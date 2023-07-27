@@ -2292,6 +2292,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             {
               fixup = 0;
               // if not found leaves placeholder_type at 0 to use DUMMY
+              LOG_HANDLE ("find_class ACDBPLACEHOLDER\n");
               dwg_find_class (dwg, "ACDBPLACEHOLDER", &placeholder_type);
               if (placeholder_type < 500)
                 {
@@ -2311,6 +2312,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       fixup++;
                       // replace entities with points, objects with
                       // placeholders
+                      LOG_HANDLE ("encode_unknown_as_dummy\n");
                       encode_unknown_as_dummy (dat, obj, placeholder_type);
                     }
                   // what to do with links to MATERIAL/...

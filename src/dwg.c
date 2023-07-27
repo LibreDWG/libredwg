@@ -2604,10 +2604,19 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       return NULL;
     }
   _obj = obj->tio.object->tio.APPID_CONTROL; // just random type
-  dwg_dynapi_entity_value (_obj, obj->name, "num_entries", &num_entries, NULL);
+  if (strEQc (table, "APPID"))
+    {
+      num_entries = _obj->num_entries;
+      hdlv = _obj->entries;
+    }
+  else
+    {
+      dwg_dynapi_entity_value (_obj, obj->name, "num_entries", &num_entries,
+                               NULL);
+      dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
+    }
   if (!num_entries)
     return NULL;
-  dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
   if (!hdlv)
     {
       LOG_ERROR ("No %s.entries but %u num_entries\n", table, (unsigned)num_entries);
