@@ -2132,7 +2132,7 @@ bit_read_TU (Bit_Chain *restrict dat)
       return NULL;
     }
   for (i = 0; i < length; i++)
-    ws[i] = le16toh (bit_read_RS (dat));
+    ws[i] = bit_read_RS (dat);
   // normally not needed, as the DWG itself contains the ending 0 as last char
   // but we enforce writing it.
   ws[length] = 0;
@@ -2158,7 +2158,7 @@ bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
       return NULL;
     }
   for (i = 0; i < length; i++)
-    chain[i] = le16toh (bit_read_RS (dat));
+    chain[i] = bit_read_RS (dat);
   // normally not needed, as the DWG itself contains the ending 0 as last char
   // but we enforce writing it.
   chain[length] = 0;

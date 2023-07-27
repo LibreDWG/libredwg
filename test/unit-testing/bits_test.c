@@ -1482,8 +1482,8 @@ main (int argc, char const *argv[])
     bit_set_position (&bitchain, pos);
     // fprintf (stderr, "bit_write_T => TU\n");
     // bit_print (&bitchain, 18);
-    bitchain.version = R_2007;
     bitchain.from_version = R_2007;
+    bitchain.version = R_2007;
     wstr = bit_read_T (&bitchain);
 #ifdef WORDS_BIGENDIAN
     ws = (BITCODE_TU)wstr;
@@ -1493,9 +1493,9 @@ main (int argc, char const *argv[])
 #ifndef WORDS_BIGENDIAN
         wstr && !memcmp (wstr, exp, sizeof (exp))
 #else
-        ws[0] == le16toh ('T') &&
-        ws[1] == le16toh ('e') &&
-        ws[6] == le16toh (0x2122) &&
+        ws[0] == 'T' &&
+        ws[1] == 'e' &&
+        ws[6] == 0x2122 &&
         ws[7] == 0
 #endif
         )
@@ -1513,6 +1513,7 @@ main (int argc, char const *argv[])
     bit_set_position (&bitchain, pos);
     free (wstr);
 
+    bitchain.from_version = R_2007;
     bitchain.version = R_2000;
     bit_write_T (&bitchain, (char *)exp); // convert to ASCII via embed
     // printf ("TV @%zu.%u\n", bitchain.byte, bitchain.bit);
@@ -1523,25 +1524,21 @@ main (int argc, char const *argv[])
             bitchain.byte, bitchain.bit);
 
     bit_set_position (&bitchain, pos);
+    bitchain.from_version = R_2000;
     bitchain.version = R_2000;
-    bitchain.from_version = R_2007;
-    str = bit_read_T (&bitchain);
+    str = bit_read_T (&bitchain); // via bit_read_TV
     // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
     if (str && !strcmp (str, "Teigha\\U+2122"))
       pass ();
     else
       {
+        size_t pos1;
         fail ("bit_read_T => TV \"%s\" @%zu.%u", str, bitchain.byte,
               bitchain.bit);
-#ifdef WORDS_BIGENDIAN
-        {
-          size_t pos1;
-          pos1 = bit_position (&bitchain);
-          bit_set_position (&bitchain, pos);
-          bit_print (&bitchain, 16);
-          bit_set_position (&bitchain, pos1);
-        }
-#endif
+        pos1 = bit_position (&bitchain);
+        bit_set_position (&bitchain, pos);
+        bit_print (&bitchain, 16);
+        bit_set_position (&bitchain, pos1);
       }
     bitchain.from_version = bitchain.version = R_2004;
     free (str);
@@ -1556,7 +1553,7 @@ main (int argc, char const *argv[])
     memset (&color, 0, sizeof (color));
     color.index = 19;
     bit_write_CMC (&bitchain, &bitchain, &color);
-    if (bitchain.byte == 96 && bitchain.bit == 2)
+    if (bitchain.byte == 82 && bitchain.bit == 2)
       pass ();
     else
       fail ("bit_write_CMC @%zu.%u", bitchain.byte, bitchain.bit);
@@ -1592,7 +1589,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some color";
     color.book_name = (char *)"DIC(3) Catalog";
     bit_write_CMC (&bitchain, &bitchain, &color);
-    if (bitchain.byte == 129 && bitchain.bit == 0)
+    if (bitchain.byte == 115 && bitchain.bit == 0)
       pass ();
     else
       fail ("bit_write_CMC (r2004) @%zu.%u", bitchain.byte, bitchain.bit);
@@ -1625,7 +1622,7 @@ main (int argc, char const *argv[])
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel (&bitchain, sentinel);
-    if (bitchain.byte == 146)
+    if (bitchain.byte == 132)
       pass ();
     else
       {
@@ -1633,16 +1630,14 @@ main (int argc, char const *argv[])
         bitchain.byte = 150;
       }
   }
-#ifndef WORDS_BIGENDIAN
   {
     unsigned int check
         = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 124L);
-    if (check == 0x852B)
+    if (check == 0x572B)
       pass ();
     else
       fail ("bit_calc_CRC %04X", check);
   }
-#endif
 
   bit_chain_alloc (&bitchain);
   if (bitchain.size == 8292)
