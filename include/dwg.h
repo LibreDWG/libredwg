@@ -68,6 +68,19 @@
 # endif
 #endif
 
+#ifndef __counted_by
+#  if (defined(__clang__) && (__clang_major__ >= 18)) || \
+      (defined( __GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 1500)
+#    define __counted_by(x) __attribute__((__counted_by__(x)))
+#    ifdef __cplusplus
+#      undef __counted_by
+#      define __counted_by(x)
+#    endif
+#  else
+#    define __counted_by(x)
+#  endif
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 # ifndef restrict
@@ -8143,17 +8156,29 @@ typedef struct _dwg_entity_eed_data
       BITCODE_RS length;          /* RC */
       unsigned short codepage:15; /* RS_LE */
       unsigned short is_tu:1;
-      char string[1];      /* inlined */
+#ifndef SWIG
+      char string[] __counted_by(length);      /* inlined */
+#else
+      char string[0]; // swig limitation https://github.com/swig/swig/issues/1699
+#endif
     } eed_0;
     struct { /* R2007+ 0 (1000) string */
       BITCODE_RS length;
       unsigned short _padding:15;
       unsigned short is_tu:1;
-      DWGCHAR string[1]; /* inlined */
+#ifndef SWIG
+      DWGCHAR string[] __counted_by(length); /* inlined */
+#else
+      DWGCHAR string[0];
+#endif
     } eed_0_r2007;
     struct { /* 1 (1001) handle, not in data */
-      char invalid[1]; // set the eed[0].handle to the used APPID instead
       BITCODE_RS appid_index;
+#ifndef SWIG
+      char invalid[]; // set the eed[0].handle to the used APPID instead
+#else
+      char invalid[0];
+#endif
     } eed_1;
     struct { /* 2 (1002) "{" => 0 open, or "}" => 1 close */
       BITCODE_RC close;
@@ -8163,7 +8188,7 @@ typedef struct _dwg_entity_eed_data
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;
-      unsigned char data[1]; // inlined
+      unsigned char data[] __counted_by(length); // inlined
     } eed_4;
     struct { /* 5 (1005) entity */
       BITCODE_RLL entity;

@@ -32,6 +32,7 @@
 #    const
 #    constructor
 #    constructor_priority for constructor attribute with priority
+#    counted_by
 #    deprecated
 #    destructor
 #    dllexport
@@ -48,7 +49,6 @@
 #    ifunc
 #    leaf
 #    malloc
-#    ms_format
 #    noclone
 #    noinline
 #    nonnull
@@ -95,6 +95,7 @@ AC_DEFUN([AX_GCC_FUNC_ATTRIBUTE], [
             CFLAGS="$CFLAGS -Werror"
         fi
     fi
+
     AC_CACHE_CHECK([for __attribute__(($1))], [ac_var], [
         AC_LINK_IFELSE([AC_LANG_PROGRAM([
             m4_case([$1],
@@ -125,6 +126,9 @@ AC_DEFUN([AX_GCC_FUNC_ATTRIBUTE], [
                 ],
                 [constructor], [
                     int foo( void ) __attribute__(($1));
+                ],
+                [counted_by], [
+                    struct { int size; int flex[[]] __attribute__((__counted_by__(size))); } x;
                 ],
                 [deprecated], [
                     int foo( void ) __attribute__(($1("")));

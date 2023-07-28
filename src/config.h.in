@@ -87,6 +87,9 @@
 /* Define to 1 if the system has the `aligned' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_ALIGNED
 
+/* Define to 1 if the system has the `counted_by' function attribute */
+#undef HAVE_FUNC_ATTRIBUTE_COUNTED_BY
+
 /* Define to 1 if the system has the `format' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_FORMAT
 

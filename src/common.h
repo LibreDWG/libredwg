@@ -392,6 +392,16 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  define ATTRIBUTE_NORETURN
 #endif
 
+#ifndef __counted_by
+#  ifdef HAVE_FUNC_ATTRIBUTE_COUNTED_BY
+#    define __counted_by(x) __attribute__ ((__counted_by__(x)))
+#  elif defined(_MSC_VER)
+#    define __counted_by(x)
+#  else
+#    define __counted_by(x)
+#  endif
+#endif
+
 #if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT)                 \
     && !defined(__USE_MINGW_ANSI_STDIO)
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
