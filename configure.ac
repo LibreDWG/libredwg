@@ -244,7 +244,7 @@ if test x$enable_shared = xyes && \
 then
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fno-semantic-interposition -fwrapv -fno-common -fvisibility=hidden \
-     -fno-strict-aliasing -ftrivial-auto-var-init=zero \
+     -fno-strict-aliasing -ftrivial-auto-var-init=zero -fstrict-flex-arrays=3 \
      -fstack-protector-strong -fstack-clash-protection \
      -fcf-protection=full -fno-delete-null-pointer-checks \
      -Wno-alloc-size])
