@@ -119,6 +119,7 @@ endif()
 if (WCHAR_T EQUAL 2)
   set(HAVE_PCRE2_16 1)
 endif()
+
 if (NOT HAVE_MIMALLOC_OVERRIDE_H)
   if (ENABLE_MIMALLOC)
     message(WARNING "Should not ENABLE_MIMALLOC without mimalloc-override.h")
