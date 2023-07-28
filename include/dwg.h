@@ -8097,17 +8097,17 @@ typedef struct _dwg_entity_eed_data
       BITCODE_RS length;          /* RC */
       unsigned short codepage:15; /* RS_LE */
       unsigned short is_tu:1;
-      char string[1];      /* inlined */
+      char string[];      /* inlined */
     } eed_0;
     struct { /* R2007+ 0 (1000) string */
       BITCODE_RS length;
       unsigned short _padding:15;
       unsigned short is_tu:1;
-      DWGCHAR string[1]; /* inlined */
+      DWGCHAR string[]; /* inlined */
     } eed_0_r2007;
     struct { /* 1 (1001) handle, not in data */
-      char invalid[1]; // set the eed[0].handle to the used APPID instead
       BITCODE_RS appid_index;
+      char invalid[]; // set the eed[0].handle to the used APPID instead
     } eed_1;
     struct { /* 2 (1002) "{" => 0 open, or "}" => 1 close */
       BITCODE_RC close;
@@ -8117,7 +8117,7 @@ typedef struct _dwg_entity_eed_data
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;
-      unsigned char data[1]; // inlined
+      unsigned char data[]; // inlined
     } eed_4;
     struct { /* 5 (1005) entity */
       BITCODE_RLL entity;
