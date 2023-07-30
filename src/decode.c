@@ -274,6 +274,26 @@ xor_section_CRC (BITCODE_RL num_sections, BITCODE_RS crc)
 }
 */
 
+// may return OUTOFBOUNDS
+static int
+template_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  Dwg_Template *_obj = &dwg->Template;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+
+  // clang-format off
+  #include "template.spec"
+  // clang-format on
+
+  dwg->header_vars.MEASUREMENT = _obj->MEASUREMENT;
+  LOG_TRACE ("-> HEADER.MEASUREMENT: " FORMAT_BS " (0 English/1 Metric)\n",
+             dwg->header_vars.MEASUREMENT)
+
+  return error;
+}
+
 static int
 decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -1005,7 +1025,6 @@ handles_section:
 
   if (dwg->header.sections > 4)
     {
-      BITCODE_RL v;
       LOG_INFO ("\n"
                 "=======> MEASUREMENT 4 (start)  : %8u\n",
                 (unsigned int)dwg->header.section[4].address)
@@ -1014,11 +1033,8 @@ handles_section:
                                + dwg->header.section[4].size))
       dat->byte = dwg->header.section[4].address;
       dat->bit = 0;
-      v = bit_read_RL_BE (dat);
-      LOG_TRACE ("MEASUREMENT: " FORMAT_RL " [RL_BE] (0 English/256 Metric)\n",
-                 v);
-      dwg->header_vars.MEASUREMENT = v ? 1 : 0;
-      // LOG_TRACE ("         Size bytes :\t%zu\n", dat->size)
+
+      error |= template_private (dat, dwg);
     }
 
   // step II of handles parsing: resolve pointers from handle value
@@ -3045,26 +3061,6 @@ read_2004_section_objfreespace (Bit_Chain *restrict dat,
   if (sec_dat.chain)
     free (sec_dat.chain);
   *dat = old_dat; // unrestrict
-  return error;
-}
-
-// may return OUTOFBOUNDS
-static int
-template_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
-{
-  Bit_Chain *str_dat = dat;
-  Dwg_Template *_obj = &dwg->Template;
-  Dwg_Object *obj = NULL;
-  int error = 0;
-
-  // clang-format off
-  #include "template.spec"
-  // clang-format on
-
-  dwg->header_vars.MEASUREMENT = _obj->MEASUREMENT;
-  LOG_TRACE ("HEADER.MEASUREMENT: " FORMAT_BS " (0 English/1 Metric)\n",
-             dwg->header_vars.MEASUREMENT)
-
   return error;
 }
 
