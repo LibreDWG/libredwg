@@ -209,6 +209,7 @@ BITCODE_TU32 bit_read_TU32 (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
 
 void bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict value);
 void bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict value);
+void bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict value);
 void bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict value);
 void bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict value);
 
