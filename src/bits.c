@@ -2393,6 +2393,29 @@ bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
   for (i = 0; i < length; i++)
     bit_write_RS (dat, chain[i]);
 }
+
+/** String16: Write ASCII prefixed by a RS length
+ */
+void
+bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
+{
+  size_t i, length;
+  if (chain)
+    length = strlen (chain);
+  else
+    length = 0;
+  if (length > INT16_MAX)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_WARN ("Overlong string truncated (len=%zu)", length);
+      length = INT16_MAX;
+      chain[INT16_MAX - 1] = '\0';
+    }
+  bit_write_RS (dat, (BITCODE_RS)(length));
+  for (i = 0; i < length; i++)
+    bit_write_RC (dat, chain[i]);
+}
+
 // ASCII/UCS-2 string with a RL size (not length)
 void
 bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)

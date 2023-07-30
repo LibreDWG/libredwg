@@ -3371,6 +3371,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   if (dwg->header.version >= R_2004
       || (int)dwg->header.num_sections > (int)sec_id)
     {
+      struct _dwg_template *_obj = &dwg->Template;
       if ((int)dwg->header.num_sections <= (int)sec_id)
         dwg->header.section = (Dwg_Section *)realloc (
             dwg->header.section, (sec_id + 1) * sizeof (Dwg_Section));
@@ -3378,9 +3379,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[sec_id].number = 4;
       dwg->header.section[sec_id].address = dat->byte;
       dwg->header.section[sec_id].size = 4;
+      // Template description
+      bit_write_T16 (dat, _obj->description);
       // 0 - English, 1- Metric
-      bit_write_RL_BE (dat, htobe32 (dwg->header_vars.MEASUREMENT ? 256 : 0));
-      LOG_TRACE ("HEADER.MEASUREMENT: %d [RL_BE]\n",
+      bit_write_RS (dat, dwg->header_vars.MEASUREMENT);
+      LOG_TRACE ("HEADER.MEASUREMENT: %d [RS]\n",
                  dwg->header_vars.MEASUREMENT);
     }
 
