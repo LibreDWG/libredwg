@@ -385,7 +385,7 @@ const unsigned char unknown_section[53]
 
 #define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
-    bit_write_CMC (dat, str_dat, &_obj->color);                               \
+    bit_write_CMC (dat, str_dat, &_obj->color, obj);                          \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf);    \
     LOG_INSANE (" @%zu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
                 dat->bit)                                                     \
@@ -406,7 +406,7 @@ const unsigned char unknown_section[53]
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
-    bit_write_CMC (dat, str_dat, &_obj->o.color);                             \
+    bit_write_CMC (dat, str_dat, &_obj->o.color, obj);                        \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf);  \
     LOG_INSANE (" @%zu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
                 dat->bit)                                                     \

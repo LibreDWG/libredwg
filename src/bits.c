@@ -3365,7 +3365,8 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
 /** Write color
  */
 void
-bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
+bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color,
+               const Dwg_Object *restrict obj)
 {
   if (dat->version >= R_2004) // truecolor
     {
@@ -3392,7 +3393,8 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
     }
   else
     {
-      if (dat->from_version >= R_2004)
+      // only for ent/obj <500, not classes
+      if (dat->from_version >= R_2004 && (!obj || obj->fixedtype < 500))
         bit_downconvert_CMC (dat, color);
       if (dat->version < R_13b1)
         bit_write_RS (dat, color->index);

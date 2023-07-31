@@ -773,7 +773,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               long num = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_VOID
-              LOG_TRACE ("%s.%s.index %ld [CMC]\n", name, fname, num);
+              LOG_TRACE ("%s.%s.index %ld [CMC.BS]\n", name, fname, num);
               color->index = (BITCODE_BSd)num;
             }
           else if (strEQc (key, "rgb"))
@@ -783,14 +783,14 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW_VOID
               sscanf (hex, "%x", &color->rgb);
               color->method = color->rgb >> 0x18;
-              LOG_TRACE ("%s.%s.rgb %x (method %x) [CMC]\n", name, fname,
+              LOG_TRACE ("%s.%s.rgb %x (method %x) [CMC.RL]\n", name, fname,
                          color->rgb, color->method);
             }
           else if (strEQc (key, "flag"))
             {
               long num = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_VOID
-              LOG_TRACE ("%s.%s.flag %lu [CMC]\n", name, fname,
+              LOG_TRACE ("%s.%s.flag %lu [CMC.BS]\n", name, fname,
                          (unsigned long)num);
               color->flag = (BITCODE_BS)num;
             }
@@ -798,7 +798,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               long num = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_VOID
-              LOG_TRACE ("%s.%s.alpha %u [CMC]\n", name, fname, (unsigned)num);
+              LOG_TRACE ("%s.%s.alpha %u [CMC.RC]\n", name, fname, (unsigned)num);
               color->alpha = (BITCODE_RC)num;
               color->alpha_type = 3;
             }
@@ -812,7 +812,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               char *str = json_string (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_VOID
-              LOG_TRACE ("%s.%s.name \"%s\" [CMC]\n", name, fname, str);
+              LOG_TRACE ("%s.%s.name \"%s\" [CMC.T]\n", name, fname, str);
               color->name = str;
               color->flag |= 1;
             }
@@ -820,7 +820,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               char *str = json_string (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_VOID
-              LOG_TRACE ("%s.%s.book_name \"%s\" [CMC]\n", name, fname, str);
+              LOG_TRACE ("%s.%s.book_name \"%s\" [CMC.T]\n", name, fname, str);
               color->book_name = str;
               color->flag |= 2;
             }
@@ -835,7 +835,7 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   else if (t->type == JSMN_PRIMITIVE)
     { // pre 2004
       long num = json_long (dat, tokens);
-      LOG_TRACE ("%s.%s.index %ld [CMC]\n", name, fname, num);
+      LOG_TRACE ("%s.%s.index %ld [CMC.BS]\n", name, fname, num);
       color->index = (BITCODE_BSd)num;
       JSON_TOKENS_CHECK_OVERFLOW_VOID
     }

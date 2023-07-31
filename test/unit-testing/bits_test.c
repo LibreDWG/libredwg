@@ -1552,7 +1552,7 @@ main (int argc, char const *argv[])
     bitchain.from_version = bitchain.version = R_2000;
     memset (&color, 0, sizeof (color));
     color.index = 19;
-    bit_write_CMC (&bitchain, &bitchain, &color);
+    bit_write_CMC (&bitchain, &bitchain, &color, NULL);
     if (bitchain.byte == 82 && bitchain.bit == 2)
       pass ();
     else
@@ -1588,7 +1588,7 @@ main (int argc, char const *argv[])
     color.flag = 3; // write both. to skip book set it to NULL
     color.name = (char *)"Some color";
     color.book_name = (char *)"DIC(3) Catalog";
-    bit_write_CMC (&bitchain, &bitchain, &color);
+    bit_write_CMC (&bitchain, &bitchain, &color, NULL);
     if (bitchain.byte == 115 && bitchain.bit == 0)
       pass ();
     else
