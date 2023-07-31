@@ -3340,12 +3340,13 @@ bit_upconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
   if (dat->version >= R_2004 && dat->from_version < R_2004)
     {
       if (!color->method)
-        color->method = 0xc3;
-      if (color->index == 256)
-        color->method = 0xc0;
-      else if (color->index == 0)
-        color->method = 0xc1;
-
+        {
+          color->method = 0xc3;
+          if (color->index == 256)
+            color->method = 0xc0;
+          else if (color->index == 0)
+            color->method = 0xc1;
+        }
       color->rgb = color->method << 0x18;
       if (color->method == 0xc3)
         color->rgb |= dwg_rgb_palette_index (color->index);
