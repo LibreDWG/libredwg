@@ -352,7 +352,15 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
       dat.size = 0;
       return DWG_ERR_IOERROR;
     }
-  if (size < 256)
+  /*
+0
+SECTION
+2
+ENTITIES
+0
+ENDSEC
+   */
+  if (size < 31)
     {
       LOG_ERROR ("File %s too small, %zu byte.\n", filename, size)
       free (dat.chain);
