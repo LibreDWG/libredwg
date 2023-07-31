@@ -3349,6 +3349,8 @@ bit_upconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
       color->rgb = color->method << 0x18;
       if (color->method == 0xc3)
         color->rgb |= dwg_rgb_palette_index (color->index);
+      else if (color->method == 0xc2)
+        color->rgb |= 0x00ffffff;
     }
 }
 
