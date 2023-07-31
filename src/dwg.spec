@@ -5908,7 +5908,7 @@ DWG_ENTITY (PROXY_ENTITY)
   }
   ENCODER {
     // write is always aligned
-    if ((dwg->opts & DWG_OPTS_INDXF) && !_obj->data_numbits)
+    if (!_obj->data_numbits)
       _obj->data_numbits = 8 * _obj->data_size;
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
@@ -6000,8 +6000,8 @@ DWG_OBJECT (PROXY_OBJECT)
         if (_obj->data_numbits % 8)
           _obj->data_size++;
       }
-    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
-    LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
+    LOG_TRACE ("data_numbits => " FORMAT_BL "\n", _obj->data_numbits);
+    LOG_TRACE ("data_size => " FORMAT_BL "\n", _obj->data_size);
     FIELD_VALUE (num_objids) = 0;
     dat->opts &= 0xf0;
     dat->size++;
@@ -6011,10 +6011,10 @@ DWG_OBJECT (PROXY_OBJECT)
   }
   ENCODER {
     // write is always aligned
-    if ((dwg->opts & DWG_OPTS_INDXF) && !_obj->data_numbits)
+    if (!_obj->data_numbits)
       _obj->data_numbits = 8 * _obj->data_size;
-    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
-    LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
+    LOG_TRACE ("data_numbits => " FORMAT_BL "\n", _obj->data_numbits);
+    LOG_TRACE ("data_size => " FORMAT_BL "\n", _obj->data_size);
   }
   JSON {
     FIELD_BL (data_numbits, 0);
