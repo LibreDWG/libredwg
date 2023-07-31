@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "tests_common.h"
+#include <assert.h>
 
 static void
 bit_advance_position_tests (void)
@@ -265,14 +266,15 @@ bit_BS_tests (void)
 {
   Bit_Chain bitchain;
   // special cases >256, 0, 256, 1-255
-  const BITCODE_BS values[] = {1024, 0, 256, 2};
-  const size_t sizes[] = {2 + 16, 2, 2, 2 + 8};
+  const BITCODE_BS values[] = {1024, 0, 256, 2, 1};
+  const size_t sizes[] = {2 + 16, 2, 2, 2 + 8, 2 + 8};
   BITCODE_BS bs;
 
+  assert (ARRAY_SIZE (values) == ARRAY_SIZE (sizes));
   bitprepare (&bitchain, 6);
-  for (int i=0; i<=1; i++)
+  for (int i = 0; i <= 1; i++)
     {
-      for (int j=0; j<4; j++)
+      for (int j = 0; j < ARRAY_SIZE (values); j++)
         {
           size_t pos;
           bs = values[j];
@@ -282,15 +284,22 @@ bit_BS_tests (void)
           if (pos == sizes[j] + i)
             pass ();
           else
-            fail ("bit_write_BS (%u) @%zu.%u", (unsigned)bs, bitchain.byte,
-                  bitchain.bit);
+            {
+              bit_set_position (&bitchain, i);
+              bit_print (&bitchain, 3);
+              fail ("bit_write_BS (%u) @%zu.%u", (unsigned)bs, bitchain.byte,
+                    bitchain.bit);
+            }
 
           bit_set_position (&bitchain, i);
-          // bit_print (&bitchain, 4);
           if ((bs = bit_read_BS (&bitchain)) == values[j])
             pass ();
           else
-            fail ("bit_read_BS %d", bs);
+            {
+              bit_set_position (&bitchain, i);
+              bit_print (&bitchain, 4);
+              fail ("bit_read_BS %d", bs);
+            }
         }
     }
   bitfree (&bitchain);
@@ -357,14 +366,15 @@ bit_BL_tests (void)
 {
   Bit_Chain bitchain;
   // special cases >255, 0, 1-255
-  const BITCODE_BL values[] = {1024, 0, 2};
-  const size_t sizes[] = {2 + 32, 2, 2 + 8};
+  const BITCODE_BL values[] = {1024, 0, 2, 1};
+  const size_t sizes[] = {2 + 32, 2, 2 + 8, 2 + 8};
   BITCODE_BL bl;
 
+  assert (ARRAY_SIZE (values) == ARRAY_SIZE (sizes));
   bitprepare (&bitchain, 6);
-  for (int i=0; i<=1; i++)
+  for (int i = 0; i <= 1; i++)
     {
-      for (int j=0; j<3; j++)
+      for (int j = 0; j < ARRAY_SIZE (values); j++)
         {
           size_t pos;
           bl = values[j];
@@ -374,15 +384,22 @@ bit_BL_tests (void)
           if (pos == sizes[j] + i)
             pass ();
           else
-            fail ("bit_write_BL (%u) @%zu.%u", (unsigned)bl, bitchain.byte,
-                  bitchain.bit);
+            {
+              bit_set_position (&bitchain, i);
+              bit_print (&bitchain, 5);
+              fail ("bit_write_BL (%u) @%zu.%u", (unsigned)bl, bitchain.byte,
+                    bitchain.bit);
+            }
 
           bit_set_position (&bitchain, i);
-          // bit_print (&bitchain, 4);
           if ((bl = bit_read_BL (&bitchain)) == values[j])
             pass ();
           else
-            fail ("bit_read_BL %d", bl);
+            {
+              bit_set_position (&bitchain, i);
+              bit_print (&bitchain, 5);
+              fail ("bit_read_BL %d", bl);
+            }
         }
     }
   bitfree (&bitchain);
