@@ -362,11 +362,16 @@
 #  define SUB_FIELD_CMTC(o, name, dxf)                                        \
     {                                                                         \
       Dwg_Version_Type _ver = dat->version;                                   \
+      Dwg_Version_Type _fver = dat->from_version;                             \
       if (dat->version < R_2004)                                              \
         dat->version = R_2004;                                                \
+      if (dat->from_version < R_2004)                                         \
+        dat->from_version = R_2004;                                           \
       SUB_FIELD_CMC (o, name, dxf);                                           \
       if (_ver != dat->version)                                               \
         dat->version = _ver;                                                  \
+      if (_fver != dat->from_version)                                         \
+        dat->from_version = _fver;                                            \
     }
 #endif
 // on DXF skip if 0
