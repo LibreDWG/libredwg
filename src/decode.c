@@ -807,10 +807,8 @@ handles_section:
             }
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC]"
-                     " Offset: " FORMAT_MC " [MC]",
-                     handleoff, offset)
-          LOG_HANDLE (" @%zu", last_offset)
+          LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC]", handleoff)
+          LOG_HANDLE (" Offset: " FORMAT_MC " [MC] @%zu", offset, last_offset)
           LOG_TRACE ("\n")
 
           if (dat->byte == oldpos)
@@ -5192,8 +5190,10 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   {
     obj->type = bit_read_BS (dat);
   }
-  LOG_INFO (", Type: %d [%s], Address: %zu\n", obj->type,
-            dat->from_version >= R_2010 ? "BOT" : "BS", obj->address);
+  LOG_INFO (", Type: %d [%s]", obj->type,
+            dat->from_version >= R_2010 ? "BOT" : "BS");
+  LOG_HANDLE (", Address: %zu", obj->address);
+  LOG_INFO ("\n");
   restartpos = bit_position (dat); // relative
 
   /* Check the type of the object
