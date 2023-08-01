@@ -184,11 +184,11 @@ typedef unsigned char* BITCODE_TF;
 typedef char* BITCODE_TV;
 #define FORMAT_TV "\"%s\""
 #define BITCODE_T16 BITCODE_TV
-#define FORMAT_T16 "\"%s\""
+#define FORMAT_T16 FORMAT_TV
 #define BITCODE_T32 BITCODE_TV
-#define FORMAT_T32 "\"%s\""
+#define FORMAT_T32 FORMAT_TV
 #define BITCODE_TU32 BITCODE_TV
-#define FORMAT_TU32 "\"%s\""
+#define FORMAT_TU32 FORMAT_TV
 typedef BITCODE_DOUBLE BITCODE_BT;
 #define FORMAT_BT "%g"
 typedef BITCODE_DOUBLE BITCODE_DD;
@@ -9554,7 +9554,7 @@ typedef struct _dwg_objfreespace
 
 typedef struct _dwg_template
 {
-  BITCODE_T16 description;
+  BITCODE_T16 description; // or TU16 >=r2007
   BITCODE_RS MEASUREMENT;
 } Dwg_Template;
 

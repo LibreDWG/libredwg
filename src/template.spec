@@ -18,5 +18,10 @@
 
 #include "spec.h"
 
-FIELD_T16 (description, 0);
+PRE (R_2007) {
+  FIELD_T16 (description, 0);
+}
+LATER_VERSIONS {
+  FIELD_CAST (description, TU16, T16, 0);
+}
 FIELD_RS (MEASUREMENT, 0); // copied to header_vars

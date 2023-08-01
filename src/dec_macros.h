@@ -104,12 +104,12 @@
 #define FIELD_CAST(nam, type, cast, dxf)                                      \
   {                                                                           \
     _obj->nam = (BITCODE_##cast)bit_read_##type (dat);                        \
-    FIELD_G_TRACE (nam, type, dxf);                                           \
+    FIELD_G_TRACE (nam, cast, dxf);                                           \
   }
 #define SUB_FIELD_CAST(o, nam, type, cast, dxf)                               \
   {                                                                           \
     _obj->o.nam = (BITCODE_##cast)bit_read_##type (dat);                      \
-    FIELD_G_TRACE (o.nam, type, dxf);                                         \
+    FIELD_G_TRACE (o.nam, cast, dxf);                                         \
   }
 
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
