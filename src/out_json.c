@@ -2458,7 +2458,8 @@ json_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
 
   RECORD (Template); // single hash. i.e MEASUREMENT metric/imperial
-                     // clang-format off
+
+  // clang-format off
   #include "template.spec"
   // clang-format on
   ENDRECORD ();
@@ -2474,7 +2475,8 @@ json_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RL vcount;
 
   RECORD (AuxHeader); // single hash
-                      // clang-format off
+
+  // clang-format off
   #include "auxheader.spec"
   // clang-format on
   ENDRECORD ();
@@ -2496,23 +2498,54 @@ json_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   ENDRECORD ();
   return 0;
 }
+#endif
 
 static int
 json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   struct _dwg_second_header *_obj = &dwg->second_header;
   Dwg_Object *obj = NULL;
+  BITCODE_BL vcount;
   int error = 0;
 
   RECORD (SecondHeader); // single hash
-  HASH;
+  FIELD_TF (version, 12, 0);
+  FIELD_VECTOR_INL (null_b, B, 4, 0);
+  FIELD_RC (unknown_10, 0);
+  FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0);
+
+  FIELD_RC (num_sections, 0);
+  SECTION (sections);
+  for (unsigned i = 0; i < MIN(FIELD_VALUE (num_sections), 6U); i++)
+    {
+      FIRSTPREFIX HASH;
+      FIELD_RC (section[i].nr, 0);
+      FIELD_BL (section[i].address, 0);
+      FIELD_BL (section[i].size, 0);
+      ENDHASH;
+    }
+  ENDSEC ();
+  FIELD_BS (num_handlers, 0); // 14, resp. 16 in r14
+  SECTION (handlers);
+  for (unsigned i = 0; i < MIN(FIELD_VALUE (num_handlers), 16U); i++)
+    {
+      FIRSTPREFIX HASH;
+      FIELD_RC (handlers[i].size, 0);
+      FIELD_RC (handlers[i].nr, 0);
+      FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
+      ENDHASH;
+    }
+  ENDSEC ();
+  VERSION (R_14) {
+    FIELD_RL (junk_r14_1, 0);
+    FIELD_RL (junk_r14_2, 0);
+  }
   // clang-format off
-  //#include "2ndheader.spec"
+  // #include "2ndheader.spec"
   // clang-format on
   ENDRECORD ();
   return 0;
 }
-#endif
 
 EXPORT int
 dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -2555,7 +2588,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           error |= json_section_template (dat, dwg); // i.e. MEASUREMENT
           error |= json_section_auxheader (dat, dwg);
-          // error |= json_section_2ndheader (dat, dwg);
+          error |= json_section_2ndheader (dat, dwg);
         }
       if (dat->version >= R_2004)
         {
