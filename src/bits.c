@@ -2848,12 +2848,12 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
               loglevel |= 1;
               LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", s);
             }
-          if (dest + 1 < endp && c == 0xe0 && *s < 0xa0)
+          else if (dest + 1 < endp && c == 0xe0 && *s < 0xa0)
             {
               loglevel |= 1;
               LOG_WARN ("utf-8: NON_SHORTEST %s", s);
             }
-          if (dest + 7 < endp && s + 1 <= ends)
+          else if (dest + 7 < endp && s + 1 <= ends)
             {
               unsigned char c1;
               wchar_t wc1;
