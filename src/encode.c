@@ -6594,11 +6594,11 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   _obj->rowstyles[0].unit_type =
   _obj->sty.cellstyle.content_format.value_unit_type;
   {
-    char *u8 = bit_convert_TU
-  (_obj->sty.cellstyle.content_format.value_format_string); size_t destlen =
-  strlen (u8) + 1; char *dest = malloc (destlen);
+    char *u8 = bit_convert_TU (_obj->sty.cellstyle.content_format.value_format_string);
+    size_t destlen = strlen (u8) + 1;
+    char *dest = malloc (destlen);
     _obj->rowstyles[0].format_string = bit_utf8_to_TV (dest, u8, destlen,
-  destlen - 1, 0, dwg->header.codepage);
+                                         destlen - 1, 0, dwg->header.codepage);
   }
   */
   if (!_obj->rowstyles[0].num_borders)

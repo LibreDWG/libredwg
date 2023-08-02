@@ -562,7 +562,28 @@
     LOG_TRACE ("\n")                                                          \
     LOG_TRACE_TF ((BITCODE_RC*)_obj->nam, (int)len);                          \
   }
-#define FIELD_T16(nam, dxf) FIELDG (nam, T16, dxf)
+#define FIELD_T16(nam, dxf)                                                   \
+    if (dat->from_version < R_2007)                                           \
+      {                                                                       \
+        FIELDG (nam, T16, dxf);                                               \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        _obj->nam = (BITCODE_T16)bit_read_TU16 (dat);                         \
+        LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf);                          \
+      }
+#define FIELD_T32(nam, dxf)                                                   \
+  {                                                                           \
+    if (dat->from_version < R_2007)                                           \
+      {                                                                       \
+        FIELDG (nam, T32, dxf);                                               \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        _obj->nam = bit_read_TU32 (dat);                                      \
+        LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf)                           \
+      }                                                                       \
+  }
 #define FIELD_TU16(nam, dxf)                                                  \
   {                                                                           \
     _obj->nam = bit_read_TU16 (dat);                                          \
@@ -574,18 +595,6 @@
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
         LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf)               \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf)                           \
-      }                                                                       \
-  }
-#define FIELD_T32(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = bit_read_T32 (dat);                                           \
-    if (dat->from_version < R_2007)                                           \
-      {                                                                       \
-        LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);               \
       }                                                                       \
     else                                                                      \
       {                                                                       \

@@ -2394,14 +2394,20 @@ bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
     bit_write_RS (dat, chain[i]);
 }
 
-/** String16: Write ASCII prefixed by a RS length
+/** String16: Write ASCII/Unicode prefixed by a RS length,
+    up-converts to TU16
  */
 void
 bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
 {
-  size_t i, length;
+  size_t length;
   if (chain)
-    length = strlen (chain);
+    {
+      if (IS_FROM_TU (dat))
+        length = bit_wcs2len ((BITCODE_TU)chain);
+      else
+        length = strlen (chain);
+    }
   else
     length = 0;
   if (length > INT16_MAX)
@@ -2411,12 +2417,61 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
       length = INT16_MAX;
       chain[INT16_MAX - 1] = '\0';
     }
-  bit_write_RS (dat, (BITCODE_RS)(length));
-  for (i = 0; i < length; i++)
-    bit_write_RC (dat, chain[i]);
+  else if (length == 0)
+    bit_write_RS (dat, 0);
+  else if (dat->version >= R_2007)
+    {
+      if (!IS_FROM_TU (dat))
+        { // convert to unicode, expand \\U+
+          BITCODE_TU wstr = bit_utf8_to_TU (chain, 0);
+          size_t wlen = bit_wcs2len (wstr) + 1;
+          bit_write_RS (dat, (BITCODE_RS)length);
+          for (size_t i = 0; i <= length; i++)
+            bit_write_RS (dat, wstr[i]);
+        }
+      else
+        {
+          bit_write_RS (dat, (BITCODE_RS)length + 1);
+          for (size_t i = 0; i <= length; i++)
+            bit_write_RS (dat, chain[i]);
+        }
+    }
+  else
+    {
+      if (IS_FROM_TU (dat))
+        {
+          // convert from unicode to ascii via utf8
+          char dest[1024];
+          char *u8 = bit_convert_TU ((BITCODE_TU)chain);
+          bit_utf8_to_TV (dest, (unsigned char *)u8, 1024, strlen (u8),
+                          0, dat->codepage);
+          length = strlen (dest);
+          if (length)
+            {
+              bit_write_RS (dat, (BITCODE_RS)(length + 1));
+              for (size_t i = 0; i <= length; i++)
+                bit_write_RC (dat, dest[i]);
+            }
+          else
+            bit_write_RS (dat, 0);
+          free (u8);
+        }
+      else
+        {
+          if (length)
+            {
+              bit_write_RS (dat, (BITCODE_RS)(length + 1));
+              for (size_t i = 0; i <= length; i++)
+                bit_write_RC (dat, chain[i]);
+            }
+          else
+            bit_write_RS (dat, 0);
+        }
+    }
 }
 
 // ASCII/UCS-2 string with a RL size (not length)
+// TODO: also upconvert to TU32
 void
 bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
 {
