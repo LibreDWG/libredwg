@@ -3645,9 +3645,9 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (section_array_size, 0)
       FIELD_RL (gap_array_size, 0)
       FIELD_RLx (crc32, 0)
-          // clang-format on
-          // end of encrypted 0x6c header
-          else
+      // clang-format on
+      // end of encrypted 0x6c header
+      else
       {
         LOG_ERROR ("Unknown %s.%s ignored", section, key);
         tokens->index++;
@@ -3717,8 +3717,8 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (zero_7, 0)
       FIELD_RL (zero_8, 0)
       FIELD_VECTOR_INL (zero_18, RS, 3, 0)
-          // clang-format on
-          else
+      // clang-format on
+      else
       {
         LOG_ERROR ("Unknown %s.%s ignored", section, key);
         tokens->index++;
@@ -3728,6 +3728,215 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("End of %s\n", section)
   tokens->index--;
   return 0;
+}
+
+static int
+json_SecondHeader_Sections (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                            jsmntokens_t *restrict tokens, Dwg_Second_Header *_obj,
+                            int size)
+{
+  const char *section = "SecondHeader_Sections";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, t->type, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  _obj->num_sections = MIN(size, 6);
+  LOG_TRACE ("%s: %d\n", section, _obj->num_sections);
+  for (int j = 0; j < _obj->num_sections; j++)
+    {
+      int keys;
+      tokens->index++;
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
+      t = &tokens->tokens[tokens->index];
+      keys = t->size;
+      if (t->type != JSMN_OBJECT)
+        {
+          LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                     t_typename[t->type], tokens->index, tokens->num_tokens,
+                     section);
+          json_advance_unknown (dat, tokens, t->type, 0);
+          return DWG_ERR_INVALIDTYPE;
+        }
+      assert (t->type == JSMN_OBJECT);
+      tokens->index++;
+      for (int k = 0; k < MIN(keys, 3); k++)
+        {
+          char key[80];
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          json_fixed_key (key, dat, tokens);
+          t = &tokens->tokens[tokens->index];
+          // clang-format off
+          if (0) ; // else
+          SUB_FIELD_LONG (section[j], nr, RC)
+          SUB_FIELD_LONG (section[j], address, BL)
+          SUB_FIELD_LONG (section[j], size, BL)
+          else
+            {
+              LOG_ERROR ("Unknown %s.%s ignored", section, key);
+              json_advance_unknown (dat, tokens, t->type, 0);
+            }
+          // clang-format on
+        }
+      tokens->index--;
+    }
+  tokens->index++;
+  return 0;
+}
+
+static int
+json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                            jsmntokens_t *restrict tokens, Dwg_Second_Header *_obj,
+                            int size)
+{
+  const char *section = "SecondHeader_Handlers";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, t->type, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  _obj->num_handlers = MIN(size, 16);
+  LOG_TRACE ("%s: %d\n", section, _obj->num_handlers);
+  for (int j = 0; j < _obj->num_handlers; j++)
+    {
+      int keys;
+      tokens->index++;
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
+      t = &tokens->tokens[tokens->index];
+      keys = t->size;
+      if (t->type != JSMN_OBJECT)
+        {
+          LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                     t_typename[t->type], tokens->index, tokens->num_tokens,
+                     section);
+          json_advance_unknown (dat, tokens, t->type, 0);
+          return DWG_ERR_INVALIDTYPE;
+        }
+      assert (t->type == JSMN_OBJECT);
+      tokens->index++;
+      for (int k = 0; k < MIN(keys, 3); k++)
+        {
+          char key[80];
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          json_fixed_key (key, dat, tokens);
+          t = &tokens->tokens[tokens->index];
+          // clang-format off
+          if (0) ; // else
+          SUB_FIELD_LONG (handlers[j], size, RC)
+          SUB_FIELD_LONG (handlers[j], nr, RC)
+          // SUB_FIELD_VECTOR_INL (data, RC, _obj->handlers[j].size, 0)
+          else if (strEQc (key, "data") && t->type == JSMN_ARRAY)
+            {
+              tokens->index++;
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              if (t->size < 256)
+                _obj->handlers[j].data = (BITCODE_RC *)calloc (1, t->size);
+              if (t->size != _obj->handlers[j].size)
+                {
+                  _obj->handlers[j].size = (BITCODE_RC)t->size & 0xFF;
+                  LOG_WARN ("handlers[%d].size mismatch => " FORMAT_RC, j,
+                             _obj->handlers[j].size);
+                }
+              for (int vcount = 0; vcount < t->size; vcount++)
+                {   
+                  _obj->handlers[j].data[vcount] = (BITCODE_RC)json_long (dat, tokens) & 0xFF;
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR               
+                  LOG_TRACE ("data[%d]: " FORMAT_RC " [RC %d]\n", vcount,
+                             _obj->handlers[j].data[vcount], 0);
+                }
+            }
+          else
+            {
+              LOG_ERROR ("Unknown %s.%s ignored", section, key);
+              json_advance_unknown (dat, tokens, t->type, 0);
+            }
+          // clang-format on
+        }
+      tokens->index--;
+    }
+  tokens->index++;
+  return 0;
+}
+
+static int
+json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                   jsmntokens_t *restrict tokens)
+{
+  const char *section = "SecondHeader";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  Dwg_Second_Header *_obj = &dwg->second_header;
+  int size, size1, error = 0;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, t->type, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  size = t->size;
+  LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section,
+             tokens->index, size);
+  tokens->index++;
+  for (int i = 0; i < size; i++)
+    {
+      char key[80];
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
+      json_fixed_key (key, dat, tokens);
+      t = &tokens->tokens[tokens->index];
+
+      if (strEQc (key, "handlers"))
+        {
+          if (t->type != JSMN_ARRAY) // of OBJECTs
+            json_advance_unknown (dat, tokens, t->type, 0);
+          else if (t->size)
+            error |= json_SecondHeader_Handlers (dat, dwg, tokens, _obj, t->size);
+          else
+            tokens->index++; // empty array
+          if (error >= DWG_ERR_CRITICAL)
+            return error;
+        }
+      else if (strEQc (key, "sections"))
+        {
+          if (t->type != JSMN_ARRAY) // of OBJECTs
+            json_advance_unknown (dat, tokens, t->type, 0);
+          else if (t->size)
+            error |= json_SecondHeader_Sections (dat, dwg, tokens, _obj, t->size);
+          else
+            tokens->index++; // empty array
+          if (error >= DWG_ERR_CRITICAL)
+            return error;
+        }
+      // clang-format off
+      FIELD_RL (size, 0)
+      FIELD_RL (address, 0)
+      FIELD_TFF (version, 12, 0)
+      FIELD_VECTOR_INL (null_b, B, 4, 0)
+      FIELD_RC (unknown_10, 0)
+      FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
+      FIELD_RC (num_sections, 0)
+      FIELD_BS (num_handlers, 0)
+      FIELD_RL (junk_r14_1, 0)
+      FIELD_RL (junk_r14_2, 0)
+      // clang-format on
+      else
+      {
+        LOG_ERROR ("Unknown %s.%s ignored", section, key);
+        tokens->index++;
+      }
+    }
+
+  LOG_TRACE ("End of %s\n", section)
+  tokens->index--;
+  return error;
 }
 
 static int
@@ -4495,8 +4704,8 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RLd (search_segidx, 0)
       FIELD_RLd (prvsav_segidx, 0)
       FIELD_RL (file_size, 0)
-          // clang-format on
-          else if (strEQc (key, "segidx"))
+      // clang-format on
+      else if (strEQc (key, "segidx"))
       {
         if (t->type != JSMN_ARRAY) // of OBJECTs
           json_advance_unknown (dat, tokens, t->type, 0);
@@ -4561,12 +4770,7 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg->header_vars.MEASUREMENT = _obj->MEASUREMENT;
           LOG_TRACE ("%s: %d\n", key, (int)_obj->MEASUREMENT)
         }
-      else if (strEQc (key, "description"))
-        {
-          LOG_TRACE ("%s: \"%.*s\" (ignored)\n", key, t->end - t->start,
-                     &dat->chain[t->start])
-          tokens->index++;
-        }
+      FIELD_T (description, 0)
       else
         {
           LOG_TRACE ("%s\n", key);
@@ -4695,7 +4899,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // section objects: FILEHEADER, HEADER, THUMBNAILIMAGE, R2004_Header,
   //                  SummaryInfo, AppInfo,
   //                  AppInfoHistory, FileDepList, Security, RevHistory,
-  //                  ObjFreeSpace, Template
+  //                  ObjFreeSpace, Template,
+  //                  AuxHeader, SecondHeader
   // section arrays: CLASSES, OBJECTS, HANDLES
   error = 0;
   for (tokens.index = 1; tokens.index < (unsigned int)tokens.num_tokens;
@@ -4745,6 +4950,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= json_THUMBNAILIMAGE (dat, dwg, &tokens);
       else if (strEQc (key, "AuxHeader"))
         error |= json_AuxHeader (dat, dwg, &tokens);
+      else if (strEQc (key, "SecondHeader"))
+        error |= json_SecondHeader (dat, dwg, &tokens);
       else if (strEQc (key, "R2004_Header"))
         error |= json_R2004_Header (dat, dwg, &tokens);
       else if (strEQc (key, "SummaryInfo"))
