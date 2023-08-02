@@ -1376,7 +1376,12 @@ json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
       if (c == '\r' || c == '\n' || c == '"' || c == '\\')
         {
           fputc ('\\', dat->fh);
-          fputc (c, dat->fh);
+          if (c == '\r')
+            fputc ('r', dat->fh);
+          else if (c == '\n')
+            fputc ('n', dat->fh);
+          else
+            fputc (c, dat->fh);
         }
       else if (c == '\\' && i + 6 < len && src[i] == 'U' && src[i + 1] == '+'
                && ishex (src[i + 2]) && ishex (src[i + 3])
