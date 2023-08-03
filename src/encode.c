@@ -2455,7 +2455,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       _obj->numentity_sections = 3;
     }
 
-// clang-format off
+    // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -4718,7 +4718,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
     }
 
-    // clang-format off
+  // clang-format off
   #include "classes.inc"
   // clang-format on
 
@@ -5688,7 +5688,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
 // if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
 //   return error;
 
-// clang-format off
+  // clang-format off
   #include "common_entity_data.spec"
   // clang-format on
 
@@ -5707,7 +5707,7 @@ dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   _ent = obj->tio.entity;
   _obj = _ent;
 
-// clang-format off
+  // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 
@@ -5722,7 +5722,7 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
-// clang-format off
+  // clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 
@@ -5901,7 +5901,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
         _obj->HANDSEED->absolute_ref = 0x72E;
     }
 
-    // clang-format off
+  // clang-format off
   #include "header_variables.spec"
   // clang-format on
 

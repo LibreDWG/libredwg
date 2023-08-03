@@ -2553,7 +2553,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     // if (!is_entity)
     //  fprintf(dat->fh, "  0\r\n%s\r\n", dxfname);
 
-    // clang-format off
+  // clang-format off
   #include "classes.inc"
   // clang-format on
 
@@ -3067,7 +3067,7 @@ dxf_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.codepage);
     }
 
-    // clang-format off
+  // clang-format off
   #include "header_variables_dxf.spec"
   // clang-format on
 
