@@ -2327,7 +2327,7 @@ json_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
 
   RECORD (SummaryInfo); // single hash
-                        // clang-format off
+  // clang-format off
   #include "summaryinfo.spec"
   // clang-format on
   ENDRECORD ();
