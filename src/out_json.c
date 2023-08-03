@@ -2567,6 +2567,8 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Header *obj = &dwg->header;
   int error = 0;
 
+  if (!dat->codepage)
+    dat->codepage = dwg->header.codepage;
   fprintf (dat->fh, "{\n  \"created_by\": \"%s\"", PACKAGE_STRING);
   dat->bit++; // ident
 

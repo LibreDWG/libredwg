@@ -271,6 +271,7 @@ main (int argc, char *argv[])
         dat.fh = stdout;
       fprintf (stderr, "\n");
       dat.version = dat.from_version = dwg.header.version;
+      dat.codepage = dwg.header.codepage;
       // TODO --as-rNNNN version? for now not.
       // we want the native dump, converters are separate.
 #ifndef DISABLE_DXF
