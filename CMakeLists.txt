@@ -1,5 +1,5 @@
+cmake_minimum_required(VERSION 2.8...3.27)
 project(libredwg C)
-cmake_minimum_required(VERSION 2.8)
 # Supported options -DLIBREDWG_LIBONLY=On
 #                   -DLIBREDWG_DISABLE_WRITE=On
 #                   -DLIBREDWG_DISABLE_JSON=On
