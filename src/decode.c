@@ -950,8 +950,7 @@ handles_section:
       // with \n at 12.
       bit_read_fixed (dat, _obj->version, 12);
       LOG_TRACE ("version: %s [TFF 12]\n", _obj->version)
-      for (i = 0; i < 4; i++)
-        FIELD_B (null_b[i], 0);
+      FIELD_VECTOR_INL (null_b, B, 4, 0)
       // DEBUG_HERE;
       // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
       // r14:      7d f4 78 01
