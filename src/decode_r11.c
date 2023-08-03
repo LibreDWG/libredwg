@@ -601,6 +601,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     int i;
     Dwg_Header *_obj = (Dwg_Header *)&dwg->header;
     Bit_Chain *hdl_dat = dat;
+    BITCODE_BL vcount;
     dat->byte = 0x06;
 // clang-format off
     #include "header.spec"

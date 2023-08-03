@@ -314,6 +314,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     int i;
     Dwg_Header *_obj = &dwg->header;
     Bit_Chain *hdl_dat = dat;
+    BITCODE_BL vcount;
     dat->byte = 0x06;
     // clang-format off
     #include "header.spec"
@@ -3371,6 +3372,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *obj = NULL;
     Bit_Chain *hdl_dat = dat;
     int i;
+    BITCODE_BL vcount;
 
     dat->byte = 0x06;
     if (dat->from_version >= R_2022)
@@ -3480,6 +3482,7 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     int i;
     Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
+    BITCODE_BL vcount;
 
     dat->byte = 0x06;
     // clang-format off
