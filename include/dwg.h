@@ -9507,7 +9507,7 @@ typedef struct _dwg_security
   BITCODE_RL unknown_2;   // 0
   BITCODE_RL unknown_3;   // 0xabcdabcd
   BITCODE_RL crypto_id;   //
-  BITCODE_TV crypto_name; // "Microsoft Base DSS and Diffie-Hellman
+  BITCODE_T32 crypto_name; // "Microsoft Base DSS and Diffie-Hellman
                           // Cryptographic Provider"
   BITCODE_RL algo_id;     // RC4
   BITCODE_RL key_len;     // 40

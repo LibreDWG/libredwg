@@ -2216,7 +2216,7 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
   nod = obj->tio.object->tio.DICTIONARY;
   for (BITCODE_BL j = 0; j < nod->numitems; j++)
     {
-      char *u8;
+      ATTRIBUTE_ALIGNED(2) BITCODE_T u8;
       if (!nod->texts || !nod->itemhandles)
         continue;
       u8 = nod->texts[j];
@@ -2270,7 +2270,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict,
     return NULL;
   for (i = 0; i < _obj->numitems; i++)
     {
-      BITCODE_T *texts = _obj->texts;
+      ATTRIBUTE_ALIGNED(2) BITCODE_T *texts = _obj->texts;
       BITCODE_H *hdlv = _obj->itemhandles;
 
       if (!hdlv || !texts || !texts[i])

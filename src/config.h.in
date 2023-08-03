@@ -75,6 +75,9 @@
 /* Define to 1 if you have the `floor' function. */
 #undef HAVE_FLOOR
 
+/* Define to 1 if the system has the `aligned' function attribute */
+#undef HAVE_FUNC_ATTRIBUTE_ALIGNED
+
 /* Define to 1 if the system has the `format' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_FORMAT
 

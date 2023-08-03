@@ -2018,6 +2018,7 @@ typedef union _encrypted_section_header
     uint32_t checksum_2;
   } fields;
 } encrypted_section_header;
+#pragma pack(pop)
 
 static int
 read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
@@ -6467,7 +6468,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
 
   // with sentinel in case of R11
   SINCE (R_11)
-  real_start -= 16;
+    real_start -= 16;
 
   // report unknown data before entites block
   if (start != end && real_start > 0 && (BITCODE_RL)dat->byte != real_start)
@@ -6970,7 +6971,5 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
 
   return error;
 }
-
-#pragma pack(pop)
 
 #undef IS_DECODER

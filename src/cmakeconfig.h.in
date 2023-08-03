@@ -99,6 +99,9 @@
 
 // TODO versions
 #ifdef __GNUC__
+/* Define to 1 if the system has the `aligned' function attribute */
+#define HAVE_FUNC_ATTRIBUTE_ALIGNED 1
+
 /* Define if the system has the `format' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_FORMAT 1
 

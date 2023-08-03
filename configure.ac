@@ -270,6 +270,7 @@ AX_GCC_FUNC_ATTRIBUTE(format)
 AX_GCC_FUNC_ATTRIBUTE(malloc)
 AX_GCC_FUNC_ATTRIBUTE(returns_nonnull)
 AX_GCC_FUNC_ATTRIBUTE(noreturn)
+AX_GCC_FUNC_ATTRIBUTE(aligned)
 if test x$ax_cv_check_cflags__Wformat_y2k = xyes || \
    test x$ax_cv_check_cflags__Wformat_2__Wformat_y2k = xyes
 then
@@ -391,6 +392,9 @@ AC_ARG_ENABLE([werror],AS_HELP_STRING([--disable-werror],[
 AS_IF([test x$enable_werror != xno],
   [AC_DEFINE([HAVE_WERROR],1,[If -Werror is enabled.])
    WARN_CFLAGS="-Werror $WARN_CFLAGS"
+   if test x$ax_cv_check_cflags__Wcast_align = xyes; then
+      WARN_CFLAGS="$WARN_CFLAGS -Wno-error=cast-align"
+   fi
    AC_MSG_RESULT([no (default)])],
   [AC_MSG_RESULT([yes])])
 

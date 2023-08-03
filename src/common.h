@@ -36,6 +36,8 @@
 #include <time.h>
 #include "dwg.h"
 
+//#pragma pack()
+
 // DoS limits
 // limit number of vector elements to BS range
 #define MAX_NUM     0xFFFE
@@ -328,6 +330,14 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  define __nonnull_all
 #endif
 
+#if HAVE_FUNC_ATTRIBUTE_ALIGNED
+#  define ATTRIBUTE_ALIGNED(num) __attribute__((aligned (num)))
+#elif defined (_MSC_VER)
+#  define ATTRIBUTE_ALIGNED(num) __declspec(align(num))
+#else
+#  define ATTRIBUTE_ALIGNED(num)
+#endif
+
 #ifdef HAVE_FUNC_ATTRIBUTE_MALLOC
 #  define ATTRIBUTE_MALLOC __attribute__ ((malloc))
 #else
@@ -342,6 +352,8 @@ EXPORT int strcasecmp (const char *a, const char *b);
 
 #ifdef HAVE_FUNC_ATTRIBUTE_NORETURN
 #  define ATTRIBUTE_NORETURN __attribute__ ((noreturn))
+#elif defined (_MSC_VER)
+#  define ATTRIBUTE_NORETURN __declspec(noreturn)
 #else
 #  define ATTRIBUTE_NORETURN
 #endif
