@@ -1054,14 +1054,14 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
-      LOG_TRACE ("-objref[%3ld]: HANDLE" FORMAT_REF "\n", (long)i,
-                 ARGS_REF (ref))
+      LOG_HANDLE ("-objref[%3ld]: HANDLE" FORMAT_REF "\n", (long)i,
+                  ARGS_REF (ref))
       assert (ref->handleref.is_global == 1);
       // search the handle in all objects
       obj = dwg_resolve_handle (dwg, ref->absolute_ref);
       if (obj)
         {
-          LOG_TRACE ("-found:     HANDLE(" FORMAT_H ") => [%u]\n",
+          LOG_HANDLE ("-found:     HANDLE(" FORMAT_H ") => [%u]\n",
                      ARGS_H (obj->handle), obj->index)
         }
       // assign found pointer to objectref vector
@@ -1072,7 +1072,7 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (obj)
             dwg_print_object (dat, obj);
           else
-            LOG_TRACE ("Null object pointer: object_ref[%ld]\n", (long)i)
+            LOG_HANDLE ("Null object pointer: object_ref[%ld]\n", (long)i)
         }
 #endif
     }
