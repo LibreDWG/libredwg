@@ -422,7 +422,7 @@
 #define FIELD_BLx(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_BL (dat);                                            \
-    LOG_TRACE (#nam ": 0x%x [BLx %d]\n", (uint32_t)_obj->nam, dxf);           \
+    LOG_TRACE (#nam ": 0x%x [BLx %d]", (uint32_t)_obj->nam, dxf);             \
     LOG_RPOS                                                                  \
   }
 #define FIELD_RLx(nam, dxf)                                                   \
@@ -452,7 +452,7 @@
 #define SUB_FIELD_BSd(o, nam, dxf)                                            \
   {                                                                           \
     _obj->o.nam = (BITCODE_BSd)bit_read_BS (dat);                             \
-    LOG_TRACE (#o "." #nam ": " FORMAT_BSd " [BSd %d]\n", _obj->o.nam, dxf);  \
+    LOG_TRACE (#o "." #nam ": " FORMAT_BSd " [BSd %d]", _obj->o.nam, dxf);    \
     LOG_RPOS                                                                  \
   }
 #define FIELD_BLd(nam, dxf)                                                   \
