@@ -49,7 +49,7 @@ VALGRIND_SUPPRESSIONS_FILES = @VALGRIND_SUPPRESSIONS_FILE@
 VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
 JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 doc_DIST = README HACKING NEWS TODO
-EXTRA_DIST = $(top_srcdir)/.version libredwg.spec build-aux/Dockerfile \
+EXTRA_DIST = $(top_srcdir)/.version libredwg.spec vcpkg.json build-aux/Dockerfile \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check json-check \
 	     log.in svg.in rw.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     cmp-objs.pl .dockerignore \
@@ -344,7 +344,7 @@ CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
 if ENABLE_GCOV
 CLEANFILES += codecov_io.sh *.gcov
 endif
-DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh unit_testing_all.sh log json dwg dxf svg rw libredwg.pc
+DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh unit_testing_all.sh log json dwg dxf svg rw libredwg.pc vcpkg.json
 MAINTAINERCLEANFILES  = *~ *.log *.dxf *.json *.dwg cover_db .analysis
 
 maintainer-clean-local:

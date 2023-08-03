@@ -937,6 +937,7 @@ AC_CONFIG_FILES([
 	test/Makefile
 	test/unit-testing/Makefile
 	libredwg.pc
+        vcpkg.json
 ])
 
 AM_COND_IF([DISABLE_BINDINGS], [],
