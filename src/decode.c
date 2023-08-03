@@ -956,8 +956,7 @@ handles_section:
       // r14:      7d f4 78 01
       // r2000:    14 64 78 01
       FIELD_RC (unknown_10, 0); // 0x10
-      for (i = 0; i < 4; i++)
-        FIELD_RC (unknown_rc4[i], 0);
+      FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
 
       if (dat->from_version < R_2000 && FIELD_VALUE (unknown_10) == 0x18
           && FIELD_VALUE (unknown_rc4[0]) == 0x78)
