@@ -2357,6 +2357,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dat->byte += 6;
 
   {
+    BITCODE_BL vcount;
     // set dwg_version from release
     const struct dwg_versions *_verp
         = dwg_version_struct (dwg->header.version);

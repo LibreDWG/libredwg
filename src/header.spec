@@ -25,9 +25,7 @@
           _obj->zero_5[0], _obj->zero_5[1], _obj->zero_5[2], _obj->zero_5[3],
           _obj->zero_5[4]);
 #else
-  for (i = 0; i < 5; i++) {
-    FIELD_RC (zero_5[i], 0);
-  }
+  FIELD_VECTOR_INL (zero_5, RC, 5, 0)
 #endif
   FIELD_RC (is_maint, 0);
 
