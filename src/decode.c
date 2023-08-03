@@ -753,8 +753,9 @@ handles_section:
 
       startpos = dat->byte;
       section_size = bit_read_RS_BE (dat);
-      LOG_TRACE ("Handles page size: %u [RS_BE] @%zu\n", section_size,
-                 startpos);
+      LOG_TRACE ("Handles page size: %u [RS_BE]", section_size);
+      LOG_HANDLE (" @%zu", startpos);
+      LOG_TRACE ("\n");
       if (section_size > 2040)
         {
           LOG_ERROR ("Object-map section size greater than 2040!")
@@ -868,7 +869,9 @@ handles_section:
   if (object_end <= dat->size)
     dat->byte = object_end;
   object_begin = bit_read_MS (dat);
-  LOG_TRACE ("last object size: %zu [MS] (@%zu)\n", object_begin, object_end)
+  LOG_TRACE ("last object size: %zu [MS]", object_begin)
+  LOG_HANDLE (" (@%zu)", object_end);
+  LOG_TRACE ("\n");
   LOG_INFO ("         Last Object (end): %8zu\n",
             (object_end + object_begin + 2))
 
