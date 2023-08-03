@@ -1428,12 +1428,14 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
   unsigned char *s = (unsigned char *)src;
   const char *endp = dest + len;
   char *d = dest;
+  char *tmp = NULL;
 
   if (!src)
     return (char *)"";
   if (codepage > CP_US_ASCII && codepage <= CP_ANSI_1258)
     {
-      char *tmp = bit_TV_to_utf8 ((char *restrict)src, codepage);
+      // may malloc
+      tmp = bit_TV_to_utf8 ((char *restrict)src, codepage);
       if (tmp)
         s = (unsigned char *)tmp;
       // else conversion failed. ignore
@@ -1443,6 +1445,8 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
       if (dest >= endp)
         {
           *dest = 0;
+          if (tmp && tmp != src)
+            free (tmp);
           return d;
         }
       if (c == '"' && dest + 1 < endp)
@@ -1488,6 +1492,8 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
         *dest++ = c;
     }
   *dest = 0; // add final delim, skipped above
+  if (tmp && tmp != src)
+    free (tmp);
   return d;
 }
 

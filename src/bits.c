@@ -2953,14 +2953,13 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
   return d;
 }
 
-ATTRIBUTE_MALLOC
 char *
 bit_u_expand (char *src)
 {
   char *ret = src;
   char *p = src;
-  // convert all \U+XXXX sequences to UTF-8
-  while (strlen (p) >= 7 && (p = strstr (p, "\\U+")) && ishex (p[3])
+  // convert all \U+XXXX sequences to UTF-8. always gets shorter, so in-place
+  while (p && strlen (p) >= 7 && (p = strstr (p, "\\U+")) && ishex (p[3])
          && ishex (p[4]) && ishex (p[5]) && ishex (p[6]))
     {
       uint16_t wc;
@@ -3000,6 +2999,11 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
   char *str = calloc (1, destlen + 1);
   char *tmp = (char *)src;
   uint16_t c = 0;
+
+  if (!srclen)
+    return (char *)calloc (1, 1);
+  if (!codepage)
+    return (char *)src;
   //  UTF8 encode
   while ((c = (0xFF & *tmp)) && i < destlen)
     {
@@ -3049,14 +3053,14 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
     const bool is_asian_cp
         = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
     const size_t srclen = strlen (src);
-    size_t destlen = is_asian_cp ? srclen * 3 : trunc (srclen * 1.5);
+    size_t destlen = 1 + (is_asian_cp ? srclen * 3 : trunc (srclen * 1.5));
 #ifdef HAVE_ICONV
     const char *charset = dwg_codepage_iconvstr ((Dwg_Codepage)codepage);
     const char utf8_cs[] = "UTF-8//TRANSLIT//IGNORE";
     iconv_t cd;
     size_t nconv = (size_t)-1;
     char *dest, *odest, *osrc;
-    if (!charset)
+    if (!charset || !srclen)
       return (char *)src;
     osrc = (char *)src;
     odest = dest = (char *)malloc (destlen);
