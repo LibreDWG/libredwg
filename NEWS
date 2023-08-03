@@ -5,14 +5,17 @@ See the end for copying conditions.
 LibreDWG version 0.13.0 - 2023/?? - beta:
 
 Major features:
-  * Added experimental pre-R13 DWG decode support for all old DWG formats
-    (with Michal Spacek). DXF and down-conversions not yet.
-  * Fixed dwgadd: (Dmitry Sinyavin #388, #415)
-  * New authors: Michal Josef Špaček (preR13 DWG formats),
-    Dmitry Sinyavin (dwgadd fixes).
+  * Added pre-R13 DWG decode support for all old DWG formats
+    with Michal Josef Špaček. DXF and down-conversions not yet.
   * Add support for VS2019 (msvc with ucrt) and clang-cl cross-compilation
     to Windows. (it is not error compatible to msvc, msvc errors much more).
+    Also cross-compile to mips32be and ppc64be.
     Tested ok with tcc and a patched chibicc.
+  * Added read support on bigendian platforms, write not yet.
+  * Fixed dwgadd (Dmitry Sinyavin #388, #415)
+  * libredwg is on vcpkg
+  * New authors: Michal Josef Špaček (preR13 DWG formats),
+    Dmitry Sinyavin (dwgadd fixes).
 Minor features:
   * Added a third *int alloced arg to dwg_dynapi_handle_name()
   * Renamed HEADER.unknown_s[] fields. (Michal Spacek #412)
