@@ -211,6 +211,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
    GCC80_DIAG_IGNORE (-Wmaybe-uninitialized)
    GCC80_DIAG_IGNORE (-Wstringop-truncation)
    GCC46_DIAG_IGNORE (-Wformat-nonliteral) + GCC46_DIAG_RESTORE
+   GCC46_DIAG_IGNORE (-Wmissing-field-initializers) 4.7.1
    GCC30_DIAG_IGNORE (-Wformat-nonliteral) w/o
    GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
    GCC30_DIAG_IGNORE (-Wshadow)

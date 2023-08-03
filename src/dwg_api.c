@@ -22319,6 +22319,8 @@ default_numheader_vars (Dwg_Data *dwg, const Dwg_Version_Type version)
 
 /* The Document API should be similar to the public VBA interface */
 
+#define CMC_DEFAULTS 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0
+
 /* The internal driver, which takes an existing dwg */
 EXPORT int
 dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
@@ -22434,10 +22436,12 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.FLAGS = 0x2a1d; // or 0x281d
   dwg->header_vars.CELWEIGHT = -1; // => FLAGS & 0x1f + lweight lookup
   now = time (NULL);
-  dwg->header_vars.TDCREATE = (BITCODE_TIMEBLL){ (BITCODE_BL)(now / 3600L),
-                                                 (BITCODE_BL)(now / 86400L) };
+  dwg->header_vars.TDCREATE
+      = (BITCODE_TIMEBLL){ (BITCODE_BL)(now / 3600L),
+                           (BITCODE_BL)(now / 86400L),
+                           (now / 3600L) + ((now / 86400L) * 1e-8) };
   // CECOLOR.index: 256 [CMC.BS 62]
-  dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, 0 }; // ByLayer
+  dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, CMC_DEFAULTS }; // ByLayer
   if (version > R_11)
     {
       // HANDSEED: 0.1.49 [H 0] // FIXME needs to be updated on encode
@@ -22514,9 +22518,9 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (version > R_2_21 && version < R_13b1)
     dwg->header_vars.circle_zoom_percent = 100;
 
-  dwg->header_vars.DIMCLRD = (BITCODE_CMC){ 0 };
-  dwg->header_vars.DIMCLRE = (BITCODE_CMC){ 0 };
-  dwg->header_vars.DIMCLRT = (BITCODE_CMC){ 0 };
+  dwg->header_vars.DIMCLRD = (BITCODE_CMC){ 0, CMC_DEFAULTS };
+  dwg->header_vars.DIMCLRE = (BITCODE_CMC){ 0, CMC_DEFAULTS };
+  dwg->header_vars.DIMCLRT = (BITCODE_CMC){ 0, CMC_DEFAULTS };
 
   dwg->header_vars.MEASUREMENT = imperial ? 0 : 256;
   canonical_media_name = imperial ? "ANSI_A_(8.50_x_11.00_Inches)"
@@ -22595,7 +22599,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     {
       // LAYER: (0.1.10)
       layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
-      layer->color = (BITCODE_CMC){ 7 };
+      layer->color = (BITCODE_CMC){ 7, CMC_DEFAULTS };
       layer->ltype
           = dwg_add_handleref (dwg, 5, UINT64_C (0x16), NULL); // Continuous
       layer->plotstyle = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL);
@@ -25293,9 +25297,9 @@ dwg_add_DIMSTYLE (Dwg_Data *restrict dwg, const char *restrict name)
       _obj->DIMLFAC = 1.0;
       _obj->DIMTFAC = 1.0;
       _obj->DIMGAP = 0.09;
-      _obj->DIMCLRD = (BITCODE_CMC){ 0 };
-      _obj->DIMCLRE = (BITCODE_CMC){ 0 };
-      _obj->DIMCLRT = (BITCODE_CMC){ 0 };
+      _obj->DIMCLRD = (BITCODE_CMC){ 0, CMC_DEFAULTS };
+      _obj->DIMCLRE = (BITCODE_CMC){ 0, CMC_DEFAULTS };
+      _obj->DIMCLRT = (BITCODE_CMC){ 0, CMC_DEFAULTS };
       if (dwg->header_vars.TEXTSTYLE)
         _obj->DIMTXSTY = dwg_add_handleref (
             dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
@@ -25423,7 +25427,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
 
   _obj->name = strEQc (name, "Standard") ? dwg_add_u8_input (dwg, "STANDARD")
                                          : dwg_add_u8_input (dwg, name);
-  _obj->fill_color = (BITCODE_CMC){ 256, 0 };
+  _obj->fill_color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
   if (strEQc (name, "Standard") || strEQc (name, "STANDARD"))
     {
       _obj->start_angle = _obj->end_angle = deg2rad (90.0);
@@ -25432,11 +25436,11 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
           = (Dwg_MLINESTYLE_line *)calloc (2, sizeof (Dwg_MLINESTYLE_line));
       _obj->lines[0].parent = _obj;
       _obj->lines[0].offset = 0.5;
-      _obj->lines[0].color = (BITCODE_CMC){ 256, 0 };
+      _obj->lines[0].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
       _obj->lines[0].lt_index = 32767;
       _obj->lines[0].parent = _obj;
       _obj->lines[1].offset = -0.5;
-      _obj->lines[1].color = (BITCODE_CMC){ 256, 0 };
+      _obj->lines[1].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
       _obj->lines[1].lt_index = 32767;
     }
   return _obj;
@@ -27872,7 +27876,7 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   Dwg_Object *img;
   Dwg_Entity_IMAGE *_img;
-  Dwg_Object *imgdef;
+  //Dwg_Object *imgdef;
   {
     int err;
     Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
@@ -27910,7 +27914,7 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Data *dwg = img->parent;
     API_ADD_OBJECT (IMAGEDEF);
-    imgdef = obj;
+    //imgdef = obj;
     //_obj->class_version = 0;
     _obj->file_path = dwg_add_u8_input (dwg, file_path);
     // TODO: get pixel props from the image. is_loaded, pixel_size, ...

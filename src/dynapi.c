@@ -14446,7 +14446,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
           { "bigfont_file", "TFv", 64, OFF (struct _dwg_object_STYLE, bigfont_file), 1,1,1, 4 },
           { "description", "TFv", 48, OFF (struct _dwg_object_LTYPE, description), 1,1,1, 3 },
           // STYLE has no description, and LTYPE no font_file's
-          { NULL }
+          { 0 }
         };
 
       if (!f)
@@ -14507,7 +14507,7 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
           { "unit2_name", "TFv", 32, OFF (struct _dwg_header_variables, unit2_name), 1,1,1, 1 },
           { "unit3_name", "TFv", 32, OFF (struct _dwg_header_variables, unit3_name), 1,1,1, 1 },
           { "unit4_name", "TFv", 32, OFF (struct _dwg_header_variables, unit4_name), 1,1,1, 1 },
-          { NULL }
+          { 0 }
         };
         if (f->is_string && dwg->header.from_version < R_13b1)
           {

@@ -100,7 +100,7 @@ common_cvt_TIMEBLL_tests (void)
 {
   const unsigned long maxtries = 10000000LU;
   static struct tm tm = { 0 };
-  static BITCODE_TIMEBLL date = { 0U, 0U };
+  static BITCODE_TIMEBLL date = { 0U, 0U, 0.0 };
   int g_failed = failed;
   failed = 0;
   setlocale (LC_TIME, "en_UK.utf8");

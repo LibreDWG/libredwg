@@ -153,8 +153,8 @@ main (int argc, char *argv[])
 {
   int i = 0;
   Dwg_Data dwg;
-  Bit_Chain dat = { NULL, 0, 0, 0, 0 };
-  Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
+  Bit_Chain dat = { 0 };
+  Bit_Chain out_dat = { 0 };
   FILE *fp;
   struct stat attrib;
   enum

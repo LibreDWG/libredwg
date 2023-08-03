@@ -1234,13 +1234,13 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       else if (strEQc (f->type, "TIMEBLL") || strEQc (f->type, "TIMERLL"))
         {
-          static BITCODE_TIMEBLL date = { 0, 0, 0 };
+          BITCODE_TIMEBLL date = { 0 };
           json_TIMEBLL (dat, tokens, key, &date);
           dwg_dynapi_header_set_value (dwg, key, &date, 0);
         }
       else if (strEQc (f->type, "CMC"))
         {
-          BITCODE_CMC color = { 0, 0, 0 };
+          BITCODE_CMC color = { 0 };
           json_CMC (dat, dwg, tokens, name, key, &color);
           dwg_dynapi_header_set_value (dwg, key, &color, 0);
         }

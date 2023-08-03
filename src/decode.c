@@ -2455,7 +2455,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain obj_dat = { NULL }, hdl_dat = { NULL };
+  Bit_Chain obj_dat = { 0 }, hdl_dat = { 0 };
   BITCODE_RS section_size = 0;
   size_t endpos;
   int error;
@@ -5110,8 +5110,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                        Bit_Chain *hdl_dat, size_t address)
 {
   size_t objpos, restartpos;
-  Bit_Chain abs_dat = { NULL };
-  unsigned char previous_bit;
+  Bit_Chain abs_dat = { 0 };
   Dwg_Object *restrict obj;
   BITCODE_BL num = dwg->num_objects;
   int error = 0;
@@ -6514,8 +6513,6 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
       while (dat->byte < oldpos + size)
         {
           Dwg_Object *obj;
-          Dwg_Object_Entity *ent, *_ent;
-          BITCODE_RS type, crc;
           Dwg_Object_Type_r11 abstype;
 
           if (!num)

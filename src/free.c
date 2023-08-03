@@ -45,7 +45,7 @@ static int env_var_checked_p;
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
-static Bit_Chain pdat = { NULL, 0, 0, 0, 0, R_INVALID };
+static Bit_Chain pdat = { 0 };
 static BITCODE_BL rcount1, rcount2;
 
 /*--------------------------------------------------------------------------------

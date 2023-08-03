@@ -96,8 +96,8 @@ AC_DEFUN([AX_COMPILER_FLAGS_CFLAGS],[
             -Wno-unused-variable dnl
             -Wno-unused-parameter dnl
             -Wno-unused-but-set-variable dnl
-            -Wno-missing-field-initializers dnl
-            -Wno-cast-align dnl
+            -Wmissing-field-initializers dnl
+            -Wcast-align dnl
             -Wformat=2 dnl
             -Wformat-nonliteral dnl
             -Wformat-security dnl

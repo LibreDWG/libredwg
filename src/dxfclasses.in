@@ -69,6 +69,8 @@ enum apptypes
 
 struct Dwg_DXFClass {int name; const char *const cppname; unsigned apptype:4; unsigned isent:1;};
 
+GCC46_DIAG_IGNORE(-Wmissing-field-initializers)
+
 %%
 # Entities
 LWPOLYLINE,	"AcDbPolyline",		ODBX,	1
@@ -381,6 +383,8 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
     }
   return -2;
 }
+
+GCC46_DIAG_RESTORE
 
 /*
  * Local variables:

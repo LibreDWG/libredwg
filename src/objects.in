@@ -43,6 +43,8 @@ static const struct _dwg_dxfname * in_word_set (const char *str, size_t len);
 
 struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type type; const unsigned isent:1; const unsigned stability:4; };
 
+GCC46_DIAG_IGNORE(-Wmissing-field-initializers)
+
 %%
 # Entities
 "3DFACE",                    "3DFACE",                     DWG_TYPE__3DFACE,	1,	STABLE
@@ -392,6 +394,7 @@ EXPORT int dwg_object_name (const char *const restrict name,
     }
   return 0;
 }
+GCC46_DIAG_RESTORE
 
 /*
  * Local variables:

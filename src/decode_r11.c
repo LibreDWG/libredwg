@@ -593,7 +593,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RL extras_start = 0, extras_end = 0, extras_size = 0;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
-  int tbl_id;
   int error = 0;
   Bit_Chain dat_save = *dat;
 
@@ -637,7 +636,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   SINCE (R_2_0b)
   {
-    tbl_id = 0;
     dwg->header.section[0].number = 0;
     dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
     strcpy (dwg->header.section[0].name, "HEADER");

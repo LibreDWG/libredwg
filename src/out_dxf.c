@@ -1435,7 +1435,7 @@ dxf_has_STYLE_eed (Bit_Chain *restrict dat,
                    const Dwg_Object_Object *restrict obj)
 {
   bool result = false;
-  bool has_acadappid = false;
+  //bool has_acadappid = false;
   Dwg_Data *dwg = obj->dwg;
   for (BITCODE_BL i = 0; i < obj->num_eed; i++)
     {
@@ -1448,7 +1448,7 @@ dxf_has_STYLE_eed (Bit_Chain *restrict dat,
           if (appid && appid->fixedtype == DWG_TYPE_APPID
               && bit_eq_T (dat, appid->tio.object->tio.APPID->name, "ACAD"))
             {
-              has_acadappid = true;
+              //has_acadappid = true;
               if (_obj->data && _obj->data->code == 0)
                 return true;
             }
@@ -1878,8 +1878,8 @@ SAT_boolean (const char *act_record, bool value)
 EXPORT int
 dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 {
-  Bit_Chain dest = { NULL, 0, 0, 0 };
-  Bit_Chain src = { NULL, 0, 0, 0 };
+  Bit_Chain dest = { 0 };
+  Bit_Chain src = { 0 };
   unsigned int i = 0, num_blocks = 2;
   BITCODE_RC c;
   char *p = (char *)&_obj->acis_data[15];
@@ -1892,7 +1892,6 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   // const char enddata[] = "\016\003End\016\002of\016\004ACIS\r\004data";
   // const char enddata1[] = "\016\003End\016\002of\016\003ASM\r\004data";
   int l = 0;
-  int forward = 0;
   int skip_hist = 0;
   char act_record[80];
   int error;
@@ -2057,7 +2056,6 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         {
         // check size, realloc encr_sat_data[i], set dest
         case 17: //  # end of record
-          forward = 0;
           if (dest.byte + 2 >= dest.size)
             bit_chain_alloc (&dest);
           if (skip_hist && !has_history)

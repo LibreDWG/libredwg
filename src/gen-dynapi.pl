@@ -1847,6 +1847,8 @@ static const struct _dwg_dxfname * in_word_set (const char *str, size_t len);
 
 struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type type; const unsigned isent:1; const unsigned stability:4; };
 
+GCC46_DIAG_IGNORE(-Wmissing-field-initializers)
+
 %%
 # Entities
 EOF
@@ -1896,6 +1898,7 @@ EXPORT int dwg_object_name (const char *const restrict name,
     }
   return 0;
 }
+GCC46_DIAG_RESTORE
 
 /*
  * Local variables:
@@ -3198,7 +3201,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
           { "bigfont_file", "TFv", 64, OFF (struct _dwg_object_STYLE, bigfont_file), 1,1,1, 4 },
           { "description", "TFv", 48, OFF (struct _dwg_object_LTYPE, description), 1,1,1, 3 },
           // STYLE has no description, and LTYPE no font_file's
-          { NULL }
+          { 0 }
         };
 
       if (!f)
@@ -3259,7 +3262,7 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
           { "unit2_name", "TFv", 32, OFF (struct _dwg_header_variables, unit2_name), 1,1,1, 1 },
           { "unit3_name", "TFv", 32, OFF (struct _dwg_header_variables, unit3_name), 1,1,1, 1 },
           { "unit4_name", "TFv", 32, OFF (struct _dwg_header_variables, unit4_name), 1,1,1, 1 },
-          { NULL }
+          { 0 }
         };
         if (f->is_string && dwg->header.from_version < R_13b1)
           {

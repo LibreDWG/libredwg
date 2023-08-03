@@ -3915,7 +3915,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       Dwg_R2004_Header *_obj = &dwg->r2004_header;
       Bit_Chain file_dat
           = { NULL, sizeof (Dwg_R2004_Header), 0UL, 0, 0, R_INVALID, R_INVALID,
-              NULL };
+              NULL, 30 };
       Bit_Chain *orig_dat = dat;
       /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
       const char enc_file_ID_string[]

@@ -12393,7 +12393,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
   for (i = 0; i < header_hdls->nitems; i++)
     {
       char *field = header_hdls->items[i].field;
-      Dxf_Pair p = { 0, DWG_VT_STRING };
+      Dxf_Pair p = { 0, DWG_VT_STRING, { 0 } };
       BITCODE_H hdl = NULL;
       p.value.s = header_hdls->items[i].name;
       if (!p.value.s || !*p.value.s)
@@ -12444,7 +12444,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
   for (i = 0; i < obj_hdls->nitems; i++)
     {
       char *field = obj_hdls->items[i].field;
-      Dxf_Pair p = { 0, DWG_VT_STRING };
+      Dxf_Pair p = { 0, DWG_VT_STRING, { 0 } };
       BITCODE_H hdl = NULL;
       int objid = obj_hdls->items[i].code;
       Dwg_Object *obj = &dwg->object[objid];
