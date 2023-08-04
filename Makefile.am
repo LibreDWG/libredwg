@@ -52,12 +52,13 @@ VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
 JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec vcpkg.json build-aux/Dockerfile \
-	     build-aux/release.sh \
+	     build-aux/release.sh libredwg-schema.json \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
 	     dxf-check dxfb-check json-check oda \
 	     json.in log.in svg.in rw.in geojson.in \
 	     logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     llvmfuzz_standalone_tz.sh llvmfuzz_standalone_data.sh \
+             dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
 	     cmp-objs.pl .dockerignore \
 	     build-aux/swig_python.patch \
              $(JSON_DIST) \
