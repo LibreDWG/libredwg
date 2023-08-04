@@ -1729,7 +1729,7 @@ section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
   if (id == SECTION_APPINFOHISTORY)
     max_decomp_size = 0x1000;
   else if (id == SECTION_APPINFO)
-    max_decomp_size = 0x300;
+    max_decomp_size = 0x400; // max seen 0x380
   else if (id == SECTION_PREVIEW)
     {
       max_decomp_size
@@ -2703,6 +2703,7 @@ read_2004_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 // may return OUTOFBOUNDS, needs to free the chain then
+// page size: 0x80, max seen max_decomp_size: 0x380
 static int
 appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
