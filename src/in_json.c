@@ -3633,7 +3633,7 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (unknown_long, 0)
       FIELD_RL (last_section_id, 0)
       FIELD_RLL (last_section_address, 0)
-      FIELD_RLL (second_header_address, 0)
+      FIELD_RLL (secondheader_address, 0)
       FIELD_RL (numgaps, 0)
       FIELD_RL (numsections, 0)
       FIELD_RL (x20, 0)
@@ -3732,7 +3732,7 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
 static int
 json_SecondHeader_Sections (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                            jsmntokens_t *restrict tokens, Dwg_Second_Header *_obj,
+                            jsmntokens_t *restrict tokens, Dwg_SecondHeader *_obj,
                             int size)
 {
   const char *section = "SecondHeader_Sections";
@@ -3772,9 +3772,9 @@ json_SecondHeader_Sections (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           t = &tokens->tokens[tokens->index];
           // clang-format off
           if (0) ; // else
-          SUB_FIELD_LONG (section[j], nr, RC)
-          SUB_FIELD_LONG (section[j], address, BL)
-          SUB_FIELD_LONG (section[j], size, BL)
+          SUB_FIELD_LONG (sections[j], nr, RC)
+          SUB_FIELD_LONG (sections[j], address, BL)
+          SUB_FIELD_LONG (sections[j], size, BL)
           else
             {
               LOG_ERROR ("Unknown %s.%s ignored", section, key);
@@ -3790,7 +3790,7 @@ json_SecondHeader_Sections (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
 static int
 json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                            jsmntokens_t *restrict tokens, Dwg_Second_Header *_obj,
+                            jsmntokens_t *restrict tokens, Dwg_SecondHeader *_obj,
                             int size)
 {
   const char *section = "SecondHeader_Handlers";
@@ -3839,12 +3839,7 @@ json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               if (t->size < 256)
                 _obj->handlers[j].data = (BITCODE_RC *)calloc (1, t->size);
-              if (t->size != _obj->handlers[j].num_data)
-                {
-                  _obj->handlers[j].num_data = (BITCODE_RC)t->size & 0xFF;
-                  LOG_WARN ("handlers[%d].num_data mismatch => " FORMAT_RC, j,
-                             _obj->handlers[j].num_data);
-                }
+              _obj->handlers[j].num_data = t->size;
               for (int vcount = 0; vcount < t->size; vcount++)
                 {   
                   _obj->handlers[j].data[vcount] = (BITCODE_RC)json_long (dat, tokens) & 0xFF;
@@ -3872,7 +3867,7 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "SecondHeader";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  Dwg_Second_Header *_obj = &dwg->second_header;
+  Dwg_SecondHeader *_obj = &dwg->secondheader;
   int size, size1, error = 0;
   if (t->type != JSMN_OBJECT)
     {
@@ -3926,6 +3921,7 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_BS (num_handlers, 0)
       FIELD_RL (junk_r14_1, 0)
       FIELD_RL (junk_r14_2, 0)
+      FIELD_RS (crc, 0)
       // clang-format on
       else
       {

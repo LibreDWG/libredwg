@@ -1670,8 +1670,8 @@ dwg_free (Dwg_Data *dwg)
       // FREE_IF (dwg->objfreespace...);
       FREE_IF (dwg->Template.description);
       FREE_IF (dwg->header.section);
-      for (i = 0; i < dwg->second_header.num_handlers; i++)
-        FREE_IF (dwg->second_header.handlers[i].data);
+      for (i = 0; i < dwg->secondheader.num_handlers; i++)
+        FREE_IF (dwg->secondheader.handlers[i].data);
       FREE_IF (dwg->auxheader.R11_HANDSEED);
 
       for (i = 0; i < dwg->num_objects; ++i)

@@ -45,7 +45,7 @@
   FIELD_RL (unknown_long, 0);         // =1
   FIELD_RL (last_section_id, 0);      // @0x28 =0x13
   FIELD_RLL (last_section_address, 0);// @0x2c =0x9c80
-  FIELD_RLL (second_header_address, 0);// @0x34 =0x984b
+  FIELD_RLL (secondheader_address, 0);// @0x34 =0x984b
   FIELD_RL (numgaps, 0);              // @0x3c =0
   FIELD_RL (numsections, 0);          // @0x40 =0x11
   FIELD_RL (x20, 0);        	      // @0x44 =0x20

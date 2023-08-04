@@ -1139,19 +1139,19 @@
           LOG_POS                                                             \
         }                                                                     \
     }
-#define SUB_FIELD_VECTOR_N(o, name, type, size, dxf)                          \
-  if (size > 0)                                                               \
+#define SUB_FIELD_VECTOR_N(o, nam, type, csize, dxf)                          \
+  if (csize > 0)                                                              \
     {                                                                         \
-      SUB_VECTOR_CHKCOUNT (o, name, type, size, dat)                          \
-      _obj->o.name                                                            \
-          = (BITCODE_##type *)calloc (size, sizeof (BITCODE_##type));         \
-      if (!_obj->o.name)                                                      \
+      SUB_VECTOR_CHKCOUNT (o, nam, type, csize, dat)                          \
+      _obj->o.nam                                                             \
+          = (BITCODE_##type *)calloc (csize, sizeof (BITCODE_##type));        \
+      if (!_obj->o.nam)                                                       \
         return DWG_ERR_OUTOFMEM;                                              \
-      for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
+      for (vcount = 0; vcount < (BITCODE_BL)csize; vcount++)                  \
         {                                                                     \
-          _obj->o.name[vcount] = bit_read_##type (dat);                       \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type "]",            \
-                     (long)vcount, _obj->o.name[vcount])                      \
+          _obj->o.nam[vcount] = bit_read_##type (dat);                        \
+          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type "]",             \
+                     (long)vcount, _obj->o.nam[vcount])                       \
           LOG_POS                                                             \
         }                                                                     \
     }
@@ -1188,15 +1188,15 @@
         }                                                                     \
     }
 // inlined, with const size and without malloc
-#define SUB_FIELD_VECTOR_INL(o, name, type, size, dxf)                        \
-  if (size > 0)                                                               \
+#define SUB_FIELD_VECTOR_INL(o, nam, type, csize, dxf)                        \
+  if (csize > 0)                                                              \
     {                                                                         \
-      _VECTOR_CHKCOUNT_STATIC (name, size, TYPE_MAXELEMSIZE (type), dat)      \
-      for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
+      _VECTOR_CHKCOUNT_STATIC (nam, csize, TYPE_MAXELEMSIZE (type), dat)      \
+      for (vcount = 0; vcount < (BITCODE_BL)csize; vcount++)                  \
         {                                                                     \
-          _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type " %d]",         \
-                     (long)vcount, _obj->o.name[vcount], dxf)                 \
+          _obj->o.nam[vcount] = bit_read_##type (dat);                        \
+          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]",          \
+                     (long)vcount, _obj->o.nam[vcount], dxf)                  \
           LOG_POS                                                             \
         }                                                                     \
     }
@@ -1645,6 +1645,7 @@
     }                                                                         \
   if (_obj->name)                                                             \
     for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
+
 // not allocating versions unchecked: _REPEAT_CNF
 // not allocating versions checked: _REPEAT_NF
 

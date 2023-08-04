@@ -86,6 +86,7 @@ EXTRA_HEADERS = \
         common_object_handle_data.spec \
         header.spec \
         auxheader.spec \
+        2ndheader.spec \
 	r2004_file_header.spec \
         summaryinfo.spec \
         acds.spec \

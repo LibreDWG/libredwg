@@ -854,16 +854,25 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define _REPEAT_CN(times, nam, type, idx) _REPEAT_N (times, nam, type, idx)
 #define _REPEAT_CNF(times, nam, type, idx) _REPEAT_N (times, nam, type, idx)
 #define _REPEAT_NF(times, nam, type, idx) _REPEAT_N (times, nam, type, idx)
-
+#define REPEAT_F(times, size, nam, type)                                      \
+  if (_obj->times > (BITCODE_BL)size)                                         \
+    {                                                                         \
+      LOG_ERROR ("Invalid %s " FORMAT_BL " > %u", #nam, _obj->times,          \
+                 (unsigned)size);                                             \
+      _obj->times = (BITCODE_BL)size;                                         \
+    }                                                                         \
+  _REPEAT_N (_obj->times, nam, type, 1)
 #undef REPEAT_BLOCK
 #define REPEAT_BLOCK FIRSTPREFIX HASH;
 #undef END_REPEAT_BLOCK
 #define END_REPEAT_BLOCK ENDHASH;
 #undef END_REPEAT
 #define END_REPEAT(nam)                                                       \
-  }                                                                           \
+    }                                                                         \
   ENDARRAY;                                                                   \
   }
+#undef END_REPEAT_F
+#define END_REPEAT_F(nam) END_REPEAT (nam)
 
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf)                             \
   FIELD (num_inserts, type, dxf)
@@ -2524,13 +2533,14 @@ json_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  struct _dwg_second_header *_obj = &dwg->second_header;
+  struct _dwg_secondheader *_obj = &dwg->secondheader;
   Dwg_Object *obj = NULL;
   BITCODE_BL vcount;
   int error = 0;
 
   RECORD (SecondHeader); // single hash
-  FIELD_TF (version, 12, 0);
+#if 0
+  FIELD_TFF (version, 12, 0);
   FIELD_VECTOR_INL (null_b, B, 4, 0);
   FIELD_RC (unknown_10, 0);
   FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0);
@@ -2561,9 +2571,11 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     FIELD_RL (junk_r14_1, 0);
     FIELD_RL (junk_r14_2, 0);
   }
+#else
   // clang-format off
-  // #include "2ndheader.spec"
+  #include "2ndheader.spec"
   // clang-format on
+#endif
   ENDRECORD ();
   return 0;
 }

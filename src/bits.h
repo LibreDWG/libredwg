@@ -131,6 +131,7 @@ void bit_write_BS (Bit_Chain *dat, BITCODE_BS value);
 
 BITCODE_BL bit_read_BL (Bit_Chain *dat);
 void bit_write_BL (Bit_Chain *dat, BITCODE_BL value);
+#define bit_read_BLd(dat) (BITCODE_BLd)bit_read_BL(dat)
 void bit_write_BLd (Bit_Chain *dat, BITCODE_BLd value);
 
 BITCODE_BS bit_read_BOT (Bit_Chain *dat);

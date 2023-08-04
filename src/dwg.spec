@@ -5109,7 +5109,7 @@ DWG_ENTITY (HATCH)
           SUB_FIELD_2BD_1 (deflines[rcount1], pt0, 43);
           SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
           SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
-          FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
+          SUB_FIELD_VECTOR (deflines[rcount1], dashes, BD, num_dashes, 49)
           SET_PARENT_OBJ (deflines[rcount1]);
       END_REPEAT_BLOCK
       END_REPEAT (deflines);
@@ -5320,7 +5320,7 @@ DWG_ENTITY (MPOLYGON)
           SUB_FIELD_2BD_1 (deflines[rcount1], pt0, 43);
           SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
           SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
-          FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
+          SUB_FIELD_VECTOR (deflines[rcount1], dashes, BD, num_dashes, 49)
           SET_PARENT (deflines[rcount1], (Dwg_Entity_HATCH *)_obj);
       END_REPEAT_BLOCK
       END_REPEAT (deflines);
@@ -9714,14 +9714,14 @@ DWG_OBJECT (EVALUATION_GRAPH)
       }
       SUB_FIELD_BLd (nodes[rcount1], nextid, 95); // 1
       SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 5, 360);
-#ifndef IS_JSON
-      SUB_FIELD_BLd (nodes[rcount1], node[0], 92);   // -1
-      SUB_FIELD_BLd (nodes[rcount1], node[1], 92);   // -1
-      SUB_FIELD_BLd (nodes[rcount1], node[2], 92);   // -1
-      SUB_FIELD_BLd (nodes[rcount1], node[3], 92);   // -1
-#else
-      SUB_FIELD_VECTOR_N (nodes[rcount1], node, BLd, 4, 92)
-#endif
+//    #ifndef IS_JSON
+//      SUB_FIELD_BLd (nodes[rcount1], node[0], 92);   // -1
+//      SUB_FIELD_BLd (nodes[rcount1], node[1], 92);   // -1
+//      SUB_FIELD_BLd (nodes[rcount1], node[2], 92);   // -1
+//      SUB_FIELD_BLd (nodes[rcount1], node[3], 92);   // -1
+//    #else
+      SUB_FIELD_VECTOR_INL (nodes[rcount1], node, BLd, 4, 92)
+      //#endif
       if (FIELD_VALUE (has_graph))
         SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
       SET_PARENT_OBJ (nodes[rcount1]);
@@ -12333,7 +12333,7 @@ DWG_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
       SUB_FIELD_BL (items[rcount1], itemloc1, 90);
       SUB_FIELD_BL (items[rcount1], itemloc2, 90);
       SUB_FIELD_BL (items[rcount1], itemloc3, 90);
-      //SUB_FIELD_VECTOR_INN (items[rcount1], itemloc, BL, 3, 90);
+      //SUB_FIELD_VECTOR_N (items[rcount1], itemloc, BL, 3, 90);
       SET_PARENT_OBJ (items[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (items)

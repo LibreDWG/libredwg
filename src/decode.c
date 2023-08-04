@@ -102,6 +102,7 @@ static int dwg_decode_common_entity_handle_data (Bit_Chain *dat,
                                                  Dwg_Object *restrict obj);
 static int resolve_objectref_vector (Bit_Chain *restrict dat,
                                      Dwg_Data *restrict dwg);
+static int secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 /*----------------------------------------------------------------------------
  * Public variables
@@ -153,7 +154,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   memset (&dwg->summaryinfo, 0, sizeof (dwg->summaryinfo));
   memset (&dwg->r2004_header, 0, sizeof (dwg->r2004_header));
   memset (&dwg->auxheader, 0, sizeof (dwg->auxheader));
-  memset (&dwg->second_header, 0, sizeof (dwg->second_header));
+  memset (&dwg->secondheader, 0, sizeof (dwg->secondheader));
 
   if (dwg->opts)
     {
@@ -878,8 +879,7 @@ handles_section:
 
   /*
    // TODO: if the previous Handleoff got corrupted somehow, read this handle
-   map
-   // and try again.
+   // map and try again.
 
    dat->byte = dwg->header.section[SECTION_HANDLES_R13].address - 2;
    // Unknown bitdouble inter object data and object map
@@ -911,23 +911,21 @@ handles_section:
    * Second header, section 3. R13c3-R2000 only.
    * But partially also since r2004.
    */
-
   if (bit_search_sentinel (dat,
-                           dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN)))
+                           dwg_sentinel (DWG_SENTINEL_2NDHEADER_BEGIN)))
     {
-      BITCODE_RL i;
-      BITCODE_RC sig, sig2;
-      BITCODE_BL vcount;
-      size_t pvzadr;
-      struct _dwg_second_header *_obj = &dwg->second_header;
-      obj = NULL;
+      //BITCODE_RL i;
+      //BITCODE_RC sig, sig2;
+      //BITCODE_BL vcount;
+      //size_t pvzadr;
+      struct _dwg_secondheader *_obj = &dwg->secondheader;
+      //obj = NULL;
 
       LOG_INFO ("\n=======> Second Header 3 (start): %8zu\n", dat->byte - 16)
-      pvzadr = dat->byte;
-      LOG_TRACE ("pvzadr: %zx\n", pvzadr)
+      //pvzadr = dat->byte;
+      //LOG_TRACE ("pvzadr: %zx\n", pvzadr)
 
-      FIELD_RL (size, 0);
-      FIELD_BLx (address, 0);
+      secondheader_private (dat, dwg);
 
       if (dwg->header.sections <= SECTION_2NDHEADER_R13)
         {
@@ -944,10 +942,14 @@ handles_section:
       if (!dwg->header.section[SECTION_2NDHEADER_R13].address)
         {
           dwg->header.section[SECTION_2NDHEADER_R13].address
-              = dwg->second_header.address;
+              = dwg->secondheader.address;
           dwg->header.section[SECTION_2NDHEADER_R13].size
-              = dwg->second_header.size;
+              = dwg->secondheader.size;
         }
+     
+#if 0
+      FIELD_RL (size, 0);
+      FIELD_BLx (address, 0);
 
       // AC1012, AC1013, AC1014 or AC1015. This is a char[11], zero padded.
       // with \n at 12.
@@ -1039,9 +1041,9 @@ handles_section:
           FIELD_RL (junk_r14_2, 0);
         }
       }
-
+#endif
       if (bit_search_sentinel (dat,
-                               dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END)))
+                               dwg_sentinel (DWG_SENTINEL_2NDHEADER_END)))
         LOG_INFO ("         Second Header 3 (end)  : %8u\n",
                   (unsigned int)dat->byte)
     }
@@ -2693,6 +2695,25 @@ auxheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   // clang-format off
   #include "auxheader.spec"
+  // clang-format on
+
+  return error;
+}
+
+// r13c3 - r2000
+static int
+secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  Dwg_SecondHeader *_obj = &dwg->secondheader;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_BL vcount;
+  if (!dat->chain || !dat->size)
+    return 1;
+
+  // clang-format off
+  #include "2ndheader.spec"
   // clang-format on
 
   return error;

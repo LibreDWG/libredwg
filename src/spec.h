@@ -297,6 +297,20 @@
       }
 #endif
 
+#ifndef REPEAT_F
+// not allocating versions checked
+#  define _REPEAT_F(times, size, nam, type, idx)                              \
+    if (_obj->times > (BITCODE_BL)size)                                       \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s " FORMAT_BL " > %u", #nam,                     \
+                   FIELD_VALUE (times), (unsigned)size);                      \
+        FIELD_VALUE (times) = (BITCODE_BL)size;                               \
+      }                                                                       \
+    for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times; rcount##idx++)
+#  define REPEAT_F(times, size, nam, type)                                    \
+    _REPEAT_F (times, size, nam, type, 1)
+#endif
+
 // logging format overrides
 #ifndef FIELD_RLx
 #  define FIELD_RLx(name, dxf) FIELD_RL (name, dxf)
@@ -507,6 +521,10 @@
 #  ifndef END_REPEAT
 #    define END_REPEAT(field)
 #  endif
+#endif
+
+#ifndef END_REPEAT_F
+#  define END_REPEAT_F(field)
 #endif
 
 #ifndef R11OPTS

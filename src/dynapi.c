@@ -12320,7 +12320,7 @@ static const Dwg_DYNAPI_field _dwg_R2004_Header_fields[] = {
     0,0,0, 0 },
   { "last_section_address",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_R2004_Header, last_section_address),
     0,0,0, 0 },
-  { "second_header_address",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_R2004_Header, second_header_address),
+  { "secondheader_address",	"RLL", sizeof (BITCODE_RLL),  OFF (struct _dwg_R2004_Header, secondheader_address),
     0,0,0, 0 },
   { "numgaps",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_R2004_Header, numgaps),
     0,0,0, 0 },

@@ -15222,7 +15222,7 @@ RL
 RL
 @item last_section_address
 RLL
-@item second_header_address
+@item secondheader_address
 RLL
 @item numgaps
 RL

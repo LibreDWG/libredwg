@@ -2205,6 +2205,27 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
+// r13c3 - r2000
+static int
+encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  Dwg_SecondHeader *_obj = &dwg->secondheader;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_BL vcount;
+  if (!dat->chain || !dat->size)
+    return 1;
+
+  // TODO fill in the defaults if not rewrite
+
+  // clang-format off
+  #include "2ndheader.spec"
+  // clang-format on
+
+  return error;
+}
+
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -3245,9 +3266,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * But partially also since r2004. (TODO: under which name? AuxHeader?)
    */
   if (dwg->header.version >= R_13b1 && dwg->header.version < R_2004 // TODO
-      && dwg->second_header.num_sections > 3)
+      && dwg->secondheader.num_sections > 3)
     {
-      struct _dwg_second_header *_obj = &dwg->second_header;
+      struct _dwg_secondheader *_obj = &dwg->secondheader;
       Dwg_Object *obj = NULL;
       BITCODE_BL vcount;
 
@@ -3258,15 +3279,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
       dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
       LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
-      write_sentinel (dat, DWG_SENTINEL_SECOND_HEADER_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
 
       pvzadr = dat->byte; // Keep the first address of the section to write its
-                          // size later
+                          // size later. before size.
       LOG_TRACE ("pvzadr: %zu\n", pvzadr);
       if (!_obj->size && !_obj->num_sections)
         {
           const char *code = dwg_version_codes (dwg->header.version);
-          LOG_TRACE ("Use second_header defaults...\n");
+          LOG_TRACE ("Use secondheader defaults...\n");
           strcpy ((char *)&_obj->version[0], &code[0]);
           memset (&_obj->version[7], 0, 4);
           _obj->version[11] = '\n';
@@ -3277,32 +3298,56 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->unknown_rc4[3] = 0x1;
           _obj->junk_r14_1 = 1957593121; //?
           _obj->junk_r14_2 = 2559919056; //?
-          // TODO handlers defaults
         }
-      // always recomputed, even with dwgrewrite
-      if (dwg->header.version <= R_2000)
+      // always recompute sections, even with dwgrewrite
+      _obj->num_sections = dwg->header.num_sections;
+      for (i = 0; i < _obj->num_sections; i++)
         {
-          _obj->num_sections = dwg->header.num_sections;
-          for (i = 0; i < _obj->num_sections; i++)
+          _obj->sections[i].nr = dwg->header.section[i].number;
+          _obj->sections[i].address = dwg->header.section[i].address;
+          _obj->sections[i].size = dwg->header.section[i].size;
+        }
+      // handlers defaults
+      if (!_obj->num_handlers)
+        {
+          _obj->num_handlers = 14;
+          _obj->handlers[0].data = (BITCODE_RC*)"\xb\xe7";
+          _obj->handlers[1].data = (BITCODE_RC*)"\x1";
+          _obj->handlers[2].data = (BITCODE_RC*)"\x2";
+          _obj->handlers[3].data = (BITCODE_RC*)"\x3";
+          _obj->handlers[4].data = (BITCODE_RC*)"\x5";
+          _obj->handlers[5].data = (BITCODE_RC*)"\x6";
+          _obj->handlers[6].data = (BITCODE_RC*)"\x7";
+          _obj->handlers[7].data = (BITCODE_RC*)"\x8";
+          _obj->handlers[8].data = (BITCODE_RC*)"\x9";
+          _obj->handlers[9].data = (BITCODE_RC*)"\xa";
+          _obj->handlers[10].data = (BITCODE_RC*)"\x2\xd1";
+          _obj->handlers[11].data = (BITCODE_RC*)"\xc";
+          _obj->handlers[12].data = (BITCODE_RC*)"\x17";
+          _obj->handlers[13].data = (BITCODE_RC*)"\xd";
+          for (i = 0; i < _obj->num_handlers; i++)
             {
-              _obj->section[i].nr = dwg->header.section[i].number;
-              _obj->section[i].address = dwg->header.section[i].address;
-              _obj->section[i].size = dwg->header.section[i].size;
+              _obj->handlers[i].nr = i;
+              _obj->handlers[i].num_data
+                  = strlen ((char *)_obj->handlers[i].data);
             }
         }
-      FIELD_RL (size, 0);
       if (FIELD_VALUE (address) != (BITCODE_RL)(pvzadr - 16))
         {
-          LOG_WARN ("second_header->address %u != %u", FIELD_VALUE (address),
+          LOG_WARN ("secondheader->address %u != %u", FIELD_VALUE (address),
                     (unsigned)(pvzadr - 16));
           FIELD_VALUE (address) = (pvzadr - 16) & 0xFFFFFFFF;
           dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
           dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
         }
-      FIELD_BL (address, 0);
+#if 1
+      encode_secondheader_private (dat, dwg);
+#else
+      FIELD_RL (size, 0);
+      FIELD_BLx (address, 0);
 
-      // AC1012, AC1014 or AC1015. This is a char[11], zero padded.
-      // with \n at 12.
+      // AC1012, AC1014 or AC1015. This is a char[12], zero padded.
+      // often with 0xf at 12.
       bit_write_TF (dat, (BITCODE_TF)_obj->version, 12);
       LOG_TRACE ("version: %s [TFF 12]\n", _obj->version)
 
@@ -3323,12 +3368,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         FIELD_RC (num_sections, 0); // r14: 5, r2000: 6 (auxheader)
         for (i = 0; i < FIELD_VALUE (num_sections); i++)
           {
-            SUB_FIELD_RC (section[i], nr, 0);
-            SUB_FIELD_BL (section[i], address, 0);
-            SUB_FIELD_BLd (section[i], size, 0);
+            SUB_FIELD_RC (sections[i], nr, 0);
+            SUB_FIELD_BLx (sections[i], address, 0);
+            SUB_FIELD_BLd (sections[i], size, 0);
           }
 
-        FIELD_BS (num_handlers, 0); // 14, resp. 16 in r14
+        FIELD_BS (num_handlers, 0); // 14, maybe 16 in some r14
         if (FIELD_VALUE (num_handlers) > 16)
           {
             LOG_ERROR ("Second header num_handlers > 16: %d\n",
@@ -3341,17 +3386,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             SUB_FIELD_RC (handlers[i], nr, 0);
             SUB_FIELD_VECTOR (handlers[i], data, RC, num_data, 0);
           }
-
-        _obj->size = encode_patch_RLsize (dat, pvzadr);
-        bit_write_CRC (dat, pvzadr, 0xC0C1);
-
-        VERSION (R_14)
-        {
-          FIELD_RL (junk_r14_1, 0);
-          FIELD_RL (junk_r14_2, 0);
-        }
       }
-      write_sentinel (dat, DWG_SENTINEL_SECOND_HEADER_END);
+#endif
+      _obj->size = encode_patch_RLsize (dat, pvzadr);
+      bit_write_CRC (dat, pvzadr, 0xC0C1);
+      VERSION (R_14)
+      {
+        FIELD_RL (junk_r14_1, 0);
+        FIELD_RL (junk_r14_2, 0);
+      }
+
+      write_sentinel (dat, DWG_SENTINEL_2NDHEADER_END);
       dwg->header.section[SECTION_2NDHEADER_R13].size
           = (dat->byte - _obj->address) & 0xFFFFFFFF;
     }
@@ -3879,7 +3924,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                           = dat->byte - 0x100;
                       dwg->r2004_header.last_section_address
                           = dat->byte + sec->size - 0x100;
-                      dwg->r2004_header.second_header_address = 0; // TODO
+                      dwg->r2004_header.secondheader_address = 0; // TODO
                     }
                   sec->address = dat->byte;
 

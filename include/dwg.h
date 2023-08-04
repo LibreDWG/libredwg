@@ -9392,7 +9392,7 @@ typedef struct _dwg_R2004_Header /* encrypted */
   BITCODE_RL unknown_long;
   BITCODE_RL last_section_id;
   BITCODE_RLL last_section_address;
-  BITCODE_RLL second_header_address;
+  BITCODE_RLL secondheader_address;
   BITCODE_RL numgaps;
   BITCODE_RL numsections;
   BITCODE_RL x20;
@@ -9558,7 +9558,21 @@ typedef struct _dwg_template
   BITCODE_RS MEASUREMENT;
 } Dwg_Template;
 
-typedef struct _dwg_second_header
+typedef struct _dwg_secondheader_sections
+{
+  BITCODE_RC nr;
+  BITCODE_BL address;
+  BITCODE_BL size;
+} Dwg_SecondHeader_Sections;
+
+typedef struct _dwg_secondheader_handlers
+{
+  BITCODE_RC num_data;
+  BITCODE_RC nr;
+  BITCODE_RC *data;
+} Dwg_SecondHeader_Handlers;
+
+typedef struct _dwg_secondheader
 {
   BITCODE_RL size;
   BITCODE_RL address;
@@ -9567,22 +9581,13 @@ typedef struct _dwg_second_header
   BITCODE_RC unknown_10;
   BITCODE_RC unknown_rc4[4];
   BITCODE_RC num_sections;
-  struct _sections
-  {
-    BITCODE_RC nr;
-    BITCODE_BL address;
-    BITCODE_BL size;
-  } section[6];
+  Dwg_SecondHeader_Sections sections[6];
   BITCODE_BS num_handlers;
-  struct _handler
-  {
-    BITCODE_RC num_data;
-    BITCODE_RC nr;
-    BITCODE_RC *data;
-  } handlers[16];
+  Dwg_SecondHeader_Handlers handlers[16];
+  BITCODE_RL crc;
   BITCODE_RL junk_r14_1; /*!< r14 only */
   BITCODE_RL junk_r14_2; /*!< r14 only */
-} Dwg_Second_Header;
+} Dwg_SecondHeader;
 
 /**
  Main DWG struct
@@ -9619,6 +9624,7 @@ typedef struct _dwg_struct
 
   /* #define DWG_AUXHEADER_SIZE 123 */
   Dwg_AuxHeader auxheader;
+  Dwg_SecondHeader secondheader;
   Dwg_SummaryInfo summaryinfo;
   /* Contains information about the application that wrote
      the .dwg file (encrypted = 2). */
@@ -9632,7 +9638,6 @@ typedef struct _dwg_struct
   Dwg_ObjFreeSpace objfreespace;
   Dwg_Template Template;
   Dwg_AcDs acds;
-  Dwg_Second_Header second_header;
 
   unsigned int layout_type;
   unsigned int num_acis_sab_hdl;  // temporary, until we can parse acds for SAB data, r2013+
