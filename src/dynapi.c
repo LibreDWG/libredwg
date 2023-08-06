@@ -10710,12 +10710,8 @@ static const Dwg_DYNAPI_field _dwg_ACTIONBODY_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ARRAYITEMLOCATOR_fields[] = {
   { "parent",	"struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY*", sizeof (void *),  OFF (struct _dwg_ARRAYITEMLOCATOR, parent),
     1,1,0, 0 },
-  { "itemloc1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ARRAYITEMLOCATOR, itemloc1),
-    0,0,0, 90 },
-  { "itemloc2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ARRAYITEMLOCATOR, itemloc2),
-    0,0,0, 90 },
-  { "itemloc3",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ARRAYITEMLOCATOR, itemloc3),
-    0,0,0, 90 },
+  { "itemloc[3]",	"BL", 3 * sizeof (BITCODE_BL),  OFF (struct _dwg_ARRAYITEMLOCATOR, itemloc),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_ASSOCACTIONBODY_action: (sorted by offset) */

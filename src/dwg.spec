@@ -9714,14 +9714,7 @@ DWG_OBJECT (EVALUATION_GRAPH)
       }
       SUB_FIELD_BLd (nodes[rcount1], nextid, 95); // 1
       SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 5, 360);
-//    #ifndef IS_JSON
-//      SUB_FIELD_BLd (nodes[rcount1], node[0], 92);   // -1
-//      SUB_FIELD_BLd (nodes[rcount1], node[1], 92);   // -1
-//      SUB_FIELD_BLd (nodes[rcount1], node[2], 92);   // -1
-//      SUB_FIELD_BLd (nodes[rcount1], node[3], 92);   // -1
-//    #else
       SUB_FIELD_VECTOR_INL (nodes[rcount1], node, BLd, 4, 92)
-      //#endif
       if (FIELD_VALUE (has_graph))
         SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
       SET_PARENT_OBJ (nodes[rcount1]);
@@ -12094,9 +12087,7 @@ DWG_OBJECT_END
 
 #define AcDbAssocArrayItem_fields(item)                          \
   SUB_FIELD_BL (item, class_version, 90);                        \
-  SUB_FIELD_BL (item, itemloc[0], 90);                           \
-  SUB_FIELD_BL (item, itemloc[1], 90);                           \
-  SUB_FIELD_BL (item, itemloc[2], 90);                           \
+  SUB_FIELD_VECTOR_INL (items[rcount1], itemloc, BL, 3, 90);     \
   SUB_FIELD_BLx (item, flags, 90);                               \
   /* TODO compare against default transmatrix */                 \
   if (FIELD_VALUE (item.is_default_transmatrix))                 \
@@ -12330,10 +12321,7 @@ DWG_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
   FIELD_BL (num_items, 90);
   REPEAT (num_items, items, Dwg_ARRAYITEMLOCATOR)
   REPEAT_BLOCK
-      SUB_FIELD_BL (items[rcount1], itemloc1, 90);
-      SUB_FIELD_BL (items[rcount1], itemloc2, 90);
-      SUB_FIELD_BL (items[rcount1], itemloc3, 90);
-      //SUB_FIELD_VECTOR_N (items[rcount1], itemloc, BL, 3, 90);
+      SUB_FIELD_VECTOR_INL (items[rcount1], itemloc, BL, 3, 90);
       SET_PARENT_OBJ (items[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (items)

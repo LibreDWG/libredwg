@@ -13060,12 +13060,8 @@ BL
 
 @item parent
 struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY*
-@item itemloc1
-BL,	DXF 90
-@item itemloc2
-BL,	DXF 90
-@item itemloc3
-BL,	DXF 90
+@item itemloc[3]
+BL
 
 @end vtable
 @end indentedblock

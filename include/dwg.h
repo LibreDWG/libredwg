@@ -6072,10 +6072,7 @@ typedef struct _dwg_object_BLOCKPARAMDEPENDENCYBODY
 typedef struct _dwg_ARRAYITEMLOCATOR
 {
   struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY *parent;
-  /* BITCODE_BL *itemloc; 3x DXF 90, FIXME dynapi: "itemloc[3]" => "itemloc" */
-  BITCODE_BL itemloc1;
-  BITCODE_BL itemloc2;
-  BITCODE_BL itemloc3;
+  BITCODE_BL itemloc[3];
 } Dwg_ARRAYITEMLOCATOR;
 
 #define ASSOCARRAYACTIONBODY_fields            \

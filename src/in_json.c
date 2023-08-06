@@ -2768,24 +2768,46 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             json_advance_unknown (dat, tokens, t->type, 0);
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
-      else if (t->type == JSMN_ARRAY && strEQc (key, "node[4]")
+      else if (t->type == JSMN_ARRAY && strEQc (key, "itemloc") && t->size <= 3
+               && (f = dwg_dynapi_entity_field (name, "itemloc[3]")))
+        {
+          BITCODE_BL arr[3] = { 0 };
+          tokens->index++;
+          dwg_dynapi_field_get_value (_obj, f, &arr);
+          for (int index = 0; index < t->size; index++)
+            {
+              if (index < 3)
+                {
+                  arr[index] = (BITCODE_BL)json_long (dat, tokens);
+                  LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
+                }
+              else
+                tokens->index++;
+            }
+          dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+        }
+      else if (t->type == JSMN_ARRAY && strEQc (key, "node") && t->size <= 4
                && (f = dwg_dynapi_entity_field (name, "node[4]")))
         {
-          BITCODE_BLd arr[4];
-          int index;
-          sscanf (key, "node[%d]", &index);
-          if (index >= 0 && index < 4)
+          BITCODE_BLd arr[4] = { 0 };
+          tokens->index++;
+          dwg_dynapi_field_get_value (_obj, f, &arr);
+          for (int index = 0; index < MIN (t->size, 4); index++)
             {
-              dwg_dynapi_field_get_value (_obj, f, &arr);
-              arr[index] = (BITCODE_BLd)json_long (dat, tokens);
-              LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
-              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+              if (index < 4)
+                {
+                  arr[index] = (BITCODE_BLd)json_long (dat, tokens);
+                  LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
+                }
+              else
+                tokens->index++;
             }
-          else
-            json_advance_unknown (dat, tokens, t->type, 0);
+          dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
       else if (t->type == JSMN_ARRAY && strEQc (key, "dashes_r11")
+               && t->size <= 12
                && (f = dwg_dynapi_entity_field (name, "dashes_r11[12]")))
         {
           BITCODE_RD arr[12] = { 0.0 };
