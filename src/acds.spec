@@ -241,7 +241,7 @@
         REPEAT2 (schdat.num_schemas, schdat.schemas, Dwg_AcDs_Schema)
         REPEAT_BLOCK
             SUB_FIELD_RS (schdat.schemas[rcount2],num_index, 0);
-            SUB_FIELD_VECTOR (schdat.schemas[rcount2],index, num_index, RLL, 0);
+            SUB_FIELD_VECTOR (schdat.schemas[rcount2],index, RLL, num_index, 0);
             SUB_FIELD_RS (schdat.schemas[rcount2],num_props, 0);
             REPEAT2 (schdat.schemas[rcount2].num_props, schdat.schemas[rcount2].props, Dwg_AcDs_Schema_Prop)
 #define prop schdat.schemas[rcount2].props[rcount3] 
@@ -287,7 +287,7 @@
         REPEAT_BLOCK
           SUB_FIELD_RL (search.search[rcount2],schema_namidx, 0);
           SUB_FIELD_RL (search.search[rcount2],num_sortedidx, 0);
-          SUB_FIELD_VECTOR (search.search[rcount2],sortedidx, num_sortedidx, RLL, 0);
+          SUB_FIELD_VECTOR (search.search[rcount2],sortedidx, RLL, num_sortedidx, 0);
           SUB_FIELD_RL (search.search[rcount2],num_ididxs, 0);
           SUB_FIELD_RL (search.search[rcount2],unknown, 0);
           REPEAT3 (search.search[rcount2].num_ididxs, search.search[rcount2].ididxs, Dwg_AcDs_Search_IdIdxs)
@@ -297,7 +297,7 @@
             REPEAT_BLOCK
               SUB_FIELD_RLL (search.search[rcount2].ididxs[rcount3].ididx[rcount4],handle, 0);
               SUB_FIELD_RL (search.search[rcount2].ididxs[rcount3].ididx[rcount4],num_ididx, 0);
-              SUB_FIELD_VECTOR (search.search[rcount2].ididxs[rcount3].ididx[rcount4],ididx, num_ididx, RLL, 0);
+              SUB_FIELD_VECTOR (search.search[rcount2].ididxs[rcount3].ididx[rcount4],ididx, RLL, num_ididx, 0);
             END_REPEAT_BLOCK
             END_REPEAT (search.search[rcount2].ididxs[rcount3].ididx)
           END_REPEAT_BLOCK

@@ -725,6 +725,8 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   FIELD_VECTOR_N (nam, type, _obj->size, dxf)
 #define FIELD_VECTOR_INL(nam, type, size, dxf)                                \
   FIELD_VECTOR_N (nam, type, size, dxf)
+#define SUB_FIELD_VECTOR(o, nam, type, size, dxf)                             \
+  SUB_FIELD_VECTOR_N (o, nam, type, _obj->o.size, dxf)
 
 #define FIELD_2RD_VECTOR(nam, size, dxf)                                      \
   if (_obj->nam)                                                              \
@@ -2551,8 +2553,8 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       FIRSTPREFIX HASH;
       SUB_FIELD_RC (handlers[i], size, 0);
       SUB_FIELD_RC (handlers[i], nr, 0);
-      FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
-      //SUB_FIELD_VECTOR (handlers[i], data, size, RC, 0);
+      //FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
+      SUB_FIELD_VECTOR (handlers[i], data, RC, size, 0);
       ENDHASH;
     }
   ENDSEC ();

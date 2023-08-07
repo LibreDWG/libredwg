@@ -1150,7 +1150,7 @@
                      (long)vcount, _obj->o.name[vcount])                      \
         }                                                                     \
     }
-#define SUB_FIELD_VECTOR(o, name, sizefield, type, dxf)                       \
+#define SUB_FIELD_VECTOR(o, name, type, sizefield, dxf)                       \
   if (_obj->o.sizefield > 0)                                                  \
     {                                                                         \
       SUB_VECTOR_CHKCOUNT (o, name, type, _obj->o.sizefield, dat)             \

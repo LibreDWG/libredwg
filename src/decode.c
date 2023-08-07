@@ -1014,7 +1014,7 @@ handles_section:
             SUB_FIELD_RC (handlers[i], size, 0);
             num_data = (BITCODE_BL)FIELD_VALUE (handlers[i].size);
             SUB_FIELD_RC (handlers[i], nr, 0);
-            SUB_FIELD_VECTOR (handlers[i], data, size, RC, 0);
+            SUB_FIELD_VECTOR (handlers[i], data, RC, size, 0);
             loglevel = oldloglevel;
             LOG_TRACE ("handlers[%d].size: %u [RC]\n", i,
                        FIELD_VALUE (handlers[i].size))

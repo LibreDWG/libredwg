@@ -212,7 +212,7 @@
 #endif
 
 #ifndef SUB_FIELD_VECTOR
-#  define SUB_FIELD_VECTOR(o, nam, sizefield, type, dxf)                      \
+#  define SUB_FIELD_VECTOR(o, nam, type, sizefield, dxf)                      \
     if (_obj->o.sizefield && _obj->o.nam)                                     \
       {                                                                       \
         BITCODE_BL _size = _obj->o.sizefield;                                 \

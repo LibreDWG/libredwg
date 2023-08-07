@@ -244,7 +244,7 @@ static BITCODE_BL rcount1, rcount2;
         }                                                                     \
       FREE_IF (_obj->o.name)                                                  \
     }
-#define SUB_FIELD_VECTOR(o, nam, sizefield, type, dxf)                        \
+#define SUB_FIELD_VECTOR(o, nam, type, sizefield, dxf)                        \
   if (_obj->o.sizefield && _obj->o.nam)                                       \
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)(_obj->o.sizefield); vcount++)    \

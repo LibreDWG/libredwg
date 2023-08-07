@@ -9444,7 +9444,7 @@ DWG_OBJECT_END
   SUB_FIELD_BD (var, maximum, d_code + 1)                                     \
   SUB_FIELD_BD (var, increment, d_code + 2)                                   \
   SUB_FIELD_BS (var, num_valuelist, s_code)                                   \
-  SUB_FIELD_VECTOR (var, valuelist, num_valuelist, BD, d_code + 3)
+  SUB_FIELD_VECTOR (var, valuelist, BD, num_valuelist, d_code + 3)
 
 #define BlockParam_PropInfo(_prop, num_code, d_code, t_code)         \
   SUB_FIELD_BL (_prop, num_connections, num_code)                    \

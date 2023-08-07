@@ -3832,7 +3832,7 @@ json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (0) ; // else
           SUB_FIELD_LONG (handlers[j], size, RC)
           SUB_FIELD_LONG (handlers[j], nr, RC)
-          // SUB_FIELD_VECTOR_INL (data, RC, _obj->handlers[j].size, 0)
+          // SUB_FIELD_VECTOR_INL (handlers[j], data, RC, num_data, 0)
           else if (strEQc (key, "data") && t->type == JSMN_ARRAY)
             {
               tokens->index++;
