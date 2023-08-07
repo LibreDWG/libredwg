@@ -9576,7 +9576,7 @@ typedef struct _dwg_second_header
   BITCODE_BS num_handlers;
   struct _handler
   {
-    BITCODE_RC size;
+    BITCODE_RC num_data;
     BITCODE_RC nr;
     BITCODE_RC *data;
   } handlers[16];

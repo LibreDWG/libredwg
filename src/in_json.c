@@ -3830,7 +3830,7 @@ json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           t = &tokens->tokens[tokens->index];
           // clang-format off
           if (0) ; // else
-          SUB_FIELD_LONG (handlers[j], size, RC)
+          SUB_FIELD_LONG (handlers[j], num_data, RC)
           SUB_FIELD_LONG (handlers[j], nr, RC)
           // SUB_FIELD_VECTOR_INL (handlers[j], data, RC, num_data, 0)
           else if (strEQc (key, "data") && t->type == JSMN_ARRAY)
@@ -3839,11 +3839,11 @@ json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               if (t->size < 256)
                 _obj->handlers[j].data = (BITCODE_RC *)calloc (1, t->size);
-              if (t->size != _obj->handlers[j].size)
+              if (t->size != _obj->handlers[j].num_data)
                 {
-                  _obj->handlers[j].size = (BITCODE_RC)t->size & 0xFF;
-                  LOG_WARN ("handlers[%d].size mismatch => " FORMAT_RC, j,
-                             _obj->handlers[j].size);
+                  _obj->handlers[j].num_data = (BITCODE_RC)t->size & 0xFF;
+                  LOG_WARN ("handlers[%d].num_data mismatch => " FORMAT_RC, j,
+                             _obj->handlers[j].num_data);
                 }
               for (int vcount = 0; vcount < t->size; vcount++)
                 {   

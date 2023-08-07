@@ -3337,9 +3337,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           }
         for (i = 0; i < FIELD_VALUE (num_handlers); i++)
           {
-            SUB_FIELD_RC (handlers[i], size, 0);
+            SUB_FIELD_RC (handlers[i], num_data, 0);
             SUB_FIELD_RC (handlers[i], nr, 0);
-            SUB_FIELD_VECTOR (handlers[i], data, RC, size, 0);
+            SUB_FIELD_VECTOR (handlers[i], data, RC, num_data, 0);
           }
 
         _obj->size = encode_patch_RLsize (dat, pvzadr);

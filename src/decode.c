@@ -1011,16 +1011,16 @@ handles_section:
           {
             BITCODE_BL num_data;
             unsigned oldloglevel = loglevel; loglevel = 0;
-            SUB_FIELD_RC (handlers[i], size, 0);
-            num_data = (BITCODE_BL)FIELD_VALUE (handlers[i].size);
+            SUB_FIELD_RC (handlers[i], num_data, 0);
+            num_data = (BITCODE_BL)FIELD_VALUE (handlers[i].num_data);
             SUB_FIELD_RC (handlers[i], nr, 0);
-            SUB_FIELD_VECTOR (handlers[i], data, RC, size, 0);
+            SUB_FIELD_VECTOR (handlers[i], data, RC, num_data, 0);
             loglevel = oldloglevel;
-            LOG_TRACE ("handlers[%d].size: %u [RC]\n", i,
-                       FIELD_VALUE (handlers[i].size))
-            LOG_TRACE ("handlers[%d].nr:   %u [RC]\n", i,
+            LOG_TRACE ("handlers[%d].num_data: %u [RC]\n", i,
+                       FIELD_VALUE (handlers[i].num_data))
+            LOG_TRACE ("handlers[%d].nr:       %u [RC]\n", i,
                        FIELD_VALUE (handlers[i].nr))
-            LOG_TRACE ("handlers[%d].data: ", i)
+            LOG_TRACE ("handlers[%d].data:    ", i)
             for (j = 0; j < num_data; j++)
               {
                 LOG_TRACE ("0x%02x%s", FIELD_VALUE (handlers[i].data[j]),
