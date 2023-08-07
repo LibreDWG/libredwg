@@ -958,11 +958,15 @@ handles_section:
       // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
       // r14:      7d f4 78 01
       // r2000:    14 64 78 01
-      FIELD_RC (unknown_10, 0); // 0x10
-      FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
-      if (dat->from_version < R_2000 && FIELD_VALUE (unknown_10) == 0x18
-          && FIELD_VALUE (unknown_rc4[0]) == 0x78)
-        dat->byte -= 2;
+      FIELD_RC (unknown_10, 0); // 0x10 or 0x18
+      if (dat->from_version < R_2000 && FIELD_VALUE (unknown_10) == 0x18)
+        {
+          FIELD_VECTOR_INL (unknown_rc4, RC, 2, 0)
+        }
+      else
+        {
+          FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
+        }
       UNTIL (R_2000)
       {
         FIELD_RC (num_sections, 0); // r14: 5, r2000: 6
@@ -974,11 +978,12 @@ handles_section:
             SUB_FIELD_BLx (section[i], address, 0);
             SUB_FIELD_BL (section[i], size, 0);
             loglevel = oldloglevel;
-            LOG_TRACE ("section[%d].nr:      " FORMAT_RC " [RC]\n", i,
-                       _obj->section[i].nr)
-            LOG_TRACE ("section[%d].address: " FORMAT_BLx " [BLx]\n", i,
+            // Dwg_Section_Type_r13
+            LOG_TRACE ("section %d: %s\n", i, dwg_section_name (dwg, (unsigned)i));
+            LOG_TRACE ("  nr:      " FORMAT_RC " [RC]\n", _obj->section[i].nr)
+            LOG_TRACE ("  address: " FORMAT_BLx " [BLx]\n",
                        _obj->section[i].address)
-            LOG_TRACE ("section[%d].size:    " FORMAT_BL " [BL]\n", i,
+            LOG_TRACE ("  size:    " FORMAT_BL " [BL]\n",
                        _obj->section[i].size)
           }
         if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
@@ -986,7 +991,7 @@ handles_section:
             LOG_HANDLE ("1st header was:\n");
             for (i = 0; i < dwg->header.num_sections; i++)
               {
-                LOG_HANDLE ("section[" FORMAT_RL "] " FORMAT_RLd " " FORMAT_RLL
+                LOG_HANDLE ("  section[" FORMAT_RL "] " FORMAT_RLd " " FORMAT_RLL
                             " " FORMAT_RL " \n",
                             i, dwg->header.section[i].number,
                             dwg->header.section[i].address,

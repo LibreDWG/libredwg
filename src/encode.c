@@ -3309,17 +3309,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       for (i = 0; i < 4; i++)
         FIELD_B (null_b[i], 0);
       FIELD_RC (unknown_10, 0); // 0x10
-      for (i = 0; i < 4; i++)
-        FIELD_RC (unknown_rc4[i], 0);
+      if (dat->version < R_2000 && FIELD_VALUE (unknown_10) == 0x18)
+        {
+          FIELD_VECTOR_INL (unknown_rc4, RC, 2, 0)
+        }
+      else
+        {
+          FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
+        }
 
       UNTIL (R_2000)
       {
         FIELD_RC (num_sections, 0); // r14: 5, r2000: 6 (auxheader)
         for (i = 0; i < FIELD_VALUE (num_sections); i++)
           {
-            FIELD_RC (section[i].nr, 0);
-            FIELD_BL (section[i].address, 0);
-            FIELD_BLd (section[i].size, 0);
+            SUB_FIELD_RC (section[i], nr, 0);
+            SUB_FIELD_BL (section[i], address, 0);
+            SUB_FIELD_BLd (section[i], size, 0);
           }
 
         FIELD_BS (num_handlers, 0); // 14, resp. 16 in r14
@@ -3331,9 +3337,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           }
         for (i = 0; i < FIELD_VALUE (num_handlers); i++)
           {
-            FIELD_RC (handlers[i].size, 0);
-            FIELD_RC (handlers[i].nr, 0);
-            FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
+            SUB_FIELD_RC (handlers[i], size, 0);
+            SUB_FIELD_RC (handlers[i], nr, 0);
+            SUB_FIELD_VECTOR (handlers[i], data, size, RC, 0);
           }
 
         _obj->size = encode_patch_RLsize (dat, pvzadr);

@@ -2538,9 +2538,9 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (unsigned i = 0; i < MIN(FIELD_VALUE (num_sections), 6U); i++)
     {
       FIRSTPREFIX HASH;
-      FIELD_RC (section[i].nr, 0);
-      FIELD_BL (section[i].address, 0);
-      FIELD_BL (section[i].size, 0);
+      SUB_FIELD_RC (section[i], nr, 0);
+      SUB_FIELD_BL (section[i], address, 0);
+      SUB_FIELD_BL (section[i], size, 0);
       ENDHASH;
     }
   ENDSEC ();
@@ -2549,9 +2549,10 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (unsigned i = 0; i < MIN(FIELD_VALUE (num_handlers), 16U); i++)
     {
       FIRSTPREFIX HASH;
-      FIELD_RC (handlers[i].size, 0);
-      FIELD_RC (handlers[i].nr, 0);
+      SUB_FIELD_RC (handlers[i], size, 0);
+      SUB_FIELD_RC (handlers[i], nr, 0);
       FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
+      //SUB_FIELD_VECTOR (handlers[i], data, size, RC, 0);
       ENDHASH;
     }
   ENDSEC ();
