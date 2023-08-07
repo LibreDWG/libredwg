@@ -960,7 +960,6 @@ handles_section:
       // r2000:    14 64 78 01
       FIELD_RC (unknown_10, 0); // 0x10
       FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
-
       if (dat->from_version < R_2000 && FIELD_VALUE (unknown_10) == 0x18
           && FIELD_VALUE (unknown_rc4[0]) == 0x78)
         dat->byte -= 2;
@@ -970,9 +969,17 @@ handles_section:
         for (i = 0; i < MIN (6U, FIELD_VALUE (num_sections)); i++)
           {
             // address+sizes of sections 0-2 is correct, 3+4 is empty
-            FIELD_RC (section[i].nr, 0);
-            FIELD_BLx (section[i].address, 0);
-            FIELD_BL (section[i].size, 0);
+            unsigned oldloglevel = loglevel; loglevel = 0;
+            SUB_FIELD_RC (section[i], nr, 0);
+            SUB_FIELD_BLx (section[i], address, 0);
+            SUB_FIELD_BL (section[i], size, 0);
+            loglevel = oldloglevel;
+            LOG_TRACE ("section[%d].nr:      " FORMAT_RC " [RC]\n", i,
+                       _obj->section[i].nr)
+            LOG_TRACE ("section[%d].address: " FORMAT_BLx " [BLx]\n", i,
+                       _obj->section[i].address)
+            LOG_TRACE ("section[%d].size:    " FORMAT_BL " [BL]\n", i,
+                       _obj->section[i].size)
           }
         if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
           {
@@ -997,9 +1004,24 @@ handles_section:
           }
         for (i = 0; i < FIELD_VALUE (num_handlers); i++)
           {
-            FIELD_RC (handlers[i].size, 0);
-            FIELD_RC (handlers[i].nr, 0);
-            FIELD_VECTOR (handlers[i].data, RC, handlers[i].size, 0);
+            BITCODE_BL num_data;
+            unsigned oldloglevel = loglevel; loglevel = 0;
+            SUB_FIELD_RC (handlers[i], size, 0);
+            num_data = (BITCODE_BL)FIELD_VALUE (handlers[i].size);
+            SUB_FIELD_RC (handlers[i], nr, 0);
+            SUB_FIELD_VECTOR (handlers[i], data, size, RC, 0);
+            loglevel = oldloglevel;
+            LOG_TRACE ("handlers[%d].size: %u [RC]\n", i,
+                       FIELD_VALUE (handlers[i].size))
+            LOG_TRACE ("handlers[%d].nr:   %u [RC]\n", i,
+                       FIELD_VALUE (handlers[i].nr))
+            LOG_TRACE ("handlers[%d].data: ", i)
+            for (j = 0; j < num_data; j++)
+              {
+                LOG_TRACE ("0x%02x%s", FIELD_VALUE (handlers[i].data[j]),
+                           j == num_data - 1 ? " " : ", ")
+              }
+            LOG_TRACE ("[RC*]\n")
           }
 
         // TODO: CRC check
