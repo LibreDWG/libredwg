@@ -494,9 +494,10 @@ static char *_path_field (const char *path);
 #define FIELD_TFFx(nam, len, dxf) FIELD_BINARY (nam, len, dxf)
 #define FIELD_TV(nam, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TU(nam, dxf) FIELD_TEXT_TU (nam, (BITCODE_TU)_obj->nam)
-#define FIELD_T16(nam, dxf) FIELD_T (nam, dxf)
+#define FIELD_T16(nam, dxf) FIELD_TU (nam, dxf)
 #define FIELD_TU16(nam, dxf) FIELD_TU (nam, dxf)
-#define FIELD_T32(nam, dxf) FIELD_T (nam, dxf)
+#define FIELD_T32(nam, dxf) FIELD_TU (nam, dxf)
+#define FIELD_TU32(nam, dxf) FIELD_TU (nam, dxf)
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
     if (IS_FROM_TU (dat))                                                     \
@@ -690,7 +691,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   if (_obj->nam)                                                              \
     {                                                                         \
       BITCODE_BL _size = (BITCODE_BL)_obj->size;                              \
-      if (IS_FROM_TU (dat))                                                   \
+      if (IS_FROM_TU (dat) || IS_TU_VEC_##type)                               \
         {                                                                     \
           for (vcount = 0; vcount < _size; vcount++)                          \
             {                                                                 \
@@ -701,7 +702,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
         {                                                                     \
           for (vcount = 0; vcount < _size; vcount++)                          \
             {                                                                 \
-              FIRSTPREFIX VALUE_TEXT (_obj->nam[vcount])                      \
+              FIRSTPREFIX VALUE_TEXT ((char*)_obj->nam[vcount])               \
             }                                                                 \
         }                                                                     \
     }                                                                         \
