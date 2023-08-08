@@ -81,7 +81,7 @@ set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
     return 0;
   if (dwg->header.from_version < R_2007)
     {
-      PS_set_info (ps, key, text);
+      PS_set_info (ps, key, (char *)text);
       ret = 1;
     }
   else
