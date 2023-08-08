@@ -25,7 +25,7 @@
       FIELD_VALUE (TDUPDATE)   = dwg->header_vars.TDUPDATE;
       if (dat->version < R_2007) /* if 2004 -> 2004: TV -> TV */
         FIELD_VALUE (HYPERLINKBASE)
-            = (BITCODE_T16)strdup (dwg->header_vars.HYPERLINKBASE);
+            = bit_utf8_to_TU (dwg->header_vars.HYPERLINKBASE, 0);
       else if (dat->from_version >= R_2007)
         { /* or already TU */
           FIELD_VALUE (HYPERLINKBASE) = (BITCODE_T16)bit_wcs2dup (

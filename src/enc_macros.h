@@ -221,7 +221,7 @@
     if (!IS_FROM_TU (dat))                                                    \
       {                                                                       \
         bit_write_T16 (str_dat, _obj->nam);                                   \
-        LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", _obj->nam, dxf);               \
+        LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", (char*)_obj->nam, dxf);        \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -234,7 +234,7 @@
     if (_obj->nam)                                                            \
       bit_write_T32 (str_dat, _obj->nam);                                     \
     if (!IS_FROM_TU (dat))                                                    \
-      LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);                 \
+      LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", (char*)_obj->nam, dxf);          \
     else                                                                      \
       LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
   }
@@ -243,7 +243,7 @@
     if (_obj->nam)                                                            \
       bit_write_TU32 (str_dat, _obj->nam);                                    \
     if (!IS_FROM_TU (dat))                                                    \
-      LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf);                \
+      LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", (char*)_obj->nam, dxf);         \
     else                                                                      \
       LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
   }
@@ -564,7 +564,7 @@
             {                                                                 \
               bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);              \
               LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]", (int)vcount,            \
-                         _obj->nam[vcount], dxf);                             \
+                         (char*)_obj->nam[vcount], dxf);                     \
               LOG_POS                                                         \
             }                                                                 \
           else                                                                \
@@ -574,7 +574,8 @@
                 LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf);                  \
               } else {                                                        \
                 LOG_TRACE (#nam "[%d]: \"%s\" [TU %d]", (int)vcount,          \
-                           _obj->nam[vcount] ? _obj->nam[vcount] : "", dxf);  \
+                           _obj->nam[vcount] ? (char*)_obj->nam[vcount] : "",  \
+                           dxf);                                              \
                 LOG_POS                                                       \
               }                                                               \
             }                                                                 \
