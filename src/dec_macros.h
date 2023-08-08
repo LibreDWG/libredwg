@@ -561,7 +561,7 @@
   {                                                                           \
     /* if (_obj->nam) free (_obj->nam); // preR13 add_Document defaults */    \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
-    _obj->nam = (BITCODE_TV)bit_read_TF (dat, (size_t)len);                   \
+    _obj->nam = bit_read_TF (dat, (size_t)len);                               \
     LOG_TRACE (#nam ": \"%s\" [TFv %" PRIuSIZE " " #dxf "]", _obj->nam,       \
                (size_t)len);                                                  \
     if (!_obj->nam)                                                           \
@@ -602,11 +602,13 @@
   {                                                                           \
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
-        FIELDG (nam, T32, dxf);                                               \
+        _obj->nam = (BITCODE_T32)bit_read_T32 (dat);                          \
+        LOG_TRACE (#nam ": %s [T32 " #dxf "]", _obj->nam);                    \
+        LOG_RPOS                                                              \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        _obj->nam = bit_read_TU32 (dat);                                      \
+        _obj->nam = (BITCODE_T32)bit_read_TU32 (dat);                         \
         LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf)                           \
       }                                                                       \
   }
