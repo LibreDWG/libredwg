@@ -15293,16 +15293,36 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           free (*(char **)old);
           memcpy (old, &str, sizeof (char*)); // size of ptr
         }
-      // ascii
+      // wide types (T16, T32, TU16, TU32, TU) - always store as TU
+      else if (f->is_string
+               && (memBEGINc (f->type, "TU") || strEQc (f->type, "T16")
+                   || strEQc (f->type, "T32") || strEQc (f->type, "TU16")
+                   || strEQc (f->type, "TU32")))
+        {
+          BITCODE_TU wstr;
+          if (is_utf8)
+            wstr = bit_utf8_to_TU (*(char **)value, 0);
+          else
+            {
+              int length = 0;
+              for (; (*(BITCODE_TU*)value)[length]; length++)
+                ;
+              length++;
+              wstr = (BITCODE_TU)malloc ((length + 1) * 2);
+              memcpy (wstr, *(void **)value, length * 2);
+              wstr[length] = 0;
+            }
+          free (*(char **)old);
+          memcpy (old, &wstr, sizeof (char*));
+        }
+      // ascii for TV/T types (pre-R2007)
       else if (f->is_string && dwg_version < R_2007)
         {
-          // FIXME: TF size calc is probably wrong
           size_t len = strlen (*(char**)value);
           char *str = (char *)malloc (len + 1);
           memcpy (str, *(char**)value, len + 1);
-          // we copy just the pointer, not the string
           free (*(char **)old);
-          memcpy (old, &str, sizeof (char*)); // size of ptr
+          memcpy (old, &str, sizeof (char*));
         }
       // or wide
       else if (strNE (f->type, "TF") && (f->is_string && dwg_version >= R_2007))

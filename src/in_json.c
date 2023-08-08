@@ -181,7 +181,11 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      _obj->nam = (BITCODE_T32)json_string (dat, tokens);                     \
+      {                                                                        \
+        char *_s = json_string (dat, tokens);                                  \
+        _obj->nam = (BITCODE_T32)bit_utf8_to_TU (_s, 0);                       \
+        free (_s);                                                             \
+      }                                                                        \
     else                                                                      \
       {                                                                       \
         _obj->nam = NULL;                                                     \
@@ -196,7 +200,9 @@ static Bit_Chain *g_dat;
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
       {                                                                       \
-        _obj->nam = json_string (dat, tokens);                                \
+        char *_s = json_string (dat, tokens);                                   \
+        _obj->nam = (BITCODE_TU)bit_utf8_to_TU (_s, 0);                         \
+        free (_s);                                                              \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -4538,7 +4544,9 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               t = &tokens->tokens[tokens->index];
               if (t->type == JSMN_STRING) // CUSTOMPROPERTYTAG
                 {
-                  _obj->props[j].tag = json_string (dat, tokens);
+                  char *_ps = json_string (dat, tokens);
+                  _obj->props[j].tag = bit_utf8_to_TU (_ps, 0);
+                  free (_ps);
                   LOG_TRACE ("props[%d] = (%.*s", j, t->end - t->start,
                              &dat->chain[t->start]);
                 }
@@ -4552,7 +4560,9 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               t = &tokens->tokens[tokens->index];
               if (t->type == JSMN_STRING) // CUSTOMPROPERTY
                 {
-                  _obj->props[j].value = json_string (dat, tokens);
+                  char *_pv = json_string (dat, tokens);
+                  _obj->props[j].value = bit_utf8_to_TU (_pv, 0);
+                  free (_pv);
                   LOG_TRACE (",%.*s)", t->end - t->start,
                              &dat->chain[t->start]);
                 }
@@ -4806,7 +4816,7 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               int size1 = t->size;
               _obj->features
-                  = (BITCODE_TV *)calloc (size1, sizeof (BITCODE_TV));
+                  = (BITCODE_TU *)calloc (size1, sizeof (BITCODE_TU));
               _obj->num_features = size1;
               tokens->index++;
               for (int j = 0; j < size1; j++)
@@ -4815,8 +4825,9 @@ json_FileDepList (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   t = &tokens->tokens[tokens->index];
                   if (t->type == JSMN_STRING)
                     {
-                      _obj->features[j] = json_string (dat, tokens);
-                      LOG_TRACE ("  %s\n", _obj->features[j]);
+                      _obj->features[j]
+                          = (BITCODE_TU)json_string (dat, tokens);
+                      LOG_TRACE ("  %s\n", (char *)_obj->features[j]);
                     }
                   else if (t->type == JSMN_PRIMITIVE)
                     tokens->index++;
@@ -5303,7 +5314,7 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg->header_vars.MEASUREMENT = _obj->MEASUREMENT;
           LOG_TRACE ("%s: %d\n", key, (int)_obj->MEASUREMENT);
         }
-      FIELD_T (description, 0)
+      FIELD_T16 (description, 0)
       else
       {
         LOG_TRACE ("%s\n", key);

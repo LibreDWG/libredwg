@@ -2530,12 +2530,12 @@ BITCODE_T16
 bit_read_T16 (Bit_Chain *restrict dat)
 {
   BITCODE_RS i, length;
-  BITCODE_TV chain;
+  BITCODE_T16 chain;
 
   CHK_OVERFLOW (__FUNCTION__, NULL)
   length = bit_read_RS (dat);
   CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
-  chain = (BITCODE_TV)malloc (length + 1);
+  chain = (BITCODE_T16)calloc (length + 1, sizeof (BITCODE_RS));
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -2543,7 +2543,7 @@ bit_read_T16 (Bit_Chain *restrict dat)
       return NULL;
     }
   for (i = 0; i < length; i++)
-    chain[i] = bit_read_RC (dat);
+    chain[i] = (BITCODE_RS)bit_read_RC (dat);
   chain[length] = 0;
   return chain;
 }
@@ -2617,7 +2617,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
                      __FUNCTION__, dat->byte, size);
           return NULL;
         }
-      str = (BITCODE_T32)malloc (size + 1);
+      str = (BITCODE_T32)calloc (size + 1, sizeof (BITCODE_RS));
       if (!str)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -2625,7 +2625,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
           return NULL;
         }
       for (i = 0; i < size; i++)
-        str[i] = bit_read_RC (dat);
+        str[i] = (BITCODE_RS)bit_read_RC (dat);
       str[size] = 0;
       return str;
     }
@@ -2690,7 +2690,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
                      __FUNCTION__, dat->byte, size);
           return NULL;
         }
-      str = (BITCODE_T32)malloc (size + 1);
+      str = (BITCODE_T32)calloc (size + 1, sizeof (BITCODE_RS));
       if (!str)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -2698,7 +2698,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
           return NULL;
         }
       for (i = 0; i < size; i++)
-        str[i] = bit_read_RC (dat);
+        str[i] = (BITCODE_RS)bit_read_RC (dat);
       str[size] = 0;
       return str;
     }
@@ -2763,7 +2763,7 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
       if (IS_FROM_TU (dat))
         length = bit_wcs2len ((BITCODE_TU)chain);
       else
-        length = strlen (chain);
+        length = strlen ((char *)chain);
     }
   else
     length = 0;
@@ -2780,7 +2780,7 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
     {
       if (!IS_FROM_TU (dat))
         { // convert to unicode, expand \\U+
-          BITCODE_TU wstr = bit_utf8_to_TU (chain, 0);
+          BITCODE_TU wstr = bit_utf8_to_TU ((char *)chain, 0);
           bit_write_RS (dat, (BITCODE_RS)length);
           for (size_t i = 0; i < length; i++)
             bit_write_RS (dat, wstr[i]);
@@ -2854,7 +2854,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
   else
     {
       if (chain)
-        length = strlen (chain) + 1;
+        length = strlen ((char *)chain) + 1;
       else
         length = 0;
       if (length > UINT32_MAX)
@@ -2895,7 +2895,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
   else
     {
       if (chain)
-        length = strlen (chain) + 1;
+        length = strlen ((char *)chain) + 1;
       else
         length = 0;
       if (length > UINT32_MAX)

@@ -1442,7 +1442,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       bit_utf8_to_TV (dest, (unsigned char *)pair->value.s.ptr, 1024,             \
                       strlen (pair->value.s.ptr), 0, dat->codepage);              \
       dest[1023] = '\0';                                                      \
-      dwg->summaryinfo.name = strdup (dest);                                  \
+      dwg->summaryinfo.name = bit_utf8_to_TU (dest, 0);                       \
     }
 
               // clang-format off
@@ -1472,7 +1472,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                   1024, strlen (pair->value.s.ptr), 0,
                                   dat->codepage);
                   dest[1023] = '\0';
-                  dwg->summaryinfo.props[j].tag = strdup (dest);
+                  dwg->summaryinfo.props[j].tag = bit_utf8_to_TU (dest, 0);
                 }
               else if (pair->code == 1 && strEQc (field, "$CUSTOMPROPERTY")
                        && pair->value.s.ptr != NULL && dwg->summaryinfo.props
@@ -1486,7 +1486,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                   1024, strlen (pair->value.s.ptr), 0,
                                   dat->codepage);
                   dest[1023] = '\0';
-                  dwg->summaryinfo.props[j].value = strdup (dest);
+                  dwg->summaryinfo.props[j].value = bit_utf8_to_TU (dest, 0);
                 }
               else
                 LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
