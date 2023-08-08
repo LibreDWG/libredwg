@@ -39,21 +39,21 @@
   }
   SINCE (R_2004a) {
     // usually only since 2010
-    HEADER_VALUE_T0 (TITLE, 1, dwg->summaryinfo.TITLE);
-    HEADER_VALUE_T0 (SUBJECT, 1, dwg->summaryinfo.SUBJECT);
-    HEADER_VALUE_T0 (AUTHOR, 1, dwg->summaryinfo.AUTHOR);
-    HEADER_VALUE_T0 (KEYWORDS, 1, dwg->summaryinfo.KEYWORDS);
-    HEADER_VALUE_T0 (COMMENTS, 1, dwg->summaryinfo.COMMENTS);
-    HEADER_VALUE_T0 (LASTSAVEDBY, 1, dwg->summaryinfo.LASTSAVEDBY);
-    HEADER_VALUE_T0 (REVISIONNUMBER, 1, dwg->summaryinfo.REVISIONNUMBER);
+    HEADER_VALUE_T16_0 (TITLE, 1, dwg->summaryinfo.TITLE);
+    HEADER_VALUE_T16_0 (SUBJECT, 1, dwg->summaryinfo.SUBJECT);
+    HEADER_VALUE_T16_0 (AUTHOR, 1, dwg->summaryinfo.AUTHOR);
+    HEADER_VALUE_T16_0 (KEYWORDS, 1, dwg->summaryinfo.KEYWORDS);
+    HEADER_VALUE_T16_0 (COMMENTS, 1, dwg->summaryinfo.COMMENTS);
+    HEADER_VALUE_T16_0 (LASTSAVEDBY, 1, dwg->summaryinfo.LASTSAVEDBY);
+    HEADER_VALUE_T16_0 (REVISIONNUMBER, 1, dwg->summaryinfo.REVISIONNUMBER);
     for (rcount2 = 0; rcount2 < dwg->summaryinfo.num_props; rcount2++)
       {
-        if (!bit_empty_T (dat, (BITCODE_T)dwg->summaryinfo.props[rcount2].tag))
+        BITCODE_T16 _tag = dwg->summaryinfo.props[rcount2].tag;
+        if (_tag && *_tag)
           {
-            HEADER_VALUE_T (CUSTOMPROPERTYTAG, 1,
-                            dwg->summaryinfo.props[rcount2].tag);
-            HEADER_VALUE_T (CUSTOMPROPERTY, 1,
-                            dwg->summaryinfo.props[rcount2].value);
+            HEADER_VALUE_T16 (CUSTOMPROPERTYTAG, 1, _tag);
+            HEADER_VALUE_T16 (CUSTOMPROPERTY, 1,
+                              dwg->summaryinfo.props[rcount2].value);
           }
       }
   }
