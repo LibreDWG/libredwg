@@ -159,7 +159,7 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: sh autogen.sh
-    - run: ./configure --disable-bindings
+    - run: ./configure --disable-bindings --disable-werror
     - run: PATH="/usr/local/opt/texinfo/bin:$PATH" make
     - run: PATH="/usr/local/opt/texinfo/bin:$PATH" make check
     #- run: make distcheck
