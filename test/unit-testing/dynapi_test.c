@@ -143,13 +143,13 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_TV dwgcodepage;
+    BITCODE_T dwgcodepage;
     if (dwg_dynapi_header_value (dwg, "DWGCODEPAGE", &dwgcodepage, NULL)
         && !memcmp (&dwgcodepage, &dwg->header_vars.DWGCODEPAGE, sizeof (dwg->header_vars.DWGCODEPAGE))
        )
       pass ();
     else
-      fail ("HEADER.DWGCODEPAGE [TV]");
+      fail ("HEADER.DWGCODEPAGE [T]");
   }
   {
     BITCODE_RS codepage;
@@ -242,40 +242,40 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_TV unit1_name;
+    BITCODE_T unit1_name;
     if (dwg_dynapi_header_value (dwg, "unit1_name", &unit1_name, NULL)
         && !memcmp (&unit1_name, &dwg->header_vars.unit1_name, sizeof (dwg->header_vars.unit1_name))
        )
       pass ();
     else
-      fail ("HEADER.unit1_name [TV]");
+      fail ("HEADER.unit1_name [T]");
   }
   {
-    BITCODE_TV unit2_name;
+    BITCODE_T unit2_name;
     if (dwg_dynapi_header_value (dwg, "unit2_name", &unit2_name, NULL)
         && !memcmp (&unit2_name, &dwg->header_vars.unit2_name, sizeof (dwg->header_vars.unit2_name))
        )
       pass ();
     else
-      fail ("HEADER.unit2_name [TV]");
+      fail ("HEADER.unit2_name [T]");
   }
   {
-    BITCODE_TV unit3_name;
+    BITCODE_T unit3_name;
     if (dwg_dynapi_header_value (dwg, "unit3_name", &unit3_name, NULL)
         && !memcmp (&unit3_name, &dwg->header_vars.unit3_name, sizeof (dwg->header_vars.unit3_name))
        )
       pass ();
     else
-      fail ("HEADER.unit3_name [TV]");
+      fail ("HEADER.unit3_name [T]");
   }
   {
-    BITCODE_TV unit4_name;
+    BITCODE_T unit4_name;
     if (dwg_dynapi_header_value (dwg, "unit4_name", &unit4_name, NULL)
         && !memcmp (&unit4_name, &dwg->header_vars.unit4_name, sizeof (dwg->header_vars.unit4_name))
        )
       pass ();
     else
-      fail ("HEADER.unit4_name [TV]");
+      fail ("HEADER.unit4_name [T]");
   }
   {
     BITCODE_BL unknown_8;
@@ -2078,13 +2078,13 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_TV menu;
+    BITCODE_T menu;
     if (dwg_dynapi_header_value (dwg, "MENU", &menu, NULL)
         && !memcmp (&menu, &dwg->header_vars.MENU, sizeof (dwg->header_vars.MENU))
        )
       pass ();
     else
-      fail ("HEADER.MENU [TV]");
+      fail ("HEADER.MENU [T]");
   }
   {
     BITCODE_TIMEBLL tdcreate;
@@ -3050,22 +3050,22 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.UCSORGBACK [3BD]");
   }
   {
-    BITCODE_TV dimpost;
+    BITCODE_T dimpost;
     if (dwg_dynapi_header_value (dwg, "DIMPOST", &dimpost, NULL)
         && !memcmp (&dimpost, &dwg->header_vars.DIMPOST, sizeof (dwg->header_vars.DIMPOST))
        )
       pass ();
     else
-      fail ("HEADER.DIMPOST [TV]");
+      fail ("HEADER.DIMPOST [T]");
   }
   {
-    BITCODE_TV dimapost;
+    BITCODE_T dimapost;
     if (dwg_dynapi_header_value (dwg, "DIMAPOST", &dimapost, NULL)
         && !memcmp (&dimapost, &dwg->header_vars.DIMAPOST, sizeof (dwg->header_vars.DIMAPOST))
        )
       pass ();
     else
-      fail ("HEADER.DIMAPOST [TV]");
+      fail ("HEADER.DIMAPOST [T]");
   }
   {
     BITCODE_B dimtol;
@@ -4634,13 +4634,13 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.HYPERLINKBASE [T]");
   }
   {
-    BITCODE_TV stylesheet;
+    BITCODE_T stylesheet;
     if (dwg_dynapi_header_value (dwg, "STYLESHEET", &stylesheet, NULL)
         && !memcmp (&stylesheet, &dwg->header_vars.STYLESHEET, sizeof (dwg->header_vars.STYLESHEET))
        )
       pass ();
     else
-      fail ("HEADER.STYLESHEET [TV]");
+      fail ("HEADER.STYLESHEET [T]");
   }
   {
     BITCODE_H dictionary_layout;
@@ -4922,22 +4922,22 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.CPSNID [H]");
   }
   {
-    BITCODE_TV fingerprintguid;
+    BITCODE_T fingerprintguid;
     if (dwg_dynapi_header_value (dwg, "FINGERPRINTGUID", &fingerprintguid, NULL)
         && !memcmp (&fingerprintguid, &dwg->header_vars.FINGERPRINTGUID, sizeof (dwg->header_vars.FINGERPRINTGUID))
        )
       pass ();
     else
-      fail ("HEADER.FINGERPRINTGUID [TV]");
+      fail ("HEADER.FINGERPRINTGUID [T]");
   }
   {
-    BITCODE_TV versionguid;
+    BITCODE_T versionguid;
     if (dwg_dynapi_header_value (dwg, "VERSIONGUID", &versionguid, NULL)
         && !memcmp (&versionguid, &dwg->header_vars.VERSIONGUID, sizeof (dwg->header_vars.VERSIONGUID))
        )
       pass ();
     else
-      fail ("HEADER.VERSIONGUID [TV]");
+      fail ("HEADER.VERSIONGUID [T]");
   }
   {
     BITCODE_RC sortents;
@@ -5120,13 +5120,13 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_TV projectname;
+    BITCODE_T projectname;
     if (dwg_dynapi_header_value (dwg, "PROJECTNAME", &projectname, NULL)
         && !memcmp (&projectname, &dwg->header_vars.PROJECTNAME, sizeof (dwg->header_vars.PROJECTNAME))
        )
       pass ();
     else
-      fail ("HEADER.PROJECTNAME [TV]");
+      fail ("HEADER.PROJECTNAME [T]");
   }
   {
     BITCODE_H block_record_pspace;
@@ -19590,14 +19590,14 @@ static int test_POINTCLOUD (const Dwg_Object *obj)
     pointcloud->show_intensity--;
   }
   {
-    BITCODE_TV* source_files;
+    BITCODE_TU* source_files;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_source_files", &count, NULL)
         && dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "source_files", &source_files, NULL)
         && source_files == pointcloud->source_files)
       pass ();
     else
-      fail ("POINTCLOUD.source_files [TV*] * %u num_source_files", count);
+      fail ("POINTCLOUD.source_files [TU*] * %u num_source_files", count);
   }
   {
     BITCODE_T ucs_name;
@@ -30009,14 +30009,14 @@ static int test_APPID (const Dwg_Object *obj)
     appid->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_TU name;
     if (dwg_dynapi_entity_value (appid, "APPID", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)appid->name)
            : !appid->name)
       pass ();
     else
-      fail ("APPID.name [TV] '%s' <> '%s'", name, appid->name);
+      fail ("APPID.name [TU] '%ls' <> '%ls'", name, appid->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -39951,14 +39951,14 @@ static int test_BLOCKLOOKUPACTION (const Dwg_Object *obj)
         fail ("BLOCKLOOKUPACTION.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV* exprs;
+    BITCODE_TU* exprs;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "num_exprs", &count, NULL)
         && dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "exprs", &exprs, NULL)
         && exprs == blocklookupaction->exprs)
       pass ();
     else
-      fail ("BLOCKLOOKUPACTION.exprs [TV*] * %u num_exprs", count);
+      fail ("BLOCKLOOKUPACTION.exprs [TU*] * %u num_exprs", count);
   }
   {
     Dwg_BLOCKLOOKUPACTION_lut* lut;
@@ -44922,14 +44922,14 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     block_header->loaded_bit--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_TU name;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)block_header->name)
            : !block_header->name)
       pass ();
     else
-      fail ("BLOCK_HEADER.name [TV] '%s' <> '%s'", name, block_header->name);
+      fail ("BLOCK_HEADER.name [TU] '%ls' <> '%ls'", name, block_header->name);
   }
   {
     BITCODE_RL num_inserts;
@@ -50582,14 +50582,14 @@ static int test_LAYERFILTER (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_TV* names;
+    BITCODE_TU* names;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "num_names", &count, NULL)
         && dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "names", &names, NULL)
         && names == layerfilter->names)
       pass ();
     else
-      fail ("LAYERFILTER.names [TV*] * %u num_names", count);
+      fail ("LAYERFILTER.names [TU*] * %u num_names", count);
   }
   {
     BITCODE_BL num_names;
@@ -51321,14 +51321,14 @@ static int test_LTYPE (const Dwg_Object *obj)
     ltype->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_TU name;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)ltype->name)
            : !ltype->name)
       pass ();
     else
-      fail ("LTYPE.name [TV] '%s' <> '%s'", name, ltype->name);
+      fail ("LTYPE.name [TU] '%ls' <> '%ls'", name, ltype->name);
   }
   {
     BITCODE_RC numdashes;
@@ -58257,14 +58257,14 @@ static int test_STYLE (const Dwg_Object *obj)
     style->last_height--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_TU name;
     if (dwg_dynapi_entity_value (style, "STYLE", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)style->name)
            : !style->name)
       pass ();
     else
-      fail ("STYLE.name [TV] '%s' <> '%s'", name, style->name);
+      fail ("STYLE.name [TU] '%ls' <> '%ls'", name, style->name);
   }
   {
     BITCODE_BD oblique_angle;
@@ -59739,14 +59739,14 @@ static int test_UCS (const Dwg_Object *obj)
     ucs->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_TU name;
     if (dwg_dynapi_entity_value (ucs, "UCS", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)ucs->name)
            : !ucs->name)
       pass ();
     else
-      fail ("UCS.name [TV] '%s' <> '%s'", name, ucs->name);
+      fail ("UCS.name [TU] '%ls' <> '%ls'", name, ucs->name);
   }
   {
     BITCODE_H named_ucs;
@@ -60302,14 +60302,14 @@ static int test_VIEW (const Dwg_Object *obj)
         fail ("VIEW.livesection [H]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_TU name;
     if (dwg_dynapi_entity_value (view, "VIEW", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)view->name)
            : !view->name)
       pass ();
     else
-      fail ("VIEW.name [TV] '%s' <> '%s'", name, view->name);
+      fail ("VIEW.name [TU] '%ls' <> '%ls'", name, view->name);
   }
   {
     BITCODE_H named_ucs;
@@ -62883,14 +62883,14 @@ static int test_VPORT (const Dwg_Object *obj)
         fail ("VPORT.lower_left [2RD]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_TU name;
     if (dwg_dynapi_entity_value (vport, "VPORT", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)vport->name)
            : !vport->name)
       pass ();
     else
-      fail ("VPORT.name [TV] '%s' <> '%s'", name, vport->name);
+      fail ("VPORT.name [TU] '%ls' <> '%ls'", name, vport->name);
   }
   {
     BITCODE_H named_ucs;
@@ -63303,14 +63303,14 @@ static int test_VX_TABLE_RECORD (const Dwg_Object *obj)
     vx_table_record->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_TU name;
     if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)vx_table_record->name)
            : !vx_table_record->name)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.name [TV] '%s' <> '%s'", name, vx_table_record->name);
+      fail ("VX_TABLE_RECORD.name [TU] '%ls' <> '%ls'", name, vx_table_record->name);
   }
   {
     struct _dwg_object_object* parent;
