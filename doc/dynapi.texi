@@ -128,7 +128,7 @@ BS,	DXF 70
 @item DIMALTZ
 BS,	DXF 70
 @item DIMAPOST
-TV,	DXF 1
+T,	DXF 1
 @item DIMAPOST_T
 T
 @item DIMARCSYM
@@ -222,7 +222,7 @@ BD
 @item DIMMZS
 T,	DXF 1
 @item DIMPOST
-TV,	DXF 1
+T,	DXF 1
 @item DIMPOST_T
 T
 @item DIMRND
@@ -304,7 +304,7 @@ H,	DXF 349
 @item DWFFRAME
 RC,	DXF 280
 @item DWGCODEPAGE
-TV,	DXF 3
+T,	DXF 3
 @item ELEVATION
 BD,	DXF 40
 @item ENDCAPS
@@ -324,7 +324,7 @@ BD,	DXF 40
 @item FILLMODE
 B,	DXF 70
 @item FINGERPRINTGUID
-TV,	DXF 2
+T,	DXF 2
 @item FLAGS
 BL
 @item FLATLAND
@@ -414,7 +414,7 @@ BS,	DXF 70
 @item MEASUREMENT
 BS,	DXF 70
 @item MENU
-TV,	DXF 1
+T,	DXF 1
 @item MENUEXT
 RC
 @item MIRRTEXT
@@ -458,7 +458,7 @@ B,	DXF 70
 @item PLINEWID
 BD,	DXF 40
 @item PROJECTNAME
-TV,	DXF 1
+T,	DXF 1
 @item PROXYGRAPHICS
 BS,	DXF 70
 @item PSLTSCALE
@@ -546,7 +546,7 @@ BD,	DXF 40
 @item STEPSPERSEC
 BD,	DXF 40
 @item STYLESHEET
-TV,	DXF 1
+T,	DXF 1
 @item STYLE_CONTROL_OBJECT
 H
 @item SURFTAB1
@@ -650,7 +650,7 @@ BD,	DXF 40
 @item USRTIMER
 B,	DXF 70
 @item VERSIONGUID
-TV,	DXF 2
+T,	DXF 2
 @item VIEWCTR
 3RD,	DXF 20
 @item VIEWDIR
@@ -718,19 +718,19 @@ RL
 @item size
 RL
 @item unit1_name
-TV
+T
 @item unit1_ratio
 BD
 @item unit2_name
-TV
+T
 @item unit2_ratio
 BD
 @item unit3_name
-TV
+T
 @item unit3_ratio
 BD
 @item unit4_name
-TV
+T
 @item unit4_ratio
 BD
 @item unknown_10
@@ -3465,7 +3465,7 @@ T,	DXF 1
 @item num_source_files
 BL,	DXF 90
 @item source_files
-TV*,	DXF 2
+TU*,	DXF 2
 @item extents_min
 3BD,	DXF 11
 @item extents_max
@@ -5685,7 +5685,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+TU
 @item used
 RSd
 @item is_xref_ref
@@ -7874,7 +7874,7 @@ BL,	DXF 93
 @item lut
 Dwg_BLOCKLOOKUPACTION_lut*
 @item exprs
-TV*,	DXF 302
+TU*,	DXF 302
 @item b280
 B,	DXF 280
 
@@ -8893,7 +8893,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+TU
 @item used
 RSd
 @item is_xref_ref
@@ -10166,7 +10166,7 @@ struct _dwg_object_object*
 @item num_names
 BL
 @item names
-TV*,	DXF 8
+TU*,	DXF 8
 
 @end vtable
 @end indentedblock
@@ -10345,7 +10345,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+TU
 @item used
 RSd
 @item is_xref_ref
@@ -11782,7 +11782,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+TU
 @item used
 RSd
 @item is_xref_ref
@@ -12105,7 +12105,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+TU
 @item used
 RSd
 @item is_xref_ref
@@ -12207,7 +12207,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+TU
 @item used
 RSd
 @item is_xref_ref
@@ -12592,7 +12592,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+TU
 @item used
 RSd
 @item is_xref_ref
@@ -12759,7 +12759,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+TU
 @item used
 RSd
 @item is_xref_ref
@@ -12877,7 +12877,7 @@ BL
 @item num_items
 BL
 @item classname
-TV
+TU
 @item items
 Dwg_ASSOCARRAYITEM*
 @item numitems
@@ -13503,7 +13503,7 @@ Dwg_AcDs_Schema*
 @item num_propnames
 RL
 @item propnames
-TV*
+TU*
 
 @end vtable
 @end indentedblock
@@ -13711,7 +13711,7 @@ RL
 @item code
 BL
 @item name
-TV
+TU
 
 @end vtable
 @end indentedblock
@@ -13769,7 +13769,7 @@ T
 @vtable @code
 
 @item desc
-TV
+TU
 @item flags
 BL
 @item minimum
@@ -14115,7 +14115,7 @@ BL,	DXF 91
 @item num_xrefpaths
 BS
 @item xrefpaths
-TV*,	DXF 301
+TU*,	DXF 301
 @item has_lastpt_ref
 B,	DXF 75
 @item lastpt_ref
@@ -14151,7 +14151,7 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+TU,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
@@ -14253,7 +14253,7 @@ BD
 @item value.pt3d
 3BD
 @item value.text1
-TV
+TU
 @item value.long90
 BL
 @item value.handle91
@@ -14283,7 +14283,7 @@ BS
 @item u.rc
 RC
 @item u.text
-TV
+TU
 @item u.handle
 H
 
@@ -14299,7 +14299,7 @@ H
 @item parent
 struct _dwg_object_FIELD*
 @item key
-TV,	DXF 6
+T,	DXF 6
 @item value
 Dwg_TABLE_value
 
@@ -14627,7 +14627,7 @@ struct _dwg_entity_MULTILEADER*
 @item attdef
 H,	DXF 330
 @item label_text
-TV,	DXF 302
+T,	DXF 302
 @item ui_index
 BS,	DXF 177
 @item width
@@ -15811,7 +15811,7 @@ T,	DXF 302
 @item flag
 BL,	DXF 90
 @item tooltip
-TV,	DXF 300
+T,	DXF 300
 @item customdata
 BL,	DXF 91
 @item num_customdata_items
@@ -15893,7 +15893,7 @@ struct _dwg_TableCellContent*
 @item attdef
 H,	DXF 330
 @item value
-TV,	DXF 301
+T,	DXF 301
 @item index
 BL,	DXF 92
 
