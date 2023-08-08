@@ -312,6 +312,21 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       HEADER_9 (nam);                                                         \
       VALUE_TU (value, dxf);                                                  \
     }
+/* T16 values (SummaryInfo) are always UCS-2 in memory, also when coming from
+   JSON or DXF (unlike VALUE_TU, which assumes TV for DWG_OPTS_INJSON). */
+#define HEADER_VALUE_T16(nam, dxf, value)                                     \
+  if (dxf)                                                                    \
+    {                                                                         \
+      char *_u8 = bit_convert_TU ((BITCODE_TU)(value));                       \
+      HEADER_9 (nam);                                                         \
+      dxf_fixup_string (dat, _u8, 1, dxf);                                    \
+      free (_u8);                                                             \
+    }
+#define HEADER_VALUE_T16_0(nam, dxf, value)                                   \
+  if (dxf && (value) && *(BITCODE_TU)(value))                                 \
+    {                                                                         \
+      HEADER_VALUE_T16 (nam, dxf, value)                                      \
+    }
 
 #define HEADER_3D(nam)                                                        \
   {                                                                           \

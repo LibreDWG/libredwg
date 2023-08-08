@@ -71,30 +71,23 @@ help (void)
   return 0;
 }
 
-/* handles r2007 wide chars (=> utf8) */
+/* T16 is always UCS-2 (=> utf8) */
 static int
 set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
           BITCODE_T16 restrict text)
 {
   int ret = 0;
+  char *u8;
+  (void)dwg;
   if (!text)
     return 0;
-  if (dwg->header.from_version < R_2007)
+  u8 = bit_convert_TU ((BITCODE_TU)text);
+  if (u8 && strlen (u8))
     {
-      PS_set_info (ps, key, text);
+      PS_set_info (ps, key, u8);
       ret = 1;
     }
-  else
-    {
-      char *u8 = bit_convert_TU ((BITCODE_TU)text);
-      if (u8 && strlen (u8))
-        {
-          PS_set_info (ps, key, u8);
-          ret = 1;
-        }
-      if (u8)
-        free (u8);
-    }
+  free (u8);
   return ret;
 }
 
