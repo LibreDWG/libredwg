@@ -1897,7 +1897,7 @@ encode_template (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dwg->header.section[sec_id].size = 4; // always empty description
   // Template description
   bit_write_T16 (dat, _obj->description);
-  LOG_TRACE ("_obj->description: %s [T16]\n", _obj->description);
+  LOG_TRACE ("_obj->description: %s [T16]\n", (char *)_obj->description);
   // 0 - English, 1- Metric
   bit_write_RS (dat, dwg->header_vars.MEASUREMENT);
   LOG_TRACE ("HEADER.MEASUREMENT: %d [RS]\n", dwg->header_vars.MEASUREMENT);

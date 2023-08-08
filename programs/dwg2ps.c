@@ -79,22 +79,16 @@ set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
   int ret = 0;
   if (!text)
     return 0;
-  if (dwg->header.from_version < R_2007)
-    {
-      PS_set_info (ps, key, text);
-      ret = 1;
-    }
-  else
-    {
-      char *u8 = bit_convert_TU ((BITCODE_TU)text);
-      if (u8 && strlen (u8))
-        {
-          PS_set_info (ps, key, u8);
-          ret = 1;
-        }
-      if (u8)
-        free (u8);
-    }
+  {
+    char *u8 = bit_convert_TU ((BITCODE_TU)text);
+    if (u8 && strlen (u8))
+      {
+        PS_set_info (ps, key, u8);
+        ret = 1;
+      }
+    if (u8)
+      free (u8);
+  }
   return ret;
 }
 
