@@ -345,7 +345,7 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
         VALUE_TV ((char *)value, dxf)                                         \
     }
 #define HEADER_VALUE_T0(nam, dxf, value)                                      \
-  if (dxf && !bit_empty_T (dat, value))                                       \
+  if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
     {                                                                         \
       HEADER_9 (nam);                                                         \
       if (IS_FROM_TU (dat))                                                   \
