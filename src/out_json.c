@@ -714,7 +714,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
         {                                                                     \
           for (vcount = 0; vcount < _size; vcount++)                          \
             {                                                                 \
-              FIRSTPREFIX VALUE_TEXT (_obj->nam[vcount])                      \
+              FIRSTPREFIX VALUE_TEXT ((char*)_obj->nam[vcount])               \
             }                                                                 \
         }                                                                     \
     }                                                                         \
