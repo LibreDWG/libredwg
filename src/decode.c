@@ -1002,7 +1002,7 @@ handles_section:
             LOG_HANDLE ("start 3: %zu\n", pvzadr - 16);
           }
 
-        FIELD_BS (num_handlers, 0); // 14, resp. 16 in r14
+        FIELD_BS (num_handlers, 0); // always 14
         if (FIELD_VALUE (num_handlers) > 16)
           {
             LOG_ERROR ("Second header num_handlers > 16: %d\n",

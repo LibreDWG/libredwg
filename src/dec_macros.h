@@ -74,6 +74,7 @@
   LOG (level, "\n")
 
 #define VALUE(value, type, dxf)                                               \
+  (void)bit_read_##type (dat);                                                \
   LOG_TRACE (FORMAT_##type " [" #type " %d]\n", (BITCODE_##type)value, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_BS(value, dxf) VALUE (value, BS, dxf)
@@ -429,6 +430,7 @@
     LOG_TRACE (#nam ": 0x%x [BLx %d]", (uint32_t)_obj->nam, dxf);             \
     LOG_RPOS                                                                  \
   }
+#define SUB_FIELD_BLx(o, nam, dxf) SUB_FIELD_CAST(o, nam, BL, BLx, dxf)
 #define FIELD_RLx(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_RL (dat);                                            \
@@ -494,6 +496,11 @@
   {                                                                           \
     _obj->nam = (BITCODE_RCd)bit_read_RC (dat);                               \
     LOG_TRACE (#nam ": %d [RC %d]\n", (int)((signed char)_obj->nam), dxf);    \
+  }
+#define SUB_FIELD_RCd(o, nam, dxf)                                            \
+  {                                                                           \
+    _obj->o.nam = (BITCODE_RC)bit_read_RC (dat);                             \
+    LOG_TRACE (#nam ": %d [RC %d]\n", (int)((signed char)_obj->o.nam), dxf);  \
   }
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
 #define FIELD_RSx(nam, dxf)                                                   \

@@ -9557,17 +9557,17 @@ typedef struct _dwg_template
 
 typedef struct _dwg_secondheader_sections
 {
-  BITCODE_RC nr;
+  BITCODE_RCd nr;
   BITCODE_BL address;
   BITCODE_BL size;
 } Dwg_SecondHeader_Sections;
 
-typedef struct _dwg_secondheader_handlers
+typedef struct _dwg_secondheader_handles
 {
-  BITCODE_RC num_data;
-  BITCODE_RC nr;
-  BITCODE_RC *data;
-} Dwg_SecondHeader_Handlers;
+  BITCODE_RCd num_hdl;
+  BITCODE_RCd nr;
+  BITCODE_RC *hdl;
+} Dwg_SecondHeader_Handles;
 
 typedef struct _dwg_secondheader
 {
@@ -9579,11 +9579,10 @@ typedef struct _dwg_secondheader
   BITCODE_RC unknown_rc4[4];
   BITCODE_RC num_sections;
   Dwg_SecondHeader_Sections sections[6];
-  BITCODE_BS num_handlers;
-  Dwg_SecondHeader_Handlers handlers[16];
+  BITCODE_BS num_handles;
+  Dwg_SecondHeader_Handles handles[14];
   BITCODE_RL crc;
-  BITCODE_RL junk_r14_1; /*!< r14 only */
-  BITCODE_RL junk_r14_2; /*!< r14 only */
+  BITCODE_RLL junk_r14; /*!< r14 only */
 } Dwg_SecondHeader;
 
 /**

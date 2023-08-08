@@ -3794,8 +3794,8 @@ json_SecondHeader_Sections (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           t = &tokens->tokens[tokens->index];
           // clang-format off
           if (0) ; // else
-          SUB_FIELD_LONG (sections[j], nr, RC)
-          SUB_FIELD_LONG (sections[j], address, BL)
+          SUB_FIELD_LONG (sections[j], nr, RCd)
+          SUB_FIELD_LONG (sections[j], address, BLx)
           SUB_FIELD_LONG (sections[j], size, BL)
           else
             {
@@ -3811,11 +3811,11 @@ json_SecondHeader_Sections (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static int
-json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+json_SecondHeader_Handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             jsmntokens_t *restrict tokens, Dwg_SecondHeader *_obj,
                             int size)
 {
-  const char *section = "SecondHeader_Handlers";
+  const char *section = "SecondHeader_Handles";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   if (t->type != JSMN_ARRAY)
     {
@@ -3825,9 +3825,9 @@ json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_advance_unknown (dat, tokens, t->type, 0);
       return DWG_ERR_INVALIDTYPE;
     }
-  _obj->num_handlers = MIN(size, 16);
-  LOG_TRACE ("%s: %d\n", section, _obj->num_handlers);
-  for (int j = 0; j < _obj->num_handlers; j++)
+  _obj->num_handles = MIN(size, 14);
+  LOG_TRACE ("%s: %d\n", section, _obj->num_handles);
+  for (int j = 0; j < _obj->num_handles; j++)
     {
       int keys;
       tokens->index++;
@@ -3852,22 +3852,32 @@ json_SecondHeader_Handlers (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           t = &tokens->tokens[tokens->index];
           // clang-format off
           if (0) ; // else
-          SUB_FIELD_LONG (handlers[j], num_data, RC)
-          SUB_FIELD_LONG (handlers[j], nr, RC)
-          // SUB_FIELD_VECTOR_INL (handlers[j], data, RC, num_data, 0)
-          else if (strEQc (key, "data") && t->type == JSMN_ARRAY)
+          SUB_FIELD_LONG (handles[j], num_hdl, RCd) // disabled
+          SUB_FIELD_LONG (handles[j], nr, RCd)
+          // SUB_FIELD_VECTOR_INL (handles[j], hdl, RC, num_hdl, 0)
+          else if (strEQc (key, "hdl") && t->type == JSMN_ARRAY)
             {
               tokens->index++;
               JSON_TOKENS_CHECK_OVERFLOW_ERR
-              if (t->size < 256)
-                _obj->handlers[j].data = (BITCODE_RC *)calloc (1, t->size);
-              _obj->handlers[j].num_data = t->size;
+              if (t->size < 8)
+                {
+                  if (_obj->handles[j].hdl)
+                    free (_obj->handles[j].hdl);
+                  _obj->handles[j].hdl = (BITCODE_RC *)calloc (1, t->size);
+                  _obj->handles[j].num_hdl = t->size;
+                }
               for (int vcount = 0; vcount < t->size; vcount++)
-                {   
-                  _obj->handlers[j].data[vcount] = (BITCODE_RC)json_long (dat, tokens) & 0xFF;
+                {
+                  if (vcount >= 8)
+                    {
+                      tokens->index++;
+                      continue;
+                    }
+                  _obj->handles[j].hdl[vcount] =
+                    (BITCODE_RC)json_long (dat, tokens) & 0xFF;
                   JSON_TOKENS_CHECK_OVERFLOW_ERR               
-                  LOG_TRACE ("data[%d]: " FORMAT_RC " [RC %d]\n", vcount,
-                             _obj->handlers[j].data[vcount], 0);
+                  LOG_TRACE ("hdl[%d]: " FORMAT_RC " [RC %d]\n", vcount,
+                               _obj->handles[j].hdl[vcount], 0);
                 }
             }
           else
@@ -3910,12 +3920,12 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       json_fixed_key (key, dat, tokens);
       t = &tokens->tokens[tokens->index];
 
-      if (strEQc (key, "handlers"))
+      if (strEQc (key, "handles"))
         {
           if (t->type != JSMN_ARRAY) // of OBJECTs
             json_advance_unknown (dat, tokens, t->type, 0);
           else if (t->size)
-            error |= json_SecondHeader_Handlers (dat, dwg, tokens, _obj, t->size);
+            error |= json_SecondHeader_Handles (dat, dwg, tokens, _obj, t->size);
           else
             tokens->index++; // empty array
           if (error >= DWG_ERR_CRITICAL)
@@ -3938,11 +3948,22 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_TFF (version, 12, 0)
       FIELD_VECTOR_INL (null_b, B, 4, 0)
       FIELD_RC (unknown_10, 0)
-      FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
+      // FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
+      else if (strEQc (key, "unknown_rc4") && t->type == JSMN_ARRAY && t->size <= 4)
+        {
+          tokens->index++;
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          for (int vcount = 0; vcount < t->size; vcount++)
+            {
+              _obj->unknown_rc4[vcount] = (BITCODE_RC)json_long (dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              LOG_TRACE ("unknown_rc4[%d]: " FORMAT_RC " [RC]\n", vcount,
+                         _obj->unknown_rc4[vcount]);
+            }
+        }
       FIELD_RC (num_sections, 0)
-      FIELD_BS (num_handlers, 0)
-      FIELD_RL (junk_r14_1, 0)
-      FIELD_RL (junk_r14_2, 0)
+      FIELD_BS (num_handles, 0)
+      FIELD_RLL (junk_r14, 0)
       FIELD_RS (crc, 0)
       // clang-format on
       else

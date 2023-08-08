@@ -175,13 +175,15 @@
 #ifndef SUB_FIELD_TF
 #  define SUB_FIELD_TF(o, nam, len, dxf) FIELD_TF (o.nam, _obj->o.len, dxf)
 #endif
+#ifndef SUB_FIELD_BLx
+#  define SUB_FIELD_BLx(o, nam, dxf) FIELD_BLx (o.nam, dxf)
+#endif
 #ifndef SUB_FIELD_BL
 #  define SUB_FIELD_B(o, nam, dxf) FIELDG (o.nam, B, dxf)
 #  define SUB_FIELD_BB(o, nam, dxf) FIELDG (o.nam, BB, dxf)
 #  define SUB_FIELD_3B(o, nam, dxf) FIELDG (o.nam, 3B, dxf)
 #  define SUB_FIELD_BS(o, nam, dxf) FIELDG (o.nam, BS, dxf)
 #  define SUB_FIELD_BL(o, nam, dxf) FIELDG (o.nam, BL, dxf)
-#  define SUB_FIELD_BLx(o, nam, dxf) FIELD_BLx (o.nam, dxf)
 #  define SUB_FIELD_BLd(o, nam, dxf) FIELD_BLd (o.nam, dxf)
 #  define SUB_FIELD_RC(o, nam, dxf) FIELDG (o.nam, RC, dxf)
 #  define SUB_FIELD_RS(o, nam, dxf) FIELDG (o.nam, RS, dxf)

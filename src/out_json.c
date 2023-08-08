@@ -557,6 +557,7 @@ static char *_path_field (const char *path);
 #define SUB_FIELD_BLx(o, nam, dxf) SUB_FIELD (o, nam, BLx, dxf)
 #define SUB_FIELD_BLd(o, nam, dxf) SUB_FIELD (o, nam, BLd, dxf)
 #define SUB_FIELD_RC(o, nam, dxf) SUB_FIELD (o, nam, RC, dxf)
+#define SUB_FIELD_RCd(o, nam, dxf) SUB_FIELD (o, nam, RCd, dxf)
 #define SUB_FIELD_RS(o, nam, dxf) SUB_FIELD (o, nam, RS, dxf)
 #define SUB_FIELD_RL(o, nam, dxf) SUB_FIELD (o, nam, RL, dxf)
 #define SUB_FIELD_BLL(o, nam, dxf) SUB_FIELD (o, nam, BLL, dxf)
@@ -857,8 +858,8 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define REPEAT_F(times, size, nam, type)                                      \
   if (_obj->times > (BITCODE_BL)size)                                         \
     {                                                                         \
-      LOG_ERROR ("Invalid %s " FORMAT_BL " > %u", #nam, _obj->times,          \
-                 (unsigned)size);                                             \
+      LOG_WARN ("Invalid %s " FORMAT_BL " > %u", #nam,                        \
+                (BITCODE_BL)_obj->times, (unsigned)size);                     \
       _obj->times = (BITCODE_BL)size;                                         \
     }                                                                         \
   _REPEAT_N (_obj->times, nam, type, 1)
@@ -2550,8 +2551,8 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (unsigned i = 0; i < MIN(FIELD_VALUE (num_sections), 6U); i++)
     {
       FIRSTPREFIX HASH;
-      SUB_FIELD_RC (section[i], nr, 0);
-      SUB_FIELD_BL (section[i], address, 0);
+      SUB_FIELD_RCd (section[i], nr, 0);
+      SUB_FIELD_BLx (section[i], address, 0);
       SUB_FIELD_BL (section[i], size, 0);
       ENDHASH;
     }
@@ -2561,8 +2562,8 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (unsigned i = 0; i < MIN(FIELD_VALUE (num_handlers), 16U); i++)
     {
       FIRSTPREFIX HASH;
-      SUB_FIELD_RC (handlers[i], num_data, 0);
-      SUB_FIELD_RC (handlers[i], nr, 0);
+      SUB_FIELD_RCd (handlers[i], num_data, 0);
+      SUB_FIELD_RCd (handlers[i], nr, 0);
       SUB_FIELD_VECTOR (handlers[i], data, RC, num_data, 0);
       ENDHASH;
     }

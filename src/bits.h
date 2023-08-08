@@ -168,6 +168,7 @@ void bit_write_BT (Bit_Chain *dat, double value);
 
 int bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle);
 void bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle);
+void bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle);
 
 uint16_t bit_read_CRC (Bit_Chain *dat);
 
