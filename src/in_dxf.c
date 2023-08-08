@@ -1489,12 +1489,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 #  define SUMMARY_T(name)                                                     \
     (pair->code == 1 && strEQc (field, "$" #name) && pair->value.s.ptr != NULL)   \
     {                                                                         \
-      char dest[1024];                                                        \
-      LOG_TRACE ("SUMMARY.%s = %s [T16 1]\n", &field[1], pair->value.s.ptr);      \
-      bit_utf8_to_TV (dest, (unsigned char *)pair->value.s.ptr, 1024,             \
-                      strlen (pair->value.s.ptr), 0, dat->codepage);              \
-      dest[1023] = '\0';                                                      \
-      dwg->summaryinfo.name = strdup (dest);                                  \
+      LOG_TRACE ("SUMMARY.%s = %s [T16 1]\n", &field[1], pair->value.s.ptr);  \
+      dwg->summaryinfo.name = bit_utf8_to_TU (pair->value.s.ptr, 0);          \
     }
 
               // clang-format off
@@ -1509,7 +1505,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                        && pair->value.s.ptr != NULL)
                 // clang-format on
                 {
-                  char dest[1024];
                   BITCODE_BL j = dwg->summaryinfo.num_props;
                   dwg->summaryinfo.num_props++;
                   dwg->summaryinfo.props
@@ -1520,25 +1515,18 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           sizeof (Dwg_SummaryInfo_Property));
                   LOG_TRACE ("SUMMARY.props[%u].tag = %s [TU16 1]\n", j,
                              pair->value.s.ptr);
-                  bit_utf8_to_TV (dest, (unsigned char *)pair->value.s.ptr,
-                                  1024, strlen (pair->value.s.ptr), 0,
-                                  dat->codepage);
-                  dest[1023] = '\0';
-                  dwg->summaryinfo.props[j].tag = strdup (dest);
+                  dwg->summaryinfo.props[j].tag
+                      = bit_utf8_to_TU (pair->value.s.ptr, 0);
                 }
               else if (pair->code == 1 && strEQc (field, "$CUSTOMPROPERTY")
                        && pair->value.s.ptr != NULL && dwg->summaryinfo.props
                        && dwg->summaryinfo.num_props > 0)
                 {
-                  char dest[1024];
                   BITCODE_BL j = dwg->summaryinfo.num_props - 1;
                   LOG_TRACE ("SUMMARY.props[%u].value = %s [TU16 1]\n", j,
                              pair->value.s.ptr);
-                  bit_utf8_to_TV (dest, (unsigned char *)pair->value.s.ptr,
-                                  1024, strlen (pair->value.s.ptr), 0,
-                                  dat->codepage);
-                  dest[1023] = '\0';
-                  dwg->summaryinfo.props[j].value = strdup (dest);
+                  dwg->summaryinfo.props[j].value
+                      = bit_utf8_to_TU (pair->value.s.ptr, 0);
                 }
               else
                 LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",

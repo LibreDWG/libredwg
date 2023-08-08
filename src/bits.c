@@ -2528,28 +2528,82 @@ bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
   return chain;
 }
 
-/** String16: Read ASCII prefixed by a RS length
+/** Converts a codepage'd TV (or UTF-8 if codepage is CP_UTF8) to a new UCS-2
+    string. src is not freed.
+ */
+EXPORT BITCODE_TU
+bit_TV_to_TU (const char *restrict src, const BITCODE_RS codepage)
+{
+  char *u8;
+  BITCODE_TU wstr;
+  if (!src)
+    return NULL;
+  u8 = bit_TV_to_utf8 (src, codepage);
+  if (!u8)
+    return NULL;
+  wstr = bit_utf8_to_TU (u8, 0);
+  if (u8 != src)
+    free (u8);
+  return wstr;
+}
+
+/** Converts a UCS-2 string to a new codepage'd TV. Characters not
+    representable in the codepage become \U+XXXX.
+ */
+EXPORT char *
+bit_TU_to_TV (const BITCODE_TU restrict wstr, const BITCODE_RS codepage)
+{
+  char *u8, *dest;
+  size_t len, destlen;
+  if (!wstr)
+    return NULL;
+  u8 = bit_convert_TU (wstr);
+  if (!u8)
+    return NULL;
+  len = strlen (u8);
+  destlen = len * 4 + 8; // worst case: 1 utf8 byte per \U+XXXX is not possible
+  dest = (char *)calloc (destlen, 1);
+  if (!dest
+      || !bit_utf8_to_TV (dest, (unsigned char *)u8, destlen, len, 0,
+                          codepage))
+    {
+      free (dest);
+      free (u8);
+      return NULL;
+    }
+  free (u8);
+  return dest;
+}
+
+/** String16: Read a RS length prefixed string. Always returns UCS-2:
+    >=r2007 reads UCS-2 directly, older versions read the codepage'd bytes
+    and convert them.
  */
 ATTRIBUTE_MALLOC
 BITCODE_T16
 bit_read_T16 (Bit_Chain *restrict dat)
 {
   BITCODE_RS i, length;
-  BITCODE_TV chain;
+  char *tv;
+  BITCODE_T16 chain;
 
+  if (dat->from_version >= R_2007)
+    return bit_read_TU16 (dat);
   CHK_OVERFLOW (__FUNCTION__, NULL)
   length = bit_read_RS (dat);
   CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
-  chain = (BITCODE_TV)malloc (length + 1);
-  if (!chain)
+  tv = (char *)malloc ((size_t)length + 1);
+  if (!tv)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Out of memory");
       return NULL;
     }
   for (i = 0; i < length; i++)
-    chain[i] = bit_read_RC (dat);
-  chain[length] = 0;
+    tv[i] = (char)bit_read_RC (dat);
+  tv[length] = '\0';
+  chain = bit_TV_to_TU (tv, dat->codepage);
+  free (tv);
   return chain;
 }
 
@@ -2614,7 +2668,8 @@ bit_read_T32 (Bit_Chain *restrict dat)
     }
   else
     {
-      BITCODE_T32 str;
+      char *tv;
+      BITCODE_TU str;
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -2622,17 +2677,19 @@ bit_read_T32 (Bit_Chain *restrict dat)
                      __FUNCTION__, dat->byte, size);
           return NULL;
         }
-      str = (BITCODE_T32)malloc (size + 1);
-      if (!str)
+      tv = (char *)malloc (size + 1);
+      if (!tv)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Out of memory");
           return NULL;
         }
       for (i = 0; i < size; i++)
-        str[i] = bit_read_RC (dat);
-      str[size] = 0;
-      return str;
+        tv[i] = (char)bit_read_RC (dat);
+      tv[size] = '\0';
+      str = bit_TV_to_TU (tv, dat->codepage);
+      free (tv);
+      return (BITCODE_T32)str;
     }
 }
 
@@ -2687,7 +2744,8 @@ bit_read_TU32 (Bit_Chain *restrict dat)
     }
   else
     {
-      BITCODE_T32 str;
+      char *tv;
+      BITCODE_TU str;
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -2695,17 +2753,19 @@ bit_read_TU32 (Bit_Chain *restrict dat)
                      __FUNCTION__, dat->byte, size);
           return NULL;
         }
-      str = (BITCODE_T32)malloc (size + 1);
-      if (!str)
+      tv = (char *)malloc (size + 1);
+      if (!tv)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Out of memory");
           return NULL;
         }
       for (i = 0; i < size; i++)
-        str[i] = bit_read_RC (dat);
-      str[size] = 0;
-      return str;
+        tv[i] = (char)bit_read_RC (dat);
+      tv[size] = '\0';
+      str = bit_TV_to_TU (tv, dat->codepage);
+      free (tv);
+      return (BITCODE_TU32)str;
     }
 }
 
@@ -2756,101 +2816,59 @@ bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
     bit_write_RS (dat, chain[i]);
 }
 
-/** String16: Write ASCII/Unicode prefixed by a RS length,
-    up-converts to TU16
+/** String16: Write UCS-2 prefixed by a RS length. >=r2007 as TU16,
+    older versions down-convert to the codepage'd TV.
  */
 void
 bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
 {
-  size_t length;
-  if (chain)
+  size_t i, length;
+  char *tv;
+
+  if (dat->version >= R_2007)
     {
-      if (IS_FROM_TU (dat))
-        length = bit_wcs2len ((BITCODE_TU)chain);
-      else
-        length = strlen (chain);
+      bit_write_TU16 (dat, chain);
+      return;
     }
-  else
-    length = 0;
-  if (length > INT16_MAX)
-    {
-      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
-      length = INT16_MAX;
-      chain[INT16_MAX - 1] = '\0';
-    }
-  else if (length == 0)
+  tv = chain ? bit_TU_to_TV ((BITCODE_TU)chain, dat->codepage) : NULL;
+  length = tv ? strlen (tv) : 0;
+  if (!length)
     bit_write_RS (dat, 0);
-  else if (dat->version >= R_2007)
-    {
-      if (!IS_FROM_TU (dat))
-        { // convert to unicode, expand \\U+
-          BITCODE_TU wstr = bit_utf8_to_TU (chain, 0);
-          bit_write_RS (dat, (BITCODE_RS)length);
-          for (size_t i = 0; i < length; i++)
-            bit_write_RS (dat, wstr[i]);
-          free (wstr);
-        }
-      else
-        {
-          bit_write_RS (dat, (BITCODE_RS)length);
-          for (size_t i = 0; i < length; i++)
-            bit_write_RS (dat, chain[i]);
-        }
-    }
   else
     {
-      if (IS_FROM_TU (dat))
+      if (length > INT16_MAX - 1)
         {
-          // convert from unicode to codepage via utf8
-          char dest[1024];
-          char *u8 = bit_convert_TU ((BITCODE_TU)chain);
-          bit_utf8_to_TV (dest, (unsigned char *)u8, 1024, strlen (u8), 0,
-                          dat->codepage);
-          length = strlen (dest);
-          if (length)
-            {
-              bit_write_RS (dat, (BITCODE_RS)(length + 1));
-              for (size_t i = 0; i <= length; i++)
-                bit_write_RC (dat, dest[i]);
-            }
-          else
-            bit_write_RS (dat, 0);
-          free (u8);
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
+          length = INT16_MAX - 1;
         }
-      else
-        {
-          if (length)
-            {
-              bit_write_RS (dat, (BITCODE_RS)(length + 1));
-              for (size_t i = 0; i <= length; i++)
-                bit_write_RC (dat, chain[i]);
-            }
-          else
-            bit_write_RS (dat, 0);
-        }
+      bit_write_RS (dat, (BITCODE_RS)(length + 1));
+      for (i = 0; i < length; i++)
+        bit_write_RC (dat, tv[i]);
+      bit_write_RC (dat, 0);
     }
+  free (tv);
 }
 
-// ASCII/UCS-2 string with a RL size (not length)
-// TODO: also upconvert to TU32
+// UCS-2 string with a RL size (not length). Down-converted to the codepage'd
+// TV for <r2007.
 void
 bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
 {
   size_t i, length;
 
-  if (IS_FROM_TU (dat))
+  if (dat->version >= R_2007)
     {
       if (chain)
         length = bit_wcs2len ((BITCODE_TU)chain) + 1;
       else
         length = 0;
-      if (length > INT32_MAX)
+      if (length > INT32_MAX / 2)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
-          length = INT32_MAX;
-          chain[INT32_MAX - 1] = '\0';
+          length = INT32_MAX / 2;
+          chain[length - 1] = '\0';
         }
       bit_write_RL (dat, (BITCODE_RL)(length * 2));
       for (i = 0; i < length; i++)
@@ -2858,23 +2876,23 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
     }
   else
     {
-      if (chain)
-        length = strlen (chain) + 1;
-      else
-        length = 0;
-      if (length > UINT32_MAX)
+      char *tv = chain ? bit_TU_to_TV ((BITCODE_TU)chain, dat->codepage) : NULL;
+      length = tv ? strlen (tv) + 1 : 0;
+      if (length > INT32_MAX)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
-          length = UINT32_MAX;
-          chain[UINT32_MAX - 1] = '\0';
+          length = INT32_MAX;
+          tv[length - 1] = '\0';
         }
       bit_write_RL (dat, (BITCODE_RL)length);
       for (i = 0; i < length; i++)
-        bit_write_RC (dat, chain[i]);
+        bit_write_RC (dat, tv[i]);
+      free (tv);
     }
 }
-// ASCII/UCS-4 or -2 string with a RL size (not length)
+// UCS-4 or -2 string with a RL size (not length). Down-converted to the
+// codepage'd TV for <r2007.
 void
 bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
 {
@@ -2883,10 +2901,6 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
   if (dat->version >= R_2007)
     {
       BITCODE_TU wstr = (BITCODE_TU)chain;
-      BITCODE_TU tmp = NULL;
-      // from JSON, DXF or a pre-r2007 DWG this is still a TV, not UCS-2
-      if (chain && !IS_FROM_TU (dat))
-        wstr = tmp = bit_utf8_to_TU (chain, 0);
       if (wstr)
         length = bit_wcs2len (wstr) + 1;
       else
@@ -2901,24 +2915,22 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
       bit_write_RL (dat, (BITCODE_RL)(length * 4));
       for (i = 0; i < length; i++)
         bit_write_RL (dat, wstr[i]);
-      free (tmp);
     }
   else
     {
-      if (chain)
-        length = strlen (chain) + 1;
-      else
-        length = 0;
-      if (length > UINT32_MAX)
+      char *tv = chain ? bit_TU_to_TV ((BITCODE_TU)chain, dat->codepage) : NULL;
+      length = tv ? strlen (tv) + 1 : 0;
+      if (length > INT32_MAX)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
-          length = UINT32_MAX;
-          chain[UINT32_MAX - 1] = '\0';
+          length = INT32_MAX;
+          tv[length - 1] = '\0';
         }
       bit_write_RL (dat, (BITCODE_RL)length);
       for (i = 0; i < length; i++)
-        bit_write_RC (dat, chain[i]);
+        bit_write_RC (dat, tv[i]);
+      free (tv);
     }
 }
 

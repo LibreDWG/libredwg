@@ -1602,6 +1602,315 @@ bit_read_MC_tests (void)
            268435455);
 }
 
+/* TV (codepage'd) <=> TU (UCS-2) <=> UTF-8, and the T16, T32, TU32 readers and
+   writers, for western and asian codepages. T16, T32, TU32 are always UCS-2 in
+   memory, and TV in the file for <r2007. */
+typedef struct
+{
+  const char *name;
+  BITCODE_RS cp;
+  const char *tv; // as stored in the DWG <r2007, with the codepage
+  const BITCODE_RS *tu;
+  const char *u8;
+} text_case;
+
+static const BITCODE_RS tu_ascii[] = { 'T', 'e', 's', 't', 0 };
+static const BITCODE_RS tu_latin[] = { 'T', 0xCB, 's', 't', 0 };
+static const BITCODE_RS tu_ko[] = { 0xC2DC, 0xD5D8, 0 };
+static const BITCODE_RS tu_ja[] = { 0x8A66, 0x9A13, 0 };
+static const BITCODE_RS tu_ja_mixed[]
+    = { 'A', 'B', 'C', ' ', 0x8A66, 0x9A13, ' ', 'x', 'y', 'z', 0 };
+static const BITCODE_RS tu_ja_kana[]
+    = { 0x65E5, 0x672C, 0x8A9E, 0x30C6, 0x30AD, 0x30B9, 0x30C8, 0 };
+static const BITCODE_RS tu_zh_s[] = { 0x6D4B, 0x8BD5, 0 };
+static const BITCODE_RS tu_zh_t[] = { 0x6E2C, 0x8A66, 0 };
+
+static const text_case text_cases[] = {
+  { "ascii", CP_ANSI_1252, "Test", tu_ascii, "Test" },
+  { "latin1", CP_ANSI_1252, "T\xcb" "st", tu_latin, "T\xc3\x8b" "st" },
+  { "korean CP949", CP_CP949, "\xbd\xc3\xc7\xe8", tu_ko,
+    "\xec\x8b\x9c\xed\x97\x98" },
+  { "japanese ANSI_932", CP_ANSI_932, "\x8e\x8e\x8c\xb1", tu_ja,
+    "\xe8\xa9\xa6\xe9\xa8\x93" },
+  { "japanese mixed ANSI_932", CP_ANSI_932,
+    "ABC \x8e\x8e\x8c\xb1 xyz", tu_ja_mixed,
+    "ABC \xe8\xa9\xa6\xe9\xa8\x93 xyz" },
+  { "japanese kana ANSI_932", CP_ANSI_932,
+    "\x93\xfa\x96\x7b\x8c\xea\x83\x65\x83\x4c\x83\x58\x83\x67", tu_ja_kana,
+    "\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e\xe3\x83\x86\xe3\x82\xad\xe3\x82\xb9"
+    "\xe3\x83\x88" },
+  { "simplified chinese ANSI_936", CP_ANSI_936, "\xb2\xe2\xca\xd4", tu_zh_s,
+    "\xe6\xb5\x8b\xe8\xaf\x95" },
+  { "traditional chinese ANSI_950", CP_ANSI_950, "\xb4\xfa\xb8\xd5", tu_zh_t,
+    "\xe6\xb8\xac\xe8\xa9\xa6" },
+};
+#define NUM_TEXT_CASES (sizeof (text_cases) / sizeof (text_cases[0]))
+
+static int
+tu_equal (const BITCODE_TU a, const BITCODE_RS *b)
+{
+  size_t i;
+  if (!a || !b)
+    return a == NULL && b == NULL;
+  for (i = 0; a[i] || b[i]; i++)
+    if (a[i] != b[i])
+      return 0;
+  return 1;
+}
+
+static size_t
+tu_len (const BITCODE_RS *s)
+{
+  size_t i = 0;
+  while (s[i])
+    i++;
+  return i;
+}
+
+static Bit_Chain
+text_chain (const Dwg_Version_Type version, const BITCODE_RS codepage)
+{
+  Bit_Chain dat;
+  memset (&dat, 0, sizeof (dat));
+  dat.size = 1024;
+  dat.chain = (unsigned char *)calloc (dat.size, 1);
+  dat.version = dat.from_version = version;
+  dat.codepage = codepage;
+  return dat;
+}
+
+static void
+text_conversion_tests (void)
+{
+  for (size_t i = 0; i < NUM_TEXT_CASES; i++)
+    {
+      const text_case *c = &text_cases[i];
+      BITCODE_TU wstr, wstr2;
+      char *tv, *u8;
+
+      // TV => TU
+      wstr = bit_TV_to_TU (c->tv, c->cp);
+      if (tu_equal (wstr, c->tu))
+        pass ();
+      else
+        fail ("bit_TV_to_TU %s", c->name);
+      free (wstr);
+
+      // TU => TV
+      tv = bit_TU_to_TV ((BITCODE_TU)c->tu, c->cp);
+      if (tv && strEQ (tv, c->tv))
+        pass ();
+      else
+        fail ("bit_TU_to_TV %s: %s", c->name, tv ? tv : "NULL");
+      free (tv);
+
+      // TU => UTF-8
+      u8 = bit_convert_TU ((BITCODE_TU)c->tu);
+      if (u8 && strEQ (u8, c->u8))
+        pass ();
+      else
+        fail ("bit_convert_TU %s: %s", c->name, u8 ? u8 : "NULL");
+
+      // UTF-8 => TU, as in_json and in_dxf do
+      wstr = bit_utf8_to_TU ((char *)c->u8, 0);
+      if (tu_equal (wstr, c->tu))
+        pass ();
+      else
+        fail ("bit_utf8_to_TU %s", c->name);
+
+      // UTF-8 => TV, TV => UTF-8
+      {
+        char dest[256];
+        char *p = bit_utf8_to_TV (dest, (const unsigned char *)c->u8,
+                                  sizeof (dest), strlen (c->u8), 0, c->cp);
+        if (p && strEQ (p, c->tv))
+          pass ();
+        else
+          fail ("bit_utf8_to_TV %s", c->name);
+        free (u8);
+        u8 = bit_TV_to_utf8 (c->tv, c->cp);
+        if (u8 && strEQ (u8, c->u8))
+          pass ();
+        else
+          fail ("bit_TV_to_utf8 %s: %s", c->name, u8 ? u8 : "NULL");
+        if (u8 != c->tv)
+          free (u8);
+      }
+
+      // TV => TU => TV is stable
+      wstr2 = bit_TV_to_TU (c->tv, c->cp);
+      tv = bit_TU_to_TV (wstr2, c->cp);
+      if (tv && strEQ (tv, c->tv))
+        pass ();
+      else
+        fail ("TV => TU => TV %s", c->name);
+      free (tv);
+      free (wstr2);
+      free (wstr);
+    }
+  // not representable in the codepage: \U+XXXX, which is expanded back
+  {
+    char *tv = bit_TU_to_TV ((BITCODE_TU)tu_ko, CP_ANSI_1252);
+    BITCODE_TU wstr;
+    if (tv && strEQ (tv, "\\U+C2DC\\U+D5D8"))
+      pass ();
+    else
+      fail ("bit_TU_to_TV korean as ANSI_1252: %s", tv ? tv : "NULL");
+    wstr = bit_TV_to_TU (tv, CP_ANSI_1252);
+    if (tu_equal (wstr, tu_ko))
+      pass ();
+    else
+      fail ("bit_TV_to_TU \\U+C2DC\\U+D5D8");
+    free (wstr);
+    free (tv);
+  }
+}
+
+static void
+text_T16_T32_TU32_tests (void)
+{
+  static const Dwg_Version_Type versions[]
+      = { R_2000, R_2004, R_2007, R_2010, R_2018 };
+  for (size_t i = 0; i < NUM_TEXT_CASES; i++)
+    {
+      const text_case *c = &text_cases[i];
+      const size_t n = tu_len (c->tu);
+      const size_t tvlen = strlen (c->tv);
+      for (size_t v = 0; v < sizeof (versions) / sizeof (versions[0]); v++)
+        {
+          const Dwg_Version_Type ver = versions[v];
+          const bool wide = ver >= R_2007;
+          const char *vn = dwg_version_codes (ver);
+          Bit_Chain dat;
+          BITCODE_TU r;
+          BITCODE_RL size;
+          size_t pos;
+
+          // T16: RS length incl. the \0, then TV or UCS-2
+          dat = text_chain (ver, c->cp);
+          bit_write_T16 (&dat, (BITCODE_T16)c->tu);
+          size = dat.chain[0] + (dat.chain[1] << 8);
+          if (size != (wide ? n + 1 : tvlen + 1))
+            fail ("bit_write_T16 %s %s: wrong length %u", c->name, vn,
+                  (unsigned)size);
+          else if (!wide && memcmp (&dat.chain[2], c->tv, tvlen + 1))
+            fail ("bit_write_T16 %s %s: not the TV", c->name, vn);
+          else if (wide && memcmp (&dat.chain[2], c->tu, n * 2))
+            fail ("bit_write_T16 %s %s: not the UCS-2", c->name, vn);
+          else
+            pass ();
+          pos = dat.byte;
+          bit_set_position (&dat, 0);
+          r = bit_read_T16 (&dat);
+          if (tu_equal (r, c->tu) && dat.byte == pos)
+            pass ();
+          else
+            fail ("bit_read_T16 %s %s", c->name, vn);
+          free (r);
+          bitfree (&dat);
+
+          // T32: RL size in bytes incl. the \0, then TV or UCS-2
+          dat = text_chain (ver, c->cp);
+          bit_write_T32 (&dat, (BITCODE_T32)c->tu);
+          pos = dat.byte;
+          bit_set_position (&dat, 0);
+          size = bit_read_RL (&dat);
+          if (size == (wide ? (n + 1) * 2 : tvlen + 1))
+            pass ();
+          else
+            fail ("bit_write_T32 %s %s: wrong size %u", c->name, vn,
+                  (unsigned)size);
+          bit_set_position (&dat, 0);
+          r = bit_read_T32 (&dat);
+          if (tu_equal (r, c->tu) && dat.byte == pos)
+            pass ();
+          else
+            fail ("bit_read_T32 %s %s", c->name, vn);
+          free (r);
+          bitfree (&dat);
+
+          // TU32: RL size in bytes incl. the \0, then TV or UCS-4
+          dat = text_chain (ver, c->cp);
+          bit_write_TU32 (&dat, (BITCODE_TU32)c->tu);
+          pos = dat.byte;
+          bit_set_position (&dat, 0);
+          size = bit_read_RL (&dat);
+          if (size == (wide ? (n + 1) * 4 : tvlen + 1))
+            pass ();
+          else
+            fail ("bit_write_TU32 %s %s: wrong size %u", c->name, vn,
+                  (unsigned)size);
+          bit_set_position (&dat, 0);
+          r = bit_read_TU32 (&dat);
+          if (tu_equal (r, c->tu) && dat.byte == pos)
+            pass ();
+          else
+            fail ("bit_read_TU32 %s %s", c->name, vn);
+          free (r);
+          bitfree (&dat);
+        }
+    }
+
+  // a conversion between versions: written as r2000 TV, read back as UCS-2
+  {
+    Bit_Chain dat = text_chain (R_2000, CP_ANSI_932);
+    BITCODE_TU r;
+    bit_write_T16 (&dat, (BITCODE_T16)tu_ja_mixed);
+    bit_set_position (&dat, 0);
+    r = bit_read_T16 (&dat);
+    if (tu_equal (r, tu_ja_mixed))
+      pass ();
+    else
+      fail ("T16 r2000 ANSI_932 roundtrip");
+    free (r);
+    bitfree (&dat);
+  }
+
+  // NULL and empty strings
+  for (size_t v = 0; v < 3; v++)
+    {
+      static const Dwg_Version_Type versions2[] = { R_2000, R_2007, R_2018 };
+      static const BITCODE_RS tu_empty[] = { 0 };
+      Bit_Chain dat = text_chain (versions2[v], CP_ANSI_1252);
+      BITCODE_TU r;
+      bit_write_T16 (&dat, NULL);
+      bit_write_T16 (&dat, (BITCODE_T16)tu_empty);
+      bit_write_T32 (&dat, NULL);
+      bit_write_T32 (&dat, (BITCODE_T32)tu_empty);
+      bit_write_TU32 (&dat, NULL);
+      bit_write_TU32 (&dat, (BITCODE_TU32)tu_empty);
+      bit_set_position (&dat, 0);
+      for (int k = 0; k < 2; k++)
+        {
+          r = bit_read_T16 (&dat);
+          if (!r || !r[0])
+            pass ();
+          else
+            fail ("bit_read_T16 empty %s", dwg_version_codes (versions2[v]));
+          free (r);
+        }
+      for (int k = 0; k < 2; k++)
+        {
+          r = bit_read_T32 (&dat);
+          if (!r || !r[0])
+            pass ();
+          else
+            fail ("bit_read_T32 empty %s", dwg_version_codes (versions2[v]));
+          free (r);
+        }
+      for (int k = 0; k < 2; k++)
+        {
+          r = bit_read_TU32 (&dat);
+          if (!r || !r[0])
+            pass ();
+          else
+            fail ("bit_read_TU32 empty %s", dwg_version_codes (versions2[v]));
+          free (r);
+        }
+      bitfree (&dat);
+    }
+}
+
 static void
 codepage_bounds_tests (void)
 {
@@ -1729,6 +2038,8 @@ main (int argc, char const *argv[])
   bit_utf8_to_TV_tests ();
   bit_utf8_to_TU_tests ();
   bit_TV_to_utf8_tests ();
+  text_conversion_tests ();
+  text_T16_T32_TU32_tests ();
   codepage_bounds_tests ();
   bit_read_H_tests ();
   bit_write_H_tests ();

@@ -565,7 +565,8 @@
   {                                                                           \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
     _obj->nam = bit_read_TF (dat, (size_t)len);                               \
-    LOG_TRACE (#nam ": \"%s\" [TF %" PRIuSIZE " " #dxf "]", _obj->nam, (size_t)len); \
+    LOG_TRACE (#nam ": \"%s\" [TF %" PRIuSIZE " " #dxf "]", _obj->nam,        \
+               (size_t)len);                                                  \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit);         \
@@ -601,29 +602,20 @@
     LOG_RPOS                                                                  \
     LOG_TRACE_TF ((BITCODE_RC*)_obj->nam, (int)len);                          \
   }
+/* T16, T32, TU16, TU32 are always UCS-2 in memory. The readers convert
+   from the codepage'd TV for <r2007. */
 #define FIELD_T16(nam, dxf)                                                   \
-    if (dat->from_version < R_2007)                                           \
-      {                                                                       \
-        _obj->nam = (BITCODE_T16)bit_read_T16 (dat);                          \
-        LOG_TRACE (#nam ": %s [T16 " #dxf "]", _obj->nam);                    \
-        LOG_RPOS                                                              \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        _obj->nam = (BITCODE_T16)bit_read_TU16 (dat);                         \
-        LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf);                          \
-      }
+  {                                                                           \
+    _obj->nam = bit_read_T16 (dat);                                           \
+    LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf);                              \
+  }
 #define FIELD_T32(nam, dxf)                                                   \
   {                                                                           \
     if (dat->from_version < R_2007)                                           \
-      {                                                                       \
-        FIELDG (nam, T32, dxf);                                               \
-      }                                                                       \
+      _obj->nam = bit_read_T32 (dat);                                         \
     else                                                                      \
-      {                                                                       \
-        _obj->nam = bit_read_TU32 (dat);                                      \
-        LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf);                          \
-      }                                                                       \
+      _obj->nam = bit_read_TU32 (dat);                                        \
+    LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf);                              \
   }
 #define FIELD_TU16(nam, dxf)                                                  \
   {                                                                           \
@@ -633,15 +625,7 @@
 #define FIELD_TU32(nam, dxf)                                                  \
   {                                                                           \
     _obj->nam = bit_read_TU32 (dat);                                          \
-    if (dat->from_version < R_2007)                                           \
-      {                                                                       \
-        LOG_TRACE (#nam ": \"%s\" [TU32 %d]", _obj->nam, dxf)                 \
-        LOG_RPOS                                                              \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf)                           \
-      }                                                                       \
+    LOG_TRACE_TU (#nam, FIELD_VALUE (nam), dxf);                              \
   }
 #define FIELD_TV(nam, dxf)                                                    \
   {                                                                           \
@@ -1254,23 +1238,31 @@
     {                                                                         \
       _VECTOR_CHKCOUNT (name, _obj->size,                                     \
                         dat->from_version >= R_2007 ? 18 : 2, dat);           \
-      _obj->name = (char **)calloc (_obj->size, sizeof (char *));             \
+      _obj->name = (BITCODE_##type*)calloc (_obj->size, sizeof (char *));     \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           PRE (R_2007a)                                                       \
           {                                                                   \
-            _obj->name[vcount] = bit_read_TV (dat);                           \
+            char *_tv = bit_read_TV (dat);                                    \
             LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
-                       _obj->name[vcount], dxf);                              \
+                       _tv ? _tv : "", dxf);                                  \
             LOG_POS                                                           \
-            if (!_obj->name[vcount])                                          \
+            if (!_tv)                                                         \
               return DWG_ERR_VALUEOUTOFBOUNDS;                                \
+            if (IS_TU_VEC_##type)                                             \
+              {                                                               \
+                _obj->name[vcount]                                            \
+                    = (BITCODE_##type)bit_TV_to_TU (_tv, dat->codepage);      \
+                free (_tv);                                                   \
+              }                                                               \
+            else                                                              \
+              _obj->name[vcount] = (BITCODE_##type)_tv;                       \
           }                                                                   \
           LATER_VERSIONS                                                      \
           {                                                                   \
-            _obj->name[vcount] = (char *)bit_read_##type (dat);               \
+            _obj->name[vcount] = (BITCODE_##type)bit_read_##type (dat);       \
             LOG_TRACE_TU_I (#name, vcount, _obj->name[vcount], type, dxf);    \
             if (!_obj->name[vcount])                                          \
               return DWG_ERR_VALUEOUTOFBOUNDS;                                \

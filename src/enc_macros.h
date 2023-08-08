@@ -216,36 +216,22 @@
       bit_write_TU16 (str_dat, _obj->nam);                                    \
     LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                          \
   }
+/* T16, T32, TU16, TU32 are always UCS-2 in memory. The writers convert
+   to the codepage'd TV for <r2007. */
 #define FIELD_T16(nam, dxf)                                                   \
   {                                                                           \
-    if (!IS_FROM_TU (dat))                                                    \
-      {                                                                       \
-        bit_write_T16 (str_dat, _obj->nam);                                   \
-        LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", _obj->nam, dxf);               \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        bit_write_TU16 (str_dat, (BITCODE_TU)_obj->nam);                      \
-        LOG_TRACE_TU (#nam, _obj->nam, dxf);                                  \
-      }                                                                       \
+    bit_write_T16 (str_dat, _obj->nam);                                       \
+    LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                          \
   }
 #define FIELD_T32(nam, dxf)                                                   \
   {                                                                           \
-    if (_obj->nam)                                                            \
-      bit_write_T32 (str_dat, _obj->nam);                                     \
-    if (!IS_FROM_TU (dat))                                                    \
-      LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);                 \
-    else                                                                      \
-      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
+    bit_write_T32 (str_dat, _obj->nam);                                       \
+    LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                          \
   }
 #define FIELD_TU32(nam, dxf)                                                  \
   {                                                                           \
-    if (_obj->nam)                                                            \
-      bit_write_TU32 (str_dat, _obj->nam);                                    \
-    if (!IS_FROM_TU (dat))                                                    \
-      LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf);                \
-    else                                                                      \
-      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
+    bit_write_TU32 (str_dat, _obj->nam);                                      \
+    LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                          \
   }
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf);
 
@@ -556,7 +542,7 @@
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           if (dat->version != dat->from_version                               \
-              || dat->version >= R_2007)                                      \
+              || dat->version >= R_2007 || IS_TU_VEC_##type)                  \
             {                                                                 \
               FIELD_##type (nam[vcount], dxf)                                 \
             }                                                                 \
@@ -564,7 +550,7 @@
             {                                                                 \
               bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);              \
               LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]", (int)vcount,            \
-                         _obj->nam[vcount], dxf);                             \
+                         (char*)_obj->nam[vcount], dxf);                     \
               LOG_POS                                                         \
             }                                                                 \
           else                                                                \
@@ -574,7 +560,8 @@
                 LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf);                  \
               } else {                                                        \
                 LOG_TRACE (#nam "[%d]: \"%s\" [TU %d]", (int)vcount,          \
-                           _obj->nam[vcount] ? _obj->nam[vcount] : "", dxf);  \
+                           _obj->nam[vcount] ? (char*)_obj->nam[vcount] : "",  \
+                           dxf);                                              \
                 LOG_POS                                                       \
               }                                                               \
             }                                                                 \
