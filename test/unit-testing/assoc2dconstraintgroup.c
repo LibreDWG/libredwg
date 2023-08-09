@@ -42,23 +42,35 @@ api_process (dwg_object *obj)
   // ASSOC2DCONSTRAINTGROUP
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, version, BL);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, b1, B);
-  // CHK_ENTITY_3RD (_obj, ASSOC2DCONSTRAINTGROUP, workplane[3],
-  // &workplane[3][0]); //3x10 workplane
+  // 3x10 workplane
+  // CHK_ENTITY_3RD (_obj, ASSOC2DCONSTRAINTGROUP, workplane[3], &workplane[3][0]);
   CHK_ENTITY_H (_obj, ASSOC2DCONSTRAINTGROUP, h1);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_actions, BL);
   CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, actions, num_actions);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_nodes, BL);
+  CHK_ENTITY_MAX (_obj, ASSOC2DCONSTRAINTGROUP, num_nodes, BL, 200);
   for (unsigned i = 0; i < num_nodes; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, nodeid, BL);
       CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, status, RC);
       CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, num_connections,
                          BL);
-      for (unsigned j = 0; j < _obj->nodes[i].num_connections; j++)
-        {
-          ok ("CONSTRAINTGROUPNODE[%d].connections[%d]: %d", i, j,
-              (int)_obj->nodes[i].connections[j]);
-        }
+      CHK_SUBCLASS_MAX (_obj->nodes[i], CONSTRAINTGROUPNODE, num_connections,
+                        BL, _obj->num_actions);
+      if (_obj->nodes[i].num_connections > _obj->num_actions)
+        fail ("Invalid nodes[%u].num_connections", i);
+      else if (!_obj->nodes[i].connections)
+        fail ("Empty nodes[%u].connections", i);
+      else
+        for (unsigned j = 0;
+             j < MIN (_obj->num_actions, _obj->nodes[i].num_connections); j++)
+          {
+            if (!_obj->nodes[i].connections[j])
+              fail("Invalid connections[%u]", j);
+            else
+              ok ("CONSTRAINTGROUPNODE[%d].connections[%d]: %d", i, j,
+                  (int)_obj->nodes[i].connections[j]);
+          }
     }
   // #endif
 }
