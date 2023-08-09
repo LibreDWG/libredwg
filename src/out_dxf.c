@@ -2533,7 +2533,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           && strNEc (klass->dxfname, "LWPOLYLINE")
           && strNEc (klass->dxfname, "HATCH"))
         {
-          LOG_WARN ("Skip %s\n", klass->dxfname)
+          LOG_WARN ("Skip %s", klass->dxfname)
           return DWG_ERR_UNHANDLEDCLASS;
         }
       // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF_REACTOR,
@@ -2545,7 +2545,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                && strNEc (klass->dxfname, "IMAGEDEF_REACTOR")
                && strNEc (klass->dxfname, "XRECORD"))
         {
-          LOG_WARN ("Skip %s\n", klass->dxfname)
+          LOG_WARN ("Skip %s", klass->dxfname)
           return DWG_ERR_UNHANDLEDCLASS;
         }
     }
@@ -2688,13 +2688,13 @@ decl_dxf_process_VERTEX (PFACE)
       return error;                                                           \
     }
 
-    // clang-format off
+// clang-format off
 decl_dxf_process_INSERT (INSERT)
 decl_dxf_process_INSERT (MINSERT)
-    // clang-format on
+// clang-format on
 
-    static int dwg_dxf_object (Bit_Chain *restrict dat,
-                               const Dwg_Object *restrict obj, int *restrict i)
+static int dwg_dxf_object (Bit_Chain *restrict dat,
+                           const Dwg_Object *restrict obj, int *restrict i)
 {
   int error = 0;
   int minimal;

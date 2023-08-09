@@ -8027,7 +8027,7 @@ DWG_OBJECT_END
   FIELD_B (assocdep.is_write_dep, 290);                    \
   FIELD_B (assocdep.is_attached_to_object, 290);           \
   FIELD_B (assocdep.is_delegating_to_owning_action, 290);  \
-  FIELD_BLd (assocdep.order, 90); /* -1 or 0 */            \
+  FIELD_BLd (assocdep.order, 90); /* -1 or 0 or -10000 */  \
   FIELD_HANDLE (assocdep.dep_on, 3, 330);                  \
   FIELD_B (assocdep.has_name, 290);                        \
   if (FIELD_VALUE (assocdep.has_name)) {                   \

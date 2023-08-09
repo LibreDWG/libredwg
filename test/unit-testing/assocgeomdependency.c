@@ -1,4 +1,4 @@
-// stable, just indxf missing
+// stable, just indxf needs to be tested
 #define DWG_TYPE DWG_TYPE_ASSOCGEOMDEPENDENCY
 #include "common.c"
 

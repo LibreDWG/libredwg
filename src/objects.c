@@ -1322,7 +1322,7 @@ in_word_set (const char *str, size_t len)
 #line 217 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str521,  "BLOCKALIGNEDCONSTRAINTPARAMETER",   DWG_TYPE_BLOCKALIGNEDCONSTRAINTPARAMETER,	0,	UNSTABLE},
 #line 197 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str522,                     "ACDBASSOCNETWORK",                  DWG_TYPE_ASSOCNETWORK,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str522,                     "ACDBASSOCNETWORK",                  DWG_TYPE_ASSOCNETWORK,	0,	STABLE},
       {-1},
 #line 55 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str524,            "ARCALIGNEDTEXT",             DWG_TYPE_ARCALIGNEDTEXT,	1,	DEBUGGING},
@@ -1338,7 +1338,7 @@ in_word_set (const char *str, size_t len)
 #line 290 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str533,                         "IDBUFFER",                          DWG_TYPE_IDBUFFER,	0,	STABLE},
 #line 194 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str534,              "ACDBASSOCGEOMDEPENDENCY",           DWG_TYPE_ASSOCGEOMDEPENDENCY,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str534,              "ACDBASSOCGEOMDEPENDENCY",           DWG_TYPE_ASSOCGEOMDEPENDENCY,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1},
 #line 269 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str540,                       "DICTIONARY",                        DWG_TYPE_DICTIONARY,	0,	STABLE},

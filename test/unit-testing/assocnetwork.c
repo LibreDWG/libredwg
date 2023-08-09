@@ -1,3 +1,4 @@
+// stable
 #define DWG_TYPE DWG_TYPE_ASSOCNETWORK
 #include "common.c"
 
