@@ -1,10 +1,21 @@
 #!/bin/sh
 
-abs_top_builddir="@abs_top_builddir@"
 abs_builddir="@abs_builddir@"
+top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
+TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
 srcdir="@abs_srcdir@"
 echo srcdir: "$srcdir"
+
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+elif [ -n "$TESTS_ENVIRONMENT" ]; then
+    TESTPROG="$TESTS_ENVIRONMENT @LTEXEC@"
+else
+    TESTPROG="@LTEXEC@"
+fi
 
 dwgaddtest() {
     MG="$1"
@@ -18,7 +29,7 @@ dwgaddtest() {
     fi
     if [ -z "$V" ]; then
         echo ./dwgadd --verify -o dwgadd_test.dwg "$FEX"
-        ${abs_top_builddir}/libtool --mode=execute "${abs_builddir}/dwgadd${EXEEXT}" --verify \
+        $TESTPROG "${abs_builddir}/dwgadd${EXEEXT}" --verify \
                        -o dwgadd_test.dwg "$FEX"
         ret=$?
     else
@@ -29,7 +40,7 @@ dwgaddtest() {
         #fi
         echo "$PRE" ./dwgadd --verify -a "$V" -o dwgadd_test.dwg "$FEX"
         # shellcheck disable=SC2086
-        ${abs_top_builddir}/libtool --mode=execute "${abs_builddir}/dwgadd${EXEEXT}" --verify \
+        $TESTPROG "${abs_builddir}/dwgadd${EXEEXT}" --verify \
                        -a "$V" -o dwgadd_test.dwg "$FEX"
         ret=$?
     fi
