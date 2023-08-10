@@ -424,61 +424,19 @@
         FIELD_G_TRACE (nam, BD, dxf);                                         \
       }                                                                       \
   }
-#define FIELD_BLx(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = bit_read_BL (dat);                                            \
-    LOG_TRACE (#nam ": 0x%x [BLx %d]", (uint32_t)_obj->nam, dxf);             \
-    LOG_RPOS                                                                  \
-  }
+#define FIELD_BLx(nam, dxf) FIELD_CAST(nam, BL, BLx, dxf)
 #define SUB_FIELD_BLx(o, nam, dxf) SUB_FIELD_CAST(o, nam, BL, BLx, dxf)
-#define FIELD_RLx(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = bit_read_RL (dat);                                            \
-    LOG_TRACE (#nam ": 0x%x [RLx %d]", (uint32_t)_obj->nam, dxf);             \
-    LOG_RPOS                                                                  \
-  }
-#define FIELD_BSx(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = bit_read_BS (dat);                                            \
-    LOG_TRACE (#nam ": 0x%x [BSx %d]", _obj->nam, dxf);                       \
-    LOG_RPOS                                                                  \
-  }
-#define FIELD_RSd(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = (BITCODE_RSd)bit_read_RS (dat);                               \
-    LOG_TRACE (#nam ": " FORMAT_RSd " [RSd %d]", _obj->nam, dxf);             \
-    LOG_RPOS                                                                  \
-  }
-#define FIELD_BSd(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = (BITCODE_BSd)bit_read_BS (dat);                               \
-    LOG_TRACE (#nam ": " FORMAT_BSd " [BSd %d]", _obj->nam, dxf);             \
-    LOG_RPOS                                                                  \
-  }
-#define SUB_FIELD_BSd(o, nam, dxf)                                            \
-  {                                                                           \
-    _obj->o.nam = (BITCODE_BSd)bit_read_BS (dat);                             \
-    LOG_TRACE (#o "." #nam ": " FORMAT_BSd " [BSd %d]", _obj->o.nam, dxf);    \
-    LOG_RPOS                                                                  \
-  }
-#define FIELD_BLd(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = (BITCODE_BLd)bit_read_BL (dat);                               \
-    LOG_TRACE (#nam ": " FORMAT_BLd " [BLd %d]", _obj->nam, dxf);             \
-    LOG_RPOS                                                                  \
-  }
-#define FIELD_RLd(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = (BITCODE_RLd)bit_read_RL (dat);                               \
-    LOG_TRACE (#nam ": " FORMAT_RLd " [RLd %d]", _obj->nam, dxf);             \
-    LOG_RPOS                                                                  \
-  }
-#define FIELD_RC(nam, dxf)                                                    \
-  {                                                                           \
-    _obj->nam = bit_read_RC (dat);                                            \
-    LOG_TRACE (#nam ": " FORMAT_RC " [RC %d]", ((BITCODE_RC)_obj->nam), dxf); \
-    LOG_RPOS                                                                  \
-  }
+#define SUB_FIELD_RC(o, nam, dxf) SUB_FIELD(o, nam, RC, dxf)
+#define FIELD_RCx(nam, dxf) FIELD_CAST(nam, RC, RCx, dxf)
+#define FIELD_RCd(nam, dxf) FIELD_CAST(nam, RC, RCd, dxf)
+#define FIELD_RLx(nam, dxf) FIELD_CAST(nam, RL, RLx, dxf)
+#define FIELD_BSx(nam, dxf) FIELD_CAST(nam, BS, BSx, dxf)
+#define FIELD_RSd(nam, dxf) FIELD_CAST(nam, RS, RSd, dxf)
+#define FIELD_BSd(nam, dxf) FIELD_CAST(nam, BS, BSd, dxf)
+#define SUB_FIELD_BSd(o, nam, dxf) SUB_FIELD_CAST(o, nam, BS, BSd, dxf)
+#define FIELD_BLd(nam, dxf) FIELD_CAST(nam, BL, BLd, dxf)
+#define FIELD_RLd(nam, dxf) FIELD_CAST(nam, RL, RLd, dxf)
+#define FIELD_RC(nam, dxf)  FIELDG (nam, RC, dxf)
 #define FIELD_RCu(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_RC (dat);                                            \
@@ -486,29 +444,9 @@
                dxf);                                                          \
     LOG_RPOS                                                                  \
   }
-#define FIELD_RCx(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = bit_read_RC (dat);                                            \
-    LOG_TRACE (#nam ": 0x%x [RCx %d]", (unsigned)_obj->nam, dxf);             \
-    LOG_RPOS                                                                  \
-  }
-#define FIELD_RCd(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = (BITCODE_RCd)bit_read_RC (dat);                               \
-    LOG_TRACE (#nam ": %d [RC %d]\n", (int)((signed char)_obj->nam), dxf);    \
-  }
-#define SUB_FIELD_RCd(o, nam, dxf)                                            \
-  {                                                                           \
-    _obj->o.nam = (BITCODE_RC)bit_read_RC (dat);                             \
-    LOG_TRACE (#nam ": %d [RC %d]\n", (int)((signed char)_obj->o.nam), dxf);  \
-  }
+#define SUB_FIELD_RCd(o, nam, dxf) SUB_FIELD_CAST(o, nam, RC, RCd, dxf)
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
-#define FIELD_RSx(nam, dxf)                                                   \
-  {                                                                           \
-    _obj->nam = bit_read_RS (dat);                                            \
-    LOG_TRACE (#nam ": " FORMAT_RSx " [RSx %d]", _obj->nam, dxf);             \
-    LOG_RPOS                                                                  \
-  }
+#define FIELD_RSx(nam, dxf) FIELD_CAST(nam, RS, RSx, dxf)
 #define FIELD_RD(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = bit_read_RD (dat);                                            \
@@ -1170,13 +1108,17 @@
                                                sizeof (BITCODE_##type));      \
       if (!_obj->o.name)                                                      \
         return DWG_ERR_OUTOFMEM;                                              \
+      LOG_TRACE (#name ": { ")                                                \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.sizefield; vcount++)      \
         {                                                                     \
           _obj->o.name[vcount] = bit_read_##type (dat);                       \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type "]",            \
-                     (long)vcount, _obj->o.name[vcount])                      \
-          LOG_POS                                                             \
+          LOG_TRACE (FORMAT_##type " ", _obj->o.name[vcount])                 \
         }                                                                     \
+      if (dxf)                                                                \
+        LOG_TRACE ("} [*" #type " %d]", dxf)                                  \
+      else                                                                    \
+        LOG_TRACE ("} [*" #type "]")                                          \
+      LOG_POS                                                                 \
     }
 // inlined, with const size and without malloc
 #define FIELD_VECTOR_INL(name, type, size, dxf)                               \
@@ -1186,13 +1128,17 @@
       {                                                                       \
         _VECTOR_CHKCOUNT_STATIC (name, size, TYPE_MAXELEMSIZE (type), dat)    \
       }                                                                       \
+      LOG_TRACE (#name ": { ")                                                \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type " %d]",         \
-                     (long)vcount, _obj->name[vcount], dxf)                   \
-          LOG_POS                                                             \
+          LOG_TRACE (FORMAT_##type " ", _obj->name[vcount])                   \
         }                                                                     \
+      if (dxf)                                                                \
+        LOG_TRACE ("} [*" #type " %d]", dxf)                                  \
+      else                                                                    \
+        LOG_TRACE ("} [*" #type "]")                                          \
+      LOG_POS                                                                 \
     }
 // inlined, with const size and without malloc
 #define SUB_FIELD_VECTOR_INL(o, nam, type, csize, dxf)                        \
