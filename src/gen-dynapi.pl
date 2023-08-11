@@ -2508,7 +2508,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2510 "gen-dynapi.pl"
+#line 2512 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2594,7 +2594,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2596 "gen-dynapi.pl"
+#line 2598 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
@@ -3284,6 +3284,10 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
           {
             dwg->header_vars.FLAGS &= ~0x1f; // delete old, and set new
             dwg->header_vars.FLAGS |= dxf_revcvt_lweight (dwg->header_vars.CELWEIGHT);
+          }
+        else if (strEQc (fieldname, "codepage"))
+          {
+            dwg->header.codepage = *(BITCODE_RS*)value;
           }
 #define SET_HDR_FLAGS(name, bit, inverse)          \
         else if (strEQc (fieldname, #name))        \
