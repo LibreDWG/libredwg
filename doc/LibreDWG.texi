@@ -1194,10 +1194,12 @@ and @code{BITCODE_TU} (i.e. @code{wchar_t} on Windows, UCS-2).
 
 Externally most functions get and set strings as UTF-8, as in DXF or JSON.
 
-Before r2007 DWG's the TV and T strings are encoded in its codepage, they are not yet converted from and
-to their proper codepage to UTF-8, but will eventually. Not via libiconv, just via the locale specific libc btowc().
-To encode unicode characters special \U+XXXX sequences are used, and with japanese shift-jis for
-Katagana and Hiregana \M+1XXXX sequences.
+Before r2007 DWG's the TV and T strings are encoded in its codepage, and converted from and
+to their proper codepage to UTF-8 or \U+XXXX.
+
+To encode unicode characters special \U+XXXX sequences are used, and pre-r2007 DXF MIF \M+nXXXX
+sequences, where n is one of the asian wide-character codepages 932 (Japanese), 950 (trad. Chinese),
+949 (Korean Wansung), 1361 (Johab), and 936 (simplified Chinese).
 
 On DWG's r2007 and later most strings (T and TU) are encoded in the Microsoft specific two-byte
 UCS-2 Unicode encoding, without proper support for surrogate pairs and the upper planes (i.e. emojis).
@@ -1211,10 +1213,10 @@ Strings in DXF and JSON also have quoting rules for special characters, like \r,
 
 DWG to DWG: decode reads the T and TU strings in its natural format into the field. encode translate it to TV or TU. encode needs @code{header.from_version} and how it was read, from DWG or from an importer (in_dxf or in_json) or the @ref{add api} (DWG_OPTS_IN).
 
-DXF/JSON to DWG: in_dxf/json keeps the T and TU strings as TV. encode to <r2007 keeps it as TV, r2007+ translates it to TU.
-it sets DWG_OPTS_IN.
+DXF/JSON to DWG: in_dxf/json keeps the T and TU strings as TV. encode to <r2007 keeps it as TV, r2007+ translates it to TU. Unicode is encoded as \U+XXXX.
+It sets DWG_OPTS_IN.
 
-DWG to DXF/JSON: decode keeps the T and TU strings as TV or TU. out_dxf/json translate them to TV or UTF-8 and quote them via \U+XXXX
+DWG to DXF/JSON: decode keeps the T and TU strings as TV or TU. out_dxf/json translate them to TV or UTF-8 and quotes them via \U+XXXX.
 
 add api to DWG/DXF: add reads strings as UTF-8, and encodes it from UTF-8 to TV or TU. (TU not yet, as we don't encode r2004+ yet). add sets DWG_OPTS_IN.
 

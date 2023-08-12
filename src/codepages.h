@@ -74,11 +74,12 @@ typedef enum _dwg_codepage
   CP_ANSI_874,       // Thai
   CP_ANSI_932,       // Japanese
   CP_ANSI_936,       // 39 Simplified Chinese
-  CP_ANSI_949,       // Korean
+  CP_ANSI_949,       // Korean Wansung
   CP_ANSI_950,       // Trad Chinese
   CP_ANSI_1361,      // ~ JOHAB
   CP_UTF16 = 43,
   CP_ANSI_1258 = 44,  // Vietnamese
+  CP_SHIFTJIS,        // for MIF M+1 only
   CP_UNDEFINED = 0xff // mostly R11
 } Dwg_Codepage;
 

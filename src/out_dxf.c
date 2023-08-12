@@ -17,6 +17,7 @@
 
 /* Works mostly.
    TODO:
+* MIF encodings 2,3,4,6
 * down-conversions from unsupported entities on older DXF versions.
   Since r13:
   Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE,
@@ -1154,11 +1155,7 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
     }
 }
 
-/* fixme: shift-jis decoding
-"\M+182B1\M+182CC\M+1907D\M+19867\M+182CD\M+18354\M+18393\M+18376\M+1838B\M+182C5\M+182B7\M+18142\M+18ED0\M+193E0\M+182CC\M+18B4B\M+18A69\M+182E2\M+18376\M+1838D\M+18362\M+1835E\M+182CC\M+18F6F\M+197CD\M+194CD\M+188CD\M+182C9\M+18D87\M+182ED\M+182B9\M+182C4\M+1934B\M+19396\M+182C9\M+195CF\M+18D58\M+182B5\M+182C4\M+182B2\M+19798\M+19770\M+182AD\M+182BE\M+182B3\M+182A2\M+18142"
-=>
-"\U+3053\U+306E\U+56F3\U+67A0\U+306F\U+30B5\U+30F3\U+30D7\U+30EB\U+3067\U+3059\U+3002\U+793E\U+5185\U+306E\U+898F\U+683C\U+3084\U+30D7\U+30ED\U+30C3\U+30BF\U+306E\U+51FA\U+529B\U+7BC4\U+56F2\U+306B\U+5408\U+308F\U+305B\U+3066\U+9069\U+5F53\U+306B\U+5909\U+66F4\U+3057\U+3066\U+3054\U+5229\U+7528\U+304F\U+3060\U+3055\U+3044\U+3002"
-*/
+// Also decodes old Asian MIF \M+nyyyy sequences to \U+xxxx
 static char *
 cquote (char *restrict dest, const size_t len, const char *restrict src)
 {
@@ -1179,34 +1176,35 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
           *dest++ = '^';
           *dest++ = 'M';
         }
-      // convert shiftjis \M+1xxxx to \U+xxxx
-      else if (c == '\\' && dest + 7 < dend && memBEGINc (s, "M+1"))
-        { // e.g. \M+1(8140) => \U+3000, 82a0 => 3042
-          uint32_t x;
-          sscanf (&s[3], "%4X", &x);
-          // just convert a small subset, Hiragana + Katakana letters
-          // see
-          // https://www.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/JIS/SHIFTJIS.TXT
-          if (x < 0x829f) // < Hiragana: 8140 -> 3000: FULLWIDTH LATIN LETTER
-            x -= 0x5140;
-          else if (x >= 0x889f)
-            { // CJK
-              LOG_WARN ("Unsupported \\M+1%04X shift-jis character", x);
-              x -= (0x889f - 0x404c); // not really
-            }
-          else if (x >= 0x839f) // > Katakana: Greek
-            x -= (0x839f - 0x391);
-          else
-            x -= 0x525e; // our safe range of Hiragana + Katakana letters
-          if (x < 0x10100)
+      // Convert Asian MIF \M+nxxxx to \U+xxxx
+      // 1: 932 ShiftJIS
+      // 2: 950 BIG5
+      // 3: 949 Wansung
+      // 4: 1361 JOHAB
+      // 5: 936 Simplified Chinese
+      // See https://docs.intellicad.org/files/oda/2021_11/oda_drawings_docs/frames.html?frmname=topic&frmfile=FontHandling.html
+      else if (c == '\\' && dest + 7 < dend && memBEGINc (s, "M+") && s[3] >= '1' && s[3] <= '5')
+        {
+          const Dwg_Codepage mif_tbl[] = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
+                                           CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
+          int i;
+          uint16_t x;
+          uint32_t uc;
+          Dwg_Codepage cp;
+          sscanf (s, "M+%d", &i);
+          if (i >= 1 && i <= 5)
             {
-              snprintf (dest, dend - dest, "\\U+%04X", x);
+              cp = mif_tbl[i];
+              sscanf (&s[3], "%4X", &uc);
+              x = uc & 0xFFFF;
+              uc = dwg_codepage_uwc (cp, x);
+              snprintf (dest, dend - dest, "\\U+%04X", uc);
               dest += 7;
               s += 7;
             }
           else
             {
-              LOG_ERROR ("Invalid shift-jis sequence %s", s - 1);
+              LOG_ERROR ("Invalid MIF index in %s", s - 1);
               s += 3;
             }
         }

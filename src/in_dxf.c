@@ -453,7 +453,9 @@ dxf_read_binary (Bit_Chain *dat, unsigned char **p, size_t len)
 }
 #  endif
 
+// Target (dynapi) expects UTF8 strings.
 // Unicode strings are UTF-8 with quoted \\U+
+// Convert old asian MIF \\M+nxxxx to this \\U+XXXX repr. also.
 // BINARY: no length prefixes, just zero-terminated strings
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
@@ -507,7 +509,28 @@ dxf_read_string (Bit_Chain *dat, char **string)
            dat->byte < dat->size && dat->chain[dat->byte] != '\n' && i < 4096;
            dat->byte++)
         {
-          buf[i++] = dat->chain[dat->byte];
+          char *s = (char *)&dat->chain[dat->byte];
+          if (memBEGINc (s, "\\M+") && s[3] >= '1' && s[3] <= '5')
+            {
+              const Dwg_Codepage mif_tbl[] = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
+                                               CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
+              int n;
+              Dwg_Codepage cp;
+              sscanf (&s[3], "%d", &n);
+              if (n >= 1 && n <= 5)
+                {
+                  uint16_t x;
+                  uint32_t uc;
+                  cp = mif_tbl[n];
+                  sscanf (&s[4], "%4hX", &x);
+                  uc = dwg_codepage_uwc (cp, x);
+                  snprintf (&buf[i], 4096 - i, "\\U+%04X", uc);
+                  i += 7;
+                  dat->byte += 7;
+                }
+            }
+          else
+            buf[i++] = *s;
         }
       if (dat->byte >= dat->size || i >= 4096)
         return;
@@ -1279,7 +1302,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static void
-dxf_set_default_DWGCODEPAGE (Dwg_Data *dwg)
+dxf_set_default_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   Dwg_Header *hdr = &dwg->header;
@@ -1298,10 +1321,11 @@ dxf_set_default_DWGCODEPAGE (Dwg_Data *dwg)
     }
   LOG_TRACE ("default HEADER.codepage = %d [%s]\n", hdr->codepage,
              vars->DWGCODEPAGE);
+  dat->codepage = hdr->codepage;
 }
 
 static void
-dxf_set_DWGCODEPAGE (Dwg_Data *dwg)
+dxf_set_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   Dwg_Header *hdr = &dwg->header;
@@ -1315,15 +1339,20 @@ dxf_set_DWGCODEPAGE (Dwg_Data *dwg)
     {
       hdr->codepage = dwg_codepage_int (vars->DWGCODEPAGE);
       if (hdr->codepage == CP_UNDEFINED)
-        LOG_ERROR ("Invalid DWGCODEPAGE %s", vars->DWGCODEPAGE)
+        {
+          LOG_ERROR ("Invalid DWGCODEPAGE %s", vars->DWGCODEPAGE);
+        }
       else
-        LOG_TRACE ("HEADER.codepage = %u [%s]\n", hdr->codepage,
-                   vars->DWGCODEPAGE);
+        {
+          LOG_TRACE ("HEADER.codepage = %u [%s]\n", hdr->codepage,
+                     vars->DWGCODEPAGE);
+          dat->codepage = hdr->codepage;
+        }
     }
 }
 
 static void
-dxf_fixup_header (Dwg_Data *dwg)
+dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   Dwg_Header *hdr = &dwg->header;
@@ -1340,9 +1369,9 @@ dxf_fixup_header (Dwg_Data *dwg)
   if (vars->HANDSEED)
     vars->HANDSEED->handleref.code = 0;
   if (vars->DWGCODEPAGE)
-    dxf_set_DWGCODEPAGE (dwg);
+    dxf_set_DWGCODEPAGE (dat, dwg);
   else
-    dxf_set_default_DWGCODEPAGE (dwg);
+    dxf_set_default_DWGCODEPAGE (dat, dwg);
 
   // R_2007:
   // is_maint: 0x32 [RC 0]
@@ -12717,7 +12746,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               error = dxf_header_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;
-              dxf_fixup_header (dwg);
+              dxf_fixup_header (dat, dwg);
               // skip minimal DXF
               /*
               if (!dwg->header_vars.DIMPOST) // T in all versions
@@ -12732,7 +12761,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               pair = NULL;
               if (dwg->header.from_version == R_INVALID)
-                dxf_fixup_header (dwg);
+                dxf_fixup_header (dat, dwg);
               error = dxf_classes_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 return error;
@@ -12749,7 +12778,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               resolve_postponed_header_refs (dwg);
               resolve_postponed_eed_refs (dwg);
               if (dwg->header.from_version == R_INVALID)
-                dxf_fixup_header (dwg);
+                dxf_fixup_header (dat, dwg);
 
               // should not happen
               if (!dwg->header_vars.LTYPE_BYLAYER
@@ -12776,7 +12805,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               pair = NULL;
               if (dwg->header.from_version == R_INVALID)
-                dxf_fixup_header (dwg);
+                dxf_fixup_header (dat, dwg);
               error = dxf_blocks_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;

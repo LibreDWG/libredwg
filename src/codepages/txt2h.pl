@@ -36,6 +36,8 @@ LINE:
                 if ($sn <= 0x7f and $sn != $dn) {
                     # exceptions
                     if (($in eq 'johab' and $src eq '0x5C') or
+                        ($in eq 'shiftjis' and $src eq '0x5C') or
+                        ($in eq 'shiftjis' and $src eq '0x7E') or
                         ($in eq 'cp864' and $src eq '0x25'))
                     {
                         warn "$in: $src != $d\n";
