@@ -41,9 +41,12 @@ htmlescape (const char *restrict src, const int cp)
       const int off = d - dest;
       if (end - d <= 8)
         {
+          d = (char*)realloc (dest, len + 10);
+          if (!d)
+            return NULL;
+          dest = d;
           len += 10;
-          dest = (char*)realloc (dest, len);
-          d = dest + off;
+          d += off;
           *d = 0;
           end = dest + len;
         }
@@ -120,14 +123,12 @@ htmlwescape (BITCODE_TU wstr)
       const int off = d - dest;
       if (off >= len - 8)
         {
-          char *_tmp;
-          len += 16;
-          _tmp = (char*)realloc (dest, len);
-          if (!_tmp)
+          d = (char*)realloc (dest, len + 16);
+          if (!d)
             return NULL;
-          else
-            dest = _tmp;
-          d = dest + off;
+          len += 16;
+          dest = d;
+          d += off;
           *d = 0;
         }
       switch (*wstr)
