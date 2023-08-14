@@ -36,8 +36,8 @@ LINE:
                 if ($sn <= 0x7f and $sn != $dn) {
                     # exceptions
                     if (($in eq 'johab' and $src eq '0x5C') or
-                        ($in eq 'shiftjis' and $src eq '0x5C') or
-                        ($in eq 'shiftjis' and $src eq '0x7E') or
+                        ($in eq 'cp932' and $src eq '0x5C') or
+                        ($in eq 'cp932' and $src eq '0x7E') or
                         ($in eq 'cp864' and $src eq '0x25'))
                     {
                         warn "$in: $src != $d\n";
@@ -60,10 +60,12 @@ print $_ for @out;
 print "};\n";
 print "#define MIN_", uc $in, "\t$los\n";
 print "#define MAX_", uc $in, "\t$his\n";
-print "#define MIN_", uc $in, "_UC\t$los\n";
-print "#define MAX_", uc $in, "_UC\t$his\n";
+print "#define MIN_", uc $in, "_UC\t$lod\n";
+print "#define MAX_", uc $in, "_UC\t$hid\n";
 if (@exclow) {
+    print "/*\n";
     print "static const uint16_t cptbl_exc_$in\[\] = {\n";
     print $_ for @exclow;
     print "};\n";
+    print "*/\n";
 }

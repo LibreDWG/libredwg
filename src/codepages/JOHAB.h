@@ -17058,7 +17058,9 @@ static const uint16_t cptbl_johab[] = {
 #define MIN_JOHAB	32
 #define MAX_JOHAB	63998
 #define MIN_JOHAB_UC	32
-#define MAX_JOHAB_UC	63998
+#define MAX_JOHAB_UC	65510
+/*
 static const uint16_t cptbl_exc_johab[] = {
   [0x5C] = 0x20A9,	//   # WON SIGN
 };
+*/

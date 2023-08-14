@@ -56,7 +56,7 @@ typedef enum _dwg_codepage
   CP_CP864,     // DOS Arabic (IBM)
   CP_CP865,     // DOS Nordic
   CP_CP869,     // DOS Greek
-  CP_CP932,     // DOS Japanese
+  CP_CP932,     // DOS Japanese (shiftjis)
   CP_MACINTOSH, // 23
   CP_BIG5,
   CP_CP949 = 25,     // Korean (Wansung + Johab)
@@ -72,11 +72,11 @@ typedef enum _dwg_codepage
   CP_ANSI_1256,      // Arabic
   CP_ANSI_1257,      // Baltic
   CP_ANSI_874,       // Thai
-  CP_ANSI_932,       // Japanese
+  CP_ANSI_932,       // 38 Japanese (extended shiftjis, windows-31j)
   CP_ANSI_936,       // 39 Simplified Chinese
-  CP_ANSI_949,       // Korean Wansung
-  CP_ANSI_950,       // Trad Chinese
-  CP_ANSI_1361,      // Korean Wansung (~JOHAB)
+  CP_ANSI_949,       // 40 Korean Wansung
+  CP_ANSI_950,       // 41 Trad Chinese
+  CP_ANSI_1361,      // 42 Korean Wansung
   CP_UTF16 = 43,
   CP_ANSI_1258 = 44,  // Vietnamese
   CP_SHIFTJIS,        // for MIF M+1 only

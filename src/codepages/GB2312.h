@@ -7455,5 +7455,5 @@ static const uint16_t cptbl_gb2312[] = {
 };
 #define MIN_GB2312	8481
 #define MAX_GB2312	30590
-#define MIN_GB2312_UC	8481
-#define MAX_GB2312_UC	30590
+#define MIN_GB2312_UC	164
+#define MAX_GB2312_UC	65509

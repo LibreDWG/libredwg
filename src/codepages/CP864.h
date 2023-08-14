@@ -134,7 +134,9 @@ static const uint16_t cptbl_cp864[] = {
 #define MIN_CP864	0
 #define MAX_CP864	254
 #define MIN_CP864_UC	0
-#define MAX_CP864_UC	254
+#define MAX_CP864_UC	65276
+/*
 static const uint16_t cptbl_exc_cp864[] = {
   [0x25] = 0x066a,	// ARABIC PERCENT SIGN
 };
+*/

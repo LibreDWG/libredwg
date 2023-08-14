@@ -136,4 +136,4 @@ static const uint16_t cptbl_cp857[] = {
 #define MIN_CP857	0
 #define MAX_CP857	255
 #define MIN_CP857_UC	0
-#define MAX_CP857_UC	255
+#define MAX_CP857_UC	9632

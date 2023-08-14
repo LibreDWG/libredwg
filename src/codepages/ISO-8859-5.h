@@ -139,4 +139,4 @@ static const uint16_t cptbl_iso_8859_5[] = {
 #define MIN_ISO_8859_5	0
 #define MAX_ISO_8859_5	255
 #define MIN_ISO_8859_5_UC	0
-#define MAX_ISO_8859_5_UC	255
+#define MAX_ISO_8859_5_UC	8470

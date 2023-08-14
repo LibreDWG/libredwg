@@ -130,4 +130,4 @@ static const uint16_t cptbl_windows_1258[] = {
 #define MIN_WINDOWS_1258	0
 #define MAX_WINDOWS_1258	255
 #define MIN_WINDOWS_1258_UC	0
-#define MAX_WINDOWS_1258_UC	255
+#define MAX_WINDOWS_1258_UC	8482

@@ -55,6 +55,7 @@ static unsigned int loglevel;
 #include "codepages/CP864.h"
 #include "codepages/CP865.h"
 #include "codepages/CP869.h"
+#include "codepages/CP932.h"
 #include "codepages/MACINTOSH.h"
 #include "codepages/BIG5.h"
 #include "codepages/CP949.h"
@@ -99,7 +100,7 @@ static const uint16_t *cp_fntbl[] = { NULL, // UTF8
                                       cptbl_cp864,
                                       cptbl_cp865,
                                       cptbl_cp869,
-                                      cptbl_windows_932, /* same as cp932 */
+                                      cptbl_cp932, /* original shiftjis */
                                       cptbl_macintosh,
                                       cptbl_big5,
                                       cptbl_cp949, /* 25 */
@@ -115,11 +116,11 @@ static const uint16_t *cp_fntbl[] = { NULL, // UTF8
                                       cptbl_windows_1256,
                                       cptbl_windows_1257,
                                       cptbl_windows_874,
-                                      cptbl_windows_932,
+                                      cptbl_windows_932, /* windows-31j */
                                       cptbl_windows_936,
                                       cptbl_windows_949,
                                       cptbl_windows_950,
-                                      cptbl_windows_1361, /* 42 ~ JOHAB */
+                                      cptbl_windows_1361, /* 42 */
                                       NULL,               /* 43 UTF16 */
                                       cptbl_windows_1258,
                                       NULL };
@@ -316,9 +317,16 @@ dwg_codepage_uc (Dwg_Codepage cp, unsigned char c)
 wchar_t
 dwg_codepage_uwc (Dwg_Codepage cp, uint16_t c)
 {
-  if (c < 128 || cp == CP_UTF8 || cp == CP_UTF16)
+  if (cp == CP_CP864 && c == 0x25)
+    return 0x066a;
+  else if (cp == CP_CP932 && c == 0x5c)
+    return 0x00A5;
+  else if (cp == CP_CP932 && c == 0x7e)
+    return 0x203E;
+  else if (cp == CP_JOHAB && c == 0x5c)
+    return 0x20A9;
+  else if (c < 128 || cp == CP_UTF8 || cp == CP_UTF16)
     return (wchar_t)c;
-  // todo: johab exceptions
   return codepage_helper (cp, (wchar_t)c, 0, 1);
 }
 // returns the matching codepoint,

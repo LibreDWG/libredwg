@@ -13514,4 +13514,4 @@ static const uint16_t cptbl_windows_950[] = {
 #define MIN_WINDOWS_950	0
 #define MAX_WINDOWS_950	63998
 #define MIN_WINDOWS_950_UC	0
-#define MAX_WINDOWS_950_UC	63998
+#define MAX_WINDOWS_950_UC	65509

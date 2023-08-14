@@ -108,4 +108,4 @@ static const uint16_t cptbl_windows_874[] = {
 #define MIN_WINDOWS_874	0
 #define MAX_WINDOWS_874	251
 #define MIN_WINDOWS_874_UC	0
-#define MAX_WINDOWS_874_UC	251
+#define MAX_WINDOWS_874_UC	8364

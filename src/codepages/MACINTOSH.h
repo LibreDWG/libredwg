@@ -138,4 +138,4 @@ static const uint16_t cptbl_macintosh[] = {
 #define MIN_MACINTOSH	0
 #define MAX_MACINTOSH	255
 #define MIN_MACINTOSH_UC	0
-#define MAX_MACINTOSH_UC	255
+#define MAX_MACINTOSH_UC	64258

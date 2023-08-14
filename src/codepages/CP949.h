@@ -17059,4 +17059,4 @@ static const uint16_t cptbl_cp949[] = {
 #define MIN_CP949	0
 #define MAX_CP949	65022
 #define MIN_CP949_UC	0
-#define MAX_CP949_UC	65022
+#define MAX_CP949_UC	65510

@@ -21803,4 +21803,4 @@ static const uint16_t cptbl_windows_936[] = {
 #define MIN_WINDOWS_936	0
 #define MAX_WINDOWS_936	65103
 #define MIN_WINDOWS_936_UC	0
-#define MAX_WINDOWS_936_UC	65103
+#define MAX_WINDOWS_936_UC	65509

@@ -13720,5 +13720,5 @@ static const uint16_t cptbl_big5[] = {
 };
 #define MIN_BIG5	41280
 #define MAX_BIG5	63957
-#define MIN_BIG5_UC	41280
-#define MAX_BIG5_UC	63957
+#define MIN_BIG5_UC	162
+#define MAX_BIG5_UC	65533

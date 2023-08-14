@@ -139,4 +139,4 @@ static const uint16_t cptbl_cp855[] = {
 #define MIN_CP855	0
 #define MAX_CP855	255
 #define MIN_CP855_UC	0
-#define MAX_CP855_UC	255
+#define MAX_CP855_UC	9632

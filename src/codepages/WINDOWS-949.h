@@ -17059,4 +17059,4 @@ static const uint16_t cptbl_windows_949[] = {
 #define MIN_WINDOWS_949	0
 #define MAX_WINDOWS_949	65022
 #define MIN_WINDOWS_949_UC	0
-#define MAX_WINDOWS_949_UC	65022
+#define MAX_WINDOWS_949_UC	65510

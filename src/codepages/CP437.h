@@ -139,4 +139,4 @@ static const uint16_t cptbl_cp437[] = {
 #define MIN_CP437	0
 #define MAX_CP437	255
 #define MIN_CP437_UC	0
-#define MAX_CP437_UC	255
+#define MAX_CP437_UC	9632
