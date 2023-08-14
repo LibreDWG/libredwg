@@ -79,7 +79,6 @@ typedef enum _dwg_codepage
   CP_ANSI_1361,      // 42 Korean Wansung
   CP_UTF16 = 43,
   CP_ANSI_1258 = 44,  // Vietnamese
-  CP_SHIFTJIS,        // for MIF M+1 only
   CP_UNDEFINED = 0xff // mostly R11
 } Dwg_Codepage;
 
@@ -101,7 +100,7 @@ unsigned char dwg_codepage_c (Dwg_Codepage cp, wchar_t wc);
 // for wide asian chars
 uint16_t dwg_codepage_wc (Dwg_Codepage cp, wchar_t wc);
 
-// these old codepages use 2-byte chars, all others only one byte.
+// these old codepages use 2-byte chars for some 0x8* bytes, all others only one byte.
 bool dwg_codepage_isasian (const Dwg_Codepage cp);
 
 #endif
