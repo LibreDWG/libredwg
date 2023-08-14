@@ -346,13 +346,22 @@ dwg_codepage_wc (Dwg_Codepage cp, wchar_t wc)
   return (uint16_t)codepage_helper (cp, wc, 1, 1);
 }
 
-// for wide asian chars
+/* for possible wide asian chars:
+   932 is single-byte for most chars, but 0x8*, 0x9*, 0xE* and 0xF* lead bytes
+   CP949, JOHAB, ANSI_949, 936, 950 for all > 0x8* lead bytes
+   1361 for all but 0x8[0123], 0xD[4567F], 0xF[A-F] lead bytes
+   BIG5, GB2312 are two-byte only.
+
+   none have valid 0x00 bytes, so strlen works as before in the TV case.
+*/
 bool
 dwg_codepage_isasian (const Dwg_Codepage cp)
 {
-  if (cp >= CP_BIG5 && cp <= CP_CP866)
+  if (cp >= CP_BIG5 && cp <= CP_JOHAB)
     return true;
   else if (cp >= CP_ANSI_932 && cp <= CP_ANSI_1258)
+    return true;
+  else if (cp == CP_GB2312)
     return true;
   else
     return false;
