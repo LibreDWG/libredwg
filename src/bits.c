@@ -3030,7 +3030,17 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
     {
       wchar_t wc;
       tmp++;
-      if (c < 0x80)
+      if (is_asian_cp) // has exceptions even below 0x80
+        {
+          if (dwg_codepage_is_twobyte ((Dwg_Codepage)codepage, c))
+            c = c << 8 | *tmp++;
+          wc = dwg_codepage_uwc ((Dwg_Codepage)codepage, c);
+          c = wc;
+          // printf("wc: %u\n", (unsigned)wc);
+          if (c < 0x80) // stayed below
+            str[i++] = c & 0xFF;
+        }
+      else if (c < 0x80)
         str[i++] = c & 0xFF;
       else if ((wc = dwg_codepage_uc ((Dwg_Codepage)codepage, c & 0xFF)))
         {
@@ -3064,6 +3074,8 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
 }
 
 /** converts old codepage'd strings to UTF-8.
+    convert \U+XXXX or \MnXXXX also if representable.
+    returns NULL on errors, or the unchanged src string, or a copy.
  */
 EXPORT ATTRIBUTE_MALLOC char *
 bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)

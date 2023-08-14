@@ -263,7 +263,7 @@ EXPORT char *bit_utf8_to_TV (char *restrict dest,
                              const unsigned cquoted,
                              const BITCODE_RS codepage);
 /** converts old codepage'd strings to UTF-8.
-    convert \U+XXXX also if representable.
+    convert \U+XXXX or \MnXXXX also if representable.
     returns NULL on errors, or the unchanged src string, or a copy.
  */
 EXPORT

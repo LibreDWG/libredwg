@@ -29,6 +29,8 @@
 #  error in_dxf.h must be included after logging.h because of FORMAT_BD
 #endif
 
+#include "codepages.h"
+
 /*
  * If more logging levels are necessary, put them in the right place and
  * update the numbering, keeping it a 0,1,...n sequence, where n corresponds
@@ -107,6 +109,20 @@
     LOG_INSANE (" @%zu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")
 #endif
+#define LOG_TRACE_TV(fmt, str, dxf)                                           \
+  if (dwg_codepage_isasian (dat->codepage))                                   \
+    {                                                                         \
+      char *nstr = bit_TV_to_utf8 (str, dat->codepage);                       \
+      LOG_TRACE (fmt, nstr, dxf)                                              \
+      if (nstr != str)                                                        \
+        free (nstr);                                                          \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      LOG_TRACE (fmt, str, dxf)                                               \
+    }                                                                         \
+  LOG_POS
+
 #ifdef HAVE_NATIVE_WCHAR2
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
     LOG_TRACE ("%s: \"%ls\" [TU %d]", s, (wchar_t *)wstr, dxf)                \

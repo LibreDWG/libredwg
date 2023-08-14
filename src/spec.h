@@ -16,6 +16,8 @@
 #  undef _GNU_SOURCE
 #  define _GNU_SOURCE
 #  include <string.h>
+#  include "bits.h"
+#  include "codepages.h"
 #  include "decode.h"
 
 #  define DECODER if (0)

@@ -102,5 +102,6 @@ uint16_t dwg_codepage_wc (Dwg_Codepage cp, wchar_t wc);
 
 // these old codepages use 2-byte chars for some 0x8* bytes, all others only one byte.
 bool dwg_codepage_isasian (const Dwg_Codepage cp);
+bool dwg_codepage_is_twobyte (const Dwg_Codepage cp, const unsigned char c);
 
 #endif

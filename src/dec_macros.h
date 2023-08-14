@@ -554,8 +554,7 @@
 #define FIELD_TV(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = bit_read_TV (dat);                                            \
-    LOG_TRACE (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);                      \
-    LOG_RPOS                                                                  \
+    LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);                   \
   }
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
@@ -568,8 +567,7 @@
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
-        LOG_TRACE (#nam ": \"%s\" [T %d]", _obj->nam, dxf)                    \
-        LOG_POS;                                                              \
+        LOG_TRACE_TV (#nam ": \"%s\" [T %d]", _obj->nam, dxf)                 \
       }                                                                       \
     else                                                                      \
       {                                                                       \
