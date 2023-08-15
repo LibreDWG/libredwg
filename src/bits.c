@@ -3003,15 +3003,16 @@ bit_u_expand (char *src)
 {
   char *ret = src;
   char *p = src;
+  char *s;
   // convert all \U+XXXX sequences to UTF-8. always gets shorter, so in-place
-  while ((p = bit_is_U_expand (p)) // jumps forward to next \U or \M
-         || (p = bit_is_M_expand (p)))
+  while ((s = bit_is_U_expand (p)) // jumps forward to next \U or \M
+         || (s = bit_is_M_expand (p)))
     {
       uint16_t wc;
       int i;
-      size_t lp = strlen (p);
+      size_t lp = strlen (s);
       // printf("p: %s %p\n", p, p);
-      if (p[1] == 'U' && 1 == sscanf (p, "\\U+%4hx", &wc))
+      if (s[1] == 'U' && 1 == sscanf (s, "\\U+%4hx", &wc))
         {
           uint16_t wp[2] = { wc, 0 };
           // the u8 is always shorter than the src sequence of len 7
@@ -3021,41 +3022,41 @@ bit_u_expand (char *src)
           // printf("u8: %s, l: %zu, lp: %zu\n", u8, l, lp);
           // printf("u8: { %hx, %hx }\n", (unsigned char)u8[0], (unsigned
           // char)u8[1]);
-          memcpy (p, u8, l + 1);
+          memcpy (s, u8, l + 1);
           if (lp > 7)
             {
               // printf("p[7]: %d, l: %zu\n", (int)p[7], lp);
-              memcpy (&p[l], &p[7], lp - 6);
+              memcpy (&s[l], &s[7], lp - 6);
             }
           if (u8 != (char *)&wp[0])
             free (u8);
         }
-      else if (1 == sscanf (p, "\\M+%d%4hx", &i, &wc))
+      else if (2 == sscanf (s, "\\M+%1d%4hx", &i, &wc))
         {
           const Dwg_Codepage mif_tbl[]
               = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
                   CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
           uint32_t uc;
-          sscanf (&p[4], "%4hX", &wc);
+          sscanf (&s[4], "%4hX", &wc);
           assert (i >= 1 && i <= 5);
           uc = dwg_codepage_uwc (mif_tbl[i], wc);
           if (uc < 0x80)
             {
-              *p++ = uc & 0xFF;
-              memcpy (p, &p[7], lp - 7);
+              *s++ = uc & 0xFF;
+              memcpy (s, &s[7], lp - 7);
             }
           else if (uc < 0x800)
             {
-              *p++ = (uc >> 6) | 0xC0;
-              *p++ = (uc & 0x3F) | 0x80;
-              memcpy (p, &p[6], lp - 7);
+              *s++ = (uc >> 6) | 0xC0;
+              *s++ = (uc & 0x3F) | 0x80;
+              memcpy (s, &s[6], lp - 7);
             }
           else
             {
-              *p++ = (uc >> 12) | 0xE0;
-              *p++ = ((uc >> 6) & 0x3F) | 0x80;
-              *p++ = (uc & 0x3F) | 0x80;
-              memcpy (p, &p[5], lp - 7);
+              *s++ = (uc >> 12) | 0xE0;
+              *s++ = ((uc >> 6) & 0x3F) | 0x80;
+              *s++ = (uc & 0x3F) | 0x80;
+              memcpy (s, &s[5], lp - 7);
             }
         }
     }

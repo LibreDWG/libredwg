@@ -939,6 +939,33 @@ bit_TV_to_utf8_tests (void)
   if (p != src_kor)
     free (p);
   free (src_kor);
+
+  p = bit_TV_to_utf8 ("\x83\x82\x83\x6d", CP_ANSI_932);
+  // echo "モノ" | od -t x1
+  if (strEQc (p, "モノ")
+      || strEQc (p, "\xe3\x83\xa2\xe3\x83\x8e"))
+    ok ("bit_TV_to_utf8_tests 932");
+  else
+    {
+      fail ("bit_TV_to_utf8 %s 932 (len=%zu)", p, strlen (p));
+      for (size_t i = 0; i < strlen (p); i++)
+        printf ("\\x%02x", (unsigned char)p[i]);
+      printf ("\n");
+    }
+  free (p);
+
+  p = bit_TV_to_utf8 ("0\\M+18382", CP_ANSI_932); // MO
+  if (strEQc (p, "0モ")
+      || strEQc (p, "0\xe3\x83\xa2"))
+    ok ("bit_TV_to_utf8_tests MIF-1 932");
+  else
+    {
+      fail ("bit_TV_to_utf8 %s MIF-1 932 (len=%zu)", p, strlen (p));
+      for (size_t i = 0; i < strlen (p); i++)
+        printf ("\\x%02x", (unsigned char)p[i]);
+      printf ("\n");
+    }
+  free (p);
 }
 
 static void
