@@ -3473,7 +3473,7 @@ T,	DXF 1
 @item num_source_files
 BL,	DXF 90
 @item source_files
-TV*,	DXF 2
+T*,	DXF 2
 @item extents_min
 3BD,	DXF 11
 @item extents_max
@@ -5701,7 +5701,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -7830,7 +7830,7 @@ BL,	DXF 93
 @item lut
 Dwg_BLOCKLOOKUPACTION_lut*
 @item exprs
-TV*,	DXF 302
+T*,	DXF 302
 @item b280
 B,	DXF 280
 
@@ -8849,7 +8849,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -10141,7 +10141,7 @@ struct _dwg_object_object*
 @item num_names
 BL
 @item names
-TV*,	DXF 8
+T*,	DXF 8
 
 @end vtable
 @end indentedblock
@@ -10297,7 +10297,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -11750,7 +11750,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12071,7 +12071,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12173,7 +12173,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12558,7 +12558,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12725,7 +12725,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12843,7 +12843,7 @@ BL
 @item num_items
 BL
 @item classname
-TV
+T
 @item items
 Dwg_ASSOCARRAYITEM*
 @item numitems
@@ -13761,7 +13761,7 @@ RL
 @item code
 BL
 @item name
-TV
+T
 
 @end vtable
 @end indentedblock
@@ -13819,7 +13819,7 @@ T
 @vtable @code
 
 @item desc
-TV
+T
 @item flags
 BL
 @item minimum
@@ -14197,11 +14197,11 @@ BL,	DXF 91
 @item num_xrefpaths
 BS
 @item xrefpaths
-TV*,	DXF 301
+T*,	DXF 301
 @item num_intersec_xrefpaths
 BS
 @item intersec_xrefpaths
-TV*
+T*
 @item has_lastpt_ref
 B,	DXF 75
 @item intersec_subent_type
@@ -14341,7 +14341,7 @@ BD
 @item value.pt3d
 3BD
 @item value.text1
-TV
+T
 @item value.long90
 BL
 @item value.handle91
@@ -14371,7 +14371,7 @@ BS
 @item u.rc
 RC
 @item u.text
-TV
+T
 @item u.handle
 H
 
