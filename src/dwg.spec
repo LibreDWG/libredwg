@@ -5493,8 +5493,9 @@ DWG_OBJECT (PLOTSETTINGS)
         {
           _obj->plotview
             = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
-          LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
-                     ARGS_REF (_obj->plotview))
+          if (_obj->plotview)
+            LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
+                       ARGS_REF (_obj->plotview))
         }
     }
   }
@@ -5504,8 +5505,9 @@ DWG_OBJECT (PLOTSETTINGS)
         {
           _obj->plotview
             = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
-          LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
-                     ARGS_REF (_obj->plotview))
+          if (_obj->plotview)
+            LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
+                       ARGS_REF (_obj->plotview))
         }
     }
     DXF {
@@ -5585,8 +5587,9 @@ DWG_OBJECT (LAYOUT)
         {
           _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
                                       _obj->plotsettings.plotview_name, "VIEW");
-          LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
-                     ARGS_REF (_obj->plotsettings.plotview))
+          if (_obj->plotsettings.plotview)
+            LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
+                       ARGS_REF (_obj->plotsettings.plotview))
         }
     }
   }
@@ -5596,8 +5599,9 @@ DWG_OBJECT (LAYOUT)
         {
           _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
               _obj->plotsettings.plotview_name, "VIEW");
-          LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
-                     ARGS_REF (_obj->plotsettings.plotview))
+          if (_obj->plotsettings.plotview)
+            LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
+                       ARGS_REF (_obj->plotsettings.plotview))
         }
     }
     FIELD_HANDLE (plotsettings.plotview, 4, 0);
