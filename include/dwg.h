@@ -197,6 +197,13 @@ typedef BITCODE_BL BITCODE_MS;
 typedef unsigned char* BITCODE_TF;
 #define FORMAT_TF "\"%s\""
 typedef char* BITCODE_TV;
+#ifdef __GNUC__
+typedef char* __attribute__((aligned(2))) BITCODE_T;
+#elif defined (_MSC_VER)
+typedef char* __declspec((align(2))) BITCODE_T;
+#else
+typedef char* BITCODE_T;
+#endif
 #define FORMAT_TV "\"%s\""
 #define BITCODE_T16 BITCODE_TV
 #define FORMAT_T16 FORMAT_TV
@@ -222,7 +229,7 @@ typedef BITCODE_TV BITCODE_D2T;
 
 /* TODO: implement version dependent string parsing */
 /* encode codepages/utf8 */
-#define BITCODE_T  BITCODE_TV
+//#define BITCODE_T  BITCODE_TV
 #ifdef HAVE_NATIVE_WCHAR2
   typedef dwg_wchar_t* BITCODE_TU; /* native UCS-2 wchar_t */
 # define FORMAT_TU "\"%ls\""
