@@ -2823,7 +2823,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
 /** converts UTF-8 (dxf,json) to ASCII TV.
     optionally unquotes \" to ", \\ to \, undo json_cquote(),
     \\uxxxx or other unicode => \\U+XXXX.
-    codepage conversion
+    codepage conversion, MIF not yet (needs version arg)
     Returns NULL if not enough room in dest.
 */
 char *
@@ -2892,7 +2892,8 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
               if (is_asian_cp
                   && (wc1 = dwg_codepage_wc ((Dwg_Codepage)codepage, wc)))
                 {
-                  *dest++ = wc1 >> 4;
+                  if (wc1 > 0xFF)
+                      *dest++ = wc1 >> 4;
                   *dest++ = wc1 & 0xff;
                 }
               // is representable as byte
@@ -2974,23 +2975,47 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
   return d;
 }
 
+static inline char *
+bit_is_U_expand (char *p)
+{
+  char *s;
+  if (p && strlen (p) >= 7 && (s = strstr (p, "\\U+")) && ishex (s[3])
+      && ishex (s[4]) && ishex (s[5]) && ishex (s[6]))
+    return s;
+  else
+    return NULL;
+}
+
+static inline char *
+bit_is_M_expand (char *p)
+{
+  char *s;
+  if (p && strlen (p) >= 8 && (s = strstr (p, "\\M+")) && s[3] >= '1'
+      && s[3] <= '5' && ishex (s[4]) && ishex (s[5]) && ishex (s[6])
+      && ishex (s[7]))
+    return s;
+  else
+    return NULL;
+}
+
 char *
 bit_u_expand (char *src)
 {
   char *ret = src;
   char *p = src;
   // convert all \U+XXXX sequences to UTF-8. always gets shorter, so in-place
-  while (p && strlen (p) >= 7 && (p = strstr (p, "\\U+")) && ishex (p[3])
-         && ishex (p[4]) && ishex (p[5]) && ishex (p[6]))
+  while ((p = bit_is_U_expand (p)) // jumps forward to next \U or \M
+         || (p = bit_is_M_expand (p)))
     {
       uint16_t wc;
+      int i;
+      size_t lp = strlen (p);
       // printf("p: %s %p\n", p, p);
-      if (1 == sscanf (p, "\\U+%4hx", &wc))
+      if (p[1] == 'U' && 1 == sscanf (p, "\\U+%4hx", &wc))
         {
           uint16_t wp[2] = { wc, 0 };
           // the u8 is always shorter than the src sequence of len 7
           char *u8 = bit_convert_TU (&wp[0]);
-          size_t lp = strlen (p);
           size_t l = strlen (u8);
           // printf("wc: %hu\n", wc);
           // printf("u8: %s, l: %zu, lp: %zu\n", u8, l, lp);
@@ -3005,6 +3030,34 @@ bit_u_expand (char *src)
           if (u8 != (char *)&wp[0])
             free (u8);
         }
+      else if (1 == sscanf (p, "\\M+%d%4hx", &i, &wc))
+        {
+          const Dwg_Codepage mif_tbl[]
+              = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
+                  CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
+          uint32_t uc;
+          sscanf (&p[4], "%4hX", &wc);
+          assert (i >= 1 && i <= 5);
+          uc = dwg_codepage_uwc (mif_tbl[i], wc);
+          if (uc < 0x80)
+            {
+              *p++ = uc & 0xFF;
+              memcpy (p, &p[7], lp - 7);
+            }
+          else if (uc < 0x800)
+            {
+              *p++ = (uc >> 6) | 0xC0;
+              *p++ = (uc & 0x3F) | 0x80;
+              memcpy (p, &p[6], lp - 7);
+            }
+          else
+            {
+              *p++ = (uc >> 12) | 0xE0;
+              *p++ = ((uc >> 6) & 0x3F) | 0x80;
+              *p++ = (uc & 0x3F) | 0x80;
+              memcpy (p, &p[5], lp - 7);
+            }
+        }
     }
   // printf("ret: %s\n", ret);
   return ret;
@@ -3018,7 +3071,7 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
   size_t destlen = is_asian_cp ? srclen * 3 : trunc (srclen * 1.5);
   size_t i = 0;
   char *str = calloc (1, destlen + 1);
-  char *tmp = (char *)src;
+  unsigned char *tmp = (unsigned char *)src;
   uint16_t c = 0;
 
   if (!srclen)
@@ -3026,7 +3079,7 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
   if (!codepage)
     return (char *)src;
   //  UTF8 encode
-  while ((c = (0xFF & *tmp)) && i < destlen)
+  while ((c = *tmp) && i < destlen)
     {
       wchar_t wc;
       tmp++;
@@ -3784,7 +3837,7 @@ bit_fprint_bits (FILE *fp, unsigned char *bits, size_t bitsize)
       unsigned char result = (bits[i / 8] & (0x80 >> bit)) >> (7 - bit);
       /*if (i && !bit) HANDLER (fp, " ");*/
       HANDLER (fp, "%d", result ? 1 : 0);
-      // fprintf(fp, "%d", BIT(bits, i) ? 1 : 0);
+      // fprintf (fp, "%d", BIT (bits, i) ? 1 : 0);
     }
 }
 

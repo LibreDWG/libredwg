@@ -64,6 +64,7 @@
          FIELD_VALUE (codepage) = dat->codepage;
     }
     FIELD_RS (codepage, 0); //@0x13: 29/30 for ANSI_1252, since r2007 UCS-16
+    LOG_TRACE ("%s\n", dwg_codepage_dxfstr ((Dwg_Codepage)FIELD_VALUE (codepage)))
     DECODER {
       dat->codepage = FIELD_VALUE (codepage);
     }
