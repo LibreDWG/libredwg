@@ -19590,14 +19590,14 @@ static int test_POINTCLOUD (const Dwg_Object *obj)
     pointcloud->show_intensity--;
   }
   {
-    BITCODE_TV* source_files;
+    BITCODE_T* source_files;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "num_source_files", &count, NULL)
         && dwg_dynapi_entity_value (pointcloud, "POINTCLOUD", "source_files", &source_files, NULL)
         && source_files == pointcloud->source_files)
       pass ();
     else
-      fail ("POINTCLOUD.source_files [TV*] * %u num_source_files", count);
+      fail ("POINTCLOUD.source_files [T*] * %u num_source_files", count);
   }
   {
     BITCODE_T ucs_name;
@@ -30062,14 +30062,14 @@ static int test_APPID (const Dwg_Object *obj)
     appid->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (appid, "APPID", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)appid->name)
            : !appid->name)
       pass ();
     else
-      fail ("APPID.name [TV] '%s' <> '%s'", name, appid->name);
+      fail ("APPID.name [T] '%s' <> '%s'", name, appid->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -40004,14 +40004,14 @@ static int test_BLOCKLOOKUPACTION (const Dwg_Object *obj)
         fail ("BLOCKLOOKUPACTION.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV* exprs;
+    BITCODE_T* exprs;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "num_exprs", &count, NULL)
         && dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "exprs", &exprs, NULL)
         && exprs == blocklookupaction->exprs)
       pass ();
     else
-      fail ("BLOCKLOOKUPACTION.exprs [TV*] * %u num_exprs", count);
+      fail ("BLOCKLOOKUPACTION.exprs [T*] * %u num_exprs", count);
   }
   {
     Dwg_BLOCKLOOKUPACTION_lut* lut;
@@ -44960,14 +44960,14 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         fail ("BLOCK_HEADER.layout [H]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)block_header->name)
            : !block_header->name)
       pass ();
     else
-      fail ("BLOCK_HEADER.name [TV] '%s' <> '%s'", name, block_header->name);
+      fail ("BLOCK_HEADER.name [T] '%s' <> '%s'", name, block_header->name);
   }
   {
     BITCODE_RL num_inserts;
@@ -50635,14 +50635,14 @@ static int test_LAYERFILTER (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_TV* names;
+    BITCODE_T* names;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "num_names", &count, NULL)
         && dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "names", &names, NULL)
         && names == layerfilter->names)
       pass ();
     else
-      fail ("LAYERFILTER.names [TV*] * %u num_names", count);
+      fail ("LAYERFILTER.names [T*] * %u num_names", count);
   }
   {
     BITCODE_BL num_names;
@@ -51374,14 +51374,14 @@ static int test_LTYPE (const Dwg_Object *obj)
     ltype->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)ltype->name)
            : !ltype->name)
       pass ();
     else
-      fail ("LTYPE.name [TV] '%s' <> '%s'", name, ltype->name);
+      fail ("LTYPE.name [T] '%s' <> '%s'", name, ltype->name);
   }
   {
     BITCODE_RC numdashes;
@@ -58325,14 +58325,14 @@ static int test_STYLE (const Dwg_Object *obj)
     style->last_height--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (style, "STYLE", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)style->name)
            : !style->name)
       pass ();
     else
-      fail ("STYLE.name [TV] '%s' <> '%s'", name, style->name);
+      fail ("STYLE.name [T] '%s' <> '%s'", name, style->name);
   }
   {
     BITCODE_BD oblique_angle;
@@ -59807,14 +59807,14 @@ static int test_UCS (const Dwg_Object *obj)
     ucs->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (ucs, "UCS", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)ucs->name)
            : !ucs->name)
       pass ();
     else
-      fail ("UCS.name [TV] '%s' <> '%s'", name, ucs->name);
+      fail ("UCS.name [T] '%s' <> '%s'", name, ucs->name);
   }
   {
     BITCODE_H named_ucs;
@@ -60370,14 +60370,14 @@ static int test_VIEW (const Dwg_Object *obj)
         fail ("VIEW.livesection [H]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (view, "VIEW", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)view->name)
            : !view->name)
       pass ();
     else
-      fail ("VIEW.name [TV] '%s' <> '%s'", name, view->name);
+      fail ("VIEW.name [T] '%s' <> '%s'", name, view->name);
   }
   {
     BITCODE_H named_ucs;
@@ -62951,14 +62951,14 @@ static int test_VPORT (const Dwg_Object *obj)
         fail ("VPORT.lower_left [2RD]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (vport, "VPORT", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)vport->name)
            : !vport->name)
       pass ();
     else
-      fail ("VPORT.name [TV] '%s' <> '%s'", name, vport->name);
+      fail ("VPORT.name [T] '%s' <> '%s'", name, vport->name);
   }
   {
     BITCODE_H named_ucs;
@@ -63371,14 +63371,14 @@ static int test_VX_TABLE_RECORD (const Dwg_Object *obj)
     vx_table_record->is_xref_resolved--;
   }
   {
-    BITCODE_TV name;
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)vx_table_record->name)
            : !vx_table_record->name)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.name [TV] '%s' <> '%s'", name, vx_table_record->name);
+      fail ("VX_TABLE_RECORD.name [T] '%s' <> '%s'", name, vx_table_record->name);
   }
   {
     struct _dwg_object_object* parent;
