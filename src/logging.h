@@ -121,7 +121,12 @@
     {                                                                         \
       LOG_TRACE (fmt, str, dxf)                                               \
     }                                                                         \
-  LOG_POS
+  LOG_POS                                                                     \
+  if (str && strlen (str) && dat->codepage != CP_ANSI_1252 &&                 \
+      !(dat->codepage < CP_ISO_8859_1))                                       \
+    {                                                                         \
+      LOG_INSANE_TF (str, strlen (str));                                      \
+    }
 
 #ifdef HAVE_NATIVE_WCHAR2
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
