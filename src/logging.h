@@ -151,7 +151,7 @@
     {                                                                         \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                       \
         {                                                                     \
-          char *_u8 ATTRIBUTE_ALIGNED(2) = bit_convert_TU (wstr);             \
+          ATTRIBUTE_ALIGNED(2) char *_u8 = bit_convert_TU (wstr);             \
           HANDLER (OUTPUT, "%s", _u8);                                        \
           free (_u8);                                                         \
         }                                                                     \

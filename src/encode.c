@@ -3278,8 +3278,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       BITCODE_BL vcount;
 
       assert (dat->byte);
-      if (!_obj->address)
-        _obj->address = dat->byte & 0xFFFFFFFF;
+      _obj->address = dat->byte & 0xFFFFFFFF;
       dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
       dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
       dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
