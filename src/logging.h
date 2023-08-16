@@ -114,7 +114,7 @@
     {                                                                         \
       char *nstr = bit_TV_to_utf8 (str, dat->codepage);                       \
       LOG_TRACE (fmt, nstr, dxf)                                              \
-      if (nstr != str)                                                        \
+      if (nstr && nstr != str)                                                \
         free (nstr);                                                          \
     }                                                                         \
   else                                                                        \
