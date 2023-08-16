@@ -3311,6 +3311,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->sections[i].address = dwg->header.section[i].address;
           _obj->sections[i].size = dwg->header.section[i].size;
         }
+      if (dwg->header.num_sections > SECTION_MEASUREMENT_R13
+          && !dwg->header.section[SECTION_MEASUREMENT_R13].address)
+        {
+          // most dwg"s leasve the 3 and 4 section addresses and sizes empty
+          _obj->sections[4].nr = 4;
+        }
       // always set handles from the header vars
       if (!_obj->num_handles)
         _obj->num_handles = 14;
@@ -3348,10 +3354,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       encode_secondheader_private (dat, dwg);
 
+      if (dwg->header.num_sections > SECTION_MEASUREMENT_R13
+          && dwg->header.section[SECTION_MEASUREMENT_R13].address)
+        {
+          // if empty keep it that way
+          dwg->header.section[4].address = dat->byte + 16;
+          _obj->sections[4].address
+              = (BITCODE_BL)dwg->header.section[4].address & 0xFFFFFFFF;
+          dwg->header.section[4].size = UINT64_C (4);
+          _obj->sections[4].size = UINT32_C (4);
+          dat->byte = pvzadr;
+          encode_secondheader_private (dat, dwg);
+        }
       dat->byte -= dwg->header.version == R_14 ? 10 : 2;
       _obj->size = encode_patch_RLsize (dat, pvzadr);
       if (_obj->size < dat->byte)
         dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
+
       bit_write_CRC (dat, pvzadr, 0xC0C1);
       VERSION (R_14)
       {
@@ -3390,7 +3409,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_INFO ("\n=======> MEASUREMENT: @%4zu\n", dat->byte);
       dwg->header.section[sec_id].number = 4;
       dwg->header.section[sec_id].address = dat->byte;
-      dwg->header.section[sec_id].size = 4;
+      dwg->header.section[sec_id].size = 4; // always empty description
       // Template description
       bit_write_T16 (dat, _obj->description);
       // 0 - English, 1- Metric
