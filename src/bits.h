@@ -200,6 +200,8 @@ void bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict value);
 /* read UCS-2 string, with length as BS */
 BITCODE_TU bit_read_TU (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
 BITCODE_TU bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp) ATTRIBUTE_MALLOC;
+BITCODE_TU bit_read_TU_size (Bit_Chain *restrict dat, unsigned int len) ATTRIBUTE_MALLOC;
+
 /* read ASCII string, with length as RS */
 BITCODE_TV bit_read_T16 (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
 /* read UCS-2 string, with length as RS */

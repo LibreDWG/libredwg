@@ -2166,6 +2166,30 @@ bit_read_TU (Bit_Chain *restrict dat)
 
 ATTRIBUTE_MALLOC
 BITCODE_TU
+bit_read_TU_size (Bit_Chain *restrict dat, unsigned int len)
+{
+  unsigned int i;
+  BITCODE_TU chain;
+
+  CHK_OVERFLOW_PLUS (len * 2, __FUNCTION__, NULL)
+  chain = (BITCODE_TU)malloc ((len + 1) * 2);
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory")
+      return NULL;
+    }
+  for (i = 0; i < len; i++)
+    chain[i] = bit_read_RS (dat);
+  // normally not needed, as the DWG itself contains the ending 0 as last char
+  // but we enforce writing it.
+  chain[len] = 0;
+  chain[len + 1] = 0;
+  return chain;
+}
+
+ATTRIBUTE_MALLOC
+BITCODE_TU
 bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
 {
   unsigned int i;

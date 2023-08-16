@@ -179,8 +179,6 @@ static uint32_t read_literal_length (BITCODE_RC *restrict *restrict src,
                                      unsigned char opcode);
 static void copy_compressed_bytes (BITCODE_RC *restrict dst,
                                    BITCODE_RC *restrict src, int length);
-static DWGCHAR *bfr_read_string (BITCODE_RC *restrict *restrict src,
-                                 int64_t size) ATTRIBUTE_MALLOC;
 static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
                               int data_size,
                               const unsigned src_size) ATTRIBUTE_MALLOC;
@@ -633,10 +631,9 @@ decode_rs (const BITCODE_RC *src, int block_count, int data_size,
   return dst_base;
 }
 
-ATTRIBUTE_MALLOC
-static BITCODE_RC *
-read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
-                  int64_t repeat_count)
+static bool
+read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
+                  int64_t size_uncomp, int64_t repeat_count)
 {
   int i;
   int error = 0;
@@ -648,7 +645,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
   BITCODE_RC *rsdata;          // RS encoded data
   BITCODE_RC *pedata;          // Pre RS encoded data
-  BITCODE_RC *data, *data_end; // The data RS unencoded and uncompressed
+  BITCODE_RC *data_end; // The data RS unencoded and uncompressed
 
   if (repeat_count < 0 || repeat_count > DBG_MAX_COUNT
       || (uint64_t)size_comp >= dat->size
@@ -658,7 +655,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
                  "size_comp: %" PRId64 ", size_uncomp: %" PRId64
                  ", repeat_count: %" PRId64,
                  size_comp, size_uncomp, repeat_count);
-      return NULL;
+      return false;
     }
   // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7) * repeat_count;
@@ -669,7 +666,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_ERROR ("Invalid r2007 system page: size_comp: %" PRId64
                  ", size_uncomp: %" PRId64,
                  size_comp, size_uncomp);
-      return NULL;
+      return false;
     }
   // Multiply with codeword size (255) and round to a multiple of 8
   page_size = (block_count * 255 + 7) & ~7;
@@ -677,7 +674,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       || (size_t)page_size > dat->size - dat->byte)
     {
       LOG_ERROR ("Invalid r2007 system page: page_size: %" PRId64, page_size);
-      return NULL;
+      return false;
     }
   LOG_HANDLE ("read_system_page: size_comp: %" PRId64 ", size_uncomp: %" PRId64
               ", repeat_count: %" PRId64 "\n",
@@ -686,33 +683,35 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   assert ((uint64_t)size_uncomp < dat->size);
   assert ((uint64_t)repeat_count < DBG_MAX_COUNT);
   assert ((uint64_t)page_size < DBG_MAX_COUNT);
-  data = (BITCODE_RC *)calloc (size_uncomp + page_size, 1);
+  bit_chain_init_dat (out, size_uncomp + page_size, dat);
+  //data = (BITCODE_RC *)calloc (size_uncomp + page_size, 1);
   LOG_HANDLE ("Alloc system page of size %" PRId64 "\n",
               size_uncomp + page_size)
-  if (!data)
+    assert (out->size == (size_t)(size_uncomp + page_size));
+  if (!out->chain)
     {
       LOG_ERROR ("Out of memory")
-      return NULL;
+      return false;
     }
-  data_end = &data[size_uncomp + page_size];
+  data_end = &out->chain[size_uncomp + page_size];
 
-  rsdata = &data[size_uncomp];
+  rsdata = &out->chain[size_uncomp];
   bit_read_fixed (dat, rsdata, page_size);
   pedata_size = block_count * 239;
   pedata = decode_rs (rsdata, block_count, 239, page_size);
   if (!pedata)
     {
-      free (data);
-      return NULL;
+      bit_chain_free (out);
+      return false;
     }
 
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (data, size_uncomp, pedata,
+    error = decompress_r2007 (out->chain, size_uncomp, pedata,
                               MIN (pedata_size, size_comp), data_end);
   else
     {
-      if (data + size_uncomp <= data_end)
-        memcpy (data, pedata, size_uncomp);
+      if (out->byte + size_uncomp <= out->size)
+        memcpy (out->chain, pedata, size_uncomp);
       else
         {
           LOG_ERROR ("data overflow")
@@ -723,10 +722,10 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   free (pedata);
   if (error >= DWG_ERR_CRITICAL)
     {
-      free (data);
-      return NULL;
+      bit_chain_free (out);
+      return false;
     }
-  return data;
+  return true;
 }
 
 static int
@@ -892,51 +891,9 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   return 0;
 }
 
-#define bfr_read_int16(_p)                                                    \
-  le16toh (*((int16_t *)_p));                                                 \
-  _p += 2;
-#define bfr_read_int64(_p)                                                    \
-  le64toh (*((int64_t *)_p));                                                 \
-  _p += 8;
-#define bfr_read_uint64(_p)                                                   \
-  le64toh (*((uint64_t *)_p));                                                \
-  _p += 8;
-
-static DWGCHAR *
-bfr_read_string (BITCODE_RC *restrict *restrict src, int64_t size)
-{
-  uint16_t *ptr = (uint16_t *)*src;
-  int32_t length = 0, wsize;
-  DWGCHAR *str, *str_base;
-  int i;
-
-  if (size <= 0)
-    return NULL;
-  while (*ptr != 0 && length * 2 < size)
-    {
-      ptr++;
-      length++;
-    }
-
-  wsize = length * sizeof (DWGCHAR) + sizeof (DWGCHAR);
-
-  str = str_base = (DWGCHAR *)malloc (wsize);
-  if (!str)
-    {
-      LOG_ERROR ("Out of memory");
-      return NULL;
-    }
-  ptr = (uint16_t *)*src;
-  for (i = 0; i < length; i++)
-    {
-      *str++ = (DWGCHAR)le16toh (*ptr++);
-    }
-
-  *src += size;
-  *str = 0;
-
-  return str_base;
-}
+#define LOG_POS_DAT(dat)                                \
+  LOG_INSANE (" @%zu.%u", (dat)->byte, (dat)->bit)      \
+  LOG_TRACE ("\n")
 
 static r2007_section *
 read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
@@ -944,39 +901,36 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 {
   BITCODE_RC *data;
   r2007_section *sections = NULL, *last_section = NULL, *section = NULL;
-  BITCODE_RC *ptr, *ptr_end;
+  //BITCODE_RC *ptr, *ptr_end;
+  Bit_Chain page = { 0 };
   int i, j = 0;
 
-  data = read_system_page (dat, size_comp, size_uncomp, correction);
-  if (!data)
+  if (!read_system_page (&page, dat, size_comp, size_uncomp, correction))
     {
       LOG_ERROR ("Failed to read system page")
       return NULL;
     }
 
-  ptr = data;
-  ptr_end = data + size_uncomp;
-  LOG_TRACE ("\n=== System Section (Section Map) ===\n")
-
-  while (ptr < ptr_end)
+  LOG_TRACE ("\n=== System Section (Section Map) ===\n");
+  while (page.byte < (size_t)size_uncomp)
     {
       section = (r2007_section *)calloc (1, sizeof (r2007_section));
       if (!section)
         {
           LOG_ERROR ("Out of memory");
-          free (data);
+          bit_chain_free (&page);
           sections_destroy (sections); // the root
           return NULL;
         }
       LOG_TRACE ("\nSection [%d]:\n", j);
-      section->data_size = bfr_read_uint64 (ptr);
-      section->max_size = bfr_read_uint64 (ptr);
-      section->encrypted = bfr_read_uint64 (ptr);
-      section->hashcode = bfr_read_uint64 (ptr);
-      section->name_length = bfr_read_uint64 (ptr);
-      section->unknown = bfr_read_uint64 (ptr);
-      section->encoded = bfr_read_uint64 (ptr);
-      section->num_pages = bfr_read_uint64 (ptr);
+      section->data_size = bit_read_RLL (&page);
+      section->max_size = bit_read_RLL (&page);
+      section->encrypted = bit_read_RLL (&page);
+      section->hashcode = bit_read_RLL (&page);
+      section->name_length = bit_read_RLL (&page);
+      section->unknown = bit_read_RLL (&page);
+      section->encoded = bit_read_RLL (&page);
+      section->num_pages = bit_read_RLL (&page);
       LOG_TRACE ("  data size:     %" PRIu64 "\n", section->data_size)
       LOG_TRACE ("  max size:      %" PRIu64 "\n", section->max_size)
       LOG_TRACE ("  encryption:    %" PRIu64 "\n", section->encrypted)
@@ -984,7 +938,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_HANDLE ("  name length:   %" PRIu64 "\n", section->name_length)
       LOG_TRACE ("  unknown:       %" PRIu64 "\n", section->unknown)
       LOG_TRACE ("  encoding:      %" PRIu64 "\n", section->encoded)
-      LOG_TRACE ("  num pages:     %" PRIu64 "\n", section->num_pages);
+      LOG_TRACE ("  num pages:     %" PRIu64, section->num_pages);
+      LOG_POS_DAT (&page)
       // debugging sanity
 #if 1
       /* compressed */
@@ -994,7 +949,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
         {
           LOG_ERROR ("Invalid System Section");
           free (section);
-          free (data);
+          bit_chain_free (&page);
           sections_destroy (sections); // the root
           return NULL;
         }
@@ -1017,19 +972,23 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
         }
 
       j++;
-      if (ptr >= ptr_end)
+      if (page.byte >= page.size)
         break;
 
       // Section Name (wchar)
-      section->name = bfr_read_string (&ptr, section->name_length);
+      {
+        uint64_t sz = section->name_length;
+        section->name = (DWGCHAR *)calloc (1, sz + 2);
+        bit_read_fixed (&page, (BITCODE_RC*)section->name, sz);
+      }
 #ifdef HAVE_NATIVE_WCHAR2
-      LOG_TRACE ("  name:          " FORMAT_TU "\n\n",
-                 (BITCODE_TU)section->name)
+      LOG_TRACE ("  name:          " FORMAT_TU, (BITCODE_TU)section->name)
 #else
       LOG_TRACE ("  name:          ")
       LOG_TEXT_UNICODE (TRACE, section->name)
-      LOG_TRACE ("\n\n")
 #endif
+      LOG_POS_DAT (&page)
+      LOG_TRACE ("\n")
       section->type = dwg_section_wtype (section->name);
 
       if (section->num_pages <= 0)
@@ -1046,7 +1005,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       if (!section->pages)
         {
           LOG_ERROR ("Out of memory");
-          free (data);
+          bit_chain_free (&page);
           if (sections)
             sections_destroy (sections); // the root
           else
@@ -1061,7 +1020,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           if (!section->pages[i])
             {
               LOG_ERROR ("Out of memory");
-              free (data);
+              bit_chain_free (&page);
               if (sections)
                 sections_destroy (sections); // the root
               else
@@ -1069,27 +1028,27 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
               return NULL;
             }
 
-          if (ptr + 56 > ptr_end)
+          if (page.byte + 56 > page.size)
             {
-              LOG_ERROR ("Section[%d]->pages[%d] overflow (%p > %p)", j, i,
-                         ptr + 56, ptr_end);
+              LOG_ERROR ("Section[%d]->pages[%d] overflow (%zu > %zu)", j, i,
+                         page.byte + 56, page.size);
               free (section->pages[i]);
               section->num_pages = i; // skip this last section
               break;
             }
 
-          section->pages[i]->offset = bfr_read_uint64 (ptr);
-          section->pages[i]->size = bfr_read_uint64 (ptr);
-          section->pages[i]->id = bfr_read_int64 (ptr);
-          section->pages[i]->uncomp_size = bfr_read_uint64 (ptr);
-          section->pages[i]->comp_size = bfr_read_uint64 (ptr);
-          section->pages[i]->checksum = bfr_read_uint64 (ptr);
-          section->pages[i]->crc = bfr_read_uint64 (ptr);
+          section->pages[i]->offset = bit_read_RLL (&page);
+          section->pages[i]->size = bit_read_RLL (&page);
+          section->pages[i]->id = (int64_t)bit_read_RLL (&page);
+          section->pages[i]->uncomp_size = bit_read_RLL (&page);
+          section->pages[i]->comp_size = bit_read_RLL (&page);
+          section->pages[i]->checksum = bit_read_RLL (&page);
+          section->pages[i]->crc = bit_read_RLL (&page);
 
           LOG_TRACE (" Page[%d]: ", i)
           LOG_TRACE (" offset: 0x%07" PRIx64, section->pages[i]->offset);
           LOG_TRACE (" size: %5" PRIu64, section->pages[i]->size);
-          LOG_TRACE (" id: %4" PRIu64, section->pages[i]->id);
+          LOG_TRACE (" id: %4" PRId64, section->pages[i]->id);
           LOG_TRACE (" uncomp_size: %5" PRIu64 "\n",
                      section->pages[i]->uncomp_size);
           LOG_HANDLE (" comp_size: %5" PRIu64, section->pages[i]->comp_size);
@@ -1101,7 +1060,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
               || section->pages[i]->comp_size >= DBG_MAX_SIZE)
             {
               LOG_ERROR ("Invalid section->pages[%d] size", i);
-              free (data);
+              bit_chain_free (&page);
               free (section->pages[i]);
               section->num_pages = i; // skip this last section
               return sections;
@@ -1112,7 +1071,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
         }
     }
 
-  free (data);
+  bit_chain_free (&page);
   return sections;
 }
 
@@ -1120,51 +1079,42 @@ static r2007_page *
 read_pages_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
                 int64_t correction)
 {
-  BITCODE_RC *data, *ptr, *ptr_end;
   r2007_page *pages = NULL, *last_page = NULL, *page;
   int64_t offset = 0x480; // dat->byte;
+  Bit_Chain sdat = { 0 };
   // int64_t index;
 
-  data = read_system_page (dat, size_comp, size_uncomp, correction);
-  if (!data)
+  if (!read_system_page (&sdat, dat, size_comp, size_uncomp, correction))
     {
       LOG_ERROR ("Failed to read system page")
       return NULL;
     }
-
-  ptr = data;
-  ptr_end = data + size_uncomp;
-
   LOG_TRACE ("\n=== System Section (Pages Map) ===\n")
-
-  while (ptr < ptr_end)
+  while (sdat.byte < (size_t)size_uncomp)
     {
       page = (r2007_page *)malloc (sizeof (r2007_page));
       if (page == NULL)
         {
           LOG_ERROR ("Out of memory")
-          free (data);
+          bit_chain_free (&sdat);
           pages_destroy (pages);
           return NULL;
         }
-      if (ptr + 16 > ptr_end)
+      if (sdat.byte + 16 > sdat.size)
         {
           LOG_ERROR ("Page out of bounds")
-          free (data);
+          bit_chain_free (&sdat);
           pages_destroy (pages);
           return NULL;
         }
-
-      page->size = bfr_read_uint64 (ptr);
-      page->id = bfr_read_int64 (ptr);
+      page->size = bit_read_RLL (&sdat);
+      page->id = (int64_t)bit_read_RLL (&sdat);
       page->offset = offset;
       offset += page->size;
 
       // index = page->id > 0 ? page->id : -page->id;
-
       LOG_TRACE ("Page [%3" PRId64 "]: ", page->id)
       LOG_TRACE ("size: %6" PRIu64 " ", page->size)
-      LOG_TRACE ("id: 0x%04" PRIx64 " ", page->id)
       LOG_TRACE ("offset: 0x%" PRIx64 " \n", page->offset)
 
       page->next = NULL;
@@ -1177,7 +1127,7 @@ read_pages_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           last_page = page;
         }
     }
-  free (data);
+  bit_chain_free (&sdat);
   return pages;
 }
 
