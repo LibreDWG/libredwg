@@ -181,7 +181,7 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      _obj->nam = (BITCODE_TU)json_wstring (dat, tokens);                     \
+      _obj->nam = json_wstring (dat, tokens);                                 \
     else                                                                      \
       {                                                                       \
         _obj->nam = NULL;                                                     \
