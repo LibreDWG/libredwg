@@ -4100,3 +4100,11 @@ in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
 #  endif
 }
 
+bool
+bit_TF_contains_high (char *s, size_t len)
+{
+  for (size_t i = 0; i < len; i++)
+    if ((unsigned char)s[i] > 0x7f)
+      return true;
+  return false;
+}

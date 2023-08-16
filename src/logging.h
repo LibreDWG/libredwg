@@ -110,7 +110,7 @@
     LOG_TRACE ("\n")
 #endif
 #define LOG_TRACE_TV(fmt, str, dxf)                                           \
-  if (dwg_codepage_isasian (dat->codepage))                                   \
+  if (dwg_codepage_isasian ((Dwg_Codepage)dat->codepage))                     \
     {                                                                         \
       char *nstr = bit_TV_to_utf8 (str, dat->codepage);                       \
       LOG_TRACE (fmt, nstr, dxf)                                              \
@@ -122,8 +122,9 @@
       LOG_TRACE (fmt, str, dxf)                                               \
     }                                                                         \
   LOG_POS                                                                     \
-  if (str && strlen (str) && dat->codepage != CP_ANSI_1252 &&                 \
-      !(dat->codepage < CP_ISO_8859_1))                                       \
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE && str                              \
+      && dat->codepage != CP_ANSI_1252 && !(dat->codepage < CP_ISO_8859_1)    \
+      && strlen (str) && bit_TF_contains_high (str, strlen (str)))            \
     {                                                                         \
       LOG_INSANE_TF (str, strlen (str));                                      \
     }

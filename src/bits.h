@@ -344,4 +344,8 @@ void bit_copy_chain (Bit_Chain *restrict orig_dat,
 size_t in_hex2bin (unsigned char *restrict dest, char *restrict src,
                    size_t destlen) __nonnull_all;
 
+// if there's a high char (> 0x7f)
+bool
+bit_TF_contains_high (char *s, size_t len);
+
 #endif // BITS_H
