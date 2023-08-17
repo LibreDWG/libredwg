@@ -1396,21 +1396,7 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   if (dat->version <= R_13b1)
     {
       bit_write_RC (dat, handle->size);
-      if (handle->size == 1)
-        bit_write_RC (dat, handle->value);
-      else if (handle->size == 2)
-        bit_write_RS_BE (dat, handle->value);
-      else if (handle->size == 4)
-        bit_write_RL_BE (dat, handle->value);
-      else if (handle->size == 8)
-        bit_write_RLL_BE (dat, handle->value);
-      else
-        {
-          BITCODE_RC *restrict str;
-          str = (BITCODE_RC *)&(handle->value);
-          for (i = handle->size - 1; i >= 0; i--)
-            bit_write_RC (dat, str[i]);
-        }
+      bit_H_to_dat (dat, handle);
       return;
     }
   if (!handle)
