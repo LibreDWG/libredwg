@@ -423,6 +423,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             NEW_OBJECT;
             error |= dwg_decode_LTYPE (dat, obj);
             ADD_CTRL_ENTRY;
+            if (strEQc (tbl->name, "CONTINUOUS"))
+              dwg->header_vars.LTYPE_CONTINUOUS = _ctrl->entries[i];
             CHK_ENDPOS;
           }
       }
