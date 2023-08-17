@@ -480,7 +480,13 @@ bit_write_RL_BE (Bit_Chain *dat, BITCODE_RL value)
 BITCODE_RLL
 bit_read_RLL (Bit_Chain *dat)
 {
-  if (!dat->bit && !(dat->byte % 8))
+  if (!dat->bit &&
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+      !((intptr_t)&dat->chain[dat->byte] % 8)
+#else
+      !(dat->byte % 8)
+#endif
+      )
     {
       BITCODE_RLL v;
       CHK_OVERFLOW_PLUS (8, __FUNCTION__, 0)
@@ -504,7 +510,13 @@ bit_read_RLL (Bit_Chain *dat)
 BITCODE_RLL
 bit_read_RLL_BE (Bit_Chain *dat)
 {
-  if (!dat->bit && !(dat->byte % 8))
+  if (!dat->bit &&
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+      !((intptr_t)&dat->chain[dat->byte] % 8)
+#else
+      !(dat->byte % 8)
+#endif
+      )
     {
       BITCODE_RLL v;
       CHK_OVERFLOW_PLUS (8, __FUNCTION__, 0)
@@ -553,7 +565,13 @@ bit_read_RD (Bit_Chain *dat)
     double d;
   } u;
   CHK_OVERFLOW_PLUS (8, __FUNCTION__, bit_nan ())
-  if (!dat->bit && !(dat->byte % 8))
+  if (!dat->bit &&
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+      !((intptr_t)&dat->chain[dat->byte] % 8)
+#else
+      !(dat->byte % 8)
+#endif
+      )
     {
       u.u = le64toh (*(uint64_t *)&dat->chain[dat->byte]);
       dat->byte += 8;
