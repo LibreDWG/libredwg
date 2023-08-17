@@ -914,16 +914,27 @@ handles_section:
   if (bit_search_sentinel (dat,
                            dwg_sentinel (DWG_SENTINEL_2NDHEADER_BEGIN)))
     {
-      //BITCODE_RL i;
-      //BITCODE_RC sig, sig2;
-      //BITCODE_BL vcount;
-      //size_t pvzadr;
       struct _dwg_secondheader *_obj = &dwg->secondheader;
-      //obj = NULL;
+      const char *const names[] = {
+        "HANDSEED",
+        "BLOCK_CONTROL_OBJECT",
+        "LAYER_CONTROL_OBJECT",
+        "STYLE_CONTROL_OBJECT",
+        "LTYPE_CONTROL_OBJECT",
+        "VIEW_CONTROL_OBJECT",
+        "UCS_CONTROL_OBJECT",
+        "VPORT_CONTROL_OBJECT",
+        "APPID_CONTROL_OBJECT",
+        "DIMSTYLE_CONTROL_OBJECT",
+        "VX_CONTROL_OBJECT",
+        "DICTIONARY_NAMED_OBJECT",
+        "DICTIONARY_ACAD_MLINESTYLE",
+        "DICTIONARY_ACAD_GROUP",
+      };
+      for (int i = 0; i <= 13; i++)
+        _obj->handles[i].name = (char *)names[i];
 
       LOG_INFO ("\n=======> Second Header 3 (start): %8zu\n", dat->byte - 16)
-      //pvzadr = dat->byte;
-      //LOG_TRACE ("pvzadr: %zx\n", pvzadr)
 
       secondheader_private (dat, dwg);
 
@@ -947,101 +958,6 @@ handles_section:
               = dwg->secondheader.size;
         }
      
-#if 0
-      FIELD_RL (size, 0);
-      FIELD_BLx (address, 0);
-
-      // AC1012, AC1013, AC1014 or AC1015. This is a char[11], zero padded.
-      // with \n at 12.
-      bit_read_fixed (dat, _obj->version, 12);
-      LOG_TRACE ("version: %s [TFF 12]\n", _obj->version)
-      FIELD_VECTOR_INL (null_b, B, 4, 0)
-      // DEBUG_HERE;
-      // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
-      // r14:      7d f4 78 01
-      // r2000:    14 64 78 01
-      FIELD_RC (unknown_10, 0); // 0x10 or 0x18
-      if (dat->from_version < R_2000 && FIELD_VALUE (unknown_10) == 0x18)
-        {
-          FIELD_VECTOR_INL (unknown_rc4, RC, 2, 0)
-        }
-      else
-        {
-          FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
-        }
-      UNTIL (R_2000)
-      {
-        FIELD_RC (num_sections, 0); // r14: 5, r2000: 6
-        for (i = 0; i < MIN (6U, FIELD_VALUE (num_sections)); i++)
-          {
-            // address+sizes of sections 0-2 is correct, 3+4 is empty
-            unsigned oldloglevel = loglevel; loglevel = 0;
-            SUB_FIELD_RC (section[i], nr, 0);
-            SUB_FIELD_BLx (section[i], address, 0);
-            SUB_FIELD_BL (section[i], size, 0);
-            loglevel = oldloglevel;
-            // Dwg_Section_Type_r13
-            LOG_TRACE ("section %d: %s\n", i, dwg_section_name (dwg, (unsigned)i));
-            LOG_TRACE ("  nr:      " FORMAT_RC " [RC]\n", _obj->section[i].nr)
-            LOG_TRACE ("  address: " FORMAT_BLx " [BLx]\n",
-                       _obj->section[i].address)
-            LOG_TRACE ("  size:    " FORMAT_BL " [BL]\n",
-                       _obj->section[i].size)
-          }
-        if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
-          {
-            LOG_HANDLE ("1st header was:\n");
-            for (i = 0; i < dwg->header.num_sections; i++)
-              {
-                LOG_HANDLE ("  section[" FORMAT_RL "] " FORMAT_RLd " " FORMAT_RLL
-                            " " FORMAT_RL " \n",
-                            i, dwg->header.section[i].number,
-                            dwg->header.section[i].address,
-                            dwg->header.section[i].size);
-              }
-            LOG_HANDLE ("start 3: %zu\n", pvzadr - 16);
-          }
-
-        FIELD_BS (num_handlers, 0); // always 14
-        if (FIELD_VALUE (num_handlers) > 16)
-          {
-            LOG_ERROR ("Second header num_handlers > 16: %d\n",
-                       FIELD_VALUE (num_handlers));
-            FIELD_VALUE (num_handlers) = 14;
-          }
-        for (i = 0; i < FIELD_VALUE (num_handlers); i++)
-          {
-            BITCODE_BL num_data;
-            unsigned oldloglevel = loglevel; loglevel = 0;
-            SUB_FIELD_RC (handlers[i], num_data, 0);
-            num_data = (BITCODE_BL)FIELD_VALUE (handlers[i].num_data);
-            SUB_FIELD_RC (handlers[i], nr, 0);
-            SUB_FIELD_VECTOR (handlers[i], data, RC, num_data, 0);
-            loglevel = oldloglevel;
-            LOG_TRACE ("handlers[%d].num_data: %u [RC]\n", i,
-                       FIELD_VALUE (handlers[i].num_data))
-            LOG_TRACE ("handlers[%d].nr:       %u [RC]\n", i,
-                       FIELD_VALUE (handlers[i].nr))
-            LOG_TRACE ("handlers[%d].data:    ", i)
-            for (j = 0; j < num_data; j++)
-              {
-                LOG_TRACE ("0x%02x%s", FIELD_VALUE (handlers[i].data[j]),
-                           j == num_data - 1 ? " " : ", ")
-              }
-            LOG_TRACE ("[RC*]\n")
-          }
-
-        // TODO: CRC check
-        crc = bit_read_CRC (dat);
-        LOG_TRACE ("crc: %04X\n", crc);
-
-        VERSION (R_14)
-        {
-          FIELD_RL (junk_r14_1, 0);
-          FIELD_RL (junk_r14_2, 0);
-        }
-      }
-#endif
       if (bit_search_sentinel (dat,
                                dwg_sentinel (DWG_SENTINEL_2NDHEADER_END)))
         LOG_INFO ("         Second Header 3 (end)  : %8u\n",
