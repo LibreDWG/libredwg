@@ -175,13 +175,11 @@ int obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
 size_t obj_stream_position (Bit_Chain *restrict dat,
                             Bit_Chain *restrict hdl_dat,
                             Bit_Chain *restrict str_dat);
-int decompress_r2007 (BITCODE_RC *restrict dst, unsigned dst_size,
-                      BITCODE_RC *restrict src, unsigned src_size,
-                      const BITCODE_RC *restrict dst_end);
 int read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
                        r2007_section *restrict sections_map,
                        r2007_page *restrict pages_map,
                        Dwg_Section_Type sec_type);
+int decompress_r2007 (Bit_Chain *in, Bit_Chain *out);
 
 void read_r2007_init (Dwg_Data *restrict dwg);
 int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
