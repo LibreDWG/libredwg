@@ -238,13 +238,19 @@ decompress_r2007_tests (void)
     const size_t src_size = block_count * 251; /* 2008 */
     BITCODE_RC *src = (BITCODE_RC *)calloc (block_count, 251);
     BITCODE_RC *dst = (BITCODE_RC *)calloc (1, 1 << 20);
+    Bit_Chain in_dat = { 0 }, out_dat = { 0 };
     int r;
 
     memset (src, 0xff, src_size);
     src[0] = 0x0f; /* read_literal_length: opcode+8==0x17, then 0xff-loop */
 
-    r = decompress_r2007 (dst, 1 << 20, src, (unsigned)src_size,
-                          dst + (1 << 20));
+    in_dat.chain = src;
+    in_dat.size = src_size;
+    in_dat.byte = 0;
+    out_dat.chain = dst;
+    out_dat.size = 1 << 20;
+    out_dat.byte = 0;
+    r = decompress_r2007 (&in_dat, &out_dat);
     if (r == (int)DWG_ERR_INTERNALERROR)
       pass ();
     else
@@ -261,11 +267,18 @@ decompress_r2007_tests (void)
         = { 0x02, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 0x05 };
     BITCODE_RC *src = (BITCODE_RC *)calloc (1, sizeof stream);
     BITCODE_RC *dst = (BITCODE_RC *)calloc (1, 4096);
+    Bit_Chain in_dat = { 0 }, out_dat = { 0 };
     int r;
 
     memcpy (src, stream, sizeof stream);
 
-    r = decompress_r2007 (dst, 4096, src, (unsigned)sizeof stream, dst + 4096);
+    in_dat.chain = src;
+    in_dat.size = (unsigned)sizeof stream;
+    in_dat.byte = 0;
+    out_dat.chain = dst;
+    out_dat.size = 4096;
+    out_dat.byte = 0;
+    r = decompress_r2007 (&in_dat, &out_dat);
     if (r == (int)DWG_ERR_INTERNALERROR)
       ok ("decompress_r2007 (A read_instructions, B read_literal_length OOB)");
     else
