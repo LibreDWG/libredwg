@@ -21972,7 +21972,7 @@ dwg_ref_get_object (const dwg_object_ref *restrict ref, int *restrict error)
           if (!ref->obj) {
           */
           *error = 2;
-          LOG_ERROR ("%s: empty ref", __FUNCTION__)
+          //LOG_ERROR ("%s: empty ref", __FUNCTION__)
           //}
         }
       *error = 0;

@@ -56,7 +56,7 @@ int test_subdirs (const char *dirname, int cov);
 char *handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl);
 
 /// iterate over objects of a block
-void output_BLOCK_HEADER (dwg_object_ref *ref);
+void output_BLOCK_HEADER (const Dwg_Data *restrict dwg, dwg_object_ref *ref);
 
 /// Check the dwg type and calls output_process
 void output_object (dwg_object *obj);
@@ -980,7 +980,7 @@ test_code (const char *dir, const char *filename, int cov)
 
 /// Iterate over the objects in a block
 void
-output_BLOCK_HEADER (dwg_object_ref *ref)
+output_BLOCK_HEADER (const Dwg_Data *restrict dwg, dwg_object_ref *ref)
 {
   dwg_object *hdr, *obj;
   int error;
@@ -990,7 +990,10 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
     return;
   hdr = dwg_ref_get_object (ref, &error);
   if (!hdr)
-    return;
+    {
+      hdr = dwg_resolve_handle (dwg, ref->absolute_ref);
+      return;
+    }
 
   obj = get_first_owned_entity (hdr);
   while (obj)
@@ -1041,13 +1044,13 @@ output_test (dwg_data *dwg)
   if (!error)
     {
       LOG_INFO ("mspace\n");
-      output_BLOCK_HEADER (ref);
+      output_BLOCK_HEADER (dwg, ref);
     }
   ref = dwg_obj_block_control_get_paper_space (_ctrl, &error);
   if (!error)
     {
       LOG_INFO ("pspace\n");
-      output_BLOCK_HEADER (ref);
+      output_BLOCK_HEADER (dwg, ref);
     }
 #endif
 
@@ -1096,7 +1099,7 @@ output_test (dwg_data *dwg)
       for (j = 0; j < num_hdr_objs; j++)
         {
           if (hdr_refs[j])
-            output_BLOCK_HEADER (hdr_refs[j]);
+            output_BLOCK_HEADER (dwg, hdr_refs[j]);
         }
       free (hdr_refs);
     }
