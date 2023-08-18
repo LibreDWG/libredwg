@@ -1015,7 +1015,7 @@ DWG_ENTITY (MINSERT)
 
 DWG_ENTITY_END
 
-/* (none/21) R2.4-R11 only */
+/* (none/21) R2.4-R10 only */
 DWG_ENTITY (_3DLINE)
   VERSIONS (R_2_4, R_9c1) {
     if (R11OPTS (1)) {
@@ -1029,7 +1029,7 @@ DWG_ENTITY (_3DLINE)
       FIELD_2RD (end, 11);
     }
   }
-  VERSIONS (R_10, R_11) {
+  SINCE (R_10) {
     FIELD_3RD (start, 10)
     FIELD_3RD (end, 11)
 

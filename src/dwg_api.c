@@ -23939,8 +23939,9 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->end.y = end_pt->y;
   _obj->end.z = end_pt->z;
 
-  if (dwg->header.version < R_10)
+  if (dwg->header.version <= R_11)
     obj->type = DWG_TYPE_LINE_r11;
+  // In case of 3d line we are changing type to 3DLINE entity
   if (dwg->header.version >= R_2_4 && dwg->header.version < R_10)
     {
       if (_obj->start.z != 0.0)
@@ -23956,19 +23957,11 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           obj->tio.entity->opts_r11 |= 2;
         }
     }
-  if (dwg->header.version >= R_10 && dwg->header.version <= R_12)
+  // There is 3DLINE entity in R_10, but duplicit with LINE (without HAS_ELEVATION)
+  if (dwg->header.version == R_10)
     {
-      if (_obj->start.z != 0.0 || _obj->end.z != 0.0)
-        {
-          obj->type = DWG_TYPE_3DLINE_r11;
-          obj->fixedtype = DWG_TYPE__3DLINE;
-        }
-      else
-        {
-          obj->type = DWG_TYPE_LINE_r11;
-          if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
-            obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
-        }
+      if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
