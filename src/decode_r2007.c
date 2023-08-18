@@ -141,9 +141,9 @@ static uint32_t read_literal_length (BITCODE_RC *restrict *restrict src,
                                      unsigned char opcode);
 static void copy_compressed_bytes (BITCODE_RC *restrict dst,
                                    BITCODE_RC *restrict src, int length);
-static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
-                              int data_size,
-                              const unsigned src_size) ATTRIBUTE_MALLOC;
+//static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
+//                             int data_size,
+//                              const unsigned src_size) ATTRIBUTE_MALLOC;
 static int decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
                              BITCODE_RC *restrict src, const unsigned src_size,
                              const BITCODE_RC *restrict dst_end);
@@ -555,42 +555,43 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
 
 // reed-solomon (255, 239) encoding with factor 3
 // TODO: for now disabled, until we get proper data
-ATTRIBUTE_MALLOC
-static BITCODE_RC *
-decode_rs (const BITCODE_RC *src, int block_count, int data_size,
-           const unsigned src_size)
+static bool
+decode_rs (Bit_Chain *in, Bit_Chain *out,
+           int block_count, int data_size)
 {
   int i, j;
-  const BITCODE_RC *src_base = src;
-  BITCODE_RC *dst_base, *dst;
+  size_t in_base = in->byte;
+  //const BITCODE_RC *src_base = &in->chain[in->byte];
+  assert (!in->bit);
+  //BITCODE_RC *dst_base, *dst;
   // TODO: round up data_size from 239 to 255
 
-  if ((size_t)block_count * data_size > src_size)
+  if ((size_t)block_count * data_size > in->size)
     {
-      LOG_ERROR ("decode_rs src overflow: %ld > %u",
-                 (long)block_count * data_size, src_size)
-      return NULL;
+      LOG_ERROR ("decode_rs src overflow: %ld > %zu",
+                 (long)block_count * data_size, in->size)
+      return false;
     }
-  dst_base = dst = (BITCODE_RC *)calloc (block_count, data_size);
-  if (!dst)
+  bit_chain_init_dat (out, block_count * data_size, in);
+  //dst_base = dst = (BITCODE_RC *)calloc (block_count, data_size);
+  if (!out->chain)
     {
       LOG_ERROR ("Out of memory")
-      return NULL;
+      return false;
     }
 
   for (i = 0; i < block_count; ++i)
     {
       for (j = 0; j < data_size; ++j)
         {
-          *dst++ = *src;
-          src += block_count;
+          out->chain[out->byte++] = in->chain[in->byte];
+          in->byte += block_count;
         }
-
       // rs_decode_block((unsigned char*)(dst_base + 239*i), 1);
-      src = ++src_base;
+      in->byte = ++in_base;
     }
 
-  return dst_base;
+  return true;
 }
 
 static bool
@@ -604,8 +605,8 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
   int64_t page_size;
   long pedata_size;
 
-  BITCODE_RC *rsdata;   // RS encoded data
-  BITCODE_RC *pedata;   // Pre RS encoded data
+  BITCODE_RC *rsdata;          // RS encoded data
+  Bit_Chain pedat = { 0 };
   BITCODE_RC *data_end; // The data RS unencoded and uncompressed
 
   if (repeat_count < 0 || repeat_count > DBG_MAX_COUNT
@@ -645,7 +646,6 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
   assert ((uint64_t)repeat_count < DBG_MAX_COUNT);
   assert ((uint64_t)page_size < DBG_MAX_COUNT);
   bit_chain_init_dat (out, size_uncomp + page_size, dat);
-  // data = (BITCODE_RC *)calloc (size_uncomp + page_size, 1);
   LOG_HANDLE ("Alloc system page of size %" PRId64 "\n",
               size_uncomp + page_size)
   assert (out->size == (size_t)(size_uncomp + page_size));
@@ -656,31 +656,30 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
     }
   data_end = &out->chain[size_uncomp + page_size];
 
-  rsdata = &out->chain[size_uncomp];
-  bit_read_fixed (dat, rsdata, page_size);
   pedata_size = block_count * 239;
-  pedata = decode_rs (rsdata, block_count, 239, page_size);
-  if (!pedata)
+  if (!decode_rs (dat, &pedat, block_count, 239))
     {
       bit_chain_free (out);
+      bit_chain_free (&pedat);
       return false;
     }
-
+  pedat.byte = 0;
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (out->chain, size_uncomp, pedata,
+    error = decompress_r2007 (out->chain, size_uncomp, pedat.chain,
                               MIN (pedata_size, size_comp), data_end);
   else
     {
       if (out->byte + size_uncomp <= out->size)
-        memcpy (out->chain, pedata, size_uncomp);
+        memcpy (out->chain, pedat.chain, size_uncomp);
       else
         {
-          LOG_ERROR ("data overflow")
+          LOG_ERROR ("data overflow");
+          bit_chain_free (&pedat);
           error = DWG_ERR_CRITICAL;
         }
     }
-
-  free (pedata);
+  out->byte += size_uncomp;
+  bit_chain_free (&pedat);
   if (error >= DWG_ERR_CRITICAL)
     {
       bit_chain_free (out);
@@ -695,12 +694,9 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                 BITCODE_RC *restrict decomp_end)
 {
   int error = 0;
-
   int64_t pesize;      // Pre RS encoded size
   int64_t block_count; // Number of RS encoded blocks
-
-  BITCODE_RC *rsdata; // RS encoded data
-  BITCODE_RC *pedata; // Pre RS encoded data
+  Bit_Chain pedat = { 0 };
   long pedata_size;
 
   // Round to a multiple of 8
@@ -708,38 +704,32 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   block_count = (pesize + 0xFB - 1) / 0xFB;
   pedata_size = block_count * 0xFB;
 
-  rsdata = (BITCODE_RC *)calloc (1, page_size);
-  if (rsdata == NULL)
+  bit_chain_init_dat (&pedat, page_size, dat);
+  if (pedat.chain == NULL)
     {
       LOG_ERROR ("Out of memory")
       return DWG_ERR_OUTOFMEM;
     }
-  bit_read_fixed (dat, rsdata, page_size);
-  pedata = decode_rs (rsdata, block_count, 0xFB, page_size);
-  if (!pedata)
+  if (!decode_rs (dat, &pedat, block_count, 0xFB))
     {
-      free (rsdata);
+      bit_chain_free (&pedat);
       return DWG_ERR_OUTOFMEM;
     }
-
+  pedat.byte = 0;
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (decomp, size_uncomp, pedata,
+    error = decompress_r2007 (decomp, size_uncomp, pedat.chain,
                               MIN (pedata_size, size_comp), decomp_end);
   else
     {
       if (decomp + size_uncomp <= decomp_end)
-        memcpy (decomp, pedata, size_uncomp);
+        memcpy (decomp, pedat.chain, size_uncomp);
       else
         {
-          LOG_ERROR ("decomp overflow")
-          free (pedata);
-          return DWG_ERR_INTERNALERROR;
+          LOG_ERROR ("decomp overflow");
+          error = DWG_ERR_INTERNALERROR;
         }
     }
-
-  free (pedata);
-  free (rsdata);
-
+  bit_chain_free (&pedat);
   return error;
 }
 
@@ -1203,29 +1193,27 @@ static int
 read_file_header (Bit_Chain *restrict dat,
                   Dwg_R2007_Header *restrict file_header)
 {
-  BITCODE_RC data[0x3d8]; // 0x400 - 5 long
-  BITCODE_RC *pedata;
-  uint64_t seqence_crc;
-  uint64_t seqence_key;
-  uint64_t compr_crc;
-  int32_t compr_len, len2;
+  Bit_Chain pedat = { 0 };
+  BITCODE_RLL seqence_crc, seqence_key, compr_crc;
+  BITCODE_RL compr_len, len2;
   int error = 0;
-  const int pedata_size = 3 * 239; // size of pedata
+  const unsigned pedata_size = 3 * 239; // size of pedata
 
   dat->byte = 0x80;
-  LOG_TRACE ("\n=== r2007 File header ===\n")
+  LOG_TRACE ("\n=== File header ===\n")
   memset (file_header, 0, sizeof (Dwg_R2007_Header));
-  memset (data, 0, 0x3d8);
-  bit_read_fixed (dat, data, 0x3d8);
-  pedata = decode_rs (data, 3, 239, 0x3d8);
-  if (!pedata)
-    return DWG_ERR_OUTOFMEM;
-
-  seqence_crc = le64toh (*((uint64_t *)pedata));
-  seqence_key = le64toh (*((uint64_t *)&pedata[8]));
-  compr_crc = le64toh (*((uint64_t *)&pedata[16]));
-  compr_len = le32toh (*((int32_t *)&pedata[24]));
-  len2 = le32toh (*((int32_t *)&pedata[28]));
+  bit_chain_init_dat (&pedat, 0x3d8, dat);
+  if (!decode_rs (dat, &pedat, 3, 239))
+    {
+      bit_chain_free (&pedat);
+      return DWG_ERR_OUTOFMEM;
+    }
+  pedat.byte = 0;
+  seqence_crc = bit_read_RLL (&pedat);
+  seqence_key = bit_read_RLL (&pedat);
+  compr_crc = bit_read_RLL (&pedat);
+  compr_len = bit_read_RL (&pedat);
+  len2 = bit_read_RL (&pedat);
   LOG_TRACE ("seqence_crc64: %016" PRIX64 "\n", seqence_crc);
   LOG_TRACE ("seqence_key:   %016" PRIX64 "\n", seqence_key);
   LOG_TRACE ("compr_crc64:   %016" PRIX64 "\n", compr_crc);
@@ -1233,11 +1221,11 @@ read_file_header (Bit_Chain *restrict dat,
   LOG_TRACE ("len2:          %d\n", (int)len2);      // 0 when compressed
 
   if (compr_len > 0)
-    error = decompress_r2007 ((BITCODE_RC *)file_header,
-                              sizeof (Dwg_R2007_Header), &pedata[32],
-                              MIN (compr_len, pedata_size - 32), NULL);
+    error = decompress_r2007 (
+        (BITCODE_RC *)file_header, sizeof (Dwg_R2007_Header),
+        pedat.chain, MIN (compr_len, pedata_size - 32), NULL);
   else
-    memcpy (file_header, &pedata[32], sizeof (Dwg_R2007_Header));
+    memcpy (file_header, pedat.chain, sizeof (Dwg_R2007_Header));
 
 #ifdef WORDS_BIGENDIAN
   {
@@ -1282,7 +1270,7 @@ read_file_header (Bit_Chain *restrict dat,
       VALID_COUNT (file_header->num_sections);
     }
 
-  free (pedata);
+  bit_chain_free (&pedat);
   return error;
 }
 
