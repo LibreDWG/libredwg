@@ -3673,7 +3673,7 @@ bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 
   if (dat->size < 16) // too short
     return 0;
-  for (i = 0; i < dat->size - 16; i++)
+  for (i = 0; i <= dat->size - 16; i++)
     {
       for (j = 0; j < 16; j++)
         {
