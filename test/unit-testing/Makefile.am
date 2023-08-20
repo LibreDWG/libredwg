@@ -29,6 +29,8 @@ add_test_LDADD = $(LDADD) \
 bits_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
 	$(top_builddir)/src/bits.lo
+common_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/codepages.lo
 decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/dwg.lo \
 	$(top_builddir)/src/common.lo \

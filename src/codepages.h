@@ -91,8 +91,6 @@ Dwg_Codepage dwg_codepage_int (const char *s); // dxfstr
 // returns the matching unicode codepoint,
 // or 0 if the codepage does not contain the character
 wchar_t dwg_codepage_uc (Dwg_Codepage cp, unsigned char c);
-// for wide asian chars
-wchar_t dwg_codepage_uwc (Dwg_Codepage cp, uint16_t c);
 
 // returns the matching codepoint,
 // or 0 if the codepage does not contain the wide character
@@ -100,8 +98,19 @@ unsigned char dwg_codepage_c (Dwg_Codepage cp, wchar_t wc);
 // for wide asian chars
 uint16_t dwg_codepage_wc (Dwg_Codepage cp, wchar_t wc);
 
-// these old codepages use 2-byte chars for some 0x8* bytes, all others only one byte.
-bool dwg_codepage_isasian (const Dwg_Codepage cp);
-bool dwg_codepage_is_twobyte (const Dwg_Codepage cp, const unsigned char c);
+#ifndef COMMON_TEST_C
+// for wide asian chars
+EXPORT wchar_t dwg_codepage_uwc (Dwg_Codepage cp, uint16_t c);
+// these old codepages use 2-byte chars for some 0x8* bytes, all others only
+// one byte.
+EXPORT bool dwg_codepage_isasian (const Dwg_Codepage cp);
+EXPORT bool dwg_codepage_is_twobyte (const Dwg_Codepage cp,
+                                     const unsigned char c);
+#else
+extern wchar_t dwg_codepage_uwc (Dwg_Codepage cp, uint16_t c);
+extern bool dwg_codepage_isasian (const Dwg_Codepage cp);
+extern bool dwg_codepage_is_twobyte (const Dwg_Codepage cp,
+                                     const unsigned char c);
+#endif
 
 #endif

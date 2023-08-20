@@ -20,9 +20,10 @@
 
 #include "dwg.h"
 #include "common.h"
+#include "codepages.h"
 
 char *ATTRIBUTE_MALLOC htmlescape (const char *restrict src,
-                                   const int codepage);
+                                   const Dwg_Codepage codepage);
 char *ATTRIBUTE_MALLOC htmlwescape (BITCODE_TU wsrc);
 
 #endif

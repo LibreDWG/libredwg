@@ -3,7 +3,9 @@
 #include <stddef.h>
 #include <locale.h>
 #include "tests_common.h"
+#include "../../src/codepages.h"
 #include "../../src/common.c"
+#include "../../programs/escape.c"
 
 static void
 common_memmem_tests (void)
@@ -204,6 +206,46 @@ dwg_find_color_index_tests (void)
   test_rgb_case (0xab000007, 256);
 }
 
+static void
+escape_htmlescape_tests (void)
+{
+  char *s = htmlescape ("'test'&{}", CP_ISO_8859_1); // forces a realloc
+  if (strEQc (s, "&#39;test&#39;&amp;&#123;&#125;"))
+    pass ();
+  else
+    fail ("htmlescape => %s", s);
+  free (s);
+
+  // to multi-byte
+  s = htmlescape ("'%test'&{}", CP_CP864);
+  if (strEQc (s, "&#39;&#x66A;test&#39;&amp;&#123;&#125;"))
+    pass ();
+  else
+    fail ("htmlescape CP864 => %s", s);
+  free (s);
+
+  // from multi-byte: echo -n "시험" | iconv -f utf-8 -t cp949 | od -t x1
+  // to: echo -n "시험" | iconv -f utf-8 -t ucs-2 | od -t x2
+  s = htmlescape ("'\xbc\xc3\xc7\xe8", CP_CP949); // "시험"
+  if (strEQc (s, "&#39;&#xC14C;&#xD5D8;"))
+    pass ();
+  else
+    fail ("htmlescape CP949 => %s", s);
+  free (s);
+}
+
+static void
+escape_htmlwescape_tests (void)
+{
+  uint16_t tu[] = { 'T', 'e', 'i', 'g', 'h', 'a', 0x2122, 0 };
+  char *s = htmlwescape (tu);
+  if (strEQc (s, "Teigha&#x2122;"))
+    pass ();
+  else
+    fail ("htmlwescape => %s", s);
+  free (s);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -212,5 +254,7 @@ main (int argc, char const *argv[])
   common_versions_tests ();
   common_cvt_TIMEBLL_tests ();
   dwg_find_color_index_tests ();
+  escape_htmlescape_tests ();
+  escape_htmlwescape_tests ();
   return failed;
 }

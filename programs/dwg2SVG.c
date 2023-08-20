@@ -237,7 +237,7 @@ output_TEXT (Dwg_Object *obj)
   if (dwg->header.version >= R_2007)
     escaped = htmlwescape ((BITCODE_TU)text->text_value);
   else
-    escaped = htmlescape (text->text_value, (int)dwg->header.codepage);
+    escaped = htmlescape (text->text_value, dwg->header.codepage);
 
   if (style && o->fixedtype == DWG_TYPE_STYLE && style->font_file
       && *style->font_file

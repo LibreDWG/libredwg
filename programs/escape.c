@@ -24,7 +24,7 @@
 #include "escape.h"
 
 char *ATTRIBUTE_MALLOC
-htmlescape (const char *restrict src, const int cp)
+htmlescape (const char *restrict src, const Dwg_Codepage cp)
 {
   size_t len;
   char *dest, *d, *end;
@@ -46,7 +46,7 @@ htmlescape (const char *restrict src, const int cp)
             return NULL;
           dest = newdest;
           len += 10;
-          d += off;
+          d = dest + off;
           *d = 0;
           end = dest + len;
         }
@@ -85,17 +85,23 @@ htmlescape (const char *restrict src, const int cp)
           d += 6;
           break;
         default:
-          if (*s >= 127) // maybe encodings, no utf8 (see htmlwescape)
-            {
-              sprintf (d, "&#x%X;", *s); // 4 + 4
-              d += strlen (d);
-              *d = 0;
-            }
-          else if (*s >= 20)
-            {
-              *d++ = *s;
-              *d = 0;
-            }
+          {
+            uint16_t cc = *s;
+            wchar_t wc;
+            if (dwg_codepage_is_twobyte (cp, *s))
+              cc = cc << 8 | *++s;
+            wc = dwg_codepage_uwc (cp, cc);
+            if (wc > 127 || wc < 0x20)
+              {
+                sprintf (d, "&#x%X;", (unsigned)wc); // 4 + 4
+                d += strlen (d);
+              }
+            else
+              {
+                *d++ = *s;
+              }
+            *d = 0;
+          }
         }
       s++;
     }
@@ -128,7 +134,7 @@ htmlwescape (BITCODE_TU wstr)
             return NULL;
           dest = newdest;
           len += 16;
-          d += off;
+          d = dest + off;
           *d = 0;
         }
       switch (*wstr)
@@ -166,13 +172,13 @@ htmlwescape (BITCODE_TU wstr)
           d += 6;
           break;
         default:
-          if (*wstr >= 127) // utf8 encodings
+          if (*wstr >= 127 || *wstr < 20) // utf8 encodings
             {
               sprintf (d, "&#x%X;", *wstr);
               d += strlen (d);
               *d = 0;
             }
-          else if (*wstr >= 20)
+          else
             {
               *d++ = *wstr;
               *d = 0;

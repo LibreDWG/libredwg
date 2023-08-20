@@ -36,6 +36,7 @@ add_test(hash_test ${TARGET_SYSTEM_EMULATOR} hash_test${CMAKE_EXECUTABLE_SUFFIX}
 add_executable(common_test
   common_test.c
   ../../src/classes.c
+  ../../src/codepages.c
   tests_common.h)
 add_test(common_test ${TARGET_SYSTEM_EMULATOR} common_test${CMAKE_EXECUTABLE_SUFFIX})
 if(WIN32)
