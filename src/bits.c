@@ -1495,8 +1495,11 @@ bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
   LOG_TRACE ("crc: %04X [RSx]\n", read);
   if (calculated == read)
     {
-      LOG_HANDLE (" check_CRC %zu-%zu = %zu: %04X == %04X\n", start_address,
-                  dat->byte - 2, size, calculated, read)
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
+        LOG_HANDLE (" check_CRC %zu-%zu = %zu: %04X == %04X\n", start_address,
+                    dat->byte - 2, size, calculated, read)
+      else
+        LOG_TRACE (" check_CRC %zu: %04X == %04X\n", size, calculated, read)
       return 1;
     }
   else
