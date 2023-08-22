@@ -101,7 +101,7 @@ jobs:
       continue-on-error: true
   mips32-big-endian:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
     - uses: actions/checkout@v3
       with:
