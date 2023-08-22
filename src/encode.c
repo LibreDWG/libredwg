@@ -3326,11 +3326,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {                                                                         \
       _obj->handles[i].num_hdl = dwg->header_vars.NAM->handleref.size;        \
       free (_obj->handles[i].hdl);                                            \
-      _obj->handles[i].hdl = calloc (1, _obj->handles[i].num_hdl);            \
+      _obj->handles[i].hdl = (BITCODE_RC *)calloc (1, _obj->handles[i].num_hdl); \
     }                                                                         \
   {                                                                           \
     unsigned char chain[8];                                                   \
-    Bit_Chain hdat = { chain, 8, 0, 0, 0, 0, 0, NULL, 30 };                   \
+    Bit_Chain hdat = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 }; \
     bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                   \
     for (int k = 0; k < (int)_obj->handles[i].num_hdl; k++)                   \
       _obj->handles[i].hdl[k] = hdat.chain[k];                                \

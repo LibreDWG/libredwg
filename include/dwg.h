@@ -70,8 +70,9 @@
 
 #ifdef __cplusplus
 extern "C" {
-# undef restrict
-# define restrict __restrict
+# ifndef restrict
+#  define restrict __restrict
+# endif
 #endif
 
 #define BITCODE_DOUBLE double
