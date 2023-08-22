@@ -20,42 +20,53 @@ print "#include <stdint.h>\n\n";
 print "static const uint16_t cptbl_$in\[\] = {\n";
 
 my ($los, $his, $lod, $hid, @out, @exclow) = (0xffff, 0, 0xffff, 0);
-LINE:
-    while (<$F>) {
-        /^#/ and next;
-            if (/^(0x[0-9a-fA-F]+)\s+(0x[0-9a-fA-F]+)(.*)/) {
-                my $src = $1;
-                my $d = $2;
-                my $cmt = $3;
-                my $sn = hex($src);
-                my $dn = hex($d);
-                $cmt =~ s/\t#//;
-                if ($cmt) {
-                    $cmt = "\t// $cmt";
-                }
-                if ($sn <= 0x7f and $sn != $dn) {
-                    # exceptions
-                    if (($in eq 'johab' and $src eq '0x5C') or
-                        ($in eq 'cp932' and $src eq '0x5C') or
-                        ($in eq 'cp932' and $src eq '0x7E') or
-                        ($in eq 'cp864' and $src eq '0x25'))
-                    {
-                        warn "$in: $src != $d\n";
-                        push @out, "  [$src] = $d,$cmt\n";
-                        push @exclow, "  [$src] = $d,$cmt\n";
-                    } else {
-                        die "$in: $src != $d";
-                    }
-                }
-                $los = $sn if $sn < $los;
-                $his = $sn if $sn > $his ;
-                $lod = $dn if $dn < $lod;
-                $hid = $dn if $dn > $hid;
-                push @out, "  [$src] = $d,$cmt\n" if $sn > 0x7f;
-        }
+my $lastsrc = 0;
+sub add_line {
+    my ($arr, $src, $d, $cmt) = @_;
+    for (my $i = $lastsrc + 1; $i < hex($src); $i++) {
+        push @$arr, sprintf("  /*[0x%x] = */%u,\n", $i, $i < 127 ? $i : 0);
+    }
+    push @$arr, "  /*[$src] = */$d,$cmt\n";
+    $lastsrc = hex($src);
 }
 
-print "  [0x0] = $his,\t// size of vector\n";
+LINE:
+while (<$F>) {
+    /^#/ and next;
+    next unless /^(0x[0-9a-fA-F]+)\s+(0x[0-9a-fA-F]+)(.*)/;
+    my $src = $1;
+    my $d = $2;
+    my $cmt = $3;
+    my $sn = hex($src);
+    my $dn = hex($d);
+    $cmt =~ s/\t#//;
+    if ($cmt) {
+        $cmt = "\t// $cmt";
+    }
+    if ($sn <= 0x7f and $sn != $dn) {
+        # exceptions
+        if (($in eq 'johab' and $src eq '0x5C') or
+            ($in eq 'cp932' and $src eq '0x5C') or
+            ($in eq 'cp932' and $src eq '0x7E') or
+            ($in eq 'cp864' and $src eq '0x25'))
+        {
+            warn "$in: $src != $d\n";
+            add_line (\@out, $src, $d, $cmt);
+            add_line (\@exclow, $src, $d, $cmt);
+        } else {
+            die "$in: $src != $d";
+        }
+    }
+    $los = $sn if $sn < $los;
+    $his = $sn if $sn > $his ;
+    $lod = $dn if $dn < $lod;
+    $hid = $dn if $dn > $hid;
+    if ($sn > 0x7f) {
+        add_line (\@out, $src, $d, $cmt);
+    }
+}
+
+print "  /*[0x0] = */$his,\t// size of vector\n";
 print $_ for @out;
 print "};\n";
 print "#define MIN_", uc $in, "\t$los\n";
@@ -63,9 +74,9 @@ print "#define MAX_", uc $in, "\t$his\n";
 print "#define MIN_", uc $in, "_UC\t$lod\n";
 print "#define MAX_", uc $in, "_UC\t$hid\n";
 if (@exclow) {
-    print "/*\n";
+    print "#if 0\n";
     print "static const uint16_t cptbl_exc_$in\[\] = {\n";
     print $_ for @exclow;
     print "};\n";
-    print "*/\n";
+    print "#endif\n";
 }
