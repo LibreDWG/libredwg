@@ -2613,23 +2613,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       BITCODE_RL endblk_index = dwg->num_objects - 1;
       Dwg_Object *last_endblk;
 
-      encode_preR13_section (SECTION_BLOCK, dat, dwg);
-      encode_preR13_section (SECTION_LAYER, dat, dwg);
-      encode_preR13_section (SECTION_STYLE, dat, dwg);
-      encode_preR13_section (SECTION_LTYPE, dat, dwg);
-      encode_preR13_section (SECTION_VIEW, dat, dwg);
+      error |= encode_preR13_section (SECTION_BLOCK, dat, dwg);
+      error |= encode_preR13_section (SECTION_LAYER, dat, dwg);
+      error |= encode_preR13_section (SECTION_STYLE, dat, dwg);
+      error |= encode_preR13_section (SECTION_LTYPE, dat, dwg);
+      error |= encode_preR13_section (SECTION_VIEW, dat, dwg);
 
       if (dwg->header.num_sections >= SECTION_VPORT)
         {
-          encode_preR13_section (SECTION_UCS, dat, dwg);
-          encode_preR13_section (SECTION_VPORT, dat, dwg);
+          error |= encode_preR13_section (SECTION_UCS, dat, dwg);
+          error |= encode_preR13_section (SECTION_VPORT, dat, dwg);
         }
       if (dwg->header.num_sections >= SECTION_APPID)
-        encode_preR13_section (SECTION_APPID, dat, dwg);
+        error |= encode_preR13_section (SECTION_APPID, dat, dwg);
       if (dwg->header.num_sections >= SECTION_VX)
         {
-          encode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
-          encode_preR13_section (SECTION_VX, dat, dwg);
+          error |= encode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
+          error |= encode_preR13_section (SECTION_VX, dat, dwg);
         }
       // encode block entities
       write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
