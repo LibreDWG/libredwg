@@ -175,6 +175,22 @@ static Bit_Chain *g_dat;
       }                                                                       \
     JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
   }
+#define FIELD_T16(nam, dxf)                                                   \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
+               &dat->chain[t->start]);                                        \
+    if (t->type == JSMN_STRING)                                               \
+      {                                                                       \
+        _obj->nam = json_string (dat, tokens);                                \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        _obj->nam = NULL;                                                     \
+        json_advance_unknown (dat, tokens, t->type, 0);                       \
+      }                                                                       \
+    JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
+  }
 #define FIELD_TU16(nam, dxf)                                                  \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
@@ -4076,14 +4092,14 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
         }
       // clang-format off
-      FIELD_TU16 (TITLE, 1)
-      FIELD_TU16 (SUBJECT, 1)
-      FIELD_TU16 (AUTHOR, 1)
-      FIELD_TU16 (KEYWORDS, 1)
-      FIELD_TU16 (COMMENTS, 1)
-      FIELD_TU16 (LASTSAVEDBY, 1)
-      FIELD_TU16 (REVISIONNUMBER, 1)
-      FIELD_TU16 (HYPERLINKBASE, 1)
+      FIELD_T16 (TITLE, 1)
+      FIELD_T16 (SUBJECT, 1)
+      FIELD_T16 (AUTHOR, 1)
+      FIELD_T16 (KEYWORDS, 1)
+      FIELD_T16 (COMMENTS, 1)
+      FIELD_T16 (LASTSAVEDBY, 1)
+      FIELD_T16 (REVISIONNUMBER, 1)
+      FIELD_T16 (HYPERLINKBASE, 1)
       FIELD_TIMERLL (TDINDWG, 0)
       FIELD_TIMERLL (TDCREATE, 0)
       FIELD_TIMERLL (TDUPDATE, 0)

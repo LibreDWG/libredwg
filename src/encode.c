@@ -275,6 +275,19 @@ const unsigned char unknown_section[53]
       bit_write_TU16 (str_dat, _obj->nam);                                    \
     LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                          \
   }
+#define FIELD_T16(nam, dxf)                                                   \
+  {                                                                           \
+    if (dat->version < R_2007)                                                \
+      {                                                                       \
+        bit_write_T16 (str_dat, _obj->nam);                                   \
+        LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", _obj->nam, dxf)                \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        bit_write_TU16 (str_dat, (BITCODE_TU)_obj->nam);                      \
+        LOG_TRACE_TU (#nam, _obj->nam, dxf);                                  \
+      }                                                                       \
+  }
 #define FIELD_T32(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam)                                                            \

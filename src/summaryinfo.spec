@@ -25,22 +25,22 @@
       FIELD_VALUE (TDUPDATE)   = dwg->header_vars.TDUPDATE;
       if (dat->version < R_2007 ||       /* if 2004 -> 2004: TV -> TV */
           dat->from_version >= R_2007) { /* or already TU */
-        FIELD_VALUE (HYPERLINKBASE) = (BITCODE_TU)dwg->header_vars.HYPERLINKBASE;
+        FIELD_VALUE (HYPERLINKBASE) = (BITCODE_T16)dwg->header_vars.HYPERLINKBASE;
       }
       else { /* 2004 -> 2007+ */
-        FIELD_VALUE (HYPERLINKBASE) = bit_utf8_to_TU (dwg->header_vars.HYPERLINKBASE, 0);
+        FIELD_VALUE (HYPERLINKBASE) = (BITCODE_T16)bit_utf8_to_TU (
+              dwg->header_vars.HYPERLINKBASE, 0);
       }
     }
   }
-
-  FIELD_TU16 (TITLE, 1);
-  FIELD_TU16 (SUBJECT, 1);
-  FIELD_TU16 (AUTHOR, 1);
-  FIELD_TU16 (KEYWORDS, 1);
-  FIELD_TU16 (COMMENTS, 1);
-  FIELD_TU16 (LASTSAVEDBY, 1);
-  FIELD_TU16 (REVISIONNUMBER, 1);
-  FIELD_TU16 (HYPERLINKBASE, 1);
+  FIELD_T16 (TITLE, 1);
+  FIELD_T16 (SUBJECT, 1);
+  FIELD_T16 (AUTHOR, 1);
+  FIELD_T16 (KEYWORDS, 1);
+  FIELD_T16 (COMMENTS, 1);
+  FIELD_T16 (LASTSAVEDBY, 1);
+  FIELD_T16 (REVISIONNUMBER, 1);
+  FIELD_T16 (HYPERLINKBASE, 1);
   //DEBUG_HERE;
   FIELD_TIMERLL (TDINDWG, 0);
   FIELD_TIMERLL (TDCREATE, 0);

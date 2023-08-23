@@ -1109,29 +1109,21 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 #  define SUMMARY_T(name)                                                     \
     (pair->code == 1 && strEQc (field, "$" #name) && pair->value.s != NULL)   \
     {                                                                         \
-      LOG_TRACE ("SUMMARY.%s = %s [TU16 1]\n", &field[1], pair->value.s);     \
-      dwg->summaryinfo.name = bit_utf8_to_TU (pair->value.s, 0);              \
+      LOG_TRACE ("SUMMARY.%s = %s [T16 1]\n", &field[1], pair->value.s);      \
+      dwg->summaryinfo.name = pair->value.s;                                  \
     }
 
+              // clang-format off
               else if SUMMARY_T (TITLE)
-                else if SUMMARY_T (AUTHOR) else if SUMMARY_T (SUBJECT) else if SUMMARY_T (KEYWORDS) else if SUMMARY_T (
-                    COMMENTS) else if SUMMARY_T (LASTSAVEDBY) else if (pair->code
-                                                                           == 1
-                                                                       && strEQc (
-                                                                           field,
-                                                                           "$C"
-                                                                           "US"
-                                                                           "TO"
-                                                                           "MP"
-                                                                           "RO"
-                                                                           "PE"
-                                                                           "RT"
-                                                                           "YT"
-                                                                           "A"
-                                                                           "G")
-                                                                       && pair->value
-                                                                                  .s
-                                                                              != NULL)
+              else if SUMMARY_T (AUTHOR)
+              else if SUMMARY_T (SUBJECT)
+              else if SUMMARY_T (KEYWORDS)
+              else if SUMMARY_T (COMMENTS)
+              else if SUMMARY_T (LASTSAVEDBY)
+              else if (pair->code == 1
+                       && strEQc (field, "$CUSTOMPROPERTYTAG")
+                       && pair->value.s != NULL)
+                // clang-format on
                 {
                   BITCODE_BL j = dwg->summaryinfo.num_props;
                   dwg->summaryinfo.num_props++;
