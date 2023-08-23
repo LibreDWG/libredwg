@@ -3283,8 +3283,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * Second header, section 3. R13-R2000 only.
    * But partially also since r2004. (TODO: under which name? AuxHeader?)
    */
-  if (dwg->header.version >= R_13b1 && dwg->header.version < R_2004 // TODO
-      && dwg->secondheader.num_sections > 3)
+  if (dwg->header.version >= R_13b1 && dwg->header.version < R_2004)
     {
       struct _dwg_secondheader *_obj = &dwg->secondheader;
       Dwg_Object *obj = NULL;
@@ -3335,19 +3334,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #define SET_HDL(i, NAM)                                                       \
   _obj->handles[i].nr = i;                                                    \
-  if (_obj->handles[i].num_hdl != dwg->header_vars.NAM->handleref.size)       \
+  if (dwg->header_vars.NAM                                                    \
+      && _obj->handles[i].num_hdl != dwg->header_vars.NAM->handleref.size)    \
     {                                                                         \
       _obj->handles[i].num_hdl = dwg->header_vars.NAM->handleref.size;        \
       free (_obj->handles[i].hdl);                                            \
-      _obj->handles[i].hdl = (BITCODE_RC *)calloc (1, _obj->handles[i].num_hdl); \
+      _obj->handles[i].hdl                                                    \
+          = (BITCODE_RC *)calloc (1, _obj->handles[i].num_hdl);               \
     }                                                                         \
-  {                                                                           \
-    unsigned char chain[8];                                                   \
-    Bit_Chain hdat = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 }; \
-    bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                   \
-    for (int k = 0; k < (int)_obj->handles[i].num_hdl; k++)                   \
-      _obj->handles[i].hdl[k] = hdat.chain[k];                                \
-  }
+  if (dwg->header_vars.NAM)                                                   \
+    {                                                                         \
+      unsigned char chain[8];                                                 \
+      Bit_Chain hdat                                                          \
+          = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 };          \
+      bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
+      for (int k = 0; k < (int)_obj->handles[i].num_hdl; k++)                 \
+        _obj->handles[i].hdl[k] = hdat.chain[k];                              \
+    }
 
       SET_HDL (0, HANDSEED);
       SET_HDL (1, BLOCK_CONTROL_OBJECT);
