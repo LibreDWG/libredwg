@@ -2552,8 +2552,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_TRACE ("crc 0 [RSx]\n");
       write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_BEGIN);
     }
-    else if (!dwg->header.num_sections) dwg->header.num_sections
-        = dwg->header.numheader_vars <= 158   ? SECTION_VPORT
+    else if (!dwg->header.num_sections)
+      dwg->header.num_sections
+        = dwg->header.numheader_vars <= 129   ? SECTION_VIEW
+          : dwg->header.numheader_vars <= 158 ? SECTION_VPORT
           : dwg->header.numheader_vars <= 160 ? SECTION_APPID
                                               : SECTION_VX;
     dwg->header.entities_start = dat->byte & 0xFFFFFFFF;
