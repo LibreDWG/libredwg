@@ -114,9 +114,9 @@ create_postscript (Dwg_Data *dwg, char *output)
     }
 
   PS_set_info (ps, "Creator", "dwg2ps " PACKAGE_VERSION);
-  (void)set_info (ps, dwg, "Author", dwg->summaryinfo.LASTSAVEDBY);
-  if (set_info (ps, dwg, "Title", dwg->summaryinfo.TITLE))
-    set_info (ps, dwg, "Keywords", dwg->summaryinfo.KEYWORDS);
+  (void)set_info (ps, dwg, "Author", (BITCODE_TU)dwg->summaryinfo.LASTSAVEDBY);
+  if (set_info (ps, dwg, "Title", (BITCODE_TU)dwg->summaryinfo.TITLE))
+    set_info (ps, dwg, "Keywords", (BITCODE_TU)dwg->summaryinfo.KEYWORDS);
   else
     {
       PS_set_info (ps, "Title", output);
