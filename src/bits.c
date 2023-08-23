@@ -3453,8 +3453,8 @@ bit_read_TIMERLL (Bit_Chain *dat)
   BITCODE_TIMERLL date;
   date.days = bit_read_RL (dat);
   date.ms = bit_read_RL (dat);
-  date.value
-      = date.days + (date.ms * 1e-8); // just for display, not calculations
+  // just for display, not calculations
+  date.value = date.days + (date.ms * 1e-8);
   return date;
 }
 

@@ -22339,7 +22339,6 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   Dwg_Entity_VIEWPORT *pviewport;
   dwg_point_3d pt0 = { 0.0, 1.0, 0.0 };
   Dwg_Object *obj, *ctrl, *mspaceobj;
-  time_t now;
   const char *canonical_media_name;
   struct dwg_versions *dwg_ver_struct;
   Dwg_Version_Type version = dwg->header.version;
@@ -22365,6 +22364,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg_ver_struct = (struct dwg_versions *)dwg_version_struct (version);
   if (!dwg->header.codepage)
     dwg->header.codepage = 30; // FIXME: local OS codepage
+
   // with decode_r11 we already have proper numheader_vars
   if (!dwg->header.numheader_vars
       || dwg->header.version != dwg->header.from_version)
@@ -22435,11 +22435,20 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
 
   dwg->header_vars.FLAGS = 0x2a1d; // or 0x281d
   dwg->header_vars.CELWEIGHT = -1; // => FLAGS & 0x1f + lweight lookup
-  now = time (NULL);
-  dwg->header_vars.TDCREATE
-      = (BITCODE_TIMEBLL){ (BITCODE_BL)(now / 3600L),
-                           (BITCODE_BL)(now / 86400L),
-                           (now / 3600L) + ((now / 86400L) * 1e-8) };
+  {
+    time_t now = time (NULL);
+    BITCODE_RLL days = now / 86400L;
+    BITCODE_RLL ms = 1000 * (now % 86400L);
+    long dzoff = 1000 * tm_offset ();
+    ms += dzoff;
+    // julian days until the 1970 epoch: 2440587.5
+    // (https://planetcalc.com/503/?date=1970-01-01%2000%3A00%3A00)
+    days += 2440588L;
+    dwg->header_vars.TDUCREATE
+        = (BITCODE_TIMEBLL){ (BITCODE_BL)days, (BITCODE_BL)ms,
+                             days + (ms * 1e-8) };
+  }
+  dwg->header_vars.TDUUPDATE = dwg->header_vars.TDUCREATE;
   // CECOLOR.index: 256 [CMC.BS 62]
   dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, CMC_DEFAULTS }; // ByLayer
   if (version > R_11)
