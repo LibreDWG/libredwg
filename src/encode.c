@@ -64,7 +64,11 @@ BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
                             const char *restrict u8str);
 Dwg_Object_APPID *dwg_add_APPID (Dwg_Data *restrict dwg,
                                  const char *restrict name);
+Dwg_Object_VX_TABLE_RECORD *dwg_add_VX (Dwg_Data *restrict dwg,
+                                        const char *restrict name);
 BITCODE_RLL dwg_obj_generic_handlevalue (void *_obj);
+Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
+                                       int *restrict error);
 
 static int encode_preR13_section (const Dwg_Section_Type_r11 id,
                                   Bit_Chain *restrict dat,
@@ -2760,6 +2764,27 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     dat->byte += (dwg->header.sections * 9); /* RC + 2*RL */
     bit_write_CRC (dat, 0, 0xC0C1);
     write_sentinel (dat, DWG_SENTINEL_HEADER_END);
+
+    // on downconvert add the missing VX_CONTROL object
+    if (dwg->header.version < R_2004 && !dwg->header_vars.VX_CONTROL_OBJECT)
+      {
+        Dwg_Object *obj;
+        obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
+        if (!obj)
+          {
+            Dwg_Object_VX_TABLE_RECORD *_obj = dwg_add_VX (dwg, "");
+            Dwg_Object *o = dwg_find_first_type (dwg, DWG_TYPE_VX_TABLE_RECORD);
+            obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
+            LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
+                       obj->handle.value);
+            _obj->is_on = 1;
+            dwg->header_vars.VX_TABLE_RECORD
+              = dwg_add_handleref (dwg, 5, o->handle.value, NULL);
+          }
+        if (obj)
+          dwg->header_vars.VX_CONTROL_OBJECT
+            = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
+      }
 
     /*------------------------------------------------------------
      * AuxHeader section 5

@@ -22559,7 +22559,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // We don't create DIMSTYLE Standard upfront, only on demand.
       dwg_add_DIMSTYLE (dwg, NULL);
       // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
-      dwg_add_VX (dwg, NULL); // TODO only <r2000
+      if (version <= R_2000)
+        dwg_add_VX (dwg, NULL);
     }
   if (version > R_11)
     {
@@ -25329,7 +25330,7 @@ dwg_add_UCS (Dwg_Data *restrict dwg, const dwg_point_3d *restrict origin,
 
 // VX_CONTROL
 // VX_TABLE_RECORD
-// only until r14
+// only r11-r2000
 EXPORT Dwg_Object_VX_TABLE_RECORD *
 dwg_add_VX (Dwg_Data *restrict dwg, const char *restrict name)
 {
