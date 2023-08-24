@@ -265,6 +265,25 @@ const unsigned char unknown_section[53]
       }                                                                       \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
+#define FIELD_BINARY(nam, len, dxf)                                           \
+  {                                                                           \
+    LOG_TRACE (#nam ": %s [TF %d %d]\n", _obj->nam, (int)len, dxf);           \
+    if (len > 0 && len < 0xFFFFFF)                                            \
+      {                                                                       \
+        if (!_obj->nam)                                                       \
+          { /* empty field, write zeros */                                    \
+            for (int _i = 0; _i < (int)(len); _i++)                           \
+              bit_write_RC (dat, 0);                                          \
+          }                                                                   \
+        /* The source might not be long enough. or it is, just with a zero */ \
+        /* Luckily TFF's are only preR13 */                                   \
+        else                                                                  \
+          {                                                                   \
+            bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                   \
+          }                                                                   \
+      }                                                                       \
+    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+  }
 #define FIELD_TFF(nam, len, dxf) FIELD_TF (nam, len, dxf)
 #define FIELD_TFv(nam, len, dxf) FIELD_TF (nam, len, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
@@ -5237,12 +5256,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           obj->bitsize = (pos - (obj->address * 8)) & 0xFFFFFFFF;
         }
       bit_set_position (dat, address * 8);
-      if (obj->size > 0x7fff && old_size <= 0x7fff)
+      if (obj->size > UINT32_C (0x7fff) && old_size <= UINT32_C (0x7fff))
         {
           // with overlarge sizes >0x7fff memmove dat right by 2, one more RS
           // added.
-          LOG_INFO ("overlarge size %u > 0x7fff (was %u) @%zu\n",
-                    (unsigned)obj->size, old_size, dat->byte);
+          LOG_INFO ("overlarge size %lu > 0x7fff (was %lu) @%zu\n",
+                    (unsigned long)obj->size, (unsigned long)old_size, dat->byte);
           if (dat->byte + obj->size + 2 >= dat->size)
             bit_chain_alloc_size (dat,
                                   (dat->byte + obj->size + 2) - dat->size);
@@ -5253,12 +5272,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           obj->bitsize_pos += 16;
           pos += 16;
         }
-      if (obj->size <= 0x7fff && old_size > 0x7fff)
+      if (obj->size <= UINT32_C (0x7fff) && old_size > UINT32_C (0x7fff))
         {
           // with old overlarge sizes >0x7fff memmove dat left by 2, one RS
           // removed.
-          LOG_INFO ("was overlarge size %u < 0x7fff @%zu\n",
-                    (unsigned)old_size, dat->byte);
+          LOG_INFO ("was overlarge size %lu => %lu @%zu\n",
+                    (unsigned long)old_size, (unsigned long)obj->size, dat->byte);
           memmove (&dat->chain[dat->byte], &dat->chain[dat->byte + 2],
                    obj->size);
           // obj->size -= 2;
