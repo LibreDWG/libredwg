@@ -74,12 +74,19 @@ help (void)
 /* handles r2007 wide chars (=> utf8) */
 static int
 set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
-          BITCODE_TU restrict text)
+          BITCODE_T16 restrict text)
 {
   int ret = 0;
-  if (text)
+  if (!text)
+    return 0;
+  if (dwg->header.from_version < R_2007)
     {
-      char *u8 = bit_convert_TU (text);
+      PS_set_info (ps, key, text);
+      ret = 1;
+    }
+  else
+    {
+      char *u8 = bit_convert_TU ((BITCODE_TU)text);
       if (u8 && strlen (u8))
         {
           PS_set_info (ps, key, u8);
@@ -114,9 +121,10 @@ create_postscript (Dwg_Data *dwg, char *output)
     }
 
   PS_set_info (ps, "Creator", "dwg2ps " PACKAGE_VERSION);
+  (void)set_info (ps, dwg, "Subject", dwg->summaryinfo.SUBJECT);
   (void)set_info (ps, dwg, "Author", dwg->summaryinfo.LASTSAVEDBY);
   if (set_info (ps, dwg, "Title", dwg->summaryinfo.TITLE))
-    set_info (ps, dwg, "Keywords", dwg->summaryinfo.KEYWORDS);
+    (void)set_info (ps, dwg, "Keywords", dwg->summaryinfo.KEYWORDS);
   else
     {
       PS_set_info (ps, "Title", output);
