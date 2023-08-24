@@ -4004,6 +4004,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       file_dat.chain = (unsigned char *)calloc (1, sizeof (Dwg_R2004_Header));
       dat = &file_dat;
       LOG_TRACE ("\nSection R2004_Header @0x100\n");
+      memcpy (_obj->file_ID_string, "AcFssFcAJMB", 12);
 
       checksum = _obj->crc32;
       LOG_HANDLE ("old crc32: 0x%x\n", _obj->crc32);
