@@ -77,6 +77,7 @@ if [ -f "$b.dwg" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$TeighaFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg" \
                 >/dev/null 2>/dev/null
+        rm "$b.json.err" 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
             mv "./$b.dxf.err" "$b.json.err"
             cat "$b.json.err"
