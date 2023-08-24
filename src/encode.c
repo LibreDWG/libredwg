@@ -2497,6 +2497,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       _obj->numentity_sections = 3;
     }
+    SINCE (R_2004)
+      if (!_obj->r2004_header_address)
+        _obj->r2004_header_address = 128;
 
     // clang-format off
     #include "header.spec"
@@ -3206,6 +3209,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * split into chunks of max. 2030
    */
   LOG_INFO ("\n=======> Object Map: %4zu\n", dat->byte);
+  pvzadr = dat->byte; // Correct value of section size must be written later
   SINCE (R_2004)
   {
     sec_id = SECTION_HANDLES;
@@ -3217,7 +3221,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     sec_id = (Dwg_Section_Type)SECTION_HANDLES_R13;
     dwg->header.section[sec_id].number = 2;
     dwg->header.section[sec_id].address = dat->byte;
-    pvzadr = dat->byte; // Correct value of section size must be written later
     dat->byte += 2;
   }
 
@@ -3890,7 +3893,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             }
           assert (dat->chain[0] == 'A');
           assert (dat->chain[1] == 'C');
-          assert (dat->byte <= 0x100);
+          PRE (R_2004)
+            assert (dat->byte <= 0x100);
+          LATER_VERSIONS
+            assert (dat->byte <= 0x140);
         }
 #endif
 
