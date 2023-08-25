@@ -50,14 +50,14 @@ VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
 JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec vcpkg.json build-aux/Dockerfile \
-	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check json-check \
+	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check json-check oda \
 	     log.in svg.in rw.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     cmp-objs.pl .dockerignore \
 	     build-aux/swig_python.patch \
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILES)
 shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
-	json-check log.in svg.in rw.in \
+	json-check oda log.in svg.in rw.in \
 	logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	dynapi_test_all.sh.in unit_testing_all.sh.in \
 	autogen.sh dxf-roundtrip.sh unit_testing_all.sh.in test-dxf.sh
