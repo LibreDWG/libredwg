@@ -24,8 +24,11 @@
 #ifdef IN_DXF_H
 #  error in_dxf.h must be included after out_dxf.h because of FORMAT_BD
 #endif
+#ifndef DXF_PRECISION
+#  define DXF_PRECISION 16
+#endif
 
-#define DXF_FORMAT_FLT "%0.16G"
+#define DXF_FORMAT_FLT "%0." _XSTR(DXF_PRECISION) "G"
 #define DXF_FLT_MAXLEN 18
 
 const char *dxf_format (int code) RETURNS_NONNULL;

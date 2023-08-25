@@ -25,9 +25,6 @@
 # error ACTION define missing: decode, encode, dxf, indxf, print, free, ...
 #endif
 
-#define _XSTR(s) _STR(s)
-#define _STR(s)  #s
-
 #define WARN_UNHANDLED_CLASS                                                  \
   LOG_WARN ("Unhandled Class %s %d %s (0x%x%s) %u/" FORMAT_RLLx,              \
             is_entity ? "entity" : "object", klass->number, klass->dxfname,   \

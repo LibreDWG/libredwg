@@ -48,9 +48,14 @@
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
 
-/* https://tools.ietf.org/html/rfc7946#section-11.2 */
+/* https://tools.ietf.org/html/rfc7946#section-11.2 recommends.
+   Set via --with-geojson-precision=rfc */
 #undef FORMAT_RD
-#define FORMAT_RD "%f"
+#ifndef GEOJSON_PRECISION
+#  define GEOJSON_PRECISION 6
+#endif
+#define FORMAT_RD "%0." _XSTR(GEOJSON_PRECISION) "f"
+//#define FORMAT_RD "%f"
 #undef FORMAT_BD
 #define FORMAT_BD FORMAT_RD
 

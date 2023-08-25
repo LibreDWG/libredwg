@@ -21,11 +21,17 @@
 /* Define to disable JSON and GeoJSON in/out modules. */
 #undef DISABLE_JSON
 
+/* Number of dxf after-comma places (default 16). */
+#undef DXF_PRECISION
+
 /* Define to 1 if mimalloc-override.h should be used. */
 #undef ENABLE_MIMALLOC
 
 /* Define to 1 if a shared library will be built */
 #undef ENABLE_SHARED
+
+/* Number of geojson after-comma places (recommended 6 by RFC). */
+#undef GEOJSON_PRECISION
 
 /* versions earlier than 301 will have no size_t */
 #undef GPERF_VERSION

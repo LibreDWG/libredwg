@@ -386,6 +386,34 @@ AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
+dnl check for --with-dxf-precision=rfc or max or num
+AC_MSG_CHECKING([for --with-dxf-precision])
+AC_ARG_WITH([dxf-precision],
+    AS_HELP_STRING([--with-dxf-precision=],
+        [How many digits in the dxf. The recommended low-precision 6 or some number or @<:@default=max@:>@]),
+	[case "${with_dxf_precision}" in
+	 max|16) with_dxf_precision=16; AC_MSG_RESULT([max]) ;;
+	 rfc|6)  with_dxf_precision=6;  AC_MSG_RESULT([rfc]) ;;
+	 [6-9]|1[0-6]) AC_MSG_RESULT([${with_dxf_precision}]) ;;
+	 *)      AC_MSG_RESULT([invalid ${with_dxf_precision}: rfc,max or some number]) ;;
+	 esac],
+        [with_dxf_precision=16; AC_MSG_RESULT([max (default)]) ])
+AC_DEFINE_UNQUOTED([DXF_PRECISION],[${with_dxf_precision}],[Number of dxf after-comma places (default 16).])
+
+dnl check for --with-geojson-precision=rfc or max or num
+AC_MSG_CHECKING([for --with-geojson-precision])
+AC_ARG_WITH([geojson-precision],
+    AS_HELP_STRING([--with-geojson-precision=],
+        [How many digits in the geojson. The RFC7946 recommended 6 or some number or @<:@default=max@:>@]),
+	[case "${with_geojson_precision}" in
+	 max|16) with_geojson_precision=16; AC_MSG_RESULT([max]) ;;
+	 rfc|6)  with_geojson_precision=6;  AC_MSG_RESULT([rfc]) ;;
+	 [6-9]|1[0-6]) AC_MSG_RESULT([${with_geojson_precision}]) ;;
+	 *)      AC_MSG_RESULT([invalid ${with_geojson_precision}: rfc,max or some number]) ;;
+	 esac],
+        [with_geojson_precision=16; AC_MSG_RESULT([max (default)]) ])
+AC_DEFINE_UNQUOTED([GEOJSON_PRECISION],[${with_geojson_precision}],[Number of geojson after-comma places (recommended 6 by RFC).])
+
 AC_MSG_CHECKING([for --disable-werror])
 AC_ARG_ENABLE([werror],AS_HELP_STRING([--disable-werror],[
     Disable -Werror (default: no).]),[],[enable_werror=yes])

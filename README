@@ -113,6 +113,16 @@ customize the installation dirs.  Other options recognized by configure are:
     Its value is an integer: 0 (no output) through 9 (full verbosity).
     Most tools do support a --verbosity|-v flag instead.
 
+  --with-dxf-precision=rfc
+
+   How many after-comma places in DXF doubles. 6 is the recommended
+   value (e.g. use rfc), max and the default is 16.
+
+  --with-geojson-precision=rfc
+
+   How many after-comma places in GeoJSON doubles. 6 is the
+   recommended value by RFC 7946, max and the default is 16.
+
   --disable-write
 
     Disable DWG write support (default: no).

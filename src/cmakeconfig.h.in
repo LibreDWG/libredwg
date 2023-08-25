@@ -27,6 +27,12 @@
 #  undef DISABLE_JSON
 #endif   
 
+/* Number of dxf after-comma places. */
+#cmakedefine DXF_PRECISION
+
+/* Number of GeoJSON after-comma places (recommended 6 by RFC). */
+#cmakedefine GEOJSON_PRECISION
+
 /* Define if a shared library will be built */
 #cmakedefine ENABLE_SHARED
 

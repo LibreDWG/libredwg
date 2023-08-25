@@ -226,11 +226,9 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  define CC_DIAG_PRAGMA(x)
 #endif
 
-/*
-#define _STR(x)  #x
-#define STR(x)_STR(x)
-#pragma message("_GNUC_VERSION " STR(_GNUC_VERSION))
-*/
+#define _STR(s) #s
+#define _XSTR(s) _STR(s)
+// #pragma message("_GNUC_VERSION " _XSTR(_GNUC_VERSION))
 
 // clang-specifics (rarely needed, as they mimic GCC diagnostics closely, even
 // down to bugs)

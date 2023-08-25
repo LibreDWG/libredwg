@@ -5,6 +5,8 @@ project(libredwg C)
 #                   -DLIBREDWG_DISABLE_JSON=On
 #                   -DENABLE_MIMALLOC=On
 #                   -DENABLE_LTO=Off
+#                   -DDXF_PRECISION=6
+#                   -DGEOMJSON_PRECISION=6
 # for smaller builds and lib.
 
 if(MSVC)
@@ -41,6 +43,8 @@ endif()
 if (LIBREDWG_DISABLE_WRITE)
   set(BUILD_SHARED_LIBS OFF)
 endif()
+option(DXF_PRECISION "number of DXF after-comma places" 16)
+option(GEOJSON_PRECISION "number of GeoJSON after-comma places (6 recoomended by RFC)" 16)
 
 include(CheckIncludeFile)
 CHECK_INCLUDE_FILE("stddef.h" HAVE_STDDEF_H)
