@@ -1259,6 +1259,71 @@ is_section_r13_critical (Dwg_Section_Type_r13 i)
 
 /* Limitations: */
 
+/* when downconverting to r2000.
+   fixes ODA Recovery error: AcDbRegAppTableRecord can't be cast to AcDbEntity
+   GH #817 */
+static void
+remove_EXEMPT_FROM_CAD_STANDARDS_APPID (Bit_Chain *restrict dat,
+                                        Dwg_Data *restrict dwg)
+{
+  BITCODE_H appid
+      = dwg_find_tablehandle (dwg, "ACAD_EXEMPT_FROM_CAD_STANDARDS", "APPID");
+  BITCODE_H appctl;
+  Dwg_Object_APPID_CONTROL *_ctl;
+  Dwg_Object *ctl, *obj;
+  if (!appid)
+    {
+      LOG_INSANE ("APPID.EXEMPT_FROM_CAD_STANDARDS %s", "not found, good.\n");
+      return;
+    }
+  if (!(appctl = dwg->header_vars.APPID_CONTROL_OBJECT))
+    appctl = dwg_find_table_control (dwg, "APPID_CONTROL");
+  if (!appctl)
+    {
+      LOG_ERROR ("APPID_CONTROL not found")
+      return;
+    }
+  ctl = dwg_ref_object (dwg, appctl);
+  if (!ctl || ctl->fixedtype != DWG_TYPE_APPID_CONTROL)
+    {
+      LOG_ERROR ("APPID_CONTROL not found")
+      return;
+    }
+  _ctl = ctl->tio.object->tio.APPID_CONTROL;
+  obj = dwg_ref_object (dwg, appid);
+  if (!obj || obj->fixedtype != DWG_TYPE_APPID)
+    {
+      LOG_ERROR ("APPID.EXEMPT_FROM_CAD_STANDARDS %s", "not found");
+    }
+  else
+    {
+      LOG_TRACE ("APPID.EXEMPT_FROM_CAD_STANDARDS " FORMAT_REF " %s",
+                 ARGS_REF (appid), "deleted\n");
+      dwg_free_object (obj);
+      //obj->fixedtype = DWG_TYPE_UNUSED;
+      //obj->type = DWG_TYPE_UNUSED;
+    }
+  // removing appid from CONTROL HV
+  for (BITCODE_BL i = 0; i < _ctl->num_entries; i++)
+    {
+      BITCODE_H ref = _ctl->entries[i];
+      if (ref->absolute_ref == appid->absolute_ref)
+        {
+          LOG_TRACE ("APPID_CONTROL[%u] removed " FORMAT_REF " [H*]\n",
+                     i, ARGS_REF (ref));
+          _ctl->num_entries--;
+          if (!_ctl->num_entries || i != _ctl->num_entries) // not the last?
+            {
+              memmove (&_ctl->entries[i], &_ctl->entries[i + 1],
+                       _ctl->num_entries);
+            }
+          return;
+        }
+    }
+  // TODO: removing appid handle from all EED's
+}
+
+
 static BITCODE_RLL
 add_LibreDWG_APPID (Dwg_Data *dwg)
 {
@@ -1283,51 +1348,8 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   // (Dictionaries, MATERIAL, VISUALSTYLE, dynblocks, surfaces, assoc*, ...)
 
   // add APPID (already searched above)
-#if 1
   _obj = dwg_add_APPID (dwg, "LibreDWG");
   return dwg_obj_generic_handlevalue (_obj);
-
-#else
-  if (!(appctl = dwg->header_vars.APPID_CONTROL_OBJECT))
-    appctl = dwg_find_table_control (dwg, "APPID_CONTROL");
-  if (!appctl)
-    {
-      LOG_ERROR ("APPID_CONTROL not found")
-      return 0UL;
-    }
-  absref = dwg->object[dwg->num_objects - 1].handle.value + 1;
-  dwg_add_object (dwg);
-  obj = &dwg->object[dwg->num_objects - 1];
-  if (dwg_setup_APPID (obj) >= DWG_ERR_CRITICAL)
-    return 0;
-  dwg_add_handle (&obj->handle, 0, absref, obj);
-  // obj->type = obj->fixedtype = DWG_TYPE_APPID;
-  _obj = obj->tio.object->tio.APPID;
-  // precise size, bitsize done by encode
-  obj->size = 25;
-  obj->bitsize = 164;
-  obj->tio.object->ownerhandle
-      = dwg_add_handleref (dwg, 4, appctl->absolute_ref, NULL);
-  obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
-
-  _obj->name = dwg_add_u8_input (dwg, "LibreDWG");
-  _obj->is_xref_ref = 1;
-  _obj->xref = dwg_add_handleref (dwg, 5, 0, NULL);
-
-  // add to APPID_CONTROL
-  obj = dwg_ref_object (dwg, appctl);
-  if (!obj)
-    {
-      LOG_ERROR ("APPID_CONTROL not found")
-      return 0;
-    }
-  o = obj->tio.object->tio.APPID_CONTROL;
-  PUSH_HV (o, num_entries, entries, dwg_add_handleref (dwg, 2, absref, NULL));
-  return absref;
-
-#endif
-
-  return 0x12; // APPID.ACAD
 }
 
 static BITCODE_BL
@@ -2410,6 +2432,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dat->opts = dwg->opts;
     }
   dat->codepage = dwg->header.codepage;
+
+  if (dwg->header.from_version > R_2000 && dwg->header.version <= R_2000)
+    {
+      remove_EXEMPT_FROM_CAD_STANDARDS_APPID (dat, dwg);
+    }
 
   /*------------------------------------------------------------
    * Header
