@@ -772,6 +772,7 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
       else
         {
           LOG_ERROR ("decomp overflow")
+          free (pedata);
           return DWG_ERR_INTERNALERROR;
         }
     }
