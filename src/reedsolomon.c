@@ -30,6 +30,7 @@
   HANDLER (OUTPUT, "%s:%d: %s() - " fmt, __FILE__, __LINE__, __func__,        \
            ##__VA_ARGS__)
 #define POLY_LENGTH 32
+#define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
 
 typedef unsigned char *Poly;
 typedef Poly *PolyRow;
@@ -290,9 +291,9 @@ rowop (PolyMatrix matrix, int dst, int src)
   unsigned char coeff;
   int i, j, k, l;
 
-  dstd = degree (matrix[dst][2]);
-  srcd = degree (matrix[src][2]);
-  power = dstd - srcd;
+  dstd = degree (matrix[dst][2]); // 0..31
+  srcd = degree (matrix[src][2]); // 0..31
+  power = dstd - srcd; // -31..31
 
   coeff = f256_inverse[matrix[src][2][srcd]];
   coeff = f256_multiply (coeff, matrix[dst][2][dstd]);
@@ -300,11 +301,12 @@ rowop (PolyMatrix matrix, int dst, int src)
   /* row operation */
   for (j = 0; j < 3; j++)
     {
-      limit = 17 - power;
+      limit = MIN(17 - power, POLY_LENGTH); // -14..48
       for (i = 0; i < limit; i++)
         {
-          matrix[dst][j][i + power]
-              ^= f256_multiply (coeff, matrix[src][j][i]);
+          // i + power: -31..78
+          matrix[dst][j][i + power] ^= f256_multiply (coeff,
+                                         matrix[src][j][i]);
         }
     }
 }
