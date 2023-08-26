@@ -3729,8 +3729,10 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
     }
   else
     {
-      dat->chain = (unsigned char *)realloc (dat->chain, dat->size + size);
-      if (!dat->chain)
+      unsigned char *tmp = (unsigned char *)realloc (dat->chain, dat->size + size);
+      if (tmp)
+        dat->chain = tmp;
+      else
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Out of memory")
