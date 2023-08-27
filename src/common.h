@@ -247,7 +247,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  define CLANG_DIAG_RESTORE
 #endif
 
-/* for GCC14_DIAG_IGNORE (-Wanalyzer-allocation-size)
+/* for GCC14_DIAG_IGNORE (-Wanalyzer-allocation-size) or -Wanalyzer-malloc-leak
    https://cwe.mitre.org/data/definitions/131.html
  */
 #if _GNUC_VERSION >= 1400

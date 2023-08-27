@@ -3696,6 +3696,7 @@ bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 void
 bit_chain_init (Bit_Chain *dat, const size_t size)
 {
+  GCC14_DIAG_IGNORE (-Wanalyzer-malloc-leak)
   dat->chain = (unsigned char *)calloc (1, size);
   if (!dat->chain)
     {
@@ -3703,6 +3704,7 @@ bit_chain_init (Bit_Chain *dat, const size_t size)
       LOG_ERROR ("Out of memory")
       abort ();
     }
+  GCC14_DIAG_RESTORE
   dat->size = size;
   dat->byte = 0;
   dat->bit = 0;

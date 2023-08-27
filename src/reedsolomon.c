@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2013, 2018-2020 Free Software Foundation, Inc.             */
+/*  Copyright (C) 2013, 2018-2020, 2023 Free Software Foundation, Inc.       */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -23,6 +23,7 @@
 #ifdef HAVE_MALLOC_H
 #  include <malloc.h>
 #endif
+#include "common.h"
 #include "logging.h"
 #include "reedsolomon.h"
 
@@ -299,6 +300,7 @@ rowop (PolyMatrix matrix, int dst, int src)
   coeff = f256_multiply (coeff, matrix[dst][2][dstd]);
 
   /* row operation */
+  GCC14_DIAG_IGNORE (-Wanalyzer-possible-null-dereference)
   for (j = 0; j < 3; j++)
     {
       limit = MIN(17 - power, POLY_LENGTH); // -14..48
@@ -309,6 +311,7 @@ rowop (PolyMatrix matrix, int dst, int src)
                                          matrix[src][j][i]);
         }
     }
+  GCC14_DIAG_RESTORE
 }
 
 static PolyMatrix
@@ -319,12 +322,24 @@ initialize_matrix (unsigned char *s)
   int i, j;
 
   matrix = (PolyMatrix)calloc (2, sizeof (PolyRow));
+  if (!matrix)
+    return NULL;
   for (i = 0; i < 2; i++)
     {
       matrix[i] = (PolyRow)calloc (3, sizeof (Poly));
+      if (!matrix[i])
+        {
+          free_matrix (matrix);
+          return NULL;
+        }
       for (j = 0; j < 3; j++)
         {
           matrix[i][j] = (Poly)calloc (1, POLY_LENGTH);
+          if (!matrix[i][j])
+            {
+              free_matrix (matrix);
+              return NULL;
+            }
         }
     }
 
@@ -347,10 +362,17 @@ free_matrix (PolyMatrix matrix)
     {
       for (j = 0; j < 2; j++)
         {
-          free (matrix[i][j]);
+          GCC14_DIAG_IGNORE (-Wanalyzer-null-dereference)
+          if (matrix[i][j])
+            free (matrix[i][j]);
+          GCC14_DIAG_RESTORE
         }
-      free (matrix[i]);
+      GCC14_DIAG_IGNORE (-Wanalyzer-malloc-leak)
+      if (matrix[i])
+        free (matrix[i]);
+      GCC14_DIAG_RESTORE
     }
+  free (matrix);
 }
 
 static unsigned char
@@ -377,6 +399,8 @@ solve_key_equation (unsigned char *s, unsigned char *sigma,
   int x, i;
 
   matrix = initialize_matrix (s);
+  if (!matrix)
+    return;
   fixed_row = 0;
 
   while (degree (matrix[fixed_row][0]) > 8
