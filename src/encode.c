@@ -3203,10 +3203,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           continue;
         }
       obj = &dwg->object[index];
+      if (obj->type == DWG_TYPE_FREED)
+        {
+          LOG_TRACE ("Skip freed object " FORMAT_BL "\n", index)
+          continue;
+        }
       // change the address to the linearly sorted one
 #ifndef NDEBUG
       PRE (R_2004)
-      assert (dat->byte);
+        assert (dat->byte);
 #endif
       if (!obj->parent)
         obj->parent = dwg;
