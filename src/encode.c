@@ -890,7 +890,7 @@ const unsigned char unknown_section[53]
       {                                                                       \
         /* save away special accumulated hdls, need to write common first */  \
         Bit_Chain dat1 = *hdl_dat;                                            \
-        Bit_Chain dat2;                                                       \
+        Bit_Chain dat2 = { 0 };                                               \
         bit_chain_init_dat (&dat2, 12, dat);                                  \
         hdl_dat = &dat2;                                                      \
         ENCODE_COMMON_HANDLES /* owner, xdic, reactors */                     \
