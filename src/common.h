@@ -247,6 +247,18 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  define CLANG_DIAG_RESTORE
 #endif
 
+/* for GCC14_DIAG_IGNORE (-Wanalyzer-allocation-size)
+   https://cwe.mitre.org/data/definitions/131.html
+ */
+#if _GNUC_VERSION >= 1400
+#  define GCC14_DIAG_IGNORE(x)                                                \
+    _Pragma ("GCC diagnostic push") CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#  define GCC14_DIAG_RESTORE _Pragma ("GCC diagnostic pop")
+#else
+#  define GCC14_DIAG_IGNORE(w)
+#  define GCC14_DIAG_RESTORE
+#endif
+
 /* for GCC80_DIAG_IGNORE (-Wstringop-truncation)
    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88780
  */
