@@ -8548,7 +8548,7 @@ get_numfield_value (void *restrict _obj, const Dwg_DYNAPI_field *restrict f)
 
 /* For tables, entities and objects.
  */
-static Dxf_Pair *
+static __nonnull ((1,2,3,4)) Dxf_Pair *
 new_object (char *restrict name, char *restrict dxfname,
             Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             BITCODE_BL ctrl_id, BITCODE_BL *i_p)
