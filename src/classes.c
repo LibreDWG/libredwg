@@ -389,7 +389,7 @@ dwg_type_name (const Dwg_Object_Type type)
   else if (type == DWG_TYPE_FREED)
     return "FREED";
   else
-    return NULL;
+    return "INVALID";
 #else
   const struct _obj_type_name *s = (struct _obj_type_name *)_dwg_type_name;
   // just 12 unhandled are missing in objects.inc
@@ -398,7 +398,7 @@ dwg_type_name (const Dwg_Object_Type type)
       if (type == s->type)
         return s->name;
     }
-  return NULL;
+  return "INVALID";
 #endif
 }
 
