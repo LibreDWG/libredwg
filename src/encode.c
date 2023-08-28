@@ -1311,11 +1311,11 @@ remove_EXEMPT_FROM_CAD_STANDARDS_APPID (Bit_Chain *restrict dat,
         {
           LOG_TRACE ("APPID_CONTROL[%u] removed " FORMAT_REF " [H*]\n",
                      i, ARGS_REF (ref));
-          _ctl->num_entries--;
+          --_ctl->num_entries;
           if (!_ctl->num_entries || i != _ctl->num_entries) // not the last?
             {
               memmove (&_ctl->entries[i], &_ctl->entries[i + 1],
-                       _ctl->num_entries);
+                       _ctl->num_entries - i);
             }
           return;
         }
