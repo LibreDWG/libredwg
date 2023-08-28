@@ -9583,7 +9583,7 @@ typedef struct _dwg_secondheader
   Dwg_SecondHeader_Sections sections[6];
   BITCODE_BS num_handles;
   Dwg_SecondHeader_Handles handles[14];
-  BITCODE_RL crc;
+  BITCODE_RS crc;
   BITCODE_RLL junk_r14; /*!< r14 only */
 } Dwg_SecondHeader;
 
