@@ -161,7 +161,7 @@
 #endif
   DECODER {    
     if (_obj->MENUEXT[1]) {
-      size_t len = strlen ((char*)&_obj->MENUEXT[1]);
+      size_t len = strlen ((char*)&_obj->MENUEXT[1]) + 1;
       _obj->MENU = (char*)realloc (_obj->MENU, strlen (_obj->MENU) + len + 1);
       strncat (_obj->MENU, (char*)&_obj->MENUEXT[1], len);
       LOG_TRACE ("MENU => \"%s\"\n", _obj->MENU);
