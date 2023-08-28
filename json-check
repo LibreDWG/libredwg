@@ -36,6 +36,12 @@ case $r in
             *_R20*)     r="${b:(-4)}" ;;
         esac      ;;
 esac
+case $r in
+    9|10|11|12|14|2000|2004|2007|2010|2013|2018) ;;
+    *) make -s -C examples odaversion
+       r="$(examples/odaversion "$d")"
+       ;;
+esac
 
 # first create a dwg log to compare against
 ./log "$v" "$d"
@@ -51,7 +57,7 @@ if [ -f "$b.json" ]; then
     fi
 fi
 
-if [ -f "$b.dwg" ]; then
+if [ -f "$b.dwg" ] && [ -n "$r" ]; then
     # teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
     can_teigha=1
     case $(uname) in

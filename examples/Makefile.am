@@ -26,7 +26,7 @@ if USE_WRITE
 bin_PROGRAMS     = dwgadd
 endif
 check_PROGRAMS   = load_dwg dwg2svg2 dwgfuzz
-EXTRA_PROGRAMS   = unknown bd bits llvmfuzz llvmfuzz_standalone
+EXTRA_PROGRAMS   = unknown bd bits llvmfuzz llvmfuzz_standalone odaversion
 
 load_dwg_SOURCES = load_dwg.c
 load_dwg_LDADD   = $(top_builddir)/src/libredwg.la
@@ -69,6 +69,7 @@ llvmfuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE
 endif
 llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo \
 	                      $(top_builddir)/src/codepages.lo
+odaversion_SOURCES          = odaversion.c
 
 all: $(check_PROGRAMS)
 
