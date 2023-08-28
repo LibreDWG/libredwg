@@ -3672,6 +3672,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         return DWG_ERR_INVALIDEED;
       data->u.eed_71.rl = bit_read_RL (dat);
       LOG_TRACE ("long: " FORMAT_RL " [RL]", data->u.eed_71.rl);
+      if (data->u.eed_71.rl > 0x100000)
+        LOG_TRACE (" " FORMAT_RLx " [RLx]", data->u.eed_71.rl);
       break;
     default:
       LOG_ERROR ("unknown EED code %d", data->code);
