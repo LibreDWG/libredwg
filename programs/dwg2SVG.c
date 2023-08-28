@@ -40,6 +40,7 @@
 #    define __BSD_VISIBLE 1
 #  endif
 #endif
+#define _GNU_SOURCE  /* make musl expose strcasestr */
 #include <string.h>
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
