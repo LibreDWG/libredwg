@@ -472,7 +472,7 @@ const unsigned char _dwg_VISUALSTYLE_proptypes[58] = {
   /* [56] */ 3, 3
 };
 
-// need to return the first ref from the handle vector.
+// returns the first ref from the handle vector.
 BITCODE_H
 shift_hv (BITCODE_H *hv, BITCODE_BL *num_p)
 {
@@ -480,6 +480,24 @@ shift_hv (BITCODE_H *hv, BITCODE_BL *num_p)
   *num_p = *num_p - 1;
   memmove (&hv[0], &hv[1], *num_p * sizeof (BITCODE_H));
   return ref;
+}
+
+// delete an entry from an HV ("handle vector") at index i
+void
+delete_hv (BITCODE_H *entries, BITCODE_BS *num_p, BITCODE_BS i)
+{
+  BITCODE_H ref;
+  BITCODE_BS nume = *num_p;
+  assert (i < nume);
+  ref = entries[i];
+  *num_p = *num_p - 1;
+  nume--;
+  if (!ref->handleref.is_global)
+    free (ref);
+  if (!nume || i != nume) // not the last?
+    {
+      memmove (&entries[i], &entries[i + 1], (nume - i) * sizeof (BITCODE_H));
+    }
 }
 
 /* from my dwg11.c, 1995 - rurban */

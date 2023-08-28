@@ -2111,7 +2111,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   Dwg_Object_Ref *ref;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   // ENTITY, DICTIONARY, XRECORD or class may need to be relative.
-  // GROUP needs to be absolute. DICTIONARYVAr absolute
+  // GROUP needs to be absolute. DICTIONARYVAR absolute
   // TODO: prev_entity/next_entity also
   // skip the search for existing absolute ref then.
   if (code > 5

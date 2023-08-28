@@ -1304,19 +1304,14 @@ remove_EXEMPT_FROM_CAD_STANDARDS_APPID (Bit_Chain *restrict dat,
       //obj->type = DWG_TYPE_UNUSED;
     }
   // removing appid from CONTROL HV
-  for (BITCODE_BL i = 0; i < _ctl->num_entries; i++)
+  for (BITCODE_BS i = 0; i < _ctl->num_entries; i++)
     {
       BITCODE_H ref = _ctl->entries[i];
       if (ref->absolute_ref == appid->absolute_ref)
         {
           LOG_TRACE ("APPID_CONTROL[%u] removed " FORMAT_REF " [H*]\n",
                      i, ARGS_REF (ref));
-          --_ctl->num_entries;
-          if (!_ctl->num_entries || i != _ctl->num_entries) // not the last?
-            {
-              memmove (&_ctl->entries[i], &_ctl->entries[i + 1],
-                       _ctl->num_entries - i);
-            }
+          delete_hv (_ctl->entries, &_ctl->num_entries, i);
           return;
         }
     }
