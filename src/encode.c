@@ -3203,12 +3203,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           continue;
         }
       obj = &dwg->object[index];
-      if (obj->type == DWG_TYPE_FREED)
+      if (obj->type == DWG_TYPE_UNUSED)
         {
-          LOG_TRACE ("Skip freed object " FORMAT_BL "\n", index)
+          LOG_TRACE ("Skip unused object %s " FORMAT_BL " " FORMAT_RLLx "\n",
+                     obj->name ? obj->name : "", index, obj->handle.value)
           continue;
         }
-      // change the address to the linearly sorted one
+      if (obj->type == DWG_TYPE_FREED)
+        {
+          LOG_TRACE ("Skip freed object %s " FORMAT_BL " " FORMAT_RLLx "\n",
+                     obj->name ? obj->name : "", index, obj->handle.value)
+          continue;
+        }
+        // change the address to the linearly sorted one
 #ifndef NDEBUG
       PRE (R_2004)
         assert (dat->byte);
