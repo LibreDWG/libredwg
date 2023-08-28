@@ -3156,6 +3156,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   // init unsorted
   for (i = 0; i < dwg->num_objects; i++)
     {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->type == DWG_TYPE_UNUSED)
+        {
+          LOG_TRACE ("Skip unused object %s " FORMAT_BL " " FORMAT_RLLx "\n",
+                     obj->name ? obj->name : "", i, obj->handle.value)
+          continue;
+        }
+      if (obj->type == DWG_TYPE_FREED)
+        {
+          LOG_TRACE ("Skip freed object %s " FORMAT_BL " " FORMAT_RLLx "\n",
+                     obj->name ? obj->name : "", i, obj->handle.value)
+          continue;
+        }
       omap[i].index = i; // i.e. dwg->object[j].index
       omap[i].handle = dwg->object[i].handle.value;
     }
@@ -3189,6 +3202,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       BITCODE_UMC hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
       BITCODE_MC off = (dat->byte - (i ? omap[i - 1].address : 0)) & INT32_MAX;
       size_t end_address;
+      if (!index && !omap[i].handle)
+        continue; // skipped objects
       LOG_TRACE ("\n> Next object: " FORMAT_BL " Handleoff: " FORMAT_UMC
                  " [UMC] Offset: " FORMAT_MC " [MC] @%zu\n"
                  "==========================================\n",
@@ -3203,19 +3218,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           continue;
         }
       obj = &dwg->object[index];
-      if (obj->type == DWG_TYPE_UNUSED)
+      if (obj->type == DWG_TYPE_UNUSED || obj->type == DWG_TYPE_FREED)
         {
-          LOG_TRACE ("Skip unused object %s " FORMAT_BL " " FORMAT_RLLx "\n",
-                     obj->name ? obj->name : "", index, obj->handle.value)
           continue;
         }
-      if (obj->type == DWG_TYPE_FREED)
-        {
-          LOG_TRACE ("Skip freed object %s " FORMAT_BL " " FORMAT_RLLx "\n",
-                     obj->name ? obj->name : "", index, obj->handle.value)
-          continue;
-        }
-        // change the address to the linearly sorted one
+      // change the address to the linearly sorted one
 #ifndef NDEBUG
       PRE (R_2004)
         assert (dat->byte);
@@ -3291,6 +3298,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       BITCODE_MC offset;
 
       index = omap[i].index;
+      if (!index && !omap[i].handle)
+        continue; // skipped objects
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
       LOG_HANDLE ("Handleoff(%3i): " FORMAT_UMC " [UMC] (" FORMAT_RLLx "), ",
