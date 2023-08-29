@@ -2822,6 +2822,19 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
+      else if (t->type == JSMN_STRING && strEQc (key, "revision_bytes"))
+        {
+          size_t len;
+          unsigned char *s = json_binary (dat, tokens, "revision_bytes", &len);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          f = dwg_dynapi_entity_field (name, "revision_bytes[9]");
+          if (f && len == 8)
+            {
+              LOG_TRACE ("%s.%s: [%s]\n", name, key, s);
+              dwg_dynapi_field_set_value (dwg, _obj, f, s, true);
+            }
+          free (s);
+        }
       else if (t->type == JSMN_ARRAY && strEQc (key, "dashes_r11")
                && t->size <= 12
                && (f = dwg_dynapi_entity_field (name, "dashes_r11[12]")))
