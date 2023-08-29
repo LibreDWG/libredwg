@@ -2644,7 +2644,8 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       if (dat->version >= R_2004)
         {
-          error |= json_section_r2004fileheader (dat, dwg);
+          if (dat->version != R_2007)
+            error |= json_section_r2004fileheader (dat, dwg);
           if (dwg->header.summaryinfo_address)
             error |= json_section_summary (dat, dwg);
           if (dwg->header.vbaproj_address)
