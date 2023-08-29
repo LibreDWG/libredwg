@@ -2348,6 +2348,53 @@ json_section_r2004fileheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
+json_section_r2007fileheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Dwg_R2007_Header *_obj = &dwg->r2007_file_header;
+  Dwg_Object *obj = NULL;
+  int i;
+
+  RECORD (R2007_Header); // single hash
+  FIELD_RLL (header_size, 0);
+  FIELD_RLL (file_size, 0);
+  FIELD_RLL (pages_map_crc_compressed, 0);
+  FIELD_RLL (pages_map_correction, 0);
+  FIELD_RLL (pages_map_crc_seed, 0);
+  FIELD_RLL (pages_map2_offset, 0);
+  FIELD_RLL (pages_map2_id, 0);
+  FIELD_RLL (pages_map_offset, 0);
+  FIELD_RLL (pages_map_id, 0);
+  FIELD_RLL (header2_offset, 0);
+  FIELD_RLL (pages_map_size_comp, 0);
+  FIELD_RLL (pages_map_size_uncomp, 0);
+  FIELD_RLL (pages_amount, 0);
+  FIELD_RLL (pages_maxid, 0);
+  FIELD_RLL (unknown1, 0);
+  FIELD_RLL (unknown2, 0);
+  FIELD_RLL (pages_map_crc_uncomp, 0);
+  FIELD_RLL (unknown3, 0);
+  FIELD_RLL (unknown4, 0);
+  FIELD_RLL (unknown5, 0);
+  FIELD_RLL (num_sections, 0);
+  FIELD_RLL (sections_map_crc_uncomp, 0);
+  FIELD_RLL (sections_map_size_comp, 0);
+  FIELD_RLL (sections_map2_id, 0);
+  FIELD_RLL (sections_map_id, 0);
+  FIELD_RLL (sections_map_size_uncomp, 0);
+  FIELD_RLL (sections_map_crc_comp, 0);
+  FIELD_RLL (sections_map_correction, 0);
+  FIELD_RLL (sections_map_crc_seed, 0);
+  FIELD_RLL (stream_version, 0);
+  FIELD_RLL (crc_seed, 0);
+  FIELD_RLL (crc_seed_encoded, 0);
+  FIELD_RLL (random_seed, 0);
+  FIELD_RLL (header_crc, 0);
+  ENDRECORD ();
+
+  return 0;
+}
+
+static int
 json_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_SummaryInfo *_obj = &dwg->summaryinfo;
@@ -2644,7 +2691,9 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       if (dat->version >= R_2004)
         {
-          if (dat->version != R_2007)
+          if (dat->version == R_2007)
+            error |= json_section_r2007fileheader (dat, dwg);
+          else
             error |= json_section_r2004fileheader (dat, dwg);
           if (dwg->header.summaryinfo_address)
             error |= json_section_summary (dat, dwg);

@@ -3611,6 +3611,83 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static int
+json_R2007_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                   jsmntokens_t *restrict tokens)
+{
+  const char *section = "R2007_Header";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  Dwg_R2007_Header *_obj = &dwg->r2007_file_header;
+  int size;
+  if (t->type != JSMN_OBJECT)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, t->type, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  size = t->size;
+  LOG_TRACE ("\n%s pos:%d [%d keys]\n--------------------\n", section,
+             tokens->index, size);
+  tokens->index++;
+  for (int i = 0; i < size; i++)
+    {
+      char key[80];
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
+      json_fixed_key (key, dat, tokens);
+      t = &tokens->tokens[tokens->index];
+
+      // clang-format off
+      if (0) ;
+      FIELD_RLL (header_size, 0)
+      FIELD_RLL (file_size, 0)
+      FIELD_RLL (pages_map_crc_compressed, 0)
+      FIELD_RLL (pages_map_correction, 0)
+      FIELD_RLL (pages_map_crc_seed, 0)
+      FIELD_RLL (pages_map2_offset, 0)
+      FIELD_RLL (pages_map2_id, 0)
+      FIELD_RLL (pages_map_offset, 0)
+      FIELD_RLL (pages_map_id, 0)
+      FIELD_RLL (header2_offset, 0)
+      FIELD_RLL (pages_map_size_comp, 0)
+      FIELD_RLL (pages_map_size_uncomp, 0)
+      FIELD_RLL (pages_amount, 0)
+      FIELD_RLL (pages_maxid, 0)
+      FIELD_RLL (unknown1, 0)
+      FIELD_RLL (unknown2, 0)
+      FIELD_RLL (pages_map_crc_uncomp, 0)
+      FIELD_RLL (unknown3, 0)
+      FIELD_RLL (unknown4, 0)
+      FIELD_RLL (unknown5, 0)
+      FIELD_RLL (num_sections, 0)
+      FIELD_RLL (sections_map_crc_uncomp, 0)
+      FIELD_RLL (sections_map_size_comp, 0)
+      FIELD_RLL (sections_map2_id, 0)
+      FIELD_RLL (sections_map_id, 0)
+      FIELD_RLL (sections_map_size_uncomp, 0)
+      FIELD_RLL (sections_map_crc_comp, 0)
+      FIELD_RLL (sections_map_correction, 0)
+      FIELD_RLL (sections_map_crc_seed, 0)
+      FIELD_RLL (stream_version, 0)
+      FIELD_RLL (crc_seed, 0)
+      FIELD_RLL (crc_seed_encoded, 0)
+      FIELD_RLL (random_seed, 0)
+      FIELD_RLL (header_crc, 0)
+      // clang-format on
+      // end of encrypted header
+      else
+      {
+        LOG_ERROR ("Unknown %s.%s ignored", section, key);
+        tokens->index++;
+      }
+    }
+
+  LOG_TRACE ("End of %s\n", section)
+  tokens->index--;
+  return 0;
+}
+
+static int
 json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    jsmntokens_t *restrict tokens)
 {
@@ -5009,6 +5086,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= json_SecondHeader (dat, dwg, &tokens);
       else if (strEQc (key, "R2004_Header"))
         error |= json_R2004_Header (dat, dwg, &tokens);
+      else if (strEQc (key, "R2007_Header"))
+        error |= json_R2007_Header (dat, dwg, &tokens);
       else if (strEQc (key, "SummaryInfo"))
         error |= json_SummaryInfo (dat, dwg, &tokens);
       else if (strEQc (key, "VBAProject"))

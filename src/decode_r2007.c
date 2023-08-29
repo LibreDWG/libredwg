@@ -49,44 +49,6 @@ static unsigned int cur_ver = 0;
 #define DBG_MAX_COUNT 0x100000
 #define DBG_MAX_SIZE 0xff0000 /* should be dat->size */
 
-typedef struct r2007_file_header
-{
-  int64_t header_size; // 0x70
-  int64_t file_size;
-  int64_t pages_map_crc_compressed;
-  int64_t pages_map_correction;
-  int64_t pages_map_crc_seed;
-  int64_t pages_map2_offset;
-  int64_t pages_map2_id;
-  int64_t pages_map_offset; // starting address of the Page Map section
-  int64_t pages_map_id;
-  int64_t header2_offset;
-  int64_t pages_map_size_comp; // the compressed size of section
-  int64_t pages_map_size_uncomp;
-  int64_t pages_amount;
-  int64_t pages_maxid;
-  int64_t unknown1; // 0x20
-  int64_t unknown2; // 0x40
-  int64_t pages_map_crc_uncomp;
-  int64_t unknown3; // 0xf800
-  int64_t unknown4; // 4
-  int64_t unknown5; // 1
-  int64_t num_sections;
-  int64_t sections_map_crc_uncomp;
-  int64_t sections_map_size_comp;
-  int64_t sections_map2_id;
-  int64_t sections_map_id;
-  int64_t sections_map_size_uncomp;
-  int64_t sections_map_crc_comp;
-  int64_t sections_map_correction;
-  int64_t sections_map_crc_seed;
-  int64_t stream_version; // 0x60100
-  int64_t crc_seed;
-  int64_t crc_seed_encoded;
-  int64_t random_seed;
-  int64_t header_crc;
-} r2007_file_header;
-
 /* page map */
 typedef struct _r2007_page
 {
@@ -165,7 +127,7 @@ static r2007_page *read_pages_map (Bit_Chain *dat, int64_t size_comp,
                                    int64_t size_uncomp,
                                    int64_t correction) ATTRIBUTE_MALLOC;
 static int read_file_header (Bit_Chain *restrict dat,
-                             r2007_file_header *restrict file_header);
+                             Dwg_R2007_Header *restrict file_header);
 static void read_instructions (BITCODE_RC *restrict *restrict src,
                                BITCODE_RC *restrict opcode,
                                uint32_t *restrict offset,
@@ -1207,7 +1169,7 @@ sections_destroy (r2007_section *section)
 
 static int
 read_file_header (Bit_Chain *restrict dat,
-                  r2007_file_header *restrict file_header)
+                  Dwg_R2007_Header *restrict file_header)
 {
   BITCODE_RC data[0x3d8]; // 0x400 - 5 long
   BITCODE_RC *pedata;
@@ -1220,8 +1182,8 @@ read_file_header (Bit_Chain *restrict dat,
   const int pedata_size = 3 * 239; // size of pedata
 
   dat->byte = 0x80;
-  LOG_TRACE ("\n=== File header ===\n")
-  memset (file_header, 0, sizeof (r2007_file_header));
+  LOG_TRACE ("\n=== r2007 File header ===\n")
+  memset (file_header, 0, sizeof (Dwg_R2007_Header));
   memset (data, 0, 0x3d8);
   bit_read_fixed (dat, data, 0x3d8);
   pedata = decode_rs (data, 3, 239, 0x3d8);
@@ -1241,15 +1203,15 @@ read_file_header (Bit_Chain *restrict dat,
 
   if (compr_len > 0)
     error = decompress_r2007 ((BITCODE_RC *)file_header,
-                              sizeof (r2007_file_header), &pedata[32],
+                              sizeof (Dwg_R2007_Header), &pedata[32],
                               MIN (compr_len, pedata_size - 32), NULL);
   else
-    memcpy (file_header, &pedata[32], sizeof (r2007_file_header));
+    memcpy (file_header, &pedata[32], sizeof (Dwg_R2007_Header));
 
 #ifdef WORDS_BIGENDIAN
   {
     uint64_t *fields  = (uint64_t *)file_header;
-    for (unsigned j = 0; j < sizeof (r2007_file_header) / 8; j++)
+    for (unsigned j = 0; j < sizeof (Dwg_R2007_Header) / 8; j++)
       {
         fields[j] = le64toh (fields[j]);
       }
@@ -2355,7 +2317,7 @@ int
 read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                       Dwg_Data *restrict dwg)
 {
-  r2007_file_header file_header;
+  Dwg_R2007_Header *file_header;
   r2007_page *restrict pages_map = NULL, *restrict page;
   r2007_section *restrict sections_map = NULL;
   int error;
@@ -2370,48 +2332,49 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
     loglevel = atoi (probe);
 #endif
   // @ 0x62
-  error = read_file_header (dat, &file_header);
+  error = read_file_header (dat, &dwg->r2007_file_header);
   if (error >= DWG_ERR_VALUEOUTOFBOUNDS)
     return error;
+  file_header = &dwg->r2007_file_header;
 
   // Pages Map
   dat->byte += 0x28; // overread check data
-  dat->byte += file_header.pages_map_offset;
-  if ((size_t)file_header.pages_map_size_comp > dat->size - dat->byte)
+  dat->byte += file_header->pages_map_offset;
+  if ((size_t)file_header->pages_map_size_comp > dat->size - dat->byte)
     {
       LOG_ERROR ("%s Invalid pages_map_size_comp %zu > %zu bytes left",
-                 __FUNCTION__, (size_t)file_header.pages_map_size_comp,
+                 __FUNCTION__, (size_t)file_header->pages_map_size_comp,
                  dat->size - dat->byte)
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
       goto error;
     }
-  pages_map = read_pages_map (dat, file_header.pages_map_size_comp,
-                              file_header.pages_map_size_uncomp,
-                              file_header.pages_map_correction);
+  pages_map = read_pages_map (dat, file_header->pages_map_size_comp,
+                              file_header->pages_map_size_uncomp,
+                              file_header->pages_map_correction);
   if (!pages_map)
     return DWG_ERR_PAGENOTFOUND; // Error already logged
 
   // Sections Map
-  page = get_page (pages_map, file_header.sections_map_id);
+  page = get_page (pages_map, file_header->sections_map_id);
   if (!page)
     {
       LOG_ERROR ("Failed to find sections page map %d",
-                 (int)file_header.sections_map_id);
+                 (int)file_header->sections_map_id);
       error |= DWG_ERR_SECTIONNOTFOUND;
       goto error;
     }
   dat->byte = page->offset;
-  if ((size_t)file_header.sections_map_size_comp > dat->size - dat->byte)
+  if ((size_t)file_header->sections_map_size_comp > dat->size - dat->byte)
     {
       LOG_ERROR ("%s Invalid comp_data_size %" PRId64 " > %zu bytes left",
-                 __FUNCTION__, file_header.sections_map_size_comp,
+                 __FUNCTION__, file_header->sections_map_size_comp,
                  dat->size - dat->byte)
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
       goto error;
     }
-  sections_map = read_sections_map (dat, file_header.sections_map_size_comp,
-                                    file_header.sections_map_size_uncomp,
-                                    file_header.sections_map_correction);
+  sections_map = read_sections_map (dat, file_header->sections_map_size_comp,
+                                    file_header->sections_map_size_uncomp,
+                                    file_header->sections_map_correction);
   if (!sections_map)
     goto error;
 

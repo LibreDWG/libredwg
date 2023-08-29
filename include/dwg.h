@@ -9378,6 +9378,44 @@ typedef struct _dwg_header
 } Dwg_Header;
 
 #pragma pack(1)
+typedef struct r2007_file_header
+{
+  int64_t header_size; // 0x70
+  int64_t file_size;
+  int64_t pages_map_crc_compressed;
+  int64_t pages_map_correction;
+  int64_t pages_map_crc_seed;
+  int64_t pages_map2_offset;
+  int64_t pages_map2_id;
+  int64_t pages_map_offset; // starting address of the Page Map section
+  int64_t pages_map_id;
+  int64_t header2_offset;
+  int64_t pages_map_size_comp; // the compressed size of section
+  int64_t pages_map_size_uncomp;
+  int64_t pages_amount;
+  int64_t pages_maxid;
+  int64_t unknown1; // 0x20
+  int64_t unknown2; // 0x40
+  int64_t pages_map_crc_uncomp;
+  int64_t unknown3; // 0xf800
+  int64_t unknown4; // 4
+  int64_t unknown5; // 1
+  int64_t num_sections;
+  int64_t sections_map_crc_uncomp;
+  int64_t sections_map_size_comp;
+  int64_t sections_map2_id;
+  int64_t sections_map_id;
+  int64_t sections_map_size_uncomp;
+  int64_t sections_map_crc_comp;
+  int64_t sections_map_correction;
+  int64_t sections_map_crc_seed;
+  int64_t stream_version; // 0x60100
+  int64_t crc_seed;
+  int64_t crc_seed_encoded;
+  int64_t random_seed;
+  int64_t header_crc;
+} Dwg_R2007_Header;
+
 typedef struct _dwg_R2004_Header /* encrypted */
 {
   BITCODE_RC file_ID_string[12];
@@ -9612,7 +9650,10 @@ typedef struct _dwg_struct
   Dwg_Header_Variables header_vars;
   Dwg_Chain thumbnail;
 
-  Dwg_R2004_Header r2004_header; /* encrypted, packed */
+  union {
+    Dwg_R2004_Header r2004_header; /* encrypted, packed */
+    Dwg_R2007_Header r2007_file_header; /* encrypted, packed */
+  };
 
   /* Should only be initialized after the read/write is complete. */
   Dwg_Object *mspace_block;
