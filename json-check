@@ -44,8 +44,7 @@ case $r in
 esac
 
 # first create a dwg log to compare against
-./log "$v" "$d"
-mv "$b.log" "$b.log.orig"
+./log "-l$b.log.orig" "$v" "$d"
 rm "./$b.json" "./$b.dwg" 2>/dev/null
 
 if ! ./json "$v" "$d"; then
