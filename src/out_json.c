@@ -881,7 +881,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define FIELD_XDATA(nam, size) error |= json_xdata (dat, _obj)
 
 #define XDICOBJHANDLE(code)                                                   \
-  if ((dat->version < R_2004 || obj->tio.object->is_xdic_missing != 0)        \
+  if ((dat->version < R_2004 || obj->tio.object->is_xdic_missing == 0)        \
       && (obj->tio.object->xdicobjhandle != NULL)                             \
       && (obj->tio.object->xdicobjhandle->handleref.value != 0))              \
     {                                                                         \
@@ -889,7 +889,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
     }
 #define ENT_XDICOBJHANDLE(code)                                               \
-  if ((dat->version < R_2004 || (_ent->is_xdic_missing != 0))                 \
+  if ((dat->version < R_2004 || _ent->is_xdic_missing == 0)                   \
       && (_ent->xdicobjhandle != NULL)                                        \
       && (_ent->xdicobjhandle->handleref.value != 0))                         \
     {                                                                         \
