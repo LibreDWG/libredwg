@@ -1109,8 +1109,11 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 #  define SUMMARY_T(name)                                                     \
     (pair->code == 1 && strEQc (field, "$" #name) && pair->value.s != NULL)   \
     {                                                                         \
+      char dest[1024];                                                        \
       LOG_TRACE ("SUMMARY.%s = %s [T16 1]\n", &field[1], pair->value.s);      \
-      dwg->summaryinfo.name = pair->value.s;                                  \
+      bit_utf8_to_TV (dest, (unsigned char *)pair->value.s, 1024,             \
+                            strlen (pair->value.s), 0, dat->codepage);        \
+      dwg->summaryinfo.name = strdup (dest);                                  \
     }
 
               // clang-format off
