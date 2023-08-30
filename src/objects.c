@@ -1010,7 +1010,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str240,                            "APPID",                             DWG_TYPE_APPID,	0,	STABLE},
       {-1},
 #line 334 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str242,                "RENDERENVIRONMENT",                 DWG_TYPE_RENDERENVIRONMENT,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str242,                "RENDERENVIRONMENT",                 DWG_TYPE_RENDERENVIRONMENT,	0,	STABLE},
       {-1}, {-1}, {-1},
 #line 90 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str246,     "LINEARPARAMETERENTITY",      DWG_TYPE_LINEARPARAMETERENTITY,	1,	DEBUGGING},

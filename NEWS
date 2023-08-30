@@ -12,6 +12,8 @@ Major features:
     Also cross-compile to mips32be and ppc64be.
     Tested ok with tcc and a patched chibicc.
   * Added read support on bigendian platforms, write not yet.
+  * Fix many minor ODA roundtrip errors, leading to less recovery mode
+    dialogs.
   * Fixed dwgadd (Dmitry Sinyavin #388, #415)
   * libredwg is on vcpkg
   * New authors: Michal Josef Špaček (preR13 DWG formats),
@@ -19,6 +21,8 @@ Major features:
 Minor features:
   * Added a third *int alloced arg to dwg_dynapi_handle_name()
   * Renamed HEADER.unknown_s[] fields. (Michal Spacek #412)
+  * Fixed RENDERENVIRONMENT.fog_color, seperated into extra rgb fields
+  * Now stable: RENDERENVIRONMENT
 Minor bugfixes:
   * Fixed HEADER.PLINEGEN pre-r13 (Michal Spacek #408)
   * Fixed HEADER.OSMODE pre-r13 (Michal Spacek #409)
