@@ -12,9 +12,16 @@ Major features:
     Also cross-compile to mips32be and ppc64be.
     Tested ok with tcc and a patched chibicc.
   * Added read support on bigendian platforms, write not yet.
+  * Full support for en-/decoding foreign codepages, also the MIF
+    \M=1-5xxxx format. (With and without iconv)
   * Fix many minor ODA roundtrip errors, leading to less recovery mode
     dialogs.
   * Fixed dwgadd (Dmitry Sinyavin #388, #415)
+  * Add --with-dxf-precision=(rfc,max,16,6) and
+    --with-geojson-precision=(rfc,max,16,6) build options. (#810)
+    The GeoJSON default is now back from the RFC7946 recommended 6 to 16 (=max),
+    leading to much larger and much more precise files.
+  * Split arcs/circles into line segments with GeoJSON (#520)
   * libredwg is on vcpkg
   * New authors: Michal Josef Špaček (preR13 DWG formats),
     Dmitry Sinyavin (dwgadd fixes).
@@ -23,10 +30,16 @@ Minor features:
   * Renamed HEADER.unknown_s[] fields. (Michal Spacek #412)
   * Fixed RENDERENVIRONMENT.fog_color, seperated into extra rgb fields
   * Now stable: RENDERENVIRONMENT
+  * json contains and can import now also SecondHeader and R2007_Header sections.
+  * Better logging.
 Minor bugfixes:
   * Fixed HEADER.PLINEGEN pre-r13 (Michal Spacek #408)
   * Fixed HEADER.OSMODE pre-r13 (Michal Spacek #409)
   * Fixed LAYER.plotflag (#509)
+  * Remove APPID.EXEMPT_FROM_CAD_STANDARDS when down-encoding to r2000. (#817)
+  * Create an VX_CONTROL and an empty VX table record when down-encoding to
+    r2000. (#811)
+  * Fixed all T16 texts in the SummaryInfo section <r2007.
   * Fixed many more minor fuzzer errors with illegal input, detected by the
     oss-fuzz service and others. More bounds and type checks, null-derefs,
     double-free, missing zero-termination in fuzzer inputs.
