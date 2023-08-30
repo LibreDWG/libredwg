@@ -9574,10 +9574,10 @@ typedef struct _dwg_revhistory
 typedef struct _dwg_objfreespace
 {
   BITCODE_RLL zero;
-  BITCODE_RLL num_handles;
+  BITCODE_RLL numhandles;
   BITCODE_TIMERLL TDUPDATE;
   BITCODE_RL objects_address;
-  BITCODE_RC num_nums; // RLL (uint64_t) or uint128_t
+  BITCODE_RC numnums; // RLL (uint64_t) or uint128_t
   BITCODE_RLL max32;   // 0x32
   BITCODE_RLL max64;   // 0x64
   BITCODE_RLL maxtbl;  // 0x200

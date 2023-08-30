@@ -4584,9 +4584,9 @@ json_ObjFreeSpace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // clang-format off
       if (0) ;
       FIELD_RLL (zero, 0)
-      FIELD_RLL (num_handles, 0)
+      FIELD_RLL (numhandles, 0)
       FIELD_TIMERLL (TDUPDATE, 0)
-      FIELD_RC (num_nums, 0)
+      FIELD_RC (numnums, 0)
       FIELD_RLL (max32, 0)
       FIELD_RLL (max32_hi, 0)
       FIELD_RLL (max64, 0)

@@ -21,10 +21,10 @@
   UNTIL (R_2007)
   {
     FIELD_CAST (zero, RL, RLL, 0);
-    FIELD_CAST (num_handles, RL, RLL, 0);
+    FIELD_CAST (numhandles, RL, RLL, 0);
     FIELD_TIMERLL (TDUPDATE, 0);
     FIELD_RLx (objects_address, 0);
-    FIELD_RC (num_nums, 0);
+    FIELD_RC (numnums, 0);
     FIELD_RLL (max32, 0);    // 0x32
     FIELD_RLL (max64, 0);    // 0x64
     FIELD_RLL (maxtbl, 0);   // 0x200
@@ -32,9 +32,9 @@
   }
   LATER_VERSIONS {
     FIELD_RLL (zero, 0);
-    FIELD_RLL (num_handles, 0);
+    FIELD_RLL (numhandles, 0);
     FIELD_TIMERLL (TDUPDATE, 0);
-    FIELD_RC (num_nums, 0);
+    FIELD_RC (numnums, 0);
     // num types are not 64 bit, but 128
     FIELD_RLL (max32, 0);       // 0x32
     FIELD_RLL (max32_hi, 0);    //
