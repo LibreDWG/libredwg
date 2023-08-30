@@ -5942,31 +5942,13 @@ add_RENDERENVIRONMENT (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BL (class_version, 90);
   FIELD_B (fog_enabled, 290);
   FIELD_B (fog_background_enabled, 290);
-
-  pair = dxf_read_pair (dat);
-  EXPECT_DXF (obj->name, fog_color, 280);
-  r = pair->value.u & 0xff;
-  dxf_free_pair (pair);
-
-  pair = dxf_read_pair (dat);
-  EXPECT_DXF (obj->name, fog_color, 280);
-  g = pair->value.u & 0xff;
-  dxf_free_pair (pair);
-
-  pair = dxf_read_pair (dat);
-  EXPECT_DXF (obj->name, fog_color, 280);
-  b = pair->value.u & 0xff;
-  dxf_free_pair (pair);
-
-  o->fog_color.method = 0xc3;
-  o->fog_color.rgb = 0xc3000000 | r << 16 | g << 8 | b;
-  LOG_TRACE ("%s.fog_color.rgb = 0x%x [3x RC 280]\n", obj->name,
-             o->fog_color.rgb)
-
+  FIELD_RC (fog_color_r, 280);
+  FIELD_RC (fog_color_g, 280);
+  FIELD_RC (fog_color_b, 280);
   FIELD_BD (fog_density_near, 40); /* default 100.0 (opaque fog) */
   FIELD_BD (fog_density_far, 40);
-  FIELD_BD (fog_distance_near,
-            40); /* default 100.0 (at the far clipping plane) */
+  /* default 100.0 (at the far clipping plane) */
+  FIELD_BD (fog_distance_near, 40);
   FIELD_BD (fog_distance_far, 40);
   FIELD_B (environ_image_enabled, 290);
   FIELD_T (environ_image_filename, 1);

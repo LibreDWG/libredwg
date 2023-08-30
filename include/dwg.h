@@ -6570,7 +6570,9 @@ typedef struct _dwg_object_RENDERENVIRONMENT
   BITCODE_BL class_version;     	/*!< DXF 90, default: 1 */
   BITCODE_B fog_enabled;        	/*!< DXF 290 */
   BITCODE_B fog_background_enabled;  	/*!< DXF 290 */
-  BITCODE_CMC fog_color;        	/*!< DXF 280 */
+  BITCODE_RC fog_color_r;        	/*!< DXF 280 */
+  BITCODE_RC fog_color_g;        	/*!< DXF 280 */
+  BITCODE_RC fog_color_b;        	/*!< DXF 280 */
   BITCODE_BD fog_density_near;  	/*!< DXF 40 */
   BITCODE_BD fog_density_far;   	/*!< DXF 40 */
   BITCODE_BD fog_distance_near;     	/*!< DXF 40 */

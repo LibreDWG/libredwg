@@ -11379,8 +11379,12 @@ BL,	DXF 90
 B,	DXF 290
 @item fog_background_enabled
 B,	DXF 290
-@item fog_color
-CMC,	DXF 280
+@item fog_color_r
+RC,	DXF 280
+@item fog_color_g
+RC,	DXF 280
+@item fog_color_b
+RC,	DXF 280
 @item fog_density_near
 BD,	DXF 40
 @item fog_density_far

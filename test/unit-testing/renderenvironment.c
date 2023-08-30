@@ -8,7 +8,9 @@ api_process (dwg_object *obj)
   BITCODE_BL class_version;
   BITCODE_B fog_enabled;
   BITCODE_B fog_background_enabled;
-  BITCODE_CMC fog_color;
+  BITCODE_RC fog_color_r;
+  BITCODE_RC fog_color_g;
+  BITCODE_RC fog_color_b;
   BITCODE_BD fog_density_near;
   BITCODE_BD fog_density_far;
   BITCODE_BD fog_distance_near;
@@ -22,7 +24,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, class_version, BL);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_enabled, B);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_background_enabled, B);
-  CHK_ENTITY_CMC (_obj, RENDERENVIRONMENT, fog_color);
+  CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_color_r, RC);
+  CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_color_g, RC);
+  CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_color_b, RC);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_density_near, BD);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_density_far, BD);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_distance_near, BD);

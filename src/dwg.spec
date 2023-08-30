@@ -11072,7 +11072,9 @@ DWG_OBJECT (RENDERENVIRONMENT)
   FIELD_BL (class_version, 90);     /*!< default 1 */
   FIELD_B (fog_enabled, 290);
   FIELD_B (fog_background_enabled, 290);
-  FIELD_CMC (fog_color, 280);
+  FIELD_RC (fog_color_r, 280);
+  FIELD_RC (fog_color_g, 280);
+  FIELD_RC (fog_color_b, 280);
   FIELD_BD (fog_density_near, 40); /* default 100.0 (opaque fog) */
   FIELD_BD (fog_density_far, 40);
   FIELD_BD (fog_distance_near, 40); /* default 100.0 (at the far clipping plane) */

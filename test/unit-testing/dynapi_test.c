@@ -56286,12 +56286,49 @@ static int test_RENDERENVIRONMENT (const Dwg_Object *obj)
     renderenvironment->fog_background_enabled--;
   }
   {
-    BITCODE_CMC fog_color;
-    if (dwg_dynapi_entity_value (renderenvironment, "RENDERENVIRONMENT", "fog_color", &fog_color, NULL)
-        && !memcmp (&fog_color, &renderenvironment->fog_color, sizeof (BITCODE_CMC)))
-        pass ();
+    BITCODE_RC fog_color_b;
+    if (dwg_dynapi_entity_value (renderenvironment, "RENDERENVIRONMENT", "fog_color_b", &fog_color_b, NULL)
+        && fog_color_b == renderenvironment->fog_color_b)
+      pass ();
     else
-        fail ("RENDERENVIRONMENT.fog_color [CMC]");
+      fail ("RENDERENVIRONMENT.fog_color_b [RC] %u != %u", renderenvironment->fog_color_b, fog_color_b);
+    fog_color_b++;
+    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_color_b", &fog_color_b, 0)
+        && fog_color_b == renderenvironment->fog_color_b)
+      pass ();
+    else
+      fail ("RENDERENVIRONMENT.fog_color_b [RC] set+1 %u != %u", renderenvironment->fog_color_b, fog_color_b);
+    renderenvironment->fog_color_b--;
+  }
+  {
+    BITCODE_RC fog_color_g;
+    if (dwg_dynapi_entity_value (renderenvironment, "RENDERENVIRONMENT", "fog_color_g", &fog_color_g, NULL)
+        && fog_color_g == renderenvironment->fog_color_g)
+      pass ();
+    else
+      fail ("RENDERENVIRONMENT.fog_color_g [RC] %u != %u", renderenvironment->fog_color_g, fog_color_g);
+    fog_color_g++;
+    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_color_g", &fog_color_g, 0)
+        && fog_color_g == renderenvironment->fog_color_g)
+      pass ();
+    else
+      fail ("RENDERENVIRONMENT.fog_color_g [RC] set+1 %u != %u", renderenvironment->fog_color_g, fog_color_g);
+    renderenvironment->fog_color_g--;
+  }
+  {
+    BITCODE_RC fog_color_r;
+    if (dwg_dynapi_entity_value (renderenvironment, "RENDERENVIRONMENT", "fog_color_r", &fog_color_r, NULL)
+        && fog_color_r == renderenvironment->fog_color_r)
+      pass ();
+    else
+      fail ("RENDERENVIRONMENT.fog_color_r [RC] %u != %u", renderenvironment->fog_color_r, fog_color_r);
+    fog_color_r++;
+    if (dwg_dynapi_entity_set_value (renderenvironment, "RENDERENVIRONMENT", "fog_color_r", &fog_color_r, 0)
+        && fog_color_r == renderenvironment->fog_color_r)
+      pass ();
+    else
+      fail ("RENDERENVIRONMENT.fog_color_r [RC] set+1 %u != %u", renderenvironment->fog_color_r, fog_color_r);
+    renderenvironment->fog_color_r--;
   }
   {
     BITCODE_BD fog_density_far;
