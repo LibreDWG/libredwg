@@ -22531,7 +22531,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.DIMCLRE = (BITCODE_CMC){ 0, CMC_DEFAULTS };
   dwg->header_vars.DIMCLRT = (BITCODE_CMC){ 0, CMC_DEFAULTS };
 
-  dwg->header_vars.MEASUREMENT = imperial ? 0 : 256;
+  dwg->header_vars.MEASUREMENT = imperial ? 0 : 1;
   canonical_media_name = imperial ? "ANSI_A_(8.50_x_11.00_Inches)"
                                   : "ISO_A1_(841.00_x_594.00_MM)";
 
