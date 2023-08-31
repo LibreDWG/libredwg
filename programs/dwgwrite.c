@@ -72,7 +72,7 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r1.1, r1.2, r1.3, r2.0, r2.10, r2.21, r2.22, r2.4,"
+  printf ("             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,"
           "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r2004-r2021\n");
@@ -91,7 +91,7 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r1.1, r1.2, r1.3, r2.0, r2.10, r2.21, r2.22, r2.4,"
+  printf ("                r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,"
           "                r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
   printf ("                r2004-r2021\n");
@@ -185,7 +185,7 @@ main (int argc, char *argv[])
   char *outfile = NULL;
   Bit_Chain dat = { 0 };
   const char *version = NULL;
-  Dwg_Version_Type dwg_version = R_2000;
+  Dwg_Version_Type dwg_version = R_INVALID;
   int c;
   int force_free = 0;
   int free_outfile = 0;
@@ -408,13 +408,18 @@ main (int argc, char *argv[])
   if (error >= DWG_ERR_CRITICAL)
     goto free;
 
+  if (dwg_version == R_INVALID)
+    {
+      dwg_version = dwg.header.from_version;
+      if (dwg_version >= R_2004)
+        dwg_version = R_2000;
+      else if (dwg_version < R_1_4)
+        dwg_version = R_1_4;
+    }
   if (dwg.header.from_version == R_INVALID)
     fprintf (stderr, "Unknown DWG header.from_version");
   // FIXME: for now only r1.4 - R_2000. later remove this line.
-  if (dwg.header.from_version >= R_2004)
-    dat.version = dwg.header.version = dwg_version;
-  if (dwg.header.version == R_INVALID)
-    dat.version = dwg.header.version = dwg.header.from_version;
+  dat.version = dwg.header.version = dwg_version;
 
   if (!outfile)
     {
