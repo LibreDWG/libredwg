@@ -59,6 +59,10 @@
 #include "dynapi.h"
 #include "free.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 // from dwg_api
 BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
                             const char *restrict u8str);
@@ -69,6 +73,9 @@ Dwg_Object_VX_TABLE_RECORD *dwg_add_VX (Dwg_Data *restrict dwg,
 BITCODE_RLL dwg_obj_generic_handlevalue (void *_obj);
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
+#ifdef __cplusplus
+}
+#endif
 
 static int encode_preR13_section (const Dwg_Section_Type_r11 id,
                                   Bit_Chain *restrict dat,
@@ -1239,10 +1246,17 @@ static void downconvert_DIMSTYLE (Bit_Chain *restrict dat,
                                   Dwg_Object *restrict obj);
 
 /* Imported */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
 void dwg_set_handle_size (Dwg_Handle *restrict hdl);
+#ifdef __cplusplus
+}
+#endif
 
 /*--------------------------------------------------------------------------------
  * Public functions
