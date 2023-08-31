@@ -34,6 +34,11 @@
 //too large. TODO ifdef there
 //%include "dwg_api.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** dynapi */
 typedef struct dwg_field_name_type_offset
 {
@@ -838,3 +843,7 @@ EXPORT Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS* dwg_object_to_ASSOCARRAYRECTA
   //EXPORT Dwg_Object_XREFPANELOBJECT* dwg_object_to_XREFPANELOBJECT (Dwg_Object* obj);
 #endif
 /* End auto-generated content */
+
+#ifdef __cplusplus
+}
+#endif
