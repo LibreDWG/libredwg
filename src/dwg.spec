@@ -2605,27 +2605,28 @@ DWG_ENTITY_END
 
 // 37, 38 and 39 are ACIS entities
 #define WIRESTRUCT_fields(name)                       \
-  FIELD_RC (name.type, 0);                            \
-  FIELD_BLd (name.selection_marker, 0);               \
+  SUB_FIELD_RC (name, type, 0);                       \
+  SUB_FIELD_BLd (name, selection_marker, 0);          \
   PRE (R_2004) {                                      \
     FIELD_CAST (name.color, BS, BL, 0);               \
   } else {                                            \
-    FIELD_BL (name.color, 0); }                       \
-  FIELD_BLd (name.acis_index, 0);                     \
+    SUB_FIELD_BL (name, color, 0);                    \
+  }                                                   \
+  SUB_FIELD_BLd (name, acis_index, 0);                \
   /* TODO: align num_points to 255 */                 \
-  FIELD_BL (name.num_points, 0);                      \
+  SUB_FIELD_BL (name, num_points, 0);                 \
   FIELD_3DPOINT_VECTOR (name.points, name.num_points, 0); \
-  FIELD_B (name.transform_present, 0);                \
+  SUB_FIELD_B (name, transform_present, 0);           \
   if (FIELD_VALUE (name.transform_present))           \
     {                                                 \
-      FIELD_3BD (name.axis_x, 0);                     \
-      FIELD_3BD (name.axis_y, 0);                     \
-      FIELD_3BD (name.axis_z, 0);                     \
-      FIELD_3BD (name.translation, 0);                \
-      FIELD_3BD (name.scale, 0);                      \
-      FIELD_B (name.has_rotation, 0);                 \
-      FIELD_B (name.has_reflection, 0);               \
-      FIELD_B (name.has_shear, 0);                    \
+      SUB_FIELD_3BD (name, axis_x, 0);                \
+      SUB_FIELD_3BD (name, axis_y, 0);                \
+      SUB_FIELD_3BD (name, axis_z, 0);                \
+      SUB_FIELD_3BD (name, translation, 0);           \
+      SUB_FIELD_3BD (name, scale, 0);                 \
+      SUB_FIELD_B (name, has_rotation, 0);            \
+      SUB_FIELD_B (name, has_reflection, 0);          \
+      SUB_FIELD_B (name, has_shear, 0);               \
     }
 
 #if defined (IS_DECODER)
