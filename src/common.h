@@ -484,6 +484,11 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /**
  Data types (including compressed forms) used through the project
 */
@@ -717,5 +722,9 @@ bool dwg_is_valid_tag (const char *tag) __nonnull_all;
 
 bool dwg_has_eed_appid (Dwg_Object_Object *restrict obj,
                         const BITCODE_RLL absref) __nonnull_all;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

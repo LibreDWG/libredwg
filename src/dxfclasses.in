@@ -26,13 +26,24 @@
 #include "config.h"
 #include "dwg.h"
 #include "common.h"
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 // other imports
 int dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
-                   const char *const restrict cppname, const char *const restrict appname,
-                   const bool is_entity);
+                   const char *const restrict cppname,
+                   const char *const restrict appname, const bool is_entity);
 // export
 EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
-                              const char *const restrict dxfname, const size_t len);
+                              const char *const restrict dxfname,
+                              const size_t len);
+
+#ifdef __cplusplus
+}
+#endif
 
 // v3.1 changed len type from unsigned int to size_t (gperf d519d1a821511eaa22eae6d9019a548aea21e6)
 static const struct Dwg_DXFClass *in_word_set (const char *str, size_t len);

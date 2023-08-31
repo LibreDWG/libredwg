@@ -110,27 +110,27 @@ hash (const char *str, size_t len)
     {
       default:
         hval += asso_values[(unsigned char)str[9]];
-#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
+#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
       [[fallthrough]];
-#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
+#elif defined __GNUC__ && __GNUC__ >= 7
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
       case 9:
       case 8:
         hval += asso_values[(unsigned char)str[7]+1];
-#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
+#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
       [[fallthrough]];
-#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
+#elif defined __GNUC__ && __GNUC__ >= 7
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
       case 7:
       case 6:
         hval += asso_values[(unsigned char)str[5]];
-#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
+#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
       [[fallthrough]];
-#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
+#elif defined __GNUC__ && __GNUC__ >= 7
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
@@ -138,17 +138,17 @@ hash (const char *str, size_t len)
       case 4:
       case 3:
         hval += asso_values[(unsigned char)str[2]];
-#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
+#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
       [[fallthrough]];
-#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
+#elif defined __GNUC__ && __GNUC__ >= 7
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
       case 2:
         hval += asso_values[(unsigned char)str[1]];
-#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
+#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
       [[fallthrough]];
-#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
+#elif defined __GNUC__ && __GNUC__ >= 7
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
@@ -803,10 +803,6 @@ static const struct stringpool_t stringpool_contents =
 const struct _dwg_dxfname *
 in_word_set (const char *str, size_t len)
 {
-#if (defined __GNUC__ && __GNUC__ + (__GNUC_MINOR__ >= 6) > 4) || (defined __clang__ && __clang_major__ >= 3)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-#endif
   static const struct _dwg_dxfname wordlist[] =
     {
       {-1}, {-1}, {-1},
@@ -1691,9 +1687,6 @@ in_word_set (const char *str, size_t len)
 #line 357 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1271,                      "UNKNOWN_OBJ",                       DWG_TYPE_UNKNOWN_OBJ,	0,	STABLE}
     };
-#if (defined __GNUC__ && __GNUC__ + (__GNUC_MINOR__ >= 6) > 4) || (defined __clang__ && __clang_major__ >= 3)
-#pragma GCC diagnostic pop
-#endif
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
     {
@@ -1711,7 +1704,7 @@ in_word_set (const char *str, size_t len)
             }
         }
     }
-  return (struct _dwg_dxfname *) 0;
+  return 0;
 }
 #line 368 "src/objects.in"
 

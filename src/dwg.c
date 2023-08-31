@@ -59,6 +59,11 @@ static bool env_var_checked_p;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /*------------------------------------------------------------------------------
  * Imports bypassing its headers.
  * We dont want to import in_dxf.h as it is redefining FORMAT_BD.
@@ -86,6 +91,10 @@ void ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref);
 const Dwg_Object_Ref *ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
                                         const unsigned long absref);
 static void dwg_init_handseed (Dwg_Data *dwg);
+
+#ifdef __cplusplus
+}
+#endif
 
 /*------------------------------------------------------------------------------
  * Public functions
