@@ -9725,7 +9725,13 @@ EXPORT int dxf_read_file (const char *restrict filename,
 EXPORT int dwg_write_file (const char *restrict filename,
                            const Dwg_Data *restrict dwg);
 
-EXPORT unsigned char *dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
+/* Supports multiple preview picture types.
+   Currently 3 types: BMP 2, WMF 3 and PNG as type 6.
+   Returns the size of the image.
+ */
+EXPORT unsigned char *dwg_bmp (const Dwg_Data *restrict dwg,
+                               BITCODE_RL *restrict size,
+                               BITCODE_RC *restrict typep);
 
 /** Converts the internal enum RC into 100th mm lineweight, with
  *  -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT.

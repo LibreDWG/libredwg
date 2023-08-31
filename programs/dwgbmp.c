@@ -97,11 +97,12 @@ bmp_free_dwg (Dwg_Data *dwg)
 #pragma pack(1)
 
 static int
-get_bmp (char *dwgfile, char *bmpfile)
+get_bmp (char *dwgfile, char *bmpfile, bool must_free)
 {
   unsigned char *data;
   int error;
   BITCODE_RL size;
+  BITCODE_RC type = 0;
   size_t retval;
   FILE *fh;
   Dwg_Data dwg;
@@ -112,6 +113,8 @@ get_bmp (char *dwgfile, char *bmpfile)
     BITCODE_RL reserved;
     BITCODE_RL offset;
   } bmp_h;
+  const char *typenames[] = { NULL, "header", "bmp", "wmf", "", "", "png" };
+  const char *typename;
 
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
@@ -120,21 +123,37 @@ get_bmp (char *dwgfile, char *bmpfile)
   if (error >= DWG_ERR_CRITICAL)
     {
       fprintf (stderr, "Unable to read file %s. ERROR 0x%x\n", dwgfile, error);
+      if (must_free)
+        free (bmpfile);
       bmp_free_dwg (&dwg);
       return error;
     }
 
   /* Get DIB bitmap data */
-  data = dwg_bmp (&dwg, &size);
+  data = dwg_bmp (&dwg, &size, &type);
+  if (type <= 6)
+    typename = typenames[type];
+  else
+    typename = "";
   if (!data)
     {
-      fprintf (stderr, "No thumbnail bmp image in %s\n", dwgfile);
+      fprintf (stderr, "No thumbnail image in %s\n", dwgfile);
+      if (must_free)
+        free (bmpfile);
+      bmp_free_dwg (&dwg);
+      return 0;
+    }
+  if (!*typename)
+    {
+      fprintf (stderr, "Unknown thumbnail type %u in %s\n", type, dwgfile);
       bmp_free_dwg (&dwg);
       return 0;
     }
   if (size < 1)
     {
       fprintf (stderr, "Empty thumbnail data in %s\n", dwgfile);
+      if (must_free)
+        free (bmpfile);
       bmp_free_dwg (&dwg);
       return -3;
     }
@@ -144,54 +163,72 @@ get_bmp (char *dwgfile, char *bmpfile)
                "Invalid thumbnail data in %s,"
                " size " FORMAT_RL " > %zu\n",
                dwgfile, size, dwg.thumbnail.size);
+      if (must_free)
+        free (bmpfile);
       bmp_free_dwg (&dwg);
       return -3;
+    }
+  if (type != 2 && *typename)
+    {
+      if (must_free)
+        free (bmpfile);
+      bmpfile = suffix (dwgfile, typename);
     }
 
   fh = fopen (bmpfile, "w");
   if (!fh)
     {
-      fprintf (stderr, "Unable to write BMP file '%s'\n", bmpfile);
+      fprintf (stderr, "Unable to write thumbnail file '%s'\n", bmpfile);
+      if (must_free)
+        free (bmpfile);
       bmp_free_dwg (&dwg);
       return -4;
     }
 
-  /* Write bmp file header */
-  bmp_h.magic[0] = 'B';
-  bmp_h.magic[1] = 'M';
-  bmp_h.file_size = 14 + size; // file header + DIB data
-  bmp_h.reserved = 0;
-  bmp_h.offset = 14 + 40 + 4 * 256; // file header + DIB header + color table
-  retval = fwrite (&bmp_h.magic[0], sizeof (char), 2, fh);
-  if (!retval)
+  if (type == 2)
     {
-      bmp_free_dwg (&dwg);
-      perror ("writing BMP magic");
-      fclose (fh);
-      return 1;
-    }
-  retval = fwrite (&bmp_h.file_size, 4, 3, fh);
-  if (!retval)
-    {
-      bmp_free_dwg (&dwg);
-      perror ("writing BMP file_size");
-      fclose (fh);
-      return 1;
+      /* Write bmp file header */
+      bmp_h.magic[0] = 'B';
+      bmp_h.magic[1] = 'M';
+      bmp_h.file_size = 14 + size; // file header + DIB data
+      bmp_h.reserved = 0;
+      bmp_h.offset = 14 + 40 + 4 * 256; // file header + DIB header + color table
+      retval = fwrite (&bmp_h.magic[0], sizeof (char), 2, fh);
+      if (!retval)
+        {
+          bmp_free_dwg (&dwg);
+          perror ("writing BMP magic");
+          fclose (fh);
+          return 1;
+        }
+      retval = fwrite (&bmp_h.file_size, 4, 3, fh);
+      if (!retval)
+        {
+          if (must_free)
+            free (bmpfile);
+          bmp_free_dwg (&dwg);
+          perror ("writing BMP file_size");
+          fclose (fh);
+          return 1;
+        }
     }
 
-  /* Write data (DIB header + bitmap) */
+  /* Write data: DIB header + bitmap, resp. the others */
   retval = fwrite (data, sizeof (char), size, fh);
   fclose (fh);
   if (!retval)
     {
+      if (must_free)
+        free (bmpfile);
       bmp_free_dwg (&dwg);
-      perror ("writing BMP header");
+      perror ("writing thumbnail data");
       return 1;
     }
 
   printf ("Success. Written thumbnail image to '%s'\n", bmpfile);
   bmp_free_dwg (&dwg);
-
+  if (must_free)
+    free (bmpfile);
   return 0;
 }
 
@@ -201,6 +238,7 @@ main (int argc, char *argv[])
   int i = 1, error;
   char *dwgfile, *bmpfile;
   int c;
+  bool must_free;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
   static struct option long_options[]
@@ -299,8 +337,6 @@ main (int argc, char *argv[])
     bmpfile = argv[i + 1];
   else
     bmpfile = suffix (dwgfile, "bmp");
-  error = get_bmp (dwgfile, bmpfile);
-  if (i != argc - 2)
-    free (bmpfile);
-  return error;
+  must_free = i != argc - 2;
+  return get_bmp (dwgfile, bmpfile, must_free);
 }

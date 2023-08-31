@@ -503,10 +503,11 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 
 /* THUMBNAIL IMAGE DATA (R13C3+).
    Supports multiple preview pictures.
-   Currently 3 types: BMP, WMF and PNG. but returns only the size of the BMP.
+   Currently 3 types: BMP, WMF and PNG. returns the size of the image.
  */
 EXPORT unsigned char *
-dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
+dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
+         BITCODE_RC *restrict typep)
 {
   BITCODE_RC i, num_headers, type = 0;
   int found;
@@ -541,6 +542,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
     }
 #endif /* USE_TRACING */
 
+  LOG_TRACE ("Thumbnail: " FORMAT_RL "\n", dwg->header.thumbnail_address);
   osize = bit_read_RL (&dat); /* overall size of all images */
   LOG_TRACE ("overall size: " FORMAT_RL " [RL]\n", osize);
   if (osize > (dat.size - 4))
@@ -561,6 +563,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
           break;
         }
       type = bit_read_RC (&dat);
+      *typep = type;
       LOG_TRACE ("\t[%i] Code: %i [RC]\n", i, type)
       address = bit_read_RL (&dat);
       if (type == 1)
@@ -587,25 +590,35 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       else if (type == 3)
         {
           osize = bit_read_RL (&dat);
+          *size = osize;
           LOG_TRACE ("\t\tWMF data start: " FORMAT_RL " [RL]\n", address)
           LOG_INFO ("\t\tWMF size: %i [RL]\n", osize)
         }
-      else if (type == 4) // type 4?
+      else if (type == 4) // what format?
         {
           osize = bit_read_RL (&dat);
+          *size = osize;
+          LOG_TRACE ("\t\tType 4 data start: " FORMAT_RL " [RL]\n", address)
+          LOG_INFO ("\t\tType 4 size: %i [RL]\n", osize)
+        }
+      else if (type == 6) // default since r2013
+        {
+          osize = bit_read_RL (&dat);
+          *size = osize;
           LOG_TRACE ("\t\tPNG data start: " FORMAT_RL " [RL]\n", address)
           LOG_INFO ("\t\tPNG size: %i [RL]\n", osize)
         }
       else
         {
           osize = bit_read_RL (&dat);
+          *size = osize;
           LOG_TRACE ("\t\tData start: " FORMAT_RL " [RL]\n", address)
           LOG_TRACE ("\t\tSize of unknown type %i: %i [RL]\n", type, osize)
         }
     }
   dat.byte += header_size;
   if (*size)
-    LOG_TRACE ("BMP offset: %zu\n", dat.byte);
+    LOG_TRACE ("Image offset: %zu\n", dat.byte);
   if (dat.byte + *size > dat.size)
     {
       LOG_ERROR ("Preview overflow %zu + " FORMAT_RL " > %zu", dat.byte, *size,

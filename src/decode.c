@@ -446,6 +446,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           else
             {
+              BITCODE_RC type;
               assert ((dat->byte - 16) >= start_address);
               dwg->thumbnail.size = (dat->byte - 16) - start_address;
               dwg->thumbnail.chain
@@ -459,9 +460,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               memcpy (dwg->thumbnail.chain, &dat->chain[start_address],
                       dwg->thumbnail.size);
               dat->byte += dwg->thumbnail.size;
-              dwg_bmp (dwg, &bmpsize);
+              dwg_bmp (dwg, &bmpsize, &type);
               if (bmpsize > dwg->thumbnail.size)
-                LOG_ERROR ("BMP size overflow: %i > %zu\n", bmpsize,
+                LOG_ERROR ("thumbnail size overflow: %i > %zu\n", bmpsize,
                            dwg->thumbnail.size)
             }
         }
@@ -3124,6 +3125,7 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain sec_dat = { 0 };
   int error = 0;
   BITCODE_RL size;
+  BITCODE_RC type;
   unsigned char *sentinel;
 
   // not compressed, num_sections: 1
@@ -3160,9 +3162,9 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->thumbnail.chain = sec_dat.chain;
   dwg->thumbnail.byte = 16; // sentinel
 
-  dwg_bmp (dwg, &size);
-  if (abs ((int)((long)size - (long)dwg->thumbnail.size))
-      > 200) // various headers
+  dwg_bmp (dwg, &size, &type);
+  // various headers
+  if (abs ((int)((long)size - (long)dwg->thumbnail.size)) > 200) 
     LOG_WARN ("thumbnail.size mismatch: %zu != " FORMAT_RL,
               dwg->thumbnail.size, size);
 

@@ -2977,9 +2977,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   {
     BITCODE_RL bmpsize;
-    dwg_bmp (dwg, &bmpsize);
+    BITCODE_RC type;
+    dwg_bmp (dwg, &bmpsize, &type);
     if (bmpsize > dwg->thumbnail.size)
-      LOG_ERROR ("BMP size overflow: %i > %zu\n", bmpsize,
+      LOG_ERROR ("thumbnail size overflow: %i > %zu\n", bmpsize,
                  dwg->thumbnail.size);
   }
   LOG_TRACE ("         Thumbnail (end): %4zu\n", dat->byte);

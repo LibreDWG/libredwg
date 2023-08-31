@@ -106,7 +106,7 @@ endif
 
 EXTRA_DIST  = suffix.inc escape.h my_getopt.h my_stat.h common.inc \
 	      $(TESTS) cmp_dxf.pl
-CLEANFILES  = {example_,sample_,entities,ACEB10}*.{bmp,ps,svg,dxf,log,json}
+CLEANFILES  = {example_,sample_,entities,ACEB10}*.{bmp,ps,svg,dxf,log,json,png}
 if USE_WRITE
 CLEANFILES += {example_,sample_,entities,ACEB10}*rewrite.{dwg,log}
 CLEANFILES += {example_,sample_,entities,ACEB10}*.dwg
