@@ -23,6 +23,10 @@
 #include "decode.h"
 #include "dynapi.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 // from dwg_api
 #ifndef _DWG_API_H_
 BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
@@ -33,6 +37,9 @@ EXPORT int dwg_read_dxf (Bit_Chain *restrict dat,
                          Dwg_Data *restrict dwg) __nonnull_all;
 EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat,
                           Dwg_Data *restrict dwg) __nonnull_all;
+#ifdef __cplusplus
+}
+#endif
 
 // global array of [obj -> [fields], ...]
 typedef struct _dxf_field
