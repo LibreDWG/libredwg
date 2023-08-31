@@ -2358,7 +2358,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
           dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
         }
-      else if (t->type == JSMN_ARRAY && strEQc (f->type, "3DPOINT*"))
+      else if (t->type == JSMN_ARRAY
+               && (strEQc (f->type, "3DPOINT*") || strEQc (f->type, "3BD*")))
         {
           int size1 = t->size;
           BITCODE_3DPOINT *pts
