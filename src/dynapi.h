@@ -38,6 +38,11 @@
 #  define EXPORT
 #endif
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifndef _DWG_API_H_
 /* Public API, duplicate of dwg_api.h */
 typedef struct dwg_field_name_type_offset
@@ -200,5 +205,9 @@ EXPORT bool dwg_dynapi_is_angle (const char *restrict name,
     __nonnull ((1, 2));
 
 EXPORT bool dwg_dynapi_is_float (const Dwg_DYNAPI_field *f) __nonnull ((1));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
