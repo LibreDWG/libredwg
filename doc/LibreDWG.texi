@@ -635,7 +635,7 @@ RL
 @node Preview
 @section Preview
 
-The optional Preview section contains the thumbnail stream of BMP or WMF data of the drawing. Note that blocks or proxy objects can also contain its own preview fields. The program @strong{dwgbmp} can extract the bitmap from this section.
+The optional Preview section contains the thumbnail stream of BMP, WMF or PNG data of the drawing. Note that blocks or proxy objects can also contain its own preview fields. The program @strong{dwgbmp} can extract the preview image from this section.
 
 @node VBAProject
 @section VBAProject

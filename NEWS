@@ -14,6 +14,7 @@ Major features:
   * Added read support on bigendian platforms, write not yet.
   * Full support for en-/decoding foreign codepages, also the MIF
     \M=1-5xxxx format. (With and without iconv)
+  * Added WMF and PNG support to dwgbmp (#824)
   * Fix many minor ODA roundtrip errors, leading to less recovery mode
     dialogs.
   * Fixed dwgadd (Dmitry Sinyavin #388, #415)
@@ -33,6 +34,7 @@ Minor features:
   * json contains and can import now also SecondHeader and R2007_Header sections.
   * Better logging.
 Minor bugfixes:
+  * Fixed wrong r2007 thumbnail overflow errors (#824)
   * Fixed HEADER.PLINEGEN pre-r13 (Michal Spacek #408)
   * Fixed HEADER.OSMODE pre-r13 (Michal Spacek #409)
   * Fixed LAYER.plotflag (#509)

@@ -594,14 +594,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
           LOG_TRACE ("\t\tWMF data start: " FORMAT_RL " [RL]\n", address)
           LOG_INFO ("\t\tWMF size: %i [RL]\n", osize)
         }
-      else if (type == 4) // what format?
-        {
-          osize = bit_read_RL (&dat);
-          *size = osize;
-          LOG_TRACE ("\t\tType 4 data start: " FORMAT_RL " [RL]\n", address)
-          LOG_INFO ("\t\tType 4 size: %i [RL]\n", osize)
-        }
-      else if (type == 6) // default since r2013
+      else if (type == 6) // PNG default since r2013
         {
           osize = bit_read_RL (&dat);
           *size = osize;
@@ -611,7 +604,6 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
       else
         {
           osize = bit_read_RL (&dat);
-          *size = osize;
           LOG_TRACE ("\t\tData start: " FORMAT_RL " [RL]\n", address)
           LOG_TRACE ("\t\tSize of unknown type %i: %i [RL]\n", type, osize)
         }
@@ -619,10 +611,10 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
   dat.byte += header_size;
   if (*size)
     LOG_TRACE ("Image offset: %zu\n", dat.byte);
-  if (dat.byte + *size > dat.size)
+  if (header_size + *size > dat.size)
     {
-      LOG_ERROR ("Preview overflow %zu + " FORMAT_RL " > %zu", dat.byte, *size,
-                 dat.size);
+      LOG_ERROR ("Preview overflow " FORMAT_RL " + " FORMAT_RL " > %zu",
+                 header_size, *size, dat.size);
       *size = 0;
       return NULL;
     }

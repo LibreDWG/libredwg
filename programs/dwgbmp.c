@@ -52,9 +52,9 @@ opt_version (void)
 static int
 help (void)
 {
-  printf ("\nUsage: dwgbmp [OPTION]... DWGFILE [BMPFILE]\n");
-  printf ("Extract the DWG thumbnail image as BMP.\n");
-  printf ("Default BMPFILE: DWGFILE with .bmp extension.\n"
+  printf ("\nUsage: dwgbmp [OPTION]... DWGFILE [thumbnailfile]\n");
+  printf ("Extract the DWG thumbnail image as BMP, WMF or PNG.\n");
+  printf ("Default thumbnailfile: DWGFILE with the proper extension.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -113,7 +113,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
     BITCODE_RL reserved;
     BITCODE_RL offset;
   } bmp_h;
-  const char *typenames[] = { NULL, "header", "bmp", "wmf", "", "", "png" };
+  const char *typenames[] = { "", "header", "bmp", "wmf", "", "", "png" };
   const char *typename;
 
   memset (&dwg, 0, sizeof (Dwg_Data));
