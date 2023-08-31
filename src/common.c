@@ -30,6 +30,11 @@
 #include "common.h"
 #include "logging.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 // See also
 // http://devel.gvsig.org/sites/org.gvsig.dwg/2.0-SNAPSHOT/gvsig-base-library-pom/org.gvsig.dwg/xref/org/gvsig/dwg/lib/DwgFile.html
 const struct dwg_versions dwg_versions[] = {
@@ -605,5 +610,9 @@ basename (char *path)
   if (!p)
     p = strrchr (path, '\\');
   return p;
+}
+#endif
+
+#ifdef __cplusplus
 }
 #endif
