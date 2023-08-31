@@ -36,6 +36,11 @@
 //%include "dwg_api.h"
 
 // clang-format: on
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** dynapi */
 typedef struct dwg_field_name_type_offset
 {
@@ -2424,3 +2429,7 @@ EXPORT Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS* dwg_object_to_ASSOCARRAYRECTA
 #endif
 // clang-format: on
 /* End auto-generated content */
+
+#ifdef __cplusplus
+}
+#endif
