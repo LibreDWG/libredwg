@@ -6437,7 +6437,11 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                    ARGS_REF (ent->next_entity))
       else
         ent->nolinks = 0;
-
+      if (ent->nolinks == 1 && num_owned == 1)
+        {
+          ent->nolinks = 0;
+          LOG_TRACE ("%s[0].nolinks = 0\n", owned_obj->name);
+        }
       for (unsigned i = 1; i < num_owned; i++)
         {
           owned_obj = dwg_ref_object (dwg, owned[i]);
