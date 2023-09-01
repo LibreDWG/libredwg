@@ -474,15 +474,15 @@ AC_ARG_ENABLE([check-less],AS_HELP_STRING([--enable-check-less],[
   AC_MSG_RESULT([no (default)]))
 AM_CONDITIONAL([CHECK_LESS], [test x$check_less = xyes])
 
-AC_MSG_CHECKING([for --enable-mimalloc])
+AC_MSG_CHECKING([for --with-mimalloc])
 if test "x$ac_cv_header_mimalloc_override_h" = "xyes"
 then
-  AC_ARG_ENABLE([mimalloc],AS_HELP_STRING([--enable-mimalloc],[
-    Enable mimalloc.]),
-    [enable_mimalloc=yes])
-  if test x$enable_mimalloc = xyes; then
-     AC_DEFINE([ENABLE_MIMALLOC],1,[Define to 1 if mimalloc-override.h should be used.])
-     LIBS="$LIBS -lmimalloc"
+  AC_ARG_WITH([mimalloc],AS_HELP_STRING([--with-mimalloc],[
+    With mimalloc.]),
+    [with_mimalloc=yes],[with_mimalloc=no])
+  if test x$with_mimalloc = xyes; then
+    AC_DEFINE([ENABLE_MIMALLOC],1,[Define to 1 if mimalloc-override.h should be used.])
+    LIBS="$LIBS -lmimalloc"
     AC_MSG_RESULT(yes)
   else
     AC_MSG_RESULT(no)
@@ -490,7 +490,7 @@ then
 else
   AC_MSG_RESULT(no mimalloc headers found)
 fi
-AM_CONDITIONAL([ENABLE_MIMALLOC], [test x$enable_mimalloc = xyes])
+AM_CONDITIONAL([ENABLE_MIMALLOC], [test x$with_mimalloc = xyes])
 
 AC_MSG_CHECKING([for --enable-gcov])
 AC_ARG_ENABLE(gcov,
