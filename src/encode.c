@@ -6339,7 +6339,7 @@ dwg_link_next (Dwg_Object_Ref *restrict next_ref, Dwg_Object *restrict obj)
   return dwg_add_handleref (dwg, 4, next->handle.value, obj);
 }
 
-// Also exported to in_json and dwg_api.
+// Also exported to in_json and dwg_api, where we have no target version still.
 // To set to linked list of children in POLYLINE_*/*INSERT
 // similar to dwg_fixup_BLOCKS_entities()
 void
@@ -6354,10 +6354,11 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   const char *firstfield;
   const char *lastfield;
 
-  LOG_TRACE ("in_postprocess_SEQEND (%u):\n", (unsigned)num_owned);
   if (!obj || obj->fixedtype != DWG_TYPE_SEQEND || !obj->tio.entity)
     return;
   dwg = obj->parent;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  LOG_TRACE ("in_postprocess_SEQEND (%u):\n", (unsigned)num_owned);
   owner = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
   if (!owner)
     {
@@ -6392,8 +6393,9 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       lastfield = "last_attrib";
     }
   // store all these fields, or just the ones for the requested version?
+  // this is also called from IN_JSON and DWG_API which has not target version yet
   if ((dwg->header.from_version > R_2000 || dwg->opts & DWG_OPTS_INDXF)
-      && dwg->header.version <= R_2000 && owned) // if downconvert to r2000
+      && owned)
     {
       Dwg_Object *owned_obj;
       Dwg_Object_Entity *ent;
@@ -6403,7 +6405,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
         {
           hdl = dwg_add_handleref (dwg, 4, owned[0]->handleref.value, NULL);
           dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &hdl, 0);
-          LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, firstfield,
+          LOG_TRACE ("%s[0].%s = " FORMAT_REF "[H 0]\n", owner->name, firstfield,
                      ARGS_REF (hdl));
         }
       if (owned[num_owned - 1])
@@ -6411,8 +6413,8 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
           hdl = dwg_add_handleref (
               dwg, 4, owned[num_owned - 1]->handleref.value, NULL);
           dwg_dynapi_entity_set_value (ow, owner->name, lastfield, &hdl, 0);
-          LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, lastfield,
-                     ARGS_REF (hdl));
+          LOG_TRACE ("%s[%u].%s = " FORMAT_REF "[H 0]\n", owner->name, num_owned - 1,
+                     lastfield, ARGS_REF (hdl));
         }
       // link the list, because the children have entmode, different to the
       // owner.
@@ -6422,14 +6424,16 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       ent = owned_obj->tio.entity;
       ent->prev_entity = dwg_link_prev (NULL, owned_obj);
       if (ent->prev_entity)
-        LOG_TRACE ("%s.prev_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
-                   ARGS_REF (ent->prev_entity))
+        {
+          LOG_TRACE ("%s[0].prev_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
+                     ARGS_REF (ent->prev_entity));
+        }
       else
         ent->nolinks = 0;
       ent->next_entity
           = dwg_link_next (num_owned > 1 ? owned[1] : NULL, owned_obj);
       if (ent->next_entity)
-        LOG_TRACE ("%s.next_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
+        LOG_TRACE ("%s[0].next_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
                    ARGS_REF (ent->next_entity))
       else
         ent->nolinks = 0;
@@ -6442,21 +6446,29 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
           ent = owned_obj->tio.entity;
           ent->prev_entity = dwg_link_prev (owned[i - 1], owned_obj);
           if (ent->prev_entity)
-            LOG_TRACE ("%s.prev_entity = " FORMAT_REF "[H 0]\n",
-                       owned_obj->name, ARGS_REF (ent->prev_entity))
+            {
+              LOG_TRACE ("%s[%u].prev_entity = " FORMAT_REF "[H 0]\n",
+                         owned_obj->name, i, ARGS_REF (ent->prev_entity));
+            }
+          if (i == num_owned - 1) // the last
+            {
+              if (ent->nolinks == 1)
+                {
+                  ent->nolinks = 0;
+                  LOG_TRACE ("%s[%u].nolinks = 0\n", owned_obj->name, i);
+                }
+            }
           else
-            ent->nolinks = 0;
-          ent->next_entity = dwg_link_next (
-              (i < num_owned - 1) ? owned[i + 1] : NULL, owned_obj);
-          if (ent->next_entity)
-            LOG_TRACE ("%s.next_entity = " FORMAT_REF "[H 0]\n",
-                       owned_obj->name, ARGS_REF (ent->next_entity))
-          else
-            ent->nolinks = 0;
+            {
+              ent->next_entity = dwg_link_next (owned[i + 1], owned_obj);
+              if (ent->next_entity)
+                LOG_TRACE ("%s[%u].next_entity = " FORMAT_REF "[H 0]\n",
+                           owned_obj->name, i, ARGS_REF (ent->next_entity));
+            }
         }
     }
   else if ((dwg->header.from_version <= R_2000 || dwg->opts & DWG_OPTS_INDXF)
-           && dwg->header.version > R_2000 && !owned)
+           && !owned)
     {
       BITCODE_H first, last, ref;
       unsigned i = 0;

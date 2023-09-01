@@ -8256,6 +8256,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   BITCODE_H *owned = NULL;
   const char *owhdls;
 
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("dxf_postprocess_SEQEND:\n");
   // r12 and earlier: search for owner backwards
   if (dwg->header.from_version < R_13b1 && !owner
