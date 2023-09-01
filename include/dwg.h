@@ -318,7 +318,7 @@ typedef enum DWG_VERSION_TYPE
   //R_2019,	/* AC1033/0x22AutoCAD 2019 */
   //R_2020,	/* AC1034/0x23 AutoCAD 2020 */
   //R_2021,	/* AC1035/0x24 AutoCAD 2021 */
-  R_2022,	/* AC103-4 AutoCAD Release 2022? */
+  R_2022b,	/* AC103-4 AutoCAD 2022 beta? */
   R_AFTER
 } Dwg_Version_Type;
 #define DWG_VERSIONS (int)(R_AFTER+1)

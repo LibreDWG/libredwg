@@ -3343,7 +3343,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     BITCODE_BL vcount;
 
     dat->byte = 0x06;
-    if (dat->from_version >= R_2022)
+    if (dat->from_version >= R_2022b)
       dat->byte = 0x07;
     // clang-format off
     #include "header.spec"

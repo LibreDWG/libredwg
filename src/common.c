@@ -89,8 +89,7 @@ const struct dwg_versions dwg_versions[] = {
   //{ R_2019, "r2019", "AC1033", "AutoCAD Release 2019", 0x22 }, // not seen
   //{ R_2020, "r2020", "AC1034", "AutoCAD Release 2020", 0x23 }, // not seen
   //{ R_2021, "r2021", "AC1035", "AutoCAD Release 2021", 0x23 }, // not seen
-  { R_2022, "r2022", "AC103-4", "AutoCAD 2022 beta",
-    0x24 }, // saw just the magic
+  { R_2022b, "r2022b", "AC103-4", "AutoCAD 2022 beta", 0x24 },
   { R_AFTER, "r>2022", NULL, "AutoCAD Release >2022", 0 },
 };
 

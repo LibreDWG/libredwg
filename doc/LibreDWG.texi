@@ -131,7 +131,7 @@ The internally supported DWG revisions are identified as
 r1.1, r1.2, r1.3, r1.4, r2.0b, r2.0, r2.10, r2.21, r2.22, r2.4, r2.5, r2.6,
 r9, r9c1, r10, r11b1, r11b2, r11, r13b1, r13b2, r13, r13c3, r14, r2000b, r2000,
 r2000i, r2002, r2004a, r2004b, r2004c, r2004, r2007a, r2007b, r2007, r2010b,
-r2010, r2013b, r2013, r2018b, r2018 and r2022.
+r2010, r2013b, r2013, r2018b and r2018.
 
 Here is a list of features that are still missing:
 
