@@ -1140,8 +1140,10 @@ DWG_ENTITY (VERTEX_3D)
   PRE (R_13b1)
   {
     FIELD_2RD (point, 10);
-    FIELD_RC (flag, 0);
-    LOG_FLAG_VERTEX
+    if (R11OPTS (8)) {
+      FIELD_RC (flag, 0);
+      LOG_FLAG_VERTEX
+    }
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);

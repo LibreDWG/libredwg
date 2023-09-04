@@ -209,7 +209,8 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       LOG_ERROR ("%s.size overflow %zu > %zu", tbl->name,
                  (size_t)(tbl->address + (tbl->number * tbl->size)),
                  dat->size);
-      return DWG_ERR_INVALIDDWG;
+      // VPORT.size bug in DWG, ignore it.
+      return id == SECTION_VPORT ? 0 : 1;
     }
   return 0;
 }

@@ -6488,6 +6488,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
         {
           Dwg_Object *obj;
           Dwg_Object_Type_r11 abstype;
+          BITCODE_RC pline_flag;
 
           if (!num)
             dwg->object
@@ -6687,7 +6688,6 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 BITCODE_RC extra_r11 = 0;
                 BITCODE_RS eed_size;
                 BITCODE_RC handling_len;
-                BITCODE_RC pline_flag;
                 size_t start_byte;
                 LOG_TRACE ("Detect polyline:");
                 start_byte = dat->byte;
@@ -6707,12 +6707,17 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                     if (flag_r11 & FLAG_R11_HAS_COLOR)
                       dat->byte += 1;
                     if (flag_r11 & FLAG_R11_HAS_LTYPE)
-                      dat->byte += 2;
+                      {
+                        PRE (R_11)
+                          dat->byte += 1;
+                        else
+                          dat->byte += 2;
+                      }
                     if (flag_r11 & FLAG_R11_HAS_THICKNESS)
                       dat->byte += 8;
                     if (flag_r11 & FLAG_R11_HAS_ELEVATION)
                       dat->byte += 8;
-                    if (extra_r11 && extra_r11 & EXTRA_R11_HAS_EED)
+                    if (extra_r11 & EXTRA_R11_HAS_EED)
                       {
                         eed_size = bit_read_RS (dat);
                         LOG_TRACE (", eed_size: %d", eed_size);
@@ -6724,10 +6729,11 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                         LOG_TRACE (", handling_len: %d", handling_len);
                         dat->byte += handling_len;
                       }
-                    if (extra_r11 && extra_r11 & EXTRA_R11_HAS_VIEWPORT)
+                    if (extra_r11 & EXTRA_R11_HAS_VIEWPORT)
                       dat->byte += 2;
                     pline_flag = bit_read_RC (dat);
-                    LOG_TRACE (", pline_flag: 0x%x\n", pline_flag);
+                    LOG_TRACE (", pline_flag: 0x%x", pline_flag);
+                    LOG_POS;
                     dat->byte = start_byte;
                     if (pline_flag & FLAG_POLYLINE_3D)
                       error |= dwg_decode_POLYLINE_3D (dat, obj);
@@ -6766,7 +6772,12 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 if (flag_r11 & FLAG_R11_HAS_COLOR)
                   dat->byte += 1;
                 if (flag_r11 & FLAG_R11_HAS_LTYPE)
-                  dat->byte += 2;
+                  {
+                    PRE (R_11)
+                      dat->byte += 1;
+                    else
+                      dat->byte += 2;
+                  }
                 if (flag_r11 & FLAG_R11_HAS_THICKNESS)
                   dat->byte += 8;
                 if (flag_r11 & FLAG_R11_HAS_ELEVATION)
@@ -6801,17 +6812,18 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 if (opts_r11 & OPTS_R11_VERTEX_HAS_FLAG)
                   {
                     vertex_flag = bit_read_RC (dat);
-                    LOG_TRACE (", vertex_flag: 0x%x\n", vertex_flag);
+                    LOG_TRACE (", vertex_flag: 0x%x", vertex_flag);
+                    LOG_POS;
                     dat->byte = start_byte;
-                    if (vertex_flag & FLAG_VERTEX_3D)
-                      error |= dwg_decode_VERTEX_3D (dat, obj);
-                    else if (vertex_flag & FLAG_VERTEX_MESH
+                    if (vertex_flag & FLAG_VERTEX_MESH
                              && vertex_flag & FLAG_VERTEX_PFACE_MESH)
                       error |= dwg_decode_VERTEX_PFACE (dat, obj);
                     else if (vertex_flag & FLAG_VERTEX_MESH)
                       error |= dwg_decode_VERTEX_MESH (dat, obj);
                     else if (vertex_flag & FLAG_VERTEX_PFACE_MESH)
                       error |= dwg_decode_VERTEX_PFACE_FACE (dat, obj);
+                    else if (vertex_flag & FLAG_VERTEX_3D)
+                      error |= dwg_decode_VERTEX_3D (dat, obj);
                     else
                       error |= dwg_decode_VERTEX_2D (dat, obj);
                   }
