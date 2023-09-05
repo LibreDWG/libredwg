@@ -1743,7 +1743,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     case DWG_TYPE_BLOCK_CONTROL:
       return dwg_json_BLOCK_CONTROL (dat, obj);
     case DWG_TYPE_BLOCK_HEADER:
-      if (dat->version <= R_12
+      if (dat->version <= R_1_4
           && strEQc (obj->tio.object->tio.BLOCK_HEADER->name, "*MODEL_SPACE"))
         {
           LOG_TRACE ("Skip *MODEL_SPACE\n");
