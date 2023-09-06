@@ -4665,7 +4665,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         }
       rbuf->nextrb = NULL;
       rbuf->type = bit_read_RS (dat);
-      LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS]\n", num_xdata,
+      LOG_HANDLE ("  xdata[%u] type: " FORMAT_RS " [RS]\n", num_xdata,
                   rbuf->type)
       if (dat->byte == curr_address || dat->byte >= end_address)
         {
