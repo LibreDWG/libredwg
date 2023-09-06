@@ -1719,14 +1719,17 @@ bit_read_TV (Bit_Chain *restrict dat)
     }
   for (i = 0; i < length; i++)
     chain[i] = bit_read_RC (dat);
-  // check if the string is already zero-terminated or not.
-  // only observed >=r2004 as writer app
-  if (length > 0 && dat->from_version > R_2000 && chain[length - 1] != '\0')
-    LOG_HANDLE ("TV-not-ZERO %u\n ", length)
-  // and preR2000 the final \0 is not included in the length (ie == strlen)
-  else if (length > 0 && dat->from_version <= R_2000
-           && chain[length - 1] == '\0')
-    LOG_HANDLE ("TV-ZERO %u\n", length)
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
+    {
+      // check if the string is already zero-terminated or not.
+      // only observed >=r2004 as writer app
+      if (length > 0 && dat->from_version > R_2000 && chain[length - 1] != '\0')
+        LOG_HANDLE ("TV-not-ZERO %u\n ", length)
+      // and preR2000 the final \0 is not included in the length (ie == strlen)
+      else if (length > 0 && dat->from_version <= R_2000
+               && chain[length - 1] == '\0')
+        LOG_HANDLE ("TV-ZERO %u\n", length)
+    }
   // normally not needed, as the DWG since r2004 itself contains the ending \0
   // as last char
   chain[i] = '\0';
