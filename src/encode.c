@@ -2560,7 +2560,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     BITCODE_BLd first_entity_idx = 0;
     Dwg_Object *first_block;
 
-    if (dwg->header.version == R_INVALID)
+    if (dwg->header.version == R_INVALID || dwg->header.from_version == R_INVALID)
       {
         LOG_ERROR (WE_CAN "Invalid or missing FILEHEADER.version");
         return DWG_ERR_INVALIDDWG;

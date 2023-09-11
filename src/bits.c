@@ -3728,7 +3728,7 @@ bit_chain_init_dat (Bit_Chain *restrict dat, const size_t size,
 void
 bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
 {
-  if (dat->size == 0)
+  if (dat->size == 0 || !dat->chain)
     {
       bit_chain_init (dat, size);
     }
