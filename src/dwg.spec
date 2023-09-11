@@ -2737,14 +2737,14 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           FIELD_VALUE (encr_sat_data) = NULL;
           //TODO string in strhdl, even <r2007
           // either has_ds_data (r2013+) or the blob is here
-          if (!obj->tio.entity->has_ds_data)
+          if (!obj->tio.entity->has_ds_data && dat->size > dat->byte + 1)
             {
               char *p;
               // Note that r2013+ has End-of-ASM-data (not ACIS anymore, but their fork)
               const char end[] = "\016\003End\016\002of\016\004ACIS\r\004data";
               const char end1[] = "\016\003End\016\002of\016\003ASM\r\004data";
               size_t pos = dat->byte;
-              size_t size = dat->size - dat->byte - 1;
+              size_t size = dat->size - pos - 1;
               FIELD_VALUE (acis_data) = (unsigned char*)calloc (size, 1);
               // Binary SAB. unencrypted, documented format until "End-of-ACIS-data"
               // TODO There exist also SAB streams with a given number of records, but I
