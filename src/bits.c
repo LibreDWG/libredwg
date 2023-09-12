@@ -3236,7 +3236,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                     loglevel |= 1;
                     LOG_ERROR ("Out of memory");
                     iconv_close (cd);
-                    free (odest);
+                    //free (odest);
                     return NULL;
                   }
               }
