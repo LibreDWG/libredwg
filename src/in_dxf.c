@@ -11782,17 +11782,20 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               Dwg_Object *obj;
               Dwg_Object *ctrl = &dwg->object[ctrl_id];
               char *dxfname = strdup (pair->value.s);
+              BITCODE_BL idx = dwg->num_objects;
               BITCODE_H ref;
               dxf_free_pair (pair);
               // until 0 table or 0 ENDTAB
               pair = new_object (table, dxfname, dat, dwg, ctrl_id,
                                  (BITCODE_BL *)&i);
+              obj = &dwg->object[idx];
               if (!pair)
                 {
                   free (dxfname);
+                  if (idx != dwg->num_objects)
+                    obj->dxfname = NULL;
                   return DWG_ERR_INVALIDDWG;
                 }
-              obj = &dwg->object[dwg->num_objects - 1];
               // A minimal DXF will have no handle values
               if (!obj->handle.value)
                 {
@@ -11972,12 +11975,14 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              obj->handle.size, obj->handle.value);
                 }
               pair = new_object (name, dxfname, dat, dwg, 0, &i);
+              obj = &dwg->object[idx];
               if (!pair)
                 {
                   free (dxfname);
+                  if (idx != dwg->num_objects)
+                    obj->dxfname = NULL;
                   return DWG_ERR_INVALIDDWG;
                 }
-              obj = &dwg->object[idx];
               if (obj->type == DWG_TYPE_BLOCK)
                 {
                   Dwg_Object_Entity *ent = obj->tio.entity;
