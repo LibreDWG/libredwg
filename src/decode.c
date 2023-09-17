@@ -5803,7 +5803,7 @@ dwg_validate_POLYLINE (Dwg_Object *restrict obj)
 }
 
 /* Set prev_ and next_entity handles from all block headers.
-   Needed after decode or import from r2004+ to <= r2000 */
+   Needed after decode or import from r2004+ to r13-r2000. */
 int
 dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
 {
@@ -5832,7 +5832,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
               _obj->first_entity = dwg_add_handleref (dwg, 4, 0, NULL);
               _obj->last_entity = dwg_add_handleref (dwg, 4, 0, NULL);
               if (_obj->num_owned)
-                LOG_ERROR ("BLOCK_HEADER %s: => 0 entities\n", _objname);
+                LOG_ERROR ("BLOCK_HEADER %s: %u => 0 num_owned\n",
+                           _objname, (unsigned)_obj->num_owned);
               _obj->num_owned = 0;
             }
           // link from first_entity to last_entity
@@ -5849,12 +5850,14 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
               BITCODE_RLL next_ref = next ? next->absolute_ref : 0;
               BITCODE_RLL cur_ref = hdl ? hdl->absolute_ref : 0;
 
+              LOG_HANDLE ("entities[%u]: " FORMAT_REF " \n", j,
+                          ARGS_REF (hdl));
               if (!o)
                 continue;
               if (o->supertype != DWG_SUPERTYPE_ENTITY)
                 {
-                  LOG_ERROR ("Illegal BLOCK_HEADER %s.entities[%d] %s",
-                             _objname, j, obj->name);
+                  LOG_ERROR ("Illegal BLOCK_HEADER %s.entities[%u] %s",
+                             _objname, j, o->name);
                   changes++;
                   if (is_uni)
                     free (_objname);

@@ -813,7 +813,17 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
   if (ref->obj && !dwg->dirty_refs)
-    return ref->obj;
+    {
+      if (ref->obj->handle.value == ref->absolute_ref) // FIXME some new_ref error
+        return ref->obj;
+      else
+        {
+          LOG_WARN ("Wrong ref_object: " FORMAT_RLLx " != " FORMAT_RLLx,
+                    ref->obj->handle.value, ref->absolute_ref);
+          ref->obj = NULL;
+          //dwg_resolve_objectrefs_silent (dwg);
+        }
+    }
   // if (dwg->header.from_version < R_12 && !ref->absolute_ref)
   //   { // resolve r11_idx to absolute_ref, looking up in the table entries
   //     LOG_WARN ("Cannot resolve r11_idx %u", ref->r11_idx)
