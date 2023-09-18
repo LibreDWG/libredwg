@@ -76,6 +76,7 @@ static int encode_preR13_section (const Dwg_Section_Type_r11 id,
 static void downconvert_relative_handle (BITCODE_H handle,
                                          Dwg_Object *restrict obj);
 
+
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */

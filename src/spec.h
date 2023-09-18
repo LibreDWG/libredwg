@@ -208,6 +208,7 @@
 #  define SUB_FIELD_3DPOINT(o, nam, dxf) FIELD_3BD (o.nam, dxf)
 // # define SUB_FIELD_ENC(o,nam,dxf1,dxf2) FIELD_ENC(o.nam, dxf1,dxf2)
 #endif
+
 #ifndef SUB_HANDLE_VECTOR
 #  define SUB_HANDLE_VECTOR(o, nam, sizefield, code, dxf)                     \
     if (_obj->o.sizefield && _obj->o.nam)                                     \

@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <math.h>
 #include "../programs/my_stat.h"
 // strings.h or string.h
 #ifdef AX_STRCASECMP_HEADER
@@ -3426,4 +3427,28 @@ dwg_has_eed_appid (Dwg_Object_Object *restrict obj, const BITCODE_RLL absref)
     if (obj->eed[i].handle.value == absref)
       return true;
   return false;
+}
+
+// Note that ODA doesn't spec it. ODA's code does take bit 1 from
+// path_type instead
+// Hook lines appears if the last leader line segment is at an angle
+// greater than 15 degrees from horizontal.  If the leader has no
+// annotation (annot_type & 0x3) or a spline path (path_type & 0x1),
+// it has no hook line.
+void
+dwg_calc_hookline_on (Dwg_Entity_LEADER *_obj)
+{
+  const double hookline_offsetR = M_PI / 12;
+  double angleR = M_PI / 2;
+  if (_obj->num_points > 2)
+    {
+      BITCODE_3DPOINT pt1 = _obj->points[_obj->num_points - 2];
+      BITCODE_3DPOINT pt2 = _obj->points[_obj->num_points - 1];
+      angleR = atan2 (pt1.y - pt2.y, pt1.x - pt2.x);
+    }
+  _obj->hookline_on = (_obj->annot_type & 0x3 || _obj->path_type & 0x1
+                      || fabs (angleR) <= hookline_offsetR
+                      || fabs (angleR - M_PI) <= hookline_offsetR)
+    ? 0
+    : 1;
 }

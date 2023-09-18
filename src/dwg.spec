@@ -19,6 +19,7 @@
  * modified by Reini Urban
  * modified by Denis Pruchkovsky
  * modified by Michal Josef Špaček
+ * modified by Gian Maria Gentilini
  */
 
 #include "spec.h"
@@ -3406,15 +3407,13 @@ DWG_ENTITY (LEADER)
   FIELD_B (hookline_dir, 0); // if hook line is on x direction
   FIELD_B (arrowhead_on, 0);
   ENCODER {
-    if (FIELD_VALUE (hookline_on))
-      FIELD_VALUE(arrowhead_type) |= 8;
+    dwg_calc_hookline_on (_obj);
+    LOG_TRACE("hookline_on: %d (calc)\n", FIELD_VALUE (hookline_on));
   }
   FIELD_BSx (arrowhead_type, 0);
   DECODER {
-    // Note that ODA doesn't spec it, and ODA's code does
-    // take bit 1 from path_type instead
-    FIELD_VALUE (hookline_on) = FIELD_VALUE (arrowhead_type) & 8 ? 0 : 1;
-    LOG_TRACE("=> hookline_on: %d [B 75]\n", FIELD_VALUE (hookline_on));
+    dwg_calc_hookline_on (_obj);
+    LOG_TRACE("hookline_on: %d (calc)\n", FIELD_VALUE (hookline_on));
   }
   JSON {
     FIELD_B (hookline_on, 0);

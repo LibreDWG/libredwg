@@ -614,6 +614,8 @@ Dwg_Object *dwg_find_last_type (const Dwg_Data *restrict dwg,
 Dwg_Handle *
 dwg_find_first_type_handle (const Dwg_Data *restrict dwg,
                             const enum DWG_OBJECT_TYPE type) __nonnull_all;
+// from dwg.c
+void dwg_calc_hookline_on (Dwg_Entity_LEADER *_obj);
 
 // <path-to>/dxf.ext => copy of "dxf", "ext"
 // Returns a malloc'ed copy of basename, and
