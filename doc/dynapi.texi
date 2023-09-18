@@ -13551,7 +13551,7 @@ RL
 @item num_sortedidx
 RL
 @item sortedidx
-RLL*
+RLLd*
 @item num_ididxs
 RL
 @item unknown

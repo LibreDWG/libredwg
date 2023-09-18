@@ -166,9 +166,11 @@ typedef BITCODE_DOUBLE BITCODE_RD;
 #define FORMAT_RD "%g"
 /* Since R2004 */
 typedef uint64_t BITCODE_RLL;
+typedef int64_t BITCODE_RLLd;
 typedef uint64_t BITCODE_BLL;
 #define FORMAT_RLLx "%" PRIX64
 #define FORMAT_RLL "0x%" PRIX64
+#define FORMAT_RLLd "%" PRId64
 #define FORMAT_BLL "%" PRIu64
 typedef int32_t BITCODE_MC;
 #define FORMAT_MC "%" PRId32
@@ -9289,7 +9291,7 @@ typedef struct _dwg_AcDs_Search_Data
 {
   BITCODE_RL schema_namidx;
   BITCODE_RL num_sortedidx;
-  BITCODE_RLL *sortedidx;
+  BITCODE_RLLd *sortedidx;
   BITCODE_RL num_ididxs;
   BITCODE_RL unknown;
   Dwg_AcDs_Search_IdIdxs *ididxs;

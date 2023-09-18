@@ -11062,7 +11062,7 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Search_Data_fields[] = {
     0,0,0, 0 },
   { "num_sortedidx",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search_Data, num_sortedidx),
     0,0,0, 0 },
-  { "sortedidx",	"RLL*", sizeof (BITCODE_RLL*),  OFF (struct _dwg_AcDs_Search_Data, sortedidx),
+  { "sortedidx",	"RLLd*", sizeof (BITCODE_RLLd*),  OFF (struct _dwg_AcDs_Search_Data, sortedidx),
     1,1,0, 0 },
   { "num_ididxs",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Search_Data, num_ididxs),
     0,0,0, 0 },

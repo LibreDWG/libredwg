@@ -212,6 +212,7 @@ const unsigned char unknown_section[53]
 #define FIELD_RD(nam, dxf) FIELDG (nam, RD, dxf)
 #define FIELD_RL(nam, dxf) FIELDG (nam, RL, dxf)
 #define FIELD_RLL(nam, dxf) FIELDG (nam, RLL, dxf)
+#define FIELD_RLLd(nam, dxf) FIELD_CAST (nam, RLL, RLLd, dxf)
 #define FIELD_RLLu(nam, dxf)                                                  \
   {                                                                           \
     bit_write_RLL (dat, _obj->nam);                                           \

@@ -287,7 +287,7 @@
         REPEAT_BLOCK
           SUB_FIELD_RL (search.search[rcount2],schema_namidx, 0);
           SUB_FIELD_RL (search.search[rcount2],num_sortedidx, 0);
-          SUB_FIELD_VECTOR (search.search[rcount2],sortedidx, RLL, num_sortedidx, 0);
+          SUB_FIELD_VECTOR (search.search[rcount2],sortedidx, RLLd, num_sortedidx, 0);
           SUB_FIELD_RL (search.search[rcount2],num_ididxs, 0);
           SUB_FIELD_RL (search.search[rcount2],unknown, 0);
           REPEAT3 (search.search[rcount2].num_ididxs, search.search[rcount2].ididxs, Dwg_AcDs_Search_IdIdxs)

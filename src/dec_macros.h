@@ -468,6 +468,7 @@
   }
 #define FIELD_RL(nam, dxf) FIELDG (nam, RL, dxf)
 #define FIELD_RLL(nam, dxf) FIELDG (nam, RLL, dxf)
+#define FIELD_RLLd(nam, dxf) FIELDG (nam, RLLd, dxf)
 #define FIELD_MC(nam, dxf) FIELDG (nam, MC, dxf)
 #define FIELD_MS(nam, dxf) FIELDG (nam, MS, dxf)
 /* preR13 we have no obj->address and obj->size yet, skip VECTOR_CHKCOUNT */

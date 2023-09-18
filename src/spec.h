@@ -165,6 +165,9 @@
 #ifndef SUB_FIELD_RSx
 #  define SUB_FIELD_RSx(o, nam, dxf) FIELD_RSx (o.nam, dxf)
 #endif
+#ifndef SUB_FIELD_RLLd
+#  define SUB_FIELD_RLLd(o, nam, dxf) FIELD_RLLd (o.nam, dxf)
+#endif
 #ifndef SUB_FIELD_TU
 #  define SUB_FIELD_TU(o, nam, dxf) FIELD_TU (o.nam, dxf)
 #endif
@@ -353,6 +356,9 @@
 #endif
 #ifndef FIELD_RSd
 #  define FIELD_RSd(name, dxf) FIELD_RS (name, dxf)
+#endif
+#ifndef FIELD_RLLd
+#  define FIELD_RLLd(name, dxf) FIELD_RLL (name, dxf)
 #endif
 #ifndef FIELD_RCu
 #  define FIELD_RCu(name, dxf) FIELD_RC (name, dxf)

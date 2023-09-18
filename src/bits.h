@@ -118,7 +118,9 @@ void bit_write_RL_BE (Bit_Chain *dat, BITCODE_RL value);
 
 BITCODE_RLL bit_read_RLL (Bit_Chain *dat);
 BITCODE_RLL bit_read_RLL_BE (Bit_Chain *dat);
+#define bit_read_RLLd(dat) (BITCODE_RLLd)bit_read_RLL(dat)
 void bit_write_RLL (Bit_Chain *dat, BITCODE_RLL value);
+#define bit_write_RLLd(dat,value) bit_write_RLL (dat, (BITCODE_RLL)value)
 void bit_write_RLL_BE (Bit_Chain *dat, BITCODE_RLL value);
 
 BITCODE_RD bit_read_RD (Bit_Chain *dat);

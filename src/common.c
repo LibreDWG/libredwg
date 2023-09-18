@@ -303,7 +303,7 @@ const char *dwg_bits_name[] = {
   "BS",      "BL",  "BLd", "RLL", "RD",      "BD",  "MC",     "UMC",
   "MS",      "TV",  "TU",  "T",   "TF",      "T32", "HANDLE", "BE",
   "DD",      "BT",  "BOT", "BLL", "TIMEBLL", "CMC", "ENC",    "2RD",
-  "3RD",     "2BD", "3BD", "2DD", "3DD",     "CRC", "CRC64",
+  "3RD",     "2BD", "3BD", "2DD", "3DD",     "CRC", "CRC64",  "RLLd"
 };
 
 // minimal size of type in bits
@@ -350,6 +350,7 @@ const unsigned char dwg_bits_size[] = {
   6,   //"3DD",
   8,   //"CRC",
   64,  //"CRC64",
+  64,  //"RLLd",
 };
 
 /* replace from ("[rcount1]") with to ("[%d]") in s (e.g.

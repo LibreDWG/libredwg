@@ -492,7 +492,8 @@ typedef enum DWG_BITS
   BITS_2DD,     /** 2 doubles with default **/
   BITS_3DD,     /** 3 doubles with default **/
   BITS_CRC,
-  BITS_CRC64
+  BITS_CRC64,
+  BITS_RLLd
 } Dwg_Bits;
 
 /* Globals inside the lib */
