@@ -3060,7 +3060,7 @@ bit_u_expand (char *src)
           if (lp > 7)
             {
               // printf("p[7]: %d, l: %zu\n", (int)p[7], lp);
-              memcpy (&s[l], &s[7], lp - 6);
+              memmove (&s[l], &s[7], lp - 6);
             }
           if (u8 != (char *)&wp[0])
             free (u8);
@@ -3077,20 +3077,20 @@ bit_u_expand (char *src)
           if (uc < 0x80)
             {
               *s++ = uc & 0xFF;
-              memcpy (s, &s[7], lp - 7);
+              memmove (s, &s[7], lp - 7);
             }
           else if (uc < 0x800)
             {
               *s++ = (uc >> 6) | 0xC0;
               *s++ = (uc & 0x3F) | 0x80;
-              memcpy (s, &s[6], lp - 7);
+              memmove (s, &s[6], lp - 7);
             }
           else
             {
               *s++ = (uc >> 12) | 0xE0;
               *s++ = ((uc >> 6) & 0x3F) | 0x80;
               *s++ = (uc & 0x3F) | 0x80;
-              memcpy (s, &s[5], lp - 7);
+              memmove (s, &s[5], lp - 7);
             }
         }
     }
