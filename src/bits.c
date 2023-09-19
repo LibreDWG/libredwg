@@ -3183,10 +3183,11 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
     iconv_t cd;
     size_t nconv = (size_t)-1;
     char *dest, *odest, *osrc;
+    size_t odestlen = destlen;
     if (!charset || !srclen)
       return (char *)src;
     osrc = (char *)src;
-    odest = dest = (char *)malloc (destlen);
+    odest = dest = (char *)malloc (odestlen);
     if (!odest || destlen > 0x2FFFE)
       {
         loglevel |= 1;
@@ -3230,7 +3231,10 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                   }
                 dest_new = (char *)realloc (odest, destlen);
                 if (dest_new)
-                  odest = dest = dest_new;
+                  {
+                    odest = dest = dest_new;
+                    odestlen = destlen;
+                  }
                 else
                   {
                     loglevel |= 1;
@@ -3252,9 +3256,18 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
       }
     // flush the remains
     iconv (cd, NULL, (size_t *)&srclen, (char **)&dest, (size_t *)&destlen);
-    *dest = '\0';
-    iconv_close (cd);
-    return bit_u_expand (odest);
+    if (dest && dest <= &odest[odestlen])
+      {
+        *dest = '\0';
+        iconv_close (cd);
+        return bit_u_expand (odest);
+      }
+    else
+      {
+        iconv_close (cd);
+        free (odest);
+        return bit_TV_to_utf8_codepage (src, codepage);
+      }
 #else
     return bit_TV_to_utf8_codepage (src, codepage);
 #endif
