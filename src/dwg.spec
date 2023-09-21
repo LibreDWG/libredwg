@@ -3412,7 +3412,7 @@ DWG_ENTITY (LEADER)
   FIELD_BSx (arrowhead_type, 0);
   DECODER {
     HANDLE_HOOKLINE_FLAG(hookline_on, FIELD_VALUE(num_points), FIELD_VALUE(points), FIELD_VALUE(annot_type), FIELD_VALUE(path_type));
-    LOG_TRACE("hookline_on: %d [B 75] (calc)", FIELD_VALUE (hookline_on));
+    LOG_TRACE("hookline_on: %d [B 75] (calc)\n", FIELD_VALUE (hookline_on));
   }
   JSON {
     FIELD_B (hookline_on, 0);
