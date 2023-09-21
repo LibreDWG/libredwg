@@ -3406,10 +3406,9 @@ DWG_ENTITY (LEADER)
   FIELD_BD (box_width, 0);
   FIELD_B (hookline_dir, 0); // if hook line is on x direction
   FIELD_B (arrowhead_on, 0);
-  //ENCODER {
-  //  if (FIELD_VALUE (hookline_on))
-  //    FIELD_VALUE(arrowhead_type) |= 8;
-  //}
+  ENCODER {
+    HANDLE_HOOKLINE_FLAG(hookline_on, FIELD_VALUE(num_points), FIELD_VALUE(points), FIELD_VALUE(annot_type), FIELD_VALUE(path_type));
+  }
   FIELD_BSx (arrowhead_type, 0);
   DECODER {
     HANDLE_HOOKLINE_FLAG(hookline_on, FIELD_VALUE(num_points), FIELD_VALUE(points), FIELD_VALUE(annot_type), FIELD_VALUE(path_type));
