@@ -22,7 +22,6 @@
  * modified by Gian Maria Gentilini
  */
 
-#include <math.h>
 #include "spec.h"
 
 /* (1/7) */
@@ -3413,24 +3412,7 @@ DWG_ENTITY (LEADER)
   //}
   FIELD_BSx (arrowhead_type, 0);
   DECODER {
-    // Note that ODA doesn't spec it
-    // ODA's code does take bit 1 from path_type instead
-    //
-    // Hook lines appears if the last leader line segment is at an angle greater than 15 degrees from horizontal. 
-    // If the leader has no annotation or a spline path (?), it has no hook line.
-
-    const double hookline_offsetR = M_PI / 12;
-    double angleR = M_PI / 2;
-
-    if(FIELD_VALUE (num_points) > 2)
-    {
-      BITCODE_3DPOINT pt1 = FIELD_VALUE (points)[FIELD_VALUE (num_points) - 2];
-      BITCODE_3DPOINT pt2 = FIELD_VALUE (points)[FIELD_VALUE (num_points) - 1];
-      
-      angleR = atan2(pt1.y - pt2.y, pt1.x - pt2.x);
-    }
-
-    FIELD_VALUE (hookline_on) = (FIELD_VALUE (annot_type) & 0x3 || FIELD_VALUE (path_type) & 0x1 || fabs(angleR) <= hookline_offsetR || fabs(angleR - M_PI) <= hookline_offsetR) ? 0 : 1;
+    HANDLE_HOOKLINE_FLAG(hookline_on, FIELD_VALUE(num_points), FIELD_VALUE(points), FIELD_VALUE(annot_type), FIELD_VALUE(path_type));
     LOG_TRACE("hookline_on: %d [B 75] (calc)", FIELD_VALUE (hookline_on));
   }
   JSON {

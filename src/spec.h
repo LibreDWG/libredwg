@@ -16,6 +16,7 @@
 #  undef _GNU_SOURCE
 #  define _GNU_SOURCE
 #  include <string.h>
+#  include <math.h>
 #  include "bits.h"
 #  include "codepages.h"
 #  include "decode.h"
@@ -204,6 +205,27 @@
 #  define SUB_FIELD_3BD_inl(o, nam, dxf) FIELD_3BD (o, dxf)
 #  define SUB_FIELD_3DPOINT(o, nam, dxf) FIELD_3BD (o.nam, dxf)
 // # define SUB_FIELD_ENC(o,nam,dxf1,dxf2) FIELD_ENC(o.nam, dxf1,dxf2)
+#endif
+#ifndef HANDLE_HOOKLINE_FLAG
+// Note that ODA doesn't spec it
+// ODA's code does take bit 1 from path_type instead
+//
+// Hook lines appears if the last leader line segment is at an angle greater than 15 degrees from horizontal. 
+// If the leader has no annotation (annot_type & 0x3) or a spline path (path_type & 0x1), it has no hook line.
+# define HANDLE_HOOKLINE_FLAG(nam, num_points, points, annot_type, path_type)\
+    const double hookline_offsetR = M_PI / 12;                                \
+    double angleR = M_PI / 2;                                                 \
+    if(num_points > 2)                                                        \
+    {                                                                         \
+      BITCODE_3DPOINT pt1 = points[num_points - 2];                           \
+      BITCODE_3DPOINT pt2 = points[num_points - 1];                           \
+      angleR = atan2(pt1.y - pt2.y, pt1.x - pt2.x);                           \
+    }                                                                         \
+    FIELD_VALUE (nam) =   (annot_type & 0x3                                   \
+                        || path_type & 0x1                                    \
+                        || fabs(angleR) <= hookline_offsetR                   \
+                        || fabs(angleR - M_PI) <= hookline_offsetR) ? 0       \
+                                                                    : 1;
 #endif
 #ifndef SUB_HANDLE_VECTOR
 #  define SUB_HANDLE_VECTOR(o, nam, sizefield, code, dxf)                     \
