@@ -804,7 +804,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           int num_pts;
           double end_angle = _obj->end_angle;
           // viewres is for 2PI. we need anglediff(deg)/2PI
-          while (_obj->start_angle > end_angle)
+          while (end_angle - _obj->start_angle < 1e-6)
             end_angle += M_PI;
           num_pts = (int)trunc(viewres / rad2deg(end_angle - _obj->start_angle));
           num_pts = MIN (num_pts, 120);
