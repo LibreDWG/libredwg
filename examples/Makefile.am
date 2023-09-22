@@ -124,6 +124,9 @@ TESTS_ENVIRONMENT = \
  DATADIR='$(top_srcdir)/test/test-data' \
  TESTPROG=''
 endif
+if CHECK_LESS
+TESTS_ENVIRONMENT += CHECK_MINIMAL=1
+endif
 
 TESTS = $(top_builddir)/programs/alive.test
 if USE_WRITE

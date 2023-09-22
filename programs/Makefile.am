@@ -82,6 +82,9 @@ TESTS_ENVIRONMENT = \
  TESTPROG=''
 endif
 endif
+if CHECK_LESS
+TESTS_ENVIRONMENT += CHECK_MINIMAL=1
+endif
 
 TESTS = alive.test
 if !DISABLE_DXF
