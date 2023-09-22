@@ -883,11 +883,17 @@ dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_RLL absref)
                                             // handle (read from DWG)
     {
       // ignore warning on invalid handles. These are warned earlier already
-      if (absref && absref < dwg->num_objects)
+      if (absref && dwg->header_vars.HANDSEED
+          && absref < dwg->header_vars.HANDSEED->absolute_ref)
         {
-          LOG_WARN ("Object handle not found, " FORMAT_BLL "/" FORMAT_RLL
-                    " in " FORMAT_BL " objects",
-                    absref, absref, dwg->num_objects);
+          LOG_WARN ("Object handle not found " FORMAT_BLL "/" FORMAT_RLL
+                    " in " FORMAT_BL " objects of max " FORMAT_RLL " handles",
+                    absref, absref, dwg->num_objects, dwg->header_vars.HANDSEED->absolute_ref);
+        }
+      else
+        {
+          LOG_WARN ("Object handle not found " FORMAT_BLL "/" FORMAT_RLL,
+                    absref, absref);
         }
       return NULL;
     }
