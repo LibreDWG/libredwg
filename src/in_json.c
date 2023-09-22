@@ -702,8 +702,11 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       size = json_long (dat, tokens);
       value = json_longlong (dat, tokens);
       absref = json_longlong (dat, tokens);
-      ref = dwg_add_handleref (dwg, code, absref,
-                               (!code || code >= 6) ? obj : NULL);
+      if (!code && strEQc (key, "sort_ents"))
+        ref = dwg_add_handleref (dwg, code, absref, NULL);
+      else
+        ref = dwg_add_handleref (dwg, code, absref,
+                                 (!code || code >= 6) ? obj : NULL);
       if (t->size > 4)
         ref->r11_idx = json_long (dat, tokens); // unused
       if ((BITCODE_RC)size != ref->handleref.size

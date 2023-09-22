@@ -814,7 +814,7 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     dwg_resolve_objectrefs_silent (dwg);
   if (ref->obj && !dwg->dirty_refs)
     {
-      if (ref->obj->handle.value == ref->absolute_ref) // FIXME some new_ref error
+      if (ref->obj->handle.value == ref->absolute_ref) // not a wrong sort_ents import
         return ref->obj;
       else
         {
