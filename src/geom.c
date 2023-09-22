@@ -156,8 +156,8 @@ arc_split (BITCODE_2BD *pts, const int num_pts,
   // shoot vectors from ctr to ang
   ang = start_angle;
   angd = (end_angle - start_angle) / num_pts;
-  while (angd < 0)
-    start_angle += M_PI, angd = (end_angle - start_angle) / num_pts;
+  while ((angd = (end_angle - start_angle) / (num_pts - 1)) < 0)
+    start_angle += M_PI;
   // fprintf (stderr, "ctr (%g,%g) ang: %g - %g\n", ctr.x, ctr.y, ang, end_angle);
   for (int i = 0; i < num_pts; i++, ang += angd)
     {
