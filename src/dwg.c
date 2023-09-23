@@ -2084,9 +2084,9 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
   if (obj && (code == 0 || !offset) && absref) // only if same obj
     {
       Dwg_Data *dwg = obj->parent;
+      assert (dwg);
       loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
       LOG_HANDLE ("object_map{" FORMAT_RLLx "} = %u\n", absref, obj->index);
-      assert (dwg);
       if (!dwg->object_map) // for dwg_add_document()
         dwg->object_map = hash_new (100);
       hash_set (dwg->object_map, absref, (uint64_t)obj->index);
@@ -2152,8 +2152,8 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
           Dwg_Object_Ref *refi = dwg->object_ref[i];
           if (refi->absolute_ref == absref && refi->handleref.code == code)
             {
-              LOG_HANDLE ("[existing handleref " FORMAT_REF "] ",
-                          ARGS_REF (refi))
+              LOG_HANDLE ("[existing handleref " FORMAT_REF "][%u] ",
+                          ARGS_REF (refi), (unsigned)i)
               return refi;
             }
         }

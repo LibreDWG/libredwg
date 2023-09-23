@@ -3365,6 +3365,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   obj->handle.code = hdl->handleref.code;
                   obj->handle.size = hdl->handleref.size;
                   obj->handle.value = hdl->handleref.value;
+                  if (!hdl->handleref.code)
+                    {
+                      hdl->obj = obj;
+                      dwg_add_handle (&hdl->handleref, 0, hdl->handleref.value, obj);
+                    }
                 }
               if (!obj->type) // TODO: We could eventually relax this
                 {
