@@ -1078,8 +1078,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type "]",            \
-                     (long)vcount, _obj->name[vcount])                        \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type " %d]",         \
+                     (long)vcount, _obj->name[vcount], dxf)                   \
           LOG_POS                                                             \
         }                                                                     \
     }
@@ -1094,8 +1094,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)csize; vcount++)                  \
         {                                                                     \
           _obj->o.nam[vcount] = bit_read_##type (dat);                        \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type "]",             \
-                     (long)vcount, _obj->o.nam[vcount])                       \
+          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]",          \
+                     (long)vcount, _obj->o.nam[vcount], dxf)                  \
           LOG_POS                                                             \
         }                                                                     \
     }

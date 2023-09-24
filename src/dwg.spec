@@ -8692,7 +8692,7 @@ DWG_ENTITY (MESH)
       SET_PARENT_OBJ (edges[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (edges);
-  //FIELD_VECTOR (edges, Dwg_MESH_edge, num_edges * 2, 90);
+  //FIELD_VECTOR (edges, BL, num_edges * 2, 90);
   FIELD_BL (num_crease, 95); // edge creases 19
   FIELD_VECTOR (crease, BD, num_crease, 140);
   COMMON_ENTITY_HANDLE_DATA;
