@@ -242,7 +242,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
   // with sentinel in case of R11
   SINCE (R_11)
-  real_start -= 16; // the sentinel size
+    real_start -= 16; // the sentinel size
 
   // report unknown data before table
   if (tbl->address && dat->byte != real_start)
@@ -301,6 +301,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if (dwg->num_alloced_objects < dwg->num_objects + tbl->number)
     {
       dwg->num_alloced_objects = dwg->num_objects + tbl->number;
+      if (dwg->num_alloced_objects > dwg->num_objects + MAX_NUM)
+        {
+          LOG_ERROR ("Invalid num_alloced_objects " FORMAT_BL, dwg->num_alloced_objects);
+          return DWG_ERR_INVALIDDWG;
+        }
       dwg->object = (Dwg_Object *)realloc (
           dwg->object, dwg->num_alloced_objects * sizeof (Dwg_Object));
       dwg->dirty_refs = 1;
