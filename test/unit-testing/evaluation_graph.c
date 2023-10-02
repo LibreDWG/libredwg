@@ -32,7 +32,7 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (_obj->nodes[i], EVAL_Node, nextid, BLd);
         CHK_SUBCLASS_H (_obj->nodes[i], EVAL_Node, evalexpr);
         // CHK_SUBCLASS_VECTOR_TYPE (_obj->nodes[i], EVAL_Node, node, 4, BLd);
-        if (dwg_dynapi_subclass_value (&_obj->nodes[i], "EVAL_Node", "node[4]",
+        if (dwg_dynapi_subclass_value (&_obj->nodes[i], "EVAL_Node", "node",
                                        &node, NULL))
           {
             for (int j = 0; j < 4; j++)
@@ -61,7 +61,7 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, e3, BLd);
         // CHK_SUBCLASS_VECTOR_TYPE (edges, EVAL_Edge, edge, 5, BLd);
         if (dwg_dynapi_subclass_value (&_obj->edges[i], "EVAL_Edge",
-                                       "out_edge[5]", &edge, NULL))
+                                       "out_edge", &edge, NULL))
           {
             for (int j = 0; j < 5; j++)
               {

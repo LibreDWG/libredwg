@@ -1222,6 +1222,9 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
     FIELD_BS (vertind[2], 73);
     FIELD_BS0 (vertind[3], 74);
   }
+#elif defined IS_JSON
+  FIELD_RC (flag, 0);
+  FIELD_VECTOR_INL (vertind, BS, 4, 71);
 #else
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
   PRE (R_13b1)

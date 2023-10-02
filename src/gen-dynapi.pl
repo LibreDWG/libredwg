@@ -532,7 +532,7 @@ $DXF{$_}->{'version'} = 70 for @solids;
 $DXF{$_}->{'encr_sat_data'} = 1 for @solids;
 $DXF{$_}->{'history_id'} = 350 for @solids;
 $DXF{$_}->{'acis_empty'} = 290 for @solids;
-$DXF{$_}->{'revision_guid[39]'} = 2 for @solids;
+$DXF{$_}->{'revision_guid'} = 2 for @solids;
 my @annotscale = qw (TEXTOBJECTCONTEXTDATA MTEXTOBJECTCONTEXTDATA ALDIMOBJECTCONTEXTDATA
                      MTEXTATTRIBUTEOBJECTCONTEXTDATA MLEADEROBJECTCONTEXTDATA LEADEROBJECTCONTEXTDATA
                      BLKREFOBJECTCONTEXTDATA);
@@ -859,7 +859,7 @@ sub out_declarator {
     $is_malloc = 0;
     $size = "$1 * $size";
     $sname =~ s/\[(\d+)\]$//;
-    $name = $sname if $sname eq 'conn_pts';
+      $name = $sname; # if $sname eq 'conn_pts';
   }
   if ($type =~ /^TF/ && exists $SIZE{$key}->{$name}) {
     $size = $SIZE{$key}->{$name};
@@ -1380,7 +1380,7 @@ for (<$in>) {
         print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_header_value (dwg, "$name", &$var, NULL)
+    if (dwg_dynapi_header_value (dwg, "$sname", &$var, NULL)
         && $var == dwg->header_vars.$name)
       pass ();
     else
@@ -1390,7 +1390,7 @@ EOF
           print $fh "    $var++;\n";
         }
         print $fh <<"EOF";
-    if (dwg_dynapi_header_set_value (dwg, "$name", &$var, 0)
+    if (dwg_dynapi_header_set_value (dwg, "$sname", &$var, 0)
         && $var == dwg->header_vars.$name)
       pass ();
     else
@@ -1399,14 +1399,14 @@ EOF
 EOF
         if ($type =~ /(int|long|short|char ||double|_B\b|_B[BSLD]\b|_R[CSLD])/) {
           print $fh "    $var--;\n";
-          print $fh "    dwg_dynapi_header_set_value (dwg, \"$name\", &$var, 0);\n";
+          print $fh "    dwg_dynapi_header_set_value (dwg, \"$sname\", &$var, 0);\n";
         }
         print $fh "\n  }\n";
       } else {
         print $fh <<"EOF";
   {
     $type $var;
-    if (dwg_dynapi_header_value (dwg, "$name", &$lname, NULL)
+    if (dwg_dynapi_header_value (dwg, "$sname", &$lname, NULL)
 EOF
         if ($type !~ /\*\*/) {
           print $fh <<"EOF";
@@ -1492,7 +1492,7 @@ EOF
     if ($var =~ /\[\d+\]$/) {
       $svar =~ s/\[\d+\]$//g;
       $skey =~ s/\[\d+\]$//g;
-      $var = $svar if $var =~ /^conn_pts\[\d\]$/;
+      $key = $skey;
     }
     next if $key eq 'evalexpr.value.text1'; # already handled by evalexpr memcmp
     my $stype = $type;

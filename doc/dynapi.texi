@@ -415,7 +415,7 @@ BS,	DXF 70
 BS,	DXF 70
 @item MENU
 TV,	DXF 1
-@item MENUEXT[46]
+@item MENUEXT
 RC
 @item MIRRTEXT
 B,	DXF 70
@@ -707,7 +707,7 @@ RS
 RL
 @item flag_3d
 RS
-@item layer_colors[128]
+@item layer_colors
 RS
 @item numentities
 RS
@@ -923,7 +923,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC,	DXF 2
 @item revision_major
 BL
@@ -931,7 +931,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -1939,7 +1939,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC,	DXF 2
 @item revision_major
 BL
@@ -1947,7 +1947,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -2675,7 +2675,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC,	DXF 2
 @item revision_major
 BL
@@ -2683,7 +2683,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -3200,7 +3200,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC,	DXF 2
 @item revision_major
 BL
@@ -3208,7 +3208,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -3351,7 +3351,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC,	DXF 2
 @item revision_major
 BL
@@ -3359,7 +3359,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -3832,7 +3832,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC,	DXF 2
 @item revision_major
 BL
@@ -3840,7 +3840,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -4157,7 +4157,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC,	DXF 2
 @item revision_major
 BL
@@ -4165,7 +4165,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -4691,8 +4691,8 @@ RC,	DXF 70
 struct _dwg_object_entity*
 @item flag
 RC,	DXF 70
-@item vertind[4]
-BS
+@item vertind
+BS,	DXF 71
 
 @end vtable
 @end indentedblock
@@ -5064,7 +5064,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC,	DXF 2
 @item revision_major
 BL
@@ -5072,7 +5072,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -5721,7 +5721,7 @@ struct _dwg_VALUEPARAM*
 BL,	DXF 90
 @item b1
 B,	DXF 70
-@item workplane[3]
+@item workplane
 3BD
 @item h1
 H,	DXF 360
@@ -5970,7 +5970,7 @@ struct _dwg_entity_3DSOLID*
 BL
 @item materials
 Dwg_3DSOLID_material*
-@item revision_guid[39]
+@item revision_guid
 RC
 @item revision_major
 BL
@@ -5978,7 +5978,7 @@ BL
 BS
 @item revision_minor2
 BS
-@item revision_bytes[9]
+@item revision_bytes
 RC
 @item end_marker
 BL
@@ -10344,8 +10344,8 @@ RC,	DXF 72
 RC,	DXF 73
 @item dashes
 Dwg_LTYPE_dash*
-@item dashes_r11[12]
-RD
+@item dashes_r11
+RD,	DXF 49
 @item has_strings_area
 B
 @item strings_area
@@ -13064,7 +13064,7 @@ BL
 
 @item parent
 struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY*
-@item itemloc[3]
+@item itemloc
 BL
 
 @end vtable
@@ -13112,7 +13112,7 @@ H
 struct _dwg_abstractobject_ASSOCARRAYPARAMETERS*
 @item class_version
 BL,	DXF 90
-@item itemloc[3]
+@item itemloc
 BL
 @item flags
 BL
@@ -13600,7 +13600,7 @@ Dwg_AcDs_Search_IdIdx*
 
 @item signature
 RS
-@item name[7]
+@item name
 RC
 @item type
 RCd
@@ -13620,7 +13620,7 @@ RL
 RL
 @item objdata_algn_offset
 RL
-@item padding[9]
+@item padding
 RC
 
 @end vtable
@@ -14104,7 +14104,7 @@ BLd,	DXF 94
 BLd,	DXF 91
 @item e3
 BLd,	DXF 91
-@item out_edge[5]
+@item out_edge
 BLd
 
 @end vtable
@@ -14126,7 +14126,7 @@ BL,	DXF 93
 BLd,	DXF 95
 @item evalexpr
 H,	DXF 360
-@item node[4]
+@item node
 BLd
 @item active_cycles
 B
@@ -15202,7 +15202,7 @@ RC
 @indentedblock
 @vtable @code
 
-@item file_ID_string[12]
+@item file_ID_string
 RC
 @item header_address
 RLx
@@ -15246,7 +15246,7 @@ RLd
 RL
 @item crc32
 RLx
-@item padding[12]
+@item padding
 RC
 @item section_type
 RL

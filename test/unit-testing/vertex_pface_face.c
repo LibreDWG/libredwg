@@ -10,7 +10,7 @@ api_process (dwg_object *obj)
 
   dwg_ent_vert_pface_face *ent = dwg_object_to_VERTEX_PFACE_FACE (obj);
 
-  if (!dwg_dynapi_entity_value (ent, "VERTEX_PFACE_FACE", "vertind[4]",
+  if (!dwg_dynapi_entity_value (ent, "VERTEX_PFACE_FACE", "vertind",
                                 &vertind, NULL))
     fail ("dwg_dynapi_entity_value");
   else

@@ -5720,7 +5720,7 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 95:
           o->nodes[i].edge_flags = pair->value.i;
           if (pair->value.i != 32)
-            LOG_WARN ("%s.nodes[%d].edge_flags = %d [BL %d] != 32\n",
+            LOG_WARN ("%s.nodes[%d].edge_flags = %d [BL %d] != 32",
                       obj->name, i, pair->value.i, pair->code)
           else
             LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,

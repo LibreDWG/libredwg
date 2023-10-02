@@ -1251,6 +1251,25 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           json_2DPOINT (dat, tokens, name, key, f->type, &pt);
           dwg_dynapi_header_set_value (dwg, key, &pt, 1);
         }
+      else if (t->type == JSMN_ARRAY
+               && (strEQc (f->type, "BS") || strEQc (f->type, "RS")))
+        {
+          int size1 = t->size;
+          BITCODE_BS *nums = (BITCODE_BS *)calloc (f->size, 1);
+          tokens->index++;
+          for (int k = 0; k < size1; k++)
+            {
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              nums[k] = (BITCODE_BS)json_long (dat, tokens);
+              LOG_TRACE ("%s.%s[%d]: " FORMAT_BS " [%s]\n", name, key, k,
+                             nums[k], f->type);
+            }
+          if (!size1)
+            LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
+          dwg_dynapi_header_set_value (dwg, key, &nums, 1);
+          if (!f->is_malloc)
+            free (nums);
+        }
       else if (strEQc (f->type, "TIMEBLL") || strEQc (f->type, "TIMERLL"))
         {
           BITCODE_TIMEBLL date = { 0 };
@@ -2250,6 +2269,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               free (str);
             }
         }
+      // arrays
       else if (t->type == JSMN_ARRAY
                && (strEQc (f->type, "3BD") || strEQc (f->type, "3RD")
                    || strEQc (f->type, "3DPOINT") || strEQc (f->type, "BE")
@@ -2381,7 +2401,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else if (t->type == JSMN_ARRAY && strEQc (f->type, "2RD*"))
         {
-          int size1 = t->size;
+          const int size1 = t->size;
           BITCODE_2DPOINT *pts = size1 ? (BITCODE_2DPOINT *)calloc (
                                      size1, sizeof (BITCODE_2DPOINT))
                                        : NULL;
@@ -2396,43 +2416,149 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
           dwg_dynapi_field_set_value (dwg, _obj, f, &pts, 1);
         }
-      else if (t->type == JSMN_ARRAY && strEQc (f->type, "BD*"))
+      else if (t->type == JSMN_ARRAY &&
+               (strEQc (f->type, "BD*") || strEQc (f->type, "RD")))
         {
-          int size1 = t->size;
-          BITCODE_BD *nums
-              = size1 ? (BITCODE_BD *)calloc (size1, sizeof (BITCODE_BD))
-                      : NULL;
-          json_set_numfield (_obj, fields, key, size1);
+          const int size1 = t->size;
+          const int max_k
+              = !f->is_malloc ? (int)(f->size / sizeof (BITCODE_BD)) : size1;
+          BITCODE_BD *nums;
+          if (f->is_malloc)
+            {
+              nums = size1 ? (BITCODE_BD *)calloc (size1, sizeof (BITCODE_BD))
+                : NULL;
+              json_set_numfield (_obj, fields, key, size1);
+            }
+          else
+            nums = (BITCODE_BD *)calloc (f->size, 1);
           tokens->index++;
           for (int k = 0; k < size1; k++)
             {
               JSON_TOKENS_CHECK_OVERFLOW_ERR
-              nums[k] = json_float (dat, tokens);
-              LOG_TRACE ("%s.%s[%d]: %f [%s]\n", name, key, k, nums[k],
-                         f->type);
+              if (k < max_k)
+                {
+                  nums[k] = json_float (dat, tokens);
+                  LOG_TRACE ("%s.%s[%d]: %f [%s]\n", name, key, k, nums[k],
+                             f->type);
+                }
             }
           if (!size1)
-            LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
-          dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
+            {
+              LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
+            }
+          else
+            {
+              if (f->is_malloc) // BD*, just copy the pointer
+                dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
+              else
+                { // copy all values
+                  dwg_dynapi_field_set_value (dwg, _obj, f, nums, 1);
+                  free (nums);
+                }
+            }
         }
-      else if (t->type == JSMN_ARRAY && strEQc (f->type, "BL*"))
+      else if (t->type == JSMN_ARRAY
+               && (strEQc (f->type, "BL*") || strEQc (f->type, "BLd")))
         {
-          int size1 = t->size;
-          BITCODE_BL *nums
-              = size1 ? (BITCODE_BL *)calloc (size1, sizeof (BITCODE_BL))
-                      : NULL;
-          json_set_numfield (_obj, fields, key, size1);
+          const int size1 = t->size;
+          const int max_k
+              = !f->is_malloc ? (int)(f->size / sizeof (BITCODE_BL)) : size1;
+          BITCODE_BL *nums;
+          if (f->is_malloc)
+            {
+              nums = size1
+                ? (BITCODE_BL *)calloc (size1, sizeof (BITCODE_BL))
+                : NULL;
+              json_set_numfield (_obj, fields, key, size1);
+            }
+          else
+            nums = (BITCODE_BL *)calloc (f->size, 1);            
           tokens->index++;
           for (int k = 0; k < size1; k++)
             {
               JSON_TOKENS_CHECK_OVERFLOW_ERR
-              nums[k] = (BITCODE_BL)json_long (dat, tokens);
-              LOG_TRACE ("%s.%s[%d]: " FORMAT_BL " [BL]\n", name, key, k,
-                         nums[k]);
+              if (k < max_k)
+                {
+                  nums[k] = (BITCODE_BL)json_long (dat, tokens);
+                  if (strEQc (f->type, "BL*"))
+                    {
+                      LOG_TRACE ("%s.%s[%d]: " FORMAT_BL " [%s]\n", name, key, k,
+                                 nums[k], f->type);
+                    }
+                  else
+                    {
+                      LOG_TRACE ("%s.%s[%d]: " FORMAT_BLd " [%s]\n", name, key, k,
+                                 nums[k], f->type);
+                    }
+                }
+              else
+                {
+                  tokens->index++;
+                  LOG_TRACE ("%s.%s[%d]: [%s] ignored\n", name, key, k, f->type);
+                }
             }
           if (!size1)
-            LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
-          dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
+            {
+              LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
+            }
+          else
+            {
+              if (f->is_malloc) // BL*
+                dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
+              else
+                {
+                  dwg_dynapi_field_set_value (dwg, _obj, f, nums, 1);
+                  free (nums);
+                }
+            }
+        }
+      else if (t->type == JSMN_ARRAY
+               && (strEQc (f->type, "BS")
+                   || strEQc (f->type, "BS*")
+                   || strEQc (f->type, "RS")))
+        {
+          const int size1 = t->size;
+          const int max_k
+              = !f->is_malloc ? (int)(f->size / sizeof (BITCODE_BS)) : size1;
+          BITCODE_BS *nums;
+          if (f->is_malloc)
+            {
+              nums = size1 ? (BITCODE_BS *)calloc (size1, sizeof (BITCODE_BS))
+                : NULL;
+              json_set_numfield (_obj, fields, key, size1);
+            }
+          else
+            nums = (BITCODE_BS *)calloc (f->size, 1);
+          tokens->index++;
+          for (int k = 0; k < size1; k++)
+            {
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              if (k < max_k)
+                {
+                  nums[k] = (BITCODE_BS)json_long (dat, tokens);
+                  LOG_TRACE ("%s.%s[%d]: " FORMAT_BS " [%s]\n", name, key, k,
+                             nums[k], f->type);
+                }
+              else
+                {
+                  tokens->index++;
+                  LOG_TRACE ("%s.%s[%d]: [%s] ignored\n", name, key, k, f->type);
+                }
+            }
+          if (!size1)
+            {
+              LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
+            }
+          else
+            {
+              if (f->is_malloc) // BS*
+                dwg_dynapi_field_set_value (dwg, _obj, f, &nums, 1);
+              else
+                {
+                  dwg_dynapi_field_set_value (dwg, _obj, f, nums, 1);
+                  free (nums);
+                }
+            }
         }
       else if (t->type == JSMN_ARRAY && strEQc (key, "xdata")
                && strEQc (name, "XRECORD"))
@@ -2730,6 +2856,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       // normal array in json: vertind: [0, ...], and apply it here. The
       // vertind dynapi type should know if it's a reference or embedded.
 
+      /*
       // f is NULL
       if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind["))
         {
@@ -2861,6 +2988,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           // dwg_dynapi_field_set_value (dwg, _obj, f, &t->size, 0);
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
+      */
       return error | (f && f->name ? 1 : 0); // found or not
     }
   return error;
@@ -3385,18 +3513,13 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               tokens->index++;
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
             }
-          else if (strEQc (key, "num_unknown_bits")
-                   && (memBEGINc (obj->name, "UNKNOWN_")
-                       || strEQc (obj->name, "STYLE")))
+          else if (strEQc (key, "num_unknown_bits"))
             {
               obj->num_unknown_bits = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
               LOG_TRACE ("num_unknown_bits: %d\n", (int)obj->num_unknown_bits);
             }
-          else if (strEQc (key, "unknown_bits")
-                   && (memBEGINc (obj->name, "UNKNOWN_")
-                       || strEQc (obj->name, "STYLE")
-                       || (dwg->header.version == dwg->header.from_version)))
+          else if (strEQc (key, "unknown_bits"))
             {
               const int len = t->end - t->start;
               char *hex = json_string (dat, tokens);
