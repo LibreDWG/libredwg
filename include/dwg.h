@@ -1292,7 +1292,7 @@ typedef struct _dwg_header_variables {
   BITCODE_RC UCSICON;
   BITCODE_RL oldCECOLOR_hi; /* r11, or RD */
   BITCODE_RL oldCECOLOR_lo; /* r11 */
-  BITCODE_RS layer_colors[128]; /* r1.2 - r1.4 */
+  BITCODE_RS layer_colors[128]; /* r1.1 - r1.4 */
   BITCODE_RS unknown_51e;  /* r11 */
   BITCODE_RS unknown_520;  /* r11 */
   BITCODE_RSd unknown_52c;  /* r11 */
