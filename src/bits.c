@@ -3256,7 +3256,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
       }
     // flush the remains
     iconv (cd, NULL, (size_t *)&srclen, (char **)&dest, (size_t *)&destlen);
-    if (dest && dest <= &odest[odestlen])
+    if (errno == 0 && dest >= odest && dest <= &odest[odestlen])
       {
         *dest = '\0';
         iconv_close (cd);
