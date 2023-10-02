@@ -2552,7 +2552,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #define WE_CAN                                                                \
   "This version of LibreDWG is only capable of encoding "                     \
-  "versions r1.4-r2000 (code: AC1.40-AC1015) DWG files.\n"
+  "versions r1.1-r2000 (code: MC0.0-AC1015) DWG files.\n"
 
   PRE (R_13b1)
   {
@@ -2567,8 +2567,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         LOG_ERROR (WE_CAN "Invalid or missing FILEHEADER.version");
         return DWG_ERR_INVALIDDWG;
       }
-    PRE (R_1_4)
-      LOG_WARN (WE_CAN "We cannot encode pre-r1.4 DWG's yet");
 
     SINCE (R_2_0b)
     {
