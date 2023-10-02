@@ -45,32 +45,32 @@
 #undef LOG_POS
 #define LOG_POS                                                               \
   LOG_INSANE (" @%zu.%u", obj ? dat->byte - obj->address : dat->byte,         \
-              dat->bit)                                                       \
+              (unsigned)dat->bit)                                             \
   LOG_TRACE ("\n")
 #define LOG_POS_(level)                                                       \
   LOG_INSANE (" @%zu.%u", obj ? dat->byte - obj->address : dat->byte,         \
-              dat->bit)                                                       \
+              (unsigned)dat->bit)                                             \
   LOG (level, "\n")
 
 #define LOG_RPOS                                                              \
-  LOG_INSANE (" @%zu.%u", dat->byte, dat->bit)                                \
+  LOG_INSANE (" @%zu.%u", dat->byte, (unsigned)dat->bit)                      \
   LOG_TRACE ("\n")
 #define LOG_RPOS_(level)                                                      \
-  LOG_INSANE (" @%zu.%u", dat->byte, dat->bit)                                \
+  LOG_INSANE (" @%zu.%u", dat->byte, (unsigned)dat->bit)                      \
   LOG (level, "\n")
 #define LOG_HPOS                                                              \
   LOG_INSANE (" @%zu.%u",                                                     \
               obj && hdl_dat->byte > obj->address                             \
                   ? hdl_dat->byte - obj->address                              \
                   : hdl_dat->byte,                                            \
-              hdl_dat->bit)                                                   \
+              (unsigned)hdl_dat->bit)                                         \
   LOG_TRACE ("\n")
 #define LOG_HPOS_(level)                                                      \
   LOG_INSANE (" @%zu.%u",                                                     \
               obj && hdl_dat->byte > obj->address                             \
                   ? hdl_dat->byte - obj->address                              \
                   : hdl_dat->byte,                                            \
-              hdl_dat->bit)                                                   \
+              (unsigned)hdl_dat->bit)                                         \
   LOG (level, "\n")
 
 #define VALUE(value, type, dxf)                                               \
@@ -480,7 +480,7 @@
     LOG_TRACE (#nam ": \"%s\" [TF %zu " #dxf "]", _obj->nam, (size_t)len);    \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
-    LOG_INSANE (" @%zu.%u", dat->byte, dat->bit)                              \
+    LOG_INSANE (" @%zu.%u", dat->byte, (unsigned)dat->bit)                    \
     LOG_TRACE ("\n")                                                          \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
@@ -891,14 +891,14 @@
 #define DEBUG_POS_OBJ                                                         \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      LOG_TRACE ("DEBUG_POS @%zu.%u (%zu) %zu\n", dat->byte, dat->bit,        \
+      LOG_TRACE ("DEBUG_POS @%zu.%u (%zu) %zu\n", dat->byte, (unsigned)dat->bit, \
                  bit_position (dat),                                          \
                  obj ? bit_position (dat) - obj->address * 8 : 0);            \
     }
 #define DEBUG_POS                                                             \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      LOG_TRACE ("DEBUG_POS @%zu.%u (%zu)\n", dat->byte, dat->bit,            \
+      LOG_TRACE ("DEBUG_POS @%zu.%u (%zu)\n", dat->byte, (unsigned)dat->bit,  \
                  bit_position (dat));                                         \
     }
 #define _DEBUG_HERE(objsize)                                                  \
@@ -1481,12 +1481,12 @@
       {                                                                       \
         LOG_HANDLE (" handle stream: %+ld @%zu.%u %s (@%zu.%u "               \
                     " @%zu.%u)\n",                                            \
-                    (long)(obj->hdlpos - _pos), dat->byte, dat->bit,          \
+                    (long)(obj->hdlpos - _pos), dat->byte, (unsigned)dat->bit,\
                     (long)(obj->hdlpos - _pos) >= 8 ? "MISSING"               \
                     : (long)(obj->hdlpos < _pos)    ? "OVERSHOOT"             \
-                                                    : "",                        \
+                                                    : "",                     \
                     obj->hdlpos / 8, (unsigned)obj->hdlpos % 8,               \
-                    hdl_dat->byte, hdl_dat->bit);                             \
+                    hdl_dat->byte, (unsigned)hdl_dat->bit);                   \
         bit_set_position (dat, obj->hdlpos);                                  \
       }                                                                       \
   }
