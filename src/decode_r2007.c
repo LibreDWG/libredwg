@@ -798,6 +798,12 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   for (i = 0; i < (int)section->num_pages; i++)
     {
       r2007_section_page *section_page = section->pages[i];
+      if (!section_page)
+        {
+          free (decomp);
+          LOG_ERROR ("Failed to find section page %d", (int)i)
+          return DWG_ERR_PAGENOTFOUND;
+        }
       page = get_page (pages_map, section_page->id);
       if (page == NULL)
         {
@@ -954,12 +960,11 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_TRACE ("\n")
       section->type = dwg_section_wtype (section->name);
 
-      if (section->num_pages <= 0)
-        continue;
-      if (section->num_pages > 0xf0000)
+      if (section->num_pages <= 0 || section->num_pages > 0xf0000)
         {
           LOG_ERROR ("Invalid num_pages %zu, skip",
                      (size_t)section->num_pages);
+          section->num_pages = 0;
           continue;
         }
 
