@@ -2618,12 +2618,14 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   RECORD (SecondHeader); // single hash
 #if 0
-  FIELD_TFF (version, 12, 0);
-  FIELD_VECTOR_INL (null_b, B, 4, 0);
-  FIELD_RC (unknown_10, 0);
-  FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0);
+  FIELD_TFF (version, 6, 0);
+  FIELD_VECTOR_INL (zero_5, RC, 5, 0)
+  FIELD_RC (is_maint, 0);
+  FIELD_RC (zero_one_or_three, 0);
+  FIELD_BS (dwg_version, 0);
+  FIELD_RS (codepage, 0);
 
-  FIELD_RC (num_sections, 0);
+  FIELD_BS (num_sections, 0);
   SECTION (sections);
   for (unsigned i = 0; i < MIN(FIELD_VALUE (num_sections), 6U); i++)
     {

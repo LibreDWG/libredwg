@@ -3545,14 +3545,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           LOG_TRACE ("Use secondheader defaults...\n");
           strcpy ((char *)&_obj->version[0], &code[0]);
           memset (&_obj->version[7], 0, 4);
-          _obj->version[11] = '\xf';
-          _obj->unknown_10 = 0x10;
-          _obj->unknown_rc4[0] = 0x84;
-          _obj->unknown_rc4[1] = 0x74;
-          _obj->unknown_rc4[2] = 0x78;
-          _obj->unknown_rc4[3] = 0x1;
+          // TODO detect what it is
           _obj->junk_r14 = UINT64_C (0x5939044DE70A1832);
         }
+      for (int k = 0; k < 5; k++)
+        _obj->zero_5[k] = dwg->header.zero_5[k];
+      _obj->is_maint = dwg->header.is_maint;
+      _obj->zero_one_or_three = dwg->header.zero_one_or_three;
+      _obj->dwg_version = (BITCODE_RS)(((BITCODE_RS)dwg->header.maint_version << 8) | dwg->header.dwg_version);
+      _obj->codepage = dwg->header.codepage;
       // always recompute sections, even with dwgrewrite
       _obj->num_sections = dwg->header.num_sections;
       for (i = 0; i < MIN (_obj->num_sections, 7U); i++)

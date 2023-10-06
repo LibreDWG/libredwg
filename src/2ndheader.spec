@@ -19,51 +19,26 @@
 #include "spec.h"
 
 VERSIONS (R_13, R_2000) {
-  IF_ENCODE_FROM_EARLIER {
-    // documented as 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
-    // r14:      7d f4 78 01
-    // r2000:    14 64 78 01
-    VERSION (R_13) {
-      BITCODE_RC unknown_rc4[] = { 0x18, 0x78, 0x01, 0x04 };
-      memcpy (_obj->unknown_rc4, unknown_rc4, 4);
-    }
-    VERSION (R_14) {
-      BITCODE_RC unknown_rc4[] = { 0x18, 0x78, 0x01, 0x05 };
-      memcpy (_obj->unknown_rc4, unknown_rc4, 4);
-    }
-    VERSION (R_2000) {
-      BITCODE_RC unknown_rc4[] = { 0x14, 0x64, 0x78, 0x01 };
-      memcpy (_obj->unknown_rc4, unknown_rc4, 4);
-    }
-  }
-  
   FIELD_RL (size, 0);
   FIELD_BL (address, 0);
-  FIELD_TFF (version, 11, 0);
-#ifndef IS_JSON
-  VALUE_RC (0xf, 0);
-#endif
-  FIELD_VECTOR_INL (null_b, B, 4, 0);
-  FIELD_RC (unknown_10, 0); // 0x10
-  if (
-#if defined IS_ENCODER
-      dat->version < R_2000
+  FIELD_TFF (version, 6, 0);
+#ifdef IS_JSON
+  KEY (zero_5);
+  fprintf (dat->fh, "[ %d, %d, %d, %d, %d ]",
+          _obj->zero_5[0], _obj->zero_5[1], _obj->zero_5[2], _obj->zero_5[3],
+          _obj->zero_5[4]);
 #else
-      dat->from_version < R_2000
+  FIELD_VECTOR_INL (zero_5, RC, 5, 0)
 #endif
-      && FIELD_VALUE (unknown_10) == 0x18)
-    {
-      FIELD_VECTOR_INL (unknown_rc4, RC, 2, 0)
-    }
-  else if (FIELD_VALUE (unknown_10) == 0x14)
-    {
-      FIELD_VECTOR_INL (unknown_rc4, RC, 3, 0)
-    }
-  else // 0x10
-    {
-      FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
-    }
-  FIELD_RCu (num_sections, 0);
+  FIELD_RC (is_maint, 0);
+  FIELD_RC (zero_one_or_three, 0);
+  FIELD_BS (dwg_version, 0);
+  DECODER {
+    LOG_TRACE("=> header dwg_version: 0x%x\n", _obj->dwg_version & 0xFF);
+    LOG_TRACE("=> header maint_version: 0x%x\n", (_obj->dwg_version >> 8) & 0xFF);
+  }
+  FIELD_RS (codepage, 0);
+  FIELD_BS (num_sections, 0);
   REPEAT_F (num_sections, 6, sections, Dwg_SecondHeader_Sections)
   REPEAT_BLOCK
       // address+sizes of sections 0-2 is correct, 3+4 is empty
