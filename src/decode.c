@@ -1434,7 +1434,11 @@ dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
   uint32_t sum2 = seed >> 0x10;
   unsigned char *data = &dat->chain[dat->byte];
   unsigned char *end = &dat->chain[dat->byte + size];
-
+  if (dat->byte + size > dat->size)
+    {
+      LOG_ERROR ("dwg_section_page_checksum size %" PRId32 " overflow", size);
+      return 0;
+    }
   while (size > 0 && data < end)
     {
       uint32_t chunksize = MIN (size, 0x15b0);
