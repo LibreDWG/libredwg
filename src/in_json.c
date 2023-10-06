@@ -4097,32 +4097,22 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // clang-format off
       FIELD_RL (size, 0)
       FIELD_RL (address, 0)
-      FIELD_TFF (version, 12, 0)
-      FIELD_VECTOR_INL (null_b, B, 4, 0)
-      FIELD_RC (unknown_10, 0)
-      // FIELD_VECTOR_INL (unknown_rc4, RC, 4, 0)
-      else if (strEQc (key, "unknown_rc4") && t->type == JSMN_ARRAY && t->size <= 4)
-        {
-          tokens->index++;
-          JSON_TOKENS_CHECK_OVERFLOW_ERR
-          for (int vcount = 0; vcount < t->size; vcount++)
-            {
-              _obj->unknown_rc4[vcount] = (BITCODE_RC)json_long (dat, tokens);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR
-              LOG_TRACE ("unknown_rc4[%d]: " FORMAT_RC " [RC]\n", vcount,
-                         _obj->unknown_rc4[vcount]);
-            }
-        }
-      FIELD_RC (num_sections, 0)
+      FIELD_TFF (version, 6, 0)
+      FIELD_VECTOR_INL (zero_5, RC, 5, 0)
+      FIELD_RC (is_maint, 0)
+      FIELD_RC (zero_one_or_three, 0)
+      FIELD_BS (dwg_version, 0)
+      FIELD_RS (codepage, 0)
+      FIELD_BS (num_sections, 0)
       FIELD_BS (num_handles, 0)
       FIELD_RLL (junk_r14, 0)
       FIELD_RS (crc, 0)
       // clang-format on
       else
-      {
-        LOG_ERROR ("Unknown %s.%s ignored", section, key);
-        tokens->index++;
-      }
+        {
+          LOG_ERROR ("Unknown %s.%s ignored", section, key);
+          tokens->index++;
+        }
     }
 
   LOG_TRACE ("End of %s\n", section)

@@ -9621,10 +9621,12 @@ typedef struct _dwg_secondheader
 {
   BITCODE_RL size;
   BITCODE_RL address;
-  BITCODE_RC version[12];
-  BITCODE_B null_b[4];
-  BITCODE_RC unknown_10;
-  BITCODE_RC unknown_rc4[4];
+  BITCODE_RC version[7];
+  BITCODE_RC zero_5[5];
+  BITCODE_RC is_maint;
+  BITCODE_RC zero_one_or_three;
+  BITCODE_BS dwg_version;
+  BITCODE_RS codepage;
   BITCODE_RC num_sections;
   Dwg_SecondHeader_Sections sections[7];
   BITCODE_BS num_handles;
