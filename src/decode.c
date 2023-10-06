@@ -1423,8 +1423,8 @@ add_section (Dwg_Data *dwg)
 }
 
 // needed for r2004+ encode and decode (check-only)
-// p 4.3: first calc with seed 0, then compress, then recalc with prev.
-// checksum
+// p 4.3: first calc with seed 0 and checksum 0, then compress,
+// then recalc with prev. checksum as seed
 // FIXME
 uint32_t
 dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
@@ -3249,8 +3249,14 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     calc_crc32 = bit_calc_CRC32 (0, &decrypted_data[0], 0x6c);
     _obj->crc32 = crc32;
     if (calc_crc32 != crc32)
-      LOG_INFO ("r2004_file_header CRC32 mismatch 0x%08x != 0x%08x\n",
-                calc_crc32, crc32)
+      {
+        LOG_INFO ("r2004_file_header CRC32 mismatch 0x%08x != 0x%08x\n",
+                  calc_crc32, crc32)
+      }
+    else
+      {
+        LOG_TRACE ("crc32 => 0x%08x (verified)\n", (unsigned)crc32);
+      }
   }
 
   /*-------------------------------------------------------------------------
@@ -3305,18 +3311,18 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RL (decomp_data_size, 0);
     FIELD_RL (comp_data_size, 0);
     FIELD_RL (compression_type, 0);
-    FIELD_RLx (checksum, 0);
     LOG_INSANE ("@0x%zx\n", dat->byte);
     // memset (&dat->chain[dat->byte - 4], 0, 4);
     //  seed 0xa751074, offset 0x100, size 16
     dat->byte = start + 0x100;
     // FIXME
-    checksum1 = dwg_section_page_checksum (0, dat, 16);
-    LOG_TRACE ("checksum1 0x%08x with seed and crc 0\n", (unsigned)checksum1);
-    // dat->byte = start + 0x110;
+    checksum1 = dwg_section_page_checksum (0, dat, 20);
+    LOG_TRACE ("checksum1 => 0x%08x with seed and crc 0\n", (unsigned)checksum1);
+    dat->byte = start + 0x110;
+    FIELD_RLx (checksum, 0);
     // bit_write_BL (dat, _obj->checksum);
     // dat->byte = start + 0x100;
-    checksum = dwg_section_page_checksum (checksum1, dat, 16);
+    checksum = dwg_section_page_checksum (checksum1, dat, _obj->comp_data_size);
     dat->byte = start + 0x114;
     if (checksum == _obj->checksum)
       {
@@ -3325,7 +3331,8 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     else
       {
         LOG_WARN ("checksum: 0x%08x (calculated) CRC mismatch 0x%zx-0x%zx\n",
-                  (unsigned)checksum, start + 0x100, start + 0x100 + 16);
+                  (unsigned)checksum, start + 0x114,
+                  start + 0x114 + _obj->comp_data_size);
         // error |= DWG_ERR_WRONGCRC;
       }
   }
