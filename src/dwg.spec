@@ -6127,6 +6127,8 @@ DWG_OBJECT_END
         default:                                                              \
           LOG_ERROR ("Invalid data type in TABLE entity\n")                   \
           DEBUG_HERE_OBJ                                                      \
+          FIELD_VALUE (value.format_flags) = 0;                               \
+          FIELD_VALUE (value.data_type) = 0;                                  \
           error |= DWG_ERR_INVALIDTYPE;                                       \
           break;                                                              \
           /*return DWG_ERR_INVALIDTYPE; */                                    \
@@ -6136,7 +6138,8 @@ DWG_OBJECT_END
   {                                                                           \
     FIELD_BL (value.unit_type, 94);                                           \
     FIELD_T (value.format_string, 300);                                       \
-    FIELD_T (value.value_string, 302);                                        \
+    if (FIELD_VALUE (value.unit_type) != 12)                                  \
+      FIELD_T (value.value_string, 302);                                      \
   }
 
 DWG_OBJECT (FIELD)
