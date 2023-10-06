@@ -943,7 +943,7 @@ handles_section:
 
       LOG_INFO ("\n=======> Second Header 3 (start): %8zu\n", dat->byte - 16)
 
-      secondheader_private (dat, dwg);
+      error |= secondheader_private (dat, dwg);
 
       if (dwg->header.sections <= SECTION_2NDHEADER_R13)
         {
@@ -2641,9 +2641,17 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-    // clang-format off
+  // clang-format off
   #include "2ndheader.spec"
   // clang-format on
+
+  if (!bit_check_CRC (dat, _obj->address + 16, 0xC0C1))
+    error |= DWG_ERR_WRONGCRC;
+
+  DEBUG_HERE
+  VERSION (R_14) {
+    FIELD_RLL (junk_r14, 0);
+  }
 
   return error;
 }

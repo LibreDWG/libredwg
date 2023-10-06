@@ -81,10 +81,4 @@ VERSIONS (R_13, R_2000) {
         }
   END_REPEAT_BLOCK
   END_REPEAT_F (handles)
-
-  // CRC check extra
-  FIELD_RSx (crc, 0);
-  VERSION (R_14) {
-    FIELD_RLL (junk_r14, 0);
-  }
 }
