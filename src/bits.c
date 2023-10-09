@@ -2030,7 +2030,7 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     bit_write_RS (dat, (BITCODE_RS)length);
   else
     {
-      if (dat->version >= R_13b1 && length)
+      if (dat->version > R_13c3 && length)
         length++;
       bit_write_BS (dat, (BITCODE_BS)length);
     }
