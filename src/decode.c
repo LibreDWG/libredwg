@@ -846,7 +846,7 @@ handles_section:
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       crc = bit_read_RS_BE (dat);
-      LOG_TRACE ("\nHandles page crc: %04X [RSx_BE] (%zu-%zu = %u)\n", crc,
+      LOG_TRACE ("\nHandles page CRC: %04X [RSx_BE] (%zu-%zu = %u)\n", crc,
                  startpos, startpos + section_size, section_size);
       crc2 = bit_calc_CRC (0xC0C1, dat->chain + startpos, section_size);
       if (crc != crc2)

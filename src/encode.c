@@ -3337,7 +3337,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           dat->chain[pvzadr + 1] = sec_size & 0xFF;
           LOG_TRACE ("Handles page size: %u [RS_BE] @%zu\n", sec_size, pvzadr);
 #endif
-          bit_write_CRC (dat, pvzadr, 0xC0C1);
+          bit_write_CRC_BE (dat, pvzadr, 0xC0C1);
 
           pvzadr = dat->byte;
           dat->byte += 2;
