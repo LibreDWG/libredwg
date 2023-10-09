@@ -2300,7 +2300,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   int ckr_missing = 1;
   int error = 0;
   BITCODE_BL i, j;
-  size_t section_address;
+  size_t section_address, header_crc_address = 0;
   size_t pvzadr;
   size_t last_offset;
   unsigned int ckr;
@@ -2808,6 +2808,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     bit_write_RL (dat, dwg->header.sections);
     section_address = dat->byte;             // save section address
     dat->byte += (dwg->header.sections * 9); /* RC + 2*RL */
+    header_crc_address = dat->byte;
     bit_write_CRC (dat, 0, 0xC0C1);
     write_sentinel (dat, DWG_SENTINEL_HEADER_END);
 
@@ -2953,10 +2954,26 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                         dat);
     str_dat = hdl_dat = dat = &sec_dat[SECTION_PREVIEW];
   }
+  // TODO: add Thumbnail after MEASUREMENT, and patchup the address later.
+  // Or just fixup the header.thumbnail_address now.
   else
   {
-    if (!dwg->header.thumbnail_address)
-      dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
+    if (dwg->header.thumbnail_address != (dat->byte & 0xFFFFFFFF))
+      {
+        // patchup header.thumbnail_address
+        size_t oldpos = dat->byte;
+        dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
+        dat->byte = 0xc0;
+        bit_write_RL (dat, dwg->header.thumbnail_address);
+        LOG_TRACE ("header.thumbnail_address: " FORMAT_RL " [RL] @0xC0",
+                   dwg->header.thumbnail_address)
+        if (header_crc_address)
+          {
+            dat->byte = header_crc_address;
+            bit_write_CRC (dat, 0, 0xC0C1);
+          }
+        dat->byte = oldpos;
+      }
   }
   dat->bit = 0;
   LOG_TRACE ("\n=======> Thumbnail:       %4zu\n", dat->byte);
