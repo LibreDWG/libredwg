@@ -427,7 +427,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("\n=======> Thumbnail:       %4zu\n", start_address - 16);
       if (dwg->header.thumbnail_address
           && dwg->header.thumbnail_address != (BITCODE_RL)(dat->byte - 16))
-        LOG_WARN ("Illegal HEADER.thumbnail_address: %i != %zu",
+        LOG_WARN ("Illegal header.thumbnail_address: %i != %zu",
                   dwg->header.thumbnail_address, dat->byte - 16)
       dwg->header.thumbnail_address = (dat->byte - 16) & 0xFFFFFFFF;
       if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END)))
@@ -436,12 +436,12 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_TRACE ("         Thumbnail (end): %4zu\n", dat->byte)
           if ((dat->byte - 16) < start_address)
             {
-              LOG_ERROR ("Illegal HEADER.thumbnail_size: %zu < %zu",
+              LOG_ERROR ("Illegal header.thumbnail_size: %zu < %zu",
                          dat->byte - 16, start_address);
             }
           else if ((dat->byte - 16) - start_address < 10)
             {
-              LOG_TRACE ("No HEADER.thumbnail: %zu < 10",
+              LOG_TRACE ("No header.thumbnail: %zu < 10",
                          dat->byte - 16 - start_address);
             }
           else

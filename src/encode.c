@@ -2787,7 +2787,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     if (!dwg->header.num_sections
         || (dat->from_version >= R_2004 && dwg->header.num_sections > 6))
       {
-        dwg->header.num_sections = dwg->header.version < R_2000 ? 5 : 6;
+        if (dwg->header.version < R_2000)
+          dwg->header.num_sections = dwg->auxheader.dwg_version ? 6 : 5;
+        else
+          dwg->header.num_sections = 6;
         // minimal DXF:
         // if (dwg->opts & (DWG_OPTS_INDXF | DWG_OPTS_MINIMAL)
         //    && (!dwg->header_vars.HANDSEED ||
@@ -2956,16 +2959,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
   // TODO: add Thumbnail after MEASUREMENT, and patchup the address later.
   // Or just fixup the header.thumbnail_address now.
-  else
+  VERSIONS (R_13b1, R_2000)
   {
     if (dwg->header.thumbnail_address != (dat->byte & 0xFFFFFFFF))
       {
         // patchup header.thumbnail_address
         size_t oldpos = dat->byte;
         dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
-        dat->byte = 0xc0;
+        dat->byte = 0x0D;
         bit_write_RL (dat, dwg->header.thumbnail_address);
-        LOG_TRACE ("header.thumbnail_address: " FORMAT_RL " [RL] @0xC0",
+        LOG_TRACE ("header.thumbnail_address => " FORMAT_RL " [RL] @0x0D\n",
                    dwg->header.thumbnail_address)
         if (header_crc_address)
           {
@@ -2975,32 +2978,34 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         dat->byte = oldpos;
       }
   }
-  dat->bit = 0;
-  LOG_TRACE ("\n=======> Thumbnail:       %4zu\n", dat->byte);
-  // dwg->thumbnail.size = 0; // to disable
-  write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_BEGIN);
-  if (dwg->thumbnail.size == 0)
-    {
-      bit_write_RL (dat, 5); // overall size
-      LOG_TRACE ("Thumbnail size: 5 [RL]\n");
-      bit_write_RC (dat, 0); // num_pictures
-      LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
-    }
-  else
-    {
-      bit_write_TF (dat, dwg->thumbnail.chain, dwg->thumbnail.size);
-    }
-  write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_END);
-
+  SINCE (R_13b1)
   {
-    BITCODE_RL bmpsize;
-    BITCODE_RC type;
-    dwg_bmp (dwg, &bmpsize, &type);
-    if (bmpsize > dwg->thumbnail.size)
-      LOG_ERROR ("thumbnail size overflow: %i > %zu\n", bmpsize,
-                 dwg->thumbnail.size);
+    dat->bit = 0;
+    LOG_TRACE ("\n=======> Thumbnail:       %4zu\n", dat->byte);
+    // dwg->thumbnail.size = 0; // to disable
+    write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_BEGIN);
+    if (dwg->thumbnail.size == 0)
+      {
+        bit_write_RL (dat, 5); // overall size
+        LOG_TRACE ("Thumbnail size: 5 [RL]\n");
+        bit_write_RC (dat, 0); // num_pictures
+        LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
+      }
+    else
+      {
+        bit_write_TF (dat, dwg->thumbnail.chain, dwg->thumbnail.size);
+      }
+    write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_END);
+    {
+      BITCODE_RL bmpsize;
+      BITCODE_RC type;
+      dwg_bmp (dwg, &bmpsize, &type);
+      if (bmpsize > dwg->thumbnail.size)
+        LOG_ERROR ("thumbnail size overflow: %i > %zu\n", bmpsize,
+                   dwg->thumbnail.size);
+    }
+    LOG_TRACE ("         Thumbnail (end): %4zu\n", dat->byte);
   }
-  LOG_TRACE ("         Thumbnail (end): %4zu\n", dat->byte);
 
   /*------------------------------------------------------------
    * Header Variables
