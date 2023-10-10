@@ -3335,10 +3335,11 @@ dwg_sections_init (Dwg_Data *dwg)
     {
       /* section 0: header vars
        *         1: class section
-       *         2: object map
-       *         3: (R13c3 and later): 2nd header (special table, no sentinels)
+       *         2: object map (i.e. handles)
+       *         3: 2ndheader (r13c3+, no sentinels)
        *         4: optional: MEASUREMENT
        *         5: optional: AuxHeader (no sentinels, since R_2000b)
+       *         6: optional: THUMBNAIL (not a section)
        */
       if (!dwg->header.num_sections)
         dwg->header.num_sections = dwg->header.version >= R_2000b ? 6 : 5;
@@ -3361,13 +3362,13 @@ dwg_sections_init (Dwg_Data *dwg)
     }
 
   if (dwg->header.section)
-    // zero-based
+    // zero-based, including THUMBNAIL
     dwg->header.section = (Dwg_Section *)realloc (
         dwg->header.section,
-        sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
+        sizeof (Dwg_Section) * (dwg->header.num_sections + 2));
   else
     dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
-                                                 dwg->header.num_sections + 1);
+                                                 dwg->header.num_sections + 2);
   if (!dwg->header.section)
     {
       LOG_ERROR ("Out of memory");

@@ -2286,6 +2286,87 @@ encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
+static int
+encode_template (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                 const Dwg_Section_Type sec_id)
+{
+  int error = 0;
+  struct _dwg_template *_obj = &dwg->Template;
+  if ((int)dwg->header.num_sections <= (int)sec_id)
+    dwg->header.section = (Dwg_Section *)realloc (
+        dwg->header.section, (sec_id + 1) * sizeof (Dwg_Section));
+  LOG_INFO ("\n=======> MEASUREMENT: @%4zu\n", dat->byte);
+  dwg->header.section[sec_id].number = 4;
+  dwg->header.section[sec_id].address = dat->byte;
+  dwg->header.section[sec_id].size = 4; // always empty description
+  // Template description
+  bit_write_T16 (dat, _obj->description);
+  // 0 - English, 1- Metric
+  bit_write_RS (dat, dwg->header_vars.MEASUREMENT);
+  LOG_TRACE ("HEADER.MEASUREMENT: %d [RS]\n",
+             dwg->header_vars.MEASUREMENT);
+  return error;
+}
+
+/*------------------------------------------------------------
+ * THUMBNAIL preview pictures
+ */
+static int
+encode_r13_thumbnail (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                      const size_t header_crc_address)
+{
+  int error = 0;
+  // When adding Thumbnail after MEASUREMENT, patchup the address later.
+  VERSIONS (R_13b1, R_2000)
+  {
+    if (dwg->header.thumbnail_address != (dat->byte & 0xFFFFFFFF))
+      {
+        // patchup header.thumbnail_address
+        size_t oldpos = dat->byte;
+        dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
+        dat->byte = 0x0D;
+        bit_write_RL (dat, dwg->header.thumbnail_address);
+        LOG_TRACE ("header.thumbnail_address => " FORMAT_RL " [RL] @0x0D\n",
+                   dwg->header.thumbnail_address)
+        if (header_crc_address)
+          {
+            dat->byte = header_crc_address;
+            bit_write_CRC (dat, 0, 0xC0C1);
+          }
+        dat->byte = oldpos;
+      }
+  }
+  SINCE (R_13b1)
+  {
+    dat->bit = 0;
+    LOG_TRACE ("\n=======> Thumbnail:       %4zu\n", dat->byte);
+    // dwg->thumbnail.size = 0; // to disable
+    write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_BEGIN);
+    if (dwg->thumbnail.size == 0)
+      {
+        bit_write_RL (dat, 5); // overall size
+        LOG_TRACE ("Thumbnail size: 5 [RL]\n");
+        bit_write_RC (dat, 0); // num_pictures
+        LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
+      }
+    else
+      {
+        bit_write_TF (dat, dwg->thumbnail.chain, dwg->thumbnail.size);
+      }
+    write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_END);
+    {
+      BITCODE_RL bmpsize;
+      BITCODE_RC type;
+      dwg_bmp (dwg, &bmpsize, &type);
+      if (bmpsize > dwg->thumbnail.size)
+        LOG_ERROR ("thumbnail size overflow: %i > %zu\n", bmpsize,
+                   dwg->thumbnail.size);
+    }
+    LOG_TRACE ("         Thumbnail (end): %4zu\n", dat->byte);
+  }
+  return error;
+}
+
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -2778,10 +2859,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     /* section 0: header vars
      *         1: class section
-     *         2: object map
-     *         3: (R13 c3 and later): 2nd header (special table no sentinels)
-     *         4: optional: MEASUREMENT
-     *         5: optional: AuxHeader
+                  MEASUREMENT (r13 only, optional)
+                  padding (r13c3+)
+                  THUMBNAIL (<r13c3)
+     *         2: handles
+     *         3: 2ndheader (r13c3+, special table, no sentinels)
+     *         4: MEASUREMENT (r14-r2000, optional)
+     *         5: AuxHeader (r2000)
+     *         6: THUMBNAIL (r13c3+, not a section)
      */
     /* Usually 3-5, max 6 */
     if (!dwg->header.num_sections
@@ -2948,66 +3033,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
 
   /*------------------------------------------------------------
-   * THUMBNAIL preview pictures
-   */
-  old_dat = dat;
-  SINCE (R_2004)
-  {
-    bit_chain_init_dat (&sec_dat[SECTION_PREVIEW], dwg->thumbnail.size + 64,
-                        dat);
-    str_dat = hdl_dat = dat = &sec_dat[SECTION_PREVIEW];
-  }
-  // TODO: add Thumbnail after MEASUREMENT, and patchup the address later.
-  // Or just fixup the header.thumbnail_address now.
-  VERSIONS (R_13b1, R_2000)
-  {
-    if (dwg->header.thumbnail_address != (dat->byte & 0xFFFFFFFF))
-      {
-        // patchup header.thumbnail_address
-        size_t oldpos = dat->byte;
-        dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
-        dat->byte = 0x0D;
-        bit_write_RL (dat, dwg->header.thumbnail_address);
-        LOG_TRACE ("header.thumbnail_address => " FORMAT_RL " [RL] @0x0D\n",
-                   dwg->header.thumbnail_address)
-        if (header_crc_address)
-          {
-            dat->byte = header_crc_address;
-            bit_write_CRC (dat, 0, 0xC0C1);
-          }
-        dat->byte = oldpos;
-      }
-  }
-  SINCE (R_13b1)
-  {
-    dat->bit = 0;
-    LOG_TRACE ("\n=======> Thumbnail:       %4zu\n", dat->byte);
-    // dwg->thumbnail.size = 0; // to disable
-    write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_BEGIN);
-    if (dwg->thumbnail.size == 0)
-      {
-        bit_write_RL (dat, 5); // overall size
-        LOG_TRACE ("Thumbnail size: 5 [RL]\n");
-        bit_write_RC (dat, 0); // num_pictures
-        LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
-      }
-    else
-      {
-        bit_write_TF (dat, dwg->thumbnail.chain, dwg->thumbnail.size);
-      }
-    write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_END);
-    {
-      BITCODE_RL bmpsize;
-      BITCODE_RC type;
-      dwg_bmp (dwg, &bmpsize, &type);
-      if (bmpsize > dwg->thumbnail.size)
-        LOG_ERROR ("thumbnail size overflow: %i > %zu\n", bmpsize,
-                   dwg->thumbnail.size);
-    }
-    LOG_TRACE ("         Thumbnail (end): %4zu\n", dat->byte);
-  }
-
-  /*------------------------------------------------------------
    * Header Variables
    */
   SINCE (R_2004)
@@ -3140,10 +3165,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("unknown: %04X [RL]\n", 0x0DCA);
   }
 
+  VERSION (R_13)
+  {
+    if ((int)dwg->header.num_sections > (int)SECTION_MEASUREMENT_R13)
+      error |= encode_template (dwg, dat, (Dwg_Section_Type)SECTION_MEASUREMENT_R13);
+  }
+  PRE (R_13c3)
+  {
+    error |= encode_r13_thumbnail (dwg, dat, header_crc_address);
+  }
+
+  old_dat = dat;
   /*------------------------------------------------------------
    * Objects
    */
-
   SINCE (R_2004)
   {
     sec_id = SECTION_OBJECTS;
@@ -3281,11 +3316,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     " / Address: %zu / Idx: " FORMAT_BL "\n",
                     i, omap[i].handle, omap[i].address, omap[i].index);
     }
-
-  /* Unknown CRC between objects and object map
-   */
-  bit_write_RS (dat, 0);
-  LOG_TRACE ("unknown crc?: %04X [RS]\n", 0);
+  bit_write_CRC (dat, pvzadr, 0xC0C1);
 
   /*------------------------------------------------------------
    * Object-map
@@ -3440,7 +3471,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (dwg->header.num_sections > SECTION_MEASUREMENT_R13
           && !dwg->header.section[SECTION_MEASUREMENT_R13].address)
         {
-          // most dwg"s leasve the 3 and 4 section addresses and sizes empty
+          // most dwg"s leave the 3 and 4 section addresses and sizes empty
           _obj->sections[4].nr = 4;
         }
       // always set handles from the header vars
@@ -3530,23 +3561,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     sec_id = (Dwg_Section_Type)SECTION_MEASUREMENT_R13;
 
   if (dwg->header.version >= R_2004
-      || (int)dwg->header.num_sections > (int)sec_id)
+      || (dwg->header.version >= R_14 && (int)dwg->header.num_sections > (int)sec_id))
     {
-      struct _dwg_template *_obj = &dwg->Template;
-      if ((int)dwg->header.num_sections <= (int)sec_id)
-        dwg->header.section = (Dwg_Section *)realloc (
-            dwg->header.section, (sec_id + 1) * sizeof (Dwg_Section));
-      LOG_INFO ("\n=======> MEASUREMENT: @%4zu\n", dat->byte);
-      dwg->header.section[sec_id].number = 4;
-      dwg->header.section[sec_id].address = dat->byte;
-      dwg->header.section[sec_id].size = 4; // always empty description
-      // Template description
-      bit_write_T16 (dat, _obj->description);
-      // 0 - English, 1- Metric
-      bit_write_RS (dat, dwg->header_vars.MEASUREMENT);
-      LOG_TRACE ("HEADER.MEASUREMENT: %d [RS]\n",
-                 dwg->header_vars.MEASUREMENT);
+      error |= encode_template (dwg, dat, sec_id);
     }
+
+  VERSIONS (R_13c3, R_2000)
+  {
+    error |= encode_r13_thumbnail (dwg, dat, header_crc_address);
+  }
 
   /* End of the file
    */
