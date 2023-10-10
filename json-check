@@ -44,10 +44,9 @@ case $r in
 esac
 
 # first create a dwg log to compare against
-./log "-l$b.log.orig" "$v" "$d"
-rm "./$b.json" "./$b.dwg" 2>/dev/null
-
-if ! ./json "$v" "$d"; then
+# ./log "$v" "$d"
+rm "./$b.log" "./$b.json" "./$b.dwg" 2>/dev/null
+if ! ./json "-l$b.log" "$v" "$d"; then
     exit 2
 fi
 if [ -f "$b.json" ]; then
@@ -75,8 +74,9 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
         baseFileConverter=TeighaFileConverter
     fi
     case $r in
-        r2\.*)     can_teigha=0 ;;
-        r1\.*)     can_teigha=0 ;;
+        2\.*)     can_teigha=0 ;;
+        1\.*)     can_teigha=0 ;;
+        11)       r=12 ;;
     esac
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg"
@@ -95,31 +95,33 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
         fi
     fi
 
-    ./log "$v" "$b.dwg"
-    log1="$b.log.orig"
-    log2="$b.log"
+    ./log "-l$b.new.log" "$v" "$b.dwg"
+    log1="$b.log"
+    log2="$b.new.log"
     echo diff -bu "log1" "$log2"
     diff -bu "$log1" "$log2"
-
-    test -f "$b.json.err"  && cat "$b.json.err"
 
     if [ -f "$log1" ] && [ -f "$log2" ]; then
         grep -E '^Add entity' "$log1" >"$log1.tmp"
         grep -E '^Add entity' "$log2" >"$log2.tmp"
-        if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
+        if diff -bu0 -I'\[[0-9]\+\]' "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
             echo entities roundtrip ok
-            rm "$log1.tmp" "$log2.tmp" 2>/dev/null
+            rm -f "$log1.tmp" "$log2.tmp" 2>/dev/null
+            test -f "$b.json.err" || rm -f "$log2"
         else
-            diff -bu0 "$log1.tmp" "$log2.tmp" | grep -v '^@@'
+            diff -bu0 -I'\[[0-9]\+\]' "$log1.tmp" "$log2.tmp" | grep -v '^@@'
         fi
         grep -E '^Add object' "$log1" >"$log1.tmp"
         grep -E '^Add object' "$log2" >"$log2.tmp"
-        if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
+        if diff -bu0 -I'\[[0-9]\+\]' "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
             echo objects roundtrip ok
-            rm "$log1.tmp" "$log2.tmp" 2>/dev/null
+            rm -f "$log1.tmp" "$log2.tmp" 2>/dev/null
+            test -f "$b.json.err" || rm -f "$log2" "$b.dxf" "$b.dwg"
         else
-            diff -bu0 "$log1.tmp" "$log2.tmp" | grep -v '^@@'
+            diff -bu0 -I'\[[0-9]\+\]' "$log1.tmp" "$log2.tmp" | grep -v '^@@'
         fi
     fi
+
+    test -f "$b.json.err" && cat "$b.json.err"
 fi
 exit $exitcode

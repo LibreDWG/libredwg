@@ -32,10 +32,14 @@ out=
 ob="$b"
 ext=
 gerr=0
+log=
 
 for d in "$@"; do
     case $d in
         -v*) v="$d"
+             ;;
+        -l*)
+             log="$(echo "$d" | cut -c3-)"
              ;;
         *)
         if [ ! -f "$d" ]; then
@@ -66,7 +70,9 @@ for d in "$@"; do
             esac
         fi
         b=$(basename "$d" .$ext)
-        log="$b$dir.log"
+        if [ -z "$log" ]; then
+           log="$b$dir.log"
+        fi
         out="$b$dir.json"
         echo "$timeout $TESTPROG programs/dwgread $v -Ojson -o $out $d 2>$log"
         # shellcheck disable=SC2086
