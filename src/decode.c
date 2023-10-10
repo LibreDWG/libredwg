@@ -381,7 +381,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   /*-------------------------------------------------------------------------
    * Section 5 AuxHeader
-   * R2000+, mostly redundant file header information
+   * R13c3+, mostly redundant file header information. no sentinels
    */
   if (dwg->header.sections == 6 && dwg->header.version >= R_13c3)
     {
@@ -415,9 +415,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   /*-------------------------------------------------------------------------
-   * Picture (Pre-R13C3)
+   * Thumbnail Image (pre-r13c3 before, since r13c3 at the end)
    */
-
   if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN)))
     {
       size_t start_address;
