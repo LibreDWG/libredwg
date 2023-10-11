@@ -216,11 +216,10 @@ dwg_sentinel (const Dwg_Sentinel sentinel_id)
           { 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE,
             0xFE, 0xFE, 0xFE, 0xFE, 0xFE }
         };
-  if ((int)sentinel_id < 0
-      || (int)sentinel_id > DWG_SENTINEL_R11_AUXHEADER_END)
+  if ((unsigned)sentinel_id > DWG_SENTINEL_R11_AUXHEADER_END)
     {
-      fprintf (stderr, "ERROR: sentinel_id %d out of bounds\n",
-               (int)sentinel_id);
+      fprintf (stderr, "ERROR: Illegal sentinel_id %u\n",
+               (unsigned)sentinel_id);
       return sentinels[DWG_SENTINEL_R11_AUXHEADER_END + 1];
     }
   return (const unsigned char *)sentinels[sentinel_id];
