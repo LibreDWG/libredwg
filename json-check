@@ -106,8 +106,8 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
         grep -E '^Add entity' "$log2" >"$log2.tmp"
         if diff -bu0 -I'\[[0-9]\+\]' "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
             echo entities roundtrip ok
+            entities_roundtrip_ok=1
             rm -f "$log1.tmp" "$log2.tmp" 2>/dev/null
-            test -f "$b.json.err" || rm -f "$log2"
         else
             diff -bu0 -I'\[[0-9]\+\]' "$log1.tmp" "$log2.tmp" | grep -v '^@@'
         fi
@@ -116,7 +116,9 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
         if diff -bu0 -I'\[[0-9]\+\]' "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
             echo objects roundtrip ok
             rm -f "$log1.tmp" "$log2.tmp" 2>/dev/null
-            test -f "$b.json.err" || rm -f "$log2" "$b.dxf" "$b.dwg"
+            if [ ! -f "$b.json.err" ] && [ -n "$entities_roundtrip_ok" ]; then
+                rm -f "$log2" "$b.dxf" "$b.dwg"
+            fi
         else
             diff -bu0 -I'\[[0-9]\+\]' "$log1.tmp" "$log2.tmp" | grep -v '^@@'
         fi
