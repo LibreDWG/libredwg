@@ -73,8 +73,8 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
 static int encode_preR13_section (const Dwg_Section_Type_r11 id,
                                   Bit_Chain *restrict dat,
                                   Dwg_Data *restrict dwg);
-static void downconvert_relative_handle (BITCODE_H handle,
-                                         Dwg_Object *restrict obj);
+//static void downconvert_relative_handle (BITCODE_H handle,
+//                                         Dwg_Object *restrict obj);
 
 
 /* The logging level for the write (encode) path.  */
@@ -744,11 +744,11 @@ const unsigned char unknown_section[53]
               LOG_WARN ("Expected a CODE %d handle, got a %d", handle_code,   \
                         (hdlptr)->handleref.code);                            \
             }                                                                 \
-          else if (dat->version <= R_2000 && dat->from_version > R_2000       \
+          /*else if (dat->version <= R_2000 && dat->from_version > R_2000     \
                    && (hdlptr)->handleref.code > 5 && handle_code == 4)       \
             {                                                                 \
               downconvert_relative_handle (hdlptr, obj);                      \
-            }                                                                 \
+            }*/                                                               \
           bit_write_H (hdl_dat, &(hdlptr)->handleref);                        \
           LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (hdlptr), dxf)  \
           LOG_HPOS                                                            \
@@ -6715,7 +6715,8 @@ dwg_set_dataflags (Dwg_Object *obj)
     }
 }
 
-// from >2000 to 2000-r13, no relative refs.
+#if 0
+// from >2000 to 2000-r13, no relative refs,. FIXME: except prev,next links.
 // only with older objects, not class objects.
 static void
 downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
@@ -6758,6 +6759,7 @@ downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
       dwg_set_handle_size (&ref->handleref);
     }
 }
+#endif
 
 // from >2007 to 2000
 void
