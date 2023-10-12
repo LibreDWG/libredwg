@@ -542,7 +542,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // section_size + data, i.e. minus the 2x sentinel (32) + crc itself (2)
       // if we would include the crc we would always get 0000
       BITCODE_RL crc_size = dwg->header.section[SECTION_HEADER_R13].size - 34;
-      LOG_HANDLE (" calc Header crc size: " FORMAT_RL "\n", crc_size);
+      LOG_HANDLE (" calc header crc size: " FORMAT_RL "\n", crc_size);
       crc2 = bit_calc_CRC (0xC0C1, &dat->chain[pvz], crc_size);
     }
   if (crc != crc2)
@@ -845,7 +845,7 @@ handles_section:
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       crc = bit_read_RS_BE (dat);
-      LOG_TRACE ("\nHandles page CRC: %04X [RSx_BE] (%zu-%zu = %u)\n", crc,
+      LOG_TRACE ("\nHandles page crc: %04X [RSx_BE] (%zu-%zu = %u)\n", crc,
                  startpos, startpos + section_size, section_size);
       crc2 = bit_calc_CRC (0xC0C1, dat->chain + startpos, section_size);
       if (crc != crc2)

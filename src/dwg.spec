@@ -585,6 +585,7 @@ DWG_ENTITY (ATTDEF)
           // TODO fields handles to MTEXT entities. how many?
           FIELD_HANDLE (mtext_style, 0, 340); //TODO
 
+          DEBUG_HERE_OBJ
           FIELD_BS (annotative_data_size, 70);
           if (FIELD_VALUE (annotative_data_size) > 1)
             {
@@ -592,6 +593,7 @@ DWG_ENTITY (ATTDEF)
               FIELD_HANDLE (annotative_app, 0, 0); //TODO
               FIELD_BS (annotative_short, 0);
             }
+          DEBUG_HERE_OBJ
         }
     }
   SINCE (R_13b1)
