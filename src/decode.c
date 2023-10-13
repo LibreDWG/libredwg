@@ -6921,11 +6921,9 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                               = (BITCODE_RL)(obj->address + obj->size
                                              - (dat->byte + 2));
                           obj->num_unknown_bits = 8 * offset;
-                          obj->unknown_bits = (BITCODE_TF)calloc (offset, 1);
+                          obj->unknown_bits = bit_read_TF (dat, offset);
                           if (obj->unknown_bits)
                             {
-                              memcpy (obj->unknown_bits, &dat->chain[dat->byte],
-                                      offset);
                               LOG_TRACE_TF (obj->unknown_bits, offset);
                             }
                           else

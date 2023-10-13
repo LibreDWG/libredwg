@@ -11638,14 +11638,14 @@ DWG_ENTITY (JUMP)
       }
 
 #ifdef IS_DECODER
-    /* trailing data: TODO seperate unknown_bits from unknown_rest */
+    /* rest: TODO seperate unknown_bits from unknown_rest */
     if (dat->byte < obj->address + obj->size)
       {
         len = obj->address + obj->size - dat->byte;
-        trailing = bit_read_TF (dat, len);
-        LOG_TRACE ("trailing (%zu): ", len);
-        LOG_TRACE_TF (trailing, len);
-        free (trailing);
+        obj->num_unknown_bits = (BITCODE_BL)(len * 8);
+        obj->unknown_bits = bit_read_TF (dat, len);
+        LOG_TRACE ("unknown_bits (%zu): ", len);
+        LOG_TRACE_TF (obj->unknown_bits, len);
       }
 #endif
   }
