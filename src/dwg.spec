@@ -360,7 +360,7 @@ DWG_ENTITY (ATTRIB)
           SUBCLASS (AcDbMText)
           LOG_WARN ("MTEXT fields")
           // TODO fields handles to MTEXT entities. how many?
-          FIELD_HANDLE (mtext_handles, 0, 340); //TODO
+          FIELD_HANDLE (mtext_style, 0, 340); //TODO
 
           FIELD_BS (annotative_data_size, 70);
           if (FIELD_VALUE (annotative_data_size) > 1)
@@ -583,7 +583,7 @@ DWG_ENTITY (ATTDEF)
           SUBCLASS (AcDbMText)
           LOG_WARN ("MTEXT fields")
           // TODO fields handles to MTEXT entities. how many?
-          FIELD_HANDLE (mtext_handles, 0, 340); //TODO
+          FIELD_HANDLE (mtext_style, 0, 340); //TODO
 
           FIELD_BS (annotative_data_size, 70);
           if (FIELD_VALUE (annotative_data_size) > 1)

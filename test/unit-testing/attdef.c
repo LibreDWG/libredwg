@@ -5,18 +5,17 @@ void
 api_process (dwg_object *obj)
 {
   int error = 0;
-  double elevation, thickness, rotation, height, oblique_angle, width_factor,
-      rdvalue;
+  double elevation, thickness, rotation, height, oblique_angle, width_factor;
   BITCODE_BS generation, vert_alignment, horiz_alignment, field_length,
-      annotative_data_size, annotative_short, bsvalue;
-  BITCODE_RC dataflags, class_version, type, flags, attdef_class_version,
-      rcvalue;
+      annotative_data_size, annotative_short;
+  BITCODE_RC dataflags, flags, type, class_version, attdef_class_version,
+      annotative_data_bytes;
   BITCODE_B lock_position_flag;
   char *tag, *default_value, *prompt;
   dwg_point_3d extrusion, pt3d;
   dwg_point_2d ins_pt, alignment_pt, pt2d;
   BITCODE_H style, annotative_app;
-  BITCODE_H mtext_handles;
+  BITCODE_H mtext_style;
   Dwg_Version_Type version = obj->parent->header.version;
   int isnew;
 
@@ -52,11 +51,12 @@ api_process (dwg_object *obj)
     }
   if (version >= R_2018)
     {
-      CHK_ENTITY_H (attdef, ATTDEF, mtext_handles);
-      CHK_ENTITY_H (attdef, ATTDEF, annotative_app);
-      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_size, BS);
-      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_short, BS);
       CHK_ENTITY_TYPE (attdef, ATTDEF, type, RC);
+      CHK_ENTITY_H (attdef, ATTDEF, mtext_style);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_size, BS);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_bytes, RC);
+      CHK_ENTITY_H (attdef, ATTDEF, annotative_app);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_short, BS);
     }
   if (version >= R_2007)
     {

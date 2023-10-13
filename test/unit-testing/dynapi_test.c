@@ -7867,12 +7867,12 @@ static int test_ATTDEF (const Dwg_Object *obj)
     attdef->lock_position_flag--;
   }
   {
-    BITCODE_H mtext_handles;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "mtext_handles", &mtext_handles, NULL)
-        && !memcmp (&mtext_handles, &attdef->mtext_handles, sizeof (BITCODE_H)))
+    BITCODE_H mtext_style;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "mtext_style", &mtext_style, NULL)
+        && !memcmp (&mtext_style, &attdef->mtext_style, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ATTDEF.mtext_handles [H]");
+        fail ("ATTDEF.mtext_style [H]");
   }
   {
     BITCODE_RD oblique_angle;
@@ -8231,12 +8231,12 @@ static int test_ATTRIB (const Dwg_Object *obj)
     attrib->lock_position_flag--;
   }
   {
-    BITCODE_H mtext_handles;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext_handles", &mtext_handles, NULL)
-        && !memcmp (&mtext_handles, &attrib->mtext_handles, sizeof (BITCODE_H)))
+    BITCODE_H mtext_style;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext_style", &mtext_style, NULL)
+        && !memcmp (&mtext_style, &attrib->mtext_style, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ATTRIB.mtext_handles [H]");
+        fail ("ATTRIB.mtext_style [H]");
   }
   {
     BITCODE_RD oblique_angle;

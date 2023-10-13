@@ -1178,7 +1178,7 @@ RC,	DXF 70
 B
 @item style
 H,	DXF 7
-@item mtext_handles
+@item mtext_style
 H,	DXF 340
 @item annotative_data_size
 BS,	DXF 70
@@ -1247,7 +1247,7 @@ RC,	DXF 70
 B
 @item style
 H,	DXF 7
-@item mtext_handles
+@item mtext_style
 H,	DXF 340
 @item annotative_data_size
 BS,	DXF 70

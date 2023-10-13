@@ -1368,7 +1368,7 @@ typedef struct _dwg_entity_ATTRIB
                        8 preset, inserted only with its default values, not editable. */
   BITCODE_B lock_position_flag;
   BITCODE_H style;
-  BITCODE_H mtext_handles; /* R2018+ TODO */
+  BITCODE_H mtext_style; /* R2018+ TODO */
   BITCODE_BS annotative_data_size; /* R2018+ */
   BITCODE_RC annotative_data_bytes;
   BITCODE_H  annotative_app;
@@ -1403,7 +1403,7 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_RC flags; /* => HEADER.AFLAGS */
   BITCODE_B lock_position_flag;
   BITCODE_H style;
-  BITCODE_H mtext_handles; /* R2018+ TODO */
+  BITCODE_H mtext_style; /* R2018+ TODO */
   BITCODE_BS annotative_data_size; /* R2018+ */
   BITCODE_RC annotative_data_bytes;
   BITCODE_H  annotative_app;
