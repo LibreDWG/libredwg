@@ -966,8 +966,18 @@ _prefix (Bit_Chain *dat)
     Dwg_Entity_##token *_obj = _ent->tio.token;
 
 #define DWG_ENTITY_END                                                        \
+  if (obj->num_unknown_bits)                                                  \
+    {                                                                         \
+      BITCODE_RL num_bytes = obj->num_unknown_bits / 8;                       \
+      if (obj->num_unknown_bits % 8)                                          \
+        num_bytes++ ;                                                         \
+      KEY (num_unknown_bits);                                                 \
+      VALUE_RL (obj->num_unknown_bits, 0);                                    \
+      KEY (unknown_bits);                                                     \
+      VALUE_BINARY (obj->unknown_bits, num_bytes, 0);                         \
+    }                                                                         \
   return error;                                                               \
-  }
+}
 
 #define DWG_OBJECT(token)                                                     \
   static int dwg_json_##token##_private (Bit_Chain *dat, Bit_Chain *hdl_dat,  \
@@ -1013,8 +1023,18 @@ _prefix (Bit_Chain *dat)
     Dwg_Object_##token *_obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END                                                        \
+  if (obj->num_unknown_bits)                                                  \
+    {                                                                         \
+      BITCODE_RL num_bytes = obj->num_unknown_bits / 8;                       \
+      if (obj->num_unknown_bits % 8)                                          \
+        num_bytes++ ;                                                         \
+      KEY (num_unknown_bits);                                                 \
+      VALUE_RL (obj->num_unknown_bits, 0);                                    \
+      KEY (unknown_bits);                                                     \
+      VALUE_BINARY (obj->unknown_bits, num_bytes, 0);                         \
+    }                                                                         \
   return 0;                                                                   \
-  }
+}
 
 #undef JSON_3DSOLID
 #define JSON_3DSOLID json_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);

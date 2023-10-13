@@ -6886,6 +6886,25 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                     {
                       LOG_ERROR ("offset %ld",
                                  (long)(obj->address + obj->size - dat->byte));
+                      if (obj->address + obj->size > dat->byte)
+                        {
+                          BITCODE_RL offset
+                              = (BITCODE_RL)(obj->address + obj->size
+                                             - dat->byte);
+                          obj->num_unknown_bits = 8 * offset;
+                          obj->unknown_bits = (BITCODE_TF)calloc (offset, 1);
+                          if (obj->unknown_bits)
+                            {
+                              memcpy (obj->unknown_bits, &dat->chain[dat->byte],
+                                      offset);
+                              LOG_TRACE_TF (obj->unknown_bits, offset);
+                            }
+                          else
+                            {
+                              LOG_ERROR ("Out of memory");
+                              obj->num_unknown_bits = 0;
+                            }
+                        }
                       if (obj->size > 2)
                         dat->byte = obj->address + obj->size;
                     }
@@ -6896,6 +6915,25 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                     {
                       LOG_ERROR ("offset %ld", (long)(obj->address + obj->size
                                                       - (dat->byte + 2)));
+                      if (obj->address + obj->size > dat->byte + 2)
+                        {
+                          BITCODE_RL offset
+                              = (BITCODE_RL)(obj->address + obj->size
+                                             - (dat->byte + 2));
+                          obj->num_unknown_bits = 8 * offset;
+                          obj->unknown_bits = (BITCODE_TF)calloc (offset, 1);
+                          if (obj->unknown_bits)
+                            {
+                              memcpy (obj->unknown_bits, &dat->chain[dat->byte],
+                                      offset);
+                              LOG_TRACE_TF (obj->unknown_bits, offset);
+                            }
+                          else
+                            {
+                              LOG_ERROR ("Out of memory");
+                              obj->num_unknown_bits = 0;
+                            }
+                        }
                       if (obj->address + obj->size >= start && start > 60)
                         dat->byte = obj->address + obj->size - 2;
                     }

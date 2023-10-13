@@ -370,6 +370,22 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if (pos != dat->byte)                                                       \
     {                                                                         \
       LOG_ERROR ("offset %ld", (long)(pos - dat->byte));                      \
+      if (pos > dat->byte)                                                    \
+        {                                                                     \
+          BITCODE_RL offset = (BITCODE_RL)(pos - dat->byte);                  \
+          obj->num_unknown_bits = 8 * offset;                                 \
+          obj->unknown_bits = (BITCODE_TF)calloc (offset, 1);                 \
+          if (obj->unknown_bits)                                              \
+            {                                                                 \
+              memcpy (obj->unknown_bits, &dat->chain[dat->byte], offset);     \
+              LOG_TRACE_TF (obj->unknown_bits, offset);                       \
+            }                                                                 \
+          else                                                                \
+            {                                                                 \
+              LOG_ERROR ("Out of memory");                                    \
+              obj->num_unknown_bits = 0;                                      \
+            }                                                                 \
+        }                                                                     \
       /* In the table header the size OR number can be wrong. */              \
       /* Here we catch the wrong number. */                                   \
       if (tbl->number > 0 && tbl->size < 33)                                  \
