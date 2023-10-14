@@ -1880,19 +1880,11 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           if (!is_entity)
             {
               error |= dwg_json_UNKNOWN_OBJ (dat, obj);
-              KEY (num_unknown_bits);
-              VALUE_RL (obj->num_unknown_bits, 0);
-              KEY (unknown_bits);
-              VALUE_BINARY (obj->unknown_bits, num_bytes, 0);
               return error;
             }
           else
             {
               error |= dwg_json_UNKNOWN_ENT (dat, obj);
-              KEY (num_unknown_bits);
-              VALUE_RL (obj->num_unknown_bits, 0);
-              KEY (unknown_bits);
-              VALUE_BINARY (obj->unknown_bits, num_bytes, 0);
               return error;
             }
         }

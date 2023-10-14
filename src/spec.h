@@ -547,16 +547,6 @@
 #endif
 
 #define DECODE_UNKNOWN_BITS                                                   \
-  JSON                                                                        \
-  {                                                                           \
-    unsigned num_bytes = obj->num_unknown_bits / 8;                           \
-    if (obj->num_unknown_bits & 8)                                            \
-      num_bytes++;                                                            \
-    KEY (num_unknown_bits);                                                   \
-    VALUE_RL (obj->num_unknown_bits, 0);                                      \
-    KEY (unknown_bits);                                                       \
-    VALUE_BINARY (obj->unknown_bits, num_bytes, 0);                           \
-  }                                                                           \
   DECODER { dwg_decode_unknown (dat, (Dwg_Object *restrict)obj); }            \
   FREE { VALUE_TF (obj->unknown_bits, 0); }
 
