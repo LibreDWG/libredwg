@@ -11637,7 +11637,8 @@ DWG_ENTITY (JUMP)
           error |= DWG_ERR_WRONGCRC;
       }
 
-    /* log trailing data */
+#ifdef IS_DECODER
+    /* trailing data: TODO seperate unknown_bits from unknown_rest */
     if (dat->byte < obj->address + obj->size)
       {
         len = obj->address + obj->size - dat->byte;
@@ -11646,6 +11647,7 @@ DWG_ENTITY (JUMP)
         LOG_TRACE_TF (trailing, len);
         free (trailing);
       }
+#endif
   }
 DWG_ENTITY_END
 

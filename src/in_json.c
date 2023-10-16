@@ -2472,7 +2472,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               json_set_numfield (_obj, fields, key, size1);
             }
           else
-            nums = (BITCODE_BL *)calloc (f->size, 1);            
+            nums = (BITCODE_BL *)calloc (f->size, 1);
           tokens->index++;
           for (int k = 0; k < size1; k++)
             {
@@ -3862,15 +3862,13 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // FIELD_TFFx (file_ID_string, 12, 0) //pre-allocated
       if (strEQc (key, "file_ID_string"))
         {
-          size_t slen;
-          unsigned char *s = json_binary (dat, tokens, key, &slen);
+          char *s = json_fixed_string (dat, 11, tokens);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
-          if (slen == 11)
+          if (s)
             memcpy (&_obj->file_ID_string, s, 12);
           else
             {
-              LOG_ERROR ("Invalid R2004_Header.file_ID_string len %zu fixed",
-                         slen)
+              LOG_ERROR ("Invalid R2004_Header.file_ID_string")
               memcpy (&_obj->file_ID_string, "AcFssFcAJMB\0", 12);
             }
           LOG_TRACE ("file_ID_string: \"%.*s\"\n", 12, _obj->file_ID_string)
