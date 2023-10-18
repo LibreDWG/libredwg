@@ -3541,6 +3541,34 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_TRACE ("unknown_bits: %.*s\n", t->end - t->start,
                          &dat->chain[t->start])
             }
+          else if (strEQc (key, "num_unknown_rest"))
+            {
+              obj->num_unknown_rest = json_long (dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
+              LOG_TRACE ("num_unknown_rest: %d\n", (int)obj->num_unknown_rest);
+            }
+          else if (strEQc (key, "unknown_rest"))
+            {
+              const int len = t->end - t->start;
+              char *hex = json_string (dat, tokens);
+              const unsigned blen = len / 2;
+              unsigned read;
+              BITCODE_TF buf = (BITCODE_TF)malloc (blen + 1);
+              if ((read = in_hex2bin (buf, hex, blen) != blen))
+                LOG_ERROR ("in_hex2bin with key %s at pos %u of %u", key, read,
+                           blen);
+              buf[blen] = '\0';
+              free (hex);
+              if (!obj->num_unknown_rest)
+                obj->num_unknown_rest = blen * 8; // minus some padding bits
+              if (obj->unknown_rest)
+                free (obj->unknown_rest);
+              obj->unknown_rest = buf;
+              // LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf,
+              //            f->type);
+              LOG_TRACE ("unknown_rest: %.*s\n", t->end - t->start,
+                         &dat->chain[t->start])
+            }
           else if (strEQc (key, "eed") && !obj->tio.object->num_eed
                    && t->type == JSMN_ARRAY)
             {

@@ -8981,7 +8981,9 @@ typedef struct _dwg_object
   size_t common_size; /* relative offset from type ... end common_entity_data */
 
   BITCODE_RL num_unknown_bits;
-  BITCODE_TF unknown_bits;
+  BITCODE_TF unknown_bits; // replacing the full object
+  BITCODE_RL num_unknown_rest;
+  BITCODE_TF unknown_rest; // just the rest
 
 } Dwg_Object;
 

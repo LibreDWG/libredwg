@@ -546,12 +546,8 @@
 #  define R11EXTRA(b) (_ent->extra_r11 & (b))
 #endif
 
-#define DECODE_UNKNOWN_BITS                                                   \
-  DECODER { dwg_decode_unknown (dat, (Dwg_Object *restrict)obj); }            \
-  FREE { VALUE_TF (obj->unknown_bits, 0); }
-
 #if defined IS_JSON
-#  define UNKNOWN_BITS_REST                                                   \
+#  define HANDLE_UNKNOWN_BITS                                                 \
     {                                                                         \
       unsigned num_bytes = obj->num_unknown_bits / 8;                         \
       if (obj->num_unknown_bits & 8)                                          \
@@ -562,13 +558,40 @@
       VALUE_BINARY (obj->unknown_bits, num_bytes, 0);                         \
     }
 #elif defined IS_DECODER
+#  define HANDLE_UNKNOWN_BITS                                                 \
+    dwg_decode_unknown_bits (dat, (Dwg_Object *restrict)obj)
+#elif defined IS_ENCODER
+#  define HANDLE_UNKNOWN_BITS                                                 \
+    dwg_encode_unknown_bits (dat, (Dwg_Object *restrict)obj)
+#elif defined IS_FREE
+#  define HANDLE_UNKNOWN_BITS VALUE_TF (obj->unknown_bits, 0)
+#elif defined IS_PRINT
+#  define HANDLE_UNKNOWN_BITS                                                 \
+    LOG_TRACE ("unknown_bits: %u [TF]\n", (unsigned)obj->num_unknown_bits);   \
+    LOG_TRACE_TF (obj->unknown_bits, obj->num_unknown_bits)
+#else
+#  define HANDLE_UNKNOWN_BITS
+#endif
+
+#if defined IS_JSON
+#  define UNKNOWN_BITS_REST                                                   \
+    {                                                                         \
+      unsigned num_bytes = obj->num_unknown_rest / 8;                         \
+      if (obj->num_unknown_rest & 8)                                          \
+        num_bytes++;                                                          \
+      KEY (num_unknown_rest);                                                 \
+      VALUE_RL (obj->num_unknown_rest, 0);                                    \
+      KEY (unknown_bits);                                                     \
+      VALUE_BINARY (obj->unknown_rest, num_bytes, 0);                         \
+    }
+#elif defined IS_DECODER
 #  define UNKNOWN_BITS_REST                                                   \
     dwg_decode_unknown_rest (dat, (Dwg_Object *restrict)obj)
 #elif defined IS_ENCODER
 #  define UNKNOWN_BITS_REST                                                   \
     dwg_encode_unknown_rest (dat, (Dwg_Object *restrict)obj)
 #elif defined IS_FREE
-#  define UNKNOWN_BITS_REST VALUE_TF (obj->unknown_bits, 0)
+#  define UNKNOWN_BITS_REST VALUE_TF (obj->unknown_rest, 0)
 #else
 #  define UNKNOWN_BITS_REST
 #endif

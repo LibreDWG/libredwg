@@ -966,16 +966,8 @@ _prefix (Bit_Chain *dat)
     Dwg_Entity_##token *_obj = _ent->tio.token;
 
 #define DWG_ENTITY_END                                                        \
-  if (obj->num_unknown_bits)                                                  \
-    {                                                                         \
-      BITCODE_RL num_bytes = obj->num_unknown_bits / 8;                       \
-      if (obj->num_unknown_bits % 8)                                          \
-        num_bytes++ ;                                                         \
-      KEY (num_unknown_bits);                                                 \
-      VALUE_RL (obj->num_unknown_bits, 0);                                    \
-      KEY (unknown_bits);                                                     \
-      VALUE_BINARY (obj->unknown_bits, num_bytes, 0);                         \
-    }                                                                         \
+  if (obj->num_unknown_rest)                                                  \
+    UNKNOWN_BITS_REST                                                         \
   return error;                                                               \
 }
 
@@ -1023,17 +1015,9 @@ _prefix (Bit_Chain *dat)
     Dwg_Object_##token *_obj = obj->tio.object->tio.token;
 
 #define DWG_OBJECT_END                                                        \
-  if (obj->num_unknown_bits)                                                  \
-    {                                                                         \
-      BITCODE_RL num_bytes = obj->num_unknown_bits / 8;                       \
-      if (obj->num_unknown_bits % 8)                                          \
-        num_bytes++ ;                                                         \
-      KEY (num_unknown_bits);                                                 \
-      VALUE_RL (obj->num_unknown_bits, 0);                                    \
-      KEY (unknown_bits);                                                     \
-      VALUE_BINARY (obj->unknown_bits, num_bytes, 0);                         \
-    }                                                                         \
-  return 0;                                                                   \
+  if (obj->num_unknown_rest)                                                  \
+    UNKNOWN_BITS_REST                                                         \
+  return error;                                                               \
 }
 
 #undef JSON_3DSOLID

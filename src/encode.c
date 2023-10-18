@@ -76,9 +76,6 @@ static int encode_preR13_section (const Dwg_Section_Type_r11 id,
 //static void downconvert_relative_handle (BITCODE_H handle,
 //                                         Dwg_Object *restrict obj);
 
-static void encode_unknown_bits (Dwg_Object *restrict obj,
-                                 Bit_Chain *restrict dat);
-
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */
@@ -1025,7 +1022,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
         LOG_HANDLE ("VALUEOUTOFBOUNDS bypassed DWG_ENTITY_END\n");            \
         /*bit_chain_free (hdl_dat);*/                                         \
       }                                                                       \
-    encode_unknown_bits (obj, dat);                                           \
+    dwg_encode_unknown_rest (dat, obj);                                       \
     return error;                                                             \
   }                                                                           \
   static int dwg_encode_##token##_private (                                   \
@@ -1077,7 +1074,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     if (error & DWG_ERR_VALUEOUTOFBOUNDS && hdl_dat != dat                    \
         && hdl_dat->chain != dat->chain)                                      \
       bit_chain_free (hdl_dat);                                               \
-    encode_unknown_bits (obj, dat);                                           \
+    dwg_encode_unknown_rest (dat, obj);                                       \
     return error;                                                             \
   }                                                                           \
   static int dwg_encode_##token##_private (                                   \
@@ -4923,8 +4920,8 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
-static void
-encode_unknown_bits (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+void
+dwg_encode_unknown_bits (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   Dwg_Data *restrict dwg = obj->parent;
   if (dwg->header.version == dwg->header.from_version && obj->unknown_bits
@@ -5428,14 +5425,14 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 int
 dwg_encode_unknown_rest (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
-  unsigned len = obj->num_unknown_bits / 8;
-  const int mod = obj->num_unknown_bits % 8;
+  unsigned len = obj->num_unknown_rest / 8;
+  const int mod = obj->num_unknown_rest % 8;
   if (mod)
     len++;
-  bit_write_TF (dat, obj->unknown_bits, len);
-  LOG_TRACE ("unknown_bits: %u/%u [TF]\n", len,
-             (unsigned)obj->num_unknown_bits);
-  LOG_TRACE_TF (obj->unknown_bits, len);
+  bit_write_TF (dat, obj->unknown_rest, len);
+  LOG_TRACE ("unknown_rest: %u/%u [TF]\n", len,
+             (unsigned)obj->num_unknown_rest);
+  LOG_TRACE_TF (obj->unknown_rest, len);
   if (mod)
     bit_advance_position (dat, mod - 8);
   return 0;

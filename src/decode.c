@@ -5573,7 +5573,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
    (obj->common_size/8 .. obj->size)
  */
 int
-dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+dwg_decode_unknown_bits (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   // bitsize does not include the handles size
   int num_bytes;
@@ -5620,22 +5620,22 @@ dwg_decode_unknown_rest (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (num_bits < 0)
     return DWG_ERR_VALUEOUTOFBOUNDS;
 
-  obj->num_unknown_bits = (BITCODE_RL)num_bits;
+  obj->num_unknown_rest = (BITCODE_RL)num_bits;
   num_bytes = num_bits / 8;
   if (num_bits % 8)
     num_bytes++;
 
-  obj->unknown_bits = bit_read_bits (dat, num_bits);
-  if (!obj->unknown_bits)
+  obj->unknown_rest = bit_read_bits (dat, num_bits);
+  if (!obj->unknown_rest)
     {
       bit_set_position (dat, pos);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   // [num_bits (commonsize, hdlpos, strsize) num_bytes TF]
-  LOG_TRACE ("unknown_bits [%ld (%zu,%ld,%d) %d TF]: ", num_bits,
+  LOG_TRACE ("unknown_rest [%ld (%zu,%ld,%d) %d TF]: ", num_bits,
              obj->common_size, (long)(obj->bitsize - obj->common_size),
              (int)obj->stringstream_size, num_bytes);
-  LOG_TRACE_TF (obj->unknown_bits, num_bytes);
+  LOG_TRACE_TF (obj->unknown_rest, num_bytes);
   LOG_TRACE ("\n");
   bit_set_position (dat, pos);
   return 0;
@@ -6529,7 +6529,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           obj->address = dat->byte;
           obj->supertype = DWG_SUPERTYPE_ENTITY;
 
-          LOG_HANDLE ("@offset: 0x%zx\n", dat->byte - start);
+          LOG_HANDLE ("@offset 0x%zx\n", dat->byte - start);
           PRE (R_2_0b)
           {
             obj->type = bit_read_RS (dat);
@@ -6891,18 +6891,18 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                           BITCODE_RL offset
                               = (BITCODE_RL)(obj->address + obj->size
                                              - dat->byte);
-                          obj->num_unknown_bits = 8 * offset;
-                          obj->unknown_bits = (BITCODE_TF)calloc (offset, 1);
-                          if (obj->unknown_bits)
+                          obj->num_unknown_rest = 8 * offset;
+                          obj->unknown_rest = (BITCODE_TF)calloc (offset, 1);
+                          if (obj->unknown_rest)
                             {
-                              memcpy (obj->unknown_bits, &dat->chain[dat->byte],
+                              memcpy (obj->unknown_rest, &dat->chain[dat->byte],
                                       offset);
-                              LOG_TRACE_TF (obj->unknown_bits, offset);
+                              LOG_TRACE_TF (obj->unknown_rest, offset);
                             }
                           else
                             {
                               LOG_ERROR ("Out of memory");
-                              obj->num_unknown_bits = 0;
+                              obj->num_unknown_rest = 0;
                             }
                         }
                       if (obj->size > 2)
@@ -6920,16 +6920,16 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                           BITCODE_RL offset
                               = (BITCODE_RL)(obj->address + obj->size
                                              - (dat->byte + 2));
-                          obj->num_unknown_bits = 8 * offset;
-                          obj->unknown_bits = bit_read_TF (dat, offset);
-                          if (obj->unknown_bits)
+                          obj->num_unknown_rest = 8 * offset;
+                          obj->unknown_rest = bit_read_TF (dat, offset);
+                          if (obj->unknown_rest)
                             {
-                              LOG_TRACE_TF (obj->unknown_bits, offset);
+                              LOG_TRACE_TF (obj->unknown_rest, offset);
                             }
                           else
                             {
                               LOG_ERROR ("Out of memory");
-                              obj->num_unknown_bits = 0;
+                              obj->num_unknown_rest = 0;
                             }
                         }
                       if (obj->address + obj->size >= start && start > 60)
