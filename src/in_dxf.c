@@ -12192,8 +12192,9 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
              && (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
           char *dxfname = strdup (pair->value.s);
+          BITCODE_BL idx = dwg->num_objects;
           // LOG_HANDLE ("dxfname = strdup (%s)\n", dxfname);
-          if (dwg->num_objects)
+          if (idx)
             {
               Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
               if (!obj->handle.value)
@@ -12208,7 +12209,10 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           pair = new_object (name, dxfname, dat, dwg, 0, NULL);
           if (!pair)
             {
+              Dwg_Object *obj = &dwg->object[idx];
               free (dxfname);
+              if (idx != dwg->num_objects)
+                obj->dxfname = NULL;
               return DWG_ERR_INVALIDDWG;
             }
           if (pair->code == 0 && pair->value.s)
