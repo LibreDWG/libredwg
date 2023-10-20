@@ -87,6 +87,7 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
         if [ -e "./$b.dxf.err" ]; then
             echo "$d" >"$b.json.err"
             cat "./$b.dxf.err" >>"$b.json.err"
+            rm -f "./$b.dxf.err"
             cat "$b.json.err"
             exitcode=1
         fi
