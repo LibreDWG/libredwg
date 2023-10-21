@@ -321,7 +321,8 @@
             FIELD_BLL (preview_size, 160);
           }
 #endif
-        if ((long)_ent->preview_size >= 0 && _ent->preview_size < obj->size)
+        if ((long)_ent->preview_size >= 0 &&
+            _ent->preview_size < (obj->size ? obj->size : dat->size))
           {
             FIELD_BINARY (preview, _ent->preview_size, 310);
           }
