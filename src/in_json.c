@@ -2598,6 +2598,20 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                        &block_size, true);
           dwg_dynapi_field_set_value (dwg, _obj, f, &data, true);
         }
+      // TFFx (binary)
+      else if (t->type == JSMN_STRING && strEQc (key, "revision_bytes"))
+        {
+          size_t len;
+          unsigned char *s = json_binary (dat, tokens, "revision_bytes", &len);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          f = dwg_dynapi_entity_field (name, "revision_bytes");
+          if (f && len == 8)
+            {
+              LOG_TRACE ("%s.%s: [%s]\n", name, key, s);
+              dwg_dynapi_field_set_value (dwg, _obj, f, s, true);
+            }
+          free (s);
+        }
       // subclass arrays:
       else if (t->type == JSMN_ARRAY && memBEGINc (f->type, "Dwg_"))
         {
@@ -2852,144 +2866,6 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
             }
         }
-      // TODO convert embedded array, vertind[0]: 0, vertind[1]: ... to
-      // normal array in json: vertind: [0, ...], and apply it here. The
-      // vertind dynapi type should know if it's a reference or embedded.
-
-      /*
-      // f is NULL
-      if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "vertind["))
-        {
-          f = dwg_dynapi_entity_field (name, "vertind[4]");
-          if (f)
-            {
-              BITCODE_BS arr[4];
-              int index;
-              sscanf (key, "vertind[%d]", &index);
-              if (index >= 0 && index < 4)
-                {
-                  dwg_dynapi_field_get_value (_obj, f, &arr);
-                  arr[index] = json_long (dat, tokens);
-                  LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
-                  dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-                }
-              else
-                {
-                  tokens->index++;
-                }
-              JSON_TOKENS_CHECK_OVERFLOW_ERR;
-            }
-        }
-      else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "edge[")
-               && (f = dwg_dynapi_entity_field (name, "edge[4]")))
-        {
-          BITCODE_BL arr[4];
-          int index;
-          sscanf (key, "edge[%d]", &index);
-          if (index >= 0 && index < 4)
-            {
-              dwg_dynapi_field_get_value (_obj, f, &arr);
-              arr[index] = json_long (dat, tokens);
-              LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
-              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-            }
-          else
-            {
-              tokens->index++;
-            }
-          JSON_TOKENS_CHECK_OVERFLOW_ERR;
-        }
-      else if (t->type == JSMN_ARRAY && memBEGINc (key, "workplane[")
-               && (f = dwg_dynapi_entity_field (name, "workplane[3]")))
-        {
-          BITCODE_3BD arr[3];
-          int index;
-          sscanf (key, "workplane[%d]", &index);
-          if (index >= 0 && index < 3)
-            {
-              dwg_dynapi_field_get_value (_obj, f, &arr);
-              json_3DPOINT (dat, tokens, name, key, f->type, &arr[index]);
-              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-            }
-          else
-            json_advance_unknown (dat, tokens, t->type, 0);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR;
-        }
-      else if (t->type == JSMN_ARRAY && strEQc (key, "itemloc") && t->size <= 3
-               && (f = dwg_dynapi_entity_field (name, "itemloc[3]")))
-        {
-          BITCODE_BL arr[3] = { 0 };
-          tokens->index++;
-          dwg_dynapi_field_get_value (_obj, f, &arr);
-          for (int index = 0; index < t->size; index++)
-            {
-              if (index < 3)
-                {
-                  arr[index] = (BITCODE_BL)json_long (dat, tokens);
-                  LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
-                }
-              else
-                tokens->index++;
-            }
-          dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR;
-        }
-      else if (t->type == JSMN_ARRAY && strEQc (key, "node") && t->size <= 4
-               && (f = dwg_dynapi_entity_field (name, "node[4]")))
-        {
-          BITCODE_BLd arr[4] = { 0 };
-          tokens->index++;
-          dwg_dynapi_field_get_value (_obj, f, &arr);
-          for (int index = 0; index < MIN (t->size, 4); index++)
-            {
-              if (index < 4)
-                {
-                  arr[index] = (BITCODE_BLd)json_long (dat, tokens);
-                  LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
-                }
-              else
-                tokens->index++;
-            }
-          dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR;
-        }
-      else if (t->type == JSMN_STRING && strEQc (key, "revision_bytes"))
-        {
-          size_t len;
-          unsigned char *s = json_binary (dat, tokens, "revision_bytes", &len);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR
-          f = dwg_dynapi_entity_field (name, "revision_bytes[9]");
-          if (f && len == 8)
-            {
-              LOG_TRACE ("%s.%s: [%s]\n", name, key, s);
-              dwg_dynapi_field_set_value (dwg, _obj, f, s, true);
-            }
-          free (s);
-        }
-      else if (t->type == JSMN_ARRAY && strEQc (key, "dashes_r11")
-               && t->size <= 12
-               && (f = dwg_dynapi_entity_field (name, "dashes_r11[12]")))
-        {
-          BITCODE_RD arr[12] = { 0.0 };
-          tokens->index++;
-          dwg_dynapi_field_get_value (_obj, f, &arr);
-          for (int index = 0; index < t->size; index++)
-            {
-              if (index < 12)
-                {
-                  arr[index] = json_float (dat, tokens);
-                  LOG_TRACE ("%s: %f [%s]\n", key, arr[index], f->type);
-                }
-              else
-                tokens->index++;
-            }
-          dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-          // f = dwg_dynapi_entity_field (name, "numdashes");
-          // dwg_dynapi_field_set_value (dwg, _obj, f, &t->size, 0);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR;
-        }
-      */
-      return error | (f && f->name ? 1 : 0); // found or not
     }
   return error;
 }
