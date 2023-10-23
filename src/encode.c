@@ -5428,16 +5428,19 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 int
 dwg_encode_unknown_rest (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
-  unsigned len = obj->num_unknown_rest / 8;
-  const int mod = obj->num_unknown_rest % 8;
-  if (mod)
-    len++;
-  bit_write_TF (dat, obj->unknown_rest, len);
-  LOG_TRACE ("unknown_rest: %u/%u [TF]\n", len,
-             (unsigned)obj->num_unknown_rest);
-  LOG_TRACE_TF (obj->unknown_rest, len);
-  if (mod)
-    bit_advance_position (dat, mod - 8);
+  if (obj->num_unknown_rest)
+    {
+      unsigned len = obj->num_unknown_rest / 8;
+      const int mod = obj->num_unknown_rest % 8;
+      if (mod)
+        len++;
+      bit_write_TF (dat, obj->unknown_rest, len);
+      LOG_TRACE ("unknown_rest: %u/%u [TF]\n", len,
+                 (unsigned)obj->num_unknown_rest);
+      LOG_TRACE_TF (obj->unknown_rest, len);
+      if (mod)
+        bit_advance_position (dat, mod - 8);
+    }
   return 0;
 }
 
