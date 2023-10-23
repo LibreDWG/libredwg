@@ -4920,7 +4920,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
-void
+bool
 dwg_encode_unknown_bits (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   Dwg_Data *restrict dwg = obj->parent;
@@ -4937,7 +4937,10 @@ dwg_encode_unknown_bits (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       LOG_TRACE_TF (obj->unknown_bits, len);
       if (mod)
         bit_advance_position (dat, mod - 8);
+      return true;
     }
+  else
+    return false;
 }
 
 int

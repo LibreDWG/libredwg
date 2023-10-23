@@ -562,7 +562,12 @@
     dwg_decode_unknown_bits (dat, (Dwg_Object *restrict)obj)
 #elif defined IS_ENCODER
 #  define HANDLE_UNKNOWN_BITS                                                 \
-    dwg_encode_unknown_bits (dat, (Dwg_Object *restrict)obj)
+    if (dwg_encode_unknown_bits (dat, (Dwg_Object *restrict)obj))             \
+      {                                                                       \
+        if (hdl_dat != dat && hdl_dat->chain != dat->chain)                   \
+          bit_chain_free (hdl_dat);                                           \
+        return error;                                                         \
+      }
 #elif defined IS_FREE
 #  define HANDLE_UNKNOWN_BITS VALUE_TF (obj->unknown_bits, 0)
 #elif defined IS_PRINT
