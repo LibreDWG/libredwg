@@ -264,6 +264,10 @@ set(libredwg_SOURCES
 add_library(${redwg}
     ${libredwg_HEADERS}
     ${libredwg_SOURCES})
+
+set_property(TARGET ${redwg} PROPERTY C_STANDARD 99)
+set_property(TARGET ${redwg} PROPERTY C_STANDARD_REQUIRED ON)
+
 set_target_properties(${redwg} PROPERTIES
   PUBLIC_HEADER "${libredwg_HEADERS}")
 if (BUILD_SHARED_LIBS)
