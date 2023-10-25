@@ -60,7 +60,10 @@
 /* Define to 1 if you have the <byteswap.h> header file. */
 #undef HAVE_BYTESWAP_H
 
-/* Defined to 1 when the compiler supports c99, mostly (...) macros */
+/* Defined to 1 when the compiler supports C11 */
+#undef HAVE_C11
+
+/* Defined to 1 when the compiler supports C99, mostly (...) macros */
 #undef HAVE_C99
 
 /* Define to 1 if you have the <ctype.h> header file. */

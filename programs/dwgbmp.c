@@ -30,8 +30,8 @@
 #  include <valgrind/valgrind.h>
 #endif
 
-#include <dwg.h>
 #include "common.h"
+#include <dwg.h>
 #include "suffix.inc"
 
 static int opts = 0;

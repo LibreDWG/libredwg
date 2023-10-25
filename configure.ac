@@ -286,14 +286,26 @@ dnl if test x$ac_compiler_gnu = xyes; then
 dnl   CFLAGS="$CFLAGS -fno-omit-frame-pointer"
 dnl fi
 
-if test "x$ac_cv_prog_cc_c99" = "xno"; then
-   AC_MSG_WARN([This compiler ${CC} has no c99 support])
+if test "x$ac_cv_prog_cc_c11" = "xno"; then
+   AC_MSG_WARN([This compiler ${CC} has no C11 support])
+   if test "x$ac_cv_prog_cc_c99" != "xno"; then
+     AC_DEFINE([HAVE_C99], 1,
+        [Defined to 1 when the compiler supports C99, mostly (...) macros])
+     AC_MSG_RESULT([added $ac_cv_prog_cc_c99 to CFLAGS])
+     CFLAGS="$CFLAGS $ac_cv_prog_cc_c99"
+   fi
 else
-   AC_DEFINE([HAVE_C99], 1,
-        [Defined to 1 when the compiler supports c99, mostly (...) macros])
-   if test "x$ac_cv_prog_cc_c99" != "x"; then
-      AC_MSG_RESULT([added $ac_cv_prog_cc_c99 to CFLAGS])
-      CFLAGS="$CFLAGS $ac_cv_prog_cc_c99"
+   AC_DEFINE([HAVE_C11], 1,
+        [Defined to 1 when the compiler supports C11])
+   if test "x$ac_cv_prog_cc_c99" = "xno"; then
+     AC_MSG_WARN([This compiler ${CC} has no C99 support])
+   else
+     AC_DEFINE([HAVE_C99], 1,
+        [Defined to 1 when the compiler supports C99, mostly (...) macros])
+   fi
+   if test "x$ac_cv_prog_cc_c11" != "x"; then
+     AC_MSG_RESULT([added $ac_cv_prog_cc_c11 to CFLAGS])
+     CFLAGS="$CFLAGS $ac_cv_prog_cc_c11"
    fi
 fi
 AC_SUBST(HAVE_C99)

@@ -39,7 +39,19 @@
 //#pragma pack()
 // use as printf("%" PRIuSIZE ", size)
 #ifndef PRI_SIZE_T_MODIFIER
-#  define PRI_SIZE_T_MODIFIER ""
+#  ifdef _WIN32
+#    if SIZEOF_SIZE_T == 8
+#      define PRI_SIZE_T_MODIFIER "ll"
+#    else
+#      define PRI_SIZE_T_MODIFIER ""
+#    endif
+#  else
+#    if SIZEOF_SIZE_T == 8
+#      define PRI_SIZE_T_MODIFIER "l"
+#    else
+#      define PRI_SIZE_T_MODIFIER ""
+#    endif
+#  endif
 #endif
 #define PRIuSIZE PRI_SIZE_T_MODIFIER "u"
 
