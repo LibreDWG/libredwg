@@ -605,8 +605,8 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
   int64_t page_size;
   long pedata_size;
 
-  BITCODE_RC *rsdata;          // RS encoded data
-  BITCODE_RC *pedata;          // Pre RS encoded data
+  BITCODE_RC *rsdata;   // RS encoded data
+  BITCODE_RC *pedata;   // Pre RS encoded data
   BITCODE_RC *data_end; // The data RS unencoded and uncompressed
 
   if (repeat_count < 0 || repeat_count > DBG_MAX_COUNT
@@ -646,10 +646,10 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
   assert ((uint64_t)repeat_count < DBG_MAX_COUNT);
   assert ((uint64_t)page_size < DBG_MAX_COUNT);
   bit_chain_init_dat (out, size_uncomp + page_size, dat);
-  //data = (BITCODE_RC *)calloc (size_uncomp + page_size, 1);
+  // data = (BITCODE_RC *)calloc (size_uncomp + page_size, 1);
   LOG_HANDLE ("Alloc system page of size %" PRId64 "\n",
               size_uncomp + page_size)
-    assert (out->size == (size_t)(size_uncomp + page_size));
+  assert (out->size == (size_t)(size_uncomp + page_size));
   if (!out->chain)
     {
       LOG_ERROR ("Out of memory")
@@ -860,8 +860,8 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   return 0;
 }
 
-#define LOG_POS_DAT(dat)                                \
-  LOG_INSANE (" @%" PRIuSIZE ".%u", (dat)->byte, (dat)->bit)      \
+#define LOG_POS_DAT(dat)                                                      \
+  LOG_INSANE (" @%" PRIuSIZE ".%u", (dat)->byte, (dat)->bit)                  \
   LOG_TRACE ("\n")
 
 static r2007_section *
@@ -870,7 +870,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 {
   BITCODE_RC *data;
   r2007_section *sections = NULL, *last_section = NULL, *section = NULL;
-  //BITCODE_RC *ptr, *ptr_end;
+  // BITCODE_RC *ptr, *ptr_end;
   Bit_Chain page = { 0 };
   int i, j = 0;
 
@@ -948,7 +948,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       {
         uint64_t sz = section->name_length;
         section->name = (DWGCHAR *)calloc (1, sz + 2);
-        bit_read_fixed (&page, (BITCODE_RC*)section->name, sz);
+        bit_read_fixed (&page, (BITCODE_RC *)section->name, sz);
       }
 #ifdef HAVE_NATIVE_WCHAR2
       LOG_TRACE ("  name:          " FORMAT_TU, (BITCODE_TU)section->name)
@@ -998,8 +998,9 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
           if (page.byte + 56 > page.size)
             {
-              LOG_ERROR ("Section[%d]->pages[%d] overflow (%" PRIuSIZE " > %" PRIuSIZE ")", j, i,
-                         page.byte + 56, page.size);
+              LOG_ERROR ("Section[%d]->pages[%d] overflow (%" PRIuSIZE
+                         " > %" PRIuSIZE ")",
+                         j, i, page.byte + 56, page.size);
               free (section->pages[i]);
               section->num_pages = i; // skip this last section
               break;
@@ -1215,7 +1216,7 @@ read_file_header (Bit_Chain *restrict dat,
 
 #ifdef WORDS_BIGENDIAN
   {
-    uint64_t *fields  = (uint64_t *)file_header;
+    uint64_t *fields = (uint64_t *)file_header;
     for (unsigned j = 0; j < sizeof (Dwg_R2007_Header) / 8; j++)
       {
         fields[j] = le64toh (fields[j]);
@@ -1307,7 +1308,8 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (str->byte > old_size - old_byte)
     {
       LOG_ERROR ("obj_string_stream overflow, bitsize " FORMAT_RL
-                 " => " FORMAT_RL " (strpos %" PRIuSIZE " > diff %" PRIuSIZE ")",
+                 " => " FORMAT_RL " (strpos %" PRIuSIZE " > diff %" PRIuSIZE
+                 ")",
                  obj->bitsize, obj->size * 8, str->byte, old_size - old_byte);
       str->byte = old_byte;
       str->size = old_size;
@@ -1315,8 +1317,9 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       obj->bitsize = obj->size * 8;
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  LOG_HANDLE (" obj string stream +" FORMAT_RL ": @%" PRIuSIZE ".%u (%" PRIuSIZE ")", start,
-              str->byte, str->bit & 7, bit_position (str));
+  LOG_HANDLE (" obj string stream +" FORMAT_RL ": @%" PRIuSIZE
+              ".%u (%" PRIuSIZE ")",
+              start, str->byte, str->bit & 7, bit_position (str));
   obj->has_strings = bit_read_B (str);
   LOG_TRACE (" has_strings: %d\n", (int)obj->has_strings);
   if (!obj->has_strings)
@@ -1355,9 +1358,11 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   str->byte -= 2;
   if (data_size > obj->bitsize)
     {
-      LOG_WARN ("Invalid string stream data_size %u > bitsize %u at @%" PRIuSIZE ".%u\n",
-                (unsigned)data_size, (unsigned)obj->bitsize, str->byte,
-                str->bit & 7);
+      LOG_WARN (
+          "Invalid string stream data_size %u > bitsize %u at @%" PRIuSIZE
+          ".%u\n",
+          (unsigned)data_size, (unsigned)obj->bitsize, str->byte,
+          str->bit & 7);
       if (dat->from_version == R_2007)
         {
           return 0;
@@ -1376,8 +1381,8 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       bit_set_position (str, 0);
     }
   // bit_reset_chain (str);
-  // LOG_TRACE(" %d: @%" PRIuSIZE ".%u (%" PRIuSIZE ")\n", -(int)data_size - 16, str->byte,
-  // str->bit & 7,
+  // LOG_TRACE(" %d: @%" PRIuSIZE ".%u (%" PRIuSIZE ")\n", -(int)data_size -
+  // 16, str->byte, str->bit & 7,
   //          bit_position(str));
   // obj->strpos = obj->bitsize_pos + obj->bitsize - obj->stringstream_size;
   return 0;
@@ -1403,8 +1408,8 @@ section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }
   *str = *dat;
   bit_set_position (str, start);
-  LOG_TRACE ("section string stream\n  pos: " FORMAT_RL ", %" PRIuSIZE "/%u\n", start,
-             str->byte, str->bit);
+  LOG_TRACE ("section string stream\n  pos: " FORMAT_RL ", %" PRIuSIZE "/%u\n",
+             start, str->byte, str->bit);
   endbit = bit_read_B (str);
   LOG_HANDLE ("  endbit: %d\n", (int)endbit);
   if (!endbit)
@@ -1429,7 +1434,8 @@ section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }
   start -= data_size;
   bit_set_position (str, start);
-  LOG_HANDLE ("  pos: " FORMAT_RL ", %" PRIuSIZE "/%u\n", start, str->byte, str->bit);
+  LOG_HANDLE ("  pos: " FORMAT_RL ", %" PRIuSIZE "/%u\n", start, str->byte,
+              str->bit);
 }
 
 // for string stream see p86
@@ -1759,7 +1765,8 @@ read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error;
     }
 
-  LOG_TRACE ("\nVBAProject (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("\nVBAProject (%" PRIuSIZE ")\n-------------------\n",
+             sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
@@ -1802,7 +1809,8 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   if (dwg->header.summaryinfo_address != (BITCODE_RL)dat->byte)
     LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != %" PRIuSIZE,
               dwg->header.summaryinfo_address, dat->byte);
-  LOG_TRACE ("\nSummaryInfo (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("\nSummaryInfo (%" PRIuSIZE ")\n-------------------\n",
+             sec_dat.size)
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
@@ -1882,7 +1890,8 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error;
     }
 
-  LOG_TRACE ("\nAuxHeader (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("\nAuxHeader (%" PRIuSIZE ")\n-------------------\n",
+             sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
@@ -1924,7 +1933,8 @@ read_2007_section_appinfohistory (Bit_Chain *restrict dat,
       return error;
     }
 
-  LOG_TRACE ("\nAppInfoHistory (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("\nAppInfoHistory (%" PRIuSIZE ")\n-------------------\n",
+             sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
@@ -1966,7 +1976,8 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error;
     }
 
-  LOG_TRACE ("\nRevHistory (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("\nRevHistory (%" PRIuSIZE ")\n-------------------\n",
+             sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
@@ -2008,7 +2019,8 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat,
       return error;
     }
 
-  LOG_TRACE ("\nObjFreeSpace (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("\nObjFreeSpace (%" PRIuSIZE ")\n-------------------\n",
+             sec_dat.size)
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
@@ -2096,7 +2108,8 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return 0;
     }
 
-  LOG_TRACE ("FileDepList (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("FileDepList (%" PRIuSIZE ")\n-------------------\n",
+             sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
@@ -2239,7 +2252,8 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return 0;
     }
 
-  LOG_TRACE ("AcDs datastorage (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  LOG_TRACE ("AcDs datastorage (%" PRIuSIZE ")\n-------------------\n",
+             sec_dat.size)
   old_dat = *dat;
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
@@ -2373,7 +2387,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   dat->byte = page->offset;
   if ((size_t)file_header->sections_map_size_comp > dat->size - dat->byte)
     {
-      LOG_ERROR ("%s Invalid comp_data_size %" PRId64 " > %" PRIuSIZE " bytes left",
+      LOG_ERROR ("%s Invalid comp_data_size %" PRId64 " > %" PRIuSIZE
+                 " bytes left",
                  __FUNCTION__, file_header->sections_map_size_comp,
                  dat->size - dat->byte)
       error |= DWG_ERR_VALUEOUTOFBOUNDS;

@@ -192,7 +192,8 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
       bmp_h.magic[1] = 'M';
       bmp_h.file_size = 14 + size; // file header + DIB data
       bmp_h.reserved = 0;
-      bmp_h.offset = 14 + 40 + 4 * 256; // file header + DIB header + color table
+      bmp_h.offset
+          = 14 + 40 + 4 * 256; // file header + DIB header + color table
       retval = fwrite (&bmp_h.magic[0], sizeof (char), 2, fh);
       if (!retval)
         {

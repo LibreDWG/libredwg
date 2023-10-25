@@ -190,12 +190,12 @@ dwg_find_color_index_tests (void)
   BITCODE_BL rgb;
   BITCODE_BS ret;
 
-#define test_rgb_case(_rgb, _ret)                         \
-  rgb = _rgb;                                             \
-  ret = dwg_find_color_index(rgb);                        \
-  if (ret == _ret)                                        \
-    ok ("dwg_find_color_index (0x%0x) -> %u", rgb, ret);  \
-  else                                                    \
+#define test_rgb_case(_rgb, _ret)                                             \
+  rgb = _rgb;                                                                 \
+  ret = dwg_find_color_index (rgb);                                           \
+  if (ret == _ret)                                                            \
+    ok ("dwg_find_color_index (0x%0x) -> %u", rgb, ret);                      \
+  else                                                                        \
     fail ("dwg_find_color_index (0x%0x) -> %u != %u", rgb, ret, _ret);
 
   test_rgb_case (0xabff0000, 1);

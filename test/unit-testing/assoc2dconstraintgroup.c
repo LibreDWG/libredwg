@@ -43,7 +43,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, version, BL);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, b1, B);
   // 3x10 workplane
-  // CHK_ENTITY_3RD (_obj, ASSOC2DCONSTRAINTGROUP, workplane[3], &workplane[3][0]);
+  // CHK_ENTITY_3RD (_obj, ASSOC2DCONSTRAINTGROUP, workplane[3],
+  // &workplane[3][0]);
   CHK_ENTITY_H (_obj, ASSOC2DCONSTRAINTGROUP, h1);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_actions, BL);
   CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, actions, num_actions);
@@ -66,7 +67,7 @@ api_process (dwg_object *obj)
              j < MIN (_obj->num_actions, _obj->nodes[i].num_connections); j++)
           {
             if (!_obj->nodes[i].connections[j])
-              fail("Invalid connections[%u]", j);
+              fail ("Invalid connections[%u]", j);
             else
               ok ("CONSTRAINTGROUPNODE[%d].connections[%d]: %d", i, j,
                   (int)_obj->nodes[i].connections[j]);

@@ -512,8 +512,9 @@ dxf_read_string (Bit_Chain *dat, char **string)
           char *s = (char *)&dat->chain[dat->byte];
           if (memBEGINc (s, "\\M+") && s[3] >= '1' && s[3] <= '5')
             {
-              const Dwg_Codepage mif_tbl[] = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
-                                               CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
+              const Dwg_Codepage mif_tbl[]
+                  = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
+                      CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
               int n;
               Dwg_Codepage cp;
               sscanf (&s[3], "%d", &n);
@@ -1112,7 +1113,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       char dest[1024];                                                        \
       LOG_TRACE ("SUMMARY.%s = %s [T16 1]\n", &field[1], pair->value.s);      \
       bit_utf8_to_TV (dest, (unsigned char *)pair->value.s, 1024,             \
-                            strlen (pair->value.s), 0, dat->codepage);        \
+                      strlen (pair->value.s), 0, dat->codepage);              \
       dwg->summaryinfo.name = strdup (dest);                                  \
     }
 
@@ -1773,7 +1774,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         LOG_TRACE ("binary[%" PRIuSIZE "]: ", blen);
         if ((read = in_hex2bin (eed[i].data->u.eed_4.data, pair->value.s, blen)
                     != blen))
-          LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
+          LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read,
+                     blen);
         eed[i].size += size;
       }
       break;
@@ -2370,7 +2372,8 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       len = strlen (pair->value.s) + 1; // + the \n
       if (len > 100000)                 // chunked into blocks of size 4096
         {
-          LOG_ERROR ("Overlarge DXF string len %" PRIuSIZE ": %s", len, pair->value.s);
+          LOG_ERROR ("Overlarge DXF string len %" PRIuSIZE ": %s", len,
+                     pair->value.s);
           return NULL;
         }
       if (!total || !o->encr_sat_data[0])
@@ -5720,8 +5723,8 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 95:
           o->nodes[i].edge_flags = pair->value.i;
           if (pair->value.i != 32)
-            LOG_WARN ("%s.nodes[%d].edge_flags = %d [BL %d] != 32",
-                      obj->name, i, pair->value.i, pair->code)
+            LOG_WARN ("%s.nodes[%d].edge_flags = %d [BL %d] != 32", obj->name,
+                      i, pair->value.i, pair->code)
           else
             LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,
                        pair->value.i, pair->code)
@@ -6618,7 +6621,8 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         rbuf->value.str.u.data = (char *)s;
         rbuf->value.str.size = blen & 0xFFFF;
         if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-          LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
+          LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read,
+                     blen);
         xdata_size += 1 + (len & 0xFFFF);
         LOG_TRACE ("xdata[%d]: ", num_xdata);
         // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
@@ -6728,17 +6732,19 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         ent->preview = (BITCODE_TF)realloc (ent->preview, written + blen);
       else if (blen + written > ent->preview_size)
         {
-          LOG_ERROR (
-              "%s.preview overflow: %" PRIuSIZE " + written %" PRIuSIZE " > size: " FORMAT_BLL,
-              obj->name, blen, written, ent->preview_size);
+          LOG_ERROR ("%s.preview overflow: %" PRIuSIZE " + written %" PRIuSIZE
+                     " > size: " FORMAT_BLL,
+                     obj->name, blen, written, ent->preview_size);
           return pair;
         }
       s = &ent->preview[written];
       if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-        LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
+        LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read,
+                   blen);
       written += read;
-      LOG_TRACE ("%s.preview += %" PRIuSIZE " (%" PRIuSIZE "/" FORMAT_BLL ")\n", obj->name, blen,
-                 written, ent->preview_size);
+      LOG_TRACE ("%s.preview += %" PRIuSIZE " (%" PRIuSIZE "/" FORMAT_BLL
+                 ")\n",
+                 obj->name, blen, written, ent->preview_size);
 
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -6782,9 +6788,11 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           _obj->preview = (BITCODE_TF)realloc (_obj->preview, written + blen);
           s = &_obj->preview[written];
           if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-            LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
+            LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
+                       read, blen);
           written += read;
-          LOG_TRACE ("BLOCK_HEADER.preview += %" PRIuSIZE " (%" PRIuSIZE ")\n", blen, written);
+          LOG_TRACE ("BLOCK_HEADER.preview += %" PRIuSIZE " (%" PRIuSIZE ")\n",
+                     blen, written);
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -8041,7 +8049,7 @@ add_AcDbBlockRotationParameter (Dwg_Object *restrict obj,
   return NULL;
 }
 
-#  define FIELD_CMC(field, dxf) dxf_read_CMC (dwg, dat, &o->field, #field, dxf)
+#  define FIELD_CMC(field, dxf) dxf_read_CMC (dwg, dat, &o->field, #  field, dxf)
 #  define FIELD_CMC2004(field, dxf)                                           \
     SINCE (R_2004)                                                            \
     FIELD_CMC (field, dxf)
@@ -8534,10 +8542,9 @@ get_numfield_value (void *restrict _obj, const Dwg_DYNAPI_field *restrict f)
 
 /* For tables, entities and objects.
  */
-static __nonnull ((1,2,3,4)) Dxf_Pair *
-new_object (char *restrict name, char *restrict dxfname,
-            Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-            BITCODE_BL ctrl_id, BITCODE_BL *i_p)
+static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
+    char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat,
+    Dwg_Data *restrict dwg, BITCODE_BL ctrl_id, BITCODE_BL *i_p)
 {
   const int is_tu = 1;
   Dwg_Object *obj;
@@ -9892,16 +9899,19 @@ new_object (char *restrict name, char *restrict dxfname,
               assert (o->data);
               if (blen + written > o->data_size)
                 {
-                  LOG_ERROR ("OLE2FRAME.data overflow: %" PRIuSIZE " + written %" PRIuSIZE " > "
+                  LOG_ERROR ("OLE2FRAME.data overflow: %" PRIuSIZE
+                             " + written %" PRIuSIZE " > "
                              "data_size: %u",
                              blen, written, o->data_size);
                   goto invalid_dxf;
                 }
               if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-                LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
+                LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
+                           read, blen);
               written += read;
-              LOG_TRACE ("OLE2FRAME.data += %" PRIuSIZE " (%" PRIuSIZE "/%u) [TF 310]\n", blen,
-                         written, o->data_size);
+              LOG_TRACE ("OLE2FRAME.data += %" PRIuSIZE " (%" PRIuSIZE
+                         "/%u) [TF 310]\n",
+                         blen, written, o->data_size);
             }
           else if (pair->code == 1
                    && ((strEQc (name, "_3DSOLID") || strEQc (name, "BODY")
@@ -9950,8 +9960,8 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   o->text = strdup (pair->value.s);
                   written = len;
-                  LOG_TRACE ("MTEXT.text = %s (%" PRIuSIZE ") [TV 3]\n", pair->value.s,
-                             len);
+                  LOG_TRACE ("MTEXT.text = %s (%" PRIuSIZE ") [TV 3]\n",
+                             pair->value.s, len);
                 }
               else
                 {
@@ -9960,7 +9970,9 @@ new_object (char *restrict name, char *restrict dxfname,
                     o->text = (char *)realloc (o->text, len + 1);
                   strcpy (o->text, pair->value.s);
                   written += len;
-                  LOG_TRACE ("MTEXT.text += %" PRIuSIZE "/%" PRIuSIZE " [TV 3]\n", len, written);
+                  LOG_TRACE ("MTEXT.text += %" PRIuSIZE "/%" PRIuSIZE
+                             " [TV 3]\n",
+                             len, written);
                 }
             }
           /*
@@ -12362,7 +12374,8 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (blen + written > dwg->thumbnail.size)
                 {
                   dxf_free_pair (pair);
-                  LOG_ERROR ("PREVIEW.size overflow: %" PRIuSIZE " + written %" PRIuSIZE " > "
+                  LOG_ERROR ("PREVIEW.size overflow: %" PRIuSIZE
+                             " + written %" PRIuSIZE " > "
                              "size: %" PRIuSIZE,
                              blen, written, dwg->thumbnail.size);
                   return 1;

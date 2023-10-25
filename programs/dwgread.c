@@ -125,9 +125,9 @@ main (int argc, char *argv[])
   int option_index = 0;
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
-          { "format", 1, NULL, 'O' },    { "file", 1,  NULL, 'o' },
-          { "help", 0, NULL, 0 },        { "version", 0, NULL, 0 },
-          { "force-free", 0, NULL, 0 },  { NULL, 0, NULL, 0 } };
+          { "format", 1, NULL, 'O' },   { "file", 1, NULL, 'o' },
+          { "help", 0, NULL, 0 },       { "version", 0, NULL, 0 },
+          { "force-free", 0, NULL, 0 }, { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
@@ -198,7 +198,7 @@ main (int argc, char *argv[])
               else
 #endif
 #ifndef DISABLE_JSON
-              if (strstr (outfile, ".json") || strstr (outfile, ".JSON"))
+                  if (strstr (outfile, ".json") || strstr (outfile, ".JSON"))
                 fmt = strdup ("json");
               else if (strstr (outfile, ".geojson")
                        || strstr (outfile, ".GeoJSON"))

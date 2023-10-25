@@ -41,35 +41,35 @@ main (int argc, char *argv[])
   buf[6] = '\0';
   if (buf[0] == 'A' && buf[1] == 'C')
     {
-        int v;
-        if (1 != sscanf (buf, "AC%4d", &v))
-            return 1;
-        if (v < 1004) // <r9
-            printf ("\n");
-        else if (v <= 1005)
-            printf ("9\n");
-        else if (v <= 1006)
-            printf ("10\n");
-        else if (v <= 1009)
-            printf ("11\n");
-        else if (v <= 1012)
-            printf ("13\n");
-        else if (v <= 1014)
-            printf ("14\n");
-        else if (v <= 1016)
-            printf ("2000\n");
-        else if (v <= 1018)
-            printf ("2004\n");
-        else if (v <= 1021)
-            printf ("2007\n");
-        else if (v <= 1024)
-            printf ("2010\n");
-        else if (v < 1028)
-            printf ("2013\n");
-        else if (v < 1033)
-            printf ("2018\n");
-        else
-            printf ("\n");
+      int v;
+      if (1 != sscanf (buf, "AC%4d", &v))
+        return 1;
+      if (v < 1004) // <r9
+        printf ("\n");
+      else if (v <= 1005)
+        printf ("9\n");
+      else if (v <= 1006)
+        printf ("10\n");
+      else if (v <= 1009)
+        printf ("11\n");
+      else if (v <= 1012)
+        printf ("13\n");
+      else if (v <= 1014)
+        printf ("14\n");
+      else if (v <= 1016)
+        printf ("2000\n");
+      else if (v <= 1018)
+        printf ("2004\n");
+      else if (v <= 1021)
+        printf ("2007\n");
+      else if (v <= 1024)
+        printf ("2010\n");
+      else if (v < 1028)
+        printf ("2013\n");
+      else if (v < 1033)
+        printf ("2018\n");
+      else
+        printf ("\n");
     }
   fclose (f);
   return 0;

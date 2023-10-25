@@ -207,7 +207,8 @@ bit_write_RC_tests (void)
 static void
 bit_RS_tests (void)
 {
-  Bit_Chain bitchain = strtobt ("11111111" "00000001");
+  Bit_Chain bitchain = strtobt ("11111111"
+                                "00000001");
   BITCODE_RS result = bit_read_RS (&bitchain);
 
   if (result == 511)
@@ -236,7 +237,8 @@ bit_RS_tests (void)
 static void
 bit_RS_BE_tests (void)
 {
-  Bit_Chain bitchain = strtobt ("00000001" "11111111");
+  Bit_Chain bitchain = strtobt ("00000001"
+                                "11111111");
   BITCODE_RS result = bit_read_RS_BE (&bitchain);
 
   if (result == 511)
@@ -266,8 +268,8 @@ bit_BS_tests (void)
 {
   Bit_Chain bitchain;
   // special cases >256, 0, 256, 1-255
-  const BITCODE_BS values[] = {1024, 0, 256, 2, 1};
-  const size_t sizes[] = {2 + 16, 2, 2, 2 + 8, 2 + 8};
+  const BITCODE_BS values[] = { 1024, 0, 256, 2, 1 };
+  const size_t sizes[] = { 2 + 16, 2, 2, 2 + 8, 2 + 8 };
   BITCODE_BS bs;
 
   assert (ARRAY_SIZE (values) == ARRAY_SIZE (sizes));
@@ -287,8 +289,8 @@ bit_BS_tests (void)
             {
               bit_set_position (&bitchain, i);
               bit_print (&bitchain, 3);
-              fail ("bit_write_BS (%u) @%" PRIuSIZE ".%u", (unsigned)bs, bitchain.byte,
-                    bitchain.bit);
+              fail ("bit_write_BS (%u) @%" PRIuSIZE ".%u", (unsigned)bs,
+                    bitchain.byte, bitchain.bit);
             }
 
           bit_set_position (&bitchain, i);
@@ -366,8 +368,8 @@ bit_BL_tests (void)
 {
   Bit_Chain bitchain;
   // special cases >255, 0, 1-255
-  const BITCODE_BL values[] = {1024, 0, 2, 1};
-  const size_t sizes[] = {2 + 32, 2, 2 + 8, 2 + 8};
+  const BITCODE_BL values[] = { 1024, 0, 2, 1 };
+  const size_t sizes[] = { 2 + 32, 2, 2 + 8, 2 + 8 };
   BITCODE_BL bl;
 
   assert (ARRAY_SIZE (values) == ARRAY_SIZE (sizes));
@@ -387,8 +389,8 @@ bit_BL_tests (void)
             {
               bit_set_position (&bitchain, i);
               bit_print (&bitchain, 5);
-              fail ("bit_write_BL (%u) @%" PRIuSIZE ".%u", (unsigned)bl, bitchain.byte,
-                    bitchain.bit);
+              fail ("bit_write_BL (%u) @%" PRIuSIZE ".%u", (unsigned)bl,
+                    bitchain.byte, bitchain.bit);
             }
 
           bit_set_position (&bitchain, i);
@@ -410,17 +412,18 @@ static void
 bit_RD_tests (void)
 {
   Bit_Chain bitchain;
-  const double values[] =  { 0.0, 1.0, 25.21241 };
+  const double values[] = { 0.0, 1.0, 25.21241 };
   double result;
-  union {
+  union
+  {
     double d;
     uint64_t u;
   } u;
 
   bitprepare (&bitchain, 9);
-  for (int i=0; i<=1; i++)
+  for (int i = 0; i <= 1; i++)
     {
-      for (int j=0; j<3; j++)
+      for (int j = 0; j < 3; j++)
         {
           size_t p1, p2;
           u.d = values[j];
@@ -429,11 +432,12 @@ bit_RD_tests (void)
           if ((size_t)i + 64L == bit_position (&bitchain))
             pass ();
           else
-            fail ("bit_write_RD bit=%d @%" PRIuSIZE ".%u", i, bitchain.byte, bitchain.bit);
+            fail ("bit_write_RD bit=%d @%" PRIuSIZE ".%u", i, bitchain.byte,
+                  bitchain.bit);
           bit_set_position (&bitchain, i);
           result = bit_read_RD (&bitchain);
           if (result == u.d)
-            pass (); //ok ("bit_read_RD bit=%d %g", i, result);
+            pass (); // ok ("bit_read_RD bit=%d %g", i, result);
           else
             fail ("bit_read_RD bit=%d %g != %g", i, result, u.d);
         }
@@ -446,17 +450,18 @@ static void
 bit_BD_tests (void)
 {
   Bit_Chain bitchain;
-  const double values[] =  { 0.0, 1.0, 25.21241 };
+  const double values[] = { 0.0, 1.0, 25.21241 };
   double result;
-  union {
+  union
+  {
     double d;
     uint64_t u;
   } u;
 
   bitprepare (&bitchain, 9);
-  for (int i=0; i<=1; i++)
+  for (int i = 0; i <= 1; i++)
     {
-      for (int j=0; j<3; j++)
+      for (int j = 0; j < 3; j++)
         {
           u.d = values[j];
           bit_set_position (&bitchain, i);
@@ -464,7 +469,8 @@ bit_BD_tests (void)
           if (j < 2 || (size_t)i + 66L == bit_position (&bitchain))
             pass ();
           else
-            fail ("bit_write_RD bit=%d @%" PRIuSIZE ".%u", i, bitchain.byte, bitchain.bit);
+            fail ("bit_write_RD bit=%d @%" PRIuSIZE ".%u", i, bitchain.byte,
+                  bitchain.bit);
           bit_set_position (&bitchain, i);
           result = bit_read_BD (&bitchain);
           if (result == u.d)
@@ -477,7 +483,7 @@ bit_BD_tests (void)
   bitchain = strtobt ("10");
   result = bit_read_BD (&bitchain);
   if (result == 0.0)
-    pass (); //ok ("bit_read_BD (0.0)");
+    pass (); // ok ("bit_read_BD (0.0)");
   else
     fail ("bit_read_BD %f (0.0)", result);
   bitfree (&bitchain);
@@ -485,7 +491,7 @@ bit_BD_tests (void)
   bitchain = strtobt ("01");
   result = bit_read_BD (&bitchain);
   if (result == 1.0)
-    pass (); //ok ("bit_read_BD (1.0)");
+    pass (); // ok ("bit_read_BD (1.0)");
   else
     fail ("bit_read_BD %f (1.0)", result);
 
@@ -499,7 +505,7 @@ bit_BD_tests (void)
   bit_set_position (&bitchain, 0);
   result = bit_read_BD (&bitchain);
   if (result == 1.2345)
-    pass (); //ok ("bit_read_BD (1.2345)");
+    pass (); // ok ("bit_read_BD (1.2345)");
   else
     {
       fail ("bit_read_BD %f (1.2345)", result);
@@ -510,21 +516,21 @@ bit_BD_tests (void)
   bit_set_position (&bitchain, 0);
   bit_write_BD (&bitchain, 0.0);
   if (bitchain.byte == 0 && bitchain.bit == 2)
-    pass (); //ok ("bit_write_BD (0.0)");
+    pass (); // ok ("bit_write_BD (0.0)");
   else
     fail ("bit_write_BD (0.0)");
 
   bit_set_position (&bitchain, 0);
   bit_write_BD (&bitchain, 1.0);
   if (bitchain.byte == 0 && bitchain.bit == 2)
-    pass (); //ok ("bit_write_BD (1.0)");
+    pass (); // ok ("bit_write_BD (1.0)");
   else
     fail ("bit_write_BD (1.0)");
 
   bit_set_position (&bitchain, 0);
   bit_write_BD (&bitchain, 1.2345);
   if (bitchain.byte == 8 && bitchain.bit == 2)
-    pass (); //ok ("bit_write_BD (1.2345)");
+    pass (); // ok ("bit_write_BD (1.2345)");
   else
     fail ("bit_write_BD (1.2345)");
 #ifdef WORDS_BIGENDIAN
@@ -538,8 +544,14 @@ bit_BD_tests (void)
 static void
 bit_RLL_tests (void)
 {
-  Bit_Chain bitchain = strtobt ("01111111" "11110111" "10111111" "01111101"
-                                "00000000" "00000000" "00000000" "00000001");
+  Bit_Chain bitchain = strtobt ("01111111"
+                                "11110111"
+                                "10111111"
+                                "01111101"
+                                "00000000"
+                                "00000000"
+                                "00000000"
+                                "00000001");
   BITCODE_RLL result = bit_read_RLL (&bitchain);
   if (result == UINT64_C (0x010000007DBFF77F))
     pass ();
@@ -548,7 +560,7 @@ bit_RLL_tests (void)
 
   bit_set_position (&bitchain, 0);
   bit_write_RLL (&bitchain, UINT64_C (0x8000ffff00000001));
-  if (memcmp (bitchain.chain, "\x01\x00\x00\x00\xff\xff\x00\x80", 8 ) == 0)
+  if (memcmp (bitchain.chain, "\x01\x00\x00\x00\xff\xff\x00\x80", 8) == 0)
     pass ();
   else
     fail ("bit_write_RLL %x %x %x %x %x %x %x %x", bitchain.chain[0],
@@ -564,8 +576,15 @@ bit_RLL_tests (void)
     fail ("bit_read_RLL 0x%016" PRIX64, result);
   bitfree (&bitchain);
   // ----------------------------------------------------------------
-  bitchain = strtobt ("0" "01111111" "11110111" "10111111" "01111101"
-                          "00000000" "00000000" "00000000" "00000001");
+  bitchain = strtobt ("0"
+                      "01111111"
+                      "11110111"
+                      "10111111"
+                      "01111101"
+                      "00000000"
+                      "00000000"
+                      "00000000"
+                      "00000001");
   bit_set_position (&bitchain, 1);
   result = bit_read_RLL (&bitchain);
   if (result == UINT64_C (0x010000007DBFF77F))
@@ -575,7 +594,7 @@ bit_RLL_tests (void)
 
   bit_set_position (&bitchain, 1);
   bit_write_RLL (&bitchain, UINT64_C (0x8000ffff00000001));
-  if (memcmp (bitchain.chain, "\x00\x80\x00\x00\x7f\xff\x80\x40", 8 ) == 0)
+  if (memcmp (bitchain.chain, "\x00\x80\x00\x00\x7f\xff\x80\x40", 8) == 0)
     pass ();
   else
     fail ("bit_write_RLL bit=1 %x %x %x %x %x %x %x %x", bitchain.chain[0],
@@ -744,7 +763,7 @@ bit_write_H_tests (void)
   else                                                                        \
     {                                                                         \
       bit_print (&bitchain, sizeof (Dwg_Handle));                             \
-      fail ("bit_write_H (" FORMAT_H ") @%" PRIuSIZE ".%u", ARGS_H (handle),            \
+      fail ("bit_write_H (" FORMAT_H ") @%" PRIuSIZE ".%u", ARGS_H (handle),  \
             bitchain.byte, bitchain.bit);                                     \
     }                                                                         \
   bitfree (&bitchain)
@@ -877,9 +896,9 @@ bit_TV_to_utf8_tests (void)
 {
   char *p;
   char *srcu = strdup ("Test\\U+0234"); // ȴ
-  const char *src1 = "Test\xc4"; // Ä
-  const char *src2 = "Test\xc6"; // Ć \U+0106
-  const char *src7 = "Test\xd3"; // Σ
+  const char *src1 = "Test\xc4";        // Ä
+  const char *src2 = "Test\xc6";        // Ć \U+0106
+  const char *src7 = "Test\xd3";        // Σ
   // echo -n "시험" | iconv -f utf8 -t cp949 | od -t x1
   char *src_kor = strdup ("\xbd\xc3\xc7\xe8");
 
@@ -942,8 +961,7 @@ bit_TV_to_utf8_tests (void)
 
   p = bit_TV_to_utf8 ("\x83\x82\x83\x6d", CP_ANSI_932);
   // echo "モノ" | od -t x1
-  if (strEQc (p, "モノ")
-      || strEQc (p, "\xe3\x83\xa2\xe3\x83\x8e"))
+  if (strEQc (p, "モノ") || strEQc (p, "\xe3\x83\xa2\xe3\x83\x8e"))
     ok ("bit_TV_to_utf8_tests 932");
   else
     {
@@ -955,8 +973,7 @@ bit_TV_to_utf8_tests (void)
   free (p);
 
   p = bit_TV_to_utf8 ("0\\M+18382", CP_ANSI_932); // MO
-  if (strEQc (p, "0モ")
-      || strEQc (p, "0\xe3\x83\xa2"))
+  if (strEQc (p, "0モ") || strEQc (p, "0\xe3\x83\xa2"))
     ok ("bit_TV_to_utf8_tests MIF-1 932");
   else
     {
@@ -1113,7 +1130,8 @@ bit_write_BE_tests (void)
   if (bitchain.byte == 0 && bitchain.bit == 1)
     ok ("bit_write_BE (0.0 0.0 1.1) R_2000");
   else
-    fail ("bit_write_BE @%" PRIuSIZE ".%u R_2000", bitchain.byte, bitchain.bit);
+    fail ("bit_write_BE @%" PRIuSIZE ".%u R_2000", bitchain.byte,
+          bitchain.bit);
 
   bit_set_position (&bitchain, 0);
   bitprepare (&bitchain, 25);
@@ -1122,7 +1140,8 @@ bit_write_BE_tests (void)
   if (bitchain.byte == 24 && bitchain.bit == 7)
     ok ("bit_write_BE (20.2535 10.2523 52.32563) R_2000");
   else
-    fail ("bit_write_BE @%" PRIuSIZE ".%u R_2000", bitchain.byte, bitchain.bit);
+    fail ("bit_write_BE @%" PRIuSIZE ".%u R_2000", bitchain.byte,
+          bitchain.bit);
 
   bit_set_position (&bitchain, 0);
   bitprepare (&bitchain, 25);
@@ -1174,44 +1193,52 @@ bit_read_CMC_tests (void)
   bitfree (&bitchain);
 
   /* R_2004 version. */
-  bitchain = strtobt ("10"                                        // index BB
-                      "00"                                        // rgb BB
+  bitchain = strtobt ("10" // index BB
+                      "00" // rgb BB
                       // B       G          R          method
-                      "00000000" "00000000" "00000000" "11000011" // rgb RL
-                      "00000000");                                // flag RC
+                      "00000000"
+                      "00000000"
+                      "00000000"
+                      "11000011"   // rgb RL
+                      "00000000"); // flag RC
   bitchain.from_version = bitchain.version = R_2004;
   result = bit_read_CMC (&bitchain, &bitchain, &color);
   if (result == 0 && color.index == 0 && color.rgb == 0xc3000000
-    && color.method == 195 && color.flag == 0)
+      && color.method == 195 && color.flag == 0)
 
     ok ("bit_read_CMC (R_2004 - white)");
   else
-    fail ("bit_read_CMC: index=%d, flag=%d, method=0x%0x, rgb=0x%08x (R_2004 - white)",
-      color.index, color.flag, color.method, color.rgb);
+    fail ("bit_read_CMC: index=%d, flag=%d, method=0x%0x, rgb=0x%08x (R_2004 "
+          "- white)",
+          color.index, color.flag, color.method, color.rgb);
   bitfree (&bitchain);
 
   /* R_2004 version. */
-  bitchain = strtobt ("10"                                        // index BB
-                      "00"                                        // rgb BB
+  bitchain = strtobt ("10" // index BB
+                      "00" // rgb BB
                       // B       G          R          method
-                      "00000000" "00000000" "11111111" "11000011" // rgb RL
-                      "00000000");                                // flag RC
+                      "00000000"
+                      "00000000"
+                      "11111111"
+                      "11000011"   // rgb RL
+                      "00000000"); // flag RC
   bitchain.from_version = bitchain.version = R_2004;
   result = bit_read_CMC (&bitchain, &bitchain, &color);
   if (result == 0 && color.index == 1 && color.rgb == 0xc3ff0000
-    && color.method == 195 && color.flag == 0)
+      && color.method == 195 && color.flag == 0)
 
     ok ("bit_read_CMC (R_2004 - red)");
   else
-    fail ("bit_read_CMC: index=%d, flag=%d, method=0x%0x, rgb=0x%08x (R_2004 - red)",
-      color.index, color.flag, color.method, color.rgb);
+    fail ("bit_read_CMC: index=%d, flag=%d, method=0x%0x, rgb=0x%08x (R_2004 "
+          "- red)",
+          color.index, color.flag, color.method, color.rgb);
   bitfree (&bitchain);
 }
 
 static void
 in_hexbin_tests (void)
 {
-  Bit_Chain dat = {0};
+  Bit_Chain dat = { 0 };
   char hex[] = "0921FFA02921FF302821FF302821FF302821FF30";
   const unsigned char result[]
       = { 0x09, 0x21, 0xFF, 0xA0, 0x29, 0x21, 0xFF, 0x30, 0x28, 0x21,
@@ -1226,7 +1253,8 @@ in_hexbin_tests (void)
     }
   else
     {
-      fail ("in_hexbin \"%.*s\" %" PRIuSIZE " (%" PRIuSIZE ")", (int)written, dat.chain, written, dat.size);
+      fail ("in_hexbin \"%.*s\" %" PRIuSIZE " (%" PRIuSIZE ")", (int)written,
+            dat.chain, written, dat.size);
       for (size_t i = 0; i < dat.size; i++)
         {
           unsigned char c = bit_read_RC (&dat);
@@ -1313,7 +1341,7 @@ main (int argc, char const *argv[])
   bit_RD_tests ();
   bit_BD_tests ();
   bit_RLL_tests ();
-  //bit_RLL_BE_tests ();
+  // bit_RLL_BE_tests ();
   bit_utf8_to_TV_tests ();
   bit_TV_to_utf8_tests ();
   bit_read_H_tests ();
@@ -1341,13 +1369,13 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 8 && bitchain.bit == 0)
     pass ();
   else
-    fail ("bit_write_RD %g @%" PRIuSIZE ".%u", 1.2345,
-          bitchain.byte, bitchain.bit);
+    fail ("bit_write_RD %g @%" PRIuSIZE ".%u", 1.2345, bitchain.byte,
+          bitchain.bit);
 
   bit_set_position (&bitchain, 0);
-//#ifdef WORDS_BIGENDIAN
-//  bit_print (&bitchain, sizeof (double));
-//#endif
+  //#ifdef WORDS_BIGENDIAN
+  //  bit_print (&bitchain, sizeof (double));
+  //#endif
   if ((dbl = bit_read_RD (&bitchain)) == 1.2345)
     pass ();
   else
@@ -1358,13 +1386,13 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 8 && bitchain.bit == 1)
     pass ();
   else
-    fail ("bit_write_RD bit=1 %g @%" PRIuSIZE ".%u", 1.2345,
-          bitchain.byte, bitchain.bit);
+    fail ("bit_write_RD bit=1 %g @%" PRIuSIZE ".%u", 1.2345, bitchain.byte,
+          bitchain.bit);
 
   bit_set_position (&bitchain, 1);
-//#ifdef WORDS_BIGENDIAN
-//  bit_print (&bitchain, sizeof (double));
-//#endif
+  //#ifdef WORDS_BIGENDIAN
+  //  bit_print (&bitchain, sizeof (double));
+  //#endif
   if ((dbl = bit_read_RD (&bitchain)) == 1.2345)
     pass ();
   else
@@ -1511,13 +1539,13 @@ main (int argc, char const *argv[])
     else
       fail ("bit_embed_TU \"%s\"", emb);
     bitchain.from_version = R_2000;
-    bitchain.version = R_2007;                         // @65.6
+    bitchain.version = R_2007; // @65.6
     // wlen = 8
     bit_write_T (&bitchain, (char *)"Teigha\\U+2122"); // convert to unicode
     // containing the ending 0L
     // printf ("TU @%" PRIuSIZE ".%u\n", bitchain.byte, bitchain.bit);
-    if (bitchain.byte == 83 && bitchain.bit == 0 &&
-        bitchain.chain[79] == 0x22 && bitchain.chain[80] == 0x21)
+    if (bitchain.byte == 83 && bitchain.bit == 0 && bitchain.chain[79] == 0x22
+        && bitchain.chain[80] == 0x21)
       pass ();
     else
       fail ("bit_write_T => TU %x %x @%" PRIuSIZE ".%u", bitchain.chain[79],
@@ -1537,16 +1565,14 @@ main (int argc, char const *argv[])
 #ifndef WORDS_BIGENDIAN
         wstr && !memcmp (wstr, exp, sizeof (exp))
 #else
-        ws[0] == 'T' &&
-        ws[1] == 'e' &&
-        ws[6] == 0x2122 &&
-        ws[7] == 0
+        ws[0] == 'T' && ws[1] == 'e' && ws[6] == 0x2122 && ws[7] == 0
 #endif
-        )
+    )
       pass ();
     else
       {
-        fail ("bit_read_T => TU @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
+        fail ("bit_read_T => TU @%" PRIuSIZE ".%u", bitchain.byte,
+              bitchain.bit);
 #ifdef WORDS_BIGENDIAN
         bit_set_position (&bitchain, pos);
         bit_print (&bitchain, 18);
@@ -1636,7 +1662,8 @@ main (int argc, char const *argv[])
     if (bitchain.byte == 115 && bitchain.bit == 0)
       pass ();
     else
-      fail ("bit_write_CMC (r2004) @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
+      fail ("bit_write_CMC (r2004) @%" PRIuSIZE ".%u", bitchain.byte,
+            bitchain.bit);
 
     bit_set_position (&bitchain, pos);
     bit_read_CMC (&bitchain, &bitchain, &color);

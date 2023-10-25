@@ -297,13 +297,12 @@ dwg_version_hdr_type2 (const char *hdr, unsigned dwg_version)
 }
 
 // keep in sync with common.h DWG_BITS
-const char *dwg_bits_name[] = {
-  "UNKNOWN", "RC",  "RS",  "RL",  "B",       "BB",  "3B",     "4BITS",
-  "BS",      "BL",  "BLd", "RLL", "RD",      "BD",  "MC",     "UMC",
-  "MS",      "TV",  "TU",  "T",   "TF",      "T32", "HANDLE", "BE",
-  "DD",      "BT",  "BOT", "BLL", "TIMEBLL", "CMC", "ENC",    "2RD",
-  "3RD",     "2BD", "3BD", "2DD", "3DD",     "CRC", "CRC64",  "RLLd"
-};
+const char *dwg_bits_name[]
+    = { "UNKNOWN", "RC",  "RS",  "RL",  "B",       "BB",  "3B",     "4BITS",
+        "BS",      "BL",  "BLd", "RLL", "RD",      "BD",  "MC",     "UMC",
+        "MS",      "TV",  "TU",  "T",   "TF",      "T32", "HANDLE", "BE",
+        "DD",      "BT",  "BOT", "BLL", "TIMEBLL", "CMC", "ENC",    "2RD",
+        "3RD",     "2BD", "3BD", "2DD", "3DD",     "CRC", "CRC64",  "RLLd" };
 
 // minimal size of type in bits
 // keep in sync with above

@@ -144,7 +144,7 @@ load_dwg (char *filename, unsigned int opts)
   dwg_point_3d pt;
 
 #ifdef USE_WRITE
-  char *new_filename = (char*)malloc (strlen (filename) + 4);
+  char *new_filename = (char *)malloc (strlen (filename) + 4);
   char *fn = strdup (filename);
   char *base = basename (fn);
   char *p;
@@ -176,7 +176,8 @@ load_dwg (char *filename, unsigned int opts)
             {
               found++;
               change_fingerprint (&dwg, _obj);
-              fprintf (stderr, "fingerprint updated at (%f, %f)\n", pt.x, pt.y);
+              fprintf (stderr, "fingerprint updated at (%f, %f)\n", pt.x,
+                       pt.y);
             }
         }
     }

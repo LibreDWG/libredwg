@@ -302,7 +302,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
           /* -Wpointer-to-int-cast */                                         \
           const int32_t _si = (int32_t)(intptr_t)(value);                     \
           GROUP (dxf);                                                        \
-          GCC46_DIAG_IGNORE (-Wformat-nonliteral)                           \
+          GCC46_DIAG_IGNORE (-Wformat-nonliteral)                             \
           snprintf (buf, 255, _fmt, value);                                   \
           GCC46_DIAG_RESTORE                                                  \
           /* not a string, empty num. must be zero */                         \
@@ -1182,11 +1182,14 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
       // 3: 949 Wansung
       // 4: 1361 JOHAB
       // 5: 936 Simplified Chinese
-      // See https://docs.intellicad.org/files/oda/2021_11/oda_drawings_docs/frames.html?frmname=topic&frmfile=FontHandling.html
-      else if (c == '\\' && dest + 7 < dend && memBEGINc (s, "M+") && s[3] >= '1' && s[3] <= '5')
+      // See
+      // https://docs.intellicad.org/files/oda/2021_11/oda_drawings_docs/frames.html?frmname=topic&frmfile=FontHandling.html
+      else if (c == '\\' && dest + 7 < dend && memBEGINc (s, "M+")
+               && s[3] >= '1' && s[3] <= '5')
         {
-          const Dwg_Codepage mif_tbl[] = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
-                                           CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
+          const Dwg_Codepage mif_tbl[]
+              = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
+                  CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
           int i;
           uint16_t x;
           uint32_t uc;
@@ -1433,7 +1436,7 @@ dxf_has_STYLE_eed (Bit_Chain *restrict dat,
                    const Dwg_Object_Object *restrict obj)
 {
   bool result = false;
-  //bool has_acadappid = false;
+  // bool has_acadappid = false;
   Dwg_Data *dwg = obj->dwg;
   for (BITCODE_BL i = 0; i < obj->num_eed; i++)
     {
@@ -1446,7 +1449,7 @@ dxf_has_STYLE_eed (Bit_Chain *restrict dat,
           if (appid && appid->fixedtype == DWG_TYPE_APPID
               && bit_eq_T (dat, appid->tio.object->tio.APPID->name, "ACAD"))
             {
-              //has_acadappid = true;
+              // has_acadappid = true;
               if (_obj->data && _obj->data->code == 0)
                 return true;
             }
@@ -1738,7 +1741,7 @@ static int
 new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj, Bit_Chain *dest,
                         unsigned int i)
 {
-#if 0
+#  if 0
   if (i + 1 >= _obj->num_blocks)
   {
     _obj->encr_sat_data
@@ -1755,7 +1758,7 @@ new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj, Bit_Chain *dest,
   _obj->block_size[i] = dest->byte - 1; // dont count the final 0
   bit_set_position (dest, 0);
   i++;
-#endif
+#  endif
   // ensure proper eol, dxf out relies on that
   bit_write_TF (dest, (BITCODE_TF) "\n", 1);
   return i;
@@ -2551,7 +2554,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     // if (!is_entity)
     //  fprintf(dat->fh, "  0\r\n%s\r\n", dxfname);
 
-  // clang-format off
+    // clang-format off
   #include "classes.inc"
   // clang-format on
 
@@ -2686,13 +2689,13 @@ decl_dxf_process_VERTEX (PFACE)
       return error;                                                           \
     }
 
-// clang-format off
+    // clang-format off
 decl_dxf_process_INSERT (INSERT)
 decl_dxf_process_INSERT (MINSERT)
-// clang-format on
+    // clang-format on
 
-static int dwg_dxf_object (Bit_Chain *restrict dat,
-                           const Dwg_Object *restrict obj, int *restrict i)
+    static int dwg_dxf_object (Bit_Chain *restrict dat,
+                               const Dwg_Object *restrict obj, int *restrict i)
 {
   int error = 0;
   int minimal;
@@ -3065,7 +3068,7 @@ dxf_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.codepage);
     }
 
-  // clang-format off
+    // clang-format off
   #include "header_variables_dxf.spec"
   // clang-format on
 

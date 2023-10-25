@@ -1466,7 +1466,7 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
     }
 
-  // clang-format off
+    // clang-format off
   #include "classes.inc"
   // clang-format on
 
@@ -1884,7 +1884,7 @@ dxfb_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.codepage);
     }
 
-  // clang-format off
+    // clang-format off
   #include "header_variables_dxf.spec"
   // clang-format on
 

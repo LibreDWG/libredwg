@@ -116,7 +116,7 @@ __asan_default_options (void)
 #ifdef __AFL_COMPILER
 __AFL_FUZZ_INIT ();
 // fastest mode via shared mem
-#define AFL_SHARED_MEM
+#  define AFL_SHARED_MEM
 
 int
 main (int argc, char *argv[])
@@ -134,7 +134,7 @@ main (int argc, char *argv[])
 #  endif
 
   while (__AFL_LOOP (10000))
-    {   // llvm_mode persistent, non-forking mode
+    { // llvm_mode persistent, non-forking mode
 #  ifdef AFL_SHARED_MEM
       dat.size = __AFL_FUZZ_TESTCASE_LEN;
       printf ("Fuzzing in_dxf + encode from shmem (%lu)\n", dat.size);

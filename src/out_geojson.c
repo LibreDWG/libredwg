@@ -54,7 +54,7 @@ static unsigned int cur_ver = 0;
 #ifndef GEOJSON_PRECISION
 #  define GEOJSON_PRECISION 6
 #endif
-#define FORMAT_RD "%0." _XSTR(GEOJSON_PRECISION) "f"
+#define FORMAT_RD "%0." _XSTR (GEOJSON_PRECISION) "f"
 //#define FORMAT_RD "%f"
 #undef FORMAT_BD
 #define FORMAT_BD FORMAT_RD
@@ -720,7 +720,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         pts = dwg_object_polyline_2d_get_points (obj, &error);
         if (error || !pts)
           return 0;
-        // TODO bulges needs explosion into lines. divided by polyline curve smoothness (default 8)
+        // TODO bulges needs explosion into lines. divided by polyline curve
+        // smoothness (default 8)
 
         // if closed and num_points > 3 use a Polygon
         FEATURE (AcDbEntity : AcDbPolyline, obj);
@@ -806,7 +807,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           // viewres is for 2PI. we need anglediff(deg)/2PI
           while (end_angle - _obj->start_angle < 1e-6)
             end_angle += M_PI;
-          num_pts = (int)trunc(viewres / rad2deg(end_angle - _obj->start_angle));
+          num_pts
+              = (int)trunc (viewres / rad2deg (end_angle - _obj->start_angle));
           num_pts = MIN (num_pts, 120);
           pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
           // explode into line segments. divided by VIEWRES (default 1000)
@@ -836,11 +838,12 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       if (1)
         {
           Dwg_Entity_CIRCLE *_obj = obj->tio.entity->tio.CIRCLE;
-          //const int viewres = 1000; //dwg->header_vars.VIEWRES;
+          // const int viewres = 1000; //dwg->header_vars.VIEWRES;
           BITCODE_2BD ctr = { _obj->center.x, _obj->center.y };
-          //double res = viewres / 360.0;
+          // double res = viewres / 360.0;
           int num_pts = 120;
-          BITCODE_2BD *pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+          BITCODE_2BD *pts
+              = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
           arc_split (pts, num_pts, ctr, 0, M_PI * 2.0, _obj->radius);
           FEATURE (AcDbEntity : AcDbCircle, obj);
           GEOMETRY (Polygon)

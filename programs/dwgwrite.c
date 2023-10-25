@@ -72,8 +72,9 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,"
-          "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
+  printf (
+      "             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,"
+      "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r2004-r2021\n");
 #  ifndef DISABLE_JSON
@@ -91,8 +92,10 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,"
-          "                r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
+  printf (
+      "                r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, "
+      "r2.4,"
+      "                r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
   printf ("                r2004-r2021\n");
 #  ifndef DISABLE_JSON
@@ -116,7 +119,7 @@ help (void)
 #ifdef __AFL_COMPILER
 __AFL_FUZZ_INIT ();
 // fastest mode via shared mem (crashes still)
-#define AFL_SHARED_MEM
+#  define AFL_SHARED_MEM
 
 int
 main (int argc, char *argv[])
@@ -135,7 +138,7 @@ main (int argc, char *argv[])
   dat.chain = __AFL_FUZZ_TESTCASE_BUF;
 #  endif
   while (__AFL_LOOP (10000))
-    {   // llvm_mode persistent, non-forking mode
+    { // llvm_mode persistent, non-forking mode
 #  ifdef AFL_SHARED_MEM
       dat.size = __AFL_FUZZ_TESTCASE_LEN;
 #  elif 1 // still 1000x faster than the old file-forking fuzzer.

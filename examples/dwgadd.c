@@ -115,7 +115,8 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r1.1, r1.2, r1.4, r2.6, r2.10, r9, r10, r11, r12, r14, r2000 (default)\n");
+  printf ("             r1.1, r1.2, r1.4, r2.6, r2.10, r9, r10, r11, r12, "
+          "r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile, --file outfile (default: stdout)\n");
@@ -123,7 +124,8 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r1.1, r1.2, r1.4, r2.6, r2.10, r9, r10, r11, r12, r14, r2000 (default)\n");
+  printf ("                r1.1, r1.2, r1.4, r2.6, r2.10, r9, r10, r11, r12, "
+          "r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
   printf ("                r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile (default: stdout)\n");
@@ -426,7 +428,7 @@ scan_pts2d (unsigned num_pts, char **pp)
   if (!p)
     return NULL;
   p++;
-  while (isspace(*p))
+  while (isspace (*p))
     p++;
   if (num_pts > 5000)
     exit (0);
@@ -435,7 +437,7 @@ scan_pts2d (unsigned num_pts, char **pp)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
     {
-      while (isspace(*p))
+      while (isspace (*p))
         p++;
       if (2 == SSCANF_S (p, "(%lf %lf)", &pts[i].x, &pts[i].y))
         {
@@ -456,7 +458,7 @@ scan_pts2d (unsigned num_pts, char **pp)
     {
       if (*p == ')')
         p++;
-      while (isspace(*p) && *p != '\n')
+      while (isspace (*p) && *p != '\n')
         p++;
       *pp = p;
       return pts;
@@ -478,7 +480,7 @@ scan_pts3d (unsigned num_pts, char **pp)
   if (!p)
     return NULL;
   p++;
-  while (isspace(*p))
+  while (isspace (*p))
     p++;
   if (num_pts > 5000)
     exit (0);
@@ -487,7 +489,7 @@ scan_pts3d (unsigned num_pts, char **pp)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
     {
-      while (isspace(*p))
+      while (isspace (*p))
         p++;
       if (3 == SSCANF_S (p, "(%lf %lf %lf)", &pts[i].x, &pts[i].y, &pts[i].z))
         {
@@ -508,7 +510,7 @@ scan_pts3d (unsigned num_pts, char **pp)
     {
       if (*p == ')')
         p++;
-      while (isspace(*p) && *p != '\n')
+      while (isspace (*p) && *p != '\n')
         p++;
       *pp = p;
       return pts;
@@ -530,7 +532,7 @@ scan_faces (unsigned num, char **pp)
   if (!p)
     return NULL;
   p++;
-  while (isspace(*p))
+  while (isspace (*p))
     p++;
   if (num > 5000)
     exit (0);
@@ -539,18 +541,20 @@ scan_faces (unsigned num, char **pp)
     exit (0);
   for (unsigned i = 0; i < num; i++)
     {
-      while (isspace(*p))
+      while (isspace (*p))
         p++;
-      if (4 == SSCANF_S (p, "(%hd %hd %hd %hd)", &faces[i][0], &faces[i][1],
-                         &faces[i][2], &faces[i][3]))
+      if (4
+          == SSCANF_S (p, "(%hd %hd %hd %hd)", &faces[i][0], &faces[i][1],
+                       &faces[i][2], &faces[i][3]))
         {
           p = strchr (p, ')');
           if (!p)
             break;
           p++;
         }
-      else if (3 == SSCANF_S (p, "(%hd %hd %hd)", &faces[i][0], &faces[i][1],
-                         &faces[i][2]))
+      else if (3
+               == SSCANF_S (p, "(%hd %hd %hd)", &faces[i][0], &faces[i][1],
+                            &faces[i][2]))
         {
           p = strchr (p, ')');
           if (!p)
@@ -570,7 +574,7 @@ scan_faces (unsigned num, char **pp)
     {
       if (*p == ')')
         p++;
-      while (isspace(*p) && *p != '\n')
+      while (isspace (*p) && *p != '\n')
         p++;
       *pp = p;
       return faces;
@@ -601,7 +605,7 @@ fn_error (const char *msg)
 
 #define CHK_MISSING_BLOCK_HEADER                                              \
   if (!hdr)                                                                   \
-    fn_error ("Missing block header\n");                                      \
+    fn_error ("Missing block header\n");
 
 static int
 dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
@@ -1024,17 +1028,18 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           else
             fn_error ("Empty mspace object\n");
         }
-      else if (8 == SSCANF_S (p,
-                         "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_TAG
-                         " " FMT_ANY,
-                         &height, &flags, prompt SZ, &pt1.x, &pt1.y,
-                         &pt1.z, tag SZ, default_text SZ))
+      else if (8
+               == SSCANF_S (p,
+                            "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_TAG
+                            " " FMT_ANY,
+                            &height, &flags, prompt SZ, &pt1.x, &pt1.y, &pt1.z,
+                            tag SZ, default_text SZ))
         {
           if (version < R_2_0b)
             fn_error ("Invalid entity ATTDEF <r2.0b\n");
           LOG_TRACE ("add_ATTDEF %s %f %d \"%s\" (%f %f %f) %s \"%s\"\n",
-                     hdr_s, height, flags, prompt, pt1.x, pt1.y, pt1.z,
-                     tag, default_text);
+                     hdr_s, height, flags, prompt, pt1.x, pt1.y, pt1.z, tag,
+                     default_text);
           CHK_MISSING_BLOCK_HEADER
           GCC80_DIAG_IGNORE (-Wmaybe-uninitialized)
           ent = (lastent_t){ .u.attdef
@@ -1046,81 +1051,83 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
         // clang-format off
         SET_ENT (attdef, ATTDEF)
-        // clang-format on
-      else if (7 == SSCANF_S (p,
-                         "attrib %lf %d (%lf %lf %lf) " FMT_TAG
-                         " " FMT_ANY,
-                         &height, &flags, &pt1.x, &pt1.y,
-                         &pt1.z, tag SZ, text SZ))
-        {
-          if (version < R_2_0b)
-            fn_error ("Invalid entity ATTRIB <r2.0b\n");
-          if (insert.type == DWG_TYPE_UNUSED)
-            {
-              log_p (DWG_LOGLEVEL_ERROR, p);
-              fn_error ("Missing INSERT for ATTRIB\n");
-            }
-          LOG_TRACE ("add_ATTRIB insert %f %d (%f %f %f) %s \"%s\"\n",
-                     height, flags, pt1.x, pt1.y, pt1.z, tag, text);
-          ent = (lastent_t){ .u.attrib
-                             = dwg_add_ATTRIB (insert.u.insert, height,
-                                               flags, &pt1, tag, text),
-                             .type = DWG_TYPE_ATTRIB };
-        }
+      // clang-format on
+      else if (7
+               == SSCANF_S (
+                   p, "attrib %lf %d (%lf %lf %lf) " FMT_TAG " " FMT_ANY,
+                   &height, &flags, &pt1.x, &pt1.y, &pt1.z, tag SZ, text SZ))
+      {
+        if (version < R_2_0b)
+          fn_error ("Invalid entity ATTRIB <r2.0b\n");
+        if (insert.type == DWG_TYPE_UNUSED)
+          {
+            log_p (DWG_LOGLEVEL_ERROR, p);
+            fn_error ("Missing INSERT for ATTRIB\n");
+          }
+        LOG_TRACE ("add_ATTRIB insert %f %d (%f %f %f) %s \"%s\"\n", height,
+                   flags, pt1.x, pt1.y, pt1.z, tag, text);
+        ent = (lastent_t){ .u.attrib = dwg_add_ATTRIB (insert.u.insert, height,
+                                                       flags, &pt1, tag, text),
+                           .type = DWG_TYPE_ATTRIB };
+      }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (attrib, ATTRIB)
-        // clang-format on
-      else if (6 == SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
-                         &pt1.z, &pt2.x, &pt2.y, &pt2.z))
-        {
-          LOG_TRACE ("add_LINE %s (%f %f %f) (%f %f %f)\n",
-                     hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
-          CHK_MISSING_BLOCK_HEADER
-          ent = (lastent_t){ .u.line = dwg_add_LINE (hdr, &pt1, &pt2),
-                         .type = DWG_TYPE_LINE };
-        }
+      // clang-format on
+      else if (6
+               == SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x,
+                            &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
+      {
+        LOG_TRACE ("add_LINE %s (%f %f %f) (%f %f %f)\n", hdr_s, pt1.x, pt1.y,
+                   pt1.z, pt2.x, pt2.y, pt2.z);
+        CHK_MISSING_BLOCK_HEADER
+        ent = (lastent_t){ .u.line = dwg_add_LINE (hdr, &pt1, &pt2),
+                           .type = DWG_TYPE_LINE };
+      }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (line, LINE)
-        // clang-format on
-      else if (6 == SSCANF_S (p, "ray (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
-                         &pt1.z, &pt2.x, &pt2.y, &pt2.z))
+      // clang-format on
+      else if (6
+               == SSCANF_S (p, "ray (%lf %lf %lf) (%lf %lf %lf)", &pt1.x,
+                            &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
       {
         if (version <= R_11)
           fn_error ("Invalid entity RAY <r13\n");
-        LOG_TRACE ("add_RAY %s (%f %f %f) (%f %f %f)\n",
-                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        LOG_TRACE ("add_RAY %s (%f %f %f) (%f %f %f)\n", hdr_s, pt1.x, pt1.y,
+                   pt1.z, pt2.x, pt2.y, pt2.z);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
                            .type = DWG_TYPE_RAY };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (ray, RAY)
-        // clang-format on
-      else if (6 == SSCANF_S (p, "xline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x,
-                         &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
+      // clang-format on
+      else if (6
+               == SSCANF_S (p, "xline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x,
+                            &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
       {
         if (version <= R_11)
           fn_error ("Invalid entity XLINE\n");
-        LOG_TRACE ("add_XLINE %s (%f %f %f) (%f %f %f)\n",
-                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        LOG_TRACE ("add_XLINE %s (%f %f %f) (%f %f %f)\n", hdr_s, pt1.x, pt1.y,
+                   pt1.z, pt2.x, pt2.y, pt2.z);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.xline = dwg_add_XLINE (hdr, &pt1, &pt2),
                            .type = DWG_TYPE_XLINE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (xline, XLINE)
-        // clang-format on
+      // clang-format on
       else if ((i = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf\n", text,
-                              &pt1.x, &pt1.y, &pt1.z, &height)) >= 5)
+                              &pt1.x, &pt1.y, &pt1.z, &height))
+               >= 5)
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
-        LOG_TRACE ("add_TEXT %s %s (%f %f %f) %f\n", hdr_s, text, pt1.x,
-                   pt1.y, pt1.z, height);
+        LOG_TRACE ("add_TEXT %s %s (%f %f %f) %f\n", hdr_s, text, pt1.x, pt1.y,
+                   pt1.z, height);
         CHK_MISSING_BLOCK_HEADER
         GCC80_DIAG_IGNORE (-Wmaybe-uninitialized)
         ent = (lastent_t){ .u.text = dwg_add_TEXT (hdr, text, &pt1, height),
@@ -1128,27 +1135,28 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         GCC80_DIAG_RESTORE
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (text, TEXT)
-        // clang-format on
-      else if (5 == SSCANF_S (p, "mtext (%lf %lf %lf) %lf " FMT_ANY, &pt1.x, &pt1.y,
-                         &pt1.z, &height, text SZ))
+      // clang-format on
+      else if (5
+               == SSCANF_S (p, "mtext (%lf %lf %lf) %lf " FMT_ANY, &pt1.x,
+                            &pt1.y, &pt1.z, &height, text SZ))
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
         if (version <= R_11)
           fn_error ("Invalid entity MTEXT\n");
-        LOG_TRACE ("add_MTEXT %s (%f %f %f) %f \"%s\"\n",
-                   hdr_s, pt1.x, pt1.y, pt1.z, height, text);
+        LOG_TRACE ("add_MTEXT %s (%f %f %f) %f \"%s\"\n", hdr_s, pt1.x, pt1.y,
+                   pt1.z, height, text);
         CHK_MISSING_BLOCK_HEADER
-        mtext = ent = (lastent_t){ .u.mtext = dwg_add_MTEXT (hdr, &pt1,
-                                                             height, text),
-                                   .type = DWG_TYPE_MTEXT };
+        mtext = ent
+            = (lastent_t){ .u.mtext = dwg_add_MTEXT (hdr, &pt1, height, text),
+                           .type = DWG_TYPE_MTEXT };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (mtext, MTEXT)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "block " FMT_TBL, text SZ))
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
@@ -1158,21 +1166,23 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_BLOCK };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (block, BLOCK)
-        // clang-format on
+      // clang-format on
       else if (memBEGINc (p, "endblk\n"))
-        {
-          LOG_TRACE ("add_ENDBLK\n");
-          dwg_add_ENDBLK (hdr);
-        }
+      {
+        LOG_TRACE ("add_ENDBLK\n");
+        dwg_add_ENDBLK (hdr);
+      }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (endblk, ENDBLK)
-        // clang-format on
-      else if (8 == SSCANF_S (p, "insert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf",
-                         &pt1.x, &pt1.y, &pt1.z, text SZ, &scale.x,
-                         &scale.y, &scale.z, &rot))
+      // clang-format on
+      else if (8
+               == SSCANF_S (p,
+                            "insert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf",
+                            &pt1.x, &pt1.y, &pt1.z, text SZ, &scale.x,
+                            &scale.y, &scale.z, &rot))
       {
         LOG_TRACE ("add_INSERT %s (%f %f %f) \"%s\" %f %f %f %f\n", hdr_s,
                    pt1.x, pt1.y, pt1.z, text, scale.x, scale.y, scale.z,
@@ -1184,15 +1194,16 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                                     .type = DWG_TYPE_INSERT };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (insert, INSERT)
-        // clang-format on
-      else if (12 == SSCANF_S (p,
-                         "minsert (%lf %lf %lf) " FMT_TBL
-                         " %lf %lf %lf %lf %d %d "
-                         "%lf %lf",
-                         &pt1.x, &pt1.y, &pt1.z, text SZ, &scale.x,
-                         &scale.y, &scale.z, &rot, &i1, &i2, &f1, &f2))
+      // clang-format on
+      else if (12
+               == SSCANF_S (p,
+                            "minsert (%lf %lf %lf) " FMT_TBL
+                            " %lf %lf %lf %lf %d %d "
+                            "%lf %lf",
+                            &pt1.x, &pt1.y, &pt1.z, text SZ, &scale.x,
+                            &scale.y, &scale.z, &rot, &i1, &i2, &f1, &f2))
       {
         if (version <= R_11)
           fn_error ("Invalid entity MINSERT\n");
@@ -1208,10 +1219,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_MINSERT };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (minsert, MINSERT)
-        // clang-format on
-      else if (3 == SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
+      // clang-format on
+      else if (3
+               == SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
       {
         LOG_TRACE ("add_POINT %s (%f %f %f)\n", hdr_s, pt1.x, pt1.y, pt1.z);
         CHK_MISSING_BLOCK_HEADER
@@ -1219,73 +1231,82 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_POINT };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (point, POINT)
-        // clang-format on
-      else if (4 == SSCANF_S (p, "circle (%lf %lf %lf) %lf", &pt1.x, &pt1.y,
-                              &pt1.z, &f1))
+      // clang-format on
+      else if (4
+               == SSCANF_S (p, "circle (%lf %lf %lf) %lf", &pt1.x, &pt1.y,
+                            &pt1.z, &f1))
       {
-        LOG_TRACE ("add_CIRCLE %s (%f %f %f) %f\n", hdr_s, pt1.x, pt1.y, pt1.z, f1);
+        LOG_TRACE ("add_CIRCLE %s (%f %f %f) %f\n", hdr_s, pt1.x, pt1.y, pt1.z,
+                   f1);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.circle = dwg_add_CIRCLE (hdr, &pt1, f1),
                            .type = DWG_TYPE_CIRCLE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (circle, CIRCLE)
-        // clang-format on
-      else if (6 == SSCANF_S (p, "arc (%lf %lf %lf) %lf %lf %lf", &pt1.x, &pt1.y,
-                              &pt1.z, &len, &f1, &f2))
+      // clang-format on
+      else if (6
+               == SSCANF_S (p, "arc (%lf %lf %lf) %lf %lf %lf", &pt1.x, &pt1.y,
+                            &pt1.z, &len, &f1, &f2))
       {
-        LOG_TRACE ("add_ARC %s (%f %f %f) %f %f %f\n", hdr_s, pt1.x, pt1.y, pt1.z,
-                   len, deg2rad (f1), deg2rad (f2));
+        LOG_TRACE ("add_ARC %s (%f %f %f) %f %f %f\n", hdr_s, pt1.x, pt1.y,
+                   pt1.z, len, deg2rad (f1), deg2rad (f2));
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.arc = dwg_add_ARC (hdr, &pt1, len, deg2rad (f1),
                                                  deg2rad (f2)),
                            .type = DWG_TYPE_ARC };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (arc, ARC)
-        // clang-format on
-      else if (9 == SSCANF_S (p,
-                         "dimension_aligned (%lf %lf %lf) (%lf %lf %lf) (%lf "
-                         "%lf %lf)",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
-                         &pt3.x, &pt3.y, &pt3.z))
+      // clang-format on
+      else if (9
+               == SSCANF_S (
+                   p,
+                   "dimension_aligned (%lf %lf %lf) (%lf %lf %lf) (%lf "
+                   "%lf %lf)",
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
+                   &pt3.y, &pt3.z))
       {
-        LOG_TRACE ("add_DIMENSION_ALIGNED %s (%f %f %f) (%f %f %f) (%f %f %f)\n",
-                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
-                   pt3.x, pt3.y, pt3.z);
+        LOG_TRACE (
+            "add_DIMENSION_ALIGNED %s (%f %f %f) (%f %f %f) (%f %f %f)\n",
+            hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x, pt3.y,
+            pt3.z);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimali
                            = dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &pt3),
                            .type = DWG_TYPE_DIMENSION_ALIGNED };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dimali, DIMENSION_ALIGNED)
-        // clang-format on
-      else if (10 == SSCANF_S (
+      // clang-format on
+      else if (10
+               == SSCANF_S (
                    p,
                    "dimension_linear (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                    "%lf) %lf",
                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                    &pt3.y, &pt3.z, &rot))
       {
-        LOG_TRACE ("add_DIMENSION_LINEAR %s (%f %f %f) (%f %f %f) (%f %f %f) %f\n",
-                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
-                   pt3.x, pt3.y, pt3.z, deg2rad (rot));
+        LOG_TRACE (
+            "add_DIMENSION_LINEAR %s (%f %f %f) (%f %f %f) (%f %f %f) %f\n",
+            hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x, pt3.y,
+            pt3.z, deg2rad (rot));
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimlin = dwg_add_DIMENSION_LINEAR (
                                hdr, &pt1, &pt2, &pt3, deg2rad (rot)),
                            .type = DWG_TYPE_DIMENSION_LINEAR };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dimlin, DIMENSION_LINEAR)
-        // clang-format on
-      else if (12 == SSCANF_S (
+      // clang-format on
+      else if (12
+               == SSCANF_S (
                    p,
                    "dimension_ang2ln (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                    "%lf) (%lf %lf %lf)",
@@ -1302,10 +1323,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_ANG2LN };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dimang2ln, DIMENSION_ANG2LN)
-        // clang-format on
-      else if (12 == SSCANF_S (
+      // clang-format on
+      else if (12
+               == SSCANF_S (
                    p,
                    "dimension_ang3pt (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                    "%lf) (%lf %lf %lf)",
@@ -1322,12 +1344,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_ANG3PT };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dimang3pt, DIMENSION_ANG3PT)
-        // clang-format on
-      else if (7 == SSCANF_S (p,
-                         "dimension_diameter (%lf %lf %lf) (%lf %lf %lf) %lf",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
+      // clang-format on
+      else if (7
+               == SSCANF_S (
+                   p, "dimension_diameter (%lf %lf %lf) (%lf %lf %lf) %lf",
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
       {
         LOG_TRACE ("add_DIMENSION_DIAMETER %s (%f %f %f) (%f %f %f) %f\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len);
@@ -1337,12 +1360,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_DIAMETER };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dimdia, DIMENSION_DIAMETER)
-        // clang-format on
-      else if (7 == SSCANF_S (p,
-                         "dimension_ordinate (%lf %lf %lf) (%lf %lf %lf) %d",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &i1))
+      // clang-format on
+      else if (7
+               == SSCANF_S (
+                   p, "dimension_ordinate (%lf %lf %lf) (%lf %lf %lf) %d",
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &i1))
       {
         LOG_TRACE ("add_DIMENSION_ORDINATE %s (%f %f %f) (%f %f %f) %s\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
@@ -1353,42 +1377,47 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_ORDINATE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dimord, DIMENSION_ORDINATE)
-        // clang-format on
-      else if (7 == SSCANF_S (p, "dimension_radius (%lf %lf %lf) (%lf %lf %lf) %lf",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
+      // clang-format on
+      else if (7
+               == SSCANF_S (
+                   p, "dimension_radius (%lf %lf %lf) (%lf %lf %lf) %lf",
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
       {
-        LOG_TRACE ("add_DIMENSION_RADIUS %s (%f %f %f) (%f %f %f) %f\n",
-                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len);
+        LOG_TRACE ("add_DIMENSION_RADIUS %s (%f %f %f) (%f %f %f) %f\n", hdr_s,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimrad
-                         = dwg_add_DIMENSION_RADIUS (hdr, &pt1, &pt2, len),
-                         .type = DWG_TYPE_DIMENSION_RADIUS };
+                           = dwg_add_DIMENSION_RADIUS (hdr, &pt1, &pt2, len),
+                           .type = DWG_TYPE_DIMENSION_RADIUS };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dimrad, DIMENSION_RADIUS)
-        // clang-format on
-      else if (12 == SSCANF_S (p,
-                         "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
-                         "%lf) (%lf %lf %lf)",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
-                         &pt3.x, &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
+      // clang-format on
+      else if (12
+               == SSCANF_S (p,
+                            "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+                            "%lf) (%lf %lf %lf)",
+                            &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                            &pt3.x, &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
       {
-        LOG_TRACE ("add_3DFACE %s (%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f)\n",
-                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
-                   pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
+        LOG_TRACE (
+            "add_3DFACE %s (%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f)\n",
+            hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x, pt3.y,
+            pt3.z, pt4.x, pt4.y, pt4.z);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dface
                            = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, &pt4),
                            .type = DWG_TYPE__3DFACE };
       }
-      else if (9 == SSCANF_S (p,
-                         "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
-                         "%lf)",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
-                         &pt3.x, &pt3.y, &pt3.z))
+      else if (9
+               == SSCANF_S (p,
+                            "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+                            "%lf)",
+                            &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                            &pt3.x, &pt3.y, &pt3.z))
       {
         LOG_TRACE ("add_3DFACE %s (%f %f %f) (%f %f %f) (%f %f %f) NULL\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
@@ -1399,42 +1428,46 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE__3DFACE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (_3dface, _3DFACE)
-        // clang-format on
-      else if (9 == SSCANF_S (p,
-                         "solid (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
-                         &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y,
-                         &p4.x, &p4.y))
+      // clang-format on
+      else if (9
+               == SSCANF_S (
+                   p, "solid (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
+                   &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y, &p4.x,
+                   &p4.y))
       {
-        LOG_TRACE ("add_SOLID %s (%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f)\n",
-                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
-                   pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
+        LOG_TRACE (
+            "add_SOLID %s (%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f)\n",
+            hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x, pt3.y,
+            pt3.z, pt4.x, pt4.y, pt4.z);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.solid = dwg_add_SOLID (hdr, &pt1, &p2, &p3, &p4),
                            .type = DWG_TYPE_SOLID };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (solid, SOLID)
-        // clang-format on
-      else if (9 == SSCANF_S (p,
-                         "trace (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
-                         &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y,
-                         &p4.x, &p4.y))
-        {
-          LOG_TRACE ("add_TRACE %s (%f %f %f) (%f %f) (%f %f) (%f %f)\n",
-                     hdr_s, pt1.x, pt1.y, pt1.z, p2.x, p2.y, p3.x, p3.y,
-                     p4.x, p4.y);
-          CHK_MISSING_BLOCK_HEADER
-          ent = (lastent_t){ .u.trace = dwg_add_TRACE (hdr, &pt1, &p2, &p3, &p4),
-                             .type = DWG_TYPE_TRACE };
-        }
+      // clang-format on
+      else if (9
+               == SSCANF_S (
+                   p, "trace (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
+                   &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y, &p4.x,
+                   &p4.y))
+      {
+        LOG_TRACE ("add_TRACE %s (%f %f %f) (%f %f) (%f %f) (%f %f)\n", hdr_s,
+                   pt1.x, pt1.y, pt1.z, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
+        CHK_MISSING_BLOCK_HEADER
+        ent = (lastent_t){ .u.trace = dwg_add_TRACE (hdr, &pt1, &p2, &p3, &p4),
+                           .type = DWG_TYPE_TRACE };
+      }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (trace, TRACE)
-        // clang-format on
-      else if (3 == SSCANF_S (p, "polyline_2d %d ((%lf %lf)", &i1, &pt1.x, &pt1.y))
+      // clang-format on
+      else if (3
+               == SSCANF_S (p, "polyline_2d %d ((%lf %lf)", &i1, &pt1.x,
+                            &pt1.y))
       {
         dwg_point_2d *pts = scan_pts2d (i1, &p);
         if (i1 && pts)
@@ -1454,11 +1487,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (polyline_2d, POLYLINE_2D)
-        // clang-format on
-      else if (4 == SSCANF_S (p, "polyline_3d %d ((%lf %lf %lf)", &i1, &pt1.x,
-                              &pt1.y, &pt1.z))
+      // clang-format on
+      else if (4
+               == SSCANF_S (p, "polyline_3d %d ((%lf %lf %lf)", &i1, &pt1.x,
+                            &pt1.y, &pt1.z))
       {
         dwg_point_3d *pts = scan_pts3d (i1, &p);
         if (i1 && pts)
@@ -1478,17 +1512,18 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (polyline_3d, POLYLINE_3D)
-        // clang-format on
-      else if (5 == SSCANF_S (p, "polyline_mesh %d %d ((%lf %lf %lf)", &i1, &i2,
-                              &pt1.x, &pt1.y, &pt1.z))
+      // clang-format on
+      else if (5
+               == SSCANF_S (p, "polyline_mesh %d %d ((%lf %lf %lf)", &i1, &i2,
+                            &pt1.x, &pt1.y, &pt1.z))
       {
         dwg_point_3d *pts = scan_pts3d (i1 * i2, &p);
         if (i1 && i2 && pts)
           {
-            LOG_TRACE ("add_POLYLINE_MESH %s %d %d ((%f %f %f)",
-                       hdr_s, i1, i2, pt1.x, pt1.y, pt1.z);
+            LOG_TRACE ("add_POLYLINE_MESH %s %d %d ((%f %f %f)", hdr_s, i1, i2,
+                       pt1.x, pt1.y, pt1.z);
             for (i = 1; i < i1; i++)
               {
                 LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
@@ -1502,19 +1537,22 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (polyline_mesh, POLYLINE_MESH)
-        // clang-format on
-      else if (5 == SSCANF_S (p, "polyline_pface %d %d ((%lf %lf %lf)", &i1, &i2,
-                              &pt1.x, &pt1.y, &pt1.z))
+      // clang-format on
+      else if (5
+               == SSCANF_S (p, "polyline_pface %d %d ((%lf %lf %lf)", &i1, &i2,
+                            &pt1.x, &pt1.y, &pt1.z))
       {
         int face[4];
         dwg_face *faces = NULL;
         dwg_point_3d *verts = scan_pts3d (i1, &p);
-        if (4 == SSCANF_S (p, "((%d %d %d %d)", &face[0], &face[1], &face[2],
-                           &face[3]))
+        if (4
+            == SSCANF_S (p, "((%d %d %d %d)", &face[0], &face[1], &face[2],
+                         &face[3]))
           faces = scan_faces (i2, &p);
-        else if (3 == SSCANF_S (p, "((%d %d %d)", &face[0], &face[1], &face[2]))
+        else if (3
+                 == SSCANF_S (p, "((%d %d %d)", &face[0], &face[1], &face[2]))
           faces = scan_faces (i2, &p);
         else if (i2) // else no faces
           {
@@ -1523,14 +1561,14 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
         if (i1 && i2 && verts && faces)
           {
-            LOG_TRACE ("add_POLYLINE_PFACE %s %d %d ((%f %f %f)",
-                       hdr_s, i1, i2, pt1.x, pt1.y, pt1.z);
-            for (i=1; i < i1; i++)
+            LOG_TRACE ("add_POLYLINE_PFACE %s %d %d ((%f %f %f)", hdr_s, i1,
+                       i2, pt1.x, pt1.y, pt1.z);
+            for (i = 1; i < i1; i++)
               {
                 LOG_TRACE (" (%f %f %f)", verts[i].x, verts[i].y, verts[i].z);
               }
             LOG_TRACE (") (");
-            for (i=0; i < i2; i++)
+            for (i = 0; i < i2; i++)
               {
                 if (faces[i][3])
                   {
@@ -1539,29 +1577,32 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                   }
                 else
                   {
-                    LOG_TRACE (" (%d %d %d)", faces[i][0], faces[i][1], faces[i][2]);
+                    LOG_TRACE (" (%d %d %d)", faces[i][0], faces[i][1],
+                               faces[i][2]);
                   }
               }
             LOG_TRACE (")\n");
             CHK_MISSING_BLOCK_HEADER
-            ent = (lastent_t){ .u.polyline_pface
-                               = dwg_add_POLYLINE_PFACE (hdr, i1, i2, verts, faces),
+            ent = (lastent_t){ .u.polyline_pface = dwg_add_POLYLINE_PFACE (
+                                   hdr, i1, i2, verts, faces),
                                .type = DWG_TYPE_POLYLINE_PFACE };
             free (verts);
             free (faces);
           }
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (polyline_pface, POLYLINE_PFACE)
-        // clang-format on
-      else if (3 == SSCANF_S (p, "lwpolyline %d ((%lf %lf)", &i1, &pt1.x, &pt1.y))
+      // clang-format on
+      else if (3
+               == SSCANF_S (p, "lwpolyline %d ((%lf %lf)", &i1, &pt1.x,
+                            &pt1.y))
       {
         dwg_point_2d *pts = scan_pts2d (i1, &p);
         if (i1 && pts)
           {
-            LOG_TRACE ("add_LWPOLYLINE %s %d ((%f %f)",
-                       hdr_s, i1, pt1.x, pt1.y);
+            LOG_TRACE ("add_LWPOLYLINE %s %d ((%f %f)", hdr_s, i1, pt1.x,
+                       pt1.y);
             for (i = 1; i < i1; i++)
               {
                 LOG_TRACE (" (%f %f)", pts[i].x, pts[i].y);
@@ -1575,17 +1616,18 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (lwpolyline, LWPOLYLINE)
-        // clang-format on
-      else if (4 == SSCANF_S (p, "mline %d ((%lf %lf %lf)", &i1, &pt1.x,
-                              &pt1.y, &pt1.z))
+      // clang-format on
+      else if (4
+               == SSCANF_S (p, "mline %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
+                            &pt1.z))
       {
         dwg_point_3d *pts = scan_pts3d (i1, &p);
         if (i1 && pts)
           {
-            LOG_TRACE ("add_MLINE %s %d ((%f %f %f)", hdr_s, i1, pt1.x,
-                       pt1.y, pt1.z);
+            LOG_TRACE ("add_MLINE %s %d ((%f %f %f)", hdr_s, i1, pt1.x, pt1.y,
+                       pt1.z);
             for (i = 1; i < i1; i++)
               {
                 LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
@@ -1598,11 +1640,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (mline, MLINE)
-        // clang-format on
-      else if (3 == SSCANF_S (p, "dictionary " FMT_TBL " " FMT_TBL " %u",
-                              text SZ, s1 SZ, &u))
+      // clang-format on
+      else if (3
+               == SSCANF_S (p, "dictionary " FMT_TBL " " FMT_TBL " %u",
+                            text SZ, s1 SZ, &u))
       {
         LOG_TRACE ("add_DICTIONARY \"%s\" \"%s\" %u\n", text, s1, u);
         dict = ent = (lastent_t){ .u.dictionary = dwg_add_DICTIONARY (
@@ -1610,24 +1653,25 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                                   .type = DWG_TYPE_DICTIONARY };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dictionary, DICTIONARY)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "xrecord dictionary " FMT_TBL, text SZ))
       {
         if (dict.type != DWG_TYPE_DICTIONARY)
           fn_error ("xrecord: missing dictionary\n");
         LOG_TRACE ("add_XRECORD dictionary \"%s\"\n", text);
         ent = (lastent_t){ .u.xrecord
-                             = dwg_add_XRECORD (dict.u.dictionary, text),
+                           = dwg_add_XRECORD (dict.u.dictionary, text),
                            .type = DWG_TYPE_XRECORD };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (xrecord, XRECORD)
-        // clang-format on
-      else if (6 == SSCANF_S (p, "shape " FMT_PATH " (%lf %lf %lf) %lf %lf",
-                              text SZ, &pt1.x, &pt1.y, &pt1.z, &scale.x, &rot))
+      // clang-format on
+      else if (6
+               == SSCANF_S (p, "shape " FMT_PATH " (%lf %lf %lf) %lf %lf",
+                            text SZ, &pt1.x, &pt1.y, &pt1.z, &scale.x, &rot))
       {
         LOG_TRACE ("add_SHAPE %s \"%s\" (%f %f %f) %f %f\n", hdr_s, text,
                    pt1.x, pt1.y, pt1.z, scale.x, deg2rad (rot));
@@ -1637,9 +1681,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_SHAPE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (shape, SHAPE)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "viewport " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_VIEWPORT %s \"%s\"\n", hdr_s, text);
@@ -1648,24 +1692,25 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_VIEWPORT };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (viewport, VIEWPORT)
-        // clang-format on
-      else if (5 == SSCANF_S (p, "ellipse (%lf %lf %lf) %lf %lf", &pt1.x, &pt1.y,
-                         &pt1.z, &f1, &f2))
+      // clang-format on
+      else if (5
+               == SSCANF_S (p, "ellipse (%lf %lf %lf) %lf %lf", &pt1.x, &pt1.y,
+                            &pt1.z, &f1, &f2))
       {
         if (version <= R_11)
           fn_error ("Invalid entity ELLIPSE <r13\n");
-        LOG_TRACE ("add_ELLIPSE %s (%f %f %f) %f %f\n", hdr_s, pt1.x,
-                   pt1.y, pt1.z, f1, f2);
+        LOG_TRACE ("add_ELLIPSE %s (%f %f %f) %f %f\n", hdr_s, pt1.x, pt1.y,
+                   pt1.z, f1, f2);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
                            .type = DWG_TYPE_ELLIPSE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (ellipse, ELLIPSE)
-        // clang-format on
+      // clang-format on
       else if (4
                == SSCANF_S (p, "spline %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
                             &pt1.z))
@@ -1695,9 +1740,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         free (fitpts);
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (spline, SPLINE)
-        // clang-format on
+      // clang-format on
       else if (ent.type == DWG_TYPE_MTEXT
                && SSCANF_S (p, "leader %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
                             &pt1.z))
@@ -1725,27 +1770,27 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         free (pts);
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (leader, LEADER)
-        // clang-format on
-      else if (7 == SSCANF_S (p,
-                         "tolerance " FMT_TBL " (%lf %lf %lf) (%lf %lf %lf)",
-                         text SZ, &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y,
-                         &pt2.z))
+      // clang-format on
+      else if (7
+               == SSCANF_S (
+                   p, "tolerance " FMT_TBL " (%lf %lf %lf) (%lf %lf %lf)",
+                   text SZ, &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
       {
         if (version <= R_11)
           fn_error ("Invalid entity TOLERANCE <r13\n");
-        LOG_TRACE ("add_TOLERANCE %s \"%s\" (%f %f %f) (%f %f %f)\n", hdr_s, text,
-                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        LOG_TRACE ("add_TOLERANCE %s \"%s\" (%f %f %f) (%f %f %f)\n", hdr_s,
+                   text, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.tolerance
                            = dwg_add_TOLERANCE (hdr, text, &pt1, &pt2),
                            .type = DWG_TYPE_TOLERANCE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (tolerance, TOLERANCE)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "mlinestyle " FMT_TBL, text SZ))
       {
         if (version <= R_11)
@@ -1755,9 +1800,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_MLINESTYLE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (mlinestyle, MLINESTYLE)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "layer " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_LAYER \"%s\"\n", text);
@@ -1765,9 +1810,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_LAYER };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (layer, LAYER)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "style " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_STYLE \"%s\"\n", text);
@@ -1775,9 +1820,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_STYLE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (style, STYLE)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "ltype " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_LTYPE \"%s\"\n", text);
@@ -1785,9 +1830,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_LTYPE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (ltype, LTYPE)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "view " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_VIEW \"%s\"\n", text);
@@ -1795,9 +1840,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_VIEW };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (view, VIEW)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "vport " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_VPORT \"%s\"\n", text);
@@ -1805,9 +1850,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_VPORT };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (vport, VPORT)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "dimstyle " FMT_TBL, text SZ))
       {
         if (version < R_11)
@@ -1817,9 +1862,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMSTYLE };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (dimstyle, DIMSTYLE)
-        // clang-format on
+      // clang-format on
       else if (1 == SSCANF_S (p, "group " FMT_TBL, text SZ))
       {
         if (version <= R_11)
@@ -1829,10 +1874,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_GROUP };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (group, GROUP)
-        // clang-format on
-      else if (10 == SSCANF_S (
+      // clang-format on
+      else if (10
+               == SSCANF_S (
                    p, "ucs (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) " FMT_TBL,
                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                    &pt3.y, &pt3.z, text SZ))
@@ -1846,11 +1892,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_UCS };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (ucs, UCS)
-        // clang-format on
-      else if (2 == SSCANF_S (p, "layout viewport " FMT_TBL " " FMT_ANY,
-                              text SZ, s1 SZ))
+      // clang-format on
+      else if (2
+               == SSCANF_S (p, "layout viewport " FMT_TBL " " FMT_ANY, text SZ,
+                            s1 SZ))
       {
         Dwg_Object *obj = dwg_ent_generic_to_object (ent.u.viewport, &error);
         if (version <= R_11)
@@ -1863,32 +1910,35 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           ent = (lastent_t){ .u.layout = dwg_add_LAYOUT (obj, text, s1),
                              .type = DWG_TYPE_LAYOUT };
       }
-      else if (8 == SSCANF_S (p, "torus (%lf %lf %lf) (%lf %lf %lf) %lf %lf",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &f1,
-                         &f2))
+      else if (8
+               == SSCANF_S (p, "torus (%lf %lf %lf) (%lf %lf %lf) %lf %lf",
+                            &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                            &f1, &f2))
       {
         if (version <= R_11)
           fn_error ("Invalid entity TORUS <r13\n");
-        LOG_TRACE ("add_TORUS %s (%f %f %f) (%f %f %f) %f %f\n", hdr_s,
-                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, f1, f2);
+        LOG_TRACE ("add_TORUS %s (%f %f %f) (%f %f %f) %f %f\n", hdr_s, pt1.x,
+                   pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, f1, f2);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid
                            = dwg_add_TORUS (hdr, &pt1, &pt2, f1, f2),
                            .type = DWG_TYPE__3DSOLID };
       }
-      else if (7 == SSCANF_S (p, "sphere (%lf %lf %lf) (%lf %lf %lf) %lf", &pt1.x,
-                         &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &f1))
+      else if (7
+               == SSCANF_S (p, "sphere (%lf %lf %lf) (%lf %lf %lf) %lf",
+                            &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                            &f1))
       {
         if (version <= R_11)
           fn_error ("Invalid entity SPHERE <r13\n");
-        LOG_TRACE ("add_SPHERE %s (%f %f %f) (%f %f %f) %f\n", hdr_s,
-                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, f1);
+        LOG_TRACE ("add_SPHERE %s (%f %f %f) (%f %f %f) %f\n", hdr_s, pt1.x,
+                   pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, f1);
         CHK_MISSING_BLOCK_HEADER
-        ent = (lastent_t){ .u._3dsolid
-                             = dwg_add_SPHERE (hdr, &pt1, &pt2, f1),
-                             .type = DWG_TYPE__3DSOLID };
+        ent = (lastent_t){ .u._3dsolid = dwg_add_SPHERE (hdr, &pt1, &pt2, f1),
+                           .type = DWG_TYPE__3DSOLID };
       }
-      else if (10 == SSCANF_S (
+      else if (10
+               == SSCANF_S (
                    p, "cylinder (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height,
                    &f1, &f2, &len))
@@ -1903,9 +1953,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                                hdr, &pt1, &pt2, height, f1, f2, len),
                            .type = DWG_TYPE__3DSOLID };
       }
-      else if (10 == SSCANF_S (p, "cone (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
-                         &height, &f1, &f2, &len))
+      else if (10
+               == SSCANF_S (p,
+                            "cone (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
+                            &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                            &height, &f1, &f2, &len))
       {
         if (version <= R_11)
           fn_error ("Invalid entity CONE <r13\n");
@@ -1913,123 +1965,126 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, f1, f2,
                    len);
         CHK_MISSING_BLOCK_HEADER
-        ent = (lastent_t){ .u._3dsolid = dwg_add_CONE (hdr, &pt1, &pt2,
-                                                       height, f1, f2, len),
-                             .type = DWG_TYPE__3DSOLID };
+        ent = (lastent_t){ .u._3dsolid = dwg_add_CONE (hdr, &pt1, &pt2, height,
+                                                       f1, f2, len),
+                           .type = DWG_TYPE__3DSOLID };
       }
-      else if (9 == SSCANF_S (p, "wedge (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len,
-                         &f1, &height))
+      else if (9
+               == SSCANF_S (p, "wedge (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
+                            &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                            &len, &f1, &height))
       {
         if (version <= R_11)
           fn_error ("Invalid entity WEDGE <r13\n");
-        LOG_TRACE ("add_WEDGE %s (%f %f %f) (%f %f %f) %f %f %f", hdr_s,
-                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len, f1,
-                   height);
+        LOG_TRACE ("add_WEDGE %s (%f %f %f) (%f %f %f) %f %f %f", hdr_s, pt1.x,
+                   pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len, f1, height);
         CHK_MISSING_BLOCK_HEADER
-        ent = (lastent_t){ .u._3dsolid = dwg_add_WEDGE (hdr, &pt1, &pt2, len,
-                                                        f1, height),
+        ent = (lastent_t){ .u._3dsolid
+                           = dwg_add_WEDGE (hdr, &pt1, &pt2, len, f1, height),
                            .type = DWG_TYPE__3DSOLID };
       }
-      else if (9 == SSCANF_S (p, "box (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len,
-                         &f1, &height))
+      else if (9
+               == SSCANF_S (p, "box (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
+                            &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                            &len, &f1, &height))
       {
         if (version <= R_11)
           fn_error ("Invalid entity BOX <r13\n");
-        LOG_TRACE ("add_BOX %s (%f %f %f) (%f %f %f) %f %f %f", hdr_s,
-                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len, f1,
-                   height);
+        LOG_TRACE ("add_BOX %s (%f %f %f) (%f %f %f) %f %f %f", hdr_s, pt1.x,
+                   pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len, f1, height);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid
-                             = dwg_add_BOX (hdr, &pt1, &pt2, len, f1, height),
+                           = dwg_add_BOX (hdr, &pt1, &pt2, len, f1, height),
                            .type = DWG_TYPE__3DSOLID };
       }
-      else if (10 == SSCANF_S (p,
-                         "pyramid (%lf %lf %lf) (%lf %lf %lf) %lf %d %lf %lf",
-                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
-                         &height, &i1, &f1, &f2))
+      else if (10
+               == SSCANF_S (
+                   p, "pyramid (%lf %lf %lf) (%lf %lf %lf) %lf %d %lf %lf",
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height,
+                   &i1, &f1, &f2))
       {
         if (version <= R_11)
           fn_error ("Invalid entity PYRAMID <r13\n");
         LOG_TRACE ("add_PYRAMID %s (%f %f %f) (%f %f %f) %f %d %f %f", hdr_s,
-                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, i1, f1, f2);
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, i1, f1,
+                   f2);
         CHK_MISSING_BLOCK_HEADER
-        ent = (lastent_t){ .u._3dsolid = dwg_add_PYRAMID (
-                                 hdr, &pt1, &pt2, height, i1, f1, f2),
-                             .type = DWG_TYPE__3DSOLID };
+        ent = (lastent_t){ .u._3dsolid = dwg_add_PYRAMID (hdr, &pt1, &pt2,
+                                                          height, i1, f1, f2),
+                           .type = DWG_TYPE__3DSOLID };
       }
       else
-        // clang-format off
+          // clang-format off
         SET_ENT (_3dsolid, _3DSOLID)
-        // clang-format on
+      // clang-format on
       else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %lf\n", s1 SZ, &f1))
-        {
-          if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %d\n", s1 SZ, &i1)
-              && i1 == f1)
-            {
-              const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (s1);
-              if (!f || f->is_string)
-                {
-                  log_p (DWG_LOGLEVEL_ERROR, p);
-                  LOG_ERROR ("Invalid HEADER.%s", s1);
-                  exit (1);
-                }
-              else if (dwg_dynapi_is_float (f))
-                {
-                  if (f->dxf >= 50 && f->dxf < 60) /* is_angle */
-                    f1 = deg2rad (i1);
-                  dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
-                  LOG_TRACE ("HEADER.%s = %lf\n", s1, f1);
-                }
-              // is integer
-              else if (sizeof (i1) == f->size)
-                dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
-              else
-                {
-                  switch (sizeof (i1))
+      {
+        if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %d\n", s1 SZ, &i1)
+            && i1 == f1)
+          {
+            const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (s1);
+            if (!f || f->is_string)
+              {
+                log_p (DWG_LOGLEVEL_ERROR, p);
+                LOG_ERROR ("Invalid HEADER.%s", s1);
+                exit (1);
+              }
+            else if (dwg_dynapi_is_float (f))
+              {
+                if (f->dxf >= 50 && f->dxf < 60) /* is_angle */
+                  f1 = deg2rad (i1);
+                dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
+                LOG_TRACE ("HEADER.%s = %lf\n", s1, f1);
+              }
+            // is integer
+            else if (sizeof (i1) == f->size)
+              dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
+            else
+              {
+                switch (sizeof (i1))
+                  {
+                  case 1:
                     {
-                    case 1:
-                      {
-                        BITCODE_RC rc = (unsigned)i1 & 0xFF;
-                        dwg_dynapi_header_set_value (dwg, s1, &rc, 0);
-                        break;
-                      }
-                    case 2:
-                      {
-                        BITCODE_RS rs = (unsigned)i1 & 0xFFFF;
-                        dwg_dynapi_header_set_value (dwg, s1, &rs, 0);
-                        break;
-                      }
-                    case 4:
-                      {
-                        BITCODE_RL rl = (BITCODE_RL)i1 & 0xFFFFFFFF;
-                        dwg_dynapi_header_set_value (dwg, s1, &rl, 0);
-                        break;
-                      }
-                    case 8:
-                      {
-                        BITCODE_RLL rll = (BITCODE_RLL)i1;
-                        dwg_dynapi_header_set_value (dwg, s1, &rll, 0);
-                        break;
-                      }
-                    default:
-                      {
-                        LOG_ERROR ("Invalid header.%s size %u", s1, f->size);
-                        exit (1);
-                      }
+                      BITCODE_RC rc = (unsigned)i1 & 0xFF;
+                      dwg_dynapi_header_set_value (dwg, s1, &rc, 0);
+                      break;
                     }
-                  LOG_TRACE ("HEADER.%s = %d\n", s1, i1);
-                }
-            }
-          else // float
-            {
-              dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
-              LOG_TRACE ("HEADER.%s = %lf\n", s1, f1);
-            }
-        }
-      else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY "\n", s1 SZ,
-                              text SZ))
+                  case 2:
+                    {
+                      BITCODE_RS rs = (unsigned)i1 & 0xFFFF;
+                      dwg_dynapi_header_set_value (dwg, s1, &rs, 0);
+                      break;
+                    }
+                  case 4:
+                    {
+                      BITCODE_RL rl = (BITCODE_RL)i1 & 0xFFFFFFFF;
+                      dwg_dynapi_header_set_value (dwg, s1, &rl, 0);
+                      break;
+                    }
+                  case 8:
+                    {
+                      BITCODE_RLL rll = (BITCODE_RLL)i1;
+                      dwg_dynapi_header_set_value (dwg, s1, &rll, 0);
+                      break;
+                    }
+                  default:
+                    {
+                      LOG_ERROR ("Invalid header.%s size %u", s1, f->size);
+                      exit (1);
+                    }
+                  }
+                LOG_TRACE ("HEADER.%s = %d\n", s1, i1);
+              }
+          }
+        else // float
+          {
+            dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
+            LOG_TRACE ("HEADER.%s = %lf\n", s1, f1);
+          }
+      }
+      else if (2
+               == SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY "\n", s1 SZ,
+                            text SZ))
       {
         char *str;
         if (strlen (text) && text[strlen (text) - 1] == '"')
@@ -2039,25 +2094,27 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         free (str);
         LOG_TRACE ("HEADER.%s = \"%s\"\n", s1, text);
       }
-      else if (4 == SSCANF_S (p, "HEADER." FMT_NAME " = (%lf %lf %lf)",
-                              s1 SZ, &pt1.x, &pt1.y, &pt1.z))
-        {
-          LOG_TRACE ("HEADER.%s = (%f %f %f)\n", s1, pt1.x, pt1.y, pt1.z);
-          dwg_dynapi_header_set_value (dwg, s1, &pt1, 0);
-        }
-      else if (3 == SSCANF_S (p, "HEADER." FMT_NAME " = (%lf %lf)",
-                         s1 SZ, &pt1.x, &pt1.y))
-        {
-          pt1.z = 0.0;
-          LOG_TRACE ("HEADER.%s = (%f %f)\n", s1, pt1.x, pt1.y);
-          dwg_dynapi_header_set_value (dwg, s1, &pt1, 0);
-        }
+      else if (4
+               == SSCANF_S (p, "HEADER." FMT_NAME " = (%lf %lf %lf)", s1 SZ,
+                            &pt1.x, &pt1.y, &pt1.z))
+      {
+        LOG_TRACE ("HEADER.%s = (%f %f %f)\n", s1, pt1.x, pt1.y, pt1.z);
+        dwg_dynapi_header_set_value (dwg, s1, &pt1, 0);
+      }
+      else if (3
+               == SSCANF_S (p, "HEADER." FMT_NAME " = (%lf %lf)", s1 SZ,
+                            &pt1.x, &pt1.y))
+      {
+        pt1.z = 0.0;
+        LOG_TRACE ("HEADER.%s = (%f %f)\n", s1, pt1.x, pt1.y);
+        dwg_dynapi_header_set_value (dwg, s1, &pt1, 0);
+      }
       else
-        {
-          char *n = strchr (p, '\n');
-          int size = n ? n - p : (int)strlen (p);
-          LOG_WARN ("Ignored %.*s", size, p)
-        }
+      {
+        char *n = strchr (p, '\n');
+        int size = n ? n - p : (int)strlen (p);
+        LOG_WARN ("Ignored %.*s", size, p)
+      }
 
       p = next_line (p, end);
     }

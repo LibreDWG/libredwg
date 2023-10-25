@@ -12,11 +12,11 @@
 #    endif
 
 GETOPT_EXTERN
-int opterr,                   /* if error message should be printed */
-    optind,                   /* index into parent argv vector */
-    optopt,                   /* character checked for validity */
-    optreset;                 /* reset getopt */
-GETOPT_EXTERN char *optarg;   /* argument associated with option */
+int opterr,                 /* if error message should be printed */
+    optind,                 /* index into parent argv vector */
+    optopt,                 /* character checked for validity */
+    optreset;               /* reset getopt */
+GETOPT_EXTERN char *optarg; /* argument associated with option */
 
 int getopt (int nargc, char *const nargv[], const char *ostr);
 #  endif

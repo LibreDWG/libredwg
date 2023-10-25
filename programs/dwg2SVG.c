@@ -40,7 +40,7 @@
 #    define __BSD_VISIBLE 1
 #  endif
 #endif
-#define _GNU_SOURCE  /* make musl expose strcasestr */
+#define _GNU_SOURCE /* make musl expose strcasestr */
 #include <string.h>
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
@@ -171,13 +171,13 @@ entity_color (Dwg_Object_Entity *ent)
     {
       const Dwg_RGB_Palette *palette = dwg_rgb_palette ();
       const Dwg_RGB_Palette *rgb = &palette[ent->color.index];
-      char *s = (char*)malloc (8);
+      char *s = (char *)malloc (8);
       sprintf (s, "#%02x%02x%02x", rgb->r, rgb->g, rgb->b);
       return s;
     }
   else if (ent->color.flag & 0x80 && !(ent->color.flag & 0x40))
     {
-      char *s = (char*)malloc (8);
+      char *s = (char *)malloc (8);
       sprintf (s, "#%06x", ent->color.rgb & 0x00ffffff);
       return s;
     }
@@ -664,7 +664,8 @@ output_INSERT (Dwg_Object *obj)
       transform_OCS (&ins_pt, insert->ins_pt, insert->extrusion);
       printf ("\t<!-- insert-%d -->\n", obj->index);
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
-              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-" FORMAT_RLLx "\" />"
+              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-" FORMAT_RLLx
+              "\" />"
               "<!-- block_header->handleref: " FORMAT_H " -->\n",
               obj->index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
               (180.0 / M_PI) * insert->rotation, insert->scale.x,

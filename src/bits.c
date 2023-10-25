@@ -489,7 +489,7 @@ bit_read_RLL (Bit_Chain *dat)
 #else
       !(dat->byte % 8)
 #endif
-      )
+  )
     {
       BITCODE_RLL v;
       CHK_OVERFLOW_PLUS (8, __FUNCTION__, 0)
@@ -519,7 +519,7 @@ bit_read_RLL_BE (Bit_Chain *dat)
 #else
       !(dat->byte % 8)
 #endif
-      )
+  )
     {
       BITCODE_RLL v;
       CHK_OVERFLOW_PLUS (8, __FUNCTION__, 0)
@@ -563,7 +563,8 @@ bit_write_RLL_BE (Bit_Chain *dat, BITCODE_RLL value)
 BITCODE_RD
 bit_read_RD (Bit_Chain *dat)
 {
-  union {
+  union
+  {
     uint64_t u;
     double d;
   } u;
@@ -574,7 +575,7 @@ bit_read_RD (Bit_Chain *dat)
 #else
       !(dat->byte % 8)
 #endif
-      )
+  )
     {
       u.u = le64toh (*(uint64_t *)&dat->chain[dat->byte]);
       dat->byte += 8;
@@ -592,7 +593,8 @@ bit_read_RD (Bit_Chain *dat)
 void
 bit_write_RD (Bit_Chain *dat, double value)
 {
-  union {
+  union
+  {
     uint64_t u;
     double d;
   } u;
@@ -1334,7 +1336,8 @@ bit_write_BT (Bit_Chain *dat, double value)
 int
 bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
-  union {
+  union
+  {
     unsigned char c[8];
     uint64_t v;
   } u;
@@ -1428,7 +1431,8 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     bit_write_RC (dat, val.p[i]);
 }
 
-void bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
+void
+bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
   if (handle->size == 1)
     bit_write_RC (dat, handle->value);
@@ -1447,7 +1451,6 @@ void bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     }
   return;
 }
-
 
 /** Only read old 16bit CRC-numbers, without checking, only in order
  *  to go to the next byte, while skipping non-aligned bits.
@@ -1505,7 +1508,8 @@ bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
                     ": %04X == %04X\n",
                     start_address, dat->byte - 2, size, calculated, read)
       else
-        LOG_TRACE (" check_CRC %" PRIuSIZE ": %04X == %04X\n", size, calculated, read)
+        LOG_TRACE (" check_CRC %" PRIuSIZE ": %04X == %04X\n", size,
+                   calculated, read)
       return 1;
     }
   else
@@ -1734,7 +1738,8 @@ bit_read_TV (Bit_Chain *restrict dat)
     {
       // check if the string is already zero-terminated or not.
       // only observed >=r2004 as writer app
-      if (length > 0 && dat->from_version > R_2000 && chain[length - 1] != '\0')
+      if (length > 0 && dat->from_version > R_2000
+          && chain[length - 1] != '\0')
         LOG_HANDLE ("TV-not-ZERO %u\n ", length)
       // and preR2000 the final \0 is not included in the length (ie == strlen)
       else if (length > 0 && dat->from_version <= R_2000
@@ -2511,8 +2516,8 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
           // convert from unicode to ascii via utf8
           char dest[1024];
           char *u8 = bit_convert_TU ((BITCODE_TU)chain);
-          bit_utf8_to_TV (dest, (unsigned char *)u8, 1024, strlen (u8),
-                          0, dat->codepage);
+          bit_utf8_to_TV (dest, (unsigned char *)u8, 1024, strlen (u8), 0,
+                          dat->codepage);
           length = strlen (dest);
           if (length)
             {
@@ -2940,7 +2945,7 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
                   && (wc1 = dwg_codepage_wc ((Dwg_Codepage)codepage, wc)))
                 {
                   if (wc1 > 0xFF)
-                      *dest++ = wc1 >> 4;
+                    *dest++ = wc1 >> 4;
                   *dest++ = wc1 & 0xff;
                 }
               // is representable as byte
@@ -3066,8 +3071,8 @@ bit_u_expand (char *src)
           char *u8 = bit_convert_TU (&wp[0]);
           size_t l = strlen (u8);
           // printf("wc: %hu\n", wc);
-          // printf("u8: %s, l: %" PRIuSIZE ", lp: %" PRIuSIZE "\n", u8, l, lp);
-          // printf("u8: { %hx, %hx }\n", (unsigned char)u8[0], (unsigned
+          // printf("u8: %s, l: %" PRIuSIZE ", lp: %" PRIuSIZE "\n", u8, l,
+          // lp); printf("u8: { %hx, %hx }\n", (unsigned char)u8[0], (unsigned
           // char)u8[1]);
           memcpy (s, u8, l + 1);
           if (lp > 7)
@@ -3220,13 +3225,13 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
       }
     while (nconv == (size_t)-1)
       {
-#ifdef WINICONV_CONST
-        nconv = iconv (cd, (WINICONV_CONST char **restrict)&src, (size_t *)&srclen,
-                       (char **)&dest, (size_t *)&destlen);
-#else
+#  ifdef WINICONV_CONST
+        nconv = iconv (cd, (WINICONV_CONST char **restrict)&src,
+                       (size_t *)&srclen, (char **)&dest, (size_t *)&destlen);
+#  else
         nconv = iconv (cd, (char **restrict)&src, (size_t *)&srclen,
                        (char **)&dest, (size_t *)&destlen);
-#endif
+#  endif
         if (nconv == (size_t)-1)
           {
             if (errno != EINVAL) // probably dest buffer too small
@@ -3254,7 +3259,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                     loglevel |= 1;
                     LOG_ERROR ("Out of memory");
                     iconv_close (cd);
-                    //free (odest);
+                    // free (odest);
                     return NULL;
                   }
               }
@@ -3761,7 +3766,8 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
     }
   else
     {
-      unsigned char *tmp = (unsigned char *)realloc (dat->chain, dat->size + size);
+      unsigned char *tmp
+          = (unsigned char *)realloc (dat->chain, dat->size + size);
       if (tmp)
         dat->chain = tmp;
       else
@@ -3799,7 +3805,8 @@ bit_print (Bit_Chain *dat, size_t size)
   unsigned char sig;
   size_t i, j;
 
-  fprintf (stderr, "---------------------------------------------------------");
+  fprintf (stderr,
+           "---------------------------------------------------------");
   if (size > (dat->size - dat->byte))
     size = dat->size - dat->byte;
   for (i = 0; i < size; i++)
@@ -4104,7 +4111,7 @@ bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
 size_t
 in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
 {
-#  if 0
+#if 0
   char *pos = (char *)src;
   for (size_t i = 0; i < destlen; i++)
     {
@@ -4114,7 +4121,7 @@ in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
         return i;
     }
   return destlen;
-#  else
+#else
   char *pos = (char *)src;
   // 124x faster, but no error checks.
   // src must consist of valid uppercase hex chars only
@@ -4144,12 +4151,11 @@ in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
     {
       unsigned char v1;
       unsigned char v2;
-#ifndef NDEBUG
+#  ifndef NDEBUG
       unsigned char p0 = (pos[0] & 0x1F) ^ 0x10;
       unsigned char p1 = (pos[1] & 0x1F) ^ 0x10;
-      if (p0 > 22 || p1 > 22 // oob
-          || (p0 > 9 && p0 < 17)
-          || (p1 > 9 && p1 < 17)) // or hole
+      if (p0 > 22 || p1 > 22                             // oob
+          || (p0 > 9 && p0 < 17) || (p1 > 9 && p1 < 17)) // or hole
         {
           loglevel = 1;
           LOG_ERROR ("Invalid hex string member %c%c", pos[0], pos[1]);
@@ -4162,7 +4168,7 @@ in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
       pos += 2;
     }
   return destlen;
-#  endif
+#endif
 }
 
 bool

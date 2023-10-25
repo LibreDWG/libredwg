@@ -162,7 +162,7 @@ BITCODE_RC dxf_find_lweight (const int lw);
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       (void)dwg_encode_get_class (obj->parent, obj);                          \
     LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)               \
-    GCC14_DIAG_IGNORE (-Wanalyzer-allocation-size)                            \
+    GCC14_DIAG_IGNORE (-Wanalyzer-allocation-size)                          \
     _obj = calloc (1, sizeof (Dwg_Entity_##token));                           \
     GCC14_DIAG_RESTORE                                                        \
     obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                  \

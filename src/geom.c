@@ -142,9 +142,8 @@ angle_vector_2d (BITCODE_2BD *out, BITCODE_2BD ctr, BITCODE_BD angle,
 
 // Segmentation of arc,curves into plines for geojson.
 void
-arc_split (BITCODE_2BD *pts, const int num_pts,
-           const BITCODE_2BD ctr, BITCODE_BD start_angle,
-           BITCODE_BD end_angle, const BITCODE_BD len)
+arc_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD ctr,
+           BITCODE_BD start_angle, BITCODE_BD end_angle, const BITCODE_BD len)
 {
   double ang, angd;
 #ifndef HAVE_NONNULL
@@ -158,7 +157,8 @@ arc_split (BITCODE_2BD *pts, const int num_pts,
   angd = (end_angle - start_angle) / num_pts;
   while ((angd = (end_angle - start_angle) / (num_pts - 1)) < 0)
     start_angle += M_PI;
-  // fprintf (stderr, "ctr (%g,%g) ang: %g - %g\n", ctr.x, ctr.y, ang, end_angle);
+  // fprintf (stderr, "ctr (%g,%g) ang: %g - %g\n", ctr.x, ctr.y, ang,
+  // end_angle);
   for (int i = 0; i < num_pts; i++, ang += angd)
     {
       BITCODE_2BD pt;

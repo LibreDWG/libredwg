@@ -45,10 +45,10 @@
 
 // DoS limits
 // limit number of vector elements to BS range
-#define MAX_NUM     0xFFFE
+#define MAX_NUM 0xFFFE
 // strings also 16bits
 #define MAX_SIZE_TF 0xFFF0
-#define MAX_SIZE_T  0xFFFE
+#define MAX_SIZE_T 0xFFFE
 
 #if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
 EXPORT int strcasecmp (const char *a, const char *b);
@@ -181,10 +181,10 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #else /* little endian: just pass-thru. i.e. mingw */
 #  define NO_BYTESWAP_SUPPORT
 // Warning: evaluates x times!
-#  define bswap_constant_16(x) ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8))
+#  define bswap_constant_16(x) ((((x) >> 8) & 0xff) | (((x)&0xff) << 8))
 #  define bswap_constant_32(x)                                                \
-  ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) |                  \
-   (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
+    ((((x)&0xff000000) >> 24) | (((x)&0x00ff0000) >> 8)                       \
+     | (((x)&0x0000ff00) << 8) | (((x)&0x000000ff) << 24))
 #  define bswap_constant_64(x)                                                \
     ((((x)&0xff00000000000000ULL) >> 56)                                      \
      | (((x)&0x00ff000000000000ULL) >> 40)                                    \
@@ -225,14 +225,14 @@ EXPORT int strcasecmp (const char *a, const char *b);
 */
 #if defined(__GNUC__)
 #  define _GNUC_VERSION ((__GNUC__ * 100) + __GNUC_MINOR__)
-#  define CC_DIAG_PRAGMA(x) _Pragma (#x)
+#  define CC_DIAG_PRAGMA(x) _Pragma (#  x)
 #else
 #  define _GNUC_VERSION 0
 #  define CC_DIAG_PRAGMA(x)
 #endif
 
 #define _STR(s) #s
-#define _XSTR(s) _STR(s)
+#define _XSTR(s) _STR (s)
 // #pragma message("_GNUC_VERSION " _XSTR(_GNUC_VERSION))
 
 // clang-specifics (rarely needed, as they mimic GCC diagnostics closely, even
@@ -292,20 +292,20 @@ EXPORT int strcasecmp (const char *a, const char *b);
 
 /* For GCC30_DIAG_IGNORE (-Wformat-nonliteral) outside functions */
 #if _GNUC_VERSION >= 300 && !defined HAVE_CC_DIAG_STACK
-#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
 #else
 #  define GCC30_DIAG_IGNORE(w)
 #endif
 /* for GCC31_DIAG_IGNORE (-Wdeprecated-declarations) outside functions */
 #if _GNUC_VERSION >= 310 && !defined HAVE_CC_DIAG_STACK
-#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
 #else
 #  define GCC31_DIAG_IGNORE(w)
 #endif
 /* for GCC33_DIAG_IGNORE (-Wswitch-enum) outside functions
    -Wswitch-enum appeared first with gcc 3.3.6 */
 #if _GNUC_VERSION >= 330 && !defined HAVE_CC_DIAG_STACK
-#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
 #else
 #  define GCC33_DIAG_IGNORE(w)
 #endif
@@ -346,9 +346,9 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #endif
 
 #if HAVE_FUNC_ATTRIBUTE_ALIGNED
-#  define ATTRIBUTE_ALIGNED(num) __attribute__((aligned (num)))
-#elif defined (_MSC_VER)
-#  define ATTRIBUTE_ALIGNED(num) __declspec(align(num))
+#  define ATTRIBUTE_ALIGNED(num) __attribute__ ((aligned (num)))
+#elif defined(_MSC_VER)
+#  define ATTRIBUTE_ALIGNED(num) __declspec(align (num))
 #else
 #  define ATTRIBUTE_ALIGNED(num)
 #endif
@@ -367,7 +367,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 
 #ifdef HAVE_FUNC_ATTRIBUTE_NORETURN
 #  define ATTRIBUTE_NORETURN __attribute__ ((noreturn))
-#elif defined (_MSC_VER)
+#elif defined(_MSC_VER)
 #  define ATTRIBUTE_NORETURN __declspec(noreturn)
 #else
 #  define ATTRIBUTE_NORETURN
@@ -387,9 +387,9 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #ifndef EXPORT
 #  if defined(_WIN32) && defined(ENABLE_SHARED)
 #    ifdef DLL_EXPORT
-#      define EXPORT __declspec (dllexport)
+#      define EXPORT __declspec(dllexport)
 #    else
-#      define EXPORT __declspec (dllimport)
+#      define EXPORT __declspec(dllimport)
 #    endif
 #  elif defined HAVE_ATTRIBUTE_VISIBILITY_DEFAULT
 #    define EXPORT __attribute__ ((visibility ("default")))
@@ -655,7 +655,7 @@ void dwg_log_dataflags (const int _loglevel, const int maxlevel,
                         const BITCODE_RC flag);
 
 // in the public API, but we don't use that for most internal modules
-#if !defined _DWG_API_H_ && !defined _DWG_API_C && !defined DYNAPI_TEST_C \
+#if !defined _DWG_API_H_ && !defined _DWG_API_C && !defined DYNAPI_TEST_C     \
     && !defined ADD_TEST_C && !defined DXF_TEST_C
 bool dwg_is_valid_tag (const char *tag) __nonnull_all;
 #endif

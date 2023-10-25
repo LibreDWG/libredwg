@@ -384,8 +384,8 @@ dwg_codepage_is_twobyte (const Dwg_Codepage cp, const unsigned char c)
            || cp == CP_ANSI_950)
     return c & 0x80;
   else if (cp == CP_ANSI_1361)
-    return (c >= 0x80 && c <= 0x83) || (c >= 0xD4 && c <= 0xD7)
-           || (c == 0xDF) || (c >= 0xFA);
+    return (c >= 0x80 && c <= 0x83) || (c >= 0xD4 && c <= 0xD7) || (c == 0xDF)
+           || (c >= 0xFA);
   else if (cp == CP_GB2312 || cp == CP_BIG5)
     return true;
   else

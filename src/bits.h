@@ -118,9 +118,9 @@ void bit_write_RL_BE (Bit_Chain *dat, BITCODE_RL value);
 
 BITCODE_RLL bit_read_RLL (Bit_Chain *dat);
 BITCODE_RLL bit_read_RLL_BE (Bit_Chain *dat);
-#define bit_read_RLLd(dat) (BITCODE_RLLd)bit_read_RLL(dat)
+#define bit_read_RLLd(dat) (BITCODE_RLLd) bit_read_RLL (dat)
 void bit_write_RLL (Bit_Chain *dat, BITCODE_RLL value);
-#define bit_write_RLLd(dat,value) bit_write_RLL (dat, (BITCODE_RLL)value)
+#define bit_write_RLLd(dat, value) bit_write_RLL (dat, (BITCODE_RLL)value)
 void bit_write_RLL_BE (Bit_Chain *dat, BITCODE_RLL value);
 
 BITCODE_RD bit_read_RD (Bit_Chain *dat);
@@ -133,7 +133,7 @@ void bit_write_BS (Bit_Chain *dat, BITCODE_BS value);
 
 BITCODE_BL bit_read_BL (Bit_Chain *dat);
 void bit_write_BL (Bit_Chain *dat, BITCODE_BL value);
-#define bit_read_BLd(dat) (BITCODE_BLd)bit_read_BL(dat)
+#define bit_read_BLd(dat) (BITCODE_BLd) bit_read_BL (dat)
 void bit_write_BLd (Bit_Chain *dat, BITCODE_BLd value);
 
 BITCODE_BS bit_read_BOT (Bit_Chain *dat);
@@ -201,8 +201,10 @@ void bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict value);
 
 /* read UCS-2 string, with length as BS */
 BITCODE_TU bit_read_TU (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
-BITCODE_TU bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp) ATTRIBUTE_MALLOC;
-BITCODE_TU bit_read_TU_size (Bit_Chain *restrict dat, unsigned int len) ATTRIBUTE_MALLOC;
+BITCODE_TU bit_read_TU_len (Bit_Chain *restrict dat,
+                            unsigned int *lenp) ATTRIBUTE_MALLOC;
+BITCODE_TU bit_read_TU_size (Bit_Chain *restrict dat,
+                             unsigned int len) ATTRIBUTE_MALLOC;
 
 /* read ASCII string, with length as RS */
 BITCODE_TV bit_read_T16 (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
@@ -349,7 +351,6 @@ size_t in_hex2bin (unsigned char *restrict dest, char *restrict src,
                    size_t destlen) __nonnull_all;
 
 // if there's a high char (> 0x7f)
-bool
-bit_TF_contains_high (char *s, size_t len);
+bool bit_TF_contains_high (char *s, size_t len);
 
 #endif // BITS_H

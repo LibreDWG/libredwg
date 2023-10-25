@@ -294,7 +294,7 @@ rowop (PolyMatrix matrix, int dst, int src)
 
   dstd = degree (matrix[dst][2]); // 0..31
   srcd = degree (matrix[src][2]); // 0..31
-  power = dstd - srcd; // -31..31
+  power = dstd - srcd;            // -31..31
 
   coeff = f256_inverse[matrix[src][2][srcd]];
   coeff = f256_multiply (coeff, matrix[dst][2][dstd]);
@@ -303,12 +303,12 @@ rowop (PolyMatrix matrix, int dst, int src)
   GCC14_DIAG_IGNORE (-Wanalyzer-possible-null-dereference)
   for (j = 0; j < 3; j++)
     {
-      limit = MIN(17 - power, POLY_LENGTH); // -14..48
+      limit = MIN (17 - power, POLY_LENGTH); // -14..48
       for (i = 0; i < limit; i++)
         {
           // i + power: -31..78
-          matrix[dst][j][i + power] ^= f256_multiply (coeff,
-                                         matrix[src][j][i]);
+          matrix[dst][j][i + power]
+              ^= f256_multiply (coeff, matrix[src][j][i]);
         }
     }
   GCC14_DIAG_RESTORE

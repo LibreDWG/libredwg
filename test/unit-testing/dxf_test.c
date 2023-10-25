@@ -532,9 +532,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         case DWG_VT_STRING:
           {
             char *value = NULL;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_utf8text (obj->tio.object->tio.APPID, name,
-                                            f->name, &value, &isnew, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_utf8text (obj->tio.object->tio.APPID,
+                                               name, f->name, &value, &isnew,
+                                               &field))
               {
                 if (!value || strEQ (value, f->value))
                   {
@@ -555,9 +556,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_POINT3D:
           {
             BITCODE_3BD pt;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
-                                         f->name, &pt, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                            f->name, &pt, &field))
               {
                 double d = strtod (f->value, NULL);
                 double ptv;
@@ -600,9 +601,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         case DWG_VT_REAL:
           {
             double value;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
-                                         f->name, &value, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                            f->name, &value, &field))
               {
                 double d = strtod (f->value, NULL);
                 if (f->code >= 50 && f->code < 59)
@@ -624,9 +625,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_BOOL:
           {
             BITCODE_B value;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
-                                         f->name, &value, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                            f->name, &value, &field))
               {
                 BITCODE_B i = (BITCODE_B)strtol (f->value, NULL, 10);
                 if (i == value)
@@ -646,9 +647,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_INT8:
           {
             BITCODE_RC value;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
-                                         f->name, &value, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                            f->name, &value, &field))
               {
                 BITCODE_RC i = (BITCODE_RC)strtol (f->value, NULL, 10);
                 if (i == value)
@@ -676,9 +677,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_INT16:
           {
             BITCODE_BS value;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
-                                         f->name, &value, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                            f->name, &value, &field))
               {
                 BITCODE_BS i = (BITCODE_BS)strtol (f->value, NULL, 10);
                 if (i == value)
@@ -706,9 +707,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_INT32:
           {
             BITCODE_BL value;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
-                                         f->name, &value, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                            f->name, &value, &field))
               {
                 long l = strtol (f->value, NULL, 10);
                 BITCODE_BL i = (BITCODE_BL)l;
@@ -744,9 +745,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_INT64:
           {
             BITCODE_RLL value;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
-                                         f->name, &value, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                            f->name, &value, &field))
               {
                 BITCODE_RLL i = (BITCODE_RLL)strtol (f->value, NULL, 10);
                 if (i == value)
@@ -775,9 +776,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         case DWG_VT_HANDLE:
           {
             BITCODE_H value;
-            if (fp->is_malloc &&
-                dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
-                                         f->name, &value, &field))
+            if (fp->is_malloc
+                && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
+                                            f->name, &value, &field))
               {
                 unsigned long l;
                 sscanf (f->value, "%lX", &l);

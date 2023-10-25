@@ -869,7 +869,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define END_REPEAT_BLOCK ENDHASH;
 #undef END_REPEAT
 #define END_REPEAT(nam)                                                       \
-    }                                                                         \
+  }                                                                           \
   ENDARRAY;                                                                   \
   }
 #undef END_REPEAT_F
@@ -969,7 +969,7 @@ _prefix (Bit_Chain *dat)
   if (obj->num_unknown_rest)                                                  \
     UNKNOWN_BITS_REST                                                         \
   return error;                                                               \
-}
+  }
 
 #define DWG_OBJECT(token)                                                     \
   static int dwg_json_##token##_private (Bit_Chain *dat, Bit_Chain *hdl_dat,  \
@@ -1018,7 +1018,7 @@ _prefix (Bit_Chain *dat)
   if (obj->num_unknown_rest)                                                  \
     UNKNOWN_BITS_REST                                                         \
   return error;                                                               \
-}
+  }
 
 #undef JSON_3DSOLID
 #define JSON_3DSOLID json_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);
@@ -1314,7 +1314,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
               fprintf (dat->fh, "%c%c%c", (c >> 12) | 0xE0,
                        ((c >> 6) & 0x3F) | 0x80, (c & 0x3F) | 0x80);
             }
-#if 0
+#  if 0
           // FIXME: handle surrogate pairs properly
           if (c >= 0xd800 && c < 0xdc00)
             {
@@ -1324,7 +1324,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
             ;
           else
             fprintf (dat->fh, "\\u%04x", c);
-#endif
+#  endif
         }
       else
         fprintf (dat->fh, "%c", (char)(c & 0xff));
@@ -2328,7 +2328,7 @@ json_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
 
   RECORD (SummaryInfo); // single hash
-  // clang-format off
+                        // clang-format off
   #include "summaryinfo.spec"
   // clang-format on
   ENDRECORD ();
@@ -2461,11 +2461,10 @@ json_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   RECORD (AcDs); // single hash
   {
 
-    // clang-format off
+  // clang-format off
     #include "acds.spec"
     // clang-format on
-  }
-  ENDRECORD ();
+  } ENDRECORD ();
   return 0;
 }
 

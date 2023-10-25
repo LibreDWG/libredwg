@@ -106,8 +106,9 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   if (size != dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Could not read file (%" PRIuSIZE " out of %" PRIuSIZE "): %s\n", size, dat->size,
-                 filename)
+      LOG_ERROR ("Could not read file (%" PRIuSIZE " out of %" PRIuSIZE
+                 "): %s\n",
+                 size, dat->size, filename)
       fclose (fp);
       free (dat->chain);
       dat->chain = NULL;
@@ -173,8 +174,9 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
 
   if (dat->size == 0)
     {
-      LOG_ERROR ("Could not read from stream (%" PRIuSIZE " out of %" PRIuSIZE ")\n", size,
-                 dat->size);
+      LOG_ERROR ("Could not read from stream (%" PRIuSIZE " out of %" PRIuSIZE
+                 ")\n",
+                 size, dat->size);
       fclose (fp);
       free (dat->chain);
       dat->chain = NULL;
@@ -346,8 +348,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   fclose (fp);
   if (size != dat.size)
     {
-      LOG_ERROR ("Could not read the entire file (%" PRIuSIZE " out of %" PRIuSIZE "): %s\n", size,
-                 dat.size, filename)
+      LOG_ERROR ("Could not read the entire file (%" PRIuSIZE
+                 " out of %" PRIuSIZE "): %s\n",
+                 size, dat.size, filename)
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -814,14 +817,15 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     dwg_resolve_objectrefs_silent (dwg);
   if (ref->obj && !dwg->dirty_refs)
     {
-      if (ref->obj->handle.value == ref->absolute_ref) // not a wrong sort_ents import
+      if (ref->obj->handle.value
+          == ref->absolute_ref) // not a wrong sort_ents import
         return ref->obj;
       else
         {
           LOG_WARN ("Wrong ref_object: " FORMAT_RLLx " != " FORMAT_RLLx,
                     ref->obj->handle.value, ref->absolute_ref);
           ref->obj = NULL;
-          //dwg_resolve_objectrefs_silent (dwg);
+          // dwg_resolve_objectrefs_silent (dwg);
         }
     }
   // if (dwg->header.from_version < R_12 && !ref->absolute_ref)
@@ -888,7 +892,8 @@ dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_RLL absref)
         {
           LOG_WARN ("Object handle not found " FORMAT_BLL "/" FORMAT_RLL
                     " in " FORMAT_BL " objects of max " FORMAT_RLL " handles",
-                    absref, absref, dwg->num_objects, dwg->header_vars.HANDSEED->absolute_ref);
+                    absref, absref, dwg->num_objects,
+                    dwg->header_vars.HANDSEED->absolute_ref);
         }
       else
         {
@@ -2238,7 +2243,7 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
   nod = obj->tio.object->tio.DICTIONARY;
   for (BITCODE_BL j = 0; j < nod->numitems; j++)
     {
-      ATTRIBUTE_ALIGNED(2) BITCODE_T u8;
+      ATTRIBUTE_ALIGNED (2) BITCODE_T u8;
       if (!nod->texts || !nod->itemhandles)
         continue;
       u8 = nod->texts[j];
@@ -2292,7 +2297,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict,
     return NULL;
   for (i = 0; i < _obj->numitems; i++)
     {
-      ATTRIBUTE_ALIGNED(2) BITCODE_T *texts = _obj->texts;
+      ATTRIBUTE_ALIGNED (2) BITCODE_T *texts = _obj->texts;
       BITCODE_H *hdlv = _obj->itemhandles;
 
       if (!hdlv || !texts || !texts[i])
@@ -2649,7 +2654,8 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
     return NULL;
   if (!hdlv)
     {
-      LOG_ERROR ("No %s.entries but %u num_entries\n", table, (unsigned)num_entries);
+      LOG_ERROR ("No %s.entries but %u num_entries\n", table,
+                 (unsigned)num_entries);
       return NULL;
     }
   for (i = 0; i < num_entries; i++)
@@ -2662,8 +2668,8 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
 
       if (!hdlv[i])
         continue;
-      LOG_INSANE ("%s.entries[%u/%u]: resolve_handle " FORMAT_RLLx "\n", obj->name,
-                  i, num_entries, hdlv[i]->absolute_ref);
+      LOG_INSANE ("%s.entries[%u/%u]: resolve_handle " FORMAT_RLLx "\n",
+                  obj->name, i, num_entries, hdlv[i]->absolute_ref);
       hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
       if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID)
         continue;
@@ -3464,8 +3470,8 @@ dwg_calc_hookline_on (Dwg_Entity_LEADER *_obj)
       angleR = atan2 (pt1.y - pt2.y, pt1.x - pt2.x);
     }
   _obj->hookline_on = (_obj->annot_type & 0x3 || _obj->path_type & 0x1
-                      || fabs (angleR) <= hookline_offsetR
-                      || fabs (angleR - M_PI) <= hookline_offsetR)
-    ? 0
-    : 1;
+                       || fabs (angleR) <= hookline_offsetR
+                       || fabs (angleR - M_PI) <= hookline_offsetR)
+                          ? 0
+                          : 1;
 }

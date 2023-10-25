@@ -281,7 +281,7 @@
       ref = dwg_decode_preR13_handleref (dat, code /*as size */, dwg);        \
       LOG_TRACE (#nam ": %hd [H(%s) %d]", (short)ref->r11_idx,                \
                  code == 1 ? "RC" : "RSd", dxf)                               \
-      LOG_INSANE (" @%" PRIuSIZE ".%u", _pos / 8, (unsigned)(_pos % 8));                \
+      LOG_INSANE (" @%" PRIuSIZE ".%u", _pos / 8, (unsigned)(_pos % 8));      \
       LOG_TRACE ("\n");                                                       \
     }                                                                         \
     LATER_VERSIONS                                                            \
@@ -313,7 +313,7 @@
             {                                                                 \
               HANDLER (OUTPUT, #nam ": NULL %d [H %d]", code, dxf);           \
             }                                                                 \
-          LOG_INSANE (" @%" PRIuSIZE ".%u", _pos / 8, (unsigned)(_pos % 8));            \
+          LOG_INSANE (" @%" PRIuSIZE ".%u", _pos / 8, (unsigned)(_pos % 8));  \
           HANDLER (OUTPUT, "\n");                                             \
         }                                                                     \
     }                                                                         \
@@ -332,7 +332,7 @@
       error |= bit_read_H (hdl_dat, &hdl);                                    \
     }                                                                         \
     LOG_TRACE ("handle: " FORMAT_H " [H %d]", ARGS_H (hdl), dxf);             \
-    LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));                    \
+    LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));          \
     LOG_TRACE ("\n");                                                         \
   }
 
@@ -344,7 +344,7 @@
       ref = dwg_decode_preR13_handleref (dat, code, dwg);                     \
       LOG_TRACE (#nam "[%d]: " FORMAT_RS " [RS %d]", (int)vcount,             \
                  ref->r11_idx, dxf);                                          \
-      LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));                  \
+      LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));        \
       LOG_TRACE ("\n");                                                       \
     }                                                                         \
     LATER_VERSIONS                                                            \
@@ -380,7 +380,7 @@
               LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, code,     \
                          dxf);                                                \
             }                                                                 \
-          LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));              \
+          LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));    \
           LOG_TRACE ("\n");                                                   \
         }                                                                     \
     }                                                                         \
@@ -424,19 +424,19 @@
         FIELD_G_TRACE (nam, BD, dxf);                                         \
       }                                                                       \
   }
-#define FIELD_BLx(nam, dxf) FIELD_CAST(nam, BL, BLx, dxf)
-#define SUB_FIELD_BLx(o, nam, dxf) SUB_FIELD_CAST(o, nam, BL, BLx, dxf)
-#define SUB_FIELD_RC(o, nam, dxf) SUB_FIELD(o, nam, RC, dxf)
-#define FIELD_RCx(nam, dxf) FIELD_CAST(nam, RC, RCx, dxf)
-#define FIELD_RCd(nam, dxf) FIELD_CAST(nam, RC, RCd, dxf)
-#define FIELD_RLx(nam, dxf) FIELD_CAST(nam, RL, RLx, dxf)
-#define FIELD_BSx(nam, dxf) FIELD_CAST(nam, BS, BSx, dxf)
-#define FIELD_RSd(nam, dxf) FIELD_CAST(nam, RS, RSd, dxf)
-#define FIELD_BSd(nam, dxf) FIELD_CAST(nam, BS, BSd, dxf)
-#define SUB_FIELD_BSd(o, nam, dxf) SUB_FIELD_CAST(o, nam, BS, BSd, dxf)
-#define FIELD_BLd(nam, dxf) FIELD_CAST(nam, BL, BLd, dxf)
-#define FIELD_RLd(nam, dxf) FIELD_CAST(nam, RL, RLd, dxf)
-#define FIELD_RC(nam, dxf)  FIELDG (nam, RC, dxf)
+#define FIELD_BLx(nam, dxf) FIELD_CAST (nam, BL, BLx, dxf)
+#define SUB_FIELD_BLx(o, nam, dxf) SUB_FIELD_CAST (o, nam, BL, BLx, dxf)
+#define SUB_FIELD_RC(o, nam, dxf) SUB_FIELD (o, nam, RC, dxf)
+#define FIELD_RCx(nam, dxf) FIELD_CAST (nam, RC, RCx, dxf)
+#define FIELD_RCd(nam, dxf) FIELD_CAST (nam, RC, RCd, dxf)
+#define FIELD_RLx(nam, dxf) FIELD_CAST (nam, RL, RLx, dxf)
+#define FIELD_BSx(nam, dxf) FIELD_CAST (nam, BS, BSx, dxf)
+#define FIELD_RSd(nam, dxf) FIELD_CAST (nam, RS, RSd, dxf)
+#define FIELD_BSd(nam, dxf) FIELD_CAST (nam, BS, BSd, dxf)
+#define SUB_FIELD_BSd(o, nam, dxf) SUB_FIELD_CAST (o, nam, BS, BSd, dxf)
+#define FIELD_BLd(nam, dxf) FIELD_CAST (nam, BL, BLd, dxf)
+#define FIELD_RLd(nam, dxf) FIELD_CAST (nam, RL, RLd, dxf)
+#define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RCu(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_RC (dat);                                            \
@@ -444,9 +444,9 @@
                dxf);                                                          \
     LOG_RPOS                                                                  \
   }
-#define SUB_FIELD_RCd(o, nam, dxf) SUB_FIELD_CAST(o, nam, RC, RCd, dxf)
+#define SUB_FIELD_RCd(o, nam, dxf) SUB_FIELD_CAST (o, nam, RC, RCd, dxf)
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
-#define FIELD_RSx(nam, dxf) FIELD_CAST(nam, RS, RSx, dxf)
+#define FIELD_RSx(nam, dxf) FIELD_CAST (nam, RS, RSx, dxf)
 #define FIELD_RD(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = bit_read_RD (dat);                                            \
@@ -589,8 +589,8 @@
 #define FIELD_4BITS(nam, dxf)                                                 \
   {                                                                           \
     int _b = _obj->nam = bit_read_4BITS (dat);                                \
-    LOG_TRACE (#nam ": b%d%d%d%d [4BITS %d]", _b & 8, _b & 4, _b & 2,         \
-               _b & 1, dxf);                                                  \
+    LOG_TRACE (#nam ": b%d%d%d%d [4BITS %d]", _b & 8, _b & 4, _b & 2, _b & 1, \
+               dxf);                                                          \
     LOG_RPOS                                                                  \
   }
 
@@ -1130,13 +1130,12 @@
       SINCE (R_13b1)                                                          \
       {                                                                       \
         _VECTOR_CHKCOUNT_STATIC (name, size, TYPE_MAXELEMSIZE (type), dat)    \
+      } LOG_TRACE (#name ": { ") for (vcount = 0; vcount < (BITCODE_BL)size;  \
+                                      vcount++)                               \
+      {                                                                       \
+        _obj->name[vcount] = bit_read_##type (dat);                           \
+        LOG_TRACE (FORMAT_##type " ", _obj->name[vcount])                     \
       }                                                                       \
-      LOG_TRACE (#name ": { ")                                                \
-      for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
-        {                                                                     \
-          _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_TRACE (FORMAT_##type " ", _obj->name[vcount])                   \
-        }                                                                     \
       if (dxf)                                                                \
         LOG_TRACE ("} [*" #type " %d]", dxf)                                  \
       else                                                                    \
@@ -1489,7 +1488,7 @@
             (long)(obj->hdlpos - _pos), dat->byte, (unsigned)dat->bit,        \
             (long)(obj->hdlpos - _pos) >= 8 ? "MISSING"                       \
             : (long)(obj->hdlpos < _pos)    ? "OVERSHOOT"                     \
-                                            : "",                             \
+                                            : "",                                \
             obj->hdlpos / 8, (unsigned)obj->hdlpos % 8, hdl_dat->byte,        \
             (unsigned)hdl_dat->bit);                                          \
         bit_set_position (dat, obj->hdlpos);                                  \
@@ -1713,7 +1712,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
@@ -1829,7 +1828,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
@@ -1914,7 +1913,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
