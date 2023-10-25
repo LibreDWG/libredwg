@@ -58,8 +58,11 @@
 /* Define if you have the `basename' function. */
 #define HAVE_BASENAME 1
 
-/* Defined to 1 when the compiler supports c99, mostly (...) macros */
+/* Defined to 1 when the compiler supports C99, mostly (...) macros */
 #define HAVE_C99 1
+
+/* Defined to 1 when the compiler supports C11 */
+#define HAVE_C11 1
 
 /* Define if you have the <ctype.h> header file. */
 #cmakedefine HAVE_CTYPE_H
@@ -303,6 +306,9 @@
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "@PACKAGE_VERSION@"
+
+/* Define to the printf() modifier to use with size_t. */
+#define PRI_SIZE_T_MODIFIER "z"
 
 /* The size of `size_t', as computed by sizeof. */
 #define SIZEOF_SIZE_T @SIZE_T@

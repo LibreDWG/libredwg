@@ -1236,7 +1236,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
           if (len > 1024)
             { // FIXME: maybe we need this for chunked strings
               fprintf (dat->fh, "\r\n");
-              LOG_ERROR ("Overlarge DXF string, len=%zu", origlen);
+              LOG_ERROR ("Overlarge DXF string, len=%" PRIuSIZE, origlen);
               return;
             }
           *_buf = '\0';

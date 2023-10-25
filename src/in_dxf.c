@@ -311,7 +311,7 @@ dxf_read_rc (Bit_Chain *dat)
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
       if (num > UINT8_MAX)
-        LOG_ERROR ("%s: RC overflow %ld (at %zu)", __FUNCTION__, num,
+        LOG_ERROR ("%s: RC overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
                    dat->byte);
       return (BITCODE_RC)num;
     }
@@ -335,7 +335,7 @@ dxf_read_rs (Bit_Chain *dat)
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
       if (num > UINT16_MAX)
-        LOG_ERROR ("%s: RS overflow %ld (at %zu)", __FUNCTION__, num,
+        LOG_ERROR ("%s: RS overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
                    dat->byte);
       return (BITCODE_RS)num;
     }
@@ -361,7 +361,7 @@ dxf_read_rl (Bit_Chain *dat)
         dat->byte++;
       /*
       if (num > (long)0xffffffff)
-        LOG_ERROR ("%s: RL overflow %ld (at %zu)", __FUNCTION__, num,
+        LOG_ERROR ("%s: RL overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
                    dat->byte);
       */
       return (BITCODE_RL)num;
@@ -445,7 +445,7 @@ dxf_read_binary (Bit_Chain *dat, unsigned char **p, size_t len)
     }
   LOG_TRACE ("binary[%u]: ", size);
   if ((read = in_hex2bin (data, pos, size) != size))
-    LOG_ERROR ("in_hex2bin read only %zu of %zu", read, size);
+    LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, size);
   dat->byte += read;
   if (p)
     *p = data;
@@ -774,7 +774,7 @@ dxf_expect_code (Bit_Chain *restrict dat, Dxf_Pair *restrict pair, int code)
       DXF_RETURN_EOF (pair);
       if (pair && pair->code != code)
         {
-          LOG_ERROR ("Expecting DXF code %d, got %d (at %zu)", code,
+          LOG_ERROR ("Expecting DXF code %d, got %d (at %" PRIuSIZE ")", code,
                      pair->code, dat->byte);
         }
     }
@@ -1770,10 +1770,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           }
         eed[i].data->code = code; // 1004
         eed[i].data->u.eed_4.length = blen & 0xFF;
-        LOG_TRACE ("binary[%zu]: ", blen);
+        LOG_TRACE ("binary[%" PRIuSIZE "]: ", blen);
         if ((read = in_hex2bin (eed[i].data->u.eed_4.data, pair->value.s, blen)
                     != blen))
-          LOG_ERROR ("in_hex2bin read only %zu of %zu", read, blen);
+          LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
         eed[i].size += size;
       }
       break;
@@ -2370,7 +2370,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       len = strlen (pair->value.s) + 1; // + the \n
       if (len > 100000)                 // chunked into blocks of size 4096
         {
-          LOG_ERROR ("Overlarge DXF string len %zu: %s", len, pair->value.s);
+          LOG_ERROR ("Overlarge DXF string len %" PRIuSIZE ": %s", len, pair->value.s);
           return NULL;
         }
       if (!total || !o->encr_sat_data[0])
@@ -2407,7 +2407,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
-  LOG_TRACE ("%s.block_size[0]: %zu\n", obj->name, total);
+  LOG_TRACE ("%s.block_size[0]: %" PRIuSIZE "\n", obj->name, total);
 
   if (o->version == 1)
     {
@@ -6618,7 +6618,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         rbuf->value.str.u.data = (char *)s;
         rbuf->value.str.size = blen & 0xFFFF;
         if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-          LOG_ERROR ("in_hex2bin read only %zu of %zu", read, blen);
+          LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
         xdata_size += 1 + (len & 0xFFFF);
         LOG_TRACE ("xdata[%d]: ", num_xdata);
         // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
@@ -6729,15 +6729,15 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (blen + written > ent->preview_size)
         {
           LOG_ERROR (
-              "%s.preview overflow: %zu + written %zu > size: " FORMAT_BLL,
+              "%s.preview overflow: %" PRIuSIZE " + written %" PRIuSIZE " > size: " FORMAT_BLL,
               obj->name, blen, written, ent->preview_size);
           return pair;
         }
       s = &ent->preview[written];
       if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-        LOG_ERROR ("in_hex2bin read only %zu of %zu", read, blen);
+        LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
       written += read;
-      LOG_TRACE ("%s.preview += %zu (%zu/" FORMAT_BLL ")\n", obj->name, blen,
+      LOG_TRACE ("%s.preview += %" PRIuSIZE " (%" PRIuSIZE "/" FORMAT_BLL ")\n", obj->name, blen,
                  written, ent->preview_size);
 
       dxf_free_pair (pair);
@@ -6782,15 +6782,15 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           _obj->preview = (BITCODE_TF)realloc (_obj->preview, written + blen);
           s = &_obj->preview[written];
           if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-            LOG_ERROR ("in_hex2bin read only %zu of %zu", read, blen);
+            LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
           written += read;
-          LOG_TRACE ("BLOCK_HEADER.preview += %zu (%zu)\n", blen, written);
+          LOG_TRACE ("BLOCK_HEADER.preview += %" PRIuSIZE " (%" PRIuSIZE ")\n", blen, written);
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
   _obj->preview_size = written & 0xFFFFFFFF;
-  LOG_TRACE ("BLOCK_HEADER.preview_size = %zu [BL 0]\n", written);
+  LOG_TRACE ("BLOCK_HEADER.preview_size = %" PRIuSIZE " [BL 0]\n", written);
   return pair;
 }
 
@@ -9892,15 +9892,15 @@ new_object (char *restrict name, char *restrict dxfname,
               assert (o->data);
               if (blen + written > o->data_size)
                 {
-                  LOG_ERROR ("OLE2FRAME.data overflow: %zu + written %zu > "
+                  LOG_ERROR ("OLE2FRAME.data overflow: %" PRIuSIZE " + written %" PRIuSIZE " > "
                              "data_size: %u",
                              blen, written, o->data_size);
                   goto invalid_dxf;
                 }
               if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-                LOG_ERROR ("in_hex2bin read only %zu of %zu", read, blen);
+                LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, blen);
               written += read;
-              LOG_TRACE ("OLE2FRAME.data += %zu (%zu/%u) [TF 310]\n", blen,
+              LOG_TRACE ("OLE2FRAME.data += %" PRIuSIZE " (%" PRIuSIZE "/%u) [TF 310]\n", blen,
                          written, o->data_size);
             }
           else if (pair->code == 1
@@ -9950,7 +9950,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   o->text = strdup (pair->value.s);
                   written = len;
-                  LOG_TRACE ("MTEXT.text = %s (%zu) [TV 3]\n", pair->value.s,
+                  LOG_TRACE ("MTEXT.text = %s (%" PRIuSIZE ") [TV 3]\n", pair->value.s,
                              len);
                 }
               else
@@ -9960,7 +9960,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     o->text = (char *)realloc (o->text, len + 1);
                   strcpy (o->text, pair->value.s);
                   written += len;
-                  LOG_TRACE ("MTEXT.text += %zu/%zu [TV 3]\n", len, written);
+                  LOG_TRACE ("MTEXT.text += %" PRIuSIZE "/%" PRIuSIZE " [TV 3]\n", len, written);
                 }
             }
           /*
@@ -12349,7 +12349,7 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_ERROR ("Out of memory");
               return DWG_ERR_OUTOFMEM;
             }
-          LOG_TRACE ("PREVIEW.size = %zu\n", dwg->thumbnail.size);
+          LOG_TRACE ("PREVIEW.size = %" PRIuSIZE "\n", dwg->thumbnail.size);
           break;
         case 310:
           if (pair->value.s)
@@ -12362,16 +12362,18 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (blen + written > dwg->thumbnail.size)
                 {
                   dxf_free_pair (pair);
-                  LOG_ERROR ("PREVIEW.size overflow: %zu + written %zu > "
-                             "size: %zu",
+                  LOG_ERROR ("PREVIEW.size overflow: %" PRIuSIZE " + written %" PRIuSIZE " > "
+                             "size: %" PRIuSIZE,
                              blen, written, dwg->thumbnail.size);
                   return 1;
                 }
               if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
-                LOG_ERROR ("in_hex2bin read only %zu of %zu", read, blen);
+                LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
+                           read, blen);
               written += read;
-              LOG_TRACE ("PREVIEW.chain += %zu (%zu/%zu)\n", blen, written,
-                         dwg->thumbnail.size);
+              LOG_TRACE ("PREVIEW.chain += %" PRIuSIZE " (%" PRIuSIZE
+                         "/%" PRIuSIZE ")\n",
+                         blen, written, dwg->thumbnail.size);
             }
           break;
         default:
@@ -12664,7 +12666,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   if (dat->size < 256)
     {
-      LOG_ERROR ("DXF input too small, %zu byte.\n", dat->size);
+      LOG_ERROR ("DXF input too small, %" PRIuSIZE " byte.\n", dat->size);
       return DWG_ERR_IOERROR;
     }
   /* Fail early on DWG */

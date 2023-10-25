@@ -376,7 +376,7 @@ static unsigned int cur_ver = 0;
   ENDARRAY;
 
 #define WARN_UNSTABLE_CLASS                                                   \
-  LOG_WARN ("Unstable Class %s %d %s (0x%x%s) -@%zu",                         \
+  LOG_WARN ("Unstable Class %s %d %s (0x%x%s) -@%" PRIuSIZE,                  \
             is_entity ? "entity" : "object", klass->number, dxfname,          \
             klass->proxyflag, klass->is_zombie ? "is_zombie" : "",            \
             obj->address + obj->size)

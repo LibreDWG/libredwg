@@ -348,7 +348,7 @@
       bit_write_RL (dat, obj->bitsize);
 #endif
 #ifndef IS_FREE
-      LOG_TRACE ("bitsize: " FORMAT_BL " @%zu.%u\n", obj->bitsize,
+      LOG_TRACE ("bitsize: " FORMAT_BL " @%" PRIuSIZE ".%u\n", obj->bitsize,
                  dat->byte, dat->bit)
 #endif
 #ifdef IS_DECODER

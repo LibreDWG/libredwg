@@ -2759,7 +2759,8 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               // Or even parse the whole SAB format here, and store the SAB different
               // to the ASCII acis_data.
               FIELD_TFF (acis_data, size, 1); // SAB "ACIS BinaryFile"
-              LOG_TRACE ("Unknown ACIS 2 SAB sab_size %zu starting at %zu\n",
+              LOG_TRACE ("Unknown ACIS 2 SAB sab_size %" PRIuSIZE
+                         " starting at %" PRIuSIZE "\n",
                          size, pos);
               if ((p = (char *)memmem (_obj->acis_data, size, end,
                                        strlen (end))))
@@ -2768,9 +2769,9 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   size += strlen (end);
                   dat->byte = pos + size;
                   _obj->sab_size = size & 0xFFFFFFFF;
-                  LOG_TRACE (
-                      "Found End-of-ACIS-data. sab_size: %zu, new pos: %zu\n",
-                      size, dat->byte);
+                  LOG_TRACE ("Found End-of-ACIS-data. sab_size: %" PRIuSIZE
+                             ", new pos: %" PRIuSIZE "\n",
+                             size, dat->byte);
                 }
               else if ((p = (char *)memmem (_obj->acis_data, size, end1,
                                             strlen (end1))))
@@ -2779,9 +2780,9 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   size += strlen (end1);
                   dat->byte = pos + size;
                   _obj->sab_size = size & 0xFFFFFFFF;
-                  LOG_TRACE (
-                      "Found End-of-ASM-data. sab_size: %zu, new pos: %zu\n",
-                      size, dat->byte);
+                  LOG_TRACE ("Found End-of-ASM-data. sab_size: %" PRIuSIZE
+                             ", new pos: %" PRIuSIZE "\n",
+                             size, dat->byte);
                 }
               else
                 LOG_TRACE ("No End-of-ACIS or ASM data marker found\n");
@@ -5899,15 +5900,15 @@ DWG_ENTITY (PROXY_ENTITY)
     _obj->data_size = (dat->size - dat->byte) & 0xFFFFFFFF;
     if (dat->size > obj->size)
       {
-            LOG_TRACE (
-                "dat not restricted, dat->size %zu > obj->size " FORMAT_RL
-                "\n", dat->size, obj->size);
-            _obj->data_numbits
-                = (((obj->address * 8) + obj->bitsize) - bit_position (dat))
-                  & 0xFFFFFFFF;
-            _obj->data_size = _obj->data_numbits % 8;
-            if (_obj->data_numbits)
-                  _obj->data_size++;
+        LOG_TRACE ("dat not restricted, dat->size %" PRIuSIZE
+                   " > obj->size " FORMAT_RL "\n",
+                   dat->size, obj->size);
+        _obj->data_numbits
+            = (((obj->address * 8) + obj->bitsize) - bit_position (dat))
+              & 0xFFFFFFFF;
+        _obj->data_size = _obj->data_numbits % 8;
+        if (_obj->data_numbits)
+          _obj->data_size++;
       }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
@@ -5997,10 +5998,12 @@ DWG_OBJECT (PROXY_OBJECT)
     _obj->data_size = (dat->size - dat->byte) & 0xFFFFFFFF;
     if (dat->size > obj->size)
       {
-        LOG_TRACE ("dat not restricted, dat->size %zu > obj->size %u\n",
+        LOG_TRACE ("dat not restricted, dat->size %" PRIuSIZE
+                   " > obj->size %u\n",
                    dat->size, obj->size);
         _obj->data_numbits
-          = (((obj->address * 8) + obj->bitsize) - bit_position (dat)) & 0xFFFFFFFF;
+            = (((obj->address * 8) + obj->bitsize) - bit_position (dat))
+              & 0xFFFFFFFF;
         _obj->data_size = _obj->data_numbits / 8;
         if (_obj->data_numbits % 8)
           _obj->data_size++;
@@ -11646,7 +11649,7 @@ DWG_ENTITY (JUMP)
         len = obj->address + obj->size - dat->byte;
         obj->num_unknown_bits = (BITCODE_BL)(len * 8);
         obj->unknown_bits = bit_read_TF (dat, len);
-        LOG_TRACE ("unknown_bits (%zu): ", len);
+        LOG_TRACE ("unknown_bits (%" PRIuSIZE "): ", len);
         LOG_TRACE_TF (obj->unknown_bits, len);
       }
 #endif

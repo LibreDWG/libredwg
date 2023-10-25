@@ -26568,7 +26568,7 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "700 104 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %" PRIuSIZE " %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -26856,7 +26856,7 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       // version num_records num_entities has_history
       "400 6 1 0 \n"
       // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
+      "8 LibreDWG 19 ASM 223.0.1.1930 NT %" PRIuSIZE " %s \n"
       // num_mm_units resabs resnor
       "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
       "body $-1 -1 $-1 $1 $-1 $2 #\n"
@@ -26955,7 +26955,7 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "400 27 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %" PRIuSIZE " %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27080,7 +27080,7 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "400 30 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %" PRIuSIZE " %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27205,7 +27205,7 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "400 6 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %" PRIuSIZE " %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27347,7 +27347,7 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "400 7 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %" PRIuSIZE " %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27440,7 +27440,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "400 19 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %" PRIuSIZE " %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27553,7 +27553,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "400 87 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %" PRIuSIZE " %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"

@@ -533,13 +533,14 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       return NULL;
     }
   if ((read = in_hex2bin (buf, pos, blen) != blen))
-    LOG_ERROR ("json_binary in_hex2bin with key %s at pos %zu of %zu", key,
-               read, blen);
+    LOG_ERROR ("json_binary in_hex2bin with key %s at pos %" PRIuSIZE
+               " of %" PRIuSIZE,
+               key, read, blen);
   if (buf)
     {
       buf[blen] = '\0';
-      LOG_TRACE ("%s: '%.*s'... [BINARY %zu]\n", key, MIN ((int)len, 60), str,
-                 len);
+      LOG_TRACE ("%s: '%.*s'... [BINARY %" PRIuSIZE "]\n", key,
+                 MIN ((int)len, 60), str, len);
       *lenp = blen;
     }
   tokens->index++;
@@ -1742,7 +1743,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
                 if (len > 0xFFFF)
                   {
-                    LOG_ERROR ("xdata string overflow len=%zu", len);
+                    LOG_ERROR ("xdata string overflow len=%" PRIuSIZE, len);
                     return DWG_ERR_INVALIDDWG;
                   }
                 rbuf->value.str.size = len & 0xFFFF;
@@ -2180,11 +2181,12 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               if (buf)
                 {
                   if ((read = in_hex2bin (buf, pos, blen) != blen))
-                    LOG_ERROR ("in_hex2bin with key %s at pos %zu of %zu", key,
-                               read, blen);
+                    LOG_ERROR ("in_hex2bin with key %s at pos %" PRIuSIZE
+                               " of %" PRIuSIZE,
+                               key, read, blen);
                   buf[blen] = '\0';
-                  LOG_TRACE ("%s.%s: '%.*s'... [BINARY %zu]\n", name, key,
-                             MIN ((int)len, 60), str, len);
+                  LOG_TRACE ("%s.%s: '%.*s'... [BINARY %" PRIuSIZE "]\n", name,
+                             key, MIN ((int)len, 60), str, len);
                 }
               free (str);
               json_set_sizefield (_obj, fields, key, blen);
@@ -2232,13 +2234,15 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   BITCODE_TF buf = (BITCODE_TF)malloc (blen);
                   len = in_hex2bin (buf, str, blen);
                   if (len != blen)
-                    LOG_ERROR ("in_hex2bin with key %s at pos %zu of %zu", key,
-                               len, blen);
+                    LOG_ERROR ("in_hex2bin with key %s at pos %" PRIuSIZE
+                               " of %" PRIuSIZE,
+                               key, len, blen);
                   memcpy (str, buf, len);
                   free (buf);
                   if (len > k)
                     {
-                      LOG_ERROR ("Illegal %s.%s length %zu > %zu, stripped",
+                      LOG_ERROR ("Illegal %s.%s length %" PRIuSIZE
+                                 " > %" PRIuSIZE ", stripped",
                                  name, key, len, k);
                       len = k;
                     }
@@ -2588,7 +2592,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               data[k] = json_binary (dat, tokens, "encr_sat_data", &len);
               block_size[k] = (BITCODE_BL)len;
-              LOG_TRACE ("block_size[%d]: %zu [BL]\n", k, len);
+              LOG_TRACE ("block_size[%d]: %" PRIuSIZE " [BL]\n", k, len);
             }
           block_size[num_blocks] = 0;
           LOG_TRACE ("block_size[%d]: 0 [BL]\n", num_blocks);
@@ -3642,9 +3646,10 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           JSON_TOKENS_CHECK_OVERFLOW_ERR
           dwg->thumbnail.size = len;
           if (size1 > 0 && size1 != (long)len)
-            LOG_WARN ("thumbnail size mismatch: binary len %zu != size %ld",
+            LOG_WARN ("thumbnail size mismatch: binary len %" PRIuSIZE
+                      " != size %ld",
                       len, size1);
-          LOG_TRACE ("size: %zu\n", len);
+          LOG_TRACE ("size: %" PRIuSIZE "\n", len);
         }
       else
         {
@@ -4988,7 +4993,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       error = dat_read_stream (dat, dat->fh);
       if (error >= DWG_ERR_CRITICAL)
         return error;
-      LOG_TRACE ("  json file size: %zu\n", dat->size);
+      LOG_TRACE ("  json file size: %" PRIuSIZE "\n", dat->size);
     }
   g_dat = dat;
 

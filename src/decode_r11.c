@@ -129,7 +129,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
 
   if (dat->byte + 10 > dat->size)
     {
-      LOG_ERROR ("%s.size overflow @%zu", name, dat->byte)
+      LOG_ERROR ("%s.size overflow @%" PRIuSIZE, name, dat->byte)
       return DWG_ERR_SECTIONNOTFOUND;
     }
   tbl->type = (Dwg_Section_Type)id;
@@ -206,7 +206,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   if (tbl->number > 0
       && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
-      LOG_ERROR ("%s.size overflow %zu > %zu", tbl->name,
+      LOG_ERROR ("%s.size overflow %" PRIuSIZE " > %" PRIuSIZE, tbl->name,
                  (size_t)(tbl->address + (tbl->number * tbl->size)),
                  dat->size);
       // VPORT.size bug in DWG, ignore it.
@@ -687,7 +687,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("@0x%zx\n", dat->byte); // 0x5e
   if (dat->size < 0x1f0)             // AC1.50 0x1f9 74 vars
     {
-      LOG_ERROR ("DWG too small %zu", (size_t)dat->size)
+      LOG_ERROR ("DWG too small %" PRIuSIZE, (size_t)dat->size)
       return DWG_ERR_INVALIDDWG;
     }
 
@@ -802,7 +802,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       size_t len = dat->size - dat->byte;
       BITCODE_TF unknown = bit_read_TF (dat, len);
-      LOG_TRACE ("unknown (%zu):", len);
+      LOG_TRACE ("unknown (%" PRIuSIZE "):", len);
       LOG_TRACE_TF (unknown, len);
       free (unknown);
     }

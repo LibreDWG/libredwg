@@ -106,7 +106,7 @@
 
 #ifndef LOG_POS
 #  define LOG_POS                                                             \
-    LOG_INSANE (" @%zu.%u", dat->byte, dat->bit)                              \
+    LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, dat->bit)                    \
     LOG_TRACE ("\n")
 #endif
 #define LOG_TRACE_TV(fmt, str, dxf)                                           \

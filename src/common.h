@@ -37,6 +37,11 @@
 #include "dwg.h"
 
 //#pragma pack()
+// use as printf("%" PRIuSIZE ", size)
+#ifndef PRI_SIZE_T_MODIFIER
+#  define PRI_SIZE_T_MODIFIER ""
+#endif
+#define PRIuSIZE PRI_SIZE_T_MODIFIER "u"
 
 // DoS limits
 // limit number of vector elements to BS range

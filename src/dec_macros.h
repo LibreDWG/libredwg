@@ -44,29 +44,29 @@
 
 #undef LOG_POS
 #define LOG_POS                                                               \
-  LOG_INSANE (" @%zu.%u", obj ? dat->byte - obj->address : dat->byte,         \
-              (unsigned)dat->bit)                                             \
+  LOG_INSANE (" @%" PRIuSIZE ".%u",                                           \
+              obj ? dat->byte - obj->address : dat->byte, (unsigned)dat->bit) \
   LOG_TRACE ("\n")
 #define LOG_POS_(level)                                                       \
-  LOG_INSANE (" @%zu.%u", obj ? dat->byte - obj->address : dat->byte,         \
-              (unsigned)dat->bit)                                             \
+  LOG_INSANE (" @%" PRIuSIZE ".%u",                                           \
+              obj ? dat->byte - obj->address : dat->byte, (unsigned)dat->bit) \
   LOG (level, "\n")
 
 #define LOG_RPOS                                                              \
-  LOG_INSANE (" @%zu.%u", dat->byte, (unsigned)dat->bit)                      \
+  LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit)            \
   LOG_TRACE ("\n")
 #define LOG_RPOS_(level)                                                      \
-  LOG_INSANE (" @%zu.%u", dat->byte, (unsigned)dat->bit)                      \
+  LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit)            \
   LOG (level, "\n")
 #define LOG_HPOS                                                              \
-  LOG_INSANE (" @%zu.%u",                                                     \
+  LOG_INSANE (" @%" PRIuSIZE ".%u",                                           \
               obj && hdl_dat->byte > obj->address                             \
                   ? hdl_dat->byte - obj->address                              \
                   : hdl_dat->byte,                                            \
               (unsigned)hdl_dat->bit)                                         \
   LOG_TRACE ("\n")
 #define LOG_HPOS_(level)                                                      \
-  LOG_INSANE (" @%zu.%u",                                                     \
+  LOG_INSANE (" @%" PRIuSIZE ".%u",                                           \
               obj && hdl_dat->byte > obj->address                             \
                   ? hdl_dat->byte - obj->address                              \
                   : hdl_dat->byte,                                            \
@@ -122,7 +122,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, rcount2, _obj->nam, dxfgroup);              \
               GCC46_DIAG_RESTORE                                              \
@@ -131,7 +131,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, _obj->nam, dxfgroup);                       \
               GCC46_DIAG_RESTORE                                              \
@@ -153,7 +153,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, rcount2, _obj->nam)                         \
               GCC46_DIAG_RESTORE                                              \
@@ -162,7 +162,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, _obj->nam)                                  \
               GCC46_DIAG_RESTORE                                              \
@@ -206,7 +206,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ") [" #type " %d]"),                     \
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf)     \
@@ -216,7 +216,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ") [" #type " %d]"),                     \
                          rcount1, _obj->nam.x, _obj->nam.y, dxf)              \
@@ -240,7 +240,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ", " FORMAT_BD ") [" #type " %d]"),      \
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y,          \
@@ -251,7 +251,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ", " FORMAT_BD ") [" #type " %d]"),      \
                          rcount1, _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf) \
@@ -281,7 +281,7 @@
       ref = dwg_decode_preR13_handleref (dat, code /*as size */, dwg);        \
       LOG_TRACE (#nam ": %hd [H(%s) %d]", (short)ref->r11_idx,                \
                  code == 1 ? "RC" : "RSd", dxf)                               \
-      LOG_INSANE (" @%zu.%u", _pos / 8, (unsigned)(_pos % 8));                \
+      LOG_INSANE (" @%" PRIuSIZE ".%u", _pos / 8, (unsigned)(_pos % 8));                \
       LOG_TRACE ("\n");                                                       \
     }                                                                         \
     LATER_VERSIONS                                                            \
@@ -313,7 +313,7 @@
             {                                                                 \
               HANDLER (OUTPUT, #nam ": NULL %d [H %d]", code, dxf);           \
             }                                                                 \
-          LOG_INSANE (" @%zu.%u", _pos / 8, (unsigned)(_pos % 8));            \
+          LOG_INSANE (" @%" PRIuSIZE ".%u", _pos / 8, (unsigned)(_pos % 8));            \
           HANDLER (OUTPUT, "\n");                                             \
         }                                                                     \
     }                                                                         \
@@ -332,7 +332,7 @@
       error |= bit_read_H (hdl_dat, &hdl);                                    \
     }                                                                         \
     LOG_TRACE ("handle: " FORMAT_H " [H %d]", ARGS_H (hdl), dxf);             \
-    LOG_INSANE (" @%zu.%u", pos / 8, (unsigned)(pos % 8));                    \
+    LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));                    \
     LOG_TRACE ("\n");                                                         \
   }
 
@@ -344,7 +344,7 @@
       ref = dwg_decode_preR13_handleref (dat, code, dwg);                     \
       LOG_TRACE (#nam "[%d]: " FORMAT_RS " [RS %d]", (int)vcount,             \
                  ref->r11_idx, dxf);                                          \
-      LOG_INSANE (" @%zu.%u", pos / 8, (unsigned)(pos % 8));                  \
+      LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));                  \
       LOG_TRACE ("\n");                                                       \
     }                                                                         \
     LATER_VERSIONS                                                            \
@@ -380,7 +380,7 @@
               LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, code,     \
                          dxf);                                                \
             }                                                                 \
-          LOG_INSANE (" @%zu.%u", pos / 8, (unsigned)(pos % 8));              \
+          LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));              \
           LOG_TRACE ("\n");                                                   \
         }                                                                     \
     }                                                                         \
@@ -477,10 +477,10 @@
   {                                                                           \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
     _obj->nam = bit_read_TF (dat, (size_t)len);                               \
-    LOG_TRACE (#nam ": \"%s\" [TF %zu " #dxf "]", _obj->nam, (size_t)len);    \
+    LOG_TRACE (#nam ": \"%s\" [TF %" PRIuSIZE " " #dxf "]", _obj->nam, (size_t)len);    \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
-    LOG_INSANE (" @%zu.%u", dat->byte, (unsigned)dat->bit)                    \
+    LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit)                    \
     LOG_TRACE ("\n")                                                          \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
@@ -489,7 +489,8 @@
     /* if (_obj->nam) free (_obj->nam); // preR13 add_Document defaults */    \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (size_t)len);                   \
-    LOG_TRACE (#nam ": \"%s\" [TFv %zu " #dxf "]", _obj->nam, (size_t)len);   \
+    LOG_TRACE (#nam ": \"%s\" [TFv %" PRIuSIZE " " #dxf "]", _obj->nam,       \
+               (size_t)len);                                                  \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     LOG_RPOS                                                                  \
@@ -499,8 +500,8 @@
   {                                                                           \
     SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 8, dat) }             \
     bit_read_fixed (dat, _obj->nam, (size_t)len);                             \
-    LOG_TRACE (#nam ": \"%.*s\" [TFF %zu " #dxf "]", (int)len, _obj->nam,     \
-               (size_t)len);                                                  \
+    LOG_TRACE (#nam ": \"%.*s\" [TFF %" PRIuSIZE " " #dxf "]", (int)len,      \
+               _obj->nam, (size_t)len);                                       \
     LOG_RPOS                                                                  \
     LOG_TRACE_TF (FIELD_VALUE (nam), (size_t)len);                            \
   }
@@ -615,7 +616,8 @@
     if ((dat->byte * 8) + 8 + dat->bit > dat->size * 8)                       \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s FIELD_DD buffer overflow at pos %zu.%u, size %zu,"     \
+        LOG_ERROR ("%s FIELD_DD buffer overflow at pos %" PRIuSIZE            \
+                   ".%u, size %" PRIuSIZE ","                                 \
                    " advance by 8",                                           \
                    __FUNCTION__, dat->byte, dat->bit, dat->size);             \
       }                                                                       \
@@ -891,15 +893,16 @@
 #define DEBUG_POS_OBJ                                                         \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      LOG_TRACE ("DEBUG_POS @%zu.%u (%zu) %zu\n", dat->byte, (unsigned)dat->bit, \
-                 bit_position (dat),                                          \
+      LOG_TRACE ("DEBUG_POS @%" PRIuSIZE ".%u (%" PRIuSIZE ") %" PRIuSIZE     \
+                 "\n",                                                        \
+                 dat->byte, (unsigned)dat->bit, bit_position (dat),           \
                  obj ? bit_position (dat) - obj->address * 8 : 0);            \
     }
 #define DEBUG_POS                                                             \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      LOG_TRACE ("DEBUG_POS @%zu.%u (%zu)\n", dat->byte, (unsigned)dat->bit,  \
-                 bit_position (dat));                                         \
+      LOG_TRACE ("DEBUG_POS @%" PRIuSIZE ".%u (%" PRIuSIZE ")\n", dat->byte,  \
+                 (unsigned)dat->bit, bit_position (dat));                     \
     }
 #define _DEBUG_HERE(objsize)                                                  \
   if (dat->size < dat->byte)                                                  \
@@ -945,14 +948,14 @@
       {                                                                       \
         *dat = here;                                                          \
         rs = bit_read_BS (dat);                                               \
-        LOG_TRACE ("  BS :" FORMAT_BS " / 0x%04x (%zu)\t", rs, rs,            \
+        LOG_TRACE ("  BS :" FORMAT_BS " / 0x%04x (%" PRIuSIZE ")\t", rs, rs,  \
                    bit_position (dat) - bit_position (&here));                \
       }                                                                       \
       SINCE (R_2007)                                                          \
       {                                                                       \
         *dat = here;                                                          \
         rs = bit_read_MS (dat);                                               \
-        LOG_TRACE ("  MS :" FORMAT_RS " / 0x%04x (%zu)\n", rs, rs,            \
+        LOG_TRACE ("  MS :" FORMAT_RS " / 0x%04x (%" PRIuSIZE ")\n", rs, rs,  \
                    bit_position (dat) - bit_position (&here));                \
       }                                                                       \
       else LOG_TRACE ("\n");                                                  \
@@ -967,11 +970,11 @@
         if (bb != 3)                                                          \
           {                                                                   \
             rl = bit_read_BL (dat);                                           \
-            LOG_TRACE ("  BL :" FORMAT_BL " / 0x%08x (%zu)\n", rl, rl,        \
-                       bit_position (dat) - bit_position (&here));            \
+            LOG_TRACE ("  BL :" FORMAT_BL " / 0x%08x (%" PRIuSIZE ")\n", rl,  \
+                       rl, bit_position (dat) - bit_position (&here));        \
             *dat = here;                                                      \
             bd = bit_read_BD (dat);                                           \
-            LOG_TRACE ("  BD :" FORMAT_BD " (%zu)\n", bd,                     \
+            LOG_TRACE ("  BD :" FORMAT_BD " (%" PRIuSIZE ")\n", bd,           \
                        bit_position (dat) - bit_position (&here));            \
             *dat = here;                                                      \
           }                                                                   \
@@ -981,7 +984,8 @@
           loglevel = 0;                                                       \
           if (!bit_read_H (dat, &hdl))                                        \
             {                                                                 \
-              LOG_TRACE ("  H : " FORMAT_H " (%zu)\n", ARGS_H (hdl),          \
+              LOG_TRACE ("  H : " FORMAT_H " (%" PRIuSIZE ")\n",              \
+                         ARGS_H (hdl),                                        \
                          bit_position (dat) - bit_position (&here));          \
             }                                                                 \
           loglevel = oldloglevel;                                             \
@@ -1479,14 +1483,15 @@
       _pos++; /* has_strings bit */                                           \
     if (obj->hdlpos != _pos)                                                  \
       {                                                                       \
-        LOG_HANDLE (" handle stream: %+ld @%zu.%u %s (@%zu.%u "               \
-                    " @%zu.%u)\n",                                            \
-                    (long)(obj->hdlpos - _pos), dat->byte, (unsigned)dat->bit,\
-                    (long)(obj->hdlpos - _pos) >= 8 ? "MISSING"               \
-                    : (long)(obj->hdlpos < _pos)    ? "OVERSHOOT"             \
-                                                    : "",                     \
-                    obj->hdlpos / 8, (unsigned)obj->hdlpos % 8,               \
-                    hdl_dat->byte, (unsigned)hdl_dat->bit);                   \
+        LOG_HANDLE (                                                          \
+            " handle stream: %+ld @%" PRIuSIZE ".%u %s (@%" PRIuSIZE ".%u "   \
+            " @%" PRIuSIZE ".%u)\n",                                          \
+            (long)(obj->hdlpos - _pos), dat->byte, (unsigned)dat->bit,        \
+            (long)(obj->hdlpos - _pos) >= 8 ? "MISSING"                       \
+            : (long)(obj->hdlpos < _pos)    ? "OVERSHOOT"                     \
+                                            : "",                             \
+            obj->hdlpos / 8, (unsigned)obj->hdlpos % 8, hdl_dat->byte,        \
+            (unsigned)hdl_dat->bit);                                          \
         bit_set_position (dat, obj->hdlpos);                                  \
       }                                                                       \
   }

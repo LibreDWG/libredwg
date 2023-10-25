@@ -347,6 +347,9 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* Define to the printf() modifier to use with size_t. */
+#undef PRI_SIZE_T_MODIFIER
+
 /* The size of `size_t', as computed by sizeof. */
 #undef SIZEOF_SIZE_T
 

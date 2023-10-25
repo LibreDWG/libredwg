@@ -67,13 +67,15 @@ bit_advance_position (Bit_Chain *dat, long advance)
   if (pos + advance > endpos)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %zu.%u, size %zu, advance by %ld",
+      LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE ".%u, size %" PRIuSIZE
+                 ", advance by %ld",
                  __FUNCTION__, dat->byte, dat->bit, dat->size, advance);
     }
   else if ((long)pos + advance < 0)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("buffer underflow at pos %zu.%u, size %zu, advance by %ld",
+      LOG_ERROR ("buffer underflow at pos %" PRIuSIZE ".%u, size %" PRIuSIZE
+                 ", advance by %ld",
                  dat->byte, dat->bit, dat->size, advance)
       dat->byte = 0;
       dat->bit = 0;
@@ -101,8 +103,8 @@ bit_set_position (Bit_Chain *dat, size_t bitpos)
   if (dat->byte > dat->size || (dat->byte == dat->size && dat->bit))
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at %zu, have %zu", __FUNCTION__,
-                 dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", have %" PRIuSIZE,
+                 __FUNCTION__, dat->byte, dat->size)
     }
 }
 
@@ -124,8 +126,8 @@ bit_reset_chain (Bit_Chain *dat)
         || ((dat->byte * 8) + dat->bit > dat->size * 8))                      \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s buffer overflow at %zu.%u > %zu", func, dat->byte,     \
-                   dat->bit, dat->size)                                       \
+        LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u > %" PRIuSIZE,     \
+                   func, dat->byte, dat->bit, dat->size)                      \
         if (++errors > DWG_ABORT_LIMIT)                                       \
           abort ();                                                           \
         return retval;                                                        \
@@ -136,8 +138,8 @@ bit_reset_chain (Bit_Chain *dat)
         || ((dat->byte * 8) + dat->bit > dat->size * 8))                      \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s buffer overflow at %zu.%u > %zu", func, dat->byte,     \
-                   dat->bit, dat->size)                                       \
+        LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u > %" PRIuSIZE,     \
+                   func, dat->byte, dat->bit, dat->size)                      \
         return retval;                                                        \
       }
 #endif
@@ -147,8 +149,8 @@ bit_reset_chain (Bit_Chain *dat)
       || (((dat->byte + plus) * 8) + dat->bit > dat->size * 8))               \
     {                                                                         \
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                               \
-      LOG_ERROR ("%s buffer overflow at %zu.%u + %d > %zu", func, dat->byte,  \
-                 dat->bit, (int)(plus), dat->size)                            \
+      LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u + %d > %" PRIuSIZE,  \
+                 func, dat->byte, dat->bit, (int)(plus), dat->size)           \
       return retval;                                                          \
     }
 
@@ -339,7 +341,8 @@ bit_read_RC (Bit_Chain *dat)
       else
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %zu", __FUNCTION__, dat->byte + 1)
+          LOG_ERROR ("%s buffer overflow at %" PRIuSIZE, __FUNCTION__,
+                     dat->byte + 1)
           return 0;
         }
     }
@@ -955,7 +958,7 @@ bit_read_MC (Bit_Chain *dat)
   LOG_ERROR (
       "bit_read_MC: error parsing modular char. i=%d, j=%d, result=" FORMAT_UMC
       ",\n"
-      " @%zu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
+      " @%" PRIuSIZE ".@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
       i, j, result, dat->byte - 5, dat->bit, dat->chain[dat->byte - 5],
       dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
       dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
@@ -1029,10 +1032,11 @@ bit_read_UMC (Bit_Chain *dat)
   LOG_ERROR (
       "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=" FORMAT_UMC,
       i, j, result)
-  LOG_HANDLE ("  @%zu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 6,
-              dat->bit, dat->chain[dat->byte - 6], dat->chain[dat->byte - 5],
-              dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
-              dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
+  LOG_HANDLE ("  @%" PRIuSIZE ".%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n",
+              dat->byte - 6, dat->bit, dat->chain[dat->byte - 6],
+              dat->chain[dat->byte - 5], dat->chain[dat->byte - 4],
+              dat->chain[dat->byte - 3], dat->chain[dat->byte - 2],
+              dat->chain[dat->byte - 1])
   return 0; /* error... */
 }
 
@@ -1460,7 +1464,7 @@ bit_read_CRC (Bit_Chain *dat)
       dat->bit = 0;
     }
   result = bit_read_RS (dat);
-  LOG_TRACE ("read CRC at %zu: %04X\n", dat->byte, result)
+  LOG_TRACE ("read CRC at %" PRIuSIZE ": %04X\n", dat->byte, result)
 
   return result;
 }
@@ -1484,8 +1488,9 @@ bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %zu-%zu, size %zu", __FUNCTION__,
-                 start_address, dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
+                 ", size %" PRIuSIZE,
+                 __FUNCTION__, start_address, dat->byte, dat->size)
       return 0;
     }
   assert (dat->byte >= start_address);
@@ -1496,15 +1501,17 @@ bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
   if (calculated == read)
     {
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
-        LOG_HANDLE (" check_CRC %zu-%zu = %zu: %04X == %04X\n", start_address,
-                    dat->byte - 2, size, calculated, read)
+        LOG_HANDLE (" check_CRC %" PRIuSIZE "-%" PRIuSIZE " = %" PRIuSIZE
+                    ": %04X == %04X\n",
+                    start_address, dat->byte - 2, size, calculated, read)
       else
-        LOG_TRACE (" check_CRC %zu: %04X == %04X\n", size, calculated, read)
+        LOG_TRACE (" check_CRC %" PRIuSIZE ": %04X == %04X\n", size, calculated, read)
       return 1;
     }
   else
     {
-      LOG_WARN ("check_CRC mismatch %zu-%zu = %zu: %04X <=> %04X\n",
+      LOG_WARN ("check_CRC mismatch %" PRIuSIZE "-%" PRIuSIZE " = %" PRIuSIZE
+                ": %04X <=> %04X\n",
                 start_address, dat->byte - 2, size, calculated, read)
       return 0;
     }
@@ -1527,16 +1534,18 @@ bit_write_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %zu-%zu, size %zu", __FUNCTION__,
-                 start_address, dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
+                 ", size %" PRIuSIZE,
+                 __FUNCTION__, start_address, dat->byte, dat->size)
       return 0;
     }
   assert (dat->byte >= start_address);
   size = dat->byte - start_address;
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
-  LOG_TRACE ("write CRC %04X [RSx] from %zu-%zu = %zu\n", crc, start_address,
-             dat->byte, size);
+  LOG_TRACE ("write CRC %04X [RSx] from %" PRIuSIZE "-%" PRIuSIZE
+             " = %" PRIuSIZE "\n",
+             crc, start_address, dat->byte, size);
   bit_write_RS (dat, crc);
   return crc;
 }
@@ -1555,8 +1564,9 @@ bit_write_CRC_BE (Bit_Chain *dat, size_t start_address, uint16_t seed)
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %zu-%zu, size %zu", __FUNCTION__,
-                 start_address, dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
+                 ", size %" PRIuSIZE,
+                 __FUNCTION__, start_address, dat->byte, dat->size)
       return 0;
     }
   assert (dat->byte >= start_address);
@@ -1564,8 +1574,9 @@ bit_write_CRC_BE (Bit_Chain *dat, size_t start_address, uint16_t seed)
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-  LOG_TRACE ("write CRC %04X [RSx_BE] from %zu-%zu = %zu\n", crc, start_address,
-             dat->byte, size);
+  LOG_TRACE ("write CRC %04X [RSx_BE] from %" PRIuSIZE "-%" PRIuSIZE
+             " = %" PRIuSIZE "\n",
+             crc, start_address, dat->byte, size);
   bit_write_RS_BE (dat, crc);
   return crc;
 }
@@ -1577,8 +1588,8 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
   if (dat->byte + length > dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %zu, size %zu", __FUNCTION__,
-                 dat->byte, dat->size)
+      LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE ", size %" PRIuSIZE,
+                 __FUNCTION__, dat->byte, dat->size)
       memset (dest, 0, length);
       return;
     }
@@ -1668,7 +1679,7 @@ bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       if (length > 0)
-        LOG_ERROR ("Empty TF with length %zu", length);
+        LOG_ERROR ("Empty TF with length %" PRIuSIZE, length);
       if (length <= 128) // either chain or length is wrong
         {
           for (size_t i = 0; i < length; i++)
@@ -1888,7 +1899,7 @@ bit_wcs2len (const BITCODE_TU restrict wstr)
           b += 2;
           c = TU_to_int (b);
         }
-      // fprintf (stderr, "* %s: %zu\n", __FUNCTION__, len);
+      // fprintf (stderr, "* %s: %" PRIuSIZE "\n", __FUNCTION__, len);
       return len;
     }
   else
@@ -1899,7 +1910,7 @@ bit_wcs2len (const BITCODE_TU restrict wstr)
         {
           len++;
         }
-      // fprintf (stderr, "* %s: %zu\n", __FUNCTION__, len);
+      // fprintf (stderr, "* %s: %" PRIuSIZE "\n", __FUNCTION__, len);
       return len;
     }
 }
@@ -2022,7 +2033,7 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     {
       // silently truncate overlong strings for now
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_WARN ("Overlong string truncated (len=%zu)", length);
+      LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
     }
@@ -2069,7 +2080,9 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
                   if (length > UINT16_MAX)
                     {
                       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-                      LOG_WARN ("Overlong string truncated (len=%zu)", length);
+                      LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE
+                                ")",
+                                length);
                       length = UINT16_MAX - 1;
                     }
                   bit_write_BS (dat, (BITCODE_BS)(length + 1));
@@ -2289,7 +2302,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %zu, size " FORMAT_BLL,
+          LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
                      __FUNCTION__, dat->byte, size)
           return NULL;
         }
@@ -2311,7 +2324,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %zu, size " FORMAT_BLL,
+          LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
                      __FUNCTION__, dat->byte, size)
           return NULL;
         }
@@ -2348,7 +2361,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %zu, size " FORMAT_BLL,
+          LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
                      __FUNCTION__, dat->byte, size)
           return NULL;
         }
@@ -2384,7 +2397,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %zu, size " FORMAT_BLL,
+          LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
                      __FUNCTION__, dat->byte, size)
           return NULL;
         }
@@ -2416,7 +2429,7 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
   if (length > UINT16_MAX)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_WARN ("Overlong string truncated (len=%zu)", length);
+      LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
     }
@@ -2439,7 +2452,7 @@ bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
   if (length > UINT16_MAX)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_WARN ("Overlong string truncated (len=%zu)", length);
+      LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
     }
@@ -2468,7 +2481,7 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
   if (length > INT16_MAX)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_WARN ("Overlong string truncated (len=%zu)", length);
+      LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
       length = INT16_MAX;
       chain[INT16_MAX - 1] = '\0';
     }
@@ -2541,7 +2554,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
       if (length > INT32_MAX)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_WARN ("Overlong string truncated (len=%zu)", length);
+          LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
           length = INT32_MAX;
           chain[INT32_MAX - 1] = '\0';
         }
@@ -2558,7 +2571,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
       if (length > UINT32_MAX)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_WARN ("Overlong string truncated (len=%zu)", length);
+          LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
           length = UINT32_MAX;
           chain[UINT32_MAX - 1] = '\0';
         }
@@ -2582,7 +2595,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
       if (length > UINT32_MAX / 4)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_WARN ("Overlong string truncated (len=%zu)", length);
+          LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
           length = UINT32_MAX / 4;
           chain[length - 1] = '\0';
         }
@@ -2599,7 +2612,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
       if (length > UINT32_MAX)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_WARN ("Overlong string truncated (len=%zu)", length);
+          LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
           length = UINT32_MAX;
           chain[UINT32_MAX - 1] = '\0';
         }
@@ -3053,13 +3066,13 @@ bit_u_expand (char *src)
           char *u8 = bit_convert_TU (&wp[0]);
           size_t l = strlen (u8);
           // printf("wc: %hu\n", wc);
-          // printf("u8: %s, l: %zu, lp: %zu\n", u8, l, lp);
+          // printf("u8: %s, l: %" PRIuSIZE ", lp: %" PRIuSIZE "\n", u8, l, lp);
           // printf("u8: { %hx, %hx }\n", (unsigned char)u8[0], (unsigned
           // char)u8[1]);
           memcpy (s, u8, l + 1);
           if (lp > 7)
             {
-              // printf("p[7]: %d, l: %zu\n", (int)p[7], lp);
+              // printf("p[7]: %d, l: %" PRIuSIZE "\n", (int)p[7], lp);
               memmove (&s[l], &s[7], lp - 6);
             }
           if (u8 != (char *)&wp[0])
@@ -3223,7 +3236,8 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                 if (destlen > 0x2FFFE)
                   {
                     loglevel |= 1;
-                    LOG_ERROR ("bit_TV_to_utf8: overlarge destlen %zu for %s",
+                    LOG_ERROR ("bit_TV_to_utf8: overlarge destlen %" PRIuSIZE
+                               " for %s",
                                destlen, src);
                     iconv_close (cd);
                     free (odest);
@@ -3289,7 +3303,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
   if (len > MAX_SIZE_T)
     {
       loglevel |= 1;
-      LOG_WARN ("Overlong string truncated (len=%zu)", len);
+      LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", len);
       len = UINT16_MAX - 1;
     }
   wstr = (BITCODE_TU)calloc (2, len + 1);

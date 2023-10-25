@@ -287,7 +287,7 @@ bit_BS_tests (void)
             {
               bit_set_position (&bitchain, i);
               bit_print (&bitchain, 3);
-              fail ("bit_write_BS (%u) @%zu.%u", (unsigned)bs, bitchain.byte,
+              fail ("bit_write_BS (%u) @%" PRIuSIZE ".%u", (unsigned)bs, bitchain.byte,
                     bitchain.bit);
             }
 
@@ -387,7 +387,7 @@ bit_BL_tests (void)
             {
               bit_set_position (&bitchain, i);
               bit_print (&bitchain, 5);
-              fail ("bit_write_BL (%u) @%zu.%u", (unsigned)bl, bitchain.byte,
+              fail ("bit_write_BL (%u) @%" PRIuSIZE ".%u", (unsigned)bl, bitchain.byte,
                     bitchain.bit);
             }
 
@@ -429,7 +429,7 @@ bit_RD_tests (void)
           if ((size_t)i + 64L == bit_position (&bitchain))
             pass ();
           else
-            fail ("bit_write_RD bit=%d @%zu.%u", i, bitchain.byte, bitchain.bit);
+            fail ("bit_write_RD bit=%d @%" PRIuSIZE ".%u", i, bitchain.byte, bitchain.bit);
           bit_set_position (&bitchain, i);
           result = bit_read_RD (&bitchain);
           if (result == u.d)
@@ -464,7 +464,7 @@ bit_BD_tests (void)
           if (j < 2 || (size_t)i + 66L == bit_position (&bitchain))
             pass ();
           else
-            fail ("bit_write_RD bit=%d @%zu.%u", i, bitchain.byte, bitchain.bit);
+            fail ("bit_write_RD bit=%d @%" PRIuSIZE ".%u", i, bitchain.byte, bitchain.bit);
           bit_set_position (&bitchain, i);
           result = bit_read_BD (&bitchain);
           if (result == u.d)
@@ -744,7 +744,7 @@ bit_write_H_tests (void)
   else                                                                        \
     {                                                                         \
       bit_print (&bitchain, sizeof (Dwg_Handle));                             \
-      fail ("bit_write_H (" FORMAT_H ") @%zu.%u", ARGS_H (handle),            \
+      fail ("bit_write_H (" FORMAT_H ") @%" PRIuSIZE ".%u", ARGS_H (handle),            \
             bitchain.byte, bitchain.bit);                                     \
     }                                                                         \
   bitfree (&bitchain)
@@ -931,7 +931,7 @@ bit_TV_to_utf8_tests (void)
     ok ("bit_TV_to_utf8_tests CP949");
   else
     {
-      fail ("bit_TV_to_utf8 %s CP_CP949 (len=%zu)", p, strlen (p));
+      fail ("bit_TV_to_utf8 %s CP_CP949 (len=%" PRIuSIZE ")", p, strlen (p));
       for (size_t i = 0; i < strlen (p); i++)
         printf ("\\x%02x", (unsigned char)p[i]);
       printf ("\n");
@@ -947,7 +947,7 @@ bit_TV_to_utf8_tests (void)
     ok ("bit_TV_to_utf8_tests 932");
   else
     {
-      fail ("bit_TV_to_utf8 %s 932 (len=%zu)", p, strlen (p));
+      fail ("bit_TV_to_utf8 %s 932 (len=%" PRIuSIZE ")", p, strlen (p));
       for (size_t i = 0; i < strlen (p); i++)
         printf ("\\x%02x", (unsigned char)p[i]);
       printf ("\n");
@@ -960,7 +960,7 @@ bit_TV_to_utf8_tests (void)
     ok ("bit_TV_to_utf8_tests MIF-1 932");
   else
     {
-      fail ("bit_TV_to_utf8 %s MIF-1 932 (len=%zu)", p, strlen (p));
+      fail ("bit_TV_to_utf8 %s MIF-1 932 (len=%" PRIuSIZE ")", p, strlen (p));
       for (size_t i = 0; i < strlen (p); i++)
         printf ("\\x%02x", (unsigned char)p[i]);
       printf ("\n");
@@ -1010,7 +1010,7 @@ bit_write_TV_tests (void)
   if (bitchain.byte == 5 && bitchain.bit == 0)
     ok ("bit_write_TV (<R_13)");
   else
-    fail ("bit_write_TV @%zu.%u", bitchain.byte, bitchain.bit);
+    fail ("bit_write_TV @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 0);
   bitchain.from_version = R_13;
@@ -1018,7 +1018,7 @@ bit_write_TV_tests (void)
   if (bitchain.byte == 5 && bitchain.bit == 2)
     ok ("bit_write_TV (>R_13)");
   else
-    fail ("bit_write_TV @%zu.%u", bitchain.byte, bitchain.bit);
+    fail ("bit_write_TV @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
   bitfree (&bitchain);
 }
@@ -1047,7 +1047,7 @@ bit_write_TF_tests (void)
   if (bitchain.byte == 3 && bitchain.bit == 0)
     ok ("bit_write_TF");
   else
-    fail ("bit_write_TF @%zu.%u", bitchain.byte, bitchain.bit);
+    fail ("bit_write_TF @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
   bitfree (&bitchain);
 }
@@ -1113,7 +1113,7 @@ bit_write_BE_tests (void)
   if (bitchain.byte == 0 && bitchain.bit == 1)
     ok ("bit_write_BE (0.0 0.0 1.1) R_2000");
   else
-    fail ("bit_write_BE @%zu.%u R_2000", bitchain.byte, bitchain.bit);
+    fail ("bit_write_BE @%" PRIuSIZE ".%u R_2000", bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 0);
   bitprepare (&bitchain, 25);
@@ -1122,7 +1122,7 @@ bit_write_BE_tests (void)
   if (bitchain.byte == 24 && bitchain.bit == 7)
     ok ("bit_write_BE (20.2535 10.2523 52.32563) R_2000");
   else
-    fail ("bit_write_BE @%zu.%u R_2000", bitchain.byte, bitchain.bit);
+    fail ("bit_write_BE @%" PRIuSIZE ".%u R_2000", bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 0);
   bitprepare (&bitchain, 25);
@@ -1131,7 +1131,7 @@ bit_write_BE_tests (void)
   if (bitchain.byte == 0 && bitchain.bit == 6)
     ok ("bit_write_BE (0.0 0.0 1.1) R_14");
   else
-    fail ("bit_write_BE @%zu.%u R_14", bitchain.byte, bitchain.bit);
+    fail ("bit_write_BE @%" PRIuSIZE ".%u R_14", bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 0);
   bitprepare (&bitchain, 25);
@@ -1140,7 +1140,7 @@ bit_write_BE_tests (void)
   if (bitchain.byte == 24 && bitchain.bit == 6)
     ok ("bit_write_BE (20.2535 10.2523 52.32563) R_14");
   else
-    fail ("bit_write_BE @%zu.%u R_14", bitchain.byte, bitchain.bit);
+    fail ("bit_write_BE @%" PRIuSIZE ".%u R_14", bitchain.byte, bitchain.bit);
 
   bitfree (&bitchain);
 }
@@ -1226,7 +1226,7 @@ in_hexbin_tests (void)
     }
   else
     {
-      fail ("in_hexbin \"%.*s\" %zu (%zu)", (int)written, dat.chain, written, dat.size);
+      fail ("in_hexbin \"%.*s\" %" PRIuSIZE " (%" PRIuSIZE ")", (int)written, dat.chain, written, dat.size);
       for (size_t i = 0; i < dat.size; i++)
         {
           unsigned char c = bit_read_RC (&dat);
@@ -1341,7 +1341,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 8 && bitchain.bit == 0)
     pass ();
   else
-    fail ("bit_write_RD %g @%zu.%u", 1.2345,
+    fail ("bit_write_RD %g @%" PRIuSIZE ".%u", 1.2345,
           bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 0);
@@ -1358,7 +1358,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 8 && bitchain.bit == 1)
     pass ();
   else
-    fail ("bit_write_RD bit=1 %g @%zu.%u", 1.2345,
+    fail ("bit_write_RD bit=1 %g @%" PRIuSIZE ".%u", 1.2345,
           bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 1);
@@ -1379,7 +1379,7 @@ main (int argc, char const *argv[])
       if (bitchain.byte <= 14)
         pass ();
       else
-        fail ("bit_write_MC @%zu.%u", bitchain.byte, bitchain.bit);
+        fail ("bit_write_MC @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
       bit_set_position (&bitchain, pos);
       // bit_print (&bitchain, 5);
@@ -1402,7 +1402,7 @@ main (int argc, char const *argv[])
       if (bitchain.byte <= 14)
         pass ();
       else
-        fail ("bit_write_UMC @%zu.%u", bitchain.byte, bitchain.bit);
+        fail ("bit_write_UMC @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
       bit_set_position (&bitchain, pos);
       // bit_print (&bitchain, 5);
@@ -1421,7 +1421,7 @@ main (int argc, char const *argv[])
   if (bitchain.byte == 13)
     pass ();
   else
-    fail ("bit_write_MS @%zu.%u", bitchain.byte, bitchain.bit);
+    fail ("bit_write_MS @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
   bit_advance_position (&bitchain, -16L);
   if ((bs = bit_read_MS (&bitchain)) == 5000)
@@ -1435,7 +1435,7 @@ main (int argc, char const *argv[])
   if ((bitchain.byte == 42 || bitchain.byte == 46) && bitchain.bit == 1)
     pass ();
   else
-    fail ("bit_write_DD @%zu.%u", bitchain.byte, bitchain.bit);
+    fail ("bit_write_DD @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, pos);
   dbl = bit_read_DD (&bitchain, 1.0);
@@ -1450,7 +1450,7 @@ main (int argc, char const *argv[])
   if ((bitchain.byte == 58 || bitchain.byte == 62) && bitchain.bit == 4)
     pass ();
   else
-    fail ("bit_write_BT @%zu.%u", bitchain.byte, bitchain.bit);
+    fail ("bit_write_BT @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, pos);
   if ((dbl = bit_read_BT (&bitchain)) == 3.0)
@@ -1496,7 +1496,7 @@ main (int argc, char const *argv[])
   for (int i = 0; i < 6; i++)
     // padding for the T BS, to have aligned strings at 67
     bit_write_B (&bitchain, 0);
-  // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
+  // printf ("@%" PRIuSIZE ".%u\n", bitchain.byte, bitchain.bit);
   pos = bit_position (&bitchain);
 
   {
@@ -1515,12 +1515,12 @@ main (int argc, char const *argv[])
     // wlen = 8
     bit_write_T (&bitchain, (char *)"Teigha\\U+2122"); // convert to unicode
     // containing the ending 0L
-    // printf ("TU @%zu.%u\n", bitchain.byte, bitchain.bit);
+    // printf ("TU @%" PRIuSIZE ".%u\n", bitchain.byte, bitchain.bit);
     if (bitchain.byte == 83 && bitchain.bit == 0 &&
         bitchain.chain[79] == 0x22 && bitchain.chain[80] == 0x21)
       pass ();
     else
-      fail ("bit_write_T => TU %x %x @%zu.%u", bitchain.chain[79],
+      fail ("bit_write_T => TU %x %x @%" PRIuSIZE ".%u", bitchain.chain[79],
             bitchain.chain[80], bitchain.byte, bitchain.bit);
 
     bit_set_position (&bitchain, pos);
@@ -1532,7 +1532,7 @@ main (int argc, char const *argv[])
 #ifdef WORDS_BIGENDIAN
     ws = (BITCODE_TU)wstr;
 #endif
-    // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
+    // printf ("@%" PRIuSIZE ".%u\n", bitchain.byte, bitchain.bit);
     if (bitchain.byte == 83 && bitchain.bit == 0 &&
 #ifndef WORDS_BIGENDIAN
         wstr && !memcmp (wstr, exp, sizeof (exp))
@@ -1546,7 +1546,7 @@ main (int argc, char const *argv[])
       pass ();
     else
       {
-        fail ("bit_read_T => TU @%zu.%u", bitchain.byte, bitchain.bit);
+        fail ("bit_read_T => TU @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 #ifdef WORDS_BIGENDIAN
         bit_set_position (&bitchain, pos);
         bit_print (&bitchain, 18);
@@ -1560,24 +1560,24 @@ main (int argc, char const *argv[])
     bitchain.from_version = R_2007;
     bitchain.version = R_2000;
     bit_write_T (&bitchain, (char *)exp); // convert to ASCII via embed
-    // printf ("TV @%zu.%u\n", bitchain.byte, bitchain.bit);
+    // printf ("TV @%" PRIuSIZE ".%u\n", bitchain.byte, bitchain.bit);
     if (bitchain.byte == 81 && bitchain.bit == 0)
       pass ();
     else
-      fail ("bit_write_T => TV \"%s\" @%zu.%u", &bitchain.chain[67],
+      fail ("bit_write_T => TV \"%s\" @%" PRIuSIZE ".%u", &bitchain.chain[67],
             bitchain.byte, bitchain.bit);
 
     bit_set_position (&bitchain, pos);
     bitchain.from_version = R_2000;
     bitchain.version = R_2000;
     str = bit_read_T (&bitchain); // via bit_read_TV
-    // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
+    // printf ("@%" PRIuSIZE ".%u\n", bitchain.byte, bitchain.bit);
     if (str && !strcmp (str, "Teigha\\U+2122"))
       pass ();
     else
       {
         size_t pos1;
-        fail ("bit_read_T => TV \"%s\" @%zu.%u", str, bitchain.byte,
+        fail ("bit_read_T => TV \"%s\" @%" PRIuSIZE ".%u", str, bitchain.byte,
               bitchain.bit);
         pos1 = bit_position (&bitchain);
         bit_set_position (&bitchain, pos);
@@ -1590,7 +1590,7 @@ main (int argc, char const *argv[])
   }
 
   pos = bit_position (&bitchain);
-  // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
+  // printf ("@%" PRIuSIZE ".%u\n", bitchain.byte, bitchain.bit);
   {
     Dwg_Color color;
     bitchain.from_version = bitchain.version = R_2000;
@@ -1600,13 +1600,13 @@ main (int argc, char const *argv[])
     if (bitchain.byte == 82 && bitchain.bit == 2)
       pass ();
     else
-      fail ("bit_write_CMC @%zu.%u", bitchain.byte, bitchain.bit);
+      fail ("bit_write_CMC @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
   }
   size = bit_position (&bitchain) - pos;
   if (size == 10)
     pass ();
   else
-    fail ("CMC size: %zu", size);
+    fail ("CMC size: %" PRIuSIZE "", size);
 
   bit_advance_position (&bitchain, -(long)size);
   {
@@ -1636,7 +1636,7 @@ main (int argc, char const *argv[])
     if (bitchain.byte == 115 && bitchain.bit == 0)
       pass ();
     else
-      fail ("bit_write_CMC (r2004) @%zu.%u", bitchain.byte, bitchain.bit);
+      fail ("bit_write_CMC (r2004) @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
     bit_set_position (&bitchain, pos);
     bit_read_CMC (&bitchain, &bitchain, &color);
@@ -1670,7 +1670,7 @@ main (int argc, char const *argv[])
       pass ();
     else
       {
-        fail ("bit_search_sentinel %zu", bitchain.byte);
+        fail ("bit_search_sentinel %" PRIuSIZE "", bitchain.byte);
         bitchain.byte = 150;
       }
   }
@@ -1687,7 +1687,7 @@ main (int argc, char const *argv[])
   if (bitchain.size == 8292)
     pass ();
   else
-    fail ("bit_chain_alloc %zu", bitchain.size);
+    fail ("bit_chain_alloc %" PRIuSIZE, bitchain.size);
 
   {
     dwg_wchar_t w[] = { 0x4e2d, 0x5fc3, 0x7ebf, 0 };

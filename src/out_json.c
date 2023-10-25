@@ -2248,7 +2248,7 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->chain += 16; /* skip the sentinel */
       KEY (THUMBNAILIMAGE);
       HASH;
-      FIRSTPREFIX fprintf (dat->fh, "\"size\": %zu", _obj->size);
+      FIRSTPREFIX fprintf (dat->fh, "\"size\": %" PRIuSIZE, _obj->size);
       FIELD_BINARY (chain, _obj->size, 310);
       if (dwg->header.from_version >= R_2004)
         _obj->chain -= 16; /* undo for free */

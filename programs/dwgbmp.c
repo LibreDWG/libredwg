@@ -161,7 +161,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
     {
       fprintf (stderr,
                "Invalid thumbnail data in %s,"
-               " size " FORMAT_RL " > %zu\n",
+               " size " FORMAT_RL " > %" PRIuSIZE "\n",
                dwgfile, size, dwg.thumbnail.size);
       if (must_free)
         free (bmpfile);

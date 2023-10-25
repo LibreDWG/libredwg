@@ -22,7 +22,7 @@
   static char _AcDs_Schema_Prop_types[] = {0, 0, 2, 1, 2, 4, 8, 1, 2, 4, 8, 4, 8, 0, 0, 0};
 
   DECODER {
-    LOG_TRACE ("unknown_bits [%zu (%u,%d,%d) %zu TF]: ", dat->size * 8,
+    LOG_TRACE ("unknown_bits [%" PRIuSIZE " (%u,%d,%d) %" PRIuSIZE " TF]: ", dat->size * 8,
                0, 0, 0, dat->size);
     LOG_TRACE_TF (dat->chain, (int)dat->size);
     LOG_TRACE ("\n");
@@ -354,7 +354,7 @@
             Dwg_Entity_3DSOLID *sol;
             size_t size = e - s;
             size += strlen (end);
-            LOG_TRACE ("acis_sab_data[%d]: found %s at %zu, size %zu\n",
+            LOG_TRACE ("acis_sab_data[%d]: found %s at %" PRIuSIZE ", size %" PRIuSIZE "\n",
                        num_acis_sab_data, start, j, size);
             if (!dwg->num_acis_sab_hdl)
               {
@@ -386,7 +386,7 @@
             dwg_dynapi_entity_set_value (sol, o->name, "acis_empty", &acis_empty, 0);
             // o->tio.entity->has_ds_data = 0; // maybe there is more, like the
             // wires and silhuettes
-            LOG_TRACE ("%s.acis_data = %zu " FORMAT_REF "\n", o->name, size,
+            LOG_TRACE ("%s.acis_data = %" PRIuSIZE " " FORMAT_REF "\n", o->name, size,
                        ARGS_REF (hdl))
             free (hdl); // it is a non-global, free'able handleref. Created in
                         // common_entity_data.spec
@@ -394,7 +394,8 @@
           }
         else
           {
-            LOG_WARN ("No End-of-ASM-data found from %zu - %zu for %d-th SAB data",
+            LOG_WARN ("No End-of-ASM-data found from %" PRIuSIZE " - %" PRIuSIZE
+                      " for %d-th SAB data",
                        j, dat->size, num_acis_sab_data);
             i = (j + 20) & UINT_MAX;
           }

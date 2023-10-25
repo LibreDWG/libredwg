@@ -268,7 +268,7 @@ main (int argc, char *argv[])
       n_read = fread (buf, 1, len, f);
       fclose (f);
       assert ((long)n_read == len);
-      fprintf (stderr, "llvmfuzz_standalone %s [%zu]\n", argv[i], len);
+      fprintf (stderr, "llvmfuzz_standalone %s [%" PRIuSIZE "]\n", argv[i], len);
       LLVMFuzzerTestOneInput (buf, len);
       free (buf);
       // Bit_Chain dat = { 0 };
