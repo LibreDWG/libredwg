@@ -642,8 +642,10 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             {
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
               SINCE (R_2000)
-              { LOG_INFO ("Object bitsize: %u\n", obj->bitsize) } LOG_INFO (
-                  "Object handle: " FORMAT_H "\n", ARGS_H (obj->handle));
+              {
+                LOG_INFO ("Object bitsize: %u\n", obj->bitsize);
+              }
+              LOG_INFO ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle));
               return error | DWG_ERR_INVALIDTYPE;
             }
         }

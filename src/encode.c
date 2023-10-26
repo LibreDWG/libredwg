@@ -2623,8 +2623,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       _obj->numentity_sections = 3;
     }
     SINCE (R_2004)
-    if (!_obj->r2004_header_address)
-      _obj->r2004_header_address = 128;
+    {
+      if (!_obj->r2004_header_address)
+        _obj->r2004_header_address = 128;
+    }
 
       // clang-format off
     #include "header.spec"
@@ -2812,7 +2814,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           }
       }
       SINCE (R_11)
-      error |= encode_r11_auxheader (dat, dwg);
+      {
+        error |= encode_r11_auxheader (dat, dwg);
+      }
       addr = dat->byte & 0xFFFFFFFF;
       LOG_TRACE ("@0x%x -> ", addr);
       if (error >= DWG_ERR_CRITICAL)
@@ -4330,7 +4334,9 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 #define CHK_ENDPOS                                                            \
   dwg->cur_index += tblnum;                                                   \
   SINCE (R_11)                                                                \
-  bit_write_CRC (dat, pvzadr, 0xC0C1)
+  {                                                                           \
+    bit_write_CRC (dat, pvzadr, 0xC0C1);                                      \
+  }
 
   switch (id)
     {
@@ -4700,7 +4706,9 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
             size_t pos = dat->byte;
             obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
             SINCE (R_11)
-            obj->size += 2; // crc16
+            {
+              obj->size += 2; // crc16
+            }
             dat->byte = size_pos;
             bit_write_RS (dat, obj->size);
             LOG_TRACE ("-size: %u [RL] (@%" PRIuSIZE ".%u)\n", obj->size,

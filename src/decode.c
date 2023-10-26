@@ -3059,7 +3059,10 @@ read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       UNTIL (R_2004)
-      { LOG_INFO ("%s section not found\n", "Template") } LATER_VERSIONS
+      {
+        LOG_INFO ("%s section not found\n", "Template");
+      }
+      LATER_VERSIONS
       {
         // violated by Teigha 4.3.2
         LOG_ERROR ("%s section not found\n", "Template")
@@ -4261,7 +4264,9 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   SINCE (R_2007)
   {
     SINCE (R_2010)
-    LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+    {
+      LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+    }
     if (obj->bitsize > obj->size * 8)
       {
         obj->bitsize = obj->size * 8;
@@ -4271,7 +4276,9 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       }
     // restrict the hdl_dat stream. already done for r2007
     SINCE (R_2010)
-    error |= obj_handle_stream (dat, obj, hdl_dat);
+    {
+      error |= obj_handle_stream (dat, obj, hdl_dat);
+    }
     // and set the string stream (restricted to size)
     if (obj->type >= 500 || obj_has_strings (obj->type))
       error |= obj_string_stream (dat, obj, str_dat);
@@ -6477,7 +6484,9 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
 
   // with sentinel in case of R11
   SINCE (R_11)
-  real_start -= 16;
+  {
+    real_start -= 16;
+  }
 
   // report unknown data before entites block
   if (start != end && real_start > 0 && (BITCODE_RL)dat->byte != real_start)
@@ -6745,7 +6754,9 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                     if (flag_r11 & FLAG_R11_HAS_LTYPE)
                       {
                         PRE (R_11)
-                        dat->byte += 1;
+                        {
+                          dat->byte += 1;
+                        }
                         else dat->byte += 2;
                       }
                     if (flag_r11 & FLAG_R11_HAS_THICKNESS)
@@ -6809,7 +6820,9 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 if (flag_r11 & FLAG_R11_HAS_LTYPE)
                   {
                     PRE (R_11)
-                    dat->byte += 1;
+                    {
+                      dat->byte += 1;
+                    }
                     else dat->byte += 2;
                   }
                 if (flag_r11 & FLAG_R11_HAS_THICKNESS)

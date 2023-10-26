@@ -242,7 +242,9 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
   // with sentinel in case of R11
   SINCE (R_11)
-  real_start -= 16; // the sentinel size
+  {
+    real_start -= 16; // the sentinel size
+  }
 
   // report unknown data before table
   if (tbl->address && dat->byte != real_start)
@@ -717,8 +719,13 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
 
   PRE (R_10)
-  num_entities = dwg->header_vars.numentities;
-  else num_entities = 0;
+  {
+    num_entities = dwg->header_vars.numentities;
+  }
+  LATER_VERSIONS
+  {
+    num_entities = 0;
+  }
   PRE (R_2_0b)
   {
     dwg->header.entities_start = dat->byte & 0xFFFFFFFF;

@@ -14,10 +14,11 @@ StatementMacros: ['SET_ENT',
                  'DISABLE_NODSTYLE',
                  'ENCODE_CTRL_TO_TABLE',
                  'PRE',
-                 'VERSION',
-                 'VERSIONS',
+                 'LATER_VERSIONS'
                  'SINCE',
                  'UNTIL'
+                 'VERSION',
+                 'VERSIONS',
                  ]
 WhitespaceSensitiveMacros: ['STRINGIZE', 'SZ']
 ...

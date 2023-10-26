@@ -1953,9 +1953,13 @@ json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   RECORD (HEADER); // single hash
   // separate funcs to catch the return, and end with ENDRECORD
   PRE (R_13b1)
-  error = json_preR13_header_write_private (dat, dwg);
+  {
+    error = json_preR13_header_write_private (dat, dwg);
+  }
   LATER_VERSIONS
-  error = json_header_write_private (dat, dwg);
+  {
+    error = json_header_write_private (dat, dwg);
+  }
   ENDRECORD ();
   return error;
 }
@@ -1991,9 +1995,13 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int max_id = SECTION_VIEW;
   VERSIONS (R_10, R_11)
-  max_id = SECTION_DIMSTYLE;
+  {
+    max_id = SECTION_DIMSTYLE;
+  }
   VERSIONS (R_11, R_13b1)
-  max_id = SECTION_VX;
+  {
+    max_id = SECTION_VX;
+  }
   CLEARFIRST;
   SECTION (TABLES);
   // FIXME __cplusplus
@@ -2012,7 +2020,9 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-            FIELD_RS (flags_r11, 0);
+            {
+              FIELD_RS (flags_r11, 0);
+            }
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2032,10 +2042,18 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               FIELD_RC (flag, 70);
               FIELD_TFv (name, 32, 2);
               SINCE (R_11)
-              FIELD_RSd (used, 0); // -1
+              {
+                FIELD_RSd (used, 0); // -1
+              }
               PRE (R_13b1)
-              { FIELD_RL (block_offset_r11, 0) } LATER_VERSIONS{ FIELD_RC (
-                  block_scaling, 0) } SINCE (R_11)
+              {
+                FIELD_RL (block_offset_r11, 0);
+              }
+              LATER_VERSIONS
+              {
+                FIELD_RC (block_scaling, 0);
+              }
+              SINCE (R_11)
               {
                 FIELD_HANDLE (block_entity, 2, 0);
                 FIELD_RC (flag2, 0);
@@ -2052,7 +2070,9 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-            FIELD_RS (flags_r11, 0);
+            {
+              FIELD_RS (flags_r11, 0);
+            }
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2075,7 +2095,9 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-            FIELD_RS (flags_r11, 0);
+            {
+              FIELD_RS (flags_r11, 0);
+            }
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2104,7 +2126,9 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-            FIELD_RS (flags_r11, 0);
+            {
+              FIELD_RS (flags_r11, 0);
+            }
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2133,7 +2157,9 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-            FIELD_RS (flags_r11, 0);
+            {
+              FIELD_RS (flags_r11, 0);
+            }
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2167,7 +2193,9 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-            FIELD_RS (flags_r11, 0);
+            {
+              FIELD_RS (flags_r11, 0);
+            }
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2556,7 +2584,8 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       ENDHASH;
     }
   ENDSEC ();
-  VERSION (R_14) {
+  VERSION (R_14)
+  {
     FIELD_RL (junk_r14_1, 0);
     FIELD_RL (junk_r14_2, 0);
   }

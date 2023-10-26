@@ -1970,7 +1970,9 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("LTYPE.dashes[%d].length = %f [BD 49]\n", j,
                      pair->value.d);
           PRE (R_13b1)
-          o->pattern_len += pair->value.d;
+          {
+            o->pattern_len += pair->value.d;
+          }
         }
       else if (pair->code == 74)
         {
@@ -8052,7 +8054,9 @@ add_AcDbBlockRotationParameter (Dwg_Object *restrict obj,
 #  define FIELD_CMC(field, dxf) dxf_read_CMC (dwg, dat, &o->field, #  field, dxf)
 #  define FIELD_CMC2004(field, dxf)                                           \
     SINCE (R_2004)                                                            \
-    FIELD_CMC (field, dxf)
+    {                                                                         \
+      FIELD_CMC (field, dxf);                                                 \
+    }
 
 // starts with 71 . 0
 // returns NULL on success
