@@ -81,7 +81,7 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$TeighaFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg" \
-                -geometry 150x150+0-0 >/dev/null 2>/dev/null
+                >/dev/null 2>/dev/null
         rm "$b.json.err" 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
             echo "$d" >"$b.json.err"
