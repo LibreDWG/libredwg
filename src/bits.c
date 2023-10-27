@@ -70,7 +70,7 @@ bit_advance_position (Bit_Chain *dat, long advance)
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE ".%u, size %" PRIuSIZE
                  ", advance by %ld",
-                 __FUNCTION__, dat->byte, dat->bit, dat->size, advance);
+                 "bit_advance_position", dat->byte, dat->bit, dat->size, advance);
     }
   else if ((long)(pos + advance) < 0)
     {
@@ -105,7 +105,7 @@ bit_set_position (Bit_Chain *dat, size_t bitpos)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", have %" PRIuSIZE,
-                 __FUNCTION__, dat->byte, dat->size)
+                 "bit_set_position", dat->byte, dat->size)
     }
 }
 
@@ -166,7 +166,7 @@ bit_read_B (Bit_Chain *dat)
   unsigned char result;
   unsigned char byte;
 
-  CHK_OVERFLOW (__FUNCTION__, 0)
+  CHK_OVERFLOW ("bit_read_B", 0)
   byte = dat->chain[dat->byte];
   result = (byte & (0x80 >> dat->bit)) >> (7 - dat->bit);
 
@@ -198,7 +198,7 @@ bit_read_BB (Bit_Chain *dat)
   unsigned char result;
   unsigned char byte;
 
-  CHK_OVERFLOW (__FUNCTION__, 0)
+  CHK_OVERFLOW ("bit_read_BB", 0)
   byte = dat->chain[dat->byte];
   if (dat->bit < 7)
     result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);
@@ -330,7 +330,7 @@ bit_read_RC (Bit_Chain *dat)
   unsigned char result;
   unsigned char byte;
 
-  CHK_OVERFLOW (__FUNCTION__, 0)
+  CHK_OVERFLOW ("bit_read_RC", 0)
   byte = dat->chain[dat->byte];
   if (dat->bit == 0)
     {
@@ -339,7 +339,7 @@ bit_read_RC (Bit_Chain *dat)
     }
   else
     {
-      CHK_OVERFLOW_PLUS (1, __FUNCTION__, 0)
+      CHK_OVERFLOW_PLUS (1, "bit_read_RC", 0)
       result = byte << dat->bit;
       byte = dat->chain[dat->byte + 1];
       result |= byte >> (8 - dat->bit);
@@ -387,7 +387,7 @@ bit_read_RS (Bit_Chain *dat)
 
   // least significant byte first
   byte1 = bit_read_RC (dat);
-  CHK_OVERFLOW (__FUNCTION__, 0)
+  CHK_OVERFLOW ("bit_read_RS", 0)
   byte2 = bit_read_RC (dat);
   return (BITCODE_RS)(((BITCODE_RS)byte2 << 8) | byte1);
 }
@@ -411,7 +411,7 @@ bit_read_RS_BE (Bit_Chain *dat)
 
   // most significant byte first
   byte1 = bit_read_RC (dat);
-  CHK_OVERFLOW (__FUNCTION__, 0)
+  CHK_OVERFLOW ("bit_read_RS_BE", 0)
   byte2 = bit_read_RC (dat);
   return (BITCODE_RS)(((BITCODE_RS)byte1 << 8) | byte2);
 }
@@ -435,7 +435,7 @@ bit_read_RL (Bit_Chain *dat)
 
   // least significant word first
   word1 = bit_read_RS (dat);
-  CHK_OVERFLOW (__FUNCTION__, 0)
+  CHK_OVERFLOW ("bit_read_RL", 0)
   word2 = bit_read_RS (dat);
   return ((((uint32_t)word2) << 16) | ((uint32_t)word1));
 }
@@ -460,7 +460,7 @@ bit_read_RL_BE (Bit_Chain *dat)
 
   // most significant word first
   word1 = bit_read_RS_BE (dat);
-  CHK_OVERFLOW (__FUNCTION__, 0)
+  CHK_OVERFLOW ("bit_read_RL_BE", 0)
   word2 = bit_read_RS_BE (dat);
   return ((((uint32_t)word1) << 16) | ((uint32_t)word2));
 }
@@ -490,7 +490,7 @@ bit_read_RLL (Bit_Chain *dat)
   )
     {
       BITCODE_RLL v;
-      CHK_OVERFLOW_PLUS (8, __FUNCTION__, 0)
+      CHK_OVERFLOW_PLUS (8, "bit_read_RLL", 0)
       v = le64toh (*(uint64_t *)&dat->chain[dat->byte]);
       dat->byte += 8;
       return v;
@@ -500,7 +500,7 @@ bit_read_RLL (Bit_Chain *dat)
       BITCODE_RL word1, word2;
       // least significant word first
       word1 = bit_read_RL (dat);
-      CHK_OVERFLOW (__FUNCTION__, 0)
+      CHK_OVERFLOW ("bit_read_RLL", 0)
       word2 = bit_read_RL (dat);
       return ((((uint64_t)word2) << 32) | ((uint64_t)word1));
     }
@@ -520,7 +520,7 @@ bit_read_RLL_BE (Bit_Chain *dat)
   )
     {
       BITCODE_RLL v;
-      CHK_OVERFLOW_PLUS (8, __FUNCTION__, 0)
+      CHK_OVERFLOW_PLUS (8, "bit_read_RLL_BE", 0)
       v = be64toh (*(uint64_t *)&dat->chain[dat->byte]);
       dat->byte += 8;
       return v;
@@ -530,7 +530,7 @@ bit_read_RLL_BE (Bit_Chain *dat)
       // most significant word first
       BITCODE_RL word1, word2;
       word1 = bit_read_RL_BE (dat);
-      CHK_OVERFLOW (__FUNCTION__, 0)
+      CHK_OVERFLOW ("bit_read_RLL_BE", 0)
       word2 = bit_read_RL_BE (dat);
       return ((((uint64_t)word1) << 32) | ((uint64_t)word2));
     }
@@ -566,7 +566,7 @@ bit_read_RD (Bit_Chain *dat)
     uint64_t u;
     double d;
   } u;
-  CHK_OVERFLOW_PLUS (8, __FUNCTION__, bit_nan ())
+  CHK_OVERFLOW_PLUS (8, "bit_read_RD", bit_nan ())
   if (!dat->bit &&
 #ifdef HAVE_ALIGNED_ACCESS_REQUIRED
       !((intptr_t)&dat->chain[dat->byte] % 8)
@@ -608,7 +608,7 @@ bit_read_BS (Bit_Chain *dat)
   const unsigned char two_bit_code = bit_read_BB (dat);
   if (two_bit_code == 0)
     {
-      CHK_OVERFLOW (__FUNCTION__, 0)
+      CHK_OVERFLOW ("bit_read_BS", 0)
       return bit_read_RS (dat);
     }
   else if (two_bit_code == 1)
@@ -650,7 +650,7 @@ bit_read_BL (Bit_Chain *dat)
   const unsigned char two_bit_code = bit_read_BB (dat);
   if (two_bit_code == 0)
     {
-      CHK_OVERFLOW (__FUNCTION__, 0)
+      CHK_OVERFLOW ("bit_read_BL", 0)
       return bit_read_RL (dat);
     }
   else if (two_bit_code == 1)
@@ -718,7 +718,7 @@ bit_read_BOT (Bit_Chain *dat)
 
   if (two_bit_code == 0)
     {
-      CHK_OVERFLOW (__FUNCTION__, 0)
+      CHK_OVERFLOW ("bit_read_BOT", 0)
       return bit_read_RC (dat);
     }
   else if (two_bit_code == 1)
@@ -770,7 +770,7 @@ bit_read_BLL (Bit_Chain *dat)
     case 4:
       return bit_read_RL (dat);
     default:
-      CHK_OVERFLOW (__FUNCTION__, 0)
+      CHK_OVERFLOW ("bit_read_BLL", 0)
       for (i = 0; i < len; i++)
         {
           result <<= 8;
@@ -791,7 +791,7 @@ bit_read_3BLL (Bit_Chain *dat)
   unsigned int i, len;
   BITCODE_BLL result = 0ULL;
   len = bit_read_3B (dat);
-  CHK_OVERFLOW (__FUNCTION__, 0)
+  CHK_OVERFLOW ("bit_read_3BLL", 0)
   for (i = 0; i < len; i++)
     {
       result <<= 8;
@@ -859,7 +859,7 @@ bit_read_BD (Bit_Chain *dat)
   two_bit_code = bit_read_BB (dat);
   if (two_bit_code == 0)
     {
-      CHK_OVERFLOW (__FUNCTION__, bit_nan ())
+      CHK_OVERFLOW ("bit_read_BD", bit_nan ())
       return bit_read_RD (dat);
     }
   else if (two_bit_code == 1)
@@ -1176,7 +1176,7 @@ bit_read_DD (Bit_Chain *dat, double default_value)
     {
       // dbl: 7654 3210
       uchar_result = (unsigned char *)&default_value;
-      CHK_OVERFLOW_PLUS (6, __FUNCTION__, bit_nan ())
+      CHK_OVERFLOW_PLUS (6, "bit_read_DD", bit_nan ())
 #ifdef WORDS_BIGENDIAN
       uchar_result[7] = bit_read_RC (dat);
       uchar_result[6] = bit_read_RC (dat);
@@ -1201,17 +1201,17 @@ bit_read_DD (Bit_Chain *dat, double default_value)
       // first 4bits eq, only last 4
 #ifdef WORDS_BIGENDIAN
       uint32_t *result = (uint32_t *)&default_value;
-      CHK_OVERFLOW_PLUS (4, __FUNCTION__, bit_nan ())
+      CHK_OVERFLOW_PLUS (4, "bit_read_DD", bit_nan ())
       *result = bit_read_RL (dat);
 #else
       uchar_result = (unsigned char *)&default_value;
-      CHK_OVERFLOW_PLUS (4, __FUNCTION__, bit_nan ())
+      CHK_OVERFLOW_PLUS (4, "bit_read_DD", bit_nan ())
       uchar_result[0] = bit_read_RC (dat);
       uchar_result[1] = bit_read_RC (dat);
       uchar_result[2] = bit_read_RC (dat);
       uchar_result[3] = bit_read_RC (dat);
 #endif
-      CHK_OVERFLOW (__FUNCTION__, bit_nan ())
+      CHK_OVERFLOW ("bit_read_DD", bit_nan ())
       return default_value;
     }
 }
@@ -1496,7 +1496,7 @@ bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
                  ", size %" PRIuSIZE,
-                 __FUNCTION__, start_address, dat->byte, dat->size)
+                 "bit_check_CRC", start_address, dat->byte, dat->size)
       return 0;
     }
   assert (dat->byte >= start_address);
@@ -1543,7 +1543,7 @@ bit_write_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
                  ", size %" PRIuSIZE,
-                 __FUNCTION__, start_address, dat->byte, dat->size)
+                 "bit_write_CRC", start_address, dat->byte, dat->size)
       return 0;
     }
   assert (dat->byte >= start_address);
@@ -1573,7 +1573,7 @@ bit_write_CRC_BE (Bit_Chain *dat, size_t start_address, uint16_t seed)
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
                  ", size %" PRIuSIZE,
-                 __FUNCTION__, start_address, dat->byte, dat->size)
+                 "bit_write_CRC_BE", start_address, dat->byte, dat->size)
       return 0;
     }
   assert (dat->byte >= start_address);
@@ -1599,7 +1599,7 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE " > size %" PRIuSIZE,
-                 __FUNCTION__, dat->byte + length, dat->size);
+                 "bit_read_fixed", dat->byte + length, dat->size);
       if (length < dat->size - dat->byte)
         memset (dest, 0, length);
       *dest = 0;
@@ -1635,10 +1635,10 @@ bit_read_TF (Bit_Chain *restrict dat, size_t length)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u + %ld > %" PRIuSIZE,
-                 __FUNCTION__, dat->byte, dat->bit, (long)length, dat->size);
+                 "bit_read_TF", dat->byte, dat->bit, (long)length, dat->size);
       return NULL;
     }
-  CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (length, "bit_read_TF", NULL)
   chain = (BITCODE_RC *)malloc (length + 1);
   if (!chain)
     {
@@ -1667,7 +1667,7 @@ bit_read_bits (Bit_Chain *dat, size_t bits)
   unsigned bytes = (bits / 8) & UINT_MAX;
   int rest = bits % 8;
   BITCODE_RC *restrict chain;
-  CHK_OVERFLOW_PLUS (bytes, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (bytes, "bit_read_bits", NULL)
   chain = (BITCODE_RC *)calloc (bytes + (rest ? 2 : 1), 1);
   if (!chain)
     {
@@ -1786,15 +1786,15 @@ bit_read_TV (Bit_Chain *restrict dat)
 
   if (dat->from_version < R_13b1)
     {
-      CHK_OVERFLOW_PLUS (2, __FUNCTION__, NULL)
+      CHK_OVERFLOW_PLUS (2, "bit_read_TV", NULL)
       length = bit_read_RS (dat);
     }
   else
     {
-      CHK_OVERFLOW_PLUS (1, __FUNCTION__, NULL)
+      CHK_OVERFLOW_PLUS (1, "bit_read_TV", NULL)
       length = bit_read_BS (dat);
     }
-  CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (length, "bit_read_TV", NULL)
   if (!loglevel)
     loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   chain = (unsigned char *)malloc (length + 1);
@@ -1975,7 +1975,7 @@ bit_wcs2len (const BITCODE_TU restrict wstr)
           b += 2;
           c = TU_to_int (b);
         }
-      // fprintf (stderr, "* %s: %" PRIuSIZE "\n", __FUNCTION__, len);
+      // fprintf (stderr, "* %s: %" PRIuSIZE "\n", "bit_wcs2len", len);
       return len;
     }
   else
@@ -1986,7 +1986,7 @@ bit_wcs2len (const BITCODE_TU restrict wstr)
         {
           len++;
         }
-      // fprintf (stderr, "* %s: %" PRIuSIZE "\n", __FUNCTION__, len);
+      // fprintf (stderr, "* %s: %" PRIuSIZE "\n", "bit_wcs2len", len);
       return len;
     }
 }
@@ -2276,9 +2276,9 @@ bit_read_TU (Bit_Chain *restrict dat)
   unsigned int length;
   BITCODE_TU ws;
 
-  CHK_OVERFLOW_PLUS (1, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (1, "bit_read_TU", NULL)
   length = bit_read_BS (dat);
-  CHK_OVERFLOW_PLUS (length * 2, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (length * 2, "bit_read_TU", NULL)
   ws = (BITCODE_TU)malloc ((length + 1) * 2);
   if (!ws)
     {
@@ -2301,7 +2301,7 @@ bit_read_TU_size (Bit_Chain *restrict dat, unsigned int len)
   unsigned int i;
   BITCODE_TU chain;
 
-  CHK_OVERFLOW_PLUS (len * 2, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (len * 2, "bit_read_TU_size", NULL)
   chain = (BITCODE_TU)malloc ((len + 1) * 2);
   if (!chain)
     {
@@ -2326,9 +2326,9 @@ bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
   unsigned int length;
   BITCODE_TU chain;
 
-  CHK_OVERFLOW_PLUS (1, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (1, "bit_read_TU_len", NULL)
   length = bit_read_BS (dat);
-  CHK_OVERFLOW_PLUS (length * 2, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (length * 2, "bit_read_TU_len", NULL)
   chain = (BITCODE_TU)malloc ((length + 1) * 2);
   if (!chain)
     {
@@ -2354,9 +2354,9 @@ bit_read_T16 (Bit_Chain *restrict dat)
   BITCODE_RS i, length;
   BITCODE_TV chain;
 
-  CHK_OVERFLOW (__FUNCTION__, NULL)
+  CHK_OVERFLOW ("bit_read_T16", NULL)
   length = bit_read_RS (dat);
-  CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (length, "bit_read_T16", NULL)
   chain = (BITCODE_TV)malloc (length + 1);
   if (!chain)
     {
@@ -2379,9 +2379,9 @@ bit_read_TU16 (Bit_Chain *restrict dat)
   BITCODE_RS i, length;
   BITCODE_TU chain;
 
-  CHK_OVERFLOW_PLUS (2, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (2, "bit_read_TU16", NULL)
   length = bit_read_RS (dat);
-  CHK_OVERFLOW_PLUS (length * 2, __FUNCTION__, NULL)
+  CHK_OVERFLOW_PLUS (length * 2, "bit_read_TU16", NULL)
   chain = (BITCODE_TU)malloc ((length + 1) * 2);
   if (!chain)
     {
@@ -2414,7 +2414,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
-                     __FUNCTION__, dat->byte, size)
+                     "bit_read_T32", dat->byte, size)
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
@@ -2436,7 +2436,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
-                     __FUNCTION__, dat->byte, size)
+                     "bit_read_T32", dat->byte, size)
           return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
@@ -2473,7 +2473,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
-                     __FUNCTION__, dat->byte, size)
+                     "bit_read_TU32", dat->byte, size)
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
@@ -2509,7 +2509,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
-                     __FUNCTION__, dat->byte, size)
+                     "bit_read_TU32", dat->byte, size)
           return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
@@ -3638,12 +3638,12 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
     color->index = bit_read_BS (dat);
   if (dat->from_version >= R_2004) // truecolor
     {
-      CHK_OVERFLOW_PLUS (1, __FUNCTION__, DWG_ERR_VALUEOUTOFBOUNDS)
+      CHK_OVERFLOW_PLUS (1, "bit_read_CMC", DWG_ERR_VALUEOUTOFBOUNDS)
       color->rgb = bit_read_BL (dat);
-      CHK_OVERFLOW_PLUS (1, __FUNCTION__, DWG_ERR_VALUEOUTOFBOUNDS)
+      CHK_OVERFLOW_PLUS (1, "bit_read_CMC", DWG_ERR_VALUEOUTOFBOUNDS)
       color->method = color->rgb >> 0x18;
       color->flag = bit_read_RC (dat);
-      CHK_OVERFLOW_PLUS (0, __FUNCTION__, DWG_ERR_VALUEOUTOFBOUNDS)
+      CHK_OVERFLOW_PLUS (0, "bit_read_CMC", DWG_ERR_VALUEOUTOFBOUNDS)
       if (color->flag < 4)
         {
           color->name
