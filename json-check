@@ -78,10 +78,11 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
         1\.*)     can_teigha=0 ;;
         11)       r=12 ;;
     esac
+    # shellcheck disable=SC2086,SC2154
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$TeighaFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg" \
-                >/dev/null 2>/dev/null
+                $ODAFileConverter_geometry >/dev/null 2>/dev/null
         rm "$b.json.err" 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
             echo "$d" >"$b.json.err"
