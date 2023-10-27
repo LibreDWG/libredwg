@@ -1378,7 +1378,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR (
               "Unexpected %s at %u of %ld tokens, expected %s OBJECT. %s:%d",
               t_typename[t->type], tokens->index, tokens->num_tokens, section,
-              __FUNCTION__, __LINE__);
+              "json_CLASSES", 1372);
           json_advance_unknown (dat, tokens, t->type, 0);
           return DWG_ERR_INVALIDTYPE;
         }
@@ -2712,8 +2712,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected "
                              "%s OBJECT. %s:%d",
                              t_typename[t->type], tokens->index,
-                             tokens->num_tokens, subclass, __FUNCTION__,
-                             __LINE__);
+                             tokens->num_tokens, subclass, "_set_struct_field",
+                             2674);
                   free (subclass);
                   json_advance_unknown (dat, tokens, t->type, 0);
                   JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -3089,7 +3089,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR (
               "Unexpected %s at %u of %ld tokens, expected %s OBJECT. %s:%d",
               t_typename[t->type], tokens->index, tokens->num_tokens, section,
-              __FUNCTION__, __LINE__);
+              "json_OBJECTS", 3050);
           json_advance_unknown (dat, tokens, t->type, 0);
           JSON_TOKENS_CHECK_OVERFLOW (goto typeerr)
         }
@@ -5195,8 +5195,13 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= json_HANDLES (dat, dwg, &tokens);
       else
         {
+#ifdef __LINE__
           LOG_ERROR ("Unexpected JSON key %s at %u of %ld tokens. %s:%d", key,
-                     tokens.index, tokens.num_tokens, __FUNCTION__, __LINE__);
+                     tokens.index, tokens.num_tokens, "dwg_read_json", __LINE__);
+#else
+          LOG_ERROR ("Unexpected JSON key %s at %u of %ld tokens. %s:%d", key,
+                     tokens.index, tokens.num_tokens, "dwg_read_json", 5176);
+#endif
           LOG_TRACE ("\n")
           json_free_globals (&tokens);
           return error | DWG_ERR_INVALIDTYPE;

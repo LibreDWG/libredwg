@@ -4872,7 +4872,7 @@ bit_read_BB_noadv (Bit_Chain *dat)
   if (dat->byte >= dat->size)
     {
       LOG_ERROR ("%s buffer overflow at %" PRIuSIZE " >= %" PRIuSIZE,
-                 __FUNCTION__, dat->byte, dat->size)
+                 "bit_read_BB_noadv", dat->byte, dat->size)
       return 9;
     }
   byte = dat->chain[dat->byte];
@@ -6260,7 +6260,7 @@ decode_preR13_sentinel (const Dwg_Sentinel sentinel,
   if (dat->byte + 16 > dat->size)
     {
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE " > size %" PRIuSIZE,
-                 __FUNCTION__, dat->byte + 16, dat->size)
+                 "decode_preR13_sentinel", dat->byte + 16, dat->size)
       return DWG_ERR_INVALIDDWG;
     }
   r11_sentinel = bit_read_TF (dat, 16U);

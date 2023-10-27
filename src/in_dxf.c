@@ -390,10 +390,10 @@ dxf_read_rc (Bit_Chain *dat)
         }
       if (num > UINT8_MAX)
         {
-          LOG_ERROR ("%s: RC overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
-                     dat->byte);
+          LOG_ERROR ("%s: RC overflow %ld (at %" PRIuSIZE ")",
+                     "dxf_read_rc", num, dat->byte);
           dat->byte = dat->size;
-        }
+      }
       return (BITCODE_RC)num;
     }
 }
@@ -423,8 +423,8 @@ dxf_read_rs (Bit_Chain *dat)
         }
       if (num > UINT16_MAX)
         {
-          LOG_ERROR ("%s: RS overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
-                   dat->byte);
+          LOG_ERROR ("%s: RS overflow %ld (at %" PRIuSIZE ")",
+                   "dxf_read_rs", num, dat->byte);
           dat->byte = dat->size;
         }
       return (BITCODE_RS)num;
@@ -457,7 +457,7 @@ dxf_read_rl (Bit_Chain *dat)
         }
       /*
       if (num > (long)0xffffffff)
-        LOG_ERROR ("%s: RL overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
+        LOG_ERROR ("%s: RL overflow %ld (at %" PRIuSIZE ")", "dxf_read_rl", num,
                    dat->byte);
       */
       return (BITCODE_RL)num;

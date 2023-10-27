@@ -653,10 +653,10 @@
     if ((dat->byte * 8) + 8 + dat->bit > dat->size * 8)                       \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s FIELD_DD buffer overflow at pos %" PRIuSIZE            \
+        LOG_ERROR ("FIELD_DD buffer overflow at pos %" PRIuSIZE               \
                    ".%u, size %" PRIuSIZE ","                                 \
                    " advance by 8",                                           \
-                   __FUNCTION__, dat->byte, dat->bit, dat->size);             \
+                   dat->byte, dat->bit, dat->size);                           \
       }                                                                       \
     byte = dat->chain[dat->byte];                                             \
     if (dat->bit < 7)                                                         \

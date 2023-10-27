@@ -458,7 +458,7 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
               src_size);
   if (!dst || !src || !dst_size || src_size < 2)
     {
-      LOG_ERROR ("Invalid argument to %s\n", __FUNCTION__);
+      LOG_ERROR ("Invalid argument to %s\n", "decompress_r2007");
       return DWG_ERR_INTERNALERROR;
     }
 
@@ -1239,7 +1239,7 @@ read_file_header (Bit_Chain *restrict dat,
     {                                                                         \
       errcount++;                                                             \
       error |= DWG_ERR_VALUEOUTOFBOUNDS;                                      \
-      LOG_ERROR ("%s Invalid %s %ld > MAX_SIZE", __FUNCTION__, #var,          \
+      LOG_ERROR ("%s Invalid %s %ld > MAX_SIZE", "read_file_header", #var,    \
                  (long)var)                                                   \
       var = 0;                                                                \
     }
@@ -1248,7 +1248,7 @@ read_file_header (Bit_Chain *restrict dat,
     {                                                                         \
       errcount++;                                                             \
       error |= DWG_ERR_VALUEOUTOFBOUNDS;                                      \
-      LOG_ERROR ("%s Invalid %s %ld > MAX_COUNT", __FUNCTION__, #var,         \
+      LOG_ERROR ("%s Invalid %s %ld > MAX_COUNT", "read_file_header", #var,   \
                  (long)var)                                                   \
       var = 0;                                                                \
     }
@@ -2366,7 +2366,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
     {
       LOG_ERROR ("%s Invalid pages_map_size_comp %" PRIuSIZE " > %" PRIuSIZE
                  " bytes left",
-                 __FUNCTION__, (size_t)file_header->pages_map_size_comp,
+                 "read_r2007_meta_data",
+                 (size_t)file_header->pages_map_size_comp,
                  dat->size - dat->byte)
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
       goto error;
@@ -2391,7 +2392,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
     {
       LOG_ERROR ("%s Invalid comp_data_size %" PRId64 " > %" PRIuSIZE
                  " bytes left",
-                 __FUNCTION__, file_header->sections_map_size_comp,
+                 "read_r2007_meta_data", file_header->sections_map_size_comp,
                  dat->size - dat->byte)
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
       goto error;
