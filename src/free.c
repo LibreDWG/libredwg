@@ -347,6 +347,7 @@ static BITCODE_BL rcount1, rcount2;
     _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END                                                        \
+    FREE_IF (obj->unknown_rest);                                              \
   return error;                                                               \
   }
 
@@ -389,6 +390,7 @@ static BITCODE_BL rcount1, rcount2;
 /* obj itself is allocated via dwg->object[], dxfname is klass->dxfname or
  * static */
 #define DWG_OBJECT_END                                                        \
+    FREE_IF (obj->unknown_rest);                                              \
   return error;                                                               \
   }
 
