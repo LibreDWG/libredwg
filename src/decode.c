@@ -6916,7 +6916,14 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               {
                 PRE (R_11) // no crc16
                 {
-                  if (obj->address + obj->size != dat->byte)
+                  if (obj->size > dat->size - oldpos)
+                    {
+                      LOG_ERROR ("Invalid obj->size " FORMAT_RL " changed to %" PRIuSIZE,
+                                 obj->size, dat->byte - oldpos);
+                      error |= DWG_ERR_VALUEOUTOFBOUNDS;
+                      obj->size = (dat->byte - oldpos) & 0xFFFFFFFF;
+                    }
+                  else if (obj->address + obj->size != dat->byte)
                     {
                       LOG_ERROR ("offset %ld",
                                  (long)(obj->address + obj->size - dat->byte));
@@ -6945,7 +6952,14 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 }
                 LATER_VERSIONS
                 {
-                  if (obj->address + obj->size != dat->byte + 2)
+                  if (obj->size > dat->size - oldpos)
+                    {
+                      LOG_ERROR ("Invalid obj->size " FORMAT_RL " changed to %" PRIuSIZE,
+                                 obj->size, dat->byte + 2 - oldpos);
+                      error |= DWG_ERR_VALUEOUTOFBOUNDS;
+                      obj->size = ((dat->byte + 2) - oldpos) & 0xFFFFFFFF;
+                    }
+                  else if (obj->address + obj->size != dat->byte + 2)
                     {
                       LOG_ERROR ("offset %ld", (long)(obj->address + obj->size
                                                       - (dat->byte + 2)));
