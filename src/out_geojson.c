@@ -809,8 +809,18 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             end_angle += M_PI;
           num_pts
               = (int)trunc (viewres / rad2deg (end_angle - _obj->start_angle));
+          if (num_pts > 10000 || num_pts < 0)
+            {
+              LOG_ERROR ("Invalid angles");
+              return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
           num_pts = MIN (num_pts, 120);
           pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+          if (!pts)
+            {
+              LOG_ERROR ("Out of memory");
+              return DWG_ERR_OUTOFMEM;
+            }
           // explode into line segments. divided by VIEWRES (default 1000)
           arc_split (pts, num_pts, ctr, _obj->start_angle, _obj->end_angle,
                      _obj->radius);
