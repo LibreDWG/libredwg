@@ -66,8 +66,8 @@ int
 LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
 {
   Dwg_Data dwg;
-  Bit_Chain dat = { NULL, 0, 0, 0, 0 };
-  Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
+  Bit_Chain dat = { NULL, 0, 0, 0, 0, 0, 0, NULL, 0 };
+  Bit_Chain out_dat = { NULL, 0, 0, 0, 0, 0, 0, NULL, 0 };
   int copied = 0;
   struct ly_ctx *ctx = NULL;
   unsigned int possible_outputformats;
