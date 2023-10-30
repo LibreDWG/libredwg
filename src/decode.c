@@ -6907,7 +6907,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           assert (!dat->bit);
           PRE (R_2_0b)
           {
-            obj->size = (dat->byte - oldpos) & 0xFFFFFFFF;
+            obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
             if (num + 1 > dwg->num_objects)
               break;
           }
@@ -6917,13 +6917,13 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               {
                 PRE (R_11) // no crc16
                 {
-                  if (obj->size > dat->size - oldpos ||
+                  if (obj->size > dat->size - obj->address ||
                       obj->size + obj->address > dat->byte)
                     {
                       LOG_ERROR ("Invalid obj->size " FORMAT_RL " changed to %" PRIuSIZE,
-                                 obj->size, dat->byte - oldpos);
+                                 obj->size, dat->byte - obj->address);
                       error |= DWG_ERR_VALUEOUTOFBOUNDS;
-                      obj->size = (dat->byte - oldpos) & 0xFFFFFFFF;
+                      obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
                     }
                   else if (obj->address + obj->size != dat->byte)
                     {
@@ -6954,13 +6954,13 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 }
                 LATER_VERSIONS
                 {
-                  if (obj->size > dat->size - oldpos ||
-                      obj->size + obj->address > dat->byte)
+                  if (obj->size > dat->size - obj->address ||
+                      obj->size + obj->address > dat->byte + 2)
                     {
                       LOG_ERROR ("Invalid obj->size " FORMAT_RL " changed to %" PRIuSIZE,
-                                 obj->size, dat->byte + 2 - oldpos);
+                                 obj->size, dat->byte + 2 - obj->address);
                       error |= DWG_ERR_VALUEOUTOFBOUNDS;
-                      obj->size = ((dat->byte + 2) - oldpos) & 0xFFFFFFFF;
+                      obj->size = ((dat->byte + 2) - obj->address) & 0xFFFFFFFF;
                     }
                   else if (obj->address + obj->size != dat->byte + 2)
                     {
