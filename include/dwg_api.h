@@ -25,11 +25,13 @@
 #include <stdbool.h>
 #include "dwg.h"
 
+#ifndef __attribute_deprecated__
 /* Since version 3.2, gcc allows marking deprecated functions.  */
-#if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 302)
-#  define __attribute_deprecated__ __attribute__ ((__deprecated__))
-#else
-#  define __attribute_deprecated__
+#  if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 302)
+#    define __attribute_deprecated__ __attribute__ ((__deprecated__))
+#  else
+#    define __attribute_deprecated__
+#  endif
 #endif
 
 #if defined(__clang__) && defined(__has_extension)
