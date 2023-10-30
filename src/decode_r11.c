@@ -377,7 +377,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         {                                                                     \
           BITCODE_RL offset = (BITCODE_RL)(pos - dat->byte);                  \
           obj->num_unknown_rest = 8 * offset;                                 \
-          obj->unknown_rest = (BITCODE_TF)calloc (offset, 1);                 \
+          obj->unknown_rest = (BITCODE_TF)calloc (offset + 1, 1);             \
           if (obj->unknown_rest)                                              \
             {                                                                 \
               memcpy (obj->unknown_rest, &dat->chain[dat->byte], offset);     \
