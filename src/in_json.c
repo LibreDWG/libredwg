@@ -480,6 +480,7 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
           if (!str)
             goto outofmemory;
         }
+      str[len] = '\0';
     }
   else
     {
@@ -490,9 +491,13 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
           memcpy (str, &dat->chain[t->start], len);
           LOG_WARN ("Overlarge JSON TF value \"%.*s\" stripped to \"%s\"", l,
                     &dat->chain[t->start], str);
+          str[len] = '\0';
         }
       else
-        memcpy (str, &dat->chain[t->start], l);
+        {
+          memcpy (str, &dat->chain[t->start], l);
+          str[l] = '\0';
+        }
     }
   tokens->index++;
   return str;
