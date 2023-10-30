@@ -931,6 +931,8 @@ _prefix (Bit_Chain *dat)
     const char *name = #token;                                                \
     LOG_INFO ("Entity " #token ":\n")                                         \
     _ent = obj->tio.entity;                                                   \
+    if (!_ent || !_ent->tio.token)                                            \
+      return DWG_ERR_INTERNALERROR;                                           \
     _obj = ent = _ent->tio.token;                                             \
     if (*name == '_')                                                         \
       FIELD_TEXT (entity, &name[1])                                           \
@@ -985,6 +987,8 @@ _prefix (Bit_Chain *dat)
     const char *name = #token;                                                \
     Dwg_Object_##token *_obj;                                                 \
     LOG_INFO ("Object " #token ":\n")                                         \
+    if (!obj->tio.object || !obj->tio.object->tio.token)                      \
+      return DWG_ERR_INTERNALERROR;                                           \
     _obj = obj->tio.object->tio.token;                                        \
     if (*name == '_')                                                         \
       FIELD_TEXT (object, &name[1])                                           \
@@ -1639,7 +1643,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   int error = 0;
   unsigned int type;
 
-  if (!obj || !obj->parent)
+  if (!obj || !obj->parent || !obj->tio.entity)
     return DWG_ERR_INTERNALERROR;
   if (dat->version < R_13b1)
     type = (unsigned int)obj->fixedtype;
