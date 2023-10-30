@@ -99,6 +99,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Not enough memory.\n")
       fclose (fp);
+      dat->fh = NULL;
       return DWG_ERR_OUTOFMEM;
     }
 
@@ -112,11 +113,12 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
       fclose (fp);
       free (dat->chain);
       dat->chain = NULL;
+      dat->fh = NULL;
       dat->size = 0;
       return DWG_ERR_IOERROR;
     }
-  dat->chain[dat->size]
-      = '\0'; // ensure zero-termination for strstr, strtol, ...
+  // ensure zero-termination for strstr, strtol, ...
+  dat->chain[dat->size] = '\0';
   return 0;
 }
 
@@ -165,6 +167,7 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
         {
           LOG_ERROR ("Not enough memory.\n");
           fclose (fp);
+          dat->fh = NULL;
           return DWG_ERR_OUTOFMEM;
         }
       size = fread (&dat->chain[dat->size], sizeof (char), 4096, fp);
@@ -179,6 +182,7 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
                  size, dat->size);
       fclose (fp);
       free (dat->chain);
+      dat->fh = NULL;
       dat->chain = NULL;
       return DWG_ERR_IOERROR;
     }
