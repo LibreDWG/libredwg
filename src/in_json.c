@@ -1070,7 +1070,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (dat->from_version == R_INVALID)
             {
               LOG_ERROR ("Invalid FILEHEADER.version %s", version);
-              exit (1);
+              return DWG_ERR_INVALIDDWG;
             }
         }
       // FIELD_VECTOR_INL (zero_5, RL, 5, 0)

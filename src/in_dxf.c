@@ -1076,7 +1076,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (dat->from_version == R_INVALID)
             {
               LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version)
-              exit (1);
+              return DWG_ERR_INVALIDDWG;
             }
           if (is_tu && dwg->num_objects
               && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
