@@ -11884,7 +11884,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Object_BLOCK_CONTROL *_ctrl
                 = ctrl->tio.object->tio.BLOCK_CONTROL;
             int at_end = 1;
-            unsigned num_entries = _ctrl->num_entries;
+            unsigned num_entries = 0;
             if (!dwg_obj_is_control (ctrl))
               {
                 LOG_ERROR ("Missing CONTROL object");
@@ -11902,6 +11902,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", ctrl->name,
                            ctrl->handle.size, ctrl->handle.value);
               }
+            num_entries = _ctrl->num_entries;
             if (_ctrl && ctrl->fixedtype == DWG_TYPE_BLOCK_CONTROL)
               {
                 for (int j = num_entries - 1; j >= 0; j--)
