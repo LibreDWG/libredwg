@@ -2901,6 +2901,18 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     assert (l >= 0);                                                          \
     assert (l < (int)o->paths[j].segs[k].num_control_points)
 
+#  define CHK_fitpts                                                          \
+    if (!o->paths[j].segs || l < 0                                            \
+        || l >= (int)o->paths[j].segs[k].num_fitpts)                          \
+      {                                                                       \
+        LOG_ERROR ("HATCH no paths[%d].segs or "                              \
+                   "wrong l %d fitpts index\n",                               \
+                   j, l);                                                     \
+        return NULL;                                                          \
+      }                                                                       \
+    assert (l >= 0);                                                          \
+    assert (l < (int)o->paths[j].segs[k].num_fitpts)
+              
               CHK_control_points;
               o->paths[j].segs[k].control_points[l].point.x = pair->value.d;
               // LOG_TRACE
@@ -2936,7 +2948,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               l++;
               CHK_paths;
               CHK_segs;
-              CHK_control_points;
+              CHK_fitpts;
               o->paths[j].segs[k].fitpts[l].x = pair->value.d;
               // LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].x = %f [
               // 2RD 11]\n",
@@ -3004,7 +3016,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   k, o->paths[j].segs[k].endpoint.x, pair->value.d);
               break;
             case 4: /* SPLINE */
-              CHK_control_points;
+              CHK_fitpts;
               o->paths[j].segs[k].fitpts[l].y = pair->value.d;
               LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].y = (%f, %f) "
                          "[2RD 11]\n",
