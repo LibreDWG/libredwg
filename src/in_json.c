@@ -1272,9 +1272,13 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           if (!size1)
             LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
-          dwg_dynapi_header_set_value (dwg, key, &nums, 1);
           if (!f->is_malloc)
-            free (nums);
+            {
+              dwg_dynapi_header_set_value (dwg, key, nums, 1);
+              free (nums);
+            }
+          else
+            dwg_dynapi_header_set_value (dwg, key, &nums, 1);
         }
       else if (strEQc (f->type, "TIMEBLL") || strEQc (f->type, "TIMERLL"))
         {
