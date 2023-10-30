@@ -1752,6 +1752,9 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_json_BLOCK_CONTROL (dat, obj);
     case DWG_TYPE_BLOCK_HEADER:
       if (dat->version <= R_12
+          && obj->tio.object
+          && obj->tio.object->tio.BLOCK_HEADER
+          && obj->tio.object->tio.BLOCK_HEADER->name
           && strEQc (obj->tio.object->tio.BLOCK_HEADER->name, "*MODEL_SPACE"))
         {
           LOG_TRACE ("Skip *MODEL_SPACE\n");
@@ -2611,6 +2614,8 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (!dat->codepage)
     dat->codepage = dwg->header.codepage;
+  if (!dat->fh)
+    goto fail;
   fprintf (dat->fh, "{\n  \"created_by\": \"%s\"", PACKAGE_STRING);
   dat->bit++; // ident
 

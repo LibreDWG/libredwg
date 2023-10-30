@@ -273,9 +273,16 @@ main (int argc, char *argv[])
 #endif
       if (dat.size == 0)
         exit (1);
-
       if (dat.size < 100)
         continue; // useful minimum input length
+      memset (&out_dat, 0, sizeof (out_dat));
+      bit_chain_set_version (&out_dat, &dat);
+#ifdef _WIN32
+      out_dat.fh = fopen ("NUL", "w");
+#else
+      out_dat.fh = fopen ("/dev/null", "w");
+#endif
+
       switch (mode)
         {
         case DWG:
@@ -286,8 +293,6 @@ main (int argc, char *argv[])
         case INDXF:
           if (dwg_read_dxf (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              memset (&out_dat, 0, sizeof (out_dat));
-              bit_chain_set_version (&out_dat, &dat);
               out_dat.version = R_2000;
               if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
                 exit (0);
@@ -299,8 +304,6 @@ main (int argc, char *argv[])
         case RW:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              memset (&out_dat, 0, sizeof (out_dat));
-              bit_chain_set_version (&out_dat, &dat);
               out_dat.version = R_2000;
               if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
                 exit (0);
@@ -338,12 +341,9 @@ main (int argc, char *argv[])
         case INJSON:
           if (dwg_read_json (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              memset (&out_dat, 0, sizeof (out_dat));
-              bit_chain_set_version (&out_dat, &dat);
               out_dat.version = R_2000;
               if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
                 exit (0);
-              free (out_dat.chain);
             }
           break;
 #endif
@@ -351,21 +351,15 @@ main (int argc, char *argv[])
         case DXF:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              memset (&out_dat, 0, sizeof (out_dat));
-              bit_chain_set_version (&out_dat, &dat);
               if (dwg_write_dxf (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
                 exit (0);
-              free (out_dat.chain);
             }
           break;
         case DXFB:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              memset (&out_dat, 0, sizeof (out_dat));
-              bit_chain_set_version (&out_dat, &dat);
               if (dwg_write_dxfb (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
                 exit (0);
-              free (out_dat.chain);
             }
           break;
 #endif
@@ -373,21 +367,15 @@ main (int argc, char *argv[])
         case JSON:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              memset (&out_dat, 0, sizeof (out_dat));
-              bit_chain_set_version (&out_dat, &dat);
               if (dwg_write_json (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
                 exit (0);
-              free (out_dat.chain);
             }
           break;
         case GEOJSON:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              memset (&out_dat, 0, sizeof (out_dat));
-              bit_chain_set_version (&out_dat, &dat);
               if (dwg_write_geojson (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
                 exit (0);
-              free (out_dat.chain);
             }
           break;
 #endif
@@ -395,6 +383,8 @@ main (int argc, char *argv[])
         default:
           exit (1);
         }
+      free (out_dat.chain);
+      fclose (out_dat.fh);
     }
   dwg_free (&dwg);
   return 0;
