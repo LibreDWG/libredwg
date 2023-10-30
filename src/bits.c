@@ -3194,7 +3194,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
     const bool is_asian_cp
         = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
     const size_t srclen = strlen (src);
-    size_t destlen = 1 + (is_asian_cp ? srclen * 3 : trunc (srclen * 1.5));
+    size_t destlen = 1 + (is_asian_cp ? srclen * 3 : trunc (srclen * 2));
 #ifdef HAVE_ICONV
     const char *charset = dwg_codepage_iconvstr ((Dwg_Codepage)codepage);
     const char utf8_cs[] = "UTF-8//TRANSLIT//IGNORE";
@@ -3205,7 +3205,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
     if (!charset || !srclen)
       return (char *)src;
     osrc = (char *)src;
-    odest = dest = (char *)malloc (odestlen);
+    odest = dest = (char *)calloc (odestlen, 1);
     if (!odest || destlen > 0x2FFFE)
       {
         loglevel |= 1;
@@ -3253,6 +3253,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                   {
                     odest = dest = dest_new;
                     odestlen = destlen;
+                    dest_new[destlen - 1] = '\0';
                   }
                 else
                   {
@@ -3274,10 +3275,11 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
           }
       }
     // flush the remains
-    iconv (cd, NULL, (size_t *)&srclen, (char **)&dest, (size_t *)&destlen);
-    if (errno == 0 && dest >= odest && dest <= &odest[odestlen])
+    iconv (cd, NULL, NULL, (char **)&dest, (size_t *)&destlen);
+    if (errno == 0 && destlen <= 0x2FFFE && (uintptr_t)dest >= (uintptr_t)odest
+        && (uintptr_t)dest <= (uintptr_t)odest + odestlen)
       {
-        *dest = '\0';
+        //*dest = '\0';
         iconv_close (cd);
         return bit_u_expand (odest);
       }
