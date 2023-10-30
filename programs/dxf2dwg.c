@@ -326,6 +326,12 @@ main (int argc, char *argv[])
           fprintf (stderr, "READ ERROR 0x%x %s\n", error, filename_in);
           if (need_free)
             free (filename_out);
+          if (do_free
+#ifdef HAVE_VALGRIND_VALGRIND_H
+              || (RUNNING_ON_VALGRIND)
+#endif
+              )
+            dwg_free (&dwg);
           continue;
         }
 
