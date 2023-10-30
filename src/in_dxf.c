@@ -12298,6 +12298,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       while (pair != NULL && pair->code == 0 && pair->value.s)
         {
+          BITCODE_BL idx = dwg->num_objects;
           strncpy (name, pair->value.s, 79);
           name[79] = '\0';
           object_alias (name);
@@ -12309,7 +12310,10 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               pair = new_object (name, dxfname, dat, dwg, 0, NULL);
               if (!pair)
                 {
+                  Dwg_Object *obj = &dwg->object[idx];
                   free (dxfname);
+                  if (idx != dwg->num_objects)
+                    obj->dxfname = NULL;
                   return DWG_ERR_INVALIDDWG;
                 }
             }
