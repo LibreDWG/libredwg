@@ -149,6 +149,8 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
 #ifdef STANDALONE
   if (getenv ("OUT"))
     out = strtol (getenv ("OUT"), NULL, 10);
+  else
+    fprintf (stderr, "OUT=%d ", out);
 #endif
   switch (out)
     {
@@ -158,6 +160,8 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
 #ifdef STANDALONE
         if (getenv ("VER"))
           ver = strtol (getenv ("VER"), NULL, 10);
+        else
+          fprintf (stderr, "VER=%d ", ver);
 #endif
         switch (ver)
           {
@@ -270,6 +274,7 @@ main (int argc, char *argv[])
       assert ((long)n_read == len);
       fprintf (stderr, "llvmfuzz_standalone %s [%" PRIuSIZE "]\n", argv[i],
                len);
+      srand ((unsigned)time (NULL));
       LLVMFuzzerTestOneInput (buf, len);
       free (buf);
       // Bit_Chain dat = { 0 };
