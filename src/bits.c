@@ -1700,6 +1700,50 @@ bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
     }
 }
 
+/** Write fixed-length text from variable length string
+    (possibly downgraded from shorter string).
+ */
+void
+bit_write_TFv (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
+              size_t length)
+{
+  size_t len;
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      if (length > 0)
+        LOG_ERROR ("Empty TF with length %" PRIuSIZE, length);
+      if (length <= 128) // either chain or length is wrong
+        {
+          for (size_t i = 0; i < length; i++)
+            bit_write_RC (dat, 0);
+        }
+      return;
+    }
+  if (dat->byte + length > dat->size)
+    bit_chain_alloc_size (dat, (dat->byte + length) - dat->size);
+  len = strlen ((char *)chain);
+  if (dat->bit == 0)
+    {
+      if (len >= length) // long enough
+        memcpy (&dat->chain[dat->byte], chain, length);
+      else // shorter
+        memcpy (&dat->chain[dat->byte], chain, len);
+      // no need to memclean, calloc'ed
+      dat->byte += length;
+    }
+  else
+    {
+      for (size_t i = 0; i < length; i++)
+        {
+          if (i < len)
+            bit_write_RC (dat, (BITCODE_RC)chain[i]);
+          else
+            bit_write_RC (dat, 0);
+        }
+    }
+}
+
 /** Read simple text. After usage, the allocated memory must be properly freed.
  */
 ATTRIBUTE_MALLOC

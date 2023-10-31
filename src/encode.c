@@ -266,6 +266,26 @@ const unsigned char unknown_section[53]
       }                                                                       \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
+// zero-terminated fixed buffer, which might be shorter
+#define FIELD_TFv(nam, len, dxf)                                              \
+  {                                                                           \
+    LOG_TRACE (#nam ": %s [TFv %d %d]\n", _obj->nam, (int)len, dxf);          \
+    if (len > 0 && len < MAX_SIZE_TF)                                         \
+      {                                                                       \
+        if (!_obj->nam)                                                       \
+          { /* empty field, write zeros */                                    \
+            for (int _i = 0; _i < (int)(len); _i++)                           \
+              bit_write_RC (dat, 0);                                          \
+          }                                                                   \
+        /* The source might not be long enough. or it is, just with a zero */ \
+        /* Luckily TFF's are only preR13 */                                   \
+        else                                                                  \
+          {                                                                   \
+            bit_write_TFv (dat, (BITCODE_TF)_obj->nam, len);                  \
+          }                                                                   \
+      }                                                                       \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
+  }
 #define FIELD_BINARY(nam, len, dxf)                                           \
   {                                                                           \
     LOG_TRACE (#nam ": %s [TF %d %d]\n", _obj->nam, (int)len, dxf);           \
@@ -286,7 +306,6 @@ const unsigned char unknown_section[53]
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TFF(nam, len, dxf) FIELD_TF (nam, len, dxf)
-#define FIELD_TFv(nam, len, dxf) FIELD_TF (nam, len, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
     if (_obj->nam)                                                            \
@@ -5936,6 +5955,45 @@ dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   return error;
 }
 
+#if 0
+// converted from TV to possibly longer TFv
+void
+downgrade_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
+{
+  if (dat->from_version >= R_13b1)
+    {
+      // downgrade TV to TFv
+      dwg->header_vars.MENU = realloc (dwg->header_vars.MENU, 15);
+      dwg->header_vars.DIMBLK_T = realloc (dwg->header_vars.DIMBLK_T, 33);
+      if (dwg->header.numheader_vars > 114)
+        {
+          dwg->header_vars.DIMPOST = realloc (dwg->header_vars.DIMPOST, 16);
+          dwg->header_vars.DIMAPOST = realloc (dwg->header_vars.DIMAPOST, 16);
+        }
+      if (dwg->header.numheader_vars > 129)
+        {
+          dwg->header_vars.DIMBLK1_T
+              = realloc (dwg->header_vars.DIMBLK1_T, 33);
+          dwg->header_vars.DIMBLK2_T
+              = realloc (dwg->header_vars.DIMBLK2_T, 33);
+          dwg->header_vars.unknown_string
+              = realloc (dwg->header_vars.unknown_string, 33);
+        }
+      if (dwg->header.numheader_vars > 160)
+        {
+          dwg->header_vars.unit1_name
+              = realloc (dwg->header_vars.unit1_name, 33);
+          dwg->header_vars.unit2_name
+              = realloc (dwg->header_vars.unit2_name, 33);
+          dwg->header_vars.unit3_name
+              = realloc (dwg->header_vars.unit3_name, 33);
+          dwg->header_vars.unit4_name
+              = realloc (dwg->header_vars.unit4_name, 33);
+        }
+    }
+}
+#endif
+
 static int
 encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
 {
@@ -5944,6 +6002,11 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
+  // PRE (R_13b1)
+  // {
+  //   if (dat->from_version >= R_13b1)
+  //     downgrade_preR13_header_variables (dat, dwg);
+  // }
   // clang-format off
   #include "header_variables_r11.spec"
   // clang-format on

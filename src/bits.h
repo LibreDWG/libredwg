@@ -200,6 +200,11 @@ BITCODE_TF bit_read_bits (Bit_Chain *dat, size_t bits) ATTRIBUTE_MALLOC;
 
 void bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
                    size_t length);
+/** Write fixed-length text from variable length string
+    (possibly downgraded from shorter string).
+ */
+void bit_write_TFv (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
+                    size_t length);
 
 /* read ASCII string, with length as BS */
 BITCODE_TV bit_read_TV (Bit_Chain *restrict dat);

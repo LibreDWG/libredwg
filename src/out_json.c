@@ -48,6 +48,8 @@ static wchar_t *wcquote (wchar_t *restrict dest, const wchar_t *restrict src);
 static void print_wcquote (Bit_Chain *restrict dat,
                            dwg_wchar_t *restrict wstr);
 #endif
+void json_write_TFv (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
+                     const size_t len);
 // write even past the \0, to keep existing slack
 void json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
                     const size_t len);
@@ -291,13 +293,18 @@ static char *_path_field (const char *path);
     KEY (nam);                                                                \
     VALUE_TEXT_TU ((BITCODE_TU)wstr);                                         \
   }
+// may be downgraded from TV, thus shorter
 #define FIELD_TFv(nam, len, dxf)                                              \
+  {                                                                           \
+    FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));            \
+    json_write_TFv (dat, (const BITCODE_TF)_obj->nam, len);                   \
+  }
+#define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
     FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));            \
     json_write_TF (dat, (const BITCODE_TF)_obj->nam, len);                    \
   }
-#define FIELD_TF(nam, len, dxf) FIELD_TFv (nam, len, dxf)
-#define FIELD_TFF(nam, len, dxf) FIELD_TFv (nam, len, dxf)
+#define FIELD_TFF(nam, len, dxf) FIELD_TF (nam, len, dxf)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
@@ -1391,8 +1398,51 @@ wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
 
 #endif /* HAVE_NATIVE_WCHAR2 */
 
+/* Don't write past the strlen.
+   TODO: convert to utf8.
+*/
+void
+json_write_TFv (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
+               const size_t len)
+{
+  const size_t slen = src ? strlen ((char *)src) : 0;
+  fputc ('"', dat->fh);
+  if (!slen)
+    {
+      fputc ('"', dat->fh);
+      return;
+    }
+  for (size_t i = 0; i < MIN (slen, len); i++)
+    {
+      const unsigned char c = src[i];
+      if (c == '\r' || c == '\n' || c == '"' || c == '\\')
+        {
+          fputc ('\\', dat->fh);
+          if (c == '\r')
+            fputc ('r', dat->fh);
+          else if (c == '\n')
+            fputc ('n', dat->fh);
+          else
+            fputc (c, dat->fh);
+        }
+      else if (c == '\\' && i + 6 < len && src[i] == 'U' && src[i + 1] == '+'
+               && ishex (src[i + 2]) && ishex (src[i + 3])
+               && ishex (src[i + 4]) && ishex (src[i + 5]))
+        {
+          fputc ('\\', dat->fh);
+          fputc ('u', dat->fh);
+          i += 3;
+        }
+      else if (c < 0x1f)
+        fprintf (dat->fh, "\\u00%02x", c);
+      else
+        fputc (c, dat->fh);
+    }
+  fputc ('"', dat->fh);
+}
+
 /* Write even past the \0, to keep existing slack.
-   Don't convert to utf8.
+   TODO: convert to utf8.
 */
 void
 json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
@@ -1961,6 +2011,8 @@ json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // separate funcs to catch the return, and end with ENDRECORD
   PRE (R_13b1)
   {
+    // if (dat->from_version >= R_13b1)
+    //   downgrade_preR13_header_variables (dat, dwg);
     error = json_preR13_header_write_private (dat, dwg);
   }
   LATER_VERSIONS
