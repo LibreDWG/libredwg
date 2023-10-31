@@ -5672,6 +5672,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     Only members with size have raw and a handle.
     Otherwise (indxf) defer to dwg_encode_eed_data.
     On does_cross_unicode_datversion skip raw, and recalc the sizes.
+    TODO downconvert: strip eed and HAS_EED flag for versions which cannot do EED.
  */
 static int
 dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
@@ -5722,6 +5723,12 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                   bit_write_H (dat, &eed->handle);
                   LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", i,
                              ARGS_H (eed->handle));
+                  LOG_POS
+                }
+              else
+                {
+                  bit_write_RS (dat, size);                
+                  LOG_TRACE ("EED[%d] size: " FORMAT_RS " [RS]", i, size);
                   LOG_POS
                 }
               LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
