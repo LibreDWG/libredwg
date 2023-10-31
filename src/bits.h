@@ -50,6 +50,13 @@
 #include "common.h"
 #include "dwg.h"
 
+// DWG size limitations, invalid sizes and offsets
+#if SIZEOF_SIZE_T == 8
+#  define MAX_MEM_ALLOC 0x10000000000
+#else
+#  define MAX_MEM_ALLOC 0xF0000000
+#endif
+
 // avoid double linkage on windows with unit-testing
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C) || defined(DXF_TEST_C)
 #  undef EXPORT

@@ -1691,7 +1691,9 @@ bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
         }
       return;
     }
-  if (dat->bit == 0 && dat->byte + length < dat->size)
+  if (dat->byte + length > dat->size)
+    bit_chain_alloc_size (dat, (dat->byte + length) - dat->size);
+  if (dat->bit == 0)
     {
       memcpy (&dat->chain[dat->byte], chain, length);
       dat->byte += length;
@@ -3734,6 +3736,12 @@ void
 bit_chain_init (Bit_Chain *dat, const size_t size)
 {
   GCC14_DIAG_IGNORE (-Wanalyzer-malloc-leak)
+  if (size > MAX_MEM_ALLOC)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory")
+      abort ();
+    }
   dat->chain = (unsigned char *)calloc (1, size);
   if (!dat->chain)
     {
@@ -3768,8 +3776,14 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
     }
   else
     {
-      unsigned char *tmp
-          = (unsigned char *)realloc (dat->chain, dat->size + size);
+      unsigned char *tmp;
+      if (dat->size + size > MAX_MEM_ALLOC || dat->byte > MAX_MEM_ALLOC)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory");
+          abort ();
+        }
+      tmp = (unsigned char *)realloc (dat->chain, dat->size + size);
       if (tmp)
         dat->chain = tmp;
       else
