@@ -4015,12 +4015,7 @@ json_SecondHeader_Handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               tokens->index++;
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               if (t->size < 8)
-                {
-                  if (_obj->handles[j].hdl)
-                    free (_obj->handles[j].hdl);
-                  _obj->handles[j].hdl = (BITCODE_RC *)calloc (1, t->size);
-                  _obj->handles[j].num_hdl = t->size;
-                }
+                _obj->handles[j].num_hdl = t->size;
               for (int vcount = 0; vcount < t->size; vcount++)
                 {
                   if (vcount >= 8)

@@ -9613,7 +9613,7 @@ typedef struct _dwg_secondheader_handles
 {
   BITCODE_RCd num_hdl;
   BITCODE_RCd nr;
-  BITCODE_RC *hdl;
+  BITCODE_RC hdl[8];
   char *name;
 } Dwg_SecondHeader_Handles;
 

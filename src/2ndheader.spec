@@ -93,7 +93,7 @@ VERSIONS (R_13, R_2000) {
   REPEAT_BLOCK
       SUB_FIELD_RCd (handles[rcount1], num_hdl, 0); // max 8, the size
       SUB_FIELD_RCd (handles[rcount1], nr, 0);
-      SUB_FIELD_VECTOR (handles[rcount1], hdl, RC, num_hdl, 0);
+      SUB_FIELD_VECTOR_INL (handles[rcount1], hdl, RC, _obj->handles[rcount1].num_hdl, 0);
       // log this handle backup similar to real handles
       if (_obj->handles[rcount1].name && DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
         {

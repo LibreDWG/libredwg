@@ -100,6 +100,7 @@ for dir in "$@"; do
            -e's, (-Wformat - y2k), (-Wformat-y2k),;' \
            -e's, (-Wmaybe - uninitialized), (-Wmaybe-uninitialized),;' \
            -e's, (-Wstringop - truncation), (-Wstringop-truncation),;' \
+           -e's, (-Wstringop - overflow), (-Wstringop-overflow),;' \
            -e's, (-Wanalyzer - allocation - size) , (-Wanalyzer-allocation-size)   ,;' \
            -e's, (-Wanalyzer - possible - null - dereference), (-Wanalyzer-possible-null-dereference),;' \
            -e's, (-Wanalyzer - null - dereference), (-Wanalyzer-null-dereference),;' \

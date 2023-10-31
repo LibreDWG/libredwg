@@ -3492,10 +3492,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   if (dwg->header_vars.NAM                                                    \
       && _obj->handles[i].num_hdl != dwg->header_vars.NAM->handleref.size)    \
     {                                                                         \
-      _obj->handles[i].num_hdl = dwg->header_vars.NAM->handleref.size;        \
-      free (_obj->handles[i].hdl);                                            \
-      _obj->handles[i].hdl                                                    \
-          = (BITCODE_RC *)calloc (1, _obj->handles[i].num_hdl);               \
+      _obj->handles[i].num_hdl = MAX (dwg->header_vars.NAM->handleref.size, 8);\
     }                                                                         \
   if (dwg->header_vars.NAM)                                                   \
     {                                                                         \
@@ -3503,8 +3500,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       Bit_Chain hdat                                                          \
           = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 };          \
       bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
-      for (int k = 0; k < (int)_obj->handles[i].num_hdl; k++)                 \
+      /* gcc 11 bug */                                                        \
+      GCC80_DIAG_IGNORE (-Wstringop-overflow)                                 \
+      for (int k = 0; k < MAX ((int)_obj->handles[i].num_hdl, 8); k++)        \
         _obj->handles[i].hdl[k] = hdat.chain[k];                              \
+      GCC80_DIAG_RESTORE                                                      \
     }
 
       SET_HDL (0, HANDSEED);
