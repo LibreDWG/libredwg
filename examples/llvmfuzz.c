@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2021 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2021, 2023 Free Software Foundation, Inc.                  */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -156,7 +156,7 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
     {
     case 0:
       {
-        int ver = rand () % 6;
+        int ver = rand () % 20;
 #ifdef STANDALONE
         if (getenv ("VER"))
           ver = strtol (getenv ("VER"), NULL, 10);
@@ -167,18 +167,48 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
           {
           // TODO support preR13, downconverters missing
           case 0:
-            out_dat.version = dwg.header.version = R_13;
+            out_dat.version = dwg.header.version = R_1_4;
             break;
           case 1:
-            out_dat.version = dwg.header.version = R_13c3;
+            out_dat.version = dwg.header.version = R_2_0;
             break;
           case 2:
+            out_dat.version = dwg.header.version = R_2_10;
+            break;
+          case 3:
+            out_dat.version = dwg.header.version = R_2_21;
+            break;
+          case 4:
+            out_dat.version = dwg.header.version = R_2_4;
+            break;
+          case 5:
+            out_dat.version = dwg.header.version = R_2_6;
+            break;
+          case 6:
+            out_dat.version = dwg.header.version = R_9;
+            break;
+          case 7:
+            out_dat.version = dwg.header.version = R_10;
+            break;
+          case 8:
+            out_dat.version = dwg.header.version = R_11;
+            break;
+          case 9:
+            out_dat.version = dwg.header.version = R_12;
+            break;
+          case 10:
+            out_dat.version = dwg.header.version = R_13;
+            break;
+          case 11:
+            out_dat.version = dwg.header.version = R_13c3;
+            break;
+          case 12:
             out_dat.version = dwg.header.version = R_14;
             break;
-          case 3: // favor this one
-          case 4:
-          case 5:
-          default:
+          case 13:
+            out_dat.version = dwg.header.version = R_2004;
+            break;
+          default: // favor this one
             out_dat.version = dwg.header.version = R_2000;
             break;
           }
@@ -260,7 +290,7 @@ main (int argc, char *argv[])
 #  ifndef _WIN32
                || S_ISLNK (attrib.st_mode)
 #  endif
-                   ))
+               ))
         {
           fprintf (stderr, "Illegal input file \"%s\"\n", argv[i]);
           continue;
