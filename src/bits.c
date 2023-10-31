@@ -122,8 +122,8 @@ bit_reset_chain (Bit_Chain *dat)
 
 #ifdef DWG_ABORT
 #  define CHK_OVERFLOW(func, retval)                                          \
-    if (dat->byte > dat->size                                                 \
-        || ((dat->byte * 8) + dat->bit > dat->size * 8))                      \
+    if (dat->byte >= dat->size                                                \
+        || ((dat->byte * 8) + dat->bit >= dat->size * 8))                     \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
         LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u > %" PRIuSIZE,     \
@@ -134,8 +134,8 @@ bit_reset_chain (Bit_Chain *dat)
       }
 #else
 #  define CHK_OVERFLOW(func, retval)                                          \
-    if (dat->byte > dat->size                                                 \
-        || ((dat->byte * 8) + dat->bit > dat->size * 8))                      \
+    if (dat->byte >= dat->size                                                \
+        || ((dat->byte * 8) + dat->bit >= dat->size * 8))                     \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
         LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u > %" PRIuSIZE,     \
@@ -939,7 +939,6 @@ bit_read_MC (Bit_Chain *dat)
   for (i = 4, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC (dat);
-      CHK_OVERFLOW (__FUNCTION__, 0)
       if (!(byte[i] & 0x80))
         {
           if ((byte[i] & 0x40))
@@ -1018,7 +1017,6 @@ bit_read_UMC (Bit_Chain *dat)
   for (i = MAX_BYTE_UMC - 1, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = bit_read_RC (dat);
-      CHK_OVERFLOW (__FUNCTION__, 0)
       if (!(byte[i] & 0x80))
         {
           result |= (((BITCODE_UMC)byte[i]) << j);
@@ -1084,7 +1082,6 @@ bit_read_MS (Bit_Chain *dat)
   for (i = 1, j = 0; i >= 0; i--, j += 15)
     {
       word[i] = bit_read_RS (dat);
-      CHK_OVERFLOW (__FUNCTION__, 0)
       if (!(word[i] & 0x8000))
         {
           result |= ((BITCODE_MS)word[i] << j);
@@ -1173,7 +1170,6 @@ bit_read_DD (Bit_Chain *dat, double default_value)
   two_bit_code = bit_read_BB (dat);
   if (two_bit_code == 0)
     {
-      CHK_OVERFLOW (__FUNCTION__, bit_nan ())
       return default_value;
     }
   if (two_bit_code == 3)
@@ -1200,7 +1196,6 @@ bit_read_DD (Bit_Chain *dat, double default_value)
       uchar_result[2] = bit_read_RC (dat);
       uchar_result[3] = bit_read_RC (dat);
 #endif
-      CHK_OVERFLOW (__FUNCTION__, bit_nan ())
       return default_value;
     }
   else /* if (two_bit_code == 1) */
