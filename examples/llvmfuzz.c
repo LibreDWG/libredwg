@@ -165,6 +165,7 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
 #endif
         switch (ver)
           {
+          // TODO support preR13, downconverters missing
           case 0:
             out_dat.version = dwg.header.version = R_13;
             break;
@@ -182,26 +183,21 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
             break;
           }
         dwg_encode (&dwg, &out_dat);
-        free (out_dat.chain);
         break;
       }
 #ifndef DISABLE_DXF
     case 1:
       dwg_write_dxf (&out_dat, &dwg);
-      free (out_dat.chain);
       break;
     case 2: // experimental
       dwg_write_dxfb (&out_dat, &dwg);
-      free (out_dat.chain);
       break;
 #  ifndef DISABLE_JSON
     case 3:
       dwg_write_json (&out_dat, &dwg);
-      free (out_dat.chain);
       break;
     case 4:
       dwg_write_geojson (&out_dat, &dwg);
-      free (out_dat.chain);
       break;
 #  endif
 #endif
@@ -209,6 +205,7 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
       break;
     }
   dwg_free (&dwg);
+  free (out_dat.chain);
   fclose (out_dat.fh);
   // unlink (tmp_file);
   return 0;
@@ -232,8 +229,14 @@ usage (void)
 int
 main (int argc, char *argv[])
 {
+  unsigned seed;
   if (argc <= 1 || !*argv[1])
     return usage ();
+  if (getenv ("SEED"))
+    seed = (unsigned)strtol (getenv ("SEED"), NULL, 10);
+  else
+    seed = (unsigned)time (NULL);
+  srand (seed);
   /* works only on linux
   if (LLVMFuzzerInitialize)
     LLVMFuzzerInitialize (&argc, &argv);
@@ -274,7 +277,6 @@ main (int argc, char *argv[])
       assert ((long)n_read == len);
       fprintf (stderr, "llvmfuzz_standalone %s [%" PRIuSIZE "]\n", argv[i],
                len);
-      srand ((unsigned)time (NULL));
       LLVMFuzzerTestOneInput (buf, len);
       free (buf);
       // Bit_Chain dat = { 0 };
