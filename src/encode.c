@@ -3490,7 +3490,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       // always recompute sections, even with dwgrewrite
       _obj->num_sections = dwg->header.num_sections;
-      for (i = 0; i < _obj->num_sections; i++)
+      for (i = 0; i < MIN (_obj->num_sections, 7U); i++)
         {
           _obj->sections[i].nr = dwg->header.section[i].number;
           _obj->sections[i].address = dwg->header.section[i].address;
