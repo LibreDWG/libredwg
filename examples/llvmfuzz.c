@@ -20,12 +20,12 @@
 #include <assert.h>
 //#include <unistd.h>
 #include <sys/stat.h>
+
+#include "common.h"
+#include <dwg.h>
 #ifdef HAVE_SYS_TIME_H
 #  include <sys/time.h>
 #endif
-
-#include <dwg.h>
-#include "common.h"
 #include "decode.h"
 #include "encode.h"
 #include "bits.h"
@@ -258,7 +258,7 @@ main (int argc, char *argv[])
     {
 #ifdef HAVE_SYS_TIME_H
       struct timeval tval;
-      gettimeofday(&tval, NULL);
+      gettimeofday (&tval, NULL);
       seed = (unsigned)(tval.tv_sec * 1000 + tval.tv_usec) % 9999;
 #else
       seed = (unsigned)time (NULL) % 9999;
