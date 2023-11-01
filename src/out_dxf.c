@@ -228,8 +228,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define HEADER_VALUE(nam, type, dxf, value)                                   \
   if (dxf)                                                                    \
     {                                                                         \
-      GROUP (9);                                                              \
-      fprintf (dat->fh, "$" #nam "\r\n");                                     \
+      HEADER_9 (nam);                                                         \
       VALUE (value, type, dxf);                                               \
     }
 #define HEADER_VAR(nam, type, dxf)                                            \
@@ -237,22 +236,37 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define HEADER_VALUE_TV(nam, dxf, value)                                      \
   if (dxf)                                                                    \
     {                                                                         \
-      GROUP (9);                                                              \
-      fprintf (dat->fh, "$" #nam "\r\n");                                     \
+      HEADER_9 (nam);                                                         \
       VALUE_TV (value, dxf);                                                  \
     }
 #define HEADER_VALUE_TU(nam, dxf, value)                                      \
   if (dxf)                                                                    \
     {                                                                         \
-      GROUP (9);                                                              \
-      fprintf (dat->fh, "$" #nam "\r\n");                                     \
+      HEADER_9 (nam);                                                         \
       VALUE_TU (value, dxf);                                                  \
+    }
+#define HEADER_VALUE_T(nam, dxf, value)                                       \
+  if (dxf)                                                                    \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      PRE (R_2007)                                                            \
+        VALUE_TV ((char *)value, dxf)                                         \
+      LATER_VERSIONS                                                          \
+        VALUE_T (value, dxf)                                                  \
+    }
+#define HEADER_VALUE_T0(nam, dxf, value)                                      \
+  if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      PRE (R_2007)                                                            \
+        VALUE_TV ((char *)value, dxf)                                         \
+      LATER_VERSIONS                                                          \
+        VALUE_T (value, dxf)                                                  \
     }
 #define HEADER_VALUE_TU0(nam, dxf, value)                                     \
   if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
     {                                                                         \
-      GROUP (9);                                                              \
-      fprintf (dat->fh, "$" #nam "\r\n");                                     \
+      HEADER_9 (nam);                                                         \
       VALUE_TU (value, dxf);                                                  \
     }
 

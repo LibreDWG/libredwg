@@ -201,13 +201,17 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define VALUE_T(value, dxf)                                                   \
   {                                                                           \
     if (IS_FROM_TU (dat))                                                     \
-      VALUE_TU (value, dxf)                                                   \
+      {                                                                       \
+        VALUE_TU (value, dxf)                                                 \
+      }                                                                       \
     else                                                                      \
-      VALUE_TV (value, dxf)                                                   \
+      {                                                                       \
+        VALUE_TV ((char *)value, dxf)                                         \
+      }                                                                       \
   }
 #define VALUE_T0(value, dxf)                                                  \
   if (!bit_empty_T (dat, value))                                              \
-  VALUE_T (value, dxf)
+    VALUE_T (value, dxf)
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
     if (IS_FROM_TU (dat))                                                     \
@@ -307,7 +311,25 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
   if (dxf && !bit_empty_T (dat, _obj->nam))                                   \
     {                                                                         \
       HEADER_9 (nam);                                                         \
-      VALUE_T ((char *)_obj->nam, dxf);                                       \
+      VALUE_T (_obj->nam, dxf);                                               \
+    }
+#define HEADER_VALUE_T(nam, dxf, value)                                       \
+  if (dxf)                                                                    \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      if (IS_FROM_TU (dat))                                                   \
+        VALUE_T (value, dxf)                                                  \
+      else                                                                    \
+        VALUE_TV ((char *)value, dxf)                                         \
+    }
+#define HEADER_VALUE_T0(nam, dxf, value)                                      \
+  if (dxf && !bit_empty_T (dat, value))                                       \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      if (IS_FROM_TU (dat))                                                   \
+        VALUE_T (value, dxf)                                                  \
+      else                                                                    \
+        VALUE_TV ((char *)value, dxf)                                         \
     }
 #define POINT_3D(nam, var, c1, c2, c3)                                        \
   {                                                                           \
