@@ -6880,7 +6880,7 @@ downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
 void
 downconvert_TABLESTYLE (Dwg_Object *restrict obj)
 {
-  Dwg_Data *dwg = obj->parent;
+  // Dwg_Data *dwg = obj->parent;
   Dwg_Object_TABLESTYLE *_obj
       = obj->tio.object ? obj->tio.object->tio.TABLESTYLE : NULL;
   if (!obj || obj->fixedtype != DWG_TYPE_TABLESTYLE)
@@ -7023,7 +7023,6 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_MLEADERSTYLE *_obj;
   Dwg_Object_Object *oo;
-  Dwg_Object *appidobj;
   Dwg_Object_APPID *appid;
   BITCODE_H hdl;
   BITCODE_RLL eedhdl;
@@ -7082,7 +7081,6 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_DIMSTYLE *_obj;
   Dwg_Object_Object *oo;
-  Dwg_Object *appidobj;
   Dwg_Object_APPID *appid;
   BITCODE_RLL eedhdl1, eedhdl2, eedhdl3;
   BITCODE_BL oindex;
