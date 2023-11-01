@@ -2102,7 +2102,23 @@ encode_preR13_section_hdr (const char *restrict name,
   static BITCODE_BL addr = 0;
   Dwg_Section *tbl;
   int i;
+  BITCODE_RL num_sections;
   assert (id <= SECTION_VX);
+  if (!dwg->header.num_sections)
+    dwg_sections_init (dwg);
+  // starts at 1 and adds thumbnail
+  num_sections = dwg->header.num_sections + 2;
+  if ((BITCODE_RL)id > num_sections)
+    {
+      // create empty default section on upgrade
+      LOG_TRACE ("Not enough sections " FORMAT_RL " for id %u\n",
+                 dwg->header.num_sections, (unsigned)id);
+      dwg->header.section = (Dwg_Section *)realloc (
+          dwg->header.section, sizeof (Dwg_Section) * (id + 2));
+      memset (&dwg->header.section[num_sections], 0,
+              id - num_sections);
+      dwg->header.num_sections = (BITCODE_RL)id;
+    }
   tbl = &dwg->header.section[id];
   i = id < 5 ? id : id - 1;
   if (id == SECTION_BLOCK)
