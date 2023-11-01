@@ -35,6 +35,9 @@
 #  include "in_dxf.h"
 #endif
 
+int out;
+int ver;
+
 extern int LLVMFuzzerTestOneInput (const unsigned char *data, size_t size);
 
 // libfuzzer limitation:
@@ -70,24 +73,11 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
   Bit_Chain out_dat = { NULL, 0, 0, 0, 0, 0, 0, NULL, 0 };
   int copied = 0;
   struct ly_ctx *ctx = NULL;
-  unsigned int possible_outputformats;
-  int out;
 
   static char tmp_file[256];
   dat.chain = (unsigned char *)data;
   dat.size = size;
   memset (&dwg, 0, sizeof (dwg));
-
-  possible_outputformats =
-#ifdef DISABLE_DXF
-#  ifdef DISABLE_JSON
-      1;
-#  else
-      3;
-#  endif
-#else
-      5;
-#endif
 
   // Detect the input format: DWG, DXF or JSON
   if (dat.size > 2 && dat.chain[0] == 'A' && dat.chain[1] == 'C')
@@ -145,24 +135,10 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
 #endif
   out_dat.fh = fopen (tmp_file, "w");
 
-  out = rand () % possible_outputformats;
-#ifdef STANDALONE
-  if (getenv ("OUT"))
-    out = strtol (getenv ("OUT"), NULL, 10);
-  else
-    fprintf (stderr, "OUT=%d ", out);
-#endif
   switch (out)
     {
     case 0:
       {
-        int ver = rand () % 20;
-#ifdef STANDALONE
-        if (getenv ("VER"))
-          ver = strtol (getenv ("VER"), NULL, 10);
-        else
-          fprintf (stderr, "VER=%d ", ver);
-#endif
         switch (ver)
           {
           // TODO support preR13, downconverters missing
@@ -260,12 +236,26 @@ int
 main (int argc, char *argv[])
 {
   unsigned seed;
+  const unsigned int possible_outputformats =
+#ifdef DISABLE_DXF
+#  ifdef DISABLE_JSON
+      1;
+#  else
+      3;
+#  endif
+#else
+      5;
+#endif
+
   if (argc <= 1 || !*argv[1])
     return usage ();
   if (getenv ("SEED"))
     seed = (unsigned)strtol (getenv ("SEED"), NULL, 10);
   else
-    seed = (unsigned)time (NULL);
+    {
+      seed = (unsigned)time (NULL);
+      fprintf (stderr, "SEED=%u ", seed);
+    }
   srand (seed);
   /* works only on linux
   if (LLVMFuzzerInitialize)
@@ -290,7 +280,7 @@ main (int argc, char *argv[])
 #  ifndef _WIN32
                || S_ISLNK (attrib.st_mode)
 #  endif
-               ))
+                   ))
         {
           fprintf (stderr, "Illegal input file \"%s\"\n", argv[i]);
           continue;
@@ -305,8 +295,26 @@ main (int argc, char *argv[])
       n_read = fread (buf, 1, len, f);
       fclose (f);
       assert ((long)n_read == len);
-      fprintf (stderr, "llvmfuzz_standalone %s [%" PRIuSIZE "]\n", argv[i],
-               len);
+
+      out = rand () % possible_outputformats;
+#ifdef STANDALONE
+      if (getenv ("OUT"))
+        out = strtol (getenv ("OUT"), NULL, 10);
+      else
+        fprintf (stderr, "OUT=%d ", out);
+#endif
+      if (out == 0)
+        {
+          ver = rand () % 20;
+#ifdef STANDALONE
+          if (getenv ("VER"))
+            ver = strtol (getenv ("VER"), NULL, 10);
+          else
+            fprintf (stderr, "VER=%d ", ver);
+#endif
+        }
+      fprintf (stderr, "examples/llvmfuzz_standalone %s [%" PRIuSIZE "]\n",
+               argv[i], len);
       LLVMFuzzerTestOneInput (buf, len);
       free (buf);
       // Bit_Chain dat = { 0 };
