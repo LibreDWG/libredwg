@@ -20,6 +20,9 @@
 #include <assert.h>
 //#include <unistd.h>
 #include <sys/stat.h>
+#ifdef HAVE_SYS_TIME_H
+#  include <sys/time.h>
+#endif
 
 #include <dwg.h>
 #include "common.h"
@@ -250,11 +253,17 @@ main (int argc, char *argv[])
   if (argc <= 1 || !*argv[1])
     return usage ();
   if (getenv ("SEED"))
-    seed = (unsigned)strtol (getenv ("SEED"), NULL, 10);
+    seed = (unsigned)strtol (getenv ("SEED"), NULL, 10) % 9999;
   else
     {
-      seed = (unsigned)time (NULL);
-      fprintf (stderr, "SEED=%u ", seed);
+#ifdef HAVE_SYS_TIME_H
+      struct timeval tval;
+      gettimeofday(&tval, NULL);
+      seed = (unsigned)(tval.tv_sec * 1000 + tval.tv_usec) % 9999;
+#else
+      seed = (unsigned)time (NULL) % 9999;
+#endif
+      fprintf (stderr, "SEED=%04u ", seed);
     }
   srand (seed);
   /* works only on linux
