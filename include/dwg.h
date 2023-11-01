@@ -9626,7 +9626,7 @@ typedef struct _dwg_secondheader
   BITCODE_RC unknown_10;
   BITCODE_RC unknown_rc4[4];
   BITCODE_RC num_sections;
-  Dwg_SecondHeader_Sections sections[6];
+  Dwg_SecondHeader_Sections sections[7];
   BITCODE_BS num_handles;
   Dwg_SecondHeader_Handles handles[14];
   BITCODE_RS crc;
