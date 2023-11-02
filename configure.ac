@@ -330,6 +330,7 @@ AC_CHECK_FUNCS([strcasestr],[],
 AC_CHECK_FUNCS([scandir],[],
   AC_MSG_WARN([BSD/POSIX scandir not found. No helper unit_testing_all.sh]))
 AC_CHECK_FUNCS([floor sqrt])
+AC_CHECK_FUNCS([gettimeofday])
 AC_CHECK_LIB([m],[floor])
 #AC_CHECK_LIB([m],[sqrt])
 AC_CHECK_FUNCS([sincos])

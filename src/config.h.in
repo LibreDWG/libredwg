@@ -111,6 +111,9 @@
 /* Define to 1 if you have the `getopt_long' function. */
 #undef HAVE_GETOPT_LONG
 
+/* Define to 1 if you have the `gettimeofday' function. */
+#undef HAVE_GETTIMEOFDAY
+
 /* Define to 1 if you have the `gmtime_r' function. */
 #undef HAVE_GMTIME_R
 

@@ -256,7 +256,7 @@ main (int argc, char *argv[])
     seed = (unsigned)strtol (getenv ("SEED"), NULL, 10) % 9999;
   else
     {
-#ifdef HAVE_SYS_TIME_H
+#ifdef HAVE_GETTIMEOFDAY
       struct timeval tval;
       gettimeofday (&tval, NULL);
       seed = (unsigned)(tval.tv_sec * 1000 + tval.tv_usec) % 9999;
