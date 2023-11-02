@@ -2094,16 +2094,12 @@ calc_preR13_ctrl_size (Dwg_Data *restrict dwg, Dwg_Object *obj)
     }
 }
 
+// needed on upgrades or <r2.0b
 static void
-encode_preR13_section_hdr (const char *restrict name,
-                           const Dwg_Section_Type_r11 id,
-                           Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+encode_check_num_sections (const Dwg_Section_Type_r11 id,
+                           Dwg_Data *restrict dwg)
 {
-  static BITCODE_BL addr = 0;
-  Dwg_Section *tbl;
-  int i;
   BITCODE_RL num_sections;
-  assert (id <= SECTION_VX);
   if (!dwg->header.num_sections)
     dwg_sections_init (dwg);
   // starts at 1 and adds thumbnail
@@ -2119,6 +2115,18 @@ encode_preR13_section_hdr (const char *restrict name,
               (id + 1 - num_sections) * sizeof (Dwg_Section));
       dwg->header.num_sections = (BITCODE_RL)id;
     }
+}
+
+static void
+encode_preR13_section_hdr (const char *restrict name,
+                           const Dwg_Section_Type_r11 id,
+                           Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  static BITCODE_BL addr = 0;
+  Dwg_Section *tbl;
+  int i;
+  assert (id <= SECTION_VX);
+  encode_check_num_sections (id, dwg);
   tbl = &dwg->header.section[id];
   i = id < 5 ? id : id - 1;
   if (id == SECTION_BLOCK)
@@ -2194,14 +2202,9 @@ encode_preR13_section_chk (const Dwg_Section_Type_r11 id,
                            Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl;
-  if (!dwg->header.num_sections)
-    dwg->header.num_sections = SECTION_VX; // r11
-  if ((BITCODE_RL)id > dwg->header.num_sections)
-    {
-      LOG_ERROR ("encode_preR13_section_chk: Invalid table %u, have only %u",
-                 (unsigned)id, (unsigned)dwg->header.num_sections)
-      return;
-    }
+  //if (!dwg->header.num_sections)
+  //  dwg->header.num_sections = SECTION_VX; // r11
+  encode_check_num_sections (id, dwg);
   tbl = &dwg->header.section[id];
   bit_write_RS (dat, (BITCODE_RS)id);
   bit_write_RS (dat, tbl->size);
@@ -2735,6 +2738,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_END);
 
     // patch all the section tbl->address
+    PRE (R_2_0b)
+    {
+      encode_check_num_sections (SECTION_BLOCK, dwg);
+    }
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
     for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
          id++)
