@@ -1532,7 +1532,7 @@ dwg_free_preR13_header_vars (Dwg_Data *dwg)
   // fields added by dwg_add_Document:
   FIELD_TV (MENU, 0);
 
-// clang-format off
+  // clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 

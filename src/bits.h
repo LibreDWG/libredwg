@@ -249,6 +249,11 @@ EXPORT char *bit_embed_TU_size (BITCODE_TU restrict wstr,
 size_t bit_wcs2nlen (const BITCODE_TU restrict wstr, const size_t maxlen);
 #  endif
 #  define bit_wcs2cpy(dest, src) wcscpy (dest, src)
+#  ifdef _WIN32
+#    define bit_wcs2dup(src) _wcsdup (src)
+#  else
+#    define bit_wcs2dup(src) wcsdup (src)
+#  endif
 #  define bit_wcs2cmp(dest, src) wcscmp (s1, s2)
 #else
 /* length of UCS-2 string */
@@ -258,6 +263,7 @@ size_t bit_wcs2len (const BITCODE_TU restrict wstr);
 size_t bit_wcs2nlen (const BITCODE_TU restrict wstr, const size_t maxlen);
 BITCODE_TU bit_wcs2cpy (BITCODE_TU restrict dest,
                         const BITCODE_TU restrict src);
+BITCODE_TU bit_wcs2dup (const BITCODE_TU restrict src);
 int bit_wcs2cmp (BITCODE_TU restrict s1, const BITCODE_TU restrict s2);
 #endif
 

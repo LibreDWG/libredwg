@@ -1993,6 +1993,22 @@ bit_wcs2cpy (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
     }
 }
 
+/* wcsdup wide string (unix-only) */
+BITCODE_TU
+bit_wcs2dup (const BITCODE_TU restrict src)
+{
+  BITCODE_TU d;
+  size_t len, blen;
+  if (!src)
+    return NULL;
+  len = bit_wcs2len (src);
+  blen = (len + 1) * 2; // include the zero
+  d = malloc (blen);
+  if (d)
+    memcpy (d, src, blen);
+  return d;
+}
+
 #  if 0
 /* compare wide string (unix-only). returns 0 if the same or 1 if not */
 // untested, unused

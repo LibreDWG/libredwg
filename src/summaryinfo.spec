@@ -23,14 +23,19 @@
       FIELD_VALUE (TDINDWG)    = dwg->header_vars.TDINDWG;
       FIELD_VALUE (TDCREATE)   = dwg->header_vars.TDCREATE;
       FIELD_VALUE (TDUPDATE)   = dwg->header_vars.TDUPDATE;
-      if (dat->version < R_2007 ||       /* if 2004 -> 2004: TV -> TV */
-          dat->from_version >= R_2007) { /* or already TU */
-        FIELD_VALUE (HYPERLINKBASE) = (BITCODE_T16)dwg->header_vars.HYPERLINKBASE;
-      }
-      else { /* 2004 -> 2007+ */
-        FIELD_VALUE (HYPERLINKBASE) = (BITCODE_T16)bit_utf8_to_TU (
+      if (dat->version < R_2007) /* if 2004 -> 2004: TV -> TV */
+        FIELD_VALUE (HYPERLINKBASE)
+            = (BITCODE_T16)strdup (dwg->header_vars.HYPERLINKBASE);
+      else if (dat->from_version >= R_2007)
+        { /* or already TU */
+          FIELD_VALUE (HYPERLINKBASE) = (BITCODE_T16)bit_wcs2dup (
+              (BITCODE_TU)dwg->header_vars.HYPERLINKBASE);
+        }
+      else
+        { /* 2004 -> 2007+ */
+          FIELD_VALUE (HYPERLINKBASE) = (BITCODE_T16)bit_utf8_to_TU (
               dwg->header_vars.HYPERLINKBASE, 0);
-      }
+        }
     }
   }
   FIELD_T16 (TITLE, 1);
