@@ -2206,12 +2206,15 @@ encode_preR13_section_chk (const Dwg_Section_Type_r11 id,
   //  dwg->header.num_sections = SECTION_VX; // r11
   encode_check_num_sections (id, dwg);
   tbl = &dwg->header.section[id];
-  bit_write_RS (dat, (BITCODE_RS)id);
-  bit_write_RS (dat, tbl->size);
-  bit_write_RS (dat, tbl->number);
-  bit_write_RL (dat, tbl->address);
-  LOG_TRACE ("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%zx)\n", tbl->name,
-             id, tbl->size, (long)tbl->number, (size_t)tbl->address)
+  if (tbl)
+    {
+      bit_write_RS (dat, (BITCODE_RS)id);
+      bit_write_RS (dat, tbl->size);
+      bit_write_RS (dat, tbl->number);
+      bit_write_RL (dat, tbl->address);
+      LOG_TRACE ("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%zx)\n", tbl->name,
+                 id, tbl->size, (long)tbl->number, (size_t)tbl->address)
+    }
 }
 
 // only in R11
@@ -2745,7 +2748,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         Dwg_Section *tbl = &dwg->header.section[id];
         BITCODE_RL pos = dat->byte & 0xFFFFFFFF;
-        if (!tbl->address)
+        if (!tbl || !tbl->address)
           continue;
         dat->byte = tbl->address;
         LOG_TRACE ("%s.address => " FORMAT_RLx " [RLx] @%x\n", tbl->name, addr,
