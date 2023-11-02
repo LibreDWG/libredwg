@@ -11086,6 +11086,31 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                                        f->name, &color, 1);
                           goto next_pair; // found, early exit
                         }
+                      // num_ field with associated vector
+                      else if (memBEGINc (f->name, "num_") &&
+                               (strEQc (f->type, "BL") ||
+                                strEQc (f->type, "BS") ||
+                                strEQc (f->type, "RL") ||
+                                strEQc (f->type, "RS") ||
+                                strEQc (f->type, "RC")))
+                        {
+                          long old = get_numfield_value (_obj, f);
+                          if (old)
+                            {
+                              LOG_ERROR ("%s.%s already set to %ld", obj->name,
+                                         f->name, old);
+                              if (is_class_stable (obj->name))
+                                {
+                                  error |= DWG_ERR_INVALIDDWG;
+                                  goto invalid_dxf;
+                                }
+                              else
+                                goto next_pair;
+                            }
+                          else
+                            dwg_dynapi_entity_set_value (
+                                _obj, obj->name, f->name, &pair->value, 1);
+                        }
                       else
                         dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
                                                      &pair->value, 1);
