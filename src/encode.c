@@ -2738,11 +2738,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_END);
 
     // patch all the section tbl->address
-    PRE (R_2_0b)
-    {
-      encode_check_num_sections (SECTION_BLOCK, dwg);
-    }
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
+    encode_check_num_sections (dwg->header.num_sections, dwg);
     for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
          id++)
       {
