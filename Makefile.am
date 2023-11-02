@@ -52,7 +52,7 @@ doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec vcpkg.json build-aux/Dockerfile \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check json-check oda \
 	     log.in svg.in rw.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
-	     llvmfuzz_standalone_all.sh \
+	     llvmfuzz_standalone_tz.sh llvmfuzz_standalone_data.sh \
 	     cmp-objs.pl .dockerignore \
 	     build-aux/swig_python.patch \
              $(JSON_DIST) \
@@ -60,7 +60,8 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec vcpkg.json build-aux/Dockerfil
 shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 	json-check oda log.in svg.in rw.in \
 	logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
-	dynapi_test_all.sh.in unit_testing_all.sh.in llvmfuzz_standalone_all.sh \
+	dynapi_test_all.sh.in unit_testing_all.sh.in \
+	llvmfuzz_standalone_tz.sh llvmfuzz_standalone_data.sh \
 	autogen.sh dxf-roundtrip.sh unit_testing_all.sh.in test-dxf.sh
 	build-aux/gendocs.sh build-aux/codecov_io.sh build-aux/smoke.sh \
 	build-aux/clang-format-all.sh \
@@ -171,6 +172,7 @@ TESTS += log dwg dxf json svg rw logs-all.sh dynapi_test_all.sh unit_testing_all
 	 $(srcdir)/dxf-allcvt.sh $(srcdir)/test-dxf.sh $(srcdir)/unknown.sh \
          programs/dwgfilter \
 	 programs/alive.test programs/dxf.test programs/json.test programs/svg.test \
+	 $(srcdir)/llvmfuzz_standalone_tz.sh $(srcdir)/llvmfuzz_standalone_data.sh \
 	 examples/dwgadd_test.sh
 TESTS_ENVIRONMENT = $(SHELLCHECK)
 check-shellcheck:

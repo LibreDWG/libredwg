@@ -263,8 +263,8 @@ main (int argc, char *argv[])
 #else
       seed = (unsigned)time (NULL) % 9999;
 #endif
-      fprintf (stderr, "SEED=%04u ", seed);
     }
+  fprintf (stderr, "SEED=%04u ", seed);
   srand (seed);
   /* works only on linux
   if (LLVMFuzzerInitialize)
@@ -309,8 +309,7 @@ main (int argc, char *argv[])
 #ifdef STANDALONE
       if (getenv ("OUT"))
         out = strtol (getenv ("OUT"), NULL, 10);
-      else
-        fprintf (stderr, "OUT=%d ", out);
+      fprintf (stderr, "OUT=%d ", out);
 #endif
       if (out == 0)
         {
@@ -318,8 +317,7 @@ main (int argc, char *argv[])
 #ifdef STANDALONE
           if (getenv ("VER"))
             ver = strtol (getenv ("VER"), NULL, 10);
-          else
-            fprintf (stderr, "VER=%d ", ver);
+          fprintf (stderr, "VER=%d ", ver);
 #endif
         }
       fprintf (stderr, "examples/llvmfuzz_standalone %s [%" PRIuSIZE "]\n",
