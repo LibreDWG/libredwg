@@ -264,7 +264,6 @@ main (int argc, char *argv[])
       seed = (unsigned)time (NULL) % 9999;
 #endif
     }
-  fprintf (stderr, "SEED=%04u ", seed);
   srand (seed);
   /* works only on linux
   if (LLVMFuzzerInitialize)
@@ -309,6 +308,9 @@ main (int argc, char *argv[])
 #ifdef STANDALONE
       if (getenv ("OUT"))
         out = strtol (getenv ("OUT"), NULL, 10);
+      // print SEED onlyu when needed (no env vars given)
+      if (!(out || getenv ("VER")))
+        fprintf (stderr, "SEED=%04u ", seed);
       fprintf (stderr, "OUT=%d ", out);
 #endif
       if (out == 0)
