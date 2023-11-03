@@ -284,7 +284,7 @@ const unsigned char unknown_section[53]
             bit_write_TFv (dat, (BITCODE_TF)_obj->nam, len);                  \
           }                                                                   \
       }                                                                       \
-    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
+    LOG_TRACE_TFv (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_BINARY(nam, len, dxf)                                           \
   {                                                                           \
@@ -502,8 +502,30 @@ const unsigned char unknown_section[53]
           LOG_INSANE ("\n");                                                  \
         }                                                                     \
     }
+#define LOG_TFv(level, var, len)                                              \
+  if (var)                                                                    \
+    {                                                                         \
+      int _i;                                                                 \
+      int _size = (int)MIN ((size_t)len, strlen (var));                       \
+      for (_i = 0; _i < _size; _i++)                                          \
+        {                                                                     \
+          LOG (level, "%02X", (unsigned char)((char *)var)[_i]);              \
+        }                                                                     \
+      LOG (level, "\n");                                                      \
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
+        {                                                                     \
+          for (_i = 0; _i < _size; _i++)                                      \
+            {                                                                 \
+              unsigned char c = ((unsigned char *)var)[_i];                   \
+              LOG_INSANE ("%-2c", isprint (c) ? c : ' ');                     \
+            }                                                                 \
+          LOG_INSANE ("\n");                                                  \
+        }                                                                     \
+    }
 #define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len)
 #define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len)
+#define LOG_TRACE_TFv(var, len) LOG_TFv (TRACE, var, len)
+#define LOG_INSANE_TFv(var, len) LOG_TFv (INSANE, var, len)
 
 #define FIELD_BE(nam, dxf)                                                    \
   {                                                                           \
@@ -2748,22 +2770,37 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     // patch all the section tbl->address
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
     encode_check_num_sections (dwg->header.num_sections, dwg);
-    for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
-         id++)
+    if (dwg->header.from_version >= R_13b1)
       {
-        Dwg_Section *tbl = &dwg->header.section[id];
-        BITCODE_RL pos = dat->byte & 0xFFFFFFFF;
-        if (!tbl || !tbl->address)
-          continue;
-        dat->byte = tbl->address;
-        LOG_TRACE ("%s.address => " FORMAT_RLx " [RLx] @%x\n", tbl->name, addr,
-                   (unsigned)tbl->address);
-        bit_write_RL (dat, addr);
-        tbl->address = addr;
-        addr += tbl->size * tbl->number;
-        if (dat->version >= R_11)
-          addr += 0x20;
-        dat->byte = pos;
+        /* r2000 has e.g.
+         * section 0: header vars
+         *         1: class section
+         *         2: object map
+         *         3: (R13c3 and later): 2nd header (special table, no sentinels)
+         *         4: optional: MEASUREMENT
+         *         5: optional: AuxHeader (no sentinels, since R13c3)
+         */
+        LOG_ERROR ("FIXME convert sections from CONTROL objects to tables");
+      }
+    if (dwg->header.from_version < R_13b1)
+      {
+        for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
+             id++)
+          {
+            Dwg_Section *tbl = &dwg->header.section[id];
+            BITCODE_RL pos = dat->byte & 0xFFFFFFFF;
+            if (!tbl || !tbl->address)
+              continue;
+            dat->byte = tbl->address;
+            LOG_TRACE ("%s.address => " FORMAT_RLx " [RLx] @%x\n", tbl->name, addr,
+                       (unsigned)tbl->address);
+            bit_write_RL (dat, addr);
+            tbl->address = addr;
+            addr += tbl->size * tbl->number;
+            if (dat->version >= R_11)
+              addr += 0x20;
+            dat->byte = pos;
+          }
       }
 
     PRE (R_2_0b)
