@@ -2649,7 +2649,7 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= DWG_ERR_WRONGCRC;
 
   DEBUG_HERE
-  VERSION (R_14) {
+  VERSIONS (R_14, R_2000) {
     FIELD_RLL (junk_r14, 0);
   }
 

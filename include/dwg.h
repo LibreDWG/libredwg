@@ -9632,7 +9632,7 @@ typedef struct _dwg_secondheader
   BITCODE_BS num_handles;
   Dwg_SecondHeader_Handles handles[14];
   BITCODE_RS crc;
-  BITCODE_RLL junk_r14; /*!< r14 only */
+  BITCODE_RLL junk_r14; /*!< r14-r2000 */
 } Dwg_SecondHeader;
 
 /**
