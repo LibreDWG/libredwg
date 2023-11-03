@@ -1505,7 +1505,8 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           obj->tio.entity->reactors = NULL;
         }
       */
-      add_DUMMY_eed (obj); // broken on windows
+      if (dwg_supports_eed (dwg))
+        add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
       free (obj->unknown_bits);
       obj->tio.entity->tio.POINT = _obj
@@ -1542,7 +1543,8 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       const char *name;
       const char *dxfname;
 
-      add_DUMMY_eed (obj); // broken on windows
+      if (dwg_supports_eed (dwg))
+        add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
       // if PLACEHOLDER is available, or even PROXY_OBJECT.
       // PLOTSETTINGS uses PLACEHOLDER though
@@ -2458,15 +2460,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   else
     LOG_TRACE ("Encode version %s (%s)\n",
                dwg_version_codes (dwg->header.version),
-               dwg_version_type (dwg->header.version))
+               dwg_version_type (dwg->header.version));
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
   // We cannot write unknown_bits into another version, or when it's coming
   // from DXF. Write a PLACEHOLDER/DUMMY or POINT instead. Later maybe PROXY.
   // This is controversial and breaks roundtrip tests, but helps
   // ACAD imports.
-  if (dwg->header.version != dwg->header.from_version
-      || (dwg->opts & DWG_OPTS_IN))
+  if (dwg_supports_eed (dwg) &&
+      (dwg->header.version != dwg->header.from_version
+       || (dwg->opts & DWG_OPTS_IN)))
     {
       int fixup = 0;
       // Scan for invalid/unstable/unsupported objects and entities
@@ -2520,7 +2523,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       encode_unknown_as_dummy (dat, obj, placeholder_type);
                     }
                   // what to do with links to MATERIAL/...
-                  if (obj->handle.value == 0xC
+                  if (dwg->header.version >= R_13b1
+                      && obj->handle.value == 0xC
                       && obj->fixedtype == DWG_TYPE_DICTIONARY)
                     fixup_NOD (dwg, obj); // named object dict
                 }
@@ -2529,7 +2533,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
 #endif
-  if (dwg->header.version < R_2010 && dwg->header.from_version >= R_2010)
+  if (dwg_supports_eed (dwg) && dwg->header.version < R_2010
+      && dwg->header.from_version >= R_2010)
     {
       // Scan for objects with EED for class_version fields.
       LOG_TRACE ("Scan for downconverting objects to EED\n");
@@ -5023,6 +5028,18 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       // limit the size (oss-fuzz #41021)
       obj->size = 0;
       return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  if (!dwg_supports_obj (dwg, obj))
+    {
+      if (dwg->header.version < R_13b1)
+        {
+          LOG_ERROR ("\nObject %s unsupported, skipped", obj->name);
+          return 0;
+        }
+      else
+        {
+          LOG_WARN ("\nObject %s unsupported", obj->name);
+        }
     }
   while (dat->byte + obj->size >= dat->size)
     bit_chain_alloc (dat);

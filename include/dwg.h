@@ -9925,6 +9925,10 @@ dwg_add_handleref_free (const BITCODE_RC code, const BITCODE_RLL absref);
 EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT Dwg_Version_Type dwg_version_as (const char *version);
 EXPORT Dwg_Version_Type dwg_version_hdr_type (const char* hdr);
+EXPORT int dwg_supports_eed (const Dwg_Data *dwg);
+/* to read and write */
+EXPORT int dwg_supports_obj (const Dwg_Data *restrict dwg,
+                             const Dwg_Object *restrict obj);
 EXPORT void dwg_errstrings (int error);
 
 EXPORT char *dwg_encrypt_SAT1 (BITCODE_BL blocksize,

@@ -43,6 +43,7 @@ char *basename (char *);
 #include "dwg.h"
 #include "hash.h"
 #include "dynapi.h"
+#include "classes.h"
 #ifdef USE_WRITE
 #  include "encode.h"
 #endif
@@ -3478,4 +3479,91 @@ dwg_calc_hookline_on (Dwg_Entity_LEADER *_obj)
                        || fabs (angleR - M_PI) <= hookline_offsetR)
                           ? 0
                           : 1;
+}
+
+EXPORT int dwg_supports_eed (const Dwg_Data *dwg)
+{
+  return dwg->header.version >= R_11;
+}
+
+EXPORT int
+dwg_supports_obj (const Dwg_Data *restrict dwg,
+                     const Dwg_Object *restrict obj)
+{
+  const Dwg_Object_Type type = obj->fixedtype;
+  Dwg_Version_Type ver;
+  if (type == DWG_TYPE_UNUSED || type == DWG_TYPE_UNKNOWN_OBJ
+      || type == DWG_TYPE_UNKNOWN_ENT || type == DWG_TYPE_FREED)
+    return 0;
+  ver = dwg->header.version;
+  if (type > DWG_TYPE_GROUP)
+    {
+      // WIPEOUT causes hang, TABLEGEOMETRY crash on encode
+      if (dwg->opts & DWG_OPTS_IN
+          && (type == DWG_TYPE_WIPEOUT || type == DWG_TYPE_TABLEGEOMETRY))
+        return 0;
+      return ver >= R_13b1 && is_type_stable (type);
+    }
+  else if (type == DWG_TYPE_GROUP)
+    return ver >= R_13b1;
+  /*
+  else if (type == DWG_TYPE_LWPOLYLINE)
+    return ver >= R_13b1;
+  else if (type == DWG_TYPE_REGION || type == DWG_TYPE__3DSOLID
+           || type == DWG_TYPE_BODY)
+    return ver >= R_13b1;
+  else if (type == DWG_TYPE_RAY || type == DWG_TYPE_XLINE
+           || type == DWG_TYPE_ELLIPSE)
+    return ver >= R_13b1;
+  else if (type == DWG_TYPE_DICTIONARY || type == DWG_TYPE_OLEFRAME
+           || type == DWG_TYPE_MTEXT || type == DWG_TYPE_LEADER
+           || type == DWG_TYPE_TOLERANCE || type == DWG_TYPE_MLINE)
+    return ver >= R_13b1;
+  else if (type == DWG_TYPE_HATCH || type == DWG_TYPE_XRECORD
+           || type == DWG_TYPE_PLACEHOLDER || type == DWG_TYPE_VBA_PROJECT
+           || type == DWG_TYPE_LAYOUT || type == DWG_TYPE_PROXY_ENTITY
+           || type == DWG_TYPE_PROXY_OBJECT)
+    return ver >= R_13b1;
+  */
+  // preR13:
+  else if (type == DWG_TYPE_JUMP)
+    return ver >= R_2_0b && ver < R_13b1;
+  else if (type == DWG_TYPE__3DLINE)
+    return ver >= R_2_4 && ver <= R_10;
+  else if (type == DWG_TYPE_LOAD)
+    return ver < R_2_0b;
+  else if (type == DWG_TYPE_ENDREP || type == DWG_TYPE_REPEAT)
+    return ver < R_2_10;
+  else if (type == DWG_TYPE_ATTRIB || type == DWG_TYPE_ATTDEF)
+    return ver >= R_2_0b;
+  else if (type == DWG_TYPE_VPORT || type == DWG_TYPE_VPORT_CONTROL ||
+           type == DWG_TYPE_UCS || type == DWG_TYPE_UCS_CONTROL)
+    return ver >= R_10;
+  else if (type == DWG_TYPE_APPID || type == DWG_TYPE_APPID_CONTROL ||
+           type == DWG_TYPE_DIMSTYLE || type == DWG_TYPE_DIMSTYLE_CONTROL)
+    return ver >= R_11;
+  else if (type == DWG_TYPE_VX_TABLE_RECORD || type == DWG_TYPE_VX_CONTROL)
+    return ver >= R_11 && ver < R_2004;
+  else if (type == DWG_TYPE__3DFACE)
+    return ver >= R_2_0b;
+  else if (type == DWG_TYPE_DIMENSION_RADIUS
+           || type == DWG_TYPE_DIMENSION_ORDINATE
+           || type == DWG_TYPE_DIMENSION_LINEAR
+           || type == DWG_TYPE_DIMENSION_ALIGNED
+           || type == DWG_TYPE_DIMENSION_ANG3PT
+           || type == DWG_TYPE_DIMENSION_ANG2LN
+           || type == DWG_TYPE_DIMENSION_RADIUS
+           || type == DWG_TYPE_DIMENSION_DIAMETER)
+    return ver >= R_2_0b;
+  else if (type == DWG_TYPE_POLYLINE_2D || type == DWG_TYPE_POLYLINE_3D
+           || type == DWG_TYPE_POLYLINE_MESH || type == DWG_TYPE_POLYLINE_PFACE
+           || type == DWG_TYPE_VERTEX_2D || type == DWG_TYPE_VERTEX_3D
+           || type == DWG_TYPE_VERTEX_MESH || type == DWG_TYPE_VERTEX_PFACE
+           || type == DWG_TYPE_VERTEX_PFACE_FACE || type == DWG_TYPE_SEQEND)
+    return ver >= R_2_0b;
+  else if (type == DWG_TYPE_MINSERT)
+    return ver >= R_2_0b;
+  else if (type == DWG_TYPE_SPLINE)
+    return ver >= R_9;
+  return 1;
 }
