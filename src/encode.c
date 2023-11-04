@@ -2344,9 +2344,9 @@ encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-    // TODO fill in the defaults if not rewrite
+  // TODO fill in the defaults if not rewrite
 
-    // clang-format off
+  // clang-format off
   #include "2ndheader.spec"
   // clang-format on
 
@@ -3546,7 +3546,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           strcpy ((char *)&_obj->version[0], &code[0]);
           memset (&_obj->version[7], 0, 4);
           // TODO detect what it is
-          _obj->junk_r14 = UINT64_C (0x5939044DE70A1832);
+          _obj->junk_r14 = UINT64_C (0x989543D074AE8021);
         }
       for (int k = 0; k < 5; k++)
         _obj->zero_5[k] = dwg->header.zero_5[k];
@@ -3621,15 +3621,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           dat->byte = pvzadr;
           encode_secondheader_private (dat, dwg);
         }
+
       dat->byte -= dwg->header.version == R_14 ? 10 : 2;
       _obj->size = encode_patch_RLsize (dat, pvzadr);
       if (_obj->size < dat->byte)
         dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
 
       bit_write_CRC (dat, pvzadr, 0xC0C1);
-      VERSION (R_14)
-      {
-        dat->byte += 8;
+      VERSIONS (R_14, R_2000) {
+        FIELD_RLL (junk_r14, 0);
       }
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_END);
     }

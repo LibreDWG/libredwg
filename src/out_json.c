@@ -2617,46 +2617,12 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
 
   RECORD (SecondHeader); // single hash
-#if 0
-  FIELD_TFF (version, 6, 0);
-  FIELD_VECTOR_INL (zero_5, RC, 5, 0)
-  FIELD_RC (is_maint, 0);
-  FIELD_RC (zero_one_or_three, 0);
-  FIELD_BS (dwg_version, 0);
-  FIELD_RS (codepage, 0);
-
-  FIELD_BS (num_sections, 0);
-  SECTION (sections);
-  for (unsigned i = 0; i < MIN(FIELD_VALUE (num_sections), 6U); i++)
-    {
-      FIRSTPREFIX HASH;
-      SUB_FIELD_RCd (section[i], nr, 0);
-      SUB_FIELD_BLx (section[i], address, 0);
-      SUB_FIELD_BL (section[i], size, 0);
-      ENDHASH;
-    }
-  ENDSEC ();
-  FIELD_BS (num_handlers, 0); // 14, resp. 16 in r14
-  SECTION (handlers);
-  for (unsigned i = 0; i < MIN(FIELD_VALUE (num_handlers), 16U); i++)
-    {
-      FIRSTPREFIX HASH;
-      SUB_FIELD_RCd (handlers[i], num_data, 0);
-      SUB_FIELD_RCd (handlers[i], nr, 0);
-      SUB_FIELD_VECTOR (handlers[i], data, RC, num_data, 0);
-      ENDHASH;
-    }
-  ENDSEC ();
-  VERSION (R_14)
-  {
-    FIELD_RL (junk_r14_1, 0);
-    FIELD_RL (junk_r14_2, 0);
-  }
-#else
   // clang-format off
   #include "2ndheader.spec"
   // clang-format on
-#endif
+  VERSIONS (R_14, R_2000) {
+    FIELD_RLL (junk_r14, 0);
+  }
   ENDRECORD ();
   return 0;
 }
