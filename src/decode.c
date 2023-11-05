@@ -938,8 +938,8 @@ handles_section:
         "DICTIONARY_ACAD_MLINESTYLE",
         "DICTIONARY_ACAD_GROUP",
       };
-      for (int i = 0; i <= 13; i++)
-        _obj->handles[i].name = (char *)names[i];
+      for (int i = 0; i < ARRAY_SIZE (names); i++)
+        _obj->handles[i].name = names[i];
 
       LOG_INFO ("\n=======> Second Header 3 (start): %8zu\n", dat->byte - 16)
 

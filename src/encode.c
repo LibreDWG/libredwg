@@ -2344,8 +2344,6 @@ encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // TODO fill in the defaults if not rewrite
-
   // clang-format off
   #include "2ndheader.spec"
   // clang-format on
@@ -3552,7 +3550,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         _obj->zero_5[k] = dwg->header.zero_5[k];
       _obj->is_maint = dwg->header.is_maint;
       _obj->zero_one_or_three = dwg->header.zero_one_or_three;
-      _obj->dwg_version = (BITCODE_RS)(((BITCODE_RS)dwg->header.maint_version << 8) | dwg->header.dwg_version);
+      _obj->dwg_version
+          = (BITCODE_RS)(((BITCODE_RS)dwg->header.maint_version << 8)
+                         | dwg->header.dwg_version);
       _obj->codepage = dwg->header.codepage;
       // always recompute sections, even with dwgrewrite
       _obj->num_sections = dwg->header.num_sections;
@@ -3585,6 +3585,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       Bit_Chain hdat                                                          \
           = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 };          \
       bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
+      _obj->handles[i].name = #NAM;                                           \
       /* gcc 11 bug */                                                        \
       GCC80_DIAG_IGNORE (-Wstringop-overflow)                                 \
       for (int k = 0; k < MAX ((int)_obj->handles[i].num_hdl, 8); k++)        \
