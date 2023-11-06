@@ -1204,6 +1204,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg_dynapi_header_set_value (dwg, key, &num, 0);
         }
       else if (t->type == JSMN_PRIMITIVE
+               && f->size <= 4  // not a RS[]
                && (strEQc (f->type, "RC") || strEQc (f->type, "B")
                    || strEQc (f->type, "BB") || strEQc (f->type, "RS")
                    || strEQc (f->type, "BS") || strEQc (f->type, "RL")
@@ -1215,6 +1216,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg_dynapi_header_set_value (dwg, key, &num, 0);
         }
       else if (t->type == JSMN_PRIMITIVE
+               && f->size == 8 // not a RLL[]
                && (strEQc (f->type, "RLL") || strEQc (f->type, "BLL")))
         {
           uint64_t num = json_longlong (dat, tokens);
