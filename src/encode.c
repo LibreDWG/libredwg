@@ -4658,7 +4658,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
           continue;
         }
       // check if block/extras or entity member
-      if (section == ENTITIES_SECTION_INDEX) // is entity
+      if (dat->version >= R_2_0b && section == ENTITIES_SECTION_INDEX)
         {
           // but belongs to a block
           if (obj->fixedtype == DWG_TYPE_BLOCK)
@@ -4669,9 +4669,8 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                 index += (next_endblk->index - obj->index);
               else
                 in_blocks = true;
-              continue;
             }
-          if (dat->version >= R_2_0b && obj->tio.entity->entmode == 3)
+          if (obj->tio.entity->entmode == 3)
             {
               LOG_TRACE ("Skip block %s in entities section, number: %d, "
                          "type: %d, Addr: %zx (0x%zx)\n",
@@ -4680,9 +4679,15 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
               continue;
             }
           if (in_blocks)
-            continue;
+            {
+              LOG_TRACE ("Skip block %s in entities section, number: %d, "
+                         "type: %d, Addr: %zx (0x%zx)\n",
+                         obj->name, obj->index, obj->type, obj->address,
+                         dat->byte);
+              continue;
+            }
         }
-      else if (section == BLOCKS_SECTION_INDEX)
+      else if (dat->version >= R_2_0b && section == BLOCKS_SECTION_INDEX)
         {
           // if (dat->version < R_2_0b || obj->tio.entity->entmode != 3)
           //   {
@@ -4695,7 +4700,13 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
           if (obj->fixedtype == DWG_TYPE_BLOCK)
             in_blocks = true;
           if (!in_blocks)
-            continue;
+            {
+              LOG_TRACE ("Skip entity %s in block section, number: %d, "
+                         "type: %d, Addr: %zx (0x%zx)\n",
+                         obj->name, obj->index, obj->type, obj->address,
+                         dat->byte);
+              continue;
+            }
         }
       if (!in_extras && obj->fixedtype == DWG_TYPE_JUMP)
         in_extras = true; // jump into
