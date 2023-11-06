@@ -39,10 +39,12 @@ VERSIONS (R_13, R_2000) {
   }
   FIELD_RS (codepage, 0);
   FIELD_BS (num_sections, 0);
+  VALUEOUTOFBOUNDS (num_sections, 6);
   REPEAT_F (num_sections, 6, sections, Dwg_SecondHeader_Sections)
   REPEAT_BLOCK
       // address+sizes of sections 0-2 is correct, 3+4 is empty
       SUB_FIELD_RCd (sections[rcount1], nr, 0);
+      SUB_VALUEOUTOFBOUNDS (handles[rcount1], nr, 6);
       SUB_FIELD_BL (sections[rcount1], address, 0);
       SUB_FIELD_BL (sections[rcount1], size, 0);
   END_REPEAT_BLOCK
@@ -64,18 +66,21 @@ VERSIONS (R_13, R_2000) {
      13: group dictionary objhandle
    */
   FIELD_BS (num_handles, 0); // always 14
+  VALUEOUTOFBOUNDS (num_handles, 14);
   REPEAT_F (num_handles, 14, handles, Dwg_SecondHeader_Handles)
   REPEAT_BLOCK
       SUB_FIELD_RCd (handles[rcount1], num_hdl, 0); // max 8, the size
+      SUB_VALUEOUTOFBOUNDS (handles[rcount1], num_hdl, 8);
       SUB_FIELD_RCd (handles[rcount1], nr, 0);
+      SUB_VALUEOUTOFBOUNDS (handles[rcount1], nr, 13);
       SUB_FIELD_VECTOR_INL (handles[rcount1], hdl, RC, _obj->handles[rcount1].num_hdl, 0);
       // log this handle backup similar to real handles
       if (_obj->handles[rcount1].name && DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
         {
           LOG_TRACE ("[%u] %s: 0.%hu.", (unsigned)rcount1,
                      _obj->handles[rcount1].name,
-                     _obj->handles[rcount1].num_hdl)
-          for (int i = 0; i < _obj->handles[rcount1].num_hdl; i++)
+                     _obj->handles[rcount1].num_hdl);
+          for (int i = 0; i < MIN (_obj->handles[rcount1].num_hdl, 8); i++)
             LOG_TRACE ("%hX", _obj->handles[rcount1].hdl[i]);
           LOG_TRACE ("\n")
         }

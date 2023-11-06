@@ -3588,7 +3588,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       _obj->handles[i].name = #NAM;                                           \
       /* gcc 11 bug */                                                        \
       GCC80_DIAG_IGNORE (-Wstringop-overflow)                                 \
-      for (int k = 0; k < MAX ((int)_obj->handles[i].num_hdl, 8); k++)        \
+      for (int k = 0; k < MIN ((int)_obj->handles[i].num_hdl, 8); k++)        \
         _obj->handles[i].hdl[k] = hdat.chain[k];                              \
       GCC80_DIAG_RESTORE                                                      \
     }
