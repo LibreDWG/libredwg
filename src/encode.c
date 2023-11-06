@@ -3607,7 +3607,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       encode_secondheader_private (dat, dwg);
 
-      if (dwg->header.num_sections > SECTION_MEASUREMENT_R13
+      if (0
+          && dwg->header.num_sections > SECTION_MEASUREMENT_R13
           && dwg->header.section[SECTION_MEASUREMENT_R13].address)
         {
           // if empty keep it that way
@@ -3620,11 +3621,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           encode_secondheader_private (dat, dwg);
         }
 
-      dat->byte -= dwg->header.version == R_14 ? 10 : 2;
       _obj->size = encode_patch_RLsize (dat, pvzadr);
       if (_obj->size < dat->byte)
         dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
-
       bit_write_CRC (dat, pvzadr, 0xC0C1);
       VERSIONS (R_14, R_2000) {
         FIELD_RLL (junk_r14, 0);
