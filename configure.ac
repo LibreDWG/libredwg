@@ -437,7 +437,7 @@ AS_IF([test x$enable_werror != xno],
   [AC_DEFINE([HAVE_WERROR],1,[If -Werror is enabled.])
    WARN_CFLAGS="-Werror $WARN_CFLAGS"
    if test x$ax_cv_check_cflags__Wcast_align = xyes; then
-      WARN_CFLAGS="$WARN_CFLAGS -Wno-error=cast-align"
+      WARN_CFLAGS="$WARN_CFLAGS -Wno-cast-align"
    fi
    AC_MSG_RESULT([no (default)])],
   [AC_MSG_RESULT([yes])])
