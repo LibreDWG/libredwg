@@ -2780,7 +2780,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
          */
         LOG_ERROR ("FIXME convert sections from CONTROL objects to tables");
       }
-    if (dwg->header.from_version < R_13b1)
+    if (dwg->header.from_version < R_13b1 && dwg->header.section)
       {
         for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
              id++)
