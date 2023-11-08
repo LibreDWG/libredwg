@@ -1114,6 +1114,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("SUMMARY.%s = %s [T16 1]\n", &field[1], pair->value.s);      \
       bit_utf8_to_TV (dest, (unsigned char *)pair->value.s, 1024,             \
                       strlen (pair->value.s), 0, dat->codepage);              \
+      dest[1023] = '\0';                                                      \
       dwg->summaryinfo.name = strdup (dest);                                  \
     }
 
