@@ -191,8 +191,8 @@ uint16_t bit_write_CRC_BE (Bit_Chain *dat, size_t start_address,
 uint16_t bit_calc_CRC (const uint16_t seed, unsigned char *adr, size_t len);
 uint32_t bit_calc_CRC32 (const uint32_t seed, unsigned char *adr, size_t len);
 
-void bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
-                     size_t length);
+int bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
+                    size_t length);
 
 /* read fixed-length ASCII string */
 BITCODE_TF bit_read_TF (Bit_Chain *dat, size_t length) ATTRIBUTE_MALLOC;

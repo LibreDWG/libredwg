@@ -122,11 +122,11 @@ bit_reset_chain (Bit_Chain *dat)
 
 #ifdef DWG_ABORT
 #  define CHK_OVERFLOW(func, retval)                                          \
-    if (dat->byte >= dat->size                                                \
-        || ((dat->byte * 8) + dat->bit >= dat->size * 8))                     \
+    if (dat->bit ? ((dat->byte * 8) + dat->bit >= dat->size * 8)              \
+                 : (dat->byte >= dat->size))                                  \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u > %" PRIuSIZE,     \
+        LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u >= %" PRIuSIZE,    \
                    func, dat->byte, dat->bit, dat->size)                      \
         if (++errors > DWG_ABORT_LIMIT)                                       \
           abort ();                                                           \
@@ -134,19 +134,19 @@ bit_reset_chain (Bit_Chain *dat)
       }
 #else
 #  define CHK_OVERFLOW(func, retval)                                          \
-    if (dat->byte >= dat->size                                                \
-        || ((dat->byte * 8) + dat->bit >= dat->size * 8))                     \
+    if (dat->bit ? ((dat->byte * 8) + dat->bit >= dat->size * 8)              \
+                 : (dat->byte >= dat->size))                                  \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u > %" PRIuSIZE,     \
+        LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u >= %" PRIuSIZE,    \
                    func, dat->byte, dat->bit, dat->size)                      \
         return retval;                                                        \
       }
 #endif
 
 #define CHK_OVERFLOW_PLUS(plus, func, retval)                                 \
-  if ((dat->byte + plus > dat->size)                                          \
-      || (((dat->byte + plus) * 8) + dat->bit > dat->size * 8))               \
+  if (dat->bit ? (((dat->byte + plus) * 8) + dat->bit > dat->size * 8)        \
+               : (dat->byte + plus > dat->size))                              \
     {                                                                         \
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                               \
       LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u + %d > %" PRIuSIZE,  \
@@ -326,28 +326,22 @@ bit_read_RC (Bit_Chain *dat)
   unsigned char result;
   unsigned char byte;
 
-  CHK_OVERFLOW_PLUS (1, __FUNCTION__, 0)
+  CHK_OVERFLOW (__FUNCTION__, 0)
   byte = dat->chain[dat->byte];
   if (dat->bit == 0)
-    result = byte;
+    {
+      result = byte;
+      dat->byte++;
+    }
   else
     {
+      CHK_OVERFLOW_PLUS (1, __FUNCTION__, 0)
       result = byte << dat->bit;
-      if (dat->byte < dat->size - 1)
-        {
-          byte = dat->chain[dat->byte + 1];
-          result |= byte >> (8 - dat->bit);
-        }
-      else
-        {
-          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %" PRIuSIZE, __FUNCTION__,
-                     dat->byte + 1)
-          return 0;
-        }
+      byte = dat->chain[dat->byte + 1];
+      result |= byte >> (8 - dat->bit);
+      bit_advance_position (dat, 8);
     }
 
-  bit_advance_position (dat, 8);
   return ((unsigned char)result);
 }
 
@@ -1580,31 +1574,33 @@ bit_write_CRC_BE (Bit_Chain *dat, size_t start_address, uint16_t seed)
   return crc;
 }
 
-void
+int
 bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
                 size_t length)
 {
-  if (dat->byte + length > dat->size)
+  if (dat->bit ? (((dat->byte + length) * 8) + dat->bit > dat->size * 8)
+               : (dat->byte + length > dat->size))
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE ", size %" PRIuSIZE,
                  __FUNCTION__, dat->byte, dat->size)
       memset (dest, 0, length);
-      return;
+      return 1;
     }
-  assert (dat->byte + length <= dat->size);
   if (dat->bit == 0)
     {
+      assert (dat->byte + length <= dat->size);
       memcpy (dest, &dat->chain[dat->byte], length);
       dat->byte += length;
     }
   else
     {
-      for (unsigned int i = 0; i < length; i++)
+      for (size_t i = 0; i < length; i++)
         {
           dest[i] = bit_read_RC (dat);
         }
     }
+  return 0;
 }
 
 /** Read fixed text with zero-termination.
@@ -1617,14 +1613,18 @@ bit_read_TF (Bit_Chain *restrict dat, size_t length)
 {
   BITCODE_RC *chain;
   CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
-  chain = (BITCODE_RC *)calloc (length + 1, 1);
+  chain = (BITCODE_RC *)malloc (length + 1);
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Out of memory");
       return NULL;
     }
-  bit_read_fixed (dat, chain, length);
+  if (bit_read_fixed (dat, chain, length))
+    {
+      free (chain);
+      return NULL;
+    }
   chain[length] = '\0';
 
   return (BITCODE_TF)chain;
@@ -1650,7 +1650,11 @@ bit_read_bits (Bit_Chain *dat, size_t bits)
       return NULL;
     }
 
-  bit_read_fixed (dat, chain, bytes);
+  if (bit_read_fixed (dat, chain, bytes))
+    {
+      free (chain);
+      return NULL;
+    }
   chain[bytes] = '\0';
   if (rest)
     {
