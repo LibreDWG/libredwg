@@ -1546,10 +1546,11 @@ dwg_free_header_vars (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
 
-// clang-format off
+  // clang-format off
   #include "header_variables.spec"
   // clang-format on
 
+  FIELD_TV (DWGCODEPAGE, 0);
   return 0;
 }
 
