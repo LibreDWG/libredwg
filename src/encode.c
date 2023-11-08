@@ -4184,8 +4184,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                           &sec->comp_data_size);
                     }
                 }
-              bit_chain_free (&sec_dat[type]);
             }
+          bit_chain_free (&sec_dat[type]);
         }
     }
 
