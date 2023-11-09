@@ -91,16 +91,6 @@ static bool env_var_checked_p;
 
 #include "logging.h"
 
-/* See ODA p263, p 25 UNKNOWN SECTION */
-const unsigned char unknown_section[53]
-    = { 0x00, 0x00, 0x00, 0x00, /* RL 0 */
-        0x00, 0x00, 0x00, 0x00, /* RL num_objmap_entries + 3 */
-        0xA7, 0x62, 0x25, 0x00, 0xF6, 0xAF, 0x25, 0x02, 0x3B, 0x04, 0x00,
-        0x00, /* obj start_address as RL (off 16) */
-        0x04, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x64, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00 };
-
 /*--------------------------------------------------------------------------------
  * spec MACROS
  */
@@ -2774,7 +2764,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
          * section 0: header vars
          *         1: class section
          *         2: object map
-         *         3: (R13c3 and later): 2nd header (special table)
+         *         3: optional: obj free space
          *         4: optional: MEASUREMENT
          *         5: optional: AuxHeader (no sentinels, since R13c3)
          */
@@ -2950,7 +2940,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   padding (r13c3+)
                   THUMBNAIL (<r13c3)
      *         2: handles
-     *         3: 2ndheader (r13c3+, special table)
+     *         3: obj free space (r13c3+, optional)
+                  2NDHEADER (r13-r2000)
      *         4: MEASUREMENT (r14-r2000, optional)
      *         5: AuxHeader (r2000, no sentinels)
      *         6: THUMBNAIL (r13c3+, not a section)
@@ -3517,7 +3508,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   free (omap);
 
   /*------------------------------------------------------------
-   * Second header, section 3. R13-R2000 only.
+   * Second header, after AcDb:ObjFreeSpace - R13-R2000 only.
    * But partially also since r2004. (TODO: under which name? AuxHeader?)
    */
   if (dwg->header.version >= R_13b1 && dwg->header.version < R_2004)
@@ -3527,10 +3518,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       BITCODE_BL vcount;
 
       assert (dat->byte);
-      _obj->address = dat->byte & 0xFFFFFFFF;
-      dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
-      dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
-      dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
       LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
 
@@ -3607,35 +3594,18 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       encode_secondheader_private (dat, dwg);
 
-      if (0
-          && dwg->header.num_sections > SECTION_MEASUREMENT_R13
-          && dwg->header.section[SECTION_MEASUREMENT_R13].address)
-        {
-          // if empty keep it that way
-          dwg->header.section[4].address = dat->byte + 16;
-          _obj->sections[4].address
-              = (BITCODE_BL)dwg->header.section[4].address & 0xFFFFFFFF;
-          dwg->header.section[4].size = UINT64_C (4);
-          _obj->sections[4].size = UINT32_C (4);
-          dat->byte = pvzadr;
-          encode_secondheader_private (dat, dwg);
-        }
-
-      _obj->size = encode_patch_RLsize (dat, pvzadr);
-      if (_obj->size < dat->byte)
-        dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
       bit_write_CRC (dat, pvzadr, 0xC0C1);
       VERSIONS (R_14, R_2000) {
         FIELD_RLL (junk_r14, 0);
       }
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_END);
     }
-  else if (dwg->header.num_sections > SECTION_2NDHEADER_R13
+  else if (dwg->header.num_sections > SECTION_OBJFREESPACE_R13
            && dwg->header.version < R_2004) // TODO
     {
-      dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
-      dwg->header.section[SECTION_2NDHEADER_R13].address = 0;
-      dwg->header.section[SECTION_2NDHEADER_R13].size = 0;
+      dwg->header.section[SECTION_OBJFREESPACE_R13].number = 3;
+      dwg->header.section[SECTION_OBJFREESPACE_R13].address = 0;
+      dwg->header.section[SECTION_OBJFREESPACE_R13].size = 0;
     }
 
   /*------------------------------------------------------------
