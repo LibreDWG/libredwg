@@ -5894,7 +5894,6 @@ DWG_ENTITY (PROXY_ENTITY)
   }
 
   DECODER {
-    unsigned char opts = dat->opts;
     _obj->data_numbits = ((dat->size * 8) - bit_position (dat)) & 0xFFFFFFFF;
     _obj->data_size = (dat->size - dat->byte) & 0xFFFFFFFF;
     if (dat->size > obj->size)
@@ -5911,11 +5910,7 @@ DWG_ENTITY (PROXY_ENTITY)
       }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
-    dat->opts &= 0xf0;
-    dat->size++;
     FIELD_TF (data, _obj->data_size, 310);
-    dat->size--;
-    dat->opts = opts;
   }
   ENCODER {
     // write is always aligned
@@ -5992,7 +5987,6 @@ DWG_OBJECT (PROXY_OBJECT)
   }
 
   DECODER {
-    unsigned char opts = dat->opts;
     _obj->data_numbits = ((dat->size * 8) - bit_position (dat)) & 0xFFFFFFFF;
     _obj->data_size = (dat->size - dat->byte) & 0xFFFFFFFF;
     if (dat->size > obj->size)
@@ -6012,15 +6006,15 @@ DWG_OBJECT (PROXY_OBJECT)
         _obj->data_size = _obj->data_numbits / 8;
         if (_obj->data_numbits % 8)
           _obj->data_size++;
+        if (!_obj->data_size)
+          _obj->data_numbits = 0;
       }
     LOG_TRACE ("data_numbits => " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size => " FORMAT_BL "\n", _obj->data_size);
     FIELD_VALUE (num_objids) = 0;
-    dat->opts &= 0xf0;
-    dat->size++;
-    FIELD_TF (data, _obj->data_size, 310);
-    dat->size--;
-    dat->opts = opts;
+    _obj->data = bit_read_bits (dat, _obj->data_numbits);
+    LOG_TRACE_TF (_obj->data, _obj->data_size);
+    // FIELD_TF (data, _obj->data_size, 310); // may overshoot
   }
   ENCODER {
     // write is always aligned
@@ -6044,14 +6038,17 @@ DWG_OBJECT (PROXY_OBJECT)
     int bits;
     if (!_obj->data_size)
       _obj->data_size = _obj->data_numbits / 8;
-    bits = _obj->data_numbits - (int)(_obj->data_size * 8);
-    if (!(bits > -8 && bits <= 0))
-      LOG_ERROR ("Invalid data_numbits %u - (_obj->data_size %u * 8): %d",
-                 _obj->data_numbits, _obj->data_size, bits);
-    assert (bits > -8 && bits <= 0);
-    if (bits < 0)
-      // back off a few bits, we wrote too much
-      bit_advance_position (dat, bits);
+    if (_obj->data_size)
+      {
+        bits = _obj->data_numbits - (int)(_obj->data_size * 8);
+        if (!(bits > -8 && bits <= 0))
+          LOG_ERROR ("Invalid data_numbits %u - (_obj->data_size %u * 8): %d",
+                     _obj->data_numbits, _obj->data_size, bits);
+        assert (bits > -8 && bits <= 0);
+        if (bits < 0)
+          // back off a few bits, we wrote too much
+          bit_advance_position (dat, bits);
+      }
   }
 #endif
 
