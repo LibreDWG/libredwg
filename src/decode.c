@@ -5164,6 +5164,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
     {
       LOG_ERROR ("MS size overflow @%" PRIuSIZE, dat->byte)
       dwg->num_objects--;
+      *dat = abs_dat;
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   obj->size = bit_read_MS (dat);
