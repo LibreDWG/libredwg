@@ -104,6 +104,8 @@ static int resolve_objectref_vector (Bit_Chain *restrict dat,
                                      Dwg_Data *restrict dwg);
 static int secondheader_private (Bit_Chain *restrict dat,
                                  Dwg_Data *restrict dwg);
+static int obj_free_space_private (Bit_Chain *restrict dat,
+                                   Dwg_Data *restrict dwg);
 
 /*----------------------------------------------------------------------------
  * Public variables
@@ -308,8 +310,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   int sentinel_size = 16;
   const char *section_names[]
-      = { "AcDb:Header", "AcDb:Classes",  "AcDb:Handles",
-          "2NDHEADER",   "AcDb:Template", "AcDb:AuxHeader" };
+      = { "AcDb:Header",       "AcDb:Classes",  "AcDb:Handles",
+          "AcDb:ObjFreeSpace", "AcDb:Template", "AcDb:AuxHeader" };
 
   {
     int i;
@@ -337,7 +339,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* section 0: header vars
    *         1: class section
    *         2: object map
-   *         3: (R13c3 and later): 2nd header (special table, no sentinels)
+   *         3: optional: obj free space
    *         4: optional: MEASUREMENT
    *         5: optional: AuxHeader (no sentinels, since R13c3)
    */
@@ -885,7 +887,27 @@ handles_section:
             (object_end + object_begin + 2))
 
   /*-------------------------------------------------------------------------
-   * Second header, section 3. R13c3-R2000 only.
+   * AcDb:ObjFreeSpace, section 3
+   */
+
+  if (dwg->header.sections > 3
+      && dwg->header.section[SECTION_OBJFREESPACE_R13].address != 0)
+    {
+      dat->byte = dwg->header.section[SECTION_OBJFREESPACE_R13].address;
+      dat->bit = 0;
+
+      LOG_INFO ("\n"
+                "=======> Obj Free Space 3 (start): %4u\n",
+                (unsigned int)dwg->header.section[SECTION_OBJFREESPACE_R13].address)
+      LOG_INFO ("         Obj Free Space 3   (end): %4u\n",
+                (unsigned int)(dwg->header.section[SECTION_OBJFREESPACE_R13].address
+                               + dwg->header.section[SECTION_OBJFREESPACE_R13].size))
+
+      error |= obj_free_space_private (dat, dwg);
+    }
+
+  /*-------------------------------------------------------------------------
+   * Second header, R13c3-R2000 only.
    * But partially also since r2004.
    */
   if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_2NDHEADER_BEGIN)))
@@ -910,32 +932,12 @@ handles_section:
       for (int i = 0; i < ARRAY_SIZE (names); i++)
         _obj->handles[i].name = names[i];
 
-      LOG_INFO ("\n=======> Second Header 3 (start): %8zu\n", dat->byte - 16)
+      LOG_INFO ("\n=======> Second Header (start): %8zu\n", dat->byte - 16)
 
       error |= secondheader_private (dat, dwg);
 
-      if (dwg->header.sections <= SECTION_2NDHEADER_R13)
-        {
-          LOG_WARN (
-              "Only %d num_sections, but 2ndheader found, extending to 4",
-              dwg->header.sections);
-          dwg->header.sections = SECTION_2NDHEADER_R13 + 1; /* 4 */
-          dwg->header.section = (Dwg_Section *)realloc (
-              dwg->header.section,
-              dwg->header.sections * sizeof (Dwg_Section));
-          memset (&dwg->header.section[SECTION_2NDHEADER_R13], 0,
-                  sizeof (Dwg_Section));
-        }
-      if (!dwg->header.section[SECTION_2NDHEADER_R13].address)
-        {
-          dwg->header.section[SECTION_2NDHEADER_R13].address
-              = dwg->secondheader.address;
-          dwg->header.section[SECTION_2NDHEADER_R13].size
-              = dwg->secondheader.size;
-        }
-
       if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_2NDHEADER_END)))
-        LOG_INFO ("         Second Header 3 (end)  : %8u\n",
+        LOG_INFO ("         Second Header (end)  : %8u\n",
                   (unsigned int)dat->byte)
     }
 
@@ -2621,6 +2623,24 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   VERSIONS (R_14, R_2000) {
     FIELD_RLL (junk_r14, 0);
   }
+
+  return error;
+}
+
+static int
+obj_free_space_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Bit_Chain *str_dat = dat;
+  Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  BITCODE_BL vcount;
+  if (!dat->chain || !dat->size)
+    return 1;
+
+  // clang-format off
+  #include "objfreespace.spec"
+  // clang-format on
 
   return error;
 }
