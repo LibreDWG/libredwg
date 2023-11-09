@@ -18,10 +18,10 @@ for f in ../tz/*/*; do
     for OUT in $(seq 0 4); do
         if [ "$OUT" = "0" ]; then
             for VER in $(seq 0 16); do
-                OUT="$OUT" VER="$VER" examples/llvmfuzz_standalone "$f" || true
+                OUT="$OUT" VER="$VER" timeout 30 examples/llvmfuzz_standalone "$f" || true
             done
         else
-            OUT="$OUT" examples/llvmfuzz_standalone "$f" || true
+            OUT="$OUT" timeout 30 examples/llvmfuzz_standalone "$f" || true
         fi
     done
 done
