@@ -2774,7 +2774,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
          * section 0: header vars
          *         1: class section
          *         2: object map
-         *         3: (R13c3 and later): 2nd header (special table, no sentinels)
+         *         3: (R13c3 and later): 2nd header (special table)
          *         4: optional: MEASUREMENT
          *         5: optional: AuxHeader (no sentinels, since R13c3)
          */
@@ -2950,7 +2950,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   padding (r13c3+)
                   THUMBNAIL (<r13c3)
      *         2: handles
-     *         3: 2ndheader (r13c3+, special table, no sentinels)
+     *         3: 2ndheader (r13c3+, special table)
      *         4: MEASUREMENT (r14-r2000, optional)
      *         5: AuxHeader (r2000)
      *         6: THUMBNAIL (r13c3+, not a section)
