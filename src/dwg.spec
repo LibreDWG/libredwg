@@ -3738,7 +3738,6 @@ DWG_TABLE (LAYER)
     FIELD_CMC (color, 62);
   }
   VERSIONS (R_13b1, R_14) {
-    DECODER { FIELD_VALUE (on) = FIELD_VALUE (color.index) >= 0; }
     // for DWG
     FIELD_VALUE (flag0) |= FIELD_VALUE (frozen) |
       (FIELD_VALUE (frozen_in_new) << 1) |
