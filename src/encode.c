@@ -2952,7 +2952,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
      *         2: handles
      *         3: 2ndheader (r13c3+, special table)
      *         4: MEASUREMENT (r14-r2000, optional)
-     *         5: AuxHeader (r2000)
+     *         5: AuxHeader (r2000, no sentinels)
      *         6: THUMBNAIL (r13c3+, not a section)
      */
     /* Usually 3-5, max 6 */
