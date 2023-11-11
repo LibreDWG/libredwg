@@ -61,7 +61,7 @@ const struct dwg_versions dwg_versions[] = {
   { R_2000b, "r2000b", "AC1500", "AutoCAD 2000 beta", 0x16 },
   { R_2000, "r2000", "AC1015", "AutoCAD Release 2000", 0x17 },
   { R_2000i, "r2000i", "AC1016", "AutoCAD Release 2000i", 0x17 },
-  { R_2002, "r2002", "AC1017", "AutoCAD Release 2002", 0x18 },
+  { R_2002, "r2002", "AC1017", "AutoCAD Release 2002", 0x17 },
   { R_2004a, "r2004a", "AC402a", "AutoCAD 2004 alpha a", 0x18 },
   { R_2004b, "r2004b", "AC402b", "AutoCAD 2004 alpha b", 0x18 },
   { R_2004c, "r2004c", "AC1018", "AutoCAD 2004 beta", 0x18 },
