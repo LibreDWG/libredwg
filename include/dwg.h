@@ -293,9 +293,9 @@ typedef enum DWG_VERSION_TYPE
   R_13c3,	/* AC1013/0x14 AutoCAD Release 13c3 */
   R_14,		/* AC1014/0x15 AutoCAD Release 14 */
   R_2000b,	/* AC1500/0x16 AutoCAD 2000 beta */
-  R_2000,	/* AC1015/0x16 AutoCAD Release 2000 */
+  R_2000,	/* AC1015/0x17 AutoCAD Release 2000 */
   R_2000i,	/* AC1016/0x17 AutoCAD Release 2000i */
-  R_2002,	/* AC1017/0x18 AutoCAD Release 2002 */
+  R_2002,	/* AC1017/0x17 AutoCAD Release 2002 */
   R_2004a,	/* AC402a/0x18 AutoCAD 2004 alpha a */
   R_2004b,	/* AC402b/0x18 AutoCAD 2004 alpha b */
   R_2004c,	/* AC1018/0x18 AutoCAD 2004 beta */
@@ -319,7 +319,7 @@ typedef enum DWG_VERSION_TYPE
   //R_2017,	/* AC1031/0x20 AutoCAD 2017 */
   R_2018b,	/* AC1032/0x20 AutoCAD 2018 beta */
   R_2018,	/* AC1032/0x21 AutoCAD Release 2018 - 2021 */
-  //R_2019,	/* AC1033/0x22AutoCAD 2019 */
+  //R_2019,	/* AC1033/0x22 AutoCAD 2019 */
   //R_2020,	/* AC1034/0x23 AutoCAD 2020 */
   //R_2021,	/* AC1035/0x24 AutoCAD 2021 */
   R_2022b,	/* AC103-4 AutoCAD 2022 beta? */
