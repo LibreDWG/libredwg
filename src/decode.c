@@ -6277,8 +6277,15 @@ decode_preR13_sentinel (const Dwg_Sentinel sentinel,
 {
   int error = 0;
   const unsigned char *const wanted = dwg_sentinel (sentinel);
-  BITCODE_TF r11_sentinel = bit_read_TF (dat, 16);
+  BITCODE_TF r11_sentinel;
 
+  if (dat->byte + 16 > dat->size)
+    {
+      LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE " > size %" PRIuSIZE,
+                 __FUNCTION__, dat->byte + 16, dat->size)
+      return DWG_ERR_INVALIDDWG;
+    }
+  r11_sentinel = bit_read_TF (dat, 16U);
   if (!r11_sentinel)
     return DWG_ERR_INVALIDDWG;
   LOG_TRACE ("%s: ", sentinel_name);
