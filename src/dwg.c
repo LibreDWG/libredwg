@@ -1836,12 +1836,12 @@ static const char *const dwg_section_r2004_names[] = {
   "SYSTEM_MAP",            // 19
 };
 static const char *const dwg_section_r13_names[] = {
-  "Header",    // 0
-  "Classes",   // 1
-  "Handles",   // 2
-  "2ndHeader", // 3
-  "Template",  // 4
-  "AuxHeader"  // 5
+  "Header",       // 0
+  "Classes",      // 1
+  "Handles",      // 2
+  "ObjFreeSpace", // 3
+  "Template",     // 4
+  "AuxHeader"     // 5
 };
 static const char *const dwg_section_r11_names[] = {
   "HEADER",   // 0

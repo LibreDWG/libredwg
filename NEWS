@@ -6,15 +6,16 @@ LibreDWG version 0.13.0 - 2023/?? - beta:
 
 Major features:
   * Added pre-R13 DWG decode support for all old DWG formats
-    with Michal Josef Špaček. DXF and down-conversions not yet.
+    with Michal Josef Špaček. DXF and many down-conversions not yet.
   * Add support for VS2019 (msvc with ucrt) and clang-cl cross-compilation
     to Windows. (it is not error compatible to msvc, msvc errors much more).
     Also cross-compile to mips32be and ppc64be.
-    Tested ok with tcc and a patched chibicc.
+    Tested ok with tcc and a patched chibicc. pcc and compcert not yet.
   * Added read support on bigendian platforms, write not yet.
   * Full support for en-/decoding foreign codepages, also the MIF
     \M=1-5xxxx format. (With and without iconv)
   * Added WMF and PNG support to dwgbmp (#824)
+  * Identified the R13-2000 ODA Unknown section as ObjFreeSpace (#860).
   * Fix many minor ODA roundtrip errors, leading to less recovery mode
     dialogs.
   * Fixed dwgadd (Dmitry Sinyavin #388, #415)
@@ -22,7 +23,7 @@ Major features:
     --with-geojson-precision=(rfc,max,16,6) build options. (#810)
     The GeoJSON default is now back from the RFC7946 recommended 6 to 16 (=max),
     leading to much larger and much more precise files.
-  * Split arcs/circles into line segments with GeoJSON (#520)
+  * Split arcs/circles into line segments with GeoJSON (#520).
   * libredwg is on vcpkg
   * Added a fixed [ODA Spec diff](doc/ODA-5.4.2-libredwg-diff.pdf)
   * New authors: Michal Josef Špaček (preR13 DWG formats),

@@ -2324,6 +2324,19 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
 // r13c3 - r2000
 static int
+encode_objfreespace_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  // clang-format off
+  #include "objfreespace.spec"
+  // clang-format on
+  return error;
+}
+
+// r13c3 - r2000
+static int
 encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *str_dat = dat;
@@ -2764,7 +2777,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
          * section 0: header vars
          *         1: class section
          *         2: object map
-         *         3: optional: obj free space
+         *         3: optional: ObjFreeSpace
          *         4: optional: MEASUREMENT
          *         5: optional: AuxHeader (no sentinels, since R13c3)
          */
@@ -2940,7 +2953,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   padding (r13c3+)
                   THUMBNAIL (<r13c3)
      *         2: handles
-     *         3: obj free space (r13c3+, optional)
+     *         3: ObjFreeSpace (r13c3+, optional)
                   2NDHEADER (r13-r2000)
      *         4: MEASUREMENT (r14-r2000, optional)
      *         5: AuxHeader (r2000, no sentinels)
@@ -3513,21 +3526,27 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   free (omap);
 
   /*------------------------------------------------------------
-   * Second header, after AcDb:ObjFreeSpace - R13-R2000 only.
-   * But partially also since r2004. (TODO: under which name? AuxHeader?)
+   * ObjFreeSpace and Second header - R13c3-R2000 only.
+   * Note: partially also since r2004.
    */
-  if (dwg->header.version >= R_13b1 && dwg->header.version < R_2004)
+  if (dwg->header.version >= R_13c3 && dwg->header.version < R_2004)
     {
       struct _dwg_secondheader *_obj = &dwg->secondheader;
       Dwg_Object *obj = NULL;
       BITCODE_BL vcount;
 
       assert (dat->byte);
+
+      LOG_INFO ("\n=======> ObjFreeSpace 3 (start): %4u\n", (unsigned)dat->byte);
+      dwg->header.section[SECTION_OBJFREESPACE_R13].number = 3;
+      dwg->header.section[SECTION_OBJFREESPACE_R13].address = dat->byte;
+      dwg->header.section[SECTION_OBJFREESPACE_R13].size = 53;
+      error |= encode_objfreespace_private (dat, dwg);
+      LOG_INFO ("\n=======> ObjFreeSpace 3 (end): %4u\n", (unsigned)dat->byte);
+      
       LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
-
-      pvzadr = dat->byte; // Keep the first address of the section to write its
-                          // size later. before size.
+      pvzadr = dat->byte; // Keep the address to write its size later. before size.
       LOG_TRACE ("pvzadr: %" PRIuSIZE "\n", pvzadr);
       if (!_obj->size && !_obj->num_sections)
         {
@@ -3605,13 +3624,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_END);
     }
-  else if (dwg->header.num_sections > SECTION_OBJFREESPACE_R13
-           && dwg->header.version < R_2004) // TODO
-    {
-      dwg->header.section[SECTION_OBJFREESPACE_R13].number = 3;
-      dwg->header.section[SECTION_OBJFREESPACE_R13].address = 0;
-      dwg->header.section[SECTION_OBJFREESPACE_R13].size = 0;
-    }
 
   /*------------------------------------------------------------
    * MEASUREMENT/Template Section 4
@@ -3672,12 +3684,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             break;
           case SECTION_OBJFREESPACE:
             {
-              Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
               bit_chain_alloc (&sec_dat[type]);
-              str_dat = hdl_dat = dat = &sec_dat[type];
+              hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
-#include "objfreespace.spec"
-              LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte)
+              error |= encode_objfreespace_private (dat, dwg);
+              LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
             }
             break;
           case SECTION_REVHISTORY:
