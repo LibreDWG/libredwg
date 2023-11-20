@@ -26,8 +26,8 @@ EXTRA_DIST = ODA-5.4.2-libredwg.patch ODA-5.4.2-libredwg-diff.pdf
 ODA_ORI_PATCH = $(top_srcdir)/../ODA-spec/ODA-5.4.2-libredwg.patch
 ODA_ORI_PDF = $(top_srcdir)/../ODA-spec/ODA-5.4.2-libredwg-diff.pdf
 
+.PHONY: manual regen-patch refman doxygen refman-pdf
 if HAVE_MAKEINFO
-.PHONY: manual
 manual:
 	cd $(top_srcdir)/doc && ../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
 
@@ -36,14 +36,13 @@ endif
 dynapi.texi: $(top_srcdir)/src/gen-dynapi.pl
 	echo make regen-dynapi might be needed
 
-.PHONY: ODA-5.4.2-libredwg.patch
+regen-patch: ODA-5.4.2-libredwg.patch ODA-5.4.2-libredwg-diff.pdf
 ODA-5.4.2-libredwg.patch:
 	-if test -e $(ODA_ORI_PATCH); then cp -f $(ODA_ORI_PATCH) $@; fi
 ODA-5.4.2-libredwg-diff.pdf:
 	-if test -e $(ODA_ORI_PDF); then cp -f $(ODA_ORI_PDF) $@; fi
 
 if HAVE_DOXYGEN
-.PHONY: refman doxygen refman-pdf
 refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h ../src/dynapi.c
 	-rm ../{src,include}/*_flymake.{c,h} ../{src,include}/*.ii
 	cd .. && $(DOXYGEN) doc/Doxyfile

@@ -6167,7 +6167,7 @@ DWG_OBJECT (FIELD)
   if (error & DWG_ERR_INVALIDTYPE)
     return error;
 
-  FIELD_T (value_string, 301); // and 9 for subsequent >255 chunks
+  FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
   FIELD_BL (value_string_length, 98); //ODA bug TV
 
   FIELD_BL (num_childval, 93);

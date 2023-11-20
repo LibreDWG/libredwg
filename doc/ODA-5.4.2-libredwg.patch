@@ -1,6 +1,6 @@
---- ODA-5.4.1.md	2023-11-20 10:20:33.798853712 +0100
-+++ ODA-5.4.2-libredwg.md	2023-11-20 10:20:26.006762802 +0100
-@@ -1,6 +1,6 @@
+--- ODA-5.4.1.md	2023-11-20 18:53:23.909377915 +0100
++++ ODA-5.4.2-libredwg.md	2023-11-20 22:34:08.826990795 +0100
+@@ -1,8 +1,8 @@
 -# Open Design Specification for .dwg files
 +# Open Design Specification for .dwg files, fixed by LibreDWG
  
@@ -9,7 +9,11 @@
  
  ## Open Design Alliance
  
-@@ -22,7 +22,7 @@
+ ## <http://www.opendesign.com>
+ 
+@@ -20,11 +20,11 @@
+ 
+ Printed in USA.
  
  * DWG is the native and proprietary file format for AutoCAD® and a trademark of Autodesk, Inc. The Open Design Alliance is not associated with Autodesk.
  
@@ -18,7 +22,11 @@
  
  # Table of Contents
  
-@@ -74,8 +74,6 @@
+ 1 Introduction .................................................................................................. 6
+ 
+@@ -72,12 +72,10 @@
+ 
+ 23 Data section AcDb:Handles (OBJECT MAP) ..................................... 251
  
  24 Section AcDb:AcDsPrototype_1b (DataStorage) ................................. 252
  
@@ -27,7 +35,11 @@
  26 SECOND FILE HEADER (R13-R15) ................................................ 264
  
  27 Data section: AcDb:AuxHeader (Auxiliary file header) ....................... 267
-@@ -96,7 +94,7 @@
+ 
+ 28 Extended Entity Data (Extended Object Data) ................................ 269
+@@ -94,11 +92,11 @@
+ 
+ # 2 BIT CODES AND DATA DEFINITIONS
  
  NOTE: Unless otherwise stated, all data in this manual is in little-endian order, with the least significant byte first.
  
@@ -36,7 +48,11 @@
  
  ----
  
-@@ -625,8 +623,8 @@
+       B : bit (1 or 0)
+      BB : special 2 bit code (entmode in entities, for instance)
+@@ -623,12 +621,12 @@
+     PADDING (R13C3 AND LATER, 200 bytes, minutes the template section above if present)
+     IMAGE DATA (PRE-R13C3)
      OBJECT DATA
        All entities, table entries, dictionary entries, etc. go in this section.
      OBJECT MAP
@@ -46,7 +62,11 @@
      SECOND HEADER
      IMAGE DATA (R13C3 AND LATER)
  
-@@ -638,9 +636,25 @@
+ ## 3.2 FILE HEADER
+ 
+@@ -636,13 +634,29 @@
+ 
+ The first 6 bytes are:
  
  | Bytes (ascii encoded) | Version |
  |:----------------------|:--------|
@@ -72,7 +92,11 @@
  | AC1018                | R2004   |
  | AC1021                | R2007   |
  | AC1024                | R2010   |
-@@ -655,7 +669,7 @@
+ | AC1027                | R2013   |
+ | AC1032                | R2018   |
+@@ -653,20 +667,68 @@
+ 
+ At 0x0D is a seeker (4 byte long absolute address) for the beginning sentinel of the image data.
  
  ### 3.2.3 OBJECT FREE SPACE
  
@@ -81,7 +105,9 @@
  
  ### 3.2.4 TEMPLATE
  
-@@ -665,6 +679,54 @@
+ This section is optional, see chapter 22.
+ 
+ ### 3.2.5 DWGCODEPAGE:
  
  Bytes at 0x13 and 0x14 are a raw short indicating the value of the code page for this drawing file.
  
@@ -136,7 +162,11 @@
  ### 3.2.6 SECTION-LOCATOR RECORDS:
  
  At 0x15 is a long that tells how many sets of recno/seeker/length records follow. Each record has the following format:
-@@ -678,12 +740,9 @@
+ 
+     Record number (raw byte) | Seeker (raw long) | Size (raw long)
+@@ -676,16 +738,13 @@
+ ----
+ 
      0 : Header variables (covers beginning and ending sentinels).
      1 : Class section.
      2 : Object map.
@@ -152,7 +182,11 @@
          This section is optional.
  
  Remarks: We have seen files with up to 6 sets in this section; the meaning of the sixth one is unknown. The Open Design Toolkit emits files with the first 5 sets only.
-@@ -2776,7 +2835,7 @@
+ 
+     RS : CRC for BOF to this point. Use 0 for the initial value, and depending on the
+@@ -2774,11 +2833,11 @@
+ 
+ # 11 PADDING (R13C3 AND LATER)
  
  0x200 bytes of padding. Can be ignored. When writing, the Open Design Toolkit writes all 0s.
  
@@ -161,7 +195,37 @@
  
  # 12 Data section: “”
  
-@@ -3299,7 +3358,10 @@
+ The empty data section was introduced in R18. This section contains no data.
+ 
+@@ -3060,11 +3119,11 @@
+ 
+ | Version | Field type | DXF group | Description
+ |---------|-------|-------|------------
+ |         | MS    |       | Size in bytes of object, not including the CRC
+ | R2010+  | MC    |       | Size in bits of the handle stream (unsigned, 0x40 is not interpreted as sign). This includes the padding bits at the end of the handle stream (the padding bits make sure the object stream ends on a byte boundary).
+-| Commmon
++| Common
+ |         | OT     |      | Object type
+ | R2000-R2007
+ |         | RL     |      | Size of object data in bits (number of bits before the handles), or the “endbit” of the pre-handles section.
+ | Common:
+ |         | H     | 5    | Object’s handle
+@@ -3097,11 +3156,11 @@
+ Drawing entities, which are of course objects, have the same format as objects, with some additional standard items:
+ 
+        MS : Size of object, not including the CRC
+     R2010+:
+        MC : Size in bits of the handle stream (unsigned, 0x40 is not interpreted as sign).
+-    Commmon:
++    Common:
+        OT : Object type
+     R2000+ Only:
+        RL : Size of object data in bits
+     Common:
+         H : Object’s handle
+@@ -3297,11 +3356,14 @@
+ ### 20.4.1 Common Entity Data
+ 
  The following data appears at the beginning of each entity in the file, and will be referred to as Common Entity Data in the subsequent entity descriptions.
  
          Length               MS   --  Entity length (not counting itself or CRC).
@@ -173,7 +237,11 @@
      R2000+ Only:
          Obj size             RL       size of object in bits, not including
                                        end handles
-@@ -5164,8 +5226,11 @@
+     Common:
+         Handle               H    5   code 0, length followed by the handle bytes.
+@@ -5162,21 +5224,24 @@
+ ### 20.4.44 DICTIONARY (42)
+ 
  Basically a list of pairs of string/objhandle that constitute the dictionary entries.
  
  ```
@@ -187,7 +255,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -5174,7 +5239,7 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -196,7 +265,131 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -5626,7 +5691,10 @@
+                                  R2000 and earlier.
+ Common:
+@@ -5256,46 +5321,46 @@
+ R2000+:
+     Linespacing Style    BS  73
+     Linespacing Factor   BD  44
+     Unknown bit           B
+ R2004+:
+-    Background flags     BL  90  0 = no background, 1 = background fill, 2 =
++    Background fill flag BL  90  0 = no background, 1 = background fill, 2 =
+                                  background fill with drawing fill color, 0x10 = text
+                                  frame (R2018+)
+ 
+-IF background flags has bit 0x01 set, or in case of R2018 bit 0x10:
+-    Background scale factor
++IF Background fill flag has bit 0x01 set, or in case of R2018 bit 0x10:
++    Background fill scale factor
+                          BL  45  default = 1.5
+-    Background color    CMC  63
+-    Background transparency
++    Background fill color CMC 63
++    Background fill transparency
+                          BL 441
+-END IF background flags 0x01/0x10
++END IF Background fill flags 0x01/0x10
+ R2018+
+     Is NOT annotative     B
+ IF MTEXT is not annotative
+     Version              BS      Default 0
+     Default flag          B      Default true
+ BEGIN REDUNDANT FIELDS (see above for descriptions)
+     Registered application H     Hard pointer
+-    Attachment point     BL
+-    X-axis dir          3BD  10
+-    Insertion point     3BD  11
++    Ignore Attachment    BL
++    X-axis dir          3BD  11
++    Insertion point     3BD  10
+     Rect width           BD  40
+     Rect height          BD  41
+-    Extents width        BD  42
+     Extents height       BD  43
++    Extents width        BD  42
+ END REDUNDANT FIELDS
+     Column type          BS  71  0 = No columns, 1 = static columns, 2 = dynamic
+                                  columns
+ IF Has Columns data (column type is not 0)
+     Column height count  BL  72
+-    Columnn width        BD  44
++    Column width         BD  44
+     Gutter               BD  45
+     Auto height?          B  73
+     Flow reversed?        B  74
+ IF not auto height and column type is dynamic columns
+-REPEAT Column heights
++REPEAT Column height count
+     Column height        BD  46
+ END REPEAT END
+ IF (has column heights)
+ END IF (has columns data)
+ END IF (not annotative)
+@@ -5324,25 +5389,25 @@
+ ### 20.4.47 LEADER (45)
+ 
+ ```
+     Common Entity Data
+     Unknown bit           B  --  Always seems to be 0.
+-    Annot type           BS  --  Annotation type (NOT bit-coded):
++    Annot type           BS  73  Annotation type (NOT bit-coded):
+                                  Value 0 : MTEXT
+                                  Value 1 : TOLERANCE
+                                  Value 2 : INSERT
+                                  Value 3 : None
+-    path type            BS  --
++    path type            BS  72
+     numpts               BL  --  number of points
+     point               3BD  10  As many as counter above specifies.
+     Origin              3BD  --  The leader plane origin (by default it’s the first
+                                  point).
+     Extrusion           3BD 210
+     x direction         3BD 211
+     offsettoblockinspt  3BD 212  Used when the BLOCK option is used. Seems to be an
+                                  unused feature.
+-R14+:
++R14-R2007:
+     Endptproj           3BD  --  A non-planar leader gives a point that projects the
+                                  endpoint back to the annotation. It's the offset
+                                  from the endpoint of the leader to the annotation,
+                                  taking into account the extrusion direction.
+ R13-R14 Only:
+@@ -5355,27 +5420,28 @@
+                                  taller, probably by some DIMvar amount.)
+     Box width            BD  41  MTEXT extents width. (A text box is slightly wider,
+                                  probably by some DIMvar amount.)
+     Hooklineonxdir        B      hook line is on x direction if 1
+     Arrowheadon           B      arrowhead on indicator
+-R13-R14 Only:
+     Arrowheadtype        BS      arrowhead type
++R13-R14 Only:
+     Dimasz               BD      DIMASZ at the time of creation, multiplied by
+                                  DIMSCALE
+     Unknown               B
+     Unknown               B
+     Unknown              BS
+     Byblockcolor         BS
+     Unknown               B
+     Unknown               B
+ R2000+:
+-    Unknown              BS
+     Unknown               B
+     Unknown               B
+ Common:
+     Common Entity Handle Data
+-                          H 340  Associated annotation activated in R14. (hard pointer)
++R13+:
++                          H 340  Associated annotation activated in R14. (soft owner
++Common:
+                           H   2  DIMSTYLE (hard pointer)
+     CRC                   X  --
+ ```
+ 
+ **_20.4.47.1 Example:_**
+@@ -5624,20 +5690,23 @@
+ 
+ ### 20.4.51 BLOCK CONTROL (48)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -208,7 +401,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -5635,7 +5703,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -217,7 +411,11 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -5666,7 +5734,10 @@
+                                  R2000 and earlier.
+ Common:
+@@ -5664,20 +5733,23 @@
+ 
+ ### 20.4.52 BLOCK HEADER (49)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -229,7 +427,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -5675,7 +5746,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -238,7 +437,11 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -5751,7 +5822,10 @@
+                                  R2000 and earlier.
+ Common:
+@@ -5749,20 +5821,23 @@
+ 
+ ### 20.4.53 LAYER CONTROL (50) (UNDOCUMENTED)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -250,7 +453,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -5760,7 +5834,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -259,7 +463,11 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -5787,7 +5861,10 @@
+                                  R2000 and earlier.
+ Common:
+@@ -5785,11 +5860,14 @@
+ 
+ ### 20.4.54 LAYER (51)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -271,7 +479,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -5854,7 +5931,10 @@
+     Handle                H   5  code 0, length followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -5852,20 +5930,23 @@
+ 
+ ### 20.4.55 SHAPEFILE CONTROL (52) (UNDOCUMENTED)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -283,7 +495,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -5863,7 +5943,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -292,7 +505,11 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -5904,7 +5984,10 @@
+                                  R2000 and earlier.
+ Common:
+@@ -5902,11 +5983,14 @@
+ |                         | Character set (bitmask) = 0x0000ff00
+ | 1002 (Bracket)          | ‘}’ (optional) |
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -304,7 +521,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -5959,7 +6042,10 @@
+     Handle                H   5  code 0, length followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -5957,20 +6041,23 @@
+ 
+ ### 20.4.57 LINETYPE CONTROL (56) (UNDOCUMENTED)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -316,7 +537,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -5968,7 +6054,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -325,7 +547,11 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -5999,7 +6085,10 @@
+                                  R2000 and earlier.
+ Common:
+@@ -5997,11 +6084,14 @@
+ 
+ ### 20.4.58 LTYPE (57)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -337,7 +563,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6070,7 +6159,10 @@
+     Handle                H   5  code 0, length followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6068,20 +6158,23 @@
+ 
+ ### 20.4.59 VIEW CONTROL (60) (UNDOCUMENTED)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -349,7 +579,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6079,7 +6171,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -358,7 +589,11 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -6106,7 +6198,10 @@
+                                  R2000 and earlier.
+ Common:
+@@ -6104,11 +6197,14 @@
+ 
+ ### 20.4.60 VIEW (61)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -370,7 +605,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6204,7 +6299,10 @@
+     Handle                H   5  code 0, length followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6202,20 +6298,23 @@
+ 
+ ### 20.4.61 UCS CONTROL (62) (UNDOCUMENTED)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -382,7 +621,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6213,7 +6311,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -391,7 +631,11 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -6240,7 +6338,10 @@
+                                  R2000 and earlier.
+ Common:
+@@ -6238,11 +6337,14 @@
+ 
+ ### 20.4.62 UCS (63)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -403,7 +647,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6302,7 +6403,10 @@
+     Handle                H   5  code 0, length followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6300,11 +6402,14 @@
+ 
+ ### 20.4.63 TABLE (VPORT) (64) (UNDOCUMENTED)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -415,7 +663,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6340,7 +6444,10 @@
+     Handle                H   5  code 0, length followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6338,11 +6443,14 @@
+ 
+ ### 20.4.64 VPORT (65)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -427,7 +679,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6468,7 +6575,10 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6466,11 +6574,14 @@
+ 
+ ### 20.4.65 TABLE (APPID) (66) (UNDOCUMENTED)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -439,7 +695,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6504,7 +6614,10 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
+@@ -6502,11 +6613,14 @@
+ 
+ ### 20.4.66 APPID (67)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -451,7 +711,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6551,7 +6664,10 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6549,11 +6663,14 @@
+ 
+ ### 20.4.67 DIMSTYLE CONTROL (68) (UNDOCUMENTED)
  
  ```
      Length               MS  --  Object length (not counting itself or CRC).
@@ -463,7 +727,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6586,7 +6702,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
+@@ -6584,11 +6701,11 @@
+ ```
+ 
  ### 20.4.68 DIMSTYLE (69)
  
  ```
@@ -472,7 +740,11 @@
      Type                 BS   0  69 (internal DWG type code).
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
-@@ -6787,8 +6903,11 @@
+ Common:
+     Handle                H   5  Length (char) followed by the handle bytes.
+@@ -6785,21 +6902,24 @@
+ ```
+ 
  ### 20.4.69 VIEWPORT ENTITY CONTROL (70) (UNDOCUMENTED)
  
  ```
@@ -486,7 +758,8 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6797,7 +6916,7 @@
+     Handle                H   5  Owner handle (soft pointer) of root object (0).
+     EED                   X  -3  See EED section.
  R13-R14 Only:
      Obj size             RL      size of object in bits, not including end handles
  Common:
@@ -495,7 +768,11 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
-@@ -6824,8 +6943,11 @@
+                                  R2000 and earlier.
+ Common:
+@@ -6822,12 +6942,15 @@
+ ```
+ 
  ### 20.4.70 VIEWPORT ENTITY HEADER (71)
  
  ```
@@ -509,7 +786,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6884,8 +7006,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6882,12 +7005,15 @@
+ |         |  H    |  340  | Handle to scale (AcDbScale) object (hard pointer). See paragraph 20.4.92. |
+ 
  ### 20.4.72 GROUP (72): Group of ACAD entities
  
  ```
@@ -523,7 +804,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -6926,8 +7051,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6924,12 +7050,15 @@
+ ```
+ 
  ### 20.4.73 MLINESTYLE (73):
  
  ```
@@ -537,7 +822,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -7000,8 +7128,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -6998,12 +7127,15 @@
+ NOTE: OBJECTS LISTED AFTER THIS POINT DO NOT HAVE FIXED TYPES. THEIR TYPES ARE DETERMINED BY FINDING THE CLASS ENTRY WHOSE POSITION IN THE CLASS LIST + 500 EQUALS THE TYPE OF THIS OBJECT
+ 
  ### 20.4.74 DICTIONARYVAR (varies)
  
  ```
@@ -551,7 +840,24 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -7399,8 +7530,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -7264,11 +7396,11 @@
+ |        |     |     | Other error = 64
+ |        | BL  |  96 | Evaluation error code
+ |        | TV  | 300 | Evaluation error message
+ |        | ... | ... | The field value, see paragraph 20.4.99.
+ |        | TV  |301,9| Value string (DXF: written in 255 character chunks)
+-|        | TV  |  98 | Value string length
++|        | BL  |  98 | Value string length
+ |        | BL  |  93 | Number of child fields
+ |        |     |     | Begin repeat child fields
+ |        | TV  |   6 | Child field key
+ |        | ... | ... | The field value, see paragraph 20.4.99.
+ |        |     |     | End repeat child fields
+@@ -7397,12 +7529,15 @@
+ ### 20.4.79 IDBUFFER (varies)
+ 
  (holds list of references to an xref)
  
  ```
@@ -565,7 +871,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -7519,8 +7653,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -7517,12 +7652,15 @@
+ 
+ ### 20.4.81 IMAGEDEF (varies)
  
  ```
  (used in conjunction with IMAGE entities)
@@ -579,7 +889,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -7569,8 +7706,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -7567,12 +7705,15 @@
+ 
+ ### 20.4.82 IMAGEDEFREACTOR (varies)
  
  ```
  (used in conjunction with IMAGE entities)
@@ -593,7 +907,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -7605,8 +7745,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -7603,12 +7744,15 @@
+ ```
+ 
  ### 20.4.83 LAYER_INDEX
  
  ```
@@ -607,7 +925,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -7660,7 +7803,10 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -7658,11 +7802,14 @@
+ 
+ ### 20.4.84 LAYOUT (varies)
  
  ```
      Length               MS  --  Entity length (not counting itself or CRC).
@@ -619,7 +941,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -8043,8 +8189,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -8041,12 +8188,15 @@
+ |       | B     | 290 | Default flag (default value is false).
+ 
  ### 20.4.90 PROXY (varies):
  
  ```
@@ -633,7 +959,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -8083,8 +8232,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -8081,12 +8231,15 @@
+ 
+ ### 20.4.91 RASTERVARIABLES (varies)
  
  ```
  (used in conjunction with IMAGE entities)
@@ -647,7 +977,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -8135,8 +8287,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -8133,12 +8286,15 @@
+ |       | B     | 290 | Has unit scale          |
+ 
  ### 20.4.93 SORTENTSTABLE (varies)
  
  ```
@@ -661,7 +995,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -8193,8 +8348,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -8191,12 +8347,15 @@
+ 
+ ### 20.4.94 SPATIAL_FILTER (varies)
  
  ```
  (used to clip external references)
@@ -675,7 +1013,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -8257,8 +8415,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -8255,12 +8414,15 @@
+ ```
+ 
  ### 20.4.95 SPATIAL_INDEX (varies):
  
  ```
@@ -689,7 +1031,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -9143,8 +9304,11 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -9141,12 +9303,15 @@
+ |       |       |     | End repeat rows                |
+ 
  ### 20.4.104 XRECORD (varies):
  
  ```
@@ -703,7 +1049,11 @@
  R2000+:
      Obj size             RL      size of object in bits, not including end handles
  Common:
-@@ -9208,26 +9372,38 @@
+     Handle                H   5  Length (char) followed by the handle bytes.
+     EED                   X  -3  See EED section.
+@@ -9206,30 +9371,42 @@
+ 00B28 45 76                   crc
+ ```
  
  # 21 Data section AcDb:ObjFreeSpace
  
@@ -755,7 +1105,11 @@
  
  # 22 Data section: AcDb:Template
  
-@@ -9718,19 +9894,6 @@
+ This section is optional in releases 13-15. The section is mandatory in the releases 18 and newer. The template section only contains the MEASUREMENT system variable.
+ 
+@@ -9716,23 +9893,10 @@
+ }
+ handleToDataRecord {
  }
  ```
  
@@ -775,7 +1129,11 @@
  # 26 SECOND FILE HEADER (R13-R15)
  
  ## 26.1 Beginning sentinel
-@@ -9884,7 +10047,7 @@
+ 
+     {0xD4,0x7B,0x21,0xCE,0x28,0x93,0x9F,0xBF,0x53,0x24,0x40,0x09,0x12,0x3C,0xAA,0x01 };
+@@ -9882,11 +10046,11 @@
+      RL : 0
+      RL : 0
       RL : 0
       RL : 0
  
@@ -784,3 +1142,5 @@
  
       RS : 0
       RS : 0
+      RS : 0
+ 
