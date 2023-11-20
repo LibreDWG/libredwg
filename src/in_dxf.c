@@ -6306,7 +6306,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
     free (obj->tio.object);
     dwg->num_objects--;
     LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
-    return pair;
+    dxf_free_pair (pair);
+    return NULL;
   }
   if (!_obj)
     {
@@ -6316,7 +6317,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       free (obj->tio.object);
       dwg->num_objects--;
       LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
-      return pair;
+      dxf_free_pair (pair);
+      return NULL;
     }
   obj->tio.object->objid = obj->index;
   is_xref_ref = 1;
