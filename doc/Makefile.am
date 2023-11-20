@@ -22,8 +22,9 @@ TEXINPUTS="$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi
 # Note: automake has a distcheck bug in .texi.info: GH #211
 LibreDWG_TEXINFOS = fdl.texi dynapi.texi
-EXTRA_DIST = ODA-5.4.2-libredwg.patch # ODA-5.4.2-libredwg.pdf
+EXTRA_DIST = ODA-5.4.2-libredwg.patch ODA-5.4.2-libredwg-diff.pdf
 ODA_ORI_PATCH = $(top_srcdir)/../ODA-spec/ODA-5.4.2-libredwg.patch
+ODA_ORI_PDF = $(top_srcdir)/../ODA-spec/ODA-5.4.2-libredwg-diff.pdf
 
 if HAVE_MAKEINFO
 .PHONY: manual
@@ -38,6 +39,8 @@ dynapi.texi: $(top_srcdir)/src/gen-dynapi.pl
 .PHONY: ODA-5.4.2-libredwg.patch
 ODA-5.4.2-libredwg.patch:
 	-if test -e $(ODA_ORI_PATCH); then cp -f $(ODA_ORI_PATCH) $@; fi
+ODA-5.4.2-libredwg-diff.pdf:
+	-if test -e $(ODA_ORI_PDF); then cp -f $(ODA_ORI_PDF) $@; fi
 
 if HAVE_DOXYGEN
 .PHONY: refman doxygen refman-pdf

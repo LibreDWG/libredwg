@@ -24,6 +24,7 @@ Major features:
     leading to much larger and much more precise files.
   * Split arcs/circles into line segments with GeoJSON (#520)
   * libredwg is on vcpkg
+  * Added a fixed [ODA Spec diff](doc/ODA-5.4.2-libredwg-diff.pdf)
   * New authors: Michal Josef Špaček (preR13 DWG formats),
     Dmitry Sinyavin (dwgadd fixes).
 Minor features:

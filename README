@@ -26,6 +26,9 @@ pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
 on the DWG version. Older DWG's are encoded in ~30 codepages, which we
 convert to unicode/UTF-8.
 
+We also maintain a diff document for our internal fixed ODA-5.4.1 spec
+at doc/ODA-5.4.2-libredwg-diff.pdf
+
 For contact file a ticket or email the package maintainers:
 
 Reini Urban <rurban AT cpan.org>
