@@ -1,5 +1,5 @@
---- ODA-5.4.1.md	2023-11-20 18:53:23.909377915 +0100
-+++ ODA-5.4.2-libredwg.md	2023-11-20 22:34:08.826990795 +0100
+--- ODA-5.4.1.md	2023-11-20 22:47:44.014320212 +0100
++++ ODA-5.4.2-libredwg.md	2023-11-20 22:47:01.015254715 +0100
 @@ -1,8 +1,8 @@
 -# Open Design Specification for .dwg files
 +# Open Design Specification for .dwg files, fixed by LibreDWG
@@ -184,6 +184,19 @@
  Remarks: We have seen files with up to 6 sets in this section; the meaning of the sixth one is unknown. The Open Design Toolkit emits files with the first 5 sets only.
  
      RS : CRC for BOF to this point. Use 0 for the initial value, and depending on the
+@@ -2168,11 +2227,11 @@
+     -----------------------
+ 
+     R2007 Only:
+         RL : Size in bits
+     R2013+:
+-       BLL : Variabele REQUIREDVERSIONS, default value 0, read only.
++       BLL : Variable REQUIREDVERSIONS, default value 0, read only.
+     Common:
+         BD : Unknown, default value 412148564080.0
+         BD : Unknown, default value 1.0
+         BD : Unknown, default value 1.0
+         BD : Unknown, default value 1.0
 @@ -2774,11 +2833,11 @@
  
  # 11 PADDING (R13C3 AND LATER)
