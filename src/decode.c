@@ -301,7 +301,6 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Object *obj = NULL;
   unsigned int section_size = 0;
-  unsigned char sgdc[2];
   BITCODE_RS crc, crc2;
   size_t size, startpos, endpos, lastmap, pvz;
   size_t object_begin, object_end;
@@ -884,36 +883,6 @@ handles_section:
   LOG_TRACE ("\n");
   LOG_INFO ("         Last Object (end): %8zu\n",
             (object_end + object_begin + 2))
-
-  /*
-   // TODO: if the previous Handleoff got corrupted somehow, read this handle
-   // map and try again.
-
-   dat->byte = dwg->header.section[SECTION_HANDLES_R13].address - 2;
-   // Unknown bitdouble inter object data and object map
-   antcrc = bit_read_CRC (dat);
-   LOG_TRACE("Address: %08u / Content: 0x%04X", dat->byte - 2, antcrc)
-
-   // check CRC-on
-   antcrc = 0xC0C1;
-   do
-   {
-     startpos = dat->byte;
-     sgdc[0] = bit_read_RC (dat);
-     sgdc[1] = bit_read_RC (dat);
-     section_size = (sgdc[0] << 8) | sgdc[1];
-     section_size -= 2;
-     dat->byte += section_size;
-     crc = bit_read_CRC (dat);
-     dat->byte -= 2;
-     bit_write_CRC (dat, startpos, antcrc);
-     dat->byte -= 2;
-     crc2 = bit_read_CRC (dat);
-     if (loglevel) HANDLER (OUTPUT, "Read: %X\nCreated: %X\t SEMO: %X\n",
-                            crc, crc2, antcrc);
-     //antcrc = crc;
-   } while (section_size > 0);
-   */
 
   /*-------------------------------------------------------------------------
    * Second header, section 3. R13c3-R2000 only.
