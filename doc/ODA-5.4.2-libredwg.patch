@@ -1,0 +1,786 @@
+--- ODA-5.4.1.md	2023-11-20 10:20:33.798853712 +0100
++++ ODA-5.4.2-libredwg.md	2023-11-20 10:20:26.006762802 +0100
+@@ -1,6 +1,6 @@
+-# Open Design Specification for .dwg files
++# Open Design Specification for .dwg files, fixed by LibreDWG
+ 
+-## Version 5.4.1
++## Version 5.4.2
+ 
+ ## Open Design Alliance
+ 
+@@ -22,7 +22,7 @@
+ 
+ * DWG is the native and proprietary file format for AutoCAD® and a trademark of Autodesk, Inc. The Open Design Alliance is not associated with Autodesk.
+ 
+-# Open Design Specification for .DWG files
++# Open Design Specification for .DWG files (fixed)
+ 
+ # Table of Contents
+ 
+@@ -74,8 +74,6 @@
+ 
+ 24 Section AcDb:AcDsPrototype_1b (DataStorage) ................................. 252
+ 
+-25 UNKNOWN SECTION ...................................................................... 263
+-
+ 26 SECOND FILE HEADER (R13-R15) ................................................ 264
+ 
+ 27 Data section: AcDb:AuxHeader (Auxiliary file header) ....................... 267
+@@ -96,7 +94,7 @@
+ 
+ NOTE: Unless otherwise stated, all data in this manual is in little-endian order, with the least significant byte first.
+ 
+-Much of the data in the DWG file format versions 13/14/2000/2004/2007/2010 must be read at the bit level. Various parts of the drawing use data in compressed forms, which are explained below. Here are the abbreviations used in this document for the various compressed forms:
++Much of the data in the DWG file format versions 13/14/2000/2004/2007/2010/2013/2018 must be read at the bit level. Various parts of the drawing use data in compressed forms, which are explained below. Here are the abbreviations used in this document for the various compressed forms:
+ 
+ ----
+ 
+@@ -625,8 +623,8 @@
+     OBJECT DATA
+       All entities, table entries, dictionary entries, etc. go in this section.
+     OBJECT MAP
+-    OBJECT FREE SPACE (optional)
+     TEMPLATE (R14-R15, optional)
++    OBJECT FREE SPACE (optional)
+     SECOND HEADER
+     IMAGE DATA (R13C3 AND LATER)
+ 
+@@ -638,9 +636,25 @@
+ 
+ | Bytes (ascii encoded) | Version |
+ |:----------------------|:--------|
++| MC0.0                 | MicroCAD R1.1 |
++| AC1.2                 | R1.2    |
++| AC1.3                 | R1.3    |
++| AC1.40                | R1.4    |
++| AC1.50                | R2.0    |
++| AC2.10                | R2.10   |
++| AC2.21                | R2.21   |
++| AC2.22                | R2.22   |
++| AC1001                | R2.4    |
++| AC1002                | R2.5    |
++| AC1003                | R2.6    |
++| AC1004                | R9      |
++| AC1006                | R10     |
++| AC1009                | R11     |
+ | AC1012                | R13     |
++| AC1013                | R13C3   |
+ | AC1014                | R14     |
+ | AC1015                | R2000   |
++| AC1016                | R2000i  |
+ | AC1018                | R2004   |
+ | AC1021                | R2007   |
+ | AC1024                | R2010   |
+@@ -655,7 +669,7 @@
+ 
+ ### 3.2.3 OBJECT FREE SPACE
+ 
+-**TODO.**
++See chapter 21.
+ 
+ ### 3.2.4 TEMPLATE
+ 
+@@ -665,6 +679,54 @@
+ 
+ Bytes at 0x13 and 0x14 are a raw short indicating the value of the code page for this drawing file.
+ 
++| Codepage | Name                          |
++|---------:|-------------------------------|
++|  0       | UTF8 (Unused)
++|  1       | US_ASCII
++|  2       | ISO-8859-1
++|  3       | ISO-8859-2
++|  4       | ISO-8859-3
++|  5       | ISO-8859-4
++|  6       | ISO-8859-5
++|  7       | ISO-8859-6
++|  8       | ISO-8859-7
++|  9       | ISO-8859-8
++|  10      | ISO-8859-9
++|  11      | CP437 (DOS English)
++|  12      | CP850 (DOS Latin-1)
++|  13      | CP852 (DOS Central European)
++|  14      | CP855 (DOS Cyrillic)
++|  15      | CP857 (DOS Turkish)
++|  16      | CP860 (DOS Portoguese)
++|  17      | CP861 (DOS Icelandic)
++|  18      | CP863 (DOS Hebrew)
++|  19      | CP864 (DOS Arabic  IBM)
++|  20      | CP865 (DOS Nordic)
++|  21      | CP869 (DOS Greek)
++|  22      | CP932 (DOS Japanese, shiftjis)
++|  23      | MACINTOSH
++|  24      | BIG5
++|  25      | CP949     (Korean, Wansung + Johab)
++|  26      | JOHAB
++|  27      | CP866     (Russian)
++|  28      | ANSI-1250 (Windows Central + Eastern European)
++|  29      | ANSI-1251 (Windows Cyrillic)
++|  30      | ANSI-1252 (Windows Western European)
++|  31      | GB2312    (Windows EUC-CN Chinese)
++|  32      | ANSI-1253  (Windows Greek)
++|  33      | ANSI-1254  (Windows Turkish)
++|  34      | ANSI-1255  (Windows Hebrew)
++|  35      | ANSI-1256  (Windows Arabic)
++|  36      | ANSI-1257  (Windows Baltic)
++|  37      | ANSI-874   (Windows Thai)
++|  38      | ANSI-932   (Windows Japanese, extended shiftjis, windows-31j)
++|  39      | ANSI-936   (Windows Simplified Chinese)
++|  40      | ANSI-949   (Windows Korean Wansung)
++|  41      | ANSI-950   (Windows Trad Chinese)
++|  42      | ANSI-1361  (Windows Korean Wansung)
++|  43      | UTF16 (Default since R2007)
++|  44      | ANSI-1258  (Windows Vietnamese)
++
+ ### 3.2.6 SECTION-LOCATOR RECORDS:
+ 
+ At 0x15 is a long that tells how many sets of recno/seeker/length records follow. Each record has the following format:
+@@ -678,12 +740,9 @@
+     0 : Header variables (covers beginning and ending sentinels).
+     1 : Class section.
+     2 : Object map.
+-    3 : (C3 and later.) A special table (no sentinels). See unknown section (R13 C3 and
+-        later). The presence of the 4th record (3) indicates that the C3 file format
+-        applies. Just look at the long at 21; if it's 4 or greater, it's the C3-and-later
+-        format.
+-    4 : In R13-R15, points to a location where there may be data stored. Currently we
+-        have seen only the MEASUREMENT variable stored here. See chapter 22.
++    3 : (C3 and later.) OBJECT FREE SPACE (without sentinels),
++        followed by the SECOND HEADER (with sentinels).
++    4 : In R13-R15, TEMPLATE with the MEASUREMENT variable. See chapter 22.
+         This section is optional.
+ 
+ Remarks: We have seen files with up to 6 sets in this section; the meaning of the sixth one is unknown. The Open Design Toolkit emits files with the first 5 sets only.
+@@ -2776,7 +2835,7 @@
+ 
+ 0x200 bytes of padding. Can be ignored. When writing, the Open Design Toolkit writes all 0s.
+ 
+-Occasionally AutoCAD will use the first 4 bytes of this area to store the value of the “measurement” variable. This padding was evidently required to allow pre-R13C3 versions of AutoCAD to read files produced by R13C3 and later.
++Occasionally AutoCAD will use the first 4 bytes of this area to store the value of the “measurement” variable., i.e the TEMPLATE section. This padding was evidently required to allow pre-R13C3 versions of AutoCAD to read files produced by R13C3 and later.
+ 
+ # 12 Data section: “”
+ 
+@@ -3299,7 +3358,10 @@
+ The following data appears at the beginning of each entity in the file, and will be referred to as Common Entity Data in the subsequent entity descriptions.
+ 
+         Length               MS   --  Entity length (not counting itself or CRC).
+-        Type                 BS   0   1 (internal DWG type code).
++    R2010+:
++        Handle Stream Size   MC   --  not counted in the Length
++    Common:
++        Type                 OT   0   internal DWG type code. BS or OT since R2010.
+     R2000+ Only:
+         Obj size             RL       size of object in bits, not including
+                                       end handles
+@@ -5164,8 +5226,11 @@
+ Basically a list of pairs of string/objhandle that constitute the dictionary entries.
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                  S   0  42 (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  42 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -5174,7 +5239,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           S      number of reactors in this object
++    Numreactors          BL      number of reactors in this object
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -5626,7 +5691,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  48 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  48 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -5635,7 +5703,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           L      Number of persistent reactors attached to this obj
++    Numreactors          BL      Number of persistent reactors attached to this obj
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -5666,7 +5734,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  49 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC   --  not counted in the Length
++Common:
++    Type                 OT   0  49 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -5675,7 +5746,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           L      Number of persistent reactors attached to this obj
++    Numreactors          BL      Number of persistent reactors attached to this obj
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -5751,7 +5822,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  50 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  50 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -5760,7 +5834,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           L      Number of persistent reactors attached to this obj
++    Numreactors          BL      Number of persistent reactors attached to this obj
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -5787,7 +5861,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  51 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  51 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -5854,7 +5931,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  52 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  52 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -5863,7 +5943,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           L      Number of persistent reactors attached to this obj
++    Numreactors          BL      Number of persistent reactors attached to this obj
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -5904,7 +5984,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  53 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  53 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -5959,7 +6042,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  56 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  56 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -5968,7 +6054,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           L      Number of persistent reactors attached to this obj
++    Numreactors          BL      Number of persistent reactors attached to this obj
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -5999,7 +6085,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  57 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  57 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6070,7 +6159,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  60 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  60 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6079,7 +6171,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           L      Number of persistent reactors attached to this obj
++    Numreactors          BL      Number of persistent reactors attached to this obj
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -6106,7 +6198,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  61 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  61 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6204,7 +6299,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  62 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  62 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6213,7 +6311,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           L      Number of persistent reactors attached to this obj
++    Numreactors          BL      Number of persistent reactors attached to this obj
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -6240,7 +6338,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  63 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  63 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6302,7 +6403,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  64 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  64 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6340,7 +6444,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  65 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  65 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6468,7 +6575,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  66 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  66 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6504,7 +6614,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  67 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  67 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6551,7 +6664,10 @@
+ 
+ ```
+     Length               MS  --  Object length (not counting itself or CRC).
+-    Type                 BS 0&2  68 (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  68 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6586,7 +6702,7 @@
+ ### 20.4.68 DIMSTYLE (69)
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
++    Length               MS  --  Object length (not counting itself or CRC).
+     Type                 BS   0  69 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+@@ -6787,8 +6903,11 @@
+ ### 20.4.69 VIEWPORT ENTITY CONTROL (70) (UNDOCUMENTED)
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS 0&2  70 (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  70 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6797,7 +6916,7 @@
+ R13-R14 Only:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+-    Numreactors           B   L  Number of persistent reactors attached to this obj
++    Numreactors          BL      Number of persistent reactors attached to this obj
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+@@ -6824,8 +6943,11 @@
+ ### 20.4.70 VIEWPORT ENTITY HEADER (71)
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS 0&2  71 (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  71 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6884,8 +7006,11 @@
+ ### 20.4.72 GROUP (72): Group of ACAD entities
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  72 (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  72 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -6926,8 +7051,11 @@
+ ### 20.4.73 MLINESTYLE (73):
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  73 (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  73 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -7000,8 +7128,11 @@
+ ### 20.4.74 DICTIONARYVAR (varies)
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  72 (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  72 (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -7399,8 +7530,11 @@
+ (holds list of references to an xref)
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                  S   0  (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -7519,8 +7653,11 @@
+ 
+ ```
+ (used in conjunction with IMAGE entities)
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                  S   0  (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -7569,8 +7706,11 @@
+ 
+ ```
+ (used in conjunction with IMAGE entities)
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                  S   0  (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -7605,8 +7745,11 @@
+ ### 20.4.83 LAYER_INDEX
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -7660,7 +7803,10 @@
+ 
+ ```
+     Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  (internal DWG type code).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -8043,8 +8189,11 @@
+ ### 20.4.90 PROXY (varies):
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  typecode (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -8083,8 +8232,11 @@
+ 
+ ```
+ (used in conjunction with IMAGE entities)
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  typecode (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -8135,8 +8287,11 @@
+ ### 20.4.93 SORTENTSTABLE (varies)
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  typecode (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -8193,8 +8348,11 @@
+ 
+ ```
+ (used to clip external references)
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  typecode (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -8257,8 +8415,11 @@
+ ### 20.4.95 SPATIAL_INDEX (varies):
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  typecode (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -9143,8 +9304,11 @@
+ ### 20.4.104 XRECORD (varies):
+ 
+ ```
+-    Length               MS  --  Entity length (not counting itself or CRC).
+-    Type                 BS   0  typecode (internal DWG type code).
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
+ R2000+:
+     Obj size             RL      size of object in bits, not including end handles
+ Common:
+@@ -9208,26 +9372,38 @@
+ 
+ # 21 Data section AcDb:ObjFreeSpace
+ 
+-The meaning of this section is not completely known. The ODA knows how to write a valid section, but
+-the meaning is not known of every field.
++From R13c3 to R15 this section is the third section, which is immediately followed by the SECOND FILE HEADER (R13-R15). See chapter 26.
+ 
+-## 21.1 Until R18
++## 21.1 Until R2007
+ 
+ | Type   | Length | Description |
+-|--------|--------|-------------|
++|----------------|--------|-------------|
+ | Int32  | 4      | 0
+ | UInt32 | 4      | Approximate number of objects in the drawing (number of handles).
+ | Julian datetime| 8 | If version > R14 then system variable TDUPDATE otherwise TDUUPDATE.
+ | UInt32 | 4      | Offset of the objects section in the stream.
+-| UInt8  | 1      | Number of 64-bit values that follow (ODA writes 4).
+-| UInt32 | 4      | ODA writes 0x00000032.
+-| UInt32 | 4      | ODA writes 0x00000000.
+-| UInt32 | 4      | ODA writes 0x00000064.
+-| UInt32 | 4      | ODA writes 0x00000000.
+-| UInt32 | 4      | ODA writes 0x00000200.
+-| UInt32 | 4      | ODA writes 0x00000000.
+-| UInt32 | 4      | ODA writes 0xffffffff.
+-| UInt32 | 4      | ODA writes 0x00000000.
++| UInt8          | 1      | Number of 64-bit values that follow (Always 4).
++| UInt64         | 8      | max32, 0x00000032.                                               |
++| UInt64         | 8      | max64, 0x00000064.                                               |
++| UInt64         | 8      | maxtbl, 0x00000200.                                              |
++| UInt64         | 8      | maxrl, 0xffffffff.                                               |
++
++## 21.2 Since R2010
++
++| Type           | Length | Description                                                      |
++|----------------|--------|------------------------------------------------------------------|
++| Int64          | 8      | 0                                                                |
++| UInt64         | 8      | Approximate number of objects in the drawing (number of handles).|
++| Julian datetime| 8      | If version > R14 then system variable TDUPDATE otherwise TDUUPDATE.|
++| UInt8          | 1      | Number of 64-bit (resp. 128-bit) values that follow (Always 4).  |
++| UInt64         | 8      | max32, 0x00000032.                                               |
++| UInt64         | 8      | max32 hi, 0x00000000.                                            |
++| UInt64         | 8      | max64, 0x00000064.                                               |
++| UInt64         | 8      | max64 hi, 0x00000000.                                            |
++| UInt64         | 8      | maxtbl, 0x00000200.                                              |
++| UInt64         | 8      | maxtbl hi, 0x00000000.                                           |
++| UInt64         | 8      | maxrl, 0xffffffff.                                               |
++| UInt64         | 8      | maxrl hi, 0x00000000.                                            |
+ 
+ # 22 Data section: AcDb:Template
+ 
+@@ -9718,19 +9894,6 @@
+ }
+ ```
+ 
+-# 25 UNKNOWN SECTION
+-
+-This section is largely unknown. The total size of this section is 53. We simply patch in "known to be valid" data. We first write a 0L, then the number of entries in the objmap +3, as a long. Then 45 bytes of "known to be valid data". Then we poke in the start address for objects at offset 16.
+-
+-The 45 bytes of known to be valid data are:
+-
+-    0xA7,0x62,0x25,0x00,0xF6,0xAF,0x25,0x02,
+-    0x3B,0x04,0x00,0x00,0x04,0x32,0x00,0x00,
+-    0x00,0x00,0x00,0x00,0x00,0x64,0x00,0x00,
+-    0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,
+-    0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,
+-    0xFF,0x00,0x00,0x00,0x00
+-
+ # 26 SECOND FILE HEADER (R13-R15)
+ 
+ ## 26.1 Beginning sentinel
+@@ -9884,7 +10047,7 @@
+      RL : 0
+      RL : 0
+ 
+-R2018+
++R2018+:
+ 
+      RS : 0
+      RS : 0
