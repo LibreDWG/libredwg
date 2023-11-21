@@ -812,6 +812,16 @@ if test -n "$MAKEINFO"; then
 fi
 AM_CONDITIONAL([HAVE_MAKEINFO], [test -n "$MAKEINFO"])
 
+AC_MSG_CHECKING([for $srcdir/../ODA-spec])
+if test -e "$srcdir/../ODA-spec/ODA-5.4.2-libredwg.patch"; then
+  have_oda_spec=yes
+  AC_MSG_RESULT([yes])
+else
+  have_oda_spec=
+  AC_MSG_RESULT([no])
+fi
+AM_CONDITIONAL([HAVE_ODA_SPEC], [test -n "$have_oda_spec"])
+
 if test x$enable_debug = xyes; then
    JSON_SED_NAN="\$SED -i -e's/ nan/ \"nan\"/g;'"
 else

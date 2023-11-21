@@ -22,9 +22,11 @@ TEXINPUTS="$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi
 # Note: automake has a distcheck bug in .texi.info: GH #211
 LibreDWG_TEXINFOS = fdl.texi dynapi.texi
-EXTRA_DIST = ODA-5.4.2-libredwg.patch ODA-5.4.2-libredwg-diff.pdf
-ODA_ORI_PATCH = $(top_srcdir)/../ODA-spec/ODA-5.4.2-libredwg.patch
-ODA_ORI_PDF = $(top_srcdir)/../ODA-spec/ODA-5.4.2-libredwg-diff.pdf
+EXTRA_DIST = $(srcdir)/ODA-5.4.2-libredwg.patch $(srcdir)/ODA-5.4.2-libredwg-diff.pdf
+if HAVE_ODA_SPEC
+ODA_SPEC_PATCH = $(top_srcdir)/../ODA-spec/ODA-5.4.2-libredwg.patch
+ODA_SPEC_PDF = $(top_srcdir)/../ODA-spec/ODA-5.4.2-libredwg-diff.pdf
+endif
 
 .PHONY: manual regen-patch refman doxygen refman-pdf
 if HAVE_MAKEINFO
@@ -36,11 +38,17 @@ endif
 dynapi.texi: $(top_srcdir)/src/gen-dynapi.pl
 	echo make regen-dynapi might be needed
 
-regen-patch: ODA-5.4.2-libredwg.patch ODA-5.4.2-libredwg-diff.pdf
-ODA-5.4.2-libredwg.patch:
-	-if test -e $(ODA_ORI_PATCH); then cp -f $(ODA_ORI_PATCH) $@; fi
-ODA-5.4.2-libredwg-diff.pdf:
-	-if test -e $(ODA_ORI_PDF); then cp -f $(ODA_ORI_PDF) $@; fi
+if HAVE_ODA_SPEC
+regen-patch: $(srcdir)/ODA-5.4.2-libredwg.patch $(srcdir)/ODA-5.4.2-libredwg-diff.pdf
+$(srcdir)/ODA-5.4.2-libredwg.patch: $(ODA_SPEC_PATCH)
+	-if [ -e $(ODA_SPEC_PATCH) ]; then \
+           if ! cmp -s $(ODA_SPEC_PATCH) $(srcdir)/ODA-5.4.2-libredwg.patch; \
+	     then cp -f $(ODA_SPEC_PATCH) $@; fi; fi
+$(srcdir)/ODA-5.4.2-libredwg-diff.pdf: $(ODA_SPEC_PDF)
+	-if [ -e $(ODA_SPEC_PDF) ]; then \
+           if ! cmp -s $(ODA_SPEC_PDF) $(srcdir)/ODA-5.4.2-libredwg-diff.pdf; \
+	     then cp -f $(ODA_SPEC_PDF) $@; fi; fi
+endif
 
 if HAVE_DOXYGEN
 refman doxygen html/index.html: Doxyfile ../include/dwg_api.h ../include/dwg.h ../src/dynapi.c
