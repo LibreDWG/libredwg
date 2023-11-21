@@ -2363,12 +2363,13 @@ encode_template (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if ((int)dwg->header.num_sections <= (int)sec_id)
     dwg->header.section = (Dwg_Section *)realloc (
         dwg->header.section, (sec_id + 1) * sizeof (Dwg_Section));
-  LOG_INFO ("\n=======> MEASUREMENT: @%4zu\n", dat->byte);
+  LOG_INFO ("\n=======> Template: @%4zu\n", dat->byte);
   dwg->header.section[sec_id].number = 4;
   dwg->header.section[sec_id].address = dat->byte;
   dwg->header.section[sec_id].size = 4; // always empty description
   // Template description
   bit_write_T16 (dat, _obj->description);
+  LOG_TRACE ("_obj->description: %s [T16]\n", _obj->description);
   // 0 - English, 1- Metric
   bit_write_RS (dat, dwg->header_vars.MEASUREMENT);
   LOG_TRACE ("HEADER.MEASUREMENT: %d [RS]\n", dwg->header_vars.MEASUREMENT);
@@ -3057,7 +3058,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
           }
 
-          // clang-format off
+        // clang-format off
         #include "auxheader.spec"
         // clang-format on
 
@@ -3264,8 +3265,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   VERSION (R_13)
   {
     if ((int)dwg->header.num_sections > (int)SECTION_TEMPLATE_R13)
-      error |= encode_template (dwg, dat,
-                                (Dwg_Section_Type)SECTION_TEMPLATE_R13);
+      {
+        error |= encode_template (dwg, dat,
+                                  (Dwg_Section_Type)SECTION_TEMPLATE_R13);
+      }
   }
   PRE (R_13c3)
   {

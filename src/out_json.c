@@ -2670,9 +2670,14 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       /* the other sections */
       if (dat->version <= R_2000)
         {
-          error |= json_section_template (dat, dwg); // i.e. MEASUREMENT
-          error |= json_section_auxheader (dat, dwg);
-          error |= json_section_2ndheader (dat, dwg);
+          if (dwg->header.sections >= 3)
+            error |= json_section_objfreespace (dat, dwg); // 3
+          if (dwg->secondheader.num_sections)
+            error |= json_section_2ndheader (dat, dwg);
+          if (dwg->header.sections >= 4)
+            error |= json_section_template (dat, dwg); // 4 i.e. MEASUREMENT
+          if (dwg->header.sections >= 6)
+            error |= json_section_auxheader (dat, dwg); // 5
         }
       if (dat->version >= R_2004)
         {
