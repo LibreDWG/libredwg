@@ -3641,7 +3641,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   else sec_id = (Dwg_Section_Type)SECTION_TEMPLATE_R13;
 
   if (dwg->header.version >= R_2004
-      || (dwg->header.version >= R_14
+      || (dwg->header.version >= R_13c3
           && (int)dwg->header.num_sections > (int)sec_id))
     {
       error |= encode_template (dwg, dat, sec_id);
