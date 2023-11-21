@@ -2959,8 +2959,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     if (!dwg->header.num_sections
         || (dat->from_version >= R_2004 && dwg->header.num_sections > 6))
       {
-        if (dwg->header.version < R_2000)
-          dwg->header.num_sections = dwg->auxheader.dwg_version ? 6 : 5;
+        if (dwg->header.version <= R_2000)
+          {
+            if (dwg->secondheader.num_sections)
+              dwg->header.num_sections = dwg->secondheader.num_sections;
+            else
+              dwg->header.num_sections = dwg->auxheader.dwg_version ? 6 : 5;
+          }
         else
           dwg->header.num_sections = 6;
         // minimal DXF:
