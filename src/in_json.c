@@ -1265,6 +1265,15 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           int size1 = t->size;
           BITCODE_BS *nums = (BITCODE_BS *)calloc (f->size, 1);
           tokens->index++;
+          // fail if not malloced or inlined array (but json has an array)
+          if (f->size <= 2 && size1 > 1)
+            {
+              LOG_ERROR ("Invalid JSON: HEADER.%s array where primitive expected",
+                         f->name);
+              free (nums);
+              tokens->index += size1;
+              return 0;
+            }
           for (int k = 0; k < size1; k++)
             {
               JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -2438,6 +2447,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           const int max_k
               = !f->is_malloc ? (int)(f->size / sizeof (BITCODE_BD)) : size1;
           BITCODE_BD *nums;
+          // fail if not malloced or inlined array (but json has an array)
+          if (f->size <= 8 && size1 > 1)
+            {
+              LOG_ERROR ("Invalid JSON: %s.%s array where primitive expected",
+                         name, f->name);
+              tokens->index += size1;
+              return 0;
+            }
           if (f->is_malloc)
             {
               nums = size1 ? (BITCODE_BD *)calloc (size1, sizeof (BITCODE_BD))
@@ -2445,7 +2462,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               json_set_numfield (_obj, fields, key, size1);
             }
           else
-            nums = (BITCODE_BD *)calloc (f->size, 1);
+            {
+              nums = (BITCODE_BD *)calloc (f->size, 1);
+            }
           tokens->index++;
           for (int k = 0; k < size1; k++)
             {
@@ -2479,6 +2498,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           const int max_k
               = !f->is_malloc ? (int)(f->size / sizeof (BITCODE_BL)) : size1;
           BITCODE_BL *nums;
+          // fail if not malloced or inlined array (but json has an array)
+          if (f->size <= 4 && size1 > 1)
+            {
+              LOG_ERROR ("Invalid JSON: %s.%s array where primitive expected",
+                         name, f->name);
+              tokens->index += size1;
+              return 0;
+            }
           if (f->is_malloc)
             {
               nums = size1 ? (BITCODE_BL *)calloc (size1, sizeof (BITCODE_BL))
@@ -2535,6 +2562,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           const int max_k
               = !f->is_malloc ? (int)(f->size / sizeof (BITCODE_BS)) : size1;
           BITCODE_BS *nums;
+          // fail if not malloced or inlined array (but json has an array)
+          if (f->size <= 2 && size1 > 1)
+            {
+              LOG_ERROR ("Invalid JSON: %s.%s array where primitive expected",
+                         name, f->name);
+              tokens->index += size1;
+              return 0;
+            }
           if (f->is_malloc)
             {
               nums = size1 ? (BITCODE_BS *)calloc (size1, sizeof (BITCODE_BS))
