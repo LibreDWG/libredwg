@@ -339,8 +339,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* section 0: header vars
    *         1: class section
    *         2: object map
-   *         3: optional: ObjFreeSpace
-   *         4: optional: MEASUREMENT
+   *         3: optional: ObjFreeSpace (with 2ndHeader and its sentinels)
+   *         4: optional: Template (MEASUREMENT)
    *         5: optional: AuxHeader (no sentinels, since R13c3)
    */
   for (j = 0; j < dwg->header.num_sections; j++)
@@ -950,15 +950,16 @@ handles_section:
     }
 
   /*-------------------------------------------------------------------------
-   * Section 4: MEASUREMENT (Called PADDING section in the ODA)
+   * Section 4: Template (with MEASUREMENT)
+   * (Called PADDING section in the ODA)
    */
 
   if (dwg->header.sections > 4)
     {
       LOG_INFO ("\n"
-                "=======> MEASUREMENT 4 (start)  : %8u\n",
+                "=======> Template 4 (start)  : %8u\n",
                 (unsigned int)dwg->header.section[4].address)
-      LOG_INFO ("         MEASUREMENT 4 (end)    : %8u\n",
+      LOG_INFO ("         Template 4 (end)    : %8u\n",
                 (unsigned int)(dwg->header.section[4].address
                                + dwg->header.section[4].size))
       dat->byte = dwg->header.section[4].address;

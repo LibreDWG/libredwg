@@ -44,6 +44,7 @@ VERSIONS (R_13, R_2000) {
   REPEAT_BLOCK
       // address+sizes of sections 0-2 is correct, 3+4 is empty
       SUB_FIELD_RCd (sections[rcount1], nr, 0);
+      LOG_TRACE (" %s\n", rcount1 < 6 ? dwg_section_name (dwg, rcount1) : "");
       SUB_VALUEOUTOFBOUNDS (handles[rcount1], nr, 6);
       SUB_FIELD_BL (sections[rcount1], address, 0);
       SUB_FIELD_BL (sections[rcount1], size, 0);

@@ -2778,7 +2778,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
          *         1: class section
          *         2: object map
          *         3: optional: ObjFreeSpace
-         *         4: optional: MEASUREMENT
+         *         4: optional: Template
          *         5: optional: AuxHeader (no sentinels, since R13c3)
          */
         LOG_ERROR ("FIXME convert sections from CONTROL objects to tables");
@@ -2949,13 +2949,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     /* section 0: header vars
      *         1: class section
-                  MEASUREMENT (r13 only, optional)
+                  Template (r13 only, optional)
                   padding (r13c3+)
                   THUMBNAIL (<r13c3)
      *         2: handles
      *         3: ObjFreeSpace (r13c3+, optional)
                   2NDHEADER (r13-r2000)
-     *         4: MEASUREMENT (r14-r2000, optional)
+     *         4: Template (r14-r2000, optional)
      *         5: AuxHeader (r2000, no sentinels)
      *         6: THUMBNAIL (r13c3+, not a section)
      */
@@ -3263,9 +3263,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   VERSION (R_13)
   {
-    if ((int)dwg->header.num_sections > (int)SECTION_MEASUREMENT_R13)
+    if ((int)dwg->header.num_sections > (int)SECTION_TEMPLATE_R13)
       error |= encode_template (dwg, dat,
-                                (Dwg_Section_Type)SECTION_MEASUREMENT_R13);
+                                (Dwg_Section_Type)SECTION_TEMPLATE_R13);
   }
   PRE (R_13c3)
   {
@@ -3542,7 +3542,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_OBJFREESPACE_R13].address = dat->byte;
       dwg->header.section[SECTION_OBJFREESPACE_R13].size = 53;
       error |= encode_objfreespace_private (dat, dwg);
-      LOG_INFO ("\n=======> ObjFreeSpace 3 (end): %4u\n", (unsigned)dat->byte);
+      LOG_INFO ("=======> ObjFreeSpace 3 (end): %4u\n", (unsigned)dat->byte);
       
       LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
@@ -3573,8 +3573,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->sections[i].address = dwg->header.section[i].address;
           _obj->sections[i].size = dwg->header.section[i].size;
         }
-      if (dwg->header.num_sections > SECTION_MEASUREMENT_R13
-          && !dwg->header.section[SECTION_MEASUREMENT_R13].address)
+      if (dwg->header.num_sections > SECTION_TEMPLATE_R13
+          && !dwg->header.section[SECTION_TEMPLATE_R13].address)
         {
           // most dwg"s leave the 3 and 4 section addresses and sizes empty
           _obj->sections[4].nr = 4;
@@ -3635,7 +3635,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     bit_chain_init_dat (&sec_dat[sec_id], 16, dat);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
   }
-  else sec_id = (Dwg_Section_Type)SECTION_MEASUREMENT_R13;
+  else sec_id = (Dwg_Section_Type)SECTION_TEMPLATE_R13;
 
   if (dwg->header.version >= R_2004
       || (dwg->header.version >= R_14
