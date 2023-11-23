@@ -131,11 +131,15 @@ someone should probably think about and resolve them!
     - build  -- configuration, makefiles, etc
     - decode -- read path (decoding)
     - encode -- write path (encoding)
+    - spec   -- spec file or type change
     - dxf    -- dxf writer
     - indxf  -- dxf reader
+    - json   -- json writer
+    - injson -- json reader
     - binding -- language bindings
     - api    -- user API
     - doc    -- documentation
+    - doc diff -- ODA-spec diff changes
 
 * trailing whitespace
 
