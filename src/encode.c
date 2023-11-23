@@ -1657,6 +1657,7 @@ fixup_NOD (Dwg_Data *restrict dwg,
         remove_NOD_item (_obj, i, "ACAD_" #name);                             \
     }
 
+#ifndef DEBUG_CLASSES
   for (BITCODE_BL i = 0; i < _obj->numitems; i++)
     {
       DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER)
@@ -1672,6 +1673,7 @@ fixup_NOD (Dwg_Data *restrict dwg,
       else DISABLE_NODSTYLE (TABLESTYLE)
       else DISABLE_NODSTYLE (VISUALSTYLE)
     }
+#endif
 #undef DISABLE_NODSTYLE
 }
 
@@ -2441,6 +2443,7 @@ encode_r13_thumbnail (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
  * TODO: 2007 maps.
  * 2010+ uses the 2004 format.
  * Returns a summary bitmask of all errors.
+ * Skip all MATERIAL objects, DICTS and common properties
  */
 AFL_GCC_TOOBIG
 EXPORT int
@@ -2514,10 +2517,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           Dwg_Object *obj = &dwg->object[i];
           if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
               || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
-              // WIPEOUT causes hang, TABLEGEOMETRY crash
-              || (dwg->opts & DWG_OPTS_IN
-                  && (obj->fixedtype == DWG_TYPE_WIPEOUT
-                      || obj->fixedtype == DWG_TYPE_TABLEGEOMETRY)))
+              // WIPEOUT causes hang, TABLEGEOMETRY crash, MATERIAL causes ODA errors
+#ifndef DEBUG_CLASSES
+                      || (dwg->opts & DWG_OPTS_IN
+                          && (obj->fixedtype == DWG_TYPE_WIPEOUT
+                              || obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
+                              || obj->fixedtype == DWG_TYPE_MATERIAL))
+#endif
+              )
             {
               fixup++;
               break;
@@ -2546,9 +2553,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   Dwg_Object *obj = &dwg->object[i];
                   if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
                       || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
+#ifndef DEBUG_CLASSES
                       || (dwg->opts & DWG_OPTS_IN
                           && (obj->fixedtype == DWG_TYPE_WIPEOUT
-                              || obj->fixedtype == DWG_TYPE_TABLEGEOMETRY)))
+                              || obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
+                              || obj->fixedtype == DWG_TYPE_MATERIAL))
+#endif
+                      )
                     {
                       fixup++;
                       // replace entities with points, objects with

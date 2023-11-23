@@ -497,9 +497,18 @@
     }
   SINCE (R_2007)
     {
+#ifndef DEBUG_CLASSES
+#ifdef IS_ENCODER
+      if (FIELD_VALUE (material_flags) == 3)
+        {
+          LOG_WARN ("Disabling MATERIAL handle\n")
+            FIELD_VALUE (material_flags) = 0;
+        }
+#endif
+#endif
       FIELD_BB (material_flags, 0); //if not BYLAYER 00: 347 material handle
       DXF {
-        if (FIELD_VALUE (material_flags))
+        if (FIELD_VALUE (material_flags)) // TODO BYBLOCK also?
           FIELD_HANDLE (material, 0, 347)
       }
       FIELD_RC0 (shadow_flags, 284); /* r2007+: 0 both, 1 receives, 2 casts, 3 no */
