@@ -2307,7 +2307,7 @@ bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
 /** String16: Read ASCII prefixed by a RS length
  */
 ATTRIBUTE_MALLOC
-BITCODE_TV
+BITCODE_T16
 bit_read_T16 (Bit_Chain *restrict dat)
 {
   BITCODE_RS i, length;

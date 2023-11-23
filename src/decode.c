@@ -2668,16 +2668,24 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-    // clang-format off
+  // clang-format off
   #include "appinfo.spec"
   // clang-format on
 
-  if (_obj->version && bit_wcs2len (_obj->version) >= 6)
+  if (_obj->version)
     {
-      is_teigha = memcmp (_obj->version, "T\0e\0i\0g\0h\0a\0", 12) == 0;
-      LOG_TRACE ("is_teigha: %s\n", is_teigha ? "true" : "false")
+      if (_obj->class_version > 2 && bit_wcs2len ((BITCODE_TU)_obj->version) >= 6)
+        {
+          is_teigha = memcmp (_obj->version, "T\0e\0i\0g\0h\0a\0", 12) == 0;
+          LOG_TRACE ("is_teigha: %s\n", is_teigha ? "true" : "false")
+        }
+      else if (_obj->class_version == 2 && dwg->header.version < R_2007
+               && strlen (_obj->version) >= 6)
+        {
+          is_teigha = memcmp (_obj->version, "Teigha", 6) == 0;
+          LOG_TRACE ("is_teigha: %s\n", is_teigha ? "true" : "false")
+        }
     }
-
   return error;
 }
 

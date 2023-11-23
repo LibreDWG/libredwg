@@ -188,6 +188,8 @@ typedef char* BITCODE_TV;
 #define FORMAT_TV "\"%s\""
 #define BITCODE_T16 BITCODE_TV
 #define FORMAT_T16 FORMAT_TV
+#define BITCODE_TU16 BITCODE_TU
+#define FORMAT_TU16 FORMAT_TU
 #define BITCODE_T32 BITCODE_TV
 #define FORMAT_T32 FORMAT_TV
 #define BITCODE_TU32 BITCODE_TV
@@ -9526,13 +9528,13 @@ typedef struct _dwg_appinfo
 {
   BITCODE_RL class_version; // 3
   BITCODE_RL num_strings;   // 2-3
-  BITCODE_TU appinfo_name;  // AppInfoDataList
+  BITCODE_T16 appinfo_name;  // AppInfoDataList
   BITCODE_RC version_checksum[16];
   BITCODE_RC comment_checksum[16];
   BITCODE_RC product_checksum[16];
-  BITCODE_TU version;      // "19.0.55.0.0", "Teigha(R) 4.3.2.0"
-  BITCODE_TU comment;      // "Autodesk DWG.  This file is a Trusted DWG "...
-  BITCODE_TU product_info; // XML ProductInformation
+  BITCODE_T16 version;      // "19.0.55.0.0", "Teigha(R) 4.3.2.0"
+  BITCODE_T16 comment;      // "Autodesk DWG.  This file is a Trusted DWG "...
+  BITCODE_T16 product_info; // XML ProductInformation
 } Dwg_AppInfo;
 
 /* File Dependencies, IMAGE files, fonts, xrefs, plotconfigs */

@@ -244,8 +244,8 @@ static char *_path_field (const char *path);
 #define VALUE_TEXT(str)                                                       \
   {                                                                           \
     if (str                                                                   \
-        && (1 || strchr (str, '"') || strchr (str, '\\')                      \
-            || strchr (str, '\n')))                                           \
+      /* && (1 || strchr (str, '"') || strchr (str, '\\')                     \
+         || strchr (str, '\n')) */)                                           \
       {                                                                       \
         const size_t len = strlen (str);                                      \
         if (len < 42)                                                         \
@@ -273,9 +273,9 @@ static char *_path_field (const char *path);
 #ifdef HAVE_NATIVE_WCHAR2
 #  define VALUE_TEXT_TU(wstr)                                                 \
     if (wstr                                                                  \
-        && (1 || wcschr ((wchar_t *)wstr, L'"')                               \
+      /* && (1 || wcschr ((wchar_t *)wstr, L'"')                              \
             || wcschr ((wchar_t *)wstr, L'\\')                                \
-            || wcschr ((wchar_t *)wstr, L'\n')))                              \
+            || wcschr ((wchar_t *)wstr, L'\n')) */)                           \
       {                                                                       \
         wchar_t *_buf = malloc (6 * wcslen ((wchar_t *)wstr) + 2);            \
         fprintf (dat->fh, "\"%ls\"", wcquote (_buf, (wchar_t *)wstr));        \
@@ -489,7 +489,7 @@ static char *_path_field (const char *path);
 #define FIELD_TFFx(nam, len, dxf) FIELD_BINARY (nam, len, dxf)
 #define FIELD_TV(nam, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TU(nam, dxf) FIELD_TEXT_TU (nam, (BITCODE_TU)_obj->nam)
-#define FIELD_T16(nam, dxf) FIELD_TV (nam, dxf)
+#define FIELD_T16(nam, dxf) FIELD_T (nam, dxf)
 #define FIELD_TU16(nam, dxf) FIELD_TU (nam, dxf)
 #define FIELD_T32(nam, dxf) FIELD_T (nam, dxf)
 #define FIELD_T(nam, dxf)                                                     \

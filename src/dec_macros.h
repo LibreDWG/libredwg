@@ -516,7 +516,9 @@
 #define FIELD_T16(nam, dxf)                                                   \
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
-        FIELDG (nam, T16, dxf);                                               \
+        _obj->nam = (BITCODE_T16)bit_read_T16 (dat);                          \
+        LOG_TRACE (#nam ": %s [T16 " #dxf "]", _obj->nam);                    \
+        LOG_RPOS                                                              \
       }                                                                       \
     else                                                                      \
       {                                                                       \

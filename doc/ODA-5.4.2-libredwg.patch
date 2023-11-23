@@ -1,6 +1,6 @@
---- ODA-5.4.1.md	2023-11-20 23:12:58.684714288 +0100
-+++ ODA-5.4.2-libredwg.md	2023-11-20 23:12:58.656714721 +0100
-@@ -8,11 +8,11 @@
+--- ODA-5.4.1.md	2023-11-23 10:22:35.200639495 +0100
++++ ODA-5.4.2-libredwg.md	2023-11-23 14:08:09.410946072 +0100
+@@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
  
@@ -13,21 +13,92 @@
  
        B : bit (1 or 0)
       BB : special 2 bit code (entmode in entities, for instance)
-@@ -537,12 +537,12 @@
+-     3B : bit triplet (1-3 bits) (R24)
++     3B : bit triplet (1-3 bits) (R2010)
+      BS : bitshort (16 bits)
+      BL : bitlong (32 bits)
+-    BLL : bitlonglong (64 bits) (R24)
++    BLL : bitlonglong (64 bits) (R2010)
+      BD : bitdouble
+     2BD : 2D point (2 bitdoubles)
+     3BD : 3D point (3 bitdoubles)
+      RC : raw char (not compressed)
+      RS : raw short (not compressed)
+@@ -34,11 +34,11 @@
+       H : handle reference (see the HANDLE REFERENCES section)
+       T : text (bitshort length, followed by the string).
+      TU : Unicode text (bitshort character length, followed by Unicode string, 2 bytes per
+           character). Unicode text is read from the “string stream” within the object data,
+           see the main Object description section for details.
+-     TV : Variable text, T for 2004 and earlier files, TU for 2007+ files.
++     TV : Variable text, T for R2004 and earlier files, TU for R2007+ files.
+       X : special form
+       U : unknown
+      SN : 16 byte sentinel
+      BE : BitExtrusion
+      DD : BitDouble With Default
+@@ -303,11 +303,11 @@
+ 
+ For R13-R14, this is a BD. For R2000+, this is a single bit followed optionally by a BD. If the bit is one, the thickness value is assumed to be 0.0. If the bit is 0, then a BD that represents the thickness follows.
+ 
+ ## 2.11 CmColor
+ 
+-R15 and earlier: BS color index
++R2000 and earlier: BS color index
+ 
+ R2004+: There are two types of color definitions, below named as CMC and ENC:
+ 
+ CMC:
+ 
+@@ -453,11 +453,11 @@
+ 
+ This function takes as its input an initial CRC value, a pointer to the data to be CRC'd, and the number of bytes of data. The return value is the new CRC. This function can be used to accumulate a CRC by running the first set of bytes with an initial value of 0 (or the "starting value" for this type of object), and subsequent calls with the initial value equal to the last returned CRC.
+ 
+ ### 2.14.2 32-bit CRC
+ 
+-From R18 onwards a 32-bit CRC is used. The algorithm is similar to the 8-bit version, but uses a CRC lookup table containing 256 32-bit values.
++From R18/R2004 onwards a 32-bit CRC is used. The algorithm is similar to the 8-bit version, but uses a CRC lookup table containing 256 32-bit values.
+ 
+ ```c
+ 
+ OdUInt32 crc32Table[] =
+ {
+@@ -517,17 +517,17 @@
+   return ~invertedCrc;
+ }
+ 
+ ```
+ 
+-# 3 R13-R15 DWG FILE FORMAT ORGANIZATION
++# 3 R13-R2000 DWG FILE FORMAT ORGANIZATION
+ 
+ ## 3.1 FILE STRUCTURE
+ 
+ The structure of the DWG file format changed between R13 C2 and R13 C3. Notations regarding C3 below indicate the differences.
+ 
+-The general arrangement of data in an R13/R14/R15 file is as follows:
++The general arrangement of data in an R13/R14/R2000 file is as follows:
+ 
+     HEADER
+       FILE HEADER
+       DWG HEADER VARIABLES
+       CRC
+@@ -537,26 +537,42 @@
      PADDING (R13C3 AND LATER, 200 bytes, minutes the template section above if present)
      IMAGE DATA (PRE-R13C3)
      OBJECT DATA
        All entities, table entries, dictionary entries, etc. go in this section.
      OBJECT MAP
 -    OBJECT FREE SPACE (optional)
-     TEMPLATE (R14-R15, optional)
-+    OBJECT FREE SPACE (optional)
+-    TEMPLATE (R14-R15, optional)
++    OBJECT FREE SPACE (R14-R2000, optional)
      SECOND HEADER
++    TEMPLATE (R14-R2000, optional)
      IMAGE DATA (R13C3 AND LATER)
  
  ## 3.2 FILE HEADER
  
-@@ -550,13 +550,29 @@
+ ### 3.2.1 VERSION ID:
  
  The first 6 bytes are:
  
@@ -141,12 +212,74 @@
 -        have seen only the MEASUREMENT variable stored here. See chapter 22.
 +    3 : (C3 and later.) OBJECT FREE SPACE (without sentinels),
 +        followed by the SECOND HEADER (with sentinels).
-+    4 : In R13-R15, TEMPLATE with the MEASUREMENT variable. See chapter 22.
++    4 : In R13-R2000, TEMPLATE with the MEASUREMENT variable. See chapter 22.
          This section is optional.
  
  Remarks: We have seen files with up to 6 sets in this section; the meaning of the sixth one is unknown. The Open Design Toolkit emits files with the first 5 sets only.
  
      RS : CRC for BOF to this point. Use 0 for the initial value, and depending on the
+@@ -966,11 +1027,11 @@
+ 
+ # 5 R2007 DWG FILE FORMAT ORGANIZATION
+ 
+ ## 5.1 Sections and pages overview
+ 
+-Like the R18 format the R21 format has sections and pages. There are system sections and data sections.
++Like the R18/R2004 format the R21/R2007 format has sections and pages. There are system sections and data sections.
+ 
+ The system sections contain information about where the data sections and their pages are in the stream.
+ 
+ A system section only has a single page, while a data section can have multiple pages. The page map contains information about where each data page is in the file stream. The section map has information about which pages belong to which section. The file header, which is at the beginning of the file, just after the meta data, contains the stream locations of the page map and section map.
+ 
+@@ -1192,11 +1253,11 @@
+ 
+ By default data/properties are not encrypted. Encryption still needs to be described.
+ 
+ ### 5.2.1 File header creation
+ 
+-Creating the R21 file header is very complex:
++Creating the R2007 file header is very complex:
+ 
+ Compute and set all the file header fields. In this process also compute CRC’s and generate check data, derived from a CRC seed value (paragraph 5.2.1.1).
+ 
+ Write the file header data to a buffer and calculate/write the 64-bit CRC (paragraph 5.2.1.2).
+ 
+@@ -1557,15 +1618,15 @@
+ 
+ We read sets of these until we exhaust the data.
+ 
+ ## 5.9 AcDb:Header Section
+ 
+-This section contains the "DWG Header Variables" data in a similar format as R15 files (see details in the DWG HEADER VARIABLES section of this document), except that string data is separated out into a string stream. See the Objects Section for details about string stream location within an object. Also, the handles are separated out into a separate stream at the end of the header, in the same manner as is done for Objects.
++This section contains the "DWG Header Variables" data in a similar format as R2000 files (see details in the DWG HEADER VARIABLES section of this document), except that string data is separated out into a string stream. See the Objects Section for details about string stream location within an object. Also, the handles are separated out into a separate stream at the end of the header, in the same manner as is done for Objects.
+ 
+ ## 5.10 Decompression
+ 
+-The compression uses another variant of the LZ77 algorithm, different from the one used in R18. Like the R18 compression, the compressed stream (source buffer) contains opcodes, offsets and lengths of byte chunks to be copied from either compressed or decompressed buffer.
++The compression uses another variant of the LZ77 algorithm, different from the one used in R18/R2004. Like the R18/R2004 compression, the compressed stream (source buffer) contains opcodes, offsets and lengths of byte chunks to be copied from either compressed or decompressed buffer.
+ 
+ An opcode consists of a single byte. The first byte contains the first opcode. If the first opcode’s high nibble equals a 2, then:
+ 
+ * the source buffer pointer is advanced 2 bytes, and a length is read from the next byte, bitwise and-ed with 0x07
+ 
+@@ -1993,15 +2054,15 @@
+ 0xa6df411fbfb21ca3, 0xdc0731d78f8795da, 0x536fa08fdfd90e51, 0x29b7d047efec8728
+ ```
+ 
+ ## 5.13 Reed-Solomon encoding
+ 
+-R21 uses Reed-Solomon (RS) encoding to add error correction. Error correction codes are typically used in telecommunication to correct errors during transmittion or on media to correct e.g. errors caused by a scratch on a CD. RS coding takes considerably study to master, and books on the subject require at least some mathematical base knowledge on academic level. For this reason it’s recommended to use an existing RS implementation, rather than to build one from scratch. When choosing to learn about the subject, a good book on the subject is “Error Control Coding, Second Edition”, by Shu Lin and Daniel J. Costello, Jr. This book is taught over two semesters, to give an idea of the depth of the subject. RS coding is treated in Chapter 7 out of 22, to have a full understanding of the subject chapters 1-7 should be read.
++R2007 uses Reed-Solomon (RS) encoding to add error correction. Error correction codes are typically used in telecommunication to correct errors during transmittion or on media to correct e.g. errors caused by a scratch on a CD. RS coding takes considerably study to master, and books on the subject require at least some mathematical base knowledge on academic level. For this reason it’s recommended to use an existing RS implementation, rather than to build one from scratch. When choosing to learn about the subject, a good book on the subject is “Error Control Coding, Second Edition”, by Shu Lin and Daniel J. Costello, Jr. This book is taught over two semesters, to give an idea of the depth of the subject. RS coding is treated in Chapter 7 out of 22, to have a full understanding of the subject chapters 1-7 should be read.
+ 
+ An open source RS implementation is available from <http://www.eccpage.com/>, item “Reed-Solomon (RS) codes”, by Simon Rockliff, 1989. This implementation uses Berlekamp-Masssey for decoding. Note that there are many ways to encode and decode, the implementation above is just one example. Though only 404 lines of code, the math involved is very sophisticated.
+ 
+-DWG file format version R21 uses two configurations of RS coding:
++DWG file format version R2007 uses two configurations of RS coding:
+ 
+ * Data pages: use a (n, k) of (255, 251), the primitive polynomial coefficients being (1, 0, 1, 1, 1, 0, 0, 0). This configuration can correct (255 – 251) / 2 = 2 error bytes per block of 255 bytes. For each 251 data bytes (k), 4 parity bytes are added to form a 255 byte (code word) block.
+ 
+ * System pages: use a (n, k) of (255, 239), the primitive polynomial coefficients being (1, 0, 0, 1, 0, 1, 1, 0). This configuration can correct (255 – 239) / 2 = 8 error bytes per block of 255 bytes. For each 239 data bytes (k), 16 parity bytes are added to form a 255 byte (code word) block.
+ 
 @@ -2082,11 +2143,11 @@
      -----------------------
  
@@ -160,20 +293,284 @@
          BD : Unknown, default value 1.0
          BD : Unknown, default value 1.0
          BD : Unknown, default value 1.0
-@@ -2688,11 +2749,11 @@
+@@ -2111,20 +2172,20 @@
+          B : REGENMODE
+          B : FILLMODE
+          B : QTEXTMODE
+          B : PSLTSCALE
+          B : LIMCHECK
+-    R13-R14 Only (stored in registry from R15 onwards):
++    R13-R14 Only (stored in registry from R2000 onwards):
+          B : BLIPMODE
+     R2004+:
+          B : Undocumented
+     Common:
+          B : USRTIMER (User timer on/off).
+          B : SKPOLY
+          B : ANGDIR
+          B : SPLFRAME
+-    R13-R14 Only (stored in registry from R15 onwards):
++    R13-R14 Only (stored in registry from R2000 onwards):
+          B : ATTREQ
+          B : ATTDIA
+     Common:
+          B : MIRRTEXT
+          B : WORLDVIEW
+@@ -2132,33 +2193,33 @@
+          B : WIREFRAME Undocumented.
+     Common:
+          B : TILEMODE
+          B : PLIMCHECK
+          B : VISRETAIN
+-    R13-R14 Only (stored in registry from R15 onwards):
++    R13-R14 Only (stored in registry from R2000 onwards):
+          B : DELOBJ
+     Common:
+          B : DISPSILH
+          B : PELLIPSE (not present in DXF)
+         BS : PROXYGRAPHICS
+-    R13-R14 Only (stored in registry from R15 onwards):
++    R13-R14 Only (stored in registry from R2000 onwards):
+         BS : DRAGMODE
+     Common:
+         BS : TREEDEPTH
+         BS : LUNITS
+         BS : LUPREC
+         BS : AUNITS
+         BS : AUPREC
+-    R13-R14 Only Only (stored in registry from R15 onwards):
++    R13-R14 Only Only (stored in registry from R2000 onwards):
+         BS : OSMODE
+     Common:
+         BS : ATTMODE
+-    R13-R14 Only Only (stored in registry from R15 onwards):
++    R13-R14 Only Only (stored in registry from R2000 onwards):
+         BS : COORDS
+     Common:
+         BS : PDMODE
+-    R13-R14 Only Only (stored in registry from R15 onwards):
++    R13-R14 Only Only (stored in registry from R2000 onwards):
+         BS : PICKSTYLE
+     R2004+:
+         BL : Unknown
+         BL : Unknown
+         BL : Unknown
+@@ -2201,11 +2262,11 @@
+         BD : CHAMFERC
+         BD : CHAMFERD
+         BD : FACETRES
+         BD : CMLSCALE
+         BD : CELTSCALE
+-    R13-R18:
++    R13-R2004:
+         TV : MENUNAME
+     Common:
+         BL : TDCREATE (Julian day)
+         BL : TDCREATE (Milliseconds into the day)
+         BL : TDUPDATE (Julian day)
+@@ -2220,11 +2281,11 @@
+         BL : TDUSRTIMER (Days)
+         BL : TDUSRTIMER (Milliseconds into the day)
+        CMC : CECOLOR
+          H : HANDSEED The next handle, with an 8-bit length specifier preceding the handle
+             bytes (standard hex handle form) (code 0). The HANDSEED is not part of the handle
+-            stream, but of the normal data stream (relevant for R21 and later).
++            stream, but of the normal data stream (relevant for R2007 and later).
+          H : CLAYER (hard pointer)
+          H : TEXTSTYLE (hard pointer)
+          H : CELTYPE (hard pointer)
+     R2007+ Only:
+          H : CMATERIAL (hard pointer)
+@@ -2410,11 +2471,11 @@
+           H : LINETYPE CONTROL OBJECT (hard owner)
+           H : VIEW CONTROL OBJECT (hard owner)
+           H : UCS CONTROL OBJECT (hard owner)
+           H : VPORT CONTROL OBJECT (hard owner)
+           H : APPID CONTROL OBJECT (hard owner)
+-          H : DIMSTYLE CONTROL OBJECT (hard owner) R13-R15 Only:
++          H : DIMSTYLE CONTROL OBJECT (hard owner) R13-R2000 Only:
+           H : VIEWPORT ENTITY HEADER CONTROL OBJECT (hard owner) Common:
+           H : DICTIONARY (ACAD_GROUP) (hard pointer)
+           H : DICTIONARY (ACAD_MLINESTYLE) (hard pointer)
+           H : DICTIONARY (NAMED OBJECTS) (hard owner)
+       R2000+ Only:
+@@ -2603,11 +2664,11 @@
+ 00240 47 B1 92 CC A0           G.... 0100 0111 1011 0001 1001 0010 1100 1100 1010 0000
+ ```
+ 
+ # 10 Data section AcDb:Classes
+ 
+-## 10.1 R13-R15
++## 10.1 R13-R2000
+ 
+ This section contains the defined classes for the drawing.
+ 
+     SN : 0x8D 0xA1 0xC4 0xB8 0xC4 0xA9 0xF8 0xC5 0xC0 0xDC 0xF4 0x5F 0xE7 0xCF 0xB6 0x8A.
+     RL : size of class data area.
+@@ -2630,13 +2691,13 @@
+ 
+ This following 16-byte sentinel appears after the CRC:
+ 
+     0x72,0x5E,0x3B,0x47,0x3B,0x56,0x07,0x3A,0x3F,0x23,0x0B,0xA0,0x18,0x30,0x49,0x75
+ 
+-For R18 and later 8 unknown bytes follow. The ODA writes 0 bytes.
++For R18/R2004 and later 8 unknown bytes follow. The ODA writes 0 bytes.
+ 
+-## 10.2 R18+
++## 10.2 R2004+
+ 
+ This section is compressed and contains the standard 32 byte section header.
+ 
+ This section contains the defined classes for the drawing.
+ 
+@@ -2688,15 +2749,15 @@
  
  # 11 PADDING (R13C3 AND LATER)
  
  0x200 bytes of padding. Can be ignored. When writing, the Open Design Toolkit writes all 0s.
  
--Occasionally AutoCAD will use the first 4 bytes of this area to store the value of the “measurement” variable. This padding was evidently required to allow pre-R13C3 versions of AutoCAD to read files produced by R13C3 and later.
-+Occasionally AutoCAD will use the first 4 bytes of this area to store the value of the “measurement” variable., i.e the TEMPLATE section. This padding was evidently required to allow pre-R13C3 versions of AutoCAD to read files produced by R13C3 and later.
+-Occasionally AutoCAD will use the first 4 bytes of this area to store the value of the "measurement" variable. This padding was evidently required to allow pre-R13C3 versions of AutoCAD to read files produced by R13C3 and later.
++Occasionally AutoCAD will use the first 4 bytes of this area to store the value of the "measurement" variable, i.e the TEMPLATE section. This padding was evidently required to allow pre-R13C3 versions of AutoCAD to read files produced by R13C3 and later.
  
- # 12 Data section: “”
+ # 12 Data section: ""
  
- The empty data section was introduced in R18. This section contains no data.
+-The empty data section was introduced in R18. This section contains no data.
++The empty data section was introduced in R18/R2004. This section contains no data.
  
-@@ -2974,11 +3035,11 @@
+ | Section property | Value
+ |------------------|------
+ | Name             | “”
+ | Section ID       | Always 0
+@@ -2807,43 +2868,42 @@
+ | Name             | AcDb:AppInfo
+ | Compressed       | 1
+ | Encrypted        | 0
+ | Page size        | 0x80
+ 
+-The AppInfo format depends on the application version (Acad version that wrote the file) in the file header. So a R18 .dwg file might have an R21 AppInfo section.
++The AppInfo format depends on the application version (Acad version that wrote the file) in the file header. So a R2004 .dwg file might have an R2007 AppInfo section.
+ 
+-## 16.1 R18
++## 16.1 R2004
+ 
+-In R18 the app info section consists of the following fields. Strings are encoded as a 16-bit length, followed by the character bytes (0-terminated).
++In R2004 the app info section consists of the following fields. Strings are encoded as a 16-bit length, followed by the single-character bytes (0-terminated).
+ 
+ | Type   | Length | Description
+ |--------|--------|------------
+-| String | 2 + n  | App info name, ODA writes “AppInfoDataList”
+-| UInt32 | 4      | Unknown, ODA writes 2
+-| String | 2 + n  | Unknown, ODA writes “4001”
+-| String | 2 + n  | App info product XML element, e.g. ODA writes
+-|        |        | “<ProductInformation name=”Teigha” build_version=”0.0”
+-|        |        | registry_version=”3.3” install_id_string=”ODA”
+-|        |        | registry_localeID=”1033”/>“
+-| String | 2 + n  | App info version, e.g. ODA writes “2.7.2.0”.
++| String | 2 + n  | App info name, ACAD writes "AppInfoData", ODA writes "AppInfoDataList"
++| RL     | 4      | num strings (default: 0)
++| String | 2 + n  | Comment, e.g. "5004", ODA writes "4001"
++| String | 2 + n  | App info product string, e.g. "Autodesk Architectural Desktop 2007"
++| String | 2 + n  | App info version, e.g. "5.0.318.0", ODA writes "2.7.2.0".
+ 
+-### 16.2 R21-27
++### 16.2 R2007+ or class_version == 3
+ 
+-In R21 (and also R24, R27) the app info section consists of the following fields. Strings are encoded as a 16-bit length, followed by the character bytes (0-terminated), using unicode encoding (2 bytes per character).
++Since R2007 or class_version 3 the app info section consists of the following fields. Strings are encoded as a 16-bit length, followed by 0-terminated unicode wide-chars (2 bytes per character).
+ 
+ | Type   | Length | Description
+ |--------|--------|------------
+-| UInt32 | 4      | Unknown (ODA writes 2)
++| RL     | 4      | class_version (default: 3)
+ | String | 2 + 2 * n + 2 | App info name, ODA writes “AppInfoDataList”
+-| UInt32 | 4      | Unknown (ODA writes 3)
+-| Byte[] | 16     | Version data (checksum, ODA writes zeroes)
+-| String | 2 + 2 * n + 2 | Version
+-| Byte[] | 16     | Comment data (checksum, ODA writes zeroes)
+-| String | 2 + 2 * n + 2 | Comment
+-| Byte[] | 16     | Product data (checksum, ODA writes zeroes)
+-| String | 2 + 2 * n + 2 | Product
+-| String | 2 + n  | App info version, e.g. ODA writes "2.7.2.0".
++| RL     | 4      | num strings (default: 3)
++| Byte[] | 16     | Version checksum (ODA and LibreDWG write zeroes)
++| String | 2 + 2 * n + 2 | Version. Eg "Teigha(R) 4.3.2.0" or AutoCAD: "19.0.55.0.0"
++| Byte[] | 16     | Comment checksum (ODA and LibreDWG write zeroes)
++| String | 2 + 2 * n + 2 | Comment. Eg "Autodesk DWG.  This file is a Trusted DWG last saved by an
++|        |        | Autodesk application or Autodesk licensed application.", or "This file was last saved by an
++|        |        | Open Design Alliance (ODA) application or an ODA licensed application." or
++|        |        | "This file was last saved by LibreDWG."
++| Byte[] | 16     | Product checksum (ODA and LibreDWG write zeroes)
++| String | 2 + 2 * n + 2 | ProductInformation as XML
+ 
+ # 17 Data section AcDb:FileDepList
+ 
+ Contains file dependencies (e.g. IMAGE files, or fonts used by STYLE).
+ 
+@@ -2852,11 +2912,11 @@
+ | Name             | AcDb:FileDepList
+ | Compressed       | 1
+ | Encrypted        | 2 (meaning unknown)
+ | Page size        | 0x80 if number of entries is 0 or 1. If more than 1, then 0x80 x number of entries.
+ 
+-In R18 the app info section consists of the following fields. Strings are encoded as a 32-bit length, followed by the character bytes (without trailing 0).
++In R2004 the app info section consists of the following fields. Strings are encoded as a 32-bit length, followed by the character bytes (without trailing 0).
+ 
+ | Type   | Length | Description
+ |--------|--------|------------
+ | Int32  | 4      | Feature count (ftc)
+ | String32 | ftc * ( 4 + n) | Feature name list. A feature name is one of the following:
+@@ -2889,21 +2949,21 @@
+ | Encrypted        | 0
+ | Page size        | 0x7400
+ 
+ The contents of this section are unknown. In the following paragraphs is described what the ODA writes in this section.
+ 
+-## 18.1 R18
++## 18.1 R2004
+ 
+ | Type   | Length | Description
+ |--------|--------|------------
+ | UInt32 | 4      | Unknown (ODA writes 0)
+ | UInt32 | 4      | Unknown (ODA writes 0)
+ | UInt32 | 4      | Unknown (ODA writes 0)
+ 
+ More unknown bytes may follow.
+ 
+-## 18.2 R21
++## 18.2 R2007
+ 
+ | Type   | Length | Description
+ |--------|--------|------------
+ | UInt32 | 4      | Unknown (ODA writes 0)
+ | UInt32 | 4      | Unknown (ODA writes 0)
+@@ -2919,13 +2979,13 @@
+ | Name             | AcDb:Security
+ | Compressed       | 1
+ | Encrypted        | 0
+ | Page size        | 0x7400
+ 
+-This section was introduced in R18. The AcDb:Security section is optional in the file—it is present if the file was saved with a password.
++This section was introduced in R2004. The AcDb:Security section is optional in the file—it is present if the file was saved with a password.
+ 
+-R18: The section is present in the file if the SecurityType entry at location 0x18 in the file is greater than 0.
++R2004: The section is present in the file if the SecurityType entry at location 0x18 in the file is greater than 0.
+ 
+ Strings are prefixed with a 32-bit length (not zero terminated).
+ 
+ | Type     | Length | Description
+ |----------|--------|------------
+@@ -2964,21 +3024,21 @@
+ 
+ This region holds the actual objects in the drawing. These can be entities, table entries, dictionary entries, and objects. This second use of objects is somewhat confusing; all items stored in the file are “objects”, but only some of them are object objects. Others are entities, table entries, etc. The objects in this section can appear in any order.
+ 
+ Not all objects present in the file are actually used. All used objects can eventually be traced back to handle references in the Header section. So the proper way to read a file is to start reading the header and then tracing all references from there until all references have been followed. Very occasionally a file contains e.g. two APPID objects with the same name, of which one is used, and the other is not. Reading both would be incorrect due to a name clash. To complicate matters more, files also exist with table records with duplicate names. This is incorrect, and the software should rename the record to be unique upon reading.
+ 
+-For R18 and later the section data (right after the page header) starts with a RL value of 0x0dca (meaning unknown).
++For R2004 and later the section data (right after the page header) starts with a RL value of 0x0dca (meaning unknown).
+ 
+ ## 20.1 Common non-entity object format
+ 
+ Objects (non-entities) have the following general format:
  
  | Version | Field type | DXF group | Description
  |---------|-------|-------|------------
@@ -186,7 +583,7 @@
  |         | RL     |      | Size of object data in bits (number of bits before the handles), or the “endbit” of the pre-handles section.
  | Common:
  |         | H     | 5    | Object’s handle
-@@ -3011,11 +3072,11 @@
+@@ -3011,11 +3071,11 @@
  Drawing entities, which are of course objects, have the same format as objects, with some additional standard items:
  
         MS : Size of object, not including the CRC
@@ -199,7 +596,76 @@
         RL : Size of object data in bits
      Common:
          H : Object’s handle
-@@ -3211,11 +3272,14 @@
+@@ -3182,11 +3242,12 @@
+ MLEADER
+ MLEADERSTYLE
+ OLE2FRAME
+ PLACEHOLDER
+ PLOTSETTINGS
+-RASTERVARIABLESSCALE
++RASTERVARIABLES
++SCALE
+ SORTENTSTABLE
+ SPATIAL_FILTER
+ SPATIAL_INDEX
+ TABLEGEOMETRY
+ TABLESTYLES
+@@ -3194,10 +3255,54 @@
+ VISUALSTYLE
+ WIPEOUTVARIABLE
+ XRECORD
+ ```
+ 
++Todo:
++
++```
++ACSH_BOOLEAN_CLASS
++ACSH_BOX_CLASS
++ACSH_CONE_CLASS
++ACSH_CYLINDER_CLASS
++ACSH_FILLET_CLASS
++ACSH_HISTORY_CLASS
++ACSH_SPHERE_CLASS
++ACSH_TORUS_CLASS
++ACSH_WEDGE_CLASS
++ASSOCNETWORK
++ASSOCGEOMDEPENDENCY
++BLOCKGRIPLOCATIONCOMPONENT
++BLOCKALIGNMENTPARAMETER
++BLOCKALIGNMENTGRIP
++BLOCKBASEPOINTPARAMETER
++BLOCKFLIPACTION
++BLOCKFLIPPARAMETER
++BLOCKFLIPGRIP
++BLOCKLINEARGRIP
++BLOCKLOOKUPGRIP
++BLOCKROTATIONGRIP
++BLOCKMOVEACTION
++BLOCKROTATEACTION
++BLOCKSCALEACTION
++BLOCKVISIBILITYGRIP
++DYNAMICBLOCKPURGEPREVENTER
++FIELDLIST
++GEODATA
++INDEX
++LAYERFILTER
++MESH
++RENDERENVIRONMENT
++SECTION_MANAGER
++DETAILVIEWSTYLE
++SECTIONVIEWSTYLE
++PDFDEFINITION
++DGNDEFINITION
++DWFDEFINITION
++UNDERLAY
++```
++
+ For objects with non-fixed values, taking the object type minus 500 gives an index into the class list, which then determines the type of object. For instance, an object type of 501 means that this object is of the class which is second in the class list; the **classdxfname** field determines the type of the object.
+ 
+ See the sections on EED a description of that areas.
+ 
+ ### 20.4 OBJECT PRESCRIPTIONS
+@@ -3211,11 +3316,14 @@
  ### 20.4.1 Common Entity Data
  
  The following data appears at the beginning of each entity in the file, and will be referred to as Common Entity Data in the subsequent entity descriptions.
@@ -215,7 +681,33 @@
                                        end handles
      Common:
          Handle               H    5   code 0, length followed by the handle bytes.
-@@ -5076,21 +5140,24 @@
+@@ -3841,11 +3949,11 @@
+ Class properties:
+ 
+ | App name            | ObjectDBX Classes |
+ |---------------------|-------------------|
+ | Class number        | Dynamic (>= 500)  |
+-| DWG version         | R18 |
++| DWG version         | R2004 |
+ | Maintenance version | 0 |
+ | Class proxy flags   | 0x401 |
+ | C++ class name      | AcDbArcDimension |
+ | DXF name            | ARC_DIMENSION |
+ 
+@@ -4235,11 +4343,11 @@
+ Class properties:
+ 
+ | App name            | ObjectDBX Classes |
+ |---------------------|-------------------|
+ | Class number        | Dynamic (>= 500)  |
+-| DWG version         | R18 |
++| DWG version         | R2004 |
+ | Maintenance version | 0 |
+ | Class proxy flags   | 0x401 |
+ | C++ class name      | AcDbRadialDimensionLarge |
+ | DXF name            | LARGE\_RADIAL\_DIMENSION |
+ 
+@@ -5076,21 +5184,24 @@
  ### 20.4.44 DICTIONARY (42)
  
  Basically a list of pairs of string/objhandle that constitute the dictionary entries.
@@ -243,7 +735,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5170,46 +5237,46 @@
+@@ -5170,46 +5281,46 @@
  R2000+:
      Linespacing Style    BS  73
      Linespacing Factor   BD  44
@@ -302,7 +794,7 @@
  IF (has column heights)
  END IF (has columns data)
  END IF (not annotative)
-@@ -5238,25 +5305,25 @@
+@@ -5238,25 +5349,25 @@
  ### 20.4.47 LEADER (45)
  
  ```
@@ -331,7 +823,7 @@
                                   from the endpoint of the leader to the annotation,
                                   taking into account the extrusion direction.
  R13-R14 Only:
-@@ -5269,27 +5336,28 @@
+@@ -5269,27 +5380,28 @@
                                   taller, probably by some DIMvar amount.)
      Box width            BD  41  MTEXT extents width. (A text box is slightly wider,
                                   probably by some DIMvar amount.)
@@ -363,7 +855,7 @@
  ```
  
  **_20.4.47.1 Example:_**
-@@ -5538,20 +5606,23 @@
+@@ -5538,20 +5650,23 @@
  
  ### 20.4.51 BLOCK CONTROL (48)
  
@@ -389,7 +881,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5578,20 +5649,23 @@
+@@ -5578,20 +5693,23 @@
  
  ### 20.4.52 BLOCK HEADER (49)
  
@@ -415,7 +907,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5663,20 +5737,23 @@
+@@ -5663,20 +5781,23 @@
  
  ### 20.4.53 LAYER CONTROL (50) (UNDOCUMENTED)
  
@@ -441,7 +933,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5699,11 +5776,14 @@
+@@ -5699,11 +5820,14 @@
  
  ### 20.4.54 LAYER (51)
  
@@ -457,7 +949,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5766,20 +5846,23 @@
+@@ -5766,20 +5890,23 @@
  
  ### 20.4.55 SHAPEFILE CONTROL (52) (UNDOCUMENTED)
  
@@ -483,7 +975,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5816,11 +5899,14 @@
+@@ -5816,11 +5943,14 @@
  |                         | Character set (bitmask) = 0x0000ff00
  | 1002 (Bracket)          | ‘}’ (optional) |
  
@@ -499,7 +991,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5871,20 +5957,23 @@
+@@ -5871,20 +6001,23 @@
  
  ### 20.4.57 LINETYPE CONTROL (56) (UNDOCUMENTED)
  
@@ -525,7 +1017,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5911,11 +6000,14 @@
+@@ -5911,11 +6044,14 @@
  
  ### 20.4.58 LTYPE (57)
  
@@ -541,7 +1033,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5982,20 +6074,23 @@
+@@ -5982,20 +6118,23 @@
  
  ### 20.4.59 VIEW CONTROL (60) (UNDOCUMENTED)
  
@@ -567,7 +1059,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6018,11 +6113,14 @@
+@@ -6018,11 +6157,14 @@
  
  ### 20.4.60 VIEW (61)
  
@@ -583,7 +1075,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6116,20 +6214,23 @@
+@@ -6116,20 +6258,23 @@
  
  ### 20.4.61 UCS CONTROL (62) (UNDOCUMENTED)
  
@@ -609,7 +1101,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6152,11 +6253,14 @@
+@@ -6152,11 +6297,14 @@
  
  ### 20.4.62 UCS (63)
  
@@ -625,7 +1117,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6214,11 +6318,14 @@
+@@ -6214,11 +6362,14 @@
  
  ### 20.4.63 TABLE (VPORT) (64) (UNDOCUMENTED)
  
@@ -641,7 +1133,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6252,11 +6359,14 @@
+@@ -6252,11 +6403,14 @@
  
  ### 20.4.64 VPORT (65)
  
@@ -657,7 +1149,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6380,11 +6490,14 @@
+@@ -6380,11 +6534,14 @@
  
  ### 20.4.65 TABLE (APPID) (66) (UNDOCUMENTED)
  
@@ -673,7 +1165,7 @@
  Common:
      Handle                H   5  Owner handle (soft pointer) of root object (0).
      EED                   X  -3  See EED section.
-@@ -6416,11 +6529,14 @@
+@@ -6416,11 +6573,14 @@
  
  ### 20.4.66 APPID (67)
  
@@ -689,7 +1181,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6463,11 +6579,14 @@
+@@ -6463,11 +6623,14 @@
  
  ### 20.4.67 DIMSTYLE CONTROL (68) (UNDOCUMENTED)
  
@@ -705,7 +1197,7 @@
  Common:
      Handle                H   5  Owner handle (soft pointer) of root object (0).
      EED                   X  -3  See EED section.
-@@ -6498,11 +6617,11 @@
+@@ -6498,11 +6661,11 @@
  ```
  
  ### 20.4.68 DIMSTYLE (69)
@@ -718,7 +1210,7 @@
      Obj size             RL      size of object in bits, not including end handles
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
-@@ -6699,21 +6818,24 @@
+@@ -6699,21 +6862,24 @@
  ```
  
  ### 20.4.69 VIEWPORT ENTITY CONTROL (70) (UNDOCUMENTED)
@@ -746,7 +1238,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6736,12 +6858,15 @@
+@@ -6736,12 +6902,15 @@
  ```
  
  ### 20.4.70 VIEWPORT ENTITY HEADER (71)
@@ -764,7 +1256,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6796,12 +6921,15 @@
+@@ -6796,12 +6965,15 @@
  |         |  H    |  340  | Handle to scale (AcDbScale) object (hard pointer). See paragraph 20.4.92. |
  
  ### 20.4.72 GROUP (72): Group of ACAD entities
@@ -782,7 +1274,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6838,12 +6966,15 @@
+@@ -6838,12 +7010,15 @@
  ```
  
  ### 20.4.73 MLINESTYLE (73):
@@ -800,7 +1292,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6912,12 +7043,15 @@
+@@ -6912,12 +7087,15 @@
  NOTE: OBJECTS LISTED AFTER THIS POINT DO NOT HAVE FIXED TYPES. THEIR TYPES ARE DETERMINED BY FINDING THE CLASS ENTRY WHOSE POSITION IN THE CLASS LIST + 500 EQUALS THE TYPE OF THIS OBJECT
  
  ### 20.4.74 DICTIONARYVAR (varies)
@@ -818,7 +1310,33 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7178,11 +7312,11 @@
+@@ -7015,11 +7193,11 @@
+             pt0         2RD  10  control point
+             if (isrational)
+               weight     BD  40  weight
+             endif
+           End repeat
+-R24:
++R2010:
+           Numfitpoints   BL  97  number of fit points
+           Begin repeat numfitpoints times:
+             Fitpoint    2RD  11
+           End repeat
+           Start tangent 2RD  12
+@@ -7125,11 +7303,11 @@
+ Class properties:
+ 
+ | App name            | ObjectDBX Classes |
+ |---------------------|-------------------|
+ | Class number        | Dynamic (>= 500)  |
+-| DWG version         | R18               |
++| DWG version         | R2004               |
+ | Maintenance version | 0                 |
+ | Class proxy flags   | 0x480             |
+ | C++ class name      | AcDbField         |
+ | DXF name            | FIELD             |
+ 
+@@ -7178,11 +7356,11 @@
  |        |     |     | Other error = 64
  |        | BL  |  96 | Evaluation error code
  |        | TV  | 300 | Evaluation error message
@@ -831,7 +1349,46 @@
  |        | TV  |   6 | Child field key
  |        | ... | ... | The field value, see paragraph 20.4.99.
  |        |     |     | End repeat child fields
-@@ -7311,12 +7445,15 @@
+@@ -7192,11 +7370,11 @@
+ Class properties:
+ 
+ | App name            | ObjectDBX Classes |
+ |---------------------|-------------------|
+ | Class number        | Dynamic (>= 500)  |
+-| DWG version         | R18               |
++| DWG version         | R2004               |
+ | Maintenance version | 0                 |
+ | Class proxy flags   | 0x480             |
+ | C++ class name      | AcDbFieldList, inherits AcDbIdSet |
+ | DXF name            | FIELDLIST         |
+ 
+@@ -7216,11 +7394,11 @@
+ Class properties:
+ 
+ | App name            | ObjectDBX Classes |
+ |---------------------|-------------------|
+ | Class number        | Dynamic (>= 500)  |
+-| DWG version         | R21               |
++| DWG version         | R2007               |
+ | Maintenance version | 45                |
+ | Class proxy flags   | 0xFFF             |
+ | C++ class name      | AcDbGeoData       |
+ | DXF name            | GEODATA           |
+ 
+@@ -7284,11 +7462,11 @@
+ |        |     |     | Repeat for each geo mesh face
+ |        | BL  |     | Face index 1
+ |        | BL  |     | Face index 2
+ |        | BL  |     | Face index 3
+ |        |     |     | End repeat geo mesh faces
+-|        |     |     | If DWG version is R21 or lower:
++|        |     |     | If DWG version is R2007 or lower:
+ |        |     |     | Below is CIVIL data. AutoCAD 2010 always writes civil data.
+ |        | B   |     | Has civil data? (true)
+ |        | B   |     | False
+ |        | RD  |     | Reference point Y
+ |        | RD  |     | Reference point X
+@@ -7311,12 +7489,15 @@
  ### 20.4.79 IDBUFFER (varies)
  
  (holds list of references to an xref)
@@ -849,7 +1406,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7431,12 +7568,15 @@
+@@ -7431,12 +7612,15 @@
  
  ### 20.4.81 IMAGEDEF (varies)
  
@@ -867,7 +1424,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7481,12 +7621,15 @@
+@@ -7481,12 +7665,15 @@
  
  ### 20.4.82 IMAGEDEFREACTOR (varies)
  
@@ -885,7 +1442,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7517,12 +7660,15 @@
+@@ -7517,12 +7704,15 @@
  ```
  
  ### 20.4.83 LAYER_INDEX
@@ -903,7 +1460,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7572,11 +7718,14 @@
+@@ -7572,11 +7762,14 @@
  
  ### 20.4.84 LAYOUT (varies)
  
@@ -919,7 +1476,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7955,12 +8104,15 @@
+@@ -7955,12 +8148,15 @@
  |       | B     | 290 | Default flag (default value is false).
  
  ### 20.4.90 PROXY (varies):
@@ -937,7 +1494,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7995,12 +8147,15 @@
+@@ -7995,12 +8191,15 @@
  
  ### 20.4.91 RASTERVARIABLES (varies)
  
@@ -955,7 +1512,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8047,12 +8202,15 @@
+@@ -8047,12 +8246,15 @@
  |       | B     | 290 | Has unit scale          |
  
  ### 20.4.93 SORTENTSTABLE (varies)
@@ -973,7 +1530,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8105,12 +8263,15 @@
+@@ -8105,12 +8307,15 @@
  
  ### 20.4.94 SPATIAL_FILTER (varies)
  
@@ -991,7 +1548,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8169,12 +8330,15 @@
+@@ -8169,12 +8374,15 @@
  ```
  
  ### 20.4.95 SPATIAL_INDEX (varies):
@@ -1009,7 +1566,131 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -9055,12 +9219,15 @@
+@@ -8333,18 +8541,18 @@
+ 0D688 54 B0                   crc
+ ```
+ 
+ ### 20.4.96 TABLE (varies)
+ 
+-The TABLE entity (entity type ACAD_TABLE) was introduced in AutoCAD 2005 (a sub release of R18), and a large number of changes were introduced in AutoCAD 2008 (a sub release of R21). The table entity inherits from the INSERT entity. The geometric results, consisting of table borders, texts and such are created in an anonymous block, similarly to the mechanism in the DIMENSION entity.
++The TABLE entity (entity type ACAD_TABLE) was introduced in AutoCAD 2005 (a sub release of R2004), and a large number of changes were introduced in AutoCAD 2008 (a sub release of R2007). The table entity inherits from the INSERT entity. The geometric results, consisting of table borders, texts and such are created in an anonymous block, similarly to the mechanism in the DIMENSION entity.
+ The anonymous block name prefix is “*T”. For the AutoCAD 2008 changes see paragraph 20.4.96.2.
+ 
+ TODO: document roundtrip data with connections to AcDbTableContent and AcDbTableGeometry.
+ 
+-20.4.96.1 **_Until R21_**
++20.4.96.1 **_Until R2007_**
+ 
+-This paragraph describes the table DWG format until R21. In R24 the format was changed to make use of table content to contain all data (AcDbTableContent).
++This paragraph describes the table DWG format until R2007. In R2010 the format was changed to make use of table content to contain all data (AcDbTableContent).
+ 
+ ```
+     Common Entity Data
+     Ins pt              3BD  10
+ R13-R14 Only:
+@@ -8618,13 +8826,13 @@
+                                  0x80000 is set in table overrides flag
+ 
+     CRC                   X ---
+ ```
+ 
+-**20.4.96.2** **_R24 and later_**
++**20.4.96.2** **_R2010 and later_**
+ 
+-In the R24 format the old table data structures were replaced with new data structures, of which the root is the AcDbTableContent class. The old data structures are still used in the DXF format. An R24 DXF file contains both the old and new structures, where the new structures are optionally used. If AutoCAD can store all data just using the old structures it does not always write the new structures in DXF. In an R24 DWG file, always the new structures are used. The table then points to a AcDbTableContent object, which contains most of the actual data. Note that AcDbTableContent was already introduced in AutoCAD 2008 (R21), but in R21 it was indirectly referenced through the tables extension dictionary entry `ACAD_XREC_ROUNDTRIP` (TODO: describe details on `ACAD_ROUNDTRIP_2008_TABLE_ENTITY` and for 2007).
++In the R2010 format the old table data structures were replaced with new data structures, of which the root is the AcDbTableContent class. The old data structures are still used in the DXF format. An R2010 DXF file contains both the old and new structures, where the new structures are optionally used. If AutoCAD can store all data just using the old structures it does not always write the new structures in DXF. In an R2010 DWG file, always the new structures are used. The table then points to a AcDbTableContent object, which contains most of the actual data. Note that AcDbTableContent was already introduced in AutoCAD 2008 (R2007), but in R2007 it was indirectly referenced through the tables extension dictionary entry `ACAD_XREC_ROUNDTRIP` (TODO: describe details on `ACAD_ROUNDTRIP_2008_TABLE_ENTITY` and for 2007).
+ 
+ |Version|Field type|DXF group| Description                   |
+ |-------|-------|----:|--------------------------------------|
+ |       | ...   |     | Common entity data  |
+ | R2010+|  RC   |     | Unknown (default 0) |
+@@ -8667,11 +8875,11 @@
+ |       |  BL   |     | End row index |
+ |       |       |     | End repeat row ranges
+ 
+ ### 20.4.97 TABLECONTENT
+ 
+-This represents the table content (AcDbTableContent) that replaces the old table data structures that were introduced in AutoCAD 2005. Table content was introduced in AutoCAD 2008 and supports more advanced features like e.g. multiple contents per cell. In AutoCAD 2008 the table content was written as a separate object in DWG and referenced by roundtrip data in the table entity’s extension dictionary. In DXF this is still the case even for R24. In a R24 DWG file, the table content is part of the table entity data and is no longer present as a separate object. Possibly for backwards compatibility with the AutoCAD 2007 (R21) format, this separate data container was created instead of extending the ACAD\_TABLE entity.
++This represents the table content (AcDbTableContent) that replaces the old table data structures that were introduced in AutoCAD 2005. Table content was introduced in AutoCAD 2008 and supports more advanced features like e.g. multiple contents per cell. In AutoCAD 2008 the table content was written as a separate object in DWG and referenced by roundtrip data in the table entity’s extension dictionary. In DXF this is still the case even for R2010. In a R2010 DWG file, the table content is part of the table entity data and is no longer present as a separate object. Possibly for backwards compatibility with the AutoCAD 2007 format, this separate data container was created instead of extending the ACAD\_TABLE entity.
+ 
+ The table content class inherits from 3 other classes, which never exist independently so they will all be described in this paragraph. AcDbTableContent inherits from AcDbFormattedTableData, which inherits from AcDbLinkedTableData, which inherits from AcDbLinkedData. Class AcDbLinkedTableData contains most of the data (rows, columns, cells, cell contents).
+ 
+ |Version|Field type|DXF group| Description                   |
+ |-------|-------|----:|--------------------------------------|
+@@ -8763,11 +8971,11 @@
+ |       |       |     | Begin repeat field references |
+ |       | H     |     | Handle to field (AcDbField), hard owner. |
+ |       |       |     | End repeat field references |
+ |       |       |     | **AcDbFormattedTableData** fields |
+ |       | ...   |     | The table’s cell style override fields (see paragraph 20.4.101.4). The table’s |
+-|       |       |     | base cell style is the table style’s overall cell style (present from R24 onwards). |
++|       |       |     | base cell style is the table style’s overall cell style (present from R2010 onwards). |
+ |       | BL    | 90  | Number of merged cell ranges |
+ |       |       |     | Begin repeat merged cell ranges |
+ |       | BL    | 91  | Top row index |
+ |       | BL    | 92  | Left column index |
+ |       | BL    | 93  | Bottom row index |
+@@ -8832,11 +9040,11 @@
+ |       | ...   |     | Item value (variant), see paragraph 20.4.98.|
+ |       |       |     | End repeat custom data items   |
+ 
+ ### 20.4.101 TABLESTYLE
+ 
+-The table style object repesents the style for the table entity. Like the table entity, table style was introduced in AutoCAD 2005. In AutoCAD 2008 new cell style data was introduced, which was stored in a separate container object: CELLSTYLEMAP, see paragraph 20.4.102 for more details. The cellstyle map can contain custom cell styles, whereas the TABLESTYLE only contains the Table (R24), _Title , _Header and _Data cell style.
++The table style object repesents the style for the table entity. Like the table entity, table style was introduced in AutoCAD 2005. In AutoCAD 2008 new cell style data was introduced, which was stored in a separate container object: CELLSTYLEMAP, see paragraph 20.4.102 for more details. The cellstyle map can contain custom cell styles, whereas the TABLESTYLE only contains the Table (R2010), _Title , _Header and _Data cell style.
+ 
+ ### 20.4.101.1 _TABLESTYLE format until R21_
+ 
+ ```
+     Common OBJECT data, see paragraph 20.1.
+@@ -8869,30 +9077,30 @@
+     Data unit type       BL  91  As defined in the ACAD\_TABLE entity.
+     Format string        TV   1
+ End repeat row styles
+ ```
+ 
+-#### 20.4.101.2 R24 TABLESTYLE format
++#### 20.4.101.2 R2010 TABLESTYLE format
+ 
+ |Version|Field type|DXF group| Description             |
+ |-------|-------|----:|--------------------------------|
+ |       | RC    |  -  | Unknown                        |
+ |       | TV    |  3  | Description                    |
+ |       | BL    |  -  | Unknown                        |
+ |       | BL    |  -  | Unknown                        |
+ |       | H     |  -  | Unknown (hard owner)           |
+ |       | ...   |     | The cell style with name “Table”, see paragraph 20.4.101.4. |
+-|       | BL    |  90 | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R24). |
++|       | BL    |  90 | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R2010). |
+ |       |       |     | The cell style ID is used by cells, columns, rows to reference a cell style in the |
+ |       |       |     | table’s table style. Custom cell style ID’s are numbered starting at 101. |
+ |       | BL    |  91 | Cell style class, 1= data, 2 = label. The default value is label. |
+ |       | TV    | 300 | Cell style name                |
+ |       | BL    |     | The number of cell styles (should be 3), the non-custom cell styles are present |
+ |       |       |     | only in the CELLSTYLEMAP.      |
+ |       |       |     | Begin repeat cell styles (for data, title, header in this order) |
+ |       | ...   |     | The cell style fields, see paragraph 20.4.101.4. |
+-|       | BL    |  -  | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R24). |
++|       | BL    |  -  | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R2010). |
+ |       |       |     | The cell style ID is used by cells, columns, rows to reference a cell style in the |
+ |       |       |     | table’s table style. Custom cell style ID’s are numbered starting at 101. |
+ |       | BL    |  -  | Cell style class, 1= data, 2 = label. The default value is label. |
+ |       | TV    |  -  | Cell style name                |
+ |       |       |     | End repeat cell styles         |
+@@ -9016,11 +9224,11 @@
+ |-------|-------|----:|--------------------------------|
+ |       |  ...  |     | Common AcDbObject fields, see paragraph 20.1. |
+ |       |  BL   |  90 | Number of cell styles          |
+ |       |       |     | Begin repeat cell styles       |
+ |       |  ...  |     | Cell style fields, see paragraph 20.4.101.4. |
+-|       |  BL   |  90 | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R24). |
++|       |  BL   |  90 | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R2010). |
+ |       |       |     | The cell style ID is used by cells, columns, rows to reference a cell style in the |
+ |       |       |     | table’s table style. Custom cell style ID’s are numbered starting at 101. |
+ |       |  BL   |  91 | Cell style class, 1= data, 2 = label. The default value is label. |
+ |       |  TV   | 300 | Cell style name                |
+ |       |       |     | End repeat cell styles         |
+@@ -9055,12 +9263,15 @@
  |       |       |     | End repeat rows                |
  
  ### 20.4.104 XRECORD (varies):
@@ -1027,7 +1708,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -9120,30 +9287,42 @@
+@@ -9120,34 +9331,46 @@
  00B28 45 76                   crc
  ```
  
@@ -1035,7 +1716,7 @@
  
 -The meaning of this section is not completely known. The ODA knows how to write a valid section, but
 -the meaning is not known of every field.
-+From R13c3 to R15 this section is the third section, which is immediately followed by the SECOND FILE HEADER (R13-R15). See chapter 26.
++From R13c3 to R2000 this section is the third section, which is immediately followed by the SECOND FILE HEADER (R13-R2000). See chapter 26.
  
 -## 21.1 Until R18
 +## 21.1 Until R2007
@@ -1081,9 +1762,43 @@
  
  # 22 Data section: AcDb:Template
  
- This section is optional in releases 13-15. The section is mandatory in the releases 18 and newer. The template section only contains the MEASUREMENT system variable.
+-This section is optional in releases 13-15. The section is mandatory in the releases 18 and newer. The template section only contains the MEASUREMENT system variable.
++This section is optional in releases r13-r2000. The section is mandatory in the releases 18 and newer. The template section only contains the MEASUREMENT system variable.
  
-@@ -9630,23 +9809,10 @@
+ | Type   | Length | Description                                                        |
+ |--------|--------|------------------------------------------------------------------- |
+ | Int16  | 2      | Template description string length in bytes (the ODA always writes |
+ |        |        | 0 here).                                                           |
+@@ -9155,11 +9378,11 @@
+ |        |        | codepage to encode the bytes).                                     |
+ | UInt16 | 2      | MEASUREMENT system variable (0 = English, 1 = Metric).             |
+ 
+ # 23 Data section AcDb:Handles (OBJECT MAP)
+ 
+-## 23.1 R13-15
++## 23.1 R13-2000
+ 
+ The Object Map is a table which gives the location of each object in the file This table is broken into sections. It is basically a list of handle/file loc pairs, and goes (something like) this:
+ 
+ ```
+ Set the "last handle" to all 0 and the "last loc" to 0L;
+@@ -9177,13 +9400,13 @@
+ End top repeat
+ ```
+ 
+ Note that each section is cut off at a maximum length of 2032.
+ 
+-## 23.2 R18
++## 23.2 R2004
+ 
+-This section is compressed and contains the standard 32 byte section header. The decompressed data in this section is identical to the “Object Map” section data found in R15 and earlier files, excepts that offsets are not absolute file addresses, but are instead offsets into the AcDb:Objects logical section (starting with offset 0 at the beginning of this logical section).
++This section is compressed and contains the standard 32 byte section header. The decompressed data in this section is identical to the “Object Map” section data found in R2000 and earlier files, excepts that offsets are not absolute file addresses, but are instead offsets into the AcDb:Objects logical section (starting with offset 0 at the beginning of this logical section).
+ 
+ # 24 Section AcDb:AcDsPrototype_1b (DataStorage)
+ 
+ At this moment (December 2012), this sections contains information about Acis data (regions, solids).
+ 
+@@ -9630,119 +9853,74 @@
  }
  handleToDataRecord {
  }
@@ -1101,13 +1816,155 @@
 -    0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,
 -    0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,
 -    0xFF,0x00,0x00,0x00,0x00
--
- # 26 SECOND FILE HEADER (R13-R15)
++# 26 SECOND FILE HEADER (R13-R2000)
  
- ## 26.1 Beginning sentinel
+-# 26 SECOND FILE HEADER (R13-R15)
++This is directly after the ObjFreeSpace section. See chapter 21.
+ 
+-## 26.1 Beginning sentinel
++Beginning sentinel
  
      {0xD4,0x7B,0x21,0xCE,0x28,0x93,0x9F,0xBF,0x53,0x24,0x40,0x09,0x12,0x3C,0xAA,0x01 };
-@@ -9796,11 +9962,11 @@
+ 
+-    RL : size of this section
+-     L : Location of this header (long, loc of start of sentinel).
+-    RC : "AC1012" or "AC1014" for R13 or R14 respectively
+-    RC : 6 0's
+-     B : 4 bits of 0
+-    RC : 0x18,0x78,0x01,0x04 for R13, 0x18,0x78,0x01,0x05 for R14
+-
+-    RC : 0
+-     L : header address
+-     L : header size
+-    RC : 1
+-     L : class address
+-     L : class data size
+-    RC : 2
+-     L : Object map address (natural table)
+-     L : Object map size
+-    RC : 3
+-     L : Address of unknown section 3
+-     L : size of that section
+-
+-     S : 14 (# of handle records following)
+-
+-    RC : size of (valid chars in) handseed
+-    RC : 0
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) block control objhandle
+-    RC : 1
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) layer control objhandle
+-    RC : 2
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) shapefile control objhandle
+-    RC : 3
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) linetype control objhandle
+-    RC : 4
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) view control objhandle
+-    RC : 5
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) ucs control objhandle
+-    RC : 6
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) vport control objhandle
+-    RC : 7
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) reg app control objhandle
+-    RC : 8
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) dimstyle control objhandle
+-    RC : 9
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) viewport entity header objhandle
+-    RC : 10
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) dictionary objhandle
+-    RC : 11
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) default multi-line style objhandle
+-    RC : 12
+-    RC : "size" characters of the handle
+-
+-    RC : size of (valid chars in) group dictionary objhandle
+-    RC : 13
++```
++    RL : Size of this section
++    BL : Location of this header (long, loc of start of sentinel).
++    RC : "AC1012", "AC1013, "AC1014" or "AC1015" for AutoCAD releases.
++    RC : 5 0's
++    RC : Maintenance release version
++    RC : Byte 0x00, 0x01, or 0x03
++    BS : Acad version that writes the file (first byte is application version and second byte is application maintenance release version)
++    RS : Codepage
++
++    BS : Number of sections
++  Repeat Number of sections
++    RC : Id of section
++    BL : Section address
++    BL : Section size
++  End Repeat Number of sections
++
++    BS : 14 (# of handle records)
++  Repeat Number of handles
++    RC : size of handle in bytes
++    RC : index of handle
+     RC : "size" characters of the handle
++  End Repeat Number of handles
+ 
+     CRC
+ 
+     RC : 8 bytes of junk (R14 only). Note that the junk is counted in the size of this
+     section at the start.
++```
++
++Handles:
++
++```
++0: handseed
++1: block control objhandle
++2: layer control objhandle
++3: style control objhandle
++4: ltype control objhandle
++5: view control objhandle
++6: ucs control objhandle
++7: vport control objhandle
++8: appid control objhandle
++9: dimstyle control objhandle
++10: vx control objhandle
++11: dictionary objhandle
++12: mlstyle objhandle
++13: group dictionary objhandle
++```
+ 
+ Ending sentinel
+ 
+     {0x2B,0x84,0xDE,0x31,0xD7,0x6C,0x60,0x40,0xAC,0xDB,0xBF,0xF6,0xED,0xC3,0x55,0xFE}
+ 
+ # 27 Data section: AcDb:AuxHeader (Auxiliary file header)
+ 
+-The auxiliary file header contains mostly redundant information and was introduced in R15.
++The auxiliary file header contains mostly redundant information and was introduced in R2000.
+ 
+     RC : 0xff 0x77 0x01
+     RS : DWG version:
+          AC1010 = 17,
+          AC1011 = 18,
+@@ -9796,11 +9974,11 @@
       RL : 0
       RL : 0
       RL : 0

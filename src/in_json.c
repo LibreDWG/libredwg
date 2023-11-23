@@ -4323,14 +4323,13 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // clang-format off
       if (0) ;
       FIELD_RL (class_version, 0)
-      FIELD_TU16 (appinfo_name, 0)
-      FIELD_RL (num_strings, 0)
+      FIELD_T16 (appinfo_name, 0)
       FIELD_TFFx (version_checksum, 16, 0)
-      FIELD_TU16 (version, 0)
+      FIELD_T16 (version, 0)
       FIELD_TFFx (comment_checksum, 16, 0)
-      FIELD_TU16 (comment, 0)
+      FIELD_T16 (comment, 0)
       FIELD_TFFx (product_checksum, 16, 0)
-      FIELD_TU16 (product_info, 0)
+      FIELD_T16 (product_info, 0)
       else
         {
           LOG_ERROR ("Unknown %s.%s ignored", section, key);
@@ -4339,7 +4338,9 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // clang-format on
     }
 
-  LOG_TRACE ("End of %s\n", section)
+  _obj->num_strings = 3;
+  LOG_TRACE ("num_strings => 3\n");
+  LOG_TRACE ("End of %s\n", section);
   tokens->index--;
   return 0;
 }
