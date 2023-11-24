@@ -6440,7 +6440,7 @@ extern "C"
   EXPORT Dwg_Entity_ENDBLK *
   dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
   EXPORT Dwg_Entity_SEQEND *
-  dwg_add_SEQEND (dwg_ent_generic *restrict blkhdr) __nonnull_all;
+  dwg_add_SEQEND (dwg_ent_generic *restrict owner) __nonnull_all;
 
   /* Experimental. Does not work yet properly */
   EXPORT Dwg_Entity_INSERT *

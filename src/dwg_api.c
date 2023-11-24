@@ -23349,8 +23349,9 @@ dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
 
 // owned by POLYLINE or INSERT
 EXPORT Dwg_Entity_SEQEND *
-dwg_add_SEQEND (dwg_ent_generic *restrict blkhdr)
+dwg_add_SEQEND (dwg_ent_generic *restrict owner)
 {
+  dwg_ent_generic *restrict blkhdr = owner;
   API_ADD_ENTITY (SEQEND);
   if (dwg->header.version <= R_12)
     obj->type = DWG_TYPE_SEQEND_r11;
