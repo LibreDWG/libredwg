@@ -3573,7 +3573,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * ObjFreeSpace and Second header - R13c3-R2000 only.
    * Note: partially also since r2004.
    */
-  if (dwg->header.version >= R_13c3 && dwg->header.version < R_2004)
+  if (dwg->header.version >= R_13 && dwg->header.version < R_2004
+      && dwg->header.num_sections >= 3)
     {
       struct _dwg_secondheader *_obj = &dwg->secondheader;
       Dwg_Object *obj = NULL;
@@ -3587,7 +3588,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_OBJFREESPACE_R13].size = 53;
       error |= encode_objfreespace_private (dat, dwg);
       LOG_INFO ("=======> ObjFreeSpace 3 (end): %4u\n", (unsigned)dat->byte);
-      
+
       LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
       pvzadr = dat->byte; // Keep the address to write its size later. before size.

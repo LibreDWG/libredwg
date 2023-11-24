@@ -1,5 +1,5 @@
---- ODA-5.4.1.md	2023-11-23 10:22:35.200639495 +0100
-+++ ODA-5.4.2-libredwg.md	2023-11-23 14:08:09.410946072 +0100
+--- ODA-5.4.1.md	2023-11-23 15:08:34.777933962 +0100
++++ ODA-5.4.2-libredwg.md	2023-11-24 13:44:56.924424775 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -1716,27 +1716,27 @@
  
 -The meaning of this section is not completely known. The ODA knows how to write a valid section, but
 -the meaning is not known of every field.
-+From R13c3 to R2000 this section is the third section, which is immediately followed by the SECOND FILE HEADER (R13-R2000). See chapter 26.
++From R13 to R2000 this section is the third section, which is immediately followed by the SECOND FILE HEADER (R13-R2000). See chapter 26.
  
 -## 21.1 Until R18
 +## 21.1 Until R2007
  
- | Type   | Length | Description |
--|--------|--------|-------------|
-+|----------------|--------|-------------|
- | Int32  | 4      | 0
- | UInt32 | 4      | Approximate number of objects in the drawing (number of handles).
+ | Type           | Length | Description |
+ |----------------|--------|-------------|
+ | Int32  | 4     | 0
+ | UInt32 | 4     | Approximate number of objects in the drawing (number of handles).
  | Julian datetime| 8 | If version > R14 then system variable TDUPDATE otherwise TDUUPDATE.
- | UInt32 | 4      | Offset of the objects section in the stream.
--| UInt8  | 1      | Number of 64-bit values that follow (ODA writes 4).
--| UInt32 | 4      | ODA writes 0x00000032.
--| UInt32 | 4      | ODA writes 0x00000000.
--| UInt32 | 4      | ODA writes 0x00000064.
--| UInt32 | 4      | ODA writes 0x00000000.
--| UInt32 | 4      | ODA writes 0x00000200.
--| UInt32 | 4      | ODA writes 0x00000000.
--| UInt32 | 4      | ODA writes 0xffffffff.
--| UInt32 | 4      | ODA writes 0x00000000.
+-| UInt32 | 4     | Offset of the objects section in the stream.
+-| UInt8  | 1     | Number of 64-bit values that follow (ODA writes 4).
+-| UInt32 | 4     | ODA writes 0x00000032.
+-| UInt32 | 4     | ODA writes 0x00000000.
+-| UInt32 | 4     | ODA writes 0x00000064.
+-| UInt32 | 4     | ODA writes 0x00000000.
+-| UInt32 | 4     | ODA writes 0x00000200.
+-| UInt32 | 4     | ODA writes 0x00000000.
+-| UInt32 | 4     | ODA writes 0xffffffff.
+-| UInt32 | 4     | ODA writes 0x00000000.
++| UInt32         | 4      | Offset of the objects section in the stream. 0 since R2000
 +| UInt8          | 1      | Number of 64-bit values that follow (Always 4).
 +| UInt64         | 8      | max32, 0x00000032.                                               |
 +| UInt64         | 8      | max64, 0x00000064.                                               |
@@ -1763,7 +1763,7 @@
  # 22 Data section: AcDb:Template
  
 -This section is optional in releases 13-15. The section is mandatory in the releases 18 and newer. The template section only contains the MEASUREMENT system variable.
-+This section is optional in releases r13-r2000. The section is mandatory in the releases 18 and newer. The template section only contains the MEASUREMENT system variable.
++This section is optional in releases r13-r2000. The section is mandatory in the releases R2004 and newer. The template section only contains the MEASUREMENT system variable.
  
  | Type   | Length | Description                                                        |
  |--------|--------|------------------------------------------------------------------- |
