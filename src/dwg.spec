@@ -3237,10 +3237,7 @@ DWG_OBJECT (DICTIONARYWDFLT)
 
   START_OBJECT_HANDLE_STREAM;
 #if !defined(IS_DXF) && !defined (IS_JSON)
-  IF_FREE_OR_SINCE (R_2000)
-    {
-      HANDLE_VECTOR_N (itemhandles, FIELD_VALUE (numitems), 2, 350);
-    }
+  HANDLE_VECTOR_N (itemhandles, FIELD_VALUE (numitems), 2, 0);
 #endif
   SUBCLASS (AcDbDictionaryWithDefault)
   FIELD_HANDLE (defaultid, 5, 340);
