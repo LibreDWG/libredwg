@@ -3383,7 +3383,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  i, omap[i].handle, omap[i].index);
     }
 
-  UNTIL (R_2007)
+  UNTIL (R_2000)
   {
     dwg->objfreespace.objects_address = dat->byte & UINT32_MAX;
   }
