@@ -3383,6 +3383,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  i, omap[i].handle, omap[i].index);
     }
 
+  UNTIL (R_2007)
+  {
+    dwg->objfreespace.objects_address = dat->byte & UINT32_MAX;
+  }
   /* Write the sorted objects
    */
   for (i = 0; i < dwg->num_objects; i++)

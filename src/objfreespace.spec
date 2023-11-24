@@ -18,6 +18,17 @@
 
   #include "spec.h"
 
+  ENCODER {
+      if (!FIELD_VALUE (numnums)) {
+        FIELD_VALUE (numhandles) = dwg->num_objects;
+        FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE;
+        FIELD_VALUE (numnums) = 4;
+        FIELD_VALUE (max32) = 0x32;
+        FIELD_VALUE (max64) = 0x64;
+        FIELD_VALUE (maxtbl) = 0x200;
+        FIELD_VALUE (maxrl) = 0xffffffff;
+      }
+  }
   UNTIL (R_2007)
   {
     FIELD_CAST (zero, RL, RLL, 0);
