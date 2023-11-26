@@ -135,6 +135,7 @@ fi
 %{_bindir}/dwgread
 %{_bindir}/dwgrewrite
 %{_bindir}/dwgwrite
+%{_bindir}/dxfread
 %{_bindir}/dxf2dwg
 %{_bindir}/dxfwrite
 %{_libdir}/libredwg.so.0
@@ -151,6 +152,7 @@ fi
 %{_mandir}/man1/dwgread.1.gz
 %{_mandir}/man1/dwgrewrite.1.gz
 %{_mandir}/man1/dwgwrite.1.gz
+%{_mandir}/man1/dxfread.1.gz
 %{_mandir}/man1/dxf2dwg.1.gz
 %{_mandir}/man1/dxfwrite.1.gz
 %{_mandir}/man5/dwg*
