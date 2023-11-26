@@ -4432,7 +4432,6 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      o->geomesh_pts[i].source_pt.x, pair->value.d, 13);
           break;
         case 14:
-          i++;
           CHK_geomesh_pts;
           o->geomesh_pts[i].dest_pt.x = pair->value.d;
           break;
