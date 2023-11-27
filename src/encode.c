@@ -259,7 +259,6 @@ static bool env_var_checked_p;
 // zero-terminated fixed buffer, which might be shorter
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
-    LOG_TRACE (#nam ": %s [TFv %d %d]\n", _obj->nam, (int)len, dxf);          \
     if (len > 0 && len < MAX_SIZE_TF)                                         \
       {                                                                       \
         if (!_obj->nam)                                                       \
@@ -274,7 +273,9 @@ static bool env_var_checked_p;
             bit_write_TFv (dat, (BITCODE_TF)_obj->nam, len);                  \
           }                                                                   \
       }                                                                       \
-    LOG_TRACE_TFv (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE (#nam ": \"%s\" [TFv %d %d]", _obj->nam, (int)len, dxf);        \
+    LOG_POS                                                                   \
+    /*LOG_TRACE_TFv (FIELD_VALUE (nam), (int)len);*/                          \
   }
 #define FIELD_BINARY(nam, len, dxf)                                           \
   {                                                                           \
@@ -433,9 +434,9 @@ static bool env_var_checked_p;
 #define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
     bit_write_CMC (dat, str_dat, &_obj->color);                               \
-    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf);    \
-    LOG_INSANE (" @%" PRIuSIZE ".%u\n",                                       \
-                obj ? dat->byte - obj->address : dat->byte, dat->bit)         \
+    LOG_TRACE (#color ".index: %d [CMC.%s %d]", _obj->color.index,            \
+               dat->version < R_13b1 ? "RS" : "BS", dxf);                     \
+    LOG_POS                                                                   \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%08x [CMC.BL %d]\n",                       \
@@ -787,11 +788,16 @@ static bool env_var_checked_p;
 // for obj->handle 0.x.x only, DXF 5
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
+    PRE (R_13b1)                                                              \
+    {                                                                         \
+      bit_write_H (dat, &hdl);                                                \
+    }                                                                         \
+    else                                                                      \
+    {                                                                         \
+      bit_write_H (hdl_dat, &hdl);                                            \
+    }                                                                         \
     LOG_TRACE ("handle: " FORMAT_H " [H %d]", ARGS_H (hdl), dxf);             \
     LOG_RPOS                                                                  \
-    PRE (R_13b1)                                                              \
-    bit_write_H (dat, &hdl);                                                  \
-    else bit_write_H (hdl_dat, &hdl);                                         \
   }
 
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \

@@ -777,7 +777,8 @@
 #define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
     error |= bit_read_CMC (dat, str_dat, &_obj->color);                       \
-    LOG_TRACE (#color ".index: %d [CMC.BS %d]", _obj->color.index, dxf);      \
+    LOG_TRACE (#color ".index: %d [CMC.%s %d]", _obj->color.index,            \
+               dat->from_version < R_13b1 ? "RS" : "BS", dxf);                \
     LOG_RPOS                                                                  \
     if (dat->from_version >= R_2004)                                          \
       {                                                                       \

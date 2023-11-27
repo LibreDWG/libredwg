@@ -734,9 +734,10 @@
         {                                                                     \
           FIELD_CAST (flag, RC, RC, 70);                                      \
         }                                                                     \
-      DECODER_OR_ENCODER{ LOG_FLAG_##acdbname } FIELD_TFv (name, 32, 2);      \
+      DECODER_OR_ENCODER { LOG_FLAG_##acdbname }                              \
+      FIELD_TFv (name, 32, 2);                                                \
       VERSION (R_11)                                                          \
-      FIELD_RSd (used, 0);                                                    \
+        FIELD_RSd (used, 0);                                                  \
     }                                                                         \
     LATER_VERSIONS                                                            \
     {                                                                         \
