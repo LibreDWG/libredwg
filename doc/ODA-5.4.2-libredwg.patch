@@ -1,5 +1,5 @@
 --- ODA-5.4.1.md	2023-11-23 15:08:34.777933962 +0100
-+++ ODA-5.4.2-libredwg.md	2023-11-24 13:44:56.924424775 +0100
++++ ODA-5.4.2-libredwg.md	2023-11-27 14:05:51.275105963 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -610,7 +610,7 @@
  SPATIAL_INDEX
  TABLEGEOMETRY
  TABLESTYLES
-@@ -3194,10 +3255,54 @@
+@@ -3194,15 +3255,46 @@
  VISUALSTYLE
  WIPEOUTVARIABLE
  XRECORD
@@ -619,15 +619,6 @@
 +Todo:
 +
 +```
-+ACSH_BOOLEAN_CLASS
-+ACSH_BOX_CLASS
-+ACSH_CONE_CLASS
-+ACSH_CYLINDER_CLASS
-+ACSH_FILLET_CLASS
-+ACSH_HISTORY_CLASS
-+ACSH_SPHERE_CLASS
-+ACSH_TORUS_CLASS
-+ACSH_WEDGE_CLASS
 +ASSOCNETWORK
 +ASSOCGEOMDEPENDENCY
 +BLOCKGRIPLOCATIONCOMPONENT
@@ -645,10 +636,6 @@
 +BLOCKSCALEACTION
 +BLOCKVISIBILITYGRIP
 +DYNAMICBLOCKPURGEPREVENTER
-+FIELDLIST
-+GEODATA
-+INDEX
-+LAYERFILTER
 +MESH
 +RENDERENVIRONMENT
 +SECTION_MANAGER
@@ -664,8 +651,14 @@
  
  See the sections on EED a description of that areas.
  
- ### 20.4 OBJECT PRESCRIPTIONS
-@@ -3211,11 +3316,14 @@
+-### 20.4 OBJECT PRESCRIPTIONS
++## 20.4 OBJECT PRESCRIPTIONS
+ 
+ The object prescriptions are given in the following form:
+ 
+     ITEM TYPE-CODE DXF-CODE DESCRIPTION
+ 
+@@ -3211,11 +3303,14 @@
  ### 20.4.1 Common Entity Data
  
  The following data appears at the beginning of each entity in the file, and will be referred to as Common Entity Data in the subsequent entity descriptions.
@@ -681,7 +674,7 @@
                                        end handles
      Common:
          Handle               H    5   code 0, length followed by the handle bytes.
-@@ -3841,11 +3949,11 @@
+@@ -3841,11 +3936,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -694,7 +687,7 @@
  | C++ class name      | AcDbArcDimension |
  | DXF name            | ARC_DIMENSION |
  
-@@ -4235,11 +4343,11 @@
+@@ -4235,11 +4330,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -707,7 +700,7 @@
  | C++ class name      | AcDbRadialDimensionLarge |
  | DXF name            | LARGE\_RADIAL\_DIMENSION |
  
-@@ -5076,21 +5184,24 @@
+@@ -5076,21 +5171,24 @@
  ### 20.4.44 DICTIONARY (42)
  
  Basically a list of pairs of string/objhandle that constitute the dictionary entries.
@@ -735,7 +728,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5170,46 +5281,46 @@
+@@ -5170,46 +5268,46 @@
  R2000+:
      Linespacing Style    BS  73
      Linespacing Factor   BD  44
@@ -794,7 +787,7 @@
  IF (has column heights)
  END IF (has columns data)
  END IF (not annotative)
-@@ -5238,25 +5349,25 @@
+@@ -5238,25 +5336,25 @@
  ### 20.4.47 LEADER (45)
  
  ```
@@ -823,7 +816,7 @@
                                   from the endpoint of the leader to the annotation,
                                   taking into account the extrusion direction.
  R13-R14 Only:
-@@ -5269,27 +5380,28 @@
+@@ -5269,27 +5367,28 @@
                                   taller, probably by some DIMvar amount.)
      Box width            BD  41  MTEXT extents width. (A text box is slightly wider,
                                   probably by some DIMvar amount.)
@@ -855,7 +848,7 @@
  ```
  
  **_20.4.47.1 Example:_**
-@@ -5538,20 +5650,23 @@
+@@ -5538,20 +5637,23 @@
  
  ### 20.4.51 BLOCK CONTROL (48)
  
@@ -881,7 +874,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5578,20 +5693,23 @@
+@@ -5578,20 +5680,23 @@
  
  ### 20.4.52 BLOCK HEADER (49)
  
@@ -907,7 +900,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5663,20 +5781,23 @@
+@@ -5663,20 +5768,23 @@
  
  ### 20.4.53 LAYER CONTROL (50) (UNDOCUMENTED)
  
@@ -933,7 +926,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5699,11 +5820,14 @@
+@@ -5699,11 +5807,14 @@
  
  ### 20.4.54 LAYER (51)
  
@@ -949,7 +942,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5766,20 +5890,23 @@
+@@ -5766,20 +5877,23 @@
  
  ### 20.4.55 SHAPEFILE CONTROL (52) (UNDOCUMENTED)
  
@@ -975,7 +968,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5816,11 +5943,14 @@
+@@ -5816,11 +5930,14 @@
  |                         | Character set (bitmask) = 0x0000ff00
  | 1002 (Bracket)          | ‘}’ (optional) |
  
@@ -991,7 +984,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5871,20 +6001,23 @@
+@@ -5871,20 +5988,23 @@
  
  ### 20.4.57 LINETYPE CONTROL (56) (UNDOCUMENTED)
  
@@ -1017,7 +1010,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5911,11 +6044,14 @@
+@@ -5911,11 +6031,14 @@
  
  ### 20.4.58 LTYPE (57)
  
@@ -1033,7 +1026,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5982,20 +6118,23 @@
+@@ -5982,20 +6105,23 @@
  
  ### 20.4.59 VIEW CONTROL (60) (UNDOCUMENTED)
  
@@ -1059,7 +1052,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6018,11 +6157,14 @@
+@@ -6018,11 +6144,14 @@
  
  ### 20.4.60 VIEW (61)
  
@@ -1075,7 +1068,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6116,20 +6258,23 @@
+@@ -6116,20 +6245,23 @@
  
  ### 20.4.61 UCS CONTROL (62) (UNDOCUMENTED)
  
@@ -1101,7 +1094,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6152,11 +6297,14 @@
+@@ -6152,11 +6284,14 @@
  
  ### 20.4.62 UCS (63)
  
@@ -1117,7 +1110,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6214,11 +6362,14 @@
+@@ -6214,11 +6349,14 @@
  
  ### 20.4.63 TABLE (VPORT) (64) (UNDOCUMENTED)
  
@@ -1133,7 +1126,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6252,11 +6403,14 @@
+@@ -6252,11 +6390,14 @@
  
  ### 20.4.64 VPORT (65)
  
@@ -1149,7 +1142,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6380,11 +6534,14 @@
+@@ -6380,11 +6521,14 @@
  
  ### 20.4.65 TABLE (APPID) (66) (UNDOCUMENTED)
  
@@ -1165,7 +1158,7 @@
  Common:
      Handle                H   5  Owner handle (soft pointer) of root object (0).
      EED                   X  -3  See EED section.
-@@ -6416,11 +6573,14 @@
+@@ -6416,11 +6560,14 @@
  
  ### 20.4.66 APPID (67)
  
@@ -1181,7 +1174,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6463,11 +6623,14 @@
+@@ -6463,11 +6610,14 @@
  
  ### 20.4.67 DIMSTYLE CONTROL (68) (UNDOCUMENTED)
  
@@ -1197,7 +1190,7 @@
  Common:
      Handle                H   5  Owner handle (soft pointer) of root object (0).
      EED                   X  -3  See EED section.
-@@ -6498,11 +6661,11 @@
+@@ -6498,11 +6648,11 @@
  ```
  
  ### 20.4.68 DIMSTYLE (69)
@@ -1210,7 +1203,7 @@
      Obj size             RL      size of object in bits, not including end handles
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
-@@ -6699,21 +6862,24 @@
+@@ -6699,21 +6849,24 @@
  ```
  
  ### 20.4.69 VIEWPORT ENTITY CONTROL (70) (UNDOCUMENTED)
@@ -1238,7 +1231,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6736,12 +6902,15 @@
+@@ -6736,12 +6889,15 @@
  ```
  
  ### 20.4.70 VIEWPORT ENTITY HEADER (71)
@@ -1256,7 +1249,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6796,12 +6965,15 @@
+@@ -6796,12 +6952,15 @@
  |         |  H    |  340  | Handle to scale (AcDbScale) object (hard pointer). See paragraph 20.4.92. |
  
  ### 20.4.72 GROUP (72): Group of ACAD entities
@@ -1274,7 +1267,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6838,12 +7010,15 @@
+@@ -6838,12 +6997,15 @@
  ```
  
  ### 20.4.73 MLINESTYLE (73):
@@ -1292,7 +1285,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6912,12 +7087,15 @@
+@@ -6912,12 +7074,15 @@
  NOTE: OBJECTS LISTED AFTER THIS POINT DO NOT HAVE FIXED TYPES. THEIR TYPES ARE DETERMINED BY FINDING THE CLASS ENTRY WHOSE POSITION IN THE CLASS LIST + 500 EQUALS THE TYPE OF THIS OBJECT
  
  ### 20.4.74 DICTIONARYVAR (varies)
@@ -1310,7 +1303,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7015,11 +7193,11 @@
+@@ -7015,11 +7180,11 @@
              pt0         2RD  10  control point
              if (isrational)
                weight     BD  40  weight
@@ -1323,7 +1316,7 @@
              Fitpoint    2RD  11
            End repeat
            Start tangent 2RD  12
-@@ -7125,11 +7303,11 @@
+@@ -7125,11 +7290,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1336,7 +1329,7 @@
  | C++ class name      | AcDbField         |
  | DXF name            | FIELD             |
  
-@@ -7178,11 +7356,11 @@
+@@ -7178,11 +7343,11 @@
  |        |     |     | Other error = 64
  |        | BL  |  96 | Evaluation error code
  |        | TV  | 300 | Evaluation error message
@@ -1349,7 +1342,7 @@
  |        | TV  |   6 | Child field key
  |        | ... | ... | The field value, see paragraph 20.4.99.
  |        |     |     | End repeat child fields
-@@ -7192,11 +7370,11 @@
+@@ -7192,11 +7357,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1362,7 +1355,7 @@
  | C++ class name      | AcDbFieldList, inherits AcDbIdSet |
  | DXF name            | FIELDLIST         |
  
-@@ -7216,11 +7394,11 @@
+@@ -7216,11 +7381,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1375,7 +1368,20 @@
  | C++ class name      | AcDbGeoData       |
  | DXF name            | GEODATA           |
  
-@@ -7284,11 +7462,11 @@
+@@ -7246,11 +7411,11 @@
+ |        |     |     | Light years = 19, Parsecs = 20
+ |        | BD  |     | Unit scale factor vertical
+ |        | BL  |     | Units value vertical (same enumeration as for the units value
+ |        |     |     | horizontal)
+ |        | 3BD |     | Up direction
+-|        | 3RD |     | North direction
++|        | 2RD |     | North direction
+ |        | BL  |     | Scale estimation method: None = 1, User specified scale factor = 2,
+ |        |     |     | Grid scale at reference point = 3, Prismodial = 4
+ |        | BD  |     | User specified scale factor
+ |        | B   |     | Do sea level correction
+ |        | BD  |     | Sea level elevation
+@@ -7284,11 +7449,11 @@
  |        |     |     | Repeat for each geo mesh face
  |        | BL  |     | Face index 1
  |        | BL  |     | Face index 2
@@ -1388,7 +1394,7 @@
  |        | B   |     | False
  |        | RD  |     | Reference point Y
  |        | RD  |     | Reference point X
-@@ -7311,12 +7489,15 @@
+@@ -7311,12 +7476,15 @@
  ### 20.4.79 IDBUFFER (varies)
  
  (holds list of references to an xref)
@@ -1406,7 +1412,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7431,12 +7612,15 @@
+@@ -7431,12 +7599,15 @@
  
  ### 20.4.81 IMAGEDEF (varies)
  
@@ -1424,7 +1430,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7481,12 +7665,15 @@
+@@ -7481,12 +7652,15 @@
  
  ### 20.4.82 IMAGEDEFREACTOR (varies)
  
@@ -1442,7 +1448,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7517,12 +7704,15 @@
+@@ -7517,12 +7691,15 @@
  ```
  
  ### 20.4.83 LAYER_INDEX
@@ -1460,7 +1466,22 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7572,11 +7762,14 @@
+@@ -7533,12 +7710,12 @@
+ R2004+:
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+                                  R2000 and earlier.
+ Common:
+-    timestamp1           BL  40
+-    timestamp2           BL  40
++    timestamp1           BL  40  last_updated days
++    timestamp2           BL  40  last_updated msec
+     numentries           BL      the number of entries
+ Repeat numentries times:
+     Indexlong            BL      a long
+     Indexstr             TV   8  a layer name
+ End repeat
+@@ -7572,11 +7749,14 @@
  
  ### 20.4.84 LAYOUT (varies)
  
@@ -1476,7 +1497,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7955,12 +8148,15 @@
+@@ -7955,12 +8135,15 @@
  |       | B     | 290 | Default flag (default value is false).
  
  ### 20.4.90 PROXY (varies):
@@ -1494,7 +1515,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7995,12 +8191,15 @@
+@@ -7995,12 +8178,15 @@
  
  ### 20.4.91 RASTERVARIABLES (varies)
  
@@ -1512,7 +1533,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8047,12 +8246,15 @@
+@@ -8047,12 +8233,15 @@
  |       | B     | 290 | Has unit scale          |
  
  ### 20.4.93 SORTENTSTABLE (varies)
@@ -1530,7 +1551,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8105,12 +8307,15 @@
+@@ -8105,12 +8294,15 @@
  
  ### 20.4.94 SPATIAL_FILTER (varies)
  
@@ -1548,7 +1569,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8169,12 +8374,15 @@
+@@ -8169,12 +8361,15 @@
  ```
  
  ### 20.4.95 SPATIAL_INDEX (varies):
@@ -1566,7 +1587,22 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8333,18 +8541,18 @@
+@@ -8186,12 +8381,12 @@
+     XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
+                                  object, otherwise XDictionary handle is stored as in
+                                  R2000 and earlier.
+ 
+ Common:
+-    timestamp1           BL
+-    timestamp2           BL
++    timestamp1           BL  40  last_updated days
++    timestamp2           BL  40  last_updated msec
+     unknown               X      rest of bits to handles
+     Handle refs           H      parenthandle (hard owner)
+                                  [Reactors (soft pointer)]
+                                  xdictionary (hard owner)
+ ```
+@@ -8333,18 +8528,18 @@
  0D688 54 B0                   crc
  ```
  
@@ -1588,7 +1624,7 @@
      Common Entity Data
      Ins pt              3BD  10
  R13-R14 Only:
-@@ -8618,13 +8826,13 @@
+@@ -8618,13 +8813,13 @@
                                   0x80000 is set in table overrides flag
  
      CRC                   X ---
@@ -1604,7 +1640,7 @@
  |-------|-------|----:|--------------------------------------|
  |       | ...   |     | Common entity data  |
  | R2010+|  RC   |     | Unknown (default 0) |
-@@ -8667,11 +8875,11 @@
+@@ -8667,11 +8862,11 @@
  |       |  BL   |     | End row index |
  |       |       |     | End repeat row ranges
  
@@ -1617,7 +1653,7 @@
  
  |Version|Field type|DXF group| Description                   |
  |-------|-------|----:|--------------------------------------|
-@@ -8763,11 +8971,11 @@
+@@ -8763,11 +8958,11 @@
  |       |       |     | Begin repeat field references |
  |       | H     |     | Handle to field (AcDbField), hard owner. |
  |       |       |     | End repeat field references |
@@ -1630,7 +1666,7 @@
  |       | BL    | 91  | Top row index |
  |       | BL    | 92  | Left column index |
  |       | BL    | 93  | Bottom row index |
-@@ -8832,11 +9040,11 @@
+@@ -8832,11 +9027,11 @@
  |       | ...   |     | Item value (variant), see paragraph 20.4.98.|
  |       |       |     | End repeat custom data items   |
  
@@ -1643,7 +1679,7 @@
  
  ```
      Common OBJECT data, see paragraph 20.1.
-@@ -8869,30 +9077,30 @@
+@@ -8869,30 +9064,30 @@
      Data unit type       BL  91  As defined in the ACAD\_TABLE entity.
      Format string        TV   1
  End repeat row styles
@@ -1677,7 +1713,7 @@
  |       | BL    |  -  | Cell style class, 1= data, 2 = label. The default value is label. |
  |       | TV    |  -  | Cell style name                |
  |       |       |     | End repeat cell styles         |
-@@ -9016,11 +9224,11 @@
+@@ -9016,11 +9211,11 @@
  |-------|-------|----:|--------------------------------|
  |       |  ...  |     | Common AcDbObject fields, see paragraph 20.1. |
  |       |  BL   |  90 | Number of cell styles          |
@@ -1690,10 +1726,14 @@
  |       |  BL   |  91 | Cell style class, 1= data, 2 = label. The default value is label. |
  |       |  TV   | 300 | Cell style name                |
  |       |       |     | End repeat cell styles         |
-@@ -9055,12 +9263,15 @@
+@@ -9052,15 +9247,18 @@
+ |       |  BD   |  95 | Unknown (0).                   |
+ |       |       |     | End repeat contents            |
+ |       |       |     | End repeat columns             |
  |       |       |     | End repeat rows                |
  
- ### 20.4.104 XRECORD (varies):
+-### 20.4.104 XRECORD (varies):
++### 20.4.104 XRECORD (varies)
  
  ```
 -    Length               MS  --  Entity length (not counting itself or CRC).
@@ -1708,10 +1748,633 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -9120,34 +9331,46 @@
+@@ -9118,36 +9316,669 @@
+ 00B1B 40 3E 00 01 00 46 00 B4 @>...F.. 0100 0000 0011 1110 0000 0000 0000 0001 0000 0000 0100 0110 0000 0000 1011 0100
+ 00B23 00 40 41 0C 30          .@A.0    0000 0000 0100 0000 0100 0001 0000 1100 0011 0000
  00B28 45 76                   crc
  ```
  
++### 20.4.105 AcDbEvalExpr subclass
++
++```
++  parentid               BL   0
++  major version          BL  98  default: 33
++  minor version          BL  99  default: 29
++  value_code             BS  70  dxf code of the next value
++  If value_code == 40
++  num40                  BD  40
++  Else If value_code == 10
++  pt2d                  2RD  10
++  Else If value_code == 11
++  pt3d                  3RD  11
++  Else If value_code == 1
++  text1                   T   1
++  Else If value_code == 90
++  long90                 BL  90
++  Else If value_code == 91
++  handle91                H  91  (code 5)
++  Else If value_code == 70
++  short70                BL  70
++  End If value_code
++  nodeid                 BL   -
++```
++
++### 20.4.106 AcDbShHistoryNode subclass
++
++```
++  major version          BL  90  Seen 27-33
++  minor version          BL  91  Seen 29-106
++  trans               16xBD  40  transformation matrix
++  color                 CMC  62
++  step_id                BL  92
++  material                H 347
++```
++
++### 20.4.107 ACSH\_BOX\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShBox         |
++| DXF name            | ACSH\_BOX\_CLASS  |
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    length               BD  40
++    width                BD  41
++    height               BD  42
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.108 ACSH\_WEDGE\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShWedge       |
++| DXF name            | ACSH\_WEDGE\_CLASS|
++
++Same fields as ACSH\_BOX\_CLASS.
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    length               BD  40
++    width                BD  41
++    height               BD  42
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.109 ACSH\_SPHERE\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShSphere      |
++| DXF name            | ACSH\_SPHERE\_CLASS|
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    radius               BD  40
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.110 ACSH\_CYLINDER\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShCylinder    |
++| DXF name            | ACSH\_CYLINDER\_CLASS|
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    height               BD  40
++    major_radius         BD  41
++    minor_radius         BD  42
++    x_radius             BD  43
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.111 ACSH\_CONE\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShCone    |
++| DXF name            | ACSH\_CONE\_CLASS|
++
++Same fields as ACSH\_CYLINDER\_CLASS.
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    height               BD  40
++    major_radius         BD  41
++    minor_radius         BD  42
++    x_radius             BD  43
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.112 ACSH\_PYRAMID\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShPyramid     |
++| DXF name            | ACSH\_PYRAMID\_CLASS|
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    height               BD  40
++    sides                BL  92
++    radius               BD  41
++    topradius            BD  42
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.113 ACSH\_FILLET\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShFillet      |
++| DXF name            | ACSH\_FILLET\_CLASS|
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    num_edges            BL  93
++    Repeat num_edges
++    edges                BL  94
++    End Repeat num_edges
++    num_radiuses         BL  93
++    Repeat num_radiuses
++    radiuses             BD  41
++    End Repeat num_radiuses
++    num_startsetbacks    BL  96
++    num_endsetbacks      BL  97
++    Repeat num_endsetbacks
++    endsetbacks          BD  43
++    End Repeat num_endsetbacks
++    Repeat num_startsetbacks
++    startsetbacks        BD  42
++    End Repeat num_startsetbacks
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.114 ACSH\_CHAMFER\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShChamfer     |
++| DXF name            | ACSH\_CHAMFER\_CLASS|
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    unknown              BL  92
++    base_dist            BD  41
++    other_dist           BD  42
++    num_edges            BL  93
++    Repeat num_edges
++    edges                BL  94
++    End Repeat num_edges
++    unknown              BL  95
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.115 ACSH\_TORUS\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShTorus       |
++| DXF name            | ACSH\_TORUS\_CLASS|
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    major_radius         BD  41
++    minor_radius         BD  42
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.116 ACSH\_BREP\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShBrep        |
++| DXF name            | ACSH\_BREP\_CLASS |
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    3DSOLID                      See chapter 20.4.41
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.117 ACSH\_BOOLEAN\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShBoolean     |
++| DXF name            | ACSH\_BOOLEAN\_CLASS |
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    operation            RC  280
++    operand1             BL  92
++    operand2             BL  93
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
++### 20.4.118 ACSH\_HISTORY\_CLASS
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbShHistory     |
++| DXF name            | ACSH\_HISTORY\_CLASS |
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    AcDbEvalExpr         ...     See 20.4.105 AcDbEvalExpr subclass
++    AcDbShHistoryNode    ...     See 20.4.106 AcDbShHistoryNode subclass
++    major                BL  90
++    minor                BL  91
++    owner                 H 260  code 2
++    h_nodeid             BL  92
++    show_history          B 280
++    record_history        B 281
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
  # 21 Data section AcDb:ObjFreeSpace
  
 -The meaning of this section is not completely known. The ODA knows how to write a valid section, but
@@ -1769,7 +2432,7 @@
  |--------|--------|------------------------------------------------------------------- |
  | Int16  | 2      | Template description string length in bytes (the ODA always writes |
  |        |        | 0 here).                                                           |
-@@ -9155,11 +9378,11 @@
+@@ -9155,11 +9986,11 @@
  |        |        | codepage to encode the bytes).                                     |
  | UInt16 | 2      | MEASUREMENT system variable (0 = English, 1 = Metric).             |
  
@@ -1782,7 +2445,7 @@
  
  ```
  Set the "last handle" to all 0 and the "last loc" to 0L;
-@@ -9177,13 +9400,13 @@
+@@ -9177,13 +10008,13 @@
  End top repeat
  ```
  
@@ -1798,16 +2461,18 @@
  
  At this moment (December 2012), this sections contains information about Acis data (regions, solids).
  
-@@ -9630,119 +9853,74 @@
+@@ -9630,119 +10461,74 @@
  }
  handleToDataRecord {
  }
  ```
  
 -# 25 UNKNOWN SECTION
--
++# 26 SECOND FILE HEADER (R13-R2000)
+ 
 -This section is largely unknown. The total size of this section is 53. We simply patch in "known to be valid" data. We first write a 0L, then the number of entries in the objmap +3, as a long. Then 45 bytes of "known to be valid data". Then we poke in the start address for objects at offset 16.
--
++This is directly after the ObjFreeSpace section. See chapter 21.
+ 
 -The 45 bytes of known to be valid data are:
 -
 -    0xA7,0x62,0x25,0x00,0xF6,0xAF,0x25,0x02,
@@ -1816,11 +2481,9 @@
 -    0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,
 -    0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,
 -    0xFF,0x00,0x00,0x00,0x00
-+# 26 SECOND FILE HEADER (R13-R2000)
- 
+-
 -# 26 SECOND FILE HEADER (R13-R15)
-+This is directly after the ObjFreeSpace section. See chapter 21.
- 
+-
 -## 26.1 Beginning sentinel
 +Beginning sentinel
  
@@ -1964,7 +2627,7 @@
      RS : DWG version:
           AC1010 = 17,
           AC1011 = 18,
-@@ -9796,11 +9974,11 @@
+@@ -9796,11 +10582,11 @@
       RL : 0
       RL : 0
       RL : 0
