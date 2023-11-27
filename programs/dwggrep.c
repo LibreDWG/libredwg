@@ -17,6 +17,7 @@
  * written by Reini Urban
  */
 
+#define _GNU_SOURCE
 #include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>

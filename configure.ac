@@ -235,7 +235,8 @@ enable_Werror=no
 ax_enable_compile_warnings=yes
 dnl This is too intrusive for our DWG_TYPE_* switches
 ax_cv_check_cflags__Wswitch_enum=no
-if test x$enable_shared = xyes -a x$ac_compiler_gnu = xyes; then
+dnl wasm does not support -fstack-protector yet
+if test x$enable_shared = xyes -a x$ac_compiler_gnu = xyes -a x$CC != xemcc; then
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fno-semantic-interposition -fwrapv -fno-common -fvisibility=hidden \
      -fno-strict-aliasing -ftrivial-auto-var-init=zero \
