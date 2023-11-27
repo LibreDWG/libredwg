@@ -241,11 +241,10 @@ static char *_path_field (const char *path);
     VALUE_TEXT ((char *)str)                                                  \
   }
 
+// Converts to UTF-8
 #define VALUE_TEXT(str)                                                       \
   {                                                                           \
-    if (str                                                                   \
-      /* && (1 || strchr (str, '"') || strchr (str, '\\')                     \
-         || strchr (str, '\n')) */)                                           \
+    if (str)                                                                  \
       {                                                                       \
         const size_t len = strlen (str);                                      \
         if (len < 42)                                                         \
@@ -270,12 +269,10 @@ static char *_path_field (const char *path);
       }                                                                       \
   }
 
+// Converts to UTF-8
 #ifdef HAVE_NATIVE_WCHAR2
 #  define VALUE_TEXT_TU(wstr)                                                 \
-    if (wstr                                                                  \
-      /* && (1 || wcschr ((wchar_t *)wstr, L'"')                              \
-            || wcschr ((wchar_t *)wstr, L'\\')                                \
-            || wcschr ((wchar_t *)wstr, L'\n')) */)                           \
+  if (wstr)                                                                   \
       {                                                                       \
         wchar_t *_buf = malloc (6 * wcslen ((wchar_t *)wstr) + 2);            \
         fprintf (dat->fh, "\"%ls\"", wcquote (_buf, (wchar_t *)wstr));        \
@@ -544,16 +541,8 @@ static char *_path_field (const char *path);
 
 #define SUB_FIELD_T(o, nam, dxf)                                              \
   {                                                                           \
-    if (IS_FROM_TU (dat))                                                     \
-      {                                                                       \
-        KEY (nam);                                                            \
-        VALUE_TEXT_TU ((BITCODE_TU)_obj->o.nam);                              \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        PRINTFIRST;                                                           \
-        PREFIX fprintf (dat->fh, "\"" #nam "\": \"%s\"", _obj->o.nam);        \
-      }                                                                       \
+    KEY (nam);                                                                \
+    VALUE_T (_obj->o.nam);                                                    \
   }
 #define SUB_FIELD_B(o, nam, dxf) SUB_FIELD (o, nam, B, dxf)
 #define SUB_FIELD_BB(o, nam, dxf) SUB_FIELD (o, nam, BB, dxf)
@@ -1518,7 +1507,7 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
 
   if (!src)
     return (char *)"";
-  if (codepage > CP_US_ASCII && codepage <= CP_ANSI_1258)
+  if (strlen (src) && codepage > CP_US_ASCII && codepage <= CP_ANSI_1258)
     {
       // may malloc
       tmp = bit_TV_to_utf8 ((char *restrict)src, codepage);
