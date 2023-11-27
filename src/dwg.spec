@@ -6249,7 +6249,7 @@ DWG_OBJECT (GEODATA)
       FIELD_BL (units_value_vert, 92);  // vert_units
       FIELD_3BD (up_dir, 210);
       // TODO compute if upgrading
-      FIELD_2RD (north_dir, 12); // obsolete: 1,1,1
+      FIELD_2RD (north_dir, 12); // obsolete: 1,1
       // Civil3D fields:
       FIELD_BL (scale_est, 95); // None = 1 (default: ScaleEstMethodUnity),
                                 // User defined = 2, Grid scale at reference point = 3,

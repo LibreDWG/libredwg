@@ -48623,12 +48623,12 @@ static int test_GEODATA (const Dwg_Object *obj)
         fail ("GEODATA.host_block [H]");
   }
   {
-    BITCODE_3BD north_dir;
+    BITCODE_2RD north_dir;
     if (dwg_dynapi_entity_value (geodata, "GEODATA", "north_dir", &north_dir, NULL)
-        && !memcmp (&north_dir, &geodata->north_dir, sizeof (BITCODE_3BD)))
+        && !memcmp (&north_dir, &geodata->north_dir, sizeof (BITCODE_2RD)))
         pass ();
     else
-        fail ("GEODATA.north_dir [3BD]");
+        fail ("GEODATA.north_dir [2RD]");
   }
   {
     BITCODE_BD north_dir_angle_deg;

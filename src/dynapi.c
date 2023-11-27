@@ -8123,7 +8123,7 @@ static const Dwg_DYNAPI_field _dwg_GEODATA_fields[] = {
     0,0,0, 92 },
   { "up_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_GEODATA, up_dir),
     1,0,0, 210 },
-  { "north_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_GEODATA, north_dir),
+  { "north_dir",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_object_GEODATA, north_dir),
     1,0,0, 12 },
   { "scale_est",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_GEODATA, scale_est),
     0,0,0, 95 },

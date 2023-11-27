@@ -4243,7 +4243,7 @@ typedef struct _dwg_object_GEODATA
   BITCODE_BD unit_scale_vert;
   BITCODE_BL units_value_vert; // enum 0-20
   BITCODE_3BD up_dir;
-  BITCODE_3BD north_dir;
+  BITCODE_2RD north_dir;
   BITCODE_BL scale_est; /* None = 1, User specified scale factor = 2,
                            Grid scale at reference point = 3, Prismodial = 4 */
   BITCODE_BD user_scale_factor;

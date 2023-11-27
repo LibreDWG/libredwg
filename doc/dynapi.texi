@@ -9739,7 +9739,7 @@ BL,	DXF 92
 @item up_dir
 3BD,	DXF 210
 @item north_dir
-3BD,	DXF 12
+2RD,	DXF 12
 @item scale_est
 BL,	DXF 95
 @item user_scale_factor
