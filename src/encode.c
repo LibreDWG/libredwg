@@ -4708,7 +4708,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
             {
               Dwg_Object *next_endblk
                   = dwg_get_next_object (dwg, DWG_TYPE_ENDBLK, obj->index);
-              if (next_endblk && next_endblk->index > obj->index)
+              if (0 && next_endblk && next_endblk->index > obj->index)
                 index += (next_endblk->index - obj->index);
               else
                 in_blocks = true;

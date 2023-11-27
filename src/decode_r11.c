@@ -152,7 +152,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   LOG_TRACE ("%s_CONTROL.flags_r11: " FORMAT_RSx " [RS]", tbl->name, tbl->flags_r11);
   LOG_RPOS;
   tbl->address = bit_read_RL (dat);
-  LOG_TRACE ("%s_CONTROL.address: " FORMAT_RLx " [RL] (%lu)", tbl->name,
+  LOG_TRACE ("%s_CONTROL.address: " FORMAT_RLx " [RL] (%u)", tbl->name,
              (BITCODE_RL)tbl->address, (unsigned)tbl->address);
   LOG_RPOS;
   end_address = (unsigned long)(tbl->address + (tbl->number * tbl->size));
