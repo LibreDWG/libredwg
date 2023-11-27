@@ -2147,6 +2147,8 @@ encode_preR13_section_hdr (const char *restrict name,
   static BITCODE_BL addr = 0;
   Dwg_Section *tbl;
   int i;
+  unsigned long end_address;
+
   assert (id <= SECTION_VX);
   encode_check_num_sections (id, dwg);
   tbl = &dwg->header.section[id];
@@ -2203,19 +2205,26 @@ encode_preR13_section_hdr (const char *restrict name,
 #undef ENCODE_CTRL_TO_TABLE
         }
     }
-  LOG_TRACE ("\nptr table %s [%d]: to:0x%zx\n", tbl->name, id,
-             (size_t)(tbl->address + (tbl->number * tbl->size)));
+  LOG_TRACE ("ptr table %s [%d]", tbl->name, id);
+  LOG_RPOS;
+  LOG_TRACE ("----------------------\n");
   bit_write_RS (dat, tbl->size & 0xFFFF); // calculated
+  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]", tbl->name,
+             (BITCODE_RS)tbl->size);
+  LOG_RPOS;
   bit_write_RS (dat, (BITCODE_RS)tbl->number);
+  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]", tbl->name,
+             (BITCODE_RS)tbl->number);
+  LOG_RPOS;
   bit_write_RS (dat, tbl->flags_r11);
+  LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]", tbl->name, tbl->flags_r11);
+  LOG_RPOS;
   tbl->address = dat->byte;
   bit_write_RL (dat, 0xDEADBEAF); // patched later
-  LOG_TRACE ("%s.size: " FORMAT_RL " [RS]\n", tbl->name, tbl->size);
-  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name,
-             (BITCODE_RS)tbl->number);
-  LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
-  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL] (patch addr)\n", tbl->name,
-             (BITCODE_RL)tbl->address);
+  LOG_TRACE ("%s.address: 0xDEADBEAF [RL] (patch addr)", tbl->name);
+  LOG_RPOS;
+  end_address = (unsigned long)(tbl->address + (tbl->number * tbl->size));
+  LOG_TRACE ("ptr table end: 0x%lx (%lu)\n\n", end_address, end_address);
 }
 
 // only in R11
@@ -2821,7 +2830,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             if (!tbl || !tbl->address)
               continue;
             dat->byte = tbl->address;
-            LOG_TRACE ("%s.address => " FORMAT_RLx " [RLx] @%x\n", tbl->name, addr,
+            LOG_TRACE ("%s.address => " FORMAT_RLx " [RLx] @%u.0\n", tbl->name, addr,
                        (unsigned)tbl->address);
             bit_write_RL (dat, addr);
             tbl->address = addr;

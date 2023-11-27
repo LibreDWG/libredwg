@@ -126,6 +126,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
 {
   int error = 0;
   Dwg_Section *tbl = &dwg->header.section[id];
+  unsigned long end_address;
 
   if (dat->byte + 10 > dat->size)
     {
@@ -133,23 +134,29 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       return DWG_ERR_SECTIONNOTFOUND;
     }
   tbl->type = (Dwg_Section_Type)id;
-  tbl->size = (BITCODE_RL)bit_read_RS (dat);
-  // RC in r2000, RL in 2004
-  tbl->number = (BITCODE_RLd)((BITCODE_RSd)bit_read_RS (dat));
-  tbl->flags_r11 = bit_read_RS (dat);
-  tbl->address = bit_read_RL (dat);
   strncpy (tbl->name, name, sizeof (tbl->name) - 1);
   tbl->name[sizeof (tbl->name) - 1] = '\0';
-  LOG_TRACE ("\nptr table %s [%d]: (0x%lx-0x%lx)\n", tbl->name, id,
-             (unsigned long)tbl->address,
-             (unsigned long)(tbl->address + (tbl->number * tbl->size)));
-  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name,
+  LOG_TRACE ("ptr table %s_CONTROL [%d]", tbl->name, id);
+  LOG_RPOS;
+  LOG_TRACE ("----------------------\n");
+  tbl->size = (BITCODE_RL)bit_read_RS (dat);
+  LOG_TRACE ("%s_CONTROL.size: " FORMAT_RS " [RS]", tbl->name,
              (BITCODE_RS)tbl->size);
-  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name,
+  LOG_RPOS;
+  // RC in r2000, RL in 2004
+  tbl->number = (BITCODE_RLd)((BITCODE_RSd)bit_read_RS (dat));
+  LOG_TRACE ("%s_CONTROL.number: " FORMAT_RS " [RS]", tbl->name,
              (BITCODE_RS)tbl->number);
-  LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
-  LOG_TRACE ("%s.address: " FORMAT_RL " [RL]\n\n", tbl->name,
-             (BITCODE_RL)tbl->address);
+  LOG_RPOS;
+  tbl->flags_r11 = bit_read_RS (dat);
+  LOG_TRACE ("%s_CONTROL.flags_r11: " FORMAT_RSx " [RS]", tbl->name, tbl->flags_r11);
+  LOG_RPOS;
+  tbl->address = bit_read_RL (dat);
+  LOG_TRACE ("%s_CONTROL.address: " FORMAT_RLx " [RL] (%lu)", tbl->name,
+             (BITCODE_RL)tbl->address, (unsigned)tbl->address);
+  LOG_RPOS;
+  end_address = (unsigned long)(tbl->address + (tbl->number * tbl->size));
+  LOG_TRACE ("ptr table end: 0x%lx (%lu)\n\n", end_address, end_address);
 
   switch (id)
     {
