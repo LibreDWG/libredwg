@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   BITCODE_BD unit_scale_vert;
   BITCODE_BL units_value_vert;
   BITCODE_3BD up_dir;
-  BITCODE_3BD north_dir;
+  BITCODE_2RD north_dir;
   BITCODE_BL scale_est; /* None = 1, User specified scale factor = 2,
                            Grid scale at reference point = 3, Prismodial = 4 */
   BITCODE_BD user_scale_factor;
@@ -50,21 +50,22 @@ api_process (dwg_object *obj)
   dwg_obj_geodata *geodata = dwg_object_to_GEODATA (obj);
 
   CHK_ENTITY_TYPE (geodata, GEODATA, class_version, BL);
+  CHK_ENTITY_MAX (geodata, GEODATA, class_version, BL, 3);
   CHK_ENTITY_H (geodata, GEODATA, host_block);
   CHK_ENTITY_TYPE (geodata, GEODATA, coord_type, BS);
   /* 0 unknown, 1 local grid, 2 projected grid,
      3 geographic defined by latitude/longitude) */
+  CHK_ENTITY_MAX (geodata, GEODATA, coord_type, BS, 3);
   CHK_ENTITY_3RD (geodata, GEODATA, design_pt);
   CHK_ENTITY_3RD (geodata, GEODATA, ref_pt);
   CHK_ENTITY_3RD (geodata, GEODATA, obs_pt);
   CHK_ENTITY_TYPE (geodata, GEODATA, unit_scale_horiz, BD);
   CHK_ENTITY_3RD (geodata, GEODATA, up_dir);
-  CHK_ENTITY_3RD (geodata, GEODATA, north_dir);
+  CHK_ENTITY_2RD (geodata, GEODATA, north_dir);
   CHK_ENTITY_TYPE (geodata, GEODATA, scale_est, BL);
   /* None = 1, User specified scale factor = 2,
      Grid scale at reference point = 3, Prismodial = 4 */
-  if (geodata->scale_est > 4)
-    fail ("Invalid GEODATA.scale_est " FORMAT_BL " > 4", geodata->scale_est);
+  CHK_ENTITY_MAX (geodata, GEODATA, scale_est, BL, 4);
   CHK_ENTITY_TYPE (geodata, GEODATA, user_scale_factor, BD);
   CHK_ENTITY_TYPE (geodata, GEODATA, do_sea_level_corr, B);
   CHK_ENTITY_TYPE (geodata, GEODATA, sea_level_elev, BD);
@@ -80,9 +81,9 @@ api_process (dwg_object *obj)
   else
     {
       CHK_ENTITY_TYPE (geodata, GEODATA, units_value_horiz, BL);
-      CHK_ENTITY_UTF8TEXT (geodata, GEODATA,
-                           coord_system_datum);                 /* obsolete */
-      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt); /* obsolete */
+      CHK_ENTITY_MAX (geodata, GEODATA, units_value_horiz, BL, 6);
+      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_datum); // obsolete
+      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt); // obsolete 
       CHK_ENTITY_TYPE (geodata, GEODATA, has_civil_data, B);
       CHK_ENTITY_TYPE (geodata, GEODATA, obsolete_false, B);
       CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_deg, BD);
