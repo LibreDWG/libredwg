@@ -44,7 +44,7 @@
   FIELD_RSx (dwg_version, 0);
 #ifndef IS_JSON
   UNTIL (R_2013) {
-    FIELD_CAST (maint_version, RL, RSx, 0);
+    FIELD_CAST (maint_version, RS, RL, 0);
   } LATER_VERSIONS
 #endif
     FIELD_RL (maint_version, 0);
@@ -56,14 +56,14 @@
   FIELD_RSx (dwg_version_1, 0);
 #ifndef IS_JSON
   UNTIL (R_2013) {
-    FIELD_CAST (maint_version_1, RL, RS, 0);
+    FIELD_CAST (maint_version_1, RS, RL, 0);
   } LATER_VERSIONS
 #endif
     FIELD_RL (maint_version_1, 0);
   FIELD_RSx (dwg_version_2, 0);
 #ifndef IS_JSON
   UNTIL (R_2013) {
-    FIELD_CAST (maint_version_2, RL, RS, 0);
+    FIELD_CAST (maint_version_2, RS, RL, 0);
   } LATER_VERSIONS
 #endif
     FIELD_RL (maint_version_2, 0);
