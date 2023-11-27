@@ -34,6 +34,9 @@ dist_man1_MANS += $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
 endif
 
 if !DISABLE_DXF
+dxfread_SOURCES    = dxfread.c
+bin_PROGRAMS      += dxfread
+dist_man1_MANS    += $(srcdir)/dxfread.1
 if HAVE_LIBPS
 bin_PROGRAMS   += dwg2ps
 dist_man1_MANS += $(srcdir)/dwg2ps.1
