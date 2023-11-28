@@ -892,22 +892,22 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           return NULL;
         }
       LOG_TRACE ("\nSection [%d]:\n", j);
-      section->data_size = bit_read_RLL (&page);
-      section->max_size = bit_read_RLL (&page);
-      section->encrypted = bit_read_RLL (&page);
-      section->hashcode = bit_read_RLL (&page);
-      section->name_length = bit_read_RLL (&page);
-      section->unknown = bit_read_RLL (&page);
-      section->encoded = bit_read_RLL (&page);
-      section->num_pages = bit_read_RLL (&page);
-      LOG_TRACE ("  data size:     %" PRIu64 "\n", section->data_size)
-      LOG_TRACE ("  max size:      %" PRIu64 "\n", section->max_size)
-      LOG_TRACE ("  encryption:    %" PRIu64 "\n", section->encrypted)
-      LOG_HANDLE ("  hashcode:      %" PRIx64 "\n", section->hashcode)
-      LOG_HANDLE ("  name length:   %" PRIu64 "\n", section->name_length)
-      LOG_TRACE ("  unknown:       %" PRIu64 "\n", section->unknown)
-      LOG_TRACE ("  encoding:      %" PRIu64 "\n", section->encoded)
-      LOG_TRACE ("  num pages:     %" PRIu64, section->num_pages);
+      section->data_size = (int64_t)bit_read_RLL (&page);
+      section->max_size =  (int64_t)bit_read_RLL (&page);
+      section->encrypted = (int64_t)bit_read_RLL (&page);
+      section->hashcode = (int64_t)bit_read_RLL (&page);
+      section->name_length = (int64_t)bit_read_RLL (&page);
+      section->unknown = (int64_t)bit_read_RLL (&page);
+      section->encoded = (int64_t)bit_read_RLL (&page);
+      section->num_pages = (int64_t)bit_read_RLL (&page);
+      LOG_TRACE ("  data size:     %" PRId64 "\n", section->data_size)
+      LOG_TRACE ("  max size:      %" PRId64 "\n", section->max_size)
+      LOG_TRACE ("  encryption:    %" PRId64 "\n", section->encrypted)
+      LOG_HANDLE ("  hashcode:      %" PRIx64 "\n", (uint64_t)section->hashcode)
+      LOG_HANDLE ("  name length:   %" PRId64 "\n", section->name_length)
+      LOG_TRACE ("  unknown:       %" PRId64 "\n", section->unknown)
+      LOG_TRACE ("  encoding:      %" PRId64 "\n", section->encoded)
+      LOG_TRACE ("  num pages:     %" PRId64, section->num_pages);
       LOG_POS_DAT (&page)
       // debugging sanity
 #if 1
@@ -946,15 +946,15 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
       // Section Name (wchar)
       {
-        uint64_t sz = section->name_length;
-        section->name = (DWGCHAR *)calloc (1, sz + 2);
+        size_t sz = (size_t)section->name_length;
+        section->name = (DWGCHAR *)calloc (1, section->name_length > 0 ? sz + 2 : 2);
         bit_read_fixed (&page, (BITCODE_RC *)section->name, sz);
       }
 #ifdef HAVE_NATIVE_WCHAR2
-      LOG_TRACE ("  name:          " FORMAT_TU, (BITCODE_TU)section->name)
+      LOG_TRACE ("  name:          " FORMAT_TU, (BITCODE_TU)section->name);
 #else
-      LOG_TRACE ("  name:          ")
-      LOG_TEXT_UNICODE (TRACE, section->name)
+      LOG_TRACE ("  name:          ");
+      LOG_TEXT_UNICODE (TRACE, section->name);
 #endif
       LOG_POS_DAT (&page)
       LOG_TRACE ("\n")

@@ -64,6 +64,7 @@ bit_advance_position (Bit_Chain *dat, long advance)
   const size_t pos = bit_position (dat);
   const size_t endpos = dat->size * 8;
   long bits = (long)dat->bit + advance;
+
   if (dat->byte >= MAX_MEM_ALLOC || pos + advance > endpos)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -71,7 +72,7 @@ bit_advance_position (Bit_Chain *dat, long advance)
                  ", advance by %ld",
                  __FUNCTION__, dat->byte, dat->bit, dat->size, advance);
     }
-  else if ((long)pos + advance < 0)
+  else if ((long)(pos + advance) < 0)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("buffer underflow at pos %" PRIuSIZE ".%u, size %" PRIuSIZE
@@ -1582,13 +1583,17 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
                 size_t length)
 {
   if (dat->byte >= MAX_MEM_ALLOC ||
+      length >= MAX_MEM_ALLOC ||
       (dat->bit ? (((dat->byte + length) * 8) + dat->bit > dat->size * 8)
        : (dat->byte + length > dat->size)))
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE " > size %" PRIuSIZE,
-                 __FUNCTION__, dat->byte + length, dat->size)
-      memset (dest, 0, length);
+                 __FUNCTION__, dat->byte + length, dat->size);
+      if (length < dat->size - dat->byte)
+        memset (dest, 0, length);
+      *dest = 0;
+      dest[1] = 0;
       return 1;
     }
   if (dat->bit == 0)
@@ -3840,7 +3845,8 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
   else
     {
       unsigned char *tmp;
-      if (dat->size + size > MAX_MEM_ALLOC || dat->byte > MAX_MEM_ALLOC)
+      if (dat->size + size > MAX_MEM_ALLOC || dat->byte > MAX_MEM_ALLOC
+          || size >= MAX_MEM_ALLOC)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Out of memory");
