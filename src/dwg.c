@@ -2094,12 +2094,23 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
   if (obj && (code == 0 || !offset) && absref) // only if same obj
     {
       Dwg_Data *dwg = obj->parent;
+      uint64_t hashkey;
       assert (dwg);
       loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
       LOG_HANDLE ("object_map{" FORMAT_RLLx "} = %u\n", absref, obj->index);
       if (!dwg->object_map) // for dwg_add_document()
         dwg->object_map = hash_new (100);
-      hash_set (dwg->object_map, absref, (uint64_t)obj->index);
+      // check if this handle already exists
+      hashkey = hash_get (dwg->object_map, absref);
+      if (HASH_NOT_FOUND == hashkey)
+        hash_set (dwg->object_map, absref, (uint64_t)obj->index);
+      else if (hashkey != obj->index)
+        {
+          LOG_ERROR ("Duplicate handle " FORMAT_RLLx " for object " FORMAT_RL
+                     " already points to object %" PRIu64,
+                     absref, obj->index, hashkey);
+          return 1;
+        }
     }
 
   dwg_set_handle_size (hdl);
