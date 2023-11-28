@@ -123,7 +123,7 @@ main (int argc, char *argv[])
           i++;
         }
       // --all, not stopping at 6
-      else if (strEQc (argv[i], "-an"))
+      else if (strEQc (argv[i], "-an") || strEQc (argv[i], "--all"))
         {
           g_countmax = 1000;
           cov = 0;
