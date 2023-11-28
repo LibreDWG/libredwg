@@ -17,19 +17,32 @@ api_process (dwg_object *obj)
   BITCODE_B is_on;
   BITCODE_H viewport;
   BITCODE_H prev_entry;
+  BITCODE_RS vport_entity_address;
+  BITCODE_RSd r11_viewport_index;
+  BITCODE_RSd r11_prev_entry_index;
 
-  // Dwg_Version_Type dwg_version = obj->parent->header.version;
+  Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_vx_table_record *_obj = dwg_object_to_VX_TABLE_RECORD (obj);
 
   CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, flag, RC);
   CHK_ENTITY_UTF8TEXT (_obj, VX_TABLE_RECORD, name);
   CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, used, RSd);
-  CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_ref, B);
-  CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_resolved, BS);
-  CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_dep, B);
-  CHK_ENTITY_H (_obj, VX_TABLE_RECORD, xref);
 
-  CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_on, B);
-  CHK_ENTITY_H (_obj, VX_TABLE_RECORD, viewport);
-  CHK_ENTITY_H (_obj, VX_TABLE_RECORD, prev_entry);
+  PRE (R_13b1)
+    {
+      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, vport_entity_address, RS);
+      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, r11_viewport_index, RSd);
+      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, r11_prev_entry_index, RSd);
+    }
+  LATER_VERSIONS
+    {
+      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_ref, B);
+      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_resolved, BS);
+      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_dep, B);
+      CHK_ENTITY_H (_obj, VX_TABLE_RECORD, xref);
+
+      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_on, B);
+      CHK_ENTITY_H (_obj, VX_TABLE_RECORD, viewport);
+      CHK_ENTITY_H (_obj, VX_TABLE_RECORD, prev_entry);
+    }
 }

@@ -2837,7 +2837,7 @@ typedef struct _dwg_object_VX_TABLE_RECORD
   BITCODE_H prev_entry;
   BITCODE_RS vport_entity_address;
   BITCODE_RSd r11_viewport_index;
-  BITCODE_RS r11_prev_entry_index;
+  BITCODE_RSd r11_prev_entry_index;
 } Dwg_Object_VX_TABLE_RECORD;
 
 /**

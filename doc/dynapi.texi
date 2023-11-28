@@ -12757,7 +12757,7 @@ RS
 @item r11_viewport_index
 RSd
 @item r11_prev_entry_index
-RS
+RSd
 
 @end vtable
 @end indentedblock

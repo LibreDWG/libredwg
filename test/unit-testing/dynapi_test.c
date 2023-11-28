@@ -63179,18 +63179,18 @@ static int test_VX_TABLE_RECORD (const Dwg_Object *obj)
         fail ("VX_TABLE_RECORD.prev_entry [H]");
   }
   {
-    BITCODE_RS r11_prev_entry_index;
+    BITCODE_RSd r11_prev_entry_index;
     if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "r11_prev_entry_index", &r11_prev_entry_index, NULL)
         && r11_prev_entry_index == vx_table_record->r11_prev_entry_index)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.r11_prev_entry_index [RS] %hu != %hu", vx_table_record->r11_prev_entry_index, r11_prev_entry_index);
+      fail ("VX_TABLE_RECORD.r11_prev_entry_index [RSd] " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->r11_prev_entry_index, r11_prev_entry_index);
     r11_prev_entry_index++;
     if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "r11_prev_entry_index", &r11_prev_entry_index, 0)
         && r11_prev_entry_index == vx_table_record->r11_prev_entry_index)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.r11_prev_entry_index [RS] set+1 %hu != %hu", vx_table_record->r11_prev_entry_index, r11_prev_entry_index);
+      fail ("VX_TABLE_RECORD.r11_prev_entry_index [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->r11_prev_entry_index, r11_prev_entry_index);
     vx_table_record->r11_prev_entry_index--;
   }
   {

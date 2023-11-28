@@ -4782,7 +4782,7 @@ DWG_TABLE (VX_TABLE_RECORD)
     {
       FIELD_RS (vport_entity_address, 0);
       FIELD_RSd (r11_viewport_index, 0);
-      FIELD_RS (r11_prev_entry_index, 0);
+      FIELD_RSd (r11_prev_entry_index, 0);
     }
   LATER_VERSIONS
     {
