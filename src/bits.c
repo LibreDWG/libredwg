@@ -3202,7 +3202,7 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
   if (!codepage)
     return (char *)src;
   //  UTF8 encode
-  while ((c = *tmp) && i < destlen)
+  while (i < destlen && (char*)tmp < &src[srclen] && (c = *tmp))
     {
       wchar_t wc;
       tmp++;
