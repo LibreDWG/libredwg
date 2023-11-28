@@ -158,6 +158,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   memset (&dwg->r2004_header, 0, sizeof (dwg->r2004_header));
   memset (&dwg->auxheader, 0, sizeof (dwg->auxheader));
   memset (&dwg->secondheader, 0, sizeof (dwg->secondheader));
+  memset (&dwg->objfreespace, 0, sizeof (dwg->objfreespace));
 
   if (dwg->opts)
     {
