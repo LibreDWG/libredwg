@@ -947,15 +947,15 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       // Section Name (wchar)
       {
         uint64_t sz = section->name_length;
-        section->name = (DWGCHAR *)calloc (1, sz + 2);
+        section->name = (DWGCHAR *)calloc (1, section->name_length > 0 ? sz + 2 : 2);
         bit_read_fixed (&page, (BITCODE_RC *)section->name, sz);
-      }
 #ifdef HAVE_NATIVE_WCHAR2
-      LOG_TRACE ("  name:          " FORMAT_TU, (BITCODE_TU)section->name)
+        LOG_TRACE ("  name:          " FORMAT_TU, (BITCODE_TU)section->name);
 #else
-      LOG_TRACE ("  name:          ")
-      LOG_TEXT_UNICODE (TRACE, section->name)
+        LOG_TRACE ("  name:          ");
+        LOG_TEXT_UNICODE (TRACE, section->name);
 #endif
+      }
       LOG_POS_DAT (&page)
       LOG_TRACE ("\n")
       section->type = dwg_section_wtype (section->name);
