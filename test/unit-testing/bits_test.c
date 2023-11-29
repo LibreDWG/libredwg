@@ -611,14 +611,13 @@ bit_RLL_tests (void)
   bitfree (&bitchain);
 }
 
-#if 0
 static void
 bit_RLL_BE_tests (void)
-{
+{ /*                             0x7f 0xf7 0xbf 0x7d 0x00 0x00 0x00 0x01 */
   Bit_Chain bitchain = strtobt ("01111111" "11110111" "10111111" "01111101"
                                 "00000000" "00000000" "00000000" "00000001");
   BITCODE_RLL result = bit_read_RLL_BE (&bitchain);
-  if (result == UINT64_C (0x010000007DBFF77F))
+  if (result == UINT64_C (0x7FF7BF7D00000001))
     pass ();
   else
     fail ("bit_read_RLL_BE 0x%016" PRIX64, result);
@@ -645,14 +644,14 @@ bit_RLL_BE_tests (void)
                           "00000000" "00000000" "00000000" "00000001");
   bit_set_position (&bitchain, 1);
   result = bit_read_RLL_BE (&bitchain);
-  if (result == UINT64_C (0x010000007DBFF77F))
+  if (result == UINT64_C (0x7FF7BF7D00000001))
     pass ();
   else
     fail ("bit_read_RLL_BE bit=1 0x%016" PRIX64, result);
 
   bit_set_position (&bitchain, 1);
   bit_write_RLL_BE (&bitchain, UINT64_C (0x8000ffff00000001));
-  if (memcmp (bitchain.chain, "\x00\x00\x00\x00\x7f\xff\x80\x40", 8 ) == 0)
+  if (memcmp (bitchain.chain, "\x40\x00\x7F\xFF\x80\x00\x00\x00", 8 ) == 0)
     pass ();
   else
     fail ("bit_write_RLL_BE bit=1 %x %x %x %x %x %x %x %x", bitchain.chain[0], bitchain.chain[1],
@@ -667,7 +666,6 @@ bit_RLL_BE_tests (void)
     fail ("bit_read_RLL_BE bit=1 0x%016" PRIX64, result);
   bitfree (&bitchain);
 }
-#endif
 
 static void
 bit_read_H_tests (void)
@@ -1341,7 +1339,7 @@ main (int argc, char const *argv[])
   bit_RD_tests ();
   bit_BD_tests ();
   bit_RLL_tests ();
-  // bit_RLL_BE_tests ();
+  bit_RLL_BE_tests ();
   bit_utf8_to_TV_tests ();
   bit_TV_to_utf8_tests ();
   bit_read_H_tests ();

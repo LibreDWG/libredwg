@@ -459,9 +459,9 @@ bit_read_RL_BE (Bit_Chain *dat)
   BITCODE_RS word1, word2;
 
   // most significant word first
-  word1 = bit_read_RS (dat);
+  word1 = bit_read_RS_BE (dat);
   CHK_OVERFLOW (__FUNCTION__, 0)
-  word2 = bit_read_RS (dat);
+  word2 = bit_read_RS_BE (dat);
   return ((((uint32_t)word1) << 16) | ((uint32_t)word2));
 }
 
@@ -472,8 +472,8 @@ bit_write_RL_BE (Bit_Chain *dat, BITCODE_RL value)
 {
   // most significant word first
   const uint32_t l = value;
-  bit_write_RS (dat, l >> 16);
-  bit_write_RS (dat, l & 0xFFFF);
+  bit_write_RS_BE (dat, l >> 16);
+  bit_write_RS_BE (dat, l & 0xFFFF);
 }
 
 /** Read 1 raw 64bit long (8 byte, LE).
@@ -529,9 +529,9 @@ bit_read_RLL_BE (Bit_Chain *dat)
     {
       // most significant word first
       BITCODE_RL word1, word2;
-      word1 = bit_read_RL (dat);
+      word1 = bit_read_RL_BE (dat);
       CHK_OVERFLOW (__FUNCTION__, 0)
-      word2 = bit_read_RL (dat);
+      word2 = bit_read_RL_BE (dat);
       return ((((uint64_t)word1) << 32) | ((uint64_t)word2));
     }
 }
@@ -552,8 +552,8 @@ void
 bit_write_RLL_BE (Bit_Chain *dat, BITCODE_RLL value)
 {
   // most significant byte first
-  bit_write_RL (dat, value >> 32);
-  bit_write_RL (dat, value & 0xFFFFFFFF);
+  bit_write_RL_BE (dat, value >> 32);
+  bit_write_RL_BE (dat, value & 0xFFFFFFFF);
 }
 
 /** Read 1 raw double (8 bytes, IEEE-754).
