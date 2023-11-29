@@ -3214,6 +3214,22 @@ dwg_resolve_jump (const Dwg_Object *obj)
 }
 
 EXPORT BITCODE_RLL
+dwg_next_handseed (Dwg_Data *dwg)
+{
+  if (dwg->header_vars.HANDSEED && dwg->header_vars.HANDSEED->absolute_ref)
+    {
+      BITCODE_RLL seed;
+      seed = dwg->header_vars.HANDSEED->absolute_ref + 1;
+      dwg->header_vars.HANDSEED->absolute_ref
+          = dwg->header_vars.HANDSEED->handleref.value = seed;
+      dwg->auxheader.HANDSEED = seed;
+      return seed;
+    }
+  else
+    return dwg_next_handle (dwg);
+}
+
+EXPORT BITCODE_RLL
 dwg_next_handle (const Dwg_Data *dwg)
 {
   BITCODE_H last_hdl;
