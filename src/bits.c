@@ -3808,14 +3808,22 @@ bit_chain_init (Bit_Chain *dat, const size_t size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Out of memory")
+#ifdef DWG_ABORT
       abort ();
+#else
+      return;
+#endif
     }
   dat->chain = (unsigned char *)calloc (1, size);
   if (!dat->chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Out of memory")
+#ifdef DWG_ABORT
       abort ();
+#else
+      return;
+#endif
     }
   GCC14_DIAG_RESTORE
   dat->size = size;
@@ -3850,7 +3858,12 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Out of memory");
+#ifdef DWG_ABORT
           abort ();
+#else
+          return;
+#endif
+          
         }
       tmp = (unsigned char *)realloc (dat->chain, dat->size + size);
       if (tmp)
@@ -3859,7 +3872,11 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Out of memory")
+#ifdef DWG_ABORT
           abort ();
+#else
+          return;
+#endif
         }
       memset (&dat->chain[dat->size], 0, size);
       dat->size += size;
