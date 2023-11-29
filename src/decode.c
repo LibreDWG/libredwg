@@ -891,7 +891,7 @@ handles_section:
 
   /*-------------------------------------------------------------------------
    * ObjFreeSpace (section 3) and
-   * Second header, R13c3-R2000 only.
+   * Second header, r13-r2000 only.
    * But partially also since r2004.
    */
   if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_2NDHEADER_BEGIN)))

@@ -2659,7 +2659,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       /* the other sections */
       if (dat->version <= R_2000)
         {
-          if (dwg->header.sections >= 3)
+          if (dwg->header.sections >= 3 && dwg->objfreespace.numnums)
             error |= json_section_objfreespace (dat, dwg); // 3
           if (dwg->secondheader.num_sections)
             error |= json_section_2ndheader (dat, dwg);

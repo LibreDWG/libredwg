@@ -3585,7 +3585,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   free (omap);
 
   /*------------------------------------------------------------
-   * ObjFreeSpace and Second header - R13c3-R2000 only.
+   * ObjFreeSpace and Second header - r13-r2000 only.
    * Note: partially also since r2004.
    */
   if (dwg->header.version >= R_13 && dwg->header.version < R_2004
@@ -3593,21 +3593,26 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       struct _dwg_secondheader *_obj = &dwg->secondheader;
       Dwg_Object *obj = NULL;
-      BITCODE_BL vcount;
 
       assert (dat->byte);
-
-      LOG_INFO ("\n=======> ObjFreeSpace 3 (start): %4u\n", (unsigned)dat->byte);
       dwg->header.section[SECTION_OBJFREESPACE_R13].number = 3;
-      dwg->header.section[SECTION_OBJFREESPACE_R13].address = dat->byte;
-      dwg->header.section[SECTION_OBJFREESPACE_R13].size = 53;
-      error |= encode_objfreespace_private (dat, dwg);
-      LOG_INFO ("=======> ObjFreeSpace 3 (end): %4u\n", (unsigned)dat->byte);
+      if (dwg->objfreespace.numnums)
+        {
+          LOG_INFO ("\n=======> ObjFreeSpace 3 (start): %4u\n",
+                    (unsigned)dat->byte);
+          dwg->header.section[SECTION_OBJFREESPACE_R13].address = dat->byte;
+          dwg->header.section[SECTION_OBJFREESPACE_R13].size = 53;
+          error |= encode_objfreespace_private (dat, dwg);
+          LOG_INFO ("=======> ObjFreeSpace 3 (end): %4u\n",
+                    (unsigned)dat->byte);
+        }
 
       LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
+      pvzadr = dat->byte;
+      LOG_INSANE ("pvzadr: %" PRIuSIZE "\n", pvzadr);
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
-      pvzadr = dat->byte; // Keep the address to write its size later. before size.
-      LOG_TRACE ("pvzadr: %" PRIuSIZE "\n", pvzadr);
+      dwg->secondheader.address = (BITCODE_RL)pvzadr & UINT32_MAX;
+      dwg->r2004_header.secondheader_address = pvzadr;
       if (!_obj->size && !_obj->num_sections)
         {
           const char *code = dwg_version_codes (dwg->header.version);
@@ -3677,7 +3682,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       SET_HDL (13, DICTIONARY_ACAD_GROUP);
 
       encode_secondheader_private (dat, dwg);
-
+      dwg->secondheader.size = (BITCODE_RL)(dat->byte - pvzadr) & UINT32_MAX;
+      encode_patch_RLsize (dat, pvzadr);
       bit_write_CRC (dat, pvzadr, 0xC0C1);
       VERSIONS (R_14, R_2000) {
         FIELD_RLL (junk_r14, 0);
