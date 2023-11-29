@@ -32,10 +32,6 @@
 #include "common.h"
 #include "codepages.h"
 
-static unsigned int loglevel;
-#define DWG_LOGLEVEL loglevel
-#include "logging.h"
-
 #include "codepages/ISO-8859-2.h"
 #include "codepages/ISO-8859-3.h"
 #include "codepages/ISO-8859-4.h"
@@ -210,7 +206,6 @@ static wchar_t
 codepage_helper (const Dwg_Codepage codepage, const wchar_t wc, const int dir,
                  const int asian)
 {
-#if 1
   const uint16_t *fntbl;
   uint16_t maxc;
   assert (codepage != CP_UTF8 && codepage != CP_UTF16
@@ -234,70 +229,6 @@ codepage_helper (const Dwg_Codepage codepage, const wchar_t wc, const int dir,
       else
         return 0;
     }
-#else
-  {
-    union
-    {
-      wchar_t wc;
-      char s[8];
-      uint32_t w[2];
-    } u1, u2;
-    // const char *od = &u2.s[0];
-    const char *charset = dwg_codepage_iconvstr (codepage);
-    char *d = &u2.s[0];
-    iconv_t cd;
-    size_t nconv = (size_t)-1;
-    size_t srclen = 2, destlen = 8;
-    if (!charset)
-      {
-        loglevel = 1;
-        LOG_ERROR ("Invalid codepage %u", codepage);
-        return 0;
-      }
-    if (!dir)
-      { // from charset to unicode
-        cd = iconv_open ("UTF-32", charset);
-        if (wc < 0xFF && !asian)
-          srclen = 1;
-        else if (asian && wc > 0xFFFF)
-          srclen = 4;
-        else if (wc > 0xFFFFFF)
-          srclen = 4;
-        else if (wc > 0xFFFF)
-          srclen = 3;
-      }
-    else
-      { // from unicode to charset
-        cd = iconv_open (charset, "UTF-32");
-        srclen = 4;
-      }
-    if (cd == (iconv_t)-1)
-      {
-        loglevel = 1;
-        LOG_ERROR ("iconv_open \"%s\" failed with errno %d", charset, errno);
-        return 0;
-      }
-    u1.wc = wc;
-    u1.w[1] = 0;
-    u2.wc = 0;
-    // u2.s[4] = '\0';
-    u2.w[1] = 0;
-    nconv = iconv (cd, (char **)&u1.s, (size_t *)&srclen, (char **)&d,
-                   (size_t *)&destlen);
-    if (nconv == (size_t)-1)
-      {
-        loglevel = 1;
-        LOG_ERROR ("iconv failed with errno %d", errno);
-        // iconv_close (cd);
-        // return 0;
-      }
-    // flush the remains
-    iconv (cd, NULL, (size_t *)&srclen, (char **)&d, (size_t *)&destlen);
-    iconv_close (cd);
-    // convert dest to result
-    return u2.wc;
-  }
-#endif
 }
 
 // returns the matching unicode codepoint,

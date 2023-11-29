@@ -2567,7 +2567,6 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
       if (!IS_FROM_TU (dat))
         { // convert to unicode, expand \\U+
           BITCODE_TU wstr = bit_utf8_to_TU (chain, 0);
-          size_t wlen = bit_wcs2len (wstr) + 1;
           bit_write_RS (dat, (BITCODE_RS)length);
           for (size_t i = 0; i <= length; i++)
             bit_write_RS (dat, wstr[i]);
@@ -3261,11 +3260,11 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
   else if (!src)
     return NULL;
   {
+#ifdef HAVE_ICONV
     const bool is_asian_cp
         = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
     const size_t srclen = strlen (src);
     size_t destlen = 1 + (is_asian_cp ? srclen * 3 : trunc (srclen * 2));
-#ifdef HAVE_ICONV
     const char *charset = dwg_codepage_iconvstr ((Dwg_Codepage)codepage);
     const char utf8_cs[] = "UTF-8//TRANSLIT//IGNORE";
     iconv_t cd;

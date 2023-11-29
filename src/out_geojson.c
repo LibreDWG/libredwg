@@ -46,7 +46,7 @@
 #include "geom.h"
 
 /* the current version per spec block */
-static unsigned int cur_ver = 0;
+// static unsigned int cur_ver = 0;
 
 /* https://tools.ietf.org/html/rfc7946#section-11.2 recommends.
    Set via --with-geojson-precision=rfc */
@@ -710,7 +710,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       {
         int error;
         BITCODE_BL j, numpts;
-        bool is_polygon = false;
+        // bool is_polygon = false;
         int changed = 0;
         dwg_point_2d *pts, *orig;
         Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;

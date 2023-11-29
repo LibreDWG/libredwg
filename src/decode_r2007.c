@@ -597,7 +597,6 @@ static bool
 read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
                   int64_t size_uncomp, int64_t repeat_count)
 {
-  int i;
   int error = 0;
 
   int64_t pesize;      // Pre RS encoded size
@@ -695,7 +694,6 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                 int64_t page_size, int64_t size_comp, int64_t size_uncomp,
                 BITCODE_RC *restrict decomp_end)
 {
-  int i;
   int error = 0;
 
   int64_t pesize;      // Pre RS encoded size
@@ -868,9 +866,7 @@ static r2007_section *
 read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
                    int64_t correction)
 {
-  BITCODE_RC *data;
   r2007_section *sections = NULL, *last_section = NULL, *section = NULL;
-  // BITCODE_RC *ptr, *ptr_end;
   Bit_Chain page = { 0 };
   int i, j = 0;
 
@@ -1183,7 +1179,6 @@ read_file_header (Bit_Chain *restrict dat,
   uint64_t seqence_key;
   uint64_t compr_crc;
   int32_t compr_len, len2;
-  int i;
   int error = 0, errcount = 0;
   const int pedata_size = 3 * 239; // size of pedata
 
@@ -1750,7 +1745,7 @@ read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Bit_Chain old_dat, sec_dat = { 0 };
   // Bit_Chain *str_dat;
   Dwg_VBAProject *_obj = &dwg->vbaproject;
-  Dwg_Object *obj = NULL;
+  // Dwg_Object *obj = NULL;
   int error = 0;
   // BITCODE_RL rcount1 = 0, rcount2 = 0;
 

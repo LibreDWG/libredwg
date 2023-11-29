@@ -32,7 +32,7 @@
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
    LIBREDWG_TRACE and set `loglevel' appropriately.  */
-static bool env_var_checked_p;
+// static bool env_var_checked_p;
 #endif /* USE_TRACING */
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -124,7 +124,7 @@ static int
 decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
                            Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  int error = 0;
+  // int error = 0;
   Dwg_Section *tbl = &dwg->header.section[id];
   unsigned long end_address;
 
@@ -229,18 +229,18 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                        Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
-  Bit_Chain *hdl_dat = dat;
+  // Bit_Chain *hdl_dat = dat;
   Dwg_Object *obj;
   int error = 0;
   BITCODE_RLd i;
-  BITCODE_RL vcount;
+  // BITCODE_RL vcount;
   BITCODE_RL num = dwg->num_objects;
   size_t pos = tbl->address;
   size_t oldpos;
   size_t real_start = pos;
-  BITCODE_TF name;
-  BITCODE_RSd used = -1;
-  BITCODE_RC flag;
+  // BITCODE_TF name;
+  // BITCODE_RSd used = -1;
+  // BITCODE_RC flag;
 
   LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (" FORMAT_RLL
              "-" FORMAT_RLL ")\n\n",
@@ -625,16 +625,16 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RL num_entities;
   BITCODE_RL blocks_start = 0, blocks_end = 0, blocks_size = 0;
   BITCODE_RL extras_start = 0, extras_end = 0, extras_size = 0;
-  BITCODE_RS rs2;
+  // BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
   int error = 0;
-  Bit_Chain dat_save = *dat;
+  // Bit_Chain dat_save = *dat;
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   {
     int i;
     Dwg_Header *_obj = (Dwg_Header *)&dwg->header;
-    Bit_Chain *hdl_dat = dat;
+    // Bit_Chain *hdl_dat = dat;
     BITCODE_BL vcount;
     dat->byte = 0x06;
     // clang-format off
@@ -677,7 +677,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
     // The 5 tables (num_sections always 5): 3 RS + 1 RL address
     LOG_INFO ("==========================================\n")
-    dat_save = *dat;
+    // dat_save = *dat;
     error |= decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
     if (error >= DWG_ERR_CRITICAL)
       return error;
