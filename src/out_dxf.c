@@ -2454,11 +2454,18 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 
           for (i = 0; i < FIELD_VALUE (num_blocks); i++)
             {
-              int idx
-                  = 0; // here idx is just local, always starting at 0. ignored
-              char *ptr = dwg_encrypt_SAT1 (
-                  _obj->block_size[i], (BITCODE_RC *)_obj->encr_sat_data[i],
-                  &idx);
+              // here idx is just local, always starting at 0. ignored
+              int idx = 0; 
+              BITCODE_BL len = FIELD_VALUE (block_size[i]);
+              char *ptr;
+              if ((BITCODE_BLd)len < 0)
+                {
+                  LOG_ERROR ("Invalid %s.block_size[%u] " FORMAT_BL, obj->name,
+                             (unsigned)i, len);
+                  return DWG_ERR_VALUEOUTOFBOUNDS;
+                }
+              ptr = dwg_encrypt_SAT1 (
+                  len, (BITCODE_RC *)_obj->encr_sat_data[i], &idx);
 
               free (_obj->encr_sat_data[i]);
               _obj->encr_sat_data[i] = ptr;

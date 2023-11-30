@@ -2682,9 +2682,11 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               if (FIELD_VALUE (block_size[i]) > 0
                   && AVAIL_BITS (dat) > 8 * FIELD_VALUE (block_size[i]))
                 {
-                  FIELD_TFv (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
+                  BITCODE_BL len = FIELD_VALUE (block_size[i]);
+                  FIELD_TFv (encr_sat_data[i], len, 1);
                   if (!FIELD_VALUE (encr_sat_data) || !FIELD_VALUE (encr_sat_data[i]))
                     FIELD_VALUE (block_size[i]) = 0;
+                  FIELD_VALUE (encr_sat_data[i][len]) = 0;
                   total_size += FIELD_VALUE (block_size[i]);
                 }
               else

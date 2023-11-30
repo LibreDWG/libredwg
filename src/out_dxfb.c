@@ -1402,8 +1402,13 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           for (i = 0; i < FIELD_VALUE (num_blocks); i++)
             {
               char *s = FIELD_VALUE (encr_sat_data[i]);
-              size_t len = strlen (s);
-              // FIELD_BL (block_size[i], 0);
+              BITCODE_BL len = FIELD_VALUE (block_size[i]);
+              if ((BITCODE_BLd)len < 0)
+                {
+                  LOG_ERROR ("Invalid %s.block_size[%u] " FORMAT_BL, obj->name,
+                             (unsigned)i, len);
+                  return DWG_ERR_VALUEOUTOFBOUNDS;
+                }
               // DXF 1 + 3 if >255
               while (len > 0)
                 {
@@ -1435,8 +1440,9 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           // LOG_TRACE("acis_data [1]:\n%s\n", FIELD_VALUE (acis_data));
         }
       else // if (FIELD_VALUE(version)==2)
+        // must use ASCII out
         {
-          LOG_ERROR ("ACIS BinaryFile v2 not yet supported");
+          LOG_ERROR ("ACIS BinaryFile v2 not yet supported. Use ASCII output.");
         }
     }
   return error;
