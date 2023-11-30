@@ -1364,12 +1364,7 @@ static BITCODE_RLL
 add_LibreDWG_APPID (Dwg_Data *dwg)
 {
   BITCODE_H appid = dwg_find_tablehandle (dwg, "LibreDWG", "APPID");
-  BITCODE_H appctl;
-  Dwg_Object *obj;
   Dwg_Object_APPID *_obj;
-  Dwg_Object_APPID_CONTROL *o;
-  BITCODE_RLL absref;
-  // int error = 0;
 
   if (appid)
     {
@@ -1605,6 +1600,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 }
 #endif
 
+#ifndef DEBUG_CLASSES
 // delete this NOD entry
 // only needed until we can write all object types (at least the ones from the
 // NOD)
@@ -1633,6 +1629,7 @@ remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
     _obj->numitems--;
   return;
 }
+#endif // !DEBUG_CLASSES
 
 // NOD: ACAD_TABLESTYLE => DICT name[0] - itemhandles[0] => TABLESTYLE
 // (Unstable) AcDbVariableDictionary: CTABLESTYLE => DICTVAR str only needed
@@ -2253,10 +2250,8 @@ static int
 encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  BITCODE_RS crc, crcc;
   Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
-  size_t pos = dat->byte;
 
   LOG_TRACE ("\nAUXHEADER: @0x%zx\n", dat->byte);
   _obj->auxheader_address = dat->byte & 0xFFFFFFFF;
@@ -4547,13 +4542,11 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           // check ucs_elevation. maybe set flag_r11 & HAS_ELEVATION
           if (FIELD_VALUE (ucs_elevation) != 0.0)
             FIELD_VALUE (ucsorg.z) = FIELD_VALUE (ucs_elevation);
-          /*
           //if (FIELD_VALUE (ucsorg.z) != 0.0)
           //  {
           //    obj->tio.object->flag_r11 |= FLAG_R11_HAS_ELEVATION;
           //    obj->tio.object->elevation_r11 = FIELD_VALUE (ucsorg.z);
           //  }
-          */
           error |= dwg_encode_UCS (dat, obj);
           CHK_ENDPOS;
         }
@@ -4679,7 +4672,6 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
     {
       Dwg_Object *obj = &dwg->object[index];
       size_t size_pos = 0UL;
-      bool deleted = obj->type >= 128;
       // skip table objects or uninitialized entities
       if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
         {

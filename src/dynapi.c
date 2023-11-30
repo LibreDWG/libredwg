@@ -13000,42 +13000,6 @@ static const Dwg_DYNAPI_field _dwg_object_object_fields[] = {
 };
 
 
-/* from typedef struct _dwg_summaryinfo: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_summaryinfo_fields[] = {
-  { "TITLE",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_summaryinfo, TITLE),
-    1,0,0, 1 },
-  { "SUBJECT",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_summaryinfo, SUBJECT),
-    1,0,0, 1 },
-  { "AUTHOR",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_summaryinfo, AUTHOR),
-    1,0,0, 1 },
-  { "KEYWORDS",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_summaryinfo, KEYWORDS),
-    1,0,0, 1 },
-  { "COMMENTS",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_summaryinfo, COMMENTS),
-    1,0,0, 1 },
-  { "LASTSAVEDBY",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_summaryinfo, LASTSAVEDBY),
-    1,0,0, 1 },
-  { "REVISIONNUMBER",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_summaryinfo, REVISIONNUMBER),
-    1,0,0, 1 },
-  { "HYPERLINKBASE",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_summaryinfo, HYPERLINKBASE),
-    1,0,0, 1 },
-  { "TDINDWG",	"TIMERLL", sizeof (BITCODE_TIMERLL),  OFF (struct _dwg_summaryinfo, TDINDWG),
-    1,0,0, 0 },
-  { "TDCREATE",	"TIMERLL", sizeof (BITCODE_TIMERLL),  OFF (struct _dwg_summaryinfo, TDCREATE),
-    1,0,0, 0 },
-  { "TDUPDATE",	"TIMERLL", sizeof (BITCODE_TIMERLL),  OFF (struct _dwg_summaryinfo, TDUPDATE),
-    1,0,0, 0 },
-  { "num_props",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_summaryinfo, num_props),
-    0,0,0, 0 },
-  { "props",	"Dwg_SummaryInfo_Property*", sizeof (Dwg_SummaryInfo_Property*),  OFF (struct _dwg_summaryinfo, props),
-    1,1,0, 0 },
-  { "unknown1",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_summaryinfo, unknown1),
-    0,0,0, 0 },
-  { "unknown2",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_summaryinfo, unknown2),
-    0,0,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-
-
 /* FIXME: Remove name. Get type via dwg_object_name() */
 struct _name_type_fields {
   const char *const name;
@@ -13839,7 +13803,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2598 "gen-dynapi.pl"
+#line 2596 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
@@ -14626,7 +14590,6 @@ dwg_dynapi_common_set_value (void *restrict _obj,
 
     if (dwg && obj->supertype == DWG_SUPERTYPE_ENTITY && strEQc (fieldname, "ltype"))
       { // set also isbylayerlt and ltype_flags
-        BITCODE_H ltype = *(BITCODE_H*)value;
         Dwg_Object_Entity *ent = obj->tio.entity;
         if (!dwg->header_vars.LTYPE_BYLAYER || !ent->ltype)
           ;

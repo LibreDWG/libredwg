@@ -2553,8 +2553,6 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
 @@struct _dwg_object_entity@@
 @@struct _dwg_object_object@@
 
-@@struct _dwg_summaryinfo@@
-
 /* FIXME: Remove name. Get type via dwg_object_name() */
 struct _name_type_fields {
   const char *const name;
@@ -2594,7 +2592,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2598 "gen-dynapi.pl"
+#line 2596 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
@@ -3381,7 +3379,6 @@ dwg_dynapi_common_set_value (void *restrict _obj,
 
     if (dwg && obj->supertype == DWG_SUPERTYPE_ENTITY && strEQc (fieldname, "ltype"))
       { // set also isbylayerlt and ltype_flags
-        BITCODE_H ltype = *(BITCODE_H*)value;
         Dwg_Object_Entity *ent = obj->tio.entity;
         if (!dwg->header_vars.LTYPE_BYLAYER || !ent->ltype)
           ;

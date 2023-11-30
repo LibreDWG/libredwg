@@ -307,7 +307,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RS crc, crc2;
   size_t size, startpos, endpos, lastmap, pvz = 0;
   size_t object_begin, object_end;
-  BITCODE_BL j, k;
+  BITCODE_BL j;
   int error = 0;
   int sentinel_size = 16;
   const char *section_names[]
@@ -390,7 +390,6 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    */
   if (dwg->header.sections == 6 && dwg->header.version >= R_13c3)
     {
-      int i;
       Dwg_AuxHeader *_obj = &dwg->auxheader;
       Bit_Chain *hdl_dat = dat;
       size_t end_address = dwg->header.section[SECTION_AUXHEADER_R2000].address
@@ -1452,7 +1451,6 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RLL section_address;
   long bytes_remaining;
   int i, error = 0, found_section_map_id = 0;
-  BITCODE_RL checksum;
   const BITCODE_RL comp_data_size = dwg->r2004_header.comp_data_size;
   const BITCODE_RL decomp_data_size = dwg->r2004_header.decomp_data_size;
   const BITCODE_RLd section_array_size = dwg->r2004_header.section_array_size;
@@ -1691,9 +1689,6 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   BITCODE_RC *decomp, *ptr, *decomp_end;
   BITCODE_BL i, j;
-  int32_t section_number = 0;
-  uint32_t data_size, maxsize;
-  uint64_t offset;
   int error;
 
   if (decomp_data_size > 0x2f000000 && // 790Mb
@@ -1747,7 +1742,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   for (i = 0; i < dwg->header.section_infohdr.num_desc; ++i)
     {
       Dwg_Section_Info *info;
-      uint64_t sum_decomp = 0;
+      // uint64_t sum_decomp = 0;
       uint64_t prev_address = 0;
       unsigned max_decomp_size;
 
@@ -1859,7 +1854,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               /* endian specific code: */
               bfr_read_32 (&page, &ptr, 8);
               bfr_read_64 (&page.address, &ptr, 8);
-              sum_decomp += page.size; /* TODO: uncompressed size */
+              // sum_decomp += page.size; /* TODO: uncompressed size */
 #if 0
               if (page.address < sum_decomp)
                 {
@@ -3390,7 +3385,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dat->byte = 0x06;
     if (dat->from_version >= R_2022b)
       dat->byte = 0x07;
-      // clang-format off
+    // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -3759,9 +3754,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
   obj->num_eed = 0;
   while (1)
     {
-      int i;
       BITCODE_BS j;
-      size_t end, offset;
+      size_t end;
 
       if (dat->from_version >= R_13b1)
         {

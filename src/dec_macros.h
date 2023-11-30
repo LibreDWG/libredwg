@@ -323,9 +323,12 @@
   VALUE_HANDLE (_obj->o.nam, o.nam, code, dxf)
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
-    size_t pos = bit_position (dat);                                          \
+    size_t pos;                                                               \
     PRE (R_13b1)                                                              \
-    error |= bit_read_H (dat, &hdl);                                          \
+    {                                                                         \
+      pos = bit_position (dat);                                               \
+      error |= bit_read_H (dat, &hdl);                                        \
+    }                                                                         \
     else                                                                      \
     {                                                                         \
       pos = bit_position (hdl_dat);                                           \

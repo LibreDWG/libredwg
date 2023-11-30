@@ -595,7 +595,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   const bool is_block = obj->address >= 0x40000000;
   Bit_Chain *hdl_dat = NULL, *str_dat = NULL;
   Dwg_Data *dwg = _ent->dwg;
-  int error = 0;
+  int error = 0; // errors only with H or CMC. r11 has none of these
 
   obj->bitsize_pos = bit_position (dat);
   obj->address
@@ -615,7 +615,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                  obj->handle.value);
     }
   obj->common_size = bit_position (dat) - obj->bitsize_pos;
-  return 0;
+  return error;
 }
 
 AFL_GCC_TOOBIG

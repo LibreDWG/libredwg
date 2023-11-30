@@ -2230,11 +2230,7 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
-  Bit_Chain *str_dat;
   const char *secname = "AcDsPrototype_1b";
-  Dwg_AcDs *_obj = &dwg->acds;
-  Dwg_Object *obj = NULL;
-  BITCODE_RL rcount1 = 0, rcount2 = 0;
 
   // compressed, pagesize 0x7400, type 13
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -2250,7 +2246,7 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("AcDs datastorage (%" PRIuSIZE ")\n-------------------\n",
              sec_dat.size)
   old_dat = *dat;
-  str_dat = dat = &sec_dat; // restrict in size
+  dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
   error |= acds_private (dat, dwg);
