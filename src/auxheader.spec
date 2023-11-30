@@ -44,10 +44,10 @@
   FIELD_RSx (dwg_version, 0);
 #ifndef IS_JSON
   UNTIL (R_2013) {
-    FIELD_CAST (maint_version, RS, RL, 0);
+    FIELD_CAST (maint_version, RS, RLx, 0);
   } LATER_VERSIONS
 #endif
-    FIELD_RL (maint_version, 0);
+    FIELD_RLx (maint_version, 0);
   FIELD_RL (numsaves, 0);
   FIELD_RLd (minus_1, 0);
   FIELD_RS (numsaves_1, 0);
