@@ -32,7 +32,7 @@ VERSIONS (R_13, R_2000) {
 #endif
   FIELD_RC (is_maint, 0);
   FIELD_RC (zero_one_or_three, 0);
-  FIELD_BS (dwg_version, 0);
+  FIELD_BSx (dwg_version, 0);
   DECODER {
     LOG_TRACE("=> header dwg_version: 0x%x\n", _obj->dwg_version & 0xFF);
     LOG_TRACE("=> header maint_version: 0x%x\n", (_obj->dwg_version >> 8) & 0xFF);
