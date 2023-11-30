@@ -2694,6 +2694,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (!o->paths)
         {
           o->num_paths = 0;
+          dxf_free_pair (pair);
           return NULL;
         }
     }
@@ -2706,6 +2707,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (!o->deflines)
         {
           o->num_deflines = 0;
+          dxf_free_pair (pair);
           return NULL;
         }
     }
@@ -2718,6 +2720,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (!o->colors)
         {
           o->num_colors = 0;
+          dxf_free_pair (pair);
           return NULL;
         }
     }
@@ -2737,6 +2740,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     if (!o->paths || j < 0 || j >= (int)o->num_paths)                         \
       {                                                                       \
         LOG_ERROR ("HATCH no paths or wrong j %u\n", j);                      \
+        if (o->paths)                                                         \
+          free (o->paths);                                                    \
+        o->num_paths = 0;                                                     \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (o->paths);                                                        \
@@ -2764,6 +2771,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (!o->paths[j].segs)
                 {
                   o->paths[j].num_segs_or_paths = 0;
+                  dxf_free_pair (pair);
                   return NULL;
                 }
             }
@@ -2774,6 +2782,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (!o->paths[j].polyline_paths)
                 {
                   o->paths[j].num_segs_or_paths = 0;
+                  dxf_free_pair (pair);
                   return NULL;
                 }
             }
@@ -2786,6 +2795,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         || k >= (int)o->paths[j].num_segs_or_paths)                           \
       {                                                                       \
         LOG_ERROR ("HATCH no paths[%d].segs or wrong k %d\n", j, k);          \
+        if (o->paths && o->paths[j].segs)                                     \
+          free (o->paths[j].segs);                                            \
+        o->paths[j].num_segs_or_paths = 0;                                    \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (o->paths[j].segs);                                                \
@@ -2846,6 +2859,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (!o->paths[j].segs[k].knots)
             {
               o->paths[j].segs[k].num_knots = 0;
+              dxf_free_pair (pair);
               return NULL;
             }
           l = -1;
@@ -2864,6 +2878,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (!o->paths[j].segs[k].control_points)
             {
               o->paths[j].segs[k].num_control_points = 0;
+              dxf_free_pair (pair);
               return NULL;
             }
           l = -1;
@@ -2897,6 +2912,14 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         LOG_ERROR ("HATCH no paths[%d].segs or "                              \
                    "wrong l %d control_points index\n",                       \
                    j, l);                                                     \
+        if (!o->paths[j].segs)                                                \
+          o->paths[j].num_segs_or_paths = 0;                                  \
+        else                                                                  \
+          {                                                                   \
+            free (o->paths[j].segs[k].control_points);                        \
+            o->paths[j].segs[k].num_control_points = 0;                       \
+          }                                                                   \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (l >= 0);                                                          \
@@ -2909,6 +2932,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         LOG_ERROR ("HATCH no paths[%d].segs or "                              \
                    "wrong l %d fitpts index\n",                               \
                    j, l);                                                     \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (l >= 0);                                                          \
@@ -3065,6 +3089,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         LOG_ERROR ("HATCH no paths[%d].segs[%d].knots or "                    \
                    "wrong l %d knots index\n",                                \
                    j, k, l);                                                  \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (l >= 0);                                                          \
@@ -3151,6 +3176,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       {                                                                       \
         LOG_ERROR ("HATCH no paths[%d].polyline_paths or wrong k %d\n", j,    \
                    k);                                                        \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (o->paths[j].polyline_paths);                                      \
@@ -3223,6 +3249,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (!o->deflines)
             {
               o->num_deflines = 0;
+              dxf_free_pair (pair);
               return NULL;
             }
           j = -1;
@@ -3235,6 +3262,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     if (!o->deflines || j < 0 || j >= (int)o->num_deflines)                   \
       {                                                                       \
         LOG_ERROR ("HATCH no deflines or wrong j %d", j);                     \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (j >= 0);                                                          \
@@ -3286,6 +3314,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (!o->deflines[j].dashes)
                 {
                   o->deflines[j].num_dashes = 0;
+                  dxf_free_pair (pair);
                   return NULL;
                 }
             }
@@ -3302,7 +3331,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           k++;
           if (!o->deflines[j].dashes || k < 0
               || k >= (int)o->deflines[j].num_dashes)
-            return NULL;
+            {
+              LOG_ERROR ("add_HATCH dashes")
+              dxf_free_pair (pair);
+              return NULL;
+            }
           assert (k >= 0);
           assert (k < (int)o->deflines[j].num_dashes);
           o->deflines[j].dashes[k] = pair->value.d;
@@ -3325,6 +3358,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (!o->seeds)
                 {
                   o->num_seeds = 0;
+                  dxf_free_pair (pair);
                   return NULL;
                 }
             }
@@ -3338,6 +3372,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     if (!o->seeds || k < 0 || k >= (int)o->num_seeds)                         \
       {                                                                       \
         LOG_ERROR ("HATCH no seeds or wrong k %d", k);                        \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (k >= 0);                                                          \
@@ -3378,6 +3413,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             {
               o->paths[j].num_boundary_handles = 0;
               LOG_ERROR ("! HATCH.paths[%d].boundary_handles", j);
+              dxf_free_pair (pair);
               return NULL;
             }
           o->paths[j].boundary_handles[hdl_idx] = ref;
@@ -3396,6 +3432,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (!o->colors)
                 {
                   o->num_colors = 0;
+                  dxf_free_pair (pair);
                   return NULL;
                 }
             }
@@ -3405,7 +3442,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j++;
           if (!o->colors || j < 0 || j >= (int)o->num_colors)
-            return NULL;
+            {
+              LOG_ERROR ("HATCH.colors DXF %hd", pair->code);
+              dxf_free_pair (pair);
+              return NULL;
+            }
           assert (j >= 0);
           assert (j < (int)o->num_colors);
           o->colors[j].shift_value = pair->value.d;
@@ -3415,7 +3456,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 63 && o->num_colors)
         {
           if (!o->colors || j < 0 || j >= (int)o->num_colors)
-            return NULL;
+            {
+              LOG_ERROR ("HATCH.colors DXF %hd", pair->code);
+              dxf_free_pair (pair);
+              return NULL;
+            }
           assert (j < (int)o->num_colors);
           o->colors[j].color.index = pair->value.i;
           LOG_TRACE ("HATCH.colors[%d].color.index = %u [CMC 63]\n", j,
@@ -3424,7 +3469,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 421 && o->num_colors)
         {
           if (!o->colors || j < 0 || j >= (int)o->num_colors)
-            return NULL;
+            {
+              LOG_ERROR ("HATCH.colors DXF %hd", pair->code);
+              dxf_free_pair (pair);
+              return NULL;
+            }
           assert (j >= 0);
           assert (j < (int)o->num_colors);
           o->colors[j].color.rgb = pair->value.u;
@@ -3434,7 +3483,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 431 && o->num_colors)
         {
           if (!o->colors || j < 0 || j >= (int)o->num_colors)
-            return NULL;
+            {
+              LOG_ERROR ("HATCH.colors DXF %hd", pair->code);
+              dxf_free_pair (pair);
+              return NULL;
+            }
           assert (j >= 0);
           assert (j < (int)o->num_colors);
           if (dat->version >= R_2007)
@@ -3505,7 +3558,11 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 {
   Dwg_Entity_MULTILEADER *o = obj->tio.entity->tio.MULTILEADER;
   if (!lnode)
-    return NULL;
+    {
+      LOG_ERROR ("MULTILEADER_lines");
+      dxf_free_pair (pair);
+      return NULL;
+    }
   lnode->num_lines = 0;
   if (pair->code == 304 && strEQc (pair->value.s, "LEADER_LINE{"))
     {
@@ -3515,6 +3572,8 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (!lnode->lines)
         {
           lnode->num_lines = 0;
+          LOG_ERROR ("MULTILEADER.node.lines");
+          dxf_free_pair (pair);
           return NULL;
         }
 
@@ -3541,6 +3600,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                     {
                       lnode->num_lines = 0;
                       LOG_ERROR ("Out of memory");
+                      dxf_free_pair (pair);
                       return NULL;
                     }
                 }
@@ -3561,6 +3621,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     if (j < 0 || j >= (int)lline->num_points)                                 \
       {                                                                       \
         LOG_ERROR ("MULTILEADER wrong j %d points index", j);                 \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (j >= 0 && j < (int)lline->num_points)
@@ -3569,6 +3630,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     if (k < 0 || k >= (int)lline->num_breaks)                                 \
       {                                                                       \
         LOG_ERROR ("MULTILEADER wrong k %d breaks index", j);                 \
+        dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
     assert (k >= 0 && k < (int)lline->num_breaks)
