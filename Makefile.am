@@ -281,38 +281,27 @@ if HAVE_SHFMT
 endif
 
 log-dwg: all
-	for d in `find $(srcdir)/test/test-data \
-		$(srcdir)/test/test-old \
-		$(srcdir)/test/issues \
-		$(srcdir)/test/ossfuzz -iname \*.dwg -size -40M`; do \
-	  ./log "$$d"; \
-	done
-	for d in `find $(srcdir)/test/ossfuzz/indwg* -type f -size -40M`; do \
-	  ./log "$$d"; \
-	done
+	find $(srcdir)/test/test-data $(srcdir)/test/test-old $(srcdir)/test/issues \
+	     $(srcdir)/test/ossfuzz -type f -print0 -iname \*.dwg -size -40M | \
+          xargs -0 -n1 -P8 ./log "$d"
+	find $(srcdir)/test/ossfuzz/indwg* -type f -printf0 -size -40M | \
+	  xargs -0 -n1 -P8 ./log "$d"
 
 check-ossfuzz: all
-	+for d in `$(srcdir)/test/ossfuzz -iname \*.dwg -size -40M`; do \
-	  ./log "$$d"; \
-	done
-	+for d in `find $(srcdir)/test/ossfuzz/indwg* -type f -size -40M`; do \
-	  ./log "$$d"; \
-	done
-	+for d in `find $(srcdir)/test/ossfuzz/outdxf* -type f -size -40M`; do \
-	  ./dxf "$$d"; \
-	done
-	+for d in `find $(srcdir)/test/ossfuzz/outjson -type f -size -40M`; do \
-	  ./json "$$d"; \
-	done
-	+for d in `find $(srcdir)/test/ossfuzz/outgeojson -type f -size -40M`; do \
-	  $(LTEXEC) programs/dwgread -Ogeojson -o/dev/null "$$d"; \
-	done
-	+for d in `find $(srcdir)/test/ossfuzz/in{dxf,dxfb,json} -type f -size -40M`; do \
-	  ./dwg "$$d"; \
-	done
-	+for d in `find $(srcdir)/test/ossfuzz/outsvg -type f -size -40M`; do \
-	  ./svg "$$d"; \
-	done
+	+find $(srcdir)/test/ossfuzz -type f -print0 -iname \*.dwg -size -40M | \
+          xargs -0 -n1 -P8 ./log "$d"
+	+find $(srcdir)/test/ossfuzz/indwg* -type f -print0 -size -40M | \
+          xargs -0 -n1 -P8 ./log "$d"
+	+find $(srcdir)/test/ossfuzz/outdxf* -type f -print0 -size -40M | \
+          xargs -0 -n1 -P8 ./dxf "$d"
+	+find $(srcdir)/test/ossfuzz/outjson -type f -print0 -size -40M | \
+	  xargs -0 -n1 -P8 ./json "$d"
+	+find $(srcdir)/test/ossfuzz/outgeojson -type f -print0 -size -40M | \
+	  xargs -0 -n1 -P8 $(LTEXEC) programs/dwgread -Ogeojson -o/dev/null "$$d"
+	+find $(srcdir)/test/ossfuzz/in{dxf,dxfb,json} -type f -size -40M | \
+	  xargs -0 -n1 -P8 ./dwg "$d"
+	+find $(srcdir)/test/ossfuzz/outsvg -type f -size -40M | \
+	  xargs -0 -n1 -P8 ./svg "$d"
 
 # clang-analyzer.llvm.org, debian: clang-tools-{6.0,7}, redhat: clang-analyzer
 SCAN_BUILD = scan-build
