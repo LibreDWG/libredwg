@@ -57,7 +57,9 @@ void json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
 static int json_3dsolid (Bit_Chain *restrict dat,
                          const Dwg_Object *restrict obj,
                          Dwg_Entity_3DSOLID *restrict _obj);
-static void _prefix (Bit_Chain *dat);
+#ifdef JSON_WHITESPACE
+  static void _prefix (Bit_Chain *dat);
+#endif
 static char *_path_field (const char *path);
 
 /*--------------------------------------------------------------------------------
@@ -70,46 +72,79 @@ static char *_path_field (const char *path);
 #define SETFIRST dat->opts |= DWG_OPTS_JSONFIRST
 #define CLEARFIRST dat->opts &= ~DWG_OPTS_JSONFIRST
 
-#define PREFIX _prefix (dat);
+#ifdef DEBUG
+#  define JSON_WHITESPACE
+#endif
+
+#ifdef JSON_WHITESPACE
+#  define PREFIX _prefix (dat);
+#  define JSON_NEWLINE "\n"
+#  define JSON_SPACE " "
+#  define JSON_KEY "\"%s\": "
+#else
+#  define PREFIX
+#  define JSON_NEWLINE
+#  define JSON_SPACE
+#  define JSON_KEY "\"%s\":"
+#endif
+
 #define PRINTFIRST                                                            \
   {                                                                           \
     if (!ISFIRST)                                                             \
-      fprintf (dat->fh, ",\n");                                               \
+      fprintf (dat->fh, "," JSON_NEWLINE);                                    \
     else                                                                      \
       CLEARFIRST;                                                             \
   }
 #define FIRSTPREFIX PRINTFIRST PREFIX
 
-#define KEYs(nam) FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", nam)
+#define KEYs(nam) FIRSTPREFIX fprintf (dat->fh, JSON_KEY, nam)
 // strip path to field only
-#define KEY(nam) FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam))
+#define KEY(nam) FIRSTPREFIX fprintf (dat->fh, JSON_KEY, _path_field (#nam))
 
 #define ARRAY                                                                 \
   {                                                                           \
-    fprintf (dat->fh, "[\n");                                                 \
+    fprintf (dat->fh, "[" JSON_NEWLINE);                                      \
     SETFIRST;                                                                 \
     dat->bit++;                                                               \
   }
-#define ENDARRAY                                                              \
-  {                                                                           \
-    fprintf (dat->fh, "\n");                                                  \
-    dat->bit--;                                                               \
-    PREFIX fprintf (dat->fh, "]");                                            \
-    CLEARFIRST;                                                               \
-  }
+#ifdef JSON_WHITESPACE
+  #define ENDARRAY                                                            \
+    {                                                                         \
+      fprintf (dat->fh, "\n");                                                \
+      dat->bit--;                                                             \
+      PREFIX fprintf (dat->fh, "]");                                          \
+      CLEARFIRST;                                                             \
+    }
+#else
+  #define ENDARRAY                                                            \
+    {                                                                         \
+      dat->bit--;                                                             \
+      PREFIX fprintf (dat->fh, "]");                                          \
+      CLEARFIRST;                                                             \
+    }
+#endif
 #define HASH                                                                  \
   {                                                                           \
-    fprintf (dat->fh, "{\n");                                                 \
+    fprintf (dat->fh, "{" JSON_NEWLINE);                                      \
     SETFIRST;                                                                 \
     dat->bit++;                                                               \
   }
-#define ENDHASH                                                               \
-  {                                                                           \
-    fprintf (dat->fh, "\n");                                                  \
-    dat->bit--;                                                               \
-    PREFIX fprintf (dat->fh, "}");                                            \
-    CLEARFIRST;                                                               \
-  }
+#ifdef JSON_WHITESPACE
+  #define ENDHASH                                                             \
+    {                                                                         \
+      fprintf (dat->fh, "\n");                                                \
+      dat->bit--;                                                             \
+      PREFIX fprintf (dat->fh, "}");                                          \
+      CLEARFIRST;                                                             \
+    }
+#else
+  #define ENDHASH                                                             \
+    {                                                                         \
+      dat->bit--;                                                             \
+      PREFIX fprintf (dat->fh, "}");                                          \
+      CLEARFIRST;                                                             \
+    }
+#endif
 
 #define TABLE(nam)                                                            \
   KEY (nam);                                                                  \
@@ -141,12 +176,12 @@ static char *_path_field (const char *path);
 #define FORMAT_BD FORMAT_RD
 #define FORMAT_RLL "%" PRIu64
 #define FORMAT_BLL "%" PRIu64
-#define FORMAT_HREF "[%u, %u, " FORMAT_RLL ", " FORMAT_RLL "]"
+#define FORMAT_HREF "[%u," JSON_SPACE "%u," JSON_SPACE FORMAT_RLL "," JSON_SPACE FORMAT_RLL "]"
 #undef FORMAT_HREF11
-#define FORMAT_HREF11 "[%u, %hd, " FORMAT_RLL "]"
+#define FORMAT_HREF11 "[%u," JSON_SPACE "%hd," JSON_SPACE FORMAT_RLL "]"
 #undef ARGS_H
 #define ARGS_H(hdl) hdl.code, hdl.size, hdl.value
-#define FORMAT_H "[%u, %u, " FORMAT_RLL "]"
+#define FORMAT_H "[%u," JSON_SPACE "%u," JSON_SPACE FORMAT_RLL "]"
 #define ARGS_HREF(ref)                                                        \
   ref->handleref.code, ref->handleref.size, ref->handleref.value,             \
       ref->absolute_ref
@@ -190,22 +225,22 @@ static char *_path_field (const char *path);
   }
 #define VALUE_2RD(pt, dxf)                                                    \
   {                                                                           \
-    fprintf (dat->fh, "[ ");                                                  \
+    fprintf (dat->fh, "[" JSON_SPACE);                                        \
     VALUE_RD (pt.x, 0);                                                       \
-    fprintf (dat->fh, ", ");                                                  \
+    fprintf (dat->fh, "," JSON_SPACE);                                        \
     VALUE_RD (pt.y, 0);                                                       \
-    fprintf (dat->fh, " ]");                                                  \
+    fprintf (dat->fh, "]" JSON_SPACE);                                        \
   }
 #define VALUE_2DD(pt, def, dxf) VALUE_2RD (pt, dxf)
 #define VALUE_3RD(pt, dxf)                                                    \
   {                                                                           \
-    fprintf (dat->fh, "[ ");                                                  \
+    fprintf (dat->fh, "[" JSON_SPACE);                                        \
     VALUE_RD (pt.x, 0);                                                       \
-    fprintf (dat->fh, ", ");                                                  \
+    fprintf (dat->fh, "," JSON_SPACE);                                        \
     VALUE_RD (pt.y, 0);                                                       \
-    fprintf (dat->fh, ", ");                                                  \
+    fprintf (dat->fh, "," JSON_SPACE);                                        \
     VALUE_RD (pt.z, 0);                                                       \
-    fprintf (dat->fh, " ]");                                                  \
+    fprintf (dat->fh, JSON_SPACE "]");                                        \
   }
 #define VALUE_3BD(pt, dxf) VALUE_3RD (pt, dxf)
 #define VALUE_TV(nam, dxf)
@@ -213,22 +248,22 @@ static char *_path_field (const char *path);
 #define FIELD(nam, type, dxf)                                                 \
   if (!memBEGINc (#nam, "num_"))                                              \
     {                                                                         \
-      FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type,                 \
+      FIRSTPREFIX fprintf (dat->fh, JSON_KEY FORMAT_##type,                   \
                            _path_field (#nam), _obj->nam);                    \
     }
 #define _FIELD(nam, type, value)                                              \
   {                                                                           \
-    FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": " FORMAT_##type, obj->nam);  \
+    FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\":" JSON_SPACE FORMAT_##type, obj->nam); \
   }
 #define ENT_FIELD(nam, type, value)                                           \
   {                                                                           \
-    FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type,                   \
+    FIRSTPREFIX fprintf (dat->fh, JSON_KEY FORMAT_##type,                     \
                          _path_field (#nam), _ent->nam);                      \
   }
 #define SUB_FIELD(o, nam, type, dxf)                                          \
   if (!memBEGINc (#nam, "num_"))                                              \
     {                                                                         \
-      FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_##type,                 \
+      FIRSTPREFIX fprintf (dat->fh, JSON_KEY FORMAT_##type,                   \
                            _path_field (#nam), _obj->o.nam);                  \
     }
 #define FIELD_CAST(nam, type, cast, dxf) FIELD (nam, cast, dxf)
@@ -237,7 +272,7 @@ static char *_path_field (const char *path);
 #define FIELD_G_TRACE(nam, type, dxf)
 #define FIELD_TEXT(nam, str)                                                  \
   {                                                                           \
-    FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));            \
+    FIRSTPREFIX fprintf (dat->fh, JSON_KEY, _path_field (#nam));              \
     VALUE_TEXT ((char *)str)                                                  \
   }
 
@@ -293,12 +328,12 @@ static char *_path_field (const char *path);
 // may be downgraded from TV, thus shorter
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
-    FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));            \
+    FIRSTPREFIX fprintf (dat->fh, JSON_KEY, _path_field (#nam));  \
     json_write_TFv (dat, (const BITCODE_TF)_obj->nam, len);                   \
   }
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
-    FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));            \
+    FIRSTPREFIX fprintf (dat->fh, JSON_KEY, _path_field (#nam));  \
     json_write_TF (dat, (const BITCODE_TF)_obj->nam, len);                    \
   }
 #define FIELD_TFF(nam, len, dxf) FIELD_TF (nam, len, dxf)
@@ -320,7 +355,7 @@ static char *_path_field (const char *path);
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      fprintf (dat->fh, "[0, 0, 0]");                                         \
+      fprintf (dat->fh, "[0," JSON_SPACE "0," JSON_SPACE "0]");               \
     }
 #define VALUE_H(hdl, dxf) fprintf (dat->fh, FORMAT_H "", ARGS_H (hdl))
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
@@ -329,30 +364,30 @@ static char *_path_field (const char *path);
       {                                                                       \
         PRE (R_13b1)                                                          \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF11 "",          \
+          FIRSTPREFIX fprintf (dat->fh, JSON_KEY FORMAT_HREF11 "",\
                                _path_field (#nam), ARGS_HREF11 (_obj->nam));  \
         }                                                                     \
         LATER_VERSIONS                                                        \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF "",            \
+          FIRSTPREFIX fprintf (dat->fh, JSON_KEY FORMAT_HREF "",  \
                                _path_field (#nam), ARGS_HREF (_obj->nam));    \
         }                                                                     \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        FIRSTPREFIX fprintf (dat->fh, "\"%s\": [0, 0]", _path_field (#nam));  \
+        FIRSTPREFIX fprintf (dat->fh, JSON_KEY "[0," JSON_SPACE "0]", _path_field (#nam)); \
       }                                                                       \
   }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
   {                                                                           \
     if (_obj->o.nam)                                                          \
       {                                                                       \
-        FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF "",              \
+        FIRSTPREFIX fprintf (dat->fh, JSON_KEY FORMAT_HREF "",    \
                              _path_field (#nam), ARGS_HREF (_obj->o.nam));    \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        FIRSTPREFIX fprintf (dat->fh, "\"%s\": [0, 0]", _path_field (#nam));  \
+        FIRSTPREFIX fprintf (dat->fh, JSON_KEY "[0," JSON_SPACE "0]", _path_field (#nam)); \
       }                                                                       \
   }
 #define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE (nam, code, dxf)
@@ -371,7 +406,7 @@ static char *_path_field (const char *path);
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "[0, 0]");                                     \
+      PREFIX fprintf (dat->fh, "[0," JSON_SPACE "0]");                        \
     }
 #define SUB_FIELD_HANDLE_N(o, nam, handle_code, dxf)                          \
   PRINTFIRST;                                                                 \
@@ -381,7 +416,7 @@ static char *_path_field (const char *path);
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      PREFIX fprintf (dat->fh, "[0, 0]");                                     \
+      PREFIX fprintf (dat->fh, "[0," JSON_SPACE "0]");                        \
     }
 #define VALUE_BINARY(buf, len, dxf)                                           \
   {                                                                           \
@@ -420,7 +455,7 @@ static char *_path_field (const char *path);
     {                                                                         \
       if (!bit_isnan (_obj->nam))                                             \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));      \
+          FIRSTPREFIX fprintf (dat->fh, JSON_KEY, _path_field (#nam));        \
           _VALUE_RD (_obj->nam, dxf);                                         \
         }                                                                     \
     }
@@ -428,7 +463,7 @@ static char *_path_field (const char *path);
     {                                                                         \
       if (!bit_isnan (_obj->nam.x) && !bit_isnan (_obj->nam.y))               \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": ");                    \
+          FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\":" JSON_SPACE);          \
           VALUE_2RD (_obj->nam, dxf);                                         \
         }                                                                     \
     }
@@ -437,7 +472,7 @@ static char *_path_field (const char *path);
       if (!bit_isnan (_obj->nam.x) && !bit_isnan (_obj->nam.y)                \
           && !bit_isnan (_obj->nam.z))                                        \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": ");                    \
+          FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\":" JSON_SPACE);          \
           VALUE_3RD (_obj->nam, dxf);                                         \
         }                                                                     \
     }
@@ -445,29 +480,29 @@ static char *_path_field (const char *path);
     {                                                                         \
       if (!bit_isnan (_obj->o.nam))                                           \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));      \
+          FIRSTPREFIX fprintf (dat->fh, JSON_KEY, _path_field (#nam));        \
           _VALUE_RD (_obj->o.nam, dxf);                                       \
         }                                                                     \
     }
 #else /* IS_RELEASE */
 #  define FIELD_BD(nam, dxf)                                                  \
     {                                                                         \
-      FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));          \
+      FIRSTPREFIX fprintf (dat->fh, JSON_KEY, _path_field (#nam));            \
       _VALUE_RD (_obj->nam, dxf);                                             \
     }
 #  define FIELD_2RD(nam, dxf)                                                 \
     {                                                                         \
-      FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": ");                        \
+      FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\":" JSON_SPACE);              \
       VALUE_2RD (_obj->nam, dxf);                                             \
     }
 #  define FIELD_3RD(nam, dxf)                                                 \
     {                                                                         \
-      FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\": ");                        \
+      FIRSTPREFIX fprintf (dat->fh, "\"" #nam "\":" JSON_SPACE);              \
       VALUE_3RD (_obj->nam, dxf);                                             \
     }
 #  define SUB_FIELD_BD(o, nam, dxf)                                           \
     {                                                                         \
-      FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));          \
+      FIRSTPREFIX fprintf (dat->fh, JSON_KEY, _path_field (#nam));            \
       _VALUE_RD (_obj->o.nam, dxf);                                           \
     }
 #endif
@@ -595,7 +630,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
         {
           FIELD_BS (index, 62);
         }
-      FIRSTPREFIX fprintf (dat->fh, "\"rgb\": \"%06x\"", (unsigned)_obj->rgb);
+      FIRSTPREFIX fprintf (dat->fh, "\"rgb\":" JSON_SPACE "\"%06x\"", (unsigned)_obj->rgb);
       if (_obj->flag)
         {
           FIELD_BS (flag, 0);
@@ -611,7 +646,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     }
   else
     {
-      FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_RSd, _path_field (key),
+      FIRSTPREFIX fprintf (dat->fh, JSON_KEY FORMAT_RSd, _path_field (key),
                            _obj->index);
     }
 }
@@ -621,7 +656,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   FIRSTPREFIX fprintf (dat->fh,                                               \
-                       "\"" #nam "\": [ " FORMAT_BL ", " FORMAT_BL " ]",      \
+                       "\"" #nam "\":" JSON_SPACE "[" JSON_SPACE FORMAT_BL "," JSON_SPACE FORMAT_BL JSON_SPACE "]", \
                        _obj->nam.days, _obj->nam.ms)
 #define FIELD_TIMERLL(nam, dxf) FIELD_TIMEBLL (nam, dxf)
 
@@ -823,7 +858,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define SUBCLASS(name)                                                        \
   SINCE (R_13b1)                                                              \
   {                                                                           \
-    FIRSTPREFIX fprintf (dat->fh, "\"_subclass\": \"" #name "\"");            \
+    FIRSTPREFIX fprintf (dat->fh, "\"_subclass\":" JSON_SPACE "\"" #name "\""); \
   }
 
 // FIXME: for KEY not the complete nam path, only the field.
@@ -901,6 +936,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define START_OBJECT_HANDLE_STREAM
 #define CONTROL_HANDLE_STREAM
 
+#ifdef JSON_WHITESPACE
 static void
 _prefix (Bit_Chain *dat)
 {
@@ -909,6 +945,7 @@ _prefix (Bit_Chain *dat)
       fprintf (dat->fh, "  ");
     }
 }
+#endif
 
 #define DWG_ENTITY(token)                                                     \
   static int dwg_json_##token##_private (Bit_Chain *dat, Bit_Chain *hdl_dat,  \
@@ -1173,7 +1210,7 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
                      rbuf->type);
           break;
         case DWG_VT_POINT3D:
-          fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ]",
+          fprintf (dat->fh, "[" JSON_SPACE FORMAT_RD "," JSON_SPACE FORMAT_RD "," JSON_SPACE FORMAT_RD JSON_SPACE "]",
                    rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2]);
           LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]\n", i, rbuf->value.pt[0],
                      rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
@@ -2307,7 +2344,7 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object *obj = &dwg->object[j];
       // handle => abs. offset
       // TODO: The real HANDLES section omap has handleoffset (deleted holes) and addressoffset
-      FIRSTPREFIX fprintf (dat->fh, "[ %lu, %lu ]", obj->handle.value, obj->address);
+      FIRSTPREFIX fprintf (dat->fh, "[" JSON_SPACE "%lu," JSON_SPACE "%lu" JSON_SPACE "]", obj->handle.value, obj->address);
     }
   ENDSEC ();
   return 0;
@@ -2326,7 +2363,7 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->chain += 16; /* skip the sentinel */
       KEY (THUMBNAILIMAGE);
       HASH;
-      FIRSTPREFIX fprintf (dat->fh, "\"size\": %" PRIuSIZE, _obj->size);
+      FIRSTPREFIX fprintf (dat->fh, "\"size\":" JSON_SPACE "%" PRIuSIZE, _obj->size);
       FIELD_BINARY (chain, _obj->size, 310);
       if (dwg->header.from_version >= R_2004)
         _obj->chain -= 16; /* undo for free */
@@ -2453,7 +2490,7 @@ json_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
 
   RECORD (AppInfoHistory); // single hash
-  FIRSTPREFIX fprintf (dat->fh, "\"size\": %d", _obj->size);
+  FIRSTPREFIX fprintf (dat->fh, "\"size\":" JSON_SPACE "%d", _obj->size);
   FIELD_BINARY (unknown_bits, _obj->size, 0);
   // clang-format off
   //#include "appinfohistory.spec"
@@ -2627,7 +2664,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dat->codepage = dwg->header.codepage;
   if (!dat->fh)
     goto fail;
-  fprintf (dat->fh, "{\n  \"created_by\": \"%s\"", PACKAGE_STRING);
+  fprintf (dat->fh, "{" JSON_NEWLINE JSON_SPACE JSON_SPACE "\"created_by\":" JSON_SPACE "\"%s\"", PACKAGE_STRING);
   dat->bit++; // ident
 
   if (!minimal)
@@ -2700,7 +2737,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 #endif
 
   dat->bit--;
-  fprintf (dat->fh, "}\n");
+  fprintf (dat->fh, "}" JSON_NEWLINE);
   return 0;
 fail:
   return 1;

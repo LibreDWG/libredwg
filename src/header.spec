@@ -21,7 +21,7 @@
 // char version[6] handled separately. older releases just had a version[12]
 #ifdef IS_JSON
   KEY (zero_5);
-  fprintf (dat->fh, "[ %d, %d, %d, %d, %d ]",
+  fprintf (dat->fh, "[" JSON_SPACE "%d," JSON_SPACE "%d," JSON_SPACE "%d," JSON_SPACE "%d," JSON_SPACE "%d" JSON_SPACE "]",
           _obj->zero_5[0], _obj->zero_5[1], _obj->zero_5[2], _obj->zero_5[3],
           _obj->zero_5[4]);
 #else

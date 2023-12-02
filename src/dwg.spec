@@ -3163,7 +3163,7 @@ DWG_OBJECT (DICTIONARY)
       {
         FIRSTPREFIX
         VALUE_T (_obj->texts[rcount1]);
-        fprintf (dat->fh, ": ");
+        fprintf (dat->fh, ":" JSON_SPACE);
         VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
       }
   }
@@ -3226,7 +3226,7 @@ DWG_OBJECT (DICTIONARYWDFLT)
       {
         FIRSTPREFIX
         VALUE_T (_obj->texts[rcount1]);
-        fprintf (dat->fh, ": ");
+        fprintf (dat->fh, ":" JSON_SPACE);
         VALUE_HANDLE (_obj->itemhandles[rcount1], itemhandles, 2, 350);
       }
   }
