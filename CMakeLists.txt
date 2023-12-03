@@ -233,10 +233,19 @@ if(NOT LIBREDWG_DISABLE_JSON)
     src/in_json.c)
 endif()
 
+if(NOT LIBREDWG_DISABLE_DXF)
+  set(outdxf_SOURCES
+    src/out_dxf.c
+    src/out_dxfb.c)
+  set(indxf_SOURCES
+    src/in_dxf.c)
+endif()
+
 if(NOT LIBREDWG_DISABLE_WRITE)
  set(write_SOURCES
     src/encode.c
-    ${injson_SOURCES}
+    ${outjson_SOURCES}
+    ${outdxf_SOURCES}
     src/reedsolomon.c)
 endif()
 
@@ -256,10 +265,8 @@ set(libredwg_SOURCES
     src/dxfclasses.c
     src/free.c
     src/geom.c
-    src/in_dxf.c
-    src/out_dxf.c
-    ${outjson_SOURCES}
-    src/out_dxfb.c
+    ${indxf_SOURCES}
+    ${injson_SOURCES}
     ${write_SOURCES}
     src/print.c)
 
