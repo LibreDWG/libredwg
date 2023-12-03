@@ -359,6 +359,28 @@ static array_hdls *obj_hdls = NULL;
       pair = dxf_read_pair (dat);                                             \
       EXPECT_SUB_T_DXF (#sub, #field, dxf, "T");                              \
     }
+#ifndef DISABLE_IGNORE_INVALID_DXF
+#  define HANDLE_INVALID(kind)                                                \
+    LOG_WARN ("DXF line %d: Failed to process %s in %s - SKIPPING",           \
+      dat->dxf_line_number, dxfname, #kind);                                  \
+    free (dxfname);                                                           \
+    obj->invalid = 1;                                                         \
+    for (;;) {                                                                \
+      pair = dxf_read_pair (dat);                                             \
+      DXF_CHECK_EOF;                                                          \
+      if (pair == NULL || pair->code == 0) {                                  \
+        break;                                                                \
+      }                                                                       \
+      dxf_free_pair(pair);                                                    \
+    }
+#else
+#  define HANDLE_INVALID(kind)                                                \
+    LOG_WARN ("DXF line %d: Failed to process %s in %s",                      \
+      dat->dxf_line_number, dxfname, #kind);                                  \
+    free (dxfname);                                                           \
+    obj->invalid = 1;                                                         \
+    return DWG_ERR_INVALIDDWG;
+#endif
 
 static void *
 xcalloc (size_t n, size_t s)
@@ -818,6 +840,8 @@ dxf_read_pair (Bit_Chain *dat)
     }
   if (is_binary)
     LOG_HANDLE ("%4zx: ", dat->byte);
+  else
+    dat->dxf_line_number += 2;
   // pre-R14 binary DXF uses 1-byte group codes (0xFF prefix for codes >= 255)
   if (is_binary && dat->version < R_14)
     {
@@ -13595,10 +13619,9 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (!pair)
             {
               Dwg_Object *obj = &dwg->object[idx];
-              free (dxfname);
               if (idx != dwg->num_objects)
                 obj->dxfname = NULL;
-              return DWG_ERR_INVALIDDWG;
+              HANDLE_INVALID(entities)
             }
           if (pair->code == 0 && pair->value.s.ptr)
             {
@@ -13675,10 +13698,9 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (!pair)
                 {
                   Dwg_Object *obj = &dwg->object[idx];
-                  free (dxfname);
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
-                  return DWG_ERR_INVALIDDWG;
+                  HANDLE_INVALID(objects)
                 }
             }
           else
@@ -14093,6 +14115,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  dat->dxf_line_number = -1;
   if (!dat->chain && dat->fh)
     {
       error = dat_read_stream (dat, dat->fh);
