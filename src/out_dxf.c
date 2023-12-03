@@ -3911,7 +3911,7 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           Dwg_Object *o = &dwg->object[i];
           Dwg_Object_Ref *ohdl;
-          if (o->supertype != DWG_SUPERTYPE_ENTITY || !o->tio.entity)
+          if (o->supertype != DWG_SUPERTYPE_ENTITY || !o->tio.entity || o->invalid)
             continue;
           if (o->fixedtype == DWG_TYPE_BLOCK
               || o->fixedtype == DWG_TYPE_ENDBLK)
@@ -3940,7 +3940,7 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 if (ohdl
                     && (ohdl->absolute_ref == ms_ref
                         || ohdl->absolute_ref == ps_ref))
-                  error |= dwg_dxf_object (dat, o, &i); // sub-entity in ms
+                    error |= dwg_dxf_object (dat, o, &i); // sub-entity in ms
               }
             // else: skip (block entity owned by a different block)
           }
@@ -3954,7 +3954,8 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (obj)
         {
           int i = obj->index;
-          error |= dwg_dxf_object (dat, obj, &i);
+          if (!obj->invalid)
+            error |= dwg_dxf_object (dat, obj, &i);
           obj = get_next_owned_block_entity (ms, obj); // until last_entity
         }
       if (ps)
@@ -3963,7 +3964,8 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           while (obj)
             {
               int i = obj->index;
-              error |= dwg_dxf_object (dat, obj, &i);
+              if (!obj->invalid)
+                error |= dwg_dxf_object (dat, obj, &i);
               obj = get_next_owned_block_entity (ps, obj);
             }
         }
@@ -3998,12 +4000,12 @@ dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // The NOD (Named Object Dict) must be always the very first OBJECT,
   // not just DICTIONARY.
   nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
-  if (nod)
+  if (nod && !nod->invalid)
     error |= dwg_dxf_object (dat, nod, &i);
   for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
     {
       const Dwg_Object *restrict obj = &dwg->object[i];
-      if (obj == nod)
+      if (obj == nod || obj->invalid)
         continue;
       if (obj->supertype == DWG_SUPERTYPE_OBJECT
           && obj->type != DWG_TYPE_BLOCK_HEADER && !dwg_obj_is_control (obj))
