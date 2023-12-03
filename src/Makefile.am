@@ -150,58 +150,58 @@ EXTRA_DIST = \
 
 # maintainer only:
 $(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
-  echo make regen-dynapi might be needed
+	echo make regen-dynapi might be needed
 if HAVE_GPERF
 $(srcdir)/dxfclasses.c: $(srcdir)/dxfclasses.in
-  -cd $(abs_top_srcdir) && \
-    $(GPERF) --output-file src/dxfclasses.tmp.c src/dxfclasses.in && \
-    sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
-        -e's,unsigned int len,size_t len,;' -e 's,register ,,g' <src/dxfclasses.tmp.c \
-                                                                >src/dxfclasses.c && \
-    rm -f src/dxfclasses.tmp.c
+	-cd $(abs_top_srcdir) && \
+	  $(GPERF) --output-file src/dxfclasses.tmp.c src/dxfclasses.in && \
+	  sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
+	      -e's,unsigned int len,size_t len,;' -e 's,register ,,g' <src/dxfclasses.tmp.c \
+	                                                              >src/dxfclasses.c && \
+	  rm -f src/dxfclasses.tmp.c
 $(srcdir)/objects.c: $(srcdir)/objects.in
-  -cd $(abs_top_srcdir) && \
-    $(GPERF) --output-file src/objects.tmp.c src/objects.in && \
-    sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
-        -e's,unsigned int len,size_t len,; s,register ,,g' <src/objects.tmp.c >src/objects.c && \
-    rm -f src/objects.tmp.c
+	-cd $(abs_top_srcdir) && \
+	  $(GPERF) --output-file src/objects.tmp.c src/objects.in && \
+	  sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
+              -e's,unsigned int len,size_t len,; s,register ,,g' <src/objects.tmp.c >src/objects.c && \
+	  rm -f src/objects.tmp.c
 endif
 
 .c.i:
-  $(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-  $(COMPILE) -E -o $@ $<
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -E -o $@ $<
 
 .c.ii: # no linemarkers
-  $(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-  $(COMPILE) -E -P -o $@ $<
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -E -P -o $@ $<
 
 .c.ic: # replace the original .c with the expanded version.
-  $(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-  $(COMPILE) -E -P -o $@ $<
-  $(CLANG_FORMAT) -i $@
-  $(am__mv) $< $<.orig
-  $(am__mv) $@ $<
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -E -P -o $@ $<
+	$(CLANG_FORMAT) -i $@
+	$(am__mv) $< $<.orig
+	$(am__mv) $@ $<
 
 cppcheck:
 if HAVE_CPPCHECK
-  $(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I. $(srcdir)/*.c
+	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I. $(srcdir)/*.c
 endif
 
 clang-tidy: ../compile_commands.json
-  $(CLANG_TIDY) --checks='-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling' $(srcdir)/*.c
+	$(CLANG_TIDY) --checks='-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling' $(srcdir)/*.c
 
 # emacs flymake-mode
 check-syntax:
-  test -n "$(CHK_SOURCES)" && \
-    nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
+	test -n "$(CHK_SOURCES)" && \
+	  nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax cppcheck clang-tidy
 
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@
 LIBS      += @GCOV_LIBS@
 gcov:
-  -test -f $(builddir)/gcov.log && rm $(builddir)/gcov.log
-  $(GCOV) -lp *.gcno | tee -a $(builddir)/gcov.log
+	-test -f $(builddir)/gcov.log && rm $(builddir)/gcov.log
+	$(GCOV) -lp *.gcno | tee -a $(builddir)/gcov.log
 endif
 MAINTAINERCLEANFILES = *~ *.i *_flymake.[ch]
 if ENABLE_GCOV
