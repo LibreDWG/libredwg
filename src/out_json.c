@@ -2293,6 +2293,8 @@ json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       int error;
       Dwg_Object *obj = &dwg->object[i];
+      if (obj->invalid)
+        continue;
       FIRSTPREFIX HASH;
       error = dwg_json_object (dat, obj);
       ENDHASH
