@@ -22,10 +22,10 @@ AM_CFLAGS   = -I. -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD       = $(top_builddir)/src/libredwg.la
 CPPCHECK    = @CPPCHECK@
 
-bin_PROGRAMS   += dwglayers dwggrep
-noinst_PROGRAMS =
-dist_bin_SCRIPTS = dwgfilter
-dist_man1_MANS += $(srcdir)/dwglayers.1 \
+bin_PROGRAMS       = dwglayers dwggrep
+noinst_PROGRAMS    =
+dist_bin_SCRIPTS   = dwgfilter
+dist_man1_MANS     = $(srcdir)/dwglayers.1 \
 		  $(srcdir)/dwggrep.1 $(srcdir)/dwgfilter.1
 
 dwglayers_SOURCES  = dwglayers.c
