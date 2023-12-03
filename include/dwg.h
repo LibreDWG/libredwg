@@ -10716,6 +10716,7 @@ typedef struct _dwg_object
   size_t hdlpos;      /* relative offset, in bits */
   BITCODE_B  was_bitsize_set;    /* internally for encode only */
   BITCODE_B  has_strings;        /*!< r2007+ */
+  BITCODE_B  invalid;            /*!< if object could not be completely processed */
   BITCODE_RL stringstream_size;  /*!< r2007+ in bits, unused */
   BITCODE_UMC handlestream_size; /*!< r2010+ in bits */
   size_t common_size; /* relative offset from type ... end common_entity_data */

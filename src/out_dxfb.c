@@ -2410,7 +2410,8 @@ dxfb_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (obj)
     {
       int i = obj->index;
-      error |= dwg_dxfb_object (dat, obj, &i);
+      if (!obj->invalid)
+        error |= dwg_dxfb_object (dat, obj, &i);
       obj = get_next_owned_block_entity (ms, obj); // until last_entity
     }
   // Then all pspace entities. just filter out other BLOCKS entities
@@ -2420,7 +2421,8 @@ dxfb_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (obj)
         {
           int i = obj->index;
-          error |= dwg_dxfb_object (dat, obj, &i);
+          if (!obj->invalid)
+            error |= dwg_dxfb_object (dat, obj, &i);
           obj = get_next_owned_block_entity (ps, obj);
         }
     }
@@ -2439,12 +2441,12 @@ dxfb_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // The NOD (Named Object Dict) must be always the very first OBJECT,
   // not just DICTIONARY.
   nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
-  if (nod)
+  if (nod && !nod->invalid)
     error |= dwg_dxfb_object (dat, nod, &i);
   for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
     {
       const Dwg_Object *restrict obj = &dwg->object[i];
-      if (obj == nod)
+      if (obj == nod || obj->invalid)
         continue;
       if (obj->supertype == DWG_SUPERTYPE_OBJECT
           && obj->type != DWG_TYPE_BLOCK_HEADER && !dwg_obj_is_control (obj))
