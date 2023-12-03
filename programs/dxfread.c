@@ -246,6 +246,7 @@ main (int argc, char *argv[])
     setenv ("LIBREDWG_TRACE", "1", 0);
 #endif
 
+#ifndef DISABLE_DXF
   if (optind != argc)
     {
       if (opts > 1)
@@ -258,6 +259,7 @@ main (int argc, char *argv[])
         fprintf (stderr, "Reading DXF from stdin\n");
       error = dxf_read_file ("-", &dwg); // i.e. from stdin
     }
+#endif
 
   if (error >= DWG_ERR_CRITICAL)
     goto done;
