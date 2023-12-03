@@ -116,7 +116,7 @@ EXTRA_HEADERS = \
         hash.h \
         dynapi.h \
         geom.h
-if !DISABLE_json
+if !DISABLE_JSON
 EXTRA_HEADERS += \
         in_json.h
 #       in_xml.h
@@ -163,7 +163,7 @@ $(srcdir)/objects.c: $(srcdir)/objects.in
   -cd $(abs_top_srcdir) && \
     $(GPERF) --output-file src/objects.tmp.c src/objects.in && \
     sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
-              -e's,unsigned int len,size_t len,; s,register ,,g' <src/objects.tmp.c >src/objects.c && \
+        -e's,unsigned int len,size_t len,; s,register ,,g' <src/objects.tmp.c >src/objects.c && \
     rm -f src/objects.tmp.c
 endif
 
