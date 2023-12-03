@@ -49,10 +49,7 @@ libredwg_la_SOURCES = \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
-        out_dxf.c \
-        out_dxfb.c
-#       out_xml.c \
-#       out_yaml.c
+	in_dxf.c
 if !DISABLE_JSON
 libredwg_la_SOURCES += \
         out_json.c \
@@ -68,7 +65,10 @@ libredwg_la_SOURCES += \
 #       in_yaml.c
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
-	in_dxf.c
+	out_dxf.c \
+  out_dxfb.c \
+#       out_xml.c \
+#       out_yaml.c
 endif
 if !DISABLE_JSON
 libredwg_la_SOURCES += \
