@@ -1182,6 +1182,7 @@ typedef struct
   BITCODE_RLL handle;
   size_t address;
   BITCODE_BL index;
+  BITCODE_B invalid;
 } Object_Map;
 
 /*--------------------------------------------------------------------------------
@@ -2842,23 +2843,33 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       LOG_HANDLE ("\nSorting objects...\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Object(%3i): " FORMAT_RLLx " / idx: %u\n", i,
-                 dwg->object[i].handle.value, dwg->object[i].index);
+        if (!dwg->object[i].invalid)
+          fprintf (OUTPUT, "Object(%3i): " FORMAT_RLLx " / idx: %u\n", i,
+                   dwg->object[i].handle.value, dwg->object[i].index);
     }
   // init unsorted
   for (i = 0; i < dwg->num_objects; i++)
     {
       Dwg_Object *obj = &dwg->object[i];
+      if (obj->invalid)
+        {
+          omap[i].invalid = 1;
+          LOG_TRACE ("Skip invalid object %s " FORMAT_BL "\n",
+                     obj->name ? obj->name : "", i);
+          continue;
+        }
       if (obj->type == DWG_TYPE_UNUSED)
         {
+          omap[i].invalid = 1;
           LOG_TRACE ("Skip unused object %s " FORMAT_BL " " FORMAT_RLLx "\n",
-                     obj->name ? obj->name : "", i, obj->handle.value)
+                     obj->name ? obj->name : "", i, obj->handle.value);
           continue;
         }
       if (obj->type == DWG_TYPE_FREED)
         {
+          omap[i].invalid = 1;
           LOG_TRACE ("Skip freed object %s " FORMAT_BL " " FORMAT_RLLx "\n",
-                     obj->name ? obj->name : "", i, obj->handle.value)
+                     obj->name ? obj->name : "", i, obj->handle.value);
           continue;
         }
       omap[i].index = i; // i.e. dwg->object[j].index
@@ -2881,8 +2892,9 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Handle(%3i): " FORMAT_RLLx " / idx: " FORMAT_BL "\n",
-                 i, omap[i].handle, omap[i].index);
+        if (!omap[i].invalid)
+          fprintf (OUTPUT, "Handle(%3i): " FORMAT_RLLx " / idx: " FORMAT_BL "\n",
+                   i, omap[i].handle, omap[i].index);
     }
 
   UNTIL (R_2002)
@@ -2898,7 +2910,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       BITCODE_UMC hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
       BITCODE_MC off = (dat->byte - (i ? omap[i - 1].address : 0)) & INT32_MAX;
       size_t end_address;
-      if (!index && !omap[i].handle)
+      if (omap[i].invalid || (!index && !omap[i].handle))
         continue; // skipped objects
       LOG_TRACE ("\n> Next object: " FORMAT_BL " Handleoff: " FORMAT_UMC
                  " [UMC] Offset: " FORMAT_MC " [MC] @%" PRIuSIZE "\n"
@@ -3170,7 +3182,7 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {                                                                         \
       unsigned char chain[8];                                                 \
       Bit_Chain hdat                                                          \
-          = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 };          \
+        = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30, -1 };        \
       bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
       _obj->handles[i].name = #NAM;                                           \
       for (int k = 0; k < MIN ((int)_obj->handles[i].num_hdl, 8); k++)        \
@@ -3267,14 +3279,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       for (i = 0; i < dwg->num_objects; i++)
         {
           Dwg_Object *obj = &dwg->object[i];
-          if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
+          if (!obj->invalid && (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
               || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
               // WIPEOUT causes hang, TABLEGEOMETRY crash, MATERIAL causes ODA errors
 #ifndef DEBUG_CLASSES
                       || (dwg->opts & DWG_OPTS_IN
                           && (obj->fixedtype == DWG_TYPE_WIPEOUT
                               || obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
-                              || obj->fixedtype == DWG_TYPE_MATERIAL))
+                              || obj->fixedtype == DWG_TYPE_MATERIAL)))
 #endif
               )
             {
@@ -3303,6 +3315,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               for (i = 0; i < dwg->num_objects; i++)
                 {
                   Dwg_Object *obj = &dwg->object[i];
+                  if (obj->invalid)
+                    continue;
                   if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
                       || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
 #ifndef DEBUG_CLASSES
@@ -3338,6 +3352,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       for (i = 0; i < dwg->num_objects; i++)
         {
           Dwg_Object *obj = &dwg->object[i];
+          if (obj->invalid)
+            continue;
           if (obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
             downconvert_MLEADERSTYLE (obj);
           else if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
@@ -4527,7 +4543,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       Dwg_R2004_Header *_obj = &dwg->r2004_header;
       Bit_Chain file_dat = {
         NULL, sizeof (Dwg_R2004_Header), 0UL, 0, 0, R_INVALID, R_INVALID, NULL,
-        30
+        30, -1
       };
       Bit_Chain *orig_dat = dat;
       /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
@@ -4945,6 +4961,8 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
     {
       Dwg_Object *obj = &dwg->object[index];
       size_t size_pos = 0UL;
+      if (obj->invalid)
+        continue;
       // skip table objects or uninitialized entities
       if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
         {
