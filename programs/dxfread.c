@@ -69,7 +69,7 @@ opt_version (void)
 static int
 help (void)
 {
-  printf ("\nUsage: dxfread [OPTION]... DWGFILE\n");
+  printf ("\nUsage: dxfread [OPTION]... DXFFILE\n");
   printf ("Reads the DXF into some optional output format to stdout or some "
           "file,\n"
           "and prints error, success or verbose internal progress to stderr.\n"
