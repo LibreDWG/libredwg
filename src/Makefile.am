@@ -30,54 +30,54 @@ endif
 CPPCHECK = @CPPCHECK@
 
 libredwg_la_SOURCES = \
-	dwg.c \
-	common.c \
-	codepages.c \
-	bits.c \
-	decode.c \
+        dwg.c \
+        common.c \
+        codepages.c \
+        bits.c \
+        decode.c \
         decode_r11.c \
         decode_r2007.c \
-	reedsolomon.c \
+        reedsolomon.c \
         print.c \
         free.c \
         hash.c \
-	dynapi.c \
-	classes.c \
-	dwg_api.c \
-	objects.c \
-	geom.c \
-	$(EXTRA_HEADERS)
+        dynapi.c \
+        classes.c \
+        dwg_api.c \
+        objects.c \
+        geom.c \
+        $(EXTRA_HEADERS)
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
-	in_dxf.c
+        in_dxf.c
+if !DISABLE_JSON
+libredwg_la_SOURCES += \
+        in_json.c
+endif
+endif
+if USE_WRITE
+libredwg_la_SOURCES += \
+        encode.c \
+        dxfclasses.c
+#       encode_r2007.c
+#       in_xml.c
+#       in_yaml.c
+if !DISABLE_DXF
+libredwg_la_SOURCES += \
+        out_dxf.c \
+        out_dxfb.c
+#       out_xml.c
+#       out_yaml.c
+endif
 if !DISABLE_JSON
 libredwg_la_SOURCES += \
         out_json.c \
         out_geojson.c
 endif
 endif
-if USE_WRITE
-libredwg_la_SOURCES += \
-	encode.c \
-	dxfclasses.c
-#       encode_r2007.c
-#       in_xml.c
-#       in_yaml.c
-if !DISABLE_DXF
-libredwg_la_SOURCES += \
-	out_dxf.c \
-  out_dxfb.c \
-#       out_xml.c \
-#       out_yaml.c
-endif
-if !DISABLE_JSON
-libredwg_la_SOURCES += \
-	in_json.c
-endif
-endif
 
 EXTRA_HEADERS = \
-	dwg.spec \
+        dwg.spec \
         header_variables.spec \
         header_variables_r11.spec \
         header_variables_dxf.spec \
@@ -87,7 +87,7 @@ EXTRA_HEADERS = \
         header.spec \
         auxheader.spec \
         2ndheader.spec \
-	r2004_file_header.spec \
+        r2004_file_header.spec \
         summaryinfo.spec \
         acds.spec \
         appinfo.spec \
@@ -97,108 +97,111 @@ EXTRA_HEADERS = \
         template.spec \
         objfreespace.spec \
         revhistory.spec \
-	classes.inc \
-	objects.inc \
-	spec.h \
-	common.h \
-	importer.h \
-	classes.h \
-	codepages.h \
-	bits.h \
-	myalloca.h \
-	decode.h \
-	decode_r11.h \
-	dec_macros.h \
-	free.h \
+        classes.inc \
+        objects.inc \
+        spec.h \
+        common.h \
+        importer.h \
+        classes.h \
+        codepages.h \
+        bits.h \
+        myalloca.h \
+        decode.h \
+        decode_r11.h \
+        dec_macros.h \
+        free.h \
         print.h \
-	logging.h \
-	reedsolomon.h \
+        logging.h \
+        reedsolomon.h \
         hash.h \
-	dynapi.h \
-	out_json.h \
-	geom.h
+        dynapi.h \
+        geom.h
+if !DISABLE_json
+EXTRA_HEADERS += \
+        in_json.h
+#       in_xml.h
+#       in_yaml.h
+endif
 if !DISABLE_DXF
 EXTRA_HEADERS += \
-	out_dxf.h
-#       out_xml.h
-#       out_yaml.h
+        in_dxf.h
 endif
 if USE_WRITE
 EXTRA_HEADERS += \
-	encode.h
+        encode.h
 if !DISABLE_DXF
 EXTRA_HEADERS += \
-	in_dxf.h
-#       in_xml.h
-#       in_yaml.h
+        out_dxf.h
+#       out_xml.h
+#       out_yaml.h
 if !DISABLE_JSON
 EXTRA_HEADERS += \
-	in_json.h
+        out_json.h
 endif
 endif
 endif
 
 EXTRA_DIST = \
-	$(include_HEADERS) \
-	$(EXTRA_HEADERS) \
-	gen-dynapi.pl \
-	dxfclasses.in \
-	objects.in
+        $(include_HEADERS) \
+        $(EXTRA_HEADERS) \
+        gen-dynapi.pl \
+        dxfclasses.in \
+        objects.in
 
 # maintainer only:
 $(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
-	echo make regen-dynapi might be needed
+  echo make regen-dynapi might be needed
 if HAVE_GPERF
 $(srcdir)/dxfclasses.c: $(srcdir)/dxfclasses.in
-	-cd $(abs_top_srcdir) && \
-	  $(GPERF) --output-file src/dxfclasses.tmp.c src/dxfclasses.in && \
-	  sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
-	      -e's,unsigned int len,size_t len,;' -e 's,register ,,g' <src/dxfclasses.tmp.c \
-	                                                              >src/dxfclasses.c && \
-	  rm -f src/dxfclasses.tmp.c
+  -cd $(abs_top_srcdir) && \
+    $(GPERF) --output-file src/dxfclasses.tmp.c src/dxfclasses.in && \
+    sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
+        -e's,unsigned int len,size_t len,;' -e 's,register ,,g' <src/dxfclasses.tmp.c \
+                                                                >src/dxfclasses.c && \
+    rm -f src/dxfclasses.tmp.c
 $(srcdir)/objects.c: $(srcdir)/objects.in
-	-cd $(abs_top_srcdir) && \
-	  $(GPERF) --output-file src/objects.tmp.c src/objects.in && \
-	  sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
+  -cd $(abs_top_srcdir) && \
+    $(GPERF) --output-file src/objects.tmp.c src/objects.in && \
+    sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
               -e's,unsigned int len,size_t len,; s,register ,,g' <src/objects.tmp.c >src/objects.c && \
-	  rm -f src/objects.tmp.c
+    rm -f src/objects.tmp.c
 endif
 
 .c.i:
-	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -E -o $@ $<
+  $(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+  $(COMPILE) -E -o $@ $<
 
 .c.ii: # no linemarkers
-	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -E -P -o $@ $<
+  $(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+  $(COMPILE) -E -P -o $@ $<
 
 .c.ic: # replace the original .c with the expanded version.
-	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -E -P -o $@ $<
-	$(CLANG_FORMAT) -i $@
-	$(am__mv) $< $<.orig
-	$(am__mv) $@ $<
+  $(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+  $(COMPILE) -E -P -o $@ $<
+  $(CLANG_FORMAT) -i $@
+  $(am__mv) $< $<.orig
+  $(am__mv) $@ $<
 
 cppcheck:
 if HAVE_CPPCHECK
-	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I. $(srcdir)/*.c
+  $(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I. $(srcdir)/*.c
 endif
 
 clang-tidy: ../compile_commands.json
-	$(CLANG_TIDY) --checks='-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling' $(srcdir)/*.c
+  $(CLANG_TIDY) --checks='-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling' $(srcdir)/*.c
 
 # emacs flymake-mode
 check-syntax:
-	test -n "$(CHK_SOURCES)" && \
-	  nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
+  test -n "$(CHK_SOURCES)" && \
+    nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax cppcheck clang-tidy
 
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@
 LIBS      += @GCOV_LIBS@
 gcov:
-	-test -f $(builddir)/gcov.log && rm $(builddir)/gcov.log
-	$(GCOV) -lp *.gcno | tee -a $(builddir)/gcov.log
+  -test -f $(builddir)/gcov.log && rm $(builddir)/gcov.log
+  $(GCOV) -lp *.gcno | tee -a $(builddir)/gcov.log
 endif
 MAINTAINERCLEANFILES = *~ *.i *_flymake.[ch]
 if ENABLE_GCOV
