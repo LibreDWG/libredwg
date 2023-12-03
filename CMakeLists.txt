@@ -236,7 +236,6 @@ endif()
 if(NOT LIBREDWG_DISABLE_WRITE)
  set(write_SOURCES
     src/encode.c
-    src/in_dxf.c
     ${injson_SOURCES}
     src/reedsolomon.c)
 endif()
@@ -257,6 +256,7 @@ set(libredwg_SOURCES
     src/dxfclasses.c
     src/free.c
     src/geom.c
+    src/in_dxf.c
     src/out_dxf.c
     ${outjson_SOURCES}
     src/out_dxfb.c
@@ -289,7 +289,10 @@ if(NOT LIBREDWG_LIBONLY)
   endif(NOT HAVE_GETOPT_H)
   set(executables_TARGETS dwgread dwg2dxf dwggrep dwglayers dwgbmp dwg2SVG)
   add_executable(dwgread programs/dwgread.c ${getopt_c})
-  add_executable(dxfread programs/dxfread.c ${getopt_c})
+  if(NOT LIBREDWG_DISABLE_WRITE)
+    add_executable(dxfread programs/dxfread.c ${getopt_c})
+    set(executables_TARGETS ${executables_TARGETS} dxfread)
+  endif
   add_executable(dwg2dxf programs/dwg2dxf.c ${getopt_c})
   if(NOT LIBREDWG_DISABLE_WRITE)
     add_executable(dwgrewrite programs/dwgrewrite.c ${getopt_c})
