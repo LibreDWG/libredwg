@@ -48,7 +48,7 @@ case $r in
        r="$(examples/odaversion "$d")"
        ;;
 esac
-if [ $r = 11 ]; then r=12; fi
+if [ x$r = x11 ]; then r=12; fi
 
 if [ ! -f "$dir/$b.dwg" ]; then
     if [ -f "$srcdir/test/test-data/$dir/$b.dwg" ]; then
