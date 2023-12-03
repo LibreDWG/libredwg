@@ -241,6 +241,9 @@ static array_hdls *obj_hdls = NULL;
     }
 #else
 #  define HANDLE_INVALID(kind)                                                \
+    LOG_WARN ("DXF line %d: Failed to process %s in %s",                      \
+      dat->dxf_line_number, dxfname, #kind);                                  \
+    free (dxfname);                                                           \
     obj->invalid = 1;                                                         \
     return DWG_ERR_INVALIDDWG;
 #endif
