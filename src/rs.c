@@ -48,25 +48,38 @@
 
 #include <math.h>
 #include <stdio.h>
-#define mm 4  /* RS code over GF(2**4) - change to suit */
-#define nn 15 /* nn=2**mm -1   length of codeword */
-#define tt 3  /* number of errors that can be corrected */
-#define kk 9  /* kk = nn-2*tt  */
+#include "config.h"
+#include "rs.h"
 
-int pp[mm + 1]
-    = { 1, 1, 0, 0, 1 }; /* specify irreducible polynomial coeffts */
-int alpha_to[nn + 1], index_of[nn + 1], gg[nn - kk + 1];
-int recd[nn], data[kk], bb[nn - kk];
+#define mm 8   /* RS code over GF(2**4) - change to suit */
+#define nn 255 /* nn=2**mm -1   length of codeword */
+//#define tt 16  /* number of errors that can be corrected */
+#define kk0 251 /* kk = nn-2*tt  */ /* Degree of g(x) = 2*tt. tt=2 data_block */
+#define kk1 239 /* kk = nn-2*tt  */ /* Degree of g(x) = 2*tt. tt=8 system_block */
 
-void
-generate_gf ()
+static int data_block_initialized = 0; // kk0
+static int system_block_initialized = 0; // kk1
+
+/* specify irreducible polynomial coeffts */
+int pp0[mm] = { 1, 0, 1, 1, 1, 0, 0, 0 };
+int pp1[mm] = { 1, 0, 0, 1, 0, 1, 1, 0 };
+int alpha_to[nn + 1], index_of[nn + 1], gg[nn - kk1 + 1];
+int recd[nn], data[kk0], bb[nn - kk1];
+
+static void generate_gf (int *pp);
+static void gen_poly (int kk);
+static void encode_rs (int kk);
+static void decode_rs (int kk);
+
 /* generate GF(2**mm) from the irreducible polynomial p(X) in pp[0]..pp[mm]
    lookup tables:  index->polynomial form   alpha_to[] contains j=alpha**i;
                    polynomial form -> index form  index_of[j=alpha**i] = i
    alpha=2 is the primitive element of GF(2**mm)
 */
+static void
+generate_gf (int *pp)
 {
-  register int i, mask;
+  int i, mask;
 
   mask = 1;
   alpha_to[mm] = 0;
@@ -91,13 +104,13 @@ generate_gf ()
   index_of[0] = -1;
 }
 
-void
-gen_poly ()
 /* Obtain the generator polynomial of the tt-error correcting, length
   nn=(2**mm -1) Reed Solomon code  from the product of (X+alpha**i), i=1..2*tt
 */
+static void
+gen_poly (int kk)
 {
-  register int i, j;
+  int i, j;
 
   gg[0] = 2; /* primitive element alpha = 2  for GF(2**mm)  */
   gg[1] = 1; /* g(x) = (X+alpha) initially */
@@ -109,16 +122,15 @@ gen_poly ()
           gg[j] = gg[j - 1] ^ alpha_to[(index_of[gg[j]] + i) % nn];
         else
           gg[j] = gg[j - 1];
-      gg[0]
-          = alpha_to[(index_of[gg[0]] + i) % nn]; /* gg[0] can never be zero */
+      gg[0] = alpha_to[(index_of[gg[0]] + i) % nn]; /* gg[0] can never be zero */
     }
   /* convert gg[] to index form for quicker encoding */
   for (i = 0; i <= nn - kk; i++)
     gg[i] = index_of[gg[i]];
 }
 
-void
-encode_rs ()
+static void
+encode_rs (int kk)
 /* take the string of symbols in data[i], i=0..(k-1) and encode systematically
    to produce 2*tt parity symbols in bb[0]..bb[2*tt-1]
    data[] is input and bb[] is output in polynomial form.
@@ -152,8 +164,8 @@ encode_rs ()
     };
 };
 
-void
-decode_rs ()
+static void
+decode_rs (int kk)
 /* assume we have received bits grouped into mm-bit symbols in recd[i],
    i=0..(nn-1),  and recd[i] is index form (ie as powers of alpha).
    We first compute the 2*tt syndromes by substituting alpha**i into rec(X) and
@@ -173,9 +185,10 @@ decode_rs ()
    parity part of the transmitted codeword).  Of course, these insoluble cases
    can be returned as error flags to the calling routine if desired.   */
 {
-  register int i, j, u, q;
+  int i, j, u, q;
   int elp[nn - kk + 2][nn - kk], d[nn - kk + 2], l[nn - kk + 2],
       u_lu[nn - kk + 2], s[nn - kk + 1];
+  const int tt = (nn - kk) / 2;
   int count = 0, syn_error = 0, root[tt], loc[tt], z[tt + 1], err[nn],
       reg[tt + 1];
 
@@ -386,21 +399,75 @@ decode_rs ()
         recd[i] = 0;
 }
 
-#ifdef TEST
-main ()
+int rs_decode_data_block (unsigned char *blk, int fix)
 {
-  register int i;
+  if (!data_block_initialized)
+    {
+      generate_gf (pp0);
+      gen_poly (kk0);
+      data_block_initialized = 1;
+      system_block_initialized = 0;
+    }
+  // TODO
+  decode_rs (kk0);
+  return 0;
+}
 
-  /* generate the Galois Field GF(2**mm) */
-  generate_gf ();
-  printf ("Look-up tables for GF(2**%2d)\n", mm);
+int rs_decode_system_block (unsigned char *blk, int fix)
+{
+  if (!system_block_initialized || data_block_initialized)
+    {
+      generate_gf (pp1);
+      gen_poly (kk1);
+      system_block_initialized = 1;
+      data_block_initialized = 0;
+    }
+  // TODO
+  decode_rs (kk1);
+  return 0;
+}
+void rs_encode_data_block (unsigned char *parity, unsigned char *src, int count)
+{
+  if (!data_block_initialized || system_block_initialized)
+    {
+      generate_gf (pp0);
+      gen_poly (kk0);
+      data_block_initialized = 1;
+      system_block_initialized = 0;
+    }
+  // TODO
+  encode_rs (kk0);
+}
+
+void rs_encode_system_block (unsigned char *parity, unsigned char *src, int count)
+{
+  if (!system_block_initialized || data_block_initialized)
+    {
+      generate_gf (pp1);
+      gen_poly (kk1);
+      system_block_initialized = 1;
+      data_block_initialized = 0;
+    }
+  // TODO
+  encode_rs (kk1);
+}
+
+#ifdef TEST
+void test (int *pp, int kk)
+{
+  int i;
+  const int tt = (nn - kk) / 2;
+
+  /* generate the Galois Fields GF(2**mm) */
+  generate_gf (pp);
+  printf ("Look-up tables for GF(2**%d)\n", mm);
   printf ("  i   alpha_to[i]  index_of[i]\n");
   for (i = 0; i <= nn; i++)
     printf ("%3d      %3d          %3d\n", i, alpha_to[i], index_of[i]);
   printf ("\n\n");
 
   /* compute the generator polynomial for this RS code */
-  gen_poly ();
+  gen_poly (kk);
 
   /* for known data, stick a few numbers into a zero codeword. Data is in
      polynomial form.
@@ -422,7 +489,7 @@ main ()
   /* encode data[] to produce parity in bb[].  Data input and parity output
      is in polynomial form
   */
-  encode_rs ();
+  encode_rs (kk);
 
   /* put the transmitted codeword, made up of data plus parity, in recd[] */
   for (i = 0; i < nn - kk; i++)
@@ -439,10 +506,10 @@ main ()
     recd[i] = index_of[recd[i]]; /* put recd[i] into index form */
 
   /* decode recv[] */
-  decode_rs (); /* recd[] is returned in polynomial form */
+  decode_rs (kk); /* recd[] is returned in polynomial form */
 
   /* print out the relevant stuff - initial and decoded {parity and message} */
-  printf ("Results for Reed-Solomon code (n=%3d, k=%3d, t= %3d)\n\n", nn, kk,
+  printf ("Results for Reed-Solomon code (n=%d, k=%d, t=%d)\n\n", nn, kk,
           tt);
   printf (
       "  i  data[i]   recd[i](decoded)   (data, recd in polynomial form)\n");
@@ -450,5 +517,10 @@ main ()
     printf ("%3d    %3d      %3d\n", i, bb[i], recd[i]);
   for (i = nn - kk; i < nn; i++)
     printf ("%3d    %3d      %3d\n", i, data[i - nn + kk], recd[i]);
+}
+
+int main (void) {
+  test(pp0, kk0);
+  test(pp1, kk1);
 }
 #endif
