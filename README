@@ -11,15 +11,15 @@ developed by AutoDesk.
 
 LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we
 think is not the best strategy for a free software project which aims
-to get lots of contributors.  LibreDWG is written in English.  At the
+to get lots of contributors. LibreDWG is written in English. At the
 moment our decoder (i.e. reader) is done, it can read all DWG
-versions, just some very advanced R2010+ and pre-R13 entities fail to
-read and are skipped over. The writer is good enough for R2000.  Among
-the example applications we wrote using LibreDWG is a reader, a
-writer, a rewriter (i.e. saveas), an initial SVG and Postscript
-conversion, dxf and json converters, dwggrep to search for text, and
-dwglayer to print the list of layers.  More are in the pipeline.
-Please contact us if you want to help.
+versions, just some very advanced R2010+ objects fail to read and are
+skipped over. The writer is good enough for R1.4 - R2000. Among the
+example applications we wrote using LibreDWG is a reader, a writer, a
+rewriter (i.e. saveas), an initial SVG and Postscript conversion, dxf
+and json converters, dwggrep to search for text, and dwglayer to print
+the list of layers. More are in the pipeline. Please contact us if you
+want to help.
 
 The strings API is UTF-8 (WTF8 really, Windows UCS-2 has no surrogate
 pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
@@ -105,9 +105,8 @@ customize the installation dirs.  Other options recognized by configure are:
   --enable-release
 
     Recommended for packagers and fuzzers. Disables all features
-    which will not be enabled in official tarball releases. Like support
-    for pre-R13 DWGs, skipping unstable DWG features, unknown DWG versions
-    and objects.
+    which will not be enabled in official tarball releases. Like skipping
+    unstable DWG features or objects, unknown DWG versions and objects.
 
   --enable-trace
 
