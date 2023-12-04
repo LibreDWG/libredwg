@@ -3341,7 +3341,7 @@ dwg_sections_init (Dwg_Data *dwg)
         dwg->header.num_sections = 5;
       if (!dwg->header.sections)
         dwg->header.sections = 5;
-      // HEADER.sections is always 5 even if it needs to be 8 or 10,
+      // HEADER.sections is always 3 or 5 even if it needs to be 8 or 10,
       // probably because the additional sections are embedded in HEADER_VARS.
       // 5 tables + header + block. VIEW = 6
       if (dwg->header.numheader_vars)
@@ -3377,13 +3377,19 @@ dwg_sections_init (Dwg_Data *dwg)
       /* section 0: header vars
        *         1: class section
        *         2: object map (i.e. handles)
-       *         3: 2ndheader (r13c3+, no sentinels)
-       *         4: optional: MEASUREMENT
+       *         3: optional ObjFreeSpace (r13+, no sentinels) + 2ndheader (r13+, sentinels)
+       *         4: optional: Template (MEASUREMENT)
        *         5: optional: AuxHeader (no sentinels, since R_2000b)
-       *         6: optional: THUMBNAIL (not a section)
+       *         6: optional: THUMBNAIL (not a section, but treated as one)
        */
       if (!dwg->header.num_sections)
-        dwg->header.num_sections = dwg->header.version >= R_2000b ? 6 : 5;
+        {
+          dwg->header.num_sections = dwg->header.version < R_13c3    ? 3
+                                     : dwg->header.version < R_2000b ? 5
+                                                                     : 6;
+          if (dwg->header.num_sections == 3 && dwg->objfreespace.numnums)
+            dwg->header.num_sections = 5;
+        }
       if (!dwg->header.sections) // ODA writes zeros.
         dwg->header.sections = dwg->header.num_sections;
       // newer DWG's have proper HEADER.sections

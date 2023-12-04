@@ -22,7 +22,7 @@
   FIELD_RC (is_maint, 0);
 
   VERSIONS (R_2_0b, R_13b1) {
-    FIELD_RC (zero_one_or_three, 0); // 1,3,0,5,0,0x00cd,0
+    FIELD_RC (zero_one_or_three, 0); // 1,3,5,0xcd,0
     /*
        AC1.50: 3, 5, 74; 3, 5, 83;
        AC2.10: 3, 5, 83
@@ -59,6 +59,12 @@
     LOG_TRACE ("%s\n", dwg_codepage_dxfstr ((Dwg_Codepage)FIELD_VALUE (codepage)))
     DECODER {
       dat->codepage = FIELD_VALUE (codepage);
+    }
+    PRE (R_2004a) {
+      FIELD_RL (sections, 0); // 3 or 5 or 6. the real size is num_sections
+      // de-/encode the section locator records extra:
+      // REPEAT sections: RC number, RL address, RL size
+      // RS CRC
     }
   }
 

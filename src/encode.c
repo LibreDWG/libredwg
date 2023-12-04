@@ -2115,14 +2115,19 @@ calc_preR13_ctrl_size (Dwg_Data *restrict dwg, Dwg_Object *obj)
 
 // needed on upgrades or <r2.0b
 static void
-encode_check_num_sections (const Dwg_Section_Type_r11 id,
+encode_check_num_sections (Dwg_Section_Type_r11 id,
                            Dwg_Data *restrict dwg)
 {
   BITCODE_RL num_sections;
-  if (!dwg->header.num_sections)
+  if (!dwg->header.sections || !dwg->header.num_sections)
     dwg_sections_init (dwg);
   // starts at 1 and adds thumbnail
   num_sections = dwg->header.num_sections + 2;
+  if (!id)
+    {
+      id = num_sections;
+      dwg->header.sections = dwg->header.num_sections;
+    }
   if ((BITCODE_RL)id >= num_sections)
     {
       // create empty default section on upgrade
@@ -2729,8 +2734,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (!_obj->r2004_header_address)
         _obj->r2004_header_address = 128;
     }
+    if (!_obj->num_sections || !_obj->sections)
+      dwg_sections_init (dwg);
 
-      // clang-format off
+    // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -2810,8 +2817,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
          * section 0: header vars
          *         1: class section
          *         2: object map
-         *         3: optional: ObjFreeSpace
-         *         4: optional: Template
+         *         3: optional: ObjFreeSpace (with SecondHeader)
+         *         4: and Template
          *         5: optional: AuxHeader (no sentinels, since R13c3)
          */
         LOG_ERROR ("FIXME convert sections from CONTROL objects to tables");
@@ -3028,9 +3035,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     error |= dwg_sections_init (dwg);
     if (error >= DWG_ERR_CRITICAL)
       return error;
-    LOG_TRACE ("sections: " FORMAT_RL " [RL]\n", dwg->header.sections);
-    bit_write_RL (dat, dwg->header.sections);
-    section_address = dat->byte;             // save section address
     dat->byte += (dwg->header.sections * 9); /* RC + 2*RL */
     header_crc_address = dat->byte;
     bit_write_CRC (dat, 0, 0xC0C1);
@@ -3605,7 +3609,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
       pvzadr = dat->byte;
-      LOG_INSANE ("pvzadr: %" PRIuSIZE "\n", pvzadr);
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
       dwg->secondheader.address = (BITCODE_RL)pvzadr & UINT32_MAX;
       dwg->r2004_header.secondheader_address = pvzadr;
@@ -4153,6 +4156,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_TRACE ("\n=== Write sections in stream order ===\n");
       size = total_size
              + (8 * ((dwg->r2004_header.numsections + 2) * 24)); // no gaps
+      assert (section_address);
       dat->byte = section_address;
       if (dat->byte + size >= dat->size)
         {

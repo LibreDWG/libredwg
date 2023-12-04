@@ -1096,6 +1096,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RC (dwg_version, 0)
       FIELD_RC (maint_version, 0)
       FIELD_RS (codepage, 0) //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
+      FIELD_RL (sections, 0) // until r2000
       // SINCE (R_2004)
       FIELD_RC (unknown_0, 0)
       FIELD_RC (app_dwg_version, 0)
@@ -1105,9 +1106,9 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (summaryinfo_address, 0)
       FIELD_RL (vbaproj_address, 0)
       FIELD_RL (r2004_header_address, 0) /* mostly 128/0x80 */
-          // clang-format on
+      // clang-format on
 
-          else if (strEQc (key, "HEADER"))
+      else if (strEQc (key, "HEADER"))
       {
         LOG_WARN ("Unexpected next section %s", key)
         tokens->index--;

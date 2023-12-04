@@ -320,19 +320,15 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     #include "header.spec"
     // clang-format on
   }
-
-  /* Section Locator Records 0x15 */
-  if (dat->byte != 0x15)
+  if ((error = dwg_sections_init (dwg)))
+    return error;
+  if (dat->byte != 0x19)
     {
       LOG_ERROR ("Wrong HEADER Section Locator Records at %" PRIuSIZE,
                  dat->byte)
       return DWG_ERR_INVALIDDWG;
     }
-  assert (dat->byte == 0x15);
-  dwg->header.sections = bit_read_RL (dat);
-  LOG_TRACE ("\nnum_sections: " FORMAT_RL " [RL]\n", dwg->header.sections)
-  if ((error = dwg_sections_init (dwg)))
-    return error;
+  assert (dat->byte == 0x19);
   /* section 0: header vars
    *         1: class section
    *         2: object map
