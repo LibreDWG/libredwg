@@ -39,9 +39,10 @@ libredwg_la_SOURCES = \
 	decode_r11.c \
 	decode_r2007.c \
 	reedsolomon.c \
-	print.c \
-	free.c \
-	hash.c \
+	rs.c \
+        print.c \
+        free.c \
+        hash.c \
 	dynapi.c \
 	classes.c \
 	dwg_api.c \
@@ -121,6 +122,7 @@ EXTRA_HEADERS = \
 	hash.h \
 	dynapi.h \
 	out_json.h \
+	rs.h \
 	geom.h
 if !DISABLE_DXF
 EXTRA_HEADERS += \
