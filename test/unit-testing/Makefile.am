@@ -38,6 +38,14 @@ decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo \
 	$(top_builddir)/src/decode_r2007.lo
+encode_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/dwg.lo \
+	$(top_builddir)/src/common.lo \
+	$(top_builddir)/src/codepages.lo \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/decode.lo \
+	$(top_builddir)/src/decode_r2007.lo
 hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
 	$(top_builddir)/src/bits.lo \
@@ -387,6 +395,9 @@ check_minimal += add_test
 endif
 if !HAVE_MINGW
 check_minimal += decode_test
+if USE_WRITE
+check_minimal += encode_test
+endif
 endif
 
 if CHECK_LESS
