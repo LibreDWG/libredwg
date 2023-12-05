@@ -1602,9 +1602,8 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               // and skip the final ^M
               if ((*p == '\r' || *p == '\n') && p - s < 256)
                 {
-                  FIRSTPREFIX fprintf (
-                      dat->fh, "\"%s\"",
-                      json_cquote (buf, s, p - s, dat->codepage));
+                  FIRSTPREFIX fprintf (dat->fh, "\"%.*s\"", (int)(p - s), s);
+                  // json_cquote (buf, s, p - s, dat->codepage));
                   if (*p == '\r' && *(p + 1) == '\n')
                     p++;
                   s = p + 1;
