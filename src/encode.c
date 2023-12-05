@@ -2412,13 +2412,18 @@ encode_r13_thumbnail (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
         dat->byte = 0x0D;
         bit_write_RL (dat, dwg->header.thumbnail_address);
-        LOG_TRACE ("header.thumbnail_address => " FORMAT_RL " [RL] @0x0D\n",
-                   dwg->header.thumbnail_address)
+        LOG_TRACE ("header.thumbnail_address => " FORMAT_RL " [RL] @0x0d\n",
+                   dwg->header.thumbnail_address);
+        assert (header_crc_address);
         if (header_crc_address)
           {
             dat->byte = header_crc_address;
             bit_write_CRC (dat, 0, 0xC0C1);
+            LOG_TRACE ("header.CRC updated [RSx] @%" PRIuSIZE "\n",
+                       header_crc_address)
           }
+        else
+          LOG_WARN ("header.CRC not updated!\n")
         dat->byte = oldpos;
       }
   }
@@ -2451,6 +2456,74 @@ encode_r13_thumbnail (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     LOG_TRACE ("         Thumbnail (end): %4zu\n", dat->byte);
   }
   return error;
+}
+
+static void section_move_top (Dwg_Section_Type_r13 *psection_order, Dwg_Section_Type_r13 sec_id)
+{
+  Dwg_Section_Type_r13 old_first = psection_order[0];
+  LOG_TRACE ("section_move_top %u\n", sec_id);
+  if (psection_order[0] == sec_id)
+    return;
+  
+  for (unsigned i = 1; i < (unsigned)SECTION_SYSTEM_MAP; i++)
+    {
+      // f x x i y y y
+      if (psection_order[i] == (unsigned)sec_id) { // found at i
+        psection_order[0] = sec_id;
+        // move x'n right by 1
+        if (i > 1)
+          memmove (&psection_order[2], &psection_order[1], (i - 1) * sizeof (Dwg_Section_Type_r13));
+        psection_order[1] = old_first;
+        break;
+      }
+      // i f x x y y y
+    }
+}
+
+static unsigned section_find (Dwg_Section_Type_r13 *psection_order,
+                              Dwg_Section_Type_r13 id)
+{
+  LOG_TRACE ("section_find %u\n", id);
+  for (unsigned i = 0; i < (unsigned)SECTION_SYSTEM_MAP; i++)
+    {
+      if (psection_order[i] == id) { // found at i
+        return i;
+      }
+    }
+  return SECTION_SYSTEM_MAP;
+}
+
+static void
+section_remove (Dwg_Section_Type_r13 *psection_order,
+                Dwg_Section_Type_r13 id)
+{
+  unsigned i = section_find (psection_order, id);
+  LOG_TRACE ("section_remove %u\n", id);
+  if (i == SECTION_SYSTEM_MAP) // not found
+    return;
+  // move left
+  memmove (&psection_order[i], &psection_order[i + 1],
+           (SECTION_SYSTEM_MAP - i) * sizeof (Dwg_Section_Type_r13));
+}
+
+static void
+section_move_before (Dwg_Section_Type_r13 *psection_order,
+                     Dwg_Section_Type_r13 id, Dwg_Section_Type_r13 before)
+{
+  unsigned b = section_find (psection_order, before);
+  unsigned id_pos;
+  Dwg_Section_Type_r13 old_before;
+  LOG_TRACE ("section_move_before %u %u\n", id, before);
+  // find before
+  if (b == SECTION_SYSTEM_MAP) // not found
+    return;
+  // x x b y y
+  old_before = psection_order[b];
+  memmove (&psection_order[b + 1], &psection_order[b],
+           (SECTION_SYSTEM_MAP - b) * sizeof (Dwg_Section_Type_r13));
+  section_remove (psection_order, id);
+  psection_order[b] = id;
+  // x x i b y y
 }
 
 /**
@@ -2489,6 +2562,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     after_class,
     after_2ndheader,
   } template_position;
+  Dwg_Section_Type section_order[SECTION_SYSTEM_MAP + 1] = { 0 };
 
   dwg->cur_index = 0;
   if (dwg->opts)
@@ -2990,7 +3064,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   template_position = after_2ndheader;
   VERSIONS (R_13b1, R_2004)
   {
-    /* section 0: Header vars
+    /* compute the r2000 section order:
+     * section 0: Header vars
      *         1: Classes
                   Template (r13 only, optional)
                   padding (r13c3+)
@@ -3040,17 +3115,63 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     bit_write_CRC (dat, 0, 0xC0C1);
     write_sentinel (dat, DWG_SENTINEL_HEADER_END);
 
+    SINCE (R_2004)
+      {
+        for (j = 0; i < (BITCODE_BL)SECTION_SYSTEM_MAP; i++)
+          section_order[j] = (Dwg_Section_Type)(j + 1); // skip SECTION_UNKNOWN
+      }
+    else
+      {
+        section_order[0] = (Dwg_Section_Type)SECTION_HEADER_R13;
+        section_order[1] = (Dwg_Section_Type)SECTION_CLASSES_R13;
+        section_order[2] = (Dwg_Section_Type)SECTION_HANDLES_R13;
+        if (dwg->header.sections > 3)
+          {
+            section_order[3] = (Dwg_Section_Type)SECTION_OBJFREESPACE_R13;
+            section_order[4] = (Dwg_Section_Type)SECTION_TEMPLATE_R13;
+            if (dwg->header.sections > 5)
+              {
+                section_order[5] = (Dwg_Section_Type)SECTION_AUXHEADER_R2000;
+                section_order[6] = (Dwg_Section_Type)SECTION_THUMBNAIL_R13;
+              }
+            else
+              {
+                section_order[5] = (Dwg_Section_Type)SECTION_THUMBNAIL_R13;
+              }
+          }
+        else
+          section_order[3] = (Dwg_Section_Type)SECTION_THUMBNAIL_R13;
+      }
+    
     // compute the old section order
     if (dwg->header.thumbnail_address)
       {
         if (dwg->header.section[SECTION_HEADER_R13].address
             && dwg->header.thumbnail_address
                    < dwg->header.section[SECTION_HEADER_R13].address)
-          thumbnail_position = before_header; // r13 if empty
-        else if (dwg->secondheader.sections[SECTION_HEADER_R13].address
-            && dwg->header.thumbnail_address
+          {
+            section_move_top ((Dwg_Section_Type_r13*)&section_order, SECTION_THUMBNAIL_R13);
+            thumbnail_position = before_header; // r13 if empty
+          }
+        else if (dwg->secondheader.sections[SECTION_HEADER_R13].address)
+          {
+            if (dwg->header.thumbnail_address
                    < dwg->secondheader.sections[SECTION_HEADER_R13].address)
-          thumbnail_position = before_header; // r13 if empty
+              {
+                section_move_top ((Dwg_Section_Type_r13*)&section_order, SECTION_THUMBNAIL_R13);
+                thumbnail_position = before_header; // r13 if empty
+              }
+            else if (dwg->secondheader.sections[SECTION_HANDLES_R13].address
+                     && dwg->header.thumbnail_address
+                            < dwg->secondheader.sections[SECTION_HANDLES_R13]
+                                  .address)
+              {
+                section_move_before ((Dwg_Section_Type_r13*)&section_order, SECTION_THUMBNAIL_R13,
+                                     SECTION_HANDLES_R13);
+                thumbnail_position = before_handles;
+              }
+          }
+        /*
         else if (dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address
                  && dwg->header.thumbnail_address
                     > dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address)
@@ -3060,18 +3181,36 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  && dwg->header.thumbnail_address
                     > dwg->header.section[SECTION_AUXHEADER_R2000].address)
           thumbnail_position = after_auxheader;
+        */
       }
     else
       {
         PRE (R_13c3)
-          thumbnail_position = before_handles;
+          {
+            section_move_before ((Dwg_Section_Type_r13*)&section_order, SECTION_THUMBNAIL_R13,
+                                 SECTION_HANDLES_R13);
+            thumbnail_position = before_handles;
+          }
         VERSIONS (R_13c3, R_2000)
           thumbnail_position = after_auxheader;
         SINCE (R_2004)
-          thumbnail_position = before_header;
+          {
+            section_move_top ((Dwg_Section_Type_r13*)&section_order, SECTION_THUMBNAIL_R13);
+            thumbnail_position = before_header;
+          }
       }
     VERSION (R_13)
-      template_position = after_class;
+      {
+        section_move_before ((Dwg_Section_Type_r13*)&section_order, SECTION_TEMPLATE_R13,
+                             SECTION_HANDLES_R13);
+        template_position = after_class;
+      }
+    LOG_TRACE ("section_order:");
+    for (i = 0; i < dwg->header.sections; i++)
+      {
+        LOG_TRACE (" %u", section_order[i]);
+      }
+    LOG_TRACE ("\n");
 
     // on downconvert add the missing VX_CONTROL object
     if (dwg->header.version < R_2004 && !dwg->header_vars.VX_CONTROL_OBJECT)
