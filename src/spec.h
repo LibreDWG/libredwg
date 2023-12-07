@@ -76,7 +76,7 @@
 #    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
       if (_IN_RANGE (_obj->field, maxvalue) && _obj->field > maxvalue)        \
         {                                                                     \
-          LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                  \
+          LOG_ERROR ("Invalid %s." #field " %lu", obj ? obj->name : "",       \
                      (unsigned long)_obj->field);                             \
           _obj->field = 0;                                                    \
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
@@ -84,7 +84,7 @@
 #    define SUB_VALUEOUTOFBOUNDS(o, field, maxvalue)                          \
       if (_IN_RANGE (_obj->o.field, maxvalue) && _obj->o.field > maxvalue)    \
         {                                                                     \
-          LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                  \
+          LOG_ERROR ("Invalid %s." #field " %lu", obj ? obj->name : "",       \
                      (unsigned long)_obj->o.field);                           \
           _obj->o.field = 0;                                                  \
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
