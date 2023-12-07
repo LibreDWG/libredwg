@@ -239,6 +239,10 @@ if(NOT LIBREDWG_DISABLE_DXF)
     src/out_dxfb.c)
   set(indxf_SOURCES
     src/in_dxf.c)
+  if(LIBREDWG_DISABLE_WRITE)
+    set(indxf_SOURCES
+      src/encode.c) # in_dxf depends on some functions
+  endif
 endif()
 
 if(NOT LIBREDWG_DISABLE_WRITE)
