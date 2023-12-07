@@ -50,6 +50,10 @@ libredwg_la_SOURCES = \
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
         in_dxf.c
+if !USE_WRITE
+libredwg_la_SOURCES += \
+        encode.c # in_dxf.c depends on some functions
+endif
 if !DISABLE_JSON
 libredwg_la_SOURCES += \
         in_json.c
