@@ -293,3 +293,15 @@ jobs:
     - run: ninja
     - run: copy libredwg.dll test\unit-testing\
     - run: ctest . --output-on-failure
+  wasm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - name: Setup Emscripten toolchain
+      uses: mymindstorm/setup-emsdk@v13
+    - name: emmake
