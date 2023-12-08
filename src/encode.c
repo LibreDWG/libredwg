@@ -4446,6 +4446,11 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       num = ref ? ref->index : 0;                                             \
     }                                                                         \
   LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum)
+  if (num + tblnum >= dwg->num_objects)
+    {
+      LOG_ERROR ("Invalid num %u + tblnum %u", (unsigned)num, (unsigned)tblnum);
+      return DWG_ERR_INVALIDTYPE;
+    }
 
 #define PREP_TABLE(token)                                                     \
   size_t pvzadr = dat->byte;                                                  \
@@ -4454,6 +4459,8 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if (!obj)                                                                   \
     {                                                                         \
       LOG_ERROR ("No table %s after pos %u found", #token, num + i);          \
+      if (num + i > dwg->num_objects)                                         \
+        num = 0;                                                              \
       continue;                                                               \
     }                                                                         \
   _obj = obj->tio.object->tio.token;                                          \
