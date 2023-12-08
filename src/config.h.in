@@ -6,6 +6,9 @@
 /* Defined to <strings.h> or <string.h> if strcasecmp is found */
 #undef AX_STRCASECMP_HEADER
 
+/* Define to build only the LibreDWG simple convert library. */
+#undef CONVERTONLY
+
 /* Define to 1 if using 'alloca.c'. */
 #undef C_ALLOCA
 
