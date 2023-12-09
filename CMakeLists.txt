@@ -183,11 +183,9 @@ else()
       add_compile_options(-fstack-protector-strong)
       add_link_options(-fstack-protector-strong)
     endif()
-    if (HAVE_C_FSTACK_CLASH_PROTECTION)
-      if (NOT LIBREDWG_LIBCONVERTONLY)
-        add_compile_options(-fstack-clash-protection)
-        add_link_options(-fstack-clash-protection)
-      endif()
+    if (NOT LIBREDWG_LIBCONVERTONLY)
+      add_compile_options(-fstack-clash-protection)
+      add_link_options(-fstack-clash-protection)
     endif()
     if (HAVE_C_FCF_PROTECTION)
       add_compile_options(-fcf-protection=full)
@@ -268,8 +266,8 @@ set(libredwg_SOURCES
     src/print.c)
 
 add_library(${redwg}
-  ${libredwg_HEADERS}
-  ${libredwg_SOURCES})
+    ${libredwg_HEADERS}
+    ${libredwg_SOURCES})
 
 set_property(TARGET ${redwg} PROPERTY C_STANDARD 99)
 set_property(TARGET ${redwg} PROPERTY C_STANDARD_REQUIRED ON)
