@@ -7,7 +7,7 @@
 #undef AX_STRCASECMP_HEADER
 
 /* Define to build only the LibreDWG simple convert library. */
-#undef CONVERTONLY
+#undef LIBCONVERTONLY
 
 /* Define to 1 if using 'alloca.c'. */
 #undef C_ALLOCA

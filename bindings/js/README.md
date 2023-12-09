@@ -1,5 +1,6 @@
 These are the (initial) Javascript bindings for GNU LibreDWG.
-You can convert between DWG, DXF, DXFB (binary) and JSON.
+You can convert between DWG, DXF, DXFB (binary) and JSON and output GeoJSON.
+You can output multiple files after reading a single file.
 It is based on WASM (emscripten).
 
 Please wait for the official release before using this in production.

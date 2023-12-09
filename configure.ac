@@ -450,16 +450,6 @@ AC_CHECK_FUNCS([setenv],[],
     [AC_MSG_RESULT([setenv not needed. no --enable-trace.])]
     ))
 
-dnl --convert-only build only the LibreDWG simple convert library
-AC_MSG_CHECKING([for --convert-only])
-AC_ARG_ENABLE([convertonly],AS_HELP_STRING([--convert-only],[
-    Build only the LibreDWG simple convert library (default: no).]),[],[convertonly=no])
-AM_CONDITIONAL([CONVERTONLY], [test x$convertonly = xyes])
-AS_IF([test x$convertonly = xyes],
-  AC_DEFINE([CONVERTONLY],1,[Define to build only the LibreDWG simple convert library.])
-  AC_MSG_RESULT([yes]),
-  AC_MSG_RESULT([no (default)]))
-
 dnl --disable-dxf only useful for faster debug/test cycles
 AC_MSG_CHECKING([for --disable-dxf])
 AC_ARG_ENABLE([dxf],AS_HELP_STRING([--disable-dxf],[
@@ -490,6 +480,15 @@ AS_IF([test x$enable_bindings = xno],
   AC_DEFINE([DISABLE_BINDINGS],1,[Define to disable bindings.])
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
+
+dnl --enable-libconvert-only
+AC_MSG_CHECKING([for --enable-libconvert-only])
+AC_ARG_ENABLE([libconvert-only],AS_HELP_STRING([--enable-libconvert-only],[
+    Build only the library for pure file format conversion (default: no).]),
+  [libconvert_only=yes
+  AC_MSG_RESULT([yes])],
+  AC_MSG_RESULT([no (default)]))
+AM_CONDITIONAL([LIBCONVERTONLY], [test x$libconvert_only = xyes])
 
 dnl --enable-check-less
 AC_MSG_CHECKING([for --enable-check-less])

@@ -307,5 +307,6 @@ jobs:
         submodules: recursive
     - name: Setup Emscripten toolchain
       uses: mymindstorm/setup-emsdk@v13
-    - run: emconfigure ./configure --convert-only
-    - run: emmake -j
+    - run: ./autogen.sh
+    - run: emconfigure ./configure --enable-libconvert-only --disable-bindings --disable-shared
+    - run: emmake make -j
