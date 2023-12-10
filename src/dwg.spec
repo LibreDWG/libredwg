@@ -1049,7 +1049,7 @@ DWG_ENTITY (VERTEX_2D)
   SUBCLASS (AcDb2dVertex)
   PRE (R_13b1)
   {
-#ifdef IN_JSON
+#ifdef IS_JSON
     FIELD_3RD (point, 10)
 #else
     FIELD_2RD (point, 10);
