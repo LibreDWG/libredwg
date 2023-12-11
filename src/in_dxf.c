@@ -8369,10 +8369,10 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   if (!owner)
     {
       if (obj->tio.entity->ownerhandle)
-        LOG_WARN ("Missing owner from " FORMAT_REF " [H 330]",
-                  ARGS_REF (obj->tio.entity->ownerhandle))
+        LOG_WARN ("Missing owner (" FORMAT_RLLx ") from " FORMAT_REF " [H 330]",
+                  obj->handle.value, ARGS_REF (obj->tio.entity->ownerhandle))
       else
-        LOG_WARN ("Missing owner")
+        LOG_WARN ("Missing owner (" FORMAT_RLLx ")", obj->handle.value)
       return;
     }
   obj->tio.entity->ownerhandle->obj = NULL;

@@ -6630,13 +6630,35 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("in_postprocess_SEQEND (%u):\n", (unsigned)num_owned);
   owner = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
+  // r12 and earlier: search for owner backwards
+  if (dwg->header.from_version < R_13b1 && !owner
+      && !obj->tio.entity->ownerhandle)
+    {
+      for (BITCODE_BL i = obj->index - 1; i > 0; i--)
+        {
+          Dwg_Object *_o = &dwg->object[i];
+          if (_o->type == DWG_TYPE_INSERT || _o->type == DWG_TYPE_MINSERT
+              || _o->type == DWG_TYPE_POLYLINE_2D
+              || _o->type == DWG_TYPE_POLYLINE_3D
+              || _o->type == DWG_TYPE_POLYLINE_PFACE
+              || _o->type == DWG_TYPE_POLYLINE_MESH)
+            {
+              owner = _o;
+              obj->tio.entity->ownerhandle
+                  = dwg_add_handleref (dwg, 4, _o->handle.value, obj);
+              LOG_TRACE ("SEQEND.owner = " FORMAT_H " (%s) [H* 0]\n",
+                         ARGS_H (_o->handle), _o->name);
+              break;
+            }
+        }
+    }
   if (!owner)
     {
       if (obj->tio.entity->ownerhandle)
-        LOG_WARN ("Missing owner from " FORMAT_REF " [H 330]",
-                  ARGS_REF (obj->tio.entity->ownerhandle))
+        LOG_WARN ("Missing owner (" FORMAT_RLLx ") from " FORMAT_REF " [H 330]",
+                  obj->handle.value, ARGS_REF (obj->tio.entity->ownerhandle))
       else
-        LOG_WARN ("Missing owner")
+        LOG_WARN ("Missing owner (" FORMAT_RLLx ")", obj->handle.value)
       return;
     }
 
