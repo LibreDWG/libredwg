@@ -4134,8 +4134,7 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // clang-format off
       FIELD_RL (size, 0)
       FIELD_RL (address, 0)
-      FIELD_TFF (version, 6, 0)
-      FIELD_VECTOR_INL (zero_5, RC, 5, 0)
+      FIELD_TFF (version, 11, 0)
       FIELD_RC (is_maint, 0)
       FIELD_RC (zero_one_or_three, 0)
       FIELD_BS (dwg_version, 0)
