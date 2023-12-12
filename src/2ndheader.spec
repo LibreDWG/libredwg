@@ -21,15 +21,7 @@
 VERSIONS (R_13, R_2000) {
   FIELD_RL (size, 0);
   FIELD_BL (address, 0);
-  FIELD_TFF (version, 6, 0);
-#ifdef IS_JSON
-  KEY (zero_5);
-  fprintf (dat->fh, "[ %d, %d, %d, %d, %d ]",
-          _obj->zero_5[0], _obj->zero_5[1], _obj->zero_5[2], _obj->zero_5[3],
-          _obj->zero_5[4]);
-#else
-  FIELD_VECTOR_INL (zero_5, RC, 5, 0)
-#endif
+  FIELD_TFF (version, 11, 0);
   FIELD_RC (is_maint, 0);
   FIELD_RC (zero_one_or_three, 0);
   FIELD_BSx (dwg_version, 0);

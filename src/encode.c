@@ -3618,8 +3618,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           // TODO detect what it is
           _obj->junk_r14 = UINT64_C (0x989543D074AE8021);
         }
-      for (int k = 0; k < 5; k++)
-        _obj->zero_5[k] = dwg->header.zero_5[k];
       _obj->is_maint = dwg->header.is_maint;
       _obj->zero_one_or_three = dwg->header.zero_one_or_three;
       _obj->dwg_version
