@@ -962,7 +962,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BS PROXYGRAPHICS;
   BITCODE_BS MEASUREMENT; /* 0 English, 1 Metric. Stored as Section 4 */
   BITCODE_BS DRAGMODE;
-  BITCODE_BS TREEDEPTH; /* r11- */
+  BITCODE_BSd TREEDEPTH; /* r11- */
   BITCODE_BS LUNITS;
   BITCODE_BS LUPREC;
   BITCODE_BS AUNITS;
