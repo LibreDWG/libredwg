@@ -1078,15 +1078,6 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               return DWG_ERR_INVALIDDWG;
             }
         }
-      // FIELD_VECTOR_INL (zero_5, RL, 5, 0)
-      else if (strEQc (key, "zero_5") && t->type == JSMN_ARRAY)
-        {
-          tokens->index++;
-          for (int j = 0; j < MIN (5, t->size); j++)
-            {
-              _obj->zero_5[j] = json_long (dat, tokens);
-            }
-        }
       // clang-format off
       FIELD_RC (is_maint, 0)
       FIELD_RC (zero_one_or_three, 0)

@@ -125,7 +125,7 @@ static int objfreespace_private (Bit_Chain *restrict dat,
 EXPORT int
 dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  char magic[8];
+  char magic[11];
 
   dwg->num_object_refs = 0;
   // dwg->num_layers = 0; // see now dwg->layer_control->num_entries
@@ -186,14 +186,8 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_ERROR ("dwg too small: %" PRIuSIZE " bytes", dat->size);
       return DWG_ERR_INVALIDDWG;
     }
-  strncpy (magic, (const char *)dat->chain, 6);
-  if (memcmp (dat->chain, "AC103-4", 7) == 0)
-    {
-      magic[6] = '4';
-      magic[7] = '\0';
-    }
-  else
-    magic[6] = '\0';
+  strncpy (magic, (const char *)dat->chain, 11);
+  magic[10] = '\0';
 
   dwg->header.from_version = dwg_version_hdr_type (magic);
   if (!dwg->header.from_version)
@@ -216,6 +210,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_INFO ("This file's version code is: %s (%s)\n", magic,
             dwg_version_type (dat->from_version))
 
+  dat->byte = 0xb; // After magic string.
   PRE (R_13b1)
   {
     Dwg_Object *ctrl;
@@ -319,7 +314,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Header *_obj = &dwg->header;
     Bit_Chain *hdl_dat = dat;
     BITCODE_BL vcount;
-    dat->byte = 0x06;
+
     // clang-format off
     #include "header.spec"
     // clang-format on
@@ -3369,9 +3364,6 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     int i;
     BITCODE_BL vcount;
 
-    dat->byte = 0x06;
-    if (dat->from_version >= R_2022b)
-      dat->byte = 0x07;
     // clang-format off
     #include "header.spec"
     // clang-format on
@@ -3479,7 +3471,6 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *obj = NULL;
     BITCODE_BL vcount;
 
-    dat->byte = 0x06;
     // clang-format off
     #include "header.spec"
     // clang-format on
