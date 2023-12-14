@@ -2624,7 +2624,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    */
   strcpy ((char *)dat->chain,
           dwg_version_codes (dwg->header.version)); // Chain version
-  dat->byte += 6;
+  dat->byte += 11;
 
   {
     BITCODE_BL vcount;

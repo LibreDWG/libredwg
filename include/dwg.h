@@ -9356,7 +9356,6 @@ typedef struct _dwg_header
 {
   Dwg_Version_Type version;      /* calculated from the header magic */
   Dwg_Version_Type from_version; /* option. set by --as (convert from) */
-  BITCODE_RC zero_5[5];
   BITCODE_RC is_maint;
   BITCODE_RC zero_one_or_three;
   BITCODE_RS numentity_sections; /* < R13, always 3 */
