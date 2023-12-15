@@ -310,10 +310,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           "AcDb:ObjFreeSpace", "AcDb:Template", "AcDb:AuxHeader" };
 
   {
-    int i;
     Dwg_Header *_obj = &dwg->header;
     Bit_Chain *hdl_dat = dat;
+    int i;
     BITCODE_BL vcount;
+    assert (dat->byte == 0xb); // after version magic
 
     // clang-format off
     #include "header.spec"
@@ -3363,6 +3364,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Bit_Chain *hdl_dat = dat;
     int i;
     BITCODE_BL vcount;
+    assert (dat->byte == 0xb); // after version magic
 
     // clang-format off
     #include "header.spec"
@@ -3466,10 +3468,11 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   hdl_dat = *dat;
   {
-    int i;
     Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
+    int i;
     BITCODE_BL vcount;
+    assert (dat->byte == 0xb); // after version magic
 
     // clang-format off
     #include "header.spec"
