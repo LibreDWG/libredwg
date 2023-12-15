@@ -615,7 +615,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     0,0,0, 70 },
   { "TRACEWID",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_header_variables, TRACEWID),
     0,0,0, 40 },
-  { "TREEDEPTH",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, TREEDEPTH),
+  { "TREEDEPTH",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_header_variables, TREEDEPTH),
     0,0,0, 70 },
   { "TSTACKALIGN",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, TSTACKALIGN),
     0,0,0, 0 },

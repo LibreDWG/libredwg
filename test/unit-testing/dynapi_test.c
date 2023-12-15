@@ -1083,18 +1083,18 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BS treedepth;
+    BITCODE_BSd treedepth;
     if (dwg_dynapi_header_value (dwg, "TREEDEPTH", &treedepth, NULL)
         && treedepth == dwg->header_vars.TREEDEPTH)
       pass ();
     else
-      fail ("HEADER.TREEDEPTH [BS] %hu != %hu", dwg->header_vars.TREEDEPTH, treedepth);
+      fail ("HEADER.TREEDEPTH [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.TREEDEPTH, treedepth);
     treedepth++;
     if (dwg_dynapi_header_set_value (dwg, "TREEDEPTH", &treedepth, 0)
         && treedepth == dwg->header_vars.TREEDEPTH)
       pass ();
     else
-      fail ("HEADER.TREEDEPTH [BS] set+1 %hu != %hu",
+      fail ("HEADER.TREEDEPTH [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.TREEDEPTH, treedepth);
     treedepth--;
     dwg_dynapi_header_set_value (dwg, "TREEDEPTH", &treedepth, 0);
