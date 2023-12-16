@@ -12013,7 +12013,7 @@ DWG_OBJECT (ASSOCDIMDEPENDENCYBODY)
   SUBCLASS (AcDbImpAssocDimDependencyBodyBase)
   FIELD_BS (dimbase_version, 90); // always 1
   FIELD_T (name, 1);
-  SUBCLASS (AdDbAssocDimDependencyBody)
+  SUBCLASS (AcDbAssocDimDependencyBody)
   FIELD_BS (class_version, 90); // 1
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
