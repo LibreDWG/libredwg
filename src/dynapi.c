@@ -13529,7 +13529,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "ASSOCBLENDSURFACEACTIONBODY", {"AcDbObject", "AcDbAssocActionBody", "AcDbAssocParamBasedActionBody", "AcDbAssocSurfaceActionBody", "AcDbAssocPathBasedSurfaceActionBody", "AcDbAssocBlendSurfaceActionBody", NULL, NULL} },
   { "ASSOCCOMPOUNDACTIONPARAM", {"AcDbObject", "AcDbAssocActionParam", "AcDbAssocCompoundActionParam", NULL, NULL, NULL, NULL, NULL} },
   { "ASSOCDEPENDENCY", {"AcDbObject", "AcDbAssocDependency", NULL, NULL, NULL, NULL, NULL, NULL} },
-  { "ASSOCDIMDEPENDENCYBODY", {"AcDbObject", "AcDbAssocDependencyBody", "AcDbImpAssocDimDependencyBodyBase", "AdDbAssocDimDependencyBody", NULL, NULL, NULL, NULL} },
+  { "ASSOCDIMDEPENDENCYBODY", {"AcDbObject", "AcDbAssocDependencyBody", "AcDbImpAssocDimDependencyBodyBase", "AcDbAssocDimDependencyBody", NULL, NULL, NULL, NULL} },
   { "ASSOCEDGEACTIONPARAM", {"AcDbObject", "AcDbAssocActionParam", "AcDbAssocSingleDependencyActionParam", "AcDbAssocEdgeActionParam", NULL, NULL, NULL, NULL} },
   { "ASSOCEDGECHAMFERACTIONBODY", {"AcDbObject", "AcDbAssocActionBody", "AcDbAssocParamBasedActionBody", "AcDbAssocSurfaceActionBody", "AcDbAssocPathBasedSurfaceActionBody", "AcDbAssocEdgeChamferActionBody", NULL, NULL} },
   { "ASSOCEDGEFILLETACTIONBODY", {"AcDbObject", "AcDbAssocActionBody", "AcDbAssocParamBasedActionBody", "AcDbAssocSurfaceActionBody", "AcDbAssocPathBasedSurfaceActionBody", "AcDbAssocEdgeFilletActionBody", NULL, NULL} },

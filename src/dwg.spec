@@ -1049,7 +1049,7 @@ DWG_ENTITY (VERTEX_2D)
   SUBCLASS (AcDb2dVertex)
   PRE (R_13b1)
   {
-#ifdef IN_JSON
+#ifdef IS_JSON
     FIELD_3RD (point, 10)
 #else
     FIELD_2RD (point, 10);
@@ -12013,7 +12013,7 @@ DWG_OBJECT (ASSOCDIMDEPENDENCYBODY)
   SUBCLASS (AcDbImpAssocDimDependencyBodyBase)
   FIELD_BS (dimbase_version, 90); // always 1
   FIELD_T (name, 1);
-  SUBCLASS (AdDbAssocDimDependencyBody)
+  SUBCLASS (AcDbAssocDimDependencyBody)
   FIELD_BS (class_version, 90); // 1
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
