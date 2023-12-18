@@ -942,7 +942,18 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
       // Section Name (wchar)
       {
-        size_t sz = (size_t)section->name_length;
+        size_t sz = (size_t)section->name_length; // size in bytes really
+        if (sz & 1) // must be even, 2 bytes
+          {
+            LOG_WARN ("Invalid section name_length %" PRId64, section->name_length);
+            section->name_length++;
+            sz++;
+          }
+        if (sz > MAX_SIZE_T)
+          {
+            LOG_WARN ("Invalid section name_length %zu", sz);
+            sz = MAX_SIZE_T;
+          }
         section->name = (DWGCHAR *)calloc (1, section->name_length > 0 ? sz + 2 : 2);
         bit_read_fixed (&page, (BITCODE_RC *)section->name, sz);
       }
