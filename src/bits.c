@@ -153,8 +153,8 @@ bit_reset_chain (Bit_Chain *dat)
                    : (dat->byte + plus > dat->size)))                         \
     {                                                                         \
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                               \
-      LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u + %d > %" PRIuSIZE,  \
-                 func, dat->byte, dat->bit, (int)(plus), dat->size)           \
+      LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u + %ld > %" PRIuSIZE, \
+                 func, dat->byte, dat->bit, (long)(plus), dat->size)          \
       return retval;                                                          \
     }
 
@@ -1627,6 +1627,13 @@ BITCODE_TF
 bit_read_TF (Bit_Chain *restrict dat, size_t length)
 {
   BITCODE_RC *chain;
+  if (length >= INT32_MAX)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u + %ld > %" PRIuSIZE,
+                 __FUNCTION__, dat->byte, dat->bit, (long)length, dat->size);
+      return NULL;
+    }
   CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
   chain = (BITCODE_RC *)malloc (length + 1);
   if (!chain)
