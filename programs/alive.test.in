@@ -210,9 +210,6 @@ run ()
                     CYGWIN*) todo=1 ;;
                     *) ;;
                 esac
-                if grep -E -q '_(r11|r10|r2\.10|r2\.6|r1\.4)\.json' $arg; then
-                    todo=1
-                fi
                 ;;
             dwgrewrite)
                 case "$(uname -s)" in
@@ -220,11 +217,6 @@ run ()
                             todo=1
                             ;;
                     *) ;;
-                esac
-                case $dwg in
-                    *r11/ACEB10)
-                        todo=1
-                        ;;
                 esac
                 ;;
             *)  ;;
