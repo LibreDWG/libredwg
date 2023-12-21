@@ -4378,6 +4378,8 @@ dwg_new_ref (Dwg_Data *restrict dwg)
   if (dwg_decode_add_object_ref (dwg, ref))
     {
       free (ref);
+      LOG_INSANE ("dwg_decode_add_object_ref failed " FORMAT_BL "\n",
+                  dwg->num_object_refs);
       return NULL;
     }
   return ref;

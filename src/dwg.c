@@ -2097,20 +2097,20 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
       uint64_t hashkey;
       assert (dwg);
       loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
-      LOG_HANDLE ("object_map{" FORMAT_RLLx "} = %u\n", absref, obj->index);
       if (!dwg->object_map) // for dwg_add_document()
         dwg->object_map = hash_new (100);
       // check if this handle already exists
       hashkey = hash_get (dwg->object_map, absref);
-      if (HASH_NOT_FOUND == hashkey)
-        hash_set (dwg->object_map, absref, (uint64_t)obj->index);
-      else if (hashkey != obj->index)
+      if (HASH_NOT_FOUND != hashkey && hashkey != obj->index)
         {
           LOG_ERROR ("Duplicate handle " FORMAT_RLLx " for object " FORMAT_RL
                      " already points to object %" PRIu64,
                      absref, obj->index, hashkey);
           return 1;
         }
+      else if (HASH_NOT_FOUND == hashkey)
+        hash_set (dwg->object_map, absref, (uint64_t)obj->index);
+      LOG_HANDLE ("object_map{" FORMAT_RLLx "} = %u\n", absref, obj->index);
     }
 
   dwg_set_handle_size (hdl);
@@ -2181,6 +2181,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
     }
   // else create a new global ref
   ref = dwg_new_ref (dwg);
+  ref->handleref.is_global = 1;
   dwg_add_handle (&ref->handleref, code, absref, obj);
   if (dwg->header.from_version <= R_12)
     ref->handleref.size = 2;
@@ -3232,25 +3233,27 @@ dwg_next_handseed (Dwg_Data *dwg)
 EXPORT BITCODE_RLL
 dwg_next_handle (const Dwg_Data *dwg)
 {
-  BITCODE_H last_hdl;
+  long j;
   BITCODE_RLL seed = 0;
-  // check the object map for the next available handle
-  last_hdl = dwg->num_object_refs ? dwg->object_ref[dwg->num_object_refs - 1]
-                                  : NULL;
-  if (last_hdl)
+  // check the objects for the highest handle
+  for (j = dwg->num_objects; !seed && j > 0; j--)
     {
-      // find the largest handle
-      seed = last_hdl->absolute_ref;
-      // LOG_TRACE ("compute HANDSEED %lu ", seed);
-      for (unsigned i = 0; i < dwg->num_object_refs; i++)
+      Dwg_Object *o = j > 0 ? &dwg->object[j - 1] : NULL;
+      if (o)
         {
-          Dwg_Object_Ref *ref = dwg->object_ref[i];
-          if (ref->absolute_ref > seed)
-            seed = ref->absolute_ref;
+          seed = o->handle.value;
+          break;
         }
     }
-  else if (dwg->num_objects)
-    seed = dwg->object[dwg->num_objects - 1].handle.value;
+  // compare against relative handles (deleted and purged?)
+  LOG_INSANE ("compute HANDSEED " FORMAT_RLLx, seed);
+  for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+    {
+      Dwg_Object_Ref *ref = dwg->object_ref[i];
+      if (ref && ref->absolute_ref > seed)
+        seed = ref->absolute_ref;
+    }
+  LOG_INSANE (" => " FORMAT_RLLx "\n", seed + 1);
   return seed + 1;
 }
 
