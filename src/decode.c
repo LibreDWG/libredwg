@@ -6421,6 +6421,11 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("Invalid auxheader_address %04X", _obj->auxheader_address);
       error |= DWG_ERR_WRONGCRC;
     }
+  else if (_obj->auxheader_size < 2)
+    {
+      LOG_WARN ("Invalid auxheader_size " FORMAT_RS, _obj->auxheader_size);
+      error |= DWG_ERR_WRONGCRC;
+    }
   else
     {
       crcc = bit_calc_CRC (0xC0C1,
