@@ -3239,7 +3239,7 @@ dwg_next_handle (const Dwg_Data *dwg)
   for (j = dwg->num_objects; !seed && j > 0; j--)
     {
       Dwg_Object *o = j > 0 ? &dwg->object[j - 1] : NULL;
-      if (o)
+      if (o && o->handle.value)
         {
           seed = o->handle.value;
           break;
