@@ -520,7 +520,7 @@ dxf_read_string (Bit_Chain *dat, char **string)
               sscanf (&s[3], "%d", &n);
               if (n >= 1 && n <= 5)
                 {
-                  uint16_t x;
+                  uint16_t x = 0;
                   uint32_t uc;
                   cp = mif_tbl[n];
                   sscanf (&s[4], "%4hX", &x);
