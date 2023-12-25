@@ -1349,7 +1349,7 @@ remove_EXEMPT_FROM_CAD_STANDARDS_APPID (Bit_Chain *restrict dat,
   for (BITCODE_BS i = 0; i < _ctl->num_entries; i++)
     {
       BITCODE_H ref = _ctl->entries[i];
-      if (ref->absolute_ref == appid->absolute_ref)
+      if (ref && ref->absolute_ref == appid->absolute_ref)
         {
           LOG_TRACE ("APPID_CONTROL[%u] removed " FORMAT_REF " [H*]\n", i,
                      ARGS_REF (ref));
