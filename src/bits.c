@@ -1435,12 +1435,18 @@ bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     bit_write_RL_BE (dat, handle->value);
   else if (handle->size == 8)
     bit_write_RLL_BE (dat, handle->value);
-  else
+  else if (handle->size < 8)
     {
       BITCODE_RC *restrict str;
       str = (BITCODE_RC *)&(handle->value);
       for (int i = handle->size - 1; i >= 0; i--)
         bit_write_RC (dat, str[i]);
+    }
+  else
+    {
+      LOG_ERROR ("Invalid handle size %u with " FORMAT_RLLx, handle->size,
+                 handle->value)
+      bit_write_RLL_BE (dat, handle->value);
     }
   return;
 }
