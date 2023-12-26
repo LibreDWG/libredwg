@@ -1683,18 +1683,8 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 
   if (!obj || !obj->parent || !obj->tio.entity)
     return DWG_ERR_INTERNALERROR;
-  if (dat->version < R_13b1)
-    type = (unsigned int)obj->fixedtype;
-  else
-    {
-      type = obj->type;
-      if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
-        type = DWG_TYPE_UNKNOWN_ENT;
-      if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
-        type = DWG_TYPE_UNKNOWN_OBJ;
-    }
-
-  switch (type)
+  type = (unsigned int)obj->fixedtype;
+  switch (obj->fixedtype)
     {
     case DWG_TYPE_TEXT:
       return dwg_json_TEXT (dat, obj);
