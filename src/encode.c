@@ -7288,88 +7288,107 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (!dwg_has_eed_appid (oo, eedhdl1))
     {
       LOG_TRACE ("Add EED for AcadAnnotative\n");
-      oo->num_eed += 5;
+      oo->num_eed += 6;
       if (idx)
         oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
       else
-        oo->eed = (Dwg_Eed *)calloc (5, sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)calloc (6, sizeof (Dwg_Eed));
       // AnnotativeData
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl1, NULL);
       oo->eed[idx].size = 28;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (20, 1);
       oo->eed[idx].data->code = 0;
       oo->eed[idx].data->u.eed_0.length = 14; // sizeof ("AnnotativeData") - 1;
       oo->eed[idx].data->u.eed_0.codepage = 30;
       memcpy (oo->eed[idx].data->u.eed_0.string, "AnnotativeData", 15);
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (2, 1);
       oo->eed[idx].data->code = 2; // open
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 1;
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 1;
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (2, 1);
       oo->eed[idx].data->code = 2;
       oo->eed[idx].data->u.eed_2.close = 1;
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
     }
 
   if (!dwg_has_eed_appid (oo, eedhdl2))
     {
       LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMJAG\n");
-      oo->num_eed += 2;
+      oo->num_eed += 3;
       if (idx)
         oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
       else
-        oo->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)calloc (3, sizeof (Dwg_Eed));
       // DIMJAG
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
       oo->eed[idx].size = 12;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       //_obj = oo->tio.DIMSTYLE;
       oo->eed[idx].data->u.eed_70.rs = 388; // FIXME Which value?
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (9, 1);
       oo->eed[idx].data->code = 40;
       oo->eed[idx].data->u.eed_40.real = 1.5; // FIXME Which value?
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
     }
   if (!dwg_has_eed_appid (oo, eedhdl3))
     {
       LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMTALN\n");
-      oo->num_eed += 2;
+      oo->num_eed += 3;
       if (idx)
         oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
       else
-        oo->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)calloc (3, sizeof (Dwg_Eed));
       // DIMTALN
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
       oo->eed[idx].size = 6;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       //_obj = oo->tio.DIMSTYLE;
       oo->eed[idx].data->u.eed_70.rs = 392; // FIXME Which value?
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
       oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 0; // FIXME Which value?
       idx++;
+      oo->eed[idx].size = 0;
+      oo->eed[idx].raw = NULL;
     }
-  oo->eed[idx].size = 0;
   if (idx != oo->num_eed)
     {
       LOG_WARN ("Already DIMSTYLE (" FORMAT_RLLx
                 ") eed idx %u vs num_eed %u\n",
                 obj->handle.value, idx, oo->num_eed);
       // oo->num_eed = idx;
-      // oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof
-      // (Dwg_Eed));
+      // oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
     }
 }
 
