@@ -3873,18 +3873,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       };
 
       // not the order in the system map, but the order in the dat stream.
-      const Dwg_Section_Type stream_order[]
-          = {                  // R2004_Header
-              SECTION_UNKNOWN, // the empty section 128-256
-              SECTION_SUMMARYINFO, SECTION_PREVIEW,        SECTION_VBAPROJECT,
-              SECTION_APPINFO,     SECTION_APPINFOHISTORY, SECTION_FILEDEPLIST,
-              SECTION_ACDS,        SECTION_REVHISTORY,     SECTION_SECURITY,
-              SECTION_OBJECTS,     SECTION_OBJFREESPACE,   SECTION_TEMPLATE,
-              SECTION_HANDLES,     SECTION_CLASSES,        SECTION_AUXHEADER,
-              SECTION_HEADER,      SECTION_SIGNATURE,
+      // clang-format off
+      const Dwg_Section_Type stream_order[] = {
+        // R2004_Header
+        SECTION_UNKNOWN, // the empty section 128-256
+        SECTION_SUMMARYINFO, SECTION_PREVIEW,        SECTION_VBAPROJECT,
+        SECTION_APPINFO,     SECTION_APPINFOHISTORY, SECTION_FILEDEPLIST,
+        SECTION_ACDS,        SECTION_REVHISTORY,     SECTION_SECURITY,
+        SECTION_OBJECTS,     SECTION_OBJFREESPACE,   SECTION_TEMPLATE,
+        SECTION_HANDLES,     SECTION_CLASSES,        SECTION_AUXHEADER,
+        SECTION_HEADER,      SECTION_SIGNATURE,
 
-              SECTION_INFO,        SECTION_SYSTEM_MAP
-            };
+        SECTION_INFO,        SECTION_SYSTEM_MAP
+      };
+      // clang-format on
 
       dwg->r2004_header.numsections = 0;
       dwg->r2004_header.numgaps = 0;
@@ -4137,9 +4139,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           assert (dat->chain[0] == 'A');
           assert (dat->chain[1] == 'C');
           PRE (R_2004)
-          assert (dat->byte <= 0x100);
+          {
+            assert (dat->byte <= 0x100);
+          }
           LATER_VERSIONS
-          assert (dat->byte <= 0x140);
+          {
+            assert (dat->byte <= 0x140);
+          }
         }
 #endif
 
