@@ -3185,6 +3185,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
+  /* "The LTYPE table always precedes the LAYER table" */
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
     if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.LTYPE_CONTROL)
@@ -3371,10 +3372,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
-  PRE (R_2004) // nowhere found yet in DXF's (r11-r2000)
+  PRE (R_2004) // nowhere found in DXF's (r11-r2000)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
-    if (ctrl)
+    if (ctrl && 0)
       {
         Dwg_Object_VX_CONTROL *_ctrl = ctrl->tio.object->tio.VX_CONTROL;
         if (_ctrl->num_entries)

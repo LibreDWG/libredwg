@@ -6293,8 +6293,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   else
   ADD_TABLE_IF1 (VIEW, VIEW_CONTROL)
   else
-  ADD_TABLE_IF1 (VX_TABLE_RECORD, VX_CONTROL)
-  else
+  // ADD_TABLE_IF1 (VX, VX_CONTROL)
+  // else
   ADD_TABLE_IF1 (BLOCK_RECORD, BLOCK_CONTROL)
   else
   // clang-format on

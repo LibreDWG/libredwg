@@ -1799,6 +1799,7 @@ decl_dxfb_process_INSERT (MINSERT)
     case DWG_TYPE_DIMSTYLE_CONTROL:
     case DWG_TYPE_DIMSTYLE:
     case DWG_TYPE_VX_CONTROL:
+    /* no dxf */
     case DWG_TYPE_VX_TABLE_RECORD:
     /* preR13: no dxfb */
     case DWG_TYPE_REPEAT:
@@ -2186,7 +2187,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
   }
   // fool the warnings. this table is nowhere to be found in the wild. maybe
-  // pre-R_11
+  // pre-R11
   if (0)
     {
       Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
