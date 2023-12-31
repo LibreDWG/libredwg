@@ -167,6 +167,7 @@ testobjects = \
 	layer_index \
 	layerfilter \
 	layout \
+	layoutprintconfig \
 	leader \
 	light \
 	lightlist \
@@ -331,7 +332,6 @@ testdebug = \
 	geomapimage \
 	geopositionmarker \
 	helix \
-	layoutprintconfig \
 	loftedsurface \
 	mleaderobjectcontextdata \
 	motionpath \

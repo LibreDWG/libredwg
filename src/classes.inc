@@ -271,6 +271,7 @@
   UNSTABLE_CLASS     (ACTION, HELIX)     /* ent, looks very stable */
   UNSTABLE_CLASS     (ACTION, WIPEOUT)   /* ent, stable but causes acad redraw to crash (GH #244) */
   UNSTABLE_CLASS     (ACTION, LARGE_RADIAL_DIMENSION) /* ent */
+  UNSTABLE_CLASS     (ACTION, LAYOUTPRINTCONFIG) /* ent. CSD_APP, probably a mistake as ent */
   UNSTABLE_CLASS     (ACTION, LIGHTLIST)
   UNSTABLE_CLASS     (ACTION, MATERIAL) // encode fails ODA
   UNSTABLE_CLASS     (ACTION, MENTALRAYRENDERSETTINGS) // not exported by Teigha
@@ -367,7 +368,6 @@
   DEBUGGING_CLASS     (ACTION, MPOLYGON)          // hatch-like ent
   DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
                                                      dxfname COORDINATION_MODEL? */
-  DEBUGGING_CLASS     (ACTION, LAYOUTPRINTCONFIG) /* ent. CSD_APP, probably a mistake as ent */
   DEBUGGING_CLASS     (ACTION, DIMASSOC)
   DEBUGGING_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent) // dxfname: "TABLE"
   DEBUGGING_CLASS     (ACTION, ACSH_EXTRUSION_CLASS)

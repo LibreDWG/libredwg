@@ -1152,7 +1152,7 @@ in_word_set (const char *str, size_t len)
 #line 118 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str371,                    "REGION",                     DWG_TYPE_REGION,	1,	STABLE},
 #line 86 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str372,         "LAYOUTPRINTCONFIG",          DWG_TYPE_LAYOUTPRINTCONFIG,	1,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str372,         "LAYOUTPRINTCONFIG",          DWG_TYPE_LAYOUTPRINTCONFIG,	1,	UNSTABLE},
 #line 201 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str373,     "ACDBASSOCOFFSETSURFACEACTIONBODY",  DWG_TYPE_ASSOCOFFSETSURFACEACTIONBODY,	0,	UNSTABLE},
 #line 284 "src/objects.in"
