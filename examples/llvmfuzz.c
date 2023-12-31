@@ -144,7 +144,7 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
       {
         switch (ver)
           {
-          // TODO support preR13, downconverters missing
+          // TODO support preR13, many downconverters still missing
           case 0:
             out_dat.version = dwg.header.version = R_1_4;
             break;

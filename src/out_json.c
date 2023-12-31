@@ -2612,6 +2612,8 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Header *obj = &dwg->header;
   int error = 0;
 
+  if (!dat->version)
+    dat->version = dat->from_version;
   if (!dat->codepage)
     dat->codepage = dwg->header.codepage;
   if (!dat->fh)
