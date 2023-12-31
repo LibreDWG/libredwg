@@ -138,16 +138,16 @@ done
 # teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
 can_teigha=1
 case $(uname) in
-    Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-    Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
-    Windows) TeighaFileConverter=TeighaFileConverter ;;
+    Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+    Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
+    Windows) TeighaFileConverter=ODAFileConverter ;;
     *)       can_teigha=0 ;;
 esac
-if [ ! -x "$TeighaFileConverter" ]; then
+if [ -n "$can_teigha" ] && [ ! -x "$TeighaFileConverter" ]; then
     case $(uname) in
-        Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
-        Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
-        Windows) TeighaFileConverter=ODAFileConverter ;;
+        Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+        Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
+        Windows) TeighaFileConverter=TeighaFileConverter ;;
     esac
 fi
 
@@ -159,10 +159,10 @@ check_oda() {
         r="$(basename "$dir")"
         can_teigha=1
         case $r in
-            20*)      ;;
-            r9)       r=9 ;;
-            r11)      r=12 ;;
-            r1[0234]) r=${r:1} ;;
+            20*)      b="${b}_${r}" ;;
+            r9)       r=9; b="${b}_r${r}" ;;
+            r11)      r=12; b="${b}_r${r}" ;;
+            r1[0234]) r=${r:1}; b="${b}_r${r}" ;;
             r[12]\.*) r=${r:1}
                       can_teigha=
                       ;;
@@ -176,10 +176,10 @@ check_oda() {
         esac
         if [ -n "$can_teigha" ] && [ ! -f "$b.dwg" ]; then
             if [ ! -f "$b.json" ]; then
-                #echo "dwgread${EXEEXT}" -o"$b.json" "${DATADIR}/$dwg.dwg"
+                echo "dwgread${EXEEXT}" -o"$b.json" "${DATADIR}/$dwg.dwg"
                 $TESTPROG "./dwgread${EXEEXT}" -o"$b.json" "${DATADIR}/$dwg.dwg" 2>/dev/null
             fi
-            #echo "./dwgwrite${EXEEXT} -y -v0 -o $b.dwg $b.json"
+            echo "./dwgwrite${EXEEXT} -y -v0 -o $b.dwg $b.json"
             $TESTPROG "./dwgwrite${EXEEXT}" -y -v0 -o "$b.dwg" "$b.json" 2>/dev/null
         fi
         if [ -n "$can_teigha" ] && [ -f "$b.dwg" ]; then
@@ -197,13 +197,14 @@ check_oda() {
     fi
 }
 
-if [ -x "$TeighaFileConverter" ]
+if [ -n "$can_teigha" ] && [ -x "$TeighaFileConverter" ]
 then
+    echo ""
     echo TeighaFileConverter roundtrip checks
-    for dwg in sample_2000 example_2000 example_r14 2000/Text.dwg r11/entities-3d r10/entities \
-               r9/entities
+    # example_r14: CRC does not match
+    for dwg in sample_2000 example_2000 2000/Arc 2000/Text 2000/circle 2000/PolyLine2D 2000/RAY\
+               2000/Spline r11/entities-3d r11/entities-2d
     do
-        dwg="${DATADIR}/$dwg.dwg"
         check_oda
     done
 else
