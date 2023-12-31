@@ -41,6 +41,7 @@ static BITCODE_BL rcount1, rcount2;
 
 #define ACTION print
 #define IS_PRINT
+#undef USE_WRITE
 
 #define FIELD(nam, type) FIELD_TRACE (nam, type)
 #define FIELDG(nam, type, dxf) FIELD_G_TRACE (nam, type, dxf)

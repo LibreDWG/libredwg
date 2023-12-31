@@ -3971,11 +3971,11 @@ DWG_TABLE (LTYPE)
     END_REPEAT (dashes);
     
     UNTIL (R_2004) {
+#if !defined(IS_DECODER) && defined(USE_WRITE) && !defined(DECODE_TEST_C)
       // downconvert from 512
-      ENCODER {
-        if (dwg->header.from_version > R_2004)
-          dwg_convert_LTYPE_strings_area (dwg, _obj);
-      }
+      if (dwg->header.from_version > R_2004)
+        dwg_convert_LTYPE_strings_area (dwg, _obj);
+#endif
       FIELD_BINARY (strings_area, 256, 0);
       DECODER {
         unsigned int dash_i = 0;
@@ -3998,12 +3998,12 @@ DWG_TABLE (LTYPE)
       }
     }
     LATER_VERSIONS {
-      if (FIELD_VALUE (has_strings_area)) {
+#if !defined(IS_DECODER) && defined(USE_WRITE) && !defined(DECODE_TEST_C)
         // upconvert from 256
-        ENCODER {
-          if (dwg->header.from_version <= R_2004)
-            dwg_convert_LTYPE_strings_area (dwg, _obj);
-        }
+        if (dwg->header.from_version <= R_2004)
+          dwg_convert_LTYPE_strings_area (dwg, _obj);
+#endif
+      if (FIELD_VALUE (has_strings_area)) {
         FIELD_BINARY (strings_area, 512, 0);
         DECODER {
           BITCODE_RS dash_i = 0;

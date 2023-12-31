@@ -7412,25 +7412,47 @@ dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
     {
       // upconvert to 512
       BITCODE_TF old = _obj->strings_area;
+      if (!old)
+        {
+          _obj->has_strings_area = 0;
+          return;
+        }
       _obj->strings_area = calloc (1, 512);
-      if (!_obj->strings_area || !old)
-        return;
+      if (!_obj->strings_area)
+        {
+          _obj->has_strings_area = 0;
+          free (old);
+          return;
+        }
+      _obj->has_strings_area = 1;
       for (int i = 0; i < 256; i++)
         {
           _obj->strings_area[i * 2] = old[i];
         }
+      free (old);
     }
   else if (dwg->header.from_version > R_2004 && dwg->header.version <= R_2004)
     {
       // downconvert to 256
       BITCODE_TF old = _obj->strings_area;
+      if (!old)
+        _obj->has_strings_area = 0;
       _obj->strings_area = calloc (1, 256);
       if (!_obj->strings_area || !old)
-        return;
+        { // all empty
+          if (old)
+            free (old);
+          if (_obj->strings_area)
+            free (_obj->strings_area);
+          _obj->strings_area = NULL;
+          return;
+        }
+      _obj->has_strings_area = 1;
       for (int i = 0; i < 256; i++)
         {
           _obj->strings_area[i] = old[i * 2];
         }
+      free (old);
     }
 }
 

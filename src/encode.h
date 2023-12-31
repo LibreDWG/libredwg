@@ -54,5 +54,4 @@ bool dwg_encode_unknown_bits (Bit_Chain *restrict dat,
                               Dwg_Object *restrict obj);
 void downconvert_TABLESTYLE (Dwg_Object *restrict obj);
 
-
 #endif
