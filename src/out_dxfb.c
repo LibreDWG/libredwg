@@ -1402,30 +1402,22 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           for (i = 0; i < FIELD_VALUE (num_blocks); i++)
             {
               char *s = FIELD_VALUE (encr_sat_data[i]);
-              BITCODE_BL len = FIELD_VALUE (block_size[i]);
-              if ((BITCODE_BLd)len < 0)
-                {
-                  LOG_ERROR ("Invalid %s.block_size[%u] " FORMAT_BL, obj->name,
-                             (unsigned)i, len);
-                  return DWG_ERR_VALUEOUTOFBOUNDS;
-                }
+              int len = FIELD_VALUE (block_size[i]);
               // DXF 1 + 3 if >255
               while (len > 0)
                 {
                   char *n = strchr (s, '\n');
                   int l = len > 255 ? 255 : len & 0xff;
                   if (n && ((long)(n - s) < (long)len))
-                    l = n - s;
+                    {
+                      l = n - s;
+                    }
                   if (l)
                     {
                       if (len < 255)
-                        {
-                          VALUE_BINARY (s, l, 1);
-                        }
+                        VALUE_BINARY (s, l, 1)
                       else
-                        {
-                          VALUE_BINARY (s, l, 3);
-                        }
+                        VALUE_BINARY (s, l, 3)
                       l++;
                       len -= l;
                       s += l;
