@@ -10,7 +10,7 @@ api_process (dwg_object *obj)
   BITCODE_BS flag;
 
 #ifdef DEBUG_CLASSES
-  dwg_obj_layoutprintconfig *_obj = dwg_object_to_LAYOUTPRINTCONFIG (obj);
+  dwg_ent_layoutprintconfig *_obj = dwg_object_to_LAYOUTPRINTCONFIG (obj);
 
   CHK_ENTITY_TYPE (_obj, LAYOUTPRINTCONFIG, class_version, BS);
   CHK_ENTITY_TYPE (_obj, LAYOUTPRINTCONFIG, flag, BS);

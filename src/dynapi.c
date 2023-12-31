@@ -2150,6 +2150,16 @@ static const Dwg_DYNAPI_field _dwg_LARGE_RADIAL_DIMENSION_fields[] = {
     1,0,0, 13 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_entity_LAYOUTPRINTCONFIG: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_LAYOUTPRINTCONFIG_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_LAYOUTPRINTCONFIG, parent),
+    1,1,0, 0 },
+  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_LAYOUTPRINTCONFIG, class_version),
+    0,0,0, 0 },
+  { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_LAYOUTPRINTCONFIG, flag),
+    0,0,0, 93 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_entity_LEADER: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_LEADER_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_LEADER, parent),
@@ -8497,16 +8507,6 @@ static const Dwg_DYNAPI_field _dwg_LAYOUT_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_object_LAYOUTPRINTCONFIG: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_LAYOUTPRINTCONFIG_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYOUTPRINTCONFIG, parent),
-    1,1,0, 0 },
-  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYOUTPRINTCONFIG, class_version),
-    0,0,0, 0 },
-  { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYOUTPRINTCONFIG, flag),
-    0,0,0, 93 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
 /* from typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_LEADEROBJECTCONTEXTDATA_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LEADEROBJECTCONTEXTDATA, parent),
@@ -13213,7 +13213,7 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "LAYER_CONTROL", DWG_TYPE_LAYER_CONTROL /*(50)*/, _dwg_LAYER_CONTROL_fields, sizeof (struct _dwg_object_LAYER_CONTROL) },	/* 189 */
   { "LAYER_INDEX", DWG_TYPE_LAYER_INDEX /*(653)*/, _dwg_LAYER_INDEX_fields, sizeof (struct _dwg_object_LAYER_INDEX) },	/* 190 */
   { "LAYOUT", DWG_TYPE_LAYOUT /*(82)*/, _dwg_LAYOUT_fields, sizeof (struct _dwg_object_LAYOUT) },	/* 191 */
-  { "LAYOUTPRINTCONFIG", DWG_TYPE_LAYOUTPRINTCONFIG /*(654)*/, _dwg_LAYOUTPRINTCONFIG_fields, sizeof (struct _dwg_object_LAYOUTPRINTCONFIG) },	/* 192 */
+  { "LAYOUTPRINTCONFIG", DWG_TYPE_LAYOUTPRINTCONFIG /*(654)*/, _dwg_LAYOUTPRINTCONFIG_fields, sizeof (struct _dwg_entity_LAYOUTPRINTCONFIG) },	/* 192 */
   { "LEADER", DWG_TYPE_LEADER /*(45)*/, _dwg_LEADER_fields, sizeof (struct _dwg_entity_LEADER) },	/* 193 */
   { "LEADEROBJECTCONTEXTDATA", DWG_TYPE_LEADEROBJECTCONTEXTDATA /*(655)*/, _dwg_LEADEROBJECTCONTEXTDATA_fields, sizeof (struct _dwg_object_LEADEROBJECTCONTEXTDATA) },	/* 194 */
   { "LIGHT", DWG_TYPE_LIGHT /*(656)*/, _dwg_LIGHT_fields, sizeof (struct _dwg_entity_LIGHT) },	/* 195 */
@@ -13672,7 +13672,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "LAYER_CONTROL", {"AcDbSymbolTable", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "LAYER_INDEX", {"AcDbObject", "AcDbIndex", "AcDbLayerIndex", NULL, NULL, NULL, NULL, NULL} },
   { "LAYOUT", {"AcDbObject", "AcDbPlotSettings", "AcDbLayout", NULL, NULL, NULL, NULL, NULL} },
-  { "LAYOUTPRINTCONFIG", {"AcDbObject", "CAcLayoutPrintConfig", NULL, NULL, NULL, NULL, NULL, NULL} },
+  { "LAYOUTPRINTCONFIG", {"AcDbEntity", "CAcLayoutPrintConfig", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "LEADER", {"AcDbEntity", "AcDbLeader", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "LEADEROBJECTCONTEXTDATA", {"AcDbObject", "AcDbObjectContextData", "AcDbAnnotScaleObjectContextData", "AcDbLeaderObjectContextData", NULL, NULL, NULL, NULL} },
   { "LIGHT", {"AcDbEntity", "AcDbLight", NULL, NULL, NULL, NULL, NULL, NULL} },

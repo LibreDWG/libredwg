@@ -13782,6 +13782,62 @@ static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_LAYOUTPRINTCONFIG (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_LAYOUTPRINTCONFIG *restrict layoutprintconfig = obj->tio.entity->tio.LAYOUTPRINTCONFIG;
+  failed = 0;
+  if (!obj_obj || !layoutprintconfig)
+    {
+      fail ("NULL LAYOUTPRINTCONFIG");
+      return 1;
+    }
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "class_version", &class_version, NULL)
+        && class_version == layoutprintconfig->class_version)
+      pass ();
+    else
+      fail ("LAYOUTPRINTCONFIG.class_version [BS] %hu != %hu", layoutprintconfig->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "class_version", &class_version, 0)
+        && class_version == layoutprintconfig->class_version)
+      pass ();
+    else
+      fail ("LAYOUTPRINTCONFIG.class_version [BS] set+1 %hu != %hu", layoutprintconfig->class_version, class_version);
+    layoutprintconfig->class_version--;
+  }
+  {
+    BITCODE_BS flag;
+    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "flag", &flag, NULL)
+        && flag == layoutprintconfig->flag)
+      pass ();
+    else
+      fail ("LAYOUTPRINTCONFIG.flag [BS] %hu != %hu", layoutprintconfig->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "flag", &flag, 0)
+        && flag == layoutprintconfig->flag)
+      pass ();
+    else
+      fail ("LAYOUTPRINTCONFIG.flag [BS] set+1 %hu != %hu", layoutprintconfig->flag, flag);
+    layoutprintconfig->flag--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "parent", &parent, NULL)
+        && !memcmp (&parent, &layoutprintconfig->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("LAYOUTPRINTCONFIG.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("LAYOUTPRINTCONFIG") || is_class_debugging ("LAYOUTPRINTCONFIG")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LAYOUTPRINTCONFIG", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_LEADER (const Dwg_Object *obj)
 {
   int error = 0;
@@ -50778,62 +50834,6 @@ static int test_LAYOUT (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_LAYOUTPRINTCONFIG (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_LAYOUTPRINTCONFIG *restrict layoutprintconfig = obj->tio.object->tio.LAYOUTPRINTCONFIG;
-  failed = 0;
-  if (!obj_obj || !layoutprintconfig)
-    {
-      fail ("NULL LAYOUTPRINTCONFIG");
-      return 1;
-    }
-  {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "class_version", &class_version, NULL)
-        && class_version == layoutprintconfig->class_version)
-      pass ();
-    else
-      fail ("LAYOUTPRINTCONFIG.class_version [BS] %hu != %hu", layoutprintconfig->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "class_version", &class_version, 0)
-        && class_version == layoutprintconfig->class_version)
-      pass ();
-    else
-      fail ("LAYOUTPRINTCONFIG.class_version [BS] set+1 %hu != %hu", layoutprintconfig->class_version, class_version);
-    layoutprintconfig->class_version--;
-  }
-  {
-    BITCODE_BS flag;
-    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "flag", &flag, NULL)
-        && flag == layoutprintconfig->flag)
-      pass ();
-    else
-      fail ("LAYOUTPRINTCONFIG.flag [BS] %hu != %hu", layoutprintconfig->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "flag", &flag, 0)
-        && flag == layoutprintconfig->flag)
-      pass ();
-    else
-      fail ("LAYOUTPRINTCONFIG.flag [BS] set+1 %hu != %hu", layoutprintconfig->flag, flag);
-    layoutprintconfig->flag--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (layoutprintconfig, "LAYOUTPRINTCONFIG", "parent", &parent, NULL)
-        && !memcmp (&parent, &layoutprintconfig->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("LAYOUTPRINTCONFIG.parent [struct _dwg_object_object*]");
-  }
-  if (failed && (is_class_unstable ("LAYOUTPRINTCONFIG") || is_class_debugging ("LAYOUTPRINTCONFIG")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "LAYOUTPRINTCONFIG", failed);
-      failed = 0;
-    }
-  return failed;
-}
 static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
 {
   int error = 0;
@@ -63714,6 +63714,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_JUMP(obj);
   else  if (obj->fixedtype == DWG_TYPE_LARGE_RADIAL_DIMENSION)
     error += test_LARGE_RADIAL_DIMENSION(obj);
+  else  if (obj->fixedtype == DWG_TYPE_LAYOUTPRINTCONFIG)
+    error += test_LAYOUTPRINTCONFIG(obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADER)
     error += test_LEADER(obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHT)
@@ -64126,8 +64128,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LAYER_INDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYOUT)
     error += test_LAYOUT(obj);
-  else  if (obj->fixedtype == DWG_TYPE_LAYOUTPRINTCONFIG)
-    error += test_LAYOUTPRINTCONFIG(obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
     error += test_LEADEROBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHTLIST)
@@ -64344,6 +64344,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_JUMP (obj);
   else  if (obj->fixedtype == DWG_TYPE_LARGE_RADIAL_DIMENSION)
     error += test_LARGE_RADIAL_DIMENSION (obj);
+  else  if (obj->fixedtype == DWG_TYPE_LAYOUTPRINTCONFIG)
+    error += test_LAYOUTPRINTCONFIG (obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADER)
     error += test_LEADER (obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHT)
@@ -64756,8 +64758,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LAYER_INDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYOUT)
     error += test_LAYOUT (obj);
-  else  if (obj->fixedtype == DWG_TYPE_LAYOUTPRINTCONFIG)
-    error += test_LAYOUTPRINTCONFIG (obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
     error += test_LEADEROBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_LIGHTLIST)
@@ -65200,6 +65200,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_LARGE_RADIAL_DIMENSION): %d != "
                "dwg_dynapi_fields_size (\"LARGE_RADIAL_DIMENSION\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_LAYOUTPRINTCONFIG);
+  size2 = dwg_dynapi_fields_size ("LAYOUTPRINTCONFIG");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_LAYOUTPRINTCONFIG): %d != "
+               "dwg_dynapi_fields_size (\"LAYOUTPRINTCONFIG\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_LEADER);
@@ -66856,14 +66864,6 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Object_LAYOUT): %d != "
                "dwg_dynapi_fields_size (\"LAYOUT\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (Dwg_Object_LAYOUTPRINTCONFIG);
-  size2 = dwg_dynapi_fields_size ("LAYOUTPRINTCONFIG");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(Dwg_Object_LAYOUTPRINTCONFIG): %d != "
-               "dwg_dynapi_fields_size (\"LAYOUTPRINTCONFIG\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Object_LEADEROBJECTCONTEXTDATA);

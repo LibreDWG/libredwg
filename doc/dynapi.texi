@@ -2388,6 +2388,23 @@ BD,	DXF 40
 @end vtable
 @end indentedblock
 
+@strong{LAYOUTPRINTCONFIG} @anchor{LAYOUTPRINTCONFIG}
+@cindex entity, LAYOUTPRINTCONFIG
+@vindex LAYOUTPRINTCONFIG
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item class_version
+BS
+@item flag
+BS,	DXF 93
+
+@end vtable
+@end indentedblock
+
 @strong{LEADER} @anchor{LEADER}
 @cindex entity, LEADER
 @vindex LEADER
@@ -10223,23 +10240,6 @@ H,	DXF 345
 BL
 @item viewports
 H*
-
-@end vtable
-@end indentedblock
-
-@strong{LAYOUTPRINTCONFIG} @anchor{LAYOUTPRINTCONFIG}
-@cindex object, LAYOUTPRINTCONFIG
-@vindex LAYOUTPRINTCONFIG
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item class_version
-BS
-@item flag
-BS,	DXF 93
 
 @end vtable
 @end indentedblock

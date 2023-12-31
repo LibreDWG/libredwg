@@ -7181,13 +7181,13 @@ typedef struct _dwg_entity_RTEXT
   BITCODE_H style;	/*!< DXF 7 */
 } Dwg_Entity_RTEXT;
 
-typedef struct _dwg_object_LAYOUTPRINTCONFIG
+typedef struct _dwg_entity_LAYOUTPRINTCONFIG
 {
-  struct _dwg_object_object *parent;
+  struct _dwg_object_entity *parent;
   BITCODE_BS class_version; /* 2 */
   // ...
   BITCODE_BS flag; /*!< DXF 93 0 */
-} Dwg_Object_LAYOUTPRINTCONFIG;
+} Dwg_Entity_LAYOUTPRINTCONFIG;
 
 typedef struct _dwg_object_ACMECOMMANDHISTORY
 {
@@ -8577,6 +8577,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_FLIPGRIPENTITY *FLIPGRIPENTITY;
     Dwg_Entity_FLIPPARAMETERENTITY *FLIPPARAMETERENTITY;
     Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
+    Dwg_Entity_LAYOUTPRINTCONFIG *LAYOUTPRINTCONFIG;
     Dwg_Entity_LINEARGRIPENTITY *LINEARGRIPENTITY;
     Dwg_Entity_LINEARPARAMETERENTITY *LINEARPARAMETERENTITY;
     Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
@@ -8878,7 +8879,6 @@ typedef struct _dwg_object_object
     Dwg_Object_DMDIMOBJECTCONTEXTDATA *DMDIMOBJECTCONTEXTDATA;
     Dwg_Object_DYNAMICBLOCKPROXYNODE *DYNAMICBLOCKPROXYNODE;
     Dwg_Object_GEOMAPIMAGE *GEOMAPIMAGE;
-    Dwg_Object_LAYOUTPRINTCONFIG *LAYOUTPRINTCONFIG;
     Dwg_Object_MLEADEROBJECTCONTEXTDATA *MLEADEROBJECTCONTEXTDATA;
     Dwg_Object_MOTIONPATH *MOTIONPATH;
     Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
@@ -10236,6 +10236,7 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_FLIPGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_FLIPPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOPOSITIONMARKER (Dwg_Object *obj);
+  EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
   EXPORT int dwg_setup_LINEARGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_LINEARPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_LOFTEDSURFACE (Dwg_Object *obj);
@@ -10287,7 +10288,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_DMDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_DYNAMICBLOCKPROXYNODE (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOMAPIMAGE (Dwg_Object *obj);
-  EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
   EXPORT int dwg_setup_MLEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_MOTIONPATH (Dwg_Object *obj);
   EXPORT int dwg_setup_MTEXTATTRIBUTEOBJECTCONTEXTDATA (Dwg_Object *obj);

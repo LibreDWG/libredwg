@@ -300,6 +300,7 @@ EXACXREFPANELOBJECT,			"ExAcXREFPanelObject",		SPECIAL, 0
 NPOCOLLECTION,				"AcDbImpNonPersistentObjectsCollection", ODBX, 0
 PARTIAL_VIEWING_FILTER,			"OdDbPartialViewingFilter",	SPECIAL, 0
 PARTIAL_VIEWING_INDEX,			"OdDbPartialViewingIndex",	SPECIAL, 0
+LAYOUTPRINTCONFIG,			"CAcLayoutPrintConfig",		SPECIAL, 1
 LSDEFINITION,				"AcDbLSDefinition",		DGNLS, 0
 LSSTROKEPATTERNCOMPONENT,	       	"AcDbLSStrokePatternComponent",	DGNLS, 0
 LSINTERNALCOMPONENT,			"AcDbLSInternalComponent",	DGNLS, 0
@@ -368,6 +369,8 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
               strcpy (appname, "AcDbDimAssoc|Product Desc:     AcDim ARX App For Dimension");
             else if (memBEGINc (dxfname, "PARTIAL_VIEWING_"))
               strcpy (appname, "OdDbPartialViewing|https://www.opendesign.com Teigha(R) Core Db");
+            else if (strEQc (dxfname, "LAYOUTPRINTCONFIG"))
+              strcpy (appname, "CSD_APP");
             else
               {
                 strcpy (appname, result->cppname);
