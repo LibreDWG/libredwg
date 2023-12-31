@@ -3992,29 +3992,29 @@ DWG_TABLE (LTYPE)
           }
       }
     }
-  }
-  LATER_VERSIONS {
-    if (FIELD_VALUE (has_strings_area)) {
-      FIELD_BINARY (strings_area, 512, 0);
-      DECODER {
-        BITCODE_RS dash_i = 0;
-        for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->numdashes; rcount1++)
-          {
-            if (_obj->dashes[rcount1].shape_flag & 2)
-              {
-                if (dash_i >= 512)
-                  {
-                    LOG_ERROR ("dashes[%u] overflow @%u", rcount1, dash_i);
-                    break;
-                  }
-                _obj->dashes[rcount1].text = (char *)&_obj->strings_area[dash_i];
-                LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i);
-                dash_i += ((2 * bit_wcs2nlen ((BITCODE_TU)_obj->dashes[rcount1].text,
-                                             256 - (dash_i / 2))) + 2 ) & 0xFFFF;
-              }
-          }
+    LATER_VERSIONS {
+      if (FIELD_VALUE (has_strings_area)) {
+        FIELD_BINARY (strings_area, 512, 0);
+        DECODER {
+          BITCODE_RS dash_i = 0;
+          for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->numdashes; rcount1++)
+            {
+              if (_obj->dashes[rcount1].shape_flag & 2)
+                {
+                  if (dash_i >= 512)
+                    {
+                      LOG_ERROR ("dashes[%u] overflow @%u", rcount1, dash_i);
+                      break;
+                    }
+                  _obj->dashes[rcount1].text = (char *)&_obj->strings_area[dash_i];
+                  LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i);
+                  dash_i += ((2 * bit_wcs2nlen ((BITCODE_TU)_obj->dashes[rcount1].text,
+                                                256 - (dash_i / 2))) + 2 ) & 0xFFFF;
+                }
+            }
+        }
       }
-    }
+    } // r2007
   } // r13
 
   SINCE (R_13b1) {
