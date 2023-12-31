@@ -218,8 +218,8 @@ then
     echo ""
     echo $baseFileConverter roundtrip checks
     # example_r14: CRC does not match
-    for dwg in sample_2000 example_2000 2000/Arc 2000/Text 2000/circle 2000/PolyLine2D 2000/RAY\
-               2000/Spline r11/entities-3d r11/entities-2d
+    for dwg in sample_2000 2000/Arc 2000/Text 2000/circle 2000/PolyLine2D 2000/RAY\
+               2000/Spline r11/entities-2d $DATA
     do
         check_oda
     done
