@@ -158,10 +158,6 @@ check_oda() {
         dir="$(dirname "$dwg")"
         r="$(basename "$dir")"
         can_teigha=1
-        #DATA=sample_2000 example_2000 example_2004 example_2007 example_2010
-        #     example_2013 example_2018 example_r14 example_r13
-        #     r11/entities-3d r2.10/entities r2.6/entities r10/entities r9/entities
-        #     2010/Text 2010/Leader 2018/Constraints
         case $r in
             20*)      ;;
             r9)       r=9 ;;
@@ -204,7 +200,10 @@ check_oda() {
 if [ -x "$TeighaFileConverter" ]
 then
     echo TeighaFileConverter roundtrip checks
-    for dwg in $DATA 2010/Text 2010/Leader 2018/Constraints; do
+    for dwg in sample_2000 example_2000 example_r14 2000/Text.dwg r11/entities-3d r10/entities \
+               r9/entities
+    do
+        dwg="${DATADIR}/$dwg.dwg"
         check_oda
     done
 else
