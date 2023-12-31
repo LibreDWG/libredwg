@@ -7403,4 +7403,35 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
 }
 
+// up or downconvert from/to 256/512 bytes
+void
+dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
+                                Dwg_Object_LTYPE *restrict _obj)
+{
+  if (dwg->header.from_version <= R_2004 && dwg->header.version > R_2004)
+    {
+      // upconvert to 512
+      BITCODE_TF old = _obj->strings_area;
+      _obj->strings_area = calloc (1, 512);
+      if (!_obj->strings_area || !old)
+        return;
+      for (int i = 0; i < 256; i++)
+        {
+          _obj->strings_area[i * 2] = old[i];
+        }
+    }
+  else if (dwg->header.from_version > R_2004 && dwg->header.version <= R_2004)
+    {
+      // downconvert to 256
+      BITCODE_TF old = _obj->strings_area;
+      _obj->strings_area = calloc (1, 256);
+      if (!_obj->strings_area || !old)
+        return;
+      for (int i = 0; i < 256; i++)
+        {
+          _obj->strings_area[i] = old[i * 2];
+        }
+    }
+}
+
 #undef IS_ENCODER

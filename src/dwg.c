@@ -3524,7 +3524,7 @@ EXPORT int dwg_supports_eed (const Dwg_Data *dwg)
 
 EXPORT int
 dwg_supports_obj (const Dwg_Data *restrict dwg,
-                     const Dwg_Object *restrict obj)
+                  const Dwg_Object *restrict obj)
 {
   const Dwg_Object_Type type = obj->fixedtype;
   Dwg_Version_Type ver;
