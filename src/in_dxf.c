@@ -11830,7 +11830,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
   else if (obj->type == DWG_TYPE_PLOTSETTINGS)
     dxf_postprocess_PLOTSETTINGS (obj);
   // set defaults not in dxf:
-  else if (obj->type == DWG_TYPE__3DFACE && dwg->header.version >= R_2000)
+  else if (obj->type == DWG_TYPE__3DFACE && dwg->header.from_version >= R_2000)
     {
       Dwg_Entity__3DFACE *o = obj->tio.entity->tio._3DFACE;
       o->has_no_flags = 1;
@@ -11954,7 +11954,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     i--;
                   else
                     {
-                      if (dwg->header.version > R_2004 && _obj->name
+                      if (dwg->header.from_version > R_2004 && _obj->name
                           && _obj->has_strings_area)
                         {
                           _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
@@ -11964,7 +11964,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                               goto outofmem;
                             }
                         }
-                      if (dwg->header.version <= R_2004)
+                      if (dwg->header.from_version <= R_2004)
                         {
                           _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
                           if (!_obj->strings_area)
@@ -12706,18 +12706,18 @@ resolve_header_dicts (Dwg_Data *restrict dwg)
   // only possible after OBJECTS
   CHECK_DICTIONARY_HDR (ACAD_GROUP)
   CHECK_DICTIONARY_HDR (ACAD_MLINESTYLE)
-  if (dwg->header.version >= R_2000)
+  if (dwg->header.from_version >= R_2000)
     {
       CHECK_DICTIONARY_HDR (LAYOUT)
       CHECK_DICTIONARY_HDR (PLOTSETTINGS)
       CHECK_DICTIONARY_HDR (PLOTSTYLENAME)
     }
-  if (dwg->header.version >= R_2004)
+  if (dwg->header.from_version >= R_2004)
     {
       CHECK_DICTIONARY_HDR (MATERIAL)
       CHECK_DICTIONARY_HDR (COLOR)
     }
-  if (dwg->header.version >= R_2007)
+  if (dwg->header.from_version >= R_2007)
     {
       CHECK_DICTIONARY_HDR (VISUALSTYLE)
     }
