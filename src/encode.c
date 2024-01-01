@@ -2407,6 +2407,9 @@ encode_auxheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   Dwg_Object *obj = NULL;
   BITCODE_BL vcount;
   int error = 0;
+  const BITCODE_RL olds = dwg->secondheader.sections[SECTION_AUXHEADER_R2000].size;
+  BITCODE_RL news = dwg->header.section[SECTION_AUXHEADER_R2000].size;
+
   assert (!dat->bit);
   LOG_INFO ("\n=======> AuxHeader: %8zu\n", dat->byte); // size: 123
 
@@ -2441,10 +2444,17 @@ encode_auxheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   #include "auxheader.spec"
   // clang-format on
 
-  dwg->header.section[SECTION_AUXHEADER_R2000].size
+  news = dwg->header.section[SECTION_AUXHEADER_R2000].size
     = (BITCODE_RL)(dat->byte
                    - dwg->header.section[SECTION_AUXHEADER_R2000]
                    .address);
+  // maybe we need padding
+  if (dat->version == dat->from_version && news < olds)
+    {
+      for (unsigned i = 0; i < (olds - news); i++)
+        bit_write_RC (dat, 0);
+    }
+
   assert (!dat->bit);
   return error;
 }
