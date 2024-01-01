@@ -3803,6 +3803,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             dwg->header.num_sections++;
         }
       }
+    VERSIONS (R_13b1, R_2000)
+    {
+      // auxheader before thumbnail?
+      if (dwg->header.sections > 5
+          && dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address
+          && dwg->header.thumbnail_address
+                 > dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address)
+        {
+          if (section_move_top ((Dwg_Section_Type_r13 *)&section_order,
+                                SECTION_AUXHEADER_R2000))
+            dwg->header.num_sections++;
+        }
+    }
     VERSION (R_13)
     {
       if (section_move_before ((Dwg_Section_Type_r13 *)&section_order,
