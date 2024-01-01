@@ -1007,8 +1007,7 @@
 
 // check for overflow into next object (invalid num_elems)
 #define AVAIL_BITS(dat)                                                       \
-  (obj ? (int64_t)((obj->size * 8) - bit_position (dat) + 20)                 \
-       : (int64_t)0x0000ff00LL)
+  (int64_t)((dat->size * 8) - bit_position (dat))
 #define TYPE_MAXELEMSIZE(type) dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(nam, type, size, dat)                                 \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \

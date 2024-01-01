@@ -20,10 +20,9 @@
 
 VERSIONS (R_13, R_2000) {
   FIELD_RL (size, 0);
-  DECODER {
-    // AVAIL_BITS fix for TFF
-    obj->size = _obj->size;
-  }
+#ifdef IS_DECODER
+  _VECTOR_CHKCOUNT_STATIC(size, _obj->size, 8, dat)
+#endif
   FIELD_BL (address, 0);
   FIELD_TFF (version, 11, 0);
   FIELD_RC (is_maint, 0);
