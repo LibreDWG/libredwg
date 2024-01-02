@@ -667,7 +667,7 @@
       FIELD_BD (SHADOWPLANELOCATION, 40); // z height
     }
 
-  SINCE (R_13b1)
+  SINCE (R_14)
     {
       FIELD_BS (unknown_54, 0); /* (type 5/6 only) these do not seem to be required */
       FIELD_BS (unknown_55, 0);
