@@ -73,8 +73,10 @@ static char *_path_field (const char *path);
 #define CLEARFIRST dat->opts &= ~DWG_OPTS_JSONFIRST
 
 #ifdef IS_RELEASE
+// smaller json's
 #  undef JSON_WHITESPACE
 #else
+// bigger readable json's
 #  define JSON_WHITESPACE
 #endif
 

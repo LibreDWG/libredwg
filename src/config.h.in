@@ -327,8 +327,8 @@
 /* Define as const if the declaration of iconv() needs const. */
 #undef ICONV_CONST
 
-/* Define to 1 if this is a release, skipping unstable DWG features, unknown
-   DWG versions and objects. */
+/* Define to 1 if this is a release. Compressed json, skipping unstable DWG
+   features, unknown DWG versions and objects. */
 #undef IS_RELEASE
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing

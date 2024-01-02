@@ -225,7 +225,7 @@ AC_ARG_ENABLE([release],AS_HELP_STRING([--enable-release],[
     [ax_is_release=yes
     AC_MSG_RESULT(IS_RELEASE override with --enable-release)])
 if test x$ax_is_release = xyes; then
-   AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release,
+   AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release. Compressed json,
    skipping unstable DWG features, unknown DWG versions and objects.])
 fi
 AM_CONDITIONAL([IS_RELEASE], [test x$ax_is_release = xyes])
