@@ -371,6 +371,9 @@
 /* The number of bytes in type wchar_t */
 #undef SIZEOF_WCHAR_T
 
+/* Define to skip invalid DXF object/entities. */
+#undef SKIP_INVALID_DXF
+
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at runtime.
