@@ -76,12 +76,14 @@ typedef struct _bit_chain
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
   FILE *fh;
+  size_t lineno;
   BITCODE_RS codepage;
-  unsigned int dxf_line_number;
 } Bit_Chain;
 
 #define EMPTY_CHAIN(size)                                                     \
-  { NULL, size, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, 0, -1 }
+  {                                                                           \
+    NULL, size, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, (size_t) - 1L, 0,      \
+  }
 
 // only if from r2007+ DWG. not JSON, DXF (FIXME TABLE.name). add API converts to TU
 #define IS_FROM_TU(dat)                                                       \
