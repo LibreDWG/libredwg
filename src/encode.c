@@ -2946,9 +2946,8 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
         if (!omap[i].invalid)
-          fprintf (OUTPUT,
-                   "Handle(%3i): " FORMAT_HV " / idx: " FORMAT_BL "\n", i,
-                   omap[i].handle, omap[i].index);
+          fprintf (OUTPUT, "Handle(%3i): " FORMAT_HV " / idx: " FORMAT_BL "\n",
+                   i, omap[i].handle, omap[i].index);
     }
 
   UNTIL (R_2002)
@@ -3235,7 +3234,8 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {                                                                         \
       unsigned char chain[8];                                                 \
       Bit_Chain hdat                                                          \
-          = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30, -1 };      \
+          = { chain,         8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL,        \
+              (size_t) - 1L, 30 };                                            \
       bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
       _obj->handles[i].name = #NAM;                                           \
       for (int k = 0; k < MIN ((int)_obj->handles[i].num_hdl, 8); k++)        \
@@ -3347,8 +3347,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #  endif
           )
             {
-              fixup++;
-              break;
+            fixup++;
+            break;
             }
         }
       if (fixup)
@@ -4603,11 +4603,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     {
       Dwg_R2004_Header *_obj = &dwg->fhdr.r2004_header;
-      Bit_Chain file_dat = { NULL,      sizeof (Dwg_R2004_Header),
-                             0UL,       0,
-                             0,         R_INVALID,
-                             R_INVALID, NULL,
-                             30,        -1 };
+      Bit_Chain file_dat = { NULL,        sizeof (Dwg_R2004_Header),
+                             0UL,         0,
+                             0,           R_INVALID,
+                             R_INVALID,   NULL,
+                             (size_t)-1L, 30 };
       Bit_Chain *orig_dat = dat;
       /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
       const char enc_file_ID_string[]

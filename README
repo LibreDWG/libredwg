@@ -149,6 +149,10 @@ customize the installation dirs.  Other options recognized by configure are:
     Related: --enable-python=python3.6
     Enforce a specific version.
 
+  --enable-skip-invalid-dxf
+
+    skip invalid DXF object/entities, and continue.
+
   --enable-debug
 
     Activates support for unstable classes. For testing only.
