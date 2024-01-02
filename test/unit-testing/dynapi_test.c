@@ -1245,18 +1245,18 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BL osmode;
+    BITCODE_BS osmode;
     if (dwg_dynapi_header_value (dwg, "OSMODE", &osmode, NULL)
         && osmode == dwg->header_vars.OSMODE)
       pass ();
     else
-      fail ("HEADER.OSMODE [BL] %u != %u", dwg->header_vars.OSMODE, osmode);
+      fail ("HEADER.OSMODE [BS] %hu != %hu", dwg->header_vars.OSMODE, osmode);
     osmode++;
     if (dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0)
         && osmode == dwg->header_vars.OSMODE)
       pass ();
     else
-      fail ("HEADER.OSMODE [BL] set+1 %u != %u",
+      fail ("HEADER.OSMODE [BS] set+1 %hu != %hu",
             dwg->header_vars.OSMODE, osmode);
     osmode--;
     dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0);

@@ -126,7 +126,7 @@
   FIELD_RS (AUNITS, 70);    //ok
   FIELD_RS (AUPREC, 70);    //ok
   FIELD_HANDLE (TEXTSTYLE, 2, 7);
-  FIELD_CAST (OSMODE, RS, BL, 70);
+  FIELD_RS (OSMODE, 70);
   FIELD_RS (ATTMODE, 70);
   DECODER {
     if (FIELD_VALUE (MENU)) // already created by add_Document

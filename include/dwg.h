@@ -971,7 +971,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BS COORDS;
   BITCODE_BS PDMODE;
   BITCODE_BS PICKSTYLE;
-  BITCODE_BL OSMODE;
+  BITCODE_BS OSMODE;
   BITCODE_BL unknown_12;
   BITCODE_BL unknown_13;
   BITCODE_BL unknown_14;

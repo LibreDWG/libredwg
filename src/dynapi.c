@@ -455,7 +455,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     0,0,0, 290 },
   { "ORTHOMODE",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, ORTHOMODE),
     0,0,0, 70 },
-  { "OSMODE",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_header_variables, OSMODE),
+  { "OSMODE",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, OSMODE),
     0,0,0, 70 },
   { "PDMODE",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, PDMODE),
     0,0,0, 70 },
