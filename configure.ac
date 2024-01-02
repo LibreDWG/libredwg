@@ -494,6 +494,15 @@ AS_IF([test x$enable_dxf = xno],
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
+dnl --enable-skip-invalid-dxf
+AC_MSG_CHECKING([for --enable-skip-invalid-dxf])
+AC_ARG_ENABLE([dxf],AS_HELP_STRING([--enable-skip-invalid-dxf],[
+    Skip invalid DXF object/entities (default: no).]),[],[skip_invalid_dxf=yes])
+AS_IF([test x$skip_invalid_dxf = xyes],
+  AC_DEFINE([SKIP_INVALID_DXF],1,[Define to skip invalid DXF object/entities.])
+  AC_MSG_RESULT([yes]),
+  AC_MSG_RESULT([no (default)]))
+
 dnl --disable-json only useful for slim libraries (i.e. SolveSpace)
 AC_MSG_CHECKING([for --disable-json])
 AC_ARG_ENABLE([json],AS_HELP_STRING([--disable-json],[

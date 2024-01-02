@@ -3824,7 +3824,8 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           && obj->type != DWG_TYPE_ENDBLK)
         {
           Dwg_Object_Ref *owner = obj->tio.entity->ownerhandle;
-          if (!obj->invalid && (!owner || (owner->obj == ms || owner->obj == ps)))
+          if (!obj->invalid
+              && (!owner || (owner->obj == ms || owner->obj == ps)))
             error |= dwg_dxf_object (dat, obj, &i);
         }
     }

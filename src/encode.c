@@ -785,14 +785,14 @@ static bool env_var_checked_p;
             {                                                                 \
               LOG_WARN ("Expected a CODE %d handle, got a %d", handle_code,   \
                         (hdlptr)->handleref.code);                            \
-            } /*else if (dat->version <= R_2000 &&    \
-                                        dat->from_version > R_2000            \
-                                               && (hdlptr)->handleref.code >  \
-                                        5 && handle_code == 4)                \
-                                        {                                     \
-                                          downconvert_relative_handle         \
-                                        (hdlptr, obj);                        \
-                                        }*/                                                               \
+            } /*else if (dat->version <= R_2000 &&                    \
+                                                 dat->from_version > R_2000    \
+                                                        &&                     \
+                          (hdlptr)->handleref.code > 5 && handle_code == 4)                                                        \
+                                                 {                             \
+                                                   downconvert_relative_handle \
+                                                 (hdlptr, obj);                \
+                                                 }*/                                                               \
           bit_write_H (hdl_dat, &(hdlptr)->handleref);                        \
           LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (hdlptr), dxf)  \
           LOG_HPOS                                                            \
@@ -940,15 +940,16 @@ static bool env_var_checked_p;
   {                                                                           \
     size_t _hpos = bit_position (hdl_dat);                                    \
     if (_hpos > 0)                                                            \
-      { /* save away special accumulated hdls, need to write common    \
-                  first */  \
+      { /* save away special accumulated hdls, need to write                    \
+                       common first */  \
         Bit_Chain dat1 = *hdl_dat;                                            \
         Bit_Chain dat2 = { 0 };                                               \
         bit_chain_init_dat (&dat2, 12, dat);                                  \
         hdl_dat = &dat2;                                                      \
         ENCODE_COMMON_HANDLES /* owner, xdic, reactors */                     \
-            obj_flush_hdlstream (obj, dat, hdl_dat); /* common */ /* special accumulated  \
-                                                         (e.g. xref) */                                 \
+            obj_flush_hdlstream (obj, dat, hdl_dat); \
+                    /* common */ /* special accumulated                                     \
+                        (e.g. xref) */                                 \
         obj_flush_hdlstream (obj, dat, &dat1);                                \
         bit_chain_free (&dat1);                                               \
         bit_chain_free (&dat2);                                               \
@@ -1073,7 +1074,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
         && hdl_dat->chain != dat->chain)                                      \
       {                                                                       \
         LOG_HANDLE ("VALUEOUTOFBOUNDS bypassed DWG_ENTITY_END\n"); /*bit_chain_free     \
-                                                            (hdl_dat);*/                                         \
+                                                  (hdl_dat);*/                                         \
       }                                                                       \
     dwg_encode_unknown_rest (dat, obj);                                       \
     return error;                                                             \
@@ -2896,9 +2897,8 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
         if (!omap[i].invalid)
-          fprintf (OUTPUT,
-                   "Handle(%3i): " FORMAT_HV " / idx: " FORMAT_BL "\n", i,
-                   omap[i].handle, omap[i].index);
+          fprintf (OUTPUT, "Handle(%3i): " FORMAT_HV " / idx: " FORMAT_BL "\n",
+                   i, omap[i].handle, omap[i].index);
     }
 
   UNTIL (R_2002)
@@ -3185,7 +3185,8 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {                                                                         \
       unsigned char chain[8];                                                 \
       Bit_Chain hdat                                                          \
-          = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30, -1 };      \
+          = { chain,         8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL,        \
+              (size_t) - 1L, 30 };                                            \
       bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
       _obj->handles[i].name = #NAM;                                           \
       for (int k = 0; k < MIN ((int)_obj->handles[i].num_hdl, 8); k++)        \
@@ -3297,8 +3298,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #  endif
           )
             {
-              fixup++;
-              break;
+            fixup++;
+            break;
             }
         }
       if (fixup)
@@ -4553,11 +4554,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     {
       Dwg_R2004_Header *_obj = &dwg->fhdr.r2004_header;
-      Bit_Chain file_dat = { NULL,      sizeof (Dwg_R2004_Header),
-                             0UL,       0,
-                             0,         R_INVALID,
-                             R_INVALID, NULL,
-                             30,        -1 };
+      Bit_Chain file_dat = { NULL,        sizeof (Dwg_R2004_Header),
+                             0UL,         0,
+                             0,           R_INVALID,
+                             R_INVALID,   NULL,
+                             (size_t)-1L, 30 };
       Bit_Chain *orig_dat = dat;
       /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
       const char enc_file_ID_string[]
@@ -6522,12 +6523,12 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
-// PRE (R_13b1)
-// {
-//   if (dat->from_version >= R_13b1)
-//     downgrade_preR13_header_variables (dat, dwg);
-// }
-// clang-format off
+  // PRE (R_13b1)
+  // {
+  //   if (dat->from_version >= R_13b1)
+  //     downgrade_preR13_header_variables (dat, dwg);
+  // }
+  // clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 

@@ -4,7 +4,7 @@ project(libredwg C)
 #                   -DLIBREDWG_DISABLE_WRITE=On
 #                   -DLIBREDWG_DISABLE_JSON=On
 #                   -DLIBREDWG_DISABLE_DXF=On
-#                   -DLIBREDWG_DISABLE_IGNORE_INVALID_DXF=On
+#                   -DLIBREDWG_SKIP_INVALID_DXF=On
 #                   -DENABLE_MIMALLOC=On
 #                   -DENABLE_LTO=Off
 #                   -DDXF_PRECISION=6
@@ -45,7 +45,7 @@ option(ENABLE_LTO "IPO/LTO Link Time Optimizations (default ON)" ON)
 # option(LIBREDWG_DISABLE_BINDINGS "no libredwg perl and python bindings" ON)
 option(LIBREDWG_DISABLE_JSON "no libredwg json support" OFF)
 option(LIBREDWG_DISABLE_DXF "no libredwg dxf support" OFF)
-option(LIBREDWG_DISABLE_IGNORE_INVALID_DXF "stop when invalid DXF object/entity encountered (don't skip)" OFF)
+option(LIBREDWG_SKIP_INVALID_DXF "skip invalid DXF object/entities and continue" OFF)
 # Rather disable installing a crippled shared lib.
 # Only use these for static in-tree libs.
 if (LIBREDWG_DISABLE_JSON)
