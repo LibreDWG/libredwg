@@ -56,17 +56,17 @@
   FIELD_RSx (dwg_version_1, 0);
 #ifndef IS_JSON
   UNTIL (R_2013) {
-    FIELD_CAST (maint_version_1, RS, RL, 0);
+    FIELD_CAST (maint_version_1, RS, RLx, 0);
   } LATER_VERSIONS
 #endif
-    FIELD_RL (maint_version_1, 0);
+    FIELD_RLx (maint_version_1, 0);
   FIELD_RSx (dwg_version_2, 0);
 #ifndef IS_JSON
   UNTIL (R_2013) {
-    FIELD_CAST (maint_version_2, RS, RL, 0);
+    FIELD_CAST (maint_version_2, RS, RLx, 0);
   } LATER_VERSIONS
 #endif
-    FIELD_RL (maint_version_2, 0);
+    FIELD_RLx (maint_version_2, 0);
   FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0)
   FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
   FIELD_TIMERLL (TDCREATE, 0);
