@@ -2408,9 +2408,8 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
         if (!omap[i].invalid)
-          fprintf (OUTPUT,
-                   "Handle(%3i): " FORMAT_HV " / idx: " FORMAT_BL "\n", i,
-                   omap[i].handle, omap[i].index);
+          fprintf (OUTPUT, "Handle(%3i): " FORMAT_HV " / idx: " FORMAT_BL "\n",
+                   i, omap[i].handle, omap[i].index);
     }
 
   UNTIL (R_2002)
@@ -2700,7 +2699,8 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {                                                                         \
       unsigned char chain[8];                                                 \
       Bit_Chain hdat                                                          \
-          = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30, -1 };      \
+          = { chain,         8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL,        \
+              (size_t) - 1L, 30 };                                            \
       bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
       _obj->handles[i].name = #NAM;                                           \
       for (int k = 0; k < MIN ((int)_obj->handles[i].num_hdl, 8); k++)        \
