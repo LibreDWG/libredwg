@@ -324,6 +324,14 @@
 /* The number of bytes in type wchar_t */
 #define SIZEOF_WCHAR_T @WCHAR_T@
 
+/* Define to skip invalid DXF object/entities. */
+#cmakedefine LIBREDWG_SKIP_INVALID_DXF
+#ifdef LIBREDWG_SKIP_INVALID_DXF
+#  define SKIP_INVALID_DXF
+#else
+#  undef SKIP_INVALID_DXF
+#endif
+
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at runtime.
