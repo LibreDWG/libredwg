@@ -18,7 +18,7 @@
 // CLANG_DIAG_RESTORE
 #include "tests_common.h"
 
-unsigned size = SECTION_R13_SIZE;
+BITCODE_RL size = SECTION_R13_SIZE;
 Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
 
 static int
@@ -60,14 +60,14 @@ test_section_find (void)
   section_reset ();
   for (Dwg_Section_Type_r13 i = 0; (unsigned)i <= size; i++)
     {
-      id = section_find ((Dwg_Section_Type_r13 *)&section_order, i);
+      id = section_find ((Dwg_Section_Type_r13 *)&section_order, size, i);
       if (id != (unsigned)i) // 7 not found, returns SECTION_R13_SIZE
         {
           fail ("section_find %u => %u", (unsigned)i, (unsigned)id);
           section_order_trace (size, (Dwg_Section_Type_r13 *)&section_order);
         }
     }
-  id = section_find ((Dwg_Section_Type_r13 *)&section_order, size + 1);
+  id = section_find ((Dwg_Section_Type_r13 *)&section_order, size, size + 1);
   if (id != SECTION_R13_SIZE) // not found
     {
       fail ("section_find %u => %u", size + 1, id);
@@ -84,7 +84,7 @@ test_section_move_top (void)
   for (Dwg_Section_Type_r13 i = 0; (unsigned)i < size - 1; i++)
     {
       // without insert
-      if (section_move_top ((Dwg_Section_Type_r13 *)&section_order, i))
+      if (section_move_top ((Dwg_Section_Type_r13 *)&section_order, &size, i))
         {
           err++;
           fail ("section_move_top existing %u", (unsigned)i);
@@ -102,7 +102,7 @@ test_section_move_top (void)
         }
     }
   // with insert
-  if (!section_move_top ((Dwg_Section_Type_r13 *)&section_order, size))
+  if (!section_move_top ((Dwg_Section_Type_r13 *)&section_order, &size, size))
     {
       err++;
       fail ("section_move_top insert");
@@ -131,9 +131,9 @@ test_section_remove (void)
   for (unsigned i = 0; i < size; i++)
     {
       Dwg_Section_Type_r13 id = maxrand (size);
-      if (section_remove ((Dwg_Section_Type_r13 *)&section_order, id))
+      if (section_remove ((Dwg_Section_Type_r13 *)&section_order, &size, id))
         sz--;
-      section_order_trace (sz, (Dwg_Section_Type_r13 *)&section_order);
+      section_order_trace (size, (Dwg_Section_Type_r13 *)&section_order);
       if (find_duplicates ())
         {
           err++;
@@ -148,7 +148,7 @@ test_section_remove (void)
 
 static void test_section_move_before(void) {
   int err = 0;
-  size = SECTION_R13_SIZE - 1;
+  size = SECTION_R13_SIZE - 2;
   section_reset ();
   for (unsigned i = 0; i < size; i++)
     {
@@ -157,7 +157,7 @@ static void test_section_move_before(void) {
       while (before == id)
         before = maxrand(size);
       if (section_move_before ((Dwg_Section_Type_r13 *)&section_order,
-                                id, before))
+                               &size, id, before))
         {
           fail ("move_before %u", (unsigned)id);
           err++;
@@ -166,7 +166,7 @@ static void test_section_move_before(void) {
       err += find_duplicates ();
     }
   if (!section_move_before ((Dwg_Section_Type_r13 *)&section_order,
-                            6, 4))
+                            &size, 6, 4))
     {
       fail ("move_before %u inserts", 6);
       err++;
