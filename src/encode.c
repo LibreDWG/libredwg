@@ -82,6 +82,12 @@ static unsigned int loglevel;
 static Dwg_Version_Type cur_ver = R_INVALID;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
 
+/* section_order: A static array of section types.
+   SECTION_R13_SIZE is the size and the sentinel.
+ */
+#define SECTION_R13_SIZE 7U
+static Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
+
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
    LIBREDWG_TRACE and set `loglevel' appropriately.  */
@@ -1990,6 +1996,119 @@ find_section_info_type (const Dwg_Data *restrict dwg, Dwg_Section_Type type)
   return NULL;
 }
 
+/* Ordering of r13-r2000 sections 0-6 */
+static void
+section_order_trace (const BITCODE_BL numsections,
+                     Dwg_Section_Type_r13 *psection_order)
+{
+  LOG_TRACE ("section_order:");
+  for (BITCODE_BL i = 0; i < numsections; i++)
+    {
+      LOG_TRACE (" %u", psection_order[i]);
+    }
+  LOG_TRACE ("\n");
+}
+
+static int
+section_move_top (Dwg_Section_Type_r13 *psection_order,
+                  BITCODE_RL *pnum,
+                  Dwg_Section_Type_r13 sec_id)
+{
+  Dwg_Section_Type_r13 old_first = psection_order[0];
+  assert(*pnum <= SECTION_R13_SIZE);
+  if (psection_order[0] == sec_id)
+    {
+      LOG_TRACE ("section_move_top %u (already)\n", sec_id);
+      return 0;
+    }
+  
+  for (unsigned i = 1; i < *pnum; i++)
+    {
+      // f x x i y y y
+      if (psection_order[i] == (unsigned)sec_id) { // found at i
+        psection_order[0] = sec_id;
+        // move x'n right by 1
+        if (i > 1)
+          memmove (&psection_order[2], &psection_order[1],
+                   (i - 1) * sizeof (Dwg_Section_Type_r13));
+        psection_order[1] = old_first;
+        // i f x x y y y
+        LOG_TRACE ("section_move_top %u (re-order)\n", sec_id);
+        return 0;
+      }
+    }
+  // not found: insert
+  psection_order[0] = sec_id;
+  // move x'n right by 1
+  // f x x x y y y
+  memmove (&psection_order[2], &psection_order[1],
+           (*pnum - 1) * sizeof (Dwg_Section_Type_r13));
+  psection_order[1] = old_first;
+  LOG_TRACE ("section_move_top %u (inserted)\n", sec_id);
+  (*pnum)++;
+  assert(*pnum <= SECTION_R13_SIZE);
+  return 1;
+}
+
+static unsigned section_find (Dwg_Section_Type_r13 *psection_order,
+                              BITCODE_RL num,
+                              Dwg_Section_Type_r13 id)
+{
+  LOG_TRACE ("section_find %u\n", (unsigned)id);
+  for (unsigned i = 0; i < num; i++)
+    {
+      if (psection_order[i] == id) { // found at i
+        return i;
+      }
+    }
+  return SECTION_R13_SIZE;
+}
+
+static int
+section_remove (Dwg_Section_Type_r13 *psection_order,
+                BITCODE_RL *pnum,
+                Dwg_Section_Type_r13 id)
+{
+  unsigned i = section_find (psection_order, *pnum, id);
+  LOG_TRACE ("section_remove %u [%u]\n", (unsigned)id, i);
+  if (i >= *pnum) // not found
+    return 0;
+  // move left
+  assert(*pnum > 0);
+  (*pnum)--;
+  memmove (&psection_order[i], &psection_order[i + 1],
+           (*pnum - i) * sizeof (Dwg_Section_Type_r13));
+  psection_order[*pnum] = SECTION_R13_SIZE; // sentinel (invalid)
+  return 1;
+}
+
+static int
+section_move_before (Dwg_Section_Type_r13 *psection_order,
+                     BITCODE_RL *pnum,
+                     Dwg_Section_Type_r13 id, Dwg_Section_Type_r13 before)
+{
+  int ret = 0;
+  unsigned b;
+  unsigned id_pos;
+  Dwg_Section_Type_r13 old_before;
+  LOG_TRACE ("section_move_before %u %u\n", (unsigned)id, (unsigned)before);
+  b = section_find (psection_order, *pnum, before);
+  // find before
+  if (b >= SECTION_R13_SIZE) // not found
+    return 0;
+  // x x b y y
+  old_before = psection_order[b];
+  assert(*pnum + 1 <= SECTION_R13_SIZE);
+  memmove (&psection_order[b + 1], &psection_order[b],
+           (*pnum - b) * sizeof (Dwg_Section_Type_r13));
+  (*pnum)++;
+  if (!section_remove (psection_order, pnum, id)) // if not exist: insert
+    ret = 1;
+  psection_order[b] = id;
+  // x x i b y
+  return ret;
+}
+
 /* header.section pointers changed, rebuild all info->sections */
 static void
 section_info_rebuild (Dwg_Data *dwg, Dwg_Section_Type lasttype)
@@ -2974,6 +3093,19 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
       dwg->secondheader.address = (BITCODE_RL)pvzadr & UINT32_MAX;
       dwg->r2004_header.secondheader_address = pvzadr;
+      UNTIL (R_2000)
+        {
+          if (!_obj->sections[SECTION_TEMPLATE_R13].address
+              && section_find (section_order, dwg->header.num_sections, SECTION_TEMPLATE_R13))
+            {
+              dwg->header.section[SECTION_TEMPLATE_R13].number =
+                _obj->sections[SECTION_TEMPLATE_R13].nr = 4;
+              dwg->header.section[SECTION_TEMPLATE_R13].address =
+                _obj->sections[SECTION_TEMPLATE_R13].address = (BITCODE_BL)(pvzadr + _obj->size);
+              dwg->header.section[SECTION_TEMPLATE_R13].size =
+                _obj->sections[SECTION_TEMPLATE_R13].size = 4;
+            }
+        }
       if (!_obj->size && !_obj->num_sections)
         {
           const char *code = dwg_version_codes (dwg->header.version);
@@ -3057,123 +3189,6 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   return error;
 }
 
-/* Ordering of r13-r2000 sections 0-6 */
-/* section_order: A static array of section types.
-   SECTION_R13_SIZE is the size and the sentinel.
- */
-#define SECTION_R13_SIZE 7U
-static void
-section_order_trace (const BITCODE_BL numsections,
-                     Dwg_Section_Type_r13 *psection_order)
-{
-  LOG_TRACE ("section_order:");
-  for (BITCODE_BL i = 0; i < numsections; i++)
-    {
-      LOG_TRACE (" %u", psection_order[i]);
-    }
-  LOG_TRACE ("\n");
-}
-
-static int
-section_move_top (Dwg_Section_Type_r13 *psection_order,
-                  BITCODE_RL *pnum,
-                  Dwg_Section_Type_r13 sec_id)
-{
-  Dwg_Section_Type_r13 old_first = psection_order[0];
-  assert(*pnum <= SECTION_R13_SIZE);
-  if (psection_order[0] == sec_id)
-    {
-      LOG_TRACE ("section_move_top %u (already)\n", sec_id);
-      return 0;
-    }
-  
-  for (unsigned i = 1; i < *pnum; i++)
-    {
-      // f x x i y y y
-      if (psection_order[i] == (unsigned)sec_id) { // found at i
-        psection_order[0] = sec_id;
-        // move x'n right by 1
-        if (i > 1)
-          memmove (&psection_order[2], &psection_order[1],
-                   (i - 1) * sizeof (Dwg_Section_Type_r13));
-        psection_order[1] = old_first;
-        // i f x x y y y
-        LOG_TRACE ("section_move_top %u (re-order)\n", sec_id);
-        return 0;
-      }
-    }
-  // not found: insert
-  psection_order[0] = sec_id;
-  // move x'n right by 1
-  // f x x x y y y
-  memmove (&psection_order[2], &psection_order[1],
-           (*pnum - 1) * sizeof (Dwg_Section_Type_r13));
-  psection_order[1] = old_first;
-  LOG_TRACE ("section_move_top %u (inserted)\n", sec_id);
-  (*pnum)++;
-  assert(*pnum <= SECTION_R13_SIZE);
-  return 1;
-}
-
-static unsigned section_find (Dwg_Section_Type_r13 *psection_order,
-                              BITCODE_RL num,
-                              Dwg_Section_Type_r13 id)
-{
-  LOG_TRACE ("section_find %u\n", (unsigned)id);
-  for (unsigned i = 0; i < num; i++)
-    {
-      if (psection_order[i] == id) { // found at i
-        return i;
-      }
-    }
-  return SECTION_R13_SIZE;
-}
-
-static int
-section_remove (Dwg_Section_Type_r13 *psection_order,
-                BITCODE_RL *pnum,
-                Dwg_Section_Type_r13 id)
-{
-  unsigned i = section_find (psection_order, *pnum, id);
-  LOG_TRACE ("section_remove %u [%u]\n", (unsigned)id, i);
-  if (i >= *pnum) // not found
-    return 0;
-  // move left
-  assert(*pnum > 0);
-  (*pnum)--;
-  memmove (&psection_order[i], &psection_order[i + 1],
-           (*pnum - i) * sizeof (Dwg_Section_Type_r13));
-  psection_order[*pnum] = SECTION_R13_SIZE; // sentinel (invalid)
-  return 1;
-}
-
-static int
-section_move_before (Dwg_Section_Type_r13 *psection_order,
-                     BITCODE_RL *pnum,
-                     Dwg_Section_Type_r13 id, Dwg_Section_Type_r13 before)
-{
-  int ret = 0;
-  unsigned b;
-  unsigned id_pos;
-  Dwg_Section_Type_r13 old_before;
-  LOG_TRACE ("section_move_before %u %u\n", (unsigned)id, (unsigned)before);
-  b = section_find (psection_order, *pnum, before);
-  // find before
-  if (b >= SECTION_R13_SIZE) // not found
-    return 0;
-  // x x b y y
-  old_before = psection_order[b];
-  assert(*pnum + 1 <= SECTION_R13_SIZE);
-  memmove (&psection_order[b + 1], &psection_order[b],
-           (*pnum - b) * sizeof (Dwg_Section_Type_r13));
-  (*pnum)++;
-  if (!section_remove (psection_order, pnum, id)) // if not exist: insert
-    ret = 1;
-  psection_order[b] = id;
-  // x x i b y
-  return ret;
-}
-
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -3200,7 +3215,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   Dwg_Section_Type sec_id;
   Dwg_Version_Type orig_from_version = dwg->header.from_version;
   Bit_Chain sec_dat[SECTION_SYSTEM_MAP + 1]; // to encode each r2004 section
-  Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
 
   dwg->cur_index = 0;
   if (dwg->opts)
