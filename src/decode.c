@@ -331,7 +331,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   assert (dat->byte == 0x19);
   /* section 0: header vars
    *         1: class section
-   *         2: object map
+   *         2: Handles (object map)
    *         3: optional: ObjFreeSpace
    *         -: 2ndHeader and its sentinels
    *         4: optional: Template (MEASUREMENT)
@@ -3122,7 +3122,7 @@ read_2004_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-static int
+static int // thumbnail
 read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain sec_dat = { 0 };

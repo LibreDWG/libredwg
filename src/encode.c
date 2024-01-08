@@ -1998,7 +1998,8 @@ find_section_info_type (const Dwg_Data *restrict dwg, Dwg_Section_Type type)
 
 /* Ordering of r13-r2000 sections 0-6 */
 static void
-section_order_trace (const BITCODE_BL numsections,
+section_order_trace (const Dwg_Data *dwg,
+                     const BITCODE_BL numsections,
                      Dwg_Section_Type_r13 *psection_order)
 {
   LOG_TRACE ("section_order:");
@@ -2006,7 +2007,12 @@ section_order_trace (const BITCODE_BL numsections,
     {
       LOG_TRACE (" %u", psection_order[i]);
     }
-  LOG_TRACE ("\n");
+  LOG_TRACE ("\n[");
+  for (BITCODE_BL i = 0; i < numsections; i++)
+    {
+      LOG_TRACE ("%s ", dwg_section_name (dwg, psection_order[i]));
+    }
+  LOG_TRACE ("]\n");
 }
 
 static int
@@ -3065,6 +3071,7 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   int error = 0;
   BITCODE_BL i;
   size_t pvzadr;
+
   /*------------------------------------------------------------
    * ObjFreeSpace and Second header - r13-r2000 only.
    * Note: partially also since r2004.
@@ -3792,7 +3799,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     // compute the old section order
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
-      section_order_trace (dwg->header.num_sections,
+      section_order_trace (dwg, dwg->header.num_sections,
                            (Dwg_Section_Type_r13 *)&section_order);
     if (dwg->header.thumbnail_address)
       {
@@ -3862,7 +3869,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                            SECTION_TEMPLATE_R13, SECTION_HANDLES_R13);
     }
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
-      section_order_trace (dwg->header.num_sections,
+      section_order_trace (dwg, dwg->header.num_sections,
                            (Dwg_Section_Type_r13 *)&section_order);
     LOG_TRACE("num_sections => " FORMAT_RL "\n", dwg->header.num_sections);
 

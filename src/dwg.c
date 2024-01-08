@@ -1841,7 +1841,8 @@ static const char *const dwg_section_r13_names[] = {
   "Handles",      // 2
   "ObjFreeSpace", // 3
   "Template",     // 4
-  "AuxHeader"     // 5
+  "AuxHeader",    // 5
+  "Thumbnail"     // 6
 };
 static const char *const dwg_section_r11_names[] = {
   "HEADER",   // 0
@@ -1867,7 +1868,7 @@ dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
     }
   else if (dwg->header.version > R_11)
     { // Dwg_Section_Type_r13
-      return (sec_id <= SECTION_AUXHEADER_R2000)
+      return (sec_id <= SECTION_THUMBNAIL_R13)
                  ? dwg_section_r13_names[sec_id]
                  : NULL;
     }
