@@ -56,26 +56,26 @@ for d in "$@"; do
             -o*)
                     if [ -n "$DASH" ]; then
                         out="$(echo "$d" | awk '{ string=substr($0, 3); print string; }')"
-                    else
+            else
                         out="$(cut "$d" -c2-)"
-                    fi
+            fi
                     ;;
             -y)     ;;
             *)
                 if [ ! -f "$d" ]; then
                     if [ -f "$srcdir/test/test-data/$d" ]; then
                         d="$srcdir/test/test-data/$d"
-                    elif [ -f "$srcdir/test/test-data/$d.dwg" ]; then
+                elif     [ -f "$srcdir/test/test-data/$d.dwg" ]; then
                         d="$srcdir/test/test-data/$d.dwg"
                         ext=dwg
-                    elif [ -f "$srcdir/test/test-data/$d.json" ]; then
+                elif     [ -f "$srcdir/test/test-data/$d.json" ]; then
                         d="$srcdir/test/test-data/$d.json"
                         ext=json
-                    elif [ -f "$srcdir/test/test-data/$d.dxf" ]; then
+                elif     [ -f "$srcdir/test/test-data/$d.dxf" ]; then
                         d="$srcdir/test/test-data/$d.dxf"
                         ext=dxf
-                    fi
                 fi
+            fi
                 xd=$(dirname "$d")
                 dir=_$(basename "$xd")
                 case "$d" in
@@ -87,23 +87,49 @@ for d in "$@"; do
                         x1=$(dirname "$xd")
                         dir=_$(basename "$xd")_$(basename "$x1")
                         ;;
-                esac
+            esac
                 if [ "$dir" = "_test-data" ]; then dir=""; fi
                 if [ "$dir" = "_td" ]; then dir=""; fi
                 if [ "$dir" = "_." ]; then dir=""; fi
                 case $(basename "$d") in
-                    *.dwg)  ext=dwg; b=$(basename "$d" .$ext) ;;
-                    *.DWG)  ext=dwg; b=$(basename "$d" .DWG) ;;
-                    *.dxf)  ext=dxf; b=$(basename "$d" .$ext) ;;
-                    *.DXF)  ext=dxf; b=$(basename "$d" .DXF) ;;
-                    *.json) ext=json; b=$(basename "$d" .$ext) ;;
-                    *.JSON) ext=json; b=$(basename "$d" .JSON) ;;
-                    *.dxfb) ext=dxf; b=$(basename "$d" .dxfb) ;;
-                    *.DXFB) ext=dxf; b=$(basename "$d" .DXFB) ;;
-                    *)      ext=dwg; b=$(basename "$d");
+                    *.dwg)
+                            ext=dwg
+                                     b=$(basename "$d" .$ext)
+                                                              ;;
+                    *.DWG)
+                            ext=dwg
+                                     b=$(basename "$d" .DWG)
+                                                             ;;
+                    *.dxf)
+                            ext=dxf
+                                     b=$(basename "$d" .$ext)
+                                                              ;;
+                    *.DXF)
+                            ext=dxf
+                                     b=$(basename "$d" .DXF)
+                                                             ;;
+                    *.json)
+                            ext=json
+                                      b=$(basename "$d" .$ext)
+                                                               ;;
+                    *.JSON)
+                            ext=json
+                                      b=$(basename "$d" .JSON)
+                                                               ;;
+                    *.dxfb)
+                            ext=dxf
+                                     b=$(basename "$d" .dxfb)
+                                                              ;;
+                    *.DXFB)
+                            ext=dxf
+                                     b=$(basename "$d" .DXFB)
+                                                              ;;
+                    *)
+                            ext=dwg
+                                     b=$(basename "$d")
                             echo "Assume DWG file for $d"
                             ;;
-                esac
+            esac
                 log="$b$dir.log"
                 [ -n "$out" ] || out="$b$dir.dxf"
                 if [ "$ext" = "dwg" ]; then
@@ -112,13 +138,13 @@ for d in "$@"; do
                     $timeout $TESTPROG programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
                     err=$?
                     [ $err -gt $gerr ] && gerr=$err
-                else
+            else
                     echo "$timeout $TESTPROG programs/dxfwrite $args $v -o $out $d 2>$log"
                     # shellcheck disable=SC2086
                     $timeout $TESTPROG programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
                     err=$?
                     [ $err -gt $gerr ] && gerr=$err
-                fi
+            fi
                 tail -n2 "$log"
                 out=
                 ;;

@@ -47,30 +47,25 @@ for d in "$@"; do
              ;;
         *)
         if [ ! -f "$d" ]; then
-            if [ -f "$srcdir/test/test-data/$d" ]
-            then
+            if [ -f "$srcdir/test/test-data/$d" ]; then
                 d="$srcdir/test/test-data/$d"
             else
-                if [ -f "$srcdir/test/test-data/$d.dwg" ]
-                then
+                if [ -f "$srcdir/test/test-data/$d.dwg" ]; then
                     d="$srcdir/test/test-data/$d.dwg"
                 fi
             fi
         fi
-        if [ -n "$timeout" ]
-        then
+        if [ -n "$timeout" ]; then
             filesize="$(wc -c <"$d")"
             [ "$filesize" -gt 8000000 ] && timeout="@TIMEOUT_30@"
-        elif [ -z "$big" ] && [ -z "$timeout" ]
-        then
+        elif [ -z "$big" ] && [ -z "$timeout" ]; then
             # reset timeout
             filesize="$(wc -c <"$d")"
             [ "$filesize" -lt 8000000 ] && timeout="@TIMEOUT_30@"
         fi
         xd=$(dirname "$d")
         dir=_$(basename "$xd")
-        if [ -z "$log" ]
-        then
+        if [ -z "$log" ]; then
             case "$d" in
                 *to/*)
                     x1=$(dirname "$xd")

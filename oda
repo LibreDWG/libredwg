@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # check dwg or json with teigha
 v=-v3
 case $1 in

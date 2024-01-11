@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # dwg -> dxfb
 # dxfb -> dwg2
 # teigha dxfb -> dwg (check out_dxfb)

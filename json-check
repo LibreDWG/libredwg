@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # dwg -> json
 # json -> dwg2
 # teigha dwg2 -> dxf just to confirm written DWG readability
