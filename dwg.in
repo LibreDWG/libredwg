@@ -17,8 +17,8 @@ else
 fi
 
 case "$CFLAGS" in
-    *-DDEBUG_CLASSES*) timeout= ;;
-    *) ;;
+*-DDEBUG_CLASSES*) timeout= ;;
+*) ;;
 esac
 make -s -j4 -C src
 make -s -j4 -C programs dwgwrite@EXEEXT@
@@ -36,31 +36,31 @@ gerr=0
 
 for d in "$@"; do
     case $d in
-        -y) ;; # the default
-        --as=*) args="$args $d" ;;
-        -Ijson)
-                args="$args $d"
-                ext=json
-                ;;
-        -Idxf)
-                args="$args $d"
-                ext=dxf
-                ;;
-        -Idxfb)
-                args="$args $d"
-                ext=dxfb
-                ;;
-        --force-free)
-                args="$args $d"
-                ;;
-        -v*)
-                v="$d"
-                ;;
-        --big)
-                timeout=
-                big=1
-                ;;
-        *)
+    -y) ;; # the default
+    --as=*) args="$args $d" ;;
+    -Ijson)
+        args="$args $d"
+        ext=json
+        ;;
+    -Idxf)
+        args="$args $d"
+        ext=dxf
+        ;;
+    -Idxfb)
+        args="$args $d"
+        ext=dxfb
+        ;;
+    --force-free)
+        args="$args $d"
+        ;;
+    -v*)
+        v="$d"
+        ;;
+    --big)
+        timeout=
+        big=1
+        ;;
+    *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]; then
                 d="$srcdir/test/test-data/$d"
@@ -90,27 +90,27 @@ for d in "$@"; do
         if [ "$dir" = "_." ]; then dir=""; fi
         if [ -z "$ext" ]; then
             case $(basename "$d") in
-                *.dwg)  ext=dwg ;;
-                *.DWG)  ext=dwg ;;
-                *.dxf)  ext=dxf ;;
-                *.DXF)  ext=dxf ;;
-                *.dxfb) ext=dxfb ;;
-                *.DXFB) ext=dxfb ;;
-                *.json) ext=json ;;
-                *.JSON) ext=json ;;
-                *)
+            *.dwg) ext=dwg ;;
+            *.DWG) ext=dwg ;;
+            *.dxf) ext=dxf ;;
+            *.DXF) ext=dxf ;;
+            *.dxfb) ext=dxfb ;;
+            *.DXFB) ext=dxfb ;;
+            *.json) ext=json ;;
+            *.JSON) ext=json ;;
+            *)
                 if [ "$(head -c1 "$d")" = "{" ]; then
-                       ext=json
-                       args="$args -Ijson"
-                elif     [ "$(head -c4 "$d")" = "Auto" ]; then
-                       ext=dxfb
-                       args="$args -Idxfb"
-                elif     [ "$(head -n1 "$d")" = "  0" ]; then
-                       ext=dxf
-                       args="$args -Idxf"
+                    ext=json
+                    args="$args -Ijson"
+                elif [ "$(head -c4 "$d")" = "Auto" ]; then
+                    ext=dxfb
+                    args="$args -Idxfb"
+                elif [ "$(head -n1 "$d")" = "  0" ]; then
+                    ext=dxf
+                    args="$args -Idxf"
                 else
-                       echo "Illegal extension for $d"
-                      exit
+                    echo "Illegal extension for $d"
+                    exit
                 fi
                 ;;
             esac

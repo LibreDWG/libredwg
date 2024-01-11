@@ -5,8 +5,8 @@ make -s -j4 -C src &&
     programs/dwg2dxf -m -y -o Drawing_2000_min.dxf test/test-data/Drawing_2000.dwg
 
 for f in test/test-data/Drawing_2*.dwg \
-         test/test-data/sample_2*.dwg \
-         test/test-data/example_*.dwg; do
+    test/test-data/sample_2*.dwg \
+    test/test-data/example_*.dwg; do
     echo
     echo programs/dwg2dxf -v0 -y "$f"
     programs/dwg2dxf -v0 -y "$f"

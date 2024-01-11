@@ -6,7 +6,7 @@ make -s -C examples llvmfuzz_standalone
 old_ASAN_OPTIONS="$ASAN_OPTIONS"
 
 for f in $(find ../test/test-data/ -type f -iname \*.dxf -o -iname \*.dwg \
-                -o -iname \*.json); do
+    -o -iname \*.json); do
     #indxf still leaks
     if echo "$f" | grep -i "\.dxf$"; then
         export ASAN_OPTIONS=detect_leaks=0

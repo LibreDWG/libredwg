@@ -17,8 +17,8 @@ else
 fi
 
 case "$CFLAGS" in
-    *-DDEBUG_CLASSES*) timeout="" ;;
-    *) ;;
+*-DDEBUG_CLASSES*) timeout="" ;;
+*) ;;
 esac
 make -s -C src
 make -s -C programs dwgread@EXEEXT@
@@ -36,13 +36,13 @@ log=
 
 for d in "$@"; do
     case $d in
-        -v*)
-             v="$d"
-             ;;
-        -l*)
-             log="$(echo "$d" | cut -c3-)"
-             ;;
-        *)
+    -v*)
+        v="$d"
+        ;;
+    -l*)
+        log="$(echo "$d" | cut -c3-)"
+        ;;
+    *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]; then
                 d="$srcdir/test/test-data/$d"
@@ -61,35 +61,35 @@ for d in "$@"; do
         [ "$dir" = "_." ] && dir=""
         if [ -z "$ext" ]; then
             case $(basename "$d") in
-                *.dwg)
-                        ext=dwg
-                                 b=$(basename "$d" .$ext)
-                                                         ;;
-                *.DWG)
-                        ext=dwg
-                                 b=$(basename "$d" .DWG)
-                                                        ;;
-                *.dxf)
-                        ext=dxf
-                                 b=$(basename "$d" .$ext)
-                                                         ;;
-                *.DXF)
-                        ext=dxf
-                                 b=$(basename "$d" .DXF)
-                                                        ;;
-                *.json)
-                        ext=json
-                                  b=$(basename "$d" .$ext)
-                                                           ;;
-                *.JSON)
-                        ext=json
-                                  b=$(basename "$d" .JSON)
-                                                          ;;
-                *)
-                        ext=dwg
-                                 b=$(basename "$d" .$ext)
-                        echo "Assume DWG file for $d"
-                                                     ;;
+            *.dwg)
+                ext=dwg
+                b=$(basename "$d" .$ext)
+                ;;
+            *.DWG)
+                ext=dwg
+                b=$(basename "$d" .DWG)
+                ;;
+            *.dxf)
+                ext=dxf
+                b=$(basename "$d" .$ext)
+                ;;
+            *.DXF)
+                ext=dxf
+                b=$(basename "$d" .DXF)
+                ;;
+            *.json)
+                ext=json
+                b=$(basename "$d" .$ext)
+                ;;
+            *.JSON)
+                ext=json
+                b=$(basename "$d" .JSON)
+                ;;
+            *)
+                ext=dwg
+                b=$(basename "$d" .$ext)
+                echo "Assume DWG file for $d"
+                ;;
             esac
         fi
         if [ -z "$log" ]; then

@@ -52,7 +52,7 @@ doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec vcpkg.json build-aux/Dockerfile \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
 	     dxf-check dxfb-check json-check oda \
-	     json.in log.in svg.in rw.in \
+	     json.in log.in svg.in rw.in geojson.in \
 	     logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     llvmfuzz_standalone_tz.sh llvmfuzz_standalone_data.sh \
 	     cmp-objs.pl .dockerignore \
@@ -60,7 +60,7 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec vcpkg.json build-aux/Dockerfil
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILES)
 shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
-	json-check oda json.in log.in svg.in rw.in \
+	json-check oda json.in log.in svg.in rw.in geojson.in \
 	logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	dynapi_test_all.sh.in unit_testing_all.sh.in \
 	llvmfuzz_standalone_tz.sh llvmfuzz_standalone_data.sh \
@@ -270,7 +270,7 @@ if HAVE_CPPCHECK
 		test/xmlsuite/*.c
 endif
 
-SHFMT_FLAGS=-i 4 -kp -p
+SHFMT_FLAGS=-i 4 -p
 shfmt:
 if HAVE_SHFMT
 	for s in $(shell_sources); do \

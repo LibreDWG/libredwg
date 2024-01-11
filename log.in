@@ -32,20 +32,20 @@ gerr=0
 for d in "$@"; do
     # we do use bash
     case $d in
-        -v*)
-             v="$d"
-             ;;
-        -l*)
-             log="$(echo "$d" | cut -c3-)"
-             ;;
-        --force-free)
-             args="$args $d"
-             ;;
-        --big)
-             timeout=
-             big=1
-             ;;
-        *)
+    -v*)
+        v="$d"
+        ;;
+    -l*)
+        log="$(echo "$d" | cut -c3-)"
+        ;;
+    --force-free)
+        args="$args $d"
+        ;;
+    --big)
+        timeout=
+        big=1
+        ;;
+    *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]; then
                 d="$srcdir/test/test-data/$d"
@@ -67,14 +67,14 @@ for d in "$@"; do
         dir=_$(basename "$xd")
         if [ -z "$log" ]; then
             case "$d" in
-                *to/*)
-                    x1=$(dirname "$xd")
-                    dir=_$(basename "$xd")_$(basename "$x1")
-                    ;;
-                *test-old/*)
-                    x1=$(dirname "$xd")
-                    dir=_$(basename "$xd")_$(basename "$x1")
-                    ;;
+            *to/*)
+                x1=$(dirname "$xd")
+                dir=_$(basename "$xd")_$(basename "$x1")
+                ;;
+            *test-old/*)
+                x1=$(dirname "$xd")
+                dir=_$(basename "$xd")_$(basename "$x1")
+                ;;
             esac
         fi
         if [ "$dir" = "_test-data" ]; then dir=""; fi

@@ -17,8 +17,8 @@ else
 fi
 
 case "$CFLAGS" in
-    *-DDEBUG_CLASSES*) timeout= ;;
-    *) ;;
+*-DDEBUG_CLASSES*) timeout= ;;
+*) ;;
 esac
 make -s -C src
 make -s -C programs dwg2dxf@EXEEXT@ dxfwrite@EXEEXT@
@@ -42,112 +42,112 @@ for d in "$@"; do
         next_is_o=
     else
         case $d in
-            -v*)    v="$d"    ;;
-            --as=*) args="$args $d" ;;
-            -m)     args="$args $d" ;;
-            -b)     args="$args $d" ;;
-            -Ijson) ext=json  ;;
-            -Idxf)  ext=dxf   ;;
-            -Idxfb)
-                    args="$args $d"
-                                     ext=dxf
-                                             ;;
-            -o)     next_is_o=1 ;;
-            -o*)
-                    if [ -n "$DASH" ]; then
-                        out="$(echo "$d" | awk '{ string=substr($0, 3); print string; }')"
+        -v*) v="$d" ;;
+        --as=*) args="$args $d" ;;
+        -m) args="$args $d" ;;
+        -b) args="$args $d" ;;
+        -Ijson) ext=json ;;
+        -Idxf) ext=dxf ;;
+        -Idxfb)
+            args="$args $d"
+            ext=dxf
+            ;;
+        -o) next_is_o=1 ;;
+        -o*)
+            if [ -n "$DASH" ]; then
+                out="$(echo "$d" | awk '{ string=substr($0, 3); print string; }')"
             else
-                        out="$(cut "$d" -c2-)"
+                out="$(cut "$d" -c2-)"
             fi
-                    ;;
-            -y)     ;;
-            *)
-                if [ ! -f "$d" ]; then
-                    if [ -f "$srcdir/test/test-data/$d" ]; then
-                        d="$srcdir/test/test-data/$d"
-                elif     [ -f "$srcdir/test/test-data/$d.dwg" ]; then
-                        d="$srcdir/test/test-data/$d.dwg"
-                        ext=dwg
-                elif     [ -f "$srcdir/test/test-data/$d.json" ]; then
-                        d="$srcdir/test/test-data/$d.json"
-                        ext=json
-                elif     [ -f "$srcdir/test/test-data/$d.dxf" ]; then
-                        d="$srcdir/test/test-data/$d.dxf"
-                        ext=dxf
+            ;;
+        -y) ;;
+        *)
+            if [ ! -f "$d" ]; then
+                if [ -f "$srcdir/test/test-data/$d" ]; then
+                    d="$srcdir/test/test-data/$d"
+                elif [ -f "$srcdir/test/test-data/$d.dwg" ]; then
+                    d="$srcdir/test/test-data/$d.dwg"
+                    ext=dwg
+                elif [ -f "$srcdir/test/test-data/$d.json" ]; then
+                    d="$srcdir/test/test-data/$d.json"
+                    ext=json
+                elif [ -f "$srcdir/test/test-data/$d.dxf" ]; then
+                    d="$srcdir/test/test-data/$d.dxf"
+                    ext=dxf
                 fi
             fi
-                xd=$(dirname "$d")
-                dir=_$(basename "$xd")
-                case "$d" in
-                    *to/*)
-                        x1=$(dirname "$xd")
-                        dir=_$(basename "$xd")_$(basename "$x1")
-                        ;;
-                    *test-old/*)
-                        x1=$(dirname "$xd")
-                        dir=_$(basename "$xd")_$(basename "$x1")
-                        ;;
-            esac
-                if [ "$dir" = "_test-data" ]; then dir=""; fi
-                if [ "$dir" = "_td" ]; then dir=""; fi
-                if [ "$dir" = "_." ]; then dir=""; fi
-                case $(basename "$d") in
-                    *.dwg)
-                            ext=dwg
-                                     b=$(basename "$d" .$ext)
-                                                              ;;
-                    *.DWG)
-                            ext=dwg
-                                     b=$(basename "$d" .DWG)
-                                                             ;;
-                    *.dxf)
-                            ext=dxf
-                                     b=$(basename "$d" .$ext)
-                                                              ;;
-                    *.DXF)
-                            ext=dxf
-                                     b=$(basename "$d" .DXF)
-                                                             ;;
-                    *.json)
-                            ext=json
-                                      b=$(basename "$d" .$ext)
-                                                               ;;
-                    *.JSON)
-                            ext=json
-                                      b=$(basename "$d" .JSON)
-                                                               ;;
-                    *.dxfb)
-                            ext=dxf
-                                     b=$(basename "$d" .dxfb)
-                                                              ;;
-                    *.DXFB)
-                            ext=dxf
-                                     b=$(basename "$d" .DXFB)
-                                                              ;;
-                    *)
-                            ext=dwg
-                                     b=$(basename "$d")
-                            echo "Assume DWG file for $d"
-                            ;;
-            esac
-                log="$b$dir.log"
-                [ -n "$out" ] || out="$b$dir.dxf"
-                if [ "$ext" = "dwg" ]; then
-                    echo "$timeout $TESTPROG programs/dwg2dxf $args $v -o $out $d 2>$log"
-                    # shellcheck disable=SC2086
-                    $timeout $TESTPROG programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
-                    err=$?
-                    [ $err -gt $gerr ] && gerr=$err
-            else
-                    echo "$timeout $TESTPROG programs/dxfwrite $args $v -o $out $d 2>$log"
-                    # shellcheck disable=SC2086
-                    $timeout $TESTPROG programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
-                    err=$?
-                    [ $err -gt $gerr ] && gerr=$err
-            fi
-                tail -n2 "$log"
-                out=
+            xd=$(dirname "$d")
+            dir=_$(basename "$xd")
+            case "$d" in
+            *to/*)
+                x1=$(dirname "$xd")
+                dir=_$(basename "$xd")_$(basename "$x1")
                 ;;
+            *test-old/*)
+                x1=$(dirname "$xd")
+                dir=_$(basename "$xd")_$(basename "$x1")
+                ;;
+            esac
+            if [ "$dir" = "_test-data" ]; then dir=""; fi
+            if [ "$dir" = "_td" ]; then dir=""; fi
+            if [ "$dir" = "_." ]; then dir=""; fi
+            case $(basename "$d") in
+            *.dwg)
+                ext=dwg
+                b=$(basename "$d" .$ext)
+                ;;
+            *.DWG)
+                ext=dwg
+                b=$(basename "$d" .DWG)
+                ;;
+            *.dxf)
+                ext=dxf
+                b=$(basename "$d" .$ext)
+                ;;
+            *.DXF)
+                ext=dxf
+                b=$(basename "$d" .DXF)
+                ;;
+            *.json)
+                ext=json
+                b=$(basename "$d" .$ext)
+                ;;
+            *.JSON)
+                ext=json
+                b=$(basename "$d" .JSON)
+                ;;
+            *.dxfb)
+                ext=dxf
+                b=$(basename "$d" .dxfb)
+                ;;
+            *.DXFB)
+                ext=dxf
+                b=$(basename "$d" .DXFB)
+                ;;
+            *)
+                ext=dwg
+                b=$(basename "$d")
+                echo "Assume DWG file for $d"
+                ;;
+            esac
+            log="$b$dir.log"
+            [ -n "$out" ] || out="$b$dir.dxf"
+            if [ "$ext" = "dwg" ]; then
+                echo "$timeout $TESTPROG programs/dwg2dxf $args $v -o $out $d 2>$log"
+                # shellcheck disable=SC2086
+                $timeout $TESTPROG programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
+                err=$?
+                [ $err -gt $gerr ] && gerr=$err
+            else
+                echo "$timeout $TESTPROG programs/dxfwrite $args $v -o $out $d 2>$log"
+                # shellcheck disable=SC2086
+                $timeout $TESTPROG programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
+                err=$?
+                [ $err -gt $gerr ] && gerr=$err
+            fi
+            tail -n2 "$log"
+            out=
+            ;;
         esac
     fi
 done

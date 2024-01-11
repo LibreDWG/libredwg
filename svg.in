@@ -27,16 +27,16 @@ out=
 ob="$b"
 gerr=0
 case "$CFLAGS" in
-    *-DDEBUG_CLASSES*) timeout="" ;;
-    *) ;;
+*-DDEBUG_CLASSES*) timeout="" ;;
+*) ;;
 esac
 
 for d in "$@"; do
     case $d in
-        -v*)
-             v="$d"
-             ;;
-        *)
+    -v*)
+        v="$d"
+        ;;
+    *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]; then
                 d="$srcdir/test/test-data/$d"

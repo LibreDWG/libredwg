@@ -17,8 +17,8 @@ else
 fi
 
 case "$CFLAGS" in
-    *-DDEBUG_CLASSES*) timeout= ;;
-    *) ;;
+*-DDEBUG_CLASSES*) timeout= ;;
+*) ;;
 esac
 make -s -j4 -C src
 make -s -j4 -C programs dwgrewrite@EXEEXT@
@@ -34,9 +34,9 @@ gerr=0
 
 for d in "$@"; do
     case $d in
-        -v*)    v="$d" ;;
-        --as=*) args="$args $d" ;;
-        *)
+    -v*) v="$d" ;;
+    --as=*) args="$args $d" ;;
+    *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]; then
                 d="$srcdir/test/test-data/$d"
