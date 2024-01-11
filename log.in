@@ -85,8 +85,8 @@ for d in "$@"; do
         if [ "$dir" = "_test-data" ]; then dir=""; fi
         if [ "$dir" = "_td" ]; then dir=""; fi
         if [ "$dir" = "_." ]; then dir=""; fi
-        b=$(basename "$d" .dwg)
-        b=$(basename "$b" .DWG)
+        b="$(basename "$d" .dwg)"
+        b="$(basename "$b" .DWG)"
         [ -z "$log" ] && log="$b$dir.log"
         ori_timeout="$timeout"
         echo "$timeout @LTEXEC@ programs/dwgread $args $v $d 2>$log"

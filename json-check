@@ -11,6 +11,7 @@ case $1 in
 esac
 d="${1:-example_2000}"
 b="$(basename "$d" .dwg)"
+b="$(basename "$b" .DWG)"
 dir="$(dirname "$d")"
 r="$(basename "$dir")"
 exitcode=0

@@ -92,20 +92,18 @@ for d in "$@"; do
                 if [ "$dir" = "_td" ]; then dir=""; fi
                 if [ "$dir" = "_." ]; then dir=""; fi
                 case $(basename "$d") in
-                    *.dwg)  ext=dwg ;;
-                    *.DWG)  ext=dwg ;;
-                    *.dxf)  ext=dxf ;;
-                    *.DXF)  ext=dxf ;;
-                    *.dxfb) ext=dxf ;;
-                    *.DXFB) ext=dxf ;;
-                    *.json) ext=json ;;
-                    *.JSON) ext=json ;;
-                    *)
-                            ext=dwg
+                    *.dwg)  ext=dwg; b=$(basename "$d" .$ext) ;;
+                    *.DWG)  ext=dwg; b=$(basename "$d" .DWG) ;;
+                    *.dxf)  ext=dxf; b=$(basename "$d" .$ext) ;;
+                    *.DXF)  ext=dxf; b=$(basename "$d" .DXF) ;;
+                    *.json) ext=json; b=$(basename "$d" .$ext) ;;
+                    *.JSON) ext=json; b=$(basename "$d" .JSON) ;;
+                    *.dxfb) ext=dxf; b=$(basename "$d" .dxfb) ;;
+                    *.DXFB) ext=dxf; b=$(basename "$d" .DXFB) ;;
+                    *)      ext=dwg; b=$(basename "$d");
                             echo "Assume DWG file for $d"
                             ;;
                 esac
-                b=$(basename "$d" .$ext)
                 log="$b$dir.log"
                 [ -n "$out" ] || out="$b$dir.dxf"
                 if [ "$ext" = "dwg" ]; then
