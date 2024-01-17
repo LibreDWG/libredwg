@@ -3102,7 +3102,7 @@ DWG_OBJECT (DICTIONARY)
         }
         FIELD_BS (cloning, 281);
       }
-    if (dat->version != R_13c3 || dwg->header.maint_version > 4)
+    if (dat->version != R_13c3 || dwg->header.is_maint > 4)
       FIELD_RC (is_hardowner, 280);
   }
   VALUEOUTOFBOUNDS (numitems, 10000)
