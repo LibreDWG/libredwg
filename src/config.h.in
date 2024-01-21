@@ -18,6 +18,9 @@
 /* Define to disable DXF, JSON and other in/out modules. */
 #undef DISABLE_DXF
 
+/* Define to stop on invalid DXF, instead of skipping invalid objects/entities. */
+#undef DISABLE_IGNORE_INVALID_DXF
+
 /* Define to disable JSON and GeoJSON in/out modules. */
 #undef DISABLE_JSON
 
