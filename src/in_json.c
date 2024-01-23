@@ -2475,6 +2475,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   LOG_TRACE ("%s.%s[%d]: %f [%s]\n", name, key, k, nums[k],
                              f->type);
                 }
+              else
+                {
+                  LOG_WARN ("Ignored %s.%s[%d]: %f [%s]", name, key, k,
+                            json_float (dat, tokens), f->type);
+                }
             }
           if (!size1)
             {
