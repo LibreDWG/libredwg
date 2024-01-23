@@ -290,7 +290,7 @@ dxf_skip_ws (Bit_Chain *dat)
     if (errno == ERANGE)                                                      \
       return (rettype)num;                                                    \
     if (dat->byte + 1 >= dat->size)                                           \
-    return (rettype)num
+      return (rettype)num
 
 static BITCODE_RC
 dxf_read_rc (Bit_Chain *dat)
@@ -310,9 +310,18 @@ dxf_read_rc (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
+      else
+        {
+          LOG_ERROR ("%s: \\n missing after %ld (at %" PRIuSIZE ")",
+                     __FUNCTION__, num, dat->byte);
+          dat->byte = dat->size;
+        }
       if (num > UINT8_MAX)
-        LOG_ERROR ("%s: RC overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
-                   dat->byte);
+        {
+          LOG_ERROR ("%s: RC overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
+                     dat->byte);
+          dat->byte = dat->size;
+        }
       return (BITCODE_RC)num;
     }
 }
@@ -334,9 +343,18 @@ dxf_read_rs (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
+      else
+        {
+          LOG_ERROR ("%s: \\n missing after %ld (at %" PRIuSIZE ")",
+                     __FUNCTION__, num, dat->byte);
+          dat->byte = dat->size;
+        }
       if (num > UINT16_MAX)
-        LOG_ERROR ("%s: RS overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
+        {
+          LOG_ERROR ("%s: RS overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
                    dat->byte);
+          dat->byte = dat->size;
+        }
       return (BITCODE_RS)num;
     }
 }
@@ -359,6 +377,12 @@ dxf_read_rl (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
+      else
+        {
+          LOG_ERROR ("%s: \\n missing after %ld (at %" PRIuSIZE ")",
+                     __FUNCTION__, num, dat->byte);
+          dat->byte = dat->size;
+        }
       /*
       if (num > (long)0xffffffff)
         LOG_ERROR ("%s: RL overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
@@ -386,6 +410,12 @@ dxf_read_rll (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
+      else
+        {
+          LOG_ERROR ("%s: \\n missing after %ld (at %" PRIuSIZE ")",
+                     __FUNCTION__, (long)num, dat->byte);
+          dat->byte = dat->size;
+        }
       return num;
     }
 }
