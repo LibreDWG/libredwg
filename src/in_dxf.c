@@ -10964,8 +10964,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           // TODO: for now we need to do double-conversion
                           // (str->dbl->str), because we don't have the initial
                           // dat->byte position.
-                          char *d2t = (char *)xcalloc (36, 1);
-                          sprintf (d2t, "%f", pair->value.d);
+                          char *d2t = (char *)xcalloc (128, 1);
+                          snprintf (d2t, 128, "%f", pair->value.d);
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &d2t, 1);
                           LOG_TRACE ("%s.%s = %s (from %f°) [%s %d]\n", name,
