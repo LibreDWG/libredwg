@@ -1269,9 +1269,17 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           for (int k = 0; k < size1; k++)
             {
               JSON_TOKENS_CHECK_OVERFLOW_ERR
-              nums[k] = (BITCODE_BS)json_long (dat, tokens);
-              LOG_TRACE ("%s.%s[%d]: " FORMAT_BS " [%s]\n", name, key, k,
-                         nums[k], f->type);
+              if (k < (f->size / 2))
+                {
+                  nums[k] = (BITCODE_BS)json_long (dat, tokens);
+                  LOG_TRACE ("%s.%s[%d]: " FORMAT_BS " [%s]\n", name, key, k,
+                             nums[k], f->type);
+                }
+              else
+                {
+                  LOG_WARN ("Ignored %s.%s[%d]: %ld [%s]", name, key, k,
+                             json_long (dat, tokens), f->type);
+                }
             }
           if (!size1)
             LOG_TRACE ("%s.%s: [%s] empty\n", name, key, f->type);
