@@ -700,11 +700,6 @@ classes_section:
         dwg->layout_type = klass->number;
 
       dwg->num_classes++;
-      if (dwg->num_classes > 500)
-        {
-          LOG_ERROR ("number of classes is greater than 500");
-          break;
-        }
     }
 
   // Check Section CRC
