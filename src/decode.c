@@ -612,15 +612,22 @@ classes_section:
    */
   dwg->layout_type = 0;
   dwg->num_classes = 0;
+
 #if 0
-  SINCE (R_2004) { // dead code. looks better than the current.
+  SINCE (R_2004) // dead code. see read_2004_section_classes() instead
+  {
     BITCODE_B btrue;
-    BITCODE_BL max_num = bit_read_BL (dat);
-    LOG_TRACE ("2004 max_num: " FORMAT_BL " [BL]\n", max_num);
+    BITCODE_BS max_num;
+    BITCODE_RS rs_zero;
+    max_num = bit_read_BS (dat);
+    LOG_TRACE ("2004 max_num: " FORMAT_BS " [BS]\n", max_num);
+    rs_zero = bit_read_RS (dat);
+    LOG_TRACE ("2004 rs_zero: " FORMAT_RS " [RS]\n", rs_zero);
     btrue = bit_read_B (dat); // always 1
     LOG_TRACE ("2004 btrue: " FORMAT_B " [B]\n", btrue);
   }
 #endif
+
   while (dat->byte < endpos - 1)
     {
       BITCODE_BS i;
@@ -2159,10 +2166,6 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("\nClasses\n-------------------\n")
       size = bit_read_RL (&sec_dat); // size of class data area
       LOG_TRACE ("size: " FORMAT_RL " [RL]\n", size)
-      /* TODO other idea:
-           BL max_num (not BS)
-           B btrue
-       */
       if ((dat->from_version >= R_2010 && dwg->header.maint_version > 3)
           || dat->from_version >= R_2018)
         {
@@ -2176,26 +2179,26 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       max_num = bit_read_BS (&sec_dat); // Maximum class number
       LOG_TRACE ("max_num: " FORMAT_BS " [BS]\n", max_num)
+      // or just a single RS (always 0)
       c = bit_read_RC (&sec_dat); // 0x00
       LOG_HANDLE ("c: " FORMAT_RC " [RC]\n", c)
       c = bit_read_RC (&sec_dat); // 0x00
       LOG_HANDLE ("c: " FORMAT_RC " [RC]\n", c)
       c = bit_read_B (&sec_dat); // 1
-      LOG_HANDLE ("c: " FORMAT_B " [B]\n", c)
+      LOG_HANDLE ("b: " FORMAT_B " [B]\n", c)
 
       dwg->layout_type = 0;
       dwg->num_classes = max_num - 499;
       if (max_num < 500
           || dwg->num_classes > 100 + (size / sizeof (Dwg_Class)))
         {
-          LOG_ERROR ("Invalid max class number %d", max_num)
+          LOG_ERROR ("Invalid max class number %d", (int)max_num)
           dwg->num_classes = 0;
           if (sec_dat.chain)
             free (sec_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       assert (max_num >= 500);
-      // assert (max_num < 5000);
 
       if (dat->from_version >= R_2007)
         section_string_stream (dwg, &sec_dat, bitsize, &str_dat);

@@ -2716,6 +2716,16 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   pvzadr = dat->byte;    // Size position
   bit_write_RL (dat, 0); // Size placeholder
 
+  SINCE (R_2004)
+  {
+    BITCODE_BS max_num = dwg->num_classes + 500;
+    bit_write_BS (dat, max_num);
+    LOG_TRACE ("max_num: " FORMAT_BS " [BS]\n", max_num);
+    bit_write_RS (dat, 0);
+    LOG_TRACE ("rs_zero: " FORMAT_RS " [RS]\n", 0);
+    bit_write_B (dat, 1);
+    LOG_TRACE ("btrue: " FORMAT_B " [B]\n", 1);
+  }
   for (j = 0; j < dwg->num_classes; j++)
     {
       Dwg_Class *klass;
@@ -2748,9 +2758,9 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  " %s \"%s\" %d 0x%x\n",
                  klass->number, klass->proxyflag, klass->dxfname,
                  klass->cppname, klass->appname, klass->is_zombie,
-                 klass->item_class_id)
+                 klass->item_class_id);
 
-        SINCE (R_2007)
+      SINCE (R_2007)
         {
           if (dat->from_version < R_2007 && !klass->dwg_version)
             {
@@ -3050,7 +3060,9 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       assert (dat->chain[1] == 'C');
     }
   PRE (R_2004)
+  {
     assert (dat->byte);
+  }
 #endif
   pvzadr = dat->byte;
   bit_write_RS_BE (dat, 2); // last section_size 2
