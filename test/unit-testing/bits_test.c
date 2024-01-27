@@ -1291,6 +1291,7 @@ in_hexbin_tests (void)
     // only with DEBUG we can detect wrong chars
 #ifndef NDEBUG
   hex[0] = 'g';
+  fprintf (stderr, "NOTE: ignore the next ERROR Invalid hex string member gF:\n");
   written = in_hex2bin (dat.chain, hex, dat.size);
   if (written == 0)
     ok ("in_hexbin error (ignore the ERROR above)");
