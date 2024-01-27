@@ -47,9 +47,11 @@ for d in "$@"; do
             if [ -f "$srcdir/test/test-data/$d" ]; then
                 d="$srcdir/test/test-data/$d"
             elif [ -f "$srcdir/test/test-data/$d.dwg" ]; then
+                b="$(basename "$d")"
                 d="$srcdir/test/test-data/$d.dwg"
                 ext=dwg
             elif [ -f "$srcdir/test/test-data/$d.dxf" ]; then
+                b="$(basename "$d")"
                 d="$srcdir/test/test-data/$d.dxf"
                 ext=dxf
             fi
