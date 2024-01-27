@@ -2822,7 +2822,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   size_t size_adr;
   size_t last_offset;
   BITCODE_RLL last_handle;
-  Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
+  Bit_Chain *old_dat, *str_dat, *hdl_dat;
   Object_Map *restrict omap;
 
   old_dat = dat;
@@ -3233,7 +3233,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   size_t section_address, header_crc_address = 0;
   size_t size_adr;
   unsigned int sec_size = 0;
-  Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
+  Bit_Chain *old_dat = dat, *str_dat, *hdl_dat;
   Dwg_Section_Type sec_id;
   Dwg_Version_Type orig_from_version = dwg->header.from_version;
   Bit_Chain sec_dat[SECTION_SYSTEM_MAP + 1]; // to encode each r2004 section
@@ -4432,7 +4432,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       dat = old_dat;
 #ifndef NDEBUG
-      if (dwg->header.version >= R_1_2)
+      if (dwg->header.version >= R_1_2 && dwg->header.version < R_2004)
         {
           if (dat->size < 4 || dat->chain[0] != 'A' || dat->chain[1] != 'C')
             {
@@ -4576,7 +4576,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       decrypt_R2004_header (&dat->chain[0x80], file_dat.chain,
                             sizeof (Dwg_R2004_Header));
       bit_chain_free (&file_dat);
-      LOG_HANDLE ("encrypted R2004_Header:\n");
+      dat->size = dat->byte;
+      dat->byte = 0x80;
+      LOG_HANDLE ("encrypted R2004_Header:");
+      LOG_POS
       LOG_TF (HANDLE, &dat->chain[0x80], (int)sizeof (Dwg_R2004_Header));
       if (memcmp (&dat->chain[0x80], enc_file_ID_string,
                   sizeof (enc_file_ID_string) - 1))
@@ -4586,9 +4589,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     } // R2004_Header
   } // R_2004
+  else
+    dat->size = dat->byte;
 
   assert (!dat->bit);
-  dat->size = dat->byte;
   LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
 
   UNTIL (R_2002)
