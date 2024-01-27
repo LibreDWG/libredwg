@@ -2704,10 +2704,10 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   else
     sec_id = (Dwg_Section_Type)SECTION_CLASSES_R13;
   LOG_INFO ("\n=======> Classes: %4zu (%d)\n", dat->byte, dwg->num_classes);
-  if (dwg->num_classes > 5000)
+  if (dwg->num_classes > UINT16_MAX - 500)
     {
-      LOG_ERROR ("Invalid dwg->num_classes %d", dwg->num_classes)
-        dwg->num_classes = 0;
+      LOG_ERROR ("Invalid dwg->num_classes " FORMAT_BS, dwg->num_classes);
+      dwg->num_classes = 0;
       error |= DWG_ERR_VALUEOUTOFBOUNDS | DWG_ERR_CLASSESNOTFOUND;
     }
   dwg->header.section[sec_id].number = 1;
@@ -3961,6 +3961,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
   /* End of the file */
   dat->size = dat->byte;
+
   SINCE (R_2004)
   {
 #ifdef __cplusplus
