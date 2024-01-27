@@ -55,13 +55,15 @@ for d in "$@"; do
                 fi
             fi
         fi
-        if [ -n "$timeout" ]; then
-            filesize="$(wc -c <"$d")"
-            [ "$filesize" -gt 8000000 ] && timeout="@TIMEOUT_30@"
-        elif [ -z "$big" ] && [ -z "$timeout" ]; then
-            # reset timeout
-            filesize="$(wc -c <"$d")"
-            [ "$filesize" -lt 8000000 ] && timeout="@TIMEOUT_30@"
+        if [ -f "$d" ]; then
+            if [ -n "$timeout" ]; then
+                filesize="$(wc -c <"$d")"
+                [ "$filesize" -gt 8000000 ] && timeout="@TIMEOUT_30@"
+            elif [ -z "$big" ] && [ -z "$timeout" ]; then
+                # reset timeout
+                filesize="$(wc -c <"$d")"
+                [ "$filesize" -lt 8000000 ] && timeout="@TIMEOUT_30@"
+            fi
         fi
         xd=$(dirname "$d")
         dir=_$(basename "$xd")
