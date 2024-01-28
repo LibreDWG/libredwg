@@ -3363,6 +3363,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
       {
         //*dest = '\0';
         iconv_close (cd);
+        // always gets shorter, so inplace
         return bit_u_expand (odest);
       }
     else
