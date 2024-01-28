@@ -3131,10 +3131,10 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // always recompute sections, even with dwgrewrite
       UNTIL (R_2000)
         {
-          if (dwg->header.num_sections > 6)
-            dwg->header.num_sections = 6;
+          if (dwg->header.num_sections > 7)
+            dwg->header.num_sections = 7;
         }
-      _obj->num_sections = dwg->header.num_sections;
+      _obj->num_sections = dwg->header.sections;
       for (i = 0; i < MIN (_obj->num_sections, 7U); i++)
         {
           _obj->sections[i].nr = dwg->header.section[i].number;
@@ -4570,7 +4570,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     dat->byte = section_address;
     dat->bit = 0;
     LOG_INFO ("\n=======> section addresses: %4zu\n", dat->byte);
-    for (j = 0; j < dwg->header.num_sections; j++)
+    for (j = 0; j < dwg->header.sections; j++)
       {
         LOG_TRACE ("section[%u].number: %4d [RC] %s\n", j,
                    (int)dwg->header.section[j].number,
