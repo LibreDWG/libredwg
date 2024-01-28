@@ -3100,18 +3100,15 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       pvzadr = dat->byte;
       dwg->secondheader.address = (BITCODE_RL)(pvzadr - 16)& UINT32_MAX;
       dwg->r2004_header.secondheader_address = pvzadr - 16;
-      UNTIL (R_2000)
+      if (!_obj->sections[SECTION_TEMPLATE_R13].address
+          && section_find (section_order, dwg->header.num_sections, SECTION_TEMPLATE_R13))
         {
-          if (!_obj->sections[SECTION_TEMPLATE_R13].address
-              && section_find (section_order, dwg->header.num_sections, SECTION_TEMPLATE_R13))
-            {
-              dwg->header.section[SECTION_TEMPLATE_R13].number =
-                _obj->sections[SECTION_TEMPLATE_R13].nr = 4;
-              dwg->header.section[SECTION_TEMPLATE_R13].address =
-                _obj->sections[SECTION_TEMPLATE_R13].address = (BITCODE_BL)(pvzadr + _obj->size);
-              dwg->header.section[SECTION_TEMPLATE_R13].size =
-                _obj->sections[SECTION_TEMPLATE_R13].size = 4;
-            }
+          dwg->header.section[SECTION_TEMPLATE_R13].number =
+            _obj->sections[SECTION_TEMPLATE_R13].nr = 4;
+          dwg->header.section[SECTION_TEMPLATE_R13].address =
+            _obj->sections[SECTION_TEMPLATE_R13].address = (BITCODE_BL)(pvzadr + _obj->size);
+          dwg->header.section[SECTION_TEMPLATE_R13].size =
+            _obj->sections[SECTION_TEMPLATE_R13].size = 4;
         }
       if (!_obj->size && !_obj->num_sections)
         {
@@ -3129,11 +3126,8 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                          | dwg->header.dwg_version);
       _obj->codepage = dwg->header.codepage;
       // always recompute sections, even with dwgrewrite
-      UNTIL (R_2000)
-        {
-          if (dwg->header.num_sections > 7)
-            dwg->header.num_sections = 7;
-        }
+      if (dwg->header.num_sections > 7)
+        dwg->header.num_sections = 7;
       _obj->num_sections = dwg->header.sections;
       for (i = 0; i < MIN (_obj->num_sections, 7U); i++)
         {
