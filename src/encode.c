@@ -3095,11 +3095,11 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     (unsigned)dat->byte);
         }
 
-      LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
-      pvzadr = dat->byte;
+      LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte + 16);
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
-      dwg->secondheader.address = (BITCODE_RL)pvzadr & UINT32_MAX;
-      dwg->r2004_header.secondheader_address = pvzadr;
+      pvzadr = dat->byte;
+      dwg->secondheader.address = (BITCODE_RL)(pvzadr - 16)& UINT32_MAX;
+      dwg->r2004_header.secondheader_address = pvzadr - 16;
       UNTIL (R_2000)
         {
           if (!_obj->sections[SECTION_TEMPLATE_R13].address
@@ -3185,7 +3185,7 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       SET_HDL (13, DICTIONARY_ACAD_GROUP);
 
       encode_secondheader_private (dat, dwg);
-      dwg->secondheader.size = (BITCODE_RL)(dat->byte - pvzadr) & UINT32_MAX;
+      dwg->secondheader.size = (BITCODE_RL)(dat->byte - pvzadr + 16) & UINT32_MAX;
       encode_patch_RLsize (dat, pvzadr);
       bit_write_CRC (dat, pvzadr, 0xC0C1);
       VERSIONS (R_14, R_2000) {
