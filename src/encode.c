@@ -3106,9 +3106,9 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           dwg->header.section[SECTION_TEMPLATE_R13].number =
             _obj->sections[SECTION_TEMPLATE_R13].nr = 4;
           dwg->header.section[SECTION_TEMPLATE_R13].address =
-            _obj->sections[SECTION_TEMPLATE_R13].address = (BITCODE_BL)(pvzadr + _obj->size);
+            _obj->sections[SECTION_TEMPLATE_R13].address = 0;
           dwg->header.section[SECTION_TEMPLATE_R13].size =
-            _obj->sections[SECTION_TEMPLATE_R13].size = 4;
+            _obj->sections[SECTION_TEMPLATE_R13].size = 0;
         }
       if (!_obj->size && !_obj->num_sections)
         {
@@ -3126,10 +3126,10 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                          | dwg->header.dwg_version);
       _obj->codepage = dwg->header.codepage;
       // always recompute sections, even with dwgrewrite
-      if (dwg->header.num_sections > 7)
-        dwg->header.num_sections = 7;
+      if (dwg->header.sections > 6)
+        dwg->header.sections = 6;
       _obj->num_sections = dwg->header.sections;
-      for (i = 0; i < MIN (_obj->num_sections, 7U); i++)
+      for (i = 0; i < MIN (dwg->header.sections, 7U); i++)
         {
           _obj->sections[i].nr = dwg->header.section[i].number;
           _obj->sections[i].address = dwg->header.section[i].address;
@@ -3186,6 +3186,24 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         FIELD_RLL (junk_r14, 0);
       }
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_END);
+
+      // when the initial size calc was wrong and we haven't written the Template yet
+      UNTIL (R_2000)
+      {
+        int pos_t = section_find (section_order, dwg->header.num_sections,
+                                  SECTION_TEMPLATE_R13);
+        int pos_s = section_find (section_order, dwg->header.num_sections,
+                                  SECTION_OBJFREESPACE_R13);
+        if (pos_t != SECTION_R13_SIZE
+            && pos_t > pos_s
+            && dat->byte != _obj->sections[SECTION_TEMPLATE_R13].address)
+          {
+            dwg->header.section[SECTION_TEMPLATE_R13].address
+                = _obj->sections[SECTION_TEMPLATE_R13].address
+                = dat->byte;
+            error |= 1;
+          }
+      }
     }
   return error;
 }
@@ -3544,7 +3562,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
          * section 0: header vars
          *         1: class section
          *         2: object map
-         *         3: optional: ObjFreeSpace (with SecondHeader)
+         *         3: optional: ObjFreeSpace
+         *            optional: SecondHeader
          *         4: and Template
          *         5: optional: AuxHeader (no sentinels, since R13c3)
          */
@@ -3713,8 +3732,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     return error;
   }
 
-  // thumbnail_position = after_auxheader;
-  // template_position = after_2ndheader;
   VERSIONS (R_13b1, R_2004)
   {
     /* compute the r2000 section order:
@@ -3904,7 +3921,18 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 error |= encode_objects_handles (dwg, dat, (Bit_Chain **)&sec_dat);
                 break;
               case SECTION_OBJFREESPACE_R13:
-                error |= encode_objfreespace_2ndheader (dwg, dat);
+                {
+                  int err1;
+                  pvzadr = dat->byte;
+                  err1 = encode_objfreespace_2ndheader (dwg, dat);
+                  if (err1 & 1)
+                    {
+                      LOG_TRACE ("2ndheader size changed, rewrite it\n")
+                      dat->byte = pvzadr;
+                      err1 = encode_objfreespace_2ndheader (dwg, dat);
+                    }
+                  error |= err1;
+                }
                 break;
               case SECTION_TEMPLATE_R13:
                 error |= encode_template (dwg, dat);
