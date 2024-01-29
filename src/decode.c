@@ -884,7 +884,7 @@ handles_section:
             (object_end + object_begin + 2))
 
   /*-------------------------------------------------------------------------
-   * Section 2: ObjFreeSpace
+   * Section 2: ObjFreeSpace, r13c3-r2000
    */
    if (dwg->header.sections > 3
        && (dwg->header.section[SECTION_OBJFREESPACE_R13].address == pvz))
@@ -2581,7 +2581,7 @@ auxheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-// r13c3 - r2000
+// r13 - r2000
 static int
 secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
