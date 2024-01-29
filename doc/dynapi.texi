@@ -5733,7 +5733,7 @@ H*
 @item num_values
 BL
 @item values
-struct _dwg_VALUEPARAM*
+Dwg_VALUEPARAM*
 @item version
 BL,	DXF 90
 @item b1
@@ -5817,7 +5817,7 @@ H*
 @item num_values
 BL
 @item values
-struct _dwg_VALUEPARAM*
+Dwg_VALUEPARAM*
 
 @end vtable
 @end indentedblock
@@ -6435,7 +6435,7 @@ H*
 @item num_values
 BL
 @item values
-struct _dwg_VALUEPARAM*
+Dwg_VALUEPARAM*
 @item network_version
 BS,	DXF 90
 @item network_action_index
@@ -7000,7 +7000,7 @@ H*
 @item num_values
 BL
 @item values
-struct _dwg_VALUEPARAM*
+Dwg_VALUEPARAM*
 @item name
 T,	DXF 1
 @item t58
@@ -13159,7 +13159,7 @@ H
 @item num_values
 BL
 @item values
-struct _dwg_VALUEPARAM*
+Dwg_VALUEPARAM*
 
 @end vtable
 @end indentedblock

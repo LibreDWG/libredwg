@@ -5332,6 +5332,17 @@ typedef struct _dwg_VALUEPARAM_vars
   BITCODE_H handle;
 } Dwg_VALUEPARAM_vars;
 
+typedef struct _dwg_VALUEPARAM
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version; /* 0 */
+  BITCODE_T name;
+  BITCODE_BL unit_type;
+  BITCODE_BL num_vars; // input vars
+  Dwg_VALUEPARAM_vars *vars;
+  BITCODE_H controlled_objdep;
+} Dwg_VALUEPARAM;
+
 /* AcDbAssocParamBasedActionBody */
 typedef struct _dwg_ASSOCPARAMBASEDACTIONBODY
 {
@@ -5344,7 +5355,7 @@ typedef struct _dwg_ASSOCPARAMBASEDACTIONBODY
   BITCODE_BL l5;         /* 90 */
   BITCODE_H  assocdep;   /* 330 */
   BITCODE_BL num_values; /* 90 */
-  struct _dwg_VALUEPARAM *values;
+  Dwg_VALUEPARAM *values;
 } Dwg_ASSOCPARAMBASEDACTIONBODY;
 
 typedef struct _dwg_ASSOCACTION_Deps
@@ -5370,7 +5381,7 @@ typedef struct _dwg_ASSOCACTION_Deps
   BITCODE_BL num_owned_params;        /* 90 */              \
   BITCODE_H *owned_params;            /* 360 */             \
   BITCODE_BL num_values;              /* 90 */              \
-  struct _dwg_VALUEPARAM *values
+  Dwg_VALUEPARAM *values
 
 // AcDbAssocDependency
 typedef struct _dwg_object_ASSOCDEPENDENCY
@@ -5557,17 +5568,6 @@ typedef struct _dwg_object_ASSOCVARIABLE
   BITCODE_T t78;
   BITCODE_B b290;
 } Dwg_Object_ASSOCVARIABLE;
-
-typedef struct _dwg_VALUEPARAM
-{
-  struct _dwg_object_object *parent;
-  BITCODE_BL class_version; /* 0 */
-  BITCODE_T name;
-  BITCODE_BL unit_type;
-  BITCODE_BL num_vars; // input vars
-  Dwg_VALUEPARAM_vars *vars;
-  BITCODE_H controlled_objdep;
-} Dwg_VALUEPARAM;
 
 // NodeInfo
 typedef struct _dwg_EVAL_Node
