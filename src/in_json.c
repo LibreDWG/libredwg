@@ -2448,7 +2448,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               = !f->is_malloc ? (int)(f->size / sizeof (BITCODE_BD)) : size1;
           BITCODE_BD *nums;
           // fail if not malloced or inlined array (but json has an array)
-          if (f->size <= 8 && size1 > 1)
+          if (f->size <= 8 && size1 > 1 && !f->is_malloc)
             {
               LOG_ERROR ("Invalid JSON: %s.%s array where primitive expected",
                          name, f->name);
