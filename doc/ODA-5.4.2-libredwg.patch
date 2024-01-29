@@ -1,5 +1,5 @@
---- ODA-5.4.1.md	2023-11-23 15:08:34.777933962 +0100
-+++ ODA-5.4.2-libredwg.md	2023-12-04 11:37:34.263842004 +0100
+--- ODA-5.4.1.md	2023-11-23 21:17:02.825331305 +0100
++++ ODA-5.4.2-libredwg.md	2024-01-29 14:40:52.198061034 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -198,7 +198,7 @@
  At 0x15 is a long that tells how many sets of recno/seeker/length records follow. Each record has the following format:
  
      Record number (raw byte) | Seeker (raw long) | Size (raw long)
-@@ -590,26 +654,18 @@
+@@ -590,26 +654,20 @@
  ----
  
      0 : Header variables (covers beginning and ending sentinels).
@@ -213,9 +213,12 @@
 +    3 : R13 and later: OBJECT FREE SPACE (optional, without sentinels),
 +        followed by the SECOND HEADER (with sentinels).
 +    4 : In R13-R2000, TEMPLATE with the MEASUREMENT variable. See chapter 22.
++        This section is optional.
++    5:  Auxheader.  See chapter 27.
          This section is optional.
  
- Remarks: We have seen files with up to 6 sets in this section; the meaning of the sixth one is unknown. The Open Design Toolkit emits files with the first 5 sets only.
+-Remarks: We have seen files with up to 6 sets in this section; the meaning of the sixth one is unknown. The Open Design Toolkit emits files with the first 5 sets only.
++Remarks: We have seen files with up to 6 sets in this section. The Open Design Toolkit emits files with the first 5 sets only.
  
 -    RS : CRC for BOF to this point. Use 0 for the initial value, and depending on the
 -         number of sets of section-locators, XOR the result with one of the following:
@@ -229,7 +232,7 @@
  
  The following 16 byte sentinel appears after the CRC:
  
-@@ -966,11 +1022,11 @@
+@@ -966,11 +1024,11 @@
  
  # 5 R2007 DWG FILE FORMAT ORGANIZATION
  
@@ -242,7 +245,7 @@
  
  A system section only has a single page, while a data section can have multiple pages. The page map contains information about where each data page is in the file stream. The section map has information about which pages belong to which section. The file header, which is at the beginning of the file, just after the meta data, contains the stream locations of the page map and section map.
  
-@@ -1192,11 +1248,11 @@
+@@ -1192,11 +1250,11 @@
  
  By default data/properties are not encrypted. Encryption still needs to be described.
  
@@ -255,7 +258,7 @@
  
  Write the file header data to a buffer and calculate/write the 64-bit CRC (paragraph 5.2.1.2).
  
-@@ -1557,15 +1613,15 @@
+@@ -1557,15 +1615,15 @@
  
  We read sets of these until we exhaust the data.
  
@@ -273,7 +276,7 @@
  
  * the source buffer pointer is advanced 2 bytes, and a length is read from the next byte, bitwise and-ed with 0x07
  
-@@ -1993,15 +2049,15 @@
+@@ -1993,15 +2051,15 @@
  0xa6df411fbfb21ca3, 0xdc0731d78f8795da, 0x536fa08fdfd90e51, 0x29b7d047efec8728
  ```
  
@@ -291,7 +294,7 @@
  
  * System pages: use a (n, k) of (255, 239), the primitive polynomial coefficients being (1, 0, 0, 1, 0, 1, 1, 0). This configuration can correct (255 – 239) / 2 = 8 error bytes per block of 255 bytes. For each 239 data bytes (k), 16 parity bytes are added to form a 255 byte (code word) block.
  
-@@ -2082,11 +2138,11 @@
+@@ -2082,11 +2140,11 @@
      -----------------------
  
      R2007 Only:
@@ -304,7 +307,7 @@
          BD : Unknown, default value 1.0
          BD : Unknown, default value 1.0
          BD : Unknown, default value 1.0
-@@ -2111,20 +2167,20 @@
+@@ -2111,20 +2169,20 @@
           B : REGENMODE
           B : FILLMODE
           B : QTEXTMODE
@@ -327,7 +330,7 @@
      Common:
           B : MIRRTEXT
           B : WORLDVIEW
-@@ -2132,33 +2188,33 @@
+@@ -2132,33 +2190,33 @@
           B : WIREFRAME Undocumented.
      Common:
           B : TILEMODE
@@ -366,7 +369,7 @@
          BL : Unknown
          BL : Unknown
          BL : Unknown
-@@ -2201,11 +2257,11 @@
+@@ -2201,11 +2259,11 @@
          BD : CHAMFERC
          BD : CHAMFERD
          BD : FACETRES
@@ -379,7 +382,7 @@
          BL : TDCREATE (Julian day)
          BL : TDCREATE (Milliseconds into the day)
          BL : TDUPDATE (Julian day)
-@@ -2220,11 +2276,11 @@
+@@ -2220,11 +2278,11 @@
          BL : TDUSRTIMER (Days)
          BL : TDUSRTIMER (Milliseconds into the day)
         CMC : CECOLOR
@@ -392,7 +395,7 @@
           H : CELTYPE (hard pointer)
      R2007+ Only:
           H : CMATERIAL (hard pointer)
-@@ -2410,11 +2466,11 @@
+@@ -2410,11 +2468,11 @@
            H : LINETYPE CONTROL OBJECT (hard owner)
            H : VIEW CONTROL OBJECT (hard owner)
            H : UCS CONTROL OBJECT (hard owner)
@@ -405,7 +408,7 @@
            H : DICTIONARY (ACAD_MLINESTYLE) (hard pointer)
            H : DICTIONARY (NAMED OBJECTS) (hard owner)
        R2000+ Only:
-@@ -2603,11 +2659,11 @@
+@@ -2603,11 +2661,11 @@
  00240 47 B1 92 CC A0           G.... 0100 0111 1011 0001 1001 0010 1100 1100 1010 0000
  ```
  
@@ -418,7 +421,7 @@
  
      SN : 0x8D 0xA1 0xC4 0xB8 0xC4 0xA9 0xF8 0xC5 0xC0 0xDC 0xF4 0x5F 0xE7 0xCF 0xB6 0x8A.
      RL : size of class data area.
-@@ -2630,13 +2686,13 @@
+@@ -2630,13 +2688,13 @@
  
  This following 16-byte sentinel appears after the CRC:
  
@@ -434,7 +437,7 @@
  
  This section contains the defined classes for the drawing.
  
-@@ -2688,15 +2744,15 @@
+@@ -2688,15 +2746,15 @@
  
  # 11 PADDING (R13C3 AND LATER)
  
@@ -452,7 +455,7 @@
  |------------------|------
  | Name             | “”
  | Section ID       | Always 0
-@@ -2807,43 +2863,42 @@
+@@ -2807,43 +2865,42 @@
  | Name             | AcDb:AppInfo
  | Compressed       | 1
  | Encrypted        | 0
@@ -517,7 +520,7 @@
  
  Contains file dependencies (e.g. IMAGE files, or fonts used by STYLE).
  
-@@ -2852,11 +2907,11 @@
+@@ -2852,11 +2909,11 @@
  | Name             | AcDb:FileDepList
  | Compressed       | 1
  | Encrypted        | 2 (meaning unknown)
@@ -530,7 +533,7 @@
  |--------|--------|------------
  | Int32  | 4      | Feature count (ftc)
  | String32 | ftc * ( 4 + n) | Feature name list. A feature name is one of the following:
-@@ -2889,21 +2944,21 @@
+@@ -2889,21 +2946,21 @@
  | Encrypted        | 0
  | Page size        | 0x7400
  
@@ -554,7 +557,7 @@
  |--------|--------|------------
  | UInt32 | 4      | Unknown (ODA writes 0)
  | UInt32 | 4      | Unknown (ODA writes 0)
-@@ -2919,13 +2974,13 @@
+@@ -2919,13 +2976,13 @@
  | Name             | AcDb:Security
  | Compressed       | 1
  | Encrypted        | 0
@@ -570,7 +573,7 @@
  
  | Type     | Length | Description
  |----------|--------|------------
-@@ -2964,21 +3019,21 @@
+@@ -2964,21 +3021,21 @@
  
  This region holds the actual objects in the drawing. These can be entities, table entries, dictionary entries, and objects. This second use of objects is somewhat confusing; all items stored in the file are “objects”, but only some of them are object objects. Others are entities, table entries, etc. The objects in this section can appear in any order.
  
@@ -594,7 +597,7 @@
  |         | RL     |      | Size of object data in bits (number of bits before the handles), or the “endbit” of the pre-handles section.
  | Common:
  |         | H     | 5    | Object’s handle
-@@ -3011,11 +3066,11 @@
+@@ -3011,11 +3068,11 @@
  Drawing entities, which are of course objects, have the same format as objects, with some additional standard items:
  
         MS : Size of object, not including the CRC
@@ -607,7 +610,7 @@
         RL : Size of object data in bits
      Common:
          H : Object’s handle
-@@ -3182,11 +3237,12 @@
+@@ -3182,11 +3239,12 @@
  MLEADER
  MLEADERSTYLE
  OLE2FRAME
@@ -621,7 +624,7 @@
  SPATIAL_INDEX
  TABLEGEOMETRY
  TABLESTYLES
-@@ -3194,15 +3250,46 @@
+@@ -3194,15 +3252,46 @@
  VISUALSTYLE
  WIPEOUTVARIABLE
  XRECORD
@@ -669,7 +672,7 @@
  
      ITEM TYPE-CODE DXF-CODE DESCRIPTION
  
-@@ -3211,11 +3298,14 @@
+@@ -3211,11 +3300,14 @@
  ### 20.4.1 Common Entity Data
  
  The following data appears at the beginning of each entity in the file, and will be referred to as Common Entity Data in the subsequent entity descriptions.
@@ -685,7 +688,7 @@
                                        end handles
      Common:
          Handle               H    5   code 0, length followed by the handle bytes.
-@@ -3841,11 +3931,11 @@
+@@ -3841,11 +3933,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -698,7 +701,7 @@
  | C++ class name      | AcDbArcDimension |
  | DXF name            | ARC_DIMENSION |
  
-@@ -4235,11 +4325,11 @@
+@@ -4235,11 +4327,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -711,7 +714,7 @@
  | C++ class name      | AcDbRadialDimensionLarge |
  | DXF name            | LARGE\_RADIAL\_DIMENSION |
  
-@@ -5076,21 +5166,24 @@
+@@ -5076,21 +5168,24 @@
  ### 20.4.44 DICTIONARY (42)
  
  Basically a list of pairs of string/objhandle that constitute the dictionary entries.
@@ -739,7 +742,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5170,46 +5263,46 @@
+@@ -5170,46 +5265,46 @@
  R2000+:
      Linespacing Style    BS  73
      Linespacing Factor   BD  44
@@ -798,7 +801,7 @@
  IF (has column heights)
  END IF (has columns data)
  END IF (not annotative)
-@@ -5238,25 +5331,25 @@
+@@ -5238,25 +5333,25 @@
  ### 20.4.47 LEADER (45)
  
  ```
@@ -827,7 +830,7 @@
                                   from the endpoint of the leader to the annotation,
                                   taking into account the extrusion direction.
  R13-R14 Only:
-@@ -5269,27 +5362,28 @@
+@@ -5269,27 +5364,28 @@
                                   taller, probably by some DIMvar amount.)
      Box width            BD  41  MTEXT extents width. (A text box is slightly wider,
                                   probably by some DIMvar amount.)
@@ -859,7 +862,7 @@
  ```
  
  **_20.4.47.1 Example:_**
-@@ -5538,20 +5632,23 @@
+@@ -5538,20 +5634,23 @@
  
  ### 20.4.51 BLOCK CONTROL (48)
  
@@ -885,7 +888,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5578,20 +5675,23 @@
+@@ -5578,20 +5677,23 @@
  
  ### 20.4.52 BLOCK HEADER (49)
  
@@ -911,7 +914,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5663,20 +5763,23 @@
+@@ -5663,20 +5765,23 @@
  
  ### 20.4.53 LAYER CONTROL (50) (UNDOCUMENTED)
  
@@ -937,7 +940,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5699,11 +5802,14 @@
+@@ -5699,11 +5804,14 @@
  
  ### 20.4.54 LAYER (51)
  
@@ -953,7 +956,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5766,20 +5872,23 @@
+@@ -5766,20 +5874,23 @@
  
  ### 20.4.55 SHAPEFILE CONTROL (52) (UNDOCUMENTED)
  
@@ -979,7 +982,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5816,11 +5925,14 @@
+@@ -5816,11 +5927,14 @@
  |                         | Character set (bitmask) = 0x0000ff00
  | 1002 (Bracket)          | ‘}’ (optional) |
  
@@ -995,7 +998,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5871,20 +5983,23 @@
+@@ -5871,20 +5985,23 @@
  
  ### 20.4.57 LINETYPE CONTROL (56) (UNDOCUMENTED)
  
@@ -1021,7 +1024,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5911,11 +6026,14 @@
+@@ -5911,11 +6028,14 @@
  
  ### 20.4.58 LTYPE (57)
  
@@ -1037,7 +1040,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5982,20 +6100,23 @@
+@@ -5982,20 +6102,23 @@
  
  ### 20.4.59 VIEW CONTROL (60) (UNDOCUMENTED)
  
@@ -1063,7 +1066,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6018,11 +6139,14 @@
+@@ -6018,11 +6141,14 @@
  
  ### 20.4.60 VIEW (61)
  
@@ -1079,7 +1082,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6116,20 +6240,23 @@
+@@ -6116,20 +6242,23 @@
  
  ### 20.4.61 UCS CONTROL (62) (UNDOCUMENTED)
  
@@ -1105,7 +1108,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6152,11 +6279,14 @@
+@@ -6152,11 +6281,14 @@
  
  ### 20.4.62 UCS (63)
  
@@ -1121,7 +1124,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6214,11 +6344,14 @@
+@@ -6214,11 +6346,14 @@
  
  ### 20.4.63 TABLE (VPORT) (64) (UNDOCUMENTED)
  
@@ -1137,7 +1140,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6252,11 +6385,14 @@
+@@ -6252,11 +6387,14 @@
  
  ### 20.4.64 VPORT (65)
  
@@ -1153,7 +1156,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6380,11 +6516,14 @@
+@@ -6380,11 +6518,14 @@
  
  ### 20.4.65 TABLE (APPID) (66) (UNDOCUMENTED)
  
@@ -1169,7 +1172,7 @@
  Common:
      Handle                H   5  Owner handle (soft pointer) of root object (0).
      EED                   X  -3  See EED section.
-@@ -6416,11 +6555,14 @@
+@@ -6416,11 +6557,14 @@
  
  ### 20.4.66 APPID (67)
  
@@ -1185,7 +1188,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6463,11 +6605,14 @@
+@@ -6463,11 +6607,14 @@
  
  ### 20.4.67 DIMSTYLE CONTROL (68) (UNDOCUMENTED)
  
@@ -1201,7 +1204,7 @@
  Common:
      Handle                H   5  Owner handle (soft pointer) of root object (0).
      EED                   X  -3  See EED section.
-@@ -6498,11 +6643,11 @@
+@@ -6498,11 +6645,11 @@
  ```
  
  ### 20.4.68 DIMSTYLE (69)
@@ -1214,7 +1217,7 @@
      Obj size             RL      size of object in bits, not including end handles
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
-@@ -6699,21 +6844,24 @@
+@@ -6699,21 +6846,24 @@
  ```
  
  ### 20.4.69 VIEWPORT ENTITY CONTROL (70) (UNDOCUMENTED)
@@ -1242,7 +1245,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6736,12 +6884,15 @@
+@@ -6736,12 +6886,15 @@
  ```
  
  ### 20.4.70 VIEWPORT ENTITY HEADER (71)
@@ -1260,7 +1263,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6796,12 +6947,15 @@
+@@ -6796,12 +6949,15 @@
  |         |  H    |  340  | Handle to scale (AcDbScale) object (hard pointer). See paragraph 20.4.92. |
  
  ### 20.4.72 GROUP (72): Group of ACAD entities
@@ -1278,7 +1281,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6838,12 +6992,15 @@
+@@ -6838,12 +6994,15 @@
  ```
  
  ### 20.4.73 MLINESTYLE (73):
@@ -1296,7 +1299,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6912,12 +7069,15 @@
+@@ -6912,12 +7071,15 @@
  NOTE: OBJECTS LISTED AFTER THIS POINT DO NOT HAVE FIXED TYPES. THEIR TYPES ARE DETERMINED BY FINDING THE CLASS ENTRY WHOSE POSITION IN THE CLASS LIST + 500 EQUALS THE TYPE OF THIS OBJECT
  
  ### 20.4.74 DICTIONARYVAR (varies)
@@ -1314,7 +1317,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7015,11 +7175,11 @@
+@@ -7015,11 +7177,11 @@
              pt0         2RD  10  control point
              if (isrational)
                weight     BD  40  weight
@@ -1327,7 +1330,7 @@
              Fitpoint    2RD  11
            End repeat
            Start tangent 2RD  12
-@@ -7125,11 +7285,11 @@
+@@ -7125,11 +7287,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1340,7 +1343,7 @@
  | C++ class name      | AcDbField         |
  | DXF name            | FIELD             |
  
-@@ -7178,11 +7338,11 @@
+@@ -7178,11 +7340,11 @@
  |        |     |     | Other error = 64
  |        | BL  |  96 | Evaluation error code
  |        | TV  | 300 | Evaluation error message
@@ -1353,7 +1356,7 @@
  |        | TV  |   6 | Child field key
  |        | ... | ... | The field value, see paragraph 20.4.99.
  |        |     |     | End repeat child fields
-@@ -7192,11 +7352,11 @@
+@@ -7192,11 +7354,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1366,7 +1369,7 @@
  | C++ class name      | AcDbFieldList, inherits AcDbIdSet |
  | DXF name            | FIELDLIST         |
  
-@@ -7216,11 +7376,11 @@
+@@ -7216,11 +7378,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1379,7 +1382,7 @@
  | C++ class name      | AcDbGeoData       |
  | DXF name            | GEODATA           |
  
-@@ -7246,11 +7406,11 @@
+@@ -7246,11 +7408,11 @@
  |        |     |     | Light years = 19, Parsecs = 20
  |        | BD  |     | Unit scale factor vertical
  |        | BL  |     | Units value vertical (same enumeration as for the units value
@@ -1392,7 +1395,7 @@
  |        | BD  |     | User specified scale factor
  |        | B   |     | Do sea level correction
  |        | BD  |     | Sea level elevation
-@@ -7284,11 +7444,11 @@
+@@ -7284,11 +7446,11 @@
  |        |     |     | Repeat for each geo mesh face
  |        | BL  |     | Face index 1
  |        | BL  |     | Face index 2
@@ -1405,7 +1408,7 @@
  |        | B   |     | False
  |        | RD  |     | Reference point Y
  |        | RD  |     | Reference point X
-@@ -7311,12 +7471,15 @@
+@@ -7311,12 +7473,15 @@
  ### 20.4.79 IDBUFFER (varies)
  
  (holds list of references to an xref)
@@ -1423,7 +1426,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7431,12 +7594,15 @@
+@@ -7431,12 +7596,15 @@
  
  ### 20.4.81 IMAGEDEF (varies)
  
@@ -1441,7 +1444,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7481,12 +7647,15 @@
+@@ -7481,12 +7649,15 @@
  
  ### 20.4.82 IMAGEDEFREACTOR (varies)
  
@@ -1459,7 +1462,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7517,12 +7686,15 @@
+@@ -7517,12 +7688,15 @@
  ```
  
  ### 20.4.83 LAYER_INDEX
@@ -1477,7 +1480,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7533,12 +7705,12 @@
+@@ -7533,12 +7707,12 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
@@ -1492,7 +1495,7 @@
      Indexlong            BL      a long
      Indexstr             TV   8  a layer name
  End repeat
-@@ -7572,11 +7744,14 @@
+@@ -7572,11 +7746,14 @@
  
  ### 20.4.84 LAYOUT (varies)
  
@@ -1508,7 +1511,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7955,12 +8130,15 @@
+@@ -7955,12 +8132,15 @@
  |       | B     | 290 | Default flag (default value is false).
  
  ### 20.4.90 PROXY (varies):
@@ -1526,7 +1529,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7995,12 +8173,15 @@
+@@ -7995,12 +8175,15 @@
  
  ### 20.4.91 RASTERVARIABLES (varies)
  
@@ -1544,7 +1547,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8047,12 +8228,15 @@
+@@ -8047,12 +8230,15 @@
  |       | B     | 290 | Has unit scale          |
  
  ### 20.4.93 SORTENTSTABLE (varies)
@@ -1562,7 +1565,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8105,12 +8289,15 @@
+@@ -8105,12 +8291,15 @@
  
  ### 20.4.94 SPATIAL_FILTER (varies)
  
@@ -1580,7 +1583,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8169,12 +8356,15 @@
+@@ -8169,12 +8358,15 @@
  ```
  
  ### 20.4.95 SPATIAL_INDEX (varies):
@@ -1598,7 +1601,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8186,12 +8376,12 @@
+@@ -8186,12 +8378,12 @@
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
@@ -1613,7 +1616,7 @@
                                   [Reactors (soft pointer)]
                                   xdictionary (hard owner)
  ```
-@@ -8333,18 +8523,18 @@
+@@ -8333,18 +8525,18 @@
  0D688 54 B0                   crc
  ```
  
@@ -1635,7 +1638,7 @@
      Common Entity Data
      Ins pt              3BD  10
  R13-R14 Only:
-@@ -8618,13 +8808,13 @@
+@@ -8618,13 +8810,13 @@
                                   0x80000 is set in table overrides flag
  
      CRC                   X ---
@@ -1651,7 +1654,7 @@
  |-------|-------|----:|--------------------------------------|
  |       | ...   |     | Common entity data  |
  | R2010+|  RC   |     | Unknown (default 0) |
-@@ -8667,11 +8857,11 @@
+@@ -8667,11 +8859,11 @@
  |       |  BL   |     | End row index |
  |       |       |     | End repeat row ranges
  
@@ -1664,7 +1667,7 @@
  
  |Version|Field type|DXF group| Description                   |
  |-------|-------|----:|--------------------------------------|
-@@ -8763,11 +8953,11 @@
+@@ -8763,11 +8955,11 @@
  |       |       |     | Begin repeat field references |
  |       | H     |     | Handle to field (AcDbField), hard owner. |
  |       |       |     | End repeat field references |
@@ -1677,7 +1680,7 @@
  |       | BL    | 91  | Top row index |
  |       | BL    | 92  | Left column index |
  |       | BL    | 93  | Bottom row index |
-@@ -8832,11 +9022,11 @@
+@@ -8832,11 +9024,11 @@
  |       | ...   |     | Item value (variant), see paragraph 20.4.98.|
  |       |       |     | End repeat custom data items   |
  
@@ -1690,7 +1693,7 @@
  
  ```
      Common OBJECT data, see paragraph 20.1.
-@@ -8869,30 +9059,30 @@
+@@ -8869,30 +9061,30 @@
      Data unit type       BL  91  As defined in the ACAD\_TABLE entity.
      Format string        TV   1
  End repeat row styles
@@ -1724,7 +1727,7 @@
  |       | BL    |  -  | Cell style class, 1= data, 2 = label. The default value is label. |
  |       | TV    |  -  | Cell style name                |
  |       |       |     | End repeat cell styles         |
-@@ -9016,11 +9206,11 @@
+@@ -9016,11 +9208,11 @@
  |-------|-------|----:|--------------------------------|
  |       |  ...  |     | Common AcDbObject fields, see paragraph 20.1. |
  |       |  BL   |  90 | Number of cell styles          |
@@ -1737,7 +1740,7 @@
  |       |  BL   |  91 | Cell style class, 1= data, 2 = label. The default value is label. |
  |       |  TV   | 300 | Cell style name                |
  |       |       |     | End repeat cell styles         |
-@@ -9052,15 +9242,18 @@
+@@ -9052,15 +9244,18 @@
  |       |  BD   |  95 | Unknown (0).                   |
  |       |       |     | End repeat contents            |
  |       |       |     | End repeat columns             |
@@ -1759,7 +1762,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -9118,36 +9311,669 @@
+@@ -9118,36 +9313,669 @@
  00B1B 40 3E 00 01 00 46 00 B4 @>...F.. 0100 0000 0011 1110 0000 0000 0000 0001 0000 0000 0100 0110 0000 0000 1011 0100
  00B23 00 40 41 0C 30          .@A.0    0000 0000 0100 0000 0100 0001 0000 1100 0011 0000
  00B28 45 76                   crc
@@ -2443,7 +2446,7 @@
  |--------|--------|------------------------------------------------------------------- |
  | Int16  | 2      | Template description string length in bytes (the ODA always writes |
  |        |        | 0 here).                                                           |
-@@ -9155,11 +9981,11 @@
+@@ -9155,11 +9983,11 @@
  |        |        | codepage to encode the bytes).                                     |
  | UInt16 | 2      | MEASUREMENT system variable (0 = English, 1 = Metric).             |
  
@@ -2456,7 +2459,7 @@
  
  ```
  Set the "last handle" to all 0 and the "last loc" to 0L;
-@@ -9177,13 +10003,13 @@
+@@ -9177,13 +10005,13 @@
  End top repeat
  ```
  
@@ -2472,7 +2475,7 @@
  
  At this moment (December 2012), this sections contains information about Acis data (regions, solids).
  
-@@ -9630,119 +10456,74 @@
+@@ -9630,119 +10458,74 @@
  }
  handleToDataRecord {
  }
@@ -2638,7 +2641,7 @@
      RS : DWG version:
           AC1010 = 17,
           AC1011 = 18,
-@@ -9796,11 +10577,11 @@
+@@ -9796,11 +10579,11 @@
       RL : 0
       RL : 0
       RL : 0

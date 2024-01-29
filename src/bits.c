@@ -1809,7 +1809,7 @@ bit_read_TV (Bit_Chain *restrict dat)
           && chain[length - 1] != '\0')
         LOG_HANDLE ("TV-not-ZERO %u\n ", length)
       // and preR2000 the final \0 is not included in the length (ie == strlen)
-      else if (length > 0 && dat->from_version <= R_2000
+      else if (length > 0 && dat->from_version < R_2000
                && chain[length - 1] == '\0')
         LOG_HANDLE ("TV-ZERO %u\n", length)
     }

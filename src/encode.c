@@ -3198,16 +3198,11 @@ AFL_GCC_TOOBIG
 EXPORT int
 dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
-  //int ckr_missing = 1;
   int error = 0;
   BITCODE_BL i, j;
   size_t section_address, header_crc_address = 0;
   size_t pvzadr;
-  //size_t last_offset;
-  unsigned int ckr;
   unsigned int sec_size = 0;
-  //BITCODE_RLL last_handle;
-  //Object_Map *restrict omap;
   Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
   Dwg_Section_Type sec_id;
   Dwg_Version_Type orig_from_version = dwg->header.from_version;
@@ -4604,32 +4599,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         bit_write_RL (dat, dwg->header.section[j].size);
       }
 
-    /* Write CRC's
-     */
-    bit_write_CRC (dat, 0, 0);
-    dat->byte -= 2;
-    ckr = bit_read_CRC (dat);
-    dat->byte -= 2;
-    // FIXME: r13-2000 only
-    switch (dwg->header.sections)
-      {
-      case 3:
-        ckr ^= 0xA598;
-        break;
-      case 4:
-        ckr ^= 0x8101;
-        break;
-      case 5:
-        ckr ^= 0x3CC4;
-        break;
-      case 6:
-        ckr ^= 0x8461;
-        break;
-      default:
-        break;
-      }
-    bit_write_RS (dat, ckr);
-    LOG_TRACE ("crc: %04X (from 0)\n", ckr);
+    // assert (dat->byte == header_crc_address);
+    bit_write_CRC (dat, 0, 0xC0C1);
+    dat->byte = dat->size;
   }
 
   return 0;
