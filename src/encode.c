@@ -90,15 +90,8 @@ bit_umc_size (BITCODE_UMC value)
   return dat.byte + (dat.bit ? 1 : 0);
 }
 
-/* section_order: A static array of section types.
-   SECTION_R13_SIZE is the size and the sentinel.
- */
-#define SECTION_R13_SIZE 7U
-static Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE]
-#ifndef __cplusplus
-    = { 0 }
-#endif
-;
+/* Capacity of the R13 section order and sentinel for an invalid entry. */
+#define SECTION_R13_SIZE 8U
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -1382,7 +1375,7 @@ find_section_info_type (const Dwg_Data *restrict dwg, Dwg_Section_Type type)
   return NULL;
 }
 
-/* Ordering of r13-r2000 sections 0-6 */
+/* Ordering of r13-r2000 sections 0-7 */
 static void
 section_order_trace (const Dwg_Data *dwg, const BITCODE_BL numsections,
                      Dwg_Section_Type_r13 *psection_order)
@@ -2719,16 +2712,15 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 }
 
 static int
-encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
+encode_objfreespace (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   int error = 0;
 
   /*------------------------------------------------------------
-   * ObjFreeSpace and Second header - r13-r2000 only.
-   * Note: partially also since r2004.
+   * ObjFreeSpace - r13c3-r2000 only.
    */
   if (dwg->header.version >= R_13 && dwg->header.version < R_2004
-      && dwg->header.num_sections > 3)
+      && dwg->header.sections > SECTION_OBJFREESPACE_R13)
     {
       assert (dat->byte);
       dwg->header.section[SECTION_OBJFREESPACE_R13].number = 3;
@@ -2744,8 +2736,16 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
 
-  if (dwg->header.version >= R_13 && dwg->header.version < R_2004
-      && dwg->secondheader.codepage)
+  return error;
+}
+
+/* The second header is delimited by sentinels and has no locator record. */
+static int
+encode_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
+{
+  int error = 0;
+
+  VERSIONS (R_13, R_2000)
     {
       struct _dwg_secondheader *_obj = &dwg->secondheader;
       Dwg_Object *obj = NULL;
@@ -2757,19 +2757,6 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       size_adr = dat->byte;
       dwg->secondheader.address = (BITCODE_RL)(size_adr - 16) & UINT32_MAX;
       dwg->fhdr.r2004_header.secondheader_address = size_adr - 16;
-      if (!_obj->sections[SECTION_TEMPLATE_R13].address
-          && section_find (section_order, dwg->header.num_sections,
-                           SECTION_TEMPLATE_R13))
-        {
-          // Template address may change when this size changes. But in ACAD
-          // dwg's, the template address is just zeroed.
-          dwg->header.section[SECTION_TEMPLATE_R13].number
-              = _obj->sections[SECTION_TEMPLATE_R13].nr = 4;
-          dwg->header.section[SECTION_TEMPLATE_R13].address
-              = _obj->sections[SECTION_TEMPLATE_R13].address = 0;
-          dwg->header.section[SECTION_TEMPLATE_R13].size
-              = _obj->sections[SECTION_TEMPLATE_R13].size = 0;
-        }
       if (!_obj->size && !_obj->num_sections)
         {
           const char *code = dwg_version_codes (dwg->header.version);
@@ -2786,12 +2773,10 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                          | dwg->header.dwg_version);
       _obj->codepage = dwg->header.codepage;
       // always recompute sections, even with dwgrewrite
-      if (dwg->header.sections > 6)
-        dwg->header.sections = 6;
-      _obj->num_sections = dwg->header.sections;
-      for (i = 0; i < MIN (dwg->header.sections, 7U); i++)
+      _obj->num_sections = (BITCODE_RC)MIN (dwg->header.sections, 6U);
+      for (i = 0; i < _obj->num_sections; i++)
         {
-          _obj->sections[i].nr = dwg->header.section[i].number;
+          _obj->sections[i].nr = (BITCODE_RCd)i;
           _obj->sections[i].address = dwg->header.section[i].address;
           _obj->sections[i].size = dwg->header.section[i].size;
         }
@@ -2801,21 +2786,16 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #define SET_HDL(i, NAM)                                                       \
   _obj->handles[i].nr = i;                                                    \
-  if (dwg->header_vars.NAM                                                    \
-      && _obj->handles[i].num_hdl != dwg->header_vars.NAM->handleref.size)    \
-    {                                                                         \
-      _obj->handles[i].num_hdl                                                \
-          = MAX (dwg->header_vars.NAM->handleref.size, 8);                    \
-    }                                                                         \
   if (dwg->header_vars.NAM)                                                   \
     {                                                                         \
-      unsigned char chain[8];                                                 \
-      Bit_Chain hdat                                                          \
-        = { chain, 8L, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 };        \
-      bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
-      _obj->handles[i].name = #NAM;                                           \
-      for (int k = 0; k < MIN ((int)_obj->handles[i].num_hdl, 8); k++)        \
-        _obj->handles[i].hdl[k] = hdat.chain[k];                              \
+      Dwg_SecondHeader_Handles *handle = &_obj->handles[i];                   \
+      Dwg_Handle *ref = &dwg->header_vars.NAM->handleref;                     \
+      Bit_Chain hdat = EMPTY_CHAIN (sizeof (handle->hdl));                    \
+      hdat.chain = handle->hdl;                                               \
+      bit_H_to_dat (&hdat, ref);                                              \
+      handle->num_hdl = (BITCODE_RC)hdat.byte;                                \
+      handle->value = ref->value;                                             \
+      handle->name = #NAM;                                                    \
     }
 
       SET_HDL (0, HANDSEED);
@@ -2833,7 +2813,9 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       SET_HDL (12, DICTIONARY_ACAD_MLINESTYLE);
       SET_HDL (13, DICTIONARY_ACAD_GROUP);
 
-      encode_secondheader_private (dat, dwg);
+#undef SET_HDL
+
+      error |= encode_secondheader_private (dat, dwg);
       dwg->secondheader.size
           = (BITCODE_RL)(dat->byte - size_adr + 16) & UINT32_MAX;
       encode_patch_RLsize (dat, size_adr);
@@ -3435,6 +3417,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   VERSIONS (R_13b1, R_2004)
   {
+    Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE];
+    BITCODE_RL num_ordered_sections = 0;
+
     /* compute the r2000 section order:
      * section 0: Header vars
      *         1: Classes
@@ -3443,10 +3428,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   THUMBNAIL
      *         2: Handles
      *         3: ObjFreeSpace (r13c3+, optional)
-                  + 2NDHEADER (r13-r2000)
      *         4: Template (r14-r2000, optional)
      *         5: AuxHeader (r2000, no sentinels)
-     *         6: THUMBNAIL (r13c3+, not a section)
+     *         6: THUMBNAIL (r13c3+, no locator record)
+     *         7: 2NDHEADER (r13-r2000, no locator record)
      */
 
     /* Usually 3-5, max 6 */
@@ -3488,101 +3473,51 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     VERSIONS (R_13b1, R_2000)
     {
-      section_order[0] = SECTION_HEADER_R13;
-      section_order[1] = SECTION_CLASSES_R13;
-      section_order[2] = SECTION_HANDLES_R13;
-      if (dwg->header.sections > 3)
-        {
-          section_order[3] = SECTION_OBJFREESPACE_R13;
-          section_order[4] = SECTION_TEMPLATE_R13;
-          if (dwg->header.sections > 5)
-            {
-              section_order[5] = SECTION_AUXHEADER_R2000;
-              section_order[6] = SECTION_THUMBNAIL_R13;
-            }
-          else
-            {
-              section_order[5] = SECTION_THUMBNAIL_R13;
-            }
-        }
-      else
-        section_order[3] = SECTION_THUMBNAIL_R13;
+      section_order[num_ordered_sections++] = SECTION_HEADER_R13;
+      section_order[num_ordered_sections++] = SECTION_CLASSES_R13;
+      section_order[num_ordered_sections++] = SECTION_HANDLES_R13;
+      if (dwg->header.sections > SECTION_OBJFREESPACE_R13)
+        section_order[num_ordered_sections++] = SECTION_OBJFREESPACE_R13;
+      section_order[num_ordered_sections++] = SECTION_SECOND_HEADER_R13;
+      if (dwg->header.sections > SECTION_TEMPLATE_R13
+          || dwg->header.version == R_13)
+        section_order[num_ordered_sections++] = SECTION_TEMPLATE_R13;
+      if (dwg->header.sections > SECTION_AUXHEADER_R2000)
+        section_order[num_ordered_sections++] = SECTION_AUXHEADER_R2000;
+      section_order[num_ordered_sections++] = SECTION_THUMBNAIL_R13;
 
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
-        section_order_trace (dwg, dwg->header.num_sections,
-                             (Dwg_Section_Type_r13 *)&section_order);
-    }
+      if (dwg->header.thumbnail_address
+          && dwg->secondheader.sections[SECTION_HEADER_R13].address
+          && dwg->header.thumbnail_address
+                 < dwg->secondheader.sections[SECTION_HEADER_R13].address)
+        section_move_top (section_order, &num_ordered_sections,
+                          SECTION_THUMBNAIL_R13);
+      else if ((dwg->header.thumbnail_address
+                && dwg->secondheader.sections[SECTION_HANDLES_R13].address
+                && dwg->header.thumbnail_address
+                       < dwg->secondheader.sections[SECTION_HANDLES_R13]
+                             .address)
+               || (!dwg->header.thumbnail_address
+                   && dwg->header.version < R_13c3))
+        section_move_before (section_order, &num_ordered_sections,
+                             SECTION_THUMBNAIL_R13, SECTION_HANDLES_R13);
 
-    if (dwg->header.thumbnail_address)
-      {
-        if (dwg->header.section[SECTION_HEADER_R13].address
-            && dwg->header.thumbnail_address
-                   < dwg->header.section[SECTION_HEADER_R13].address)
-          {
-            section_move_top ((Dwg_Section_Type_r13 *)&section_order,
-                              &dwg->header.num_sections,
-                              SECTION_THUMBNAIL_R13);
-            // thumbnail_position = before_header; // r13 if empty
-          }
-        else if (dwg->secondheader.sections[SECTION_HEADER_R13].address)
-          {
-            if (dwg->header.thumbnail_address
-                < dwg->secondheader.sections[SECTION_HEADER_R13].address)
-              {
-                section_move_top ((Dwg_Section_Type_r13 *)&section_order,
-                                  &dwg->header.num_sections,
-                                  SECTION_THUMBNAIL_R13);
-                // thumbnail_position = before_header; // r13 if empty
-              }
-            else if (dwg->secondheader.sections[SECTION_HANDLES_R13].address
-                     && dwg->header.thumbnail_address
-                            < dwg->secondheader.sections[SECTION_HANDLES_R13]
-                                  .address)
-              {
-                section_move_before ((Dwg_Section_Type_r13 *)&section_order,
-                                     &dwg->header.num_sections,
-                                     SECTION_THUMBNAIL_R13,
-                                     SECTION_HANDLES_R13);
-              }
-          }
-      }
-    else
-      {
-        PRE (R_13c3)
-        {
-          section_move_before ((Dwg_Section_Type_r13 *)&section_order,
-                               &dwg->header.num_sections,
-                               SECTION_THUMBNAIL_R13, SECTION_HANDLES_R13);
-        }
-        SINCE (R_2004a)
-        {
-          section_move_top ((Dwg_Section_Type_r13 *)&section_order,
-                            &dwg->header.num_sections, SECTION_THUMBNAIL_R13);
-        }
-      }
-    VERSIONS (R_13b1, R_2000)
-    {
       // auxheader before thumbnail?
-      if (dwg->header.sections > 5
+      if (dwg->header.sections > SECTION_AUXHEADER_R2000
           && dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address
           && dwg->header.thumbnail_address
                  > dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address)
-        {
-          section_move_top ((Dwg_Section_Type_r13 *)&section_order,
-                            &dwg->header.num_sections,
-                            SECTION_AUXHEADER_R2000);
-        }
+        section_move_top (section_order, &num_ordered_sections,
+                          SECTION_AUXHEADER_R2000);
+
+      VERSION (R_13)
+      {
+        section_move_before (section_order, &num_ordered_sections,
+                             SECTION_TEMPLATE_R13, SECTION_HANDLES_R13);
+      }
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+        section_order_trace (dwg, num_ordered_sections, section_order);
     }
-    VERSION (R_13)
-    {
-      section_move_before ((Dwg_Section_Type_r13 *)&section_order,
-                           &dwg->header.num_sections, SECTION_TEMPLATE_R13,
-                           SECTION_HANDLES_R13);
-    }
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
-      section_order_trace (dwg, dwg->header.num_sections,
-                           (Dwg_Section_Type_r13 *)&section_order);
-    LOG_TRACE ("num_sections => " FORMAT_RL "\n", dwg->header.num_sections);
 
     // on downconvert or DXF import add the missing VX_CONTROL object
     // (DXF never contains VX tables nor table records)
@@ -3611,8 +3546,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     VERSIONS (R_13b1, R_2000)
     {
-      for (unsigned id = 0;
-           id < dwg->header.num_sections && id < SECTION_R13_SIZE; id++)
+      for (unsigned id = 0; id < num_ordered_sections; id++)
         {
           if (section_order[id] >= SECTION_R13_SIZE)
             {
@@ -3631,7 +3565,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 error |= encode_objects_handles (dwg, dat, sec_dat);
                 break;
               case SECTION_OBJFREESPACE_R13:
-                error |= encode_objfreespace_2ndheader (dwg, dat);
+                error |= encode_objfreespace (dwg, dat);
+                break;
+              case SECTION_SECOND_HEADER_R13:
+                error |= encode_2ndheader (dwg, dat);
                 break;
               case SECTION_TEMPLATE_R13:
                 error |= encode_template (dwg, dat);
@@ -3648,10 +3585,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               }
         }
     }
-    if (dwg->header.sections == 3 && dwg->secondheader.codepage)
-      {
-        error |= encode_objfreespace_2ndheader (dwg, dat);
-      }
   } // VERSIONS (R_13b1, R_2004)
 
   /* r2004 file header (compressed + encrypted) */

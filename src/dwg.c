@@ -2469,7 +2469,8 @@ static const char *const dwg_section_r13_names[] = {
   "ObjFreeSpace", // 3
   "Template",     // 4
   "AuxHeader",    // 5
-  "Thumbnail"     // 6
+  "Thumbnail",    // 6
+  "SecondHeader"  // 7
 };
 static const char *const dwg_section_r11_names[] = {
   "HEADER",   // 0
@@ -2495,8 +2496,8 @@ dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
     }
   else if (dwg->header.version > R_11)
     { // Dwg_Section_Type_r13
-      return (sec_id <= SECTION_THUMBNAIL_R13) ? dwg_section_r13_names[sec_id]
-                                               : NULL;
+      return sec_id <= SECTION_SECOND_HEADER_R13 ? dwg_section_r13_names[sec_id]
+                                                 : NULL;
     }
   else
     { // Dwg_Section_Type_r11
@@ -4305,10 +4306,10 @@ dwg_sections_init (Dwg_Data *dwg)
       /* section 0: header vars
        *         1: class section
        *         2: object map (i.e. handles)
-       *         3: optional ObjFreeSpace (r13+, no sentinels) + 2ndheader
-       * (r13+, sentinels) 4: optional: Template (MEASUREMENT) 5: optional:
-       * AuxHeader (no sentinels, since R_2000b) 6: optional: THUMBNAIL (not a
-       * section, but treated as one)
+       *         3: optional ObjFreeSpace (r13c3+, no sentinels)
+       *         4: optional Template (MEASUREMENT)
+       *         5: optional AuxHeader (no sentinels, since R_2000b)
+       * Thumbnail and second header have sentinels and no locator record.
        */
       if (!dwg->header.num_sections
           || ((dwg->header.from_version > R_2000)
