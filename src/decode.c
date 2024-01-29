@@ -333,7 +333,6 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    *         1: class section
    *         2: Handles (object map)
    *         3: optional: ObjFreeSpace
-   *         -: 2ndHeader and its sentinels
    *         4: optional: Template (MEASUREMENT)
    *         5: optional: AuxHeader (no sentinels, since R13c3)
    */
