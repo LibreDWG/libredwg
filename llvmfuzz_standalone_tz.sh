@@ -6,7 +6,8 @@ make -s -j4 -C src
 make -s -C examples llvmfuzz_standalone
 old_ASAN_OPTIONS="$ASAN_OPTIONS"
 
-for f in ../tz/*/*; do
+run() {
+    f="$1"
     # indxf still leaks
     if echo "$f" | grep -i "\.dxf$"; then
         export ASAN_OPTIONS=detect_leaks=0
@@ -24,5 +25,15 @@ for f in ../tz/*/*; do
             OUT="$OUT" timeout 30 examples/llvmfuzz_standalone "$f" || true
         fi
     done
-done
+}
+
+if [ -z "$1" ]; then
+    for f in ../tz/*/*; do
+        run "$f"
+    done
+else
+    for f in "$@"; do
+        run "$f"
+    done
+fi
 ASAN_OPTIONS="$old_ASAN_OPTIONS"
