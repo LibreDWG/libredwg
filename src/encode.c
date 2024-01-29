@@ -3103,6 +3103,8 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (!_obj->sections[SECTION_TEMPLATE_R13].address
           && section_find (section_order, dwg->header.num_sections, SECTION_TEMPLATE_R13))
         {
+          // Template address may change when this size changes. But in ACAD dwg's,
+          // the template address is just zeroed.
           dwg->header.section[SECTION_TEMPLATE_R13].number =
             _obj->sections[SECTION_TEMPLATE_R13].nr = 4;
           dwg->header.section[SECTION_TEMPLATE_R13].address =
@@ -3134,12 +3136,6 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->sections[i].nr = dwg->header.section[i].number;
           _obj->sections[i].address = dwg->header.section[i].address;
           _obj->sections[i].size = dwg->header.section[i].size;
-        }
-      if (dwg->header.num_sections > SECTION_TEMPLATE_R13
-          && !dwg->header.section[SECTION_TEMPLATE_R13].address)
-        {
-          // most dwg"s leave the 3 and 4 section addresses and sizes empty
-          _obj->sections[4].nr = 4;
         }
       // always set handles from the header vars
       if (!_obj->num_handles)
@@ -3186,24 +3182,6 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         FIELD_RLL (junk_r14, 0);
       }
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_END);
-
-      // when the initial size calc was wrong and we haven't written the Template yet
-      UNTIL (R_2000)
-      {
-        int pos_t = section_find (section_order, dwg->header.num_sections,
-                                  SECTION_TEMPLATE_R13);
-        int pos_s = section_find (section_order, dwg->header.num_sections,
-                                  SECTION_OBJFREESPACE_R13);
-        if (pos_t != SECTION_R13_SIZE
-            && pos_t > pos_s
-            && dat->byte != _obj->sections[SECTION_TEMPLATE_R13].address)
-          {
-            dwg->header.section[SECTION_TEMPLATE_R13].address
-                = _obj->sections[SECTION_TEMPLATE_R13].address
-                = dat->byte;
-            error |= 1;
-          }
-      }
     }
   return error;
 }
@@ -3925,12 +3903,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   int err1;
                   pvzadr = dat->byte;
                   err1 = encode_objfreespace_2ndheader (dwg, dat);
+                  /*
                   if (err1 & 1)
                     {
                       LOG_TRACE ("2ndheader size changed, rewrite it\n")
                       dat->byte = pvzadr;
                       err1 = encode_objfreespace_2ndheader (dwg, dat);
                     }
+                  */
                   error |= err1;
                 }
                 break;
