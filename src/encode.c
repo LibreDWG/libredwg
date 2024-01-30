@@ -2003,12 +2003,12 @@ section_order_trace (const Dwg_Data *dwg,
                      Dwg_Section_Type_r13 *psection_order)
 {
   LOG_TRACE ("section_order:");
-  for (BITCODE_BL i = 0; i < numsections; i++)
+  for (BITCODE_BL i = 0; i < MAX(numsections, SECTION_R13_SIZE); i++)
     {
       LOG_TRACE (" %u", psection_order[i]);
     }
   LOG_TRACE ("\n[");
-  for (BITCODE_BL i = 0; i < numsections; i++)
+  for (BITCODE_BL i = 0; i < MAX(numsections, SECTION_R13_SIZE); i++)
     {
       LOG_TRACE ("%s ", dwg_section_name (dwg, psection_order[i]));
     }
@@ -3779,12 +3779,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       else
         section_order[3] = SECTION_THUMBNAIL_R13;
+
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+        section_order_trace (dwg, dwg->header.num_sections,
+                             (Dwg_Section_Type_r13 *)&section_order);
     }
 
-    // compute the old section order
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
-      section_order_trace (dwg, dwg->header.num_sections,
-                           (Dwg_Section_Type_r13 *)&section_order);
     if (dwg->header.thumbnail_address)
       {
         if (dwg->header.section[SECTION_HEADER_R13].address
