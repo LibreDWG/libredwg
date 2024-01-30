@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# Copyright (C) 2019-2023 Free Software Foundation, Inc., GPL3
+# Copyright (C) 2019-2024 Free Software Foundation, Inc., GPL3
 #
 # Generate src/dynapi.c and test/unit-testing/dynapi_test.c
 # C structs/arrays for all dwg objects and its fields for a dynamic API.
@@ -1295,7 +1295,7 @@ print $inc <<"EOF";
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2019-2023 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2019-2024 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -2512,7 +2512,7 @@ __DATA__
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2024 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */

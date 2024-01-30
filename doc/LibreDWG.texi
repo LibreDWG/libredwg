@@ -14,7 +14,7 @@
 @copying
 This manual is for GNU LibreDWG (version @value{VERSION}, @value{UPDATED}).
 
-Copyright @copyright{} 2010-2023 Free Software Foundation, Inc.
+Copyright @copyright{} 2010-2024 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -999,8 +999,8 @@ Those entities do have a type > 127. You need to filter them out by yourself, wh
 @cindex functions, write path
 
 Encoding DWG files, i.e. DWG write support, can be disabled via
-@code{./configure --disable-write}. The default format and only useful
-one is currently r13-r2000. Experimentally work is ongoing for the r2004
+@code{./configure --disable-write}. The default formats and only useful
+ones are currently r1.1 - r2000. Experimentally work is ongoing for the r2004
 format, which is also used for r2010, r2013, and r2018.
 The r2007 format version is not covered yet.
 The pre-r13 formats are much simpler and can be written, but need some
