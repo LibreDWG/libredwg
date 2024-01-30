@@ -133,6 +133,7 @@ ACDBDETAILVIEWSTYLE,	"AcDbDetailViewStyle",	ODBX,	0
 POSITIONMARKER,		"AcDbGeoPositionMarker",ODBX,	0
 ACAD_EVALUATION_GRAPH,	"AcDbEvalGraph",	ODBX,	0
 #
+MESH,		        "AcDbSubDMesh",		ODBX,	1
 SURFACE,		"AcDbSurface",		ODBX,	1
 EXTRUDEDSURFACE,	"AcDbExtrudedSurface",	ODBX,	1
 LOFTEDSURFACE,		"AcDbLoftedSurface",	ODBX,	1
