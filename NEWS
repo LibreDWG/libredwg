@@ -1,8 +1,8 @@
 GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
-Copyright (C) 2023 Free Software Foundation, Inc.
+Copyright (C) 2024 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.13.0 - 2023/?? - beta:
+LibreDWG version 0.13.0 - 2023/02 - beta:
 
 Major features:
   * Added pre-R13 DWG decode support for all old DWG formats
@@ -18,6 +18,7 @@ Major features:
   * Identified the R13-2000 ODA Unknown section as ObjFreeSpace (#860).
   * Fix many minor ODA roundtrip errors, leading to less recovery mode
     dialogs.
+  * Encode now support various r13-r2000 section orderings, as in the original.
   * Fixed dwgadd (Dmitry Sinyavin #388, #415)
   * Add --with-dxf-precision=(rfc,max,16,6) and
     --with-geojson-precision=(rfc,max,16,6) build options. (#810)
@@ -47,21 +48,52 @@ Minor bugfixes:
   * Fixed many more minor fuzzer errors with illegal input, detected by the
     oss-fuzz service and others. More bounds and type checks, null-derefs,
     double-free, missing zero-termination in fuzzer inputs.
-    Fixed GH issues 616, 615, 594, 581, 578, 528, 527, 524, 518, 494, 493,
-    492, 491, 490, 489, 488, 487, 486, 485, 484, 425.
+    
+    Fixed GH fuzzing issues 911, 901, 899, 890, 880, 881, 859, 850,
+    848, 708, 707, 704, 697, 696, 695, 694, 692, 677, 616, 615, 594,
+    581, 578, 528, 527, 524, 518, 497, 494, 493, 492, 491, 490, 489,
+    488, 487, 486, 485, 484, 425, 361, 360, 356.
 
-    Fixed oss-fuzz issues 54871, 54869, 54839, 54448, 54766, 54760,
-    54625, 54536, 54507, 54457, 54450, 54228, 54237, 53484, 52719,
-    52075, 53483, 51956, 53617, 53750, 53672, 53492, 53492, 53468,
-    50259, 49681, 49589, 48793, 47729, 47632, 47570, 47526, 47497,
-    47487, 47304, 47303, 47166, 47151, 47144, 47002, 46769, 46751,
-    47020, 47015, 47014, 46998, 46994, 46985, 46881, 44533, 44481,
-    44981, 44460, 44439, 43178, 42212, 40721, 40434, 39241, 39510,
-    39885, 38263, 36544, 37227, 36979, 36698, 35897.
+    Fixed oss-fuzz issues 66111, 66046, 65937, 65481, 65366, 65359,
+    65357 65355, 65353, 65346, 65125, 64751, 64506, 64318, 64118,
+    64052, 63919, 63895 63824, 63814, 63803, 63799, 63798, 63791,
+    63776, 63761, 63760, 63690, 63629 63537, 63483, 63463, 63137,
+    63076, 63057, 62973, 62718, 62561, 62461, 62367 62363, 62132,
+    61964, 61901, 61818, 61795, 61741, 61735, 61593, 61497, 61494
+    60993, 60980, 60902, 60600, 60598, 60216, 60067, 60008, 59899,
+    59847, 59826 59763, 59732, 59633, 59589, 59571, 59561, 59544,
+    59528, 59523, 59515, 59428 59388, 59124, 59118, 59097, 59089,
+    58974, 58927, 58915, 58904, 58649, 58564 58498, 58473, 58443,
+    58334, 58306, 58143, 58135, 58082, 58019, 58008, 57981 57969,
+    57940, 57911, 57899, 57723, 57722, 57649, 57589, 57587, 57586,
+    57481 57432, 56972, 56953, 56473, 56255, 56238, 56129, 56112,
+    56034, 55917, 55875 55855, 55769, 55693, 55634, 55610, 55607,
+    55604, 55579, 55092, 54944, 54871 54869, 54839, 54808, 54766,
+    54760, 54625, 54536, 54507, 54492, 54457, 54450 54448, 54422,
+    54393, 54380, 54237, 54228, 54163, 54162, 53750, 53672, 53617
+    53492, 53484, 53483, 53468, 52719, 52075, 51956, 50760, 50194,
+    50191, 49928 49883, 49789, 49772, 49721, 49693, 49681, 49678,
+    49675, 49630, 49618, 49613 49612, 49602, 49589, 48793, 48236,
+    47729, 47632, 47570, 47526, 47497, 47487 47352, 47341, 47333,
+    47330, 47319, 47304, 47303, 47300, 47259, 47189, 47185 47166,
+    47151, 47144, 47127, 47126, 47121, 47002, 46769, 46751, 47020,
+    47015, 47014, 46998, 46994, 46985, 46881, 44533, 44481, 44981,
+    44460, 44439, 43178, 42212, 40721, 40434, 39241, 39510, 39885,
+    38263, 36544, 37227, 36979, 36698, 35897.
 
   * Fixed make install via cmake.
   * Fixed cmake compilation with missing memmem on mingw. (#422)
   * Fixed cmake compilation with -DBUILD_SHARED_LIBS=Off. (#421)
+
+Outlook:
+  * Several open pull requests by fr-a-nk could not be merged,
+    because the copyright assignment was not cleared in time.
+    Next release.
+  * 2004-2018 encoding support makes good progress. I'm confident to be ready
+    for the next major release. This would need much less downconverting
+    shenigans via custom EED's.
+  * There are still open problems with dxf roundtrips, exotic objects and
+    downconverting via EED's.
 
 LibreDWG version 0.12.5 - 2022/02/06 - beta:
 
