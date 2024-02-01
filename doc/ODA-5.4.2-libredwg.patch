@@ -1,5 +1,5 @@
 --- ODA-5.4.1.md	2023-11-23 21:17:02.825331305 +0100
-+++ ODA-5.4.2-libredwg.md	2024-01-29 14:40:52.198061034 +0100
++++ ODA-5.4.2-libredwg.md	2024-02-01 15:51:23.995449318 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -801,7 +801,7 @@
  IF (has column heights)
  END IF (has columns data)
  END IF (not annotative)
-@@ -5238,25 +5333,25 @@
+@@ -5238,26 +5333,26 @@
  ### 20.4.47 LEADER (45)
  
  ```
@@ -824,12 +824,14 @@
      offsettoblockinspt  3BD 212  Used when the BLOCK option is used. Seems to be an
                                   unused feature.
 -R14+:
-+R14-R2007:
-     Endptproj           3BD  --  A non-planar leader gives a point that projects the
+-    Endptproj           3BD  --  A non-planar leader gives a point that projects the
++R13c3-R2007:
++    Endptproj           3BD  212 A non-planar leader gives a point that projects the
                                   endpoint back to the annotation. It's the offset
                                   from the endpoint of the leader to the annotation,
                                   taking into account the extrusion direction.
  R13-R14 Only:
+     DIMGAP               BD  --  The value of DIMGAP in the associated DIMSTYLE at
 @@ -5269,27 +5364,28 @@
                                   taller, probably by some DIMvar amount.)
      Box width            BD  41  MTEXT extents width. (A text box is slightly wider,

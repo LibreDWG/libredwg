@@ -2272,16 +2272,16 @@ typedef struct _dwg_entity_LEADER
   BITCODE_BS path_type;     /*< DXF(72) 0: line, 1: spline (oda bug) */
   BITCODE_BS annot_type;    /*< DXF(73) 0: text, 1: tol, 2: insert, 3 (def): none */
   BITCODE_BL num_points;    /*< DXF(76) */
-  BITCODE_3DPOINT* points;
+  BITCODE_3DPOINT* points;  /*< DXF(10) */
   BITCODE_3DPOINT origin;
   BITCODE_BE extrusion;
-  BITCODE_3DPOINT x_direction;
-  BITCODE_3DPOINT inspt_offset;
-  BITCODE_3DPOINT endptproj; /* R_14-R_2007 ? */
+  BITCODE_3DPOINT x_direction;  /*< DXF(211) */
+  BITCODE_3DPOINT inspt_offset; /*< DXF(212) */
+  BITCODE_3DPOINT endptproj; /* DXF(213) R_13c3-R_2007 */
   BITCODE_BD dimgap;         /* R_13-R_14 only */
   BITCODE_BD box_height;     /*< DXF(40) */
   BITCODE_BD box_width;      /*< DXF(41) */
-  BITCODE_B hookline_dir;
+  BITCODE_B hookline_dir;    /* if hook line is on x direction */
   BITCODE_B hookline_on;     /*< DXF(75) computed from arrowhead_type & 8 */
   BITCODE_B arrowhead_on;
   BITCODE_BS arrowhead_type;
