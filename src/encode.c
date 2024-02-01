@@ -5844,7 +5844,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (dat->bit)
     LOG_TRACE ("padding: +%d [*B]\n", 8 - dat->bit)
   while (dat->bit)
-    bit_write_B (dat, 1);
+    bit_write_B (dat, 0);
   end_address = obj->address + obj->size;
   if (end_address != dat->byte)
     {
