@@ -1,5 +1,5 @@
 --- ODA-5.4.1.md	2023-11-23 21:17:02.825331305 +0100
-+++ ODA-5.4.2-libredwg.md	2024-02-01 15:51:23.995449318 +0100
++++ ODA-5.4.2-libredwg.md	2024-02-02 08:46:31.429684112 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -37,6 +37,19 @@
       SN : 16 byte sentinel
       BE : BitExtrusion
       DD : BitDouble With Default
+@@ -114,11 +114,11 @@
+     01 00001111                            (15)
+     10                                     (0)
+ 
+ ## 2.4 BITLONGLONG
+ 
+-The first 1-3 bits indicate the length l (see paragraph 2.1). Then l bytes follow, which represent the
++The first 1-3 bits indicate the length l (see paragraph [2.1](#21-3b)). Then l bytes follow, which represent the
+ number (the least significant byte is first).
+ 
+ ## 2.5 BITDOUBLE:
+ 
+ | 1^st 2 bits | what it is       |
 @@ -303,11 +303,11 @@
  
  For R13-R14, this is a BD. For R2000+, this is a single bit followed optionally by a BD. If the bit is one, the thickness value is assumed to be 0.0. If the bit is 0, then a BD that represents the thickness follows.
@@ -135,11 +148,12 @@
  ### 3.2.3 OBJECT FREE SPACE
  
 -**TODO.**
-+See chapter 21.
++See [chapter 21](#21-data-section-acdbobjfreespace).
  
  ### 3.2.4 TEMPLATE
  
- This section is optional, see chapter 22.
+-This section is optional, see chapter 22.
++This section is optional, see [chapter 22](#22-data-section-acdbtemplate).
  
  ### 3.2.5 DWGCODEPAGE:
  
@@ -232,6 +246,19 @@
  
  The following 16 byte sentinel appears after the CRC:
  
+@@ -690,11 +748,11 @@
+ | 0x50 | 4  | Section Page Map Id |
+ | 0x54 | 8  | Section Page Map address (add 0x100 to this value) |
+ | 0x5C | 4  | Section Map Id |
+ | 0x60 | 4  | Section page array size |
+ | 0x64 | 4  | Gap array size |
+-| 0x68 | 4  | CRC 32 (long). See paragraph 2.14.2 for the 32-bit |
++| 0x68 | 4  | CRC 32 (long). See paragraph [2.14.2](#2142-32-bit-crc) for the 32-bit |
+ |      |    | CRC calculation, the seed is zero. Note that the |
+ |      |    | CRC calculation is done including the 4 CRC bytes |
+ |      |    | that are initially zero! So the CRC calculation takes |
+ |      |    | into account all of the 0x6c bytes of the data in this |
+ |      |    | table. |
 @@ -966,11 +1024,11 @@
  
  # 5 R2007 DWG FILE FORMAT ORGANIZATION
@@ -245,7 +272,33 @@
  
  A system section only has a single page, while a data section can have multiple pages. The page map contains information about where each data page is in the file stream. The section map has information about which pages belong to which section. The file header, which is at the beginning of the file, just after the meta data, contains the stream locations of the page map and section map.
  
-@@ -1192,11 +1250,11 @@
+@@ -1010,11 +1068,11 @@
+ | 0x0D| 4| Preview address (long)             |
+ | 0x11| 1| Dwg version (Acad version that writes the file)|
+ | 0x12| 1| Maintenance release version (Acad maintenance version that writes the file)|
+ | 0x13| 2| Codepage                           |
+ | 0x15| 3| Unknown (ODA writes zeroes)        |
+-| 0x18| 4| SecurityType (long), see R2004 meta data, the definition is the same, paragraph 4.1.|
++| 0x18| 4| SecurityType (long), see R2004 meta data, the definition is the same, paragraph [4.1](#41-r2004-file-header)|
+ | 0x1C| 4| Unknown long                       |
+ | 0x20| 4| Summary info Address in stream     |
+ | 0x24| 4| VBA Project Addr (0 if not present)|
+ | 0x28| 4| 0x00000080                         |
+ | 0x2C| 4| Application Info Addr              |
+@@ -1093,11 +1151,11 @@
+ }
+ ```
+ 
+ The **File Header** value PagesMaxId indicates the largest index that will be used for the m_pages array.
+ 
+-Next, the Section Map should be loaded. The offset of the section map data is the m_offset value of the page with index SectionsMapId in the Page Map of the file. The File Header values SectionsMapSizeCompressed, SectionsMapSizeUncompressed, SectionsMapCrcCompressed, SectionsMapCrcUncompressed, and SectionsMapCorrectionFactor make of the remainder of the arguments to pass to the OdDwgR21FileController::loadSysPage function (see paragraph 5.3) for decoding and decompression of the Section Map data. The decoded and decompressed Section Map data consists of the following attributes for each section in the file:
++Next, the Section Map should be loaded. The offset of the section map data is the m_offset value of the page with index SectionsMapId in the Page Map of the file. The File Header values SectionsMapSizeCompressed, SectionsMapSizeUncompressed, SectionsMapCrcCompressed, SectionsMapCrcUncompressed, and SectionsMapCorrectionFactor make of the remainder of the arguments to pass to the OdDwgR21FileController::loadSysPage function (see paragraph [5.3](#53-system-section-page)) for decoding and decompression of the Section Map data. The decoded and decompressed Section Map data consists of the following attributes for each section in the file:
+ 
+ | Address| Length| Description                |
+ |:-------|:------|:---------------------------|
+ | 0x00   | 8     | Data size                  |
+ | 0x08   | 8     | Max size                   |
+@@ -1192,21 +1250,21 @@
  
  By default data/properties are not encrypted. Encryption still needs to be described.
  
@@ -254,9 +307,176 @@
 -Creating the R21 file header is very complex:
 +Creating the R2007 file header is very complex:
  
- Compute and set all the file header fields. In this process also compute CRC’s and generate check data, derived from a CRC seed value (paragraph 5.2.1.1).
+-Compute and set all the file header fields. In this process also compute CRC’s and generate check data, derived from a CRC seed value (paragraph 5.2.1.1).
++Compute and set all the file header fields. In this process also compute CRC’s and generate check data, derived from a CRC seed value (paragraph [5.2.1.1](#5211-calculating-the-file-header-crcs-and-check-data)).
  
- Write the file header data to a buffer and calculate/write the 64-bit CRC (paragraph 5.2.1.2).
+-Write the file header data to a buffer and calculate/write the 64-bit CRC (paragraph 5.2.1.2).
++Write the file header data to a buffer and calculate/write the 64-bit CRC (paragraph [5.2.1.2](#5212-calculate-file-header-data-64-bit-crc-decompressed)).
+ 
+-Compress the file header data and calculate the 64-bit CRC (paragraph 5.2.1.3).
++Compress the file header data and calculate the 64-bit CRC (paragraph [5.2.1.3](#5213-compress-and-calculate-64-bit-crc-compressed)).
+ 
+-Create a checking sequence and calculate a CRC over this sequence data (paragraph 5.2.1.4).
++Create a checking sequence and calculate a CRC over this sequence data (paragraph [5.2.1.4](#5214-create-checking-sequence-and-64-bit-crc)).
+ 
+-Create a buffer in preparation of Reed-Solomon encoding (Pre-Reed-Solomon encoded data). This contains checking sequence, compressed CRC, compressed size, compressed data and random data (as padding) (paragraph 5.2.1.5).
++Create a buffer in preparation of Reed-Solomon encoding (Pre-Reed-Solomon encoded data). This contains checking sequence, compressed CRC, compressed size, compressed data and random data (as padding) (paragraph [5.2.1.5](#5215-create-a-buffer-in-preparation-of-reed-solomon-encoding)).
+ 
+ Encode the data using Reed-Solomon (for error correction).
+ 
+ Write the encoded data, followed by the check data from the first step.
+ 
+@@ -1214,23 +1272,23 @@
+ 
+ The file header data consists of regular data fields and CRC values and check data to verify the data’s correctness. All fields pertaining to the file header’s correctness are discussed in more detail in the following paragraphs. Note that the order of CRC calculation is important, so the order of the following paragraphs should be used.
+ 
+ ##### 5.2.1.1.1 RandomSeed
+ 
+-Is filled with the CRC random encoding’s seed (see paragraph 5.11).
++Is filled with the CRC random encoding’s seed (see paragraph [5.11](#511-crc-random-encoding)).
+ 
+ ##### 5.2.1.1.2 CrcSeed
+ 
+ The ODA always initializes this with value 0.
+ 
+ ##### 5.2.1.1.3 SectionsMapCrcSeed
+ 
+-Is filled with crcSeed initially. Then it’s encoded using the CRC random encoding as described in paragraph 5.11.
++Is filled with crcSeed initially. Then it’s encoded using the CRC random encoding as described in paragraph [5.11](#511-crc-random-encoding).
+ 
+ ##### 5.2.1.1.4 PagesMapCrcSeed
+ 
+-Is filled with crcSeed initially. Then it’s encoded using the CRC random encoding as described in paragraph 5.11.
++Is filled with crcSeed initially. Then it’s encoded using the CRC random encoding as described in paragraph [5.11](#511-crc-random-encoding).
+ 
+ ##### 5.2.1.1.5 Check data
+ 
+ The check data for the file header page is present at the end of the header page at location 0x3d8. It contains data generated based on the CrcSeed and the current state of the CRC random encoder. The check data contains the following UInt64 fields (computed in this order):
+ 
+@@ -1302,44 +1360,44 @@
+ }
+ ```
+ 
+ ##### 5.2.1.1.6 CrcSeedEncoded
+ 
+-Encoded value of CrcSeed, using the CRC random encoding as described in paragraph 5.11.
++Encoded value of CrcSeed, using the CRC random encoding as described in paragraph [5.11](#511-crc-random-encoding).
+ 
+ #### 5.2.1.2 Calculate file header data 64-bit CRC (decompressed)
+ 
+-The last field in the file header is a normal 64-bit CRC (see paragraph 5.12) which is the CRC calculated from the file header data, including the 64-bit CRC with value zero. The CRC seed value is 0, and then updated with method UpdateSeed2 before calling UpdateCrc (see again paragraph 5.12). The initial CRC value of 0 is replaced with the calculated value.
++The last field in the file header is a normal 64-bit CRC (see paragraph [5.12](#512-64-bit-crc-calculation)) which is the CRC calculated from the file header data, including the 64-bit CRC with value zero. The CRC seed value is 0, and then updated with method UpdateSeed2 before calling UpdateCrc (see again paragraph [5.12](#512-64-bit-crc-calculation)). The initial CRC value of 0 is replaced with the calculated value.
+ 
+ #### 5.2.1.3 Compress and calculate 64-bit CRC (compressed)
+ 
+-The file header data is compressed. If the compressed data is not shorter than the uncompressed data, then the uncompressed data itself is used. Another normal 64-bit CRC value is calculated from the resulting data (see paragraph 5.12).
++The file header data is compressed. If the compressed data is not shorter than the uncompressed data, then the uncompressed data itself is used. Another normal 64-bit CRC value is calculated from the resulting data (see paragraph [5.12](#512-64-bit-crc-calculation)).
+ 
+ #### 5.2.1.4 Create checking sequence and 64-bit CRC
+ 
+-Another checking sequence of 2 UInt64 values is created, very similar to the check data in paragraph 5.2.1.1.5. The first value is filled with the next value from the random encoder (see paragraph 5.11). The second value is calculated using the check data’s Encode function, with the first sequence value passed as first (value) and second (control) parameter. The sequence bytes are then converted to little endian format. The last step is calculating a normal 64-bit CRC value (see paragraph 5.12). The CRC seed value is 0, updated by method UpdateSeed1.
++Another checking sequence of 2 UInt64 values is created, very similar to the check data in paragraph [5.2.1.1.5.](#5.2.1.1.5.) The first value is filled with the next value from the random encoder (see paragraph [5.11](#511-crc-random-encoding)). The second value is calculated using the check data’s Encode function, with the first sequence value passed as first (value) and second (control) parameter. The sequence bytes are then converted to little endian format. The last step is calculating a normal 64-bit CRC value (see paragraph [5.12](#512-64-bit-crc-calculation)). The CRC seed value is 0, updated by method UpdateSeed1.
+ 
+ #### 5.2.1.5 Create a buffer in preparation of Reed-Solomon encoding
+ 
+-In preparation of the next step, which is Reed-Solomon (RS) encoding, a buffer is created which is going to be encoded. The size of this buffer is 3 x 239 bytes (239 is the RS data size for a block (k) used for system pages, see paragraph 5.13). First a block is created, of which the size is a multiple of 8 bytes:
++In preparation of the next step, which is Reed-Solomon (RS) encoding, a buffer is created which is going to be encoded. The size of this buffer is 3 x 239 bytes (239 is the RS data size for a block (k) used for system pages, see paragraph [5.13](#513-reed-solomon-encoding)). First a block is created, of which the size is a multiple of 8 bytes:
+ 
+ | Position | Size | Description |
+ |----------|------|-------------|
+-| 0        | 8    | Checking sequence CRC (paragraph 5.2.1.4) |
+-| 8        | 8    | Checking sequence first UInt64 value (paragraph 5.2.1.4) |
+-| 16       | 8    | Compressed data CRC (paragraph 5.2.1.3) |
++| 0        | 8    | Checking sequence CRC (paragraph [5.2.1.4](#5214-create-checking-sequence-and-64-bit-crc)) |
++| 8        | 8    | Checking sequence first UInt64 value (paragraph [5.2.1.4](#5214-create-checking-sequence-and-64-bit-crc) |
++| 16       | 8    | Compressed data CRC (paragraph [5.2.1.3](#5213-compress-and-calculate-64-bit-crc-compressed)) |
+ | 24       | 8    | Compressed data size. In case the compressed data size is larger than the uncompressed data size, then the negated uncompressed data size is written. |
+ | 32       | n    | Compressed data in case the size is smaller than the uncompressed data size. Otherwise the uncompressed data. |
+-| 32 + n   | m    | Padding so the block size is a multiple of 8 bytes. The padding bytes are gotten from the CRC random encoding, see paragraph 5.11.  This block is repeated as many times as possible within the buffer. The remaining bytes are filled using random padding data from the CRC random encoding (see paragraph 5.11).|
++| 32 + n   | m    | Padding so the block size is a multiple of 8 bytes. The padding bytes are gotten from the CRC random encoding, see paragraph [5.11](#511-crc-random-encoding).  This block is repeated as many times as possible within the buffer. The remaining bytes are filled using random padding data from the CRC random encoding (see paragraph [5.11](#511-crc-random-encoding)).|
+ 
+ #### 5.2.1.6 Encode the data using Reed-Solomon
+ 
+-In this step the header data is encoded using the Reed-Solomon (RS) encoding for interleaved system pages (see paragraph 5.13). The encoded size is 3 x 255 bytes. The remaining bytes of the page (of total size 0x400) are filled using random padding data from the CRC random encoding (see paragraph 5.11).
++In this step the header data is encoded using the Reed-Solomon (RS) encoding for interleaved system pages (see paragraph [5.13](#513-reed-solomon-encoding)). The encoded size is 3 x 255 bytes. The remaining bytes of the page (of total size 0x400) are filled using random padding data from the CRC random encoding (see paragraph [5.11](#511-crc-random-encoding)).
+ 
+ #### 5.2.1.7 Add check data at the end of the page
+ 
+-The last 0x20 bytes of the page should be overwritten using the check data, calculated in paragraph 5.2.1.1.5. The page size remains 0x400 bytes.
++The last 0x20 bytes of the page should be overwritten using the check data, calculated in paragraph [5.2.1.1.5.](#5.2.1.1.5.) The page size remains 0x400 bytes.
+ 
+ #### 5.2.1.8 Write the file header to the file stream
+ 
+ The file header is written to position 0x80 and to the end of the file stream.
+ 
+@@ -1349,26 +1407,26 @@
+ 
+ Inputs for writing a system section page are:
+ 
+ * The data.
+ * The 64-bit CRC seed.
+-* The page size (minimum 0x400). The page size is determined from the decompressed data size as described in paragraph 5.3.1.
++* The page size (minimum 0x400). The page size is determined from the decompressed data size as described in paragraph [5.3.1.](#5.3.1.)
+ 
+ Outputs are:
+ 
+ * Compressed and Reed-Solomon (RS) encoded data.
+-* Derived properties of the (compressed/encoded) data: compressed 64-bit CRC, decompressed 64 bit CRC, data repeat count (or data factor). These derived properties are written in the file header (see paragraph 5.2).
++* Derived properties of the (compressed/encoded) data: compressed 64-bit CRC, decompressed 64 bit CRC, data repeat count (or data factor). These derived properties are written in the file header (see paragraph [5.2](#5.2)).
+ 
+-First the 64-bit CRC of the decompressed data is calculated, using the mirrored 64-bit CRC calculation (see paragraph 5.12). This uses theUpdateSeed1 method to update the CRC seed before entering the CRC computation.
++First the 64-bit CRC of the decompressed data is calculated, using the mirrored 64-bit CRC calculation (see paragraph [5.12](#512-64-bit-crc-calculation)). This uses theUpdateSeed1 method to update the CRC seed before entering the CRC computation.
+ 
+ Next step is compression. If the compressed data isn’t shorter than the original data, then the original data is used instead of the compressed data.
+ 
+ Of the resulting data (either compressed or not), another 64-bit CRC is computed (similarly to described above).
+ 
+ The resulting data is padded with zeroes so the length is a multiple of the CRC block size (8).
+ 
+-Now the resulting data is repeated as many times as possible within the page, RS encoded (see paragraph 5.13) and padded. The maximum RS block count (integer) is the page size divided by the RS codeword size (255). The maximum RS pre-encoded size is the maximum RS block count times the k value of the RS system page encoding (239). So the data repeat count is the maximum RS pre-encoded size divided by the resulting (padded) data length. Next a buffer is created, with the resulting (padded) data repeated (data repeat count times). This buffer is encoded using RS encoding for system pages, interleaved. Note that the actual RS block count is less than or equal to the maximum RS block count calculated above. The encoded size is the RS block count times 255. The final step is to add padding using random data from the random encoding to fill the remainder of the page, see paragraph 5.11.
++Now the resulting data is repeated as many times as possible within the page, RS encoded (see paragraph [5.13](#513-reed-solomon-encoding)) and padded. The maximum RS block count (integer) is the page size divided by the RS codeword size (255). The maximum RS pre-encoded size is the maximum RS block count times the k value of the RS system page encoding (239). So the data repeat count is the maximum RS pre-encoded size divided by the resulting (padded) data length. Next a buffer is created, with the resulting (padded) data repeated (data repeat count times). This buffer is encoded using RS encoding for system pages, interleaved. Note that the actual RS block count is less than or equal to the maximum RS block count calculated above. The encoded size is the RS block count times 255. The final step is to add padding using random data from the random encoding to fill the remainder of the page, see paragraph [5.11](#511-crc-random-encoding).
+ 
+ ### 5.3.1 System section page size calculation
+ 
+ The data stored in a system section is first padded until its size is a multiple of the CRC block size (8). This is called the aligned size. The Reed-Solomon encoded aligned data should fit the system section at least two times. The minimimum page size is 0x400 bytes.
+ 
+@@ -1403,21 +1461,21 @@
+ 
+ ## 5.4 Data section page
+ 
+ Data sections are used for all sections except the data section map and the section page map. The section’s data is partitioned into pages, each of Max size length, except for the last page which may be of size less than Max size. The following steps are taken when writing data page.
+ 
+-First a 32-bit data checksum of the page’s data is calculated. The pseudo code for this calculation is presented in paragraph 5.4.1.
++First a 32-bit data checksum of the page’s data is calculated. The pseudo code for this calculation is presented in paragraph [5.4.1.](#5.4.1.)
+ 
+ Next the page data is optionally compressed (depending on the section). If the compressed data isn’t shorter than the original data, then this page’s data is not compressed.
+ 
+ If the file is encrypted, the page is encrypted (to be described).
+ 
+-The page’s 64-bit CRC is calculated (mirrored CRC, see paragraph 5.12). The page CRC seed is the file’s CRC seed updated using UpdateSeed1 (see again paragraph 5.12).
++The page’s 64-bit CRC is calculated (mirrored CRC, see paragraph [5.12](#512-64-bit-crc-calculation)). The page CRC seed is the file’s CRC seed updated using UpdateSeed1 (see again paragraph [5.12](#512-64-bit-crc-calculation)).
+ 
+ Pad the data with zero bytes so the size becomes a multiple of the CRC block size (0x8).
+ 
+-The data is Reed-Solomon encoded (see paragraph 5.13). Depending on the section encoding, the data is either interleaved (value 4) or not (value 1).
++The data is Reed-Solomon encoded (see paragraph [5.13](#513-reed-solomon-encoding)). Depending on the section encoding, the data is either interleaved (value 4) or not (value 1).
+ 
+ The page start position should be aligned on a 0x20 byte boundary (if all is well nothing has to be done at this point to achieve this). The data is written and padded with zero bytes so the stream position is again at a 0x20 byte boundary.
+ 
+ Finally the current page ID is incremented.
+ 
+@@ -1506,11 +1564,11 @@
+ 
+ The AcDb:Security section is optional in the file—it is present if the file was saved with a password. The data in this section is in the same format as in the R2004 format, 2 unknown 32-bit integers, a 32-bit integer with value 0xABCDABCD, etc.
+ 
+ ## 5.6 AcDb:AuxHeader Section
+ 
+-This section is in the same format as in R2004. See details in chapter 27.
++This section is in the same format as in R2004. See details in [chapter 27](#27-data-section-acdbauxheader-auxiliary-file-header).
+ 
+ ## 5.7 AcDb:Handles Section
+ 
+ This section is in the same format as in R2004.
  
 @@ -1557,15 +1615,15 @@
  
@@ -294,6 +514,86 @@
  
  * System pages: use a (n, k) of (255, 239), the primitive polynomial coefficients being (1, 0, 0, 1, 0, 1, 1, 0). This configuration can correct (255 – 239) / 2 = 8 error bytes per block of 255 bytes. For each 239 data bytes (k), 16 parity bytes are added to form a 255 byte (code word) block.
  
+@@ -2011,54 +2069,54 @@
+ 
+ ### 5.13.1 Non-interleaved
+ 
+ All original data blocks are followed by the parity byte blocks (i.e. the first parity block follows the last data block).
+ 
+-When the last block is not entirely filled, then random bytes are added from the random encoding (see paragraph 5.11) to fill the block to have size k.
++When the last block is not entirely filled, then random bytes are added from the random encoding (see paragraph [5.11](#511-crc-random-encoding)) to fill the block to have size k.
+ 
+ ### 5.13.2 Interleaved
+ 
+ When more than 1 block of data is encoded, the encoded block data is interleaved. E.g. when there are 3 blocks to be encoded, then the data bytes and parity bytes of the first block are written to positions 3 x i (where i is an integer >= 0). The encoded bytes of the second block are written to positions 3 x i + 1 and of the third block to positions 3 x i + 2.
+ 
+-When the last block is not entirely filled, then random bytes are added from the random encoding (see paragraph 5.11) to fill the block to have size k.
++When the last block is not entirely filled, then random bytes are added from the random encoding (see paragraph [5.11](#511-crc-random-encoding)) to fill the block to have size k.
+ 
+ # 6 R2010 DWG FILE FORMAT ORGANIZATION
+ 
+-The 2010 format is based mostly on the 2004 format and somewhat on the 2007 format. The file header, page map, section map, compression are the same as in R2004. The bit coding is the same as in R2007 (see chapter 2), with the exception of the Object Type being encoded differently (see paragraph 2.12).
++The 2010 format is based mostly on the 2004 format and somewhat on the 2007 format. The file header, page map, section map, compression are the same as in R2004. The bit coding is the same as in R2007 (see [chapter 2](#2-bit-codes-and-data-definitions)), with the exception of the Object Type being encoded differently (see paragraph [2.12](#212-object-type)).
+ 
+ Like the R2007 format, the data, strings and handles are separated in header and objects sections.
+ 
+ # 7 R2013 DWG FILE FORMAT ORGANIZATION
+ 
+ The 2013 format is based mostly on the 2010 format. The file header, summary info, page map, section map, compression are the same as in R2004. The bit coding is the same as in R2010. Like the R2007 format, the data, strings and handles are separated in header and objects sections. The changes in the Header section are minor (only 2 added fields).
+ 
+-A new data section was introduced, the data storage section (AcDb:AcDsPrototype_1b). At this moment (December 2012), this sections contains information about Acis data (regions, solids). See chapter 24 for more details about this section.
++A new data section was introduced, the data storage section (AcDb:AcDsPrototype_1b). At this moment (December 2012), this sections contains information about Acis data (regions, solids). See [chapter 24](#24-section-acdbacdsprototype_1b-datastorage) for more details about this section.
+ 
+ Note that at the point of writing (22 March 2013) known valid values for acad maintenance version are 6 and 8. The ODA currently writes value 8.
+ 
+ # 8 R2018 DWG FILE FORMAT ORGANIZATION
+ 
+ The AutoCAD 2018 format is almost identical to the 2013 format. Structurally they are identical.
+ 
+ Below is a summary of the changes:
+ 
+-* Three shorts (int16) with value zero have been added to end of the auxiliary file header (see chapter 27).
++* Three shorts (int16) with value zero have been added to end of the auxiliary file header (see [chapter 27](#27-data-section-acdbauxheader-auxiliary-file-header)).
+ 
+-* In the AcDb:Header nothing changed, but note that the unknown 32-bit int at the start, directly following the section size that was present for R2010/R2013 for acad maintenance version greater than 3, is also present for R2018 (see chapter 9).
++* In the AcDb:Header nothing changed, but note that the unknown 32-bit int at the start, directly following the section size that was present for R2010/R2013 for acad maintenance version greater than 3, is also present for R2018 (see [chapter 9](#9-data-section-acdbheader-header-variables)).
+ 
+ * Additions/changes in the following entities:
+ 
+-  * ACAD\_PROXY\_ENTITY (paragraph 20.4.90),
+-  * ATTRIB (paragraph 20.4.4),
+-  * ATTDEF (paragraph 20.4.5),
+-  * MTEXT (see paragraph 20.4.46).
++  * ACAD\_PROXY\_ENTITY (paragraph [20.4.90](#20490-proxy-varies)),
++  * ATTRIB (paragraph [20.4.4](#2044-attrib-2)),
++  * ATTDEF (paragraph [20.4.5](#2045-attdef-3)),
++  * MTEXT (see paragraph [20.4.46](#20446-mtext-44)).
+ 
+-* Object MLINESTYLE (paragraph 20.4.73) references line types in its element by their handle rather than by index.
++* Object MLINESTYLE (paragraph [20.4.73](#20473-mlinestyle-73)) references line types in its element by their handle rather than by index.
+ 
+ # 9 Data section AcDb:Header (HEADER VARIABLES)
+ 
+-The header contains all header (system) variables, except the MEASUREMENT variable, which is present in the AcDb:Template section, see chapter 22.
++The header contains all header (system) variables, except the MEASUREMENT variable, which is present in the AcDb:Template section, see [chapter 22](#22-data-section-acdbtemplate).
+ 
+ The header variables section indicated by section-locator 0 has the following form:
+ 
+     Beginning sentinel
+     Size of the section (a 4 byte long)
+@@ -2066,11 +2124,11 @@
+       Unknown (4 byte long), might be part of a 64-bit size.
+     Data (system variables and possibly other data at the beginning)
+     CRC (covers the stepper and the data)
+     Ending sentinel
+ 
+-This data section appear as one long stream, with no gaps. Most are bit coded. (See the BIT CODES section.) The header is padded with random bits to the next byte boundary.
++This data section appear as one long stream, with no gaps. Most are bit coded. (See the [BIT CODES section](#2-bit-codes-and-data-definitions).) The header is padded with random bits to the next byte boundary.
+ 
+ The following 16 byte sentinel introduces this section:
+ 
+     0xCF,0x7B,0x1F,0x23,0xFD,0xDE,0x38,0xA9,0x5F,0x7C,0x68,0xB8,0x4E,0x6D,0x33,0x5F
+     RL : Size of the section.
 @@ -2082,11 +2140,11 @@
      -----------------------
  
@@ -573,7 +873,7 @@
  
  | Type     | Length | Description
  |----------|--------|------------
-@@ -2964,21 +3021,21 @@
+@@ -2964,34 +3021,34 @@
  
  This region holds the actual objects in the drawing. These can be entities, table entries, dictionary entries, and objects. This second use of objects is somewhat confusing; all items stored in the file are “objects”, but only some of them are object objects. Others are entities, table entries, etc. The objects in this section can appear in any order.
  
@@ -597,6 +897,21 @@
  |         | RL     |      | Size of object data in bits (number of bits before the handles), or the “endbit” of the pre-handles section.
  | Common:
  |         | H     | 5    | Object’s handle
+-|         | BS    |      | Size of extended object data, if any X Extended object data, if any. See EED section, chapter 28.
++|         | BS    |      | Size of extended object data, if any X Extended object data, if any. See EED section, [chapter 28](#28-extended-entity-data-extended-object-data).
+ | R13-R14
+ |         | RL    |      | Size of object data in bits
+ |         | BL    |      | Number of persistent reactors attached to this object
+ | R2004+
+ |         | B     |      | If 1, no XDictionary handle is stored for this object, otherwise XDictionary handle is stored as in R2000 and earlier.
+ | R2013+
+-|         | B    |      | Indicates whether the object has associated binary data in the data store section (see chapter 24 for more details about this section).
++|         | B    |      | Indicates whether the object has associated binary data in the data store section (see [chapter 24](#24-section-acdbacdsprototype_1b-datastorage) for more details about this section).
+ | Common
+ |         | X    |      | Object data (varies by type of object)
+ | R2007+
+ |         | X    |      | String data (optional)
+ |         | B    |      | String stream present bit (last bit in pre-handles section). If 1, then the “endbit” location should be decremented by 16 bytes, and a short should be read at location endbit – 128 (bits), call this short strDataSize. If this short has the 0x8000 bit set, then decrement endbit by an additional 16 bytes, strip the 0x8000 bit off of strDataSize, and read the short at this new location, calling it hiSize. Then set strDataSize to (strDataSize | (hiSize << 15)). “endbit” should then be decremented by this final strDataSize value, and this bit location marks the start of the “string stream” within this object. All unicode strings in this object are located in the “string stream”, and should be read from this stream, even though the location of the TV type fields in the object descriptions list these fields in among the normal object data.
 @@ -3011,11 +3068,11 @@
  Drawing entities, which are of course objects, have the same format as objects, with some additional standard items:
  
@@ -624,7 +939,7 @@
  SPATIAL_INDEX
  TABLEGEOMETRY
  TABLESTYLES
-@@ -3194,15 +3252,46 @@
+@@ -3194,15 +3252,49 @@
  VISUALSTYLE
  WIPEOUTVARIABLE
  XRECORD
@@ -651,6 +966,9 @@
 +BLOCKVISIBILITYGRIP
 +DYNAMICBLOCKPURGEPREVENTER
 +MESH
++SECTIONOBJECT
++SECTION_MANAGER
++SCALE
 +RENDERENVIRONMENT
 +SECTION_MANAGER
 +DETAILVIEWSTYLE
@@ -672,7 +990,7 @@
  
      ITEM TYPE-CODE DXF-CODE DESCRIPTION
  
-@@ -3211,11 +3300,14 @@
+@@ -3211,11 +3303,14 @@
  ### 20.4.1 Common Entity Data
  
  The following data appears at the beginning of each entity in the file, and will be referred to as Common Entity Data in the subsequent entity descriptions.
@@ -688,7 +1006,7 @@
                                        end handles
      Common:
          Handle               H    5   code 0, length followed by the handle bytes.
-@@ -3841,11 +3933,11 @@
+@@ -3841,11 +3936,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -701,7 +1019,20 @@
  | C++ class name      | AcDbArcDimension |
  | DXF name            | ARC_DIMENSION |
  
-@@ -4235,11 +4327,11 @@
+@@ -4062,11 +4157,11 @@
+ 
+ ### 20.4.25 DIMENSION (ALIGNED) (22)
+ 
+ ```
+     Common Entity Data
+-    Common Dimension Data        See paragraph 20.4.22.
++    Common Dimension Data        See paragraph 20.4.22
+ Common:
+     13-pt               3BD  13  See DXF documentation.
+     14-pt               3BD  14  See DXF documentation.
+     10-pt               3BD  10  See DXF documentation.
+     Ext ln rot           BD  52  Extension line rotation; see DXF documentation.
+@@ -4235,11 +4330,11 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -714,7 +1045,7 @@
  | C++ class name      | AcDbRadialDimensionLarge |
  | DXF name            | LARGE\_RADIAL\_DIMENSION |
  
-@@ -5076,21 +5168,24 @@
+@@ -5076,21 +5171,24 @@
  ### 20.4.44 DICTIONARY (42)
  
  Basically a list of pairs of string/objhandle that constitute the dictionary entries.
@@ -742,7 +1073,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5170,46 +5265,46 @@
+@@ -5170,46 +5268,46 @@
  R2000+:
      Linespacing Style    BS  73
      Linespacing Factor   BD  44
@@ -801,7 +1132,7 @@
  IF (has column heights)
  END IF (has columns data)
  END IF (not annotative)
-@@ -5238,26 +5333,26 @@
+@@ -5238,26 +5336,26 @@
  ### 20.4.47 LEADER (45)
  
  ```
@@ -832,7 +1163,7 @@
                                   taking into account the extrusion direction.
  R13-R14 Only:
      DIMGAP               BD  --  The value of DIMGAP in the associated DIMSTYLE at
-@@ -5269,27 +5364,28 @@
+@@ -5269,27 +5367,28 @@
                                   taller, probably by some DIMvar amount.)
      Box width            BD  41  MTEXT extents width. (A text box is slightly wider,
                                   probably by some DIMvar amount.)
@@ -864,7 +1195,28 @@
  ```
  
  **_20.4.47.1 Example:_**
-@@ -5538,20 +5634,23 @@
+@@ -5316,18 +5415,18 @@
+ 02295 6E AB                   crc
+ ```
+ 
+ ### 20.4.48 MLEADER
+ 
+-This entity was introduced in version 21. A significant portion (content block/text and leaders) of the multileader entity is stored in the MLeaderAnnotContext object (see paragraph 20.4.86), which is embedded into this object (stream).
++This entity was introduced in version 21. A significant portion (content block/text and leaders) of the multileader entity is stored in the MLeaderAnnotContext object (see paragraph [20.4.86](#20486-mleaderannotcontext)), which is embedded into this object (stream).
+ 
+ | Version | Field type | DXF group | Description
+ |---------|-------|---:|------------------------|
+ |         | ...   |    | Common entity data.    |
+ | R2010+  | BS    | 270| Version (expected to be 2). |
+ | Common  |
+-|         | ...   |    | MLeaderAnnotContext fields (see paragraph 20.4.86). This contains the |
++|         | ...   |    | MLeaderAnnotContext fields (see paragraph [20.4.86](#20486-mleaderannotcontext)). This contains the |
+ |         |       |    | mleader content (block/text) and the leaders.|
+ |         | H     | 340| Leader style handle (hard pointer)|
+ |         | BL    |  90| Override flags:|
+ |         |       |    | 1 << 0 = Leader line type,|
+ |         |       |    | 1 << 1 = Leader line color,|
+@@ -5538,20 +5637,23 @@
  
  ### 20.4.51 BLOCK CONTROL (48)
  
@@ -890,7 +1242,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5578,20 +5677,23 @@
+@@ -5578,20 +5680,23 @@
  
  ### 20.4.52 BLOCK HEADER (49)
  
@@ -916,7 +1268,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5663,20 +5765,23 @@
+@@ -5663,20 +5768,23 @@
  
  ### 20.4.53 LAYER CONTROL (50) (UNDOCUMENTED)
  
@@ -942,7 +1294,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5699,11 +5804,14 @@
+@@ -5699,11 +5807,14 @@
  
  ### 20.4.54 LAYER (51)
  
@@ -958,7 +1310,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5766,20 +5874,23 @@
+@@ -5766,20 +5877,23 @@
  
  ### 20.4.55 SHAPEFILE CONTROL (52) (UNDOCUMENTED)
  
@@ -984,7 +1336,20 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5816,11 +5927,14 @@
+@@ -5800,11 +5914,11 @@
+ 024D5 33 8B                   crc
+ ```
+ 
+ ### 20.4.56 SHAPEFILE (53)
+ 
+-This contains a text style for the TEXT or MTEXT entity. Mostly the font information is stored in fields Font name and Big font name, but sometimes (for reasons unknown) some true type font information is contained in the table record’s extended data (see paragraph 28). The true type descriptor is stored as follows in the extended data:
++This contains a text style for the TEXT or MTEXT entity. Mostly the font information is stored in fields Font name and Big font name, but sometimes (for reasons unknown) some true type font information is contained in the table record’s extended data (see paragraph [28](#28-extended-entity-data-extended-object-data)). The true type descriptor is stored as follows in the extended data:
+ 
+ | Group code (Value type) | Value          |
+ |-------------------------|----------------|
+ | 1001 (String)           | Font file name |
+ | 1002 (Bracket)          | ‘{‘ (optional) |
+@@ -5816,11 +5930,14 @@
  |                         | Character set (bitmask) = 0x0000ff00
  | 1002 (Bracket)          | ‘}’ (optional) |
  
@@ -1000,7 +1365,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5871,20 +5985,23 @@
+@@ -5871,20 +5988,23 @@
  
  ### 20.4.57 LINETYPE CONTROL (56) (UNDOCUMENTED)
  
@@ -1026,7 +1391,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -5911,11 +6028,14 @@
+@@ -5911,11 +6031,14 @@
  
  ### 20.4.58 LTYPE (57)
  
@@ -1042,7 +1407,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -5982,20 +6102,23 @@
+@@ -5982,20 +6105,23 @@
  
  ### 20.4.59 VIEW CONTROL (60) (UNDOCUMENTED)
  
@@ -1068,7 +1433,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6018,11 +6141,14 @@
+@@ -6018,11 +6144,14 @@
  
  ### 20.4.60 VIEW (61)
  
@@ -1084,7 +1449,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6116,20 +6242,23 @@
+@@ -6116,20 +6245,23 @@
  
  ### 20.4.61 UCS CONTROL (62) (UNDOCUMENTED)
  
@@ -1110,7 +1475,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6152,11 +6281,14 @@
+@@ -6152,11 +6284,14 @@
  
  ### 20.4.62 UCS (63)
  
@@ -1126,7 +1491,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6214,11 +6346,14 @@
+@@ -6214,11 +6349,14 @@
  
  ### 20.4.63 TABLE (VPORT) (64) (UNDOCUMENTED)
  
@@ -1142,7 +1507,7 @@
  Common:
      Handle                H   5  code 0, length followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6252,11 +6387,14 @@
+@@ -6252,11 +6390,14 @@
  
  ### 20.4.64 VPORT (65)
  
@@ -1158,7 +1523,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6380,11 +6518,14 @@
+@@ -6380,11 +6521,14 @@
  
  ### 20.4.65 TABLE (APPID) (66) (UNDOCUMENTED)
  
@@ -1174,7 +1539,7 @@
  Common:
      Handle                H   5  Owner handle (soft pointer) of root object (0).
      EED                   X  -3  See EED section.
-@@ -6416,11 +6557,14 @@
+@@ -6416,11 +6560,14 @@
  
  ### 20.4.66 APPID (67)
  
@@ -1190,7 +1555,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6463,11 +6607,14 @@
+@@ -6463,11 +6610,14 @@
  
  ### 20.4.67 DIMSTYLE CONTROL (68) (UNDOCUMENTED)
  
@@ -1206,7 +1571,7 @@
  Common:
      Handle                H   5  Owner handle (soft pointer) of root object (0).
      EED                   X  -3  See EED section.
-@@ -6498,11 +6645,11 @@
+@@ -6498,11 +6648,11 @@
  ```
  
  ### 20.4.68 DIMSTYLE (69)
@@ -1219,7 +1584,7 @@
      Obj size             RL      size of object in bits, not including end handles
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
-@@ -6699,21 +6846,24 @@
+@@ -6699,21 +6849,24 @@
  ```
  
  ### 20.4.69 VIEWPORT ENTITY CONTROL (70) (UNDOCUMENTED)
@@ -1247,7 +1612,7 @@
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
  Common:
-@@ -6736,12 +6886,15 @@
+@@ -6736,12 +6889,15 @@
  ```
  
  ### 20.4.70 VIEWPORT ENTITY HEADER (71)
@@ -1265,8 +1630,21 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6796,12 +6949,15 @@
- |         |  H    |  340  | Handle to scale (AcDbScale) object (hard pointer). See paragraph 20.4.92. |
+@@ -6786,22 +6942,25 @@
+ 03587 2F 9E                   crc
+ ```
+ 
+ ### 20.4.71 AcDbAnnotScaleObjectContextData
+ 
+-This class inherits from class AcDbObjectContextData (see paragraph 20.4.89).
++This class inherits from class AcDbObjectContextData (see paragraph [20.4.89](#20489-acdbobjectcontextdata)).
+ 
+ | Version | Field type | DXF group | Description |
+ |---------|-------|------:|----------------------|
+-|         | ...   |       | Common AcDbObjectContextData data (see paragraph 20.4.89).
+-|         |  H    |  340  | Handle to scale (AcDbScale) object (hard pointer). See paragraph 20.4.92. |
++|         | ...   |       | Common AcDbObjectContextData data (see paragraph [20.4.89](#20489-acdbobjectcontextdata)).
++|         |  H    |  340  | Handle to scale (AcDbScale) object (hard pointer). See paragraph [20.4.92](#20492-scale-acdbscale). |
  
  ### 20.4.72 GROUP (72): Group of ACAD entities
  
@@ -1283,7 +1661,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6838,12 +6994,15 @@
+@@ -6838,12 +6997,15 @@
  ```
  
  ### 20.4.73 MLINESTYLE (73):
@@ -1301,7 +1679,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -6912,12 +7071,15 @@
+@@ -6912,12 +7074,15 @@
  NOTE: OBJECTS LISTED AFTER THIS POINT DO NOT HAVE FIXED TYPES. THEIR TYPES ARE DETERMINED BY FINDING THE CLASS ENTRY WHOSE POSITION IN THE CLASS LIST + 500 EQUALS THE TYPE OF THIS OBJECT
  
  ### 20.4.74 DICTIONARYVAR (varies)
@@ -1319,7 +1697,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7015,11 +7177,11 @@
+@@ -7015,11 +7180,11 @@
              pt0         2RD  10  control point
              if (isrational)
                weight     BD  40  weight
@@ -1332,7 +1710,7 @@
              Fitpoint    2RD  11
            End repeat
            Start tangent 2RD  12
-@@ -7125,11 +7287,11 @@
+@@ -7125,21 +7290,21 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1345,20 +1723,38 @@
  | C++ class name      | AcDbField         |
  | DXF name            | FIELD             |
  
-@@ -7178,11 +7340,11 @@
+-Fields are referenced from the field list of a drawing (paragraph 20.4.77).
++Fields are referenced from the field list of a drawing (paragraph [20.4.77](#20477-fieldlist)).
+ 
+ | Version|Field type |DXF group| Description                |
+ | ---    | --- | ---:| ---                                  |
+-|        | ... |     | Common object data (paragraph 20.1). |
++|        | ... |     | Common object data (paragraph [20.1](#201-common-non-entity-object-format)). |
+ |        | TV  |   1 | Evaluator ID TV 2,3 Field code (in DXF strings longer than 255 characters
+ |        |     |     | are written in chunks of 255 characters in one 2 group and one or
+ |        |     |     | more 3 groups).
+ |        | BL  |  90 | Number of child fields
+ |        |     |     | Begin repeat child fields
+@@ -7176,37 +7341,37 @@
+ |        |     |     | Invalid code = 16,
+ |        |     |     | Invalid context = 32,
  |        |     |     | Other error = 64
  |        | BL  |  96 | Evaluation error code
  |        | TV  | 300 | Evaluation error message
- |        | ... | ... | The field value, see paragraph 20.4.99.
+-|        | ... | ... | The field value, see paragraph 20.4.99.
++|        | ... | ... | The field value, see paragraph [20.4.99](#20499-value).
  |        | TV  |301,9| Value string (DXF: written in 255 character chunks)
 -|        | TV  |  98 | Value string length
 +|        | BL  |  98 | Value string length
  |        | BL  |  93 | Number of child fields
  |        |     |     | Begin repeat child fields
  |        | TV  |   6 | Child field key
- |        | ... | ... | The field value, see paragraph 20.4.99.
+-|        | ... | ... | The field value, see paragraph 20.4.99.
++|        | ... | ... | The field value, see paragraph [20.4.99](#20499-value).
  |        |     |     | End repeat child fields
-@@ -7192,11 +7354,11 @@
+ 
+ ### 20.4.77 FIELDLIST
+ 
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1371,7 +1767,19 @@
  | C++ class name      | AcDbFieldList, inherits AcDbIdSet |
  | DXF name            | FIELDLIST         |
  
-@@ -7216,11 +7378,11 @@
+-Fields (paragraph 20.4.76) are referenced from the field list of a drawing. The field list is stored in the root dictionary entry ACAD_FIELDLIST.
++Fields (paragraph [20.4.76](#20476-field)) are referenced from the field list of a drawing. The field list is stored in the root dictionary entry ACAD_FIELDLIST.
+ 
+ | Version|Field type |DXF group| Description                |
+ | ---    | --- | ---:| ---                                  |
+-|        | ... |     | Common object data (paragraph 20.1). |
++|        | ... |     | Common object data (paragraph [20.1](#201-common-non-entity-object-format)). |
+ |        | BL  |     | Number of fields
+ |        | B   |     | Unknown
+ |        |     |     | Begin repeat fields
+ |        | H   | 330 | Field handle (soft pointer)
+ |        |     |     | End repeat fields
+@@ -7216,21 +7381,21 @@
  Class properties:
  
  | App name            | ObjectDBX Classes |
@@ -1384,7 +1792,18 @@
  | C++ class name      | AcDbGeoData       |
  | DXF name            | GEODATA           |
  
-@@ -7246,11 +7408,11 @@
+ The geo data object was introduced in AutoCAD 2009. The format changed considerably in AutoCAD 2010. The objectVersion field discerns between the formats (1 = AutoCAD 2009, 2 = AutoCAD 2010, 3 = AutoCAD 2013, but the format is the same as 2010).
+ 
+ | Version|Field type |DXF group| Description                |
+ | ---    | --- | ---:| ---                                  |
+-|        | ... |     | Common object data (paragraph 20.1). |
++|        | ... |     | Common object data (paragraph [20.1](#201-common-non-entity-object-format)). |
+ |        | BL  |     | Object version formats (1 = AutoCAD 2009, 2 = AutoCAD 2010,
+ |        |     |     | 3 = AutoCAD 2013, but the format is the same as 2010) |
+ |        | H   |     | Soft pointer to host block (model space layout owner block) |
+ |        | BS  |     | Design coordinate type (0 = unknown, local grid = 1,
+ |        |     |     | projected grid = 2, geographic (defined by latitude/longitude) = 3) |
+@@ -7246,11 +7411,11 @@
  |        |     |     | Light years = 19, Parsecs = 20
  |        | BD  |     | Unit scale factor vertical
  |        | BL  |     | Units value vertical (same enumeration as for the units value
@@ -1397,7 +1816,7 @@
  |        | BD  |     | User specified scale factor
  |        | B   |     | Do sea level correction
  |        | BD  |     | Sea level elevation
-@@ -7284,11 +7446,11 @@
+@@ -7284,11 +7449,11 @@
  |        |     |     | Repeat for each geo mesh face
  |        | BL  |     | Face index 1
  |        | BL  |     | Face index 2
@@ -1410,7 +1829,7 @@
  |        | B   |     | False
  |        | RD  |     | Reference point Y
  |        | RD  |     | Reference point X
-@@ -7311,12 +7473,15 @@
+@@ -7311,12 +7476,15 @@
  ### 20.4.79 IDBUFFER (varies)
  
  (holds list of references to an xref)
@@ -1428,7 +1847,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7431,12 +7596,15 @@
+@@ -7431,12 +7599,15 @@
  
  ### 20.4.81 IMAGEDEF (varies)
  
@@ -1446,7 +1865,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7481,12 +7649,15 @@
+@@ -7481,12 +7652,15 @@
  
  ### 20.4.82 IMAGEDEFREACTOR (varies)
  
@@ -1464,7 +1883,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7517,12 +7688,15 @@
+@@ -7517,12 +7691,15 @@
  ```
  
  ### 20.4.83 LAYER_INDEX
@@ -1482,7 +1901,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7533,12 +7707,12 @@
+@@ -7533,12 +7710,12 @@
  R2004+:
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
@@ -1497,7 +1916,7 @@
      Indexlong            BL      a long
      Indexstr             TV   8  a layer name
  End repeat
-@@ -7572,11 +7746,14 @@
+@@ -7572,11 +7749,14 @@
  
  ### 20.4.84 LAYOUT (varies)
  
@@ -1513,7 +1932,56 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7955,12 +8132,15 @@
+@@ -7738,17 +7918,17 @@
+ 03F1C 85 93                   crc
+ ```
+ 
+ ### 20.4.86 MLeaderAnnotContext
+ 
+-This is a helper class for the multileader entity (see paragraph 20.4.48), that inherits from class AcDbAnnotScaleObjectContextData (see paragraph 20.4.71).
++This is a helper class for the multileader entity (see paragraph [20.4.48](#20448-mleader)), that inherits from class AcDbAnnotScaleObjectContextData (see paragraph [20.4.71](#20471-acdbannotscaleobjectcontextdata)).
+ 
+ This object mainly contains a content object, which is either a block or multiline text. To the content object one or two leader roots are attached. They are either attached to the left/right or top/bottom depending on the multileaders attachment direction (horizontal/vertical). Each leader root can contain one more leader lines.
+ 
+ |Version | Field type| DXF group | Description |
+ |--------|-------|----:|-----------------------|
+-|        | ...   |     | Common AcDbAnnotScaleObjectContextData data (see paragraph 20.4.71). |
++|        | ...   |     | Common AcDbAnnotScaleObjectContextData data (see paragraph [20.4.71](#20471-acdbannotscaleobjectcontextdata)). |
+ |        |       | 300 | DXF: “CONTEXT_DATA{“ |
+ |        | BL    |     | Number of leader roots |
+ |        |       |     | Begin repeat leader root |
+ |        |       | 302 | DXF: “LEADER{“ |
+ |        | B     | 290 | Is content valid (ODA writes true) |
+@@ -7860,17 +8040,17 @@
+ |        | BS    | 272 | Style bottom attachment. See also MLEADER style left text attachment type for values. Relevant if mleader attachment direction is vertical.
+ |        | -     | 301 | DXF: “}”
+ 
+ ### 20.4.87 MLEADERSTYLE (AcDbMLeaderStyle)
+ 
+-This class inherits from AcDbObject. The provides a style for the MLEADER entity (see paragraph 20.4.48).
++This class inherits from AcDbObject. The provides a style for the MLEADER entity (see paragraph [20.4.48](#20448-mleader)).
+ 
+ The value of IsNewFormat is true in case the version is R2010 or later, or if the object has extended data for APPID “ACAD_MLEADERVER”.
+ 
+ |Version|Field type| DXF group | Description
+ |-------|-------|----:|-----------------------|
+-|       | ...   |     | Common AcDbAnnotScaleObjectContextData data (see paragraph 20.1). |
++|       | ...   |     | Common AcDbAnnotScaleObjectContextData data (see paragraph [20.1](#201-common-non-entity-object-format)). |
+ |R2010  |
+ |       | BS    | 179 | Version (expected to have value 2) |
+ |Common |
+ |       | BS    | 170 | Content type (see paragraph on LEADER for more details). |
+ |       | BS    | 171 | Draw multi-leader order (0 = draw content first, 1 = draw leader first) |
+@@ -7947,20 +8127,23 @@
+ 
+ This class inherits from AcDbObject. The object provides contextual data for another object/entity.
+ 
+ |Version|Field type|DXF group| Description                   |
+ |-------|-------|----:|--------------------------------------|
+-|       | ...   |     | Common object data (paragraph 20.1). |
++|       | ...   |     | Common object data (paragraph [20.1](#201-common-non-entity-object-format)). |
+ |R2010  | BS    |  70 | Version (default value is 3).        |
+ |       | B     |   - | Has file to extension dictionary (default value is true). |
  |       | B     | 290 | Default flag (default value is false).
  
  ### 20.4.90 PROXY (varies):
@@ -1531,7 +1999,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -7995,12 +8175,15 @@
+@@ -7995,12 +8178,15 @@
  
  ### 20.4.91 RASTERVARIABLES (varies)
  
@@ -1549,7 +2017,18 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8047,12 +8230,15 @@
+@@ -8037,22 +8223,25 @@
+ 
+ This class inherits from AcDbObject. This represents a ratio of paper units to drawing units, where the drawing units are divided by 10 when using the same distance units (e.g. mm). E.g. a scale of 1 mm to 10 mm is stored as paper units = 1, drawing units = 1. A scale of 1 mm to 1000 mm (= 1 m) is stored as paper units = 1, drawing units = 100.
+ 
+ |Version|Field type|DXF group| Description                   |
+ |-------|-------|----:|--------------------------------------|
+-|       | ...   |     | Common object data (paragraph 20.1). |
++|       | ...   |     | Common object data (paragraph [20.1](#201-common-non-entity-object-format)). |
+ |       | BS    | 70  | Unknown (ODA writes 0). |
+ |       | TV    | 300 | Name                    |
+ |       | BD    | 140 | Paper units (numerator) |
+ |       | BD    | 141 | Drawing units (denominator, divided by 10). |
  |       | B     | 290 | Has unit scale          |
  
  ### 20.4.93 SORTENTSTABLE (varies)
@@ -1567,7 +2046,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8105,12 +8291,15 @@
+@@ -8105,12 +8294,15 @@
  
  ### 20.4.94 SPATIAL_FILTER (varies)
  
@@ -1585,7 +2064,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8169,12 +8358,15 @@
+@@ -8169,12 +8361,15 @@
  ```
  
  ### 20.4.95 SPATIAL_INDEX (varies):
@@ -1603,7 +2082,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -8186,12 +8378,12 @@
+@@ -8186,12 +8381,12 @@
      XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
                                   object, otherwise XDictionary handle is stored as in
                                   R2000 and earlier.
@@ -1618,15 +2097,16 @@
                                   [Reactors (soft pointer)]
                                   xdictionary (hard owner)
  ```
-@@ -8333,18 +8525,18 @@
+@@ -8333,18 +8528,18 @@
  0D688 54 B0                   crc
  ```
  
  ### 20.4.96 TABLE (varies)
  
 -The TABLE entity (entity type ACAD_TABLE) was introduced in AutoCAD 2005 (a sub release of R18), and a large number of changes were introduced in AutoCAD 2008 (a sub release of R21). The table entity inherits from the INSERT entity. The geometric results, consisting of table borders, texts and such are created in an anonymous block, similarly to the mechanism in the DIMENSION entity.
+-The anonymous block name prefix is “*T”. For the AutoCAD 2008 changes see paragraph 20.4.96.2.
 +The TABLE entity (entity type ACAD_TABLE) was introduced in AutoCAD 2005 (a sub release of R2004), and a large number of changes were introduced in AutoCAD 2008 (a sub release of R2007). The table entity inherits from the INSERT entity. The geometric results, consisting of table borders, texts and such are created in an anonymous block, similarly to the mechanism in the DIMENSION entity.
- The anonymous block name prefix is “*T”. For the AutoCAD 2008 changes see paragraph 20.4.96.2.
++The anonymous block name prefix is “*T”. For the AutoCAD 2008 changes see paragraph [20.4.96.2.](#20.4.96.2.)
  
  TODO: document roundtrip data with connections to AcDbTableContent and AcDbTableGeometry.
  
@@ -1640,7 +2120,20 @@
      Common Entity Data
      Ins pt              3BD  10
  R13-R14 Only:
-@@ -8618,13 +8810,13 @@
+@@ -8469,11 +8664,11 @@
+                                  override
+     Left visibility      BS 288  Present only if bit 0x20000 is set in cell flag
+                                  override (1 = visible).
+ R2007+:
+     Unknown              BL
+-    Value fields         ...     See paragraph 20.4.98.
++    Value fields         ...     See paragraph [20.4.98](#20498-cell-content-geometry).
+ Common:
+ End Cell Data (remaining data applies to entire table)
+     Has table overrides   B
+ If has table overrides == 1:
+     Table flag override  BL  93
+@@ -8618,13 +8813,13 @@
                                   0x80000 is set in table overrides flag
  
      CRC                   X ---
@@ -1656,7 +2149,20 @@
  |-------|-------|----:|--------------------------------------|
  |       | ...   |     | Common entity data  |
  | R2010+|  RC   |     | Unknown (default 0) |
-@@ -8667,11 +8859,11 @@
+@@ -8633,11 +8828,11 @@
+ | R2010 |
+ |       |  B    |     | Unknown (default true)      |
+ | R2013 |
+ |       |  BL   |     | Unknown (default 0)         |
+ | R2010+| ...   |     | Here the table content is present (see TABLECONTENT object), without the |
+-|       |       |     | common OBJECT data. See paragraph 20.4.97. |
++|       |       |     | common OBJECT data. See paragraph [20.4.97.](#20.4.97.) |
+ |       |  BS   |     | Unknown (default 38)        |
+ |       |  3BD  | 11  | Horizontal direction        |
+ |       |  BL   |     | Has break data flag (0 = no break data, 1 = has break data) |
+ |       |       |     | Begin break data (optional) |
+ |       |  BL   |     | Option flags:               |
+@@ -8667,11 +8862,11 @@
  |       |  BL   |     | End row index |
  |       |       |     | End repeat row ranges
  
@@ -1669,33 +2175,125 @@
  
  |Version|Field type|DXF group| Description                   |
  |-------|-------|----:|--------------------------------------|
-@@ -8763,11 +8955,11 @@
+@@ -8681,12 +8876,12 @@
+ |       | TV    | 300 | Description AcDbLinkedTableData fields |
+ |       | BL    |  90 | Number of columns |
+ |       |       |     | Begin repeat columns |
+ |       | TV    | 300 | Column name |
+ |       | BL    |  91 | 32 bit integer containing custom data |
+-|       | ...   |     | Custom data collection, see paragraph 20.4.100. |
+-|       | ...   |     | Cell style data, see paragraph 20.4.101.4, this contains cell style overrides for |
++|       | ...   |     | Custom data collection, see paragraph [20.4.100.](#20.4.100.) |
++|       | ...   |     | Cell style data, see paragraph [20.4.101.4](#20.4.101.4), this contains cell style overrides for |
+ |       |       |     | the column. |
+ |       | BL    | 90  | Cell style ID, points to the cell style in the table’s table style that is used as the |
+ |       |       |     | base cell style for the column. 0 if not present. |
+ |       | BD    | 40  | Column width. |
+ |       |       |     | End repeat columns |
+@@ -8702,11 +8897,11 @@
+ |       |       |     | Format locked = 0x10, |
+ |       |       |     | Format readonly = 0x20, |
+ |       |       |     | Format modified after update = 0x40
+ |       | TV    | 300 | Tooltip |
+ |       | BL    |  91 | 32 bit integer containing custom data |
+-|       | ...   |     | Custom data collection, see paragraph 20.4.100. |
++|       | ...   |     | Custom data collection, see paragraph [20.4.100.](#20.4.100.) |
+ |       | BL    |  92 | Has linked data flags, 0 = false, 1 = true If has linked data |
+ |       | H     | 340 | Handle to data link object (hard pointer). |
+ |       | BL    |  93 | Row count. |
+ |       | BL    |  94 | Column count. |
+ |       | BL    |  96 | Unknown. |
+@@ -8717,11 +8912,11 @@
+ |       |       |     | Unknown = 0, |
+ |       |       |     | Value = 0x1, |
+ |       |       |     | Field = 0x2, |
+ |       |       |     | Block = 0x4 |
+ |       |       |     | If cell content type is Value |
+-|       | ...   |     | Write value (see paragraph 20.4.98) |
++|       | ...   |     | Write value (see paragraph [20.4.98](#20498-cell-content-geometry)) |
+ |       |       |     | Else if cell content type is Field |
+ |       | H     | 340 | Handle to AcDbField object (hard pointer). |
+ |       |       |     | Else if cell content type is Block |
+ |       | H     | 340 | Handle to block record (hard pointer). |
+ |       |       |     | End if cell content type is Block BL 91 Number of attributes |
+@@ -8730,15 +8925,15 @@
+ |       | TV    | 301 | Attribute value. |
+ |       | BL    |  92 | Index (starts at 1). |
+ |       |       |     | End repeat attributes |
+ |       | BS    | 170 | Has content format overrides flag |
+ |       |       |     | If has content format overrides flag is non-zero |
+-|       | ...   |     | The content format overrides, see paragraph 20.4.101.3. By default the cell |
++|       | ...   |     | The content format overrides, see paragraph [20.4.101.3](#2041013-content-format). By default the cell |
+ |       |       |     | content uses the cell’s cell style, this allows to override properties per content. |
+ |       |       |     | End if has content format overrides flag is non-zero |
+ |       |       |     | End repeat cell contents |
+-|       | ...   |     | Cell style data, see paragraph 20.4.101.4, this contains cell style overrides for |
++|       | ...   |     | Cell style data, see paragraph [20.4.101.4](#2041014-cell-style), this contains cell style overrides for |
+ |       |       |     | the cell. |
+ |       | BL    |  90 | Cell style ID, points to the cell style in the table’s table style that is used as the|
+ |       |       |     |  base cell style for the cell. 0 if not present. |
+ |       | BL    |  91 | Unknown flag |
+ |       |       |     | If unknown flag is non-zero |
+@@ -8746,28 +8941,28 @@
+ |       | BD    | 40  | Unknown |
+ |       | BD    | 41  | Unknown |
+ |       | BL    |     | Geometry data flags |
+ |       | H     |     | Unknown () |
+ |       |       |     | If geometry data flags is non-zero |
+-|       | ...   |     | Cell content geometry, see paragraph 20.4.98. |
++|       | ...   |     | Cell content geometry, see paragraph [20.4.98](#20498-cell-content-geometry). |
+ |       |       |     | Enf if geometry data flags is non-zero |
+ |       |       |     | End If unknown flag is non-zero |
+ |       |       |     | End repeat cells |
+ |       | BL    | 91  | 32 bit integer containing custom data |
+-|       | ...   |     | Custom data collection, see paragraph 20.4.100. |
+-|       | ...   |     | Cell style data, see paragraph 20.4.101.4, this contains cell style overrides for the row. |
++|       | ...   |     | Custom data collection, see paragraph [20.4.100.](#20.4.100.) |
++|       | ...   |     | Cell style data, see paragraph [20.4.101.4](#20.4.101.4), this contains cell style overrides for the row. |
+ |       | BL    | 90  | Cell style ID, points to the cell style in the table’s table style that is used as the  |
+ |       |       |     | base cell style for the row. 0 if not present. |
+ |       | BD    | 40  | Row height. |
+ |       |       |     | End repeat rows. |
+ |       | BL    |     | Number of cell contents that contain a field reference. |
  |       |       |     | Begin repeat field references |
  |       | H     |     | Handle to field (AcDbField), hard owner. |
  |       |       |     | End repeat field references |
  |       |       |     | **AcDbFormattedTableData** fields |
- |       | ...   |     | The table’s cell style override fields (see paragraph 20.4.101.4). The table’s |
+-|       | ...   |     | The table’s cell style override fields (see paragraph 20.4.101.4). The table’s |
 -|       |       |     | base cell style is the table style’s overall cell style (present from R24 onwards). |
++|       | ...   |     | The table’s cell style override fields (see paragraph [20.4.101.4](#20.4.101.4)). The table’s |
 +|       |       |     | base cell style is the table style’s overall cell style (present from R2010 onwards). |
  |       | BL    | 90  | Number of merged cell ranges |
  |       |       |     | Begin repeat merged cell ranges |
  |       | BL    | 91  | Top row index |
  |       | BL    | 92  | Left column index |
  |       | BL    | 93  | Bottom row index |
-@@ -8832,11 +9024,11 @@
- |       | ...   |     | Item value (variant), see paragraph 20.4.98.|
+@@ -8827,21 +9022,21 @@
+ |Version|Field type|DXF group| Description             |
+ |-------|-------|----:|--------------------------------|
+ |       | BL    | 90  | Number of custom data items    |
+ |       |       |     | Begin repeat custom data items |
+ |       | TV    | 300 | Item name                      |
+-|       | ...   |     | Item value (variant), see paragraph 20.4.98.|
++|       | ...   |     | Item value (variant), see paragraph [20.4.98](#20498-cell-content-geometry).|
  |       |       |     | End repeat custom data items   |
  
  ### 20.4.101 TABLESTYLE
  
 -The table style object repesents the style for the table entity. Like the table entity, table style was introduced in AutoCAD 2005. In AutoCAD 2008 new cell style data was introduced, which was stored in a separate container object: CELLSTYLEMAP, see paragraph 20.4.102 for more details. The cellstyle map can contain custom cell styles, whereas the TABLESTYLE only contains the Table (R24), _Title , _Header and _Data cell style.
-+The table style object repesents the style for the table entity. Like the table entity, table style was introduced in AutoCAD 2005. In AutoCAD 2008 new cell style data was introduced, which was stored in a separate container object: CELLSTYLEMAP, see paragraph 20.4.102 for more details. The cellstyle map can contain custom cell styles, whereas the TABLESTYLE only contains the Table (R2010), _Title , _Header and _Data cell style.
++The table style object repesents the style for the table entity. Like the table entity, table style was introduced in AutoCAD 2005. In AutoCAD 2008 new cell style data was introduced, which was stored in a separate container object: CELLSTYLEMAP, see paragraph [20.4.102](#204102-cellstylemap) for more details. The cellstyle map can contain custom cell styles, whereas the TABLESTYLE only contains the Table (R2010), _Title , _Header and _Data cell style.
  
  ### 20.4.101.1 _TABLESTYLE format until R21_
  
  ```
-     Common OBJECT data, see paragraph 20.1.
-@@ -8869,30 +9061,30 @@
+-    Common OBJECT data, see paragraph 20.1.
++    Common OBJECT data, see paragraph [20.1](#201-common-non-entity-object-format).
+ Common:
+     Description          TV   3
+     Flow direction       BS  70  0 = down, 1 = up
+     Bit flags            BS  71  Meaning unknown.
+     Hori. cell margin    BD  40
+@@ -8869,30 +9064,30 @@
      Data unit type       BL  91  As defined in the ACAD\_TABLE entity.
      Format string        TV   1
  End repeat row styles
@@ -1711,8 +2309,9 @@
  |       | BL    |  -  | Unknown                        |
  |       | BL    |  -  | Unknown                        |
  |       | H     |  -  | Unknown (hard owner)           |
- |       | ...   |     | The cell style with name “Table”, see paragraph 20.4.101.4. |
+-|       | ...   |     | The cell style with name “Table”, see paragraph 20.4.101.4. |
 -|       | BL    |  90 | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R24). |
++|       | ...   |     | The cell style with name “Table”, see paragraph [20.4.101.4](#2041014-cell-style). |
 +|       | BL    |  90 | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R2010). |
  |       |       |     | The cell style ID is used by cells, columns, rows to reference a cell style in the |
  |       |       |     | table’s table style. Custom cell style ID’s are numbered starting at 101. |
@@ -1721,28 +2320,97 @@
  |       | BL    |     | The number of cell styles (should be 3), the non-custom cell styles are present |
  |       |       |     | only in the CELLSTYLEMAP.      |
  |       |       |     | Begin repeat cell styles (for data, title, header in this order) |
- |       | ...   |     | The cell style fields, see paragraph 20.4.101.4. |
+-|       | ...   |     | The cell style fields, see paragraph 20.4.101.4. |
 -|       | BL    |  -  | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R24). |
++|       | ...   |     | The cell style fields, see paragraph [20.4.101.4](#2041014-cell-style). |
 +|       | BL    |  -  | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R2010). |
  |       |       |     | The cell style ID is used by cells, columns, rows to reference a cell style in the |
  |       |       |     | table’s table style. Custom cell style ID’s are numbered starting at 101. |
  |       | BL    |  -  | Cell style class, 1= data, 2 = label. The default value is label. |
  |       | TV    |  -  | Cell style name                |
  |       |       |     | End repeat cell styles         |
-@@ -9016,11 +9208,11 @@
+@@ -8927,12 +9122,12 @@
+ |       |       |     | Merge all = 0x8000             |
+ |       |       |     | **Table properties:**          |
+ |       |       |     | Flow direction bottom to top = 0x10000 |
+ |       |  BL   | 91  | Property flags. Contains property bit values for property Auto Scale only |
+ |       |       |     | (0x100).                       |
+-|       |  BL   | 92  | Value data type, see also paragraph 20.4.98. |
+-|       |  BL   | 93  | Value unit type, see also paragraph 20.4.98. |
++|       |  BL   | 92  | Value data type, see also paragraph [20.4.98](#20498-cell-content-geometry). |
++|       |  BL   | 93  | Value unit type, see also paragraph [20.4.98](#20498-cell-content-geometry). |
+ |       |  TV   | 300 | Value format string           |
+ |       |  BD   | 40  | Rotation                      |
+ |       |  BD   | 140 | Block scale                   |
+ |       |  BL   | 94  | Cell alignment:               |
+ |       |       |     | Top left = 1,                 |
+@@ -8948,11 +9143,11 @@
+ |       |  H    | 340 | Text style handle (hard pointer)|
+ |       |  BD   | 144 | Text height                   |
+ 
+ #### 20.4.101.4 Cell style
+ 
+-Table cell style data is present in the cell style map object, in the table entity and also the table content object. A cell style inherits from content format. Cell style adds amongst others cell border style and margin properties to the content style properties of content format (see paragraph 20.4.101.3).
++Table cell style data is present in the cell style map object, in the table entity and also the table content object. A cell style inherits from content format. Cell style adds amongst others cell border style and margin properties to the content style properties of content format (see paragraph [20.4.101.3](#20.4.101.3)).
+ 
+ |Version|Field type|DXF group| Description             |
  |-------|-------|----:|--------------------------------|
- |       |  ...  |     | Common AcDbObject fields, see paragraph 20.1. |
+ |       |  BL   |  90 | Cell style type:               |
+ |       |       |     | Cell = 1,                      |
+@@ -8961,18 +9156,18 @@
+ |       |       |     | Formatted table data = 4,      |
+ |       |       |     | Table = 5                      |
+ |       |  BS   | 170 | Data flags, 0 = no data, 1 = data is present |
+ |       |       |     | If data is present             |
+ |       |  BL   |  91 | Property override flags. The definition is the same as the content format  |
+-|       |       |     | propery override flags, see paragraph 20.4.101.3. |
++|       |       |     | propery override flags, see paragraph [20.4.101.3](#2041013-content-format). |
+ |       |  BL   |  92 | Merge flags, but may only for bits 0x8000 and 0x10000. |
+ |       |  TC   |  62 | Background color               |
+ |       |  BL   |  93 | Content layout flags:          |
+ |       |       |     | Flow = 1,                      |
+ |       |       |     | Stacked horizontal = 2,        |
+ |       |       |     | Stacked vertical = 4           |
+-|       |  ...  |     | Content format fields (see paragraph 20.4.101.3). |
++|       |  ...  |     | Content format fields (see paragraph [20.4.101.3](#2041013-content-format)). |
+ |       |  BS   | 171 | Margin override flags, bit 1 is set if margin overrides are present |
+ |       |       |     | If margin overrides are present |
+ |       |  BD   |  40 | Vertical margin                |
+ |       |  BD   |  40 | Horizontal margin              |
+ |       |  BD   |  40 | Bottom margin                  |
+@@ -9012,15 +9207,15 @@
+ 
+ The cell style map is connected to the table style through an extension dictionary entry with name “ACAD_ROUNDTRIP_2008_TABLESTYLE_CELLSTYLEMAP” in the table style’s extension dictionary. The dictionary entry value points to the cell style map.
+ 
+ |Version|Field type|DXF group| Description             |
+ |-------|-------|----:|--------------------------------|
+-|       |  ...  |     | Common AcDbObject fields, see paragraph 20.1. |
++|       |  ...  |     | Common AcDbObject fields, see paragraph [20.1](#201-common-non-entity-object-format). |
  |       |  BL   |  90 | Number of cell styles          |
  |       |       |     | Begin repeat cell styles       |
- |       |  ...  |     | Cell style fields, see paragraph 20.4.101.4. |
+-|       |  ...  |     | Cell style fields, see paragraph 20.4.101.4. |
 -|       |  BL   |  90 | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R24). |
++|       |  ...  |     | Cell style fields, see paragraph [20.4.101.4](#2041014-cell-style). |
 +|       |  BL   |  90 | Cell style ID, 1 = title, 2 = header, 3 = data, 4 = table (new in R2010). |
  |       |       |     | The cell style ID is used by cells, columns, rows to reference a cell style in the |
  |       |       |     | table’s table style. Custom cell style ID’s are numbered starting at 101. |
  |       |  BL   |  91 | Cell style class, 1= data, 2 = label. The default value is label. |
  |       |  TV   | 300 | Cell style name                |
  |       |       |     | End repeat cell styles         |
-@@ -9052,15 +9244,18 @@
+@@ -9029,11 +9224,11 @@
+ 
+ This object represents a table’s geometry and was introduced in AutoCAD 2008. It does not need to be present in a DWG file.
+ 
+ |Version|Field type|DXF group| Description             |
+ |-------|-------|----:|--------------------------------|
+-|       |  ...  |     | Common AcDbObject fields, see paragraph 20.1. |
++|       |  ...  |     | Common AcDbObject fields, see paragraph [20.1](#201-common-non-entity-object-format). |
+ |       |  BL   |  90 | Row count                      |
+ |       |  BL   |  91 | Column count                   |
+ |       |  BL   |  92 | Row * column count             |
+ |       |       |     | Begin repeat rows              |
+ |       |       |     | Begin repeat columns           |
+@@ -9052,15 +9247,18 @@
  |       |  BD   |  95 | Unknown (0).                   |
  |       |       |     | End repeat contents            |
  |       |       |     | End repeat columns             |
@@ -1764,7 +2432,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -9118,36 +9313,669 @@
+@@ -9118,36 +9316,669 @@
  00B1B 40 3E 00 01 00 46 00 B4 @>...F.. 0100 0000 0011 1110 0000 0000 0000 0001 0000 0000 0100 0110 0000 0000 1011 0100
  00B23 00 40 41 0C 30          .@A.0    0000 0000 0100 0000 0100 0001 0000 1100 0011 0000
  00B28 45 76                   crc
@@ -2395,7 +3063,7 @@
  
 -The meaning of this section is not completely known. The ODA knows how to write a valid section, but
 -the meaning is not known of every field.
-+From R13 to R2000 this section is the third section, which is immediately followed by the SECOND FILE HEADER (R13-R2000). See chapter 26.
++From R13 to R2000 this section is the third section, which is immediately followed by the SECOND FILE HEADER (R13-R2000). See [chapter 26](#26-second-file-header-r13-r2000).
  
 -## 21.1 Until R18
 +## 21.1 Until R2007
@@ -2448,7 +3116,7 @@
  |--------|--------|------------------------------------------------------------------- |
  | Int16  | 2      | Template description string length in bytes (the ODA always writes |
  |        |        | 0 here).                                                           |
-@@ -9155,11 +9983,11 @@
+@@ -9155,11 +9986,11 @@
  |        |        | codepage to encode the bytes).                                     |
  | UInt16 | 2      | MEASUREMENT system variable (0 = English, 1 = Metric).             |
  
@@ -2461,7 +3129,7 @@
  
  ```
  Set the "last handle" to all 0 and the "last loc" to 0L;
-@@ -9177,13 +10005,13 @@
+@@ -9177,23 +10008,23 @@
  End top repeat
  ```
  
@@ -2477,7 +3145,232 @@
  
  At this moment (December 2012), this sections contains information about Acis data (regions, solids).
  
-@@ -9630,119 +10458,74 @@
+ The data is stored in a byte stream, not a bit stream like e.g. the objects section.
+ 
+ The data store contains several data segments, and index segments that contain lookup information for finding the data segments and objects within these data segments. The file header contains the stream position of the segment index file segment and the segment indexes for the schema index/data index/search file segments. The segment index file segment is a lookup table for finding the stream position of a file segment by its segment index.
+ 
+-In paragraph 24.3 the default contents of this section is shown when empty.
++In paragraph [24.3](#243-default-contents) the default contents of this section is shown when empty.
+ 
+ ## 24.1 File header
+ 
+ |Version|Field type|DXF group| Description             |
+ |-------|-------|----:|--------------------------------|
+@@ -9202,19 +10033,19 @@
+ |       | Int32 |     | Unknown 1 (always 2?)
+ |       | Int32 |     | Version (always 2?)
+ |       | Int32 |     | Unknown 2 (always 0?)
+ |       | Int32 |     | Data storage revision
+ |       | Int32 |     | Segment index offset (the stream off set from the data store’s stream start|
+-|       |       |     | position). See paragraph 24.2.2.1 for the segment index file segment.
++|       |       |     | position). See paragraph [24.2.2.1](#24221-segment-index-file-segment) for the segment index file segment.
+ |       | Int32 |     | Segment index unknown
+ |       | Int32 |     | Segment index entry count
+ |       | Int32 |     | Schema index segment index. This is the index into the segment index entry |
+-|       |       |     | array (see paragraph 24.2.2.1) for the schema index file segment (see |
+-|       |       |     | paragraph 24.2.2.4).
++|       |       |     | array (see paragraph [24.2.2.1](#24221-segment-index-file-segment)) for the schema index file segment (see |
++|       |       |     | paragraph [24.2.2.4](#24224-blob01-file-segment)).
+ |       | Int32 |     | Data index segment index. This is the index into the segment index entry |
+-|       |       |     | array (see paragraph 24.2.2.1) for the data index file segment (see paragraph |
+-|       |       |     | 24.2.2.2).
++|       |       |     | array (see paragraph [24.2.2.1](#24221-segment-index-file-segment)) for the data index file segment (see paragraph |
++|       |       |     | [24.2.2.2](#24222-data-index-file-segment)).
+ |       | Int32 |     | Search segment index
+ |       | Int32 |     | Previous save index
+ |       | Int32 |     | File size
+ 
+ ## 24.2 File segment
+@@ -9263,26 +10094,26 @@
+ The segment is looked up by the index in the array.
+ 
+ |Version|Field type|DXF group| Description              |
+ |-------|------- |----:|--------------------------------|
+ |       |        |     | Begin repeat segment index entry count (as present in the file header, see |
+-|       |        |     | paragraph 24.1)                |
++|       |        |     | paragraph [24.1](#24.1))                |
+ |       | UInt64 |     | Offset. This is the offset from the data store’s stream start position. |
+ |       | UInt32 |     | Size                           |
+ |       |        |     | End repeat segment index entry count
+ 
+ #### 24.2.2.2 Data index file segment
+ 
+-This file segment contains index entries for objects within the data file segment (see paragraph 24.2.2.3).
++This file segment contains index entries for objects within the data file segment (see paragraph [24.2.2.3](#24223-data-file-segment)).
+ 
+ |Version|Field type|DXF group| Description                     |
+ |-------|------- |----:|---------------------------------------|
+ |       | Int32  |     | Entry count Int32 Unknown (always 0?) |
+ |       |        |     | Begin repeat of entries (entry count) |
+ |       | UInt32 |     | Segment index (0 means stub entry and can be ignored).                             |
+ |       | UInt32 |     | Local offset. This is a local offset in the stream, relative to the file segment’s |
+-|       |        |     | stream start position. This points to a data file segment, see paragraph 24.2.2.3. |
++|       |        |     | stream start position. This points to a data file segment, see paragraph [24.2.2.3](#24223-data-file-segment). |
+ |       | UInt32 |     | Schema index                          |
+ |       |        |     | End repeat of entries                 |
+ 
+ #### 24.2.2.3 Data file segment
+ 
+@@ -9290,33 +10121,33 @@
+ 
+ x data records, where each data record is a byte array. Relatively small amounts of data are stored directly in the data file segment (up to 0x40000 bytes).
+ 
+ x A data blob references, where each blob reference references one or more other blob file segments.
+ 
+-These other file segments represent the pages of the blob (paragraph 24.2.2.3.1). Large byte arrays are stored into multiple of these pages (more than 0x40000 bytes, max 0xfffb0 bytes per page).
++These other file segments represent the pages of the blob (paragraph [24.2.2.3.1](#242231-data-blob-reference-record)). Large byte arrays are stored into multiple of these pages (more than 0x40000 bytes, max 0xfffb0 bytes per page).
+ 
+-For each entity’s binary data stored in the data file segment entries have to be created in the schema search data. See paragraph 24.2.2.7.1. When reading the schema search data can be ignored.
++For each entity’s binary data stored in the data file segment entries have to be created in the schema search data. See paragraph [24.2.2.7.1](#242271-schema-search-data). When reading the schema search data can be ignored.
+ 
+ For each ACIS entity (REGION, 3DSOLID), a data record is created with the SAB stream of the object.
+ 
+ More detailed description of the ACIS/SAB data falls outside the scope of this document. The SAB stream bytes are prefixed with the ASCII encoded bytes of the string “ACIS BinaryFile”. When for an ACIS entity a SAB stream is created from SAT, then if the version >= 21800, the bytes are post fixed with the ASCII encoded bytes of the string “End-of-ASM-data”, otherwise “End-of-ACIS-data”.
+ 
+ |Version|Field type|DXF group| Description                     |
+ |-------|------- |----:|---------------------------------------|
+ 
+- Begin repeat (data record) headers. Repeats number of local offsets times (this is read earlier from the data index, see paragraph 24.2.2.2). For a particular data file segment, find all data index entries with the segment’s segment index and take the local offsets. Move the stream position according to the current header local offset, which is relative to this data file segments stream start position. UInt32 Entry size UInt32 Unknown (ODA writes 1) UInt64 Handle UInt32 Local offset, a stream offset relative to the data start marker (just after this list of data record headers). End repeat (data record) header offsets Data start marker, this is the beginning of all data records. Begin repeat header entries (that were read above) Each data record starts at the data start marker position + local offset. The maxRecordSize of the record is the difference between two consecutive stream offsets. For the last data record the size is the file segment header’s (object data alignment offset << 4) + segment size the record’s stream offset (i.e. the file segment end position – the record start position). UInt32 dataSize If ((dataSize + 4) <= maxRecordSize) Byte[] Data record’s bytes of length dataSize Else If (dataSize == 0xbb106bb1) Data blob reference record, see paragraph 24.2.2.3.1 End If End repeat header entries
++ Begin repeat (data record) headers. Repeats number of local offsets times (this is read earlier from the data index, see paragraph [24.2.2.2](#24.2.2.2)). For a particular data file segment, find all data index entries with the segment’s segment index and take the local offsets. Move the stream position according to the current header local offset, which is relative to this data file segments stream start position. UInt32 Entry size UInt32 Unknown (ODA writes 1) UInt64 Handle UInt32 Local offset, a stream offset relative to the data start marker (just after this list of data record headers). End repeat (data record) header offsets Data start marker, this is the beginning of all data records. Begin repeat header entries (that were read above) Each data record starts at the data start marker position + local offset. The maxRecordSize of the record is the difference between two consecutive stream offsets. For the last data record the size is the file segment header’s (object data alignment offset << 4) + segment size the record’s stream offset (i.e. the file segment end position – the record start position). UInt32 dataSize If ((dataSize + 4) <= maxRecordSize) Byte[] Data record’s bytes of length dataSize Else If (dataSize == 0xbb106bb1) Data blob reference record, see paragraph [24.2.2.3.1](#242231-data-blob-reference-record) End If End repeat header entries
+ 
+ ##### 24.2.2.3.1 Data blob reference record
+ 
+-A data blob reference references one or more other file segments. These other file segments represent the pages of the blob. Each page is stored in a Blob01 file segment, see paragraph 24.2.2.4.
++A data blob reference references one or more other file segments. These other file segments represent the pages of the blob. Each page is stored in a Blob01 file segment, see paragraph [24.2.2.4](#24224-blob01-file-segment).
+ 
+ |Version|Field type|DXF group| Description                     |
+ |-------|------- |----:|---------------------------------------|
+ 
+  UInt64 Total data size UInt32 Page count UInt32 Record size (the size of this data blob reference record UInt32 Page size UInt32 Last page size UInt32 Unknown 1 (ODA writes 0)
+ 
+- UInt32 Unknown 2 (ODA writes 0) Begin repeat page count UInt32 Segment index. The page’s blob01 file segment stream position can be found by a lookup in the segment index file segment using the segment index, see paragraph 24.2.2.1. UInt32 Size End repeat page count
++ UInt32 Unknown 2 (ODA writes 0) Begin repeat page count UInt32 Segment index. The page’s blob01 file segment stream position can be found by a lookup in the segment index file segment using the segment index, see paragraph [24.2.2.1.](#24.2.2.1.) UInt32 Size End repeat page count
+ 
+ #### 24.2.2.4 Blob01 file segment
+ 
+ |Version|Field type|DXF group| Description                     |
+ |-------|------- |----:|---------------------------------------|
+@@ -9327,58 +10158,58 @@
+ |       | UInt64 |     | Page data size
+ |       | byte[] |     | Binary data (byte array) of size Page data size
+ 
+ ##### 24.2.2.5 Schema index file segment
+ 
+-The schema index contains references to objects within the schema data file segment, see paragraph 24.2.2.6.
++The schema index contains references to objects within the schema data file segment, see paragraph [24.2.2.6](#24226-schema-data-file-segment).
+ 
+ |Version|Field type|DXF group| Description                     |
+ |-------|------- |----:|---------------------------------------|
+ |       | UInt32 |     | Unknown property count                |
+ |       | UInt32 |     | Unknown (0)                           |
+ |       |        |     | Begin repeat schema unknown property count |
+ |       | UInt32 |     | Index (starting at 0)                 |
+ |       | UInt32 |     | Segment index into the segment index file segment entry table (paragraph |
+-|       |        |     | 24.2.2.1) of the schema data file segment (paragraph 24.2.2.6) |
++|       |        |     | 24.2.2.1) of the schema data file segment (paragraph [24.2.2.6](#24226-schema-data-file-segment)) |
+ |       | UInt32 |     | Local offset of the unknown schema property. This is a local offset in the|
+ |       |        |     | stream, relative to the schema data file segment’s stream start position. |
+ |       |        |     | End repeat schema unknown property count |
+ |       | Int64  |     | Unknown (0x0af10c)                    |
+ |       | UInt32 |     | Property entry count                  |
+ |       | UInt32 |     | Unknown (0)                           |
+ |       |        |     | Begin repeat property entry count     |
+ |       | UInt32 |     | Segment index into the segment index file segment entry table (paragraph |
+-|       |        |     | 24.2.2.1) of the schema data file segment (paragraph 24.2.2.6). |
++|       |        |     | 24.2.2.1) of the schema data file segment (paragraph [24.2.2.6](#24226-schema-data-file-segment)). |
+ |       | UInt32 |     | Local offset of the schema property. This is a local offset in the stream, relative |
+ |       |        |     | to the schema data file segment’s stream start position. |
+ |       | UInt32 |     | Index                                 |
+ |       |        |     | End repeat property entry count       |
+ 
+ #### 24.2.2.6 Schema data file segment
+ 
+-The schema data file segment contains unknown properties and schemas. The stream offsets of these objects from the start of this file segment are found in the schema index, see paragraph 24.2.2.5.
++The schema data file segment contains unknown properties and schemas. The stream offsets of these objects from the start of this file segment are found in the schema index, see paragraph [24.2.2.5](#24225-schema-index-file-segment).
+ 
+ |Version|Field type|DXF group| Description                     |
+ |-------|------- |----:|---------------------------------------|
+ |       |        |     | Begin repeat schema unknown properties in the associated schema index file |
+-|       |        |     | segment (paragraph 24.2.2.4), where the property’s segment index is equal to |
++|       |        |     | segment (paragraph [24.2.2.4](#24224-blob01-file-segment)), where the property’s segment index is equal to |
+ |       |        |     | this file segment’s segment index (found in the header). |
+ |       | UInt32 |     | Data size                             |
+ |       | UInt32 |     | Unknown flags                         |
+ |       |        |     | End repeat schema unknown properties  |
+ |       |        |     | Begin repeat schema entries in the associated schema index file segment |
+-|       |        |     | (paragraph 24.2.2.4), where the property’s segment index is equal to this file |
++|       |        |     | (paragraph [24.2.2.4](#24224-blob01-file-segment)), where the property’s segment index is equal to this file |
+ |       |        |     | segment’s segment index (found in the header). |
+-|       |        |     | A schema, see paragraph 24.2.2.6.1. The stream position is the file segment’s|
++|       |        |     | A schema, see paragraph [24.2.2.6.1](#242261-schema) The stream position is the file segment’s|
+ |       |        |     |  start position + the schema entry’s local offset. |
+ |       |        |     | End repeat schema entries             |
+ |       | Uint32 |     | Property name count                   |
+ |       |        |     | Begin repeat property name count      |
+ |       | AnsiString|  | Property name (zero byte delimited). These names are referred to by the |
+-|       |        |     | schema’s schema property’s name index (paragraph 24.2.2.6.1. 1 ). Name |
++|       |        |     | schema’s schema property’s name index (paragraph [24.2.2.6.1](#242261-schema)). Name |
+ |       |        |     | strings can be shared between multiple schema properties this way. |
+-|       |        |     | See paragraph 24.2.2.6.1 for details about the schema. |
++|       |        |     | See paragraph [24.2.2.6.1](#242261-schema) for details about the schema. |
+ |       |        |     | End repeat property name count        |
+ 
+ ##### 24.2.2.6.1 Schema
+ 
+ A schema is a collection of name value pairs, where the value can have a number of types.
+@@ -9389,11 +10220,11 @@
+ |       |        |     | Begin repeat index count              |
+ |       | UInt64 |     | Index                                 |
+ |       |        |     | End repeat index count                |
+ |       | UInt16 |     | Property count                        |
+ |       |        |     | Begin repeat property count           |
+-|       |        |     | Schema property, see paragraph 24.2.2.6.1.1. |
++|       |        |     | Schema property, see paragraph [24.2.2.6.1.1.](#24226-schema-data-file-segment.1.1.) |
+ |       |        |     | End repeat property count             |
+ 
+ ##### 24.2.2.6.1.1 Schema property
+ 
+ This is a schema (see 24.2.2.6.1) property, having a name and a value of a certain type.
+@@ -9403,11 +10234,11 @@
+ |       | UInt32 |  91 | Property flags:                       |
+ |       |        |     | * 1 = Unknown 1 (if set then all other bits are cleared). |
+ |       |        |     | * 2 = Has no type.                    |
+ |       |        |     | * 8 = Unknown 2 (if set then all other bits are cleared). |
+ |       | UInt32 |   2 | Name index. Index into a property names array in the schema data file segment|
+-|       |        |     | (see paragraph 24.2.2.6). In a DXF file the name is directly written instead of |
++|       |        |     | (see paragraph [24.2.2.6](#24226-schema-data-file-segment)). In a DXF file the name is directly written instead of |
+ |       |        |     | indirectly through a table lookup.    |
+ |       |        |     | If property flags bit 2 is NOT set    |
+ |       | UInt32 | 280 | Type (0-15)                           |
+ |       |        |     | If type == 0xe                        |
+ |       | UInt32 |     | Custom type size                      |
+@@ -9430,11 +10261,11 @@
+ 
+ |Version|Field type|DXF group| Description                     |
+ |-------|------- |----:|---------------------------------------|
+ |       | UInt32 |     | Schema count                          |
+ |       |        |     | Begin repeat schema count             |
+-|       |        |     | Schema search data, see paragraph 24.2.2.7.1. |
++|       |        |     | Schema search data, see paragraph [24.2.2.7.1](#242271-schema-search-data) |
+ |       |        |     | End repeat schema count               |
+ 
+ ##### 24.2.2.7.1 Schema search data
+ 
+ The purpose of this segment is unknown. It seems to contain redundant data coupling a (sort) index to the objects in the data segment. When reading the schema search data can be ignored.
+@@ -9454,11 +10285,11 @@
+ |       |        |     | If ID indexes count > 0               |
+ |       | UInt32 |     | Unknown (0)                           |
+ |       |        |     | Begin repeat ID indexes count         |
+ |       | UInt32 |     | ID index count                        |
+ |       |        |     | Begin repeat ID index count (in this loop the ID entry object is serialized) |
+-|       | UInt64 |     | Handle of the object present in the data segment (see paragraph 24.2.2.3). |
++|       | UInt64 |     | Handle of the object present in the data segment (see paragraph [24.2.2.3](#24223-data-file-segment)). |
+ |       | UInt64 |     | Index count                           |
+ |       |        |     | Begin repeat index count              |
+ |       | UInt64 |     | Index (same as Sorted index value above). The ODA only writes one index per |
+ |       |        |     | handle.                               |
+ |       |        |     | End repeat index count                |
+@@ -9630,119 +10461,74 @@
  }
  handleToDataRecord {
  }
@@ -2487,7 +3380,7 @@
 +# 26 SECOND FILE HEADER (R13-R2000)
  
 -This section is largely unknown. The total size of this section is 53. We simply patch in "known to be valid" data. We first write a 0L, then the number of entries in the objmap +3, as a long. Then 45 bytes of "known to be valid data". Then we poke in the start address for objects at offset 16.
-+This is directly after the ObjFreeSpace section. See chapter 21.
++This is directly after the ObjFreeSpace section. See [chapter 21](#21-data-section-acdbobjfreespace).
  
 -The 45 bytes of known to be valid data are:
 -
@@ -2643,7 +3536,7 @@
      RS : DWG version:
           AC1010 = 17,
           AC1011 = 18,
-@@ -9796,11 +10579,11 @@
+@@ -9796,11 +10582,11 @@
       RL : 0
       RL : 0
       RL : 0
@@ -2655,4 +3548,17 @@
       RS : 0
       RS : 0
       RS : 0
+ 
+@@ -9855,11 +10641,11 @@
+ 
+ If that bit is 1, then following it, and preceding the RL which indicates the number of bits in the object, is an RL which indicates the number of bytes of proxy entity graphic data to follow.
+ 
+ Graphics data is padded to 4 byte boundaries! So, for instance, strings which are too short are padded out to the next 4 byte boundary. Similarly for lists of shorts.
+ 
+-In addition to the data definitions from chapter 2 there are a few additional data types:
++In addition to the data definitions from [chapter 2](#2-bit-codes-and-data-definitions) there are a few additional data types:
+ 
+ PS : Padded string. This is a string, terminated with a zero byte. The file’s text encoding (code page) is used to encode/decode the bytes into a string.
+ 
+ PUS : Padded Unicode string. The bytes are encoded using Unicode encoding. The bytes consist of byte pairs and the string is terminated by 2 zero bytes.
  
