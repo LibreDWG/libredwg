@@ -5139,6 +5139,8 @@ typedef struct _dwg_entity_MESH
   Dwg_MESH_edge* edges;   	/*!< DXF 90 */
   BITCODE_BL num_crease;  	/*!< DXF 95 (19) */
   BITCODE_BD* crease;   	/*!< DXF 140 */
+  BITCODE_B unknown_b1;
+  BITCODE_B unknown_b2;
 } Dwg_Entity_MESH;
 
 /**

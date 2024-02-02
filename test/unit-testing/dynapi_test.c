@@ -16125,6 +16125,36 @@ static int test_MESH (const Dwg_Object *obj)
       fail ("MESH.subdiv_vertex [3DPOINT*] * %u num_subdiv_vertex", count);
   }
   {
+    BITCODE_B unknown_b1;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "unknown_b1", &unknown_b1, NULL)
+        && unknown_b1 == mesh->unknown_b1)
+      pass ();
+    else
+      fail ("MESH.unknown_b1 [B] " FORMAT_B " != " FORMAT_B "", mesh->unknown_b1, unknown_b1);
+    unknown_b1++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "unknown_b1", &unknown_b1, 0)
+        && unknown_b1 == mesh->unknown_b1)
+      pass ();
+    else
+      fail ("MESH.unknown_b1 [B] set+1 " FORMAT_B " != " FORMAT_B "", mesh->unknown_b1, unknown_b1);
+    mesh->unknown_b1--;
+  }
+  {
+    BITCODE_B unknown_b2;
+    if (dwg_dynapi_entity_value (mesh, "MESH", "unknown_b2", &unknown_b2, NULL)
+        && unknown_b2 == mesh->unknown_b2)
+      pass ();
+    else
+      fail ("MESH.unknown_b2 [B] " FORMAT_B " != " FORMAT_B "", mesh->unknown_b2, unknown_b2);
+    unknown_b2++;
+    if (dwg_dynapi_entity_set_value (mesh, "MESH", "unknown_b2", &unknown_b2, 0)
+        && unknown_b2 == mesh->unknown_b2)
+      pass ();
+    else
+      fail ("MESH.unknown_b2 [B] set+1 " FORMAT_B " != " FORMAT_B "", mesh->unknown_b2, unknown_b2);
+    mesh->unknown_b2--;
+  }
+  {
     BITCODE_3DPOINT* vertex;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (mesh, "MESH", "num_owned", &count, NULL)

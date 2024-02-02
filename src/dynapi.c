@@ -2183,7 +2183,7 @@ static const Dwg_DYNAPI_field _dwg_LEADER_fields[] = {
   { "inspt_offset",	"3DPOINT", sizeof (BITCODE_3DPOINT),  OFF (struct _dwg_entity_LEADER, inspt_offset),
     1,0,0, 212 },
   { "endptproj",	"3DPOINT", sizeof (BITCODE_3DPOINT),  OFF (struct _dwg_entity_LEADER, endptproj),
-    1,0,0, 0 },
+    1,0,0, 213 },
   { "dimgap",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_LEADER, dimgap),
     0,0,0, 0 },
   { "box_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_LEADER, box_height),
@@ -2524,6 +2524,10 @@ static const Dwg_DYNAPI_field _dwg_MESH_fields[] = {
     0,0,0, 95 },
   { "crease",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_entity_MESH, crease),
     1,1,0, 140 },
+  { "unknown_b1",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_MESH, unknown_b1),
+    0,0,0, 0 },
+  { "unknown_b2",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_MESH, unknown_b2),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_MINSERT: (sorted by offset) */

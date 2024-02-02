@@ -8707,6 +8707,8 @@ DWG_ENTITY (MESH)
   //FIELD_VECTOR (edges, BL, num_edges * 2, 90);
   FIELD_BL (num_crease, 95); // edge creases 19
   FIELD_VECTOR (crease, BD, num_crease, 140);
+  FIELD_B (unknown_b1, 0);
+  FIELD_B (unknown_b2, 0);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 

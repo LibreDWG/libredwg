@@ -650,7 +650,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str26,		"AcDbNurbSurface",	ODBX,	1},
       {-1}, {-1},
 #line 136 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str29,		        "AcDbSubDMesh",		ODBX,	1},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str29,		        "AcDbSubDMesh",		SCENEOE,	1},
 #line 165 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str30,		"AcDbAssocAction",		ODBX,	0},
       {-1}, {-1}, {-1}, {-1},

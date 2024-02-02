@@ -2433,7 +2433,7 @@ BE,	DXF 210
 @item inspt_offset
 3DPOINT,	DXF 212
 @item endptproj
-3DPOINT
+3DPOINT,	DXF 213
 @item dimgap
 BD
 @item box_height
@@ -2830,6 +2830,10 @@ Dwg_MESH_edge*
 BL,	DXF 95
 @item crease
 BD*,	DXF 140
+@item unknown_b1
+B
+@item unknown_b2
+B
 
 @end vtable
 @end indentedblock

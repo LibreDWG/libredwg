@@ -37,6 +37,7 @@ Minor features:
   * json contains and can import now also SecondHeader and R2007_Header sections.
   * Better logging.
 Minor bugfixes:
+  * Fixed MESH roundtrips, added 2 unknown bits.
   * Fixed wrong r2007 thumbnail overflow errors (#824)
   * Fixed HEADER.PLINEGEN pre-r13 (Michal Spacek #408)
   * Fixed HEADER.OSMODE pre-r13 (Michal Spacek #409)
