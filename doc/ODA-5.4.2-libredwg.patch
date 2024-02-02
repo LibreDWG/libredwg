@@ -1,5 +1,5 @@
 --- ODA-5.4.1.md	2023-11-23 21:17:02.825331305 +0100
-+++ ODA-5.4.2-libredwg.md	2024-02-02 08:46:31.429684112 +0100
++++ ODA-5.4.2-libredwg.md	2024-02-02 08:52:50.623573831 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -3244,7 +3244,7 @@
   UInt64 Total data size UInt32 Page count UInt32 Record size (the size of this data blob reference record UInt32 Page size UInt32 Last page size UInt32 Unknown 1 (ODA writes 0)
  
 - UInt32 Unknown 2 (ODA writes 0) Begin repeat page count UInt32 Segment index. The page’s blob01 file segment stream position can be found by a lookup in the segment index file segment using the segment index, see paragraph 24.2.2.1. UInt32 Size End repeat page count
-+ UInt32 Unknown 2 (ODA writes 0) Begin repeat page count UInt32 Segment index. The page’s blob01 file segment stream position can be found by a lookup in the segment index file segment using the segment index, see paragraph [24.2.2.1.](#24.2.2.1.) UInt32 Size End repeat page count
++ UInt32 Unknown 2 (ODA writes 0) Begin repeat page count UInt32 Segment index. The page’s blob01 file segment stream position can be found by a lookup in the segment index file segment using the segment index, see paragraph [24.2.2.1](#24221-segment-index-file-segment). UInt32 Size End repeat page count
  
  #### 24.2.2.4 Blob01 file segment
  
@@ -3267,7 +3267,7 @@
  |       | UInt32 |     | Index (starting at 0)                 |
  |       | UInt32 |     | Segment index into the segment index file segment entry table (paragraph |
 -|       |        |     | 24.2.2.1) of the schema data file segment (paragraph 24.2.2.6) |
-+|       |        |     | 24.2.2.1) of the schema data file segment (paragraph [24.2.2.6](#24226-schema-data-file-segment)) |
++|       |        |     | [24.2.2.1](#24221-segment-index-file-segment)) of the schema data file segment (paragraph [24.2.2.6](#24226-schema-data-file-segment)) |
  |       | UInt32 |     | Local offset of the unknown schema property. This is a local offset in the|
  |       |        |     | stream, relative to the schema data file segment’s stream start position. |
  |       |        |     | End repeat schema unknown property count |
@@ -3277,7 +3277,7 @@
  |       |        |     | Begin repeat property entry count     |
  |       | UInt32 |     | Segment index into the segment index file segment entry table (paragraph |
 -|       |        |     | 24.2.2.1) of the schema data file segment (paragraph 24.2.2.6). |
-+|       |        |     | 24.2.2.1) of the schema data file segment (paragraph [24.2.2.6](#24226-schema-data-file-segment)). |
++|       |        |     | [24.2.2.1](#24221-segment-index-file-segment)) of the schema data file segment (paragraph [24.2.2.6](#24226-schema-data-file-segment)). |
  |       | UInt32 |     | Local offset of the schema property. This is a local offset in the stream, relative |
  |       |        |     | to the schema data file segment’s stream start position. |
  |       | UInt32 |     | Index                                 |
