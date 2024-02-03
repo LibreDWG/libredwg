@@ -1,6 +1,6114 @@
 Full history from the git log
 -----------------------------
 
+2024-02-04  Reini Urban  <reini.urban@gmail.com>
+
+	Release 0.13
+        See NEWS.
+	Read and write DWGs from r1.1 to r11 also
+
+2024-02-03  Reini Urban  <reini.urban@gmail.com>
+
+	encode: extra 2ndheader write
+	See GH #860
+
+2024-02-02  Reini Urban  <reini.urban@gmail.com>
+
+	doc: one more ODA spec update
+	more links
+
+	doc: update ODA spec patches
+	links
+
+	spec: fix MESH 2 missing bits
+	2018/Surface take these 2 bits from the handles.
+	Fixes the MESH ODA error
+
+2024-02-01  Reini Urban  <reini.urban@gmail.com>
+
+	spec: fix LEADER.endptproj for r13c3
+	fixes r13c3/from_autocad_r14/bflyhse.dwg ODA roundtrip errors
+
+2024-02-01  Reini Urban  <reini.urban@gmail.com>
+
+	encode: write 0 padding bits, not 1
+	eg. as seen in CARWHEEL_from_autocad_r13 with STYLE padding bits
+
+	in the original it was 0, in the new 0x77, leading to an oda error in this
+	style object, and different CRCs.
+	Might be related to GH #346
+
+2024-02-01  Reini Urban  <reini.urban@gmail.com>
+
+	NEWS for 0.13
+
+2024-01-31  Reini Urban  <reini.urban@gmail.com>
+
+	comment: add more AEC objects
+	found in some ACadSharp example
+
+	encode: r2004 classes
+	Forgot the 3 extra fields as in read_2004_section_classes().
+
+2024-01-30  Reini Urban  <reini.urban@gmail.com>
+
+	dxfclasses: add missing MESH/AcDbSubDMesh class
+
+	bump the copyrights to 2024
+
+2024-01-30  Reini Urban  <reini.urban@gmail.com>
+
+	injson: fix Dwg_VALUEPARAM subclass
+	with a proper subclass name we can now almost import
+	ASSOCACTION's.
+
+	Missing: resolve of inlined Dwg_EvalVariant
+	ERROR: Unknown subclass field VALUEPARAM_vars.code
+	ERROR: Unknown subclass field VALUEPARAM_vars.u
+
+2024-01-30  Reini Urban  <reini.urban@gmail.com>
+
+	insjon: fix MESH.crease malloc array
+	e.g. 2018/Surface. GH #830
+
+	encode: downconvert header.sections
+
+2024-01-29  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix sections patchup, fix header crc
+	we wrote num_sections, not sections.
+	the ODA crc calc. is also widely complicated, it is
+	rather simple
+
+	encode: skip the 2ndheader rewrite on size changes
+	in real ACAD dwgs this 2ndheader template address is just zeroed.
+	only in the header.section it is then correct
+
+	2ndheader: re-write 2ndheader when its size changed
+	for the template address.
+	also fix 2ndheader.num_sections (6 not 7)
+
+	llvmfuzz_standalone_tz.sh: accept file arg
+
+	bits: comment bit_TV_to_utf8 leak case
+	Answering JoraGevorgyan, GH #926.
+	See ossfuzz 66248
+
+2024-01-29  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Remove UNTIL (R_2000)
+	Everything is UNTIL (R_2000), so we don't need.
+
+	Fix encoding of second header
+	logging address is address after sentinel, same in decoding
+	address is address before sentinel
+	size is second header block + begin sentinel
+
+	Fix section numbers
+	sections are sections in header and aux header
+	num_sections are all sections
+
+2024-01-27  Reini Urban  <rurban@cpan.org>
+
+	doc: Update README for preR13
+
+2024-01-27  Reini Urban  <reini.urban@gmail.com>
+
+	encode: extend max num_classes
+	to overflow into negative
+
+	bits_test: print error hint
+
+	fix json
+	e.g. ./json example_2004
+
+	log: fixes for not existing args
+
+	encode: print section names
+	as with decode
+
+	encode: missing template.address
+	Need to move section_order into a global array
+
+	encode: section_order adjust num_sections internally
+
+	encode: maybe auxheader needs padding
+
+	encode: maybe move auxheader before thumbnail
+
+	decode: fix AVAIL_BITS, independent on obj->size
+	AVAIL_BITS only depends on dat.
+	fix the 2ndheader size check.
+
+2024-01-27  Reini Urban  <rurban@cpan.org>
+
+	encode: section_order harmonization
+	use functions for each section, so that we can re-use 2004 code for 2000.
+	and write sections in arbitrary order.
+
+	2000 as in 2004
+
+2024-01-27  Reini Urban  <rurban@cpan.org>
+
+	encode: add section_order[] and section_move funcs
+	but not used yet
+
+2024-01-24  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Remove maximum of classes
+
+2024-01-23  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: reject invalid number pairs
+	0\nSECTION ok,
+	0SECTION not ok.
+
+	indxf: fix float-conversion overflow, fuzzing only
+	with extremely large numbers.
+	Fixes ossfuzz 65937
+
+	injson: ditto for RD*
+	consume the token, and warn
+
+	injson: fix RS* overflow, fuzzing only
+	Fixes ossfuzz 66046
+
+2024-01-18  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix dictionary for R_13c3
+	There were typo in variable.
+
+2024-01-11  Reini Urban  <reini.urban@gmail.com>
+
+	shfmt: regen-shfmt without -kp
+
+	shell: regen-shfmt
+
+	shell: improve .DWG stripping
+
+2024-01-07  washcloth  <wsh@riski.sh>
+
+	Use python3 syntax and modernize shebang env
+	Many systems do not provide the /usr/bin/python link. Instead use the
+	env program to specify a python3 working environment. Presumably during
+	a conversion to python3, a print statement during an error check was
+	still in python2 syntax, this is now changed to proper python3 syntax.
+
+2024-01-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	maint_versions to hexadecimal
+
+	Fix presence of unknown variables
+
+2024-01-02  Reini Urban  <reini.urban@gmail.com>
+
+	spec: finish OSMODE BS
+
+2024-01-01  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix OSMODE variable in header
+	it's BS not BL
+
+2023-12-31  Reini Urban  <reini.urban@gmail.com>
+
+	json.test: fix check_oda
+
+	check_oda: r2000,r14 only
+
+2023-12-31  Reini Urban  <rurban@cpan.org>
+
+	add oda check to json.test
+
+	indxf: fix double-free
+	ossfuzz 64318 WIP
+
+2023-12-31  Reini Urban  <reini.urban@gmail.com>
+
+	spec: promote LAYOUTPRINTCONFIG to unstable
+	we do have coverage, and it looks complete
+	(just 6 padding bits)
+
+	need convert_LTYPE_strings_area also for out_dxf, svg, json
+
+	encode: add convert_LTYPE_strings_area
+	for 256/512 byte conversions.
+	See GH #910
+
+	in_dxf: fix LTYPE.strings_area for r2007+
+	Fixes GH #910
+
+	spec: fix LTYPE for r13-2004 for in_dxf
+	wrong if-else brackets
+
+	spec: change LAYOUTPRINTCONFIG to entity
+	detected by OUT=3 examples/llvmfuzz_standalone ../test/test-data/2000/5.dxf
+	is entity in dxf's (281: 1) and dwg's (item_class_id 498)
+
+	Fix missing json dat->version
+	Fixes GH #910
+
+	Fix dxfb_3dsolid heap-buffer-overflow with VALUE_BINARY (s, l)
+	Fixes GH #911
+
+2023-12-31  Reini Urban  <rurban@cpan.org>
+
+	encode r11: protect from wrong tbl->number
+
+2023-12-30  Reini Urban  <reini.urban@gmail.com>
+
+	ninja ci: lukka/run-vcpk fails
+	vcpkg.json.in is not found
+
+	dxf: disable the VX table
+	Import and output. It is not observed, not documented in DXF.
+	Analog to DXFB
+
+2023-12-27  Reini Urban  <reini.urban@gmail.com>
+
+	*-check: fix dxf $r, esp. for r13
+
+	bits: extra bit_read_TF length overflow check
+	ERROR: bit_read_TF buffer overflow at 2441.0 + -559041242 > 3806
+
+2023-12-27  Reini Urban  <rurban@cpan.org>
+
+	header.spec: move section field into spec
+	so that it is tracked in json, to en-/disable
+	a potential r13 second header.
+
+	Fixes GH #860
+
+2023-12-26  Reini Urban  <reini.urban@gmail.com>
+
+	json: fix type confusion
+
+	encode: fix downconvert_DIMSTYLE eed overflow
+	need room for the final size=0, num_eed includes that.
+	esp. when all the DIMSTYLE APPID's already exist.
+
+	formatting only
+
+2023-12-25  Reini Urban  <reini.urban@gmail.com>
+
+	bits: fix fuzzing bit_H_to_dat overflow
+	with invalid handle size
+
+	encode: fix NULL deref in remove_EXEMPT_FROM_CAD_STANDARDS_APPID
+	Fixes GH #901
+	OUT=0 VER=3 examples/llvmfuzz_standalone ../ti/gh901/other/testcase
+
+2023-12-24  Reini Urban  <reini.urban@gmail.com>
+
+	decode: fixup for 2ndheader wrong overflow check
+	10c79fd51df35afdc3e0272e58075e8d5d2e9a3c added obj, which fails with AVAIL_BITS.
+	Thanks to Michal, GH #860
+
+	postprocess_SEQEND: improve Missing owner
+	log the handle, search the owner on preR13, as in indxf
+
+2023-12-23  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix uninit in \M+ scanning
+	Fixes testcase 0 from GH #901, detected by Matteo Marini.
+
+	decode: fix fuzzer error with Invalid auxheader_size
+	testcase 1 of GH #901
+
+2023-12-23  Reini Urban  <rurban@cpan.org>
+
+	more dwg_next_handle fixes.
+	Fixes GH #891.
+	dwg->num_objects is unreliable <r2.0, containing
+	empty objects
+
+2023-12-21  Reini Urban  <reini.urban@gmail.com>
+
+	fix dwg_next_handle
+	For GH #891.
+	Scan all objects backwards for the next handle, not the global refs.
+	preR13 has almost no global refs
+
+	alive.test: enable preR13 tests
+
+	doc: patch updates
+
+	decode: header pos asserts
+
+2023-12-21  Reini Urban  <rurban@cpan.org>
+
+	injson logging: no hex thumbnail_address
+
+2023-12-18  Reini Urban  <reini.urban@gmail.com>
+
+	decode_r2007: fix heap overflow by one
+	Just a harmless 1 byte overflow with an invalid odd section->name_length.
+	not security relevant.
+	Fixes GH #899. Fuzzing only
+
+2023-12-16  Reini Urban  <reini.urban@gmail.com>
+
+	json: change <r13 VERTEX_2D.point to 2RD
+	also for in_json json_3DPOINT()
+	Resolves PR #893 differently
+
+2023-12-16  Frank  <f.vanleeuwen@unovica.nl>
+
+	AdDbAssocDimDependencyBody typo
+
+2023-12-15  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Remove zero_5 from header
+
+	Remove zero_5 from second header
+
+2023-12-15  Reini Urban  <reini.urban@gmail.com>
+
+	regen-dynapi for BSd TREEDEPTH
+
+2023-12-14  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Simplify decoding of ObjFreeSpace section and second header
+	These two sections are independent
+
+	Fix TREEDEPTH header variable
+	It is signed number
+
+2023-12-07  Reini Urban  <rurban@cpan.org>
+
+	fix 2ndheader logging null-deref
+	Fixes fuzz GH #890
+
+2023-12-05  Reini Urban  <rurban@cpan.org>
+
+	json: dont cquote 3DSOLID.acis_data
+	they are chunked by 256 max, not encoded, and without any
+	to be escaped chars
+
+2023-12-03  Reini Urban  <rurban@cpan.org>
+
+	oda: fix shell warning
+	oda: line 51: [: =: unary operator expected
+
+	dwg2SVG: feature ordering
+	not too late
+
+2023-12-01  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	maint_version in aux header to hex format
+
+	Fix R_2002 dwg_version
+
+	Fix comments about AutoCAD releases
+
+2023-11-30  Reini Urban  <rurban@cpan.org>
+
+	make: run log-dwg and check-ossfuzz in parallel
+	and esp. with spaces in filename support (find -print0 | xargs -0)
+
+	logging: improve 2ndheader.dwg_version (hex)
+
+	outdxf: protect against ACIS.block_size overflow
+	terminate the encr_sat_data[i] block.
+	Fixes ossfuzz 59124
+
+	indxf: fix some fuzzing leaks on errors
+	ossfuzz 44697
+
+	fix more unused vars detected by msvc/clang-cl
+
+2023-11-29  Reini Urban  <rurban@cpan.org>
+
+	fix unused vars detected by msvc/clang-cl
+	WIP
+
+	fix 2ndheader
+	Fixes GH #860.
+	Write the correct 2ndheader.size, and address.
+	write no objfreespace of none read (even if num_sections)
+	patch the 2ndheader.size
+
+	decode_r11: add dwg_next_handseed
+	Fixes Duplicate handle errors with r11.
+	Fixes GH #879
+
+	bits: fix RLL_BE
+	reading and writing, down to RS_BE.
+	Fixes the r11 HANDSEED and EED handles, Fixes GH #883
+
+	no abort() in libraries
+
+	bits: fix bit_TV_to_utf8_codepage heap-buffer-overflow
+	Fixes GH #881
+
+	bits: protect from more size overflows
+	Fixes GH #880
+
+2023-11-28  Reini Urban  <rurban@cpan.org>
+
+	decode: zero-init objfreespace also
+
+2023-11-28  Reini Urban  <rurban@cpan.org>
+
+	emscripten/WASM support
+	Closes GH #876
+
+	Compiles fine with:
+	emconfigure ../configure --disable-bindings --disable-shared
+	make -j -s
+
+	but not tested in a browser (no stdio in the console via node programs dwg...)
+
+2023-11-28  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: assign free handles for new objects
+	See GH #879
+	And fail on existing duplicate object handles.
+
+	unit-tests: add --all option, alias to -an
+
+	spec: r11 signed VX_TABLE_RECORD RS fields
+
+	WIP: encode r11 blocks all BLOCK into BLOCKS
+	Interestingly seems to fix GH #879
+
+2023-11-27  Reini Urban  <rurban@cpan.org>
+
+	r11: harmonize POS logging
+
+	oda: better fix for r11
+
+	fix CMC and H tracing
+	on encode log the POS after the write, not before. analog to decode.
+
+	json: simplify SUB_FIELD_T, VALUE_TEXT_TU, VALUE_TEXT
+	All of them must convert to UTF-8
+
+	doc diff: add more specs
+
+	api: fix GEODATA.north_dir to 2RD
+	also fixes GEODATA imports
+
+	api: fix GEODATA.north_dir to 2RD
+	also fixes GEODATA imports
+
+	auxheader: wrong maint_version casts
+	Fixes GH #871
+
+2023-11-27  Frank  <f.vanleeuwen@unovica.nl>
+
+	fix GEODATA num pts
+
+2023-11-24  Reini Urban  <rurban@cpan.org>
+
+	objfreespace: since r13 already
+	Fixes GH #872
+
+	objfreespace: set objects_address only r13-r2000
+	r2004-r2007 has 0
+
+	encode: set objfreespace defaults
+	Fixes GH #869
+
+	api: clearup dwg_add_SEQEND blkhdr confusion
+	Fixes GH #856
+
+	spec: fix r13 DICTIONARYWDFLT
+	Fixes GH #864
+
+2023-11-23  Reini Urban  <rurban@cpan.org>
+
+	encode: skip MATERIAL (and its NOD)
+	and its common handle link.
+
+	encode: keep thumbnail and template section order
+	if we have the old addresses. else honor the old version logic.
+	Fixes GH #853
+
+2023-11-23  Reinhard Urban  <reinhard.urban@nubix.de>
+
+	encode: fix r13c3 templates
+	oda errors went from 213 to 172. master has 99 of 971 though.
+	but fixed most r14 errors, only 3 vs 30 in master.
+
+	json: add json_section_objfreespace
+
+2023-11-23  Reini Urban  <rurban@cpan.org>
+
+	Rename the MEASUREMENT section 4 to Template
+	for consistency
+
+	r13 objfreespace
+	do decode (also with section[3].address == 0)
+	add encode.
+
+2023-11-23  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	r13-2000: Fix encoding of 2ndheader, add objfreespace
+	In DWG file header is address and size for objfreespace section.
+	The 2ndheader is after that section with extra sentinels, main data and crc.
+
+	Improve logging of sections
+
+	auxheader hasn't sentinel - fix comment
+
+	2ndheader have sentinels - fix comments
+
+2023-11-23  Reini Urban  <rurban@cpan.org>
+
+	spec: fix appinfo class_version 2/r2004
+	analog to SummaryInfo.
+	e.g. test-old/2004/from_cadforum.cz/corvette.dwg
+
+	HACKING: update commit prefixes
+
+2023-11-23  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Unify log of maint_version
+	Same as in HEADER and Second Header
+
+2023-11-21  Reini Urban  <rurban@cpan.org>
+
+	encode: honor secondheader.num_sections
+	on empty num_sections.
+
+	injson: fail on arrays when a primitive expected
+	e.g. ossfuzz 63057
+
+	doc: probe for HAVE_ODA_SPEC
+
+2023-11-20  Reini Urban  <rurban@cpan.org>
+
+	doc: diff.pdf - Variabele typo
+
+	doc: diff.pdf - MTEXT, LEADER, FIELD
+
+	add doc/ODA-5.4.2-libredwg-diff.pdf
+	a colored diff as pdf
+
+	decode: cleanup dead code
+
+	add doc/ODA-5.4.2-libredwg.patch
+	as generated privately
+
+2023-11-14  Reini Urban  <rurban@cpan.org>
+
+	json-check: keep old err
+	to see regressions and improvements
+
+2023-11-13  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: fix dat->byte wraparound heap-buffer-overflow
+	Fixes ossfuzz 64118
+
+2023-11-10  Reini Urban  <rurban@cpan.org>
+
+	spec: fixed PROXY.data size hack
+	fixes overflow with ossfuzz 63814
+
+	decode: missed a dat restore
+	on an decode error (MS size overflow)
+
+	decode: improve bit_read_fixed buffer-overflow
+	on wrap-around.
+
+2023-11-09  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix layer.on decoding
+
+2023-11-09  Reini Urban  <rurban@cpan.org>
+
+	add timeout to llvmfuzz_standalone_*.sh
+	some tests hang
+
+2023-11-08  Reini Urban  <rurban@cpan.org>
+
+	encode: fix NULL-deref with old files (r1.1)
+	Fixes ossfuzz 63895
+
+	free: fix DWGCODEPAGE indxf leak
+	Releated to ossfuzz 63895
+
+	indxf: fix stack-buffer-overflow
+	Fixes ossfuzz 63919
+
+	encode: fix r2004 section dat leaks
+	with no info pages
+
+2023-11-06  Reini Urban  <rurban@cpan.org>
+
+	encode: fix 2ndheader hdl overwrite
+	fixed size patchup
+
+	encode: fix r1.4/entities roundtrip for BLOCK/ENDBLK
+	need to keep BLOCK/ENDBLK in entities, no blocks section.
+
+	suppress -Wcast-align warnings
+	we already know about them already, and there's a branch to fix it.
+
+	encode: revert -Wstringop-overflow suppression
+	the error was a MIN/MAX confusion, not a compiler bug.
+
+	2ndheader: add VALUEOUTOFBOUNDS checks
+	because example_r14 overflows num_hdl still
+
+	encode: set 2ndheader.handles[].name
+	for better logging
+
+	encode: forgot 2ndheader.junk_r14
+	json also.
+
+	injson: fix RS[] type confusion
+	check that the parsed type (ie. HEADER.layer_colors) fits
+	the real type sizes.
+	Fixes ossfuzz 63824, a stack overflow
+
+2023-11-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	junk_r14 is from r14 to r2000
+
+	Fix CRC
+
+	Fix second header structure
+
+2023-11-03  Reini Urban  <rurban@cpan.org>
+
+	encode: add LOG_TFv
+	same problem as with write_TFv on downgrading
+
+	encode: more downgrading support
+	add dwg_supports_eed and dwg_supports_obj.
+	skip writing unsupported entities and objects pre-R13.
+	>= r13 we keep our old logic for handles refs.
+
+	json: dont skip *MODEL_SPACE BLOCK_HEADER
+	only with encode later
+
+	llvmfuzz_standalone: dont print unnecessary SEED
+	when we dont need rand(), when all env vars already given
+
+2023-11-02  Reini Urban  <rurban@cpan.org>
+
+	encode: even more encode_check_num_sections checks
+
+	indxf: fail on setting a num_ values twice
+	Fixes GH #859
+
+	encode: more encode_check_num_sections checks
+
+	free: fix HYPERLINKBASE double-free
+	add bit_wcs2dup
+
+	cmake: sort probes
+
+	add HAVE_GETTIMEOFDAY probe
+
+	more llvmfuzz_standalone_*.sh
+	rename llvmfuzz_standalone_all.sh to llvmfuzz_standalone_tz.sh
+	add llvmfuzz_standalone_data.sh
+	fix env vars to check all permutations.
+	skip leaks only on indxf
+
+	encode abstract into encode_check_num_sections
+	needed also for <r2.0b
+
+2023-11-01  Reini Urban  <rurban@cpan.org>
+
+	encode: fix new r11 sections on upgrade
+
+	llvmfuzz: honor config.h
+
+	encode: some unused variables
+
+	llvmfuzz: better seed precision (millisecs)
+
+	llvmfuzz_standalone: improve repro output
+
+	header_variables_dxf.spec: fix summaryinfo types
+
+	encode: add new r11 sections on upgrade
+
+	encode: no 2ndheader sections overflow
+	on downgrade
+
+	spec: index 6 out of bounds for type Dwg_SecondHeader_Sections[6]
+	with encode (fuzzing)
+
+	encode,json: downgrade TV strings to TFv
+	which might be shorter than the TF, so skip the slack.
+
+2023-10-31  Reini Urban  <rurban@cpan.org>
+
+	add llvmfuzz_standalone_all.sh
+	and test most versions
+
+	llvmfuzz: support env SEED
+
+	bits: fix CHK_OVERFLOW
+	CHK_OVERFLOW_PLUS is ok.
+	Fixes ossfuzz 55579, 54163, 54162, 57911, 60993
+
+2023-10-31  Reini Urban  <rurban@cpan.org>
+
+	spec: change 2ndheader handles[].hdl to static
+	Boy, do I hate these gcc -Wstringop-* bugs! Still not fixed in 11.4
+	after 4 releases.
+
+	Fixes ossfuzz 61796 in free() in encode
+
+2023-10-31  Reini Urban  <rurban@cpan.org>
+
+	fuzz: limit max. alloc size to 0x10000000000
+	taken from asan: AddressSanitizer: requested allocation size
+	0xffffffff00cee7ad (0xffffffff00cef7b0 after adjustments for alignment, red
+	zones etc.) exceeds maximum supported size of 0x10000000000
+
+	fixes some fuzzing DOS attacks.
+	also optimize bit_write_TF when needing more room.
+	and fix it when aligned.
+
+2023-10-31  Reini Urban  <rurban@cpan.org>
+
+	encode r11: forgot writing eed raw size
+	Fixes ./rw r11/ACEB10
+
+2023-10-30  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: fixup Invalid obj->size change
+
+2023-10-30  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: more wrong obj->size checks
+	Fixes more preR13 fuzzing tests
+	$ examples/llvmfuzz_standalone ../tz/*/clusterfuzz-testcase-*
+
+	but breaks ./rw r11/ACEB10
+
+2023-10-30  Reini Urban  <rurban@cpan.org>
+
+	dxf2dwg: honor --force-free also with errors
+	to repro ../tz/indwg/clusterfuzz-testcase-minimized-llvmfuzz-5075763015057408.dxf
+
+	llvmfuzz_standalone: srand the env vars
+	and print them
+
+	bit_TV_to_utf8: fix illegal write
+	on failed iconv conversions with too short destlen.
+	Fixes ossfuzz 63629
+
+	dwgfuzz: fix some NULL derefs
+	e.g. clusterfuzz-testcase-minimized-llvmfuzz-4602743341580288
+	Fixes ossfuzz 63690
+
+	injson: fix pre-R2 layer_colors setter
+	stack-overflow even.
+
+	decode_r11: fix heap-overflow by 1
+	Fixes ossfuzz 63483
+
+	indxf: fix dxfname double-free
+	analog to dxf_entities_read.
+	Fixes ossfuzz 65537
+
+	dynapi: fix fixed_string termination
+	Fixes ossfuzz 59523
+
+	dynapi: fix r11 MENU size
+	Fixes ossfuzz 50194 regression
+
+	json: protect NULL derefs
+	Fixes ossfuzz 47352
+
+	indxf: fix spline fitpts check
+	Fixes ossfuzz 44697
+
+	indxf: fix heap overflow, wrong type
+	Fixes ossfuzz 44483
+
+	fuzz: avoid double fclose on IO errors
+	Fixes ossfuzz 39933
+
+	injson: no exit in a library
+	Fixes ossfuzz 37355
+	indxf ditto: fixes ossfuzz 46916
+
+	dwg_api.h: check for __attribute_deprecated__
+	e.g. already defined with compcert
+
+	.clang-format: fix syntax error
+
+2023-10-29  Reini Urban  <rurban@cpan.org>
+
+	regen-dynapi: formatting
+
+	decode_r13: ignore invalid obj->size
+	Fixes ossfuzz 63463 heap-overflow
+
+	free: fix preR13 unknown_rest leaks
+
+	geojson: check out of memory
+	With invalid ARC angles.
+	Fixes ossfuzz 63690
+
+	llvmfuzz: fix missing initializers
+
+2023-10-27  Reini Urban  <rurban@cpan.org>
+
+	json-check: use $ODAFileConverter_geometry env
+
+2023-10-26  Reini Urban  <rurban@cpan.org>
+
+	json-check: revert geometry again (wayland vs X)
+
+	indent: proper VERSION blocks
+
+2023-10-25  Reini Urban  <rurban@cpan.org>
+
+	cmake: require C99 standard
+	and define HAVE_C11 via __STDC_VERSION__
+
+	set PRI_SIZE_T_MODIFIER on cross
+	check HAVE_C11, but don't use it, because mingw ignores it.
+	rather set PRI_SIZE_T_MODIFIER manually then (based on mingw32,
+	mingw64, ppc64, mips32, aarch64)
+
+	fix and run clang-format-all
+	support new -Wanalyzer warnings
+
+	add AX_PRINTF_SIZE_T %zu formatting
+	Fixes GH #857
+
+2023-10-23  Reini Urban  <rurban@cpan.org>
+
+	encode: silence unknown_rest if unneeded
+
+	encode: on dwg_encode_unknown_bits skip the rest
+
+	injson: fix Unknown type for REGION.revision_bytes RC with STRING
+	dynapi doesn't know of this array type (yet).
+
+2023-10-21  Reini Urban  <rurban@cpan.org>
+
+	encode: revise preview_size check
+	for encode, where we dont have the obj->size.
+	eg. example_2018
+
+2023-10-21  Reini Urban  <rurban@cpan.org>
+
+	decode: improve Invalid preview_size error
+	with to/r13/from_autocad_r13/ROBOT.DWG. check against the obj->size
+	not some hardcoded too low limit.
+
+	But now this file fail with out of memory on outjson
+
+2023-10-20  Reini Urban  <rurban@cpan.org>
+
+	Revert "json-check: geometry at lower-left corner"
+	This reverts commit 09c73ba18d4c4f2f8b29b252c7648191b182375b.
+	This does not work on Fedora (wayland).
+
+	add unknown_rest to replace some unknown_bits
+	oda errors went down from 174 to 168 of 969
+
+	WIP attdef debug
+
+	json: we emit non-empty unknown_bits
+	so remove JSON DECODE_UNKNOWN_BITS.
+	GH #855
+
+	convert JUMP.trailing also to unknown_bits
+
+	preR13 store ERROR: offset slack in unknown_bits
+	Fixes GH #855
+
+	json-check: fixup source dwg as first line
+
+	json-check: geometry at lower-left corner
+
+	json-check: source dwg as first line in .err
+	for easier regression checks
+
+2023-10-19  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix dxfname double-free
+	Fixes ossfuzz 57481
+
+2023-10-17  Reini Urban  <rurban@cpan.org>
+
+	injson: fix R2004_Header.file_ID_string
+	not hex
+
+2023-10-13  Reini Urban  <rurban@cpan.org>
+
+	spec: rename ATTRIB,ATTDEF.mtext_handles to mtext_style
+	and add missing attrib unit-test field checks.
+	those r2018 mtext fields are still unstable.
+
+2023-10-12  Reini Urban  <rurban@cpan.org>
+
+	encode: disable downconvert_relative_handle
+	Of course r2000 can read relative handles just fine.
+	They are mandatory for prev,next_entity links.
+	Just first,last_ links and similar 4 links were always absolute.
+	Just VX_TABLE_RECORD.ownerhandle is relative.
+
+	But this must be defined in the caller, if obj or NULL.
+
+2023-10-11  Reini Urban  <rurban@cpan.org>
+
+	json-check: better cleanup on success
+
+	dwg_sentinel: remove superfluous bounds-check
+
+2023-10-10  Reini Urban  <rurban@cpan.org>
+
+	encode: refactor r13-r2000, thumbnail, meas, objects CRC
+	esp. write objects crc. Fixes all ODA CRC errors with all r2000 test files.
+
+	TODO: we could also check if the old r2000 dwg has the template/image before or after.
+	ODA is not quite right
+
+	Fixes GH #853
+
+2023-10-10  Reini Urban  <rurban@cpan.org>
+
+	decode: comments only
+
+	json-check: change .log.orig, improve diff
+	ignore the indices.
+	no double initial logs, just the outjson log.
+	fix invalid ACAD11 r, wrong checks.
+
+2023-10-09  Reini Urban  <rurban@cpan.org>
+
+	encode: fixup header.thumbnail_address
+	wrong pos.
+	also keep an existing r14 auxheader.
+
+	encode: fix Handles page CRC as BE
+	fixes WRONGCRC errors with overlarge Handles page sizes
+
+	encode: patchup header.thumbnail_address
+	which may move the thumbnail upfront. Fixes GH #853
+
+	encode: no TV-ZERO with r13c3
+
+2023-10-06  Reini Urban  <rurban@cpan.org>
+
+	decode: more work on dwg_section_page_checksum
+	but still wrong (for writing r2004)
+
+	decode: add dwg_section_page_checksum overflow check
+
+	spec: hack FIELD a bit
+	to fix 2018/TS1 json-roundtrips.
+	need the logic when to omit TABLE_value.value_string
+
+2023-10-05  Reini Urban  <rurban@cpan.org>
+
+	decode_r2007: fix fuzzing out-of-bounds
+	reset invalid section->num_pages.
+	Fixes GH #850
+
+	refactor injson dynapi for inline arrays
+	maybe the reason for the GH #851 readDWG crash.
+	simplifies a lot.
+
+2023-10-03  Reini Urban  <rurban@cpan.org>
+
+	bits: %u dat->bit warnings
+	on mingw32
+
+	cmake: use -Wno-error=array-bounds
+
+2023-10-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix comment about layer_colors in header file
+
+	Add r1.1 and r1.2 versions for dwgadd
+	It's working
+
+	Remove obsolete warning for pre r1.4
+	All versions like r1.1 and r1.2 are working.
+	There are not evidence for AC1.30 DWG files
+
+2023-10-02  Reini Urban  <rurban@cpan.org>
+
+	bits: more iconv fuzzing fixes
+	check now also errno and the full dest range.
+	Fixes again ossfuzz 62363
+
+2023-09-30  Reini Urban  <rurban@cpan.org>
+
+	fuzz: fix decode_preR13_section overflow
+	with negative tbl->number.
+	Fixes GH #848, maybe.
+
+2023-09-24  Reini Urban  <rurban@cpan.org>
+
+	decode: add dxf logging to VECTORs
+
+2023-09-23  Reini Urban  <rurban@cpan.org>
+
+	injson: add_handle for all object handles
+	to fill the object_map{}, to properly resolve 0 handles later.
+	See GH #830
+
+2023-09-23  WU LONGYONG  <chunibyo.wly@gmail.com>
+
+	fix: the number of dividing angle
+	if want to cut an angle to 10 points
+	the delta angle should be divided  as 10-1=9
+
+2023-09-22  Reini Urban  <rurban@cpan.org>
+
+	fix dwg_resolve_handle
+	when the handle wasn't found.
+	Too eager bounds check.
+
+	See GH #830
+
+2023-09-22  Reini Urban  <rurban@cpan.org>
+
+	injson: fix sort_ents add_handleref
+	this is an exception for code 0. No obj, see GH #830
+
+	WIP: Warn Wrong ref_object ref->obj->handle.value != ref->absolute_ref
+	with 2018/Surface with 0.2.2CF
+
+	enable-check-less: also for programs, examples
+	ubsan needs 44m on github. make check from 9m to 14m (even with check_less)
+
+2023-09-21  Reini Urban  <rurban@cpan.org>
+
+	configure: default to -fhardened compiler flags
+
+2023-09-21  chunibyo  <chunibyo.wly@gmail.com>
+
+	fix angle normalization loop
+	and a segment fault bug.
+
+2023-09-21  Gian Maria Gentilini  <38076337+gentilinigian@users.noreply.github.com>
+
+	spec: Add LEADER.hookline_on flag calculation
+	Re-calculate AutoCAD's hookline display rules, different to ODA.
+	(but more likely more correct)
+
+	Rewritten by Reini Urban.
+	Insignificant contribution.
+
+2023-09-19  Reini Urban  <rurban@cpan.org>
+
+	spec: add RLLd type (signed int64)
+	though unused yet.
+	Dwg_R2007_Section will need that.
+	The AcDS sortedidx is not, I think
+
+	json: more bit_TV_to_utf8 iconv protections
+	check heap overflows with iconv dest result
+
+	bits: memcpy-param-overlap
+	Fixes oss-fuzz 62461, though not repro
+
+2023-09-12  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix double-free with INVALIDDWG cases
+	when the dxfname was allocated and the import error occured later.
+	Fixes oss-fuzz 59428
+
+	bits: fix double-free in Out of memory error
+	Fixes oss-fuzz 48236 crash
+
+2023-09-11  Reini Urban  <rurban@cpan.org>
+
+	encode: dont encode from invalid version
+	and dont realloc a nullptr.
+	Fixes oss-fuzz 62132
+
+	decode: fix unsigned overflow
+	asan: allocation-size-too-big
+	Fixes oss-fuzz 59899
+
+2023-09-06  Reini Urban  <rurban@cpan.org>
+
+	bit_read_TV: optimize TV-ZERO logging a bit
+
+	decode: log xdata.type RS with -v4
+	not just insane. I forgot where the xdata_size came from. the RS type
+
+2023-09-04  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: fix wrong ltype size for POLYLINE/VERTEX
+	Fixes GH #832
+
+2023-09-01  Reini Urban  <rurban@cpan.org>
+
+	rename R_2022 to R_2022b
+	this beta-only format was not used in regular releases until r2024
+
+	encode: in_postprocess_SEQEND with one entity
+	there is no nolinks (single vertex).
+	TODO: the same for the BLOCK entity chain
+
+2023-09-01  Reini Urban  <rurban@cpan.org>
+
+	encode: fix in_postprocess_SEQEND from injson
+	where we have no target version.
+	fix the nolinks setter.
+	log the vertex index.
+
+	Fixes GH #829 for POLYLINE, BLOCK not yet
+
+2023-09-01  Reini Urban  <rurban@cpan.org>
+
+	configure: rename --enable-mimalloc to --with-mimalloc
+	it's an optional library, not a feature.
+
+2023-08-31  Reini Urban  <rurban@cpan.org>
+
+	injson: support 3BD* points
+	Fixes e.g. 3DSOLID_wire.points.
+	Detected via GH #827
+
+	json: skip duplicate COMMON_3DSOLID
+	See GH #827
+
+2023-08-31  Reini Urban  <rurban@cpan.org>
+
+	spec: improve WIRESTRUCT_fields
+	mostly the 2 BLd fields to appear as -1.
+	and to skip num_points with json.
+
+	See GH #827
+
+2023-08-31  Reini Urban  <rurban@cpan.org>
+
+	bmp: fix wrong r2007 overflow errors
+	general logical error, but only appearing with r2007 thumbnails.
+	Fixes GH #824
+
+2023-08-31  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix presence of AuxHeader
+	I has no evidence, that AuxHeader is in any DWG files like AC1013 and
+	AC1014.
+
+	Fix MEASUREMENT value
+	The possible values for the MEASUREMENT field are:
+	0 - English
+	1 - Metric
+
+2023-08-31  Reini Urban  <rurban@cpan.org>
+
+	dwgbmp: extend to emit WMF and PNG
+	See GH #824
+
+	dwgwrite: new version defaults, don't write r2000, but old versions asis
+	readers would perfer r2000 or higher, oda can only read from r9 on,
+	but for the sake of sanity don't upconvert preR13 to r2000 per default.
+	only <r1.4 upconvert to r1.4, and >=r2004 down to r2000.
+	This way we have much less up/downconverting changes.
+
+2023-08-30  Reini Urban  <rurban@cpan.org>
+
+	update NEWS
+
+	promote RENDERENVIRONMENT to stable
+	dxf and coverage ok
+
+	spec: fix RENDERENVIRONMENT.fog_color
+	the last text environ_image_filename is still unknown
+
+	spec: rename ObjFreeSpace num fields
+	no num_ prefix, to let them appear in json.
+	they are not vector sizes.
+
+2023-08-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix SUMMARY strings
+	no use-after-free, convert from codepage to TV
+	fixes ./dxf example_201*.dwg
+
+	injson: handle 3DSOLID.revision_bytes[9] TFFx
+
+	encode: more downconvert_TABLESTYLE
+	because some border colors were invalid.
+	fill in sensible defaults
+
+	*-check: stabilize .log.orig creation
+	because some b's are other than other b's
+
+	json: im-/export the R2007_Header
+	analog to R2004.
+
+	json: skip r2004fileheader with r2007
+	it is empty there
+
+2023-08-29  Reini Urban  <rurban@cpan.org>
+
+	json: fix xdicobjhandle logic
+	write now the xdicobjhandle if not missing.
+	Fixes oda errors Invalid input
+	  AcDbBlockTableRecord(1F),
+	and Object of class AcDbRegAppTableRecord cant be cast to AcDbEntity
+
+	See GH #322
+
+2023-08-29  Reini Urban  <rurban@cpan.org>
+
+	encode: abstract delete_hv
+	and fix another memmove error, the ptr size!
+	and also fix a shift_hv leak
+
+	encode: fixup remove_EXEMPT_FROM_CAD_STANDARDS_APPID memmove
+	too many entries!
+
+2023-08-29  Robert Scott  <code@humanleg.org.uk>
+
+	dwg2SVG: define _GNU_SOURCE to expose strcasestr with musl libc
+
+2023-08-28  Jarkko Hautakorpi  <jarkko.hautakorpi@pok.fi>
+
+	decode r11: error: ‘__builtin_strncat’ output truncated before terminating nul
+	copying as many bytes from a string as its length
+	[-Werror=stringop-truncation]
+	header_variables_r11.spec:164:20: note: length computed here
+	164 |       size_t len = strlen ((char*)&_obj->MENUEXT[1]);
+
+2023-08-28  Reini Urban  <rurban@cpan.org>
+
+	add examples/odaversion helper
+
+	encode: fixup FREED objects
+	they did appear twice, so skip them in the HANDLES omap list already
+
+	logging: RLx on eed 71, when overlarge
+	i.e. rgb colors
+
+	encode: skip also UNUSED objects
+	and print the name and handle
+
+	2ndheader: wrong crc type
+	only detected by clang
+	Fixes GH #820
+
+2023-08-27  Reini Urban  <rurban@cpan.org>
+
+	encode: skip freed object
+	namely the APPID.EXEMPT_FROM_CAD_STANDARDS
+
+	fix gcc14 -Wanalyzer-null-argument
+	with is_class_unstable (dwg_type_name (type))
+
+	gcc14: silence more wrong -Wanalyzer bugs
+
+	gcc14: silence wrong -Wanalyzer-allocation-size
+	in ADD_ENTITY ALIGNMENTPARAMETERENTITY
+
+	indxf: fix -Wanalyzer-possible-null-argument
+	null dxfname, CWE-690, with gcc 14
+
+	encode: avoid uninitialized dat->chain"s
+	leading to false gcc 14 -Wanalyzer-malloc-leak errors
+	in bit_chain_init
+
+2023-08-26  Reini Urban  <rurban@cpan.org>
+
+	encode: remove APPID.EXEMPT_FROM_CAD_STANDARDS
+	GH #817
+
+	reedsolomon: document matrix ranges
+	gcc-14 warns
+	reedsolomon.c:307:54: error: dereference of possibly-NULL '*_20 + _22 + (sizetype)i' [CWE-690] [-Werror=analyzer-possible-null-dereference]
+	  307 |               ^= f256_multiply (coeff, matrix[src][j][i]);
+
+	fix CWE-401 -Wanalyzer-malloc-leak
+	detected with latest gcc
+
+	add config --with-{geojson,dxf}-precision
+	And switch the default back from the RFC recommended 6 to max 16.
+	See GH #810
+
+	Revert "encode: remove APPID.EXEMPT_FROM_CAD_STANDARDS"
+	Flaky, and we need to add removal of this handle from individual EED's also
+	This reverts commit 3247beebd2efd84241a8406536fc89870fc676dc.
+
+2023-08-25  Reini Urban  <rurban@cpan.org>
+
+	encode: remove APPID.EXEMPT_FROM_CAD_STANDARDS
+	GH #817
+
+	add oda tool
+	with json or dwg input
+
+	regen-dynapi: summaryinfo T16
+
+2023-08-24  Reini Urban  <rurban@cpan.org>
+
+	encode: fix OLE2FRAME wrong MAX_SIZE_TF
+	they can be much larger.
+	Fixes json-check 2000/TS1
+
+	encode: r2004_file_header.file_ID_string
+
+	encode: fix r2004 assertions
+
+	json-check: delete the old errors
+	because without new errors this would stay
+
+	dwg2ps: handle T16 summaryinfo types
+	Fixes GH #812
+	Also add Subject Info
+
+2023-08-24  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix error handling in dwg_encode()
+
+	Fix number of sections in encoding of header (preR13)
+
+2023-08-23  Reini Urban  <rurban@cpan.org>
+
+	add: default TDCREATE
+	via TDUCREATE. WIP not sure how to create these julian days since 1970
+
+	encode: on downconvert add the missing VX_CONTROL object
+	Fixes GH #811
+
+	encode: always write SecondHeader now
+	for r13b1-r2000.
+	Maybe that's what's causing the oda recovery warnings
+
+	spec: fix summaryinfo <2007
+	T16 is not always TU
+	this fixes esp. decode errors.
+
+2023-08-22  Reini Urban  <rurban@cpan.org>
+
+	c99: regen codepages, fix -Wc99-designator
+	array designators are a C99 extension,
+	and illegal with C++
+
+	c++compat fixes
+
+	gh: mips decode.lo needs more than 25m
+
+	logging: less -v3 decode tracing
+	no crc address ranges.
+	no EED raw TF content
+
+2023-08-21  Reini Urban  <rurban@cpan.org>
+
+	escape: honor codepage in htmlescape()
+	add asian codepage support
+
+	escape: workaround gcc-12 uaf var-tracking bug
+	See GH #801
+
+2023-08-18  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix creating of line entity in preR13
+	3DLINE entity isn't in R11
+	In R10 is possibility of 3DLINE or LINE (with 3d support). Rewrite to
+	use of LINE.
+
+	Fix thumbnail on the end of data
+
+2023-08-18  Reini Urban  <rurban@cpan.org>
+
+	unit-tests: silence ERROR: dwg_ref_get_object: empty ref
+	rather resolve them
+
+	decode_2007: refactor to Bit_Chain
+	the page and section maps. now they are proper fields.
+	See GH #806
+
+2023-08-17  Reini Urban  <rurban@cpan.org>
+
+	preR13: set HEADER.LTYPE_CONTINUOUS ref
+	See GH #761
+
+	logging: 2ndheader handles
+	Fixes GH #804
+
+	bits: simplify bit_write_H via bit_H_to_dat
+	Releated to GH #804
+
+	encode: fix 2ndheader copypasta
+	VX_CONTROL_OBJECT for 10th handle.
+	Fixes GH #803
+
+	ubsan: stricter alignment checks
+	when even alloced pointers are not memaligned. (as with ubsan or other weird archs)
+
+	logging: only insane T if there is a high char
+
+2023-08-16  Reini Urban  <rurban@cpan.org>
+
+	logging: LOG_INSANE_T on unusual codepages
+	See GH #802
+
+	bits: fix strlen(NULL)
+	Fixes ossfuzz 61497, 61494
+
+	msvc: fix declspec position
+	also clang-cl
+
+	encode: fixup section[4] fields
+	before writing the MEASUREMENT_R13 section.
+	Fixes GH #792
+
+	bits: fix ubsan alignment checks
+	Fixes ossfuzz 59124
+
+2023-08-15  Reini Urban  <rurban@cpan.org>
+
+	logging: fix null-deref
+	with empty dwg_find_tablehandle results
+
+	bits: fix bit_u_expand and add tests
+	Fixes GH #802
+
+	bits: add MIF support to bit_u_expand
+	Tests missing
+
+2023-08-15  Reini Urban  <rurban@cpan.org>
+
+	bits: bit_TV_to_utf8 handle asian codepages
+	non-asian <0x80 exceptions not-yet.
+	add LOG_TRACE_TV with utf-8 conversion
+
+	See GH #802
+
+2023-08-14  Reini Urban  <rurban@cpan.org>
+
+	codepages: remove CP_SHIFTJIS
+	it is CP932 now
+
+	codepages: add CP932 (alias for shiftjis)
+	also add missing the c < 128 exceptions for a few asian codepages.
+	and fix the MIN_*_UC unused defines.
+
+	codepages: fix dwg_codepage_isasian
+	and document the asian multi-byte specialities.
+	Closes GH #802
+
+2023-08-13  Reini Urban  <rurban@cpan.org>
+
+	svg: fix and simplify htmlescape
+	no realloc use-after-free
+	Fixes GH #801
+
+	dxf: convert all MIF \M+1-5 DXF encodings to \U+xxxx
+	as documented by ODA, not in any DXF nor FrameMaker documentation.
+	Fixes GH #428
+
+2023-08-11  Reini Urban  <rurban@cpan.org>
+
+	json: fix print_wcquote to print utf-8
+	not \uxxxx chars, when possible.
+	Fixes GH #655
+
+	dynapi: special-case HEADER.codepage
+	for dwgadd. Fixes GH #727
+
+	examples: add wine/valgrind support to dwgadd_test.sh
+
+	logging: compacter FIELD_VECTOR tracing
+	on decode
+
+2023-08-11  Reini Urban  <rurban@cpan.org>
+
+	change 2ndheader: handles and sizes
+	always set handles, rename them.
+	identified the source for all 2ndheader.handle fields,
+	the HANDSEED and CONTROL_OBJECT parts from the header_vars,
+	so we can always set them reliably.
+
+	fix sample_2000 with unknown_10 == 0x14 => unknown_rc4[3]
+
+2023-08-09  Reini Urban  <rurban@cpan.org>
+
+	spec: ARRAYITEMLOCATOR.itemloc[3] inlined array
+	use SUB_FIELD_VECTOR_INL
+	node[4] is now also an inlined json array.
+
+	add 2ndheader.spec
+	and rename second_header to secondheader
+	Fixes GH #800
+
+	decode: better vcount logging
+	strip the vcount (e.g. entries[]), and add LOG_RPOS throughout
+
+	spec: move ASSOCGEOMDEPENDENCY, ASSOCNETWORK to stable
+	can be ex-/imported via json and dxf
+
+	unit-testing: improve failing assoc2dconstraintgroup
+	check max num_connections and empty connections
+
+2023-08-08  Reini Urban  <rurban@cpan.org>
+
+	actions: --disable-werror on macOS CI
+	which throws -Werror=cast-align, by not honoring
+	$ax_cv_check_cflags__Wcast_align = yes
+
+2023-08-07  Reini Urban  <rurban@cpan.org>
+
+	2ndheader: rename handlers.size to num_data
+
+	spec: harmonize SUB_FIELD_VECTOR API
+	type before size
+
+	2ndheader: fix unknown_rc4 reset hack
+	no dat->byte -= 2, check unknown_10 for subsequent length 2 or 4
+	just for json stay with length 4 for now, as in_json _INL cannot decide on 2/4 yet.
+
+	decode: better 2ndheader logging
+	spezialize the section and handlers repeats
+
+2023-08-04  Reini Urban  <rurban@cpan.org>
+
+	decode: enhance APPINFO.max_decomp_size
+	as seen in GH #797
+
+2023-08-04  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Improve logging of addresses
+
+2023-08-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Improve logging output for unknown_rc4 in second header
+	Main intent is removing of [i], not intuitive
+
+	Before:
+	unknown_rc4[i]: 0x78 [RC 0]
+	unknown_rc4[i]: 0x1 [RC 0]
+	unknown_rc4[i]: 0x5 [RC 0]
+	unknown_rc4[i]: 0x0 [RC 0]
+
+	After:
+	unknown_rc4[0]: 0x78 [RC 0]
+	unknown_rc4[1]: 0x1 [RC 0]
+	unknown_rc4[2]: 0x5 [RC 0]
+	unknown_rc4[3]: 0x0 [RC 0]
+
+2023-08-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Improve logging output for second header null_b[]
+	Improve logging output
+
+	Main intent is removing of [i], not intuitive
+
+	Before:
+	null_b[i]: 0 [B 0]
+	null_b[i]: 0 [B 0]
+	null_b[i]: 0 [B 0]
+	null_b[i]: 0 [B 0]
+
+	After:
+	null_b[0]: 0 [B 0]
+	null_b[1]: 0 [B 0]
+	null_b[2]: 0 [B 0]
+	null_b[3]: 0 [B 0]
+
+2023-08-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix indentation of clang-format off comment
+
+	Fix dxf in FIELD_VECTOR_INL logging
+
+2023-08-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Improve logging output for zero_5 header variable
+	Main intent is removing of [i], not intuitive
+
+	Before:
+	zero_5[i]: 0x0 [RC 0]
+	zero_5[i]: 0x0 [RC 0]
+	zero_5[i]: 0x0 [RC 0]
+	zero_5[i]: 0x0 [RC 0]
+	zero_5[i]: 0x0 [RC 0]
+
+	After:
+	zero_5[0]: 0x0 [RC]
+	zero_5[1]: 0x0 [RC]
+	zero_5[2]: 0x0 [RC]
+	zero_5[3]: 0x0 [RC]
+	zero_5[4]: 0x0 [RC]
+
+2023-08-03  Reini Urban  <rurban@cpan.org>
+
+	bits: fix bit_TV_to_utf8 and bit_u_expand
+	fix the json_cquote leak with codepages.
+	bit_TV_to_utf8 via iconv requires at least a destlen + 1 for the final \0.
+	optimize empty strings.
+	bit_u_expand needs to check for not-found substrings.
+
+	json: set dat->codepage
+	for json utf8 conversion.
+	Fixes GH #788
+
+	bit_write_T16 converts from/to TU16
+	For GH #788
+
+	indent
+
+2023-08-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix logging
+	There was a trailing newline
+
+2023-08-03  Reini Urban  <rurban@cpan.org>
+
+	update NEWS
+
+	bump copyright's
+
+	add a vcpkg.json
+
+	cmake: fix deprecation warnings
+	tested with 3.27.1
+
+2023-08-03  Reini Urban  <rurban@cpan.org>
+
+	-Wcast-align fixes
+	need ATTRIBUTE_ALIGNED()
+
+	but we would really need to alias all BITCODE_T as BITCODE_TU
+	and then downcast for TV, to ensure the 2 alignment.
+
+2023-08-03  Reini Urban  <rurban@cpan.org>
+
+	enable more warnings, -Wmissing-field-initializers
+	and fix a few others
+
+	logging: log resolve_objectref_vector with HANDLE
+	too much roundtrip noise
+
+2023-08-02  Reini Urban  <rurban@cpan.org>
+
+	json: fix json_write_TF \r and \n quoting
+
+	injson: support SecondHeader section
+	GH #792
+
+	json: write SecondHeader section
+	GH #792
+	Not really sure if useful enough
+
+	bit_utf8_to_TV: skip invalid UTF-8 characters
+	helps with fuzzing. e.g. ossfuzz 57481
+
+2023-08-01  Reini Urban  <rurban@cpan.org>
+
+	template: use TU16 cast
+	Fixes GH #788
+
+2023-07-31  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Move address and offset to LOG_HANDLE
+	This is better to diff between dwgread log outputs
+
+2023-07-31  Reini Urban  <rurban@cpan.org>
+
+	encode: fix PROXY numbits calc.
+	e.g. json-check example_r13
+
+	CMC: set method only in upconvert when undefined
+	Fixes GH #785
+
+	CMC: method c2 (entity) defaults to 0xffffff rgb
+	See GH #785
+
+	CMTC: also keep from_version >= 2004
+	Should fix GH #785, upconvert should be skipped also
+
+	bits_test: add BS 1 test
+	as XRECORD.cloning is written wrongly
+
+2023-07-31  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Implement template description write support
+	Only for AC1013 .. AC1018
+
+	Rewrite decoding of template to use existing template_private()
+
+2023-07-31  Reini Urban  <rurban@cpan.org>
+
+	indxf: not too small
+	Fixes GH #786
+
+2023-07-28  Reini Urban  <rurban@cpan.org>
+
+	add arc_split, angle_vector_2d: split arcs into lines
+	for geojson arc and circle so far.
+	TODO pline bulges
+	Fixes GH #520
+	Arc's must be closed, which is weird, but demanded by the spec as closed Polygon.
+
+2023-07-27  Reini Urban  <rurban@cpan.org>
+
+	dxf: exit Convert SAB ACIS on len=0
+	at the end of the SAB.
+	./dxf example_2013
+
+	bigendian: workaround add_LibreDWG_APPID error
+	in dwg_dynapi_entity_value in dwg_find_tablehandle
+
+	bigendian: fix bit_read_TU
+	wrong byteswap and wrong tests
+
+	fix r11 HANDSEED RLLs, analog to EED
+
+	decode_r2007 bigendian sections
+
+2023-07-26  Reini Urban  <rurban@cpan.org>
+
+	bigendian: improve bit_read_DD
+
+	bigendian: fix bit_read_TU16 and bit_read_T32
+
+	bits: fix bigendian TU tests
+	and optimize bit_write_T a bit. we already have the length.
+
+2023-07-25  Reini Urban  <rurban@cpan.org>
+
+	bigendian: various fixes and more bits tests
+	add more RD and BD tests, esp. for the new optimized branches
+
+	rename _LE to _BE variants, which are really big-endian.  Wrongly named and
+	unneeded.
+
+2023-07-25  Reini Urban  <rurban@cpan.org>
+
+	fix EED entity RLL: wrong conversion on aligned bit=0
+	also remove unneeded bits _LE variants (which are BE anyway)
+
+2023-07-25  Reini Urban  <rurban@cpan.org>
+
+	build: conditional AC_CONFIG_FILES on --disable-bindings
+	and not HAVE_PYTHON_LIBXML2.
+	Which should simplify make dist and docker builds without bindings.
+
+	with --disable-bindings the dist would exclude that now.
+	without makeinfo even the docs.
+
+2023-07-25  Reini Urban  <rurban@cpan.org>
+
+	add a Dockerfile.ppc64 with the current sources, for bits testing
+
+	auxheader: change TDCREATE to TIMERLL
+	from TD
+
+	bigendian: fix bit_u_expand()
+
+	iconv: fails at run-time on powerpc64-linux-gnu
+	and now also on macOS with utf-8 constants
+
+2023-07-24  Reini Urban  <rurban@cpan.org>
+
+	iconv: use UTF-8//TRANSLIT//IGNORE as tocode
+	but it still fails with 22 on powerpc64
+
+	modernize iconv.m4 probes
+
+	dwgread: fix getopt_long usage
+	with -o. Fixes GH #784
+
+	fixup common_test linkage
+
+2023-07-24  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add tests for dwg_find_color_index()
+
+2023-07-23  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix LTYPE.strings_area conversion from JSON to DWG
+
+2023-07-22  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add tests for bit_read_CMC
+
+2023-07-21  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix find of RGB color index
+
+2023-07-21  Reini Urban  <rurban@cpan.org>
+
+	bigendian: fix dwg_set_handle_size
+
+	make check-minimal deps
+
+	add in_hexbin_tests
+	and add error checks to the non-release version
+
+2023-07-20  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Use in_hex2bin() in bits.c
+
+	Move in_hex2bin() to bits.c
+	This function is used in in_dxf.c and in_json.c
+
+2023-07-20  Reini Urban  <rurban@cpan.org>
+
+	spec: resolve plotview only from non-empty name
+	also more logging.
+	log example_2004 BE crash in json encode: add APPID LibreDWG
+
+	add check-minimal target
+	e.g. for ppc64 via qemu
+	to keep CI timeouts at about 20m
+
+2023-07-20  Reini Urban  <rurban@cpan.org>
+
+	big-endian: run-time checks and most fixes
+	I actually can check big-endian now, on ubuntu mips and ppc64 cross.
+	But no debugging yet. And tests don't run through yet.
+
+	Fix the Rx and Rx_LE variants for big-endian.
+	Fixes GH #774
+
+2023-07-19  Reini Urban  <rurban@cpan.org>
+
+	configure: add AM_TESTS_ENVIRONMENT support for qemu cross-builds
+	debian-style with qemu binfmt support.
+	redhat sys-root style rpm's are broken by redhat,
+	and would need manual labor. (even if they do sound better in theory)
+
+2023-07-18  Reini Urban  <rurban@cpan.org>
+
+	logging: change FORMAT_RD from %f to %g
+	be less verbose
+
+	unit-tests: fix RSd used table field
+
+2023-07-17  Reini Urban  <rurban@cpan.org>
+
+	add mips Dockerfile
+	to actually test big-endian: many failures
+
+	bigendian: broken since 0.12.5
+	as reported by suse obs, which does have a proper big-endian gcc,
+	unlike fedora (missing sys-root).
+	debian/ubuntu also have a proper powerpc64-linux-gnu cross target.
+	add 64-bit (ppc) and 32-bit (mips) big-endian CI compilation targets.
+	(without check so far)
+
+2023-07-15  Reini Urban  <rurban@cpan.org>
+
+	iconv: honor mingw WINICONV_CONST
+	else fails on some mingw systems
+
+	xdata: fix XDATA handle representation
+	the 8 byte are only the handle value.
+
+2023-07-13  Reini Urban  <rurban@cpan.org>
+
+	dxfb: sync dxfb-check with dxf-check
+	almost done
+
+	outdxfb: handles confirmed as hex strings
+	as with ascii dxf
+
+	outdxfb: <=r12 requires leading 0xff
+	for eed group codes
+
+	afl: last AFL++ compilation fixes
+	can now build all programs and examples,
+	with --disable-werror.
+
+2023-07-12  Reini Urban  <rurban@cpan.org>
+
+	afl: fix AFL++ encode compilation
+	obj is accessed now via downconvert_relative_handle()
+
+2023-07-11  Reini Urban  <rurban@cpan.org>
+
+	encode: define MAX_SIZE checks
+	for fixed strings and vectors.
+	we had these numbers before.
+
+	Fixes ossfuzz #58143
+
+2023-07-11  Reini Urban  <rurban@cpan.org>
+
+	examples: missing bits dependencies
+
+	bits: one more bit_TV_to_utf8 leak on error
+	but not yet ossfuzz #58132 finished
+
+2023-07-10  Reini Urban  <rurban@cpan.org>
+
+	bit_TV_to_utf8: overlarge destlen
+	fixes ossfuzz #58008
+
+	fuzz: honor dwg_sections_init errors
+	also encode_r11_auxheader.
+	Fixes ossfuzz #58019
+
+2023-07-08  Reini Urban  <rurban@cpan.org>
+
+	c++compat
+	don't include limits.h from spec.h
+	as it mixes up decls.
+
+2023-07-07  Reini Urban  <rurban@cpan.org>
+
+	clang-format: run
+	build-aux/clang-format-all.sh src include test/unit-testing/ test/xmlsuite/
+
+	clang-format: prepare
+	add more statement macros
+	skip src/codepages/*.h (read-only)
+
+	shellcheck: {json,dxf}-check
+
+2023-07-06  Reini Urban  <rurban@cpan.org>
+
+	decode: allow empty section_map_address
+	Fixes GH #769
+
+2023-06-29  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: clear on realloc ctrl entries
+	Fixes ossfuzz 59428, double-free
+
+2023-06-28  Reini Urban  <rurban@cpan.org>
+
+	unit-tests: missing and wrong SWEEPOPTIONS_fields
+	debugging only
+
+	free: fix UAF with debug_classes
+
+	dxf: default empty revision_guid 2
+	ODA throws invalid input there
+
+	extend dxf-check roundtrips
+	also check the generated DXF with oda
+
+2023-06-27  Reini Urban  <rurban@cpan.org>
+
+	decode: improve dwg_section_page_checksum
+	now exactly as described in ODA, but still wrong
+
+	decode: disable dwg_section_page_checksum warning status
+	no DWG_ERR_WRONGCRC, as the calculation is still wrong
+
+	decode: unify CRC mismatch log messages
+
+	json-check: echo the correct ODA exec, add timeout
+	for 2 r10 files
+
+2023-06-27  Reini Urban  <rurban@cpan.org>
+
+	encode: "was overlarge size" fixups
+	size and bitsize stay the same, just move the content.
+	test with ../json-check -v5 2007/colorwh
+
+	Fixes 17 ODA errors 'CRC does not match' and .dwg needs recovery.
+	22 left
+
+2023-06-27  Reini Urban  <rurban@cpan.org>
+
+	bit_copy_chain: better docs
+
+	ACTION_3DSOLID: fix double-free
+	do not flush the hdlstream 2x. Fixes GH #497
+
+	bit_copy_chain: skip equal chains
+	GH #497
+
+	encode: fix obj_flush_hdlstream
+	honor unaligned rhs dat chains.
+	though handles should be always aligned.
+
+2023-06-26  Reini Urban  <rurban@cpan.org>
+
+	restore c++-compat
+	and some unused vars
+
+2023-06-25  Reini Urban  <rurban@cpan.org>
+
+	encode: downconvert_relative_handle only
+	with non-class objects
+
+	decode: fix wrong ERROR obj_string_stream overflow
+	without strings, such as eg with IMAGEDEF_REACTOR in 2007/Leader
+
+2023-06-24  Reini Urban  <rurban@cpan.org>
+
+	windows compiler warnings
+	unused vars
+
+	in_json: fix LTYPE.strings_area type from TF
+	to BINARY (hex).
+
+	encode: fix bit_downconvert_CMC
+	for non-truecolor color index
+
+	prefer newer ODA over old TeighaFileConverter
+
+	encode: downconvert_relative_handle
+	r2000 cannot read relative handles
+
+2023-06-23  Reini Urban  <rurban@cpan.org>
+
+	json-check: support r11 files
+
+	encode: fix downconvert_DIMSTYLE
+	by adding a dwg_has_eed_appid() check.
+	Now it roundtrips via ODA
+
+	encode: add experimental downconvert_DIMSTYLE
+	only EED for DIMSTYLE.Annotative
+
+	encode: format Dwg_Section_Type stream_order
+
+	encode: add downconvert_MLEADERSTYLE
+
+2023-06-22  Reini Urban  <rurban@cpan.org>
+
+	format: fix DISABLE_NODSTYLE to StatementMacros
+
+	dwg_next_entity: fix fuzzing error
+	when the next_entity handle points to an object, not entity.
+	Fixes ossfuzz #60008
+
+2023-06-21  Reini Urban  <rurban@cpan.org>
+
+	spec: demote MLEADERSTYLE back to unstable
+	no json roundtrips yet.
+	ODA throws Object improperly read: <AcDbMLeaderStyle> (E5)
+	with most 2010+ examples.
+
+2023-06-20  Reini Urban  <rurban@cpan.org>
+
+	spec: fix MLEADERSTYLE round-trips
+	set class_version.
+	but still fails with ODA
+
+2023-06-20  Reini Urban  <rurban@cpan.org>
+
+	spec: fix MULTILEADER for r14
+	we had a slack of 19 bits, which are exactly the
+	r2000 bits missing (arrowheads, blocklabels, ...)
+
+	r14/Leader roundtrips now ok with oda via json
+	fixes Object improperly read: <AcDbMLeader> (640) with example_r14
+
+2023-06-20  Reini Urban  <rurban@cpan.org>
+
+	spec: fix entity_common vs entity field clashes
+	esp. for the importers. We did set the wrong fields
+
+	encode: support downconvert_TABLESTYLE
+	to produce correct TABLESTYLE objects from versions >= r2007
+	since free follows the from_version, we need to specialize
+	free_TABLESTYLE also, to delete the version subclasses.
+
+2023-06-19  Reini Urban  <rurban@cpan.org>
+
+	spec: ditto for HATCH.paths[].polyline_paths
+	the preprocessor got confused and produced wrong .i files
+
+	spec: free HATCH_gradientfill already covered
+	SINCE with free already checks from_version
+
+	spec: fix wrong HATCH.segs
+	they are really in paths[].segs
+
+	*-check: support DS_libereco_R20* dwgs
+	enable teigha on r9-r11
+	no test/$b.dwg copy
+
+2023-06-16  Reini Urban  <rurban@cpan.org>
+
+	spec: fix HATCH.pixel_size roundtrips
+	by storing the calculated has_derived flag into the json
+
+	spec: fix VX_CONTROL entries handle type
+	dedected by ODA roundchecks
+
+	encode: always re-calculate bitsize in START_HANDLE_STREAM
+	fixes json roundtrip in example_2000 with ELLIPSE (BE 210 differences)
+	we should check for floats, plus strings.
+
+	*-check: support -v5 argument
+
+	spec: remove wrong UNKNOWN_BITS_REST in STYLE
+	this was the handles, not some secret bits.
+	CRC is now ok again, ODA complains now not about the style but the ELLIPSE
+
+	spec: fix PLOTSETTINGS (and LAYOUT) dxf order
+
+2023-06-15  Reini Urban  <rurban@cpan.org>
+
+	preR13: move old entities to stable
+	for the importers
+
+2023-06-14  Reini Urban  <rurban@cpan.org>
+
+	decode: fix r2007 Section[%d]->pages[%d] overflow check
+	Fixes GH #763
+
+	add --enable-debug support to dxf?-check tools
+
+	debug: alive is fixed
+	dxf not yet
+
+2023-06-13  Reini Urban  <rurban@cpan.org>
+
+	dxf: rename TABLECONTENT.dxfname back to TABLECONTENT
+	it was wrong. see example_2000.dxf
+
+	injson: skip unneeded fixup Type
+
+	dwgadd: add CHK_MISSING_BLOCK_HEADER
+	to ensure hdr is nonnull
+
+	encode: fix double-free of klass->dxfname of TABLECONTENT
+
+	encode: fix TABLECONTENT type fixup
+	ignore the given dxfname there, rather search by class id
+	--enable-debug only
+
+	decode: more precise bit_read_TV overflow checks
+	for preR13, when we need to read 2 byte lengths, not BS
+
+	decode: skip earlier on FIELD_VECTOR_T overflows
+	to avoid chunk strings (e.g. invalid utf-8) in the json.
+	Fixes debug build of import of json example_2000 with DIMASSOC.xrefpaths
+
+2023-06-12  Reini Urban  <rurban@cpan.org>
+
+	dxfclasses: -Wlto-type-mismatch
+
+	tinycc: -C -E is invalid, only -E
+
+	avoid math macro redefinition
+	unit-tests: error: M_PI_2 redefined
+
+	unit-tests: add _CAST macros
+	where needed. all other field checks are now again type-strict
+
+2023-06-11  Reini Urban  <rurban@cpan.org>
+
+	remaining -Werror fixes
+	suppress -Wmaybe-uninitialized (false positives), -Wformat and
+	-Wstringop-truncation.
+	Mostly with ubsan or macOS.
+
+2023-06-09  Reini Urban  <rurban@cpan.org>
+
+	config: add --disable-werror
+	for autoconf and cmake.
+	fatalize all warnings
+
+	fix clang -Wtautological-constant-out-of-range-compare
+	comparisons short > 0xc0000000 at compile-time
+
+	encode: int vs uchar truncation
+
+	m4: fix mingw gcc -Wformat-y2k probes
+	mingw gcc requires -Wformat with the -Wformat suboptions
+
+	encode: long to short truncations
+
+	indxf: silence wrong -Wstringop-truncation
+	https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88780
+	esp. on old mingw gcc
+
+	dwgadd: formatting only
+
+2023-06-08  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: -Wmaybe-uninitialized
+
+	encode: -Wmaybe-uninitialized
+
+	decode_test: pragma pack warning
+	with msvc.
+	warning C4103: alignment changed after including header, may be due to
+	missing #pragma pack(pop)
+
+	outdxf: fix unsigned loop overflow
+	which never goes < 0 when decr len -= 255.
+	Fixes GH #759, thanks to @weikenxq
+
+2023-06-08  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Improve flags_r11
+
+2023-06-07  Reini Urban  <rurban@cpan.org>
+
+	json: fix json_write_TF \\ quoting
+	Fixes GH #756
+
+2023-06-07  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	To readable code
+
+	Remove trailing code
+
+	Fix size of APPID table record in preR13
+
+2023-06-05  Reini Urban  <rurban@cpan.org>
+
+	add: formatting only
+
+	add: support and document pface triangles
+
+	add: fix r11 pline and vertex flags
+	and improve the examples for 3D.
+	Still wrong flags all-over though.
+	Fixes GH #754
+
+2023-06-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Sort EED codes
+
+	Fix conversion of appid to JSON
+
+2023-06-02  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: add HEADER.point support
+	Fixes GH #750
+
+2023-06-02  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Identify VX is_on option
+
+	Identify VX variables
+
+2023-06-02  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: fix crazy dynapi string issue
+	char text[120] and &text is different as a pointer to s heap string.
+	we rather deref it twice for all buffers and structs, than fixing the static
+	fixed buffers.
+
+	Fixes GH #747
+
+2023-06-02  Reini Urban  <rurban@cpan.org>
+
+	add: add tests for HEADER texts
+	and other
+
+2023-06-02  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Remove trailing "1" from log output
+
+	Fix parsing of HEADER text value
+
+2023-06-02  Reini Urban  <rurban@cpan.org>
+
+	rename the _R11 Dwg_Object_Type_r11 type values to _r11
+	Rename the _R11 Dwg_Object_Type_r11 type values to _r11,
+	to avoid conflicts with the POLYLINE_R11 fixedtype.
+
+	This is preparation to add POLYLINE_R11 entity
+
+2023-06-02  Reini Urban  <rurban@cpan.org>
+
+	add: forgot SEQEND.type in dwg_add_Attribute
+	fixes r11 dwgadd.example_r11
+
+2023-06-02  Reini Urban  <rurban@cpan.org>
+
+	encode r11: refactor encode_preR13_entities
+	blocks might be in between normal entities, see dwgadd.example_r11
+	instead pass an enum arg for entities, blocks or extras, and decide
+	there then, what to emit.
+
+	Fixes GH #746
+
+2023-06-01  Reini Urban  <rurban@cpan.org>
+
+	json: fix TF slack regression
+	A TF string of WIDE\0W should be printed with full slack.
+	Fixes GH #745
+
+2023-05-31  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Run prepared tests
+
+2023-05-31  Reini Urban  <rurban@cpan.org>
+
+	outjson: fix json_write_TF null-deref
+	handle null strings as ""
+	Fixes ossfuzz 58904
+
+	indxf: honor version for default HEADER strings
+	FINGERPRINTGUID and VERSIONGUID must be wide as default, or
+	bit_convert_TU will overflow later.
+	fuzzing bug found by coolkingcole huntr.dev/bounties
+
+	add: no PLOTSTYLE placeholder <r2000
+	dwgadd warnings
+
+2023-05-31  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Improve bit_read/write_BE tests
+
+2023-05-31  Reini Urban  <rurban@cpan.org>
+
+	actions: no ACTIONS_ALLOW_UNSECURE_COMMANDS
+
+	upgrade to ilammy/msvc-dev-cmd@v1.12.1 for node
+	Node.js 12 actions are deprecated
+
+	upgrade to lukka/run-vcpkg@v11 for vs2019-ninja
+
+	dwgadd: fix int vs float decisions
+	now also with checking the target size and type. (stack-overflows)
+	Fixes GH #741
+
+2023-05-31  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add tests for bit_read/write_TV
+
+	Add tests for bit_read/write_TF
+
+2023-05-30  Reini Urban  <rurban@cpan.org>
+
+	fix FORMAT_MC
+
+	minor type errors
+	wrong unit-tests
+	and improve obj.type to BS (short)
+
+	-fno-strict-overflow warning with clang
+
+	encode: wrong Empty TF with length 0 warning
+	and dont log "(null)" [T]
+
+	encode: fix r14 write_BE
+	no r2000+ default bit
+
+	dwgadd: more TRACE
+
+	dwgadd: add examples with header floats to parse
+
+	dwgadd: scanf float before int
+	Fixes GH #741
+
+2023-05-29  Reini Urban  <rurban@cpan.org>
+
+	fix 32-bit handle sizes
+	32bit did not zero the higher bits, leading
+	to too high handle values with the add api.
+
+	msvc: no /lm with cmake
+
+	msvc: ucrt has sys/stat.h
+	fixes last msvc warning
+
+	add_test: MSVC truncation warning
+
+	gperf: silence one more truncation warning
+
+	add extra ubsan action workflow
+	asan+ubsan runs into the 60min timeout
+
+	add -m32 action workflow
+	for the 32bit write handle bug
+
+	actions: -O1 for asan,ubsan
+	to catch more UB's
+
+	add_test: ok many objects
+
+	alive.test: silence the libtool prefix
+
+	STYLE: debug UNKNOWN_BITS_REST
+
+2023-05-27  Reini Urban  <rurban@cpan.org>
+
+	fix r11 -Wstringop-truncation
+	__builtin_strncpy specified bound 32 equals destination size.
+	detected with -O2 -fsanitize=undefined
+
+	enforce -fwrapv esp. with broken gcc
+	See https://thephd.dev/c-undefined-behavior-and-the-sledgehammer-guideline
+	gcc removing bounds checks without any warning
+
+	dwg_api: clang-format some macros
+
+	encode: wrong mingw32 formats, size_t
+
+	add_test: debug dwg_getall_OBJECT failures
+	on mingw 32bit
+
+	decode: log read_BE fields (default or not)
+
+	encode: log write_BE fields (default or not)
+
+2023-05-25  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Regenerate dynapi
+
+2023-05-24  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix preR13 DIMARROW header variable
+	The name DIMARROW is used in r1.4 DXF format and it's different that
+	DIMASZ
+
+	Improve unknown variables in preR13
+
+2023-05-23  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix preR13 SHAPE entity logging
+
+	Identify x_ang in preR13 POINT entity
+
+	Add preR13 DIMENSION_RADIUS/DIAMETER extrusion
+
+2023-05-22  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix preR13 DIMENSION_LINEAR extrusion
+
+	Identify EXTRUSION in preR13 ATTRIB/ATTDEF entities
+
+	Add preR13 point extrusion
+
+2023-05-20  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix vertical alignment in preR13 ATTDEF entity
+
+	Remove obsolete comment
+
+	Fix vertical alignment in preR13 ATTRIB entity
+
+2023-05-18  Reini Urban  <rurban@cpan.org>
+
+	r11: skip BLOCK_HEADER *MODEL_SPACE
+	on output
+
+	encode: more missing size_t's
+
+	r1.4 encode: keep deleted and unused entities
+
+	json-check: no teigha for r1.4
+
+	spec: rename ENDREP fields
+	to avoid the json magic with num_
+	fixes json roundtrips
+
+2023-05-17  Reini Urban  <rurban@cpan.org>
+
+	silence uninitialized vars warnings for AFL fuzzing
+
+	injson: protect overlarge xdata strings
+
+	change ulong to size_t. msvc size_t truncation warnings
+	use size_t (64bit) for the windows long problem, instead of unsigned long (32bit).
+	which is a problem for large files on windows.
+	use the %zu formatter throughout.
+
+	indxf: msvc SCANF_2X has "%2hhX"
+
+2023-05-16  Reini Urban  <rurban@cpan.org>
+
+	more WINE test fixups
+
+	dxf*-check: better teigha checks
+	from json-check
+
+	programs: add -I for config.h
+
+	decode r11: avoid double evaluation in r11 HANDSEED
+	esp. with mingw
+
+	add wine support for programs tests
+
+2023-05-15  Reini Urban  <rurban@cpan.org>
+
+	no inline for be64toh
+
+2023-05-13  Reini Urban  <rurban@cpan.org>
+
+	gperf: enforce size_t
+	and fix it up via regen-gperf, where needed
+
+	fix gperf on macOS
+	macOS 12.6.5 lies about its gperf version, using size_t as 3.0
+
+	c++ compat for programs, examples
+	just it does not link yet
+
+	indxf: full c++ compat
+	by additional macros. but we get better type checks in the rest
+
+	regen-perf: major c++ compats
+	get rid of deprecated register keyword. regen with gperf 3.2
+	note that macOS gperf says 300, but emits size_t!
+
+	minor c++ compat
+
+	encode: fix 2x string_area, zero-padding
+	re-add the zero to strings. (compared with sources)
+	auxheader padding.
+	clear APPID_CONTROL size to recalc when added entries.
+
+	dxfb-check: new debian pkg ODAFileConverter
+
+	extend all handle values to 64bit
+	the eed entity handle needs 8 byte. so the handle.value and absref would too.
+
+	use strtoull for eed.5.entity longlong values
+	otherwise it would overflow. extend handle values to 64bit
+	got dataloss on r11/ACEB10 EED.5.entity values via json
+
+2023-05-13  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix version of AutoCAD for preR13 entity types
+
+2023-05-12  Reini Urban  <rurban@cpan.org>
+
+	dwggrep: fix print_match without PCRE
+	don't double convert from UCS-2 to UTF8
+
+	injson: fix 32bit RLL setters
+	long is not big enough for RLL there.
+	detected with 32bit asan
+
+2023-05-11  Reini Urban  <rurban@cpan.org>
+
+	encode r9: fix numentities calculation and patchup
+	no extras.
+	and write the correct value.
+	fix blocks entities calculation.
+
+	write TF slack
+	to json, write \0 as \u0000.
+	from json, use json_fixed_string.
+	encode: all TF strings must now be of adequate size (check in_dxf)
+
+	dxf2dwg: dat-> . confusion
+
+2023-05-11  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Merge pull request #723 from michal-josef-spacek/fix_warning
+	Fix warning with logging of addr
+
+2023-05-10  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix warning with logging of addr
+
+2023-05-10  Reini Urban  <rurban@cpan.org>
+
+	encode r11: avoid ending junk
+
+	injson fuzz: fix dwg_next_handle for !dwg->num_objects
+
+	r11: fix writing r11 handles, change json for handles
+	change json handle format to size 3
+	esp. for object handles. we need to write the size
+	fix writing r11 handles, analog to read_H
+
+	encode r11: fix EED, skip handle
+	r11 EEDs dont read/write the appid handles, they use the appid_index instead
+	fixes writing ACEB10_r11
+	-v5 log the handles position (before)
+
+2023-05-09  Reini Urban  <rurban@cpan.org>
+
+	encode r11: fix extras section
+	calc. jump_entity_section for JUMP (in_json).
+	extras starting off from the last block index.
+
+2023-05-08  Reini Urban  <rurban@cpan.org>
+
+	json.test: fixed json roundtrips
+
+	encode: fixup address patchup
+	evert part of 0d00fd5c203ded9b495d187819558ee5747d6a32
+
+	fuzz injson: stack-overflow with over-long
+	fixed strings.
+
+	fuzz encode: protect in_postprocess_SEQEND
+
+	fuzz injson: protect >dashes_r11[12] oob
+	allow max 12 elements
+
+	fuzz injson: protect from missing version
+
+	fuzz: fix dwg_find_first_type oob
+
+	dwgwrite: fix invalid type argument of ->
+	only detected with afl-gcc-fast
+
+	encode r11: fix header.blocks_start without blocks
+	write the sentinels, set proper blocks_start.
+
+	encode r11: support EED types 0 and 3
+
+2023-05-07  Reini Urban  <rurban@cpan.org>
+
+	encode r10: skip table crc
+
+	encode r11: unify CASE_ENCODE_TYPE
+	no special-cases anymore. the flag_r11 fixups were wrong
+
+	m4: fix -D_FORTIFY_SOURCE=2 probe
+	it didnt error, only warn
+
+	encode r11: fix tbl->flags_r11 for r9-r11
+
+	encode r11: init on valid header.dwg_version = 0
+	and don't init it away.
+
+	encode r11: encode_preR13_section with spec tables
+	Fixes GH #720
+
+	temp. regen-dynapi
+
+2023-05-05  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix vertex entity flags
+
+	Fix POLYLINE and VERTEX entity decoding in preR13
+
+	Fix detection of POLYLINE and VERTEX entities in preR13
+	There are common POLYLINE and VERTEX entities in preR13.
+	There are concrete POLYINE and VERTEX entities later.
+	This is detection of concrete entities and use code in dwg.spec for
+	precise decoding.
+
+2023-05-05  Reini Urban  <rurban@cpan.org>
+
+	encode_r11: fix VPORT
+	simple json roundtrips now ok, blocks not yet
+
+	decode_r11: fix sentinel search diagnostics
+
+	log: fix -larg
+
+	common.c: DWG_SENTINEL_R11_ simplier sentinel values in comments
+	to be searched for in logs
+
+	decode_r11: delete unused comments/code
+
+	log.in: fix -llogfile option
+
+	harmonize SENTINEL_R11 macro/enum names
+	and simplify the case switches
+
+	decode_r11: search sentinel +- 200 bytes around
+
+	encode r11: fix LTYPE.pattern_len
+	which broke dashes_r11[11]
+
+	api: rename LTYPE.num_dashes to numdashes
+	with r11 the vector is fixed-size 12, not dependent on num_dashes.
+	hence we need to write it into json, and read it back in.
+	without the "num_" vector size magic.
+
+	encode r11: fix STYLE.bigfont_file
+
+	decode_r11: dont overwrite block_entity->handleref.size
+	now json-check r11/entities-2d fails at STYLE.bigfont_file
+
+	api: change BLOCK_HEADER.flag2 to RSd
+	simplier and more logical. defaults to 0xffff
+
+2023-05-04  Reini Urban  <rurban@cpan.org>
+
+	encode r11: disable encode_preR13_DIMENSION
+	it changes its flag_r11 for no good reason. we rather rely on the fixedtype
+	calcuclated earlier. fixes a couple of roundtrip errors
+
+	encode r11: fix dwg_add_handleref for empty absref
+	we cannot search the handles when we haven't resolved them yet.
+
+2023-05-03  Reini Urban  <rurban@cpan.org>
+
+	encode r11: deleted entities also
+	for easier comparisons
+
+	injson: special-case TFv table sizes
+	because we need to access them beyond their length.
+	we would need json_fixed_string for this, but realloc is
+	also ok, because the dynapi registered these strings as TV, not TF.
+
+	decode_r11: auxheader.R11_HANDSEED leak
+
+	encode r11: fix add with non-consecutive table records
+	when using an arbitrary add api, we cannot ensure that all
+	table records are one after each other.
+
+	encode r11: sync UCS with spec
+
+	encode: honor UCS.ucs_elevation when encoding from r2000+
+	to earlier versions. but the default ucsorg is just a 2RD,
+	I don't see any flag value to add the elevation there.
+
+	decode_r11: improve VERTEX type detection, rename r11_auxheader
+	See GH #713. use the pline type for subsequent vertex types.
+	add VERTEX_MESH opts.
+	reformat some encode funcs,
+	rename r11_auxheader funcs
+
+	encode r11: write_sentinel as macro
+	and skip writing deleted r11 entities.
+	it would be useful, but there are encode problems with json and dxf
+	in the type mapper, I couldn't find good fixes for yet.
+
+	json.test: todo preR13 roundtrips
+
+	json-check: no teigha write <r12
+
+	encode r11: fixup empty header.num_sections
+	which prohibited patching the control tbl addresses
+
+	encode_r11: add missing encode_preR13_auxheader
+	This fixes most preR13 json roundtrips.
+
+2023-05-02  Reini Urban  <rurban@cpan.org>
+
+	encode r11: write mand. extras sentines and set extras_start
+
+	encode r11: common tbl used, add tbl crc
+
+	encode r11: move r11 check into the function
+
+	encode r11: patch the section address'es
+	because we dont know the entities_end address yet,
+	when we write the section hdr's.
+	re-use the static Section[id].address for this, which is only written later.
+
+	json: skip the final \r in acis_data strings
+	esp. for json, where we did split only on \n, not \r\n.
+
+	encode_r11: better write_sentinel
+	with -v4 logging, and just the ID
+	remove unneeded bit_write_sentinel
+	default to r11 numheader_vars = 205
+
+	WIP encode r11: add missing sentinels
+	because we still get SECTIONNOTFOUND errors
+
+	json.test: extend to all versions
+	example?r13 has an encoding problem
+	and ACEB10_r11 cannot be read back in
+
+	doc: r11 doc updates
+	and dwgread has no --as VERSION argument (yet)
+
+2023-04-29  Reini Urban  <rurban@cpan.org>
+
+	encode: undo minimal DXF hack
+	creating invalid header strings e.g.
+
+	gen-dynapi for SHAPE.style_id 2
+	r11_idx => name
+
+	preR11 leaks fixed
+	preR13 imports and outdxf dont leak anymore.
+	Fixes GH #466
+
+	encode_r11: calculate HANDSEED
+
+	fix preR13 free CMC
+	somehow the name strings became invalid
+
+	encode_r11: set HEADER.numentity_sections to 3
+
+	decode_r11: non-global dwg_decode_preR13_handleref
+	add to the refs vector.
+	to avoid duplicates,
+	and to avoid BLOCK_HEADER.block_entity leaks.
+
+	examples/dwg2svg2: prefer paperspace
+	if there are paperspace entities, only output them.
+	Else all modelspace entities.
+
+	examples/dwg2svg2: API fixes for preR13
+	use fixedtype, check if paperspace exists
+
+	dxf: fix dxf_print_rd
+	reduce precision is still broken, disable it.
+	fixup for d7f200788
+	fixes dxf-check
+
+	encode r11: calc. the control table sizes
+	also set entities_end. See GH #716
+
+	dxf r11: fix HANDLE (style, 2)
+	but we really should resolve the style_id to its r11 name
+
+	decode_r11: set handles for all, fixes get_first_owned_block()
+	without proper handle we cannot resolve entities, like in get_first_owned_block
+
+	decode_r11: set hdr->block_entity, endblk_entity
+
+	json.test: stricter check_roundtrip
+
+2023-04-28  Reini Urban  <rurban@cpan.org>
+
+	dxf.test: stricter check_roundtrip
+
+2023-04-27  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add missing logging of vertex flag in VERTEX_PFACE in R13
+
+2023-04-27  Reini Urban  <rurban@cpan.org>
+
+	helpers: portable make addprefix workaround
+	add shellcheck target.
+	add old tests to roundtrip testers
+
+2023-04-27  Reini Urban  <rurban@cpan.org>
+
+	encode: more fuzzing assertions => error
+	overwriting dat->chain at pos 0.
+	add some more basic checks.
+	like NULL checks and overflow checks.
+
+	all detected by llvmfuzz
+
+2023-04-27  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add logging of SOLID R11 opts
+
+2023-04-26  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix parsing of preR13 tables
+	Table definitions in dwg.spec need obj->size, which wasn't here.
+
+2023-04-26  Reini Urban  <rurban@cpan.org>
+
+	fix dwg2SVG for preR13, wrong type
+	BTW: we see all these new errors, because we never before iterated over r11
+	entities.
+
+	log: timeout 30 with bigger files automatically
+	eg td/2007/fischer_anchor_base_and_dynamic_blocks.dwg
+
+	unit_testing: changed the test-old files
+	space to _
+
+	add exit 1 for helpers, disable broken shfmt
+	shfmt 3.4.3-1 creates broken if indents
+
+	dxf: dxf_cvt_tablerecord triggers at r2000, not r13
+	e.g. TEXTSTYLE STANDARD or Standard
+
+2023-04-25  Reini Urban  <rurban@cpan.org>
+
+	latest shellcheck 0.9.0, shfmt
+
+	dxf: resolve r11_idx table names
+	FIELD_HANDLE_NAME via dwg_handle_name()
+
+	dwg_api.h: cygwin/newlib already has __nonnull_all
+
+	dxf: $UCSXORI preR11, FLATLAND 70 r20 only
+
+	dxf: fix dxf_print_rd trailing spaces
+	no trailing spaces
+
+	dxf: skip *MODEL_SPACE BLOCK before r11
+
+	decode_r11: set ownerhandle->r11_idx, entities[] logging
+
+	dxf: version-specific table entries
+
+	decode_r11: parse even empty tables
+	Fixes GH #709
+	we need to parse the sentinels and add the control table objects, even if
+	the table is empty or has invalid entries
+
+2023-04-24  Reini Urban  <rurban@cpan.org>
+
+	encode: -Wmaybe-uninitialized first_block
+
+	encode preR13: encode missing last entity/block
+	also fix writing all entities r1.x, not just until the first block.
+	with r1.x there is no blocks section.
+	Fixes GH #702
+
+	automake: rename SH_SOURCES to shell_sources
+	dont trample on reserved names
+	for shfmt only
+
+	decode_r11: fail on sentinel error
+	or empty table number or size.
+	Fixes GH #708
+
+	dwggrep: formatting only
+
+	missing #include AX_STRCASECMP_HEADER
+
+	geojson: fixed for preR13
+	fixedtype, not type.
+	Fixes ossfuzz 58306
+
+	indxf: accept lowercase DWGCODEPAGE
+	e.g. example_r13.dxf has "ansi_1252"
+
+	appveyor: on cygwin set git safe.directory
+	this fixes the cygwin build on appveyor
+
+	appveyor: remove cygwin32
+	Cygwin is not supported on 32-bit Windows
+
+	decode: check failing mallocs in spec
+
+	log: support --big, HACKING: recommend tcc
+	--big is needed to bypass timeouts
+
+2023-04-23  Reini Urban  <rurban@cpan.org>
+
+	dwg.in: check json,dxf,dxfb for fuzzed input
+
+2023-04-21  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix blocks_size for preR13
+	Constant 0x40000000 was added in AC1001 version to blocks_size
+
+2023-04-21  Reini Urban  <rurban@cpan.org>
+
+	appveyor: deploy libiconv-2.dll also
+	Fixes GH #700
+
+	dxf: fix dxf_fixup_string, uninitialized _buf
+	detected by valgrind with MTEXT
+
+	disable failing setup-python-libxml2
+	Requirement already satisfied
+
+2023-04-18  Reini Urban  <rurban@cpan.org>
+
+	codeql: update checkout also to latest node 16
+
+	codeql: update to v2
+	https://github.blog/changelog/2023-01-18-code-scanning-codeql-action-v1-is-now-deprecated/
+
+2023-04-18  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix wrong floating truncation and format
+	use %G, not %f, don't strip overlarge ints.
+	now:
+	$PEXTMIN
+	 10
+	1E+20
+	before:
+	$PEXTMIN
+	 10
+	100000000000000000
+
+	Fixes GH #687
+
+2023-04-18  Reini Urban  <rurban@cpan.org>
+
+	unset HAVE_PYTHON_LIBXML2 on cross
+	Fixes GH #698, for 32bit cross e.g.
+	python demand-loads the shared libxml2 without honoring libpath hints
+
+	common_cvt_TIMEBLL_tests: fix 32bit overflows
+
+2023-04-18  Reini Urban  <rurban@cpan.org>
+
+	check calloc overflows, esp. with 32-bit
+	New alloc limit:
+	"requested allocation size 0xd0000618 (0xd0001618 after adjustments for
+	alignment, red zones etc.) exceeds maximum supported size of 0xc0000000
+	(thread T0)"
+
+	detected by fuzzing. Fixes GH #694, #695, #696, #697
+
+2023-04-18  Reini Urban  <rurban@cpan.org>
+
+	more FORMAT_UMC, esp. for 32-bit
+
+	decode_r11: add BLOCK.name as 2
+
+2023-04-17  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: set BLOCKS header (owner)
+	to generate the entities[]
+
+2023-04-17  Reini Urban  <rurban@cpan.org>
+
+	r11-iter: resolve JUMP's
+	WIP add missing BLOCK_HEADER.entities[].
+	resolve extras section JUMP entities.
+
+	GH #635
+
+2023-04-15  Reini Urban  <rurban@cpan.org>
+
+	actions: apt-get update needed now
+
+	dxf.test: skip symbolic links
+	which I made locally for testing
+
+	decode: fix bit_read_UMC
+	@arturred at GH #386 was right, UMC may need up to 8 byte.
+	The #662 testcase works now, and the samples also.
+	Fixes GH #662 and #126. ERR-2 from #386 not yet.
+
+2023-04-14  Reini Urban  <rurban@cpan.org>
+
+	decode: better recovery from UMC bug
+	reading from the HANDLES stream easily gets corrupted with a wrong
+	read_UMC function. Better recovery logic, and add a unit-test
+
+	GH #662, #386, #126 and znacky_all_dwg_from_cadforum.cz_2004.log
+
+2023-04-13  Reini Urban  <rurban@cpan.org>
+
+	injson r11: split MENU into MENUEXT
+	Fixes ossfuzz 57969
+
+	bits: change TV-ZERO policy GH #683
+	write the same length as when reading. dont include the final zero
+	preR2004.
+
+	encode r11: fix control resolver GH #693
+	the object_map is only stored with an obj. without
+	it cannot resolve.
+	add more -v4 and -v5 handle resolver logging
+
+	use less control handles with r11
+	esp. for out_json. the de/encoding is done elsewhere for r11 still
+
+	log more handles helper functions (esp. r11 resolver)
+
+	encode r11: calc the control address
+	with sentinels for r11
+
+	json: extend r11 handles to size 3 with absref
+	the default r11 control entries get code 3 (the major r11 usage so far)
+	also parse the r11 _control address
+
+2023-04-12  Reini Urban  <rurban@cpan.org>
+
+	encode r11: add missing UCS - VX sections
+
+	more r11 _CONTROL object support
+	which is not yet de/encoded via spec, but use it for JSON at least.
+	rename tbl->flags to tbl->flags_r11 and add it to JSON.
+
+	encode r11: control table flags_r11 and search
+	GH #693, TODO: address and num
+
+2023-04-11  Reini Urban  <rurban@cpan.org>
+
+	bit_read_T32: fix size overflow
+	With fuzzed input, GH #692
+
+	encode: don't skip entities in blocks section
+	wrong entmode
+
+	encode r11: eed write RS not BS
+
+	encode: wrong BLOCK_HEADER.unknown_r11
+	With the new diagnostics of the previous commits
+	a new ACEB10-rewrite.dwg problem appeared:
+	  ERROR: Wrong BLOCK.number or size
+	  ERROR: LAYER.size overflow
+	on encode.
+
+	decode_r11: catch wrong table size or number in the header
+	only warn at the first violation, because the number can be wrong.
+	only error when the number is wrong later.
+	Fixes ossfuzz 56972
+
+	decode_r11: fail in fuzzed overlarge entities_size
+	e.g. ossfuzz 49618
+
+	add make check-ossfuzz target
+
+	dxf: Assume DWG file
+	similar to json. mostly for ossfuzz reproducers
+
+2023-04-09  Reini Urban  <rurban@cpan.org>
+
+	bit_TV_to_utf8: handle out of memory
+
+	use the safer dwg_ref_object() more often
+
+	protect from use-after-free realloced dwg->objects
+	may not access ref->obj when dirty_refs.
+
+2023-04-07  Reini Urban  <rurban@cpan.org>
+
+	document the new r11 JUMP entity and EXTRAS section
+	See also https://github.com/LibreDWG/libredwg/discussions/691
+
+2023-04-06  Reini Urban  <rurban@cpan.org>
+
+	free: skip TABLE/TABLECONTENTS.cells free (workaround)
+	because it's 0x21, not a pointer. Someone is overwriting it,
+	because it's shared with TABLECONTENT. use a subclass instead.
+
+	--enable-debug only
+
+2023-04-06  Reini Urban  <rurban@cpan.org>
+
+	unit-testing classes cleanup
+
+	fix dwg_add_HATCH overflow on HATCH.LWPOLYLINE path segs
+	detected only with c++ fixes
+
+	strrplc: more checks, truncation warning
+	conversion from 'size_t' to 'const int', possible loss of data
+
+	fix most C++ type strictness problems
+	and improve jump_entity_section error handling.
+	only in_dxf is missing
+
+	encode: set dat->codepage
+
+	encode: refactor encode_preR13_entities GH #689
+	use from/to indices, not positions.
+	dxfwrite ACEB10_r11.json works now again.
+
+2023-04-05  Reini Urban  <rurban@cpan.org>
+
+	injson: fix remaining r11 BLOCK,ENDBLK leaks
+	we freed the wrong temp. entities
+
+	injson: fix r11 section overflow
+	we can read up to VX
+
+	encode: support eed code 1 (the appid_index)
+
+	injson: rename POLYLINE_2D.extra_r11 to _text
+	else we get a type error.
+	fix last entity reading (GH #679).
+	support eed code 1 (the appid_index) for ACEB10_r11.
+
+	injson: accept RSd HEADER
+
+	r11 injson: forgot VPORT table
+
+	r11 json: change r11_idx repr, fix color_r11 RCd in_json
+
+	r11 handles: decode, encode, json
+	json specialize r11 only two elems with signed r11_idx.
+	encode/decode: signed -1 for unused r11_idx, use handleref.size, not the code
+
+	injson: preR13 special cases
+
+	codepages: handle dxf undefined as CP_UNDEFINED
+	CP_DWG is gone
+
+	minor codepage encode and dxf fixes
+	esp. the DWGCODEPAGE dxf versions.
+	accept r11 $DWGCODEPAGE undefined.
+
+	README: disable-write and codepage updates
+	also the 2 new optional libs
+
+	API: enable reading preR13 dwg with --disable-write #688
+	enable the add API with --disable-write, but skip some postR13 postprocessing
+	from encode.
+
+2023-04-04  Reini Urban  <rurban@cpan.org>
+
+	alive.test: add more preR13 tests
+	example_r13 and r1.4/entities are stable.
+	r11/entities r10/entities r2.x/entities fail rw.
+
+	FIXME: chibicc fails at bit_read_4BITS_tests
+
+	-Winline eed_need_size
+	gcc4 says: eed_need_size.isra.3: call is unlikely and code size would grow
+
+	tcc found missing returns
+
+	bits: add asian cp tests
+	fix bits loglevels for warn/errors
+
+	windows clang-cl can scanf %2hhX
+
+	ctest: use wine
+
+	bits: more msvc truncation fixes
+	conversion from 'size_t' to 'const int', possible loss of data.
+	bits_test segfaults with vs2019
+
+	support bit_TV_to_utf8 without iconv
+	TODO: asian codepages TV to utf-8,
+	e.g. gh90-dxf_r14.log with "����1", ie. "<B2><BC><BE><D6>1"
+
+	add our own codepage mappings
+	iconv is way too instable.
+	also fix the CP_JOHAB hole.
+
+	wip iconv
+
+	bits: add bit_u_expand
+	convert all \U+XXXX sequences to UTF-8
+
+	iconv: add codepages.c and helpers via iconv
+
+	stabler bit_TV_to_utf8 conversion
+
+	abstract codepage API, convert via iconv
+
+	cmake+configure: add AM_ICONV probe from gcc
+	also to cmake via FindIconv()
+
+	add dxf_set_DWGCODEPAGE and enum Dwg_Codepage
+
+	mingw: check less with mingw
+	we dont want to wait 1hr for the artefact
+
+	fix wrong header.section_info size allocation
+	detected by c++ compilation tests
+
+2023-04-03  Reini Urban  <rurban@cpan.org>
+
+	dynapi: free old malloced values generally
+	cppcheck was right about the leak
+
+	indxf: free old strings in dwg_dynapi_header_set_value()
+	there is a leak in dwg_dynapi_header_set_value() in in_dxf.c:1288
+
+	indxf: fix DIMENSION_LINEAR.oblique_angle
+	old name ext_line_rotation DXF 52
+
+	indxf: fix dxf_read_rl: RL overflow
+	esp. with colors, like C2FFFFFF
+
+	indxf: fix dxfname leaks with dimensions
+
+	indxf: fix AcDb*ViewStyle leaks
+	of skipped pairs
+
+	clang-format off for else_do_strict_subclass chains ...
+
+	free: no dxfname leaks
+	alloced on indxf or injson
+
+	dxf: add SPLINE.fit_pts
+	missing from scenario 1
+	for dxf and free (e.g. added via indxf). not yet calculated.
+
+	indxf: dont overwrite invalid dwg->header.from_version
+	on indxf we only know the from_version, and still have an invalid header.version.
+
+	indxf: fix dxfname leaks on errors
+
+	indxf: fail on missing mandatory CONTROL object
+	Fixes ossfuzz #44483
+
+2023-04-01  Reini Urban  <rurban@cpan.org>
+
+	examples: support mimalloc in api-only samples
+	we need to use the very same malloc/free calls.
+	Fixes dwg2svg2 free()
+
+2023-04-01  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Identify address in SEQEND entity
+	Address mean begin of sequence (polyline with vertexes or insert with
+	attributes)
+
+	Log degrees in RD
+
+	Improve tests for handles
+
+2023-03-31  Reini Urban  <rurban@cpan.org>
+
+	decode: improve fuzzing overflow on auxheader crc calc
+	Improve on 8651fa27dd2de731e706e2ba09f0d28e4e0dce33
+	Fixes part 3 of GH #677
+
+	bits: stabilize bit_utf8_to_TU for invalid strings
+	Fixes both fuzzer bugs GH #681 poc0.bit_utf8_to_TU and poc1.bit_wcs2nlen
+	hexhive: nice fuzzer!
+
+	3dface: rename FACE3D to _3DFACE prefix
+
+2023-03-31  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add logging of 3dface invisible flag
+
+2023-03-30  Reini Urban  <rurban@cpan.org>
+
+	dxf_test: fix -Wformat-overflow
+	value is always NULL
+
+	my_stat: config has no include guard
+	already included before in all cases.
+	avoid duplicate inclusion
+
+	in_json: support HEADER.layer_colors[128]
+	Fixes GH #676
+
+2023-03-30  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix CECOLOR JSON conversion in preR13
+
+	Fix CECOLOR in JSON conversion for preR2
+
+	Fix SNAPUNIT and GRIDUNIT in JSON conversion for preR2
+
+2023-03-30  Reini Urban  <rurban@cpan.org>
+
+	add UNKNOWN_BITS_REST
+	for now used for the STYLE slack after bigfont_file.
+	a "A" 4 after the empty bigfont.
+	      "num_unknown_bits": 12,
+	      "unknown_bits": "4104"
+	See GH #322
+
+	decode: fix DEBUG_HERE overflow
+
+	bit_utf8_to_TU: implement cquoted option
+	yet unused
+
+2023-03-30  Reini Urban  <rurban@cpan.org>
+
+	bits: fix size truncation warnings
+	from msvc: '=': conversion from size_t to unsigned int, possible loss of data
+
+	warn and truncate overlong strings.
+
+2023-03-30  Reini Urban  <rurban@cpan.org>
+
+	outdxf: fix SAB fuzzing sign-confusion
+	1.: use unsigned length
+	2.: fix wrong size check for case 9, long len.
+
+	Fixes GH #677
+
+2023-03-30  Reini Urban  <rurban@cpan.org>
+
+	decode: fix fuzzing overflow with invalid auxheader_address
+	Sanitize wrong auxheader_address or auxheader_size.
+	Fixes part1 of GH #677
+
+	encode: unused var in in_postprocess_SEQEND
+
+	encode: fix ent->color.alpha
+	add a BLx color.alpha_raw field, so that encode does not loose this information
+	on decode
+
+2023-03-28  Reini Urban  <rurban@cpan.org>
+
+	header: remove unused STYLE.unknown
+
+2023-03-26  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix table logging of is_removed flag
+
+	Rewrite logging of removed viewport to common way
+
+2023-03-24  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix DIMSTYLE DIMALTZ and DIMALTTZ for AC1012
+
+	Fix header DIMALTZ and DIMALTTZ for AC1012
+
+2023-03-23  Evgeny Sobolev  <esobolev321@gmail.com>
+
+	indxf: Fix last entity for block
+
+2023-03-23  Reini Urban  <rurban@cpan.org>
+
+	json: assume DWG type for fuzzer input
+
+2023-03-22  Reini Urban  <rurban@cpan.org>
+
+	add JUMP unit-test
+	PR #670
+
+2023-03-21  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Identify JUMP entity
+
+	Identify id for DWGCODEPAGE in DXF
+
+	Remove duplicit codepage
+
+2023-03-20  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix EED appid index variable in preR13
+
+	Fix TILEMODE header variables in preR13
+
+2023-03-18  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix EED layer for preR13
+	This is RS not RC
+
+2023-03-17  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix LEADER path_type and annot_type
+
+	Fix indentation in LEADER logs
+
+2023-03-16  Reini Urban  <rurban@cpan.org>
+
+	spec: fix LEADER.hookline_on
+	which apparently is bit 8 off in arrowhead_type.
+	not spec'd in ODA, and differently implemented in their theiga dxf converter.
+	Fixes GH #656
+
+2023-03-13  Evgeny Sobolev  <esobolev321@gmail.com>
+
+	Fix incorrect read w-coordinate for spline
+
+2023-03-01  Reini Urban  <rurban@cpan.org>
+
+	Dockerfile.centos7: merged centos7 to master
+
+2023-03-01  gongxy  <83904580@qq.com>
+
+	Optimization find_prev_entity,Accelerate DWG generation.
+
+2023-03-01  Reini Urban  <rurban@cpan.org>
+
+	avoid which, use POSIX
+
+	centos7 has an incomplete endian.h
+
+	centos7 has only automake 1.13.4
+
+	Move Dockerfiles into build-aux
+	to avoid copying all the test-data to the docker daemon
+
+2023-03-01  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix tables in preR13
+
+	Fix vx table in preR13
+
+	Fix view table in preR13
+
+2023-02-23  Reini Urban  <rurban@cpan.org>
+
+	cmake: -DENABLE_LTO=Off
+	for faster build times
+
+	Support --enable-mimalloc
+
+2023-02-22  Reini Urban  <rurban@cpan.org>
+
+	minor clang-tidy issues
+
+2023-02-20  Reini Urban  <rurban@cpan.org>
+
+	actions: add vs2019-ninja
+	a bit complicated, but a good documentation
+
+2023-02-19  Reini Urban  <rurban@cpan.org>
+
+	docs updates
+
+	Merge branch 'smoke/VS2019'
+	add Visual Studio 2019 Support
+
+	CI: cmake msys and msvc error search
+
+	msvc: fix unit-tests
+
+2023-02-18  Reini Urban  <rurban@cpan.org>
+
+	msvc: fix cmake packaging
+	new dll name.
+	enable tests when cross-compiling on linux
+
+	msvc: out_json warnings
+
+	fix VS2019 type cast
+	see the VS2019 action:
+	error C2440: type cast: cannot convert from BITCODE_TIMERLL to BITCODE_TIMERLL
+
+2023-02-18  Reini Urban  <rurban@cpan.org>
+
+	VS2019 specific fixes, __VA_ARGS__, __attribute__, suppress warnings
+	* __VA_ARGS__ macro support
+	* __attribute__ only with __GCC__
+	* suppress C4101 uninitialized recount warnings, and strcpy insecure warnings.
+	* no proper const var support
+	  (with the even weirder error: cannot allocate an array of constant
+	  size)
+	* strict dllexport/dllimport decls: fix various omissions
+
+	clang-cl can handle it, VS2019 errors. See the new VS2019 CI
+
+2023-02-18  Reini Urban  <rurban@cpan.org>
+
+	add msvc support
+	now that I can cross-compile it on linux via clang-cl (cmake and ninja),
+	and added a CI for VS2019 on Windows.
+	via ucrt, so only newer Visual Studio's.
+	See previous commits.
+
+	Fix some wrong types along the way, clang-cl x86_64 finds much more
+	deviating integer sizes.
+
+	WIP
+
+2023-02-18  Reini Urban  <rurban@cpan.org>
+
+	add VS2019 CI
+
+2023-02-17  Reini Urban  <rurban@cpan.org>
+
+	tcc fixes
+	wrong dwg_get_HEADER_utf8text (tcc has HAVE_NONNULL)
+
+2023-02-15  Reini Urban  <rurban@cpan.org>
+
+	add make clang-tidy target and probes
+	Closes GH #645
+
+	clang-tidy: fix some bits.c violations
+
+2023-02-14  Reini Urban  <rurban@cpan.org>
+
+	apply regen-shfmt
+
+	add shfmt checks
+
+	cvt_TIMEBLL: fix tm_hour and tm_mday GH #639
+
+	unit-test: add cvt_TIMEBLL tests, catch GH #639
+
+2023-02-14  gongxy  <83904580@qq.com>
+
+	fix cvt_TIMEBLL Interpretation of date.ms
+
+2023-02-13  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'smoke/polyline_has_extra-gh548'
+
+	regen-dynapi with new DWG_TABLE detection
+
+	POLYLINE.extra_r11: variable size
+	16 or 17
+
+	polyline.layer with IN_EXTRA is really the offset
+	GH #548.
+	Log the offset
+
+	spec: other r11 extra, use 2 RLLs instead
+	they indeed do like some encoded links into the extra entity section,
+	for the replaced curve_fit plines, sitting there.
+	See GH #548
+
+	spec: OPTS_R11_POLYLINE_HAS_EXTRA = 0x8000
+	See GH #548
+	HAS_EXTRA means that this entity is replaced by entity in extra entity section.
+
+2023-02-12  Reini Urban  <rurban@cpan.org>
+
+	README, NEWS Updates
+
+	Merge branch 'smoke/preR13-tables'
+
+	free: fix block_control.entries leak/double-free preR13
+	We know the number of tables, but add_ may add some beforehand.
+
+	free: fix auxheader.R11_HANDSEED leak
+
+	decode_r11: remove dead code
+
+	decode_r11: fail on critical section errors only
+	we properly save/restore dat now.
+
+2023-02-11  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: check crc
+
+	decode_r11: setup and link control tables
+	GH #538
+
+	decode_r11: move blocks,extra_size calc earlier
+	for logging only
+
+	out_json: no MENUEXT
+	as it cannot be imported.
+	TODO: split on import or downgrade. GH #636
+
+	header: rename r11 entity section names, fix r11 in_json
+	as before: blocks and extras. extras seems to be similar to AcDs sections,
+	additional entity data. (like calculated spline curve points)
+
+	spec: add DWG_TABLE, fix dwg_decode_<TABLE> visibility
+	the tables are non-static for r11 decoding, the DWG_OBJECT stays static
+
+	decode: support for preR13 objects
+	no handles, no eed too early.
+	GH #538
+
+	decode: move r11 tables to dwg.spec
+	GH #538
+
+2023-02-11  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Remove duplicit xline command
+
+2023-02-09  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix aux header
+
+2023-02-09  Reini Urban  <rurban@cpan.org>
+
+	fix rw 2.10/entities
+	dont endless loop on misread objects, invalid types
+
+	decode: replace if-else chain with switch-case
+	catch errors, simplier code
+
+	improve dwg_sentinel a bit
+	check out-of-bounds, use const
+
+	fixup r11 sentinels
+
+2023-02-09  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Report undefined data before tables
+
+	Fix sentinels in preR13 tables
+
+	Improve preR13 entity blocks encoding
+	We have three blocks of entities.
+	The change is simplifing decode_preR13_section() and improving
+	decode_preR13_entities() to handle all things in entity section.
+	Including sentinels in R11.
+
+	Add r11 sentinels
+
+	Rename sentinel from DWG_SENTINEL_R11_HEADER_END to DWG_SENTINEL_R11_ENTITIES_BEGIN
+
+	Fix name of variable which mean number of sections which have entities
+
+2023-02-09  Reini Urban  <rurban@cpan.org>
+
+	decode r11: improve broken obj->size
+	avoid an endless loop there.
+	testcase: ./rw r2.10/entities
+
+	more __nonnull checks
+	from internal common.h
+
+	is_valid_tag: re-add NULL check
+	Fixes ossfuzz 55769
+
+	regen-dynapi
+
+2023-02-08  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix VX table
+
+2023-02-08  Reini Urban  <rurban@cpan.org>
+
+	unit-tests: fix 2 -Wredundant-decls for dwg_is_valid_tag
+
+	NEWS: 2 more ossfuzz bugs fixed
+
+2023-02-07  Reini Urban  <rurban@cpan.org>
+
+	regen-dynapi
+
+	cppcheck: uninitvar in mpolygon.c
+
+	Update docs and Copyright years
+
+	cppcheck: limit unit-testing define combinations
+
+	cppcheck: suppress wrong preprocessorErrorDirective
+	dwggrep.c:1970:0: error: failed to expand LOG_ERROR,
+	Wrong number of parameters for macro LOG_ERROR. [preprocessorErrorDirective]
+
+	cppcheck: one more memleakOnRealloc, in htmlwescape
+
+	cppcheck: Fix dwgbmp.c Resource leak: fh [resourceLeak]
+
+	cppcheck: suppress wrong memleak warning
+	we copy just the pointer, not the string.
+
+	cppcheck: suppress wrong double-free warning
+
+	cppcheck: fix dxf_read_file memleak on error
+
+	add cppcheck integration
+
+2023-02-06  Reini Urban  <rurban@cpan.org>
+
+	bits: fix cppcheck
+	Common realloc mistake: str nulled but not freed upon failure [memleakOnRealloc]
+
+	autoconf -Wsyntax warning
+
+	dwg_api: fixup wrong EXPORTs
+
+	mingw: upload src/dwg_api.i on failure
+	and the config.h.
+	Press Cancel Workflow on error, after the artefact upload, for faster finish.
+
+	dwg_api.c: add missing EXPORT's
+	harmless, but better than deviating from the header.
+	fixup doxygen comments
+
+	actions: make -j ...
+	and don't run make check on tags
+
+	bump LIBREDWG_SO_VERSION to 0:13:0
+	for the changed add and r11 API
+
+	spec: protect from wrong PROXY_OBJECT overflow errors
+	on unaligned data. but we read whole bytes with TF
+
+	dynapi: fix -Wdiscarded-qualifiers
+
+	encode: fixup invalid tags
+	accept them, just warn
+
+	better integrate dwg_is_valid_tag
+
+2023-02-05  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: -Wmaybe-uninitialized with older compilers
+
+	importers: use dwg_is_valid_tag checks
+	but no conversion, just ignore wrong tags.
+	See GH #628
+
+2023-02-05  Reini Urban  <rurban@cpan.org>
+
+	api: add dwg_is_valid_tag checks
+	for the add API. TODO encode and importers,
+	but they need to upcase the lc letters
+
+	See GH #628
+
+2023-02-03  Reini Urban  <rurban@cpan.org>
+
+	add: more r11 opts and flags, esp. POLYLINE/VERTEX
+	but still encode is broken for these
+
+	dwgadd: fix ATTDEF,ATTRIB tag to any string
+	Fixes GH #628
+
+	NEWS: Update fixed fuzzing bugs
+
+	change versions: add R_2007a, remove unused
+	checked against ODA.
+
+	spec r11: add MENUEXT support
+	Fixes GH #626
+
+2023-02-02  Reini Urban  <rurban@cpan.org>
+
+	decode: initialize sp from src
+	this time -Wmaybe-uninitialized was correct. only caught with -O2
+
+2023-02-02  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix dwgadd attdef and attrib parsing
+	attdef and attrib prompt could be FMT_ANY
+	attdef default value could be FMT_ANY
+
+2023-02-02  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: initialize used
+	typical wrong -Wmaybe-uninitialized
+
+	dwgadd: version specific examples
+	temp. created for each test
+
+	dwgadd: fix scan_pts swallowing the last newline
+	which lost the dimstyle init
+
+	dwgadd: add MLINE support, leading to a new error
+	added better diagnostics
+
+	dwgadd: finish the trace logging
+
+	dwgadd: fix angle stack-overflow
+	convert to the right type.
+	Closes GH #611
+
+	dwgadd: fix scan_pts3d slack, and scan_faces
+
+	dwgadd: fix viewport, add layout warning
+
+	dwgadd: fix "text" parsing
+	and add some logging. we need to parse until the next "
+	Fixes GH #609
+
+	dwgadd: add lwpolyline and polyline_pface
+	broken: text, mline, layout
+
+	dwgadd: support angles in degree
+	See GH #611.
+	Fixes GH #610
+	Also see GH #609: wrong sscanf usage.
+
+2023-02-02  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix extra flag
+	It's after entity options
+	-> Cleanup of color_r11
+
+2023-02-01  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add start_width and end_width to POLYLINE_3D entity
+
+2023-02-01  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: support add_ATTRIB
+	See GH #619
+
+	spec: BLOCKGRIP comments only
+
+	dwgadd: fix clang-format
+	also our public headers
+
+	dwgadd example fixups
+
+2023-02-01  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add dwgadd example for AutoCAD r1
+
+	Fix dwgadd example
+	attdef is entity which define attribute, must be before main attribute
+	entity.
+
+	Support attdef entity in dwgadd
+
+	Export dwg_add_ATTDEF function
+	attdef is regular entity, independent on other
+
+2023-02-01  Reini Urban  <rurban@cpan.org>
+
+	LOG_FLAG_R11 space
+
+	regen-dynapi for POLYLINE_3D.extrusion
+
+2023-02-01  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix POLYLINE_MESH curve_type
+
+	Fix curve_type logging
+
+	Fix polyline 2d curve_type
+
+	Identify invis_flags in 3DFACE entity
+
+	Fix line entity unknown
+	Size of entity is variable
+	In case with extrusion is 56+24
+
+	Fix polyline 3d curve type
+
+	Fix polyline_3d extrusion
+
+	Fix UCS used
+
+	Fix UCS table
+
+	Fix preR13 VPORT table
+
+	Use used variable from COMMON_TABLE_FLAGS
+
+	Move R11 used to PREP_TABLE
+
+	Fix vport table flag
+
+2023-01-31  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	spec: Fix tag and prompt in r11 attdef entity
+
+2023-01-31  Reini Urban  <rurban@cpan.org>
+
+	decode: search for section_map_address
+	Closes GH #617
+	ODA fails with "Unexpected end of file", so failing looks ok.
+
+	decode_r11: fix AUXHEADER decode_preR13_section_chk
+	Fixes fuzzed GH #616. tbl overflow without bounds check
+
+2023-01-30  Reini Urban  <rurban@cpan.org>
+
+	fixup add API errors
+
+2023-01-30  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix presence of ATTDEF entity
+
+	Fix presence of some entities in preR13
+
+	Fix encoding of block name in pre R_2_0b
+
+	Fix LINE in pre R_2_4
+
+	Sort code blocks by AutoCAD version
+
+2023-01-30  Reini Urban  <rurban@cpan.org>
+
+	spec: simplify to PRER13_SECTION_HDR()
+
+	spec: move preR13_section_hdr() into header_variables_t11.spec
+	massive simplification
+
+	decode: fix decode_preR13_section
+	according to header.num_sections.
+	Fixes GH #591
+
+	global HEADER.num_sections and sections
+	num_sections for the allocated section[], sections read from the
+	header.
+
+	encode r11: header crc and sentinel only since r11
+
+	decode: fail on wrong r2000 Classes header
+	Fixes GH #615
+
+	fix decode ubsan: align src or dst in bfr_read_32,64
+
+2023-01-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix arc start and end angles
+	We need to convert to radians
+
+2023-01-26  Reini Urban  <rurban@cpan.org>
+
+	log SPLINE flags, rename splineflags1 to splineflags
+
+	rename Dwg_Section_Type_R13 to Dwg_Section_Type_r13
+	section harmonization.
+	triggered by GH #591, which I cannot repro.
+
+2023-01-26  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Cleanup comments
+
+2023-01-25  Reini Urban  <rurban@cpan.org>
+
+	decode: fix overflows with fuzzed entities_start
+	Fixes GH #594
+
+	entities_start may be < 2
+	objects may be size 0 and address < 2, leading to overflows
+
+2023-01-25  Reini Urban  <rurban@cpan.org>
+
+	logging: simplify block_offset_r11, RLx is good enough
+
+	Update cirrus to freebsd-13-1
+
+	decode: fix r11 blocks_start GH #589
+	analog to blocks_end
+
+	bump file codas and modifications
+
+2023-01-25  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Identify PUCSNAME
+
+	Identify UCSNAME in preR13
+	This is index to UCS table
+
+	Fix gen-dynapi.pl for debian sysinc
+	Debian has includes in arch dependent directory too
+	Closes PR #604
+
+	Identify aspect ratio
+	Closes PR #603
+
+	Fix SKPOLY
+	Closes PR #600
+
+	Unify and rename unknown_unit1-4 header vars
+	unify between preR13 and postR13
+	PR #599, squashed
+
+	Identify flag_3d in preR13 header
+	It's same variable as flag_3d in VIEW table.
+	Not saved to DXF
+
+2023-01-25  Reini Urban  <rurban@cpan.org>
+
+	endian: probe for htobe64, be64toh (unused)
+	but only with <byteswap.h>
+
+2023-01-24  Reini Urban  <rurban@cpan.org>
+
+	spec: cleanup r11 BLOCK actions
+
+	spec: fix some -Wformat (detected via macOS clang)
+	some wrong types.
+
+	move ATTRIBUTE_FORMAT from test_common.h to common.h
+	we will need that for smaller logging
+
+	fix ax_gcc_func_attribute.m4
+	use -Werror
+
+	spec: simplify r11 HANDSEED via endian macros
+	also enable all other actions than decode
+
+	cmake: endian support
+
+	endian: enable all APPLE extensions for memmem
+	the default from src/config.h _POSIX_C_SOURCE 200809L disables most.
+
+	endian: define __XSI_VISIBLE 700 only on cygwin
+	clashes with macOS for memmem, which does not work with _XOPEN_SOURCE 700
+
+	endian: support macOS and mingw with be conversions
+
+	endian: enable default endian macros
+	need _DEFAULT_SOURCE for __USE_MISC
+
+	endian: remove unneeded swaps
+
+	fix WORDS_BIGENDIAN uncertainties
+	on le, just pass through.
+	mingw detected le but failed with unknown byte order
+
+	WIP endian: more conversions
+
+	WIP endian: swap the bits (1)
+	TODO: some writers, handles
+
+	WIP r2004 endian compat
+	roughly based on GH #120.
+	older glibc need _BSD_SOURCE for the byteswap macros, some
+	_POSIX_SOURCE, newer _DEFAULT_SOURCE.
+
+2023-01-23  Reini Urban  <rurban@cpan.org>
+
+	fixup unknown_59 size, regen, fixup timezone
+	timezone is a protected global on darwin
+
+2023-01-22  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix handseed
+
+2023-01-21  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix unit mode header variable
+
+2023-01-21  Reini Urban  <rurban@cpan.org>
+
+	strncpy for dynapi_test.c
+
+	spec: check shorter AppInfo
+	on some dwgs. which led to leaks.
+	also fix a wrong static overflow check
+
+	use more older test-data
+
+	dist the 3 new r9 files
+
+2023-01-21  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add r9 test files
+
+	Add unknown_r11 to VIEW table
+	This variable is similar as in other tables for this version of DWG file
+
+2023-01-20  Reini Urban  <rurban@cpan.org>
+
+	r11: move entites/blocks_start/end to header
+	rename block_addr to block_offset_r11, see GH #483.
+	TODO: write the r11 block_entities.
+	regen the dynapi.
+
+	decode_r11: improve DIMENSION logging
+
+	decode_r11: change DIMENSION_ANG3PT
+	as proposed by Michal, GH #587
+
+	more minor r11 dims: one dimstyle size error
+	Fixes GH #582
+
+	decode: minor 0x8000 harmonization
+
+2023-01-19  Reini Urban  <rurban@cpan.org>
+
+	r11 dimensions: more ANG3PT fields, more dimstyle
+	Fixes GH #587
+
+	decode_r11: fix block entities
+	mask end
+
+	log flags as hex, add more flag enums and logs
+	undocumented LEADER.pathtype 2
+
+	r11: add weird LINE.unknown_r11 GH #586
+	On some lines only, not backed up by some flag or opts.
+	The DXF misses those 2 numbers.
+	E.g.
+	start: (20.000000, 51.000000) [2RD 10]
+	end: (20.000000, -51.000000) [2RD 11]
+	unknown_r11: (-3.626858, 10.000000) [2RD 0]
+
+2023-01-19  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix text_rotation in preR13
+
+	Fix xline2end_pt in preR13
+
+	Fix preR13 dimstyle
+
+2023-01-18  Reini Urban  <rurban@cpan.org>
+
+	silence the -Wformat-y2k warning in load_dwg.c
+
+2023-01-18  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix DIMENSION_ORDINATE in preR13
+	Removing of flag2 field
+
+	Add clone_ins_pt to preR13
+
+	Fix dimension entity
+
+2023-01-18  Reini Urban  <rurban@cpan.org>
+
+	fix dwg_sections_init: renamed, fuzzing GH 581
+	On a mismatch between dwg->header.numheader_vars and dwg->version,
+	a r11 tbl overflow could happen.
+	Fixes GH #581
+
+	add_test: TODO flaky dxf tests GH #572
+
+	extend load_dwg to add/update a fingerprint
+
+2023-01-16  Reini Urban  <rurban@cpan.org>
+
+	re-add probe for attribute format(ms_printf)
+
+	decode_r2007: fix decompression overflows
+	mostly with fuzzing, GH #578.
+	dst_size may be inexact, pass through the real decomp/data size
+
+2023-01-16  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix logging of flags/opts in free
+
+	Fix LOG_LEADER_PATHTYPE macro
+
+	Fix log in free mode
+
+2023-01-13  Reini Urban  <rurban@cpan.org>
+
+	log: strip .DWG also
+
+	regen-dynapi: block_addr, extra_r11 again
+
+	fixup r11 EED for FREE and ENCODE
+
+2023-01-13  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix color vs pspace
+
+	Fix insert entity point in preR13
+
+	Decode eed in preR13 entities
+
+	Log open/close in eed
+
+	Update decoding of eed to preR13
+
+2023-01-12  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix table log of flag
+
+	Fix error in free for BLOCK_HEADER
+
+2023-01-12  Reini Urban  <rurban@cpan.org>
+
+	GH actions: cancel outdated branch workflows
+
+	encode r11: handle entities errors
+
+	rewrite r11: check wrong dwg->cur_index
+
+	alive.test: fix DISABLE_WRITE check
+
+	xmlsuite: english wording
+
+	r11: sync STYLE, fixes bigfont_file leak
+
+2023-01-12  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix view table
+
+	Fix layer table
+
+	Fix style table
+
+	Fix VIEWPORT entity id
+
+	Improve block decoding
+
+	Identify is_removed flag for tables
+
+2023-01-08  Reini Urban  <rurban@cpan.org>
+
+	xmlsuite: add ObjectName props
+
+	xmlsuite: add MTEXT support
+
+	xmlsuite: allow simple errors, fix double-free
+	but still does not work properly again
+
+2023-01-07  Reini Urban  <rurban@cpan.org>
+
+	sync dwg.spec from decode_r11
+	yet unused, GH #538
+
+	rename AX_RESTRICT to AX_C_RESTRICT
+	opposed to CC_RESTRICT.
+	https://github.com/autoconf-archive/autoconf-archive/pull/271
+
+	r11 VIEWPORT handling
+	a bit more handles, see GH #435
+
+	fix mingw -Wpointer-to-int-cast
+	pointer arithmetic
+
+	update ax_add_fortify_source to 3
+	check -D_FORTIFY_SOURCE=3 first
+
+	update to latest m4/ax_valgrind.m4
+	alive.test already has valgrind support
+
+	ax_pkg_swig.m4: reapply my mingw fix
+
+2023-01-06  Reini Urban  <rurban@cpan.org>
+
+	update most autoconf-archive m4's
+	just not my extended m4/ax_compiler_flags_cflags.m4
+
+	configure: replace deprecated $as_echo
+
+2023-01-06  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Log LWPOLYLINE flag
+	rurban: Fixed VERTEXIDCOUNT name
+
+2023-01-05  Reini Urban  <rurban@cpan.org>
+
+	init_sections: another bounds-check error
+	ossfuzz 54237
+
+	use spec.h table flags for r11 also
+
+	Log table flags
+	Replaces PR #562
+
+	decode_r11: fix wrong HAS_ELEVATION filter
+	for r10 LINE, POINT, 3DFACE: also catch deleted entities.
+	Fixes GH #558
+
+	out_dxf: skip deleted entities explicitly
+	as documented. but still does not work.
+	the LINE in the BLOCK is missing, and the INSERT
+
+	preR13: log and document deleted entities
+	when type > 127. we rather keep them. processors (like viewers or converters)
+	must filter them out by themselves.
+
+	add r10/tmp_line test-data
+	by Michal. See GH #558
+
+	add r2.10/block test-data
+	by Michal. See GH #483
+
+2023-01-05  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Identify text extrusion
+
+	Log attrib entity flags
+	rurban: kept comments
+
+2023-01-05  Reini Urban  <rurban@cpan.org>
+
+	Really fix blocks_end
+	a zero and a size of 0x40000000 denotes an empty BLOCK section
+
+2023-01-05  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix blocks_end
+
+2023-01-05  Reini Urban  <rurban@cpan.org>
+
+	.gitignore: .ccls-cache
+	some emacs thing
+
+	fixup block flags, use the old names
+	even if is_ref_ref and is_xref_dep are mixed up in the old code.
+	they should be exchanged later
+
+2023-01-05  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Log block flag
+
+2023-01-04  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Identify block options and log them
+
+	Fix block entity in preR13
+
+	Add PRESET flag for attdef entity
+
+2023-01-04  Reini Urban  <rurban@cpan.org>
+
+	r11: less table offsets
+	the one missing byte in several tables
+
+	decode_r11: change wrong curve_fit POLYLINE_2D to VERTEX_2D
+	an extra vertex created via pedit L F, but with wrong type.
+	Fixes GH #548
+
+	xmlsuite: robust check.py
+	only take test-data/r* or numeric dirs
+
+	configure: fix libxml-2.0 probe
+
+2023-01-04  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix LOG_FLAG_R11_MAX
+	rurban: with adjustments. bitmasks need the sum, not the last
+
+	Log attdef entity flags
+
+	preR13: Fix 3DFACE spec
+
+	Name some dimension options
+
+	Log 3DLINE opts
+
+	Fix align of logging
+
+2023-01-04  Reini Urban  <rurban@cpan.org>
+
+	more FLAG_R11_DIMENSION flags
+	see acad_r12_dxf.pdf
+
+	log more VERTEX flags
+	keep the existing names, unlike PR #550
+
+	more flags, and some simplifications
+	those flags do have the same fieldname. only the prefix may vary for subclasses.
+
+2023-01-03  Reini Urban  <rurban@cpan.org>
+
+	programs: adjust --help and .1 for saveas version
+	via regen-man
+
+	classes: require dwg.h
+
+	bash build-aux/clang-format-all.sh src programs examples test
+	and add some more fixups
+
+	decode: Better Invalid class size warning
+
+	cleanup unused r11 opts and flags
+	and warn if an unused appears
+
+2023-01-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix bigfont_file in style table
+
+2023-01-03  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: fail on invalid numsections
+	Fixes ossfuzz 50191
+
+	preR13 POLYLINE_MESH fixup
+	new opts and DXF
+
+2023-01-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix polyline mesh entity for preR13
+	rurban: but still 4 byte too many (TEMP.DWG_from_autocad_r10_r10.log)
+
+	Add extrusion to polyline entity
+
+	Add extrusion to line entity
+
+	Add extrusion to insert entity
+
+2023-01-03  Reini Urban  <rurban@cpan.org>
+
+	add HORIZ_ALIGNMENT flags and logging
+
+	more LOG_TEXT_GENERATION and LOG_VERT_ALIGNMENT
+	for all versions
+
+2023-01-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Rewrite logging of R11 flags to HAS_ prefix
+
+	Log vertical alignment
+	rurban: with additions
+
+	Log polyline flag
+	rurban: with changes
+
+	Add logging of vertex flag
+	rurban: formatting, r11 types, %d
+
+	Add logging for text generation
+	rurban: minor changes
+
+	Add pretty print of entity options
+	rurban: Changed and simplified to R11 types
+
+	Name unknown flag
+
+2023-01-03  Reini Urban  <rurban@cpan.org>
+
+	add_test: print dwg/dxf_read error code on fail
+
+2023-01-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: sync with dwg_set_dataflags
+	wrong dxf logic
+
+	add dwg_log_dataflags and dwg_set_dataflags
+	set the r2000 TEXT.dataflags when up-converting
+
+	add dwg_log_proxyflag GH #469
+
+	r11: fix POLYLINE_2D.flag
+	Fixes GH #542
+
+2023-01-01  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: fix ossfuzz 47189
+	entities_end overflow
+
+	injson: fix ossfuzz 47352
+	skip empty entities
+
+2022-12-31  Reini Urban  <rurban@cpan.org>
+
+	fix dwg_bmp GH #539
+	fix the dat.size
+	allow huge max_decomp_size with r2004 (eg. material.dwg, Theigha bug?)
+
+	decode: skip dwg_bmp early
+	when header.thumbnail_address is 0, but there is
+	still an empty thumbnail sentinel block.
+	eg 2000/Multileader.dwg
+
+	calc TDCREATE from TDUCREATE
+	from the timezone offset. Fixes part of GH #394.
+	I've looked at the DXF values, and there the TDUCREATE value
+	matches the dwg, not TDCREATE.
+
+2022-12-30  Reini Urban  <rurban@cpan.org>
+
+	fix make codecov for out-of-tree configures
+
+	decode: fix ossfuzz 54163 overflow
+	when reading handles (e.g. an obj->size MS) from wrong address
+
+	decode_r11: fix ossfuzz 49721 overflow
+	when reading the UCS section hdr
+
+	r11: DIMENSION opts flags, and 3d pts
+	Closes GH #468
+
+2022-12-29  Reini Urban  <rurban@cpan.org>
+
+	r11: 3d DIM points since r10 only
+	when the FLAG_R11_ELEVATION is missing
+
+	decode_r11: better DIMENSION_RADIUS
+	honor ELEVATION flag for 3D points
+
+	spec: DIMENSION.flag 70
+	no flag1, the DXF is the same as the DWG flag preR13
+
+2022-12-28  Reini Urban  <rurban@cpan.org>
+
+	spec: changed r11 DIMENSION spec
+	GH #468
+	refactor decode_preR13_DIMENSION
+
+2022-12-27  Reini Urban  <rurban@cpan.org>
+
+	replace missing R_13 checks with R_13b1
+
+2022-12-26  Reini Urban  <rurban@cpan.org>
+
+	spec: cleanup unused HEADER vars, regen-dynapi
+
+	r11 UCS: the last byte is extra
+	it does not belong to the UCS hdr
+
+	spec: change HEADER USERI1-5 to signed
+
+	r11: remaining unknown HEADER vars
+	for proper roundtrips.
+
+	add: more r11 header defaults
+
+2022-12-25  Reini Urban  <rurban@cpan.org>
+
+	fix preR13-dims flag_r11 logic
+	Fixes GH #468. To be tested with rw -r2.6 and add.
+
+	r11: write back HANDSEED
+
+	r11 add HEADER.VPOINT(X,Y,Z)(ALT)
+	the main and alternative VIEW directions
+
+2022-12-20  Reini Urban  <rurban@cpan.org>
+
+	examples: allow examples/dwgadd_test.sh invocation
+
+	macOS diff -1 deprecation
+	diff -bu1 interpretated as -b -u -1
+	-u number is deprecated, use -U
+	See GH #541
+
+2022-12-19  Reini Urban  <rurban@cpan.org>
+
+	add dwg_init_sections, default_numheader_vars
+	it was too ugly. and wrong. Fixes GH #540
+
+2022-12-17  Reini Urban  <rurban@cpan.org>
+
+	fixup encode: grow header.sections on dwgadd
+	-Wsign-compare
+
+2022-12-16  Reini Urban  <rurban@cpan.org>
+
+	encode: grow header.sections on dwgadd
+	on r2004 with the MEASUREMENT section.
+
+	encode for r2004 is not supported yet, but we can run into this
+	heap overflow. Not explicitly forbidden yet, we just print a Warning.
+
+2022-12-16  Reini Urban  <rurban@cpan.org>
+
+	replace all R_13 checks with R_13b1
+	preR13 goes PRE R_13b1 (AC1010)
+	fix 3DFACE spec for R13b1 - R_13: VERSIONS (R_10, R_13) was wrong
+
+2022-12-15  Reini Urban  <rurban@cpan.org>
+
+	preR13: better wrong dat->chain free fix
+	restore the proper dat on fatal error.
+	Fixes GH #486
+
+	decode: protect illegal object_end
+	and underflowing header_vars.size.
+	Also oss-fuzz 54163
+
+	decode: Fixup illegal Header Length
+	the extra RL after the header sentinel might be wrong.
+	Fixes heap overflow in oss-fuzz 54163
+
+	bits: fix dat->byte mult overflow
+	e.g. with oss-fuzz 54163
+
+	spec: start syncing dwg.spec preR13 tables with decode_r11
+	GH #538
+
+2022-12-15  Reini Urban  <rurban@cpan.org>
+
+	preR13: fix wrong dat->chain free with preR13 tables
+	and wrong data, leading to an early return. FIELD_VECTOR_INL
+	behaves better, but see GH #538.
+
+	But LTYPE only table with bit_reset_chain() because of some
+	tbl->size logic later, so we are safe for now.
+
+2022-12-15  Reini Urban  <rurban@cpan.org>
+
+	dynapi: simplify TV strings
+
+2022-12-15  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix DWG versions
+	AC1.3 probably doesn't exist. After this patch version line is full
+
+	Fix AutoCAD releases
+	Releases based on
+	https://autodesk.blogs.com/between_the_lines/autocad-release-history.html
+
+	Fix DWG version in header
+
+	Support MC0.0 DWG file
+	Set dwg_version to 1 as first version of DWG file.
+
+2022-12-14  Reini Urban  <rurban@cpan.org>
+
+	dynapi: protect fixed TFv strings
+	eg. from fuzzed illegal input.
+	Fixes oss-fuzz #49928
+
+	indxf: enforce dxf_fixup_header for missing $ACADVER
+	HEADER is optional, so enforce some version. Needed for string conversions.
+	R_INVALID is invalid
+
+2022-12-14  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix EED 1004 with empty value
+	need to print the GROUP 1004, even with empty value.
+	Fixes GH #536
+
+	DXFB has a better logic: do{} while, and is not affected.
+
+2022-12-14  Reini Urban  <rurban@cpan.org>
+
+	dxf: NOD must be the first OBJECTS item
+	not just the first DICTIONARY.
+	Fixes part 1 of GH #536
+
+	json: fix LTYPE.dashes_r11 size
+	fixed size 12 for json also.
+	Fixes oss-fuzz #53617
+
+	json: fix json_cquote for illegal (fuzzed) strings
+	Fixes part of oss-fuzz #53617
+
+	decode: fix assert with fuzzed illegal HEADER
+	No Section Locator Records at 0x15
+	Fixes oss-fuzz #47319
+
+	decode: route AC1010 and AC1011 to r13, not preR13
+	but I dont have any proper samples from those.
+	only fuzzing DWG's
+
+2022-12-13  Reini Urban  <rurban@cpan.org>
+
+	decode: fix -v4 GH #368 asan crash
+	invalid alloced result in FIELD_HANDLE
+
+	add make log-dwg target
+	individual log files, not a big check-dwg.log
+
+	decode_r11: fix reading empty tables
+	and r11 blocks (without 32byte sentinel)
+
+	add: set HEADER.numsections
+	otherwise we overflow with r11 in header_vars.
+	logic from decode_r11
+
+	dwgadd: disable --verify without -o DWG
+	because we cannot read back in from stdout
+
+	add: set HEADER.numheader_vars
+
+	free: fix r1.4 leaks of deleted entities
+
+	encode: name harmonization
+
+	add: fixup HEADER.numentities
+	via the dwg_add API
+
+2022-12-12  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: bypass asan leak test for r1.4
+
+	encode: fix preR13 entity size
+	add crc
+
+	encode preR13: no duplicate flag_r11 and size
+
+	dwgadd: fixup FMT_ANY quirks, final "
+	FMT_ANY %NNNs parses to the next whitespace, keeping the last "
+
+	add: fix preR13 DIMENSION flags and types
+
+	add: revert Michals R11 type adds
+	only defined valid R11 types. set them manually
+
+	add API: preR13 fixups flag_r11 and opts_r11
+
+	encode preR13: more unhandled _R11 types
+	Michals r11 type fixes changed our type handling, and set it to _R11.
+	Fix it up for dwgadd
+
+	decode: fix double-free of XRECORD.objid_handles
+	silly code.
+	Fixes GH #518
+
+	encode preR13: fixup size
+	if empty (e.g. dwgadd)
+
+2022-12-12  Reini Urban  <rurban@cpan.org>
+
+	encode: fix writing r13,r14 bitsize
+	The position os different from r2000, but we can handle it
+	here at the same place, because we patch it at bitsize_pos when missing.
+
+	Fixes GH #531
+
+2022-12-12  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: LOG_INFO
+
+	dwgadd: fix -v options for --verify
+
+	dwgad: enable r14,r13 tests without XRECORD
+	DICTIONARY.ownerhandle still wrong
+
+	spec: fix DICTIONARYWDFLT.cloning
+	and remove cloning_r14
+
+	dwg_add: fix add_DICTIONARY for the NOD
+
+	configure: move DEBUG_CLASSES into config.h
+	and use it to test dwgadd (#530)
+
+2022-12-12  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix writing of 1.4 release DWG files
+	We are setting entity type for proper version and <R11 has different
+	types.
+
+	Fix going over all objects.
+
+2022-12-12  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix writing of 1.4 release DWG files
+	We are setting entity type for proper version and <R11 has different
+	types.
+
+	Fix going over all objects.
+
+2022-12-11  Reini Urban  <rurban@cpan.org>
+
+	unit-tests: fix load field
+
+2022-12-11  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix parsing of AutoCAD 1.4 entities
+	num is index of actual object
+
+	Fixing GH#471
+
+2022-12-09  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: cleanup old code, fix retval
+	Fixes GH #388 when only one object was added.
+
+	dwgadd: check dwg_add_dat retval
+	if it failed to add any object.
+	e.g. r11 fails to add one point (GH #388)
+
+	dwgadd: fix dwg leaks
+	when add fails harmlessly, eg. r11 with one point
+
+2022-12-08  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: enable more tests
+	just the XRECORD double-free not.
+	r11 errors on verify with 0x100, but not fatally
+
+	dwgadd: adjust tests
+
+	encode: fix writing incomplete tables (preR13)
+	eg. as created by dwgadd <r13
+
+	encode: fix missing HEADER.section[]
+
+	bits: analog to TRACE_DD, fix CHK_OVERFLOW
+	now count to the bits. r13,r14 create wrong common obj/ent handles
+	which cause these overflows
+
+	dwgadd: fix valgrind warnings
+	dependent on uninitialized variable
+
+2022-12-08  Reini Urban  <rurban@cpan.org>
+
+	fix ACSH_init_evalgraph evalexpr leak
+	The evalexpr handles are initialized as global, i.e.
+	created in the object_refs[] vector.
+	Se we can safely free it here.
+
+	Fixes GH #529
+
+2022-12-08  Reini Urban  <rurban@cpan.org>
+
+	free: fix header_vars.unknown_text1 leak
+	with dwgadd, resp. dwg_add_Document()
+
+	fix the FIELD_DD overflows again
+	this time count to the bits. See GH #505
+
+	dwgadd: fix dat leaks
+
+	dwgadd: add more tests
+	and check the verify return value.
+	GH #388
+
+	dwgadd: fix dat->size overflows
+	kept old dwgadd file size, did not set the new dwg file size.
+	GH #388
+
+2022-12-06  Reini Urban  <rurban@cpan.org>
+
+	more fuzzing
+	improve fuzzer documentation.
+	run oss-fuzz on some push also
+
+2022-12-05  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: use sscanf_s
+	Closes GH #388
+
+	dwgadd: forbid >r11 entities with <=r11
+
+	gh: use latest actions
+	for node16, node 12 deprecated in summer 2023
+
+	dwgadd: add tests
+
+	dwgadd: set loglevel, parse only once WIP
+
+	dwgadd: support -a VERSION
+
+	regen-man, adjust dwgadd.1
+
+	dwgadd: support empty -o outfile
+	write to stdout then.
+	change --verbose from -v1 to -v3.
+
+2022-12-01  Dmitry Sinyavin  <s0me0ne@s0me0ne.com>
+
+	Various fixes to dwgadd GH #388
+	CLA done
+
+2022-12-01  Reini Urban  <rurban@cpan.org>
+
+	Update NEWS, AUTHORS. prep 0.13 release
+
+	bump appveyor tags
+
+	unit-test: fix r11 leaks on errors
+	as r11 samples still fail.
+	r11 missing sections or section errors now return DWG_ERR_SECTIONNOTFOUND.
+
+2022-12-01  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: protect from fatal r11 section errors
+	Fixes GH #493
+
+	with illegal (fuzzed) input
+
+2022-11-30  Reini Urban  <rurban@cpan.org>
+
+	decode_r11: fix NULL deref with fuzzed block names
+	Fixes GH #528
+
+2022-11-29  Reini Urban  <rurban@cpan.org>
+
+	cmake: fix install
+	missing public headers, missing programs executables
+
+	decode_r11: fix post HEADER overflow
+	fixes ossfuzz: 53750
+
+	missing dat chain overflow GH #505
+	rework PR 508: catch overflows when reading from it, not when
+	merely advancing. One such case is TRACE_DD, which must be fixed there.
+
+2022-11-23  Reini Urban  <rurban@cpan.org>
+
+	dwglayers: skip empty layer handles
+	Fixes GH #519, fuzzed invalid input
+
+	decode_r11: failing dwg_get_first_object TABLE_CONTROL
+	Fixed GH #524.
+
+	decode_r11: implement PRE_TABLE(UCS)
+	dwg_add_UCS accepts now a NULL origin, as needed by r11.
+
+	decode_r11: better numsections calc.
+	to avoid section[] overflows.
+
+2022-11-20  David Korczynski  <david@adalogics.com>
+
+	gh: add CIFuzz integration
+
+2022-11-20  luz paz  <luzpaz@pm.me>
+
+	Fix typos
+	Found via `codespell -q 3 -S ./.git,ChangeLog,./NEWS -L 2rd,aadd,addd,aded,afe,ba,baed,beed,childs,daa,ded,ede,fo,gir,gost,nam,noo,oce,ro,siz,tekst,ue,uptodate`
+
+2022-11-18  Reini Urban  <rurban@cpan.org>
+
+	decode: fix fuzzing type confusion
+	leading to arbitrary pointer reads.
+	set the obj->type to UNKNOWN_* on unknown class, as the
+	further type switches act on this type. eg out_json.
+	Fixes oss-fuzzer #53468
+
+2022-11-17  Reini Urban  <rurban@cpan.org>
+
+	fix bit_advance_position buffer overflow error
+	we may advance to the end of the stream.
+
+2022-11-15  Reini Urban  <rurban@cpan.org>
+
+	dynapi: regen tests without LAYER.flag
+	broken with commit seperate LAYER.flag0
+
+2022-11-14  Reini Urban  <rurban@cpan.org>
+
+	dwg_decode_add_object comment only
+
+	indxf: assign missing handles for tables
+	for minimal DXF, GH #474.
+	No entities yet, and still WIP.
+	Also default to R12 as from_version.
+
+	indxf: resolve table refs earlier
+	when we start reading ENTITIES, after the tables.
+	Fixes a part of GH #474, now only special table entries are missing.
+	(e.g. LTYPE.CONTINUOUS)
+
+	indxf: fix Invalid VPORT_CONTROL field objid ERROR
+	we can set this object field directly, dynapi cannot.
+	One part of GH #474
+
+	cmake library DESTINATION #333
+	add missing library DESTINATION also.
+	thanks @j3pic
+
+2022-10-16  Reini Urban  <rurban@cpan.org>
+
+	api: seperate LAYER.flag0 from flag 70
+	they are completely different bits.
+	See GH #510.
+
+	fix LAYER.plotflag calculation
+	Fixes GH #509, thanks to @zamtmn (zcad)
+
+2022-09-05  Reini Urban  <rurban@cpan.org>
+
+	GitHub Workflows security hardening
+	https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+
+2022-08-15  Reini Urban  <rurban@cpan.org>
+
+	cirrus: FreeBSD 13 update to python39
+
+2022-07-31  luz paz  <luzpaz@pm.me>
+
+	Fix various typos
+	Found via `codespell -q 3 -S ChangeLog,./NEWS -L 2rd,aadd,addd,aded,ba,childs,daa,ded,fo,gir,gost,noo,oce,ro,siz,tekst,ue`
+
+2022-07-30  Reini Urban  <rurban@cpan.org>
+
+	Revert "Fixes Stack-buffer-overflow in dynapi_set_helper"
+	This reverts commit 4e3f073be2453148af5f4da4d5d22ce9e6c2f7a5.
+	Testing if this fixes mingw.
+
+2022-07-29  Reini Urban  <rurban@cpan.org>
+
+	fixup Fixes Heap-buffer-overflow in dwg_decode_MINSERT_private
+	invalid bit_advance_position fix.
+	we need to advance it, even when out-of-bounds
+
+	fixup decode_r2007 off-by-one
+	commit fe03c5a89cbd441b6840335bd484cf08bc65c7c4 only set the size for one case,
+	but we had three. Fix the real problem, the dest overflow check.
+
+	unit-testing: enable preR13 DWGs
+
+	preR13: fix --disable-write
+	cannot decode_r11 without dwg_add_*
+	Fixes GH #498
+
+2022-07-29  Aleks L  <93376818+sashashura@users.noreply.github.com>
+
+	Fixes Stack-buffer-overflow in decompress_rNUMBER
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=44432
+	
+	`sizeof (r2007_file_header) + 1` is passed in `read_file_header` which leads to off by one write buffer overflow.
+
+2022-07-29  Aleks L  <93376818+sashashura@users.noreply.github.com>
+
+	Fixes Heap-buffer-overflow in dwg_decode_MINSERT_private
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=31741 and
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=31591
+	
+	The out of bounds read happens in `TRACE_DD` macro at `dat->chain[dat->byte]` because of corrupted `dat->byte`: `dat->byte` equals to `dat->size`.
+	The corruption happens before in `bit_advance_position`. When `advance == 2`, `dat->size == 2`, `dat->byte == 1`, `dat->bit == 6` it calculates `pos == 14` and `endpos == 16`.
+	Then it passes the overflow check: `if (pos + advance > endpos)` and after
+	```cpp
+	  dat->byte += (bits >> 3);
+	  dat->bit = bits & 7;
+	```
+	`dat->byte` becomes 2.
+
+2022-07-29  Aleks L  <93376818+sashashura@users.noreply.github.com>
+
+	Fixes Segv on unknown address in dwg_free_summaryinfo
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=33059
+	
+	`dwg.summaryinfo.props[0].value` in `dwg_free_summaryinfo` is uninitialized pointer. It happens when `dwg_read_dxf` fails and partially initialized summary info object is created.
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	api: fix dwg_dynapi_handle_name 3rd arg
+	esp. needed for the unit-tests
+
+	decode: set dirty_refs in dwg_decode_add_object_ref
+	See GH #495
+
+	preR13: fixup the new unknowns for r11 and r2.*
+	regen-dynapi
+
+2022-07-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix POLYLINE detection in preR13
+
+	Fix VERTEX detection in preR13
+
+	Fix r11_unknown on multiple tables
+
+	Fix VIEW table for preR_10
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	SKIP and TODO failing r11 tests for now
+	but start smoking them.
+
+2022-07-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix layer linetype index in preR13
+
+	Fix STYLE for text entity
+
+	Fix style in ATTRIB entity
+
+	Fix style in ATTDEF entity
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	preR13: set control object handles continuation
+	otherwise the entries handles would start at 0 again
+
+	encode r11: check table types
+	errors cuased by wrong ctrl->entries handles/indices
+
+	injson: r13 -> r13b1
+
+	free: fix double-free of DIMSTYLE.DIMTXSTY
+	esp. preR13, which has no handle.is_global
+
+	preR13: en/decode the 5 new r10-r11 table headers
+	which are embedded in the header section.
+	also add the CONTROL objects with add_Document.
+	header.numsections is wrong. should be header.numoldtables or such.
+
+	encode r11: trace tables
+
+	encode r11: write crc16 and r11_sentinel
+
+	dwgrewrite: improve usage, allow more versions
+
+	dwgrewrite: fix dwg_variable_dict dirty static var_dict
+	!var_dict is not enough to check for a valid ref.
+	Fixes invalid var_dict->obj
+
+	WIP dynapi: TFv exceptions
+	the reader needs large enough buffers
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	improve dwg_ref_tblname return status
+	if a fresh allocated or static string.
+	Fixes dwgrewrite and dwggrep heap-use-after-free crashes,
+	but not yet the dwg_find_dicthandle crash with LIGHT.
+
+	make regen-dynapi
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	rename FLAG_R11_HAS_ATTRIBUTES => FLAG_R11_HAS_ATTRIBS
+	for consistency
+
+2022-07-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Identify has_attributes flag
+
+	Use of R11FLAG with named constant
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	json: avoid heap-buffer-overflow for fixed json strings
+	TFv, TFF and such. Luckily only for preR13 strings
+
+	preR13: convert CONTROL objects back to tables
+	on encode. flags not, but they look fixed
+
+	UNKNOWN_UNTIL reading only with decode
+
+	add r2.6 dim dwgs by Michal
+
+2022-07-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix preR13 shape entity
+
+	Fix linetype
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	decode: improve CLASS logging
+	LOG_POS always added a \n. but do that dependent on the trace level.
+
+	decode: trace object vector REALLOCs
+
+	improve decode EED logging
+	LOG_POS add a \n, avoid duplicate \n
+
+	free: fix one-byte leaks
+	with empty TU handle names
+
+	preR13: fix ref->obj crashes
+	resolve_objectrefs when dirty.
+	fixes the dwg2dxf crashes.
+
+	preR13: more SHAPE fields (untested)
+
+2022-07-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix shape entity handle
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	preR13: log the flag_r11 bits
+
+	r11: pspace and viewports
+	but viewports not fully yet
+
+	dwgrewrite beauty
+
+	add preR13 handle support
+	if the HANDLING header_var is set (ie some opts_r11 flag),
+	we have special r11 handles.
+	extend VALUE_H for this.
+
+	preR13: more work on dimension opts
+
+	preR13: abstract and use UNKNOWN_UNTIL(pos)
+	for the unknown ranges, esp. in the header_vars_r11
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	preR13: fix ltype sizes
+	r11: 2
+	before: 1
+
+	also linewt is shorter pre-R11
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	decode: fix revised dwg->object realloc strategy
+	we have now a global dwg->num_alloced_objects.
+	fixes heap-buffer-overflow with preR13
+
+	preR13: common_entity_data.spec
+	and harmonize ent to _ent fields.
+
+	preR13: fix DIMENSION type switch
+	and improve the fields a bit
+
+	preR13: handling_r11, dwg->block_control, POLYLINE types
+	support 2 more POLYLINE types.
+	breaks the r11 tests now
+
+	preR13: fix POLYLINE_PFACE
+
+2022-07-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	preR13: Fix entities and block entities decoding
+	PR #452
+
+2022-07-28  Reini Urban  <rurban@cpan.org>
+
+	r11: log unknowns
+
+2022-07-28  Aleks L  <93376818+sashashura@users.noreply.github.com>
+
+	Fixes Heap-use-after-free in dwg_free_TABLEGEOMETRY_private
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=46847
+	
+	The title is somewhat misleading, because it is a read out of bounds, but the memory out of the bounds is previously allocated and then freed, so it says use after free.
+	In `add_TABLEGEOMETRY_Cell` function when `o->num_cells` equals to zero, the call to calloc doesn't return NULL because of https://linux.die.net/man/3/calloc#:~:text=If%20nmemb%20or%20size%20is%200%2C%20then%20calloc()%20returns%20either%20NULL%2C%20or%20a%20unique%20pointer%20value%20that%20can%20later%20be%20successfully%20passed%20to%20free().
+	So it passes the check
+	```cpp
+	  if (!o->cells)
+	    {
+	      o->num_cells = 0;
+	      return NULL;
+	    }
+	```
+	Next it goes to `switch (pair->code)` which is 10. So it fails the `CHECK` because `i == -1` and return NULL, however the `o->cells` has the the address from zeor size calloc call.
+	```cpp
+	#define CHK_cells                                                             \
+	  if (i < 0 || i >= (int)num_cells || !o->cells)                              \
+	    return NULL;                                                              \
+	```
+	Later in `dwg_free_TABLEGEOMETRY_private` an offset of `tablegeometry` is added to the address in `o->cells` so it reasult in heap read overflow.
+
+2022-07-28  Aleks L  <93376818+sashashura@users.noreply.github.com>
+
+	Fixes Stack-buffer-overflow in dynapi_set_helper
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=46918
+	
+	`dwg_dynapi_header_set_value` in `json_HEADER` is called with a pointer to long:
+	```cpp
+	          long num = json_long (dat, tokens);
+	          LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type)
+	          dwg_dynapi_header_set_value (dwg, key, &num, 0);
+	```
+	However the `f->size` is 255 which leads to stack overlow in `dynapi_set_helper` when `memcpy (old, value, f->size)` is called.
+
+2022-06-27  luz paz  <luzpaz@pm.me>
+
+	Fix various typos
+	Found via `codespell -q 3 -S ChangeLog -L 2rd,ba,childs,daa,ded,fo,oce,ro,siz`
+
+2022-06-26  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add case with --disable-write
+	There is issue with build actually in this special case.
+
+2022-05-16  Reini Urban  <rurban@cpan.org>
+
+	make distcheck: package the new files
+
+2022-05-14  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add test files for R11
+
+2022-05-09  Reini Urban  <rurban@cpan.org>
+
+	codeql: yaml syntax fixes
+	paths must be in an extra codeql-config.yml file,
+	as argument to init@v1
+
+2022-05-08  Reini Urban  <rurban@cpan.org>
+
+	json: support RSd, eg for TABLE.used fields
+	and skip duplicates
+
+2022-05-08  Reini Urban  <rurban@cpan.org>
+
+	codeql UB: pointer overflow check
+	When checking for integer overflow, you may often write tests like p + i <
+	p.  This works fine if p and i are unsigned integers, since any overflow in
+	the addition will cause the value to simply "wrap around." However, using
+	this pattern when p is a pointer is problematic because pointer overflow has
+	undefined behavior according to the C and C++ standards.  If the addition
+	overflows and has an undefined result, the comparison will likewise be
+	undefined; it may produce an unintended result, or may be deleted entirely
+	by an optimizing compiler.
+
+	fixes codeql #51, #52
+
+2022-05-08  Reini Urban  <rurban@cpan.org>
+
+	codeql: integer-multiplication-cast-to-long
+	Multiplication result converted to larger type with possible arithmetic
+	overflow. codeql #2, #3, #5
+
+2022-05-08  Reini Urban  <rurban@cpan.org>
+
+	CodeQL #53, compare long with narrow
+	Comparison of narrow type with wide type in loop condition
+
+	In a loop condition, comparison of a value of a narrow type with a value of
+	a wide type may result in unexpected behavior if the wider value is
+	sufficiently large (or small).  This is because the narrower value may
+	overflow.  This can lead to an infinite loop.
+
+2022-05-08  Reini Urban  <rurban@cpan.org>
+
+	extend CodeQL #65, decode int overflow
+	Extend aca2aead798c300f4fa40a7a85c49564a6408c82
+
+	preR13: fix TEXT.common.ltype leak and exports
+
+	dwg_api: fix preR13 vertex iterators
+
+	fixed preR13 types dwg2ps
+	and the old object check was also wrong.
+
+	r11: change dashes_r11 to static [12] inlined
+
+2022-05-07  Reini Urban  <rurban@cpan.org>
+
+	r11: fix LTYPE dashes and STYLE
+
+2022-05-06  Reini Urban  <rurban@cpan.org>
+
+	security: no alloca in a loop
+	CodeQL #50. looped num_eed or num_classes times for
+	all strings. rather recycle the temp. stack buffer.
+
+	get rid of alloca at all.
+
+2022-05-06  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'smoke/preR13-iterators'
+	GH #453
+
+	Create interim _CONTROL objects, holding the tables.  best as r2004 arrays,
+	not as r2000 doubly-linked lists.  this would allow the old iteration via
+	model_space -> block_control -> entities, as before.  e.g.  for dxf in/out,
+	and all the helpers.
+	There are still minor leaks to be fixed, and DXF to be tested.
+
+2022-05-06  Reini Urban  <rurban@cpan.org>
+
+	load_dwg: preR13 fixes with wrong types
+
+	injson: more leaks
+
+	preR13: allow dxfwrite memory leaks
+	for now. GH #466
+
+	preR13: harmonize color_r11 into color CMC
+	and fix injson warning: gnore wrong index i, expected i-2
+
+	clean: extend make clean to new tests
+	make distcheck failed with distcleancheck
+
+2022-05-05  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix R11 header sentinel
+	There are multiple R11 header variants (204 and 205 header variables)
+
+2022-05-05  Reini Urban  <rurban@cpan.org>
+
+	injson: fix 2dpoint import
+	into 3dpoints
+
+	json: fix r2-r11 json for INSERT
+
+2022-05-05  Reini Urban  <rurban@cpan.org>
+
+	injson: don't Change wrong type to fixedtype
+	for old preR13 dwg's.
+
+	alive.test: abstract clean() function
+
+2022-05-05  Reini Urban  <rurban@cpan.org>
+
+	preR13: fix heap-over-flow with fixed TF strings
+	strdup of such a TF shortens it, and runs into a heap-over-flow
+	on bit_write_TF.
+
+	r11: fix outdxf ENDBLK leaks
+
+	r11: add crc16 and DWG_SENTINEL_R11_HEADER_END check
+	Revises PR #458
+
+	r11: read table crc16
+	revises previous commit
+
+2022-05-05  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix trailing bytes for table check
+
+2022-05-05  Reini Urban  <rurban@cpan.org>
+
+	autoupdate to autoconf 2.71
+	but still try to be back-compat with autoconf-2.69
+
+	decode: fix int overflow
+	CodeQL #65: Multiplication result may overflow 'unsigned int'
+	before it is converted to 'long'.
+
+	CodeQL: restrict to sources, skip scanning unsafe test code
+
+	preR13: add enum DWG_OBJECT_TYPE_R11, fix mspace BLOCK
+	do not encode the artificial mspace BLOCK and ENDBLK, set its type to 0.
+	return a proper dwg_add_BLOCK_HEADER result.
+
+	preR13: split too large json_header_write_private functions
+	variable tracking size limit exceeded with ‘-fvar-tracking-assignments’
+
+	free: fix block_control->entries leak
+	we allocated entries for model_space, and removed num_entries
+
+	distcheck: ship the new preR13 test-data
+	Fixes make distcheck
+
+	preR13: fix leaks in common_entity
+
+	preR13: add dwg_free_preR13_header_vars
+	to match decode. Fixed all leaks.
+
+	API: change dwg_add_Document, add dwg_new_Document
+	else preR13 leaks the dwg.
+	Down to 79 byte(s) leaked.
+
+	preR13: set new dwg from add_Document
+	and free the add_Document defaults when decoding it
+
+	preR13: fix some table name leaks
+	dwg_add_TABLE creates a new name.
+	from 10304 leaking bytes down to 6456 with r11/ACEB10.
+
+	indxf: fix missing AcDbZombieObject subclass
+	fixes example_r13 alive.test
+
+	tests: enable example_r13
+	and fix a proxy_object unit-test with a NULL objid
+
+	preR13: more json and encode tables
+	with encode from json/dxf we don't have sections, just the control
+	objects.
+
+	preR13: block_header and style specs
+	esp. for r11
+
+	preR13: fix encode handle sizes
+	fixes dwgrewrite
+
+	preR13: fix unit-testing/decode_test undefined refs
+
+	preR13: decode tables into objects
+	set the entries handles, common fields
+
+	preR13 json: set ctrl table fields
+	size, num_entries, entries
+
+	preR13 json: add object handles and r11_idx
+
+	preR13 docs: Add Tables
+	How the old tables are mapped into the new objects
+
+	preR13 refactor: extra decode_r11.c module
+	and add all the CONTROL objects for the tables.
+	conveniently use dwg_add_Document for the initial setup,
+	so that we can treat r11 similar to r2004 iterators.
+	i.e. GH #443 Variant 2
+
+	rename HEADER.num_entities and .num_bytes
+	to .numentities and .dwg_size, not to be skipped in json
+
+2022-05-05  Reini Urban  <rurban@cpan.org>
+
+	WIP preR13: partial tbl support for in_json
+	create the sections from the objects, but just the number.
+	the size and address should be filled on encode
+
+	Two variants:
+	1. json dump the tables, entities and blocks, as in the dwg/dxf.
+	   very simple, but special code for in_json.
+	2. or create interim _CONTROL objects, holding the tables. this would allow iteration
+	   via model_space -> block_control -> entities, as before. e.g. for dxf in/out, and
+	   the helpers.
+
+2022-05-05  Reini Urban  <rurban@cpan.org>
+
+	preR13: rename the magic FILEHEADER.numheader_vars, numsections
+	They are not exported to json, because the num_ fields are just
+	the number of the related array.
+	But here we have no related array, at least not trivially.
+	Rather store them in json, so rename them.
+
+	preR13: fix api impl. type => fixedtype
+	needed esp. in the iterators. now the tests dont hang, just fail
+	for injson and dxf
+
+	preR13: activate alive.test, fix dwggrep a bit
+	dwggrep and dxf would need the BLOCK_HEADER/BLOCK_CONTROL objects
+	for basic entity/blocks iterators.
+	injson and dxf still broken.
+
+2022-05-05  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix 3dline entity
+
+2022-05-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix 114 header variables
+
+	Fix WORLDVIEW header variable
+
+2022-05-03  Reini Urban  <rurban@cpan.org>
+
+	add SECURITY.md
+	github complained about it
+
+	make regen-dynapi: VIEWDIR DXF
+
+2022-05-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix preR13 layer index in entities
+
+2022-05-01  Reini Urban  <rurban@cpan.org>
+
+	fixup r2.10 dxf header_vars codes
+	for TEXTSTYLE, CLAYER.
+	Don't change the normal codes, just r2.10 is flipped
+
+2022-04-30  Reini Urban  <rurban@cpan.org>
+
+	fixed r2.10 dxf header_vars
+	could not test the versions between r2.10-r2.6,
+	so this needs to be adjusted later. I assumed r2.21
+
+	preR13: work on dxf support
+	fixed all the header vars so far.
+
+	doc: Update pre-R13 capabilities
+	list all supported revisions.
+	add @registeredsymbol.
+	add trademark paragraph.
+
+	dwgadd: fix --disable-dxf compilation
+
+	move api functions to dwg_api.c
+	with --enable-write --disable-dxf --disable-json.
+	Fixes GH #449
+
+2022-04-30  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix preR13 line entity
+
+	Fix preR13 3DFACE entity
+
+2022-04-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add AC1006 test DWG file
+
+2022-04-26  Reini Urban  <rurban@cpan.org>
+
+	preR13: support deleted entities r2.0-r11
+	which are the entities moved into a BLOCK.
+	eg test-data/r2.10/entities.dwg and r2.6, but also r1.4.
+
+	preR13: fix POLYLINE_2D.end_width
+	The other PR #448 fixes do look wrong to me
+
+2022-04-26  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix style_id print in shape entity
+
+2022-04-26  Reini Urban  <rurban@cpan.org>
+
+	preR13: support block entities
+	with no block_end, only num_entities in the loop.
+	the blocks_offset is really the size minus 0x40000000, as Michal said.
+	he was right. rename it.
+	Now just the VIEW is wrong.
+	Fixes GH #444
+
+2022-04-25  Reini Urban  <rurban@cpan.org>
+
+	gitignore preR13 docs
+
+	preR13: fix SHAPE specs
+	style_id and scale mostly.
+	replaces PR #445
+
+2022-04-24  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix begin block entity
+	There is no block name in this entity.
+	Block name from pre R_2_0 is converted to block table.
+
+	Fix preR13 ATTRIB entity
+
+	Fix preR13 attdef entity options
+
+	Fix ATTDEF flags comment
+
+	Add AC1003 test DWG file
+	With script definition
+
+	Add AC2.10 test DWG file
+	With script definition
+
+2022-04-24  Reini Urban  <rurban@cpan.org>
+
+	encode: fix table object indices to write
+	but still fails
+
+2022-04-23  Reini Urban  <rurban@cpan.org>
+
+	decode TF, less verbose tracing
+
+	outjson: adapt to preR13
+	and prepare the tests. no subdirs dwgs yet
+
+	encode: fixed for r1.4
+	tested ok with dwgrewrite, but no translations yet
+	from other versions. json and dxf also not yet adapted.
+
+	preR13: enable write of preR13 in programs
+
+	enable decode_preR13 even in releases
+
+	doc: fix recursive TEXINPUTS
+	Fixes GH #404. Thanks to @AndrewAmmerlaan
+
+2022-04-22  Reini Urban  <rurban@cpan.org>
+
+	install: fix load_dwg.py destdir
+	Fixes GH #406
+
+	preR2: fix r1.4, change ENDREP fields
+	ENDREP harmonized with MINSERT.
+	re-enable r1.4 unit-test for load
+
+	spec: fix shape spec for r13
+	broken with 8f116dd9b79b587f163cb0bfafc33b49a8d503db
+
+	disable r1.4 decoding in unit-test
+	not yet stable
+
+	preR13: fixes for old types
+	use fixedtype for <R13 types
+
+2022-04-21  Reini Urban  <rurban@cpan.org>
+
+	encode: fix patching preR13 pos
+
+	more LOAD support, make regen-dynapi
+	dxf, json, unit-test
+
+2022-04-21  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix pre R_2_0 shape entity
+
+	Fix pre R_2_0 text entity
+
+	Fix pre R_2_0 common entity reading
+	There is no entity size.
+	There is flag_r11 and flag2_r11 fields, but zeroed still
+
+	Add load entity
+	This entity is pre R_2_0
+
+	Fix preR13 PSLTSCALE and TREEDEPTH header variables
+
+2022-04-21  Reini Urban  <rurban@cpan.org>
+
+	rename test-data/1_4 to 1.4
+
+2022-04-21  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add AC1.40 test DWG file
+
+2022-04-21  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'smoke/versions' into smoke/preR13
+	Use a proper table and an API.
+	E.g. support beta versions, diffing only in the dwg_version.
+
+	indxf: same here
+	but also set dwg_version from the struct
+
+	in_json: use the new dwg_version_hdr_type()
+	and not linear search topdown.
+	also revise the version on dwg_version (if a beta).
+
+2022-04-21  Reini Urban  <rurban@cpan.org>
+
+	refactor DWG versions (GH #436)
+	enable all the known alpha and beta versions,
+	seperate pre and post release versions,
+	add api to check the dwg_version with the magic header,
+	change linear search backwards, so that we can list the versions chronologically.
+
+	Fixes GH #436
+
+	also adapt pre r2.0 changes to encode.
+
+2022-04-21  Reini Urban  <rurban@cpan.org>
+
+	WIP preR13: fix BLOCK_HEADER tables
+
+2022-04-20  Reini Urban  <rurban@cpan.org>
+
+	preR13: fix r9 header_vars
+	missing num_entities and unknown_5.
+	partially support POLYLINE, type 18,
+	but this has different flags.
+
+	encode: better FIELD_CAST tracing
+	e.g. BLd
+
+	indent only
+
+	preR13: first r1.4 attempts
+
+2022-04-19  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Stub for entity handling id
+
+	Remove extrusion from point
+	I don't think that extrusion is possible in point entity (tested on r14)
+
+	Fix enums for FLAG and OPTS
+
+	Fix elevation
+
+	Fix decoding of entity with thickness
+	thickness is common structure defined by flag before main entity
+
+2022-04-19  Reini Urban  <rurban@cpan.org>
+
+	preR13: free the dispatched VERTEX and POLYLINE ents
+
+	dynapi: fix regen-dynapi in-tree
+	as reported by Michal
+
+2022-04-18  Reini Urban  <rurban@cpan.org>
+
+	preR11: revise current_color_convert
+	not a RD. rather the old smaller CMC struct, with only the low
+	part interesting as index.
+
+	mingw: appveyor native mingw host=x86_64-pc-mingw64
+
+	mingw: disable shared mingw decode_test.exe
+	duplicate symbols on linking
+
+2022-04-18  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix current_color_convert and identify TREEDEPTH
+
+2022-04-18  Reini Urban  <rurban@cpan.org>
+
+	preR13: ltype is only one byte
+	max 255 linetypes.
+	ATTDEF.flags ditto
+
+	preR13: fail with wrong entity
+
+	preR13, entity repair, dimensions
+	and fix POINT.z flag
+
+	preR13: fix LINE opts
+	matching michal's kaitai scripts
+
+2022-04-18  Reini Urban  <rurban@cpan.org>
+
+	preR13: dispatch VERTEX and POLYLINE
+	use our types. but some opts are still unclear.
+
+	dxf.test: relax roundtrip check from == to >=
+
+2022-04-18  Reini Urban  <rurban@cpan.org>
+
+	preR13: more _r11 indices replaced by handles
+	TEXTSTYLE, CLAYER. Fixed some unit-tests
+
+2022-04-17  Reini Urban  <rurban@cpan.org>
+
+	preR13: fix ATTDEF
+
+	preR13: harmonize _r11 indices with handles
+	remove the special _r11 indices, and store them in our handles.
+	this way we can convert them easier, name <-> idx <-> handle
+
+	mingw: more exports
+
+	spec: remove outdated comment
+	we already handle the nolinks logic.
+	this comment was added with the code in 2010.
+
+	mingw: use -DDLL_EXPORT
+	no extra LDFLAGS -fstack-protector on windows, link already includes CFLAGS.
+	update TODO plans.
+	fixup some missing EXPORT's.
+
+	make dwg_version_hdr_type public API
+
+2022-04-16  Reini Urban  <rurban@cpan.org>
+
+	preR13: harmonize more _r11 fields
+	rename color_rs/ltype_rs to _r11
+
+	preR13: ATTRIB fixes
+	and no handles at all
+
+	preR13: fix INSERT.rotation
+	and set has_attribs
+
+	preR13: disable pre-R12 EED
+	this code is probably wrong. I got it from dwg11.c
+	have to read when EED's were introduced.
+
+	preR13: fix TV BS, special-case free by fixedtype
+	not type
+
+	preR13: more entities
+	and fixed the blocks detection via some temp. hack.
+	still wrong free on wrong types
+
+	mingw: missing C99 strftime %F %T
+	the msvcrt
+
+2022-04-15  Reini Urban  <rurban@cpan.org>
+
+	preR13: decode and encode many entities now
+	the _ent->opts_r11 and flag2_r11 are unclear yet.
+
+	TIMERLL: add support for relative times
+	where date.days == 0
+
+	TIMERLL: re-implement proper time conversion
+	from my old dwg11.c (1995), mandates now -lm.
+	use TIMERLL in _r11.
+
+2022-04-14  Reini Urban  <rurban@cpan.org>
+
+	spec: <R13 change CLAYER_r11 name and DXF code 8
+
+	spec: <R13 unknown_12 is TEXTSTYLE_r11
+	Fixes GH #414. Thanks to @michal-josef-spacek for finding out
+
+	fixup 3DLINE api
+	hack upon hacks... oh my
+
+	preR13: more decode fixes
+
+	HACKING: advise about make regen-dynapi
+
+	make regen-dynapi
+
+2022-04-14  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Identify new pre R13 header variables
+
+2022-04-14  Reini Urban  <rurban@cpan.org>
+
+	<R13: add dwg_decode_preR13_header_variables
+	the spec fields return on error. so wrap it.
+	improve decoding the tables.
+
+	spec: fix clang -Wtautological-constant-out-of-range-compare
+	RCu can be max 255, then it wraps around
+
+	<R13 unit-tests, fixup _3DLINE to 3DLINE name
+	move the new ents to unstable. regen-dynapi.
+
+2022-04-13  Reini Urban  <rurban@cpan.org>
+
+	<R13: integrate the old 3 types
+	into the loops. We got -Wunused-function warnings
+
+	make regen-dynapi
+	for the new preR13 entities
+
+2022-04-13  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add missing pre r13 entities
+
+	Improve entity id comments
+	Comments are in form (number1/number2) or (number1) or
+	(number1/Tnumber3).
+	number1 is entity id after r13
+	number2 is entity id in r2.0-r13
+	number3 is table id in r2.0-r13 (there are 5 basic tables and other
+	tables are in header variables).
+
+2022-04-13  Reini Urban  <rurban@cpan.org>
+
+	work on preR13 header and entities
+	can parse now the entities.
+	cross-checked with Michals dwg*./ksy files from his perl cad modules
+
+	add DEBUG ents: BREAKDATA, BREAKPOINTREF, *GRIPENTITY
+	with not many fields for now.
+	but I found coverage in free cadforum.cz samples,
+	and latest ODA 23.2 knows it also.
+
+2022-04-12  Reini Urban  <rurban@cpan.org>
+
+	spec: add 25 UNKNOWN SECTION, improve auxheader.spec
+	document the beta dwg_version fields
+
+	work on ACAC103-4 support
+	There's only a single example dwg though, and this might be
+	from a beta revision.
+
+	simplify dwg versions
+	use a single array of releases, headers, versions.
+	and add all the possible DWG versions (also the not yet seen,
+	and the versions which did not change the DWG).
+
+2022-04-11  Reini Urban  <rurban@cpan.org>
+
+	Fix wrong ERROR: Skip section AcDb:AcDsPrototype_1b
+	The size overflow error was incorrect, fixes one example from
+	GH #144, esp. CFI - RIC - Room v3-2.dwg
+
+2022-04-08  Reini Urban  <rurban@cpan.org>
+
+	header.spec: document HEADER.security_type flags
+	and regen-dynapi
+
+2022-04-03  Reini Urban  <rurban@cpan.org>
+
+	fix !HAVE_STRNLEN macro
+	Fixes GH #418
+
+	revert part of config.h.in: HAVE_DLFCN_H needed by mingw
+	removed 4 commits before: b087dabf6 extend cmake probes
+
+2022-03-24  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix use-after-free in the pair error-return design
+	E.g. GH #425. On errors don't free pair and use pair.
+	pair = NULL announces success, on error return the pair.
+
+	add a EXPECT_UINT_DXF check esp. for BL. signed BL values have
+	the type BLd.
+
+2022-03-08  Reini Urban  <rurban@cpan.org>
+
+	fix picat out-of-src, document svg11-relaxng install
+
+2022-03-05  Reini Urban  <rurban@cpan.org>
+
+	gh actions: add mingw-cmake smoker
+	checkout submodules
+
+2022-03-04  Reini Urban  <rurban@cpan.org>
+
+	extend cmake probes
+	for completeness sake
+
+2022-03-04  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add some AC2.10 .. AC1009 variables
+
+2022-03-04  Reini Urban  <rurban@cpan.org>
+
+	improve dwg_add_XRECORD_handle
+	As found out in GH #419, memcpy copied into the
+	wrong part of the union, and overly clever compilers
+	might copy only 8, not >20 bytes.
+
+2022-03-04  Neil Wakefield  <carmethene@gmail.com>
+
+	Fix #422 - Missing functions in CMake/MinGW
+	- Correctly set HAVE_* #defines in configuration step so that fallback options are used when these functions are not available.
+
+	Fix #421 - BUILD_SHARED_LIBS not respected on WIN32
+	- Reorder CMakeLists such that BUILD_SHARED_LIBS is set before running configure step
+	- Use #cmakedefine so that ENABLE_SHARED is unset when BUILD_SHARED_LIBS is OFF
+
+	Fix #420 - HAVE_ALLOCA_H and HAVE_LIBGEN_H symbols ignore results of cmake configure
+
+2022-03-01  Reini Urban  <rurban@cpan.org>
+
+	configure: remove outdated comment
+
+2022-02-19  Reini Urban  <rurban@cpan.org>
+
+	fix CirrusCI: git was missing from FreeBSD 13.0
+
+	regen-dynapi for header_vars
+
+2022-02-19  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Decode variables in AC1.50
+	These variables are valid from AC1.50 to AC1009
+
+2022-02-19  Reini Urban  <rurban@cpan.org>
+
+	no out_dxf with --disable-dxf
+	fix --disable-write cfg
+
+	preR13 spec: resolve unknown_s[]
+	by Michal GH #412.
+
+	CodeQL with submodules
+
+	fix wrong DWG too small error
+	Michal sent an empty 1095 byte DWG r2.10
+	Fixes GH #411
+
+2022-02-18  Reini Urban  <rurban@cpan.org>
+
+	Update codeql-analysis.yml
+
+2022-02-17  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'michal-josef-spacek-osmode'
+
+	Merge branch 'master' into osmode
+
+	Remove .travis
+
+	Merge branch 'master' into osmode
+
+	Add codeql-analysis.yml
+	from the wizard
+
+2022-02-17  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	GH#409: Fix OSMODE header variable
+	From AC1.50 to AC1009 (old format) there is issue in place of OSMODE
+	variable.
+
+	BTW: FIELD_RS (unknown_12, 8); is TEXTSTYLE, but this is for another
+	issue, we have second TEXTSTYLE variable for different DWG format.
+
+	Values:
+	  osnap_modes:
+	    0: none
+	    1: endpoint
+	    2: midpoint
+	    4: center
+	    8: node
+	    16: quadrant
+	    32: intersection
+	    64: insertion
+	    128: perpendicular
+	    256: tangent
+	    512: nearest
+
+2022-02-16  Reini Urban  <rurban@cpan.org>
+
+	spec: fixup PLINEGEN preR11
+	Fixes GH #408
+
+	gcc -Wstringop-truncation bug #88780
+	abstract the sizes to give gcc a chance.
+
+	regen-dynapi for AXISMODE
+
+2022-02-14  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Remove obsolete comment
+	From `git show 5fa6e0374`
+
+	...
+	-  decode_preR13_table("BLOCK", ++tbl_id, dat, dwg);
+	-  decode_preR13_table("LAYER", ++tbl_id, dat, dwg);
+	-  decode_preR13_table("STYLE", ++tbl_id, dat, dwg);
+	-  tbl_id++; // skip one
+	-  decode_preR13_table("LTYPE", ++tbl_id, dat, dwg);
+	-  decode_preR13_table("VIEW", ++tbl_id, dat, dwg);
+	+  decode_preR13_section_ptr("BLOCK", SECTION_BLOCK, dat, dwg);
+	+  decode_preR13_section_ptr("LAYER", SECTION_LAYER, dat, dwg);
+	+  decode_preR13_section_ptr("STYLE", SECTION_STYLE, dat, dwg);
+	+  // skip one
+	+  decode_preR13_section_ptr("LTYPE", SECTION_LTYPE, dat, dwg);
+	+  decode_preR13_section_ptr("VIEW", SECTION_VIEW, dat, dwg);
+	...
+
+2022-02-13  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add AXISMODE and AXISUNIT
+
 2022-02-06  Reini Urban  <rurban@cpan.org>
 
 	Release 0.12.5
