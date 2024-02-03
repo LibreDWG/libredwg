@@ -3081,19 +3081,14 @@ static int
 encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   int error = 0;
-  BITCODE_BL i;
-  size_t pvzadr;
 
   /*------------------------------------------------------------
    * ObjFreeSpace and Second header - r13-r2000 only.
    * Note: partially also since r2004.
    */
   if (dwg->header.version >= R_13 && dwg->header.version < R_2004
-      && dwg->header.num_sections >= 3)
+      && dwg->header.num_sections > 3)
     {
-      struct _dwg_secondheader *_obj = &dwg->secondheader;
-      Dwg_Object *obj = NULL;
-
       assert (dat->byte);
       dwg->header.section[SECTION_OBJFREESPACE_R13].number = 3;
       if (dwg->objfreespace.numnums)
@@ -3106,6 +3101,15 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           LOG_INFO ("=======> ObjFreeSpace 3 (end): %4u\n",
                     (unsigned)dat->byte);
         }
+    }
+
+  if (dwg->header.version >= R_13 && dwg->header.version < R_2004 &&
+      dwg->secondheader.codepage)
+    {
+      struct _dwg_secondheader *_obj = &dwg->secondheader;
+      Dwg_Object *obj = NULL;
+      size_t pvzadr;
+      BITCODE_BL i;
 
       LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte + 16);
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
@@ -3906,20 +3910,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 error |= encode_objects_handles (dwg, dat, (Bit_Chain **)&sec_dat);
                 break;
               case SECTION_OBJFREESPACE_R13:
-                {
-                  int err1;
-                  pvzadr = dat->byte;
-                  err1 = encode_objfreespace_2ndheader (dwg, dat);
-                  /*
-                  if (err1 & 1)
-                    {
-                      LOG_TRACE ("2ndheader size changed, rewrite it\n")
-                      dat->byte = pvzadr;
-                      err1 = encode_objfreespace_2ndheader (dwg, dat);
-                    }
-                  */
-                  error |= err1;
-                }
+                error |= encode_objfreespace_2ndheader (dwg, dat);
                 break;
               case SECTION_TEMPLATE_R13:
                 error |= encode_template (dwg, dat);
@@ -3935,6 +3926,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 break;
               }
           }
+      }
+    if (dwg->header.sections == 3 && dwg->secondheader.codepage)
+      {
+        error |= encode_objfreespace_2ndheader (dwg, dat);
       }
   } // VERSIONS (R_13b1, R_2004)
 

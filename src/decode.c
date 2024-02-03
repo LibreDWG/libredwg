@@ -337,7 +337,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    *         4: optional: Template (MEASUREMENT)
    *         5: optional: AuxHeader (no sentinels, since R13c3)
    */
-  for (j = 0; j < dwg->header.num_sections; j++)
+  for (j = 0; j < dwg->header.sections; j++)
     {
       dwg->header.section[j].number = (BITCODE_RLd)bit_read_RC (dat);
       dwg->header.section[j].address = (BITCODE_RLL)bit_read_RL (dat);
