@@ -2237,7 +2237,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.i & 1) /* only if closed or not */
             o->flag |= 512;
           else if (pair->value.i & 128) /* plinegen? */
-            o->flag |= 128;
+            o->flag |= 256;
           LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", o->flag);
         }
       else if (pair->code == 38)

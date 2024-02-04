@@ -1005,8 +1005,8 @@
           LOG_FLAG_LWPOLYLINE_W (HAS_NUM_BULGES);                             \
           LOG_FLAG_LWPOLYLINE_W (HAS_NUM_WIDTHS);                             \
           LOG_FLAG_LWPOLYLINE_W (UNKNOWN_64);                                 \
+          LOG_FLAG_LWPOLYLINE_W (UNKNOWN_128);                                \
           LOG_FLAG_LWPOLYLINE_W (PLINEGEN);                                   \
-          LOG_FLAG_LWPOLYLINE_W (UNKNOWN_256);                                \
           LOG_FLAG_LWPOLYLINE_W (CLOSED);                                     \
           LOG_FLAG_LWPOLYLINE_W (VERTEXIDCOUNT);                              \
           LOG_FLAG_MAX (_obj->flag, 2047);                                    \
