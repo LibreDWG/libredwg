@@ -25442,11 +25442,12 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
       _obj->lines[0].parent = _obj;
       _obj->lines[0].offset = 0.5;
       _obj->lines[0].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
-      _obj->lines[0].lt_index = 32767;
+      // TODO r2018+ lt.ltype handle
+      _obj->lines[0].lt.index = 32767;
       _obj->lines[0].parent = _obj;
       _obj->lines[1].offset = -0.5;
       _obj->lines[1].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
-      _obj->lines[1].lt_index = 32767;
+      _obj->lines[1].lt.index = 32767;
     }
   return _obj;
 }

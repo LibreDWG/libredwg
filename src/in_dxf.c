@@ -2146,30 +2146,30 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (j < 0)
             j++;
           CHK_array (j, lines);
-          o->lines[j].lt_index = 0;
-          o->lines[j].lt_ltype = NULL;
+          o->lines[j].lt.index = 0;
+          o->lines[j].lt.ltype = NULL;
           if (strEQc (pair->value.s, "BYLAYER")
               || strEQc (pair->value.s, "ByLayer"))
             {
               // TODO SHRT_MAX, but should be -1 really
-              o->lines[j].lt_index = 32767;
-              LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = -1 [BSd 6]\n", j);
+              o->lines[j].lt.index = 32767;
+              LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = -1 [BSd 6]\n", j);
               if (dwg->header.from_version >= R_2018)
                 goto mline_hdl;
             }
           else if (strEQc (pair->value.s, "BYBLOCK")
                    || strEQc (pair->value.s, "ByBlock"))
             {
-              o->lines[j].lt_index = 32766;
-              LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = -2 [BSd 6]\n", j);
+              o->lines[j].lt.index = 32766;
+              LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = -2 [BSd 6]\n", j);
               if (dwg->header.from_version >= R_2018)
                 goto mline_hdl;
             }
           else if (strEQc (pair->value.s, "CONTINUOUS")
                    || strEQc (pair->value.s, "Continuous"))
             {
-              o->lines[j].lt_index = 0;
-              LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = 0 [BSd 6]\n", j);
+              o->lines[j].lt.index = 0;
+              LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = 0 [BSd 6]\n", j);
               if (dwg->header.from_version >= R_2018)
                 goto mline_hdl;
             }
@@ -2177,17 +2177,17 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           mline_hdl:
             {
               BITCODE_H hdl;
-              o->lines[j].lt_index
+              o->lines[j].lt.index
                   = (BITCODE_BSd)strtol (pair->value.s, NULL, 10);
-              if (o->lines[j].lt_index)
-                LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = %d [BSd 6]\n", j,
-                           (int)o->lines[j].lt_index);
+              if (o->lines[j].lt.index)
+                LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = %d [BSd 6]\n", j,
+                           (int)o->lines[j].lt.index);
               if ((hdl = dwg_find_tablehandle_silent (dwg, pair->value.s,
                                                       "LTYPE")))
                 {
                   hdl->handleref.code = 5;
-                  o->lines[j].lt_ltype = hdl;
-                  LOG_TRACE ("MLINESTYLE.lines[%d].lt_ltype %s => " FORMAT_REF
+                  o->lines[j].lt.ltype = hdl;
+                  LOG_TRACE ("MLINESTYLE.lines[%d].lt.ltype %s => " FORMAT_REF
                              " [H 6]\n",
                              j, pair->value.s, ARGS_REF (hdl));
                 }

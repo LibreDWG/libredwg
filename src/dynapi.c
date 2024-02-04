@@ -12120,9 +12120,9 @@ static const Dwg_DYNAPI_field _dwg_MLINESTYLE_line_fields[] = {
     0,0,0, 49 },
   { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_MLINESTYLE_line, color),
     0,0,0, 62 },
-  { "lt_index",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_MLINESTYLE_line, lt_index),
+  { "lt.index",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_MLINESTYLE_line, lt.index),
     0,0,0, 6 },
-  { "lt_ltype",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_MLINESTYLE_line, lt_ltype),
+  { "lt.ltype",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_MLINESTYLE_line, lt.ltype),
     1,0,0, 6 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
