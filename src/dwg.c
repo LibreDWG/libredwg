@@ -3418,8 +3418,8 @@ dwg_sections_init (Dwg_Data *dwg)
         dwg->header.section,
         sizeof (Dwg_Section) * (dwg->header.num_sections + 2));
   else
-    dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
-                                                 dwg->header.num_sections + 2);
+    dwg->header.section = (Dwg_Section *)calloc (dwg->header.num_sections + 2,
+                                                 sizeof (Dwg_Section));
   if (!dwg->header.section)
     {
       LOG_ERROR ("Out of memory");
