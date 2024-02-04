@@ -75,6 +75,8 @@ static int encode_preR13_section (const Dwg_Section_Type_r11 id,
                                   Dwg_Data *restrict dwg);
 // static void downconvert_relative_handle (BITCODE_H handle,
 //                                          Dwg_Object *restrict obj);
+void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
+void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *restrict o);
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
@@ -5625,6 +5627,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_GROUP (dat, obj);
       break;
     case DWG_TYPE_MLINESTYLE:
+      if (dat->version >= R_2018 && dat->from_version < R_2018)
+        dwg_upgrade_MLINESTYLE (dwg, obj->tio.object->tio.MLINESTYLE);
+      else if (dat->version < R_2018 && dat->from_version >+ R_2018)
+        dwg_downgrade_MLINESTYLE (obj->tio.object->tio.MLINESTYLE);
       error = dwg_encode_MLINESTYLE (dat, obj);
       (void)dwg_encode_get_class (dwg, obj);
       break;

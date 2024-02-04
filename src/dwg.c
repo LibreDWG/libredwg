@@ -77,6 +77,8 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
 // used in encode.c
 void dwg_set_handle_size (Dwg_Handle *restrict hdl);
+void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
+void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *restrict o);
 
 /*------------------------------------------------------------------------------
  * Public functions
@@ -2712,6 +2714,92 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   return NULL;
 }
 
+// Search for the table entry and return its handle.
+// Note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
+EXPORT BITCODE_H
+dwg_find_tablehandle_index (Dwg_Data *restrict dwg, const int index,
+                            const char *restrict table)
+{
+  BITCODE_BL i, num_entries = 0;
+  BITCODE_H ctrl = NULL, *hdlv = NULL;
+  Dwg_Object *obj;
+  Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
+  Dwg_Header_Variables *vars = &dwg->header_vars;
+
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  if (!dwg || !table)
+    return NULL;
+  // look for the _CONTROL table, and search for name in all entries
+  ctrl = dwg_ctrl_table (dwg, table);
+  if (strEQc (table, "LTYPE"))
+    {
+      if (index == 32767)
+        {
+          if (vars->LTYPE_BYLAYER)
+            return vars->LTYPE_BYLAYER;
+        }
+      else if (index == 32766)
+        {
+          if (vars->LTYPE_BYBLOCK)
+            return vars->LTYPE_BYBLOCK;
+        }
+      else if (index == 0)
+        {
+          if (vars->LTYPE_CONTINUOUS)
+            return vars->LTYPE_CONTINUOUS;
+        }
+    }
+  if (!ctrl)
+    { // TODO: silently search table_control. header_vars can be empty
+      LOG_TRACE ("dwg_find_tablehandle: Empty header_vars table %s\n", table);
+      return NULL;
+    }
+  obj = dwg_resolve_handle (dwg, ctrl->absolute_ref);
+  if (!obj)
+    {
+      LOG_TRACE ("dwg_find_tablehandle: Could not resolve table %s\n", table);
+      return NULL;
+    }
+  //if (obj->fixedtype == DWG_TYPE_DICTIONARY)
+  // return dwg_find_dicthandle_objname (dwg, ctrl, name);
+  if (!dwg_obj_is_control (obj))
+    {
+      LOG_ERROR ("dwg_find_tablehandle_index: Could not resolve CONTROL object %s "
+                 "for table %s",
+                 obj->name, table);
+      return NULL;
+    }
+  _obj = obj->tio.object->tio.APPID_CONTROL; // just random type
+  if (strEQc (table, "APPID"))
+    {
+      num_entries = _obj->num_entries;
+      hdlv = _obj->entries;
+    }
+  else
+    {
+      dwg_dynapi_entity_value (_obj, obj->name, "num_entries", &num_entries,
+                               NULL);
+      dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
+    }
+  if (!num_entries)
+    return NULL;
+  if (!hdlv)
+    {
+      LOG_ERROR ("No %s.entries but %u num_entries\n", table,
+                 (unsigned)num_entries);
+      return NULL;
+    }
+  if (index < (int)num_entries)
+    {
+      if (hdlv[index])
+        LOG_INSANE ("%s.entries[%u/%u]: " FORMAT_RLLx "\n",
+                    obj->name, index, num_entries, hdlv[index]->absolute_ref);
+      return hdlv[index];
+    }
+  LOG_INSANE ("Not found in %u %s entries\n", num_entries, table);
+  return NULL;
+}
+
 // Search for handle in associated table, and return its name. (as UTF-8)
 // Always returns a copy.
 EXPORT char *
@@ -3606,4 +3694,48 @@ dwg_supports_obj (const Dwg_Data *restrict dwg,
   else if (type == DWG_TYPE_SPLINE)
     return ver >= R_9;
   return 1;
+}
+
+/* from 2018 to earlier */
+void
+dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o)
+{
+  BITCODE_BSd lt_index
+      = strEQc (o->name, "CONTINUOUS") || strEQc (o->name, "Continuous")
+            ? 0
+            : 32767; // or 32766 for BYBLOCK
+  for (BITCODE_RC j = 0; j < o->num_lines; j++)
+    {
+      // TODO lookup lt.ltype
+      o->lines[j].lt.index = lt_index;
+    }
+}
+
+/* to 2018 */
+void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *restrict o)
+{
+  // lookup on LTYPE_CONTROL list
+  for (BITCODE_RC j = 0; j < o->num_lines; j++)
+  {
+    BITCODE_BSd lt_index = o->lines[j].lt.index;
+    LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = %d [BSd 6]\n", j,
+               (int)lt_index);
+    if (lt_index == 0)
+      o->lines[j].lt.ltype = dwg->header_vars.LTYPE_CONTINUOUS;
+    else if (lt_index == 32767)
+      o->lines[j].lt.ltype = dwg->header_vars.LTYPE_BYLAYER;
+    else if (lt_index == 32766)
+      o->lines[j].lt.ltype = dwg->header_vars.LTYPE_BYBLOCK;
+    else if (lt_index > 0)
+      {
+        BITCODE_H hdl = dwg_find_tablehandle_index (dwg, (int)lt_index, "LTYPE");
+        o->lines[j].lt.ltype = dwg_add_handleref (dwg, 5, hdl ? hdl->absolute_ref : 0, NULL);
+        if (hdl)
+          LOG_TRACE ("MLINESTYLE.lines[%d].lt.ltype %s => " FORMAT_REF
+                     " [H]\n",
+                     j, o->name, ARGS_REF (hdl));
+      }
+    else
+      o->lines[j].lt.ltype = dwg_add_handleref (dwg, 5, 0, NULL);
+  }
 }

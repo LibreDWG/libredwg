@@ -9767,7 +9767,9 @@ dwg_ctrl_table (Dwg_Data *restrict dwg, const char *restrict table);
 EXPORT BITCODE_H dwg_find_tablehandle (Dwg_Data *restrict dwg,
                                        const char *restrict name,
                                        const char *restrict table);
-
+EXPORT BITCODE_H dwg_find_tablehandle_index (Dwg_Data *restrict dwg,
+                                             const int index,
+                                             const char *restrict table);
 
 /* Search for handle in associated table, and return its name (as UTF-8) */
 EXPORT char *

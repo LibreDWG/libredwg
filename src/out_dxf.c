@@ -56,6 +56,8 @@ char *dwg_obj_table_get_name (const Dwg_Object *restrict obj,
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
+void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
+void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *restrict o);
 
 // private
 static int dxf_common_entity_handle_data (Bit_Chain *restrict dat,
@@ -2883,7 +2885,16 @@ decl_dxf_process_INSERT (MINSERT)
     case DWG_TYPE_GROUP:
       return dwg_dxf_GROUP (dat, obj);
     case DWG_TYPE_MLINESTYLE:
-      return minimal ? 0 : dwg_dxf_MLINESTYLE (dat, obj);
+      if (minimal)
+        return 0;
+      else
+        {
+          if (dat->version >= R_2018 && dat->from_version < R_2018)
+            dwg_upgrade_MLINESTYLE (obj->parent, obj->tio.object->tio.MLINESTYLE);
+          else if (dat->version < R_2018 && dat->from_version >= R_2018)
+            dwg_downgrade_MLINESTYLE (obj->tio.object->tio.MLINESTYLE);
+          return dwg_dxf_MLINESTYLE (dat, obj);
+        }
     case DWG_TYPE_OLE2FRAME:
       return minimal ? 0 : dwg_dxf_OLE2FRAME (dat, obj);
     case DWG_TYPE_DUMMY:
