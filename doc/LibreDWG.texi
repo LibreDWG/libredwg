@@ -285,6 +285,9 @@ Written in C++, under the GPLv2 license.
 @item libopencad
 Read the r2000 DWG format.
 Written in C++, under the GPLv2 license.
+@item ACadSharp
+Read and write the basic objects in most DWG and DXF formats.
+Written in C#, under the MIT license.
 @item OpenDWG
 The OpenDWG's license does not allow the usage in free software projects.
 @end table
