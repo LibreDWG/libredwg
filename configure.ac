@@ -241,7 +241,8 @@ if test x$enable_shared = xyes -a x$ac_compiler_gnu = xyes -a x$CC != xemcc; the
     [-fno-semantic-interposition -fwrapv -fno-common -fvisibility=hidden \
      -fno-strict-aliasing -ftrivial-auto-var-init=zero \
      -fstack-protector-strong -fstack-clash-protection \
-     -fcf-protection=full -fno-delete-null-pointer-checks])
+     -fcf-protection=full -fno-delete-null-pointer-checks \
+     -Wno-alloc-size])
 else
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fwrapv -fno-common -fvisibility=hidden -fno-strict-aliasing \
