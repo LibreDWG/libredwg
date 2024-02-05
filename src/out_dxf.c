@@ -141,7 +141,9 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                 GROUP (dxf);                                                  \
               }                                                               \
             if (value)                                                        \
-              fprintf (dat->fh, "%02X", (value)[j]);                          \
+              fprintf (dat->fh, "%02X", ((unsigned char*)value)[j]);          \
+            else                                                              \
+              fprintf (dat->fh, "%02X", 0);                                   \
           }                                                                   \
         fprintf (dat->fh, "\r\n");                                            \
       }                                                                       \
