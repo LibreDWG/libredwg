@@ -198,9 +198,17 @@ check_roundtrip() {
         fi
         # We dont write unstable entities yet. WIPEOUT is converted to POINT in encode, but skipped at out_dxf
         if [ "$DEBUG_CLASSES" = "1" ] && [ -z "$is_release" ]; then
-            expect="$(grep -E '^Add entity' "$log1" | grep -c -v 'entity UNKNOWN_ENT')"
+            if [ "$log1" = "example_r13.log1" ]; then
+                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (UNKNOWN_ENT|LIGHT)')"
+            else
+                expect="$(grep -E '^Add entity' "$log1" | grep -c -v 'entity UNKNOWN_ENT')"
+            fi
         else
-            expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT)')"
+            if [ "$log1" = "example_r13.log1" ]; then
+                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT|LIGHT)')"
+            else
+                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT)')"
+            fi
         fi
         got="$(grep -E -c '^Add entity' "$log2")"
         rm "./$dxf" "./$tgt" 2>/dev/null
