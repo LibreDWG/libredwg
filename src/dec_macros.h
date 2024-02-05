@@ -752,10 +752,13 @@
       {                                                                       \
         struct tm tm;                                                         \
         char _buf[60] = "";                                                   \
-        if (_obj->nam.days)                                                   \
-          strftime (_buf, 60, STRFTIME_DATE, cvt_TIMEBLL (&tm, _obj->nam));   \
+        cvt_TIMEBLL (&tm, _obj->nam);                                         \
+        if (strEQc (#nam, "TDINDWG") || strEQc (#nam, "TDUSRTIMER"))          \
+          strftime (_buf, 60, STRFTIME_DURATION, &tm);                        \
+        else if (_obj->nam.days)                                              \
+          strftime (_buf, 60, STRFTIME_DATE, &tm);                            \
         else                                                                  \
-          strftime (_buf, 60, STRFTIME_TIME, cvt_TIMEBLL (&tm, _obj->nam));   \
+          strftime (_buf, 60, STRFTIME_TIME, &tm);                            \
         LOG_TRACE (#nam ": [" FORMAT_BL ", " FORMAT_BL "] %s [TIMEBLL %d]",   \
                    _obj->nam.days, _obj->nam.ms, _buf, dxf);                  \
         LOG_RPOS                                                              \

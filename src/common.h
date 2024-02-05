@@ -419,10 +419,12 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #ifndef _WIN32
 #  define STRFTIME_DATE "%F %T"
 #  define STRFTIME_TIME "%T"
+#  define STRFTIME_DURATION "%e days and %T"
 #else
 /* windows/mingw misses those C99 formats */
 #  define STRFTIME_DATE "%Y-%m-%d %X"
 #  define STRFTIME_TIME "%X"
+#  define STRFTIME_DURATION "%d days and %X"
 #endif
 
 // Exporters are more common in the spec format, in_json and in_dxf are not
