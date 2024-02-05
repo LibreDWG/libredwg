@@ -6940,7 +6940,7 @@ typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA
   TEXTOBJECTCONTEXTDATA_fields;
   // MTEXTATTR
   BITCODE_B enable_context;
-  struct _dwg_object *context;
+  Dwg_Object_SCALE context;
 } Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA;
 
 typedef struct _dwg_object_MLEADEROBJECTCONTEXTDATA

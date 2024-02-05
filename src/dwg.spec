@@ -10650,6 +10650,7 @@ DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
   AcDbTextObjectContextData_fields;
   SUBCLASS (AcDbMTextAttributeObjectContextData)
   FIELD_B (enable_context, 290);
+  // if scale is not 1:1
   if (FIELD_VALUE (enable_context))
     {
       /*
@@ -10660,6 +10661,12 @@ DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
       } */
       DXF { VALUE_TFF ( "Embedded Object", 101 ); }
       //CALL_ENTITY (SCALE, _obj->context);
+      SUBCLASS (AcDbScale);
+      SUB_FIELD_BS (context,flag, 70); // always 0
+      SUB_FIELD_T (context,name, 300);
+      SUB_FIELD_BD (context,paper_units, 140);
+      SUB_FIELD_BD (context,drawing_units, 141);
+      SUB_FIELD_B (context,is_unit_scale, 290);
     }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

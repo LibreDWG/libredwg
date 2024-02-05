@@ -53650,14 +53650,12 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextattributeobjectcontextdata->class_version--;
   }
   {
-    struct _dwg_object* context;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "num_context", &count, NULL)
-        && dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "context", &context, NULL)
-        && context == mtextattributeobjectcontextdata->context)
-      pass ();
+    Dwg_Object_SCALE context;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "context", &context, NULL)
+        && !memcmp (&context, &mtextattributeobjectcontextdata->context, sizeof (Dwg_Object_SCALE)))
+        pass ();
     else
-      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.context [struct _dwg_object*] * %u num_context", count);
+        fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.context [Dwg_Object_SCALE]");
   }
   {
     BITCODE_B enable_context;

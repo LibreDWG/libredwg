@@ -8969,8 +8969,8 @@ static const Dwg_DYNAPI_field _dwg_MTEXTATTRIBUTEOBJECTCONTEXTDATA_fields[] = {
     1,0,0, 11 },
   { "enable_context",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, enable_context),
     0,0,0, 290 },
-  { "context",	"struct _dwg_object*", sizeof (void *),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, context),
-    1,1,0, 0 },
+  { "context",	"Dwg_Object_SCALE", sizeof (Dwg_Object_SCALE),  OFF (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA, context),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA: (sorted by offset) */
@@ -13701,7 +13701,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "MOTIONPATH", {"AcDbObject", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "MPOLYGON", {"AcDbEntity", "AcDbMPolygon", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "MTEXT", {"AcDbEntity", "AcDbMText", NULL, NULL, NULL, NULL, NULL, NULL} },
-  { "MTEXTATTRIBUTEOBJECTCONTEXTDATA", {"AcDbObject", "AcDbObjectContextData", "AcDbAnnotScaleObjectContextData", "AcDbTextObjectContextData", "AcDbMTextAttributeObjectContextData", NULL, NULL, NULL} },
+  { "MTEXTATTRIBUTEOBJECTCONTEXTDATA", {"AcDbObject", "AcDbObjectContextData", "AcDbAnnotScaleObjectContextData", "AcDbTextObjectContextData", "AcDbMTextAttributeObjectContextData", "AcDbScale", NULL, NULL} },
   { "MTEXTOBJECTCONTEXTDATA", {"AcDbObject", "AcDbObjectContextData", "AcDbAnnotScaleObjectContextData", "AcDbMTextObjectContextData", NULL, NULL, NULL, NULL} },
   { "MULTILEADER", {"AcDbEntity", "AcDbMLeader", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "NAVISWORKSMODEL", {"AcDbEntity", "AcDbNavisworksModel", NULL, NULL, NULL, NULL, NULL, NULL} },
