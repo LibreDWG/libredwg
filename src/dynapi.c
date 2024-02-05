@@ -7924,7 +7924,7 @@ static const Dwg_DYNAPI_field _dwg_DIMSTYLE_fields[] = {
   { "DIMFXLON",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_DIMSTYLE, DIMFXLON),
     0,0,0, 290 },
   { "DIMTXTDIRECTION",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_DIMSTYLE, DIMTXTDIRECTION),
-    0,0,0, 295 },
+    0,0,0, 294 },
   { "DIMALTMZF",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_DIMSTYLE, DIMALTMZF),
     0,0,0, 0 },
   { "DIMALTMZS",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, DIMALTMZS),

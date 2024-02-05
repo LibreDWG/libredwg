@@ -1,5 +1,5 @@
 --- ODA-5.4.1.md	2023-11-23 21:17:02.825331305 +0100
-+++ ODA-5.4.2-libredwg.md	2024-02-02 08:52:50.623573831 +0100
++++ ODA-5.4.2-libredwg.md	2024-02-05 10:23:26.470967528 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -1584,6 +1584,19 @@
      Obj size             RL      size of object in bits, not including end handles
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
+@@ -6646,11 +6796,11 @@
+     DIMUPT                B 288
+     DIMFIT               BS 287
+ R2007+:
+     DIMFXLON              B 290
+ R2010+:
+-    DIMTXTDIRECTION       B 295
++    DIMTXTDIRECTION       B 295 (or 294?)
+     DIMALTMZF            BD  ?
+     DIMALTMZS             T  ?
+     DIMMZF               BD  ?
+     DIMMZS                T  ?
+ R2000+:
 @@ -6699,21 +6849,24 @@
  ```
  

@@ -4723,7 +4723,7 @@ DWG_TABLE (DIMSTYLE)
 
   IF_FREE_OR_SINCE (R_2010)
     {
-      FIELD_B (DIMTXTDIRECTION, 295);
+      FIELD_B (DIMTXTDIRECTION, 294); // ODA documented as 295. Undocumented in ACAD
       FIELD_BD (DIMALTMZF, 0); // undocumented
       FIELD_T (DIMALTMZS, 0); // undocumented
       FIELD_BD (DIMMZF, 0); // undocumented

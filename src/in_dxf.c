@@ -10503,6 +10503,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else
                 goto search_field;
             }
+          else if (obj->fixedtype == DWG_TYPE_DIMSTYLE && pair->code == 295)
+            { // ODA has this documented as 205, netDXF as 294
+              Dwg_Object_DIMSTYLE *o = obj->tio.object->tio.DIMSTYLE;
+              o->DIMTXTDIRECTION = pair->value.i & 1;
+              LOG_TRACE ("%s.DIMTXTDIRECTION = %u [B %d]\n", name, pair->value.u,
+                         pair->code);
+            }
           else if (obj->fixedtype == DWG_TYPE_LEADER
                    && (pair->code == 10 || pair->code == 20
                        || pair->code == 30))
