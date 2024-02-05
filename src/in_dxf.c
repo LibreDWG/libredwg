@@ -6731,7 +6731,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
           LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read,
                      blen);
-        xdata_size += 1 + (len & 0xFFFF);
+        xdata_size += 1 + (blen & 0xFFFF);
         LOG_TRACE ("xdata[%d]: ", num_xdata);
         // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
       }
