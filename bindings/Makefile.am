@@ -26,12 +26,13 @@ ACLOCAL_AMFLAGS = -I m4
 if HAVE_SWIG_PYTHON
 SUBDIRS = python
 endif
+EXTRA_DIST     = Makefile.am Makefile.in
 
 if HAVE_SWIG_PERL
 
 dist_perl_PERL = perl/LibreDWG.c perl/LibreDWG.pm \
                  perl/Makefile.PL perl/MANIFEST perl/t/0_basic.t
-EXTRA_DIST     = $(dist_perl_PERL)
+EXTRA_DIST    += $(dist_perl_PERL)
 
 all-am: $(dist_perl_PERL)
 	@echo Making all for perl
