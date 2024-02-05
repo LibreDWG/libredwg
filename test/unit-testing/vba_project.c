@@ -10,5 +10,5 @@ api_process (dwg_object *obj)
   dwg_obj_vba_project *_obj = dwg_object_to_VBA_PROJECT (obj);
 
   CHK_ENTITY_TYPE (_obj, VBA_PROJECT, data_size, BL);
-  CHK_ENTITY_TYPE (_obj, VBA_PROJECT, data, TF);
+  CHK_ENTITY_BINARY (_obj, VBA_PROJECT, data, data_size);
 }

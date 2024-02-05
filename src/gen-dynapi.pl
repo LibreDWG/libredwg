@@ -499,6 +499,7 @@ $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 # $DXF{'VISUALSTYLE'}->{'face_lighting_model'} = 71;
 $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
 # $DXF{'DIMSTYLE'}->{'DIMFIT'} = 287;   # <= r14 only
+# $DXF{'PROXY_ENTITY'}->{'class_id'} = 90;
 $DXF{'PROXY_ENTITY'}->{'version'} = 95; # or 91 <= r14
 $DXF{'DIMASSOC'}->{'intsect_gsmarker'} = 92;
 $DXF{'DIMASSOC_Ref'}->{'xrefpaths'} = 301;

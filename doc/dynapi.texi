@@ -3741,7 +3741,7 @@ BS,	DXF 72
 @item parent
 struct _dwg_object_entity*
 @item class_id
-BL,	DXF 91
+BL,	DXF 90
 @item version
 BL,	DXF 95
 @item maint_version
@@ -3751,7 +3751,7 @@ B,	DXF 70
 @item data_numbits
 BL
 @item data_size
-BL,	DXF 93
+BL,	DXF 160
 @item data
 TF,	DXF 310
 @item num_objids
@@ -11180,7 +11180,7 @@ BS,	DXF 90
 @item parent
 struct _dwg_object_object*
 @item class_id
-BL,	DXF 91
+BL,	DXF 90
 @item version
 BL,	DXF 71
 @item maint_version
@@ -11190,7 +11190,7 @@ B,	DXF 70
 @item data_numbits
 BL
 @item data_size
-BL,	DXF 93
+BL,	DXF 161
 @item data
 TF,	DXF 310
 @item num_objids

@@ -623,10 +623,12 @@ main (int argc, char *argv[])
               error += test_code_nodist (
                   prefix, "2007/blocks_and_tables_-_imperial.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_VBA_PROJECT)
+          if (DWG_TYPE == DWG_TYPE_VBA_PROJECT
+              || DWG_TYPE == DWG_TYPE_PROXY_OBJECT
+              || DWG_TYPE == DWG_TYPE_PROXY_ENTITY)
             {
               error += test_code_nodist (
-                  prefix, // but here in section not in object
+                  prefix, // but here in section not in object.
                   "../test-old/2013/from_upcommons.upc.edu/DRAWINGS.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_RAPIDRTRENDERSETTINGS)
@@ -767,8 +769,8 @@ main (int argc, char *argv[])
               || DWG_TYPE == DWG_TYPE_LIGHTLIST
               || DWG_TYPE == DWG_TYPE_LONG_TRANSACTION
               || DWG_TYPE == DWG_TYPE_OLEFRAME
-              || DWG_TYPE == DWG_TYPE_PROXY_ENTITY
-              || DWG_TYPE == DWG_TYPE_PROXY_OBJECT
+              // || DWG_TYPE == DWG_TYPE_PROXY_ENTITY
+              // || DWG_TYPE == DWG_TYPE_PROXY_OBJECT
               || DWG_TYPE == DWG_TYPE_RENDERSETTINGS
               || DWG_TYPE == DWG_TYPE_DGNUNDERLAY
               || DWG_TYPE == DWG_TYPE_DWFUNDERLAY
@@ -1524,6 +1526,19 @@ api_common_entity (dwg_object *obj)
           else                                                                \
             ok ("%s.%s[%d]:", #name, #field, i);                              \
         }                                                                     \
+    }
+
+#define CHK_ENTITY_BINARY(ent, name, field, size)                             \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
+    fail (#name "." #field);                                                  \
+  else if (!field)                                                            \
+    pass ();                                                                  \
+  else                                                                        \
+    {                                                                         \
+      if (memcmp (ent->field, field, size))                                   \
+        fail ("%s.%s", #name, #field);                                        \
+      else                                                                    \
+        ok ("%s.%s", #name, #field);                                          \
     }
 
 // i must be defined as type of num

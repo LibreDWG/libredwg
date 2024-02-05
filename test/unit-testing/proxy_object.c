@@ -28,7 +28,7 @@ api_process (dwg_object *obj)
   if (data_size * 8 < data_numbits || data_size > obj->size)
     fail ("Invalid PROXY_ENTITY.data_size %u * 8 < %u data_numbits",
           (unsigned)data_size, (unsigned)data_numbits);
-  // BITCODE_RC *data;
+  CHK_ENTITY_BINARY (_obj, PROXY_OBJECT, data, data_size);
   CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, num_objids, BL);
   if (!dwg_dynapi_entity_value (_obj, "PROXY_OBJECT", "objids", &objids, NULL))
     fail ("PROXY_OBJECT.objids");

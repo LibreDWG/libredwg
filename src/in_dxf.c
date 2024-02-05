@@ -11725,6 +11725,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY
                        && (pair->code == 90 || pair->code == 91
                            || pair->code == 71
+                           || pair->code == 92 // else 160 via search
+                           || pair->code == 93
                            || pair->code == 94)) // unknown r14
                 {
                   Dwg_Entity_PROXY_ENTITY *o
@@ -11736,10 +11738,20 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                       else if (pair->code == 91)
                         o->version = pair->value.i;
                     }
+                  else if (pair->code == 92)
+                    o->data_size = pair->value.i;
                   else if (pair->code == 91)
                     o->class_id = pair->value.i;
                   else if (pair->code == 71) // r2018+
                     o->version = pair->value.i;
+                }
+              else if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT
+                       && pair->code == 93 // else 161 via search
+                       && dwg->header.version <= R_14)
+                {
+                  Dwg_Object_PROXY_OBJECT *o
+                      = obj->tio.object->tio.PROXY_OBJECT;
+                  o->data_size = pair->value.i;
                 }
               else if (obj->fixedtype == DWG_TYPE_LAYER
                        && ((pair->code == 348) || (pair->code == 420)
