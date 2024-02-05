@@ -751,8 +751,8 @@ bit_write_BOT (Bit_Chain *dat, BITCODE_BS value)
 
 /** Read 1 bitlonglong (compacted uint64_t) for REQUIREDVERSIONS, preview_size.
  *  ODA doc bug. ODA say 1-3 bits until the first 0 bit. See 3BLL.
- *  The first 3 bits indicate the length l (see paragraph 2.1). Then
- *  l bytes follow, which represent the number (the least significant
+ *  The first 3 bits indicate the length len (see paragraph 2.1). Then
+ *  len bytes follow, which represent the number (the least significant
  *  byte is first).
  */
 BITCODE_BLL

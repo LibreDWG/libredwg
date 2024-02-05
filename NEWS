@@ -2,7 +2,21 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2024 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.13.0 - 2023-02-04 - beta:
+LibreDWG version 0.13.1 - 2023-02-10 - beta:
+
+Minor bugfixes:
+  * Fixed DXF XRECORD xdata values and sizes (wrong binary encoding in outdxf,
+    wrong xdata_size in indxf)
+  * Fixed indxf for stable ASSOCGEOMDEPENDENCY object.
+  * Improve PROXY fields and DXF codes
+  * Changed MLINESTYLE.line.lt fields (#924)
+  * gcc-14 warning fixes (#931)
+  * Fixed LWPOLYLINE.PLINEGEN flag
+  * Change DIMSTYLE.DIMTXTDIRECTION dxf code from 295 to 294. (#835)
+    Undocumented, ODA has it as 295, netDXF as 294. on indxf accept both.
+  * Fix encode ERROR: Wrong object size on MS adjust on large objects.
+
+LibreDWG version 0.13 - 2023-02-04 - beta:
 
 Major features:
   * Added pre-R13 DWG decode support for all old DWG formats

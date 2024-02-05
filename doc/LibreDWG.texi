@@ -144,7 +144,7 @@ Writing DWG formats for r2004 and later: r2007, r2010, r2013, r2018 is an
 ongoing effort. You need to patch the code to enable writing to the r2004+ format.
 See the @code{work/2004} branch.
 Writing to the specific r2007 format is not implemented.
-We write as default in the r2000 format only.
+We write as default in the r2000 or older formats only.
 
 @item Reading binary DXF
 DXF support is now mostly implemented.
@@ -487,8 +487,9 @@ The r2000 format (used for r13-r2000) knows the following 6 sections:
     HEADER
     CLASSES
     HANDLES
-    2NDHEADER
-    MEASUREMENT
+    OBJFREESPACE +
+      2NDHEADER
+    MEASUREMENT/TEMPLATE
     AUXHEADER (only r2000)
 
 The r2004 and r2007 format (used for r2004-r2018) knows the following sections:
@@ -539,7 +540,7 @@ With r11 came the additional tables:
     DIMSTYLE
     VX
 
-But we convert them internally to the r2004 table record and
+But we convert them internally to r2004 table record and
 table control objects. @xref{Tables}.
 
 @node HEADER_
