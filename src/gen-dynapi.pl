@@ -649,7 +649,7 @@ dxfin_spec "$srcdir/summaryinfo.spec";
   # VIEWSTYLE_ModelDoc => "AcDbModelDocViewStyle",
   DETAILVIEWSTYLE => "AcDbDetailViewStyle",
   SECTIONVIEWSTYLE => "AcDbSectionViewStyle",
-  ASSOCGEOMDEPENDENCY => "AcDbAssocDependency",
+  ASSOCGEOMDEPENDENCY => "AcDbAssocGeomDependency",
   ASSOCOSNAPPOINTREFACTIONPARAM => "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
   ASSOCALIGNEDDIMACTIONBODY => "ACDBASSOCALIGNEDDIMACTIONBODY",
   ASSOCOSNAPPOINTREFACTIONPARAM => "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
@@ -2511,7 +2511,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2512 "gen-dynapi.pl"
+#line 2515 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2595,7 +2595,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2596 "gen-dynapi.pl"
+#line 2599 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
