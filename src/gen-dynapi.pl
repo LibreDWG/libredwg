@@ -3419,17 +3419,54 @@ dwg_dynapi_subclass_value (const void *restrict ptr,
                            const char *restrict fieldname,
                            void *restrict out, Dwg_DYNAPI_field *restrict fp)
 {
-  const Dwg_DYNAPI_field *f;
+  Dwg_DYNAPI_field *f;
 #ifndef HAVE_NONNULL
   if (!ptr || !subclass || !fieldname || !out)
     return false;
 #endif
-  f = dwg_dynapi_subclass_field (subclass, fieldname);
+  f = (Dwg_DYNAPI_field *)dwg_dynapi_subclass_field (subclass, fieldname);
   if (!f) // TODO maybe search via dwg_dynapi_subclass_name ()
-    return false;
+    {
+      // Dwg_Object_ASSOCDEPENDENCY is also a valid subclass, embedded into other objects
+      if (memBEGINc (subclass, "Dwg_Object_"))
+        f = (Dwg_DYNAPI_field *)dwg_dynapi_entity_field (&subclass[strlen("Dwg_Object_")], fieldname);
+      if (!f)
+        return false;
+    }
   memcpy (out, &((char*)ptr)[f->offset], f->size);
   if (fp)
     memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
+  return true;
+}
+
+// ptr points to the subclass field offset
+EXPORT bool
+dwg_dynapi_subclass_set_value (Dwg_Data *restrict dwg,
+                               const void *restrict ptr,
+                               const char *restrict subclass,
+                               const char *restrict fieldname,
+                               const void *restrict value, const bool is_utf8)
+{
+  Dwg_DYNAPI_field *f;
+  void *old;
+#ifndef HAVE_NONNULL
+  if (!dwg || !ptr || !subclass || !fieldname || !value)
+    return false;
+#endif
+  f = (Dwg_DYNAPI_field *)dwg_dynapi_subclass_field (subclass, fieldname);
+  if (!f) // TODO maybe search via dwg_dynapi_subclass_name ()
+    {
+      // Dwg_Object_ASSOCDEPENDENCY is also a valid subclass, embedded into other objects
+      if (memBEGINc (subclass, "Dwg_Object_"))
+        f = (Dwg_DYNAPI_field *)dwg_dynapi_entity_field (&subclass[strlen("Dwg_Object_")], fieldname);
+      if (!f)
+        return false;
+    }
+  old = &((char*)ptr)[f->offset];
+  if (f->is_string)
+    dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
+  else
+    memcpy (old, value, f->size);
   return true;
 }
 
