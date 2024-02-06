@@ -137,6 +137,7 @@ done
 
 # teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
 can_teigha=1
+baseFileConverter=ODAFileConverter
 case $(uname) in
     Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
     Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
@@ -144,6 +145,7 @@ case $(uname) in
     *)       can_teigha=0 ;;
 esac
 if [ -n "$can_teigha" ] && [ ! -x "$TeighaFileConverter" ]; then
+    baseFileConverter=TeighaFileConverter
     case $(uname) in
         Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
         Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
@@ -183,7 +185,7 @@ check_oda() {
             $TESTPROG "./dwgwrite${EXEEXT}" -y -v0 -o "$b.dwg" "$b.json" 2>/dev/null
         fi
         if [ -n "$can_teigha" ] && [ -f "$b.dwg" ]; then
-            echo TeighaFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" from "$dwg"
+            echo $baseFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" from "$dwg"
             $TeighaFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" >/dev/null 2>/dev/null
             if [ -e "../$b.dxf.err" ]; then
                 mv "../$b.dxf.err" "$b.json.err"
@@ -200,7 +202,7 @@ check_oda() {
 if [ -n "$can_teigha" ] && [ -x "$TeighaFileConverter" ]
 then
     echo ""
-    echo TeighaFileConverter roundtrip checks
+    echo $baseFileConverter roundtrip checks
     # example_r14: CRC does not match
     for dwg in sample_2000 example_2000 2000/Arc 2000/Text 2000/circle 2000/PolyLine2D 2000/RAY\
                2000/Spline r11/entities-3d r11/entities-2d
@@ -208,7 +210,7 @@ then
         check_oda
     done
 else
-    echo "(Teigha|ODA)FileConverter not installed"
+    echo "$baseFileConverter not installed"
 fi
 
 if [ -n "$JQ" ]
