@@ -192,9 +192,9 @@ check_oda() {
                 cat "$b.json.err"
                 i=$((i+1))
             fi
-            rm -f "../$b.dxf"
+            rm -f "../$b.dxf" "./$b.dwg" "./$b.json"
         else
-            rm -f "./$b.json.err" 2>/dev/null
+            rm -f "./$b.json.err" "./$b.dwg" "./$b.json" 2>/dev/null
         fi
     fi
 }
