@@ -7347,7 +7347,9 @@ DWG_OBJECT (XRECORD)
     FIELD_XDATA (xdata, xdata_size);
   }
   SINCE (R_2000) {
-    FIELD_BS (cloning, 0);
+#ifndef IS_DXF
+    FIELD_BS (cloning, 280);
+#endif
   }
 
   START_OBJECT_HANDLE_STREAM;
