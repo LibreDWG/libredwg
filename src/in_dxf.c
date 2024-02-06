@@ -83,14 +83,14 @@ static array_hdls *obj_hdls = NULL;
                  pair ? pair->code : -1, dxf, #field);                        \
       return pair;                                                            \
     }
-#define EXPECT_INT_DXF(field, dxf, type)                                      \
+#define EXPECT_INT_DXF(field, dxf, _type)                                      \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %d [" #type " %d]\n", obj->name, field, pair->value.i,  \
+  LOG_TRACE ("%s.%s = %d [" #_type " %d]\n", obj->name, field, pair->value.i,  \
              pair->code);                                                     \
   dxf_free_pair (pair);                                                       \
   pair = NULL;
-#define EXPECT_UINT_DXF(field, dxf, type)                                     \
+#define EXPECT_UINT_DXF(field, dxf, _type)                                    \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   if (pair->value.l < 0)                                                      \
     {                                                                         \
@@ -99,18 +99,18 @@ static array_hdls *obj_hdls = NULL;
       return pair;                                                            \
     }                                                                         \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %d [" #type " %d]\n", obj->name, field, pair->value.i,  \
+  LOG_TRACE ("%s.%s = %d [" #_type " %d]\n", obj->name, field, pair->value.i,  \
              pair->code);                                                     \
   dxf_free_pair (pair);                                                       \
   pair = NULL
-#define EXPECT_DBL_DXF(field, dxf, type)                                      \
+#define EXPECT_DBL_DXF(field, dxf, _type)                                     \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %f [" #type " %d]\n", obj->name, field, pair->value.d,  \
+  LOG_TRACE ("%s.%s = %f [" #_type " %d]\n", obj->name, field, pair->value.d,  \
              pair->code);                                                     \
   dxf_free_pair (pair);                                                       \
   pair = NULL
-#define EXPECT_H_DXF(field, htype, dxf, type)                                 \
+#define EXPECT_H_DXF(field, htype, dxf, _type)                                \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   if (pair->value.u)                                                          \
     {                                                                         \
@@ -131,6 +131,48 @@ static array_hdls *obj_hdls = NULL;
     }                                                                         \
   dxf_free_pair (pair);                                                       \
   pair = NULL
+#define EXPECT_SUB_INT_DXF(sub, field, dxf, _type)                            \
+  EXPECT_DXF (obj->name, field, dxf);                                         \
+  dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value, 1);    \
+  LOG_TRACE ("%s.%s.%s = %d [" #_type " %d]\n", obj->name, sub, field,         \
+             pair->value.i, pair->code);                                      \
+  dxf_free_pair (pair);                                                       \
+  pair = NULL;
+#define EXPECT_SUB_UINT_DXF(sub, field, dxf, _type)                           \
+  EXPECT_DXF (obj->name, field, dxf);                                         \
+  if (pair->value.l < 0)                                                      \
+    {                                                                         \
+      LOG_ERROR ("%s: Unexpected DXF value %ld for %s.%s code %d", obj->name, \
+                 pair ? pair->value.l : 0, sub, field, dxf);                  \
+      return pair;                                                            \
+    }                                                                         \
+  dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value, 1);    \
+  LOG_TRACE ("%s.%s.%s = %ld [" #_type " %d]\n", obj->name, sub, field,        \
+             pair->value.l, pair->code);                                      \
+  dxf_free_pair (pair);                                                       \
+  pair = NULL;
+#define EXPECT_SUB_H_DXF(sub, field, htype, dxf, _type)                       \
+  EXPECT_DXF (obj->name, field, dxf);                                         \
+  if (pair->value.u)                                                          \
+    {                                                                         \
+      BITCODE_H hdl = dwg_add_handleref (dwg, htype, pair->value.u, obj);     \
+      dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &hdl, 1);        \
+      LOG_TRACE ("%s.%s.%s = " FORMAT_REF " [H %d]\n", obj->name, sub, field, \
+                 ARGS_REF (hdl), pair->code);                                 \
+    }                                                                         \
+  dxf_free_pair (pair);                                                       \
+  pair = NULL
+#define EXPECT_SUB_T_DXF(sub, field, dxf)                                     \
+  EXPECT_DXF (obj->name, field, dxf);                                         \
+  if (pair->value.s)                                                          \
+    {                                                                         \
+      dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value.s,  \
+                                     1);                                      \
+      LOG_TRACE ("%s.%s.%s = \"%s\" [T %d]\n", obj->name, sub, field,         \
+                 pair->value.s, pair->code);                                  \
+    }                                                                         \
+  dxf_free_pair (pair);                                                       \
+  pair = NULL
 
 // stricter ordering for special subclasses:
 #define FIELD_B(field, dxf)                                                   \
@@ -138,6 +180,12 @@ static array_hdls *obj_hdls = NULL;
     {                                                                         \
       pair = dxf_read_pair (dat);                                             \
       EXPECT_INT_DXF (#field, dxf, B);                                        \
+    }
+#define SUB_FIELD_B(sub, field, dxf)                                          \
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_INT_DXF (#sub, #field, dxf, B);                              \
     }
 #define FIELD_RC(field, dxf)                                                  \
   if (dxf)                                                                    \
@@ -157,11 +205,23 @@ static array_hdls *obj_hdls = NULL;
       pair = dxf_read_pair (dat);                                             \
       EXPECT_INT_DXF (#field, dxf, BLd);                                      \
     }
+#define SUB_FIELD_BLd(sub, field, dxf)                                        \
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_INT_DXF (#sub, #field, dxf, BLd);                            \
+    }
 #define FIELD_BL(field, dxf)                                                  \
   if (dxf)                                                                    \
     {                                                                         \
       pair = dxf_read_pair (dat);                                             \
       EXPECT_UINT_DXF (#field, dxf, BL);                                      \
+    }
+#define SUB_FIELD_BL(sub, field, dxf)                                         \
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_UINT_DXF (#sub, #field, dxf, BL);                            \
     }
 #define FIELD_BD(field, dxf)                                                  \
   if (dxf)                                                                    \
@@ -219,11 +279,23 @@ static array_hdls *obj_hdls = NULL;
       pair = dxf_read_pair (dat);                                             \
       EXPECT_H_DXF (#field, code, dxf, H);                                    \
     }
+#define SUB_FIELD_HANDLE(sub, field, code, dxf)                               \
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_H_DXF (#sub, #field, code, dxf, H);                          \
+    }
 #define FIELD_T(field, dxf)                                                   \
   if (dxf)                                                                    \
     {                                                                         \
       pair = dxf_read_pair (dat);                                             \
       EXPECT_T_DXF (#field, dxf);                                             \
+    }
+#define SUB_FIELD_T(sub, field, dxf)                                          \
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_T_DXF (#sub, #field, dxf);                                   \
     }
 
 static void *
@@ -6251,6 +6323,37 @@ add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
+// ASSOCGEOMDEPENDENCY or ASSOCVALUEDEPENDENCY subclass
+static Dxf_Pair *
+add_sub_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, "assocdep");
+  char *o = &((char*)obj->tio.object->tio.ASSOCGEOMDEPENDENCY)[f->offset];
+  BITCODE_B has_name;
+
+  SUB_FIELD_BL (assocdep,class_version, 90);
+  SUB_FIELD_BL (assocdep,status, 90);
+  SUB_FIELD_B (assocdep,is_read_dep, 290);
+  SUB_FIELD_B (assocdep,is_write_dep, 290);
+  SUB_FIELD_B (assocdep,is_attached_to_object, 290);
+  SUB_FIELD_B (assocdep,is_delegating_to_owning_action, 290);
+  SUB_FIELD_BLd (assocdep,order, 90); /* -1 or 0 */
+  SUB_FIELD_HANDLE (assocdep,dep_on, 3, 330);
+  SUB_FIELD_B (assocdep,has_name, 290);
+  if (dwg_dynapi_subclass_value (o, "Dwg_Object_ASSOCDEPENDENCY", "has_name", &has_name, 0)
+      && has_name)
+    {
+      SUB_FIELD_T (assocdep,name, 1);
+    }
+  SUB_FIELD_HANDLE (assocdep,readdep, 4, 330);
+  SUB_FIELD_HANDLE (assocdep,node, 3, 330);
+  SUB_FIELD_HANDLE (assocdep,dep_body, 4, 360);
+  SUB_FIELD_BLd (assocdep,depbodyid, 90);
+  return NULL;
+}
+
 /* if it has an absolute ownerhandle */
 static int
 is_obj_absowner (Dwg_Object *obj)
@@ -9206,12 +9309,23 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     goto start_loop; /* failure */
                 }
               // with ASSOCDEPENDENCY or ACDBASSOCGEOMDEPENDENCY
+              else if (strEQc (obj->name, "ASSOCDEPENDENCY")
+                       && strEQc (subclass, "AcDbAssocDependency"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_ASSOCDEPENDENCY (obj, dat); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              // with ASSOCVALUEDEPENDENCY or ACDBASSOCGEOMDEPENDENCY
               else if (strstr (obj->name, "ASSOC")
                        && strstr (obj->name, "DEPENDENCY")
                        && strEQc (subclass, "AcDbAssocDependency"))
                 {
                   dxf_free_pair (pair);
-                  pair = add_ASSOCDEPENDENCY (obj, dat); // NULL for success
+                  pair = add_sub_ASSOCDEPENDENCY (obj, dat); // NULL for success
                   if (!pair)
                     goto next_pair;
                   else
