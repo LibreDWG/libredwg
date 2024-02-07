@@ -7471,9 +7471,9 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
   idx = oo->num_eed;
   if (dwg_has_eed_appid (oo, eedhdl))
     return;
-  oo->num_eed += 2;
+  oo->num_eed += 1;
   if (idx)
-    oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
+    oo->eed = (Dwg_Eed *)realloc (oo->eed, (oo->num_eed + 1) * sizeof (Dwg_Eed));
   else
     oo->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
   dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
@@ -7483,7 +7483,10 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
   _obj = oo->tio.MLEADERSTYLE;
   oo->eed[idx].data->u.eed_70.rs
       = _obj->class_version ? _obj->class_version : 2;
-  oo->eed[idx + 1].size = 0;
+  idx++;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].data = NULL;
 }
 
 static void
@@ -7559,10 +7562,11 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   idx = oo->num_eed;
   if (!dwg_has_eed_appid (oo, eedhdl1))
     {
-      LOG_TRACE ("Add EED for AcadAnnotative\n");
-      oo->num_eed += 6;
+      LOG_TRACE ("Add EED for AcadAnnotative to " FORMAT_RLLx "\n",
+                 obj->handle.value);
+      oo->num_eed += 5;
       if (idx)
-        oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)realloc (oo->eed, (oo->num_eed + 1) * sizeof (Dwg_Eed));
       else
         oo->eed = (Dwg_Eed *)calloc (6, sizeof (Dwg_Eed));
       // AnnotativeData
@@ -7599,15 +7603,17 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       oo->eed[idx].data->u.eed_2.close = 1;
       idx++;
       oo->eed[idx].size = 0;
+      oo->eed[idx].data = NULL;
       oo->eed[idx].raw = NULL;
     }
 
   if (!dwg_has_eed_appid (oo, eedhdl2))
     {
-      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMJAG\n");
-      oo->num_eed += 3;
+      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMJAG to " FORMAT_RLLx "\n",
+                 obj->handle.value);
+      oo->num_eed += 2;
       if (idx)
-        oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)realloc (oo->eed, (oo->num_eed + 1) * sizeof (Dwg_Eed));
       else
         oo->eed = (Dwg_Eed *)calloc (3, sizeof (Dwg_Eed));
       // DIMJAG
@@ -7626,14 +7632,16 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       oo->eed[idx].data->u.eed_40.real = 1.5; // FIXME Which value?
       idx++;
       oo->eed[idx].size = 0;
+      oo->eed[idx].data = NULL;
       oo->eed[idx].raw = NULL;
     }
   if (!dwg_has_eed_appid (oo, eedhdl3))
     {
-      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMTALN\n");
-      oo->num_eed += 3;
+      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMTALN to " FORMAT_RLLx "\n",
+                 obj->handle.value);
+      oo->num_eed += 2;
       if (idx)
-        oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)realloc (oo->eed, (oo->num_eed + 1) * sizeof (Dwg_Eed));
       else
         oo->eed = (Dwg_Eed *)calloc (3, sizeof (Dwg_Eed));
       // DIMTALN
@@ -7652,15 +7660,18 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       oo->eed[idx].data->u.eed_70.rs = 0; // FIXME Which value?
       idx++;
       oo->eed[idx].size = 0;
+      oo->eed[idx].data = NULL;
       oo->eed[idx].raw = NULL;
     }
   if (idx != oo->num_eed)
     {
-      LOG_WARN ("Already DIMSTYLE (" FORMAT_RLLx
+      // eg. when the EED already had AcadAnnotative
+      LOG_WARN ("Already DIMSTYLE(" FORMAT_RLLx
                 ") eed idx %u vs num_eed %u\n",
                 obj->handle.value, idx, oo->num_eed);
-      // oo->num_eed = idx;
-      // oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
+      oo->eed[idx].data = NULL;
+      oo->num_eed = idx;
+      oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
     }
 }
 
