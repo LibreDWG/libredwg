@@ -1378,7 +1378,7 @@ LibreDWG installs some binary programs to read or write DWG files.
 @anchor{dwgread}
 
 This reads a DWG file, and optionally converts its content to some
-output formats: JSON, GeoJSON, DXF, DXFB (i.e. Binary DXF), SVG.
+output formats: JSON, Minimal JSON, GeoJSON, DXF, DXFB (i.e. Binary DXF), SVG.
 
 @code{dwgread [OPTION]... DWGFILE}
 
@@ -1388,7 +1388,7 @@ Options:
               verbosity
 
        -O fmt,  --format fmt
-              fmt: JSON, DXF, DXFB, GeoJSON.
+              fmt: JSON, DXF, DXFB, minJSON, GeoJSON.
 
               More planned formats: YAML, XML/OGR, GPX, SVG, PS.
 
@@ -1399,6 +1399,8 @@ Options:
 
        --version
               output version information and exit
+
+minJSON is minimized JSON, without whitespace.
 
 @item @file{dwgwrite}
 @cindex dwgwrite

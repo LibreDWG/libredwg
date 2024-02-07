@@ -2,7 +2,7 @@
 # alive.test
 #
 # Copyright (C) 2010 Thien-Thi Nguyen
-# Copyright (C) 2018-2023 Free Software Foundation, Inc.
+# Copyright (C) 2018-2024 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -85,7 +85,11 @@ run ()
                 ;;
     dwgread)    if [ -z "$DISABLE_JSON" ]; then
                     if [ -n "$addarg" ]; then
-                        arg="-v2 $addarg -o $bdwg-$out.json $arg"
+                        if [ "$addarg" = "min" ]; then
+                            arg="-v2 -o $bdwg.$out.json $arg"
+                        else
+                            arg="-v2 $addarg -o $bdwg-$out.json $arg"
+                        fi
                     else
                         arg="-v2 -o $bdwg.json $arg"
                     fi
@@ -253,6 +257,7 @@ clean ()
       rm "./$b.ps" 2>/dev/null
       rm "./$b.bmp" 2>/dev/null
       rm "./$b.json" 2>/dev/null
+      rm "./$b.min.json" 2>/dev/null
       rm "./$b-rewrite.dwg" 2>/dev/null
       rm "./$b-dwgwrite.dwg" 2>/dev/null
       rm "./${b}_new.dwg" 2>/dev/null
@@ -260,10 +265,12 @@ clean ()
   rm "./entities*.dwg" 2>/dev/null
   rm "./entities*.dxf" 2>/dev/null
   rm "./entities*.json" 2>/dev/null
+  rm "./entities*.min.json" 2>/dev/null
   rm "./entities.dwg" 2>/dev/null
   rm "./entities-3d.dwg" 2>/dev/null
   rm "./entities-3d_r11.dwg" 2>/dev/null
   rm "./entities-3d_r11.json" 2>/dev/null
+  rm "./entities-3d_r11.min.json" 2>/dev/null
   rm "./ACEB10.dwg" 2>/dev/null
   rm "./ACEB10.dxf" 2>/dev/null
   rm "./ACEB10_*.dxf" 2>/dev/null
@@ -277,6 +284,9 @@ for prog in $PROGS ; do
         ;;
     *)  for dwg in $DATA; do
             run "$prog" "$dwg"
+            if [ "$prog" = "dwgread@EXEEXT@" ]; then
+                run "$prog" "$dwg" "min"
+            fi
         done
         ;;
     esac

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2023 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2024 Free Software Foundation, Inc.                   */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -78,7 +78,7 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
 #  ifndef DISABLE_DXF
 #    ifndef DISABLE_JSON
-  printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB, JSON, GeoJSON\n");
+  printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB, JSON, minJSON, GeoJSON\n");
 #    else
   printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB\n");
 #    endif
@@ -93,7 +93,7 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
 #  ifndef DISABLE_DXF
 #    ifndef DISABLE_JSON
-  printf ("  -O fmt      fmt: DXF, DXFB, JSON, GeoJSON\n");
+  printf ("  -O fmt      fmt: DXF, DXFB, JSON, MinJSON, GeoJSON\n");
 #    else
   printf ("  -O fmt      fmt: DXF, DXFB\n");
 #    endif
@@ -147,7 +147,7 @@ main (int argc, char *argv[])
         case ':': // missing arg
           if (optarg && !strcmp (optarg, "v"))
             {
-              opts = 1;
+              opts |= 1;
               has_v = 1;
               break;
             }
@@ -198,7 +198,13 @@ main (int argc, char *argv[])
               else
 #endif
 #ifndef DISABLE_JSON
-                  if (strstr (outfile, ".json") || strstr (outfile, ".JSON"))
+              if (strstr (outfile, ".min.json")
+                       || strstr (outfile, ".MIN.JSON"))
+                {
+                  fmt = strdup ("json");
+                  opts |= DWG_OPTS_MINIMAL;
+                }
+              else if (strstr (outfile, ".json") || strstr (outfile, ".JSON"))
                 fmt = strdup ("json");
               else if (strstr (outfile, ".geojson")
                        || strstr (outfile, ".GeoJSON"))
@@ -248,13 +254,13 @@ main (int argc, char *argv[])
 
   if (optind != argc)
     {
-      if (opts > 1)
+      if ((opts & 0xf) > 1)
         fprintf (stderr, "Reading DWG file %s\n", argv[i]);
       error = dwg_read_file (argv[i], &dwg);
     }
   else
     {
-      if (opts > 1)
+      if ((opts & 0xf) > 1)
         fprintf (stderr, "Reading DWG from stdin\n");
       error = dwg_read_file ("-", &dwg); // i.e. from stdin
     }
@@ -272,34 +278,36 @@ main (int argc, char *argv[])
       fprintf (stderr, "\n");
       dat.version = dat.from_version = dwg.header.version;
       dat.codepage = dwg.header.codepage;
+      dat.opts = opts;
       // TODO --as-rNNNN version? for now not.
       // we want the native dump, converters are separate.
 #ifndef DISABLE_DXF
 #  ifndef DISABLE_JSON
-      if (!strcasecmp (fmt, "json"))
+      if (!strcasecmp (fmt, "json") || !strcasecmp (fmt, "minjson"))
         {
-          if (opts > 1 && outfile)
-            fprintf (stderr, "Writing JSON file %s\n", outfile);
+          if ((opts & 0xf) > 1 && outfile)
+            fprintf (stderr, "Writing %sJSON file %s\n",
+                     opts & DWG_OPTS_MINIMAL ? "minimal " : "", outfile);
           error = dwg_write_json (&dat, &dwg);
         }
       else
 #  endif
           if (!strcasecmp (fmt, "dxfb"))
         {
-          if (opts > 1 && outfile)
+          if ((opts & 0xf) > 1 && outfile)
             fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
           error = dwg_write_dxfb (&dat, &dwg);
         }
       else if (!strcasecmp (fmt, "dxf"))
         {
-          if (opts > 1 && outfile)
+          if ((opts & 0xf) > 1 && outfile)
             fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
           error = dwg_write_dxf (&dat, &dwg);
         }
 #  ifndef DISABLE_JSON
       else if (!strcasecmp (fmt, "geojson"))
         {
-          if (opts > 1 && outfile)
+          if ((opts & 0xf) > 1 && outfile)
             fprintf (stderr, "Writing GeoJSON file %s\n", outfile);
           error = dwg_write_geojson (&dat, &dwg);
         }
@@ -341,15 +349,15 @@ done:
   if (error >= DWG_ERR_CRITICAL)
     {
       fprintf (stderr, "ERROR 0x%x\n", error);
-      if (error && opts > 2)
+      if (error && (opts & 0xf) > 2)
         dwg_errstrings (error);
     }
   else
     {
-      if (opts > 1)
+      if ((opts & 0xf) > 1)
         {
           fprintf (stderr, "SUCCESS 0x%x\n", error);
-          if (error && opts > 2)
+          if (error && (opts & 0xf) > 2)
             dwg_errstrings (error);
         }
       else

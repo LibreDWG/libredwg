@@ -116,6 +116,18 @@ for dwg in $DATA $TODO; do
         i=$((i+1))
     fi
 
+    minjson="$(basename "$dwg" .dwg).min.json"
+    echo "./dwgread${EXEEXT} -Ominjson -o$minjson $dwg && jq . $minjson"
+    if $TESTPROG "./dwgread${EXEEXT}" -Ominjson -o"$minjson" "$dwg" 2>/dev/null && \
+       @JSON_SED_NAN@ "$minjson" && \
+       $JQ . "$minjson" >>"$json.log" 2>&1
+    then
+       rm "./$json.log" "./$minjson"
+    else
+        cat "$json.log"
+        i=$((i+1))
+    fi
+
     geojson="$(basename "$dwg" .dwg).geojson"
     echo "./dwgread${EXEEXT}" -o"$geojson" "$dwg"
     if $TESTPROG "./dwgread${EXEEXT}" -Ogeojson -o"$geojson" "$dwg" 2>/dev/null && \
