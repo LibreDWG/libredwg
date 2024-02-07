@@ -996,6 +996,12 @@ search:
     {
       if (strEQ (s, f->name))
         return f;
+      // but not HATCH
+      else if (strEQc (key, "dashes") && strEQc (f->type, "Dwg_LTYPE_dash*"))
+        {
+          strcpy (s, "numdashes");
+          goto search;
+        }
     }
   // or num_owner
   if (strEQc (key, "vertex"))
