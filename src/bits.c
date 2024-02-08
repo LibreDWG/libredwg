@@ -1419,7 +1419,7 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   assert (sizeof (val) <= 8);
   memset (&val, 0, sizeof (val));
   val.v = htole64 (handle->value);
-  for (i = sizeof (val) - 1; i >= 0; i--)
+  for (i = 7; i >= 0; i--)
     if (val.p[i])
       break;
   size = handle->code << 4;
