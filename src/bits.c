@@ -1355,7 +1355,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   else
     {
       handle->size = handle->code & 0xf;
-      handle->code = (handle->code & 0xf0) >> 4;
+      handle->code = (handle->code >> 4) & 0xf;
     }
 
   // size must not exceed 8
@@ -1368,9 +1368,15 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     }
 
   u.v = UINT64_C (0);
+  /*
   for (int i = handle->size - 1; i >= 0; i--)
     u.c[i] = bit_read_RC (dat);
+  */
+  for (int i = 0; i < handle->size; i++)
+    u.v = (u.v << 8) | bit_read_RC (dat);
   handle->value = htole64 (u.v);
+  if (dat->version < R_2018) // FIXME where did I see 64bit handles?
+    handle->value &= 0xFFFF; // cap at 32bit
   return 0;
 }
 
