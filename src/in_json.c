@@ -420,24 +420,6 @@ outofmemory:
   return NULL;
 }
 
-// not yet needed. only with write2004
-ATTRIBUTE_MALLOC
-static BITCODE_TU
-json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
-{
-  const jsmntok_t *t = &tokens->tokens[tokens->index];
-  if (t->type != JSMN_STRING)
-    {
-      LOG_ERROR ("Expected JSON STRING");
-      json_advance_unknown (dat, tokens, t->type, 0);
-      return NULL;
-    }
-  tokens->index++;
-  JSON_TOKENS_CHECK_OVERFLOW_NULL
-  dat->chain[t->end] = '\0';
-  return bit_utf8_to_TU ((char *)&dat->chain[t->start], 0);
-}
-
 ATTRIBUTE_MALLOC
 static char *
 json_fixed_string (Bit_Chain *restrict dat, const int len,
@@ -4233,7 +4215,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               t = &tokens->tokens[tokens->index];
               if (t->type == JSMN_STRING) // CUSTOMPROPERTYTAG
                 {
-                  _obj->props[j].tag = json_wstring (dat, tokens);
+                  _obj->props[j].tag = json_string (dat, tokens);
                   LOG_TRACE ("props[%d] = (%.*s", j, t->end - t->start,
                              &dat->chain[t->start])
                 }
@@ -4247,7 +4229,7 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               t = &tokens->tokens[tokens->index];
               if (t->type == JSMN_STRING) // CUSTOMPROPERTY
                 {
-                  _obj->props[j].value = json_wstring (dat, tokens);
+                  _obj->props[j].value = json_string (dat, tokens);
                   LOG_TRACE (",%.*s)", t->end - t->start,
                              &dat->chain[t->start])
                 }
