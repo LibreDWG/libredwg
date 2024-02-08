@@ -3216,9 +3216,15 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
   uint16_t c = 0;
 
   if (!srclen)
-    return (char *)calloc (1, 1);
+    {
+      free (str);
+      return (char *)calloc (1, 1);
+    }
   if (!codepage)
-    return (char *)src;
+    {
+      free (str);
+      return (char *)src;
+    }
   //  UTF8 encode
   while (i < destlen && (char*)tmp < &src[srclen] && (c = *tmp))
     {
