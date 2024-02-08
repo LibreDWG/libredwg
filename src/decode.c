@@ -6917,7 +6917,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 PRE (R_11) // no crc16
                 {
                   if (obj->size > dat->size - obj->address ||
-                      obj->size + obj->address > dat->byte)
+                      obj->size + obj->address > dat->byte + 1)
                     {
                       LOG_ERROR ("Invalid obj->size " FORMAT_RL " changed to %" PRIuSIZE,
                                  obj->size, dat->byte - obj->address);

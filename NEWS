@@ -15,6 +15,8 @@ Minor bugfixes:
   * Fixed indxf for stable ASSOCGEOMDEPENDENCY object.
   * Fixed decoding handles with sizes > 4, now capped at 32bit.
     There were apparently undocumented handle bits in the 5th byte.
+  * Fixed decoding preR13 entities with an offset of 1, one unknown byte.
+    Fixes one r2.6 TEXT example.
   * Improve PROXY fields and DXF codes
   * Changed MLINESTYLE.line.lt fields (#924)
   * gcc-14 warning fixes (#931)
