@@ -1382,10 +1382,10 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 
 /** Write handle-references.
  * TODO
- * separate SoftPtr:   BB 0 + RLL
- *          HardPtr:   BB 1 + RLL
- *          SoftOwner: BB 2 + RLL
- *          HardOwner: BB 3 + RLL
+ * separate SoftPtr:   BB 0 + RL
+ *          HardPtr:   BB 1 + RL
+ *          SoftOwner: BB 2 + RL
+ *          HardOwner: BB 3 + RL
  * downconvert relative handles to abs. 4 to r2000
  */
 void
@@ -1452,7 +1452,7 @@ bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     {
       LOG_ERROR ("Invalid handle size %u with " FORMAT_RLLx, handle->size,
                  handle->value)
-      bit_write_RLL_BE (dat, handle->value);
+      bit_write_RL_BE (dat, handle->value);
     }
   return;
 }
