@@ -12446,10 +12446,10 @@ static const Dwg_DYNAPI_field _dwg_SUNSTUDY_Dates_fields[] = {
 };
 /* from typedef struct _dwg_SummaryInfo_Property: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_SummaryInfo_Property_fields[] = {
-  { "tag",	"TU", sizeof (BITCODE_TU),  OFF (struct _dwg_SummaryInfo_Property, tag),
-    1,1,1, 0 },
-  { "value",	"TU", sizeof (BITCODE_TU),  OFF (struct _dwg_SummaryInfo_Property, value),
-    1,1,1, 0 },
+  { "tag",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_SummaryInfo_Property, tag),
+    1,0,0, 0 },
+  { "value",	"T16", sizeof (BITCODE_T16),  OFF (struct _dwg_SummaryInfo_Property, value),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_TABLEGEOMETRY_Cell: (sorted by offset) */

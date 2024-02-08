@@ -15379,9 +15379,9 @@ BL,	DXF 90
 @vtable @code
 
 @item tag
-TU
+T16
 @item value
-TU
+T16
 
 @end vtable
 @end indentedblock

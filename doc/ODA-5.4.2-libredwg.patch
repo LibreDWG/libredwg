@@ -1,5 +1,5 @@
 --- ODA-5.4.1.md	2023-11-23 21:17:02.825331305 +0100
-+++ ODA-5.4.2-libredwg.md	2024-02-08 11:53:19.642323334 +0100
++++ ODA-5.4.2-libredwg.md	2024-02-09 07:03:36.394566600 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -774,6 +774,19 @@
  |------------------|------
  | Name             | “”
  | Section ID       | Always 0
+@@ -2726,11 +2786,11 @@
+ | String | 2 + n  | Revision number
+ | String | 2 + n  | Hyperlink base
+ | ?      | 8      | Total editing time (ODA writes two zero Int32’s)
+ | Julian date | 8 | Create date time
+ | Julian date | 8 | Modified date time
+-| Int16  | 2 + 2 * (2 + n) | Property count, followed by PropertyCount key/value string pairs.
++| Int16  | 2 + 2 * (2 + n) | Custom Property count, followed by CUSTOMPROPERTYTAG and CUSTOMPROPERTY key/value string pairs.
+ | Int32  | 4      | Unknown (write 0)
+ | Int32  | 4      | Unknown (write 0)
+ 
+ # 14 Data section AcDb:Preview
+ 
 @@ -2807,43 +2867,42 @@
  | Name             | AcDb:AppInfo
  | Compressed       | 1
