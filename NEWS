@@ -4,6 +4,11 @@ See the end for copying conditions.
 
 LibreDWG version 0.13.1 - 2023-02-10 - beta:
 
+Minor features:
+  * dwgread now supports --fmt=minJSON or --file=XXX.min.json
+    to emit minimized json without whitespace. Use eg.
+      jq . XXX.min.json
+    to unminimize it. Saves about 50% size.
 Minor bugfixes:
   * Fixed DXF XRECORD xdata values and sizes (wrong binary encoding in outdxf,
     wrong xdata_size in indxf)
@@ -15,6 +20,8 @@ Minor bugfixes:
   * Change DIMSTYLE.DIMTXTDIRECTION dxf code from 295 to 294. (#835)
     Undocumented, ODA has it as 295, netDXF as 294. on indxf accept both.
   * Fix encode ERROR: Wrong object size on MS adjust on large objects.
+  * Fix encode downconvert_DIMSTYLE, when the eed already had one
+    member, AcadAnnotative.
 
 LibreDWG version 0.13 - 2023-02-04 - beta:
 

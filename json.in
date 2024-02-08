@@ -33,9 +33,13 @@ ob="$b"
 ext=
 gerr=0
 log=
+jext="json"
 
 for d in "$@"; do
     case $d in
+    -m)
+        jext="min.json"
+        ;;
     -v*)
         v="$d"
         ;;
@@ -97,10 +101,10 @@ for d in "$@"; do
         if [ -z "$log" ]; then
             log="$b$dir.log"
         fi
-        out="$b$dir.json"
-        echo "$timeout $TESTPROG programs/dwgread $v -Ojson -o $out $d 2>$log"
+        out="$b$dir.$jext"
+        echo "$timeout $TESTPROG programs/dwgread $v -o $out $d 2>$log"
         # shellcheck disable=SC2086
-        $timeout $TESTPROG programs/dwgread "$v" -Ojson -o "$out" "$d" 2>"$log"
+        $timeout $TESTPROG programs/dwgread "$v" -o "$out" "$d" 2>"$log"
         err=$?
         [ $err -gt $gerr ] && gerr=$err
         tail -n2 "$log"

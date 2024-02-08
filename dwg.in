@@ -90,14 +90,41 @@ for d in "$@"; do
         if [ "$dir" = "_." ]; then dir=""; fi
         if [ -z "$ext" ]; then
             case $(basename "$d") in
-            *.dwg) ext=dwg ;;
-            *.DWG) ext=dwg ;;
-            *.dxf) ext=dxf ;;
-            *.DXF) ext=dxf ;;
-            *.dxfb) ext=dxfb ;;
-            *.DXFB) ext=dxfb ;;
-            *.json) ext=json ;;
-            *.JSON) ext=json ;;
+            *.dwg)
+                ext=dwg
+                b=$(basename "$d" ".$ext")
+                ;;
+            *.DWG)
+                ext=dwg
+                b=$(basename "$d" .DWG)
+                ;;
+            *.dxf)
+                ext=dxf
+                b=$(basename "$d" ".$ext")
+                ;;
+            *.DXF)
+                ext=dxf
+                b=$(basename "$d" .DXF)
+                ;;
+            *.dxfb)
+                ext=dxfb
+                b=$(basename "$d" ".$ext")
+                ;;
+            *.DXFB)
+                ext=dxfb
+                b=$(basename "$d" .DXFB)
+                ;;
+            *.min.json)
+                b=$(basename "$d" .min.json)
+                ext=json ;;
+            *.json)
+                ext=json
+                b=$(basename "$d" ".$ext")
+                ;;
+            *.JSON)
+                ext=json
+                b=$(basename "$d" .JSON)
+                ;;
             *)
                 if [ "$(head -c1 "$d")" = "{" ]; then
                     ext=json
@@ -112,10 +139,10 @@ for d in "$@"; do
                     echo "Illegal extension for $d"
                     exit
                 fi
+                b=$(basename "$d" ."$ext")
                 ;;
             esac
         fi
-        b=$(basename "$d" ."$ext")
         log="$b$dir.$ext.log"
         out="$b$dir.dwg"
         ori_timeout="$timeout"

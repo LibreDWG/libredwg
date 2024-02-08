@@ -46,12 +46,12 @@ esac
 
 # first create a dwg log to compare against
 # ./log "$v" "$d"
-rm "./$b.log" "./$b.json" "./$b.dwg" 2>/dev/null
-if ! ./json "-l$b.log" "$v" "$d"; then
+rm "./$b.log" "./$b.min.json" "./$b.dwg" 2>/dev/null
+if ! ./json -m "-l$b.log" "$v" "$d"; then
     exit 2
 fi
-if [ -f "$b.json" ]; then
-    if ! ./dwg -y "$v" "$b.json"; then
+if [ -f "$b.min.json" ]; then
+    if ! ./dwg -y "$v" "$b.min.json"; then
         exit 1
     fi
 fi
