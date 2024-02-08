@@ -26,6 +26,9 @@ Minor bugfixes:
   * Fix encode ERROR: Wrong object size on MS adjust on large objects.
   * Fix encode downconvert_DIMSTYLE, when the eed already had one
     member, AcadAnnotative.
+  * Fixed preR13 generated internal handles, esp. for the control table records,
+    by updating the internal HANDSEED. Which fixes the ERROR: Duplicate handle X
+    already points to object X.
 
 LibreDWG version 0.13 - 2023-02-04 - beta:
 

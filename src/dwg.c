@@ -2187,7 +2187,14 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   ref->handleref.is_global = 1;
   dwg_add_handle (&ref->handleref, code, absref, obj);
   if (dwg->header.from_version <= R_12)
-    ref->handleref.size = 2;
+    {
+      ref->handleref.size = 2;
+      if (dwg->header_vars.HANDSEED && dwg->header_vars.HANDSEED->absolute_ref
+          && absref > dwg->header_vars.HANDSEED->absolute_ref)
+        {
+          dwg->header_vars.HANDSEED->absolute_ref = absref;
+        }
+    }
   ref->absolute_ref = absref;
   ref->obj = NULL;
   LOG_HANDLE ("[add handleref " FORMAT_REF "] ", ARGS_REF (ref))
