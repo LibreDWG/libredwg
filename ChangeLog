@@ -1,6 +1,165 @@
 Full history from the git log
 -----------------------------
 
+2024-02-09  Reini Urban  <reini.urban@gmail.com>
+
+	Release 0.13.1
+	A bugfix release,
+	with one minor feature dwgread .min.json added. See NEWS
+
+	NEWS: Fixed SummaryInfo.props[].tag and value types to T16
+
+2024-02-09  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix summaryinfo props
+
+2024-02-09  Reini Urban  <reini.urban@gmail.com>
+
+	decode_r11: update HANDSEED on new handles
+	Fixes decoding and roundtrips of
+	e.g. r11/from_autocad_r12/sample/BASEPLAT.DWG
+	esp. on ctrl entries.
+
+2024-02-09  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix comments of ObjFreeSpace and SecondHeader
+
+2024-02-08  Reini Urban  <reini.urban@gmail.com>
+
+	bits: write only 4 byte handles on error
+
+	bits: sizeof bits union may be 16
+	detected by cppcheck. not sure which compiler actually does such things,
+	but keep it the specs
+
+	bits: fix leak
+	detected by cppcheck
+
+	decode_r11: accept 1 missing byte
+	esp. with TEXT entities. eg from_autocad_2.62/MENUTREE.DWG
+	there might be one more unknown byte
+
+	decode: cap handles at 32bit
+	Fixes GH #935, which has a r2000 example which has an undocumented high bit set
+	in most handles.
+	In fact, searching found no examples with more then 4 byte handles.
+
+	json-check: use min.json
+	dwg: support .min.json
+	json: support -m
+
+	json: option DWG_OPTS_MINIMAL for minJSON (minimized)
+	no whitespace at run-time.
+	We don't write minimal JSON as with minimal DXFs anymore
+	($ACADVER, $HANDSEED, and then ENTITIES only).
+	With ideas from GH #886
+
+2024-02-07  Reini Urban  <reini.urban@gmail.com>
+
+	injson/dxf: fix LTYPE.numdashes setter
+	ERROR: Unknown num_dashes field
+
+	encode: fix downconvert_DIMSTYLE
+	when the eed already had one member, AcadAnnotative.
+	e.g. ../to/2013/from_github_santicastro/Triskele_centered_with_connectors_extract.dwg
+
+2024-02-06  Reini Urban  <reini.urban@gmail.com>
+
+	Prepare 0.13.1 bugfix release
+
+2024-02-06  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: add add_sub_ASSOCDEPENDENCY
+	for the 2 special classes ASSOCGEOMDEPENDENCY or ASSOCVALUEDEPENDENCY.
+	add SUB_FIELD_* parsers, which need o for the field ptr, and f for its type.
+
+	Fixes ASSOCGEOMDEPENDENCY dxf import with example_2000
+	(which was suppoed to be stable)
+
+2024-02-06  Reini Urban  <reini.urban@gmail.com>
+
+	dynapi: add dwg_dynapi_subclass_set_value
+	needed for indxf. can also be used for injson
+
+	gen-dynapi: fix ASSOCGEOMDEPENDENCY subclass
+	and fixup the lines for debugging
+
+	dxfb-check: harmonize with dxf-check
+
+	encode: fix ERROR: Wrong object size on MS adjust
+	when the new size doesnt fit the old MS size (overlarge MS size),
+	we move the stream by 2, but forgot to adjust the end_address calc,
+	leading to wrong ERROR: Wrong object size and CRC calc
+
+	XRECORD.cloning logging: print the DXF code
+
+	distcheck: cleanup check_oda files
+	so far only locally
+
+	json.test: print the right ODAFileConverter name
+	as with json-check
+
+2024-02-05  Reini Urban  <reini.urban@gmail.com>
+
+	dxf.test: except skipped r13 LIGHT entity
+	which must be skipped in r13 DXFs
+
+	spec: improve PROXY fields and dxf codes
+	but still cannot roundtrip
+
+	indxf: fix xdata_size with BINARY
+
+	outdxf: fix BINARY
+	esp. for 310 xdata fields, with wrong value types.
+	Ensure correct values and lengths 127
+
+2024-02-05  Reini Urban  <reini.urban@gmail.com>
+
+	dxf spec: change DIMSTYLE.DIMTXTDIRECTION from 295 to 294
+	ODA has it documented as 295 B0, netDXF as 294.
+	Acad has it undocumented. It has a default of 0, so only
+	present if reversed.
+	But accept indxf of 295 also (for ODA and backcompat)
+
+	See GH #835
+
+2024-02-05  Reini Urban  <reini.urban@gmail.com>
+
+	debug: enable MTEXTATTRIBUTEOBJECTCONTEXTDATA.context
+	as embedded SCALE object, if the SCALE is not 1:1.
+	See GH #851
+
+	fix missing bindings/Makefile.in
+	Fixes GH #934
+
+	log timeduration better
+	Fixes GH #916
+
+2024-02-04  Reini Urban  <reini.urban@gmail.com>
+
+	up/downgrade MLINESTYLE_line.lt. fields
+	Add a new dwg_find_tablehandle_index() helper, which is
+	needed for more upgraders.
+	Fixes GH #924
+
+2024-02-04  Reini Urban  <reini.urban@gmail.com>
+
+	spec: fix MLINESTYLE_line.lt_ fields to union
+	because of the tricky overflow check in REPEAT_CHKCOUNT_LVAL.
+	Fixes #924
+
+	WIP add_test. dxf from/to 2018 needs a converter.
+
+2024-02-04  Reini Urban  <reini.urban@gmail.com>
+
+	disable broken gcc-14 -Walloc-size
+	Fixes GH #931
+
+	doc: mention ACadSharp
+
+	fix -Wcalloc-transposed-args
+	Fixes GH #931, thanks to @topazus
+
 2024-02-04  Reini Urban  <reini.urban@gmail.com>
 
 	Release 0.13

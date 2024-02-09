@@ -164,8 +164,8 @@ someone should probably think about and resolve them!
   - generate the missing ChangeLog entries
     e.g. via build-aux/gitlog-to-changelog --since='2018-11-05' >x
   - make distcheck
-  - push a smoke/ branch to check the CI results for linux, darwin, freebsd, mingw
-    and cygwin.
+  - push a smoke/ branch to check the CI results for linux, darwin, freebsd, msvc,
+    mingw and cygwin.
   - create a temp. tag with the correct version number (see above):
     e.g. git tag -s -m 'release 0.6.2' 0.6.2
   - sh autogen.sh to update the version
