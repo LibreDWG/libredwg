@@ -21,6 +21,7 @@ Minor bugfixes:
   * Changed MLINESTYLE.line.lt fields (#924)
   * gcc-14 warning fixes (#931)
   * Fixed LWPOLYLINE.PLINEGEN flag
+  * Fixed SummaryInfo.props[].tag and value types to T16
   * Change DIMSTYLE.DIMTXTDIRECTION dxf code from 295 to 294. (#835)
     Undocumented, ODA has it as 295, netDXF as 294. on indxf accept both.
   * Fix encode ERROR: Wrong object size on MS adjust on large objects.
