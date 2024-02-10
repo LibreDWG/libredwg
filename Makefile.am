@@ -78,9 +78,12 @@ shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi \
 	maintainer-clean-local distuninstallcheck dist-hook
 
-dist-hook:
+dist-hook: regen-dynapi
 	echo dist-hook distdir="$(distdir)"
 	echo $(VERSION) > $(distdir)/.tarball-version
+	test -f $(distdir)/test/xmlsuite/Makefile.in
+	test -f $(distdir)/bindings/python/Makefile.in
+	test -f $(distdir)/bindings/perl/Makefile.PL
 # automake bug, GH #211 (howto enable skip_mode_fix? tried now info-in-builddir)
 #distcheck-hook:
 #	echo distcheck-hook distdir="$(distdir)"

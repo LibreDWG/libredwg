@@ -105,8 +105,8 @@ AC_CHECK_LIB([xml2],[newXMLEntity],
    ],
   [if pkg-config --exists libxml-2.0; then
     have_libxml2=yes;
-    XML2_CFLAGS=`pkg-config libxml-2.0 --cflags`
-    XML2_LIBS=`pkg-config libxml-2.0 --libs`
+    XML2_CFLAGS="`pkg-config libxml-2.0 --cflags`"
+    XML2_LIBS="`pkg-config libxml-2.0 --libs`"
   else
     AC_MSG_WARN([libxml-2.0 for test/xmlsuite not found])
   fi])
@@ -225,8 +225,11 @@ AC_ARG_ENABLE([release],AS_HELP_STRING([--enable-release],[
     [ax_is_release=yes
     AC_MSG_RESULT(IS_RELEASE override with --enable-release)])
 if test x$ax_is_release = xyes; then
+   if test x$have_libxml2 != xyes; then
+     AC_MSG_WARN([libxml-2.0 for test/xmlsuite missing])
+   fi
    AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release,
-   skipping unstable DWG features, unknown DWG versions and objects.])
+skipping unstable DWG features, unknown DWG versions and objects.])
 fi
 AM_CONDITIONAL([IS_RELEASE], [test x$ax_is_release = xyes])
 

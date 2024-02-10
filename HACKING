@@ -176,7 +176,8 @@ someone should probably think about and resolve them!
     see NEWS'
   - merge it into master (ff)
   - update the tag: git tag -d 0.6.2; git tag -s -m 'release 0.6.2' 0.6.2
-  - make dist to create the source tarballs
+  - make dist to create the source tarballs. if seperate build dirs, in a
+    config with --enable-release only.
   - check if the source tarballs compile
   - push master and tags to run the CI and create the windows binaries on appveyor
   - upload the dist tarballs
