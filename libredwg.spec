@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.13.1
+Version:        0.13.2
 Release:        1%{?dist}
 Summary:        GNU C library and programs to read and write DWG files
 
@@ -138,7 +138,7 @@ fi
 %{_bindir}/dxf2dwg
 %{_bindir}/dxfwrite
 %{_libdir}/libredwg.so.0
-%{_libdir}/libredwg.so.0.0.12
+%{_libdir}/libredwg.so.0.0.13
 %{_mandir}/man1/dwg2SVG.1.gz
 %{_mandir}/man1/dwg2dxf.1.gz
 %{_mandir}/man1/dwg2ps.1.gz
@@ -175,8 +175,11 @@ fi
 
 
 %changelog
+* Sat Feb 10 2024 Reini Urban <reini.urban@gmail.com> 0.13.2-1
+- upstream bugfix.
+
 * Fri Feb 9 2024 Reini Urban <reini.urban@gmail.com> 0.13.1-1
-- upstream update.
+- upstream bugfix.
 
 * Fri Feb 4 2024 Reini Urban <reini.urban@gmail.com> 0.13.0-1
 - upstream update.

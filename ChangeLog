@@ -1,6 +1,22 @@
 Full history from the git log
 -----------------------------
 
+2024-02-10  Reini Urban  <reini.urban@gmail.com>
+
+	Release 0.13.2
+
+	check make dist for missing subdirs
+	See GH #937
+
+2024-02-10  Reini Urban  <reini.urban@gmail.com>
+
+	github: fix make release, no extra python
+	install missing python3-libxml2 and libxslt
+	See GH #937
+
+	add install-libxslt helper, needed for the
+	python libxml2 package if installed extra.
+
 2024-02-09  Reini Urban  <reini.urban@gmail.com>
 
 	Release 0.13.1
