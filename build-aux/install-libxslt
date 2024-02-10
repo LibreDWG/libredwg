@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+VER=1.1.39
+wget -q https://download.gnome.org/sources/libxslt/1.1/libxslt-$VER.tar.xz
+tar xfJ libxslt-$VER.tar.xz
+cd libxslt-$VER
+./configure
+make
+#make check
+sudo make install

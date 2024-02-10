@@ -36,14 +36,14 @@ jobs:
           - CFLAGS="-O2 -m32" --disable-bindings
           - CFLAGS="-O2 -fno-omit-frame-pointer -fsanitize=undefined -fno-var-tracking" --disable-bindings --enable-check-less
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
-    - name: setup-python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.8
+    #- name: setup-python
+    #  uses: actions/setup-python@v5
+    #  with:
+    #    python-version: '3.11'
     - if: matrix.CONFIGURE_ARGS == 'CFLAGS="-O2 -m32" --disable-bindings'
       run: |
         sudo apt-get -y update
@@ -52,6 +52,14 @@ jobs:
     #  run: |
     #    python -m pip install --upgrade pip
     #    python -m pip install --upgrade libxml2-python3
+    - if: matrix.CONFIGURE_ARGS == '--enable-release'
+      name: setup --enable-release
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install texlive help2man libconvert-binary-c-perl shellcheck \
+          swig python3-dev python3-libxml2 libxml2-dev libpcre2-dev libpcre2-32-0 jq \
+          pkg-config shellcheck parallel rpmlint shfmt doxygen jing valgrind cppcheck gperf
+        build-aux/install-libxslt
     - run: sh autogen.sh
     - run: ./configure ${{ matrix.CONFIGURE_ARGS }}
     - if: matrix.CONFIGURE_ARGS != '--enable-release'
@@ -68,8 +76,6 @@ jobs:
     - if: matrix.CONFIGURE_ARGS == '--enable-release'
       name: Run make distcheck if --enable-release
       run: |
-        sudo apt-get -y update
-        sudo apt-get -y install texlive help2man libconvert-binary-c-perl shellcheck
         make regen-dynapi
         make distcheck
     - if: matrix.CONFIGURE_ARGS == '--enable-release' && startsWith(github.ref, 'refs/tags/')
@@ -123,9 +129,9 @@ jobs:
     #      - "-DLIBREDWG_DISABLE_WRITE=On"
     steps:
     - name: setup-python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.8
+        python-version: 3.12
     - name: checkout
       uses: actions/checkout@v3
       with:
@@ -150,9 +156,9 @@ jobs:
     - name: link texinfo
       run: brew link texinfo --force
     - name: setup-python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.8
+        python-version: 3.12
     - name: checkout
       uses: actions/checkout@v3
       with:

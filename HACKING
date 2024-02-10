@@ -177,6 +177,7 @@ someone should probably think about and resolve them!
   - merge it into master (ff)
   - update the tag: git tag -d 0.6.2; git tag -s -m 'release 0.6.2' 0.6.2
   - make dist to create the source tarballs
+  - check if the source tarballs compile
   - push master and tags to run the CI and create the windows binaries on appveyor
   - upload the dist tarballs
     build-aux/gnupload --to ftp.gnu.org:libredwg libredwg-0.6.2.tar.gz libredwg-0.6.2.tar.xz
