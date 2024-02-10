@@ -610,7 +610,7 @@
 #ifndef CONTROL_HANDLE_STREAM
 #  define CONTROL_HANDLE_STREAM                                               \
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
-    PRE (R_2007)                                                              \
+    PRE (R_2007a)                                                              \
     {                                                                         \
       hdl_dat->byte = dat->byte;                                              \
       hdl_dat->bit = dat->bit;                                                \

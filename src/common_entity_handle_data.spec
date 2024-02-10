@@ -89,7 +89,7 @@
         }
     }
 
-  SINCE (R_2000)
+  SINCE (R_2000b)
     {
       FIELD_HANDLE (layer, 5, 8);
 
@@ -115,7 +115,7 @@
 #endif
     }
 
-  SINCE (R_2007)
+  SINCE (R_2007a)
     {
       if (FIELD_VALUE (material_flags) == 3)
         FIELD_HANDLE (material, 5, 347);
@@ -123,13 +123,13 @@
         FIELD_HANDLE (shadow, 5, 0);
     }
 
-  SINCE (R_2000)
+  SINCE (R_2000b)
     {
       if (FIELD_VALUE (plotstyle_flags) == 3)
         FIELD_HANDLE (plotstyle, 5, 390);
     }
 
-  SINCE (R_2010)
+  SINCE (R_2010b)
     {
       // DXF 348 but which?
       if (FIELD_VALUE (has_full_visualstyle))

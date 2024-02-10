@@ -253,7 +253,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   if (dxf)                                                                    \
     {                                                                         \
       HEADER_9 (nam);                                                         \
-      PRE (R_2007)                                                            \
+      PRE (R_2007a)                                                            \
         VALUE_TV ((char *)value, dxf)                                         \
       LATER_VERSIONS                                                          \
         VALUE_T (value, dxf)                                                  \
@@ -262,7 +262,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
     {                                                                         \
       HEADER_9 (nam);                                                         \
-      PRE (R_2007)                                                            \
+      PRE (R_2007a)                                                            \
         VALUE_TV ((char *)value, dxf)                                         \
       LATER_VERSIONS                                                          \
         VALUE_T (value, dxf)                                                  \
@@ -2628,7 +2628,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           error |= dwg_dxf_SEQEND (dat, o);                                   \
         *i = *i + 1;                                                          \
       }                                                                       \
-      SINCE (R_2004)                                                          \
+      SINCE (R_2004a)                                                          \
       {                                                                       \
         Dwg_Object *o;                                                        \
         for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                      \
@@ -2696,7 +2696,7 @@ decl_dxf_process_VERTEX (PFACE)
           error |= dwg_dxf_SEQEND (dat, o);                                   \
         *i = *i + 1;                                                          \
       }                                                                       \
-      SINCE (R_2004)                                                          \
+      SINCE (R_2004a)                                                          \
       {                                                                       \
         Dwg_Object *o;                                                        \
         for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                      \
@@ -3138,7 +3138,7 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else
         VALUE_T (dwg->dwg_class[j].appname, 3)
       VALUE_RL (dwg->dwg_class[j].proxyflag, 90);
-      SINCE (R_2004)
+      SINCE (R_2004a)
       {
         VALUE_RL (dwg->dwg_class[j].num_instances, 91);
       }
@@ -3385,7 +3385,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
-  PRE (R_2004) // nowhere found in DXF's (r11-r2000)
+  PRE (R_2004a) // nowhere found in DXF's (r11-r2000)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
     if (ctrl && 0)
@@ -3538,7 +3538,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
     }
   else
     {
-      SINCE (R_2004)
+      SINCE (R_2004a)
       {
         // first_owned_block
         if (IS_FROM_TU (dat))
@@ -3828,7 +3828,7 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         if (dxf_acds_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;
       }
-      SINCE (R_2000)
+      SINCE (R_2000b)
       {
         if (dxf_thumbnail_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;

@@ -316,7 +316,7 @@
           {
             FIELD_CAST (preview_size, RL, BLL, 92);
           }
-        SINCE (R_2010)
+        SINCE (R_2010b)
           {
             FIELD_BLL (preview_size, 160);
           }
@@ -378,7 +378,7 @@
         FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
 #endif
     }
-  SINCE (R_2004) //ODA bug
+  SINCE (R_2004a) //ODA bug
     {
       FIELD_B (is_xdic_missing, 0);
     }
@@ -401,7 +401,7 @@
 
   // no ENC type as it's only used once, here, and we would need to write
   // handlers for all 3 importers, and 3 exporters.
-  SINCE (R_2004) // ENC (entity color encoding)
+  SINCE (R_2004a) // ENC (entity color encoding)
     {
       BITCODE_BS flags;
 #ifdef IS_JSON
@@ -488,14 +488,14 @@
   SINCE (R_13b1)
     FIELD_BD1 (ltype_scale, 48);
 #endif
-  SINCE (R_2000)
+  SINCE (R_2000b)
     {
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
       FIELD_BB (ltype_flags, 0);
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
       FIELD_BB (plotstyle_flags, 0);
     }
-  SINCE (R_2007)
+  SINCE (R_2007a)
     {
 #ifndef DEBUG_CLASSES
 #ifdef IS_ENCODER
@@ -513,7 +513,7 @@
       }
       FIELD_RC0 (shadow_flags, 284); /* r2007+: 0 both, 1 receives, 2 casts, 3 no */
     }
-  SINCE (R_2010)
+  SINCE (R_2010b)
     {
       FIELD_B (has_full_visualstyle, 0); // DXF?
       FIELD_B (has_face_visualstyle, 0);
@@ -530,7 +530,7 @@
     }
   }
 
-  SINCE (R_2000) {
+  SINCE (R_2000b) {
     // DXF later after 6, see common_entity_handle_data.spec
     // Ideally CMC 60 should be deferred after layer 8, before linewt 370 also
 #ifndef IS_DXF

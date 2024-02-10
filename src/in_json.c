@@ -1079,7 +1079,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RC (maint_version, 0)
       FIELD_RS (codepage, 0) //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
       FIELD_RL (sections, 0) // until r2000
-      // SINCE (R_2004)
+      // SINCE (R_2004a)
       FIELD_RC (unknown_0, 0)
       FIELD_RC (app_dwg_version, 0)
       FIELD_RC (app_maint_version, 0)
@@ -1571,7 +1571,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                     case 0:
                       {
-                        /*PRE (R_2007)*/
+                        /*PRE (R_2007a)*/
                         {
                           char *s = json_string (dat, tokens);
                           BITCODE_RS len = strlen (s) & 0xFFFF;
@@ -1587,7 +1587,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                           LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
                           have++; // ignore the ending NUL
                           free (s);
-                          // with PRE (R_2007), the size gets smaller
+                          // with PRE (R_2007a), the size gets smaller
                           if (does_cross_unicode_datversion (dat))
                             {
                               int oldsize = (len * 2) + 5;
@@ -1750,7 +1750,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   }
                 rbuf->value.str.size = len & 0xFFFF;
                 // here the xdata_size gets re-calculated from size
-                PRE (R_2007) // from version
+                PRE (R_2007a) // from version
                 {
                   rbuf->value.str.is_tu = 0;
                   rbuf->value.str.u.data = s;
@@ -3573,7 +3573,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                       JSON_TOKENS_CHECK_OVERFLOW (goto harderr);
                       t = &tokens->tokens[tokens->index];
-                      /*SINCE (R_2007)
+                      /*SINCE (R_2007a)
                         o->texts[k] = (BITCODE_T)json_wstring (dat, tokens);
                       else*/
                       o->texts[k] = json_string (dat, tokens);

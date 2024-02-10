@@ -1535,7 +1535,7 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         error |= dwg_dxfb_SEQEND (dat, o);                                    \
       *i = *i + 1;                                                            \
     }                                                                         \
-    SINCE (R_2004)                                                            \
+    SINCE (R_2004a)                                                            \
     {                                                                         \
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
@@ -1602,7 +1602,7 @@ decl_dxfb_process_VERTEX (PFACE)
         error |= dwg_dxfb_SEQEND (dat, o);                                    \
       *i = *i + 1;                                                            \
     }                                                                         \
-    SINCE (R_2004)                                                            \
+    SINCE (R_2004a)                                                            \
     {                                                                         \
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
@@ -1940,7 +1940,7 @@ dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else
         VALUE_T (dwg->dwg_class[j].appname, 3)
       VALUE_RL (dwg->dwg_class[j].proxyflag, 90);
-      SINCE (R_2004)
+      SINCE (R_2004a)
       {
         VALUE_RL (dwg->dwg_class[j].num_instances, 91);
       }
@@ -2503,7 +2503,7 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         if (dxfb_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;
       }
-      SINCE (R_2000)
+      SINCE (R_2000b)
       {
         if (dxfb_thumbnail_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;

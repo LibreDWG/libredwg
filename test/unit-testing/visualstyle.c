@@ -103,7 +103,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_modifier, BL);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_opacity, BD);
-  PRE (R_2010)
+  PRE (R_2010b)
   {
     CHK_ENTITY_TYPE_CAST (vsty, VISUALSTYLE, edge_width, BS, BL);
     CHK_ENTITY_TYPE_CAST (vsty, VISUALSTYLE, edge_overhang, BS, BL);
@@ -131,11 +131,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness, BD);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_shadow_type, BL);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, internal_only, B);
-  VERSION (R_2007)
+  VERSIONS (R_2007a, R_2007)
   {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd2007_45, BD);
   }
-  SINCE (R_2013)
+  SINCE (R_2013b)
   {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, num_props, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop1c, B);

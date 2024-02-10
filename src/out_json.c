@@ -1655,7 +1655,7 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       COMMON_ENTITY_HANDLE_DATA;
       if (FIELD_VALUE (version) > 1)
         {
-          SINCE (R_2007)
+          SINCE (R_2007a)
           {
             FIELD_HANDLE (history_id, 0, 350);
           }

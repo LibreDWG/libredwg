@@ -125,7 +125,7 @@ api_process (dwg_object *obj)
   if (version > 1)
     {
       CHK_ENTITY_TYPE (body, BODY, num_materials, BL);
-      SINCE (R_2007)
+      SINCE (R_2007a)
       {
         if (!dwg_dynapi_entity_value (body, "BODY", "materials", &materials,
                                       NULL))
@@ -154,7 +154,7 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (body, BODY, end_marker, BL);
     }
 
-  SINCE (R_2007)
+  SINCE (R_2007a)
   {
     CHK_ENTITY_H (body, BODY, history_id);
   }

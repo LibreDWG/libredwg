@@ -32,7 +32,7 @@
       }
 #endif
   }
-  SINCE (R_2004) { FIELD_B (is_xdic_missing, 0); }
+  SINCE (R_2004a) { FIELD_B (is_xdic_missing, 0); }
   SINCE (R_2013) { FIELD_B (has_ds_data, 0); }
 
 #ifdef IS_DXF

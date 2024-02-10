@@ -1389,7 +1389,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         goto next_hdrvalue; // for mult. 10,20,30 values
     }
 
-  SINCE (R_2000)
+  SINCE (R_2000b)
   {
     BITCODE_BSd celweight = dxf_revcvt_lweight (_obj->CELWEIGHT);
     // clang-format off
@@ -1469,7 +1469,7 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
   Dwg_Header *hdr = &dwg->header;
   const struct dwg_versions *_verp
       = dwg->header.version == R_INVALID
-            ? dwg_version_struct (R_2000)
+            ? dwg_version_struct (R_2000b)
             : dwg_version_struct (dwg->header.version);
   // Dwg_AuxHeader *aux = &dwg->auxheader;
   LOG_TRACE ("dxf_fixup_header\n");
@@ -6745,7 +6745,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case DWG_VT_STRING:
       if (!pair->value.s)
         goto invalid;
-      PRE (R_2007) // TODO: nice would be the proper target version.
+      PRE (R_2007a) // TODO: nice would be the proper target version.
                    // dat->version
       {
         Dwg_Data *dwg = obj->parent;
@@ -8274,7 +8274,7 @@ add_AcDbBlockRotationParameter (Dwg_Object *restrict obj,
 
 #  define FIELD_CMC(field, dxf) dxf_read_CMC (dwg, dat, &o->field, #  field, dxf)
 #  define FIELD_CMC2004(field, dxf)                                           \
-    SINCE (R_2004)                                                            \
+    SINCE (R_2004a)                                                            \
     {                                                                         \
       FIELD_CMC (field, dxf);                                                 \
     }
@@ -9780,7 +9780,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 }
               else if (obj->fixedtype == DWG_TYPE_LAYER)
                 {
-                  SINCE (R_2000)
+                  SINCE (R_2000b)
                   {
                     SET_CTRL_BIT (1, frozen);
                     bit = flag & 2 ? 0 : 1; // reverse

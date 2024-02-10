@@ -195,13 +195,13 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMERLL(name, dxf)
 #define FIELD_CMC(color, dxf)                                                 \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     FIELD_T (color.name, 0);                                                  \
     FIELD_T (color.book_name, 0);                                             \
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     VALUE_TV (_obj->o.color.name, 0);                                         \
     VALUE_TV (_obj->o.color.book_name, 0);                                    \
@@ -271,7 +271,7 @@ static BITCODE_BL rcount1, rcount2;
       VALUE_TV (_ent->reactors, 0);                                           \
     }
 #define XDICOBJHANDLE(code)                                                   \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     if (!obj->tio.object->is_xdic_missing)                                    \
       {                                                                       \
@@ -284,7 +284,7 @@ static BITCODE_BL rcount1, rcount2;
     VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0);    \
   }
 #define ENT_XDICOBJHANDLE(code)                                               \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     if (!_ent->is_xdic_missing)                                               \
       {                                                                       \

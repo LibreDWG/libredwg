@@ -161,7 +161,7 @@ api_process (dwg_object *obj)
   else
     fail ("silhouettes");
 
-  SINCE (R_2007)
+  SINCE (R_2007a)
   {
     CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_materials, BL);
     if (!dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "materials", &materials,

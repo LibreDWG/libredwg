@@ -138,7 +138,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, genprocvalcolorname);
 #endif
 
-  SINCE (R_2007)
+  SINCE (R_2007a)
   {
     CHK_ENTITY_TYPE (_obj, MATERIAL, translucence, BD);
     CHK_ENTITY_TYPE (_obj, MATERIAL, self_illumination, BD);

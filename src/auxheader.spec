@@ -18,7 +18,7 @@
 
 #include "spec.h"
 
-  SINCE (R_2000) {
+  SINCE (R_2000b) {
     IF_ENCODE_FROM_EARLIER {
       BITCODE_RS def_unknown_6rs[] = { 4, 0x565, 0, 0, 2, 1 };
       BITCODE_RL def_unknown_5rl[] = { 0, 0, 0, 256, 393218 };
@@ -81,7 +81,7 @@
   FIELD_RL (numsaves_4, 0);
   FIELD_RL (zero_5, 0);
   FIELD_RL (zero_6, 0);
-  SINCE (R_2004) {
+  SINCE (R_2004a) {
     FIELD_RL (zero_7, 0);
     FIELD_RL (zero_8, 0);
   }

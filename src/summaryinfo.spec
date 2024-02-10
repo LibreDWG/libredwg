@@ -18,7 +18,7 @@
 
   #include "spec.h"
 
-  SINCE (R_2004) {
+  SINCE (R_2004a) {
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE (TDINDWG)    = dwg->header_vars.TDINDWG;
       FIELD_VALUE (TDCREATE)   = dwg->header_vars.TDCREATE;

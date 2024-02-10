@@ -41,7 +41,7 @@ api_process (dwg_object *obj)
         {
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, type, RC);
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, selection_marker, BLd);
-          PRE (R_2004)
+          PRE (R_2004a)
           {
             CHK_SUBCLASS_TYPE_CAST (wires[i], 3DSOLID_wire, color, BS, BL);
           }
@@ -125,7 +125,7 @@ api_process (dwg_object *obj)
   if (version > 1)
     {
       CHK_ENTITY_TYPE (_obj, ACSH_BREP_CLASS, num_materials, BL);
-      SINCE (R_2007)
+      SINCE (R_2007a)
       {
         if (!dwg_dynapi_entity_value (_obj, "BREP", "materials", &materials,
                                       NULL))
@@ -154,7 +154,7 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (_obj, ACSH_BREP_CLASS, end_marker, BL);
     }
 
-  SINCE (R_2007)
+  SINCE (R_2007a)
   {
     CHK_ENTITY_H (_obj, ACSH_BREP_CLASS, history_id);
   }

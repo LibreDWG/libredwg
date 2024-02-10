@@ -960,7 +960,7 @@
         LOG_TRACE ("  BS :" FORMAT_BS " / 0x%04x (%" PRIuSIZE ")\t", rs, rs,  \
                    bit_position (dat) - bit_position (&here));                \
       }                                                                       \
-      SINCE (R_2007)                                                          \
+      SINCE (R_2007a)                                                          \
       {                                                                       \
         *dat = here;                                                          \
         rs = bit_read_MS (dat);                                               \
@@ -1173,7 +1173,7 @@
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          PRE (R_2007)                                                        \
+          PRE (R_2007a)                                                        \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
             LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
@@ -1420,7 +1420,7 @@
     }
 
 #define XDICOBJHANDLE(code)                                                   \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     if (!obj->tio.object->is_xdic_missing)                                    \
       {                                                                       \
@@ -1440,7 +1440,7 @@
   }
 
 #define ENT_XDICOBJHANDLE(code)                                               \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     if (!_ent->is_xdic_missing)                                               \
       {                                                                       \
@@ -1707,7 +1707,7 @@
     Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
-    SINCE (R_2007)                                                            \
+    SINCE (R_2007a)                                                            \
     {                                                                         \
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
       error                                                                   \
@@ -1823,7 +1823,7 @@
     Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
-    SINCE (R_2007)                                                            \
+    SINCE (R_2007a)                                                            \
     {                                                                         \
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
       error                                                                   \
@@ -1908,7 +1908,7 @@
     Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
-    SINCE (R_2007)                                                            \
+    SINCE (R_2007a)                                                            \
     {                                                                         \
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
       error                                                                   \

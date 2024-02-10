@@ -69,7 +69,7 @@
   }
 
   /* Until R_2004 here follows the sections */
-  SINCE (R_2004) {
+  SINCE (R_2004a) {
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE (app_dwg_version) = FIELD_VALUE (dwg_version);
       FIELD_VALUE (app_maint_version) = FIELD_VALUE (maint_version);

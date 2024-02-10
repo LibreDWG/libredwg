@@ -41,13 +41,13 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_height, BD);
   CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, extents_width, BD);
   CHK_ENTITY_H (mtext, MTEXT, style);
-  SINCE (R_2000)
+  SINCE (R_2000b)
   {
     CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_style, BS);
     CHK_ENTITY_TYPE_W_OLD (mtext, MTEXT, linespace_factor, BD);
     CHK_ENTITY_TYPE (mtext, MTEXT, unknown_b0, B);
   }
-  SINCE (R_2004)
+  SINCE (R_2004a)
   {
     CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_flag, BL);
     CHK_ENTITY_MAX (mtext, MTEXT, bg_fill_flag, BL, 31);

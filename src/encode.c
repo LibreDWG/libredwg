@@ -604,7 +604,7 @@ static bool env_var_checked_p;
 
 #define XDICOBJHANDLE(code)                                                   \
   RESET_VER                                                                   \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     if (!obj->tio.object->is_xdic_missing)                                    \
       {                                                                       \
@@ -624,7 +624,7 @@ static bool env_var_checked_p;
 
 #define ENT_XDICOBJHANDLE(code)                                               \
   RESET_VER                                                                   \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     if (!obj->tio.entity->is_xdic_missing)                                    \
       {                                                                       \
@@ -2505,7 +2505,7 @@ encode_template (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   int error = 0;
   struct _dwg_template *_obj = &dwg->Template;
   Dwg_Section_Type sec_id;
-  SINCE (R_2004)
+  SINCE (R_2004a)
     sec_id = SECTION_TEMPLATE;
   else
     sec_id = (Dwg_Section_Type)SECTION_TEMPLATE_R13;
@@ -2660,7 +2660,7 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   int error;
   size_t pvzadr;
   Dwg_Section_Type sec_id;
-  SINCE (R_2004)
+  SINCE (R_2004a)
     sec_id = SECTION_HEADER;
   else
     sec_id = (Dwg_Section_Type)SECTION_HEADER_R13;
@@ -2701,7 +2701,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   BITCODE_BL j;
   Dwg_Section_Type sec_id;
   size_t pvzadr;
-  SINCE (R_2004)
+  SINCE (R_2004a)
     sec_id = SECTION_CLASSES;
   else
     sec_id = (Dwg_Section_Type)SECTION_CLASSES_R13;
@@ -2718,7 +2718,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   pvzadr = dat->byte;    // Size position
   bit_write_RL (dat, 0); // Size placeholder
 
-  SINCE (R_2004)
+  SINCE (R_2004a)
   {
     BITCODE_BS max_num = dwg->num_classes + 500;
     bit_write_BS (dat, max_num);
@@ -2734,7 +2734,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       klass = &dwg->dwg_class[j];
       bit_write_BS (dat, klass->number);
       bit_write_BS (dat, klass->proxyflag);
-      SINCE (R_2007)
+      SINCE (R_2007a)
         {
           bit_write_T (dat, klass->appname);
           bit_write_T (dat, klass->cppname);
@@ -2744,7 +2744,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           bit_write_TV (dat, klass->appname);
           bit_write_TV (dat, klass->cppname);
         }
-      SINCE (R_2007) // only when we have it. like not for 2004 => 2007
+      SINCE (R_2007a) // only when we have it. like not for 2004 => 2007
         // conversions
         {
           if (klass->dxfname_u)
@@ -2762,7 +2762,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  klass->cppname, klass->appname, klass->is_zombie,
                  klass->item_class_id);
 
-      SINCE (R_2007)
+      SINCE (R_2007a)
         {
           if (dat->from_version < R_2007 && !klass->dwg_version)
             {
@@ -2818,7 +2818,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   /*------------------------------------------------------------
    * Objects
    */
-  SINCE (R_2004)
+  SINCE (R_2004a)
   {
     sec_id = SECTION_OBJECTS;
     bit_chain_alloc (sec_dat[sec_id]);
@@ -2885,7 +2885,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                  i, omap[i].handle, omap[i].index);
     }
 
-  UNTIL (R_2000)
+  UNTIL (R_2002)
   {
     dwg->objfreespace.objects_address = dat->byte & UINT32_MAX;
   }
@@ -2920,7 +2920,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
         // change the address to the linearly sorted one
 #ifndef NDEBUG
-      PRE (R_2004)
+      PRE (R_2004a)
       {
         assert (dat->byte);
       }
@@ -2969,7 +2969,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
    */
   LOG_INFO ("\n=======> Object Map: %4zu\n", dat->byte);
   pvzadr = dat->byte; // Correct value of section size must be written later
-  SINCE (R_2004)
+  SINCE (R_2004a)
   {
     sec_id = SECTION_HANDLES;
     bit_chain_init_dat (sec_dat[sec_id], (8 * dwg->num_objects) + 32, dat);
@@ -3032,7 +3032,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (ckr_missing)
     {
 #ifndef NDEBUG
-      PRE (R_2004)
+      PRE (R_2004a)
       {
         assert (pvzadr);
       }
@@ -3061,7 +3061,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       assert (dat->chain[0] == 'A');
       assert (dat->chain[1] == 'C');
     }
-  PRE (R_2004)
+  PRE (R_2004a)
   {
     assert (dat->byte);
   }
@@ -3465,7 +3465,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       _obj->numentity_sections = 3;
     }
-    SINCE (R_2004)
+    SINCE (R_2004a)
     {
       if (!_obj->r2004_header_address)
         _obj->r2004_header_address = 128;
@@ -3844,7 +3844,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                &dwg->header.num_sections,
                                SECTION_THUMBNAIL_R13, SECTION_HANDLES_R13);
         }
-        SINCE (R_2004)
+        SINCE (R_2004a)
         {
           section_move_top ((Dwg_Section_Type_r13 *)&section_order,
                             &dwg->header.num_sections,
@@ -3935,7 +3935,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
   } // VERSIONS (R_13b1, R_2004)
 
-  VERSION (R_2007)
+  VERSIONS (R_2007a, R_2007)
   {
     LOG_ERROR (WE_CAN "We don't encode R2007 sections yet");
     dat->version = dwg->header.version = R_2010; // rather do 2010
@@ -3943,7 +3943,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
 
   /* r2004 file header (compressed + encrypted) */
-  SINCE (R_2004)
+  SINCE (R_2004a)
   {
     LOG_INFO ("\n");
     LOG_ERROR (WE_CAN "Writing R2004 sections not yet finished");
@@ -3968,7 +3968,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /* End of the file */
   dat->size = dat->byte;
 
-  SINCE (R_2004)
+  SINCE (R_2004a)
   {
 #ifdef __cplusplus
     int type;
@@ -4417,7 +4417,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             }
           assert (dat->chain[0] == 'A');
           assert (dat->chain[1] == 'C');
-          PRE (R_2004)
+          PRE (R_2004a)
           {
             assert (dat->byte <= 0x100);
           }
@@ -4568,7 +4568,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dat->size = dat->byte;
   LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
 
-  UNTIL (R_2000)
+  UNTIL (R_2002)
   {
     /* Patch section addresses
      */
@@ -5369,7 +5369,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   size_t end_address = address + obj->size;
   Dwg_Data *dwg = obj->parent;
 
-  PRE (R_2004)
+  PRE (R_2004a)
   {
     if (!address)
       return DWG_ERR_INVALIDDWG;
@@ -5406,7 +5406,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   // Patch it afterwards and check old<>new size if enough space allocated.
   bit_write_MS (dat, obj->size);
   obj->address = dat->byte;
-  PRE (R_2010)
+  PRE (R_2010b)
   {
     bit_write_BS (dat, obj->type);
     LOG_INFO (", Size: " FORMAT_MS " [MS], Type: " FORMAT_BS
@@ -5824,7 +5824,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       bit_write_MS (dat, obj->size);
       LOG_TRACE ("-size: %u [MS] @%" PRIuSIZE "\n", obj->size, address);
-      SINCE (R_2013)
+      SINCE (R_2013b)
       {
         if (!obj->handlestream_size && obj->bitsize)
           obj->handlestream_size = (obj->size * 8) - obj->bitsize;
@@ -5973,7 +5973,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                          data->u.eed_0.string);
             }
         }
-        SINCE (R_2007)
+        SINCE (R_2007a)
         {
           // from ASCII DWG or JSON, DXF
           if (!data->u.eed_0.is_tu)
@@ -6288,7 +6288,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
   hdl_dat->version = dat->version;
   hdl_dat->opts = dat->opts;
 
-  SINCE (R_2007)
+  SINCE (R_2007a)
   {
     *str_dat = *dat;
   }
@@ -6304,11 +6304,11 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
     {
       obj->hdlpos = (obj->address * 8) + obj->bitsize;
     }
-  SINCE (R_2007)
+  SINCE (R_2007a)
   {
     // The handle stream offset, i.e. end of the object, right after
     // the has_strings bit.
-    SINCE (R_2010)
+    SINCE (R_2010b)
     {
       if (obj->bitsize)
         {
@@ -6515,7 +6515,7 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
     if (obj->bitsize)
       // the handle stream offset
       obj->hdlpos = bit_position (dat) + obj->bitsize;
-    SINCE (R_2007)
+    SINCE (R_2007a)
     {
       obj_string_stream (dat, obj, str_dat);
     }
@@ -6539,11 +6539,11 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
   {
     Dwg_Object_Object *_obj = obj->tio.object;
     FIELD_BL (num_reactors, 0);
-    SINCE (R_2004)
+    SINCE (R_2004a)
     {
       FIELD_B (is_xdic_missing, 0);
     }
-    SINCE (R_2013)
+    SINCE (R_2013b)
     {
       FIELD_B (has_ds_data, 0);
     } // AcDs DATA
@@ -6627,7 +6627,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
       switch (type)
         {
         case DWG_VT_STRING:
-          PRE (R_2007)
+          PRE (R_2007a)
           {
             if (dat->byte + 3 + rbuf->value.str.size > end)
               break;

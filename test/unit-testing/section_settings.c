@@ -78,7 +78,7 @@ api_process (dwg_object *obj)
                                  ltype_scale, BD);
               CHK_SUBCLASS_UTF8TEXT (geom[j], SECTION_geometrysettings,
                                      plotstyle);
-              SINCE (R_2000)
+              SINCE (R_2000b)
               CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, linewt,
                                  BLd);
               CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings,

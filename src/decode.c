@@ -226,15 +226,15 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     return decode_R13_R2000 (dat, dwg);
   }
-  VERSION (R_2004)
+  VERSIONS (R_2004a, R_2004)
   {
     return decode_R2004 (dat, dwg);
   }
-  VERSION (R_2007)
+  VERSIONS (R_2007a, R_2007)
   {
     return decode_R2007 (dat, dwg);
   }
-  SINCE (R_2010)
+  SINCE (R_2010b)
   {
     read_r2007_init (dwg); // sets loglevel only for now
     return decode_R2004 (dat, dwg);
@@ -614,7 +614,7 @@ classes_section:
   dwg->num_classes = 0;
 
 #if 0
-  SINCE (R_2004) // dead code. see read_2004_section_classes() instead
+  SINCE (R_2004a) // dead code. see read_2004_section_classes() instead
   {
     BITCODE_B btrue;
     BITCODE_BS max_num;
@@ -688,7 +688,7 @@ classes_section:
         }
 
 #if 0
-      SINCE (R_2007) //? dead code it seems. see read_2004_section_classes()
+      SINCE (R_2007a) //? dead code it seems. see read_2004_section_classes()
       {
         klass->num_instances = bit_read_BL (dat);
         LOG_HANDLE ("num_instances: " FORMAT_BL " [BL]", klass->num_instances); LOG_POS_ (HANDLE);
@@ -2329,7 +2329,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("\nHeader\n-------------------\n")
       dwg->header_vars.size = bit_read_RL (&sec_dat);
       LOG_TRACE ("size: " FORMAT_RL " [RL]\n", dwg->header_vars.size);
-      PRE (R_2007)
+      PRE (R_2007a)
       {
         error
             |= dwg_decode_header_variables (&sec_dat, &sec_dat, &sec_dat, dwg);
@@ -3579,7 +3579,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         LOG_TRACE ("string: len=%d [RC] cp=%d [RS_BE] \"%s\" [TF]", (int)lenc,
                    (int)data->u.eed_0.codepage, data->u.eed_0.string);
       }
-      SINCE (R_2007)
+      SINCE (R_2007a)
       {
         if (eed_need_size (2, size))
           return DWG_ERR_INVALIDEED;
@@ -4149,9 +4149,9 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     else
       error |= obj_handle_stream (dat, obj, hdl_dat);
   }
-  SINCE (R_2007)
+  SINCE (R_2007a)
   {
-    SINCE (R_2010)
+    SINCE (R_2010b)
     {
       LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
       // restrict the hdl_dat stream
@@ -4245,9 +4245,9 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     else
       error |= obj_handle_stream (dat, obj, hdl_dat);
   }
-  SINCE (R_2007)
+  SINCE (R_2007a)
   {
-    SINCE (R_2010)
+    SINCE (R_2010b)
     {
       LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
     }
@@ -4259,7 +4259,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         LOG_HANDLE (" (fixed)");
       }
     // restrict the hdl_dat stream. already done for r2007
-    SINCE (R_2010)
+    SINCE (R_2010b)
     {
       error |= obj_handle_stream (dat, obj, hdl_dat);
     }
@@ -4709,7 +4709,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
       switch (vtype)
         {
         case DWG_VT_STRING:
-          PRE (R_2007)
+          PRE (R_2007a)
           {
             length = bit_read_RS (dat);
             LOG_INSANE ("xdata[%u]: length " FORMAT_RS "\n", num_xdata, length)
@@ -5147,7 +5147,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
     }
   obj->size = bit_read_MS (dat);
   LOG_INFO (", Size: %d [MS]", obj->size)
-  SINCE (R_2010)
+  SINCE (R_2010b)
   {
     /* This is not counted in the object size */
     obj->handlestream_size = bit_read_UMC (dat);
@@ -5180,7 +5180,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
     }
   dat->size = obj->size;
 
-  SINCE (R_2010)
+  SINCE (R_2010b)
   {
     obj->type = bit_read_BOT (dat);
   }

@@ -237,7 +237,7 @@ static BITCODE_BL rcount1, rcount2;
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          PRE (R_2007)                                                        \
+          PRE (R_2007a)                                                        \
           {                                                                   \
             LOG_TRACE (#name "[%ld]: %s\n", (long)vcount, _obj->name[vcount]) \
           }                                                                   \
@@ -313,7 +313,7 @@ static BITCODE_BL rcount1, rcount2;
     }
 
 #define XDICOBJHANDLE(code)                                                   \
-  SINCE (R_2004)                                                              \
+  SINCE (R_2004a)                                                              \
   {                                                                           \
     if (!obj->tio.object->is_xdic_missing)                                    \
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0);  \
@@ -642,7 +642,7 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           else // not a class
             {
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
-              SINCE (R_2000)
+              SINCE (R_2000b)
               {
                 LOG_INFO ("Object bitsize: %u\n", obj->bitsize);
               }

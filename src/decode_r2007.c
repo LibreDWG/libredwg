@@ -1279,7 +1279,7 @@ obj_stream_position (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
   size_t p1 = bit_position (dat);
   /* all 3 now relative to obj */
   size_t p2 = bit_position (hdl_dat);
-  SINCE (R_2007)
+  SINCE (R_2007a)
   { // but only since 2007 there is a separate string stream
     size_t p3 = bit_position (str_dat);
     if (p2 > p1)
