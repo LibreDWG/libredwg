@@ -3724,7 +3724,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("Wrote %" PRIuSIZE " bytes\n", dat->byte);
     dat->size = addr;
     return error;
-  }
+  } // PRE (R_13b1)
 
   VERSIONS (R_13b1, R_2000)
   {
@@ -3779,32 +3779,29 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     bit_write_CRC (dat, 0, 0xC0C1);
     write_sentinel (dat, DWG_SENTINEL_HEADER_END);
 
-    VERSIONS (R_13b1, R_2000)
-    {
-      section_order[0] = SECTION_HEADER_R13;
-      section_order[1] = SECTION_CLASSES_R13;
-      section_order[2] = SECTION_HANDLES_R13;
-      if (dwg->header.sections > 3)
-        {
-          section_order[3] = SECTION_OBJFREESPACE_R13;
-          section_order[4] = SECTION_TEMPLATE_R13;
-          if (dwg->header.sections > 5)
-            {
-              section_order[5] = SECTION_AUXHEADER_R2000;
-              section_order[6] = SECTION_THUMBNAIL_R13;
-            }
-          else
-            {
-              section_order[5] = SECTION_THUMBNAIL_R13;
-            }
-        }
-      else
-        section_order[3] = SECTION_THUMBNAIL_R13;
+    section_order[0] = SECTION_HEADER_R13;
+    section_order[1] = SECTION_CLASSES_R13;
+    section_order[2] = SECTION_HANDLES_R13;
+    if (dwg->header.sections > 3)
+      {
+        section_order[3] = SECTION_OBJFREESPACE_R13;
+        section_order[4] = SECTION_TEMPLATE_R13;
+        if (dwg->header.sections > 5)
+          {
+            section_order[5] = SECTION_AUXHEADER_R2000;
+            section_order[6] = SECTION_THUMBNAIL_R13;
+          }
+        else
+          {
+            section_order[5] = SECTION_THUMBNAIL_R13;
+          }
+      }
+    else
+      section_order[3] = SECTION_THUMBNAIL_R13;
 
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
-        section_order_trace (dwg, dwg->header.num_sections,
-                             (Dwg_Section_Type_r13 *)&section_order);
-    }
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
+      section_order_trace (dwg, dwg->header.num_sections,
+                           (Dwg_Section_Type_r13 *)&section_order);
 
     if (dwg->header.thumbnail_address)
       {
@@ -3839,7 +3836,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               }
           }
       }
-    else
+    else // ! dwg->header.thumbnail_address
       {
         PRE (R_13c3)
         {
@@ -3847,25 +3844,25 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                &dwg->header.num_sections,
                                SECTION_THUMBNAIL_R13, SECTION_HANDLES_R13);
         }
+#if 0
         SINCE (R_2004a)
         {
           section_move_top ((Dwg_Section_Type_r13 *)&section_order,
                             &dwg->header.num_sections, SECTION_THUMBNAIL_R13);
         }
+#endif
+        // auxheader before thumbnail?
+        if (dwg->header.sections > 5
+            && dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address
+            && dwg->header.thumbnail_address
+            > dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address)
+          {
+            section_move_top ((Dwg_Section_Type_r13 *)&section_order,
+                              &dwg->header.num_sections,
+                              SECTION_AUXHEADER_R2000);
+          }
       }
-    VERSIONS (R_13b1, R_2000)
-    {
-      // auxheader before thumbnail?
-      if (dwg->header.sections > 5
-          && dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address
-          && dwg->header.thumbnail_address
-                 > dwg->secondheader.sections[SECTION_AUXHEADER_R2000].address)
-        {
-          section_move_top ((Dwg_Section_Type_r13 *)&section_order,
-                            &dwg->header.num_sections,
-                            SECTION_AUXHEADER_R2000);
-        }
-    }
+
     VERSION (R_13)
     {
       section_move_before ((Dwg_Section_Type_r13 *)&section_order,
@@ -3878,7 +3875,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("num_sections => " FORMAT_RL "\n", dwg->header.num_sections);
 
     // on downconvert add the missing VX_CONTROL object
-    if (dwg->header.version < R_2004 && !dwg->header_vars.VX_CONTROL_OBJECT)
+    if (!dwg->header_vars.VX_CONTROL_OBJECT)
       {
         Dwg_Object *obj;
         obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
@@ -3901,40 +3898,38 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           dwg->header_vars.VX_CONTROL_OBJECT
               = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
       }
-    VERSIONS (R_13b1, R_2000)
-    {
-      for (unsigned id = 0; id < dwg->header.num_sections; id++)
-        {
-          switch (section_order[id])
-            {
-            case SECTION_HEADER_R13:
-              error |= encode_header_vars (dwg, dat, orig_from_version);
-              break;
-            case SECTION_CLASSES_R13:
-              error |= encode_classes (dwg, dat);
-              break;
-            case SECTION_HANDLES_R13:
-              error
-                  |= encode_objects_handles (dwg, dat, (Bit_Chain **)&sec_dat);
-              break;
-            case SECTION_OBJFREESPACE_R13:
-              error |= encode_objfreespace_2ndheader (dwg, dat);
-              break;
-            case SECTION_TEMPLATE_R13:
-              error |= encode_template (dwg, dat);
-              break;
-            case SECTION_AUXHEADER_R2000:
-              error |= encode_auxheader (dwg, dat);
-              break;
-            case SECTION_THUMBNAIL_R13:
-              error |= encode_r13_thumbnail (dwg, dat, header_crc_address);
-              break;
-            default:
-              LOG_WARN ("Unhandled section %u [%u]", section_order[id], id);
-              break;
-            }
-        }
-    }
+
+    for (unsigned id = 0; id < dwg->header.num_sections; id++)
+      {
+        switch (section_order[id])
+          {
+          case SECTION_HEADER_R13:
+            error |= encode_header_vars (dwg, dat, orig_from_version);
+            break;
+          case SECTION_CLASSES_R13:
+            error |= encode_classes (dwg, dat);
+            break;
+          case SECTION_HANDLES_R13:
+            error |= encode_objects_handles (dwg, dat, (Bit_Chain **)&sec_dat);
+            break;
+          case SECTION_OBJFREESPACE_R13:
+            error |= encode_objfreespace_2ndheader (dwg, dat);
+            break;
+          case SECTION_TEMPLATE_R13:
+            error |= encode_template (dwg, dat);
+            break;
+          case SECTION_AUXHEADER_R2000:
+            error |= encode_auxheader (dwg, dat);
+            break;
+          case SECTION_THUMBNAIL_R13:
+            error |= encode_r13_thumbnail (dwg, dat, header_crc_address);
+            break;
+          default:
+            LOG_WARN ("Unhandled section %u [%u]", section_order[id], id);
+            break;
+          }
+      }
+
     if (dwg->header.sections == 3 && dwg->secondheader.codepage)
       {
         error |= encode_objfreespace_2ndheader (dwg, dat);
@@ -3976,8 +3971,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("\n#### r2004 File Header ####\n");
     if (dat->byte + 0x80 >= dat->size - 1)
       {
-        dwg->header.num_sections = 28; // room for some object pages
-        dwg->header.section = (Dwg_Section *)calloc (28, sizeof (Dwg_Section));
+        dwg->header.num_sections = SECTION_SYSTEM_MAP + 1;
+        dwg->header.section = (Dwg_Section *)calloc (SECTION_SYSTEM_MAP + 1,
+                                                     sizeof (Dwg_Section));
       }
     if (!dwg->header.section_info)
       {
@@ -4272,6 +4268,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if ((unsigned)si > dwg->header.num_sections) // needed?
         {
           Dwg_Section *oldsecs = dwg->header.section;
+          LOG_TRACE ("header.num_sections %u too low, extending to %u\n",
+                     (unsigned)dwg->header.num_sections, (unsigned)si);
           dwg->header.num_sections = si;
           dwg->header.section = (Dwg_Section *)realloc (
               dwg->header.section, si * sizeof (Dwg_Section));
