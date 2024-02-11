@@ -3978,12 +3978,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section_info = (Dwg_Section_Info *)calloc (
           dwg->header.section_infohdr.num_desc, sizeof (Dwg_Section_Info));
     LOG_TRACE ("\n#### r2004 File Header ####\n");
-    if (dat->byte + 0x80 >= dat->size - 1)
-      {
-        dwg->header.num_sections = SECTION_SYSTEM_MAP + 1;
-        dwg->header.section = (Dwg_Section *)calloc (SECTION_SYSTEM_MAP + 1,
-                                                     sizeof (Dwg_Section));
-      }
+    //if (dat->byte + 0x80 >= dat->size - 1)
+    //  {
+    //    dwg->header.num_sections = SECTION_SYSTEM_MAP + 1;
+    //    dwg->header.section = (Dwg_Section *)calloc (SECTION_SYSTEM_MAP + 1,
+    //                                                 sizeof (Dwg_Section));
+    //  }
     if (!dwg->header.section_info)
       {
         dwg->header.section_infohdr.num_desc = SECTION_SYSTEM_MAP + 1;
