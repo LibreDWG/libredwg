@@ -3979,6 +3979,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     BITCODE_BL vcount, rcount3;
     size_t size;
     unsigned total_size = 0;
+    old_dat = dat;
 
     // write remaining section data
     for (type = SECTION_OBJFREESPACE; type < SECTION_SYSTEM_MAP; type++)
