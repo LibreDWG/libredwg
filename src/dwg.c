@@ -1175,7 +1175,7 @@ get_first_owned_entity (const Dwg_Object *hdr)
       /* With r2000 we rather follow the next_entity chain */
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
-  else if (version >= R_2004 || version < R_13b1)
+  else if (version >= R_2004a || version < R_13b1)
     {
       _hdr->__iterator = 0;
       if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
@@ -1206,7 +1206,7 @@ dwg_next_entity (const Dwg_Object *restrict obj)
   if (obj == NULL || obj->parent == NULL
       || obj->supertype != DWG_SUPERTYPE_ENTITY)
     return NULL;
-  if (obj->parent->header.version < R_2004
+  if (obj->parent->header.version < R_2004a
       && obj->parent->header.version > R_12)
     {
       if (!obj->tio.entity) // decoding error
@@ -1279,7 +1279,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
         }
       return obj;
     }
-  else if (version >= R_2004 || version < R_13b1)
+  else if (version >= R_2004a || version < R_13b1)
     {
       Dwg_Object *obj;
       Dwg_Object_Ref *ref;
@@ -1859,7 +1859,7 @@ static const char *const dwg_section_r11_names[] = {
 const char *
 dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
 {
-  if (dwg->header.version >= R_2004)
+  if (dwg->header.version >= R_2004a)
     { // Dwg_Section_Type
       return (sec_id <= SECTION_SYSTEM_MAP) ? dwg_section_r2004_names[sec_id]
                                             : NULL;
@@ -3464,9 +3464,10 @@ dwg_sections_init (Dwg_Data *dwg)
       // and there is one hole 1,2,3,5,6 we need to skip over.
       dwg->header.num_sections += 1;
     }
-  else
+  else if (dwg->header.version <= R_2004a)
     {
-      /* section 0: header vars
+      /* r2000:
+       * section 0: header vars
        *         1: class section
        *         2: object map (i.e. handles)
        *         3: optional ObjFreeSpace (r13+, no sentinels) + 2ndheader (r13+, sentinels)
@@ -3490,6 +3491,18 @@ dwg_sections_init (Dwg_Data *dwg)
       // newer DWG's have proper HEADER.sections
       if (dwg->header.num_sections != dwg->header.sections)
         dwg->header.num_sections = dwg->header.sections;
+    }
+  else
+    {
+      if (!dwg->header.num_sections || dwg->header.from_version < R_2004a)
+        {
+          if (dwg->r2004_header.section_map_id)
+            dwg->header.num_sections = dwg->r2004_header.section_map_id;
+          else if (dwg->r2004_header.numsections)
+            dwg->header.num_sections = dwg->r2004_header.numsections + 2;
+          else
+            dwg->header.num_sections = SECTION_SYSTEM_MAP + 1;
+        }
     }
   LOG_TRACE ("num_sections => " FORMAT_RL "\n", dwg->header.num_sections);
   if (dwg->header.num_sections < 3)
@@ -3674,7 +3687,7 @@ dwg_supports_obj (const Dwg_Data *restrict dwg,
            type == DWG_TYPE_DIMSTYLE || type == DWG_TYPE_DIMSTYLE_CONTROL)
     return ver >= R_11;
   else if (type == DWG_TYPE_VX_TABLE_RECORD || type == DWG_TYPE_VX_CONTROL)
-    return ver >= R_11 && ver < R_2004;
+    return ver >= R_11 && ver < R_2004a;
   else if (type == DWG_TYPE__3DFACE)
     return ver >= R_2_0b;
   else if (type == DWG_TYPE_DIMENSION_RADIUS
