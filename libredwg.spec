@@ -1,10 +1,10 @@
 # -*- sh -*-
 Name:           libredwg
 Version:        0.13.2
-Release:        1%{?dist}
-Summary:        GNU C library and programs to read and write DWG files
+Release:        0%{?dist}
+Summary:        GNU C library and programs to read and write DWG/DXF files
 
-License:        GPLv3+
+License:        GPL-3.0-or-later
 URL:            https://www.gnu.org/software/libredwg/
 #Source0:        https://ftp.gnu.org/gnu/libredwg/libredwg-%%{version}.tar.xz
 Source0:        https://github.com/LibreDWG/libredwg/releases/download/%{version}/libredwg-%{version}.tar.xz
@@ -23,11 +23,12 @@ BuildRequires:  libubsan
 BuildRequires:  texinfo
 BuildRequires:  texinfo-tex
 # Required for tests.
+BuildRequires:  libxml2-devel
 BuildRequires:  python3-libxml2
 BuildRequires:  pcre2
 BuildRequires:  pcre2-utf16
 
-# no big-endian. s390 untested
+# no big-endian write support. TODO --disable-write
 ExcludeArch:    sparc alpha ppc64 ppc s390
 
 %description
@@ -97,10 +98,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm %{buildroot}/%{perl_archlib}/perllocal.pod
 rm %{buildroot}/%{perl_vendorarch}/auto/LibreDWG/.packlist
 
-# Remove examples placed directly in /usr/share directory.
-rm %{buildroot}/%{_datadir}/load_dwg.py
-rm %{buildroot}/%{_datadir}/dwgadd.example
-
 # Remove Info file.
 rm %{buildroot}/%{_infodir}/dir
 
@@ -143,7 +140,6 @@ fi
 %{_mandir}/man1/dwg2dxf.1.gz
 %{_mandir}/man1/dwg2ps.1.gz
 %{_mandir}/man1/dwgadd.1.gz
-%{_mandir}/man1/dwgadd.5.gz
 %{_mandir}/man1/dwgbmp.1.gz
 %{_mandir}/man1/dwgfilter.1.gz
 %{_mandir}/man1/dwggrep.1.gz
@@ -153,9 +149,10 @@ fi
 %{_mandir}/man1/dwgwrite.1.gz
 %{_mandir}/man1/dxf2dwg.1.gz
 %{_mandir}/man1/dxfwrite.1.gz
-%{_mandir}/man5/dwg*
+%{_mandir}/man5/dwgadd.5.gz
 %{_infodir}/LibreDWG.info*
-%{_sharedir}/libredwg/dwgadd.example
+%{_sharedir}/libredwg/dwgadd.example*
+%{_sharedir}/libredwg/load_dwg.py
 
 %files devel
 %doc TODO
@@ -175,6 +172,10 @@ fi
 
 
 %changelog
+* Mon Feb 12 2024 Reini Urban <reini.urban@gmail.com> 0.13.2-2
+- Add libxml2-devel
+- Fixed the sonumber back to 0
+
 * Sat Feb 10 2024 Reini Urban <reini.urban@gmail.com> 0.13.2-1
 - upstream bugfix.
 
