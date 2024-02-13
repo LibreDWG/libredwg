@@ -10132,6 +10132,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               size_t read;
               // const char *pos = pair->value.s;
               unsigned char *s = (unsigned char *)&o->data[written];
+              if (!o->data)
+                {
+                  written = 0;
+                  o->data = (unsigned char *)xcalloc(blen, 1);
+                  s = o->data;
+                }
               assert (o->data);
               if (blen + written > o->data_size)
                 {
