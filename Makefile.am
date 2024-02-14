@@ -84,6 +84,9 @@ dist-hook: regen-dynapi
 	test -f $(distdir)/test/xmlsuite/Makefile.in
 	test -f $(distdir)/bindings/python/Makefile.in
 	test -f $(distdir)/bindings/perl/Makefile.PL
+if !HAVE_LIBPS
+	echo "Missing libps" && false
+endif
 # automake bug, GH #211 (howto enable skip_mode_fix? tried now info-in-builddir)
 #distcheck-hook:
 #	echo distcheck-hook distdir="$(distdir)"
