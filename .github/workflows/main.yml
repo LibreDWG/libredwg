@@ -58,8 +58,10 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install texlive help2man libconvert-binary-c-perl shellcheck \
           swig python3-dev python3-libxml2 libxml2-dev libpcre2-dev libpcre2-32-0 jq \
-          pkg-config shellcheck parallel rpmlint shfmt doxygen jing valgrind cppcheck gperf
+          pkg-config shellcheck parallel rpmlint shfmt doxygen jing valgrind cppcheck gperf \
+          intltool
         build-aux/install-libxslt
+        build-aux/install-pslib
     - run: sh autogen.sh
     - run: ./configure ${{ matrix.CONFIGURE_ARGS }}
     - if: matrix.CONFIGURE_ARGS != '--enable-release'

@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+VER=0.4.6
+wget -q -O pslib-$VER.tar.gz https://sourceforge.net/projects/pslib/files/pslib/$VER/pslib-$VER.tar.gz/download
+tar xfz pslib-$VER.tar.gz
+cd pslib-$VER
+# sh autogen.sh
+./configure --prefix=/usr
+make
+#make check
+sudo make install
