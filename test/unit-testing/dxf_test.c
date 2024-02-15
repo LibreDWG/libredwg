@@ -809,7 +809,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
           const char *restrict dwgfile)
 {
   int error = 0;
-  static char prev_dwgfile[128];
+  static char prev_dwgfile[256];
   static Dwg_Data dwg;
   BITCODE_BL i;
   char *trace;
@@ -959,7 +959,7 @@ main (int argc, char *argv[])
         }
       if (stat (dwgfile, &attrib)) // not found
         {
-          char path[80];
+          char path[256];
           char *top_srcdir = getenv ("top_srcdir");
           // fixup wrong alldxf_0.inc paths
           if (len > 3 && dwgfile[0] == '.' && dwgfile[1] == '.'
@@ -967,12 +967,12 @@ main (int argc, char *argv[])
             memmove (dwgfile, &dwgfile[3], len - 2); // include the final \0
           if (top_srcdir)
             {
-              strcpy (path, top_srcdir);
-              strcat (path, "/");
+              strncpy (path, top_srcdir, sizeof (path) - 1);
+              strncat (path, "/", sizeof (path) - 1);
             }
           else
-            strcpy (path, "../../../");
-          strcat (path, dwgfile);
+            strncpy (path, "../../../", sizeof (path) - 1);
+          strncat (path, dwgfile, sizeof (path) - 1);
           if (stat (path, &attrib))
             LOG_WARN ("%s not found\n", path)
           else
