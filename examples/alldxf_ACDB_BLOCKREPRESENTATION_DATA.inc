@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_BLOCKREPRESENTATION_DATA 9C2 in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_409[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_447[] = {
   //{ 5, "9C2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "9C1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -15,7 +15,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_409[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA BFD3 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_410[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_448[] = {
   //{ 5, "BFD3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BFD2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -27,7 +27,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_410[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA BFDB in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_411[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_449[] = {
   //{ 5, "BFDB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BFDA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -39,7 +39,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_411[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA C148 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_412[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_450[] = {
   //{ 5, "C148", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C147", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -51,7 +51,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_412[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA C14F in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_413[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_451[] = {
   //{ 5, "C14F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C14E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -63,7 +63,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_413[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA C15D in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_414[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_452[] = {
   //{ 5, "C15D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C15C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -75,7 +75,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_414[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA C177 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_415[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_453[] = {
   //{ 5, "C177", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C176", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -87,7 +87,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_415[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA C182 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_416[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_454[] = {
   //{ 5, "C182", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C181", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -99,7 +99,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_416[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 17E7 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_417[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_455[] = {
   //{ 5, "17E7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "17E6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -111,7 +111,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_417[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 17EE in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_418[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_456[] = {
   //{ 5, "17EE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "17ED", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -123,7 +123,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_418[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 17F5 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_419[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_457[] = {
   //{ 5, "17F5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "17F4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -135,7 +135,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_419[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 17FC in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_420[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_458[] = {
   //{ 5, "17FC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "17FB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -147,7 +147,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_420[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 1803 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_421[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_459[] = {
   //{ 5, "1803", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1802", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -159,7 +159,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_421[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 1814 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_422[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_460[] = {
   //{ 5, "1814", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1813", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -171,7 +171,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_422[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 1825 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_423[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_461[] = {
   //{ 5, "1825", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1824", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -183,7 +183,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_423[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 182C in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_424[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_462[] = {
   //{ 5, "182C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "182B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -195,7 +195,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_424[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 1833 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_425[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_463[] = {
   //{ 5, "1833", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1832", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -207,7 +207,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_425[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 183A in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_426[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_464[] = {
   //{ 5, "183A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1839", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -219,7 +219,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_426[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 1896 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_427[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_465[] = {
   //{ 5, "1896", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "1895", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -231,7 +231,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_427[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 18AC in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_428[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_466[] = {
   //{ 5, "18AC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "18AB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -243,7 +243,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_428[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 18BA in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_429[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_467[] = {
   //{ 5, "18BA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "18B9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -255,7 +255,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_429[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLOCKREPRESENTATION_DATA 18C1 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_430[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_468[] = {
   //{ 5, "18C1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "18C0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -264,5 +264,53 @@ static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_430[] = {
     { 100, "AcDbBlockRepresentationData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
     { 340, "100D", NULL, 0, BITS_UNKNOWN, "block", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLOCKREPRESENTATION_DATA 11662 in test/test-old/2018/from_cadforum.cz/GRUE_LTM_1090+.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_469[] = {
+  //{ 5, "11662", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "11661", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "11661", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbBlockRepresentationData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
+    { 340, "81FA", NULL, 0, BITS_UNKNOWN, "block", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLOCKREPRESENTATION_DATA 187FD in test/test-old/2018/from_cadforum.cz/GRUE_LTM_1090+.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_470[] = {
+  //{ 5, "187FD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "187FC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "187FC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbBlockRepresentationData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
+    { 340, "187B2", NULL, 0, BITS_UNKNOWN, "block", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLOCKREPRESENTATION_DATA 2D6 in test/test-old/2018/from_cadforum.cz/Leader_5.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_471[] = {
+  //{ 5, "2D6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "2D5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "2D5", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbBlockRepresentationData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
+    { 340, "297", NULL, 0, BITS_UNKNOWN, "block", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLOCKREPRESENTATION_DATA 2F0 in test/test-old/2018/from_cadforum.cz/Leader_5.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLOCKREPRESENTATION_DATA_472[] = {
+  //{ 5, "2F0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "2EF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "2EF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbBlockRepresentationData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "1", NULL, 0, BITS_UNKNOWN, "flag", 1, {-1,-1,-1,-1,-1} },
+    { 340, "297", NULL, 0, BITS_UNKNOWN, "block", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };

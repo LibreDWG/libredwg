@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCVARIABLE 6EC in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_356[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_378[] = {
   //{ 5, "6EC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "6ED", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -30,7 +30,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_356[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 6FC in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_357[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_379[] = {
   //{ 5, "6FC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "6FD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -57,7 +57,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_357[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 9AD in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_358[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_380[] = {
   //{ 5, "9AD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "9AF", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -84,7 +84,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_358[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 9BA in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_359[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_381[] = {
   //{ 5, "9BA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "9B4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -111,7 +111,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_359[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB10 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_360[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_382[] = {
   //{ 5, "BB10", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB1C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -142,7 +142,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_360[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB11 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_361[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_383[] = {
   //{ 5, "BB11", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB49", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -173,7 +173,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_361[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB12 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_362[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_384[] = {
   //{ 5, "BB12", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB0F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -201,7 +201,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_362[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB13 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_363[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_385[] = {
   //{ 5, "BB13", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB2D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -232,7 +232,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_363[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB14 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_364[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_386[] = {
   //{ 5, "BB14", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB26", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -263,7 +263,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_364[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB15 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_365[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_387[] = {
   //{ 5, "BB15", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB34", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -294,7 +294,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_365[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB16 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_366[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_388[] = {
   //{ 5, "BB16", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB2E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -325,7 +325,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_366[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB17 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_367[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_389[] = {
   //{ 5, "BB17", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB22", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -356,7 +356,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_367[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB18 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_368[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_390[] = {
   //{ 5, "BB18", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB44", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -387,7 +387,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_368[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB19 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_369[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_391[] = {
   //{ 5, "BB19", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB0F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -415,7 +415,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_369[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB1A in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_370[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_392[] = {
   //{ 5, "BB1A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB48", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -446,7 +446,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_370[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB76 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_371[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_393[] = {
   //{ 5, "BB76", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BBA0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -477,7 +477,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_371[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB77 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_372[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_394[] = {
   //{ 5, "BB77", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB88", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -508,7 +508,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_372[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB78 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_373[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_395[] = {
   //{ 5, "BB78", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB75", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -536,7 +536,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_373[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB79 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_374[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_396[] = {
   //{ 5, "BB79", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB90", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -567,7 +567,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_374[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB7A in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_375[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_397[] = {
   //{ 5, "BB7A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BBAE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -598,7 +598,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_375[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB7B in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_376[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_398[] = {
   //{ 5, "BB7B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB9A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -629,7 +629,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_376[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB7C in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_377[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_399[] = {
   //{ 5, "BB7C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB8E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -660,7 +660,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_377[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB7D in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_378[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_400[] = {
   //{ 5, "BB7D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -691,7 +691,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_378[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB7E in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_379[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_401[] = {
   //{ 5, "BB7E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BBB0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -722,7 +722,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_379[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB7F in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_380[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_402[] = {
   //{ 5, "BB7F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB75", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -750,7 +750,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_380[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE BB80 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_381[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_403[] = {
   //{ 5, "BB80", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB9C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -781,7 +781,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_381[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 498 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_382[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_404[] = {
   //{ 5, "498", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "499", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -812,7 +812,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_382[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 4B1 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_383[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_405[] = {
   //{ 5, "4B1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4B2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -841,7 +841,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_383[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 4B9 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_384[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_406[] = {
   //{ 5, "4B9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4BA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -870,7 +870,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_384[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 4C1 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_385[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_407[] = {
   //{ 5, "4C1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4C2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -899,7 +899,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_385[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 4F3 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_386[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_408[] = {
   //{ 5, "4F3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "4F4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -928,7 +928,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_386[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 552 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_387[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_409[] = {
   //{ 5, "552", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "553", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -960,7 +960,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_387[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 566 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_388[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_410[] = {
   //{ 5, "566", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "567", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -989,7 +989,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_388[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 5DC in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_389[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_411[] = {
   //{ 5, "5DC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5DD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1018,7 +1018,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_389[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 611 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_390[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_412[] = {
   //{ 5, "611", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "612", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1046,7 +1046,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_390[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 61C in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_391[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_413[] = {
   //{ 5, "61C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "61D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1075,7 +1075,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_391[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 623 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_392[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_414[] = {
   //{ 5, "623", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "624", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1105,7 +1105,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_392[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 63F in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_393[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_415[] = {
   //{ 5, "63F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "640", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1134,7 +1134,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_393[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 691 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_394[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_416[] = {
   //{ 5, "691", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "692", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1163,7 +1163,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_394[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 69E in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_395[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_417[] = {
   //{ 5, "69E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "69F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1192,7 +1192,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_395[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 6E4 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_396[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_418[] = {
   //{ 5, "6E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "6E5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1221,7 +1221,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_396[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 6F0 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_397[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_419[] = {
   //{ 5, "6F0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "6F1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -1250,7 +1250,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_397[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVARIABLE 6F7 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_398[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVARIABLE_420[] = {
   //{ 5, "6F7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "6F8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },

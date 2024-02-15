@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ASSOCDIMDEPENDENCYBODY C36 in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_641[] = {
+static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_723[] = {
   //{ 5, "C36", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "C35", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependencyBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -16,7 +16,7 @@ static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_641[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ASSOCDIMDEPENDENCYBODY C4C in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_642[] = {
+static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_724[] = {
   //{ 5, "C4C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "C4B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependencyBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -29,7 +29,7 @@ static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_642[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ASSOCDIMDEPENDENCYBODY BB20 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_643[] = {
+static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_725[] = {
   //{ 5, "BB20", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependencyBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -42,7 +42,7 @@ static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_643[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ASSOCDIMDEPENDENCYBODY BB28 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_644[] = {
+static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_726[] = {
   //{ 5, "BB28", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB27", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependencyBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -55,7 +55,7 @@ static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_644[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ASSOCDIMDEPENDENCYBODY 49B in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_645[] = {
+static struct _unknown_field unknown_dxf_ASSOCDIMDEPENDENCYBODY_727[] = {
   //{ 5, "49B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "49A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependencyBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

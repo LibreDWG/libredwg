@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* SECTION_SETTINGS 22A in test/test-data/2018/LiveSection1.dxf */
-static struct _unknown_field unknown_dxf_SECTION_SETTINGS_807[] = {
+static struct _unknown_field unknown_dxf_SECTION_SETTINGS_973[] = {
   //{ 5, "22A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "228", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbSectionSettings", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -92,7 +92,7 @@ static struct _unknown_field unknown_dxf_SECTION_SETTINGS_807[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* SECTION_SETTINGS 22A in test/test-data/2018/LiveSection.dxf */
-static struct _unknown_field unknown_dxf_SECTION_SETTINGS_808[] = {
+static struct _unknown_field unknown_dxf_SECTION_SETTINGS_974[] = {
   //{ 5, "22A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "228", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbSectionSettings", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

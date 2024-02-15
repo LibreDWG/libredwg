@@ -35,7 +35,7 @@
   XREFPANELOBJECT IDBUFFER IMAGEDEF
   IMAGEDEF_REACTOR LIGHTLIST
   NPOCOLLECTION OBJECT_PTR PROXY_OBJECT
-  RASTERVARIABLES UCS VBA_PROJECT
+  RASTERVARIABLES UCS VBA_PROJECT SUN
 * check-dxf/outdxf: DXFIN coverage for all generated dxfs. some objects even crash acad:
   VERTEX_3D, MLINE.
 * DXFIN errors:
@@ -53,7 +53,6 @@
 * encode for 2004+: fix the remaining bugs, almost done.
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
 * finish GeoJSON http://geojson.org/geojson-spec.html
-  ELLIPSE, ARC, CIRCLE: needs segmentation into lines
   MLINE, SPLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?)
 * more dwgfilter examples, as from the osmctools, with keep and drop rules.
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how

@@ -188,11 +188,19 @@ alldxf_unknowns = \
 	alldxf_ARC_DIMENSION.inc \
 	alldxf_ASSOCDIMDEPENDENCYBODY.inc \
 	alldxf_BLOCKALIGNMENTGRIP.inc \
+	alldxf_BLOCKARRAYACTION.inc \
 	alldxf_BLOCKGRIPLOCATIONCOMPONENT.inc \
+	alldxf_BLOCKLINEARPARAMETER.inc \
+	alldxf_BLOCKLOOKUPACTION.inc \
+	alldxf_BLOCKLOOKUPPARAMETER.inc \
+	alldxf_BLOCKPARAMDEPENDENCYBODY.inc \
+	alldxf_BLOCKPOLARSTRETCHACTION.inc \
+	alldxf_BLOCKROTATIONPARAMETER.inc \
 	alldxf_BLOCKSTRETCHACTION.inc \
 	alldxf_BLOCKVISIBILITYGRIP.inc \
 	alldxf_BLOCKVISIBILITYPARAMETER.inc \
 	alldxf_BLOCKXYGRIP.inc \
+	alldxf_BREAKDATA.inc \
 	alldxf_CELLSTYLEMAP.inc \
 	alldxf_CSACDOCUMENTOPTIONS.inc \
 	alldxf_DATALINK.inc \
@@ -207,6 +215,7 @@ alldxf_unknowns = \
 	alldxf_MATERIAL.inc \
 	alldxf_MENTALRAYRENDERSETTINGS.inc \
 	alldxf_MESH.inc \
+	alldxf_MLEADERSTYLE.inc \
 	alldxf_MULTILEADER.inc \
 	alldxf_PLANESURFACE.inc \
 	alldxf_PLOTSETTINGS.inc \
@@ -218,6 +227,7 @@ alldxf_unknowns = \
 	alldxf_SECTION_MANAGER.inc \
 	alldxf_SECTION_SETTINGS.inc \
 	alldxf_SKYLIGHT_BACKGROUND.inc \
+	alldxf_SPATIAL_INDEX.inc \
 	alldxf_SUN.inc \
 	alldxf_SWEPTSURFACE.inc \
 	alldxf_TABLEGEOMETRY.inc \

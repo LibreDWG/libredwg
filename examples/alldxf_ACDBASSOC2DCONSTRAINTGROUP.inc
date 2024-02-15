@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOC2DCONSTRAINTGROUP 6F0 in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_256[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_268[] = {
   //{ 5, "6F0", NULL, 0, BITS_UNKNOWN, "handle", 44, {-1,-1,-1,-1,-1} },
     { 330, "6EB", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -585,7 +585,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_256[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOC2DCONSTRAINTGROUP 9AE in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_257[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_269[] = {
   //{ 5, "9AE", NULL, 0, BITS_UNKNOWN, "handle", 44, {-1,-1,-1,-1,-1} },
     { 330, "9BD", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1167,7 +1167,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_257[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOC2DCONSTRAINTGROUP 3E3 in test/test-data/2000/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_258[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_270[] = {
   //{ 5, "3E3", NULL, 0, BITS_UNKNOWN, "handle", 10, {-1,-1,-1,-1,-1} },
     { 330, "3E0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1315,7 +1315,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_258[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOC2DCONSTRAINTGROUP 3E3 in test/test-data/2004/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_259[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_271[] = {
   //{ 5, "3E3", NULL, 0, BITS_UNKNOWN, "handle", 10, {-1,-1,-1,-1,-1} },
     { 330, "3E0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1463,7 +1463,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_259[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOC2DCONSTRAINTGROUP 3E3 in test/test-data/2007/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_260[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_272[] = {
   //{ 5, "3E3", NULL, 0, BITS_UNKNOWN, "handle", 10, {-1,-1,-1,-1,-1} },
     { 330, "3E0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1611,7 +1611,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_260[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOC2DCONSTRAINTGROUP 3E3 in test/test-data/2013/Constraints.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_261[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_273[] = {
   //{ 5, "3E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3E0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1767,7 +1767,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_261[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOC2DCONSTRAINTGROUP 3E3 in test/test-data/Drawing_2018.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_262[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_274[] = {
   //{ 5, "3E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3E0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1923,7 +1923,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_262[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOC2DCONSTRAINTGROUP BB1B in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_263[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_275[] = {
   //{ 5, "BB1B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB0F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -3441,7 +3441,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_263[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOC2DCONSTRAINTGROUP BB81 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_264[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOC2DCONSTRAINTGROUP_276[] = {
   //{ 5, "BB81", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB75", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocAction", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

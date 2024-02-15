@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCDEPENDENCY 6EE in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_269[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_283[] = {
   //{ 5, "6EE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6F0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -22,8 +22,68 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_269[] = {
     { 90, "4", NULL, 0, BITS_UNKNOWN, "depbodyid", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
+/* ACDBASSOCDEPENDENCY 107F in test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_284[] = {
+  //{ 5, "107F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "107B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "status", 2, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "isread_dep", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "iswrite_dep", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isobjectstate_dep", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "unknown_b4", 3, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "order", 2, {-1,-1,-1,-1,-1} },
+    { 330, "106E", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b5", 2, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 360, "0", NULL, 0, BITS_UNKNOWN, "writedep", 3, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "depbodyid", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDBASSOCDEPENDENCY 1080 in test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_285[] = {
+  //{ 5, "1080", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "107B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "status", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isread_dep", 3, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "iswrite_dep", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isobjectstate_dep", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "unknown_b4", 3, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "order", 2, {-1,-1,-1,-1,-1} },
+    { 330, "106B", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b5", 2, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 360, "0", NULL, 0, BITS_UNKNOWN, "writedep", 3, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "depbodyid", 2, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDBASSOCDEPENDENCY 1081 in test/test-old/2018/from_cadforum.cz/DUVAR_ASKI.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_286[] = {
+  //{ 5, "1081", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "107B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "status", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isread_dep", 4, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "iswrite_dep", 4, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isobjectstate_dep", 4, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "unknown_b4", 4, {-1,-1,-1,-1,-1} },
+    { 90, "-2147483648", NULL, 0, BITS_UNKNOWN, "order", 1, {-1,-1,-1,-1,-1} },
+    { 330, "1071", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b5", 1, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 360, "0", NULL, 0, BITS_UNKNOWN, "writedep", 3, {-1,-1,-1,-1,-1} },
+    { 90, "3", NULL, 0, BITS_UNKNOWN, "depbodyid", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
 /* ACDBASSOCDEPENDENCY BB1F in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_270[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_287[] = {
   //{ 5, "BB1F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB1B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -43,7 +103,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_270[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY BB27 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_271[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_288[] = {
   //{ 5, "BB27", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB1B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -63,7 +123,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_271[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 397 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_272[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_289[] = {
   //{ 5, "397", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -83,7 +143,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_272[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 397 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_273[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_290[] = {
   //{ 5, "397", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -103,7 +163,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_273[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 397 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_274[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_291[] = {
   //{ 5, "397", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -123,7 +183,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_274[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 397 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_275[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_292[] = {
   //{ 5, "397", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -143,7 +203,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_275[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 49A in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_276[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_293[] = {
   //{ 5, "49A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "42B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -163,7 +223,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_276[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 2E1 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_277[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_294[] = {
   //{ 5, "2E1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -183,7 +243,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_277[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 2E4 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_278[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_295[] = {
   //{ 5, "2E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -203,7 +263,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_278[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 350 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_279[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_296[] = {
   //{ 5, "350", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "34E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -223,7 +283,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_279[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 353 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_280[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_297[] = {
   //{ 5, "353", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "34E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -243,7 +303,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_280[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 356 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_281[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_298[] = {
   //{ 5, "356", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "34E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -263,7 +323,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_281[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 369 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_282[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_299[] = {
   //{ 5, "369", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "367", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -283,7 +343,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_282[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 36C in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_283[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_300[] = {
   //{ 5, "36C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "367", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -303,7 +363,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_283[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 414 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_284[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_301[] = {
   //{ 5, "414", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "412", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -323,7 +383,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_284[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 417 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_285[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_302[] = {
   //{ 5, "417", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "412", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -343,7 +403,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_285[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 41A in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_286[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_303[] = {
   //{ 5, "41A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "412", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -363,7 +423,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_286[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 50D in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_287[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_304[] = {
   //{ 5, "50D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "50B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -383,7 +443,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_287[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 510 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_288[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_305[] = {
   //{ 5, "510", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "50B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -403,7 +463,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_288[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 2E1 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_289[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_306[] = {
   //{ 5, "2E1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -423,7 +483,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_289[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 2E4 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_290[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_307[] = {
   //{ 5, "2E4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -443,7 +503,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_290[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 350 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_291[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_308[] = {
   //{ 5, "350", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "34E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -463,7 +523,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_291[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 353 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_292[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_309[] = {
   //{ 5, "353", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "34E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -483,7 +543,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_292[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 356 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_293[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_310[] = {
   //{ 5, "356", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "34E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -503,7 +563,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_293[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 369 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_294[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_311[] = {
   //{ 5, "369", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "367", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -523,7 +583,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_294[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 36C in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_295[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_312[] = {
   //{ 5, "36C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "367", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -543,7 +603,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_295[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 414 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_296[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_313[] = {
   //{ 5, "414", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "412", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -563,7 +623,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_296[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 417 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_297[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_314[] = {
   //{ 5, "417", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "412", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -583,7 +643,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_297[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCDEPENDENCY 41A in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_298[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_315[] = {
   //{ 5, "41A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "412", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -596,6 +656,66 @@ static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_298[] = {
     { 90, "0", NULL, 0, BITS_UNKNOWN, "order", 2, {-1,-1,-1,-1,-1} },
     { 330, "2D1", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b5", 2, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 360, "0", NULL, 0, BITS_UNKNOWN, "writedep", 3, {-1,-1,-1,-1,-1} },
+    { 90, "3", NULL, 0, BITS_UNKNOWN, "depbodyid", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDBASSOCDEPENDENCY 41D in test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_316[] = {
+  //{ 5, "41D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "41B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "status", 2, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "isread_dep", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "iswrite_dep", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isobjectstate_dep", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "unknown_b4", 3, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "order", 2, {-1,-1,-1,-1,-1} },
+    { 330, "427", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b5", 2, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 360, "0", NULL, 0, BITS_UNKNOWN, "writedep", 3, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "depbodyid", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDBASSOCDEPENDENCY 41E in test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_317[] = {
+  //{ 5, "41E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "41B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 2, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "status", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isread_dep", 3, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "iswrite_dep", 2, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isobjectstate_dep", 3, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "unknown_b4", 3, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "order", 2, {-1,-1,-1,-1,-1} },
+    { 330, "423", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b5", 2, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 360, "0", NULL, 0, BITS_UNKNOWN, "writedep", 3, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "depbodyid", 2, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDBASSOCDEPENDENCY 41F in test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCDEPENDENCY_318[] = {
+  //{ 5, "41F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 330, "41B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "status", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isread_dep", 4, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "iswrite_dep", 4, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "isobjectstate_dep", 4, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "unknown_b4", 4, {-1,-1,-1,-1,-1} },
+    { 90, "-2147483648", NULL, 0, BITS_UNKNOWN, "order", 1, {-1,-1,-1,-1,-1} },
+    { 330, "393", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b5", 1, {-1,-1,-1,-1,-1} },
     { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 330, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 360, "0", NULL, 0, BITS_UNKNOWN, "writedep", 3, {-1,-1,-1,-1,-1} },

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* PLANESURFACE 50A in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_PLANESURFACE_802[] = {
+static struct _unknown_field unknown_dxf_PLANESURFACE_968[] = {
   //{ 5, "50A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "50D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 1, {-1,-1,-1,-1,-1} },
@@ -63,7 +63,7 @@ static struct _unknown_field unknown_dxf_PLANESURFACE_802[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLANESURFACE 1C1 in test/test-data/2010/visualization_-_aerial.dxf */
-static struct _unknown_field unknown_dxf_PLANESURFACE_803[] = {
+static struct _unknown_field unknown_dxf_PLANESURFACE_969[] = {
   //{ 5, "1C1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -141,7 +141,7 @@ static struct _unknown_field unknown_dxf_PLANESURFACE_803[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLANESURFACE 2F2 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_PLANESURFACE_804[] = {
+static struct _unknown_field unknown_dxf_PLANESURFACE_970[] = {
   //{ 5, "2F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -219,7 +219,7 @@ static struct _unknown_field unknown_dxf_PLANESURFACE_804[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* PLANESURFACE A07 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_PLANESURFACE_805[] = {
+static struct _unknown_field unknown_dxf_PLANESURFACE_971[] = {
   //{ 5, "A07", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

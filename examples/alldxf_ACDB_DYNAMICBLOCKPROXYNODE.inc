@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_DYNAMICBLOCKPROXYNODE 70B in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDB_DYNAMICBLOCKPROXYNODE_431[] = {
+static struct _unknown_field unknown_dxf_ACDB_DYNAMICBLOCKPROXYNODE_473[] = {
   //{ 5, "70B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6DD", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -13,7 +13,7 @@ static struct _unknown_field unknown_dxf_ACDB_DYNAMICBLOCKPROXYNODE_431[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_DYNAMICBLOCKPROXYNODE BB50 in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDB_DYNAMICBLOCKPROXYNODE_432[] = {
+static struct _unknown_field unknown_dxf_ACDB_DYNAMICBLOCKPROXYNODE_474[] = {
   //{ 5, "BB50", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB4B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

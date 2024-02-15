@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* DATALINK 201 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_DATALINK_674[] = {
+static struct _unknown_field unknown_dxf_DATALINK_769[] = {
   //{ 5, "201", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "200", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

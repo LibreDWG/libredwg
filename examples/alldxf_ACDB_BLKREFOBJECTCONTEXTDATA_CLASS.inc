@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 5EEAE7 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_403[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_430[] = {
   //{ 5, "5EEAE7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EEAE6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -24,7 +24,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_403[
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 5EEC77 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_404[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_431[] = {
   //{ 5, "5EEC77", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EEC76", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -44,8 +44,239 @@ static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_404[
     { 43, "32.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 5DE in test/test-old/2018/from_autocad_2021/Annotation_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_432[] = {
+  //{ 5, "5DE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "5DD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "5DD", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "4FB", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 10, "0.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 20, "500.0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 38C in test/test-old/2018/from_autocad_2021/Civil_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_433[] = {
+  //{ 5, "38C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "38B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "38B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "334", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "16975.93856670939", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "20078.07927988815", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 3A0 in test/test-old/2018/from_autocad_2021/Civil_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_434[] = {
+  //{ 5, "3A0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "39F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "39F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "334", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "16976.09107998391", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "20058.47259587815", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 29B in test/test-old/2018/from_autocad_2021/Electrical_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_435[] = {
+  //{ 5, "29B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "29A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "29A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "20D", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 10, "0.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 20, "312.5", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 10B5 in test/test-old/2018/from_autocad_2021/Mechanical_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_436[] = {
+  //{ 5, "10B5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "10B4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "10B4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "8B2", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "-20.36922498716206", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "159.0547237686706", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 1164 in test/test-old/2018/from_autocad_2021/Mechanical_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_437[] = {
+  //{ 5, "1164", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "1163", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "1163", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "8B2", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "13.8834202935108", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "279.776177521622", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 1295 in test/test-old/2018/from_autocad_2021/Mechanical_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_438[] = {
+  //{ 5, "1295", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "1294", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "1294", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "8B2", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "-20.68397980024247", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "92.1411188177467", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 24F in test/test-old/2018/from_autocad_2021/Structural_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_439[] = {
+  //{ 5, "24F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "24E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "24E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "1BF", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "36.74926899975981", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "1278.891216996111", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 2F7 in test/test-old/2018/from_autocad_2021/Structural_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_440[] = {
+  //{ 5, "2F7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "2F6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "2F6", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "1BF", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "35.6237712103125", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "1256.591808141339", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 37E in test/test-old/2018/from_autocad_2021/Structural_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_441[] = {
+  //{ 5, "37E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "37D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "37D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "1BF", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "30.04179363720141", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "1245.464013744134", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 3BC in test/test-old/2018/from_autocad_2021/Structural_-_Metric.dxf */
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_442[] = {
+  //{ 5, "3BC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "3BB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "3BB", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 70, "4", NULL, 0, BITS_UNKNOWN, "class_version", 1, {-1,-1,-1,-1,-1} },
+    { 290, "1", NULL, 0, BITS_UNKNOWN, "is_default", 1, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAnnotScaleObjectContextData", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 340, "1BF", NULL, 0, BITS_UNKNOWN, "scale", 1, {-1,-1,-1,-1,-1} },
+    { 50, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 10, "-245.0073673436309", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 20, "24.6958135251848", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 30, "0.0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 41, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 42, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 43, "1.0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 45D in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_405[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_443[] = {
   //{ 5, "45D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "45C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -66,7 +297,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_405[
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 46D in test/test-data/2004/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_406[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_444[] = {
   //{ 5, "46D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "46C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -87,7 +318,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_406[
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 45D in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_407[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_445[] = {
   //{ 5, "45D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "45C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -108,7 +339,7 @@ static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_407[
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_BLKREFOBJECTCONTEXTDATA_CLASS 46D in test/test-data/2018/Visualstyle.dxf */
-static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_408[] = {
+static struct _unknown_field unknown_dxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS_446[] = {
   //{ 5, "46D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "46C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

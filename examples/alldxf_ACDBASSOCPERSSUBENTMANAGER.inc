@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCPERSSUBENTMANAGER 214 in test/test-data/2000/Box.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_337[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_357[] = {
   //{ 5, "214", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -22,7 +22,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_337[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 27B in test/test-data/2004/BoxUnion.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_338[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_358[] = {
   //{ 5, "27B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -41,7 +41,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_338[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2DF in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_339[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_359[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -92,7 +92,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_339[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2DF in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_340[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_360[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -143,7 +143,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_340[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2DF in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_341[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_361[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -194,7 +194,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_341[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2DF in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_342[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_362[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -247,8 +247,30 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_342[] = {
     { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b37", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
+/* ACDBASSOCPERSSUBENTMANAGER 19303 in test/test-old/2018/from_cadforum.cz/GRUE_LTM_1090+.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_363[] = {
+  //{ 5, "19303", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocPersSubentManager", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 5, {-1,-1,-1,-1,-1} },
+    { 90, "3", NULL, 0, BITS_UNKNOWN, "unknown_bl1", 1, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl2", 3, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "unknown_bl3", 5, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "unknown_bl4", 5, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl5", 3, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "unknown_bl6", 2, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "unknown_bl6a", 5, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "unknown_bl7a", 2, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "unknown_bl7", 5, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl7", 3, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b37", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
 /* ACDBASSOCPERSSUBENTMANAGER 51D in test/test-data/2010/sun_and_sky_demo.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_343[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_364[] = {
   //{ 5, "51D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -267,7 +289,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_343[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2D9 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_344[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_365[] = {
   //{ 5, "2D9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -304,7 +326,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_344[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2D9 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_345[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_366[] = {
   //{ 5, "2D9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -348,7 +370,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_345[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER E57 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_346[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_367[] = {
   //{ 5, "E57", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -378,7 +400,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_346[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER EDD in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_347[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_368[] = {
   //{ 5, "EDD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -393,6 +415,52 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_347[] = {
     { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl5", 4, {-1,-1,-1,-1,-1} },
     { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl6", 4, {-1,-1,-1,-1,-1} },
     { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl6a", 4, {-1,-1,-1,-1,-1} },
+    { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b37", 1, {-1,-1,-1,-1,-1} },
+    { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
+};
+/* ACDBASSOCPERSSUBENTMANAGER 380 in test/test-old/2018/from_cadforum.cz/YARMA_REDÜKTÖR_SACI_-_15022021_R2_CS.dxf */
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_369[] = {
+  //{ 5, "380", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
+    { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
+    { 102, "}", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 330, "C", NULL, 0, BITS_UNKNOWN, "ownerhandle", 2, {-1,-1,-1,-1,-1} },
+    { 100, "AcDbAssocPersSubentManager", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "class_version", 3, {-1,-1,-1,-1,-1} },
+    { 90, "3", NULL, 0, BITS_UNKNOWN, "unknown_bl1", 2, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl2", 4, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "unknown_bl3", 3, {-1,-1,-1,-1,-1} },
+    { 90, "26", NULL, 0, BITS_UNKNOWN, "unknown_bl4", 3, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl5", 4, {-1,-1,-1,-1,-1} },
+    { 90, "26", NULL, 0, BITS_UNKNOWN, "unknown_bl6", 3, {-1,-1,-1,-1,-1} },
+    { 90, "1", NULL, 0, BITS_UNKNOWN, "unknown_bl6a", 1, {-1,-1,-1,-1,-1} },
+    { 90, "2", NULL, 0, BITS_UNKNOWN, "unknown_bl7a", 3, {-1,-1,-1,-1,-1} },
+    { 90, "3", NULL, 0, BITS_UNKNOWN, "unknown_bl7", 2, {-1,-1,-1,-1,-1} },
+    { 90, "4", NULL, 0, BITS_UNKNOWN, "unknown_bl7", 1, {-1,-1,-1,-1,-1} },
+    { 90, "5", NULL, 0, BITS_UNKNOWN, "unknown_bl8", 1, {-1,-1,-1,-1,-1} },
+    { 90, "6", NULL, 0, BITS_UNKNOWN, "unknown_bl9", 1, {-1,-1,-1,-1,-1} },
+    { 90, "7", NULL, 0, BITS_UNKNOWN, "unknown_bl10", 1, {-1,-1,-1,-1,-1} },
+    { 90, "8", NULL, 0, BITS_UNKNOWN, "unknown_bl11", 1, {-1,-1,-1,-1,-1} },
+    { 90, "9", NULL, 0, BITS_UNKNOWN, "unknown_bl12", 1, {-1,-1,-1,-1,-1} },
+    { 90, "10", NULL, 0, BITS_UNKNOWN, "unknown_bl13", 1, {-1,-1,-1,-1,-1} },
+    { 90, "11", NULL, 0, BITS_UNKNOWN, "unknown_bl14", 1, {-1,-1,-1,-1,-1} },
+    { 90, "12", NULL, 0, BITS_UNKNOWN, "unknown_bl15", 1, {-1,-1,-1,-1,-1} },
+    { 90, "13", NULL, 0, BITS_UNKNOWN, "unknown_bl16", 1, {-1,-1,-1,-1,-1} },
+    { 90, "14", NULL, 0, BITS_UNKNOWN, "unknown_bl17", 1, {-1,-1,-1,-1,-1} },
+    { 90, "15", NULL, 0, BITS_UNKNOWN, "unknown_bl18", 1, {-1,-1,-1,-1,-1} },
+    { 90, "16", NULL, 0, BITS_UNKNOWN, "unknown_bl19", 1, {-1,-1,-1,-1,-1} },
+    { 90, "17", NULL, 0, BITS_UNKNOWN, "unknown_bl20", 1, {-1,-1,-1,-1,-1} },
+    { 90, "18", NULL, 0, BITS_UNKNOWN, "unknown_bl21", 1, {-1,-1,-1,-1,-1} },
+    { 90, "19", NULL, 0, BITS_UNKNOWN, "unknown_bl22", 1, {-1,-1,-1,-1,-1} },
+    { 90, "20", NULL, 0, BITS_UNKNOWN, "unknown_bl23", 1, {-1,-1,-1,-1,-1} },
+    { 90, "21", NULL, 0, BITS_UNKNOWN, "unknown_bl24", 1, {-1,-1,-1,-1,-1} },
+    { 90, "22", NULL, 0, BITS_UNKNOWN, "unknown_bl25", 1, {-1,-1,-1,-1,-1} },
+    { 90, "23", NULL, 0, BITS_UNKNOWN, "unknown_bl26", 1, {-1,-1,-1,-1,-1} },
+    { 90, "24", NULL, 0, BITS_UNKNOWN, "unknown_bl27", 1, {-1,-1,-1,-1,-1} },
+    { 90, "25", NULL, 0, BITS_UNKNOWN, "unknown_bl28", 1, {-1,-1,-1,-1,-1} },
+    { 90, "26", NULL, 0, BITS_UNKNOWN, "unknown_bl29", 3, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl30", 4, {-1,-1,-1,-1,-1} },
+    { 90, "0", NULL, 0, BITS_UNKNOWN, "unknown_bl31", 4, {-1,-1,-1,-1,-1} },
     { 290, "0", NULL, 0, BITS_UNKNOWN, "unknown_b37", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCVALUEDEPENDENCY 6ED in test/test-data/2010/civil_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVALUEDEPENDENCY_353[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVALUEDEPENDENCY_375[] = {
   //{ 5, "6ED", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6F0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -27,7 +27,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVALUEDEPENDENCY_353[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVALUEDEPENDENCY BB1C in test/test-data/2018/Dynblocks.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVALUEDEPENDENCY_354[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVALUEDEPENDENCY_376[] = {
   //{ 5, "BB1C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "BB1B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -51,7 +51,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCVALUEDEPENDENCY_354[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCVALUEDEPENDENCY 499 in test/test-data/2010/mechanical_example-imperial.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCVALUEDEPENDENCY_355[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCVALUEDEPENDENCY_377[] = {
   //{ 5, "499", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "42B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocDependency", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

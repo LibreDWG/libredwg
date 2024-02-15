@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACAD_TABLE 4F2 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_114[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_126[] = {
   //{ 5, "4F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "BED", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -1899,7 +1899,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_114[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 4F2 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_115[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_127[] = {
   //{ 5, "4F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "F00", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -3801,7 +3801,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_115[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 4F2 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_116[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_128[] = {
   //{ 5, "4F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "EAF", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -6971,7 +6971,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_116[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 4F2 in test/test-data/example_2010.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_117[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_129[] = {
   //{ 5, "4F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E5E", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -10142,7 +10142,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_117[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 4F2 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_118[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_130[] = {
   //{ 5, "4F2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "E43", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13313,7 +13313,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_118[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 37F in test/test-data/2004/fr05_b101_ref.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_119[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_131[] = {
   //{ 5, "37F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "844", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -13742,7 +13742,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_119[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 2A6 in test/test-data/2004/fr05_f101_ref.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_120[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_132[] = {
   //{ 5, "2A6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "57D", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -14171,7 +14171,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_120[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 338 in test/test-data/2004/fr05_s101_ref.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_121[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_133[] = {
   //{ 5, "338", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "670", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -14600,7 +14600,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_121[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 2D8 in test/test-data/2004/fr05_x101_ref.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_122[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_134[] = {
   //{ 5, "2D8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "4D0", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -15029,7 +15029,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_122[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 2F66 in test/test-data/2013/nrcs141p2_034463.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_123[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_135[] = {
   //{ 5, "2F66", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "32D2", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -15154,7 +15154,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_123[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 1C53 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_124[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_136[] = {
   //{ 5, "1C53", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -15276,7 +15276,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_124[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 47D1 in test/test-data/2013/stelprdb1144445.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_125[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_137[] = {
   //{ 5, "47D1", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -15683,7 +15683,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_125[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 236 in test/test-data/2000/TS1.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_126[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_138[] = {
   //{ 5, "236", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_XDICTIONARY", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 360, "2FD", NULL, 0, BITS_UNKNOWN, "xdicobjhandle", 1, {-1,-1,-1,-1,-1} },
@@ -15884,7 +15884,7 @@ static struct _unknown_field unknown_dxf_ACAD_TABLE_126[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACAD_TABLE 236 in test/test-data/2018/TS1.dxf */
-static struct _unknown_field unknown_dxf_ACAD_TABLE_127[] = {
+static struct _unknown_field unknown_dxf_ACAD_TABLE_139[] = {
   //{ 5, "236", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

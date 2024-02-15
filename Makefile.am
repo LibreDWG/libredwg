@@ -106,7 +106,7 @@ unknown:
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
 if HAVE_PICAT
 if !HAVE_INSRCDIR
-	ln -s $(srcdir)/unknown.pi unknown.pi
+	test -e unknown.pi || ln -s $(srcdir)/examples/unknown.pi unknown.pi
 endif
 if HAVE_PARALLEL
 	-rm examples/*.pi.tmplog 2>/dev/null

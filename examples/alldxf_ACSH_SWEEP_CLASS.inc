@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACSH_SWEEP_CLASS 49C in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_620[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_702[] = {
   //{ 5, "49C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "49D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -112,7 +112,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_620[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 4ED in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_621[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_703[] = {
   //{ 5, "4ED", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "4EC", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -221,7 +221,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_621[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 502 in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_622[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_704[] = {
   //{ 5, "502", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "503", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -330,7 +330,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_622[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 54F in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_623[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_705[] = {
   //{ 5, "54F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "550", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -439,7 +439,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_623[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 2E2 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_624[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_706[] = {
   //{ 5, "2E2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -534,7 +534,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_624[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 2E2 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_625[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_707[] = {
   //{ 5, "2E2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E3", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -629,7 +629,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_625[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 22C7 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_626[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_708[] = {
   //{ 5, "22C7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "22C8", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -724,7 +724,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_626[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 22CC in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_627[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_709[] = {
   //{ 5, "22CC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "22CD", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -819,7 +819,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_627[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 3F6 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_628[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_710[] = {
   //{ 5, "3F6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3E8", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -914,7 +914,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_628[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 437 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_629[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_711[] = {
   //{ 5, "437", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "436", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1011,7 +1011,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_629[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 525 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_630[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_712[] = {
   //{ 5, "525", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "524", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1107,7 +1107,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_630[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 535 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_631[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_713[] = {
   //{ 5, "535", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "534", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1203,7 +1203,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_631[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 73F in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_632[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_714[] = {
   //{ 5, "73F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "740", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1299,7 +1299,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_632[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 7CF in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_633[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_715[] = {
   //{ 5, "7CF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "7D0", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1395,7 +1395,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_633[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS 7D6 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_634[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_716[] = {
   //{ 5, "7D6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "7D7", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1491,7 +1491,7 @@ static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_634[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_SWEEP_CLASS A59 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_635[] = {
+static struct _unknown_field unknown_dxf_ACSH_SWEEP_CLASS_717[] = {
   //{ 5, "A59", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "A5A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC878 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_128[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_140[] = {
   //{ 5, "5FC878", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6997", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -37,7 +37,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_128[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC893 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_129[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_141[] = {
   //{ 5, "5FC893", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F69A8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -71,7 +71,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_129[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC8AB in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_130[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_142[] = {
   //{ 5, "5FC8AB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F69B9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -105,7 +105,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_130[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC8C6 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_131[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_143[] = {
   //{ 5, "5FC8C6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6986", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -139,7 +139,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_131[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC8DE in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_132[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_144[] = {
   //{ 5, "5FC8DE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A97", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -173,7 +173,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_132[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC8F6 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_133[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_145[] = {
   //{ 5, "5FC8F6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6AA8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -207,7 +207,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_133[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC90E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_134[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_146[] = {
   //{ 5, "5FC90E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6AB9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -241,7 +241,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_134[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC926 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_135[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_147[] = {
   //{ 5, "5FC926", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6ACA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -275,7 +275,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_135[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC93E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_136[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_148[] = {
   //{ 5, "5FC93E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B0E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -309,7 +309,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_136[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC956 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_137[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_149[] = {
   //{ 5, "5FC956", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6AFD", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -343,7 +343,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_137[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC96E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_138[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_150[] = {
   //{ 5, "5FC96E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6AEC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -377,7 +377,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_138[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC986 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_139[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_151[] = {
   //{ 5, "5FC986", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6ADB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -411,7 +411,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_139[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC99C in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_140[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_152[] = {
   //{ 5, "5FC99C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B1E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -445,7 +445,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_140[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC9BA in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_141[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_153[] = {
   //{ 5, "5FC9BA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8A2B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -479,7 +479,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_141[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC9D8 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_142[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_154[] = {
   //{ 5, "5FC9D8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8A3F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -513,7 +513,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_142[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FC9F0 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_143[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_155[] = {
   //{ 5, "5FC9F0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A86", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -547,7 +547,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_143[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCA08 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_144[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_156[] = {
   //{ 5, "5FCA08", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A75", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -581,7 +581,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_144[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCA20 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_145[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_157[] = {
   //{ 5, "5FCA20", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A64", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -615,7 +615,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_145[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCA38 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_146[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_158[] = {
   //{ 5, "5FCA38", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A53", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -649,7 +649,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_146[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCA50 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_147[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_159[] = {
   //{ 5, "5FCA50", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A42", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -683,7 +683,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_147[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCA68 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_148[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_160[] = {
   //{ 5, "5FCA68", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A31", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -717,7 +717,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_148[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCA80 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_149[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_161[] = {
   //{ 5, "5FCA80", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A20", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -751,7 +751,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_149[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCA98 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_150[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_162[] = {
   //{ 5, "5FCA98", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6A0F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -785,7 +785,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_150[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCAB0 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_151[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_163[] = {
   //{ 5, "5FCAB0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F69FE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -819,7 +819,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_151[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCACE in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_152[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_164[] = {
   //{ 5, "5FCACE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F69ED", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -853,7 +853,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_152[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCAE6 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_153[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_165[] = {
   //{ 5, "5FCAE6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6954", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -887,7 +887,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_153[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCAFD in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_154[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_166[] = {
   //{ 5, "5FCAFD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6964", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -921,7 +921,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_154[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCB15 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_155[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_167[] = {
   //{ 5, "5FCB15", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6975", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -955,7 +955,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_155[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCB2D in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_156[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_168[] = {
   //{ 5, "5FCB2D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F69C9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -989,7 +989,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_156[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCB45 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_157[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_169[] = {
   //{ 5, "5FCB45", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F69D9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1023,7 +1023,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_157[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCB5D in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_158[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_170[] = {
   //{ 5, "5FCB5D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B2F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1057,7 +1057,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_158[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCB75 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_159[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_171[] = {
   //{ 5, "5FCB75", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8AF2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1091,7 +1091,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_159[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCB8D in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_160[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_172[] = {
   //{ 5, "5FCB8D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8B02", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1125,7 +1125,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_160[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCBA5 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_161[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_173[] = {
   //{ 5, "5FCBA5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8B12", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1159,7 +1159,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_161[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCBBD in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_162[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_174[] = {
   //{ 5, "5FCBBD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8B22", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1193,7 +1193,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_162[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCBDB in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_163[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_175[] = {
   //{ 5, "5FCBDB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8B35", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1227,7 +1227,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_163[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCBF3 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_164[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_176[] = {
   //{ 5, "5FCBF3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B62", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1261,7 +1261,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_164[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCC0E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_165[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_177[] = {
   //{ 5, "5FCC0E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B40", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1295,7 +1295,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_165[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCC26 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_166[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_178[] = {
   //{ 5, "5FCC26", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6C42", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1329,7 +1329,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_166[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCC3E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_167[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_179[] = {
   //{ 5, "5FCC3E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6C53", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1363,7 +1363,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_167[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCC56 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_168[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_180[] = {
   //{ 5, "5FCC56", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6C64", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1397,7 +1397,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_168[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCC6E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_169[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_181[] = {
   //{ 5, "5FCC6E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6C89", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1431,7 +1431,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_169[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCD38 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_170[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_182[] = {
   //{ 5, "5FCD38", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6C78", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1465,7 +1465,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_170[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCD50 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_171[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_183[] = {
   //{ 5, "5FCD50", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6C31", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1499,7 +1499,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_171[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCD68 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_172[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_184[] = {
   //{ 5, "5FCD68", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6C20", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1533,7 +1533,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_172[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCD80 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_173[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_185[] = {
   //{ 5, "5FCD80", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6C0F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1567,7 +1567,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_173[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCD98 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_174[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_186[] = {
   //{ 5, "5FCD98", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6BFE", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1601,7 +1601,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_174[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCDB0 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_175[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_187[] = {
   //{ 5, "5FCDB0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6BED", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1635,7 +1635,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_175[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCDC8 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_176[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_188[] = {
   //{ 5, "5FCDC8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8C09", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1669,7 +1669,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_176[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCDE0 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_177[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_189[] = {
   //{ 5, "5FCDE0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6BDC", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1703,7 +1703,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_177[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCDF8 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_178[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_190[] = {
   //{ 5, "5FCDF8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6BCB", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1737,7 +1737,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_178[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCE10 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_179[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_191[] = {
   //{ 5, "5FCE10", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6BBA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1771,7 +1771,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_179[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCE2E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_180[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_192[] = {
   //{ 5, "5FCE2E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6BA9", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1805,7 +1805,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_180[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCE46 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_181[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_193[] = {
   //{ 5, "5FCE46", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B84", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1839,7 +1839,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_181[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCE61 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_182[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_194[] = {
   //{ 5, "5FCE61", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B95", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1873,7 +1873,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_182[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCE79 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_183[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_195[] = {
   //{ 5, "5FCE79", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B51", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1907,7 +1907,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_183[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCEF0 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_184[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_196[] = {
   //{ 5, "5FCEF0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F6B73", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1941,7 +1941,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_184[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCF08 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_185[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_197[] = {
   //{ 5, "5FCF08", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8C9F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -1975,7 +1975,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_185[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCF23 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_186[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_198[] = {
   //{ 5, "5FCF23", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8CB0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2009,7 +2009,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_186[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCF3B in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_187[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_199[] = {
   //{ 5, "5FCF3B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8CC1", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2043,7 +2043,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_187[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCF56 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_188[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_200[] = {
   //{ 5, "5FCF56", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8CD2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2077,7 +2077,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_188[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCF6E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_189[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_201[] = {
   //{ 5, "5FCF6E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8CE3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2111,7 +2111,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_189[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCF86 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_190[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_202[] = {
   //{ 5, "5FCF86", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8CF4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2145,7 +2145,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_190[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCF9E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_191[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_203[] = {
   //{ 5, "5FCF9E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D05", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2179,7 +2179,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_191[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCFB6 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_192[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_204[] = {
   //{ 5, "5FCFB6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D16", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2213,7 +2213,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_192[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCFCE in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_193[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_205[] = {
   //{ 5, "5FCFCE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D27", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2247,7 +2247,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_193[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCFE6 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_194[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_206[] = {
   //{ 5, "5FCFE6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D38", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2281,7 +2281,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_194[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FCFFE in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_195[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_207[] = {
   //{ 5, "5FCFFE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D49", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2315,7 +2315,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_195[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD016 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_196[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_208[] = {
   //{ 5, "5FD016", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D5A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2349,7 +2349,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_196[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD02C in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_197[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_209[] = {
   //{ 5, "5FD02C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D6A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2383,7 +2383,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_197[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD044 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_198[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_210[] = {
   //{ 5, "5FD044", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D7B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2417,7 +2417,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_198[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD062 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_199[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_211[] = {
   //{ 5, "5FD062", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8D8F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2451,7 +2451,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_199[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD173 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_200[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_212[] = {
   //{ 5, "5FD173", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8E4D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2485,7 +2485,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_200[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD18B in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_201[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_213[] = {
   //{ 5, "5FD18B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8E5E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2519,7 +2519,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_201[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD1A3 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_202[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_214[] = {
   //{ 5, "5FD1A3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8E6F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2553,7 +2553,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_202[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD1BB in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_203[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_215[] = {
   //{ 5, "5FD1BB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8E80", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2587,7 +2587,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_203[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD1D3 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_204[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_216[] = {
   //{ 5, "5FD1D3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8E91", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2621,7 +2621,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_204[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD1EB in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_205[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_217[] = {
   //{ 5, "5FD1EB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8EA2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2655,7 +2655,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_205[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD203 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_206[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_218[] = {
   //{ 5, "5FD203", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8EB3", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2689,7 +2689,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_206[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD21B in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_207[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_219[] = {
   //{ 5, "5FD21B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8EC4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2723,7 +2723,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_207[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD233 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_208[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_220[] = {
   //{ 5, "5FD233", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8ED5", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2757,7 +2757,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_208[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD24B in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_209[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_221[] = {
   //{ 5, "5FD24B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8EE6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2791,7 +2791,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_209[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD269 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_210[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_222[] = {
   //{ 5, "5FD269", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8EFA", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2825,7 +2825,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_210[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD281 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_211[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_223[] = {
   //{ 5, "5FD281", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8F0B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2859,7 +2859,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_211[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD299 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_212[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_224[] = {
   //{ 5, "5FD299", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8F1C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2893,7 +2893,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_212[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD2B0 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_213[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_225[] = {
   //{ 5, "5FD2B0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8F2D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2927,7 +2927,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_213[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD2C8 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_214[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_226[] = {
   //{ 5, "5FD2C8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EE8D4", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2961,7 +2961,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_214[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD2E6 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_215[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_227[] = {
   //{ 5, "5FD2E6", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EE91D", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -2995,7 +2995,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_215[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD304 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_216[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_228[] = {
   //{ 5, "5FD304", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EE933", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3029,7 +3029,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_216[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD322 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_217[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_229[] = {
   //{ 5, "5FD322", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5EE946", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3063,7 +3063,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_217[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD352 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_218[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_230[] = {
   //{ 5, "5FD352", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5F8F78", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3097,7 +3097,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_218[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD51C in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_219[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_231[] = {
   //{ 5, "5FD51C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD51A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3131,7 +3131,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_219[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD522 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_220[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_232[] = {
   //{ 5, "5FD522", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD520", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3165,7 +3165,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_220[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD528 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_221[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_233[] = {
   //{ 5, "5FD528", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD526", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3199,7 +3199,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_221[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD52E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_222[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_234[] = {
   //{ 5, "5FD52E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD52C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3233,7 +3233,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_222[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD534 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_223[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_235[] = {
   //{ 5, "5FD534", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD532", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3267,7 +3267,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_223[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD53A in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_224[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_236[] = {
   //{ 5, "5FD53A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD538", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3301,7 +3301,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_224[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD540 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_225[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_237[] = {
   //{ 5, "5FD540", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD53E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3335,7 +3335,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_225[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD546 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_226[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_238[] = {
   //{ 5, "5FD546", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD544", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3369,7 +3369,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_226[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD54C in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_227[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_239[] = {
   //{ 5, "5FD54C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD54A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3403,7 +3403,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_227[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD552 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_228[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_240[] = {
   //{ 5, "5FD552", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD550", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3437,7 +3437,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_228[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD558 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_229[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_241[] = {
   //{ 5, "5FD558", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD556", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3471,7 +3471,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_229[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD55E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_230[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_242[] = {
   //{ 5, "5FD55E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD55C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3505,7 +3505,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_230[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD564 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_231[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_243[] = {
   //{ 5, "5FD564", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD562", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3539,7 +3539,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_231[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD56A in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_232[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_244[] = {
   //{ 5, "5FD56A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD568", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3573,7 +3573,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_232[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD570 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_233[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_245[] = {
   //{ 5, "5FD570", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD56E", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3607,7 +3607,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_233[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD576 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_234[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_246[] = {
   //{ 5, "5FD576", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD574", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3641,7 +3641,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_234[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD57C in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_235[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_247[] = {
   //{ 5, "5FD57C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD57A", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3675,7 +3675,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_235[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD582 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_236[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_248[] = {
   //{ 5, "5FD582", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD580", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3709,7 +3709,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_236[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD588 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_237[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_249[] = {
   //{ 5, "5FD588", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD586", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3743,7 +3743,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_237[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD58E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_238[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_250[] = {
   //{ 5, "5FD58E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD58C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3777,7 +3777,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_238[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FD594 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_239[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_251[] = {
   //{ 5, "5FD594", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FD592", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3811,7 +3811,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_239[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FE77A in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_240[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_252[] = {
   //{ 5, "5FE77A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FE779", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3845,7 +3845,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_240[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FE78E in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_241[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_253[] = {
   //{ 5, "5FE78E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FE78C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3879,7 +3879,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_241[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FE830 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_242[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_254[] = {
   //{ 5, "5FE830", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FE82F", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3913,7 +3913,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_242[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FE8A2 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_243[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_255[] = {
   //{ 5, "5FE8A2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FE8A0", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3947,7 +3947,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_243[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FE971 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_244[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_256[] = {
   //{ 5, "5FE971", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FE8B8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -3981,7 +3981,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_244[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FEF95 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_245[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_257[] = {
   //{ 5, "5FEF95", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FEF94", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4015,7 +4015,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_245[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FEFA7 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_246[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_258[] = {
   //{ 5, "5FEFA7", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FEFA6", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4049,7 +4049,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_246[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FEFB9 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_247[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_259[] = {
   //{ 5, "5FEFB9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FEFB8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4083,7 +4083,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_247[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FF077 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_248[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_260[] = {
   //{ 5, "5FF077", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FF076", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4117,7 +4117,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_248[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FF07D in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_249[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_261[] = {
   //{ 5, "5FF07D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FF07C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4151,7 +4151,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_249[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FF0E3 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_250[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_262[] = {
   //{ 5, "5FF0E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FF0E2", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4185,7 +4185,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_250[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FF0E9 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_251[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_263[] = {
   //{ 5, "5FF0E9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FF0E8", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4219,7 +4219,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_251[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FF107 in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_252[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_264[] = {
   //{ 5, "5FF107", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FF106", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4253,7 +4253,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_252[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 5FF10D in test/test-data/2018/ACI_20160321_A_30_east.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_253[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_265[] = {
   //{ 5, "5FF10D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "5FF10C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4287,7 +4287,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_253[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 873C in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_254[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_266[] = {
   //{ 5, "873C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "873B", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -4321,7 +4321,7 @@ static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_254[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDB_ALDIMOBJECTCONTEXTDATA_CLASS 8741 in test/test-data/2013/gh44-error.dxf */
-static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_255[] = {
+static struct _unknown_field unknown_dxf_ACDB_ALDIMOBJECTCONTEXTDATA_CLASS_267[] = {
   //{ 5, "8741", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "8740", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

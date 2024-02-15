@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCEDGEACTIONPARAM 2E3 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_299[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_319[] = {
   //{ 5, "2E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -33,7 +33,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_299[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 352 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_300[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_320[] = {
   //{ 5, "352", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "351", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -79,7 +79,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_300[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 355 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_301[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_321[] = {
   //{ 5, "355", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "354", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -125,7 +125,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_301[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 36B in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_302[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_322[] = {
   //{ 5, "36B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "36A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -195,7 +195,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_302[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 416 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_303[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_323[] = {
   //{ 5, "416", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "415", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -265,7 +265,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_303[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 419 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_304[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_324[] = {
   //{ 5, "419", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "418", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -288,7 +288,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_304[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 50F in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_305[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_325[] = {
   //{ 5, "50F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "50E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -318,7 +318,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_305[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 2E3 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_306[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_326[] = {
   //{ 5, "2E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -350,7 +350,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_306[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 352 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_307[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_327[] = {
   //{ 5, "352", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "351", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -397,7 +397,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_307[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 355 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_308[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_328[] = {
   //{ 5, "355", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "354", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -444,7 +444,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_308[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 36B in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_309[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_329[] = {
   //{ 5, "36B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "36A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -519,7 +519,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_309[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 416 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_310[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_330[] = {
   //{ 5, "416", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "415", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -594,7 +594,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_310[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCEDGEACTIONPARAM 419 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_311[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCEDGEACTIONPARAM_331[] = {
   //{ 5, "419", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "418", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACSH_CHAMFER_CLASS 51C in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_580[] = {
+static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_660[] = {
   //{ 5, "51C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "51A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -44,7 +44,7 @@ static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_580[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_CHAMFER_CLASS 5D4 in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_581[] = {
+static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_661[] = {
   //{ 5, "5D4", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "5D1", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -85,7 +85,7 @@ static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_581[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_CHAMFER_CLASS 60C in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_582[] = {
+static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_662[] = {
   //{ 5, "60C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "60A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -126,7 +126,7 @@ static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_582[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_CHAMFER_CLASS 72B in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_583[] = {
+static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_663[] = {
   //{ 5, "72B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "729", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -167,7 +167,7 @@ static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_583[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_CHAMFER_CLASS 741 in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_584[] = {
+static struct _unknown_field unknown_dxf_ACSH_CHAMFER_CLASS_664[] = {
   //{ 5, "741", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "73F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
