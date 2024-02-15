@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBPERSSUBENTMANAGER 215 in test/test-data/2000/Box.dxf */
-static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_806[] = {
+static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_530[] = {
   //{ 5, "215", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -20,7 +20,7 @@ static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_806[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBPERSSUBENTMANAGER 27C in test/test-data/2004/BoxUnion.dxf */
-static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_807[] = {
+static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_531[] = {
   //{ 5, "27C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -36,7 +36,7 @@ static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_807[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBPERSSUBENTMANAGER 2E0 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_808[] = {
+static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_532[] = {
   //{ 5, "2E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -53,7 +53,7 @@ static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_808[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBPERSSUBENTMANAGER 2E0 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_809[] = {
+static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_533[] = {
   //{ 5, "2E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -70,7 +70,7 @@ static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_809[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBPERSSUBENTMANAGER 2E0 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_810[] = {
+static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_534[] = {
   //{ 5, "2E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -87,7 +87,7 @@ static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_810[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBPERSSUBENTMANAGER 2E0 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_811[] = {
+static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_535[] = {
   //{ 5, "2E0", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -103,7 +103,7 @@ static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_811[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBPERSSUBENTMANAGER 16B in test/test-data/2010/sun_and_sky_demo.dxf */
-static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_812[] = {
+static struct _unknown_field unknown_dxf_ACDBPERSSUBENTMANAGER_536[] = {
   //{ 5, "16B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

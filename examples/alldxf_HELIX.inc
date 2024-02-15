@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* HELIX 1BF in test/test-data/2000/Helix.dxf */
-static struct _unknown_field unknown_dxf_HELIX_1517[] = {
+static struct _unknown_field unknown_dxf_HELIX_795[] = {
   //{ 5, "1BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -180,7 +180,7 @@ static struct _unknown_field unknown_dxf_HELIX_1517[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* HELIX 1BF in test/test-data/2004/Helix.dxf */
-static struct _unknown_field unknown_dxf_HELIX_1518[] = {
+static struct _unknown_field unknown_dxf_HELIX_796[] = {
   //{ 5, "1BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -357,7 +357,7 @@ static struct _unknown_field unknown_dxf_HELIX_1518[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* HELIX 1BF in test/test-data/2007/Helix.dxf */
-static struct _unknown_field unknown_dxf_HELIX_1519[] = {
+static struct _unknown_field unknown_dxf_HELIX_797[] = {
   //{ 5, "1BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -608,7 +608,7 @@ static struct _unknown_field unknown_dxf_HELIX_1519[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* HELIX 1BF in test/test-data/2010/Helix.dxf */
-static struct _unknown_field unknown_dxf_HELIX_1520[] = {
+static struct _unknown_field unknown_dxf_HELIX_798[] = {
   //{ 5, "1BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -859,7 +859,7 @@ static struct _unknown_field unknown_dxf_HELIX_1520[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* HELIX 1BF in test/test-data/2013/Helix.dxf */
-static struct _unknown_field unknown_dxf_HELIX_1521[] = {
+static struct _unknown_field unknown_dxf_HELIX_799[] = {
   //{ 5, "1BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1110,7 +1110,7 @@ static struct _unknown_field unknown_dxf_HELIX_1521[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* HELIX 1BF in test/test-data/2018/Helix.dxf */
-static struct _unknown_field unknown_dxf_HELIX_1522[] = {
+static struct _unknown_field unknown_dxf_HELIX_800[] = {
   //{ 5, "1BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1287,7 +1287,7 @@ static struct _unknown_field unknown_dxf_HELIX_1522[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* HELIX 1BF in test/test-data/2000/work.dxf */
-static struct _unknown_field unknown_dxf_HELIX_1523[] = {
+static struct _unknown_field unknown_dxf_HELIX_801[] = {
   //{ 5, "1BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "1F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEntity", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

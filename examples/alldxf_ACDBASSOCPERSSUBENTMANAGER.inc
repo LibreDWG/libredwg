@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCPERSSUBENTMANAGER 214 in test/test-data/2000/Box.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_579[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_337[] = {
   //{ 5, "214", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -22,7 +22,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_579[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 27B in test/test-data/2004/BoxUnion.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_580[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_338[] = {
   //{ 5, "27B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -41,7 +41,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_580[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2DF in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_581[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_339[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -92,7 +92,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_581[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2DF in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_582[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_340[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -143,7 +143,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_582[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2DF in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_583[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_341[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -194,7 +194,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_583[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2DF in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_584[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_342[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -248,7 +248,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_584[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 51D in test/test-data/2010/sun_and_sky_demo.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_585[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_343[] = {
   //{ 5, "51D", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -267,7 +267,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_585[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2D9 in test/test-data/2004/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_586[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_344[] = {
   //{ 5, "2D9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -304,7 +304,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_586[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER 2D9 in test/test-data/2018/Surface.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_587[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_345[] = {
   //{ 5, "2D9", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -348,7 +348,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_587[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER E57 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_588[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_346[] = {
   //{ 5, "E57", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },
@@ -378,7 +378,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_588[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCPERSSUBENTMANAGER EDD in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_589[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCPERSSUBENTMANAGER_347[] = {
   //{ 5, "EDD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 102, "{ACAD_REACTORS", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 330, "C", NULL, 0, BITS_UNKNOWN, "reactors[0]", 2, {-1,-1,-1,-1,-1} },

@@ -11,6 +11,7 @@ debugging objects in all found DWG's.
 =cut
 no strict;
 my $td = "test/test-data";
+my $to = "test/test-old";
 my $tb = "test/test-big";
 
 # also triggered by objectmap (print) and free
@@ -61,6 +62,9 @@ if (/Next object: / or /^Num objects:/) {
     $dxf = "$td/$d/$n.dxf";
     if (!-f "../$dxf" && -f "../$tb/$d/$n.dxf") {
       $dxf = "$tb/$d/$n.dxf";
+    }
+    if (!-f "../$dxf" && -f "../$to/$d/$n.dxf") {
+      $dxf = "$to/$d/$n.dxf";
     }
     unless (-f $dxf || -f "../$dxf") {
       $dxf = "$td/${n}_${d}.dxf";

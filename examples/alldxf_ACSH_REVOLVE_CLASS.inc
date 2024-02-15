@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACSH_REVOLVE_CLASS C6C in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_935[] = {
+static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_616[] = {
   //{ 5, "C6C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "C6B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -57,7 +57,7 @@ static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_935[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_REVOLVE_CLASS 6AA in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_936[] = {
+static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_617[] = {
   //{ 5, "6AA", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6A9", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -110,7 +110,7 @@ static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_936[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_REVOLVE_CLASS 6D3 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_937[] = {
+static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_618[] = {
   //{ 5, "6D3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6D2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -163,7 +163,7 @@ static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_937[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_REVOLVE_CLASS 6FC in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_938[] = {
+static struct _unknown_field unknown_dxf_ACSH_REVOLVE_CLASS_619[] = {
   //{ 5, "6FC", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6FB", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

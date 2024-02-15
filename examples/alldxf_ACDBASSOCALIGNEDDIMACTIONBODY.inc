@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_509[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_265[] = {
   //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -24,7 +24,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_509[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_510[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_266[] = {
   //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -45,7 +45,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_510[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_511[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_267[] = {
   //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -66,7 +66,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_511[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCALIGNEDDIMACTIONBODY 392 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_512[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCALIGNEDDIMACTIONBODY_268[] = {
   //{ 5, "392", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionBody", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },

@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACSH_EXTRUSION_CLASS 459 in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_904[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_585[] = {
   //{ 5, "459", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "458", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -125,7 +125,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_904[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 461 in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_905[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_586[] = {
   //{ 5, "461", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "460", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -247,7 +247,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_905[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 467 in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_906[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_587[] = {
   //{ 5, "467", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "466", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -369,7 +369,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_906[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 46B in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_907[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_588[] = {
   //{ 5, "46B", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "46A", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -491,7 +491,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_907[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 46F in test/test-data/2007/ATMOS-DC22S.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_908[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_589[] = {
   //{ 5, "46F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "46E", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -613,7 +613,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_908[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 2168 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_909[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_590[] = {
   //{ 5, "2168", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2169", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -706,7 +706,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_909[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 216E in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_910[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_591[] = {
   //{ 5, "216E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "216D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -799,7 +799,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_910[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 21D3 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_911[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_592[] = {
   //{ 5, "21D3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "21D4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -892,7 +892,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_911[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 3106 in test/test-data/2013/JW.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_912[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_593[] = {
   //{ 5, "3106", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3107", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -985,7 +985,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_912[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 2BE in test/test-data/2010/sun_and_sky_demo.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_913[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_594[] = {
   //{ 5, "2BE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2BF", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1080,7 +1080,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_913[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 2DF in test/test-data/2010/sun_and_sky_demo.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_914[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_595[] = {
   //{ 5, "2DF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2DE", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1175,7 +1175,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_914[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 2E3 in test/test-data/2010/sun_and_sky_demo.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_915[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_596[] = {
   //{ 5, "2E3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "2E2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1270,7 +1270,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_915[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 31C in test/test-data/2010/sun_and_sky_demo.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_916[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_597[] = {
   //{ 5, "31C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "31D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1365,7 +1365,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_916[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 38A in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_917[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_598[] = {
   //{ 5, "38A", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "389", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1469,7 +1469,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_917[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 38F in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_918[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_599[] = {
   //{ 5, "38F", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "389", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1582,7 +1582,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_918[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 393 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_919[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_600[] = {
   //{ 5, "393", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "389", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1676,7 +1676,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_919[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 39E in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_920[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_601[] = {
   //{ 5, "39E", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "39D", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1775,7 +1775,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_920[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 3BE in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_921[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_602[] = {
   //{ 5, "3BE", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3BD", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1869,7 +1869,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_921[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 3E5 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_922[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_603[] = {
   //{ 5, "3E5", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "3E4", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -1963,7 +1963,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_922[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 412 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_923[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_604[] = {
   //{ 5, "412", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "40F", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2056,7 +2056,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_923[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 43C in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_924[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_605[] = {
   //{ 5, "43C", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "43B", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2150,7 +2150,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_924[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 4A3 in test/test-data/2010/visualization_-_condominium_with_skylight.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_925[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_606[] = {
   //{ 5, "4A3", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "4A2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2283,7 +2283,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_925[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 6B2 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_926[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_607[] = {
   //{ 5, "6B2", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6A9", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2376,7 +2376,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_926[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 6BF in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_927[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_608[] = {
   //{ 5, "6BF", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6BE", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2469,7 +2469,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_927[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 6DB in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_928[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_609[] = {
   //{ 5, "6DB", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6D2", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2562,7 +2562,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_928[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 6E8 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_929[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_610[] = {
   //{ 5, "6E8", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6E7", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2655,7 +2655,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_929[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 704 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_930[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_611[] = {
   //{ 5, "704", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "6FB", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2748,7 +2748,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_930[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 711 in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_931[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_612[] = {
   //{ 5, "711", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "710", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -2841,7 +2841,7 @@ static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_931[] = {
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACSH_EXTRUSION_CLASS 8FD in test/test-data/2010/visualization_-_conference_room.dxf */
-static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_932[] = {
+static struct _unknown_field unknown_dxf_ACSH_EXTRUSION_CLASS_613[] = {
   //{ 5, "8FD", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "8FE", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbEvalExpr", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
