@@ -821,11 +821,11 @@ close_pi (FILE *pi, long class_filled, long class_size, int k)
 int
 main (int argc, char *argv[])
 {
-  int i = 1, ic, j, num_classes;
-  long sum_filled = 0, sum_size = 0;
+  unsigned i = 1, ic, j, num_classes = 0;
+  unsigned long sum_filled = 0, sum_size = 0;
   char *class = NULL;
   char *file = NULL;
-#define MAX_CLASSES 100
+#define MAX_CLASSES 200
   char *classes[MAX_CLASSES]; // create files per classes
   struct _dxf *dxf = calloc (sizeof (unknown_dxf) / sizeof (unknown_dxf[0]),
                              sizeof (struct _dxf));
@@ -846,7 +846,7 @@ main (int argc, char *argv[])
       num_classes = 0;
       for (i = 0; unknown_dxf[i].name; i++)
         { // TODO: alldwg/alldxf needs to be sorted per class, not file.
-          if (class != unknown_dxf[i].name)
+          if (!class || strcmp(class, unknown_dxf[i].name))
             {
               classes[num_classes++] = (char *)unknown_dxf[i].name;
               class = (char *)unknown_dxf[i].name;
@@ -897,9 +897,9 @@ main (int argc, char *argv[])
         continue;
       for (i = 0; unknown_dxf[i].name; i++)
         {
-          int num_fields;
-          int num_found = -1;
-          int size = unknown_dxf[i].num_bits;
+          unsigned num_fields;
+          unsigned num_found = -1;
+          unsigned size = unknown_dxf[i].num_bits;
           struct _unknown_field *g
               = (struct _unknown_field *)unknown_dxf[i].fields;
           const int is16 = dxf_is16 (&unknown_dxf[i]);
