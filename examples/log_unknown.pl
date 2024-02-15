@@ -63,12 +63,27 @@ if (/Next object: / or /^Num objects:/) {
     if (!-f "../$dxf" && -f "../$tb/$d/$n.dxf") {
       $dxf = "$tb/$d/$n.dxf";
     }
-    if (!-f "../$dxf" && -f "../$to/$d/$n.dxf") {
-      $dxf = "$to/$d/$n.dxf";
+    elsif (!-f "../$dxf" && -f "../$tb/$d/$n.DXF") {
+      $dxf = "$tb/$d/$n.DXF";
     }
-    unless (-f $dxf || -f "../$dxf") {
-      $dxf = "$td/${n}_${d}.dxf";
+    elsif (!-f "../$dxf" && $ARGV =~ /_from_/) { # to
+      if (-f "../$to/$d/$n.dxf") {
+        $dxf = "$to/$d/$n.dxf";
+      } else {
+        my $from;
+        ($n, $from, $d) =
+          $ARGV =~ /^(.+)_(from_.*)_(r[\.\d]+|20\d\d)\.log$/;
+        if (-f "../$to/$d/$from/$n.dxf") {
+          $dxf = "$to/$d/$from/$n.dxf";
+        }
+        elsif (-f "../$to/$d/$from/$n.DXF") {
+          $dxf = "$to/$d/$from/$n.DXF";
+        }
+      }
     }
+    #unless (-f $dxf || -f "../$dxf") {
+    #  $dxf = "$td/${n}_${d}.dxf";
+    #}
   }
   next if $dxf =~ /work\.orig/; # skip temp. duplicates
   unless (-f $dxf || -f "../$dxf") {
