@@ -8525,13 +8525,11 @@ BL,	DXF 72
 @item num_hdls
 BL,	DXF 73
 @item hdls
-H*,	DXF 331
-@item shorts
-BS*,	DXF 74
+Dwg_BLOCKSTRETCHACTION_handles*
 @item num_codes
 BL,	DXF 75
 @item codes
-BL*,	DXF 76
+Dwg_BLOCKSTRETCHACTION_codes*
 @item action_offset_x
 BD,	DXF 140
 @item action_offset_y
@@ -13724,6 +13722,44 @@ BD
 BS
 @item valuelist
 BD*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BLOCKSTRETCHACTION_codes} @anchor{Dwg_BLOCKSTRETCHACTION_codes}
+@vindex Dwg_BLOCKSTRETCHACTION_codes
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_BLOCKSTRETCHACTION*
+@item bl95
+BL,	DXF 95
+@item bs76
+BS,	DXF 76
+@item bl94
+BL,	DXF 94
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BLOCKSTRETCHACTION_handles} @anchor{Dwg_BLOCKSTRETCHACTION_handles}
+@vindex Dwg_BLOCKSTRETCHACTION_handles
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_BLOCKSTRETCHACTION*
+@item hdl
+H,	DXF 331
+@item shrt
+BS,	DXF 74
+@item long1
+BL,	DXF 94
+@item long2
+BL,	DXF 94
 
 @end vtable
 @end indentedblock

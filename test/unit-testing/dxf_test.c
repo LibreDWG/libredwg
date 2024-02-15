@@ -677,7 +677,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_INT16:
           {
             BITCODE_BS value;
-            if (fp->is_malloc
+            if (fp->is_malloc // vector of shorts, RS[] or BS[]
+                && strlen (fp->type) == 2
+                && fp->type[1] == 'S'
                 && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                             f->name, &value, &field))
               {
@@ -707,7 +709,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_INT32:
           {
             BITCODE_BL value;
-            if (fp->is_malloc
+            if (fp->is_malloc // vector of longs, RL[] or BL[]
+                && strlen (fp->type) == 2
+                && fp->type[1] == 'L'
                 && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                             f->name, &value, &field))
               {
@@ -745,7 +749,9 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
         DWG_VT_INT64:
           {
             BITCODE_RLL value;
-            if (fp->is_malloc
+            if (fp->is_malloc // vector of LL's, RLL[] or BLL[]
+                && strlen (fp->type) == 3
+                && fp->type[1] == 'L'
                 && dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                             f->name, &value, &field))
               {

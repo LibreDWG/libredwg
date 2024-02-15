@@ -42876,14 +42876,14 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
     blockstretchaction->be_minor--;
   }
   {
-    BITCODE_BL* codes;
+    Dwg_BLOCKSTRETCHACTION_codes* codes;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_codes", &count, NULL)
         && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "codes", &codes, NULL)
         && codes == blockstretchaction->codes)
       pass ();
     else
-      fail ("BLOCKSTRETCHACTION.codes [BL*] * %u num_codes", count);
+      fail ("BLOCKSTRETCHACTION.codes [Dwg_BLOCKSTRETCHACTION_codes*] * %u num_codes", count);
   }
   {
     Dwg_BLOCKACTION_connectionpts conn_pts[2];
@@ -42935,14 +42935,14 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
         fail ("BLOCKSTRETCHACTION.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_H* hdls;
+    Dwg_BLOCKSTRETCHACTION_handles* hdls;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_hdls", &count, NULL)
         && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "hdls", &hdls, NULL)
         && hdls == blockstretchaction->hdls)
       pass ();
     else
-      fail ("BLOCKSTRETCHACTION.hdls [H*] * %u num_hdls", count);
+      fail ("BLOCKSTRETCHACTION.hdls [Dwg_BLOCKSTRETCHACTION_handles*] * %u num_hdls", count);
   }
   {
     BITCODE_T name;
@@ -43046,16 +43046,6 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
       pass ();
     else
       fail ("BLOCKSTRETCHACTION.pts [2RD*] * %u num_pts", count);
-  }
-  {
-    BITCODE_BS* shorts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "num_shorts", &count, NULL)
-        && dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "shorts", &shorts, NULL)
-        && shorts == blockstretchaction->shorts)
-      pass ();
-    else
-      fail ("BLOCKSTRETCHACTION.shorts [BS*] * %u num_shorts", count);
   }
   if (failed && (is_class_unstable ("BLOCKSTRETCHACTION") || is_class_debugging ("BLOCKSTRETCHACTION")))
     {
@@ -67796,6 +67786,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_BLOCKPARAMVALUESET): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPARAMVALUESET\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BLOCKSTRETCHACTION_codes);
+  size2 = dwg_dynapi_fields_size ("BLOCKSTRETCHACTION_codes");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BLOCKSTRETCHACTION_codes): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKSTRETCHACTION_codes\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BLOCKSTRETCHACTION_handles);
+  size2 = dwg_dynapi_fields_size ("BLOCKSTRETCHACTION_handles");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BLOCKSTRETCHACTION_handles): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKSTRETCHACTION_handles\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_BLOCKVISIBILITYPARAMETER_state);

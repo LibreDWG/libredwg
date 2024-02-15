@@ -1,4 +1,4 @@
-// looks stable, but some structs might be missing. indxf definitely broken
+// some structs in work. indxf definitely broken
 #define DWG_TYPE DWG_TYPE_BLOCKSTRETCHACTION
 #include "common.c"
 
@@ -11,10 +11,9 @@ api_process (dwg_object *obj)
   BITCODE_BL num_pts;
   BITCODE_2RD *pts;
   BITCODE_BL num_hdls;
-  BITCODE_H *hdls;
-  BITCODE_BS *shorts;
+  Dwg_BLOCKSTRETCHACTION_handles *hdls;
   BITCODE_BL num_codes;
-  BITCODE_BL *codes;
+  Dwg_BLOCKSTRETCHACTION_codes *codes;
   BLOCKACTION_doubles_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -38,11 +37,21 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_pts, BL);
   CHK_ENTITY_2DPOINTS (_obj, BLOCKSTRETCHACTION, pts, num_pts);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_hdls, BL);
-  CHK_ENTITY_HV (_obj, BLOCKSTRETCHACTION, hdls, num_hdls);
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKSTRETCHACTION, shorts, num_hdls, BS);
+  for (i = 0; i < num_hdls; i++)
+    {
+      CHK_SUBCLASS_H (_obj->hdls[i], BLOCKSTRETCHACTION_handles, hdl);
+      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, shrt, BS);
+      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, long1, BL);
+      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, long1, BL);
+    }
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_codes, BL);
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKSTRETCHACTION, codes, num_codes, BL);
-  // ..
+  for (i = 0; i < num_codes; i++)
+    {
+      CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, bl95, BL);
+      CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, bs76, BS);
+      CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, bl94, BL);
+    }
+
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_offset_x, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_offset_y, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, angle_offset, BD);

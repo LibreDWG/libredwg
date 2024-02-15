@@ -7815,51 +7815,69 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
         }
     }
   FIELD_BL (num_hdls, 73);
-  // TODO one struct
-  // HANDLE_VECTOR (hdls, num_hdls, 0, 331);
   if (o->num_hdls)
     {
-      o->hdls = (BITCODE_H *)xcalloc (o->num_hdls, sizeof (BITCODE_H));
+      o->hdls = (Dwg_BLOCKSTRETCHACTION_handles *)xcalloc (
+          o->num_hdls, sizeof (Dwg_BLOCKSTRETCHACTION_handles));
       if (!o->hdls)
         return pair;
       for (unsigned i = 0; i < o->num_hdls; i++)
         {
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, o->hdls[i], 331);
-          o->hdls[i] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          o->hdls[i].hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
           LOG_TRACE ("%s.hdls[%d] = " FORMAT_REF " [H 331]\n", obj->name, i,
-                     ARGS_REF (o->hdls[i]));
+                     ARGS_REF (o->hdls[i].hdl));
           dxf_free_pair (pair);
-        }
-      // FIELD_VECTOR (shorts, BS, num_hdls, 74);
-      o->shorts = (BITCODE_BS *)xcalloc (o->num_hdls, sizeof (BITCODE_BS));
-      if (!o->shorts)
-        return pair;
-      for (unsigned i = 0; i < o->num_hdls; i++)
-        {
+
           pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->shorts[i], 74);
-          o->shorts[i] = pair->value.i;
-          LOG_TRACE ("%s.shorts[%d] = %u [BS 74]\n", obj->name, i,
-                     (unsigned)o->shorts[i]);
+          EXPECT_DXF (obj->name, o->hdls[i].shrt, 74);
+          o->hdls[i].shrt = pair->value.i;
+          LOG_TRACE ("%s.hdls[%d].shrt = %u [BS 74]\n", obj->name, i,
+                     (unsigned)o->hdls[i].shrt);
+          dxf_free_pair (pair);
+
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->hdls[i].long1, 94);
+          o->hdls[i].long1 = pair->value.u;
+          LOG_TRACE ("%s.hdls[%d].long1 = %u [BL 94]\n", obj->name, i,
+                     (unsigned)o->hdls[i].long1);
+          dxf_free_pair (pair);
+
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->hdls[i].long2, 94);
+          o->hdls[i].long2 = pair->value.u;
+          LOG_TRACE ("%s.hdls[%d].long2 = %u [BL 94]\n", obj->name, i,
+                     (unsigned)o->hdls[i].long2);
           dxf_free_pair (pair);
         }
     }
 
   FIELD_BL (num_codes, 75);
-  // FIXME 3x BL?
-  // FIELD_VECTOR (codes, BL, num_codes, 76);
   if (o->num_codes)
     {
-      o->codes = (BITCODE_BL *)xcalloc (o->num_codes, sizeof (BITCODE_BL));
+      o->codes = (Dwg_BLOCKSTRETCHACTION_codes *)xcalloc (
+          o->num_codes, sizeof (Dwg_BLOCKSTRETCHACTION_codes));
       if (!o->codes)
         return pair;
-      for (unsigned i = 0; i < o->num_pts; i++)
+      for (unsigned i = 0; i < o->num_codes; i++)
         {
           pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->codes[i], 76);
-          o->codes[i] = pair->value.i;
-          LOG_TRACE ("%s.codes[%d] = %d [BL 76]\n", obj->name, i, o->codes[i]);
+          EXPECT_DXF (obj->name, o->codes[i].bl95, 95);
+          o->codes[i].bl95 = pair->value.i;
+          LOG_TRACE ("%s.codes[%d].bl95 = %d [BL 95]\n", obj->name, i, o->codes[i].bl95);
+          dxf_free_pair (pair);
+
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->codes[i].bs76, 76);
+          o->codes[i].bs76 = pair->value.i;
+          LOG_TRACE ("%s.codes[%d].bs76 = %d [BS 76]\n", obj->name, i, o->codes[i].bs76);
+          dxf_free_pair (pair);
+
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->codes[i].bl94, 94);
+          o->codes[i].bl94 = pair->value.i;
+          LOG_TRACE ("%s.codes[%d].bl94 = %d [BL 94]\n", obj->name, i, o->codes[i].bl94);
           dxf_free_pair (pair);
         }
     }

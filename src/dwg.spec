@@ -12336,14 +12336,24 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
   FIELD_BL (num_pts, 72);
   FIELD_2RD_VECTOR (pts, num_pts, 1011);
   FIELD_BL (num_hdls, 73);
-  // TODO one struct
-  HANDLE_VECTOR (hdls, num_hdls, 0, 331);
-  FIELD_VECTOR (shorts, BS, num_hdls, 74);
-
+  REPEAT (num_hdls, hdls, Dwg_BLOCKSTRETCHACTION_handles)
+  REPEAT_BLOCK
+    SUB_FIELD_HANDLE (hdls[rcount1], hdl, 0, 331);
+    SUB_FIELD_BS (hdls[rcount1], shrt, 74);
+    SUB_FIELD_BS (hdls[rcount1], long1, 94);
+    SUB_FIELD_BS (hdls[rcount1], long2, 94);
+    SET_PARENT_OBJ (hdls[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (hdls)
   FIELD_BL (num_codes, 75);
-  // FIXME 3x BL?
-  FIELD_VECTOR (codes, BL, num_codes, 76);
-  // ...
+  REPEAT (num_codes, codes, Dwg_BLOCKSTRETCHACTION_codes)
+  REPEAT_BLOCK
+    SUB_FIELD_BL (codes[rcount1], bl95, 95);
+    SUB_FIELD_BS (codes[rcount1], bs76, 76);
+    SUB_FIELD_BL (codes[rcount1], bl94, 94);
+    SET_PARENT_OBJ (codes[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (codes)
   AcDbBlockAction_doubles_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

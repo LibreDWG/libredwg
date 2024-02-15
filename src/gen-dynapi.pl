@@ -107,11 +107,11 @@ for (sort $c->struct_names) {
     push @object_names, $n;
   } elsif (/^_dwg_header_variables/) {
     ;
-  } elsif (/^Dwg_([A-Z0-9]+)/) { # AuxHeader, Header, R2004_Header, SummaryInfo
+  } elsif (/^Dwg_(\w+)/) { # AuxHeader, Header, R2004_Header, SummaryInfo
     my $n = $1;
     next if length $n <= 1;
     $structs{$n}++;
-  } elsif (/_dwg_([A-Z0-9_]+)/ && !/_dwg_ODA/) {
+  } elsif (/_dwg_([A-Z0-9]+(?:_\w+)?)/ && !/_dwg_ODA/) {
     $structs{$_}++;
     push @subclasses, $_;
   } else {
