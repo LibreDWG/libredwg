@@ -144,6 +144,94 @@ my @AcDbEvalExpr = (
     91  => 'evalexpr.value.handle91',
     70  => 'evalexpr.value.short70'
 );
+my @AcDbBlockElement = (
+    @AcDbEvalExpr,
+    300  => 'name',
+    98  => 'be_major',
+    99  => 'be_minor',
+    1071  => 'eed1071'
+);
+my @AcDbBlockAction = (
+    @AcDbBlockElement,
+    70  => 'num_actions',
+    91  => 'actions',
+    71  => 'num_deps',
+    330  => 'deps',
+    1010  => 'display_location'
+);
+my @AcDbBlockAction_doubles = (
+    @AcDbBlockElement,
+    140  => 'action_offset_x',
+    141  => 'action_offset_y',
+    #142  => 'action_offset_z', # always empty, 0
+    280  => 'action_xy_type', # always 1
+    );
+my @AcDbBlockGrip = (
+    @AcDbBlockElement,
+    91  => 'bg_bl91',
+    92  => 'bg_bl92',
+    1010  => 'bg_location',
+    280 => 'bg_insert_cycling',
+    93  => 'bg_insert_cycling_weight'
+);
+my @AcDbBlockGripExpr = (
+    91  => 'grip_type',
+    300  => 'grip_expr',
+    );
+
+sub BlockParam_PropInfo {
+  my ($i, $prop, $num_code, $d_code, $t_code) = @_;
+  return (
+      $num_code => "$prop.num_connections",
+      $d_code => "$prop.connections[$i].code",
+      $t_code => "$prop.connections[$i].name"
+      );
+}
+my @AcDbBlockParameter = (
+    @AcDbBlockElement,
+    280  => 'show_properties',
+    281  => 'chain_actions'
+    );
+my @AcDbBlock1PtParameter = (
+    @AcDbBlockParameter,
+    1010 => "def_pt.x",
+    1020 => "def_pt.y",
+    1030 => "def_pt.z",
+    93 => "num_propinfos", # always 2
+    BlockParam_PropInfo (0, 'prop1', 170, 91, 301),
+    BlockParam_PropInfo (1, 'prop2', 171, 92, 302)
+    );
+my @AcDbBlock2PtParameter = (
+    @AcDbBlockParameter,
+    1010 => "def_basept.x",
+    1020 => "def_basept.y",
+    1030 => "def_basept.z",
+    1011 => "def_pt.x",
+    1021 => "def_pt.y",
+    1031 => "def_pt.z",
+    170 => "num_prop_states", # always 4
+    91 => "prop_states[0]",
+    91 => "prop_states[1]",
+    91 => "prop_states[2]",
+    91 => "prop_states[3]",
+    93 => "num_propinfos", # always 4
+    BlockParam_PropInfo (0, 'prop1', 171, 92, 302),
+    BlockParam_PropInfo (1, 'prop2', 172, 93, 303),
+    BlockParam_PropInfo (2, 'prop3', 173, 94, 304),
+    BlockParam_PropInfo (3, 'prop4', 174, 95, 305),
+    177 => "parameter_base_location",
+    );
+sub AcDbBlockParamValueSet {
+    my ($var, $i_code, $d_code, $s_code, $t_code) = @_; 
+    return (
+        $t_code => "$var.desc",
+        $i_code => "$var.flags",
+        $d_code => "$var.minimum",
+        $d_code + 2 => "$var.increment",
+        $s_code => "$var.num_valuelist",
+        $d_code + 3 => "$var.valuelist",
+        );
+}
 
 sub trans {
   my ($code, $name, $num) = @_;
@@ -863,7 +951,80 @@ my $known = {
     41 => 'arc_start_param',
     42 => 'arc_end_param',
     70 => 'is_partial',
-    ],
+      ],
+  BLOCKLOOKUPACTION => [
+      @AcDbBlockAction,
+      # AcDbBlockLookupAction
+      92 => 'numrows',
+      93 => 'numcols',
+      301 => "",
+      # BlockAction_ConnectionPts[]:
+      94 => 'lut.conn_pts.code',
+      303 => 'lut.conn_pts.name',
+      282 => 'lut.b282',
+      281 => 'lut.b282',
+      280 => 'b280',
+      102 => 'exprs',
+      ],
+  BLOCKSTRETCHACTION => [
+      @AcDbBlockAction,
+      # BlockAction_ConnectionPts[]:
+      92 => 'conn_pts[0].code',
+      301 => 'conn_pts[0].name',
+      93 => 'conn_pts[1].code',
+      302 => 'conn_pts[1].name',
+      72 => 'num_pts',
+      1011 => 'pts',
+      73 => 'num_hdls',
+      331 => 'hdls',
+      74 => 'shorts',
+      75 => 'num_codes',
+      76 => 'codes',
+      @AcDbBlockAction_doubles
+      ],
+  BLOCKVISIBILITYGRIP => [
+      @AcDbBlockGrip,
+      ],
+  BLOCKGRIPLOCATIONCOMPONENT => [
+      @AcDbEvalExpr,
+      @AcDbBlockGripExpr,
+      ],
+  BLOCKALIGNMENTGRIP => [
+      @AcDbBlockGrip,
+      140 => 'orientation.x',
+      141 => 'orientation.y',
+      142 => 'orientation.z',
+      ],
+  BLOCKALIGNMENTPARAMETER => [
+      @AcDbBlock2PtParameter,
+      280 => 'align_perpendicular',
+      ],
+  BLOCKLINEARPARAMETER => [
+      @AcDbBlock2PtParameter,
+      305 => 'distance_name',
+      306 => 'distance_desc',
+      140 => 'distance',
+      AcDbBlockParamValueSet("value_set",96,141,175,307),
+      ],
+  BLOCKXYPARAMETER => [
+      @AcDbBlock2PtParameter,
+      305 => 'x_label',
+      306 => 'x_label_desc',
+      307 => 'y_label',
+      308 => 'y_label_desc',
+      142 => 'y_value',
+      141 => 'x_value',
+      AcDbBlockParamValueSet("y_value_set",97,146,176,309),
+      AcDbBlockParamValueSet("x_value_set",96,142,175,410),
+      ],
+  BLOCKMOVEACTION => [
+      @AcDbBlockAction,
+      92 => 'conn_pts[0].code',
+      301 => 'conn_pts[0].name',
+      93 => 'conn_pts[1].code',
+      302 => 'conn_pts[1].name',
+      @AcDbBlockAction_doubles
+      ],
   DATALINK => [
     70 => 'class_version',
     1 => 'data_adapter',
