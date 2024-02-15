@@ -96,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
@@ -135,7 +135,7 @@ jobs:
       with:
         python-version: 3.12
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
@@ -162,7 +162,7 @@ jobs:
       with:
         python-version: 3.12
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
@@ -206,7 +206,7 @@ jobs:
           mingw-w64-x86_64-pcre2
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
@@ -235,7 +235,7 @@ jobs:
       with:
         path-type: minimal
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
@@ -253,7 +253,7 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
@@ -275,7 +275,7 @@ jobs:
     #  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 1
         submodules: recursive
