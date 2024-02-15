@@ -1,4 +1,4 @@
-// unstable
+// stable
 #define DWG_TYPE DWG_TYPE_SUN
 #include "common.c"
 
@@ -22,6 +22,7 @@ api_process (dwg_object *obj)
   dwg_obj_sun *_obj = dwg_object_to_SUN (obj);
 
   CHK_ENTITY_TYPE (_obj, SUN, class_version, BL);
+  CHK_ENTITY_MAX (_obj, SUN, class_version, BL, 10);
   CHK_ENTITY_TYPE (_obj, SUN, is_on, B);
   CHK_ENTITY_CMC (_obj, SUN, color);
   CHK_ENTITY_TYPE (_obj, SUN, intensity, BD);
@@ -30,6 +31,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SUN, is_dst, B);
   CHK_ENTITY_TYPE (_obj, SUN, has_shadow, B);
   CHK_ENTITY_TYPE (_obj, SUN, shadow_type, BL);
+  CHK_ENTITY_MAX (_obj, SUN, shadow_type, BL, 2);
   CHK_ENTITY_TYPE (_obj, SUN, shadow_mapsize, BS);
+  CHK_ENTITY_MAX (_obj, SUN, shadow_mapsize, BS, 3968);
   CHK_ENTITY_TYPE (_obj, SUN, shadow_softness, RC);
 }

@@ -8758,20 +8758,21 @@ DWG_OBJECT_END
 
 // hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
 // DXF docs put that as Entity, wrong!
-// Missing: 421
 DWG_OBJECT (SUN)
   SUBCLASS (AcDbSun)
   FIELD_BL (class_version, 90);
   VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_B (is_on, 290);       // status, isOn
-  FIELD_CMC (color, 63);
+  FIELD_CMC (color, 63);      // with 421
   FIELD_BD (intensity, 40);   //
   FIELD_B (has_shadow, 291);  // shadow on/off
   FIELD_BL (julian_day, 91);
   FIELD_BL (msecs, 92);
   FIELD_B (is_dst, 292);      // isDayLightSavingsOn
   FIELD_BL (shadow_type, 70); // 0 raytraced, 1 shadow maps
+  VALUEOUTOFBOUNDS (shadow_type, 2)
   FIELD_BS (shadow_mapsize, 71); // max 3968
+  VALUEOUTOFBOUNDS (shadow_mapsize, 3968)
   FIELD_RCd (shadow_softness, 280);
 
   START_OBJECT_HANDLE_STREAM;

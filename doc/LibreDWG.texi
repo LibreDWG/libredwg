@@ -174,7 +174,7 @@ For a detailed overview see the file @file{src/classes.inc} or @file{src/classes
   BLOCKVISIBILITYPARAMETER EVALUATION_GRAPH HELIX
   LARGE_RADIAL_DIMENSION LIGHTLIST MATERIAL MENTALRAYRENDERSETTINGS
   OBJECT_PTR RAPIDRTRENDERSETTINGS RENDERSETTINGS SECTION_SETTINGS
-  SPATIAL_INDEX SUN TABLESTYLE (works only pre-2010)
+  SPATIAL_INDEX TABLESTYLE (works only pre-2010)
 
 @item Unhandled (fields spec'ed, but broken/undertested):
 

@@ -957,7 +957,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str196,                 "BLOCKSCALEACTION",                  DWG_TYPE_BLOCKSCALEACTION,	0,	STABLE},
       {-1},
 #line 348 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str198,                              "SUN",                               DWG_TYPE_SUN,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str198,                              "SUN",                               DWG_TYPE_SUN,	0,	STABLE},
 #line 237 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str199,         "BLOCKPARAMDEPENDENCYBODY",          DWG_TYPE_BLOCKPARAMDEPENDENCYBODY,	0,	UNSTABLE},
 #line 210 "src/objects.in"

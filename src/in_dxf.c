@@ -11789,6 +11789,23 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   pair = add_ent_preview (obj, dat, pair);
                   goto start_loop;
                 }
+              else if (strEQc (name, "SUN") && pair->code == 421)
+                {
+                  BITCODE_CMC color;
+                  color.rgb = pair->value.l;
+                  color.method = pair->value.l >> 0x18;
+                  if (pair->value.l == 257)
+                    {
+                      color.method = 0xc8;
+                      color.rgb = 0xc8000000;
+                    }
+                  // color.alpha = (pair->value.l & 0xFF000000) >> 24;
+                  // if (color.alpha)
+                  //  color.alpha_type = 3;
+                  LOG_TRACE ("SUN.color.rgb = %08X [%s %d]\n",
+                             pair->value.u, "CMC", pair->code);
+                  goto next_pair;
+                }
               else if (strEQc (name, "MULTILEADER"))
                 {
                   // for the unknown subfields: 300, 140, 145, 302, 304, ...

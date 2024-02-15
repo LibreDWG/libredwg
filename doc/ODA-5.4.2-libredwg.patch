@@ -1,5 +1,5 @@
 --- ODA-5.4.1.md	2023-11-23 21:17:02.825331305 +0100
-+++ ODA-5.4.2-libredwg.md	2024-02-09 07:03:36.394566600 +0100
++++ ODA-5.4.2-libredwg.md	2024-02-15 10:46:29.909285772 +0100
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -2477,7 +2477,7 @@
  Common:
      Handle                H   5  Length (char) followed by the handle bytes.
      EED                   X  -3  See EED section.
-@@ -9118,36 +9318,669 @@
+@@ -9118,36 +9318,723 @@
  00B1B 40 3E 00 01 00 46 00 B4 @>...F.. 0100 0000 0011 1110 0000 0000 0000 0001 0000 0000 0100 0110 0000 0000 1011 0100
  00B23 00 40 41 0C 30          .@A.0    0000 0000 0100 0000 0100 0001 0000 1100 0011 0000
  00B28 45 76                   crc
@@ -3104,6 +3104,60 @@
 +                                 xdictionary (hard owner)
 +```
 +
++### 20.4.119 SUN
++
++Hard-owned child of AcDbViewportTableRecord or AcDbViewport 361.
++The AutoDesk DXF docs put that as Entity, wrong.
++
++Class properties:
++
++| App name            | ObjectDBX Classes |
++|---------------------|-------------------|
++| Class number        | Dynamic (>= 500)  |
++| DWG version         | R2000             |
++| Maintenance version | 0                 |
++| Class proxy flags   | 499               |
++| C++ class name      | AcDbSun           |
++| DXF name            | SUN               |
++
++```
++    Length               MS  --  Object length (not counting itself or CRC).
++R2010+:
++    Handle Stream Size   MC  --  not counted in the Length
++Common:
++    Type                 OT   0  typecode (internal DWG type code).
++R2000+:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Handle                H   5  Length (char) followed by the handle bytes.
++    EED                   X  -3  See EED section.
++R13-R14 Only:
++    Obj size             RL      size of object in bits, not including end handles
++Common:
++    Numreactors          BL      number of reactors in this object
++R2004+:
++    XDic Missing Flag     B      If 1, no XDictionary handle is stored for this
++                                 object, otherwise XDictionary handle is stored as in
++                                 R2000 and earlier.
++
++Common:
++    class_version        BL  90
++    is_on                B  290
++    color                CMC 63/421
++    intensity            BD  40
++    has_shadow           B  291
++    julian_day           BL  91
++    msecs                BL  92
++    is_dst               B  292  isDayLightSavingsOn
++    shadow_type          BL  70  0 raytraced, 1 shadow maps
++    shadow_mapsize       BS  71  max 3968
++    shadow_softness      RC 280
++
++    Handle refs           H      parenthandle (soft pointer)
++                                 [Reactors (soft pointer)]
++                                 xdictionary (hard owner)
++```
++
  # 21 Data section AcDb:ObjFreeSpace
  
 -The meaning of this section is not completely known. The ODA knows how to write a valid section, but
@@ -3161,7 +3215,7 @@
  |--------|--------|------------------------------------------------------------------- |
  | Int16  | 2      | Template description string length in bytes (the ODA always writes |
  |        |        | 0 here).                                                           |
-@@ -9155,11 +9988,11 @@
+@@ -9155,11 +10042,11 @@
  |        |        | codepage to encode the bytes).                                     |
  | UInt16 | 2      | MEASUREMENT system variable (0 = English, 1 = Metric).             |
  
@@ -3174,7 +3228,7 @@
  
  ```
  Set the "last handle" to all 0 and the "last loc" to 0L;
-@@ -9177,23 +10010,23 @@
+@@ -9177,23 +10064,23 @@
  End top repeat
  ```
  
@@ -3201,7 +3255,7 @@
  
  |Version|Field type|DXF group| Description             |
  |-------|-------|----:|--------------------------------|
-@@ -9202,19 +10035,19 @@
+@@ -9202,19 +10089,19 @@
  |       | Int32 |     | Unknown 1 (always 2?)
  |       | Int32 |     | Version (always 2?)
  |       | Int32 |     | Unknown 2 (always 0?)
@@ -3226,7 +3280,7 @@
  |       | Int32 |     | File size
  
  ## 24.2 File segment
-@@ -9263,26 +10096,26 @@
+@@ -9263,26 +10150,26 @@
  The segment is looked up by the index in the array.
  
  |Version|Field type|DXF group| Description              |
@@ -3256,7 +3310,7 @@
  
  #### 24.2.2.3 Data file segment
  
-@@ -9290,33 +10123,33 @@
+@@ -9290,33 +10177,33 @@
  
  x data records, where each data record is a byte array. Relatively small amounts of data are stored directly in the data file segment (up to 0x40000 bytes).
  
@@ -3295,7 +3349,7 @@
  
  |Version|Field type|DXF group| Description                     |
  |-------|------- |----:|---------------------------------------|
-@@ -9327,58 +10160,58 @@
+@@ -9327,58 +10214,58 @@
  |       | UInt64 |     | Page data size
  |       | byte[] |     | Binary data (byte array) of size Page data size
  
@@ -3363,7 +3417,7 @@
  ##### 24.2.2.6.1 Schema
  
  A schema is a collection of name value pairs, where the value can have a number of types.
-@@ -9389,11 +10222,11 @@
+@@ -9389,11 +10276,11 @@
  |       |        |     | Begin repeat index count              |
  |       | UInt64 |     | Index                                 |
  |       |        |     | End repeat index count                |
@@ -3376,7 +3430,7 @@
  ##### 24.2.2.6.1.1 Schema property
  
  This is a schema (see 24.2.2.6.1) property, having a name and a value of a certain type.
-@@ -9403,11 +10236,11 @@
+@@ -9403,11 +10290,11 @@
  |       | UInt32 |  91 | Property flags:                       |
  |       |        |     | * 1 = Unknown 1 (if set then all other bits are cleared). |
  |       |        |     | * 2 = Has no type.                    |
@@ -3389,7 +3443,7 @@
  |       | UInt32 | 280 | Type (0-15)                           |
  |       |        |     | If type == 0xe                        |
  |       | UInt32 |     | Custom type size                      |
-@@ -9430,11 +10263,11 @@
+@@ -9430,11 +10317,11 @@
  
  |Version|Field type|DXF group| Description                     |
  |-------|------- |----:|---------------------------------------|
@@ -3402,7 +3456,7 @@
  ##### 24.2.2.7.1 Schema search data
  
  The purpose of this segment is unknown. It seems to contain redundant data coupling a (sort) index to the objects in the data segment. When reading the schema search data can be ignored.
-@@ -9454,11 +10287,11 @@
+@@ -9454,11 +10341,11 @@
  |       |        |     | If ID indexes count > 0               |
  |       | UInt32 |     | Unknown (0)                           |
  |       |        |     | Begin repeat ID indexes count         |
@@ -3415,27 +3469,27 @@
  |       | UInt64 |     | Index (same as Sorted index value above). The ODA only writes one index per |
  |       |        |     | handle.                               |
  |       |        |     | End repeat index count                |
-@@ -9630,119 +10463,74 @@
+@@ -9630,119 +10517,74 @@
  }
  handleToDataRecord {
  }
  ```
  
 -# 25 UNKNOWN SECTION
+-
+-This section is largely unknown. The total size of this section is 53. We simply patch in "known to be valid" data. We first write a 0L, then the number of entries in the objmap +3, as a long. Then 45 bytes of "known to be valid data". Then we poke in the start address for objects at offset 16.
+-
+-The 45 bytes of known to be valid data are:
 +# 26 SECOND FILE HEADER (R13-R2000)
  
--This section is largely unknown. The total size of this section is 53. We simply patch in "known to be valid" data. We first write a 0L, then the number of entries in the objmap +3, as a long. Then 45 bytes of "known to be valid data". Then we poke in the start address for objects at offset 16.
-+This is directly after the ObjFreeSpace section. See [chapter 21](#21-data-section-acdbobjfreespace).
- 
--The 45 bytes of known to be valid data are:
--
 -    0xA7,0x62,0x25,0x00,0xF6,0xAF,0x25,0x02,
 -    0x3B,0x04,0x00,0x00,0x04,0x32,0x00,0x00,
 -    0x00,0x00,0x00,0x00,0x00,0x64,0x00,0x00,
 -    0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x00,
 -    0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,
 -    0xFF,0x00,0x00,0x00,0x00
--
++This is directly after the ObjFreeSpace section. See [chapter 21](#21-data-section-acdbobjfreespace).
+ 
 -# 26 SECOND FILE HEADER (R13-R15)
 -
 -## 26.1 Beginning sentinel
@@ -3581,7 +3635,7 @@
      RS : DWG version:
           AC1010 = 17,
           AC1011 = 18,
-@@ -9796,11 +10584,11 @@
+@@ -9796,11 +10638,11 @@
       RL : 0
       RL : 0
       RL : 0
@@ -3594,7 +3648,7 @@
       RS : 0
       RS : 0
  
-@@ -9855,11 +10643,11 @@
+@@ -9855,11 +10697,11 @@
  
  If that bit is 1, then following it, and preceding the RL which indicates the number of bits in the object, is an RL which indicates the number of bytes of proxy entity graphic data to follow.
  
