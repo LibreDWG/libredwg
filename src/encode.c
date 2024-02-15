@@ -48,7 +48,7 @@
 #  include <wctype.h>
 #endif
 
-#define DWG_MAX_OBJSIZE 0x100000
+#define DWG_MAX_OBJSIZE 0xf00000
 
 #include "common.h"
 #include "bits.h"
