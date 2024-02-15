@@ -2425,8 +2425,8 @@ while (<>) {
       }
       if ($in_entity && is_common_entity($code, $v, $name)) {
         push @FIELD, [$code, $v, $name, 1];
-      } elsif ($code >= 1000) { # no EED
-        push @FIELD, [$code, $v, $name, 1];
+      } elsif ($code >= 1000) { # TODO EED mixup
+        push @FIELD, [$code, $v, $name];
       } elsif ($code == 5 && !$seen100) {
         push @FIELD, [$code, $v, $name, 1];
       } else {

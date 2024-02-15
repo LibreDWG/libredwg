@@ -1249,10 +1249,10 @@ static struct _unknown_field unknown_dxf_WIPEOUT_1107[] = {
     { 24, "-0.2428571428571429", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 14, "-0.5", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
     { 24, "-0.5", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
-  //{ 1001, "AcDbBlockRepETag", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1070, "1", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-  //{ 1071, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-  //{ 1005, "40A0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1001, "AcDbBlockRepETag", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1070, "1", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 1071, "0", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
+    { 1005, "40A0", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* WIPEOUT 40A7 in test/test-data/2013/flipped.dxf */
@@ -1314,10 +1314,10 @@ static struct _unknown_field unknown_dxf_WIPEOUT_1108[] = {
     { 24, "-0.4330127018922197", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 14, "0.0", NULL, 0, BITS_UNKNOWN, "", 7, {-1,-1,-1,-1,-1} },
     { 24, "-0.5", NULL, 0, BITS_UNKNOWN, "", 3, {-1,-1,-1,-1,-1} },
-  //{ 1001, "AcDbBlockRepETag", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1070, "1", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
-  //{ 1071, "4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1005, "40A7", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1001, "AcDbBlockRepETag", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1070, "1", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
+    { 1071, "4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1005, "40A7", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* WIPEOUT 40BB in test/test-data/2013/flipped.dxf */

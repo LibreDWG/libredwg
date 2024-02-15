@@ -54,7 +54,7 @@ static struct _unknown_field unknown_dxf_REVOLVEDSURFACE_972[] = {
     { 46, "0.0", NULL, 0, BITS_UNKNOWN, "twist_angle", 20, {-1,-1,-1,-1,-1} },
     { 290, "0", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 291, "0", NULL, 0, BITS_UNKNOWN, "close_to_axis", 2, {-1,-1,-1,-1,-1} },
-  //{ 1001, "ACAD_STEPID", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
-  //{ 1071, "4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1001, "ACAD_STEPID", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
+    { 1071, "4", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
