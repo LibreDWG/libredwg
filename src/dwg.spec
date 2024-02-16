@@ -12341,6 +12341,10 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
     SUB_FIELD_HANDLE (hdls[rcount1], hdl, 0, 331);
     SUB_FIELD_BS (hdls[rcount1], shrt, 74);
     SUB_FIELD_BS (hdls[rcount1], long1, 94);
+    // See GRUE_LTM_1090+_from_cadforum.cz_2018
+    if (FIELD_VALUE (hdls[rcount1].long1) >= 128) {
+      DEBUG_HERE_OBJ
+    }
     SUB_FIELD_BS (hdls[rcount1], long2, 94);
     SET_PARENT_OBJ (hdls[rcount1]);
   END_REPEAT_BLOCK
