@@ -189,13 +189,13 @@ bits_BD (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
   // 4.0, 2.0, 0.36, 5.0, 4.131293495034893, 4701.847034571434,
   // 0.5024999976158142
   // hard-code some special values not properly converted and found.
-  if (!strcmp (g->value, "0.5"))
+  if (strEQc (g->value, "0.5"))
     d = 0.5;
-  else if (!strcmp (g->value, "10.0"))
+  else if (strEQc (g->value, "10.0"))
     d = 10.0;
-  else if (!strcmp (g->value, "11.0"))
+  else if (strEQc (g->value, "11.0"))
     d = 11.0;
-  else if (!strcmp (g->value, "63.5"))
+  else if (strEQc (g->value, "63.5"))
     d = 63.5;
   g->type = BITS_BD;
   // some more not found BD values
@@ -581,7 +581,7 @@ num_dxf (const struct _unknown_field *g, const struct _unknown_dxf *dxf) {
   int num_dxf = 0;
   struct _unknown_field *f = (struct _unknown_field *)dxf->fields;
   while (f->value) {
-    if (f->code == g->code && !strcmp(f->value, g->value))
+    if (f->code == g->code && strEQ (f->value, g->value))
       num_dxf++;
     f++;
   }
@@ -833,12 +833,12 @@ main (int argc, char *argv[])
   #include "alldxf_2.inc"
   // clang-format on
 
-  if (argc > 2 && !strcmp (argv[i], "--class"))
+  if (argc > 2 && strEQc (argv[i], "--class"))
     {
       class = argv[i + 1];
       i = 3;
     }
-  if (argc - i >= 2 && !strcmp (argv[i], "--file"))
+  if (argc - i >= 2 && strEQc (argv[i], "--file"))
     file = argv[i + 1];
   // process per class, not per logged instances.
   if (!class)
@@ -846,7 +846,7 @@ main (int argc, char *argv[])
       num_classes = 0;
       for (i = 0; unknown_dxf[i].name; i++)
         { // TODO: alldwg/alldxf needs to be sorted per class, not file.
-          if (!class || strcmp(class, unknown_dxf[i].name))
+          if (!class || !strEQ (class, unknown_dxf[i].name))
             {
               classes[num_classes++] = (char *)unknown_dxf[i].name;
               class = (char *)unknown_dxf[i].name;
@@ -884,12 +884,12 @@ main (int argc, char *argv[])
           strcpy (pi_fn, dn);
           pi_fn[l - 5] = '\0';
         }
-      else if (dn && !strcmp (basename (dn), "examples"))
+      else if (dn && strEQc (basename (dn), "examples"))
         {
           strcpy (pi_fn, dn);
           strcat (pi_fn, "/");
         }
-      else if (!strcmp (argv[0], "examples"))
+      else if (strEQc (argv[0], "examples"))
         {
           strcpy (pi_fn, "examples/");
         }
@@ -915,11 +915,11 @@ main (int argc, char *argv[])
           int version = 0;
           char *s;
 
-          if (class && strcmp (class, unknown_dxf[i].name))
+          if (class && !strEQ (class, unknown_dxf[i].name))
             continue;
-          if (file && strcmp (file, unknown_dxf[i].dxf))
+          if (file && !strEQ (file, unknown_dxf[i].dxf))
             continue;
-          /*if (!strcmp(unknown_dxf[i].name, "TABLEGEOMETRY")) {
+          /*if (strEQc (unknown_dxf[i].name, "TABLEGEOMETRY")) {
             printf("skip TABLEGEOMETRY\n");
             continue;
           }*/
@@ -965,11 +965,11 @@ main (int argc, char *argv[])
               printf ("%d: %s\n", g[j].code, g[j].value);
               if (g[j].code == 102)
                 {
-                  if (!strcmp (g[j].value, "{ACAD_XDICTIONARY"))
+                  if (strEQc (g[j].value, "{ACAD_XDICTIONARY"))
                     is_dict = 1;
-                  else if (!strcmp (g[j].value, "{ACAD_REACTORS"))
+                  else if (strEQc (g[j].value, "{ACAD_REACTORS"))
                     is_react = 1;
-                  else if (!strcmp (g[j].value, "}"))
+                  else if (strEQc (g[j].value, "}"))
                     {
                       is_react = 0;
                       is_dict = 0;
@@ -1309,7 +1309,7 @@ main (int argc, char *argv[])
                   if (!num_found || is_common_entity_data (g[j].code))
                     {
                       piname = (char *)dwg_bits_name[g[j].type];
-                      if (!strcmp (piname, "HANDLE"))
+                      if (strEQc (piname, "HANDLE"))
                         piname = (char *)"H";
                       // unfound DXF field for the picat file.
                       // later could be used as hints for the picat solver
