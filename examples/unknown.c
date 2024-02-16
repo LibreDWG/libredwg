@@ -875,10 +875,16 @@ main (int argc, char *argv[])
       uint16_t i_pi = 0;
 
       class = classes[ic];
-      // dirname should be examples/
+      // dirname should be examples, but can also be examples/.libs
       dn = dirname (argv[0]);
       printf ("dirname(%s): %s\n", argv[0], dn);
-      if (dn && !strcmp (basename (dn), "examples"))
+      if (dn && strstr (dn, "/examples/.libs"))
+        {
+          size_t l = strlen (dn);
+          strcpy (pi_fn, dn);
+          pi_fn[l - 5] = '\0';
+        }
+      else if (dn && !strcmp (basename (dn), "examples"))
         {
           strcpy (pi_fn, dn);
           strcat (pi_fn, "/");

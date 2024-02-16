@@ -94,19 +94,19 @@ endif
 #	chmod u+w "$(distdir)/doc/LibreDWG.info"
 
 UNKNOWN_LOG = unknown-`git describe --long --tags --dirty --always`.log
-UNKNOWN_SKIP = examples/alldwg.skip
+UNKNOWN_SKIP = alldwg.skip
 TIMEOUT_30 = @TIMEOUT_30@
 
 unknown:
 	-mv examples/alldwg.skip examples/alldwg.skip~
 	$(MAKE) -C src bits.lo && \
 	  $(MAKE) -C examples unknown$(EXEEXT) bd$(EXEEXT) bits$(EXEEXT) && \
-	  $(LTEXEC) examples/unknown$(EXEEXT) >$(UNKNOWN_LOG) 2>$(UNKNOWN_SKIP)
+	  $(LTEXEC) examples/unknown$(EXEEXT) >examples/$(UNKNOWN_LOG) 2>examples/$(UNKNOWN_SKIP)
 	if test -s examples/alldwg.skip; then true; \
 	else mv examples/alldwg.skip~ examples/alldwg.skip; fi
 if HAVE_PICAT
 if !HAVE_INSRCDIR
-	test -e unknown.pi || ln -s $(srcdir)/examples/unknown.pi unknown.pi
+	test -e examples/unknown.pi || ln -s $(abs_srcdir)/examples/unknown.pi unknown.pi
 endif
 if HAVE_PARALLEL
 	-rm examples/*.pi.tmplog 2>/dev/null
