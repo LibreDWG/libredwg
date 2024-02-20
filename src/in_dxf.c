@@ -3085,9 +3085,13 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 4: /* SPLINE */
               l++;
-              CHK_paths;
-              CHK_segs;
               CHK_fitpts;
+              if (!o->paths[j].segs[k].fitpts)
+                {
+                  o->paths[j].segs[k].num_fitpts = 0;
+                  dxf_free_pair (pair);
+                  return NULL;
+                }
               o->paths[j].segs[k].fitpts[l].x = pair->value.d;
               // LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].x = %f [
               // 2RD 11]\n",
@@ -3341,6 +3345,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE (
                   "HATCH.paths[%d].segs[%d].num_fitpts  = %ld [BL 97]\n", j, k,
                   pair->value.l);
+              o->paths[j].segs[k].fitpts
+                  = (BITCODE_2RD *)xcalloc (pair->value.l, sizeof (BITCODE_2RD));
             }
         }
       else if (pair->code == 97 && is_plpath)
