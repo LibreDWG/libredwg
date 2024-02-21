@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * in_dxf.c: read ascii DXF
+ * in_dxf.c: read ascii and binary DXF
  * written by Reini Urban
  */
 
