@@ -11775,9 +11775,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           dwg_dynapi_common_set_value (_obj, f->name,
                                                        &pair->value, 1);
-                          if (f->is_string)
+                          if (f->is_string || f->type[0] == 'T')
                             {
-                              LOG_TRACE ("COMMON.%s = %s [%s %d]\n", f->name,
+                              LOG_TRACE ("COMMON.%s = \"%s\" [%s %d]\n", f->name,
                                          pair->value.s, f->type, pair->code)
                             }
                           else
