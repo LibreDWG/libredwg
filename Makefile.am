@@ -84,6 +84,8 @@ dist-hook: regen-dynapi
 	test -f $(distdir)/test/xmlsuite/Makefile.in
 	test -f $(distdir)/bindings/python/Makefile.in
 	test -f $(distdir)/bindings/perl/Makefile.PL
+	test -f $(distdir)/programs/dwg2ps.1
+	test -f $(distdir)/examples/dwgadd.1
 if !HAVE_LIBPS
 	echo "Missing libps" && false
 endif
@@ -147,8 +149,10 @@ full-regen-unknown:
 	$(MAKE) -C examples $@
 regen-man:
 	$(MAKE) -C programs $@
+	$(MAKE) -C examples $@
 man:
 	$(MAKE) -C programs $@
+	$(MAKE) -C examples $@
 manual:
 	$(MAKE) -C doc $@
 refman:
