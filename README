@@ -212,6 +212,10 @@ that uses our lib:
 
 * dwgbmp -- Extracts the bmp thumbnail of a dwg file when it is available.
 
+* dwgadd -- the easiest way to create DWG's (or DXF, JSON) from scratch or
+  add entities to an existing DWG. It accepts a very simple file with commands
+  to create entities or objects and set its properties.
+
 * dwgrewrite -- Reads a DWG, writes it back under a different name and optionally
   under a different version (default r2000), and re-reads it back for confirmation.
 
