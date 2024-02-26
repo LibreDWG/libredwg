@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.13.2
+Version:        0.13.3
 Release:        0%{?dist}
 Summary:        GNU C library and programs to read and write DWG/DXF files
 
@@ -172,6 +172,9 @@ fi
 
 
 %changelog
+* Mon Feb 26 2024 Reini Urban <reini.urban@gmail.com> 0.13.3-1
+- upstream bugfix.
+
 * Mon Feb 12 2024 Reini Urban <reini.urban@gmail.com> 0.13.2-2
 - Add libxml2-devel
 - Fixed the sonumber back to 0

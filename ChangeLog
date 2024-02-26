@@ -1,6 +1,104 @@
 Full history from the git log
 -----------------------------
 
+2024-02-26  Reini Urban  <reini.urban@gmail.com>
+
+	Release 0.13.3
+
+	dist: check for dwg2ps.1 and dwgadd.1 explicitly
+	The examples manpages were missing.
+	See GH #941
+
+2024-02-21  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: comment, can read binary dxf also
+
+2024-02-20  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: fix HATCH null-deref
+	Fixes oss-fuzz 66843
+
+	indxf: fix UAF
+	Fixes oss-fuzz 66835
+
+2024-02-16  Reini Urban  <reini.urban@gmail.com>
+
+	spec: debug uncertainties in BLOCKSTRETCHACTION_handles
+
+	unknown: use strEQ macros
+
+	unknown: fix pi_fn vbase for libtool'd unknown
+	in the .build-debug/examples/.libs subdir
+
+	spec: add BLOCKSTRETCHACTION subclasses
+	support dxf_test for array of structs with primitive types
+	(BLOCKSTRETCHACTION_codes*)
+
+2024-02-15  Reini Urban  <reini.urban@gmail.com>
+
+	unknown: add 10xx fields,
+	which are not EED mostly
+
+	log_unknown_dxf: more enhanced BLOCK fields
+
+	github: bump actions/checkout@v4
+	"Node.js 16 actions are deprecated.  Please update the following actions to
+	use Node.js 20: actions/checkout@v3"
+
+	dxf_test: now we have longer paths
+
+	encode: wrong DWG_MAX_OBJSIZE
+	introduced for fuzzing, but STEERING_from_autocad_r13.dwg has a larger 3DSOLID
+
+	spec: promote SUN object to stable
+
+	spec: update coverage comments
+	after running unknown with the new dwg/dxf pairs.
+	several objects do look very stable though, such as some
+	AcDbBlock1PtParameter objects: BLOCKBASEPOINTPARAMETER,
+	BLOCKLOOKUPPARAMETER, BLOCKPOINTPARAMETER.
+
+	unknown: fix num_classes calc
+	we need to compare by value, not pointer, as the unknown_dxf[i].name strings
+	are distinct
+
+	unknown: regen alldxf incs
+	with test-old dxfs
+
+	unknown: regen alldwg.inc with test-old dxfs
+
+	unknown: EVALUATION_GRAPH is UNSTABLE
+	not DEBUG anymore. regen the unknown inc's
+	via full-regen-unknown.
+	test-old DWG/DXF pairs not yet included.
+
+2024-02-14  Reini Urban  <reini.urban@gmail.com>
+
+	spec updates
+	Note: opensuse seperates it into -tools and 0
+
+	make dist: fail releasing on missing libps
+	Fixes GH #941
+
+	add build-aux/install-pslib to --enable-release
+	Fixes GH #941
+
+	indxf: fix OLE2FRAME.data [310] initial case
+	Also fixes ossfuzz 66639
+
+2024-02-13  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix typo
+
+2024-02-11  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix uninit old_data segv
+	esp. on downconverting.
+	OUT=0 VER=13 examples/llvmfuzz_standalone ../test/test-data/DS_libereco_R2007.dwg
+
+	support beta VERSIONs, no holes
+	Fixes GH #908
+
 2024-02-10  Reini Urban  <reini.urban@gmail.com>
 
 	Release 0.13.2

@@ -2,6 +2,21 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2024 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.13.3 - 2023-02-26 - beta:
+
+Minor features:
+  * Promoted SUN object to stable
+Minor bugfixes:
+  * Fix make dist, checking missing dwg2ps.1 and dwgadd.1. Check for missing
+    libps. (#941)
+  * Improved BLOCKSTRETCHACTION a bit
+  * Improved dxf import for OLE2FRAME.data
+  * Fix some fuzzing errors: ossfuzz 66843, 66835, 66639
+  * Various unknown fixes, esp. for out-of-tree builds
+  * Improved wrong DWG_MAX_OBJSIZE, which prevented
+    very large 3DSOLID's to encode, like STEERING.dwg from_autocad_r13
+  * Improved support for beta versions, no logic holes (#908)
+
 LibreDWG version 0.13.2 - 2023-02-10 - beta:
 
 The source releases 0.13 and 0.13.1 missed test/xmlsuite and bindings/python,
