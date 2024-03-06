@@ -3882,15 +3882,18 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
         if (!obj)
           {
-            Dwg_Object_VX_TABLE_RECORD *_obj = dwg_add_VX (dwg, "");
+            Dwg_Object_VX_TABLE_RECORD *_obj = dwg_add_VX (dwg, "*");
             Dwg_Object *o
               = dwg_find_first_type (dwg, DWG_TYPE_VX_TABLE_RECORD);
             obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
-            LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
-                       obj->handle.value);
-            _obj->is_on = 1;
-            dwg->header_vars.VX_TABLE_RECORD
-              = dwg_add_handleref (dwg, 5, o->handle.value, NULL);
+            if (obj)
+              {
+                LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
+                           obj->handle.value);
+                _obj->is_on = 1;
+                dwg->header_vars.VX_TABLE_RECORD
+                  = dwg_add_handleref (dwg, 5, o->handle.value, NULL);
+              }
           }
         if (obj)
           dwg->header_vars.VX_CONTROL_OBJECT

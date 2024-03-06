@@ -21371,6 +21371,7 @@ dwg_ent_get_edge_visualstyle (const dwg_obj_ent *restrict ent,
   _BODY_FIELD (ent, edge_visualstyle);
 }
 
+// accepts utf-8 string
 EXPORT int
 dwg_ent_set_ltype (dwg_obj_ent *restrict ent, const char *restrict name)
 {
@@ -21379,6 +21380,8 @@ dwg_ent_set_ltype (dwg_obj_ent *restrict ent, const char *restrict name)
   Dwg_Data *dwg = ent->dwg;
   BITCODE_H lt_ref = dwg_find_tablehandle (dwg, name, "LTYPE");
   if (!lt_ref) {
+    if (!dwg_is_valid_name (dwg, name))
+      return 2; // invalid name
     return 1; // not found
   }
   if (lt_ref->absolute_ref != ent->ltype->absolute_ref)
@@ -22065,6 +22068,78 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
     }
   *acis_data_idx = i;
   return (char *)encr_sat_data;
+}
+
+/* check for valid symbol table record name.
+     names can be up to 255 characters long and can contain letters,
+     digits, and the following special characters:
+     dollar sign ($), hyphen (-), and underscore (_).
+     utf-8 string without space, !
+     TODO: valid is contained in codepage
+*/
+EXPORT bool
+dwg_is_valid_name (Dwg_Data *restrict dwg, char *restrict name)
+{
+  Dwg_Version version = dwg->header.version;
+#ifndef HAVE_NONNULL
+  if (!name)
+    return false;
+#endif
+  if (!*name || strlen (name) > 255)
+    return false;
+#ifdef HAVE_WCTYPE_H
+  {
+    // decode utf-8, check wide-chars
+    BITCODE_TU wstr = bit_utf8_to_TU ((char *)name, 0);
+    size_t wlen = bit_wcs2nlen (wstr, 255);
+    if (wlen > 255 || !wlen)
+      {
+        free (wstr);
+        return false;
+      }
+    for (size_t i = 0; i < wlen; i++)
+      {
+        uint16_t c = wstr[i];
+        if (version < R_13 && c > 255)
+          {
+            free (wstr);
+            return false;
+          }
+        if (version < R_13 && iswlower (c))
+          {
+            free (wstr);
+            return false;
+          }
+        // TODO check if char in target codepage
+        if (version >= R_13
+            && !(iswalnum (c) || c == '$' || c == '_' || c == '-'))
+          {
+            if (i == 0 && c == '*')
+              continue;
+            free (wstr);
+            return false;
+          }
+      }
+    free (wstr);
+  }
+#else
+  // only ascii support, no wctype checks
+  while (*name)
+    {
+      unsigned char c = (unsigned char)*name;
+      name++;
+      if (version < R_13 && islower (c))
+        return false;
+      if (version >= R_13
+          && !(isalnum (c) || c == '$' || c == '_' || c == '-'))
+        {
+          if (i == 0 && c == '*')
+            continue;
+          return false;
+        }
+    }
+#endif
+  return true;
 }
 
 /* utf-8 string without lowercase letters, space or ! */
@@ -25172,6 +25247,11 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
   Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);          \
   Dwg_Object_##control *_ctrl;                                                \
   BITCODE_RLL ctrlhdl, ctrlidx;                                               \
+  if (name && !dwg_is_valid_name (dwg, name))                                 \
+    {                                                                         \
+      LOG_ERROR ("Invalid symbol table record name \"%s\"\n", name);          \
+      return NULL;                                                            \
+    }
   if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)           \
     {                                                                         \
       API_ADD_OBJECT (control);                                               \
@@ -25259,6 +25339,8 @@ dwg_add_LTYPE (Dwg_Data *restrict dwg, const char *restrict name)
 EXPORT Dwg_Object_VIEW *
 dwg_add_VIEW (Dwg_Data *restrict dwg, const char *restrict name)
 {
+  if (name && !dwg_is_valid_name (dwg, name))
+    return NULL;
   API_ADD_TABLE (VIEW, VIEW_CONTROL, {
     _obj->lens_length = 50.0;
     _obj->VIEWDIR.z = 1.0;
@@ -25378,7 +25460,7 @@ dwg_add_UCS (Dwg_Data *restrict dwg, const dwg_point_3d *restrict origin,
 // VX_TABLE_RECORD
 // only r11-r2000
 EXPORT Dwg_Object_VX_TABLE_RECORD *
-dwg_add_VX (Dwg_Data *restrict dwg, const char *restrict name)
+dwg_add_VX (Dwg_Data *restrict dwg, const char *restrict name /* maybe NULL */)
 {
   API_ADD_TABLE (VX_TABLE_RECORD, VX_CONTROL);
 }
@@ -25391,43 +25473,47 @@ dwg_add_GROUP (Dwg_Data *restrict dwg,
   Dwg_Object *dictobj;
   Dwg_Object_Ref *groupdict;
   Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
-  API_ADD_OBJECT (GROUP);
-  if (dwg->header.version <= R_12)
-    {
-      LOG_ERROR ("Invalid entity %s <r13", "GROUP")
-      API_UNADD_ENTITY;
-      return NULL;
-    }
-  // find nod dict
-  groupdict = dwg_ctrl_table (dwg, "GROUP");
-  if (!groupdict)
-    {
-      dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", name,
-                                 obj->handle.value);
-    }
-  else
-    {
-      Dwg_Object *group = dwg_ref_object (dwg, groupdict);
-      if (group)
-        dict = dwg_add_DICTIONARY_item (obj->tio.object->tio.DICTIONARY,
-                                        (const BITCODE_T) "ACAD_GROUP",
-                                        group->handle.value);
-    }
-  if (dict)
-    {
-      dictobj = dwg_obj_generic_to_object (dict, &error);
-      obj->tio.object->ownerhandle
+  if (name && !dwg_is_valid_name (dwg, name))
+    return NULL;
+  {
+    API_ADD_OBJECT (GROUP);
+    if (dwg->header.version <= R_12)
+      {
+        LOG_ERROR ("Invalid entity %s <r13", "GROUP")
+          API_UNADD_ENTITY;
+        return NULL;
+      }
+    // find nod dict
+    groupdict = dwg_ctrl_table (dwg, "GROUP");
+    if (!groupdict)
+      {
+        dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", name,
+                                   obj->handle.value);
+      }
+    else
+      {
+        Dwg_Object *group = dwg_ref_object (dwg, groupdict);
+        if (group)
+          dict = dwg_add_DICTIONARY_item (obj->tio.object->tio.DICTIONARY,
+                                          (const BITCODE_T) "ACAD_GROUP",
+                                          group->handle.value);
+      }
+    if (dict)
+      {
+        dictobj = dwg_obj_generic_to_object (dict, &error);
+        obj->tio.object->ownerhandle
           = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
-      obj->tio.object->ownerhandle->obj = NULL;
-      add_obj_reactor (obj->tio.object, dictobj->handle.value);
-    }
+        obj->tio.object->ownerhandle->obj = NULL;
+        add_obj_reactor (obj->tio.object, dictobj->handle.value);
+      }
 
-  _obj->selectable = 1;
-  if (name)
-    _obj->name = dwg_add_u8_input (dwg, name);
-  else
-    _obj->unnamed = 1;
-  return _obj;
+    _obj->selectable = 1;
+    if (name)
+      _obj->name = dwg_add_u8_input (dwg, name);
+    else
+      _obj->unnamed = 1;
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Object_MLINESTYLE *
@@ -25435,63 +25521,67 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
 {
   Dwg_Object_DICTIONARY *dict;
   Dwg_Object_Ref *dictref;
-  API_ADD_OBJECT (MLINESTYLE);
-  // find nod dict
-  dictref = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
-  if (!dictref)
-    {
-      dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE",
-                                 name, obj->handle.value);
-      if (dict)
-        {
-          obj->tio.object->ownerhandle = dwg_add_handleref (
-              dwg, 4, dwg_obj_generic_handlevalue (dict), obj);
-          if (!obj->tio.object->num_reactors)
-            add_obj_reactor (obj->tio.object,
-                             dwg_obj_generic_handlevalue (dict));
-        }
-    }
-  else
-    {
-      Dwg_Object *dictobj = dwg_ref_object (dwg, dictref);
-      if (dictobj)
-        {
-          dwg_add_DICTIONARY_item (dictobj->tio.object->tio.DICTIONARY, name,
-                                   obj->handle.value);
-          obj->tio.object->ownerhandle
+  if (name && !dwg_is_valid_name (dwg, name))
+    return NULL;
+  {
+    API_ADD_OBJECT (MLINESTYLE);
+    // find nod dict
+    dictref = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
+    if (!dictref)
+      {
+        dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE",
+                                   name, obj->handle.value);
+        if (dict)
+          {
+            obj->tio.object->ownerhandle = dwg_add_handleref (
+                dwg, 4, dwg_obj_generic_handlevalue (dict), obj);
+            if (!obj->tio.object->num_reactors)
+              add_obj_reactor (obj->tio.object,
+                               dwg_obj_generic_handlevalue (dict));
+          }
+      }
+    else
+      {
+        Dwg_Object *dictobj = dwg_ref_object (dwg, dictref);
+        if (dictobj)
+          {
+            dwg_add_DICTIONARY_item (dictobj->tio.object->tio.DICTIONARY, name,
+                                     obj->handle.value);
+            obj->tio.object->ownerhandle
               = dwg_add_handleref (dwg, 4, dictobj->handle.value, obj);
-          if (!obj->tio.object->num_reactors)
-            add_obj_reactor (obj->tio.object, dictobj->handle.value);
-        }
-    }
+            if (!obj->tio.object->num_reactors)
+              add_obj_reactor (obj->tio.object, dictobj->handle.value);
+          }
+      }
 
-  _obj->name = strEQc (name, "Standard") ? dwg_add_u8_input (dwg, "STANDARD")
-                                         : dwg_add_u8_input (dwg, name);
-  _obj->fill_color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
-  if (strEQc (name, "Standard") || strEQc (name, "STANDARD"))
-    {
-      _obj->start_angle = _obj->end_angle = deg2rad (90.0);
-      _obj->num_lines = 2;
-      _obj->lines
+    _obj->name = strEQc (name, "Standard") ? dwg_add_u8_input (dwg, "STANDARD")
+      : dwg_add_u8_input (dwg, name);
+    _obj->fill_color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
+    if (strEQc (name, "Standard") || strEQc (name, "STANDARD"))
+      {
+        _obj->start_angle = _obj->end_angle = deg2rad (90.0);
+        _obj->num_lines = 2;
+        _obj->lines
           = (Dwg_MLINESTYLE_line *)calloc (2, sizeof (Dwg_MLINESTYLE_line));
-      _obj->lines[0].parent = _obj;
-      _obj->lines[0].offset = 0.5;
-      _obj->lines[0].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
-      _obj->lines[0].parent = _obj;
-      _obj->lines[1].offset = -0.5;
-      _obj->lines[1].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
-      if (dwg->header.version >= R_2018)
-        {
-          _obj->lines[0].lt.ltype = NULL; // FIXME
-          _obj->lines[1].lt.ltype = NULL;
-        }
-      else
-        {
-          _obj->lines[0].lt.index = 32767;
-          _obj->lines[1].lt.index = 32767;
-        }
-    }
-  return _obj;
+        _obj->lines[0].parent = _obj;
+        _obj->lines[0].offset = 0.5;
+        _obj->lines[0].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
+        _obj->lines[0].parent = _obj;
+        _obj->lines[1].offset = -0.5;
+        _obj->lines[1].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
+        if (dwg->header.version >= R_2018)
+          {
+            _obj->lines[0].lt.ltype = NULL; // FIXME
+            _obj->lines[1].lt.ltype = NULL;
+          }
+        else
+          {
+            _obj->lines[0].lt.index = 32767;
+            _obj->lines[1].lt.index = 32767;
+          }
+      }
+    return _obj;
+  }
 }
 
 // OLE2FRAME

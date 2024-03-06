@@ -6415,6 +6415,11 @@ extern "C"
   EXPORT Dwg_Object_BLOCK_HEADER *
   dwg_entity_owner (const void *_ent) __nonnull_all;
 
+  /* utf-8 string without lowercase letters for <r13, space or !. maxlen 255 */
+  EXPORT bool
+  dwg_is_valid_name (Dwg_Data *restrict dwg, char *restrict name)
+    __nonnull_all;
+
   /* utf-8 string without lowercase letters, space or !. maxlen 256 */
   EXPORT bool dwg_is_valid_tag (const char *tag) __nonnull_all;
 
