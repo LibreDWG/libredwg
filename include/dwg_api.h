@@ -6019,11 +6019,11 @@ extern "C"
   EXPORT char *
   dwg_obj_block_header_get_name (const dwg_obj_block_header *restrict hdr,
                                  int *restrict error)
-      __nonnull ((2)) _deprecated_dynapi_getter;
+      __nonnull_all _deprecated_dynapi_getter;
 
   EXPORT dwg_obj_block_header *dwg_get_block_header (dwg_data *restrict dwg,
                                                      int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   /********************************************************************
    *               FUNCTIONS FOR BLOCK_CONTROL OBJECT                  *
@@ -6031,23 +6031,23 @@ extern "C"
 
   EXPORT BITCODE_BL dwg_obj_block_control_get_num_entries (
       const dwg_obj_block_control *restrict ctrl, int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref **dwg_obj_block_control_get_block_headers (
       const dwg_obj_block_control *restrict ctrl, int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_obj_block_control *
   dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
-                                      int *restrict error) __nonnull ((2));
+                                      int *restrict error) __nonnull_all;
 
   EXPORT dwg_object_ref *dwg_obj_block_control_get_model_space (
       const dwg_obj_block_control *restrict ctrl, int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *dwg_obj_block_control_get_paper_space (
       const dwg_obj_block_control *restrict ctrl, int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   /********************************************************************
    *                    FUNCTIONS FOR LAYER OBJECT                     *
@@ -6055,7 +6055,7 @@ extern "C"
 
   // Get/Set name (utf-8) of the layer object
   EXPORT char *dwg_obj_layer_get_name (const dwg_obj_layer *restrict layer,
-                                       int *restrict error) __nonnull ((2));
+                                       int *restrict error) __nonnull_all;
   EXPORT void dwg_obj_layer_set_name (dwg_obj_layer *restrict layer,
                                       const char *restrict name,
                                       int *restrict error) __nonnull ((2, 3));
@@ -6068,15 +6068,15 @@ extern "C"
   /// Get name of any table entry. Defaults to ByLayer.
   /// \sa dwg_ent_get_layer_name which defaults to "0"
   EXPORT char *dwg_obj_table_get_name (const dwg_object *restrict obj,
-                                       int *restrict error) __nonnull ((2));
+                                       int *restrict error) __nonnull_all;
 
   // Get name of the referenced table entry. Defaults to ByLayer
   EXPORT char *dwg_ref_get_table_name (const dwg_object_ref *restrict ref,
-                                       int *restrict error) __nonnull ((2));
+                                       int *restrict error) __nonnull_all;
 
   // Get number of table entries from the table.
   EXPORT BITCODE_BL dwg_object_tablectrl_get_num_entries (
-      const dwg_object *restrict obj, int *restrict error) __nonnull ((2));
+      const dwg_object *restrict obj, int *restrict error) __nonnull_all;
 
   // Get the nth table entry from the table.
   EXPORT dwg_object_ref *
@@ -6087,36 +6087,36 @@ extern "C"
   // Get all table entries from the table.
   EXPORT dwg_object_ref **
   dwg_object_tablectrl_get_entries (const dwg_object *restrict obj,
-                                    int *restrict error) __nonnull ((2));
+                                    int *restrict error) __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_object_tablectrl_get_ownerhandle (const dwg_object *restrict obj,
-                                        int *restrict error) __nonnull ((2));
+                                        int *restrict error) __nonnull_all;
   EXPORT dwg_object_ref *
   dwg_object_tablectrl_get_xdicobjhandle (const dwg_object *restrict obj,
-                                          int *restrict error) __nonnull ((2));
+                                          int *restrict error) __nonnull_all;
   EXPORT BITCODE_BL dwg_object_tablectrl_get_objid (
-      const dwg_object *restrict obj, int *restrict error) __nonnull ((2));
+      const dwg_object *restrict obj, int *restrict error) __nonnull_all;
 
   /********************************************************************
    *                    COMMON FUNCTIONS FOR DWG ENTITY                *
    ********************************************************************/
 
   EXPORT dwg_object *dwg_ent_to_object (const dwg_obj_ent *restrict obj,
-                                        int *restrict error) __nonnull ((2));
+                                        int *restrict error) __nonnull_all;
 
   EXPORT dwg_object *dwg_ent_generic_to_object (const void *restrict obj,
                                                 int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
   EXPORT dwg_obj_ent *dwg_ent_generic_parent (const void *restrict ent,
                                               int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_RL dwg_ent_get_bitsize (const dwg_obj_ent *restrict ent,
-                                         int *restrict error) __nonnull ((2));
+                                         int *restrict error) __nonnull_all;
 
   EXPORT BITCODE_BL dwg_ent_get_num_eed (const dwg_obj_ent *restrict ent,
-                                         int *restrict error) __nonnull ((2));
+                                         int *restrict error) __nonnull_all;
 
   EXPORT dwg_entity_eed *dwg_ent_get_eed (const dwg_obj_ent *restrict ent,
                                           BITCODE_BL index,
@@ -6128,148 +6128,148 @@ extern "C"
 
   EXPORT BITCODE_B dwg_ent_get_picture_exists (const dwg_obj_ent *restrict ent,
                                                int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_BLL
   dwg_ent_get_picture_size (const dwg_obj_ent *restrict ent,
                             int *restrict error) // before r2007 only RL
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_TF dwg_ent_get_picture (const dwg_obj_ent *restrict ent,
-                                         int *restrict error) __nonnull ((2));
+                                         int *restrict error) __nonnull_all;
 
   EXPORT BITCODE_BB dwg_ent_get_entmode (const dwg_obj_ent *restrict ent,
-                                         int *restrict error) __nonnull ((2));
+                                         int *restrict error) __nonnull_all;
 
   EXPORT BITCODE_BL dwg_ent_get_num_reactors (const dwg_obj_ent *restrict ent,
                                               int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_B
   dwg_ent_get_is_xdic_missing (const dwg_obj_ent *restrict ent,
                                int *restrict error) // r2004+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT char *dwg_ent_get_layer_name (const dwg_obj_ent *restrict ent,
-                                       int *restrict error) __nonnull ((2));
+                                       int *restrict error) __nonnull_all;
 
   EXPORT char *dwg_ent_get_ltype_name (const dwg_obj_ent *restrict ent,
-                                       int *restrict error) __nonnull ((2));
+                                       int *restrict error) __nonnull_all;
 
   EXPORT BITCODE_B
   dwg_ent_get_isbylayerlt (const dwg_obj_ent *restrict ent,
                            int *restrict error) // r13-r14 only
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_B dwg_ent_get_nolinks (const dwg_obj_ent *restrict ent,
-                                        int *restrict error) __nonnull ((2));
+                                        int *restrict error) __nonnull_all;
 
   EXPORT const Dwg_Color *dwg_ent_get_color (const dwg_obj_ent *restrict ent,
                                              int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT double dwg_ent_get_linetype_scale (const dwg_obj_ent *restrict ent,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_BB
   dwg_ent_get_linetype_flags (const dwg_obj_ent *restrict ent,
                               int *restrict error) // r2000+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_BB
   dwg_ent_get_plotstyle_flags (const dwg_obj_ent *restrict ent,
                                int *restrict error) // r2000+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_BB
   dwg_ent_get_material_flags (const dwg_obj_ent *restrict ent,
                               int *restrict error) // r2007+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_RC dwg_ent_get_shadow_flags (const dwg_obj_ent *restrict ent,
                                               int *restrict error) // r2007+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_B dwg_ent_has_full_visualstyle (dwg_obj_ent *restrict ent,
                                                  int *restrict error) // r2010+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_B dwg_ent_has_face_visualstyle (dwg_obj_ent *restrict ent,
                                                  int *restrict error) // r2010+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_B dwg_ent_has_edge_visualstyle (dwg_obj_ent *restrict ent,
                                                  int *restrict error) // r2010+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_BS dwg_ent_get_invisible (const dwg_obj_ent *restrict ent,
                                            int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   /* See dxf_cvt_lweight() for the mm value */
   EXPORT BITCODE_RC dwg_ent_get_linewt (const dwg_obj_ent *restrict ent,
                                         int *restrict error) // r2000+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_ownerhandle (const dwg_obj_ent *restrict ent,
-                           int *restrict error) __nonnull ((2));
+                           int *restrict error) __nonnull_all;
 
   EXPORT dwg_object_ref **
   dwg_ent_get_reactors (const dwg_obj_ent *restrict ent, int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_xdicobjhandle (const dwg_obj_ent *restrict ent,
-                             int *restrict error) __nonnull ((2));
+                             int *restrict error) __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_prev_entity (const dwg_obj_ent *restrict ent,
                            int *restrict error) // r13-r2000
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_next_entity (const dwg_obj_ent *restrict ent,
                            int *restrict error) // r13-r2000
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_color_handle (const dwg_obj_ent *restrict ent,
                             int *restrict error) // r2004+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *dwg_ent_get_layer (const dwg_obj_ent *restrict ent,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *dwg_ent_get_ltype (const dwg_obj_ent *restrict ent,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *dwg_ent_get_material (const dwg_obj_ent *restrict ent,
                                                int *restrict error) // r2007+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_plotstyle (const dwg_obj_ent *restrict ent,
                          int *restrict error) // r2000+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_full_visualstyle (const dwg_obj_ent *restrict ent,
                                 int *restrict error) // r2010+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_face_visualstyle (const dwg_obj_ent *restrict ent,
                                 int *restrict error) // r2010+
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object_ref *
   dwg_ent_get_edge_visualstyle (const dwg_obj_ent *restrict ent,
                                 int *restrict error) // r2010+
-    __nonnull ((2));
+    __nonnull_all;
 
   EXPORT int
   dwg_ent_set_ltype (dwg_obj_ent *restrict ent, const char *restrict name)
@@ -6281,13 +6281,13 @@ extern "C"
 
   EXPORT dwg_object *dwg_obj_obj_to_object (const dwg_obj_obj *restrict obj,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT BITCODE_BL dwg_obj_get_objid (const dwg_obj_obj *restrict obj,
-                                       int *restrict error) __nonnull ((2));
+                                       int *restrict error) __nonnull_all;
 
   EXPORT BITCODE_BL dwg_obj_get_num_eed (const dwg_obj_obj *restrict obj,
-                                         int *restrict error) __nonnull ((2));
+                                         int *restrict error) __nonnull_all;
   EXPORT dwg_entity_eed *dwg_obj_get_eed (const dwg_obj_obj *restrict obj,
                                           const BITCODE_BL index,
                                           int *restrict error) __nonnull ((3));
@@ -6298,53 +6298,53 @@ extern "C"
 
   EXPORT BITCODE_H dwg_obj_get_ownerhandle (const dwg_obj_obj *restrict obj,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
   EXPORT BITCODE_BL dwg_obj_get_num_reactors (const dwg_obj_obj *restrict obj,
                                               int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
   EXPORT BITCODE_H *dwg_obj_get_reactors (const dwg_obj_obj *restrict obj,
-                                          int *restrict error) __nonnull ((2));
+                                          int *restrict error) __nonnull_all;
   EXPORT BITCODE_H dwg_obj_get_xdicobjhandle (const dwg_obj_obj *restrict obj,
                                               int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
   /* r2004+ */
   EXPORT BITCODE_B dwg_obj_get_is_xdic_missing (
-      const dwg_obj_obj *restrict obj, int *restrict error) __nonnull ((2));
+      const dwg_obj_obj *restrict obj, int *restrict error) __nonnull_all;
   /* r2013+ */
   EXPORT BITCODE_B dwg_obj_get_has_ds_binary_data (
-      const dwg_obj_obj *restrict obj, int *restrict error) __nonnull ((2));
+      const dwg_obj_obj *restrict obj, int *restrict error) __nonnull_all;
   EXPORT Dwg_Handle *dwg_obj_get_handleref (const dwg_obj_obj *restrict obj,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object *dwg_obj_generic_to_object (const void *restrict obj,
                                                 int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
   EXPORT BITCODE_RLL dwg_obj_generic_handlevalue (void *_obj) __nonnull_all;
   Dwg_Data *dwg_obj_generic_dwg (const void *restrict obj,
                                  int *restrict error) __nonnull_all;
   EXPORT dwg_obj_obj *dwg_obj_generic_parent (const void *restrict obj,
                                               int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_object *dwg_get_object (dwg_data *dwg, BITCODE_BL index);
 
   EXPORT BITCODE_RL dwg_object_get_bitsize (const dwg_object *obj);
 
   EXPORT BITCODE_BL dwg_object_get_index (const dwg_object *restrict obj,
-                                          int *restrict error) __nonnull ((2));
+                                          int *restrict error) __nonnull_all;
 
   EXPORT dwg_handle *dwg_object_get_handle (dwg_object *restrict obj,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_obj_obj *dwg_object_to_object (dwg_object *restrict obj,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT dwg_obj_ent *dwg_object_to_entity (dwg_object *restrict obj,
                                             int *restrict error)
-      __nonnull ((2));
+      __nonnull_all;
 
   EXPORT int dwg_object_get_type (const dwg_object *obj);
 
@@ -6353,7 +6353,7 @@ extern "C"
   EXPORT char *dwg_object_get_dxfname (const dwg_object *obj);
 
   EXPORT BITCODE_BL dwg_ref_get_absref (const dwg_object_ref *restrict ref,
-                                        int *restrict error) __nonnull ((2));
+                                        int *restrict error) __nonnull_all;
 
   EXPORT dwg_object *dwg_ref_get_object (const dwg_object_ref *restrict ref,
                                          int *restrict error) __nonnull ((2));
