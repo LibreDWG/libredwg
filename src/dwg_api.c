@@ -21371,6 +21371,41 @@ dwg_ent_get_edge_visualstyle (const dwg_obj_ent *restrict ent,
   _BODY_FIELD (ent, edge_visualstyle);
 }
 
+EXPORT int
+dwg_ent_set_ltype (dwg_obj_ent *restrict ent, const char *restrict name)
+{
+  int error = 0;
+  // check given handle (to the ltype tablerecord)
+  Dwg_Data *dwg = ent->dwg;
+  BITCODE_H lt_ref = dwg_find_tablehandle (dwg, name, "LTYPE");
+  if (!lt_ref) {
+    return 1; // not found
+  }
+  if (lt_ref->absolute_ref != ent->ltype->absolute_ref)
+    {
+      // TODO preR13
+      if (!strcasecmp (name, "BYLAYER")) {
+        ent->isbylayerlt = 1;
+        ent->ltype_flags = 0;
+      }
+      else if (!strcasecmp (name, "BYBLOCK")) {
+        ent->isbylayerlt = 0;
+        ent->ltype_flags = 1;
+      }
+      else if (!strcasecmp (name, "CONTINUOUS")) {
+        ent->isbylayerlt = 0;
+        ent->ltype_flags = 2;
+      }
+      else {
+        ent->isbylayerlt = 0;
+        ent->ltype_flags = 3;
+        // set ltype tablerecord if not one the 3 builtins
+        ent->ltype = dwg_add_handleref (dwg, 5, lt_ref->absolute_ref, NULL);
+      }
+    }
+  return error;
+}
+
 #endif /* __AFL_COMPILER */
 
 /** Returns dwg_object* from dwg_obj_ent*

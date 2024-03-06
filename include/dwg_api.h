@@ -6269,7 +6269,11 @@ extern "C"
   EXPORT dwg_object_ref *
   dwg_ent_get_edge_visualstyle (const dwg_obj_ent *restrict ent,
                                 int *restrict error) // r2010+
-      __nonnull ((2));
+    __nonnull ((2));
+
+  EXPORT int
+  dwg_ent_set_ltype (dwg_obj_ent *restrict ent, const char *restrict name)
+    __nonnull_all;
 
   /********************************************************************
    *                    FUNCTIONS FOR DWG OBJECT                       *
