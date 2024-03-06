@@ -6019,7 +6019,7 @@ extern "C"
   EXPORT char *
   dwg_obj_block_header_get_name (const dwg_obj_block_header *restrict hdr,
                                  int *restrict error)
-      __nonnull_all _deprecated_dynapi_getter;
+    __nonnull ((2)) _deprecated_dynapi_getter;
 
   EXPORT dwg_obj_block_header *dwg_get_block_header (dwg_data *restrict dwg,
                                                      int *restrict error)
@@ -6031,11 +6031,11 @@ extern "C"
 
   EXPORT BITCODE_BL dwg_obj_block_control_get_num_entries (
       const dwg_obj_block_control *restrict ctrl, int *restrict error)
-      __nonnull_all;
+    __nonnull ((2));
 
   EXPORT dwg_object_ref **dwg_obj_block_control_get_block_headers (
       const dwg_obj_block_control *restrict ctrl, int *restrict error)
-      __nonnull_all;
+    __nonnull ((2));
 
   EXPORT dwg_obj_block_control *
   dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
@@ -6043,11 +6043,11 @@ extern "C"
 
   EXPORT dwg_object_ref *dwg_obj_block_control_get_model_space (
       const dwg_obj_block_control *restrict ctrl, int *restrict error)
-      __nonnull_all;
+    __nonnull ((2));
 
   EXPORT dwg_object_ref *dwg_obj_block_control_get_paper_space (
       const dwg_obj_block_control *restrict ctrl, int *restrict error)
-      __nonnull_all;
+    __nonnull ((2));
 
   /********************************************************************
    *                    FUNCTIONS FOR LAYER OBJECT                     *
@@ -6116,7 +6116,7 @@ extern "C"
                                          int *restrict error) __nonnull_all;
 
   EXPORT BITCODE_BL dwg_ent_get_num_eed (const dwg_obj_ent *restrict ent,
-                                         int *restrict error) __nonnull_all;
+                                         int *restrict error) __nonnull ((2));
 
   EXPORT dwg_entity_eed *dwg_ent_get_eed (const dwg_obj_ent *restrict ent,
                                           BITCODE_BL index,
@@ -6128,7 +6128,7 @@ extern "C"
 
   EXPORT BITCODE_B dwg_ent_get_picture_exists (const dwg_obj_ent *restrict ent,
                                                int *restrict error)
-      __nonnull_all;
+    __nonnull_all;
 
   EXPORT BITCODE_BLL
   dwg_ent_get_picture_size (const dwg_obj_ent *restrict ent,
@@ -6166,7 +6166,7 @@ extern "C"
 
   EXPORT const Dwg_Color *dwg_ent_get_color (const dwg_obj_ent *restrict ent,
                                              int *restrict error)
-      __nonnull_all;
+    __nonnull ((2));
 
   EXPORT double dwg_ent_get_linetype_scale (const dwg_obj_ent *restrict ent,
                                             int *restrict error)
@@ -6415,9 +6415,15 @@ extern "C"
   EXPORT Dwg_Object_BLOCK_HEADER *
   dwg_entity_owner (const void *_ent) __nonnull_all;
 
-  /* utf-8 string without lowercase letters for <r13, space or !. maxlen 255 */
+  /* check for valid symbol table record name.
+     names can be up to 255 characters long and can contain letters,
+     digits, and the following special characters:
+     dollar sign ($), hyphen (-), and underscore (_).
+     utf-8 string without space, !
+     TODO: if all chars are contained in codepage
+  */
   EXPORT bool
-  dwg_is_valid_name (Dwg_Data *restrict dwg, char *restrict name)
+  dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
     __nonnull_all;
 
   /* utf-8 string without lowercase letters, space or !. maxlen 256 */
@@ -6895,7 +6901,7 @@ extern "C"
 
   EXPORT Dwg_Object_BLOCK_HEADER *
   dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
-      __nonnull ((1, 2));
+    __nonnull ((1));
   EXPORT Dwg_Object_UCS *
   dwg_add_UCS (Dwg_Data *restrict dwg, const dwg_point_3d *restrict origin,
                const dwg_point_3d *restrict x_axis,

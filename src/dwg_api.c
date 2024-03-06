@@ -20500,7 +20500,7 @@ dwg_obj_block_control *
 dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
                                     int *restrict error)
 {
-  if (block_header && block_header->parent && block_header->parent->ownerhandle
+  if (block_header->parent && block_header->parent->ownerhandle
       && block_header->parent->ownerhandle->obj
       && block_header->parent->ownerhandle->obj->fixedtype
              == DWG_TYPE_BLOCK_CONTROL
@@ -20528,7 +20528,7 @@ dwg_obj_block_control_get_block_headers (
 {
   dwg_object_ref **ptx;
 
-  if (!ctrl || (ctrl->num_entries && !ctrl->entries))
+  if (ctrl->num_entries && !ctrl->entries)
     {
       *error = 1;
       LOG_ERROR ("%s: null block_headers", __FUNCTION__);
@@ -20632,20 +20632,11 @@ char *
 dwg_obj_block_header_get_name (const dwg_obj_block_header *restrict hdr,
                                int *restrict error)
 {
-  if (hdr)
-    {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)hdr->name);
-      else
-        return hdr->name;
-    }
+  *error = 0;
+  if (dwg_version >= R_2007)
+    return bit_convert_TU ((BITCODE_TU)hdr->name);
   else
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
-      return NULL;
-    }
+    return hdr->name;
 }
 
 /** Returns 1st block header present in the dwg file.
@@ -20662,7 +20653,7 @@ dwg_get_block_header (dwg_data *restrict dwg, int *restrict error)
   Dwg_Object_BLOCK_HEADER *blk;
 
   *error = 0;
-  if (!dwg || dwg->num_classes > 1000 || dwg->num_objects > 0xfffffff)
+  if (dwg->num_classes > 1000 || dwg->num_objects > 0xfffffff)
     {
       *error = 1;
       return NULL;
@@ -20716,27 +20707,18 @@ char *
 dwg_obj_layer_get_name (const dwg_obj_layer *restrict layer,
                         int *restrict error)
 {
-  if (layer)
-    {
-      const Dwg_Object *obj = dwg_obj_generic_to_object (layer, error);
-      if (*error || obj->fixedtype != DWG_TYPE_LAYER)
-        {
-          *error = 1;
-          LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
-          return NULL;
-        }
-      *error = 0;
-      if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)layer->name);
-      else
-        return layer->name;
-    }
-  else
+  const Dwg_Object *obj = dwg_obj_generic_to_object (layer, error);
+  if (*error || obj->fixedtype != DWG_TYPE_LAYER)
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
-      return NULL;
+      LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
+        return NULL;
     }
+  *error = 0;
+  if (dwg_version >= R_2007)
+    return bit_convert_TU ((BITCODE_TU)layer->name);
+  else
+    return layer->name;
 }
 
 /** Change name of the layer (utf-8 encoded).
@@ -20752,28 +20734,19 @@ EXPORT void
 dwg_obj_layer_set_name (dwg_obj_layer *restrict layer,
                         const char *restrict name, int *restrict error)
 {
-  if (layer)
+  const Dwg_Object *obj = dwg_obj_generic_to_object (layer, error);
+  if (*error || obj->fixedtype != DWG_TYPE_LAYER)
     {
-      const Dwg_Object *obj = dwg_obj_generic_to_object (layer, error);
-      if (*error || obj->fixedtype != DWG_TYPE_LAYER)
-        {
-          LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
-          *error = 1;
-          return;
-        }
-      *error = 0;
-      if (dwg_version >= R_2007)
-        layer->name = bit_convert_TU ((BITCODE_TU)layer->name);
-      else
-        layer->name = strdup (name);
-      return;
-    }
-  else
-    {
-      LOG_ERROR ("%s: empty arg", __FUNCTION__)
+      LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
       *error = 1;
       return;
     }
+  *error = 0;
+  if (dwg_version >= R_2007)
+    layer->name = bit_convert_TU ((BITCODE_TU)layer->name);
+  else
+    layer->name = strdup (name);
+  return;
 }
 
 /*******************************************************************
@@ -20790,7 +20763,7 @@ EXPORT BITCODE_BL
 dwg_object_tablectrl_get_num_entries (const dwg_object *restrict obj,
                                       int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
       // HACK: we can guarantee that num_entries is always the first field.
@@ -20802,7 +20775,7 @@ dwg_object_tablectrl_get_num_entries (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 __FUNCTION__, obj, obj ? obj->type : 0)
+                 __FUNCTION__, obj, obj->type)
       return 0;
     }
 }
@@ -20816,7 +20789,7 @@ EXPORT dwg_object_ref **
 dwg_object_tablectrl_get_entries (const dwg_object *restrict obj,
                                   int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
       // HACK: we can guarantee a common layout of the common fields
@@ -20827,7 +20800,7 @@ dwg_object_tablectrl_get_entries (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 __FUNCTION__, obj, obj ? obj->type : 0)
+                 __FUNCTION__, obj, obj->type)
       return NULL;
     }
 }
@@ -20841,7 +20814,7 @@ EXPORT dwg_object_ref *
 dwg_object_tablectrl_get_entry (const dwg_object *restrict obj,
                                 const BITCODE_BS idx, int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
       // HACK: we can guarantee a common layout of the common fields
@@ -20863,7 +20836,7 @@ dwg_object_tablectrl_get_entry (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 __FUNCTION__, obj, obj ? obj->type : 0)
+                 __FUNCTION__, obj, obj->type)
       return NULL;
     }
 }
@@ -20877,7 +20850,7 @@ EXPORT dwg_object_ref *
 dwg_object_tablectrl_get_ownerhandle (const dwg_object *restrict obj,
                                       int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
       return obj->tio.object->ownerhandle;
@@ -20886,7 +20859,7 @@ dwg_object_tablectrl_get_ownerhandle (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 __FUNCTION__, obj, obj ? obj->type : 0)
+                 __FUNCTION__, obj, obj->type)
       return NULL;
     }
 }
@@ -20901,7 +20874,7 @@ EXPORT dwg_object_ref *
 dwg_object_tablectrl_get_xdicobjhandle (const dwg_object *restrict obj,
                                         int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
       return obj->tio.object->xdicobjhandle;
@@ -20910,7 +20883,7 @@ dwg_object_tablectrl_get_xdicobjhandle (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 __FUNCTION__, obj, obj ? obj->type : 0)
+                 __FUNCTION__, obj, obj->type)
       return NULL;
     }
 }
@@ -20925,7 +20898,7 @@ EXPORT BITCODE_BL
 dwg_object_tablectrl_get_objid (const dwg_object *restrict obj,
                                 int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
       return obj->tio.object->objid;
@@ -20934,7 +20907,7 @@ dwg_object_tablectrl_get_objid (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 __FUNCTION__, obj, obj ? obj->type : 0)
+                 __FUNCTION__, obj, obj->type)
       return 0;
     }
 }
@@ -20952,7 +20925,7 @@ dwg_ref_get_table_name (const dwg_object_ref *restrict ref,
                         int *restrict error)
 {
   char *name = NULL;
-  if (ref && ref->obj)
+  if (ref->obj)
     name = dwg_obj_table_get_name (ref->obj, error);
   if (!name)
     name = (char *)"ByLayer";
@@ -20973,7 +20946,7 @@ dwg_ref_get_table_name (const dwg_object_ref *restrict ref,
 EXPORT char *
 dwg_obj_table_get_name (const dwg_object *restrict obj, int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT
       && (dwg_obj_is_table (
           obj) /* || obj->fixedtype == DWG_TYPE_DICTIONARY */))
     {
@@ -20993,7 +20966,7 @@ dwg_obj_table_get_name (const dwg_object *restrict obj, int *restrict error)
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table arg %p, type: 0x%x", __FUNCTION__,
-                 obj, obj ? obj->type : 0)
+                 obj, obj->type)
       return NULL;
     }
 }
@@ -21056,7 +21029,7 @@ EXPORT BITCODE_RL
 dwg_ent_get_bitsize (const dwg_obj_ent *restrict ent, int *restrict error)
 {
   Dwg_Object *obj = dwg_ent_to_object (ent, error);
-  if (obj && !*error)
+  if (!*error)
     {
       return obj->bitsize;
     }
@@ -21147,11 +21120,6 @@ dwg_ent_get_eed_data (const dwg_obj_ent *restrict ent, const BITCODE_BL idx,
 #endif /* __AFL_COMPILER */
 
 #define _BODY_FIELD(ent, field)                                               \
-  if (!ent)                                                                   \
-    {                                                                         \
-      *error = 1;                                                             \
-      return 0;                                                               \
-    }                                                                         \
   *error = 0;                                                                 \
   return ent->field
 
@@ -21422,12 +21390,6 @@ dwg_ent_to_object (const dwg_obj_ent *restrict obj, int *restrict error)
 {
   dwg_data *dwg;
   dwg_object *retval;
-  if (!obj)
-    {
-      *error = 1;
-      LOG_ERROR ("%s: Empty or invalid obj", __FUNCTION__);
-      return NULL;
-    }
   dwg = obj->dwg;
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
@@ -21501,7 +21463,7 @@ dwg_ent_generic_parent (const void *restrict ent, int *restrict error)
 dwg_obj_ent *
 dwg_object_to_entity (dwg_object *restrict obj, int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY)
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY)
     {
       *error = 0;
       if (dwg_version == R_INVALID)
@@ -21609,19 +21571,10 @@ dwg_object_get_bitsize (const dwg_object *obj)
 EXPORT BITCODE_BL
 dwg_object_get_index (const dwg_object *restrict obj, int *restrict error)
 {
-  if (obj)
-    {
-      *error = 0;
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
-      return obj->index;
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty obj", __FUNCTION__)
-      return 0;
-    }
+  *error = 0;
+  if (dwg_version == R_INVALID)
+    dwg_version = (Dwg_Version_Type)obj->parent->header.version;
+  return obj->index;
 }
 
 /** Returns dwg_handle* from dwg_object*
@@ -21633,19 +21586,8 @@ dwg_object_get_index (const dwg_object *restrict obj, int *restrict error)
 dwg_handle *
 dwg_object_get_handle (dwg_object *restrict obj, int *restrict error)
 {
-  if (obj)
-    {
-      *error = 0;
-      if (dwg_version == R_INVALID)
-        dwg_version = (Dwg_Version_Type)obj->parent->header.version;
-      return &(obj->handle);
-    }
-  else
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty obj", __FUNCTION__)
-      return NULL;
-    }
+  *error = 0;
+  return &(obj->handle);
 }
 
 /** Returns the dwg object type, see \ref DWG_OBJECT_TYPE "enum
@@ -21731,12 +21673,6 @@ dwg_obj_get_objid (const dwg_obj_obj *restrict obj, int *restrict error)
 EXPORT BITCODE_BL
 dwg_obj_get_num_eed (const dwg_obj_obj *restrict obj, int *restrict error)
 {
-  if (!obj)
-    {
-      *error = 1;
-      return 0;
-    }
-  *error = 0;
   return obj->num_eed;
 }
 /** Returns the nth EED structure.
@@ -21751,13 +21687,7 @@ dwg_entity_eed *
 dwg_obj_get_eed (const dwg_obj_obj *restrict obj, const BITCODE_BL idx,
                  int *restrict error)
 {
-  if (!obj)
-    {
-      *error = 1;
-      LOG_ERROR ("%s: empty or invalid obj", __FUNCTION__)
-      return NULL;
-    }
-  else if (idx >= obj->num_eed)
+  if (idx >= obj->num_eed)
     {
       *error = 2;
       return NULL;
@@ -21849,7 +21779,7 @@ dwg_obj_get_handleref (const dwg_obj_obj *restrict obj, int *restrict error)
 EXPORT dwg_obj_obj *
 dwg_object_to_object (dwg_object *restrict obj, int *restrict error)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT)
     {
       *error = 0;
       if ((dwg_version == R_INVALID) && (obj->parent != NULL))
@@ -21876,12 +21806,6 @@ dwg_obj_obj_to_object (const dwg_obj_obj *restrict obj, int *restrict error)
   dwg_data *dwg;
   dwg_object *retval;
 
-  if (!obj)
-    {
-      *error = 1;
-      // LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
-      return NULL;
-    }
   dwg = obj->dwg;
   if (!dwg)
     {
@@ -21956,7 +21880,7 @@ dwg_obj_generic_handlevalue (void *_obj)
 {
   int error;
   Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
-  if (obj && !error)
+  if (!error)
     return obj->handle.value;
   else
     return 0UL;
@@ -22034,17 +21958,7 @@ dwg_ref_get_object (const dwg_object_ref *restrict ref, int *restrict error)
 EXPORT BITCODE_BL
 dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
 {
-  if (ref)
-    {
-      *error = 0;
-      return ref->absolute_ref;
-    }
-  else
-    {
-      LOG_ERROR ("%s: empty ref", __FUNCTION__)
-      *error = 1;
-      return (BITCODE_BL)-1;
-    }
+  return ref->absolute_ref;
 }
 
 /* This was previously in encode and out_dxf, but since out_dxf needs it for
@@ -22075,12 +21989,12 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
      digits, and the following special characters:
      dollar sign ($), hyphen (-), and underscore (_).
      utf-8 string without space, !
-     TODO: valid is contained in codepage
+     TODO: in codepage
 */
 EXPORT bool
-dwg_is_valid_name (Dwg_Data *restrict dwg, char *restrict name)
+dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  Dwg_Version version = dwg->header.version;
+  Dwg_Version_Type version = dwg->header.version;
 #ifndef HAVE_NONNULL
   if (!name)
     return false;
@@ -25251,7 +25165,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
     {                                                                         \
       LOG_ERROR ("Invalid symbol table record name \"%s\"\n", name);          \
       return NULL;                                                            \
-    }
+    }                                                                         \
   if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)           \
     {                                                                         \
       API_ADD_OBJECT (control);                                               \
@@ -25269,7 +25183,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
     }                                                                         \
   ctrlhdl = ctrl->handle.value;                                               \
   ctrlidx = ctrl->index;                                                      \
-  if (name || strEQc (#record, "BLOCK_HEADER"))                               \
+  if (name)                                                                   \
     {                                                                         \
       API_ADD_OBJECT (record);                                                \
       _record = _obj;                                                         \
@@ -25339,8 +25253,6 @@ dwg_add_LTYPE (Dwg_Data *restrict dwg, const char *restrict name)
 EXPORT Dwg_Object_VIEW *
 dwg_add_VIEW (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  if (name && !dwg_is_valid_name (dwg, name))
-    return NULL;
   API_ADD_TABLE (VIEW, VIEW_CONTROL, {
     _obj->lens_length = 50.0;
     _obj->VIEWDIR.z = 1.0;
@@ -25521,7 +25433,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
 {
   Dwg_Object_DICTIONARY *dict;
   Dwg_Object_Ref *dictref;
-  if (name && !dwg_is_valid_name (dwg, name))
+  if (!dwg_is_valid_name (dwg, name))
     return NULL;
   {
     API_ADD_OBJECT (MLINESTYLE);
