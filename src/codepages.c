@@ -28,6 +28,9 @@
 #if defined HAVE_ICONV && defined HAVE_ICONV_H
 #  include <iconv.h>
 #endif
+#if defined HAVE_WCTYPE_H
+#  include <wctype.h>
+#endif
 // #define CODEPAGES_C
 #include "common.h"
 #include "codepages.h"
@@ -119,6 +122,100 @@ static const uint16_t *cp_fntbl[] = { NULL, // UTF8
                                       cptbl_windows_1361, /* 42 */
                                       NULL,               /* 43 UTF16 */
                                       cptbl_windows_1258,
+                                      NULL };
+
+static const uint8_t *cp_alnumtbl[] = { NULL, // UTF8
+                                      NULL, // US-ASCII
+                                      NULL, // ISO-8859-1
+                                      cptbl_alnum_iso_8859_2,
+                                      cptbl_alnum_iso_8859_3,
+                                      cptbl_alnum_iso_8859_4,
+                                      cptbl_alnum_iso_8859_5,
+                                      cptbl_alnum_iso_8859_6,
+                                      cptbl_alnum_iso_8859_7,
+                                      cptbl_alnum_iso_8859_8,
+                                      cptbl_alnum_iso_8859_9,
+                                      cptbl_alnum_cp437,
+                                      cptbl_alnum_cp850,
+                                      cptbl_alnum_cp852,
+                                      cptbl_alnum_cp855,
+                                      cptbl_alnum_cp857,
+                                      cptbl_alnum_cp860,
+                                      cptbl_alnum_cp861,
+                                      cptbl_alnum_cp863,
+                                      cptbl_alnum_cp864,
+                                      cptbl_alnum_cp865,
+                                      cptbl_alnum_cp869,
+                                      NULL, //cptbl_alnum_cp932, /* original shiftjis */
+                                      cptbl_alnum_macintosh,
+                                      NULL, //cptbl_alnum_big5,
+                                      NULL, //cptbl_alnum_cp949, /* 25 */
+                                      NULL, //cptbl_alnum_johab, /* 26 */
+                                      cptbl_alnum_cp866,
+                                      cptbl_alnum_windows_1250,
+                                      cptbl_alnum_windows_1251, /* 29 */
+                                      cptbl_alnum_windows_1252, /* 30 */
+                                      NULL, //cptbl_alnum_gb2312,
+                                      cptbl_alnum_windows_1253,
+                                      cptbl_alnum_windows_1254,
+                                      cptbl_alnum_windows_1255,
+                                      cptbl_alnum_windows_1256,
+                                      cptbl_alnum_windows_1257,
+                                      cptbl_alnum_windows_874,
+                                      NULL, //cptbl_alnum_windows_932, /* windows-31j */
+                                      NULL, //cptbl_alnum_windows_936,
+                                      NULL, //cptbl_alnum_windows_949,
+                                      NULL, //cptbl_alnum_windows_950,
+                                      NULL, //cptbl_alnum_windows_1361, /* 42 */
+                                      NULL,               /* 43 UTF16 */
+                                      cptbl_alnum_windows_1258,
+                                      NULL };
+
+static const uint16_t *cp_alnum16tbl[] = { NULL, // UTF8
+                                      NULL, // US-ASCII
+                                      NULL, // ISO-8859-1
+                                      NULL, //cptbl_alnum_iso_8859_2,
+                                      NULL, //cptbl_alnum_iso_8859_3,
+                                      NULL, //cptbl_alnum_iso_8859_4,
+                                      NULL, //cptbl_alnum_iso_8859_5,
+                                      NULL, //cptbl_alnum_iso_8859_6,
+                                      NULL, //cptbl_alnum_iso_8859_7,
+                                      NULL, //cptbl_alnum_iso_8859_8,
+                                      NULL, //cptbl_alnum_iso_8859_9,
+                                      NULL, //cptbl_alnum_cp437,
+                                      NULL, //cptbl_alnum_cp850,
+                                      NULL, //cptbl_alnum_cp852,
+                                      NULL, //cptbl_alnum_cp855,
+                                      NULL, //cptbl_alnum_cp857,
+                                      NULL, //cptbl_alnum_cp860,
+                                      NULL, //cptbl_alnum_cp861,
+                                      NULL, //cptbl_alnum_cp863,
+                                      NULL, //cptbl_alnum_cp864,
+                                      NULL, //cptbl_alnum_cp865,
+                                      NULL, //cptbl_alnum_cp869,
+                                      cptbl_alnum_cp932, /* original shiftjis */
+                                      NULL, //cptbl_alnum_macintosh,
+                                      cptbl_alnum_big5,
+                                      cptbl_alnum_cp949, /* 25 */
+                                      cptbl_alnum_johab, /* 26 */
+                                      NULL, //cptbl_alnum_cp866,
+                                      NULL, //cptbl_alnum_windows_1250,
+                                      NULL, //cptbl_alnum_windows_1251, /* 29 */
+                                      NULL, //cptbl_alnum_windows_1252, /* 30 */
+                                      cptbl_alnum_gb2312,
+                                      NULL, //cptbl_alnum_windows_1253,
+                                      NULL, //cptbl_alnum_windows_1254,
+                                      NULL, //cptbl_alnum_windows_1255,
+                                      NULL, //cptbl_alnum_windows_1256,
+                                      NULL, //cptbl_alnum_windows_1257,
+                                      NULL, //cptbl_alnum_windows_874,
+                                      cptbl_alnum_windows_932, /* windows-31j */
+                                      cptbl_alnum_windows_936,
+                                      cptbl_alnum_windows_949,
+                                      cptbl_alnum_windows_950,
+                                      cptbl_alnum_windows_1361, /* 42 */
+                                      NULL,               /* 43 UTF16 */
+                                      NULL, //cptbl_alnum_windows_1258,
                                       NULL };
 
 // synced with typedef enum _dwg_codepage in codepages.h
@@ -213,8 +310,8 @@ codepage_helper (const Dwg_Codepage codepage, const wchar_t wc, const int dir,
   fntbl = cp_fntbl[codepage];
   maxc = fntbl[0];
   assert (maxc);
-  if (dir) // from unicode to charset
-    {      // reverse lookup
+  if (dir) // from unicode to charset.
+    {      // reverse lookup. unsorted rhs values so we cannot bsearch.
       for (uint16_t i = 0x80; i < maxc; i++)
         {
           if (wc == fntbl[i])
@@ -304,6 +401,73 @@ dwg_codepage_isasian (const Dwg_Codepage cp)
     return true;
   else
     return false;
+}
+
+static int
+b8_cmp (const void *a, const void *b)
+{
+  return *(uint8_t *)a < *(uint8_t *)b   ? -1
+         : *(uint8_t *)a > *(uint8_t *)b ? 1
+                                         : 0;
+}
+
+static int
+b16_cmp (const void *a, const void *b)
+{
+  return *(uint16_t *)a < *(uint16_t *)b   ? -1
+         : *(uint16_t *)a > *(uint16_t *)b ? 1
+                                           : 0;
+}
+
+bool
+dwg_codepage_isalnum (const Dwg_Codepage cp,
+                      const wchar_t c)
+{
+  if (c < 128)
+    return isalnum ((int)c);
+  switch (cp)
+    {
+    case CP_US_ASCII:
+      return false;
+    case CP_ISO_8859_1:
+      return (c >= 0xC0 && c <= 0xD6) || (c >= 0xD8 && c <= 0xFF);
+    case CP_UTF8:
+    case CP_UTF16: // fallthru
+#if defined HAVE_WCTYPE_H
+      return iswalnum ((int)c);
+#else
+      //TODO panic?
+      return false;
+#endif
+    default:
+      {
+        const uint8_t* fntbl = cp_alnumtbl[cp];
+        assert (cp != CP_UTF8 && cp != CP_UTF16
+                && cp != CP_US_ASCII && cp != CP_ISO_8859_1);
+        // 8 or 16bit?
+        if (fntbl) {
+          const uint8_t key = c & 0xff;
+          const uint8_t sz8 = fntbl[0];
+          const size_t sz = (size_t)sz8;
+          uint8_t *found = bsearch(&key, &fntbl[1], sz, 1, b8_cmp);
+          if (!found || found == &fntbl[0])
+            return false;
+          else
+            return true;
+        } else {
+          const uint16_t key = c & 0xffff;
+          const uint16_t* fntbl16 = cp_alnum16tbl[cp];
+          const uint16_t sz16 = fntbl16[0];
+          const size_t sz = (size_t)sz16;
+          uint16_t *found = bsearch(&key, &fntbl16[1], sz, 2, b16_cmp);
+          if (!found || found == &fntbl16[0])
+            return false;
+          else
+            return true;
+        }
+        return false;
+      }
+    }
 }
 
 bool

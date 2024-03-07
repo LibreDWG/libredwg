@@ -1029,6 +1029,8 @@ main (int argc, char *argv[])
   char *trace = getenv ("LIBREDWG_TRACE");    // read_dwg
   char *debugenv = getenv ("LIBREDWG_DEBUG"); // keep files
   int dxf = 0;
+  Dwg_Data *dwg;
+
   loglevel = is_make_silent () ? 0 : 2; // print ok
   if (trace)
     tracelevel = atoi (trace);
@@ -1156,5 +1158,47 @@ main (int argc, char *argv[])
           += test_add (DWG_TYPE_WIPEOUTVARIABLES, "add_wipeoutvars_2000", dxf);
     }
 
+  // more common add API tests
+  if (dwg_is_valid_tag (""))
+    fail("!dwg_is_valid_tag(\"\")");
+  if (dwg_is_valid_tag ("A!"))
+    fail("!dwg_is_valid_tag(\"A!\")");
+  if (dwg_is_valid_tag ("A B"))
+    fail("!dwg_is_valid_tag(\"A B\")");
+  if (dwg_is_valid_tag ("a"))
+    fail("!dwg_is_valid_tag(\"a\")");
+  if (!dwg_is_valid_tag ("A"))
+    fail("dwg_is_valid_tag(\"A\")");
+
+  dwg = dwg_new_Document (R_2018, 0 /*metric/iso */, tracelevel);
+  if (dwg_is_valid_name (dwg, ""))
+    fail("!dwg_is_valid_name (\"\")");
+  if (!dwg_is_valid_name (dwg, "*U"))
+    fail("dwg_is_valid_name (\"U*\")");
+  if (!dwg_is_valid_name (dwg, "SAB_X"))
+    fail("dwg_is_valid_name (\"SAB_X\")");
+  if (!dwg_is_valid_name (dwg, "SAB-X"))
+    fail("dwg_is_valid_name (\"SAB-X\")");
+  if (!dwg_is_valid_name (dwg, "$SAB"))
+    fail("dwg_is_valid_name (\"$SAB\")");
+  if (dwg_is_valid_name (dwg, "#SAB"))
+    fail("!dwg_is_valid_name (\"#SAB\")");
+  if (dwg_is_valid_name (dwg, "%SAB"))
+    fail("!dwg_is_valid_name (\"%%SAB\")");
+
+  dwg->header.codepage = CP_CP869; // DOS Greek
+#ifdef HAVE_WCTYPE_H // as utf-8, not greek
+  if (dwg_is_valid_name (dwg, "Û")) // FULL BLOCK, valid greek at db
+    fail("!dwg_is_valid_name (\"\\xdb FULL BLOCK\")");
+  if (!dwg_is_valid_name (dwg, "\xc3\x9d")) // SMALL DELTA is at dd
+    fail("dwg_is_valid_name (\"\\xdd SMALL DELTA\")");
+#else // asis in the CP869 codepage
+  if (dwg_is_valid_name (dwg, "\xdb")) // FULL BLOCK, valid greek
+    fail("!dwg_is_valid_name (\"\\xdb FULL BLOCK\")");
+  if (!dwg_is_valid_name (dwg, "\xdd")) // SMALL DELTA
+    fail("dwg_is_valid_name (\"\\xdd SMALL DELTA\")");
+#endif
+  dwg_free (dwg);
+  error += numfailed();
   return error;
 }

@@ -21986,16 +21986,17 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
 }
 
 /* check for valid symbol table record name.
-     names can be up to 255 characters long and can contain letters,
-     digits, and the following special characters:
-     dollar sign ($), hyphen (-), and underscore (_).
-     utf-8 string without space, !
-     TODO: in codepage
+   names can be up to 255 characters long and can contain letters,
+   digits, and the following special characters:
+   dollar sign ($), hyphen (-), and underscore (_).
+   utf-8 string without space, !
+   check if in codepage
 */
 EXPORT bool
 dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
 {
   Dwg_Version_Type version = dwg->header.version;
+  const Dwg_Codepage cp = dwg->header.codepage;
 #ifndef HAVE_NONNULL
   if (!name)
     return false;
@@ -22015,22 +22016,17 @@ dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
     for (size_t i = 0; i < wlen; i++)
       {
         uint16_t c = wstr[i];
-        if (version < R_13 && c > 255)
-          {
-            free (wstr);
-            return false;
-          }
+        if (i == 0 && c == '*')
+          continue;
         if (version < R_13 && iswlower (c))
           {
             free (wstr);
             return false;
           }
-        // TODO check if char in target codepage
-        if (version >= R_13
-            && !(iswalnum (c) || c == '$' || c == '_' || c == '-'))
+        // check if char in target codepage
+        if (!(c == '$' || c == '_' || c == '-' ||
+              dwg_codepage_isalnum (cp, c)))
           {
-            if (i == 0 && c == '*')
-              continue;
             free (wstr);
             return false;
           }
@@ -22038,20 +22034,18 @@ dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
     free (wstr);
   }
 #else
-  // only ascii support, no wctype checks
+  // no wctype checks
+  if (*name == '*') // valid at the beginning
+    name++;
   while (*name)
     {
       unsigned char c = (unsigned char)*name;
       name++;
       if (version < R_13 && islower (c))
         return false;
-      if (version >= R_13
-          && !(isalnum (c) || c == '$' || c == '_' || c == '-'))
-        {
-          if (i == 0 && c == '*')
-            continue;
-          return false;
-        }
+      if (!(c == '$' || c == '_' || c == '-' ||
+            dwg_codepage_isalnum (cp, c)))
+        return false;
     }
 #endif
   return true;

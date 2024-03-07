@@ -158,6 +158,7 @@ someone should probably think about and resolve them!
   This might be better in an in-tree ./configure, not in an extra build
   directory. But out-of-tree is also supported now.
   It needs the default configure options, esp. the enabled bindings.
+  It needs all the optional tools and libs.
 
   Before a release:
   - update NEWS, .appveyor.yml, libredwg.spec manually

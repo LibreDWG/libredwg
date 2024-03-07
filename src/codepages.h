@@ -106,11 +106,15 @@ EXPORT wchar_t dwg_codepage_uwc (Dwg_Codepage cp, uint16_t c);
 EXPORT bool dwg_codepage_isasian (const Dwg_Codepage cp);
 EXPORT bool dwg_codepage_is_twobyte (const Dwg_Codepage cp,
                                      const unsigned char c);
+EXPORT bool dwg_codepage_isalnum (const Dwg_Codepage cp,
+                                  const wchar_t wc);
 #else
 extern wchar_t dwg_codepage_uwc (Dwg_Codepage cp, uint16_t c);
 extern bool dwg_codepage_isasian (const Dwg_Codepage cp);
 extern bool dwg_codepage_is_twobyte (const Dwg_Codepage cp,
                                      const unsigned char c);
+extern bool dwg_codepage_isalnum (const Dwg_Codepage cp,
+                                  const wchar_t wc);
 #endif
 
 #endif
