@@ -99,6 +99,12 @@ static Bit_Chain *g_dat;
     _obj->o.nam = (BITCODE_##type)json_long (dat, tokens);                    \
     LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->o.nam)                     \
   }
+#define _FIELD_LONGLONG(nam, type)                                            \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    _obj->nam = (BITCODE_##type)json_longlong (dat, tokens);                  \
+    LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam)                       \
+  }
 #define _FIELD_LONGT(nam, type, fmt)                                          \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
@@ -226,7 +232,7 @@ static Bit_Chain *g_dat;
 #define FIELD_RL(nam, dxf) _FIELD_LONG (nam, RL)
 #define FIELD_RLx(nam, dxf) _FIELD_LONGT (nam, RL, RLx)
 #define FIELD_RLd(nam, dxf) _FIELD_LONGT (nam, RL, RLd)
-#define FIELD_RLL(nam, dxf) _FIELD_LONG (nam, RLL)
+#define FIELD_RLL(nam, dxf) _FIELD_LONGLONG (nam, RLL)
 #define FIELD_MC(nam, dxf) _FIELD_LONG (nam, MC)
 #define FIELD_MS(nam, dxf) _FIELD_LONG (nam, MS)
 
