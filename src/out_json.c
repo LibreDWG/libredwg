@@ -425,7 +425,11 @@ static char *_path_field (const char *path);
 #define FIELD_BB(nam, dxf) FIELD (nam, BB, dxf)
 #define FIELD_3B(nam, dxf) FIELD (nam, 3B, dxf)
 #define FIELD_BS(nam, dxf) FIELD (nam, BS, dxf)
+#define FIELD_BSd(nam, dxf) FIELD (nam, BSd, dxf)
+#define FIELD_BSx(nam, dxf) FIELD (nam, BSx, dxf)
 #define FIELD_BL(nam, dxf) FIELD (nam, BL, dxf)
+#define FIELD_BLd(nam, dxf) FIELD (nam, BLd, dxf)
+#define FIELD_BLx(nam, dxf) FIELD (nam, BLx, dxf)
 #define FIELD_BLL(nam, dxf) FIELD (nam, BLL, dxf)
 #ifdef IS_RELEASE
 #  define FIELD_BD(nam, dxf)                                                  \
