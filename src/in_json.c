@@ -219,6 +219,7 @@ static Bit_Chain *g_dat;
 #define FIELD_BL(nam, dxf) _FIELD_LONG (nam, BL)
 #define FIELD_BLL(nam, dxf) _FIELD_LONG (nam, BLL)
 #define FIELD_RC(nam, dxf) _FIELD_LONG (nam, RC)
+#define FIELD_RCd(nam, dxf) _FIELD_LONG (nam, RCd)
 #define FIELD_RCx(nam, dxf) _FIELD_LONGT (nam, RC, RCx)
 #define FIELD_RS(nam, dxf) _FIELD_LONG (nam, RS)
 #define FIELD_RSx(nam, dxf) _FIELD_LONGT (nam, RS, RSx)
