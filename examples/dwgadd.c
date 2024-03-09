@@ -1162,8 +1162,14 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
         CHK_MISSING_BLOCK_HEADER
-        ent = (lastent_t){ .u.block = dwg_add_BLOCK (hdr, text),
-                           .type = DWG_TYPE_BLOCK };
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid BLOCK name\n");
+        else
+          {
+            dwg_add_BLOCK_HEADER (dwg, text);
+            ent = (lastent_t){ .u.block = dwg_add_BLOCK (hdr, text),
+                               .type = DWG_TYPE_BLOCK };
+          }
       }
       else
           // clang-format off
@@ -1188,10 +1194,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    pt1.x, pt1.y, pt1.z, text, scale.x, scale.y, scale.z,
                    deg2rad (rot));
         CHK_MISSING_BLOCK_HEADER
-        insert = ent = (lastent_t){ .u.insert = dwg_add_INSERT (
-                                        hdr, &pt1, text, scale.x, scale.y,
-                                        scale.z, deg2rad (rot)),
-                                    .type = DWG_TYPE_INSERT };
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid BLOCK name\n");
+        else
+          insert = ent = (lastent_t){ .u.insert = dwg_add_INSERT (
+                                          hdr, &pt1, text, scale.x, scale.y,
+                                          scale.z, deg2rad (rot)),
+                                      .type = DWG_TYPE_INSERT };
       }
       else
           // clang-format off
@@ -1212,6 +1221,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             hdr_s, pt1.x, pt1.y, pt1.z, text, scale.x, scale.y, scale.z,
             deg2rad (rot), i1, i2, f1, f2);
         CHK_MISSING_BLOCK_HEADER
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid block name\n");
         insert = ent
             = (lastent_t){ .u.minsert = dwg_add_MINSERT (
                                hdr, &pt1, text, scale.x, scale.y, scale.z,
@@ -1648,6 +1659,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                             text SZ, s1 SZ, &u))
       {
         LOG_TRACE ("add_DICTIONARY \"%s\" \"%s\" %u\n", text, s1, u);
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid dictionary name\n");
         dict = ent = (lastent_t){ .u.dictionary = dwg_add_DICTIONARY (
                                       dwg, text, s1, (unsigned long)u),
                                   .type = DWG_TYPE_DICTIONARY };
@@ -1661,6 +1674,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         if (dict.type != DWG_TYPE_DICTIONARY)
           fn_error ("xrecord: missing dictionary\n");
         LOG_TRACE ("add_XRECORD dictionary \"%s\"\n", text);
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid dictionary name\n");
         ent = (lastent_t){ .u.xrecord
                            = dwg_add_XRECORD (dict.u.dictionary, text),
                            .type = DWG_TYPE_XRECORD };
@@ -1688,6 +1703,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         LOG_TRACE ("add_VIEWPORT %s \"%s\"\n", hdr_s, text);
         CHK_MISSING_BLOCK_HEADER
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid table record name\n");
         ent = (lastent_t){ .u.viewport = dwg_add_VIEWPORT (hdr, text),
                            .type = DWG_TYPE_VIEWPORT };
       }
@@ -1796,6 +1813,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         if (version <= R_11)
           fn_error ("Invalid entity MLINESTYLE <r13\n");
         LOG_TRACE ("add_MLINESTYLE \"%s\"\n", text);
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid style name\n");
         ent = (lastent_t){ .u.mlinestyle = dwg_add_MLINESTYLE (dwg, text),
                            .type = DWG_TYPE_MLINESTYLE };
       }
@@ -1806,6 +1825,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (1 == SSCANF_S (p, "layer " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_LAYER \"%s\"\n", text);
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid table record name\n");
         ent = (lastent_t){ .u.layer = dwg_add_LAYER (dwg, text),
                            .type = DWG_TYPE_LAYER };
       }
@@ -1858,6 +1879,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         if (version < R_11)
           fn_error ("Invalid table DIMSTYLE <r11\n");
         LOG_TRACE ("add_DIMSTYLE \"%s\"\n", text);
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid table record name\n");
         ent = (lastent_t){ .u.dimstyle = dwg_add_DIMSTYLE (dwg, text),
                            .type = DWG_TYPE_DIMSTYLE };
       }
@@ -1870,6 +1893,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         if (version <= R_11)
           fn_error ("Invalid object GROUP < r13\n");
         LOG_TRACE ("add_GROUP \"%s\"\n", text);
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid group name\n");
         ent = (lastent_t){ .u.group = dwg_add_GROUP (dwg, text),
                            .type = DWG_TYPE_GROUP };
       }
@@ -1906,6 +1931,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("layout viewport: last entity is not a viewport\n");
         if (strlen (s1) && text[strlen (s1) - 1] == '"')
           text[strlen (s1) - 1] = '\0'; // strip the \"
+        if (!dwg_is_valid_name (dwg, text))
+          fn_error ("Invalid table record name\n");
         if (!error)
           ent = (lastent_t){ .u.layout = dwg_add_LAYOUT (obj, text, s1),
                              .type = DWG_TYPE_LAYOUT };

@@ -22631,6 +22631,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     }
   if (version > R_11)
     {
+      const char *standard = dwg->header.version < R_13 ? "STANDARD" : "Standard";
       // LAYER: (0.1.10)
       layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
       layer->color = (BITCODE_CMC){ 7, CMC_DEFAULTS };
@@ -22644,7 +22645,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // if (ctrl)
       //   dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
       //   STYLE: (0.1.11)
-      style = dwg_add_STYLE (dwg, "Standard");
+      style = dwg_add_STYLE (dwg, standard);
       style->font_file = dwg_add_u8_input (dwg, "txt");
       style->last_height = 0.2;
       // TEXTSTYLE: (5.1.11) [H 7]
@@ -23403,6 +23404,11 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   // TODO scale_flag
   _obj->rotation = rotation;
   ADD_CHECK_ANGLE (_obj->rotation);
+  if (!dwg_is_valid_name (dwg, name)) {
+    API_UNADD_ENTITY;
+    LOG_ERROR("Invalid blockname %s", name);
+    return NULL;
+  }
   hdrref = dwg_find_tablehandle (dwg, name, "BLOCK");
   if (hdrref)
     {
@@ -23421,6 +23427,12 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
             blkhdr->inserts, blkhdr->num_inserts * sizeof (BITCODE_H));
       blkhdr->inserts[blkhdr->num_inserts - 1]
           = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+    }
+  else
+    {
+      API_UNADD_ENTITY;
+      LOG_ERROR("block %s not found", name);
+      return NULL;
     }
   if (dwg->header.version < R_2_0b)
     _obj->block_name = strdup (name);
@@ -24005,9 +24017,10 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 static void
 dwg_require_DIMSTYLE_Standard (Dwg_Data *restrict dwg)
 {
-  if (!(dwg_find_tablehandle_silent (dwg, "Standard", "DIMSTYLE")))
+  const char *standard = dwg->header.version < R_13 ? "STANDARD" : "Standard";
+  if (!(dwg_find_tablehandle_silent (dwg, standard, "DIMSTYLE")))
     {
-      Dwg_Object_DIMSTYLE *std = dwg_add_DIMSTYLE (dwg, "Standard");
+      Dwg_Object_DIMSTYLE *std = dwg_add_DIMSTYLE (dwg, standard);
       if (std)
         dwg->header_vars.DIMSTYLE = dwg_add_handleref (
             dwg, 5, dwg_obj_generic_handlevalue (std), NULL);
@@ -25302,7 +25315,7 @@ dwg_add_APPID (Dwg_Data *restrict dwg, const char *restrict name)
 EXPORT Dwg_Object_DIMSTYLE *
 dwg_add_DIMSTYLE (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  if (name && strNE (name, "Standard"))
+  if (name && strNE (name, dwg->header.version < R_13 ? "STANDARD" : "Standard"))
     dwg_require_DIMSTYLE_Standard (dwg);
   {
     API_ADD_TABLE (DIMSTYLE, DIMSTYLE_CONTROL, {
@@ -25466,7 +25479,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
           }
       }
 
-    _obj->name = strEQc (name, "Standard") ? dwg_add_u8_input (dwg, "STANDARD")
+    _obj->name = strEQc (name, "Standard") ? dwg_add_u8_input (dwg, "Standard")
       : dwg_add_u8_input (dwg, name);
     _obj->fill_color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
     if (strEQc (name, "Standard") || strEQc (name, "STANDARD"))

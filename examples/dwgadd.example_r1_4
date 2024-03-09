@@ -5,12 +5,12 @@ HEADER.INSBASE = (1 0)
 HEADER.LIMMIN = (12 9)
 point (2 0 0)
 text "test" (0.0 1.0 0.0) 8
-block "bloko"
+block "BLOKO"
 line (0 1 0) (1 1 0)
 endblk
-insert (0 1 0) "bloko" 1 1 1 0
+insert (0 1 0) "BLOKO" 1 1 1 0
 arc (0.0 1.0 0.0) 0.5 0.0 3.0
 circle (0.0 1.0 0.0) 0.5
 solid (0 0 0) (2 0) (2 1) (0 2)
 trace (0 0 0) (2 0) (2 1) (0 2)
-shape "roman.shx" (0 0 0) 2 45
+shape "ROMAN.SHX" (0 0 0) 2 45
