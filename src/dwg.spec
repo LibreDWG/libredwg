@@ -12345,7 +12345,7 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
     if (FIELD_VALUE (hdls[rcount1].long1) >= 128) {
       DEBUG_HERE_OBJ
     }
-    SUB_FIELD_BS (hdls[rcount1], long2, 94);
+    SUB_FIELD_BL (hdls[rcount1], long2, 94);
     SET_PARENT_OBJ (hdls[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (hdls)
