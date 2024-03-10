@@ -213,7 +213,7 @@ static BITCODE_BL rcount1, rcount2;
 #define VALUE(value, type, dxf)                                               \
   LOG_TRACE (FORMAT_##type " [" #type " " #dxf "]\n", value)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
-#define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
+#define VALUE_RS(value, dxf) VALUE ((BITCODE_RS)value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RLx(value, dxf)                                                 \
   LOG_TRACE (FORMAT_RLx " [RL " #dxf "]\n", (BITCODE_RL)value)
