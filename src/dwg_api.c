@@ -21352,7 +21352,8 @@ dwg_ent_set_ltype (dwg_obj_ent *restrict ent, const char *restrict name)
       return 2; // invalid name
     return 1; // not found
   }
-  if (lt_ref->absolute_ref != ent->ltype->absolute_ref)
+  if (!ent->ltype
+      || lt_ref->absolute_ref != ent->ltype->absolute_ref)
     {
       // TODO preR13
       if (!strcasecmp (name, "BYLAYER")) {
