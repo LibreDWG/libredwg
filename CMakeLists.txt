@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8...3.27)
 project(libredwg C)
 # Supported options -DLIBREDWG_LIBONLY=On
+#                   -DLIBREDWG_LIBCONVERTONLY=On
 #                   -DLIBREDWG_DISABLE_WRITE=On
 #                   -DLIBREDWG_DISABLE_JSON=On
 #                   -DENABLE_MIMALLOC=On
@@ -29,6 +30,7 @@ string(STRIP "${NL_PACKAGE_VERSION}" PACKAGE_VERSION)
 
 option(BUILD_SHARED_LIBS "shared libredwg library" ON)
 option(LIBREDWG_LIBONLY "only the libredwg library" OFF)
+option(LIBREDWG_LIBCONVERTONLY "only the libredwg pure file format conversion library" OFF)
 option(LIBREDWG_DISABLE_WRITE "no libredwg write support" OFF)
 option(DISABLE_WERROR "no -Werror" OFF)
 option(ENABLE_LTO "IPO/LTO Link Time Optimizations (default ON)" ON)
@@ -283,7 +285,9 @@ target_include_directories(${redwg} PUBLIC
 
 link_libraries(${redwg} ${LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
-if(NOT LIBREDWG_LIBONLY)
+if(LIBREDWG_LIBCONVERTONLY)
+  add_library(convert programs/convert.c)
+elseif(NOT LIBREDWG_LIBONLY)
   if(NOT HAVE_GETOPT_H)
     set(getopt_c programs/getopt.c)
   endif(NOT HAVE_GETOPT_H)
@@ -311,7 +315,7 @@ if(NOT LIBREDWG_LIBONLY)
     #target_include_directories(dwggrep PUBLIC pcre2)
   endif(HAVE_PCRE2_H)
 
-endif(NOT LIBREDWG_LIBONLY)
+endif(LIBREDWG_LIBCONVERTONLY)
 
 if(ipo_supported)
   message(STATUS "IPO / LTO enabled")

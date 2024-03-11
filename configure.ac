@@ -485,6 +485,15 @@ AS_IF([test x$enable_bindings = xno],
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
+dnl --enable-libconvert-only
+AC_MSG_CHECKING([for --enable-libconvert-only])
+AC_ARG_ENABLE([libconvert-only],AS_HELP_STRING([--enable-libconvert-only],[
+    Build only the library for pure file format conversion (default: no).]),
+  [libconvert_only=yes
+  AC_MSG_RESULT([yes])],
+  AC_MSG_RESULT([no (default)]))
+AM_CONDITIONAL([LIBCONVERTONLY], [test x$libconvert_only = xyes])
+
 dnl --enable-check-less
 AC_MSG_CHECKING([for --enable-check-less])
 AC_ARG_ENABLE([check-less],AS_HELP_STRING([--enable-check-less],[

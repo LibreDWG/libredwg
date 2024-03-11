@@ -11,6 +11,9 @@ on:
   pull_request:
     branches:
       - '*'
+  workflow_dispatch:
+    branches:
+      - '*'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -302,3 +305,17 @@ jobs:
     - run: ninja
     - run: copy libredwg.dll test\unit-testing\
     - run: ctest . --output-on-failure
+  wasm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - name: Setup Emscripten toolchain
+      uses: mymindstorm/setup-emsdk@v13
+    - run: ./autogen.sh
+    - run: emconfigure ./configure --enable-libconvert-only --disable-bindings --disable-shared
+    - run: emmake make -j

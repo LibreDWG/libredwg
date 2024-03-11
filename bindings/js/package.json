@@ -1,0 +1,21 @@
+{
+  "name": "libredwg",
+  "version": "0.0.0-dev.0",
+  "description": "GNU LibreDWG is a free library to handle DWG/DXF files",
+  "main": "index.js",
+  "repository": "git://fr-an-k/libredwg.git",
+  "author": "Frank van Leeuwen",
+  "keywords": [
+    "DWG",
+    "DXF",
+    "DXFB"
+  ],
+  "license": "ISC",
+  "private": false,
+  "exports": {
+    ".": {
+      "require": "./index.cjs",
+      "import": "./index.mjs"
+    }
+  }
+}
