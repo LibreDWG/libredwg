@@ -26,7 +26,9 @@ SUBDIRS += bindings
 endif
 endif
 if HAVE_MAKEINFO
+if !DISABLE_DOCS
 SUBDIRS += doc
+endif
 endif
 AM_DISTCHECK_CONFIGURE_FLAGS = --enable-release
 if DISABLE_BINDINGS
@@ -89,6 +91,13 @@ dist-hook: regen-dynapi
 if !HAVE_LIBPS
 	echo "Missing libps" && false
 endif
+if !HAVE_MAKEINFO
+	echo "Missing makeinfo" && false
+endif
+if DISABLE_DOCS
+	echo "config --disable-docs" && false
+endif
+
 # automake bug, GH #211 (howto enable skip_mode_fix? tried now info-in-builddir)
 #distcheck-hook:
 #	echo distcheck-hook distdir="$(distdir)"

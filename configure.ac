@@ -485,6 +485,15 @@ AS_IF([test x$enable_bindings = xno],
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
+dnl --disable-docs
+AC_MSG_CHECKING([for --disable-docs])
+AC_ARG_ENABLE([docs],AS_HELP_STRING([--disable-docs],[
+    Disable docs generation, texlive is big (default: enabled).]),[],[enable_docs=yes])
+AM_CONDITIONAL([DISABLE_DOCS], [test x$enable_docs = xno])
+AS_IF([test x$enable_docs = xno],
+  AC_MSG_RESULT([yes]),
+  AC_MSG_RESULT([no (default)]))
+
 dnl --enable-check-less
 AC_MSG_CHECKING([for --enable-check-less])
 AC_ARG_ENABLE([check-less],AS_HELP_STRING([--enable-check-less],[
@@ -494,6 +503,7 @@ AC_ARG_ENABLE([check-less],AS_HELP_STRING([--enable-check-less],[
   AC_MSG_RESULT([yes])],
   AC_MSG_RESULT([no (default)]))
 AM_CONDITIONAL([CHECK_LESS], [test x$check_less = xyes])
+
 
 AC_MSG_CHECKING([for --with-mimalloc])
 if test "x$ac_cv_header_mimalloc_override_h" = "xyes"
