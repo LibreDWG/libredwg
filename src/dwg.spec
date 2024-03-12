@@ -3988,7 +3988,8 @@ DWG_TABLE (LTYPE)
                     break;
                   }
                 _obj->dashes[rcount1].text = (char*)&_obj->strings_area[dash_i];
-                LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i);
+                LOG_TRACE ("dashes[%u].text: \"%s\" [TF %" PRIuSIZE " 9] @%u\n", rcount1,
+                           _obj->dashes[rcount1].text, strlen (_obj->dashes[rcount1].text), dash_i);
                 dash_i += (unsigned)(strnlen (_obj->dashes[rcount1].text,
                                               256 - dash_i)
                                      + 1);
@@ -4016,7 +4017,8 @@ DWG_TABLE (LTYPE)
                       break;
                     }
                   _obj->dashes[rcount1].text = (char *)&_obj->strings_area[dash_i];
-                  LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i);
+                  LOG_TRACE ("dashes[%u].text: \"%s\" [TF %" PRIuSIZE " 9] @%u\n", rcount1,
+                             _obj->dashes[rcount1].text, strlen (_obj->dashes[rcount1].text), dash_i);
                   dash_i += ((2 * bit_wcs2nlen ((BITCODE_TU)_obj->dashes[rcount1].text,
                                                 256 - (dash_i / 2))) + 2 ) & 0xFFFF;
                 }
