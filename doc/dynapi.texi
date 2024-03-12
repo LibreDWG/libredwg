@@ -10354,6 +10354,8 @@ B
 TF
 @item unknown_r11
 RC
+@item unknown_r13
+RC
 
 @end vtable
 @end indentedblock

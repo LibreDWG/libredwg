@@ -3975,6 +3975,9 @@ DWG_TABLE (LTYPE)
       if (dwg->header.from_version > R_2004)
         dwg_convert_LTYPE_strings_area (dwg, _obj);
 #endif
+      VERSIONS (R_13b1, R_13c3) {
+        FIELD_RC (unknown_r13, 0);
+      }
       FIELD_BINARY (strings_area, 256, 0);
       DECODER {
         unsigned int dash_i = 0;
