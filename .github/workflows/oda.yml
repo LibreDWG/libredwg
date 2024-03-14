@@ -28,11 +28,11 @@ jobs:
         python-version: '3.10'
     - uses: pyvista/setup-headless-display-action@v1
     - run: |
-        wget -q https://download.opendesign.com/guestfiles/Demo/ODAFileConverter_QT5_lnxX64_8.3dll_24.9.deb
+        wget -q https://download.opendesign.com/guestfiles/Demo/ODAFileConverter_QT5_lnxX64_8.3dll_25.1.deb
         sudo add-apt-repository -y ppa:linuxuprising/libpng12
         sudo apt update
         sudo apt-get -y install libpng12-0 qt5dxcb-plugin
-        sudo dpkg -i ODAFileConverter_QT5_lnxX64_8.3dll_24.9.deb
+        sudo dpkg -i ODAFileConverter_QT5_lnxX64_8.3dll_25.1.deb
         cd /usr/lib/x86_64-linux-gnu
         sudo ln -s libxcb-util.so.1 libxcb-util.so.0
     - run: |
