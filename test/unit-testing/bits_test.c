@@ -882,11 +882,50 @@ bit_utf8_to_TV_tests (void)
   else
     fail ("bit_utf8_to_TV %s as CP949", p);
   p = bit_utf8_to_TV (dest, (const unsigned char *)"시험", sizeof (dest),
-                      strlen (src1), 0, CP_CP949);
+                      strlen ("시험"), 0, CP_CP949);
   if (strEQc (p, "\xdc\xc3\x7e\xe8"))
     pass ();
   else
     fail ("bit_utf8_to_TV %s as CP949", p);
+  p = bit_utf8_to_TV (dest, (const unsigned char *)"█", sizeof (dest),
+                      strlen ("█"), 0, CP_CP869);
+  if (strEQc (p, "\xdb"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s as CP869 (DB %2X)", p, (unsigned)*p);
+  p = bit_utf8_to_TV (dest, (const unsigned char *)"δ", sizeof (dest),
+                      strlen ("δ"), 0, CP_CP869);
+  if (strEQc (p, "\xdd"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s as CP869 (DD %2X)", p, (unsigned)*p);
+}
+
+static void
+bit_utf8_to_TU_tests (void)
+{
+  BITCODE_TU p;
+
+  p = bit_utf8_to_TU ((char*)"Ë", 0); // "\xc3\x8b"
+  if (*p == 0xCB && !p[1])
+    pass ();
+  else
+    fail ("bit_utf8_to_TU U+00CB => %2X%2X", p[0], p[1]);
+  free (p);
+
+  p = bit_utf8_to_TU ((char*)"█", 0); // \xe2\x96\x88
+  if (*p == 0x2588 && !p[1])
+    pass ();
+  else
+    fail ("bit_utf8_to_TU U+2588 => %2X%2X", p[0], p[1]);
+  free (p);
+
+  p = bit_utf8_to_TU ((char*)"δ", 0); // "\xce\xb4"
+  if (*p == 0x03B4 && !p[1])
+    pass ();
+  else
+    fail ("bit_utf8_to_TU U+03B4 => %2X%2X", p[0], p[1]);
+  free (p);
 }
 
 static void
@@ -1342,6 +1381,7 @@ main (int argc, char const *argv[])
   bit_RLL_tests ();
   bit_RLL_BE_tests ();
   bit_utf8_to_TV_tests ();
+  bit_utf8_to_TU_tests ();
   bit_TV_to_utf8_tests ();
   bit_read_H_tests ();
   bit_write_H_tests ();

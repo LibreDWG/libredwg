@@ -3438,39 +3438,48 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
         }
       else if ((c & 0xe0) == 0xc0)
         {
-          /* ignore invalid utf8 for now */
           if (len >= 1)
             {
-              wstr[i++] = ((c & 0x1f) << 6) | (str[1] & 0x3f);
+              wstr[i++] = ((uint16_t)(c & 0x1f) << 6) | (*str++ & 0x3f);
               len--;
-              str++;
+            }
+          else
+            {
+              loglevel |= 1;
+              LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", &str[-1]);
             }
         }
       else if ((c & 0xf0) == 0xe0)
         {
           /* ignore invalid utf8? */
           if (len >= 2
-              && ((unsigned char)str[1] < 0x80 || (unsigned char)str[1] > 0xBF
-                  || (unsigned char)str[2] < 0x80
-                  || (unsigned char)str[2] > 0xBF))
+              && ((unsigned char)str[1] < 0x80 || (unsigned char)*str > 0xBF
+                  || (unsigned char)str[1] < 0x80
+                  || (unsigned char)str[1] > 0xBF))
             {
               loglevel |= 1;
-              LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", str);
+              LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", &str[-1]);
             }
-          else if (len >= 1 && c == 0xe0 && (unsigned char)str[1] < 0xa0)
+          else if (len >= 1 && c == 0xe0 && (unsigned char)*str < 0xa0)
             {
               loglevel |= 1;
-              LOG_WARN ("utf-8: NON_SHORTEST %s", str);
+              LOG_WARN ("utf-8: NON_SHORTEST %s", &str[-1]);
             }
           else if (len >= 2)
             {
-              wstr[i++] = ((c & 0x0f) << 12) | ((str[1] & 0x3f) << 6)
-                          | (str[2] & 0x3f);
+              wstr[i++] = ((uint16_t)(c & 0x0f) << 12)
+                        | ((uint16_t)(*str & 0x3f) << 6)
+                        | (str[1] & 0x3f);
               str++;
               str++;
               len--;
               len--;
             }
+        }
+      else
+        {
+          loglevel |= 1;
+          LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", &str[-1]);
         }
       /* everything above 0xf0 exceeds ucs-2, 4-6 byte seqs */
     }

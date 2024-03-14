@@ -89,7 +89,7 @@ typedef struct _bit_chain
   (dat->from_version >= R_2007) && !(dat->opts & DWG_OPTS_IN)
 #define IS_FROM_TU_DWG(dwg)                                                   \
   (dwg->header.from_version >= R_2007) && !(dwg->opts & DWG_OPTS_IN)
-#define TU_to_int(b) le16toh ((b[1] << 8) + b[0])
+#define TU_to_int(b) le16toh (((uint16_t)b[1] << 8) + b[0])
 
 /* Functions for raw data manipulations.
  */
