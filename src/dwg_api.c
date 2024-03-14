@@ -21989,8 +21989,87 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
    names can be up to 255 characters long and can contain letters,
    digits, and the following special characters:
    dollar sign ($), hyphen (-), and underscore (_).
-   utf-8 string without space, !
+   utf-8 string.
    check if in codepage
+*/
+EXPORT bool
+dwg_is_valid_name_u8 (Dwg_Data *restrict dwg, const char *restrict name)
+{
+  Dwg_Version_Type version = dwg->header.version;
+  const Dwg_Codepage cp = dwg->header.codepage;
+  BITCODE_TU wstr;
+  size_t wlen;
+#ifndef HAVE_NONNULL
+  if (!name)
+    return false;
+#endif
+  if (!*name || strlen (name) > 255)
+    return false;
+  // decode utf-8, check wide-chars
+  wstr = bit_utf8_to_TU ((char *)name, 0);
+  wlen = bit_wcs2nlen (wstr, 255);
+  if (wlen > 255 || !wlen)
+    {
+      free (wstr);
+      return false;
+    }
+  for (size_t i = 0; i < wlen; i++)
+    {
+      uint16_t c = wstr[i];
+      if (i == 0 && c == '*')
+        continue;
+      if (version < R_13 &&
+#ifdef HAVE_WCTYPE_H
+          iswlower (c)
+#else
+          c < 128 && islower (c)
+#endif
+          )
+        {
+          free (wstr);
+          return false;
+        }
+      if (c < 128)
+        {
+          if (!(c == '$' || c == '_' || c == '-' || isalnum (c)))
+            {
+              free (wstr);
+              return false;
+            }
+          else
+            continue;
+        }
+      else if (dwg_codepage_isasian (cp))
+        {
+          // reverse lookup in the cp for the cp index, and then check this
+          // for alnum
+          uint16_t idx = dwg_codepage_wc (cp, c);
+          if (!dwg_codepage_isalnum (cp, idx))
+            {
+              free (wstr);
+              return false;
+            }
+        }
+      else
+        {
+          uint8_t idx = dwg_codepage_c (cp, c);
+          if (!dwg_codepage_isalnum (cp, idx))
+            {
+              free (wstr);
+              return false;
+            }
+        }
+    }
+  free (wstr);
+  return true;
+}
+
+/* check for valid symbol table record name.
+   names can be up to 255 characters long and can contain letters,
+   digits, and the following special characters:
+   dollar sign ($), hyphen (-), and underscore (_).
+   native TV or TU string.
+   check if each char in codepage.
 */
 EXPORT bool
 dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
@@ -22001,57 +22080,59 @@ dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
   if (!name)
     return false;
 #endif
-  if (!*name || strlen (name) > 255)
-    return false;
-#ifdef HAVE_WCTYPE_H
-  {
-    // decode utf-8, check wide-chars
-    BITCODE_TU wstr = bit_utf8_to_TU ((char *)name, 0);
-    size_t wlen = bit_wcs2nlen (wstr, 255);
-    if (wlen > 255 || !wlen)
-      {
-        free (wstr);
-        return false;
-      }
-    for (size_t i = 0; i < wlen; i++)
-      {
-        uint16_t c = wstr[i];
-        if (i == 0 && c == '*')
-          continue;
-        if (version < R_13 && iswlower (c))
-          {
-            free (wstr);
-            return false;
-          }
-        // check if char in target codepage
-        if (!(c == '$' || c == '_' || c == '-' ||
-              dwg_codepage_isalnum (cp, c)))
-          {
-            free (wstr);
-            return false;
-          }
-      }
-    free (wstr);
-  }
-#else
-  // no wctype checks
-  if (*name == '*') // valid at the beginning
-    name++;
-  while (*name)
+  if (dwg->header.from_version < R_2007)
     {
-      unsigned char c = (unsigned char)*name;
-      name++;
-      if (version < R_13 && islower (c))
+      bool isasian = dwg_codepage_isasian (cp);
+      if (!*name || strlen (name) > 255)
         return false;
-      if (!(c == '$' || c == '_' || c == '-' ||
-            dwg_codepage_isalnum (cp, c)))
-        return false;
+      if (*name == '*') // valid at the beginning
+        name++;
+      
+      while (*name)
+        {
+          uint16_t c = (unsigned char)*name;
+          name++;
+          if (version < R_13 && c < 128 && islower (c))
+            return false;
+          if (c > 127 && isasian)
+            {
+              c = (c << 8) + (unsigned char)*name++;
+            }
+          if (!(c == '$' || c == '_' || c == '-' ||
+                dwg_codepage_isalnum (cp, c)))
+            return false;
+        }
+      return true;
     }
+  else // TU string
+    {
+      BITCODE_TU wstr = (BITCODE_TU)name;
+      size_t wlen = bit_wcs2nlen (wstr, 255);
+      if (wlen > 255 || !wlen)
+        return false;
+      for (size_t i = 0; i < wlen; i++)
+        {
+          uint16_t c = wstr[i];
+          if (i == 0 && c == '*')
+            continue;
+          if (version < R_13 &&
+#ifdef HAVE_WCTYPE_H
+              iswlower (c)
+#else
+              c < 128 && islower (c)
 #endif
+              )
+            return false;
+          // check if char in target codepage
+          if (!(c == '$' || c == '_' || c == '-' ||
+                dwg_codepage_isalnum (cp, c)))
+            return false;
+        }
+    }
   return true;
 }
 
-/* utf-8 string without lowercase letters, space or ! */
+/* utf-8? string without lowercase letters, space or ! */
 EXPORT bool
 dwg_is_valid_tag (const char *tag)
 {
@@ -22073,7 +22154,8 @@ dwg_is_valid_tag (const char *tag)
       }
     for (size_t i = 0; i < len; i++)
       {
-        if (iswlower (wstr[i]))
+        uint16_t c = wstr[i];
+        if (iswlower (c) || !(c == '$' || c == '_' || c == '-' || iswalnum(c)))
           {
             free (wstr);
             return false;
@@ -22083,11 +22165,10 @@ dwg_is_valid_tag (const char *tag)
   }
 #else
   // only ascii support, no wctype nor maxlen checks
-  while (*tag)
+  while ((uint8_t c = *tag++))
     {
-      if (islower (*tag))
+      if (islower (c) || !(c == '$' || c == '_' || c == '-' || isalnum(c)))
         return false;
-      tag++;
     }
 #endif
   return true;
@@ -22374,9 +22455,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (version)
     dwg->header.from_version = version;
   else
-    {
-      version = dwg->header.version = dwg->header.from_version;
-    }
+    version = dwg->header.version = dwg->header.from_version;
+
   // dwg->header.is_maint = 0xf;
   // dwg->header.zero_one_or_three = 1;
   // dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0
@@ -22629,20 +22709,26 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       const char *standard = dwg->header.version < R_13 ? "STANDARD" : "Standard";
       // LAYER: (0.1.10)
       layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
-      layer->color = (BITCODE_CMC){ 7, CMC_DEFAULTS };
-      layer->ltype
-          = dwg_add_handleref (dwg, 5, UINT64_C (0x16), NULL); // Continuous
-      layer->plotstyle = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL);
-      // CLAYER: (5.1.F) abs:F [H 8]
-      dwg->header_vars.CLAYER
-          = dwg_add_handleref (dwg, 5, UINT64_C (0x10), NULL);
+      if (layer)
+        {
+          layer->color = (BITCODE_CMC){ 7, CMC_DEFAULTS };
+          layer->ltype
+            = dwg_add_handleref (dwg, 5, UINT64_C (0x16), NULL); // Continuous
+          layer->plotstyle = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL);
+          // CLAYER: (5.1.F) abs:F [H 8]
+          dwg->header_vars.CLAYER
+            = dwg_add_handleref (dwg, 5, UINT64_C (0x10), NULL);
+        }
       // ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
       // if (ctrl)
       //   dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
       //   STYLE: (0.1.11)
       style = dwg_add_STYLE (dwg, standard);
-      style->font_file = dwg_add_u8_input (dwg, "txt");
-      style->last_height = 0.2;
+      if (style)
+        {
+          style->font_file = dwg_add_u8_input (dwg, "txt");
+          style->last_height = 0.2;
+        }
       // TEXTSTYLE: (5.1.11) [H 7]
       dwg->header_vars.TEXTSTYLE
           = dwg_add_handleref (dwg, 5, UINT64_C (0x11), NULL);
@@ -22674,7 +22760,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
           = dwg_add_handleref (dwg, 5, UINT64_C (0x15), NULL);
       // LTYPE_CONTINUOUS: (5.1.16)
       ltype = dwg_add_LTYPE (dwg, "CONTINUOUS");
-      ltype->description = dwg_add_u8_input (dwg, "Solid line");
+      if (ltype)
+        ltype->description = dwg_add_u8_input (dwg, "Solid line");
       dwg->header_vars.LTYPE_CONTINUOUS
           = dwg_add_handleref (dwg, 5, UINT64_C (0x16), NULL);
     }
@@ -22687,10 +22774,13 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
           = dwg_add_handleref (dwg, 5, UINT64_C (0x17), NULL);
       // MLINESTYLE: (0.1.18)
       mlstyle = dwg_add_MLINESTYLE (dwg, "Standard");
-      obj = dwg_obj_generic_to_object (mlstyle, &error);
-      if (!error)
-        dwg->header_vars.CMLSTYLE
-            = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+      if (mlstyle)
+        {
+          obj = dwg_obj_generic_to_object (mlstyle, &error);
+          if (!error)
+            dwg->header_vars.CMLSTYLE
+              = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+        }
 
       // DICTIONARY ACAD_PLOTSETTINGS: (5.1.19)
       dwg_add_DICTIONARY (dwg, "ACAD_PLOTSETTINGS", NULL, 0);
@@ -22701,9 +22791,12 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     {
       // DICTIONARY_LAYOUT: (5.1.1A)
       layoutdict = dwg_add_DICTIONARY (dwg, "ACAD_LAYOUT", NULL, 0);
-      obj = dwg_obj_generic_to_object (layoutdict, &error);
-      dwg->header_vars.DICTIONARY_LAYOUT
-          = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+      if (layoutdict)
+        {
+          obj = dwg_obj_generic_to_object (layoutdict, &error);
+          dwg->header_vars.DICTIONARY_LAYOUT
+            = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+        }
     }
   // DIMSTYLE: (5.1.1D) abs:1D [H 2]
 
@@ -22712,6 +22805,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   // BLOCK_RECORD_MSPACE: (5.1.1F)
   mspace = dwg_add_BLOCK_HEADER (dwg, "*MODEL_SPACE");
   mspaceobj = dwg_obj_generic_to_object (mspace, &error);
+  if (!mspaceobj)
+    return 1;
   block_control->num_entries--;
   dwg->header_vars.BLOCK_RECORD_MSPACE
       = dwg_add_handleref (dwg, 5, mspaceobj->handle.value, NULL);
@@ -22810,7 +22905,7 @@ dwg_new_Document (const Dwg_Version_Type version, const int imperial,
   dwg->header.version = version;
   dwg->opts = log_level;
 
-  (void)dwg_add_Document (dwg, imperial);
+  (void)dwg_add_Document (dwg, imperial); // ignores errors
   return dwg;
 }
 

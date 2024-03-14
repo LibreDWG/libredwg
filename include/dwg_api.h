@@ -6415,15 +6415,18 @@ extern "C"
   EXPORT Dwg_Object_BLOCK_HEADER *
   dwg_entity_owner (const void *_ent) __nonnull_all;
 
-  /* check for valid symbol table record name.
+  /* check for valid symbol table record name, and if it fits the codepage.
      names can be up to 255 characters long and can contain letters,
      digits, and the following special characters:
      dollar sign ($), hyphen (-), and underscore (_).
-     utf-8 string without space, !
-     TODO: if all chars are contained in codepage
+     input is a TV or TU string
   */
   EXPORT bool
   dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
+    __nonnull_all;
+  // variant where input is a UTF-8 string.
+  EXPORT bool
+  dwg_is_valid_name_u8 (Dwg_Data *restrict dwg, const char *restrict name)
     __nonnull_all;
 
   /* utf-8 string without lowercase letters, space or !. maxlen 256 */

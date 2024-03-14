@@ -127,13 +127,12 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
                           tracelevel);
   mspace = dwg_model_space_object (dwg);
   mspace_ref = dwg_model_space_ref (dwg);
-  hdr = mspace->tio.object->tio.BLOCK_HEADER;
-
   if (!mspace)
     {
       fail ("empty mspace");
       return 1;
     }
+  hdr = mspace->tio.object->tio.BLOCK_HEADER;
   switch ((int)type)
     {
     case DWG_TYPE_LINE:
@@ -1022,6 +1021,109 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   return n_failed;
 }
 
+static int test_names (void)
+{
+  Dwg_Data *dwg;
+  // more common add API tests
+  if (dwg_is_valid_tag (""))
+    fail("!dwg_is_valid_tag(\"\")");
+  if (dwg_is_valid_tag ("A!"))
+    fail("!dwg_is_valid_tag(\"A!\")");
+  if (dwg_is_valid_tag ("A B"))
+    fail("!dwg_is_valid_tag(\"A B\")");
+  if (dwg_is_valid_tag ("a"))
+    fail("!dwg_is_valid_tag(\"a\")");
+  if (!dwg_is_valid_tag ("ABC"))
+    fail("dwg_is_valid_tag(\"ABC\")");
+
+  dwg = dwg_new_Document (R_2000, 0, tracelevel);
+  dwg->header.codepage = CP_CP869; // DOS Greek
+  if (dwg_is_valid_name (dwg, ""))
+    fail("!dwg_is_valid_name (\"\")");
+  if (!dwg_is_valid_name (dwg, "0"))
+    fail("dwg_is_valid_name (\"0\")");
+  if (!dwg_is_valid_name (dwg, "*U"))
+    fail("dwg_is_valid_name (\"U*\")");
+  if (!dwg_is_valid_name (dwg, "SAB_X"))
+    fail("dwg_is_valid_name (\"SAB_X\")");
+  if (!dwg_is_valid_name (dwg, "SAB-X"))
+    fail("dwg_is_valid_name (\"SAB-X\")");
+  if (!dwg_is_valid_name (dwg, "$SAB"))
+    fail("dwg_is_valid_name (\"$SAB\")");
+  if (dwg_is_valid_name (dwg, "#SAB"))
+    fail("!dwg_is_valid_name (\"#SAB\")");
+  if (dwg_is_valid_name (dwg, "%SAB"))
+    fail("!dwg_is_valid_name (\"%%SAB\")");
+
+  if (!dwg_is_valid_name_u8 (dwg, "0"))
+    fail("dwg_is_valid_name_u8 (\"0\") CP869/r2000");
+  if (dwg_is_valid_name_u8 (dwg, "█")) // valid greek but no letter. \xe2\x96\x88
+    fail("!dwg_is_valid_name_u8(█) U+2588 FULL BLOCK CP869/r2000");
+#ifndef HAVE_WCTYPE_H // locale specific
+  if (!dwg_is_valid_name_u8 (dwg, "δ")) // SMALL DELTA
+    fail("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA CP869/r2000");
+#endif
+  // asis as in the CP869 codepage
+  if (dwg_is_valid_name (dwg, "\xdb")) // FULL BLOCK, valid greek at DB
+    fail("!dwg_is_valid_name(DB) FULL BLOCK CP869/r2000");
+  if (!dwg_is_valid_name (dwg, "\xdd")) // SMALL LETTER DELTA at DD
+    fail("dwg_is_valid_name(DD) SMALL LETTER DELTA CP869/r2000");
+
+  dwg->header.codepage = CP_CP949; // multibyte korean
+  if (!dwg_is_valid_name_u8 (dwg, "0"))
+    fail("dwg_is_valid_name_u8 (\"0\")");
+  if (dwg_is_valid_name_u8 (dwg, "갂")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
+    fail("!dwg_is_valid_name_u8(갂) U+AC02 SYLLABLE");
+  if (!dwg_is_valid_name_u8 (dwg, "Ａ"))
+    fail("dwg_is_valid_name_u8(Ａ) U+FF21 LETTER CP949/r2000");
+  // asis as in the CP949 codepage
+  if (!dwg_is_valid_name (dwg, "0"))
+    fail("dwg_is_valid_name (\"0\")");
+  if (!dwg_is_valid_name (dwg, "A")) // LATIN CAPITAL LETTER A
+    fail("dwg_is_valid_name(41) LETTER A single-byte");
+  if (dwg_is_valid_name (dwg, "\x81\x41")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
+    fail("!dwg_is_valid_name(8141) U+AC02 SYLLABLE");
+  if (!dwg_is_valid_name (dwg, "\xa3\xc1"))
+    fail("dwg_is_valid_name(A3C1) U+FF21 LETTER CP949/r2000");
+  dwg_free (dwg);
+
+  dwg = dwg_new_Document (R_2007, 0, tracelevel);
+  dwg->header.codepage = CP_ANSI_1253; // ANSI Greek
+  if (!dwg_is_valid_name_u8 (dwg, "0"))
+    fail("dwg_is_valid_name_u8 (\"0\")");
+  if (dwg_is_valid_name_u8 (dwg, "»")) // 0xbb
+    fail("!dwg_is_valid_name_u8(») U+00BB RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK");
+  if (!dwg_is_valid_name_u8 (dwg, "δ")) // 0xe4
+    fail("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA ANSI_1253/r2007");
+  // asis as in the CP949 codepage
+  if (dwg_is_valid_name (dwg, "\xbb\x00\x00"))
+    fail("!dwg_is_valid_name(BB) U+00BB RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK");
+  if (!dwg_is_valid_name (dwg, "\xdd\x00\x00"))
+    fail("dwg_is_valid_name(E4) U+03B4 SMALL LETTER DELTA ANSI_1253/r2007");
+  if (!dwg_is_valid_name (dwg, "0\x00\x00"))
+    fail("dwg_is_valid_name (L\"0\") ANSI_1253/r2007");
+
+  dwg->header.codepage = CP_ANSI_949; // multibyte korean
+  if (!dwg_is_valid_name_u8 (dwg, "0"))
+    fail("dwg_is_valid_name_u8 (\"0\")");
+  if (dwg_is_valid_name_u8 (dwg, "갂")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
+    fail("!dwg_is_valid_name_u8(갂) U+AC02 SYLLABLE");
+  if (!dwg_is_valid_name_u8 (dwg, "Ａ"))
+    fail("dwg_is_valid_name_u8(Ａ) U+FF21 LETTER at A3C1");
+  // asis as in the CP949 codepage
+  if (!dwg_is_valid_name (dwg, "B\x00\x00")) // LATIN CAPITAL LETTER A
+    fail("dwg_is_valid_name(42) LETTER B ANSI_949/r2007");
+  if (dwg_is_valid_name (dwg, "\x41\x81\x00")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
+    fail("!dwg_is_valid_name(8141) U+AC02 SYLLABLE");
+  if (!dwg_is_valid_name (dwg, "\xc1\xa3\x00"))
+    fail("dwg_is_valid_name(A3C1) U+FF21 LETTER ANSI_949/r2007");
+  if (!dwg_is_valid_name (dwg, "0\x00\x00"))
+    fail("dwg_is_valid_name (\"0\") ANSI_949/r2007");
+
+  dwg_free (dwg);
+  return numfailed();
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1029,7 +1131,6 @@ main (int argc, char *argv[])
   char *trace = getenv ("LIBREDWG_TRACE");    // read_dwg
   char *debugenv = getenv ("LIBREDWG_DEBUG"); // keep files
   int dxf = 0;
-  Dwg_Data *dwg;
 
   loglevel = is_make_silent () ? 0 : 2; // print ok
   if (trace)
@@ -1040,6 +1141,8 @@ main (int argc, char *argv[])
     debug = atoi (debugenv);
   else
     debug = 0;
+
+  error = test_names();
 
 #ifndef DISABLE_DXF
   for (; dxf < 2; dxf++)
@@ -1158,47 +1261,5 @@ main (int argc, char *argv[])
           += test_add (DWG_TYPE_WIPEOUTVARIABLES, "add_wipeoutvars_2000", dxf);
     }
 
-  // more common add API tests
-  if (dwg_is_valid_tag (""))
-    fail("!dwg_is_valid_tag(\"\")");
-  if (dwg_is_valid_tag ("A!"))
-    fail("!dwg_is_valid_tag(\"A!\")");
-  if (dwg_is_valid_tag ("A B"))
-    fail("!dwg_is_valid_tag(\"A B\")");
-  if (dwg_is_valid_tag ("a"))
-    fail("!dwg_is_valid_tag(\"a\")");
-  if (!dwg_is_valid_tag ("A"))
-    fail("dwg_is_valid_tag(\"A\")");
-
-  dwg = dwg_new_Document (R_2018, 0 /*metric/iso */, tracelevel);
-  if (dwg_is_valid_name (dwg, ""))
-    fail("!dwg_is_valid_name (\"\")");
-  if (!dwg_is_valid_name (dwg, "*U"))
-    fail("dwg_is_valid_name (\"U*\")");
-  if (!dwg_is_valid_name (dwg, "SAB_X"))
-    fail("dwg_is_valid_name (\"SAB_X\")");
-  if (!dwg_is_valid_name (dwg, "SAB-X"))
-    fail("dwg_is_valid_name (\"SAB-X\")");
-  if (!dwg_is_valid_name (dwg, "$SAB"))
-    fail("dwg_is_valid_name (\"$SAB\")");
-  if (dwg_is_valid_name (dwg, "#SAB"))
-    fail("!dwg_is_valid_name (\"#SAB\")");
-  if (dwg_is_valid_name (dwg, "%SAB"))
-    fail("!dwg_is_valid_name (\"%%SAB\")");
-
-  dwg->header.codepage = CP_CP869; // DOS Greek
-#ifdef HAVE_WCTYPE_H // as utf-8, not greek
-  if (dwg_is_valid_name (dwg, "Û")) // FULL BLOCK, valid greek at db
-    fail("!dwg_is_valid_name (\"\\xdb FULL BLOCK\")");
-  if (!dwg_is_valid_name (dwg, "\xc3\x9d")) // SMALL DELTA is at dd
-    fail("dwg_is_valid_name (\"\\xdd SMALL DELTA\")");
-#else // asis in the CP869 codepage
-  if (dwg_is_valid_name (dwg, "\xdb")) // FULL BLOCK, valid greek
-    fail("!dwg_is_valid_name (\"\\xdb FULL BLOCK\")");
-  if (!dwg_is_valid_name (dwg, "\xdd")) // SMALL DELTA
-    fail("dwg_is_valid_name (\"\\xdd SMALL DELTA\")");
-#endif
-  dwg_free (dwg);
-  error += numfailed();
   return error;
 }
