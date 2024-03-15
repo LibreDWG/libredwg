@@ -22009,10 +22009,7 @@ dwg_is_valid_name_u8 (Dwg_Data *restrict dwg, const char *restrict name)
   wstr = bit_utf8_to_TU ((char *)name, 0);
   wlen = bit_wcs2nlen (wstr, 255);
   if (wlen > 255 || !wlen)
-    {
-      free (wstr);
-      return false;
-    }
+    goto fail;
   for (size_t i = 0; i < wlen; i++)
     {
       uint16_t c = wstr[i];
@@ -22025,17 +22022,11 @@ dwg_is_valid_name_u8 (Dwg_Data *restrict dwg, const char *restrict name)
           c < 128 && islower (c)
 #endif
           )
-        {
-          free (wstr);
-          return false;
-        }
+        goto fail;
       if (c < 128)
         {
           if (!(c == '$' || c == '_' || c == '-' || isalnum (c)))
-            {
-              free (wstr);
-              return false;
-            }
+            goto fail;
           else
             continue;
         }
@@ -22045,23 +22036,20 @@ dwg_is_valid_name_u8 (Dwg_Data *restrict dwg, const char *restrict name)
           // for alnum
           uint16_t idx = dwg_codepage_wc (cp, c);
           if (!dwg_codepage_isalnum (cp, idx))
-            {
-              free (wstr);
-              return false;
-            }
+            goto fail;
         }
       else
         {
           uint8_t idx = dwg_codepage_c (cp, c);
           if (!dwg_codepage_isalnum (cp, idx))
-            {
-              free (wstr);
-              return false;
-            }
+            goto fail;
         }
     }
   free (wstr);
   return true;
+ fail:
+  free (wstr);
+  return false;
 }
 
 /* check for valid symbol table record name.
@@ -22144,24 +22132,22 @@ dwg_is_valid_tag (const char *tag)
     return false;
 #ifdef HAVE_WCTYPE_H
   {
-    // decode utf-8, check wide-chars
+    // decode utf-8, check wide-chars (but only in current locale!)
     BITCODE_TU wstr = bit_utf8_to_TU ((char *)tag, 0);
     size_t len = bit_wcs2nlen (wstr, 256);
     if (len > 256 || !len)
-      {
-        free (wstr);
-        return false;
-      }
+      goto fail1;
     for (size_t i = 0; i < len; i++)
       {
         uint16_t c = wstr[i];
         if (iswlower (c) || !(c == '$' || c == '_' || c == '-' || iswalnum(c)))
-          {
-            free (wstr);
-            return false;
-          }
+          goto fail1;
       }
     free (wstr);
+    return true;
+  fail1:
+    free (wstr);
+    return false;
   }
 #else
   // only ascii support, no wctype nor maxlen checks
@@ -22170,8 +22156,8 @@ dwg_is_valid_tag (const char *tag)
       if (islower (c) || !(c == '$' || c == '_' || c == '-' || isalnum(c)))
         return false;
     }
-#endif
   return true;
+#endif
 }
 
 /********************************************************************
