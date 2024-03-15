@@ -21347,10 +21347,14 @@ dwg_ent_set_ltype (dwg_obj_ent *restrict ent, const char *restrict name)
   // check given handle (to the ltype tablerecord)
   Dwg_Data *dwg = ent->dwg;
   BITCODE_H lt_ref = dwg_find_tablehandle (dwg, name, "LTYPE");
-  if (!lt_ref) {
-    if (!dwg_is_valid_name (dwg, name))
-      return 2; // invalid name
-    return 1; // not found
+  if (!lt_ref)
+    {
+      if (!dwg_is_valid_name_u8 (dwg, name))
+        {
+          LOG_WARN ("Invalid symbol table record name \"%s\"\n", name);
+          return 2; // invalid name
+        }
+      return 1; // not found
   }
   if (!ent->ltype
       || lt_ref->absolute_ref != ent->ltype->absolute_ref)
@@ -23480,10 +23484,10 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   // TODO scale_flag
   _obj->rotation = rotation;
   ADD_CHECK_ANGLE (_obj->rotation);
-  if (!dwg_is_valid_name (dwg, name)) {
-    API_UNADD_ENTITY;
-    LOG_ERROR("Invalid blockname %s", name);
-    return NULL;
+  if (!dwg_is_valid_name_u8 (dwg, name)) {
+    LOG_WARN("Invalid blockname %s", name);
+    //API_UNADD_ENTITY;
+    //return NULL;
   }
   hdrref = dwg_find_tablehandle (dwg, name, "BLOCK");
   if (hdrref)
@@ -25250,10 +25254,10 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
   Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);          \
   Dwg_Object_##control *_ctrl;                                                \
   BITCODE_RLL ctrlhdl, ctrlidx;                                               \
-  if (name && !dwg_is_valid_name (dwg, name))                                 \
+  if (name && !dwg_is_valid_name_u8 (dwg, name))                              \
     {                                                                         \
-      LOG_ERROR ("Invalid symbol table record name \"%s\"\n", name);          \
-      return NULL;                                                            \
+      LOG_WARN ("Invalid symbol table record name \"%s\"\n", name);           \
+      /*return NULL;*/                                                        \
     }                                                                         \
   if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)           \
     {                                                                         \
@@ -25474,14 +25478,15 @@ dwg_add_GROUP (Dwg_Data *restrict dwg,
   Dwg_Object *dictobj;
   Dwg_Object_Ref *groupdict;
   Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
-  if (name && !dwg_is_valid_name (dwg, name))
-    return NULL;
+  if (name && !dwg_is_valid_name_u8 (dwg, name))
+    LOG_WARN ("Invalid name \"%s\"\n", name);
+    //return NULL;
   {
     API_ADD_OBJECT (GROUP);
     if (dwg->header.version <= R_12)
       {
-        LOG_ERROR ("Invalid entity %s <r13", "GROUP")
-          API_UNADD_ENTITY;
+        LOG_ERROR ("Invalid entity %s <r13", "GROUP");
+        API_UNADD_ENTITY;
         return NULL;
       }
     // find nod dict
@@ -25522,8 +25527,9 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
 {
   Dwg_Object_DICTIONARY *dict;
   Dwg_Object_Ref *dictref;
-  if (!dwg_is_valid_name (dwg, name))
-    return NULL;
+  if (!dwg_is_valid_name_u8 (dwg, name))
+    LOG_WARN ("Invalid name \"%s\"\n", name);
+    //return NULL;
   {
     API_ADD_OBJECT (MLINESTYLE);
     // find nod dict
