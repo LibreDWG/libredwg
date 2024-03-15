@@ -3936,6 +3936,7 @@ DWG_TABLE (LTYPE)
       SUB_FIELD_BD (dashes[rcount1],length, 49);
       DXF {
         SUB_FIELD_BS (dashes[rcount1],shape_flag, 74);
+        LOG_LTYPE_SHAPE_FLAG
         if (_obj->dashes[rcount1].shape_flag) // eg BATTING
           {
             SUB_FIELD_BS (dashes[rcount1],complex_shapecode, 75);
@@ -3957,6 +3958,7 @@ DWG_TABLE (LTYPE)
         SUB_FIELD_BD (dashes[rcount1],scale, 46);
         SUB_FIELD_BD (dashes[rcount1],rotation, 50);
         SUB_FIELD_BS (dashes[rcount1],shape_flag, 74);
+        LOG_LTYPE_SHAPE_FLAG
       }
       DECODER {
         if (FIELD_VALUE (dashes[rcount1].shape_flag) & 2)

@@ -906,6 +906,25 @@
     }
 #endif
 
+#ifndef LOG_LTYPE_SHAPE_FLAG
+#  define LOG_LTYPE_SHAPE_FLAG_W(w)                                           \
+    if (_obj->dashes[rcount1].shape_flag & LTYPE_SHAPE_FLAG_##w)              \
+    LOG_TRACE (#w "(0x%x) ", LTYPE_SHAPE_FLAG_##w)
+#  define LOG_LTYPE_SHAPE_FLAG                                                \
+    DECODER_OR_ENCODER                                                        \
+    {                                                                         \
+      if (_obj->dashes[rcount1].shape_flag)                                   \
+        {                                                                     \
+          LOG_TRACE ("                      ");                               \
+          LOG_LTYPE_SHAPE_FLAG_W (ABS_ROTATION);                              \
+          LOG_LTYPE_SHAPE_FLAG_W (IS_TEXT);                                   \
+          LOG_LTYPE_SHAPE_FLAG_W (IS_SHAPE);                                  \
+          LOG_FLAG_MAX (_obj->dashes[rcount1].shape_flag, LTYPE_SHAPE_FLAG_IS_SHAPE); \
+          LOG_TRACE ("\n");                                                   \
+        }                                                                     \
+    }
+#endif
+
 #ifndef LOG_HORIZ_ALIGNMENT
 #  define LOG_HORIZ_ALIGNMENT_W(w)                                            \
     if (_obj->horiz_alignment == HORIZ_ALIGNMENT_##w)                         \
