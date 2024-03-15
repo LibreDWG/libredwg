@@ -197,6 +197,38 @@
 #define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len)
 #define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len)
 
+#define FIELD_VEC_TRACE_N(nam, type, vcount, value, dxf)                      \
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
+    {                                                                         \
+      char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                         \
+      if (s1)                                                                 \
+        {                                                                     \
+          char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
+          if (s2)                                                             \
+            {                                                                 \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              LOG_TRACE (strcat (s2, "[%ld]: " FORMAT_##type " [" #type       \
+                         " %d]"), rcount1, rcount2, vcount, value, dxf)       \
+              GCC46_DIAG_RESTORE                                              \
+              free (s2);                                                      \
+              free (s1);                                                      \
+            }                                                                 \
+          else                                                                \
+            {                                                                 \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              LOG_TRACE (strcat (s1, "[%ld]: " FORMAT_##type " [" #type       \
+                         " %d]"), rcount1, vcount, value, dxf)                \
+              GCC46_DIAG_RESTORE                                              \
+              free (s1);                                                      \
+            }                                                                 \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]",          \
+                     vcount, value, dxf)                                      \
+        }                                                                     \
+      LOG_POS;                                                                \
+    }
 #define FIELD_2PT_TRACE(nam, type, dxf)                                       \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
@@ -1090,9 +1122,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type " %d]",         \
-                     (long)vcount, _obj->name[vcount], dxf)                   \
-          LOG_POS                                                             \
+          FIELD_VEC_TRACE_N (name, type, (long)vcount, _obj->name[vcount],    \
+                             dxf)                                             \
         }                                                                     \
     }
 #define SUB_FIELD_VECTOR_N(o, nam, type, csize, dxf)                          \
