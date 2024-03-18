@@ -28,7 +28,7 @@ jobs:
       fail-fast: true
       matrix:
         CONFIGURE_ARGS:
-          #- CFLAGS="-O1 -fno-omit-frame-pointer -fsanitize=address -fno-var-tracking" --disable-bindings --disable-docs
+          - CFLAGS="-O1 -fno-omit-frame-pointer -fsanitize=address -fno-var-tracking" --disable-bindings --disable-docs
           - CC="clang"
           - --enable-release
           - --enable-gcov --disable-bindings --disable-docs
@@ -65,9 +65,14 @@ jobs:
         build-aux/install-pslib
     - run: sh autogen.sh
     - if: contains(matrix.CONFIGURE_ARGS, '-fsanitize=address')
+      name: Fix kernel mmap rnd bits for -fsanitize=address
       run: |
-        echo "-fsanitize=address run-time broken in latest ubuntu image update from March 10, 2024"
-        exit 0
+        # echo "-fsanitize=address run-time broken in latest ubuntu image update from March 10, 2024"
+        # https://github.com/actions/runner-images/issues/9491
+        # Asan in llvm 14 provided in ubuntu 22.04 is incompatible with
+        # high-entropy ASLR in much newer kernels that GitHub runners are
+        # using leading to random crashes: https://reviews.llvm.org/D148280
+        sudo sysctl vm.mmap_rnd_bits=28
     - run: ./configure ${{ matrix.CONFIGURE_ARGS }}
     - if: ${{ !contains(matrix.CONFIGURE_ARGS, '--enable-release') }}
       run: make -j
