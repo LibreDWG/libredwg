@@ -1169,7 +1169,7 @@
     {                                                                         \
       if (_obj->scenario)                                                     \
         {                                                                     \
-          LOG_TRACE ("         ");                                            \
+          LOG_TRACE ("          ");                                           \
           LOG_SPLINE_SCENARIO_W (SPLINE);                                     \
           LOG_SPLINE_SCENARIO_W (BEZIER);                                     \
           LOG_FLAG_MAX (_obj->scenario, 2);                                   \
