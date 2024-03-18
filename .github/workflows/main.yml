@@ -28,7 +28,7 @@ jobs:
       fail-fast: true
       matrix:
         CONFIGURE_ARGS:
-          - CFLAGS="-O1 -fno-omit-frame-pointer -fsanitize=address -fno-var-tracking" --disable-bindings --disable-docs
+          #- CFLAGS="-O1 -fno-omit-frame-pointer -fsanitize=address -fno-var-tracking" --disable-bindings --disable-docs
           - CC="clang"
           - --enable-release
           - --enable-gcov --disable-bindings --disable-docs
@@ -64,6 +64,10 @@ jobs:
         build-aux/install-libxslt
         build-aux/install-pslib
     - run: sh autogen.sh
+    - if: contains(matrix.CONFIGURE_ARGS, '-fsanitize=address')
+      run: |
+        echo "-fsanitize=address run-time broken in latest ubuntu image update from March 10, 2024"
+        exit 0
     - run: ./configure ${{ matrix.CONFIGURE_ARGS }}
     - if: ${{ !contains(matrix.CONFIGURE_ARGS, '--enable-release') }}
       run: make -j
