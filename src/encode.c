@@ -6653,13 +6653,37 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
               }
             else
               {
-                bit_write_RS (dat, rbuf->value.str.size);
-                bit_write_RC (dat, rbuf->value.str.codepage);
-                if (rbuf->value.str.u.data)
-                  bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data,
-                                rbuf->value.str.size);
+                // do we need to convert UTF-8 to codepage?
+                if (rbuf->value.str.size > 0 && dat->opts & DWG_OPTS_INJSON)
+                  {
+                    BITCODE_RS destlen = rbuf->value.str.size * 2;
+                    char* dest = malloc (destlen);
+                    while (!bit_utf8_to_TV (dest, (BITCODE_TF)rbuf->value.str.u.data,
+                                            destlen, rbuf->value.str.size, 0,
+                                            rbuf->value.str.codepage))
+                      {
+                        destlen *= 2;
+                        dest = realloc(dest, destlen);
+                      }
+                    destlen = (BITCODE_RS)strlen (dest);
+                    bit_write_RS (dat, destlen);
+                    bit_write_RC (dat, rbuf->value.str.codepage);
+                    if (dest)
+                      bit_write_TF (dat, (BITCODE_TF)dest, destlen);
+                    else
+                      bit_write_TF (dat, (BITCODE_TF) "", 0);
+                    free (dest);
+                  }
                 else
-                  bit_write_TF (dat, (BITCODE_TF) "", 0);
+                  {
+                    bit_write_RS (dat, rbuf->value.str.size);
+                    bit_write_RC (dat, rbuf->value.str.codepage);
+                    if (rbuf->value.str.u.data)
+                      bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data,
+                                    rbuf->value.str.size);
+                    else
+                      bit_write_TF (dat, (BITCODE_TF) "", 0);
+                  }
                 LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]", j,
                            rbuf->value.str.u.data, rbuf->value.str.size,
                            rbuf->type);
