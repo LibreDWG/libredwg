@@ -2117,12 +2117,14 @@ bit_embed_TU (BITCODE_TU restrict wstr)
 /** Write ASCIIZ text.
     Starting with r2004 as writer (not target version) acad always
     writes a terminating zero, and includes it in the length.
+    On DWG_OPTS_INJSON (imported from JSON), convert from UTF-8 to the codepage.
  */
 void
 bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
 {
   size_t i;
   size_t length = (chain && *chain) ? strlen ((const char *)chain) : 0;
+  bool need_free = false;
   if (length > UINT16_MAX)
     {
       // silently truncate overlong strings for now
@@ -2130,6 +2132,21 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
       LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
+    }
+  // on utf-8 convert back to codepage
+  if (length && dat->opts & DWG_OPTS_INJSON)
+    {
+      size_t destlen = length * 2;
+      char* dest = malloc(destlen);
+      while (!bit_utf8_to_TV (dest, (unsigned char *)chain, destlen, length,
+             0, dat->codepage))
+        {
+          destlen *= 2;
+          dest = realloc(dest, destlen);
+        }
+      need_free = true;
+      chain = dest;
+      length = strlen (dest);
     }
   if (dat->from_version < R_13b1)
     bit_write_RS (dat, (BITCODE_RS)length);
@@ -2141,6 +2158,8 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     }
   for (i = 0; i < length; i++)
     bit_write_RC (dat, (unsigned char)chain[i]);
+  if (need_free)
+    free (chain);
 }
 
 static int
