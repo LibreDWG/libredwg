@@ -87,7 +87,7 @@ static BITCODE_BL rcount1 = 0, rcount2 = 0;
 /* section_order: A static array of section types.
    SECTION_R13_SIZE is the size and the sentinel.
  */
-#define SECTION_R13_SIZE 7U
+#define SECTION_R13_SIZE 8U
 static Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
 
 #ifdef USE_TRACING
@@ -1998,7 +1998,7 @@ find_section_info_type (const Dwg_Data *restrict dwg, Dwg_Section_Type type)
   return NULL;
 }
 
-/* Ordering of r13-r2000 sections 0-6 */
+/* Ordering of r13-r2000 sections 0-7 */
 static void
 section_order_trace (const Dwg_Data *dwg,
                      const BITCODE_BL numsections,
@@ -3080,13 +3080,12 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 }
 
 static int
-encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
+encode_objfreespace (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   int error = 0;
 
   /*------------------------------------------------------------
-   * ObjFreeSpace and Second header - r13-r2000 only.
-   * Note: partially also since r2004.
+   * ObjFreeSpace - r13c3-r2000 only.
    */
   if (dwg->header.version >= R_13 && dwg->header.version < R_2004
       && dwg->header.num_sections > 3)
@@ -3105,8 +3104,18 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
 
-  if (dwg->header.version >= R_13 && dwg->header.version < R_2004 &&
-      dwg->secondheader.codepage)
+  return error;
+}
+
+static int
+encode_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
+{
+  int error = 0;
+
+  /*------------------------------------------------------------
+   * Second Header - r13-r2000 only.
+   */
+  if (dwg->header.version >= R_13 && dwg->header.version < R_2004)
     {
       struct _dwg_secondheader *_obj = &dwg->secondheader;
       Dwg_Object *obj = NULL;
@@ -3733,15 +3742,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   THUMBNAIL
      *         2: Handles
      *         3: ObjFreeSpace (r13c3+, optional)
-                  + 2NDHEADER (r13-r2000)
+     *         7: 2NDHEADER (r13-r2000, not a section)
      *         4: Template (r14-r2000, optional)
      *         5: AuxHeader (r2000, no sentinels)
      *         6: THUMBNAIL (r13c3+, not a section)
      */
     
-    /* Usually 3-5, max 6 */
+    /* Usually 5-7, max 8 */
     if (!dwg->header.num_sections
-        || (dat->from_version >= R_2004 && dwg->header.num_sections > 6))
+        || (dat->from_version >= R_2004 && dwg->header.num_sections > 8))
       {
         if (dwg->header.version <= R_2000)
           {
@@ -3750,11 +3759,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             else
               dwg->header.num_sections
                   = dwg->auxheader.dwg_version && dwg->header.version == R_2000
-                        ? 6
-                        : 5;
+                        ? 7
+                        : 6;
           }
         else
-          dwg->header.num_sections = 6;
+          dwg->header.num_sections = 7;
         // minimal DXF:
         // if (dwg->opts & (DWG_OPTS_INDXF | DWG_OPTS_MINIMAL)
         //    && (!dwg->header_vars.HANDSEED ||
@@ -3784,19 +3793,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (dwg->header.sections > 3)
         {
           section_order[3] = SECTION_OBJFREESPACE_R13;
-          section_order[4] = SECTION_TEMPLATE_R13;
+          section_order[4] = SECTION_SECOND_HEADER_R13;
+          section_order[5] = SECTION_TEMPLATE_R13;
           if (dwg->header.sections > 5)
             {
-              section_order[5] = SECTION_AUXHEADER_R2000;
-              section_order[6] = SECTION_THUMBNAIL_R13;
+              section_order[6] = SECTION_AUXHEADER_R2000;
+              section_order[7] = SECTION_THUMBNAIL_R13;
             }
           else
             {
-              section_order[5] = SECTION_THUMBNAIL_R13;
+              section_order[6] = SECTION_THUMBNAIL_R13;
             }
         }
       else
-        section_order[3] = SECTION_THUMBNAIL_R13;
+        {
+          section_order[3] = SECTION_THUMBNAIL_R13;
+          section_order[4] = SECTION_SECOND_HEADER_R13;
+        }
 
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
         section_order_trace (dwg, dwg->header.num_sections,
@@ -3915,7 +3928,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 error |= encode_objects_handles (dwg, dat, (Bit_Chain **)&sec_dat);
                 break;
               case SECTION_OBJFREESPACE_R13:
-                error |= encode_objfreespace_2ndheader (dwg, dat);
+                error |= encode_objfreespace (dwg, dat);
+                break;
+              case SECTION_SECOND_HEADER_R13:
+                error |= encode_2ndheader (dwg, dat);
                 break;
               case SECTION_TEMPLATE_R13:
                 error |= encode_template (dwg, dat);
@@ -3931,10 +3947,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 break;
               }
           }
-      }
-    if (dwg->header.sections == 3 && dwg->secondheader.codepage)
-      {
-        error |= encode_objfreespace_2ndheader (dwg, dat);
       }
   } // VERSIONS (R_13b1, R_2004)
 
