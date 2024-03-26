@@ -3816,6 +3816,10 @@ DWG_TABLE (STYLE)
       FIELD_VALUE (flag) |= (FIELD_VALUE (is_vertical) ? 4 : 0) +
                             (FIELD_VALUE (is_shape) ? 1 : 0);
       LOG_TRACE ("flag => %d [RC 70]\n", FIELD_VALUE (flag));
+      DECODER_OR_ENCODER {
+        LOG_TRACE ("  ")
+        LOG_FLAG_TextStyle
+      }
     }
   }
   PRE (R_13b1) {
