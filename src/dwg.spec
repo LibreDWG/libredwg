@@ -4844,6 +4844,7 @@ DWG_OBJECT (MLINESTYLE)
                              256 = End square (line) cap,
                              512 = End inner arcs cap,
                              1024 = End round (outer arcs) cap */
+  LOG_MLINESTYLE_FLAG
   DXF { FIELD_T (description, 3); }
   FIELD_CMC (fill_color, 62); /*!< default 256 */
 #ifdef IS_DXF
