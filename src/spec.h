@@ -1160,6 +1160,33 @@
     }
 #endif
 
+#ifndef LOG_MLINESTYLE_FLAG
+#  define LOG_MLINESTYLE_FLAG_W(w)                                            \
+    if (_obj->flag & MLINESTYLE_FLAG_##w)                                     \
+    LOG_TRACE (#w "(0x%x) ", MLINESTYLE_FLAG_##w)
+#  define LOG_MLINESTYLE_FLAG                                                 \
+    DECODER_OR_ENCODER                                                        \
+    {                                                                         \
+      if (_obj->flag)                                                         \
+        {                                                                     \
+          LOG_TRACE ("      ");                                               \
+          LOG_MLINESTYLE_FLAG_W (FILL);                                       \
+          LOG_MLINESTYLE_FLAG_W (MITERS);                                     \
+          LOG_MLINESTYLE_FLAG_W (UNKNOWN_4);                                  \
+          LOG_MLINESTYLE_FLAG_W (UNKNOWN_8);                                  \
+          LOG_MLINESTYLE_FLAG_W (START_SQUARE_END);                           \
+          LOG_MLINESTYLE_FLAG_W (START_INNER_ARC);                            \
+          LOG_MLINESTYLE_FLAG_W (START_ROUND);                                \
+          LOG_MLINESTYLE_FLAG_W (UNKNOWN_128);                                \
+          LOG_MLINESTYLE_FLAG_W (END_SQUARE);                                 \
+          LOG_MLINESTYLE_FLAG_W (END_INNER_ARC);                              \
+          LOG_MLINESTYLE_FLAG_W (END_ROUND);                                  \
+          LOG_FLAG_MAX (_obj->flag, 2047);                                    \
+          LOG_TRACE ("\n");                                                   \
+        }                                                                     \
+    }
+#endif
+
 #ifndef LOG_MLINE_JUSTIFICATION
 #  define LOG_MLINE_JUSTIFICATION_W(w)                                        \
     if (_obj->justification == MLINE_JUSTIFICATION_##w)                       \
