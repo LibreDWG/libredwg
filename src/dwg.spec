@@ -3184,12 +3184,9 @@ DWG_OBJECT (DICTIONARYWDFLT)
 
 #ifdef IS_DXF
   SUBCLASS (AcDbDictionary)
-  SINCE (R_2000b)
-  {
-    if (FIELD_VALUE (is_hardowner))
-      FIELD_RC (is_hardowner, 280);
-    FIELD_BS (cloning, 281);
-  }
+  if (FIELD_VALUE (is_hardowner))
+    FIELD_RC (is_hardowner, 280);
+  FIELD_BS (cloning, 281);
 #else
   FIELD_BL (numitems, 0);
   FIELD_BS (cloning, 281);
