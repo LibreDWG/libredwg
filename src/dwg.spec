@@ -601,6 +601,7 @@ DWG_ENTITY (ATTDEF)
     FIELD_T (tag, 0);
     FIELD_BS (field_length, 0); //DXF 73, unused
     FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
+    LOG_FLAG_ATTDEF
     SINCE (R_2007a) {
       FIELD_B (lock_position_flag, 0);
     }
