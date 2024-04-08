@@ -80,6 +80,10 @@ void dwg_set_handle_size (Dwg_Handle *restrict hdl);
 void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
 void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *restrict o);
 
+void ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref);
+const Dwg_Object_Ref *ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
+                                  const unsigned long absref);
+
 /*------------------------------------------------------------------------------
  * Public functions
  */
@@ -2171,6 +2175,8 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   else if (dwg->header.from_version > R_12 || absref)
     {
       // search of this code-absref pair already exists
+      // lsearch is slow,use bsearch
+      /*
       for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
         {
           Dwg_Object_Ref *refi = dwg->object_ref[i];
@@ -2180,6 +2186,12 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
                           ARGS_REF (refi), (unsigned)i)
               return refi;
             }
+        }
+      */
+      Dwg_Object_Ref *refi = (Dwg_Object_Ref*)ordered_ref_find (dwg, code, absref);
+      if (NULL != refi)
+        {
+          return refi;
         }
     }
   // else create a new global ref
@@ -2199,6 +2211,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   ref->obj = NULL;
   LOG_HANDLE ("[add handleref " FORMAT_REF "] ", ARGS_REF (ref))
   // fill ->obj later
+  ordered_ref_add (dwg, ref);
   return ref;
 }
 
@@ -3745,4 +3758,214 @@ void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *rest
     else
       o->lines[j].lt.ltype = dwg_add_handleref (dwg, 5, 0, NULL);
   }
+}
+
+static const void *
+bsearch_ex (const void *pKey, const void *pBase, size_t numBase,
+            size_t nItemWidth,
+            int (*compare) (const void *pItemL, const void *pItemR),
+            const void **ppBefore)
+{
+  size_t numNow = numBase;
+  char* pLo = (char*)pBase;
+  char* pHi = (char*)pBase + (numNow - 1) * nItemWidth;
+  if (NULL != ppBefore)
+    {
+      *ppBefore = NULL;
+    }
+  if (0 == numBase)
+    {
+      return NULL;
+    }
+  for (; pLo <= pHi;)
+    {
+      if (0 == numNow)
+        {
+          break;
+        }
+      if (1 == numNow)
+        {
+          if (0 == compare (pKey, pLo))
+            {
+              // pKey == pLo
+              return pLo;
+            }
+          break;
+        }
+      else
+        {
+          size_t numHalf;
+          char *pMid = NULL;
+          int result;
+
+          numHalf = numNow / 2;
+          pMid = pLo + (numNow & 1 ? numHalf : (numHalf - 1)) * nItemWidth;
+          result = compare (pKey, pMid);
+          if (0 == result)
+            {
+              // pKey == pMid
+              return pMid;
+            }
+          if (result < 0)
+            {
+              // pKey < pMid
+              pHi = pMid - nItemWidth;
+              numNow = numNow & 1 ? numHalf : numHalf - 1;
+            }
+          else
+            {
+              // pKey > pMid
+              pLo = pMid + nItemWidth;
+              numNow = numHalf;
+            }
+        }
+    }
+  if (NULL != ppBefore)
+    {
+      if (compare (pKey, pLo) > 0)
+        {
+          // pKey > pLo
+          pLo += nItemWidth;
+          if (pLo < (char *)pBase + numBase * nItemWidth)
+            {
+              *ppBefore = pLo;
+            }
+        }
+      else
+        {
+          // pKey < pLo
+          *ppBefore = pLo;
+        }
+    }
+  return NULL;
+}
+
+static int
+Ref_cmp (const Dwg_Object_Ref *pKey, const Dwg_Object_Ref **ppR)
+{
+  int retVal = (int)pKey->handleref.code - (int)(*ppR)->handleref.code;
+  if (0 != retVal)
+    {
+      return retVal;
+    }
+  return (long)pKey->absolute_ref - (long)(*ppR)->absolute_ref;
+}
+
+void
+ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref)
+{
+  Dwg_Object_Ref **pBefore = NULL;
+  Dwg_Object_Ref **pFound = NULL;
+  if (DWG_HDL_OWNER != ref->handleref.code
+      && DWG_HDL_SOFTOWN != ref->handleref.code
+      && DWG_HDL_HARDOWN != ref->handleref.code
+      && DWG_HDL_SOFTPTR != ref->handleref.code
+      && DWG_HDL_HARDPTR != ref->handleref.code)
+    {
+      return;
+    }
+  if ((BITCODE_BL)-1 == dwg->num_object_ordered_refs)
+    {
+      return;
+    }
+  if (0 == dwg->num_object_ordered_refs)
+    {
+      dwg->object_ordered_ref = (Dwg_Object_Ref **)calloc (
+          REFS_PER_REALLOC, sizeof (Dwg_Object_Ref *));
+    }
+  else
+    {
+      if (0 == (dwg->num_object_ordered_refs % REFS_PER_REALLOC))
+        {
+          Dwg_Object_Ref **pNew = (Dwg_Object_Ref **)realloc (
+              dwg->object_ordered_ref,
+              sizeof (Dwg_Object_Ref *)
+                  * (dwg->num_object_ordered_refs + REFS_PER_REALLOC));
+          if (NULL == pNew)
+            {
+              // realloc failure,back to linear search
+              if (NULL != dwg->object_ordered_ref)
+                {
+                  free (dwg->object_ordered_ref);
+                  dwg->object_ordered_ref = NULL;
+                }
+              dwg->num_object_ordered_refs = (BITCODE_BL)-1;
+              return;
+            }
+          else
+            {
+              dwg->object_ordered_ref = pNew;
+            }
+        }
+    }
+  pFound = (Dwg_Object_Ref **)bsearch_ex (
+      ref, dwg->object_ordered_ref, dwg->num_object_ordered_refs,
+      sizeof (Dwg_Object_Ref *), (int (*) (const void *, const void *))Ref_cmp,
+      (const void **)&pBefore);
+  if (NULL == pFound)
+    {
+      // OK, no duplicates
+      if (NULL != pBefore)
+        {
+          // Find the insertion point and insert before it
+          size_t numCopy = dwg->num_object_ordered_refs
+                           - (pBefore - dwg->object_ordered_ref);
+          memmove (&pBefore[1], pBefore, sizeof (Dwg_Object_Ref *) * numCopy);
+          *pBefore = ref;
+        }
+      else
+        {
+          // The new key is the largest and attached to the last
+          dwg->object_ordered_ref[dwg->num_object_ordered_refs] = ref;
+        }
+      dwg->num_object_ordered_refs++;
+    }
+  else
+    {
+      // There are duplicates, disable bsearch
+      // It should never happen !
+      free (dwg->object_ordered_ref);
+      dwg->object_ordered_ref = NULL;
+      dwg->num_object_ordered_refs = -1;
+    }
+}
+
+const Dwg_Object_Ref *
+ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
+                  const unsigned long absref)
+{
+  Dwg_Object_Ref nKey;
+  if (0 == dwg->num_object_refs)
+    {
+      return NULL;
+    }
+
+  nKey.handleref.code = code;
+  nKey.absolute_ref = absref;
+
+  // bsearch first,if possible
+  if (0 != dwg->num_object_ordered_refs && NULL != dwg->object_ordered_ref)
+    {
+      Dwg_Object_Ref **pFound = (Dwg_Object_Ref **)bsearch (
+          &nKey, dwg->object_ordered_ref, dwg->num_object_ordered_refs,
+          sizeof (Dwg_Object_Ref *),
+          (int (*) (const void *, const void *))Ref_cmp);
+      if (NULL != pFound)
+        {
+          return *pFound;
+        }
+      return NULL;
+    }
+
+  // lsearch, if can't bsearch
+  for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+    {
+      const Dwg_Object_Ref *pRef = dwg->object_ref[i];
+      if (0 == Ref_cmp (&nKey, &pRef))
+        {
+          return pRef;
+        }
+    }
+
+  return NULL;
 }
