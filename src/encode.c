@@ -1695,10 +1695,7 @@ copy_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                     uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
   if (dat->size < dat->byte + decomp_data_size)
-    {
-      dat->size = dat->byte + decomp_data_size;
-      bit_chain_alloc (dat);
-    }
+    bit_chain_alloc_size (dat, decomp_data_size);
   assert (!dat->bit);
   memcpy (&dat->chain[dat->byte], decomp, decomp_data_size);
   dat->byte += decomp_data_size;
@@ -2948,8 +2945,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       if (end_address > dat->size)
         {
           assert (obj->size < DWG_MAX_OBJSIZE);
-          dat->size = end_address;
-          bit_chain_alloc (dat);
+          bit_chain_alloc_size (dat, end_address - dat->size);
         }
     }
 
@@ -3037,8 +3033,6 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         assert (pvzadr);
       }
 #endif
-      if (pvzadr + 1 >= dat->size)
-        bit_chain_alloc (dat);
 #ifdef ENCODE_PATCH_RSSIZE
       encode_patch_RSsize (dat, pvzadr);
 #else
@@ -3968,8 +3962,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             SECTION_SYSTEM_MAP + 1, sizeof (Dwg_Section_Info));
       }
   }
-  /* End of the file */
-  dat->size = dat->byte;
+  else
+    /* End of the file */
+    dat->size = dat->byte;
 
   SINCE (R_2004a)
   {
@@ -4439,10 +4434,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       assert (section_address);
       dat->byte = section_address;
       if (dat->byte + size >= dat->size)
-        {
-          dat->size = dat->byte + size;
-          bit_chain_alloc (dat);
-        }
+        bit_chain_alloc_size (dat, size);
       LOG_HANDLE ("@%" PRIuSIZE ".0\n", dat->byte);
       for (i = 0; i < ARRAY_SIZE (stream_order); i++)
         {
