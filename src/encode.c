@@ -6930,7 +6930,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   const char *firstfield;
   const char *lastfield;
 
-  if (!obj || obj->fixedtype != DWG_TYPE_SEQEND || !obj->tio.entity)
+  if (!obj || !obj->parent || obj->fixedtype != DWG_TYPE_SEQEND || !obj->tio.entity)
     return;
   dwg = obj->parent;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -6958,7 +6958,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
             }
         }
     }
-  if (!owner)
+  if (!owner || !owner->tio.entity || !owner->name)
     {
       if (obj->tio.entity->ownerhandle)
         LOG_WARN ("Missing owner (" FORMAT_RLLx ") from " FORMAT_REF " [H 330]",
@@ -7094,7 +7094,8 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                && ref->absolute_ref != last->absolute_ref)
           {
             Dwg_Object *ref_obj = dwg_ref_object (dwg, ref);
-            if (!ref_obj || ref_obj->supertype != DWG_SUPERTYPE_ENTITY)
+            if (!ref_obj || ref_obj->supertype != DWG_SUPERTYPE_ENTITY
+                || !ref_obj->tio.entity)
               continue;
             owned[i] = ref;
             if (ref)
