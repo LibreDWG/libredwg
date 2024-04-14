@@ -1694,7 +1694,7 @@ static int
 copy_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                     uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
-  if (dat->byte + decomp_data_size >= dat->size)
+  if (dat->size < dat->byte + decomp_data_size)
     {
       dat->size = dat->byte + decomp_data_size;
       bit_chain_alloc (dat);
