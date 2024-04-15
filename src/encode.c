@@ -3737,7 +3737,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     return error;
   }
 
-  VERSIONS (R_13b1, R_2004)
+  VERSIONS (R_13b1, R_2000)
   {
     /* compute the r2000 section order:
      * section 0: Header vars
@@ -3948,7 +3948,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         error |= encode_objfreespace_2ndheader (dwg, dat);
       }
-  } // VERSIONS (R_13b1, R_2004)
+    /* End of the file */
+    dat->size = dat->byte;
+  } // VERSIONS (R_13b1, R_2000)
 
   VERSIONS (R_2007a, R_2007)
   {
@@ -3960,6 +3962,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   /* r2004 file header (compressed + encrypted) */
   SINCE (R_2004a)
   {
+#ifdef __cplusplus
+    int type;
+#else
+    Dwg_Section_Type type;
+#endif
+    Dwg_Object *obj = NULL;
+    BITCODE_BL vcount, rcount3;
+    size_t size;
+    unsigned total_size = 0;
+
+    bit_write_CRC (dat, 0, 0xC0C1);
+    write_sentinel (dat, DWG_SENTINEL_HEADER_END);
+
     LOG_INFO ("\n");
     LOG_WARN (WE_CAN "Writing R2004 sections not yet finished");
 
@@ -3979,24 +3994,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         dwg->header.section_info = (Dwg_Section_Info *)calloc (
             SECTION_SYSTEM_MAP + 1, sizeof (Dwg_Section_Info));
       }
-  }
-  else
-      /* End of the file */
-      dat->size
-      = dat->byte;
-
-  SINCE (R_2004a)
-  {
-#ifdef __cplusplus
-    int type;
-#else
-    Dwg_Section_Type type;
-#endif
-    Dwg_Object *obj = NULL;
-    BITCODE_BL vcount, rcount3;
-    size_t size;
-    unsigned total_size = 0;
-    old_dat = dat;
 
     // write remaining section data
     for (type = SECTION_OBJFREESPACE; type < SECTION_SYSTEM_MAP; type++)
@@ -4210,6 +4207,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   = section_max_decomp_size (dwg, (Dwg_Section_Type)type);
               const char *name = dwg_section_name (dwg, type);
               Dwg_Section_Info *info;
+              int ssi = 0;
+
               if (sec_dat[type].bit)
                 {
                   LOG_WARN ("Unpadded section %d", type);
@@ -4253,40 +4252,24 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 }
               info->sections = (Dwg_Section **)calloc (info->num_sections,
                                                        sizeof (Dwg_Section *));
-              // enough sections?
-              if (si + info->num_sections > dwg->header.num_sections)
+              do
                 {
-                  Dwg_Section *oldsecs = dwg->header.section;
-                  dwg->header.num_sections = si + info->num_sections;
-                  dwg->header.section = (Dwg_Section *)realloc (
-                      dwg->header.section,
-                      dwg->header.num_sections * sizeof (Dwg_Section));
-                  if (dwg->header.section != oldsecs)
-                    // need to rebuild all info->sections
-                    section_info_rebuild (dwg, (Dwg_Section_Type)type);
+                  Dwg_Section *sec = &dwg->header.section[si];
+                  total_size += ssize;
+                  sec->number = si + 1; // index starting at 1
+                  sec->size = MIN (max_decomp_size, (unsigned)ssize);
+                  sec->decomp_data_size = sec->size;
+                  sec->type = (Dwg_Section_Type)type;
+                  sec->compression_type = info->compressed;
+                  info->sections[ssi] = sec;
+                  LOG_TRACE ("section[%d] %s[%d].sections[%d]: number=%d "
+                             "size=%d\n",
+                             si, dwg_section_name (dwg, type), info_id, ssi,
+                             sec->number, (int)sec->size);
+                  ssize -= max_decomp_size;
+                  ssi++; // info->sections index
                 }
-              {
-                int ssi = 0;
-                do
-                  {
-                    Dwg_Section *sec = &dwg->header.section[si];
-                    total_size += ssize;
-                    sec->number = si + 1; // index starting at 1
-                    sec->size = MIN (max_decomp_size, (unsigned)ssize);
-                    sec->decomp_data_size = sec->size;
-                    sec->type = (Dwg_Section_Type)type;
-                    sec->compression_type = info->compressed;
-                    info->sections[ssi] = sec;
-                    LOG_TRACE ("section[%d] %s[%d].sections[%d]: number=%d "
-                               "size=%d\n",
-                               si, dwg_section_name (dwg, type), info_id, ssi,
-                               sec->number, (int)sec->size);
-                    ssize -= max_decomp_size;
-                    ssi++; // info->sections index
-                    si++;  // section index
-                  }
-                while (ssize > (int)max_decomp_size); // keep same type
-              }
+              while (ssize > (int)max_decomp_size); // keep same type
               info_id++;
             }
           else
@@ -4589,8 +4572,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     } // R2004_Header
   } // R_2004
-  else
-    dat->size = dat->byte;
 
   assert (!dat->bit);
   LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
