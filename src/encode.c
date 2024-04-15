@@ -4433,7 +4433,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
              + (8 * ((dwg->r2004_header.numsections + 2) * 24)); // no gaps
       assert (section_address);
       dat->byte = section_address;
-      if (dat->byte + size >= dat->size)
+      if (dat->byte + size < dat->size)
         bit_chain_alloc_size (dat, size);
       LOG_HANDLE ("@%" PRIuSIZE ".0\n", dat->byte);
       for (i = 0; i < ARRAY_SIZE (stream_order); i++)
@@ -5020,8 +5020,8 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
         continue;
       // jump back below
 
-      while (dat->byte + obj->size >= dat->size)
-        bit_chain_alloc (dat);
+      if (dat->byte + obj->size < dat->size)
+        bit_chain_alloc_size (dat, obj->size);
       numentities++;
       obj->address = dat->byte;
       LOG_INFO ("===========================\n"
@@ -5394,8 +5394,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_WARN ("\nObject %s unsupported", obj->name);
         }
     }
-  while (dat->byte + obj->size >= dat->size)
-    bit_chain_alloc (dat);
+  if (dat->byte + obj->size < dat->size)
+    bit_chain_alloc_size (dat, obj->size);
 
   // First write an approximate size here.
   // Then calculate size from the fields. Either <0x7fff or more.
@@ -5790,7 +5790,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_INFO ("overlarge MS size %lu > 0x7fff (was %lu) @%" PRIuSIZE "\n",
                     (unsigned long)obj->size, (unsigned long)old_size,
                     dat->byte);
-          if (dat->byte + obj->size + 2 >= dat->size)
+          if (dat->byte + obj->size + 2 < dat->size)
             bit_chain_alloc_size (dat,
                                   (dat->byte + obj->size + 2) - dat->size);
           memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte],
@@ -5890,8 +5890,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
 {
   size_t pos = bit_position (dat);
   size_t size;
-  if (dat->byte + 24 >= dat->size)
-    bit_chain_alloc (dat);
+  if (dat->byte + 24 < dat->size)
+    bit_chain_alloc_size (dat, 24);
   bit_write_RC (dat, data->code);
   LOG_TRACE ("EED[%d] code: %d [RC] ", i, data->code);
   switch (data->code)
@@ -5904,7 +5904,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           BITCODE_RS length = data->u.eed_0.is_tu ? data->u.eed_0.length
                                                   : data->u.eed_0_r2007.length;
           char *s;
-          if (length + 1 + dat->byte >= dat->size)
+          if (length + 1 + dat->byte < dat->size)
             bit_chain_alloc_size (dat, (length + 1 + dat->byte) - dat->size);
           if (length > 255)
             {
@@ -5936,7 +5936,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
               char *dest;
-              if (length + 5 + dat->byte >= dat->size)
+              if (length + 5 + dat->byte < dat->size)
                 bit_chain_alloc_size (dat,
                                       (length + 5 + dat->byte) - dat->size);
               if (length > 255)
@@ -5957,8 +5957,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
             {
               if (!*data->u.eed_0.string)
                 data->u.eed_0.length = 0;
-              if (data->u.eed_0.length + 5 + dat->byte >= dat->size)
-                bit_chain_alloc (dat);
+              if (data->u.eed_0.length + 5 + dat->byte < dat->size)
+                bit_chain_alloc_size (dat, data->u.eed_0.length + 5);
               bit_write_RC (dat, data->u.eed_0.length);
               bit_write_RS_BE (dat, data->u.eed_0.codepage);
               bit_write_TF (dat, (BITCODE_TF)data->u.eed_0.string,
@@ -5976,8 +5976,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
             {
               BITCODE_RS length = data->u.eed_0.length;
               BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string, 0);
-              if ((length * 2) + 5 + dat->byte >= dat->size)
-                bit_chain_alloc (dat);
+              if ((length * 2) + 5 + dat->byte < dat->size)
+                bit_chain_alloc_size (dat, (length * 2) + 5 + dat->byte);
               bit_write_RS (dat, length);
               for (int j = 0; j < length; j++)
                 bit_write_RS (dat, *dest++);
@@ -5989,8 +5989,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
             {
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
-              if ((length * 2) + 5 + dat->byte >= dat->size)
-                bit_chain_alloc (dat);
+              if ((length * 2) + 5 + dat->byte < dat->size)
+                bit_chain_alloc_size (dat, (length * 2) + 5);
               bit_write_RS (dat, length);
               for (int j = 0; j < length; j++)
                 bit_write_RS (dat, *s++);
@@ -6041,8 +6041,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       }
       break;
     case 4:
-      if (data->u.eed_4.length + 1 + dat->byte >= dat->size)
-        bit_chain_alloc (dat);
+      if (data->u.eed_4.length + 1 + dat->byte < dat->size)
+        bit_chain_alloc_size (dat, data->u.eed_4.length + 1);
       bit_write_RC (dat, data->u.eed_4.length);
       bit_write_TF (dat, (BITCODE_TF)data->u.eed_4.data, data->u.eed_4.length);
       LOG_TRACE ("binary: ");
