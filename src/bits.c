@@ -1375,8 +1375,6 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   for (int i = 0; i < handle->size; i++)
     u.v = (u.v << 8) | bit_read_RC (dat);
   handle->value = htole64 (u.v);
-  if (dat->version < R_2018) // FIXME where did I see 64bit handles?
-    handle->value &= 0xFFFF; // cap at 32bit
   return 0;
 }
 
