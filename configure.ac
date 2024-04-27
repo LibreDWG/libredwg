@@ -19,7 +19,7 @@ dnl AM_INIT_AUTOMAKE([1.11.6 gnu no-define])
 dnl parallel-tests:
 dnl: error: using '$(srcdir)' in TESTS is currently broken: '$(srcdir)/libredwg.spec'
 AM_INIT_AUTOMAKE([1.14 gnu no-define serial-tests dist-xz info-in-builddir])
-AC_DISABLE_STATIC
+LT_INIT
 
 # Keep this in sync with what is passed in AC_INIT
 TARBALL_VERSION_FILE=".tarball-version"
@@ -56,7 +56,6 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_EGREP
-LT_INIT
 AC_CHECK_PROGS([BASH], [bash])
 
 if test x$enable_shared = xyes; then
