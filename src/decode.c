@@ -2118,7 +2118,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           // the remaining uncompressed size to read from
           const BITCODE_RL size = MIN (info->size, info->max_decomp_size);
           if (info->compressed == 2 || bytes_left < 0
-              || es.fields.address + 32 + info->size > max_decomp_size
               || (j * info->max_decomp_size) + size > max_decomp_size
               || offset + size > dat->size)
             {
