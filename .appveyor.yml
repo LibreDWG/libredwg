@@ -68,7 +68,7 @@ build_script:
   #-bash -c "rm /usr/bin/python{,2,2.7.exe}; ls -al /usr/bin/python*"
   - if "%MINGW%"=="1" call build-aux\msys2.bat
   - bash -c "sh ./autogen.sh"
-  - if "%CYGWIN%"=="1" bash -c "./configure --disable-static --disable-python || cat config.log"
+  - if "%CYGWIN%"=="1" bash -c "./configure --disable-static --disable-werror --disable-python || cat config.log"
   - if not "%CYGWIN%"=="1" bash -c "CFLAGS=-fstack-protector ./configure --disable-static || cat config.log"
   - bash -c "make V=1"
 
