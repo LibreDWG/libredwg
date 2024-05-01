@@ -3713,7 +3713,7 @@ json_R2007_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "R2007_Header";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  Dwg_R2007_Header *_obj = &dwg->r2007_file_header;
+  Dwg_R2007_Header *_obj = &dwg->fhdr.r2007_file_header;
   int size;
   if (t->type != JSMN_OBJECT)
     {
@@ -3790,7 +3790,7 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 {
   const char *section = "R2004_Header";
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  Dwg_R2004_Header *_obj = &dwg->r2004_header;
+  Dwg_R2004_Header *_obj = &dwg->fhdr.r2004_header;
   int size;
   if (t->type != JSMN_OBJECT)
     {

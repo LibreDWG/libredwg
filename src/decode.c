@@ -155,7 +155,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // memset (&dwg->header, 0, sizeof (dwg->header)); // no, needed for magic
   memset (&dwg->header_vars, 0, sizeof (dwg->header_vars));
   memset (&dwg->summaryinfo, 0, sizeof (dwg->summaryinfo));
-  memset (&dwg->r2004_header, 0, sizeof (dwg->r2004_header));
+  memset (&dwg->fhdr.r2004_header, 0, sizeof (dwg->fhdr.r2004_header));
   memset (&dwg->auxheader, 0, sizeof (dwg->auxheader));
   memset (&dwg->secondheader, 0, sizeof (dwg->secondheader));
   memset (&dwg->objfreespace, 0, sizeof (dwg->objfreespace));
@@ -1431,12 +1431,12 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RLL section_address;
   long bytes_remaining;
   int i, error = 0, found_section_map_id = 0;
-  const BITCODE_RL comp_data_size = dwg->r2004_header.comp_data_size;
-  const BITCODE_RL decomp_data_size = dwg->r2004_header.decomp_data_size;
-  const BITCODE_RLd section_array_size = dwg->r2004_header.section_array_size;
+  const BITCODE_RL comp_data_size = dwg->fhdr.r2004_header.comp_data_size;
+  const BITCODE_RL decomp_data_size = dwg->fhdr.r2004_header.decomp_data_size;
+  const BITCODE_RLd section_array_size = dwg->fhdr.r2004_header.section_array_size;
   const BITCODE_RLL section_map_address
-      = dwg->r2004_header.section_map_address + 0x100;
-  const BITCODE_RLd section_map_id = dwg->r2004_header.section_map_id;
+      = dwg->fhdr.r2004_header.section_map_address + 0x100;
+  const BITCODE_RLd section_map_id = dwg->fhdr.r2004_header.section_map_id;
   BITCODE_RLd max_id = 0;
 
   dwg->header.num_sections = 0;
@@ -1448,7 +1448,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       LOG_ERROR ("Invalid r2004_header.decomp_data_size %" PRIu32,
                  decomp_data_size)
-      dwg->r2004_header.decomp_data_size = 8 * comp_data_size;
+      dwg->fhdr.r2004_header.decomp_data_size = 8 * comp_data_size;
       return DWG_ERR_OUTOFMEM;
     }
   decomp = (BITCODE_RC *)calloc (decomp_data_size + 1024, sizeof (BITCODE_RC));
@@ -1543,20 +1543,20 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("Invalid section_array_size: [%u].%u != %u", i, max_id,
                 (unsigned)section_array_size);
     }
-  if (section_address != dwg->r2004_header.last_section_address + 0x100)
+  if (section_address != dwg->fhdr.r2004_header.last_section_address + 0x100)
     {
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
       LOG_WARN ("Invalid last_section_address: %" PRIx64 " != %" PRIx64,
-                section_address, dwg->r2004_header.last_section_address);
+                section_address, dwg->fhdr.r2004_header.last_section_address);
     }
   if (dwg->header.num_sections
-      != dwg->r2004_header.numgaps + dwg->r2004_header.numsections)
+      != dwg->fhdr.r2004_header.numgaps + dwg->fhdr.r2004_header.numsections)
     {
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
       LOG_WARN ("Invalid sections: %d != numgaps: " FORMAT_RL
                 " + numsections: " FORMAT_RL,
-                dwg->header.num_sections, dwg->r2004_header.numgaps,
-                dwg->r2004_header.numsections);
+                dwg->header.num_sections, dwg->fhdr.r2004_header.numgaps,
+                dwg->fhdr.r2004_header.numsections);
     }
   if (!found_section_map_id)
     {
@@ -1577,7 +1577,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             dwg->header.section[i].size
                 = section_map_address - dwg->header.section[i - 1].address;
         }
-      info = find_section (dwg, dwg->r2004_header.section_info_id);
+      info = find_section (dwg, dwg->fhdr.r2004_header.section_info_id);
       if (!info)
         goto repair_info_id;
       dat->bit = 0;
@@ -1587,7 +1587,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
         repair_info_id:
           LOG_WARN ("Repair invalid section_info_id [%d]: => %d", i - 1,
-                    (int)dwg->r2004_header.section_info_id);
+                    (int)dwg->fhdr.r2004_header.section_info_id);
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
           for (i = 0; i < (int)dwg->header.num_sections; ++i)
             {
@@ -1599,27 +1599,27 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (section_type == 0x4163003b)
                 {
                   LOG_WARN ("Fixed section_info_id [%d]: => %d @" FORMAT_RLL,
-                            i, (int)dwg->r2004_header.section_info_id,
+                            i, (int)dwg->fhdr.r2004_header.section_info_id,
                             dwg->header.section[i].address);
                   if (!info)
                     info = &dwg->header.section[i];
                   info->address = dwg->header.section[i].address;
                   info->size = dwg->header.section[i].size;
-                  info->number = dwg->r2004_header.section_info_id;
+                  info->number = dwg->fhdr.r2004_header.section_info_id;
                 }
             }
-          if (!info || info->number != dwg->r2004_header.section_info_id)
+          if (!info || info->number != dwg->fhdr.r2004_header.section_info_id)
             {
               i = dwg->header.num_sections;
               add_section (dwg);
               error |= DWG_ERR_VALUEOUTOFBOUNDS;
               dwg->header.section[i].number
-                  = dwg->r2004_header.section_info_id;
+                  = dwg->fhdr.r2004_header.section_info_id;
               dwg->header.section[i].address
                   = dwg->header.section[i - 1].address
                     + dwg->header.section[i - 1].size;
               LOG_WARN ("Add section_info_id [%d] %d => address 0x%" PRIx64, i,
-                        dwg->r2004_header.section_info_id,
+                        dwg->fhdr.r2004_header.section_info_id,
                         dwg->header.section[i].address);
             }
         }
@@ -3199,7 +3199,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   Dwg_Object *obj = NULL;
-  Dwg_R2004_Header *_obj = &dwg->r2004_header;
+  Dwg_R2004_Header *_obj = &dwg->fhdr.r2004_header;
   Bit_Chain *hdl_dat = file_dat;
 
   {
@@ -3274,9 +3274,9 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     LOG_INSANE ("@0x%zx\n", dat->byte)
 
     LOG_TRACE ("\n=== Read System Section (Section Page Map) @%lx ===\n\n",
-               (unsigned long)dwg->r2004_header.section_map_address + 0x100)
-    dat->byte = dwg->r2004_header.section_map_address + 0x100;
-    start = dwg->r2004_header.section_map_address;
+               (unsigned long)dwg->fhdr.r2004_header.section_map_address + 0x100)
+    dat->byte = dwg->fhdr.r2004_header.section_map_address + 0x100;
+    start = dwg->fhdr.r2004_header.section_map_address;
     // Some section_map_address overflow past the dwg. GH #617
     // maybe search the magic type backwards then. (in 0x20 page boundary
     // steps) e.g. 1344464555_1_2004
@@ -3381,13 +3381,13 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /*-------------------------------------------------------------------------
    * Section Info
    */
-  section = find_section (dwg, dwg->r2004_header.section_info_id);
+  section = find_section (dwg, dwg->fhdr.r2004_header.section_info_id);
   if (section)
     {
       Dwg_Object *obj = NULL;
       Dwg_Section *_obj = section;
       LOG_TRACE ("\n=== Data Section (Section Info %d) @%lx ===\n",
-                 dwg->r2004_header.section_info_id,
+                 dwg->fhdr.r2004_header.section_info_id,
                  (unsigned long)section->address)
       dat->byte = section->address;
 

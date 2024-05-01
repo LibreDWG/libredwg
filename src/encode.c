@@ -3111,7 +3111,7 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       write_sentinel (dat, DWG_SENTINEL_2NDHEADER_BEGIN);
       pvzadr = dat->byte;
       dwg->secondheader.address = (BITCODE_RL)(pvzadr - 16)& UINT32_MAX;
-      dwg->r2004_header.secondheader_address = pvzadr - 16;
+      dwg->fhdr.r2004_header.secondheader_address = pvzadr - 16;
       if (!_obj->sections[SECTION_TEMPLATE_R13].address
           && section_find (section_order, dwg->header.num_sections, SECTION_TEMPLATE_R13))
         {
@@ -4166,8 +4166,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       };
       // clang-format on
 
-      dwg->r2004_header.numsections = 0;
-      dwg->r2004_header.numgaps = 0;
+      dwg->fhdr.r2004_header.numsections = 0;
+      dwg->fhdr.r2004_header.numgaps = 0;
 
       // sec_dat[SECTION_UNKNOWN].byte = 0;
       sec_dat[SECTION_INFO].byte = 10
@@ -4273,7 +4273,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             LOG_TRACE ("section_info %s is empty, skipped. size=0\n",
                        dwg_section_name (dwg, type));
         }
-      dwg->r2004_header.numsections = si;
+      dwg->fhdr.r2004_header.numsections = si;
       // section_info [27] and section_map [28] as two last already added.
       if ((unsigned)si > dwg->header.num_sections) // needed?
         {
@@ -4284,16 +4284,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           if (dwg->header.section != oldsecs)
             section_info_rebuild (dwg, SECTION_SYSTEM_MAP);
         }
-      dwg->r2004_header.section_info_id
-          = dwg->r2004_header.numsections + 1; // a gap of 3
-      dwg->r2004_header.section_map_id = dwg->r2004_header.numsections + 2;
-      dwg->r2004_header.section_array_size = dwg->r2004_header.numsections + 2;
-      dwg->r2004_header.last_section_id = dwg->r2004_header.section_map_id;
-      dwg->header.section[si - 2].number = dwg->r2004_header.section_info_id;
-      dwg->header.section[si - 1].number = dwg->r2004_header.section_map_id;
+      dwg->fhdr.r2004_header.section_info_id
+          = dwg->fhdr.r2004_header.numsections + 1; // a gap of 3
+      dwg->fhdr.r2004_header.section_map_id = dwg->fhdr.r2004_header.numsections + 2;
+      dwg->fhdr.r2004_header.section_array_size = dwg->fhdr.r2004_header.numsections + 2;
+      dwg->fhdr.r2004_header.last_section_id = dwg->fhdr.r2004_header.section_map_id;
+      dwg->header.section[si - 2].number = dwg->fhdr.r2004_header.section_info_id;
+      dwg->header.section[si - 1].number = dwg->fhdr.r2004_header.section_map_id;
 
       LOG_TRACE ("\n=== Section Info %d in map order ===\n",
-                 dwg->r2004_header.section_info_id);
+                 dwg->fhdr.r2004_header.section_info_id);
       // write into sec_dat[type] first, then compress
       sec_id = SECTION_INFO;
       sec_dat[sec_id].size = sec_dat[sec_id].byte;
@@ -4308,7 +4308,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         Dwg_Section_Info *info
             = find_section_info_type (dwg, (Dwg_Section_Type)sec_id);
         // index starting at 1
-        sec->number = dwg->r2004_header.section_info_id;
+        sec->number = dwg->fhdr.r2004_header.section_info_id;
         sec->size = MIN (0x7400, sec->size);
         sec->decomp_data_size = sec->size;
         sec->type = (Dwg_Section_Type)type;
@@ -4353,7 +4353,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
 
       LOG_TRACE ("\n=== Section System Map %d in map order ===\n",
-                 dwg->r2004_header.section_map_id);
+                 dwg->fhdr.r2004_header.section_map_id);
       sec_id = SECTION_SYSTEM_MAP;
       type = SECTION_SYSTEM_MAP;
       {
@@ -4374,7 +4374,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         bit_set_position (dat, 0); // so far we faked the content. now write it
 
         // index starting at 1
-        sec->number = dwg->r2004_header.section_map_id;
+        sec->number = dwg->fhdr.r2004_header.section_map_id;
         sec->size = MIN (0x7400, sec->size);
         sec->decomp_data_size = sec->size;
         sec->type = (Dwg_Section_Type)type;
@@ -4401,7 +4401,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               FIELD_RL (x00, 0);
             }
         }
-      dwg->r2004_header.decomp_data_size
+      dwg->fhdr.r2004_header.decomp_data_size
           = dat->byte & 0xFFFFFFFF; // system_map_size
       LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
 
@@ -4430,7 +4430,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // now write all the sections in the stream order
       LOG_TRACE ("\n=== Write sections in stream order ===\n");
       size = total_size
-             + (8 * ((dwg->r2004_header.numsections + 2) * 24)); // no gaps
+             + (8 * ((dwg->fhdr.r2004_header.numsections + 2) * 24)); // no gaps
       assert (section_address);
       dat->byte = section_address;
       if (dat->byte + size < dat->size)
@@ -4472,11 +4472,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     dwg->header.vbaproj_address = dat->byte & 0xFFFFFFFF;
                   else if (info->fixedtype == SECTION_SYSTEM_MAP)
                     {
-                      dwg->r2004_header.section_map_address
+                      dwg->fhdr.r2004_header.section_map_address
                           = dat->byte - 0x100;
-                      dwg->r2004_header.last_section_address
+                      dwg->fhdr.r2004_header.last_section_address
                           = dat->byte + sec->size - 0x100;
-                      dwg->r2004_header.secondheader_address = 0; // TODO
+                      dwg->fhdr.r2004_header.secondheader_address = 0; // TODO
                     }
                   sec->address = dat->byte;
 
@@ -4516,7 +4516,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
 
     {
-      Dwg_R2004_Header *_obj = &dwg->r2004_header;
+      Dwg_R2004_Header *_obj = &dwg->fhdr.r2004_header;
       Bit_Chain file_dat = {
         NULL, sizeof (Dwg_R2004_Header), 0UL, 0, 0, R_INVALID, R_INVALID, NULL,
         30
@@ -4537,7 +4537,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       _obj->crc32 = 0;
       // recalc the CRC32, without the padding, but the crc32 as 0
       _obj->crc32
-          = bit_calc_CRC32 (0, (unsigned char *)&dwg->r2004_header, 0x6c);
+          = bit_calc_CRC32 (0, (unsigned char *)&dwg->fhdr.r2004_header, 0x6c);
       LOG_HANDLE ("calc crc32: 0x%x\n", _obj->crc32);
 
       // clang-format off

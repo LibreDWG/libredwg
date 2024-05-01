@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2023 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2024 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -2345,7 +2345,7 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_section_r2004fileheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Dwg_R2004_Header *_obj = &dwg->r2004_header;
+  Dwg_R2004_Header *_obj = &dwg->fhdr.r2004_header;
   Dwg_Object *obj = NULL;
   int i;
 
@@ -2361,7 +2361,7 @@ json_section_r2004fileheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_section_r2007fileheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Dwg_R2007_Header *_obj = &dwg->r2007_file_header;
+  Dwg_R2007_Header *_obj = &dwg->fhdr.r2007_file_header;
   Dwg_Object *obj = NULL;
   int i;
 

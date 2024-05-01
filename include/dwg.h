@@ -9692,7 +9692,7 @@ typedef struct _dwg_struct
   BITCODE_BL cur_index;          /*!< how many we have written currently */
   Dwg_Object_Ref **object_ref;   /*!< array of most handles */
   struct _inthash *object_map;   /*!< map of all handles */
-  int dirty_refs;                /* 1 if we added an entity, and invalidated all
+  int dirty_refs;                /* 1 if we added an object, and invalidated all
                                     the internal ref->obj's */
   unsigned int opts;             /* See DWG_OPTS_* below */
 
@@ -9702,7 +9702,7 @@ typedef struct _dwg_struct
   union {
     Dwg_R2004_Header r2004_header; /* encrypted, packed */
     Dwg_R2007_Header r2007_file_header; /* encrypted, packed */
-  };
+  } fhdr;
 
   /* Should only be initialized after the read/write is complete. */
   Dwg_Object *mspace_block;

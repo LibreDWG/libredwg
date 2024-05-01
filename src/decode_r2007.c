@@ -2354,10 +2354,10 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
     loglevel = atoi (probe);
 #endif
   // @ 0x62
-  error = read_file_header (dat, &dwg->r2007_file_header);
+  error = read_file_header (dat, &dwg->fhdr.r2007_file_header);
   if (error >= DWG_ERR_VALUEOUTOFBOUNDS)
     return error;
-  file_header = &dwg->r2007_file_header;
+  file_header = &dwg->fhdr.r2007_file_header;
 
   // Pages Map
   dat->byte += 0x28; // overread check data
