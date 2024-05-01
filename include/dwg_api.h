@@ -45,14 +45,16 @@
    clang claims to be gcc 4.2, but may also support this feature.
    icc (at least 12) not.
    glibc 2.28 /usr/include/sys/cdefs.h is wrong about icc compat. */
-#if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 405          \
+#ifndef __attribute_deprecated_msg__
+#  if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 405        \
      && !defined(__ICC))                                                      \
     || _clang_has_extension(attribute_deprecated_with_message)
-#  undef __attribute_deprecated_msg
-#  define __attribute_deprecated_msg__(msg)                                   \
+#    undef __attribute_deprecated_msg
+#    define __attribute_deprecated_msg__(msg)                                 \
     __attribute__ ((__deprecated__ (msg)))
-#else
-#  define __attribute_deprecated_msg__(msg) __attribute_deprecated__
+#  else
+#    define __attribute_deprecated_msg__(msg) __attribute_deprecated__
+#  endif
 #endif
 
 /* The __nonnull function attribute marks pointer arguments which
