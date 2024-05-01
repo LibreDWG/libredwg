@@ -84,6 +84,8 @@ jobs:
     #    coveralls -e test -e bindings
     - if: contains(matrix.CONFIGURE_ARGS, '--enable-gcov')
       name: Run make codecov if --enable-gcov
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: make codecov
     - if: contains(matrix.CONFIGURE_ARGS, '--enable-release')
       name: Run make distcheck if --enable-release
