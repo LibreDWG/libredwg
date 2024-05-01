@@ -341,7 +341,7 @@ cover: gcov
 codecov: check
 	-(cd src && mkdir gcno && mv *.gcno gcno/ && \
 	  for g in .libs/*.gcda .libs/*.gcno; do ln -s $g; done)
-	$(srcdir)/build-aux/codecov_io.sh -X test -X bindings
+	-$(srcdir)/build-aux/codecov_io.sh -X test -X bindings
 coveralls: gcov
 	coveralls -e test -e bindings
 endif
