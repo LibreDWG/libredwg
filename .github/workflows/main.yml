@@ -31,7 +31,7 @@ jobs:
           - CFLAGS="-O1 -fno-omit-frame-pointer -fsanitize=address -fno-var-tracking" --disable-bindings --disable-docs
           - CC="clang"
           - --enable-release
-          - --enable-gcov --disable-bindings --disable-docs
+          - --enable-gcov --disable-bindings --disable-docs CFLAGS="-O0 -g"
           - --disable-write --disable-docs
           - CFLAGS="-O2 -m32" --disable-bindings --disable-docs
           - CFLAGS="-O2 -fno-omit-frame-pointer -fsanitize=undefined -fno-var-tracking" --disable-bindings --disable-docs --enable-check-less
