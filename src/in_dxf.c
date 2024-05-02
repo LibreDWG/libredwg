@@ -11773,8 +11773,16 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                   goto next_pair;
                                 }
                             }
-                          dwg_dynapi_common_set_value (_obj, f->name,
-                                                       &pair->value, 1);
+                          if (f->is_malloc)
+                            {
+                              char *str = strdup (pair->value.s);
+                              dwg_dynapi_common_set_value (_obj, f->name, &str, 1);
+                            }
+                          else
+                            {
+                              dwg_dynapi_common_set_value (_obj, f->name,
+                                                           &pair->value, 1);
+                            }
                           if (f->is_string || f->type[0] == 'T')
                             {
                               LOG_TRACE ("COMMON.%s = \"%s\" [%s %d]\n", f->name,
