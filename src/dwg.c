@@ -3473,7 +3473,8 @@ dwg_sections_init (Dwg_Data *dwg)
       /* section 0: header vars
        *         1: class section
        *         2: object map (i.e. handles)
-       *         3: optional ObjFreeSpace (r13+, no sentinels) + 2ndheader (r13+, sentinels)
+       *         3: optional ObjFreeSpace (r13c3+, no sentinels)
+       *         7: 2ndheader (not a section, r13+, sentinels)
        *         4: optional: Template (MEASUREMENT)
        *         5: optional: AuxHeader (no sentinels, since R_2000b)
        *         6: optional: THUMBNAIL (not a section, but treated as one)
@@ -3481,22 +3482,27 @@ dwg_sections_init (Dwg_Data *dwg)
       if (!dwg->header.num_sections ||
           (dwg->header.from_version > R_2000 && dwg->header.version <= R_2000))
         {
-          dwg->header.num_sections = dwg->header.version < R_13c3    ? 3
-                                     : dwg->header.version < R_2000b ? 5
-                                                                     : 6;
-          if (dwg->header.num_sections == 3 && dwg->objfreespace.numnums)
-            dwg->header.num_sections = 5;
+          if (dwg->header.sections)
+            {
+              // Plus thumbnail and second header
+              dwg->header.num_sections = dwg->header.sections + 2;
+            }
+          else
+            {
+              dwg->header.num_sections = dwg->header.version < R_13c3    ? 5
+                                         : dwg->header.version < R_2000b ? 7
+                                                                         : 8;
+              if (dwg->header.num_sections == 5 && dwg->objfreespace.numnums)
+                dwg->header.num_sections = 6;
+            }
         }
       if (!dwg->header.sections ||
           (dwg->header.from_version > R_2000 && dwg->header.version <= R_2000))
-         // ODA writes zeros
-        dwg->header.sections = dwg->header.num_sections;
-      // newer DWG's have proper HEADER.sections
-      if (dwg->header.num_sections != dwg->header.sections)
-        dwg->header.num_sections = dwg->header.sections;
+        // ODA writes zeros
+        dwg->header.sections = dwg->header.num_sections - 2;
     }
   LOG_TRACE ("num_sections => " FORMAT_RL "\n", dwg->header.num_sections);
-  if (dwg->header.num_sections < 3)
+  if (dwg->header.num_sections < 5)
     {
       LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.num_sections);
       return DWG_ERR_INVALIDDWG;
@@ -3508,12 +3514,12 @@ dwg_sections_init (Dwg_Data *dwg)
     }
 
   if (dwg->header.section)
-    // zero-based, including THUMBNAIL
+    // zero-based, including THUMBNAIL and Second Header
     dwg->header.section = (Dwg_Section *)realloc (
         dwg->header.section,
-        sizeof (Dwg_Section) * (dwg->header.num_sections + 2));
+        sizeof (Dwg_Section) * (dwg->header.num_sections));
   else
-    dwg->header.section = (Dwg_Section *)calloc (dwg->header.num_sections + 2,
+    dwg->header.section = (Dwg_Section *)calloc (dwg->header.num_sections,
                                                  sizeof (Dwg_Section));
   if (!dwg->header.section)
     {

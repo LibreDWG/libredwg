@@ -9076,10 +9076,11 @@ typedef enum DWG_SECTION_TYPE_R13
   SECTION_HEADER_R13 = 0,
   SECTION_CLASSES_R13 = 1,
   SECTION_HANDLES_R13 = 2,
-  SECTION_OBJFREESPACE_R13 = 3, /* including the 2ndheader */
+  SECTION_OBJFREESPACE_R13 = 3,
   SECTION_TEMPLATE_R13 = 4,
   SECTION_AUXHEADER_R2000 = 5,
   SECTION_THUMBNAIL_R13 = 6,
+  SECTION_SECOND_HEADER_R13 = 7,
 } Dwg_Section_Type_r13;
 
 typedef enum DWG_SECTION_TYPE_R11 /* tables */
@@ -9418,7 +9419,7 @@ typedef struct _dwg_header
   BITCODE_RL summaryinfo_address; /* R2004+ */
   BITCODE_RL vbaproj_address;     /* R2004+ */
   BITCODE_RL r2004_header_address; /* R2004+ */
-  BITCODE_RL sections;            // as in the header, 5 or 6 usually
+  BITCODE_RL sections;            // as in the header, 3 .. 6 usually
   BITCODE_RL num_sections;        // as allocated, many more
   Dwg_Section *section;
   Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
