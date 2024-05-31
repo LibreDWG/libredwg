@@ -1,0 +1,24 @@
+point 1,2,3
+line 2,3,4 3,4,5 
+arc c 5,5,5 5,4 a 90
+circle 3,1,2 1
+text A 1,4,2 3,4 FOO
+trace 0.2 1,5,2 2,6 
+line 6,1,1 7,2,2 
+block BLOCK1 6,1,2 L 
+insert BLOCK1 6,1,3 0.5 0.5 30
+load es
+shape DIODE 6,6  30
+solid 7,1,2 8,2 7,3 8,4 
+attdef  ATTR1 PROMPT
+3
+9,5,2 0.2 60
+attdef  ATTR2 PROMPT
+3
+1,2,3 0.2 60
+block BLOCK2 1,2,3 L 
+insert BLOCK2 2,2,4 0.5 0.5 30 4
+pline 5,7,2 6,8 7,7 
+dim ALI 6,8,2 7,7,3 8,8  
+EXIT
+3dface 0,7,1 4,8,2 3,9,3 2,8,4 
