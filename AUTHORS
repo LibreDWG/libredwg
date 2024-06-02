@@ -1,3 +1,7 @@
+Gong Xiangyang <83904580@qq.com>
+        Massive performance improvements changing the refs
+        list to a tree.
+
 Dmitry Sinyavin <s0me0ne@s0me0ne.com>
         dwgadd fixes.
 
