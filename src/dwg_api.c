@@ -1947,7 +1947,7 @@ dwg_ent_circle_get_center (const dwg_ent_circle *restrict circle,
     }
   else
     {
-      LOG_ERROR ("%s: empty point or circle", "dwg_ent_circle_get_center")
+      LOG_ERROR ("%s: empty point or circle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -1973,7 +1973,7 @@ dwg_ent_circle_set_center (dwg_ent_circle *restrict circle,
     *error = 0;
   else
     {
-      LOG_ERROR ("%s: empty point or circle", "dwg_ent_circle_set_center")
+      LOG_ERROR ("%s: empty point or circle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -1996,7 +1996,7 @@ dwg_ent_circle_get_radius (const dwg_ent_circle *restrict circle,
     }
   else
     {
-      LOG_ERROR ("%s: empty circle", "dwg_ent_circle_get_radius")
+      LOG_ERROR ("%s: empty circle", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -2022,7 +2022,7 @@ dwg_ent_circle_set_radius (dwg_ent_circle *restrict circle,
     }
   else
     {
-      LOG_ERROR ("%s: empty circle", "dwg_ent_circle_set_radius")
+      LOG_ERROR ("%s: empty circle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2045,7 +2045,7 @@ dwg_ent_circle_get_thickness (const dwg_ent_circle *restrict circle,
     }
   else
     {
-      LOG_ERROR ("%s: empty circle", "dwg_ent_circle_get_thickness")
+      LOG_ERROR ("%s: empty circle", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -2070,7 +2070,7 @@ dwg_ent_circle_set_thickness (dwg_ent_circle *restrict circle,
     }
   else
     {
-      LOG_ERROR ("%s: empty circle", "dwg_ent_circle_set_thickness")
+      LOG_ERROR ("%s: empty circle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2099,7 +2099,7 @@ dwg_ent_circle_set_extrusion (dwg_ent_circle *restrict circle,
     }
   else
     {
-      LOG_ERROR ("%s: empty vector or circle", "dwg_ent_circle_set_extrusion")
+      LOG_ERROR ("%s: empty vector or circle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2127,7 +2127,7 @@ dwg_ent_circle_get_extrusion (const dwg_ent_circle *restrict circle,
     }
   else
     {
-      LOG_ERROR ("%s: empty vector or circle", "dwg_ent_circle_get_extrusion")
+      LOG_ERROR ("%s: empty vector or circle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2159,7 +2159,7 @@ dwg_ent_line_get_start_point (const dwg_ent_line *restrict line,
     }
   else
     {
-      LOG_ERROR ("%s: empty line", "dwg_ent_line_get_start_point")
+      LOG_ERROR ("%s: empty line", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2187,7 +2187,7 @@ dwg_ent_line_set_start_point (dwg_ent_line *restrict line,
     }
   else
     {
-      LOG_ERROR ("%s: empty line", "dwg_ent_line_set_start_point")
+      LOG_ERROR ("%s: empty line", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2217,7 +2217,7 @@ dwg_ent_line_get_end_point (const dwg_ent_line *restrict line,
     }
   else
     {
-      LOG_ERROR ("%s: empty line", "dwg_ent_line_get_end_point")
+      LOG_ERROR ("%s: empty line", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2248,7 +2248,7 @@ dwg_ent_line_set_end_point (dwg_ent_line *restrict line,
     }
   else
     {
-      LOG_ERROR ("%s: empty line", "dwg_ent_line_set_end_point")
+      LOG_ERROR ("%s: empty line", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2270,7 +2270,7 @@ dwg_ent_line_get_thickness (const dwg_ent_line *restrict line,
     }
   else
     {
-      LOG_ERROR ("%s: empty line", "dwg_ent_line_get_thickness")
+      LOG_ERROR ("%s: empty line", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -2295,7 +2295,7 @@ dwg_ent_line_set_thickness (dwg_ent_line *restrict line,
     }
   else
     {
-      LOG_ERROR ("%s: empty line", "dwg_ent_line_set_thickness")
+      LOG_ERROR ("%s: empty line", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2325,7 +2325,7 @@ dwg_ent_line_get_extrusion (const dwg_ent_line *restrict line,
     }
   else
     {
-      LOG_ERROR ("%s: empty vector or line", "dwg_ent_line_get_extrusion")
+      LOG_ERROR ("%s: empty vector or line", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2356,7 +2356,7 @@ dwg_ent_line_set_extrusion (dwg_ent_line *restrict line,
     }
   else
     {
-      LOG_ERROR ("%s: empty vector or line", "dwg_ent_line_set_extrusion")
+      LOG_ERROR ("%s: empty vector or line", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2390,7 +2390,7 @@ dwg_ent_arc_get_center (const dwg_ent_arc *restrict arc,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc or point", "dwg_ent_arc_get_center")
+      LOG_ERROR ("%s: empty arc or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2421,7 +2421,7 @@ dwg_ent_arc_set_center (dwg_ent_arc *restrict arc,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc or point", "dwg_ent_arc_set_center")
+      LOG_ERROR ("%s: empty arc or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2443,7 +2443,7 @@ dwg_ent_arc_get_radius (const dwg_ent_arc *restrict arc, int *restrict error)
     }
   else
     {
-      LOG_ERROR ("%s: empty arc", "dwg_ent_arc_get_radius")
+      LOG_ERROR ("%s: empty arc", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -2468,7 +2468,7 @@ dwg_ent_arc_set_radius (dwg_ent_arc *restrict arc, const double radius,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc", "dwg_ent_arc_set_radius")
+      LOG_ERROR ("%s: empty arc", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2491,7 +2491,7 @@ dwg_ent_arc_get_thickness (const dwg_ent_arc *restrict arc,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc", "dwg_ent_arc_get_thickness")
+      LOG_ERROR ("%s: empty arc", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -2516,7 +2516,7 @@ dwg_ent_arc_set_thickness (dwg_ent_arc *restrict arc, const double thickness,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc", "dwg_ent_arc_set_thickness")
+      LOG_ERROR ("%s: empty arc", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2546,7 +2546,7 @@ dwg_ent_arc_get_extrusion (const dwg_ent_arc *restrict arc,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc or vector", "dwg_ent_arc_get_extrusion")
+      LOG_ERROR ("%s: empty arc or vector", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2577,7 +2577,7 @@ dwg_ent_arc_set_extrusion (dwg_ent_arc *restrict arc,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc or vector", "dwg_ent_arc_set_extrusion")
+      LOG_ERROR ("%s: empty arc or vector", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2600,7 +2600,7 @@ dwg_ent_arc_get_start_angle (const dwg_ent_arc *restrict arc,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc", "dwg_ent_arc_get_start_angle")
+      LOG_ERROR ("%s: empty arc", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -2626,7 +2626,7 @@ dwg_ent_arc_set_start_angle (dwg_ent_arc *restrict arc, const double angle,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc", "dwg_ent_arc_set_start_angle")
+      LOG_ERROR ("%s: empty arc", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2649,7 +2649,7 @@ dwg_ent_arc_get_end_angle (const dwg_ent_arc *restrict arc,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc", "dwg_ent_arc_get_end_angle")
+      LOG_ERROR ("%s: empty arc", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -2675,7 +2675,7 @@ dwg_ent_arc_set_end_angle (dwg_ent_arc *restrict arc, const double angle,
     }
   else
     {
-      LOG_ERROR ("%s: empty arc", "dwg_ent_arc_set_end_angle")
+      LOG_ERROR ("%s: empty arc", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2709,7 +2709,7 @@ dwg_ent_ellipse_get_center (const dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse or point", "dwg_ent_ellipse_get_center")
+      LOG_ERROR ("%s: empty ellipse or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2740,7 +2740,7 @@ dwg_ent_ellipse_set_center (dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse or point", "dwg_ent_ellipse_set_center")
+      LOG_ERROR ("%s: empty ellipse or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2770,7 +2770,7 @@ dwg_ent_ellipse_get_sm_axis (const dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse or point", "dwg_ent_ellipse_get_sm_axis")
+      LOG_ERROR ("%s: empty ellipse or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2801,7 +2801,7 @@ dwg_ent_ellipse_set_sm_axis (dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse or point", "dwg_ent_ellipse_set_sm_axis")
+      LOG_ERROR ("%s: empty ellipse or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2832,7 +2832,7 @@ dwg_ent_ellipse_get_extrusion (const dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse or vector", "dwg_ent_ellipse_get_extrusion")
+      LOG_ERROR ("%s: empty ellipse or vector", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2863,7 +2863,7 @@ dwg_ent_ellipse_set_extrusion (dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse or vector", "dwg_ent_ellipse_set_extrusion")
+      LOG_ERROR ("%s: empty ellipse or vector", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2885,7 +2885,7 @@ dwg_ent_ellipse_get_axis_ratio (const dwg_ent_ellipse *restrict ellipse,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty ellipse", "dwg_ent_ellipse_get_axis_ratio")
+      LOG_ERROR ("%s: empty ellipse", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -2909,7 +2909,7 @@ dwg_ent_ellipse_set_axis_ratio (dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse", "dwg_ent_ellipse_set_axis_ratio")
+      LOG_ERROR ("%s: empty ellipse", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2930,7 +2930,7 @@ dwg_ent_ellipse_get_start_angle (const dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse", "dwg_ent_ellipse_get_start_angle")
+      LOG_ERROR ("%s: empty ellipse", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -2955,7 +2955,7 @@ dwg_ent_ellipse_set_start_angle (dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse", "dwg_ent_ellipse_set_start_angle")
+      LOG_ERROR ("%s: empty ellipse", __FUNCTION__)
       *error = 1;
     }
 }
@@ -2976,7 +2976,7 @@ dwg_ent_ellipse_get_end_angle (const dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse", "dwg_ent_ellipse_get_end_angle")
+      LOG_ERROR ("%s: empty ellipse", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -3001,7 +3001,7 @@ dwg_ent_ellipse_set_end_angle (dwg_ent_ellipse *restrict ellipse,
     }
   else
     {
-      LOG_ERROR ("%s: empty ellipse", "dwg_ent_ellipse_set_end_angle")
+      LOG_ERROR ("%s: empty ellipse", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3029,7 +3029,7 @@ dwg_ent_text_set_text (dwg_ent_text *restrict ent,
     }
   else
     {
-      LOG_ERROR ("%s: empty ent", "dwg_ent_text_set_text")
+      LOG_ERROR ("%s: empty ent", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3054,7 +3054,7 @@ dwg_ent_text_get_text (const dwg_ent_text *restrict ent, int *restrict error)
     }
   else
     {
-      LOG_ERROR ("%s: empty ent", "dwg_ent_text_get_text")
+      LOG_ERROR ("%s: empty ent", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -3085,7 +3085,7 @@ dwg_ent_text_get_insertion_pt (const dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text or point", "dwg_ent_text_get_insertion_pt")
+      LOG_ERROR ("%s: empty text or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3115,7 +3115,7 @@ dwg_ent_text_set_insertion_pt (dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text or point", "dwg_ent_text_set_insertion_pt")
+      LOG_ERROR ("%s: empty text or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3139,7 +3139,7 @@ dwg_ent_text_get_height (const dwg_ent_text *restrict text,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_get_height")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -3163,7 +3163,7 @@ dwg_ent_text_set_height (dwg_ent_text *restrict text, const double height,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_set_height")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3193,7 +3193,7 @@ dwg_ent_text_get_extrusion (const dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text or vector", "dwg_ent_text_get_extrusion")
+      LOG_ERROR ("%s: empty text or vector", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3224,7 +3224,7 @@ dwg_ent_text_set_extrusion (dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text or vector", "dwg_ent_text_set_extrusion")
+      LOG_ERROR ("%s: empty text or vector", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3247,7 +3247,7 @@ dwg_ent_text_get_thickness (const dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_get_thickness")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -3272,7 +3272,7 @@ dwg_ent_text_set_thickness (dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_set_thickness")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3295,7 +3295,7 @@ dwg_ent_text_get_rotation (const dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_get_rotation")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -3320,7 +3320,7 @@ dwg_ent_text_set_rotation (dwg_ent_text *restrict text, const double angle,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_set_rotation")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3343,7 +3343,7 @@ dwg_ent_text_get_vert_alignment (const dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_get_vert_alignment")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
       return -1;
     }
@@ -3370,7 +3370,7 @@ dwg_ent_text_set_vert_alignment (dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_set_vert_alignment")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3393,7 +3393,7 @@ dwg_ent_text_get_horiz_alignment (const dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_get_horiz_alignment")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -3420,7 +3420,7 @@ dwg_ent_text_set_horiz_alignment (dwg_ent_text *restrict text,
     }
   else
     {
-      LOG_ERROR ("%s: empty text", "dwg_ent_text_set_horiz_alignment")
+      LOG_ERROR ("%s: empty text", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3448,7 +3448,7 @@ dwg_ent_attrib_set_text (dwg_ent_attrib *restrict ent,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_set_text")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3474,7 +3474,7 @@ dwg_ent_attrib_get_text (const dwg_ent_attrib *restrict ent,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_get_text")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -3505,7 +3505,7 @@ dwg_ent_attrib_get_insertion_pt (const dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_get_insertion_pt")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3535,7 +3535,7 @@ dwg_ent_attrib_set_insertion_pt (dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_set_insertion_pt")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3558,7 +3558,7 @@ dwg_ent_attrib_get_height (const dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_get_height")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -3583,7 +3583,7 @@ dwg_ent_attrib_set_height (dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_set_height")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3614,7 +3614,7 @@ dwg_ent_attrib_get_extrusion (const dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib or vector", "dwg_ent_attrib_get_extrusion")
+      LOG_ERROR ("%s: empty attrib or vector", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3645,7 +3645,7 @@ dwg_ent_attrib_set_extrusion (dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib or vector", "dwg_ent_attrib_set_extrusion")
+      LOG_ERROR ("%s: empty attrib or vector", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3669,7 +3669,7 @@ dwg_ent_attrib_get_thickness (const dwg_ent_attrib *restrict attrib,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_get_thickness")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -3694,7 +3694,7 @@ dwg_ent_attrib_set_thickness (dwg_ent_attrib *restrict attrib,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_set_thickness")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
     }
 }
 
@@ -3716,7 +3716,7 @@ dwg_ent_attrib_get_rotation (const dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_get_rotation")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -3742,7 +3742,7 @@ dwg_ent_attrib_set_rotation (dwg_ent_attrib *restrict attrib,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attrib_set_rotation")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -3762,7 +3762,7 @@ dwg_ent_attrib_get_vert_alignment (const dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_get_vert_alignment")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
       return -1;
     }
@@ -3787,7 +3787,7 @@ dwg_ent_attrib_set_vert_alignment (dwg_ent_attrib *restrict attrib,
     }
   else
     {
-      LOG_ERROR ("%s: empty attrib", "dwg_ent_attrib_set_vert_alignment")
+      LOG_ERROR ("%s: empty attrib", __FUNCTION__)
       *error = 1;
     }
 }
@@ -3809,7 +3809,7 @@ dwg_ent_attrib_get_horiz_alignment (const dwg_ent_attrib *restrict attrib,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attrib_get_horiz_alignment")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return -1;
     }
 }
@@ -3835,7 +3835,7 @@ dwg_ent_attrib_set_horiz_alignment (dwg_ent_attrib *restrict attrib,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attrib_set_horiz_alignment")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -3864,7 +3864,7 @@ dwg_ent_attdef_set_default_value (dwg_ent_attdef *restrict ent,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_set_default_value")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -3889,7 +3889,7 @@ dwg_ent_attdef_get_default_value (const dwg_ent_attdef *restrict ent,
     }
   else
     {
-      LOG_ERROR ("%s: empty attdef", "dwg_ent_attdef_get_default_value")
+      LOG_ERROR ("%s: empty attdef", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -3921,7 +3921,7 @@ dwg_ent_attdef_get_insertion_pt (const dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_get_insertion_pt")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -3951,7 +3951,7 @@ dwg_ent_attdef_set_insertion_pt (dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_set_insertion_pt")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -3974,7 +3974,7 @@ dwg_ent_attdef_get_height (const dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_get_height")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -3999,7 +3999,7 @@ dwg_ent_attdef_set_height (dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_set_height")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4030,7 +4030,7 @@ dwg_ent_attdef_get_extrusion (const dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_get_extrusion")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4061,7 +4061,7 @@ dwg_ent_attdef_set_extrusion (dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_set_extrusion")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4084,7 +4084,7 @@ dwg_ent_attdef_get_thickness (const dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_get_thickness")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -4109,11 +4109,11 @@ dwg_ent_attdef_set_thickness (dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_set_thickness")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
-/** Returns the ATTDEF rotation angle, DXF 50 (radian).
+/** Returns the _dwg_entity_ATTDEF::rotation agle, DXF 50 (radian).
   \code Usage: double angle = dwg_ent_attdef_get_rotation(attdef, &error);
   \endcode
   \param[in] attdef dwg_ent_attdef*
@@ -4132,7 +4132,7 @@ dwg_ent_attdef_get_rotation (const dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_get_rotation")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -4157,7 +4157,7 @@ dwg_ent_attdef_set_rotation (dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_set_rotation")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4178,7 +4178,7 @@ dwg_ent_attdef_get_vert_alignment (const dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_get_vert_alignment")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return -1;
     }
 }
@@ -4204,7 +4204,7 @@ dwg_ent_attdef_set_vert_alignment (dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_set_vert_alignment")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4225,7 +4225,7 @@ dwg_ent_attdef_get_horiz_alignment (const dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_get_horiz_alignment")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return -1;
     }
 }
@@ -4251,7 +4251,7 @@ dwg_ent_attdef_set_horiz_alignment (dwg_ent_attdef *restrict attdef,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_attdef_set_horiz_alignment")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4286,7 +4286,7 @@ dwg_ent_point_set_point (dwg_ent_point *restrict point,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_point_set_point")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4316,7 +4316,7 @@ dwg_ent_point_get_point (const dwg_ent_point *restrict point,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_point_get_point")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4339,7 +4339,7 @@ dwg_ent_point_get_thickness (const dwg_ent_point *restrict point,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_point_get_thickness")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -4364,7 +4364,7 @@ dwg_ent_point_set_thickness (dwg_ent_point *restrict point,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_point_set_thickness")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4395,7 +4395,7 @@ dwg_ent_point_set_extrusion (dwg_ent_point *restrict point,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_point_set_extrusion")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4426,7 +4426,7 @@ dwg_ent_point_get_extrusion (const dwg_ent_point *restrict point,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_point_get_extrusion")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4453,7 +4453,7 @@ dwg_ent_solid_get_thickness (const dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_get_thickness")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -4478,7 +4478,7 @@ dwg_ent_solid_set_thickness (dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_set_thickness")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4501,7 +4501,7 @@ dwg_ent_solid_get_elevation (const dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_get_elevation")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -4526,7 +4526,7 @@ dwg_ent_solid_set_elevation (dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_set_elevation")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4555,7 +4555,7 @@ dwg_ent_solid_get_corner1 (const dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_get_corner1")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4585,7 +4585,7 @@ dwg_ent_solid_set_corner1 (dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_set_corner1")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4614,7 +4614,7 @@ dwg_ent_solid_get_corner2 (const dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_get_corner2")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4644,7 +4644,7 @@ dwg_ent_solid_set_corner2 (dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_set_corner2")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4673,7 +4673,7 @@ dwg_ent_solid_get_corner3 (const dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_get_corner3")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4703,7 +4703,7 @@ dwg_ent_solid_set_corner3 (dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_set_corner3")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4732,7 +4732,7 @@ dwg_ent_solid_get_corner4 (const dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_get_corner4")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4762,7 +4762,7 @@ dwg_ent_solid_set_corner4 (dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_set_corner4")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4793,7 +4793,7 @@ dwg_ent_solid_get_extrusion (const dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_get_extrusion")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4824,7 +4824,7 @@ dwg_ent_solid_set_extrusion (dwg_ent_solid *restrict solid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_solid_set_extrusion")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4852,7 +4852,7 @@ dwg_ent_block_set_name (dwg_ent_block *restrict ent, const char *name,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_block_set_name")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4878,7 +4878,7 @@ dwg_ent_block_get_name (const dwg_ent_block *restrict block,
     }
   else
     {
-      LOG_ERROR ("%s: empty block", "dwg_ent_block_get_name")
+      LOG_ERROR ("%s: empty block", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -4914,7 +4914,7 @@ dwg_ent_ray_get_point (const dwg_ent_ray *restrict ray,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_ray_get_point")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4944,7 +4944,7 @@ dwg_ent_ray_set_point (dwg_ent_ray *restrict ray,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_ray_set_point")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -4974,7 +4974,7 @@ dwg_ent_ray_get_vector (const dwg_ent_ray *restrict ray,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_ray_get_vector")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5005,7 +5005,7 @@ dwg_ent_ray_set_vector (dwg_ent_ray *restrict ray,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_ray_set_vector")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5039,7 +5039,7 @@ dwg_ent_xline_get_point (const dwg_ent_xline *restrict xline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_xline_get_point")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5070,7 +5070,7 @@ dwg_ent_xline_set_point (dwg_ent_xline *restrict xline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_xline_set_point")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5100,7 +5100,7 @@ dwg_ent_xline_get_vector (const dwg_ent_xline *restrict xline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_xline_get_vector")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5130,7 +5130,7 @@ dwg_ent_xline_set_vector (dwg_ent_xline *restrict xline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_xline_set_vector")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5157,7 +5157,7 @@ dwg_ent_trace_get_thickness (const dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_get_thickness")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -5182,7 +5182,7 @@ dwg_ent_trace_set_thickness (dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_set_thickness")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5205,7 +5205,7 @@ dwg_ent_trace_get_elevation (const dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_get_elevation")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -5230,7 +5230,7 @@ dwg_ent_trace_set_elevation (dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_set_elevation")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5259,7 +5259,7 @@ dwg_ent_trace_get_corner1 (const dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_get_corner1")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5289,7 +5289,7 @@ dwg_ent_trace_set_corner1 (dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_set_corner1")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5318,7 +5318,7 @@ dwg_ent_trace_get_corner2 (const dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_get_corner2")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5348,7 +5348,7 @@ dwg_ent_trace_set_corner2 (dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_set_corner2")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5377,7 +5377,7 @@ dwg_ent_trace_get_corner3 (const dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_get_corner3")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5407,7 +5407,7 @@ dwg_ent_trace_set_corner3 (dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_set_corner3")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5436,7 +5436,7 @@ dwg_ent_trace_get_corner4 (const dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_get_corner4")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5466,7 +5466,7 @@ dwg_ent_trace_set_corner4 (dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_set_corner4")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5497,7 +5497,7 @@ dwg_ent_trace_get_extrusion (const dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_get_extrusion")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5528,7 +5528,7 @@ dwg_ent_trace_set_extrusion (dwg_ent_trace *restrict trace,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_trace_set_extrusion")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5555,7 +5555,7 @@ dwg_ent_vertex_3d_get_flag (const dwg_ent_vertex_3d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_vertex_3d_get_flag")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -5580,7 +5580,7 @@ dwg_ent_vertex_3d_set_flag (dwg_ent_vertex_3d *restrict vert, const char flag,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_vertex_3d_set_flag")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5610,7 +5610,7 @@ dwg_ent_vertex_3d_get_point (const dwg_ent_vertex_3d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_vertex_3d_get_point")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5641,7 +5641,7 @@ dwg_ent_vertex_3d_set_point (dwg_ent_vertex_3d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_vertex_3d_set_point")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5668,7 +5668,7 @@ dwg_ent_vertex_mesh_get_flag (const dwg_ent_vertex_mesh *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_vertex_mesh_get_flag")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -5693,7 +5693,7 @@ dwg_ent_vertex_mesh_set_flag (dwg_ent_vertex_mesh *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_vertex_mesh_set_flag")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5724,7 +5724,7 @@ dwg_ent_vertex_mesh_get_point (const dwg_ent_vertex_mesh *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5755,7 +5755,7 @@ dwg_ent_vertex_mesh_set_point (dwg_ent_vertex_mesh *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5782,7 +5782,7 @@ dwg_ent_vertex_pface_get_flag (const dwg_ent_vertex_pface *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -5807,7 +5807,7 @@ dwg_ent_vertex_pface_set_flag (dwg_ent_vertex_pface *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5838,7 +5838,7 @@ dwg_ent_vertex_pface_get_point (const dwg_ent_vertex_pface *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5869,7 +5869,7 @@ dwg_ent_vertex_pface_set_point (dwg_ent_vertex_pface *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5896,7 +5896,7 @@ dwg_ent_vertex_2d_get_flag (const dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -5921,7 +5921,7 @@ dwg_ent_vertex_2d_set_flag (dwg_ent_vertex_2d *restrict vert, const char flag,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5951,7 +5951,7 @@ dwg_ent_vertex_2d_get_point (const dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -5982,7 +5982,7 @@ dwg_ent_vertex_2d_set_point (dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6005,7 +6005,7 @@ dwg_ent_vertex_2d_get_start_width (const dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -6031,7 +6031,7 @@ dwg_ent_vertex_2d_set_start_width (dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6054,7 +6054,7 @@ dwg_ent_vertex_2d_get_end_width (const dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -6079,7 +6079,7 @@ dwg_ent_vertex_2d_set_end_width (dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6102,7 +6102,7 @@ dwg_ent_vertex_2d_get_bulge (const dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -6127,7 +6127,7 @@ dwg_ent_vertex_2d_set_bulge (dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6148,7 +6148,7 @@ dwg_ent_vertex_2d_get_tangent_dir (const dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -6174,7 +6174,7 @@ dwg_ent_vertex_2d_set_tangent_dir (dwg_ent_vertex_2d *restrict vert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6207,7 +6207,7 @@ dwg_ent_insert_get_ins_pt (const dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6237,7 +6237,7 @@ dwg_ent_insert_set_ins_pt (dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6266,7 +6266,7 @@ dwg_ent_insert_get_scale (const dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6296,7 +6296,7 @@ dwg_ent_insert_set_scale (dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6319,7 +6319,7 @@ dwg_ent_insert_get_rotation (const dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -6344,7 +6344,7 @@ dwg_ent_insert_set_rotation (dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6375,7 +6375,7 @@ dwg_ent_insert_get_extrusion (const dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6406,7 +6406,7 @@ dwg_ent_insert_set_extrusion (dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6429,7 +6429,7 @@ dwg_ent_insert_has_attribs (dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
       return '\0';
     }
@@ -6453,7 +6453,7 @@ dwg_ent_insert_get_num_owned (const dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
       return 0L;
     }
@@ -6480,7 +6480,7 @@ dwg_ent_insert_get_block_header (const dwg_ent_insert *restrict insert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -6515,7 +6515,7 @@ dwg_ent_minsert_get_ins_pt (const dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6546,7 +6546,7 @@ dwg_ent_minsert_set_ins_pt (dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty minsert", "dwg_api")
+      LOG_ERROR ("%s: empty minsert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6575,7 +6575,7 @@ dwg_ent_minsert_get_scale (const dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty minsert", "dwg_api")
+      LOG_ERROR ("%s: empty minsert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6606,7 +6606,7 @@ dwg_ent_minsert_set_scale (dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty minsert", "dwg_api")
+      LOG_ERROR ("%s: empty minsert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6629,7 +6629,7 @@ dwg_ent_minsert_get_rotation (const dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty minsert", "dwg_api")
+      LOG_ERROR ("%s: empty minsert", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -6654,7 +6654,7 @@ dwg_ent_minsert_set_rotation (dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty minsert", "dwg_api")
+      LOG_ERROR ("%s: empty minsert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6685,7 +6685,7 @@ dwg_ent_minsert_get_extrusion (const dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty minsert", "dwg_api")
+      LOG_ERROR ("%s: empty minsert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6716,7 +6716,7 @@ dwg_ent_minsert_set_extrusion (dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty minsert", "dwg_api")
+      LOG_ERROR ("%s: empty minsert", __FUNCTION__)
       *error = 1;
     }
 }
@@ -6739,7 +6739,7 @@ dwg_ent_minsert_has_attribs (dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty minsert", "dwg_api")
+      LOG_ERROR ("%s: empty minsert", __FUNCTION__)
       *error = 1;
       return '\0';
     }
@@ -6762,7 +6762,7 @@ dwg_ent_minsert_get_num_owned (const dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -6791,7 +6791,7 @@ dwg_ent_minsert_set_num_cols (dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6812,7 +6812,7 @@ dwg_ent_minsert_get_num_cols (const dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -6837,7 +6837,7 @@ dwg_ent_minsert_set_num_rows (dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6858,7 +6858,7 @@ dwg_ent_minsert_get_num_rows (const dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -6880,7 +6880,7 @@ dwg_ent_minsert_get_col_spacing (const dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -6905,7 +6905,7 @@ dwg_ent_minsert_set_col_spacing (dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6926,7 +6926,7 @@ dwg_ent_minsert_get_row_spacing (const dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -6951,7 +6951,7 @@ dwg_ent_minsert_set_row_spacing (dwg_ent_minsert *restrict minsert,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -6972,7 +6972,7 @@ dwg_ent_minsert_get_block_header (const dwg_ent_minsert *restrict minsert,
     }
   else
     {
-      LOG_ERROR ("%s: empty insert", "dwg_api")
+      LOG_ERROR ("%s: empty insert", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -7003,7 +7003,7 @@ dwg_obj_mlinestyle_get_name (const dwg_obj_mlinestyle *restrict mlinestyle,
     }
   else
     {
-      LOG_ERROR ("%s: empty mlinestyle", "dwg_api")
+      LOG_ERROR ("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -7029,7 +7029,7 @@ dwg_obj_mlinestyle_set_name (dwg_obj_mlinestyle *restrict mlinestyle,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7054,7 +7054,7 @@ dwg_obj_mlinestyle_get_desc (const dwg_obj_mlinestyle *restrict mlinestyle,
     }
   else
     {
-      LOG_ERROR ("%s: empty mlinestyle", "dwg_api")
+      LOG_ERROR ("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -7080,7 +7080,7 @@ dwg_obj_mlinestyle_set_desc (dwg_obj_mlinestyle *restrict mlinestyle,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7102,7 +7102,7 @@ dwg_obj_mlinestyle_get_flag (const dwg_obj_mlinestyle *restrict mlinestyle,
     }
   else
     {
-      LOG_ERROR ("%s: empty mlinestyle", "dwg_api")
+      LOG_ERROR ("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
       return '\0';
     }
@@ -7128,7 +7128,7 @@ dwg_obj_mlinestyle_set_flag (dwg_obj_mlinestyle *restrict mlinestyle,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7149,7 +7149,7 @@ dwg_obj_mlinestyle_get_start_angle (
     }
   else
     {
-      LOG_ERROR ("%s: empty mlinestyle", "dwg_api")
+      LOG_ERROR ("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
       return '\0';
     }
@@ -7175,7 +7175,7 @@ dwg_obj_mlinestyle_set_start_angle (dwg_obj_mlinestyle *restrict mlinestyle,
     }
   else
     {
-      LOG_ERROR ("%s: empty mlinestyle", "dwg_api")
+      LOG_ERROR ("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -7196,7 +7196,7 @@ dwg_obj_mlinestyle_get_end_angle (
     }
   else
     {
-      LOG_ERROR ("%s: empty mlinestyle", "dwg_api")
+      LOG_ERROR ("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
       return '\0';
     }
@@ -7221,7 +7221,7 @@ dwg_obj_mlinestyle_set_end_angle (dwg_obj_mlinestyle *restrict mlinestyle,
     }
   else
     {
-      LOG_ERROR ("%s: empty mlinestyle", "dwg_api")
+      LOG_ERROR ("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
     }
 }
@@ -7242,7 +7242,7 @@ dwg_obj_mlinestyle_get_num_lines (
     }
   else
     {
-      LOG_ERROR ("%s: empty mlinestyle", "dwg_api")
+      LOG_ERROR ("%s: empty mlinestyle", __FUNCTION__)
       *error = 1;
       return '\0';
     }
@@ -7268,7 +7268,7 @@ dwg_obj_appid_control_get_num_entries (
     }
   else
     {
-      LOG_ERROR ("%s: empty appid", "dwg_api")
+      LOG_ERROR ("%s: empty appid", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -7292,7 +7292,7 @@ dwg_obj_appid_control_get_appid (const dwg_obj_appid_control *restrict appid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -7322,7 +7322,7 @@ dwg_obj_appid_get_name (const dwg_obj_appid *restrict appid,
     }
   else
     {
-      LOG_ERROR ("%s: empty appid", "dwg_api")
+      LOG_ERROR ("%s: empty appid", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -7347,7 +7347,7 @@ dwg_obj_appid_get_flag (const dwg_obj_appid *restrict appid,
     }
   else
     {
-      LOG_ERROR ("%s: empty appid", "dwg_api")
+      LOG_ERROR ("%s: empty appid", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -7375,7 +7375,7 @@ dwg_obj_appid_set_flag (dwg_obj_appid *restrict appid, const BITCODE_RC flag,
     }
   else
     {
-      LOG_ERROR ("%s: empty appid", "dwg_api")
+      LOG_ERROR ("%s: empty appid", __FUNCTION__)
       *error = 1;
     }
 }
@@ -7397,7 +7397,7 @@ dwg_obj_appid_get_appid_control (const dwg_obj_appid *restrict appid,
     }
   else
     {
-      LOG_ERROR ("%s: empty appid", "dwg_api")
+      LOG_ERROR ("%s: empty appid", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -7430,7 +7430,7 @@ dwg_ent_dim_get_block_name (const dwg_ent_dim *restrict dim,
     }
   else
     {
-      LOG_ERROR ("%s: empty dim", "dwg_api")
+      LOG_ERROR ("%s: empty dim", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -7453,7 +7453,7 @@ dwg_ent_dim_get_elevation (const dwg_ent_dim *restrict dim,
     }
   else
     {
-      LOG_ERROR ("%s: empty dim", "dwg_api")
+      LOG_ERROR ("%s: empty dim", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -7478,7 +7478,7 @@ dwg_ent_dim_set_elevation (dwg_ent_dim *restrict dim, const double elevation,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7500,7 +7500,7 @@ dwg_ent_dim_get_flag1 (const dwg_ent_dim *restrict dim, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -7525,7 +7525,7 @@ dwg_ent_dim_set_flag1 (dwg_ent_dim *restrict dim, const char flag,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7548,7 +7548,7 @@ dwg_ent_dim_get_act_measurement (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -7573,7 +7573,7 @@ dwg_ent_dim_set_act_measurement (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7596,7 +7596,7 @@ dwg_ent_dim_get_horiz_dir (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -7621,7 +7621,7 @@ dwg_ent_dim_set_horiz_dir (dwg_ent_dim *restrict dim, const double horiz_dir,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7642,7 +7642,7 @@ dwg_ent_dim_get_lspace_factor (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -7667,7 +7667,7 @@ dwg_ent_dim_set_lspace_factor (dwg_ent_dim *restrict dim, const double factor,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7688,7 +7688,7 @@ dwg_ent_dim_get_lspace_style (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -7713,7 +7713,7 @@ dwg_ent_dim_set_lspace_style (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7736,7 +7736,7 @@ dwg_ent_dim_get_attachment (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -7761,7 +7761,7 @@ dwg_ent_dim_set_attachment (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7792,7 +7792,7 @@ dwg_ent_dim_set_extrusion (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7822,7 +7822,7 @@ dwg_ent_dim_get_extrusion (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7847,7 +7847,7 @@ dwg_ent_dim_get_user_text (const dwg_ent_dim *restrict dim,
     }
   else
     {
-      LOG_ERROR ("%s: empty dim", "dwg_api")
+      LOG_ERROR ("%s: empty dim", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -7873,7 +7873,7 @@ dwg_ent_dim_set_user_text (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7896,7 +7896,7 @@ dwg_ent_dim_get_text_rotation (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -7921,7 +7921,7 @@ dwg_ent_dim_set_text_rotation (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7944,7 +7944,7 @@ dwg_ent_dim_get_ins_rotation (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -7969,7 +7969,7 @@ dwg_ent_dim_set_ins_rotation (dwg_ent_dim *restrict dim, const double rotation,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -7992,7 +7992,7 @@ dwg_ent_dim_get_flip_arrow1 (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -8017,7 +8017,7 @@ dwg_ent_dim_set_flip_arrow1 (dwg_ent_dim *restrict dim, const char flip_arrow,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8040,7 +8040,7 @@ dwg_ent_dim_get_flip_arrow2 (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -8065,7 +8065,7 @@ dwg_ent_dim_set_flip_arrow2 (dwg_ent_dim *restrict dim, const char flip_arrow,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8095,7 +8095,7 @@ dwg_ent_dim_set_text_midpt (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8124,7 +8124,7 @@ dwg_ent_dim_get_text_midpt (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8154,7 +8154,7 @@ dwg_ent_dim_set_ins_scale (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8183,7 +8183,7 @@ dwg_ent_dim_get_ins_scale (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8213,7 +8213,7 @@ dwg_ent_dim_set_clone_ins_pt (dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8243,7 +8243,7 @@ dwg_ent_dim_get_clone_ins_pt (const dwg_ent_dim *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8270,7 +8270,7 @@ dwg_ent_dim_ordinate_get_flag2 (const dwg_ent_dim_ordinate *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -8295,7 +8295,7 @@ dwg_ent_dim_ordinate_set_flag2 (dwg_ent_dim_ordinate *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8326,7 +8326,7 @@ dwg_ent_dim_ordinate_set_def_pt (dwg_ent_dim_ordinate *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8357,7 +8357,7 @@ dwg_ent_dim_ordinate_get_def_pt (const dwg_ent_dim_ordinate *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8386,7 +8386,7 @@ dwg_ent_dim_ordinate_set_feature_location_pt (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8415,7 +8415,7 @@ dwg_ent_dim_ordinate_get_feature_location_pt (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8446,7 +8446,7 @@ dwg_ent_dim_ordinate_set_leader_endpt (dwg_ent_dim_ordinate *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8477,7 +8477,7 @@ dwg_ent_dim_ordinate_get_leader_endpt (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8512,7 +8512,7 @@ dwg_ent_dim_linear_set_def_pt (dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8543,7 +8543,7 @@ dwg_ent_dim_linear_get_def_pt (const dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8574,7 +8574,7 @@ dwg_ent_dim_linear_set_13_pt (dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8605,7 +8605,7 @@ dwg_ent_dim_linear_get_13_pt (const dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8636,7 +8636,7 @@ dwg_ent_dim_linear_set_14_pt (dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8667,7 +8667,7 @@ dwg_ent_dim_linear_get_14_pt (const dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8688,7 +8688,7 @@ dwg_ent_dim_linear_get_ext_line_rotation (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -8714,7 +8714,7 @@ dwg_ent_dim_linear_set_ext_line_rotation (dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8737,7 +8737,7 @@ dwg_ent_dim_linear_get_dim_rotation (const dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -8763,7 +8763,7 @@ dwg_ent_dim_linear_set_dim_rotation (dwg_ent_dim_linear *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8798,7 +8798,7 @@ dwg_ent_dim_aligned_set_def_pt (dwg_ent_dim_aligned *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8829,7 +8829,7 @@ dwg_ent_dim_aligned_get_def_pt (const dwg_ent_dim_aligned *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8860,7 +8860,7 @@ dwg_ent_dim_aligned_set_13_pt (dwg_ent_dim_aligned *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8891,7 +8891,7 @@ dwg_ent_dim_aligned_get_13_pt (const dwg_ent_dim_aligned *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8922,7 +8922,7 @@ dwg_ent_dim_aligned_set_14_pt (dwg_ent_dim_aligned *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8949,7 +8949,7 @@ dwg_ent_dim_aligned_get_14_pt (const dwg_ent_dim_aligned *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -8970,7 +8970,7 @@ dwg_ent_dim_aligned_get_ext_line_rotation (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -8996,7 +8996,7 @@ dwg_ent_dim_aligned_set_ext_line_rotation (dwg_ent_dim_aligned *restrict dim,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9031,7 +9031,7 @@ dwg_ent_dim_ang3pt_set_def_pt (dwg_ent_dim_ang3pt *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9058,7 +9058,7 @@ dwg_ent_dim_ang3pt_get_def_pt (const dwg_ent_dim_ang3pt *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9089,7 +9089,7 @@ dwg_ent_dim_ang3pt_set_13_pt (dwg_ent_dim_ang3pt *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9120,7 +9120,7 @@ dwg_ent_dim_ang3pt_get_13_pt (const dwg_ent_dim_ang3pt *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9151,7 +9151,7 @@ dwg_ent_dim_ang3pt_set_14_pt (dwg_ent_dim_ang3pt *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9182,7 +9182,7 @@ dwg_ent_dim_ang3pt_get_14_pt (const dwg_ent_dim_ang3pt *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9213,7 +9213,7 @@ dwg_ent_dim_ang3pt_set_first_arc_pt (dwg_ent_dim_ang3pt *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9244,7 +9244,7 @@ dwg_ent_dim_ang3pt_get_first_arc_pt (const dwg_ent_dim_ang3pt *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9272,7 +9272,7 @@ dwg_ent_dim_ang2ln_set_def_pt (dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9297,7 +9297,7 @@ dwg_ent_dim_ang2ln_get_def_pt (const dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9322,7 +9322,7 @@ dwg_ent_dim_ang2ln_set_13_pt (dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9347,7 +9347,7 @@ dwg_ent_dim_ang2ln_get_13_pt (const dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9372,7 +9372,7 @@ dwg_ent_dim_ang2ln_set_14_pt (dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9397,7 +9397,7 @@ dwg_ent_dim_ang2ln_get_14_pt (const dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9422,7 +9422,7 @@ dwg_ent_dim_ang2ln_set_first_arc_pt (dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9447,7 +9447,7 @@ dwg_ent_dim_ang2ln_get_first_arc_pt (const dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9472,7 +9472,7 @@ dwg_ent_dim_ang2ln_set_16_pt (dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9497,7 +9497,7 @@ dwg_ent_dim_ang2ln_get_16_pt (const dwg_ent_dim_ang2ln *restrict ang,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9525,7 +9525,7 @@ dwg_ent_dim_radius_set_def_pt (dwg_ent_dim_radius *restrict radius,
     }
   else
     {
-      LOG_ERROR ("%s: empty radius", "dwg_api")
+      LOG_ERROR ("%s: empty radius", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9550,7 +9550,7 @@ dwg_ent_dim_radius_get_def_pt (const dwg_ent_dim_radius *restrict radius,
     }
   else
     {
-      LOG_ERROR ("%s: empty radius", "dwg_api")
+      LOG_ERROR ("%s: empty radius", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9575,7 +9575,7 @@ dwg_ent_dim_radius_set_first_arc_pt (dwg_ent_dim_radius *restrict radius,
     }
   else
     {
-      LOG_ERROR ("%s: empty radius", "dwg_api")
+      LOG_ERROR ("%s: empty radius", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9600,7 +9600,7 @@ dwg_ent_dim_radius_get_first_arc_pt (const dwg_ent_dim_radius *restrict radius,
     }
   else
     {
-      LOG_ERROR ("%s: empty radius", "dwg_api")
+      LOG_ERROR ("%s: empty radius", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9618,7 +9618,7 @@ dwg_ent_dim_radius_get_leader_length (
     }
   else
     {
-      LOG_ERROR ("%s: empty radius", "dwg_api")
+      LOG_ERROR ("%s: empty radius", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -9637,7 +9637,7 @@ dwg_ent_dim_radius_set_leader_length (dwg_ent_dim_radius *restrict radius,
     }
   else
     {
-      LOG_ERROR ("%s: empty radius", "dwg_api")
+      LOG_ERROR ("%s: empty radius", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9667,7 +9667,7 @@ dwg_ent_dim_diameter_set_def_pt (dwg_ent_dim_diameter *restrict dia,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9692,7 +9692,7 @@ dwg_ent_dim_diameter_get_def_pt (const dwg_ent_dim_diameter *restrict dia,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9717,7 +9717,7 @@ dwg_ent_dim_diameter_set_first_arc_pt (dwg_ent_dim_diameter *restrict dia,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9742,7 +9742,7 @@ dwg_ent_dim_diameter_get_first_arc_pt (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -9759,7 +9759,7 @@ dwg_ent_dim_diameter_get_leader_length (
     }
   else
     {
-      LOG_ERROR ("%s: empty dia", "dwg_api")
+      LOG_ERROR ("%s: empty dia", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -9779,7 +9779,7 @@ dwg_ent_dim_diameter_set_leader_length (dwg_ent_dim_diameter *restrict dia,
     }
   else
     {
-      LOG_ERROR ("%s: empty dia", "dwg_api")
+      LOG_ERROR ("%s: empty dia", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9807,7 +9807,7 @@ dwg_ent_shape_get_ins_pt (const dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape or point", "dwg_api")
+      LOG_ERROR ("%s: empty shape or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9832,7 +9832,7 @@ dwg_ent_shape_set_ins_pt (dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape or point", "dwg_api")
+      LOG_ERROR ("%s: empty shape or point", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9850,7 +9850,7 @@ dwg_ent_shape_get_scale (const dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -9869,7 +9869,7 @@ dwg_ent_shape_set_scale (dwg_ent_shape *restrict shape, const double scale,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9887,7 +9887,7 @@ dwg_ent_shape_get_rotation (const dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -9906,7 +9906,7 @@ dwg_ent_shape_set_rotation (dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9924,7 +9924,7 @@ dwg_ent_shape_get_width_factor (const dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -9943,7 +9943,7 @@ dwg_ent_shape_set_width_factor (dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9961,7 +9961,7 @@ dwg_ent_shape_get_oblique (const dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -9980,7 +9980,7 @@ dwg_ent_shape_set_oblique (dwg_ent_shape *restrict shape, const double oblique,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
     }
 }
@@ -9998,7 +9998,7 @@ dwg_ent_shape_get_thickness (const dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
       return bit_nan ();
     }
@@ -10017,7 +10017,7 @@ dwg_ent_shape_set_thickness (dwg_ent_shape *restrict shape,
     }
   else
     {
-      LOG_ERROR ("%s: empty shape", "dwg_api")
+      LOG_ERROR ("%s: empty shape", __FUNCTION__)
       *error = 1;
     }
 }
@@ -10036,7 +10036,7 @@ dwg_ent_shape_get_shape_no (const dwg_ent_shape *restrict shape,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -10056,7 +10056,7 @@ dwg_ent_shape_set_shape_no (dwg_ent_shape *restrict shape, const BITCODE_BS id,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10074,7 +10074,7 @@ dwg_ent_shape_get_style_id (const dwg_ent_shape *restrict shape,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -10094,7 +10094,7 @@ dwg_ent_shape_set_style_id (dwg_ent_shape *restrict shape, const BITCODE_BS id,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10118,7 +10118,7 @@ dwg_ent_shape_get_extrusion (const dwg_ent_shape *restrict shape,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10143,7 +10143,7 @@ dwg_ent_shape_set_extrusion (dwg_ent_shape *restrict shape,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10172,7 +10172,7 @@ dwg_ent_mtext_set_insertion_pt (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10197,7 +10197,7 @@ dwg_ent_mtext_get_insertion_pt (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10222,7 +10222,7 @@ dwg_ent_mtext_set_extrusion (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10246,7 +10246,7 @@ dwg_ent_mtext_get_extrusion (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10271,7 +10271,7 @@ dwg_ent_mtext_set_x_axis_dir (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10296,7 +10296,7 @@ dwg_ent_mtext_get_x_axis_dir (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10314,7 +10314,7 @@ dwg_ent_mtext_set_rect_height (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10332,7 +10332,7 @@ dwg_ent_mtext_get_rect_height (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -10351,7 +10351,7 @@ dwg_ent_mtext_set_rect_width (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10369,7 +10369,7 @@ dwg_ent_mtext_get_rect_width (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -10388,7 +10388,7 @@ dwg_ent_mtext_set_text_height (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10406,7 +10406,7 @@ dwg_ent_mtext_get_text_height (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -10425,7 +10425,7 @@ dwg_ent_mtext_get_attachment (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -10444,7 +10444,7 @@ dwg_ent_mtext_set_attachment (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or wrong arg", "dwg_api")
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
     }
 }
 
@@ -10462,7 +10462,7 @@ dwg_ent_mtext_get_drawing_dir (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -10481,7 +10481,7 @@ dwg_ent_mtext_set_drawing_dir (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or wrong arg", "dwg_api")
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
     }
 }
 
@@ -10499,7 +10499,7 @@ dwg_ent_mtext_get_extents_height (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -10518,7 +10518,7 @@ dwg_ent_mtext_set_extents_height (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10536,7 +10536,7 @@ dwg_ent_mtext_get_extents_width (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -10555,7 +10555,7 @@ dwg_ent_mtext_set_extents_width (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10575,7 +10575,7 @@ dwg_ent_mtext_get_text (const dwg_ent_mtext *restrict ent, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -10594,7 +10594,7 @@ dwg_ent_mtext_set_text (dwg_ent_mtext *restrict ent, char *text,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10612,7 +10612,7 @@ dwg_ent_mtext_get_linespace_style (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -10631,7 +10631,7 @@ dwg_ent_mtext_set_linespace_style (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10649,7 +10649,7 @@ dwg_ent_mtext_get_linespace_factor (const dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -10668,7 +10668,7 @@ dwg_ent_mtext_set_linespace_factor (dwg_ent_mtext *restrict mtext,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10690,7 +10690,7 @@ dwg_ent_leader_set_annot_type (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10708,7 +10708,7 @@ dwg_ent_leader_get_annot_type (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -10727,7 +10727,7 @@ dwg_ent_leader_set_path_type (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10745,7 +10745,7 @@ dwg_ent_leader_get_path_type (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -10764,7 +10764,7 @@ dwg_ent_leader_get_num_points (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -10792,7 +10792,7 @@ dwg_ent_leader_set_origin (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10816,7 +10816,7 @@ dwg_ent_leader_get_origin (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10841,7 +10841,7 @@ dwg_ent_leader_set_extrusion (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10866,7 +10866,7 @@ dwg_ent_leader_get_extrusion (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10891,7 +10891,7 @@ dwg_ent_leader_set_x_direction (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10916,7 +10916,7 @@ dwg_ent_leader_get_x_direction (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10941,7 +10941,7 @@ dwg_ent_leader_set_inspt_offset (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10966,7 +10966,7 @@ dwg_ent_leader_get_inspt_offset (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -10984,7 +10984,7 @@ dwg_ent_leader_set_dimgap (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11002,7 +11002,7 @@ dwg_ent_leader_get_dimgap (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11021,7 +11021,7 @@ dwg_ent_leader_set_box_height (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11039,7 +11039,7 @@ dwg_ent_leader_get_box_height (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11058,7 +11058,7 @@ dwg_ent_leader_set_box_width (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11076,7 +11076,7 @@ dwg_ent_leader_get_box_width (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11095,7 +11095,7 @@ dwg_ent_leader_set_hookline_dir (dwg_ent_leader *restrict leader, char dir,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11113,7 +11113,7 @@ dwg_ent_leader_get_hookline_dir (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -11132,7 +11132,7 @@ dwg_ent_leader_set_arrowhead_on (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11150,7 +11150,7 @@ dwg_ent_leader_get_arrowhead_on (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -11169,7 +11169,7 @@ dwg_ent_leader_set_arrowhead_type (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11187,7 +11187,7 @@ dwg_ent_leader_get_arrowhead_type (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -11206,7 +11206,7 @@ dwg_ent_leader_set_dimasz (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11224,7 +11224,7 @@ dwg_ent_leader_get_dimasz (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11243,7 +11243,7 @@ dwg_ent_leader_set_byblock_color (dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11261,7 +11261,7 @@ dwg_ent_leader_get_byblock_color (const dwg_ent_leader *restrict leader,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -11284,7 +11284,7 @@ dwg_ent_tolerance_set_height (dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11302,7 +11302,7 @@ dwg_ent_tolerance_get_height (const dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11321,7 +11321,7 @@ dwg_ent_tolerance_set_dimgap (dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11339,7 +11339,7 @@ dwg_ent_tolerance_get_dimgap (const dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11365,7 +11365,7 @@ dwg_ent_tolerance_set_ins_pt (dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11390,7 +11390,7 @@ dwg_ent_tolerance_get_ins_pt (const dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11415,7 +11415,7 @@ dwg_ent_tolerance_set_x_direction (dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11440,7 +11440,7 @@ dwg_ent_tolerance_get_x_direction (const dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11465,7 +11465,7 @@ dwg_ent_tolerance_set_extrusion (dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11490,7 +11490,7 @@ dwg_ent_tolerance_get_extrusion (const dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11509,7 +11509,7 @@ dwg_ent_tolerance_set_text_string (dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11530,7 +11530,7 @@ dwg_ent_tolerance_get_text_string (const dwg_ent_tolerance *restrict tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -11552,7 +11552,7 @@ dwg_ent_lwpline_get_flag (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -11571,7 +11571,7 @@ dwg_ent_lwpline_set_flag (dwg_ent_lwpline *restrict lwpline, char flags,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11589,7 +11589,7 @@ dwg_ent_lwpline_get_const_width (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11608,7 +11608,7 @@ dwg_ent_lwpline_set_const_width (dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 /** Returns lwpline elevation
@@ -11625,7 +11625,7 @@ dwg_ent_lwpline_get_elevation (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11644,7 +11644,7 @@ dwg_ent_lwpline_set_elevation (dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 /** Returns lwpline thickness
@@ -11661,7 +11661,7 @@ dwg_ent_lwpline_get_thickness (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -11680,7 +11680,7 @@ dwg_ent_lwpline_set_thickness (dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11698,7 +11698,7 @@ dwg_ent_lwpline_get_numbulges (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -11717,7 +11717,7 @@ dwg_ent_lwpline_get_numwidths (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -11743,7 +11743,7 @@ dwg_ent_lwpline_get_extrusion (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11768,7 +11768,7 @@ dwg_ent_lwpline_set_extrusion (dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11790,7 +11790,7 @@ dwg_ent_ole2frame_get_type (const dwg_ent_ole2frame *restrict frame,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return (BITCODE_BS)-1;
     }
 }
@@ -11809,7 +11809,7 @@ dwg_ent_ole2frame_set_type (dwg_ent_ole2frame *restrict frame,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or wrong arg", "dwg_api")
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
     }
 }
 
@@ -11827,7 +11827,7 @@ dwg_ent_ole2frame_get_mode (const dwg_ent_ole2frame *restrict frame,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return (BITCODE_BS)-1;
     }
 }
@@ -11846,7 +11846,7 @@ dwg_ent_ole2frame_set_mode (dwg_ent_ole2frame *restrict frame,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or wrong arg", "dwg_api")
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
     }
 }
 
@@ -11864,7 +11864,7 @@ dwg_ent_ole2frame_get_data_size (const dwg_ent_ole2frame *restrict frame,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -11883,7 +11883,7 @@ dwg_ent_ole2frame_get_data (const dwg_ent_ole2frame *restrict frame,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -11904,7 +11904,7 @@ dwg_ent_ole2frame_set_data (dwg_ent_ole2frame *restrict frame,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11924,7 +11924,7 @@ dwg_obj_proxy_get_class_id (const dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -11941,7 +11941,7 @@ dwg_obj_proxy_set_class_id (dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11957,7 +11957,7 @@ dwg_obj_proxy_get_version (const dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -11974,7 +11974,7 @@ dwg_obj_proxy_set_version (dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -11990,7 +11990,7 @@ dwg_obj_proxy_get_from_dxf (const dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -12007,7 +12007,7 @@ dwg_obj_proxy_set_from_dxf (dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12023,7 +12023,7 @@ dwg_obj_proxy_get_data (const dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -12040,7 +12040,7 @@ dwg_obj_proxy_set_data (dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12056,7 +12056,7 @@ dwg_obj_proxy_get_objids (const dwg_obj_proxy *restrict proxy,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -12077,7 +12077,7 @@ dwg_obj_xrecord_get_xdata_size (const dwg_obj_xrecord *restrict xrecord,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -12094,7 +12094,7 @@ dwg_obj_xrecord_get_cloning_flags (const dwg_obj_xrecord *restrict xrecord,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -12112,7 +12112,7 @@ dwg_obj_xrecord_set_cloning_flags (dwg_obj_xrecord *restrict xrecord,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12128,7 +12128,7 @@ dwg_obj_xrecord_get_num_xdata (const dwg_obj_xrecord *restrict xrecord,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0U;
     }
 }
@@ -12145,7 +12145,7 @@ dwg_obj_xrecord_get_xdata (const dwg_obj_xrecord *restrict xrecord,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -12162,7 +12162,7 @@ dwg_obj_xrecord_set_xdata (dwg_obj_xrecord *restrict xrecord,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12178,7 +12178,7 @@ dwg_obj_xrecord_get_num_objid_handles (const dwg_obj_xrecord *restrict xrecord,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -12195,7 +12195,7 @@ dwg_obj_xrecord_get_objid_handles (const dwg_obj_xrecord *restrict xrecord,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -12218,7 +12218,7 @@ dwg_ent_spline_get_scenario (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -12237,7 +12237,7 @@ dwg_ent_spline_set_scenario (dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12255,7 +12255,7 @@ dwg_ent_spline_get_degree (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -12274,7 +12274,7 @@ dwg_ent_spline_set_degree (dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12292,7 +12292,7 @@ dwg_ent_spline_get_fit_tol (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -12311,7 +12311,7 @@ dwg_ent_spline_set_fit_tol (dwg_ent_spline *restrict spline, int fit_tol,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12336,7 +12336,7 @@ dwg_ent_spline_get_begin_tan_vector (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12361,7 +12361,7 @@ dwg_ent_spline_set_begin_tan_vector (dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12386,7 +12386,7 @@ dwg_ent_spline_get_end_tan_vector (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12411,7 +12411,7 @@ dwg_ent_spline_set_end_tan_vector (dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12429,7 +12429,7 @@ dwg_ent_spline_get_knot_tol (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -12448,7 +12448,7 @@ dwg_ent_spline_set_knot_tol (dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12466,7 +12466,7 @@ dwg_ent_spline_get_ctrl_tol (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -12485,7 +12485,7 @@ dwg_ent_spline_set_ctrl_tol (dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12503,7 +12503,7 @@ dwg_ent_spline_get_num_fit_pts (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -12522,7 +12522,7 @@ dwg_ent_spline_get_rational (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -12541,7 +12541,7 @@ dwg_ent_spline_set_rational (dwg_ent_spline *restrict spline, char rational,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12559,7 +12559,7 @@ dwg_ent_spline_get_closed_b (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -12578,7 +12578,7 @@ dwg_ent_spline_set_closed_b (dwg_ent_spline *restrict spline, char closed_b,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12596,7 +12596,7 @@ dwg_ent_spline_get_weighted (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -12615,7 +12615,7 @@ dwg_ent_spline_set_weighted (dwg_ent_spline *restrict spline, char weighted,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12633,7 +12633,7 @@ dwg_ent_spline_get_periodic (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -12652,7 +12652,7 @@ dwg_ent_spline_set_periodic (dwg_ent_spline *restrict spline, char periodic,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12670,7 +12670,7 @@ dwg_ent_spline_get_num_knots (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -12693,7 +12693,7 @@ dwg_ent_spline_get_num_ctrl_pts (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -12718,7 +12718,7 @@ dwg_ent_spline_get_fit_pts (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_api")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -12744,7 +12744,7 @@ dwg_ent_spline_get_ctrl_pts (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_api")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -12769,7 +12769,7 @@ dwg_ent_spline_get_knots (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_api")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -12798,7 +12798,7 @@ dwg_ent_viewport_get_center (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12823,7 +12823,7 @@ dwg_ent_viewport_set_center (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12841,7 +12841,7 @@ dwg_ent_viewport_get_width (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -12860,7 +12860,7 @@ dwg_ent_viewport_set_width (dwg_ent_viewport *restrict vp, const double width,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12878,7 +12878,7 @@ dwg_ent_viewport_get_height (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -12897,7 +12897,7 @@ dwg_ent_viewport_set_height (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12915,7 +12915,7 @@ dwg_ent_viewport_get_grid_major (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -12934,7 +12934,7 @@ dwg_ent_viewport_set_grid_major (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12952,7 +12952,7 @@ dwg_ent_viewport_get_num_frozen_layers (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -12972,7 +12972,7 @@ dwg_ent_viewport_set_num_frozen_layers (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -12993,7 +12993,7 @@ dwg_ent_viewport_get_style_sheet (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -13012,7 +13012,7 @@ dwg_ent_viewport_set_style_sheet (dwg_ent_viewport *restrict ent, char *sheet,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13030,7 +13030,7 @@ dwg_ent_viewport_set_circle_zoom (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13048,7 +13048,7 @@ dwg_ent_viewport_get_circle_zoom (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -13067,7 +13067,7 @@ dwg_ent_viewport_set_status_flag (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13085,7 +13085,7 @@ dwg_ent_viewport_get_status_flag (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -13104,7 +13104,7 @@ dwg_ent_viewport_get_render_mode (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -13123,7 +13123,7 @@ dwg_ent_viewport_set_render_mode (dwg_ent_viewport *restrict vp, char mode,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13141,7 +13141,7 @@ dwg_ent_viewport_set_ucs_at_origin (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13159,7 +13159,7 @@ dwg_ent_viewport_get_ucs_at_origin (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -13178,7 +13178,7 @@ dwg_ent_viewport_set_UCSVP (dwg_ent_viewport *restrict vp, unsigned char ucsvp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13196,7 +13196,7 @@ dwg_ent_viewport_get_UCSVP (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -13222,7 +13222,7 @@ dwg_ent_viewport_set_view_target (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13247,7 +13247,7 @@ dwg_ent_viewport_get_view_target (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13272,7 +13272,7 @@ dwg_ent_viewport_set_VIEWDIR (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13297,7 +13297,7 @@ dwg_ent_viewport_get_VIEWDIR (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13315,7 +13315,7 @@ dwg_ent_viewport_set_twist_angle (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13333,7 +13333,7 @@ dwg_ent_viewport_get_twist_angle (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -13352,7 +13352,7 @@ dwg_ent_viewport_set_VIEWSIZE (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13370,7 +13370,7 @@ dwg_ent_viewport_get_VIEWSIZE (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -13389,7 +13389,7 @@ dwg_ent_viewport_set_lens_length (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13407,7 +13407,7 @@ dwg_ent_viewport_get_lens_length (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -13426,7 +13426,7 @@ dwg_ent_viewport_set_front_clip_z (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13444,7 +13444,7 @@ dwg_ent_viewport_get_front_clip_z (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -13463,7 +13463,7 @@ dwg_ent_viewport_set_back_clip_z (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13481,7 +13481,7 @@ dwg_ent_viewport_get_back_clip_z (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -13500,7 +13500,7 @@ dwg_ent_viewport_set_SNAPANG (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13518,7 +13518,7 @@ dwg_ent_viewport_get_SNAPANG (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -13543,7 +13543,7 @@ dwg_ent_viewport_get_VIEWCTR (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13563,7 +13563,7 @@ dwg_ent_viewport_set_VIEWCTR (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13587,7 +13587,7 @@ dwg_ent_viewport_get_GRIDUNIT (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13611,7 +13611,7 @@ dwg_ent_viewport_set_GRIDUNIT (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13635,7 +13635,7 @@ dwg_ent_viewport_get_SNAPBASE (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13659,7 +13659,7 @@ dwg_ent_viewport_set_SNAPBASE (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13683,7 +13683,7 @@ dwg_ent_viewport_get_SNAPUNIT (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13707,7 +13707,7 @@ dwg_ent_viewport_set_SNAPUNIT (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13732,7 +13732,7 @@ dwg_ent_viewport_set_ucsorg (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13756,7 +13756,7 @@ dwg_ent_viewport_get_ucsorg (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13781,7 +13781,7 @@ dwg_ent_viewport_set_ucsxdir (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13806,7 +13806,7 @@ dwg_ent_viewport_get_ucsxdir (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13831,7 +13831,7 @@ dwg_ent_viewport_set_ucsydir (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13856,7 +13856,7 @@ dwg_ent_viewport_get_ucsydir (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13875,7 +13875,7 @@ dwg_ent_viewport_set_ucs_elevation (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13893,7 +13893,7 @@ dwg_ent_viewport_get_ucs_elevation (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -13912,7 +13912,7 @@ dwg_ent_viewport_set_UCSORTHOVIEW (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13930,7 +13930,7 @@ dwg_ent_viewport_get_UCSORTHOVIEW (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -13950,7 +13950,7 @@ dwg_ent_viewport_set_shadeplot_mode (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -13968,7 +13968,7 @@ dwg_ent_viewport_get_shadeplot_mode (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -13988,7 +13988,7 @@ dwg_ent_viewport_set_use_default_lights (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14006,7 +14006,7 @@ dwg_ent_viewport_get_use_default_lights (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -14026,7 +14026,7 @@ dwg_ent_viewport_set_default_lighting_type (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14044,7 +14044,7 @@ dwg_ent_viewport_get_default_lighting_type (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -14063,7 +14063,7 @@ dwg_ent_viewport_set_brightness (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14081,7 +14081,7 @@ dwg_ent_viewport_get_brightness (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -14100,7 +14100,7 @@ dwg_ent_viewport_set_contrast (dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14118,7 +14118,7 @@ dwg_ent_viewport_get_contrast (const dwg_ent_viewport *restrict vp,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -14140,7 +14140,7 @@ dwg_ent_polyline_pface_get_numpoints (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14159,7 +14159,7 @@ dwg_ent_polyline_pface_get_numfaces (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14172,12 +14172,12 @@ dwg_ent_polyline_pface_get_points (const dwg_object *restrict obj,
   if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_PFACE)
     {
       *error = 0;
-      LOG_ERROR ("%s: nyi", "dwg_api");
+      LOG_ERROR ("%s: nyi", __FUNCTION__);
       return NULL; // TODO
     }
   else
     {
-      LOG_ERROR ("%s: empty or wrong arg", "dwg_api")
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -14200,7 +14200,7 @@ dwg_ent_polyline_mesh_get_flag (const dwg_ent_polyline_mesh *restrict mesh,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14219,7 +14219,7 @@ dwg_ent_polyline_mesh_set_flag (dwg_ent_polyline_mesh *restrict mesh,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14237,7 +14237,7 @@ dwg_ent_polyline_mesh_get_curve_type (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14257,7 +14257,7 @@ dwg_ent_polyline_mesh_set_curve_type (dwg_ent_polyline_mesh *restrict mesh,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14275,7 +14275,7 @@ dwg_ent_polyline_mesh_get_num_m_verts (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14297,7 +14297,7 @@ dwg_ent_polyline_mesh_get_num_n_verts (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14316,7 +14316,7 @@ dwg_ent_polyline_mesh_get_m_density (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14336,7 +14336,7 @@ dwg_ent_polyline_mesh_set_m_density (dwg_ent_polyline_mesh *restrict mesh,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14354,7 +14354,7 @@ dwg_ent_polyline_mesh_get_n_density (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14374,7 +14374,7 @@ dwg_ent_polyline_mesh_set_n_density (dwg_ent_polyline_mesh *restrict mesh,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14392,7 +14392,7 @@ dwg_ent_polyline_mesh_get_num_owned (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0L;
     }
@@ -14426,7 +14426,7 @@ dwg_ent_polyline_2d_get_extrusion (const dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14455,7 +14455,7 @@ dwg_ent_polyline_2d_set_extrusion (dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14477,7 +14477,7 @@ dwg_ent_polyline_2d_get_start_width (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -14500,7 +14500,7 @@ dwg_ent_polyline_2d_set_start_width (dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14519,7 +14519,7 @@ dwg_ent_polyline_2d_get_end_width (const dwg_ent_polyline_2d *restrict pline2d,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -14537,7 +14537,7 @@ dwg_ent_polyline_2d_set_end_width (dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14556,7 +14556,7 @@ dwg_ent_polyline_2d_get_thickness (const dwg_ent_polyline_2d *restrict pline2d,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -14574,7 +14574,7 @@ dwg_ent_polyline_2d_set_thickness (dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14593,7 +14593,7 @@ dwg_ent_polyline_2d_get_elevation (const dwg_ent_polyline_2d *restrict pline2d,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -14611,7 +14611,7 @@ dwg_ent_polyline_2d_set_elevation (dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14632,7 +14632,7 @@ dwg_ent_polyline_2d_get_flag (const dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14655,7 +14655,7 @@ dwg_ent_polyline_2d_set_flag (dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14673,7 +14673,7 @@ dwg_ent_polyline_2d_get_curve_type (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return 0;
     }
@@ -14693,7 +14693,7 @@ dwg_ent_polyline_2d_set_curve_type (dwg_ent_polyline_2d *restrict pline2d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14718,7 +14718,7 @@ dwg_ent_polyline_3d_get_flag (const dwg_ent_polyline_3d *restrict pline3d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return '\0';
     }
@@ -14741,7 +14741,7 @@ dwg_ent_polyline_3d_set_flag (dwg_ent_polyline_3d *restrict pline3d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14759,7 +14759,7 @@ dwg_ent_polyline_3d_get_curve_type (
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return '\0';
     }
@@ -14779,7 +14779,7 @@ dwg_ent_polyline_3d_set_curve_type (dwg_ent_polyline_3d *restrict pline3d,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
     }
 }
@@ -14805,7 +14805,7 @@ dwg_ent_3dface_get_invis_flags (const dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -14831,7 +14831,7 @@ dwg_ent_3dface_set_invis_flags (dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14861,7 +14861,7 @@ dwg_ent_3dface_get_corner1 (const dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14892,7 +14892,7 @@ dwg_ent_3dface_set_corner1 (dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14922,7 +14922,7 @@ dwg_ent_3dface_get_corner2 (const dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14953,7 +14953,7 @@ dwg_ent_3dface_set_corner2 (dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -14983,7 +14983,7 @@ dwg_ent_3dface_get_corner3 (const dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15014,7 +15014,7 @@ dwg_ent_3dface_set_corner3 (dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15044,7 +15044,7 @@ dwg_ent_3dface_get_corner4 (const dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15075,7 +15075,7 @@ dwg_ent_3dface_set_corner4 (dwg_ent_3dface *restrict _3dface,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15097,7 +15097,7 @@ dwg_ent_image_get_class_version (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -15117,7 +15117,7 @@ dwg_ent_image_set_class_version (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15141,7 +15141,7 @@ dwg_ent_image_get_pt0 (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15165,7 +15165,7 @@ dwg_ent_image_set_pt0 (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15189,7 +15189,7 @@ dwg_ent_image_get_u_vector (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15214,7 +15214,7 @@ dwg_ent_image_set_u_vector (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15238,7 +15238,7 @@ dwg_ent_image_get_v_vector (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15263,7 +15263,7 @@ dwg_ent_image_set_v_vector (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15281,7 +15281,7 @@ dwg_ent_image_get_size_height (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -15300,7 +15300,7 @@ dwg_ent_image_set_size_height (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15318,7 +15318,7 @@ dwg_ent_image_get_size_width (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -15337,7 +15337,7 @@ dwg_ent_image_set_size_width (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15355,7 +15355,7 @@ dwg_ent_image_get_display_props (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -15375,7 +15375,7 @@ dwg_ent_image_set_display_props (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15393,7 +15393,7 @@ dwg_ent_image_get_clipping (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -15412,7 +15412,7 @@ dwg_ent_image_set_clipping (dwg_ent_image *restrict image, BITCODE_B clipping,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15430,7 +15430,7 @@ dwg_ent_image_get_brightness (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -15449,7 +15449,7 @@ dwg_ent_image_set_brightness (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15466,7 +15466,7 @@ dwg_ent_image_get_contrast (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -15485,7 +15485,7 @@ dwg_ent_image_set_contrast (dwg_ent_image *restrict image, const char contrast,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15503,7 +15503,7 @@ dwg_ent_image_get_fade (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -15522,7 +15522,7 @@ dwg_ent_image_set_fade (dwg_ent_image *restrict image, const char fade,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15540,7 +15540,7 @@ dwg_ent_image_get_clip_boundary_type (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -15560,7 +15560,7 @@ dwg_ent_image_set_clip_boundary_type (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15584,7 +15584,7 @@ dwg_ent_image_get_boundary_pt0 (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15608,7 +15608,7 @@ dwg_ent_image_set_boundary_pt0 (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15632,7 +15632,7 @@ dwg_ent_image_get_boundary_pt1 (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15656,7 +15656,7 @@ dwg_ent_image_set_boundary_pt1 (dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15673,7 +15673,7 @@ dwg_ent_image_get_num_clip_verts (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -15699,7 +15699,7 @@ dwg_ent_image_get_clip_verts (const dwg_ent_image *restrict image,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_api")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -15722,7 +15722,7 @@ dwg_ent_mline_set_scale (dwg_ent_mline *restrict mline, const double scale,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15740,7 +15740,7 @@ dwg_ent_mline_get_scale (const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -15760,7 +15760,7 @@ dwg_ent_mline_set_justification (dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15778,7 +15778,7 @@ dwg_ent_mline_get_justification (const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -15804,7 +15804,7 @@ dwg_ent_mline_set_base_point (dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15829,7 +15829,7 @@ dwg_ent_mline_get_base_point (const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15854,7 +15854,7 @@ dwg_ent_mline_set_extrusion (dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15878,7 +15878,7 @@ dwg_ent_mline_get_extrusion (const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15896,7 +15896,7 @@ dwg_ent_mline_set_flags (dwg_ent_mline *restrict mline, const BITCODE_BS oc,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -15914,7 +15914,7 @@ dwg_ent_mline_get_flags (const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -15933,7 +15933,7 @@ dwg_ent_mline_get_num_lines (const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -15959,7 +15959,7 @@ dwg_mline_vertex_get_lines (const dwg_mline_vertex *restrict vertex,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_api")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -15978,7 +15978,7 @@ dwg_ent_mline_get_num_verts (const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -16004,7 +16004,7 @@ dwg_ent_mline_get_verts (const dwg_ent_mline *restrict mline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_api")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -16024,7 +16024,7 @@ dwg_ent_vertex_pface_face_get_vertind (const dwg_ent_vert_pface_face *face)
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return (BITCODE_BS)-1;
     }
 }
@@ -16048,7 +16048,7 @@ dwg_ent_vertex_pface_face_set_vertind (dwg_ent_vert_pface_face *restrict face,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16070,7 +16070,7 @@ dwg_ent_3dsolid_get_acis_empty (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -16089,7 +16089,7 @@ dwg_ent_3dsolid_set_acis_empty (dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16109,7 +16109,7 @@ dwg_ent_3dsolid_get_version (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -16128,7 +16128,7 @@ dwg_ent_3dsolid_get_acis_data (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -16148,7 +16148,7 @@ dwg_ent_3dsolid_set_acis_data (dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16166,7 +16166,7 @@ dwg_ent_3dsolid_get_wireframe_data_present (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -16186,7 +16186,7 @@ dwg_ent_3dsolid_set_wireframe_data_present (dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16204,7 +16204,7 @@ dwg_ent_3dsolid_get_point_present (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -16223,7 +16223,7 @@ dwg_ent_3dsolid_set_point_present (dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16247,7 +16247,7 @@ dwg_ent_3dsolid_get_point (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16272,7 +16272,7 @@ dwg_ent_3dsolid_set_point (dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16290,7 +16290,7 @@ dwg_ent_3dsolid_get_isolines (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -16310,7 +16310,7 @@ dwg_ent_3dsolid_set_isolines (dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16329,7 +16329,7 @@ dwg_ent_3dsolid_get_isoline_present (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -16349,7 +16349,7 @@ dwg_ent_3dsolid_set_isoline_present (dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16367,7 +16367,7 @@ dwg_ent_3dsolid_get_num_wires (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -16394,7 +16394,7 @@ dwg_ent_3dsolid_get_wires (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_api")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -16413,7 +16413,7 @@ dwg_ent_3dsolid_get_num_silhouettes (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -16440,7 +16440,7 @@ dwg_ent_3dsolid_get_silhouettes (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_api")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -16459,7 +16459,7 @@ dwg_ent_3dsolid_get_acis_empty2 (const dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -16478,7 +16478,7 @@ dwg_ent_3dsolid_set_acis_empty2 (dwg_ent_3dsolid *restrict _3dsolid,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16941,7 +16941,7 @@ dwg_ent_table_set_insertion_pt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -16970,7 +16970,7 @@ dwg_ent_table_get_insertion_pt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17012,7 +17012,7 @@ dwg_ent_table_set_scale (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17040,7 +17040,7 @@ dwg_ent_table_get_scale (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17062,7 +17062,7 @@ dwg_ent_table_set_rotation (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17083,7 +17083,7 @@ dwg_ent_table_get_rotation (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -17113,7 +17113,7 @@ dwg_ent_table_set_extrusion (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17142,7 +17142,7 @@ dwg_ent_table_get_extrusion (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17162,7 +17162,7 @@ dwg_ent_table_has_attribs (dwg_ent_table *restrict table, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -17187,7 +17187,7 @@ dwg_ent_table_get_num_owned (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -17220,7 +17220,7 @@ dwg_ent_table_set_flag_for_table_value (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17242,7 +17242,7 @@ dwg_ent_table_get_flag_for_table_value (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -17272,7 +17272,7 @@ dwg_ent_table_set_horiz_direction (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17301,7 +17301,7 @@ dwg_ent_table_get_horiz_direction (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17322,7 +17322,7 @@ dwg_ent_table_get_num_cols (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -17344,7 +17344,7 @@ dwg_ent_table_get_num_rows (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -17369,7 +17369,7 @@ dwg_ent_table_get_col_widths (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -17391,7 +17391,7 @@ dwg_ent_table_get_row_heights (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -17413,7 +17413,7 @@ dwg_ent_table_has_table_overrides (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -17437,7 +17437,7 @@ dwg_ent_table_set_table_flag_override (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17458,7 +17458,7 @@ dwg_ent_table_get_table_flag_override (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -17484,7 +17484,7 @@ dwg_ent_table_set_title_suppressed (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17505,7 +17505,7 @@ dwg_ent_table_get_title_suppressed (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -17529,7 +17529,7 @@ dwg_ent_table_set_header_suppressed (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17550,7 +17550,7 @@ dwg_ent_table_get_header_suppressed (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -17575,7 +17575,7 @@ dwg_ent_table_set_flow_direction (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17596,7 +17596,7 @@ dwg_ent_table_get_flow_direction (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -17623,7 +17623,7 @@ dwg_ent_table_set_horiz_cell_margin (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17644,7 +17644,7 @@ dwg_ent_table_get_horiz_cell_margin (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -17671,7 +17671,7 @@ dwg_ent_table_set_vert_cell_margin (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17692,7 +17692,7 @@ dwg_ent_table_get_vert_cell_margin (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -17718,7 +17718,7 @@ dwg_ent_table_set_title_row_fill_none (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17739,7 +17739,7 @@ dwg_ent_table_get_title_row_fill_none (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -17765,7 +17765,7 @@ dwg_ent_table_set_header_row_fill_none (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17786,7 +17786,7 @@ dwg_ent_table_get_header_row_fill_none (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -17812,7 +17812,7 @@ dwg_ent_table_set_data_row_fill_none (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17833,7 +17833,7 @@ dwg_ent_table_get_data_row_fill_none (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -17861,7 +17861,7 @@ dwg_ent_table_set_title_row_alignment (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17882,7 +17882,7 @@ dwg_ent_table_get_title_row_alignment (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -17908,7 +17908,7 @@ dwg_ent_table_set_header_row_alignment (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17930,7 +17930,7 @@ dwg_ent_table_get_header_row_alignment (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -17959,7 +17959,7 @@ dwg_ent_table_set_data_row_alignment (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -17980,7 +17980,7 @@ dwg_ent_table_get_data_row_alignment (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18007,7 +18007,7 @@ dwg_ent_table_set_title_row_height (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18028,7 +18028,7 @@ dwg_ent_table_get_title_row_height (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -18055,7 +18055,7 @@ dwg_ent_table_set_header_row_height (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18076,7 +18076,7 @@ dwg_ent_table_get_header_row_height (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -18103,7 +18103,7 @@ dwg_ent_table_set_data_row_height (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18124,7 +18124,7 @@ dwg_ent_table_get_data_row_height (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return bit_nan ();
     }
 }
@@ -18146,7 +18146,7 @@ dwg_ent_table_has_border_color_overrides (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -18170,7 +18170,7 @@ dwg_ent_table_set_border_color_overrides_flag (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -18198,7 +18198,7 @@ dwg_ent_table_get_border_color_overrides_flag (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -18220,7 +18220,7 @@ dwg_ent_table_has_border_lineweight_overrides (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -18244,7 +18244,7 @@ dwg_ent_table_set_border_lineweight_overrides_flag (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -18265,7 +18265,7 @@ dwg_ent_table_get_border_lineweight_overrides_flag (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -18289,7 +18289,7 @@ dwg_ent_table_set_title_horiz_top_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18311,7 +18311,7 @@ dwg_ent_table_get_title_horiz_top_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18335,7 +18335,7 @@ dwg_ent_table_set_title_horiz_ins_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18357,7 +18357,7 @@ dwg_ent_table_get_title_horiz_ins_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18381,7 +18381,7 @@ dwg_ent_table_set_title_horiz_bottom_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18403,7 +18403,7 @@ dwg_ent_table_get_title_horiz_bottom_linewt (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18427,7 +18427,7 @@ dwg_ent_table_set_title_vert_left_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18449,7 +18449,7 @@ dwg_ent_table_get_title_vert_left_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18473,7 +18473,7 @@ dwg_ent_table_set_title_vert_ins_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18495,7 +18495,7 @@ dwg_ent_table_get_title_vert_ins_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18519,7 +18519,7 @@ dwg_ent_table_set_title_vert_right_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18541,7 +18541,7 @@ dwg_ent_table_get_title_vert_right_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18565,7 +18565,7 @@ dwg_ent_table_set_header_horiz_top_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18587,7 +18587,7 @@ dwg_ent_table_get_header_horiz_top_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18611,7 +18611,7 @@ dwg_ent_table_set_header_horiz_ins_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18633,7 +18633,7 @@ dwg_ent_table_get_header_horiz_ins_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18657,7 +18657,7 @@ dwg_ent_table_set_header_horiz_bottom_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18679,7 +18679,7 @@ dwg_ent_table_get_header_horiz_bottom_linewt (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18703,7 +18703,7 @@ dwg_ent_table_set_header_vert_left_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18725,7 +18725,7 @@ dwg_ent_table_get_header_vert_left_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18749,7 +18749,7 @@ dwg_ent_table_set_header_vert_ins_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18770,7 +18770,7 @@ dwg_ent_table_get_header_vert_ins_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18794,7 +18794,7 @@ dwg_ent_table_set_header_vert_right_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18815,7 +18815,7 @@ dwg_ent_table_get_header_vert_right_linewt (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18839,7 +18839,7 @@ dwg_ent_table_set_data_horiz_top_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18861,7 +18861,7 @@ dwg_ent_table_get_data_horiz_top_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18885,7 +18885,7 @@ dwg_ent_table_set_data_horiz_ins_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18907,7 +18907,7 @@ dwg_ent_table_get_data_horiz_ins_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18931,7 +18931,7 @@ dwg_ent_table_set_data_horiz_bottom_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18952,7 +18952,7 @@ dwg_ent_table_get_data_horiz_bottom_linewt (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -18976,7 +18976,7 @@ dwg_ent_table_set_data_vert_ins_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -18997,7 +18997,7 @@ dwg_ent_table_get_data_vert_ins_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19021,7 +19021,7 @@ dwg_ent_table_set_data_vert_right_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -19042,7 +19042,7 @@ dwg_ent_table_get_data_vert_right_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19066,7 +19066,7 @@ dwg_ent_table_set_data_vert_left_linewt (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
     }
 }
 
@@ -19087,7 +19087,7 @@ dwg_ent_table_get_data_vert_left_linewt (const dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19109,7 +19109,7 @@ dwg_ent_table_has_border_visibility_overrides (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return '\0';
     }
 }
@@ -19133,7 +19133,7 @@ dwg_ent_table_set_border_visibility_overrides_flag (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19154,7 +19154,7 @@ dwg_ent_table_get_border_visibility_overrides_flag (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -19180,7 +19180,7 @@ dwg_ent_table_set_title_horiz_top_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19201,7 +19201,7 @@ dwg_ent_table_get_title_horiz_top_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19227,7 +19227,7 @@ dwg_ent_table_set_title_horiz_ins_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19248,7 +19248,7 @@ dwg_ent_table_get_title_horiz_ins_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19274,7 +19274,7 @@ dwg_ent_table_set_title_horiz_bottom_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19295,7 +19295,7 @@ dwg_ent_table_get_title_horiz_bottom_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19321,7 +19321,7 @@ dwg_ent_table_set_title_vert_left_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19342,7 +19342,7 @@ dwg_ent_table_get_title_vert_left_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19368,7 +19368,7 @@ dwg_ent_table_set_title_vert_ins_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19389,7 +19389,7 @@ dwg_ent_table_get_title_vert_ins_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19415,7 +19415,7 @@ dwg_ent_table_set_title_vert_right_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19436,7 +19436,7 @@ dwg_ent_table_get_title_vert_right_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19462,7 +19462,7 @@ dwg_ent_table_set_header_horiz_top_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19483,7 +19483,7 @@ dwg_ent_table_get_header_horiz_top_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19509,7 +19509,7 @@ dwg_ent_table_set_header_horiz_ins_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19530,7 +19530,7 @@ dwg_ent_table_get_header_horiz_ins_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19556,7 +19556,7 @@ dwg_ent_table_set_header_horiz_bottom_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19577,7 +19577,7 @@ dwg_ent_table_get_header_horiz_bottom_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19603,7 +19603,7 @@ dwg_ent_table_set_header_vert_left_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19624,7 +19624,7 @@ dwg_ent_table_get_header_vert_left_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19650,7 +19650,7 @@ dwg_ent_table_set_header_vert_ins_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19671,7 +19671,7 @@ dwg_ent_table_get_header_vert_ins_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19697,7 +19697,7 @@ dwg_ent_table_set_header_vert_right_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19718,7 +19718,7 @@ dwg_ent_table_get_header_vert_right_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19744,7 +19744,7 @@ dwg_ent_table_set_data_horiz_top_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19765,7 +19765,7 @@ dwg_ent_table_get_data_horiz_top_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19791,7 +19791,7 @@ dwg_ent_table_set_data_horiz_ins_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19812,7 +19812,7 @@ dwg_ent_table_get_data_horiz_ins_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19838,7 +19838,7 @@ dwg_ent_table_set_data_horiz_bottom_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19859,7 +19859,7 @@ dwg_ent_table_get_data_horiz_bottom_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19885,7 +19885,7 @@ dwg_ent_table_set_data_vert_left_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19906,7 +19906,7 @@ dwg_ent_table_get_data_vert_left_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19932,7 +19932,7 @@ dwg_ent_table_set_data_vert_ins_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -19953,7 +19953,7 @@ dwg_ent_table_get_data_vert_ins_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -19980,7 +19980,7 @@ dwg_ent_table_set_data_vert_right_visibility (dwg_ent_table *restrict table,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg", "dwg_api")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
     }
 }
 
@@ -20002,7 +20002,7 @@ dwg_ent_table_get_data_vert_right_visibility (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_api")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0;
     }
 }
@@ -20062,8 +20062,7 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
     }
   else
     {
-      LOG_ERROR ("%s: empty or wrong arg",
-                 "dwg_object_polyline_2d_get_numpoints")
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
       *error = 1;
       return 0L;
     }
@@ -20091,7 +20090,7 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
       ptx = (dwg_point_2d *)calloc (num_points, sizeof (dwg_point_2d));
       if (!ptx)
         {
-          LOG_ERROR ("%s: Out of memory", "dwg_object_polyline_2d_get_points");
+          LOG_ERROR ("%s: Out of memory", __FUNCTION__);
           *error = 1;
           return NULL;
         }
@@ -20171,7 +20170,7 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_object_polyline_2d_get_points")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -20235,8 +20234,7 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
     }
   else
     {
-      LOG_ERROR ("%s: empty or wrong arg",
-                 "dwg_object_polyline_3d_get_numpoints")
+      LOG_ERROR ("%s: empty or wrong arg", __FUNCTION__)
       *error = 1;
       return 0L;
     }
@@ -20265,7 +20263,7 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
       ptx = (dwg_point_3d *)calloc (num_points, sizeof (dwg_point_3d));
       if (!ptx)
         {
-          LOG_ERROR ("%s: Out of memory", "dwg_object_polyline_3d_get_points");
+          LOG_ERROR ("%s: Out of memory", __FUNCTION__);
           *error = 1;
           return NULL;
         }
@@ -20349,7 +20347,7 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
     }
   else
     {
-      LOG_ERROR ("%s: empty arg", "dwg_object_polyline_3d_get_points")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       *error = 1;
       return NULL;
     }
@@ -20376,7 +20374,7 @@ dwg_ent_lwpline_get_bulges (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_ent_lwpline_get_bulges")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -20395,7 +20393,7 @@ dwg_ent_lwpline_get_numpoints (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_ent_lwpline_get_numpoints")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -20422,7 +20420,7 @@ dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_ent_lwpline_get_points")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -20448,11 +20446,11 @@ dwg_ent_lwpline_set_points (dwg_ent_lwpline *restrict lwpline,
     }
   else
     {
-      LOG_ERROR ("%s: Out of memory", "dwg_ent_lwpline_set_points")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return 1;
     }
 isnan:
-  LOG_ERROR ("%s: Invalid vertex nan", "dwg_ent_lwpline_set_points");
+  LOG_ERROR ("%s: Invalid vertex nan", __FUNCTION__);
   return 2;
 }
 
@@ -20478,7 +20476,7 @@ dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", "dwg_ent_lwpline_get_widths")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -20515,8 +20513,7 @@ dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid arg",
-                 "dwg_block_header_get_block_control")
+      LOG_ERROR ("%s: empty or invalid arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -20534,8 +20531,7 @@ dwg_obj_block_control_get_block_headers (
   if (ctrl->num_entries && !ctrl->entries)
     {
       *error = 1;
-      LOG_ERROR ("%s: null block_headers",
-                 "dwg_obj_block_control_get_block_headers");
+      LOG_ERROR ("%s: null block_headers", __FUNCTION__);
       return NULL;
     }
 
@@ -20554,8 +20550,7 @@ dwg_obj_block_control_get_block_headers (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory",
-                 "dwg_obj_block_control_get_block_headers")
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return NULL;
     }
 }
@@ -20576,7 +20571,7 @@ dwg_obj_block_control_get_num_entries (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_obj_block_control_get_num_entries")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return 0L;
     }
 }
@@ -20597,7 +20592,7 @@ dwg_obj_block_control_get_model_space (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_obj_block_control_get_model_space")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -20618,7 +20613,7 @@ dwg_obj_block_control_get_paper_space (
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_obj_block_control_get_paper_space")
+      LOG_ERROR ("%s: empty arg", __FUNCTION__)
       return NULL;
     }
 }
@@ -20693,7 +20688,7 @@ dwg_get_block_header (dwg_data *restrict dwg, int *restrict error)
   else
     {
       *error = 3;
-      LOG_ERROR ("%s: BLOCK_HEADER not found", "dwg_get_block_header")
+      LOG_ERROR ("%s: BLOCK_HEADER not found", __FUNCTION__)
       return NULL;
     }
 }
@@ -20716,8 +20711,8 @@ dwg_obj_layer_get_name (const dwg_obj_layer *restrict layer,
   if (*error || obj->fixedtype != DWG_TYPE_LAYER)
     {
       *error = 1;
-      LOG_ERROR ("%s: empty arg", "dwg_obj_layer_get_name")
-      return NULL;
+      LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
+        return NULL;
     }
   *error = 0;
   if (dwg_version >= R_2007)
@@ -20742,7 +20737,7 @@ dwg_obj_layer_set_name (dwg_obj_layer *restrict layer,
   const Dwg_Object *obj = dwg_obj_generic_to_object (layer, error);
   if (*error || obj->fixedtype != DWG_TYPE_LAYER)
     {
-      LOG_ERROR ("%s: arg not a LAYER", "dwg_obj_layer_set_name")
+      LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
       *error = 1;
       return;
     }
@@ -20780,7 +20775,7 @@ dwg_object_tablectrl_get_num_entries (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 "dwg_object_tablectrl_get_num_entries", obj, obj->type)
+                 __FUNCTION__, obj, obj->type)
       return 0;
     }
 }
@@ -20805,7 +20800,7 @@ dwg_object_tablectrl_get_entries (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 "dwg_object_tablectrl_get_entries", obj, obj->type)
+                 __FUNCTION__, obj, obj->type)
       return NULL;
     }
 }
@@ -20833,8 +20828,7 @@ dwg_object_tablectrl_get_entry (const dwg_object *restrict obj,
       else
         {
           *error = 2;
-          LOG_ERROR ("%s: idx %d out of bounds %d",
-                     "dwg_object_tablectrl_get_entry", idx, count);
+          LOG_ERROR ("%s: idx %d out of bounds %d", __FUNCTION__, idx, count);
           return NULL;
         }
     }
@@ -20842,7 +20836,7 @@ dwg_object_tablectrl_get_entry (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 "dwg_object_tablectrl_get_entry", obj, obj->type)
+                 __FUNCTION__, obj, obj->type)
       return NULL;
     }
 }
@@ -20865,7 +20859,7 @@ dwg_object_tablectrl_get_ownerhandle (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 "dwg_object_tablectrl_get_ownerhandle", obj, obj->type)
+                 __FUNCTION__, obj, obj->type)
       return NULL;
     }
 }
@@ -20889,7 +20883,7 @@ dwg_object_tablectrl_get_xdicobjhandle (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 "dwg_object_tablectrl_get_xdicobjhandle", obj, obj->type)
+                 __FUNCTION__, obj, obj->type)
       return NULL;
     }
 }
@@ -20913,7 +20907,7 @@ dwg_object_tablectrl_get_objid (const dwg_object *restrict obj,
     {
       *error = 1;
       LOG_ERROR ("%s: empty or invalid table control arg %p, type: 0x%x",
-                 "dwg_object_tablectrl_get_objid", obj, obj->type)
+                 __FUNCTION__, obj, obj->type)
       return 0;
     }
 }
@@ -20971,8 +20965,8 @@ dwg_obj_table_get_name (const dwg_object *restrict obj, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid table arg %p, type: 0x%x",
-                 "dwg_obj_table_get_name", obj, obj->type)
+      LOG_ERROR ("%s: empty or invalid table arg %p, type: 0x%x", __FUNCTION__,
+                 obj, obj->type)
       return NULL;
     }
 }
@@ -21078,7 +21072,7 @@ dwg_ent_get_eed (const dwg_obj_ent *restrict ent, const BITCODE_BL idx,
   if (!ent)
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid ent", "dwg_ent_get_eed")
+      LOG_ERROR ("%s: empty or invalid ent", __FUNCTION__)
       return NULL;
     }
   else if (idx >= ent->num_eed)
@@ -21108,7 +21102,7 @@ dwg_ent_get_eed_data (const dwg_obj_ent *restrict ent, const BITCODE_BL idx,
   if (!ent)
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid ent", "dwg_ent_get_eed_data")
+      LOG_ERROR ("%s: empty or invalid ent", __FUNCTION__)
       return NULL;
     }
   else if (idx >= ent->num_eed)
@@ -21460,7 +21454,7 @@ dwg_ent_generic_parent (const void *restrict ent, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Empty or invalid obj", "dwg_ent_generic_parent")
+      LOG_ERROR ("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
@@ -21484,7 +21478,7 @@ dwg_object_to_entity (dwg_object *restrict obj, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Empty or invalid obj", "dwg_object_to_entity")
+      LOG_ERROR ("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
@@ -21618,7 +21612,7 @@ dwg_object_get_type (const dwg_object *obj)
     }
   else
     {
-      LOG_ERROR ("%s: empty ref", "dwg_api")
+      LOG_ERROR ("%s: empty ref", __FUNCTION__)
       return -1;
     }
 }
@@ -21637,7 +21631,7 @@ dwg_object_get_fixedtype (const dwg_object *obj)
     }
   else
     {
-      LOG_ERROR ("%s: empty ref", "dwg_api")
+      LOG_ERROR ("%s: empty ref", __FUNCTION__)
       return -1;
     }
 }
@@ -21659,7 +21653,7 @@ dwg_object_get_dxfname (const dwg_object *obj)
     }
   else
     {
-      LOG_ERROR ("%s: empty ref", "dwg_api")
+      LOG_ERROR ("%s: empty ref", __FUNCTION__)
       return NULL;
     }
 }
@@ -21725,7 +21719,7 @@ dwg_obj_get_eed_data (const dwg_obj_obj *restrict obj, const BITCODE_BL idx,
   if (!obj)
     {
       *error = 1;
-      LOG_ERROR ("%s: empty or invalid obj", "dwg_obj_get_eed_data")
+      LOG_ERROR ("%s: empty or invalid obj", __FUNCTION__)
       return NULL;
     }
   else if (idx >= obj->num_eed)
@@ -21800,7 +21794,7 @@ dwg_object_to_object (dwg_object *restrict obj, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Empty or invalid obj", "dwg_object_to_object")
+      LOG_ERROR ("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
@@ -21861,7 +21855,7 @@ dwg_obj_generic_to_object (const void *restrict _vobj, int *restrict error)
           || dwg->header.version > R_AFTER)
         {
           *error = 1;
-          LOG_ERROR ("%s: Invalid obj", "dwg_obj_generic_to_object")
+          LOG_ERROR ("%s: Invalid obj", __FUNCTION__)
           return NULL;
         }
       *error = 0;
@@ -21873,7 +21867,7 @@ dwg_obj_generic_to_object (const void *restrict _vobj, int *restrict error)
   else
     {
       *error = 1;
-      // LOG_ERROR("%s: Empty or invalid obj", "dwg_obj_generic_to_object")
+      // LOG_ERROR("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
@@ -21916,7 +21910,7 @@ dwg_obj_generic_parent (const void *restrict _vobj, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Empty or invalid obj", "dwg_obj_generic_parent")
+      LOG_ERROR ("%s: Empty or invalid obj", __FUNCTION__)
       return NULL;
     }
 }
@@ -21945,7 +21939,7 @@ dwg_ref_get_object (const dwg_object_ref *restrict ref, int *restrict error)
           if (!ref->obj) {
           */
           *error = 2;
-          // LOG_ERROR ("%s: empty ref", "dwg_ref_get_object")
+          // LOG_ERROR ("%s: empty ref", __FUNCTION__)
           // }
         }
       *error = 0;
@@ -21954,7 +21948,7 @@ dwg_ref_get_object (const dwg_object_ref *restrict ref, int *restrict error)
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: empty ref", "dwg_ref_get_object")
+      LOG_ERROR ("%s: empty ref", __FUNCTION__)
       return NULL;
     }
 }
@@ -27397,7 +27391,7 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 //                          */ const double major_radius, const double
 //                          minor_radius, const double height)
 //{
-//   LOG_ERROR ("%s not yet implemented", "dwg_add_ELLIPTICAL_CONE")
+//   LOG_ERROR ("%s not yet implemented", __FUNCTION__)
 //   return NULL;
 // }
 //
@@ -27408,7 +27402,7 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 //                              NULL */ const double major_radius, const double
 //                              minor_radius, const double height)
 //{
-//   LOG_ERROR ("%s not yet implemented", "dwg_add_ELLIPTICAL_CYLINDER")
+//   LOG_ERROR ("%s not yet implemented", __FUNCTION__)
 //   return NULL;
 // }
 
@@ -27417,7 +27411,7 @@ dwg_add_EXTRUDED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const Dwg_Object *restrict profile,
                         const double height, const double taper_angle)
 {
-  LOG_ERROR ("%s not yet implemented", "dwg_add_EXTRUDED_SOLID")
+  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
   return NULL;
 }
 EXPORT Dwg_Entity_3DSOLID *
@@ -27425,7 +27419,7 @@ dwg_add_EXTRUDED_PATH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                        const Dwg_Object *restrict profile, const double height,
                        const double taper_angle)
 {
-  LOG_ERROR ("%s not yet implemented", "dwg_add_EXTRUDED_PATH")
+  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
   return NULL;
 }
 
@@ -27436,7 +27430,7 @@ dwg_add_REVOLVED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const dwg_point_3d *restrict axis_dir,
                         const double angle)
 {
-  LOG_ERROR ("%s not yet implemented", "dwg_add_REVOLVED_SOLID")
+  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
   return NULL;
 }
 
