@@ -105,7 +105,7 @@ static int resolve_objectref_vector (Bit_Chain *restrict dat,
 static int secondheader_private (Bit_Chain *restrict dat,
                                  Dwg_Data *restrict dwg);
 static int objfreespace_private (Bit_Chain *restrict dat,
-                                   Dwg_Data *restrict dwg);
+                                 Dwg_Data *restrict dwg);
 
 /*----------------------------------------------------------------------------
  * Public variables
@@ -886,17 +886,19 @@ handles_section:
   /*-------------------------------------------------------------------------
    * Section 2: ObjFreeSpace, r13c3-r2000
    */
-   if (dwg->header.sections > 3
-       && (dwg->header.section[SECTION_OBJFREESPACE_R13].address == pvz))
-     {
-       dat->byte = dwg->header.section[SECTION_OBJFREESPACE_R13].address;
-       dat->bit = 0;
-       LOG_INFO ("\n"
-                 "=======> ObjFreeSpace 3 (start): %4zu\n", dat->byte);
-       LOG_INFO ("         ObjFreeSpace 3 (end)  : %4zu\n", dat->byte
-                 + dwg->header.section[SECTION_OBJFREESPACE_R13].size);
-       error |= objfreespace_private (dat, dwg);
-     }
+  if (dwg->header.sections > 3
+      && (dwg->header.section[SECTION_OBJFREESPACE_R13].address == pvz))
+    {
+      dat->byte = dwg->header.section[SECTION_OBJFREESPACE_R13].address;
+      dat->bit = 0;
+      LOG_INFO ("\n"
+                "=======> ObjFreeSpace 3 (start): %4zu\n",
+                dat->byte);
+      LOG_INFO ("         ObjFreeSpace 3 (end)  : %4zu\n",
+                dat->byte
+                    + dwg->header.section[SECTION_OBJFREESPACE_R13].size);
+      error |= objfreespace_private (dat, dwg);
+    }
 
   /*-------------------------------------------------------------------------
    * Second header, r13-r2000 only. With sentinels.
@@ -1433,7 +1435,8 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int i, error = 0, found_section_map_id = 0;
   const BITCODE_RL comp_data_size = dwg->fhdr.r2004_header.comp_data_size;
   const BITCODE_RL decomp_data_size = dwg->fhdr.r2004_header.decomp_data_size;
-  const BITCODE_RLd section_array_size = dwg->fhdr.r2004_header.section_array_size;
+  const BITCODE_RLd section_array_size
+      = dwg->fhdr.r2004_header.section_array_size;
   const BITCODE_RLL section_map_address
       = dwg->fhdr.r2004_header.section_map_address + 0x100;
   const BITCODE_RLd section_map_id = dwg->fhdr.r2004_header.section_map_id;
@@ -2587,13 +2590,13 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *str_dat = dat;
   Dwg_SecondHeader *_obj = &dwg->secondheader;
   // for error logging only:
-  Dwg_Object *obj = &(Dwg_Object){ .name = (char*)"2NDHEADER" };
+  Dwg_Object *obj = &(Dwg_Object){ .name = (char *)"2NDHEADER" };
   int error = 0;
   BITCODE_BL vcount;
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "2ndheader.spec"
   // clang-format on
 
@@ -2601,7 +2604,8 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     error |= DWG_ERR_WRONGCRC;
 
   DEBUG_HERE
-  VERSIONS (R_14, R_2000) {
+  VERSIONS (R_14, R_2000)
+  {
     FIELD_RLL (junk_r14, 0);
   }
 
@@ -2611,15 +2615,15 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 objfreespace_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  //Bit_Chain *str_dat = dat;
+  // Bit_Chain *str_dat = dat;
   Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
   Dwg_Object *obj = NULL;
   int error = 0;
-  //BITCODE_BL vcount;
+  // BITCODE_BL vcount;
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "objfreespace.spec"
   // clang-format on
 
@@ -2669,13 +2673,14 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "appinfo.spec"
   // clang-format on
 
   if (_obj->version)
     {
-      if (_obj->class_version > 2 && bit_wcs2len ((BITCODE_TU)_obj->version) >= 6)
+      if (_obj->class_version > 2
+          && bit_wcs2len ((BITCODE_TU)_obj->version) >= 6)
         {
           is_teigha = memcmp (_obj->version, "T\0e\0i\0g\0h\0a\0", 12) == 0;
           LOG_TRACE ("is_teigha: %s\n", is_teigha ? "true" : "false")
@@ -3274,7 +3279,8 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     LOG_INSANE ("@0x%zx\n", dat->byte)
 
     LOG_TRACE ("\n=== Read System Section (Section Page Map) @%lx ===\n\n",
-               (unsigned long)dwg->fhdr.r2004_header.section_map_address + 0x100)
+               (unsigned long)dwg->fhdr.r2004_header.section_map_address
+                   + 0x100)
     dat->byte = dwg->fhdr.r2004_header.section_map_address + 0x100;
     start = dwg->fhdr.r2004_header.section_map_address;
     // Some section_map_address overflow past the dwg. GH #617
@@ -6915,10 +6921,11 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               {
                 PRE (R_11) // no crc16
                 {
-                  if (obj->size > dat->size - obj->address ||
-                      obj->size + obj->address > dat->byte + 1)
+                  if (obj->size > dat->size - obj->address
+                      || obj->size + obj->address > dat->byte + 1)
                     {
-                      LOG_ERROR ("Invalid obj->size " FORMAT_RL " changed to %" PRIuSIZE,
+                      LOG_ERROR ("Invalid obj->size " FORMAT_RL
+                                 " changed to %" PRIuSIZE,
                                  obj->size, dat->byte - obj->address);
                       error |= DWG_ERR_VALUEOUTOFBOUNDS;
                       obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
@@ -6952,13 +6959,15 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 }
                 LATER_VERSIONS
                 {
-                  if (obj->size > dat->size - obj->address ||
-                      obj->size + obj->address > dat->byte + 2)
+                  if (obj->size > dat->size - obj->address
+                      || obj->size + obj->address > dat->byte + 2)
                     {
-                      LOG_ERROR ("Invalid obj->size " FORMAT_RL " changed to %" PRIuSIZE,
+                      LOG_ERROR ("Invalid obj->size " FORMAT_RL
+                                 " changed to %" PRIuSIZE,
                                  obj->size, dat->byte + 2 - obj->address);
                       error |= DWG_ERR_VALUEOUTOFBOUNDS;
-                      obj->size = ((dat->byte + 2) - obj->address) & 0xFFFFFFFF;
+                      obj->size
+                          = ((dat->byte + 2) - obj->address) & 0xFFFFFFFF;
                     }
                   else if (obj->address + obj->size != dat->byte + 2)
                     {

@@ -36,8 +36,8 @@
 #include <time.h>
 #include "dwg.h"
 
-//#pragma pack()
-// use as printf("%" PRIuSIZE ", size)
+// #pragma pack()
+//  use as printf("%" PRIuSIZE ", size)
 #ifndef PRI_SIZE_T_MODIFIER
 #  ifdef _WIN32
 #    if SIZEOF_SIZE_T == 8
@@ -73,14 +73,14 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #endif
 
 #ifdef HAVE_ENDIAN_H
-//#pragma message "_DEFAULT_SOURCE: " _DEFAULT_SOURCE
-//#pragma message "HAVE_HTOBE64: " HAVE_HTOBE64
-//#pragma message "HAVE_BYTESWAP_H: " HAVE_BYTESWAP_H
-//#pragma message "__USE_MISC: " __USE_MISC
-//#pragma message "LITTLE_ENDIAN: " LITTLE_ENDIAN
+// #pragma message "_DEFAULT_SOURCE: " _DEFAULT_SOURCE
+// #pragma message "HAVE_HTOBE64: " HAVE_HTOBE64
+// #pragma message "HAVE_BYTESWAP_H: " HAVE_BYTESWAP_H
+// #pragma message "__USE_MISC: " __USE_MISC
+// #pragma message "LITTLE_ENDIAN: " LITTLE_ENDIAN
 #  include <endian.h>
-//#pragma message "htobe64: " htobe64
-// centos 7/glibc quirks
+// #pragma message "htobe64: " htobe64
+//  centos 7/glibc quirks
 #  if defined(HAVE_BYTESWAP_H) && !defined(htobe64)
 #    include <byteswap.h>
 #    ifndef WORDS_BIGENDIAN
@@ -193,19 +193,19 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #else /* little endian: just pass-thru. i.e. mingw */
 #  define NO_BYTESWAP_SUPPORT
 // Warning: evaluates x times!
-#  define bswap_constant_16(x) ((((x) >> 8) & 0xff) | (((x)&0xff) << 8))
+#  define bswap_constant_16(x) ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8))
 #  define bswap_constant_32(x)                                                \
-    ((((x)&0xff000000) >> 24) | (((x)&0x00ff0000) >> 8)                       \
-     | (((x)&0x0000ff00) << 8) | (((x)&0x000000ff) << 24))
+    ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >> 8)                   \
+     | (((x) & 0x0000ff00) << 8) | (((x) & 0x000000ff) << 24))
 #  define bswap_constant_64(x)                                                \
-    ((((x)&0xff00000000000000ULL) >> 56)                                      \
-     | (((x)&0x00ff000000000000ULL) >> 40)                                    \
-     | (((x)&0x0000ff0000000000ULL) >> 24)                                    \
-     | (((x)&0x000000ff00000000ULL) >> 8)                                     \
-     | (((x)&0x00000000ff000000ULL) << 8)                                     \
-     | (((x)&0x0000000000ff0000ULL) << 24)                                    \
-     | (((x)&0x000000000000ff00ULL) << 40)                                    \
-     | (((x)&0x00000000000000ffULL) << 56))
+    ((((x) & 0xff00000000000000ULL) >> 56)                                    \
+     | (((x) & 0x00ff000000000000ULL) >> 40)                                  \
+     | (((x) & 0x0000ff0000000000ULL) >> 24)                                  \
+     | (((x) & 0x000000ff00000000ULL) >> 8)                                   \
+     | (((x) & 0x00000000ff000000ULL) << 8)                                   \
+     | (((x) & 0x0000000000ff0000ULL) << 24)                                  \
+     | (((x) & 0x000000000000ff00ULL) << 40)                                  \
+     | (((x) & 0x00000000000000ffULL) << 56))
 
 #  define le16toh(x) (x)
 #  define htole32(x) (x)
@@ -238,7 +238,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 */
 #if defined(__GNUC__)
 #  define _GNUC_VERSION ((__GNUC__ * 100) + __GNUC_MINOR__)
-#  define CC_DIAG_PRAGMA(x) _Pragma (#  x)
+#  define CC_DIAG_PRAGMA(x) _Pragma (#x)
 #else
 #  define _GNUC_VERSION 0
 #  define CC_DIAG_PRAGMA(x)
@@ -305,20 +305,20 @@ EXPORT int strcasecmp (const char *a, const char *b);
 
 /* For GCC30_DIAG_IGNORE (-Wformat-nonliteral) outside functions */
 #if _GNUC_VERSION >= 300 && !defined HAVE_CC_DIAG_STACK
-#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
+#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC30_DIAG_IGNORE(w)
 #endif
 /* for GCC31_DIAG_IGNORE (-Wdeprecated-declarations) outside functions */
 #if _GNUC_VERSION >= 310 && !defined HAVE_CC_DIAG_STACK
-#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
+#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC31_DIAG_IGNORE(w)
 #endif
 /* for GCC33_DIAG_IGNORE (-Wswitch-enum) outside functions
    -Wswitch-enum appeared first with gcc 3.3.6 */
 #if _GNUC_VERSION >= 330 && !defined HAVE_CC_DIAG_STACK
-#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
+#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC33_DIAG_IGNORE(w)
 #endif
@@ -361,7 +361,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #if HAVE_FUNC_ATTRIBUTE_ALIGNED
 #  define ATTRIBUTE_ALIGNED(num) __attribute__ ((aligned (num)))
 #elif defined(_MSC_VER)
-#  define ATTRIBUTE_ALIGNED(num) __declspec(align (num))
+#  define ATTRIBUTE_ALIGNED(num) __declspec (align (num))
 #else
 #  define ATTRIBUTE_ALIGNED(num)
 #endif
@@ -381,7 +381,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #ifdef HAVE_FUNC_ATTRIBUTE_NORETURN
 #  define ATTRIBUTE_NORETURN __attribute__ ((noreturn))
 #elif defined(_MSC_VER)
-#  define ATTRIBUTE_NORETURN __declspec(noreturn)
+#  define ATTRIBUTE_NORETURN __declspec (noreturn)
 #else
 #  define ATTRIBUTE_NORETURN
 #endif
@@ -400,9 +400,9 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #ifndef EXPORT
 #  if defined(_WIN32) && defined(ENABLE_SHARED)
 #    ifdef DLL_EXPORT
-#      define EXPORT __declspec(dllexport)
+#      define EXPORT __declspec (dllexport)
 #    else
-#      define EXPORT __declspec(dllimport)
+#      define EXPORT __declspec (dllimport)
 #    endif
 #  elif defined HAVE_ATTRIBUTE_VISIBILITY_DEFAULT
 #    define EXPORT __attribute__ ((visibility ("default")))

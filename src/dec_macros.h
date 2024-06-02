@@ -207,8 +207,9 @@
           if (s2)                                                             \
             {                                                                 \
               GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s2, "[%ld]: " FORMAT_##type " [" #type       \
-                         " %d]"), rcount1, rcount2, vcount, value, dxf)       \
+              LOG_TRACE (                                                     \
+                  strcat (s2, "[%ld]: " FORMAT_##type " [" #type " %d]"),     \
+                  rcount1, rcount2, vcount, value, dxf)                       \
               GCC46_DIAG_RESTORE                                              \
               free (s2);                                                      \
               free (s1);                                                      \
@@ -216,16 +217,17 @@
           else                                                                \
             {                                                                 \
               GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s1, "[%ld]: " FORMAT_##type " [" #type       \
-                         " %d]"), rcount1, vcount, value, dxf)                \
+              LOG_TRACE (                                                     \
+                  strcat (s1, "[%ld]: " FORMAT_##type " [" #type " %d]"),     \
+                  rcount1, vcount, value, dxf)                                \
               GCC46_DIAG_RESTORE                                              \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
         {                                                                     \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]",          \
-                     vcount, value, dxf)                                      \
+          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]", vcount,  \
+                     value, dxf)                                              \
         }                                                                     \
       LOG_POS;                                                                \
     }
@@ -992,7 +994,7 @@
         LOG_TRACE ("  BS :" FORMAT_BS " / 0x%04x (%" PRIuSIZE ")\t", rs, rs,  \
                    bit_position (dat) - bit_position (&here));                \
       }                                                                       \
-      SINCE (R_2007a)                                                          \
+      SINCE (R_2007a)                                                         \
       {                                                                       \
         *dat = here;                                                          \
         rs = bit_read_MS (dat);                                               \
@@ -1041,16 +1043,15 @@
   _DEBUG_HERE (0UL)
 
 // check for overflow into next object (invalid num_elems)
-#define AVAIL_BITS(dat)                                                       \
-  (int64_t)((dat->size * 8) - bit_position (dat))
+#define AVAIL_BITS(dat) (int64_t) ((dat->size * 8) - bit_position (dat))
 #define TYPE_MAXELEMSIZE(type) dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(nam, type, size, dat)                                 \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
-      || (int64_t)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))        \
+      || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
                  " bits for " #type ", have %" PRId64 " for %s.",             \
-                 (int64_t)(size), (int64_t)(size)*TYPE_MAXELEMSIZE (type),    \
+                 (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       if (_obj->nam)                                                          \
         free (_obj->nam);                                                     \
@@ -1058,11 +1059,11 @@
     }
 #define SUB_VECTOR_CHKCOUNT(o, nam, type, size, dat)                          \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
-      || (int64_t)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))        \
+      || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
                  " bits for " #type ", have %" PRId64 " for %s.",             \
-                 (int64_t)(size), (int64_t)(size)*TYPE_MAXELEMSIZE (type),    \
+                 (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       if (_obj->o.nam)                                                        \
         free (_obj->o.nam);                                                   \
@@ -1070,11 +1071,11 @@
     }
 #define VECTOR_CHKCOUNT_LV(nam, type, size, dat)                              \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
-      || (int64_t)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))        \
+      || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
                  " bits for " #type ", have %" PRId64 " for %s.",             \
-                 (int64_t)(size), (int64_t)(size)*TYPE_MAXELEMSIZE (type),    \
+                 (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       if (_obj->nam)                                                          \
         free (_obj->nam);                                                     \
@@ -1204,7 +1205,7 @@
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          PRE (R_2007a)                                                        \
+          PRE (R_2007a)                                                       \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
             LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
@@ -1451,7 +1452,7 @@
     }
 
 #define XDICOBJHANDLE(code)                                                   \
-  SINCE (R_2004a)                                                              \
+  SINCE (R_2004a)                                                             \
   {                                                                           \
     if (!obj->tio.object->is_xdic_missing)                                    \
       {                                                                       \
@@ -1471,7 +1472,7 @@
   }
 
 #define ENT_XDICOBJHANDLE(code)                                               \
-  SINCE (R_2004a)                                                              \
+  SINCE (R_2004a)                                                             \
   {                                                                           \
     if (!_ent->is_xdic_missing)                                               \
       {                                                                       \
@@ -1489,7 +1490,7 @@
 #define UNKNOWN_UNTIL(pos)                                                    \
   if (dat->byte < (size_t)(pos))                                              \
     {                                                                         \
-      long len = (long)((pos)-dat->byte);                                     \
+      long len = (long)((pos) - dat->byte);                                   \
       BITCODE_TF unknown = bit_read_TF (dat, (size_t)len);                    \
       LOG_TRACE ("unknown (%ld): ", len);                                     \
       LOG_TRACE_TF (unknown, len);                                            \
@@ -1738,7 +1739,7 @@
     Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
-    SINCE (R_2007a)                                                            \
+    SINCE (R_2007a)                                                           \
     {                                                                         \
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
       error                                                                   \
@@ -1854,7 +1855,7 @@
     Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
-    SINCE (R_2007a)                                                            \
+    SINCE (R_2007a)                                                           \
     {                                                                         \
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
       error                                                                   \
@@ -1939,7 +1940,7 @@
     Bit_Chain hdl_dat = *dat;                                                 \
     if (error)                                                                \
       return error;                                                           \
-    SINCE (R_2007a)                                                            \
+    SINCE (R_2007a)                                                           \
     {                                                                         \
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
       error                                                                   \

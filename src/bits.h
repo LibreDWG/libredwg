@@ -80,9 +80,7 @@ typedef struct _bit_chain
 } Bit_Chain;
 
 #define EMPTY_CHAIN(size)                                                     \
-  {                                                                           \
-    NULL, size, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, 0                      \
-  }
+  { NULL, size, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, 0 }
 
 // only if from r2007+ DWG, not JSON, DXF, add API
 #define IS_FROM_TU(dat)                                                       \

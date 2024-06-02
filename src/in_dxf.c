@@ -83,10 +83,10 @@ static array_hdls *obj_hdls = NULL;
                  pair ? pair->code : -1, dxf, #field);                        \
       return pair;                                                            \
     }
-#define EXPECT_INT_DXF(field, dxf, _type)                                      \
+#define EXPECT_INT_DXF(field, dxf, _type)                                     \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %d [" #_type " %d]\n", obj->name, field, pair->value.i,  \
+  LOG_TRACE ("%s.%s = %d [" #_type " %d]\n", obj->name, field, pair->value.i, \
              pair->code);                                                     \
   dxf_free_pair (pair);                                                       \
   pair = NULL;
@@ -99,14 +99,14 @@ static array_hdls *obj_hdls = NULL;
       return pair;                                                            \
     }                                                                         \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %d [" #_type " %d]\n", obj->name, field, pair->value.i,  \
+  LOG_TRACE ("%s.%s = %d [" #_type " %d]\n", obj->name, field, pair->value.i, \
              pair->code);                                                     \
   dxf_free_pair (pair);                                                       \
   pair = NULL
 #define EXPECT_DBL_DXF(field, dxf, _type)                                     \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
-  LOG_TRACE ("%s.%s = %f [" #_type " %d]\n", obj->name, field, pair->value.d,  \
+  LOG_TRACE ("%s.%s = %f [" #_type " %d]\n", obj->name, field, pair->value.d, \
              pair->code);                                                     \
   dxf_free_pair (pair);                                                       \
   pair = NULL
@@ -134,7 +134,7 @@ static array_hdls *obj_hdls = NULL;
 #define EXPECT_SUB_INT_DXF(sub, field, dxf, _type)                            \
   EXPECT_DXF (obj->name, field, dxf);                                         \
   dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value, 1);    \
-  LOG_TRACE ("%s.%s.%s = %d [" #_type " %d]\n", obj->name, sub, field,         \
+  LOG_TRACE ("%s.%s.%s = %d [" #_type " %d]\n", obj->name, sub, field,        \
              pair->value.i, pair->code);                                      \
   dxf_free_pair (pair);                                                       \
   pair = NULL;
@@ -147,7 +147,7 @@ static array_hdls *obj_hdls = NULL;
       return pair;                                                            \
     }                                                                         \
   dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value, 1);    \
-  LOG_TRACE ("%s.%s.%s = %ld [" #_type " %d]\n", obj->name, sub, field,        \
+  LOG_TRACE ("%s.%s.%s = %ld [" #_type " %d]\n", obj->name, sub, field,       \
              pair->value.l, pair->code);                                      \
   dxf_free_pair (pair);                                                       \
   pair = NULL;
@@ -362,7 +362,7 @@ dxf_skip_ws (Bit_Chain *dat)
     if (errno == ERANGE)                                                      \
       return (rettype)num;                                                    \
     if (dat->byte + 1 >= dat->size)                                           \
-      return (rettype)num
+    return (rettype)num
 
 static BITCODE_RC
 dxf_read_rc (Bit_Chain *dat)
@@ -390,8 +390,8 @@ dxf_read_rc (Bit_Chain *dat)
         }
       if (num > UINT8_MAX)
         {
-          LOG_ERROR ("%s: RC overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
-                     dat->byte);
+          LOG_ERROR ("%s: RC overflow %ld (at %" PRIuSIZE ")", __FUNCTION__,
+                     num, dat->byte);
           dat->byte = dat->size;
         }
       return (BITCODE_RC)num;
@@ -423,8 +423,8 @@ dxf_read_rs (Bit_Chain *dat)
         }
       if (num > UINT16_MAX)
         {
-          LOG_ERROR ("%s: RS overflow %ld (at %" PRIuSIZE ")", __FUNCTION__, num,
-                   dat->byte);
+          LOG_ERROR ("%s: RS overflow %ld (at %" PRIuSIZE ")", __FUNCTION__,
+                     num, dat->byte);
           dat->byte = dat->size;
         }
       return (BITCODE_RS)num;
@@ -1538,7 +1538,7 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
       vars->FINGERPRINTGUID
           = dwg->header.from_version >= R_2007
                 ? (BITCODE_TV)bit_utf8_to_TU (
-                    (char *)"{00000000-0000-0000-0000-000000000000}", 0)
+                      (char *)"{00000000-0000-0000-0000-000000000000}", 0)
                 : strdup ("{00000000-0000-0000-0000-000000000000}");
     }
   if (!vars->VERSIONGUID)
@@ -1546,9 +1546,9 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
       vars->VERSIONGUID
           = dwg->header.from_version >= R_2007
                 ? (BITCODE_TV)bit_utf8_to_TU (
-                    (char *)"{A6BF05D3-02A0-4EB8-9AEE-9443625E66B6}", 0)
+                      (char *)"{A6BF05D3-02A0-4EB8-9AEE-9443625E66B6}", 0)
                 : (BITCODE_TV)strdup (
-                    "{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
+                      "{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
     }
 }
 
@@ -3051,7 +3051,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       }                                                                       \
     assert (l >= 0);                                                          \
     assert (l < (int)o->paths[j].segs[k].num_fitpts)
-              
+
               CHK_control_points;
               o->paths[j].segs[k].control_points[l].point.x = pair->value.d;
               // LOG_TRACE
@@ -3345,8 +3345,8 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE (
                   "HATCH.paths[%d].segs[%d].num_fitpts  = %ld [BL 97]\n", j, k,
                   pair->value.l);
-              o->paths[j].segs[k].fitpts
-                  = (BITCODE_2RD *)xcalloc (pair->value.l, sizeof (BITCODE_2RD));
+              o->paths[j].segs[k].fitpts = (BITCODE_2RD *)xcalloc (
+                  pair->value.l, sizeof (BITCODE_2RD));
             }
         }
       else if (pair->code == 97 && is_plpath)
@@ -6348,27 +6348,28 @@ add_sub_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dwg_Data *dwg = obj->parent;
   Dxf_Pair *pair;
   const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, "assocdep");
-  char *o = &((char*)obj->tio.object->tio.ASSOCGEOMDEPENDENCY)[f->offset];
+  char *o = &((char *)obj->tio.object->tio.ASSOCGEOMDEPENDENCY)[f->offset];
   BITCODE_B has_name;
 
-  SUB_FIELD_BL (assocdep,class_version, 90);
-  SUB_FIELD_BL (assocdep,status, 90);
-  SUB_FIELD_B (assocdep,is_read_dep, 290);
-  SUB_FIELD_B (assocdep,is_write_dep, 290);
-  SUB_FIELD_B (assocdep,is_attached_to_object, 290);
-  SUB_FIELD_B (assocdep,is_delegating_to_owning_action, 290);
-  SUB_FIELD_BLd (assocdep,order, 90); /* -1 or 0 */
-  SUB_FIELD_HANDLE (assocdep,dep_on, 3, 330);
-  SUB_FIELD_B (assocdep,has_name, 290);
-  if (dwg_dynapi_subclass_value (o, "Dwg_Object_ASSOCDEPENDENCY", "has_name", &has_name, 0)
+  SUB_FIELD_BL (assocdep, class_version, 90);
+  SUB_FIELD_BL (assocdep, status, 90);
+  SUB_FIELD_B (assocdep, is_read_dep, 290);
+  SUB_FIELD_B (assocdep, is_write_dep, 290);
+  SUB_FIELD_B (assocdep, is_attached_to_object, 290);
+  SUB_FIELD_B (assocdep, is_delegating_to_owning_action, 290);
+  SUB_FIELD_BLd (assocdep, order, 90); /* -1 or 0 */
+  SUB_FIELD_HANDLE (assocdep, dep_on, 3, 330);
+  SUB_FIELD_B (assocdep, has_name, 290);
+  if (dwg_dynapi_subclass_value (o, "Dwg_Object_ASSOCDEPENDENCY", "has_name",
+                                 &has_name, 0)
       && has_name)
     {
-      SUB_FIELD_T (assocdep,name, 1);
+      SUB_FIELD_T (assocdep, name, 1);
     }
-  SUB_FIELD_HANDLE (assocdep,readdep, 4, 330);
-  SUB_FIELD_HANDLE (assocdep,node, 3, 330);
-  SUB_FIELD_HANDLE (assocdep,dep_body, 4, 360);
-  SUB_FIELD_BLd (assocdep,depbodyid, 90);
+  SUB_FIELD_HANDLE (assocdep, readdep, 4, 330);
+  SUB_FIELD_HANDLE (assocdep, node, 3, 330);
+  SUB_FIELD_HANDLE (assocdep, dep_body, 4, 360);
+  SUB_FIELD_BLd (assocdep, depbodyid, 90);
   return NULL;
 }
 
@@ -6752,7 +6753,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       if (!pair->value.s)
         goto invalid;
       PRE (R_2007a) // TODO: nice would be the proper target version.
-                   // dat->version
+                    // dat->version
       {
         Dwg_Data *dwg = obj->parent;
         size_t length = strlen (pair->value.s);
@@ -7871,19 +7872,22 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, o->codes[i].bl95, 95);
           o->codes[i].bl95 = pair->value.i;
-          LOG_TRACE ("%s.codes[%d].bl95 = %d [BL 95]\n", obj->name, i, o->codes[i].bl95);
+          LOG_TRACE ("%s.codes[%d].bl95 = %d [BL 95]\n", obj->name, i,
+                     o->codes[i].bl95);
           dxf_free_pair (pair);
 
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, o->codes[i].bs76, 76);
           o->codes[i].bs76 = pair->value.i;
-          LOG_TRACE ("%s.codes[%d].bs76 = %d [BS 76]\n", obj->name, i, o->codes[i].bs76);
+          LOG_TRACE ("%s.codes[%d].bs76 = %d [BS 76]\n", obj->name, i,
+                     o->codes[i].bs76);
           dxf_free_pair (pair);
 
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, o->codes[i].bl94, 94);
           o->codes[i].bl94 = pair->value.i;
-          LOG_TRACE ("%s.codes[%d].bl94 = %d [BL 94]\n", obj->name, i, o->codes[i].bl94);
+          LOG_TRACE ("%s.codes[%d].bl94 = %d [BL 94]\n", obj->name, i,
+                     o->codes[i].bl94);
           dxf_free_pair (pair);
         }
     }
@@ -8296,9 +8300,9 @@ add_AcDbBlockRotationParameter (Dwg_Object *restrict obj,
   return NULL;
 }
 
-#  define FIELD_CMC(field, dxf) dxf_read_CMC (dwg, dat, &o->field, #  field, dxf)
+#  define FIELD_CMC(field, dxf) dxf_read_CMC (dwg, dat, &o->field, #field, dxf)
 #  define FIELD_CMC2004(field, dxf)                                           \
-    SINCE (R_2004a)                                                            \
+    SINCE (R_2004a)                                                           \
     {                                                                         \
       FIELD_CMC (field, dxf);                                                 \
     }
@@ -8540,7 +8544,8 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   if (!owner)
     {
       if (obj->tio.entity->ownerhandle)
-        LOG_WARN ("Missing owner (" FORMAT_RLLx ") from " FORMAT_REF " [H 330]",
+        LOG_WARN ("Missing owner (" FORMAT_RLLx ") from " FORMAT_REF
+                  " [H 330]",
                   obj->handle.value, ARGS_REF (obj->tio.entity->ownerhandle))
       else
         LOG_WARN ("Missing owner (" FORMAT_RLLx ")", obj->handle.value)
@@ -8869,7 +8874,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
       */
       else
         {
-// clang-format off
+          // clang-format off
           // ADD_ENTITY by name
           // check all objects
           #undef DWG_ENTITY
@@ -8898,7 +8903,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
       obj->tio.object->is_xdic_missing = 1;
       if (!ctrl_id) // no table
         {
-// clang-format off
+          // clang-format off
           // ADD_OBJECT by name
           // check all objects
           #undef DWG_OBJECT
@@ -9361,7 +9366,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                        && strEQc (subclass, "AcDbAssocDependency"))
                 {
                   dxf_free_pair (pair);
-                  pair = add_sub_ASSOCDEPENDENCY (obj, dat); // NULL for success
+                  pair
+                      = add_sub_ASSOCDEPENDENCY (obj, dat); // NULL for success
                   if (!pair)
                     goto next_pair;
                   else
@@ -10159,7 +10165,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               if (!o->data)
                 {
                   written = 0;
-                  o->data = (unsigned char *)xcalloc(blen, 1);
+                  o->data = (unsigned char *)xcalloc (blen, 1);
                   s = o->data;
                 }
               assert (o->data);
@@ -10663,8 +10669,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             { // ODA has this documented as 205, netDXF as 294
               Dwg_Object_DIMSTYLE *o = obj->tio.object->tio.DIMSTYLE;
               o->DIMTXTDIRECTION = pair->value.i & 1;
-              LOG_TRACE ("%s.DIMTXTDIRECTION = %u [B %d]\n", name, pair->value.u,
-                         pair->code);
+              LOG_TRACE ("%s.DIMTXTDIRECTION = %u [B %d]\n", name,
+                         pair->value.u, pair->code);
             }
           else if (obj->fixedtype == DWG_TYPE_LEADER
                    && (pair->code == 10 || pair->code == 20
@@ -11344,12 +11350,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           goto next_pair; // found, early exit
                         }
                       // num_ field with associated vector
-                      else if (memBEGINc (f->name, "num_") &&
-                               (strEQc (f->type, "BL") ||
-                                strEQc (f->type, "BS") ||
-                                strEQc (f->type, "RL") ||
-                                strEQc (f->type, "RS") ||
-                                strEQc (f->type, "RC")))
+                      else if (memBEGINc (f->name, "num_")
+                               && (strEQc (f->type, "BL")
+                                   || strEQc (f->type, "BS")
+                                   || strEQc (f->type, "RL")
+                                   || strEQc (f->type, "RS")
+                                   || strEQc (f->type, "RC")))
                         {
                           long old = get_numfield_value (_obj, f);
                           if (old)
@@ -11776,7 +11782,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           if (f->is_malloc)
                             {
                               char *str = strdup (pair->value.s);
-                              dwg_dynapi_common_set_value (_obj, f->name, &str, 1);
+                              dwg_dynapi_common_set_value (_obj, f->name, &str,
+                                                           1);
                             }
                           else
                             {
@@ -11785,8 +11792,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           if (f->is_string || f->type[0] == 'T')
                             {
-                              LOG_TRACE ("COMMON.%s = \"%s\" [%s %d]\n", f->name,
-                                         pair->value.s, f->type, pair->code)
+                              LOG_TRACE ("COMMON.%s = \"%s\" [%s %d]\n",
+                                         f->name, pair->value.s, f->type,
+                                         pair->code)
                             }
                           else
                             {
@@ -11834,8 +11842,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   // color.alpha = (pair->value.l & 0xFF000000) >> 24;
                   // if (color.alpha)
                   //  color.alpha_type = 3;
-                  LOG_TRACE ("SUN.color.rgb = %08X [%s %d]\n",
-                             pair->value.u, "CMC", pair->code);
+                  LOG_TRACE ("SUN.color.rgb = %08X [%s %d]\n", pair->value.u,
+                             "CMC", pair->code);
                   goto next_pair;
                 }
               else if (strEQc (name, "MULTILEADER"))

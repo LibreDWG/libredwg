@@ -195,13 +195,13 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMERLL(name, dxf)
 #define FIELD_CMC(color, dxf)                                                 \
-  SINCE (R_2004a)                                                              \
+  SINCE (R_2004a)                                                             \
   {                                                                           \
     FIELD_T (color.name, 0);                                                  \
     FIELD_T (color.book_name, 0);                                             \
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
-  SINCE (R_2004a)                                                              \
+  SINCE (R_2004a)                                                             \
   {                                                                           \
     VALUE_TV (_obj->o.color.name, 0);                                         \
     VALUE_TV (_obj->o.color.book_name, 0);                                    \
@@ -271,7 +271,7 @@ static BITCODE_BL rcount1, rcount2;
       VALUE_TV (_ent->reactors, 0);                                           \
     }
 #define XDICOBJHANDLE(code)                                                   \
-  SINCE (R_2004a)                                                              \
+  SINCE (R_2004a)                                                             \
   {                                                                           \
     if (!obj->tio.object->is_xdic_missing)                                    \
       {                                                                       \
@@ -284,7 +284,7 @@ static BITCODE_BL rcount1, rcount2;
     VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0);    \
   }
 #define ENT_XDICOBJHANDLE(code)                                               \
-  SINCE (R_2004a)                                                              \
+  SINCE (R_2004a)                                                             \
   {                                                                           \
     if (!_ent->is_xdic_missing)                                               \
       {                                                                       \
@@ -347,7 +347,7 @@ static BITCODE_BL rcount1, rcount2;
     _obj = ent = _ent->tio.token;
 
 #define DWG_ENTITY_END                                                        \
-    FREE_IF (obj->unknown_rest);                                              \
+  FREE_IF (obj->unknown_rest);                                                \
   return error;                                                               \
   }
 
@@ -390,7 +390,7 @@ static BITCODE_BL rcount1, rcount2;
 /* obj itself is allocated via dwg->object[], dxfname is klass->dxfname or
  * static */
 #define DWG_OBJECT_END                                                        \
-    FREE_IF (obj->unknown_rest);                                              \
+  FREE_IF (obj->unknown_rest);                                                \
   return error;                                                               \
   }
 
@@ -413,7 +413,7 @@ dwg_free_common_entity_data (Dwg_Object *obj)
 
   FREE_IF (_ent->preview);
 
-// clang-format off
+  // clang-format off
   #include "common_entity_data.spec"
   if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
@@ -434,7 +434,7 @@ dwg_free_common_object_data (Dwg_Object *obj)
   BITCODE_BL vcount;
   int error = 0;
 
-// clang-format off
+  // clang-format off
   #include "common_object_handle_data.spec"
   // clang-format on
 }
@@ -1561,7 +1561,7 @@ dwg_free_summaryinfo (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
 
-// clang-format off
+  // clang-format off
   #include "summaryinfo.spec"
   // clang-format on
   return 0;
@@ -1574,7 +1574,7 @@ dwg_free_appinfo (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
 
-// clang-format off
+  // clang-format off
   #include "appinfo.spec"
   // clang-format on
   return 0;
@@ -1587,7 +1587,7 @@ dwg_free_filedeplist (Dwg_Data *dwg)
   Bit_Chain *dat = &pdat;
   BITCODE_RL vcount;
 
-// clang-format off
+  // clang-format off
   #include "filedeplist.spec"
   // clang-format on
   return 0;
@@ -1599,7 +1599,7 @@ dwg_free_security (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
 
-// clang-format off
+  // clang-format off
   #include "security.spec"
   // clang-format on
   return 0;
@@ -1614,7 +1614,7 @@ dwg_free_acds (Dwg_Data *dwg)
   BITCODE_RL rcount3 = 0, rcount4, vcount;
   int error = 0;
 
-// clang-format off
+  // clang-format off
   #include "acds.spec"
   // clang-format on
   return 0;

@@ -1592,10 +1592,9 @@ int
 bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
                 size_t length)
 {
-  if (dat->byte >= MAX_MEM_ALLOC ||
-      length >= MAX_MEM_ALLOC ||
-      (dat->bit ? (((dat->byte + length) * 8) + dat->bit > dat->size * 8)
-       : (dat->byte + length > dat->size)))
+  if (dat->byte >= MAX_MEM_ALLOC || length >= MAX_MEM_ALLOC
+      || (dat->bit ? (((dat->byte + length) * 8) + dat->bit > dat->size * 8)
+                   : (dat->byte + length > dat->size)))
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE " > size %" PRIuSIZE,
@@ -1735,7 +1734,7 @@ bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
  */
 void
 bit_write_TFv (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
-              size_t length)
+               size_t length)
 {
   size_t len;
   if (!chain)
@@ -2115,7 +2114,8 @@ bit_embed_TU (BITCODE_TU restrict wstr)
 /** Write ASCIIZ text.
     Starting with r2004 as writer (not target version) acad always
     writes a terminating zero, and includes it in the length.
-    On DWG_OPTS_INJSON (imported from JSON), convert from UTF-8 to the codepage.
+    On DWG_OPTS_INJSON (imported from JSON), convert from UTF-8 to the
+   codepage.
  */
 void
 bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
@@ -2135,12 +2135,12 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
   if (length && dat->opts & DWG_OPTS_INJSON)
     {
       size_t destlen = length * 2;
-      char* dest = malloc(destlen);
-      while (!bit_utf8_to_TV (dest, (unsigned char *)chain, destlen, length,
-             0, dat->codepage))
+      char *dest = malloc (destlen);
+      while (!bit_utf8_to_TV (dest, (unsigned char *)chain, destlen, length, 0,
+                              dat->codepage))
         {
           destlen *= 2;
-          dest = realloc(dest, destlen);
+          dest = realloc (dest, destlen);
         }
       need_free = true;
       chain = dest;
@@ -3243,7 +3243,7 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
       return (char *)src;
     }
   //  UTF8 encode
-  while (i < destlen && (char*)tmp < &src[srclen] && (c = *tmp))
+  while (i < destlen && (char *)tmp < &src[srclen] && (c = *tmp))
     {
       wchar_t wc;
       tmp++;
@@ -3485,8 +3485,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
           else if (len >= 2)
             {
               wstr[i++] = ((uint16_t)(c & 0x0f) << 12)
-                        | ((uint16_t)(*str & 0x3f) << 6)
-                        | (str[1] & 0x3f);
+                          | ((uint16_t)(*str & 0x3f) << 6) | (str[1] & 0x3f);
               str++;
               str++;
               len--;
@@ -3914,7 +3913,6 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
 #else
           return;
 #endif
-          
         }
       tmp = (unsigned char *)realloc (dat->chain, dat->size + size);
       if (tmp)

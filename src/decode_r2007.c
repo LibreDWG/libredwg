@@ -889,7 +889,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
         }
       LOG_TRACE ("\nSection [%d]:\n", j);
       section->data_size = (int64_t)bit_read_RLL (&page);
-      section->max_size =  (int64_t)bit_read_RLL (&page);
+      section->max_size = (int64_t)bit_read_RLL (&page);
       section->encrypted = (int64_t)bit_read_RLL (&page);
       section->hashcode = (int64_t)bit_read_RLL (&page);
       section->name_length = (int64_t)bit_read_RLL (&page);
@@ -899,7 +899,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_TRACE ("  data size:     %" PRId64 "\n", section->data_size)
       LOG_TRACE ("  max size:      %" PRId64 "\n", section->max_size)
       LOG_TRACE ("  encryption:    %" PRId64 "\n", section->encrypted)
-      LOG_HANDLE ("  hashcode:      %" PRIx64 "\n", (uint64_t)section->hashcode)
+      LOG_HANDLE ("  hashcode:      %" PRIx64 "\n",
+                  (uint64_t)section->hashcode)
       LOG_HANDLE ("  name length:   %" PRId64 "\n", section->name_length)
       LOG_TRACE ("  unknown:       %" PRId64 "\n", section->unknown)
       LOG_TRACE ("  encoding:      %" PRId64 "\n", section->encoded)
@@ -943,9 +944,10 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       // Section Name (wchar)
       {
         size_t sz = (size_t)section->name_length; // size in bytes really
-        if (sz & 1) // must be even, 2 bytes
+        if (sz & 1)                               // must be even, 2 bytes
           {
-            LOG_WARN ("Invalid section name_length %" PRId64, section->name_length);
+            LOG_WARN ("Invalid section name_length %" PRId64,
+                      section->name_length);
             section->name_length++;
             sz++;
           }
@@ -954,7 +956,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
             LOG_WARN ("Invalid section name_length %zu", sz);
             sz = MAX_SIZE_T;
           }
-        section->name = (DWGCHAR *)calloc (1, section->name_length > 0 ? sz + 2 : 2);
+        section->name
+            = (DWGCHAR *)calloc (1, section->name_length > 0 ? sz + 2 : 2);
         bit_read_fixed (&page, (BITCODE_RC *)section->name, sz);
       }
 #ifdef HAVE_NATIVE_WCHAR2
@@ -1820,7 +1823,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "summaryinfo.spec"
   // clang-format on
 
@@ -1860,7 +1863,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "appinfo.spec"
   // clang-format on
 
@@ -1902,7 +1905,7 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "auxheader.spec"
   // clang-format on
 
@@ -1988,7 +1991,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "revhistory.spec"
   // clang-format on
 
@@ -2031,7 +2034,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "objfreespace.spec"
   // clang-format on
 
@@ -2073,7 +2076,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "template.spec"
   // clang-format on
 
@@ -2120,7 +2123,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "filedeplist.spec"
   // clang-format on
 
@@ -2161,7 +2164,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "security.spec"
   // clang-format on
 
@@ -2225,7 +2228,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL rcount1 = 0, rcount2 = 0;
   BITCODE_BL rcount3 = 0, rcount4, vcount;
 
-// clang-format off
+  // clang-format off
   #include "acds.spec"
   // clang-format on
 

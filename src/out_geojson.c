@@ -55,7 +55,7 @@
 #  define GEOJSON_PRECISION 6
 #endif
 #define FORMAT_RD "%0." _XSTR (GEOJSON_PRECISION) "f"
-//#define FORMAT_RD "%f"
+// #define FORMAT_RD "%f"
 #undef FORMAT_BD
 #define FORMAT_BD FORMAT_RD
 

@@ -610,7 +610,7 @@
 #ifndef CONTROL_HANDLE_STREAM
 #  define CONTROL_HANDLE_STREAM                                               \
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
-    PRE (R_2007a)                                                              \
+    PRE (R_2007a)                                                             \
     {                                                                         \
       hdl_dat->byte = dat->byte;                                              \
       hdl_dat->bit = dat->bit;                                                \
@@ -734,10 +734,13 @@
         {                                                                     \
           FIELD_CAST (flag, RC, RC, 70);                                      \
         }                                                                     \
-      DECODER_OR_ENCODER { LOG_FLAG_##acdbname }                              \
+      DECODER_OR_ENCODER                                                      \
+      {                                                                       \
+        LOG_FLAG_##acdbname                                                   \
+      }                                                                       \
       FIELD_TFv (name, 32, 2);                                                \
       VERSION (R_11)                                                          \
-        FIELD_RSd (used, 0);                                                  \
+      FIELD_RSd (used, 0);                                                    \
     }                                                                         \
     LATER_VERSIONS                                                            \
     {                                                                         \
@@ -919,7 +922,8 @@
           LOG_LTYPE_SHAPE_FLAG_W (ABS_ROTATION);                              \
           LOG_LTYPE_SHAPE_FLAG_W (IS_TEXT);                                   \
           LOG_LTYPE_SHAPE_FLAG_W (IS_SHAPE);                                  \
-          LOG_FLAG_MAX (_obj->dashes[rcount1].shape_flag, LTYPE_SHAPE_FLAG_IS_SHAPE); \
+          LOG_FLAG_MAX (_obj->dashes[rcount1].shape_flag,                     \
+                        LTYPE_SHAPE_FLAG_IS_SHAPE);                           \
           LOG_TRACE ("\n");                                                   \
         }                                                                     \
     }

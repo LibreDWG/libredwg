@@ -284,7 +284,7 @@ static Bit_Chain *g_dat;
   JSON_TOKENS_CHECK_OVERFLOW (return DWG_ERR_INVALIDDWG)
 #define JSON_TOKENS_CHECK_OVERFLOW_NULL                                       \
   JSON_TOKENS_CHECK_OVERFLOW (return NULL)
-#define JSON_TOKENS_CHECK_OVERFLOW_VOID JSON_TOKENS_CHECK_OVERFLOW (return )
+#define JSON_TOKENS_CHECK_OVERFLOW_VOID JSON_TOKENS_CHECK_OVERFLOW (return)
 
 // advance until next known first-level type
 // on OBJECT to end of OBJECT
@@ -714,8 +714,8 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               && (strEQc (key, "HANDSEED") || strEQc (key, "UCSNAME")))
             ;
           else
-            LOG_ERROR ("Invalid handle %.*s => " FORMAT_REF
-                       " code=" FORMAT_BL " size=" FORMAT_BL " value=" FORMAT_RLL
+            LOG_ERROR ("Invalid handle %.*s => " FORMAT_REF " code=" FORMAT_BL
+                       " size=" FORMAT_BL " value=" FORMAT_RLL
                        " absref=" FORMAT_RLL,
                        t->end - t->start, &dat->chain[t->start],
                        ARGS_REF (ref), code, size, value, absref);
@@ -788,7 +788,8 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               uint32_t num = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_VOID
               color->index = (BITCODE_BSd)num;
-              LOG_TRACE ("%s.%s.index " FORMAT_BSd " [CMC]\n", name, fname, color->index);
+              LOG_TRACE ("%s.%s.index " FORMAT_BSd " [CMC]\n", name, fname,
+                         color->index);
             }
           else if (strEQc (key, "rgb"))
             {
@@ -850,7 +851,8 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     { // pre 2004
       uint32_t num = json_long (dat, tokens);
       color->index = (BITCODE_BSd)num;
-      LOG_TRACE ("%s.%s.index " FORMAT_BSd " [CMC]\n", name, fname, color->index);
+      LOG_TRACE ("%s.%s.index " FORMAT_BSd " [CMC]\n", name, fname,
+                 color->index);
       JSON_TOKENS_CHECK_OVERFLOW_VOID
     }
 }
@@ -1095,9 +1097,9 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (summaryinfo_address, 0)
       FIELD_RL (vbaproj_address, 0)
       FIELD_RL (r2004_header_address, 0) /* mostly 128/0x80 */
-      // clang-format on
+          // clang-format on
 
-      else if (strEQc (key, "HEADER"))
+          else if (strEQc (key, "HEADER"))
       {
         LOG_WARN ("Unexpected next section %s", key)
         tokens->index--;
@@ -1184,8 +1186,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_TRACE ("%s: " FORMAT_RD " [%s]\n", key, num, f->type)
           dwg_dynapi_header_set_value (dwg, key, &num, 0);
         }
-      else if (t->type == JSMN_PRIMITIVE
-               && f->size <= 4  // not a RS[]
+      else if (t->type == JSMN_PRIMITIVE && f->size <= 4 // not a RS[]
                && (strEQc (f->type, "RC") || strEQc (f->type, "B")
                    || strEQc (f->type, "BB") || strEQc (f->type, "RS")
                    || strEQc (f->type, "BS") || strEQc (f->type, "RL")
@@ -1196,8 +1197,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_TRACE ("%s: " FORMAT_BL " [%s]\n", key, num, f->type)
           dwg_dynapi_header_set_value (dwg, key, &num, 0);
         }
-      else if (t->type == JSMN_PRIMITIVE
-               && f->size == 8 // not a RLL[]
+      else if (t->type == JSMN_PRIMITIVE && f->size == 8 // not a RLL[]
                && (strEQc (f->type, "RLL") || strEQc (f->type, "BLL")))
         {
           uint64_t num = json_longlong (dat, tokens);
@@ -1249,8 +1249,9 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           // fail if not malloced or inlined array (but json has an array)
           if (f->size <= 2 && size1 > 1)
             {
-              LOG_ERROR ("Invalid JSON: HEADER.%s array where primitive expected",
-                         f->name);
+              LOG_ERROR (
+                  "Invalid JSON: HEADER.%s array where primitive expected",
+                  f->name);
               free (nums);
               tokens->index += size1;
               return 0;
@@ -1266,8 +1267,8 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               else
                 {
-                  LOG_WARN ("Ignored %s.%s[%d]: " FORMAT_BL " [%s]", name, key, k,
-                             json_long (dat, tokens), f->type);
+                  LOG_WARN ("Ignored %s.%s[%d]: " FORMAT_BL " [%s]", name, key,
+                            k, json_long (dat, tokens), f->type);
                 }
             }
           if (!size1)
@@ -1394,7 +1395,8 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (strEQc (key, "number"))
             {
               klass->number = (BITCODE_BS)json_long (dat, tokens) & 0xFFFF;
-              LOG_TRACE ("\nCLASS[%d].number: " FORMAT_BS "\n", i, klass->number)
+              LOG_TRACE ("\nCLASS[%d].number: " FORMAT_BS "\n", i,
+                         klass->number)
               if (klass->number != i + 500)
                 LOG_WARN ("Possibly illegal class number %d, expected %d",
                           klass->number, i + 500)
@@ -1527,7 +1529,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   // see below: if does_cross_unicode_datversion (dat) we need
                   // to recalc
                   obj->eed[i].size = (BITCODE_BS)size & 0xFFFF;
-                  LOG_TRACE ("eed[%u].size " FORMAT_BS "\n", i, obj->eed[i].size);
+                  LOG_TRACE ("eed[%u].size " FORMAT_BS "\n", i,
+                             obj->eed[i].size);
                   have = size + 1; // we overallocate by 1 for the ending NUL
                   obj->eed[i].data = (Dwg_Eed_Data *)calloc (have, 1);
                   LOG_INSANE (" alloc eed[%u].data: %d\n", i, have)
@@ -1802,7 +1805,8 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 uint32_t l = json_long (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
                 rbuf->value.i32 = (BITCODE_RL)l;
-                LOG_TRACE ("xdata[%u]: " FORMAT_BL " [RL %d]\n", i, l, (int)rbuf->type);
+                LOG_TRACE ("xdata[%u]: " FORMAT_BL " [RL %d]\n", i, l,
+                           (int)rbuf->type);
                 size += 4;
               }
               break;
@@ -1811,7 +1815,8 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 uint64_t l = json_longlong (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
                 rbuf->value.i64 = l;
-                LOG_TRACE ("xdata[%u]: " FORMAT_RLL " [RLL %d]\n", i, l, (int)rbuf->type);
+                LOG_TRACE ("xdata[%u]: " FORMAT_RLL " [RLL %d]\n", i, l,
+                           (int)rbuf->type);
                 size += 8;
               }
               break;
@@ -2418,7 +2423,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         {
           const int size1 = t->size;
           BITCODE_2DPOINT *pts = size1 ? (BITCODE_2DPOINT *)calloc (
-                                     size1, sizeof (BITCODE_2DPOINT))
+                                             size1, sizeof (BITCODE_2DPOINT))
                                        : NULL;
           json_set_numfield (_obj, fields, key, size1);
           tokens->index++;
@@ -3572,11 +3577,12 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   Dwg_Object_DICTIONARY *o = obj->tio.object->tio.DICTIONARY;
                   o->numitems = t->size;
                   o->texts = o->numitems ? (BITCODE_T *)calloc (
-                                 o->numitems, sizeof (BITCODE_T))
+                                               o->numitems, sizeof (BITCODE_T))
                                          : NULL;
-                  o->itemhandles = o->numitems ? (BITCODE_H *)calloc (
-                                       o->numitems, sizeof (BITCODE_H))
-                                               : NULL;
+                  o->itemhandles
+                      = o->numitems ? (BITCODE_H *)calloc (o->numitems,
+                                                           sizeof (BITCODE_H))
+                                    : NULL;
                   tokens->index++;
                   for (int k = 0; k < (int)o->numitems; k++)
                     {
@@ -4141,10 +4147,10 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RS (crc, 0)
       // clang-format on
       else
-        {
-          LOG_ERROR ("Unknown %s.%s ignored", section, key);
-          tokens->index++;
-        }
+      {
+        LOG_ERROR ("Unknown %s.%s ignored", section, key);
+        tokens->index++;
+      }
     }
 
   LOG_TRACE ("End of %s\n", section)

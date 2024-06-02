@@ -237,7 +237,7 @@ static BITCODE_BL rcount1, rcount2;
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          PRE (R_2007a)                                                        \
+          PRE (R_2007a)                                                       \
           {                                                                   \
             LOG_TRACE (#name "[%ld]: %s\n", (long)vcount, _obj->name[vcount]) \
           }                                                                   \
@@ -313,7 +313,7 @@ static BITCODE_BL rcount1, rcount2;
     }
 
 #define XDICOBJHANDLE(code)                                                   \
-  SINCE (R_2004a)                                                              \
+  SINCE (R_2004a)                                                             \
   {                                                                           \
     if (!obj->tio.object->is_xdic_missing)                                    \
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0);  \
@@ -417,7 +417,7 @@ dwg_print_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-// clang-format off
+  // clang-format off
   #include "classes.inc"
   // clang-format on
 

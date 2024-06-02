@@ -112,12 +112,12 @@ EXPORT bool dwg_dynapi_subclass_value (const void *restrict ptr,
                                        void *restrict out,
                                        Dwg_DYNAPI_field *restrict fp)
     __nonnull ((1, 2, 3, 4));
-EXPORT bool
-dwg_dynapi_subclass_set_value (Dwg_Data *restrict dwg,
-                               const void *restrict ptr,
-                               const char *restrict subclass,
-                               const char *restrict fieldname,
-                               const void *restrict value, const bool is_utf8)
+EXPORT bool dwg_dynapi_subclass_set_value (Dwg_Data *restrict dwg,
+                                           const void *restrict ptr,
+                                           const char *restrict subclass,
+                                           const char *restrict fieldname,
+                                           const void *restrict value,
+                                           const bool is_utf8)
     __nonnull ((1, 2, 3, 4, 5));
 EXPORT bool dwg_dynapi_field_get_value (const void *restrict ptr,
                                         const Dwg_DYNAPI_field *restrict field,

@@ -611,7 +611,8 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
         {
           FIELD_BS (index, 62);
         }
-      FIRSTPREFIX fprintf (dat->fh, "\"rgb\":%s\"%06x\"", JSON_SPC, (unsigned)_obj->rgb);
+      FIRSTPREFIX fprintf (dat->fh, "\"rgb\":%s\"%06x\"", JSON_SPC,
+                           (unsigned)_obj->rgb);
       if (_obj->flag)
         {
           FIELD_BS (flag, 0);
@@ -636,10 +637,9 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define SUB_FIELD_CMC(o, color, dxf) field_cmc (dat, #color, &_obj->o.color)
 
 #define FIELD_TIMEBLL(nam, dxf)                                               \
-  FIRSTPREFIX fprintf (dat->fh,                                               \
-                       "\"" #nam "\":%s[%s" FORMAT_BL ",%s" FORMAT_BL "%s]",  \
-                       JSON_SPC, JSON_SPC, _obj->nam.days, JSON_SPC,    \
-                       _obj->nam.ms, JSON_SPC)
+  FIRSTPREFIX fprintf (                                                       \
+      dat->fh, "\"" #nam "\":%s[%s" FORMAT_BL ",%s" FORMAT_BL "%s]",          \
+      JSON_SPC, JSON_SPC, _obj->nam.days, JSON_SPC, _obj->nam.ms, JSON_SPC)
 #define FIELD_TIMERLL(nam, dxf) FIELD_TIMEBLL (nam, dxf)
 
 // FIELD_VECTOR_N(nam, type, size):
@@ -1412,7 +1412,7 @@ wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
 */
 void
 json_write_TFv (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
-               const size_t len)
+                const size_t len)
 {
   const size_t slen = src ? strlen ((char *)src) : 0;
   fputc ('"', dat->fh);
@@ -2333,7 +2333,8 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->chain += 16; /* skip the sentinel */
       KEY (THUMBNAILIMAGE);
       HASH;
-      FIRSTPREFIX fprintf (dat->fh, "\"size\":%s%" PRIuSIZE, JSON_SPC, _obj->size);
+      FIRSTPREFIX fprintf (dat->fh, "\"size\":%s%" PRIuSIZE, JSON_SPC,
+                           _obj->size);
       FIELD_BINARY (chain, _obj->size, 310);
       if (dwg->header.from_version >= R_2004)
         _obj->chain -= 16; /* undo for free */
@@ -2546,10 +2547,11 @@ json_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   RECORD (AcDs); // single hash
   {
 
-  // clang-format off
+    // clang-format off
     #include "acds.spec"
     // clang-format on
-  } ENDRECORD ();
+  }
+  ENDRECORD ();
   return 0;
 }
 
@@ -2616,7 +2618,8 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // clang-format off
   #include "2ndheader.spec"
   // clang-format on
-  VERSIONS (R_14, R_2000) {
+  VERSIONS (R_14, R_2000)
+  {
     FIELD_RLL (junk_r14, 0);
   }
   ENDRECORD ();
@@ -2635,14 +2638,14 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dat->codepage = dwg->header.codepage;
   if (!dat->fh)
     goto fail;
-  fprintf (dat->fh, "{%s%s%s\"created_by\":%s\"%s\"", JSON_NL, JSON_SPC, JSON_SPC,
-           JSON_SPC, PACKAGE_STRING);
+  fprintf (dat->fh, "{%s%s%s\"created_by\":%s\"%s\"", JSON_NL, JSON_SPC,
+           JSON_SPC, JSON_SPC, PACKAGE_STRING);
   dat->bit++; // ident
 
   json_fileheader_write (dat, dwg);
 
-  // A minimal HEADER would require only $ACADVER, $HANDSEED, and then ENTITIES.
-  // But we do that only for DXF
+  // A minimal HEADER would require only $ACADVER, $HANDSEED, and then
+  // ENTITIES. But we do that only for DXF
   json_header_write (dat, dwg);
 
   if (dat->version >= R_13b1)

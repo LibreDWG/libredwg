@@ -179,7 +179,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
         }                                                                     \
       else                                                                    \
         {                                                                     \
-          uint8_t icode = (uint8_t)((code)&0xff);                             \
+          uint8_t icode = (uint8_t)((code) & 0xff);                           \
           fwrite (&icode, 1, 1, dat->fh);                                     \
         }                                                                     \
     }                                                                         \
@@ -211,7 +211,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
   }
 #define VALUE_T0(value, dxf)                                                  \
   if (!bit_empty_T (dat, value))                                              \
-    VALUE_T (value, dxf)
+  VALUE_T (value, dxf)
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
     if (IS_FROM_TU (dat))                                                     \
@@ -1434,7 +1434,8 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       else // if (FIELD_VALUE(version)==2)
         // must use ASCII out
         {
-          LOG_ERROR ("ACIS BinaryFile v2 not yet supported. Use ASCII output.");
+          LOG_ERROR (
+              "ACIS BinaryFile v2 not yet supported. Use ASCII output.");
         }
     }
   return error;
@@ -1535,7 +1536,7 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         error |= dwg_dxfb_SEQEND (dat, o);                                    \
       *i = *i + 1;                                                            \
     }                                                                         \
-    SINCE (R_2004a)                                                            \
+    SINCE (R_2004a)                                                           \
     {                                                                         \
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
@@ -1602,7 +1603,7 @@ decl_dxfb_process_VERTEX (PFACE)
         error |= dwg_dxfb_SEQEND (dat, o);                                    \
       *i = *i + 1;                                                            \
     }                                                                         \
-    SINCE (R_2004a)                                                            \
+    SINCE (R_2004a)                                                           \
     {                                                                         \
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \

@@ -57,7 +57,8 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
 void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
-void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *restrict o);
+void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
+                             Dwg_Object_MLINESTYLE *restrict o);
 
 // private
 static int dxf_common_entity_handle_data (Bit_Chain *restrict dat,
@@ -141,7 +142,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                 GROUP (dxf);                                                  \
               }                                                               \
             if (value)                                                        \
-              fprintf (dat->fh, "%02X", ((unsigned char*)value)[j]);          \
+              fprintf (dat->fh, "%02X", ((unsigned char *)value)[j]);         \
             else                                                              \
               fprintf (dat->fh, "%02X", 0);                                   \
           }                                                                   \
@@ -253,19 +254,19 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   if (dxf)                                                                    \
     {                                                                         \
       HEADER_9 (nam);                                                         \
-      PRE (R_2007a)                                                            \
-        VALUE_TV ((char *)value, dxf)                                         \
+      PRE (R_2007a)                                                           \
+      VALUE_TV ((char *)value, dxf)                                           \
       LATER_VERSIONS                                                          \
-        VALUE_T (value, dxf)                                                  \
+      VALUE_T (value, dxf)                                                    \
     }
 #define HEADER_VALUE_T0(nam, dxf, value)                                      \
   if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
     {                                                                         \
       HEADER_9 (nam);                                                         \
-      PRE (R_2007a)                                                            \
-        VALUE_TV ((char *)value, dxf)                                         \
+      PRE (R_2007a)                                                           \
+      VALUE_TV ((char *)value, dxf)                                           \
       LATER_VERSIONS                                                          \
-        VALUE_T (value, dxf)                                                  \
+      VALUE_T (value, dxf)                                                    \
     }
 #define HEADER_VALUE_TU0(nam, dxf, value)                                     \
   if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
@@ -2459,7 +2460,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           for (i = 0; i < FIELD_VALUE (num_blocks); i++)
             {
               // here idx is just local, always starting at 0. ignored
-              int idx = 0; 
+              int idx = 0;
               BITCODE_BL len = FIELD_VALUE (block_size[i]);
               char *ptr;
               if ((BITCODE_BLd)len < 0)
@@ -2628,7 +2629,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           error |= dwg_dxf_SEQEND (dat, o);                                   \
         *i = *i + 1;                                                          \
       }                                                                       \
-      SINCE (R_2004a)                                                          \
+      SINCE (R_2004a)                                                         \
       {                                                                       \
         Dwg_Object *o;                                                        \
         for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                      \
@@ -2696,7 +2697,7 @@ decl_dxf_process_VERTEX (PFACE)
           error |= dwg_dxf_SEQEND (dat, o);                                   \
         *i = *i + 1;                                                          \
       }                                                                       \
-      SINCE (R_2004a)                                                          \
+      SINCE (R_2004a)                                                         \
       {                                                                       \
         Dwg_Object *o;                                                        \
         for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                      \
@@ -2892,7 +2893,8 @@ decl_dxf_process_INSERT (MINSERT)
       else
         {
           if (dat->version >= R_2018 && dat->from_version < R_2018)
-            dwg_upgrade_MLINESTYLE (obj->parent, obj->tio.object->tio.MLINESTYLE);
+            dwg_upgrade_MLINESTYLE (obj->parent,
+                                    obj->tio.object->tio.MLINESTYLE);
           else if (dat->version < R_2018 && dat->from_version >= R_2018)
             dwg_downgrade_MLINESTYLE (obj->tio.object->tio.MLINESTYLE);
           return dwg_dxf_MLINESTYLE (dat, obj);

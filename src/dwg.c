@@ -78,11 +78,12 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
 // used in encode.c
 void dwg_set_handle_size (Dwg_Handle *restrict hdl);
 void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
-void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *restrict o);
+void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
+                             Dwg_Object_MLINESTYLE *restrict o);
 
 void ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref);
 const Dwg_Object_Ref *ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
-                                  const unsigned long absref);
+                                        const unsigned long absref);
 
 /*------------------------------------------------------------------------------
  * Public functions
@@ -1874,9 +1875,8 @@ dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
     }
   else if (dwg->header.version > R_11)
     { // Dwg_Section_Type_r13
-      return (sec_id <= SECTION_THUMBNAIL_R13)
-                 ? dwg_section_r13_names[sec_id]
-                 : NULL;
+      return (sec_id <= SECTION_THUMBNAIL_R13) ? dwg_section_r13_names[sec_id]
+                                               : NULL;
     }
   else
     { // Dwg_Section_Type_r11
@@ -2188,7 +2188,8 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
             }
         }
       */
-      Dwg_Object_Ref *refi = (Dwg_Object_Ref*)ordered_ref_find (dwg, code, absref);
+      Dwg_Object_Ref *refi
+          = (Dwg_Object_Ref *)ordered_ref_find (dwg, code, absref);
       if (NULL != refi)
         {
           return refi;
@@ -2780,13 +2781,14 @@ dwg_find_tablehandle_index (Dwg_Data *restrict dwg, const int index,
       LOG_TRACE ("dwg_find_tablehandle: Could not resolve table %s\n", table);
       return NULL;
     }
-  //if (obj->fixedtype == DWG_TYPE_DICTIONARY)
-  // return dwg_find_dicthandle_objname (dwg, ctrl, name);
+  // if (obj->fixedtype == DWG_TYPE_DICTIONARY)
+  //  return dwg_find_dicthandle_objname (dwg, ctrl, name);
   if (!dwg_obj_is_control (obj))
     {
-      LOG_ERROR ("dwg_find_tablehandle_index: Could not resolve CONTROL object %s "
-                 "for table %s",
-                 obj->name, table);
+      LOG_ERROR (
+          "dwg_find_tablehandle_index: Could not resolve CONTROL object %s "
+          "for table %s",
+          obj->name, table);
       return NULL;
     }
   _obj = obj->tio.object->tio.APPID_CONTROL; // just random type
@@ -2812,8 +2814,8 @@ dwg_find_tablehandle_index (Dwg_Data *restrict dwg, const int index,
   if (index < (int)num_entries)
     {
       if (hdlv[index])
-        LOG_INSANE ("%s.entries[%u/%u]: " FORMAT_RLLx "\n",
-                    obj->name, index, num_entries, hdlv[index]->absolute_ref);
+        LOG_INSANE ("%s.entries[%u/%u]: " FORMAT_RLLx "\n", obj->name, index,
+                    num_entries, hdlv[index]->absolute_ref);
       return hdlv[index];
     }
   LOG_INSANE ("Not found in %u %s entries\n", num_entries, table);
@@ -3486,13 +3488,14 @@ dwg_sections_init (Dwg_Data *dwg)
       /* section 0: header vars
        *         1: class section
        *         2: object map (i.e. handles)
-       *         3: optional ObjFreeSpace (r13+, no sentinels) + 2ndheader (r13+, sentinels)
-       *         4: optional: Template (MEASUREMENT)
-       *         5: optional: AuxHeader (no sentinels, since R_2000b)
-       *         6: optional: THUMBNAIL (not a section, but treated as one)
+       *         3: optional ObjFreeSpace (r13+, no sentinels) + 2ndheader
+       * (r13+, sentinels) 4: optional: Template (MEASUREMENT) 5: optional:
+       * AuxHeader (no sentinels, since R_2000b) 6: optional: THUMBNAIL (not a
+       * section, but treated as one)
        */
-      if (!dwg->header.num_sections ||
-          (dwg->header.from_version > R_2000 && dwg->header.version <= R_2000))
+      if (!dwg->header.num_sections
+          || (dwg->header.from_version > R_2000
+              && dwg->header.version <= R_2000))
         {
           dwg->header.num_sections = dwg->header.version < R_13c3    ? 3
                                      : dwg->header.version < R_2000b ? 5
@@ -3500,9 +3503,10 @@ dwg_sections_init (Dwg_Data *dwg)
           if (dwg->header.num_sections == 3 && dwg->objfreespace.numnums)
             dwg->header.num_sections = 5;
         }
-      if (!dwg->header.sections ||
-          (dwg->header.from_version > R_2000 && dwg->header.version <= R_2000))
-         // ODA writes zeros
+      if (!dwg->header.sections
+          || (dwg->header.from_version > R_2000
+              && dwg->header.version <= R_2000))
+        // ODA writes zeros
         dwg->header.sections = dwg->header.num_sections;
       // newer DWG's have proper HEADER.sections
       if (dwg->header.num_sections != dwg->header.sections)
@@ -3629,14 +3633,14 @@ dwg_calc_hookline_on (Dwg_Entity_LEADER *_obj)
                           : 1;
 }
 
-EXPORT int dwg_supports_eed (const Dwg_Data *dwg)
+EXPORT int
+dwg_supports_eed (const Dwg_Data *dwg)
 {
   return dwg->header.version >= R_11;
 }
 
 EXPORT int
-dwg_supports_obj (const Dwg_Data *restrict dwg,
-                  const Dwg_Object *restrict obj)
+dwg_supports_obj (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   const Dwg_Object_Type type = obj->fixedtype;
   Dwg_Version_Type ver;
@@ -3684,11 +3688,11 @@ dwg_supports_obj (const Dwg_Data *restrict dwg,
     return ver < R_2_10;
   else if (type == DWG_TYPE_ATTRIB || type == DWG_TYPE_ATTDEF)
     return ver >= R_2_0b;
-  else if (type == DWG_TYPE_VPORT || type == DWG_TYPE_VPORT_CONTROL ||
-           type == DWG_TYPE_UCS || type == DWG_TYPE_UCS_CONTROL)
+  else if (type == DWG_TYPE_VPORT || type == DWG_TYPE_VPORT_CONTROL
+           || type == DWG_TYPE_UCS || type == DWG_TYPE_UCS_CONTROL)
     return ver >= R_10;
-  else if (type == DWG_TYPE_APPID || type == DWG_TYPE_APPID_CONTROL ||
-           type == DWG_TYPE_DIMSTYLE || type == DWG_TYPE_DIMSTYLE_CONTROL)
+  else if (type == DWG_TYPE_APPID || type == DWG_TYPE_APPID_CONTROL
+           || type == DWG_TYPE_DIMSTYLE || type == DWG_TYPE_DIMSTYLE_CONTROL)
     return ver >= R_11;
   else if (type == DWG_TYPE_VX_TABLE_RECORD || type == DWG_TYPE_VX_CONTROL)
     return ver >= R_11 && ver < R_2004;
@@ -3732,32 +3736,36 @@ dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o)
 }
 
 /* to 2018 */
-void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg, Dwg_Object_MLINESTYLE *restrict o)
+void
+dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
+                        Dwg_Object_MLINESTYLE *restrict o)
 {
   // lookup on LTYPE_CONTROL list
   for (BITCODE_RC j = 0; j < o->num_lines; j++)
-  {
-    BITCODE_BSd lt_index = o->lines[j].lt.index;
-    LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = %d [BSd 6]\n", j,
-               (int)lt_index);
-    if (lt_index == 0)
-      o->lines[j].lt.ltype = dwg->header_vars.LTYPE_CONTINUOUS;
-    else if (lt_index == 32767)
-      o->lines[j].lt.ltype = dwg->header_vars.LTYPE_BYLAYER;
-    else if (lt_index == 32766)
-      o->lines[j].lt.ltype = dwg->header_vars.LTYPE_BYBLOCK;
-    else if (lt_index > 0)
-      {
-        BITCODE_H hdl = dwg_find_tablehandle_index (dwg, (int)lt_index, "LTYPE");
-        o->lines[j].lt.ltype = dwg_add_handleref (dwg, 5, hdl ? hdl->absolute_ref : 0, NULL);
-        if (hdl)
-          LOG_TRACE ("MLINESTYLE.lines[%d].lt.ltype %s => " FORMAT_REF
-                     " [H]\n",
-                     j, o->name, ARGS_REF (hdl));
-      }
-    else
-      o->lines[j].lt.ltype = dwg_add_handleref (dwg, 5, 0, NULL);
-  }
+    {
+      BITCODE_BSd lt_index = o->lines[j].lt.index;
+      LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = %d [BSd 6]\n", j,
+                 (int)lt_index);
+      if (lt_index == 0)
+        o->lines[j].lt.ltype = dwg->header_vars.LTYPE_CONTINUOUS;
+      else if (lt_index == 32767)
+        o->lines[j].lt.ltype = dwg->header_vars.LTYPE_BYLAYER;
+      else if (lt_index == 32766)
+        o->lines[j].lt.ltype = dwg->header_vars.LTYPE_BYBLOCK;
+      else if (lt_index > 0)
+        {
+          BITCODE_H hdl
+              = dwg_find_tablehandle_index (dwg, (int)lt_index, "LTYPE");
+          o->lines[j].lt.ltype
+              = dwg_add_handleref (dwg, 5, hdl ? hdl->absolute_ref : 0, NULL);
+          if (hdl)
+            LOG_TRACE ("MLINESTYLE.lines[%d].lt.ltype %s => " FORMAT_REF
+                       " [H]\n",
+                       j, o->name, ARGS_REF (hdl));
+        }
+      else
+        o->lines[j].lt.ltype = dwg_add_handleref (dwg, 5, 0, NULL);
+    }
 }
 
 static const void *
@@ -3767,8 +3775,8 @@ bsearch_ex (const void *pKey, const void *pBase, size_t numBase,
             const void **ppBefore)
 {
   size_t numNow = numBase;
-  char* pLo = (char*)pBase;
-  char* pHi = (char*)pBase + (numNow - 1) * nItemWidth;
+  char *pLo = (char *)pBase;
+  char *pHi = (char *)pBase + (numNow - 1) * nItemWidth;
   if (NULL != ppBefore)
     {
       *ppBefore = NULL;
