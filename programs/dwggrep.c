@@ -106,7 +106,7 @@ static pcre2_compile_context_16 *compile_context16 = NULL;
 static int
 usage (void)
 {
-  printf ("\nUsage: dwggrep [-cRr] pattern *.dwg\n");
+  printf ("\nUsage: dwggrep [-bcihntx] [--type TYPE] [--dxf NUM] [--help] pattern *.dwg\n");
   return 1;
 }
 static int
@@ -128,19 +128,16 @@ help (void)
 #ifdef HAVE_PCRE2_H
   printf ("  -x                        Extended regex pattern\n");
 #endif
-  printf ("  -c, --count               Print only the count of matched "
-          "elements.\n");
+  printf ("  -c, --count               Print only the count of matched elements.\n");
   printf ("  -h, --no-filename         Print no filename.\n");
 #if 0
   printf("  -R, -r, --recursive       Recursively search subdirectories listed.\n");
 #endif
-  printf (
-      "  -y, --type NAME           Search only NAME entities or objects.\n");
+  printf ("  -y, --type NAME           Search only NAME entities or objects.\n");
   printf ("  -d, --dxf NUM             Search only DXF group NUM fields.\n");
   printf ("  -t, --text                Search only in TEXT-like entities.\n");
-  printf (
-      "  -b, --blocks              Search also in all block definitions.\n");
-  printf ("       --tables              Search only in table names.\n");
+  printf ("  -b, --blocks              Search also in all block definitions.\n");
+  printf ("  -n, --tables              Search only in table names.\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("      --help                Display this help and exit\n");
   printf ("      --version             Output version information and exit\n"
@@ -1868,7 +1865,7 @@ main (int argc, char *argv[])
           { "recursive", 0, 0, 'r' }, { "recursive", 0, 0, 'R' },
           { "type", 1, 0, 'y' },      { "dxf", 1, 0, 'd' },
           { "text", 0, 0, 't' },      { "blocks", 0, 0, 'b' },
-          { "tables", 0, 0, 0 },      { "help", 0, 0, 0 },
+          { "tables", 0, 0, 'n' },    { "help", 0, 0, 0 },
           { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
 
@@ -1879,11 +1876,11 @@ main (int argc, char *argv[])
 
   while
 #ifdef HAVE_GETOPT_LONG
-      ((c = getopt_long (argc, argv, "ixchrRy:d:tb", long_options,
+      ((c = getopt_long (argc, argv, "ixchrRy:d:tbn", long_options,
                          &option_index))
        != -1)
 #else
-      ((c = getopt (argc, argv, "ixchrRy:d:tbvu")) != -1)
+      ((c = getopt (argc, argv, "ixchrRy:d:tbnvu")) != -1)
 #endif
     {
       if (c == -1)
@@ -1896,8 +1893,6 @@ main (int argc, char *argv[])
             return help ();
           if (!strcmp (long_options[option_index].name, "version"))
             return opt_version ();
-          if (!strcmp (long_options[option_index].name, "tables"))
-            opt_tables = 1;
           break;
 #else
         case 'v':
@@ -1926,6 +1921,9 @@ main (int argc, char *argv[])
           break;
         case 'b':
           opt_blocks = 1;
+          break;
+        case 'n':
+          opt_tables = 1;
           break;
         case 'y':
           if (numtype >= 10)
