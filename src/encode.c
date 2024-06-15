@@ -6412,12 +6412,12 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
-// PRE (R_13b1)
-// {
-//   if (dat->from_version >= R_13b1)
-//     downgrade_preR13_header_variables (dat, dwg);
-// }
-// clang-format off
+  // PRE (R_13b1)
+  // {
+  //   if (dat->from_version >= R_13b1)
+  //     downgrade_preR13_header_variables (dat, dwg);
+  // }
+  // clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 

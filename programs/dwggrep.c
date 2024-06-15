@@ -106,7 +106,8 @@ static pcre2_compile_context_16 *compile_context16 = NULL;
 static int
 usage (void)
 {
-  printf ("\nUsage: dwggrep [-bcihntx] [--type TYPE] [--dxf NUM] [--help] pattern *.dwg\n");
+  printf ("\nUsage: dwggrep [-bcihntx] [--type TYPE] [--dxf NUM] [--help] "
+          "pattern *.dwg\n");
   return 1;
 }
 static int
@@ -128,15 +129,18 @@ help (void)
 #ifdef HAVE_PCRE2_H
   printf ("  -x                        Extended regex pattern\n");
 #endif
-  printf ("  -c, --count               Print only the count of matched elements.\n");
+  printf ("  -c, --count               Print only the count of matched "
+          "elements.\n");
   printf ("  -h, --no-filename         Print no filename.\n");
 #if 0
   printf("  -R, -r, --recursive       Recursively search subdirectories listed.\n");
 #endif
-  printf ("  -y, --type NAME           Search only NAME entities or objects.\n");
+  printf (
+      "  -y, --type NAME           Search only NAME entities or objects.\n");
   printf ("  -d, --dxf NUM             Search only DXF group NUM fields.\n");
   printf ("  -t, --text                Search only in TEXT-like entities.\n");
-  printf ("  -b, --blocks              Search also in all block definitions.\n");
+  printf (
+      "  -b, --blocks              Search also in all block definitions.\n");
   printf ("  -n, --tables              Search only in table names.\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("      --help                Display this help and exit\n");

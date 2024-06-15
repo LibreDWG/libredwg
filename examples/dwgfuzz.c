@@ -62,8 +62,8 @@
 // debugging
 #ifndef FUZZ_MODE
 #  define FUZZ_MODE FUZZ_INMEM
-//#define FUZZ_MODE FUZZ_STDIN
-//#define FUZZ_MODE FUZZ_FILE
+// #define FUZZ_MODE FUZZ_STDIN
+// #define FUZZ_MODE FUZZ_FILE
 #endif
 
 int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat);

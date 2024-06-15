@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-//#include <unistd.h>
+// #include <unistd.h>
 #include <sys/stat.h>
 
 #include "common.h"
@@ -240,15 +240,15 @@ main (int argc, char *argv[])
 {
   unsigned seed;
   const unsigned int possible_outputformats =
-#ifdef DISABLE_DXF
-#  ifdef DISABLE_JSON
+#  ifdef DISABLE_DXF
+#    ifdef DISABLE_JSON
       1;
-#  else
+#    else
       3;
-#  endif
-#else
+#    endif
+#  else
       5;
-#endif
+#  endif
 
   if (argc <= 1 || !*argv[1])
     return usage ();
@@ -256,13 +256,13 @@ main (int argc, char *argv[])
     seed = (unsigned)strtol (getenv ("SEED"), NULL, 10) % 9999;
   else
     {
-#ifdef HAVE_GETTIMEOFDAY
+#  ifdef HAVE_GETTIMEOFDAY
       struct timeval tval;
       gettimeofday (&tval, NULL);
       seed = (unsigned)(tval.tv_sec * 1000 + tval.tv_usec) % 9999;
-#else
+#  else
       seed = (unsigned)time (NULL) % 9999;
-#endif
+#  endif
     }
   srand (seed);
   /* works only on linux
@@ -305,22 +305,22 @@ main (int argc, char *argv[])
       assert ((long)n_read == len);
 
       out = rand () % possible_outputformats;
-#ifdef STANDALONE
+#  ifdef STANDALONE
       if (getenv ("OUT"))
         out = strtol (getenv ("OUT"), NULL, 10);
       // print SEED onlyu when needed (no env vars given)
       if (!(out || getenv ("VER")))
         fprintf (stderr, "SEED=%04u ", seed);
       fprintf (stderr, "OUT=%d ", out);
-#endif
+#  endif
       if (out == 0)
         {
           ver = rand () % 20;
-#ifdef STANDALONE
+#  ifdef STANDALONE
           if (getenv ("VER"))
             ver = strtol (getenv ("VER"), NULL, 10);
           fprintf (stderr, "VER=%d ", ver);
-#endif
+#  endif
         }
       fprintf (stderr, "examples/llvmfuzz_standalone %s [%" PRIuSIZE "]\n",
                argv[i], len);

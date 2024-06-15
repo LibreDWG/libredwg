@@ -330,7 +330,7 @@ main (int argc, char *argv[])
 #ifdef HAVE_VALGRIND_VALGRIND_H
               || (RUNNING_ON_VALGRIND)
 #endif
-              )
+          )
             dwg_free (&dwg);
           continue;
         }

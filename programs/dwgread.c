@@ -78,7 +78,8 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
 #  ifndef DISABLE_DXF
 #    ifndef DISABLE_JSON
-  printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB, JSON, minJSON, GeoJSON\n");
+  printf (
+      "  -O fmt,  --format fmt     fmt: DXF, DXFB, JSON, minJSON, GeoJSON\n");
 #    else
   printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB\n");
 #    endif
@@ -198,8 +199,8 @@ main (int argc, char *argv[])
               else
 #endif
 #ifndef DISABLE_JSON
-              if (strstr (outfile, ".min.json")
-                       || strstr (outfile, ".MIN.JSON"))
+                  if (strstr (outfile, ".min.json")
+                      || strstr (outfile, ".MIN.JSON"))
                 {
                   fmt = strdup ("json");
                   opts |= DWG_OPTS_MINIMAL;

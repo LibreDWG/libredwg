@@ -675,7 +675,7 @@ set_possible(struct _dxf *dxf, const struct _unknown_field *g, const int i)
 // The i-th bit of a string. See bit_read_B()
 // 0x1: 10000000,0 >> 8 = 1
 #define BIT(b, i) (((b)[(i) / 8] & (0x80 >> (i) % 8)) >> (7 - (i) % 8))
-//#define BIT(b,i) (((b)[(i)/8] >> (8-((i)%8))) & 1)
+// #define BIT(b,i) (((b)[(i)/8] >> (8-((i)%8))) & 1)
 
 // like memmem but for bits, not bytes.
 // search for the bits of small in big. returns the bit offset in big or -1.
