@@ -941,20 +941,36 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       if (page.byte >= page.size)
         break;
 
+      if (section->name_length < 0L)
+        {
+          LOG_ERROR ("Invalid section name_length");
+          bit_chain_free (&page);
+          if (sections)
+            sections_destroy (sections); // the root
+          else
+            sections_destroy (section);
+          return NULL;
+        }
       // Section Name (wchar)
       {
         size_t sz = (size_t)section->name_length; // size in bytes really
+        size_t page_sz = page.size - page.byte;
         if (sz & 1)                               // must be even, 2 bytes
           {
-            LOG_WARN ("Invalid section name_length %" PRId64,
+            LOG_ERROR ("Invalid section name_length %" PRId64,
                       section->name_length);
             section->name_length++;
             sz++;
           }
         if (sz > MAX_SIZE_T)
           {
-            LOG_WARN ("Invalid section name_length %zu", sz);
+            LOG_ERROR ("Invalid section name_length %zu > %u", sz, MAX_SIZE_T);
             sz = MAX_SIZE_T;
+          }
+        if (sz > page_sz)
+          {
+            LOG_ERROR ("Invalid section name_length %zu > %zu", sz, page_sz);
+            sz = page_sz;
           }
         section->name
             = (DWGCHAR *)calloc (1, section->name_length > 0 ? sz + 2 : 2);
