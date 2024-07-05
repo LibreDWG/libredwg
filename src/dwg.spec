@@ -817,7 +817,6 @@ DWG_ENTITY (INSERT)
             {
               FIELD_VALUE (scale_flag) = 1;
               FIELD_BB (scale_flag, 0);
-              FIELD_RD (scale.x, 41);
               FIELD_DD (scale.y, 1.0, 42);
               FIELD_DD (scale.z, 1.0, 43);
             }

@@ -453,8 +453,9 @@
       }                                                                       \
     if (dxf >= 50 && dxf < 54)                                                \
       {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_BD " [BD %d]  %gº\n", _obj->nam, dxf,     \
+        LOG_TRACE (#nam ": " FORMAT_BD " [BD %d]  %gº", _obj->nam, dxf,       \
                    rad2deg (_obj->nam));                                      \
+        LOG_RPOS                                                              \
       }                                                                       \
     else                                                                      \
       {                                                                       \
