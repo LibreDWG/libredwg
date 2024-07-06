@@ -157,7 +157,7 @@ if(CMAKE_MAJOR_VERSION GREATER 2)
 endif()
 
 if (MSVC)
-  add_compile_options(/W3)
+  add_compile_options(/W3 /utf-8)
 else()
   add_compile_options(-W -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter
       -Wno-unused-but-set-variable -Wcast-align -Wmissing-field-initializers)
