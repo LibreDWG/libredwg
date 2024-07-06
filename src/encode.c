@@ -2870,7 +2870,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               || (dwg->opts & DWG_OPTS_INDXF
                   && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) || */
                       obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
-                      || obj->fixedtype == DWG_TYPE_MATERIAL))
+                      /* || obj->fixedtype == DWG_TYPE_MATERIAL */))
 #  endif
           )
             {
@@ -2906,7 +2906,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                           && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) ||
                                */
                               obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
-                              || obj->fixedtype == DWG_TYPE_MATERIAL))
+                              /*|| obj->fixedtype == DWG_TYPE_MATERIAL */))
 #  endif
                   )
                     {
@@ -6344,19 +6344,19 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       break;
     case DWG_TYPE_REGION:
 #ifndef DEBUG_CLASSES
-      disable_3DSOLID_materials (obj);
+      // disable_3DSOLID_materials (obj);
 #endif
       error = dwg_encode_REGION (dat, obj);
       break;
     case DWG_TYPE__3DSOLID:
 #ifndef DEBUG_CLASSES
-      disable_3DSOLID_materials (obj);
+      // disable_3DSOLID_materials (obj);
 #endif
       error = dwg_encode__3DSOLID (dat, obj);
       break;
     case DWG_TYPE_BODY:
 #ifndef DEBUG_CLASSES
-      disable_3DSOLID_materials (obj);
+      // disable_3DSOLID_materials (obj);
 #endif
       error = dwg_encode_BODY (dat, obj);
       break;
@@ -6523,8 +6523,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     */
     default:
 #ifndef DEBUG_CLASSES
-      if (dwg && dwg_dynapi_entity_field (obj->name, "num_materials"))
-        disable_3DSOLID_materials (obj);
+      // if (dwg && dwg_dynapi_entity_field (obj->name, "num_materials"))
+      //  disable_3DSOLID_materials (obj);
 #endif
       if (dwg && obj->type == dwg->layout_type
           && obj->fixedtype == DWG_TYPE_LAYOUT)
