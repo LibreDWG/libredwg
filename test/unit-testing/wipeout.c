@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL class_version;
   dwg_point_3d pt0, uvec, vvec;
-  dwg_point_2d size; /*!< DXF 13/23; width, height in pixel */
+  dwg_point_2d image_size; /*!< DXF 13/23; width, height in pixel */
   BITCODE_BS display_props;
   BITCODE_B clipping;
   BITCODE_RC brightness;
@@ -26,6 +26,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (wipeout, WIPEOUT, pt0);
   CHK_ENTITY_3RD (wipeout, WIPEOUT, uvec);
   CHK_ENTITY_3RD (wipeout, WIPEOUT, vvec);
+  CHK_ENTITY_2RD (wipeout, WIPEOUT, image_size);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, display_props, BS);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, clipping, B);
   CHK_ENTITY_TYPE (wipeout, WIPEOUT, brightness, RC);

@@ -2934,7 +2934,7 @@ typedef struct _dwg_PROXY_LWPOLYLINE
 {
   struct _dwg_entity_PROXY_ENTITY *parent;
 
-  BITCODE_RL size; /* from flags to *widths */
+  BITCODE_RL data_size; /* from flags to *widths */
   BITCODE_BS flags;
   BITCODE_BD const_width;
   BITCODE_BD elevation;
@@ -4301,7 +4301,7 @@ typedef struct _dwg_entity_IMAGE
   BITCODE_3BD pt0;
   BITCODE_3BD uvec;
   BITCODE_3BD vvec;
-  BITCODE_2RD size; 	/*!< DXF 13/23; width, height in pixel */
+  BITCODE_2RD image_size; 	/*!< DXF 13/23; width, height in pixel */
   BITCODE_BS display_props;
   BITCODE_B clipping;
   BITCODE_RC brightness;
@@ -4483,7 +4483,7 @@ typedef struct _dwg_entity_WIPEOUT
   BITCODE_3BD pt0;
   BITCODE_3BD uvec;
   BITCODE_3BD vvec;
-  BITCODE_2RD size;
+  BITCODE_2RD image_size;
   BITCODE_BS display_props;
   BITCODE_B clipping;
   BITCODE_RC brightness;
@@ -4885,7 +4885,7 @@ typedef struct _dwg_object_GEOMAPIMAGE
   struct _dwg_object_object *parent;
   BITCODE_BL class_version; // 90
   BITCODE_3BD pt0; // 10
-  BITCODE_2RD size; // 13
+  BITCODE_2RD image_size; // 13
   BITCODE_BS display_props; // 70
   BITCODE_B clipping; // 280 i.e. clipping_enabled
   BITCODE_RC brightness; // 281

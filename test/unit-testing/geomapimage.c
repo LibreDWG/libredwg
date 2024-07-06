@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BL class_version;
   BITCODE_3BD pt0;
-  BITCODE_2RD size;
+  BITCODE_2RD image_size;
   BITCODE_BS display_props;
   BITCODE_B clipping;
   BITCODE_RC brightness;
@@ -39,7 +39,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, class_version, BL);
   CHK_ENTITY_3RD (_obj, GEOMAPIMAGE, pt0);
-  CHK_ENTITY_2RD (_obj, GEOMAPIMAGE, size);
+  CHK_ENTITY_2RD (_obj, GEOMAPIMAGE, image_size);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, display_props, BS);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, clipping, B);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, brightness, RC);

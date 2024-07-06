@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL class_version;
   dwg_point_3d pt0, uvec, vvec;
-  dwg_point_2d size; /*!< DXF 13/23; width, height in pixel */
+  dwg_point_2d image_size; /*!< DXF 13/23; width, height in pixel */
   BITCODE_BS display_props;
   BITCODE_B clipping;
   BITCODE_RC brightness;
@@ -26,6 +26,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (image, IMAGE, pt0);
   CHK_ENTITY_3RD (image, IMAGE, uvec); // still old api name u_vector
   CHK_ENTITY_3RD (image, IMAGE, vvec);
+  CHK_ENTITY_2RD (image, IMAGE, image_size);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, display_props, BS);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, clipping, B);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, brightness, RC);

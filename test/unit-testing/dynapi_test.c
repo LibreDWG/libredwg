@@ -13078,6 +13078,14 @@ static int test_IMAGE (const Dwg_Object *obj)
     image->fade--;
   }
   {
+    BITCODE_2RD image_size;
+    if (dwg_dynapi_entity_value (image, "IMAGE", "image_size", &image_size, NULL)
+        && !memcmp (&image_size, &image->image_size, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("IMAGE.image_size [2RD]");
+  }
+  {
     BITCODE_H imagedef;
     if (dwg_dynapi_entity_value (image, "IMAGE", "imagedef", &imagedef, NULL)
         && !memcmp (&imagedef, &image->imagedef, sizeof (BITCODE_H)))
@@ -13123,14 +13131,6 @@ static int test_IMAGE (const Dwg_Object *obj)
         pass ();
     else
         fail ("IMAGE.pt0 [3BD]");
-  }
-  {
-    BITCODE_2RD size;
-    if (dwg_dynapi_entity_value (image, "IMAGE", "size", &size, NULL)
-        && !memcmp (&size, &image->size, sizeof (BITCODE_2RD)))
-        pass ();
-    else
-        fail ("IMAGE.size [2RD]");
   }
   {
     BITCODE_3BD uvec;
@@ -26351,6 +26351,14 @@ static int test_WIPEOUT (const Dwg_Object *obj)
     wipeout->fade--;
   }
   {
+    BITCODE_2RD image_size;
+    if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "image_size", &image_size, NULL)
+        && !memcmp (&image_size, &wipeout->image_size, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("WIPEOUT.image_size [2RD]");
+  }
+  {
     BITCODE_H imagedef;
     if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "imagedef", &imagedef, NULL)
         && !memcmp (&imagedef, &wipeout->imagedef, sizeof (BITCODE_H)))
@@ -26396,14 +26404,6 @@ static int test_WIPEOUT (const Dwg_Object *obj)
         pass ();
     else
         fail ("WIPEOUT.pt0 [3BD]");
-  }
-  {
-    BITCODE_2RD size;
-    if (dwg_dynapi_entity_value (wipeout, "WIPEOUT", "size", &size, NULL)
-        && !memcmp (&size, &wipeout->size, sizeof (BITCODE_2RD)))
-        pass ();
-    else
-        fail ("WIPEOUT.size [2RD]");
   }
   {
     BITCODE_3BD uvec;
@@ -49261,6 +49261,14 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     geomapimage->image_height--;
   }
   {
+    BITCODE_2RD image_size;
+    if (dwg_dynapi_entity_value (geomapimage, "GEOMAPIMAGE", "image_size", &image_size, NULL)
+        && !memcmp (&image_size, &geomapimage->image_size, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("GEOMAPIMAGE.image_size [2RD]");
+  }
+  {
     BITCODE_BD image_visibility;
     if (dwg_dynapi_entity_value (geomapimage, "GEOMAPIMAGE", "image_visibility", &image_visibility, NULL)
         && image_visibility == geomapimage->image_visibility)
@@ -49360,14 +49368,6 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     else
       fail ("GEOMAPIMAGE.show_rotation [B] set+1 " FORMAT_B " != " FORMAT_B "", geomapimage->show_rotation, show_rotation);
     geomapimage->show_rotation--;
-  }
-  {
-    BITCODE_2RD size;
-    if (dwg_dynapi_entity_value (geomapimage, "GEOMAPIMAGE", "size", &size, NULL)
-        && !memcmp (&size, &geomapimage->size, sizeof (BITCODE_2RD)))
-        pass ();
-    else
-        fail ("GEOMAPIMAGE.size [2RD]");
   }
   {
     BITCODE_BS transparency;

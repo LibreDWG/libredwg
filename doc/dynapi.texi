@@ -2229,7 +2229,7 @@ BL,	DXF 90
 3BD,	DXF 11
 @item vvec
 3BD,	DXF 12
-@item size
+@item image_size
 2RD,	DXF 13
 @item display_props
 BS,	DXF 70
@@ -4864,7 +4864,7 @@ BL,	DXF 90
 3BD,	DXF 11
 @item vvec
 3BD,	DXF 12
-@item size
+@item image_size
 2RD,	DXF 13
 @item display_props
 BS,	DXF 70
@@ -9826,7 +9826,7 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item pt0
 3BD,	DXF 10
-@item size
+@item image_size
 2RD,	DXF 13
 @item display_props
 BS,	DXF 70
@@ -15204,7 +15204,7 @@ BD
 
 @item parent
 struct _dwg_entity_PROXY_ENTITY*
-@item size
+@item data_size
 RL
 @item flags
 BS

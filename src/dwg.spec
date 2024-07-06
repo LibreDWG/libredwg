@@ -5382,7 +5382,7 @@ DWG_ENTITY (IMAGE)
   FIELD_3DPOINT (pt0, 10);
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
-  FIELD_2RD (size, 13);
+  FIELD_2RD (image_size, 13);
   FIELD_HANDLE (imagedef, 5, 340); // hard pointer
   FIELD_BS (display_props, 70);
   FIELD_B (clipping, 280);
@@ -5826,7 +5826,7 @@ DWG_ENTITY_END
 DWG_SUBENT (PROXY_LWPOLYLINE)
 
   HANDLE_UNKNOWN_BITS;
-  FIELD_RL (size);
+  FIELD_RL (data_size, 0);
   FIELD_BS (flag, 70);
 
   if (FIELD_VALUE (flag) & 4)
@@ -7769,7 +7769,7 @@ DWG_ENTITY (WIPEOUT)
   FIELD_3DPOINT (pt0, 10);
   FIELD_3DPOINT (uvec, 11);
   FIELD_3DPOINT (vvec, 12);
-  FIELD_2RD (size, 13);
+  FIELD_2RD (image_size, 13);
   FIELD_HANDLE (imagedef, 5, 340);
   FIELD_BS (display_props, 70);
   FIELD_B (clipping, 280);
@@ -10582,7 +10582,7 @@ DWG_OBJECT (GEOMAPIMAGE)
   FIELD_3DPOINT (pt0, 10);
   //FIELD_3DPOINT (uvec, 11);
   //FIELD_3DPOINT (vvec, 12);
-  FIELD_2RD (size, 13);
+  FIELD_2RD (image_size, 13);
   FIELD_BS (display_props, 70);
   FIELD_B (clipping, 280); // i.e. clipping_enabled
   FIELD_RC (brightness, 281);
