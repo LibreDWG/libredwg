@@ -1212,7 +1212,7 @@ in_word_set (const char *str, size_t len)
 #line 312 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str426,  "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,	0,	DEBUGGING},
 #line 143 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str427,                   "WIPEOUT",                    DWG_TYPE_WIPEOUT,	1,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str427,                   "WIPEOUT",                    DWG_TYPE_WIPEOUT,	1,	STABLE},
 #line 262 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str428,               "CONTEXTDATAMANAGER",                DWG_TYPE_CONTEXTDATAMANAGER,	0,	DEBUGGING},
 #line 259 "src/objects.in"

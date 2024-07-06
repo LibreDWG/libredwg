@@ -3618,7 +3618,7 @@ dwg_supports_obj (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     {
       // WIPEOUT causes hang, TABLEGEOMETRY crash on encode
       if (dwg->opts & DWG_OPTS_IN
-          && (type == DWG_TYPE_WIPEOUT || type == DWG_TYPE_TABLEGEOMETRY))
+          && (/*type == DWG_TYPE_WIPEOUT || */type == DWG_TYPE_TABLEGEOMETRY))
         return 0;
       return ver >= R_13b1 && is_type_stable (type);
     }

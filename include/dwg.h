@@ -8600,6 +8600,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_PDFUNDERLAY *PDFUNDERLAY;
     Dwg_Entity_REPEAT *REPEAT;
     Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
+    Dwg_Entity_WIPEOUT *WIPEOUT;
     /* unstable */
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_HELIX *HELIX;
@@ -8608,7 +8609,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_POINTCLOUD *POINTCLOUD;
     Dwg_Entity_POINTCLOUDEX *POINTCLOUDEX;
-    Dwg_Entity_WIPEOUT *WIPEOUT;
     /* debugging */
     Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
     Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
@@ -10116,6 +10116,7 @@ EXPORT int dwg_setup_OLE2FRAME (Dwg_Object *obj);
 EXPORT int dwg_setup_PDFUNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_setup_REPEAT (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
+EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOOLEAN_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
@@ -10183,7 +10184,6 @@ EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDEX (Dwg_Object *obj);
-EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);

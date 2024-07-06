@@ -3265,8 +3265,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           // errors
 #  ifndef DEBUG_CLASSES
               || (dwg->opts & DWG_OPTS_IN
-                  && (obj->fixedtype == DWG_TYPE_WIPEOUT
-                      || obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
+                  && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) || */
+                      obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
                       || obj->fixedtype == DWG_TYPE_MATERIAL))
 #  endif
           )
@@ -3300,9 +3300,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
 #  ifndef DEBUG_CLASSES
                       || (dwg->opts & DWG_OPTS_IN
-                          && (obj->fixedtype == DWG_TYPE_WIPEOUT
-                              || obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
-                              || obj->fixedtype == DWG_TYPE_MATERIAL))
+                          && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) || */
+                              obj->fixedtype == DWG_TYPE_TABLEGEOMETRY ||
+                              obj->fixedtype == DWG_TYPE_MATERIAL))
 #  endif
                   )
                     {
@@ -5310,8 +5310,8 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       size_t pos = bit_position (dat);
       /* Should not be triggered. Only when undef ENCODE_UNKNOWN_AS_DUMMY */
       if (is_type_unstable (obj->fixedtype)
-          && (obj->fixedtype == DWG_TYPE_WIPEOUT
-              || obj->fixedtype == DWG_TYPE_TABLEGEOMETRY))
+          && (/*obj->fixedtype == DWG_TYPE_WIPEOUT || */
+              obj->fixedtype == DWG_TYPE_TABLEGEOMETRY))
         {
           LOG_WARN ("Skip broken %s", obj->name); // acad crashes still
           obj->type = is_entity ? DWG_TYPE_UNKNOWN_ENT : DWG_TYPE_PLACEHOLDER;
