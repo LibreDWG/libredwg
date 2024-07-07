@@ -105,9 +105,9 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
         fi
     fi
 
-    ./log "-l$b.log.new" "$v" "$b.dwg"
     log1="$b.log"
     log2="$b.log.new"
+    ./log "-l$log2" "$v" "$b.dwg"
     echo diff -bu "log1" "$log2"
     diff -bu "$log1" "$log2"
 
