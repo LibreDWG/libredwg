@@ -1725,77 +1725,43 @@ EXPORT Dwg_Section_Type
 dwg_section_type (const char *restrict name)
 {
   if (name == NULL)
-    {
-      return SECTION_UNKNOWN; // but could also be INFO or SYSTEM_MAP
-    }
+    return SECTION_UNKNOWN; // but could also be INFO or SYSTEM_MAP
   else if (strEQc (name, "AcDb:Header"))
-    {
-      return SECTION_HEADER;
-    }
+    return SECTION_HEADER;
   else if (strEQc (name, "AcDb:Classes"))
-    {
-      return SECTION_CLASSES;
-    }
+    return SECTION_CLASSES;
   else if (strEQc (name, "AcDb:SummaryInfo"))
-    {
-      return SECTION_SUMMARYINFO;
-    }
+    return SECTION_SUMMARYINFO;
   else if (strEQc (name, "AcDb:Preview"))
-    {
-      return SECTION_PREVIEW;
-    }
+    return SECTION_PREVIEW;
   else if (strEQc (name, "AcDb:VBAProject"))
-    {
-      return SECTION_VBAPROJECT;
-    }
+    return SECTION_VBAPROJECT;
   else if (strEQc (name, "AcDb:AppInfo"))
-    {
-      return SECTION_APPINFO;
-    }
+    return SECTION_APPINFO;
   else if (strEQc (name, "AcDb:FileDepList"))
-    {
-      return SECTION_FILEDEPLIST;
-    }
+    return SECTION_FILEDEPLIST;
   else if (strEQc (name, "AcDb:RevHistory"))
-    {
-      return SECTION_REVHISTORY;
-    }
+    return SECTION_REVHISTORY;
   else if (strEQc (name, "AcDb:Security"))
-    {
-      return SECTION_SECURITY;
-    }
+    return SECTION_SECURITY;
   else if (strEQc (name, "AcDb:AcDbObjects"))
-    {
-      return SECTION_OBJECTS;
-    }
+    return SECTION_OBJECTS;
   else if (strEQc (name, "AcDb:ObjFreeSpace"))
-    {
-      return SECTION_OBJFREESPACE;
-    }
+    return SECTION_OBJFREESPACE;
   else if (strEQc (name, "AcDb:Template"))
-    {
-      return SECTION_TEMPLATE;
-    }
+    return SECTION_TEMPLATE;
   else if (strEQc (name, "AcDb:Handles"))
-    {
-      return SECTION_HANDLES;
-    }
+    return SECTION_HANDLES;
   else if (strEQc (name, "AcDb:AcDsPrototype_1b"))
-    {                      // r2013+
-      return SECTION_ACDS; // 0xc or 0xd
-    }
+    // r2013+
+    return SECTION_ACDS; // 0xc or 0xd
   else if (strEQc (name, "AcDb:AuxHeader"))
-    {
-      return SECTION_AUXHEADER;
-    }
+    return SECTION_AUXHEADER;
   else if (strEQc (name, "AcDb:Signature"))
-    {
-      return SECTION_SIGNATURE;
-    }
+    return SECTION_SIGNATURE;
   else if (strEQc (name, "AcDb:AppInfoHistory"))
-    { // AC1021
-      return SECTION_APPINFOHISTORY;
-    }
+    // AC1021
+    return SECTION_APPINFOHISTORY;
   return SECTION_UNKNOWN;
 }
 
