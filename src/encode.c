@@ -73,11 +73,12 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
 static int encode_preR13_section (const Dwg_Section_Type_r11 id,
                                   Bit_Chain *restrict dat,
                                   Dwg_Data *restrict dwg);
-// static void downconvert_relative_handle (BITCODE_H handle,
-//                                          Dwg_Object *restrict obj);
+static void downconvert_relative_handle (BITCODE_H handle,
+                                         Dwg_Object *restrict obj);
 void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
 void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
                              Dwg_Object_MLINESTYLE *restrict o);
+void dwg_downgrade_MATERIAL (Dwg_Object *obj);
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
@@ -794,11 +795,12 @@ static bool env_var_checked_p;
               LOG_WARN ("Expected a CODE %d handle, got a %d", handle_code,   \
                         (hdlptr)->handleref.code);                            \
             }                                                                 \
-          /*else if (dat->version <= R_2000 && dat->from_version > R_2000     \
+          else if (dat->version <= R_2000 && dat->from_version > R_2000       \
+                   && strEQc (#nam, "ownerhandle")                            \
                    && (hdlptr)->handleref.code > 5 && handle_code == 4)       \
             {                                                                 \
               downconvert_relative_handle (hdlptr, obj);                      \
-            }*/                                                               \
+            }                                                                 \
           bit_write_H (hdl_dat, &(hdlptr)->handleref);                        \
           LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (hdlptr), dxf)  \
           LOG_HPOS                                                            \
@@ -1686,7 +1688,7 @@ fixup_NOD (Dwg_Data *restrict dwg,
       DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER)
       // else DISABLE_NODSTYLE (ASSOCNETWORK)
       else DISABLE_NODSTYLE (DETAILVIEWSTYLE)
-      else DISABLE_NODSTYLE (MATERIAL)
+      // else DISABLE_NODSTYLE (MATERIAL)
       else DISABLE_NODSTYLE (MLEADERSTYLE)
       else DISABLE_NODSTYLE (MLINESTYLE)
       else DISABLE_NODSTYLE (PERSUBENTMGR)
@@ -3320,7 +3322,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
 #  ifndef DEBUG_CLASSES
                       || (dwg->opts & DWG_OPTS_IN
-                          && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) || */
+                          && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) ||
+                               */
                               obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
                               /*|| obj->fixedtype == DWG_TYPE_MATERIAL */))
 #  endif
@@ -5722,10 +5725,16 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     case DWG_TYPE_GROUP:
       error = dwg_encode_GROUP (dat, obj);
       break;
+    case DWG_TYPE_MATERIAL:
+      if (dat->version <= R_2000 && dat->from_version >= R_2007)
+        dwg_downgrade_MATERIAL (obj);
+      error = dwg_encode_MATERIAL (dat, obj);
+      (void)dwg_encode_get_class (dwg, obj);
+      break;
     case DWG_TYPE_MLINESTYLE:
       if (dat->version >= R_2018 && dat->from_version < R_2018)
         dwg_upgrade_MLINESTYLE (dwg, obj->tio.object->tio.MLINESTYLE);
-      else if (dat->version < R_2018 && dat->from_version > +R_2018)
+      else if (dat->version < R_2018 && dat->from_version > R_2018)
         dwg_downgrade_MLINESTYLE (obj->tio.object->tio.MLINESTYLE);
       error = dwg_encode_MLINESTYLE (dat, obj);
       (void)dwg_encode_get_class (dwg, obj);
@@ -7344,14 +7353,24 @@ dwg_set_dataflags (Dwg_Object *obj)
   #undef _SET_DATAFLAGS
 }
 
-#if 0
+#if 1
 // from >2000 to 2000-r13, no relative refs,. FIXME: except prev,next links.
 // only with older objects, not class objects.
 static void
 downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
 {
-  if (obj && obj->type >= 500)
+  if (!obj)
     return;
+  /*
+  if (obj->type >= 500
+      && obj->fixedtype != DWG_TYPE_DICTIONARYWDFLT
+      && obj->fixedtype != DWG_TYPE_PLACEHOLDER
+      && obj->fixedtype != DWG_TYPE_LAYOUT
+      && obj->fixedtype != DWG_TYPE_MATERIAL
+      && obj->fixedtype != DWG_TYPE_TABLESTYLE
+      && obj->fixedtype != DWG_TYPE_DICTIONARYVAR)
+    return;
+  */
   assert (ref->handleref.code > 5);
   if (ref->absolute_ref)
     {
@@ -7779,6 +7798,108 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       oo->num_eed = idx;
       oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
     }
+}
+
+// from >2007 to 2000, no Texture_diffusemap, translucence, ...
+// APPID.ACAD: 3x 70, 0, 71, 70 (2018->2004)
+// TODO: add APPID.ACAD_MATERIAL_MAPPER: 3x 70, 4x 11 to entities
+//           APPID.ACAD_MATERIAL_MAPPER_2: 2x 07 to entities
+// TODO: APPID.ACAD: 0 "RTMaterial", 5: MATERIAL HANDLE
+void
+dwg_downgrade_MATERIAL (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_MATERIAL *_obj;
+  Dwg_Object_Object *oo;
+  Dwg_Object_APPID *appid;
+  BITCODE_H hdl;
+  BITCODE_RLL eedhdl;
+  BITCODE_BL oindex;
+  unsigned int idx;
+
+  if (!obj || obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object)
+    {
+      LOG_ERROR ("Invalid type %s (%u) for dwg_downgrade_MATERIAL",
+                 obj ? dwg_type_name (obj->fixedtype) : "", obj ? obj->fixedtype : 0);
+      return;
+    }
+  oindex = obj->index;
+  hdl = dwg_find_tablehandle_silent (dwg, "ACAD", "APPID");
+  if (hdl)
+    {
+      eedhdl = hdl->handleref.value;
+      LOG_TRACE ("Use APPID.ACAD (" FORMAT_RLLx ")\n", eedhdl);
+    }
+  else
+    {
+      appid = dwg_add_APPID (dwg, "ACAD");
+      eedhdl = dwg_obj_generic_handlevalue (appid);
+      LOG_TRACE ("Added APPID.ACAD (" FORMAT_RLLx ")\n", eedhdl);
+    }
+  // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
+  obj = &dwg->object[oindex];
+  if (obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object)
+    {
+      LOG_ERROR ("Invalid type %s (%u) for dwg_downgrade_MATERIAL",
+                 obj ? dwg_type_name (obj->fixedtype) : "", obj ? obj->fixedtype : 0);
+      return;
+    }
+  oo = obj->tio.object;
+  idx = oo->num_eed;
+  if (dwg_has_eed_appid (oo, eedhdl))
+    return;
+  LOG_TRACE ("Downgrade MATERIAL " FORMAT_RLLx ". Add ACAD EED from %d to %d values\n",
+             obj->handle.value, oo->num_eed, oo->num_eed + 6);
+  oo->num_eed += 6;
+  if (idx)
+    oo->eed
+        = (Dwg_Eed *)realloc (oo->eed, (oo->num_eed + 1) * sizeof (Dwg_Eed));
+  else
+    oo->eed = (Dwg_Eed *)calloc (6 + 1, sizeof (Dwg_Eed));
+  dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 21;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 65535; // -1
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 3;
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 1;
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (6, 1);
+  oo->eed[idx].data->code = 0;
+  // implicitly set by calloc
+  // oo->eed[idx].data->u.eed_0.string[0] = '\0';
+  // oo->eed[idx].data->u.eed_0.length = 0;
+  // oo->eed[idx].data->u.eed_0.codepage = dwg->header.codepage;
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (5, 1);
+  oo->eed[idx].data->code = 71;
+  oo->eed[idx].data->u.eed_71.rl = 72;
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 0;
+  idx++;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].data = NULL;
+  assert (oo->num_eed == idx);
 }
 
 // up or downconvert from/to 256/512 bytes
