@@ -63,6 +63,10 @@ jobs:
           intltool
         build-aux/install-libxslt
         build-aux/install-pslib
+    - uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        create-symlink: true
+        key: ${{ github.job }}-${{ matrix.CONFIGURE_ARGS }}
     - run: sh autogen.sh
     - if: contains(matrix.CONFIGURE_ARGS, '-fsanitize=address')
       name: Fix kernel mmap rnd bits for -fsanitize=address
@@ -115,8 +119,11 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: sudo apt-get -y update && sudo apt-get -y install gcc-powerpc64-linux-gnu libc6-ppc64-cross qemu-system-ppc binfmt-support qemu-user qemu-user-binfmt
+    - uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ github.job }}
     - run: sh autogen.sh
-    - run: ./configure --host=powerpc64-linux-gnu --disable-bindings --disable-python
+    - run: CC="ccache powerpc64-linux-gnu-gcc" ./configure --host=powerpc64-linux-gnu --disable-bindings --disable-python
     - run: make -j
     - run: cd /lib64 && sudo ln -s /usr/powerpc64-linux-gnu/lib/ld64.so.1
     - run: make -j check-minimal
@@ -130,8 +137,11 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: sudo apt-get -y update && sudo apt-get -y install gcc-mips-linux-gnu gcc-multilib-mips-linux-gnu
+    - uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ github.job }}
     - run: sh autogen.sh
-    - run: CFLAGS=-Os ./configure --host=mips-linux-gnu --disable-bindings --disable-python
+    - run: CC="ccache mips-linux-gnu-gcc" CFLAGS=-Os ./configure --host=mips-linux-gnu --disable-bindings --disable-python
     - run: make -j
   linux-cmake:
     runs-on: ubuntu-latest
@@ -153,7 +163,11 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: cmake -DLIBREDWG_LIBONLY=On .
+    - uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        create-symlink: true
+        key: ${{ github.job }}
+    - run: cmake -DLIBREDWG_LIBONLY=On -DCMAKE_C_COMPILER_LAUNCHER=ccache .
     - run: make -j
     - run: make -j test
     - if: failure()
@@ -180,6 +194,10 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
+    - uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        create-symlink: true
+        key: ${{ github.job }}
     - run: sh autogen.sh
     - run: ./configure --disable-bindings --disable-werror
     - run: PATH="/usr/local/opt/texinfo/bin:$PATH" make
@@ -253,7 +271,10 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: cmake -G "MinGW Makefiles" -DDISABLE_WERROR=ON .
+    - uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ github.job }}
+    - run: cmake -G "MinGW Makefiles" -DDISABLE_WERROR=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache .
     - run: mingw32-make -j VERBOSE=1 | tee make.log
     - if: failure()
       run: tar cfz msys-failure.tgz make.log src/config.h
