@@ -26,6 +26,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "encode.h"
+#include "classes.h"
 #include "dynapi.h"
 #include "free.h"
 #include "decode.h"
@@ -40,6 +41,7 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
 
 // Internal add API used while constructing conversion metadata.
+void dwg_set_handle_size (Dwg_Handle *restrict hdl);
 Dwg_Object_APPID *dwg_add_APPID (Dwg_Data *restrict dwg,
                                  const char *restrict name);
 BITCODE_RLL dwg_obj_generic_handlevalue (void *_obj);
@@ -1615,4 +1617,230 @@ fill_owned_entities (Dwg_Data *restrict dwg)
         }
     }
   return 0;
+}
+
+#if 1
+// from >2000 to 2000-r13, no relative refs,. FIXME: except prev,next links.
+// only with older objects, not class objects.
+static void
+downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
+{
+  if (!obj)
+    return;
+  /*
+  if (obj->type >= 500
+      && obj->fixedtype != DWG_TYPE_DICTIONARYWDFLT
+      && obj->fixedtype != DWG_TYPE_PLACEHOLDER
+      && obj->fixedtype != DWG_TYPE_LAYOUT
+      && obj->fixedtype != DWG_TYPE_MATERIAL
+      && obj->fixedtype != DWG_TYPE_TABLESTYLE
+      && obj->fixedtype != DWG_TYPE_DICTIONARYVAR)
+    return;
+  */
+  assert (ref->handleref.code > 5);
+  if (ref->absolute_ref)
+    {
+      ref->handleref.value = ref->absolute_ref;
+      ref->handleref.code = 4;
+      dwg_set_handle_size (&ref->handleref);
+      return;
+    }
+  else
+    {
+      assert (obj);
+      switch (ref->handleref.code)
+        {
+        case 6:
+          ref->handleref.value = obj->handle.value + 1;
+          dwg_set_handle_size (&ref->handleref);
+          break;
+        case 8:
+          ref->handleref.value = obj->handle.value - 1;
+          break;
+        case 10:
+          ref->handleref.value = obj->handle.value + ref->handleref.value;
+          break;
+        case 12:
+          ref->handleref.value = (obj->handle.value - ref->handleref.value);
+          break;
+        case 14: // eg 2007 REGION.history_id (some very high number)
+          ref->handleref.value = obj->handle.value;
+          break;
+        default:
+          return;
+        }
+      ref->handleref.code = 4;
+      dwg_set_handle_size (&ref->handleref);
+    }
+}
+#endif
+
+
+// from >2007 to 2000, no Texture_diffusemap, translucence, ...
+// APPID.ACAD: 3x 70, 0, 71, 70 (2018->2004)
+// TODO: add APPID.ACAD_MATERIAL_MAPPER: 3x 70, 4x 11 to entities
+//           APPID.ACAD_MATERIAL_MAPPER_2: 2x 07 to entities
+// TODO: APPID.ACAD: 0 "RTMaterial", 5: MATERIAL HANDLE
+void
+dwg_downgrade_MATERIAL (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_MATERIAL *_obj;
+  Dwg_Object_Object *oo;
+  Dwg_Object_APPID *appid;
+  BITCODE_H hdl;
+  BITCODE_RLL eedhdl;
+  BITCODE_BL oindex;
+  unsigned int idx;
+
+  if (!obj || obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object)
+    {
+      LOG_ERROR ("Invalid type %s (%u) for dwg_downgrade_MATERIAL",
+                 obj ? dwg_type_name (obj->fixedtype) : "",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  oindex = obj->index;
+  hdl = dwg_find_tablehandle_silent (dwg, "ACAD", "APPID");
+  if (hdl)
+    {
+      eedhdl = hdl->handleref.value;
+      LOG_TRACE ("Use APPID.ACAD (" FORMAT_RLLx ")\n", eedhdl);
+    }
+  else
+    {
+      appid = dwg_add_APPID (dwg, "ACAD");
+      eedhdl = dwg_obj_generic_handlevalue (appid);
+      LOG_TRACE ("Added APPID.ACAD (" FORMAT_RLLx ")\n", eedhdl);
+    }
+  // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
+  obj = &dwg->object[oindex];
+  if (obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object)
+    {
+      LOG_ERROR ("Invalid type %s (%u) for dwg_downgrade_MATERIAL",
+                 obj ? dwg_type_name (obj->fixedtype) : "",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  oo = obj->tio.object;
+  idx = oo->num_eed;
+  if (dwg_has_eed_appid (oo, eedhdl))
+    return;
+  LOG_TRACE ("Downgrade MATERIAL " FORMAT_RLLx
+             ". Add ACAD EED from %d to %d values\n",
+             obj->handle.value, oo->num_eed, oo->num_eed + 6);
+  oo->num_eed += 6;
+  if (idx)
+    oo->eed
+        = (Dwg_Eed *)realloc (oo->eed, (oo->num_eed + 1) * sizeof (Dwg_Eed));
+  else
+    oo->eed = (Dwg_Eed *)calloc (6 + 1, sizeof (Dwg_Eed));
+  dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 21;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 65535; // -1
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 3;
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 1;
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (6, 1);
+  oo->eed[idx].data->code = 0;
+  // implicitly set by calloc
+  // oo->eed[idx].data->u.eed_0.string[0] = '\0';
+  // oo->eed[idx].data->u.eed_0.length = 0;
+  // oo->eed[idx].data->u.eed_0.codepage = dwg->header.codepage;
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (5, 1);
+  oo->eed[idx].data->code = 71;
+  oo->eed[idx].data->u.eed_71.rl = 72;
+  idx++;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 0;
+  idx++;
+  oo->eed[idx].size = 0;
+  oo->eed[idx].raw = NULL;
+  oo->eed[idx].data = NULL;
+  assert (oo->num_eed == idx);
+}
+
+// up or downconvert from/to 256/512 bytes
+void
+dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
+                                Dwg_Object_LTYPE *restrict _obj)
+{
+  // add_LTYPE_dashes builds strings_area for DXF input sized by the source
+  // (header.version during the read): exactly 256 for a <=r2004 source, 512
+  // for a >=r2007 source. The <=r2004 -> r2007 upconvert reads old[0..255] and
+  // writes new[i*2], safe on a 256-byte buffer, and is required so a <=r2004
+  // source is not written past its 256-byte allocation for a r2007+ target
+  // (GH #1486). The r2007 -> <=r2004 downconvert instead reads old[i*2] up to
+  // index 510, which would overread a 256-byte DXF buffer, so it stays skipped
+  // for DXF input.
+  if ((dwg->opts & DWG_OPTS_INDXF)
+      && !(dwg->header.from_version <= R_2004 && dwg->header.version > R_2004))
+    return;
+  if (dwg->header.from_version <= R_2004 && dwg->header.version > R_2004)
+    {
+      // upconvert to 512
+      BITCODE_TF old = _obj->strings_area;
+      if (!old)
+        {
+          _obj->has_strings_area = 0;
+          return;
+        }
+      _obj->strings_area = (BITCODE_TF)calloc (1, 512);
+      if (!_obj->strings_area)
+        {
+          _obj->has_strings_area = 0;
+          free (old);
+          return;
+        }
+      _obj->has_strings_area = 1;
+      for (int i = 0; i < 256; i++)
+        {
+          _obj->strings_area[i * 2] = old[i];
+        }
+      free (old);
+    }
+  else if (dwg->header.from_version > R_2004 && dwg->header.version <= R_2004)
+    {
+      // downconvert to 256
+      BITCODE_TF old = _obj->strings_area;
+      if (!old)
+        _obj->has_strings_area = 0;
+      _obj->strings_area = (BITCODE_TF)calloc (1, 256);
+      if (!_obj->strings_area || !old)
+        { // all empty
+          if (old)
+            free (old);
+          if (_obj->strings_area)
+            free (_obj->strings_area);
+          _obj->strings_area = NULL;
+          return;
+        }
+      _obj->has_strings_area = 1;
+      for (int i = 0; i < 256; i++)
+        {
+          _obj->strings_area[i] = old[i * 2];
+        }
+      free (old);
+    }
 }

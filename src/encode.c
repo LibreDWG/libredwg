@@ -74,6 +74,7 @@ static int encode_preR13_section (const Dwg_Section_Type_r11 id,
                                   Dwg_Data *restrict dwg);
 // static void downconvert_relative_handle (BITCODE_H handle,
 //                                          Dwg_Object *restrict obj);
+void dwg_downgrade_MATERIAL (Dwg_Object *obj);
 
 /* the current version per spec block */
 static Dwg_Version_Type cur_ver = R_INVALID;
@@ -887,7 +888,7 @@ fixup_NOD (Dwg_Data *restrict dwg,
       DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER)
       // else DISABLE_NODSTYLE (ASSOCNETWORK)
       else DISABLE_NODSTYLE (DETAILVIEWSTYLE)
-      else DISABLE_NODSTYLE (MATERIAL)
+      // else DISABLE_NODSTYLE (MATERIAL)
       else DISABLE_NODSTYLE (MLEADERSTYLE)
       else DISABLE_NODSTYLE (MLINESTYLE)
       else DISABLE_NODSTYLE (PERSUBENTMGR)
@@ -6525,10 +6526,16 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     case DWG_TYPE_GROUP:
       error = dwg_encode_GROUP (dat, obj);
       break;
+    case DWG_TYPE_MATERIAL:
+      if (dat->version <= R_2000 && dat->from_version >= R_2007)
+        dwg_downgrade_MATERIAL (obj);
+      error = dwg_encode_MATERIAL (dat, obj);
+      (void)dwg_encode_get_class (dwg, obj);
+      break;
     case DWG_TYPE_MLINESTYLE:
       if (dat->version >= R_2018 && dat->from_version < R_2018)
         dwg_upgrade_MLINESTYLE (dwg, obj->tio.object->tio.MLINESTYLE);
-      else if (dat->version < R_2018 && dat->from_version > +R_2018)
+      else if (dat->version < R_2018 && dat->from_version > R_2018)
         dwg_downgrade_MLINESTYLE (obj->tio.object->tio.MLINESTYLE);
       error = dwg_encode_MLINESTYLE (dat, obj);
       (void)dwg_encode_get_class (dwg, obj);
@@ -7914,116 +7921,6 @@ dwg_set_dataflags (Dwg_Object *obj)
       _SET_DATAFLAGS;
     }
 #undef _SET_DATAFLAGS
-}
-
-#if 0
-// from >2000 to 2000-r13, no relative refs,. FIXME: except prev,next links.
-// only with older objects, not class objects.
-static void
-downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
-{
-  if (obj && obj->type >= 500)
-    return;
-  assert (ref->handleref.code > 5);
-  if (ref->absolute_ref)
-    {
-      ref->handleref.value = ref->absolute_ref;
-      ref->handleref.code = 4;
-      dwg_set_handle_size (&ref->handleref);
-      return;
-    }
-  else
-    {
-      assert (obj);
-      switch (ref->handleref.code)
-        {
-        case 6:
-          ref->handleref.value = obj->handle.value + 1;
-          dwg_set_handle_size (&ref->handleref);
-          break;
-        case 8:
-          ref->handleref.value = obj->handle.value - 1;
-          break;
-        case 10:
-          ref->handleref.value = obj->handle.value + ref->handleref.value;
-          break;
-        case 12:
-          ref->handleref.value = (obj->handle.value - ref->handleref.value);
-          break;
-        case 14: // eg 2007 REGION.history_id (some very high number)
-          ref->handleref.value = obj->handle.value;
-          break;
-        default:
-          return;
-        }
-      ref->handleref.code = 4;
-      dwg_set_handle_size (&ref->handleref);
-    }
-}
-#endif
-
-// up or downconvert from/to 256/512 bytes
-void
-dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
-                                Dwg_Object_LTYPE *restrict _obj)
-{
-  // add_LTYPE_dashes builds strings_area for DXF input sized by the source
-  // (header.version during the read): exactly 256 for a <=r2004 source, 512
-  // for a >=r2007 source. The <=r2004 -> r2007 upconvert reads old[0..255] and
-  // writes new[i*2], safe on a 256-byte buffer, and is required so a <=r2004
-  // source is not written past its 256-byte allocation for a r2007+ target
-  // (GH #1486). The r2007 -> <=r2004 downconvert instead reads old[i*2] up to
-  // index 510, which would overread a 256-byte DXF buffer, so it stays skipped
-  // for DXF input.
-  if ((dwg->opts & DWG_OPTS_INDXF)
-      && !(dwg->header.from_version <= R_2004 && dwg->header.version > R_2004))
-    return;
-  if (dwg->header.from_version <= R_2004 && dwg->header.version > R_2004)
-    {
-      // upconvert to 512
-      BITCODE_TF old = _obj->strings_area;
-      if (!old)
-        {
-          _obj->has_strings_area = 0;
-          return;
-        }
-      _obj->strings_area = (BITCODE_TF)calloc (1, 512);
-      if (!_obj->strings_area)
-        {
-          _obj->has_strings_area = 0;
-          free (old);
-          return;
-        }
-      _obj->has_strings_area = 1;
-      for (int i = 0; i < 256; i++)
-        {
-          _obj->strings_area[i * 2] = old[i];
-        }
-      free (old);
-    }
-  else if (dwg->header.from_version > R_2004 && dwg->header.version <= R_2004)
-    {
-      // downconvert to 256
-      BITCODE_TF old = _obj->strings_area;
-      if (!old)
-        _obj->has_strings_area = 0;
-      _obj->strings_area = (BITCODE_TF)calloc (1, 256);
-      if (!_obj->strings_area || !old)
-        { // all empty
-          if (old)
-            free (old);
-          if (_obj->strings_area)
-            free (_obj->strings_area);
-          _obj->strings_area = NULL;
-          return;
-        }
-      _obj->has_strings_area = 1;
-      for (int i = 0; i < 256; i++)
-        {
-          _obj->strings_area[i] = old[i * 2];
-        }
-      free (old);
-    }
 }
 
 #undef IS_ENCODER
