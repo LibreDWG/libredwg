@@ -251,7 +251,7 @@ then
 else
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fwrapv -fno-common -fvisibility=hidden -fno-strict-aliasing \
-     -fno-delete-null-pointer-checks])
+     -fno-delete-null-pointer-checks -Wno-alloc-size])
 fi
 dnl if test x$ax_cv_check_cflags__Wunused_but_set_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-but-set-variable"
