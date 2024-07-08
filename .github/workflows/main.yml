@@ -250,12 +250,13 @@ jobs:
     - shell: msys2 {0}
       run: make -j
     - if: failure()
-      run: make -C src dwg_api.i; tar cfz artefact-failure.tgz src/dwg_api.i src/config.h
+      shell: msys2 {0}
+      run: make -C src dwg_api.i; tar cfz mingw-failure.tgz src/dwg_api.i src/config.h
     - if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: artefact-failure.tgz
-        path: artefact-failure.tgz
+        name: mingw-failure.tgz
+        path: mingw-failure.tgz
     - shell: msys2 {0}
       run: make -j check
   mingw-cmake:
@@ -279,7 +280,7 @@ jobs:
     - if: failure()
       run: tar cfz msys-failure.tgz make.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: msys-failure.tgz
         path: msys-failure.tgz
@@ -299,7 +300,7 @@ jobs:
     - if: failure()
       run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: msvc-failure.tgz
         path: msvc-failure.tgz
