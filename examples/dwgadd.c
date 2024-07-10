@@ -60,7 +60,7 @@ static unsigned int loglevel;
 #  define FMT_TAG "%[^ !]"
 #  define FMT_TBL "\"%[a-zA-Z0-9._ -]\""
 #  define FMT_PATH "\"%[a-zA-Z0-9_. \\-]\""
-#  define FMT_ANY "\"%[^\"]"
+#  define FMT_ANY "\"%[^\"]\""
 #else
 #  define SSCANF_S sscanf
 #  define SZ
@@ -726,7 +726,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           p = next_line (p, end);
           continue;
         }
-
+      LOG_INSANE ("< \"%.*s\"...\n\n", 80, p);
       if (memBEGINc (p, "readdwg"))
         {
           if (dwg)
@@ -1120,7 +1120,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           // clang-format off
         SET_ENT (xline, XLINE)
       // clang-format on
-      else if ((i = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf\n", text,
+      else if ((i = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf\n", text SZ,
                               &pt1.x, &pt1.y, &pt1.z, &height))
                >= 5)
       {
@@ -1236,6 +1236,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (3
                == SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
       {
+        LOG_INSANE ("> point (%%lf %%lf %%lf)\n");
         LOG_TRACE ("add_POINT %s (%f %f %f)\n", hdr_s, pt1.x, pt1.y, pt1.z);
         CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.point = dwg_add_POINT (hdr, &pt1),
@@ -1925,6 +1926,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                             s1 SZ))
       {
         Dwg_Object *obj = dwg_ent_generic_to_object (ent.u.viewport, &error);
+        LOG_INSANE ("> layout viewport FMT_TBL FMT_ANY\n");
         if (version <= R_11)
           fn_error ("Invalid object LAYOUT <r13\n");
         if (ent.type != DWG_TYPE_VIEWPORT)
@@ -2046,10 +2048,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %lf\n", s1 SZ, &f1))
       {
+        LOG_INSANE ("> HEADER.FMT_NAME = %%lf\n");
         if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %d\n", s1 SZ, &i1)
             && i1 == f1)
           {
             const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (s1);
+            LOG_INSANE ("> HEADER.FMT_NAME = %%d\n");
             if (!f || f->is_string)
               {
                 log_p (DWG_LOGLEVEL_ERROR, p);
