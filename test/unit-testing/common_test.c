@@ -3,9 +3,15 @@
 #include <stddef.h>
 #include <locale.h>
 #include <assert.h>
+#include "tests_common.h"
 #include "../../src/codepages.h"
-#include "../../src/common.c"
 #include "../../programs/escape.c"
+#ifdef _WIN32
+#undef EXPORT
+#define EXPORT
+GCC31_DIAG_IGNORE(-Wattributes)
+#endif
+#include "../../src/common.c"
 
 extern unsigned int loglevel;
 
@@ -49,6 +55,7 @@ static void
 common_versions_tests (void)
 {
   uint8_t prev_version = 0;
+#ifndef _WIN32
   assert (R_AFTER + 1 == ARRAY_SIZE (dwg_versions));
   assert (strEQc (dwg_versions[R_2018].type, "r2018"));
   assert (strEQc (dwg_versions[R_2007].type, "r2007"));
@@ -73,6 +80,7 @@ common_versions_tests (void)
     }
   if (!failed)
     ok ("dwg_versions ordered");
+#endif // _WIN32
 
   if (!dwg_version_struct (R_AFTER))
     ok ("!dwg_version_struct (R_AFTER)");
