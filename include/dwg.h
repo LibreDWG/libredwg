@@ -11769,9 +11769,15 @@ dwg_dup_handleref (Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict ref);
 EXPORT Dwg_Object_Ref *
 dwg_add_handleref_free (const BITCODE_RC code, const BITCODE_HV absref);
 
+#ifdef COMMON_TEST_C // test quirks
+const char *dwg_version_type (const Dwg_Version_Type version);
+Dwg_Version_Type dwg_version_as (const char *version);
+Dwg_Version_Type dwg_version_hdr_type (const char *hdr);
+#else
 EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT Dwg_Version_Type dwg_version_as (const char *version);
-EXPORT Dwg_Version_Type dwg_version_hdr_type (const char* hdr);
+EXPORT Dwg_Version_Type dwg_version_hdr_type (const char *hdr);
+#endif
 EXPORT int dwg_supports_eed (const Dwg_Data *dwg);
 /* to read and write */
 EXPORT int dwg_supports_obj (const Dwg_Data *restrict dwg,
