@@ -2984,7 +2984,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
   FIELD_B (acis_empty_bit, 0); /* ?? */                                       \
   if (FIELD_VALUE (version) > 1)                                              \
     {                                                                         \
-      SINCE (R_2007a)                                                          \
+      SINCE (R_2007a)                                                         \
       {                                                                       \
         FIELD_BL (num_materials, 0);                                          \
         REPEAT (num_materials, materials, Dwg_3DSOLID_material)               \

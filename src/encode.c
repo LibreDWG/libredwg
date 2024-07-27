@@ -3300,9 +3300,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
 #  ifndef DEBUG_CLASSES
                       || (dwg->opts & DWG_OPTS_IN
-                          && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) || */
-                              obj->fixedtype == DWG_TYPE_TABLEGEOMETRY ||
-                              obj->fixedtype == DWG_TYPE_MATERIAL))
+                          && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) ||
+                               */
+                              obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
+                              || obj->fixedtype == DWG_TYPE_MATERIAL))
 #  endif
                   )
                     {
@@ -4883,6 +4884,22 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   return error;
 }
 
+static void
+disable_3DSOLID_materials (Dwg_Object *obj)
+{
+  BITCODE_BL num_materials = 0;
+  // or some child of it
+  Dwg_Entity_BODY *_obj = obj->tio.entity->tio.BODY;
+  if (dwg_dynapi_entity_value (_obj, obj->name, "num_materials",
+                               &num_materials, NULL)
+      && num_materials)
+    {
+      num_materials = 0;
+      dwg_dynapi_entity_set_value (_obj, obj->name, "num_materials",
+                                   &num_materials, false);
+    }
+}
+
 /*
 static int
 encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
@@ -5538,12 +5555,21 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_SPLINE (dat, obj);
       break;
     case DWG_TYPE_REGION:
+#ifndef DEBUG_CLASSES
+      disable_3DSOLID_materials (obj);
+#endif
       error = dwg_encode_REGION (dat, obj);
       break;
     case DWG_TYPE__3DSOLID:
+#ifndef DEBUG_CLASSES
+      disable_3DSOLID_materials (obj);
+#endif
       error = dwg_encode__3DSOLID (dat, obj);
       break;
     case DWG_TYPE_BODY:
+#ifndef DEBUG_CLASSES
+      disable_3DSOLID_materials (obj);
+#endif
       error = dwg_encode_BODY (dat, obj);
       break;
     case DWG_TYPE_RAY:
@@ -5696,6 +5722,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       break;
     */
     default:
+#ifndef DEBUG_CLASSES
+      if (dwg && dwg_dynapi_entity_field (obj->name, "num_materials"))
+        disable_3DSOLID_materials (obj);
+#endif
       if (dwg && obj->type == dwg->layout_type
           && obj->fixedtype == DWG_TYPE_LAYOUT)
         {
@@ -6412,12 +6442,12 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
-  // PRE (R_13b1)
-  // {
-  //   if (dat->from_version >= R_13b1)
-  //     downgrade_preR13_header_variables (dat, dwg);
-  // }
-  // clang-format off
+// PRE (R_13b1)
+// {
+//   if (dat->from_version >= R_13b1)
+//     downgrade_preR13_header_variables (dat, dwg);
+// }
+// clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 
