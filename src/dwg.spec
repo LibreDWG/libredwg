@@ -3762,6 +3762,12 @@ DWG_TABLE (LAYER)
     FIELD_HANDLE (plotstyle, 5, 0);
   }
   SINCE (R_2007a) {
+    ENCODER {
+#ifndef DEBUG_CLASSES
+      _obj->material->absolute_ref = 0;
+      _obj->material->handleref.value = 0;
+#endif
+    }
     FIELD_HANDLE (material, 5, 0);
   }
   SINCE (R_13b1) {
@@ -3787,10 +3793,7 @@ DWG_TABLE (LAYER)
       FIELD_HANDLE (plotstyle, 5, 390);
     }
     SINCE (R_2007a) {
-      DXF { FIELD_HANDLE (material, 5, 0); } // yet unstable class
-      else {
-        FIELD_HANDLE (material, 5, 347);
-      }
+      FIELD_HANDLE (material, 5, 347);
     }
   }
   SINCE (R_2013b) {
