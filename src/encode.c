@@ -4884,6 +4884,7 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   return error;
 }
 
+#ifndef DEBUG_CLASSES
 static void
 disable_3DSOLID_materials (Dwg_Object *obj)
 {
@@ -4899,6 +4900,7 @@ disable_3DSOLID_materials (Dwg_Object *obj)
                                    &num_materials, false);
     }
 }
+#endif
 
 /*
 static int
