@@ -42,7 +42,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_H (_obj->hdls[i], BLOCKSTRETCHACTION_handles, hdl);
       CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, shrt, BS);
       CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, long1, BL);
-      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, long1, BL);
+      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, long2, BL);
     }
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_codes, BL);
   for (i = 0; i < num_codes; i++)
