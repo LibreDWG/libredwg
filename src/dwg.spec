@@ -640,11 +640,8 @@ DWG_ENTITY (BLOCK)
     }
   }
 #endif
-  SINCE (R_13b1) {
-    BLOCK_NAME (name, 2) // special pre-R13 naming rules
-    COMMON_ENTITY_HANDLE_DATA;
-  }
 #ifdef IS_DXF
+  SINCE (R_13b1)
   {
     Dwg_Object_BLOCK_HEADER *_hdr = NULL;
     Dwg_Object *hdr
@@ -652,7 +649,25 @@ DWG_ENTITY (BLOCK)
               ? _ent->ownerhandle->obj : NULL;
     if (!hdr)
       hdr = dwg_ref_object (dwg, _ent->ownerhandle);
-    if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+    if (hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
+      _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+    else if (_ent->entmode == 2) {
+      hdr = dwg_model_space_object (dwg);
+      _hdr = hdr ? hdr->tio.object->tio.BLOCK_HEADER : NULL;
+    }
+    else if (_ent->entmode == 1) {
+      hdr = dwg_paper_space_object (dwg);
+      _hdr = hdr ? hdr->tio.object->tio.BLOCK_HEADER : NULL;
+    }
+    if (_hdr && (bit_empty_T (dat, _obj->name) || bit_eq_T (dat, _obj->name, "*"))) {
+      VALUE_T (_hdr->name, 2);   // from BLOCK_HEADER
+    }
+    else {
+      BLOCK_NAME (name, 2);
+    }
+    COMMON_ENTITY_HANDLE_DATA;
+
+    if (!_hdr)
       {
         Dwg_Bitcode_3RD nullpt = { 0.0, 0.0, 0.0 };
         VALUE_BL (0, 70); // flags: anon, has_attribs, is_xref, is_overlaid, ...
@@ -660,18 +675,27 @@ DWG_ENTITY (BLOCK)
       }
     else
       {
-        _hdr = hdr->tio.object->tio.BLOCK_HEADER;
         VALUE_BL (_hdr->flag & 0x3f, 70);
         VALUE_3BD (_hdr->base_pt, 10);
       }
-    SINCE (R_13)
-      BLOCK_NAME (name, 3); // for entget() from BLOCK_HEADER
+    SINCE (R_13) {
+      if (_hdr && (bit_empty_T (dat, _obj->name) || bit_eq_T (dat, _obj->name, "*"))) {
+        VALUE_T (_hdr->name, 3);   // from BLOCK_HEADER
+      } else {
+        BLOCK_NAME (name, 3); // for entget() from BLOCK_HEADER
+      }
+    }
     if (_hdr) {
       VALUE_T (_hdr->xref_pname, 1);   // from BLOCK_HEADER
       VALUE_T0 (_hdr->description, 4); // from BLOCK_HEADER
     } else {
       VALUE_TFF ("", 1);
     }
+  }
+#else
+  SINCE (R_13b1) {
+    BLOCK_NAME (name, 2) // special pre-R13 naming rules
+    COMMON_ENTITY_HANDLE_DATA;
   }
 #endif
 

@@ -1622,14 +1622,22 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 static void
 dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 {
+  static int gensym = 0;
   if (!name)
     {
-      fprintf (dat->fh, "%3i\r\n\r\n", dxf);
+      fprintf (dat->fh, "%3i\r\n*U%i\r\n", dxf, gensym++);
       return;
     }
   if (IS_FROM_TU (dat)) // r2007+ unicode names
     {
       name = bit_convert_TU ((BITCODE_TU)name);
+    }
+  if (!name || !*name)
+    {
+      fprintf (dat->fh, "%3i\r\n*U%i\r\n", dxf, gensym++);
+      if (IS_FROM_TU (dat))
+        free (name);
+      return;
     }
   if (dat->version == dat->from_version) // no conversion
     {
@@ -1648,7 +1656,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       else
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
     }
-  else if (dat->version >= R_13b1 && dat->from_version < R_13b1) // to newer
+  else if (dat->version >= R_13b1) // to newer
     {
       if (strlen (name) < 10)
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
