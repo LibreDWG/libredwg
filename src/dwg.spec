@@ -5989,12 +5989,14 @@ DWG_ENTITY (PROXY_ENTITY)
   }
 #endif
   DXF {
-    VALUE_RS (0, 360);
+    BITCODE_RS v = 0;
+    VALUE_RS (v, 360);
   }
   HANDLE_VECTOR (objids, num_objids, ANYCODE, 340); // code 3 or 4
   SINCE (R_2000b) { // only sometimes
     DXF {
-      VALUE_RS (0, 94);
+      BITCODE_RS v = 0;
+      VALUE_RS (v, 94);
     }
   }
 
@@ -6122,7 +6124,8 @@ DWG_OBJECT (PROXY_OBJECT)
   HANDLE_VECTOR (objids, num_objids, ANYCODE, 340); // code 3 or 4
   SINCE (R_2000b) { // only sometimes
     DXF {
-      VALUE_RS (0, 94);
+      BITCODE_RS v = 0;
+      VALUE_RS (v, 94);
     }
   }
 
