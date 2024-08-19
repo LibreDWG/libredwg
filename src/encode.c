@@ -1226,7 +1226,8 @@ static int dwg_encode_xdata (Bit_Chain *restrict dat,
                              Dwg_Object_XRECORD *restrict obj, unsigned size);
 static BITCODE_RLL add_LibreDWG_APPID (Dwg_Data *dwg);
 static BITCODE_BL add_DUMMY_eed (Dwg_Object *obj);
-static void fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
+static void fixup_NOD (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                       Dwg_Object *restrict obj);
 static void downconvert_MLEADERSTYLE (Dwg_Object *restrict obj);
 static void downconvert_DIMSTYLE (Bit_Chain *restrict dat,
                                   Dwg_Object *restrict obj);
@@ -1648,7 +1649,8 @@ remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
 // (Unstable) AcDbVariableDictionary: CTABLESTYLE => DICTVAR str only needed
 // until we can write all object types (at least the ones from the NOD)
 static void
-fixup_NOD (Dwg_Data *restrict dwg,
+fixup_NOD (Bit_Chain *restrict dat,
+           Dwg_Data *restrict dwg,
            Dwg_Object *restrict obj) // named object dict
 {
   Dwg_Object_DICTIONARY *_obj;
@@ -1660,34 +1662,25 @@ fixup_NOD (Dwg_Data *restrict dwg,
   // If the link target is disabled (unstable, unhandled or such), remove it
   // from the NOD.
 #define DISABLE_NODSTYLE(name)                                                \
-  if (!is_type_stable (DWG_TYPE_##name))                                      \
-    {                                                                         \
-      if (is_tu)                                                              \
-        {                                                                     \
-          char *u8 = bit_convert_TU ((BITCODE_TU)_obj->texts[i]);             \
-          if (u8 && strEQc (u8, "ACAD_" #name))                               \
-            remove_NOD_item (_obj, i, "ACAD_" #name);                         \
-          free (u8);                                                          \
-        }                                                                     \
-      else if (_obj->texts[i] && strEQc (_obj->texts[i], "ACAD_" #name))      \
-        remove_NOD_item (_obj, i, "ACAD_" #name);                             \
-    }
+  if (!is_type_stable (DWG_TYPE_##name)                                       \
+      && bit_eq_T (dat, _obj->texts[i], "ACAD_" #name))                       \
+    remove_NOD_item (_obj, i, "ACAD_" #name);
 
 #ifndef DEBUG_CLASSES
   for (BITCODE_BL i = 0; i < _obj->numitems; i++)
     {
       DISABLE_NODSTYLE (ASSOCPERSSUBENTMANAGER)
-      // DISABLE_NODSTYLE (ASSOCNETWORK)
-      DISABLE_NODSTYLE (DETAILVIEWSTYLE)
-      DISABLE_NODSTYLE (MATERIAL)
-      DISABLE_NODSTYLE (MLEADERSTYLE)
-      DISABLE_NODSTYLE (MLINESTYLE)
-      DISABLE_NODSTYLE (PERSUBENTMGR)
-      DISABLE_NODSTYLE (PLOTSETTINGS)
-      DISABLE_NODSTYLE (PLOTSTYLENAME)
-      DISABLE_NODSTYLE (SECTIONVIEWSTYLE)
-      DISABLE_NODSTYLE (TABLESTYLE)
-      DISABLE_NODSTYLE (VISUALSTYLE)
+      // else DISABLE_NODSTYLE (ASSOCNETWORK)
+      else DISABLE_NODSTYLE (DETAILVIEWSTYLE)
+      else DISABLE_NODSTYLE (MATERIAL)
+      else DISABLE_NODSTYLE (MLEADERSTYLE)
+      else DISABLE_NODSTYLE (MLINESTYLE)
+      else DISABLE_NODSTYLE (PERSUBENTMGR)
+      else DISABLE_NODSTYLE (PLOTSETTINGS)
+      // else DISABLE_NODSTYLE (PLOTSTYLENAME)
+      else DISABLE_NODSTYLE (SECTIONVIEWSTYLE)
+      else DISABLE_NODSTYLE (TABLESTYLE)
+      else DISABLE_NODSTYLE (VISUALSTYLE)
     }
 #endif
 #undef DISABLE_NODSTYLE
@@ -3332,7 +3325,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   // what to do with links to MATERIAL/...
                   if (dwg->header.version >= R_13b1 && obj->handle.value == 0xC
                       && obj->fixedtype == DWG_TYPE_DICTIONARY)
-                    fixup_NOD (dwg, obj); // named object dict
+                    fixup_NOD (dat, dwg, obj); // named object dict
                 }
               LOG_TRACE ("Fixed %d unsupported objects\n\n", fixup);
             }
