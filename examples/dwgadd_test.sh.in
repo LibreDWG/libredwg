@@ -4,6 +4,7 @@ abs_builddir="@abs_builddir@"
 top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
 TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
+HAVE_ASAN="@HAVE_ASAN@"
 srcdir="@abs_srcdir@"
 echo srcdir: "$srcdir"
 
@@ -34,7 +35,7 @@ dwgaddtest() {
         ret=$?
     else
         #PRE=
-        #if test "$V" = "r1.4" -a -n "@HAVE_ASAN@"
+        #if test "$V" = "r1.4" -a -n $HAVE_ASAN
         #then
         #   PRE="env ASAN_OPTIONS=detect_leaks=0"
         #fi
@@ -102,8 +103,46 @@ dwgaddtest AC1015 r2000 $tmp
 
 echo "point (0 0 0)" >$tmp
 cat $tmp
-dwgaddtest AC1015 r2000 $tmp
 dwgaddtest AC1009 r11 $tmp
+dwgaddtest AC1015 r2000 $tmp
+
+echo "readdwg \"dwgadd_test.dwg\"" >$tmp
+echo "point (10 0 0)" >>$tmp
+cat $tmp
+dwgaddtest AC1015 r2000 $tmp
+
+if [ -f "$abs_builddir"/../dxf ]; then
+    cd "$abs_builddir"/.. || exit 1
+    ./dxf -o examples/dwgadd_test.dxf examples/dwgadd_test.dwg
+    rm -f -- ./dwgadd_test_examples.log
+    cd "$abs_builddir" || exit 1
+    if [ -f dwgadd_test.dxf ]; then
+        echo "readdxf \"dwgadd_test.dxf\"" >$tmp
+        echo "point (10 0 0)" >>$tmp
+        cat $tmp
+        if [ "$HAVE_ASAN" = "yes" ]
+        then
+            env ASAN_OPTIONS=detect_leaks=0 dwgaddtest AC1015 r2000 $tmp
+        else
+            dwgaddtest AC1015 r2000 $tmp
+        fi
+    fi
+fi
+
+if [ -f "$abs_builddir"/../json ]; then
+    cd "$abs_builddir"/.. || exit 1
+    cp examples/dwgadd_test.dwg .
+    ./json dwgadd_test.dwg
+    mv dwgadd_test.json examples/
+    rm -f dwgadd_test.dwg dwgadd_test.log
+    cd "$abs_builddir" || exit 1
+    if [ -f dwgadd_test.json ]; then
+        echo "readjson \"dwgadd_test.json\"" >$tmp
+        echo "point (20 0 0)" >>$tmp
+        cat $tmp
+        dwgaddtest AC1015 r2000 $tmp
+    fi
+fi
 
 # cleanup
-rm -f dwgadd_test.dwg $tmp
+rm -f -- dwgadd_test.dwg dwgadd_test.dxf dwgadd_test.json $tmp

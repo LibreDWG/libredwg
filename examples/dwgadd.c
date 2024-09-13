@@ -59,7 +59,7 @@ static unsigned int loglevel;
 #  define FMT_NAME "%[a-zA-Z0-9_]"
 #  define FMT_TAG "%[^ !]"
 #  define FMT_TBL "\"%[a-zA-Z0-9._ -]\""
-#  define FMT_PATH "\"%[a-zA-Z0-9_. \\-]\""
+#  define FMT_PATH "\"%[a-zA-Z0-9_. \\-/]\""
 #  define FMT_ANY "\"%[^\"]\""
 #else
 #  define SSCANF_S sscanf
@@ -67,7 +67,7 @@ static unsigned int loglevel;
 #  define FMT_NAME "%119[a-zA-Z0-9_]"
 #  define FMT_TAG "%119[^ !]"
 #  define FMT_TBL "\"%119[a-zA-Z0-9._ -]\""
-#  define FMT_PATH "\"%119[a-zA-Z0-9_. \\-]\""
+#  define FMT_PATH "\"%119[a-zA-Z0-9_. \\-/]\""
 #  define FMT_ANY "\"%119[^\"]\""
 #endif
 
@@ -332,6 +332,7 @@ main (int argc, char *argv[])
       if (!out_dat.fh)
         {
           LOG_ERROR ("Could not write %s", outfile)
+          free (dat.chain);
           exit (1);
         }
       out_dat.from_version = dwg.header.from_version;
@@ -607,6 +608,12 @@ fn_error (const char *msg)
   if (!hdr)                                                                   \
     fn_error ("Missing block header\n");
 
+#define ADD_INITIAL                                           \
+  mspace = dwg_model_space_object (dwg);                      \
+  hdr = mspace ? mspace->tio.object->tio.BLOCK_HEADER : NULL; \
+  orig_num = dwg->num_objects;                                \
+  initial = 0
+
 static int
 dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
 {
@@ -729,21 +736,22 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       LOG_INSANE ("< \"%.*s\"...\n\n", 80, p);
       if (memBEGINc (p, "readdwg"))
         {
-          if (dwg)
+          if (!initial || dwg->num_objects)
             {
-              LOG_ERROR ("readdwg seen, but DWG already exists");
+              LOG_ERROR ("readdwg seen, but DWG already initialized");
               exit (1);
             }
           if (1 == SSCANF_S (p, "readdwg " FMT_PATH, text SZ))
             {
               LOG_INFO ("readdwg %s\n", text)
-              if ((error = dwg_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
+              if ((error = dwg_read_file (text, *dwgp)) >= DWG_ERR_CRITICAL)
                 {
                   LOG_ERROR ("Invalid readdwg \"%s\" => error 0x%x", text,
                              error);
                   exit (1);
                 }
               dwg = *dwgp;
+              ADD_INITIAL;
               p = next_line (p, end);
               continue;
             }
@@ -755,21 +763,22 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         }
       else if (memBEGINc (p, "readdxf"))
         {
-          if (dwg)
+          if (!initial || dwg->num_objects)
             {
-              LOG_ERROR ("readdxf seen, but DWG already exists");
+              LOG_ERROR ("readdxf seen, but DWG already initialized");
               exit (1);
             }
           if (1 == SSCANF_S (p, "readdxf " FMT_PATH, text SZ))
             {
               LOG_INFO ("readdxf %s\n", text)
-              if ((error = dxf_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
+              if ((error = dxf_read_file (text, *dwgp)) >= DWG_ERR_CRITICAL)
                 {
                   LOG_ERROR ("Invalid readdxf \"%s\" => error 0x%x", text,
                              error);
                   exit (1);
                 }
               dwg = *dwgp;
+              ADD_INITIAL;
               p = next_line (p, end);
               continue;
             }
@@ -781,9 +790,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         }
       else if (memBEGINc (p, "readjson"))
         {
-          if (dwg)
+          if (!initial || dwg->num_objects)
             {
-              LOG_ERROR ("readjson seen, but DWG already exists");
+              LOG_ERROR ("readjson seen, but DWG already initialized");
               exit (1);
             }
           if (1 == SSCANF_S (p, "readjson " FMT_PATH, text SZ))
@@ -795,14 +804,17 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                 dat_read_file (&in_dat, in_dat.fh, text);
               if (!in_dat.fh
                   || (error = dwg_read_json (&in_dat, *dwgp))
-                         > DWG_ERR_CRITICAL)
+                         >= DWG_ERR_CRITICAL)
                 {
                   LOG_ERROR ("Invalid readjson \"%s\" => error 0x%x", text,
                              error);
+                  free (in_dat.chain);
                   exit (1);
                 }
               fclose (in_dat.fh);
+              free (in_dat.chain);
               dwg = *dwgp;
+              ADD_INITIAL;
               p = next_line (p, end);
               continue;
             }
@@ -814,7 +826,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         }
       else if (memBEGINc (p, "imperial"))
         {
-          if (!initial)
+          if (!initial || dwg->num_objects)
             {
               LOG_ERROR ("`imperial' directive out of header section");
               exit (1);
@@ -829,7 +841,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           double f_ver;
           char s_ver[16];
 
-          if (!initial)
+          if (!initial || dwg->num_objects)
             {
               LOG_ERROR ("`version' directive out of header section");
               exit (1);
@@ -865,11 +877,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           else
             dwg_add_Document (dwg, imperial);
           *dwgp = dwg;
-
-          mspace = dwg_model_space_object (dwg);
-          hdr = mspace ? mspace->tio.object->tio.BLOCK_HEADER : NULL;
-          orig_num = dwg->num_objects;
-          initial = 0;
+          ADD_INITIAL;
           LOG_TRACE ("==========================================\n");
         }
 
