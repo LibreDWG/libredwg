@@ -924,8 +924,7 @@
           LOG_LTYPE_SHAPE_FLAG_W (ABS_ROTATION);                              \
           LOG_LTYPE_SHAPE_FLAG_W (IS_TEXT);                                   \
           LOG_LTYPE_SHAPE_FLAG_W (IS_SHAPE);                                  \
-          LOG_FLAG_MAX (_obj->dashes[rcount1].shape_flag,                     \
-                        LTYPE_SHAPE_FLAG_IS_SHAPE);                           \
+          LOG_FLAG_MAX (_obj->dashes[rcount1].shape_flag, 5);                 \
           LOG_TRACE ("\n");                                                   \
         }                                                                     \
     }
