@@ -144,6 +144,40 @@
       LOG_RPOS                                                                \
     }
 
+#define FIELD_G_TRACE_ANGLE(nam, type, dxfgroup)                              \
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
+    {                                                                         \
+      char *s1 = strrplc (#nam, "[rcount1]", "[%d]");                         \
+      if (s1)                                                                 \
+        {                                                                     \
+          char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
+          if (s2)                                                             \
+            {                                                                 \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type            \
+                                 " %d] %gº"),                                 \
+                         rcount1, rcount2, _obj->nam, dxfgroup,               \
+                         rad2deg (_obj->nam));                                \
+              GCC46_DIAG_RESTORE                                              \
+              free (s2);                                                      \
+              free (s1);                                                      \
+            }                                                                 \
+          else                                                                \
+            {                                                                 \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type            \
+                                 " %d] %gº"),                                 \
+                         rcount1, _obj->nam, dxfgroup, rad2deg (_obj->nam));  \
+              GCC46_DIAG_RESTORE                                              \
+              free (s1);                                                      \
+            }                                                                 \
+        }                                                                     \
+      else                                                                    \
+        LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d] %gº",             \
+                   (BITCODE_##type)_obj->nam, dxfgroup, rad2deg (_obj->nam)); \
+      LOG_RPOS                                                                \
+    }
+
 #define FIELD_TRACE(nam, type)                                                \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
@@ -453,9 +487,7 @@
       }                                                                       \
     if (dxf >= 50 && dxf < 54)                                                \
       {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_BD " [BD %d]  %gº", _obj->nam, dxf,       \
-                   rad2deg (_obj->nam));                                      \
-        LOG_RPOS                                                              \
+        FIELD_G_TRACE_ANGLE (nam, BD, dxf);                                   \
       }                                                                       \
     else                                                                      \
       {                                                                       \
