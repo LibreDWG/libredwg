@@ -244,58 +244,6 @@ bit_write_BB (Bit_Chain *dat, unsigned char value)
   bit_advance_position (dat, 2);
 }
 
-/** Read 1-3 bits
- *  Keep reading bits until a zero bit is encountered, => 0,2,6,7.
- *  0: 0, 10: 2, 110: 6, 111: 7. 100 for 4 or 101 for 5 is invalid.
- */
-BITCODE_3B
-bit_read_3B (Bit_Chain *dat)
-{
-  BITCODE_3B result = bit_read_B (dat);
-  if (result)
-    {
-      BITCODE_3B next = bit_read_B (dat);
-      if (next)
-        {
-          next = bit_read_B (dat);
-          return next ? 7 : 6;
-        }
-      else
-        {
-          return 2;
-        }
-    }
-  else
-    {
-      return 0;
-    }
-}
-
-/** Write 1-3 bits
- */
-void
-bit_write_3B (Bit_Chain *dat, unsigned char value)
-{
-  if (value > 7)
-    {
-      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Invalid bit_write_3B value %u > 7", value)
-      bit_write_B (dat, 0);
-      return;
-    }
-  bit_write_B (dat, value & 1);
-  if (value)
-    {
-      value >>= 1;
-      bit_write_B (dat, value & 1);
-      if (value)
-        {
-          value >>= 1;
-          bit_write_B (dat, value & 1);
-        }
-    }
-}
-
 /** Read 4 bits.
  */
 BITCODE_4BITS
@@ -750,7 +698,7 @@ bit_write_BOT (Bit_Chain *dat, BITCODE_BS value)
 }
 
 /** Read 1 bitlonglong (compacted uint64_t) for REQUIREDVERSIONS, preview_size.
- *  ODA doc bug. ODA say 1-3 bits until the first 0 bit. See 3BLL.
+ *  ODA doc bug. ODA say 1-3 bits until the first 0 bit. See 3BLL below.
  *  The first 3 bits indicate the length len (see paragraph 2.1). Then
  *  len bytes follow, which represent the number (the least significant
  *  byte is first).
@@ -771,33 +719,14 @@ bit_read_BLL (Bit_Chain *dat)
       return bit_read_RL (dat);
     default:
       CHK_OVERFLOW (__FUNCTION__, 0)
-      for (i = 0; i < len; i++)
+      for (i = 0; i < 8; i++)
         {
           result <<= 8;
-          result |= bit_read_RC (dat);
+          if (i < len)
+            result |= bit_read_RC (dat);
         }
-      return result;
+      return be64toh (result);
     }
-}
-
-/** Read 1 bitlonglong (compacted uint64_t) as documented (but unused).
- *  The first 1-3 bits indicate the length l (see paragraph 2.1). Then
- *  l bytes follow, which represent the number (the least significant
- *  byte is first).
- */
-BITCODE_BLL
-bit_read_3BLL (Bit_Chain *dat)
-{
-  unsigned int i, len;
-  BITCODE_BLL result = 0ULL;
-  len = bit_read_3B (dat);
-  CHK_OVERFLOW (__FUNCTION__, 0)
-  for (i = 0; i < len; i++)
-    {
-      result <<= 8;
-      result |= bit_read_RC (dat);
-    }
-  return result;
 }
 
 /** Write 1 bitlonglong (compacted data).
@@ -821,10 +750,94 @@ bit_write_BLL (Bit_Chain *dat, BITCODE_BLL value)
   bit_write_B (dat, len & 1);
   for (i = 0; i < len; i++)
     {
+      // least significant byte first
       bit_write_RC (dat, value & 0xFF);
       value >>= 8;
     }
 }
+
+#if 0
+/** Read 1-3 bits. As falsely documented in ODA for BLL, but unused.
+ *  Keep reading bits until a zero bit is encountered, => 0,2,6,7.
+ *  0: 0, 10: 2, 110: 6, 111: 7. 100 for 4 or 101 for 5 is invalid.
+ */
+BITCODE_3B
+bit_read_3B (Bit_Chain *dat)
+{
+  BITCODE_3B result = bit_read_B (dat);
+  if (result)
+    {
+      BITCODE_3B next = bit_read_B (dat);
+      if (next)
+        {
+          next = bit_read_B (dat);
+          return next ? 7 : 6;
+        }
+      else
+        {
+          return 2;
+        }
+    }
+  else
+    {
+      return 0;
+    }
+}
+/** Write 1-3 bits
+ */
+void
+bit_write_3B (Bit_Chain *dat, unsigned char value)
+{
+  if (value > 7)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Invalid bit_write_3B value %u > 7", value)
+      bit_write_B (dat, 0);
+      return;
+    }
+  bit_write_B (dat, value & 1);
+  if (value)
+    {
+      value >>= 1;
+      bit_write_B (dat, value & 1);
+      if (value)
+        {
+          value >>= 1;
+          bit_write_B (dat, value & 1);
+        }
+    }
+}
+/** Read 1 bitlonglong (compacted uint64_t) as documented (but unused).
+ *  The first 1-3 bits indicate the length l (see paragraph 2.1). Then
+ *  l bytes follow, which represent the number (the least significant
+ *  byte is first).
+ */
+BITCODE_BLL
+bit_read_3BLL (Bit_Chain *dat)
+{
+  unsigned int i, len;
+  BITCODE_BLL result = 0ULL;
+  len = bit_read_3B (dat);
+  CHK_OVERFLOW (__FUNCTION__, 0)
+  switch (len)
+    {
+    case 1:
+      return bit_read_RC (dat);
+    case 2:
+      return bit_read_RS (dat);
+    case 4:
+      return bit_read_RL (dat);
+    default:
+      for (i = 0; i < len; i++)
+        {
+          // least significant byte first
+          result |= bit_read_RC (dat);
+          result >>= 8;
+        }
+      return result;
+    }
+}
+
 void
 bit_write_3BLL (Bit_Chain *dat, BITCODE_BLL value)
 {
@@ -848,6 +861,7 @@ bit_write_3BLL (Bit_Chain *dat, BITCODE_BLL value)
       value >>= 8;
     }
 }
+#endif
 
 /** Read 1 bitdouble (compacted data).
  */
@@ -1614,9 +1628,7 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
   else
     {
       for (size_t i = 0; i < length; i++)
-        {
           dest[i] = bit_read_RC (dat);
-        }
     }
   return 0;
 }

@@ -102,9 +102,6 @@ void bit_write_B (Bit_Chain *dat, unsigned char value);
 BITCODE_BB bit_read_BB (Bit_Chain *dat);
 void bit_write_BB (Bit_Chain *dat, unsigned char value);
 
-BITCODE_3B bit_read_3B (Bit_Chain *dat);
-void bit_write_3B (Bit_Chain *dat, unsigned char value);
-
 BITCODE_4BITS bit_read_4BITS (Bit_Chain *dat);
 void bit_write_4BITS (Bit_Chain *dat, unsigned char value);
 
@@ -145,9 +142,14 @@ BITCODE_BS bit_read_BOT (Bit_Chain *dat);
 void bit_write_BOT (Bit_Chain *dat, BITCODE_BS value);
 
 BITCODE_BLL bit_read_BLL (Bit_Chain *dat);
-BITCODE_BLL bit_read_3BLL (Bit_Chain *dat); /*unused but as documented*/
 void bit_write_BLL (Bit_Chain *dat, BITCODE_BLL value);
+
+#if 0
+BITCODE_3B bit_read_3B (Bit_Chain *dat);
+void bit_write_3B (Bit_Chain *dat, unsigned char value);
+BITCODE_BLL bit_read_3BLL (Bit_Chain *dat); /*unused but as documented*/
 void bit_write_3BLL (Bit_Chain *dat, BITCODE_BLL value);
+#endif
 
 BITCODE_BD bit_read_BD (Bit_Chain *dat);
 void bit_write_BD (Bit_Chain *dat, BITCODE_BD value);

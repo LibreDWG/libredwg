@@ -321,7 +321,7 @@
             FIELD_BLL (preview_size, 160);
           }
 #endif
-        if ((long)_ent->preview_size >= 0 &&
+        if ((int64_t)_ent->preview_size >= 0 &&
             _ent->preview_size < (obj->size ? obj->size : dat->size))
           {
             FIELD_BINARY (preview, _ent->preview_size, 310);
@@ -329,8 +329,9 @@
 #ifndef IS_FREE
         else
           {
-            LOG_ERROR ("Invalid preview_size: " FORMAT_BLL " kB",
-                      _ent->preview_size / 1000);
+            LOG_ERROR ("Invalid preview_size: " FORMAT_BLL " > %lu",
+                       _ent->preview_size,
+                       (unsigned long)(obj->size ? obj->size : dat->size));
             error |= DWG_ERR_VALUEOUTOFBOUNDS;
           }
 #endif
