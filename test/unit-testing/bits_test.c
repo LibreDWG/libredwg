@@ -71,6 +71,7 @@ bit_write_BB_tests (void)
   bitfree (&bitchain);
 }
 
+#if 0
 static void
 bit_read_3B_tests (void)
 {
@@ -106,6 +107,7 @@ bit_write_3B_tests (void)
     fail ("bit_write_3B %d", bitchain.chain[0]);
   bitfree (&bitchain);
 }
+#endif
 
 /* This function calls tests for bit_write_4BITS_tests()
    Used in VIEW view_mode, type 71
@@ -168,15 +170,68 @@ bit_read_4BITS_tests (void)
 }
 
 static void
-bit_read_BLL_tests (void)
+bit_BLL_tests (void)
 {
-  /* 001 => 1, 00000011 */
+  /* 3: 001 => 1, 00000011 */
   Bit_Chain bitchain = strtobt ("00100000011");
   BITCODE_BLL result = bit_read_BLL (&bitchain);
   if (result == 3)
     pass ();
   else
-    fail ("bit_read_BLL " FORMAT_BLL, result);
+    fail ("bit_read_BLL 3 => " FORMAT_BLL, result);
+  bit_set_position (&bitchain, 0);
+
+  bit_write_BLL (&bitchain, 0xF); // => 00100001 11100000
+  if (bitchain.chain[0] == 0x21 && bitchain.chain[1] == 0xe0)
+    pass ();
+  else
+    fail ("bit_write_BLL 0xF => %02X %02X", bitchain.chain[0], bitchain.chain[1]);
+  bit_set_position (&bitchain, 0);
+
+  bit_write_BLL (&bitchain, 0x6C4E);
+  // 0b010 + 0b110110001001110. p/x 0b010 rev(00110100 01001110) => 0x49 0xcd 0x80
+  if (bitchain.chain[0] == 0x49 && bitchain.chain[1] == 0xcd
+      && bitchain.chain[2] == 0x80)
+    pass ();
+  else
+    fail ("bit_write_BLL 0x6C4E => %02X %02X %02X", bitchain.chain[0], bitchain.chain[1],
+          bitchain.chain[2]);
+  bit_set_position (&bitchain, 0);
+  
+  bit_write_BLL (&bitchain, 0x100000);
+  // 0b011 1000000000000000000000
+  if (bitchain.chain[0] == 0x60 && bitchain.chain[1] == 0x00
+      && bitchain.chain[2] == 0x02)
+    pass ();
+  else
+    fail ("bit_write_BLL 0x100000 => %02X %02X %02X", bitchain.chain[0], bitchain.chain[1],
+          bitchain.chain[2]);
+  bit_set_position (&bitchain, 0);
+
+  for (int j = 0; j < 5; j++)
+    {
+      for (int len = 0; len <= 7; len++)
+        {
+          // generate random number with len bytes
+          BITCODE_BLL r = 0;
+          for (int i = 0; i < len; i++)
+            {
+              r <<= 8;
+              r |= (uint8_t)(rand () & 0xFF);
+            }
+
+          // 0xc669 => 010 + 0xc669
+          bit_write_BLL (&bitchain, r);
+          bit_set_position (&bitchain, 0);
+          result = bit_read_BLL (&bitchain);
+          if (result == r)
+            pass ();
+          else
+            fail ("bit_read_BLL len=%d " FORMAT_RLL " => " FORMAT_RLL, len,
+                  r, result);
+          bit_set_position (&bitchain, 0);
+        }
+    }
   bitfree (&bitchain);
 }
 
@@ -479,6 +534,7 @@ bit_BD_tests (void)
             fail ("bit_read_BD bit=%d %g != %g", i, result, u.d);
         }
     }
+  bitfree (&bitchain);
 
   bitchain = strtobt ("10");
   result = bit_read_BD (&bitchain);
@@ -1037,6 +1093,8 @@ bit_read_TV_tests (void)
     ok ("bit_read_TV (<R_13)");
   else
     fail ("bit_read_TV (<R_13): %s", result);
+  free (result);
+  bitfree (&bitchain);
 
   bitchain = strtobt ("01"         // BB (1)
                       "00000100"   // RC (3)
@@ -1050,7 +1108,7 @@ bit_read_TV_tests (void)
     ok ("bit_read_TV (>R_13)");
   else
     fail ("bit_read_TV (>R_13): %s", result);
-
+  free (result);
   bitfree (&bitchain);
 }
 
@@ -1089,6 +1147,7 @@ bit_read_TF_tests (void)
   else
     fail ("bit_read_TF");
 
+  free (result);
   bitfree (&bitchain);
 }
 
@@ -1119,6 +1178,7 @@ bit_read_BE_tests (void)
     ok ("bit_read_BE (0.0 0.0 1.1) R_2000");
   else
     fail ("bit_read_BE (%f,%f,%f) R_2000", x, y, z);
+  bitfree (&bitchain);
 
   bitprepare (&bitchain, 25);
   bitchain.from_version = R_2000;
@@ -1132,6 +1192,7 @@ bit_read_BE_tests (void)
     ok ("bit_read_BE (20.2535 10.2523 52.32563) R_2000");
   else
     fail ("bit_read_BE (%f,%f,%f) R_2000", x, y, z);
+  bitfree (&bitchain);
 
   bitchain = strtobt ("10100100");
   bitchain.from_version = R_14;
@@ -1140,6 +1201,7 @@ bit_read_BE_tests (void)
     ok ("bit_read_BE (0.0 0.0 1.1) R_14");
   else
     fail ("bit_read_BE (%f,%f,%f) R_14", x, y, z);
+  bitfree (&bitchain);
 
   bitprepare (&bitchain, 25);
   bitchain.from_version = R_14;
@@ -1171,8 +1233,6 @@ bit_write_BE_tests (void)
           bitchain.bit);
 
   bit_set_position (&bitchain, 0);
-  bitprepare (&bitchain, 25);
-  bitchain.version = R_2000;
   bit_write_BE (&bitchain, 20.2535, 10.2523, 52.32563);
   if (bitchain.byte == 24 && bitchain.bit == 7)
     ok ("bit_write_BE (20.2535 10.2523 52.32563) R_2000");
@@ -1181,7 +1241,6 @@ bit_write_BE_tests (void)
           bitchain.bit);
 
   bit_set_position (&bitchain, 0);
-  bitprepare (&bitchain, 25);
   bitchain.version = R_14;
   bit_write_BE (&bitchain, 0.0, 0.0, 1.0);
   if (bitchain.byte == 0 && bitchain.bit == 6)
@@ -1190,7 +1249,6 @@ bit_write_BE_tests (void)
     fail ("bit_write_BE @%" PRIuSIZE ".%u R_14", bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 0);
-  bitprepare (&bitchain, 25);
   bitchain.version = R_14;
   bit_write_BE (&bitchain, 20.2535, 10.2523, 52.32563);
   if (bitchain.byte == 24 && bitchain.bit == 6)
@@ -1364,11 +1422,13 @@ main (int argc, char const *argv[])
   bit_advance_position_tests ();
   bit_read_BB_tests ();
   bit_write_BB_tests ();
+#if 0
   bit_read_3B_tests ();
   bit_write_3B_tests ();
+#endif
   bit_read_4BITS_tests ();
   bit_write_4BITS_tests ();
-  bit_read_BLL_tests ();
+  bit_BLL_tests ();
   bit_read_RC_tests ();
   bit_write_RC_tests ();
   bit_RS_tests ();

@@ -708,51 +708,78 @@ bit_read_BLL (Bit_Chain *dat)
 {
   unsigned int i, len;
   BITCODE_BLL result = 0ULL;
-  len = bit_read_BB (dat) << 1 | bit_read_B (dat);
+  len = (bit_read_BB (dat) << 1) | bit_read_B (dat);
   switch (len)
     {
     case 1:
       return bit_read_RC (dat);
     case 2:
       return bit_read_RS (dat);
+    //case 3:
+    //  return (bit_read_RC (dat) << 16) + bit_read_RS (dat);
     case 4:
       return bit_read_RL (dat);
     default:
-      CHK_OVERFLOW (__FUNCTION__, 0)
+      CHK_OVERFLOW_PLUS (len, __FUNCTION__, 0)
+      // least significant byte first
+#if 1
       for (i = 0; i < 8; i++)
         {
-          result <<= 8;
+          result <<= 8; // fill all 8 bytes for the swap
           if (i < len)
-            result |= bit_read_RC (dat);
+            result |= bit_read_RC (dat); // but read only len
         }
       return be64toh (result);
+#else
+      for (i = 0; i < len; i++)
+        result += bit_read_RC (dat) << i*8;
+      return result;
+#endif
     }
 }
 
-/** Write 1 bitlonglong (compacted data).
+/** Write 1 bitlonglong (compacted data). max 7 byte by design.
  */
 void
 bit_write_BLL (Bit_Chain *dat, BITCODE_BLL value)
 {
-  // 64bit into how many bytes?
   int i;
-  int len = 0;
-  BITCODE_BLL umax = 0xf000000000000000ULL;
-  for (i = 16; i; i--, umax >>= 8)
-    {
-      if (value & umax)
-        {
-          len = i;
-          break;
-        }
-    }
-  bit_write_BB (dat, len << 2);
+  unsigned len = 0;
+  unsigned v;
+  // 64bit into how many bytes? max 8 (count leading zeros)
+  BITCODE_BLL umax = 0xff00000000000000ULL;
+  if (value)
+    for (i = 8; i; i--, umax >>= 8)
+      {
+        if (value & umax)
+          {
+            len = (unsigned)i;
+            break;
+          }
+      }
+  // max len: 7
+  bit_write_B (dat, len & 4);
+  bit_write_B (dat, len & 2);
+  // or just bit_write_BB (dat, len >> 1);
   bit_write_B (dat, len & 1);
-  for (i = 0; i < len; i++)
+  switch (len)
     {
-      // least significant byte first
-      bit_write_RC (dat, value & 0xFF);
-      value >>= 8;
+    case 1:
+      bit_write_RC (dat, value);
+      break;
+    case 2:
+      bit_write_RS (dat, value);
+      break;
+    case 4:
+      bit_write_RL (dat, value);
+      break;
+    default:
+      for (i = 0; i < (int)len; i++)
+        {
+          // least significant byte first
+          bit_write_RC (dat, value & 0xFF);
+          value >>= 8;
+        }
     }
 }
 
