@@ -6935,7 +6935,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       return dxf_read_pair (dat);
     }
-  if (ent->preview_size > INTMAX_MAX)
+  if (ent->preview_size >= MAX_SIZE_BUF)
     {
       LOG_ERROR ("Invalid %s.preview_size", obj->name);
       dxf_free_pair (pair);

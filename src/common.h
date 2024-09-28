@@ -61,6 +61,12 @@
 // strings also 16bits
 #define MAX_SIZE_TF 0xFFF0
 #define MAX_SIZE_T 0xFFFE
+// asan: allocation-size-too-big
+#ifdef MAX_MEM
+#define MAX_SIZE_BUF MAX_MEM
+#else
+#define MAX_SIZE_BUF UINT64_C(0x7FFFFFFFFFFFFFFF)
+#endif
 
 #if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
 EXPORT int strcasecmp (const char *a, const char *b);
