@@ -6935,6 +6935,12 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       return dxf_read_pair (dat);
     }
+  if (ent->preview_size > INTMAX_MAX)
+    {
+      LOG_ERROR ("Invalid %s.preview_size", obj->name);
+      dxf_free_pair (pair);
+      return NULL;
+    }
   ent->preview
       = (BITCODE_TF)calloc (ent->preview_size ? ent->preview_size : 127, 1);
   if (!ent->preview)
