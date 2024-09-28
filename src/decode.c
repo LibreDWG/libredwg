@@ -1043,7 +1043,7 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
              size_t size)
 {
   size_t n;
-  uint32_t *dp, *sp, *dp0, *sp0;
+  uint32_t *dp, *sp, *dp0 = NULL, *sp0 = NULL;
   bool dst_unaligned = false;
   bool src_unaligned = false;
   assert (!(size % 4));
@@ -1090,7 +1090,7 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
              size_t size)
 {
   size_t n;
-  uint64_t *dp, *sp, *dp0, *sp0;
+  uint64_t *dp, *sp, *dp0 = NULL, *sp0 = NULL;
   bool dst_unaligned = false;
   bool src_unaligned = false;
   assert (!(size % 8));
