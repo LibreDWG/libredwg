@@ -71,7 +71,7 @@ AC_C_RESTRICT
 dnl Checks for libraries
 AM_ICONV
 
-AC_CHECK_LIB([ps],[PS_open_file],
+AC_CHECK_LIB([ps -lm],[PS_open_file],
   libredwg_have_libps=yes,
   libredwg_have_libps=no)
 
@@ -226,6 +226,9 @@ AC_ARG_ENABLE([release],AS_HELP_STRING([--enable-release],[
 if test x$ax_is_release = xyes; then
    if test x$have_libxml2 != xyes; then
      AC_MSG_WARN([libxml-2.0 for test/xmlsuite missing])
+   fi
+   if test x$libredwg_have_libps != xyes; then
+     AC_MSG_WARN([pslib for dwg2ps missing with release])
    fi
    AC_DEFINE([IS_RELEASE],1,[Define to 1 if this is a release,
 skipping unstable DWG features, unknown DWG versions and objects.])
