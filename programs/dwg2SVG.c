@@ -271,7 +271,8 @@ output_TEXT (Dwg_Object *obj)
           obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,
           text->height /* fontsize */, entity_color (obj->tio.entity),
           escaped ? escaped : "");
-  free (escaped);
+  if (escaped)
+    free (escaped);
 }
 
 static void

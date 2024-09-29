@@ -33,6 +33,8 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
     return NULL;
   len = strlen (src) + 10;
   d = (char *)calloc (len, 1);
+  if (!d)
+    return NULL;
   s = (unsigned char *)src;
   dest = d;
   end = dest + len;
@@ -93,6 +95,8 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
             wc = dwg_codepage_uwc (cp, cc);
             if (wc > 127 || wc < 0x20)
               {
+                if (!d)
+                  return NULL;
                 sprintf (d, "&#x%X;", (unsigned)wc); // 4 + 4
                 d += strlen (d);
               }
@@ -123,6 +127,8 @@ htmlwescape (BITCODE_TU wstr)
     len++;
   len += 16;
   d = dest = (char *)calloc (len, 1);
+  if (!d)
+    return NULL;
 
   while (*wstr)
     {
@@ -174,6 +180,8 @@ htmlwescape (BITCODE_TU wstr)
         default:
           if (*wstr >= 127 || *wstr < 20) // utf8 encodings
             {
+              if (!d)
+                return NULL;
               sprintf (d, "&#x%X;", *wstr);
               d += strlen (d);
               *d = 0;
