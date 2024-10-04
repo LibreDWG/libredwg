@@ -579,6 +579,10 @@ dxf_read_string (Bit_Chain *dat, char **string)
         {
           *string = !*string ? (char *)malloc (size)
                              : (char *)realloc (*string, size);
+          if (!*string) {
+            LOG_ERROR ("Out of memory");
+            return;
+          }
           strcpy (*string, (char *)&dat->chain[dat->byte]);
         }
       dat->byte += size;
@@ -597,6 +601,10 @@ dxf_read_string (Bit_Chain *dat, char **string)
         }
       *string
           = !*string ? (char *)malloc (size) : (char *)realloc (*string, size);
+      if (!*string) {
+        LOG_ERROR ("Out of memory");
+        return;
+      }
       strcpy (*string, buf);
 #  endif
     }
@@ -650,6 +658,10 @@ dxf_read_string (Bit_Chain *dat, char **string)
         *string = (char *)malloc (strlen (buf) + 1);
       else
         *string = (char *)realloc (*string, strlen (buf) + 1);
+      if (!*string) {
+        LOG_ERROR ("Out of memory");
+        return;
+      }
       strcpy (*string, buf);
     }
 }
@@ -701,6 +713,11 @@ dxf_read_pair (Bit_Chain *dat)
       dxf_read_string (dat, &pair->value.s);
       if (!pair->value.s && pair->code != 0)
         pair->value.s = (char *)calloc (1, 1);
+      if (!pair->value.s) {
+        LOG_ERROR ("Out of memory");
+        dxf_free_pair (pair);
+        return NULL;
+      }
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
       // dynapi_set_helper converts from utf-8 to unicode, not here.
       // we need to know the type of the target field, if TV or T
@@ -734,6 +751,11 @@ dxf_read_pair (Bit_Chain *dat)
       dxf_read_string (dat, &pair->value.s);
       if (!pair->value.s)
         pair->value.s = (char *)calloc (1, 1);
+      if (!pair->value.s) {
+        LOG_ERROR ("Out of memory");
+        dxf_free_pair (pair);
+        return NULL;
+      }
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
     case DWG_VT_HANDLE:
@@ -6878,7 +6900,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 }
 
 // 350 or 360
-static void
+static __nonnull_all void
 add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
                             char *restrict text)
 {
@@ -9598,9 +9620,10 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                          ARGS_REF (xdic));
               break;
             }
-          // // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
+          // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
           else if (memBEGINc (name, "DICTIONARY")
-                   && strNE (name, "DICTIONARYVAR"))
+                   && strNE (name, "DICTIONARYVAR")
+                   && *text)
             {
               add_dictionary_itemhandles (obj, pair, text);
               break;

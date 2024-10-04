@@ -22305,7 +22305,8 @@ add_obj_reactor (Dwg_Object_Object *obj, BITCODE_RLL absolute_ref)
     }
 
 /* Convert UTF-8 strings to BITCODE_T fields */
-EXPORT BITCODE_T
+EXPORT __nonnull_all
+BITCODE_T
 dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
 {
   if (IS_FROM_TU_DWG (dwg))
