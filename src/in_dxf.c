@@ -685,7 +685,8 @@ dxf_free_pair (Dxf_Pair *pair)
   pair = NULL;
 }
 
-static Dxf_Pair *ATTRIBUTE_MALLOC
+static Dxf_Pair *
+ATTRIBUTE_MALLOC
 dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = (Dxf_Pair *)xcalloc (1, sizeof (Dxf_Pair));

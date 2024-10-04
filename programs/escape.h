@@ -22,8 +22,10 @@
 #include "common.h"
 #include "codepages.h"
 
-char *ATTRIBUTE_MALLOC htmlescape (const char *restrict src,
+char *
+ATTRIBUTE_MALLOC htmlescape (const char *restrict src,
                                    const Dwg_Codepage codepage);
-char *ATTRIBUTE_MALLOC htmlwescape (BITCODE_TU wsrc);
+char *
+ATTRIBUTE_MALLOC htmlwescape (BITCODE_TU wsrc);
 
 #endif
