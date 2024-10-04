@@ -420,7 +420,7 @@ main (int argc, char *argv[])
         dwg_version = R_1_4;
     }
   if (dwg.header.from_version == R_INVALID)
-    fprintf (stderr, "Unknown DWG header.from_version");
+    fprintf (stderr, "Unknown DWG header.from_version\n");
   // FIXME: for now only r1.4 - R_2000. later remove this line.
   dat.version = dwg.header.version = dwg_version;
 
