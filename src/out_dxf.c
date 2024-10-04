@@ -69,8 +69,7 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_3DSOLID *restrict _obj);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
-                              const int opts, const int dxf,
-                              const int dxfcont);
+                              const int opts, const int dxf);
 static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                      const int dxf, const int opt);
 
@@ -90,14 +89,12 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 
 #define VALUE_TV(value, dxf)                                                  \
   {                                                                           \
-    GROUP (dxf);                                                              \
-    dxf_fixup_string (dat, (char *)value, 1, dxf, dxf);                       \
+    dxf_fixup_string (dat, (char *)value, 1, dxf);                            \
   }
 #define VALUE_TV0(value, dxf)                                                 \
   if (dxf && value && *value)                                                 \
     {                                                                         \
-      GROUP (dxf);                                                            \
-      dxf_fixup_string (dat, (char *)value, 1, dxf, dxf);                     \
+      dxf_fixup_string (dat, (char *)value, 1, dxf);                          \
     }
 // in_json writes all strings as TV, in_dxf and decode not.
 #define VALUE_TU(wstr, dxf)                                                   \
@@ -109,23 +106,15 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
     else if (dxf)                                                             \
       {                                                                       \
         char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                         \
-        GROUP (dxf);                                                          \
+        dxf_fixup_string (dat, u8, 1, dxf);                                   \
         if (u8)                                                               \
-          {                                                                   \
-            dxf_fixup_string (dat, u8, 1, dxf, dxf);                          \
-          }                                                                   \
-        else                                                                  \
-          fprintf (dat->fh, "\r\n");                                          \
-        free (u8);                                                            \
+          free (u8);                                                          \
       }                                                                       \
   }
 #define VALUE_TFF(str, dxf)                                                   \
   {                                                                           \
     if (dxf)                                                                  \
-      {                                                                       \
-        GROUP (dxf);                                                          \
-        dxf_fixup_string (dat, (char *)str, 0, dxf, dxf);                     \
-      }                                                                       \
+      dxf_fixup_string (dat, (char *)str, 0, dxf);                            \
   }
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
@@ -1240,11 +1229,12 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
 /* If opts 1:
      quote \n => ^J
      \M+xxxxx => \U+XXXX (shift-jis)
-   Splits overlong (len>255) lines into dxf 3 chunks with group 1
+   Splits overlong (len>255) lines into dxf 3 chunks ending with group dxf
+   only TFF sets opts=0, TV and TU to 1.
  */
 static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
-                  const int dxf, const int dxfcont)
+                  const int dxf)
 {
   if (str && *str)
     {
@@ -1252,52 +1242,52 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
           && (strchr (str, '\n') || strchr (str, '\r')
               || strstr (str, "\\M+1")))
         {
-          static char _buf[1024] = { 0 };
+          static char *cbuf;
+          static char _sbuf[1024] = { 0 };
           const size_t origlen = strlen (str);
           long len = (long)((2 * origlen) + 1);
-          if (len > 1024)
-            { // FIXME: maybe we need this for chunked strings
-              fprintf (dat->fh, "\r\n");
-              LOG_ERROR ("Overlarge DXF string, len=%" PRIuSIZE, origlen);
+          bool need_free = false;
+          if (len < 0)
+            {
+              LOG_ERROR ("Overlong DXF string");
               return;
             }
-          *_buf = '\0';
-          len = (long)strlen (cquote (_buf, len, str));
-          if (len > 255 && dxf == 1)
+          if (len > 1024)
             {
-              char *bufp = &_buf[0];
-              // GROUP 1 already printed
-              while (len > 0)
+              cbuf = malloc (len);
+              if (!cbuf)
                 {
-                  int rlen = len > 255 ? 255 : len;
-                  fprintf (dat->fh, "%.*s\r\n", rlen, bufp);
-                  len -= 255;
-                  bufp += 255;
-                  if (len > 0)
-                    fprintf (dat->fh, "%3d\r\n", dxfcont);
+                  LOG_ERROR ("Out of memory");
+                  return;
                 }
+              *cbuf = '\0';
+              need_free = true;
             }
           else
-            fprintf (dat->fh, "%s\r\n", _buf);
+              cbuf = &_sbuf[0];
+          {
+            len = (long)strlen (cquote (cbuf, len, str));
+            while (len > 0)
+              {
+                fprintf (dat->fh, "%3d\r\n", len < 250 ? dxf : 3);
+                fprintf (dat->fh, "%.*s\r\n", len > 250 ? 250 : (int)len, cbuf);
+                len -= 250;
+                cbuf += 250;
+              }
+          }
+          if (need_free)
+            free (cbuf);
         }
-      else
+      else // TFF
         {
           long len = (long)strlen (str);
-          if (len > 255 && dxf == 1)
+          while (len > 0)
             {
-              // GROUP 1 already printed
-              while (len > 0)
-                {
-                  int rlen = len > 255 ? 255 : len;
-                  fprintf (dat->fh, "%.*s\r\n", (int)rlen, str);
-                  len -= 255;
-                  str += 255;
-                  if (len > 255)
-                    fprintf (dat->fh, "  3\r\n");
-                }
+              fprintf (dat->fh, "%3d\r\n", len < 250 ? dxf : 3);
+              fprintf (dat->fh, "%.*s\r\n", len > 250 ? 250 : (int)len, str);
+              len -= 250;
+              str += 250;
             }
-          else
-            fprintf (dat->fh, "%s\r\n", str);
         }
     }
   else
