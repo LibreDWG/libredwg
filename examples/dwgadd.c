@@ -863,7 +863,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             }
           if (!i || version >= R_AFTER)
             {
-              fprintf (stderr, "Invalid version %.*s", 40, p);
+              fprintf (stderr, "Invalid version %.*s\n", 40, p);
               exit (1);
             }
           p = next_line (p, end);

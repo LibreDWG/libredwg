@@ -77,25 +77,25 @@ help (void)
 #define log_if_error(msg)                                                     \
   if (error)                                                                  \
     {                                                                         \
-      fprintf (stderr, "ERROR: %s", msg);                                     \
+      fprintf (stderr, "ERROR: %s\n", msg);                                   \
       exit (1);                                                               \
     }
 #define log_error(msg)                                                        \
   {                                                                           \
-    fprintf (stderr, "ERROR: %s", msg);                                       \
+    fprintf (stderr, "ERROR: %s\n", msg);                                     \
     exit (1);                                                                 \
   }
 #define dynget(obj, name, field, var)                                         \
   if (!dwg_dynapi_entity_value (obj, "" name, "" field, var, NULL))           \
     {                                                                         \
-      fprintf (stderr, "ERROR: %s.%s", name, field);                          \
+      fprintf (stderr, "ERROR: %s.%s\n", name, field);                        \
       exit (1);                                                               \
     }
 #define dynget_utf8(obj, name, field, var)                                    \
   if (!dwg_dynapi_entity_utf8text (obj, "" name, "" field, var, &isnew,       \
                                    NULL))                                     \
     {                                                                         \
-      fprintf (stderr, "ERROR: %s.%s", name, field);                          \
+      fprintf (stderr, "ERROR: %s.%s\n", name, field);                        \
       exit (1);                                                               \
     }
 
