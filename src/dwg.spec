@@ -339,23 +339,26 @@ DWG_ENTITY (ATTRIB)
   SUBCLASS (AcDbAttribute)
   DXF {
     FIELD_T (tag, 2);
-    FIELD_RC (type, 70);
-    //FIELD_BS (field_length, 73);
+    FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
+    LOG_FLAG_ATTDEF
+    FIELD_BS0 (field_length, 73);
     FIELD_BS0 (vert_alignment, 74);
     LOG_VERT_ALIGNMENT
     SINCE (R_2004a) {
-      FIELD_RC (class_version, 280);
+      FIELD_RC (is_locked_in_block, 280);
+      FIELD_RC (keep_duplicate_records, 280);
     }
   }
   SINCE (R_2010b)
     {
-      FIELD_RC (class_version, 0); // 0 = r2010
-      VALUEOUTOFBOUNDS (class_version, 10)
+      FIELD_RC (is_locked_in_block, 0);
+      VALUEOUTOFBOUNDS (is_locked_in_block, 2)
+      // FIELD_RC (keep_duplicate_records, 280);
     }
   SINCE (R_2018b)
     {
-      FIELD_RC (type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
-      if (FIELD_VALUE (type) > 1)
+      FIELD_RC (mtext_type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
+      if (FIELD_VALUE (mtext_type) > 1)
         {
           SUBCLASS (AcDbMText)
           LOG_WARN ("MTEXT fields")
@@ -571,9 +574,9 @@ DWG_ENTITY (ATTDEF)
   }
   SINCE (R_2010b)
     {
-      //int dxf = dat->version == R_2010 ? 280: 0;
-      FIELD_RC (is_locked_in_block, 0); // 0 = r2010
+      FIELD_RC (is_locked_in_block, 0);
       VALUEOUTOFBOUNDS (is_locked_in_block, 1)
+      // FIELD_RC (keep_duplicate_records, 280);
     }
   IF_FREE_OR_SINCE (R_2018)
     {

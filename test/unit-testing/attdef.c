@@ -30,6 +30,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (attdef, ATTDEF, extrusion);
   CHK_ENTITY_TYPE (attdef, ATTDEF, elevation, BD);
   CHK_ENTITY_TYPE (attdef, ATTDEF, dataflags, RC);
+  CHK_ENTITY_TYPE_W_OLD (attdef, ATTDEF, flags, RC);
   CHK_ENTITY_TYPE_W_OLD (attdef, ATTDEF, height, RD);
   CHK_ENTITY_TYPE_W_OLD (attdef, ATTDEF, thickness, RD);
   CHK_ENTITY_TYPE_W_OLD (attdef, ATTDEF, rotation, RD);
@@ -47,19 +48,19 @@ api_process (dwg_object *obj)
   if (version >= R_2007)
     {
       CHK_ENTITY_TYPE (attdef, ATTDEF, is_locked_in_block, RC);
+      CHK_ENTITY_MAX (attdef, ATTDEF, is_locked_in_block, RC, 1);
       CHK_ENTITY_TYPE (attdef, ATTDEF, keep_duplicate_records, RC);
+      CHK_ENTITY_MAX (attdef, ATTDEF, keep_duplicate_records, RC, 1);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, lock_position_flag, B);
     }
   if (version >= R_2018)
     {
       CHK_ENTITY_TYPE (attdef, ATTDEF, mtext_type, RC);
+      CHK_ENTITY_MAX (attdef, ATTDEF, mtext_type, RC, 4);
       CHK_ENTITY_H (attdef, ATTDEF, mtext_style);
       CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_size, BS);
       CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_bytes, RC);
       CHK_ENTITY_H (attdef, ATTDEF, annotative_app);
       CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_short, BS);
-    }
-  if (version >= R_2007)
-    {
-      CHK_ENTITY_TYPE (attdef, ATTDEF, lock_position_flag, B);
     }
 }

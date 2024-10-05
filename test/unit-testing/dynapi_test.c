@@ -8080,21 +8080,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     attrib->annotative_short--;
   }
   {
-    BITCODE_RC class_version;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "class_version", &class_version, NULL)
-        && class_version == attrib->class_version)
-      pass ();
-    else
-      fail ("ATTRIB.class_version [RC] %u != %u", attrib->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "class_version", &class_version, 0)
-        && class_version == attrib->class_version)
-      pass ();
-    else
-      fail ("ATTRIB.class_version [RC] set+1 %u != %u", attrib->class_version, class_version);
-    attrib->class_version--;
-  }
-  {
     BITCODE_RC dataflags;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "dataflags", &dataflags, NULL)
         && dataflags == attrib->dataflags)
@@ -8216,6 +8201,36 @@ static int test_ATTRIB (const Dwg_Object *obj)
         fail ("ATTRIB.ins_pt [2DPOINT]");
   }
   {
+    BITCODE_RC is_locked_in_block;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "is_locked_in_block", &is_locked_in_block, NULL)
+        && is_locked_in_block == attrib->is_locked_in_block)
+      pass ();
+    else
+      fail ("ATTRIB.is_locked_in_block [RC] %u != %u", attrib->is_locked_in_block, is_locked_in_block);
+    is_locked_in_block++;
+    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "is_locked_in_block", &is_locked_in_block, 0)
+        && is_locked_in_block == attrib->is_locked_in_block)
+      pass ();
+    else
+      fail ("ATTRIB.is_locked_in_block [RC] set+1 %u != %u", attrib->is_locked_in_block, is_locked_in_block);
+    attrib->is_locked_in_block--;
+  }
+  {
+    BITCODE_RC keep_duplicate_records;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "keep_duplicate_records", &keep_duplicate_records, NULL)
+        && keep_duplicate_records == attrib->keep_duplicate_records)
+      pass ();
+    else
+      fail ("ATTRIB.keep_duplicate_records [RC] %u != %u", attrib->keep_duplicate_records, keep_duplicate_records);
+    keep_duplicate_records++;
+    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "keep_duplicate_records", &keep_duplicate_records, 0)
+        && keep_duplicate_records == attrib->keep_duplicate_records)
+      pass ();
+    else
+      fail ("ATTRIB.keep_duplicate_records [RC] set+1 %u != %u", attrib->keep_duplicate_records, keep_duplicate_records);
+    attrib->keep_duplicate_records--;
+  }
+  {
     BITCODE_B lock_position_flag;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "lock_position_flag", &lock_position_flag, NULL)
         && lock_position_flag == attrib->lock_position_flag)
@@ -8237,6 +8252,21 @@ static int test_ATTRIB (const Dwg_Object *obj)
         pass ();
     else
         fail ("ATTRIB.mtext_style [H]");
+  }
+  {
+    BITCODE_RC mtext_type;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext_type", &mtext_type, NULL)
+        && mtext_type == attrib->mtext_type)
+      pass ();
+    else
+      fail ("ATTRIB.mtext_type [RC] %u != %u", attrib->mtext_type, mtext_type);
+    mtext_type++;
+    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "mtext_type", &mtext_type, 0)
+        && mtext_type == attrib->mtext_type)
+      pass ();
+    else
+      fail ("ATTRIB.mtext_type [RC] set+1 %u != %u", attrib->mtext_type, mtext_type);
+    attrib->mtext_type--;
   }
   {
     BITCODE_RD oblique_angle;
@@ -8318,21 +8348,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.thickness [RD] set+1 %g != %g", attrib->thickness, thickness);
     attrib->thickness--;
-  }
-  {
-    BITCODE_RC type;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "type", &type, NULL)
-        && type == attrib->type)
-      pass ();
-    else
-      fail ("ATTRIB.type [RC] %u != %u", attrib->type, type);
-    type++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "type", &type, 0)
-        && type == attrib->type)
-      pass ();
-    else
-      fail ("ATTRIB.type [RC] set+1 %u != %u", attrib->type, type);
-    attrib->type--;
   }
   {
     BITCODE_BS vert_alignment;

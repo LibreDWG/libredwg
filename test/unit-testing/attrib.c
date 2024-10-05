@@ -8,7 +8,8 @@ api_process (dwg_object *obj)
   double elevation, thickness, rotation, height, oblique_angle, width_factor;
   BITCODE_BS generation, vert_alignment, horiz_alignment, annotative_data_size,
       annotative_short;
-  BITCODE_RC dataflags, class_version, type, annotative_data_bytes;
+  BITCODE_RC dataflags, flags, is_locked_in_block, keep_duplicate_records, mtext_type,
+      annotative_data_bytes;
   char *text_value;
   dwg_point_3d extrusion;
   dwg_point_2d ins_pt, alignment_pt;
@@ -30,6 +31,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (attrib, ATTRIB, extrusion);
   CHK_ENTITY_TYPE (attrib, ATTRIB, elevation, BD);
   CHK_ENTITY_TYPE (attrib, ATTRIB, dataflags, RC);
+  CHK_ENTITY_TYPE_W_OLD (attrib, ATTRIB, flags, RC);
   CHK_ENTITY_TYPE_W_OLD (attrib, ATTRIB, height, RD);
   CHK_ENTITY_TYPE_W_OLD (attrib, ATTRIB, thickness, RD);
   CHK_ENTITY_TYPE_W_OLD (attrib, ATTRIB, rotation, RD);
@@ -42,21 +44,22 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (attrib, ATTRIB, vert_alignment, BS);
   CHK_ENTITY_TYPE_W_OLD (attrib, ATTRIB, horiz_alignment, BS);
   CHK_ENTITY_H (attrib, ATTRIB, style);
-  if (version >= R_2010)
+  if (version >= R_2007)
     {
-      CHK_ENTITY_TYPE (attrib, ATTRIB, class_version, RC);
+      CHK_ENTITY_TYPE (attrib, ATTRIB, is_locked_in_block, RC);
+      CHK_ENTITY_MAX (attrib, ATTRIB, is_locked_in_block, RC, 1);
+      CHK_ENTITY_TYPE (attrib, ATTRIB, keep_duplicate_records, RC);
+      CHK_ENTITY_MAX (attrib, ATTRIB, keep_duplicate_records, RC, 1);
+      CHK_ENTITY_TYPE (attrib, ATTRIB, lock_position_flag, B);
     }
   if (version >= R_2018)
     {
-      CHK_ENTITY_TYPE (attrib, ATTRIB, type, RC);
+      CHK_ENTITY_TYPE (attrib, ATTRIB, mtext_type, RC);
+      CHK_ENTITY_MAX (attrib, ATTRIB, mtext_type, RC, 4);
       CHK_ENTITY_H (attrib, ATTRIB, mtext_style);
       CHK_ENTITY_TYPE (attrib, ATTRIB, annotative_data_size, BS);
       CHK_ENTITY_TYPE (attrib, ATTRIB, annotative_data_bytes, RC);
       CHK_ENTITY_H (attrib, ATTRIB, annotative_app);
       CHK_ENTITY_TYPE (attrib, ATTRIB, annotative_short, BS);
-    }
-  if (version >= R_2007)
-    {
-      CHK_ENTITY_TYPE (attrib, ATTRIB, lock_position_flag, B);
     }
 }
