@@ -3454,7 +3454,9 @@ DWG_ENTITY (LEADER)
 
 DWG_ENTITY_END
 
-/* (46) */
+/* (46)
+   See https://docs.intellicad.org/files/oda/2021_11/oda_drawings_docs/db_fcf.html
+ */
 DWG_ENTITY (TOLERANCE)
 
   SUBCLASS (AcDbFcf)   // for Feature Control Frames
@@ -11724,11 +11726,12 @@ DWG_ENTITY (JUMP)
   }
 DWG_ENTITY_END
 
+/* Stored in ACAD_POINTCLOUD_DICT dictionary */
 DWG_OBJECT (POINTCLOUDDEF)
   HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbPointCloudDef)
   FIELD_BL (class_version, 90);
-  FIELD_T (source_filename, 1);
+  FIELD_T (source_filename, 1); /* .pcg or .isd */
   FIELD_B (is_loaded, 280);
   DXF {
     UNTIL (R_2010) {
@@ -11746,11 +11749,12 @@ DWG_OBJECT (POINTCLOUDDEF)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+/* Stored in ACAD_POINTCLOUD_DICT dictionary */
 DWG_OBJECT (POINTCLOUDDEFEX)
   HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbPointCloudDefEx)
   FIELD_BL (class_version, 90);
-  FIELD_T (source_filename, 1);
+  FIELD_T (source_filename, 1); /* .pcg or .isd */
   FIELD_B (is_loaded, 280);
   FIELD_RLL (numpoints, 160);
   FIELD_3BD (extents_min, 10);

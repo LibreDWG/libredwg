@@ -1955,12 +1955,12 @@ typedef struct _dwg_entity_ELLIPSE
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_3BD center;
-  BITCODE_3BD sm_axis;
-  BITCODE_BE extrusion;
-  BITCODE_BD axis_ratio; /* i.e RadiusRatio */
-  BITCODE_BD start_angle;
-  BITCODE_BD end_angle;
+  BITCODE_3BD center;    /* DXF 10 */
+  BITCODE_3BD sm_axis;   /* DXF 11, major axis */
+  BITCODE_BE extrusion;  /* DXF 210, the normal */
+  BITCODE_BD axis_ratio; /* DXF 40, i.e RadiusRatio, minor radius / major radius */
+  BITCODE_BD start_angle;/* DXF 41, default 0 */
+  BITCODE_BD end_angle;  /* DXF 42, default 2*PI */
 } Dwg_Entity_ELLIPSE;
 
 /**
@@ -2298,6 +2298,8 @@ typedef struct _dwg_entity_LEADER
 
 /**
  TOLERANCE (46) entity
+ See https://docs.intellicad.org/files/oda/2021_11/oda_drawings_docs/db_fcf.html
+ for special {\F symbols in the text_value
  */
 typedef struct _dwg_entity_TOLERANCE
 {
