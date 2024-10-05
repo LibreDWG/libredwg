@@ -7691,36 +7691,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     attdef->annotative_short--;
   }
   {
-    BITCODE_RC attdef_class_version;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "attdef_class_version", &attdef_class_version, NULL)
-        && attdef_class_version == attdef->attdef_class_version)
-      pass ();
-    else
-      fail ("ATTDEF.attdef_class_version [RC] %u != %u", attdef->attdef_class_version, attdef_class_version);
-    attdef_class_version++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "attdef_class_version", &attdef_class_version, 0)
-        && attdef_class_version == attdef->attdef_class_version)
-      pass ();
-    else
-      fail ("ATTDEF.attdef_class_version [RC] set+1 %u != %u", attdef->attdef_class_version, attdef_class_version);
-    attdef->attdef_class_version--;
-  }
-  {
-    BITCODE_RC class_version;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "class_version", &class_version, NULL)
-        && class_version == attdef->class_version)
-      pass ();
-    else
-      fail ("ATTDEF.class_version [RC] %u != %u", attdef->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "class_version", &class_version, 0)
-        && class_version == attdef->class_version)
-      pass ();
-    else
-      fail ("ATTDEF.class_version [RC] set+1 %u != %u", attdef->class_version, class_version);
-    attdef->class_version--;
-  }
-  {
     BITCODE_RC dataflags;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "dataflags", &dataflags, NULL)
         && dataflags == attdef->dataflags)
@@ -7852,6 +7822,36 @@ static int test_ATTDEF (const Dwg_Object *obj)
         fail ("ATTDEF.ins_pt [2DPOINT]");
   }
   {
+    BITCODE_RC is_locked_in_block;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "is_locked_in_block", &is_locked_in_block, NULL)
+        && is_locked_in_block == attdef->is_locked_in_block)
+      pass ();
+    else
+      fail ("ATTDEF.is_locked_in_block [RC] %u != %u", attdef->is_locked_in_block, is_locked_in_block);
+    is_locked_in_block++;
+    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "is_locked_in_block", &is_locked_in_block, 0)
+        && is_locked_in_block == attdef->is_locked_in_block)
+      pass ();
+    else
+      fail ("ATTDEF.is_locked_in_block [RC] set+1 %u != %u", attdef->is_locked_in_block, is_locked_in_block);
+    attdef->is_locked_in_block--;
+  }
+  {
+    BITCODE_RC keep_duplicate_records;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "keep_duplicate_records", &keep_duplicate_records, NULL)
+        && keep_duplicate_records == attdef->keep_duplicate_records)
+      pass ();
+    else
+      fail ("ATTDEF.keep_duplicate_records [RC] %u != %u", attdef->keep_duplicate_records, keep_duplicate_records);
+    keep_duplicate_records++;
+    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "keep_duplicate_records", &keep_duplicate_records, 0)
+        && keep_duplicate_records == attdef->keep_duplicate_records)
+      pass ();
+    else
+      fail ("ATTDEF.keep_duplicate_records [RC] set+1 %u != %u", attdef->keep_duplicate_records, keep_duplicate_records);
+    attdef->keep_duplicate_records--;
+  }
+  {
     BITCODE_B lock_position_flag;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "lock_position_flag", &lock_position_flag, NULL)
         && lock_position_flag == attdef->lock_position_flag)
@@ -7873,6 +7873,21 @@ static int test_ATTDEF (const Dwg_Object *obj)
         pass ();
     else
         fail ("ATTDEF.mtext_style [H]");
+  }
+  {
+    BITCODE_RC mtext_type;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "mtext_type", &mtext_type, NULL)
+        && mtext_type == attdef->mtext_type)
+      pass ();
+    else
+      fail ("ATTDEF.mtext_type [RC] %u != %u", attdef->mtext_type, mtext_type);
+    mtext_type++;
+    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "mtext_type", &mtext_type, 0)
+        && mtext_type == attdef->mtext_type)
+      pass ();
+    else
+      fail ("ATTDEF.mtext_type [RC] set+1 %u != %u", attdef->mtext_type, mtext_type);
+    attdef->mtext_type--;
   }
   {
     BITCODE_RD oblique_angle;
@@ -7954,21 +7969,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.thickness [RD] set+1 %g != %g", attdef->thickness, thickness);
     attdef->thickness--;
-  }
-  {
-    BITCODE_RC type;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "type", &type, NULL)
-        && type == attdef->type)
-      pass ();
-    else
-      fail ("ATTDEF.type [RC] %u != %u", attdef->type, type);
-    type++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "type", &type, 0)
-        && type == attdef->type)
-      pass ();
-    else
-      fail ("ATTDEF.type [RC] set+1 %u != %u", attdef->type, type);
-    attdef->type--;
   }
   {
     BITCODE_BS vert_alignment;

@@ -559,26 +559,27 @@ DWG_ENTITY (ATTDEF)
   DXF {
     FIELD_T (prompt, 3);
     FIELD_T (tag, 2);
-    FIELD_RC (type, 70);
+    FIELD_RC (mtext_type, 70);
     SINCE (R_13b1) {
-      //FIELD_BS (field_length, 73);
+      FIELD_BS0 (field_length, 73);
       FIELD_BS0 (vert_alignment, 74);
     }
     SINCE (R_2004a) {
-      FIELD_RC (class_version, 280);
+      FIELD_RC (is_locked_in_block, 280);
+      FIELD_RC (keep_duplicate_records, 280);
     }
   }
   SINCE (R_2010b)
     {
       //int dxf = dat->version == R_2010 ? 280: 0;
-      FIELD_RC (class_version, 0); // 0 = r2010
-      VALUEOUTOFBOUNDS (class_version, 10)
+      FIELD_RC (is_locked_in_block, 0); // 0 = r2010
+      VALUEOUTOFBOUNDS (is_locked_in_block, 1)
     }
   IF_FREE_OR_SINCE (R_2018)
     {
-      FIELD_RC (type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
+      FIELD_RC (mtext_type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
 
-      if (FIELD_VALUE (type) > 1)
+      if (FIELD_VALUE (mtext_type) > 1)
         {
           SUBCLASS (AcDbMText)
           LOG_WARN ("MTEXT fields")
@@ -607,8 +608,8 @@ DWG_ENTITY (ATTDEF)
     }
     // specific to ATTDEF
     SINCE (R_2010b) {
-      FIELD_RC (attdef_class_version, 0);
-      VALUEOUTOFBOUNDS (attdef_class_version, 10)
+      FIELD_RC (keep_duplicate_records, 0);
+      VALUEOUTOFBOUNDS (keep_duplicate_records, 1)
     }
     FIELD_T (prompt, 0);
   }

@@ -1164,14 +1164,16 @@ BS,	DXF 72
 BS,	DXF 74
 @item dataflags
 RC
-@item class_version
+@item is_locked_in_block
 RC,	DXF 280
-@item type
+@item keep_duplicate_records
+RC,	DXF 280
+@item mtext_type
 RC,	DXF 70
 @item tag
 T,	DXF 2
 @item field_length
-BS
+BS,	DXF 73
 @item flags
 RC,	DXF 70
 @item lock_position_flag
@@ -1188,8 +1190,6 @@ RC
 H
 @item annotative_short
 BS
-@item attdef_class_version
-RC
 @item prompt
 T,	DXF 3
 

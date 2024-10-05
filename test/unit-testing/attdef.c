@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   double elevation, thickness, rotation, height, oblique_angle, width_factor;
   BITCODE_BS generation, vert_alignment, horiz_alignment, field_length,
       annotative_data_size, annotative_short;
-  BITCODE_RC dataflags, flags, type, class_version, attdef_class_version,
+  BITCODE_RC dataflags, flags, mtext_type, is_locked_in_block, keep_duplicate_records,
       annotative_data_bytes;
   BITCODE_B lock_position_flag;
   char *tag, *default_value, *prompt;
@@ -44,14 +44,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (attdef, ATTDEF, field_length, BS);
   CHK_ENTITY_TYPE (attdef, ATTDEF, flags, RC);
   CHK_ENTITY_H (attdef, ATTDEF, style);
-  if (version >= R_2010)
+  if (version >= R_2007)
     {
-      CHK_ENTITY_TYPE (attdef, ATTDEF, class_version, RC);
-      CHK_ENTITY_TYPE (attdef, ATTDEF, attdef_class_version, RC);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, is_locked_in_block, RC);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, keep_duplicate_records, RC);
     }
   if (version >= R_2018)
     {
-      CHK_ENTITY_TYPE (attdef, ATTDEF, type, RC);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, mtext_type, RC);
       CHK_ENTITY_H (attdef, ATTDEF, mtext_style);
       CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_size, BS);
       CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_bytes, RC);

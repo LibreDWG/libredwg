@@ -1398,8 +1398,9 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_BS horiz_alignment;
   BITCODE_BS vert_alignment;
   BITCODE_RC dataflags;
-  BITCODE_RC class_version; /* R2010+ */
-  BITCODE_RC type;    /* R2018+ */
+  BITCODE_RC is_locked_in_block; /* R2007+ */
+  BITCODE_RC keep_duplicate_records; /* R2007+ */
+  BITCODE_RC mtext_type;    /* R2018+ */
   BITCODE_T tag;
   BITCODE_BS field_length;
   BITCODE_RC flags; /* => HEADER.AFLAGS */
@@ -1411,7 +1412,6 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_H  annotative_app;
   BITCODE_BS annotative_short;
 
-  BITCODE_RC attdef_class_version; /* R2010+ */
   BITCODE_T prompt;
 } Dwg_Entity_ATTDEF;
 
