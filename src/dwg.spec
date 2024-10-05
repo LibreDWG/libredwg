@@ -11267,8 +11267,8 @@ DWG_ENTITY (ARCALIGNEDTEXT)
   SUBCLASS (AcDbArcAlignedText);
   DXF {
     FIELD_T (text_value, 1);
-    FIELD_T (t2, 2);
-    FIELD_T (t3, 3);
+    FIELD_T (font_name, 2);
+    FIELD_T (bigfont_name, 3);
     FIELD_T (style, 7); // as name
     FIELD_3BD (center, 10);
     FIELD_BD (radius, 40);
@@ -11281,14 +11281,14 @@ DWG_ENTITY (ARCALIGNEDTEXT)
     FIELD_BD (start_angle, 50);
     FIELD_BD (end_angle, 51);
     FIELD_BS (is_reverse, 70);
-    FIELD_BS (text_direction, 71);
+    FIELD_BS (text_direction, 71); // OutwardFromCenter=1, InwardToCenter=2
     FIELD_BS (alignment, 72);
-    FIELD_BS (text_position, 73);
-    FIELD_BS (font_19, 74);
-    FIELD_BS (bs2, 75);
+    FIELD_BS (text_position, 73); // side_flag. OnConvexSide=1, OnConcaveSide=2
+    FIELD_BS (is_bold, 74);
+    FIELD_BS (is_italic, 75);
     FIELD_BS (is_underlined, 76);
-    FIELD_BS (bs1, 77);
-    FIELD_BS (font, 78);
+    FIELD_BS (character_set, 77);
+    FIELD_BS (pitch_and_family, 78);
     FIELD_BS (is_shx, 79);
     FIELD_BL (color, 90);
     FIELD_3BD (extrusion, 210);
@@ -11299,8 +11299,8 @@ DWG_ENTITY (ARCALIGNEDTEXT)
     FIELD_D2T (xscale, 41);
     FIELD_D2T (char_spacing, 43);
     FIELD_T (style, 7);
-    FIELD_T (t2, 2);
-    FIELD_T (t3, 3);
+    FIELD_T (font_name, 2);
+    FIELD_T (bigfont_name, 3);
     FIELD_T (text_value, 1);
     FIELD_D2T (offset_from_arc, 44);
     FIELD_D2T (right_offset, 45);
@@ -11311,11 +11311,11 @@ DWG_ENTITY (ARCALIGNEDTEXT)
     FIELD_BD (end_angle, 51);
     FIELD_3BD (extrusion, 210);
     FIELD_BL (color, 90);
-    FIELD_BS (bs1, 77);
-    FIELD_BS (font, 78);
+    FIELD_BS (character_set, 77);
+    FIELD_BS (pitch_and_family, 78);
     FIELD_BS (is_shx, 79);
-    FIELD_BS (font_19, 74);
-    FIELD_BS (bs2, 75);
+    FIELD_BS (is_bold, 74);
+    FIELD_BS (is_italic, 75);
     FIELD_BS (is_underlined, 76);
     FIELD_BS (alignment, 72);
     FIELD_BS (is_reverse, 70);

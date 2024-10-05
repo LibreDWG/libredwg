@@ -1000,12 +1000,12 @@ D2T,	DXF 41
 D2T,	DXF 43
 @item style
 T,	DXF 7
-@item t2
-T,	DXF 2
-@item t3
-T,	DXF 3
 @item text_value
 T,	DXF 1
+@item font_name
+T,	DXF 2
+@item bigfont_name
+T,	DXF 3
 @item offset_from_arc
 D2T,	DXF 44
 @item right_offset
@@ -1032,15 +1032,15 @@ BS,	DXF 71
 BS,	DXF 72
 @item text_position
 BS,	DXF 73
-@item font_19
+@item is_bold
 BS,	DXF 74
-@item bs2
+@item is_italic
 BS,	DXF 75
 @item is_underlined
 BS,	DXF 76
-@item bs1
+@item character_set
 BS,	DXF 77
-@item font
+@item pitch_and_family
 BS,	DXF 78
 @item is_shx
 BS,	DXF 79

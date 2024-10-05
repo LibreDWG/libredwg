@@ -7147,9 +7147,9 @@ typedef struct _dwg_entity_ARCALIGNEDTEXT
   BITCODE_D2T xscale;		/*!< DXF 41 */
   BITCODE_D2T char_spacing;	/*!< DXF 43 */
   BITCODE_T style;		/*!< DXF 7 */
-  BITCODE_T t2;			/*!< DXF 2 */
-  BITCODE_T t3;			/*!< DXF 3 */
   BITCODE_T text_value;		/*!< DXF 1 */
+  BITCODE_T font_name;		/*!< DXF 2 */
+  BITCODE_T bigfont_name;	/*!< DXF 3 */
   BITCODE_D2T offset_from_arc;	/*!< DXF 44 */
   BITCODE_D2T right_offset;	/*!< DXF 45 */
   BITCODE_D2T left_offset;	/*!< DXF 46 */
@@ -7160,15 +7160,15 @@ typedef struct _dwg_entity_ARCALIGNEDTEXT
   BITCODE_3BD extrusion;        /*!< DXF 210 */
   BITCODE_BL color;             /*!< DXF 90 */
   BITCODE_BS is_reverse;	/*!< DXF 70 */
-  BITCODE_BS text_direction;	/*!< DXF 71 */
-  BITCODE_BS alignment;		/*!< DXF 72 */
-  BITCODE_BS text_position;	/*!< DXF 73 */
-  BITCODE_BS font_19;		/*!< DXF 74 */
-  BITCODE_BS bs2;		/*!< DXF 75 */
+  BITCODE_BS text_direction;	/*!< DXF 71, OutwardFromCenter=1, InwardToCenter=2 */
+  BITCODE_BS alignment;		/*!< DXF 72, 1-4 */
+  BITCODE_BS text_position;	/*!< DXF 73, side_flag. OnConvexSide=1, OnConcaveSide=2 */
+  BITCODE_BS is_bold;		/*!< DXF 74 */
+  BITCODE_BS is_italic;		/*!< DXF 75 */
   BITCODE_BS is_underlined;	/*!< DXF 76 */
-  BITCODE_BS bs1;		/*!< DXF 77 */
-  BITCODE_BS font;		/*!< DXF 78 */
-  BITCODE_BS is_shx;		/*!< DXF 79 */
+  BITCODE_BS character_set; 	/*!< DXF 77 */
+  BITCODE_BS pitch_and_family;	/*!< DXF 78 */
+  BITCODE_BS is_shx;		/*!< DXF 79, font_type. */
   BITCODE_BS wizard_flag;	/*!< DXF 280 */
   BITCODE_H arc_handle;		/*!< DXF 330 */
 } Dwg_Entity_ARCALIGNEDTEXT;

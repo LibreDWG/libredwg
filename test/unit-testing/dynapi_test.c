@@ -6852,34 +6852,14 @@ static int test_ARCALIGNEDTEXT (const Dwg_Object *obj)
         fail ("ARCALIGNEDTEXT.arc_handle [H]");
   }
   {
-    BITCODE_BS bs1;
-    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "bs1", &bs1, NULL)
-        && bs1 == arcalignedtext->bs1)
+    BITCODE_T bigfont_name;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "bigfont_name", &bigfont_name, NULL)
+        && bigfont_name
+           ? strEQ ((char *)bigfont_name, (char *)arcalignedtext->bigfont_name)
+           : !arcalignedtext->bigfont_name)
       pass ();
     else
-      fail ("ARCALIGNEDTEXT.bs1 [BS] %hu != %hu", arcalignedtext->bs1, bs1);
-    bs1++;
-    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "bs1", &bs1, 0)
-        && bs1 == arcalignedtext->bs1)
-      pass ();
-    else
-      fail ("ARCALIGNEDTEXT.bs1 [BS] set+1 %hu != %hu", arcalignedtext->bs1, bs1);
-    arcalignedtext->bs1--;
-  }
-  {
-    BITCODE_BS bs2;
-    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "bs2", &bs2, NULL)
-        && bs2 == arcalignedtext->bs2)
-      pass ();
-    else
-      fail ("ARCALIGNEDTEXT.bs2 [BS] %hu != %hu", arcalignedtext->bs2, bs2);
-    bs2++;
-    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "bs2", &bs2, 0)
-        && bs2 == arcalignedtext->bs2)
-      pass ();
-    else
-      fail ("ARCALIGNEDTEXT.bs2 [BS] set+1 %hu != %hu", arcalignedtext->bs2, bs2);
-    arcalignedtext->bs2--;
+      fail ("ARCALIGNEDTEXT.bigfont_name [T] '%s' <> '%s'", bigfont_name, arcalignedtext->bigfont_name);
   }
   {
     BITCODE_3BD center;
@@ -6902,6 +6882,21 @@ static int test_ARCALIGNEDTEXT (const Dwg_Object *obj)
     else
       fail ("ARCALIGNEDTEXT.char_spacing [D2T] set+1 %s != %s", arcalignedtext->char_spacing, char_spacing);
     arcalignedtext->char_spacing--;
+  }
+  {
+    BITCODE_BS character_set;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "character_set", &character_set, NULL)
+        && character_set == arcalignedtext->character_set)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.character_set [BS] %hu != %hu", arcalignedtext->character_set, character_set);
+    character_set++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "character_set", &character_set, 0)
+        && character_set == arcalignedtext->character_set)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.character_set [BS] set+1 %hu != %hu", arcalignedtext->character_set, character_set);
+    arcalignedtext->character_set--;
   }
   {
     BITCODE_BL color;
@@ -6942,34 +6937,44 @@ static int test_ARCALIGNEDTEXT (const Dwg_Object *obj)
         fail ("ARCALIGNEDTEXT.extrusion [3BD]");
   }
   {
-    BITCODE_BS font;
-    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "font", &font, NULL)
-        && font == arcalignedtext->font)
+    BITCODE_T font_name;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "font_name", &font_name, NULL)
+        && font_name
+           ? strEQ ((char *)font_name, (char *)arcalignedtext->font_name)
+           : !arcalignedtext->font_name)
       pass ();
     else
-      fail ("ARCALIGNEDTEXT.font [BS] %hu != %hu", arcalignedtext->font, font);
-    font++;
-    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "font", &font, 0)
-        && font == arcalignedtext->font)
-      pass ();
-    else
-      fail ("ARCALIGNEDTEXT.font [BS] set+1 %hu != %hu", arcalignedtext->font, font);
-    arcalignedtext->font--;
+      fail ("ARCALIGNEDTEXT.font_name [T] '%s' <> '%s'", font_name, arcalignedtext->font_name);
   }
   {
-    BITCODE_BS font_19;
-    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "font_19", &font_19, NULL)
-        && font_19 == arcalignedtext->font_19)
+    BITCODE_BS is_bold;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "is_bold", &is_bold, NULL)
+        && is_bold == arcalignedtext->is_bold)
       pass ();
     else
-      fail ("ARCALIGNEDTEXT.font_19 [BS] %hu != %hu", arcalignedtext->font_19, font_19);
-    font_19++;
-    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "font_19", &font_19, 0)
-        && font_19 == arcalignedtext->font_19)
+      fail ("ARCALIGNEDTEXT.is_bold [BS] %hu != %hu", arcalignedtext->is_bold, is_bold);
+    is_bold++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "is_bold", &is_bold, 0)
+        && is_bold == arcalignedtext->is_bold)
       pass ();
     else
-      fail ("ARCALIGNEDTEXT.font_19 [BS] set+1 %hu != %hu", arcalignedtext->font_19, font_19);
-    arcalignedtext->font_19--;
+      fail ("ARCALIGNEDTEXT.is_bold [BS] set+1 %hu != %hu", arcalignedtext->is_bold, is_bold);
+    arcalignedtext->is_bold--;
+  }
+  {
+    BITCODE_BS is_italic;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "is_italic", &is_italic, NULL)
+        && is_italic == arcalignedtext->is_italic)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.is_italic [BS] %hu != %hu", arcalignedtext->is_italic, is_italic);
+    is_italic++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "is_italic", &is_italic, 0)
+        && is_italic == arcalignedtext->is_italic)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.is_italic [BS] set+1 %hu != %hu", arcalignedtext->is_italic, is_italic);
+    arcalignedtext->is_italic--;
   }
   {
     BITCODE_BS is_reverse;
@@ -7053,6 +7058,21 @@ static int test_ARCALIGNEDTEXT (const Dwg_Object *obj)
         fail ("ARCALIGNEDTEXT.parent [struct _dwg_object_entity*]");
   }
   {
+    BITCODE_BS pitch_and_family;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "pitch_and_family", &pitch_and_family, NULL)
+        && pitch_and_family == arcalignedtext->pitch_and_family)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.pitch_and_family [BS] %hu != %hu", arcalignedtext->pitch_and_family, pitch_and_family);
+    pitch_and_family++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "pitch_and_family", &pitch_and_family, 0)
+        && pitch_and_family == arcalignedtext->pitch_and_family)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.pitch_and_family [BS] set+1 %hu != %hu", arcalignedtext->pitch_and_family, pitch_and_family);
+    arcalignedtext->pitch_and_family--;
+  }
+  {
     BITCODE_BD radius;
     if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "radius", &radius, NULL)
         && radius == arcalignedtext->radius)
@@ -7105,26 +7125,6 @@ static int test_ARCALIGNEDTEXT (const Dwg_Object *obj)
       pass ();
     else
       fail ("ARCALIGNEDTEXT.style [T] '%s' <> '%s'", style, arcalignedtext->style);
-  }
-  {
-    BITCODE_T t2;
-    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "t2", &t2, NULL)
-        && t2
-           ? strEQ ((char *)t2, (char *)arcalignedtext->t2)
-           : !arcalignedtext->t2)
-      pass ();
-    else
-      fail ("ARCALIGNEDTEXT.t2 [T] '%s' <> '%s'", t2, arcalignedtext->t2);
-  }
-  {
-    BITCODE_T t3;
-    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "t3", &t3, NULL)
-        && t3
-           ? strEQ ((char *)t3, (char *)arcalignedtext->t3)
-           : !arcalignedtext->t3)
-      pass ();
-    else
-      fail ("ARCALIGNEDTEXT.t3 [T] '%s' <> '%s'", t3, arcalignedtext->t3);
   }
   {
     BITCODE_BS text_direction;
