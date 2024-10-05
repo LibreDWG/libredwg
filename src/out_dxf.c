@@ -1226,11 +1226,12 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
   return d;
 }
 
-/* If opts 1:
+/*
+   Splits overlong (len>250) lines into dxf 3 chunks ending with group dxf.
+   Only TFF sets opts=0, TV and TU to 1.
+   If opts 1:
      quote \n => ^J
      \M+xxxxx => \U+XXXX (shift-jis)
-   Splits overlong (len>255) lines into dxf 3 chunks ending with group dxf
-   only TFF sets opts=0, TV and TU to 1.
  */
 static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
@@ -1240,7 +1241,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
     {
       if (opts
           && (strchr (str, '\n') || strchr (str, '\r')
-              || strstr (str, "\\M+1")))
+              || strstr (str, "\\M+")))
         {
           static char *cbuf;
           static char _sbuf[1024] = { 0 };
