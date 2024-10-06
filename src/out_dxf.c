@@ -1232,6 +1232,7 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
    If opts 1:
      quote \n => ^J
      \M+xxxxx => \U+XXXX (shift-jis)
+   split by intermediate UCS-2, convert all unicode to \\U+
  */
 static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
@@ -1243,41 +1244,39 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
           && (strchr (str, '\n') || strchr (str, '\r')
               || strstr (str, "\\M+")))
         {
-          static char *cbuf;
-          static char _sbuf[1024] = { 0 };
+          static char *cstr, *ubuf;
           const size_t origlen = strlen (str);
           long len = (long)((2 * origlen) + 1);
-          bool need_free = false;
+          BITCODE_TU wstr;
+          cstr = malloc (len);
+          if (!cstr)
+            {
+              LOG_ERROR ("Out of memory");
+              return;
+            }
+          len = (long)strlen (cquote (cstr, len, str));
           if (len < 0)
             {
               LOG_ERROR ("Overlong DXF string");
               return;
             }
-          if (len > 1024)
+          if (len > 250)
             {
-              cbuf = malloc (len);
-              if (!cbuf)
-                {
-                  LOG_ERROR ("Out of memory");
-                  return;
-                }
-              *cbuf = '\0';
-              need_free = true;
+              LOG_TRACE ("Split overlong string");
             }
-          else
-              cbuf = &_sbuf[0];
-          {
-            len = (long)strlen (cquote (cbuf, len, str));
-            while (len > 0)
-              {
-                fprintf (dat->fh, "%3d\r\n", len < 250 ? dxf : 3);
-                fprintf (dat->fh, "%.*s\r\n", len > 250 ? 250 : (int)len, cbuf);
-                len -= 250;
-                cbuf += 250;
-              }
-          }
-          if (need_free)
-            free (cbuf);
+          wstr = bit_utf8_to_TU (cstr, 0);
+          free (cstr);
+          cstr = ubuf = bit_embed_TU (wstr);
+          free (wstr);
+          len = (long)strlen (ubuf);
+          while (len > 0)
+            {
+              fprintf (dat->fh, "%3d\r\n", len < 250 ? dxf : 3);
+              fprintf (dat->fh, "%.*s\r\n", len > 250 ? 250 : (int)len, ubuf);
+              len -= 250;
+              ubuf += 250;
+            }
+          free (cstr);
         }
       else // TFF
         {
