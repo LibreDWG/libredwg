@@ -1095,9 +1095,10 @@
       || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
-                 " bits for " #type ", have %" PRId64 " for %s.",             \
+                 " bits for " #type ", have %" PRId64 " at @%" PRIuSIZE ".%u "\
+                 " for %s.",                                                  \
                  (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
-                 AVAIL_BITS (dat), SAFEDXFNAME);                              \
+                 AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);\
       if (_obj->o.nam)                                                        \
         free (_obj->o.nam);                                                   \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
@@ -1107,9 +1108,10 @@
       || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
-                 " bits for " #type ", have %" PRId64 " for %s.",             \
+                 " bits for " #type ", have %" PRId64 " at @%" PRIuSIZE ".%u "\
+                 "for %s.",                                                   \
                  (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
-                 AVAIL_BITS (dat), SAFEDXFNAME);                              \
+                 AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);\
       if (_obj->nam)                                                          \
         free (_obj->nam);                                                     \
       size = 0;                                                               \

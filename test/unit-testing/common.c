@@ -234,6 +234,12 @@ main (int argc, char *argv[])
             {
               error += test_code (prefix, "2004/HatchG.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_ATTDEF)
+            {
+              error += test_code_nodist (prefix,
+                                         "../test-old/2018/from_ACadSharp/"
+                                         "AecObjects.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_BODY)
             {
               error += test_code_nodist (prefix,
@@ -679,6 +685,10 @@ main (int argc, char *argv[])
               error += test_code_nodist (
                   prefix,
                   "../test-old/2004/from_uloz.to/00_005_POHLADY_Kl_A.dwg",
+                  cov);
+              error += test_code_nodist (
+                  prefix,
+                  "../test-old/2018/from_ACadSharp/AecObjects.dwg",
                   cov);
             }
           if (DWG_TYPE == DWG_TYPE_OBJECT_PTR)

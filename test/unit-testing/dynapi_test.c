@@ -7638,59 +7638,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
         fail ("ATTDEF.alignment_pt [2DPOINT]");
   }
   {
-    BITCODE_H annotative_app;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "annotative_app", &annotative_app, NULL)
-        && !memcmp (&annotative_app, &attdef->annotative_app, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ATTDEF.annotative_app [H]");
-  }
-  {
-    BITCODE_RC annotative_data_bytes;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "annotative_data_bytes", &annotative_data_bytes, NULL)
-        && annotative_data_bytes == attdef->annotative_data_bytes)
-      pass ();
-    else
-      fail ("ATTDEF.annotative_data_bytes [RC] %u != %u", attdef->annotative_data_bytes, annotative_data_bytes);
-    annotative_data_bytes++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_data_bytes", &annotative_data_bytes, 0)
-        && annotative_data_bytes == attdef->annotative_data_bytes)
-      pass ();
-    else
-      fail ("ATTDEF.annotative_data_bytes [RC] set+1 %u != %u", attdef->annotative_data_bytes, annotative_data_bytes);
-    attdef->annotative_data_bytes--;
-  }
-  {
-    BITCODE_BS annotative_data_size;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "annotative_data_size", &annotative_data_size, NULL)
-        && annotative_data_size == attdef->annotative_data_size)
-      pass ();
-    else
-      fail ("ATTDEF.annotative_data_size [BS] %hu != %hu", attdef->annotative_data_size, annotative_data_size);
-    annotative_data_size++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_data_size", &annotative_data_size, 0)
-        && annotative_data_size == attdef->annotative_data_size)
-      pass ();
-    else
-      fail ("ATTDEF.annotative_data_size [BS] set+1 %hu != %hu", attdef->annotative_data_size, annotative_data_size);
-    attdef->annotative_data_size--;
-  }
-  {
-    BITCODE_BS annotative_short;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "annotative_short", &annotative_short, NULL)
-        && annotative_short == attdef->annotative_short)
-      pass ();
-    else
-      fail ("ATTDEF.annotative_short [BS] %hu != %hu", attdef->annotative_short, annotative_short);
-    annotative_short++;
-    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "annotative_short", &annotative_short, 0)
-        && annotative_short == attdef->annotative_short)
-      pass ();
-    else
-      fail ("ATTDEF.annotative_short [BS] set+1 %hu != %hu", attdef->annotative_short, annotative_short);
-    attdef->annotative_short--;
-  }
-  {
     BITCODE_RC dataflags;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "dataflags", &dataflags, NULL)
         && dataflags == attdef->dataflags)
@@ -7837,6 +7784,21 @@ static int test_ATTDEF (const Dwg_Object *obj)
     attdef->is_locked_in_block--;
   }
   {
+    BITCODE_B is_really_locked;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "is_really_locked", &is_really_locked, NULL)
+        && is_really_locked == attdef->is_really_locked)
+      pass ();
+    else
+      fail ("ATTDEF.is_really_locked [B] " FORMAT_B " != " FORMAT_B "", attdef->is_really_locked, is_really_locked);
+    is_really_locked++;
+    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "is_really_locked", &is_really_locked, 0)
+        && is_really_locked == attdef->is_really_locked)
+      pass ();
+    else
+      fail ("ATTDEF.is_really_locked [B] set+1 " FORMAT_B " != " FORMAT_B "", attdef->is_really_locked, is_really_locked);
+    attdef->is_really_locked--;
+  }
+  {
     BITCODE_RC keep_duplicate_records;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "keep_duplicate_records", &keep_duplicate_records, NULL)
         && keep_duplicate_records == attdef->keep_duplicate_records)
@@ -7867,14 +7829,6 @@ static int test_ATTDEF (const Dwg_Object *obj)
     attdef->lock_position_flag--;
   }
   {
-    BITCODE_H mtext_style;
-    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "mtext_style", &mtext_style, NULL)
-        && !memcmp (&mtext_style, &attdef->mtext_style, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ATTDEF.mtext_style [H]");
-  }
-  {
     BITCODE_RC mtext_type;
     if (dwg_dynapi_entity_value (attdef, "ATTDEF", "mtext_type", &mtext_type, NULL)
         && mtext_type == attdef->mtext_type)
@@ -7888,6 +7842,21 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.mtext_type [RC] set+1 %u != %u", attdef->mtext_type, mtext_type);
     attdef->mtext_type--;
+  }
+  {
+    BITCODE_BS num_secondary_atts;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "num_secondary_atts", &num_secondary_atts, NULL)
+        && num_secondary_atts == attdef->num_secondary_atts)
+      pass ();
+    else
+      fail ("ATTDEF.num_secondary_atts [BS] %hu != %hu", attdef->num_secondary_atts, num_secondary_atts);
+    num_secondary_atts++;
+    if (dwg_dynapi_entity_set_value (attdef, "ATTDEF", "num_secondary_atts", &num_secondary_atts, 0)
+        && num_secondary_atts == attdef->num_secondary_atts)
+      pass ();
+    else
+      fail ("ATTDEF.num_secondary_atts [BS] set+1 %hu != %hu", attdef->num_secondary_atts, num_secondary_atts);
+    attdef->num_secondary_atts--;
   }
   {
     BITCODE_RD oblique_angle;
@@ -7936,6 +7905,16 @@ static int test_ATTDEF (const Dwg_Object *obj)
     else
       fail ("ATTDEF.rotation [RD] set+1 %g != %g", attdef->rotation, rotation);
     attdef->rotation--;
+  }
+  {
+    BITCODE_H* secondary_atts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (attdef, "ATTDEF", "num_secondary_atts", &count, NULL)
+        && dwg_dynapi_entity_value (attdef, "ATTDEF", "secondary_atts", &secondary_atts, NULL)
+        && secondary_atts == attdef->secondary_atts)
+      pass ();
+    else
+      fail ("ATTDEF.secondary_atts [H*] * %u num_secondary_atts", count);
   }
   {
     BITCODE_H style;
@@ -8025,59 +8004,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
         pass ();
     else
         fail ("ATTRIB.alignment_pt [2DPOINT]");
-  }
-  {
-    BITCODE_H annotative_app;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "annotative_app", &annotative_app, NULL)
-        && !memcmp (&annotative_app, &attrib->annotative_app, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ATTRIB.annotative_app [H]");
-  }
-  {
-    BITCODE_RC annotative_data_bytes;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "annotative_data_bytes", &annotative_data_bytes, NULL)
-        && annotative_data_bytes == attrib->annotative_data_bytes)
-      pass ();
-    else
-      fail ("ATTRIB.annotative_data_bytes [RC] %u != %u", attrib->annotative_data_bytes, annotative_data_bytes);
-    annotative_data_bytes++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_data_bytes", &annotative_data_bytes, 0)
-        && annotative_data_bytes == attrib->annotative_data_bytes)
-      pass ();
-    else
-      fail ("ATTRIB.annotative_data_bytes [RC] set+1 %u != %u", attrib->annotative_data_bytes, annotative_data_bytes);
-    attrib->annotative_data_bytes--;
-  }
-  {
-    BITCODE_BS annotative_data_size;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "annotative_data_size", &annotative_data_size, NULL)
-        && annotative_data_size == attrib->annotative_data_size)
-      pass ();
-    else
-      fail ("ATTRIB.annotative_data_size [BS] %hu != %hu", attrib->annotative_data_size, annotative_data_size);
-    annotative_data_size++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_data_size", &annotative_data_size, 0)
-        && annotative_data_size == attrib->annotative_data_size)
-      pass ();
-    else
-      fail ("ATTRIB.annotative_data_size [BS] set+1 %hu != %hu", attrib->annotative_data_size, annotative_data_size);
-    attrib->annotative_data_size--;
-  }
-  {
-    BITCODE_BS annotative_short;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "annotative_short", &annotative_short, NULL)
-        && annotative_short == attrib->annotative_short)
-      pass ();
-    else
-      fail ("ATTRIB.annotative_short [BS] %hu != %hu", attrib->annotative_short, annotative_short);
-    annotative_short++;
-    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "annotative_short", &annotative_short, 0)
-        && annotative_short == attrib->annotative_short)
-      pass ();
-    else
-      fail ("ATTRIB.annotative_short [BS] set+1 %hu != %hu", attrib->annotative_short, annotative_short);
-    attrib->annotative_short--;
   }
   {
     BITCODE_RC dataflags;
@@ -8216,6 +8142,21 @@ static int test_ATTRIB (const Dwg_Object *obj)
     attrib->is_locked_in_block--;
   }
   {
+    BITCODE_RC is_really_locked;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "is_really_locked", &is_really_locked, NULL)
+        && is_really_locked == attrib->is_really_locked)
+      pass ();
+    else
+      fail ("ATTRIB.is_really_locked [RC] %u != %u", attrib->is_really_locked, is_really_locked);
+    is_really_locked++;
+    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "is_really_locked", &is_really_locked, 0)
+        && is_really_locked == attrib->is_really_locked)
+      pass ();
+    else
+      fail ("ATTRIB.is_really_locked [RC] set+1 %u != %u", attrib->is_really_locked, is_really_locked);
+    attrib->is_really_locked--;
+  }
+  {
     BITCODE_RC keep_duplicate_records;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "keep_duplicate_records", &keep_duplicate_records, NULL)
         && keep_duplicate_records == attrib->keep_duplicate_records)
@@ -8246,14 +8187,6 @@ static int test_ATTRIB (const Dwg_Object *obj)
     attrib->lock_position_flag--;
   }
   {
-    BITCODE_H mtext_style;
-    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext_style", &mtext_style, NULL)
-        && !memcmp (&mtext_style, &attrib->mtext_style, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ATTRIB.mtext_style [H]");
-  }
-  {
     BITCODE_RC mtext_type;
     if (dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext_type", &mtext_type, NULL)
         && mtext_type == attrib->mtext_type)
@@ -8267,6 +8200,21 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.mtext_type [RC] set+1 %u != %u", attrib->mtext_type, mtext_type);
     attrib->mtext_type--;
+  }
+  {
+    BITCODE_BS num_secondary_atts;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "num_secondary_atts", &num_secondary_atts, NULL)
+        && num_secondary_atts == attrib->num_secondary_atts)
+      pass ();
+    else
+      fail ("ATTRIB.num_secondary_atts [BS] %hu != %hu", attrib->num_secondary_atts, num_secondary_atts);
+    num_secondary_atts++;
+    if (dwg_dynapi_entity_set_value (attrib, "ATTRIB", "num_secondary_atts", &num_secondary_atts, 0)
+        && num_secondary_atts == attrib->num_secondary_atts)
+      pass ();
+    else
+      fail ("ATTRIB.num_secondary_atts [BS] set+1 %hu != %hu", attrib->num_secondary_atts, num_secondary_atts);
+    attrib->num_secondary_atts--;
   }
   {
     BITCODE_RD oblique_angle;
@@ -8305,6 +8253,16 @@ static int test_ATTRIB (const Dwg_Object *obj)
     else
       fail ("ATTRIB.rotation [RD] set+1 %g != %g", attrib->rotation, rotation);
     attrib->rotation--;
+  }
+  {
+    BITCODE_H* secondary_atts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (attrib, "ATTRIB", "num_secondary_atts", &count, NULL)
+        && dwg_dynapi_entity_value (attrib, "ATTRIB", "secondary_atts", &secondary_atts, NULL)
+        && secondary_atts == attrib->secondary_atts)
+      pass ();
+    else
+      fail ("ATTRIB.secondary_atts [H*] * %u num_secondary_atts", count);
   }
   {
     BITCODE_H style;

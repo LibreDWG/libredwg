@@ -4,20 +4,18 @@
 void
 api_process (dwg_object *obj)
 {
-  int error = 0;
+  int error = 0, isnew;
   double elevation, thickness, rotation, height, oblique_angle, width_factor;
   BITCODE_BS generation, vert_alignment, horiz_alignment, field_length,
-      annotative_data_size, annotative_short;
-  BITCODE_RC dataflags, flags, mtext_type, is_locked_in_block, keep_duplicate_records,
-      annotative_data_bytes;
+    is_really_locked, num_secondary_atts, i;
+  BITCODE_RC dataflags, flags, is_locked_in_block, keep_duplicate_records, mtext_type;
   BITCODE_B lock_position_flag;
   char *tag, *default_value, *prompt;
   dwg_point_3d extrusion, pt3d;
   dwg_point_2d ins_pt, alignment_pt, pt2d;
-  BITCODE_H style, annotative_app;
-  BITCODE_H mtext_style;
+  BITCODE_H style;
+  BITCODE_H *secondary_atts, *hdls;
   Dwg_Version_Type version = obj->parent->header.version;
-  int isnew;
 
   dwg_ent_attdef *attdef = dwg_object_to_ATTDEF (obj);
 
@@ -57,10 +55,20 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_TYPE (attdef, ATTDEF, mtext_type, RC);
       CHK_ENTITY_MAX (attdef, ATTDEF, mtext_type, RC, 4);
-      CHK_ENTITY_H (attdef, ATTDEF, mtext_style);
-      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_size, BS);
-      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_data_bytes, RC);
-      CHK_ENTITY_H (attdef, ATTDEF, annotative_app);
-      CHK_ENTITY_TYPE (attdef, ATTDEF, annotative_short, BS);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, is_really_locked, BS);
+      CHK_ENTITY_TYPE (attdef, ATTDEF, num_secondary_atts, BS);
+      if (!dwg_dynapi_entity_value (attdef, "ATTDEF", "secondary_atts",
+                                    &secondary_atts, NULL))
+        fail ("ATTRIB.secondary_atts");
+      hdls = attdef->secondary_atts;
+      for (i = 0; i < num_secondary_atts; i++)
+        {
+          if (hdls[i] == secondary_atts[i])
+            ok ("ATTDEF.secondary_atts[%d]: " FORMAT_REF, i,
+                ARGS_REF (secondary_atts[i]));
+          else
+            fail ("ATTDEF.secondary_atts[%d]: " FORMAT_REF, i,
+                  ARGS_REF (secondary_atts[i]));
+        }
     }
 }

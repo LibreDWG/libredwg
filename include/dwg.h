@@ -1361,22 +1361,20 @@ typedef struct _dwg_entity_ATTRIB
   // AcDbAttributeDefinition
   BITCODE_RC is_locked_in_block; /* R2007+ */
   BITCODE_RC keep_duplicate_records; /* R2007+ */
-  BITCODE_RC mtext_type;    /* R2018+ */
   BITCODE_T tag;
-  BITCODE_BS field_length; /* DXF 73 */
-  BITCODE_RC flags; /* bitmask of:
+  BITCODE_BS field_length;
+  BITCODE_RC flags; /* => HEADER.AFLAGS. bitmask of:
                        0 none
                        1 invisible, overridden by ATTDISP
                        2 constant, no prompt
                        4 verify on insert
                        8 preset, inserted only with its default values, not editable. */
-  BITCODE_B lock_position_flag;
+  BITCODE_B lock_position_flag; /* R2007+ */
   BITCODE_H style;
-  BITCODE_H mtext_style; /* R2018+ TODO */
-  BITCODE_BS annotative_data_size; /* R2018+ */
-  BITCODE_RC annotative_data_bytes;
-  BITCODE_H  annotative_app;
-  BITCODE_BS annotative_short;
+  BITCODE_RC mtext_type;    /* R2018+ */
+  BITCODE_RC is_really_locked; /* R2018+ */
+  BITCODE_BS num_secondary_atts; /* R2018+ TODO */
+  BITCODE_H *secondary_atts;
 } Dwg_Entity_ATTRIB;
 
 /** \ref Dwg_Entity_ATTDEF
@@ -1403,17 +1401,20 @@ typedef struct _dwg_entity_ATTDEF
   // AcDbAttributeDefinition
   BITCODE_RC is_locked_in_block; /* R2007+ */
   BITCODE_RC keep_duplicate_records; /* R2007+ */
-  BITCODE_RC mtext_type;    /* R2018+ */
   BITCODE_T tag;
   BITCODE_BS field_length;
-  BITCODE_RC flags; /* => HEADER.AFLAGS */
-  BITCODE_B lock_position_flag;
+  BITCODE_RC flags; /* => HEADER.AFLAGS. bitmask of:
+                       0 none
+                       1 invisible, overridden by ATTDISP
+                       2 constant, no prompt
+                       4 verify on insert
+                       8 preset, inserted only with its default values, not editable. */
+  BITCODE_B lock_position_flag; /* R2007+ */
   BITCODE_H style;
-  BITCODE_H mtext_style; /* R2018+ TODO */
-  BITCODE_BS annotative_data_size; /* R2018+ */
-  BITCODE_RC annotative_data_bytes;
-  BITCODE_H  annotative_app;
-  BITCODE_BS annotative_short;
+  BITCODE_RC mtext_type;    /* R2018+ */
+  BITCODE_B is_really_locked; /* R2018+ */
+  BITCODE_BS num_secondary_atts; /* R2018+ TODO */
+  BITCODE_H *secondary_atts;
 
   BITCODE_T prompt;
 } Dwg_Entity_ATTDEF;

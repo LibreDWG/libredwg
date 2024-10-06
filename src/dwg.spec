@@ -339,13 +339,14 @@ DWG_ENTITY (ATTRIB)
   SUBCLASS (AcDbAttribute)
   DXF {
     FIELD_T (tag, 2);
-    FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
+    FIELD_RC (flags, 70);
     LOG_FLAG_ATTDEF
     FIELD_BS0 (field_length, 73);
     FIELD_BS0 (vert_alignment, 74);
     LOG_VERT_ALIGNMENT
     SINCE (R_2004a) {
       FIELD_RC (is_locked_in_block, 280);
+      SUBCLASS (AcDbXrecord);
       FIELD_RC (keep_duplicate_records, 280);
     }
   }
@@ -353,39 +354,35 @@ DWG_ENTITY (ATTRIB)
     {
       FIELD_RC (is_locked_in_block, 0);
       VALUEOUTOFBOUNDS (is_locked_in_block, 2)
-      // FIELD_RC (keep_duplicate_records, 280);
     }
   SINCE (R_2018b)
     {
-      FIELD_RC (mtext_type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
+      FIELD_RC (mtext_type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
       if (FIELD_VALUE (mtext_type) > 1)
         {
           SUBCLASS (AcDbMText)
           LOG_WARN ("MTEXT fields")
-          // TODO fields handles to MTEXT entities. how many?
-          FIELD_HANDLE (mtext_style, 0, 340); //TODO
-
-          FIELD_BS (annotative_data_size, 70);
-          if (FIELD_VALUE (annotative_data_size) > 1)
-            {
-              FIELD_RC (annotative_data_bytes, 0);
-              FIELD_HANDLE (annotative_app, 0, 0); //TODO
-              FIELD_BS (annotative_short, 0);
-            }
+          FIELD_B (is_really_locked, 70);
+          FIELD_BS (num_secondary_atts, 70);
+          DEBUG_HERE_OBJ
+          HANDLE_VECTOR (secondary_atts, num_secondary_atts, 4, 340);
         }
     }
 
-  SINCE (R_13b1)
-    {
-      FIELD_T (tag, 0);
-      FIELD_BS0 (field_length, 0);
-      FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
+  SINCE (R_13b1) {
+    FIELD_T (tag, 0);
+    FIELD_BS0 (field_length, 0);
+    FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
+    LOG_FLAG_ATTDEF
+    SINCE (R_2007a) {
+      FIELD_B (lock_position_flag, 0); // 70
     }
-
-  SINCE (R_2007a) {
-    FIELD_B (lock_position_flag, 0); // 70
+    // XRECORD subclass
+    SINCE (R_2010b) {
+      FIELD_RC (keep_duplicate_records, 0);
+      VALUEOUTOFBOUNDS (keep_duplicate_records, 1)
+    }
   }
-
   COMMON_ENTITY_HANDLE_DATA;
   SINCE (R_13b1) {
     FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
@@ -560,15 +557,17 @@ DWG_ENTITY (ATTDEF)
 
   SUBCLASS (AcDbAttributeDefinition);
   DXF {
+    VALUE_RS (0, 280); // 0 = 2010
     FIELD_T (prompt, 3);
     FIELD_T (tag, 2);
     FIELD_RC (mtext_type, 70);
     SINCE (R_13b1) {
-      FIELD_BS0 (field_length, 73);
+      FIELD_BS0 (field_length, 73); // unused
       FIELD_BS0 (vert_alignment, 74);
     }
     SINCE (R_2004a) {
       FIELD_RC (is_locked_in_block, 280);
+      SUBCLASS (AcDbXrecord);
       FIELD_RC (keep_duplicate_records, 280);
     }
   }
@@ -576,32 +575,21 @@ DWG_ENTITY (ATTDEF)
     {
       FIELD_RC (is_locked_in_block, 0);
       VALUEOUTOFBOUNDS (is_locked_in_block, 1)
-      // FIELD_RC (keep_duplicate_records, 280);
     }
   IF_FREE_OR_SINCE (R_2018)
     {
-      FIELD_RC (mtext_type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
-
+      FIELD_RC (mtext_type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
       if (FIELD_VALUE (mtext_type) > 1)
         {
           SUBCLASS (AcDbMText)
           LOG_WARN ("MTEXT fields")
-          // TODO fields handles to MTEXT entities. how many?
-          FIELD_HANDLE (mtext_style, 0, 340); //TODO
-
+          FIELD_B (is_really_locked, 70);
+          FIELD_BS (num_secondary_atts, 70);
           DEBUG_HERE_OBJ
-          FIELD_BS (annotative_data_size, 70);
-          if (FIELD_VALUE (annotative_data_size) > 1)
-            {
-              FIELD_RC (annotative_data_bytes, 0);
-              FIELD_HANDLE (annotative_app, 0, 0); //TODO
-              FIELD_BS (annotative_short, 0);
-            }
-          DEBUG_HERE_OBJ
+          HANDLE_VECTOR (secondary_atts, num_secondary_atts, 4, 340);
         }
     }
-  SINCE (R_13b1)
-  {
+  SINCE (R_13b1) {
     FIELD_T (tag, 0);
     FIELD_BS (field_length, 0); //DXF 73, unused
     FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
@@ -609,7 +597,7 @@ DWG_ENTITY (ATTDEF)
     SINCE (R_2007a) {
       FIELD_B (lock_position_flag, 0);
     }
-    // specific to ATTDEF
+    // XRECORD subclass
     SINCE (R_2010b) {
       FIELD_RC (keep_duplicate_records, 0);
       VALUEOUTOFBOUNDS (keep_duplicate_records, 1)
@@ -6456,6 +6444,7 @@ DWG_OBJECT (SPATIAL_INDEX)
   FIELD_BD (num5, 40);
   FIELD_BD (num6, 40);
   FIELD_BL (num_hdls, 90);
+  // probably in main dat, not hdl_dat
   HANDLE_VECTOR (hdls, num_hdls, 5, 330);
   FIELD_BL (bindata_size, 90);
   FIELD_BINARY (bindata, FIELD_VALUE (bindata_size), 310);

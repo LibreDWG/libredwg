@@ -1168,8 +1168,6 @@ RC
 RC,	DXF 280
 @item keep_duplicate_records
 RC,	DXF 280
-@item mtext_type
-RC,	DXF 70
 @item tag
 T,	DXF 2
 @item field_length
@@ -1180,16 +1178,14 @@ RC,	DXF 70
 B
 @item style
 H,	DXF 7
-@item mtext_style
-H,	DXF 340
-@item annotative_data_size
+@item mtext_type
+RC,	DXF 70
+@item is_really_locked
+B,	DXF 70
+@item num_secondary_atts
 BS,	DXF 70
-@item annotative_data_bytes
-RC
-@item annotative_app
-H
-@item annotative_short
-BS
+@item secondary_atts
+H*,	DXF 340
 @item prompt
 T,	DXF 3
 
@@ -1237,8 +1233,6 @@ RC
 RC,	DXF 280
 @item keep_duplicate_records
 RC,	DXF 280
-@item mtext_type
-RC
 @item tag
 T,	DXF 2
 @item field_length
@@ -1249,16 +1243,14 @@ RC,	DXF 70
 B
 @item style
 H,	DXF 7
-@item mtext_style
-H,	DXF 340
-@item annotative_data_size
+@item mtext_type
+RC,	DXF 70
+@item is_really_locked
+RC,	DXF 70
+@item num_secondary_atts
 BS,	DXF 70
-@item annotative_data_bytes
-RC
-@item annotative_app
-H
-@item annotative_short
-BS
+@item secondary_atts
+H*,	DXF 340
 
 @end vtable
 @end indentedblock
