@@ -195,6 +195,12 @@ main (int argc, char *argv[])
           else
             error += test_code (prefix, *ptr, cov);
         }
+      if (DWG_TYPE == DWG_TYPE_ATTDEF)
+        {
+          error += test_code_nodist (prefix,
+                                     "../test-old/2018/from_ACadSharp/"
+                                     "AecObjects.dwg", cov);
+        }
       // if no coverage
       if (!numpassed () && !numfailed ())
         {
@@ -233,12 +239,6 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_HATCH)
             {
               error += test_code (prefix, "2004/HatchG.dwg", cov);
-            }
-          if (DWG_TYPE == DWG_TYPE_ATTDEF)
-            {
-              error += test_code_nodist (prefix,
-                                         "../test-old/2018/from_ACadSharp/"
-                                         "AecObjects.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_BODY)
             {

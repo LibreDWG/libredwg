@@ -336,8 +336,6 @@
       LOG_POS;                                                                \
     }
 
-#define FIELD_VALUE(nam) _obj->nam
-
 #define ANYCODE -1
 #define VALUE_HANDLE(ref, nam, code, dxf)                                     \
   {                                                                           \

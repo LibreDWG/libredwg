@@ -57,7 +57,6 @@ static BITCODE_BL rcount1, rcount2;
   FIELD_G_TRACE (o.nam, cast, dxf)
 
 #define LOG_INSANE_TF(var, len)
-#define FIELD_VALUE(name) _obj->name
 #define FIELD_2PT_TRACE(name, type, dxf)                                      \
   {                                                                           \
     LOG_TRACE (#name ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]\n",     \

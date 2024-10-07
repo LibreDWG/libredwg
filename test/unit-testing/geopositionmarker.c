@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_RC text_alignment;
   BITCODE_B mtext_visible;
   BITCODE_B enable_frame_text;
-  Dwg_Object *mtext;
+  Dwg_AcDbMTextObjectEmbedded mtext;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -32,11 +32,13 @@ api_process (dwg_object *obj)
   if (!dwg_dynapi_entity_value (_obj, "GEOPOSITIONMARKER", "mtext", &mtext,
                                 NULL))
     fail ("GEOPOSITIONMARKER.mtext");
-  else if (mtext)
+  else
     {
-      Dwg_Entity_MTEXT *sub = mtext->tio.entity->tio.MTEXT;
-      if (mtext->fixedtype != DWG_TYPE_MTEXT)
-        fail ("Wrong MTEXT.mtext.fixedtype %d", mtext->fixedtype);
+      CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, attachment, BL);
+      CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, ins_pt);
+      CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, x_axis_dir);
+      CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_height, BD);
+      CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_width, BD);
     }
 #endif
 }

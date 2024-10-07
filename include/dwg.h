@@ -1337,6 +1337,30 @@ typedef struct _dwg_entity_TEXT
   BITCODE_H style;	      /*!< code 5, DXF 7, optional */
 } Dwg_Entity_TEXT;
 
+/**
+ * R2010+ Subclass of ATTRIB, ATTDEF, GEOPOSITIONMARKER
+ * See also MTEXTOBJECTCONTEXTDATA
+ */
+typedef struct _dwg_AcDbMTextObjectEmbedded
+{
+  BITCODE_B is_really_locked;      	/*<! DXF 70 */
+  BITCODE_BL attachment;      	/*<! DXF 70 */
+  BITCODE_3BD ins_pt; 		/*!< DXF 10 */
+  BITCODE_3BD x_axis_dir; 	/*!< DXF 11 */
+  BITCODE_BD rect_height;	/*!< DXF 40 */
+  BITCODE_BD rect_width;	/*!< DXF 41 */
+  BITCODE_BD extents_width;	/*!< DXF 42 */
+  BITCODE_BD extents_height;	/*!< DXF 43 */
+  BITCODE_BL column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic.
+                                     Note: BS in MTEXT! */
+  BITCODE_BD column_width;      /*!< DXF 44 */
+  BITCODE_BD gutter;            /*!< DXF 45 */
+  BITCODE_B auto_height;        /*!< DXF 73 */
+  BITCODE_B flow_reversed;      /*!< DXF 74 */
+  BITCODE_BL num_column_heights;/*!< DXF 72 or numfragments */
+  BITCODE_BD *column_heights;   /*!< DXF 46 if dynamic and not auto_height */
+} Dwg_AcDbMTextObjectEmbedded;
+
 /** \ref Dwg_Entity_ATTRIB
  ATTRIB (2/16) entity
  */
@@ -1372,9 +1396,12 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_B lock_position_flag; /* R2007+ */
   BITCODE_H style;
   BITCODE_RC mtext_type;    /* R2018+ */
-  BITCODE_RC is_really_locked; /* R2018+ */
-  BITCODE_BS num_secondary_atts; /* R2018+ TODO */
-  BITCODE_H *secondary_atts;
+  Dwg_AcDbMTextObjectEmbedded mtext;
+  BITCODE_B is_really_locked;     /* R2018+ */
+  BITCODE_BS annotative_data_size;/* R2018+ */
+  BITCODE_RC* annotative_data;    /* R2018+ */
+  BITCODE_BS annotative_flag;     /* R2018+ */
+  BITCODE_H  annotative_style;    /* R2018+ */
 } Dwg_Entity_ATTRIB;
 
 /** \ref Dwg_Entity_ATTDEF
@@ -1411,10 +1438,15 @@ typedef struct _dwg_entity_ATTDEF
                        8 preset, inserted only with its default values, not editable. */
   BITCODE_B lock_position_flag; /* R2007+ */
   BITCODE_H style;
-  BITCODE_RC mtext_type;    /* R2018+ */
-  BITCODE_B is_really_locked; /* R2018+ */
-  BITCODE_BS num_secondary_atts; /* R2018+ TODO */
-  BITCODE_H *secondary_atts;
+  BITCODE_RC mtext_type;          /* R2018+ */
+  Dwg_AcDbMTextObjectEmbedded mtext;
+  BITCODE_B is_really_locked;     /* R2018+ */
+  BITCODE_BS annotative_data_size;/* R2018+ */
+  BITCODE_RC* annotative_data;    /* R2018+ */
+  BITCODE_BS annotative_flag;    /* R2018+ */
+  BITCODE_H  annotative_style;    /* R2018+ */
+  // BITCODE_BS num_secondary_atts;  /* R2018+ TODO */
+  // BITCODE_H *secondary_atts;
 
   BITCODE_T prompt;
 } Dwg_Entity_ATTDEF;
@@ -4879,7 +4911,12 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
   BITCODE_RC text_alignment;   /*!< DXF 70  0 left, 1 center, 2 right */
   BITCODE_B mtext_visible;     /*!< DXF 290 */
   BITCODE_B enable_frame_text; /*!< DXF 290 */
-  struct _dwg_object *mtext;
+  Dwg_AcDbMTextObjectEmbedded mtext;
+  BITCODE_B is_really_locked;     /* R2018+ */
+  BITCODE_BS annotative_data_size;/* R2018+ */
+  BITCODE_RC* annotative_data;    /* R2018+ */
+  BITCODE_BS annotative_flag;    /* R2018+ */
+  BITCODE_H  annotative_style;    /* R2018+ */
 } Dwg_Entity_GEOPOSITIONMARKER;
 
 /**
@@ -6769,6 +6806,7 @@ typedef struct _dwg_object_GROUND_PLANE_BACKGROUND
  * R2010+
  * 20.4.89 SubClass AcDbObjectContextData (varies)
  */
+
 #define OBJECTCONTEXTDATA_fields                                              \
   struct _dwg_object_object *parent;                                          \
   BITCODE_BS class_version; /*!< r2010+ =4, before 3 */                       \
@@ -6831,6 +6869,7 @@ typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
+  // AcDbMTextObjectContextData_fields:
   BITCODE_BL attachment;      	/*<! DXF 70 */
   BITCODE_3BD ins_pt; 		/*!< DXF 10 */
   BITCODE_3BD x_axis_dir; 	/*!< DXF 11 */
@@ -6838,7 +6877,8 @@ typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
   BITCODE_BD rect_width;	/*!< DXF 41 */
   BITCODE_BD extents_width;	/*!< DXF 42 */
   BITCODE_BD extents_height;	/*!< DXF 43 */
-  BITCODE_BL column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic. Note: BS in MTEXT! */
+  BITCODE_BL column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic.
+                                     Note: BS in MTEXT! */
   BITCODE_BD column_width;      /*!< DXF 44 */
   BITCODE_BD gutter;            /*!< DXF 45 */
   BITCODE_B auto_height;        /*!< DXF 73 */

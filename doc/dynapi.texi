@@ -1167,7 +1167,7 @@ RC
 @item is_locked_in_block
 RC,	DXF 280
 @item keep_duplicate_records
-RC,	DXF 280
+RC
 @item tag
 T,	DXF 2
 @item field_length
@@ -1180,12 +1180,18 @@ B
 H,	DXF 7
 @item mtext_type
 RC,	DXF 70
+@item mtext
+Dwg_AcDbMTextObjectEmbedded
 @item is_really_locked
-B,	DXF 70
-@item num_secondary_atts
-BS,	DXF 70
-@item secondary_atts
-H*,	DXF 340
+B
+@item annotative_data_size
+BS
+@item annotative_data
+RC*
+@item annotative_flag
+BS
+@item annotative_style
+H
 @item prompt
 T,	DXF 3
 
@@ -1245,12 +1251,18 @@ B
 H,	DXF 7
 @item mtext_type
 RC,	DXF 70
+@item mtext
+Dwg_AcDbMTextObjectEmbedded
 @item is_really_locked
-RC,	DXF 70
-@item num_secondary_atts
-BS,	DXF 70
-@item secondary_atts
-H*,	DXF 340
+B
+@item annotative_data_size
+BS
+@item annotative_data
+RC*
+@item annotative_flag
+BS
+@item annotative_style
+H
 
 @end vtable
 @end indentedblock
@@ -2061,7 +2073,17 @@ B,	DXF 290
 @item enable_frame_text
 B,	DXF 290
 @item mtext
-struct _dwg_object*
+Dwg_AcDbMTextObjectEmbedded
+@item is_really_locked
+B
+@item annotative_data_size
+BS,	DXF 70
+@item annotative_data
+TF
+@item annotative_flag
+BS
+@item annotative_style
+H
 
 @end vtable
 @end indentedblock
@@ -13182,6 +13204,46 @@ B
 BS
 @item assocdep
 H
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_AcDbMTextObjectEmbedded} @anchor{Dwg_AcDbMTextObjectEmbedded}
+@vindex Dwg_AcDbMTextObjectEmbedded
+
+@indentedblock
+@vtable @code
+
+@item is_really_locked
+B
+@item attachment
+BL
+@item ins_pt
+3BD
+@item x_axis_dir
+3BD
+@item rect_height
+BD
+@item rect_width
+BD
+@item extents_width
+BD
+@item extents_height
+BD
+@item column_type
+BL
+@item column_width
+BD
+@item gutter
+BD
+@item auto_height
+B
+@item flow_reversed
+B
+@item num_column_heights
+BL
+@item column_heights
+BD*
 
 @end vtable
 @end indentedblock

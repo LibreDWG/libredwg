@@ -104,6 +104,9 @@
 
 #endif /* SPEC_H */
 
+#define FIELD_VALUE(nam) _obj->nam
+#define SUB_FIELD_VALUE(o,nam) _obj->o.nam
+
 #ifndef VALUE_HANDLE
 #  define VALUE_HANDLE(value, nam, handle_code, dxf)
 #endif

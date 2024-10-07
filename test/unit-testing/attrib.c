@@ -6,15 +6,14 @@ api_process (dwg_object *obj)
 {
   int error = 0, isnew;
   double elevation, thickness, rotation, height, oblique_angle, width_factor;
-  BITCODE_BS generation, vert_alignment, horiz_alignment, is_really_locked,
-    num_secondary_atts, i;
+  BITCODE_BS generation, vert_alignment, horiz_alignment, i;
   BITCODE_RC dataflags, flags, is_locked_in_block, keep_duplicate_records, mtext_type;
   BITCODE_B lock_position_flag;
   char *text_value;
   dwg_point_3d extrusion;
   dwg_point_2d ins_pt, alignment_pt;
   BITCODE_H style;
-  BITCODE_H *secondary_atts, *hdls;
+  Dwg_AcDbMTextObjectEmbedded mtext;
 
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_attrib *attrib = dwg_object_to_ATTRIB (obj);
@@ -56,20 +55,18 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_TYPE (attrib, ATTRIB, mtext_type, RC);
       CHK_ENTITY_MAX (attrib, ATTRIB, mtext_type, RC, 4);
-      CHK_ENTITY_TYPE (attrib, ATTRIB, is_really_locked, BS);
-      CHK_ENTITY_TYPE (attrib, ATTRIB, num_secondary_atts, BS);
-      if (!dwg_dynapi_entity_value (attrib, "ATTRIB", "secondary_atts",
-                                    &secondary_atts, NULL))
-        fail ("ATTRIB.secondary_atts");
-      hdls = attrib->secondary_atts;
-      for (i = 0; i < num_secondary_atts; i++)
+    }
+  if (attrib->mtext_type > 0)
+    {
+      if (!dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext", &mtext, NULL))
+        fail ("ATTRIB.mtext");
+      else
         {
-          if (hdls[i] == secondary_atts[i])
-            ok ("ATTRIB.secondary_atts[%d]: " FORMAT_REF, i,
-                ARGS_REF (secondary_atts[i]));
-          else
-            fail ("ATTRIB.secondary_atts[%d]: " FORMAT_REF, i,
-                  ARGS_REF (secondary_atts[i]));
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, attachment, BL);
+          CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, ins_pt);
+          CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, x_axis_dir);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_height, BD);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_width, BD);
         }
     }
 }

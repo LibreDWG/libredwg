@@ -96,7 +96,6 @@ static BITCODE_BL rcount1, rcount2;
 #define SUB_FIELD_CAST(o, name, type, cast, dxf)                              \
   {                                                                           \
   }
-#define FIELD_VALUE(name) _obj->name
 #define SUB_FIELD(o, nam, type, dxf) FIELD (_obj->o.nam, type)
 
 #define ANYCODE -1
