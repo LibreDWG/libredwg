@@ -41,7 +41,7 @@ decode (Bit_Chain *dat, int off, const int size)
       int p = (int)bit_position (dat);
       if (d != bit_nan ())
         {
-          printf ("%.15f BD @%d (%d)\n", d, p, size);
+          printf ("%.15f BD @%d @%u.%u (%d)\n", d, p, p/8, p%8, size);
           pos = p;
         }
       bit_set_position (dat, off);
@@ -52,7 +52,7 @@ decode (Bit_Chain *dat, int off, const int size)
       int p = (int)bit_position (dat);
       if (d != bit_nan ())
         {
-          printf ("%.15f RD @%d (%d)\n", d, p, size);
+          printf ("%.15f RD @%d @%u.%u (%d)\n", d, p, p/8, p%8, size);
           pos = p;
         }
       bit_set_position (dat, off);
@@ -63,7 +63,7 @@ decode (Bit_Chain *dat, int off, const int size)
       int p = (int)bit_position (dat);
       if (p <= size - off)
         {
-          printf ("%u BL @%d (%d)\n", l, p, size);
+          printf ("%u BL @%d @%u.%u (%d)\n", l, p, p/8, p%8, size);
           pos = p;
         }
       bit_set_position (dat, off);
@@ -72,7 +72,7 @@ decode (Bit_Chain *dat, int off, const int size)
     {
       BITCODE_BL l = (long)bit_read_RL (dat);
       pos = (int)bit_position (dat);
-      printf ("%u RL @%d (%d)\n", l, pos, size);
+      printf ("%u RL @%d @%u.%u (%d)\n", l, pos, pos/8, pos%8, size);
       bit_set_position (dat, off);
     }
   if (size - off >= 16)
@@ -177,6 +177,7 @@ int
 main (int argc, char *argv[])
 {
   int hex = 0;
+  int print_bits = 0;
   int i;
   int pos;
   Bit_Chain dat = EMPTY_CHAIN (0);
@@ -190,14 +191,16 @@ main (int argc, char *argv[])
           "or examples/bits -x '8055 40f9 3284 d222 3e40 7436 e0d9 23fd'\n");
       return 1;
     }
-  if (argc > 2 && !strcmp (argv[1], "-x"))
+  i = 1;
+  if (argc > 2 && !strcmp (argv[i], "-x"))
     {
       hex = 1;
-      i = 2;
+      i++;
     }
-  else
+  if (argc > 2 && !strcmp (argv[i], "-b"))
     {
-      i = 1;
+      print_bits = 1;
+      i++;
     }
 
   // dat.chain = malloc (size + 1);
@@ -224,6 +227,8 @@ main (int argc, char *argv[])
   while (i < argc);
 
   pos = (int)bit_position (&dat);
+  if (print_bits)
+    bit_print_bits (&dat.chain[0], pos);
   // accept all types, like CMC, BS, BL, HANDLE and print all possible variants
   pos = decode (&dat, 0, (int)pos);
 

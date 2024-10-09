@@ -1354,3 +1354,7 @@
 #  define PRER13_SECTION_HDR(name)
 #  define DWG_TABLE(token) DWG_OBJECT (token)
 #endif
+
+#ifndef _DEBUG_HERE
+#  define _DEBUG_HERE(x)
+#endif

@@ -6,9 +6,9 @@ api_process (dwg_object *obj)
 {
   int error = 0, isnew;
   double elevation, thickness, rotation, height, oblique_angle, width_factor;
-  BITCODE_BS generation, vert_alignment, horiz_alignment, i;
+  BITCODE_BS generation, vert_alignment, horiz_alignment, annotative_data_size, i;
   BITCODE_RC dataflags, flags, is_locked_in_block, keep_duplicate_records, mtext_type;
-  BITCODE_B lock_position_flag;
+  BITCODE_B lock_position_flag, is_really_locked;
   char *text_value;
   dwg_point_3d extrusion;
   dwg_point_2d ins_pt, alignment_pt;
@@ -55,18 +55,22 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_TYPE (attrib, ATTRIB, mtext_type, RC);
       CHK_ENTITY_MAX (attrib, ATTRIB, mtext_type, RC, 4);
+      CHK_ENTITY_TYPE (attrib, ATTRIB, is_really_locked, B);
+      CHK_ENTITY_TYPE (attrib, ATTRIB, annotative_data_size, BS);
     }
-  if (attrib->mtext_type > 0)
+  if (attrib->mtext_type > 1)
     {
       if (!dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext", &mtext, NULL))
         fail ("ATTRIB.mtext");
       else
         {
-          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, attachment, BL);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, attachment, BS);
           CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, ins_pt);
           CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, x_axis_dir);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_height, BD);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_width, BD);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, column_type, BS);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, num_column_heights, BS);
         }
     }
 }

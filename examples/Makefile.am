@@ -187,6 +187,7 @@ alldxf_unknowns = \
 	alldxf_ACSH_SWEEP_CLASS.inc \
 	alldxf_ARC_DIMENSION.inc \
 	alldxf_ASSOCDIMDEPENDENCYBODY.inc \
+	alldxf_ATTDEF.inc \
 	alldxf_BLOCKALIGNMENTGRIP.inc \
 	alldxf_BLOCKARRAYACTION.inc \
 	alldxf_BLOCKGRIPLOCATIONCOMPONENT.inc \

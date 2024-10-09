@@ -572,7 +572,6 @@ bit_read_BS (Bit_Chain *dat)
 void
 bit_write_BS (Bit_Chain *dat, BITCODE_BS value)
 {
-  // BITCODE_BS is defined as uint16_t, but better safe than sorry
   const uint16_t l = value;
   if (l > 256)
     {

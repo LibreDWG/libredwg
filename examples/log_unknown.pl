@@ -39,7 +39,7 @@ elsif (/handle: 0\.\d+\.([0-9A-F]+) \[H 5\]$/) {
 }
 next unless $bitsize and $handle;
 
-if (/^unknown_bits \[(\d+) \((\d+),(-?\d+),(\d+)\) (\d+) TF\]: ([0-9A-F]+$)/) {
+if (/^unknown_(?:bits|rest) \[(\d+) \((\d+),(-?\d+),(\d+)\) (\d+) TF\]: ([0-9A-F]+$)/) {
   ($num_bits, $commonsize, $hdloff, $strsize, $len, $b) = ($1, $2, $3, $4, $5, $6);
   print "//offsets=$num_bits, $commonsize, $hdloff, $strsize, $hdlsize. len=$len\n";
   chomp $b; next;

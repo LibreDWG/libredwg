@@ -1112,3 +1112,4 @@ unknown_dxf[1107].fields = unknown_dxf_WIPEOUT_1107;
 unknown_dxf[1108].fields = unknown_dxf_WIPEOUT_1108;
 unknown_dxf[1109].fields = unknown_dxf_WIPEOUT_1109;
 unknown_dxf[1110].fields = unknown_dxf_WIPEOUT_1110;
+unknown_dxf[1111].fields = unknown_dxf_ATTDEF_2F7F;

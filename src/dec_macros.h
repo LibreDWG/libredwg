@@ -992,8 +992,8 @@
       double bd;                                                              \
       Dwg_Handle hdl;                                                         \
       rs = 24;                                                                \
-      if (objsize > 0 && dat->byte + rs > objsize)                            \
-        rs = (objsize - dat->byte) & 0xFFFF;                                  \
+      if ((objsize) > 0 && dat->byte + rs > (objsize))                        \
+        rs = ((objsize) - dat->byte) & 0xFFFF;                                \
       if (dat->byte + rs > dat->size)                                         \
         rs = (dat->size - dat->byte - 1) & 0xFFFF;                            \
       tmp = bit_read_TF (dat, (size_t)rs);                                    \

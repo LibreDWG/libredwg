@@ -190,13 +190,15 @@ DWG_ENTITY_END
 {                                                                       \
   FIELD_B (is_really_locked, 0);                                        \
   DXF {                                                                 \
-    SUB_FIELD_3BD (mtext, x_axis_dir, 11);                              \
-    DXF { VALUE_TFF ( "Embedded Object", 101 ); }                       \
-    SUB_FIELD_3BD (mtext, ins_pt, 10);                                  \
+    FIELD_BD (alignment_pt.x, 11);                                      \
+    FIELD_BD (alignment_pt.y, 21);                                      \
+    VALUE_RD (0.0, 31);                                                 \
+    VALUE_TFF ( "Embedded Object", 101 );                               \
+    FIELD_BD (ins_pt.x, 10);                                            \
+    FIELD_BD (ins_pt.y, 20);                                            \
+    VALUE_RD (0.0, 30);                                                 \
     SUB_FIELD_BD (mtext, rect_width, 40);                               \
     SUB_FIELD_BD (mtext, rect_height, 41);                              \
-    SUB_FIELD_BD (mtext, extents_width, 42);                            \
-    SUB_FIELD_BD (mtext, extents_height, 43);                           \
     SUB_FIELD_BL (mtext, column_type, 71);                              \
     SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)                        \
     if (SUB_FIELD_VALUE (mtext, column_type))                           \
@@ -217,25 +219,23 @@ DWG_ENTITY_END
     FIELD_BS (annotative_data_size, 70);                                \
     if (FIELD_VALUE (annotative_data_size) > 0)                         \
       {                                                                 \
-        /* TODO looks more like the prompt TU is here */                \
-        /* FIELD_TF (annotative_data, _obj->annotative_data_size, 0); */\
+        /*FIELD_TF (annotative_data, _obj->annotative_data_size, 0);*/  \
         SUB_FIELD_BS (mtext, attachment, 70);                           \
-        /*SUB_FIELD_3BD (mtext, x_axis_dir, 11);*/                      \
-        DXF { VALUE_TFF ( "Embedded Object", 101 ); }                   \
-        SUB_FIELD_3BD (mtext, ins_pt, 10);                              \
         DEBUG_HERE_OBJ                                                  \
-        SUB_FIELD_BD (mtext, rect_width, 40);                           \
+        SUB_FIELD_3BD (mtext, ins_pt, 10);                              \
+        SUB_FIELD_3BD (mtext, x_axis_dir, 11);                          \
         SUB_FIELD_BD (mtext, rect_height, 41);                          \
-        SUB_FIELD_BD (mtext, extents_width, 42);                        \
-        SUB_FIELD_BD (mtext, extents_height, 43);                       \
-        SUB_FIELD_BL (mtext, column_type, 71);                          \
-        SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)                    \
+        SUB_FIELD_BD (mtext, rect_width, 40); /* 1.2: @112 */           \
+        /*SUB_FIELD_BD (mtext, extents_width, 42);                      \
+          SUB_FIELD_BD (mtext, extents_height, 43);*/                   \
+        SUB_FIELD_BS (mtext, column_type, 71); /* 8: @180 */            \
+        /*SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)*/                \
         if (SUB_FIELD_VALUE (mtext, column_type))                       \
           {                                                             \
-            SUB_FIELD_BL (mtext, num_column_heights, 72);               \
+            SUB_FIELD_BS (mtext, num_column_heights, 72); /* 5: @23.5 */\
             SUB_FIELD_BD (mtext, column_width, 44);                     \
             SUB_FIELD_BD (mtext, gutter, 45);                           \
-            SUB_FIELD_B (mtext, auto_height, 73);                       \
+            SUB_FIELD_BS (mtext, auto_height, 73); /* 1: 25.3 */        \
             SUB_FIELD_B (mtext, flow_reversed, 74);                     \
             if (!SUB_FIELD_VALUE (mtext, auto_height)                   \
                 && SUB_FIELD_VALUE (mtext, column_type) == 2)           \
