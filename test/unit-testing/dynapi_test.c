@@ -12019,12 +12019,14 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_TF annotative_data;
+    BITCODE_RC* annotative_data;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "annotative_data", &annotative_data, NULL)
-        && !memcmp (&annotative_data, &geopositionmarker->annotative_data, sizeof (BITCODE_TF)))
-        pass ();
+        && annotative_data
+           ? strEQ ((char *)annotative_data, (char *)geopositionmarker->annotative_data)
+           : !geopositionmarker->annotative_data)
+      pass ();
     else
-        fail ("GEOPOSITIONMARKER.annotative_data [TF]");
+      fail ("GEOPOSITIONMARKER.annotative_data [RC*] '%s' <> '%s'", annotative_data, geopositionmarker->annotative_data);
   }
   {
     BITCODE_BS annotative_data_size;

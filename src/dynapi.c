@@ -1883,8 +1883,8 @@ static const Dwg_DYNAPI_field _dwg_GEOPOSITIONMARKER_fields[] = {
   { "is_really_locked",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, is_really_locked),
     0,0,0, 0 },
   { "annotative_data_size",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, annotative_data_size),
-    0,0,0, 70 },
-  { "annotative_data",	"TF", sizeof (BITCODE_RC*),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, annotative_data),
+    0,0,0, 0 },
+  { "annotative_data",	"RC*", sizeof (BITCODE_RC*),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, annotative_data),
     1,1,0, 0 },
   { "annotative_flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_GEOPOSITIONMARKER, annotative_flag),
     0,0,0, 0 },
@@ -10828,8 +10828,6 @@ static const Dwg_DYNAPI_field _dwg_ASSOCSURFACEACTIONBODY_fields[] = {
 };
 /* from typedef struct _dwg_AcDbMTextObjectEmbedded: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDbMTextObjectEmbedded_fields[] = {
-  { "is_really_locked",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, is_really_locked),
-    0,0,0, 0 },
   { "attachment",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, attachment),
     0,0,0, 0 },
   { "ins_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, ins_pt),

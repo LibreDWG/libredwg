@@ -861,6 +861,11 @@
       Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
       Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)
 
+#define DWG_ENT_SUBCLASS_DECL(parenttype, subtype)                            \
+  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
+      Dwg_Entity_##parenttype *restrict _obj, Bit_Chain * dat,                \
+      Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)
+
 #define DWG_SUBCLASS(parenttype, subtype)                                     \
   static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
       Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
@@ -873,13 +878,22 @@
     return error;                                                             \
   }
 
+#define DWG_ENT_SUBCLASS(parenttype, subtype)                                 \
+  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
+      Dwg_Entity_##parenttype *restrict _obj, Bit_Chain * dat,                \
+      Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
+  {                                                                           \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    Dwg_Data *dwg = obj->parent;                                              \
+    int error = 0;                                                            \
+    subtype##_fields;                                                         \
+    return error;                                                             \
+  }
+
+
 #define CALL_SUBCLASS(_xobj, parenttype, subtype)                             \
   error |= DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                   \
       _xobj, dat, hdl_dat, str_dat, (Dwg_Object *)obj)
-// if the name is compile-time known
-#define CALL_ENTITY(name, xobj)                                               \
-  error |= DWG_PRIVATE_N (ACTION, name) (dat, hdl_dat, str_dat,               \
-                                         (Dwg_Object *)xobj)
 // TODO: dispatch on the type
 #define CALL_SUBENT(hdl, dxf)
 // error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat,

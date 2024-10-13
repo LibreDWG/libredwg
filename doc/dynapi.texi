@@ -2077,9 +2077,9 @@ Dwg_AcDbMTextObjectEmbedded
 @item is_really_locked
 B
 @item annotative_data_size
-BS,	DXF 70
+BS
 @item annotative_data
-TF
+RC*
 @item annotative_flag
 BS
 @item annotative_style
@@ -13214,8 +13214,6 @@ H
 @indentedblock
 @vtable @code
 
-@item is_really_locked
-B
 @item attachment
 BL
 @item ins_pt

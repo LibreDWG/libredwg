@@ -186,51 +186,53 @@ DWG_ENTITY_END
 
 // R2010+ Subclass of ATTRIB, ATTDEF, GEOPOSITIONMARKER.
 // Similar to MTEXTOBJECTCONTEXTDATA?
-#define AcDbMTextObjectEmbedded_fields                                  \
-{                                                                       \
-  FIELD_B (is_really_locked, 0);                                        \
-  DXF {                                                                 \
-    FIELD_BD (alignment_pt.x, 11);                                      \
-    FIELD_BD (alignment_pt.y, 21);                                      \
-    VALUE_RD (0.0, 31);                                                 \
-    VALUE_TFF ( "Embedded Object", 101 );                               \
-    FIELD_BD (ins_pt.x, 10);                                            \
-    FIELD_BD (ins_pt.y, 20);                                            \
-    VALUE_RD (0.0, 30);                                                 \
-    SUB_FIELD_BD (mtext, rect_width, 40);                               \
-    SUB_FIELD_BD (mtext, rect_height, 41);                              \
-    SUB_FIELD_BL (mtext, column_type, 71);                              \
-    SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)                        \
-    if (SUB_FIELD_VALUE (mtext, column_type))                           \
-      {                                                                 \
-        SUB_FIELD_BL (mtext, num_column_heights, 72);                   \
-        SUB_FIELD_BD (mtext, column_width, 44);                         \
-        SUB_FIELD_BD (mtext, gutter, 45);                               \
-        SUB_FIELD_B (mtext, auto_height, 73);                           \
-        SUB_FIELD_B (mtext, flow_reversed, 74);                         \
-        if (!SUB_FIELD_VALUE (mtext, auto_height)                       \
-            && SUB_FIELD_VALUE (mtext, column_type) == 2)               \
-          {                                                             \
-            SUB_FIELD_VECTOR (mtext, column_heights, BD, num_column_heights, 46); \
-          }                                                             \
-      }                                                                 \
-  }                                                                     \
-  else {                                                                \
-    FIELD_BS (annotative_data_size, 70);                                \
-    if (FIELD_VALUE (annotative_data_size) > 0)                         \
-      {                                                                 \
-        /*FIELD_TF (annotative_data, _obj->annotative_data_size, 0);*/  \
-        SUB_FIELD_BS (mtext, attachment, 70);                           \
-        DEBUG_HERE_OBJ                                                  \
-        SUB_FIELD_3BD (mtext, ins_pt, 10);                              \
-        SUB_FIELD_3BD (mtext, x_axis_dir, 11);                          \
-        SUB_FIELD_BD (mtext, rect_height, 41);                          \
-        SUB_FIELD_BD (mtext, rect_width, 40); /* 1.2: @112 */           \
-        /*SUB_FIELD_BD (mtext, extents_width, 42);                      \
-          SUB_FIELD_BD (mtext, extents_height, 43);*/                   \
-        SUB_FIELD_BS (mtext, column_type, 71); /* 8: @180 */            \
-        /*SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)*/                \
-        if (SUB_FIELD_VALUE (mtext, column_type))                       \
+#define AcDbMTextObjectEmbedded_fields                    \
+  FIELD_B (is_really_locked, 0);                          \
+  DXF                                                     \
+  {                                                       \
+    FIELD_BD (alignment_pt.x, 11);                        \
+    FIELD_BD (alignment_pt.y, 21);                        \
+    VALUE_RD (0.0, 31);                                   \
+    VALUE_TFF ("Embedded Object", 101);                   \
+    FIELD_BD (ins_pt.x, 10);                              \
+    FIELD_BD (ins_pt.y, 20);                              \
+    VALUE_RD (0.0, 30);                                   \
+    SUB_FIELD_BD (mtext, rect_width, 40);                 \
+    SUB_FIELD_BD (mtext, rect_height, 41);                \
+    SUB_FIELD_BL (mtext, column_type, 71);                \
+    SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)          \
+    if (SUB_FIELD_VALUE (mtext, column_type))             \
+      {                                                   \
+        SUB_FIELD_BL (mtext, num_column_heights, 72);     \
+        SUB_FIELD_BD (mtext, column_width, 44);           \
+        SUB_FIELD_BD (mtext, gutter, 45);                 \
+        SUB_FIELD_B (mtext, auto_height, 73);             \
+        SUB_FIELD_B (mtext, flow_reversed, 74);           \
+        if (!SUB_FIELD_VALUE (mtext, auto_height)         \
+            && SUB_FIELD_VALUE (mtext, column_type) == 2) \
+          {                                               \
+            SUB_FIELD_VECTOR (mtext, column_heights, BD,  \
+                              num_column_heights, 46);    \
+          }                                               \
+      }                                                   \
+    }                                                     \
+  else                                                    \
+    {                                                     \
+      FIELD_BS (annotative_data_size, 70);                \
+      if (FIELD_VALUE (annotative_data_size) > 0)         \
+        {                                                 \
+        /*FIELD_TF (annotative_data, _obj->annotative_data_size, 0);*/ \
+        SUB_FIELD_BS (mtext, attachment, 70);             \
+        DEBUG_HERE_OBJ                                    \
+        SUB_FIELD_3BD (mtext, ins_pt, 10);                \
+        SUB_FIELD_3BD (mtext, x_axis_dir, 11);            \
+        SUB_FIELD_BD (mtext, rect_height, 41);            \
+        SUB_FIELD_BD (mtext, rect_width, 40); /* 1.2: @112 */ \
+        /*SUB_FIELD_BD (mtext, extents_width, 42);        \
+          SUB_FIELD_BD (mtext, extents_height, 43);*/     \
+        SUB_FIELD_BS (mtext, column_type, 71); /* 8: @180 */ \
+        SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)      \
+        if (SUB_FIELD_VALUE (mtext, column_type))         \
           {                                                             \
             SUB_FIELD_BS (mtext, num_column_heights, 72); /* 5: @23.5 */\
             SUB_FIELD_BD (mtext, column_width, 44);                     \
@@ -240,42 +242,16 @@ DWG_ENTITY_END
             if (!SUB_FIELD_VALUE (mtext, auto_height)                   \
                 && SUB_FIELD_VALUE (mtext, column_type) == 2)           \
               {                                                         \
-                SUB_FIELD_VECTOR (mtext, column_heights, BD, num_column_heights, 46); \
+                SUB_FIELD_VECTOR (mtext, column_heights, BD,            \
+                                  num_column_heights, 46);              \
               }                                                         \
-          }                                                             \
+            }                                                           \
         FIELD_BS (annotative_flag, 0);                                  \
-      }                                                                 \
-  }                                                                     \
-}
-
-#define AcDbMTextObjectEmbedded1_fields                                 \
-  {                                                                     \
-  SUB_FIELD_B (mtext, is_really_locked, 0);                             \
-  DEBUG_HERE_OBJ                                                        \
-  SUB_FIELD_BL (mtext, attachment, 70);                                 \
-  SUB_FIELD_3BD (mtext, x_axis_dir, 11);                                \
-  DXF { VALUE_TFF ( "Embedded Object", 101 ); }                         \
-  SUB_FIELD_3BD (mtext, ins_pt, 10);                                    \
-  SUB_FIELD_BD (mtext, rect_width, 40);                                 \
-  SUB_FIELD_BD (mtext, rect_height, 41);                                \
-  SUB_FIELD_BD (mtext, extents_width, 42);                              \
-  SUB_FIELD_BD (mtext, extents_height, 43);                             \
-  SUB_FIELD_BL (mtext, column_type, 71);                                \
-  SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)                          \
-  if (SUB_FIELD_VALUE (mtext, column_type))                             \
-    {                                                                   \
-      SUB_FIELD_BL (mtext, num_column_heights, 72);                     \
-      SUB_FIELD_BD (mtext, column_width, 44);                           \
-      SUB_FIELD_BD (mtext, gutter, 45);                                 \
-      SUB_FIELD_B (mtext, auto_height, 73);                             \
-      SUB_FIELD_B (mtext, flow_reversed, 74);                           \
-      if (!SUB_FIELD_VALUE (mtext, auto_height)                         \
-          && SUB_FIELD_VALUE (mtext, column_type) == 2)                 \
-        {                                                               \
-          SUB_FIELD_VECTOR (mtext, column_heights, BD, num_column_heights, 46); \
         }                                                               \
-      }                                                                 \
   }
+
+DWG_ENT_SUBCLASS_DECL (ATTRIB, AcDbMTextObjectEmbedded);
+DWG_ENT_SUBCLASS_DECL (ATTDEF, AcDbMTextObjectEmbedded);
 
 /* (2/16) */
 DWG_ENTITY (ATTRIB)
@@ -452,7 +428,7 @@ DWG_ENTITY (ATTRIB)
     {
       FIELD_RC (mtext_type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
       if (FIELD_VALUE (mtext_type) > 1)
-        AcDbMTextObjectEmbedded_fields
+        CALL_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
     }
 
   SINCE (R_13b1) {
@@ -598,8 +574,8 @@ DWG_ENTITY (ATTDEF)
       } else {
         if (!(dataflags & 0x02))
           FIELD_2DD (alignment_pt, ins_pt, 0);
-        FIELD_BE (extrusion, 0);
-        FIELD_BT (thickness, 0);
+        FIELD_BE (extrusion, 210);
+        FIELD_BT (thickness, 39);
       }
       DXF {
         FIELD_RD0 (rotation, 50);
@@ -643,7 +619,7 @@ DWG_ENTITY (ATTDEF)
 
   SUBCLASS (AcDbAttributeDefinition);
   DXF {
-    VALUE_RS (0, 280); // 0 = 2010
+    VALUE_RS (0, 280); // 0 = 2010+ (class_version)
     FIELD_T (prompt, 3);
     FIELD_T (tag, 2);
     FIELD_RC (mtext_type, 70);
@@ -664,9 +640,10 @@ DWG_ENTITY (ATTDEF)
     }
   IF_FREE_OR_SINCE (R_2018)
     {
-      FIELD_RC (mtext_type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
+      // 1=single line, 2=multi line attrib, 4=multi line attdef
+      FIELD_RC (mtext_type, 0);
       if (FIELD_VALUE (mtext_type) > 1)
-        AcDbMTextObjectEmbedded_fields
+        CALL_SUBCLASS (_obj, ATTDEF, AcDbMTextObjectEmbedded);
     }
   SINCE (R_13b1) {
     FIELD_T (tag, 0);
@@ -689,6 +666,9 @@ DWG_ENTITY (ATTDEF)
 
 DWG_ENTITY_END
 
+DWG_ENT_SUBCLASS (ATTRIB, AcDbMTextObjectEmbedded);
+DWG_ENT_SUBCLASS (ATTDEF, AcDbMTextObjectEmbedded);
+    
 /* (4/12) */
 DWG_ENTITY (BLOCK)
 
@@ -10205,6 +10185,8 @@ DWG_OBJECT (SUNSTUDY)
 
 DWG_OBJECT_END
 
+DWG_ENT_SUBCLASS_DECL (GEOPOSITIONMARKER, AcDbMTextObjectEmbedded);
+
 // (varies) UNSTABLE
 // in DXF as POSITIONMARKER (rename?, no), command: GEOMARKPOSITION, GEOMARKPOINT
 // r2014+
@@ -10221,10 +10203,12 @@ DWG_ENTITY (GEOPOSITIONMARKER)
   FIELD_RCd (text_alignment, 280);
   FIELD_B (enable_frame_text, 290);
   if (FIELD_VALUE (enable_frame_text))
-    AcDbMTextObjectEmbedded_fields;
+    CALL_SUBCLASS (_obj, GEOPOSITIONMARKER, AcDbMTextObjectEmbedded);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+DWG_ENT_SUBCLASS (GEOPOSITIONMARKER, AcDbMTextObjectEmbedded)
+  
 #define SweepOptions_fields  \
   FIELD_BD (draft_angle, 42); \
   FIELD_BD (draft_start_distance, 43); \
@@ -10786,7 +10770,7 @@ DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
         dwg_setup_SCALE (_obj->context);
       } */
       DXF { VALUE_TFF ( "Embedded Object", 101 ); }
-      //CALL_ENTITY (SCALE, _obj->context);
+      //CALL_SUBCLASS (_obj->context, SCALE, AcDbScale);
       SUBCLASS (AcDbScale);
       SUB_FIELD_BS (context, flag, 70); // always 0
       SUB_FIELD_T (context, name, 300);

@@ -1343,7 +1343,6 @@ typedef struct _dwg_entity_TEXT
  */
 typedef struct _dwg_AcDbMTextObjectEmbedded
 {
-  BITCODE_B is_really_locked;      	/*<! DXF 70 */
   BITCODE_BL attachment;      	/*<! DXF 70 */
   BITCODE_3BD ins_pt; 		/*!< DXF 10 */
   BITCODE_3BD x_axis_dir; 	/*!< DXF 11 */
@@ -1397,7 +1396,7 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_H style;
   BITCODE_RC mtext_type;    /* R2018+ */
   Dwg_AcDbMTextObjectEmbedded mtext;
-  BITCODE_B is_really_locked;     /* R2018+ */
+  BITCODE_B is_really_locked;      	/*<! DXF 70 */
   BITCODE_BS annotative_data_size;/* R2018+ */
   BITCODE_RC* annotative_data;    /* R2018+ */
   BITCODE_BS annotative_flag;     /* R2018+ */
@@ -1440,7 +1439,7 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_H style;
   BITCODE_RC mtext_type;          /* R2018+ */
   Dwg_AcDbMTextObjectEmbedded mtext;
-  BITCODE_B is_really_locked;     /* R2018+ */
+  BITCODE_B is_really_locked;      	/*<! DXF 70 */
   BITCODE_BS annotative_data_size;/* R2018+ */
   BITCODE_RC* annotative_data;    /* R2018+ */
   BITCODE_BS annotative_flag;    /* R2018+ */
@@ -4912,7 +4911,7 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
   BITCODE_B mtext_visible;     /*!< DXF 290 */
   BITCODE_B enable_frame_text; /*!< DXF 290 */
   Dwg_AcDbMTextObjectEmbedded mtext;
-  BITCODE_B is_really_locked;     /* R2018+ */
+  BITCODE_B is_really_locked;      	/*<! DXF 70 */
   BITCODE_BS annotative_data_size;/* R2018+ */
   BITCODE_RC* annotative_data;    /* R2018+ */
   BITCODE_BS annotative_flag;    /* R2018+ */
