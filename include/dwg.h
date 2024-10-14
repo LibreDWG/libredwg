@@ -5333,8 +5333,7 @@ typedef struct _dwg_object_DATALINK
 } Dwg_Object_DATALINK;
 
 /**
- Object DIMASSOC (varies) DEBUGGING
- --enable-debug only
+ Object DIMASSOC (varies) unstable
  */
 typedef struct _dwg_DIMASSOC_Ref
 {
@@ -5359,11 +5358,11 @@ typedef struct _dwg_object_DIMASSOC
 {
   struct _dwg_object_object *parent;
   BITCODE_H dimensionobj;
-  BITCODE_BL associativity;   /*!< DXF 90, bitmask 0-15*/
+  BITCODE_BL associativity;   /*!< DXF 90, bitmask 0-15 */
   BITCODE_B trans_space_flag; /*!< DXF 70 boolean */
-  BITCODE_RC rotated_type;      /*!< DXF 71 */
-  Dwg_DIMASSOC_Ref *ref;       /* 1-4x, with possible holes,
-                                  depend. on associativity bitmask */
+  BITCODE_RC rotated_type;    /*!< DXF 71 */
+  Dwg_DIMASSOC_Ref *ref;      /* 1-4x, with possible holes,
+                                 depends on associativity bitmask */
 } Dwg_Object_DIMASSOC;
 
 typedef struct _dwg_ACTIONBODY
@@ -8921,6 +8920,7 @@ typedef struct _dwg_object_object
     Dwg_Object_BLOCKXYPARAMETER *BLOCKXYPARAMETER;
     Dwg_Object_DATALINK *DATALINK;
     Dwg_Object_DBCOLOR *DBCOLOR;
+    Dwg_Object_DIMASSOC *DIMASSOC;
     Dwg_Object_EVALUATION_GRAPH *EVALUATION_GRAPH;
     Dwg_Object_FCFOBJECTCONTEXTDATA *FCFOBJECTCONTEXTDATA;
     Dwg_Object_GRADIENT_BACKGROUND *GRADIENT_BACKGROUND;
@@ -8985,7 +8985,6 @@ typedef struct _dwg_object_object
     Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CURVEPATH *CURVEPATH;
     Dwg_Object_DATATABLE *DATATABLE;
-    Dwg_Object_DIMASSOC *DIMASSOC;
     Dwg_Object_DMDIMOBJECTCONTEXTDATA *DMDIMOBJECTCONTEXTDATA;
     Dwg_Object_DYNAMICBLOCKPROXYNODE *DYNAMICBLOCKPROXYNODE;
     Dwg_Object_GEOMAPIMAGE *GEOMAPIMAGE;
@@ -10312,6 +10311,7 @@ EXPORT int dwg_setup_BLOCKXYGRIP (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKXYPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_DATALINK (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
+EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_setup_EVALUATION_GRAPH (Dwg_Object *obj);
 EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_GRADIENT_BACKGROUND (Dwg_Object *obj);
@@ -10401,7 +10401,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
   EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);
   EXPORT int dwg_setup_DATATABLE (Dwg_Object *obj);
-  EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
   EXPORT int dwg_setup_DMDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_DYNAMICBLOCKPROXYNODE (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOMAPIMAGE (Dwg_Object *obj);

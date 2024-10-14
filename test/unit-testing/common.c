@@ -663,6 +663,31 @@ main (int argc, char *argv[])
               error += test_code_nodist (
                   prefix, "2010/visualization_-_conference_room.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_DIMASSOC)
+            {
+              error += test_code_nodist (prefix, "../test/issues/gh518/9.dwg",
+                                         cov);
+              error += test_code_nodist (
+                  prefix,
+                  "../test-old/2018/from_cadforum.cz/A_BIG_COLLECTION.dwg",
+                  cov);
+              error += test_code_nodist (
+                  prefix, "../td/2007/400306222-Main_board_line.dwg", cov);
+              error += test_code_nodist (
+                  prefix, "../td/2007/400306224-X_E_Motor_Line.dwg", cov);
+              error += test_code_nodist (
+                  prefix,
+                  "../test-old/2004/from_uloz.to/61_001_00_Bo_Ze_A_KV1.dwg",
+                  cov);
+              error += test_code_nodist (
+                  prefix,
+                  "../test-old/2004/from_uloz.to/00_005_POHLADY_Kl_A.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                                         "../test-old/2004/from_uloz.to/"
+                                         "00_006_SCHODISKO_e_IX_X_Kl.dwg",
+                                         cov);
+            }
           if (DWG_TYPE == DWG_TYPE_POINTCLOUDCOLORMAP)
             {
               if (g_countmax == 1000) // only with -a
