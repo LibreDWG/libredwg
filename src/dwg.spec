@@ -10016,14 +10016,6 @@ DWG_ENTITY_END
   FIELD_B (dimension.flip_arrow2, 296);                 \
   FIELD_B (dimension.flip_arrow1, 297)
 
-/*=============================================================================*/
-
-/* In work area:
-   The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
-   unless enabled via --enable-debug/-DDEBUG_CLASSES */
-
-#if defined (DEBUG_CLASSES) || defined (IS_FREE)
-
 // (varies) UNSTABLE
 // 1-4 references, see associativity bits 1-8.
 DWG_OBJECT (DIMASSOC)
@@ -10082,6 +10074,14 @@ DWG_OBJECT (DIMASSOC)
 
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
+
+/*=============================================================================*/
+
+/* In work area:
+   The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
+   unless enabled via --enable-debug/-DDEBUG_CLASSES */
+
+#if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
 // (varies) fails the unit-test
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
