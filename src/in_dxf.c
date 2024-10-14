@@ -5606,7 +5606,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 30:
           if (i < 0)
             break;
-          o->ref[i].osnap_pt.z = pair->value.d;
+          // o->ref[i].osnap_pt.z = pair->value.d;
           LOG_TRACE ("%s.ref[%d].osnap_pt = (%f, %f, %f) [3BD 10]\n",
                      obj->name, i, o->ref[i].osnap_pt.x, o->ref[i].osnap_pt.y,
                      pair->value.d);

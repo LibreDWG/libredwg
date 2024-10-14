@@ -9966,7 +9966,7 @@ DWG_OBJECT (DIMASSOC)
         }
 
       SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
-      SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
+      SUB_FIELD_2BD (ref[rcount1], osnap_pt, 10);
 
       // restrict only when writing, not when reading?
       if (FIELD_VALUE (ref[rcount1].osnap_type) == 6

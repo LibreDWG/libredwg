@@ -5328,7 +5328,7 @@ typedef struct _dwg_DIMASSOC_Ref
   BITCODE_T classname;             /*!< DXF 1 constant */
   BITCODE_RC osnap_type;           /*!< DXF 72 */
   BITCODE_BD osnap_dist;           /*!< DXF 40 */
-  BITCODE_3BD osnap_pt;            /*!< DXF 10-30 */
+  BITCODE_2BD osnap_pt;            /*!< DXF 10-30 */
   BITCODE_BS num_xrefs;
   BITCODE_H *xrefs;                /*!< DXF 331 the geometry objects, 1 or 2 */
   BITCODE_BS main_subent_type;     /*!< DXF 73 */

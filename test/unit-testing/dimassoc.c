@@ -41,7 +41,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, osnap_type, RC);
       CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, osnap_type, RC, 13);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, osnap_dist, BD);
-      CHK_SUBCLASS_3RD (ref[i], DIMASSOC_Ref, osnap_pt);
+      CHK_SUBCLASS_2RD (ref[i], DIMASSOC_Ref, osnap_pt);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, main_subent_type, BL);
       CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, main_subent_type, BL, 2);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, main_gsmarker, BL);
