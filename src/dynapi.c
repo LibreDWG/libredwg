@@ -11489,7 +11489,7 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_Ref_fields[] = {
   { "intersec_gsmarker",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_DIMASSOC_Ref, intersec_gsmarker),
     0,0,0, 92 },
   { "num_intsectobj",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_DIMASSOC_Ref, num_intsectobj),
-    0,0,0, 0 },
+    0,0,0, 74 },
   { "intsectobj",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_DIMASSOC_Ref, intsectobj),
     1,1,0, 332 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
