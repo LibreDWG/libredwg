@@ -14127,7 +14127,7 @@ BS,	DXF 74
 @item intersec_gsmarker
 BL,	DXF 92
 @item num_intsectobj
-BL
+BL,	DXF 74
 @item intsectobj
 H*,	DXF 332
 

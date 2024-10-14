@@ -1543,7 +1543,7 @@ in_word_set (const char *str, size_t len)
 #line 258 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str782,                     "BLOCK_HEADER",                      DWG_TYPE_BLOCK_HEADER,	0,	STABLE},
 #line 273 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str783,                         "DIMASSOC",                          DWG_TYPE_DIMASSOC,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str783,                         "DIMASSOC",                          DWG_TYPE_DIMASSOC,	0,	UNSTABLE},
       {-1}, {-1},
 #line 69 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str786,          "DIMENSION",                  DWG_TYPE_DIMENSION_LINEAR,	1,	STABLE},
