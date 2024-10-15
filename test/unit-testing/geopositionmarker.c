@@ -32,14 +32,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, annotative_data_size, BS);
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, is_really_locked, B);
 
-  if (attrib->mtext_type > 1)
+  if (_obj->enable_frame_text)
     {
-      if (!dwg_dynapi_entity_value (attrib, "ATTRIB", "mtext", &mtext, NULL))
-        fail ("ATTRIB.mtext");
+      if (!dwg_dynapi_entity_value (_obj, "GEOPOSITIONMARKER", "mtext", &mtext, NULL))
+        fail ("GEOPOSITIONMARKER.mtext");
       else
         {
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, attachment, BS);
-          CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, ins_pt);
+          // CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, ins_pt);
           CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, x_axis_dir);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_height, BD);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_width, BD);

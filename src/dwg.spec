@@ -190,12 +190,12 @@ DWG_ENTITY_END
   FIELD_B (is_really_locked, 0);                          \
   DXF                                                     \
   {                                                       \
-    FIELD_BD (alignment_pt.x, 11);                        \
-    FIELD_BD (alignment_pt.y, 21);                        \
+    FIELD_RD (alignment_pt.x, 11);                        \
+    FIELD_RD (alignment_pt.y, 21);                        \
     VALUE_RD (0.0, 31);                                   \
     VALUE_TFF ("Embedded Object", 101);                   \
-    FIELD_BD (ins_pt.x, 10);                              \
-    FIELD_BD (ins_pt.y, 20);                              \
+    FIELD_RD (ins_pt.x, 10);                              \
+    FIELD_RD (ins_pt.y, 20);                              \
     VALUE_RD (0.0, 30);                                   \
     SUB_FIELD_BD (mtext, rect_width, 40);                 \
     SUB_FIELD_BD (mtext, rect_height, 41);                \
@@ -10202,8 +10202,10 @@ DWG_ENTITY (GEOPOSITIONMARKER)
   FIELD_B (mtext_visible, 290);
   FIELD_RCd (text_alignment, 280);
   FIELD_B (enable_frame_text, 290);
-  if (FIELD_VALUE (enable_frame_text))
+  if (FIELD_VALUE (enable_frame_text)) {
+    DXF { FIELD_VALUE (ins_pt) = FIELD_VALUE (position); }
     CALL_SUBCLASS (_obj, GEOPOSITIONMARKER, AcDbMTextObjectEmbedded);
+  }
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 

@@ -4910,6 +4910,8 @@ typedef struct _dwg_entity_GEOPOSITIONMARKER
   BITCODE_RC text_alignment;   /*!< DXF 70  0 left, 1 center, 2 right */
   BITCODE_B mtext_visible;     /*!< DXF 290 */
   BITCODE_B enable_frame_text; /*!< DXF 290 */
+  BITCODE_3BD ins_pt;          /* DXF only, = position */
+  BITCODE_2RD alignment_pt;    /* DXF only */
   Dwg_AcDbMTextObjectEmbedded mtext;
   BITCODE_B is_really_locked;      	/*<! DXF 70 */
   BITCODE_BS annotative_data_size;/* R2018+ */
