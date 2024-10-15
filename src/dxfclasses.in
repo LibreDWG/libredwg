@@ -49,6 +49,7 @@ enum apptypes
   DGNLSCLASS,
   AEC60CLASS,
   SPECIALCLASS,
+  NanoSPDSCLASS,
 };
 #define ODBX ODBXCLASS
 #define ISM ISMCLASS
@@ -58,6 +59,7 @@ enum apptypes
 #define DGNLS DGNLSCLASS
 #define AEC60 AEC60CLASS
 #define SPECIAL SPECIALCLASS
+#define NanoSPDS NanoSPDSCLASS
 //%null-strings
 
 %}
@@ -309,6 +311,13 @@ LSCOMPOUNDCOMPONENT,			"AcDbLSCompoundComponent",	DGNLS, 0
 LSPOINTCOMPONENT,			"AcDbLSPointComponent",		DGNLS, 0
 LSSYMBOLCOMPONENT,			"AcDbLSSymbolComponent",	DGNLS, 0
 AEC_REFEDIT_STATUS_TRACKER,		"AecDbRefEditStatusTracker",    AEC60, 0
+Wall,                                   "PtDbWall",                     NanoSPDS, 1
+Format,                                 "mcsDbObjectFormat",            NanoSPDS, 1
+NOTEPOSITION,                           "mcsDbObjectNotePosition",      NanoSPDS, 1
+mcsDbObject,                            "mcsDbObject",                  NanoSPDS, 1
+McDbContainer2,                         "McDbContainer2",               NanoSPDS, 0
+spdsLevelMark,                          "mcsDbObjectLevelMark",         NanoSPDS, 1
+spdsRelationMark,                       "mcsDbObjectRelationMark",      NanoSPDS, 1
 %%
 
 /* Create classes on demand.
@@ -349,6 +358,8 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
           return dwg_add_class (dwg, dxfname, result->cppname, "AcDbPointCloudObj", result->isent); //appname?
         case DGNLSCLASS:
           return dwg_add_class (dwg, dxfname, result->cppname, "AcDgnLS", result->isent);
+        case NanoSPDSCLASS:
+          return dwg_add_class (dwg, dxfname, result->cppname, "NanoSPDS", result->isent);
         case AEC60CLASS:
           return dwg_add_class (dwg, dxfname, result->cppname, "AecArchBase60|Product Desc: "
                                 "Autodesk Architectural Desktop 2007", result->isent);

@@ -12019,6 +12019,14 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
       return 1;
     }
   {
+    BITCODE_2RD alignment_pt;
+    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "alignment_pt", &alignment_pt, NULL)
+        && !memcmp (&alignment_pt, &geopositionmarker->alignment_pt, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("GEOPOSITIONMARKER.alignment_pt [2RD]");
+  }
+  {
     BITCODE_RC* annotative_data;
     if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "annotative_data", &annotative_data, NULL)
         && annotative_data
@@ -12095,6 +12103,14 @@ static int test_GEOPOSITIONMARKER (const Dwg_Object *obj)
     else
       fail ("GEOPOSITIONMARKER.enable_frame_text [B] set+1 " FORMAT_B " != " FORMAT_B "", geopositionmarker->enable_frame_text, enable_frame_text);
     geopositionmarker->enable_frame_text--;
+  }
+  {
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (geopositionmarker, "GEOPOSITIONMARKER", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &geopositionmarker->ins_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("GEOPOSITIONMARKER.ins_pt [3BD]");
   }
   {
     BITCODE_B is_really_locked;

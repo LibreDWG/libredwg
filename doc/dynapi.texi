@@ -2072,6 +2072,10 @@ RC,	DXF 280
 B,	DXF 290
 @item enable_frame_text
 B,	DXF 290
+@item ins_pt
+3BD
+@item alignment_pt
+2RD
 @item mtext
 Dwg_AcDbMTextObjectEmbedded
 @item is_really_locked
