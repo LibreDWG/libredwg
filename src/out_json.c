@@ -494,6 +494,7 @@ static char *_path_field (const char *path);
 #define FIELD_RSd(nam, dxf) FIELD (nam, RSd, dxf)
 #define FIELD_RD(nam, dxf) FIELD_BD (nam, dxf)
 #define FIELD_RL(nam, dxf) FIELD (nam, RL, dxf)
+#define FIELD_RLd(nam, dxf) FIELD (nam, RLd, dxf)
 #define FIELD_RLL(nam, dxf) FIELD (nam, RLL, dxf)
 #define FIELD_MC(nam, dxf) FIELD (nam, MC, dxf)
 #define FIELD_MS(nam, dxf) FIELD (nam, MS, dxf)
