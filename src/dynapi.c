@@ -11254,11 +11254,9 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSTRETCHACTION_handles_fields[] = {
     1,1,0, 0 },
   { "hdl",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, hdl),
     1,0,0, 331 },
-  { "shrt",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, shrt),
+  { "bs74",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, bs74),
     0,0,0, 74 },
-  { "long1",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, long1),
-    0,0,0, 94 },
-  { "long2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, long2),
+  { "bl94",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, bl94),
     0,0,0, 94 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

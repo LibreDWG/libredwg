@@ -7800,9 +7800,8 @@ typedef struct _dwg_object_BLOCKSCALEACTION
 typedef struct _dwg_BLOCKSTRETCHACTION_handles {
   struct _dwg_object_BLOCKSTRETCHACTION *parent;
   BITCODE_H hdl;     // 331
-  BITCODE_BS shrt;   // 74
-  BITCODE_BL long1;  // 94
-  BITCODE_BL long2;  // 94
+  BITCODE_BS bs74;   // 74
+  BITCODE_BL bl94;   // 94
 } Dwg_BLOCKSTRETCHACTION_handles;
 
 typedef struct _dwg_BLOCKSTRETCHACTION_codes {

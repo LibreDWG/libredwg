@@ -7867,24 +7867,17 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           dxf_free_pair (pair);
 
           pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->hdls[i].shrt, 74);
-          o->hdls[i].shrt = pair->value.i;
-          LOG_TRACE ("%s.hdls[%d].shrt = %u [BS 74]\n", obj->name, i,
-                     (unsigned)o->hdls[i].shrt);
+          EXPECT_DXF (obj->name, o->hdls[i].bs74, 74);
+          o->hdls[i].bs74 = pair->value.i;
+          LOG_TRACE ("%s.hdls[%d].bs74 = %u [BS 74]\n", obj->name, i,
+                     (unsigned)o->hdls[i].bs74);
           dxf_free_pair (pair);
 
           pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->hdls[i].long1, 94);
-          o->hdls[i].long1 = pair->value.u;
-          LOG_TRACE ("%s.hdls[%d].long1 = %u [BL 94]\n", obj->name, i,
-                     (unsigned)o->hdls[i].long1);
-          dxf_free_pair (pair);
-
-          pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->hdls[i].long2, 94);
-          o->hdls[i].long2 = pair->value.u;
-          LOG_TRACE ("%s.hdls[%d].long2 = %u [BL 94]\n", obj->name, i,
-                     (unsigned)o->hdls[i].long2);
+          EXPECT_DXF (obj->name, o->hdls[i].bl94, 94);
+          o->hdls[i].bl94 = pair->value.u;
+          LOG_TRACE ("%s.hdls[%d].bl94 = %u [BL 94]\n", obj->name, i,
+                     (unsigned)o->hdls[i].bl94);
           dxf_free_pair (pair);
         }
     }
