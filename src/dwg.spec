@@ -5134,11 +5134,13 @@ DWG_ENTITY (HATCH)
                       END_REPEAT_BLOCK
                       END_REPEAT (control_points);
 #undef control_points
-                      SINCE (R_2013) // r2014 really
+                      SINCE (R_2010)
                         {
 #define seg segx[rcount2]
                           SUB_FIELD_BL (seg, num_fitpts, 97);
                           FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
+                          SUB_FIELD_2RD (seg, start_tangent, 12);
+                          SUB_FIELD_2RD (seg, end_tangent, 13);
                         }
                       break;
                     default:
