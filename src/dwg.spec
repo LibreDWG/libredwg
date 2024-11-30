@@ -12425,13 +12425,8 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
   REPEAT (num_hdls, hdls, Dwg_BLOCKSTRETCHACTION_handles)
   REPEAT_BLOCK
     SUB_FIELD_HANDLE (hdls[rcount1], hdl, 0, 331);
-    SUB_FIELD_BS (hdls[rcount1], shrt, 74);
-    SUB_FIELD_BL (hdls[rcount1], long1, 94);
-    // See GRUE_LTM_1090+_from_cadforum.cz_2018
-    if (FIELD_VALUE (hdls[rcount1].long1) >= 128) {
-      DEBUG_HERE_OBJ
-    }
-    SUB_FIELD_BL (hdls[rcount1], long2, 94);
+    SUB_FIELD_BS (hdls[rcount1], bs74, 74);
+    SUB_FIELD_BL (hdls[rcount1], bl94, 94);
     SET_PARENT_OBJ (hdls[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (hdls)

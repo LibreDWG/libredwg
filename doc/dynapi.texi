@@ -13814,11 +13814,9 @@ BL,	DXF 94
 struct _dwg_object_BLOCKSTRETCHACTION*
 @item hdl
 H,	DXF 331
-@item shrt
+@item bs74
 BS,	DXF 74
-@item long1
-BL,	DXF 94
-@item long2
+@item bl94
 BL,	DXF 94
 
 @end vtable
