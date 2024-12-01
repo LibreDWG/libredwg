@@ -49,7 +49,7 @@ save_CFLAGS="$CFLAGS"
 if test "_$GCC" = _yes
 then
 	# Take advantage of GCC's format-string checking
-	CFLAGS="$CFLAGS -Wformat -pedantic -Werror"
+	CFLAGS="$CFLAGS -Wformat -pedantic -Werror -Wno-deprecated"
 fi
 
 result=unknown
