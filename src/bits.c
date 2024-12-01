@@ -2070,7 +2070,7 @@ bit_wcs2dup (const BITCODE_TU restrict src)
     return NULL;
   len = bit_wcs2len (src);
   blen = (len + 1) * 2; // include the zero
-  d = malloc (blen);
+  d = (BITCODE_TU)malloc (blen);
   if (d)
     memcpy (d, src, blen);
   return d;
@@ -2173,12 +2173,12 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
   if (length && dat->opts & DWG_OPTS_INJSON)
     {
       size_t destlen = length * 2;
-      char *dest = malloc (destlen);
+      char *dest = (char*)malloc (destlen);
       while (!bit_utf8_to_TV (dest, (unsigned char *)chain, destlen, length, 0,
                               dat->codepage))
         {
           destlen *= 2;
-          dest = realloc (dest, destlen);
+          dest = (char*)realloc (dest, destlen);
         }
       need_free = true;
       chain = dest;

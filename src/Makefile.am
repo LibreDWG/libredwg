@@ -190,7 +190,7 @@ clang-tidy: ../compile_commands.json
 # emacs flymake-mode
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
-	  nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
+	  nice $(COMPILE) -I. -O0 -o /dev/null -S $(CHK_SOURCES)
 .PHONY: check-syntax cppcheck clang-tidy
 
 if ENABLE_GCOV

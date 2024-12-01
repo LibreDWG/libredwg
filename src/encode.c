@@ -89,7 +89,11 @@ static BITCODE_BL rcount1 = 0, rcount2 = 0;
    SECTION_R13_SIZE is the size and the sentinel.
  */
 #define SECTION_R13_SIZE 7U
-static Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
+static Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE]
+#ifndef __cplusplus
+  = { 0 }
+#endif
+  ;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -2083,7 +2087,7 @@ section_remove (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
   (*pnum)--;
   memmove (&psection_order[i], &psection_order[i + 1],
            (*pnum - i) * sizeof (Dwg_Section_Type_r13));
-  psection_order[*pnum] = SECTION_R13_SIZE; // sentinel (invalid)
+  psection_order[*pnum] = (Dwg_Section_Type_r13)SECTION_R13_SIZE; // sentinel (invalid)
   return 1;
 }
 
@@ -2247,7 +2251,7 @@ encode_check_num_sections (Dwg_Section_Type_r11 id, Dwg_Data *restrict dwg)
   num_sections = dwg->header.num_sections + 2;
   if (!id)
     {
-      id = num_sections;
+      id = (Dwg_Section_Type_r11)num_sections;
       dwg->header.sections = dwg->header.num_sections;
     }
   if ((BITCODE_RL)id >= num_sections)
@@ -2481,7 +2485,13 @@ encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *str_dat = dat;
   Dwg_SecondHeader *_obj = &dwg->secondheader;
   // for error logging only:
+#ifndef __cplusplus
   Dwg_Object *obj = &(Dwg_Object){ .name = (char *)"2NDHEADER" };
+#else
+  Dwg_Object xobj;
+  xobj.name = (char *)"2NDHEADER";
+  Dwg_Object *obj = &xobj;
+#endif
   int error = 0;
   BITCODE_BL vcount;
   if (!dat->chain || !dat->size)
@@ -3539,7 +3549,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     // patch all the section tbl->address
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
-    encode_check_num_sections (dwg->header.num_sections, dwg);
+    encode_check_num_sections ((Dwg_Section_Type_r11)dwg->header.num_sections, dwg);
     if (dwg->header.from_version >= R_13b1)
       {
         /* r2000 has e.g.
@@ -3893,8 +3903,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     VERSIONS (R_13b1, R_2000)
     {
-      for (Dwg_Section_Type_r13 id = 0;
-           (unsigned)id < (unsigned)dwg->header.num_sections; id++)
+      for (unsigned id = 0; id < dwg->header.num_sections; id++)
         {
           switch (section_order[id])
             {
@@ -6690,13 +6699,13 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                 if (rbuf->value.str.size > 0 && dat->opts & DWG_OPTS_INJSON)
                   {
                     BITCODE_RS destlen = rbuf->value.str.size * 2;
-                    char *dest = malloc (destlen);
+                    char *dest = (char *)malloc (destlen);
                     while (!bit_utf8_to_TV (
                         dest, (BITCODE_TF)rbuf->value.str.u.data, destlen,
                         rbuf->value.str.size, 0, rbuf->value.str.codepage))
                       {
                         destlen *= 2;
-                        dest = realloc (dest, destlen);
+                        dest = (char *)realloc (dest, destlen);
                       }
                     destlen = (BITCODE_RS)strlen (dest);
                     bit_write_RS (dat, destlen);
@@ -7756,7 +7765,7 @@ dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
           _obj->has_strings_area = 0;
           return;
         }
-      _obj->strings_area = calloc (1, 512);
+      _obj->strings_area = (BITCODE_TF)calloc (1, 512);
       if (!_obj->strings_area)
         {
           _obj->has_strings_area = 0;
@@ -7776,7 +7785,7 @@ dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
       BITCODE_TF old = _obj->strings_area;
       if (!old)
         _obj->has_strings_area = 0;
-      _obj->strings_area = calloc (1, 256);
+      _obj->strings_area = (BITCODE_TF)calloc (1, 256);
       if (!_obj->strings_area || !old)
         { // all empty
           if (old)

@@ -2590,7 +2590,13 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *str_dat = dat;
   Dwg_SecondHeader *_obj = &dwg->secondheader;
   // for error logging only:
+#ifndef __cplusplus
   Dwg_Object *obj = &(Dwg_Object){ .name = (char *)"2NDHEADER" };
+#else
+  Dwg_Object xobj;
+  xobj.name = (char *)"2NDHEADER";
+  Dwg_Object *obj = &xobj;
+#endif
   int error = 0;
   BITCODE_BL vcount;
   if (!dat->chain || !dat->size)

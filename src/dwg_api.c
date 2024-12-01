@@ -22000,7 +22000,7 @@ EXPORT bool
 dwg_is_valid_name_u8 (Dwg_Data *restrict dwg, const char *restrict name)
 {
   Dwg_Version_Type version = dwg->header.version;
-  const Dwg_Codepage cp = dwg->header.codepage;
+  const Dwg_Codepage cp = (const Dwg_Codepage)dwg->header.codepage;
   BITCODE_TU wstr;
   size_t wlen;
 #ifndef HAVE_NONNULL
@@ -22067,7 +22067,7 @@ EXPORT bool
 dwg_is_valid_name (Dwg_Data *restrict dwg, const char *restrict name)
 {
   Dwg_Version_Type version = dwg->header.version;
-  const Dwg_Codepage cp = dwg->header.codepage;
+  const Dwg_Codepage cp = (const Dwg_Codepage)dwg->header.codepage;
 #ifndef HAVE_NONNULL
   if (!name)
     return false;
