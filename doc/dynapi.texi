@@ -13804,6 +13804,20 @@ BL,	DXF 94
 @end vtable
 @end indentedblock
 
+@strong{Dwg_BLOCKSTRETCHACTION_handle_indexes} @anchor{Dwg_BLOCKSTRETCHACTION_handle_indexes}
+@vindex Dwg_BLOCKSTRETCHACTION_handle_indexes
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_BLOCKSTRETCHACTION*
+@item index
+BL,	DXF 94
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_BLOCKSTRETCHACTION_handles} @anchor{Dwg_BLOCKSTRETCHACTION_handles}
 @vindex Dwg_BLOCKSTRETCHACTION_handles
 
@@ -13814,10 +13828,10 @@ BL,	DXF 94
 struct _dwg_object_BLOCKSTRETCHACTION*
 @item hdl
 H,	DXF 331
-@item bs74
+@item num_indexes
 BS,	DXF 74
-@item bl94
-BL,	DXF 94
+@item indexes
+Dwg_BLOCKSTRETCHACTION_handle_indexes*
 
 @end vtable
 @end indentedblock
@@ -14559,9 +14573,9 @@ BL,	DXF 97
 @item fitpts
 2RD*
 @item start_tangent
-2RD
+2RD,	DXF 12
 @item end_tangent
-2RD
+2RD,	DXF 13
 
 @end vtable
 @end indentedblock

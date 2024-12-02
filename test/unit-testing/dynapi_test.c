@@ -67931,6 +67931,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"BLOCKSTRETCHACTION_codes\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_BLOCKSTRETCHACTION_handle_indexes);
+  size2 = dwg_dynapi_fields_size ("BLOCKSTRETCHACTION_handle_indexes");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BLOCKSTRETCHACTION_handle_indexes): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKSTRETCHACTION_handle_indexes\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_BLOCKSTRETCHACTION_handles);
   size2 = dwg_dynapi_fields_size ("BLOCKSTRETCHACTION_handles");
   if (size1 != size2)

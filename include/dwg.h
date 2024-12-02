@@ -7797,11 +7797,16 @@ typedef struct _dwg_object_BLOCKSCALEACTION
   BLOCKACTION_WITHBASEPT_fields(5);
 } Dwg_Object_BLOCKSCALEACTION;
 
+typedef struct _dwg_BLOCKSTRETCHACTION_handle_indexes {
+  struct _dwg_object_BLOCKSTRETCHACTION *parent;
+  BITCODE_BL index;   // 94
+} Dwg_BLOCKSTRETCHACTION_handle_indexes;
+
 typedef struct _dwg_BLOCKSTRETCHACTION_handles {
   struct _dwg_object_BLOCKSTRETCHACTION *parent;
-  BITCODE_H hdl;     // 331
-  BITCODE_BS bs74;   // 74
-  BITCODE_BL bl94;   // 94
+  BITCODE_H hdl;            // 331
+  BITCODE_BS num_indexes;   // 74
+  Dwg_BLOCKSTRETCHACTION_handle_indexes *indexes;
 } Dwg_BLOCKSTRETCHACTION_handles;
 
 typedef struct _dwg_BLOCKSTRETCHACTION_codes {
@@ -7819,7 +7824,7 @@ typedef struct _dwg_object_BLOCKSTRETCHACTION
   BITCODE_BL num_pts;   // 72
   BITCODE_2RD *pts;     // 10
   BITCODE_BL num_hdls;  // 72
-  Dwg_BLOCKSTRETCHACTION_handles *hdls; /*!< DXF 331, 74, 94, 94 */
+  Dwg_BLOCKSTRETCHACTION_handles *hdls; /*!< DXF 331, 74, 94 */
   BITCODE_BL num_codes; // 75
   Dwg_BLOCKSTRETCHACTION_codes *codes;  /*!< DXF 95, 76, 94 */
   BLOCKACTION_doubles_fields;
