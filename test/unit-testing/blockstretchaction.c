@@ -6,7 +6,7 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BL i;
+  BITCODE_BL i, j;
   BLOCKACTION_fields;
   BITCODE_BL num_pts;
   BITCODE_2RD *pts;
@@ -40,8 +40,8 @@ api_process (dwg_object *obj)
   for (i = 0; i < num_hdls; i++)
     {
       CHK_SUBCLASS_H (_obj->hdls[i], BLOCKSTRETCHACTION_handles, hdl);
-      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, bs74, BS);
-      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, bl94, BL);
+      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, num_indexes, BS);
+      CHK_SUBCLASS_VECTOR_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, indexes, _obj->hdls[i].num_indexes, BL);
     }
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_codes, BL);
   for (i = 0; i < num_codes; i++)

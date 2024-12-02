@@ -13814,10 +13814,10 @@ BL,	DXF 94
 struct _dwg_object_BLOCKSTRETCHACTION*
 @item hdl
 H,	DXF 331
-@item bs74
+@item num_indexes
 BS,	DXF 74
-@item bl94
-BL,	DXF 94
+@item indexes
+BL*
 
 @end vtable
 @end indentedblock
@@ -14559,9 +14559,9 @@ BL,	DXF 97
 @item fitpts
 2RD*
 @item start_tangent
-2RD
+2RD,	DXF 12
 @item end_tangent
-2RD
+2RD,	DXF 13
 
 @end vtable
 @end indentedblock

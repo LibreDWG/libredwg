@@ -11254,10 +11254,10 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSTRETCHACTION_handles_fields[] = {
     1,1,0, 0 },
   { "hdl",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, hdl),
     1,0,0, 331 },
-  { "bs74",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, bs74),
+  { "num_indexes",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, num_indexes),
     0,0,0, 74 },
-  { "bl94",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, bl94),
-    0,0,0, 94 },
+  { "indexes",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, indexes),
+    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_BLOCKVISIBILITYPARAMETER_state: (sorted by offset) */
@@ -11819,9 +11819,9 @@ static const Dwg_DYNAPI_field _dwg_HATCH_PathSeg_fields[] = {
   { "fitpts",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_HATCH_PathSeg, fitpts),
     1,1,0, 0 },
   { "start_tangent",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_HATCH_PathSeg, start_tangent),
-    1,0,0, 0 },
+    1,0,0, 12 },
   { "end_tangent",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_HATCH_PathSeg, end_tangent),
-    1,0,0, 0 },
+    1,0,0, 13 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_HATCH_PolylinePath: (sorted by offset) */
