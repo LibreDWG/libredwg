@@ -50,8 +50,11 @@ api_process (dwg_object *obj)
   for (i = 0; i < num_codes; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, bl95, BL);
-      CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, bs76, BS);
-      CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, bl94, BL);
+      CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, num_indexes, BS);
+      for (j = 0; j < _obj->codes[i].num_indexes; j++)
+        {
+          CHK_SUBCLASS_TYPE (_obj->codes[i].indexes[j], BLOCKSTRETCHACTION_code_indexes, index, BL);
+        }
     }
 
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_offset_x, BD);

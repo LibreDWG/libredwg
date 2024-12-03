@@ -12441,8 +12441,13 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
   REPEAT (num_codes, codes, Dwg_BLOCKSTRETCHACTION_codes)
   REPEAT_BLOCK
     SUB_FIELD_BL (codes[rcount1], bl95, 95);
-    SUB_FIELD_BS (codes[rcount1], bs76, 76);
-    SUB_FIELD_BL (codes[rcount1], bl94, 94);
+    SUB_FIELD_BS (codes[rcount1], num_indexes, 76);
+    REPEAT2 (codes[rcount1].num_indexes, codes[rcount1].indexes, Dwg_BLOCKSTRETCHACTION_code_indexes)
+    REPEAT_BLOCK
+      SUB_FIELD_BL (codes[rcount1].indexes[rcount2], index, 94);
+      SET_PARENT_OBJ (codes[rcount1].indexes[rcount2]);
+    END_REPEAT_BLOCK
+    END_REPEAT (codes[rcount1].indexes)
     SET_PARENT_OBJ (codes[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (codes)

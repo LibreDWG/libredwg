@@ -13786,6 +13786,20 @@ BD*
 @end vtable
 @end indentedblock
 
+@strong{Dwg_BLOCKSTRETCHACTION_code_indexes} @anchor{Dwg_BLOCKSTRETCHACTION_code_indexes}
+@vindex Dwg_BLOCKSTRETCHACTION_code_indexes
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_BLOCKSTRETCHACTION*
+@item index
+BL,	DXF 94
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_BLOCKSTRETCHACTION_codes} @anchor{Dwg_BLOCKSTRETCHACTION_codes}
 @vindex Dwg_BLOCKSTRETCHACTION_codes
 
@@ -13796,10 +13810,10 @@ BD*
 struct _dwg_object_BLOCKSTRETCHACTION*
 @item bl95
 BL,	DXF 95
-@item bs76
+@item num_indexes
 BS,	DXF 76
-@item bl94
-BL,	DXF 94
+@item indexes
+Dwg_BLOCKSTRETCHACTION_code_indexes*
 
 @end vtable
 @end indentedblock

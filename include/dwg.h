@@ -7809,11 +7809,16 @@ typedef struct _dwg_BLOCKSTRETCHACTION_handles {
   Dwg_BLOCKSTRETCHACTION_handle_indexes *indexes;
 } Dwg_BLOCKSTRETCHACTION_handles;
 
+typedef struct _dwg_BLOCKSTRETCHACTION_code_indexes {
+  struct _dwg_object_BLOCKSTRETCHACTION *parent;
+  BITCODE_BL index;   // 94
+} Dwg_BLOCKSTRETCHACTION_code_indexes;
+
 typedef struct _dwg_BLOCKSTRETCHACTION_codes {
   struct _dwg_object_BLOCKSTRETCHACTION *parent;
-  BITCODE_BL bl95;  // 95
-  BITCODE_BS bs76;  // 76
-  BITCODE_BL bl94;  // 94
+  BITCODE_BL bl95;         // 95
+  BITCODE_BS num_indexes;  // 76
+  Dwg_BLOCKSTRETCHACTION_code_indexes *indexes;
 } Dwg_BLOCKSTRETCHACTION_codes;
 
 typedef struct _dwg_object_BLOCKSTRETCHACTION
