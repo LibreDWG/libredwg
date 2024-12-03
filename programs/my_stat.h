@@ -37,6 +37,9 @@ int _access (const char *path, int mode);
 #  ifndef S_ISREG
 #    define S_ISREG(m) ((m & 0170000) == _S_IFREG)
 #  endif
+#  ifndef S_ISDIR
+#    define S_ISDIR(m) ((m & 0170000) == _S_IFDIR)
+#  endif
 #  ifndef W_OK
 #    define W_OK 0
 #  endif

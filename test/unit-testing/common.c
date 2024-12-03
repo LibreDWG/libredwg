@@ -183,9 +183,9 @@ main (int argc, char *argv[])
           if (stat (*ptr, &attrib))
             {
               char tmp[80];
-              strcpy (tmp, prefix);
-              strcat (tmp, "/");
-              strcat (tmp, *ptr);
+              strncpy (tmp, prefix, sizeof (tmp));
+              strncat (tmp, "/", sizeof (prefix) - 1);
+              strncat (tmp, *ptr, sizeof (tmp) - sizeof (prefix) - strlen (*ptr) - 1);
               if (stat (tmp, &attrib))
                 fprintf (stderr, "Env var INPUT not defined, %s not found\n",
                          tmp);

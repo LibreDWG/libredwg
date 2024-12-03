@@ -20,8 +20,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
 #include "config.h"
+#ifdef __APPLE__
+#  define _DARWIN_C_SOURCE /* for DT_DIR */
+#endif
+#ifdef HAVE_DIRENT_H
+#  include <dirent.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
@@ -45,7 +50,7 @@ test_header (Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-#line 46 "dynapi_test.c"
+#line 53 "dynapi_test.c"
   /* @@for test_HEADER@@ */
   {
     BITCODE_RL size;
@@ -6095,10 +6100,10 @@ test_header (Dwg_Data *dwg)
     dwg_dynapi_header_set_value (dwg, "aspect_ratio", &aspect_ratio, 0);
 
   }
-#line 47 "dynapi_test.c.in"
+#line 54 "dynapi_test.c.in"
   return error;
 }
-#line 5379 "dynapi_test.c"
+#line 6106 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 static int test__3DFACE (const Dwg_Object *obj)
 {
@@ -63780,12 +63785,12 @@ static int test_ASSOCARRAYRECTANGULARPARAMETERS (const Dwg_Object *obj)
   return failed;
 }
 
-#line 53 "dynapi_test.c.in"
+#line 60 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 62158 "dynapi_test.c"
+#line 63793 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -65047,7 +65052,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCARRAYPOLARPARAMETERS (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS)
     error += test_ASSOCARRAYRECTANGULARPARAMETERS (obj);
-#line 60 "dynapi_test.c.in"
+#line 67 "dynapi_test.c.in"
   return error + failed;
 }
 
@@ -65057,7 +65062,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 63386 "dynapi_test.c"
+#line 65065 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -68611,7 +68616,7 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"MLEADER_Content\"): %d\n", size1, size2);
       error++;
     }
-#line 72 "dynapi_test.c.in"
+#line 79 "dynapi_test.c.in"
   return error;
 }
 
@@ -68684,10 +68689,20 @@ main (int argc, char *argv[])
           if (stat (*ptr, &attrib))
             {
               char tmp[80];
-              strncpy (tmp, "../test-data/", sizeof (tmp));
-              strncat (tmp, *ptr, sizeof (tmp) - sizeof ("../test-data/") - 1);
-              if (stat (tmp, &attrib))
-                LOG_ERROR ("Env var INPUT not defined, %s not found", tmp)
+              const char *prefix = "../test-data/";
+              strcpy (tmp, prefix);
+              strncat (tmp, *ptr,  sizeof (tmp) - sizeof (prefix) - strlen (*ptr) - 1);
+              if (stat (tmp, &attrib)) {
+                /* file not found. try srcdir */
+                prefix = "../../../test/test-data/";
+                if (!stat (prefix, &attrib) && S_ISDIR (attrib.st_mode)) {
+                  strcpy (tmp, prefix);
+                  strncat (tmp, *ptr, sizeof (tmp) - sizeof (prefix) - strlen (*ptr) - 1);
+                  error += test_dynapi (tmp);
+                } else {
+                  LOG_ERROR ("Env var INPUT not defined, %s not found", tmp);
+                }
+              }
               else
                 error += test_dynapi (tmp);
             }
