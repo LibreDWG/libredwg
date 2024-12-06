@@ -13796,10 +13796,10 @@ BD*
 struct _dwg_object_BLOCKSTRETCHACTION*
 @item bl95
 BL,	DXF 95
-@item bs76
+@item num_indexes
 BS,	DXF 76
-@item bl94
-BL,	DXF 94
+@item indexes
+BL*
 
 @end vtable
 @end indentedblock

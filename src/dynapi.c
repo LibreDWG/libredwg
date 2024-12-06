@@ -11242,10 +11242,10 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSTRETCHACTION_codes_fields[] = {
     1,1,0, 0 },
   { "bl95",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKSTRETCHACTION_codes, bl95),
     0,0,0, 95 },
-  { "bs76",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKSTRETCHACTION_codes, bs76),
+  { "num_indexes",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKSTRETCHACTION_codes, num_indexes),
     0,0,0, 76 },
-  { "bl94",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKSTRETCHACTION_codes, bl94),
-    0,0,0, 94 },
+  { "indexes",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_BLOCKSTRETCHACTION_codes, indexes),
+    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_BLOCKSTRETCHACTION_handles: (sorted by offset) */

@@ -7906,18 +7906,24 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           dxf_free_pair (pair);
 
           pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->codes[i].bs76, 76);
-          o->codes[i].bs76 = pair->value.i;
-          LOG_TRACE ("%s.codes[%d].bs76 = %d [BS 76]\n", obj->name, i,
-                     o->codes[i].bs76);
+          EXPECT_DXF (obj->name, o->codes[i].num_indexes, 76);
+          o->codes[i].num_indexes = pair->value.i;
+          LOG_TRACE ("%s.codes[%d].num_indexes = %d [BS 76]\n", obj->name, i,
+                     o->codes[i].num_indexes);
           dxf_free_pair (pair);
 
-          pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->codes[i].bl94, 94);
-          o->codes[i].bl94 = pair->value.i;
-          LOG_TRACE ("%s.codes[%d].bl94 = %d [BL 94]\n", obj->name, i,
-                     o->codes[i].bl94);
-          dxf_free_pair (pair);
+          if (o->codes[i].num_indexes)
+            {
+              for (unsigned j = 0; j < o->hdls[i].num_indexes; j++)
+                {
+                  pair = dxf_read_pair (dat);
+                  EXPECT_DXF (obj->name, o->codes[i].indexes[j], 94);
+                  o->codes[i].indexes[j] = pair->value.i;
+                  LOG_TRACE ("%s.codes[%d].indexes[%d] = %d [BL 94]\n", obj->name, i, j,
+                             o->codes[i].indexes[j]);
+                  dxf_free_pair (pair);
+                }
+            }
         }
     }
 

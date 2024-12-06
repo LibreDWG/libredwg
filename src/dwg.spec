@@ -12428,8 +12428,7 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
   REPEAT_BLOCK
     SUB_FIELD_HANDLE (hdls[rcount1], hdl, 0, 331);
     SUB_FIELD_BS (hdls[rcount1], num_indexes, 74);
-    SUB_FIELD_VALUE (hdls[rcount1], indexes) = (BITCODE_BL *)calloc (_obj->hdls[rcount1].num_indexes, sizeof (BITCODE_BL));
-    SUB_FIELD_VECTOR_INL (hdls[rcount1], indexes, BL, _obj->hdls[rcount1].num_indexes, 94);
+    SUB_FIELD_VECTOR (hdls[rcount1], indexes, BL, num_indexes, 94);
     SET_PARENT_OBJ (hdls[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (hdls)
@@ -12437,8 +12436,8 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
   REPEAT (num_codes, codes, Dwg_BLOCKSTRETCHACTION_codes)
   REPEAT_BLOCK
     SUB_FIELD_BL (codes[rcount1], bl95, 95);
-    SUB_FIELD_BS (codes[rcount1], bs76, 76);
-    SUB_FIELD_BL (codes[rcount1], bl94, 94);
+    SUB_FIELD_BS (codes[rcount1], num_indexes, 76);
+    SUB_FIELD_VECTOR (codes[rcount1], indexes, BL, num_indexes, 94);
     SET_PARENT_OBJ (codes[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (codes)
