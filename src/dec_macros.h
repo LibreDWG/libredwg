@@ -1160,22 +1160,6 @@
                              dxf)                                             \
         }                                                                     \
     }
-#define SUB_FIELD_VECTOR_N(o, nam, type, csize, dxf)                          \
-  if (csize > 0)                                                              \
-    {                                                                         \
-      SUB_VECTOR_CHKCOUNT (o, nam, type, csize, dat)                          \
-      _obj->o.nam                                                             \
-          = (BITCODE_##type *)calloc (csize, sizeof (BITCODE_##type));        \
-      if (!_obj->o.nam)                                                       \
-        return DWG_ERR_OUTOFMEM;                                              \
-      for (vcount = 0; vcount < (BITCODE_BL)csize; vcount++)                  \
-        {                                                                     \
-          _obj->o.nam[vcount] = bit_read_##type (dat);                        \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]",          \
-                     (long)vcount, _obj->o.nam[vcount], dxf)                  \
-          LOG_POS                                                             \
-        }                                                                     \
-    }
 #define SUB_FIELD_VECTOR(o, name, type, sizefield, dxf)                       \
   if (_obj->o.sizefield > 0)                                                  \
     {                                                                         \
@@ -1214,19 +1198,6 @@
       else                                                                    \
         LOG_TRACE ("} [*" #type "]")                                          \
       LOG_POS                                                                 \
-    }
-// inlined, with const size and without malloc
-#define SUB_FIELD_VECTOR_INL(o, nam, type, csize, dxf)                        \
-  if (csize > 0)                                                              \
-    {                                                                         \
-      _VECTOR_CHKCOUNT_STATIC (nam, csize, TYPE_MAXELEMSIZE (type), dat)      \
-      for (vcount = 0; vcount < (BITCODE_BL)csize; vcount++)                  \
-        {                                                                     \
-          _obj->o.nam[vcount] = bit_read_##type (dat);                        \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [" #type " %d]",          \
-                     (long)vcount, _obj->o.nam[vcount], dxf)                  \
-          LOG_POS                                                             \
-        }                                                                     \
     }
 #define FIELD_VECTOR_T(name, type, size, dxf)                                 \
   if (_obj->size > 0)                                                         \
