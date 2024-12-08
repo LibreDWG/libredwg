@@ -11245,7 +11245,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSTRETCHACTION_codes_fields[] = {
   { "num_indexes",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKSTRETCHACTION_codes, num_indexes),
     0,0,0, 76 },
   { "indexes",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_BLOCKSTRETCHACTION_codes, indexes),
-    1,1,0, 0 },
+    1,1,0, 94 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_BLOCKSTRETCHACTION_handles: (sorted by offset) */
@@ -11257,7 +11257,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSTRETCHACTION_handles_fields[] = {
   { "num_indexes",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, num_indexes),
     0,0,0, 74 },
   { "indexes",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_BLOCKSTRETCHACTION_handles, indexes),
-    1,1,0, 0 },
+    1,1,0, 94 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_BLOCKVISIBILITYPARAMETER_state: (sorted by offset) */
@@ -11751,7 +11751,7 @@ static const Dwg_DYNAPI_field _dwg_HATCH_DefLine_fields[] = {
   { "num_dashes",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_HATCH_DefLine, num_dashes),
     0,0,0, 79 },
   { "dashes",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_HATCH_DefLine, dashes),
-    1,1,0, 0 },
+    1,1,0, 49 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_HATCH_Path: (sorted by offset) */

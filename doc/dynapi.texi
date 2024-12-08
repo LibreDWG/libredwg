@@ -13799,7 +13799,7 @@ BL,	DXF 95
 @item num_indexes
 BS,	DXF 76
 @item indexes
-BL*
+BL*,	DXF 94
 
 @end vtable
 @end indentedblock
@@ -13817,7 +13817,7 @@ H,	DXF 331
 @item num_indexes
 BS,	DXF 74
 @item indexes
-BL*
+BL*,	DXF 94
 
 @end vtable
 @end indentedblock
@@ -14479,7 +14479,7 @@ BD,	DXF 53
 @item num_dashes
 BS,	DXF 79
 @item dashes
-BD*
+BD*,	DXF 49
 
 @end vtable
 @end indentedblock

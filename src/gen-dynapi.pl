@@ -387,6 +387,10 @@ sub dxf_in {
       my $type = $1;
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
+    } elsif (@old && /^\s+SUB_FIELD_VECTOR\s*\($v,\s*(\w+),\s*\w+,\s*\w+,\s*(\d+)\)/) {
+      my $type = $1;
+      $f = $1;
+      $DXF{$n}->{$f} = $2 if $2;
     } elsif (@old && /^\s+SUB_FIELD_(.+?)\s*\($v,\s*(\w+),\s*(\d+)\)/) {
       my $type = $1;
       $f = $2;
