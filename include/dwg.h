@@ -5339,20 +5339,23 @@ typedef struct _dwg_object_DATALINK
 typedef struct _dwg_DIMASSOC_Ref
 {
   struct _dwg_object_DIMASSOC *parent;
-  BITCODE_T classname;         /*!< DXF 1 constant */
-  BITCODE_RC osnap_type;       /*!< DXF 72 */
-  BITCODE_BD osnap_dist;       /*!< DXF 40 */
-  BITCODE_3BD osnap_pt;        /*!< DXF 10-30 */
+  BITCODE_T classname;             /*!< DXF 1 constant */
+  BITCODE_RC osnap_type;           /*!< DXF 72 */
+  BITCODE_BD osnap_dist;           /*!< DXF 40 */
+  BITCODE_3BD osnap_pt;            /*!< DXF 10-30 */
   BITCODE_BS num_xrefs;
-  BITCODE_H *xrefs;            /*!< DXF 331 the geometry objects, 1 or 2 */ 
-  BITCODE_BS main_subent_type; /*!< DXF 73 */
-  BITCODE_BL main_gsmarker;    /*!< DXF 91 */
+  BITCODE_H *xrefs;                /*!< DXF 331 the geometry objects, 1 or 2 */
+  BITCODE_BS main_subent_type;     /*!< DXF 73 */
+  BITCODE_BL main_gsmarker;        /*!< DXF 91 */
   BITCODE_BS num_xrefpaths;
-  BITCODE_T *xrefpaths;        /*!< DXF 301 */
-  BITCODE_B  has_lastpt_ref;   /*!< DXF 75 */
-  BITCODE_3BD lastpt_ref;      /*!< DXF ?? */
-  BITCODE_BL num_intsectobj;   /*!< DXF 74 */
-  BITCODE_H* intsectobj;       /*!< DXF 332 the intersection objects, 1 or 2 */
+  BITCODE_T *xrefpaths;            /*!< DXF 301 */
+  BITCODE_BS num_intersec_xrefpaths;
+  BITCODE_T *intersec_xrefpaths;   /*!< DXF 302 */
+  BITCODE_B  has_lastpt_ref;       /*!< DXF 75 */
+  BITCODE_BS intersec_subent_type; /*!< DXF 74 */
+  BITCODE_BL intersec_gsmarker;    /*!< DXF 92 */
+  BITCODE_BL num_intsectobj;
+  BITCODE_H* intsectobj;           /*!< DXF 332 the intersection objects, 1 or 2 */
 } Dwg_DIMASSOC_Ref;
 
 typedef struct _dwg_object_DIMASSOC
