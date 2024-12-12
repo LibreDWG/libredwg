@@ -18,6 +18,7 @@ api_process (dwg_object *obj)
   // BITCODE_H intsectxrefobj;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
+#ifdef DEBUG_CLASSES
   dwg_obj_dimassoc *dimassoc = dwg_object_to_DIMASSOC (obj);
 
   if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
@@ -55,4 +56,5 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, has_lastpt_ref, B);
       CHK_SUBCLASS_3RD (ref[i], DIMASSOC_Ref, lastpt_ref);
     }
+#endif
 }
