@@ -463,6 +463,7 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
                          l, &dat->chain[t->start]);
               // len = t->end - t->start;
               free (str);
+              str = NULL;
               goto normal;
             }
           str = (char *)realloc (str, dlen);
@@ -475,6 +476,7 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
     {
       char *p;
     normal:
+      if (!str) return NULL;
       if (l > len)
         {
           memcpy (str, &dat->chain[t->start], len);
@@ -3831,6 +3833,7 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           LOG_TRACE ("file_ID_string: \"%.*s\"\n", 12, _obj->file_ID_string)
           free (s);
+          s = NULL;
         }
       else if (strEQc (key, "padding"))
         {
