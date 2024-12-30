@@ -6186,6 +6186,7 @@ typedef struct _dwg_object_DIMASSOC
   BITCODE_BL associativity;   /*!< DXF 90, bitmask 0-15 */
   BITCODE_B trans_space_flag; /*!< DXF 70 boolean */
   BITCODE_RC rotated_type;    /*!< DXF 71 */
+  BITCODE_B has_lastpt_ref;   // copy of last ref field
   Dwg_DIMASSOC_Ref *ref;      /* 1-4x, with possible holes,
                                  depends on associativity bitmask */
 } Dwg_Object_DIMASSOC;

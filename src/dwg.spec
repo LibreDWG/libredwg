@@ -10017,7 +10017,7 @@ DWG_ENTITY_END
   FIELD_B (dimension.flip_arrow1, 297)
 
 // (varies) UNSTABLE
-// 1-4 references, see associativity bits 1-8.
+// 1-6 references, see associativity bits 1-8.
 DWG_OBJECT (DIMASSOC)
 
   HANDLE_UNKNOWN_BITS;
@@ -10026,12 +10026,11 @@ DWG_OBJECT (DIMASSOC)
   FIELD_B (trans_space_flag, 70);
   FIELD_RC (rotated_type, 71);
   FIELD_HANDLE (dimensionobj, 4, 330);
-  // 6 = maximum of items
   REPEAT_CN (6, ref, Dwg_DIMASSOC_Ref) // i.e. AcDbOsnapPointRef
   REPEAT_BLOCK
-      // there could be more blocks, up to 5.
+      // there could be more blocks, up to 5 or 6.
       // 0 1 2 3 => 1 2 4 8. skip unset bits
-      if (!(FIELD_VALUE (associativity) & (1 << rcount1)))
+    if (!(FIELD_VALUE (associativity) & (1 << rcount1)) && !FIELD_VALUE(has_lastpt_ref))
         {
 #ifdef IS_JSON
           ENDHASH;
@@ -10068,6 +10067,7 @@ DWG_OBJECT (DIMASSOC)
           FIELD_VECTOR_T (ref[rcount1].intersec_xrefpaths, T, ref[rcount1].num_intersec_xrefpaths, 302)
         }
       SUB_FIELD_B (ref[rcount1], has_lastpt_ref, 75);
+      FIELD_VALUE(has_lastpt_ref) = SUB_FIELD_VALUE(ref[rcount1], has_lastpt_ref);
       SET_PARENT_OBJ (ref[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (ref)
