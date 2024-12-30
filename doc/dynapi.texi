@@ -9322,6 +9322,8 @@ BL,	DXF 90
 B,	DXF 70
 @item rotated_type
 RC,	DXF 71
+@item has_lastpt_ref
+B
 @item ref
 Dwg_DIMASSOC_Ref*
 

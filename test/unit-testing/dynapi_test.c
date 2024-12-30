@@ -46519,6 +46519,21 @@ static int test_DIMASSOC (const Dwg_Object *obj)
         fail ("DIMASSOC.dimensionobj [H]");
   }
   {
+    BITCODE_B has_lastpt_ref;
+    if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "has_lastpt_ref", &has_lastpt_ref, NULL)
+        && has_lastpt_ref == dimassoc->has_lastpt_ref)
+      pass ();
+    else
+      fail ("DIMASSOC.has_lastpt_ref [B] " FORMAT_B " != " FORMAT_B "", dimassoc->has_lastpt_ref, has_lastpt_ref);
+    has_lastpt_ref++;
+    if (dwg_dynapi_entity_set_value (dimassoc, "DIMASSOC", "has_lastpt_ref", &has_lastpt_ref, 0)
+        && has_lastpt_ref == dimassoc->has_lastpt_ref)
+      pass ();
+    else
+      fail ("DIMASSOC.has_lastpt_ref [B] set+1 " FORMAT_B " != " FORMAT_B "", dimassoc->has_lastpt_ref, has_lastpt_ref);
+    dimassoc->has_lastpt_ref--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dimassoc, "DIMASSOC", "parent", &parent, NULL)
         && !memcmp (&parent, &dimassoc->parent, sizeof (struct _dwg_object_object*)))

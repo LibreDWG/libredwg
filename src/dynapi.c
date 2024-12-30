@@ -7785,6 +7785,8 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_fields[] = {
     0,0,0, 70 },
   { "rotated_type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DIMASSOC, rotated_type),
     0,0,0, 71 },
+  { "has_lastpt_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_DIMASSOC, has_lastpt_ref),
+    0,0,0, 0 },
   { "ref",	"Dwg_DIMASSOC_Ref*", sizeof (Dwg_DIMASSOC_Ref*),  OFF (struct _dwg_object_DIMASSOC, ref),
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
