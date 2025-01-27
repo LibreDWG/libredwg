@@ -17,6 +17,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+AM_MAKEFLAGS = --no-print-directory
 TEXINFO_TEX_DIR = $(abs_builddir)/latex
 TEXINPUTS="$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi

@@ -1,4 +1,4 @@
-
+AM_MAKEFLAGS = --no-print-directory
 AM_CPPFLAGS = $(XML2_CFLAGS)
 # no -O2
 # CFLAGS = -g

@@ -24,6 +24,7 @@
 ## TODO: place generated files out of source tree
 
 ACLOCAL_AMFLAGS = -I $(top_srcdir)/m4
+AM_MAKEFLAGS = --no-print-directory
 
 ## magic to override pkgpythondir = $(pythondir)/$(PACKAGE)
 ## at least in Ubuntu python wouldn't find the module there

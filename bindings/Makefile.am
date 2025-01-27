@@ -21,6 +21,7 @@
 ## written by Reini Urban
 
 ACLOCAL_AMFLAGS = -I m4
+AM_MAKEFLAGS = --no-print-directory
 
 # The perl subdir is for the perl Makefile.PL tool and is driven from here
 if HAVE_SWIG_PYTHON

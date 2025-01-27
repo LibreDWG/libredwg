@@ -1,3 +1,4 @@
+AM_MAKEFLAGS = --no-print-directory
 SUBDIRS = unit-testing
 if HAVE_PYTHON_LIBXML2
 if HAVE_LIBXML2

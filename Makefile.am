@@ -18,6 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ACLOCAL_AMFLAGS = -I m4
+AM_MAKEFLAGS = --no-print-directory
 
 SUBDIRS = src programs examples test
 if HAVE_SWIG_PYTHON
