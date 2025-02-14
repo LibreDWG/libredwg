@@ -3799,6 +3799,11 @@ DWG_TABLE (LAYER)
     }
   }
   SINCE (R_13b1) {
+    DXF {
+      if (! FIELD_VALUE(on)) {
+        FIELD_VALUE (color.index) = - FIELD_VALUE(color.index); // Negative value in case of disabled layer
+      }
+    }
     FIELD_CMC (color, 62);
   }
   VERSIONS (R_13b1, R_14) {
