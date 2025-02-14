@@ -3785,9 +3785,9 @@ DWG_TABLE (LAYER)
     FIELD_VALUE (flag) |= FIELD_VALUE (frozen) |
       (FIELD_VALUE (frozen_in_new) << 1) |
       (FIELD_VALUE (locked) << 2) |
-      (FIELD_VALUE (is_xref_ref) << 3) |
-      ((FIELD_VALUE (is_xref_resolved) ? 1 : 0) << 4) |
-      (FIELD_VALUE (is_xref_dep) << 5);
+      (FIELD_VALUE (is_xref_ref) << 4) |
+      ((FIELD_VALUE (is_xref_resolved) ? 1 : 0) << 5) |
+      (FIELD_VALUE (is_xref_dep) << 6);
     JSON {
       FIELD_RC (linewt, 370);
     }
