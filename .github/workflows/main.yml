@@ -173,7 +173,7 @@ jobs:
     - if: failure()
       run: tar cfz cmake-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: cmake-failure.tgz
         path: cmake-failure.tgz
