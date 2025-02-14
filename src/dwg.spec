@@ -3835,7 +3835,7 @@ DWG_TABLE (LAYER)
         _obj->plotflag = 0;
         FIELD_B (plotflag, 290);
       } else {
-        FIELD_B0 (plotflag, 290);
+        FIELD_B1 (plotflag, 290);
       }
     }
     SINCE (R_13b1) {

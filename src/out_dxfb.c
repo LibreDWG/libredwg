@@ -265,6 +265,11 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     if (_obj->nam)                                                            \
       FIELD_B (nam, dxf)                                                      \
   }
+#define FIELD_B1(nam, dxf)                                                    \
+  {                                                                           \
+    if (! _obj->nam)                                                          \
+      FIELD_B (nam, dxf)                                                      \
+  }
 #define FIELD_RC0(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam != 0)                                                       \
