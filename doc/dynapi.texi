@@ -14116,12 +14116,18 @@ BL,	DXF 91
 BS
 @item xrefpaths
 TV*,	DXF 301
+@item num_intersec_xrefpaths
+BS
+@item intersec_xrefpaths
+TV*
 @item has_lastpt_ref
 B,	DXF 75
-@item lastpt_ref
-3BD
+@item intersec_subent_type
+BS,	DXF 74
+@item intersec_gsmarker
+BL,	DXF 92
 @item num_intsectobj
-BL,	DXF 74
+BL
 @item intsectobj
 H*,	DXF 332
 
