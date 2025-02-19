@@ -3775,17 +3775,29 @@ DWG_TABLE (LAYER)
     // DWG: frozen (1), on (2), frozen by default (4),
     //      locked (8), plotting flag (16), and linewt (mask with 0x03E0)
     FIELD_VALUE (frozen) = flag0 & 1;
+#ifndef IS_FREE
     LOG_LAYER_FLAG(frozen);
+#endif
     FIELD_VALUE (on) = !(flag0 & 2);
+#ifndef IS_FREE
     LOG_LAYER_FLAG_REV(on);
+#endif
     FIELD_VALUE (frozen_in_new) = (flag0 & 4) ? 1 : 0;
+#ifndef IS_FREE
     LOG_LAYER_FLAG(frozen_in_new);
+#endif
     FIELD_VALUE (locked) = (flag0 & 8) ? 1 : 0;
+#ifndef IS_FREE
     LOG_LAYER_FLAG(locked);
+#endif
     FIELD_VALUE (plotflag) = (flag0 & 16) ? 1 : 0;
+#ifndef IS_FREE
     LOG_LAYER_FLAG_REV(plotflag);
+#endif
     FIELD_VALUE (linewt) = (flag0 & 0x03E0) >> 5;
+#ifndef IS_FREE
     LOG_LAYER_FLAG(linewt);
+#endif
     // DXF: frozen (1), frozen by default in new viewports (2),
     //      locked (4), is_xref_ref (16), is_xref_resolved (32), is_xref_dep (64).
     FIELD_VALUE (flag) |= FIELD_VALUE (frozen) |
