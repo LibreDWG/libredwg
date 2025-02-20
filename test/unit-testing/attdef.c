@@ -60,7 +60,7 @@ api_process (dwg_object *obj)
   if (attdef->mtext_type > 1)
     {
       if (!dwg_dynapi_entity_value (attdef, "ATTDEF", "mtext", &mtext, NULL))
-        fail ("ATTRIB.mtext");
+        fail ("ATTDEF.mtext");
       else
         {
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, attachment, BS);
