@@ -913,11 +913,17 @@
 
 #ifndef LOG_LAYER_FLAG
 #  define LOG_LAYER_FLAG(w)                                                   \
-    if (_obj->w)                                                              \
-      LOG_TRACE("       %s: 0x%x\n", #w, _obj->w);
+    DECODER_OR_ENCODER                                                        \
+    {                                                                         \
+      if (_obj->w)                                                            \
+        LOG_TRACE("       %s: 0x%x\n", #w, _obj->w);                          \
+    }
 #  define LOG_LAYER_FLAG_REV(w)                                               \
-    if (! _obj->w)                                                            \
-      LOG_TRACE("       %s: 0x%x\n", #w, _obj->w);
+    DECODER_OR_ENCODER                                                        \
+    {                                                                         \
+      if (! _obj->w)                                                          \
+        LOG_TRACE("       %s: 0x%x\n", #w, _obj->w);                          \
+    }
 #endif
 #ifndef LOG_TEXT_GENERATION
 #  define LOG_TEXT_GENERATION_W(w)                                            \
