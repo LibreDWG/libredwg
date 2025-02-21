@@ -9849,13 +9849,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   SINCE (R_2000b)
                   {
                     SET_CTRL_BIT (1, frozen);
-                    bit = flag & 2 ? 0 : 1; // reverse
-                    if (bit)
-                      {
-                        dwg_dynapi_entity_set_value (_obj, obj->name, "on",
-                                                     &bit, 1);
-                        LOG_TRACE ("%s.%s = %d [B]\n", name, "on", bit);
-                      }
+                    SET_CTRL_BIT (2, off);
                     SET_CTRL_BIT (4, frozen_in_new);
                     SET_CTRL_BIT (8, locked);
                     SET_CTRL_BIT (32768, plotflag);

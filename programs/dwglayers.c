@@ -168,10 +168,10 @@ main (int argc, char *argv[])
         continue;
       assert (_ctrl->entries[i]->obj->tio.object);
       layer = _ctrl->entries[i]->obj->tio.object->tio.LAYER;
-      if (on && (!layer->on || layer->frozen))
+      if (on && (layer->off || layer->frozen))
         continue;
       if (flags)
-        printf ("%s%s%s\t", layer->frozen ? "f" : " ", layer->on ? "+" : "-",
+        printf ("%s%s%s\t", layer->frozen ? "f" : " ", layer->off ? "-" : "+",
                 layer->locked ? "l" : " ");
       if (extnames && dwg.header.from_version >= R_13b1
           && dwg.header.from_version < R_2000)

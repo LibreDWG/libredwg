@@ -50487,19 +50487,19 @@ static int test_LAYER (const Dwg_Object *obj)
       fail ("LAYER.name [T] '%s' <> '%s'", name, layer->name);
   }
   {
-    BITCODE_B on;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "on", &on, NULL)
-        && on == layer->on)
+    BITCODE_B off;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "off", &off, NULL)
+        && off == layer->off)
       pass ();
     else
-      fail ("LAYER.on [B] " FORMAT_B " != " FORMAT_B "", layer->on, on);
-    on++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "on", &on, 0)
-        && on == layer->on)
+      fail ("LAYER.off [B] " FORMAT_B " != " FORMAT_B "", layer->off, off);
+    off++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "off", &off, 0)
+        && off == layer->off)
       pass ();
     else
-      fail ("LAYER.on [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->on, on);
-    layer->on--;
+      fail ("LAYER.off [B] set+1 " FORMAT_B " != " FORMAT_B "", layer->off, off);
+    layer->off--;
   }
   {
     struct _dwg_object_object* parent;

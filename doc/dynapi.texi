@@ -10130,7 +10130,7 @@ H
 BS
 @item frozen
 B
-@item on
+@item off
 B
 @item frozen_in_new
 B

@@ -2480,7 +2480,7 @@ typedef struct _dwg_object_LAYER
 {
   /*<! flag0 DWG r2000+
      1:  frozen
-     2:  on
+     2:  off
      4:  frozen_in_new
      8:  locked
      16: plotflag
@@ -2489,7 +2489,7 @@ typedef struct _dwg_object_LAYER
   COMMON_TABLE_FIELDS;
   BITCODE_BS flag0;       /* The DWG variant of 70, flag is for DXF */
   BITCODE_B frozen;
-  BITCODE_B on;
+  BITCODE_B off;
   BITCODE_B frozen_in_new;
   BITCODE_B locked;
   BITCODE_B plotflag;     /* DXF 290 (optional) */

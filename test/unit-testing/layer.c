@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_H xref;
 
   BITCODE_B frozen;
-  BITCODE_B on;
+  BITCODE_B off;
   BITCODE_B frozen_in_new;
   BITCODE_B locked;
   BITCODE_B plotflag;
@@ -40,7 +40,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (layer, LAYER, xref);
 
   CHK_ENTITY_TYPE (layer, LAYER, frozen, B);
-  CHK_ENTITY_TYPE (layer, LAYER, on, B);
+  CHK_ENTITY_TYPE (layer, LAYER, off, B);
   CHK_ENTITY_TYPE (layer, LAYER, frozen_in_new, B);
   CHK_ENTITY_TYPE (layer, LAYER, locked, B);
   CHK_ENTITY_TYPE (layer, LAYER, plotflag, B);
