@@ -8427,7 +8427,7 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
     0,0,0, 0 },
   { "frozen",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LAYER, frozen),
     0,0,0, 0 },
-  { "on",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LAYER, on),
+  { "off",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LAYER, off),
     0,0,0, 0 },
   { "frozen_in_new",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LAYER, frozen_in_new),
     0,0,0, 0 },

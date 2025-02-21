@@ -3755,7 +3755,7 @@ DWG_TABLE (LAYER)
       FIELD_CAST (flag0, RC, BS, 0);
 
     DECODER {
-      FIELD_VALUE (on)            = FIELD_VALUE (color.index) >= 0;
+      FIELD_VALUE (off)           = FIELD_VALUE (color.index) < 0;
       FIELD_VALUE (frozen)        = FIELD_VALUE (flag) & 1;
       FIELD_VALUE (frozen_in_new) = FIELD_VALUE (flag) & 2;
       FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;
@@ -3763,7 +3763,7 @@ DWG_TABLE (LAYER)
   }
   VERSIONS (R_13b1, R_14) {
     FIELD_B (frozen, 0); // bit 1
-    FIELD_B (on, 0);     // really: negate the color
+    FIELD_B (off, 0);    // also: negate the color. see below
     FIELD_B (frozen_in_new, 0);
     FIELD_B (locked, 0);
   }
@@ -3772,12 +3772,12 @@ DWG_TABLE (LAYER)
     int flag0 = FIELD_VALUE (flag0);
     FIELD_BSx (flag0, 0); // -> 70,290,370
     flag0 = FIELD_VALUE (flag0);
-    // DWG: frozen (1), on (2), frozen by default (4),
+    // DWG: frozen (1), off (2), frozen by default (4),
     //      locked (8), plotting flag (16), and linewt (mask with 0x03E0)
     FIELD_VALUE (frozen) = flag0 & 1;
     LOG_LAYER_FLAG(frozen);
-    FIELD_VALUE (on) = !(flag0 & 2);
-    LOG_LAYER_FLAG_REV(on);
+    FIELD_VALUE (off) = flag0 & 2;
+    LOG_LAYER_FLAG(off);
     FIELD_VALUE (frozen_in_new) = (flag0 & 4) ? 1 : 0;
     LOG_LAYER_FLAG(frozen_in_new);
     FIELD_VALUE (locked) = (flag0 & 8) ? 1 : 0;
@@ -3800,7 +3800,7 @@ DWG_TABLE (LAYER)
   }
   SINCE (R_13b1) {
     DXF {
-      if (! FIELD_VALUE(on)) {
+      if (FIELD_VALUE(off)) {
         FIELD_VALUE (color.index) = - FIELD_VALUE(color.index); // Negative value in case of disabled layer
       }
     }
@@ -3808,18 +3808,19 @@ DWG_TABLE (LAYER)
   }
   VERSIONS (R_13b1, R_14) {
     DECODER {
-      FIELD_VALUE (on) = FIELD_VALUE (color.index) >= 0;
+      FIELD_VALUE (off) = FIELD_VALUE (color.index) < 0;
+      LOG_LAYER_FLAG(off);
     }
     // for DWG
     FIELD_VALUE (flag0) |= FIELD_VALUE (frozen) |
       (FIELD_VALUE (frozen_in_new) << 1) |
       (FIELD_VALUE (locked) << 2) |
-      (FIELD_VALUE (on) ? 0 : 32);
+      (FIELD_VALUE (off) ? 32 : 0);
     // for DXF
     FIELD_VALUE (flag) |= FIELD_VALUE (frozen) |
       (FIELD_VALUE (frozen_in_new) << 1) |
       (FIELD_VALUE (locked) << 2) |
-      (FIELD_VALUE (on) ? 0 : 32);
+      (FIELD_VALUE (off) ? 32: 0);
   }
 
   SINCE (R_13b1) {

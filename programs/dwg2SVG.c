@@ -151,7 +151,7 @@ entity_invisible (Dwg_Object *obj)
     return false;
   _obj = layer->tio.object->tio.LAYER;
   // pre-r13 it is set if the layer color is negative
-  return _obj->on == 0 ? true : false;
+  return _obj->off == 1 ? true : false;
 }
 
 static double
