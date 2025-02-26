@@ -1298,7 +1298,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
         }
     }
   else
-    fprintf (dat->fh, "\r\n");
+    fprintf (dat->fh, "%3d\r\n\r\n", dxf);
 }
 
 static int
