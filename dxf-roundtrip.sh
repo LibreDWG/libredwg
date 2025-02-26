@@ -17,6 +17,7 @@ r=$(basename $(dirname $full))
 case $r in
     20*)      ;;
     r9)       r=9 ;;
+    r11)      r=12 ;;
     r1[0234]) r=${r:1} ;;
     *)  case $f in
             *_20*)
@@ -26,6 +27,9 @@ case $r in
             *_r9)
                 r=9
                 f=$(basename $f _r$r)
+                ;;
+            *_r11)
+                r=12
                 ;;
             *_r1[0234])
                 r=${f:(-2)}
@@ -37,9 +41,15 @@ case $r in
                ;;
     esac     ;;
 esac
+case $r in
+    9|10|11|12|13|14|2000|2004|2007|2010|2013|2018) ;;
+    *) make -s -C examples odaversion
+       r="$(examples/odaversion "$full")"
+       ;;
+esac
 
-echo programs/dwg2dxf -v4 -o ${f}_${r}.dxf $full
-programs/dwg2dxf -v4 -o ${f}_${r}.dxf $full 2>${f}_${r}.log ||
+echo programs/dwg2dxf -y -v4 -o ${f}_${r}.dxf $full
+programs/dwg2dxf -y -v4 -o ${f}_${r}.dxf $full 2>${f}_${r}.log ||
     grep Error ${f}_${r}.log
 
 mv ${f}_${r}.dxf test/

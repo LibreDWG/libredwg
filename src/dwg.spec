@@ -4001,18 +4001,21 @@ DWG_TABLE (LTYPE)
   }
   FIELD_RC (alignment, 72);
   FIELD_RCu (numdashes, 73);
-  DXF { FIELD_BD (pattern_len, 40); }
-  PRE (R_13b1)
-  {
-    FIELD_RD (pattern_len, 40);
+  DXF {
+    FIELD_BD (pattern_len, 40);
+  } else {
+    PRE (R_13b1)
+    {
+      FIELD_RD (pattern_len, 40);
 #ifndef IS_JSON
-    FIELD_VECTOR_INL (dashes_r11, RD, 12, 49);
+      FIELD_VECTOR_INL (dashes_r11, RD, 12, 49);
 #else
-    FIELD_VECTOR_N (dashes_r11, RD, 12, 49);
+      FIELD_VECTOR_N (dashes_r11, RD, 12, 49);
 #endif
-    PRE (R_11) {
-      if (obj->size > 187) // !! encode,add
-        FIELD_RC (unknown_r11, 0);
+      PRE (R_11) {
+        if (obj->size > 187) // !! encode,add
+          FIELD_RC (unknown_r11, 0);
+      }
     }
   }
   SINCE (R_13b1)
@@ -4056,7 +4059,7 @@ DWG_TABLE (LTYPE)
       SET_PARENT_OBJ (dashes[rcount1]);
     END_REPEAT_BLOCK
     END_REPEAT (dashes);
-    
+
     UNTIL (R_2004) {
 #if !defined(IS_DECODER) && defined(USE_WRITE) && !defined(DECODE_TEST_C)
       // downconvert from 512
