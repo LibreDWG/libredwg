@@ -52,7 +52,7 @@ mline 4 ((3.9 1.5 0) (3.2 1.8 0) (4.6 1.0 0) (3.8 1.7 0))
 dimstyle "Dim1"
 dimstyle.DIMSCALE = 2.0
 dimstyle.DIMUPT = 1
-ucs (0 0 0) (1 0 0) (2.5 0 0) "Ucs1"
+ucs (0 1 0) (1 0 0) (0 0 1) "Ucs1"
 ucs.ucs_elevation = 1.0
 viewport "Viewport1"
 layout viewport "Model" "ANSI_A_(8.50_x_11.00_Inches)"
