@@ -23638,7 +23638,7 @@ EXPORT Dwg_Entity_POLYLINE_2D *
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const int num_pts, const dwg_point_2d *restrict pts)
 {
-  Dwg_Object *pl, *vtx = NULL;
+  Dwg_Object *pl, *seq, *vtx = NULL;
   Dwg_Entity_POLYLINE_2D *_pl;
   Dwg_Entity_VERTEX_2D *_vtx;
   Dwg_Entity_SEQEND *_seq;
@@ -23664,8 +23664,9 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           return NULL;
         }
       vtx = dwg_obj_generic_to_object (_vtx, &error);
-      if (!vtx)
+      if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_2d_err;
+      vtx->tio.entity->next_entity = NULL;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
         _pl->first_vertex
@@ -23690,6 +23691,7 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
+  seq = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
@@ -23697,7 +23699,7 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     obj->type = DWG_TYPE_POLYLINE_r11;
 
   _pl->num_owned = num_pts;
-  IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  IN_POSTPROCESS_SEQEND (seq, _pl->num_owned, _pl->vertex);
   return _pl;
 }
 
@@ -23705,7 +23707,7 @@ EXPORT Dwg_Entity_POLYLINE_3D *
 dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const int num_pts, const dwg_point_3d *restrict pts)
 {
-  Dwg_Object *pl, *vtx = NULL;
+  Dwg_Object *pl, *seq, *vtx = NULL;
   Dwg_Entity_POLYLINE_3D *_pl;
   Dwg_Entity_VERTEX_3D *_vtx;
   Dwg_Entity_SEQEND *_seq;
@@ -23733,8 +23735,8 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           return NULL;
         }
       vtx = dwg_obj_generic_to_object (_vtx, &error);
-      if (!vtx)
         goto vtx_3d_err;
+      vtx->tio.entity->next_entity = NULL;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
         _pl->first_vertex
@@ -23757,6 +23759,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
+  seq = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
@@ -23764,7 +23767,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     obj->type = DWG_TYPE_POLYLINE_r11;
 
   _pl->num_owned = num_pts;
-  IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  IN_POSTPROCESS_SEQEND (seq, _pl->num_owned, _pl->vertex);
   return _pl;
 }
 
@@ -23832,7 +23835,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const dwg_point_3d *restrict verts,
                         const dwg_face *restrict faces)
 {
-  Dwg_Object *pl, *vtx;
+  Dwg_Object *pl, *seq, *vtx;
   Dwg_Entity_POLYLINE_PFACE *_pl;
   Dwg_Entity_VERTEX_PFACE *_vtx;
   Dwg_Entity_VERTEX_PFACE_FACE *_vtxf;
@@ -23864,7 +23867,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           return NULL;
         }
       vtx = dwg_obj_generic_to_object (_vtx, &error);
-      if (!vtx)
+      if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_pface_err;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
@@ -23881,8 +23884,9 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           return NULL;
         }
       vtx = dwg_obj_generic_to_object (_vtxf, &error);
-      if (!vtx)
+      if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_pface_face_err;
+      vtx->tio.entity->next_entity = NULL;
       _pl->vertex[numverts + j]
           = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (j == numfaces - 1)
@@ -23900,9 +23904,10 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
+  seq = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
-  IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  IN_POSTPROCESS_SEQEND (seq, _pl->num_owned, _pl->vertex);
   pl->tio.entity->next_entity = NULL; // fixup
   if (dwg->header.version <= R_12)
     obj->type = DWG_TYPE_POLYLINE_r11;
@@ -23942,7 +23947,7 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                        const unsigned num_m_verts, const unsigned num_n_verts,
                        const dwg_point_3d *restrict verts)
 {
-  Dwg_Object *pl, *vtx;
+  Dwg_Object *pl, *seq, *vtx;
   Dwg_Entity_POLYLINE_MESH *_pl;
   Dwg_Entity_VERTEX_MESH *_vtx;
   Dwg_Entity_SEQEND *_seq;
@@ -23970,8 +23975,9 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           return NULL;
         }
       vtx = dwg_obj_generic_to_object (_vtx, &error);
-      if (!vtx)
+      if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_mesh_err;
+      vtx->tio.entity->next_entity = NULL;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
         _pl->first_vertex
@@ -23990,6 +23996,7 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
+  seq = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
@@ -24004,7 +24011,7 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       if (num_n_verts)
         obj->tio.entity->opts_r11 |= OPTS_R11_POLYLINE_HAS_N_VERTS;
     }
-  IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  IN_POSTPROCESS_SEQEND (seq, _pl->num_owned, _pl->vertex);
   return _pl;
 }
 

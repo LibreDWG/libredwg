@@ -6973,8 +6973,10 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   const char *lastfield;
 
   if (!obj || !obj->parent || obj->fixedtype != DWG_TYPE_SEQEND
-      || !obj->tio.entity)
+      || !obj->tio.entity) {
+    LOG_ERROR ("wrong in_postprocess_SEQEND obj");
     return;
+  }
   dwg = obj->parent;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("in_postprocess_SEQEND (%u):\n", (unsigned)num_owned);
