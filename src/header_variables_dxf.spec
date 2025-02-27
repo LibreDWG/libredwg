@@ -243,7 +243,7 @@
   }
   HEADER_RS (LIMCHECK, 70);
   UNTIL (R_14) {
-    HEADER_RS0 (BLIPMODE, 70); //documented but nowhere found
+    HEADER_RS (BLIPMODE, 70); //documented but nowhere found
   }
   HEADER_RD (CHAMFERA, 40);
   HEADER_RD (CHAMFERB, 40);
