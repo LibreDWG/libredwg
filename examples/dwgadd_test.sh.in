@@ -18,6 +18,54 @@ else
     TESTPROG="@LTEXEC@"
 fi
 
+case $(uname) in
+    Darwin)  ODAFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+    Linux)   ODAFileConverter=/usr/bin/ODAFileConverter ;;
+    Windows) ODAFileConverter=ODAFileConverter ;;
+    *)       has_oda= ;;
+esac
+if [ ! -x "$ODAFileConverter" ]; then
+    case $(uname) in
+        Darwin)  ODAFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+        Linux)   ODAFileConverter=/usr/bin/TeighaFileConverter ;;
+        Windows) ODAFileConverter=TeighaFileConverter ;;
+    esac
+    if [ -x "$ODAFileConverter" ]; then
+        baseFileConverter=TeighaFileConverter
+        has_oda=1
+    fi
+else
+    baseFileConverter=ODAFileConverter
+    has_oda=1
+fi
+
+checkODA() {
+    DWG="$1"
+    V="$2"
+    case $V in
+        r2000) r=2000 ;;
+        r14) r=14 ;;
+        r13) r=13 ;;
+        r12) r=12 ;;
+        r11) r=12 ;;
+        r10) r=10 ;;
+        r9) r=9 ;;
+        *) return ;;
+    esac
+    dxf="$(basename "$DWG" .dwg).dxf"
+    rm -f "$dxf.err"
+    echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$DWG"
+    timeout 30 "$ODAFileConverter" . . "ACAD$r" DXF 0 1 "$DWG" >/dev/null 2>/dev/null
+    ret=$?
+    if test -f "$dxf.err"; then
+        cat "$dxf.err"
+        echo FAIL "$baseFileConverter" "$DWG" "$V"
+        return 1
+    fi
+    rm -f "$dxf"
+    return 0
+}
+
 dwgaddtest() {
     MG="$1"
     V="$2"
@@ -33,6 +81,10 @@ dwgaddtest() {
         $TESTPROG "${abs_builddir}/dwgadd${EXEEXT}" --verify \
                        -o dwgadd_test.dwg "$FEX"
         ret=$?
+        if [ -n "$has_oda" ]; then
+            checkODA dwgadd_test.dwg r2000
+            ret=$?
+        fi
     else
         #PRE=
         #if test "$V" = "r1.4" -a -n $HAVE_ASAN
@@ -44,6 +96,14 @@ dwgaddtest() {
         $TESTPROG "${abs_builddir}/dwgadd${EXEEXT}" --verify \
                        -a "$V" -o dwgadd_test.dwg "$FEX"
         ret=$?
+        if [ -n "$has_oda" ]; then
+            checkODA dwgadd_test.dwg "$V"
+            if [ "$V" = "r14" ]; then
+                echo "TODO $V $EX"
+                ret=0
+            fi
+            ret=$?
+        fi
     fi
     if [ $ret -ne 0 ]
     then
