@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <ctype.h>
 // #include <math.h>
 
 #define IS_DXF
@@ -332,6 +333,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     {
       char _buf[128];
       char *comma;
+      char *s;
+      bool add_dot_zero = 1;
       fprintf (dat->fh, "%3i\r\n", dxf);
 #ifndef DEBUG_CLASSES
       if (bit_isnan (value))
@@ -355,7 +358,20 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           fprintf (dat->fh, "%s\r\n", _buf);
         }
       else
-        fprintf (dat->fh, "%s\r\n", _buf);
+        {
+          s = _buf;
+          while (*s) {
+            if (!isdigit((unsigned char)*s))
+              {
+                add_dot_zero = 0;
+                break;
+              }
+            s++;
+          }
+          if (add_dot_zero)
+            strcat(_buf, ".0");
+          fprintf (dat->fh, "%s\r\n", _buf);
+        }
     }
 }
 #define VALUE_BSd(value, dxf)                                                 \
