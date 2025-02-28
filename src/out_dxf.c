@@ -355,7 +355,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           fprintf (dat->fh, "%s\r\n", _buf);
         }
       else
-        fprintf (dat->fh, "%s\r\n", _buf);
+        {
+          if (! comma)
+            strcat(_buf, ".0");
+          fprintf (dat->fh, "%s\r\n", _buf);
+        }
     }
 }
 #define VALUE_BSd(value, dxf)                                                 \
