@@ -2712,7 +2712,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_B UCSFOLLOW;
   BITCODE_BS circle_zoom; /* circle sides: nr of tesselations */
   BITCODE_B FASTZOOM;
-  BITCODE_RC UCSICON;     /* DXF 71:  0: icon_on, 1: icon_at_ucsorg */
+  BITCODE_RC UCSICON;     /* DXF 74:  0: icon_on, 1: icon_at_ucsorg */
   BITCODE_B GRIDMODE;     /* DXF 76: on or off */
   BITCODE_2RD GRIDUNIT;
   BITCODE_B SNAPMODE;     /* DXF 75: on or off */
