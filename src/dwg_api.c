@@ -12718,7 +12718,7 @@ dwg_ent_spline_get_fit_pts (const dwg_ent_spline *restrict spline,
   else
     {
       *error = 1;
-      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__);
       return NULL;
     }
 }
@@ -22323,7 +22323,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
                                   dwg->header.codepage);
       if (!dest)
         {
-          LOG_ERROR ("Out of memory");
+          LOG_ERROR ("%s: Out of memory", __FUNCTION__);
           return NULL;
         }
       while (!tgt)
@@ -22331,7 +22331,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
           size *= 2;
           if (size >= 1>>32)
             {
-              LOG_ERROR ("Out of memory");
+              LOG_ERROR ("%s: Out of memory", __FUNCTION__);
               return NULL;
             }
           dest = (char*)realloc (dest, size);
@@ -22918,7 +22918,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
         = (Dwg_Class *)realloc (dwg->dwg_class, (i + 1) * sizeof (Dwg_Class));
   if (!dwg->dwg_class)
     {
-      LOG_ERROR ("Out of memory");
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__);
       return -1;
     }
   klass = &dwg->dwg_class[i];
@@ -23716,8 +23716,10 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   pl = obj;
   _pl = _obj;
   _pl->vertex = (BITCODE_H *)malloc (num_pts * sizeof (BITCODE_H));
-  if (!_pl->vertex)
+  if (!_pl->vertex) {
+    LOG_ERROR ("%s: Out of memory", __FUNCTION__)
     return NULL;
+  }
   obj->tio.entity->opts_r11 = OPTS_R11_POLYLINE_HAS_FLAG;
   _obj->flag = FLAG_POLYLINE_3D;
   if (num_pts)
@@ -23735,6 +23737,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           return NULL;
         }
       vtx = dwg_obj_generic_to_object (_vtx, &error);
+      if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_3d_err;
       vtx->tio.entity->next_entity = NULL;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
@@ -23846,8 +23849,10 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _pl = _obj;
   _pl->vertex = (BITCODE_H *)malloc (((unsigned long)numverts + numfaces)
                                      * sizeof (BITCODE_H));
-  if (!_pl->vertex)
+  if (!_pl->vertex) {
+    LOG_ERROR ("%s: Out of memory", __FUNCTION__)
     return NULL;
+  }
   _pl->has_vertex = 1;
   obj->tio.entity->opts_r11 = OPTS_R11_POLYLINE_HAS_FLAG
                               | OPTS_R11_POLYLINE_HAS_M_VERTS
@@ -23957,8 +23962,10 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _pl = _obj;
   _pl->vertex = (BITCODE_H *)malloc ((unsigned long)num_m_verts * num_n_verts
                                      * sizeof (BITCODE_H));
-  if (!_pl->vertex)
+  if (!_pl->vertex) {
+    LOG_ERROR ("%s: Out of memory", __FUNCTION__)
     return NULL;
+  }
   _pl->flag = FLAG_POLYLINE_MESH;
   _pl->num_m_verts = num_m_verts;
   _pl->num_n_verts = num_n_verts;
@@ -24634,7 +24641,11 @@ dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->num_fit_pts = (BITCODE_BL)num_fit_pts;
   assert (sizeof (BITCODE_3BD) == sizeof (dwg_point_3d));
   _obj->fit_pts = (BITCODE_3BD *)malloc (num_fit_pts * sizeof (BITCODE_3BD));
-  memcpy (_obj->fit_pts, fit_pts, num_fit_pts * sizeof (BITCODE_3BD));
+  if (!_obj->fit_pts) {
+    LOG_ERROR ("%s: Out of memory", __FUNCTION__)
+  } else {
+    memcpy (_obj->fit_pts, fit_pts, num_fit_pts * sizeof (BITCODE_3BD));
+  }
   return _obj;
 }
 
@@ -26115,11 +26126,17 @@ dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj, const short dxf,
     _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
-  rbuf->value.str.size = size;
   rbuf->value.str.is_tu = 0;
   rbuf->value.str.u.data = (char *)malloc (size);
-  memcpy (rbuf->value.str.u.data, data, size);
-  _obj->xdata_size += 3 + size; // 2 + 1 + len
+  if (!rbuf->value.str.u.data) {
+    LOG_ERROR ("%s: Out of memory", __FUNCTION__)
+    rbuf->value.str.size = 0;
+    _obj->xdata_size += 3; // 2 + 1
+  } else {
+    rbuf->value.str.size = size;
+    memcpy (rbuf->value.str.u.data, data, size);
+    _obj->xdata_size += 3 + size; // 2 + 1 + len
+  }
   return _obj;
 }
 
@@ -26202,8 +26219,14 @@ dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
     // add the data to dwg->vbaproject, the SECTION_VBAPROJECT
     dwg->vbaproject.size = size;
     dwg->vbaproject.unknown_bits = (BITCODE_TF)malloc (size);
-    // memcpy (_obj->data, data, size);
-    memcpy (dwg->vbaproject.unknown_bits, data, size);
+    if (!dwg->vbaproject.unknown_bits) {
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+      dwg->vbaproject.size = 0;
+      _obj->data_size = 0;
+    } else {
+      // memcpy (_obj->data, data, size);
+      memcpy (dwg->vbaproject.unknown_bits, data, size);
+    }
     // header.vbaproj_address is set in encode
     return _obj;
   }
