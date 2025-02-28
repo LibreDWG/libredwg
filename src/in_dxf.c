@@ -10360,6 +10360,18 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 return pair;
               goto next_pair;
             }
+          else if (pair->code == 74 && obj->fixedtype == DWG_TYPE_VPORT)
+            {
+              Dwg_Object_VPORT *o = obj->tio.object->tio.VPORT;
+              BITCODE_RC ucsicon = pair->value.i;
+              if (ucsicon == 1) // 1 and 2 are swapped in DXF
+                ucsicon = 2;
+              else if (ucsicon == 2)
+                ucsicon = 1;
+              o->UCSICON = ucsicon;
+              LOG_TRACE ("VPORT.UCSICON = %d [BB 74]\n", o->UCSICON)
+              goto next_pair;
+            }
           else if (pair->code == 65 && obj->fixedtype == DWG_TYPE_VPORT)
             {
               Dwg_Object_VPORT *o = obj->tio.object->tio.VPORT;
