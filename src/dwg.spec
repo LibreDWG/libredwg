@@ -4371,7 +4371,14 @@ DWG_TABLE (VPORT)
     //VIEWMODE: UCSVP bit 0, ucs_at_origin bit 1, UCSFOLLOW bit 3
     FIELD_RS (circle_zoom, 72); // 1000
     FIELD_RS (FASTZOOM, 73);
-    FIELD_RS (UCSICON, 74);
+    { // 1 and 2 are swapped in DXF output, 0 and 3 are on place
+      BITCODE_RC ucsicon = FIELD_VALUE (UCSICON);
+      if (ucsicon == 1)
+        ucsicon = 2;
+      else if (ucsicon == 2)
+        ucsicon = 1;
+      VALUE_RS (ucsicon, 74);
+    }
     FIELD_RS (SNAPMODE, 75);
     FIELD_RS (GRIDMODE, 76);
     FIELD_RS (SNAPSTYLE, 77);
