@@ -81,8 +81,13 @@ if [ -f "$b.dxf" ]; then
     test -z "$r" && can_teigha=0
 
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
-        echo timeout 30 "$baseFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxf"
-        timeout 30 "$TeighaFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxf" \
+        rd="$r"
+        # can only write r12+
+        if [ $r -lt 12 ]; then
+            rd=12
+        fi
+        echo timeout 30 "$baseFileConverter" . . "ACAD$rd" DWG 0 1 "$b.dxf"
+        timeout 30 "$TeighaFileConverter" . . "ACAD$rd" DWG 0 1 "$b.dxf" \
                 >/dev/null 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
             cat "$b.dxf.err"

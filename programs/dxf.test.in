@@ -56,8 +56,8 @@ convert_year() {
         r13) r=13 ;;
         r12) r=12 ;;
         r11) r=12 ;;
-        r10) r=10 ;;
-        r9) r=9 ;;
+        r10) r=12 ;;
+        r9) r=12 ;;
         *) return ;;
     esac
 }
