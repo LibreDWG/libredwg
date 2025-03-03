@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+wget -q http://yupotan.sppd.ne.jp/relax-ng/svg11/svg11-relaxng-20060604.zip
+test -d /usr/local/share/relaxng || sudo mkdir -p /usr/local/share/relaxng
+sudo unzip svg11-relaxng-20060604.zip -d /usr/local/share/relaxng/
