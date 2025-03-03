@@ -43,7 +43,8 @@ i=0
 rm -f ./*dxf.log
 is_release="$(grep -c 'IS_RELEASE 1' $top_builddir/src/config.h)"
 
-convert_year() {
+# ODA can only write R12+ DWG's
+convert_year_dwg() {
     r=
     case $year in
         2018) r=2018 ;;
@@ -58,6 +59,25 @@ convert_year() {
         r11) r=12 ;;
         r10) r=12 ;;
         r9) r=12 ;;
+        *) return ;;
+    esac
+}
+# ODA cannot write r11 DXF
+convert_year_dxf() {
+    r=
+    case $year in
+        2018) r=2018 ;;
+        2013) r=2013 ;;
+        2010) r=2010 ;;
+        2007) r=2007 ;;
+        2003) r=2003 ;;
+        2000) r=2000 ;;
+        r14) r=14 ;;
+        r13) r=13 ;;
+        r12) r=12 ;;
+        r11) r=12 ;;
+        r10) r=10 ;;
+        r9) r=9 ;;
         *) return ;;
     esac
 }
@@ -81,7 +101,7 @@ check_subentity() {
         if [ -n "$HAVE_ODA" ]; then
             base="$(basename "$tgt" .dxf)"
             rm -f "$base.dwg.err"
-            convert_year
+            convert_year_dwg
             if [ -n "$r" ]; then
                 echo timeout 30 "$baseFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf"
                 timeout 30 "$ODAFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf" >/dev/null 2>/dev/null
@@ -229,12 +249,28 @@ check_roundtrip() {
             exit 1
         fi
         if ! $DXF2DWG -y -v0 -o "$tgt" "$dxf" 2>/dev/null >/dev/null; then
-            echo "$DXF2DWG -y -v0 -o $tgt $dxf failed"
+            echo "$DXF2DWG -y -v0 -o $tgt $dxf failed with $?"
             exit 1
         fi
         if ! $TESTPROG "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null; then
-            echo "dwgread $tgt failed"
+            echo "dwgread $tgt failed with $?"
             exit 1
+        fi
+        # check dwg (is_dxf) with ODA, can do all versions
+        if [ -n "$HAVE_ODA" ]; then
+            rm -f "$dxf.err"
+            convert_year_dxf
+            if [ -n "$r" ]; then
+                echo timeout 30 "$baseFileConverter" . .. "ACAD$r" DXF 0 1 "$dwg"
+                timeout 30 "$ODAFileConverter" . .. "ACAD$r" DXF 0 1 "$dwg" >/dev/null 2>/dev/null
+                if test -f "$dxf.err"; then
+                    cat "$dxf.err"
+                    echo FAIL "$baseFileConverter" "$tgt" "$year"
+                    i=$((i+1))
+                fi
+            else
+                echo empty $year
+            fi
         fi
         # We dont write unstable entities yet. WIPEOUT is converted to POINT in encode, but skipped at out_dxf
         if [ "$DEBUG_CLASSES" = "1" ] && [ -z "$is_release" ]; then

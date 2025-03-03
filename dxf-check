@@ -82,8 +82,8 @@ if [ -f "$b.dxf" ]; then
 
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         rd="$r"
-        # can only write r12+
-        if [ $r -lt 12 ]; then
+        # can only write r12+ DWG's. DXF's all
+        if [ "$r" -lt 12 ]; then
             rd=12
         fi
         echo timeout 30 "$baseFileConverter" . . "ACAD$rd" DWG 0 1 "$b.dxf"
