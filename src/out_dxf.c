@@ -334,7 +334,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       char _buf[128];
       char *comma;
       char *s;
-      bool add_dot_zero = 1;
+      bool add_dot_zero = true;
       fprintf (dat->fh, "%3i\r\n", dxf);
 #ifndef DEBUG_CLASSES
       if (bit_isnan (value))
@@ -360,10 +360,12 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       else
         {
           s = _buf;
+          if (*s == '-')
+            s++;
           while (*s) {
             if (!isdigit((unsigned char)*s))
               {
-                add_dot_zero = 0;
+                add_dot_zero = false;
                 break;
               }
             s++;
