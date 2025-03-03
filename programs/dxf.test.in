@@ -30,13 +30,37 @@ fi
 if [ -n "@HAVE_ASAN@" ]
 then
     DXF2DWG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG ./dxf2dwg${EXEEXT}"
-else    
+else
     DXF2DWG="$TESTPROG ./dxf2dwg${EXEEXT}"
+fi
+HAVE_ODA="@HAVE_ODA@"
+ODAFileConverter="@ODAFILECONVERTER@"
+if [ -n "$HAVE_ODA" ]; then
+    baseFileConverter="$(basename "$ODAFileConverter")"
 fi
 
 i=0
 rm -f ./*dxf.log
 is_release="$(grep -c 'IS_RELEASE 1' $top_builddir/src/config.h)"
+
+convert_year() {
+    r=
+    case $year in
+        2018) r=2018 ;;
+        2013) r=2013 ;;
+        2010) r=2010 ;;
+        2007) r=2007 ;;
+        2003) r=2003 ;;
+        2000) r=2000 ;;
+        r14) r=14 ;;
+        r13) r=13 ;;
+        r12) r=12 ;;
+        r11) r=12 ;;
+        r10) r=10 ;;
+        r9) r=9 ;;
+        *) return ;;
+    esac
+}
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
@@ -54,6 +78,22 @@ check_subentity() {
         d="$(diff -b -U1 tmp1 tmp2)"
         test -z "$d" || echo "POLYLINE $tgt $d"
         rm tmp1 tmp2
+        if [ -n "$HAVE_ODA" ]; then
+            base="$(basename "$tgt" .dxf)"
+            rm -f "$base.dwg.err"
+            convert_year
+            if [ -n "$r" ]; then
+                echo timeout 30 "$baseFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf"
+                timeout 30 "$ODAFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf" >/dev/null 2>/dev/null
+                if test -f "$base.dwg.err"; then
+                    cat "$base.dwg.err"
+                    echo FAIL "$baseFileConverter" "$tgt" "$year"
+                    return 1
+                fi
+            else
+                echo empty $year
+            fi
+        fi
 #   else
 #       echo skip $dxf missing
     fi

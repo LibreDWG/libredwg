@@ -5,6 +5,8 @@ top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
 TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
 HAVE_ASAN="@HAVE_ASAN@"
+HAVE_ODA="@HAVE_ODA@"
+ODAFileConverter="@ODAFILECONVERTER@"
 srcdir="@abs_srcdir@"
 echo srcdir: "$srcdir"
 
@@ -18,27 +20,9 @@ else
     TESTPROG="@LTEXEC@"
 fi
 
-case $(uname) in
-    Darwin)  ODAFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
-    Linux)   ODAFileConverter=/usr/bin/ODAFileConverter ;;
-    Windows) ODAFileConverter=ODAFileConverter ;;
-    *)       has_oda= ;;
-esac
-if [ ! -x "$ODAFileConverter" ]; then
-    case $(uname) in
-        Darwin)  ODAFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-        Linux)   ODAFileConverter=/usr/bin/TeighaFileConverter ;;
-        Windows) ODAFileConverter=TeighaFileConverter ;;
-    esac
-    if [ -x "$ODAFileConverter" ]; then
-        baseFileConverter=TeighaFileConverter
-        has_oda=1
-    fi
-else
-    baseFileConverter=ODAFileConverter
-    has_oda=1
+if [ -n "$HAVE_ODA" ]; then
+    baseFileConverter="$(basename "$ODAFileConverter")"
 fi
-
 checkODA() {
     DWG="$1"
     V="$2"
