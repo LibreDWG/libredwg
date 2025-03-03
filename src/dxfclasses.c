@@ -138,9 +138,9 @@ hash (const char *str, size_t len)
     {
       default:
         hval += asso_values[(unsigned char)str[20]];
-#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
+#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
       [[fallthrough]];
-#elif defined __GNUC__ && __GNUC__ >= 7
+#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
@@ -154,18 +154,18 @@ hash (const char *str, size_t len)
       case 13:
       case 12:
         hval += asso_values[(unsigned char)str[11]+1];
-#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
+#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
       [[fallthrough]];
-#elif defined __GNUC__ && __GNUC__ >= 7
+#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
       case 11:
       case 10:
         hval += asso_values[(unsigned char)str[9]];
-#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
+#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
       [[fallthrough]];
-#elif defined __GNUC__ && __GNUC__ >= 7
+#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
@@ -174,9 +174,9 @@ hash (const char *str, size_t len)
       case 7:
       case 6:
         hval += asso_values[(unsigned char)str[5]];
-#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
+#if (defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang__ && __clang_major__ + (__clang_minor__ >= 9) > 3))) || (__STDC_VERSION__ >= 202000L && ((defined __GNUC__ && __GNUC__ >= 10) || (defined __clang__ && __clang_major__ >= 9)))
       [[fallthrough]];
-#elif defined __GNUC__ && __GNUC__ >= 7
+#elif (defined __GNUC__ && __GNUC__ >= 7) || (defined __clang__ && __clang_major__ >= 10)
       __attribute__ ((__fallthrough__));
 #endif
       /*FALLTHROUGH*/
@@ -644,6 +644,10 @@ static const struct stringpool_t stringpool_contents =
 const struct Dwg_DXFClass *
 in_word_set (const char *str, size_t len)
 {
+#if (defined __GNUC__ && __GNUC__ + (__GNUC_MINOR__ >= 6) > 4) || (defined __clang__ && __clang_major__ >= 3)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
   static const struct Dwg_DXFClass wordlist[] =
     {
       {-1}, {-1}, {-1}, {-1},
@@ -694,7 +698,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str44,		"AcDbAssocArrayPolarParameters",	ODBX,	0},
 #line 181 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str45,	"AcDbAssocArrayModifyActionBody",	ODBX,	0},
-#line 99 "src/dxfclasses.in"
+#line 100 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str46,	"AcDbLayerIndex",	ODBX,	0},
 #line 105 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str47,	"AcDbTableContent",	ODBX,	0},
@@ -721,7 +725,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str59,			"AcDbPointCloudDefEx",			POINTCLOUD, 0},
 #line 127 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str60, 		"AcDbRText", 		EXPRESS, 1},
-#line 94 "src/dxfclasses.in"
+#line 95 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str61,		"AcDbLayout",		A2000CLASS,	0},
 #line 300 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str62,			"AcDbPointCloudColorMap",		POINTCLOUD, 0},
@@ -871,7 +875,7 @@ in_word_set (const char *str, size_t len)
 #line 198 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str184,	"AcDbAssocRevolvedSurfaceActionBody",	ODBX,	0},
       {-1}, {-1},
-#line 98 "src/dxfclasses.in"
+#line 99 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str187,	"AcDbXrecord",		ODBX,	0},
 #line 81 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str188,	"AcDbArcDimension",	ODBX,	1},
@@ -966,8 +970,8 @@ in_word_set (const char *str, size_t len)
 #line 238 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str261,			"AcDbBlockScaleAction",			ODBX,	0},
       {-1},
-#line 100 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str263,	"AcDbSpatialIndex",	ODBX,	0},
+#line 92 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str263,	"AcDbSpatialIndex",	ODBX_OR_A2000CLASS,	0},
 #line 308 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str264,	       	"AcDbLSStrokePatternComponent",	DGNLS, 0},
 #line 151 "src/dxfclasses.in"
@@ -1039,7 +1043,7 @@ in_word_set (const char *str, size_t len)
 #line 283 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str318,	"AcDbAnnotScaleObjectContextData",	ODBX,	0},
       {-1}, {-1},
-#line 97 "src/dxfclasses.in"
+#line 98 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str321,	"AcDbVbaProject",	ODBX,	0},
       {-1},
 #line 204 "src/dxfclasses.in"
@@ -1179,13 +1183,13 @@ in_word_set (const char *str, size_t len)
 #line 311 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str471,			"AcDbLSPointComponent",		DGNLS, 0},
       {-1},
-#line 95 "src/dxfclasses.in"
+#line 96 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str473,	"AcDbSortentsTable",	A2000CLASS,	0},
       {-1},
 #line 149 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str475,	"AcDbShBrep",		ODBX,	0},
       {-1}, {-1},
-#line 93 "src/dxfclasses.in"
+#line 94 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str478,	"AcDbDictionaryVar",	A2000CLASS,	0},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
 #line 259 "src/dxfclasses.in"
@@ -1247,6 +1251,9 @@ in_word_set (const char *str, size_t len)
 #line 116 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str716,"AcDbRasterImageDefReactor",	ISM,	0}
     };
+#if (defined __GNUC__ && __GNUC__ + (__GNUC_MINOR__ >= 6) > 4) || (defined __clang__ && __clang_major__ >= 3)
+#pragma GCC diagnostic pop
+#endif
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
     {
@@ -1264,7 +1271,7 @@ in_word_set (const char *str, size_t len)
             }
         }
     }
-  return 0;
+  return (struct Dwg_DXFClass *) 0;
 }
 #line 321 "src/dxfclasses.in"
 
