@@ -64,6 +64,7 @@ jobs:
         build-aux/install-libxslt
         build-aux/install-pslib
         build-aux/install-relaxng-svg11
+        sudo npm i -g geojson-validation
     - uses: hendrikmuhs/ccache-action@v1.2
       with:
         create-symlink: true
