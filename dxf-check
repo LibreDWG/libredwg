@@ -51,7 +51,7 @@ esac
 ./log "-l$b.log.orig" "$v" "$d"
 rm "./$b.dxf" "./$b.dwg" 2>/dev/null
 
-if ! ./dxf -y "$v" "$d"; then
+if ! ./dxf -y "$v" -o "$b.dxf" "$d"; then
     exit 2
 fi
 if [ -f "$b.dxf" ]; then
