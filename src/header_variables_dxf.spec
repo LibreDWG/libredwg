@@ -287,8 +287,10 @@
     HEADER_RS (HANDLING, 70); // default 1
   }
   //HEADER_H (HANDSEED, 5); //default: 20000, before r13: 0xB8BC
-  SINCE (R_9) {
+  SINCE (R_10) {
     FIELD_DATAHANDLE (HANDSEED, 0, 5);
+  }
+  SINCE (R_9) {
     HEADER_RS (SURFTAB1, 70); // 6
     HEADER_RS (SURFTAB2, 70); // 6
     HEADER_RS (SURFTYPE, 70); // 6
@@ -304,6 +306,8 @@
   SINCE (R_9) {
     HEADER_HANDLE_NAME (UCSNAME, 2, UCS);
     HEADER_3D (UCSORG);
+  }
+  SINCE (R_10) {
     PRE (R_11)
     {
       HEADER_9 (UCSXORI);
