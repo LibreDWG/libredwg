@@ -1070,6 +1070,8 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         SINCE (R_14)                                                          \
         {                                                                     \
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
+          LOG_TRACE ("ownerhandle: " FORMAT_RLLx " [330]\n",                  \
+                     obj->tio.object->ownerhandle->absolute_ref);             \
         }                                                                     \
       }                                                                       \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
@@ -2743,8 +2745,8 @@ decl_dxf_process_INSERT (INSERT)
 decl_dxf_process_INSERT (MINSERT)
     // clang-format on
 
-    static int dwg_dxf_object (Bit_Chain *restrict dat,
-                               const Dwg_Object *restrict obj, int *restrict i)
+static int dwg_dxf_object (Bit_Chain *restrict dat,
+                           const Dwg_Object *restrict obj, int *restrict i)
 {
   int error = 0;
   int minimal;
@@ -3260,7 +3262,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _ctrl->num_entries = num_entries;
         SINCE (R_12)
         {
-          // first the 2 builtin ltypes: ByBlock, ByLayer
+          // first the 2 builtin ltypes: ByBlock, ByLayer, which don't count for num_entries
           if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYBLOCK))
               && obj->type == DWG_TYPE_LTYPE)
             {

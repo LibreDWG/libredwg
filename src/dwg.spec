@@ -668,7 +668,7 @@ DWG_ENTITY_END
 
 DWG_ENT_SUBCLASS (ATTRIB, AcDbMTextObjectEmbedded);
 DWG_ENT_SUBCLASS (ATTDEF, AcDbMTextObjectEmbedded);
-    
+
 /* (4/12) */
 DWG_ENTITY (BLOCK)
 
