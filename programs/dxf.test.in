@@ -261,8 +261,8 @@ check_roundtrip() {
             rm -f "$dxf.err"
             convert_year_dxf
             if [ -n "$r" ]; then
-                echo timeout 30 "$baseFileConverter" . .. "ACAD$r" DXF 0 1 "$dwg"
-                timeout 30 "$ODAFileConverter" . .. "ACAD$r" DXF 0 1 "$dwg" >/dev/null 2>/dev/null
+                echo timeout 30 "$baseFileConverter" . .. "ACAD$r" DXF 0 1 "$tgt"
+                timeout 30 "$ODAFileConverter" . .. "ACAD$r" DXF 0 1 "$tgt" >/dev/null 2>/dev/null
                 if test -f "$dxf.err"; then
                     cat "$dxf.err"
                     echo FAIL "$baseFileConverter" "$tgt" "$year"
