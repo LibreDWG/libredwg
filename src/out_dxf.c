@@ -3175,6 +3175,25 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+// first pass to adjust num_entries
+#define TABLE_WRITE_FIXUP_NUMENTRIES(name)                                    \
+    num_entries = _ctrl->num_entries;                                         \
+    _ctrl->num_entries = 0;                                                   \
+    for (i = 0; i < num_entries; i++)                                         \
+      {                                                                       \
+        if (!_ctrl->entries)                                                  \
+            break;                                                            \
+        if (!_ctrl->entries[i])                                               \
+            continue;                                                         \
+        obj = dwg_ref_object (dwg, _ctrl->entries[i]);                        \
+        if (obj && obj->type == DWG_TYPE_##name)                              \
+          _ctrl->num_entries++;                                               \
+      }                                                                       \
+    if (_ctrl->num_entries != num_entries)                                    \
+      LOG_TRACE ("num_entries: %u -> %u\n", (unsigned)num_entries,            \
+                 (unsigned)_ctrl->num_entries);
+
+
 // r2.6-r9: LTYPE, LAYER, STYLE, VIEW
 // r10: VPORT, LTYPE, LAYER, STYLE, VIEW, UCS
 // r11: VPORT, LTYPE, LAYER, STYLE, VIEW, UCS, APPID, DIMSTYLE
@@ -3185,6 +3204,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   unsigned int i;
   BITCODE_BL vcount;
+  BITCODE_BL num_entries;
 
   SECTION (TABLES);
   SINCE (R_9c1)
@@ -3197,7 +3217,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         TABLE (VPORT);
         // add handle 5 here at first
         COMMON_TABLE_CONTROL_FLAGS;
+        // first pass to adjust num_entries
+        TABLE_WRITE_FIXUP_NUMENTRIES (VPORT);
         error |= dwg_dxf_VPORT_CONTROL (dat, ctrl);
+        _ctrl->num_entries = num_entries;
         // TODO how far back can DXF read 1000?
         if (dat->version != dat->from_version && dat->from_version >= R_2000)
           {
@@ -3206,7 +3229,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             VALUE_TV ("DbSaveVer", 1000);
             VALUE_RS (dwg->header.dwg_version, 1071); // so that 69 is R_2018
           }
-        for (i = 0; i < _ctrl->num_entries; i++)
+        for (i = 0; i < num_entries; i++)
           {
             if (!_ctrl->entries)
               break;
@@ -3232,7 +3255,9 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         Dwg_Object *obj = ctrl;
         TABLE (LTYPE);
         COMMON_TABLE_CONTROL_FLAGS;
+        TABLE_WRITE_FIXUP_NUMENTRIES (LTYPE);
         error |= dwg_dxf_LTYPE_CONTROL (dat, ctrl);
+        _ctrl->num_entries = num_entries;
         SINCE (R_12)
         {
           // first the 2 builtin ltypes: ByBlock, ByLayer
@@ -3248,7 +3273,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
         }
         // here LTYPE_CONTINUOUS is already included
-        for (i = 0; i < _ctrl->num_entries; i++)
+        for (i = 0; i < num_entries; i++)
           {
             if (!_ctrl->entries)
               break;
@@ -3271,8 +3296,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         Dwg_Object *obj = ctrl;
         TABLE (LAYER);
         COMMON_TABLE_CONTROL_FLAGS;
+        TABLE_WRITE_FIXUP_NUMENTRIES (LAYER);
         error |= dwg_dxf_LAYER_CONTROL (dat, ctrl);
-        for (i = 0; i < _ctrl->num_entries; i++)
+        _ctrl->num_entries = num_entries;
+        for (i = 0; i < num_entries; i++)
           {
             if (!_ctrl->entries)
               break;
@@ -3295,8 +3322,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         Dwg_Object *obj = ctrl;
         TABLE (STYLE);
         COMMON_TABLE_CONTROL_FLAGS;
+        TABLE_WRITE_FIXUP_NUMENTRIES (STYLE);
         error |= dwg_dxf_STYLE_CONTROL (dat, ctrl);
-        for (i = 0; i < _ctrl->num_entries; i++)
+        _ctrl->num_entries = num_entries;
+        for (i = 0; i < num_entries; i++)
           {
             if (!_ctrl->entries)
               break;
@@ -3319,8 +3348,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         Dwg_Object *obj = ctrl;
         TABLE (VIEW);
         COMMON_TABLE_CONTROL_FLAGS;
+        TABLE_WRITE_FIXUP_NUMENTRIES (VIEW);
         error |= dwg_dxf_VIEW_CONTROL (dat, ctrl);
-        for (i = 0; i < _ctrl->num_entries; i++)
+        _ctrl->num_entries = num_entries;
+        for (i = 0; i < num_entries; i++)
           {
             if (!_ctrl->entries)
               break;
@@ -3342,8 +3373,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         Dwg_Object *obj = ctrl;
         TABLE (UCS);
         COMMON_TABLE_CONTROL_FLAGS;
+        TABLE_WRITE_FIXUP_NUMENTRIES (UCS);
         error |= dwg_dxf_UCS_CONTROL (dat, ctrl);
-        for (i = 0; i < _ctrl->num_entries; i++)
+        _ctrl->num_entries = num_entries;
+        for (i = 0; i < num_entries; i++)
           {
             if (!_ctrl->entries)
               break;
@@ -3367,8 +3400,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         Dwg_Object *obj = ctrl;
         TABLE (APPID);
         COMMON_TABLE_CONTROL_FLAGS;
+        TABLE_WRITE_FIXUP_NUMENTRIES (APPID);
         error |= dwg_dxf_APPID_CONTROL (dat, ctrl);
-        for (i = 0; i < _ctrl->num_entries; i++)
+        _ctrl->num_entries = num_entries;
+        for (i = 0; i < num_entries; i++)
           {
             if (!_ctrl->entries)
               break;
@@ -3393,9 +3428,11 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         Dwg_Object *obj = ctrl;
         TABLE (DIMSTYLE);
         COMMON_TABLE_CONTROL_FLAGS;
+        TABLE_WRITE_FIXUP_NUMENTRIES (DIMSTYLE);
         error |= dwg_dxf_DIMSTYLE_CONTROL (dat, ctrl);
+        _ctrl->num_entries = num_entries;
         // ignoring morehandles
-        for (i = 0; i < _ctrl->num_entries; i++)
+        for (i = 0; i < num_entries; i++)
           {
             if (!_ctrl->entries)
               break;
@@ -3421,8 +3458,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Object *obj = ctrl;
             TABLE (VX);
             COMMON_TABLE_CONTROL_FLAGS;
+            TABLE_WRITE_FIXUP_NUMENTRIES (VX_TABLE_RECORD);
             error |= dwg_dxf_VX_CONTROL (dat, ctrl);
-            for (i = 0; i < _ctrl->num_entries; i++)
+            _ctrl->num_entries = num_entries;
+            for (i = 0; i < num_entries; i++)
               {
                 if (!_ctrl->entries)
                   break;
