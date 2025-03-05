@@ -3855,7 +3855,9 @@ DWG_TABLE (LAYER)
     }
     SINCE (R_13b1) {
       int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
-      KEY (linewt); VALUE_BSd (lw, 370);
+      if (lw) {
+        KEY (linewt); VALUE_BSd (lw, 370);
+      }
     }
     SINCE (R_2000b) {
       FIELD_HANDLE (plotstyle, 5, 390);
