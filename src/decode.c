@@ -516,8 +516,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_HANDLE (" crc pos: %" PRIuSIZE "\n", crcpos);
       bit_set_position (dat, crcpos * 8);
       crc = bit_read_RS (dat);
-      LOG_TRACE ("crc: %04X [RSx] from %" PRIuSIZE "-%" PRIuSIZE "=%zd\n", crc,
-                 pvz, dat->byte - 2, dat->byte - 2 - pvz);
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
+        LOG_HANDLE ("crc: %04X [RSx] from %" PRIuSIZE "-%" PRIuSIZE "=%zd\n", crc,
+                    pvz, dat->byte - 2, dat->byte - 2 - pvz)
+      else
+        LOG_TRACE ("crc: %04X [RSx] %zd\n", crc, dat->byte - 2 - pvz);
     }
   else
     {
