@@ -6690,6 +6690,8 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "LTYPE");
   else if (pair->code == 7)
     ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "STYLE");
+  else if (pair->code == 345 || pair->code == 346)
+    ref = dwg_find_tablehandle_silent (dwg, pair->value.s, "UCS");
 
   if (ref) // turn a 2 (hardowner) into a 5 (softref)
     return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
@@ -9155,7 +9157,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           // fall through
         case 5:
           {
-            obj->handle.value = pair->value.u;
             // check for existing BLOCK_HEADER.*Model_Space
             if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER
                 && dwg->object[0].handle.value == pair->value.u
@@ -9170,51 +9171,65 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 LOG_TRACE ("Reuse existing BLOCK_HEADER.*Model_Space %X [0]\n",
                            pair->value.u)
               }
-            dwg_add_handle (&obj->handle, 0, pair->value.u, obj);
-            LOG_TRACE ("%s.handle = " FORMAT_H " [H 5]\n", name,
-                       ARGS_H (obj->handle));
-            if (ctrl_id)
+            if (strNE (name, "DIMSTYLE") || pair->code == 105)
               {
-                // add to ctrl "entries" HANDLE_VECTOR
-                Dwg_Object_BLOCK_CONTROL *_ctrl
-                    = dwg->object[ctrl_id].tio.object->tio.BLOCK_CONTROL;
-                BITCODE_H *hdls = NULL;
-                BITCODE_BL num_entries = 0;
-
-                if ((int)i < 0)
-                  i = 0;
-                dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
-                                         &num_entries, NULL);
-                if (i >= num_entries)
+                obj->handle.value = pair->value.u;
+                dwg_add_handle (&obj->handle, 0, pair->value.u, obj);
+                LOG_TRACE ("%s.handle = " FORMAT_H " [H 5]\n", name,
+                           ARGS_H (obj->handle));
+                if (ctrl_id)
                   {
-                    // DXF often lies about num_entries, skipping defaults
-                    // e.g. BLOCK_CONTROL contains mspace+pspace in DXF, but in
-                    // the DWG they are extra. But this is fixed at case 2, not
-                    // here.
-                    LOG_TRACE ("Misleading %s.num_entries %d for %dth entry\n",
-                               ctrlname, num_entries, i);
-                    i = num_entries;
-                    num_entries++;
-                    dwg_dynapi_entity_set_value (
-                        _ctrl, ctrlname, "num_entries", &num_entries, 0);
-                    LOG_TRACE ("%s.num_entries = %d [BL 70]\n", ctrlname,
-                               num_entries);
+                    // add to ctrl "entries" HANDLE_VECTOR
+                    Dwg_Object_BLOCK_CONTROL *_ctrl
+                      = dwg->object[ctrl_id].tio.object->tio.BLOCK_CONTROL;
+                    BITCODE_H *hdls = NULL;
+                    BITCODE_BL num_entries = 0;
+
+                    if ((int)i < 0)
+                      i = 0;
+                    dwg_dynapi_entity_value (_ctrl, ctrlname, "num_entries",
+                                             &num_entries, NULL);
+                    if (i >= num_entries)
+                      {
+                        // DXF often lies about num_entries, skipping defaults
+                        // e.g. BLOCK_CONTROL contains mspace+pspace in DXF, but in
+                        // the DWG they are extra. But this is fixed at case 2, not
+                        // here.
+                        LOG_TRACE ("Misleading %s.num_entries %d for %dth entry\n",
+                                   ctrlname, num_entries, i);
+                        i = num_entries;
+                        num_entries++;
+                        dwg_dynapi_entity_set_value (_ctrl, ctrlname, "num_entries", &num_entries, 0);
+                        LOG_TRACE ("%s.num_entries = %d [BL 70]\n", ctrlname,
+                                   num_entries);
+                      }
+                    dwg_dynapi_entity_value (_ctrl, ctrlname, "entries", &hdls,
+                                             NULL);
+                    if (!hdls)
+                      hdls = (BITCODE_H *)xcalloc (num_entries,
+                                                   sizeof (Dwg_Object_Ref *));
+                    else
+                      hdls = (BITCODE_H *)realloc (
+                                                   hdls, num_entries * sizeof (Dwg_Object_Ref *));
+                    if (pair->value.u && !hdls)
+                      goto invalid_dxf;
+                    hdls[i] = dwg_add_handleref (dwg, 2, pair->value.u, obj);
+                    dwg_dynapi_entity_set_value (_ctrl, ctrlname, "entries", &hdls,
+                                                 0);
+                    LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", ctrlname,
+                               "entries", i, ARGS_REF (hdls[i]));
                   }
-                dwg_dynapi_entity_value (_ctrl, ctrlname, "entries", &hdls,
-                                         NULL);
-                if (!hdls)
-                  hdls = (BITCODE_H *)xcalloc (num_entries,
-                                               sizeof (Dwg_Object_Ref *));
-                else
-                  hdls = (BITCODE_H *)realloc (
-                      hdls, num_entries * sizeof (Dwg_Object_Ref *));
-                if (pair->value.u && !hdls)
-                  goto invalid_dxf;
-                hdls[i] = dwg_add_handleref (dwg, 2, pair->value.u, obj);
-                dwg_dynapi_entity_set_value (_ctrl, ctrlname, "entries", &hdls,
-                                             0);
-                LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", ctrlname,
-                           "entries", i, ARGS_REF (hdls[i]));
+              }
+            else if (pair->value.u && *buf)
+              {
+                // DIMSTYLE 5: DIMBLK name -> handle
+                BITCODE_H handle = dwg_find_tablehandle_silent (dwg, buf, "BLOCK");
+                if (!handle)
+                  {
+                    obj_hdls = array_push (obj_hdls, "DIMBLK", buf,
+                                           obj->tio.object->objid);
+                    LOG_TRACE ("DIMSTYLE.DIMBLK: name %s -> H later\n", buf);
+                  }
               }
           }
           break;
@@ -12825,7 +12840,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
         }
       p.code = header_hdls->items[i].code;
       if (strEQc (field, "DIMSTYLE"))
-        p.code = 3;
+        p.code = 3; // special handling in find_tablehandle()
       else if (strstr (field, "UCS"))
         p.code = 345;
       hdl = find_tablehandle (dwg, &p);
