@@ -86,14 +86,14 @@ if [ -f "$b.dxf" ]; then
         if [ "$r" -lt 12 ]; then
             rd=12
         fi
-        echo timeout 30 "$baseFileConverter" . . "ACAD$rd" DWG 0 1 "$b.dxf"
-        timeout 30 "$TeighaFileConverter" . . "ACAD$rd" DWG 0 1 "$b.dxf" \
+        echo timeout 30 "$baseFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf"
+        timeout 30 "$TeighaFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf" \
                 >/dev/null 2>/dev/null
-        if [ -e "./$b.dxf.err" ]; then
-            cat "$b.dxf.err"
+        if [ -e "test/$b.dwg.err" ]; then
+            cat "test/$b.dwg.err"
             exitcode=1
         fi
-        mv -f "$b.dwg" "$b.oda.dwg"
+        mv -f "test/$b.dwg" "$b.oda.dwg"
     fi
     if ! ./dwg -y "$v" "$b.dxf"; then
         exit 2
@@ -102,15 +102,15 @@ fi
 
 if [ -f "$b.dwg" ]; then
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
-        echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg"
-        timeout 30 "$TeighaFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg" \
+        echo timeout 30 "$baseFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg"
+        timeout 30 "$TeighaFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg" \
                 >/dev/null 2>/dev/null
-        if [ -e "./$b.dxf.err" ]; then
-            cat "$b.dxf.err"
+        if [ -e "test/$b.dxf.err" ]; then
+            cat "test/$b.dxf.err"
             exitcode=3
         fi
     else
-        rm "$b.dxf.err" 2>/dev/null
+        rm "test/$b.dxf.err" 2>/dev/null
         if [ ! -x "$TeighaFileConverter" ]; then
             echo "$baseFileConverter not installed"
         fi
@@ -122,7 +122,7 @@ if [ -f "$b.dwg" ]; then
     echo diff -bu "log1" "$log2"
     diff -I '^-(objref|found:)' -bu "$log1" "$log2"
 
-    test -f "$b.dxf.err" && cat "$b.dxf.err"
+    test -f "test/$b.dxf.err" && cat "test/$b.dxf.err"
 
     if [ -f "$log1" ] && [ -f "$log2" ]; then
         # Really interesting is the Section BLOCKS here. vs BLOCK_HEADER
