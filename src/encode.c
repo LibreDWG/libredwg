@@ -2005,13 +2005,19 @@ static void
 section_order_trace (const Dwg_Data *dwg, const BITCODE_BL numsections,
                      Dwg_Section_Type_r13 *psection_order)
 {
+  BITCODE_BL num = numsections;
   LOG_TRACE ("section_order:");
-  for (BITCODE_BL i = 0; i < MAX (numsections, SECTION_R13_SIZE); i++)
+  if (numsections > SECTION_R13_SIZE)
+    {
+      LOG_WARN ("numsections %u => %u", numsections, SECTION_R13_SIZE);
+      num = SECTION_R13_SIZE;
+    }
+  for (BITCODE_BL i = 0; i < num; i++)
     {
       LOG_TRACE (" %u", psection_order[i]);
     }
   LOG_TRACE ("\n[");
-  for (BITCODE_BL i = 0; i < MAX (numsections, SECTION_R13_SIZE); i++)
+  for (BITCODE_BL i = 0; i < num; i++)
     {
       LOG_TRACE ("%s ", dwg_section_name (dwg, psection_order[i]));
     }
