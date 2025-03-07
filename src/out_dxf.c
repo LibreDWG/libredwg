@@ -2964,28 +2964,44 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
         {
           return minimal ? 0 : dwg_dxf_LAYOUT (dat, obj);
         }
-      /* > 500 */
-      else if ((error
-                = dwg_dxf_variable_type (obj->parent, dat, (Dwg_Object *)obj))
-               & DWG_ERR_UNHANDLEDCLASS)
+      else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
         {
-          Dwg_Data *dwg = obj->parent;
-          int j = obj->type - 500;
-          Dwg_Class *klass = NULL;
-
-          if (j >= 0 && j < (int)dwg->num_classes
-              && obj->fixedtype < DWG_TYPE_FREED)
-            klass = &dwg->dwg_class[j];
-          if (!klass)
+#  if defined DEBUG_CLASSES
+          return dwg_dxf_TABLESTYLE (dat, obj);
+#  else
+          if (dat->version >= R_2000 && dat->version < R_2010)
+            return dwg_dxf_TABLESTYLE (dat, obj);
+          else
             {
-              LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
-              return DWG_ERR_INVALIDTYPE;
+              LOG_WARN (
+                  "Unhandled Object TABLESTYLE in out_dxf %u/" FORMAT_RLLx,
+                  obj->index, obj->handle.value);
+              return DWG_ERR_UNHANDLEDCLASS;
             }
-          return error;
         }
+#  endif
+          /* > 500 */
+          else if ((error = dwg_dxf_variable_type (obj->parent, dat,
+                                                   (Dwg_Object *)obj))
+                   & DWG_ERR_UNHANDLEDCLASS)
+          {
+            Dwg_Data *dwg = obj->parent;
+            int j = obj->type - 500;
+            Dwg_Class *klass = NULL;
+
+            if (j >= 0 && j < (int)dwg->num_classes
+                && obj->fixedtype < DWG_TYPE_FREED)
+              klass = &dwg->dwg_class[j];
+            if (!klass)
+              {
+                LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
+                return DWG_ERR_INVALIDTYPE;
+              }
+            return error;
+          }
+        }
+      return DWG_ERR_UNHANDLEDCLASS;
     }
-  return DWG_ERR_UNHANDLEDCLASS;
-}
 
 static int
 dxf_common_entity_handle_data (Bit_Chain *restrict dat,
