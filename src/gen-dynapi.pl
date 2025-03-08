@@ -503,8 +503,8 @@ $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 # $DXF{'VISUALSTYLE'}->{'face_lighting_model'} = 71;
 $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
 # $DXF{'DIMSTYLE'}->{'DIMFIT'} = 287;   # <= r14 only
-# $DXF{'PROXY_ENTITY'}->{'class_id'} = 90;
-$DXF{'PROXY_ENTITY'}->{'version'} = 95; # or 91 <= r14
+$DXF{'PROXY_ENTITY'}->{'dwg_version'} = 95;
+$DXF{'PROXY_ENTITY'}->{'maint_version'} = 95;
 $DXF{'DIMASSOC'}->{'intsect_gsmarker'} = 92;
 $DXF{'DIMASSOC_Ref'}->{'xrefpaths'} = 301;
 $DXF{'DIMSTYLE'}->{'flag'} = 70;
@@ -2515,7 +2515,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2515 "gen-dynapi.pl"
+#line 2519 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2599,7 +2599,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2599 "gen-dynapi.pl"
+#line 2603 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;

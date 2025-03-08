@@ -5985,16 +5985,22 @@ DWG_ENTITY (PROXY_ENTITY)
 
   //HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbProxyEntity)
-  FIELD_BL (class_id, 90);
+  FIELD_BL (proxy_id, 90); // always 499
   PRE (R_2018)
   {
-    int dxf = dat->version <= R_14 ? 91 : 95;
-    FIELD_BL (version, dxf); // i.e. version << 8 + maint_version
+    FIELD_BL (class_id, 91);
   }
   SINCE (R_2018)
-  { // if encode from earlier: maint_version = version<<16 + acad version
-    FIELD_BL (version, 71);
-    FIELD_BL (maint_version, 97);
+  {
+    FIELD_BL (dwg_version, 0);
+    FIELD_BL (maint_version, 0);
+  } else {
+    FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
+    FIELD_VALUE (maint_version) = dwg->header.maint_version;
+  }
+  DXF {
+    BITCODE_BL v = (FIELD_VALUE(dwg_version) << 16) + FIELD_VALUE(maint_version);
+    VALUE_BL (v, 95);
   }
   SINCE (R_2000b)
   {
@@ -6100,15 +6106,22 @@ DWG_OBJECT (PROXY_OBJECT)
     SUBCLASS (AcDbProxyObject)
   }
 #endif
-  FIELD_BL (class_id, 90);
+  FIELD_BL (proxy_id, 90); // always 499
   PRE (R_2018)
   {
-    FIELD_BL (version, 91);
+    FIELD_BL (class_id, 91);
   }
   SINCE (R_2018)
-  { // if encode from earlier: maint_version = version<<16 + acad version
-    FIELD_BL (version, 71);
-    FIELD_BL (maint_version, 97);
+  {
+    FIELD_BL (dwg_version, 0);
+    FIELD_BL (maint_version, 0);
+  } else {
+    FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
+    FIELD_VALUE (maint_version) = dwg->header.maint_version;
+  }
+  DXF {
+    BITCODE_BL v = (FIELD_VALUE(dwg_version) << 16) + FIELD_VALUE(maint_version);
+    VALUE_BL (v, 95);
   }
   SINCE (R_2000b)
   {
@@ -6205,12 +6218,13 @@ DWG_OBJECT (PROXY_OBJECT)
     bit_set_position (hdl_dat, pos);
   }
 #endif
-  // oda has 330 or 340
+  // really 330, 340, 350 or 360
   HANDLE_VECTOR (objids, num_objids, ANYCODE, 340); // code 3 or 4
-  SINCE (R_2000b) { // only sometimes
+  SINCE (R_2000b) { // end of Object ID's
     DXF {
-      BITCODE_RS v = 0;
-      VALUE_RS (v, 94);
+      if (FIELD_VALUE (num_objids)) {
+        VALUE_RS (0, 94);
+      }
     }
   }
 

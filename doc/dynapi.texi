@@ -3760,12 +3760,14 @@ BS,	DXF 72
 
 @item parent
 struct _dwg_object_entity*
-@item class_id
+@item proxy_id
 BL,	DXF 90
-@item version
+@item class_id
+BL,	DXF 91
+@item dwg_version
 BL,	DXF 95
 @item maint_version
-BL,	DXF 97
+BL,	DXF 95
 @item from_dxf
 B,	DXF 70
 @item data_numbits
@@ -11199,12 +11201,14 @@ BS,	DXF 90
 
 @item parent
 struct _dwg_object_object*
-@item class_id
+@item proxy_id
 BL,	DXF 90
-@item version
-BL,	DXF 71
+@item class_id
+BL,	DXF 91
+@item dwg_version
+BL
 @item maint_version
-BL,	DXF 97
+BL
 @item from_dxf
 B,	DXF 70
 @item data_numbits

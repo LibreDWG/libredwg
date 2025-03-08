@@ -6,8 +6,9 @@ void
 api_process (dwg_object *obj)
 {
   int error;
+  BITCODE_BL proxy_id;
   BITCODE_BL class_id;
-  BITCODE_BL version;
+  BITCODE_BL dwg_version;
   BITCODE_BL maint_version;
   BITCODE_B from_dxf;
   BITCODE_BL data_numbits;
@@ -17,10 +18,11 @@ api_process (dwg_object *obj)
   BITCODE_H *objids;
 
   dwg_ent_proxy *_obj = dwg_object_to_PROXY_ENTITY (obj);
-  CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, class_id, BL);
-  if (class_id != 498)
-    fail ("PROXY_ENTITY.class_id %d not 498", (int)class_id);
-  CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, version, BL);
+  CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, proxy_id, BL);
+  if (proxy_id != 498)
+    fail ("PROXY_ENTITY.proxy_id %d not 498", (int)proxy_id);
+  CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, class_id, BL); // index in CLASSES
+  CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, dwg_version, BL);
   CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, maint_version, BL);
   CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, from_dxf, B);
   CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, data_numbits, BL);

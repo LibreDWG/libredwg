@@ -20875,6 +20875,21 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     proxy_entity->data_size--;
   }
   {
+    BITCODE_BL dwg_version;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "dwg_version", &dwg_version, NULL)
+        && dwg_version == proxy_entity->dwg_version)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.dwg_version [BL] %u != %u", proxy_entity->dwg_version, dwg_version);
+    dwg_version++;
+    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "dwg_version", &dwg_version, 0)
+        && dwg_version == proxy_entity->dwg_version)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.dwg_version [BL] set+1 %u != %u", proxy_entity->dwg_version, dwg_version);
+    proxy_entity->dwg_version--;
+  }
+  {
     BITCODE_B from_dxf;
     if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "from_dxf", &from_dxf, NULL)
         && from_dxf == proxy_entity->from_dxf)
@@ -20938,19 +20953,19 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         fail ("PROXY_ENTITY.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_BL version;
-    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "version", &version, NULL)
-        && version == proxy_entity->version)
+    BITCODE_BL proxy_id;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "proxy_id", &proxy_id, NULL)
+        && proxy_id == proxy_entity->proxy_id)
       pass ();
     else
-      fail ("PROXY_ENTITY.version [BL] %u != %u", proxy_entity->version, version);
-    version++;
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "version", &version, 0)
-        && version == proxy_entity->version)
+      fail ("PROXY_ENTITY.proxy_id [BL] %u != %u", proxy_entity->proxy_id, proxy_id);
+    proxy_id++;
+    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "proxy_id", &proxy_id, 0)
+        && proxy_id == proxy_entity->proxy_id)
       pass ();
     else
-      fail ("PROXY_ENTITY.version [BL] set+1 %u != %u", proxy_entity->version, version);
-    proxy_entity->version--;
+      fail ("PROXY_ENTITY.proxy_id [BL] set+1 %u != %u", proxy_entity->proxy_id, proxy_id);
+    proxy_entity->proxy_id--;
   }
   if (failed && (is_class_unstable ("PROXY_ENTITY") || is_class_debugging ("PROXY_ENTITY")))
     {
@@ -55469,6 +55484,21 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     proxy_object->data_size--;
   }
   {
+    BITCODE_BL dwg_version;
+    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "dwg_version", &dwg_version, NULL)
+        && dwg_version == proxy_object->dwg_version)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.dwg_version [BL] %u != %u", proxy_object->dwg_version, dwg_version);
+    dwg_version++;
+    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "dwg_version", &dwg_version, 0)
+        && dwg_version == proxy_object->dwg_version)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.dwg_version [BL] set+1 %u != %u", proxy_object->dwg_version, dwg_version);
+    proxy_object->dwg_version--;
+  }
+  {
     BITCODE_B from_dxf;
     if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "from_dxf", &from_dxf, NULL)
         && from_dxf == proxy_object->from_dxf)
@@ -55532,19 +55562,19 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
         fail ("PROXY_OBJECT.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BL version;
-    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "version", &version, NULL)
-        && version == proxy_object->version)
+    BITCODE_BL proxy_id;
+    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "proxy_id", &proxy_id, NULL)
+        && proxy_id == proxy_object->proxy_id)
       pass ();
     else
-      fail ("PROXY_OBJECT.version [BL] %u != %u", proxy_object->version, version);
-    version++;
-    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "version", &version, 0)
-        && version == proxy_object->version)
+      fail ("PROXY_OBJECT.proxy_id [BL] %u != %u", proxy_object->proxy_id, proxy_id);
+    proxy_id++;
+    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "proxy_id", &proxy_id, 0)
+        && proxy_id == proxy_object->proxy_id)
       pass ();
     else
-      fail ("PROXY_OBJECT.version [BL] set+1 %u != %u", proxy_object->version, version);
-    proxy_object->version--;
+      fail ("PROXY_OBJECT.proxy_id [BL] set+1 %u != %u", proxy_object->proxy_id, proxy_id);
+    proxy_object->proxy_id--;
   }
   if (failed && (is_class_unstable ("PROXY_OBJECT") || is_class_debugging ("PROXY_OBJECT")))
     {

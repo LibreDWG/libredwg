@@ -11970,34 +11970,47 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 }
               else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY
                        && (pair->code == 90 || pair->code == 91
-                           || pair->code == 71
-                           || pair->code == 92 // else 160 via search
+                           || pair->code == 70
                            || pair->code == 93
-                           || pair->code == 94)) // unknown r14
+                           || pair->code == 94 // end of objids
+                           || pair->code == 95))
                 {
                   Dwg_Entity_PROXY_ENTITY *o
                       = obj->tio.entity->tio.PROXY_ENTITY;
-                  if (dwg->header.version <= R_14)
-                    {
-                      if (pair->code == 90)
-                        o->class_id = pair->value.i;
-                      else if (pair->code == 91)
-                        o->version = pair->value.i;
-                    }
-                  else if (pair->code == 92)
-                    o->data_size = pair->value.i;
+                  if (pair->code == 90)
+                    o->proxy_id = pair->value.i;
                   else if (pair->code == 91)
                     o->class_id = pair->value.i;
-                  else if (pair->code == 71) // r2018+
-                    o->version = pair->value.i;
+                  else if (pair->code == 93 && dwg->header.version < R_2010)
+                    o->data_size = pair->value.i;
+                  else if (pair->code == 95) {
+                    o->dwg_version = pair->value.u >> 16;
+                    o->maint_version = pair->value.u & 0xff;
+                  }
+                  else if (pair->code == 70)
+                    o->from_dxf = pair->value.i;
                 }
               else if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT
-                       && pair->code == 93 // else 161 via search
-                       && dwg->header.version <= R_14)
+                       && (pair->code == 90 || pair->code == 91
+                           || pair->code == 70
+                           || pair->code == 93
+                           || pair->code == 94 // end of objids
+                           || pair->code == 95))
                 {
                   Dwg_Object_PROXY_OBJECT *o
                       = obj->tio.object->tio.PROXY_OBJECT;
-                  o->data_size = pair->value.i;
+                  if (pair->code == 90)
+                    o->proxy_id = pair->value.i;
+                  else if (pair->code == 91)
+                    o->class_id = pair->value.i;
+                  else if (pair->code == 93 && dwg->header.version < R_2010)
+                    o->data_size = pair->value.i;
+                  else if (pair->code == 95) {
+                    o->dwg_version = pair->value.u >> 16;
+                    o->maint_version = pair->value.u & 0xff;
+                  }
+                  else if (pair->code == 70)
+                    o->from_dxf = pair->value.i;
                 }
               else if (obj->fixedtype == DWG_TYPE_LAYER
                        && ((pair->code == 348) || (pair->code == 420)

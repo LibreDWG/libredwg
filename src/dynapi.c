@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2515 "gen-dynapi.pl"
+#line 2519 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -3306,12 +3306,14 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_PFACE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_PROXY_ENTITY_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_PROXY_ENTITY, parent),
     1,1,0, 0 },
-  { "class_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, class_id),
+  { "proxy_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, proxy_id),
     0,0,0, 90 },
-  { "version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, version),
+  { "class_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, class_id),
+    0,0,0, 91 },
+  { "dwg_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, dwg_version),
     0,0,0, 95 },
   { "maint_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, maint_version),
-    0,0,0, 97 },
+    0,0,0, 95 },
   { "from_dxf",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_PROXY_ENTITY, from_dxf),
     0,0,0, 70 },
   { "data_numbits",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_PROXY_ENTITY, data_numbits),
@@ -9267,12 +9269,14 @@ static const Dwg_DYNAPI_field _dwg_POINTPATH_fields[] = {
 static const Dwg_DYNAPI_field _dwg_PROXY_OBJECT_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_PROXY_OBJECT, parent),
     1,1,0, 0 },
-  { "class_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PROXY_OBJECT, class_id),
+  { "proxy_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PROXY_OBJECT, proxy_id),
     0,0,0, 90 },
-  { "version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PROXY_OBJECT, version),
-    0,0,0, 71 },
+  { "class_id",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PROXY_OBJECT, class_id),
+    0,0,0, 91 },
+  { "dwg_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PROXY_OBJECT, dwg_version),
+    0,0,0, 0 },
   { "maint_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PROXY_OBJECT, maint_version),
-    0,0,0, 97 },
+    0,0,0, 0 },
   { "from_dxf",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_PROXY_OBJECT, from_dxf),
     0,0,0, 70 },
   { "data_numbits",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_PROXY_OBJECT, data_numbits),
@@ -13886,7 +13890,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2599 "gen-dynapi.pl"
+#line 2603 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;

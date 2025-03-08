@@ -3008,15 +3008,16 @@ typedef struct _dwg_entity_PROXY_ENTITY
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_BL class_id;      /*!< DXF 91, always 498, same as obj->type */
-  BITCODE_BL version;       /*!< DXF 95 <r2018, 71 r2018+ */
-  BITCODE_BL maint_version; /*!< DXF 97 r2018+ */
+  BITCODE_BL proxy_id;      /*!< DXF 90 always 498, same as obj->type */
+  BITCODE_BL class_id;      /*!< DXF 91 class index */
+  BITCODE_BL dwg_version;   /*!< DXF hiword of 95 */
+  BITCODE_BL maint_version; /*!< DXF loword of 95 */
   BITCODE_B from_dxf;       /*!< DXF 70 */
   BITCODE_BL data_numbits;
-  BITCODE_BL data_size;     /*!< DXF 93 */
+  BITCODE_BL data_size;     /*!< DXF 93, r2010+: 161 */
   BITCODE_RC *data;         /*!< DXF 310 */
   BITCODE_BL num_objids;
-  BITCODE_H* objids;        /*!< DXF 340 */
+  BITCODE_H* objids;        /*!< DXF 330,340,350,360 */
 } Dwg_Entity_PROXY_ENTITY;
 
 /**
@@ -3026,15 +3027,16 @@ typedef struct _dwg_object_PROXY_OBJECT
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_BL class_id;      /*!< DXF 91, always 499, same as obj->type */
-  BITCODE_BL version;       /*!< DXF 95 <r2018, 71 r2018+ */
-  BITCODE_BL maint_version; /*!< DXF 97 r2018+ */
+  BITCODE_BL proxy_id;      /*!< DXF 90 always 499, same as obj->type */
+  BITCODE_BL class_id;      /*!< DXF 91 class index */
+  BITCODE_BL dwg_version;   /*!< DXF hiword of 95 */
+  BITCODE_BL maint_version; /*!< DXF loword of 95 */
   BITCODE_B from_dxf;       /*!< DXF 70 */
   BITCODE_BL data_numbits;
-  BITCODE_BL data_size;     /*!< DXF 93 */
+  BITCODE_BL data_size;     /*!< DXF 93, r2010+: 161 */
   BITCODE_RC *data;         /*!< DXF 310 */
   BITCODE_BL num_objids;
-  BITCODE_H* objids;        /*!< DXF 340 */
+  BITCODE_H* objids;        /*!< DXF 330,340,350,360 */
 } Dwg_Object_PROXY_OBJECT;
 
 /**
