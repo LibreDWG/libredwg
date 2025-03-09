@@ -6199,34 +6199,50 @@ DWG_OBJECT (PROXY_OBJECT)
 #endif
 
   START_OBJECT_HANDLE_STREAM;
-#ifdef IS_DECODER
-  {
-    size_t pos = bit_position (hdl_dat);
-    unsigned char opts = dat->opts;
-    dat->opts &= 0xf0;
-    _obj->num_objids = 0;
-    while (hdl_dat->byte < hdl_dat->size)
-      {
-        Dwg_Handle hdl;
-        if (bit_read_H (hdl_dat, &hdl))
-          break; // error
-        else
-          _obj->num_objids++;
+#if defined(IS_DECODER)
+  while (hdl_dat->byte < hdl_dat->size)
+    {
+      Dwg_Handle hdl;
+      if (bit_read_H (hdl_dat, &hdl))
+        break; // error
+      else
+        {
+          BITCODE_H ref
+              = dwg_add_handleref (dwg, hdl.code, hdl.value, NULL);
+          PUSH_HV (_obj, num_objids, objids, ref);
+        }
+    }
+  LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
+#elif defined(IS_ENCODER) || defined(IS_JSON)
+  HANDLE_VECTOR (objids, num_objids, ANYCODE, 340);
+#elif defined(IS_DXF)
+  for (rcount1 = 0; rcount1 < _obj->num_objids; rcount1++)
+    {
+      int dxf = 330;
+      if (!_obj->objids[rcount1]) {
+        LOG_ERROR ("Illegal %s.objids[%u]", obj->name, rcount1);
       }
-    LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
-    dat->opts = opts;
-    bit_set_position (hdl_dat, pos);
-  }
-#endif
-  // really 330, 340, 350 or 360
-  HANDLE_VECTOR (objids, num_objids, ANYCODE, 340); // code 3 or 4
+      else
+        {
+          unsigned code = _obj->objids[rcount1]->handleref.code;
+          switch (code)
+            {
+            case 2: dxf = 330; break;
+            case 3: dxf = 340; break;
+            case 4: case 6: case 8: case 10: case 12: dxf = 350; break;
+            case 5: dxf = 360; break;
+            default: LOG_ERROR ("Illegal %s objids[%u].code %u", obj->name,
+                                rcount1, code);
+            }
+          VALUE_HANDLE (_obj->objids[rcount1], objids, code, dxf);
+        }
+    }
   SINCE (R_2000b) { // end of Object ID's
-    DXF {
-      if (FIELD_VALUE (num_objids)) {
-        VALUE_RS (0, 94);
-      }
+    if (FIELD_VALUE (num_objids)) {
+      VALUE_RS (0, 94);
     }
   }
+#endif
 
 DWG_OBJECT_END
 
