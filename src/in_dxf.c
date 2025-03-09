@@ -11972,9 +11972,14 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                        && (pair->code == 90 || pair->code == 91
                            || pair->code == 70
                            || pair->code == 93
-                           || pair->code == 94 // end of objids
-                           || pair->code == 95))
+                           || pair->code == 95
+                           || pair->code == 330 // objids
+                           || pair->code == 340 // objids
+                           || pair->code == 350 // objids
+                           || pair->code == 360 // objids
+                           || pair->code == 94)) // end of objids, ignore
                 {
+                  Dwg_Object_Ref *ref;
                   Dwg_Entity_PROXY_ENTITY *o
                       = obj->tio.entity->tio.PROXY_ENTITY;
                   if (pair->code == 90)
@@ -11983,20 +11988,58 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     o->class_id = pair->value.i;
                   else if (pair->code == 93 && dwg->header.version < R_2010)
                     o->data_size = pair->value.i;
-                  else if (pair->code == 95) {
-                    o->dwg_version = pair->value.u >> 16;
-                    o->maint_version = pair->value.u & 0xff;
-                  }
+                  else if (pair->code == 95)
+                    {
+                      o->dwg_version = pair->value.u >> 16;
+                      o->maint_version = pair->value.u & 0xff;
+                    }
                   else if (pair->code == 70)
                     o->from_dxf = pair->value.i;
+                  else if (pair->code == 330)
+                    {
+                      ref = dwg_add_handleref (dwg, 2, pair->value.u, obj);
+                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
+                                 obj->name, o->num_objids, ARGS_REF (ref),
+                                 pair->code);
+                      PUSH_HV (o, num_objids, objids, ref);
+                    }
+                  else if (pair->code == 340)
+                    {
+                      ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
+                                 obj->name, o->num_objids, ARGS_REF (ref),
+                                 pair->code);
+                      PUSH_HV (o, num_objids, objids, ref);
+                    }
+                  else if (pair->code == 350)
+                    {
+                      ref = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
+                                 obj->name, o->num_objids, ARGS_REF (ref),
+                                 pair->code);
+                      PUSH_HV (o, num_objids, objids, ref);
+                    }
+                  else if (pair->code == 360)
+                    {
+                      ref = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
+                                 obj->name, o->num_objids, ARGS_REF (ref),
+                                 pair->code);
+                      PUSH_HV (o, num_objids, objids, ref);
+                    }
                 }
               else if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT
                        && (pair->code == 90 || pair->code == 91
                            || pair->code == 70
                            || pair->code == 93
-                           || pair->code == 94 // end of objids
-                           || pair->code == 95))
+                           || pair->code == 95
+                           || pair->code == 330 // objids
+                           || pair->code == 340 // objids
+                           || pair->code == 350 // objids
+                           || pair->code == 360 // objids
+                           || pair->code == 94)) // end of objids, ignore
                 {
+                  Dwg_Object_Ref *ref;
                   Dwg_Object_PROXY_OBJECT *o
                       = obj->tio.object->tio.PROXY_OBJECT;
                   if (pair->code == 90)
@@ -12005,12 +12048,45 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     o->class_id = pair->value.i;
                   else if (pair->code == 93 && dwg->header.version < R_2010)
                     o->data_size = pair->value.i;
-                  else if (pair->code == 95) {
-                    o->dwg_version = pair->value.u >> 16;
-                    o->maint_version = pair->value.u & 0xff;
-                  }
+                  else if (pair->code == 95)
+                    {
+                      o->dwg_version = pair->value.u >> 16;
+                      o->maint_version = pair->value.u & 0xff;
+                    }
                   else if (pair->code == 70)
                     o->from_dxf = pair->value.i;
+                  else if (pair->code == 330)
+                    {
+                      ref = dwg_add_handleref (dwg, 2, pair->value.u, obj);
+                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
+                                 obj->name, o->num_objids, ARGS_REF (ref),
+                                 pair->code);
+                      PUSH_HV (o, num_objids, objids, ref);
+                    }
+                  else if (pair->code == 340)
+                    {
+                      ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
+                                 obj->name, o->num_objids, ARGS_REF (ref),
+                                 pair->code);
+                      PUSH_HV (o, num_objids, objids, ref);
+                    }
+                  else if (pair->code == 350)
+                    {
+                      ref = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
+                                 obj->name, o->num_objids, ARGS_REF (ref),
+                                 pair->code);
+                      PUSH_HV (o, num_objids, objids, ref);
+                    }
+                  else if (pair->code == 360)
+                    {
+                      ref = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
+                                 obj->name, o->num_objids, ARGS_REF (ref),
+                                 pair->code);
+                      PUSH_HV (o, num_objids, objids, ref);
+                    }
                 }
               else if (obj->fixedtype == DWG_TYPE_LAYER
                        && ((pair->code == 348) || (pair->code == 420)
