@@ -221,7 +221,7 @@ main (int argc, char *argv[])
           dat.size -= dat.size - size;
         }
       else
-        bit_write_bits (&dat, input);
+        bit_write_bits1 (&dat, input);
       i++;
     }
   while (i < argc);
