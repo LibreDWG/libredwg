@@ -203,7 +203,7 @@ bits_BD (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
     {
       if (strEQ (g->value, b->value))
         {
-          bit_write_bits (dat, b->bin);
+          bit_write_bits1 (dat, b->bin);
           return;
         }
     }

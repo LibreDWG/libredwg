@@ -8,6 +8,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL proxy_id;
   BITCODE_BL class_id;
+  BITCODE_BL dwg_versions;
   BITCODE_BL dwg_version;
   BITCODE_BL maint_version;
   BITCODE_B from_dxf;
@@ -21,10 +22,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, proxy_id, BL);
   if (proxy_id != 499)
     fail ("PROXY_OBJECT.proxy_id %d not 499", (int)proxy_id);
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, class_id, BL); // index in CLASSES
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, dwg_version, BL);
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, maint_version, BL);
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, class_id, BL);      // index in CLASSES
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, dwg_versions, BL);  // <r2018, later computed
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, dwg_version, BL);   // r2018+, earlier computed
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, maint_version, BL); // r2018+, earlier computed
   CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, from_dxf, B);
+  // no graphical proxy data
   CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, data_numbits, BL);
   CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, data_size, BL);
   if (data_size * 8 < data_numbits || data_size > obj->size)

@@ -20860,21 +20860,6 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     proxy_entity->data_numbits--;
   }
   {
-    BITCODE_BL data_size;
-    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "data_size", &data_size, NULL)
-        && data_size == proxy_entity->data_size)
-      pass ();
-    else
-      fail ("PROXY_ENTITY.data_size [BL] %u != %u", proxy_entity->data_size, data_size);
-    data_size++;
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "data_size", &data_size, 0)
-        && data_size == proxy_entity->data_size)
-      pass ();
-    else
-      fail ("PROXY_ENTITY.data_size [BL] set+1 %u != %u", proxy_entity->data_size, data_size);
-    proxy_entity->data_size--;
-  }
-  {
     BITCODE_BL dwg_version;
     if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "dwg_version", &dwg_version, NULL)
         && dwg_version == proxy_entity->dwg_version)
@@ -20888,6 +20873,21 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
     else
       fail ("PROXY_ENTITY.dwg_version [BL] set+1 %u != %u", proxy_entity->dwg_version, dwg_version);
     proxy_entity->dwg_version--;
+  }
+  {
+    BITCODE_BL dwg_versions;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "dwg_versions", &dwg_versions, NULL)
+        && dwg_versions == proxy_entity->dwg_versions)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.dwg_versions [BL] %u != %u", proxy_entity->dwg_versions, dwg_versions);
+    dwg_versions++;
+    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "dwg_versions", &dwg_versions, 0)
+        && dwg_versions == proxy_entity->dwg_versions)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.dwg_versions [BL] set+1 %u != %u", proxy_entity->dwg_versions, dwg_versions);
+    proxy_entity->dwg_versions--;
   }
   {
     BITCODE_B from_dxf;
@@ -20951,6 +20951,29 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         pass ();
     else
         fail ("PROXY_ENTITY.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_TF proxy_data;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "proxy_data", &proxy_data, NULL)
+        && !memcmp (&proxy_data, &proxy_entity->proxy_data, sizeof (BITCODE_TF)))
+        pass ();
+    else
+        fail ("PROXY_ENTITY.proxy_data [TF]");
+  }
+  {
+    BITCODE_BL proxy_data_size;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "proxy_data_size", &proxy_data_size, NULL)
+        && proxy_data_size == proxy_entity->proxy_data_size)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.proxy_data_size [BL] %u != %u", proxy_entity->proxy_data_size, proxy_data_size);
+    proxy_data_size++;
+    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "proxy_data_size", &proxy_data_size, 0)
+        && proxy_data_size == proxy_entity->proxy_data_size)
+      pass ();
+    else
+      fail ("PROXY_ENTITY.proxy_data_size [BL] set+1 %u != %u", proxy_entity->proxy_data_size, proxy_data_size);
+    proxy_entity->proxy_data_size--;
   }
   {
     BITCODE_BL proxy_id;
@@ -55497,6 +55520,21 @@ static int test_PROXY_OBJECT (const Dwg_Object *obj)
     else
       fail ("PROXY_OBJECT.dwg_version [BL] set+1 %u != %u", proxy_object->dwg_version, dwg_version);
     proxy_object->dwg_version--;
+  }
+  {
+    BITCODE_BL dwg_versions;
+    if (dwg_dynapi_entity_value (proxy_object, "PROXY_OBJECT", "dwg_versions", &dwg_versions, NULL)
+        && dwg_versions == proxy_object->dwg_versions)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.dwg_versions [BL] %u != %u", proxy_object->dwg_versions, dwg_versions);
+    dwg_versions++;
+    if (dwg_dynapi_entity_set_value (proxy_object, "PROXY_OBJECT", "dwg_versions", &dwg_versions, 0)
+        && dwg_versions == proxy_object->dwg_versions)
+      pass ();
+    else
+      fail ("PROXY_OBJECT.dwg_versions [BL] set+1 %u != %u", proxy_object->dwg_versions, dwg_versions);
+    proxy_object->dwg_versions--;
   }
   {
     BITCODE_B from_dxf;
