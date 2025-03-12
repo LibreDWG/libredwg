@@ -6169,7 +6169,7 @@ DWG_OBJECT (PROXY_OBJECT)
 
   START_OBJECT_HANDLE_STREAM;
 #if defined(IS_DECODER)
-  while (hdl_dat->byte < hdl_dat->size)
+  while (hdl_dat->byte < hdl_dat->size - 1)
     {
       Dwg_Handle hdl;
       if (bit_read_H (hdl_dat, &hdl))
