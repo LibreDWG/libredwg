@@ -650,37 +650,36 @@ classes_section:
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
       klass->number = bit_read_BS (dat);
-      LOG_HANDLE ("number: " FORMAT_BS " [BS] ", klass->number);
+      LOG_HANDLE ("-------------------\n")
+      LOG_HANDLE ("Number:           " FORMAT_BS " [BS]", klass->number);
       LOG_POS_ (HANDLE);
       klass->proxyflag = bit_read_BS (dat);
-      LOG_HANDLE ("proxyflag: " FORMAT_BS " [BS] ", klass->proxyflag);
+      LOG_HANDLE ("Proxyflag:        " FORMAT_BS " [BS]", klass->proxyflag);
       LOG_POS_ (HANDLE);
       dwg_log_proxyflag (DWG_LOGLEVEL, DWG_LOGLEVEL_HANDLE, klass->proxyflag);
       if (dat->byte >= endpos)
         break;
       klass->appname = bit_read_TV (dat);
-      LOG_HANDLE ("appname: %s [TV] ", klass->appname);
+      LOG_HANDLE ("Application name: \"%s\" [TV]", klass->appname);
       LOG_POS_ (HANDLE);
       if (dat->byte >= endpos)
         {
           free (klass->appname);
           break;
         }
-      LOG_HANDLE ("\n  ");
       klass->cppname = bit_read_TV (dat);
-      LOG_HANDLE ("cppname: %s [TV] ", klass->cppname);
+      LOG_HANDLE ("C++ class name:   %s [TV] ", klass->cppname);
       LOG_POS_ (HANDLE);
       klass->dxfname = bit_read_TV (dat);
-      LOG_HANDLE ("dxfname: %s [TV] ", klass->dxfname);
+      LOG_HANDLE ("DXF record name:  %s [TV] ", klass->dxfname);
       LOG_POS_ (HANDLE);
       klass->is_zombie = bit_read_B (dat); // was_a_proxy
-      LOG_HANDLE ("is_zombie: " FORMAT_B " [B] ", klass->is_zombie);
+      LOG_HANDLE ("is_zombie:        " FORMAT_B " [B] ", klass->is_zombie);
       LOG_POS_ (HANDLE);
       // 1f2 for entities, 1f3 for objects
       klass->item_class_id = bit_read_BS (dat);
-      LOG_HANDLE ("item_class_id: " FORMAT_BS " [BS]", klass->item_class_id);
+      LOG_HANDLE ("item_class_id:    " FORMAT_BS " [BS]", klass->item_class_id);
       LOG_POS_ (HANDLE);
-      LOG_HANDLE ("\n");
       if (DWG_LOGLEVEL == DWG_LOGLEVEL_TRACE)
         {
           LOG (TRACE,
@@ -711,6 +710,7 @@ classes_section:
 
       dwg->num_classes++;
     }
+  LOG_HANDLE ("-------------------\n")
 
   // Check Section CRC
   dat->byte = dwg->header.section[SECTION_CLASSES_R13].address
