@@ -2978,8 +2978,8 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
                   obj->index, obj->handle.value);
               return DWG_ERR_UNHANDLEDCLASS;
             }
-        }
 #  endif
+        }
           /* > 500 */
           else if ((error = dwg_dxf_variable_type (obj->parent, dat,
                                                    (Dwg_Object *)obj))
