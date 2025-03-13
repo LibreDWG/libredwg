@@ -35,6 +35,7 @@ jobs:
           - --disable-write --disable-docs
           - CFLAGS="-O2 -m32" --disable-bindings --disable-docs
           - CFLAGS="-O2 -fno-omit-frame-pointer -fsanitize=undefined -fno-var-tracking" --disable-bindings --disable-docs --enable-check-less
+          - --enable-debug --disable-bindings --disable-docs
     steps:
     - uses: actions/checkout@v4
       with:
