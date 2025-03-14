@@ -2978,30 +2978,30 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
                   obj->index, obj->handle.value);
               return DWG_ERR_UNHANDLEDCLASS;
             }
-        }
 #  endif
-          /* > 500 */
-          else if ((error = dwg_dxf_variable_type (obj->parent, dat,
-                                                   (Dwg_Object *)obj))
-                   & DWG_ERR_UNHANDLEDCLASS)
-          {
-            Dwg_Data *dwg = obj->parent;
-            int j = obj->type - 500;
-            Dwg_Class *klass = NULL;
-
-            if (j >= 0 && j < (int)dwg->num_classes
-                && obj->fixedtype < DWG_TYPE_FREED)
-              klass = &dwg->dwg_class[j];
-            if (!klass)
-              {
-                LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
-                return DWG_ERR_INVALIDTYPE;
-              }
-            return error;
-          }
         }
-      return DWG_ERR_UNHANDLEDCLASS;
+      /* > 500 */
+      else if ((error = dwg_dxf_variable_type (obj->parent, dat,
+                                               (Dwg_Object *)obj))
+               & DWG_ERR_UNHANDLEDCLASS)
+        {
+          Dwg_Data *dwg = obj->parent;
+          int j = obj->type - 500;
+          Dwg_Class *klass = NULL;
+
+          if (j >= 0 && j < (int)dwg->num_classes
+              && obj->fixedtype < DWG_TYPE_FREED)
+            klass = &dwg->dwg_class[j];
+          if (!klass)
+            {
+              LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
+              return DWG_ERR_INVALIDTYPE;
+            }
+          return error;
+        }
     }
+  return DWG_ERR_UNHANDLEDCLASS;
+}
 
 static int
 dxf_common_entity_handle_data (Bit_Chain *restrict dat,
