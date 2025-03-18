@@ -29,6 +29,8 @@ compile_commands.json
 /autom4te.cache/
 # will be a submodule
 /bindings/gambas/
+/build/
+/build-wasm/
 /compat_reports/
 /doc/acis/
 /doc/LibreDWG.t2p/

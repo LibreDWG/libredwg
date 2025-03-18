@@ -205,6 +205,48 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
   return 0;
 }
 
+/** dwg_read_data
+ * returns 0 on success.
+ *
+ * everything in dwg is cleared
+ * and then either read from dat, or set to a default.
+ */
+EXPORT int
+dwg_read_data (unsigned char *data, size_t size, Dwg_Data* dwg)
+{
+  struct_stat_t attrib;
+  Bit_Chain bit_chain = { 0 };
+  int error;
+
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  memset (dwg, 0, sizeof (Dwg_Data));
+  dwg->opts = loglevel;
+
+  memset (&bit_chain, 0, sizeof (Bit_Chain));
+  bit_chain.chain = data;
+  bit_chain.fh = NULL;
+  bit_chain.size = size;
+
+  /* Decode the dwg structure */
+  error = dwg_decode (&bit_chain, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      LOG_ERROR ("Failed to decode dwg data: 0x%x\n", error)
+      free (bit_chain.chain);
+      bit_chain.chain = NULL;
+      bit_chain.size = 0;
+      return error;
+    }
+
+  // TODO: does dwg hold any char* pointers to the bit_chain or are they all
+  // copied?
+  free (bit_chain.chain);
+  bit_chain.chain = NULL;
+  bit_chain.size = 0;
+
+  return error;
+}
+
 /** dwg_read_file
  * returns 0 on success.
  *
