@@ -17,7 +17,7 @@ bash -c "make install prefix= bindir= pdfdir= DESTDIR=`pwd`/%DESTDIR%"
 rem TODO install-pdf broken
 rem bash -c "make install-pdf prefix= bindir= pdfdir= DESTDIR=`pwd`/%DESTDIR%"
 cd %DESTDIR%
-copy ..\README README.txt
+copy ..\README.md README.txt
 move /y bin\libredwg-0.dll libredwg-0.dll
 rmdir bin
 rem libssp-0.dll needed for -fstack-protector

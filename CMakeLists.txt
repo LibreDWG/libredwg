@@ -419,8 +419,8 @@ install(TARGETS RUNTIME)
 
 if(WIN32)
   add_custom_target(dist
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/README README
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/README.md README.md
     COMMAND zip libredwg-${PACKAGE_VERSION}.zip dwg*.exe dxf*.exe *.lib *.dll
-                README doc/LibreDWG.pdf
+                README.md doc/LibreDWG.pdf
     DEPENDS ${redwg})
 endif()

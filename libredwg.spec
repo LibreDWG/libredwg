@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.13.3
+Version:        0.13.4
 Release:        0%{?dist}
 Summary:        GNU C library and programs to read and write DWG/DXF files
 
@@ -120,7 +120,7 @@ fi
 
 %files
 %license COPYING
-%doc README AUTHORS NEWS doc/LibreDWG.pdf
+%doc README.md AUTHORS NEWS doc/LibreDWG.pdf
 %{_bindir}/dwg2SVG
 %{_bindir}/dwg2dxf
 %{_bindir}/dwg2ps

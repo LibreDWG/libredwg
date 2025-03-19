@@ -30,7 +30,7 @@ COPY src/codepages ./src/codepages/
 COPY jsmn/jsmn.h ./jsmn/
 COPY test/unit-testing ./test/unit-testing/
 RUN git --version; powerpc64-linux-gnu-gcc --version
-RUN touch NEWS README AUTHORS ChangeLog COPYING doc/Doxyfile.in doc/footer.in && \
+RUN touch NEWS README.md AUTHORS ChangeLog COPYING doc/Doxyfile.in doc/footer.in && \
     autoreconf --install --symlink -I m4
 RUN ./configure CFLAGS='-O1 -mbig -mcpu=power7' --host=powerpc64-linux-gnu --disable-bindings && \
     make -s -C src && \
