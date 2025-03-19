@@ -586,7 +586,7 @@ int dwg_object_name_wrapper(
 }
 
 
-EMSCRIPTEN_BINDINGS(libredwg_functions) {
+EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_read_file);
   DEFINE_FUNC(dxf_read_file);
   DEFINE_FUNC(dwg_write_file);
@@ -673,4 +673,278 @@ EMSCRIPTEN_BINDINGS(libredwg_functions) {
   function("dwg_find_color_index", &dwg_find_color_index);
   DEFINE_FUNC(dwg_add_object);
   DEFINE_FUNC(dwg_object_name);
+}
+
+/** 
+ * Check if the name is a valid ENTITY name, not an OBJECT.
+ */
+bool is_dwg_entity_wrapper(const std::string& name) {
+  return is_dwg_entity(name.c_str());
+}
+
+/** 
+ * Check if the name is a valid OBJECT name, not an ENTITY.
+ */
+bool is_dwg_object_wrapper(const std::string& name) {
+  return is_dwg_object(name.c_str());
+}
+
+/** 
+ * Returns the HEADER.fieldname value in out.
+ * The optional Dwg_DYNAPI_field *fp is filled with the field types from dynapi.c
+ */
+bool dwg_dynapi_header_value_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& fieldname,
+  uintptr_t out_ptr,
+  uintptr_t field_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  void* out = reinterpret_cast<void*>(out_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_header_value(dwg, fieldname.c_str(), out, fp);
+}
+
+/** 
+ * Returns the ENTITY|OBJECT.fieldname value in out.
+ * entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+ * specific fields. The optional Dwg_DYNAPI_field *fp is filled with the
+ * field types from dynapi.c.
+ */
+bool dwg_dynapi_entity_value_wrapper(
+  uintptr_t entity_ptr, 
+  const std::string& dxfname,
+  const std::string& fieldname, 
+  uintptr_t out_ptr,
+  uintptr_t field_ptr) {
+  void* entity = reinterpret_cast<void*>(entity_ptr);
+  void* out = reinterpret_cast<void*>(out_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_entity_value(entity, dxfname.c_str(), fieldname.c_str(), out, fp);
+}
+
+/** 
+ * Returns the common ENTITY|OBJECT.fieldname value in out.
+ * _obj is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+ * specific fields. The optional Dwg_DYNAPI_field *fp is filled with the
+ * field types from dynapi.c
+ */
+bool dwg_dynapi_common_value_wrapper(
+  uintptr_t obj_ptr, 
+  const std::string& fieldname, 
+  uintptr_t out_ptr,
+  uintptr_t field_ptr) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  void* out = reinterpret_cast<void*>(out_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_common_value(obj, fieldname.c_str(), out, fp);
+}
+
+/** 
+ * Returns the common OBJECT.subclass.fieldname value in out.
+ * ptr points to the subclass field. The optional Dwg_DYNAPI_field *fp is
+ * filled with the field types from dynapi.c
+ */
+EXPORT bool dwg_dynapi_subclass_value_wrapper(
+  uintptr_t raw_ptr,
+  const std::string& subclass,
+  const std::string& fieldname,
+  uintptr_t out_ptr,
+  uintptr_t field_ptr) {
+  void* ptr = reinterpret_cast<void*>(raw_ptr);
+  void* out = reinterpret_cast<void*>(out_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_subclass_value(ptr, subclass.c_str(), fieldname.c_str(), out, fp);
+}
+
+/**
+ * Converts T or TU wide-strings to utf-8. Only for text values
+ * isnew is set to 1 if textp is freshly malloced (r2007+), otherwise 0
+ */ 
+bool dwg_dynapi_header_utf8text_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& fieldname,
+  uintptr_t text_ptr,
+  uintptr_t isnew_ptr,
+  uintptr_t field_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  char** textp = reinterpret_cast<char**>(text_ptr);
+  int* isnewp = reinterpret_cast<int*>(isnew_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_header_utf8text(dwg, fieldname.c_str(), textp, isnewp, fp);
+}
+
+/** 
+ * Returns the ENTITY|OBJECT.fieldname text value in textp as utf-8.
+ * entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+ * specific fields. The optional Dwg_DYNAPI_field *fp is filled with the
+ * field types from dynapi.c With DWG's since r2007+ creates a fresh UTF-8
+ * conversion from the UTF-16 wchar value (which needs to be free'd), with
+ * older DWG's or with TV, TF or TFF returns the unconverted text value. Only
+ * valid for text fields. isnew is set to 1 if textp is freshly malloced
+ * (r2007+), otherwise 0
+ */
+bool dwg_dynapi_entity_utf8text_wrapper(
+  uintptr_t entity_ptr,
+  const std::string& name,
+  const std::string& fieldname,
+  uintptr_t text_ptr,
+  uintptr_t isnew_ptr,
+  uintptr_t field_ptr) {
+  void* entity = reinterpret_cast<void*>(entity_ptr);
+  char** textp = reinterpret_cast<char**>(text_ptr);
+  int* isnewp = reinterpret_cast<int*>(isnew_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_entity_utf8text(entity, name.c_str(), fieldname.c_str(), textp, isnewp, fp);
+}
+
+bool dwg_dynapi_common_utf8text_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  uintptr_t text_ptr,
+  uintptr_t isnew_ptr,
+  uintptr_t field_ptr) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  char** textp = reinterpret_cast<char**>(text_ptr);
+  int* isnewp = reinterpret_cast<int*>(isnew_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_common_utf8text(obj, fieldname.c_str(), textp, isnewp, fp);
+}
+
+/** 
+ * Sets the HEADER.fieldname to a value.
+ * A malloc'ed struct or string is passed by ptr, not by the content.
+ * A non-malloc'ed struct is set by content.
+ * If is_utf8 is set, the given value is a UTF-8 string, and will be
+ * converted to TV or TU.
+*/
+bool dwg_dynapi_header_set_value_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& fieldname,
+  uintptr_t value_ptr,
+  const bool is_utf8) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  void* value = reinterpret_cast<void*>(value_ptr);
+  return dwg_dynapi_header_set_value(dwg, fieldname.c_str(), value, is_utf8);
+}
+
+/** 
+ * Sets the ENTITY.fieldname to a value.
+ * A malloc'ed struct is passed by ptr, not by the content.
+ * A non-malloc'ed struct is set by content.
+ * Arrays or strings must be malloced before. We just set the new pointer,
+ * the old value will be freed.
+ * If is_utf8 is set, the given value is a UTF-8 string, and will be
+ * converted to TV or TU.
+ */
+bool dwg_dynapi_entity_set_value_wrapper(
+  uintptr_t entity_ptr,
+  const std::string& dxfname,
+  const std::string& fieldname,
+  uintptr_t value_ptr,
+  const bool is_utf8) {
+  void* entity = reinterpret_cast<void*>(entity_ptr);
+  void* value = reinterpret_cast<void*>(value_ptr);
+  return dwg_dynapi_entity_set_value(entity, dxfname.c_str(), fieldname.c_str(), value, is_utf8);
+}
+
+/**
+ * Sets the common ENTITY or OBJECT.fieldname to a value.
+ * A malloc'ed struct is passed by ptr, not by the content.
+ * A non-malloc'ed struct is set by content.
+ * Arrays or strings must be malloced before. We just set the new pointer,
+ * the old value will be freed.
+ * If is_utf8 is set, the given value is a UTF-8 string, and will be
+ * converted to TV or TU.
+ */
+bool dwg_dynapi_common_set_value_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  uintptr_t value_ptr,
+  const bool is_utf8) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  void* value = reinterpret_cast<void*>(value_ptr);
+  return dwg_dynapi_common_set_value(obj, fieldname.c_str(), value, is_utf8);
+}
+
+std::string dwg_dynapi_handle_name_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t hdl_ptr,
+  uintptr_t alloced_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object_Ref* hdl = reinterpret_cast<Dwg_Object_Ref*>(hdl_ptr);
+  int* alloced = reinterpret_cast<int*>(alloced_ptr);
+  return std::string(dwg_dynapi_handle_name(dwg, hdl, alloced));
+}
+
+/** 
+ * Return the field for custom type checks. 
+ */
+const uintptr_t dwg_dynapi_header_field_wrapper(const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_header_field(fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_entity_field_wrapper(
+  const std::string& name,
+  const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_entity_field(name.c_str(), fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_subclass_field_wrapper(
+  const std::string& name,
+  const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_subclass_field(name.c_str(), fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_common_entity_field_wrapper(const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_common_entity_field(fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_common_object_field_wrapper(const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_common_object_field(fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_entity_fields_wrapper(const std::string& name) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_entity_fields(name.c_str()));
+}
+
+uintptr_t dwg_dynapi_common_entity_fields_wrapper() {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_common_entity_fields());
+}
+
+uintptr_t dwg_dynapi_common_object_fields_wrapper() {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_common_object_fields());
+}
+
+uintptr_t dwg_dynapi_subclass_fields_wrapper(const std::string& name) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_subclass_fields(name.c_str()));
+}
+
+int dwg_dynapi_fields_size_wrapper(const std::string& name) {
+  return dwg_dynapi_fields_size(name.c_str());
+}
+
+
+EMSCRIPTEN_BINDINGS(libredwg_dynapi) {
+  DEFINE_FUNC(is_dwg_entity);
+  DEFINE_FUNC(is_dwg_object);
+  DEFINE_FUNC(dwg_dynapi_header_value);
+  DEFINE_FUNC(dwg_dynapi_entity_value);
+  DEFINE_FUNC(dwg_dynapi_common_value);
+  DEFINE_FUNC(dwg_dynapi_subclass_value);
+  DEFINE_FUNC(dwg_dynapi_header_utf8text);
+  DEFINE_FUNC(dwg_dynapi_entity_utf8text);
+  DEFINE_FUNC(dwg_dynapi_common_utf8text);
+  DEFINE_FUNC(dwg_dynapi_header_set_value);
+  DEFINE_FUNC(dwg_dynapi_entity_set_value);
+  DEFINE_FUNC(dwg_dynapi_common_set_value);
+  DEFINE_FUNC(dwg_dynapi_handle_name);
+  DEFINE_FUNC(dwg_dynapi_header_field);
+  DEFINE_FUNC(dwg_dynapi_entity_field);
+  DEFINE_FUNC(dwg_dynapi_subclass_field);
+  DEFINE_FUNC(dwg_dynapi_common_entity_field);
+  DEFINE_FUNC(dwg_dynapi_common_object_field);
+  DEFINE_FUNC(dwg_dynapi_entity_fields);
+  DEFINE_FUNC(dwg_dynapi_common_entity_fields);
+  DEFINE_FUNC(dwg_dynapi_common_object_fields);
+  DEFINE_FUNC(dwg_dynapi_subclass_fields);
 }
