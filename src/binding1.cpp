@@ -607,6 +607,29 @@ int dwg_obj_layer_set_name_wrapper(
   return error;
 }
 
+/*******************************************************************
+ *                    FUNCTIONS FOR TABLES                          *
+ *             All other tables and table entries                   *
+ ********************************************************************/
+
+/**
+ * Get name of any table entry. Defaults to ByLayer.
+ */
+std::string dwg_obj_table_get_name_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  int error = 0;
+  return std::string(dwg_obj_table_get_name(obj, &error));
+}
+
+/** 
+ * Get name of the referenced table entry. Defaults to ByLayer
+ */
+std::string dwg_ref_get_table_name_wrapper(uintptr_t ref_ptr) {
+  dwg_object_ref* ref = reinterpret_cast<dwg_object_ref*>(ref_ptr);
+  int error = 0;
+  return std::string(dwg_ref_get_table_name(ref, &error));
+}
+
 
 EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_read_file);
@@ -698,6 +721,8 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
 
   DEFINE_FUNC(dwg_obj_layer_get_name);
   DEFINE_FUNC(dwg_obj_layer_set_name);
+  DEFINE_FUNC(dwg_obj_table_get_name);
+  DEFINE_FUNC(dwg_ref_get_table_name);
 }
 
 /** 
