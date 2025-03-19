@@ -585,6 +585,28 @@ int dwg_object_name_wrapper(
   return dwg_object_name(name.c_str(), dxfnamep, typep, is_entp, stabilityp);
 }
 
+/********************************************************************
+ *                    FUNCTIONS FOR LAYER OBJECT                     *
+ ********************************************************************/
+
+/**
+ * Get/Set name (utf-8) of the layer object
+ */
+std::string dwg_obj_layer_get_name_wrapper(uintptr_t layer_ptr) {
+  dwg_obj_layer* layer = reinterpret_cast<dwg_obj_layer*>(layer_ptr);
+  int error = 0;
+  return std::string(dwg_obj_layer_get_name(layer, &error));
+}
+
+int dwg_obj_layer_set_name_wrapper(
+  uintptr_t layer_ptr,
+  const std::string& name) {
+  dwg_obj_layer* layer = reinterpret_cast<dwg_obj_layer*>(layer_ptr);
+  int error = 0;
+  dwg_obj_layer_set_name(layer, name.c_str(), &error);
+  return error;
+}
+
 
 EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_read_file);
@@ -673,6 +695,9 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   function("dwg_find_color_index", &dwg_find_color_index);
   DEFINE_FUNC(dwg_add_object);
   DEFINE_FUNC(dwg_object_name);
+
+  DEFINE_FUNC(dwg_obj_layer_get_name);
+  DEFINE_FUNC(dwg_obj_layer_set_name);
 }
 
 /** 
