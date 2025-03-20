@@ -93,7 +93,7 @@ if test yes = "$libredwg_have_libpcre2_16"; then
 fi
 AC_SUBST([PCRE2_CFLAGS])
 AC_SUBST([PCRE2_LIBS])
-  
+
 dnl PKG_CHECK_MODULES([LIBXML2], [libxml-2.0], [],
 dnl    AC_MSG_ERROR([Install libxml-2.0 first]))
 AC_CHECK_LIB([xml2],[newXMLEntity],

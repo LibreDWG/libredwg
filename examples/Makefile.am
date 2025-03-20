@@ -247,7 +247,9 @@ dist_pkgdata_DATA = dwgadd.example dwgadd.example_r11 dwgadd.example_r10 \
 
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~ dwgadd_test.dwg
-DISTCLEANFILES = alldxf_0.inc alldxf_1.inc alldxf_2.inc
+# only if out-of-tree
+# DISTCLEANFILES = alldxf_0.inc alldxf_1.inc alldxf_2.inc
+DISTCLEANFILES = example_*.dxf.err
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 .c.i:

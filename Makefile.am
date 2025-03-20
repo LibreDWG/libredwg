@@ -138,7 +138,7 @@ endif
 endif
 
 regen-dynapi: $(srcdir)/src/gen-dynapi.pl $(srcdir)/include/dwg.h
-	-$(PERL) $(srcdir)/src/gen-dynapi.pl
+	-test "$(CC)" != "tcc" && $(PERL) $(srcdir)/src/gen-dynapi.pl
 # $(MAKE) -C src $(abs_top_srcdir)/src/dxfclasses.c
 regen-gperf:
 	-cd $(abs_top_srcdir) && \
