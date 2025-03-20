@@ -1,0 +1,141 @@
+import { dwg_getall_LTYPE, dwg_read_data } from "./utils.mjs";
+
+// load libredwg webassembly module
+const libredwg = await createModule();
+window.libredwg = libredwg;
+
+const printItems = (id, size, getItem, getPropVal, propName = 'name') => {
+  // Clear previous item list
+  const listElement = document.getElementById(id);
+  listElement.innerHTML = '';
+
+  // Create list item for item
+  for (let index = 0; index < size; ++index) {
+    const item = getItem(index);
+    const li = document.createElement('li');
+    li.textContent = `${getPropVal(item, propName)}`;
+    listElement.appendChild(li);
+  }
+}
+
+const printEntityInfo = (id, entity) => {
+  // Clear previous item list
+  const listElement = document.getElementById(id);
+  listElement.innerHTML = '';
+
+  const propNames = ["handle", "layer", "lineType", "colorName", "proxyGraphics", "extPoint"];
+  propNames.forEach((name) => {
+    const li = document.createElement('li');
+    if (name == "extPoint") {
+      const coord = entity[name]
+      if (coord) {
+        li.textContent = `${name}: (${coord.x}, ${coord.y}, ${coord.z})`;
+        listElement.appendChild(li);
+      }
+    } else {
+      li.textContent = `${name}: ${entity[name]}`;
+      listElement.appendChild(li);
+    }
+  });
+}
+
+const printVertexesInTheFirstPolyline = (id, polyline) => {
+  // Clear previous item list
+  const listElement = document.getElementById(id);
+  listElement.innerHTML = '';
+
+  const vertexes = polyline.getVertexList();
+  for (let index = 0, size = vertexes.size(); index < size; ++index) {
+    const vertex = vertexes.get(index);
+    const li = document.createElement('li');
+    li.textContent = `(x: ${vertex.x}, y: ${vertex.y}, bulge: ${vertex.bulge})`;
+    listElement.appendChild(li);
+  }
+}
+
+const printEntityStats = (id, entities) => {
+  // Clear previous item list
+  const listElement = document.getElementById(id);
+  listElement.innerHTML = '';
+
+  const group = new Map();
+  let isFoundPolyline = false;
+  for (let index = 0, size = entities.size(); index < size; ++index) {
+    const entity = entities.get(index);
+    // If the group for the given eType does not exist, initialize the count to 0
+    const typeName = entity.eType.constructor.name;
+    if (!group.has(typeName)) {
+      group.set(typeName, 0);
+    }
+    if (!isFoundPolyline && (entity.eType == libredwg.DRW_ETYPE.LWPOLYLINE || entity.eType == libredwg.DRW_ETYPE.POLYLINE)) {
+      printEntityInfo("entityInfoList", entity);
+      printVertexesInTheFirstPolyline("vertexList", entity);
+      isFoundPolyline = true;
+    }
+    // Increment the count for the current group
+    group.set(typeName, group.get(typeName) + 1);
+  }
+
+  // Create list item for item
+  group.forEach((value, key) => {
+    const li = document.createElement('li');
+    li.textContent = `${key}: ${value}`;
+    listElement.appendChild(li);
+  });
+}
+
+const fileInput = document.getElementById('fileInput');
+
+// Function to handle file input change event
+fileInput.addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  
+  if (file) {
+    // Get file extension
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    // Create a FileReader to read the file
+    const reader = new FileReader();
+
+    // Define the callback function for when the file is read
+    reader.onload = function(e) {
+      const fileContent = e.target.result;
+      try {
+        if (fileExtension == 'dxf') {
+            // Do nothing for now
+        } else if (fileExtension == 'dwg') {
+          const data = dwg_read_data(libredwg, fileContent)
+          printItems(
+            'layerNameList', 
+            libredwg.dwg_get_layer_count(data),
+            (index) => libredwg.dwg_get_layer_index(data, index),
+            (item, propName) => libredwg.dwg_obj_layer_get_name(item, propName)
+          );
+
+          const ltypes = dwg_getall_LTYPE(libredwg, data);
+          printItems(
+            'lineTypeList', 
+            ltypes.length,
+            (index) => ltypes[index],
+            (item, propName) => libredwg.dwg_ent_get_STRING(item, propName)
+          );
+
+          // Manually signal that a C++ object is no longer needed and can be deleted.
+          // data.delete();
+        }
+      } catch (error) {
+        console.error('Error processing DXF/DWG file: ', error);
+      }
+    };
+
+    // Read the file
+    if (fileExtension == 'dxf') {
+      reader.readAsText(file);
+    } else if (fileExtension == 'dwg') {
+      reader.readAsArrayBuffer(file);
+    }
+  } else {
+    convertButton.disabled = true;
+    console.log('No file selected');
+  }
+});

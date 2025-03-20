@@ -1,0 +1,1325 @@
+#include <emscripten/bind.h>
+#include <string>
+#include "dwg.h"
+#include "dwg_api.h"
+
+using namespace emscripten;
+
+#define DEFINE_FUNC(funcName)                                                 \
+  function(#funcName, &funcName##_wrapper)
+
+#define DEFINE_FUNC_WITH_REF_POLICY(funcName)                                 \
+  function(#funcName, &funcName##_wrapper, return_value_policy::reference())
+
+uintptr_t dwg_read_file_wrapper(const std::string& filename) {
+  Dwg_Data* dwg = new Dwg_Data(); 
+  dwg_read_file(filename.c_str(), dwg);
+  return reinterpret_cast<uintptr_t>(dwg);
+}
+
+uintptr_t dxf_read_file_wrapper(const std::string& filename) {
+  Dwg_Data* dwg = new Dwg_Data(); 
+  dxf_read_file(filename.c_str(), dwg);
+  return reinterpret_cast<uintptr_t>(dwg);
+}
+
+int dwg_write_file_wrapper(
+  const std::string& filename,
+  uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_write_file(filename.c_str(), dwg);
+}
+
+/** 
+ * Search for the name in the associated table, and return its handle. Search
+ * is case-insensitive.
+ * Both name and table are ascii.
+ */
+uintptr_t dwg_find_tablehandle_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& name,
+  const std::string& table) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_find_tablehandle(dwg, name.c_str(), table.c_str()));
+}
+
+uintptr_t dwg_find_tablehandle_index_wrapper(
+  uintptr_t dwg_ptr,
+  const int index,
+  const std::string& table) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_find_tablehandle_index(dwg, index, table.c_str()));
+}
+
+/**
+ * Search for handle in associated table, and return its name (as UTF-8) 
+ */
+std::string dwg_handle_name_wrapper (
+  uintptr_t dwg_ptr,
+  const std::string& table,
+  uintptr_t handle_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  BITCODE_H handle = reinterpret_cast<BITCODE_H>(handle_ptr);
+  return std::string(dwg_handle_name(dwg, table.c_str(), handle));
+}
+
+/** 
+ * Not checking the header_vars entry, only searching the objects
+ * Returning a hardowner or hardpointer (DICTIONARY) ref (code 3 or 5)
+ * to it, as stored in header_vars. table must contain the "_CONTROL" suffix.
+ * table is ascii.
+ */
+uintptr_t dwg_find_table_control_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& table) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_find_table_control(dwg, table.c_str()));
+}
+
+/** 
+ * Search for a dictionary ref.
+ * Returning a hardpointer ref (5) to it, as stored in header_vars.
+ * Name is ascii.
+ */
+uintptr_t dwg_find_dictionary_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& name) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_find_dictionary(dwg, name.c_str()));
+}
+
+/** 
+ * Search for a named dictionary entry in the given dict.
+ * Search is case-sensitive. name is ASCII.
+ */
+uintptr_t dwg_find_dicthandle_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t dict_ptr,
+  const std::string& name) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  BITCODE_H dict = reinterpret_cast<BITCODE_H>(dict_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_find_dicthandle(dwg, dict, name.c_str()));
+}
+
+/** 
+ * Search all dictionary entries in the given dict.
+ * Check for the matching name of the handle object. (Control lists).
+ * Search is case-insensitive 
+ */
+uintptr_t dwg_find_dicthandle_objname_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t dict_ptr,
+  const std::string& name) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  BITCODE_H dict = reinterpret_cast<BITCODE_H>(dict_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_find_dicthandle_objname(dwg, dict, name.c_str()));
+}
+
+/** 
+ * Search for a table EXTNAME 
+ */
+std::string dwg_find_table_extname_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t obj_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return std::string(dwg_find_table_extname(dwg, obj));
+}
+
+/**
+ * Returns the string value of the member of the AcDbVariableDictionary.
+ * The name is ascii. E.g. LIGHTINGUNITS => "0"
+ */
+std::string dwg_variable_dict_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& name) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return std::string(dwg_variable_dict(dwg, name.c_str()));
+}
+
+double dwg_model_x_min_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_model_x_min(dwg);
+}
+
+double dwg_model_x_max_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_model_x_max(dwg);
+}
+
+double dwg_model_y_min_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_model_y_min(dwg);
+}
+
+double dwg_model_y_max_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_model_y_max(dwg);
+}
+
+double dwg_model_z_min_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_model_z_min(dwg);
+}
+
+double dwg_model_z_max_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_model_z_max(dwg);
+}
+
+double dwg_page_x_min_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_page_x_min(dwg);
+}
+
+double dwg_page_x_max_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_page_x_max(dwg);
+}
+
+double dwg_page_y_min_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_page_y_min(dwg);
+}
+
+double dwg_page_y_max_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_page_y_max(dwg);
+}
+
+uintptr_t dwg_block_control_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_block_control(dwg)); 
+}
+
+uintptr_t dwg_model_space_ref_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_model_space_ref(dwg));  
+}
+
+uintptr_t dwg_paper_space_ref_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_paper_space_ref(dwg));  
+}
+
+uintptr_t dwg_model_space_object_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_model_space_object(dwg));  
+}
+
+uintptr_t dwg_paper_space_object_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_paper_space_object(dwg));  
+}
+
+unsigned int dwg_get_layer_count_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_get_layer_count(dwg);  
+}
+
+uintptr_t dwg_get_layer_index_wrapper(
+  uintptr_t dwg_ptr,
+  size_t index) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object_LAYER ** layers = dwg_get_layers(dwg);
+  return reinterpret_cast<uintptr_t>(layers[index]);
+}
+
+BITCODE_BL dwg_get_num_objects_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_get_num_objects(dwg);
+}
+
+uintptr_t dwg_get_object_index_wrapper(
+  uintptr_t dwg_ptr,
+  size_t index) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(&dwg->object[index]);
+}
+
+BITCODE_BL dwg_get_object_num_objects_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_get_object_num_objects(dwg);  
+}
+
+int dwg_class_is_entity_wrapper(uintptr_t class_ptr) {
+  Dwg_Class* klass= reinterpret_cast<Dwg_Class*>(class_ptr);
+  return dwg_class_is_entity(klass);  
+}
+
+int dwg_obj_is_control_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_obj_is_control(obj);  
+}
+
+int dwg_obj_is_table_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_obj_is_table(obj);  
+}
+
+int dwg_obj_is_subentity_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_obj_is_subentity(obj);  
+}
+
+int dwg_obj_has_subentity_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_obj_has_subentity(obj);  
+}
+
+int dwg_obj_is_3dsolid_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_obj_is_3dsolid(obj);  
+}
+
+int dwg_obj_is_acsh_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_obj_is_acsh(obj);  
+}
+
+BITCODE_BL dwg_get_num_entities_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_get_num_entities(dwg);
+}
+
+uintptr_t dwg_get_entity_index_wrapper(uintptr_t dwg_ptr, size_t index) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object_Entity ** entities = dwg_get_entities(dwg);
+  return reinterpret_cast<uintptr_t>(entities[index]);
+}
+
+uintptr_t dwg_get_entity_layer_wrapper(uintptr_t entity_ptr) {
+  Dwg_Object_Entity* entity = reinterpret_cast<Dwg_Object_Entity*>(entity_ptr);
+  return reinterpret_cast<uintptr_t>(entity);
+}
+
+uintptr_t dwg_next_object_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_next_object(obj));  
+}
+
+uintptr_t dwg_next_entity_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_next_entity(obj));  
+}
+
+BITCODE_RLL dwg_next_handle_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_next_handle(dwg);
+}
+
+BITCODE_RLL dwg_next_handseed_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_next_handseed(dwg);
+}
+
+uintptr_t dwg_ref_object_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t ref_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_ref_object(dwg, ref));
+}
+
+uintptr_t dwg_ref_object_relative_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t ref_ptr,
+  uintptr_t obj_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_ref_object_relative(dwg, ref, obj));
+}
+
+uintptr_t dwg_ref_object_silent_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t ref_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_ref_object_silent(dwg, ref));
+}
+
+uintptr_t get_first_owned_entity_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return reinterpret_cast<uintptr_t>(get_first_owned_entity(obj));  
+}
+
+uintptr_t get_next_owned_entity_wrapper(
+  uintptr_t obj_ptr,
+  uintptr_t current_ptr) {
+  Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
+  Dwg_Object* current= reinterpret_cast<Dwg_Object*>(current_ptr);
+  return reinterpret_cast<uintptr_t>(get_next_owned_entity(obj, current));
+}
+
+uintptr_t get_first_owned_subentity_wrapper(uintptr_t owner_ptr) {
+  Dwg_Object* owner = reinterpret_cast<Dwg_Object*>(owner_ptr);
+  return reinterpret_cast<uintptr_t>(get_first_owned_subentity(owner));
+}
+
+uintptr_t get_next_owned_subentity_wrapper(
+  uintptr_t owner_ptr,
+  uintptr_t current_ptr) {
+  Dwg_Object* owner = reinterpret_cast<Dwg_Object*>(owner_ptr);
+  Dwg_Object* current = reinterpret_cast<Dwg_Object*>(current_ptr);
+  return reinterpret_cast<uintptr_t>(get_next_owned_subentity(owner, current));
+}
+
+uintptr_t get_first_owned_block_wrapper(uintptr_t hdr_ptr) {
+  Dwg_Object* hdr = reinterpret_cast<Dwg_Object*>(hdr_ptr);
+  return reinterpret_cast<uintptr_t>(get_first_owned_block(hdr));
+}
+
+uintptr_t get_last_owned_block_wrapper(uintptr_t hdr_ptr) {
+  Dwg_Object* hdr = reinterpret_cast<Dwg_Object*>(hdr_ptr);
+  return reinterpret_cast<uintptr_t>(get_last_owned_block(hdr));
+}
+
+uintptr_t get_next_owned_block_wrapper(
+  uintptr_t hdr_ptr,
+  uintptr_t current_ptr) {
+  Dwg_Object* hdr = reinterpret_cast<Dwg_Object*>(hdr_ptr);
+  Dwg_Object* current = reinterpret_cast<Dwg_Object*>(current_ptr);
+  return reinterpret_cast<uintptr_t>(get_next_owned_block(hdr, current));
+}
+
+uintptr_t get_next_owned_block_entity_wrapper(
+  uintptr_t hdr_ptr,
+  uintptr_t current_ptr) {
+  Dwg_Object* hdr = reinterpret_cast<Dwg_Object*>(hdr_ptr);
+  Dwg_Object* current = reinterpret_cast<Dwg_Object*>(current_ptr);
+  return reinterpret_cast<uintptr_t>(get_next_owned_block_entity(hdr, current));
+}
+
+uintptr_t dwg_get_first_object_wrapper(
+  uintptr_t dwg_ptr,
+  const Dwg_Object_Type type) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_get_first_object(dwg, type));
+}
+
+uintptr_t dwg_get_next_object_wrapper(
+  uintptr_t dwg_ptr,
+  const Dwg_Object_Type type,
+  const BITCODE_RL index) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_get_next_object(dwg, type, index));
+}
+
+uintptr_t dwg_resolve_handle_wrapper(
+  uintptr_t dwg_ptr,
+  BITCODE_RLL absref) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_resolve_handle(dwg, absref));
+}
+
+uintptr_t dwg_resolve_handle_silent_wrapper(
+  uintptr_t dwg_ptr,
+  const BITCODE_RLL absref) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_resolve_handle_silent(dwg, absref));
+}
+
+int dwg_resolve_handleref_wrapper(
+  uintptr_t ref_ptr,
+  uintptr_t obj_ptr) {
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_resolve_handleref(ref, obj);
+}
+
+uintptr_t dwg_resolve_jump_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_resolve_jump(obj));
+}
+
+Dwg_Section_Type dwg_section_type_wrapper(const std::string& name) {
+  return dwg_section_type(name.c_str());
+}
+
+// Dwg_Section_Type dwg_section_wtype_wrapper(const std::wstring& wname) {
+//   return dwg_section_wtype(wname.c_str());
+// }
+
+std::string dwg_section_name_wrapper(
+  uintptr_t dwg_ptr,
+  const unsigned int sec_id) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return std::string(dwg_section_name(dwg, sec_id));
+}
+
+/** 
+ * Free the whole DWG. all tables, sections, objects, ...
+ */
+void dwg_free_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  dwg_free(dwg);
+}
+
+/** 
+ * Free the object (all three structs and its fields)
+ */
+void dwg_free_object_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  dwg_free_object(obj);  
+}
+
+/**
+ * Add the empty ref to the DWG (freshly malloc'ed), or NULL.
+ */
+uintptr_t dwg_new_ref_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_new_ref(dwg));
+}
+
+/** 
+ * For encode:
+ * May need obj to shorten the code to a relative offset, but not in header_vars.
+ * There obj is NULL.
+ */
+int dwg_add_handle_wrapper(
+  uintptr_t hdl_ptr,
+  const BITCODE_RC code,
+  const BITCODE_RLL value,
+  uintptr_t obj_ptr) {
+  Dwg_Handle* hdl = reinterpret_cast<Dwg_Handle*>(hdl_ptr);
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_add_handle(hdl, code, value, obj);
+}
+
+/** 
+ * Returns an existing ref with the same ownership (hard/soft, owner/pointer)
+ * or creates it. With obj non-NULL it may return a relative offset, otherwise
+ * always absolute.
+ */
+uintptr_t dwg_add_handleref_wrapper(
+  uintptr_t dwg_ptr,
+  const BITCODE_RC code,
+  const BITCODE_RLL value,
+  uintptr_t obj_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_add_handleref(dwg, code, value, obj));
+}
+
+/** 
+ * Return a link to the global ref or a new one. Or a NULLHDL. 
+ */
+uintptr_t dwg_dup_handleref_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t ref_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_dup_handleref(dwg, ref));
+}
+
+/** 
+ * Creates a non-global, free'able handle ref. Never relative 
+ */
+uintptr_t dwg_add_handleref_free_wrapper(
+  const BITCODE_RC code,
+  const BITCODE_RLL absref) {
+  return reinterpret_cast<uintptr_t>(dwg_add_handleref_free(code, absref));
+}
+
+std::string dwg_version_type_wrapper(const Dwg_Version_Type version) {
+  return std::string(dwg_version_type(version));
+}
+
+Dwg_Version_Type dwg_version_as_wrapper(const std::string& version) {
+  return dwg_version_as(version.c_str());
+}
+
+Dwg_Version_Type dwg_version_hdr_type_wrapper(const std::string& hdr) {
+  return dwg_version_hdr_type(hdr.c_str());
+}
+
+int dwg_supports_eed_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_supports_eed(dwg);
+}
+
+/* to read and write */
+int dwg_supports_obj_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t obj_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return dwg_supports_obj(dwg, obj);
+}
+
+std::string dwg_encrypt_SAT1_wrapper(
+  BITCODE_BL blocksize,
+  uintptr_t acis_data_ptr,
+  uintptr_t acis_data_offset_ptr) {
+  BITCODE_RC* acis_data = reinterpret_cast<BITCODE_RC*>(acis_data_ptr);
+  int* acis_data_offset = reinterpret_cast<int*>(acis_data_offset_ptr);
+  return dwg_encrypt_SAT1(blocksize, acis_data, acis_data_offset);
+}
+
+/* 
+ * Converts v2 SAB acis_data in-place to SAT v1 encr_sat_data[].
+ * Sets _obj->_dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
+ * encrypted acis_data anymore, rather the converted from SAB for DXF 
+ */
+int dwg_convert_SAB_to_SAT1_wrapper(uintptr_t obj_ptr) {
+  Dwg_Entity_3DSOLID* obj = reinterpret_cast<Dwg_Entity_3DSOLID*>(obj_ptr);
+  return dwg_convert_SAB_to_SAT1(obj);
+}
+
+/** 
+ * Add the empty object to the DWG.
+ * Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.
+ * objects are allocated in bulk, and all old obj pointers may become invalid.
+ * The new object is at &dwg->object[dwg->num_objects - 1].
+ */
+int dwg_add_object_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg_add_object(dwg);
+}
+
+/* 
+ * Find if an object name (our internal name, not anything used elsewhere)
+ * is defined, and return our fixed type, the public dxfname and if it's an entity. 
+ */
+int dwg_object_name_wrapper(
+  const std::string& name, // in
+  uintptr_t dxfname_ptr,  // out, maybe NULL
+  uintptr_t type_ptr, // out, maybe NULL
+  uintptr_t is_ent_ptr, // out, maybe NULL
+  uintptr_t stability_ptr) { // out, maybe NULL
+  const char ** dxfnamep = reinterpret_cast<const char **>(dxfname_ptr);
+  Dwg_Object_Type* typep = reinterpret_cast<Dwg_Object_Type*>(type_ptr);
+  int* is_entp = reinterpret_cast<int*>(is_ent_ptr);
+  Dwg_Class_Stability* stabilityp = reinterpret_cast<Dwg_Class_Stability*>(stability_ptr);
+  return dwg_object_name(name.c_str(), dxfnamep, typep, is_entp, stabilityp);
+}
+
+/********************************************************************
+ *                    FUNCTIONS FOR LAYER OBJECT                     *
+ ********************************************************************/
+
+/**
+ * Get/Set name (utf-8) of the layer object
+ */
+std::string dwg_obj_layer_get_name_wrapper(uintptr_t layer_ptr) {
+  dwg_obj_layer* layer = reinterpret_cast<dwg_obj_layer*>(layer_ptr);
+  int error = 0;
+  return std::string(dwg_obj_layer_get_name(layer, &error));
+}
+
+int dwg_obj_layer_set_name_wrapper(
+  uintptr_t layer_ptr,
+  const std::string& name) {
+  dwg_obj_layer* layer = reinterpret_cast<dwg_obj_layer*>(layer_ptr);
+  int error = 0;
+  dwg_obj_layer_set_name(layer, name.c_str(), &error);
+  return error;
+}
+
+/*******************************************************************
+ *                    FUNCTIONS FOR TABLES                          *
+ *             All other tables and table entries                   *
+ ********************************************************************/
+
+/**
+ * Get name of any table entry. Defaults to ByLayer.
+ */
+std::string dwg_obj_table_get_name_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  int error = 0;
+  return std::string(dwg_obj_table_get_name(obj, &error));
+}
+
+/** 
+ * Get name of the referenced table entry. Defaults to ByLayer
+ */
+std::string dwg_ref_get_table_name_wrapper(uintptr_t ref_ptr) {
+  dwg_object_ref* ref = reinterpret_cast<dwg_object_ref*>(ref_ptr);
+  int error = 0;
+  return std::string(dwg_ref_get_table_name(ref, &error));
+}
+
+/********************************************************************
+ *                FUNCTIONS TYPE SPECIFIC                            *
+ *********************************************************************/
+dwg_point_2d *dwg_ent_get_POINT2D_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_get_POINT2D(obj, fieldname.c_str());
+}
+
+bool dwg_ent_set_POINT2D_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  const dwg_point_2d *point) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_set_POINT2D(obj, fieldname.c_str(), point);
+}
+
+dwg_point_3d *dwg_ent_get_POINT3D_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_get_POINT3D(obj, fieldname.c_str());
+}
+
+bool dwg_ent_set_POINT3D_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  const dwg_point_3d *point) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_set_POINT3D(obj, fieldname.c_str(), point);
+}
+
+std::string dwg_ent_get_STRING_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return std::string(dwg_ent_get_STRING(obj, fieldname.c_str()));
+}
+
+bool dwg_ent_set_STRING_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  const std::string& string) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  // TODO: double check whether to alloc memory for string before calling this function.
+  return dwg_ent_set_STRING(obj, fieldname.c_str(), string.c_str());
+}
+
+std::string dwg_ent_get_UTF8_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  int isnew = 0;
+  char* str_ptr = dwg_ent_get_UTF8(obj, fieldname.c_str(), &isnew);
+  std::string result(str_ptr);
+  if (isnew) free(str_ptr);
+  return result;
+}
+
+bool dwg_ent_set_UTF8_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  const std::string& string) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  // TODO: double check whether to alloc memory for string before calling this function.
+  return dwg_ent_set_UTF8(obj, fieldname.c_str(), string.c_str());
+}
+
+BITCODE_BD dwg_ent_get_REAL_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_get_REAL(obj, fieldname.c_str());
+}
+
+bool dwg_ent_set_REAL_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  const BITCODE_BD num) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_set_REAL(obj, fieldname.c_str(), num);
+}
+
+BITCODE_BS dwg_ent_get_INT16_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_get_INT16(obj, fieldname.c_str());
+}
+
+bool dwg_ent_set_INT16_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  const BITCODE_BS num) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_set_INT16(obj, fieldname.c_str(), num);
+}
+
+BITCODE_BL dwg_ent_get_INT32_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_get_INT32(obj, fieldname.c_str());
+}
+
+bool dwg_ent_set_INT32_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  const BITCODE_BL num) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  return dwg_ent_set_INT32(obj, fieldname.c_str(), num);
+}
+
+/********************************************************************
+ *                    FUNCTIONS FOR DWG OBJECT                       *
+ ********************************************************************/
+dwg_object *dwg_obj_obj_to_object_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+BITCODE_BL dwg_obj_get_objid_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+BITCODE_BL dwg_obj_get_num_eed_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+dwg_entity_eed *dwg_obj_get_eed_wrapper(
+  const dwg_obj_obj *restrict obj,
+  const BITCODE_BL index,
+  int *restrict error) {
+
+}
+
+dwg_entity_eed_data* dwg_obj_get_eed_data_wrapper(
+  const dwg_obj_obj *restrict obj,
+  const BITCODE_BL index, int *restrict error) {
+
+}
+
+BITCODE_H dwg_obj_get_ownerhandle_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+BITCODE_BL dwg_obj_get_num_reactors_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+BITCODE_H *dwg_obj_get_reactors_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+BITCODE_H dwg_obj_get_xdicobjhandle_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+/* r2004+ */
+BITCODE_B dwg_obj_get_is_xdic_missing_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+/* r2013+ */
+BITCODE_B dwg_obj_get_has_ds_binary_data_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+Dwg_Handle *dwg_obj_get_handleref_wrapper(
+  const dwg_obj_obj *restrict obj,
+  int *restrict error) {
+
+}
+
+dwg_object *dwg_obj_generic_to_object_wrapper(
+  const void *restrict obj,
+  int *restrict error) {
+
+}
+
+BITCODE_RLL dwg_obj_generic_handlevalue_wrapper(void *_obj) {
+
+}
+
+Dwg_Data *dwg_obj_generic_dwg_wrapper(
+  const void *restrict obj,
+  int *restrict error) {
+
+}
+
+dwg_obj_obj *dwg_obj_generic_parent_wrapper(
+  const void *restrict obj,
+  int *restrict error) {
+
+}
+
+uintptr_t dwg_get_object_wrapper(uintptr_t dwg_ptr, BITCODE_BL index) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_get_object(dwg, index));  
+}
+
+BITCODE_RL dwg_object_get_bitsize_wrapper(const dwg_object *obj) {
+
+}
+
+BITCODE_BL dwg_object_get_index_wrapper(
+  const dwg_object *restrict obj,
+  int *restrict error) {
+
+}
+
+dwg_handle *dwg_object_get_handle_wrapper(
+  dwg_object *restrict obj,
+  int *restrict error) {
+
+}
+
+dwg_obj_obj *dwg_object_to_object_wrapper(
+  dwg_object *restrict obj,
+  int *restrict error) {
+
+}
+
+dwg_obj_ent *dwg_object_to_entity_wrapper(
+  dwg_object *restrict obj,
+  int *restrict error) {
+
+}
+
+int dwg_object_get_type_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  return dwg_object_get_type(obj);  
+}
+
+int dwg_object_get_fixedtype_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  return dwg_object_get_fixedtype(obj);  
+}
+
+char *dwg_object_get_dxfname_wrapper(const dwg_object *obj) {
+
+}
+
+BITCODE_BL dwg_ref_get_absref_wrapper(
+  const dwg_object_ref *restrict ref,
+  int *restrict error) {
+
+}
+
+dwg_object *dwg_ref_get_object_wrapper(
+  const dwg_object_ref *restrict ref,
+  int *restrict error) {
+
+}
+
+dwg_object *dwg_absref_get_object_wrapper(
+  const dwg_data *dwg,
+  const BITCODE_BL absref) {
+
+}
+
+unsigned int dwg_get_num_classes_wrapper(const dwg_data *dwg) {
+
+}
+
+dwg_class *dwg_get_class_wrapper(const dwg_data *dwg, unsigned int index) {
+
+}
+
+
+EMSCRIPTEN_BINDINGS(libredwg_api) {
+  DEFINE_FUNC(dwg_read_file);
+  DEFINE_FUNC(dxf_read_file);
+  DEFINE_FUNC(dwg_write_file);
+
+  DEFINE_FUNC(dwg_find_tablehandle);
+  DEFINE_FUNC(dwg_find_tablehandle_index);
+  DEFINE_FUNC(dwg_handle_name);
+  DEFINE_FUNC(dwg_find_table_control);
+  DEFINE_FUNC(dwg_find_dictionary);
+  DEFINE_FUNC(dwg_find_dicthandle);
+  DEFINE_FUNC(dwg_find_dicthandle_objname);
+  DEFINE_FUNC(dwg_find_table_extname);
+  DEFINE_FUNC(dwg_variable_dict);
+  DEFINE_FUNC(dwg_model_x_min);
+  DEFINE_FUNC(dwg_model_x_max);
+  DEFINE_FUNC(dwg_model_y_min);
+  DEFINE_FUNC(dwg_model_y_max);
+  DEFINE_FUNC(dwg_model_z_min);
+  DEFINE_FUNC(dwg_model_z_max);
+  DEFINE_FUNC(dwg_page_x_min);
+  DEFINE_FUNC(dwg_page_x_max);
+  DEFINE_FUNC(dwg_page_y_min);
+  DEFINE_FUNC(dwg_page_y_max);
+  DEFINE_FUNC(dwg_block_control);
+  DEFINE_FUNC(dwg_model_space_ref);
+  DEFINE_FUNC(dwg_paper_space_ref);
+  DEFINE_FUNC(dwg_model_space_object);
+  DEFINE_FUNC(dwg_paper_space_object);
+  DEFINE_FUNC(dwg_get_layer_count);
+  DEFINE_FUNC(dwg_get_layer_index);
+  DEFINE_FUNC(dwg_get_num_objects);
+  DEFINE_FUNC(dwg_get_object_num_objects);
+  DEFINE_FUNC(dwg_class_is_entity);
+  DEFINE_FUNC(dwg_obj_is_control);
+  DEFINE_FUNC(dwg_obj_is_table);
+  DEFINE_FUNC(dwg_obj_is_subentity);
+  DEFINE_FUNC(dwg_obj_has_subentity);
+  DEFINE_FUNC(dwg_obj_is_3dsolid);  
+  DEFINE_FUNC(dwg_obj_is_acsh);
+  DEFINE_FUNC(dwg_get_num_entities);
+  DEFINE_FUNC(dwg_get_entity_index);
+  DEFINE_FUNC(dwg_get_entity_layer);
+  DEFINE_FUNC(dwg_next_object);
+  DEFINE_FUNC(dwg_next_entity);
+  DEFINE_FUNC(dwg_next_handle);
+  DEFINE_FUNC(dwg_next_handseed);
+  DEFINE_FUNC(dwg_ref_object);
+  DEFINE_FUNC(dwg_ref_object_relative);
+  DEFINE_FUNC(dwg_ref_object_silent);
+  DEFINE_FUNC(get_first_owned_entity);
+  DEFINE_FUNC(get_next_owned_entity);
+  DEFINE_FUNC(get_first_owned_subentity);
+  DEFINE_FUNC(get_next_owned_subentity);
+  DEFINE_FUNC(get_first_owned_block);
+  DEFINE_FUNC(get_last_owned_block);
+  DEFINE_FUNC(get_next_owned_block);
+  DEFINE_FUNC(get_next_owned_block_entity);
+  DEFINE_FUNC(dwg_get_first_object);
+  DEFINE_FUNC(dwg_get_next_object);
+  DEFINE_FUNC(dwg_resolve_handle);
+  DEFINE_FUNC(dwg_resolve_handle_silent);
+  DEFINE_FUNC(dwg_resolve_handleref);
+  DEFINE_FUNC(dwg_resolve_jump);
+  DEFINE_FUNC(dwg_section_type);
+  // DEFINE_FUNC(dwg_section_wtype);
+  DEFINE_FUNC(dwg_section_name);
+  function("dwg_resbuf_value_type", &dwg_resbuf_value_type);
+  DEFINE_FUNC(dwg_free);
+  DEFINE_FUNC(dwg_free_object);
+  DEFINE_FUNC(dwg_new_ref);
+  DEFINE_FUNC(dwg_add_handle);
+  DEFINE_FUNC(dwg_add_handleref);
+  DEFINE_FUNC(dwg_dup_handleref);
+  DEFINE_FUNC(dwg_add_handleref_free);
+  DEFINE_FUNC(dwg_version_type);
+  DEFINE_FUNC(dwg_version_as);
+  DEFINE_FUNC(dwg_version_hdr_type);
+  DEFINE_FUNC(dwg_supports_eed);
+  DEFINE_FUNC(dwg_supports_obj);
+  function("dwg_errstrings", &dwg_errstrings);
+  DEFINE_FUNC(dwg_encrypt_SAT1);
+  DEFINE_FUNC(dwg_convert_SAB_to_SAT1);
+  function("dwg_rgb_palette_index", &dwg_rgb_palette_index);
+  function("dwg_find_color_index", &dwg_find_color_index);
+  DEFINE_FUNC(dwg_add_object);
+  DEFINE_FUNC(dwg_object_name);
+
+  DEFINE_FUNC(dwg_obj_layer_get_name);
+  DEFINE_FUNC(dwg_obj_layer_set_name);
+  DEFINE_FUNC(dwg_obj_table_get_name);
+  DEFINE_FUNC(dwg_ref_get_table_name);
+
+  class_<dwg_point_3d>("dwg_point_3d")
+    .property("x", &dwg_point_3d::x)
+    .property("y", &dwg_point_3d::y)
+    .property("z", &dwg_point_3d::z);
+
+  class_<dwg_point_2d>("dwg_point_2d")
+    .property("x", &dwg_point_2d::x)
+    .property("y", &dwg_point_2d::y);
+
+  DEFINE_FUNC_WITH_REF_POLICY(dwg_ent_get_POINT2D);
+  DEFINE_FUNC_WITH_REF_POLICY(dwg_ent_set_POINT2D);
+  DEFINE_FUNC_WITH_REF_POLICY(dwg_ent_get_POINT3D);
+  DEFINE_FUNC_WITH_REF_POLICY(dwg_ent_set_POINT3D);
+  DEFINE_FUNC(dwg_ent_get_STRING);
+  DEFINE_FUNC(dwg_ent_set_STRING);
+  DEFINE_FUNC(dwg_ent_get_UTF8);
+  DEFINE_FUNC(dwg_ent_set_UTF8);
+  DEFINE_FUNC(dwg_ent_get_REAL);
+  DEFINE_FUNC(dwg_ent_set_REAL);
+  DEFINE_FUNC(dwg_ent_get_INT16);
+  DEFINE_FUNC(dwg_ent_set_INT16);
+  DEFINE_FUNC(dwg_ent_get_INT32);
+  DEFINE_FUNC(dwg_ent_set_INT32);
+
+  DEFINE_FUNC(dwg_get_object);
+  DEFINE_FUNC(dwg_object_get_type);
+  DEFINE_FUNC(dwg_object_get_fixedtype);  
+}
+
+/** 
+ * Check if the name is a valid ENTITY name, not an OBJECT.
+ */
+bool is_dwg_entity_wrapper(const std::string& name) {
+  return is_dwg_entity(name.c_str());
+}
+
+/** 
+ * Check if the name is a valid OBJECT name, not an ENTITY.
+ */
+bool is_dwg_object_wrapper(const std::string& name) {
+  return is_dwg_object(name.c_str());
+}
+
+/** 
+ * Returns the HEADER.fieldname value in out.
+ * The optional Dwg_DYNAPI_field *fp is filled with the field types from dynapi.c
+ */
+bool dwg_dynapi_header_value_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& fieldname,
+  uintptr_t out_ptr,
+  uintptr_t field_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  void* out = reinterpret_cast<void*>(out_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_header_value(dwg, fieldname.c_str(), out, fp);
+}
+
+/** 
+ * Returns the ENTITY|OBJECT.fieldname value in out.
+ * entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+ * specific fields. The optional Dwg_DYNAPI_field *fp is filled with the
+ * field types from dynapi.c.
+ */
+bool dwg_dynapi_entity_value_wrapper(
+  uintptr_t entity_ptr, 
+  const std::string& dxfname,
+  const std::string& fieldname, 
+  uintptr_t out_ptr,
+  uintptr_t field_ptr) {
+  void* entity = reinterpret_cast<void*>(entity_ptr);
+  void* out = reinterpret_cast<void*>(out_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_entity_value(entity, dxfname.c_str(), fieldname.c_str(), out, fp);
+}
+
+/** 
+ * Returns the common ENTITY|OBJECT.fieldname value in out.
+ * _obj is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+ * specific fields. The optional Dwg_DYNAPI_field *fp is filled with the
+ * field types from dynapi.c
+ */
+bool dwg_dynapi_common_value_wrapper(
+  uintptr_t obj_ptr, 
+  const std::string& fieldname, 
+  uintptr_t out_ptr,
+  uintptr_t field_ptr) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  void* out = reinterpret_cast<void*>(out_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_common_value(obj, fieldname.c_str(), out, fp);
+}
+
+/** 
+ * Returns the common OBJECT.subclass.fieldname value in out.
+ * ptr points to the subclass field. The optional Dwg_DYNAPI_field *fp is
+ * filled with the field types from dynapi.c
+ */
+bool dwg_dynapi_subclass_value_wrapper(
+  uintptr_t raw_ptr,
+  const std::string& subclass,
+  const std::string& fieldname,
+  uintptr_t out_ptr,
+  uintptr_t field_ptr) {
+  void* ptr = reinterpret_cast<void*>(raw_ptr);
+  void* out = reinterpret_cast<void*>(out_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_subclass_value(ptr, subclass.c_str(), fieldname.c_str(), out, fp);
+}
+
+/**
+ * Converts T or TU wide-strings to utf-8. Only for text values
+ * isnew is set to 1 if textp is freshly malloced (r2007+), otherwise 0
+ */ 
+bool dwg_dynapi_header_utf8text_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& fieldname,
+  uintptr_t text_ptr,
+  uintptr_t isnew_ptr,
+  uintptr_t field_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  char** textp = reinterpret_cast<char**>(text_ptr);
+  int* isnewp = reinterpret_cast<int*>(isnew_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_header_utf8text(dwg, fieldname.c_str(), textp, isnewp, fp);
+}
+
+/** 
+ * Returns the ENTITY|OBJECT.fieldname text value in textp as utf-8.
+ * entity is the Dwg_Entity_ENTITY or Dwg_Object_OBJECT struct with the
+ * specific fields. The optional Dwg_DYNAPI_field *fp is filled with the
+ * field types from dynapi.c With DWG's since r2007+ creates a fresh UTF-8
+ * conversion from the UTF-16 wchar value (which needs to be free'd), with
+ * older DWG's or with TV, TF or TFF returns the unconverted text value. Only
+ * valid for text fields. isnew is set to 1 if textp is freshly malloced
+ * (r2007+), otherwise 0
+ */
+bool dwg_dynapi_entity_utf8text_wrapper(
+  uintptr_t entity_ptr,
+  const std::string& name,
+  const std::string& fieldname,
+  uintptr_t text_ptr,
+  uintptr_t isnew_ptr,
+  uintptr_t field_ptr) {
+  void* entity = reinterpret_cast<void*>(entity_ptr);
+  char** textp = reinterpret_cast<char**>(text_ptr);
+  int* isnewp = reinterpret_cast<int*>(isnew_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_entity_utf8text(entity, name.c_str(), fieldname.c_str(), textp, isnewp, fp);
+}
+
+bool dwg_dynapi_common_utf8text_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  uintptr_t text_ptr,
+  uintptr_t isnew_ptr,
+  uintptr_t field_ptr) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  char** textp = reinterpret_cast<char**>(text_ptr);
+  int* isnewp = reinterpret_cast<int*>(isnew_ptr);
+  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
+  return dwg_dynapi_common_utf8text(obj, fieldname.c_str(), textp, isnewp, fp);
+}
+
+/** 
+ * Sets the HEADER.fieldname to a value.
+ * A malloc'ed struct or string is passed by ptr, not by the content.
+ * A non-malloc'ed struct is set by content.
+ * If is_utf8 is set, the given value is a UTF-8 string, and will be
+ * converted to TV or TU.
+*/
+bool dwg_dynapi_header_set_value_wrapper(
+  uintptr_t dwg_ptr,
+  const std::string& fieldname,
+  uintptr_t value_ptr,
+  const bool is_utf8) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  void* value = reinterpret_cast<void*>(value_ptr);
+  return dwg_dynapi_header_set_value(dwg, fieldname.c_str(), value, is_utf8);
+}
+
+/** 
+ * Sets the ENTITY.fieldname to a value.
+ * A malloc'ed struct is passed by ptr, not by the content.
+ * A non-malloc'ed struct is set by content.
+ * Arrays or strings must be malloced before. We just set the new pointer,
+ * the old value will be freed.
+ * If is_utf8 is set, the given value is a UTF-8 string, and will be
+ * converted to TV or TU.
+ */
+bool dwg_dynapi_entity_set_value_wrapper(
+  uintptr_t entity_ptr,
+  const std::string& dxfname,
+  const std::string& fieldname,
+  uintptr_t value_ptr,
+  const bool is_utf8) {
+  void* entity = reinterpret_cast<void*>(entity_ptr);
+  void* value = reinterpret_cast<void*>(value_ptr);
+  return dwg_dynapi_entity_set_value(entity, dxfname.c_str(), fieldname.c_str(), value, is_utf8);
+}
+
+/**
+ * Sets the common ENTITY or OBJECT.fieldname to a value.
+ * A malloc'ed struct is passed by ptr, not by the content.
+ * A non-malloc'ed struct is set by content.
+ * Arrays or strings must be malloced before. We just set the new pointer,
+ * the old value will be freed.
+ * If is_utf8 is set, the given value is a UTF-8 string, and will be
+ * converted to TV or TU.
+ */
+bool dwg_dynapi_common_set_value_wrapper(
+  uintptr_t obj_ptr,
+  const std::string& fieldname,
+  uintptr_t value_ptr,
+  const bool is_utf8) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  void* value = reinterpret_cast<void*>(value_ptr);
+  return dwg_dynapi_common_set_value(obj, fieldname.c_str(), value, is_utf8);
+}
+
+std::string dwg_dynapi_handle_name_wrapper(
+  uintptr_t dwg_ptr,
+  uintptr_t hdl_ptr,
+  uintptr_t alloced_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  Dwg_Object_Ref* hdl = reinterpret_cast<Dwg_Object_Ref*>(hdl_ptr);
+  int* alloced = reinterpret_cast<int*>(alloced_ptr);
+  return std::string(dwg_dynapi_handle_name(dwg, hdl, alloced));
+}
+
+/** 
+ * Return the field for custom type checks. 
+ */
+const uintptr_t dwg_dynapi_header_field_wrapper(const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_header_field(fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_entity_field_wrapper(
+  const std::string& name,
+  const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_entity_field(name.c_str(), fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_subclass_field_wrapper(
+  const std::string& name,
+  const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_subclass_field(name.c_str(), fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_common_entity_field_wrapper(const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_common_entity_field(fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_common_object_field_wrapper(const std::string& fieldname) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_common_object_field(fieldname.c_str()));
+}
+
+uintptr_t dwg_dynapi_entity_fields_wrapper(const std::string& name) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_entity_fields(name.c_str()));
+}
+
+uintptr_t dwg_dynapi_common_entity_fields_wrapper() {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_common_entity_fields());
+}
+
+uintptr_t dwg_dynapi_common_object_fields_wrapper() {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_common_object_fields());
+}
+
+uintptr_t dwg_dynapi_subclass_fields_wrapper(const std::string& name) {
+  return reinterpret_cast<uintptr_t>(dwg_dynapi_subclass_fields(name.c_str()));
+}
+
+int dwg_dynapi_fields_size_wrapper(const std::string& name) {
+  return dwg_dynapi_fields_size(name.c_str());
+}
+
+
+EMSCRIPTEN_BINDINGS(libredwg_dynapi) {
+  DEFINE_FUNC(is_dwg_entity);
+  DEFINE_FUNC(is_dwg_object);
+  DEFINE_FUNC(dwg_dynapi_header_value);
+  DEFINE_FUNC(dwg_dynapi_entity_value);
+  DEFINE_FUNC(dwg_dynapi_common_value);
+  DEFINE_FUNC(dwg_dynapi_subclass_value);
+  DEFINE_FUNC(dwg_dynapi_header_utf8text);
+  DEFINE_FUNC(dwg_dynapi_entity_utf8text);
+  DEFINE_FUNC(dwg_dynapi_common_utf8text);
+  DEFINE_FUNC(dwg_dynapi_header_set_value);
+  DEFINE_FUNC(dwg_dynapi_entity_set_value);
+  DEFINE_FUNC(dwg_dynapi_common_set_value);
+  DEFINE_FUNC(dwg_dynapi_handle_name);
+  DEFINE_FUNC(dwg_dynapi_header_field);
+  DEFINE_FUNC(dwg_dynapi_entity_field);
+  DEFINE_FUNC(dwg_dynapi_subclass_field);
+  DEFINE_FUNC(dwg_dynapi_common_entity_field);
+  DEFINE_FUNC(dwg_dynapi_common_object_field);
+  DEFINE_FUNC(dwg_dynapi_entity_fields);
+  DEFINE_FUNC(dwg_dynapi_common_entity_fields);
+  DEFINE_FUNC(dwg_dynapi_common_object_fields);
+  DEFINE_FUNC(dwg_dynapi_subclass_fields);
+}
