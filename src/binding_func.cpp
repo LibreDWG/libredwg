@@ -875,16 +875,36 @@ dwg_handle *dwg_object_get_handle_wrapper(
 
 }
 
-dwg_obj_obj *dwg_object_to_object_wrapper(
-  dwg_object *restrict obj,
-  int *restrict error) {
-
+uintptr_t dwg_object_to_object_wrapper(uintptr_t obj_ptr) {
+  int error = 0;
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_object_to_object(obj, &error));
 }
 
-dwg_obj_ent *dwg_object_to_entity_wrapper(
-  dwg_object *restrict obj,
-  int *restrict error) {
+uintptr_t dwg_object_to_object_tio_wrapper(uintptr_t obj_ptr) {
+  int error = 0;
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  dwg_obj_obj* obj_obj = dwg_object_to_object(obj, &error);
+  if (obj_obj != NULL && error == 0) 
+    return reinterpret_cast<uintptr_t>(&obj_obj->tio);
+  else
+    return 0;
+}
 
+uintptr_t dwg_object_to_entity_wrapper(uintptr_t obj_ptr) {
+  int error = 0;
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_object_to_entity(obj, &error));
+}
+
+uintptr_t dwg_object_to_entity_tio_wrapper(uintptr_t obj_ptr) {
+  int error = 0;
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  dwg_obj_ent* obj_ent = dwg_object_to_entity(obj, &error);
+  if (obj_ent != NULL && error == 0) 
+    return reinterpret_cast<uintptr_t>(&obj_ent->tio);
+  else
+    return 0;
 }
 
 int dwg_object_get_type_wrapper(uintptr_t obj_ptr) {
@@ -1046,6 +1066,10 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_ent_set_INT32);
 
   DEFINE_FUNC(dwg_get_object);
+  DEFINE_FUNC(dwg_object_to_object);
+  DEFINE_FUNC(dwg_object_to_object_tio);
+  DEFINE_FUNC(dwg_object_to_entity);
+  DEFINE_FUNC(dwg_object_to_entity_tio);
   DEFINE_FUNC(dwg_object_get_type);
   DEFINE_FUNC(dwg_object_get_fixedtype);  
 }
