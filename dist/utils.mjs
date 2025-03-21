@@ -381,3 +381,9 @@ export const dwg_getall_entity_by_type = (libredwg, data, type) => {
 export const dwg_getall_LTYPE = (libredwg, data) => {
   return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_LTYPE);
 }
+
+export const dwg_ent_get_data = (libredwg, obj, fieldname) => {
+  const result = libredwg.dwg_dynapi_entity_value(obj, fieldname);
+  console.log('data: ', result);
+  return result.data;
+}

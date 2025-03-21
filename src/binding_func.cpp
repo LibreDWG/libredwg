@@ -1,9 +1,57 @@
 #include <emscripten/bind.h>
 #include <string>
+#include <sstream>
+
 #include "dwg.h"
 #include "dwg_api.h"
+#include "common.h"
+#include "bits.h"
+
 
 using namespace emscripten;
+
+/* converts UCS-2LE to UTF-8.
+   first pass to get the dest len. single malloc.
+ */
+char *bit_convert_TU (const BITCODE_TU restrict wstr) {
+  BITCODE_TU tmp = wstr;
+  char *str; 
+  int i, len = 0;
+  uint16_t c = 0;
+
+  if (!wstr) return NULL;
+
+  while ((c = *tmp++)) {
+    len++;
+    if (c >= 0x80) {
+      len++;
+      if (c >= 0x800) len++;
+    }
+  }
+  str = (char *)malloc (len + 1);
+  if (!str) {
+    return NULL;
+  }
+  i = 0;
+  tmp = wstr;
+
+  while ((c = *tmp++) && i < len) {
+    if (c < 0x80) {
+      str[i++] = c & 0xFF;
+    } else if (c < 0x800) {
+      str[i++] = (c >> 6) | 0xC0;
+      str[i++] = (c & 0x3F) | 0x80;
+    } else { /* if (c < 0x10000) */
+      /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up */
+      str[i++] = (c >> 12) | 0xE0;
+      str[i++] = ((c >> 6) & 0x3F) | 0x80;
+      str[i++] = (c & 0x3F) | 0x80;
+    }
+  }
+  if (i <= len + 1)
+    str[i] = '\0';
+  return str;
+}
 
 #define DEFINE_FUNC(funcName)                                                 \
   function(#funcName, &funcName##_wrapper)
@@ -885,8 +933,9 @@ uintptr_t dwg_object_to_object_tio_wrapper(uintptr_t obj_ptr) {
   int error = 0;
   dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
   dwg_obj_obj* obj_obj = dwg_object_to_object(obj, &error);
-  if (obj_obj != NULL && error == 0) 
-    return reinterpret_cast<uintptr_t>(&obj_obj->tio);
+  if (obj_obj != NULL && error == 0)
+    // The address of the first item 'tio.APPID' in union is same as others.
+    return reinterpret_cast<uintptr_t>(obj_obj->tio.APPID);
   else
     return 0;
 }
@@ -1109,16 +1158,74 @@ bool dwg_dynapi_header_value_wrapper(
  * specific fields. The optional Dwg_DYNAPI_field *fp is filled with the
  * field types from dynapi.c.
  */
-bool dwg_dynapi_entity_value_wrapper(
-  uintptr_t entity_ptr, 
-  const std::string& dxfname,
-  const std::string& fieldname, 
-  uintptr_t out_ptr,
-  uintptr_t field_ptr) {
-  void* entity = reinterpret_cast<void*>(entity_ptr);
-  void* out = reinterpret_cast<void*>(out_ptr);
-  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
-  return dwg_dynapi_entity_value(entity, dxfname.c_str(), fieldname.c_str(), out, fp);
+emscripten::val dwg_dynapi_entity_value_wrapper(
+  uintptr_t _obj_ptr, 
+  const std::string& fieldname) {
+  void* _obj = reinterpret_cast<void*>(_obj_ptr);
+  if (!_obj) {
+    emscripten::val result = emscripten::val::object();
+    result.set("success", false); 
+    result.set("message", std::string("Null object pointer passed!"));
+    result.set("data", emscripten::val::null());
+    return result;
+  }
+
+  int error;
+  const Dwg_Object* obj = dwg_obj_generic_to_object(_obj, &error);
+  // Here we need to ignore errors, because we allow subentities via
+  // CHK_SUBCLASS_* e.g. layout->plotsetting via PLOTSETTING
+  if (!obj) { // objid may be 0
+    emscripten::val result = emscripten::val::object();
+    result.set("success", false); 
+    result.set("message", std::string("Invalid object pointer passed!"));
+    result.set("data", emscripten::val::null());
+    return result;
+  }
+
+  const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field(obj->name, fieldname.c_str());
+  if (!f) {
+    std::ostringstream ss;
+    ss << "Invalid object name '" << obj->name << "' or field name '" << fieldname << "'!";
+    emscripten::val result = emscripten::val::object();
+    result.set("success", false); 
+    result.set("message", ss.str());
+    result.set("data", emscripten::val::null());
+    return result;
+  }
+
+  emscripten::val result = emscripten::val::object();
+  result.set("success", true); 
+  if (f->is_string || strEQc (f->type, "TF")) {
+    // UTF8 String
+    const Dwg_Data *dwg = obj ? obj->parent : NULL;
+    const bool is_tu = dwg ? IS_FROM_TU_DWG (dwg) : false;
+    if (is_tu && strNE (f->type, "TF")) { /* not TF */
+        BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
+        char *utf8 = bit_convert_TU(wstr);
+        if (wstr && !utf8) { // some conversion error, invalid wchar (nyi)
+          result.set("success", false);
+          result.set("message", std::string("Failed to convert string!"));
+          result.set("data", emscripten::val::null());
+        }
+        result.set("data", std::string(utf8));
+        free(utf8);
+    } else
+    {
+      char *utf8 = *(char **)((char*)_obj + f->offset);
+      result.set("data", std::string(utf8));
+    }
+  } if (strEQc(f->type, "RL") || strEQc(f->type, "BL") || strEQc (f->type, "MS")) {
+    // INT32
+    result.set("data", *reinterpret_cast<BITCODE_BL*>(&((char *)_obj)[f->offset]));
+  } else if (strEQc (f->type, "RS") || strEQc (f->type, "BS")) {
+    // INT16
+    result.set("data", *reinterpret_cast<BITCODE_BS*>(&((char *)_obj)[f->offset]));
+  } else if (strEQc(f->type, "RD") || strEQc(f->type, "BD")) {
+    // DOUBLE
+    result.set("data", *reinterpret_cast<BITCODE_BD*>(&((char *)_obj)[f->offset]));
+  }
+
+  return result;
 }
 
 /** 

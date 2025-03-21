@@ -1,4 +1,4 @@
-import { dwg_getall_LTYPE, dwg_read_data } from "./utils.mjs";
+import { dwg_ent_get_data, dwg_getall_LTYPE, dwg_read_data } from "./utils.mjs";
 
 // load libredwg webassembly module
 const libredwg = await createModule();
@@ -117,7 +117,7 @@ fileInput.addEventListener('change', function(event) {
             'lineTypeList', 
             ltypes.length,
             (index) => ltypes[index],
-            (item, propName) => libredwg.dwg_ent_get_STRING(item, propName)
+            (item, propName) => dwg_ent_get_data(libredwg, item, propName),
           );
 
           // Manually signal that a C++ object is no longer needed and can be deleted.
