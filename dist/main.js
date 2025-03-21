@@ -104,7 +104,9 @@ fileInput.addEventListener('change', function(event) {
         if (fileExtension == 'dxf') {
             // Do nothing for now
         } else if (fileExtension == 'dwg') {
-          const data = dwg_read_data(libredwg, fileContent)
+          const data = dwg_read_data(libredwg, fileContent);
+          console.log(libredwg.dwg_dynapi_header_value(data, 'LIMMAX'));
+
           printItems(
             'layerNameList', 
             libredwg.dwg_get_layer_count(data),
@@ -117,7 +119,10 @@ fileInput.addEventListener('change', function(event) {
             'lineTypeList', 
             ltypes.length,
             (index) => ltypes[index],
-            (item, propName) => dwg_ent_get_data(libredwg, item, propName),
+            (item, propName) => {
+              const result = libredwg.dwg_dynapi_entity_value(item, propName);
+              return result.data;
+            },
           );
 
           // Manually signal that a C++ object is no longer needed and can be deleted.

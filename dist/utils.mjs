@@ -356,7 +356,6 @@ export const dwg_getall_object_by_type = (libredwg, data, type) => {
   for (let i = 0; i < num_objects; i++) {                                                 
     const obj = libredwg.dwg_get_object(data, i);
     const tio = libredwg.dwg_object_to_object_tio(obj);
-    console.log('tio: ', tio, ', fixed type: ', libredwg.dwg_object_get_fixedtype(obj));
     if (tio && libredwg.dwg_object_get_fixedtype(obj) == type) {
       results.push(tio);
     }
@@ -370,7 +369,6 @@ export const dwg_getall_entity_by_type = (libredwg, data, type) => {
   for (let i = 0; i < num_objects; i++) {                                                 
     const obj = libredwg.dwg_get_object(data, i);
     const tio = libredwg.dwg_object_to_entity_tio(obj);
-    console.log('tio: ', tio, ', fixed type: ', libredwg.dwg_object_get_fixedtype(obj));
     if (tio && libredwg.dwg_object_get_fixedtype(obj) == type) {
       results.push(tio);
     }

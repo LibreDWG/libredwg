@@ -1137,19 +1137,91 @@ bool is_dwg_object_wrapper(const std::string& name) {
   return is_dwg_object(name.c_str());
 }
 
+template <typename T>
+emscripten::val get_obj_value(const Dwg_Data *dwg, T _obj, const Dwg_DYNAPI_field *f) {
+  emscripten::val result = emscripten::val::object();
+  result.set("success", true); 
+  if (f->is_string || strEQc(f->type, "TF")) {
+    // UTF8 String
+    const bool is_tu = dwg ? IS_FROM_TU_DWG (dwg) : false;
+    if (is_tu && strNE (f->type, "TF")) { /* not TF */
+        BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
+        char *utf8 = bit_convert_TU(wstr);
+        if (wstr && !utf8) { // some conversion error, invalid wchar (nyi)
+          result.set("success", false);
+          result.set("message", std::string("Failed to convert string!"));
+          return result;
+        }
+        result.set("data", std::string(utf8));
+        free(utf8);
+    } else {
+      char *utf8 = *(char **)((char*)_obj + f->offset);
+      result.set("data", std::string(utf8));
+    }
+  } else if (strEQc(f->type, "RL") || strEQc(f->type, "BL") || strEQc (f->type, "MS")) {
+    // INT32
+    result.set("data", *reinterpret_cast<BITCODE_BL*>(&((char *)_obj)[f->offset]));
+  } else if (strEQc (f->type, "RS") || strEQc (f->type, "BS")) {
+    // INT16
+    result.set("data", *reinterpret_cast<BITCODE_BS*>(&((char *)_obj)[f->offset]));
+  } else if (strEQc(f->type, "RD") || strEQc(f->type, "BD")) {
+    // DOUBLE
+    result.set("data", *reinterpret_cast<BITCODE_BD*>(&((char *)_obj)[f->offset]));
+  } else if (strEQc(f->type, "RC") || strEQc(f->type, "BB") || strEQc(f->type, "B")) {
+    // UNSIGNED CHAR
+    result.set("data", *reinterpret_cast<BITCODE_RC*>(&((char *)_obj)[f->offset]));
+  } else if (strEQc(f->type, "RCd")) {
+    // SIGNED CHAR
+    result.set("data", *reinterpret_cast<BITCODE_RCd*>(&((char *)_obj)[f->offset]));
+  } else if (strEQc(f->type, "3RD") || strEQc(f->type, "3BD") || 
+             strEQc(f->type, "BE") || strEQc(f->type, "3DPOINT")) {
+    // POINT3D
+    auto point = reinterpret_cast<dwg_point_3d*>(&((char *)_obj)[f->offset]);
+    emscripten::val point_obj = emscripten::val::object();
+    point_obj.set("x", point->x);
+    point_obj.set("y", point->y);
+    point_obj.set("z", point->z);
+    result.set("data", point_obj);
+  } else if (strEQc(f->type, "2RD") || strEQc(f->type, "2BD") || strEQc(f->type, "2DPOINT")) {
+    // POINT2D
+    auto point = reinterpret_cast<dwg_point_2d*>(&((char *)_obj)[f->offset]);
+    emscripten::val point_obj = emscripten::val::object();
+    point_obj.set("x", point->x);
+    point_obj.set("y", point->y);
+    result.set("data", point_obj);
+  }
+  return result;
+}
+
 /** 
  * Returns the HEADER.fieldname value in out.
  * The optional Dwg_DYNAPI_field *fp is filled with the field types from dynapi.c
  */
-bool dwg_dynapi_header_value_wrapper(
+emscripten::val dwg_dynapi_header_value_wrapper(
   uintptr_t dwg_ptr,
-  const std::string& fieldname,
-  uintptr_t out_ptr,
-  uintptr_t field_ptr) {
+  const std::string& fieldname) {
   Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
-  void* out = reinterpret_cast<void*>(out_ptr);
-  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
-  return dwg_dynapi_header_value(dwg, fieldname.c_str(), out, fp);
+  if (!dwg) {
+    emscripten::val result = emscripten::val::object();
+    result.set("success", false); 
+    result.set("message", std::string("Null dwg pointer passed!"));
+    result.set("data", emscripten::val::null());
+    return result;
+  }
+
+  emscripten::val result = emscripten::val::object();
+  result.set("success", true); 
+  const Dwg_DYNAPI_field *f = dwg_dynapi_header_field(fieldname.c_str());
+  if (f) {
+    const Dwg_Header_Variables *const _obj = &dwg->header_vars;
+    return get_obj_value(dwg, _obj, f);
+  } else {
+    std::ostringstream ss;
+    ss << "Invalid header field '" << fieldname << "'!";
+    result.set("success", false); 
+    result.set("message", ss.str());
+    return result;
+  }
 }
 
 /** 
@@ -1166,7 +1238,6 @@ emscripten::val dwg_dynapi_entity_value_wrapper(
     emscripten::val result = emscripten::val::object();
     result.set("success", false); 
     result.set("message", std::string("Null object pointer passed!"));
-    result.set("data", emscripten::val::null());
     return result;
   }
 
@@ -1178,7 +1249,6 @@ emscripten::val dwg_dynapi_entity_value_wrapper(
     emscripten::val result = emscripten::val::object();
     result.set("success", false); 
     result.set("message", std::string("Invalid object pointer passed!"));
-    result.set("data", emscripten::val::null());
     return result;
   }
 
@@ -1189,43 +1259,11 @@ emscripten::val dwg_dynapi_entity_value_wrapper(
     emscripten::val result = emscripten::val::object();
     result.set("success", false); 
     result.set("message", ss.str());
-    result.set("data", emscripten::val::null());
     return result;
   }
 
-  emscripten::val result = emscripten::val::object();
-  result.set("success", true); 
-  if (f->is_string || strEQc (f->type, "TF")) {
-    // UTF8 String
-    const Dwg_Data *dwg = obj ? obj->parent : NULL;
-    const bool is_tu = dwg ? IS_FROM_TU_DWG (dwg) : false;
-    if (is_tu && strNE (f->type, "TF")) { /* not TF */
-        BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
-        char *utf8 = bit_convert_TU(wstr);
-        if (wstr && !utf8) { // some conversion error, invalid wchar (nyi)
-          result.set("success", false);
-          result.set("message", std::string("Failed to convert string!"));
-          result.set("data", emscripten::val::null());
-        }
-        result.set("data", std::string(utf8));
-        free(utf8);
-    } else
-    {
-      char *utf8 = *(char **)((char*)_obj + f->offset);
-      result.set("data", std::string(utf8));
-    }
-  } if (strEQc(f->type, "RL") || strEQc(f->type, "BL") || strEQc (f->type, "MS")) {
-    // INT32
-    result.set("data", *reinterpret_cast<BITCODE_BL*>(&((char *)_obj)[f->offset]));
-  } else if (strEQc (f->type, "RS") || strEQc (f->type, "BS")) {
-    // INT16
-    result.set("data", *reinterpret_cast<BITCODE_BS*>(&((char *)_obj)[f->offset]));
-  } else if (strEQc(f->type, "RD") || strEQc(f->type, "BD")) {
-    // DOUBLE
-    result.set("data", *reinterpret_cast<BITCODE_BD*>(&((char *)_obj)[f->offset]));
-  }
-
-  return result;
+  const Dwg_Data *dwg = obj ? obj->parent : NULL;
+  return get_obj_value(dwg, _obj, f);
 }
 
 /** 
