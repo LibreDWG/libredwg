@@ -204,17 +204,6 @@ emscripten::val dwg_dynapi_entity_value_wrapper(
  * specific fields. The optional Dwg_DYNAPI_field *fp is filled with the
  * field types from dynapi.c
  */
-bool dwg_dynapi_common_value_old_wrapper(
-  uintptr_t obj_ptr, 
-  const std::string& fieldname, 
-  uintptr_t out_ptr,
-  uintptr_t field_ptr) {
-  void* obj = reinterpret_cast<void*>(obj_ptr);
-  void* out = reinterpret_cast<void*>(out_ptr);
-  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
-  return dwg_dynapi_common_value(obj, fieldname.c_str(), out, fp);
-}
-
 emscripten::val dwg_dynapi_common_value_wrapper(
   uintptr_t _obj_ptr, 
   const std::string& fieldname) {
@@ -276,17 +265,37 @@ emscripten::val dwg_dynapi_common_value_wrapper(
  * ptr points to the subclass field. The optional Dwg_DYNAPI_field *fp is
  * filled with the field types from dynapi.c
  */
-bool dwg_dynapi_subclass_value_wrapper(
+emscripten::val dwg_dynapi_subclass_value_wrapper(
   uintptr_t raw_ptr,
   const std::string& subclass,
-  const std::string& fieldname,
-  uintptr_t out_ptr,
-  uintptr_t field_ptr) {
+  const std::string& fieldname) {
   void* ptr = reinterpret_cast<void*>(raw_ptr);
-  void* out = reinterpret_cast<void*>(out_ptr);
-  Dwg_DYNAPI_field* fp = reinterpret_cast<Dwg_DYNAPI_field*>(field_ptr);
-  return dwg_dynapi_subclass_value(ptr, subclass.c_str(), fieldname.c_str(), out, fp);
+  if (!ptr) {
+    emscripten::val result = emscripten::val::object();
+    result.set("success", false); 
+    result.set("message", std::string("Null object pointer passed!"));
+    return result;
+  }
+
+  const char* subclass_ptr = subclass.c_str();
+  const char* fieldname_ptr = fieldname.c_str();
+  Dwg_DYNAPI_field *f = (Dwg_DYNAPI_field *)dwg_dynapi_subclass_field(subclass_ptr, fieldname_ptr);
+  if (!f) {
+    if (memBEGINc(subclass_ptr, "Dwg_Object_"))
+    f = (Dwg_DYNAPI_field *)dwg_dynapi_entity_field(&subclass_ptr[strlen("Dwg_Object_")], fieldname_ptr);
+    if (!f) {
+      std::ostringstream ss;
+      ss << "Invalid subclass name '" << subclass << "' or field name '" << fieldname << "'!";
+      emscripten::val result = emscripten::val::object();
+      result.set("success", false); 
+      result.set("message", ss.str());
+      return result;
+    }
+  }
+
+  return get_obj_value(NULL, ptr, f);
 }
+
 
 /** 
  * Sets the HEADER.fieldname to a value.
