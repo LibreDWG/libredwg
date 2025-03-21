@@ -23,4 +23,4 @@ emmake make
 emcc ../src/bindings.cpp -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../include src/*.o -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 -s EXPORT_NAME="createModule" --emit-tsd libredwg-web.d.ts
 ```
 
-emcc ../src/binding_func.cpp src/*.o -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../include -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 -s EXPORT_NAME="createModule" -sEXPORTED_RUNTIME_METHODS=FS,ENV,ccall,cwrap,UTF8ToString,stringToNewUTF8,setValue --emit-tsd libredwg-web.d.ts
+emcc ../src/binding_dynapi.cpp ../src/binding_func.cpp src/*.o -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../include -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 -s EXPORT_NAME="createModule" -sEXPORTED_RUNTIME_METHODS=FS,ENV,ccall,cwrap,UTF8ToString,stringToNewUTF8,setValue --emit-tsd libredwg-web.d.ts

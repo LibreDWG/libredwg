@@ -105,7 +105,7 @@ fileInput.addEventListener('change', function(event) {
             // Do nothing for now
         } else if (fileExtension == 'dwg') {
           const data = dwg_read_data(libredwg, fileContent);
-          console.log(libredwg.dwg_dynapi_header_value(data, 'LIMMAX'));
+          console.log('LIMMAX: ', libredwg.dwg_dynapi_header_value(data, 'LIMMAX').data);
 
           printItems(
             'layerNameList', 
