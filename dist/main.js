@@ -34,28 +34,37 @@ const printItemsByDynApi = (id, items, propName = 'name') => {
       const result = libredwg.dwg_dynapi_entity_value(item, propName);
       return result.data;
     },
+    propName
   );
 }
 
 const printAllItems = (data) => {
-  const ids = [
-    'lineTypeList',
-    'textStyleList',
-    'dimStyleList',
-    'viewportList',
-    'layoutList'
-  ];
-  const callbacks = [
-    dwg_getall_LTYPE,
-    dwg_getall_STYLE,
-    dwg_getall_DIMSTYLE,
-    dwg_getall_VPORT,
-    dwg_getall_LAYOUT
+  const objects = [{
+      id: 'lineTypeList',
+      getAll: dwg_getall_LTYPE,
+      propName: 'name'
+    }, {
+      id: 'textStyleList',
+      getAll: dwg_getall_STYLE,
+      propName: 'name'
+    }, {
+      id: 'dimStyleList',
+      getAll: dwg_getall_DIMSTYLE,
+      propName: 'name'
+    }, {
+      id: 'viewportList',
+      getAll: dwg_getall_VPORT,
+      propName: 'name'
+    }, {
+      id: 'layoutList',
+      getAll: dwg_getall_LAYOUT,
+      propName: 'layout_name'
+    }
   ];
 
-  ids.forEach((id, index) => {
-    const items = callbacks[index](libredwg, data);
-    printItemsByDynApi(id, items);
+  objects.forEach((obj) => {
+    const items = obj.getAll(libredwg, data);
+    printItemsByDynApi(obj.id, items, obj.propName);
   })
 }
 
