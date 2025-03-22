@@ -22701,7 +22701,6 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     }
   if (version > R_11)
     {
-      const char *standard = dwg->header.version < R_13 ? "STANDARD" : "Standard";
       // LAYER: (0.1.10)
       layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
       if (layer)
@@ -22714,21 +22713,30 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
           dwg->header_vars.CLAYER
             = dwg_add_handleref (dwg, 5, UINT64_C (0x10), NULL);
         }
-      // ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
-      // if (ctrl)
-      //   dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
-      //   STYLE: (0.1.11)
+    }
+  if (version > R_10)
+    {
+      const char *standard = dwg->header.version < R_13 ? "STANDARD" : "Standard";
       style = dwg_add_STYLE (dwg, standard);
       if (style)
         {
           style->font_file = dwg_add_u8_input (dwg, "txt");
           style->last_height = 0.2;
+          obj = dwg_obj_generic_to_object (style, &error);
+          if (!error)
+            {
+              dwg->header_vars.TEXTSTYLE
+                = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+              if (version > R_11)
+                {
+                  dwg->header_vars.DIMTXSTY
+                    = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+                }
+            }
         }
-      // TEXTSTYLE: (5.1.11) [H 7]
-      dwg->header_vars.TEXTSTYLE
-          = dwg_add_handleref (dwg, 5, UINT64_C (0x11), NULL);
-      dwg->header_vars.DIMTXSTY
-          = dwg_add_handleref (dwg, 5, UINT64_C (0x11), NULL);
+    }
+  if (version > R_11)
+    {
       // ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
       // if (ctrl)
       //   dwg->style_control = ctrl->tio.object->tio.STYLE_CONTROL;
