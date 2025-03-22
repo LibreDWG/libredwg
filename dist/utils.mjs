@@ -344,6 +344,13 @@ export const Dwg_Object_Type = Object.freeze({
   DWG_TYPE_UNKNOWN_OBJ : 0xffff,
 });
 
+/**
+ * The object created by swapping keys and values of Dwg_Object_Type
+ */ 
+export const Dwg_Object_Type_Inverted = Object.fromEntries(
+  Object.entries(Dwg_Object_Type).map(([key, value]) => [value, key])
+);
+
 export const Dwg_File_Type = Object.freeze({
   DWG: 0,
   DXF: 1
@@ -353,16 +360,37 @@ export const dwg_read_data = (libredwg, fileContent, fileType) => {
   if (fileType == Dwg_File_Type.DWG) {
     const fileName = "tmp.dwg";
     libredwg.FS.writeFile(fileName, new Uint8Array(fileContent));
-    const data = libredwg.dwg_read_file(fileName);
+    const result = libredwg.dwg_read_file(fileName);
+    if (result.error != 0) {
+      console.log('Failed to open dwg file with error code: ', result.error);
+    }
     libredwg.FS.unlink(fileName);
-    return data;
+    return result.data;
   } else if (fileType == Dwg_File_Type.DXF) {
     const fileName = "tmp.dxf";
     libredwg.FS.writeFile(fileName, new Uint8Array(fileContent));
-    const data = libredwg.dxf_read_file(fileName);
+    const result = libredwg.dxf_read_file(fileName);
+    if (result.error != 0) {
+      console.log('Failed to open dxf file with error code: ', result.error);
+    }
     libredwg.FS.unlink(fileName);
-    return data;
+    return result.data;
   }
+}
+
+/**
+ * Returns all of entities in the model space. Each item in returned array
+ * is one Dwg_Object pointer (Dwg_Object*).
+ */
+export const dwg_getall_entitie_in_model_space = (libredwg, data) => {
+  const model_space = libredwg.dwg_model_space_object(data);
+  const entities = [];
+  let next = libredwg.get_first_owned_entity(model_space);
+  while (next) {
+    entities.push(next);
+    next = libredwg.get_next_owned_entity(model_space);
+  }
+  return entities;
 }
 
 export const dwg_getall_object_by_type = (libredwg, data, type) => {
@@ -413,4 +441,8 @@ export const dwg_getall_LAYOUT = (libredwg, data) => {
 
 export const dwg_getall_BLOCK = (libredwg, data) => {
   return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_BLOCK);
+}
+
+export const dwg_getall_BLOCK_HEADER = (libredwg, data) => {
+  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER);
 }

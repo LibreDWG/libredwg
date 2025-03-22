@@ -1,11 +1,13 @@
 import {
   Dwg_File_Type,
+  Dwg_Object_Type_Inverted,
   dwg_getall_DIMSTYLE,
   dwg_getall_LTYPE,
   dwg_getall_STYLE,
   dwg_getall_VPORT,
   dwg_getall_LAYOUT,
-  dwg_getall_BLOCK,
+  dwg_getall_BLOCK_HEADER,
+  dwg_getall_entitie_in_model_space,
   dwg_read_data
 } from "./utils.mjs";
 
@@ -63,7 +65,7 @@ const printAllItems = (data) => {
       propName: 'layout_name'
     }, {
       id: 'blockList',
-      getAll: dwg_getall_BLOCK,
+      getAll: dwg_getall_BLOCK_HEADER,
       propName: 'name'
     }
   ];
@@ -109,28 +111,23 @@ const printVertexesInTheFirstPolyline = (id, polyline) => {
   }
 }
 
-const printEntityStats = (id, entities) => {
+const printEntityStats = (id, libredwg, entities) => {
   // Clear previous item list
   const listElement = document.getElementById(id);
   listElement.innerHTML = '';
 
   const group = new Map();
-  let isFoundPolyline = false;
-  for (let index = 0, size = entities.size(); index < size; ++index) {
-    const entity = entities.get(index);
-    // If the group for the given eType does not exist, initialize the count to 0
-    const typeName = entity.eType.constructor.name;
+  entities.forEach((entity) => {
+    const type = libredwg.dwg_object_get_fixedtype(entity);
+    const typeName = Dwg_Object_Type_Inverted[type.toString()]
+
     if (!group.has(typeName)) {
       group.set(typeName, 0);
     }
-    if (!isFoundPolyline && (entity.eType == libredwg.DRW_ETYPE.LWPOLYLINE || entity.eType == libredwg.DRW_ETYPE.POLYLINE)) {
-      printEntityInfo("entityInfoList", entity);
-      printVertexesInTheFirstPolyline("vertexList", entity);
-      isFoundPolyline = true;
-    }
+
     // Increment the count for the current group
     group.set(typeName, group.get(typeName) + 1);
-  }
+  });
 
   // Create list item for item
   group.forEach((value, key) => {
@@ -174,6 +171,10 @@ fileInput.addEventListener('change', function(event) {
         );
 
         printAllItems(data);
+
+        const entities = dwg_getall_entitie_in_model_space(libredwg, data);
+        console.log('Entities in model space: ', entities);
+        printEntityStats('entityList', libredwg, entities)
 
         libredwg.dwg_free(data);
       } catch (error) {

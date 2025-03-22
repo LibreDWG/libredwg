@@ -13,23 +13,36 @@ using namespace emscripten;
 #define DEFINE_FUNC_WITH_REF_POLICY(funcName)                                 \
   function(#funcName, &funcName##_wrapper, return_value_policy::reference())
 
-uintptr_t dwg_read_file_wrapper(const std::string& filename) {
-  Dwg_Data* dwg = new Dwg_Data(); 
-  dwg_read_file(filename.c_str(), dwg);
-  return reinterpret_cast<uintptr_t>(dwg);
+emscripten::val dwg_read_file_wrapper(const std::string& filename) {
+  Dwg_Data* dwg = new Dwg_Data();
+  int error = dwg_read_file(filename.c_str(), dwg);
+
+  emscripten::val result = emscripten::val::object();
+  result.set("error", error);
+  result.set("data", reinterpret_cast<uintptr_t>(dwg));
+  return result;
 }
 
-uintptr_t dxf_read_file_wrapper(const std::string& filename) {
+emscripten::val dxf_read_file_wrapper(const std::string& filename) {
   Dwg_Data* dwg = new Dwg_Data(); 
-  dxf_read_file(filename.c_str(), dwg);
-  return reinterpret_cast<uintptr_t>(dwg);
+  int error = dxf_read_file(filename.c_str(), dwg);
+
+  emscripten::val result = emscripten::val::object();
+  result.set("error", error);
+  result.set("data", reinterpret_cast<uintptr_t>(dwg));
+  return result;
 }
 
-int dwg_write_file_wrapper(
+emscripten::val dwg_write_file_wrapper(
   const std::string& filename,
   uintptr_t dwg_ptr) {
   Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
-  return dwg_write_file(filename.c_str(), dwg);
+  int error = dwg_write_file(filename.c_str(), dwg);
+
+  emscripten::val result = emscripten::val::object();
+  result.set("error", error);
+  result.set("data", reinterpret_cast<uintptr_t>(dwg));
+  return result;
 }
 
 /** 
@@ -367,16 +380,27 @@ uintptr_t get_next_owned_subentity_wrapper(
   return reinterpret_cast<uintptr_t>(get_next_owned_subentity(owner, current));
 }
 
+/** 
+ * Returns the BLOCK entity owned by the block hdr.
+ * Only NULL on illegal hdr argument or dwg version.
+ */
 uintptr_t get_first_owned_block_wrapper(uintptr_t hdr_ptr) {
   Dwg_Object* hdr = reinterpret_cast<Dwg_Object*>(hdr_ptr);
   return reinterpret_cast<uintptr_t>(get_first_owned_block(hdr));
 }
 
+/** 
+ * Returns the last ENDBLK entity owned by the block hdr.
+ * Only NULL on illegal hdr argument or dwg version.
+ */
 uintptr_t get_last_owned_block_wrapper(uintptr_t hdr_ptr) {
   Dwg_Object* hdr = reinterpret_cast<Dwg_Object*>(hdr_ptr);
   return reinterpret_cast<uintptr_t>(get_last_owned_block(hdr));
 }
 
+/** 
+ * Returns the next block object after current owned by the block hdr, or NULL.
+ */
 uintptr_t get_next_owned_block_wrapper(
   uintptr_t hdr_ptr,
   uintptr_t current_ptr) {
@@ -385,6 +409,10 @@ uintptr_t get_next_owned_block_wrapper(
   return reinterpret_cast<uintptr_t>(get_next_owned_block(hdr, current));
 }
 
+/** 
+ * Returns the next block object until last_entity
+ * after current owned by the block hdr, or NULL.
+ */
 uintptr_t get_next_owned_block_entity_wrapper(
   uintptr_t hdr_ptr,
   uintptr_t current_ptr) {
@@ -759,10 +787,14 @@ bool dwg_ent_set_INT32_wrapper(
 /********************************************************************
  *                    FUNCTIONS FOR DWG OBJECT                       *
  ********************************************************************/
-dwg_object *dwg_obj_obj_to_object_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
 
+/** 
+ * Convert dwg_object* from dwg_obj_obj*. 
+*/
+uintptr_t dwg_obj_obj_to_object_wrapper(uintptr_t obj_ptr) {
+  dwg_obj_obj* obj = reinterpret_cast<dwg_obj_obj*>(obj_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_obj_obj_to_object(obj, &error));
 }
 
 BITCODE_BL dwg_obj_get_objid_wrapper(
@@ -834,10 +866,13 @@ Dwg_Handle *dwg_obj_get_handleref_wrapper(
 
 }
 
-dwg_object *dwg_obj_generic_to_object_wrapper(
-  const void *restrict obj,
-  int *restrict error) {
-
+/** 
+ * Convert dwg_object* from any dwg_obj_*
+*/
+uintptr_t dwg_obj_generic_to_object_wrapper(uintptr_t obj_ptr) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_obj_generic_to_object(obj, &error));
 }
 
 BITCODE_RLL dwg_obj_generic_handlevalue_wrapper(void *_obj) {
@@ -877,9 +912,12 @@ dwg_handle *dwg_object_get_handle_wrapper(
 
 }
 
+/** 
+ * Convert dwg_obj_obj* from dwg_object*. 
+*/
 uintptr_t dwg_object_to_object_wrapper(uintptr_t obj_ptr) {
-  int error = 0;
   dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  int error = 0;
   return reinterpret_cast<uintptr_t>(dwg_object_to_object(obj, &error));
 }
 
@@ -894,9 +932,12 @@ uintptr_t dwg_object_to_object_tio_wrapper(uintptr_t obj_ptr) {
     return 0;
 }
 
+/** 
+ * Convert dwg_obj_ent* from dwg object.
+*/
 uintptr_t dwg_object_to_entity_wrapper(uintptr_t obj_ptr) {
-  int error = 0;
   dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  int error = 0;
   return reinterpret_cast<uintptr_t>(dwg_object_to_entity(obj, &error));
 }
 
@@ -1068,6 +1109,8 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_ent_get_INT32);
   DEFINE_FUNC(dwg_ent_set_INT32);
 
+  DEFINE_FUNC(dwg_obj_obj_to_object);
+  DEFINE_FUNC(dwg_obj_generic_to_object);
   DEFINE_FUNC(dwg_get_object);
   DEFINE_FUNC(dwg_object_to_object);
   DEFINE_FUNC(dwg_object_to_object_tio);
