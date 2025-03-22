@@ -22541,11 +22541,14 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.TDUUPDATE = dwg->header_vars.TDUCREATE;
   // CECOLOR.index: 256 [CMC.BS 62]
   dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, CMC_DEFAULTS }; // ByLayer
-  if (version > R_11)
+  if (version > R_9)
     {
       // HANDSEED: 0.1.49 [H 0] // FIXME needs to be updated on encode
       dwg->header_vars.HANDSEED
           = dwg_add_handleref (dwg, 0, UINT64_C (0x25), NULL);
+    }
+  if (version > R_10)
+    {
       dwg->header_vars.PEXTMIN
           = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
                            100000000000000000000.0 };
@@ -22557,9 +22560,10 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       dwg->header_vars.PUCSYDIR = (BITCODE_3BD){ 0.0, 1.0, 0.0 };
       // PUCSNAME: (5.0.0) abs:0 [H 2]
     }
-  else
+  if (version > R_1_4 && version < R_13b1)
+    dwg->header_vars.oldCECOLOR_lo = 15;
+  if (version < R_10)
     {
-      dwg->header_vars.oldCECOLOR_lo = 15;
       dwg->header_vars.VPOINTX = (BITCODE_3RD){ 1.0, 0.0, 0.0 };
       dwg->header_vars.VPOINTY = (BITCODE_3RD){ 0.0, 1.0, 0.0 };
       dwg->header_vars.VPOINTZ = (BITCODE_3RD){ 0.0, 0.0, 1.0 };
