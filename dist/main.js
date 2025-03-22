@@ -1,18 +1,12 @@
 import {
   Dwg_File_Type,
   Dwg_Object_Type_Inverted,
-  dwg_getall_DIMSTYLE,
-  dwg_getall_LTYPE,
-  dwg_getall_STYLE,
-  dwg_getall_VPORT,
-  dwg_getall_LAYOUT,
-  dwg_getall_BLOCK_HEADER,
-  dwg_getall_entitie_in_model_space,
-  dwg_read_data
+  extend_lib
 } from "./utils.mjs";
 
 // load libredwg webassembly module
 const libredwg = await createModule();
+extend_lib(libredwg);
 window.libredwg = libredwg;
 
 const printItems = (id, size, getItem, getPropVal, propName = 'name') => {
@@ -42,36 +36,36 @@ const printItemsByDynApi = (id, items, propName = 'name') => {
   );
 }
 
-const printAllItems = (data) => {
+const printAllItems = (libredwg, data) => {
   const objects = [{
       id: 'lineTypeList',
-      getAll: dwg_getall_LTYPE,
+      getAll: libredwg.dwg_getall_LTYPE,
       propName: 'name'
     }, {
       id: 'textStyleList',
-      getAll: dwg_getall_STYLE,
+      getAll: libredwg.dwg_getall_STYLE,
       propName: 'name'
     }, {
       id: 'dimStyleList',
-      getAll: dwg_getall_DIMSTYLE,
+      getAll: libredwg.dwg_getall_DIMSTYLE,
       propName: 'name'
     }, {
       id: 'viewportList',
-      getAll: dwg_getall_VPORT,
+      getAll: libredwg.dwg_getall_VPORT,
       propName: 'name'
     }, {
       id: 'layoutList',
-      getAll: dwg_getall_LAYOUT,
+      getAll: libredwg.dwg_getall_LAYOUT,
       propName: 'layout_name'
     }, {
       id: 'blockList',
-      getAll: dwg_getall_BLOCK_HEADER,
+      getAll: libredwg.dwg_getall_BLOCK_HEADER,
       propName: 'name'
     }
   ];
 
   objects.forEach((obj) => {
-    const items = obj.getAll(libredwg, data);
+    const items = obj.getAll(data);
     printItemsByDynApi(obj.id, items, obj.propName);
   })
 }
@@ -160,7 +154,7 @@ fileInput.addEventListener('change', function(event) {
         } else if (fileExtension == 'dwg') {
           fileType = Dwg_File_Type.DWG;
         }
-        const data = dwg_read_data(libredwg, fileContent, fileType);
+        const data = libredwg.dwg_read_data(fileContent, fileType);
         console.log('LIMMAX: ', libredwg.dwg_dynapi_header_value(data, 'LIMMAX').data);
 
         printItems(
@@ -170,10 +164,9 @@ fileInput.addEventListener('change', function(event) {
           (item, propName) => libredwg.dwg_obj_layer_get_name(item, propName)
         );
 
-        printAllItems(data);
+        printAllItems(libredwg, data);
 
-        const entities = dwg_getall_entitie_in_model_space(libredwg, data);
-        console.log('Entities in model space: ', entities);
+        const entities = libredwg.dwg_getall_entitie_in_model_space(data);
         printEntityStats('entityList', libredwg, entities)
 
         libredwg.dwg_free(data);

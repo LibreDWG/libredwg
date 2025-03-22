@@ -356,93 +356,95 @@ export const Dwg_File_Type = Object.freeze({
   DXF: 1
 });
 
-export const dwg_read_data = (libredwg, fileContent, fileType) => {
-  if (fileType == Dwg_File_Type.DWG) {
-    const fileName = "tmp.dwg";
-    libredwg.FS.writeFile(fileName, new Uint8Array(fileContent));
-    const result = libredwg.dwg_read_file(fileName);
-    if (result.error != 0) {
-      console.log('Failed to open dwg file with error code: ', result.error);
+export function extend_lib(lib) {
+  lib.dwg_read_data = function(fileContent, fileType) {
+    if (fileType == Dwg_File_Type.DWG) {
+      const fileName = "tmp.dwg";
+      this.FS.writeFile(fileName, new Uint8Array(fileContent));
+      const result = this.dwg_read_file(fileName);
+      if (result.error != 0) {
+        console.log('Failed to open dwg file with error code: ', result.error);
+      }
+      this.FS.unlink(fileName);
+      return result.data;
+    } else if (fileType == Dwg_File_Type.DXF) {
+      const fileName = "tmp.dxf";
+      this.FS.writeFile(fileName, new Uint8Array(fileContent));
+      const result = this.dxf_read_file(fileName);
+      if (result.error != 0) {
+        console.log('Failed to open dxf file with error code: ', result.error);
+      }
+      this.FS.unlink(fileName);
+      return result.data;
     }
-    libredwg.FS.unlink(fileName);
-    return result.data;
-  } else if (fileType == Dwg_File_Type.DXF) {
-    const fileName = "tmp.dxf";
-    libredwg.FS.writeFile(fileName, new Uint8Array(fileContent));
-    const result = libredwg.dxf_read_file(fileName);
-    if (result.error != 0) {
-      console.log('Failed to open dxf file with error code: ', result.error);
+  };
+
+  /**
+   * Returns all of entities in the model space. Each item in returned array
+   * is one Dwg_Object pointer (Dwg_Object*).
+   */
+  lib.dwg_getall_entitie_in_model_space = function(data) {
+    const model_space = this.dwg_model_space_object(data);
+    const entities = [];
+    let next = this.get_first_owned_entity(model_space);
+    while (next) {
+      entities.push(next);
+      next = this.get_next_owned_entity(model_space);
     }
-    libredwg.FS.unlink(fileName);
-    return result.data;
+    return entities;
   }
-}
 
-/**
- * Returns all of entities in the model space. Each item in returned array
- * is one Dwg_Object pointer (Dwg_Object*).
- */
-export const dwg_getall_entitie_in_model_space = (libredwg, data) => {
-  const model_space = libredwg.dwg_model_space_object(data);
-  const entities = [];
-  let next = libredwg.get_first_owned_entity(model_space);
-  while (next) {
-    entities.push(next);
-    next = libredwg.get_next_owned_entity(model_space);
-  }
-  return entities;
-}
-
-export const dwg_getall_object_by_type = (libredwg, data, type) => {
-  const num_objects = libredwg.dwg_get_num_objects(data);
-  const results = [];
-  for (let i = 0; i < num_objects; i++) {                                                 
-    const obj = libredwg.dwg_get_object(data, i);
-    const tio = libredwg.dwg_object_to_object_tio(obj);
-    if (tio && libredwg.dwg_object_get_fixedtype(obj) == type) {
-      results.push(tio);
+  lib.dwg_getall_object_by_type = function(data, type) {
+    const num_objects = this.dwg_get_num_objects(data);
+    const results = [];
+    for (let i = 0; i < num_objects; i++) {                                                 
+      const obj = this.dwg_get_object(data, i);
+      const tio = this.dwg_object_to_object_tio(obj);
+      if (tio && this.dwg_object_get_fixedtype(obj) == type) {
+        results.push(tio);
+      }
     }
-  }
-  return results; 
-}
+    return results; 
+  };
 
-export const dwg_getall_entity_by_type = (libredwg, data, type) => {
-  const num_objects = libredwg.dwg_get_num_objects(data);
-  const results = [];
-  for (let i = 0; i < num_objects; i++) {                                                 
-    const obj = libredwg.dwg_get_object(data, i);
-    const tio = libredwg.dwg_object_to_entity_tio(obj);
-    if (tio && libredwg.dwg_object_get_fixedtype(obj) == type) {
-      results.push(tio);
+  lib.dwg_getall_entity_by_type = function(data, type) {
+    const num_objects = this.dwg_get_num_objects(data);
+    const results = [];
+    for (let i = 0; i < num_objects; i++) {                                                 
+      const obj = this.dwg_get_object(data, i);
+      const tio = this.dwg_object_to_entity_tio(obj);
+      if (tio && this.dwg_object_get_fixedtype(obj) == type) {
+        results.push(tio);
+      }
     }
-  }
-  return results; 
-}
+    return results; 
+  };
 
-export const dwg_getall_LTYPE = (libredwg, data) => {
-  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_LTYPE);
-}
-
-export const dwg_getall_STYLE = (libredwg, data) => {
-  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_STYLE);
-}
-
-export const dwg_getall_DIMSTYLE = (libredwg, data) => {
-  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_DIMSTYLE);
-}
-
-export const dwg_getall_VPORT = (libredwg, data) => {
-  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_VPORT);
-}
-
-export const dwg_getall_LAYOUT = (libredwg, data) => {
-  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_LAYOUT);
-}
-
-export const dwg_getall_BLOCK = (libredwg, data) => {
-  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_BLOCK);
-}
-
-export const dwg_getall_BLOCK_HEADER = (libredwg, data) => {
-  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER);
+  lib.dwg_getall_LTYPE = function(data) {
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LTYPE);
+  };
+  
+  lib.dwg_getall_STYLE = function(data) {
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_STYLE);
+  };
+  
+  lib.dwg_getall_DIMSTYLE = function(data) {
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_DIMSTYLE);
+  };
+  
+  lib.dwg_getall_VPORT = function(data) {
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_VPORT);
+  };
+  
+  lib.dwg_getall_LAYOUT = function(data) {
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LAYOUT);
+  };
+  
+  lib.dwg_getall_BLOCK = function(data) {
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_BLOCK);
+  };
+  
+  lib.dwg_getall_BLOCK_HEADER = function(data) {
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER);
+  };
 }
