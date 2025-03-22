@@ -3496,7 +3496,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
   }
 
-  SINCE (R_12)
+  SINCE (R_13b1)
   {
     Dwg_Object *ctrl, *obj;
     Dwg_Object_BLOCK_CONTROL *_ctrl = dwg_block_control (dwg);
@@ -3530,13 +3530,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
 #  else
     mspace = dwg_model_space_object (dwg);
-    SINCE (R_13b1)
-    {
-      if (!mspace)
-        return DWG_ERR_INVALIDDWG;
-      RECORD (BLOCK_RECORD);
-      error |= dwg_dxf_BLOCK_HEADER (dat, mspace);
-    }
+    if (!mspace)
+      return DWG_ERR_INVALIDDWG;
+    RECORD (BLOCK_RECORD);
+    error |= dwg_dxf_BLOCK_HEADER (dat, mspace);
 
     ref = dwg_paper_space_ref (dwg);
     pspace = ref ? dwg_ref_object (dwg, ref) : NULL;
