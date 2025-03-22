@@ -344,10 +344,25 @@ export const Dwg_Object_Type = Object.freeze({
   DWG_TYPE_UNKNOWN_OBJ : 0xffff,
 });
 
-export const dwg_read_data = (libredwg, fileContent) => {
-  const fileName = "tmp.dwg";
-  libredwg.FS.writeFile(fileName, new Uint8Array(fileContent));
-  return libredwg.dwg_read_file(fileName);
+export const Dwg_File_Type = Object.freeze({
+  DWG: 0,
+  DXF: 1
+});
+
+export const dwg_read_data = (libredwg, fileContent, fileType) => {
+  if (fileType == Dwg_File_Type.DWG) {
+    const fileName = "tmp.dwg";
+    libredwg.FS.writeFile(fileName, new Uint8Array(fileContent));
+    const data = libredwg.dwg_read_file(fileName);
+    libredwg.FS.unlink(fileName);
+    return data;
+  } else if (fileType == Dwg_File_Type.DXF) {
+    const fileName = "tmp.dxf";
+    libredwg.FS.writeFile(fileName, new Uint8Array(fileContent));
+    const data = libredwg.dxf_read_file(fileName);
+    libredwg.FS.unlink(fileName);
+    return data;
+  }
 }
 
 export const dwg_getall_object_by_type = (libredwg, data, type) => {
@@ -396,8 +411,6 @@ export const dwg_getall_LAYOUT = (libredwg, data) => {
   return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_LAYOUT);
 }
 
-export const dwg_ent_get_data = (libredwg, obj, fieldname) => {
-  const result = libredwg.dwg_dynapi_entity_value(obj, fieldname);
-  console.log('data: ', result);
-  return result.data;
+export const dwg_getall_BLOCK = (libredwg, data) => {
+  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_BLOCK);
 }

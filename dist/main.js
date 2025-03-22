@@ -1,9 +1,11 @@
 import {
+  Dwg_File_Type,
   dwg_getall_DIMSTYLE,
   dwg_getall_LTYPE,
   dwg_getall_STYLE,
   dwg_getall_VPORT,
   dwg_getall_LAYOUT,
+  dwg_getall_BLOCK,
   dwg_read_data
 } from "./utils.mjs";
 
@@ -59,6 +61,10 @@ const printAllItems = (data) => {
       id: 'layoutList',
       getAll: dwg_getall_LAYOUT,
       propName: 'layout_name'
+    }, {
+      id: 'blockList',
+      getAll: dwg_getall_BLOCK,
+      propName: 'name'
     }
   ];
 
@@ -151,33 +157,25 @@ fileInput.addEventListener('change', function(event) {
     reader.onload = function(e) {
       const fileContent = e.target.result;
       try {
+        let fileType = undefined;
         if (fileExtension == 'dxf') {
-            // Do nothing for now
+          fileType = Dwg_File_Type.DXF;
         } else if (fileExtension == 'dwg') {
-          const data = dwg_read_data(libredwg, fileContent);
-          console.log('LIMMAX: ', libredwg.dwg_dynapi_header_value(data, 'LIMMAX').data);
-
-          printItems(
-            'layerNameList', 
-            libredwg.dwg_get_layer_count(data),
-            (index) => libredwg.dwg_get_layer_index(data, index),
-            (item, propName) => libredwg.dwg_obj_layer_get_name(item, propName)
-          );
-
-          printAllItems(data);
-
-          // const ltypes = dwg_getall_LTYPE(libredwg, data);
-          // printItemsByDynApi('lineTypeList', ltypes);
-
-          // const styles = dwg_getall_STYLE(libredwg, data);
-          // printItemsByDynApi('textStyleList', styles);
-
-          // const dimStyles = dwg_getall_DIMSTYLE(libredwg, data);
-          // printItemsByDynApi('dimStyleList', dimStyles);
-
-          // Manually signal that a C++ object is no longer needed and can be deleted.
-          // data.delete();
+          fileType = Dwg_File_Type.DWG;
         }
+        const data = dwg_read_data(libredwg, fileContent, fileType);
+        console.log('LIMMAX: ', libredwg.dwg_dynapi_header_value(data, 'LIMMAX').data);
+
+        printItems(
+          'layerNameList', 
+          libredwg.dwg_get_layer_count(data),
+          (index) => libredwg.dwg_get_layer_index(data, index),
+          (item, propName) => libredwg.dwg_obj_layer_get_name(item, propName)
+        );
+
+        printAllItems(data);
+
+        libredwg.dwg_free(data);
       } catch (error) {
         console.error('Error processing DXF/DWG file: ', error);
       }
