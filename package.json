@@ -27,7 +27,7 @@
     "build": "cd build-wasm/src && emmake make",
     "build:wasm": "cd build-wasm && emcc ../src/bindings.cpp -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../include src/*.o -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 -s EXPORT_NAME=\"createModule\"",
     "clean": "rm -rf build",
-    "copy": "cp -f build-wasm/libredwg-web.d.ts build-wasm/libredwg-web.js build-wasm/libredwg-web.wasm  dist/",
+    "copy": "cp -f build-wasm/libredwg-web.js build-wasm/libredwg-web.wasm  dist/",
     "install:emsdk": "cd $EMSDK && ./emsdk install latest && ./emsdk activate latest",
     "prepare": "mkdir -p build && cd build && emconfigure ../configure && cd src",
     "publish": "pnpm publish --access public --no-git-checks"

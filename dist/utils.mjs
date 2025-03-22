@@ -380,6 +380,22 @@ export const dwg_getall_LTYPE = (libredwg, data) => {
   return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_LTYPE);
 }
 
+export const dwg_getall_STYLE = (libredwg, data) => {
+  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_STYLE);
+}
+
+export const dwg_getall_DIMSTYLE = (libredwg, data) => {
+  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_DIMSTYLE);
+}
+
+export const dwg_getall_VPORT = (libredwg, data) => {
+  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_VPORT);
+}
+
+export const dwg_getall_LAYOUT = (libredwg, data) => {
+  return dwg_getall_object_by_type(libredwg, data, Dwg_Object_Type.DWG_TYPE_LAYOUT);
+}
+
 export const dwg_ent_get_data = (libredwg, obj, fieldname) => {
   const result = libredwg.dwg_dynapi_entity_value(obj, fieldname);
   console.log('data: ', result);

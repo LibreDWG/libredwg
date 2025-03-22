@@ -1,4 +1,11 @@
-import { dwg_ent_get_data, dwg_getall_LTYPE, dwg_read_data } from "./utils.mjs";
+import {
+  dwg_getall_DIMSTYLE,
+  dwg_getall_LTYPE,
+  dwg_getall_STYLE,
+  dwg_getall_VPORT,
+  dwg_getall_LAYOUT,
+  dwg_read_data
+} from "./utils.mjs";
 
 // load libredwg webassembly module
 const libredwg = await createModule();
@@ -16,6 +23,40 @@ const printItems = (id, size, getItem, getPropVal, propName = 'name') => {
     li.textContent = `${getPropVal(item, propName)}`;
     listElement.appendChild(li);
   }
+}
+
+const printItemsByDynApi = (id, items, propName = 'name') => {
+  printItems(
+    id,
+    items.length,
+    (index) => items[index],
+    (item, propName) => {
+      const result = libredwg.dwg_dynapi_entity_value(item, propName);
+      return result.data;
+    },
+  );
+}
+
+const printAllItems = (data) => {
+  const ids = [
+    'lineTypeList',
+    'textStyleList',
+    'dimStyleList',
+    'viewportList',
+    'layoutList'
+  ];
+  const callbacks = [
+    dwg_getall_LTYPE,
+    dwg_getall_STYLE,
+    dwg_getall_DIMSTYLE,
+    dwg_getall_VPORT,
+    dwg_getall_LAYOUT
+  ];
+
+  ids.forEach((id, index) => {
+    const items = callbacks[index](libredwg, data);
+    printItemsByDynApi(id, items);
+  })
 }
 
 const printEntityInfo = (id, entity) => {
@@ -114,16 +155,16 @@ fileInput.addEventListener('change', function(event) {
             (item, propName) => libredwg.dwg_obj_layer_get_name(item, propName)
           );
 
-          const ltypes = dwg_getall_LTYPE(libredwg, data);
-          printItems(
-            'lineTypeList', 
-            ltypes.length,
-            (index) => ltypes[index],
-            (item, propName) => {
-              const result = libredwg.dwg_dynapi_entity_value(item, propName);
-              return result.data;
-            },
-          );
+          printAllItems(data);
+
+          // const ltypes = dwg_getall_LTYPE(libredwg, data);
+          // printItemsByDynApi('lineTypeList', ltypes);
+
+          // const styles = dwg_getall_STYLE(libredwg, data);
+          // printItemsByDynApi('textStyleList', styles);
+
+          // const dimStyles = dwg_getall_DIMSTYLE(libredwg, data);
+          // printItemsByDynApi('dimStyleList', dimStyles);
 
           // Manually signal that a C++ object is no longer needed and can be deleted.
           // data.delete();
