@@ -9,16 +9,15 @@ const libredwg = await createModule();
 extend_lib(libredwg);
 window.libredwg = libredwg;
 
-const printItems = (id, size, getItem, getPropVal, propName = 'name') => {
+const printItems = (id, size, getItemContent) => {
   // Clear previous item list
   const listElement = document.getElementById(id);
   listElement.innerHTML = '';
 
   // Create list item for item
   for (let index = 0; index < size; ++index) {
-    const item = getItem(index);
     const li = document.createElement('li');
-    li.textContent = `${getPropVal(item, propName)}`;
+    li.textContent = getItemContent(index);
     listElement.appendChild(li);
   }
 }
@@ -27,12 +26,11 @@ const printItemsByDynApi = (id, items, propName = 'name') => {
   printItems(
     id,
     items.length,
-    (index) => items[index],
-    (item, propName) => {
+    (index) => {
+      const item = items[index];
       const result = libredwg.dwg_dynapi_entity_value(item, propName);
-      return result.data;
-    },
-    propName
+      return `${result.data}`;
+    }
   );
 }
 
@@ -74,6 +72,30 @@ const printAllItems = (libredwg, data) => {
   })
 }
 
+const printImages = (id, libredwg, data) => {
+  const images = libredwg.dwg_getall_IMAGE(data);
+  const imageDefs = libredwg.dwg_getall_IMAGEDEF(data);
+
+  const files = new Map();
+  imageDefs.forEach((imageDef) => {
+    const dwg_obj = libredwg.dwg_obj_generic_to_object(imageDef);
+    const fileName = libredwg.dwg_dynapi_entity_value(imageDef, 'file_path').data;
+    group.set(dwg_obj, fileName);
+  });
+
+  printItems(
+    id,
+    images.length,
+    (index) => {
+      const item = images[index];
+      const point = libredwg.dwg_dynapi_entity_value(item, 'pt0').data;
+      const imagedef_handle_absref = libredwg.dwg_dynapi_entity_value(item, 'imagedef').data;
+      const dwg_obj = libredwg.dwg_resolve_handle(data, imagedef_handle_absref);
+      return `insert point: {${point.x}, ${point.y}, ${point.z}}, file: ${files.get(dwg_obj)}`;
+    }
+  );
+}
+
 const printEntityInfo = (id, polyline) => {
   // Clear previous item list
   const listElement = document.getElementById(id);
@@ -83,13 +105,7 @@ const printEntityInfo = (id, polyline) => {
   propNames.forEach((name) => {
     const li = document.createElement('li');
     const result = libredwg.dwg_dynapi_common_value(polyline, name);
-    if (name == "extPoint") {
-      const coord = result.data;
-      if (coord) {
-        li.textContent = `${name}: (${coord.x}, ${coord.y}, ${coord.z})`;
-        listElement.appendChild(li);
-      }
-    } else if (name == "color") {
+    if (name == "color") {
       const color = result.data;
       li.textContent = `index: ${color.index}, flag: ${color.flag}, rgb: ${color.rgb}, name: ${color.name}, book_name: ${color.book_name}`;
       listElement.appendChild(li);
@@ -123,6 +139,7 @@ const printEntityStats = (id, libredwg, entities) => {
   entities.forEach((entity) => {
     const type = libredwg.dwg_object_get_fixedtype(entity);
     const typeName = Dwg_Object_Type_Inverted[type.toString()]
+    // console.log('type: ', type, ', typeName : ', typeName);
 
     if (!group.has(typeName)) {
       group.set(typeName, 0);
@@ -181,6 +198,8 @@ fileInput.addEventListener('change', function(event) {
         if (polylines.length > 0) {
           printEntityInfo('entityInfoList', polylines[0]);
         }
+
+        printImages('imageList', libredwg, data);
 
         libredwg.dwg_free(data);
       } catch (error) {

@@ -436,6 +436,9 @@ uintptr_t dwg_get_next_object_wrapper(
   return reinterpret_cast<uintptr_t>(dwg_get_next_object(dwg, type, index));
 }
 
+/** 
+ * Resolve handle absref value to Dwg_Object*. 
+*/
 uintptr_t dwg_resolve_handle_wrapper(
   uintptr_t dwg_ptr,
   BITCODE_RLL absref) {
@@ -443,6 +446,9 @@ uintptr_t dwg_resolve_handle_wrapper(
   return reinterpret_cast<uintptr_t>(dwg_resolve_handle(dwg, absref));
 }
 
+/** 
+ * Resolve handle to Dwg_Object* without warning info
+*/
 uintptr_t dwg_resolve_handle_silent_wrapper(
   uintptr_t dwg_ptr,
   const BITCODE_RLL absref) {
@@ -450,6 +456,9 @@ uintptr_t dwg_resolve_handle_silent_wrapper(
   return reinterpret_cast<uintptr_t>(dwg_resolve_handle_silent(dwg, absref));
 }
 
+/** 
+ * Resolve Dwg_Object_Ref* to Dwg_Object*. 
+*/
 int dwg_resolve_handleref_wrapper(
   uintptr_t ref_ptr,
   uintptr_t obj_ptr) {

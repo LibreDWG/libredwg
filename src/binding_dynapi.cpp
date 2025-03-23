@@ -132,6 +132,10 @@ emscripten::val get_obj_value(const Dwg_Data *dwg, T _obj, const Dwg_DYNAPI_fiel
     color_obj.set("name", std::string(color->name));
     color_obj.set("book_name", std::string(color->book_name));
     result.set("data", color_obj);
+  } else if (strEQc(f->type, "H")) {
+    // Dwg_Object_Ref* (BITCODE_H)
+    auto handle = reinterpret_cast<BITCODE_H>(&((char *)_obj)[f->offset]);
+    result.set("data", handle->handleref.value);
   }
   // TODO: support "color_r11" (BITCODE_RCd)
   return result;
