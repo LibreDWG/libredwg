@@ -420,6 +420,10 @@ export function extend_lib(lib) {
     return results; 
   };
 
+  lib.dwg_getall_LAYER = function(data) {
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LAYER);
+  };
+
   lib.dwg_getall_LTYPE = function(data) {
     return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LTYPE);
   };
@@ -446,5 +450,13 @@ export function extend_lib(lib) {
   
   lib.dwg_getall_BLOCK_HEADER = function(data) {
     return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER);
+  };
+
+  lib.dwg_getall_POLYLINE_2D = function(data) {
+    return lib.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_POLYLINE_2D);
+  };
+
+  lib.dwg_getall_POLYLINE_3D = function(data) {
+    return lib.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_POLYLINE_3D);
   };
 }

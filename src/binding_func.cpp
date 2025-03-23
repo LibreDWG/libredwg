@@ -945,8 +945,9 @@ uintptr_t dwg_object_to_entity_tio_wrapper(uintptr_t obj_ptr) {
   int error = 0;
   dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
   dwg_obj_ent* obj_ent = dwg_object_to_entity(obj, &error);
-  if (obj_ent != NULL && error == 0) 
-    return reinterpret_cast<uintptr_t>(&obj_ent->tio);
+  if (obj_ent != NULL && error == 0)
+    // The address of the first item 'tio.UNUSED' in union is same as others.
+    return reinterpret_cast<uintptr_t>(obj_ent->tio.UNUSED);
   else
     return 0;
 }

@@ -38,6 +38,10 @@ const printItemsByDynApi = (id, items, propName = 'name') => {
 
 const printAllItems = (libredwg, data) => {
   const objects = [{
+      id: 'layerNameList',
+      getAll: libredwg.dwg_getall_LAYER,
+      propName: 'name'
+    }, {
       id: 'lineTypeList',
       getAll: libredwg.dwg_getall_LTYPE,
       propName: 'name'
@@ -70,22 +74,27 @@ const printAllItems = (libredwg, data) => {
   })
 }
 
-const printEntityInfo = (id, entity) => {
+const printEntityInfo = (id, polyline) => {
   // Clear previous item list
   const listElement = document.getElementById(id);
   listElement.innerHTML = '';
 
-  const propNames = ["handle", "layer", "lineType", "colorName", "proxyGraphics", "extPoint"];
+  const propNames = ["objid", "ownerhandle", "layer", "invisible", "ltype", "linewt", "color"];
   propNames.forEach((name) => {
     const li = document.createElement('li');
+    const result = libredwg.dwg_dynapi_common_value(polyline, name);
     if (name == "extPoint") {
-      const coord = entity[name]
+      const coord = result.data;
       if (coord) {
         li.textContent = `${name}: (${coord.x}, ${coord.y}, ${coord.z})`;
         listElement.appendChild(li);
       }
+    } else if (name == "color") {
+      const color = result.data;
+      li.textContent = `index: ${color.index}, flag: ${color.flag}, rgb: ${color.rgb}, name: ${color.name}, book_name: ${color.book_name}`;
+      listElement.appendChild(li);
     } else {
-      li.textContent = `${name}: ${entity[name]}`;
+      li.textContent = `${name}: ${result.data}`;
       listElement.appendChild(li);
     }
   });
@@ -157,17 +166,21 @@ fileInput.addEventListener('change', function(event) {
         const data = libredwg.dwg_read_data(fileContent, fileType);
         console.log('LIMMAX: ', libredwg.dwg_dynapi_header_value(data, 'LIMMAX').data);
 
-        printItems(
-          'layerNameList', 
-          libredwg.dwg_get_layer_count(data),
-          (index) => libredwg.dwg_get_layer_index(data, index),
-          (item, propName) => libredwg.dwg_obj_layer_get_name(item, propName)
-        );
+        const layerCount = libredwg.dwg_get_layer_count(data);
+        for (let index = 0; index < layerCount; index++) {
+          const layer = libredwg.dwg_get_layer_index(data, index);
+          libredwg.dwg_obj_layer_get_name(layer, 'name');
+        }
 
         printAllItems(libredwg, data);
 
         const entities = libredwg.dwg_getall_entitie_in_model_space(data);
-        printEntityStats('entityList', libredwg, entities)
+        printEntityStats('entityList', libredwg, entities);
+
+        const polylines = libredwg.dwg_getall_POLYLINE_3D(data);
+        if (polylines.length > 0) {
+          printEntityInfo('entityInfoList', polylines[0]);
+        }
 
         libredwg.dwg_free(data);
       } catch (error) {
