@@ -6,6 +6,7 @@
 #include "dwg_api.h"
 #include "common.h"
 #include "bits.h"
+#include "binding.h"
 
 using namespace emscripten;
 
@@ -52,9 +53,6 @@ char *bit_convert_TU (const BITCODE_TU restrict wstr) {
   return str;
 }
 
-#define DEFINE_FUNC(funcName)                                                 \
-  function(#funcName, &funcName##_wrapper)
-
 /** 
  * Check if the name is a valid ENTITY name, not an OBJECT.
  */
@@ -67,33 +65,6 @@ bool is_dwg_entity_wrapper(const std::string& name) {
  */
 bool is_dwg_object_wrapper(const std::string& name) {
   return is_dwg_object(name.c_str());
-}
-
-emscripten::val object_ref_to_js_object(BITCODE_H ref) {
-  emscripten::val handleref_obj = emscripten::val::object();
-  auto handleref = ref->handleref;
-  handleref_obj.set("code", handleref.code);
-  handleref_obj.set("size", handleref.size);
-  handleref_obj.set("value", handleref.value);
-  handleref_obj.set("is_global", handleref.is_global);
-
-  emscripten::val handle_obj = emscripten::val::object();
-  handle_obj.set("obj", reinterpret_cast<uintptr_t>(ref->obj));
-  handle_obj.set("handleref", handleref_obj);
-  handle_obj.set("absolute_ref", ref->absolute_ref);
-  handle_obj.set("r11_idx", ref->r11_idx);
-  return handle_obj;
-}
-
-emscripten::val color_to_js_object(Dwg_Color* color) {
-  emscripten::val color_obj = emscripten::val::object();
-  color_obj.set("index", color->index);
-  color_obj.set("flag", color->flag);
-  // TODO: combine 'rgb' and 'alpha' together and convert them to 'rgba'
-  color_obj.set("rgb", color->rgb);
-  color_obj.set("name", std::string(color->name));
-  color_obj.set("book_name", std::string(color->book_name));
-  return color_obj;
 }
 
 template <typename T>
@@ -161,14 +132,6 @@ emscripten::val get_obj_value(const Dwg_Data *dwg, T _obj, const Dwg_DYNAPI_fiel
   }
   // TODO: support "color_r11" (BITCODE_RCd)
   return result;
-}
-
-/**
- * Return one JavaScript object of Dwg_Object_Ref
- */
-emscripten::val dwg_dynapi_object_ref_wrapper(uintptr_t ref_ptr) {
-  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
-  return object_ref_to_js_object(ref);
 }
 
 /** 
@@ -412,7 +375,6 @@ std::string dwg_dynapi_handle_name_wrapper(
 EMSCRIPTEN_BINDINGS(libredwg_dynapi) {
   DEFINE_FUNC(is_dwg_entity);
   DEFINE_FUNC(is_dwg_object);
-  DEFINE_FUNC(dwg_dynapi_object_ref);
   DEFINE_FUNC(dwg_dynapi_header_value);
   DEFINE_FUNC(dwg_dynapi_entity_value);
   DEFINE_FUNC(dwg_dynapi_common_value);

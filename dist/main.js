@@ -74,6 +74,17 @@ const printAllItems = (libredwg, data) => {
 
 const printImages = (id, libredwg, data) => {
   const images = libredwg.dwg_getall_IMAGE(data);
+  const imageDefs = libredwg.dwg_getall_IMAGEDEF(data);
+
+  const files = new Map();
+  imageDefs.forEach((imageDef) => {
+    const dwg_obj = libredwg.dwg_obj_generic_to_object(imageDef);
+    const handle = libredwg.dwg_object_get_handle_object(dwg_obj);
+    console.log('imagedef handle: ', handle);
+    const fileName = libredwg.dwg_dynapi_entity_value(imageDef, 'file_path').data;
+    files.set(handle.value, fileName);
+  });
+
   printItems(
     id,
     images.length,
@@ -81,6 +92,8 @@ const printImages = (id, libredwg, data) => {
       const item = images[index];
       const point = libredwg.dwg_dynapi_entity_value(item, 'pt0').data;
       const imagedef_ref = libredwg.dwg_dynapi_entity_value(item, 'imagedef').data;
+      const imagedef_obj = libredwg.dwg_object_ref(imagedef_ref);
+      console.log('imagedef_ref: ', imagedef_obj);
       const obj = libredwg.dwg_ref_object_silent(data, imagedef_ref);
       const imagedef = libredwg.dwg_object_get_tio(obj);
       const filename = libredwg.dwg_dynapi_entity_value(imagedef, 'file_path');

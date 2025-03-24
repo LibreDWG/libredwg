@@ -4,14 +4,9 @@
 
 #include "dwg.h"
 #include "dwg_api.h"
+#include "binding.h"
 
 using namespace emscripten;
-
-#define DEFINE_FUNC(funcName)                                                 \
-  function(#funcName, &funcName##_wrapper)
-
-#define DEFINE_FUNC_WITH_REF_POLICY(funcName)                                 \
-  function(#funcName, &funcName##_wrapper, return_value_policy::reference())
 
 emscripten::val dwg_read_file_wrapper(const std::string& filename) {
   Dwg_Data* dwg = new Dwg_Data();
@@ -977,32 +972,6 @@ uintptr_t dwg_object_to_entity_tio_wrapper(uintptr_t obj_ptr) {
     return 0;
 }
 
-uintptr_t dwg_object_get_tio_wrapper(uintptr_t obj_ptr) {
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  // The address of 'tio.entity' is same as the address of 'tio.object'.
-  return (obj == NULL) ? 0 : reinterpret_cast<uintptr_t>(obj->tio.object);
-}
-
-int dwg_object_get_type_wrapper(uintptr_t obj_ptr) {
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  return (obj == NULL) ? 0 : obj->type;
-}
-
-int dwg_object_get_fixedtype_wrapper(uintptr_t obj_ptr) {
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  return (obj == NULL) ? 0 : obj->fixedtype;
-}
-
-int dwg_object_get_supertype_wrapper(uintptr_t obj_ptr) {
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  return (obj == NULL) ? 0 : obj->supertype;
-}
-
-std::string dwg_object_get_dxfname_wrapper(uintptr_t obj_ptr) {
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  return (obj == NULL) ? 0 : std::string(obj->dxfname);
-}
-
 /**
  * Returns the absolute handle reference (field 'absolute_ref') of Dwg_Object_Ref*
  */
@@ -1037,7 +1006,6 @@ unsigned int dwg_get_num_classes_wrapper(const dwg_data *dwg) {
 dwg_class *dwg_get_class_wrapper(const dwg_data *dwg, unsigned int index) {
 
 }
-
 
 EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_read_file);
@@ -1165,11 +1133,7 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_object_to_object_tio);
   DEFINE_FUNC(dwg_object_to_entity);
   DEFINE_FUNC(dwg_object_to_entity_tio);
-  DEFINE_FUNC(dwg_object_get_tio);
-  DEFINE_FUNC(dwg_object_get_type);
-  DEFINE_FUNC(dwg_object_get_supertype);
-  DEFINE_FUNC(dwg_object_get_fixedtype);
-  DEFINE_FUNC(dwg_object_get_dxfname);
+
   DEFINE_FUNC(dwg_ref_get_absref);
   DEFINE_FUNC(dwg_ref_get_object);
   DEFINE_FUNC(dwg_absref_get_object);
