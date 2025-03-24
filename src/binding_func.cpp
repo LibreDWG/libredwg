@@ -793,6 +793,22 @@ bool dwg_ent_set_INT32_wrapper(
   return dwg_ent_set_INT32(obj, fieldname.c_str(), num);
 }
 
+/**
+ * Get handle value from Dwg_Object* 
+ */
+BITCODE_RLL dwg_obj_get_handle_wrapper(uintptr_t obj_ptr) {
+  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
+  return obj->handle.value;
+}
+
+/**
+ * Get handle value from Dwg_Object_Ref* 
+ */
+BITCODE_RLL dwg_obj_ref_get_handle_wrapper(uintptr_t obj_ref_ptr) {
+  Dwg_Object_Ref* obj_ref = reinterpret_cast<Dwg_Object_Ref*>(obj_ref_ptr);
+  return obj_ref->handleref.value;
+}
+
 /********************************************************************
  *                    FUNCTIONS FOR DWG OBJECT                       *
  ********************************************************************/
@@ -961,36 +977,57 @@ uintptr_t dwg_object_to_entity_tio_wrapper(uintptr_t obj_ptr) {
     return 0;
 }
 
+uintptr_t dwg_object_get_tio_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  // The address of 'tio.entity' is same as the address of 'tio.object'.
+  return (obj == NULL) ? 0 : reinterpret_cast<uintptr_t>(obj->tio.object);
+}
+
 int dwg_object_get_type_wrapper(uintptr_t obj_ptr) {
   dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  return dwg_object_get_type(obj);  
+  return (obj == NULL) ? 0 : obj->type;
 }
 
 int dwg_object_get_fixedtype_wrapper(uintptr_t obj_ptr) {
   dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  return dwg_object_get_fixedtype(obj);  
+  return (obj == NULL) ? 0 : obj->fixedtype;
 }
 
-char *dwg_object_get_dxfname_wrapper(const dwg_object *obj) {
-
+int dwg_object_get_supertype_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  return (obj == NULL) ? 0 : obj->supertype;
 }
 
-BITCODE_BL dwg_ref_get_absref_wrapper(
-  const dwg_object_ref *restrict ref,
-  int *restrict error) {
-
+std::string dwg_object_get_dxfname_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  return (obj == NULL) ? 0 : std::string(obj->dxfname);
 }
 
-dwg_object *dwg_ref_get_object_wrapper(
-  const dwg_object_ref *restrict ref,
-  int *restrict error) {
-
+/**
+ * Returns the absolute handle reference (field 'absolute_ref') of Dwg_Object_Ref*
+ */
+BITCODE_BL dwg_ref_get_absref_wrapper(uintptr_t ref_ptr) {
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  return (ref == 0) ? 0 : ref->absolute_ref;
 }
 
-dwg_object *dwg_absref_get_object_wrapper(
-  const dwg_data *dwg,
+/**
+ * Returns Dwg_Object* from Dwg_Object_Ref*
+ */
+uintptr_t dwg_ref_get_object_wrapper(uintptr_t ref_ptr) {
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_ref_get_object(ref, &error));
+}
+
+/**
+ * Returns Dwg_Object* from absolute reference
+ */
+uintptr_t dwg_absref_get_object_wrapper(
+  uintptr_t dwg_ptr,
   const BITCODE_BL absref) {
-
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return reinterpret_cast<uintptr_t>(dwg_absref_get_object(dwg, absref));
 }
 
 unsigned int dwg_get_num_classes_wrapper(const dwg_data *dwg) {
@@ -1118,6 +1155,8 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_ent_set_INT16);
   DEFINE_FUNC(dwg_ent_get_INT32);
   DEFINE_FUNC(dwg_ent_set_INT32);
+  DEFINE_FUNC(dwg_obj_get_handle);
+  DEFINE_FUNC(dwg_obj_ref_get_handle);
 
   DEFINE_FUNC(dwg_obj_obj_to_object);
   DEFINE_FUNC(dwg_obj_generic_to_object);
@@ -1126,6 +1165,12 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_object_to_object_tio);
   DEFINE_FUNC(dwg_object_to_entity);
   DEFINE_FUNC(dwg_object_to_entity_tio);
+  DEFINE_FUNC(dwg_object_get_tio);
   DEFINE_FUNC(dwg_object_get_type);
-  DEFINE_FUNC(dwg_object_get_fixedtype);  
+  DEFINE_FUNC(dwg_object_get_supertype);
+  DEFINE_FUNC(dwg_object_get_fixedtype);
+  DEFINE_FUNC(dwg_object_get_dxfname);
+  DEFINE_FUNC(dwg_ref_get_absref);
+  DEFINE_FUNC(dwg_ref_get_object);
+  DEFINE_FUNC(dwg_absref_get_object);
 }

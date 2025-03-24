@@ -74,24 +74,17 @@ const printAllItems = (libredwg, data) => {
 
 const printImages = (id, libredwg, data) => {
   const images = libredwg.dwg_getall_IMAGE(data);
-  const imageDefs = libredwg.dwg_getall_IMAGEDEF(data);
-
-  const files = new Map();
-  imageDefs.forEach((imageDef) => {
-    const dwg_obj = libredwg.dwg_obj_generic_to_object(imageDef);
-    const fileName = libredwg.dwg_dynapi_entity_value(imageDef, 'file_path').data;
-    group.set(dwg_obj, fileName);
-  });
-
   printItems(
     id,
     images.length,
     (index) => {
       const item = images[index];
       const point = libredwg.dwg_dynapi_entity_value(item, 'pt0').data;
-      const imagedef_handle_absref = libredwg.dwg_dynapi_entity_value(item, 'imagedef').data;
-      const dwg_obj = libredwg.dwg_resolve_handle(data, imagedef_handle_absref);
-      return `insert point: {${point.x}, ${point.y}, ${point.z}}, file: ${files.get(dwg_obj)}`;
+      const imagedef_ref = libredwg.dwg_dynapi_entity_value(item, 'imagedef').data;
+      const obj = libredwg.dwg_ref_object_silent(data, imagedef_ref);
+      const imagedef = libredwg.dwg_object_get_tio(obj);
+      const filename = libredwg.dwg_dynapi_entity_value(imagedef, 'file_path');
+      return `insert point: {${point.x}, ${point.y}, ${point.z}}, file: ${filename}`;
     }
   );
 }

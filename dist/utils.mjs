@@ -453,7 +453,7 @@ export function extend_lib(lib) {
   };
 
   lib.dwg_getall_IMAGEDEF = function(data) {
-    return lib.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_IMAGEDEF);
+    return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_IMAGEDEF);
   };
 
   lib.dwg_getall_POLYLINE_2D = function(data) {
