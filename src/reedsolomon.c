@@ -470,7 +470,7 @@ fix_errors (unsigned char *blk, unsigned char *sigma, unsigned char *omega)
 /*
  * Some debugging code, for developer use.
  */
-#ifdef DEBUG
+#if 0 && defined DEBUG
 static void
 debug_row (PolyRow row)
 {
