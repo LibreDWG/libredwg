@@ -3238,6 +3238,10 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
                 0x80, size + 0x80, size);
     LOG_TF_HEX (HANDLE, &file_dat->chain[0x80], (int)size);
     decrypt_R2004_header (decrypted_data, &file_dat->chain[0x80], size);
+    LOG_HANDLE ("decrypted R2004_Header (@%u.0-%" PRIuSIZE ".0, %" PRIuSIZE
+                "):\n",
+                0x80, size + 0x80, size);
+    LOG_TF_HEX (HANDLE, &decrypted_data[0], size);
 
     dat = &decrypted_header_dat;
     dat->bit = 0;
