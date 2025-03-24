@@ -210,14 +210,7 @@
     }
 #define LOG_TF(level, var, len)                                               \
   {                                                                           \
-    if (var && (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level || len <= 256))          \
-      {                                                                       \
-        for (unsigned _i = 0; _i < (unsigned)(len); _i++)                     \
-          {                                                                   \
-            LOG (level, "%02X", (unsigned char)((char *)var)[_i]);            \
-          }                                                                   \
-        LOG (level, "\n");                                                    \
-      }                                                                       \
+    LOG_TF_HEX(level, var, len)                                               \
     if (var && (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE))                         \
       {                                                                       \
         for (unsigned _i = 0; _i < (unsigned)(len); _i++)                     \
@@ -226,6 +219,17 @@
             LOG_INSANE ("%-2c", isprint (c) ? c : ' ');                       \
           }                                                                   \
         LOG_INSANE ("\n");                                                    \
+      }                                                                       \
+  }
+#define LOG_TF_HEX(level, var, len)                                           \
+  {                                                                           \
+    if (var && (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level || len <= 256))          \
+      {                                                                       \
+        for (unsigned _i = 0; _i < (unsigned)(len); _i++)                     \
+          {                                                                   \
+            LOG (level, "%02X", (unsigned char)((char *)var)[_i]);            \
+          }                                                                   \
+        LOG (level, "\n");                                                    \
       }                                                                       \
   }
 #define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len)
