@@ -29,10 +29,12 @@ emscripten::val color_to_js_object(Dwg_Color* color) {
   return color_obj;
 }
 
+/***********************************************************************/
+
 /**
  * Return one JavaScript object for Dwg_Handle instance
  */
-emscripten::val dwg_handle_wrapper(uintptr_t handle_ptr) {
+emscripten::val dwg_handle_wrapper(Dwg_Handle_Ptr handle_ptr) {
   Dwg_Handle* ptr = reinterpret_cast<Dwg_Handle*>(handle_ptr);
   return handle_to_js_object(ptr);
 }
@@ -40,7 +42,7 @@ emscripten::val dwg_handle_wrapper(uintptr_t handle_ptr) {
 /**
  * Return one JavaScript object for Dwg_Object_Ref instance
  */
-emscripten::val dwg_object_ref_wrapper(uintptr_t ref_ptr) {
+emscripten::val dwg_object_ref_wrapper(Dwg_Object_Ref_Ptr ref_ptr) {
   Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
   return object_ref_to_js_object(ref);
 }
@@ -83,23 +85,23 @@ EMSCRIPTEN_BINDINGS(libredwg_array) {
 
 /***********************************************************************/
 
-uintptr_t dwg_object_get_tio_wrapper(uintptr_t obj_ptr) {
+Dwg_Object_Object_Ptr dwg_object_get_tio_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   // The address of 'tio.entity' is same as the address of 'tio.object'.
   return (obj == NULL) ? 0 : reinterpret_cast<uintptr_t>(obj->tio.object);
 }
 
-int dwg_object_get_type_wrapper(uintptr_t obj_ptr) {
+int dwg_object_get_type_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   return (obj == NULL) ? 0 : obj->type;
 }
 
-int dwg_object_get_fixedtype_wrapper(uintptr_t obj_ptr) {
+int dwg_object_get_fixedtype_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   return (obj == NULL) ? 0 : obj->fixedtype;
 }
 
-int dwg_object_get_supertype_wrapper(uintptr_t obj_ptr) {
+int dwg_object_get_supertype_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   return (obj == NULL) ? 0 : obj->supertype;
 }
@@ -107,7 +109,7 @@ int dwg_object_get_supertype_wrapper(uintptr_t obj_ptr) {
 /**
  * public entity/object name
  */
-std::string dwg_object_get_name_wrapper(uintptr_t obj_ptr) {
+std::string dwg_object_get_name_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   return (obj == NULL) ? 0 : std::string(obj->name);
 }
@@ -115,17 +117,17 @@ std::string dwg_object_get_name_wrapper(uintptr_t obj_ptr) {
 /**
  * The internal dxf classname, often with a ACDB prefix
  */
-std::string dwg_object_get_dxfname_wrapper(uintptr_t obj_ptr) {
+std::string dwg_object_get_dxfname_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   return (obj == NULL) ? 0 : std::string(obj->dxfname);
 }
 
-int dwg_object_get_handle_wrapper(uintptr_t obj_ptr) {
+int dwg_object_get_handle_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   return (obj == NULL) ? 0 : reinterpret_cast<uintptr_t>(&(obj->handle));
 }
 
-emscripten::val dwg_object_get_handle_object_wrapper(uintptr_t obj_ptr) {
+emscripten::val dwg_object_get_handle_object_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   return handle_to_js_object(&(obj->handle));
 }
@@ -149,7 +151,7 @@ EMSCRIPTEN_BINDINGS(libredwg_dwg_object) {
 /**
  * Returns the absolute handle reference (field 'absolute_ref') of Dwg_Object_Ref*
  */
-BITCODE_BL dwg_ref_get_absref_wrapper(uintptr_t ref_ptr) {
+BITCODE_BL dwg_ref_get_absref_wrapper(Dwg_Object_Ref_Ptr ref_ptr) {
   Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
   return (ref == 0) ? 0 : ref->absolute_ref;
 }
@@ -157,13 +159,25 @@ BITCODE_BL dwg_ref_get_absref_wrapper(uintptr_t ref_ptr) {
 /**
  * Returns Dwg_Object* from Dwg_Object_Ref*
  */
-uintptr_t dwg_ref_get_object_wrapper(uintptr_t ref_ptr) {
+Dwg_Object_Ptr dwg_ref_get_object_wrapper(Dwg_Object_Ref_Ptr ref_ptr) {
   Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
   int error = 0;
-  return reinterpret_cast<uintptr_t>(dwg_ref_get_object(ref, &error));
+  return reinterpret_cast<Dwg_Object_Ptr>(dwg_ref_get_object(ref, &error));
+}
+
+int dwg_ref_get_handle_wrapper(Dwg_Object_Ref_Ptr ref_ptr) {
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  return (ref == NULL) ? 0 : reinterpret_cast<uintptr_t>(&(ref->handleref));
+}
+
+emscripten::val dwg_ref_get_handle_object_wrapper(Dwg_Object_Ref_Ptr ref_ptr) {
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  return handle_to_js_object(&(ref->handleref));
 }
 
 EMSCRIPTEN_BINDINGS(libredwg_dwg_object_ref) {
   DEFINE_FUNC(dwg_ref_get_absref);
   DEFINE_FUNC(dwg_ref_get_object);
+  DEFINE_FUNC(dwg_ref_get_handle);
+  DEFINE_FUNC(dwg_ref_get_handle_object);
 }
