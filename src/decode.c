@@ -1268,15 +1268,18 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
         }
       // copy previous offset'ed bytes.
       pos = dec->byte;
-      LOG_INSANE ("co: %d %ld\n", comp_bytes, pos - comp_offset);
+      LOG_INSANE ("co: %d %ld->%lu\n", comp_bytes, pos - comp_offset, pos);
       //assert ((long)(pos + comp_bytes - comp_offset) >= 0);
-      assert ((long)(comp_bytes - comp_offset) < (long)dec->size);
-      for (i = comp_bytes + pos; pos < i; ++pos)
+      assert ((long)pos >= (long)comp_offset);
+      assert ((long)(pos + comp_bytes) < (long)dec->size);
+      // assert ((long)(pos + comp_bytes) <= (long)dec->size);
+      for (size_t end = pos + comp_bytes; pos < end; pos++)
         {
           unsigned char b;
-          assert ((long)(pos - comp_offset) >= 0);
+          // assert ((long)(pos - comp_offset) >= 0);
           assert ((long)(pos - comp_offset) < (long)dec->size);
           b = dec->chain[pos - comp_offset];
+          assert (pos < dec->size);
           dec->chain[pos] = b;
           dec->byte = pos + 1;
         }
@@ -2055,8 +2058,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       // (+ 2bytes)
       LOG_INFO ("Data size:        0x%x/%u (compressed)\n", (unsigned)es.fields.data_size,
                 (unsigned)es.fields.data_size)
-      LOG_INFO ("Page size:        0x%x (decompressed)\n", (unsigned)es.fields.page_size)
-      LOG_TRACE ("StartOffset:      0x%x\n", (unsigned)es.fields.address)
+      LOG_INFO ("Page size:        0x%x/%u (decompressed)\n", (unsigned)es.fields.page_size,
+                (unsigned)es.fields.page_size)
+      LOG_TRACE ("StartOffset:      0x%x/%u\n", (unsigned)es.fields.address, (unsigned)es.fields.address)
       LOG_HANDLE ("Unknown:          0x%x\n", (unsigned)es.fields.unknown)
       LOG_HANDLE ("page_header_crc:  0x%X\n", (unsigned)es.fields.page_header_crc)
       LOG_HANDLE ("data_crc:         0x%X\n", (unsigned)es.fields.data_crc)
@@ -2075,7 +2079,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         {
           unsigned long orig_size = dat->size;
           dec.byte = j * info->max_decomp_size; // offset
-          dec.size = info->max_decomp_size;
+          LOG_INSANE ("dec offset: %" PRIuSIZE "\n", (size_t)dec.byte)
+          dec.size = dec.byte + es.fields.page_size;
+          LOG_INSANE ("dec size: %" PRIuSIZE "\n", (size_t)dec.size)
           dat->size = dat->byte + es.fields.data_size;
           error = decompress_R2004_section (dat, &dec);
           dat->size = orig_size;
@@ -2085,8 +2091,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               free (dec.chain);
               return error;
             }
-          bytes_left -= info->max_decomp_size;
-          sec_dat->size += info->max_decomp_size;
+          bytes_left -= es.fields.page_size;
+          sec_dat->size += es.fields.page_size;
         }
       else
         {
