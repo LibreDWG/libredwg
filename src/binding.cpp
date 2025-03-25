@@ -54,15 +54,26 @@ EMSCRIPTEN_BINDINGS(libredwg_type) {
 
 /***********************************************************************/
 
-emscripten::val dwg_ptr_to_double_array_wrapper(uintptr_t array_ptr, size_t size) {
-  double* array = reinterpret_cast<double*>(array_ptr);
-
-  emscripten::val jsArray = emscripten::val::array();
-  for (int index = 0; index < size; ++index) {
-    jsArray.call<void>("push", array[index]);
-  }
-  return jsArray;
+#define DEFINE_ARRAY_FUNC(type)                                                        \
+emscripten::val dwg_ptr_to_##type##_array_wrapper(uintptr_t array_ptr, size_t size) {  \
+  type* array = reinterpret_cast<type*>(array_ptr);                                    \
+  emscripten::val jsArray = emscripten::val::array();                                  \
+  for (int index = 0; index < size; ++index) {                                         \
+    jsArray.call<void>("push", array[index]);                                          \
+  }                                                                                    \
+  return jsArray;                                                                      \
 }
+
+DEFINE_ARRAY_FUNC(double)
+// DEFINE_ARRAY_FUNC(unsigned char)
+// DEFINE_ARRAY_FUNC(signed char)
+DEFINE_ARRAY_FUNC(uint16_t)
+DEFINE_ARRAY_FUNC(int16_t)
+DEFINE_ARRAY_FUNC(uint32_t)
+DEFINE_ARRAY_FUNC(int32_t)
+DEFINE_ARRAY_FUNC(uint64_t)
+DEFINE_ARRAY_FUNC(int64_t)
+
 
 emscripten::val dwg_ptr_to_point2d_array_wrapper(uintptr_t array_ptr, size_t size) {
   dwg_point_2d* array = reinterpret_cast<dwg_point_2d*>(array_ptr);
@@ -78,9 +89,31 @@ emscripten::val dwg_ptr_to_point2d_array_wrapper(uintptr_t array_ptr, size_t siz
   return points_obj;
 }
 
+emscripten::val dwg_ptr_to_point3d_array_wrapper(uintptr_t array_ptr, size_t size) {
+  dwg_point_3d* array = reinterpret_cast<dwg_point_3d*>(array_ptr);
+
+  emscripten::val points_obj = emscripten::val::array();
+  for (int index = 0; index < size; ++index) {
+    emscripten::val point_obj = emscripten::val::object();
+    auto point = array[index];
+    point_obj.set("x", point.x);
+    point_obj.set("y", point.y);
+    point_obj.set("z", point.z);
+    points_obj.call<void>("push", point_obj);
+  }
+  return points_obj;
+}
+
 EMSCRIPTEN_BINDINGS(libredwg_array) {
+  DEFINE_FUNC(dwg_ptr_to_uint16_t_array);
+  DEFINE_FUNC(dwg_ptr_to_int16_t_array);
+  DEFINE_FUNC(dwg_ptr_to_uint32_t_array);
+  DEFINE_FUNC(dwg_ptr_to_int32_t_array);
+  DEFINE_FUNC(dwg_ptr_to_uint64_t_array);
+  DEFINE_FUNC(dwg_ptr_to_int64_t_array);
   DEFINE_FUNC(dwg_ptr_to_double_array);
   DEFINE_FUNC(dwg_ptr_to_point2d_array);
+  DEFINE_FUNC(dwg_ptr_to_point3d_array);
 }
 
 /***********************************************************************/
