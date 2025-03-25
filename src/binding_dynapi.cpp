@@ -10,6 +10,17 @@
 
 using namespace emscripten;
 
+/**
+ * Returns 1 if the string is not empty and the last character is the
+ * specified character.
+ */
+int is_last_char(const char *str, const char c) {
+  if (str != NULL && str[strlen(str) - 1] == c) {
+      return 1; // Last character is '*'
+  }
+  return 0; // Last character is not '*'
+}
+
 /* converts UCS-2LE to UTF-8.
    first pass to get the dest len. single malloc.
  */
@@ -126,10 +137,14 @@ emscripten::val get_obj_value(const Dwg_Data *dwg, T _obj, const Dwg_DYNAPI_fiel
     result.set("data", js_object);
   } else if (strEQc(f->type, "H")) {
     // Dwg_Object_Ref* (BITCODE_H)
-    auto object_ref = reinterpret_cast<BITCODE_H>(&((char *)_obj)[f->offset]);
-    // auto js_object = object_ref_to_js_object(object_ref);
+    auto object_ref = *reinterpret_cast<BITCODE_H*>(&((char *)_obj)[f->offset]);
     result.set("data", reinterpret_cast<uintptr_t>(object_ref));
+  } else if (is_last_char(f->type, '*')) {
+    // Array
+    auto ptr = *reinterpret_cast<uintptr_t**>(&((char *)_obj)[f->offset]);
+    result.set("data", reinterpret_cast<uintptr_t>(ptr));
   }
+
   // TODO: support "color_r11" (BITCODE_RCd)
   return result;
 }

@@ -456,6 +456,14 @@ export function extend_lib(lib) {
     return lib.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_IMAGEDEF);
   };
 
+  lib.dwg_getall_VERTEX_2D = function(data) {
+    return lib.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_VERTEX_2D);
+  };
+
+  lib.dwg_getall_VERTEX_3D = function(data) {
+    return lib.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_VERTEX_3D);
+  };
+
   lib.dwg_getall_POLYLINE_2D = function(data) {
     return lib.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_POLYLINE_2D);
   };
@@ -466,5 +474,9 @@ export function extend_lib(lib) {
 
   lib.dwg_getall_IMAGE = function(data) {
     return lib.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_IMAGE);
+  };
+
+  lib.dwg_getall_LWPOLYLINE = function(data) {
+    return lib.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_LWPOLYLINE);
   };
 }

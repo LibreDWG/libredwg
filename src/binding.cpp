@@ -50,6 +50,39 @@ EMSCRIPTEN_BINDINGS(libredwg_type) {
   DEFINE_FUNC(dwg_object_ref);
 }
 
+/***********************************************************************/
+
+emscripten::val dwg_ptr_to_double_array_wrapper(uintptr_t array_ptr, size_t size) {
+  double* array = reinterpret_cast<double*>(array_ptr);
+
+  emscripten::val jsArray = emscripten::val::array();
+  for (int index = 0; index < size; ++index) {
+    jsArray.call<void>("push", array[index]);
+  }
+  return jsArray;
+}
+
+emscripten::val dwg_ptr_to_point2d_array_wrapper(uintptr_t array_ptr, size_t size) {
+  dwg_point_2d* array = reinterpret_cast<dwg_point_2d*>(array_ptr);
+
+  emscripten::val points_obj = emscripten::val::array();
+  for (int index = 0; index < size; ++index) {
+    emscripten::val point_obj = emscripten::val::object();
+    auto point = array[index];
+    point_obj.set("x", point.x);
+    point_obj.set("y", point.y);
+    points_obj.call<void>("push", point_obj);
+  }
+  return points_obj;
+}
+
+EMSCRIPTEN_BINDINGS(libredwg_array) {
+  DEFINE_FUNC(dwg_ptr_to_double_array);
+  DEFINE_FUNC(dwg_ptr_to_point2d_array);
+}
+
+/***********************************************************************/
+
 uintptr_t dwg_object_get_tio_wrapper(uintptr_t obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   // The address of 'tio.entity' is same as the address of 'tio.object'.
@@ -109,4 +142,28 @@ EMSCRIPTEN_BINDINGS(libredwg_dwg_object) {
   DEFINE_FUNC(dwg_object_get_dxfname);
   DEFINE_FUNC(dwg_object_get_handle);
   DEFINE_FUNC(dwg_object_get_handle_object);
+}
+
+/***********************************************************************/
+
+/**
+ * Returns the absolute handle reference (field 'absolute_ref') of Dwg_Object_Ref*
+ */
+BITCODE_BL dwg_ref_get_absref_wrapper(uintptr_t ref_ptr) {
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  return (ref == 0) ? 0 : ref->absolute_ref;
+}
+
+/**
+ * Returns Dwg_Object* from Dwg_Object_Ref*
+ */
+uintptr_t dwg_ref_get_object_wrapper(uintptr_t ref_ptr) {
+  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_ref_get_object(ref, &error));
+}
+
+EMSCRIPTEN_BINDINGS(libredwg_dwg_object_ref) {
+  DEFINE_FUNC(dwg_ref_get_absref);
+  DEFINE_FUNC(dwg_ref_get_object);
 }

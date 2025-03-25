@@ -973,23 +973,6 @@ uintptr_t dwg_object_to_entity_tio_wrapper(uintptr_t obj_ptr) {
 }
 
 /**
- * Returns the absolute handle reference (field 'absolute_ref') of Dwg_Object_Ref*
- */
-BITCODE_BL dwg_ref_get_absref_wrapper(uintptr_t ref_ptr) {
-  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
-  return (ref == 0) ? 0 : ref->absolute_ref;
-}
-
-/**
- * Returns Dwg_Object* from Dwg_Object_Ref*
- */
-uintptr_t dwg_ref_get_object_wrapper(uintptr_t ref_ptr) {
-  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
-  int error = 0;
-  return reinterpret_cast<uintptr_t>(dwg_ref_get_object(ref, &error));
-}
-
-/**
  * Returns Dwg_Object* from absolute reference
  */
 uintptr_t dwg_absref_get_object_wrapper(
@@ -1134,7 +1117,5 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_object_to_entity);
   DEFINE_FUNC(dwg_object_to_entity_tio);
 
-  DEFINE_FUNC(dwg_ref_get_absref);
-  DEFINE_FUNC(dwg_ref_get_object);
   DEFINE_FUNC(dwg_absref_get_object);
 }
