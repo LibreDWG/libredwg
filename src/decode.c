@@ -1270,15 +1270,19 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
       pos = dec->byte;
       LOG_INSANE ("co: %d %ld\n", comp_bytes, pos - comp_offset);
       //assert ((long)(pos + comp_bytes - comp_offset) >= 0);
-      assert ((long)(comp_bytes - comp_offset) < (long)dec->size);
-      for (i = comp_bytes + pos; pos < i; ++pos)
+      if ((long)pos >= (long)comp_offset &&
+          (long)(comp_bytes - comp_offset) < (long)dec->size)
         {
-          unsigned char b;
-          assert ((long)(pos - comp_offset) >= 0);
-          assert ((long)(pos - comp_offset) < (long)dec->size);
-          b = dec->chain[pos - comp_offset];
-          dec->chain[pos] = b;
-          dec->byte = pos + 1;
+          assert ((long)pos >= (long)comp_offset);
+          assert ((long)(comp_bytes - comp_offset) < (long)dec->size);
+          for (i = comp_bytes + pos; pos < i; ++pos)
+            {
+              unsigned char b;
+              assert ((long)(pos - comp_offset) < (long)dec->size);
+              b = dec->chain[pos - comp_offset];
+              dec->chain[pos] = b;
+              dec->byte = pos + 1;
+            }
         }
       // copy "literal data"
       lit_length = opcode1 & 3;
