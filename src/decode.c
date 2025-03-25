@@ -1269,7 +1269,7 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
       // copy previous offset'ed bytes.
       pos = dec->byte;
       LOG_INSANE ("co: %d %ld->%lu\n", comp_bytes, pos - comp_offset, pos);
-      //assert ((long)(pos + comp_bytes - comp_offset) >= 0);
+      // assert ((long)(pos + comp_bytes - comp_offset) >= 0);
       assert ((long)pos >= (long)comp_offset);
       assert ((long)(pos + comp_bytes) < (long)dec->size);
       // assert ((long)(pos + comp_bytes) <= (long)dec->size);
@@ -1618,7 +1618,7 @@ section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
   else if (id == SECTION_PREVIEW)
     {
       // resp. 0x1800 with r2013+, 0x4a000 with r2007-r2010
-      max_decomp_size = 0x7c00; 
+      max_decomp_size = 0x7c00;
       if (dwg->header.version >= R_2013)
         max_decomp_size = 0x1800;
       else if (dwg->header.version >= R_2007 && dwg->header.version <= R_2010)
@@ -1638,7 +1638,7 @@ static int
 read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                          uint32_t comp_data_size, uint32_t decomp_data_size)
 {
-  BITCODE_RC *decomp, *ptr, *decomp_end;
+  Bit_Chain *orig_dat = dat;
   Bit_Chain dec = {0};
   BITCODE_BL i, j;
   int error;
@@ -1665,21 +1665,29 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error;
     }
   dec.byte = 0;
-  ptr = dec.chain + 20;
-  //bfr_read_32 (&dwg->header.section_infohdr, &ptr, 20);
   LOG_TRACE ("\n#### Read 2004 section_infohdr ####\n")
-  dwg->header.section_infohdr.num_desc = bit_read_RL (&dec);
-  LOG_TRACE ("num_desc:   %d\n", dwg->header.section_infohdr.num_desc);
-  dwg->header.section_infohdr.compressed = bit_read_RL (&dec);
-  LOG_TRACE ("compressed: %d\n", dwg->header.section_infohdr.compressed)
-  dwg->header.section_infohdr.max_size = bit_read_RL (&dec);
-  LOG_TRACE ("max_size:   0x%x\n", dwg->header.section_infohdr.max_size)
-  dwg->header.section_infohdr.encrypted = bit_read_RL (&dec);
-  LOG_TRACE ("encrypted:  %d\n", dwg->header.section_infohdr.encrypted)
-  dwg->header.section_infohdr.num_desc2 = bit_read_RL (&dec);
-  LOG_TRACE ("num_desc2:  %d/0x%x\n", dwg->header.section_infohdr.num_desc2,
-             dwg->header.section_infohdr.num_desc2)
-  dwg->header.section_infohdr.compressed = bit_read_RL (&dec);
+  {
+    Dwg_Object *obj = NULL;
+    Dwg_Section_InfoHdr *_obj = &dwg->header.section_infohdr;
+    dat = &dec;
+    FIELD_RL (num_desc, 0);
+    FIELD_RL (compressed, 0);
+    FIELD_RLx (max_size, 0);
+    FIELD_RL (encrypted, 0);
+    FIELD_RL (num_desc2, 0);
+    //dwg->header.section_infohdr.num_desc = bit_read_RL (&dec);
+    //LOG_TRACE ("num_desc:   %d\n", dwg->header.section_infohdr.num_desc);
+    //dwg->header.section_infohdr.compressed = bit_read_RL (&dec);
+    //LOG_TRACE ("compressed: %d\n", dwg->header.section_infohdr.compressed)
+    //dwg->header.section_infohdr.max_size = bit_read_RL (&dec);
+    //LOG_TRACE ("max_size:   0x%x\n", dwg->header.section_infohdr.max_size)
+    //dwg->header.section_infohdr.encrypted = bit_read_RL (&dec);
+    //LOG_TRACE ("encrypted:  %d\n", dwg->header.section_infohdr.encrypted)
+    //dwg->header.section_infohdr.num_desc2 = bit_read_RL (&dec);
+    //LOG_TRACE ("num_desc2:  %d/0x%x\n", dwg->header.section_infohdr.num_desc2,
+    //           dwg->header.section_infohdr.num_desc2)
+  }
+  assert(dec.byte == 20);
 
   if (dwg->header.section_infohdr.num_desc
       > 0xc0000000 / sizeof (Dwg_Section_Info))
@@ -1705,43 +1713,42 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       uint64_t prev_address = 0;
       unsigned max_decomp_size;
 
-      if (ptr + 32 + 64 >= &dec.chain[dec.size])
+      if (dec.byte + 8 + 6*4 + 64 >= dec.size)
         {
           free (dec.chain);
           dwg->header.section_infohdr.num_desc = i;
           LOG_ERROR ("read_R2004_section_info out of range");
           return DWG_ERR_INVALIDDWG;
         }
-      info = &dwg->header.section_info[i];
-      bfr_read_64 (&info->size, &ptr, 8);
-      bfr_read_32 (&info->num_sections, &ptr, 32 - 8);
-      bfr_read (&info->name, &ptr, 64);
+      {
+        Dwg_Object *obj = NULL;
+        Dwg_Section_Info *_obj = &dwg->header.section_info[i];
+        info = _obj;
+        LOG_TRACE ("\nsection_info[%d] fields:\n", i);
+        FIELD_RLL (size, 0);
+        FIELD_RL (num_sections, 0);
+        FIELD_RLx (max_decomp_size, 0); // normally 0x7400, max 0x8000
+        FIELD_RL (unknown, 0);
+        FIELD_RL (compressed, 0); // 1=no, 2=yes
+        FIELD_RL (type, 0);
+        FIELD_RL (encrypted, 0); // 0=no, 1=yes, 2=unknown
+        bit_read_fixed (&dec, (BITCODE_RC*)info->name, 64);
+        LOG_TRACE ("name: \"%s\"\n", info->name);
+        // FIELD_TFF (name, 64, 0);
+        info->fixedtype = dwg_section_type (info->name);
+        LOG_TRACE ("fixedtype: %d\n\n", info->fixedtype);
+      }
 
-      LOG_TRACE ("\nsection_info[%d] fields:\n", i)
-      LOG_TRACE ("size:            %" PRId64 "\n", info->size)
-      LOG_TRACE ("num_sections:    " FORMAT_RL "\n", info->num_sections)
-      LOG_TRACE ("max_decomp_size: %u / 0x%x\n", // normally 0x7400, max 0x8000
-                 info->max_decomp_size, info->max_decomp_size)
-      LOG_TRACE ("unknown:         " FORMAT_RL "\n", info->unknown)
-      LOG_TRACE ("compressed:      " FORMAT_RL " (1=no, 2=yes)\n",
-                 info->compressed)
-      LOG_TRACE ("type:            " FORMAT_RL "\n", info->type)
-      LOG_TRACE ("encrypted:       " FORMAT_RL " (0=no, 1=yes, 2=unknown)\n",
-                 info->encrypted)
-      LOG_TRACE ("name:            %s\n", info->name);
-      info->fixedtype = dwg_section_type (info->name);
-      LOG_TRACE ("fixedtype:       %d\n\n", info->fixedtype);
-
-      if (ptr + (16 * info->num_sections) >= &dec.chain[dec.size])
-        {
-          info->name[0] = '\0';
-          info->num_sections = 0;
-          info->sections = NULL;
-          dwg->header.section_infohdr.num_desc = i;
-          free (dec.chain);
-          LOG_ERROR ("read_R2004_section_info out of range");
-          return DWG_ERR_INVALIDDWG;
-        }
+      //if (dec.byte >= dec.size)
+      //  {
+      //    info->name[0] = '\0';
+      //    info->num_sections = 0;
+      //    info->sections = NULL;
+      //    dwg->header.section_infohdr.num_desc = i;
+      //    free (dec.chain);
+      //    LOG_ERROR ("read_R2004_section_info out of range");
+      //    return DWG_ERR_INVALIDDWG;
+      //  }
       // max_decomp_size is the decompressed block size
       max_decomp_size = section_max_decomp_size (dwg, info->fixedtype);
       if (info->max_decomp_size > max_decomp_size)
@@ -1776,9 +1783,9 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (info->num_sections > 1 && info->size < info->max_decomp_size)
             {
               // on mult. blocks, size must exceed the size of the first block
-              LOG_ERROR ("Skip section %s with size %" PRId64
+              LOG_ERROR ("Skip section %s(%u) with size %" PRId64
                          " < max_decomp_size " FORMAT_RL,
-                         info->name, info->size, info->max_decomp_size);
+                         info->name, info->type, info->size, info->max_decomp_size);
               info->max_decomp_size = info->size = info->num_sections = 0;
               error |= DWG_ERR_VALUEOUTOFBOUNDS;
             }
@@ -1796,23 +1803,24 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           for (j = 0; j < info->num_sections; j++)
             {
               struct _section_page
-              { /* unused */
+              {
                 int32_t number;
                 uint32_t size;
                 uint64_t address;
               } page;
 
-              if (ptr + 16 >= &dec.chain[dec.size])
+              if (dec.byte + 16 > dec.size)
                 {
-                  LOG_ERROR ("read_R2004_section_info[%u] out of range, abort",
-                             j);
+                  LOG_ERROR ("read_R2004_section_info[%u] out of range %zu/%zu, abort",
+                             j, dec.byte, dec.size);
                   info->num_sections = j;
                   error |= DWG_ERR_SECTIONNOTFOUND;
                   break;
                 }
               /* endian specific code: */
-              bfr_read_32 (&page, &ptr, 8);
-              bfr_read_64 (&page.address, &ptr, 8);
+              page.number = bit_read_RL (&dec);
+              page.size = bit_read_RL (&dec);
+              page.address = bit_read_RLL (&dec);
               // sum_decomp += page.size; /* TODO: uncompressed size */
 #if 0
               if (page.address < sum_decomp)
@@ -1850,21 +1858,23 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                                   + info->sections[0]->number))
                 {
                   // for [7] ptr+160 seems to be AcDb:ObjFreeSpace
-                  LOG_INFO ("Page: %4" PRId32 " (n)", page.number)
+                  LOG_TRACE ("Page: %4" PRId32 " (n)", page.number)
                 }
+              /*
               else if (!info->sections[j]
                        && page.number != old_section_number + 1)
                 {
-                  LOG_INFO ("Page: %4" PRId32 " (b)", page.number)
+                  LOG_WARN ("Page: %4" PRId32 " (b)", page.number)
                   LOG_TRACE (" size: %5" PRIu32, page.size) // compressed
                   LOG_TRACE (" address: 0x%" PRIx64, page.address)
                   if (info->sections[j])
                     LOG_TRACE (" info: 0x%" PRIx64,
                                info->sections[j]->address);
                   LOG_TRACE ("\n")
-                  ptr -= 16;
+                  dec.byte -= 16;
                   break;
                 }
+              */
               else
                 {
                   LOG_TRACE ("Page: %4" PRId32 "    ", page.number)
@@ -1920,7 +1930,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   Dwg_Section_Info *info = NULL;
   encrypted_section_header es;
   Bit_Chain dec = {0};
-  //BITCODE_RC *decomp;
   BITCODE_BL i, j;
   int error = 0;
 
@@ -2003,7 +2012,10 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
     }
   LOG_HANDLE ("Alloc section %s size %" PRIu32 "\n", info->name,
               max_decomp_size);
+  dec.opts = dwg->opts & DWG_OPTS_LOGLEVEL;
   dec.size = max_decomp_size;
+  dec.version = dat->version;
+  dec.from_version = dat->from_version;
   dec.chain = (BITCODE_RC *)calloc (max_decomp_size, 1);
   if (!dec.chain)
     {
@@ -2075,12 +2087,12 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
 
       // check if compressed at all
       if (info->compressed == 2 && bytes_left > 0
-          && (j * info->max_decomp_size) <= max_decomp_size)
+          && es.fields.address <= max_decomp_size)
         {
           unsigned long orig_size = dat->size;
-          dec.byte = j * info->max_decomp_size; // offset
+          dec.byte = es.fields.address; /* == j * info->max_decomp_size;*/ // offset
           LOG_INSANE ("dec offset: %" PRIuSIZE "\n", (size_t)dec.byte)
-          dec.size = dec.byte + es.fields.page_size;
+	  dec.size = dec.byte + info->max_decomp_size; /*es.fields.page_size;*/
           LOG_INSANE ("dec size: %" PRIuSIZE "\n", (size_t)dec.size)
           dat->size = dat->byte + es.fields.data_size;
           error = decompress_R2004_section (dat, &dec);
@@ -2091,8 +2103,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               free (dec.chain);
               return error;
             }
-          bytes_left -= es.fields.page_size;
-          sec_dat->size += es.fields.page_size;
+          bytes_left -= info->max_decomp_size;
+          sec_dat->size += info->max_decomp_size;
         }
       else
         {
