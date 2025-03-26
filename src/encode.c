@@ -1785,80 +1785,52 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
 #define COMPRESSION_BUFFER_SIZE 0x400
 #define COMPRESSION_WINDOW_SIZE 0x800
 
-static void write_length (Bit_Chain *dat, uint32_t u1, uint32_t match,
-                          uint32_t u2);
+static void write_opcode (Bit_Chain *dat, unsigned char opcode,
+                          int comp_offset, unsigned value);
 
 /* R2004 Write literal length
  */
-static unsigned char
-write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
-                      uint32_t len)
+static void
+write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
+                      int len, int comp_offset)
 {
-#if 0
-  if (len <= (0x0F + 3)) // single byte, opcode 0
-    {
-      bit_write_RC (dat, len - 3);
-      return 0;
-    }
-  else if (len < 0xf0)
-    {
-      bit_write_RC (dat, len);
-      return length & 0xff;
-    }
-  else
-    {
-      uint32_t total = 0x0f;
-      while (leng >= 0xf0)
-        {
-          bit_write_RC (dat, 0);
-          len -= 0xFF;
-          total += 0xFF;
-        }
-      bit_write_RC (dat, len - 3); // ??
-      return 0;
-    }
-#else
-  if (len)
-    {
-      if (len > 3)
-        {
-          write_length (dat, 0, len - 1, 0x11);
-        }
-      LOG_INSANE ("LIT %x\n", len)
-      bit_write_TF (dat, buf, len);
-    }
-  return 0;
-#endif
+  int off = comp_offset;
+  if (len <= 0)
+    return;
+  if (len > 3)
+    write_opcode (dat, 0, len - 1, 0x11);
+  for (int i=0; i < len; i++) {
+    BITCODE_RC b = decomp[off++];
+    bit_write_RC (dat, b);
+  }
 }
 
-/* R2004 Long Compression Offset
- */
 static void
-write_long_compression_offset (Bit_Chain *dat, uint32_t offset)
+write_length (Bit_Chain *dat, unsigned len)
 {
-  while (offset > 0xff)
+  LOG_INSANE (">L %u\n", len);
+  while (len > 0xFF)
     {
+      len -= 0xFF;
       bit_write_RC (dat, 0);
-      offset -= 0xff;
     }
-  LOG_INSANE (">O 00 %x", offset)
-  bit_write_RC (dat, (unsigned char)offset);
+  bit_write_RC (dat, len);
 }
 
 static void
-write_length (Bit_Chain *dat, uint32_t u1, uint32_t match, uint32_t u2)
+write_opcode (Bit_Chain *dat, unsigned char opcode, int comp_offset,
+              unsigned value)
 {
-  if (u2 < match)
+  assert (comp_offset > 0);
+  if (comp_offset <= value)
     {
-      LOG_INSANE (">L %x ", u1 & 0xff)
-      bit_write_RC (dat, u1 & 0xff);
-      write_long_compression_offset (dat, match - u2);
-      LOG_INSANE ("\n")
+      opcode |= comp_offset - 2;
+      bit_write_RC (dat, opcode);
     }
   else
     {
-      LOG_INSANE (">L %x\n", (u1 | (match - 2)) & 0xff);
-      bit_write_RC (dat, (u1 | (match - 2)) & 0xff);
+      bit_write_RC (dat, opcode);
+      write_length ((unsigned)comp_offset - value);
     }
 }
 
@@ -1971,9 +1943,9 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
       if (offset)
         {
           // encode offset + len
-          if (match)
-            write_two_byte_offset (dat, oldlen, match, len);
-          write_literal_length (dat, &decomp[i], len);
+          //if (match)
+          // write_two_byte_offset (dat, oldlen, match, len);
+          write_literal_length (dat, decomp, len, offset);
           i += match;
           match = offset;
           oldlen = len;
