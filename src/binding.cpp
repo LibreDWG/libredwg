@@ -65,8 +65,6 @@ emscripten::val dwg_ptr_to_##type##_array_wrapper(uintptr_t array_ptr, size_t si
 }
 
 DEFINE_ARRAY_FUNC(double)
-// DEFINE_ARRAY_FUNC(unsigned char)
-// DEFINE_ARRAY_FUNC(signed char)
 DEFINE_ARRAY_FUNC(uint16_t)
 DEFINE_ARRAY_FUNC(int16_t)
 DEFINE_ARRAY_FUNC(uint32_t)
@@ -74,6 +72,24 @@ DEFINE_ARRAY_FUNC(int32_t)
 DEFINE_ARRAY_FUNC(uint64_t)
 DEFINE_ARRAY_FUNC(int64_t)
 
+
+emscripten::val dwg_ptr_to_unsigned_char_array_wrapper(uintptr_t array_ptr, size_t size) {
+  unsigned char* array = reinterpret_cast<unsigned char*>(array_ptr);
+  emscripten::val jsArray = emscripten::val::array();
+  for (int index = 0; index < size; ++index) {
+    jsArray.call<void>("push", array[index]);
+  }
+  return jsArray;
+}
+
+emscripten::val dwg_ptr_to_signed_char_array_wrapper(uintptr_t array_ptr, size_t size) {
+  signed char* array = reinterpret_cast<signed char*>(array_ptr);
+  emscripten::val jsArray = emscripten::val::array();
+  for (int index = 0; index < size; ++index) {
+    jsArray.call<void>("push", array[index]);
+  }
+  return jsArray;
+}
 
 emscripten::val dwg_ptr_to_point2d_array_wrapper(uintptr_t array_ptr, size_t size) {
   dwg_point_2d* array = reinterpret_cast<dwg_point_2d*>(array_ptr);
@@ -105,6 +121,8 @@ emscripten::val dwg_ptr_to_point3d_array_wrapper(uintptr_t array_ptr, size_t siz
 }
 
 EMSCRIPTEN_BINDINGS(libredwg_array) {
+  DEFINE_FUNC(dwg_ptr_to_unsigned_char_array);
+  DEFINE_FUNC(dwg_ptr_to_signed_char_array);
   DEFINE_FUNC(dwg_ptr_to_uint16_t_array);
   DEFINE_FUNC(dwg_ptr_to_int16_t_array);
   DEFINE_FUNC(dwg_ptr_to_uint32_t_array);
@@ -131,12 +149,12 @@ int dwg_object_get_type_wrapper(Dwg_Object_Ptr obj_ptr) {
 
 int dwg_object_get_fixedtype_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
-  return (obj == NULL) ? 0 : obj->fixedtype;
+  return (obj == NULL) ? 0 : static_cast<int>(obj->fixedtype);
 }
 
 int dwg_object_get_supertype_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
-  return (obj == NULL) ? 0 : obj->supertype;
+  return (obj == NULL) ? 0 : static_cast<int>(obj->supertype);
 }
 
 /**
