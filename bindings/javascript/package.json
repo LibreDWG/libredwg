@@ -1,0 +1,58 @@
+{
+  "name": "@mlightcad/libredwg-web",
+  "description": "a webassembly version of libredwg, which can read/write DXF files (in both formats, ascii and binary form) and read DWG files from AutoCAD R14 to AutoCAD 2020.",
+  "license": "GPL-2.0-only",
+  "private": false,
+  "version": "0.0.1",
+  "author": "MLight Lee <mlight.lee@outlook.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mlight-lee/libredwg-web"
+  },
+  "keywords": [
+    "AutoCAD",
+    "cad",
+    "dxf",
+    "dxf-reader",
+    "dxf-writer",
+    "dwg",
+    "dwg-reader",
+    "libredwg",
+    "mlight",
+    "mlightcad",
+    "wasm",
+    "webassembly"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:obj": "cd ../../build-wasm && emmake make",
+    "build:wasm": "cd ../../build-wasm && emcc ../src/binding.cpp ../src/binding_enum.cpp ../src/binding_dynapi.cpp ../src/binding_func.cpp src/*.o -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../include -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s EXPORT_ES6=1 -s MODULARIZE=1 -s EXPORT_NAME=\"createModule\" -sEXPORTED_RUNTIME_METHODS=FS,ENV,ccall,cwrap,UTF8ToString,stringToNewUTF8,setValue",
+    "clean": "rm -rf ../../build-wasm",
+    "copy": "cp -f ../../build-wasm/libredwg-web.js src/ && cp -f ../../build-wasm/libredwg-web.wasm wasm/",
+    "install:emsdk": "cd $EMSDK && ./emsdk install latest && ./emsdk activate latest",
+    "prep": "mkdir -p ../../build-wasm && cd ../../build-wasm && emconfigure ../configure && cd src",
+    "publish": "pnpm publish --access public --no-git-checks"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@typescript-eslint/parser": "^8.4.0",
+    "eslint": "^9.9.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.2",
+    "typescript-eslint": "^8.4.0",
+    "vite": "^5.2.10"
+  }
+}

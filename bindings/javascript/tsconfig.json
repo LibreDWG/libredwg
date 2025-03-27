@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "baseUrl": "./src",
+
+    "target": "esnext",
+    "module": "esnext",
+    "declaration": true,
+    "declarationMap": true,
+    "allowJs": true,
+    "sourceMap": true,
+
+    /* Linting */
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "downlevelIteration": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node"
+  },
+  "ts-node": {
+    "esm": true,
+  },
+  "include": [
+    "src"
+  ]
+}
