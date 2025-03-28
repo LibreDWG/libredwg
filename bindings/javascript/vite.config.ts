@@ -40,28 +40,28 @@ export default defineConfig({
       },
     },
     {
-      name: 'copy-wasm-files',
+      name: 'copy-wasm-to-test',
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          // Define paths for the wasm file and the mjs file
-          const wasmSource = path.resolve(__dirname, 'wasm/libredwg-web.wasm');
-          const wasmDest = path.resolve(__dirname, 'test/libredwg-web.wasm');
-          const mjsSource = path.resolve(__dirname, 'dist/libredwg-web.mjs');
-          const mjsDest = path.resolve(__dirname, 'test/libredwg-web.mjs');
+          // Define the array of files to copy: [source, destination]
+          const filesToCopy = [
+            {
+              source: path.resolve(__dirname, 'wasm/libredwg-web.wasm'),
+              dest: path.resolve(__dirname, 'test/libredwg-web.wasm'),
+            },
+            {
+              source: path.resolve(__dirname, 'dist/libredwg-web.mjs'),
+              dest: path.resolve(__dirname, 'test/libredwg-web.mjs'),
+            },
+          ];
 
-          // Check if the wasm file exists in the source folder, and copy to test folder if not present
-          if (fs.existsSync(wasmSource) && !fs.existsSync(wasmDest)) {
-            fs.copyFileSync(wasmSource, wasmDest);
-            console.log('✅ Copied wasm file to test folder');
-          }
-
-          // Check if the mjs file exists in the dist folder, and copy it to wasm folder
-          if (fs.existsSync(mjsSource) && !fs.existsSync(mjsDest)) {
-            fs.copyFileSync(mjsSource, mjsDest);
-            console.log('✅ Copied mjs file to wasm folder');
-          }
-
-          next();
+          // Iterate through each file and copy it if it doesn't exist at the destination
+          filesToCopy.forEach(({ source, dest }) => {
+            if (fs.existsSync(source) && !fs.existsSync(dest)) {
+              fs.copyFileSync(source, dest);
+              console.log(`✅ Copied ${path.basename(source)} to ${path.basename(dest)}`);
+            }
+          });
         });
       },
     },

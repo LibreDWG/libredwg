@@ -1,12 +1,4 @@
-// export async function createModule() {
-//   const module = await import("./libredwg-web.js");
-//   const createModule = module.default || module;  // Handle both ES and CommonJS
-//   const wasmInstance = await createModule(); // Call the function
-//   console.log("WASM module loaded:", wasmInstance);
-//   return wasmInstance;
-// }
-
-import createModule from "./libredwg-web.js";
+import createModule from "../wasm/libredwg-web.js";
 export { createModule };
 
 export const Dwg_Object_Supertype = Object.freeze({

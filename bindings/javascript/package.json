@@ -29,7 +29,7 @@
     "build:obj": "cd ../../build-wasm && emmake make",
     "build:wasm": "cd ../../build-wasm && emcc ../src/binding.cpp ../src/binding_enum.cpp ../src/binding_dynapi.cpp ../src/binding_func.cpp src/*.o -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../include -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s EXPORT_ES6=1 -s MODULARIZE=1 -s EXPORT_NAME=\"createModule\" -sEXPORTED_RUNTIME_METHODS=FS,ENV,ccall,cwrap,UTF8ToString,stringToNewUTF8,setValue",
     "clean": "rm -rf ../../build-wasm",
-    "copy": "cp -f ../../build-wasm/libredwg-web.js src/ && cp -f ../../build-wasm/libredwg-web.wasm wasm/",
+    "copy": "cp -f ../../build-wasm/libredwg-web.js ../../build-wasm/libredwg-web.wasm wasm/",
     "install:emsdk": "cd $EMSDK && ./emsdk install latest && ./emsdk activate latest",
     "prep": "mkdir -p ../../build-wasm && cd ../../build-wasm && emconfigure ../configure && cd src",
     "publish": "pnpm publish --access public --no-git-checks"
