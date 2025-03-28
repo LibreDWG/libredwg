@@ -4,7 +4,7 @@ import { createModule, Dwg_File_Type, Dwg_Object_Type } from './utils';
 export type Dwg_Data_Ptr = number;
 export type Dwg_Object_Ptr = number;
 
-export class LibreDwgWrapper {
+export class LibreDwg {
   private wasmInstance!: MainModule;
 
   private constructor(wasmInstance: MainModule) {
@@ -147,10 +147,8 @@ export class LibreDwgWrapper {
     return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_LWPOLYLINE);
   };
 
-  static async create(): Promise<LibreDwg> {
+  static async create(): Promise<LibreDwg & MainModule> {
     const wasmInstance = await createModule();
-    return new LibreDwgWrapper(wasmInstance) as LibreDwg;
+    return new LibreDwg(wasmInstance) as LibreDwg & MainModule;
   }
 }
-
-export type LibreDwg = LibreDwgWrapper & MainModule;

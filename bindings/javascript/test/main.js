@@ -1,11 +1,11 @@
 import {
   Dwg_File_Type,
   Dwg_Object_Type_Inverted,
-  LibreDwgWrapper
+  LibreDwg
 } from './libredwg-web.mjs';
 
 // load libredwg webassembly module
-const libredwg = await LibreDwgWrapper.create();
+const libredwg = await LibreDwg.create();
 window.libredwg = libredwg;
 
 const printItems = (id, size, getItemContent) => {
