@@ -40,7 +40,7 @@
     "package.json"
   ],
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./lib/index.d.ts",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
     "@typescript-eslint/parser": "^8.4.0",

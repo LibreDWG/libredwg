@@ -9,6 +9,10 @@ tmp
 # dependencies
 node_modules
 
+# web assembly files
+test/libredwg*
+dist/libredwg-web.wasm
+
 # IDEs and editors
 /.idea
 .project

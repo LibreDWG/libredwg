@@ -8,6 +8,7 @@
     "module": "esnext",
     "declaration": true,
     "declarationMap": true,
+    "emitDeclarationOnly": false,
     "allowJs": true,
     "sourceMap": true,
 

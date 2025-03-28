@@ -1,13 +1,11 @@
 import {
   Dwg_File_Type,
   Dwg_Object_Type_Inverted,
-  extend_lib,
-  createModule
+  LibreDwgWrapper
 } from './libredwg-web.mjs';
 
 // load libredwg webassembly module
-const libredwg = await createModule();
-extend_lib(libredwg);
+const libredwg = await LibreDwgWrapper.create();
 window.libredwg = libredwg;
 
 const printItems = (id, size, getItemContent) => {
@@ -68,7 +66,7 @@ const printAllItems = (libredwg, data) => {
   ];
 
   objects.forEach((obj) => {
-    const items = obj.getAll(data);
+    const items = obj.getAll.call(libredwg, data);
     printItemsByDynApi(obj.id, items, obj.propName);
   })
 }

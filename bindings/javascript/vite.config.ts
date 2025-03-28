@@ -23,23 +23,6 @@ export default defineConfig({
   },
   plugins: [
     {
-      name: 'copy-wasm-to-dist',
-      writeBundle() {
-        if (copied) return; // Prevent multiple executions
-        copied = true;
-
-        const src = path.resolve(__dirname, 'wasm/libredwg-web.wasm');
-        const dest = path.resolve(__dirname, 'dist/libredwg-web.wasm');
-
-        if (fs.existsSync(src)) {
-          fs.copyFileSync(src, dest);
-          console.log('✅ Copied wasm file to dist');
-        } else {
-          console.error('❌ WASM file not found:', src);
-        }
-      },
-    },
-    {
       name: 'copy-wasm-to-test',
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
