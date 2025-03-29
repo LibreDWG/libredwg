@@ -39,8 +39,14 @@
     "README.md",
     "package.json"
   ],
-  "module": "./dist/index.js",
+  "main": "./dist/libredwg-web.umd.cjs",
+  "module": "./dist/libredwg-web.mjs",
   "types": "./lib/index.d.ts",
+  "exports": {
+    "types": "./lib/index.d.ts",
+    "import": "./dist/libredwg-web.mjs",
+    "require": "./dist/libredwg-web.umd.cjs"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
     "@typescript-eslint/parser": "^8.4.0",
