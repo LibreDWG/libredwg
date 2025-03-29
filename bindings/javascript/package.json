@@ -37,6 +37,9 @@
   },
   "files": [
     "dist",
+    "lib/*.js",
+    "lib/*.ts",
+    "wasm",
     "README.md",
     "package.json"
   ],
