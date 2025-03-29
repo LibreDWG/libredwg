@@ -259,6 +259,7 @@ interface WasmModule {
   __Z36dwg_ptr_to_signed_char_array_wrappermm(_0: number, _1: number, _2: number): void;
   __Z32dwg_ptr_to_point2d_array_wrappermm(_0: number, _1: number, _2: number): void;
   __Z32dwg_ptr_to_point3d_array_wrappermm(_0: number, _1: number, _2: number): void;
+  __Z35dwg_ptr_to_ltype_dash_array_wrappermm(_0: number, _1: number, _2: number): void;
   __Z26dwg_object_get_tio_wrapperm(_0: number): number;
   __Z27dwg_object_get_type_wrapperm(_0: number): number;
   __Z32dwg_object_get_fixedtype_wrapperm(_0: number): number;
@@ -2468,6 +2469,7 @@ interface EmbindModule {
   dwg_ptr_to_double_array(_0: number, _1: number): any;
   dwg_ptr_to_point2d_array(_0: number, _1: number): any;
   dwg_ptr_to_point3d_array(_0: number, _1: number): any;
+  dwg_ptr_to_ltype_dash_array(_0: number, _1: number): any;
   dwg_object_get_handle_object(_0: number): any;
   dwg_ref_get_handle_object(_0: number): any;
   dwg_dynapi_header_value(_0: number, _1: EmbindString): any;

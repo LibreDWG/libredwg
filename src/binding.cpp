@@ -120,6 +120,27 @@ emscripten::val dwg_ptr_to_point3d_array_wrapper(uintptr_t array_ptr, size_t siz
   return points_obj;
 }
 
+emscripten::val dwg_ptr_to_ltype_dash_array_wrapper(uintptr_t array_ptr, size_t size) {
+  Dwg_LTYPE_dash* array = reinterpret_cast<Dwg_LTYPE_dash*>(array_ptr);
+
+  emscripten::val dashes = emscripten::val::array();
+  for (int index = 0; index < size; ++index) {
+    emscripten::val dash_obj = emscripten::val::object();
+    auto dash = array[index];
+    dash_obj.set("length", dash.length);
+    dash_obj.set("complex_shapecode", dash.complex_shapecode);
+    dash_obj.set("style", reinterpret_cast<uintptr_t>(dash.style));
+    dash_obj.set("x_offset", dash.x_offset);
+    dash_obj.set("y_offset", dash.y_offset);
+    dash_obj.set("scale", dash.scale);
+    dash_obj.set("rotation", dash.rotation);
+    dash_obj.set("shape_flag", dash.shape_flag);
+    dash_obj.set("text", std::string(dash.text));
+    dash_obj.call<void>("push", dash);
+  }
+  return dashes;
+}
+
 EMSCRIPTEN_BINDINGS(libredwg_array) {
   DEFINE_FUNC(dwg_ptr_to_unsigned_char_array);
   DEFINE_FUNC(dwg_ptr_to_signed_char_array);
@@ -132,6 +153,7 @@ EMSCRIPTEN_BINDINGS(libredwg_array) {
   DEFINE_FUNC(dwg_ptr_to_double_array);
   DEFINE_FUNC(dwg_ptr_to_point2d_array);
   DEFINE_FUNC(dwg_ptr_to_point3d_array);
+  DEFINE_FUNC(dwg_ptr_to_ltype_dash_array);
 }
 
 /***********************************************************************/
