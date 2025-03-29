@@ -1,6 +1,4 @@
-// Not import 'libredwg-web.js' in folder 'wasm' on purpose so that 
-// Vite doesn't bundle 'libredwg-web.wasm' file into the js bundle.
-import createModule from "./libredwg-web.js";
+import createModule from '../wasm/libredwg-web.js';
 export { createModule }
 
 export const Dwg_Object_Supertype = Object.freeze({

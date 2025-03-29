@@ -28,13 +28,9 @@ export default defineConfig({
           // Define the array of files to copy: [source, destination]
           const filesToCopy = [
             {
-              source: path.resolve(__dirname, 'wasm/libredwg-web.wasm'),
-              dest: path.resolve(__dirname, 'test/libredwg-web.wasm'),
-            },
-            {
               source: path.resolve(__dirname, 'dist/libredwg-web.mjs'),
               dest: path.resolve(__dirname, 'test/libredwg-web.mjs'),
-            },
+            }
           ];
 
           // Iterate through each file and copy it if it doesn't exist at the destination
