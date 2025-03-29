@@ -18,7 +18,7 @@ source ./emsdk_env.sh
 ./autogen.sh
 mkdir build-wasm
 cd build-wasm
-emconfigure ../configure CFLAGS="-sUSE_ZLIB=1" CC=emcc --disable-bindings --disable-shared
+emconfigure ../configure CFLAGS="-O2 -sUSE_ZLIB=1" CC=emcc --enable-release --disable-docs --disable-write --disable-bindings --disable-shared --disable-json --disable-dxf
 emmake make
 emcc ../src/bindings.cpp -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../include src/*.o -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 -s EXPORT_NAME="createModule" --emit-tsd libredwg-web.d.ts
 ```

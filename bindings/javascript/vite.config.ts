@@ -3,10 +3,9 @@ import { defineConfig } from 'vite'
 import path from 'path'
 import fs from 'fs'
 
-let copied = false  // Global flag to ensure copying happens only once
-
 export default defineConfig({
   build: {
+    assetsInlineLimit: 0,
     outDir: 'dist',
     lib: {
       entry: 'src/index.ts',

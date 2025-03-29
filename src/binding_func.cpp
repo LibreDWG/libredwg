@@ -18,27 +18,27 @@ emscripten::val dwg_read_file_wrapper(const std::string& filename) {
   return result;
 }
 
-emscripten::val dxf_read_file_wrapper(const std::string& filename) {
-  Dwg_Data* dwg = new Dwg_Data(); 
-  int error = dxf_read_file(filename.c_str(), dwg);
+// emscripten::val dxf_read_file_wrapper(const std::string& filename) {
+//   Dwg_Data* dwg = new Dwg_Data(); 
+//   int error = dxf_read_file(filename.c_str(), dwg);
 
-  emscripten::val result = emscripten::val::object();
-  result.set("error", error);
-  result.set("data", reinterpret_cast<uintptr_t>(dwg));
-  return result;
-}
+//   emscripten::val result = emscripten::val::object();
+//   result.set("error", error);
+//   result.set("data", reinterpret_cast<uintptr_t>(dwg));
+//   return result;
+// }
 
-emscripten::val dwg_write_file_wrapper(
-  const std::string& filename,
-  uintptr_t dwg_ptr) {
-  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
-  int error = dwg_write_file(filename.c_str(), dwg);
+// emscripten::val dwg_write_file_wrapper(
+//   const std::string& filename,
+//   uintptr_t dwg_ptr) {
+//   Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+//   int error = dwg_write_file(filename.c_str(), dwg);
 
-  emscripten::val result = emscripten::val::object();
-  result.set("error", error);
-  result.set("data", reinterpret_cast<uintptr_t>(dwg));
-  return result;
-}
+//   emscripten::val result = emscripten::val::object();
+//   result.set("error", error);
+//   result.set("data", reinterpret_cast<uintptr_t>(dwg));
+//   return result;
+// }
 
 /** 
  * Search for the name in the associated table, and return its handle. Search
@@ -596,10 +596,10 @@ std::string dwg_encrypt_SAT1_wrapper(
  * Sets _obj->_dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
  * encrypted acis_data anymore, rather the converted from SAB for DXF 
  */
-int dwg_convert_SAB_to_SAT1_wrapper(uintptr_t obj_ptr) {
-  Dwg_Entity_3DSOLID* obj = reinterpret_cast<Dwg_Entity_3DSOLID*>(obj_ptr);
-  return dwg_convert_SAB_to_SAT1(obj);
-}
+// int dwg_convert_SAB_to_SAT1_wrapper(uintptr_t obj_ptr) {
+//   Dwg_Entity_3DSOLID* obj = reinterpret_cast<Dwg_Entity_3DSOLID*>(obj_ptr);
+//   return dwg_convert_SAB_to_SAT1(obj);
+// }
 
 /** 
  * Add the empty object to the DWG.
@@ -995,8 +995,8 @@ dwg_class *dwg_get_class_wrapper(const dwg_data *dwg, unsigned int index) {
 
 EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_read_file);
-  DEFINE_FUNC(dxf_read_file);
-  DEFINE_FUNC(dwg_write_file);
+  // DEFINE_FUNC(dxf_read_file);
+  // DEFINE_FUNC(dwg_write_file);
 
   DEFINE_FUNC(dwg_find_tablehandle);
   DEFINE_FUNC(dwg_find_tablehandle_index);
@@ -1075,7 +1075,7 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_supports_obj);
   function("dwg_errstrings", &dwg_errstrings);
   DEFINE_FUNC(dwg_encrypt_SAT1);
-  DEFINE_FUNC(dwg_convert_SAB_to_SAT1);
+  // DEFINE_FUNC(dwg_convert_SAB_to_SAT1);
   function("dwg_rgb_palette_index", &dwg_rgb_palette_index);
   function("dwg_find_color_index", &dwg_find_color_index);
   DEFINE_FUNC(dwg_add_object);

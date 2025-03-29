@@ -10,8 +10,8 @@ tmp
 node_modules
 
 # web assembly files
+src/libredwg-web.js
 test/libredwg*
-dist/libredwg-web.wasm
 
 # IDEs and editors
 /.idea
