@@ -31,16 +31,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Copy web assembly module to test folder
-        run: |
-          cp ./bindings/javascript/dist/libredwg-web.mjs ./bindings/javascript/test/
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      
+      # Cache node_modules
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'pnpm'
+       
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build demo pages
+        run: pnpm build
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: './bindings/javascript/test/'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
