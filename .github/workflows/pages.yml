@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -44,9 +44,11 @@ jobs:
        
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: ./bindings/javascript
 
       - name: Build demo pages
         run: pnpm build
+        working-directory: ./bindings/javascript
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
