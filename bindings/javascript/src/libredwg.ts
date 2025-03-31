@@ -36,7 +36,10 @@ export interface Dwg_Field_Value {
   data?: string | number | Dwg_Array_Ptr | Dwg_Point_2D | Dwg_Point_3D
 }
 
+export type LibreDwgEx = LibreDwg & MainModule;
+
 export class LibreDwg {
+  static instance: LibreDwgEx;
   private wasmInstance!: MainModule;
 
   private constructor(wasmInstance: MainModule) {
@@ -230,8 +233,8 @@ export class LibreDwg {
     return this.wasmInstance.dwg_dynapi_entity_value(obj, field);
   }
 
-  static async create(): Promise<LibreDwg & MainModule> {
-    const wasmInstance = await createModule();
-    return new LibreDwg(wasmInstance) as LibreDwg & MainModule;
+  static async create(wasmInstance: MainModule | undefined): Promise<LibreDwgEx> {
+    if (wasmInstance == null) wasmInstance = await createModule()
+    return this.instance == null ? new LibreDwg(wasmInstance) as LibreDwgEx : this.instance;
   }
 }
