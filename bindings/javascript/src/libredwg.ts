@@ -233,8 +233,12 @@ export class LibreDwg {
     return this.wasmInstance.dwg_dynapi_entity_value(obj, field);
   }
 
-  static async create(wasmInstance: MainModule | undefined = undefined): Promise<LibreDwgEx> {
-    if (wasmInstance == null) wasmInstance = await createModule()
+  static createByWasmInstance(wasmInstance: MainModule): LibreDwgEx {
     return this.instance == null ? new LibreDwg(wasmInstance) as LibreDwgEx : this.instance;
+  }
+
+  static async create(): Promise<LibreDwgEx> {
+    const wasmInstance = await createModule();
+    return this.createByWasmInstance(wasmInstance);
   }
 }
