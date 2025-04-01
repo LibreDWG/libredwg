@@ -1914,9 +1914,9 @@ typedef union _encrypted_section_header
     uint32_t data_size; // compressed
     uint32_t page_size; // decompressed
     uint32_t address; // start offset into page_size
+    uint32_t unknown;  // oda writes 0
     uint32_t page_header_crc; // section page checksum from unencoded header
     uint32_t data_crc; // from compressed data
-    uint32_t unknown;  // oda writes 0
   } fields;
 } encrypted_section_header;
 #pragma pack(pop)
