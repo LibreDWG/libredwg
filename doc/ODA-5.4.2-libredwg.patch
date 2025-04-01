@@ -1,5 +1,5 @@
 --- ODA-5.4.1.md	2024-09-28 19:30:32.454895413 +0200
-+++ ODA-5.4.2-libredwg.md	2025-02-23 18:59:24.518365925 +0100
++++ ODA-5.4.2-libredwg.md	2025-04-02 12:55:26.192804546 +0200
 @@ -8,20 +8,20 @@
  
  # 2 BIT CODES AND DATA DEFINITIONS
@@ -278,6 +278,54 @@
  |      |    | that are initially zero! So the CRC calculation takes |
  |      |    | into account all of the 0x6c bytes of the data in this |
  |      |    | table. |
+@@ -772,25 +832,25 @@
+ 
+ ## 4.5 2004 Data section map
+ 
+ The data section map is a map for locating all data sections (i.e. system sections are not present in this map).
+ 
+-The uncompressed Section Info section contains the following data:
++The decompressed Section Info section contains the following data:
+ 
+ | Offset | Length | Description       |
+ |:-------|:-------|:------------------|
+ | 0x00   | 4      | Number of section descriptions (NumDescriptions) |
+-| 0x04   | 4      | 0x02 (long)       |
+-| 0x08   | 4      | 0x00007400 (long) |
+-| 0x0C   | 4      | 0x00 (long)       |
++| 0x04   | 4      | Compressed 0x02 (long)     |
++| 0x08   | 4      | Max size 0x7400 (long)     |
++| 0x0C   | 4      | Encrypted 0x00 (long)      |
+ | 0x10   | 4      | Unknown (long), ODA writes NumDescriptions here. |
+ 
+ Next, the following data is repeated NumDescriptions times:
+ 
+ | Offset | Length | Description                |
+ |:-------|:-------|:---------------------------|
+-| 0x00   | 8      | Size of section (OdUInt64) |
++| 0x00   | 8      | Size of section (uint64_t) |
+ | 0x08   | 4      | Page count (PageCount). Note that there can be more pages than PageCount, as PageCount is just the number of pages written to file. If a page contains zeroes only, that page is not written to file. These “zero pages” can be detected by checking if the page’s start offset is bigger than it should be based on the sum of previously read pages decompressed size (including zero pages). After reading all pages, if the total decompressed size of the pages is not equal to the section’s size, add more zero pages to the section until this condition is met. |
+ | 0x0C   | 4      | Max Decompressed Size of a section page of this type (normally 0x7400) |
+ | 0x10   | 4      | Unknown (long)         |
+ | 0x14   | 4      | Compressed (1 = no, 2 = yes, normally 2) |
+ | 0x18   | 4      | Section Id (starts at 0). The first section (empty section) is numbered 0, consecutive sections are numbered descending from (the number of sections – 1) down to 1. |
+@@ -869,13 +929,13 @@
+ | 0x00   | 4      | Section page type, since it’s always a data section: 0x4163043b |
+ | 0x04   | 4      | Section number             |
+ | 0x08   | 4      | Data size (compressed)     |
+ | 0x0C   | 4      | Page Size (decompressed)   |
+ | 0x10   | 4      | Start Offset (in the decompressed buffer) |
+-| 0x14   | 4      | Page header Checksum (section page checksum calculated from unencoded header bytes, with the data checksum as seed) |
+-| 0x18   | 4      | Data Checksum (section page checksum calculated from compressed data bytes, with seed 0) |
+-| 0x1C   | 4      | Unknown (ODA writes a 0)   |
++| 0x14   | 4      | Unknown (ODA writes a 0)   |
++| 0x18   | 4      | Page header Checksum (section page checksum calculated from unencoded header bytes, with the data checksum as seed) |
++| 0x1C   | 4      | Data Checksum (section page checksum calculated from compressed data bytes, with seed 0) |
+ 
+ Each section page must start on a 0x20 byte boundary of the raw data stream. The empty bytes between the start of this section and then end of the previous section are filled with as many bytes as needed from the magic number sequence.
+ 
+ ## 4.7 Compression
+ 
 @@ -966,11 +1026,11 @@
  
  # 5 R2007 DWG FILE FORMAT ORGANIZATION
@@ -304,6 +352,19 @@
  | 0x24| 4| VBA Project Addr (0 if not present)|
  | 0x28| 4| 0x00000080                         |
  | 0x2C| 4| Application Info Addr              |
+@@ -1078,11 +1138,11 @@
+ The page map is stored in a single system section page. The page size of this system section page depends on how much data is stored in it. One page should be able to fit ((dataSectionPageCount + 5) * 16) bytes.
+ 
+ PagesMapOffset indicates the starting address of the Page Map section of the file, PagesMapSizeCompressed is the compressed size of this section, PagesMapSizeUncompressed is the uncompressed size, PagesMapCorrectionFactor is the correction factor used, and PagesMapCrcCompressed and PagesMapCrcUncompressed are the compressed and uncomressed CRC values, respectively. The data at PagesMapOffset is in the following format (to be referred to as “System Page” format throughout the remainder of this document) should be decoded and optionally decompressed using the OdDwgR21FileController::loadSysPage function. The resulting pages map data consists of a sequence of pairs, where each pair consists of an Int64 **SIZE** value, and an Int64 **ID** value. This sequence creates a set of pages where each. These values create a pages map using the following algorithm:
+ 
+ ```c
+-OdInt64 offset = 0;
++int64 offset = 0;
+ 
+ while (!pStream->isEof()) {
+   size = OdPlatformStreamer::rdInt64(*pStream);
+   id = OdPlatformStreamer::rdInt64(*pStream);
+   ind = id > 0 ? id : -id;
 @@ -1093,11 +1153,11 @@
  }
  ```
