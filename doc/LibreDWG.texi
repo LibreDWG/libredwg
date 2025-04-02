@@ -937,26 +937,26 @@ via two ways:
 @verbatim
   Dwg_Object_BLOCK_CONTROL* block_control = dwg->block_control;
   // first all entities in the model space
-  process_BLOCK_HEADER(dwg->header_vars.BLOCK_RECORD_MSPACE);
+  process_BLOCK_HEADER (dwg->header_vars.BLOCK_RECORD_MSPACE);
   // then all entities in the blocks
   for (i=0; i < block_control->num_entries; i++)
     {
-      process_BLOCK_HEADER(block_control->block_headers[i]);
+      process_BLOCK_HEADER (block_control->entries[i]);
     }
   // and last all entities in the paper space
-  process_BLOCK_HEADER(dwg->header_vars.BLOCK_RECORD_PSPACE);
+  process_BLOCK_HEADER (dwg->header_vars.BLOCK_RECORD_PSPACE);
 @end verbatim
 
 or 2. by using the API functions from @file{dwg_api.h}:
 
 @verbatim
   Dwg_Object_BLOCK_CONTROL* block_control = dwg_block_control(dwg);
-  process_BLOCK_HEADER(dwg_model_space_ref(dwg));
+  process_BLOCK_HEADER (dwg_model_space_ref(dwg));
   for (i=0; i < block_control->num_entries; i++)
     {
-      process_BLOCK_HEADER(block_control->block_headers[i]);
+      process_BLOCK_HEADER (block_control->entries[i]);
     }
-  process_BLOCK_HEADER(dwg_paper_space_ref(dwg));
+  process_BLOCK_HEADER (dwg_paper_space_ref(dwg));
 @end verbatim
 
 and inside the @code{process_BLOCK_HEADER} function, you iterate over the entities
