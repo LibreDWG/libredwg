@@ -522,8 +522,9 @@ interface WasmModule {
   _dwg_ent_get_INT32(_0: number, _1: number): number;
   __Z25dwg_ent_set_INT32_wrappermRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEEj(_0: number, _1: number, _2: number): number;
   _dwg_ent_set_INT32(_0: number, _1: number, _2: number): number;
-  __Z26dwg_obj_get_handle_wrapperm(_0: number): BigInt;
-  __Z30dwg_obj_ref_get_handle_wrapperm(_0: number): BigInt;
+  __Z32dwg_obj_get_handle_value_wrapperm(_0: number): BigInt;
+  __Z32dwg_ref_get_handle_value_wrapperm(_0: number): BigInt;
+  __Z39dwg_ref_get_handle_absolute_ref_wrapperm(_0: number): BigInt;
   __Z29dwg_obj_obj_to_object_wrapperm(_0: number): number;
   _dwg_obj_obj_to_object(_0: number, _1: number): number;
   __Z25dwg_obj_get_objid_wrapperPK18_dwg_object_objectPi(_0: number, _1: number): number;
@@ -2399,8 +2400,9 @@ interface EmbindModule {
   dwg_add_handle(_0: number, _1: number, _2: bigint, _3: number): number;
   dwg_add_handleref(_0: number, _1: number, _2: bigint, _3: number): number;
   dwg_add_handleref_free(_0: number, _1: bigint): number;
-  dwg_obj_get_handle(_0: number): bigint;
-  dwg_obj_ref_get_handle(_0: number): bigint;
+  dwg_obj_get_handle_value(_0: number): bigint;
+  dwg_ref_get_handle_value(_0: number): bigint;
+  dwg_ref_get_handle_absolute_ref(_0: number): bigint;
   dwg_model_x_min(_0: number): number;
   dwg_model_x_max(_0: number): number;
   dwg_model_y_min(_0: number): number;

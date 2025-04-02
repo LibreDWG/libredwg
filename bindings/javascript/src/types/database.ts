@@ -1,9 +1,19 @@
-import { DwgLayerTableEntry, DwgLTypeTableEntry, DwgTable } from "./tables";
+import { DwgImageDefObject } from "./objects";
+import { 
+  DwgLayerTableEntry,
+  DwgLTypeTableEntry,
+  DwgTable,
+  DwgVPortTableEntry
+} from "./tables";
 
 export interface DwgDatabase {
   tables: {
     LAYER: DwgTable<DwgLayerTableEntry>;
     LTYPE: DwgTable<DwgLTypeTableEntry>;
+    VPORT: DwgTable<DwgVPortTableEntry>;
+  };
+  objects: {
+    IMAGEDEF: DwgImageDefObject[];
   };
 }
 

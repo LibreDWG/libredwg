@@ -791,7 +791,7 @@ bool dwg_ent_set_INT32_wrapper(
 /**
  * Get handle value from Dwg_Object* 
  */
-BITCODE_RLL dwg_obj_get_handle_wrapper(uintptr_t obj_ptr) {
+BITCODE_RLL dwg_obj_get_handle_value_wrapper(uintptr_t obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
   return obj->handle.value;
 }
@@ -799,9 +799,17 @@ BITCODE_RLL dwg_obj_get_handle_wrapper(uintptr_t obj_ptr) {
 /**
  * Get handle value from Dwg_Object_Ref* 
  */
-BITCODE_RLL dwg_obj_ref_get_handle_wrapper(uintptr_t obj_ref_ptr) {
+BITCODE_RLL dwg_ref_get_handle_value_wrapper(uintptr_t obj_ref_ptr) {
   Dwg_Object_Ref* obj_ref = reinterpret_cast<Dwg_Object_Ref*>(obj_ref_ptr);
   return obj_ref->handleref.value;
+}
+
+/**
+ * Get absolute_ref value from Dwg_Object_Ref* 
+ */
+BITCODE_RLL dwg_ref_get_handle_absolute_ref_wrapper(uintptr_t obj_ref_ptr) {
+  Dwg_Object_Ref* obj_ref = reinterpret_cast<Dwg_Object_Ref*>(obj_ref_ptr);
+  return obj_ref->absolute_ref;
 }
 
 /********************************************************************
@@ -1109,9 +1117,10 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_ent_set_INT16);
   DEFINE_FUNC(dwg_ent_get_INT32);
   DEFINE_FUNC(dwg_ent_set_INT32);
-  DEFINE_FUNC(dwg_obj_get_handle);
-  DEFINE_FUNC(dwg_obj_ref_get_handle);
-
+  DEFINE_FUNC(dwg_obj_get_handle_value);
+  DEFINE_FUNC(dwg_ref_get_handle_value);
+  DEFINE_FUNC(dwg_ref_get_handle_absolute_ref);
+  
   DEFINE_FUNC(dwg_obj_obj_to_object);
   DEFINE_FUNC(dwg_obj_generic_to_object);
   DEFINE_FUNC(dwg_get_object);

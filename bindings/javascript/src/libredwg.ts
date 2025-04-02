@@ -1,10 +1,12 @@
 import { LibreDwgConverter } from './converter';
 import { MainModule } from '../wasm/libredwg-web'
 import { createModule, Dwg_File_Type, Dwg_Object_Type } from './utils';
+import { DwgPoint2D, DwgPoint3D } from './types';
 
 export type Dwg_Array_Ptr = number;
 export type Dwg_Data_Ptr = number;
 export type Dwg_Object_Ptr = number;
+export type Dwg_Object_Ref_Ptr = number;
 export type Dwg_Object_Object_Ptr = number;
 export type Dwg_Object_Entity_Ptr = number;
 
@@ -20,17 +22,6 @@ export interface Dwg_Object_Ref {
   handleref: Dwg_Handle
   absolute_ref: number
   r11_idx: number
-}
-
-export interface Dwg_Point_2D {
-  x: number
-  y: number
-}
-
-export interface Dwg_Point_3D {
-  x: number
-  y: number
-  z: number
 }
 
 export interface Dwg_Color {
@@ -56,7 +47,7 @@ export interface Dwg_LTYPE_Dash {
 export interface Dwg_Field_Value {
   success: boolean
   message?: string
-  data?: string | number | Dwg_Color | Dwg_Array_Ptr | Dwg_Point_2D | Dwg_Point_3D
+  data?: string | number | Dwg_Color | Dwg_Array_Ptr | DwgPoint2D | DwgPoint3D
 }
 
 export type LibreDwgEx = LibreDwg & MainModule;
@@ -251,11 +242,11 @@ export class LibreDwg {
     return this.wasmInstance.dwg_ptr_to_double_array(ptr, size)
   }
 
-  dwg_ptr_to_point2d_array(ptr: Dwg_Array_Ptr, size: number): Dwg_Point_2D[] {
+  dwg_ptr_to_point2d_array(ptr: Dwg_Array_Ptr, size: number): DwgPoint2D[] {
     return this.wasmInstance.dwg_ptr_to_point2d_array(ptr, size)
   }
 
-  dwg_ptr_to_point3d_array(ptr: Dwg_Array_Ptr, size: number): Dwg_Point_3D[] {
+  dwg_ptr_to_point3d_array(ptr: Dwg_Array_Ptr, size: number): DwgPoint3D[] {
     return this.wasmInstance.dwg_ptr_to_point3d_array(ptr, size)
   }
 
@@ -275,7 +266,7 @@ export class LibreDwg {
     return this.wasmInstance.dwg_object_object_get_handle_object(ptr);  
   }
 
-  dwg_object_object_get_ownerhandle_object(ptr: Dwg_Object_Ptr): Dwg_Handle {
+  dwg_object_object_get_ownerhandle_object(ptr: Dwg_Object_Ptr): Dwg_Object_Ref {
     return this.wasmInstance.dwg_object_object_get_ownerhandle_object(ptr);  
   }
 
