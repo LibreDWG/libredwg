@@ -1,3 +1,4 @@
+import { LibreDwgConverter } from './converter';
 import { MainModule } from '../wasm/libredwg-web'
 import { createModule, Dwg_File_Type, Dwg_Object_Type } from './utils';
 
@@ -6,6 +7,20 @@ export type Dwg_Data_Ptr = number;
 export type Dwg_Object_Ptr = number;
 export type Dwg_Object_Object_Ptr = number;
 export type Dwg_Object_Entity_Ptr = number;
+
+export interface Dwg_Handle {
+  code: number
+  size: number
+  value: number
+  is_global: number
+}
+
+export interface Dwg_Object_Ref {
+  obj: Dwg_Object_Ptr
+  handleref: Dwg_Handle
+  absolute_ref: number
+  r11_idx: number
+}
 
 export interface Dwg_Point_2D {
   x: number
@@ -16,6 +31,14 @@ export interface Dwg_Point_3D {
   x: number
   y: number
   z: number
+}
+
+export interface Dwg_Color {
+  index: number
+  flag: number
+  rgb: number
+  name: string
+  book_name: string
 }
 
 export interface Dwg_LTYPE_Dash {
@@ -33,7 +56,7 @@ export interface Dwg_LTYPE_Dash {
 export interface Dwg_Field_Value {
   success: boolean
   message?: string
-  data?: string | number | Dwg_Array_Ptr | Dwg_Point_2D | Dwg_Point_3D
+  data?: string | number | Dwg_Color | Dwg_Array_Ptr | Dwg_Point_2D | Dwg_Point_3D
 }
 
 export type LibreDwgEx = LibreDwg & MainModule;
@@ -64,17 +87,28 @@ export class LibreDwg {
         console.log('Failed to open dwg file with error code: ', result.error);
       }
       this.wasmInstance.FS.unlink(fileName);
-      return result.data;
-    } else if (fileType == Dwg_File_Type.DXF) {
-      const fileName = "tmp.dxf";
-      this.wasmInstance.FS.writeFile(fileName, new Uint8Array(fileContent as ArrayBuffer));
-      const result = this.wasmInstance.dxf_read_file(fileName);
-      if (result.error != 0) {
-        console.log('Failed to open dxf file with error code: ', result.error);
-      }
-      this.wasmInstance.FS.unlink(fileName);
-      return result.data;
-    }
+      return result.data as Dwg_Data_Ptr;
+    } 
+    // else if (fileType == Dwg_File_Type.DXF) {
+    //   const fileName = "tmp.dxf";
+    //   this.wasmInstance.FS.writeFile(fileName, new Uint8Array(fileContent as ArrayBuffer));
+    //   const result = this.wasmInstance.dxf_read_file(fileName);
+    //   if (result.error != 0) {
+    //     console.log('Failed to open dxf file with error code: ', result.error);
+    //   }
+    //   this.wasmInstance.FS.unlink(fileName);
+    //   return result.data as Dwg_Data_Ptr;
+    // }
+  }
+
+  /**
+   * Converts Dwg_Data instance to DwgDatabase instance.
+   * @param data input pointer to Dwg_Data instance.
+   * @returns Returns the converted DwgDatabase instance.
+   */
+  convert(data: Dwg_Data_Ptr) {
+    const converter = new LibreDwgConverter(this as unknown as LibreDwgEx)
+    return converter.convert(data)
   }
 
   /**
@@ -231,6 +265,18 @@ export class LibreDwg {
 
   dwg_dynapi_entity_value(obj: number, field: string): Dwg_Field_Value {
     return this.wasmInstance.dwg_dynapi_entity_value(obj, field);
+  }
+
+  dwg_object_get_handle_object(ptr: Dwg_Object_Ptr): Dwg_Handle {
+    return this.wasmInstance.dwg_object_get_handle_object(ptr);  
+  }
+
+  dwg_object_object_get_handle_object(ptr: Dwg_Object_Ptr): Dwg_Handle {
+    return this.wasmInstance.dwg_object_object_get_handle_object(ptr);  
+  }
+
+  dwg_object_object_get_ownerhandle_object(ptr: Dwg_Object_Ptr): Dwg_Handle {
+    return this.wasmInstance.dwg_object_object_get_ownerhandle_object(ptr);  
   }
 
   static createByWasmInstance(wasmInstance: MainModule): LibreDwgEx {

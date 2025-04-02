@@ -219,6 +219,63 @@ EMSCRIPTEN_BINDINGS(libredwg_dwg_object) {
   DEFINE_FUNC(dwg_object_get_handle_object);
 }
 
+
+/***********************************************************************/
+
+Dwg_Object_Object_Ptr dwg_object_object_get_tio_wrapper(Dwg_Object_Object_Ptr obj_obj_ptr) {
+  Dwg_Object_Object* obj_obj = reinterpret_cast<Dwg_Object_Object*>(obj_obj_ptr);
+  return (obj_obj == NULL) ? 0 : reinterpret_cast<uintptr_t>(obj_obj->tio.APPID);
+}
+
+int dwg_object_object_get_objid_wrapper(Dwg_Object_Object_Ptr obj_obj_ptr) {
+  Dwg_Object_Object* obj_obj = reinterpret_cast<Dwg_Object_Object*>(obj_obj_ptr);
+  return (obj_obj == NULL) ? 0 : obj_obj->objid;
+}
+
+uintptr_t dwg_object_object_get_ownerhandle_wrapper(Dwg_Object_Object_Ptr obj_obj_ptr) {
+  Dwg_Object_Object* obj_obj = reinterpret_cast<Dwg_Object_Object*>(obj_obj_ptr);
+  return (obj_obj == NULL) ? 0 : reinterpret_cast<uintptr_t>(obj_obj->ownerhandle);
+}
+
+emscripten::val dwg_object_object_get_ownerhandle_object_wrapper(Dwg_Object_Object_Ptr obj_obj_ptr) {
+  Dwg_Object_Object* obj_obj = reinterpret_cast<Dwg_Object_Object*>(obj_obj_ptr);
+  return object_ref_to_js_object(obj_obj->ownerhandle);
+}
+
+uintptr_t dwg_object_object_get_handle_wrapper(Dwg_Object_Object_Ptr obj_obj_ptr) {
+  Dwg_Object_Object* obj_obj = reinterpret_cast<Dwg_Object_Object*>(obj_obj_ptr);
+  return (obj_obj == NULL) ? 0 : reinterpret_cast<uintptr_t>(obj_obj->handleref);
+}
+
+emscripten::val dwg_object_object_get_handle_object_wrapper(Dwg_Object_Object_Ptr obj_obj_ptr) {
+  Dwg_Object_Object* obj_obj = reinterpret_cast<Dwg_Object_Object*>(obj_obj_ptr);
+  return handle_to_js_object(obj_obj->handleref);
+}
+
+int dwg_object_object_get_num_reactors_wrapper(Dwg_Object_Object_Ptr obj_obj_ptr) {
+  Dwg_Object_Object* obj_obj = reinterpret_cast<Dwg_Object_Object*>(obj_obj_ptr);
+  return (obj_obj == NULL) ? 0 : obj_obj->num_reactors;
+}
+
+uintptr_t dwg_object_object_get_reactors_wrapper(Dwg_Object_Object_Ptr obj_obj_ptr) {
+  Dwg_Object_Object* obj_obj = reinterpret_cast<Dwg_Object_Object*>(obj_obj_ptr);
+  return (obj_obj == NULL) ? 0 : reinterpret_cast<uintptr_t>(obj_obj->reactors);
+}
+
+/**
+ * Methods to access fields of Dwg_Object_Object
+ */
+EMSCRIPTEN_BINDINGS(libredwg_dwg_object_object) {
+  DEFINE_FUNC(dwg_object_object_get_tio);
+  DEFINE_FUNC(dwg_object_object_get_objid);
+  DEFINE_FUNC(dwg_object_object_get_ownerhandle);
+  DEFINE_FUNC(dwg_object_object_get_ownerhandle_object);
+  DEFINE_FUNC(dwg_object_object_get_handle);
+  DEFINE_FUNC(dwg_object_object_get_handle_object);
+  DEFINE_FUNC(dwg_object_object_get_num_reactors);
+  DEFINE_FUNC(dwg_object_object_get_reactors);
+}
+
 /***********************************************************************/
 
 /**

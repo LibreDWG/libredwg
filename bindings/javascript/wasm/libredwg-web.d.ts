@@ -268,6 +268,14 @@ interface WasmModule {
   __Z30dwg_object_get_dxfname_wrapperm(_0: number, _1: number): void;
   __Z29dwg_object_get_handle_wrapperm(_0: number): number;
   __Z36dwg_object_get_handle_object_wrapperm(_0: number, _1: number): void;
+  __Z33dwg_object_object_get_tio_wrapperm(_0: number): number;
+  __Z35dwg_object_object_get_objid_wrapperm(_0: number): number;
+  __Z41dwg_object_object_get_ownerhandle_wrapperm(_0: number): number;
+  __Z48dwg_object_object_get_ownerhandle_object_wrapperm(_0: number, _1: number): void;
+  __Z36dwg_object_object_get_handle_wrapperm(_0: number): number;
+  __Z43dwg_object_object_get_handle_object_wrapperm(_0: number, _1: number): void;
+  __Z42dwg_object_object_get_num_reactors_wrapperm(_0: number): number;
+  __Z38dwg_object_object_get_reactors_wrapperm(_0: number): number;
   __Z26dwg_ref_get_absref_wrapperm(_0: number): number;
   __Z26dwg_ref_get_object_wrapperm(_0: number): number;
   _dwg_ref_get_object(_0: number, _1: number): number;
@@ -326,10 +334,6 @@ interface WasmModule {
   __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagENSt3__212basic_stringIcNS4_11char_traitsIcEENS4_9allocatorIcEEEEJmmmEE6invokeEPFSA_mmmEmmm(_0: number, _1: number, _2: number, _3: number): number;
   __Z21dwg_read_file_wrapperRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE(_0: number, _1: number): void;
   _dwg_read_file(_0: number, _1: number): number;
-  __Z21dxf_read_file_wrapperRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE(_0: number, _1: number): void;
-  _dxf_read_file(_0: number, _1: number): number;
-  __Z22dwg_write_file_wrapperRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEEm(_0: number, _1: number, _2: number): void;
-  _dwg_write_file(_0: number, _1: number): number;
   __Z28dwg_find_tablehandle_wrappermRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEES7_(_0: number, _1: number, _2: number): number;
   _dwg_find_tablehandle(_0: number, _1: number, _2: number): number;
   __Z34dwg_find_tablehandle_index_wrappermiRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE(_0: number, _1: number, _2: number): number;
@@ -478,8 +482,6 @@ interface WasmModule {
   _dwg_supports_obj(_0: number, _1: number): number;
   __Z24dwg_encrypt_SAT1_wrapperjmm(_0: number, _1: number, _2: number, _3: number): void;
   _dwg_encrypt_SAT1(_0: number, _1: number, _2: number): number;
-  __Z31dwg_convert_SAB_to_SAT1_wrapperm(_0: number): number;
-  _dwg_convert_SAB_to_SAT1(_0: number): number;
   __Z22dwg_add_object_wrapperm(_0: number): number;
   _dwg_add_object(_0: number): number;
   __Z23dwg_object_name_wrapperRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEEmmmm(_0: number, _1: number, _2: number, _3: number, _4: number): number;
@@ -555,7 +557,6 @@ interface WasmModule {
   __Z27dwg_get_num_classes_wrapperPK11_dwg_struct(_0: number): number;
   __Z21dwg_get_class_wrapperPK11_dwg_structj(_0: number, _1: number): number;
   __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagENS_3valEJRKNSt3__212basic_stringIcNS5_11char_traitsIcEENS5_9allocatorIcEEEEEE6invokeEPFS4_SD_EPNS0_11BindingTypeISB_vEUt_E(_0: number, _1: number): number;
-  __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagENS_3valEJRKNSt3__212basic_stringIcNS5_11char_traitsIcEENS5_9allocatorIcEEEEmEE6invokeEPFS4_SD_mEPNS0_11BindingTypeISB_vEUt_Em(_0: number, _1: number, _2: number): number;
   __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagEmJmRKNSt3__212basic_stringIcNS4_11char_traitsIcEENS4_9allocatorIcEEEESC_EE6invokeEPFmmSC_SC_EmPNS0_11BindingTypeISA_vEUt_ESJ_(_0: number, _1: number, _2: number, _3: number): number;
   __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagEmJmiRKNSt3__212basic_stringIcNS4_11char_traitsIcEENS4_9allocatorIcEEEEEE6invokeEPFmmiSC_EmiPNS0_11BindingTypeISA_vEUt_E(_0: number, _1: number, _2: number, _3: number): number;
   __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagENSt3__212basic_stringIcNS4_11char_traitsIcEENS4_9allocatorIcEEEEJmRKSA_mEE6invokeEPFSA_mSC_mEmPNS0_11BindingTypeISA_vEUt_Em(_0: number, _1: number, _2: number, _3: number): number;
@@ -885,9 +886,6 @@ interface WasmModule {
   _dat_read_size(_0: number): number;
   _dat_read_stream(_0: number, _1: number): number;
   _dwg_read_data(_0: number, _1: number, _2: number): number;
-  _dwg_read_dxfb(_0: number, _1: number): number;
-  _dwg_read_dxf(_0: number, _1: number): number;
-  _dwg_encode(_0: number, _1: number): number;
   _dwg_get_entity_layer(_0: number): number;
   _dxf_cvt_lweight(_0: number): number;
   _dxf_revcvt_lweight(_0: number): number;
@@ -2022,7 +2020,6 @@ interface WasmModule {
   _dwg_add_BLOCK(_0: number, _1: number): number;
   _dwg_add_ENDBLK(_0: number): number;
   _dwg_add_LAYOUT(_0: number, _1: number, _2: number): number;
-  _dwg_require_class(_0: number, _1: number, _2: number): number;
   _dwg_add_entity_defaults(_0: number, _1: number): number;
   _dwg_insert_entity(_0: number, _1: number): number;
   _dwg_new_Document(_0: number, _1: number, _2: number): number;
@@ -2133,11 +2130,6 @@ interface WasmModule {
   _transform_OCS_2d(_0: number, _1: number, _2: number): void;
   _transform_OCS(_0: number, _1: number, _2: number): void;
   _arc_split(_0: number, _1: number, _2: number, _3: number, _4: number, _5: number): void;
-  _dwg_read_json(_0: number, _1: number): number;
-  _dwg_write_dxf(_0: number, _1: number): number;
-  _dwg_write_dxfb(_0: number, _1: number): number;
-  _dwg_write_geojson(_0: number, _1: number): number;
-  _dwg_write_json(_0: number, _1: number): number;
   __ZNSt9exceptionD2Ev(_0: number): number;
   _emscripten_stack_get_base(): number;
   _emscripten_stack_get_end(): number;
@@ -2340,6 +2332,12 @@ interface EmbindModule {
   dwg_object_get_supertype(_0: number): number;
   dwg_object_get_fixedtype(_0: number): number;
   dwg_object_get_handle(_0: number): number;
+  dwg_object_object_get_tio(_0: number): number;
+  dwg_object_object_get_objid(_0: number): number;
+  dwg_object_object_get_ownerhandle(_0: number): number;
+  dwg_object_object_get_handle(_0: number): number;
+  dwg_object_object_get_num_reactors(_0: number): number;
+  dwg_object_object_get_reactors(_0: number): number;
   dwg_ref_get_absref(_0: number): number;
   dwg_ref_get_object(_0: number): number;
   dwg_ref_get_handle(_0: number): number;
@@ -2385,7 +2383,6 @@ interface EmbindModule {
   dwg_dup_handleref(_0: number, _1: number): number;
   dwg_supports_eed(_0: number): number;
   dwg_supports_obj(_0: number, _1: number): number;
-  dwg_convert_SAB_to_SAT1(_0: number): number;
   dwg_add_object(_0: number): number;
   dwg_obj_obj_to_object(_0: number): number;
   dwg_obj_generic_to_object(_0: number): number;
@@ -2471,14 +2468,14 @@ interface EmbindModule {
   dwg_ptr_to_point3d_array(_0: number, _1: number): any;
   dwg_ptr_to_ltype_dash_array(_0: number, _1: number): any;
   dwg_object_get_handle_object(_0: number): any;
+  dwg_object_object_get_ownerhandle_object(_0: number): any;
+  dwg_object_object_get_handle_object(_0: number): any;
   dwg_ref_get_handle_object(_0: number): any;
   dwg_dynapi_header_value(_0: number, _1: EmbindString): any;
   dwg_dynapi_entity_value(_0: number, _1: EmbindString): any;
   dwg_dynapi_common_value(_0: number, _1: EmbindString): any;
   dwg_dynapi_subclass_value(_0: number, _1: EmbindString, _2: EmbindString): any;
   dwg_read_file(_0: EmbindString): any;
-  dxf_read_file(_0: EmbindString): any;
-  dwg_write_file(_0: EmbindString, _1: number): any;
 }
 
 export type MainModule = WasmModule & typeof RuntimeExports & EmbindModule;
