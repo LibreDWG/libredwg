@@ -1,4 +1,4 @@
-import { DwgImageDefObject } from "./objects";
+import { DwgImageDefObject, DwgLayoutObject } from "./objects";
 import { 
   DwgLayerTableEntry,
   DwgLTypeTableEntry,
@@ -14,6 +14,7 @@ export interface DwgDatabase {
   };
   objects: {
     IMAGEDEF: DwgImageDefObject[];
+    LAYOUT: DwgLayoutObject[];
   };
 }
 

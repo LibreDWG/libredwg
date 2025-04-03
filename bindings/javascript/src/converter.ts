@@ -4,6 +4,7 @@ import {
   DwgDatabase, 
   DwgImageDefObject, 
   DwgLayerTableEntry, 
+  DwgLayoutObject, 
   DwgLineTypeElement, 
   DwgLTypeTableEntry,
   DwgPoint2D,
@@ -45,7 +46,8 @@ export class LibreDwgConverter {
         }
       },
       objects: {
-        IMAGEDEF: []
+        IMAGEDEF: [],
+        LAYOUT: []
       }
     }
     const libredwg = this.libredwg
@@ -68,6 +70,9 @@ export class LibreDwgConverter {
             break;
           case Dwg_Object_Type.DWG_TYPE_IMAGEDEF:
             db.objects.IMAGEDEF.push(this.convertImageDef(tio, obj))
+            break;
+          case Dwg_Object_Type.DWG_TYPE_LAYOUT:
+            db.objects.LAYOUT.push(this.convertLayout(tio, obj))
             break;
           default:
             break; 
@@ -271,6 +276,54 @@ export class LibreDwgConverter {
       sizeOfOnePixel: sizeOfOnePixel,
       isLoaded: isLoaded,
       resolutionUnits: resolutionUnits
+    }
+  }
+
+  private convertLayout(item: Dwg_Object_Object_Ptr, obj: Dwg_Object_Ptr): DwgLayoutObject {
+    const libredwg = this.libredwg
+    const commonAttrs = this.getCommonObjectAttrs(obj)
+
+    // AcDbLayout
+    const layoutName = libredwg.dwg_dynapi_entity_value(item, 'layout_name').data as string
+    const tabOrder = libredwg.dwg_dynapi_entity_value(item, 'tab_order').data as number
+    const controlFlag = libredwg.dwg_dynapi_entity_value(item, 'layout_flags').data as number
+    const insertionPoint = libredwg.dwg_dynapi_entity_value(item, 'INSBASE').data as DwgPoint3D
+    const minLimit = libredwg.dwg_dynapi_entity_value(item, 'LIMMIN').data as DwgPoint2D
+    const maxLimit = libredwg.dwg_dynapi_entity_value(item, 'LIMMAX').data as DwgPoint2D
+    const ucsOrigin = libredwg.dwg_dynapi_entity_value(item, 'UCSORG').data as DwgPoint3D
+    const ucsXAxis = libredwg.dwg_dynapi_entity_value(item, 'UCSXDIR').data as DwgPoint3D
+    const ucsYAxis = libredwg.dwg_dynapi_entity_value(item, 'UCSYDIR').data as DwgPoint3D
+    const orthographicType = libredwg.dwg_dynapi_entity_value(item, 'UCSORTHOVIEW').data as number
+    const minExtent = libredwg.dwg_dynapi_entity_value(item, 'EXTMIN').data as DwgPoint3D
+    const maxExtent = libredwg.dwg_dynapi_entity_value(item, 'EXTMAX').data as DwgPoint3D
+    const elevation = libredwg.dwg_dynapi_entity_value(item, 'ucs_elevation').data as number
+    // BITCODE_H block_header;
+    // BITCODE_H active_viewport;
+    // BITCODE_H base_ucs;
+    // BITCODE_H named_ucs;
+    // BITCODE_BL num_viewports; // r2004+
+    // BITCODE_H *viewports;     // r2004+
+
+    return {
+      ...commonAttrs,
+      layoutName: layoutName,
+      controlFlag: controlFlag,
+      tabOrder: tabOrder,
+      minLimit: minLimit,
+      maxLimit: maxLimit,
+      insertionPoint: insertionPoint,
+      minExtent: minExtent,
+      maxExtent: maxExtent,
+      elevation: elevation,
+      ucsOrigin: ucsOrigin,
+      ucsXAxis: ucsXAxis,
+      ucsYAxis: ucsYAxis,
+      orthographicType: orthographicType,
+      paperSpaceTableId: '',  // TODO: Set the correct value
+      viewportId: '',         // TODO: Set the correct value
+      // namedUcsId?: string;
+      // orthographicUcsId?: string;
+      shadePlotId: ''         // TODO: Set the correct value
     }
   }
 
