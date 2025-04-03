@@ -1153,7 +1153,7 @@ copy_bytes (unsigned int lit_length, Bit_Chain *restrict src,
 static unsigned int
 read_literal_length (Bit_Chain *restrict dat, unsigned char opcode)
 {
-  BITCODE_RC lowbits = opcode & 0xf;
+  unsigned int lowbits = opcode & 0xf;
   if (lowbits == 0) { // if low bits are 0
     BITCODE_RC lastbyte = 0;
     while (((lastbyte = bit_read_RC (dat)) == 0) && (dat->byte < dat->size))
