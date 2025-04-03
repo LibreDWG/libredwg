@@ -941,7 +941,7 @@ via two ways:
   // then all entities in the blocks
   for (i=0; i < block_control->num_entries; i++)
     {
-      process_BLOCK_HEADER(block_control->block_headers[i]);
+      process_BLOCK_HEADER(block_control->entries[i]);
     }
   // and last all entities in the paper space
   process_BLOCK_HEADER(dwg->header_vars.BLOCK_RECORD_PSPACE);
@@ -954,9 +954,7 @@ or 2. by using the API functions from @file{dwg_api.h}:
   process_BLOCK_HEADER(dwg_model_space_ref(dwg));
   for (i=0; i < block_control->num_entries; i++)
     {
-      process_BLOCK_HEADER(block_control->block_headers[i]);
-      // replace process_BLOCK_HEADER()'s attribute for the upper line, because block_headers[] does not extend block_control
-      process_BLOCK_HEADER(block_control->entries[i]);          // proposal, instead of the block_headers[i]
+      process_BLOCK_HEADER(block_control->entries[i]);
     }
   process_BLOCK_HEADER(dwg_paper_space_ref(dwg));
 @end verbatim
