@@ -1268,21 +1268,30 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
         }
       // copy previous offset'ed bytes.
       pos = dec->byte;
-      LOG_INSANE ("co: %d %ld->%lu\n", comp_bytes, pos - comp_offset, pos);
-      // assert ((long)(pos + comp_bytes - comp_offset) >= 0);
-      assert ((long)pos >= (long)comp_offset);
-      assert ((long)(pos + comp_bytes) < (long)dec->size);
-      // assert ((long)(pos + comp_bytes) <= (long)dec->size);
+      LOG_INSANE ("co: %d %ld->%lu (%lu)\n", comp_bytes, pos - comp_offset, pos, dec->size);
+      // This seems to be a comp_bytes encoding bug,
+      // copying past the decompressed_size. rather cap it and stop decompression.
+      // ACadSharp decompresses all comp_bytes, enlarging the buffer (but not using it)
+      if ((long)(pos + comp_bytes) >= (long)dec->size)
+        {
+          //bit_chain_alloc_size (dec, pos + comp_bytes);
+          comp_bytes = dec->size - pos;
+          opcode1 = 0x11;
+        }
+#ifdef NDEBUG
+      memmove (&dat->chain[pos], &dat->chain[pos - comp_offset], comp_bytes);
+#else
       for (size_t end = pos + comp_bytes; pos < end; pos++)
         {
           unsigned char b;
-          // assert ((long)(pos - comp_offset) >= 0);
+          assert ((long)(pos - comp_offset) >= 0);
           assert ((long)(pos - comp_offset) < (long)dec->size);
           b = dec->chain[pos - comp_offset];
           assert (pos < dec->size);
           dec->chain[pos] = b;
-          dec->byte = pos + 1;
         }
+#endif
+      dec->byte += comp_bytes;
       // copy "literal data"
       lit_length = opcode1 & 3;
       if (lit_length == 0)
@@ -1292,7 +1301,7 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
           lit_length = read_literal_length(src, opcode1);
       }
       LOG_INSANE ("L %d\n", lit_length)
-      if (lit_length)
+      if (lit_length && opcode1 != 0x11)
         opcode1 = copy_bytes(lit_length, src, dec);
     }
 #ifdef DEBUG
