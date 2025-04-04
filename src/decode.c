@@ -3720,11 +3720,11 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
   LOG_POS
 
 #ifdef DEBUG
-  // sanity checks
-  if (obj->eed[idx].code == 0 || obj->eed[idx].code == 4)
-    assert (obj->eed[idx].data->u.eed_0.length <= size - 1);
-  if (obj->eed[idx].code == 10) // 3 double
-    assert (size >= 1 + 3 * 8);
+  // sanity checks:
+  if (data->code == 0 || data->code == 4)
+     assert (data->u.eed_0.length <= size - 1);
+  if (data->code == 10) // 3 double
+     assert (size >= 1 + 3 * 8);
 #endif
 
   return 0;
