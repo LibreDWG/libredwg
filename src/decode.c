@@ -5289,10 +5289,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
     }
 //#ifdef DEBUG
 //  if ((dat->opts & DWG_OPTS_LOGLEVEL) > 5 && obj->index == 12)
-//    {
-//      printf ("@%" PRIuSIZE ".%u: ", dat->byte, (unsigned)dat->bit);
-//      bit_print_bits(&dat->chain[dat->byte], 64);
-//    }
+//    bit_explore_chain (dat, dat->byte, 16);
 //#endif
   obj->size = bit_read_MS (dat);
   LOG_INFO (", Size: %d [MS]", obj->size)
