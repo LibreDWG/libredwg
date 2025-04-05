@@ -1,7 +1,7 @@
 import { DwgPoint3D } from "../common";
 import { DwgEntity } from "./entity";
 
-export declare enum DimensionType {
+export declare enum DwgDimensionType {
   Rotated = 0,
   Aligned = 1,
   Angular = 2,
@@ -14,7 +14,7 @@ export declare enum DimensionType {
   IsCustomTextPositionFlag = 128
 }
 
-export declare enum AttachmentPoint {
+export declare enum DwgAttachmentPoint {
   TopLeft = 1,
   TopCenter = 2,
   TopRight = 3,
@@ -26,12 +26,12 @@ export declare enum AttachmentPoint {
   BottomRight = 9
 }
 
-export declare enum DimensionTextLineSpacing {
+export declare enum DwgDimensionTextLineSpacing {
   AtLeast = 1,
   Exact = 2
 }
 
-export declare enum DimensionTextVertical {
+export declare enum DwgDimensionTextVertical {
   Center = 0,
   Above = 1,
   Outside = 2,
@@ -39,7 +39,7 @@ export declare enum DimensionTextVertical {
   Below = 4
 }
 
-export declare enum DimensionZeroSuppression {
+export declare enum DwgDimensionZeroSuppression {
   Feet = 0,
   None = 1,
   Inch = 2,
@@ -49,14 +49,14 @@ export declare enum DimensionZeroSuppression {
   LeadingAndTrailing = 12
 }
 
-export declare enum DimensionZeroSuppressionAngular {
+export declare enum DwgDimensionZeroSuppressionAngular {
   None = 0,
   Leading = 1,
   Trailing = 2,
   LeadingAndTrailing = 3
 }
 
-export declare enum DimensionTextHorizontal {
+export declare enum DwgDimensionTextHorizontal {
   Center = 0,
   Left = 1,
   Right = 2,
@@ -64,7 +64,7 @@ export declare enum DimensionTextHorizontal {
   OverSecond = 4
 }
 
-export declare enum DimensionToleranceTextVertical {
+export declare enum DwgDimensionToleranceTextVertical {
   Bottom = 0,
   Center = 1,
   Top = 2
@@ -77,9 +77,9 @@ export interface DwgDimensionEntityCommon extends DwgEntity {
   name: string;
   definitionPoint: DwgPoint3D;
   textPoint: DwgPoint3D;
-  dimensionType: DimensionType;
-  attachmentPoint: AttachmentPoint;
-  textLineSpacingStyle?: DimensionTextLineSpacing;
+  dimensionType: DwgDimensionType;
+  attachmentPoint: DwgAttachmentPoint;
+  textLineSpacingStyle?: DwgDimensionTextLineSpacing;
   textLineSpacingFactor?: number;
   measurement?: number;
   text?: string;
