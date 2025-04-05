@@ -389,6 +389,43 @@ evaluate (Poly poly, int deg, unsigned char x)
   return y;
 }
 
+/*
+ * Some debugging code, for developer use.
+ */
+#ifdef DEBUG
+
+static void
+debug_row (PolyRow row)
+{
+  int j, k;
+  for (j = 0; j < 4; j++)
+    {
+      for (k = 0; k < 3; k++)
+        {
+          HANDLER (OUTPUT, " %02x %02x %02x %02x ", row[k][4 * j + 0],
+                   row[k][4 * j + 1], row[k][4 * j + 2], row[k][4 * j + 3]);
+          if (k != 2)
+            {
+              HANDLER (OUTPUT, " | ");
+            }
+        }
+      HANDLER (OUTPUT, "\n");
+    }
+  HANDLER (OUTPUT, " %02x           |  %02x           |  %02x \n", row[0][16],
+           row[1][16], row[2][16]);
+}
+
+static void
+dump_matrix (PolyMatrix matrix)
+{
+  debug ("Matrix:\n");
+  debug_row (matrix[0]);
+  HANDLER (OUTPUT, "\n");
+  debug_row (matrix[1]);
+}
+
+#endif
+
 static void
 solve_key_equation (unsigned char *s, unsigned char *sigma,
                     unsigned char *omega)
@@ -420,6 +457,10 @@ solve_key_equation (unsigned char *s, unsigned char *sigma,
 
   memcpy (sigma, matrix[fixed_row][0], POLY_LENGTH);
   memcpy (omega, matrix[fixed_row][2], POLY_LENGTH);
+
+#ifdef DEBUG
+  dump_matrix(matrix);
+#endif
 
   free_matrix (matrix);
 }
@@ -466,42 +507,6 @@ fix_errors (unsigned char *blk, unsigned char *sigma, unsigned char *omega)
     }
   return nerr;
 }
-
-/*
- * Some debugging code, for developer use.
- */
-#ifdef DEBUG
-static void
-debug_row (PolyRow row)
-{
-  int j, k;
-  for (j = 0; j < 4; j++)
-    {
-      for (k = 0; k < 3; k++)
-        {
-          HANDLER (OUTPUT, " %02x %02x %02x %02x ", row[k][4 * j + 0],
-                   row[k][4 * j + 1], row[k][4 * j + 2], row[k][4 * j + 3]);
-          if (k != 2)
-            {
-              HANDLER (OUTPUT, " | ");
-            }
-        }
-      HANDLER (OUTPUT, "\n");
-    }
-  HANDLER (OUTPUT, " %02x           |  %02x           |  %02x \n", row[0][16],
-           row[1][16], row[2][16]);
-}
-
-static void
-dump_matrix (PolyMatrix matrix)
-{
-  debug ("Matrix:\n");
-  debug_row (matrix[0]);
-  HANDLER (OUTPUT, "\n");
-  debug_row (matrix[1]);
-}
-
-#endif
 
 static void
 dump_syndrome (unsigned char *s)
