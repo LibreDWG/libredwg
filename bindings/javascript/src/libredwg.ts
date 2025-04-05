@@ -206,67 +206,155 @@ export class LibreDwg {
     return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_LWPOLYLINE);
   };
 
+  /**
+   * Converts one C++ unsigned char array to one JavaScript number array.
+   * @param ptr Point to C++ unsigned char array.
+   * @param size The size of C++ unsigned char array.
+   * @returns Returns one JavaScript number array from the specified C++ unsigned char array.
+   */
   dwg_ptr_to_unsigned_char_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_unsigned_char_array(ptr, size)
   }
   
+  /**
+   * Converts one C++ signed char array to one JavaScript number array.
+   * @param ptr Point to C++ signed char array.
+   * @param size The size of C++ signed char array.
+   * @returns Returns one JavaScript number array from the specified C++ signed char array.
+   */
   dwg_ptr_to_signed_char_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_signed_char_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ unsigned int16 array to one JavaScript number array.
+   * @param ptr Point to C++ unsigned int16 array.
+   * @param size The size of C++ unsigned int16 array.
+   * @returns Returns one JavaScript number array from the specified C++ unsigned int16 array.
+   */
   dwg_ptr_to_uint16_t_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_uint16_t_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ int16 array to one JavaScript number array.
+   * @param ptr Point to C++ int16 array.
+   * @param size The size of C++ int16 array.
+   * @returns Returns one JavaScript number array from the specified C++ int16 array.
+   */
   dwg_ptr_to_int16_t_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_int16_t_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ unsigned int32 array to one JavaScript number array.
+   * @param ptr Point to C++ unsigned int32 array.
+   * @param size The size of C++ unsigned int32 array.
+   * @returns Returns one JavaScript number array from the specified C++ unsigned int32 array.
+   */
   dwg_ptr_to_uint32_t_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_uint32_t_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ int32 array to one JavaScript number array.
+   * @param ptr Point to C++ int32 array.
+   * @param size The size of C++ int32 array.
+   * @returns Returns one JavaScript number array from the specified C++ int32 array.
+   */
   dwg_ptr_to_int32_t_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_int32_t_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ unsigned int64 array to one JavaScript number array.
+   * @param ptr Point to C++ unsigned int64 array.
+   * @param size The size of C++ unsigned int64 array.
+   * @returns Returns one JavaScript number array from the specified C++ unsigned int64 array.
+   */
   dwg_ptr_to_uint64_t_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_uint64_t_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ int64 array to one JavaScript number array.
+   * @param ptr Point to C++ int64 array.
+   * @param size The size of C++ int64 array.
+   * @returns Returns one JavaScript number array from the specified C++ int64 array.
+   */
   dwg_ptr_to_int64_t_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_int64_t_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ double array to one JavaScript number array.
+   * @param ptr Point to C++ double array.
+   * @param size The size of C++ double array.
+   * @returns Returns one JavaScript number array from the specified C++ double array.
+   */
   dwg_ptr_to_double_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_double_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ 2d point array to one JavaScript 2d point array.
+   * @param ptr Point to C++ 2d point array.
+   * @param size The size of C++ 2 point array.
+   * @returns Returns one JavaScript 2d point array from the specified C++ 2d point array.
+   */
   dwg_ptr_to_point2d_array(ptr: Dwg_Array_Ptr, size: number): DwgPoint2D[] {
     return this.wasmInstance.dwg_ptr_to_point2d_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ 3d point array to one JavaScript 3d point array.
+   * @param ptr Point to C++ 3d point array.
+   * @param size The size of C++ 3d point array.
+   * @returns Returns one JavaScript 3d point array from the specified C++ 3d point array.
+   */
   dwg_ptr_to_point3d_array(ptr: Dwg_Array_Ptr, size: number): DwgPoint3D[] {
     return this.wasmInstance.dwg_ptr_to_point3d_array(ptr, size)
   }
 
+  /**
+   * Converts one C++ line type array to one JavaScript line type array.
+   * @param ptr Point to C++ line type array.
+   * @param size The size of C++ line type array.
+   * @returns Returns one JavaScript line type array from the specified C++ line type array.
+   */
   dwg_ptr_to_ltype_dash_array(ptr: Dwg_Array_Ptr, size: number): Dwg_LTYPE_Dash[] {
     return this.wasmInstance.dwg_ptr_to_ltype_dash_array(ptr, size)
   }
 
+  /**
+   * Generic field value getter. Used to get the field value of one object or entity.
+   * @param obj Pointer to one object or entity
+   * @param field Field name of one object or entity
+   * @returns Returns the field value of one object or entity.
+   */
   dwg_dynapi_entity_value(obj: number, field: string): Dwg_Field_Value {
     return this.wasmInstance.dwg_dynapi_entity_value(obj, field);
   }
 
+  /**
+   * Returns the handle of one Dwg_Object instance.
+   * @param ptr Pointer to one Dwg_Object instance.
+   * @returns Returns the handle of one Dwg_Object instance.
+   */
   dwg_object_get_handle_object(ptr: Dwg_Object_Ptr): Dwg_Handle {
     return this.wasmInstance.dwg_object_get_handle_object(ptr);  
   }
 
-  dwg_object_object_get_handle_object(ptr: Dwg_Object_Ptr): Dwg_Handle {
+  /**
+   * Returns the handle of one Dwg_Object_Object instance.
+   * @param ptr Pointer to one Dwg_Object_Object instance.
+   * @returns Returns the handle of one Dwg_Object_Object instance.
+   */
+  dwg_object_object_get_handle_object(ptr: Dwg_Object_Object_Ptr): Dwg_Handle {
     return this.wasmInstance.dwg_object_object_get_handle_object(ptr);  
   }
 
-  dwg_object_object_get_ownerhandle_object(ptr: Dwg_Object_Ptr): Dwg_Object_Ref {
+  dwg_object_object_get_ownerhandle_object(ptr: Dwg_Object_Object_Ptr): Dwg_Object_Ref {
     return this.wasmInstance.dwg_object_object_get_ownerhandle_object(ptr);  
   }
 

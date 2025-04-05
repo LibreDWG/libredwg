@@ -1,7 +1,9 @@
 import { 
+  DwgBlockRecordTableEntry,
   DwgCommonObject,
   DwgCommonTableEntry, 
   DwgDatabase, 
+  DwgDimStyleTableEntry, 
   DwgImageDefObject, 
   DwgLayerTableEntry, 
   DwgLayoutObject, 
@@ -9,6 +11,7 @@ import {
   DwgLTypeTableEntry,
   DwgPoint2D,
   DwgPoint3D,
+  DwgStyleTableEntry,
   DwgVPortTableEntry
 } from './types'
 import { 
@@ -35,10 +38,19 @@ export class LibreDwgConverter {
   convert(data: Dwg_Data_Ptr) {
     const db: DwgDatabase = {
       tables: {
+        BLOCK_RECORD: {
+          entries: []
+        },
+        DIMSTYLE: {
+          entries: []
+        },
         LAYER: {
           entries: []
         },
         LTYPE: {
+          entries: []
+        },
+        STYLE: {
           entries: []
         },
         VPORT: {
@@ -59,11 +71,20 @@ export class LibreDwgConverter {
       if (tio) {
         const fixedtype = libredwg.dwg_object_get_fixedtype(obj);
         switch(fixedtype) {
+          case Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER:
+            db.tables.BLOCK_RECORD.entries.push(this.convertBlockRecord(tio, obj))
+            break;
+          case Dwg_Object_Type.DWG_TYPE_DIMSTYLE:
+            db.tables.DIMSTYLE.entries.push(this.convertDimStyle(tio, obj))
+            break;
           case Dwg_Object_Type.DWG_TYPE_LAYER:
             db.tables.LAYER.entries.push(this.convertLayer(tio, obj))
             break;
           case Dwg_Object_Type.DWG_TYPE_LTYPE:
             db.tables.LTYPE.entries.push(this.convertLineType(tio, obj))
+            break;
+          case Dwg_Object_Type.DWG_TYPE_STYLE:
+            db.tables.STYLE.entries.push(this.convertStyle(tio, obj))
             break;
           case Dwg_Object_Type.DWG_TYPE_VPORT:
             db.tables.VPORT.entries.push(this.convertViewport(tio, obj))
@@ -81,6 +102,197 @@ export class LibreDwgConverter {
       }
     }
     return db
+  }
+
+  private convertBlockRecord(item: Dwg_Object_Object_Ptr, obj: Dwg_Object_Ptr): DwgBlockRecordTableEntry {
+    const libredwg = this.libredwg
+    const commonAttrs = this.getCommonTableEntryAttrs(item, obj)
+    const insertionUnits = libredwg.dwg_dynapi_entity_value(item, 'insert_units').data as number
+    const explodability = libredwg.dwg_dynapi_entity_value(item, 'explodable').data as number
+    const scalability = libredwg.dwg_dynapi_entity_value(item, 'block_scaling').data as number
+    const layout_ptr = libredwg.dwg_dynapi_entity_value(item, 'layout').data as number
+    const layout = libredwg.dwg_ref_get_absref(layout_ptr)
+    // TODO: Handle preview
+  
+    return {
+      ...commonAttrs,
+      layout: layout,
+      insertionUnits: insertionUnits,
+      explodability: explodability,
+      scalability: scalability
+    }
+  }
+
+  private convertDimStyle(item: Dwg_Object_Object_Ptr, obj: Dwg_Object_Ptr): DwgDimStyleTableEntry {
+    const libredwg = this.libredwg
+    const commonAttrs = this.getCommonTableEntryAttrs(item, obj)
+    const DIMTOL = libredwg.dwg_dynapi_entity_value(item, 'DIMTOL').data as number
+    const DIMLIM = libredwg.dwg_dynapi_entity_value(item, 'DIMLIM').data as number
+    const DIMTIH = libredwg.dwg_dynapi_entity_value(item, 'DIMTIH').data as number
+    const DIMTOH = libredwg.dwg_dynapi_entity_value(item, 'DIMTOH').data as number
+    const DIMSE1 = libredwg.dwg_dynapi_entity_value(item, 'DIMSE1').data as number
+    const DIMSE2 = libredwg.dwg_dynapi_entity_value(item, 'DIMSE2').data as number
+    const DIMALT = libredwg.dwg_dynapi_entity_value(item, 'DIMALT').data as number
+    const DIMTOFL = libredwg.dwg_dynapi_entity_value(item, 'DIMTOFL').data as number
+    const DIMSAH = libredwg.dwg_dynapi_entity_value(item, 'DIMSAH').data as number
+    const DIMTIX = libredwg.dwg_dynapi_entity_value(item, 'DIMTIX').data as number
+    const DIMSOXD = libredwg.dwg_dynapi_entity_value(item, 'DIMSOXD').data as number
+    const DIMALTD = libredwg.dwg_dynapi_entity_value(item, 'DIMALTD').data as number
+    const DIMZIN = libredwg.dwg_dynapi_entity_value(item, 'DIMZIN').data as number
+    const DIMSD1 = libredwg.dwg_dynapi_entity_value(item, 'DIMSD1').data as number
+    const DIMSD2 = libredwg.dwg_dynapi_entity_value(item, 'DIMSD2').data as number
+    const DIMTOLJ = libredwg.dwg_dynapi_entity_value(item, 'DIMTOLJ').data as number
+    const DIMJUST = libredwg.dwg_dynapi_entity_value(item, 'DIMJUST').data as number
+    const DIMFIT = libredwg.dwg_dynapi_entity_value(item, 'DIMFIT').data as number
+    const DIMUPT = libredwg.dwg_dynapi_entity_value(item, 'DIMUPT').data as number
+    const DIMTZIN = libredwg.dwg_dynapi_entity_value(item, 'DIMTZIN').data as number
+    const DIMALTZ = libredwg.dwg_dynapi_entity_value(item, 'DIMALTZ').data as number
+    const DIMALTTZ = libredwg.dwg_dynapi_entity_value(item, 'DIMALTTZ').data as number
+    const DIMTAD = libredwg.dwg_dynapi_entity_value(item, 'DIMTAD').data as number
+    const DIMUNIT = libredwg.dwg_dynapi_entity_value(item, 'DIMUNIT').data as number
+    const DIMAUNIT = libredwg.dwg_dynapi_entity_value(item, 'DIMAUNIT').data as number
+    const DIMDEC = libredwg.dwg_dynapi_entity_value(item, 'DIMDEC').data as number
+    const DIMTDEC = libredwg.dwg_dynapi_entity_value(item, 'DIMTDEC').data as number
+    const DIMALTU = libredwg.dwg_dynapi_entity_value(item, 'DIMALTU').data as number
+    const DIMALTTD = libredwg.dwg_dynapi_entity_value(item, 'DIMALTTD').data as number
+    const DIMSCALE = libredwg.dwg_dynapi_entity_value(item, 'DIMSCALE').data as number
+    const DIMASZ = libredwg.dwg_dynapi_entity_value(item, 'DIMASZ').data as number
+    const DIMEXO = libredwg.dwg_dynapi_entity_value(item, 'DIMEXO').data as number
+    const DIMDLI = libredwg.dwg_dynapi_entity_value(item, 'DIMDLI').data as number
+    const DIMEXE = libredwg.dwg_dynapi_entity_value(item, 'DIMEXE').data as number
+    const DIMRND = libredwg.dwg_dynapi_entity_value(item, 'DIMRND').data as number
+    const DIMDLE = libredwg.dwg_dynapi_entity_value(item, 'DIMDLE').data as number
+    const DIMTP = libredwg.dwg_dynapi_entity_value(item, 'DIMTP').data as number
+    const DIMTM = libredwg.dwg_dynapi_entity_value(item, 'DIMTM').data as number
+    const DIMFXL = libredwg.dwg_dynapi_entity_value(item, 'DIMFXL').data as number
+    const DIMJOGANG = libredwg.dwg_dynapi_entity_value(item, 'DIMJOGANG').data as number
+    const DIMTFILL = libredwg.dwg_dynapi_entity_value(item, 'DIMTFILL').data as number
+    const DIMTFILLCLR = libredwg.dwg_dynapi_entity_value(item, 'DIMTFILLCLR').data as number
+    const DIMAZIN = libredwg.dwg_dynapi_entity_value(item, 'DIMAZIN').data as number
+    const DIMARCSYM = libredwg.dwg_dynapi_entity_value(item, 'DIMARCSYM').data as number
+    const DIMTXT = libredwg.dwg_dynapi_entity_value(item, 'DIMTXT').data as number
+    const DIMCEN = libredwg.dwg_dynapi_entity_value(item, 'DIMCEN').data as number
+    const DIMTSZ = libredwg.dwg_dynapi_entity_value(item, 'DIMTSZ').data as number
+    const DIMALTF = libredwg.dwg_dynapi_entity_value(item, 'DIMALTF').data as number
+    const DIMLFAC = libredwg.dwg_dynapi_entity_value(item, 'DIMLFAC').data as number
+    const DIMTVP = libredwg.dwg_dynapi_entity_value(item, 'DIMTVP').data as number
+    const DIMTFAC = libredwg.dwg_dynapi_entity_value(item, 'DIMTFAC').data as number
+    const DIMGAP = libredwg.dwg_dynapi_entity_value(item, 'DIMGAP').data as number
+    const DIMPOST = libredwg.dwg_dynapi_entity_value(item, 'DIMPOST').data as string
+    const DIMAPOST = libredwg.dwg_dynapi_entity_value(item, 'DIMAPOST').data as string
+    const DIMBLK_T = libredwg.dwg_dynapi_entity_value(item, 'DIMBLK_T').data as string
+    const DIMBLK1_T = libredwg.dwg_dynapi_entity_value(item, 'DIMBLK1_T').data as string
+    const DIMBLK2_T = libredwg.dwg_dynapi_entity_value(item, 'DIMBLK2_T').data as string
+    const DIMALTRND = libredwg.dwg_dynapi_entity_value(item, 'DIMALTRND').data as number
+    const DIMCLRD_N = libredwg.dwg_dynapi_entity_value(item, 'DIMCLRD_N').data as number
+    const DIMCLRE_N = libredwg.dwg_dynapi_entity_value(item, 'DIMCLRE_N').data as number
+    const DIMCLRT_N = libredwg.dwg_dynapi_entity_value(item, 'DIMCLRT_N').data as number
+    const DIMCLRD = libredwg.dwg_dynapi_entity_value(item, 'DIMCLRD').data as number
+    const DIMCLRE = libredwg.dwg_dynapi_entity_value(item, 'DIMCLRE').data as number
+    const DIMCLRT = libredwg.dwg_dynapi_entity_value(item, 'DIMCLRT').data as number
+    const DIMADEC = libredwg.dwg_dynapi_entity_value(item, 'DIMADEC').data as number
+    const DIMFRAC = libredwg.dwg_dynapi_entity_value(item, 'DIMFRAC').data as number
+    const DIMLUNIT = libredwg.dwg_dynapi_entity_value(item, 'DIMLUNIT').data as number
+    const DIMDSEP = libredwg.dwg_dynapi_entity_value(item, 'DIMDSEP').data as number
+    const DIMTMOVE = libredwg.dwg_dynapi_entity_value(item, 'DIMTMOVE').data as number
+    const DIMATFIT = libredwg.dwg_dynapi_entity_value(item, 'DIMATFIT').data as number
+    const DIMFXLON = libredwg.dwg_dynapi_entity_value(item, 'DIMFXLON').data as number
+    const DIMTXTDIRECTION = libredwg.dwg_dynapi_entity_value(item, 'DIMTXTDIRECTION').data as number
+    const DIMALTMZF = libredwg.dwg_dynapi_entity_value(item, 'DIMALTMZF').data as number
+    const DIMALTMZS = libredwg.dwg_dynapi_entity_value(item, 'DIMALTMZS').data as string
+    const DIMMZF = libredwg.dwg_dynapi_entity_value(item, 'DIMMZF').data as number
+    const DIMMZS = libredwg.dwg_dynapi_entity_value(item, 'DIMMZS').data as string
+    const DIMLWD = libredwg.dwg_dynapi_entity_value(item, 'DIMLWD').data as number
+    const DIMLWE = libredwg.dwg_dynapi_entity_value(item, 'DIMLWE').data as number
+    const DIMTXSTY_Ptr = libredwg.dwg_dynapi_entity_value(item, 'DIMTXSTY').data as number
+    const DIMTXSTY = libredwg.dwg_ref_get_absref(DIMTXSTY_Ptr)
+    const DIMLDRBLK_Ptr = libredwg.dwg_dynapi_entity_value(item, 'DIMLDRBLK').data as number
+    const DIMLDRBLK = libredwg.dwg_ref_get_absref(DIMLDRBLK_Ptr)
+
+    return {
+      ...commonAttrs,
+      DIMPOST: DIMPOST,
+      DIMAPOST: DIMAPOST,
+      DIMBLK: DIMBLK_T,
+      DIMBLK1: DIMBLK1_T,
+      DIMBLK2: DIMBLK2_T,
+      DIMSCALE: DIMSCALE,
+      DIMASZ: DIMASZ,
+      DIMEXO: DIMEXO,
+      DIMDLI: DIMDLI,
+      DIMEXE: DIMEXE,
+      DIMRND: DIMRND,
+      DIMDLE: DIMDLE,
+      DIMTP: DIMTP,
+      DIMTM: DIMTM,
+      DIMTXT: DIMTXT,
+      DIMCEN: DIMCEN,
+      DIMTSZ: DIMTSZ,
+      DIMALTF: DIMALTF,
+      DIMLFAC: DIMLFAC,
+      DIMTVP: DIMTVP,
+      DIMTFAC: DIMTFAC,
+      DIMGAP: DIMGAP,
+      DIMALTRND: DIMALTRND,
+      DIMTOL: DIMTOL,
+      DIMLIM: DIMLIM,
+      DIMTIH: DIMTIH,
+      DIMTOH: DIMTOH,
+      DIMSE1: DIMSE1 as 0 | 1,
+      DIMSE2: DIMSE2 as 0 | 1,
+      DIMTAD: DIMTAD,
+      DIMZIN: DIMZIN,
+      DIMAZIN: DIMAZIN,
+      DIMALT: DIMALT as 0 | 1,
+      DIMALTD: DIMALTD as 0 | 1,
+      DIMTOFL: DIMTOFL as 0 | 1,
+      DIMSAH: DIMSAH as 0 | 1,
+      DIMTIX: DIMTIX as 0 | 1,
+      DIMSOXD: DIMSOXD as 0 | 1,
+      DIMCLRD: DIMCLRD,
+      DIMCLRE: DIMCLRE,
+      DIMCLRT: DIMCLRT,
+      DIMADEC: DIMADEC,
+      DIMUNIT: DIMUNIT,
+      DIMDEC: DIMDEC,
+      DIMTDEC: DIMTDEC,
+      DIMALTU: DIMALTU,
+      DIMALTTD: DIMALTTD,
+      DIMAUNIT: DIMAUNIT,
+      DIMFRAC: DIMFRAC,
+      DIMLUNIT: DIMLUNIT,
+      DIMDSEP: String.fromCharCode(DIMDSEP),
+      DIMTMOVE: DIMTMOVE,
+      DIMJUST: DIMJUST,
+      DIMSD1: DIMSD1 as 0 | 1,
+      DIMSD2: DIMSD2 as 0 | 1,
+      DIMTOLJ: DIMTOLJ,
+      DIMTZIN: DIMTZIN,
+      DIMALTZ: DIMALTZ,
+      DIMALTTZ: DIMALTTZ,
+      DIMFIT: DIMFIT,
+      DIMUPT: DIMUPT,
+      DIMATFIT: DIMATFIT,
+      DIMTXSTY: DIMTXSTY,
+      DIMLDRBLK: DIMLDRBLK,
+      DIMLWD: DIMLWD,
+      DIMLWE: DIMLWE,
+
+      DIMFXL: DIMFXL,
+      DIMJOGANG: DIMJOGANG,
+      DIMTFILL: DIMTFILL,
+      DIMTFILLCLR: DIMTFILLCLR,
+      DIMARCSYM: DIMARCSYM,
+      DIMCLRD_N: DIMCLRD_N,
+      DIMCLRE_N: DIMCLRE_N,
+      DIMCLRT_N: DIMCLRT_N,
+      DIMFXLON: DIMFXLON,
+      DIMTXTDIRECTION: DIMTXTDIRECTION,
+      DIMALTMZF: DIMALTMZF,
+      DIMALTMZS: DIMALTMZS,
+      DIMMZF: DIMMZF,
+      DIMMZS: DIMMZS,
+    }
   }
 
   private convertLayer(item: Dwg_Object_Object_Ptr, obj: Dwg_Object_Ptr): DwgLayerTableEntry {
@@ -142,6 +354,30 @@ export class LibreDwgConverter {
       })
     })
     return patterns
+  }
+
+  private convertStyle(item: Dwg_Object_Object_Ptr, obj: Dwg_Object_Ptr): DwgStyleTableEntry {
+    const libredwg = this.libredwg
+    const commonAttrs = this.getCommonTableEntryAttrs(item, obj)
+    const standardFlag = libredwg.dwg_dynapi_entity_value(item, 'flag').data as number
+    const widthFactor = libredwg.dwg_dynapi_entity_value(item, 'width_factor').data as number
+    const obliqueAngle = libredwg.dwg_dynapi_entity_value(item, 'oblique_angle').data as number
+    const textGenerationFlag = libredwg.dwg_dynapi_entity_value(item, 'generation').data as number
+    const lastHeight = libredwg.dwg_dynapi_entity_value(item, 'last_height').data as number
+    const font = libredwg.dwg_dynapi_entity_value(item, 'font_file').data as string
+    const bigFont = libredwg.dwg_dynapi_entity_value(item, 'bigfont_file').data as string
+  
+    return {
+      ...commonAttrs,
+      standardFlag: standardFlag,
+      fixedTextHeight: 0, // TODO: Set the correct value
+      widthFactor: widthFactor,
+      obliqueAngle: obliqueAngle,
+      textGenerationFlag: textGenerationFlag,
+      lastHeight: lastHeight,
+      font: font,
+      bigFont: bigFont,
+    }
   }
 
   private convertViewport(item: Dwg_Object_Object_Ptr, obj: Dwg_Object_Ptr): DwgVPortTableEntry {
