@@ -21,4 +21,4 @@ emscripten::val handle_to_js_object(Dwg_Handle* handle);
 
 emscripten::val object_ref_to_js_object(BITCODE_H object_ref);
 
-emscripten::val color_to_js_object(Dwg_Color* color);
+emscripten::val color_to_js_object(const Dwg_Color* color);

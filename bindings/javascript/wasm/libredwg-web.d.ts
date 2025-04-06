@@ -241,7 +241,7 @@ declare class FSNode {
 interface WasmModule {
   __Z19handle_to_js_objectP11_dwg_handle(_0: number, _1: number): void;
   __Z23object_ref_to_js_objectP15_dwg_object_ref(_0: number, _1: number): void;
-  __Z18color_to_js_objectP10_dwg_color(_0: number, _1: number): void;
+  __Z18color_to_js_objectPK10_dwg_color(_0: number, _1: number): void;
   __Znwm(_0: number): number;
   __ZN10emscripten3val3setIA5_cNSt3__212basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEEEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
   __ZdlPv(_0: number): void;
@@ -283,6 +283,8 @@ interface WasmModule {
   _dwg_ent_to_object(_0: number, _1: number): number;
   _dwg_object_get_handle(_0: number, _1: number): number;
   __Z43dwg_object_entity_get_handle_object_wrapperm(_0: number, _1: number): void;
+  __Z42dwg_object_entity_get_color_object_wrapperm(_0: number, _1: number): void;
+  _dwg_ent_get_color(_0: number, _1: number): number;
   __Z40dwg_object_entity_get_layer_name_wrapperm(_0: number, _1: number): void;
   _dwg_ent_get_layer_name(_0: number, _1: number): number;
   __Z40dwg_object_entity_get_ltype_name_wrapperm(_0: number, _1: number): void;
@@ -668,6 +670,9 @@ interface WasmModule {
   _decode_preR13(_0: number, _1: number): number;
   _dwg_bmp(_0: number, _1: number, _2: number): number;
   _dwg_free_eed(_0: number): void;
+  _dwg_color_method_name(_0: number): number;
+  _dwg_decode_preR13_handleref(_0: number, _1: number, _2: number): number;
+  _dxf_cvt_lweight(_0: number): number;
   _dwg_setup_TEXT(_0: number): number;
   _dwg_setup_ATTRIB(_0: number): number;
   _dwg_setup_ATTDEF(_0: number): number;
@@ -719,10 +724,8 @@ interface WasmModule {
   _dwg_setup_MLINE(_0: number): number;
   _dwg_setup_BLOCK_CONTROL(_0: number): number;
   _dwg_setup_BLOCK_HEADER(_0: number): number;
-  _dwg_decode_preR13_handleref(_0: number, _1: number, _2: number): number;
   _dwg_setup_LAYER_CONTROL(_0: number): number;
   _dwg_setup_LAYER(_0: number): number;
-  _dwg_color_method_name(_0: number): number;
   _dwg_setup_STYLE_CONTROL(_0: number): number;
   _dwg_setup_STYLE(_0: number): number;
   _dwg_setup_LTYPE_CONTROL(_0: number): number;
@@ -927,7 +930,6 @@ interface WasmModule {
   _dat_read_stream(_0: number, _1: number): number;
   _dwg_read_data(_0: number, _1: number, _2: number): number;
   _dwg_get_entity_layer(_0: number): number;
-  _dxf_cvt_lweight(_0: number): number;
   _dxf_revcvt_lweight(_0: number): number;
   _dwg_dynapi_entity_utf8text(_0: number, _1: number, _2: number, _3: number, _4: number, _5: number): number;
   _dwg_ctrl_table(_0: number, _1: number): number;
@@ -1978,7 +1980,6 @@ interface WasmModule {
   _dwg_ent_get_num_eed(_0: number, _1: number): number;
   _dwg_ent_get_eed(_0: number, _1: number, _2: number): number;
   _dwg_ent_get_eed_data(_0: number, _1: number, _2: number): number;
-  _dwg_ent_get_color(_0: number, _1: number): number;
   _dwg_ent_get_picture_exists(_0: number, _1: number): number;
   _dwg_ent_get_picture_size(_0: number, _1: number): BigInt;
   _dwg_ent_get_picture(_0: number, _1: number): number;
@@ -2512,6 +2513,7 @@ interface EmbindModule {
   dwg_object_object_get_handle_object(_0: number): any;
   dwg_object_entity_get_ownerhandle_object(_0: number): any;
   dwg_object_entity_get_handle_object(_0: number): any;
+  dwg_object_entity_get_color_object(_0: number): any;
   dwg_ref_get_handle_object(_0: number): any;
   dwg_dynapi_header_value(_0: number, _1: EmbindString): any;
   dwg_dynapi_entity_value(_0: number, _1: EmbindString): any;

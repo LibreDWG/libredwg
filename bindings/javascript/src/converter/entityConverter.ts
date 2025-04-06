@@ -33,6 +33,7 @@ export class AcDbEntityConverter {
 
   private getCommonAttrs(entity: Dwg_Object_Entity_Ptr) {
     const libredwg = this.libredwg
+    const color = libredwg.dwg_object_entity_get_color_object(entity)
     const layer = libredwg.dwg_object_entity_get_layer_name(entity)
     const handle = libredwg.dwg_object_entity_get_handle_object(entity)
     const ownerhandle = libredwg.dwg_object_entity_get_ownerhandle_object(entity)
@@ -42,9 +43,12 @@ export class AcDbEntityConverter {
     const isVisible = !libredwg.dwg_object_entity_get_invisible(entity)
 
     return {
-      layer: layer,
       handle: handle.value,
       ownerHandle: ownerhandle.absolute_ref,
+      layer: layer,
+      color: color.rgb,
+      colorIndex: color.index,
+      colorName: color.name,
       lineType: lineType,
       lineweight: lineweight,
       lineTypeScale: lineTypeScale,
