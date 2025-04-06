@@ -278,6 +278,173 @@ EMSCRIPTEN_BINDINGS(libredwg_dwg_object_object) {
 
 /***********************************************************************/
 
+uintptr_t dwg_object_entity_get_ownerhandle_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_ent_get_ownerhandle(ent, &error));
+}
+
+emscripten::val dwg_object_entity_get_ownerhandle_object_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  Dwg_Object_Ref* ownerhandle = dwg_ent_get_ownerhandle(ent, &error);
+  return object_ref_to_js_object(ownerhandle);
+}
+
+uintptr_t dwg_object_entity_get_handle_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  Dwg_Object* obj = dwg_ent_to_object(ent, &error);
+  return reinterpret_cast<uintptr_t>(dwg_object_get_handle(obj, &error));
+}
+
+emscripten::val dwg_object_entity_get_handle_object_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  Dwg_Object* obj = dwg_ent_to_object(ent, &error);
+  Dwg_Handle* handle = dwg_object_get_handle(obj, &error);
+  return handle_to_js_object(handle);
+}
+
+/**
+ * Get the name of the layer referenced by this entity
+ */
+std::string dwg_object_entity_get_layer_name_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_layer_name(ent, &error);
+}
+
+/**
+ * Get the name of the line type referenced by this entity
+ */
+std::string dwg_object_entity_get_ltype_name_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_ltype_name(ent, &error);
+}
+
+double dwg_object_entity_get_ltype_flags_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_linetype_flags(ent, &error);
+}
+
+/**
+ * Get The line type scale factor of this entity.
+ */
+double dwg_object_entity_get_ltype_scale_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_linetype_scale(ent, &error);
+}
+
+/**
+ * Get the line weight used by this entity.
+ */
+BITCODE_RC dwg_object_entity_get_line_weight_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_linewt(ent, &error);
+}
+
+/**
+ * Get the entity mode of this entity
+ * - 0: has no ownerhandle
+ * - 1: paper space
+ * - 2: model space
+ * - 3: has ownerhandle
+ */
+BITCODE_BB dwg_object_entity_get_entmode_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_entmode(ent, &error);
+}
+
+/**
+ * Get the invisibility state of this entity.
+ */
+BITCODE_BS dwg_object_entity_get_invisible_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_invisible(ent, &error);
+}
+
+BITCODE_BB dwg_object_entity_get_plotstyle_flags_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_plotstyle_flags(ent, &error);
+}
+
+BITCODE_BB dwg_object_entity_get_material_flags_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_material_flags(ent, &error);
+}
+
+BITCODE_BB dwg_object_entity_get_shadow_flags_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_shadow_flags(ent, &error);
+}
+
+BITCODE_BB dwg_object_entity_has_full_visualstyle_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_has_full_visualstyle(ent, &error);
+}
+
+BITCODE_BB dwg_object_entity_has_face_visualstyle_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_has_face_visualstyle(ent, &error);
+}
+
+BITCODE_BB dwg_object_entity_has_edge_visualstyle_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_has_edge_visualstyle(ent, &error);
+}
+
+BITCODE_BL dwg_object_entity_get_num_reactors_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return dwg_ent_get_num_reactors(ent, &error);
+}
+
+uintptr_t dwg_object_entity_get_reactors_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_ent_get_reactors(ent, &error));
+}
+
+/**
+ * Methods to access fields of Dwg_Object_Entity
+ */
+EMSCRIPTEN_BINDINGS(libredwg_dwg_object_entity) {
+  DEFINE_FUNC(dwg_object_entity_get_ownerhandle);
+  DEFINE_FUNC(dwg_object_entity_get_ownerhandle_object);
+  DEFINE_FUNC(dwg_object_entity_get_handle);
+  DEFINE_FUNC(dwg_object_entity_get_handle_object);
+  DEFINE_FUNC(dwg_object_entity_get_layer_name);
+  DEFINE_FUNC(dwg_object_entity_get_ltype_name);
+  DEFINE_FUNC(dwg_object_entity_get_ltype_flags);
+  DEFINE_FUNC(dwg_object_entity_get_ltype_scale);
+  DEFINE_FUNC(dwg_object_entity_get_line_weight);
+  DEFINE_FUNC(dwg_object_entity_get_entmode);
+  DEFINE_FUNC(dwg_object_entity_get_invisible);
+  DEFINE_FUNC(dwg_object_entity_get_plotstyle_flags);
+  DEFINE_FUNC(dwg_object_entity_get_material_flags);
+  DEFINE_FUNC(dwg_object_entity_get_shadow_flags);
+  DEFINE_FUNC(dwg_object_entity_has_full_visualstyle);
+  DEFINE_FUNC(dwg_object_entity_has_face_visualstyle);
+  DEFINE_FUNC(dwg_object_entity_has_edge_visualstyle);
+  DEFINE_FUNC(dwg_object_entity_get_num_reactors);
+  DEFINE_FUNC(dwg_object_entity_get_reactors);
+}
+
+/***********************************************************************/
+
 /**
  * Returns the absolute handle reference (field 'absolute_ref') of Dwg_Object_Ref*
  */
