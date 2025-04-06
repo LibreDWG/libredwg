@@ -1,5 +1,5 @@
-import { DwgPoint3D } from "../common";
-import { DwgEntity } from "./entity";
+import { DwgPoint3D } from '../common';
+import { DwgEntity } from './entity';
 
 export interface DwgSplineEntity extends DwgEntity {
   normal?: DwgPoint3D;

@@ -1,4 +1,4 @@
-import { DwgPoint3D } from "../common";
+import { DwgPoint3D } from '../common';
 
 export interface DwgXData {
   appName: string;

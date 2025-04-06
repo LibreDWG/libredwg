@@ -1,5 +1,5 @@
-import { DwgPoint2D } from "../common";
-import { DwgCommonObject } from "./common";
+import { DwgPoint2D } from '../common';
+import { DwgCommonObject } from './common';
 
 export interface DwgImageDefObject extends DwgCommonObject {
   fileName: string;

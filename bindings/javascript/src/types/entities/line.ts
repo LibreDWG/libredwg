@@ -1,5 +1,5 @@
-import { DwgPoint3D } from "../common";
-import { DwgEntity } from "./entity";
+import { DwgPoint3D } from '../common';
+import { DwgEntity } from './entity';
 
 export interface DwgLineEntity extends DwgEntity {
   thickness: number;

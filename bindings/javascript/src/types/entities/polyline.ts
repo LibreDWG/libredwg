@@ -1,6 +1,6 @@
-import { DwgPoint3D } from "../common";
-import { DwgEntity } from "./entity";
-import { DwgVertexEntity } from "./vertex";
+import { DwgPoint3D } from '../common';
+import { DwgEntity } from './entity';
+import { DwgVertexEntity } from './vertex';
 
 export declare enum DwgPolylineFlag {
   CLOSED_POLYLINE = 1,

@@ -1,5 +1,5 @@
-import { DwgPoint2D, DwgPoint3D } from "../common";
-import { DwgEntity } from "./entity";
+import { DwgPoint2D, DwgPoint3D } from '../common';
+import { DwgEntity } from './entity';
 
 export declare enum DwgHatchSolidFill {
   PatternFill = 0,
@@ -133,7 +133,7 @@ interface DwgHatchEntityBase extends DwgEntity {
   extrusionDirection?: DwgPoint3D;
   patternName: string;
   solidFill: DwgHatchSolidFill;
-  patternFillColor: any;
+  patternFillColor: number;
   associativity: DwgHatchAssociativity;
   numberOfBoundaryPaths: number;
   boundaryPaths: DwgBoundaryPath[];

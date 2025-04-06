@@ -1,4 +1,4 @@
-import { DwgCommonObject } from "./common";
+import { DwgCommonObject } from './common';
 
 export interface DwgPlotSettingObject extends DwgCommonObject {
   pageSetupName: string;

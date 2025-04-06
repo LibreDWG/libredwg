@@ -1,4 +1,4 @@
-import { DwgCommonTableEntry } from "./table";
+import { DwgCommonTableEntry } from './table';
 
 export interface DwgDimStyleTableEntry extends DwgCommonTableEntry {
   DIMPOST?: string;

@@ -1,5 +1,5 @@
-import { DwgPoint2D, DwgPoint3D } from "../common";
-import { DwgCommonObject } from "./common";
+import { DwgPoint2D, DwgPoint3D } from '../common';
+import { DwgCommonObject } from './common';
 
 export interface DwgLayoutObject extends DwgCommonObject {
   layoutName: string;

@@ -1,4 +1,4 @@
-import { DwgImageDefObject, DwgLayoutObject } from "./objects";
+import { DwgImageDefObject, DwgLayoutObject } from './objects';
 import { 
   DwgBlockRecordTableEntry,
   DwgDimStyleTableEntry,
@@ -7,7 +7,7 @@ import {
   DwgStyleTableEntry,
   DwgTable,
   DwgVPortTableEntry
-} from "./tables";
+} from './tables';
 
 export interface DwgDatabase {
   tables: {

@@ -1,7 +1,7 @@
-import { LibreDwgConverter } from './converter';
 import { MainModule } from '../wasm/libredwg-web'
-import { createModule, Dwg_File_Type, Dwg_Object_Type } from './utils';
+import { LibreDwgConverter } from './converter';
 import { DwgPoint2D, DwgPoint3D } from './types';
+import { createModule, Dwg_File_Type, Dwg_Object_Type } from './utils';
 
 export type Dwg_Array_Ptr = number;
 export type Dwg_Data_Ptr = number;
@@ -71,7 +71,7 @@ export class LibreDwg {
 
   dwg_read_data(fileContent: string | ArrayBuffer, fileType: number) {
     if (fileType == Dwg_File_Type.DWG) {
-      const fileName = "tmp.dwg";
+      const fileName = 'tmp.dwg';
       this.wasmInstance.FS.writeFile(fileName, new Uint8Array(fileContent as ArrayBuffer));
       const result = this.wasmInstance.dwg_read_file(fileName);
       if (result.error != 0) {

@@ -1,5 +1,5 @@
-import { DwgPoint2D, DwgPoint3D } from "../common";
-import { DwgEntity } from "./entity";
+import { DwgPoint2D, DwgPoint3D } from '../common';
+import { DwgEntity } from './entity';
 
 export declare enum DwgViewportStatusFlag {
   PERSPECTIVE_MODE = 1,

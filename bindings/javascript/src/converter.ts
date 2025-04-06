@@ -1,4 +1,13 @@
 import { 
+  Dwg_Color,
+  Dwg_Data_Ptr,
+  Dwg_LTYPE_Dash,
+  Dwg_Object_Object_Ptr,
+  Dwg_Object_Ptr,
+  Dwg_Object_Ref_Ptr,
+  LibreDwgEx
+} from './libredwg'
+import { 
   DwgBlockRecordTableEntry,
   DwgCommonObject,
   DwgCommonTableEntry, 
@@ -14,15 +23,6 @@ import {
   DwgStyleTableEntry,
   DwgVPortTableEntry
 } from './types'
-import { 
-  Dwg_Color,
-  Dwg_Data_Ptr,
-  Dwg_LTYPE_Dash,
-  Dwg_Object_Object_Ptr,
-  Dwg_Object_Ptr,
-  Dwg_Object_Ref_Ptr,
-  LibreDwgEx
-} from './libredwg'
 import { Dwg_Object_Type } from './utils'
 
 /**

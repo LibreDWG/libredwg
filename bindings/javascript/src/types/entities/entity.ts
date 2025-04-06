@@ -1,4 +1,4 @@
-import { DwgXData } from "../shared/xdata";
+import { DwgXData } from '../shared/xdata';
 
 export interface DwgEntity {
   type: string;

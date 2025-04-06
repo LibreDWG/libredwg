@@ -1,6 +1,6 @@
-import { DwgPoint3D } from "../common";
-import { DwgAttachmentPoint } from "./dimension";
-import { DwgEntity } from "./entity";
+import { DwgPoint3D } from '../common';
+import { DwgAttachmentPoint } from './dimension';
+import { DwgEntity } from './entity';
 
 export declare enum DwgMTextDrawingDirection {
   LEFT_TO_RIGHT = 1,
