@@ -72,7 +72,6 @@ export declare enum DwgDimensionToleranceTextVertical {
 
 export interface DwgDimensionEntityCommon extends DwgEntity {
   subclassMarker: string;
-  handle: string;
   version: string;
   name: string;
   definitionPoint: DwgPoint3D;

@@ -30,7 +30,6 @@ export interface DwgTableCell {
 }
 
 export interface DwgTableEntity extends DwgEntity {
-  handle: string;
   ownerDictionaryId: string;
   name: string;
   version: number;

@@ -358,6 +358,19 @@ export class LibreDwg {
     return this.wasmInstance.dwg_object_object_get_ownerhandle_object(ptr);  
   }
 
+  /**
+   * Returns the handle of one Dwg_Object_Entity instance.
+   * @param ptr Pointer to one Dwg_Object_Entity instance.
+   * @returns Returns the handle of one Dwg_Object_Entity instance.
+   */
+  dwg_object_entity_get_handle_object(ptr: Dwg_Object_Entity_Ptr): Dwg_Handle {
+    return this.wasmInstance.dwg_object_entity_get_handle_object(ptr);  
+  }
+
+  dwg_object_entity_get_ownerhandle_object(ptr: Dwg_Object_Entity_Ptr): Dwg_Object_Ref {
+    return this.wasmInstance.dwg_object_entity_get_ownerhandle_object(ptr);  
+  }
+
   static createByWasmInstance(wasmInstance: MainModule): LibreDwgEx {
     return this.instance == null ? new LibreDwg(wasmInstance) as LibreDwgEx : this.instance;
   }

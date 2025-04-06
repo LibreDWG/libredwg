@@ -67,13 +67,14 @@ const dwg = libredwg.dwg_read_data(fileContent, 0);
 
 Web assembly wrapper is stored in folder [dist](./dist/). It provides one class `LibreDwg` to wrap the web assembly. This class provides
 
+- Method to convert dwg data to [DwgDatabase](./src/types/database.ts) instance with the strong type definition so that it is easy to use.
 - More methods that the raw web assembly API doesn't provide. 
-- More accurated type definition so that it is easy to understand API.
 
 ```typescript
 import { Dwg_File_Type, LibreDwg } from '@mlightcad/libredwg-web';
 const libredwg = await LibreDwg.create();
 const dwg = libredwg.dwg_read_data(fileContent, Dwg_File_Type.DWG);
+const db = this.libredwg.convert(dwg);
 ```
 
 ## Demo App

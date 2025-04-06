@@ -1,8 +1,7 @@
 import { DwgXData } from '../shared/xdata';
 
 export interface DwgEntity {
-  type: string;
-  handle: string;
+  handle: number;
   ownerBlockRecordSoftId?: string;
   isInPaperSpace?: boolean;
   layer: string;

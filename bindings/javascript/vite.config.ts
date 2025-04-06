@@ -28,8 +28,8 @@ export default defineConfig({
           // Define the array of files to copy: [source, destination]
           const filesToCopy = [
             {
-              source: path.resolve(__dirname, 'dist/libredwg-web.mjs'),
-              dest: path.resolve(__dirname, 'test/libredwg-web.mjs'),
+              source: path.resolve(__dirname, 'dist/libredwg-web.js'),
+              dest: path.resolve(__dirname, 'test/libredwg-web.js'),
             }
           ];
 

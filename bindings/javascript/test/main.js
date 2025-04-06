@@ -2,7 +2,7 @@ import {
   Dwg_File_Type,
   Dwg_Object_Type_Inverted,
   LibreDwg
-} from './libredwg-web.mjs';
+} from './libredwg-web.js';
 
 // load libredwg webassembly module
 const libredwg = await LibreDwg.create();
