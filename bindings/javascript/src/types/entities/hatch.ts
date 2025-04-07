@@ -129,6 +129,7 @@ export interface DwgHatchDefinitionLine {
 }
 
 interface DwgHatchEntityBase extends DwgEntity {
+  type: 'HATCH';
   elevationPoint: DwgPoint3D;
   extrusionDirection?: DwgPoint3D;
   patternName: string;

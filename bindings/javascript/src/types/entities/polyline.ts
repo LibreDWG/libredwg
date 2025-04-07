@@ -21,6 +21,7 @@ export declare enum DwgSmoothType {
 }
 
 export interface DwgPolylineEntity extends DwgEntity {
+  type: 'POLYLINE';
   thickness: number;
   flag: number;
   startWidth: number;

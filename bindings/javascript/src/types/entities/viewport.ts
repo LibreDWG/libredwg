@@ -64,7 +64,7 @@ export declare enum DwgDefaultLightingType {
 }
 
 export interface DwgViewportEntity extends DwgEntity {
-  subclassMarker: string;
+  type: 'VIEWPORT';
   viewportCenter: DwgPoint3D;
   width: number;
   height: number;

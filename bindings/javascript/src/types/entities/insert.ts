@@ -2,6 +2,7 @@ import { DwgPoint3D } from '../common';
 import { DwgEntity } from './entity';
 
 export interface DwgInsertEntity extends DwgEntity {
+  type: 'INSERT';
   isVariableAttributes?: boolean;
   name: string;
   insertionPoint: DwgPoint3D;

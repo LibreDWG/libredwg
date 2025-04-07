@@ -2,6 +2,7 @@ import { DwgPoint2D, DwgPoint3D } from '../common';
 import { DwgEntity } from './entity';
 
 export interface DwgLWPolylineEntity extends DwgEntity {
+  type: 'LWPOLYLINE';
   numberOfVertices: number;
   flag: number;
   constantWidth?: number;

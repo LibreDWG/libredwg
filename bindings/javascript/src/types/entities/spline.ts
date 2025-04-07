@@ -2,6 +2,7 @@ import { DwgPoint3D } from '../common';
 import { DwgEntity } from './entity';
 
 export interface DwgSplineEntity extends DwgEntity {
+  type: 'SPLINE';
   normal?: DwgPoint3D;
   flag: number;
   degree: number;

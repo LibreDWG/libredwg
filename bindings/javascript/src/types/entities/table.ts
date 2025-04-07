@@ -30,6 +30,7 @@ export interface DwgTableCell {
 }
 
 export interface DwgTableEntity extends DwgEntity {
+  type: 'ACAD_TABLE';
   ownerDictionaryId: string;
   name: string;
   version: number;

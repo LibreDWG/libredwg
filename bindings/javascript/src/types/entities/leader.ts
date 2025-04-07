@@ -9,6 +9,7 @@ export declare enum DwgLeaderCreationFlag {
 }
 
 export interface DwgLeaderEntity extends DwgEntity {
+  type: 'LEADER';
   styleName: string;
   isArrowheadEnabled: boolean;
   isSpline: boolean;

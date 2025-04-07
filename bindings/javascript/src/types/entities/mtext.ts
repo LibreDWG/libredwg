@@ -9,6 +9,7 @@ export declare enum DwgMTextDrawingDirection {
 }
 
 export interface DwgMTextEntity extends DwgEntity {
+  type: 'MTEXT';
   insertionPoint: DwgPoint3D;
   height: number;
   width: number;

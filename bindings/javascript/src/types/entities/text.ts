@@ -24,6 +24,7 @@ export declare enum DwgTextVerticalAlign {
 }
 
 export interface DwgTextEntity extends DwgEntity {
+  type: 'TEXT';
   text: string;
   thickness: number;
   startPoint: DwgPoint3D;

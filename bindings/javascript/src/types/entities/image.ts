@@ -19,6 +19,7 @@ export declare enum DwgImageClipMode {
 }
 
 export interface DwgImageEntity extends DwgEntity {
+  type: 'IMAGE';
   version: number;
   position: DwgPoint3D;
   uPixel: DwgPoint3D;
