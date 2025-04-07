@@ -1,7 +1,7 @@
-import { DwgPoint3D } from 'types'
+import { Dwg_Object_Type } from '../enums'
+import { Dwg_Object_Entity_Ptr, Dwg_Object_Ptr, LibreDwgEx } from '../libredwg'
+import { DwgArcEntity, DwgEntity, DwgPoint3D } from '../types'
 
-import { Dwg_Object_Entity_Ptr, LibreDwgEx } from '../libredwg'
-import { DwgArcEntity } from '../types/entities'
 
 export class AcDbEntityConverter {
   libredwg: LibreDwgEx
@@ -10,7 +10,16 @@ export class AcDbEntityConverter {
     this.libredwg = instance
   }
 
-  convertArc(entity: Dwg_Object_Entity_Ptr): DwgArcEntity {
+  convert(object_ptr: Dwg_Object_Ptr): DwgEntity | undefined {
+    const libredwg = this.libredwg
+    const tio = libredwg.dwg_object_to_entity_tio(object_ptr)
+    if (tio && libredwg.dwg_object_get_fixedtype(object_ptr) == Dwg_Object_Type.DWG_TYPE_ARC) {
+      return this.convertArc(tio)
+    }
+    return undefined
+  }
+
+  private convertArc(entity: Dwg_Object_Entity_Ptr): DwgArcEntity {
     const libredwg = this.libredwg
     const commonAttrs = this.getCommonAttrs(entity)
     const center = libredwg.dwg_dynapi_entity_value(entity, 'center').data as DwgPoint3D

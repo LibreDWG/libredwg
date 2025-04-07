@@ -1,3 +1,4 @@
+import { DwgEntity } from '../entities';
 import { DwgCommonTableEntry } from './table';
 
 export interface DwgBlockRecordTableEntry extends DwgCommonTableEntry {
@@ -7,4 +8,5 @@ export interface DwgBlockRecordTableEntry extends DwgCommonTableEntry {
   explodability: number;
   scalability: number;
   bmpPreview?: string;
+  entities: DwgEntity[]
 }

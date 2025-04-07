@@ -1,3 +1,4 @@
+import { Dwg_Object_Type } from '../enums'
 import { 
   Dwg_Color,
   Dwg_Data_Ptr,
@@ -13,6 +14,7 @@ import {
   DwgCommonTableEntry, 
   DwgDatabase, 
   DwgDimStyleTableEntry, 
+  DwgEntity, 
   DwgImageDefObject, 
   DwgLayerTableEntry, 
   DwgLayoutObject, 
@@ -23,7 +25,6 @@ import {
   DwgStyleTableEntry,
   DwgVPortTableEntry
 } from '../types'
-import { Dwg_Object_Type } from '../utils'
 
 /**
  * Class used to convert Dwg_Data instance to DwgDatabase instance.
@@ -113,14 +114,26 @@ export class LibreDwgConverter {
     const layout_ptr = libredwg.dwg_dynapi_entity_value(item, 'layout').data as number
     const layout = libredwg.dwg_ref_get_absref(layout_ptr)
     // TODO: Handle preview
+    const entities = this.convertEntities(item)
   
     return {
       ...commonAttrs,
       layout: layout,
       insertionUnits: insertionUnits,
       explodability: explodability,
-      scalability: scalability
+      scalability: scalability,
+      entities: entities
     }
+  }
+
+  private convertEntities(item: Dwg_Object_Object_Ptr): DwgEntity[] {
+    const libredwg = this.libredwg
+    const entities: DwgEntity[] = []
+    let entity = libredwg.get_first_owned_entity(item)
+    while (entity) {
+      entity = libredwg.get_next_owned_entity(item, entity)
+    }
+    return entities
   }
 
   private convertDimStyle(item: Dwg_Object_Object_Ptr, obj: Dwg_Object_Ptr): DwgDimStyleTableEntry {
