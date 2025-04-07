@@ -32,6 +32,7 @@
     "build:wasm": "cd ../../build-wasm && emcc ../bindings/javascript/embind/*.cpp src/*.o -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../src -I../include -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s EXPORT_ES6=1 -s MODULARIZE=1 -s EXPORT_NAME=\"createModule\" -sEXPORTED_RUNTIME_METHODS=FS,ENV,ccall,cwrap,UTF8ToString,stringToNewUTF8,setValue --emit-tsd libredwg-web.d.ts",
     "clean": "rm -rf ../../build-wasm",
     "copy": "cp -f ../../build-wasm/libredwg-web.js ../../build-wasm/libredwg-web.wasm wasm/ && cp -f ../../build-wasm/libredwg-web.js src/",
+    "format": "prettier --config ./.prettierrc.js --write src/**/*.{ts,js,json}",
     "install:emsdk": "cd $EMSDK && ./emsdk install latest && ./emsdk activate latest",
     "link": "node script/create-symlink.js ./wasm/libredwg-web.js ./src/libredwg-web.js",
     "lint": "eslint src/",
@@ -46,11 +47,11 @@
     "package.json"
   ],
   "main": "./dist/libredwg-web.umd.cjs",
-  "module": "./dist/libredwg-web.mjs",
+  "module": "./dist/libredwg-web.js",
   "types": "./lib/index.d.ts",
   "exports": {
     "types": "./lib/index.d.ts",
-    "import": "./dist/libredwg-web.mjs",
+    "import": "./dist/libredwg-web.js",
     "require": "./dist/libredwg-web.umd.cjs"
   },
   "devDependencies": {

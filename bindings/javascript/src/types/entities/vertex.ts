@@ -1,5 +1,5 @@
-import { DwgPoint3D } from '../common';
-import { DwgEntity } from './entity';
+import { DwgPoint3D } from '../common'
+import { DwgEntity } from './entity'
 
 export declare enum DwgVertexFlag {
   CREATED_BY_CURVE_FIT = 1,
@@ -13,14 +13,14 @@ export declare enum DwgVertexFlag {
 }
 
 export interface DwgVertexEntity extends DwgEntity, DwgPoint3D {
-  startWidth: number;
-  endWidth: number;
-  bulge: number;
-  flag: DwgVertexFlag;
-  tangentDirection: number;
-  polyfaceIndex0?: number;
-  polyfaceIndex1?: number;
-  polyfaceIndex2?: number;
-  polyfaceIndex3?: number;
-  id: number;
+  startWidth: number
+  endWidth: number
+  bulge: number
+  flag: DwgVertexFlag
+  tangentDirection: number
+  polyfaceIndex0?: number
+  polyfaceIndex1?: number
+  polyfaceIndex2?: number
+  polyfaceIndex3?: number
+  id: number
 }

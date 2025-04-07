@@ -1,5 +1,5 @@
-import { DwgPoint3D } from '../common';
-import { DwgEntity } from './entity';
+import { DwgPoint3D } from '../common'
+import { DwgEntity } from './entity'
 
 export declare enum DwgTextGenerationFlag {
   NONE = 0,
@@ -24,18 +24,18 @@ export declare enum DwgTextVerticalAlign {
 }
 
 export interface DwgTextEntity extends DwgEntity {
-  type: 'TEXT';
-  text: string;
-  thickness: number;
-  startPoint: DwgPoint3D;
-  endPoint: DwgPoint3D;
-  textHeight: number;
-  rotation: number;
-  xScale: number;
-  obliqueAngle: number;
-  styleName: string;
-  generationFlag: number;
-  halign: DwgTextHorizontalAlign;
-  valign: DwgTextVerticalAlign;
-  extrusionDirection: DwgPoint3D;
+  type: 'TEXT'
+  text: string
+  thickness: number
+  startPoint: DwgPoint3D
+  endPoint: DwgPoint3D
+  textHeight: number
+  rotation: number
+  xScale: number
+  obliqueAngle: number
+  styleName: string
+  generationFlag: number
+  halign: DwgTextHorizontalAlign
+  valign: DwgTextVerticalAlign
+  extrusionDirection: DwgPoint3D
 }

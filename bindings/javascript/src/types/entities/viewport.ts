@@ -1,5 +1,5 @@
-import { DwgPoint2D, DwgPoint3D } from '../common';
-import { DwgEntity } from './entity';
+import { DwgPoint2D, DwgPoint3D } from '../common'
+import { DwgEntity } from './entity'
 
 export declare enum DwgViewportStatusFlag {
   PERSPECTIVE_MODE = 1,
@@ -27,7 +27,7 @@ export declare enum DwgViewportStatusFlag {
 }
 
 export declare enum DwgRenderMode {
-  OPTIMIZED_2D = 0,// classic 2D
+  OPTIMIZED_2D = 0, // classic 2D
   WIREFRAME = 1,
   HIDDEN_LINE = 2,
   FLAT_SHADED = 3,
@@ -64,48 +64,48 @@ export declare enum DwgDefaultLightingType {
 }
 
 export interface DwgViewportEntity extends DwgEntity {
-  type: 'VIEWPORT';
-  viewportCenter: DwgPoint3D;
-  width: number;
-  height: number;
-  status: number;
-  viewportId: number;
-  displayCenter: DwgPoint2D;
-  snapBase: DwgPoint2D;
-  snapSpacing: DwgPoint2D;
-  gridSpacing: DwgPoint2D;
-  viewDirection: DwgPoint3D;
-  targetPoint: DwgPoint3D;
-  perspectiveLensLength: number;
-  frontClipZ: number;
-  backClipZ: number;
-  viewHeight: number;
-  snapAngle: number;
-  viewTwistAngle: number;
-  circleZoomPercent: number;
-  frozenLayerIds?: string[];
-  statusBitFlags: number;
-  clippingBoundaryId?: string;
-  sheetName: string;
-  renderMode: DwgRenderMode;
-  ucsPerViewport: DwgUCSPerViewport;
-  ucsOrigin?: DwgPoint3D;
-  ucsXAxis?: DwgPoint3D;
-  ucsYAxis?: DwgPoint3D;
-  ucsId?: string;
-  ucsBaseId?: string;
-  orthographicType?: DwgOrthographicType;
-  elevation: number;
-  shadePlotMode: DwgShadePlotMode;
-  majorGridFrequency: number;
-  backgroundId?: string;
-  shadePlotId?: string;
-  visualStyleId?: string;
-  isDefaultLighting: boolean;
-  defaultLightingType?: DwgDefaultLightingType;
-  brightness: number;
-  contrast: number;
-  ambientLightColor?: string;
-  sunId?: string;
-  softPointer?: string;
+  type: 'VIEWPORT'
+  viewportCenter: DwgPoint3D
+  width: number
+  height: number
+  status: number
+  viewportId: number
+  displayCenter: DwgPoint2D
+  snapBase: DwgPoint2D
+  snapSpacing: DwgPoint2D
+  gridSpacing: DwgPoint2D
+  viewDirection: DwgPoint3D
+  targetPoint: DwgPoint3D
+  perspectiveLensLength: number
+  frontClipZ: number
+  backClipZ: number
+  viewHeight: number
+  snapAngle: number
+  viewTwistAngle: number
+  circleZoomPercent: number
+  frozenLayerIds?: string[]
+  statusBitFlags: number
+  clippingBoundaryId?: string
+  sheetName: string
+  renderMode: DwgRenderMode
+  ucsPerViewport: DwgUCSPerViewport
+  ucsOrigin?: DwgPoint3D
+  ucsXAxis?: DwgPoint3D
+  ucsYAxis?: DwgPoint3D
+  ucsId?: string
+  ucsBaseId?: string
+  orthographicType?: DwgOrthographicType
+  elevation: number
+  shadePlotMode: DwgShadePlotMode
+  majorGridFrequency: number
+  backgroundId?: string
+  shadePlotId?: string
+  visualStyleId?: string
+  isDefaultLighting: boolean
+  defaultLightingType?: DwgDefaultLightingType
+  brightness: number
+  contrast: number
+  ambientLightColor?: string
+  sunId?: string
+  softPointer?: string
 }

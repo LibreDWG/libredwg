@@ -1,5 +1,5 @@
-import { DwgImageDefObject, DwgLayoutObject } from './objects';
-import { 
+import { DwgImageDefObject, DwgLayoutObject } from './objects'
+import {
   DwgBlockRecordTableEntry,
   DwgDimStyleTableEntry,
   DwgLayerTableEntry,
@@ -7,20 +7,19 @@ import {
   DwgStyleTableEntry,
   DwgTable,
   DwgVPortTableEntry
-} from './tables';
+} from './tables'
 
 export interface DwgDatabase {
   tables: {
-    BLOCK_RECORD: DwgTable<DwgBlockRecordTableEntry>;
-    DIMSTYLE: DwgTable<DwgDimStyleTableEntry>;
-    LAYER: DwgTable<DwgLayerTableEntry>;
-    LTYPE: DwgTable<DwgLTypeTableEntry>;
-    STYLE: DwgTable<DwgStyleTableEntry>;
-    VPORT: DwgTable<DwgVPortTableEntry>;
-  };
+    BLOCK_RECORD: DwgTable<DwgBlockRecordTableEntry>
+    DIMSTYLE: DwgTable<DwgDimStyleTableEntry>
+    LAYER: DwgTable<DwgLayerTableEntry>
+    LTYPE: DwgTable<DwgLTypeTableEntry>
+    STYLE: DwgTable<DwgStyleTableEntry>
+    VPORT: DwgTable<DwgVPortTableEntry>
+  }
   objects: {
-    IMAGEDEF: DwgImageDefObject[];
-    LAYOUT: DwgLayoutObject[];
-  };
+    IMAGEDEF: DwgImageDefObject[]
+    LAYOUT: DwgLayoutObject[]
+  }
 }
-

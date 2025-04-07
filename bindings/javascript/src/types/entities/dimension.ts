@@ -1,5 +1,5 @@
-import { DwgPoint3D } from '../common';
-import { DwgEntity } from './entity';
+import { DwgPoint3D } from '../common'
+import { DwgEntity } from './entity'
 
 export declare enum DwgDimensionType {
   Rotated = 0,
@@ -71,46 +71,53 @@ export declare enum DwgDimensionToleranceTextVertical {
 }
 
 export interface DwgDimensionEntityCommon extends DwgEntity {
-  type: 'DIMENSION';
-  version: string;
-  name: string;
-  definitionPoint: DwgPoint3D;
-  textPoint: DwgPoint3D;
-  dimensionType: DwgDimensionType;
-  attachmentPoint: DwgAttachmentPoint;
-  textLineSpacingStyle?: DwgDimensionTextLineSpacing;
-  textLineSpacingFactor?: number;
-  measurement?: number;
-  text?: string;
-  textRotation?: number;
-  ocsRotation?: number;
-  extrusionDirection?: DwgPoint3D;
-  styleName: string;
+  type: 'DIMENSION'
+  version: string
+  name: string
+  definitionPoint: DwgPoint3D
+  textPoint: DwgPoint3D
+  dimensionType: DwgDimensionType
+  attachmentPoint: DwgAttachmentPoint
+  textLineSpacingStyle?: DwgDimensionTextLineSpacing
+  textLineSpacingFactor?: number
+  measurement?: number
+  text?: string
+  textRotation?: number
+  ocsRotation?: number
+  extrusionDirection?: DwgPoint3D
+  styleName: string
 }
 
 export interface DwgAlignedDimensionEntity extends DwgDimensionEntityCommon {
-  insertionPoint?: DwgPoint3D;
-  subDefinitionPoint1: DwgPoint3D;
-  subDefinitionPoint2: DwgPoint3D;
-  rotationAngle: number;
-  obliqueAngle: number;
+  insertionPoint?: DwgPoint3D
+  subDefinitionPoint1: DwgPoint3D
+  subDefinitionPoint2: DwgPoint3D
+  rotationAngle: number
+  obliqueAngle: number
 }
 
 export interface DwgAngularDimensionEntity extends DwgDimensionEntityCommon {
-  subDefinitionPoint1: DwgPoint3D;
-  subDefinitionPoint2: DwgPoint3D;
-  centerPoint: DwgPoint3D;
-  arcPoint: DwgPoint3D;
+  subDefinitionPoint1: DwgPoint3D
+  subDefinitionPoint2: DwgPoint3D
+  centerPoint: DwgPoint3D
+  arcPoint: DwgPoint3D
 }
 
 export interface DwgOrdinateDimensionEntity extends DwgDimensionEntityCommon {
-  subDefinitionPoint1: DwgPoint3D;
-  subDefinitionPoint2: DwgPoint3D;
+  subDefinitionPoint1: DwgPoint3D
+  subDefinitionPoint2: DwgPoint3D
 }
 
-export interface DwgRadialDiameterDimensionEntity extends DwgDimensionEntityCommon {
-  centerPoint: DwgPoint3D;
-  leaderLength: number;
+export interface DwgRadialDiameterDimensionEntity
+  extends DwgDimensionEntityCommon {
+  centerPoint: DwgPoint3D
+  leaderLength: number
 }
 
-export type DimensionEntity = DwgDimensionEntityCommon & (Partial<DwgAlignedDimensionEntity> | Partial<DwgAngularDimensionEntity> | Partial<DwgOrdinateDimensionEntity> | Partial<DwgRadialDiameterDimensionEntity>);
+export type DimensionEntity = DwgDimensionEntityCommon &
+  (
+    | Partial<DwgAlignedDimensionEntity>
+    | Partial<DwgAngularDimensionEntity>
+    | Partial<DwgOrdinateDimensionEntity>
+    | Partial<DwgRadialDiameterDimensionEntity>
+  )

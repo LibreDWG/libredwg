@@ -1,15 +1,16 @@
 import { MainModule } from '../wasm/libredwg-web'
-import createModule from '../wasm/libredwg-web.js';
-import { LibreDwgConverter } from './converter';
-import { Dwg_File_Type, Dwg_Object_Type } from './enums';
-import { DwgPoint2D, DwgPoint3D } from './types';
+import createModule from '../wasm/libredwg-web.js'
+import { LibreDwgConverter } from './converter'
+import { Dwg_File_Type, Dwg_Object_Type } from './enums'
+import { DwgPoint2D, DwgPoint3D } from './types'
 
-export type Dwg_Array_Ptr = number;
-export type Dwg_Data_Ptr = number;
-export type Dwg_Object_Ptr = number;
-export type Dwg_Object_Ref_Ptr = number;
-export type Dwg_Object_Object_Ptr = number;
-export type Dwg_Object_Entity_Ptr = number;
+export { createModule }
+export type Dwg_Array_Ptr = number
+export type Dwg_Data_Ptr = number
+export type Dwg_Object_Ptr = number
+export type Dwg_Object_Ref_Ptr = number
+export type Dwg_Object_Object_Ptr = number
+export type Dwg_Object_Entity_Ptr = number
 
 export interface Dwg_Handle {
   code: number
@@ -51,36 +52,39 @@ export interface Dwg_Field_Value {
   data?: string | number | Dwg_Color | Dwg_Array_Ptr | DwgPoint2D | DwgPoint3D
 }
 
-export type LibreDwgEx = LibreDwg & MainModule;
+export type LibreDwgEx = LibreDwg & MainModule
 
 export class LibreDwg {
-  static instance: LibreDwgEx;
-  private wasmInstance!: MainModule;
+  static instance: LibreDwgEx
+  private wasmInstance!: MainModule
 
   private constructor(wasmInstance: MainModule) {
-    this.wasmInstance = wasmInstance;
+    this.wasmInstance = wasmInstance
     return new Proxy(this, {
       get: (target, prop, receiver) => {
         if (prop in target) {
-          return Reflect.get(target, prop, receiver);
+          return Reflect.get(target, prop, receiver)
         }
         // Delegate to the wasmInstance for WebAssembly methods
-        return Reflect.get(target.wasmInstance, prop, receiver);
-      },
-    });
+        return Reflect.get(target.wasmInstance, prop, receiver)
+      }
+    })
   }
 
   dwg_read_data(fileContent: string | ArrayBuffer, fileType: number) {
     if (fileType == Dwg_File_Type.DWG) {
-      const fileName = 'tmp.dwg';
-      this.wasmInstance.FS.writeFile(fileName, new Uint8Array(fileContent as ArrayBuffer));
-      const result = this.wasmInstance.dwg_read_file(fileName);
+      const fileName = 'tmp.dwg'
+      this.wasmInstance.FS.writeFile(
+        fileName,
+        new Uint8Array(fileContent as ArrayBuffer)
+      )
+      const result = this.wasmInstance.dwg_read_file(fileName)
       if (result.error != 0) {
-        console.log('Failed to open dwg file with error code: ', result.error);
+        console.log('Failed to open dwg file with error code: ', result.error)
       }
-      this.wasmInstance.FS.unlink(fileName);
-      return result.data as Dwg_Data_Ptr;
-    } 
+      this.wasmInstance.FS.unlink(fileName)
+      return result.data as Dwg_Data_Ptr
+    }
     // else if (fileType == Dwg_File_Type.DXF) {
     //   const fileName = "tmp.dxf";
     //   this.wasmInstance.FS.writeFile(fileName, new Uint8Array(fileContent as ArrayBuffer));
@@ -108,104 +112,128 @@ export class LibreDwg {
    * is one Dwg_Object pointer (Dwg_Object*).
    */
   dwg_getall_entitie_in_model_space(data: Dwg_Data_Ptr) {
-    const wasmInstance = this.wasmInstance;
-    const model_space = wasmInstance.dwg_model_space_object(data);
-    const entities = [];
-    let next = wasmInstance.get_first_owned_entity(model_space);
+    const wasmInstance = this.wasmInstance
+    const model_space = wasmInstance.dwg_model_space_object(data)
+    const entities = []
+    let next = wasmInstance.get_first_owned_entity(model_space)
     while (next) {
-      entities.push(next);
-      next = wasmInstance.get_next_owned_entity(model_space, next);
+      entities.push(next)
+      next = wasmInstance.get_next_owned_entity(model_space, next)
     }
-    return entities;
+    return entities
   }
 
   dwg_getall_object_by_type(data: Dwg_Data_Ptr, type: number): number[] {
-    const wasmInstance = this.wasmInstance;
-    const num_objects = wasmInstance.dwg_get_num_objects(data);
-    const results = [];
-    for (let i = 0; i < num_objects; i++) {                                                  
-      const obj = wasmInstance.dwg_get_object(data, i);
-      const tio = wasmInstance.dwg_object_to_object_tio(obj);
+    const wasmInstance = this.wasmInstance
+    const num_objects = wasmInstance.dwg_get_num_objects(data)
+    const results = []
+    for (let i = 0; i < num_objects; i++) {
+      const obj = wasmInstance.dwg_get_object(data, i)
+      const tio = wasmInstance.dwg_object_to_object_tio(obj)
       if (tio && wasmInstance.dwg_object_get_fixedtype(obj) == type) {
-        results.push(tio);
+        results.push(tio)
       }
     }
-    return results; 
+    return results
   }
 
   dwg_getall_entity_by_type(data: Dwg_Data_Ptr, type: number): number[] {
-    const wasmInstance = this.wasmInstance;
-    const num_objects = wasmInstance.dwg_get_num_objects(data);
-    const results = [];
-    for (let i = 0; i < num_objects; i++) {                                                 
-      const obj = wasmInstance.dwg_get_object(data, i);
-      const tio = wasmInstance.dwg_object_to_entity_tio(obj);
+    const wasmInstance = this.wasmInstance
+    const num_objects = wasmInstance.dwg_get_num_objects(data)
+    const results = []
+    for (let i = 0; i < num_objects; i++) {
+      const obj = wasmInstance.dwg_get_object(data, i)
+      const tio = wasmInstance.dwg_object_to_entity_tio(obj)
       if (tio && wasmInstance.dwg_object_get_fixedtype(obj) == type) {
-        results.push(tio);
+        results.push(tio)
       }
     }
-    return results; 
+    return results
   }
 
   dwg_getall_LAYER(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LAYER);
+    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LAYER)
   }
 
   dwg_getall_LTYPE(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LTYPE);
+    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LTYPE)
   }
-  
+
   dwg_getall_STYLE(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_STYLE);
-  };
-  
+    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_STYLE)
+  }
+
   dwg_getall_DIMSTYLE(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_DIMSTYLE);
-  };
-  
+    return this.dwg_getall_object_by_type(
+      data,
+      Dwg_Object_Type.DWG_TYPE_DIMSTYLE
+    )
+  }
+
   dwg_getall_VPORT(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_VPORT);
-  };
-  
+    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_VPORT)
+  }
+
   dwg_getall_LAYOUT(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LAYOUT);
-  };
-  
+    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LAYOUT)
+  }
+
   dwg_getall_BLOCK(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_BLOCK);
-  };
-  
+    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_BLOCK)
+  }
+
   dwg_getall_BLOCK_HEADER(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER);
-  };
+    return this.dwg_getall_object_by_type(
+      data,
+      Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER
+    )
+  }
 
   dwg_getall_IMAGEDEF(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_IMAGEDEF);
-  };
+    return this.dwg_getall_object_by_type(
+      data,
+      Dwg_Object_Type.DWG_TYPE_IMAGEDEF
+    )
+  }
 
   dwg_getall_VERTEX_2D(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_VERTEX_2D);
-  };
+    return this.dwg_getall_entity_by_type(
+      data,
+      Dwg_Object_Type.DWG_TYPE_VERTEX_2D
+    )
+  }
 
   dwg_getall_VERTEX_3D(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_VERTEX_3D);
-  };
+    return this.dwg_getall_entity_by_type(
+      data,
+      Dwg_Object_Type.DWG_TYPE_VERTEX_3D
+    )
+  }
 
   dwg_getall_POLYLINE_2D(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_POLYLINE_2D);
-  };
+    return this.dwg_getall_entity_by_type(
+      data,
+      Dwg_Object_Type.DWG_TYPE_POLYLINE_2D
+    )
+  }
 
   dwg_getall_POLYLINE_3D(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_POLYLINE_3D);
-  };
+    return this.dwg_getall_entity_by_type(
+      data,
+      Dwg_Object_Type.DWG_TYPE_POLYLINE_3D
+    )
+  }
 
   dwg_getall_IMAGE(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_IMAGE);
-  };
+    return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_IMAGE)
+  }
 
   dwg_getall_LWPOLYLINE(data: Dwg_Data_Ptr): number[] {
-    return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_LWPOLYLINE);
-  };
+    return this.dwg_getall_entity_by_type(
+      data,
+      Dwg_Object_Type.DWG_TYPE_LWPOLYLINE
+    )
+  }
 
   /**
    * Converts one C++ unsigned char array to one JavaScript number array.
@@ -216,7 +244,7 @@ export class LibreDwg {
   dwg_ptr_to_unsigned_char_array(ptr: Dwg_Array_Ptr, size: number): number[] {
     return this.wasmInstance.dwg_ptr_to_unsigned_char_array(ptr, size)
   }
-  
+
   /**
    * Converts one C++ signed char array to one JavaScript number array.
    * @param ptr Point to C++ signed char array.
@@ -323,7 +351,10 @@ export class LibreDwg {
    * @param size The size of C++ line type array.
    * @returns Returns one JavaScript line type array from the specified C++ line type array.
    */
-  dwg_ptr_to_ltype_dash_array(ptr: Dwg_Array_Ptr, size: number): Dwg_LTYPE_Dash[] {
+  dwg_ptr_to_ltype_dash_array(
+    ptr: Dwg_Array_Ptr,
+    size: number
+  ): Dwg_LTYPE_Dash[] {
     return this.wasmInstance.dwg_ptr_to_ltype_dash_array(ptr, size)
   }
 
@@ -334,7 +365,7 @@ export class LibreDwg {
    * @returns Returns the field value of one object or entity.
    */
   dwg_dynapi_entity_value(obj: number, field: string): Dwg_Field_Value {
-    return this.wasmInstance.dwg_dynapi_entity_value(obj, field);
+    return this.wasmInstance.dwg_dynapi_entity_value(obj, field)
   }
 
   /**
@@ -343,7 +374,7 @@ export class LibreDwg {
    * @returns Returns the handle of one Dwg_Object instance.
    */
   dwg_object_get_handle_object(ptr: Dwg_Object_Ptr): Dwg_Handle {
-    return this.wasmInstance.dwg_object_get_handle_object(ptr);  
+    return this.wasmInstance.dwg_object_get_handle_object(ptr)
   }
 
   /**
@@ -352,11 +383,13 @@ export class LibreDwg {
    * @returns Returns the handle of one Dwg_Object_Object instance.
    */
   dwg_object_object_get_handle_object(ptr: Dwg_Object_Object_Ptr): Dwg_Handle {
-    return this.wasmInstance.dwg_object_object_get_handle_object(ptr);  
+    return this.wasmInstance.dwg_object_object_get_handle_object(ptr)
   }
 
-  dwg_object_object_get_ownerhandle_object(ptr: Dwg_Object_Object_Ptr): Dwg_Object_Ref {
-    return this.wasmInstance.dwg_object_object_get_ownerhandle_object(ptr);  
+  dwg_object_object_get_ownerhandle_object(
+    ptr: Dwg_Object_Object_Ptr
+  ): Dwg_Object_Ref {
+    return this.wasmInstance.dwg_object_object_get_ownerhandle_object(ptr)
   }
 
   /**
@@ -365,23 +398,27 @@ export class LibreDwg {
    * @returns Returns the handle of one Dwg_Object_Entity instance.
    */
   dwg_object_entity_get_handle_object(ptr: Dwg_Object_Entity_Ptr): Dwg_Handle {
-    return this.wasmInstance.dwg_object_entity_get_handle_object(ptr);  
+    return this.wasmInstance.dwg_object_entity_get_handle_object(ptr)
   }
 
-  dwg_object_entity_get_ownerhandle_object(ptr: Dwg_Object_Entity_Ptr): Dwg_Object_Ref {
-    return this.wasmInstance.dwg_object_entity_get_ownerhandle_object(ptr);  
+  dwg_object_entity_get_ownerhandle_object(
+    ptr: Dwg_Object_Entity_Ptr
+  ): Dwg_Object_Ref {
+    return this.wasmInstance.dwg_object_entity_get_ownerhandle_object(ptr)
   }
 
   dwg_object_entity_get_color_object(ptr: Dwg_Object_Entity_Ptr): Dwg_Color {
-    return this.wasmInstance.dwg_object_entity_get_color_object(ptr);  
+    return this.wasmInstance.dwg_object_entity_get_color_object(ptr)
   }
 
   static createByWasmInstance(wasmInstance: MainModule): LibreDwgEx {
-    return this.instance == null ? new LibreDwg(wasmInstance) as LibreDwgEx : this.instance;
+    return this.instance == null
+      ? (new LibreDwg(wasmInstance) as LibreDwgEx)
+      : this.instance
   }
 
   static async create(): Promise<LibreDwgEx> {
-    const wasmInstance = await createModule();
-    return this.createByWasmInstance(wasmInstance);
+    const wasmInstance = await createModule()
+    return this.createByWasmInstance(wasmInstance)
   }
 }

@@ -1,5 +1,5 @@
-import { DwgPoint2D, DwgPoint3D } from '../common';
-import { DwgEntity } from './entity';
+import { DwgPoint2D, DwgPoint3D } from '../common'
+import { DwgEntity } from './entity'
 
 export declare enum DwgHatchSolidFill {
   PatternFill = 0,
@@ -7,13 +7,13 @@ export declare enum DwgHatchSolidFill {
 }
 
 export declare enum DwgHatchAssociativity {
-  NonAssociative = 0,// For MPolygon LacksSolidFill
+  NonAssociative = 0, // For MPolygon LacksSolidFill
   Associative = 1
 }
 
 export declare enum DwgHatchStyle {
-  Normal = 0,// Odd parity area
-  Outer = 1,// Outermost area
+  Normal = 0, // Odd parity area
+  Outer = 1, // Outermost area
   Ignore = 2
 }
 
@@ -55,109 +55,116 @@ export declare enum DwgBoundaryPathEdgeType {
 }
 
 interface DwgBoundaryPathBase {
-  boundaryPathTypeFlag: number;
-  numberOfSourceBoundaryObjects: number;
-  sourceBoundaryObjects: string[];
+  boundaryPathTypeFlag: number
+  numberOfSourceBoundaryObjects: number
+  sourceBoundaryObjects: string[]
 }
 
 export interface DwgPolylineBoundaryPath extends DwgBoundaryPathBase {
-  hasBulge: boolean;
-  isClosed: boolean;
-  numberOfVertices: number;
+  hasBulge: boolean
+  isClosed: boolean
+  numberOfVertices: number
   vertices: (DwgPoint2D & {
-      bulge: number;
-  })[];
+    bulge: number
+  })[]
 }
 
-export interface DwgEdgeBoundaryPath<EdgeType extends DwgBoundaryPathEdge> extends DwgBoundaryPathBase {
-  numberOfEdges: number;
-  edges: EdgeType[];
+export interface DwgEdgeBoundaryPath<EdgeType extends DwgBoundaryPathEdge>
+  extends DwgBoundaryPathBase {
+  numberOfEdges: number
+  edges: EdgeType[]
 }
 
 interface DwgBoundaryPathEdgeCommon {
-  type: DwgBoundaryPathEdgeType;
+  type: DwgBoundaryPathEdgeType
 }
 
-export type DwgBoundaryPath = DwgPolylineBoundaryPath | DwgEdgeBoundaryPath<DwgBoundaryPathEdge>;
+export type DwgBoundaryPath =
+  | DwgPolylineBoundaryPath
+  | DwgEdgeBoundaryPath<DwgBoundaryPathEdge>
 
 export interface DwgLineEdge extends DwgBoundaryPathEdgeCommon {
-  start: DwgPoint2D;
-  end: DwgPoint2D;
+  start: DwgPoint2D
+  end: DwgPoint2D
 }
 
 export interface DwgArcEdge extends DwgBoundaryPathEdgeCommon {
-  center: DwgPoint2D;
-  radius: number;
-  startAngle: number;
-  endAngle: number;
-  isCCW?: boolean;
+  center: DwgPoint2D
+  radius: number
+  startAngle: number
+  endAngle: number
+  isCCW?: boolean
 }
 
 export interface DwgEllipseEdge extends DwgBoundaryPathEdgeCommon {
-  center: DwgPoint2D;
-  end: DwgPoint2D;
-  lengthOfMinorAxis: number;
-  startAngle: number;
-  endAngle: number;
-  isCCW?: boolean;
+  center: DwgPoint2D
+  end: DwgPoint2D
+  lengthOfMinorAxis: number
+  startAngle: number
+  endAngle: number
+  isCCW?: boolean
 }
 
 export interface DwgSplineEdge extends DwgBoundaryPathEdgeCommon {
-  degree: number;
-  splineFlag: number;
-  isPeriodic?: boolean;
-  numberOfKnots: number;
-  numberOfControlPoints: number;
-  knots: number[];
+  degree: number
+  splineFlag: number
+  isPeriodic?: boolean
+  numberOfKnots: number
+  numberOfControlPoints: number
+  knots: number[]
   controlPoints: (DwgPoint2D & {
-      weight?: number;
-  })[];
-  numberOfFitData: number;
-  fitDatum: DwgPoint2D[];
-  startTangent: DwgPoint2D;
-  endTangent: DwgPoint2D;
+    weight?: number
+  })[]
+  numberOfFitData: number
+  fitDatum: DwgPoint2D[]
+  startTangent: DwgPoint2D
+  endTangent: DwgPoint2D
 }
 
-export type DwgBoundaryPathEdge = DwgLineEdge | DwgArcEdge | DwgEllipseEdge | DwgSplineEdge;
+export type DwgBoundaryPathEdge =
+  | DwgLineEdge
+  | DwgArcEdge
+  | DwgEllipseEdge
+  | DwgSplineEdge
 
 export interface DwgHatchDefinitionLine {
-  angle: number;
-  base: DwgPoint2D;
-  offset: DwgPoint2D;
-  numberOfDashLengths: number;
-  dashLengths: number[];
+  angle: number
+  base: DwgPoint2D
+  offset: DwgPoint2D
+  numberOfDashLengths: number
+  dashLengths: number[]
 }
 
 interface DwgHatchEntityBase extends DwgEntity {
-  type: 'HATCH';
-  elevationPoint: DwgPoint3D;
-  extrusionDirection?: DwgPoint3D;
-  patternName: string;
-  solidFill: DwgHatchSolidFill;
-  patternFillColor: number;
-  associativity: DwgHatchAssociativity;
-  numberOfBoundaryPaths: number;
-  boundaryPaths: DwgBoundaryPath[];
-  hatchStyle: DwgHatchStyle;
-  patternType: DwgHatchPatternType;
-  patternAngle?: number;
-  patternScale?: number;
-  numberOfDefinitionLines: number;
-  definitionLines: DwgHatchDefinitionLine[];
-  pixelSize: number;
-  numberOfSeedPoints: number;
-  offsetVector?: DwgPoint3D;
-  seedPoints?: DwgPoint3D[];
-  gradientFlag?: DwgHatchGradientFlag;
+  type: 'HATCH'
+  elevationPoint: DwgPoint3D
+  extrusionDirection?: DwgPoint3D
+  patternName: string
+  solidFill: DwgHatchSolidFill
+  patternFillColor: number
+  associativity: DwgHatchAssociativity
+  numberOfBoundaryPaths: number
+  boundaryPaths: DwgBoundaryPath[]
+  hatchStyle: DwgHatchStyle
+  patternType: DwgHatchPatternType
+  patternAngle?: number
+  patternScale?: number
+  numberOfDefinitionLines: number
+  definitionLines: DwgHatchDefinitionLine[]
+  pixelSize: number
+  numberOfSeedPoints: number
+  offsetVector?: DwgPoint3D
+  seedPoints?: DwgPoint3D[]
+  gradientFlag?: DwgHatchGradientFlag
 }
 
 export interface DwgGradientHatchEntity extends DwgHatchEntityBase {
-  gradientFlag: DwgHatchGradientFlag.Gradient;
-  gradientColorFlag: DwgHatchGradientColorFlag;
-  numberOfColors: 0 | 2;
-  gradientRotation?: number;
-  gradientDefinition: number;
-  colorTint?: number;
+  gradientFlag: DwgHatchGradientFlag.Gradient
+  gradientColorFlag: DwgHatchGradientColorFlag
+  numberOfColors: 0 | 2
+  gradientRotation?: number
+  gradientDefinition: number
+  colorTint?: number
 }
 
-export type HatchEntity = DwgGradientHatchEntity | DwgHatchEntityBase;
+export type HatchEntity = DwgGradientHatchEntity | DwgHatchEntityBase

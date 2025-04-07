@@ -1,5 +1,5 @@
-import { DwgPoint3D } from '../common';
-import { DwgEntity } from './entity';
+import { DwgPoint3D } from '../common'
+import { DwgEntity } from './entity'
 
 export declare enum DwgImageFlags {
   ShowImage = 1,
@@ -19,21 +19,21 @@ export declare enum DwgImageClipMode {
 }
 
 export interface DwgImageEntity extends DwgEntity {
-  type: 'IMAGE';
-  version: number;
-  position: DwgPoint3D;
-  uPixel: DwgPoint3D;
-  vPixel: DwgPoint3D;
-  imageSize: DwgPoint3D;
-  imageDefHandle: string;
-  flags: DwgImageFlags;
-  clipping: number;
-  brightness: number;
-  contrast: number;
-  fade: number;
-  imageDefReactorHandle: string;
-  clippingBoundaryType: DwgImageClippingBoundaryType;
-  countBoundaryPoints: number;
-  clippingBoundaryPath: DwgPoint3D[];
-  clipMode: DwgImageClipMode;
+  type: 'IMAGE'
+  version: number
+  position: DwgPoint3D
+  uPixel: DwgPoint3D
+  vPixel: DwgPoint3D
+  imageSize: DwgPoint3D
+  imageDefHandle: string
+  flags: DwgImageFlags
+  clipping: number
+  brightness: number
+  contrast: number
+  fade: number
+  imageDefReactorHandle: string
+  clippingBoundaryType: DwgImageClippingBoundaryType
+  countBoundaryPoints: number
+  clippingBoundaryPath: DwgPoint3D[]
+  clipMode: DwgImageClipMode
 }

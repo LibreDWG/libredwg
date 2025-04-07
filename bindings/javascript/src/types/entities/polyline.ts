@@ -1,6 +1,6 @@
-import { DwgPoint3D } from '../common';
-import { DwgEntity } from './entity';
-import { DwgVertexEntity } from './vertex';
+import { DwgPoint3D } from '../common'
+import { DwgEntity } from './entity'
+import { DwgVertexEntity } from './vertex'
 
 export declare enum DwgPolylineFlag {
   CLOSED_POLYLINE = 1,
@@ -21,16 +21,16 @@ export declare enum DwgSmoothType {
 }
 
 export interface DwgPolylineEntity extends DwgEntity {
-  type: 'POLYLINE';
-  thickness: number;
-  flag: number;
-  startWidth: number;
-  endWidth: number;
-  meshMVertexCount: number;
-  meshNVertexCount: number;
-  surfaceMDensity: number;
-  surfaceNDensity: number;
-  smoothType: DwgSmoothType;
-  extrusionDirection: DwgPoint3D;
-  vertices: DwgVertexEntity[];
+  type: 'POLYLINE'
+  thickness: number
+  flag: number
+  startWidth: number
+  endWidth: number
+  meshMVertexCount: number
+  meshNVertexCount: number
+  surfaceMDensity: number
+  surfaceNDensity: number
+  smoothType: DwgSmoothType
+  extrusionDirection: DwgPoint3D
+  vertices: DwgVertexEntity[]
 }

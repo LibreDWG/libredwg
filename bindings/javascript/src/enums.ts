@@ -30,7 +30,7 @@ export enum Dwg_Object_Type {
   DWG_TYPE_DIMENSION_ANG3PT = 0x17,
   DWG_TYPE_DIMENSION_ANG2LN = 0x18,
   DWG_TYPE_DIMENSION_RADIUS = 0x19,
-  DWG_TYPE_DIMENSION_DIAMETER = 0x1A,
+  DWG_TYPE_DIMENSION_DIAMETER = 0x1a,
   DWG_TYPE_POINT = 0x1b,
   DWG_TYPE__3DFACE = 0x1c,
   DWG_TYPE_POLYLINE_PFACE = 0x1d,
@@ -56,7 +56,7 @@ export enum Dwg_Object_Type {
   DWG_TYPE_BLOCK_HEADER = 0x31,
   DWG_TYPE_LAYER_CONTROL = 0x32,
   DWG_TYPE_LAYER = 0x33,
-  DWG_TYPE_STYLE_CONTROL = 0x34, /* 52 SHAPEFILE_CONTROL */
+  DWG_TYPE_STYLE_CONTROL = 0x34 /* 52 SHAPEFILE_CONTROL */,
   DWG_TYPE_STYLE = 0x35,
   /* DWG_TYPE_<UNKNOWN> = 0x36, */
   /* DWG_TYPE_<UNKNOWN> = 0x37, */
@@ -81,15 +81,15 @@ export enum Dwg_Object_Type {
   DWG_TYPE_OLE2FRAME = 0x4a,
   DWG_TYPE_DUMMY = 0x4b,
   DWG_TYPE_LONG_TRANSACTION = 0x4c,
-  DWG_TYPE_LWPOLYLINE = 0x4d, /* ?? */
+  DWG_TYPE_LWPOLYLINE = 0x4d /* ?? */,
   DWG_TYPE_HATCH = 0x4e,
   DWG_TYPE_XRECORD = 0x4f,
   DWG_TYPE_PLACEHOLDER = 0x50,
   DWG_TYPE_VBA_PROJECT = 0x51,
   DWG_TYPE_LAYOUT = 0x52,
 
-  DWG_TYPE_PROXY_ENTITY = 0x1f2, /* 498 */
-  DWG_TYPE_PROXY_OBJECT = 0x1f3, /* 499 */
+  DWG_TYPE_PROXY_ENTITY = 0x1f2 /* 498 */,
+  DWG_TYPE_PROXY_OBJECT = 0x1f3 /* 499 */,
 
   /* non-fixed types > 500. not stored as type, but as fixedtype */
 
@@ -339,14 +339,14 @@ export enum Dwg_Object_Type {
   DWG_TYPE_LOAD = 739,
   // after 1.0 add new types here for binary compat
 
-  DWG_TYPE_FREED        = 0xfffd,
-  DWG_TYPE_UNKNOWN_ENT  = 0xfffe,
-  DWG_TYPE_UNKNOWN_OBJ  = 0xffff,
+  DWG_TYPE_FREED = 0xfffd,
+  DWG_TYPE_UNKNOWN_ENT = 0xfffe,
+  DWG_TYPE_UNKNOWN_OBJ = 0xffff
 }
 
 /**
  * The object created by swapping keys and values of Dwg_Object_Type
- */ 
+ */
 export const Dwg_Object_Type_Inverted = Object.fromEntries(
   Object.entries(Dwg_Object_Type).map(([key, value]) => [value, key])
 )
