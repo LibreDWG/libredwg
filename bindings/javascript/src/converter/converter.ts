@@ -25,15 +25,18 @@ import {
   DwgStyleTableEntry,
   DwgVPortTableEntry
 } from '../types'
+import { LibreEntityConverter } from './entityConverter'
 
 /**
  * Class used to convert Dwg_Data instance to DwgDatabase instance.
  */
 export class LibreDwgConverter {
-  libredwg: LibreDwgEx
+  private libredwg: LibreDwgEx
+  private entityConverter: LibreEntityConverter
 
   constructor(instance: LibreDwgEx) {
     this.libredwg = instance
+    this.entityConverter = new LibreEntityConverter(instance)
   }
 
   convert(data: Dwg_Data_Ptr) {
@@ -128,10 +131,13 @@ export class LibreDwgConverter {
 
   private convertEntities(item: Dwg_Object_Object_Ptr): DwgEntity[] {
     const libredwg = this.libredwg
+    const converter = this.entityConverter
     const entities: DwgEntity[] = []
-    let entity = libredwg.get_first_owned_entity(item)
-    while (entity) {
-      entity = libredwg.get_next_owned_entity(item, entity)
+    let entity_ptr = libredwg.get_first_owned_entity(item)
+    while (entity_ptr) {
+      entity_ptr = libredwg.get_next_owned_entity(item, entity_ptr)
+      const entity = converter.convert(entity_ptr)
+      if (entity) entities.push(entity)
     }
     return entities
   }

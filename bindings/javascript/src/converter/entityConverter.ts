@@ -3,7 +3,7 @@ import { Dwg_Object_Entity_Ptr, Dwg_Object_Ptr, LibreDwgEx } from '../libredwg'
 import { DwgArcEntity, DwgEntity, DwgPoint3D } from '../types'
 
 
-export class AcDbEntityConverter {
+export class LibreEntityConverter {
   libredwg: LibreDwgEx
 
   constructor(instance: LibreDwgEx) {
