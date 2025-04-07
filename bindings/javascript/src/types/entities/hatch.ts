@@ -167,4 +167,4 @@ export interface DwgGradientHatchEntity extends DwgHatchEntityBase {
   colorTint?: number
 }
 
-export type HatchEntity = DwgGradientHatchEntity | DwgHatchEntityBase
+export type DwgHatchEntity = DwgGradientHatchEntity | DwgHatchEntityBase

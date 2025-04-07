@@ -72,6 +72,7 @@ export declare enum DwgDimensionToleranceTextVertical {
 
 export interface DwgDimensionEntityCommon extends DwgEntity {
   type: 'DIMENSION'
+  subclassMarker: string
   version: string
   name: string
   definitionPoint: DwgPoint3D
@@ -89,6 +90,7 @@ export interface DwgDimensionEntityCommon extends DwgEntity {
 }
 
 export interface DwgAlignedDimensionEntity extends DwgDimensionEntityCommon {
+  subclassMarker: 'AcDbAlignedDimension' | 'AcDbRotatedDimension'
   insertionPoint?: DwgPoint3D
   subDefinitionPoint1: DwgPoint3D
   subDefinitionPoint2: DwgPoint3D
@@ -97,6 +99,7 @@ export interface DwgAlignedDimensionEntity extends DwgDimensionEntityCommon {
 }
 
 export interface DwgAngularDimensionEntity extends DwgDimensionEntityCommon {
+  subclassMarker: 'AcDb3PointAngularDimension'
   subDefinitionPoint1: DwgPoint3D
   subDefinitionPoint2: DwgPoint3D
   centerPoint: DwgPoint3D
@@ -104,12 +107,14 @@ export interface DwgAngularDimensionEntity extends DwgDimensionEntityCommon {
 }
 
 export interface DwgOrdinateDimensionEntity extends DwgDimensionEntityCommon {
+  subclassMarker: 'AcDbOrdinateDimension'
   subDefinitionPoint1: DwgPoint3D
   subDefinitionPoint2: DwgPoint3D
 }
 
 export interface DwgRadialDiameterDimensionEntity
   extends DwgDimensionEntityCommon {
+  subclassMarker: 'AcDbRadialDimension' | 'AcDbDiametricDimension'
   centerPoint: DwgPoint3D
   leaderLength: number
 }

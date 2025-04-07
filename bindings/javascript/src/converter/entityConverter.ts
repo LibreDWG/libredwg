@@ -8,7 +8,12 @@ import {
   DwgLineEntity,
   DwgLWPolylineEntity,
   DwgLWPolylineVertex,
-  DwgPoint3D
+  DwgPoint2D,
+  DwgPoint3D,
+  DwgPointEntity,
+  DwgTextEntity,
+  DwgTextHorizontalAlign,
+  DwgTextVerticalAlign
 } from '../types'
 
 export class LibreEntityConverter {
@@ -33,6 +38,10 @@ export class LibreEntityConverter {
         return this.convertLine(tio)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_LWPOLYLINE) {
         return this.convertLWPolyline(tio)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_POINT) {
+        return this.convertPoint(tio)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_TEXT) {
+        return this.convertText(tio)
       }
     }
     return undefined
@@ -201,6 +210,85 @@ export class LibreEntityConverter {
       thickness: thickness,
       extrusionDirection: extrusionDirection,
       vertices: vertices
+    }
+  }
+
+  private convertPoint(entity: Dwg_Object_Entity_Ptr): DwgPointEntity {
+    const libredwg = this.libredwg
+    const commonAttrs = this.getCommonAttrs(entity)
+    const x = libredwg.dwg_dynapi_entity_value(entity, 'x').data as number
+    const y = libredwg.dwg_dynapi_entity_value(entity, 'y').data as number
+    const z = libredwg.dwg_dynapi_entity_value(entity, 'z').data as number
+    const thickness = libredwg.dwg_dynapi_entity_value(entity, 'thickness')
+      .data as number
+    const extrusionDirection = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'extrusion'
+    ).data as DwgPoint3D
+    const angle = libredwg.dwg_dynapi_entity_value(entity, 'x_ang')
+      .data as number
+
+    return {
+      type: 'POINT',
+      ...commonAttrs,
+      position: { x, y, z },
+      thickness: thickness,
+      extrusionDirection: extrusionDirection,
+      angle: angle
+    }
+  }
+
+  private convertText(entity: Dwg_Object_Entity_Ptr): DwgTextEntity {
+    const libredwg = this.libredwg
+    const commonAttrs = this.getCommonAttrs(entity)
+    const text = libredwg.dwg_dynapi_entity_value(entity, 'text_value')
+      .data as string
+    const thickness = libredwg.dwg_dynapi_entity_value(entity, 'thickness')
+      .data as number
+    const startPoint = libredwg.dwg_dynapi_entity_value(entity, 'ins_pt')
+      .data as DwgPoint2D
+    const endPoint = libredwg.dwg_dynapi_entity_value(entity, 'alignment_pt')
+      .data as DwgPoint2D
+    const rotation = libredwg.dwg_dynapi_entity_value(entity, 'rotation')
+      .data as number
+    const textHeight = libredwg.dwg_dynapi_entity_value(entity, 'height')
+      .data as number
+    const xScale = libredwg.dwg_dynapi_entity_value(entity, 'width_factor')
+      .data as number
+    const obliqueAngle = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'oblique_angle'
+    ).data as number
+    // const style_ptr = libredwg.dwg_dynapi_entity_value(entity, 'style').data as number
+    const generationFlag = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'generation'
+    ).data as number
+    const halign = libredwg.dwg_dynapi_entity_value(entity, 'horiz_alignment')
+      .data as number
+    const valign = libredwg.dwg_dynapi_entity_value(entity, 'vert_alignment')
+      .data as number
+    const extrusionDirection = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'extrusion'
+    ).data as DwgPoint3D
+
+    return {
+      type: 'TEXT',
+      ...commonAttrs,
+      text: text,
+      thickness: thickness,
+      startPoint: startPoint,
+      endPoint: endPoint,
+      textHeight: textHeight,
+      rotation: rotation,
+      xScale: xScale,
+      obliqueAngle: obliqueAngle,
+      styleName: '', // TODO: Set the correct value
+      generationFlag: generationFlag,
+      halign: halign as DwgTextHorizontalAlign,
+      valign: valign as DwgTextVerticalAlign,
+      extrusionDirection: extrusionDirection
     }
   }
 

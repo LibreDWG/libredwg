@@ -1,4 +1,4 @@
-import { DwgPoint3D } from '../common'
+import { DwgPoint2D, DwgPoint3D } from '../common'
 import { DwgEntity } from './entity'
 
 export declare enum DwgTextGenerationFlag {
@@ -27,8 +27,8 @@ export interface DwgTextEntity extends DwgEntity {
   type: 'TEXT'
   text: string
   thickness: number
-  startPoint: DwgPoint3D
-  endPoint: DwgPoint3D
+  startPoint: DwgPoint2D
+  endPoint: DwgPoint2D
   textHeight: number
   rotation: number
   xScale: number
