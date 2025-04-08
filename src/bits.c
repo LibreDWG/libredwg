@@ -4020,7 +4020,22 @@ bit_print (Bit_Chain *dat, size_t size)
 #define BIT(b, i) (((b)[(i) / 8] & (0x80 >> (i) % 8)) >> (7 - (i) % 8))
 
 void
-bit_write_bits (Bit_Chain *restrict dat, const char *restrict bits)
+bit_write_bits (Bit_Chain *restrict dat, const BITCODE_TF bits, size_t numbits)
+{
+  //BITCODE_TF p = (BITCODE_TF)bits;
+  unsigned char *last;
+  size_t i = 0;
+  if (!bits || !numbits)
+    return;
+  for (; i < (numbits / 8); i++)
+    bit_write_RC (dat, bits[i]);
+  last = &bits[numbits / 8];
+  for (i = 0; i < (numbits % 8); i++)
+    bit_write_B (dat, BIT(last, i));
+}
+
+void
+bit_write_bits1 (Bit_Chain *restrict dat, const char *restrict bits)
 {
   char *p = (char *)bits;
   for (; *p; p++)

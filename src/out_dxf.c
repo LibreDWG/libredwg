@@ -2964,9 +2964,25 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
         {
           return minimal ? 0 : dwg_dxf_LAYOUT (dat, obj);
         }
+      else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
+        {
+#  if defined DEBUG_CLASSES
+          return dwg_dxf_TABLESTYLE (dat, obj);
+#  else
+          if (dat->version >= R_2000 && dat->version < R_2010)
+            return dwg_dxf_TABLESTYLE (dat, obj);
+          else
+            {
+              LOG_WARN (
+                  "Unhandled Object TABLESTYLE in out_dxf %u/" FORMAT_RLLx,
+                  obj->index, obj->handle.value);
+              return DWG_ERR_UNHANDLEDCLASS;
+            }
+#  endif
+        }
       /* > 500 */
-      else if ((error
-                = dwg_dxf_variable_type (obj->parent, dat, (Dwg_Object *)obj))
+      else if ((error = dwg_dxf_variable_type (obj->parent, dat,
+                                               (Dwg_Object *)obj))
                & DWG_ERR_UNHANDLEDCLASS)
         {
           Dwg_Data *dwg = obj->parent;
@@ -3480,7 +3496,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
   }
 
-  SINCE (R_12)
+  SINCE (R_13b1)
   {
     Dwg_Object *ctrl, *obj;
     Dwg_Object_BLOCK_CONTROL *_ctrl = dwg_block_control (dwg);
@@ -3514,13 +3530,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
 #  else
     mspace = dwg_model_space_object (dwg);
-    SINCE (R_13b1)
-    {
-      if (!mspace)
-        return DWG_ERR_INVALIDDWG;
-      RECORD (BLOCK_RECORD);
-      error |= dwg_dxf_BLOCK_HEADER (dat, mspace);
-    }
+    if (!mspace)
+      return DWG_ERR_INVALIDDWG;
+    RECORD (BLOCK_RECORD);
+    error |= dwg_dxf_BLOCK_HEADER (dat, mspace);
 
     ref = dwg_paper_space_ref (dwg);
     pspace = ref ? dwg_ref_object (dwg, ref) : NULL;

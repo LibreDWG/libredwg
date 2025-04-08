@@ -650,37 +650,36 @@ classes_section:
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
       klass->number = bit_read_BS (dat);
-      LOG_HANDLE ("number: " FORMAT_BS " [BS] ", klass->number);
+      LOG_HANDLE ("-------------------\n")
+      LOG_HANDLE ("Number:           " FORMAT_BS " [BS]", klass->number);
       LOG_POS_ (HANDLE);
       klass->proxyflag = bit_read_BS (dat);
-      LOG_HANDLE ("proxyflag: " FORMAT_BS " [BS] ", klass->proxyflag);
+      LOG_HANDLE ("Proxyflag:        " FORMAT_BS " [BS]", klass->proxyflag);
       LOG_POS_ (HANDLE);
       dwg_log_proxyflag (DWG_LOGLEVEL, DWG_LOGLEVEL_HANDLE, klass->proxyflag);
       if (dat->byte >= endpos)
         break;
       klass->appname = bit_read_TV (dat);
-      LOG_HANDLE ("appname: %s [TV] ", klass->appname);
+      LOG_HANDLE ("Application name: \"%s\" [TV]", klass->appname);
       LOG_POS_ (HANDLE);
       if (dat->byte >= endpos)
         {
           free (klass->appname);
           break;
         }
-      LOG_HANDLE ("\n  ");
       klass->cppname = bit_read_TV (dat);
-      LOG_HANDLE ("cppname: %s [TV] ", klass->cppname);
+      LOG_HANDLE ("C++ class name:   %s [TV] ", klass->cppname);
       LOG_POS_ (HANDLE);
       klass->dxfname = bit_read_TV (dat);
-      LOG_HANDLE ("dxfname: %s [TV] ", klass->dxfname);
+      LOG_HANDLE ("DXF record name:  %s [TV] ", klass->dxfname);
       LOG_POS_ (HANDLE);
       klass->is_zombie = bit_read_B (dat); // was_a_proxy
-      LOG_HANDLE ("is_zombie: " FORMAT_B " [B] ", klass->is_zombie);
+      LOG_HANDLE ("is_zombie:        " FORMAT_B " [B] ", klass->is_zombie);
       LOG_POS_ (HANDLE);
       // 1f2 for entities, 1f3 for objects
       klass->item_class_id = bit_read_BS (dat);
-      LOG_HANDLE ("item_class_id: " FORMAT_BS " [BS]", klass->item_class_id);
+      LOG_HANDLE ("item_class_id:    " FORMAT_BS " [BS]", klass->item_class_id);
       LOG_POS_ (HANDLE);
-      LOG_HANDLE ("\n");
       if (DWG_LOGLEVEL == DWG_LOGLEVEL_TRACE)
         {
           LOG (TRACE,
@@ -711,6 +710,7 @@ classes_section:
 
       dwg->num_classes++;
     }
+  LOG_HANDLE ("-------------------\n")
 
   // Check Section CRC
   dat->byte = dwg->header.section[SECTION_CLASSES_R13].address
@@ -3236,8 +3236,12 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     LOG_HANDLE ("encrypted R2004_Header (@%u.0-%" PRIuSIZE ".0, %" PRIuSIZE
                 "):\n",
                 0x80, size + 0x80, size);
-    LOG_TF (HANDLE, &file_dat->chain[0x80], (int)size);
+    LOG_TF_HEX (HANDLE, &file_dat->chain[0x80], (int)size);
     decrypt_R2004_header (decrypted_data, &file_dat->chain[0x80], size);
+    LOG_HANDLE ("decrypted R2004_Header (@%u.0-%" PRIuSIZE ".0, %" PRIuSIZE
+                "):\n",
+                0x80, size + 0x80, size);
+    LOG_TF_HEX (HANDLE, &decrypted_data[0], size);
 
     dat = &decrypted_header_dat;
     dat->bit = 0;
@@ -3716,11 +3720,11 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
   LOG_POS
 
 #ifdef DEBUG
-  // sanity checks
-  if (obj->eed[idx].code == 0 || obj->eed[idx].code == 4)
-    assert (obj->eed[idx].data->u.eed_0.length <= size - 1);
-  if (obj->eed[idx].code == 10) // 3 double
-    assert (size >= 1 + 3 * 8);
+  // sanity checks:
+  if (data->code == 0 || data->code == 4)
+     assert (data->u.eed_0.length <= size - 1);
+  if (data->code == 10) // 3 double
+     assert (size >= 1 + 3 * 8);
 #endif
 
   return 0;
@@ -5159,6 +5163,13 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       *dat = abs_dat;
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
+#ifdef DEBUG
+  if ((dat->opts & DWG_OPTS_LOGLEVEL) > 5 && obj->index == 12)
+    {
+      printf ("@%" PRIuSIZE ".%u: ", dat->byte, (unsigned)dat->bit);
+      bit_print_bits(&dat->chain[dat->byte], 64);
+    }
+#endif
   obj->size = bit_read_MS (dat);
   LOG_INFO (", Size: %d [MS]", obj->size)
   SINCE (R_2010b)

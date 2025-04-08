@@ -3764,22 +3764,28 @@ struct _dwg_object_entity*
 BL,	DXF 90
 @item class_id
 BL,	DXF 91
-@item dwg_version
+@item dwg_versions
 BL,	DXF 95
 @item maint_version
 BL,	DXF 95
+@item dwg_version
+BL,	DXF 95
 @item from_dxf
 B,	DXF 70
+@item proxy_data_size
+BL,	DXF 92
+@item proxy_data
+TF,	DXF 310
 @item data_numbits
-BL
+BL,	DXF 93
 @item data_size
-BL,	DXF 160
+BL
 @item data
 TF,	DXF 310
 @item num_objids
 BL
 @item objids
-H*,	DXF 340
+H*
 
 @end vtable
 @end indentedblock
@@ -11205,22 +11211,24 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item class_id
 BL,	DXF 91
-@item dwg_version
-BL
+@item dwg_versions
+BL,	DXF 95
 @item maint_version
+BL
+@item dwg_version
 BL
 @item from_dxf
 B,	DXF 70
 @item data_numbits
-BL
+BL,	DXF 93
 @item data_size
-BL,	DXF 161
+BL
 @item data
 TF,	DXF 310
 @item num_objids
 BL
 @item objids
-H*,	DXF 340
+H*
 
 @end vtable
 @end indentedblock

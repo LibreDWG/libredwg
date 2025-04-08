@@ -197,6 +197,7 @@ int bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
 /* read fixed-length ASCII string */
 BITCODE_TF bit_read_TF (Bit_Chain *dat, size_t length) ATTRIBUTE_MALLOC;
 BITCODE_TF bit_read_bits (Bit_Chain *dat, size_t bits) ATTRIBUTE_MALLOC;
+void bit_write_bits (Bit_Chain *restrict dat, BITCODE_TF restrict bits, size_t numbits);
 
 void bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
                    size_t length);
@@ -349,7 +350,7 @@ void bit_chain_free (Bit_Chain *dat);
 
 void bit_print (Bit_Chain *dat, size_t size);
 
-void bit_write_bits (Bit_Chain *restrict dat, const char *restrict bits);
+void bit_write_bits1 (Bit_Chain *restrict dat, const char *restrict bits);
 long bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes);
 void bit_print_bits (unsigned char *bits, size_t bitsize);
 void bit_fprint_bits (FILE *fp, unsigned char *bits, size_t bitsize);

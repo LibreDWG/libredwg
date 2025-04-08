@@ -5986,26 +5986,38 @@ DWG_ENTITY (PROXY_ENTITY)
   //HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbProxyEntity)
   FIELD_BL (proxy_id, 90); // always 499
-  PRE (R_2018)
-  {
-    FIELD_BL (class_id, 91);
-  }
-  SINCE (R_2018)
-  {
-    FIELD_BL (dwg_version, 0);
-    FIELD_BL (maint_version, 0);
-  } else {
-    FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
-    FIELD_VALUE (maint_version) = dwg->header.maint_version;
-  }
   DXF {
-    BITCODE_BL v = (FIELD_VALUE(dwg_version) << 16) + FIELD_VALUE(maint_version);
-    VALUE_BL (v, 95);
+    PRE (R_2018) {
+      FIELD_BL (class_id, 91);
+    }
   }
-  SINCE (R_2000b)
-  {
+  PRE (R_2018) {
+    FIELD_BLx (dwg_versions, 95);
+    FIELD_VALUE (maint_version) = FIELD_VALUE(dwg_versions) >> 8;
+    FIELD_VALUE (dwg_version) = FIELD_VALUE(dwg_versions) & 0xff;
+    LOG_TRACE ("> maint_version: %x\n", _obj->maint_version);
+    LOG_TRACE ("> dwg_version: %x\n", _obj->dwg_version);
+  }
+  SINCE (R_2018) {
+    FIELD_BLx (dwg_version, 0);
+    FIELD_BLx (maint_version, 0);
+    FIELD_VALUE (dwg_versions) = (FIELD_VALUE(maint_version) << 8) + FIELD_VALUE(dwg_version);
+    DXF {
+      FIELD_BLx (dwg_versions, 95);
+    }
+  }
+  SINCE (R_2000b) {
     FIELD_B (from_dxf, 70); // Original Data Format: 0 dwg, 1 dxf
   }
+
+  // proxy_data_size is _ent->preview_size. see par 29
+  DXF_OR_PRINT {
+    // preview 92/310 is also proxy data
+    FIELD_BL (proxy_data_size, 92)
+  } else {
+    FIELD_VALUE (proxy_data_size) = _ent->preview_size;
+  }
+  FIELD_TF (proxy_data, _obj->proxy_data_size, 310);
 
   DECODER {
     _obj->data_numbits = (obj->hdlpos - bit_position (dat)) & 0xFFFFFFFF;
@@ -6018,47 +6030,23 @@ DWG_ENTITY (PROXY_ENTITY)
             = (((obj->address * 8) + obj->bitsize) - bit_position (dat))
               & 0xFFFFFFFF;
       }
-    _obj->data_size = _obj->data_numbits % 8;
-    if (_obj->data_numbits)
-      _obj->data_size++;
-    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
-    LOG_TRACE ("data_size: " FORMAT_BL " [ 92]\n", _obj->data_size);
-    FIELD_TF (data, _obj->data_size, 310);
+    _obj->data = bit_read_bits (dat, _obj->data_numbits);
+    LOG_TRACE ("> data_numbits: " FORMAT_BL " [ 93]\n", _obj->data_numbits);
+    LOG_TRACE_TF (_obj->data, (_obj->data_numbits / 8) + (_obj->data_numbits % 8 ? 1 : 0));
   }
   ENCODER {
-    // write is always aligned
-    if (!_obj->data_numbits)
-      _obj->data_numbits = 8 * _obj->data_size;
-    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
-    LOG_TRACE ("data_size: " FORMAT_BL " [ 92]\n", _obj->data_size);
-  }
-  JSON {
-    FIELD_BL (data_numbits, 0);
+    LOG_TRACE ("data_numbits: " FORMAT_BL " [ 93]\n", _obj->data_numbits);
+    bit_write_bits (dat, _obj->data, _obj->data_numbits);
   }
   DXF_OR_PRINT {
-    // preview 92/310 is also proxy data
-    PRE (R_2000b) {
-      FIELD_BL (data_size, 92)
-    }
-    LATER_VERSIONS {
-      FIELD_BL (data_size, 160)
-    }
+    unsigned bytes = _obj->data_numbits / 8;
+    if (_obj->data_numbits % 8) bytes++;
+    FIELD_BL (data_numbits, 93)
+    FIELD_BINARY (data, bytes, 310);
   }
-#ifndef IS_DECODER
-  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
-#endif
-#if defined IS_DECODER || defined IS_ENCODER
-  {
-    int bits = _obj->data_numbits - (_obj->data_size * 8);
-    if (!(bits > -8 && bits <= 0))
-      LOG_ERROR ("Invalid data_numbits %u - (_obj->data_size %u * 8): %d",
-                 _obj->data_numbits, _obj->data_size, bits);
-    //assert (bits > -8 && bits <= 0);
-    if (bits < 0)
-      // back off a few bits, we wrote too much
-      bit_advance_position (dat, bits);
+  FREE {
+    FIELD_BINARY (data, _obj->data_numbits / 8, 0);
   }
-#endif
 
   COMMON_ENTITY_HANDLE_DATA;
 #ifdef IS_DECODER
@@ -6078,18 +6066,36 @@ DWG_ENTITY (PROXY_ENTITY)
     dat->opts = opts;
     bit_set_position (hdl_dat, pos);
   }
-#endif
-  DXF {
-    BITCODE_RS v = 0;
-    VALUE_RS (v, 360);
-  }
-  HANDLE_VECTOR (objids, num_objids, ANYCODE, 340); // code 3 or 4
-  SINCE (R_2000b) { // only sometimes
-    DXF {
-      BITCODE_RS v = 0;
-      VALUE_RS (v, 94);
+#elif defined(IS_ENCODER) || defined(IS_JSON) || defined(IS_FREE)
+  HANDLE_VECTOR (objids, num_objids, ANYCODE, 0);
+#elif defined(IS_DXF)
+  for (rcount1 = 0; rcount1 < _obj->num_objids; rcount1++)
+    {
+      int dxf = 330;
+      if (!_obj->objids[rcount1]) {
+        LOG_ERROR ("Illegal %s.objids[%u]", obj->name, rcount1);
+      }
+      else
+        {
+          unsigned code = _obj->objids[rcount1]->handleref.code;
+          switch (code)
+            {
+            case 2: dxf = 330; break;
+            case 3: dxf = 340; break;
+            case 4: case 6: case 8: case 10: case 12: dxf = 350; break;
+            case 5: dxf = 360; break;
+            default: LOG_ERROR ("Illegal %s objids[%u].code %u", obj->name,
+                                rcount1, code);
+            }
+          VALUE_HANDLE (_obj->objids[rcount1], objids, code, dxf);
+        }
+    }
+  SINCE (R_2000b) { // end of Object ID's
+    if (FIELD_VALUE (num_objids)) {
+      VALUE_RS (0, 94);
     }
   }
+#endif
 
 DWG_ENTITY_END
 
@@ -6107,21 +6113,25 @@ DWG_OBJECT (PROXY_OBJECT)
   }
 #endif
   FIELD_BL (proxy_id, 90); // always 499
-  PRE (R_2018)
-  {
-    FIELD_BL (class_id, 91);
-  }
-  SINCE (R_2018)
-  {
-    FIELD_BL (dwg_version, 0);
-    FIELD_BL (maint_version, 0);
-  } else {
-    FIELD_VALUE (dwg_version) = dwg->header.dwg_version;
-    FIELD_VALUE (maint_version) = dwg->header.maint_version;
-  }
   DXF {
-    BITCODE_BL v = (FIELD_VALUE(dwg_version) << 16) + FIELD_VALUE(maint_version);
-    VALUE_BL (v, 95);
+    PRE (R_2018) {
+      FIELD_BL (class_id, 91);
+    }
+  }
+  PRE (R_2018) {
+    FIELD_BLx (dwg_versions, 95);
+    FIELD_VALUE (maint_version) = FIELD_VALUE(dwg_versions) >> 8;
+    FIELD_VALUE (dwg_version) = FIELD_VALUE(dwg_versions) & 0xff;
+    LOG_TRACE ("> maint_version: %x\n", _obj->maint_version);
+    LOG_TRACE ("> dwg_version: %x\n", _obj->dwg_version);
+  }
+  SINCE (R_2018) {
+    FIELD_BLx (dwg_version, 0);
+    FIELD_BLx (maint_version, 0);
+    FIELD_VALUE (dwg_versions) = (FIELD_VALUE(maint_version) << 8) + FIELD_VALUE(dwg_version);
+    DXF {
+      FIELD_BLx (dwg_versions, 95);
+    }
   }
   SINCE (R_2000b)
   {
@@ -6133,100 +6143,75 @@ DWG_OBJECT (PROXY_OBJECT)
     if (dat->size > obj->size)
       {
         LOG_TRACE ("dat not restricted, dat->size %" PRIuSIZE
-                   " > obj->size %u\n",
+                   " > obj->size " FORMAT_RL "\n",
                    dat->size, obj->size);
         _obj->data_numbits
             = (((obj->address * 8) + obj->bitsize) - bit_position (dat))
               & 0xFFFFFFFF;
-        _obj->data_size = _obj->data_numbits / 8;
-        if (_obj->data_numbits % 8)
-          _obj->data_size++;
       }
-    else
-      if (!_obj->data_size) {
-        _obj->data_size = _obj->data_numbits / 8;
-        if (_obj->data_numbits % 8)
-          _obj->data_size++;
-        if (!_obj->data_size)
-          _obj->data_numbits = 0;
-      }
-    LOG_TRACE ("data_numbits => " FORMAT_BL "\n", _obj->data_numbits);
-    LOG_TRACE ("data_size => " FORMAT_BL " [ 93]\n", _obj->data_size);
-    FIELD_VALUE (num_objids) = 0;
     _obj->data = bit_read_bits (dat, _obj->data_numbits);
-    LOG_TRACE_TF (_obj->data, _obj->data_size);
-    // FIELD_TF (data, _obj->data_size, 310); // may overshoot
+    LOG_TRACE ("> data_numbits: " FORMAT_BL " [ 93]\n", _obj->data_numbits);
+    LOG_TRACE_TF (_obj->data, (_obj->data_numbits / 8) + (_obj->data_numbits % 8 ? 1 : 0));
   }
   ENCODER {
-    // write is always aligned
-    if (!_obj->data_numbits)
-      _obj->data_numbits = 8 * _obj->data_size;
-    LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
-    LOG_TRACE ("data_size => " FORMAT_BL " [ 93]\n", _obj->data_size);
-  }
-  JSON {
-    FIELD_BL (data_numbits, 0);
+    LOG_TRACE ("data_numbits: " FORMAT_BL " [ 93]\n", _obj->data_numbits);
+    bit_write_bits (dat, _obj->data, _obj->data_numbits);
   }
   DXF_OR_PRINT {
-    // preview 92/310 is also proxy data
-    PRE (R_2000b) {
-      FIELD_BL (data_size, 93)
-    }
-    LATER_VERSIONS {
-      FIELD_BL (data_size, 161)
-    }
+    unsigned bytes = _obj->data_numbits / 8;
+    if (_obj->data_numbits % 8) bytes++;
+    FIELD_BL (data_numbits, 93)
+    FIELD_BINARY (data, bytes, 310);
   }
-#ifndef IS_DECODER
-  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
-#endif
-#if defined IS_DECODER || defined IS_ENCODER
-  {
-    int bits;
-    if (!_obj->data_size)
-      _obj->data_size = _obj->data_numbits / 8;
-    if (_obj->data_size)
-      {
-        bits = _obj->data_numbits - (int)(_obj->data_size * 8);
-        if (!(bits > -8 && bits <= 0))
-          LOG_ERROR ("Invalid data_numbits %u - (_obj->data_size %u * 8): %d",
-                     _obj->data_numbits, _obj->data_size, bits);
-        assert (bits > -8 && bits <= 0);
-        if (bits < 0)
-          // back off a few bits, we wrote too much
-          bit_advance_position (dat, bits);
-      }
+  FREE {
+    FIELD_BINARY (data, _obj->data_numbits / 8, 0);
   }
-#endif
 
   START_OBJECT_HANDLE_STREAM;
-#ifdef IS_DECODER
-  {
-    size_t pos = bit_position (hdl_dat);
-    unsigned char opts = dat->opts;
-    dat->opts &= 0xf0;
-    _obj->num_objids = 0;
-    while (hdl_dat->byte < hdl_dat->size)
-      {
-        Dwg_Handle hdl;
-        if (bit_read_H (hdl_dat, &hdl))
-          break; // error
-        else
-          _obj->num_objids++;
+#if defined(IS_DECODER)
+  while (hdl_dat->byte < hdl_dat->size - 1)
+    {
+      Dwg_Handle hdl;
+      if (bit_read_H (hdl_dat, &hdl))
+        break; // error
+      else
+        {
+          BITCODE_H ref
+              = dwg_add_handleref (dwg, hdl.code, hdl.value, NULL);
+          PUSH_HV (_obj, num_objids, objids, ref);
+        }
+    }
+  LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
+#elif defined(IS_ENCODER) || defined(IS_JSON) || defined(IS_FREE)
+  HANDLE_VECTOR (objids, num_objids, ANYCODE, 0);
+#elif defined(IS_DXF)
+  for (rcount1 = 0; rcount1 < _obj->num_objids; rcount1++)
+    {
+      int dxf = 330;
+      if (!_obj->objids[rcount1]) {
+        LOG_ERROR ("Illegal %s.objids[%u]", obj->name, rcount1);
       }
-    LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
-    dat->opts = opts;
-    bit_set_position (hdl_dat, pos);
-  }
-#endif
-  // really 330, 340, 350 or 360
-  HANDLE_VECTOR (objids, num_objids, ANYCODE, 340); // code 3 or 4
+      else
+        {
+          unsigned code = _obj->objids[rcount1]->handleref.code;
+          switch (code)
+            {
+            case 2: dxf = 330; break;
+            case 3: dxf = 340; break;
+            case 4: case 6: case 8: case 10: case 12: dxf = 350; break;
+            case 5: dxf = 360; break;
+            default: LOG_ERROR ("Illegal %s objids[%u].code %u", obj->name,
+                                rcount1, code);
+            }
+          VALUE_HANDLE (_obj->objids[rcount1], objids, code, dxf);
+        }
+    }
   SINCE (R_2000b) { // end of Object ID's
-    DXF {
-      if (FIELD_VALUE (num_objids)) {
-        VALUE_RS (0, 94);
-      }
+    if (FIELD_VALUE (num_objids)) {
+      VALUE_RS (0, 94);
     }
   }
+#endif
 
 DWG_OBJECT_END
 

@@ -11998,33 +11998,21 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   else if (pair->code == 330)
                     {
                       ref = dwg_add_handleref (dwg, 2, pair->value.u, obj);
-                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
-                                 obj->name, o->num_objids, ARGS_REF (ref),
-                                 pair->code);
                       PUSH_HV (o, num_objids, objids, ref);
                     }
                   else if (pair->code == 340)
                     {
                       ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
-                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
-                                 obj->name, o->num_objids, ARGS_REF (ref),
-                                 pair->code);
                       PUSH_HV (o, num_objids, objids, ref);
                     }
                   else if (pair->code == 350)
                     {
                       ref = dwg_add_handleref (dwg, 4, pair->value.u, obj);
-                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
-                                 obj->name, o->num_objids, ARGS_REF (ref),
-                                 pair->code);
                       PUSH_HV (o, num_objids, objids, ref);
                     }
                   else if (pair->code == 360)
                     {
                       ref = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
-                                 obj->name, o->num_objids, ARGS_REF (ref),
-                                 pair->code);
                       PUSH_HV (o, num_objids, objids, ref);
                     }
                 }
@@ -12058,33 +12046,21 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   else if (pair->code == 330)
                     {
                       ref = dwg_add_handleref (dwg, 2, pair->value.u, obj);
-                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
-                                 obj->name, o->num_objids, ARGS_REF (ref),
-                                 pair->code);
                       PUSH_HV (o, num_objids, objids, ref);
                     }
                   else if (pair->code == 340)
                     {
                       ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
-                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
-                                 obj->name, o->num_objids, ARGS_REF (ref),
-                                 pair->code);
                       PUSH_HV (o, num_objids, objids, ref);
                     }
                   else if (pair->code == 350)
                     {
                       ref = dwg_add_handleref (dwg, 4, pair->value.u, obj);
-                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
-                                 obj->name, o->num_objids, ARGS_REF (ref),
-                                 pair->code);
                       PUSH_HV (o, num_objids, objids, ref);
                     }
                   else if (pair->code == 360)
                     {
                       ref = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-                      LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n",
-                                 obj->name, o->num_objids, ARGS_REF (ref),
-                                 pair->code);
                       PUSH_HV (o, num_objids, objids, ref);
                     }
                 }

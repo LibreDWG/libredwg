@@ -63,7 +63,7 @@ main (int argc, char *argv[])
       bits = dat.size / 8;
     }
   else
-    bit_write_bits (&dat, input);
+    bit_write_bits1 (&dat, input);
   pos = bit_position (&dat);
   bit_set_position (&dat, 0);
   // accept more types, like CMC, BS, BL, HANDLE and print all possible
