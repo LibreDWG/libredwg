@@ -16,6 +16,8 @@ import {
   DwgTextVerticalAlign
 } from '../types'
 
+type DwgCommonAttributes = Omit<DwgEntity, 'type'>
+
 export class LibreEntityConverter {
   libredwg: LibreDwgEx
 
@@ -25,31 +27,35 @@ export class LibreEntityConverter {
 
   convert(object_ptr: Dwg_Object_Ptr): DwgEntity | undefined {
     const libredwg = this.libredwg
-    const tio = libredwg.dwg_object_to_entity_tio(object_ptr)
-    if (tio) {
+
+    // Get values of the common attributes of one entity
+    const entity = libredwg.dwg_object_to_entity(object_ptr)
+    const entity_tio = libredwg.dwg_object_to_entity_tio(object_ptr)
+    if (entity && entity_tio) {
+      // Get values of the common attributes of one entity
+      const commonAttrs = this.getCommonAttrs(entity)
       const fixedtype = libredwg.dwg_object_get_fixedtype(object_ptr)
       if (fixedtype == Dwg_Object_Type.DWG_TYPE_ARC) {
-        return this.convertArc(tio)
+        return this.convertArc(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_CIRCLE) {
-        return this.convertCircle(tio)
+        return this.convertCircle(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_ELLIPSE) {
-        return this.convertEllise(tio)
+        return this.convertEllise(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_LINE) {
-        return this.convertLine(tio)
+        return this.convertLine(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_LWPOLYLINE) {
-        return this.convertLWPolyline(tio)
+        return this.convertLWPolyline(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_POINT) {
-        return this.convertPoint(tio)
+        return this.convertPoint(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_TEXT) {
-        return this.convertText(tio)
+        return this.convertText(entity_tio, commonAttrs)
       }
     }
     return undefined
   }
 
-  private convertArc(entity: Dwg_Object_Entity_Ptr): DwgArcEntity {
+  private convertArc(entity: Dwg_Object_Entity_Ptr, commonAttrs: DwgCommonAttributes): DwgArcEntity {
     const libredwg = this.libredwg
-    const commonAttrs = this.getCommonAttrs(entity)
     const center = libredwg.dwg_dynapi_entity_value(entity, 'center')
       .data as DwgPoint3D
     const radius = libredwg.dwg_dynapi_entity_value(entity, 'radius')
@@ -77,9 +83,8 @@ export class LibreEntityConverter {
     }
   }
 
-  private convertCircle(entity: Dwg_Object_Entity_Ptr): DwgCircleEntity {
+  private convertCircle(entity: Dwg_Object_Entity_Ptr, commonAttrs: DwgCommonAttributes): DwgCircleEntity {
     const libredwg = this.libredwg
-    const commonAttrs = this.getCommonAttrs(entity)
     const center = libredwg.dwg_dynapi_entity_value(entity, 'center')
       .data as DwgPoint3D
     const radius = libredwg.dwg_dynapi_entity_value(entity, 'radius')
@@ -101,9 +106,8 @@ export class LibreEntityConverter {
     }
   }
 
-  private convertEllise(entity: Dwg_Object_Entity_Ptr): DwgEllipseEntity {
+  private convertEllise(entity: Dwg_Object_Entity_Ptr, commonAttrs: DwgCommonAttributes): DwgEllipseEntity {
     const libredwg = this.libredwg
-    const commonAttrs = this.getCommonAttrs(entity)
     const center = libredwg.dwg_dynapi_entity_value(entity, 'center')
       .data as DwgPoint3D
     const majorAxisEndPoint = libredwg.dwg_dynapi_entity_value(
@@ -133,9 +137,8 @@ export class LibreEntityConverter {
     }
   }
 
-  private convertLine(entity: Dwg_Object_Entity_Ptr): DwgLineEntity {
+  private convertLine(entity: Dwg_Object_Entity_Ptr, commonAttrs: DwgCommonAttributes): DwgLineEntity {
     const libredwg = this.libredwg
-    const commonAttrs = this.getCommonAttrs(entity)
     const startPoint = libredwg.dwg_dynapi_entity_value(entity, 'start')
       .data as DwgPoint3D
     const endPoint = libredwg.dwg_dynapi_entity_value(entity, 'end')
@@ -158,10 +161,10 @@ export class LibreEntityConverter {
   }
 
   private convertLWPolyline(
-    entity: Dwg_Object_Entity_Ptr
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
   ): DwgLWPolylineEntity {
     const libredwg = this.libredwg
-    const commonAttrs = this.getCommonAttrs(entity)
     const numberOfVertices = libredwg.dwg_dynapi_entity_value(
       entity,
       'num_points'
@@ -213,9 +216,8 @@ export class LibreEntityConverter {
     }
   }
 
-  private convertPoint(entity: Dwg_Object_Entity_Ptr): DwgPointEntity {
+  private convertPoint(entity: Dwg_Object_Entity_Ptr, commonAttrs: DwgCommonAttributes): DwgPointEntity {
     const libredwg = this.libredwg
-    const commonAttrs = this.getCommonAttrs(entity)
     const x = libredwg.dwg_dynapi_entity_value(entity, 'x').data as number
     const y = libredwg.dwg_dynapi_entity_value(entity, 'y').data as number
     const z = libredwg.dwg_dynapi_entity_value(entity, 'z').data as number
@@ -238,9 +240,8 @@ export class LibreEntityConverter {
     }
   }
 
-  private convertText(entity: Dwg_Object_Entity_Ptr): DwgTextEntity {
+  private convertText(entity: Dwg_Object_Entity_Ptr, commonAttrs: DwgCommonAttributes): DwgTextEntity {
     const libredwg = this.libredwg
-    const commonAttrs = this.getCommonAttrs(entity)
     const text = libredwg.dwg_dynapi_entity_value(entity, 'text_value')
       .data as string
     const thickness = libredwg.dwg_dynapi_entity_value(entity, 'thickness')
@@ -292,7 +293,7 @@ export class LibreEntityConverter {
     }
   }
 
-  private getCommonAttrs(entity: Dwg_Object_Entity_Ptr) {
+  private getCommonAttrs(entity: Dwg_Object_Entity_Ptr): DwgCommonAttributes {
     const libredwg = this.libredwg
     const color = libredwg.dwg_object_entity_get_color_object(entity)
     const layer = libredwg.dwg_object_entity_get_layer_name(entity)
@@ -306,7 +307,7 @@ export class LibreEntityConverter {
 
     return {
       handle: handle.value,
-      ownerHandle: ownerhandle.absolute_ref,
+      ownerBlockRecordSoftId: ownerhandle.absolute_ref,
       layer: layer,
       color: color.rgb,
       colorIndex: color.index,

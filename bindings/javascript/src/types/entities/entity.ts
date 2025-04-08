@@ -3,7 +3,7 @@ import { DwgXData } from '../shared/xdata'
 export interface DwgEntity {
   type: string
   handle: number
-  ownerBlockRecordSoftId?: string
+  ownerBlockRecordSoftId: number
   isInPaperSpace?: boolean
   layer: string
   lineType?: string

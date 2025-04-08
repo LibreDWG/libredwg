@@ -128,7 +128,7 @@ export class LibreDwgConverter {
       .data as number
     const layout = libredwg.dwg_ref_get_absref(layout_ptr)
     // TODO: Handle preview
-    const entities = this.convertEntities(item)
+    const entities = this.convertEntities(obj, commonAttrs.handle)
 
     return {
       ...commonAttrs,
@@ -140,15 +140,18 @@ export class LibreDwgConverter {
     }
   }
 
-  private convertEntities(item: Dwg_Object_Object_Ptr): DwgEntity[] {
+  private convertEntities(obj: Dwg_Object_Ptr, ownerHandle: number): DwgEntity[] {
     const libredwg = this.libredwg
     const converter = this.entityConverter
     const entities: DwgEntity[] = []
-    let entity_ptr = libredwg.get_first_owned_entity(item)
-    while (entity_ptr) {
-      entity_ptr = libredwg.get_next_owned_entity(item, entity_ptr)
-      const entity = converter.convert(entity_ptr)
-      if (entity) entities.push(entity)
+    let next = libredwg.get_first_owned_entity(obj)
+    while (next) {
+      const entity = converter.convert(next)
+      if (entity) {
+        entity.ownerBlockRecordSoftId = ownerHandle
+        entities.push(entity)
+      }
+      next = libredwg.get_next_owned_entity(obj, next)
     }
     return entities
   }

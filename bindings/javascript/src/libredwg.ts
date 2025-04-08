@@ -236,8 +236,30 @@ export class LibreDwg {
   }
 
   /**
+   * Returns the first entity owned by the block header or null
+   * @param ptr Pointer to the block header.
+   * @returns Returns the first entity owned by the block header or null
+   */
+  get_first_owned_entity(ptr: Dwg_Object_Ptr): Dwg_Object_Ptr {
+    return this.wasmInstance.get_first_owned_entity(ptr)
+  }
+
+  /**
+   * Returns the next entity owned by the block header or null.
+   * @param ptr Pointer to the block header.
+   * @param current Pointer to the current entity in the block header.
+   * @returns Returns the next entity owned by the block header or null.
+   */
+  get_next_owned_entity(
+    ptr: Dwg_Object_Ptr,
+    current: Dwg_Object_Ptr
+  ): Dwg_Object_Ptr {
+    return this.wasmInstance.get_next_owned_entity(ptr, current)
+  }
+
+  /**
    * Converts one C++ unsigned char array to one JavaScript number array.
-   * @param ptr Point to C++ unsigned char array.
+   * @param ptr Pointer to C++ unsigned char array.
    * @param size The size of C++ unsigned char array.
    * @returns Returns one JavaScript number array from the specified C++ unsigned char array.
    */
@@ -247,7 +269,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ signed char array to one JavaScript number array.
-   * @param ptr Point to C++ signed char array.
+   * @param ptr Pointer to C++ signed char array.
    * @param size The size of C++ signed char array.
    * @returns Returns one JavaScript number array from the specified C++ signed char array.
    */
@@ -257,7 +279,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ unsigned int16 array to one JavaScript number array.
-   * @param ptr Point to C++ unsigned int16 array.
+   * @param ptr Pointer to C++ unsigned int16 array.
    * @param size The size of C++ unsigned int16 array.
    * @returns Returns one JavaScript number array from the specified C++ unsigned int16 array.
    */
@@ -267,7 +289,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ int16 array to one JavaScript number array.
-   * @param ptr Point to C++ int16 array.
+   * @param ptr Pointer to C++ int16 array.
    * @param size The size of C++ int16 array.
    * @returns Returns one JavaScript number array from the specified C++ int16 array.
    */
@@ -277,7 +299,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ unsigned int32 array to one JavaScript number array.
-   * @param ptr Point to C++ unsigned int32 array.
+   * @param ptr Pointer to C++ unsigned int32 array.
    * @param size The size of C++ unsigned int32 array.
    * @returns Returns one JavaScript number array from the specified C++ unsigned int32 array.
    */
@@ -287,7 +309,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ int32 array to one JavaScript number array.
-   * @param ptr Point to C++ int32 array.
+   * @param ptr Pointer to C++ int32 array.
    * @param size The size of C++ int32 array.
    * @returns Returns one JavaScript number array from the specified C++ int32 array.
    */
@@ -297,7 +319,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ unsigned int64 array to one JavaScript number array.
-   * @param ptr Point to C++ unsigned int64 array.
+   * @param ptr Pointer to C++ unsigned int64 array.
    * @param size The size of C++ unsigned int64 array.
    * @returns Returns one JavaScript number array from the specified C++ unsigned int64 array.
    */
@@ -307,7 +329,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ int64 array to one JavaScript number array.
-   * @param ptr Point to C++ int64 array.
+   * @param ptr Pointer to C++ int64 array.
    * @param size The size of C++ int64 array.
    * @returns Returns one JavaScript number array from the specified C++ int64 array.
    */
@@ -317,7 +339,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ double array to one JavaScript number array.
-   * @param ptr Point to C++ double array.
+   * @param ptr Pointer to C++ double array.
    * @param size The size of C++ double array.
    * @returns Returns one JavaScript number array from the specified C++ double array.
    */
@@ -327,7 +349,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ 2d point array to one JavaScript 2d point array.
-   * @param ptr Point to C++ 2d point array.
+   * @param ptr Pointer to C++ 2d point array.
    * @param size The size of C++ 2 point array.
    * @returns Returns one JavaScript 2d point array from the specified C++ 2d point array.
    */
@@ -337,7 +359,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ 3d point array to one JavaScript 3d point array.
-   * @param ptr Point to C++ 3d point array.
+   * @param ptr Pointer to C++ 3d point array.
    * @param size The size of C++ 3d point array.
    * @returns Returns one JavaScript 3d point array from the specified C++ 3d point array.
    */
@@ -347,7 +369,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ line type array to one JavaScript line type array.
-   * @param ptr Point to C++ line type array.
+   * @param ptr Pointer to C++ line type array.
    * @param size The size of C++ line type array.
    * @returns Returns one JavaScript line type array from the specified C++ line type array.
    */
