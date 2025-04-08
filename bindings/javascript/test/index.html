@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DWG/DXF File Reader</title>
+</head>
+<body>
+    <h1>Select a DXF/DWG file</h1>
+    <input type="file" id="fileInput" accept=".dxf, .dwg" />
+
+    <!-- Element to display Layer Names -->
+    <h2>Layer Names:</h2>
+    <ul id="layerNameList"></ul>
+
+    <!-- Element to display Line Types -->
+    <h2>Line Types:</h2>
+    <ul id="lineTypeList"></ul>
+
+    <!-- Element to display Text Styles -->
+    <h2>Text Styles:</h2>
+    <ul id="textStyleList"></ul>
+
+    <!-- Element to display Dimensionn Styles -->
+    <h2>Dimension Styles:</h2>
+    <ul id="dimStyleList"></ul>
+
+    <!-- Element to display Viewports -->
+    <h2>Viewports:</h2>
+    <ul id="viewportList"></ul>
+
+    <!-- Element to display Layouts -->
+    <h2>Layouts:</h2>
+    <ul id="layoutList"></ul>
+
+    <!-- Element to display Blocks -->
+    <h2>Blocks:</h2>
+    <ul id="blockList"></ul>
+
+    <!-- Element to display Images -->
+    <h2>Images:</h2>
+    <ul id="imageList"></ul>
+
+    <!-- Element to display Entity Stats -->
+    <h2>Entities:</h2>
+    <ul id="entityList"></ul>
+
+    <!-- Element to display vertexes and other information in the first polyline entity -->
+    <h2>The First Polyline:</h2>
+    <ul id="entityInfoList"></ul>
+    <ul id="vertexList"></ul>
+
+    <script type="module" src="libredwg-web.js" defer></script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>

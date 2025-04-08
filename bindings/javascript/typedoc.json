@@ -1,0 +1,26 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": ["src/index.ts"],
+    "name": "MLightCAD",
+    "out": "docs",
+    "includeVersion": false,
+    "exclude": [
+        "libredwg-web.js",
+    ],
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "excludeProtected": false
+
+    // In TypeDoc 0.26 it is possible to specify options which should be inherited
+    // by packages here, instead of in a separate file which is extended by each
+    // package. We don't use this here as relying on it would prevent us from running
+    // TypeDoc individually in each package, which is required for the advanced method
+    // of generating monorepo documentation.
+    // "packageOptions": {
+    //   "includeVersion": true,
+    //   "entryPoints": ["src/index.ts"]
+    // }
+
+    // Potentially useful for debugging
+    // "logLevel": "Verbose"
+}

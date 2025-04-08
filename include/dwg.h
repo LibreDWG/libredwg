@@ -343,9 +343,9 @@ typedef enum DWG_VERSION_TYPE
 
 typedef struct dwg_versions {
   Dwg_Version_Type r;
-  const char *const type;
-  const char *const hdr; // char[6] mostly
-  const char *const desc;
+  const char * type;
+  const char * hdr; // char[6] mostly
+  const char * desc;
   uint8_t dwg_version;
 } Dwg_Versions;
 
@@ -11465,7 +11465,9 @@ typedef enum RESBUF_VALUE_TYPE
 /*--------------------------------------------------
  * Exported Functions
  */
-
+EXPORT int dwg_read_data (unsigned char *restrict data,
+                          size_t size,
+                          Dwg_Data *restrict dwg);
 EXPORT int dwg_read_file (const char *restrict filename,
                           Dwg_Data *restrict dwg);
 EXPORT int dxf_read_file (const char *restrict filename,
