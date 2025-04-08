@@ -51,7 +51,7 @@ jobs:
         working-directory: ./bindings/javascript
 
       - name: Build API docs
-        run: pnpm docs
+        run: pnpm doc
         working-directory: ./bindings/javascript
 
       - name: Prepare GitHub Pages content
