@@ -1,7 +1,8 @@
 {
     "$schema": "https://typedoc.org/schema.json",
-    "entryPoints": ["src/index.ts"],
-    "name": "MLightCAD",
+    "entryPoints": ["src/database", "src/types", "src/libredwg.ts"],
+    "entryPointStrategy": "expand", 
+    "name": "MLightCAD LibreDwg-Web API Docs",
     "out": "docs",
     "includeVersion": false,
     "exclude": [

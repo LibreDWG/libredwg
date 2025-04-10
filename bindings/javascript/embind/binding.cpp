@@ -120,6 +120,22 @@ emscripten::val dwg_ptr_to_point3d_array_wrapper(uintptr_t array_ptr, size_t siz
   return points_obj;
 }
 
+emscripten::val dwg_ptr_to_point4d_array_wrapper(uintptr_t array_ptr, size_t size) {
+  Dwg_SPLINE_control_point* array = reinterpret_cast<Dwg_SPLINE_control_point*>(array_ptr);
+
+  emscripten::val points_obj = emscripten::val::array();
+  for (int index = 0; index < size; ++index) {
+    emscripten::val point_obj = emscripten::val::object();
+    auto point = array[index];
+    point_obj.set("x", point.x);
+    point_obj.set("y", point.y);
+    point_obj.set("z", point.z);
+    point_obj.set("w", point.w);
+    points_obj.call<void>("push", point_obj);
+  }
+  return points_obj;
+}
+
 emscripten::val dwg_ptr_to_ltype_dash_array_wrapper(uintptr_t array_ptr, size_t size) {
   Dwg_LTYPE_dash* array = reinterpret_cast<Dwg_LTYPE_dash*>(array_ptr);
 
@@ -136,9 +152,65 @@ emscripten::val dwg_ptr_to_ltype_dash_array_wrapper(uintptr_t array_ptr, size_t 
     dash_obj.set("rotation", dash.rotation);
     dash_obj.set("shape_flag", dash.shape_flag);
     dash_obj.set("text", std::string(dash.text));
-    dash_obj.call<void>("push", dash);
+    dashes.call<void>("push", dash_obj);
   }
   return dashes;
+}
+
+emscripten::val dwg_ptr_to_table_cell_array_wrapper(uintptr_t array_ptr, size_t size) {
+  Dwg_TABLE_Cell* array = reinterpret_cast<Dwg_TABLE_Cell*>(array_ptr);
+
+  emscripten::val cells = emscripten::val::array();
+  for (int i = 0; i < size; ++i) {
+    emscripten::val cell_obj = emscripten::val::object();
+    auto cell = array[i];
+    cell_obj.set("type", cell.type);
+    cell_obj.set("flags", cell.flags);
+    cell_obj.set("is_merged_value", cell.is_merged_value);
+    cell_obj.set("is_autofit_flag", cell.is_autofit_flag);
+    cell_obj.set("merged_width_flag", cell.merged_width_flag);
+    cell_obj.set("merged_height_flag", cell.merged_height_flag);
+    cell_obj.set("rotation", cell.type);
+    cell_obj.set("text_value", std::string(cell.text_value));
+    cell_obj.set("text_style", reinterpret_cast<uintptr_t>(cell.text_style));
+    cell_obj.set("block_handle", object_ref_to_js_object(cell.block_handle));
+    cell_obj.set("block_scale", cell.block_scale);
+    cell_obj.set("additional_data_flag", cell.additional_data_flag);
+    cell_obj.set("cell_flag_override", cell.cell_flag_override);
+    cell_obj.set("virtual_edge_flag", cell.virtual_edge_flag);
+    cell_obj.set("cell_alignment", cell.cell_alignment);
+    cell_obj.set("bg_fill_none", cell.bg_fill_none);
+    cell_obj.set("bg_color", color_to_js_object(&cell.bg_color));
+    cell_obj.set("content_color", color_to_js_object(&cell.content_color));
+    cell_obj.set("text_height", cell.text_height);
+    cell_obj.set("top_grid_color", color_to_js_object(&cell.top_grid_color));
+    cell_obj.set("top_grid_linewt", cell.top_grid_linewt);
+    cell_obj.set("top_visibility", cell.top_visibility);
+    cell_obj.set("right_grid_color", color_to_js_object(&cell.right_grid_color));
+    cell_obj.set("right_grid_linewt", cell.right_grid_linewt);
+    cell_obj.set("right_visibility", cell.right_visibility);
+    cell_obj.set("bottom_grid_color", color_to_js_object(&cell.bottom_grid_color));
+    cell_obj.set("bottom_grid_linewt", cell.bottom_grid_linewt);
+    cell_obj.set("bottom_visibility", cell.bottom_visibility);
+    cell_obj.set("left_grid_color", color_to_js_object(&cell.left_grid_color));
+    cell_obj.set("left_grid_linewt", cell.left_grid_linewt);
+    cell_obj.set("left_visibility", cell.left_visibility);
+    cell_obj.set("num_attr_defs", cell.num_attr_defs);
+
+    emscripten::val attr_defs_obj = emscripten::val::array();
+    for (int i = 0; i < size; ++i) {
+      auto attr_def = cell.attr_defs[i];
+      emscripten::val attr_def_obj = emscripten::val::object();
+      attr_def_obj.set("attdef", object_ref_to_js_object(attr_def.attdef));
+      attr_def_obj.set("text", std::string(attr_def.text));
+      attr_def_obj.set("index", attr_def.index);
+      attr_defs_obj.call<void>("push", attr_def_obj);
+    }
+    cell_obj.set("attr_defs", attr_defs_obj);
+    
+    cells.call<void>("push", cell_obj);
+  }
+  return cells;
 }
 
 EMSCRIPTEN_BINDINGS(libredwg_array) {
@@ -153,7 +225,9 @@ EMSCRIPTEN_BINDINGS(libredwg_array) {
   DEFINE_FUNC(dwg_ptr_to_double_array);
   DEFINE_FUNC(dwg_ptr_to_point2d_array);
   DEFINE_FUNC(dwg_ptr_to_point3d_array);
+  DEFINE_FUNC(dwg_ptr_to_point4d_array);
   DEFINE_FUNC(dwg_ptr_to_ltype_dash_array);
+  DEFINE_FUNC(dwg_ptr_to_table_cell_array);
 }
 
 /***********************************************************************/
