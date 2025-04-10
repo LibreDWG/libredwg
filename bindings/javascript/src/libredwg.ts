@@ -1,56 +1,24 @@
 import { MainModule } from '../wasm/libredwg-web'
 import createModule from '../wasm/libredwg-web.js'
 import { LibreDwgConverter } from './converter'
-import { Dwg_File_Type, Dwg_Object_Type } from './enums'
-import { DwgPoint2D, DwgPoint3D } from './types'
+import { DwgPoint2D, DwgPoint3D, DwgPoint4D } from './database'
+import { 
+  Dwg_Array_Ptr,
+  Dwg_Color,
+  Dwg_Data_Ptr,
+  Dwg_Field_Value,
+  Dwg_File_Type,
+  Dwg_Handle,
+  Dwg_LTYPE_Dash,
+  Dwg_Object_Entity_Ptr,
+  Dwg_Object_Object_Ptr,
+  Dwg_Object_Ptr,
+  Dwg_Object_Ref,
+  Dwg_Object_Type,
+  Dwg_TABLE_Cell
+} from './types'
 
 export { createModule }
-export type Dwg_Array_Ptr = number
-export type Dwg_Data_Ptr = number
-export type Dwg_Object_Ptr = number
-export type Dwg_Object_Ref_Ptr = number
-export type Dwg_Object_Object_Ptr = number
-export type Dwg_Object_Entity_Ptr = number
-
-export interface Dwg_Handle {
-  code: number
-  size: number
-  value: number
-  is_global: number
-}
-
-export interface Dwg_Object_Ref {
-  obj: Dwg_Object_Ptr
-  handleref: Dwg_Handle
-  absolute_ref: number
-  r11_idx: number
-}
-
-export interface Dwg_Color {
-  index: number
-  flag: number
-  rgb: number
-  name: string
-  book_name: string
-}
-
-export interface Dwg_LTYPE_Dash {
-  length: number
-  complex_shapecode: number
-  style: number
-  x_offset: number
-  y_offset: number
-  scale: number
-  rotation: number
-  shape_flag: number
-  text: string
-}
-
-export interface Dwg_Field_Value {
-  success: boolean
-  message?: string
-  data?: string | number | Dwg_Color | Dwg_Array_Ptr | DwgPoint2D | DwgPoint3D
-}
 
 export type LibreDwgEx = LibreDwg & MainModule
 
@@ -368,6 +336,16 @@ export class LibreDwg {
   }
 
   /**
+   * Converts one C++ 4d point array to one JavaScript 4d point array.
+   * @param ptr Pointer to C++ 4d point array.
+   * @param size The size of C++ 4d point array.
+   * @returns Returns one JavaScript 4d point array from the specified C++ 4d point array.
+   */
+  dwg_ptr_to_point4d_array(ptr: Dwg_Array_Ptr, size: number): DwgPoint4D[] {
+    return this.wasmInstance.dwg_ptr_to_point4d_array(ptr, size)
+  }
+
+  /**
    * Converts one C++ line type array to one JavaScript line type array.
    * @param ptr Pointer to C++ line type array.
    * @param size The size of C++ line type array.
@@ -378,6 +356,19 @@ export class LibreDwg {
     size: number
   ): Dwg_LTYPE_Dash[] {
     return this.wasmInstance.dwg_ptr_to_ltype_dash_array(ptr, size)
+  }
+
+  /**
+   * Converts one C++ table cell array to one JavaScript table cell array.
+   * @param ptr Pointer to C++ table cell array.
+   * @param size The size of C++ table cell array.
+   * @returns Returns one JavaScript table cell array from the specified C++ table cell array.
+   */
+  dwg_ptr_to_table_cell_array(
+    ptr: Dwg_Array_Ptr,
+    size: number
+  ): Dwg_TABLE_Cell[] {
+    return this.wasmInstance.dwg_ptr_to_table_cell_array(ptr, size)
   }
 
   /**

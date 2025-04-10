@@ -3,7 +3,7 @@
   "description": "a webassembly version of libredwg, which can read/write DXF files (in both formats, ascii and binary form) and read DWG files from AutoCAD R14 to AutoCAD 2020.",
   "license": "GPL-2.0-only",
   "private": false,
-  "version": "0.0.9",
+  "version": "0.0.11",
   "author": "MLight Lee <mlight.lee@outlook.com>",
   "type": "module",
   "repository": {
@@ -25,7 +25,7 @@
     "webassembly"
   ],
   "scripts": {
-    "demo": "vite",
+    "demo": "live-server test --entry-file=index.html",
     "doc": "typedoc",
     "build": "tsc && vite build && cp -f dist/libredwg-web.js test/",
     "build:prepare": "mkdir -p ../../build-wasm && cd ../../build-wasm && emconfigure ../configure CFLAGS=\"-O2 -sUSE_ZLIB=1\" CC=emcc --enable-release --disable-docs --disable-write --disable-bindings --disable-shared --disable-json --disable-dxf",
@@ -33,7 +33,7 @@
     "build:wasm": "cd ../../build-wasm && emcc ../bindings/javascript/embind/*.cpp src/*.o -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../src -I../include -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s EXPORT_ES6=1 -s MODULARIZE=1 -s EXPORT_NAME=\"createModule\" -sEXPORTED_RUNTIME_METHODS=FS,ENV,ccall,cwrap,UTF8ToString,stringToNewUTF8,setValue --emit-tsd libredwg-web.d.ts",
     "clean": "rm -rf ../../build-wasm ./docs ./dist ./lib",
     "copy": "cp -f ../../build-wasm/libredwg-web.js ../../build-wasm/libredwg-web.wasm wasm/ && cp -f ../../build-wasm/libredwg-web.js src/",
-    "format": "prettier --config ./.prettierrc.js --write src/**/*.{ts,js,json}",
+    "format": "prettier --config ./.prettierrc.js --write src/**/*.{ts,js}",
     "install:emsdk": "cd $EMSDK && ./emsdk install latest && ./emsdk activate latest",
     "link": "node script/create-symlink.js ./wasm/libredwg-web.js ./src/libredwg-web.js",
     "lint": "eslint src/",
@@ -56,7 +56,6 @@
     "require": "./dist/libredwg-web.umd.cjs"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.3",
     "@typescript-eslint/parser": "^8.4.0",
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
@@ -64,6 +63,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.0.0",
     "lint-staged": "^15.2.7",
+    "live-server": "^1.2.2",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
     "shelljs": "^0.9.2",
