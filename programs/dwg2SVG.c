@@ -494,7 +494,7 @@ output_ELLIPSE (Dwg_Object *obj)
           ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z, ell->axis_ratio,
           ell->start_angle, ell->end_angle);
   printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
-          "ry=\"%f\" transform=\"rotate=(%f %f %f)\"\n\t",
+          "ry=\"%f\" transform=\"rotate(%f %f %f)\"\n\t",
           obj->index, ell->center.x, ell->center.y, radius.x, radius.y,
           ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z);
   common_entity (obj->tio.entity);
