@@ -106,6 +106,12 @@ help (void)
 }
 
 static double
+transform_ANGLE (double angle)
+{
+  return 180 - angle;
+}
+
+static double
 transform_X (double x)
 {
   return x - model_xmin;
@@ -466,6 +472,7 @@ output_ELLIPSE (Dwg_Object *obj)
 {
   Dwg_Entity_ELLIPSE *ell = obj->tio.entity->tio.ELLIPSE;
   BITCODE_2DPOINT radius;
+  double angle_rad, angle_dec;
   // BITCODE_3DPOINT center, sm_axis;
   // double x_start, y_start, x_end, y_end;
 
@@ -477,8 +484,8 @@ output_ELLIPSE (Dwg_Object *obj)
   /* The 2 points are already WCS */
   // transform_OCS (&center, ell->center, ell->extrusion);
   // transform_OCS (&sm_axis, ell->sm_axis, ell->extrusion);
-  radius.x = fabs (ell->sm_axis.x);
-  radius.y = fabs (ell->sm_axis.y * ell->axis_ratio);
+  radius.x = sqrt (ell->sm_axis.x * ell->sm_axis.x + ell->sm_axis.y * ell->sm_axis.y);
+  radius.y = radius.x * ell->axis_ratio;
 
   /*
   x_start = ell->center.x + radius.x * cos (ell->start_angle);
@@ -487,7 +494,10 @@ output_ELLIPSE (Dwg_Object *obj)
   y_end = ell->center.y + radius.y * sin (ell->end_angle);
   */
 
-  // TODO: rotate. start,end_angle => pathLength
+  angle_rad = atan2(ell->sm_axis.y, ell->sm_axis.x);
+  angle_dec = angle_rad * 180.0 / M_PI;
+
+  // TODO: start,end_angle => pathLength
   printf ("\t<!-- ellipse-%d -->\n", obj->index);
   printf ("\t<!-- sm_axis=(%f,%f,%f) axis_ratio=%f start_angle=%f "
           "end_angle=%f-->\n",
@@ -495,8 +505,9 @@ output_ELLIPSE (Dwg_Object *obj)
           ell->start_angle, ell->end_angle);
   printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
           "ry=\"%f\" transform=\"rotate(%f %f %f)\"\n\t",
-          obj->index, ell->center.x, ell->center.y, radius.x, radius.y,
-          ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z);
+          obj->index, transform_X (ell->center.x), transform_Y (ell->center.y),
+          radius.x, radius.y,
+          transform_ANGLE (angle_dec), transform_X (ell->center.x), transform_Y (ell->center.y));
   common_entity (obj->tio.entity);
 }
 
