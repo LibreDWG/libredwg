@@ -354,7 +354,7 @@ void bit_write_bits1 (Bit_Chain *restrict dat, const char *restrict bits);
 long bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes);
 void bit_print_bits (unsigned char *bits, size_t bitsize);
 void bit_fprint_bits (FILE *fp, unsigned char *bits, size_t bitsize);
-void bit_explore_chain (Bit_Chain *dat, size_t datsize);
+void bit_explore_chain (Bit_Chain *dat, size_t from, size_t size);
 
 BITCODE_BD bit_nan (void);
 int bit_isnan (BITCODE_BD number);

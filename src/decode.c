@@ -1349,6 +1349,17 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
           LOG_INSANE ("(%ld) ", bytes_left)
         }
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    static int ctr = 0;
+    char out[80];
+    FILE *fp;
+    snprintf (out, 80, "decomp_%u.bin", ctr++);
+    fp = fopen (out, "wb");
+    fwrite (decomp, 1,  decomp_data_size, fp);
+    fclose(fp);
+  }
+#endif
 
   return 0; // Success
 }
@@ -2164,6 +2175,13 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return error;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_cls.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   if (bit_search_sentinel (&sec_dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN)))
     {
@@ -2321,6 +2339,13 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return error;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_hea.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
   if (dat->size - dat->byte <= 200)
     {
       LOG_ERROR ("Not enough space for HEADER %" PRIuSIZE,
@@ -2385,6 +2410,13 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (obj_dat.chain);
       return error;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_obj.bin", "wb");
+    fwrite (obj_dat.chain, 1, obj_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   error = read_2004_compressed_section (dat, dwg, &hdl_dat, SECTION_HANDLES);
   if (error >= DWG_ERR_CRITICAL || !hdl_dat.chain)
@@ -2395,6 +2427,13 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (hdl_dat.chain);
       return error;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_hdl.bin", "wb");
+    fwrite (hdl_dat.chain, 1, hdl_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   endpos = hdl_dat.byte + hdl_dat.size;
   dwg->num_objects = 0;
@@ -2550,6 +2589,14 @@ read_2004_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return error;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_si.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
+
   if (dwg->header.summaryinfo_address != (BITCODE_RL)dat->byte)
     LOG_WARN ("summaryinfo_address mismatch: " FORMAT_RL " != %" PRIuSIZE,
               dwg->header.summaryinfo_address, dat->byte);
@@ -2655,6 +2702,13 @@ read_2004_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return error;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_auxh.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("AuxHeader (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
   old_dat = *dat;
@@ -2721,6 +2775,13 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return error;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_ai.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("AppInfo (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
   old_dat = *dat;
@@ -2769,6 +2830,13 @@ read_2004_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_fd.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("FileDepList (%" PRIuSIZE ")\n-------------------\n",
              sec_dat.size)
@@ -2818,6 +2886,13 @@ read_2004_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_sec.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("Security (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
   old_dat = *dat;
@@ -2864,6 +2939,13 @@ read_2004_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_sig.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("Signature (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
   old_dat = *dat;
@@ -2903,6 +2985,13 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_vba.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("VBAProject (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
   old_dat = *dat;
@@ -2941,6 +3030,13 @@ read_2004_section_appinfohistory (Bit_Chain *restrict dat,
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_aih.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("AppInfoHistory (%" PRIuSIZE ")\n-------------------\n",
              sec_dat.size)
@@ -2993,6 +3089,13 @@ read_2004_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_rh.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("RevHistory (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
   old_dat = *dat;
@@ -3028,6 +3131,13 @@ read_2004_section_objfreespace (Bit_Chain *restrict dat,
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_ofs.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("ObjFreeSpace (%" PRIuSIZE ")\n-------------------\n",
              sec_dat.size)
@@ -3071,6 +3181,13 @@ read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_temp.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("Template (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
   old_dat = *dat;
@@ -3121,6 +3238,13 @@ read_2004_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return 0;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_acds.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   LOG_TRACE ("AcDs datastorage (%" PRIuSIZE ")\n-------------------\n",
              sec_dat.size)
@@ -3156,6 +3280,13 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return error;
     }
+#ifdef DEBUG
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE) {
+    FILE *fp = fopen ("decomp_pre.bin", "wb");
+    fwrite (sec_dat.chain, 1, sec_dat.size, fp);
+    fclose(fp);
+  }
+#endif
 
   if (dwg->header.thumbnail_address != (BITCODE_RL)dat->byte)
     LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %" PRIuSIZE,
