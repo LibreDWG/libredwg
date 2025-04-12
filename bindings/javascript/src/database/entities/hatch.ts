@@ -1,44 +1,44 @@
 import { DwgPoint2D, DwgPoint3D } from '../common'
 import { DwgEntity } from './entity'
 
-export declare enum DwgHatchSolidFill {
+export enum DwgHatchSolidFill {
   PatternFill = 0,
   SolidFill = 1
 }
 
-export declare enum DwgHatchAssociativity {
+export enum DwgHatchAssociativity {
   NonAssociative = 0, // For MPolygon LacksSolidFill
   Associative = 1
 }
 
-export declare enum DwgHatchStyle {
+export enum DwgHatchStyle {
   Normal = 0, // Odd parity area
   Outer = 1, // Outermost area
   Ignore = 2
 }
 
-export declare enum DwgHatchPatternType {
+export enum DwgHatchPatternType {
   UserDefined = 0,
   Predefined = 1,
   Custom = 2
 }
 
-export declare enum DwgHatchBoundaryAnnotation {
+export enum DwgHatchBoundaryAnnotation {
   NotAnnotated = 0,
   Annotated = 1
 }
 
-export declare enum DwgHatchGradientFlag {
+export enum DwgHatchGradientFlag {
   Solid = 0,
   Gradient = 1
 }
 
-export declare enum DwgHatchGradientColorFlag {
+export enum DwgHatchGradientColorFlag {
   TwoColor = 0,
   OneColor = 1
 }
 
-export declare enum DwgBoundaryPathTypeFlag {
+export enum DwgBoundaryPathTypeFlag {
   Default = 0,
   External = 1,
   Polyline = 2,
@@ -47,7 +47,7 @@ export declare enum DwgBoundaryPathTypeFlag {
   Outermost = 16
 }
 
-export declare enum DwgBoundaryPathEdgeType {
+export enum DwgBoundaryPathEdgeType {
   Line = 1,
   Circular = 2,
   Elliptic = 3,
@@ -56,8 +56,8 @@ export declare enum DwgBoundaryPathEdgeType {
 
 interface DwgBoundaryPathBase {
   boundaryPathTypeFlag: number
-  numberOfSourceBoundaryObjects: number
-  sourceBoundaryObjects: string[]
+  // numberOfSourceBoundaryObjects: number
+  // sourceBoundaryObjects: string[]
 }
 
 export interface DwgPolylineBoundaryPath extends DwgBoundaryPathBase {
@@ -107,7 +107,6 @@ export interface DwgEllipseEdge extends DwgBoundaryPathEdgeCommon {
 
 export interface DwgSplineEdge extends DwgBoundaryPathEdgeCommon {
   degree: number
-  splineFlag: number
   isPeriodic?: boolean
   numberOfKnots: number
   numberOfControlPoints: number
@@ -137,11 +136,11 @@ export interface DwgHatchDefinitionLine {
 
 export interface DwgHatchEntityBase extends DwgEntity {
   type: 'HATCH'
-  elevationPoint: DwgPoint3D
+  // elevationPoint: DwgPoint3D
   extrusionDirection?: DwgPoint3D
   patternName: string
   solidFill: DwgHatchSolidFill
-  patternFillColor: number
+  // patternFillColor: number
   associativity: DwgHatchAssociativity
   numberOfBoundaryPaths: number
   boundaryPaths: DwgBoundaryPath[]
@@ -154,7 +153,7 @@ export interface DwgHatchEntityBase extends DwgEntity {
   pixelSize: number
   numberOfSeedPoints: number
   offsetVector?: DwgPoint3D
-  seedPoints?: DwgPoint3D[]
+  seedPoints?: DwgPoint2D[]
   gradientFlag?: DwgHatchGradientFlag
 }
 

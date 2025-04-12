@@ -1,4 +1,4 @@
-import { DwgPoint2D, DwgPoint3D } from '../database'
+import { DwgPoint2D, DwgPoint2DWithWeight, DwgPoint3D } from '../database'
 
 export type Dwg_Array_Ptr = number
 export type Dwg_Data_Ptr = number
@@ -6,6 +6,24 @@ export type Dwg_Object_Ptr = number
 export type Dwg_Object_Ref_Ptr = number
 export type Dwg_Object_Object_Ptr = number
 export type Dwg_Object_Entity_Ptr = number
+export type Dwg_Object_Object_TIO_Ptr = number
+export type Dwg_Object_Entity_TIO_Ptr = number
+
+export type Dwg_Object_LAYER_Ptr = number
+export type Dwg_Object_LTYPE_Ptr = number
+export type Dwg_Object_STYLE_Ptr = number
+export type Dwg_Object_DIMSTYLE_Ptr = number
+export type Dwg_Object_VPORT_Ptr = number
+export type Dwg_Object_BLOCK_Ptr = number
+export type Dwg_Object_BLOCK_HEADER_Ptr = number
+export type Dwg_Object_IMAGEDEF_Ptr = number
+export type Dwg_Object_VERTEX_2D_Ptr = number
+export type Dwg_Object_VERTEX_3D_Ptr = number
+
+export type Dwg_Entity_POLYLINE_2D_Ptr = number
+export type Dwg_Entity_POLYLINE_3D_Ptr = number
+export type Dwg_Entity_IMAGE_Ptr = number
+export type Dwg_Entity_LWPOLYLINE_Ptr = number
 
 export interface Dwg_Handle {
   code: number
@@ -122,6 +140,63 @@ export interface Dwg_TableCell {
   num_rows: number
   num_cols: number
   cell_contents: Dwg_TableCellContent[]
+}
+
+export interface Dwg_HATCH_DefLine {
+  angle: number
+  pt0: DwgPoint2D
+  offset: DwgPoint2D
+  dashes: number[]
+}
+
+export interface Dwg_HATCH_PathSeg {
+  curve_type: number
+
+  /* LINE */
+  first_endpoint: DwgPoint2D
+  second_endpoint: DwgPoint2D
+
+  /* CIRCULAR ARC */
+  center: DwgPoint2D
+  radius: number
+  start_angle: number
+  end_angle: number
+  is_ccw: boolean
+
+  /* ELLIPTICAL ARC */
+  // center: DwgPoint2D
+  endpoint: DwgPoint2D
+  minor_major_ratio: number
+  // start_angle: number
+  // end_angle: number
+  // is_ccw: boolean
+
+  /* SPLINE */
+  degree: number
+  is_rational: boolean
+  is_periodic: boolean
+  num_knots: number
+  num_control_points: number
+  knots: number[]
+  control_points: DwgPoint2DWithWeight[]
+  num_fitpts: number
+  fitpts: DwgPoint2D[]
+  start_tangent: DwgPoint2D
+  end_tangent: DwgPoint2D
+}
+
+export interface Dwg_HATCH_PolylinePath {
+  point: DwgPoint2D
+  bulge: number
+}
+
+export interface Dwg_HATCH_Path {
+  flag: number
+  num_segs_or_paths: number
+  segs: Dwg_HATCH_PathSeg[]
+  bulges_present: boolean
+  closed: boolean
+  polyline_paths: Dwg_HATCH_PolylinePath[]
 }
 
 export interface Dwg_Field_Value {

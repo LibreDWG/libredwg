@@ -3,6 +3,12 @@ export interface DwgPoint2D {
   y: number
 }
 
+export interface DwgPoint2DWithWeight {
+  x: number
+  y: number
+  w: number
+}
+
 export interface DwgPoint3D {
   x: number
   y: number

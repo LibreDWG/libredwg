@@ -355,3 +355,10 @@ export enum Dwg_File_Type {
   DWG = 0,
   DXF = 1
 }
+
+export enum Dwg_Hatch_Edge_Type {
+  Line = 1,
+  CircularArc = 2,
+  EllipticArc = 3,
+  Spline = 4
+}

@@ -29,6 +29,45 @@ emscripten::val color_to_js_object(const Dwg_Color* color) {
   return color_obj;
 }
 
+emscripten::val point2d_to_js_object(const dwg_point_2d* point) {
+  emscripten::val point_obj = emscripten::val::object();
+  point_obj.set("x", point->x);
+  point_obj.set("y", point->y);
+  return point_obj;
+}
+
+emscripten::val bitcode_2rd_to_js_object(const BITCODE_2RD* point) {
+  emscripten::val point_obj = emscripten::val::object();
+  point_obj.set("x", point->x);
+  point_obj.set("y", point->y);
+  return point_obj;
+}
+
+emscripten::val point3d_to_js_object(const dwg_point_3d* point) {
+  emscripten::val point_obj = emscripten::val::object();
+  point_obj.set("x", point->x);
+  point_obj.set("y", point->y);
+  point_obj.set("z", point->z);
+  return point_obj;
+}
+
+emscripten::val bitcode_3rd_to_js_object(const BITCODE_3RD* point) {
+  emscripten::val point_obj = emscripten::val::object();
+  point_obj.set("x", point->x);
+  point_obj.set("y", point->y);
+  point_obj.set("z", point->z);
+  return point_obj;
+}
+
+emscripten::val point4d_to_js_object(const Dwg_SPLINE_control_point* point) {
+  emscripten::val point_obj = emscripten::val::object();
+  point_obj.set("x", point->x);
+  point_obj.set("y", point->y);
+  point_obj.set("z", point->z);
+  point_obj.set("w", point->w);
+  return point_obj;
+}
+
 /***********************************************************************/
 
 /**
@@ -96,10 +135,8 @@ emscripten::val dwg_ptr_to_point2d_array_wrapper(uintptr_t array_ptr, size_t siz
 
   emscripten::val points_obj = emscripten::val::array();
   for (int index = 0; index < size; ++index) {
-    emscripten::val point_obj = emscripten::val::object();
     auto point = array[index];
-    point_obj.set("x", point.x);
-    point_obj.set("y", point.y);
+    emscripten::val point_obj = point2d_to_js_object(&point);
     points_obj.call<void>("push", point_obj);
   }
   return points_obj;
@@ -110,11 +147,8 @@ emscripten::val dwg_ptr_to_point3d_array_wrapper(uintptr_t array_ptr, size_t siz
 
   emscripten::val points_obj = emscripten::val::array();
   for (int index = 0; index < size; ++index) {
-    emscripten::val point_obj = emscripten::val::object();
     auto point = array[index];
-    point_obj.set("x", point.x);
-    point_obj.set("y", point.y);
-    point_obj.set("z", point.z);
+    emscripten::val point_obj = point3d_to_js_object(&point);
     points_obj.call<void>("push", point_obj);
   }
   return points_obj;
@@ -213,6 +247,130 @@ emscripten::val dwg_ptr_to_table_cell_array_wrapper(uintptr_t array_ptr, size_t 
   return cells;
 }
 
+emscripten::val dwg_ptr_to_hatch_defline_array_wrapper(uintptr_t array_ptr, size_t size) {
+  Dwg_HATCH_DefLine* array = reinterpret_cast<Dwg_HATCH_DefLine*>(array_ptr);
+  emscripten::val deflines = emscripten::val::array();
+  for (int index = 0; index < size; ++index) {
+    emscripten::val defline_obj = emscripten::val::object();
+    auto defline = array[index];
+    defline_obj.set("angle", defline.angle);
+    defline_obj.set("pt0", point2d_to_js_object(reinterpret_cast<const dwg_point_2d*>(&defline.pt0)));
+    defline_obj.set("offset", point2d_to_js_object(reinterpret_cast<const dwg_point_2d*>(&defline.offset)));
+    defline_obj.set("dashes", dwg_ptr_to_double_array_wrapper(reinterpret_cast<uintptr_t>(defline.dashes), defline.num_dashes));
+    deflines.call<void>("push", defline_obj);
+  }
+  return deflines;
+}
+
+emscripten::val dwg_ptr_to_hatch_path_array_wrapper(uintptr_t array_ptr, size_t size) {
+  Dwg_HATCH_Path* array = reinterpret_cast<Dwg_HATCH_Path*>(array_ptr);
+  emscripten::val pathes = emscripten::val::array();
+  for (int i = 0; i < size; ++i) {
+    emscripten::val path_obj = emscripten::val::object();
+    auto path = array[i];
+    // 2: is_polyline, 4: is_derived, 8: is_textbox,
+    // 0x20: is_open, 0x80: is_textisland, 0x100: is_duplicate,
+    // 0x200: is_annotative
+    path_obj.set("flag", path.flag);
+    auto num_segs_or_paths = path.num_segs_or_paths;
+    path_obj.set("num_segs_or_paths", num_segs_or_paths);
+
+    // Convert segment path
+    if (path.segs) {
+      emscripten::val segs = emscripten::val::array();
+      for (int j = 0; j < num_segs_or_paths; ++j) {
+        auto seg = path.segs[j];
+        emscripten::val seg_obj = emscripten::val::object();
+
+        // Edge type (only if boundary is not a polyline)
+        // - 1: Line
+        // - 2: Circular arc
+        // - 3: Elliptic arc
+        // - 4: Spline
+        auto curve_type = seg.curve_type;
+        seg_obj.set("curve_type", seg.curve_type);
+
+        if (curve_type == 1) {
+          // Line
+          seg_obj.set("first_endpoint", bitcode_2rd_to_js_object(&seg.first_endpoint));
+          seg_obj.set("second_endpoint", bitcode_2rd_to_js_object(&seg.second_endpoint));
+        } else if (curve_type == 2) {
+          // Circular arc
+          seg_obj.set("center", bitcode_2rd_to_js_object(&seg.center));
+          seg_obj.set("radius", seg.radius);
+          seg_obj.set("start_angle", seg.start_angle);
+          seg_obj.set("end_angle", seg.end_angle);
+          seg_obj.set("is_ccw", seg.is_ccw);
+        } else if (curve_type == 3) {
+          // Elliptic arc
+          seg_obj.set("center", bitcode_2rd_to_js_object(&seg.center));
+          seg_obj.set("endpoint", bitcode_2rd_to_js_object(&seg.endpoint));
+          seg_obj.set("minor_major_ratio", seg.minor_major_ratio);
+          seg_obj.set("start_angle", seg.start_angle);
+          seg_obj.set("end_angle", seg.end_angle);
+          seg_obj.set("is_ccw", seg.is_ccw);
+        } else if (curve_type == 4) {
+          // Elliptic arc
+          seg_obj.set("degree", seg.degree);
+          seg_obj.set("is_rational", seg.is_rational);
+          seg_obj.set("is_periodic", seg.is_periodic);
+
+          // Convert knots
+          auto num_knots = seg.num_knots;
+          seg_obj.set("num_knots", num_knots);
+          seg_obj.set("knots", dwg_ptr_to_double_array_wrapper(reinterpret_cast<uintptr_t>(seg.knots), num_knots));
+
+          // Convert hatch control points
+          auto num_control_points = seg.num_control_points;
+          seg_obj.set("num_control_points", num_control_points);
+          emscripten::val control_points = emscripten::val::array();
+          for (int k = 0; k < num_control_points; ++k) {
+            auto control_point = seg.control_points[k];
+            emscripten::val control_point_obj = emscripten::val::object();
+            control_point_obj.set("x", control_point.point.x);
+            control_point_obj.set("y", control_point.point.y);
+            control_point_obj.set("w", control_point.weight);
+            control_points.call<void>("push", control_point_obj);
+          }
+          seg_obj.set("control_points", control_points);
+
+          // Convert fit points
+          auto num_fitpts = seg.num_fitpts;
+          seg_obj.set("num_fitpts", num_fitpts);
+          seg_obj.set("fitpts", dwg_ptr_to_point2d_array_wrapper(reinterpret_cast<uintptr_t>(seg.fitpts), num_fitpts));
+        }
+        seg_obj.set("start_tangent", bitcode_2rd_to_js_object(&seg.start_tangent));
+        seg_obj.set("end_tangent", bitcode_2rd_to_js_object(&seg.end_tangent));
+
+        segs.call<void>("push", seg_obj);
+      }
+      path_obj.set("segs", segs);
+    }
+
+    // Convert polyline path
+    if (path.polyline_paths) {
+      auto bulges_present = path.bulges_present;
+      path_obj.set("bulges_present", bulges_present);
+      path_obj.set("closed", path.closed);
+      emscripten::val polyline_paths = emscripten::val::array();
+      for (int j = 0; j < num_segs_or_paths; ++j) {
+        auto polyline_path = path.polyline_paths[j];
+        emscripten::val polyline_path_obj = emscripten::val::object();
+        polyline_path_obj.set("point", bitcode_2rd_to_js_object(&polyline_path.point));
+        if (bulges_present) {
+          polyline_path_obj.set("bulge", polyline_path.bulge);
+        }
+        polyline_paths.call<void>("push", polyline_path_obj);
+      }
+
+      path_obj.set("polyline_paths", polyline_paths);
+    }
+
+    pathes.call<void>("push", path_obj);
+  }
+  return pathes;
+}
+
 EMSCRIPTEN_BINDINGS(libredwg_array) {
   DEFINE_FUNC(dwg_ptr_to_unsigned_char_array);
   DEFINE_FUNC(dwg_ptr_to_signed_char_array);
@@ -228,6 +386,8 @@ EMSCRIPTEN_BINDINGS(libredwg_array) {
   DEFINE_FUNC(dwg_ptr_to_point4d_array);
   DEFINE_FUNC(dwg_ptr_to_ltype_dash_array);
   DEFINE_FUNC(dwg_ptr_to_table_cell_array);
+  DEFINE_FUNC(dwg_ptr_to_hatch_defline_array);
+  DEFINE_FUNC(dwg_ptr_to_hatch_path_array);
 }
 
 /***********************************************************************/

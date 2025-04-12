@@ -1,6 +1,6 @@
 # libredwg-web
 
-This is a webassembly version of libredwg. It can be used in browser and Node.js environments. 
+This is a DWG/DXF JavaScript parser based on libredwg. It can be used in browser and Node.js environments. 
 
 - [Live demo](https://mlight-lee.github.io/libredwg-web/)
 - [API docs](https://mlight-lee.github.io/libredwg-web/docs/)
