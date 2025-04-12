@@ -2,19 +2,37 @@ import { MainModule } from '../wasm/libredwg-web'
 import createModule from '../wasm/libredwg-web.js'
 import { LibreDwgConverter } from './converter'
 import { DwgPoint2D, DwgPoint3D, DwgPoint4D } from './database'
-import { 
+import {
   Dwg_Array_Ptr,
   Dwg_Color,
   Dwg_Data_Ptr,
+  Dwg_Entity_IMAGE_Ptr,
+  Dwg_Entity_LWPOLYLINE_Ptr,
+  Dwg_Entity_POLYLINE_2D_Ptr,
+  Dwg_Entity_POLYLINE_3D_Ptr,
   Dwg_Field_Value,
   Dwg_File_Type,
   Dwg_Handle,
+  Dwg_HATCH_DefLine,
+  Dwg_HATCH_Path,
   Dwg_LTYPE_Dash,
+  Dwg_Object_BLOCK_HEADER_Ptr,
+  Dwg_Object_BLOCK_Ptr,
+  Dwg_Object_DIMSTYLE_Ptr,
   Dwg_Object_Entity_Ptr,
+  Dwg_Object_Entity_TIO_Ptr,
+  Dwg_Object_IMAGEDEF_Ptr,
+  Dwg_Object_LAYER_Ptr,
+  Dwg_Object_LTYPE_Ptr,
   Dwg_Object_Object_Ptr,
+  Dwg_Object_Object_TIO_Ptr,
   Dwg_Object_Ptr,
   Dwg_Object_Ref,
+  Dwg_Object_STYLE_Ptr,
   Dwg_Object_Type,
+  Dwg_Object_VERTEX_2D_Ptr,
+  Dwg_Object_VERTEX_3D_Ptr,
+  Dwg_Object_VPORT_Ptr,
   Dwg_TABLE_Cell
 } from './types'
 
@@ -67,7 +85,7 @@ export class LibreDwg {
 
   /**
    * Converts Dwg_Data instance to DwgDatabase instance.
-   * @param data input pointer to Dwg_Data instance.
+   * @param data Pointer to Dwg_Data instance.
    * @returns Returns the converted DwgDatabase instance.
    */
   convert(data: Dwg_Data_Ptr) {
@@ -78,6 +96,9 @@ export class LibreDwg {
   /**
    * Returns all of entities in the model space. Each item in returned array
    * is one Dwg_Object pointer (Dwg_Object*).
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of entities in the model space.
    */
   dwg_getall_entitie_in_model_space(data: Dwg_Data_Ptr) {
     const wasmInstance = this.wasmInstance
@@ -91,7 +112,17 @@ export class LibreDwg {
     return entities
   }
 
-  dwg_getall_object_by_type(data: Dwg_Data_Ptr, type: number): number[] {
+  /**
+   * Returns all of objects in Dwg_Data instance with the specified type.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @param type Object type.
+   * @returns Returns all of objects with the specified type.
+   */
+  dwg_getall_object_by_type(
+    data: Dwg_Data_Ptr,
+    type: Dwg_Object_Type
+  ): Dwg_Object_Object_TIO_Ptr[] {
     const wasmInstance = this.wasmInstance
     const num_objects = wasmInstance.dwg_get_num_objects(data)
     const results = []
@@ -105,7 +136,17 @@ export class LibreDwg {
     return results
   }
 
-  dwg_getall_entity_by_type(data: Dwg_Data_Ptr, type: number): number[] {
+  /**
+   * Returns all of objects in Dwg_Data instance with the specified type.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @param type Object type.
+   * @returns Returns all of objects with the specified type.
+   */
+  dwg_getall_entity_by_type(
+    data: Dwg_Data_Ptr,
+    type: Dwg_Object_Type
+  ): Dwg_Object_Entity_TIO_Ptr[] {
     const wasmInstance = this.wasmInstance
     const num_objects = wasmInstance.dwg_get_num_objects(data)
     const results = []
@@ -119,84 +160,174 @@ export class LibreDwg {
     return results
   }
 
-  dwg_getall_LAYER(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of layer objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of layer objects in Dwg_Data instance.
+   */
+  dwg_getall_LAYER(data: Dwg_Data_Ptr): Dwg_Object_LAYER_Ptr[] {
     return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LAYER)
   }
 
-  dwg_getall_LTYPE(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of line type objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of line type objects in Dwg_Data instance.
+   */
+  dwg_getall_LTYPE(data: Dwg_Data_Ptr): Dwg_Object_LTYPE_Ptr[] {
     return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LTYPE)
   }
 
-  dwg_getall_STYLE(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of text style objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of text style objects in Dwg_Data instance.
+   */
+  dwg_getall_STYLE(data: Dwg_Data_Ptr): Dwg_Object_STYLE_Ptr[] {
     return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_STYLE)
   }
 
-  dwg_getall_DIMSTYLE(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of dimension style objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of dimension style objects in Dwg_Data instance.
+   */
+  dwg_getall_DIMSTYLE(data: Dwg_Data_Ptr): Dwg_Object_DIMSTYLE_Ptr[] {
     return this.dwg_getall_object_by_type(
       data,
       Dwg_Object_Type.DWG_TYPE_DIMSTYLE
     )
   }
 
-  dwg_getall_VPORT(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of viewport objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of viewport objects in Dwg_Data instance.
+   */
+  dwg_getall_VPORT(data: Dwg_Data_Ptr): Dwg_Object_VPORT_Ptr[] {
     return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_VPORT)
   }
 
+  /**
+   * Returns all of layout objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of layout objects in Dwg_Data instance.
+   */
   dwg_getall_LAYOUT(data: Dwg_Data_Ptr): number[] {
     return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_LAYOUT)
   }
 
-  dwg_getall_BLOCK(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of block objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of block objects in Dwg_Data instance.
+   */
+  dwg_getall_BLOCK(data: Dwg_Data_Ptr): Dwg_Object_BLOCK_Ptr[] {
     return this.dwg_getall_object_by_type(data, Dwg_Object_Type.DWG_TYPE_BLOCK)
   }
 
-  dwg_getall_BLOCK_HEADER(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of block header objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of block header objects in Dwg_Data instance.
+   */
+  dwg_getall_BLOCK_HEADER(data: Dwg_Data_Ptr): Dwg_Object_BLOCK_HEADER_Ptr[] {
     return this.dwg_getall_object_by_type(
       data,
       Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER
     )
   }
 
-  dwg_getall_IMAGEDEF(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of image definition objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of image definition objects in Dwg_Data instance.
+   */
+  dwg_getall_IMAGEDEF(data: Dwg_Data_Ptr): Dwg_Object_IMAGEDEF_Ptr[] {
     return this.dwg_getall_object_by_type(
       data,
       Dwg_Object_Type.DWG_TYPE_IMAGEDEF
     )
   }
 
-  dwg_getall_VERTEX_2D(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of 2d vertex objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of 2d vertex objects in Dwg_Data instance.
+   */
+  dwg_getall_VERTEX_2D(data: Dwg_Data_Ptr): Dwg_Object_VERTEX_2D_Ptr[] {
     return this.dwg_getall_entity_by_type(
       data,
       Dwg_Object_Type.DWG_TYPE_VERTEX_2D
     )
   }
 
-  dwg_getall_VERTEX_3D(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of 3d vertex objects in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of 3d vertex objects in Dwg_Data instance.
+   */
+  dwg_getall_VERTEX_3D(data: Dwg_Data_Ptr): Dwg_Object_VERTEX_3D_Ptr[] {
     return this.dwg_getall_entity_by_type(
       data,
       Dwg_Object_Type.DWG_TYPE_VERTEX_3D
     )
   }
 
-  dwg_getall_POLYLINE_2D(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of 2d polyline entities in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of 2d polyline entities in Dwg_Data instance.
+   */
+  dwg_getall_POLYLINE_2D(data: Dwg_Data_Ptr): Dwg_Entity_POLYLINE_2D_Ptr[] {
     return this.dwg_getall_entity_by_type(
       data,
       Dwg_Object_Type.DWG_TYPE_POLYLINE_2D
     )
   }
 
-  dwg_getall_POLYLINE_3D(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of 3d polyline entities in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of 3d polyline entities in Dwg_Data instance.
+   */
+  dwg_getall_POLYLINE_3D(data: Dwg_Data_Ptr): Dwg_Entity_POLYLINE_3D_Ptr[] {
     return this.dwg_getall_entity_by_type(
       data,
       Dwg_Object_Type.DWG_TYPE_POLYLINE_3D
     )
   }
 
-  dwg_getall_IMAGE(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of image entities in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of image entities in Dwg_Data instance.
+   */
+  dwg_getall_IMAGE(data: Dwg_Data_Ptr): Dwg_Entity_IMAGE_Ptr[] {
     return this.dwg_getall_entity_by_type(data, Dwg_Object_Type.DWG_TYPE_IMAGE)
   }
 
-  dwg_getall_LWPOLYLINE(data: Dwg_Data_Ptr): number[] {
+  /**
+   * Returns all of lwpolyline entities in Dwg_Data instance.
+   * @group GetAll Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Returns all of lwpolyline entities in Dwg_Data instance.
+   */
+  dwg_getall_LWPOLYLINE(data: Dwg_Data_Ptr): Dwg_Entity_LWPOLYLINE_Ptr[] {
     return this.dwg_getall_entity_by_type(
       data,
       Dwg_Object_Type.DWG_TYPE_LWPOLYLINE
@@ -227,6 +358,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ unsigned char array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ unsigned char array.
    * @param size The size of C++ unsigned char array.
    * @returns Returns one JavaScript number array from the specified C++ unsigned char array.
@@ -237,6 +369,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ signed char array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ signed char array.
    * @param size The size of C++ signed char array.
    * @returns Returns one JavaScript number array from the specified C++ signed char array.
@@ -247,6 +380,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ unsigned int16 array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ unsigned int16 array.
    * @param size The size of C++ unsigned int16 array.
    * @returns Returns one JavaScript number array from the specified C++ unsigned int16 array.
@@ -257,6 +391,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ int16 array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ int16 array.
    * @param size The size of C++ int16 array.
    * @returns Returns one JavaScript number array from the specified C++ int16 array.
@@ -267,6 +402,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ unsigned int32 array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ unsigned int32 array.
    * @param size The size of C++ unsigned int32 array.
    * @returns Returns one JavaScript number array from the specified C++ unsigned int32 array.
@@ -277,6 +413,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ int32 array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ int32 array.
    * @param size The size of C++ int32 array.
    * @returns Returns one JavaScript number array from the specified C++ int32 array.
@@ -287,6 +424,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ unsigned int64 array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ unsigned int64 array.
    * @param size The size of C++ unsigned int64 array.
    * @returns Returns one JavaScript number array from the specified C++ unsigned int64 array.
@@ -297,6 +435,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ int64 array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ int64 array.
    * @param size The size of C++ int64 array.
    * @returns Returns one JavaScript number array from the specified C++ int64 array.
@@ -307,6 +446,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ double array to one JavaScript number array.
+   * @group Array Methods
    * @param ptr Pointer to C++ double array.
    * @param size The size of C++ double array.
    * @returns Returns one JavaScript number array from the specified C++ double array.
@@ -317,6 +457,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ 2d point array to one JavaScript 2d point array.
+   * @group Array Methods
    * @param ptr Pointer to C++ 2d point array.
    * @param size The size of C++ 2 point array.
    * @returns Returns one JavaScript 2d point array from the specified C++ 2d point array.
@@ -327,6 +468,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ 3d point array to one JavaScript 3d point array.
+   * @group Array Methods
    * @param ptr Pointer to C++ 3d point array.
    * @param size The size of C++ 3d point array.
    * @returns Returns one JavaScript 3d point array from the specified C++ 3d point array.
@@ -337,6 +479,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ 4d point array to one JavaScript 4d point array.
+   * @group Array Methods
    * @param ptr Pointer to C++ 4d point array.
    * @param size The size of C++ 4d point array.
    * @returns Returns one JavaScript 4d point array from the specified C++ 4d point array.
@@ -347,6 +490,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ line type array to one JavaScript line type array.
+   * @group Array Methods
    * @param ptr Pointer to C++ line type array.
    * @param size The size of C++ line type array.
    * @returns Returns one JavaScript line type array from the specified C++ line type array.
@@ -360,6 +504,7 @@ export class LibreDwg {
 
   /**
    * Converts one C++ table cell array to one JavaScript table cell array.
+   * @group Array Methods
    * @param ptr Pointer to C++ table cell array.
    * @param size The size of C++ table cell array.
    * @returns Returns one JavaScript table cell array from the specified C++ table cell array.
@@ -372,17 +517,92 @@ export class LibreDwg {
   }
 
   /**
+   * Converts one C++ hatch definition line array to one JavaScript hatch definition line array.
+   * @group Array Methods
+   * @param ptr Pointer to C++ hatch definition line array.
+   * @param size The size of C++ hatch definition line array.
+   * @returns Returns one JavaScript hatch definition line array from the specified C++ hatch definition line array.
+   */
+  dwg_ptr_to_hatch_defline_array(
+    ptr: Dwg_Array_Ptr,
+    size: number
+  ): Dwg_HATCH_DefLine[] {
+    return this.wasmInstance.dwg_ptr_to_hatch_defline_array(ptr, size)
+  }
+
+  /**
+   * Converts one C++ hatch path array to one JavaScript hatch path array.
+   * @group Array Methods
+   * @param ptr Pointer to C++ hatch path array.
+   * @param size The size of C++ hatch path array.
+   * @returns Returns one JavaScript hatch path array from the specified C++ hatch path array.
+   */
+  dwg_ptr_to_hatch_path_array(
+    ptr: Dwg_Array_Ptr,
+    size: number
+  ): Dwg_HATCH_Path[] {
+    return this.wasmInstance.dwg_ptr_to_hatch_path_array(ptr, size)
+  }
+
+  /**
    * Generic field value getter. Used to get the field value of one object or entity.
+   * @group Dynamic API Methods
    * @param obj Pointer to one object or entity
    * @param field Field name of one object or entity
    * @returns Returns the field value of one object or entity.
    */
-  dwg_dynapi_entity_value(obj: number, field: string): Dwg_Field_Value {
+  dwg_dynapi_entity_value(
+    obj: Dwg_Object_Object_TIO_Ptr | Dwg_Object_Entity_TIO_Ptr,
+    field: string
+  ): Dwg_Field_Value {
     return this.wasmInstance.dwg_dynapi_entity_value(obj, field)
   }
 
   /**
+   * Header field value getter. Used to get the field value of dwg/dxf header.
+   * @group Dynamic API Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @param field Field name of header.
+   * @returns Returns the field value of dwg/dxf header.
+   */
+  dwg_dynapi_header_value(data: Dwg_Data_Ptr, field: string): Dwg_Field_Value {
+    return this.wasmInstance.dwg_dynapi_header_value(data, field)
+  }
+
+  /**
+   * The common field value getter. Used to get the value of object or entity common fields.
+   * @group Dynamic API Methods
+   * @param obj Pointer to one object or entity
+   * @param field The name of object or entity common fields.
+   * @returns Returns the value of object or entity common fields.
+   */
+  dwg_dynapi_common_value(
+    obj: Dwg_Object_Object_TIO_Ptr | Dwg_Object_Entity_TIO_Ptr,
+    field: string
+  ): Dwg_Field_Value {
+    return this.wasmInstance.dwg_dynapi_common_value(obj, field)
+  }
+
+  /**
+   * The field of one object or entity may not be primitive type. It means one field may consist of
+   * multiple sub-fields. This method is used to get the sub-field value of those complex field.
+   * @group Dynamic API Methods
+   * @param obj Pointer to one object or entity.
+   * @param subclass The class name of the field with complex type.
+   * @param field The field name of one object or entit.
+   * @returns Returns the sub-field value of one complex field.
+   */
+  dwg_dynapi_subclass_value(
+    obj: Dwg_Object_Object_TIO_Ptr | Dwg_Object_Entity_TIO_Ptr,
+    subclass: string,
+    field: string
+  ): Dwg_Field_Value {
+    return this.wasmInstance.dwg_dynapi_subclass_value(obj, subclass, field)
+  }
+
+  /**
    * Returns the handle of one Dwg_Object instance.
+   * @group Dwg_Object Methods
    * @param ptr Pointer to one Dwg_Object instance.
    * @returns Returns the handle of one Dwg_Object instance.
    */
@@ -392,6 +612,7 @@ export class LibreDwg {
 
   /**
    * Returns the handle of one Dwg_Object_Object instance.
+   * @group Dwg_Object_Object Methods
    * @param ptr Pointer to one Dwg_Object_Object instance.
    * @returns Returns the handle of one Dwg_Object_Object instance.
    */
@@ -399,6 +620,12 @@ export class LibreDwg {
     return this.wasmInstance.dwg_object_object_get_handle_object(ptr)
   }
 
+  /**
+   * Returns the owner handle of one Dwg_Object_Object instance.
+   * @group Dwg_Object_Object Methods
+   * @param ptr Pointer to one Dwg_Object_Object instance.
+   * @returns Returns the owner handle of one Dwg_Object_Object instance.
+   */
   dwg_object_object_get_ownerhandle_object(
     ptr: Dwg_Object_Object_Ptr
   ): Dwg_Object_Ref {
@@ -407,6 +634,7 @@ export class LibreDwg {
 
   /**
    * Returns the handle of one Dwg_Object_Entity instance.
+   * @group Dwg_Object_Entity Methods
    * @param ptr Pointer to one Dwg_Object_Entity instance.
    * @returns Returns the handle of one Dwg_Object_Entity instance.
    */
@@ -414,12 +642,24 @@ export class LibreDwg {
     return this.wasmInstance.dwg_object_entity_get_handle_object(ptr)
   }
 
+  /**
+   * Returns the owner handle of one Dwg_Object_Entity instance.
+   * @group Dwg_Object_Entity Methods
+   * @param ptr Pointer to one Dwg_Object_Entity instance.
+   * @returns Returns the owner handle of one Dwg_Object_Entity instance.
+   */
   dwg_object_entity_get_ownerhandle_object(
     ptr: Dwg_Object_Entity_Ptr
   ): Dwg_Object_Ref {
     return this.wasmInstance.dwg_object_entity_get_ownerhandle_object(ptr)
   }
 
+  /**
+   * Returns color value of one Dwg_Object_Entity instance.
+   * @group Dwg_Object_Entity Methods
+   * @param ptr Pointer to one Dwg_Object_Entity instance.
+   * @returns Returns color value of one Dwg_Object_Entity instance.
+   */
   dwg_object_entity_get_color_object(ptr: Dwg_Object_Entity_Ptr): Dwg_Color {
     return this.wasmInstance.dwg_object_entity_get_color_object(ptr)
   }

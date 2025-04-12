@@ -246,6 +246,9 @@ interface WasmModule {
   __ZN10emscripten3val3setIA5_cNSt3__212basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEEEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
   __ZdlPv(_0: number): void;
   __ZN10emscripten3val3setIA10_cNSt3__212basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEEEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
+  __Z20point2d_to_js_objectPK12dwg_point_2d(_0: number, _1: number): void;
+  __Z20point3d_to_js_objectPK12dwg_point_3d(_0: number, _1: number): void;
+  __Z20point4d_to_js_objectPK25_dwg_SPLINE_control_point(_0: number, _1: number): void;
   __Z18dwg_handle_wrapperm(_0: number, _1: number): void;
   __Z22dwg_object_ref_wrapperm(_0: number, _1: number): void;
   __Z31dwg_ptr_to_double_array_wrappermm(_0: number, _1: number, _2: number): void;
@@ -263,6 +266,8 @@ interface WasmModule {
   __Z35dwg_ptr_to_ltype_dash_array_wrappermm(_0: number, _1: number, _2: number): void;
   __Z35dwg_ptr_to_table_cell_array_wrappermm(_0: number, _1: number, _2: number): void;
   __ZN10emscripten3val3setIA11_cNSt3__212basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEEEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
+  __Z38dwg_ptr_to_hatch_defline_array_wrappermm(_0: number, _1: number, _2: number): void;
+  __Z35dwg_ptr_to_hatch_path_array_wrappermm(_0: number, _1: number, _2: number): void;
   __Z26dwg_object_get_tio_wrapperm(_0: number): number;
   __Z27dwg_object_get_type_wrapperm(_0: number): number;
   __Z32dwg_object_get_fixedtype_wrapperm(_0: number): number;
@@ -351,7 +356,6 @@ interface WasmModule {
   __ZN10emscripten3val3setIA5_cdEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
   __ZN10emscripten3val3setIA5_chEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
   __ZN10emscripten3val3setIA5_caEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
-  __ZN10emscripten3val3setIA2_cdEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
   __ZN10emscripten3val3setIA5_cmEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
   __Z31dwg_dynapi_entity_value_wrappermRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE(_0: number, _1: number, _2: number): void;
   _dwg_obj_generic_to_object(_0: number, _1: number): number;
@@ -2513,6 +2517,8 @@ interface EmbindModule {
   dwg_ptr_to_point4d_array(_0: number, _1: number): any;
   dwg_ptr_to_ltype_dash_array(_0: number, _1: number): any;
   dwg_ptr_to_table_cell_array(_0: number, _1: number): any;
+  dwg_ptr_to_hatch_defline_array(_0: number, _1: number): any;
+  dwg_ptr_to_hatch_path_array(_0: number, _1: number): any;
   dwg_object_get_handle_object(_0: number): any;
   dwg_object_object_get_ownerhandle_object(_0: number): any;
   dwg_object_object_get_handle_object(_0: number): any;

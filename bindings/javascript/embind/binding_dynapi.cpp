@@ -118,17 +118,12 @@ emscripten::val get_obj_value(const Dwg_Data *dwg, T _obj, const Dwg_DYNAPI_fiel
              strEQc(f->type, "BE") || strEQc(f->type, "3DPOINT")) {
     // POINT3D
     auto point = reinterpret_cast<dwg_point_3d*>(&((char *)_obj)[f->offset]);
-    emscripten::val point_obj = emscripten::val::object();
-    point_obj.set("x", point->x);
-    point_obj.set("y", point->y);
-    point_obj.set("z", point->z);
+    emscripten::val point_obj = point3d_to_js_object(point);
     result.set("data", point_obj);
   } else if (strEQc(f->type, "2RD") || strEQc(f->type, "2BD") || strEQc(f->type, "2DPOINT")) {
     // POINT2D
     auto point = reinterpret_cast<dwg_point_2d*>(&((char *)_obj)[f->offset]);
-    emscripten::val point_obj = emscripten::val::object();
-    point_obj.set("x", point->x);
-    point_obj.set("y", point->y);
+    emscripten::val point_obj = point2d_to_js_object(point);
     result.set("data", point_obj);
   } else if (strEQc(f->type, "CMC")) {
     // Dwg_Color* (BITCODE_CMC)

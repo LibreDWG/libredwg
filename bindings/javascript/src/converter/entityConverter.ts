@@ -1,15 +1,26 @@
 import {
   DwgAlignedDimensionEntity,
   DwgAngularDimensionEntity,
+  DwgArcEdge,
   DwgArcEntity,
   DwgAttachmentPoint,
+  DwgBoundaryPath,
+  DwgBoundaryPathEdge,
   DwgCircleEntity,
   DwgDimensionEntityCommon,
   DwgDimensionTextLineSpacing,
   DwgDimensionType,
+  DwgEdgeBoundaryPath,
+  DwgEllipseEdge,
   DwgEllipseEntity,
   DwgEntity,
+  DwgHatchAssociativity,
+  DwgHatchEntityBase,
+  DwgHatchPatternType,
+  DwgHatchSolidFill,
+  DwgHatchStyle,
   DwgInsertEntity,
+  DwgLineEdge,
   DwgLineEntity,
   DwgLWPolylineEntity,
   DwgLWPolylineVertex,
@@ -19,7 +30,9 @@ import {
   DwgPoint2D,
   DwgPoint3D,
   DwgPointEntity,
+  DwgPolylineBoundaryPath,
   DwgRadialDiameterDimensionEntity,
+  DwgSplineEdge,
   DwgSplineEntity,
   DwgTableCell,
   DwgTableEntity,
@@ -30,6 +43,8 @@ import {
 import { LibreDwgEx } from '../libredwg'
 import {
   Dwg_Color,
+  Dwg_Hatch_Edge_Type,
+  Dwg_HATCH_Path,
   Dwg_Object_Entity_Ptr,
   Dwg_Object_Ptr,
   Dwg_Object_Type,
@@ -75,6 +90,8 @@ export class LibreEntityConverter {
         return this.convertRadiusDimension(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_ELLIPSE) {
         return this.convertEllise(entity_tio, commonAttrs)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_HATCH) {
+        return this.convertHatch(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_INSERT) {
         return this.convertInsert(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_LINE) {
@@ -325,6 +342,182 @@ export class LibreEntityConverter {
       startAngle: startAngle,
       endAngle: endAngle
     }
+  }
+
+  private convertHatch(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): DwgHatchEntityBase {
+    const libredwg = this.libredwg
+    const extrusionDirection = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'extrusion'
+    ).data as DwgPoint3D
+    const patternName = libredwg.dwg_dynapi_entity_value(entity, 'name')
+      .data as string
+    const isSolidFill = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'is_solid_fill'
+    ).data as number
+    const isAssociative = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'is_associative'
+    ).data as number
+    const numberOfBoundaryPaths = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'num_paths'
+    ).data as number
+    const paths_ptr = libredwg.dwg_dynapi_entity_value(entity, 'paths')
+      .data as number
+    const boundaryPaths = libredwg.dwg_ptr_to_hatch_path_array(
+      paths_ptr,
+      numberOfBoundaryPaths
+    )
+    const patternStyle = libredwg.dwg_dynapi_entity_value(entity, 'style')
+      .data as number
+    const patternType = libredwg.dwg_dynapi_entity_value(entity, 'pattern_type')
+      .data as number
+    const patternAngle = libredwg.dwg_dynapi_entity_value(entity, 'angle')
+      .data as number
+    const patternScale = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'scale_spacing'
+    ).data as number
+    const numberOfDefinitionLines = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'num_deflines'
+    ).data as number
+    const definitionLines_ptr = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'deflines'
+    ).data as number
+    const definitionLines = libredwg.dwg_ptr_to_hatch_defline_array(
+      definitionLines_ptr,
+      numberOfDefinitionLines
+    )
+    const pixelSize = libredwg.dwg_dynapi_entity_value(entity, 'pixel_size')
+      .data as number
+    const numberOfSeedPoints = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'num_seeds'
+    ).data as number
+    const seedPoints_ptr = libredwg.dwg_dynapi_entity_value(entity, 'seeds')
+      .data as number
+    const seedPoints = libredwg.dwg_ptr_to_point2d_array(
+      seedPoints_ptr,
+      numberOfSeedPoints
+    )
+
+    return {
+      type: 'HATCH',
+      ...commonAttrs,
+      // elevationPoint: DwgPoint3D
+      extrusionDirection: extrusionDirection,
+      patternName: patternName,
+      solidFill: isSolidFill
+        ? DwgHatchSolidFill.SolidFill
+        : DwgHatchSolidFill.PatternFill,
+      // patternFillColor: number
+      associativity: isAssociative
+        ? DwgHatchAssociativity.Associative
+        : DwgHatchAssociativity.NonAssociative,
+      numberOfBoundaryPaths: numberOfBoundaryPaths,
+      boundaryPaths: this.convertHatchBoundaryPaths(boundaryPaths),
+      hatchStyle: patternStyle as DwgHatchStyle,
+      patternType: patternType as DwgHatchPatternType,
+      patternAngle: patternAngle,
+      patternScale: patternScale,
+      numberOfDefinitionLines: numberOfDefinitionLines,
+      definitionLines: definitionLines.map(value => {
+        return {
+          angle: value.angle,
+          base: value.pt0,
+          offset: value.offset,
+          numberOfDashLengths: value.dashes.length,
+          dashLengths: value.dashes
+        }
+      }),
+      pixelSize: pixelSize,
+      numberOfSeedPoints: numberOfSeedPoints,
+      // offsetVector?: DwgPoint3D
+      seedPoints: seedPoints
+      // gradientFlag?: DwgHatchGradientFlag
+    }
+  }
+
+  private convertHatchBoundaryPaths(paths: Dwg_HATCH_Path[]) {
+    const converted: DwgBoundaryPath[] = paths.map(path => {
+      const commonAttrs = {
+        boundaryPathTypeFlag: path.flag
+      }
+
+      // Check whether it is a polyline
+      if (path.flag & 0x02) {
+        return {
+          ...commonAttrs,
+          hasBulge: path.bulges_present,
+          isClosed: path.closed,
+          numberOfVertices: path.num_segs_or_paths,
+          vertices: path.polyline_paths.map(vertex => {
+            return {
+              x: vertex.point.x,
+              y: vertex.point.y,
+              bulge: vertex.bulge
+            }
+          })
+        } as DwgPolylineBoundaryPath
+      } else {
+        const edges = path.segs.map(seg => {
+          if ((seg.curve_type = Dwg_Hatch_Edge_Type.Line)) {
+            return {
+              type: seg.curve_type,
+              start: seg.first_endpoint,
+              end: seg.second_endpoint
+            } as DwgLineEdge
+          } else if ((seg.curve_type = Dwg_Hatch_Edge_Type.CircularArc)) {
+            return {
+              type: seg.curve_type,
+              center: seg.center,
+              radius: seg.radius,
+              startAngle: seg.start_angle,
+              endAngle: seg.end_angle,
+              isCCW: seg.is_ccw
+            } as DwgArcEdge
+          } else if ((seg.curve_type = Dwg_Hatch_Edge_Type.EllipticArc)) {
+            return {
+              type: seg.curve_type,
+              center: seg.center,
+              end: seg.endpoint,
+              lengthOfMinorAxis: seg.minor_major_ratio,
+              startAngle: seg.start_angle,
+              endAngle: seg.end_angle,
+              isCCW: seg.is_ccw
+            } as DwgEllipseEdge
+          } else if ((seg.curve_type = Dwg_Hatch_Edge_Type.Spline)) {
+            return {
+              type: seg.curve_type,
+              degree: seg.degree,
+              isRational: seg.is_rational,
+              isPeriodic: seg.is_periodic,
+              numberOfKnots: seg.num_knots,
+              numberOfControlPoints: seg.num_control_points,
+              knots: seg.knots,
+              controlPoints: seg.control_points,
+              numberOfFitData: seg.num_fitpts,
+              fitDatum: seg.fitpts,
+              startTangent: seg.start_tangent,
+              endTangent: seg.end_tangent
+            } as DwgSplineEdge
+          }
+        })
+        return {
+          ...commonAttrs,
+          numberOfEdges: path.num_segs_or_paths,
+          edges: edges
+        } as DwgEdgeBoundaryPath<DwgBoundaryPathEdge>
+      }
+    })
+    return converted
   }
 
   private convertInsert(
