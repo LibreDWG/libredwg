@@ -1264,7 +1264,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
     {
       Dwg_Object *obj;
       if (_hdr->last_entity == NULL
-          || current >= _hdr->last_entity->obj)
+          || current == _hdr->last_entity->obj)
         return NULL;
       obj = dwg_next_entity (current);
       while (obj
