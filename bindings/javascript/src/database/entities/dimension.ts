@@ -74,6 +74,10 @@ export interface DwgDimensionEntityCommon extends DwgEntity {
   type: 'DIMENSION'
   subclassMarker: string
   version: number
+  /**
+   * DXF group code: 2
+   * Name of the block that contains the entities that make up the dimension picture
+   */
   name: string
   definitionPoint: DwgPoint3D
   textPoint: DwgPoint2D

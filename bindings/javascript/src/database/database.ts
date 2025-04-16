@@ -1,3 +1,4 @@
+import { DwgHeader } from './header'
 import { DwgImageDefObject, DwgLayoutObject } from './objects'
 import {
   DwgBlockRecordTableEntry,
@@ -22,4 +23,5 @@ export interface DwgDatabase {
     IMAGEDEF: DwgImageDefObject[]
     LAYOUT: DwgLayoutObject[]
   }
+  header: DwgHeader
 }

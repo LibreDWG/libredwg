@@ -114,13 +114,14 @@ emscripten::val get_obj_value(const Dwg_Data *dwg, T _obj, const Dwg_DYNAPI_fiel
   } else if (strEQc(f->type, "RCd")) {
     // SIGNED CHAR
     result.set("data", *reinterpret_cast<BITCODE_RCd*>(&((char *)_obj)[f->offset]));
-  } else if (strEQc(f->type, "3RD") || strEQc(f->type, "3BD") || 
+  } else if (strEQc(f->type, "3RD") || strEQc(f->type, "3BD") || strEQc(f->type, "3BD_1") || 
              strEQc(f->type, "BE") || strEQc(f->type, "3DPOINT")) {
     // POINT3D
     auto point = reinterpret_cast<dwg_point_3d*>(&((char *)_obj)[f->offset]);
     emscripten::val point_obj = point3d_to_js_object(point);
     result.set("data", point_obj);
-  } else if (strEQc(f->type, "2RD") || strEQc(f->type, "2BD") || strEQc(f->type, "2DPOINT")) {
+  } else if (strEQc(f->type, "2RD") || strEQc(f->type, "2BD") || strEQc(f->type, "2BD_1") ||
+             strEQc(f->type, "2DPOINT")) {
     // POINT2D
     auto point = reinterpret_cast<dwg_point_2d*>(&((char *)_obj)[f->offset]);
     emscripten::val point_obj = point2d_to_js_object(point);
