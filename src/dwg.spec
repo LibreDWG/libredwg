@@ -3774,9 +3774,9 @@ DWG_TABLE (LAYER)
     flag0 = FIELD_VALUE (flag0);
     // DWG: frozen (1), off (2), frozen by default (4),
     //      locked (8), plotting flag (16), and linewt (mask with 0x03E0)
-    FIELD_VALUE (frozen) = flag0 & 1;
+    FIELD_VALUE (frozen) = (flag0 & 1) ? 1 : 0;
     LOG_LAYER_FLAG(frozen);
-    FIELD_VALUE (off) = flag0 & 2;
+    FIELD_VALUE (off) = (flag0 & 2) ? 1 : 0;
     LOG_LAYER_FLAG(off);
     FIELD_VALUE (frozen_in_new) = (flag0 & 4) ? 1 : 0;
     LOG_LAYER_FLAG(frozen_in_new);
