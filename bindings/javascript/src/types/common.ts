@@ -47,6 +47,11 @@ export interface Dwg_Color {
   book_name: string
 }
 
+export interface Dwg_Entity_BLOCK {
+  name: string
+  base_pt: DwgPoint2D
+}
+
 export interface Dwg_LTYPE_Dash {
   length: number
   complex_shapecode: number

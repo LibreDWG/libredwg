@@ -3,7 +3,7 @@
   "description": "a webassembly version of libredwg, which can read/write DXF files (in both formats, ascii and binary form) and read DWG files from AutoCAD R14 to AutoCAD 2020.",
   "license": "GPL-2.0-only",
   "private": false,
-  "version": "0.0.11",
+  "version": "0.0.12",
   "author": "MLight Lee <mlight.lee@outlook.com>",
   "type": "module",
   "repository": {

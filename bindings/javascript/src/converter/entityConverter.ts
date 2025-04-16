@@ -78,7 +78,9 @@ export class LibreEntityConverter {
         return this.convertArc(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_CIRCLE) {
         return this.convertCircle(entity_tio, commonAttrs)
-      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ALIGNED) {
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ALIGNED ||
+        fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_LINEAR
+      ) {
         return this.convertAlignedDimension(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ANG3PT) {
         return this.convert3PointAngularDimension(entity_tio, commonAttrs)
@@ -190,11 +192,10 @@ export class LibreEntityConverter {
       entity,
       'xline2_pt'
     ).data as DwgPoint3D
-    // TODO: Not sure whether 'ins_rotation' is same as 'rotationAngle'
     const rotationAngle = libredwg.dwg_dynapi_entity_value(
-      entity,
-      'ins_rotation'
-    ).data as number
+        entity,
+        'ins_rotation'
+      ).data as number | undefined
     const obliqueAngle = libredwg.dwg_dynapi_entity_value(
       entity,
       'oblique_angle'
@@ -207,7 +208,7 @@ export class LibreEntityConverter {
       insertionPoint: insertionPoint,
       subDefinitionPoint1: subDefinitionPoint1,
       subDefinitionPoint2: subDefinitionPoint2,
-      rotationAngle: rotationAngle,
+      rotationAngle: rotationAngle == null ? 0 : rotationAngle,
       obliqueAngle: obliqueAngle
     }
   }
@@ -446,7 +447,9 @@ export class LibreEntityConverter {
   }
 
   private convertHatchBoundaryPaths(paths: Dwg_HATCH_Path[]) {
-    const converted: DwgBoundaryPath[] = paths.map(path => {
+    const converted: DwgBoundaryPath[] = paths
+    .filter(path => path.num_segs_or_paths > 0)
+    .map(path => {
       const commonAttrs = {
         boundaryPathTypeFlag: path.flag
       }
@@ -538,12 +541,13 @@ export class LibreEntityConverter {
         const block_header_tio =
           libredwg.dwg_object_to_object_tio(block_header_obj)
         if (block_header_tio) {
-          name = libredwg.dwg_dynapi_entity_value(block_header_tio, 'name')
-            .data as string
+          name =
+            libredwg.dwg_entity_block_header_get_block(block_header_tio).name
         }
       }
     }
     if (name === '') {
+      /* pre-R2.0 */
       name = libredwg.dwg_dynapi_entity_value(entity, 'block_name')
         .data as string
     }
@@ -1065,6 +1069,7 @@ export class LibreEntityConverter {
     const libredwg = this.libredwg
     const version = libredwg.dwg_dynapi_entity_value(entity, 'class_version')
       .data as number
+    const name = libredwg.dwg_entity_get_block_name(entity, 'block')
     const definitionPoint = libredwg.dwg_dynapi_entity_value(entity, 'def_pt')
       .data as DwgPoint3D
     const textPoint = libredwg.dwg_dynapi_entity_value(entity, 'text_midpt')
@@ -1100,11 +1105,12 @@ export class LibreEntityConverter {
       entity,
       'extrusion'
     ).data as DwgPoint3D
+    const styleName = libredwg.dwg_entity_dimension_get_style_name(entity)
 
     return {
       type: 'DIMENSION',
       version: version,
-      name: '', // TODO: Set the correct value
+      name: name,
       definitionPoint: definitionPoint,
       textPoint: textPoint,
       dimensionType: dimensionType as DwgDimensionType,
@@ -1116,7 +1122,7 @@ export class LibreEntityConverter {
       textRotation: textRotation,
       ocsRotation: ocsRotation,
       extrusionDirection: extrusionDirection,
-      styleName: '' // TODO: Set correct value
+      styleName: styleName
     }
   }
 

@@ -5,4 +5,10 @@ This is a DWG/DXF JavaScript parser based on libredwg. It can be used in browser
 - [Live demo](https://mlight-lee.github.io/libredwg-web/)
 - [API docs](https://mlight-lee.github.io/libredwg-web/docs/)
 
-Please read README [here](./bindings/javascript/README.md) to get more details.
+## Usage
+
+```bash
+npm install @mlightcad/libredwg-web
+```
+
+Please refer to [README](./bindings/javascript/README.md) to get more details.

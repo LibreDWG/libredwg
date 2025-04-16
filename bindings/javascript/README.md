@@ -50,6 +50,10 @@ If you want those functionalities, just modify command `build:prepare` defined i
 
 There are two approaches to use this package. No matter which approach to use, please do remember copying wasm file (libredwg.wasm) to the same folder as your JavaScript bundle file when deploying your application. 
 
+```bash
+npm install @mlightcad/libredwg-web
+```
+
 ### Use Raw Web Assembly
 
 The raw web assembly module (wasm file and JavaScript glue code file) is stored in folder [wasm](./wasm/). 
@@ -77,6 +81,20 @@ const libredwg = await LibreDwg.create();
 const dwg = libredwg.dwg_read_data(fileContent, Dwg_File_Type.DWG);
 const db = this.libredwg.convert(dwg);
 ```
+
+## Interfaces
+
+There are two kinds of interfaces defined to access dwg/dxf drawing data. 
+
+### Interfaces with prifix 'Dwg'
+
+Those interfaces are much more easier to use with better data structure. It is quite similar to interfaces defined in project [@mlightcad/dxf-json](https://github.com/mlight-lee/dxf-json). Those interfaces describe most of commonly used objects in the dwg/dxf drawing.
+
+### Interfaces with prefix 'Dwg_'
+
+Those interfaces are JavaScript version of `structs` defined in libredwg C++ code. Only a few `structs` have the correponding JavaScript interface. Most of them are defined to make it easier to convert libredwg data structure to [DwgDatabase](./src/types/database.ts).
+
+So it is recommend to use interfaces with prefix 'Dwg'.
 
 ## Demo App
 
