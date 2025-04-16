@@ -25349,6 +25349,8 @@ dwg_add_LAYER (Dwg_Data *restrict dwg, const char *restrict name)
       // PLOTSTYLE placeholder
       API_ADD_TABLE (LAYER, LAYER_CONTROL, {
         _obj->plotstyle = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL);
+        _obj->plotflag = 1;
+        _obj->linewt = 0x1f;
       });
     }
   else
