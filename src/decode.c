@@ -3849,15 +3849,6 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       return DWG_ERR_INVALIDEED; /* may continue */
     }
   LOG_POS
-
-#ifdef DEBUG
-  // sanity checks:
-  if (data->code == 0 || data->code == 4)
-     assert (data->u.eed_0.length <= size - 1);
-  if (data->code == 10) // 3 double
-     assert (size >= 1 + 3 * 8);
-#endif
-
   return 0;
 }
 
@@ -5294,13 +5285,13 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       *dat = abs_dat;
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-#ifdef DEBUG
-  if ((dat->opts & DWG_OPTS_LOGLEVEL) > 5 && obj->index == 12)
-    {
-      printf ("@%" PRIuSIZE ".%u: ", dat->byte, (unsigned)dat->bit);
-      bit_print_bits(&dat->chain[dat->byte], 64);
-    }
-#endif
+//#ifdef DEBUG
+//  if ((dat->opts & DWG_OPTS_LOGLEVEL) > 5 && obj->index == 12)
+//    {
+//      printf ("@%" PRIuSIZE ".%u: ", dat->byte, (unsigned)dat->bit);
+//      bit_print_bits(&dat->chain[dat->byte], 64);
+//    }
+//#endif
   obj->size = bit_read_MS (dat);
   LOG_INFO (", Size: %d [MS]", obj->size)
   SINCE (R_2010b)
