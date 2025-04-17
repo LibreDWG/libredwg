@@ -1226,7 +1226,7 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   bit_read_fixed (dat, decomp, lit_length);
   dst += lit_length;
   bytes_left -= lit_length;
-  LOG_INSANE ("(%ld) ", bytes_left)
+  LOG_INSANE ("(%ld) ", decomp_data_size - bytes_left)
 
   opcode1 = 0x00;
   while (dat->byte - start_byte < comp_data_size && dst < dst_end)
@@ -1311,7 +1311,7 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
         }
       if (comp_bytes)
         {
-          LOG_INSANE ("<C %d ", comp_bytes);
+          LOG_INSANE ("<C %d %d ", comp_bytes, comp_offset);
           // copy "compressed data"
           if ((long)comp_bytes > bytes_left)
             {
@@ -1330,7 +1330,7 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
           for (i = 0; i < comp_bytes; ++i)
             *dst++ = *src++;
           bytes_left -= comp_bytes;
-          LOG_INSANE ("(%ld) ", bytes_left)
+          LOG_INSANE ("(%ld) ", decomp_data_size - bytes_left)
         }
       // copy "literal data"
       LOG_INSANE ("<L %d\n", lit_length)
@@ -1346,7 +1346,7 @@ decompress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
           for (i = 0; i < lit_length; ++i)
             *dst++ = bit_read_RC (dat);
           bytes_left -= lit_length;
-          LOG_INSANE ("(%ld) ", bytes_left)
+          LOG_INSANE ("(%ld) ", decomp_data_size - bytes_left)
         }
     }
 #ifdef DEBUG
