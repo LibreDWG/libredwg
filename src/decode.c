@@ -1210,7 +1210,7 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
 {
   unsigned int i, lit_length;
   int comp_offset, comp_bytes;
-  unsigned long pos, end;
+  size_t pos, end;
   unsigned char opcode1 = 0, opcode2;
   size_t start_byte = src->byte;
 
@@ -1278,17 +1278,19 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
           return DWG_ERR_INTERNALERROR; // error in input stream
         }
       // copy previous offset'ed bytes.
-      pos = (unsigned long)dec->byte;
-      LOG_INSANE ("co: %d %ld->%lu\n", comp_bytes, pos - comp_offset, pos);
+      pos = dec->byte;
+      LOG_INSANE ("co: %d %ld->%" PRIuSIZE "\n", comp_bytes, (long)pos - comp_offset,
+                  pos);
       // This seems to be a comp_bytes encoding bug,
       // copying past the decompressed_size. rather cap it and stop decompression.
       // ACadSharp decompresses all comp_bytes, enlarging the buffer (but not using it)
       end = pos + comp_bytes;
-      if ((size_t)end >= dec->size)
+      if (end >= dec->size)
         {
-          LOG_TRACE ("decompress oob: %lu >= %" PRIuSIZE "\n", end, dec->size);
+          LOG_TRACE ("decompress oob: %" PRIuSIZE " >= %" PRIuSIZE "\n", end,
+                     dec->size);
           //bit_chain_alloc_size (dec, pos + comp_bytes);
-          comp_bytes = (int)((unsigned long)dec->size - pos);
+          comp_bytes = (int)(dec->size - pos);
           end = pos + comp_bytes;
           opcode1 = 0x11;
           LOG_INSANE (">O %x!\n", opcode1)
@@ -1299,8 +1301,8 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
       for (; pos < end; pos++)
         {
           unsigned char b;
-          assert ((long)(pos - comp_offset) >= 0);
-          assert ((long)(pos - comp_offset) < (long)dec->size);
+          assert ((long)pos >= (long)comp_offset);
+          assert (pos - comp_offset < dec->size);
           b = dec->chain[pos - comp_offset];
           assert (pos < dec->size);
           dec->chain[pos] = b;
@@ -1441,7 +1443,8 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       LOG_ERROR ("Invalid r2004_header.decomp_data_size %" PRIuSIZE,
                  dec.size)
-        dwg->fhdr.r2004_header.decomp_data_size = 8 * (BITCODE_RL)sec.size;
+        dwg->fhdr.r2004_header.decomp_data_size =
+          8 * (BITCODE_RL)(sec.size & 0xffffffff);
       return DWG_ERR_OUTOFMEM;
     }
   dec.chain = (BITCODE_RC *)calloc (dec.size + 1024, 1);
@@ -2111,10 +2114,10 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_TRACE ("Section start:    %" PRIuSIZE "\n\n", dat->byte);
 
       // GH #126 part 4
-      LOG_INSANE ("info[%d]->max_decomp_size: %" PRIuSIZE " (0x%" PRI_SIZE_T_MODIFIER "x)\n", i,
-                  (size_t)info->max_decomp_size, (size_t)info->max_decomp_size)
-      LOG_INSANE ("max_decomp_size:          %" PRIuSIZE " (0x%" PRI_SIZE_T_MODIFIER "x)\n",
-                  (size_t)max_decomp_size, (size_t)max_decomp_size)
+      LOG_INSANE ("info[%d]->max_decomp_size: %" PRIu32 " (0x%"
+                  PRIx32 ")\n", i, info->max_decomp_size, info->max_decomp_size)
+      LOG_INSANE ("max_decomp_size:          %" PRIu32 " (0x%"
+                  PRIx32 ")\n", max_decomp_size, max_decomp_size)
       LOG_INSANE ("bytes_left:               %ld\n", bytes_left);
 
       // check if compressed at all
@@ -2123,9 +2126,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         {
           size_t orig_size = dat->size;
           dec.byte = es.fields.address; /* == j * info->max_decomp_size;*/ // offset
-          LOG_INSANE ("dec offset: %" PRIuSIZE "\n", (size_t)dec.byte)
-	  dec.size = dec.byte + info->max_decomp_size; /*es.fields.page_size;*/
-          LOG_INSANE ("dec size: %" PRIuSIZE "\n", (size_t)dec.size)
+          LOG_INSANE ("dec offset: %" PRIuSIZE "\n", dec.byte)
+          dec.size = dec.byte + info->max_decomp_size; /*es.fields.page_size;*/
+          LOG_INSANE ("dec size: %" PRIuSIZE "\n", dec.size)
           dat->size = dat->byte + es.fields.data_size;
 #ifdef DEBUG
           if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)

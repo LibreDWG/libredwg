@@ -22155,11 +22155,14 @@ dwg_is_valid_tag (const char *tag)
   }
 #else
   // only ascii support, no wctype nor maxlen checks
-  while ((uint8_t c = *tag++))
-    {
-      if (islower (c) || !(c == '$' || c == '_' || c == '-' || isalnum(c)))
-        return false;
-    }
+  {
+    uint8_t c;
+    while (c = *tag++)
+      {
+        if (islower (c) || !(c == '$' || c == '_' || c == '-' || isalnum(c)))
+          return false;
+      }
+  }
   return true;
 #endif
 }
