@@ -338,9 +338,9 @@ emscripten::val dwg_ptr_to_hatch_path_array_wrapper(uintptr_t array_ptr, size_t 
           auto num_fitpts = seg.num_fitpts;
           seg_obj.set("num_fitpts", num_fitpts);
           seg_obj.set("fitpts", dwg_ptr_to_point2d_array_wrapper(reinterpret_cast<uintptr_t>(seg.fitpts), num_fitpts));
+          seg_obj.set("start_tangent", bitcode_2rd_to_js_object(&seg.start_tangent));
+          seg_obj.set("end_tangent", bitcode_2rd_to_js_object(&seg.end_tangent));
         }
-        seg_obj.set("start_tangent", bitcode_2rd_to_js_object(&seg.start_tangent));
-        seg_obj.set("end_tangent", bitcode_2rd_to_js_object(&seg.end_tangent));
 
         segs.call<void>("push", seg_obj);
       }
