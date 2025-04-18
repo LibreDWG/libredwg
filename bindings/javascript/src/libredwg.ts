@@ -9,8 +9,11 @@ import {
   Dwg_Entity_BLOCK,
   Dwg_Entity_IMAGE_Ptr,
   Dwg_Entity_LWPOLYLINE_Ptr,
+  Dwg_Entity_MTEXT_Ptr,
   Dwg_Entity_POLYLINE_2D_Ptr,
   Dwg_Entity_POLYLINE_3D_Ptr,
+  Dwg_Entity_TEXT_Ptr,
+  Dwg_Entity_VERTEX_2D,
   Dwg_Field_Value,
   Dwg_File_Type,
   Dwg_Handle,
@@ -674,12 +677,16 @@ export class LibreDwg {
    * @param field Field name of the block.
    * @returns Returns block name of one Dwg_Entity_* instance.
    */
-  dwg_entity_get_block_name(ptr: Dwg_Object_Entity_TIO_Ptr, field: string): string {
+  dwg_entity_get_block_name(
+    ptr: Dwg_Object_Entity_TIO_Ptr,
+    field: string
+  ): string {
     const wasmInstance = this.wasmInstance
     const block_header_ref = wasmInstance.dwg_dynapi_entity_value(ptr, field)
       .data as number
     const block_header_obj = wasmInstance.dwg_ref_get_object(block_header_ref)
-    const block_header_tio = wasmInstance.dwg_object_to_object_tio(block_header_obj)
+    const block_header_tio =
+      wasmInstance.dwg_object_to_object_tio(block_header_obj)
     const block = this.dwg_entity_block_header_get_block(block_header_tio)
     return block.name
   }
@@ -696,7 +703,8 @@ export class LibreDwg {
       .data as number
     const dimstyle_obj = wasmInstance.dwg_ref_get_object(dimstyle_ref)
     const dimstyle_tio = wasmInstance.dwg_object_to_object_tio(dimstyle_obj)
-    const dimstyle_name = this.dwg_dynapi_entity_value(dimstyle_tio, 'name').data as string
+    const dimstyle_name = this.dwg_dynapi_entity_value(dimstyle_tio, 'name')
+      .data as string
     return dimstyle_name
   }
 
@@ -722,6 +730,70 @@ export class LibreDwg {
       name,
       base_pt // preR13 only
     }
+  }
+
+  /**
+   * Returns text style name of one Dwg_Entity_MTEXT instance.
+   * @group Dwg_Entity_MTEXT Methods
+   * @param ptr Pointer to one Dwg_Entity_MTEXT instance.
+   * @returns Returns text style name of one Dwg_Entity_MTEXT instance.
+   */
+  dwg_entity_mtext_get_style_name(ptr: Dwg_Entity_MTEXT_Ptr): string {
+    const wasmInstance = this.wasmInstance
+    const style_ref = wasmInstance.dwg_dynapi_entity_value(ptr, 'style')
+      .data as number
+    const style_obj = wasmInstance.dwg_ref_get_object(style_ref)
+    const style_tio = wasmInstance.dwg_object_to_object_tio(style_obj)
+    const name = wasmInstance.dwg_dynapi_entity_value(style_tio, 'name')
+      .data as string
+    return name
+  }
+
+  /**
+   * Returns text style name of one Dwg_Entity_TEXT instance.
+   * @group Dwg_Entity_TEXT Methods
+   * @param ptr Pointer to one Dwg_Entity_TEXT instance.
+   * @returns Returns text style name of one Dwg_Entity_TEXT instance.
+   */
+  dwg_entity_text_get_style_name(ptr: Dwg_Entity_TEXT_Ptr): string {
+    return this.dwg_entity_mtext_get_style_name(ptr)
+  }
+
+  /**
+   * Returns the number of points in Dwg_Entity_POLYLINE_2D.
+   * @group Dwg_Entity_POLYLINE_2D Methods
+   * @param ptr Pointer to one Dwg_Object (not Dwg_Entity_POLYLINE_2D) instance.
+   * @returns Returns the number of points in one Dwg_Entity_POLYLINE_2D.
+   */
+  dwg_entity_polyline_2d_get_numpoints(ptr: Dwg_Object_Ptr): number {
+    const wasmInstance = this.wasmInstance
+    return wasmInstance.dwg_entity_polyline_2d_get_numpoints(ptr).data as number
+  }
+
+  /**
+   * Returns points in Dwg_Entity_POLYLINE_2D.
+   * @group Dwg_Entity_POLYLINE_2D Methods
+   * @param ptr Pointer to one Dwg_Object (not Dwg_Entity_POLYLINE_2D) instance.
+   * @returns Returns points in one Dwg_Entity_POLYLINE_2D.
+   */
+  dwg_entity_polyline_2d_get_points(ptr: Dwg_Object_Ptr): DwgPoint2D[] {
+    const wasmInstance = this.wasmInstance
+    return wasmInstance.dwg_entity_polyline_2d_get_points(ptr)
+      .data as DwgPoint2D[]
+  }
+
+  /**
+   * Returns vertices in Dwg_Entity_POLYLINE_2D.
+   * @group Dwg_Entity_POLYLINE_2D Methods
+   * @param ptr Pointer to one Dwg_Object (not Dwg_Entity_POLYLINE_2D) instance.
+   * @returns Returns vertices in one Dwg_Entity_POLYLINE_2D.
+   */
+  dwg_entity_polyline_2d_get_vertices(
+    ptr: Dwg_Object_Ptr
+  ): Dwg_Entity_VERTEX_2D[] {
+    const wasmInstance = this.wasmInstance
+    return wasmInstance.dwg_entity_polyline_2d_get_vertices(ptr)
+      .data as Dwg_Entity_VERTEX_2D[]
   }
 
   static createByWasmInstance(wasmInstance: MainModule): LibreDwgEx {

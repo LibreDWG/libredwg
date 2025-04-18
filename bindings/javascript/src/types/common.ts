@@ -24,6 +24,8 @@ export type Dwg_Entity_POLYLINE_2D_Ptr = number
 export type Dwg_Entity_POLYLINE_3D_Ptr = number
 export type Dwg_Entity_IMAGE_Ptr = number
 export type Dwg_Entity_LWPOLYLINE_Ptr = number
+export type Dwg_Entity_MTEXT_Ptr = number
+export type Dwg_Entity_TEXT_Ptr = number
 
 export interface Dwg_Handle {
   code: number
@@ -202,6 +204,16 @@ export interface Dwg_HATCH_Path {
   bulges_present: boolean
   closed: boolean
   polyline_paths: Dwg_HATCH_PolylinePath[]
+}
+
+export interface Dwg_Entity_VERTEX_2D {
+  flag: number
+  point: DwgPoint3D
+  start_width: number
+  end_width: number
+  id: number
+  bulge: number
+  tangent_dir: number
 }
 
 export interface Dwg_Field_Value {

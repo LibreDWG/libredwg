@@ -1,4 +1,4 @@
-import { DwgPoint3D } from '../common'
+import { DwgPoint2D, DwgPoint3D } from '../common'
 import { DwgEntity } from './entity'
 
 export declare enum DwgImageFlags {
@@ -24,14 +24,14 @@ export interface DwgImageEntity extends DwgEntity {
   position: DwgPoint3D
   uPixel: DwgPoint3D
   vPixel: DwgPoint3D
-  imageSize: DwgPoint3D
-  imageDefHandle: string
+  imageSize: DwgPoint2D
+  imageDefHandle: number
   flags: DwgImageFlags
   clipping: number
   brightness: number
   contrast: number
   fade: number
-  imageDefReactorHandle: string
+  imageDefReactorHandle: number
   clippingBoundaryType: DwgImageClippingBoundaryType
   countBoundaryPoints: number
   clippingBoundaryPath: DwgPoint3D[]

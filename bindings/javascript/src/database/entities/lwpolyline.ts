@@ -3,7 +3,7 @@ import { DwgEntity } from './entity'
 
 export interface DwgLWPolylineEntity extends DwgEntity {
   type: 'LWPOLYLINE'
-  /* 
+  /*
    * DXF group code: 70
    *
    * Polyline flag (bit-coded); default is 0:
@@ -16,7 +16,7 @@ export interface DwgLWPolylineEntity extends DwgEntity {
    * - 128 plinegen
    * - 512: closed
    * - 1024 vertexidcount
-   * 
+   *
    * ⚠️ **Warning:** The meaning of this field is different from the original meaning in DXF!
    */
   flag: number

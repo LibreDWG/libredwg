@@ -6,6 +6,7 @@ import {
   DwgAttachmentPoint,
   DwgBoundaryPath,
   DwgBoundaryPathEdge,
+  DwgBoundaryPathEdgeType,
   DwgCircleEntity,
   DwgDimensionEntityCommon,
   DwgDimensionTextLineSpacing,
@@ -19,6 +20,9 @@ import {
   DwgHatchPatternType,
   DwgHatchSolidFill,
   DwgHatchStyle,
+  DwgImageClippingBoundaryType,
+  DwgImageEntity,
+  DwgImageFlags,
   DwgInsertEntity,
   DwgLineEdge,
   DwgLineEntity,
@@ -31,14 +35,20 @@ import {
   DwgPoint3D,
   DwgPointEntity,
   DwgPolylineBoundaryPath,
+  DwgPolylineEntity,
   DwgRadialDiameterDimensionEntity,
+  DwgRayEntity,
+  DwgSmoothType,
   DwgSplineEdge,
   DwgSplineEntity,
   DwgTableCell,
   DwgTableEntity,
   DwgTextEntity,
   DwgTextHorizontalAlign,
-  DwgTextVerticalAlign
+  DwgTextVerticalAlign,
+  DwgVertexEntity,
+  DwgWipeoutEntity,
+  DwgXlineEntity
 } from '../database'
 import { LibreDwgEx } from '../libredwg'
 import {
@@ -78,7 +88,8 @@ export class LibreEntityConverter {
         return this.convertArc(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_CIRCLE) {
         return this.convertCircle(entity_tio, commonAttrs)
-      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ALIGNED ||
+      } else if (
+        fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_ALIGNED ||
         fixedtype == Dwg_Object_Type.DWG_TYPE_DIMENSION_LINEAR
       ) {
         return this.convertAlignedDimension(entity_tio, commonAttrs)
@@ -94,6 +105,8 @@ export class LibreEntityConverter {
         return this.convertEllise(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_HATCH) {
         return this.convertHatch(entity_tio, commonAttrs)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_IMAGE) {
+        return this.convertImage(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_INSERT) {
         return this.convertInsert(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_LINE) {
@@ -104,12 +117,20 @@ export class LibreEntityConverter {
         return this.convertMText(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_POINT) {
         return this.convertPoint(entity_tio, commonAttrs)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_POLYLINE_2D) {
+        return this.convertPolyline2d(entity_tio, commonAttrs, object_ptr)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_RAY) {
+        return this.convertRay(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_SPLINE) {
         return this.convertSpline(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_TABLE) {
         return this.convertTable(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_TEXT) {
         return this.convertText(entity_tio, commonAttrs)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_WIPEOUT) {
+        return this.convertWipeout(entity_tio, commonAttrs)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_XLINE) {
+        return this.convertXline(entity_tio, commonAttrs)
       }
     }
     return undefined
@@ -193,9 +214,9 @@ export class LibreEntityConverter {
       'xline2_pt'
     ).data as DwgPoint3D
     const rotationAngle = libredwg.dwg_dynapi_entity_value(
-        entity,
-        'ins_rotation'
-      ).data as number | undefined
+      entity,
+      'ins_rotation'
+    ).data as number | undefined
     const obliqueAngle = libredwg.dwg_dynapi_entity_value(
       entity,
       'oblique_angle'
@@ -448,79 +469,153 @@ export class LibreEntityConverter {
 
   private convertHatchBoundaryPaths(paths: Dwg_HATCH_Path[]) {
     const converted: DwgBoundaryPath[] = paths
-    .filter(path => path.num_segs_or_paths > 0)
-    .map(path => {
-      const commonAttrs = {
-        boundaryPathTypeFlag: path.flag
-      }
+      .filter(path => path.num_segs_or_paths > 0)
+      .map(path => {
+        const commonAttrs = {
+          boundaryPathTypeFlag: path.flag
+        }
 
-      // Check whether it is a polyline
-      if (path.flag & 0x02) {
-        return {
-          ...commonAttrs,
-          hasBulge: path.bulges_present,
-          isClosed: path.closed,
-          numberOfVertices: path.num_segs_or_paths,
-          vertices: path.polyline_paths.map(vertex => {
-            return {
-              x: vertex.point.x,
-              y: vertex.point.y,
-              bulge: vertex.bulge
+        // Check whether it is a polyline
+        if (path.flag & 0x02) {
+          return {
+            ...commonAttrs,
+            hasBulge: path.bulges_present,
+            isClosed: path.closed,
+            numberOfVertices: path.num_segs_or_paths,
+            vertices: path.polyline_paths.map(vertex => {
+              return {
+                x: vertex.point.x,
+                y: vertex.point.y,
+                bulge: vertex.bulge
+              }
+            })
+          } as DwgPolylineBoundaryPath
+        } else {
+          const edges = path.segs.map(seg => {
+            if (seg.curve_type == Dwg_Hatch_Edge_Type.Line) {
+              return {
+                type: DwgBoundaryPathEdgeType.Line,
+                start: seg.first_endpoint,
+                end: seg.second_endpoint
+              } as DwgLineEdge
+            } else if (seg.curve_type == Dwg_Hatch_Edge_Type.CircularArc) {
+              return {
+                type: DwgBoundaryPathEdgeType.Circular,
+                center: seg.center,
+                radius: seg.radius,
+                startAngle: seg.start_angle,
+                endAngle: seg.end_angle,
+                isCCW: seg.is_ccw
+              } as DwgArcEdge
+            } else if (seg.curve_type == Dwg_Hatch_Edge_Type.EllipticArc) {
+              return {
+                type: DwgBoundaryPathEdgeType.Elliptic,
+                center: seg.center,
+                end: seg.endpoint,
+                lengthOfMinorAxis: seg.minor_major_ratio,
+                startAngle: seg.start_angle,
+                endAngle: seg.end_angle,
+                isCCW: seg.is_ccw
+              } as DwgEllipseEdge
+            } else if (seg.curve_type == Dwg_Hatch_Edge_Type.Spline) {
+              return {
+                type: DwgBoundaryPathEdgeType.Spline,
+                degree: seg.degree,
+                isRational: seg.is_rational,
+                isPeriodic: seg.is_periodic,
+                numberOfKnots: seg.num_knots,
+                numberOfControlPoints: seg.num_control_points,
+                knots: seg.knots,
+                controlPoints: seg.control_points,
+                numberOfFitData: seg.num_fitpts,
+                fitDatum: seg.fitpts,
+                startTangent: seg.start_tangent,
+                endTangent: seg.end_tangent
+              } as DwgSplineEdge
             }
           })
-        } as DwgPolylineBoundaryPath
-      } else {
-        const edges = path.segs.map(seg => {
-          if ((seg.curve_type = Dwg_Hatch_Edge_Type.Line)) {
-            return {
-              type: seg.curve_type,
-              start: seg.first_endpoint,
-              end: seg.second_endpoint
-            } as DwgLineEdge
-          } else if ((seg.curve_type = Dwg_Hatch_Edge_Type.CircularArc)) {
-            return {
-              type: seg.curve_type,
-              center: seg.center,
-              radius: seg.radius,
-              startAngle: seg.start_angle,
-              endAngle: seg.end_angle,
-              isCCW: seg.is_ccw
-            } as DwgArcEdge
-          } else if ((seg.curve_type = Dwg_Hatch_Edge_Type.EllipticArc)) {
-            return {
-              type: seg.curve_type,
-              center: seg.center,
-              end: seg.endpoint,
-              lengthOfMinorAxis: seg.minor_major_ratio,
-              startAngle: seg.start_angle,
-              endAngle: seg.end_angle,
-              isCCW: seg.is_ccw
-            } as DwgEllipseEdge
-          } else if ((seg.curve_type = Dwg_Hatch_Edge_Type.Spline)) {
-            return {
-              type: seg.curve_type,
-              degree: seg.degree,
-              isRational: seg.is_rational,
-              isPeriodic: seg.is_periodic,
-              numberOfKnots: seg.num_knots,
-              numberOfControlPoints: seg.num_control_points,
-              knots: seg.knots,
-              controlPoints: seg.control_points,
-              numberOfFitData: seg.num_fitpts,
-              fitDatum: seg.fitpts,
-              startTangent: seg.start_tangent,
-              endTangent: seg.end_tangent
-            } as DwgSplineEdge
-          }
-        })
-        return {
-          ...commonAttrs,
-          numberOfEdges: path.num_segs_or_paths,
-          edges: edges
-        } as DwgEdgeBoundaryPath<DwgBoundaryPathEdge>
-      }
-    })
+          return {
+            ...commonAttrs,
+            numberOfEdges: path.num_segs_or_paths,
+            edges: edges
+          } as DwgEdgeBoundaryPath<DwgBoundaryPathEdge>
+        }
+      })
     return converted
+  }
+
+  private convertImage(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): DwgImageEntity {
+    const libredwg = this.libredwg
+    const version = libredwg.dwg_dynapi_entity_value(entity, 'class_version')
+      .data as number
+    const position = libredwg.dwg_dynapi_entity_value(entity, 'pt0')
+      .data as DwgPoint3D
+    const uPixel = libredwg.dwg_dynapi_entity_value(entity, 'uvec')
+      .data as DwgPoint3D
+    const vPixel = libredwg.dwg_dynapi_entity_value(entity, 'vvec')
+      .data as DwgPoint3D
+    const imageSize = libredwg.dwg_dynapi_entity_value(entity, 'image_size')
+      .data as DwgPoint2D
+    const flags = libredwg.dwg_dynapi_entity_value(entity, 'display_props')
+      .data as number
+    const clipping = libredwg.dwg_dynapi_entity_value(entity, 'clipping')
+      .data as number
+    const brightness = libredwg.dwg_dynapi_entity_value(entity, 'brightness')
+      .data as number
+    const contrast = libredwg.dwg_dynapi_entity_value(entity, 'contrast')
+      .data as number
+    const fade = libredwg.dwg_dynapi_entity_value(entity, 'fade').data as number
+    const clipMode = libredwg.dwg_dynapi_entity_value(entity, 'clip_mode')
+      .data as number
+    const clippingBoundaryType = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'clip_boundary_type'
+    ).data as number
+    const countBoundaryPoints = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'num_clip_verts'
+    ).data as number
+    const clip_verts = libredwg.dwg_dynapi_entity_value(entity, 'clip_verts')
+      .data as number
+    const clippingBoundaryPath = libredwg.dwg_ptr_to_point3d_array(
+      clip_verts,
+      countBoundaryPoints
+    )
+
+    const imagedef_ref = libredwg.dwg_dynapi_entity_value(entity, 'imagedef')
+      .data as number
+    const imageDefHandle = libredwg.dwg_ref_get_absref(imagedef_ref)
+    const imagedefreactor_ref = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'imagedefreactor'
+    ).data as number
+    const imageDefReactorHandle =
+      libredwg.dwg_ref_get_absref(imagedefreactor_ref)
+
+    return {
+      type: 'IMAGE',
+      ...commonAttrs,
+      version: version,
+      position: position,
+      uPixel: uPixel,
+      vPixel: vPixel,
+      imageSize: imageSize,
+      imageDefHandle: imageDefHandle,
+      flags: flags as DwgImageFlags,
+      clipping: clipping,
+      brightness: brightness,
+      contrast: contrast,
+      fade: fade,
+      imageDefReactorHandle: imageDefReactorHandle,
+      clippingBoundaryType:
+        clippingBoundaryType as DwgImageClippingBoundaryType,
+      countBoundaryPoints: countBoundaryPoints,
+      clippingBoundaryPath: clippingBoundaryPath,
+      clipMode: clipMode
+    }
   }
 
   private convertInsert(
@@ -693,6 +788,7 @@ export class LibreEntityConverter {
       'flow_dir'
     ).data as number
     const text = libredwg.dwg_dynapi_entity_value(entity, 'text').data as string
+    const styleName = libredwg.dwg_entity_mtext_get_style_name(entity)
     const extrusionDirection = libredwg.dwg_dynapi_entity_value(
       entity,
       'extrusion'
@@ -760,7 +856,7 @@ export class LibreEntityConverter {
       attachmentPoint: attachmentPoint as DwgAttachmentPoint,
       drawingDirection: drawingDirection as DwgMTextDrawingDirection,
       text: text,
-      styleName: '', // TODO: Set correct value
+      styleName: styleName,
       extrusionDirection: extrusionDirection,
       direction: direction,
       rotation: 0, // TODO: Didn't find the corresponding field in libredwg
@@ -806,6 +902,73 @@ export class LibreEntityConverter {
       thickness: thickness,
       extrusionDirection: extrusionDirection,
       angle: angle
+    }
+  }
+
+  private convertPolyline2d(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes,
+    object: Dwg_Object_Ptr
+  ): DwgPolylineEntity {
+    const libredwg = this.libredwg
+    const flag = libredwg.dwg_dynapi_entity_value(entity, 'flag').data as number
+    const startWidth = libredwg.dwg_dynapi_entity_value(entity, 'start_width')
+      .data as number
+    const endWidth = libredwg.dwg_dynapi_entity_value(entity, 'end_width')
+      .data as number
+    const elevation = libredwg.dwg_dynapi_entity_value(entity, 'elevation')
+      .data as number
+    const thickness = libredwg.dwg_dynapi_entity_value(entity, 'thickness')
+      .data as number
+    const extrusionDirection = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'extrusion'
+    ).data as DwgPoint3D
+
+    const vertices = libredwg.dwg_entity_polyline_2d_get_vertices(object)
+    return {
+      type: 'POLYLINE',
+      ...commonAttrs,
+      flag: flag,
+      startWidth: startWidth,
+      endWidth: endWidth,
+      elevation: elevation,
+      thickness: thickness,
+      extrusionDirection: extrusionDirection,
+      vertices: vertices.map(vertex => {
+        return {
+          x: vertex.point.x,
+          y: vertex.point.y,
+          z: vertex.point.z,
+          startWidth: vertex.start_width,
+          endWidth: vertex.end_width,
+          bulge: vertex.bulge,
+          flag: vertex.flag,
+          tangentDirection: vertex.tangent_dir
+        } as unknown as DwgVertexEntity
+      }),
+      meshMVertexCount: 0,
+      meshNVertexCount: 0,
+      surfaceMDensity: 0,
+      surfaceNDensity: 0,
+      smoothType: DwgSmoothType.NONE
+    }
+  }
+
+  private convertRay(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): DwgRayEntity {
+    const libredwg = this.libredwg
+    const firstPoint = libredwg.dwg_dynapi_entity_value(entity, 'point')
+      .data as DwgPoint3D
+    const unitDirection = libredwg.dwg_dynapi_entity_value(entity, 'vector')
+      .data as DwgPoint3D
+    return {
+      type: 'RAY',
+      ...commonAttrs,
+      firstPoint: firstPoint,
+      unitDirection: unitDirection
     }
   }
 
@@ -1030,6 +1193,7 @@ export class LibreEntityConverter {
       entity,
       'oblique_angle'
     ).data as number
+    const styleName = libredwg.dwg_entity_text_get_style_name(entity)
     // const style_ptr = libredwg.dwg_dynapi_entity_value(entity, 'style').data as number
     const generationFlag = libredwg.dwg_dynapi_entity_value(
       entity,
@@ -1055,11 +1219,102 @@ export class LibreEntityConverter {
       rotation: rotation,
       xScale: xScale,
       obliqueAngle: obliqueAngle,
-      styleName: '', // TODO: Set the correct value
+      styleName: styleName,
       generationFlag: generationFlag,
       halign: halign as DwgTextHorizontalAlign,
       valign: valign as DwgTextVerticalAlign,
       extrusionDirection: extrusionDirection
+    }
+  }
+
+  private convertWipeout(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): DwgWipeoutEntity {
+    const libredwg = this.libredwg
+    const version = libredwg.dwg_dynapi_entity_value(entity, 'class_version')
+      .data as number
+    const position = libredwg.dwg_dynapi_entity_value(entity, 'pt0')
+      .data as DwgPoint3D
+    const uPixel = libredwg.dwg_dynapi_entity_value(entity, 'uvec')
+      .data as DwgPoint3D
+    const vPixel = libredwg.dwg_dynapi_entity_value(entity, 'vvec')
+      .data as DwgPoint3D
+    const imageSize = libredwg.dwg_dynapi_entity_value(entity, 'image_size')
+      .data as DwgPoint2D
+    const flags = libredwg.dwg_dynapi_entity_value(entity, 'display_props')
+      .data as number
+    const clipping = libredwg.dwg_dynapi_entity_value(entity, 'clipping')
+      .data as number
+    const brightness = libredwg.dwg_dynapi_entity_value(entity, 'brightness')
+      .data as number
+    const contrast = libredwg.dwg_dynapi_entity_value(entity, 'contrast')
+      .data as number
+    const fade = libredwg.dwg_dynapi_entity_value(entity, 'fade').data as number
+    const clipMode = libredwg.dwg_dynapi_entity_value(entity, 'clip_mode')
+      .data as number
+    const clippingBoundaryType = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'clip_boundary_type'
+    ).data as number
+    const countBoundaryPoints = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'num_clip_verts'
+    ).data as number
+    const clip_verts = libredwg.dwg_dynapi_entity_value(entity, 'clip_verts')
+      .data as number
+    const clippingBoundaryPath = libredwg.dwg_ptr_to_point3d_array(
+      clip_verts,
+      countBoundaryPoints
+    )
+
+    const imagedef_ref = libredwg.dwg_dynapi_entity_value(entity, 'imagedef')
+      .data as number
+    const imageDefHandle = libredwg.dwg_ref_get_absref(imagedef_ref)
+    const imagedefreactor_ref = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'imagedefreactor'
+    ).data as number
+    const imageDefReactorHandle =
+      libredwg.dwg_ref_get_absref(imagedefreactor_ref)
+
+    return {
+      type: 'WIPEOUT',
+      ...commonAttrs,
+      version: version,
+      position: position,
+      uPixel: uPixel,
+      vPixel: vPixel,
+      imageSize: imageSize,
+      imageDefHandle: imageDefHandle,
+      flags: flags as DwgImageFlags,
+      clipping: clipping,
+      brightness: brightness,
+      contrast: contrast,
+      fade: fade,
+      imageDefReactorHandle: imageDefReactorHandle,
+      clippingBoundaryType:
+        clippingBoundaryType as DwgImageClippingBoundaryType,
+      countBoundaryPoints: countBoundaryPoints,
+      clippingBoundaryPath: clippingBoundaryPath,
+      clipMode: clipMode
+    }
+  }
+
+  private convertXline(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): DwgXlineEntity {
+    const libredwg = this.libredwg
+    const firstPoint = libredwg.dwg_dynapi_entity_value(entity, 'point')
+      .data as DwgPoint3D
+    const unitDirection = libredwg.dwg_dynapi_entity_value(entity, 'vector')
+      .data as DwgPoint3D
+    return {
+      type: 'XLINE',
+      ...commonAttrs,
+      firstPoint: firstPoint,
+      unitDirection: unitDirection
     }
   }
 

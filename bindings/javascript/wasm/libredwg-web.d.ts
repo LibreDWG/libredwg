@@ -247,7 +247,9 @@ interface WasmModule {
   __ZdlPv(_0: number): void;
   __ZN10emscripten3val3setIA10_cNSt3__212basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEEEEvRKT_RKT0_(_0: number, _1: number, _2: number): void;
   __Z20point2d_to_js_objectPK12dwg_point_2d(_0: number, _1: number): void;
+  __Z24bitcode_2rd_to_js_objectPK16_dwg_bitcode_2rd(_0: number, _1: number): void;
   __Z20point3d_to_js_objectPK12dwg_point_3d(_0: number, _1: number): void;
+  __Z24bitcode_3rd_to_js_objectPK16_dwg_bitcode_3rd(_0: number, _1: number): void;
   __Z20point4d_to_js_objectPK25_dwg_SPLINE_control_point(_0: number, _1: number): void;
   __Z18dwg_handle_wrapperm(_0: number, _1: number): void;
   __Z22dwg_object_ref_wrapperm(_0: number, _1: number): void;
@@ -381,6 +383,16 @@ interface WasmModule {
   __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagEbJmRKNSt3__212basic_stringIcNS4_11char_traitsIcEENS4_9allocatorIcEEEEmbEE6invokeEPFbmSC_mbEmPNS0_11BindingTypeISA_vEUt_Emb(_0: number, _1: number, _2: number, _3: number, _4: number): number;
   __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagEbJmRKNSt3__212basic_stringIcNS4_11char_traitsIcEENS4_9allocatorIcEEEESC_mbEE6invokeEPFbmSC_SC_mbEmPNS0_11BindingTypeISA_vEUt_ESJ_mb(_0: number, _1: number, _2: number, _3: number, _4: number, _5: number): number;
   __ZN10emscripten8internal7InvokerINS0_3rvp11default_tagENSt3__212basic_stringIcNS4_11char_traitsIcEENS4_9allocatorIcEEEEJmmmEE6invokeEPFSA_mmmEmmm(_0: number, _1: number, _2: number, _3: number): number;
+  __Z44dwg_entity_polyline_2d_get_numpoints_wrapperm(_0: number, _1: number): void;
+  _dwg_object_polyline_2d_get_numpoints(_0: number, _1: number): number;
+  __Z41dwg_entity_polyline_2d_get_points_wrapperm(_0: number, _1: number): void;
+  _dwg_object_polyline_2d_get_points(_0: number, _1: number): number;
+  __ZNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2B8ne190106ILi0EEEPKc(_0: number, _1: number): number;
+  __Z21vertex2d_to_js_objectP21_dwg_entity_VERTEX_2D(_0: number, _1: number): void;
+  __Z43dwg_entity_polyline_2d_get_vertices_wrapperm(_0: number, _1: number): void;
+  _dwg_ref_object(_0: number, _1: number): number;
+  _dwg_object_to_VERTEX_2D(_0: number): number;
+  _dwg_next_object(_0: number): number;
   __Z21dwg_read_file_wrapperRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE(_0: number, _1: number): void;
   _dwg_read_file(_0: number, _1: number): number;
   __Z28dwg_find_tablehandle_wrappermRKNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEES7_(_0: number, _1: number, _2: number): number;
@@ -460,7 +472,6 @@ interface WasmModule {
   _dwg_get_entities(_0: number): number;
   __Z28dwg_get_entity_layer_wrapperm(_0: number): number;
   __Z23dwg_next_object_wrapperm(_0: number): number;
-  _dwg_next_object(_0: number): number;
   __Z23dwg_next_entity_wrapperm(_0: number): number;
   _dwg_next_entity(_0: number): number;
   __Z23dwg_next_handle_wrapperm(_0: number): BigInt;
@@ -468,7 +479,6 @@ interface WasmModule {
   __Z25dwg_next_handseed_wrapperm(_0: number): BigInt;
   _dwg_next_handseed(_0: number): BigInt;
   __Z22dwg_ref_object_wrappermm(_0: number, _1: number): number;
-  _dwg_ref_object(_0: number, _1: number): number;
   __Z31dwg_ref_object_relative_wrappermmm(_0: number, _1: number, _2: number): number;
   _dwg_ref_object_relative(_0: number, _1: number, _2: number): number;
   __Z29dwg_ref_object_silent_wrappermm(_0: number, _1: number): number;
@@ -1738,7 +1748,6 @@ interface WasmModule {
   _dwg_object_to_TOLERANCE(_0: number): number;
   _dwg_object_to_TRACE(_0: number): number;
   _dwg_object_to_UNKNOWN_ENT(_0: number): number;
-  _dwg_object_to_VERTEX_2D(_0: number): number;
   _dwg_object_to_VERTEX_3D(_0: number): number;
   _dwg_object_to_VERTEX_MESH(_0: number): number;
   _dwg_object_to_VERTEX_PFACE(_0: number): number;
@@ -1961,8 +1970,6 @@ interface WasmModule {
   _dwg_set_ENTITY_common_utf8text(_0: number, _1: number, _2: number): number;
   _dwg_get_OBJECT_common_utf8text(_0: number, _1: number, _2: number, _3: number): number;
   _dwg_set_OBJECT_common_utf8text(_0: number, _1: number, _2: number): number;
-  _dwg_object_polyline_2d_get_numpoints(_0: number, _1: number): number;
-  _dwg_object_polyline_2d_get_points(_0: number, _1: number): number;
   _dwg_object_polyline_3d_get_numpoints(_0: number, _1: number): number;
   _dwg_object_polyline_3d_get_points(_0: number, _1: number): number;
   _dwg_ent_lwpline_get_bulges(_0: number, _1: number): number;
@@ -2530,6 +2537,9 @@ interface EmbindModule {
   dwg_dynapi_entity_value(_0: number, _1: EmbindString): any;
   dwg_dynapi_common_value(_0: number, _1: EmbindString): any;
   dwg_dynapi_subclass_value(_0: number, _1: EmbindString, _2: EmbindString): any;
+  dwg_entity_polyline_2d_get_numpoints(_0: number): any;
+  dwg_entity_polyline_2d_get_points(_0: number): any;
+  dwg_entity_polyline_2d_get_vertices(_0: number): any;
   dwg_read_file(_0: EmbindString): any;
 }
 
