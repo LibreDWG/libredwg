@@ -1790,14 +1790,17 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         {
           int32_t old_section_number = 0;
           // bug in Teigha with Template, with num_sections=0
+          /*
           if (info->num_sections == 0
               && info->fixedtype == SECTION_TEMPLATE
-              /*&& is_teigha */
+              // && is_teigha
               && info->size >= 4)
             {
               LOG_INFO ("Fixup TEMPLATE.num_sections to 1 (Teigha bug)\n")
               info->num_sections = 1;
             }
+          */
+          /*
           if (info->size > (int64_t)info->num_sections
                                * (int64_t)info->max_decomp_size * 2L)
             {
@@ -1808,6 +1811,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               info->max_decomp_size = info->size = info->num_sections = 0;
               error |= DWG_ERR_VALUEOUTOFBOUNDS;
             }
+          */
           if (info->num_sections > 1 && info->size < info->max_decomp_size)
             {
               // on mult. blocks, size must exceed the size of the first block
