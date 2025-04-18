@@ -1033,13 +1033,6 @@ dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg)
   loglevel = oldloglevel;
 }
 
-void
-bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size)
-{
-  memcpy (dst, *src, size);
-  *src += size;
-}
-
 /* endian specific */
 void
 bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
@@ -1085,6 +1078,14 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   *src += size;
   size -= n * sizeof (uint32_t);
   assert (size == 0);
+}
+
+#if 0
+void
+bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src, size_t size)
+{
+  memcpy (dst, *src, size);
+  *src += size;
 }
 
 /* endian specific */
@@ -1133,6 +1134,7 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   size -= n * sizeof (uint64_t);
   assert (size == 0);
 }
+#endif
 
 // always byte-aligned
 static unsigned char
@@ -2121,6 +2123,23 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
 	  dec.size = dec.byte + info->max_decomp_size; /*es.fields.page_size;*/
           LOG_INSANE ("dec size: %" PRIuSIZE "\n", (size_t)dec.size)
           dat->size = dat->byte + es.fields.data_size;
+#ifdef DEBUG
+          if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
+            {
+              if (type == SECTION_AUXHEADER)
+                {
+                  FILE *fp = fopen ("comp_auxh.bin", "wb");
+                  fwrite (&dat->chain[dat->byte], 1, es.fields.data_size, fp);
+                  fclose(fp);
+                }
+              else if (type == SECTION_OBJFREESPACE)
+                {
+                  FILE *fp = fopen ("comp_ofs.bin", "wb");
+                  fwrite (&dat->chain[dat->byte], 1, es.fields.data_size, fp);
+                  fclose(fp);
+                }
+            }
+#endif
           error = decompress_R2004_section (dat, &dec);
           dat->size = orig_size;
           if (error > DWG_ERR_CRITICAL)
