@@ -4131,11 +4131,11 @@ bit_explore_chain (Bit_Chain *dat, size_t from, size_t size)
   ob = dat->byte;
   dat->byte = from;
   if (from % 16 != 0)
-    printf ("\n[0x%04lX]: ", from);
+    printf ("\n[0x%04" PRI_SIZE_T_MODIFIER "X]: ", from);
   for (i = from; i < from + size; i++)
     {
       if (i % 16 == 0)
-        printf ("\n[0x%04lX]: ", i);
+        printf ("\n[0x%04" PRI_SIZE_T_MODIFIER "X]: ", i);
       c = bit_read_RC (dat);
       printf ("%02x", c);
     }
