@@ -1,8 +1,12 @@
 import { DwgPoint2D, DwgPoint3D } from '../common'
 import { DwgEntity } from './entity'
-import { DwgImageClipMode, DwgImageClippingBoundaryType, DwgImageFlags } from './image'
+import {
+  DwgImageClipMode,
+  DwgImageClippingBoundaryType,
+  DwgImageFlags
+} from './image'
 
-export interface DwgWipeoutEntity  extends DwgEntity {
+export interface DwgWipeoutEntity extends DwgEntity {
   type: 'WIPEOUT'
   version: number
   position: DwgPoint3D
@@ -21,4 +25,3 @@ export interface DwgWipeoutEntity  extends DwgEntity {
   clippingBoundaryPath: DwgPoint3D[]
   clipMode: DwgImageClipMode
 }
-

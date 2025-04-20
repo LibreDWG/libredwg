@@ -1,9 +1,9 @@
 {
   "name": "@mlightcad/libredwg-web",
-  "description": "a webassembly version of libredwg, which can read/write DXF files (in both formats, ascii and binary form) and read DWG files from AutoCAD R14 to AutoCAD 2020.",
+  "description": "A DWG/DXF JavaScript parser based on libredwg",
   "license": "GPL-2.0-only",
   "private": false,
-  "version": "0.0.14",
+  "version": "0.1.0",
   "author": "MLight Lee <mlight.lee@outlook.com>",
   "type": "module",
   "repository": {
@@ -25,9 +25,9 @@
     "webassembly"
   ],
   "scripts": {
-    "demo": "live-server test --entry-file=index.html",
+    "demo": "live-server examples --entry-file=index.html",
     "doc": "typedoc",
-    "build": "tsc && vite build && cp -f dist/libredwg-web.js test/",
+    "build": "tsc && vite build && cp -rf wasm/ examples/ && cp -rf dist examples/",
     "build:prepare": "mkdir -p ../../build-wasm && cd ../../build-wasm && emconfigure ../configure CFLAGS=\"-O2 -sUSE_ZLIB=1\" CC=emcc --enable-release --disable-docs --disable-write --disable-bindings --disable-shared --disable-json --disable-dxf",
     "build:obj": "cd ../../build-wasm && emmake make",
     "build:wasm": "cd ../../build-wasm && emcc ../bindings/javascript/embind/*.cpp src/*.o -O2 -s LINKABLE=1 -lembind -std=c++11 -Isrc -I../src -I../include -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s EXPORT_ES6=1 -s MODULARIZE=1 -s EXPORT_NAME=\"createModule\" -sEXPORTED_RUNTIME_METHODS=FS,ENV,ccall,cwrap,UTF8ToString,stringToNewUTF8,setValue --emit-tsd libredwg-web.d.ts",

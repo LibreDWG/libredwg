@@ -1,3 +1,4 @@
+import { DwgEntity } from './entities'
 import { DwgHeader } from './header'
 import { DwgImageDefObject, DwgLayoutObject } from './objects'
 import {
@@ -24,4 +25,5 @@ export interface DwgDatabase {
     LAYOUT: DwgLayoutObject[]
   }
   header: DwgHeader
+  entities: DwgEntity[]
 }

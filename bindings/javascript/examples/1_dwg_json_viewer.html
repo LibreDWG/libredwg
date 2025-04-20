@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DWG Model Json Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.2.0/dist/jsoneditor.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.2.0/dist/jsoneditor.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>DWG Database JSON Viewer</h1>
+    <input type="file" id="fileInput" accept=".dwg" />
+    <div id="jsoneditor"></div>
+    <script type="module" src="dist/libredwg-web.js" defer></script>
+    <script type="module" >
+      import { Dwg_File_Type, LibreDwg } from './dist/libredwg-web.js'
+
+      // load libredwg webassembly module
+      const libredwg = await LibreDwg.create()
+
+      // create the editor
+      const container = document.getElementById('jsoneditor')
+      const options = {
+        mode: 'view'
+      }
+      const editor = new JSONEditor(container, options)
+    
+      // handle file input change event
+      const fileInput = document.getElementById('fileInput')
+      fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0]
+        if (file) {
+          // create a FileReader to read the file
+          const reader = new FileReader()
+
+          // define the callback function for when the file is read
+          reader.onload = function(e) {
+            const fileContent = e.target.result
+            try {
+              const dwg = libredwg.dwg_read_data(fileContent, Dwg_File_Type.DWG)
+              const model = libredwg.convert(dwg)
+              editor.set(model)
+            } catch (error) {
+              console.error('Error processing DWG file: ', error)
+            }
+          }
+
+          // read the file
+          reader.readAsArrayBuffer(file)
+        } else {
+          console.log('No file selected')
+        }
+      })
+    </script>
+</body>
+</html>

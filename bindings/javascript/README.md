@@ -59,20 +59,32 @@ npm install @mlightcad/libredwg-web
 The raw web assembly module (wasm file and JavaScript glue code file) is stored in folder [wasm](./wasm/). 
 
 ```javascript
-import createModule from "@mlightcad/libredwg-web/wasm/libredwg-web.js";
+import { createModule } from "@mlightcad/libredwg-web/wasm/libredwg-web.js";
+
+// Create libredwg module
 const libredwg = await createModule();
 
-// The second paramter represents file types
-// - 0: dwg file
-// - 1: dxf file
-const dwg = libredwg.dwg_read_data(fileContent, 0);
+// Store file content to one temporary file and read it
+const fileName = 'tmp.dwg';
+libredwg.FS.writeFile(
+  fileName,
+  new Uint8Array(fileContent)
+);
+const result = libredwg.dwg_read_file(fileName);
+if (result.error != 0) {
+  console.log('Failed to open dwg file with error code: ', result.error);
+}
+libredwg.FS.unlink(fileName);
+
+// Get pointer to Dwg_Data
+const data = result.data;
 ```
 
 ### Use Web Assembly Wrapper
 
 Web assembly wrapper is stored in folder [dist](./dist/). It provides one class `LibreDwg` to wrap the web assembly. This class provides
 
-- Method to convert dwg data to [DwgDatabase](./src/types/database.ts) instance with the strong type definition so that it is easy to use.
+- Method to convert dwg data to [DwgDatabase](https://mlight-lee.github.io/libredwg-web/docs/interfaces/database_database.DwgDatabase.html) instance with the strong type definition so that it is easy to use.
 - More methods that the raw web assembly API doesn't provide. 
 
 ```typescript
@@ -92,7 +104,7 @@ Those interfaces are much more easier to use with better data structure. It is q
 
 ### Interfaces with prefix 'Dwg_'
 
-Those interfaces are JavaScript version of `structs` defined in libredwg C++ code. Only a few `structs` have the correponding JavaScript interface. Most of them are defined to make it easier to convert libredwg data structure to [DwgDatabase](./src/types/database.ts).
+Those interfaces are JavaScript version of `structs` defined in libredwg C++ code. Only a few `structs` have the correponding JavaScript interface. Most of them are defined to make it easier to convert libredwg data structure to [DwgDatabase](https://mlight-lee.github.io/libredwg-web/docs/interfaces/database_database.DwgDatabase.html).
 
 So it is recommend to use interfaces with prefix 'Dwg'.
 
