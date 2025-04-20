@@ -108,7 +108,7 @@ static void
 decompress_R2004_section_tests (void)
 {
   int result;
-  Bit_Chain src, dec = {0};
+  static Bit_Chain src, dec = {0};
   // from example_2004 via DEBUG
   unsigned char comp_auxh_bin[225] = { // very bad compression indeed
     0x00, 0x01, 0xff, 0x88, 0x01, 0x21, 0x00, 0x1d, 0x00, 0x19, 0x00, 0x00,
@@ -172,8 +172,12 @@ decompress_R2004_section_tests (void)
 
   src.chain = comp_auxh_bin;
   src.size = sizeof comp_auxh_bin;
+  src.bit = 0;
+  src.byte = 0UL;
   bit_chain_alloc_size (&dec, sizeof decomp_auxh_bin);
   dec.size = sizeof decomp_auxh_bin;
+  dec.bit = 0;
+  dec.byte = 0UL;
   result = decompress_R2004_section (&src, &dec);
   if (result == 0 && dec.size == sizeof decomp_auxh_bin && memcmp (dec.chain, decomp_auxh_bin, sizeof decomp_auxh_bin) == 0)
     pass ();
