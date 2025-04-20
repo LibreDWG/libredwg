@@ -3,7 +3,7 @@
 
 #include "dwg.h"
 #include "dwg_api.h"
-#include "binding.h"
+#include "binding_common.h"
 
 
 using namespace emscripten;

@@ -4,7 +4,7 @@
 
 #include "dwg.h"
 #include "dwg_api.h"
-#include "binding.h"
+#include "binding_common.h"
 
 using namespace emscripten;
 
@@ -323,32 +323,6 @@ BITCODE_RLL dwg_next_handseed_wrapper(uintptr_t dwg_ptr) {
   return dwg_next_handseed(dwg);
 }
 
-uintptr_t dwg_ref_object_wrapper(
-  uintptr_t dwg_ptr,
-  uintptr_t ref_ptr) {
-  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
-  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
-  return reinterpret_cast<uintptr_t>(dwg_ref_object(dwg, ref));
-}
-
-uintptr_t dwg_ref_object_relative_wrapper(
-  uintptr_t dwg_ptr,
-  uintptr_t ref_ptr,
-  uintptr_t obj_ptr) {
-  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
-  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
-  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
-  return reinterpret_cast<uintptr_t>(dwg_ref_object_relative(dwg, ref, obj));
-}
-
-uintptr_t dwg_ref_object_silent_wrapper(
-  uintptr_t dwg_ptr,
-  uintptr_t ref_ptr) {
-  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
-  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
-  return reinterpret_cast<uintptr_t>(dwg_ref_object_silent(dwg, ref));
-}
-
 uintptr_t get_first_owned_entity_wrapper(uintptr_t obj_ptr) {
   Dwg_Object* obj= reinterpret_cast<Dwg_Object*>(obj_ptr);
   return reinterpret_cast<uintptr_t>(get_first_owned_entity(obj));  
@@ -431,36 +405,6 @@ uintptr_t dwg_get_next_object_wrapper(
   return reinterpret_cast<uintptr_t>(dwg_get_next_object(dwg, type, index));
 }
 
-/** 
- * Resolve handle absref value to Dwg_Object*. 
-*/
-uintptr_t dwg_resolve_handle_wrapper(
-  uintptr_t dwg_ptr,
-  BITCODE_RLL absref) {
-  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
-  return reinterpret_cast<uintptr_t>(dwg_resolve_handle(dwg, absref));
-}
-
-/** 
- * Resolve handle to Dwg_Object* without warning info
-*/
-uintptr_t dwg_resolve_handle_silent_wrapper(
-  uintptr_t dwg_ptr,
-  const BITCODE_RLL absref) {
-  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
-  return reinterpret_cast<uintptr_t>(dwg_resolve_handle_silent(dwg, absref));
-}
-
-/** 
- * Resolve Dwg_Object_Ref* to Dwg_Object*. 
-*/
-int dwg_resolve_handleref_wrapper(
-  uintptr_t ref_ptr,
-  uintptr_t obj_ptr) {
-  Dwg_Object_Ref* ref = reinterpret_cast<Dwg_Object_Ref*>(ref_ptr);
-  Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
-  return dwg_resolve_handleref(ref, obj);
-}
 
 uintptr_t dwg_resolve_jump_wrapper(uintptr_t obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
@@ -1048,9 +992,7 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_next_entity);
   DEFINE_FUNC(dwg_next_handle);
   DEFINE_FUNC(dwg_next_handseed);
-  DEFINE_FUNC(dwg_ref_object);
-  DEFINE_FUNC(dwg_ref_object_relative);
-  DEFINE_FUNC(dwg_ref_object_silent);
+
   DEFINE_FUNC(get_first_owned_entity);
   DEFINE_FUNC(get_next_owned_entity);
   DEFINE_FUNC(get_first_owned_subentity);
@@ -1061,9 +1003,7 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(get_next_owned_block_entity);
   DEFINE_FUNC(dwg_get_first_object);
   DEFINE_FUNC(dwg_get_next_object);
-  DEFINE_FUNC(dwg_resolve_handle);
-  DEFINE_FUNC(dwg_resolve_handle_silent);
-  DEFINE_FUNC(dwg_resolve_handleref);
+
   DEFINE_FUNC(dwg_resolve_jump);
   DEFINE_FUNC(dwg_section_type);
   // DEFINE_FUNC(dwg_section_wtype);

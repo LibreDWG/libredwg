@@ -32,6 +32,7 @@ import {
   Dwg_Object_Object_TIO_Ptr,
   Dwg_Object_Ptr,
   Dwg_Object_Ref,
+  Dwg_Object_Ref_Ptr,
   Dwg_Object_STYLE_Ptr,
   Dwg_Object_Type,
   Dwg_Object_VERTEX_2D_Ptr,
@@ -98,13 +99,113 @@ export class LibreDwg {
   }
 
   /**
+   * Frees the whole DWG. all tables, sections, objects, ...
+   * @param data Pointer to Dwg_Data instance.
+   */
+  dwg_free(data: Dwg_Data_Ptr) {
+    this.wasmInstance.dwg_free(data)
+  }
+
+  /**
+   * Frees the object (all three structs and its fields)
+   * @group Dwg_Object Methods
+   * @param ptr Pointer to one Dwg_Object instance.
+   */
+  dwg_free_object(obj_ptr: Dwg_Object_Ptr) {
+    this.wasmInstance.dwg_free_object(obj_ptr)
+  }
+
+  /**
+   * Gets an object by its handle.
+   * @group Handle Conversion Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @param ref_ptr Pointer to Dwg_Object_Ref instance.
+   * @returns Returns the object whose handle is equal to the given handle.
+   */
+  dwg_ref_object(
+    data: Dwg_Data_Ptr,
+    ref_ptr: Dwg_Object_Ref_Ptr
+  ): Dwg_Object_Ptr {
+    return this.wasmInstance.dwg_ref_object(data, ref_ptr)
+  }
+
+  /**
+   * Gets an object by its handle without warning message.
+   * @group Handle Conversion Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @param ref_ptr Pointer to Dwg_Object_Ref instance.
+   * @returns Returns the object whose handle is equal to the given handle.
+   */
+  dwg_ref_object_silent(
+    data: Dwg_Data_Ptr,
+    ref_ptr: Dwg_Object_Ref_Ptr
+  ): Dwg_Object_Ptr {
+    return this.wasmInstance.dwg_ref_object_silent(data, ref_ptr)
+  }
+
+  /**
+   * Gets an object given its handle and relative base object.
+   * @group Handle Conversion Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @param ref_ptr Pointer to Dwg_Object_Ref instance.
+   * @param obj_ptr Pointer to the relative base object (Dwg_Object instance).
+   * @returns Returns the object given its handle and relative base object.
+   */
+  dwg_ref_object_relative(
+    data: Dwg_Data_Ptr,
+    ref_ptr: Dwg_Object_Ref_Ptr,
+    obj_ptr: Dwg_Object_Ptr
+  ): Dwg_Object_Ptr {
+    return this.wasmInstance.dwg_ref_object_relative(data, ref_ptr, obj_ptr)
+  }
+
+  /**
+   * Resolves handle absref value to Dwg_Object instance.
+   * @group Handle Conversion Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @param absref Handle absref value.
+   * @returns Returns the object with the given handle absref value.
+   */
+  dwg_resolve_handle(data: Dwg_Data_Ptr, absref: bigint): Dwg_Object_Ptr {
+    return this.wasmInstance.dwg_resolve_handle(data, absref)
+  }
+
+  /**
+   * Resolves handle absref value to Dwg_Object instance without warning message.
+   * @group Handle Conversion Methods
+   * @param data Pointer to Dwg_Data instance.
+   * @param absref Handle absref value.
+   * @returns Returns the object with the given handle absref value.
+   */
+  dwg_resolve_handle_silent(
+    data: Dwg_Data_Ptr,
+    absref: bigint
+  ): Dwg_Object_Ptr {
+    return this.wasmInstance.dwg_resolve_handle_silent(data, absref)
+  }
+
+  /**
+   * Sets ref->absolute_ref from the specified obj for a subsequent dwg_resolve_handle
+   * @group Handle Conversion Methods
+   * @param ref_ptr Pointer to Dwg_Object_Ref instance.
+   * @param obj_ptr Pointer to Dwg_Object instance.
+   * @returns Returns 1 if set absref value correctly. Otherwise, return 0.
+   */
+  dwg_resolve_handleref(
+    ref_ptr: Dwg_Object_Ref_Ptr,
+    obj_ptr: Dwg_Object_Ptr
+  ): number {
+    return this.wasmInstance.dwg_resolve_handleref(ref_ptr, obj_ptr)
+  }
+
+  /**
    * Returns all of entities in the model space. Each item in returned array
    * is one Dwg_Object pointer (Dwg_Object*).
    * @group GetAll Methods
    * @param data Pointer to Dwg_Data instance.
    * @returns Returns all of entities in the model space.
    */
-  dwg_getall_entitie_in_model_space(data: Dwg_Data_Ptr) {
+  dwg_getall_entities_in_model_space(data: Dwg_Data_Ptr) {
     const wasmInstance = this.wasmInstance
     const model_space = wasmInstance.dwg_model_space_object(data)
     const entities = []
@@ -339,28 +440,6 @@ export class LibreDwg {
   }
 
   /**
-   * Returns the first entity owned by the block header or null
-   * @param ptr Pointer to the block header.
-   * @returns Returns the first entity owned by the block header or null
-   */
-  get_first_owned_entity(ptr: Dwg_Object_Ptr): Dwg_Object_Ptr {
-    return this.wasmInstance.get_first_owned_entity(ptr)
-  }
-
-  /**
-   * Returns the next entity owned by the block header or null.
-   * @param ptr Pointer to the block header.
-   * @param current Pointer to the current entity in the block header.
-   * @returns Returns the next entity owned by the block header or null.
-   */
-  get_next_owned_entity(
-    ptr: Dwg_Object_Ptr,
-    current: Dwg_Object_Ptr
-  ): Dwg_Object_Ptr {
-    return this.wasmInstance.get_next_owned_entity(ptr, current)
-  }
-
-  /**
    * Converts one C++ unsigned char array to one JavaScript number array.
    * @group Array Methods
    * @param ptr Pointer to C++ unsigned char array.
@@ -509,6 +588,7 @@ export class LibreDwg {
   /**
    * Converts one C++ table cell array to one JavaScript table cell array.
    * @group Array Methods
+   * @group Dwg_Entity_TABLE Methods
    * @param ptr Pointer to C++ table cell array.
    * @param size The size of C++ table cell array.
    * @returns Returns one JavaScript table cell array from the specified C++ table cell array.
@@ -523,6 +603,7 @@ export class LibreDwg {
   /**
    * Converts one C++ hatch definition line array to one JavaScript hatch definition line array.
    * @group Array Methods
+   * @group Dwg_Entity_HATCH Methods
    * @param ptr Pointer to C++ hatch definition line array.
    * @param size The size of C++ hatch definition line array.
    * @returns Returns one JavaScript hatch definition line array from the specified C++ hatch definition line array.
@@ -537,6 +618,7 @@ export class LibreDwg {
   /**
    * Converts one C++ hatch path array to one JavaScript hatch path array.
    * @group Array Methods
+   * @group Dwg_Entity_HATCH Methods
    * @param ptr Pointer to C++ hatch path array.
    * @param size The size of C++ hatch path array.
    * @returns Returns one JavaScript hatch path array from the specified C++ hatch path array.
@@ -730,6 +812,30 @@ export class LibreDwg {
       name,
       base_pt // preR13 only
     }
+  }
+
+  /**
+   * Returns the first entity owned by the block header or null
+   * @group Dwg_Entity_BLOCK_HEADER Methods
+   * @param ptr Pointer to the block header.
+   * @returns Returns the first entity owned by the block header or null
+   */
+  get_first_owned_entity(ptr: Dwg_Object_Ptr): Dwg_Object_Ptr {
+    return this.wasmInstance.get_first_owned_entity(ptr)
+  }
+
+  /**
+   * Returns the next entity owned by the block header or null.
+   * @group Dwg_Entity_BLOCK_HEADER Methods
+   * @param ptr Pointer to the block header.
+   * @param current Pointer to the current entity in the block header.
+   * @returns Returns the next entity owned by the block header or null.
+   */
+  get_next_owned_entity(
+    ptr: Dwg_Object_Ptr,
+    current: Dwg_Object_Ptr
+  ): Dwg_Object_Ptr {
+    return this.wasmInstance.get_next_owned_entity(ptr, current)
   }
 
   /**

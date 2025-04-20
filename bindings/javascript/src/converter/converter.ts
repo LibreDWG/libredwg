@@ -68,7 +68,8 @@ export class LibreDwgConverter {
       },
       header: {
         variables: new Map()
-      }
+      },
+      entities: []
     }
     const libredwg = this.libredwg
     this.convertHeader(data, db.header)
@@ -81,9 +82,13 @@ export class LibreDwgConverter {
         const fixedtype = libredwg.dwg_object_get_fixedtype(obj)
         switch (fixedtype) {
           case Dwg_Object_Type.DWG_TYPE_BLOCK_HEADER:
-            db.tables.BLOCK_RECORD.entries.push(
-              this.convertBlockRecord(tio, obj)
-            )
+            {
+              const btr = this.convertBlockRecord(tio, obj)
+              db.tables.BLOCK_RECORD.entries.push(btr)
+              if (btr.name == '*Model_Space') {
+                db.entities = btr.entities
+              }
+            }
             break
           case Dwg_Object_Type.DWG_TYPE_DIMSTYLE:
             db.tables.DIMSTYLE.entries.push(this.convertDimStyle(tio, obj))

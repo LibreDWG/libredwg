@@ -6,7 +6,7 @@
 #include "dwg_api.h"
 #include "common.h"
 #include "bits.h"
-#include "binding.h"
+#include "binding_common.h"
 
 using namespace emscripten;
 
