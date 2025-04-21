@@ -1379,16 +1379,19 @@ add_section (Dwg_Data *dwg)
 }
 
 // needed for r2004+ encode and decode (check-only)
-// p 4.3: first calc with seed 0 and checksum 0, then compress,
-// then recalc with prev. checksum as seed
-// FIXME
+// p 4.3: first calc the header with seed 0 and skipped checksum (as 0),
+// then compress, then calc the compressed body with prev. checksum as seed.
+// Does not advance dat->byte.
 uint32_t
 dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
-                           int32_t size)
+                           int32_t size, bool skip_checksum)
 {
   uint32_t sum1 = seed & 0xffff;
   uint32_t sum2 = seed >> 0x10;
   unsigned char *data = &dat->chain[dat->byte];
+  // only for skip_checksum
+  unsigned char *before = &dat->chain[dat->byte + 16];
+  unsigned char *after = &dat->chain[dat->byte + 20];
   unsigned char *end = &dat->chain[dat->byte + size];
   if (dat->byte + size > dat->size)
     {
@@ -1401,7 +1404,9 @@ dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
       size -= chunksize;
       for (uint32_t i = 0; i < chunksize; i++)
         {
-          sum1 += htole32 (*data);
+          if (!skip_checksum || data < before || data >= after)
+            sum1 += *data;
+          // else assume 0 for the existing checksum. mask it out
           sum2 += sum1;
           data++;
         }
@@ -3443,7 +3448,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
    * Section Page Map
    */
   {
-    BITCODE_RL checksum, checksum1;
+    BITCODE_RL checksum, checksum1, checksum2;
     Bit_Chain *dat = file_dat;
     size_t old_address = dat->byte;
     size_t start;
@@ -3455,6 +3460,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
                    + 0x100)
     dat->byte = dwg->fhdr.r2004_header.section_map_address + 0x100;
     start = dwg->fhdr.r2004_header.section_map_address;
+
     // Some section_map_address overflow past the dwg. GH #617
     // maybe search the magic type backwards then. (in 0x20 page boundary
     // steps) e.g. 1344464555_1_2004
@@ -3492,31 +3498,25 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RL (decomp_data_size, 0);
     FIELD_RL (comp_data_size, 0);
     FIELD_RL (compression_type, 0);
-    LOG_INSANE ("@0x%zx\n", dat->byte);
-    // memset (&dat->chain[dat->byte - 4], 0, 4);
-    //  seed 0xa751074, offset 0x100, size 16
-    dat->byte = start + 0x100;
-    // FIXME
-    checksum1 = dwg_section_page_checksum (0, dat, 20);
-    LOG_TRACE ("checksum1 => 0x%08x with seed and crc 0\n",
-               (unsigned)checksum1);
-    dat->byte = start + 0x110;
     FIELD_RLx (checksum, 0);
-    // bit_write_BL (dat, _obj->checksum);
-    // dat->byte = start + 0x100;
-    checksum
-        = dwg_section_page_checksum (checksum1, dat, _obj->comp_data_size);
+    LOG_INSANE ("@0x%zx\n", dat->byte);
+    // get the seed from the header (skipping the checksum)
+    dat->byte = start + 0x100;
+    checksum1 = dwg_section_page_checksum (0, dat, 20, true);
+    // now the compressed buffer, not the header. not skipping the checksum
     dat->byte = start + 0x114;
-    if (checksum == _obj->checksum)
+    checksum2 = dwg_section_page_checksum (checksum1, dat, _obj->comp_data_size, false);
+    LOG_TRACE ("checksum => 0x%08x with calculated seed 0x%08x\n",
+               (unsigned)checksum2, (unsigned)checksum1);
+    if (checksum2 == _obj->checksum)
       {
-        LOG_TRACE ("checksum: 0x%08x (verified)\n", (unsigned)checksum);
+        LOG_TRACE ("checksum: 0x%08x (verified)\n", (unsigned)checksum2);
       }
     else
       {
-        LOG_WARN ("checksum: 0x%08x (calculated) CRC mismatch 0x%zx-0x%zx\n",
-                  (unsigned)checksum, start + 0x114,
-                  start + 0x114 + _obj->comp_data_size);
-        // error |= DWG_ERR_WRONGCRC;
+        LOG_WARN ("checksum: 0x%08x (calculated) page checksum mismatch 0x%zx-0x%zx\n",
+                  (unsigned)checksum2, start + 0x100, start + 0x114);
+        error |= DWG_ERR_WRONGCRC;
       }
   }
   return error;

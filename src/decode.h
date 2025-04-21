@@ -98,7 +98,8 @@ void decrypt_R2004_header (BITCODE_RC *restrict dest,
                            const BITCODE_RC *restrict src, size_t size);
 void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
 uint32_t dwg_section_page_checksum (const uint32_t seed,
-                                    Bit_Chain *restrict dat, int32_t size);
+                                    Bit_Chain *restrict dat, int32_t size,
+                                    bool skip_checksum);
 unsigned int section_max_decomp_size (const Dwg_Data *dwg,
                                       const Dwg_Section_Type id);
 
