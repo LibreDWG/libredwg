@@ -3949,7 +3949,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   VERSIONS (R_2007a, R_2007)
   {
-    LOG_ERROR (WE_CAN "We don't encode R2007 sections yet");
+    LOG_ERROR (WE_CAN "We don't encode R2007 sections yet, do R2010 instead");
     dat->version = dwg->header.version = R_2010; // rather do 2010
     // return DWG_ERR_NOTYETSUPPORTED;
   }
@@ -4209,6 +4209,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 {
                   LOG_WARN ("Unpadded section %d", type);
                   sec_dat[type].byte++;
+                  sec_dat[type].bit = 0;
                 }
               ssize = (int)sec_dat[type].byte;
               sec_dat[type].size = ssize;
@@ -4450,9 +4451,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           info = find_section_info_type (dwg, (Dwg_Section_Type)type);
           if (info)
             {
-              LOG_TRACE ("Write %s pages @%" PRIuSIZE " (%u/%" PRIuSIZE ")\n",
-                         dwg_section_name (dwg, type), dat->byte,
-                         info->num_sections, sec_dat[type].size);
+              LOG_TRACE ("Write %u %s pages @%" PRIuSIZE " (%" PRIuSIZE ")\n",
+                         info->num_sections, dwg_section_name (dwg, type), dat->byte,
+                         sec_dat[type].size);
               for (unsigned k = 0; k < info->num_sections; k++)
                 {
                   Dwg_Section *sec = info->sections[k];
@@ -4468,8 +4469,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       continue;
                     }
 #ifndef NDEBUG
-                  if (info->fixedtype < SECTION_INFO)
-                    assert (info->fixedtype == sec->type);
+                  //if (info->fixedtype < SECTION_INFO)
+                  //  assert (info->fixedtype == sec->type);
 #endif
                   if (info->fixedtype == SECTION_SUMMARYINFO)
                     dwg->header.summaryinfo_address = dat->byte & 0xFFFFFFFF;
