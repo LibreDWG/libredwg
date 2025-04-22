@@ -22549,7 +22549,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     {
       // HANDSEED: 0.1.49 [H 0] // FIXME needs to be updated on encode
       dwg->header_vars.HANDSEED
-          = dwg_add_handleref (dwg, 0, UINT64_C (0x25), NULL);
+          = dwg_add_handleref (dwg, 0, UINT64_C (0x2c), NULL);
     }
   if (version > R_10)
     {
