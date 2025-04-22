@@ -453,6 +453,80 @@ EMSCRIPTEN_BINDINGS(libredwg_dwg_object) {
   DEFINE_FUNC(dwg_object_get_handle_object);
 }
 
+/***********************************************************************/
+
+/** 
+ * Convert dwg_object* from dwg_obj_obj*. 
+*/
+uintptr_t dwg_obj_obj_to_object_wrapper(uintptr_t obj_ptr) {
+  dwg_obj_obj* obj = reinterpret_cast<dwg_obj_obj*>(obj_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_obj_obj_to_object(obj, &error));
+}
+
+/** 
+ * Convert dwg_object* from any dwg_obj_*
+*/
+uintptr_t dwg_obj_generic_to_object_wrapper(uintptr_t obj_ptr) {
+  void* obj = reinterpret_cast<void*>(obj_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_obj_generic_to_object(obj, &error));
+}
+
+/** 
+ * Convert dwg_obj_obj* from dwg_object*. 
+*/
+uintptr_t dwg_object_to_object_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_object_to_object(obj, &error));
+}
+
+/** 
+ * Get dwg_obj_obj->tio from dwg_object*. 
+*/
+uintptr_t dwg_object_to_object_tio_wrapper(uintptr_t obj_ptr) {
+  int error = 0;
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  dwg_obj_obj* obj_obj = dwg_object_to_object(obj, &error);
+  if (obj_obj != NULL && error == 0)
+    // The address of the first item 'tio.APPID' in union is same as others.
+    return reinterpret_cast<uintptr_t>(obj_obj->tio.APPID);
+  else
+    return 0;
+}
+
+/** 
+ * Convert dwg_obj_ent* from dwg object.
+*/
+uintptr_t dwg_object_to_entity_wrapper(uintptr_t obj_ptr) {
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  int error = 0;
+  return reinterpret_cast<uintptr_t>(dwg_object_to_entity(obj, &error));
+}
+
+uintptr_t dwg_object_to_entity_tio_wrapper(uintptr_t obj_ptr) {
+  int error = 0;
+  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
+  dwg_obj_ent* obj_ent = dwg_object_to_entity(obj, &error);
+  if (obj_ent != NULL && error == 0)
+    // The address of the first item 'tio.UNUSED' in union is same as others.
+    return reinterpret_cast<uintptr_t>(obj_ent->tio.UNUSED);
+  else
+    return 0;
+}
+
+/**
+ * Methods to convert Dwg_Object instance
+ */
+EMSCRIPTEN_BINDINGS(libredwg_dwg_object_conversion) {
+  DEFINE_FUNC(dwg_obj_obj_to_object);
+  DEFINE_FUNC(dwg_obj_generic_to_object);
+  DEFINE_FUNC(dwg_object_to_object);
+  DEFINE_FUNC(dwg_object_to_object_tio);
+  DEFINE_FUNC(dwg_object_to_entity);
+  DEFINE_FUNC(dwg_object_to_entity_tio);
+}
 
 /***********************************************************************/
 

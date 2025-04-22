@@ -25,6 +25,7 @@ import {
   Dwg_Object_DIMSTYLE_Ptr,
   Dwg_Object_Entity_Ptr,
   Dwg_Object_Entity_TIO_Ptr,
+  Dwg_Object_Generic_Ptr,
   Dwg_Object_IMAGEDEF_Ptr,
   Dwg_Object_LAYER_Ptr,
   Dwg_Object_LTYPE_Ptr,
@@ -196,6 +197,70 @@ export class LibreDwg {
     obj_ptr: Dwg_Object_Ptr
   ): number {
     return this.wasmInstance.dwg_resolve_handleref(ref_ptr, obj_ptr)
+  }
+
+  /**
+   * Converts Dwg_Object_Object instance to Dwg_Object instance.
+   * @group Object Conversion Methods
+   * @param obj_ptr Pointer to Dwg_Object_Object instance.
+   * @returns Returns one pointer to Dwg_Object instance.
+   */
+  dwg_obj_obj_to_object(obj_obj_ptr: Dwg_Object_Object_Ptr): Dwg_Object_Ptr {
+    return this.wasmInstance.dwg_obj_obj_to_object(obj_obj_ptr)
+  }
+
+  /**
+   * Converts Dwg_Object_* instance to Dwg_Object instance.
+   * @group Object Conversion Methods
+   * @param obj_generic_ptr Pointer to Dwg_Object_* instance.
+   * @returns Returns one pointer to Dwg_Object instance.
+   */
+  dwg_obj_generic_to_object(
+    obj_generic_ptr: Dwg_Object_Generic_Ptr
+  ): Dwg_Object_Ptr {
+    return this.wasmInstance.dwg_obj_generic_to_object(obj_generic_ptr)
+  }
+
+  /**
+   * Converts Dwg_Object instance to Dwg_Object_Object instance.
+   * @group Object Conversion Methods
+   * @param obj_ptr Pointer to Dwg_Object instance.
+   * @returns Returns one pointer to Dwg_Object_Object instance.
+   */
+  dwg_object_to_object(obj_ptr: Dwg_Object_Ptr): Dwg_Object_Object_Ptr {
+    return this.wasmInstance.dwg_object_to_object(obj_ptr)
+  }
+
+  /**
+   * Gets Dwg_Object_* instance (such as Dwg_Entity_LAYER, Dwg_Entity_STYLE, and etc.)
+   * from Dwg_Object instance.
+   * @group Object Conversion Methods
+   * @param obj_ptr Pointer to Dwg_Object instance.
+   * @returns Returns one pointer to Dwg_Object_Object_TIO_Ptr instance.
+   */
+  dwg_object_to_object_tio(obj_ptr: Dwg_Object_Ptr): Dwg_Object_Object_TIO_Ptr {
+    return this.wasmInstance.dwg_object_to_object_tio(obj_ptr)
+  }
+
+  /**
+   * Converts Dwg_Object instance to Dwg_Object_Entity instance.
+   * @group Object Conversion Methods
+   * @param obj_ptr Pointer to Dwg_Object instance.
+   * @returns Returns one pointer to Dwg_Object_Entity instance.
+   */
+  dwg_object_to_entity(obj_ptr: Dwg_Object_Ptr): Dwg_Object_Entity_Ptr {
+    return this.wasmInstance.dwg_object_to_entity(obj_ptr)
+  }
+
+  /**
+   * Gets Dwg_Entity_* instance (such as Dwg_Entity_LINE, Dwg_Entity_SPLINE, and etc.)
+   * from Dwg_Object instance.
+   * @group Object Conversion Methods
+   * @param obj_ptr Pointer to Dwg_Object instance.
+   * @returns Returns one pointer to Dwg_Object_Object_TIO_Ptr instance.
+   */
+  dwg_object_to_entity_tio(obj_ptr: Dwg_Object_Ptr): Dwg_Object_Object_TIO_Ptr {
+    return this.wasmInstance.dwg_object_to_entity_tio(obj_ptr)
   }
 
   /**

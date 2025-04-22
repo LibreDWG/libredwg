@@ -756,175 +756,9 @@ BITCODE_RLL dwg_ref_get_handle_absolute_ref_wrapper(uintptr_t obj_ref_ptr) {
   return obj_ref->absolute_ref;
 }
 
-/********************************************************************
- *                    FUNCTIONS FOR DWG OBJECT                       *
- ********************************************************************/
-
-/** 
- * Convert dwg_object* from dwg_obj_obj*. 
-*/
-uintptr_t dwg_obj_obj_to_object_wrapper(uintptr_t obj_ptr) {
-  dwg_obj_obj* obj = reinterpret_cast<dwg_obj_obj*>(obj_ptr);
-  int error = 0;
-  return reinterpret_cast<uintptr_t>(dwg_obj_obj_to_object(obj, &error));
-}
-
-BITCODE_BL dwg_obj_get_objid_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-BITCODE_BL dwg_obj_get_num_eed_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-dwg_entity_eed *dwg_obj_get_eed_wrapper(
-  const dwg_obj_obj *restrict obj,
-  const BITCODE_BL index,
-  int *restrict error) {
-
-}
-
-dwg_entity_eed_data* dwg_obj_get_eed_data_wrapper(
-  const dwg_obj_obj *restrict obj,
-  const BITCODE_BL index, int *restrict error) {
-
-}
-
-BITCODE_H dwg_obj_get_ownerhandle_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-BITCODE_BL dwg_obj_get_num_reactors_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-BITCODE_H *dwg_obj_get_reactors_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-BITCODE_H dwg_obj_get_xdicobjhandle_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-/* r2004+ */
-BITCODE_B dwg_obj_get_is_xdic_missing_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-/* r2013+ */
-BITCODE_B dwg_obj_get_has_ds_binary_data_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-Dwg_Handle *dwg_obj_get_handleref_wrapper(
-  const dwg_obj_obj *restrict obj,
-  int *restrict error) {
-
-}
-
-/** 
- * Convert dwg_object* from any dwg_obj_*
-*/
-uintptr_t dwg_obj_generic_to_object_wrapper(uintptr_t obj_ptr) {
-  void* obj = reinterpret_cast<void*>(obj_ptr);
-  int error = 0;
-  return reinterpret_cast<uintptr_t>(dwg_obj_generic_to_object(obj, &error));
-}
-
-BITCODE_RLL dwg_obj_generic_handlevalue_wrapper(void *_obj) {
-
-}
-
-Dwg_Data *dwg_obj_generic_dwg_wrapper(
-  const void *restrict obj,
-  int *restrict error) {
-
-}
-
-dwg_obj_obj *dwg_obj_generic_parent_wrapper(
-  const void *restrict obj,
-  int *restrict error) {
-
-}
-
 uintptr_t dwg_get_object_wrapper(uintptr_t dwg_ptr, BITCODE_BL index) {
   Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
   return reinterpret_cast<uintptr_t>(dwg_get_object(dwg, index));  
-}
-
-BITCODE_RL dwg_object_get_bitsize_wrapper(const dwg_object *obj) {
-
-}
-
-BITCODE_BL dwg_object_get_index_wrapper(
-  const dwg_object *restrict obj,
-  int *restrict error) {
-
-}
-
-dwg_handle *dwg_object_get_handle_wrapper(
-  dwg_object *restrict obj,
-  int *restrict error) {
-
-}
-
-/** 
- * Convert dwg_obj_obj* from dwg_object*. 
-*/
-uintptr_t dwg_object_to_object_wrapper(uintptr_t obj_ptr) {
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  int error = 0;
-  return reinterpret_cast<uintptr_t>(dwg_object_to_object(obj, &error));
-}
-
-/** 
- * Get dwg_obj_obj->tio from dwg_object*. 
-*/
-uintptr_t dwg_object_to_object_tio_wrapper(uintptr_t obj_ptr) {
-  int error = 0;
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  dwg_obj_obj* obj_obj = dwg_object_to_object(obj, &error);
-  if (obj_obj != NULL && error == 0)
-    // The address of the first item 'tio.APPID' in union is same as others.
-    return reinterpret_cast<uintptr_t>(obj_obj->tio.APPID);
-  else
-    return 0;
-}
-
-/** 
- * Convert dwg_obj_ent* from dwg object.
-*/
-uintptr_t dwg_object_to_entity_wrapper(uintptr_t obj_ptr) {
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  int error = 0;
-  return reinterpret_cast<uintptr_t>(dwg_object_to_entity(obj, &error));
-}
-
-uintptr_t dwg_object_to_entity_tio_wrapper(uintptr_t obj_ptr) {
-  int error = 0;
-  dwg_object* obj = reinterpret_cast<dwg_object*>(obj_ptr);
-  dwg_obj_ent* obj_ent = dwg_object_to_entity(obj, &error);
-  if (obj_ent != NULL && error == 0)
-    // The address of the first item 'tio.UNUSED' in union is same as others.
-    return reinterpret_cast<uintptr_t>(obj_ent->tio.UNUSED);
-  else
-    return 0;
 }
 
 /**
@@ -935,14 +769,6 @@ uintptr_t dwg_absref_get_object_wrapper(
   const BITCODE_BL absref) {
   Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
   return reinterpret_cast<uintptr_t>(dwg_absref_get_object(dwg, absref));
-}
-
-unsigned int dwg_get_num_classes_wrapper(const dwg_data *dwg) {
-
-}
-
-dwg_class *dwg_get_class_wrapper(const dwg_data *dwg, unsigned int index) {
-
 }
 
 EMSCRIPTEN_BINDINGS(libredwg_api) {
@@ -1061,13 +887,6 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_ref_get_handle_value);
   DEFINE_FUNC(dwg_ref_get_handle_absolute_ref);
   
-  DEFINE_FUNC(dwg_obj_obj_to_object);
-  DEFINE_FUNC(dwg_obj_generic_to_object);
   DEFINE_FUNC(dwg_get_object);
-  DEFINE_FUNC(dwg_object_to_object);
-  DEFINE_FUNC(dwg_object_to_object_tio);
-  DEFINE_FUNC(dwg_object_to_entity);
-  DEFINE_FUNC(dwg_object_to_entity_tio);
-
   DEFINE_FUNC(dwg_absref_get_object);
 }

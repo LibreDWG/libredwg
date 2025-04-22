@@ -6,6 +6,7 @@ export type Dwg_Object_Ptr = number
 export type Dwg_Object_Ref_Ptr = number
 export type Dwg_Object_Object_Ptr = number
 export type Dwg_Object_Entity_Ptr = number
+export type Dwg_Object_Generic_Ptr = number
 export type Dwg_Object_Object_TIO_Ptr = number
 export type Dwg_Object_Entity_TIO_Ptr = number
 

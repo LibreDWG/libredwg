@@ -332,6 +332,12 @@ interface EmbindModule {
   dwg_object_get_supertype(_0: number): number;
   dwg_object_get_fixedtype(_0: number): number;
   dwg_object_get_handle(_0: number): number;
+  dwg_obj_obj_to_object(_0: number): number;
+  dwg_obj_generic_to_object(_0: number): number;
+  dwg_object_to_object(_0: number): number;
+  dwg_object_to_object_tio(_0: number): number;
+  dwg_object_to_entity(_0: number): number;
+  dwg_object_to_entity_tio(_0: number): number;
   dwg_object_object_get_tio(_0: number): number;
   dwg_object_object_get_objid(_0: number): number;
   dwg_object_object_get_ownerhandle(_0: number): number;
@@ -397,13 +403,7 @@ interface EmbindModule {
   dwg_supports_eed(_0: number): number;
   dwg_supports_obj(_0: number, _1: number): number;
   dwg_add_object(_0: number): number;
-  dwg_obj_obj_to_object(_0: number): number;
-  dwg_obj_generic_to_object(_0: number): number;
   dwg_get_object(_0: number, _1: number): number;
-  dwg_object_to_object(_0: number): number;
-  dwg_object_to_object_tio(_0: number): number;
-  dwg_object_to_entity(_0: number): number;
-  dwg_object_to_entity_tio(_0: number): number;
   dwg_absref_get_object(_0: number, _1: number): number;
   dwg_resolve_handle(_0: number, _1: bigint): number;
   dwg_resolve_handle_silent(_0: number, _1: bigint): number;

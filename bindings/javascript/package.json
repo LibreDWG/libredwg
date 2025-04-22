@@ -32,7 +32,7 @@
     "build:obj": "cd ../../build-wasm && emmake make",
     "build:wasm": "cd ../../build-wasm && emcc ../bindings/javascript/embind/*.cpp src/*.o -O2 -lembind -std=c++11 -Isrc -I../src -I../include -o libredwg-web.js -s ALLOW_MEMORY_GROWTH=1 -s EXPORT_ES6=1 -s MODULARIZE=1 -s EXPORT_NAME=\"createModule\" -sEXPORTED_RUNTIME_METHODS=FS,ENV,ccall,cwrap,UTF8ToString,stringToNewUTF8,setValue --emit-tsd libredwg-web.d.ts",
     "clean": "rm -rf ../../build-wasm ./docs ./dist ./lib",
-    "copy": "cp -f ../../build-wasm/libredwg-web.js ../../build-wasm/libredwg-web.wasm wasm/ && cp -f ../../build-wasm/libredwg-web.js src/",
+    "copy": "cp -f ../../build-wasm/libredwg-web.d.ts ../../build-wasm/libredwg-web.js ../../build-wasm/libredwg-web.wasm wasm/ && cp -f ../../build-wasm/libredwg-web.js src/",
     "format": "prettier --config ./.prettierrc.js --write src/**/*.{ts,js}",
     "install:emsdk": "cd $EMSDK && ./emsdk install latest && ./emsdk activate latest",
     "link": "node script/create-symlink.js ./wasm/libredwg-web.js ./src/libredwg-web.js",
