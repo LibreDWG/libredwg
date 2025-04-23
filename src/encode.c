@@ -1954,6 +1954,7 @@ find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size,
 
 /* Compress the decomp buffer into dat of a DWG r2004+ file. Sets
    comp_data_size. Variant of the LZ77 algo. ODA section 4.7
+   TODO: use 2 chain args, as with decompress
 */
 static int
 compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
