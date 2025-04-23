@@ -1209,8 +1209,7 @@ two_byte_offset (Bit_Chain *restrict dat, int plus, int *restrict offset)
 /* Decompresses a system section of a 2004+ DWG file.
  * With a LZ77 variant.
  */
-static int
-decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
+int decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
 {
   unsigned int i, lit_length;
   int comp_offset, comp_bytes;
