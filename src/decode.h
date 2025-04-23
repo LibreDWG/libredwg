@@ -102,6 +102,8 @@ uint32_t dwg_section_page_checksum (const uint32_t seed,
                                     bool skip_checksum);
 unsigned int section_max_decomp_size (const Dwg_Data *dwg,
                                       const Dwg_Section_Type id);
+/* reused with encode_test */
+int decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec);
 
 /* reused with out_dxf */
 char *dwg_dim_blockname (Dwg_Data *restrict dwg,
