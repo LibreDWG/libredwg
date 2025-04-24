@@ -284,7 +284,8 @@ escape_htmlwescape_tests (void)
 int
 main (int argc, char const *argv[])
 {
-  loglevel = is_make_silent () ? 0 : 2;
+  loglevel = loglevel_from_env ();
+
   common_memmem_tests ();
   common_versions_tests ();
   common_cvt_TIMEBLL_tests ();
@@ -292,5 +293,6 @@ main (int argc, char const *argv[])
   common_strcasecmp_tests ();
   escape_htmlescape_tests ();
   escape_htmlwescape_tests ();
+
   return failed;
 }
