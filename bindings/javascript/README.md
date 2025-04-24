@@ -92,6 +92,10 @@ import { Dwg_File_Type, LibreDwg } from '@mlightcad/libredwg-web';
 const libredwg = await LibreDwg.create();
 const dwg = libredwg.dwg_read_data(fileContent, Dwg_File_Type.DWG);
 const db = this.libredwg.convert(dwg);
+
+// Affter conversion, 'dwg' isn't needed any more. So you can call
+// function 'dwg_free' to free its memory.
+this.libredwg.dwg_free(db);
 ```
 
 ## Interfaces
