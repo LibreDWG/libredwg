@@ -68723,7 +68723,7 @@ int
 main (int argc, char *argv[])
 {
   char *input = getenv ("INPUT");
-  loglevel = is_make_silent() ? 0 : 2;
+  loglevel = loglevel_from_env ();
 
   if (input == NULL)
     {
