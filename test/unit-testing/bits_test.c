@@ -1505,7 +1505,7 @@ main (int argc, char const *argv[])
   unsigned char sentinel[]
       = { 0xCF, 0x7B, 0x1F, 0x23, 0xFD, 0xDE, 0x38, 0xA9,
           0x5F, 0x7C, 0x68, 0xB8, 0x4E, 0x6D, 0x33, 0x5F };
-  loglevel = is_make_silent () ? 0 : 3;
+  loglevel = loglevel_from_env ();
 
   bit_read_B_tests ();
   bit_write_B_tests ();
