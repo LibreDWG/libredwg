@@ -188,7 +188,7 @@ static void
 test_compress_R2004_section (void)
 {
   int result;
-  static Bit_Chain dat, dec = { 0 };
+  static Bit_Chain src, dat, dec = { 0 };
   // from example_2004 via DEBUG
   unsigned char const comp_auxh_bin[225] = {
     // very bad compression indeed
@@ -252,14 +252,17 @@ test_compress_R2004_section (void)
   uint32_t comp_data_size;
 
   // compress src => dat
+  src.chain = (unsigned char *)decomp_auxh_bin;
+  src.size = sizeof decomp_auxh_bin;
+  src.bit = 0;
+  src.byte = 0UL;
+
   bit_chain_alloc_size (&dat, 2 * sizeof comp_auxh_bin);
   dat.size = sizeof comp_auxh_bin;
   dat.bit = 0;
   dat.byte = 0UL;
   comp_data_size = dat.size & 0xFFFFFFFF;
-  result = compress_R2004_section (&dat, (BITCODE_RC *restrict)decomp_auxh_bin,
-                                   sizeof decomp_auxh_bin, &comp_data_size);
-  dat.size = comp_data_size;
+  result = compress_R2004_section (&src, &dat);
   if (result == 0)
     {
       // decompress dat => dec
@@ -300,14 +303,17 @@ test_compress_R2004_section (void)
           (unsigned long)comp_data_size);
 
   // compress src => dat
+  src.chain = (unsigned char *)decomp_ofs_bin;
+  src.size = sizeof decomp_ofs_bin;
+  src.bit = 0;
+  src.byte = 0UL;
+
   bit_chain_alloc_size (&dat, 2 * sizeof comp_ofs_bin);
   dat.size = sizeof comp_ofs_bin;
   dat.bit = 0;
   dat.byte = 0UL;
   comp_data_size = dat.size & 0xFFFFFFFF;
-  result = compress_R2004_section (&dat, (BITCODE_RC *restrict)decomp_ofs_bin,
-                                   sizeof decomp_ofs_bin, &comp_data_size);
-  dat.size = comp_data_size;
+  result = compress_R2004_section (&src, &dat);
   if (result == 0)
     {
       // decompress dat => dec
