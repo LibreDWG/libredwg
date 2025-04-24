@@ -268,8 +268,32 @@ test_compress_R2004_section (void)
           && memcmp (dec.chain, decomp_auxh_bin, sizeof decomp_ofs_bin) == 0)
         pass ();
       else
-        fail ("decompress compressed section back auxh %d %lu", result,
-              (unsigned long)dec.size);
+        {
+          fail ("decompress compressed section back auxh %d %lu", result,
+                (unsigned long)dec.size);
+          if (loglevel >= 3)
+            {
+              if (loglevel >= 6)
+                {
+                  bit_explore_chain (&dat, 0, dat.size);
+                  bit_explore_chain (&dec, 0, dec.size);
+                }
+              for (unsigned i=0; i < sizeof decomp_auxh_bin; i++)
+                {
+                  if (dec.chain[i] != decomp_auxh_bin[i])
+                    {
+                      fprintf (
+                          stderr,
+                          "diff 0x%x: %02x%02x%02x%02x != %02x%02x%02x%02x\n", i,
+                          dec.chain[i], dec.chain[i + 1], dec.chain[i + 2],
+                          dec.chain[i + 3], decomp_auxh_bin[i],
+                          decomp_auxh_bin[i + 1], decomp_auxh_bin[i + 2],
+                          decomp_auxh_bin[i + 3]);
+                      break;
+                    }
+                }
+            }
+        }
     }
   else
     fail ("compress_R2004_section auxh %d %lu", result,
@@ -292,8 +316,32 @@ test_compress_R2004_section (void)
           && memcmp (dec.chain, decomp_ofs_bin, sizeof decomp_ofs_bin) == 0)
         ok ("compress_R2004_section");
       else
-        fail ("decompress compressed section back ofs %d %lu", result,
-              (unsigned long)dec.size);
+        {
+          fail ("decompress compressed section back ofs %d %lu", result,
+                (unsigned long)dec.size);
+          if (loglevel >= 3)
+            {
+              if (loglevel >= 6)
+                {
+                  bit_explore_chain (&dat, 0, dat.size);
+                  bit_explore_chain (&dec, 0, dec.size);
+                }
+              for (unsigned i=0; i < sizeof decomp_ofs_bin; i++)
+                {
+                  if (dec.chain[i] != decomp_ofs_bin[i])
+                    {
+                      fprintf (
+                          stderr,
+                          "diff 0x%x: %02x%02x%02x%02x != %02x%02x%02x%02x\n", i,
+                          dec.chain[i], dec.chain[i + 1], dec.chain[i + 2],
+                          dec.chain[i + 3], decomp_ofs_bin[i],
+                          decomp_ofs_bin[i + 1], decomp_ofs_bin[i + 2],
+                          decomp_ofs_bin[i + 3]);
+                      break;
+                    }
+                }
+            }
+        }
     }
   else
     fail ("compress_R2004_section ofs %d %lu", result,
