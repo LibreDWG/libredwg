@@ -1803,12 +1803,12 @@ write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
   else if (len < 0xf0)
     {
       bit_write_RC (dat, len);
-      return length & 0xff;
+      return len & 0xff;
     }
   else
     {
       uint32_t total = 0x0f;
-      while (leng >= 0xf0)
+      while (len >= 0xf0)
         {
           bit_write_RC (dat, 0);
           len -= 0xFF;
@@ -1821,10 +1821,8 @@ write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
   if (len)
     {
       if (len > 3)
-        {
-          write_length (dat, 0, len - 1, 0x11);
-        }
-      LOG_INSANE ("LIT %x\n", len)
+        write_length (dat, 0, len - 1, 0x11);
+      LOG_INSANE ("LIT %" PRIx32 "\n", len)
       bit_write_TF (dat, buf, len);
     }
   return 0;
@@ -1841,8 +1839,25 @@ write_long_compression_offset (Bit_Chain *dat, uint32_t offset)
       bit_write_RC (dat, 0);
       offset -= 0xff;
     }
-  LOG_INSANE (">O 00 %x", offset)
+  LOG_INSANE (">O 00 %" PRIx32 " ", offset)
   bit_write_RC (dat, (unsigned char)offset);
+}
+
+static void
+write_opcode (Bit_Chain *dat, uint32_t op, uint32_t offset, uint32_t value)
+{
+  if (offset <= value)
+    {
+      op |= offset - 2;
+      assert (op < 0x100);
+      bit_write_RC (dat, op & 0xff);
+    }
+  else
+    {
+      assert (op < 0x100);
+      bit_write_RC (dat, op & 0xff);
+      write_long_compression_offset (dat, offset - value);
+    }
 }
 
 static void
@@ -1850,15 +1865,15 @@ write_length (Bit_Chain *dat, uint32_t u1, uint32_t match, uint32_t u2)
 {
   if (u2 < match)
     {
-      LOG_INSANE (">L %x ", u1 & 0xff)
-      bit_write_RC (dat, u1 & 0xff);
+      LOG_INSANE (">L %" PRIx32 " ", u1)
+      write_long_compression_offset (dat, u1);
       write_long_compression_offset (dat, match - u2);
       LOG_INSANE ("\n")
     }
   else
     {
-      LOG_INSANE (">L %x\n", (u1 | (match - 2)) & 0xff);
-      bit_write_RC (dat, (u1 | (match - 2)) & 0xff);
+      LOG_INSANE (">L %" PRIx32 "\n", (u1 | (match - 2)));
+      write_long_compression_offset (dat, u1 | (match - 2));
     }
 }
 
@@ -1886,7 +1901,7 @@ write_two_byte_offset (Bit_Chain *restrict dat, uint32_t oldlen,
   const unsigned lookahead_buffer_size = COMPRESSION_BUFFER_SIZE;
   uint32_t b1, b2;
 
-  LOG_INSANE ("2O %x %x %x: ", oldlen, offset, len)
+  LOG_INSANE ("2O %" PRIx32 " %" PRIx32 " %" PRIx32 ": ", oldlen, offset, len)
   if ((offset < 0xf) && (oldlen < 0x401))
     {
       b1 = (offset + 1) * 0x10 | ((oldlen - 1U) & 3) << 2;
@@ -1909,7 +1924,7 @@ write_two_byte_offset (Bit_Chain *restrict dat, uint32_t oldlen,
     }
   if (len < 4)
     b1 = b1 | len;
-  LOG_INSANE ("> %x %x\n", b1, b2)
+  LOG_INSANE ("> %" PRIx32 " %" PRIx32 "\n", b1, b2)
   bit_write_RC (dat, b1 & 0xff);
   bit_write_RC (dat, b2 & 0xff);
 }
@@ -1948,7 +1963,7 @@ find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size,
     }
   if (offset)
     {
-      LOG_INSANE (">M %u (%u)\n", offset, *lenp)
+      LOG_INSANE (">M %d (%" PRIu32 ")\n", offset, *lenp)
     }
   return offset;
 }
@@ -1965,7 +1980,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   uint32_t match = 0, oldlen = 0;
   uint32_t len = 0;
   size_t pos = bit_position (dat);
-  LOG_WARN ("compress_R2004_section %d", decomp_data_size);
+  LOG_WARN ("compress_R2004_section %" PRIu32, decomp_data_size);
   assert (decomp_data_size > MIN_COMPRESSED_SECTION);
   while (i < decomp_data_size - MIN_COMPRESSED_SECTION)
     {
@@ -1996,7 +2011,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   bit_write_RC (dat, 0);
   bit_write_RC (dat, 0);
   *comp_data_size = (bit_position (dat) - pos) & 0xFFFFFFFF;
-  LOG_INSANE ("> 11 0 => %u\n", *comp_data_size)
+  LOG_INSANE ("> 11 0 => %" PRIu32 "\n", *comp_data_size)
   return 0;
 }
 
