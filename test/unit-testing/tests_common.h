@@ -22,7 +22,7 @@ static char buffer[512];
 
 int numpassed (void);
 int numfailed (void);
-int is_make_silent (void);
+int loglevel_from_env (void);
 
 static inline void pass (void);
 static void fail (const char *fmt, ...) ATTRIBUTE_FORMAT (1, 2);
@@ -181,15 +181,16 @@ atoi (const char *str)
 }
 #endif
 
-// make -s makes it silent, but can be overridden by VERBOSE=1
+// make -s makes it silent, but can be overridden by VERBOSE=4
 int
-is_make_silent (void)
+loglevel_from_env (void)
 {
   const char *make = getenv ("MAKEFLAGS");
+  const char *verbose = getenv ("VERBOSE");
   if (!make)
-    return 0;                                        // not from make: verbose
+    return verbose ? atoi (verbose) : 0;             // not from make: verbose
   if (strstr (make, "-s") || memBEGINc (make, "s ")) // make check with -s
-    return atoi (getenv ("VERBOSE"));
+    return 0;
   else
-    return 0; // make check without -s
+    return verbose ? atoi (verbose) : 0;             // make check without -s
 }
