@@ -90,7 +90,9 @@ export class LibreDwg {
   }
 
   /**
-   * Converts Dwg_Data instance to DwgDatabase instance.
+   * Converts Dwg_Data instance to DwgDatabase instance. DwgDatabase instance doesn't depend on 
+   * Dwg_Data instance any more after conversion. So you can call function dwg_free to free memory
+   * occupied by Dwg_Data.
    * @param data Pointer to Dwg_Data instance.
    * @returns Returns the converted DwgDatabase instance.
    */
