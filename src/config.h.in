@@ -45,6 +45,9 @@
 /* Define to 1 if <alloca.h> works. */
 #undef HAVE_ALLOCA_H
 
+/* Define to 1 if you have the 'atoi' function. */
+#undef HAVE_ATOI
+
 /* Define if __attribute__((visibility("default"))) is supported. */
 #undef HAVE_ATTRIBUTE_VISIBILITY_DEFAULT
 
