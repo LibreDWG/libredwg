@@ -1208,7 +1208,7 @@ main (int argc, char *argv[])
   char *debugenv = getenv ("LIBREDWG_DEBUG"); // keep files
   int dxf = 0;
 
-  loglevel = is_make_silent () ? 0 : 2; // print ok
+  loglevel = loglevel_from_env ();
   if (trace)
     tracelevel = atoi (trace);
   else
