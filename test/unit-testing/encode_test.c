@@ -49,7 +49,8 @@ section_reset (const Dwg_Data *dwg)
   memset (section_order, 0, sizeof section_order);
   for (Dwg_Section_Type_r13 i = 0; (unsigned)i < size; i++)
     section_order[i] = i;
-  fprintf (stderr, "---\n");
+  if (dwg->opts & DWG_OPTS_LOGLEVEL)
+    fprintf (stderr, "---\n");
   section_order_trace (dwg, size, (Dwg_Section_Type_r13 *)&section_order);
 }
 
@@ -303,7 +304,7 @@ int
 main (int argc, char const *argv[])
 {
   Dwg_Data dwg;
-  loglevel = is_make_silent ();
+  dwg.opts = loglevel = loglevel_from_env ();
   dwg.header.version = R_2000;
 
   test_section_find (&dwg);

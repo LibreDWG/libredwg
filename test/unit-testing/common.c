@@ -93,7 +93,7 @@ main (int argc, char *argv[])
   // #ifdef USE_TRACING
   char *trace = getenv ("LIBREDWG_TRACE");
   char *skip;
-  silent = is_make_silent ();
+  silent = !loglevel_from_env ();
   if (trace)
     loglevel = atoi (trace);
   else
