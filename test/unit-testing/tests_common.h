@@ -1,4 +1,5 @@
 #define TEST_COMMON_H
+#include <limits.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -161,6 +162,25 @@ strtobt (const char *binarystring)
 
 #endif
 
+#ifndef HAVE_ATOI
+int
+atoi (const char *str)
+{
+  char *endptr;
+  long val = strtol (str, &endptr, 10);
+  // if endptr == str (no digits were found),
+  // or if val is outside the range of int
+  if (str == endptr)
+    // No conversion could be performed
+    return 0;
+  if (val > INT_MAX)
+    return INT_MAX;
+  if (val < INT_MIN)
+    return INT_MIN;
+  return (int)val;
+}
+#endif
+
 // make -s makes it silent, but can be overridden by VERBOSE=1
 int
 is_make_silent (void)
@@ -169,7 +189,7 @@ is_make_silent (void)
   if (!make)
     return 0;                                        // not from make: verbose
   if (strstr (make, "-s") || memBEGINc (make, "s ")) // make check with -s
-    return getenv ("VERBOSE") ? 0 : 1;
+    return atoi (getenv ("VERBOSE"));
   else
     return 0; // make check without -s
 }
