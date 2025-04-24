@@ -211,7 +211,7 @@ decompress_R2004_section_tests (void)
 int
 main (int argc, char const *argv[])
 {
-  loglevel = is_make_silent () ? 0 : 2;
+  loglevel = loglevel_from_env ();
 
   read_literal_length_tests ();
   read_compressed_bytes_tests ();
