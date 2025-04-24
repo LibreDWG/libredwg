@@ -303,14 +303,14 @@ int
 main (int argc, char const *argv[])
 {
   Dwg_Data dwg;
-  loglevel = is_make_silent () ? 0 : 3;
+  loglevel = is_make_silent ();
   dwg.header.version = R_2000;
 
   test_section_find (&dwg);
   test_section_move_top (&dwg);
-  // loglevel = is_make_silent () ? 0 : 3;
   test_section_remove (&dwg);
   test_section_move_before (&dwg);
+
   test_compress_R2004_section ();
 
   return failed;
