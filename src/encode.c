@@ -1700,6 +1700,7 @@ fixup_NOD (Dwg_Data *restrict dwg,
 #undef DISABLE_NODSTYLE
 }
 
+#if 0
 /* Copy the decomp buffer uncompressed into dat of a DWG r2004+ file. Sets
  * comp_data_size. */
 static int
@@ -1714,6 +1715,7 @@ copy_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   *comp_data_size = decomp_data_size;
   return 0;
 }
+#endif
 
 /* 1 for yes, 0 for no */
 static int
@@ -1928,21 +1930,33 @@ write_two_byte_offset (Bit_Chain *restrict dat, uint32_t oldlen,
 }
 
 /* Finds the longest match to the substring starting at i
-   in the lookahead buffer (size ?) from the history window (size ?). */
+   in the lookahead buffer (size ?) from the history window (size ?).
+
+TODO hash 4 byte chunks:
+
+#define HASH_LOG 13
+#define HASH_SIZE (1 << HASH_LOG)
+#define HASH_MASK (HASH_SIZE - 1)
+
+static uint16_t hash(uint32_t v) {
+  uint32_t h = (v * 2654435769UL) >> (32 - HASH_LOG);
+  return h & HASH_MASK;
+}
+*/
 static uint32_t
-find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size,
-                    uint32_t i, uint32_t *lenp)
+find_longest_match (Bit_Chain *restrict src, uint32_t i, uint32_t *restrict lenp)
 {
   const unsigned lookahead_buffer_size = COMPRESSION_BUFFER_SIZE;
   const unsigned window_size = COMPRESSION_WINDOW_SIZE;
   uint32_t offset = 0;
-  uint32_t bufend = MIN (i + lookahead_buffer_size, decomp_data_size + 1);
+  uint32_t bufend = MIN (i + lookahead_buffer_size, src->size + 1);
+  assert (i < src->size);
   *lenp = 0;
   // only substring lengths >= 2, anything else compression is longer
   for (uint32_t j = i + 2; j < bufend; j++)
     {
       int start = MAX (0, (int)(i - window_size));
-      BITCODE_RC *s = &decomp[i];
+      BITCODE_RC *s = &src->chain[i];
       uint32_t slen = j - i;
       assert (j > i); // slen will never overflow
       for (uint32_t k = start; k < i; k++)
@@ -1950,7 +1964,7 @@ find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size,
           uint32_t curr_offset = i - k;
           // unsigned int repetitions = slen / curr_offset;
           // unsigned int last = slen % curr_offset;
-          BITCODE_RC *match = &decomp[k]; // ...
+          BITCODE_RC *match = &src->chain[k]; // ...
           assert (k < i);
           // int matchlen = k + last;
           if ((memcmp (s, match, slen) == 0) && slen > *lenp)
@@ -1967,30 +1981,28 @@ find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size,
   return offset;
 }
 
-/* Compress the decomp buffer into dat of a DWG r2004+ file. Sets
-   comp_data_size. Variant of the LZ77 algo. ODA section 4.7
-   TODO: use 2 chain args, as with decompress
+/* Compress the section src into dat for a DWG r2004+ file.
+   Variant of the LZ77 algo. See ODA section 4.7 and decompress_R2004_section()
 */
 static int
-compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
-                        uint32_t decomp_data_size, uint32_t *comp_data_size)
+compress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dat)
 {
   uint32_t i = 0;
   uint32_t match = 0, oldlen = 0;
   uint32_t len = 0;
   uint32_t offset = 0;
   size_t pos = bit_position (dat);
-  LOG_WARN ("compress_R2004_section %" PRIu32, decomp_data_size);
-  assert (decomp_data_size > MIN_COMPRESSED_SECTION);
-  while (i < decomp_data_size - MIN_COMPRESSED_SECTION)
+  LOG_INFO ("compress_R2004_section %" PRIuSIZE "\n", src->size);
+  assert (src->size > MIN_COMPRESSED_SECTION);
+  while (i < src->size - MIN_COMPRESSED_SECTION)
     {
-      offset = find_longest_match (decomp, decomp_data_size, i, &len);
+      offset = find_longest_match (src, i, &len);
       if (offset)
         {
           // encode offset + len
           if (match)
             write_two_byte_offset (dat, oldlen, match, len);
-          write_literal_length (dat, &decomp[i], len, offset);
+          write_literal_length (dat, &src->chain[i], len, offset);
           i += (match ? match : 1);
           match = offset;
           oldlen = len;
@@ -2000,18 +2012,18 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
           i += 1; // no match found
         }
     }
-  if (decomp_data_size > i)
+  if (src->size > i)
     {
-      len = decomp_data_size - i;
+      len = src->size - i;
       if (match)
         write_two_byte_offset (dat, oldlen, match, len);
-      write_literal_length (dat, &decomp[i], len, offset);
+      write_literal_length (dat, &src->chain[i], len, offset);
     }
   bit_write_RC (dat, 0x11);
   bit_write_RC (dat, 0);
   bit_write_RC (dat, 0);
-  *comp_data_size = (bit_position (dat) - pos) & 0xFFFFFFFF;
-  LOG_INSANE ("> 11 0 => %" PRIu32 "\n", *comp_data_size)
+  dat->size = (bit_position (dat) - pos) & 0xFFFFFFFF;
+  LOG_INSANE ("> 11 0 => %" PRIuSIZE "\n", dat->size)
   return 0;
 }
 
@@ -4525,8 +4537,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     {
                       LOG_HANDLE ("Compress %s (%u/%d)\n", info->name, k,
                                   sec->size);
-                      compress_R2004_section (dat, sec_dat[type].chain,
-                                              sec->size, &sec->comp_data_size);
+                      compress_R2004_section (&sec_dat[type], dat);
+                      sec->comp_data_size = sec_dat[type].size;
                       LOG_TRACE ("sec->comp_data_size: " FORMAT_RL "\n",
                                  sec->comp_data_size);
                     }
@@ -4534,8 +4546,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     {
                       LOG_HANDLE ("Copy uncompressed %s (%u/%d)\n", info->name,
                                   k, sec->size);
-                      copy_R2004_section (dat, sec_dat[type].chain, sec->size,
-                                          &sec->comp_data_size);
+                      assert (dat->bit == 0);
+                      bit_chain_alloc_size (dat, dat->byte + sec->size);
+                      memcpy (&dat->chain[dat->byte], &sec_dat[type].chain, sec->size);
+                      dat->byte += sec->size;
+                      sec->comp_data_size = sec->size;
+                      //copy_R2004_section (dat, sec_dat[type].chain, sec->size,
+                      //                    &sec->comp_data_size);
                     }
                 }
             }
