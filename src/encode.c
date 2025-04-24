@@ -1931,6 +1931,7 @@ find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size,
       int start = MAX (0, (int)(i - window_size));
       BITCODE_RC *s = &decomp[i];
       uint32_t slen = j - i;
+      assert (j > i); // slen will never overflow
       for (int k = start; k < (int)i; k++)
         {
           int curr_offset = i - k;
@@ -1975,7 +1976,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
           if (match)
             write_two_byte_offset (dat, oldlen, match, len);
           write_literal_length (dat, &decomp[i], len);
-          i += match;
+          i += (match ? match : 1);
           match = offset;
           oldlen = len;
         }
@@ -1984,10 +1985,13 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
           i += 1; // no match found
         }
     }
-  len = decomp_data_size - i;
-  if (match)
-    write_two_byte_offset (dat, oldlen, match, len);
-  write_literal_length (dat, &decomp[i], len);
+  if (decomp_data_size > i)
+    {
+      len = decomp_data_size - i;
+      if (match)
+        write_two_byte_offset (dat, oldlen, match, len);
+      write_literal_length (dat, &decomp[i], len);
+    }
   bit_write_RC (dat, 0x11);
   bit_write_RC (dat, 0);
   bit_write_RC (dat, 0);
