@@ -369,7 +369,7 @@ AC_CHECK_FUNCS([gettimeofday])
 AC_CHECK_LIB([m],[floor])
 #AC_CHECK_LIB([m],[sqrt])
 AC_CHECK_FUNCS([sincos])
-AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strstr strrchr strtol strtoll strtoul strtoull strnlen])
+AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strstr strrchr strtol strtoll strtoul strtoull strnlen atoi])
 AC_CHECK_FUNCS([memmem],[],
   AC_MSG_WARN([memmem not found. Using a slower workaround.]))
 AC_CHECK_FUNCS([gmtime_r])

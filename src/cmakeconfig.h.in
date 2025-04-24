@@ -132,6 +132,9 @@
 #define HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL 1
 #endif
 
+/* Define if you have the `atoi' function. */
+#cmakedefine HAVE_ATOI
+
 /* Define if you have the <getopt.h> header file. */
 #cmakedefine HAVE_GETOPT_H
 
