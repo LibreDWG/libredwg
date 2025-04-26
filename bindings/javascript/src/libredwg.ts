@@ -90,7 +90,7 @@ export class LibreDwg {
   }
 
   /**
-   * Converts Dwg_Data instance to DwgDatabase instance. DwgDatabase instance doesn't depend on 
+   * Converts Dwg_Data instance to DwgDatabase instance. DwgDatabase instance doesn't depend on
    * Dwg_Data instance any more after conversion. So you can call function dwg_free to free memory
    * occupied by Dwg_Data.
    * @param data Pointer to Dwg_Data instance.
@@ -822,7 +822,7 @@ export class LibreDwg {
    * dimension entities have one 'block' field which represents the block that contains
    * the entities that make up the dimension picture.
    * @group Dwg_Entity_* Methods
-   * @param ptr Pointer to one Dwg_Entity_* instance  with one block field
+   * @param ptr Pointer to one Dwg_Entity_* instance  with one block field.
    * @param field Field name of the block.
    * @returns Returns block name of one Dwg_Entity_* instance.
    */
@@ -841,14 +841,19 @@ export class LibreDwg {
   }
 
   /**
-   * Returns dimension style name of one Dwg_Entity_DIMENSION_* instance.
-   * @group Dwg_Entity_DIMENSION_* Methods
-   * @param ptr Pointer to one Dwg_Entity_DIMENSION_* instance
-   * @returns Returns dimension style name of one Dwg_Entity_DIMENSION_* instance.
+   * Returns dimension style name of one Dwg_Entity_* instance with one dimension style
+   * field.
+   * @group Dwg_Entity_* Methods
+   * @param ptr Pointer to one Dwg_Entity_* instance.
+   * @param field Field name of the dimension style.
+   * @returns Returns dimension style name of one Dwg_Entity_* instance.
    */
-  dwg_entity_dimension_get_style_name(ptr: Dwg_Object_Entity_TIO_Ptr): string {
+  dwg_entity_get_style_name(
+    ptr: Dwg_Object_Entity_TIO_Ptr,
+    field: string = 'dimstyle'
+  ): string {
     const wasmInstance = this.wasmInstance
-    const dimstyle_ref = wasmInstance.dwg_dynapi_entity_value(ptr, 'dimstyle')
+    const dimstyle_ref = wasmInstance.dwg_dynapi_entity_value(ptr, field)
       .data as number
     const dimstyle_obj = wasmInstance.dwg_ref_get_object(dimstyle_ref)
     const dimstyle_tio = wasmInstance.dwg_object_to_object_tio(dimstyle_obj)
