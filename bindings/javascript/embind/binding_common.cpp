@@ -36,6 +36,13 @@ emscripten::val point2d_to_js_object(const dwg_point_2d* point) {
   return point_obj;
 }
 
+emscripten::val bitcode_2bd_to_js_object(const BITCODE_2BD* point) {
+  emscripten::val point_obj = emscripten::val::object();
+  point_obj.set("x", point->x);
+  point_obj.set("y", point->y);
+  return point_obj;
+}
+
 emscripten::val bitcode_2rd_to_js_object(const BITCODE_2RD* point) {
   emscripten::val point_obj = emscripten::val::object();
   point_obj.set("x", point->x);
@@ -44,6 +51,14 @@ emscripten::val bitcode_2rd_to_js_object(const BITCODE_2RD* point) {
 }
 
 emscripten::val point3d_to_js_object(const dwg_point_3d* point) {
+  emscripten::val point_obj = emscripten::val::object();
+  point_obj.set("x", point->x);
+  point_obj.set("y", point->y);
+  point_obj.set("z", point->z);
+  return point_obj;
+}
+
+emscripten::val bitcode_3bd_to_js_object(const BITCODE_3BD* point) {
   emscripten::val point_obj = emscripten::val::object();
   point_obj.set("x", point->x);
   point_obj.set("y", point->y);
@@ -371,6 +386,52 @@ emscripten::val dwg_ptr_to_hatch_path_array_wrapper(uintptr_t array_ptr, size_t 
   return pathes;
 }
 
+emscripten::val dwg_ptr_to_mline_vertex_array_wrapper(uintptr_t array_ptr, size_t size) {
+  Dwg_MLINE_vertex* array = reinterpret_cast<Dwg_MLINE_vertex*>(array_ptr);
+  emscripten::val vertices = emscripten::val::array();
+  for (int i = 0; i < size; ++i) {
+    emscripten::val vertex_obj = emscripten::val::object();
+    auto vertex = array[i];
+
+    vertex_obj.set("vertex", bitcode_3bd_to_js_object(&vertex.vertex));
+    vertex_obj.set("vertex_direction", bitcode_3bd_to_js_object(&vertex.vertex_direction));
+    vertex_obj.set("miter_direction", bitcode_3bd_to_js_object(&vertex.miter_direction));
+
+    auto num_lines = vertex.num_lines;
+    vertex_obj.set("num_lines", num_lines);
+    
+    // Convert lines
+    if (vertex.lines) {
+      emscripten::val lines = emscripten::val::array();
+      for (int j = 0; j < num_lines; ++j) {
+        auto line = vertex.lines[j];
+        emscripten::val line_obj = emscripten::val::object();
+
+        auto num_segparms = line.num_segparms;
+        line_obj.set("num_segparms", num_segparms);
+        emscripten::val segparms = emscripten::val::array();
+        for (int k = 0; k < num_segparms; ++k) {
+          segparms.call<void>("push", line.segparms[k]);
+        }
+        line_obj.set("segparms", segparms);
+
+        auto num_areafillparms = line.num_areafillparms;
+        line_obj.set("num_areafillparms", num_areafillparms);
+        emscripten::val areafillparms = emscripten::val::array();
+        for (int k = 0; k < num_areafillparms; ++k) {
+          areafillparms.call<void>("push", line.areafillparms[k]);
+        }
+        line_obj.set("segparms", segparms);
+
+        lines.call<void>("push", line_obj);
+      }
+      vertex_obj.set("lines", lines);
+    }
+    vertices.call<void>("push", vertex_obj);
+  }
+  return vertices;
+}
+
 EMSCRIPTEN_BINDINGS(libredwg_array) {
   DEFINE_FUNC(dwg_ptr_to_unsigned_char_array);
   DEFINE_FUNC(dwg_ptr_to_signed_char_array);
@@ -388,6 +449,7 @@ EMSCRIPTEN_BINDINGS(libredwg_array) {
   DEFINE_FUNC(dwg_ptr_to_table_cell_array);
   DEFINE_FUNC(dwg_ptr_to_hatch_defline_array);
   DEFINE_FUNC(dwg_ptr_to_hatch_path_array);
+  DEFINE_FUNC(dwg_ptr_to_mline_vertex_array);
 }
 
 /***********************************************************************/

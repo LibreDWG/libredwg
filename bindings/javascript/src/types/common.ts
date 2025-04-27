@@ -207,6 +207,15 @@ export interface Dwg_HATCH_Path {
   polyline_paths: Dwg_HATCH_PolylinePath[]
 }
 
+export interface Dwg_HATCH_Path {
+  flag: number
+  num_segs_or_paths: number
+  segs: Dwg_HATCH_PathSeg[]
+  bulges_present: boolean
+  closed: boolean
+  polyline_paths: Dwg_HATCH_PolylinePath[]
+}
+
 export interface Dwg_Entity_VERTEX_2D {
   flag: number
   point: DwgPoint3D
@@ -215,6 +224,21 @@ export interface Dwg_Entity_VERTEX_2D {
   id: number
   bulge: number
   tangent_dir: number
+}
+
+export interface Dwg_MLINE_Line {
+  num_segparms: number
+  segparms: number[]
+  num_areafillparms: number
+  areafillparms: number[]
+}
+
+export interface Dwg_MLINE_Vertex {
+  vertex: DwgPoint3D
+  vertex_direction: DwgPoint3D
+  miter_direction: DwgPoint3D
+  num_lines: number
+  lines: Dwg_MLINE_Line[]
 }
 
 export interface Dwg_Field_Value {

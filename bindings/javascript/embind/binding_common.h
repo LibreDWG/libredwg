@@ -25,9 +25,13 @@ emscripten::val color_to_js_object(const Dwg_Color* color);
 
 emscripten::val point2d_to_js_object(const dwg_point_2d* point);
 
+emscripten::val bitcode_2bd_to_js_object(const BITCODE_2BD* point);
+
 emscripten::val bitcode_2rd_to_js_object(const BITCODE_2RD* point);
 
 emscripten::val point3d_to_js_object(const dwg_point_3d* point);
+
+emscripten::val bitcode_3bd_to_js_object(const BITCODE_3BD* point);
 
 emscripten::val bitcode_3rd_to_js_object(const BITCODE_3RD* point);
 

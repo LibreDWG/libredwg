@@ -489,6 +489,7 @@ interface EmbindModule {
   dwg_ptr_to_table_cell_array(_0: number, _1: number): any;
   dwg_ptr_to_hatch_defline_array(_0: number, _1: number): any;
   dwg_ptr_to_hatch_path_array(_0: number, _1: number): any;
+  dwg_ptr_to_mline_vertex_array(_0: number, _1: number): any;
   dwg_object_get_handle_object(_0: number): any;
   dwg_object_object_get_ownerhandle_object(_0: number): any;
   dwg_object_object_get_handle_object(_0: number): any;
