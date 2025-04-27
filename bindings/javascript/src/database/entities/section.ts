@@ -13,7 +13,7 @@ export interface DwgSectionEntity extends DwgEntity {
   /**
    * Section flags
    */
-  flag: number
+  flags: number
   /**
    * Name
    */

@@ -20,6 +20,7 @@ import {
   Dwg_HATCH_DefLine,
   Dwg_HATCH_Path,
   Dwg_LTYPE_Dash,
+  Dwg_MLINE_Vertex,
   Dwg_Object_BLOCK_HEADER_Ptr,
   Dwg_Object_BLOCK_Ptr,
   Dwg_Object_DIMSTYLE_Ptr,
@@ -695,6 +696,21 @@ export class LibreDwg {
     size: number
   ): Dwg_HATCH_Path[] {
     return this.wasmInstance.dwg_ptr_to_hatch_path_array(ptr, size)
+  }
+
+  /**
+   * Converts one C++ mline vertex array to one JavaScript mline vertex array.
+   * @group Array Methods
+   * @group Dwg_Entity_MLINE Methods
+   * @param ptr Pointer to C++ mline vertex array.
+   * @param size The size of C++ mline vertex array.
+   * @returns Returns one JavaScript mline vertex array from the specified C++ mline vertex array.
+   */
+  dwg_ptr_to_mline_vertex_array(
+    ptr: Dwg_Array_Ptr,
+    size: number
+  ): Dwg_MLINE_Vertex[] {
+    return this.wasmInstance.dwg_ptr_to_mline_vertex_array(ptr, size)
   }
 
   /**

@@ -114,7 +114,7 @@ So it is recommend to use interfaces with prefix 'Dwg'.
 
 ## Demo App
 
-One demo app is provided in folder [test](./test/). You can run the following command to launch it.
+One demo app is provided in folder [examples](./examples/). You can run the following command to launch it.
 
 ```javascript
 pnpm demo

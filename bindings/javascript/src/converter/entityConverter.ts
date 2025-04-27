@@ -1,4 +1,5 @@
 import {
+  Dwg3dFaceEntity,
   DwgAlignedDimensionEntity,
   DwgAngularDimensionEntity,
   DwgArcEdge,
@@ -29,6 +30,8 @@ import {
   DwgLineEntity,
   DwgLWPolylineEntity,
   DwgLWPolylineVertex,
+  DwgMLineEntity,
+  DwgMLineVertex,
   DwgMTextDrawingDirection,
   DwgMTextEntity,
   DwgOle2FrameEntity,
@@ -90,7 +93,9 @@ export class LibreEntityConverter {
       // Get values of the common attributes of one entity
       const commonAttrs = this.getCommonAttrs(entity)
       const fixedtype = libredwg.dwg_object_get_fixedtype(object_ptr)
-      if (fixedtype == Dwg_Object_Type.DWG_TYPE_ARC) {
+      if (fixedtype == Dwg_Object_Type.DWG_TYPE_3DFACE) {
+        return this.convert3dFace(entity_tio, commonAttrs)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_ARC) {
         return this.convertArc(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_CIRCLE) {
         return this.convertCircle(entity_tio, commonAttrs)
@@ -121,6 +126,8 @@ export class LibreEntityConverter {
         return this.convertLine(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_LWPOLYLINE) {
         return this.convertLWPolyline(entity_tio, commonAttrs)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_MLINE) {
+        return this.convertMLine(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_MTEXT) {
         return this.convertMText(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_OLE2FRAME) {
@@ -152,6 +159,33 @@ export class LibreEntityConverter {
       }
     }
     return undefined
+  }
+
+  private convert3dFace(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): Dwg3dFaceEntity {
+    const libredwg = this.libredwg
+    const corner1 = libredwg.dwg_dynapi_entity_value(entity, 'corner1')
+      .data as DwgPoint3D
+    const corner2 = libredwg.dwg_dynapi_entity_value(entity, 'corner2')
+      .data as DwgPoint3D
+    const corner3 = libredwg.dwg_dynapi_entity_value(entity, 'corner3')
+      .data as DwgPoint3D
+    const corner4 = libredwg.dwg_dynapi_entity_value(entity, 'corner4')
+      .data as DwgPoint3D
+    const flag = libredwg.dwg_dynapi_entity_value(entity, 'invis_flags')
+      .data as number
+
+    return {
+      type: '3DFACE',
+      ...commonAttrs,
+      corner1: corner1,
+      corner2: corner2,
+      corner3: corner3,
+      corner4: corner4,
+      flag: flag
+    }
   }
 
   private convertArc(
@@ -864,6 +898,71 @@ export class LibreEntityConverter {
     }
   }
 
+  private convertMLine(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): DwgMLineEntity {
+    const libredwg = this.libredwg
+    const scale = libredwg.dwg_dynapi_entity_value(entity, 'scale')
+      .data as number
+    const flags = libredwg.dwg_dynapi_entity_value(entity, 'flags')
+      .data as number
+    const justification = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'justification'
+    ).data as number
+    const startPoint = libredwg.dwg_dynapi_entity_value(entity, 'base_point')
+      .data as DwgPoint3D
+    const extrusionDirection = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'extrusion'
+    ).data as DwgPoint3D
+    const numberOfLines = libredwg.dwg_dynapi_entity_value(entity, 'num_lines')
+      .data as number
+    const numberOfVertices = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'num_verts'
+    ).data as number
+    const verts_ptr = libredwg.dwg_dynapi_entity_value(entity, 'verts')
+      .data as number
+    const verts = libredwg.dwg_ptr_to_mline_vertex_array(
+      verts_ptr,
+      numberOfVertices
+    )
+
+    const vertices: DwgMLineVertex[] = []
+    verts.forEach(vert => {
+      vertices.push({
+        vertex: vert.vertex,
+        vertexDirection: vert.vertex_direction,
+        miterDirection: vert.miter_direction,
+        numberOfLines: vert.num_lines,
+        lines: vert.lines.map(line => {
+          return {
+            numberOfSegmentParams: line.num_segparms,
+            segmentParams: line.segparms,
+            numberOfAreaFillParams: line.num_areafillparms,
+            areaFillParams: line.areafillparms
+          }
+        })
+      })
+    })
+
+    return {
+      type: 'MLINE',
+      ...commonAttrs,
+      scale: scale,
+      flags: flags,
+      justification: justification,
+      startPoint: startPoint,
+      extrusionDirection: extrusionDirection,
+      numberOfLines: numberOfLines,
+      numberOfVertices: numberOfVertices,
+      vertices: vertices,
+      mlineStyle: '' // TODO: Set the correct value
+    }
+  }
+
   private convertOle2Frame(
     entity: Dwg_Object_Entity_Ptr,
     commonAttrs: DwgCommonAttributes
@@ -1134,7 +1233,8 @@ export class LibreEntityConverter {
     const libredwg = this.libredwg
     const state = libredwg.dwg_dynapi_entity_value(entity, 'state')
       .data as number
-    const flag = libredwg.dwg_dynapi_entity_value(entity, 'flag').data as number
+    const flags = libredwg.dwg_dynapi_entity_value(entity, 'flag')
+      .data as number
     const name = libredwg.dwg_dynapi_entity_value(entity, 'name').data as string
     const verticalDirection = libredwg.dwg_dynapi_entity_value(
       entity,
@@ -1190,7 +1290,7 @@ export class LibreEntityConverter {
       type: 'SECTION',
       ...commonAttrs,
       state: state,
-      flag: flag,
+      flags: flags,
       name: name,
       verticalDirection: verticalDirection,
       topHeight: topHeight,
