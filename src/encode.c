@@ -1987,13 +1987,16 @@ find_longest_match (Bit_Chain *restrict src, uint32_t i, uint32_t *restrict lenp
 static int
 compress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dat)
 {
-  uint32_t i = 0;
+  uint32_t i = src->byte;
   uint32_t match = 0, oldlen = 0;
   uint32_t len = 0;
   uint32_t offset = 0;
   size_t pos = bit_position (dat);
   LOG_INFO ("compress_R2004_section %" PRIuSIZE "\n", src->size);
-  assert (src->size > MIN_COMPRESSED_SECTION);
+  assert (src->bit == 0);
+  assert (dat->bit == 0);
+  if (src->size <= MIN_COMPRESSED_SECTION)
+    return 1;
   while (i < src->size - MIN_COMPRESSED_SECTION)
     {
       offset = find_longest_match (src, i, &len);
@@ -4537,13 +4540,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     {
                       LOG_HANDLE ("Compress %s (%u/%d)\n", info->name, k,
                                   sec->size);
-                      compress_R2004_section (&sec_dat[type], dat);
+                      if (compress_R2004_section (&sec_dat[type], dat))
+                        goto uncompressed;
                       sec->comp_data_size = sec_dat[type].size;
                       LOG_TRACE ("sec->comp_data_size: " FORMAT_RL "\n",
                                  sec->comp_data_size);
                     }
                   else
                     {
+                    uncompressed:
+                      info->compressed = 1;
                       LOG_HANDLE ("Copy uncompressed %s (%u/%d)\n", info->name,
                                   k, sec->size);
                       assert (dat->bit == 0);
