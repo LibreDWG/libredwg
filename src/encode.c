@@ -4542,7 +4542,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                   sec->size);
                       if (compress_R2004_section (&sec_dat[type], dat))
                         goto uncompressed;
-                      sec->comp_data_size = sec_dat[type].size;
+                      sec->comp_data_size = dat->size;
                       LOG_TRACE ("sec->comp_data_size: " FORMAT_RL "\n",
                                  sec->comp_data_size);
                     }
