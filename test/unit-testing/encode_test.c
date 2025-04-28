@@ -272,14 +272,14 @@ test_compress_R2004_section (void)
         pass ();
       else
         {
-          fail ("decompress compressed section back auxh %d %lu", result,
-                (unsigned long)dec.size);
+          fail ("decompress compressed section back auxh %d %lu => %lu", result,
+                (unsigned long)dat.size, (unsigned long)dec.size);
           if (loglevel >= 3)
             {
               if (loglevel >= 6)
                 {
                   bit_explore_chain (&dat, 0, dat.size);
-                  bit_explore_chain (&dec, 0, dec.size);
+                  bit_explore_chain (&dec, 0, MIN (dec.size, 0x1000));
                 }
               for (unsigned i=0; i < sizeof decomp_auxh_bin; i++)
                 {
@@ -323,14 +323,14 @@ test_compress_R2004_section (void)
         ok ("compress_R2004_section");
       else
         {
-          fail ("decompress compressed section back ofs %d %lu", result,
-                (unsigned long)dec.size);
+          fail ("decompress compressed section back ofs %d %lu => %lu", result,
+                (unsigned long)dat.size, (unsigned long)dec.size);
           if (loglevel >= 3)
             {
               if (loglevel >= 6)
                 {
                   bit_explore_chain (&dat, 0, dat.size);
-                  bit_explore_chain (&dec, 0, dec.size);
+                  bit_explore_chain (&dec, 0, MIN (dec.size, 0x1000));
                 }
               for (unsigned i=0; i < sizeof decomp_ofs_bin; i++)
                 {
