@@ -201,6 +201,10 @@ main (int argc, char *argv[])
                                      "../test-old/2018/from_ACadSharp/"
                                      "AecObjects.dwg", cov);
         }
+      // if (DWG_TYPE == DWG_TYPE_MULTILEADER)
+      //  {
+      //    error += test_code_nodist (prefix, "../issues/gh518/9.dwg", cov);
+      //  }
       // if no coverage
       if (!numpassed () && !numfailed ())
         {
@@ -282,6 +286,8 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_GEODATA)
             {
               error += test_code (prefix, "2010/gh209_1.dwg", cov);
+              error += test_code_nodist (
+                  prefix, "../test-old/2018/from_ACadSharp/geoloc.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_PLOTSETTINGS)
             {
@@ -637,6 +643,16 @@ main (int argc, char *argv[])
                   prefix, // but here in section not in object.
                   "../test-old/2013/from_upcommons.upc.edu/DRAWINGS.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_SOLID_BACKGROUND)
+            {
+              error += test_code_nodist (prefix, "../issues/gh695/2.dwg",
+                                         cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_LARGE_RADIAL_DIMENSION)
+            {
+              error += test_code_nodist (
+                  prefix, "../test-old/2018/from_ezdxf/uncommon.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_RAPIDRTRENDERSETTINGS)
             {
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
@@ -766,7 +782,6 @@ main (int argc, char *argv[])
               || DWG_TYPE == DWG_TYPE_ASSOCOFFSETSURFACEACTIONBODY
               || DWG_TYPE == DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY
               || DWG_TYPE == DWG_TYPE_ASSOCTRIMSURFACEACTIONBODY
-              || DWG_TYPE == DWG_TYPE_SOLID_BACKGROUND
               || DWG_TYPE == DWG_TYPE_IBL_BACKGROUND
               || DWG_TYPE == DWG_TYPE_IMAGE_BACKGROUND
               || DWG_TYPE == DWG_TYPE_GRADIENT_BACKGROUND
