@@ -6637,6 +6637,21 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
              ")\n",
              entities_section[entity_section], start, end, num_entities, size);
   LOG_INFO ("==========================================\n");
+  if (end > dat->size)
+    {
+      if (dwg->auxheader.entities_end && end != dwg->auxheader.entities_end)
+        {
+          LOG_ERROR ("Corrupt entities_end, fixed to auxheader.entities_end " FORMAT_RL,
+                     dwg->auxheader.entities_end);
+          end = dwg->header.entities_end = dwg->auxheader.entities_end;
+        }
+      if (end > dat->size)
+        {
+          LOG_ERROR ("Corrupt entities_end " FORMAT_RL " fixed to filesize",
+                     dwg->header.entities_end);
+          end = dwg->header.entities_end = dat->size & 0xFFFFFFFF;
+        }
+    }
   if (entity_section != BLOCKS_SECTION_INDEX)
     {
       hdr = dwg_model_space_object (dwg);
@@ -7196,6 +7211,13 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               LOG_ERROR ("Too many entities, buffer overflow %" PRIuSIZE
                          " >= %" PRIuSIZE,
                          dat->byte, dat->size);
+              return DWG_ERR_INVALIDDWG;
+            }
+          if (dat->byte == oldpos)
+            {
+              LOG_ERROR (
+                  "No advance in decode_preR13_entities, abort at %" PRIuSIZE,
+                  dat->byte);
               return DWG_ERR_INVALIDDWG;
             }
         }
