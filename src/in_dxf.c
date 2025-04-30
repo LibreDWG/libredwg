@@ -8705,8 +8705,14 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
           if (j < _ctrl->num_entries)
             memmove (&_ctrl->entries[j], &_ctrl->entries[j + 1],
                      (_ctrl->num_entries - j - 1) * sizeof (BITCODE_H));
-          _ctrl->entries = (BITCODE_H *)realloc (
-              _ctrl->entries, _ctrl->num_entries * sizeof (BITCODE_H));
+          if (_ctrl->num_entries)
+            _ctrl->entries = (BITCODE_H *)realloc (
+                _ctrl->entries, _ctrl->num_entries * sizeof (BITCODE_H));
+          else
+            {
+              free (_ctrl->entries);
+              _ctrl->entries = NULL;
+            }
           return 1;
         }
     }
