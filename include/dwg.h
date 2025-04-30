@@ -8163,7 +8163,8 @@ typedef struct _dwg_entity_eed_data
       unsigned short codepage:15; /* RS_LE */
       unsigned short is_tu:1;
 #ifndef SWIG
-      char string[] __counted_by(length);      /* inlined */
+      // TODO broken gcc-15 optimization
+      char string[] /*__counted_by(length)*/;      /* inlined */
 #else
       char string[0]; // swig limitation https://github.com/swig/swig/issues/1699
 #endif
@@ -8173,7 +8174,7 @@ typedef struct _dwg_entity_eed_data
       unsigned short _padding:15;
       unsigned short is_tu:1;
 #ifndef SWIG
-      DWGCHAR string[] __counted_by(length); /* inlined */
+      DWGCHAR string[] /*__counted_by(length)*/; /* inlined */
 #else
       DWGCHAR string[0];
 #endif
