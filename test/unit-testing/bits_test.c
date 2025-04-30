@@ -1348,6 +1348,78 @@ bit_read_CMC_tests (void)
 }
 
 static void
+bit_read_MS_tests (void)
+{
+  Bit_Chain bitchain = strtobt ("11111111" "01111111");
+  unsigned int result = bit_read_MS (&bitchain);
+  if (result == 32767)
+    ok ("bit_read_MS - 32767");
+  else
+    fail ("bit_read_MS");
+  bitfree (&bitchain);
+
+  bitchain = strtobt ("11111111" "11111111" "11111111" "01111111");
+  result = bit_read_MS (&bitchain);
+  if (result == 1073741823)
+    ok ("bit_read_MS - 1073741823");
+  else
+    fail ("bit_read_MS");
+  bitfree (&bitchain);
+}
+
+static void
+bit_read_UMC_tests (void)
+{
+  Bit_Chain bitchain;
+  BITCODE_UMC umc;
+
+#define test_UMC(s, x)                                                        \
+  bitchain = strtobt (s);                                                     \
+  umc = bit_read_UMC (&bitchain);                                             \
+  if (umc == x)                                                               \
+    ok ("bit_read_UMC - " FORMAT_UMC, (BITCODE_UMC)x);                        \
+  else                                                                        \
+    fail ("bit_read_UMC " FORMAT_UMC " != " FORMAT_UMC, umc, (BITCODE_UMC)x); \
+  bitfree (&bitchain)
+
+  test_UMC("00000000", 0x0);
+  test_UMC("01111111", 0x7F);
+  test_UMC("11100101" "10001110" "00100110", 0x98765);
+  test_UMC("11010010" "11101100" "10101001" "11110010" "10010010" "10100010" "00000001", 0x5112E4A7652);
+  test_UMC("11111111" "11111111" "11111111" "11111111" "11111111" "11111111" "11111111" "01111111", 0xFFFFFFFFFFFFFF);
+}
+
+static void
+bit_read_MC_tests (void)
+{
+  Bit_Chain bitchain;
+  BITCODE_MC mc;
+
+#define test_MC(s, x)                                                     \
+  bitchain = strtobt (s);                                                 \
+  mc = bit_read_MC (&bitchain);                                           \
+  if (mc == x)                                                            \
+    ok ("bit_read_MC - %d", (BITCODE_MC)x);                               \
+  else                                                                    \
+    fail ("bit_read_MC " FORMAT_MC " != " FORMAT_MC, mc, (BITCODE_MC)x);  \
+  bitfree (&bitchain)
+
+  test_MC("00000000", 0);
+  test_MC("00111111", 63);
+  test_MC("01111111", -63);
+  test_MC("11111111" "00000000", 127);
+  test_MC("11111111" "01000000", -127);
+  test_MC("11111111" "00111111", 8191);
+  test_MC("11111111" "01111111", -8191);
+  test_MC("11111111" "11111111" "00000000", 16383);
+  test_MC("11111111" "11111111" "01000000", -16383);
+  test_MC("11000000" "10111011" "01111000", -925120);
+  test_MC("11111111" "11111111" "11111111" "00111111", 134217727);
+  test_MC("11111111" "11111111" "11111111" "01111111", -134217727);
+  test_MC("11111111" "11111111" "11111111" "11111111", 268435455);
+}
+
+static void
 in_hexbin_tests (void)
 {
   Bit_Chain dat = { 0 };
@@ -1471,6 +1543,9 @@ main (int argc, char const *argv[])
   bit_read_BE_tests ();
   bit_write_BE_tests ();
   bit_read_CMC_tests ();
+  bit_read_MS_tests ();
+  bit_read_UMC_tests ();
+  bit_read_MC_tests ();
   in_hexbin_tests ();
 
   // Prepare the testcase
