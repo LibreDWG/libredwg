@@ -6637,20 +6637,20 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
              ")\n",
              entities_section[entity_section], start, end, num_entities, size);
   LOG_INFO ("==========================================\n");
+  // we only have a 2nd entities_end, not for blocks nor extras
+  if (end > dat->size && entity_section == ENTITIES_SECTION_INDEX
+      && dwg->auxheader.entities_end && end != dwg->auxheader.entities_end)
+    {
+      LOG_ERROR ("Corrupt entities_end, fixed to "
+                 "auxheader.entities_end " FORMAT_RL,
+                 dwg->auxheader.entities_end);
+      end = dwg->header.entities_end = dwg->auxheader.entities_end;
+    }
   if (end > dat->size)
     {
-      if (dwg->auxheader.entities_end && end != dwg->auxheader.entities_end)
-        {
-          LOG_ERROR ("Corrupt entities_end, fixed to auxheader.entities_end " FORMAT_RL,
-                     dwg->auxheader.entities_end);
-          end = dwg->header.entities_end = dwg->auxheader.entities_end;
-        }
-      if (end > dat->size)
-        {
-          LOG_ERROR ("Corrupt entities_end " FORMAT_RL " fixed to filesize",
-                     dwg->header.entities_end);
-          end = dwg->header.entities_end = dat->size & 0xFFFFFFFF;
-        }
+      LOG_ERROR ("Corrupt end " FORMAT_RL " fixed to filesize",
+                 end);
+      end = dat->size & 0xFFFFFFFF;
     }
   if (entity_section != BLOCKS_SECTION_INDEX)
     {
