@@ -1,5 +1,7 @@
 export * from './3dface'
 export * from './arc'
+export * from './attdef'
+export * from './attrib'
 export * from './circle'
 export * from './dimension'
 export * from './ellipse'

@@ -1,7 +1,8 @@
 import { MainModule } from '../wasm/libredwg-web'
 import createModule from '../wasm/libredwg-web.js'
 import { LibreDwgConverter } from './converter'
-import { DwgPoint2D, DwgPoint3D, DwgPoint4D } from './database'
+import { DwgDatabase, DwgPoint2D, DwgPoint3D, DwgPoint4D } from './database'
+import { SvgConverter } from './svg'
 import {
   Dwg_Array_Ptr,
   Dwg_Color,
@@ -99,6 +100,16 @@ export class LibreDwg {
    */
   convert(data: Dwg_Data_Ptr) {
     const converter = new LibreDwgConverter(this as unknown as LibreDwgEx)
+    return converter.convert(data)
+  }
+
+  /**
+   * Converts DwgDatabase instance to svg string. 
+   * @param data DwgDatabase instance.
+   * @returns Returns the converted svg string.
+   */
+  dwg_to_svg(data: DwgDatabase) {
+    const converter = new SvgConverter()
     return converter.convert(data)
   }
 
