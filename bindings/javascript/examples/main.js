@@ -208,7 +208,7 @@ fileInput.addEventListener('change', function(event) {
 
         libredwg.dwg_free(data)
       } catch (error) {
-        console.error('Error processing DWG file: ', error)
+        console.error('Failed to process dwg file: ', error)
       }
     }
 

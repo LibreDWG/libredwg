@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert Dwg to SVG</title>
+</head>
+<body>
+    <h1>Convert Dwg to SVG</h1>
+    <p>Notes: support arc, line, circle, ellipse, and polyline only.</p>
+    <input type="file" id="fileInput" accept=".dwg" />
+    <button id="download-svg-btn">Download SVG</button>
+    <br><br>
+    <div id="svg-container"></div>
+    <script type="module" src="dist/libredwg-web.js" defer></script>
+    <script type="module" >
+      import { Dwg_File_Type, LibreDwg } from './dist/libredwg-web.js'
+
+      // load libredwg webassembly module
+      const libredwg = await LibreDwg.create()
+
+      document.getElementById('download-svg-btn').addEventListener('click', () => {
+        const svg = document.querySelector('#svg-container svg');
+        if (!svg) {
+          alert('No SVG to download!')
+          return
+        }
+
+        const serializer = new XMLSerializer()
+        const svgContent = serializer.serializeToString(svg)
+        const blob = new Blob([svgContent], { type: 'image/svg+xml' })
+        const url = URL.createObjectURL(blob)
+
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'drawing.svg'
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+      })
+    
+      // handle file input change event
+      const fileInput = document.getElementById('fileInput')
+      fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0]
+        if (file) {
+          // create a FileReader to read the file
+          const reader = new FileReader()
+
+          // define the callback function for when the file is read
+          reader.onload = function(e) {
+            const fileContent = e.target.result
+            try {
+              const dwg = libredwg.dwg_read_data(fileContent, Dwg_File_Type.DWG)
+              const db = libredwg.convert(dwg)
+              const svgString = libredwg.dwg_to_svg(db)
+
+              const parser = new DOMParser()
+              const doc = parser.parseFromString(svgString, 'image/svg+xml')
+              const svg = doc.documentElement
+              const svgContainer = document.getElementById('svg-container')
+              svgContainer.innerHTML = ''
+              svgContainer.appendChild(svg)
+            } catch (error) {
+              console.error('Failed to process dwg file: ', error)
+            }
+          }
+
+          // read the file
+          reader.readAsArrayBuffer(file)
+        } else {
+          console.log('No file selected')
+        }
+      })
+    </script>
+</body>
+</html>

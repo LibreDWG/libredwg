@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DWG Model Json Viewer</title>
+    <title>Dwg Database JSON Viewer</title>
     <script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.2.0/dist/jsoneditor.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.2.0/dist/jsoneditor.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>DWG Database JSON Viewer</h1>
+    <h1>Dwg Database JSON Viewer</h1>
     <input type="file" id="fileInput" accept=".dwg" />
     <div id="jsoneditor"></div>
     <script type="module" src="dist/libredwg-web.js" defer></script>
@@ -41,7 +41,7 @@
               const model = libredwg.convert(dwg)
               editor.set(model)
             } catch (error) {
-              console.error('Error processing DWG file: ', error)
+              console.error('Failed to process dwg file: ', error)
             }
           }
 

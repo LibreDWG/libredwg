@@ -25,5 +25,8 @@ export interface DwgDatabase {
     LAYOUT: DwgLayoutObject[]
   }
   header: DwgHeader
+  /**
+   * All of entities in the model space.
+   */
   entities: DwgEntity[]
 }

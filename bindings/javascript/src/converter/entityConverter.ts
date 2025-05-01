@@ -5,6 +5,7 @@ import {
   DwgArcEdge,
   DwgArcEntity,
   DwgAttachmentPoint,
+  DwgAttdefEntity,
   DwgBoundaryPath,
   DwgBoundaryPathEdge,
   DwgBoundaryPathEdgeType,
@@ -15,6 +16,7 @@ import {
   DwgEdgeBoundaryPath,
   DwgEllipseEdge,
   DwgEllipseEntity,
+  DwgEmbeddedMText,
   DwgEntity,
   DwgHatchAssociativity,
   DwgHatchEntityBase,
@@ -51,6 +53,7 @@ import {
   DwgSplineEntity,
   DwgTableCell,
   DwgTableEntity,
+  DwgTextBase,
   DwgTextEntity,
   DwgTextHorizontalAlign,
   DwgTextVerticalAlign,
@@ -97,6 +100,8 @@ export class LibreEntityConverter {
         return this.convert3dFace(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_ARC) {
         return this.convertArc(entity_tio, commonAttrs)
+      } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_ATTDEF) {
+        return this.convertAttdef(entity_tio, commonAttrs)
       } else if (fixedtype == Dwg_Object_Type.DWG_TYPE_CIRCLE) {
         return this.convertCircle(entity_tio, commonAttrs)
       } else if (
@@ -217,6 +222,155 @@ export class LibreEntityConverter {
       startAngle: startAngle,
       endAngle: endAngle,
       extrusionDirection: extrusionDirection
+    }
+  }
+
+  private convertEmbeddedMText(
+    entity: Dwg_Object_Entity_Ptr,
+    subclassName: string
+  ): DwgEmbeddedMText {
+    const libredwg = this.libredwg
+    const attachmentPoint = libredwg.dwg_dynapi_subclass_value(
+      entity,
+      subclassName,
+      'attachment'
+    ).data as number
+    const insertionPoint = libredwg.dwg_dynapi_subclass_value(
+      entity,
+      subclassName,
+      'ins_pt'
+    ).data as DwgPoint3D
+    const direction = libredwg.dwg_dynapi_subclass_value(
+      entity,
+      subclassName,
+      'x_axis_dir'
+    ).data as DwgPoint3D
+    const rectHeight = libredwg.dwg_dynapi_subclass_value(
+      entity,
+      subclassName,
+      'rect_height'
+    ).data as number
+    const rectWidth = libredwg.dwg_dynapi_subclass_value(
+      entity,
+      subclassName,
+      'rect_width'
+    ).data as number
+    const extentsHeight = libredwg.dwg_dynapi_subclass_value(
+      entity,
+      subclassName,
+      'extents_height'
+    ).data as number
+    const extentsWidth = libredwg.dwg_dynapi_subclass_value(
+      entity,
+      subclassName,
+      'extents_width'
+    ).data as number
+    // const columnType = libredwg.dwg_dynapi_subclass_value(entity, subclassName, 'column_type')
+    //   .data as number
+    // const columnWidth = libredwg.dwg_dynapi_subclass_value(entity, subclassName, 'column_width')
+    //   .data as number
+    // const columnGutter = libredwg.dwg_dynapi_subclass_value(entity, subclassName, 'gutter')
+    //   .data as number
+    // const columnAutoHeight = libredwg.dwg_dynapi_subclass_value(
+    //     entity,
+    //     subclassName,
+    //     'auto_height'
+    //   ).data as number
+    // const columnFlowReversed = libredwg.dwg_dynapi_subclass_value(
+    //     entity,
+    //     subclassName,
+    //     'flow_reversed'
+    //   ).data as number
+    // const columnHeightCount = libredwg.dwg_dynapi_subclass_value(
+    //   entity,
+    //   subclassName,
+    //   'num_column_heights'
+    // ).data as number
+    // const columnHeights_ptr = libredwg.dwg_dynapi_subclass_value(
+    //   entity,
+    //   subclassName,
+    //   'column_heights'
+    // ).data as number
+    // const columnHeights = libredwg.dwg_ptr_to_double_array(
+    //   columnHeights_ptr,
+    //   columnHeightCount
+    // )
+
+    return {
+      insertionPoint: insertionPoint,
+      rectHeight: rectHeight,
+      rectWidth: rectWidth,
+      extentsHeight: extentsHeight,
+      extentsWidth: extentsWidth,
+      attachmentPoint: attachmentPoint as DwgAttachmentPoint,
+      direction: direction
+      // columnType: columnType,
+      // columnFlowReversed: columnFlowReversed,
+      // columnAutoHeight: columnAutoHeight,
+      // columnWidth: columnWidth,
+      // columnGutter: columnGutter,
+      // columnHeightCount: columnHeightCount,
+      // columnHeights: columnHeights
+    }
+  }
+
+  private convertAttdef(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): DwgAttdefEntity {
+    const libredwg = this.libredwg
+
+    // Because the field name of text string in Dwg_Entity_ATTDEF is 'default_value'
+    // instead of 'text_value'. So we need to get its value again using the correct
+    // field name.
+    const textValue = libredwg.dwg_dynapi_entity_value(entity, 'default_value')
+      .data as string
+    const text = this.convertTextBase(entity)
+    text.text = textValue
+
+    const prompt = libredwg.dwg_dynapi_entity_value(entity, 'prompt')
+      .data as string
+    const tag = libredwg.dwg_dynapi_entity_value(entity, 'tag').data as string
+    const flags = libredwg.dwg_dynapi_entity_value(entity, 'flags')
+      .data as number
+    const fieldLength = libredwg.dwg_dynapi_entity_value(entity, 'field_length')
+      .data as number
+    const lockPositionFlag = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'lock_position_flag'
+    ).data as number
+    const duplicateRecordCloningFlag = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'keep_duplicate_records'
+    ).data as number
+    const isReallyLocked = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'is_locked_in_block'
+    ).data as number
+    // TODO: double check whether 'mtext_type' is 'mtextFlag'
+    const mtextFlag = libredwg.dwg_dynapi_entity_value(entity, 'mtext_type')
+      .data as number
+    const alignmentPoint = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'alignment_pt'
+    ).data as DwgPoint2D
+
+    return {
+      type: 'ATTDEF',
+      ...commonAttrs,
+      text: this.convertTextBase(entity),
+      prompt: prompt,
+      tag: tag,
+      flags: flags,
+      fieldLength: fieldLength,
+      lockPositionFlag: lockPositionFlag > 0,
+      duplicateRecordCloningFlag: duplicateRecordCloningFlag > 0,
+      mtextFlag: mtextFlag,
+      isReallyLocked: isReallyLocked > 0,
+      alignmentPoint: alignmentPoint,
+      annotationScale: 1, // TODO: Set the correct value
+      attrTag: '', // TODO: Set the correct value
+      mtext: this.convertEmbeddedMText(entity, 'ATTDEF_mtext')
     }
   }
 
@@ -1029,10 +1183,20 @@ export class LibreEntityConverter {
     const libredwg = this.libredwg
     const insertionPoint = libredwg.dwg_dynapi_entity_value(entity, 'ins_pt')
       .data as DwgPoint3D
-    const height = libredwg.dwg_dynapi_entity_value(entity, 'text_height')
+    const textHeight = libredwg.dwg_dynapi_entity_value(entity, 'text_height')
       .data as number
-    const width = libredwg.dwg_dynapi_entity_value(entity, 'rect_width')
+    const rectHeight = libredwg.dwg_dynapi_entity_value(entity, 'rect_height')
       .data as number
+    const rectWidth = libredwg.dwg_dynapi_entity_value(entity, 'rect_width')
+      .data as number
+    const extentsWidth = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'extents_width'
+    ).data as number
+    const extentsHeight = libredwg.dwg_dynapi_entity_value(
+      entity,
+      'extents_height'
+    ).data as number
     const attachmentPoint = libredwg.dwg_dynapi_entity_value(
       entity,
       'attachment'
@@ -1105,8 +1269,11 @@ export class LibreEntityConverter {
       type: 'MTEXT',
       ...commonAttrs,
       insertionPoint: insertionPoint,
-      height: height,
-      width: width,
+      textHeight: textHeight,
+      rectHeight: rectHeight,
+      rectWidth: rectWidth,
+      extentsHeight: extentsHeight,
+      extentsWidth: extentsWidth,
       attachmentPoint: attachmentPoint as DwgAttachmentPoint,
       drawingDirection: drawingDirection as DwgMTextDrawingDirection,
       text: text,
@@ -1535,10 +1702,7 @@ export class LibreEntityConverter {
     return converted
   }
 
-  private convertText(
-    entity: Dwg_Object_Entity_Ptr,
-    commonAttrs: DwgCommonAttributes
-  ): DwgTextEntity {
+  private convertTextBase(entity: Dwg_Object_Entity_Ptr): DwgTextBase {
     const libredwg = this.libredwg
     const text = libredwg.dwg_dynapi_entity_value(entity, 'text_value')
       .data as string
@@ -1559,7 +1723,6 @@ export class LibreEntityConverter {
       'oblique_angle'
     ).data as number
     const styleName = libredwg.dwg_entity_text_get_style_name(entity)
-    // const style_ptr = libredwg.dwg_dynapi_entity_value(entity, 'style').data as number
     const generationFlag = libredwg.dwg_dynapi_entity_value(
       entity,
       'generation'
@@ -1574,8 +1737,6 @@ export class LibreEntityConverter {
     ).data as DwgPoint3D
 
     return {
-      type: 'TEXT',
-      ...commonAttrs,
       text: text,
       thickness: thickness,
       startPoint: startPoint,
@@ -1589,6 +1750,17 @@ export class LibreEntityConverter {
       halign: halign as DwgTextHorizontalAlign,
       valign: valign as DwgTextVerticalAlign,
       extrusionDirection: extrusionDirection
+    }
+  }
+
+  private convertText(
+    entity: Dwg_Object_Entity_Ptr,
+    commonAttrs: DwgCommonAttributes
+  ): DwgTextEntity {
+    return {
+      type: 'TEXT',
+      ...commonAttrs,
+      ...this.convertTextBase(entity)
     }
   }
 
