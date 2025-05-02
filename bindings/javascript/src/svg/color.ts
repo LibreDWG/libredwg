@@ -233,15 +233,15 @@ export class Color {
   }
 
   get red() {
-    return this.color ? (this.color >> 16) & 255 : null
+    return this.color != null ? (this.color >> 16) & 255 : null
   }
 
   get green() {
-    return this.color ? (this.color >> 8) & 255 : null
+    return this.color != null ? (this.color >> 8) & 255 : null
   }
 
   get blue() {
-    return this.color ? this.color & 255 : null
+    return this.color != null ? this.color & 255 : null
   }
 
   /**

@@ -5,11 +5,16 @@ type Transform =
   | { type: 'rotate'; angle: number }
   | { type: 'scale'; x: number; y: number }
 
+export interface BBoxAndElement {
+  bbox: Box2D
+  element: string
+}
+
 export const transformBoundingBoxAndElement = (
   bbox: Box2D,
   element: string,
   transforms: Transform[] | undefined = undefined
-): { bbox: Box2D; element: string } => {
+): BBoxAndElement => {
   if (!transforms || transforms.length === 0) {
     return { bbox, element }
   }

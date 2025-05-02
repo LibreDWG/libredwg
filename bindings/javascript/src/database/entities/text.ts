@@ -38,6 +38,7 @@ export interface DwgTextBase {
   startPoint: DwgPoint2D
   /**
    * Second alignment point (in OCS) (optional)
+   * This value is meaningful only if the justification is anything other than baseline/left
    */
   endPoint: DwgPoint2D
   /**
