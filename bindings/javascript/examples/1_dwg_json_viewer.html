@@ -40,6 +40,7 @@
               const dwg = libredwg.dwg_read_data(fileContent, Dwg_File_Type.DWG)
               const model = libredwg.convert(dwg)
               editor.set(model)
+              libredwg.dwg_free(dwg)
             } catch (error) {
               console.error('Failed to process dwg file: ', error)
             }

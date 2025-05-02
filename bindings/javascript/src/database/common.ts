@@ -1,3 +1,7 @@
+export const MODEL_SPACE = '*Model_Space'
+
+export const MODEL_SPACE_PREFIX = '*Paper_Space'
+
 export interface DwgPoint2D {
   x: number
   y: number

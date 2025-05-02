@@ -1,23 +1,32 @@
 import {
   DwgArcEntity,
+  DwgBlockRecordTableEntry,
   DwgCircleEntity,
   DwgDatabase,
   DwgEllipseEntity,
   DwgEntity,
+  DwgInsertEntity,
   DwgLayerTableEntry,
   DwgLineEntity,
   DwgLWPolylineEntity,
   DwgPoint2D,
   DwgPolylineEntity,
-  DwgSplineEntity
+  DwgSplineEntity,
+  DwgTextEntity,
+  MODEL_SPACE
 } from '../database'
 import { Box2D } from './box2d'
 import { evaluateBSpline } from './bspline'
 import { Color } from './color'
 import { interpolatePolyline } from './polyline'
-import { transformBoundingBoxAndElement } from './transformBoundingBoxAndElement'
+import {
+  BBoxAndElement,
+  transformBoundingBoxAndElement
+} from './transformBoundingBoxAndElement'
 
 export class SvgConverter {
+  private blockMap = new Map<string, BBoxAndElement>()
+
   private rotate(point: DwgPoint2D, angle: number) {
     const cos = Math.cos(angle)
     const sin = Math.sin(angle)
@@ -107,6 +116,25 @@ export class SvgConverter {
       .expandByPoint({ x: entity.startPoint.x, y: entity.startPoint.y })
       .expandByPoint({ x: entity.endPoint.x, y: entity.endPoint.y })
     const element = `<line x1="${entity.startPoint.x}" y1="${entity.startPoint.y}" x2="${entity.endPoint.x}" y2="${entity.endPoint.y}" />`
+    return transformBoundingBoxAndElement(bbox, element)
+  }
+
+  private text(entity: DwgTextEntity) {
+    const fontsize = entity.textHeight
+    const bbox = new Box2D().expandByPoint({
+      x: entity.startPoint.x,
+      y: entity.startPoint.y
+    })
+    if (entity.halign != 0) {
+      bbox.expandByPoint({ x: entity.endPoint.x, y: entity.endPoint.y })
+    } else {
+      bbox.expandByPoint({
+        x: entity.text.length * fontsize + entity.startPoint.x,
+        y: entity.endPoint.y
+      })
+    }
+    const insertionPoint = entity.startPoint
+    const element = `\t<text x="${insertionPoint.x}" y="${insertionPoint.y}" font-size="${fontsize}" fill="blue">${entity.text}</text>\n`
     return transformBoundingBoxAndElement(bbox, element)
   }
 
@@ -288,6 +316,50 @@ export class SvgConverter {
     return transformBoundingBoxAndElement(bbox, element)
   }
 
+  private insert(entity: DwgInsertEntity) {
+    const block = this.blockMap.get(entity.name)
+    if (block) {
+      const transform = `matrix(${entity.xScale},0,0,${entity.yScale},${entity.insertionPoint.x},${entity.insertionPoint.y})`
+      const newBBox = block.bbox.applyTransform(
+        { x: entity.xScale, y: entity.yScale },
+        entity.rotation,
+        entity.insertionPoint
+      )
+      return {
+        bbox: newBBox,
+        element: `<use href="#${entity.name}" transform="${transform}" />`
+      }
+    }
+    return null
+  }
+
+  private block(block: DwgBlockRecordTableEntry, dwg: DwgDatabase) {
+    const entities = block.entities
+    const { bbox, elements } = entities.reduce(
+      (acc: { bbox: Box2D; elements: string[] }, entity: DwgEntity) => {
+        const color = this.getEntityColor(dwg.tables.LAYER.entries, entity)
+        const boundsAndElement = this.entityToBoundsAndElement(entity)
+        if (boundsAndElement) {
+          const { bbox, element } = boundsAndElement
+          if (bbox.valid) {
+            acc.bbox.expandByPoint(bbox.min)
+            acc.bbox.expandByPoint(bbox.max)
+          }
+          acc.elements.push(`<g stroke="${color.cssColor}">${element}</g>`)
+        }
+        return acc
+      },
+      {
+        bbox: new Box2D(),
+        elements: []
+      }
+    )
+    return {
+      bbox,
+      element: `<g id="${block.name}" stroke="#000000" stroke-width="0.1%" fill="none" transform="matrix(1,0,0,-1,0,0)">${elements.join('\n')}</g>`
+    }
+  }
+
   private entityToBoundsAndElement(entity: DwgEntity) {
     switch (entity.type) {
       case 'CIRCLE':
@@ -308,6 +380,8 @@ export class SvgConverter {
           )
         )
       }
+      case 'INSERT':
+        return this.insert(entity as DwgInsertEntity)
       case 'LINE':
         return this.line(entity as DwgLineEntity)
       case 'LWPOLYLINE': {
@@ -322,6 +396,8 @@ export class SvgConverter {
         const vertices = interpolatePolyline(polyline, closed)
         return this.vertices(vertices, closed)
       }
+      case 'TEXT':
+        return this.text(entity as DwgTextEntity)
       default:
         return null
     }
@@ -359,27 +435,20 @@ export class SvgConverter {
   }
 
   public convert(dwg: DwgDatabase) {
-    const entities = dwg.entities
-    const { bbox, elements } = entities.reduce(
-      (acc: { bbox: Box2D; elements: string[] }, entity: DwgEntity) => {
-        const color = this.getEntityColor(dwg.tables.LAYER.entries, entity)
-        const boundsAndElement = this.entityToBoundsAndElement(entity)
-        if (boundsAndElement) {
-          const { bbox, element } = boundsAndElement
-          if (bbox.valid) {
-            acc.bbox.expandByPoint(bbox.min)
-            acc.bbox.expandByPoint(bbox.max)
-          }
-          acc.elements.push(`<g stroke="${color.cssColor}">${element}</g>`)
-        }
-        return acc
-      },
-      {
-        bbox: new Box2D(),
-        elements: []
+    let modelSpace = null
+    this.blockMap.clear()
+    let blockElements = ''
+    dwg.tables.BLOCK_RECORD.entries.forEach(block => {
+      if (block.name === MODEL_SPACE) {
+        modelSpace = block
+      } else {
+        const item = this.block(block, dwg)
+        blockElements += item.element
+        this.blockMap.set(block.name, item)
       }
-    )
+    })
 
+    const { bbox, element } = this.block(modelSpace!, dwg)
     const viewBox = bbox.valid
       ? {
           x: bbox.min.x,
@@ -401,9 +470,7 @@ export class SvgConverter {
   viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}"
   width="100%" height="100%"
 >
-  <g stroke="#000000" stroke-width="0.1%" fill="none" transform="matrix(1,0,0,-1,0,0)">
-    ${elements.join('\n')}
-  </g>
+  <defs>${blockElements}</defs>${element}
 </svg>`
   }
 }

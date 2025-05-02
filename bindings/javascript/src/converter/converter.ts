@@ -14,7 +14,8 @@ import {
   DwgPoint2D,
   DwgPoint3D,
   DwgStyleTableEntry,
-  DwgVPortTableEntry
+  DwgVPortTableEntry,
+  MODEL_SPACE
 } from '../database'
 import { LibreDwgEx } from '../libredwg'
 import {
@@ -85,7 +86,7 @@ export class LibreDwgConverter {
             {
               const btr = this.convertBlockRecord(tio, obj)
               db.tables.BLOCK_RECORD.entries.push(btr)
-              if (btr.name == '*Model_Space') {
+              if (btr.name == MODEL_SPACE) {
                 db.entities = btr.entities
               }
             }
@@ -151,6 +152,11 @@ export class LibreDwgConverter {
     const block = libredwg.dwg_entity_block_header_get_block(item)
     commonAttrs.name = block.name
 
+    const flags = libredwg.dwg_dynapi_entity_value(item, 'flag').data as number
+    const description = libredwg.dwg_dynapi_entity_value(item, 'description')
+      .data as string
+    const basePoint = libredwg.dwg_dynapi_entity_value(item, 'base_pt')
+      .data as DwgPoint3D
     const insertionUnits = libredwg.dwg_dynapi_entity_value(
       item,
       'insert_units'
@@ -167,6 +173,9 @@ export class LibreDwgConverter {
 
     return {
       ...commonAttrs,
+      flags: flags,
+      description: description,
+      basePoint: basePoint,
       layout: layout,
       insertionUnits: insertionUnits,
       explodability: explodability,

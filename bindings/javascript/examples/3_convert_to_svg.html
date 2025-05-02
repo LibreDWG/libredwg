@@ -7,9 +7,9 @@
 </head>
 <body>
     <h1>Convert Dwg to SVG</h1>
-    <p>Notes: support arc, line, circle, ellipse, and polyline only.</p>
+    <p>Notes: support arc, circle, ellipse, insert, line, and polyline only.</p>
     <input type="file" id="fileInput" accept=".dwg" />
-    <button id="download-svg-btn">Download SVG</button>
+    <button id="download-svg-btn" disabled>Download SVG</button>
     <br><br>
     <div id="svg-container"></div>
     <script type="module" src="dist/libredwg-web.js" defer></script>
@@ -62,7 +62,11 @@
               const svgContainer = document.getElementById('svg-container')
               svgContainer.innerHTML = ''
               svgContainer.appendChild(svg)
+
+              libredwg.dwg_free(dwg)
+              document.getElementById('download-svg-btn').disabled = false
             } catch (error) {
+              document.getElementById('download-svg-btn').disabled = true
               console.error('Failed to process dwg file: ', error)
             }
           }
@@ -70,6 +74,7 @@
           // read the file
           reader.readAsArrayBuffer(file)
         } else {
+          document.getElementById('download-svg-btn').disabled = true
           console.log('No file selected')
         }
       })
