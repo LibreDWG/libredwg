@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract Thumbnail Image from Dwg File</title>
+</head>
+<body>
+    <h1>Extract Thumbnail Image from Dwg File</h1>
+    <input type="file" id="fileInput" accept=".dwg" />
+    <br><br>
+    <img id="thumbnail" alt="Dwg Thumbnail Image" />
+    <script type="module" src="dist/libredwg-web.js" defer></script>
+    <script type="module" >
+      import { Dwg_File_Type, LibreDwg } from './dist/libredwg-web.js'
+
+      // load libredwg webassembly module
+      const libredwg = await LibreDwg.create()
+
+      const showImageFromUint8Array = (data, typep) => {
+        let mimeType = "image/png"
+        if (typep == 2) {
+          mineType = "image/bmp"
+        } else if (typep == 3) {
+          mineType = "image/x-wmf"
+        } 
+        const blob = new Blob([data], { type: mimeType })
+        const url = URL.createObjectURL(blob)
+
+        const img = document.getElementById("thumbnail")
+        img.src = url
+        // Clean up the URL after the image loads
+        img.onload = () => URL.revokeObjectURL(url)
+      }
+    
+      // handle file input change event
+      const fileInput = document.getElementById('fileInput')
+      fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0]
+        if (file) {
+          // create a FileReader to read the file
+          const reader = new FileReader()
+
+          // define the callback function for when the file is read
+          reader.onload = function(e) {
+            const fileContent = e.target.result
+            try {
+              const dwg = libredwg.dwg_read_data(fileContent, Dwg_File_Type.DWG)
+              const thumbnail = libredwg.dwg_bmp(dwg)
+              if (thumbnail) {
+                showImageFromUint8Array(thumbnail.data, thumbnail.type)
+              } else {
+                const img = document.getElementById("thumbnail")
+                img.src = ''
+                img.alt = 'No thumbnail image stored in dwg!'
+                // Clean up the URL after the image loads
+                img.onload = () => URL.revokeObjectURL('')
+              }
+              libredwg.dwg_free(dwg)
+            } catch (error) {
+              console.error('Failed to process dwg file: ', error)
+            }
+          }
+
+          // read the file
+          reader.readAsArrayBuffer(file)
+        } else {
+          console.log('No file selected')
+        }
+      })
+    </script>
+</body>
+</html>

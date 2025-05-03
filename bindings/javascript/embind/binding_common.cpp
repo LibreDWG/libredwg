@@ -111,11 +111,8 @@ EMSCRIPTEN_BINDINGS(libredwg_type) {
 #define DEFINE_ARRAY_FUNC(type)                                                        \
 emscripten::val dwg_ptr_to_##type##_array_wrapper(uintptr_t array_ptr, size_t size) {  \
   type* array = reinterpret_cast<type*>(array_ptr);                                    \
-  emscripten::val jsArray = emscripten::val::array();                                  \
-  for (int index = 0; index < size; ++index) {                                         \
-    jsArray.call<void>("push", array[index]);                                          \
-  }                                                                                    \
-  return jsArray;                                                                      \
+  std::vector<type> data(array, array + size);                                         \
+  return emscripten::val(emscripten::typed_memory_view(data.size(), data.data()));     \
 }
 
 DEFINE_ARRAY_FUNC(double)
@@ -125,7 +122,6 @@ DEFINE_ARRAY_FUNC(uint32_t)
 DEFINE_ARRAY_FUNC(int32_t)
 DEFINE_ARRAY_FUNC(uint64_t)
 DEFINE_ARRAY_FUNC(int64_t)
-
 
 emscripten::val dwg_ptr_to_unsigned_char_array_wrapper(uintptr_t array_ptr, size_t size) {
   unsigned char* array = reinterpret_cast<unsigned char*>(array_ptr);
