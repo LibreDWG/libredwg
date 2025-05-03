@@ -1981,7 +1981,6 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           break;
         }
     }
-  sec_dat->chain = NULL; // fixes double-free
   if (!info)
     {
       if (type < SECTION_REVHISTORY && type != SECTION_TEMPLATE
@@ -2080,8 +2079,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           LOG_WARN ("Skip empty section %u %s", i, info->name);
           if (i == info->num_sections - 1) // the last one
             {
-              sec_dat->chain = NULL; // fix double-free
               free (dec.chain);
+              sec_dat->chain = NULL;
               return DWG_ERR_SECTIONNOTFOUND;
             }
           j--; // index for writing info->max_decomp_size chunks
@@ -2153,11 +2152,12 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
             }
 #endif
           error = decompress_R2004_section (dat, &dec);
+          sec_dat->chain = dec.chain; // may be realloced
           dat->size = orig_size;
           if (error > DWG_ERR_CRITICAL)
             {
-              sec_dat->chain = NULL; // fix double-free
               free (dec.chain);
+              sec_dat->chain = NULL;
               return error;
             }
           bytes_left -= info->max_decomp_size;
@@ -2173,8 +2173,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
               || offset + size > dat->size)
             {
               LOG_ERROR ("Some section size or address out of bounds")
-              sec_dat->chain = NULL;
               free (dec.chain);
+              sec_dat->chain = NULL;
               return type < SECTION_REVHISTORY ? DWG_ERR_INVALIDDWG
                                                : DWG_ERR_VALUEOUTOFBOUNDS;
             }
@@ -2200,6 +2200,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain sec_dat = { 0 }, str_dat = { 0 };
   Dwg_Object *obj = NULL;
 
+  memset (&sec_dat, 0, sizeof (sec_dat));
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_CLASSES);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
@@ -2257,7 +2258,10 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       assert (max_num >= 500);
 
       if (dat->from_version >= R_2007)
-        section_string_stream (dwg, &sec_dat, bitsize, &str_dat);
+        {
+          memset (&str_dat, 0, sizeof (str_dat));
+          section_string_stream (dwg, &sec_dat, bitsize, &str_dat);
+        }
 
       dwg->dwg_class
           = (Dwg_Class *)calloc (dwg->num_classes, sizeof (Dwg_Class));
