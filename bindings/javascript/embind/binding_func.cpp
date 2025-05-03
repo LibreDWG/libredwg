@@ -40,6 +40,26 @@ emscripten::val dwg_read_file_wrapper(const std::string& filename) {
 //   return result;
 // }
 
+/* 
+ * Supports multiple preview picture types.
+ * Currently 3 types: BMP 2, WMF 3 and PNG as type 6.
+ * Returns the size of the image.
+ */
+emscripten::val dwg_bmp_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  BITCODE_RL size = 0;
+  BITCODE_RC typep = 0;
+  const unsigned char* array = dwg_bmp(dwg, &size, &typep);
+  if (array) {
+    emscripten::val result = emscripten::val::object();
+    std::vector<unsigned char> data(array, array + size);
+    result.set("type", typep);
+    result.set("data", emscripten::val(emscripten::typed_memory_view(data.size(), data.data())));
+    return result;
+  }
+  return emscripten::val::null();
+}
+
 /** 
  * Search for the name in the associated table, and return its handle. Search
  * is case-insensitive.
@@ -775,6 +795,7 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_read_file);
   // DEFINE_FUNC(dxf_read_file);
   // DEFINE_FUNC(dwg_write_file);
+  DEFINE_FUNC(dwg_bmp);
 
   DEFINE_FUNC(dwg_find_tablehandle);
   DEFINE_FUNC(dwg_find_tablehandle_index);

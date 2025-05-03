@@ -48,6 +48,17 @@ export { createModule }
 
 export type LibreDwgEx = LibreDwg & MainModule
 
+export enum DwgThumbnailImageType {
+  BMP = 2,
+  WMF = 3,
+  PNG = 6
+}
+
+export interface DwgThumbnail {
+  data: Uint8Array
+  type: DwgThumbnailImageType
+}
+
 export class LibreDwg {
   static instance: LibreDwgEx
   private wasmInstance!: MainModule
@@ -92,6 +103,15 @@ export class LibreDwg {
   }
 
   /**
+   * Extracts thumbnail image form dwg.
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Return thumbnail image data
+   */
+  dwg_bmp(data: Dwg_Data_Ptr): DwgThumbnail | null {
+    return this.wasmInstance.dwg_bmp(data)
+  }
+
+  /**
    * Converts Dwg_Data instance to DwgDatabase instance. DwgDatabase instance doesn't depend on
    * Dwg_Data instance any more after conversion. So you can call function dwg_free to free memory
    * occupied by Dwg_Data.
@@ -104,7 +124,7 @@ export class LibreDwg {
   }
 
   /**
-   * Converts DwgDatabase instance to svg string. 
+   * Converts DwgDatabase instance to svg string.
    * @param data DwgDatabase instance.
    * @returns Returns the converted svg string.
    */

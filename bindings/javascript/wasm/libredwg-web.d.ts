@@ -505,6 +505,7 @@ interface EmbindModule {
   dwg_entity_polyline_2d_get_points(_0: number): any;
   dwg_entity_polyline_2d_get_vertices(_0: number): any;
   dwg_read_file(_0: EmbindString): any;
+  dwg_bmp(_0: number): any;
 }
 
 export type MainModule = WasmModule & typeof RuntimeExports & EmbindModule;
