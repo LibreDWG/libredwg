@@ -15,6 +15,7 @@ import {
   DwgPoint3D,
   DwgStyleTableEntry,
   DwgVPortTableEntry,
+  HEADER_VARIABLES,
   MODEL_SPACE
 } from '../database'
 import { LibreDwgEx } from '../libredwg'
@@ -67,9 +68,7 @@ export class LibreDwgConverter {
         IMAGEDEF: [],
         LAYOUT: []
       },
-      header: {
-        variables: new Map()
-      },
+      header: {},
       entities: []
     }
     const libredwg = this.libredwg
@@ -123,20 +122,31 @@ export class LibreDwgConverter {
 
   private convertHeader(data: Dwg_Data_Ptr, header: DwgHeader) {
     const libredwg = this.libredwg
-    const variables = [
-      'CECOLOR',
-      'ANGBASE',
-      'ANGDIR',
-      'AUNITS',
-      'INSUNITS',
-      'PDMODE',
-      'PDSIZE'
-    ]
-    const headerVars = header.variables
-    variables.forEach(name => {
-      // TODO: For number variables are converted only
-      const value = libredwg.dwg_dynapi_header_value(data, name).data as number
-      headerVars.set(name, value)
+    HEADER_VARIABLES.forEach(name => {
+      let var_name = name
+      if (name == 'DIMBLK' || name == 'DIMBLK1' || name == 'DIMBLK2') {
+        var_name = var_name + '_T'
+      }
+      let value = libredwg.dwg_dynapi_header_value(data, var_name).data as
+        | number
+        | string
+
+      // Get object name if the 'value' is one Dwg_Object_Ref instance.
+      // TODO: handle 'CMLSTYLE' correctly
+      if (
+        name == 'CELTYPE' ||
+        name == 'CLAYER' ||
+        name == 'CLAYER' ||
+        name == 'DIMSTYLE' ||
+        name == 'DIMTXSTY' ||
+        name == 'TEXTSTYLE'
+      ) {
+        value = libredwg.dwg_ref_get_object_name(value as number)
+      } else if (name == 'DRAGVS') {
+        value = libredwg.dwg_ref_get_absref(value as number)
+      }
+      // @ts-expect-error header variable name
+      header[name] = value
     })
   }
 
@@ -168,7 +178,21 @@ export class LibreDwgConverter {
     const layout_ptr = libredwg.dwg_dynapi_entity_value(item, 'layout')
       .data as number
     const layout = libredwg.dwg_ref_get_absref(layout_ptr)
-    // TODO: Handle preview
+
+    let bmpPreview = ''
+    const uint8ArrayToHexString = (bytes: Uint8Array): string => {
+      const hexChars: string[] = new Array(bytes.length)
+      for (let i = 0; i < bytes.length; i++) {
+        hexChars[i] = bytes[i].toString(16).toUpperCase()
+      }
+      return hexChars.join('')
+    }
+    const bmpPreviewBinaryData =
+      libredwg.dwg_entity_block_header_get_preview(item)
+    if (bmpPreviewBinaryData && bmpPreviewBinaryData.length > 0) {
+      bmpPreview = uint8ArrayToHexString(bmpPreviewBinaryData)
+    }
+
     const entities = this.convertEntities(obj, commonAttrs.handle)
 
     return {
@@ -180,6 +204,7 @@ export class LibreDwgConverter {
       insertionUnits: insertionUnits,
       explodability: explodability,
       scalability: scalability,
+      bmpPreview: bmpPreview,
       entities: entities
     }
   }

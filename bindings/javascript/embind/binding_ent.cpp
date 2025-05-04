@@ -152,7 +152,19 @@ emscripten::val dwg_entity_polyline_2d_get_vertices_wrapper(Dwg_Object_Ptr obj_p
     }
   } else {
     result.set("success", false);
-    result.set("message", "empty arg!");
+    result.set("message", "Null pointer passed or object isn't a 2d poyline!");
+  }
+  return result;
+}
+
+emscripten::val dwg_entity_block_header_get_preview_wrapper(Dwg_Object_Object_Ptr obj_ptr) {
+  Dwg_Object_BLOCK_HEADER* block_header = reinterpret_cast<Dwg_Object_BLOCK_HEADER*>(obj_ptr);
+  emscripten::val result = emscripten::val::object();
+  if (block_header) {
+    result.set("data", dwg_ptr_to_unsigned_char_array(block_header->preview, block_header->preview_size));
+  } else {
+    result.set("success", false);
+    result.set("message", "Null pointer passed!");
   }
   return result;
 }
@@ -161,4 +173,5 @@ EMSCRIPTEN_BINDINGS(libredwg_dwg_object_ref) {
   DEFINE_FUNC(dwg_entity_polyline_2d_get_numpoints);
   DEFINE_FUNC(dwg_entity_polyline_2d_get_points);
   DEFINE_FUNC(dwg_entity_polyline_2d_get_vertices);
+  DEFINE_FUNC(dwg_entity_block_header_get_preview);
 }

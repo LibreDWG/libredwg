@@ -504,6 +504,7 @@ interface EmbindModule {
   dwg_entity_polyline_2d_get_numpoints(_0: number): any;
   dwg_entity_polyline_2d_get_points(_0: number): any;
   dwg_entity_polyline_2d_get_vertices(_0: number): any;
+  dwg_entity_block_header_get_preview(_0: number): any;
   dwg_read_file(_0: EmbindString): any;
   dwg_bmp(_0: number): any;
 }

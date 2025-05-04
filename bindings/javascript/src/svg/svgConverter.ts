@@ -1,28 +1,31 @@
 import {
   DwgArcEntity,
+  DwgAttachmentPoint,
   DwgBlockRecordTableEntry,
   DwgCircleEntity,
   DwgDatabase,
+  DwgDimensionEntity,
   DwgEllipseEntity,
   DwgEntity,
   DwgInsertEntity,
   DwgLayerTableEntry,
   DwgLineEntity,
   DwgLWPolylineEntity,
+  DwgMTextEntity,
   DwgPoint2D,
   DwgPolylineEntity,
   DwgSplineEntity,
   DwgTextEntity,
+  DwgTextHorizontalAlign,
   MODEL_SPACE
 } from '../database'
 import { Box2D } from './box2d'
 import { evaluateBSpline } from './bspline'
 import { Color } from './color'
 import { interpolatePolyline } from './polyline'
-import {
-  BBoxAndElement,
-  transformBoundingBoxAndElement
-} from './transformBoundingBoxAndElement'
+import { BBoxAndElement } from './transformBoundingBoxAndElement'
+
+type SvgAnchorType = 'start' | 'middle' | 'end'
 
 export class SvgConverter {
   private blockMap = new Map<string, BBoxAndElement>()
@@ -111,34 +114,115 @@ export class SvgConverter {
     }
   }
 
-  private line(entity: DwgLineEntity) {
+  private line(entity: DwgLineEntity): BBoxAndElement {
     const bbox = new Box2D()
       .expandByPoint({ x: entity.startPoint.x, y: entity.startPoint.y })
       .expandByPoint({ x: entity.endPoint.x, y: entity.endPoint.y })
     const element = `<line x1="${entity.startPoint.x}" y1="${entity.startPoint.y}" x2="${entity.endPoint.x}" y2="${entity.endPoint.y}" />`
-    return transformBoundingBoxAndElement(bbox, element)
+    return { bbox, element }
   }
 
-  private text(entity: DwgTextEntity) {
-    const fontsize = entity.textHeight
-    const bbox = new Box2D().expandByPoint({
-      x: entity.startPoint.x,
-      y: entity.startPoint.y
-    })
-    if (entity.halign != 0) {
-      bbox.expandByPoint({ x: entity.endPoint.x, y: entity.endPoint.y })
-    } else {
-      bbox.expandByPoint({
-        x: entity.text.length * fontsize + entity.startPoint.x,
-        y: entity.endPoint.y
+  private extractMTextLines(mtext: string) {
+    return (
+      mtext
+        // Convert Unicode codes to characters
+        .replace(/\\U\+([0-9A-Fa-f]{4})/g, (_, hex) =>
+          String.fromCharCode(parseInt(hex, 16))
+        )
+        // Remove underline, overline
+        .replace(/\\[LOlo]/g, '')
+        // Remove color, background color, height, width, text scale, vertical alignment
+        .replace(/\\[KkCcHhWwTtAa]\d*\.?\d*;?/g, '')
+        // Remove font specs like \fArial|b0|i0;
+        .replace(/\\f[^;]*?;/g, '')
+        // Replace escaped backslash
+        .replace(/\\\\/g, '\\')
+        // Replace non-breaking space
+        .replace(/\\~/g, '\u00A0')
+        // Remove grouping braces
+        .replace(/[{}]/g, '')
+        // Split by line breaks (\P)
+        .split(/\\P/)
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+    )
+  }
+
+  private lines(
+    lines: string[],
+    fontsize: number,
+    insertionPoint: DwgPoint2D,
+    extentsWidth: number,
+    anchor: SvgAnchorType = 'start'
+  ): BBoxAndElement {
+    const bbox = new Box2D()
+      .expandByPoint({
+        x: insertionPoint.x,
+        y: insertionPoint.y
       })
-    }
-    const insertionPoint = entity.startPoint
-    const element = `\t<text x="${insertionPoint.x}" y="${insertionPoint.y}" font-size="${fontsize}" fill="blue">${entity.text}</text>\n`
-    return transformBoundingBoxAndElement(bbox, element)
+      .expandByPoint({
+        x: insertionPoint.x + extentsWidth,
+        y: insertionPoint.y - lines.length * fontsize * 1.5
+      })
+    const texts = lines.map((line, index) => {
+      const x = insertionPoint.x
+      const y = insertionPoint.y - index * fontsize * 1.5
+      const transform = `translate(${x},${y}) scale(1,-1) translate(${-x},${-y})`
+
+      return `<text x="${x}" y="${y}" font-size="${fontsize}" text-anchor="${anchor}" transform="${transform}">${line}</text>`
+    })
+    return { bbox, element: texts.join('\n') }
   }
 
-  private vertices(vertices: DwgPoint2D[], closed: boolean = false) {
+  private mtext(entity: DwgMTextEntity): BBoxAndElement {
+    const fontsize = entity.textHeight
+    const insertionPoint = entity.insertionPoint
+    const lines = this.extractMTextLines(entity.text)
+    const attachmentPoint = entity.attachmentPoint
+    let anchor: SvgAnchorType = 'start'
+    if (
+      attachmentPoint == DwgAttachmentPoint.BottomCenter ||
+      attachmentPoint == DwgAttachmentPoint.MiddleCenter ||
+      attachmentPoint == DwgAttachmentPoint.TopCenter
+    ) {
+      anchor = 'middle'
+    } else if (
+      attachmentPoint == DwgAttachmentPoint.BottomRight ||
+      attachmentPoint == DwgAttachmentPoint.MiddleRight ||
+      attachmentPoint == DwgAttachmentPoint.TopRight
+    ) {
+      anchor = 'end'
+    }
+    return this.lines(
+      lines,
+      fontsize,
+      insertionPoint,
+      entity.extentsWidth,
+      anchor
+    )
+  }
+
+  private text(entity: DwgTextEntity): BBoxAndElement {
+    const fontsize = entity.textHeight
+    const insertionPoint = entity.startPoint
+    const lines = [entity.text]
+    let extentsWidth = entity.endPoint.x - entity.endPoint.x
+    if (entity.halign == 0) {
+      extentsWidth = entity.text.length * fontsize + entity.startPoint.x
+    }
+    let anchor: SvgAnchorType = 'start'
+    if (entity.halign == DwgTextHorizontalAlign.CENTER) {
+      anchor = 'middle'
+    } else if (entity.halign == DwgTextHorizontalAlign.RIGHT) {
+      anchor = 'end'
+    }
+    return this.lines(lines, fontsize, insertionPoint, extentsWidth, anchor)
+  }
+
+  private vertices(
+    vertices: DwgPoint2D[],
+    closed: boolean = false
+  ): BBoxAndElement {
     const bbox = vertices.reduce(
       (acc: Box2D, point: DwgPoint2D) => acc.expandByPoint(point),
       new Box2D()
@@ -151,10 +235,10 @@ export class SvgConverter {
     if (closed) {
       d += 'Z'
     }
-    return transformBoundingBoxAndElement(bbox, `<path d="${d}" />`)
+    return { bbox, element: `<path d="${d}" />` }
   }
 
-  private circle(entity: DwgCircleEntity) {
+  private circle(entity: DwgCircleEntity): BBoxAndElement {
     const bbox0 = new Box2D()
       .expandByPoint({
         x: entity.center.x + entity.radius,
@@ -165,11 +249,10 @@ export class SvgConverter {
         y: entity.center.y - entity.radius
       })
     const element0 = `<circle cx="${entity.center.x}" cy="${entity.center.y}" r="${entity.radius}" />`
-    const { bbox, element } = this.addFlipXIfApplicable(entity, {
+    return this.addFlipXIfApplicable(entity, {
       bbox: bbox0,
       element: element0
     })
-    return transformBoundingBoxAndElement(bbox, element)
   }
 
   private ellipseOrArc(
@@ -180,7 +263,7 @@ export class SvgConverter {
     axisRatio: number,
     startAngle: number,
     endAngle: number
-  ) {
+  ): BBoxAndElement {
     const rx = Math.sqrt(majorX * majorX + majorY * majorY)
     const ry = axisRatio * rx
     const rotationAngle = -Math.atan2(-majorY, majorX)
@@ -282,7 +365,7 @@ export class SvgConverter {
     return bbox
   }
 
-  private ellipse(entity: DwgEllipseEntity) {
+  private ellipse(entity: DwgEllipseEntity): BBoxAndElement {
     const { bbox: bbox0, element: element0 } = this.ellipseOrArc(
       entity.center.x,
       entity.center.y,
@@ -292,14 +375,13 @@ export class SvgConverter {
       entity.startAngle,
       entity.endAngle
     )
-    const { bbox, element } = this.addFlipXIfApplicable(entity, {
+    return this.addFlipXIfApplicable(entity, {
       bbox: bbox0,
       element: element0
     })
-    return transformBoundingBoxAndElement(bbox, element)
   }
 
-  private arc(entity: DwgArcEntity) {
+  private arc(entity: DwgArcEntity): BBoxAndElement {
     const { bbox: bbox0, element: element0 } = this.ellipseOrArc(
       entity.center.x,
       entity.center.y,
@@ -309,17 +391,29 @@ export class SvgConverter {
       entity.startAngle,
       entity.endAngle
     )
-    const { bbox, element } = this.addFlipXIfApplicable(entity, {
+    return this.addFlipXIfApplicable(entity, {
       bbox: bbox0,
       element: element0
     })
-    return transformBoundingBoxAndElement(bbox, element)
   }
 
-  private insert(entity: DwgInsertEntity) {
+  private dimension(entity: DwgDimensionEntity): BBoxAndElement | null {
     const block = this.blockMap.get(entity.name)
     if (block) {
-      const transform = `matrix(${entity.xScale},0,0,${entity.yScale},${entity.insertionPoint.x},${entity.insertionPoint.y})`
+      return {
+        bbox: block.bbox,
+        element: `<use href="#${entity.name}" />`
+      }
+    }
+    return null
+  }
+
+  private insert(entity: DwgInsertEntity): BBoxAndElement | null {
+    const block = this.blockMap.get(entity.name)
+    if (block) {
+      // In SVG, the unit of rotate is degrees — not radians.
+      const rotation = entity.rotation * (180 / Math.PI)
+      const transform = `matrix(${entity.xScale},0,0,${entity.yScale},${entity.insertionPoint.x},${entity.insertionPoint.y}) rotate(${rotation})`
       const newBBox = block.bbox.applyTransform(
         { x: entity.xScale, y: entity.yScale },
         entity.rotation,
@@ -333,11 +427,13 @@ export class SvgConverter {
     return null
   }
 
-  private block(block: DwgBlockRecordTableEntry, dwg: DwgDatabase) {
+  private block(
+    block: DwgBlockRecordTableEntry,
+    dwg: DwgDatabase
+  ): BBoxAndElement {
     const entities = block.entities
     const { bbox, elements } = entities.reduce(
       (acc: { bbox: Box2D; elements: string[] }, entity: DwgEntity) => {
-        const color = this.getEntityColor(dwg.tables.LAYER.entries, entity)
         const boundsAndElement = this.entityToBoundsAndElement(entity)
         if (boundsAndElement) {
           const { bbox, element } = boundsAndElement
@@ -345,7 +441,18 @@ export class SvgConverter {
             acc.bbox.expandByPoint(bbox.min)
             acc.bbox.expandByPoint(bbox.max)
           }
-          acc.elements.push(`<g stroke="${color.cssColor}">${element}</g>`)
+          const color = this.getEntityColor(dwg.tables.LAYER.entries, entity)
+          const fill =
+            entity.type == 'TEXT' || entity.type == 'MTEXT'
+              ? color.cssColor
+              : 'none'
+          if (color.isByBlock) {
+            acc.elements.push(`<g id="${entity.handle}">${element}</g>`)
+          } else {
+            acc.elements.push(
+              `<g id="${entity.handle}" stroke="${color.cssColor}" fill="${fill}">${element}</g>`
+            )
+          }
         }
         return acc
       },
@@ -356,18 +463,32 @@ export class SvgConverter {
     )
     return {
       bbox,
-      element: `<g id="${block.name}" stroke="#000000" stroke-width="0.1%" fill="none" transform="matrix(1,0,0,-1,0,0)">${elements.join('\n')}</g>`
+      element: `<g id="${block.name}">${elements.join('\n')}</g>`
     }
   }
 
   private entityToBoundsAndElement(entity: DwgEntity) {
     switch (entity.type) {
-      case 'CIRCLE':
-        return this.circle(entity as DwgCircleEntity)
-      case 'ELLIPSE':
-        return this.ellipse(entity as DwgEllipseEntity)
       case 'ARC':
         return this.arc(entity as DwgArcEntity)
+      case 'CIRCLE':
+        return this.circle(entity as DwgCircleEntity)
+      case 'DIMENSION':
+        return this.dimension(entity as DwgDimensionEntity)
+      case 'ELLIPSE':
+        return this.ellipse(entity as DwgEllipseEntity)
+      case 'INSERT':
+        return this.insert(entity as DwgInsertEntity)
+      case 'LINE':
+        return this.line(entity as DwgLineEntity)
+      case 'LWPOLYLINE': {
+        const lwpolyline = entity as DwgLWPolylineEntity
+        const closed = !!(lwpolyline.flag & 0x200)
+        const vertices = interpolatePolyline(lwpolyline, closed)
+        return this.vertices(vertices, closed)
+      }
+      case 'MTEXT':
+        return this.mtext(entity as DwgMTextEntity)
       case 'SPLINE': {
         const spline = entity as DwgSplineEntity
         return this.vertices(
@@ -379,16 +500,6 @@ export class SvgConverter {
             spline.weights
           )
         )
-      }
-      case 'INSERT':
-        return this.insert(entity as DwgInsertEntity)
-      case 'LINE':
-        return this.line(entity as DwgLineEntity)
-      case 'LWPOLYLINE': {
-        const lwpolyline = entity as DwgLWPolylineEntity
-        const closed = !!(lwpolyline.flag & 0x200)
-        const vertices = interpolatePolyline(lwpolyline, closed)
-        return this.vertices(vertices, closed)
       }
       case 'POLYLINE': {
         const polyline = entity as DwgPolylineEntity
@@ -409,14 +520,17 @@ export class SvgConverter {
   ): Color {
     // Get entity color
     const color = new Color()
-    if (entity.color != null) {
-      color.color = entity.color
-    }
     if (entity.colorIndex != null) {
       color.colorIndex = entity.colorIndex
-    }
-    if (entity.colorName != null) {
+    } else if (entity.colorName) {
       color.colorName = entity.colorName
+    } else if (entity.color != null) {
+      color.color = entity.color
+    }
+
+    // If it is white color, convert it to black because the background of svg is white
+    if (color.colorIndex == 7) {
+      color.colorIndex = 256
     }
 
     // If color is 'byLayer', use the layer color
@@ -470,7 +584,10 @@ export class SvgConverter {
   viewBox="${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}"
   width="100%" height="100%"
 >
-  <defs>${blockElements}</defs>${element}
+  <defs>${blockElements}</defs>
+  <g stroke="#000000" stroke-width="0.1%" fill="none" transform="matrix(1,0,0,-1,0,0)">
+    ${element}
+  </g>
 </svg>`
   }
 }

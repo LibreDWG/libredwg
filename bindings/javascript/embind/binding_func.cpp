@@ -49,12 +49,11 @@ emscripten::val dwg_bmp_wrapper(uintptr_t dwg_ptr) {
   Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
   BITCODE_RL size = 0;
   BITCODE_RC typep = 0;
-  const unsigned char* array = dwg_bmp(dwg, &size, &typep);
+  unsigned char* array = dwg_bmp(dwg, &size, &typep);
   if (array) {
     emscripten::val result = emscripten::val::object();
-    std::vector<unsigned char> data(array, array + size);
     result.set("type", typep);
-    result.set("data", emscripten::val(emscripten::typed_memory_view(data.size(), data.data())));
+    result.set("data", dwg_ptr_to_unsigned_char_array(array, size));
     return result;
   }
   return emscripten::val::null();

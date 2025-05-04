@@ -1781,7 +1781,7 @@ export class LibreEntityConverter {
       entity,
       'extrusion'
     ).data as DwgPoint3D
-    const dimStyleName = libredwg.dwg_entity_get_style_name(entity)
+    const dimStyleName = libredwg.dwg_entity_get_dimstyle_name(entity)
 
     return {
       type: 'TOLERANCE',
@@ -1927,7 +1927,7 @@ export class LibreEntityConverter {
       entity,
       'extrusion'
     ).data as DwgPoint3D
-    const styleName = libredwg.dwg_entity_get_style_name(entity)
+    const styleName = libredwg.dwg_entity_get_dimstyle_name(entity)
 
     return {
       type: 'DIMENSION',

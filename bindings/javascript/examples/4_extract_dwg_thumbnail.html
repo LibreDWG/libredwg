@@ -18,13 +18,13 @@
       const libredwg = await LibreDwg.create()
 
       const showImageFromUint8Array = (data, typep) => {
-        let mimeType = "image/png"
+        let mineType = "image/png"
         if (typep == 2) {
           mineType = "image/bmp"
         } else if (typep == 3) {
           mineType = "image/x-wmf"
         } 
-        const blob = new Blob([data], { type: mimeType })
+        const blob = new Blob([data], { type: mineType })
         const url = URL.createObjectURL(blob)
 
         const img = document.getElementById("thumbnail")
