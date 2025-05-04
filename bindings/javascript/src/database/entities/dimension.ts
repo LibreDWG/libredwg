@@ -1,7 +1,7 @@
 import { DwgPoint2D, DwgPoint3D } from '../common'
 import { DwgEntity } from './entity'
 
-export declare enum DwgDimensionType {
+export enum DwgDimensionType {
   Rotated = 0,
   Aligned = 1,
   Angular = 2,
@@ -14,7 +14,7 @@ export declare enum DwgDimensionType {
   IsCustomTextPositionFlag = 128
 }
 
-export declare enum DwgAttachmentPoint {
+export enum DwgAttachmentPoint {
   TopLeft = 1,
   TopCenter = 2,
   TopRight = 3,
@@ -26,12 +26,12 @@ export declare enum DwgAttachmentPoint {
   BottomRight = 9
 }
 
-export declare enum DwgDimensionTextLineSpacing {
+export enum DwgDimensionTextLineSpacing {
   AtLeast = 1,
   Exact = 2
 }
 
-export declare enum DwgDimensionTextVertical {
+export enum DwgDimensionTextVertical {
   Center = 0,
   Above = 1,
   Outside = 2,
@@ -39,7 +39,7 @@ export declare enum DwgDimensionTextVertical {
   Below = 4
 }
 
-export declare enum DwgDimensionZeroSuppression {
+export enum DwgDimensionZeroSuppression {
   Feet = 0,
   None = 1,
   Inch = 2,
@@ -49,14 +49,14 @@ export declare enum DwgDimensionZeroSuppression {
   LeadingAndTrailing = 12
 }
 
-export declare enum DwgDimensionZeroSuppressionAngular {
+export enum DwgDimensionZeroSuppressionAngular {
   None = 0,
   Leading = 1,
   Trailing = 2,
   LeadingAndTrailing = 3
 }
 
-export declare enum DwgDimensionTextHorizontal {
+export enum DwgDimensionTextHorizontal {
   Center = 0,
   Left = 1,
   Right = 2,
@@ -64,7 +64,7 @@ export declare enum DwgDimensionTextHorizontal {
   OverSecond = 4
 }
 
-export declare enum DwgDimensionToleranceTextVertical {
+export enum DwgDimensionToleranceTextVertical {
   Bottom = 0,
   Center = 1,
   Top = 2

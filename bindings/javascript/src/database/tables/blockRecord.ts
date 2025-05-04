@@ -28,10 +28,28 @@ export interface DwgBlockRecordTableEntry extends DwgCommonTableEntry {
    * Block description (optional)
    */
   description?: string
+  /**
+   * Hard-pointer ID/handle to associated LAYOUT object
+   */
   layout: number
+  /**
+   * Block insertion units.
+   */
   insertionUnits: number
+  /**
+   * Block explodability
+   */
   explodability: number
+  /**
+   * Block scalability
+   */
   scalability: number
+  /**
+   * Binary data for bitmap preview (optional)
+   */
   bmpPreview?: string
+  /**
+   * All of entities in this block record
+   */
   entities: DwgEntity[]
 }

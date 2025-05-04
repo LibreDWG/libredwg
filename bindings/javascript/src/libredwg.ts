@@ -234,6 +234,21 @@ export class LibreDwg {
   }
 
   /**
+   * Returns object (such as line type, layer name, dimension style, and etc.) name by its handle.
+   * @group Handle Conversion Methods
+   * @param ref_ptr Pointer to Dwg_Object_Ref instance.
+   * @returns Returns object name by its handle.
+   */
+  dwg_ref_get_object_name(ref_ptr: Dwg_Object_Ref_Ptr): string {
+    const wasmInstance = this.wasmInstance
+    const obj = wasmInstance.dwg_ref_get_object(ref_ptr)
+    const obj_tio = wasmInstance.dwg_object_to_object_tio(obj)
+    const obj_name = this.dwg_dynapi_entity_value(obj_tio, 'name')
+      .data as string
+    return obj_name
+  }
+
+  /**
    * Converts Dwg_Object_Object instance to Dwg_Object instance.
    * @group Object Conversion Methods
    * @param obj_ptr Pointer to Dwg_Object_Object instance.
@@ -895,7 +910,7 @@ export class LibreDwg {
    * @param field Field name of the dimension style.
    * @returns Returns dimension style name of one Dwg_Entity_* instance.
    */
-  dwg_entity_get_style_name(
+  dwg_entity_get_dimstyle_name(
     ptr: Dwg_Object_Entity_TIO_Ptr,
     field: string = 'dimstyle'
   ): string {
@@ -931,6 +946,20 @@ export class LibreDwg {
       name,
       base_pt // preR13 only
     }
+  }
+
+  /**
+   * Returns preview image of the block pointed by the specified block header.
+   * @group Dwg_Entity_BLOCK_HEADER Methods
+   * @param ptr Pointer to one Dwg_Entity_BLOCK_HEADER instance.
+   * @returns Returns preview image of the block pointed by the specified block header.
+   */
+  dwg_entity_block_header_get_preview(
+    ptr: Dwg_Object_BLOCK_HEADER_Ptr
+  ): Uint8Array {
+    const wasmInstance = this.wasmInstance
+    return wasmInstance.dwg_entity_block_header_get_preview(ptr)
+      .data as Uint8Array
   }
 
   /**
