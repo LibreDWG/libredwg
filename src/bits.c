@@ -4121,29 +4121,26 @@ bit_fprint_bits (FILE *fp, unsigned char *bits, size_t bitsize)
 }
 
 void
-bit_explore_chain (Bit_Chain *dat, size_t datsize)
+bit_explore_chain (Bit_Chain *dat, size_t from, size_t size)
 {
-  unsigned char sig, k;
-  size_t i;
+  unsigned char c;
+  size_t i, ob;
 
-  if (datsize > dat->size)
-    datsize = dat->size;
-
-  for (k = 0; k < 8; k++)
+  if (from + size > dat->size)
+    size = dat->size - from;
+  ob = dat->byte;
+  dat->byte = from;
+  if (from % 16 != 0)
+    printf ("\n[0x%04" PRI_SIZE_T_MODIFIER "X]: ", from);
+  for (i = from; i < from + size; i++)
     {
-      printf ("---------------------------------------------------------");
-      dat->byte = 0;
-      dat->bit = k;
-      for (i = 0; i < datsize - 1; i++)
-        {
-          if (i % 16 == 0)
-            printf ("\n[0x%04X]: ", (unsigned int)i & 0xffffffff);
-          sig = bit_read_RC (dat);
-          printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
-        }
-      puts ("");
+      if (i % 16 == 0)
+        printf ("\n[0x%04" PRI_SIZE_T_MODIFIER "X]: ", i);
+      c = bit_read_RC (dat);
+      printf ("%02x", c);
     }
-  puts ("---------------------------------------------------------");
+  dat->byte = ob;
+  puts ("");
 }
 
 uint16_t

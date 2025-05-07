@@ -1800,13 +1800,14 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
                 return;
               }
             eed[i].data->code = code; // 1000
-            eed[i].data->u.eed_0.is_tu = 0;
             eed[i].data->u.eed_0.length = len & 0xFFFF;
+            eed[i].data->u.eed_0.is_tu = 0;
             eed[i].data->u.eed_0.codepage = dwg->header.codepage;
             if (len && len < 256)
               {
                 LOG_TRACE ("string: \"%s\" [TV %d]\n", pair->value.s,
                            size - 1);
+                // FIXME buffer overflow with dwgwrite example_2010.dxf
                 memcpy (eed[i].data->u.eed_0.string, pair->value.s, len + 1);
               }
           }
@@ -1826,8 +1827,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
                     return;
                   }
                 eed[i].data->code = code;
-                eed[i].data->u.eed_0.is_tu = 1;
                 eed[i].data->u.eed_0_r2007.length = len & 0xFFFF;
+                eed[i].data->u.eed_0.is_tu = 1;
                 LOG_TRACE ("wstring: \"%s\" [TU %d]\n", pair->value.s, len);
                 if (len)
                   memcpy (eed[i].data->u.eed_0_r2007.string, tu,
@@ -8705,8 +8706,14 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
           if (j < _ctrl->num_entries)
             memmove (&_ctrl->entries[j], &_ctrl->entries[j + 1],
                      (_ctrl->num_entries - j - 1) * sizeof (BITCODE_H));
-          _ctrl->entries = (BITCODE_H *)realloc (
-              _ctrl->entries, _ctrl->num_entries * sizeof (BITCODE_H));
+          if (_ctrl->num_entries)
+            _ctrl->entries = (BITCODE_H *)realloc (
+                _ctrl->entries, _ctrl->num_entries * sizeof (BITCODE_H));
+          else
+            {
+              free (_ctrl->entries);
+              _ctrl->entries = NULL;
+            }
           return 1;
         }
     }
