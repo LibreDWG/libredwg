@@ -1,4 +1,4 @@
-import { DwgPoint3D } from 'database/common'
+import { DwgPoint3D } from '../common'
 
 export interface DwgHeader {
   /**
