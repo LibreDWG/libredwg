@@ -15,6 +15,8 @@ import {
   DwgPoint2D,
   DwgPolylineEntity,
   DwgSplineEntity,
+  DwgTableCell,
+  DwgTableEntity,
   DwgTextEntity,
   DwgTextHorizontalAlign,
   MODEL_SPACE
@@ -200,6 +202,93 @@ export class SvgConverter {
       entity.extentsWidth,
       anchor
     )
+  }
+
+  private table(entity: DwgTableEntity) {
+    const {
+      rowCount,
+      columnCount,
+      rowHeightArr,
+      columnWidthArr,
+      startPoint,
+      cells
+    } = entity
+
+    const originX = startPoint.x
+    const originY = startPoint.y
+
+    // Compute cell rectangles
+    const cellRects: {
+      x: number
+      y: number
+      width: number
+      height: number
+      cell: DwgTableCell
+      row: number
+      col: number
+    }[] = []
+
+    for (let row = 0, y = originY; row < rowCount; row++) {
+      const height = rowHeightArr[row]
+      let x = originX
+      for (let col = 0; col < columnCount; col++) {
+        const cellIndex = row * columnCount + col
+        const cell = cells[cellIndex]
+        const width = columnWidthArr[col]
+
+        cellRects.push({ x, y, width, height, cell, row, col })
+        x += width
+      }
+      y += height
+    }
+
+    // Create SVG content
+    const svgElements = cellRects
+      .map(({ x, y, width, height, cell }) => {
+        const lines: string[] = []
+
+        if (cell.topBorderVisibility)
+          lines.push(
+            `<line x1="${x}" y1="${y}" x2="${x + width}" y2="${y}" stroke="black" />`
+          )
+        if (cell.bottomBorderVisibility)
+          lines.push(
+            `<line x1="${x}" y1="${y + height}" x2="${x + width}" y2="${y + height}" stroke="black" />`
+          )
+        if (cell.leftBorderVisibility)
+          lines.push(
+            `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + height}" stroke="black" />`
+          )
+        if (cell.rightBorderVisibility)
+          lines.push(
+            `<line x1="${x + width}" y1="${y}" x2="${x + width}" y2="${y + height}" stroke="black" />`
+          )
+
+        const textX = x + width / 2
+        const textY = y + height / 2 + cell.textHeight / 3
+        const text = `<text x="${textX}" y="${textY}" font-size="${cell.textHeight}" text-anchor="middle" dominant-baseline="middle">${cell.text}</text>`
+
+        return [...lines, text].join('\n')
+      })
+      .join('\n')
+
+    const totalWidth = columnWidthArr.reduce((sum, w) => sum + w, 0)
+    const totalHeight = rowHeightArr.reduce((sum, h) => sum + h, 0)
+
+    const bbox: Box2D = new Box2D()
+      .expandByPoint({ x: originX, y: originY })
+      .expandByPoint({ x: originX + totalWidth, y: originY + totalHeight })
+
+    const svg = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" viewBox="${originX} ${originY} ${totalWidth} ${totalHeight}">
+  ${svgElements}
+  </svg>
+    `.trim()
+
+    return {
+      bbox,
+      element: svg
+    }
   }
 
   private text(entity: DwgTextEntity): BBoxAndElement {
@@ -507,6 +596,8 @@ export class SvgConverter {
         const vertices = interpolatePolyline(polyline, closed)
         return this.vertices(vertices, closed)
       }
+      case 'TABLE':
+        return this.table(entity as DwgTableEntity)
       case 'TEXT':
         return this.text(entity as DwgTextEntity)
       default:
