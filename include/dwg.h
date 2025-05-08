@@ -2383,9 +2383,17 @@ typedef struct _dwg_entity_VERTEX_3D
 typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_MESH;
 
 /**
- VERTEX_PFACE (13) - same as VERTEX_3D entity
+ VERTEX_PFACE (13)
  */
-typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
+typedef struct _dwg_entity_VERTEX_PFACE
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_RC flag;
+  BITCODE_BD start_width;
+  BITCODE_BD end_width;
+  BITCODE_3BD point;
+} Dwg_Entity_VERTEX_PFACE;
 
 /**
  VERTEX_PFACE_FACE (14) entity

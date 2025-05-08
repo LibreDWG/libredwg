@@ -25713,6 +25713,67 @@ static int test_VERTEX_PFACE (const Dwg_Object *obj)
       fail ("NULL VERTEX_PFACE");
       return 1;
     }
+  {
+    BITCODE_BD end_width;
+    if (dwg_dynapi_entity_value (vertex_pface, "VERTEX_PFACE", "end_width", &end_width, NULL)
+        && end_width == vertex_pface->end_width)
+      pass ();
+    else
+      fail ("VERTEX_PFACE.end_width [BD] %g != %g", vertex_pface->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (vertex_pface, "VERTEX_PFACE", "end_width", &end_width, 0)
+        && end_width == vertex_pface->end_width)
+      pass ();
+    else
+      fail ("VERTEX_PFACE.end_width [BD] set+1 %g != %g", vertex_pface->end_width, end_width);
+    vertex_pface->end_width--;
+  }
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value (vertex_pface, "VERTEX_PFACE", "flag", &flag, NULL)
+        && flag == vertex_pface->flag)
+      pass ();
+    else
+      fail ("VERTEX_PFACE.flag [RC] %u != %u", vertex_pface->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (vertex_pface, "VERTEX_PFACE", "flag", &flag, 0)
+        && flag == vertex_pface->flag)
+      pass ();
+    else
+      fail ("VERTEX_PFACE.flag [RC] set+1 %u != %u", vertex_pface->flag, flag);
+    vertex_pface->flag--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (vertex_pface, "VERTEX_PFACE", "parent", &parent, NULL)
+        && !memcmp (&parent, &vertex_pface->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("VERTEX_PFACE.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD point;
+    if (dwg_dynapi_entity_value (vertex_pface, "VERTEX_PFACE", "point", &point, NULL)
+        && !memcmp (&point, &vertex_pface->point, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("VERTEX_PFACE.point [3BD]");
+  }
+  {
+    BITCODE_BD start_width;
+    if (dwg_dynapi_entity_value (vertex_pface, "VERTEX_PFACE", "start_width", &start_width, NULL)
+        && start_width == vertex_pface->start_width)
+      pass ();
+    else
+      fail ("VERTEX_PFACE.start_width [BD] %g != %g", vertex_pface->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (vertex_pface, "VERTEX_PFACE", "start_width", &start_width, 0)
+        && start_width == vertex_pface->start_width)
+      pass ();
+    else
+      fail ("VERTEX_PFACE.start_width [BD] set+1 %g != %g", vertex_pface->start_width, start_width);
+    vertex_pface->start_width--;
+  }
   if (failed && (is_class_unstable ("VERTEX_PFACE") || is_class_debugging ("VERTEX_PFACE")))
     {
       ok ("%s failed %d tests (TODO unstable)", "VERTEX_PFACE", failed);

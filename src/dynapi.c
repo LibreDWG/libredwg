@@ -4116,6 +4116,20 @@ static const Dwg_DYNAPI_field _dwg_VERTEX_3D_fields[] = {
     1,0,0, 10 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_entity_VERTEX_PFACE: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_VERTEX_PFACE_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_VERTEX_PFACE, parent),
+    1,1,0, 0 },
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_VERTEX_PFACE, flag),
+    0,0,0, 70 },
+  { "start_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_VERTEX_PFACE, start_width),
+    0,0,0, 40 },
+  { "end_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_VERTEX_PFACE, end_width),
+    0,0,0, 41 },
+  { "point",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_VERTEX_PFACE, point),
+    1,0,0, 10 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_entity_VERTEX_PFACE_FACE: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_VERTEX_PFACE_FACE_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_VERTEX_PFACE_FACE, parent),

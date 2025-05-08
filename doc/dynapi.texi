@@ -4726,7 +4726,20 @@ RC,	DXF 70
 @vindex VERTEX_PFACE
 
 @indentedblock
-@xref{VERTEX_3D}
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item flag
+RC,	DXF 70
+@item start_width
+BD,	DXF 40
+@item end_width
+BD,	DXF 41
+@item point
+3BD,	DXF 10
+
+@end vtable
 @end indentedblock
 
 @strong{VERTEX_PFACE_FACE} @anchor{VERTEX_PFACE_FACE}

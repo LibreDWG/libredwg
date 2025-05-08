@@ -129,7 +129,7 @@ for (sort $c->union_names) {
 }
 # typedefs as aliases:
 push @entity_names, qw(XLINE);                    # RAY
-push @entity_names, qw(VERTEX_MESH VERTEX_PFACE); # VERTEX_3D
+push @entity_names, qw(VERTEX_MESH);              # VERTEX_3D
 push @entity_names, qw(REGION BODY);              # 3DSOLID
 $structs{abstractobject_UNDERLAYDEFINITION}++;
 $structs{abstractentity_UNDERLAY}++;
