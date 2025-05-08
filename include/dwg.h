@@ -2378,14 +2378,30 @@ typedef struct _dwg_entity_VERTEX_3D
 } Dwg_Entity_VERTEX_3D;
 
 /**
- VERTEX_MESH (12) - same as VERTEX_3D entity
+ VERTEX_MESH (12) entity
  */
-typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_MESH;
+typedef struct _dwg_entity_VERTEX_MESH
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_RC flag;
+  BITCODE_BD start_width;
+  BITCODE_BD end_width;
+  BITCODE_3BD point;
+} Dwg_Entity_VERTEX_MESH;
 
 /**
- VERTEX_PFACE (13) - same as VERTEX_3D entity
+ VERTEX_PFACE (13) entuty
  */
-typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
+typedef struct _dwg_entity_VERTEX_PFACE
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_RC flag;
+  BITCODE_BD start_width;
+  BITCODE_BD end_width;
+  BITCODE_3BD point;
+} Dwg_Entity_VERTEX_PFACE;
 
 /**
  VERTEX_PFACE_FACE (14) entity
@@ -9212,8 +9228,8 @@ enum {
   OPTS_R11_VERTEX_HAS_INDEX1 = 0x20,
   OPTS_R11_VERTEX_HAS_INDEX2 = 0x40,
   OPTS_R11_VERTEX_HAS_INDEX3 = 0x80,
-  OPTS_R11_VERTEX_UNKNOWN_256 = 0x100,
-  OPTS_R11_VERTEX_HAS_INDEX4 = 0x200,
+  OPTS_R11_VERTEX_HAS_INDEX4 = 0x100,
+  OPTS_R11_VERTEX_UNKNOWN_512 = 0x200,
   OPTS_R11_VERTEX_UNKNOWN_1024 = 0x400,
   OPTS_R11_VERTEX_UNKNOWN_2048 = 0x800,
   OPTS_R11_VERTEX_UNKNOWN_4096 = 0x1000,
