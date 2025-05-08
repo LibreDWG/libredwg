@@ -6940,6 +6940,12 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                         extra_r11 = bit_read_RC (dat);
                         LOG_TRACE (", extra_r11: 0x%x", extra_r11);
                       }
+                    if (extra_r11 & EXTRA_R11_HAS_EED)
+                      {
+                        eed_size = bit_read_RS (dat);
+                        LOG_TRACE (", eed_size: %d", eed_size);
+                        dat->byte += eed_size;
+                      }
                     if (flag_r11 & FLAG_R11_HAS_COLOR)
                       dat->byte += 1;
                     if (flag_r11 & FLAG_R11_HAS_LTYPE)
@@ -6950,16 +6956,10 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                         }
                         else dat->byte += 2;
                       }
-                    if (flag_r11 & FLAG_R11_HAS_THICKNESS)
-                      dat->byte += 8;
                     if (flag_r11 & FLAG_R11_HAS_ELEVATION)
                       dat->byte += 8;
-                    if (extra_r11 & EXTRA_R11_HAS_EED)
-                      {
-                        eed_size = bit_read_RS (dat);
-                        LOG_TRACE (", eed_size: %d", eed_size);
-                        dat->byte += eed_size;
-                      }
+                    if (flag_r11 & FLAG_R11_HAS_THICKNESS)
+                      dat->byte += 8;
                     if (flag_r11 & FLAG_R11_HAS_HANDLING)
                       {
                         handling_len = bit_read_RC (dat);
