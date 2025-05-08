@@ -1235,6 +1235,10 @@ DWG_ENTITY (VERTEX_MESH)
   PRE (R_13b1)
   {
     FIELD_2RD (point, 10);
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_START_WIDTH))
+      FIELD_RD (start_width, 40);
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_END_WIDTH))
+      FIELD_RD (end_width, 41);
     FIELD_RC (flag, 0);
     LOG_FLAG_VERTEX
   }

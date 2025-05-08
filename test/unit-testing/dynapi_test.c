@@ -25695,6 +25695,67 @@ static int test_VERTEX_MESH (const Dwg_Object *obj)
       fail ("NULL VERTEX_MESH");
       return 1;
     }
+  {
+    BITCODE_BD end_width;
+    if (dwg_dynapi_entity_value (vertex_mesh, "VERTEX_MESH", "end_width", &end_width, NULL)
+        && end_width == vertex_mesh->end_width)
+      pass ();
+    else
+      fail ("VERTEX_MESH.end_width [BD] %g != %g", vertex_mesh->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (vertex_mesh, "VERTEX_MESH", "end_width", &end_width, 0)
+        && end_width == vertex_mesh->end_width)
+      pass ();
+    else
+      fail ("VERTEX_MESH.end_width [BD] set+1 %g != %g", vertex_mesh->end_width, end_width);
+    vertex_mesh->end_width--;
+  }
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value (vertex_mesh, "VERTEX_MESH", "flag", &flag, NULL)
+        && flag == vertex_mesh->flag)
+      pass ();
+    else
+      fail ("VERTEX_MESH.flag [RC] %u != %u", vertex_mesh->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (vertex_mesh, "VERTEX_MESH", "flag", &flag, 0)
+        && flag == vertex_mesh->flag)
+      pass ();
+    else
+      fail ("VERTEX_MESH.flag [RC] set+1 %u != %u", vertex_mesh->flag, flag);
+    vertex_mesh->flag--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (vertex_mesh, "VERTEX_MESH", "parent", &parent, NULL)
+        && !memcmp (&parent, &vertex_mesh->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("VERTEX_MESH.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD point;
+    if (dwg_dynapi_entity_value (vertex_mesh, "VERTEX_MESH", "point", &point, NULL)
+        && !memcmp (&point, &vertex_mesh->point, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("VERTEX_MESH.point [3BD]");
+  }
+  {
+    BITCODE_BD start_width;
+    if (dwg_dynapi_entity_value (vertex_mesh, "VERTEX_MESH", "start_width", &start_width, NULL)
+        && start_width == vertex_mesh->start_width)
+      pass ();
+    else
+      fail ("VERTEX_MESH.start_width [BD] %g != %g", vertex_mesh->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (vertex_mesh, "VERTEX_MESH", "start_width", &start_width, 0)
+        && start_width == vertex_mesh->start_width)
+      pass ();
+    else
+      fail ("VERTEX_MESH.start_width [BD] set+1 %g != %g", vertex_mesh->start_width, start_width);
+    vertex_mesh->start_width--;
+  }
   if (failed && (is_class_unstable ("VERTEX_MESH") || is_class_debugging ("VERTEX_MESH")))
     {
       ok ("%s failed %d tests (TODO unstable)", "VERTEX_MESH", failed);
