@@ -12,10 +12,11 @@ api_process (dwg_object *obj)
   BITCODE_RC rotated_type;
   Dwg_DIMASSOC_Ref *ref;
   // BITCODE_BS j;
-  BITCODE_BL num_intsectobj, num_xrefs;
+  BITCODE_BL num_intsectobj, num_xrefs, num_xrefpaths,
+    num_intersec_xrefpaths;
   BITCODE_H *intsectobj, *xrefs;
-  // BITCODE_BL intsect_gsmarker;
-  // BITCODE_H intsectxrefobj;
+  BITCODE_T *xrefpaths;
+  // BITCODE_BL intersec_gsmarker;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_dimassoc *dimassoc = dwg_object_to_DIMASSOC (obj);
@@ -53,6 +54,9 @@ api_process (dwg_object *obj)
       num_xrefs = ref[i].num_xrefs;
       CHK_SUBCLASS_HV (ref[i], DIMASSOC_Ref, xrefs, num_xrefs);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, has_lastpt_ref, B);
-      CHK_SUBCLASS_3RD (ref[i], DIMASSOC_Ref, lastpt_ref);
+      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, num_intersec_xrefpaths, BL);
+      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, num_intersec_xrefpaths, BL, 100);
+      // num_intersec_xrefpaths = ref[i].num_intersec_xrefpaths;
+      // CHK_SUBCLASS_TV (ref[i], DIMASSOC_Ref, intersec_xrefpaths, num_intersec_xrefpaths);
     }
 }

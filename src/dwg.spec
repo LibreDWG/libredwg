@@ -9968,13 +9968,32 @@ DWG_ENTITY_END
   FIELD_B (dimension.flip_arrow2, 296);                 \
   FIELD_B (dimension.flip_arrow1, 297)
 
-/*=============================================================================*/
-
-/* In work area:
-   The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
-   unless enabled via --enable-debug/-DDEBUG_CLASSES */
-
-#if defined (DEBUG_CLASSES) || defined (IS_FREE)
+#define AcDbOsnapPointRef_fields(index)                                                            \
+  LOG_HANDLE ("DIMASSOC_Ref.rcount1: %d\n", index);                                                \
+  SUB_FIELD_T (ref[index], classname, 1); /* "AcDbOsnapPointRef" */                                \
+  SUB_FIELD_RC (ref[index], osnap_type, 72); /* 0-13 */                                            \
+  SUB_FIELD_BL (ref[index], num_xrefs, 0);                                                         \
+  SUB_HANDLE_VECTOR (ref[index], xrefs, num_xrefs, 4, 331);                                        \
+  if (FIELD_VALUE (ref[index].osnap_type) != 0)                                                    \
+    {                                                                                              \
+      SUB_FIELD_BL (ref[index], main_subent_type, 73);                                             \
+      SUB_FIELD_BL (ref[index], main_gsmarker, 91);                                                \
+      SUB_FIELD_BL (ref[index], num_xrefpaths, 0);                                                 \
+      FIELD_VECTOR_T (ref[index].xrefpaths, T, ref[4].num_xrefpaths, 301)                          \
+    }                                                                                              \
+  SUB_FIELD_BD (ref[index], osnap_dist, 40);                                                       \
+  SUB_FIELD_3BD (ref[index], osnap_pt, 10);                                                        \
+  if (FIELD_VALUE (ref[index].osnap_type) == 6                                                     \
+      || FIELD_VALUE (ref[index].osnap_type) == 11)                                                \
+    {                                                                                              \
+      SUB_FIELD_BL (ref[index], num_intsectobj, 0);                                                \
+      SUB_HANDLE_VECTOR (ref[index], intsectobj, num_intsectobj, 5, 332);                          \
+      SUB_FIELD_BL (ref[index], intersec_subent_type, 74);                                         \
+      SUB_FIELD_BL (ref[index], intersec_gsmarker, 92);                                            \
+      SUB_FIELD_BL (ref[index], num_intersec_xrefpaths, 0);                                        \
+      FIELD_VECTOR_T (ref[index].intersec_xrefpaths, T, ref[index].num_intersec_xrefpaths, 302)    \
+    }                                                                                              \
+  SUB_FIELD_B (ref[index], has_lastpt_ref, 75);
 
 // (varies) UNSTABLE
 // 1-4 references, see associativity bits 1-8.
@@ -9986,52 +10005,42 @@ DWG_OBJECT (DIMASSOC)
   FIELD_B (trans_space_flag, 70);
   FIELD_RC (rotated_type, 71);
   FIELD_HANDLE (dimensionobj, 4, 330);
-  REPEAT_CN (4, ref, Dwg_DIMASSOC_Ref) // i.e. AcDbOsnapPointRef
+  REPEAT_CN (6, ref, Dwg_DIMASSOC_Ref) // i.e. AcDbOsnapPointRef
   REPEAT_BLOCK
-      // TODO: there could be much more blocks, up to 5.
-      // 0 1 2 3 => 1 2 4 8. skip unset bits
-      if (!(FIELD_VALUE (associativity) & (1<<rcount1)))
+      // index 0 1 2 3 => bits 1 2 4 8. skip unset bits
+      if (!(FIELD_VALUE (associativity) & (1 << rcount1)))
         {
 #ifdef IS_JSON
           ENDHASH;
 #endif
           continue;
         }
-      LOG_HANDLE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
-      // DXF: 1, 72, 10, ??, 75
-      SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
-      SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
-      // idpaths:
-      SUB_FIELD_BL0 (ref[rcount1], num_intsectobj, 74);
-      SUB_HANDLE_VECTOR (ref[rcount1], intsectobj, num_intsectobj, 5, 332);
-
-      SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
-      SUB_FIELD_3BD (ref[rcount1], osnap_pt, 10);
-
-      // XrefFullSubentPath
-      SUB_FIELD_BL (ref[rcount1], num_xrefs, 0); // 1 or 2
-      SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_xrefs, 100)
-      SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
-
-      // restrict only when writing, not when reading?
-      //if (FIELD_VALUE (ref[rcount1].osnap_type) == 6 || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
-      // {
-      SUB_FIELD_BL0 (ref[rcount1], main_subent_type, 73);
-      SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
-      SUB_FIELD_BL (ref[rcount1], num_xrefpaths, 0);
-      FIELD_VECTOR_T (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
-      // }
-      SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
-      if (FIELD_VALUE (ref[rcount1].has_lastpt_ref))
-        {
-          SUB_FIELD_3BD (ref[rcount1], lastpt_ref, 0);
-        }
+      AcDbOsnapPointRef_fields(rcount1)
       SET_PARENT_OBJ (ref[rcount1]);
   END_REPEAT_BLOCK
+  if (FIELD_VALUE (ref[0].has_lastpt_ref)
+      || FIELD_VALUE (ref[1].has_lastpt_ref)
+      || FIELD_VALUE (ref[2].has_lastpt_ref)
+      || FIELD_VALUE (ref[3].has_lastpt_ref))
+    {
+      AcDbOsnapPointRef_fields(4)
+    }
+  if (FIELD_VALUE (ref[4].has_lastpt_ref))
+    {
+      AcDbOsnapPointRef_fields(5)
+    }
   END_REPEAT (ref)
 
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
+
+/*=============================================================================*/
+
+/* In work area:
+   The following entities/objects are only stored as raw UNKNOWN_ENT/OBJ,
+   unless enabled via --enable-debug/-DDEBUG_CLASSES */
+
+#if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
 // (varies) fails the unit-test
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
