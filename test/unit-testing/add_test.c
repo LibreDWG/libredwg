@@ -1121,7 +1121,68 @@ static int test_names (void)
     fail("dwg_is_valid_name (\"0\") ANSI_949/r2007");
 
   dwg_free (dwg);
+  if (!numfailed())
+    ok ("names");
   return numfailed();
+}
+
+static int test_api_version (void)
+{
+  const char *version = dwg_api_version_string ();
+  long i0, i1, i2;
+  char *d0, *d1, *d2;
+  const int major = dwg_api_version_major ();
+  const int minor = dwg_api_version_minor ();
+
+  assert (version);
+  assert (strEQc(dwg_api_version_string (), PACKAGE_VERSION));
+  assert (major == LIBREDWG_VERSION_MAJOR);
+  assert (minor == LIBREDWG_VERSION_MINOR);
+
+  d0 = strchr (version, '.');
+  if (d0) // or git hash only. no tags fetched
+    {
+      assert (d0);
+      d1 = strchr (&d0[1], '.');
+      assert (d1);
+      // d2 = strchr (&d1[1], '.');
+
+      // assert (strEQc(dwg_api_so_version (), "0:13:0")); // LIBREDWG_SO_VERSION
+      // check that major and minor match the tag
+      i0 = atoi (version);
+      i1 = atoi (&d0[1]);
+      assert (major == i0);
+      assert (minor == i1);
+    }
+  else
+    {
+#ifdef IS_RELEASE
+      fail ("no tags in version_string %s", version);
+#else
+      ok ("TODO no tags in version_string %s. Need to git fetch --depth 50 and re-configure", version);
+#endif
+    }
+
+  // check libtool versioning
+  version = dwg_api_so_version ();
+  d0 = strchr (version, ':');
+  d1 = strchr (&d0[1], ':');
+  assert (d0);
+  assert (d1);
+  i0 = atoi (version); // current 0
+  i1 = atoi (&d0[1]); // revision
+  i2 = atoi (&d1[1]); // age
+  if (major + minor == i0 + i1 + i2)
+    ok ("so_version %s matches major %d + minor %d", version, major, minor);
+  else
+    fail ("so_version %s: %d + %d != %ld + %ld + %ld", version,
+          major, minor, i0, i1, i2);
+
+#ifndef IS_RELEASE
+  assert (!dwg_api_version_is_release ());
+#endif
+  ok ("api_version %s", dwg_api_version_string ());
+  return numfailed ();
 }
 
 int
@@ -1142,7 +1203,8 @@ main (int argc, char *argv[])
   else
     debug = 0;
 
-  error = test_names();
+  error = test_names ();
+  error += test_api_version ();
 
 #ifndef DISABLE_DXF
   for (; dxf < 2; dxf++)

@@ -91,6 +91,46 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
 
 // #endif
 
+/* Generic version api */
+EXPORT const char* dwg_api_version_string (void)
+{
+  return PACKAGE_VERSION;
+}
+EXPORT int dwg_api_version (void)
+{
+  return LIBREDWG_VERSION;
+}
+EXPORT int dwg_api_version_major (void)
+{
+  return LIBREDWG_VERSION_MAJOR;
+}
+EXPORT int dwg_api_version_minor (void)
+{
+  return LIBREDWG_VERSION_MINOR;
+}
+EXPORT bool dwg_api_version_is_release (void)
+{
+#ifdef IS_RELEASE
+  const char *s = PACKAGE_VERSION;
+  int count_dots = 0; // 0.13.3 vs 0.13.3.7539.2_0c711
+  if (!s)
+    return false;
+  while (*s)
+    {
+      if (*s == '.')
+        count_dots++;
+      s++;
+    }
+  return count_dots < 3; // not patched, has a tag.
+#else
+  return false;
+ #endif
+}
+EXPORT const char* dwg_api_so_version (void)
+{
+  return LIBREDWG_SO_VERSION;
+}
+
 /**
  * Return an object fieldvalue
  */
