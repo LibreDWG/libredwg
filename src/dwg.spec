@@ -1213,10 +1213,8 @@ DWG_ENTITY (VERTEX_3D)
   PRE (R_13b1)
   {
     FIELD_2RD (point, 10);
-    if (R11OPTS (8)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
+    FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
@@ -1259,10 +1257,9 @@ DWG_ENTITY (VERTEX_PFACE)
   PRE (R_13b1)
   {
     FIELD_2RD (point, 10);
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
     }
+    FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
@@ -1301,10 +1298,8 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
   PRE (R_13b1)
   {
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
+    FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX
     if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX1)) {
       FIELD_RS (vertind[0], 71);
     }
