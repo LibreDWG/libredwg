@@ -16,7 +16,7 @@ import {
   DwgStyleTableEntry,
   DwgVPortTableEntry,
   HEADER_VARIABLES,
-  MODEL_SPACE
+  isModelSpace
 } from '../database'
 import { LibreDwgEx } from '../libredwg'
 import {
@@ -85,7 +85,7 @@ export class LibreDwgConverter {
             {
               const btr = this.convertBlockRecord(tio, obj)
               db.tables.BLOCK_RECORD.entries.push(btr)
-              if (btr.name == MODEL_SPACE) {
+              if (isModelSpace(btr.name)) {
                 db.entities = btr.entities
               }
             }
