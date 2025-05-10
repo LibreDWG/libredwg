@@ -1,4 +1,4 @@
-* pre-R13: finish remaining entities and the blocks. Add tests.
+* pre-R13: finish POLYLINE, VERTEX
 * add API for more complex entities, like 3dsolids, hatch, ACSH solids, dynblocks.
 * PROXY subentities, PROXY_ENTITY
 * rename all internal ent->tio.ENTITY to ent->tio._ENTITY, so that all 3D names can
