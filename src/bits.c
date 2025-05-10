@@ -744,7 +744,6 @@ bit_write_BLL (Bit_Chain *dat, BITCODE_BLL value)
 {
   int i;
   unsigned len = 0;
-  unsigned v;
   // 64bit into how many bytes? max 8 (count leading zeros)
   BITCODE_BLL umax = 0xff00000000000000ULL;
   if (value)

@@ -2707,7 +2707,7 @@ EXPORT BITCODE_H
 dwg_find_tablehandle_index (Dwg_Data *restrict dwg, const int index,
                             const char *restrict table)
 {
-  BITCODE_BL i, num_entries = 0;
+  BITCODE_BL num_entries = 0;
   BITCODE_H ctrl = NULL, *hdlv = NULL;
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
