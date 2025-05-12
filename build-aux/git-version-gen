@@ -1,6 +1,6 @@
 #!/bin/sh
 # Print a version string.
-scriptversion=2022-02-04.19; # UTC
+scriptversion=2025-05-12.12; # UTC
 
 # Copyright (C) 2007-2018 Free Software Foundation, Inc.
 #
@@ -190,6 +190,8 @@ then
     # The rpm version must not contain a -
     v=`echo "$v" | sed 's/_\([^_]*\)_g\([^_]*\)$/.\1_\2/'`;
     v_from_git=1
+elif test -f NEWS; then
+    v=`perl -ne 'if (/^LibreDWG version \(.*?\) - /){print $1; exit}' NEWS`
 elif test "x$fallback" = x || git --version >/dev/null 2>&1; then
     v=UNKNOWN
 else
