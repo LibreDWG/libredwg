@@ -19,7 +19,6 @@ if test -d .git -a -f build-aux/git-version-gen; then
         rm .tarball-version
     fi
     v=$(build-aux/git-version-gen .tarball-version)
-    echo $v >.tarball-version
     echo $v >.version
 fi
 

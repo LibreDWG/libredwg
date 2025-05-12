@@ -1,6 +1,6 @@
 #!/bin/sh
 # Print a version string.
-scriptversion=2025-05-12.12; # UTC
+scriptversion=2025-05-12.14; # UTC
 
 # Copyright (C) 2007-2018 Free Software Foundation, Inc.
 #
@@ -199,6 +199,8 @@ else
 fi
 
 if test "x$v" = "xUNKNOWN"; then
+    # a shallow clone will have no tags. try enhancing the depth
+    git fetch --depth 50
     v=`git describe --long --tags --dirty --always`
 fi
 
