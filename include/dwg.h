@@ -24,27 +24,10 @@
 #ifndef DWG_H
 #define DWG_H
 
+/* keep in sync with release tags */
 #define LIBREDWG_VERSION_MAJOR 0
 #define LIBREDWG_VERSION_MINOR 13
 #define LIBREDWG_VERSION       ((LIBREDWG_VERSION_MAJOR * 100) + LIBREDWG_VERSION_MINOR)
-// clang-format off
-/*
-Update the version information only immediately before a public release of your
-software. More frequent updates are unnecessary, and only guarantee that the
-current interface number gets larger faster.
-Stay at 0 until we leave the beta stage.
-
-- If the library source code has changed at all since the last update,
-  then increment revision (‘c:r:a’ becomes ‘c:r+1:a’).
-- If any interfaces have been added, removed, or changed since the last update,
-  increment current, and set revision to 0.
-- If any interfaces have been added since the last public release,
-  then increment age.
-- If any interfaces have been removed or changed since the last public release,
-  then set age to 0.
-*/
-#define LIBREDWG_SO_VERSION 0:13:0
-// clang-format on
 
 /* for uint64_t, but not in swig */
 #ifndef SWIGIMPORTED

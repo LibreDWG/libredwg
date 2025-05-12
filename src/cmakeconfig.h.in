@@ -315,6 +315,9 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "@PACKAGE_VERSION@"
 
+/* Defined in configure.ac to the libtool version-info of the shared lib. */
+#define LIBREDWG_SO_VERSION "@LIBREDWG_SO_VERSION@"
+
 /* The size of `size_t', as computed by sizeof. */
 #define SIZEOF_SIZE_T @SIZE_T@
 

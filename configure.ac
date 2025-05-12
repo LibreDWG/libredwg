@@ -28,7 +28,19 @@ dnl one place. For information on how to properly maintain the library
 dnl version information, refer to the libtool manual, section "Updating
 dnl library version information":
 dnl http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
-AC_SUBST([LIBREDWG_SO_VERSION], [0:13:0])
+dnl Stay at 0 until we leave the beta stage.
+dnl- If the library source code has changed at all since the last update,
+dnl  then increment revision (‘c:r:a’ becomes ‘c:r+1:a’).
+dnl- If any interfaces have been added, removed, or changed since the last update,
+dnl  increment current, and set revision to 0.
+dnl- If any interfaces have been added since the last public release,
+dnl  then increment age.
+dnl- If any interfaces have been removed or changed since the last public release,
+dnl  then set age to 0.
+LIBREDWG_SO_VERSION=0:13:0
+AC_DEFINE_UNQUOTED([LIBREDWG_SO_VERSION], ["${LIBREDWG_SO_VERSION}"],
+          [Defined in configure.ac to the libtool version-info of the shared lib.])
+AC_SUBST([LIBREDWG_SO_VERSION])
 AC_SUBST([TARBALL_VERSION_FILE])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -93,7 +105,7 @@ if test yes = "$libredwg_have_libpcre2_16"; then
 fi
 AC_SUBST([PCRE2_CFLAGS])
 AC_SUBST([PCRE2_LIBS])
-  
+
 dnl PKG_CHECK_MODULES([LIBXML2], [libxml-2.0], [],
 dnl    AC_MSG_ERROR([Install libxml-2.0 first]))
 AC_CHECK_LIB([xml2],[newXMLEntity],
