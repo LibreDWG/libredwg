@@ -410,10 +410,10 @@ check-prep: $(check_PROGRAMS)
 list:
 	echo $(testobjects) dynapi_test
 
-dynapi_test.c: dynapi_test.c.in \
-		$(top_srcdir)/include/dwg.h \
-	        $(top_srcdir)/src/gen-dynapi.pl
-	echo make regen-dynapi might be needed
+#dynapi_test.c: $(srcdir)/dynapi_test.c.in \
+#		$(top_srcdir)/include/dwg.h \
+#	        $(top_srcdir)/src/gen-dynapi.pl
+#	echo make regen-dynapi might be needed
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

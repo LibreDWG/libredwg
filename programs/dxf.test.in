@@ -265,6 +265,7 @@ check_roundtrip() {
                 timeout 30 "$ODAFileConverter" . .. "ACAD$r" DXF 0 1 "$tgt" >/dev/null 2>/dev/null
                 if test -f "$dxf.err"; then
                     cat "$dxf.err"
+                    rm -- "$dxf.err"
                     echo FAIL "$baseFileConverter" "$tgt" "$year"
                     i=$((i+1))
                 fi
