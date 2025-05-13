@@ -60,16 +60,16 @@ if [ -f "$b.dxf" ]; then
     # teigha can only write from r12-r2018
     can_teigha=1
     case $(uname) in
-        Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
-        Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
-        Windows) TeighaFileConverter=ODAFileConverter ;;
+        Darwin)  ODAFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+        Linux)   ODAFileConverter=/usr/bin/ODAFileConverter ;;
+        Windows) ODAFileConverter=ODAFileConverter ;;
     esac
     baseFileConverter=ODAFileConverter
-    if [ ! -x "$TeighaFileConverter" ]; then
+    if [ ! -x "$ODAFileConverter" ]; then
         case $(uname) in
-            Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-            Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
-            Windows) TeighaFileConverter=TeighaFileConverter ;;
+            Darwin)  ODAFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+            Linux)   ODAFileConverter=/usr/bin/TeighaFileConverter ;;
+            Windows) ODAFileConverter=TeighaFileConverter ;;
         esac
         baseFileConverter=TeighaFileConverter
     fi
@@ -80,14 +80,14 @@ if [ -f "$b.dxf" ]; then
     esac
     test -z "$r" && can_teigha=0
 
-    if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
+    if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         rd="$r"
         # can only write r12+ DWG's. DXF's all
         if [ "$r" -lt 12 ]; then
             rd=12
         fi
         echo timeout 30 "$baseFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf"
-        timeout 30 "$TeighaFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf" \
+        timeout 30 "$ODAFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf" \
                 >/dev/null 2>/dev/null
         if [ -e "test/$b.dwg.err" ]; then
             cat "test/$b.dwg.err"
@@ -101,9 +101,9 @@ if [ -f "$b.dxf" ]; then
 fi
 
 if [ -f "$b.dwg" ]; then
-    if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
+    if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg"
-        timeout 30 "$TeighaFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg" \
+        timeout 30 "$ODAFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg" \
                 >/dev/null 2>/dev/null
         if [ -e "test/$b.dxf.err" ]; then
             cat "test/$b.dxf.err"
@@ -111,7 +111,7 @@ if [ -f "$b.dwg" ]; then
         fi
     else
         rm "test/$b.dxf.err" 2>/dev/null
-        if [ ! -x "$TeighaFileConverter" ]; then
+        if [ ! -x "$ODAFileConverter" ]; then
             echo "$baseFileConverter not installed"
         fi
     fi

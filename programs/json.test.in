@@ -151,22 +151,22 @@ done
 can_teigha=1
 baseFileConverter=ODAFileConverter
 case $(uname) in
-    Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
-    Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
-    Windows) TeighaFileConverter=ODAFileConverter ;;
+    Darwin)  ODAFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+    Linux)   ODAFileConverter=/usr/bin/ODAFileConverter ;;
+    Windows) ODAFileConverter=ODAFileConverter ;;
     *)       can_teigha=0 ;;
 esac
-if [ -n "$can_teigha" ] && [ ! -x "$TeighaFileConverter" ]; then
+if [ -n "$can_teigha" ] && [ ! -x "$ODAFileConverter" ]; then
     baseFileConverter=TeighaFileConverter
     case $(uname) in
-        Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-        Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
-        Windows) TeighaFileConverter=TeighaFileConverter ;;
+        Darwin)  ODAFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+        Linux)   ODAFileConverter=/usr/bin/TeighaFileConverter ;;
+        Windows) ODAFileConverter=TeighaFileConverter ;;
     esac
 fi
 
 check_oda() {
-    if [ -x "$TeighaFileConverter" ]
+    if [ -x "$ODAFileConverter" ]
     then
         b="$(basename "$dwg")"
         dir="$(dirname "$dwg")"
@@ -199,7 +199,7 @@ check_oda() {
         # shellcheck disable=SC2086,SC2154
         if [ -n "$can_teigha" ] && [ -f "$b.dwg" ]; then
             echo $baseFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" from "$dwg"
-            $TeighaFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" \
+            $ODAFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" \
                 $ODAFileConverter_geometry >/dev/null 2>/dev/null
             if [ -e "../$b.dxf.err" ]; then
                 mv "../$b.dxf.err" "$b.json.err"
@@ -213,7 +213,7 @@ check_oda() {
     fi
 }
 
-if [ -n "$can_teigha" ] && [ -x "$TeighaFileConverter" ]
+if [ -n "$can_teigha" ] && [ -x "$ODAFileConverter" ]
 then
     echo ""
     echo $baseFileConverter roundtrip checks
