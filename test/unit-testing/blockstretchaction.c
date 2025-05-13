@@ -40,15 +40,19 @@ api_process (dwg_object *obj)
   for (i = 0; i < num_hdls; i++)
     {
       CHK_SUBCLASS_H (_obj->hdls[i], BLOCKSTRETCHACTION_handles, hdl);
-      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, num_indexes, BS);
-      CHK_SUBCLASS_VECTOR_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles, indexes, _obj->hdls[i].num_indexes, BL);
+      CHK_SUBCLASS_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles,
+                         num_indexes, BS);
+      CHK_SUBCLASS_VECTOR_TYPE (_obj->hdls[i], BLOCKSTRETCHACTION_handles,
+                                indexes, _obj->hdls[i].num_indexes, BL);
     }
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_codes, BL);
   for (i = 0; i < num_codes; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, bl95, BL);
-      CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, num_indexes, BS);
-      CHK_SUBCLASS_VECTOR_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, indexes, _obj->codes[i].num_indexes, BL);
+      CHK_SUBCLASS_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes, num_indexes,
+                         BS);
+      CHK_SUBCLASS_VECTOR_TYPE (_obj->codes[i], BLOCKSTRETCHACTION_codes,
+                                indexes, _obj->codes[i].num_indexes, BL);
     }
 
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_offset_x, BD);

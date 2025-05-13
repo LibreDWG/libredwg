@@ -185,27 +185,29 @@ bit_BLL_tests (void)
   if (bitchain.chain[0] == 0x21 && bitchain.chain[1] == 0xe0)
     pass ();
   else
-    fail ("bit_write_BLL 0xF => %02X %02X", bitchain.chain[0], bitchain.chain[1]);
+    fail ("bit_write_BLL 0xF => %02X %02X", bitchain.chain[0],
+          bitchain.chain[1]);
   bit_set_position (&bitchain, 0);
 
   bit_write_BLL (&bitchain, 0x6C4E);
-  // 0b010 + 0b110110001001110. p/x 0b010 rev(00110100 01001110) => 0x49 0xcd 0x80
+  // 0b010 + 0b110110001001110. p/x 0b010 rev(00110100 01001110) => 0x49 0xcd
+  // 0x80
   if (bitchain.chain[0] == 0x49 && bitchain.chain[1] == 0xcd
       && bitchain.chain[2] == 0x80)
     pass ();
   else
-    fail ("bit_write_BLL 0x6C4E => %02X %02X %02X", bitchain.chain[0], bitchain.chain[1],
-          bitchain.chain[2]);
+    fail ("bit_write_BLL 0x6C4E => %02X %02X %02X", bitchain.chain[0],
+          bitchain.chain[1], bitchain.chain[2]);
   bit_set_position (&bitchain, 0);
-  
+
   bit_write_BLL (&bitchain, 0x100000);
   // 0b011 1000000000000000000000
   if (bitchain.chain[0] == 0x60 && bitchain.chain[1] == 0x00
       && bitchain.chain[2] == 0x02)
     pass ();
   else
-    fail ("bit_write_BLL 0x100000 => %02X %02X %02X", bitchain.chain[0], bitchain.chain[1],
-          bitchain.chain[2]);
+    fail ("bit_write_BLL 0x100000 => %02X %02X %02X", bitchain.chain[0],
+          bitchain.chain[1], bitchain.chain[2]);
   bit_set_position (&bitchain, 0);
 
   for (int j = 0; j < 5; j++)
@@ -227,8 +229,8 @@ bit_BLL_tests (void)
           if (result == r)
             pass ();
           else
-            fail ("bit_read_BLL len=%d " FORMAT_RLL " => " FORMAT_RLL, len,
-                  r, result);
+            fail ("bit_read_BLL len=%d " FORMAT_RLL " => " FORMAT_RLL, len, r,
+                  result);
           bit_set_position (&bitchain, 0);
         }
     }
@@ -670,8 +672,14 @@ bit_RLL_tests (void)
 static void
 bit_RLL_BE_tests (void)
 { /*                             0x7f 0xf7 0xbf 0x7d 0x00 0x00 0x00 0x01 */
-  Bit_Chain bitchain = strtobt ("01111111" "11110111" "10111111" "01111101"
-                                "00000000" "00000000" "00000000" "00000001");
+  Bit_Chain bitchain = strtobt ("01111111"
+                                "11110111"
+                                "10111111"
+                                "01111101"
+                                "00000000"
+                                "00000000"
+                                "00000000"
+                                "00000001");
   BITCODE_RLL result = bit_read_RLL_BE (&bitchain);
   if (result == UINT64_C (0x7FF7BF7D00000001))
     pass ();
@@ -680,12 +688,13 @@ bit_RLL_BE_tests (void)
 
   bit_set_position (&bitchain, 0);
   bit_write_RLL_BE (&bitchain, UINT64_C (0x8000ffff00000001));
-  if (memcmp (bitchain.chain, "\x80\x00\xff\xff\x00\x00\x00\x01", 8 ) == 0)
+  if (memcmp (bitchain.chain, "\x80\x00\xff\xff\x00\x00\x00\x01", 8) == 0)
     pass ();
   else
-    fail ("bit_write_RLL_BE %x %x %x %x %x %x %x %x", bitchain.chain[0], bitchain.chain[1],
-          bitchain.chain[2], bitchain.chain[3], bitchain.chain[4], bitchain.chain[5],
-          bitchain.chain[6], bitchain.chain[7]);
+    fail ("bit_write_RLL_BE %x %x %x %x %x %x %x %x", bitchain.chain[0],
+          bitchain.chain[1], bitchain.chain[2], bitchain.chain[3],
+          bitchain.chain[4], bitchain.chain[5], bitchain.chain[6],
+          bitchain.chain[7]);
 
   bit_set_position (&bitchain, 0);
   result = bit_read_RLL_BE (&bitchain);
@@ -696,8 +705,15 @@ bit_RLL_BE_tests (void)
   bitfree (&bitchain);
 
   // ----------------------------------------------------------------
-  bitchain = strtobt ("0" "01111111" "11110111" "10111111" "01111101"
-                          "00000000" "00000000" "00000000" "00000001");
+  bitchain = strtobt ("0"
+                      "01111111"
+                      "11110111"
+                      "10111111"
+                      "01111101"
+                      "00000000"
+                      "00000000"
+                      "00000000"
+                      "00000001");
   bit_set_position (&bitchain, 1);
   result = bit_read_RLL_BE (&bitchain);
   if (result == UINT64_C (0x7FF7BF7D00000001))
@@ -707,12 +723,13 @@ bit_RLL_BE_tests (void)
 
   bit_set_position (&bitchain, 1);
   bit_write_RLL_BE (&bitchain, UINT64_C (0x8000ffff00000001));
-  if (memcmp (bitchain.chain, "\x40\x00\x7F\xFF\x80\x00\x00\x00", 8 ) == 0)
+  if (memcmp (bitchain.chain, "\x40\x00\x7F\xFF\x80\x00\x00\x00", 8) == 0)
     pass ();
   else
-    fail ("bit_write_RLL_BE bit=1 %x %x %x %x %x %x %x %x", bitchain.chain[0], bitchain.chain[1],
-          bitchain.chain[2], bitchain.chain[3], bitchain.chain[4], bitchain.chain[5],
-          bitchain.chain[6], bitchain.chain[7]);
+    fail ("bit_write_RLL_BE bit=1 %x %x %x %x %x %x %x %x", bitchain.chain[0],
+          bitchain.chain[1], bitchain.chain[2], bitchain.chain[3],
+          bitchain.chain[4], bitchain.chain[5], bitchain.chain[6],
+          bitchain.chain[7]);
 
   bit_set_position (&bitchain, 1);
   result = bit_read_RLL_BE (&bitchain);
@@ -962,21 +979,21 @@ bit_utf8_to_TU_tests (void)
 {
   BITCODE_TU p;
 
-  p = bit_utf8_to_TU ((char*)"Ë", 0); // "\xc3\x8b"
+  p = bit_utf8_to_TU ((char *)"Ë", 0); // "\xc3\x8b"
   if (*p == 0xCB && !p[1])
     pass ();
   else
     fail ("bit_utf8_to_TU U+00CB => %2X%2X", p[0], p[1]);
   free (p);
 
-  p = bit_utf8_to_TU ((char*)"█", 0); // \xe2\x96\x88
+  p = bit_utf8_to_TU ((char *)"█", 0); // \xe2\x96\x88
   if (*p == 0x2588 && !p[1])
     pass ();
   else
     fail ("bit_utf8_to_TU U+2588 => %2X%2X", p[0], p[1]);
   free (p);
 
-  p = bit_utf8_to_TU ((char*)"δ", 0); // "\xce\xb4"
+  p = bit_utf8_to_TU ((char *)"δ", 0); // "\xce\xb4"
   if (*p == 0x03B4 && !p[1])
     pass ();
   else
@@ -1388,7 +1405,8 @@ in_hexbin_tests (void)
     // only with DEBUG we can detect wrong chars
 #ifndef NDEBUG
   hex[0] = 'g';
-  fprintf (stderr, "NOTE: ignore the next ERROR Invalid hex string member gF:\n");
+  fprintf (stderr,
+           "NOTE: ignore the next ERROR Invalid hex string member gF:\n");
   written = in_hex2bin (dat.chain, hex, dat.size);
   if (written == 0)
     ok ("in_hexbin error (ignore the ERROR above)");
@@ -1472,9 +1490,9 @@ main (int argc, char const *argv[])
           bitchain.bit);
 
   bit_set_position (&bitchain, 0);
-  //#ifdef WORDS_BIGENDIAN
-  //  bit_print (&bitchain, sizeof (double));
-  //#endif
+  // #ifdef WORDS_BIGENDIAN
+  //   bit_print (&bitchain, sizeof (double));
+  // #endif
   if ((dbl = bit_read_RD (&bitchain)) == 1.2345)
     pass ();
   else
@@ -1489,9 +1507,9 @@ main (int argc, char const *argv[])
           bitchain.bit);
 
   bit_set_position (&bitchain, 1);
-  //#ifdef WORDS_BIGENDIAN
-  //  bit_print (&bitchain, sizeof (double));
-  //#endif
+  // #ifdef WORDS_BIGENDIAN
+  //   bit_print (&bitchain, sizeof (double));
+  // #endif
   if ((dbl = bit_read_RD (&bitchain)) == 1.2345)
     pass ();
   else

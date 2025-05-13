@@ -1021,112 +1021,119 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   return n_failed;
 }
 
-static int test_names (void)
+static int
+test_names (void)
 {
   Dwg_Data *dwg;
   // more common add API tests
   if (dwg_is_valid_tag (""))
-    fail("!dwg_is_valid_tag(\"\")");
+    fail ("!dwg_is_valid_tag(\"\")");
   if (dwg_is_valid_tag ("A!"))
-    fail("!dwg_is_valid_tag(\"A!\")");
+    fail ("!dwg_is_valid_tag(\"A!\")");
   if (dwg_is_valid_tag ("A B"))
-    fail("!dwg_is_valid_tag(\"A B\")");
+    fail ("!dwg_is_valid_tag(\"A B\")");
   if (dwg_is_valid_tag ("a"))
-    fail("!dwg_is_valid_tag(\"a\")");
+    fail ("!dwg_is_valid_tag(\"a\")");
   if (!dwg_is_valid_tag ("ABC"))
-    fail("dwg_is_valid_tag(\"ABC\")");
+    fail ("dwg_is_valid_tag(\"ABC\")");
 
   dwg = dwg_new_Document (R_2000, 0, tracelevel);
   dwg->header.codepage = CP_CP869; // DOS Greek
   if (dwg_is_valid_name (dwg, ""))
-    fail("!dwg_is_valid_name (\"\")");
+    fail ("!dwg_is_valid_name (\"\")");
   if (!dwg_is_valid_name (dwg, "0"))
-    fail("dwg_is_valid_name (\"0\")");
+    fail ("dwg_is_valid_name (\"0\")");
   if (!dwg_is_valid_name (dwg, "*U"))
-    fail("dwg_is_valid_name (\"U*\")");
+    fail ("dwg_is_valid_name (\"U*\")");
   if (!dwg_is_valid_name (dwg, "SAB_X"))
-    fail("dwg_is_valid_name (\"SAB_X\")");
+    fail ("dwg_is_valid_name (\"SAB_X\")");
   if (!dwg_is_valid_name (dwg, "SAB-X"))
-    fail("dwg_is_valid_name (\"SAB-X\")");
+    fail ("dwg_is_valid_name (\"SAB-X\")");
   if (!dwg_is_valid_name (dwg, "$SAB"))
-    fail("dwg_is_valid_name (\"$SAB\")");
+    fail ("dwg_is_valid_name (\"$SAB\")");
   if (dwg_is_valid_name (dwg, "#SAB"))
-    fail("!dwg_is_valid_name (\"#SAB\")");
+    fail ("!dwg_is_valid_name (\"#SAB\")");
   if (dwg_is_valid_name (dwg, "%SAB"))
-    fail("!dwg_is_valid_name (\"%%SAB\")");
+    fail ("!dwg_is_valid_name (\"%%SAB\")");
 
   if (!dwg_is_valid_name_u8 (dwg, "0"))
-    fail("dwg_is_valid_name_u8 (\"0\") CP869/r2000");
-  if (dwg_is_valid_name_u8 (dwg, "█")) // valid greek but no letter. \xe2\x96\x88
-    fail("!dwg_is_valid_name_u8(█) U+2588 FULL BLOCK CP869/r2000");
-#ifndef HAVE_WCTYPE_H // locale specific
+    fail ("dwg_is_valid_name_u8 (\"0\") CP869/r2000");
+  if (dwg_is_valid_name_u8 (dwg,
+                            "█")) // valid greek but no letter. \xe2\x96\x88
+    fail ("!dwg_is_valid_name_u8(█) U+2588 FULL BLOCK CP869/r2000");
+#ifndef HAVE_WCTYPE_H                   // locale specific
   if (!dwg_is_valid_name_u8 (dwg, "δ")) // SMALL DELTA
-    fail("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA CP869/r2000");
+    fail ("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA CP869/r2000");
 #endif
   // asis as in the CP869 codepage
   if (dwg_is_valid_name (dwg, "\xdb")) // FULL BLOCK, valid greek at DB
-    fail("!dwg_is_valid_name(DB) FULL BLOCK CP869/r2000");
+    fail ("!dwg_is_valid_name(DB) FULL BLOCK CP869/r2000");
   if (!dwg_is_valid_name (dwg, "\xdd")) // SMALL LETTER DELTA at DD
-    fail("dwg_is_valid_name(DD) SMALL LETTER DELTA CP869/r2000");
+    fail ("dwg_is_valid_name(DD) SMALL LETTER DELTA CP869/r2000");
 
   dwg->header.codepage = CP_CP949; // multibyte korean
   if (!dwg_is_valid_name_u8 (dwg, "0"))
-    fail("dwg_is_valid_name_u8 (\"0\")");
+    fail ("dwg_is_valid_name_u8 (\"0\")");
   if (dwg_is_valid_name_u8 (dwg, "갂")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
-    fail("!dwg_is_valid_name_u8(갂) U+AC02 SYLLABLE");
+    fail ("!dwg_is_valid_name_u8(갂) U+AC02 SYLLABLE");
   if (!dwg_is_valid_name_u8 (dwg, "Ａ"))
-    fail("dwg_is_valid_name_u8(Ａ) U+FF21 LETTER CP949/r2000");
+    fail ("dwg_is_valid_name_u8(Ａ) U+FF21 LETTER CP949/r2000");
   // asis as in the CP949 codepage
   if (!dwg_is_valid_name (dwg, "0"))
-    fail("dwg_is_valid_name (\"0\")");
+    fail ("dwg_is_valid_name (\"0\")");
   if (!dwg_is_valid_name (dwg, "A")) // LATIN CAPITAL LETTER A
-    fail("dwg_is_valid_name(41) LETTER A single-byte");
-  if (dwg_is_valid_name (dwg, "\x81\x41")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
-    fail("!dwg_is_valid_name(8141) U+AC02 SYLLABLE");
+    fail ("dwg_is_valid_name(41) LETTER A single-byte");
+  if (dwg_is_valid_name (dwg,
+                         "\x81\x41")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
+    fail ("!dwg_is_valid_name(8141) U+AC02 SYLLABLE");
   if (!dwg_is_valid_name (dwg, "\xa3\xc1"))
-    fail("dwg_is_valid_name(A3C1) U+FF21 LETTER CP949/r2000");
+    fail ("dwg_is_valid_name(A3C1) U+FF21 LETTER CP949/r2000");
   dwg_free (dwg);
 
   dwg = dwg_new_Document (R_2007, 0, tracelevel);
   dwg->header.codepage = CP_ANSI_1253; // ANSI Greek
   if (!dwg_is_valid_name_u8 (dwg, "0"))
-    fail("dwg_is_valid_name_u8 (\"0\")");
+    fail ("dwg_is_valid_name_u8 (\"0\")");
   if (dwg_is_valid_name_u8 (dwg, "»")) // 0xbb
-    fail("!dwg_is_valid_name_u8(») U+00BB RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK");
+    fail ("!dwg_is_valid_name_u8(») U+00BB RIGHT-POINTING DOUBLE ANGLE "
+          "QUOTATION MARK");
   if (!dwg_is_valid_name_u8 (dwg, "δ")) // 0xe4
-    fail("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA ANSI_1253/r2007");
+    fail ("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA ANSI_1253/r2007");
   // asis as in the CP949 codepage
   if (dwg_is_valid_name (dwg, "\xbb\x00\x00"))
-    fail("!dwg_is_valid_name(BB) U+00BB RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK");
+    fail ("!dwg_is_valid_name(BB) U+00BB RIGHT-POINTING DOUBLE ANGLE "
+          "QUOTATION MARK");
   if (!dwg_is_valid_name (dwg, "\xdd\x00\x00"))
-    fail("dwg_is_valid_name(E4) U+03B4 SMALL LETTER DELTA ANSI_1253/r2007");
+    fail ("dwg_is_valid_name(E4) U+03B4 SMALL LETTER DELTA ANSI_1253/r2007");
   if (!dwg_is_valid_name (dwg, "0\x00\x00"))
-    fail("dwg_is_valid_name (L\"0\") ANSI_1253/r2007");
+    fail ("dwg_is_valid_name (L\"0\") ANSI_1253/r2007");
 
   dwg->header.codepage = CP_ANSI_949; // multibyte korean
   if (!dwg_is_valid_name_u8 (dwg, "0"))
-    fail("dwg_is_valid_name_u8 (\"0\")");
+    fail ("dwg_is_valid_name_u8 (\"0\")");
   if (dwg_is_valid_name_u8 (dwg, "갂")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
-    fail("!dwg_is_valid_name_u8(갂) U+AC02 SYLLABLE");
+    fail ("!dwg_is_valid_name_u8(갂) U+AC02 SYLLABLE");
   if (!dwg_is_valid_name_u8 (dwg, "Ａ"))
-    fail("dwg_is_valid_name_u8(Ａ) U+FF21 LETTER at A3C1");
+    fail ("dwg_is_valid_name_u8(Ａ) U+FF21 LETTER at A3C1");
   // asis as in the CP949 codepage
   if (!dwg_is_valid_name (dwg, "B\x00\x00")) // LATIN CAPITAL LETTER A
-    fail("dwg_is_valid_name(42) LETTER B ANSI_949/r2007");
-  if (dwg_is_valid_name (dwg, "\x41\x81\x00")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
-    fail("!dwg_is_valid_name(8141) U+AC02 SYLLABLE");
+    fail ("dwg_is_valid_name(42) LETTER B ANSI_949/r2007");
+  if (dwg_is_valid_name (
+          dwg, "\x41\x81\x00")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
+    fail ("!dwg_is_valid_name(8141) U+AC02 SYLLABLE");
   if (!dwg_is_valid_name (dwg, "\xc1\xa3\x00"))
-    fail("dwg_is_valid_name(A3C1) U+FF21 LETTER ANSI_949/r2007");
+    fail ("dwg_is_valid_name(A3C1) U+FF21 LETTER ANSI_949/r2007");
   if (!dwg_is_valid_name (dwg, "0\x00\x00"))
-    fail("dwg_is_valid_name (\"0\") ANSI_949/r2007");
+    fail ("dwg_is_valid_name (\"0\") ANSI_949/r2007");
 
   dwg_free (dwg);
-  if (!numfailed())
+  if (!numfailed ())
     ok ("names");
-  return numfailed();
+  return numfailed ();
 }
 
-static int test_api_version (void)
+static int
+test_api_version (void)
 {
   const char *version = dwg_api_version_string ();
   long i0, i1, i2;
@@ -1135,7 +1142,7 @@ static int test_api_version (void)
   const int minor = dwg_api_version_minor ();
 
   assert (version);
-  assert (strEQc(dwg_api_version_string (), PACKAGE_VERSION));
+  assert (strEQc (dwg_api_version_string (), PACKAGE_VERSION));
   assert (major == LIBREDWG_VERSION_MAJOR);
   assert (minor == LIBREDWG_VERSION_MINOR);
 
@@ -1147,8 +1154,8 @@ static int test_api_version (void)
       assert (d1);
       // d2 = strchr (&d1[1], '.');
 
-      // assert (strEQc(dwg_api_so_version (), "0:13:0")); // LIBREDWG_SO_VERSION
-      // check that major and minor match the tag
+      // assert (strEQc(dwg_api_so_version (), "0:13:0")); //
+      // LIBREDWG_SO_VERSION check that major and minor match the tag
       i0 = atoi (version);
       i1 = atoi (&d0[1]);
       assert (major == i0);
@@ -1159,7 +1166,9 @@ static int test_api_version (void)
 #ifdef IS_RELEASE
       fail ("no tags in version_string %s", version);
 #else
-      ok ("TODO no tags in version_string %s. Need to git fetch --depth 50 and re-configure", version);
+      ok ("TODO no tags in version_string %s. Need to git fetch --depth 50 "
+          "and re-configure",
+          version);
 #endif
     }
 
@@ -1170,13 +1179,13 @@ static int test_api_version (void)
   assert (d0);
   assert (d1);
   i0 = atoi (version); // current 0
-  i1 = atoi (&d0[1]); // revision
-  i2 = atoi (&d1[1]); // age
+  i1 = atoi (&d0[1]);  // revision
+  i2 = atoi (&d1[1]);  // age
   if (major + minor == i0 + i1 + i2)
     ok ("so_version %s matches major %d + minor %d", version, major, minor);
   else
-    fail ("so_version %s: %d + %d != %ld + %ld + %ld", version,
-          major, minor, i0, i1, i2);
+    fail ("so_version %s: %d + %d != %ld + %ld + %ld", version, major, minor,
+          i0, i1, i2);
 
 #ifndef IS_RELEASE
   assert (!dwg_api_version_is_release ());

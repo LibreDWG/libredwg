@@ -63,9 +63,9 @@
 #define MAX_SIZE_T 0xFFFE
 // asan: allocation-size-too-big
 #ifdef MAX_MEM
-#define MAX_SIZE_BUF MAX_MEM
+#  define MAX_SIZE_BUF MAX_MEM
 #else
-#define MAX_SIZE_BUF UINT64_C(0x7FFFFFFFFFFFFFFF)
+#  define MAX_SIZE_BUF UINT64_C (0x7FFFFFFFFFFFFFFF)
 #endif
 
 #if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
@@ -394,7 +394,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 
 #ifndef __counted_by
 #  ifdef HAVE_FUNC_ATTRIBUTE_COUNTED_BY
-#    define __counted_by(x) __attribute__ ((__counted_by__(x)))
+#    define __counted_by(x) __attribute__ ((__counted_by__ (x)))
 #  elif defined(_MSC_VER)
 #    define __counted_by(x)
 #  else

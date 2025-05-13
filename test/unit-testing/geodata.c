@@ -83,7 +83,7 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (geodata, GEODATA, units_value_horiz, BL);
       CHK_ENTITY_MAX (geodata, GEODATA, units_value_horiz, BL, 6);
       CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_datum); // obsolete
-      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt); // obsolete 
+      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt);   // obsolete
       CHK_ENTITY_TYPE (geodata, GEODATA, has_civil_data, B);
       CHK_ENTITY_TYPE (geodata, GEODATA, obsolete_false, B);
       CHK_ENTITY_TYPE (geodata, GEODATA, north_dir_angle_deg, BD);

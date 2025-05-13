@@ -476,7 +476,8 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
     {
       char *p;
     normal:
-      if (!str) return NULL;
+      if (!str)
+        return NULL;
       if (l > len)
         {
           memcpy (str, &dat->chain[t->start], len);

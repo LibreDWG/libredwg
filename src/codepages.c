@@ -451,7 +451,8 @@ dwg_codepage_isalnum (const Dwg_Codepage cp, const wchar_t c)
             const uint8_t key = c & 0xff;
             const uint8_t sz8 = fntbl[0];
             const size_t sz = (size_t)sz8;
-            uint8_t *found = (uint8_t *)bsearch (&key, &fntbl[1], sz, 1, b8_cmp);
+            uint8_t *found
+                = (uint8_t *)bsearch (&key, &fntbl[1], sz, 1, b8_cmp);
             if (!found || found == &fntbl[0])
               return false;
             else
@@ -463,7 +464,8 @@ dwg_codepage_isalnum (const Dwg_Codepage cp, const wchar_t c)
             const uint16_t *fntbl16 = cp_alnum16tbl[cp];
             const uint16_t sz16 = fntbl16[0];
             const size_t sz = (size_t)sz16;
-            uint16_t *found = (uint16_t *)bsearch (&key, &fntbl16[1], sz, 2, b16_cmp);
+            uint16_t *found
+                = (uint16_t *)bsearch (&key, &fntbl16[1], sz, 2, b16_cmp);
             if (!found || found == &fntbl16[0])
               return false;
             else

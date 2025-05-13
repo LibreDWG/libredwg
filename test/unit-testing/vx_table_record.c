@@ -29,20 +29,20 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, used, RSd);
 
   PRE (R_13b1)
-    {
-      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, vport_entity_address, RS);
-      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, r11_viewport_index, RSd);
-      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, r11_prev_entry_index, RSd);
-    }
+  {
+    CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, vport_entity_address, RS);
+    CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, r11_viewport_index, RSd);
+    CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, r11_prev_entry_index, RSd);
+  }
   LATER_VERSIONS
-    {
-      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_ref, B);
-      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_resolved, BS);
-      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_dep, B);
-      CHK_ENTITY_H (_obj, VX_TABLE_RECORD, xref);
+  {
+    CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_ref, B);
+    CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_resolved, BS);
+    CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_xref_dep, B);
+    CHK_ENTITY_H (_obj, VX_TABLE_RECORD, xref);
 
-      CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_on, B);
-      CHK_ENTITY_H (_obj, VX_TABLE_RECORD, viewport);
-      CHK_ENTITY_H (_obj, VX_TABLE_RECORD, prev_entry);
-    }
+    CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, is_on, B);
+    CHK_ENTITY_H (_obj, VX_TABLE_RECORD, viewport);
+    CHK_ENTITY_H (_obj, VX_TABLE_RECORD, prev_entry);
+  }
 }

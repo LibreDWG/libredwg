@@ -955,10 +955,10 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       {
         size_t sz = (size_t)section->name_length; // size in bytes really
         size_t page_sz = page.size - page.byte;
-        if (sz & 1)                               // must be even, 2 bytes
+        if (sz & 1) // must be even, 2 bytes
           {
             LOG_ERROR ("Invalid section name_length %" PRId64,
-                      section->name_length);
+                       section->name_length);
             section->name_length++;
             sz++;
           }
@@ -2134,7 +2134,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("FileDepList (%" PRIuSIZE ")\n-------------------\n",
              sec_dat.size)
   old_dat = *dat;
-  /*str_dat = */dat = &sec_dat; // restrict in size
+  /*str_dat = */ dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
   // clang-format off
@@ -2175,7 +2175,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("Security (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
   old_dat = *dat;
-  /*str_dat = */dat = &sec_dat; // restrict in size
+  /*str_dat = */ dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
   // clang-format off

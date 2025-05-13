@@ -362,16 +362,17 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           s = _buf;
           if (*s == '-')
             s++;
-          while (*s) {
-            if (!isdigit((unsigned char)*s))
-              {
-                add_dot_zero = false;
-                break;
-              }
-            s++;
-          }
+          while (*s)
+            {
+              if (!isdigit ((unsigned char)*s))
+                {
+                  add_dot_zero = false;
+                  break;
+                }
+              s++;
+            }
           if (add_dot_zero)
-            strcat(_buf, ".0");
+            strcat (_buf, ".0");
           fprintf (dat->fh, "%s\r\n", _buf);
         }
     }
@@ -661,7 +662,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_B1(nam, dxf)                                                    \
   if (dxf)                                                                    \
     {                                                                         \
-      if (! _obj->nam)                                                        \
+      if (!_obj->nam)                                                         \
         FIELD_B (nam, dxf)                                                    \
     }
 #define FIELD_RC0(nam, dxf)                                                   \
@@ -2744,8 +2745,8 @@ decl_dxf_process_INSERT (INSERT)
 decl_dxf_process_INSERT (MINSERT)
     // clang-format on
 
-static int dwg_dxf_object (Bit_Chain *restrict dat,
-                           const Dwg_Object *restrict obj, int *restrict i)
+    static int dwg_dxf_object (Bit_Chain *restrict dat,
+                               const Dwg_Object *restrict obj, int *restrict i)
 {
   int error = 0;
   int minimal;
@@ -2980,8 +2981,8 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
 #  endif
         }
       /* > 500 */
-      else if ((error = dwg_dxf_variable_type (obj->parent, dat,
-                                               (Dwg_Object *)obj))
+      else if ((error
+                = dwg_dxf_variable_type (obj->parent, dat, (Dwg_Object *)obj))
                & DWG_ERR_UNHANDLEDCLASS)
         {
           Dwg_Data *dwg = obj->parent;
@@ -3193,15 +3194,15 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 // first pass to adjust num_entries
-#define TABLE_WRITE_FIXUP_NUMENTRIES(name)                                    \
+#  define TABLE_WRITE_FIXUP_NUMENTRIES(name)                                  \
     num_entries = _ctrl->num_entries;                                         \
     _ctrl->num_entries = 0;                                                   \
     for (i = 0; i < num_entries; i++)                                         \
       {                                                                       \
         if (!_ctrl->entries)                                                  \
-            break;                                                            \
+          break;                                                              \
         if (!_ctrl->entries[i])                                               \
-            continue;                                                         \
+          continue;                                                           \
         obj = dwg_ref_object (dwg, _ctrl->entries[i]);                        \
         if (obj && obj->type == DWG_TYPE_##name)                              \
           _ctrl->num_entries++;                                               \
@@ -3209,7 +3210,6 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     if (_ctrl->num_entries != num_entries)                                    \
       LOG_TRACE ("num_entries: %u -> %u\n", (unsigned)num_entries,            \
                  (unsigned)_ctrl->num_entries);
-
 
 // r2.6-r9: LTYPE, LAYER, STYLE, VIEW
 // r10: VPORT, LTYPE, LAYER, STYLE, VIEW, UCS
@@ -3277,7 +3277,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _ctrl->num_entries = num_entries;
         SINCE (R_12)
         {
-          // first the 2 builtin ltypes: ByBlock, ByLayer, which don't count for num_entries
+          // first the 2 builtin ltypes: ByBlock, ByLayer, which don't count
+          // for num_entries
           if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYBLOCK))
               && obj->type == DWG_TYPE_LTYPE)
             {

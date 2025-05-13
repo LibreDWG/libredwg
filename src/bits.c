@@ -714,8 +714,8 @@ bit_read_BLL (Bit_Chain *dat)
       return bit_read_RC (dat);
     case 2:
       return bit_read_RS (dat);
-    //case 3:
-    //  return (bit_read_RC (dat) << 16) + bit_read_RS (dat);
+    // case 3:
+    //   return (bit_read_RC (dat) << 16) + bit_read_RS (dat);
     case 4:
       return bit_read_RL (dat);
     default:
@@ -731,7 +731,7 @@ bit_read_BLL (Bit_Chain *dat)
       return be64toh (result);
 #else
       for (i = 0; i < len; i++)
-        result += bit_read_RC (dat) << i*8;
+        result += bit_read_RC (dat) << i * 8;
       return result;
 #endif
     }
@@ -1653,7 +1653,7 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
   else
     {
       for (size_t i = 0; i < length; i++)
-          dest[i] = bit_read_RC (dat);
+        dest[i] = bit_read_RC (dat);
     }
   return 0;
 }
@@ -2172,12 +2172,12 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
   if (length && dat->opts & DWG_OPTS_INJSON)
     {
       size_t destlen = length * 2;
-      char *dest = (char*)malloc (destlen);
+      char *dest = (char *)malloc (destlen);
       while (!bit_utf8_to_TV (dest, (unsigned char *)chain, destlen, length, 0,
                               dat->codepage))
         {
           destlen *= 2;
-          dest = (char*)realloc (dest, destlen);
+          dest = (char *)realloc (dest, destlen);
         }
       need_free = true;
       chain = dest;
@@ -4021,7 +4021,7 @@ bit_print (Bit_Chain *dat, size_t size)
 void
 bit_write_bits (Bit_Chain *restrict dat, const BITCODE_TF bits, size_t numbits)
 {
-  //BITCODE_TF p = (BITCODE_TF)bits;
+  // BITCODE_TF p = (BITCODE_TF)bits;
   unsigned char *last;
   size_t i = 0;
   if (!bits || !numbits)
@@ -4030,7 +4030,7 @@ bit_write_bits (Bit_Chain *restrict dat, const BITCODE_TF bits, size_t numbits)
     bit_write_RC (dat, bits[i]);
   last = &bits[numbits / 8];
   for (i = 0; i < (numbits % 8); i++)
-    bit_write_B (dat, BIT(last, i));
+    bit_write_B (dat, BIT (last, i));
 }
 
 void

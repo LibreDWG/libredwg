@@ -154,10 +154,10 @@
           if (s2)                                                             \
             {                                                                 \
               GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type            \
-                                 " %d] %gº"),                                 \
-                         rcount1, rcount2, _obj->nam, dxfgroup,               \
-                         rad2deg (_obj->nam));                                \
+              LOG_TRACE (                                                     \
+                  strcat (s2, ": " FORMAT_##type " [" #type " %d] %gº"),      \
+                  rcount1, rcount2, _obj->nam, dxfgroup,                      \
+                  rad2deg (_obj->nam));                                       \
               GCC46_DIAG_RESTORE                                              \
               free (s2);                                                      \
               free (s1);                                                      \
@@ -165,9 +165,9 @@
           else                                                                \
             {                                                                 \
               GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type            \
-                                 " %d] %gº"),                                 \
-                         rcount1, _obj->nam, dxfgroup, rad2deg (_obj->nam));  \
+              LOG_TRACE (                                                     \
+                  strcat (s1, ": " FORMAT_##type " [" #type " %d] %gº"),      \
+                  rcount1, _obj->nam, dxfgroup, rad2deg (_obj->nam));         \
               GCC46_DIAG_RESTORE                                              \
               free (s1);                                                      \
             }                                                                 \
@@ -210,7 +210,7 @@
     }
 #define LOG_TF(level, var, len)                                               \
   {                                                                           \
-    LOG_TF_HEX(level, var, len)                                               \
+    LOG_TF_HEX (level, var, len)                                              \
     if (var && (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE))                         \
       {                                                                       \
         for (unsigned _i = 0; _i < (unsigned)(len); _i++)                     \
@@ -1078,7 +1078,7 @@
   _DEBUG_HERE (0UL)
 
 // check for overflow into next object (invalid num_elems)
-#define AVAIL_BITS(dat) (int64_t) ((dat->size * 8) - bit_position (dat))
+#define AVAIL_BITS(dat) (int64_t)((dat->size * 8) - bit_position (dat))
 #define TYPE_MAXELEMSIZE(type) dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(nam, type, size, dat)                                 \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
@@ -1096,11 +1096,12 @@
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
       || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
     {                                                                         \
-      LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
-                 " bits for " #type ", have %" PRId64 " at @%" PRIuSIZE ".%u "\
-                 " for %s.",                                                  \
-                 (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
-                 AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);\
+      LOG_ERROR (                                                             \
+          "Invalid " #nam " size %" PRId64 ". Need min. %" PRId64             \
+          " bits for " #type ", have %" PRId64 " at @%" PRIuSIZE ".%u "       \
+          " for %s.",                                                         \
+          (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),         \
+          AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);      \
       if (_obj->o.nam)                                                        \
         free (_obj->o.nam);                                                   \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
@@ -1109,11 +1110,12 @@
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
       || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
     {                                                                         \
-      LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
-                 " bits for " #type ", have %" PRId64 " at @%" PRIuSIZE ".%u "\
-                 "for %s.",                                                   \
-                 (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
-                 AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);\
+      LOG_ERROR (                                                             \
+          "Invalid " #nam " size %" PRId64 ". Need min. %" PRId64             \
+          " bits for " #type ", have %" PRId64 " at @%" PRIuSIZE ".%u "       \
+          "for %s.",                                                          \
+          (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),         \
+          AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);      \
       if (_obj->nam)                                                          \
         free (_obj->nam);                                                     \
       size = 0;                                                               \

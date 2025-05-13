@@ -83,6 +83,8 @@ for dir in "$@"; do
          -o -name '*.h' \) \
          -a \! \( -path './bindings/*' \
                -o -path './codepages/*' \
+               -o -name dwg.h \
+               -o -name dwg_api.h \
                -o -name dwg_api.c \
                -o -name config.h \
                -o -name objects.c \

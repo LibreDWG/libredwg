@@ -32,33 +32,34 @@ api_process (dwg_object *obj)
   BITCODE_BD end_angle;        /*!< DXF 51 */
   BITCODE_3BD extrusion;
   BITCODE_BL color;
-  BITCODE_BS is_reverse;     /*!< DXF 70 */
-  BITCODE_BS text_direction; /*!< DXF 71, 1 or 2 */
-  BITCODE_BS alignment;      /*!< DXF 72 */
-  BITCODE_BS text_position;  /*!< DXF 73, 1 or 2 */
-  BITCODE_BS is_bold;        /*!< DXF 74 */
-  BITCODE_BS is_italic;      /*!< DXF 75 */
-  BITCODE_BS is_underlined;  /*!< DXF 76 */
-  BITCODE_BS character_set;  /*!< DXF 77 */
-  BITCODE_BS pitch_and_family;/*!< DXF 78 */
-  BITCODE_BS is_shx;         /*!< DXF 79 */
-  BITCODE_BS wizard_flag;    /*!< DXF 280 */
-  BITCODE_H arc_handle;      /*!< DXF 330 */
+  BITCODE_BS is_reverse;       /*!< DXF 70 */
+  BITCODE_BS text_direction;   /*!< DXF 71, 1 or 2 */
+  BITCODE_BS alignment;        /*!< DXF 72 */
+  BITCODE_BS text_position;    /*!< DXF 73, 1 or 2 */
+  BITCODE_BS is_bold;          /*!< DXF 74 */
+  BITCODE_BS is_italic;        /*!< DXF 75 */
+  BITCODE_BS is_underlined;    /*!< DXF 76 */
+  BITCODE_BS character_set;    /*!< DXF 77 */
+  BITCODE_BS pitch_and_family; /*!< DXF 78 */
+  BITCODE_BS is_shx;           /*!< DXF 79 */
+  BITCODE_BS wizard_flag;      /*!< DXF 280 */
+  BITCODE_H arc_handle;        /*!< DXF 330 */
 
   Dwg_Version_Type version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
   dwg_ent_arcalignedtext *atext = dwg_object_to_ARCALIGNEDTEXT (obj);
 
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, text_value);
-  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, text_size);    // D2T double as TV
-  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, xscale);       // -"-
+  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, text_size); // D2T double as TV
+  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, xscale);    // -"-
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, char_spacing); // -"-
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, style);
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, font_name);
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, bigfont_name);
-  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, offset_from_arc); // D2T double as TV
-  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, right_offset);    // -"-
-  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, left_offset);     // -"-
+  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT,
+                       offset_from_arc); // D2T double as TV
+  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, right_offset); // -"-
+  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, left_offset);  // -"-
 
   CHK_ENTITY_2RD (atext, ARCALIGNEDTEXT, center);
   CHK_ENTITY_3RD (atext, ARCALIGNEDTEXT, extrusion);

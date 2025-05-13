@@ -459,7 +459,7 @@ solve_key_equation (unsigned char *s, unsigned char *sigma,
   memcpy (omega, matrix[fixed_row][2], POLY_LENGTH);
 
 #ifdef DEBUG
-  dump_matrix(matrix);
+  dump_matrix (matrix);
 #endif
 
   free_matrix (matrix);

@@ -19,7 +19,7 @@
 #include "tests_common.h"
 
 BITCODE_RL size = SECTION_R13_SIZE;
-//Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
+// Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
 
 static int
 find_duplicates (const Dwg_Data *dwg)
@@ -34,7 +34,8 @@ find_duplicates (const Dwg_Data *dwg)
           if (section_order[j] == id && (unsigned)id != size)
             {
               fail ("find_duplicate %u", (unsigned)id);
-              section_order_trace (dwg, size, (Dwg_Section_Type_r13 *)&section_order);
+              section_order_trace (dwg, size,
+                                   (Dwg_Section_Type_r13 *)&section_order);
               return 1;
             }
         }
@@ -64,7 +65,8 @@ test_section_find (const Dwg_Data *dwg)
       if (id != (unsigned)i) // 7 not found, returns SECTION_R13_SIZE
         {
           fail ("section_find %u => %u", (unsigned)i, (unsigned)id);
-          section_order_trace (dwg, size, (Dwg_Section_Type_r13 *)&section_order);
+          section_order_trace (dwg, size,
+                               (Dwg_Section_Type_r13 *)&section_order);
         }
     }
   id = section_find ((Dwg_Section_Type_r13 *)&section_order, size, size + 1);
@@ -146,18 +148,20 @@ test_section_remove (const Dwg_Data *dwg)
     fail ("test_section_remove");
 }
 
-static void test_section_move_before(const Dwg_Data *dwg) {
+static void
+test_section_move_before (const Dwg_Data *dwg)
+{
   int err = 0;
   size = SECTION_R13_SIZE - 2;
   section_reset (dwg);
   for (unsigned i = 0; i < size; i++)
     {
-      Dwg_Section_Type_r13 id = maxrand(size);
-      Dwg_Section_Type_r13 before = maxrand(size);
+      Dwg_Section_Type_r13 id = maxrand (size);
+      Dwg_Section_Type_r13 before = maxrand (size);
       while (before == id)
-        before = maxrand(size);
-      if (section_move_before ((Dwg_Section_Type_r13 *)&section_order,
-                               &size, id, before))
+        before = maxrand (size);
+      if (section_move_before ((Dwg_Section_Type_r13 *)&section_order, &size,
+                               id, before))
         {
           fail ("move_before %u", (unsigned)id);
           err++;
@@ -165,8 +169,8 @@ static void test_section_move_before(const Dwg_Data *dwg) {
       section_order_trace (dwg, size, (Dwg_Section_Type_r13 *)&section_order);
       err += find_duplicates (dwg);
     }
-  if (!section_move_before ((Dwg_Section_Type_r13 *)&section_order,
-                            &size, 6, 4))
+  if (!section_move_before ((Dwg_Section_Type_r13 *)&section_order, &size, 6,
+                            4))
     {
       fail ("move_before %u inserts", 6);
       err++;
@@ -188,7 +192,7 @@ main (int argc, char const *argv[])
 
   test_section_find (&dwg);
   test_section_move_top (&dwg);
-  //loglevel = is_make_silent () ? 0 : 3;
+  // loglevel = is_make_silent () ? 0 : 3;
   test_section_remove (&dwg);
   test_section_move_before (&dwg);
 

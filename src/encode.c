@@ -91,9 +91,9 @@ static BITCODE_BL rcount1 = 0, rcount2 = 0;
 #define SECTION_R13_SIZE 7U
 static Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE]
 #ifndef __cplusplus
-  = { 0 }
+    = { 0 }
 #endif
-  ;
+;
 
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
@@ -2093,7 +2093,8 @@ section_remove (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
   (*pnum)--;
   memmove (&psection_order[i], &psection_order[i + 1],
            (*pnum - i) * sizeof (Dwg_Section_Type_r13));
-  psection_order[*pnum] = (Dwg_Section_Type_r13)SECTION_R13_SIZE; // sentinel (invalid)
+  psection_order[*pnum]
+      = (Dwg_Section_Type_r13)SECTION_R13_SIZE; // sentinel (invalid)
   return 1;
 }
 
@@ -2503,7 +2504,7 @@ encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-    // clang-format off
+  // clang-format off
   #include "2ndheader.spec"
   // clang-format on
 
@@ -3482,7 +3483,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     if (!_obj->num_sections || !_obj->sections)
       dwg_sections_init (dwg);
 
-      // clang-format off
+    // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -3555,7 +3556,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     // patch all the section tbl->address
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
-    encode_check_num_sections ((Dwg_Section_Type_r11)dwg->header.num_sections, dwg);
+    encode_check_num_sections ((Dwg_Section_Type_r11)dwg->header.num_sections,
+                               dwg);
     if (dwg->header.from_version >= R_13b1)
       {
         /* r2000 has e.g.
@@ -6459,12 +6461,12 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
-// PRE (R_13b1)
-// {
-//   if (dat->from_version >= R_13b1)
-//     downgrade_preR13_header_variables (dat, dwg);
-// }
-// clang-format off
+  // PRE (R_13b1)
+  // {
+  //   if (dat->from_version >= R_13b1)
+  //     downgrade_preR13_header_variables (dat, dwg);
+  // }
+  // clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 
@@ -6979,10 +6981,11 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   const char *lastfield;
 
   if (!obj || !obj->parent || obj->fixedtype != DWG_TYPE_SEQEND
-      || !obj->tio.entity) {
-    LOG_ERROR ("wrong in_postprocess_SEQEND obj");
-    return;
-  }
+      || !obj->tio.entity)
+    {
+      LOG_ERROR ("wrong in_postprocess_SEQEND obj");
+      return;
+    }
   dwg = obj->parent;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("in_postprocess_SEQEND (%u):\n", (unsigned)num_owned);

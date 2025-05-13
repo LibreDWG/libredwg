@@ -6,8 +6,10 @@ api_process (dwg_object *obj)
 {
   int error = 0, isnew;
   double elevation, thickness, rotation, height, oblique_angle, width_factor;
-  BITCODE_BS generation, vert_alignment, horiz_alignment, annotative_data_size, i;
-  BITCODE_RC dataflags, flags, is_locked_in_block, keep_duplicate_records, mtext_type;
+  BITCODE_BS generation, vert_alignment, horiz_alignment, annotative_data_size,
+      i;
+  BITCODE_RC dataflags, flags, is_locked_in_block, keep_duplicate_records,
+      mtext_type;
   BITCODE_B lock_position_flag, is_really_locked;
   char *text_value;
   dwg_point_3d extrusion;
@@ -70,7 +72,8 @@ api_process (dwg_object *obj)
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_height, BD);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_width, BD);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, column_type, BS);
-          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, num_column_heights, BS);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded,
+                             num_column_heights, BS);
         }
     }
 }

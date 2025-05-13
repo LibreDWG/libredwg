@@ -579,10 +579,11 @@ dxf_read_string (Bit_Chain *dat, char **string)
         {
           *string = !*string ? (char *)malloc (size)
                              : (char *)realloc (*string, size);
-          if (!*string) {
-            LOG_ERROR ("Out of memory");
-            return;
-          }
+          if (!*string)
+            {
+              LOG_ERROR ("Out of memory");
+              return;
+            }
           strcpy (*string, (char *)&dat->chain[dat->byte]);
         }
       dat->byte += size;
@@ -601,10 +602,11 @@ dxf_read_string (Bit_Chain *dat, char **string)
         }
       *string
           = !*string ? (char *)malloc (size) : (char *)realloc (*string, size);
-      if (!*string) {
-        LOG_ERROR ("Out of memory");
-        return;
-      }
+      if (!*string)
+        {
+          LOG_ERROR ("Out of memory");
+          return;
+        }
       strcpy (*string, buf);
 #  endif
     }
@@ -658,10 +660,11 @@ dxf_read_string (Bit_Chain *dat, char **string)
         *string = (char *)malloc (strlen (buf) + 1);
       else
         *string = (char *)realloc (*string, strlen (buf) + 1);
-      if (!*string) {
-        LOG_ERROR ("Out of memory");
-        return;
-      }
+      if (!*string)
+        {
+          LOG_ERROR ("Out of memory");
+          return;
+        }
       strcpy (*string, buf);
     }
 }
@@ -685,8 +688,7 @@ dxf_free_pair (Dxf_Pair *pair)
   pair = NULL;
 }
 
-static Dxf_Pair *
-ATTRIBUTE_MALLOC
+static Dxf_Pair *ATTRIBUTE_MALLOC
 dxf_read_pair (Bit_Chain *dat)
 {
   Dxf_Pair *pair = (Dxf_Pair *)xcalloc (1, sizeof (Dxf_Pair));
@@ -714,11 +716,12 @@ dxf_read_pair (Bit_Chain *dat)
       dxf_read_string (dat, &pair->value.s);
       if (!pair->value.s && pair->code != 0)
         pair->value.s = (char *)calloc (1, 1);
-      if (!pair->value.s) {
-        LOG_ERROR ("Out of memory");
-        dxf_free_pair (pair);
-        return NULL;
-      }
+      if (!pair->value.s)
+        {
+          LOG_ERROR ("Out of memory");
+          dxf_free_pair (pair);
+          return NULL;
+        }
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
       // dynapi_set_helper converts from utf-8 to unicode, not here.
       // we need to know the type of the target field, if TV or T
@@ -752,11 +755,12 @@ dxf_read_pair (Bit_Chain *dat)
       dxf_read_string (dat, &pair->value.s);
       if (!pair->value.s)
         pair->value.s = (char *)calloc (1, 1);
-      if (!pair->value.s) {
-        LOG_ERROR ("Out of memory");
-        dxf_free_pair (pair);
-        return NULL;
-      }
+      if (!pair->value.s)
+        {
+          LOG_ERROR ("Out of memory");
+          dxf_free_pair (pair);
+          return NULL;
+        }
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
     case DWG_VT_HANDLE:
@@ -7883,12 +7887,11 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
                   pair = dxf_read_pair (dat);
                   EXPECT_DXF (obj->name, o->hdls[i].indexes[j], 94);
                   o->hdls[i].indexes[j] = pair->value.u;
-                  LOG_TRACE ("%s.hdls[%d].indexes[%d] = %u [BL 94]\n", obj->name, i, j,
-                             (unsigned)o->hdls[i].indexes[j]);
+                  LOG_TRACE ("%s.hdls[%d].indexes[%d] = %u [BL 94]\n",
+                             obj->name, i, j, (unsigned)o->hdls[i].indexes[j]);
                   dxf_free_pair (pair);
                 }
             }
-
         }
     }
 
@@ -7922,8 +7925,8 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
                   pair = dxf_read_pair (dat);
                   EXPECT_DXF (obj->name, o->codes[i].indexes[j], 94);
                   o->codes[i].indexes[j] = pair->value.i;
-                  LOG_TRACE ("%s.codes[%d].indexes[%d] = %d [BL 94]\n", obj->name, i, j,
-                             o->codes[i].indexes[j]);
+                  LOG_TRACE ("%s.codes[%d].indexes[%d] = %d [BL 94]\n",
+                             obj->name, i, j, o->codes[i].indexes[j]);
                   dxf_free_pair (pair);
                 }
             }
@@ -9188,7 +9191,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   {
                     // add to ctrl "entries" HANDLE_VECTOR
                     Dwg_Object_BLOCK_CONTROL *_ctrl
-                      = dwg->object[ctrl_id].tio.object->tio.BLOCK_CONTROL;
+                        = dwg->object[ctrl_id].tio.object->tio.BLOCK_CONTROL;
                     BITCODE_H *hdls = NULL;
                     BITCODE_BL num_entries = 0;
 
@@ -9199,14 +9202,16 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     if (i >= num_entries)
                       {
                         // DXF often lies about num_entries, skipping defaults
-                        // e.g. BLOCK_CONTROL contains mspace+pspace in DXF, but in
-                        // the DWG they are extra. But this is fixed at case 2, not
-                        // here.
-                        LOG_TRACE ("Misleading %s.num_entries %d for %dth entry\n",
-                                   ctrlname, num_entries, i);
+                        // e.g. BLOCK_CONTROL contains mspace+pspace in DXF,
+                        // but in the DWG they are extra. But this is fixed at
+                        // case 2, not here.
+                        LOG_TRACE (
+                            "Misleading %s.num_entries %d for %dth entry\n",
+                            ctrlname, num_entries, i);
                         i = num_entries;
                         num_entries++;
-                        dwg_dynapi_entity_set_value (_ctrl, ctrlname, "num_entries", &num_entries, 0);
+                        dwg_dynapi_entity_set_value (
+                            _ctrl, ctrlname, "num_entries", &num_entries, 0);
                         LOG_TRACE ("%s.num_entries = %d [BL 70]\n", ctrlname,
                                    num_entries);
                       }
@@ -9217,12 +9222,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                                    sizeof (Dwg_Object_Ref *));
                     else
                       hdls = (BITCODE_H *)realloc (
-                                                   hdls, num_entries * sizeof (Dwg_Object_Ref *));
+                          hdls, num_entries * sizeof (Dwg_Object_Ref *));
                     if (pair->value.u && !hdls)
                       goto invalid_dxf;
                     hdls[i] = dwg_add_handleref (dwg, 2, pair->value.u, obj);
-                    dwg_dynapi_entity_set_value (_ctrl, ctrlname, "entries", &hdls,
-                                                 0);
+                    dwg_dynapi_entity_set_value (_ctrl, ctrlname, "entries",
+                                                 &hdls, 0);
                     LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", ctrlname,
                                "entries", i, ARGS_REF (hdls[i]));
                   }
@@ -9230,7 +9235,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             else if (pair->value.u && *buf)
               {
                 // DIMSTYLE 5: DIMBLK name -> handle
-                BITCODE_H handle = dwg_find_tablehandle_silent (dwg, buf, "BLOCK");
+                BITCODE_H handle
+                    = dwg_find_tablehandle_silent (dwg, buf, "BLOCK");
                 if (!handle)
                   {
                     obj_hdls = array_push (obj_hdls, "DIMBLK", buf,
@@ -9651,8 +9657,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             }
           // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
           else if (memBEGINc (name, "DICTIONARY")
-                   && strNE (name, "DICTIONARYVAR")
-                   && *text)
+                   && strNE (name, "DICTIONARYVAR") && *text)
             {
               add_dictionary_itemhandles (obj, pair, text);
               break;
@@ -11977,13 +11982,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 }
               else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY
                        && (pair->code == 90 || pair->code == 91
-                           || pair->code == 70
-                           || pair->code == 93
-                           || pair->code == 95
-                           || pair->code == 330 // objids
-                           || pair->code == 340 // objids
-                           || pair->code == 350 // objids
-                           || pair->code == 360 // objids
+                           || pair->code == 70 || pair->code == 93
+                           || pair->code == 95 || pair->code == 330 // objids
+                           || pair->code == 340                     // objids
+                           || pair->code == 350                     // objids
+                           || pair->code == 360                     // objids
                            || pair->code == 94)) // end of objids, ignore
                 {
                   Dwg_Object_Ref *ref;
@@ -12025,13 +12028,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 }
               else if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT
                        && (pair->code == 90 || pair->code == 91
-                           || pair->code == 70
-                           || pair->code == 93
-                           || pair->code == 95
-                           || pair->code == 330 // objids
-                           || pair->code == 340 // objids
-                           || pair->code == 350 // objids
-                           || pair->code == 360 // objids
+                           || pair->code == 70 || pair->code == 93
+                           || pair->code == 95 || pair->code == 330 // objids
+                           || pair->code == 340                     // objids
+                           || pair->code == 350                     // objids
+                           || pair->code == 360                     // objids
                            || pair->code == 94)) // end of objids, ignore
                 {
                   Dwg_Object_Ref *ref;

@@ -105,7 +105,7 @@
 #endif /* SPEC_H */
 
 #define FIELD_VALUE(nam) _obj->nam
-#define SUB_FIELD_VALUE(o,nam) _obj->o.nam
+#define SUB_FIELD_VALUE(o, nam) _obj->o.nam
 
 #ifndef VALUE_HANDLE
 #  define VALUE_HANDLE(value, nam, handle_code, dxf)
@@ -726,18 +726,18 @@
 #endif
 
 #ifndef COMMON_TABLE_FLAGS
-#  define COMMON_TABLE_FLAGS(acdbname)                                          \
-    assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                            \
-    PRE (R_13b1)                                                                \
-    {                                                                           \
-      if (strcmp (#acdbname, "Layer") == 0)                                     \
-        {                                                                       \
-          FIELD_CAST (flag, RC, RS, 70);                                        \
-        }                                                                       \
-      else                                                                      \
-        {                                                                       \
-          FIELD_CAST (flag, RC, RC, 70);                                        \
-        }                                                                       \
+#  define COMMON_TABLE_FLAGS(acdbname)                                            \
+    assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                              \
+    PRE (R_13b1)                                                                  \
+    {                                                                             \
+      if (strcmp (#acdbname, "Layer") == 0)                                       \
+        {                                                                         \
+          FIELD_CAST (flag, RC, RS, 70);                                          \
+        }                                                                         \
+      else                                                                        \
+        {                                                                         \
+          FIELD_CAST (flag, RC, RC, 70);                                          \
+        }                                                                         \
       /* clang-format off */                                                    \
       DECODER_OR_ENCODER                                                        \
         {                                                                       \
@@ -745,29 +745,29 @@
         }                                                                       \
       FIELD_TFv (name, 32, 2);                                                  \
       VERSION (R_11)                                                            \
-        FIELD_RSd (used, 0);                                                    \
-      /* clang-format on */                                                     \
-    }                                                                           \
-    LATER_VERSIONS                                                              \
-    {                                                                           \
-      FIELD_T (name, 2);                                                        \
-      UNTIL (R_2004)                                                            \
-      {                                                                         \
-        FIELD_B (is_xref_ref, 0);       /* always 1, 70 bit 6 */                \
-        FIELD_BS (is_xref_resolved, 0); /* 0 or 256 */                          \
-        FIELD_B (is_xref_dep, 0);       /* 70 bit 4 */                          \
-      }                                                                         \
-      LATER_VERSIONS                                                            \
-      {                                                                         \
-        FIELD_VALUE (is_xref_ref) = 1;                                          \
-        FIELD_BS (is_xref_resolved, 0); /* 0 or 256 */                          \
-        if (FIELD_VALUE (is_xref_resolved) == 256)                              \
-          FIELD_VALUE (is_xref_dep) = 1;                                        \
-      }                                                                         \
-      FIELD_HANDLE (xref, 5, 0); /* NULLHDL without is_xref_dep */              \
-      FIELD_VALUE (flag)                                                        \
-          |= FIELD_VALUE (is_xref_dep) << 4 | FIELD_VALUE (is_xref_ref) << 6;   \
-    }                                                                           \
+        FIELD_RSd (used, 0); \
+      /* clang-format on */                                                       \
+    }                                                                             \
+    LATER_VERSIONS                                                                \
+    {                                                                             \
+      FIELD_T (name, 2);                                                          \
+      UNTIL (R_2004)                                                              \
+      {                                                                           \
+        FIELD_B (is_xref_ref, 0);       /* always 1, 70 bit 6 */                  \
+        FIELD_BS (is_xref_resolved, 0); /* 0 or 256 */                            \
+        FIELD_B (is_xref_dep, 0);       /* 70 bit 4 */                            \
+      }                                                                           \
+      LATER_VERSIONS                                                              \
+      {                                                                           \
+        FIELD_VALUE (is_xref_ref) = 1;                                            \
+        FIELD_BS (is_xref_resolved, 0); /* 0 or 256 */                            \
+        if (FIELD_VALUE (is_xref_resolved) == 256)                                \
+          FIELD_VALUE (is_xref_dep) = 1;                                          \
+      }                                                                           \
+      FIELD_HANDLE (xref, 5, 0); /* NULLHDL without is_xref_dep */                \
+      FIELD_VALUE (flag)                                                          \
+          |= FIELD_VALUE (is_xref_dep) << 4 | FIELD_VALUE (is_xref_ref) << 6;     \
+    }                                                                             \
     RESET_VER
 #endif
 
@@ -891,7 +891,6 @@
     return error;                                                             \
   }
 
-
 #define CALL_SUBCLASS(_xobj, parenttype, subtype)                             \
   error |= DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                   \
       _xobj, dat, hdl_dat, str_dat, (Dwg_Object *)obj)
@@ -916,13 +915,13 @@
     DECODER_OR_ENCODER                                                        \
     {                                                                         \
       if (_obj->w)                                                            \
-        LOG_TRACE("       %s: 0x%x\n", #w, _obj->w);                          \
+        LOG_TRACE ("       %s: 0x%x\n", #w, _obj->w);                         \
     }
 #  define LOG_LAYER_FLAG_REV(w)                                               \
     DECODER_OR_ENCODER                                                        \
     {                                                                         \
-      if (! _obj->w)                                                          \
-        LOG_TRACE("       %s: 0x%x\n", #w, _obj->w);                          \
+      if (!_obj->w)                                                           \
+        LOG_TRACE ("       %s: 0x%x\n", #w, _obj->w);                         \
     }
 #endif
 #ifndef LOG_TEXT_GENERATION

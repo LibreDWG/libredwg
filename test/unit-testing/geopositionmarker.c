@@ -34,7 +34,8 @@ api_process (dwg_object *obj)
 
   if (_obj->enable_frame_text)
     {
-      if (!dwg_dynapi_entity_value (_obj, "GEOPOSITIONMARKER", "mtext", &mtext, NULL))
+      if (!dwg_dynapi_entity_value (_obj, "GEOPOSITIONMARKER", "mtext", &mtext,
+                                    NULL))
         fail ("GEOPOSITIONMARKER.mtext");
       else
         {
@@ -44,7 +45,8 @@ api_process (dwg_object *obj)
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_height, BD);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_width, BD);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, column_type, BS);
-          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, num_column_heights, BS);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded,
+                             num_column_heights, BS);
         }
     }
 #endif
