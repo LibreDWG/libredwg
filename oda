@@ -48,7 +48,7 @@ case $r in
        r="$(examples/odaversion "$d")"
        ;;
 esac
-if [ x$r = x11 ]; then r=12; fi
+if [ "$r" = "11" ]; then r=12; fi
 
 if [ ! -f "$dir/$b.dwg" ]; then
     if [ -f "$srcdir/test/test-data/$dir/$b.dwg" ]; then
@@ -80,10 +80,11 @@ if [ -f "$dir/$b.dwg" ] && [ -n "$r" ]; then
         r2\.*)     can_teigha=0 ;;
         r1\.*)     can_teigha=0 ;;
     esac
+    # shellcheck disable=SC2086,SC2154
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" "$dir" . "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$TeighaFileConverter" "$dir" . "ACAD$r" DXF 0 1 "$b.dwg" \
-                >/dev/null 2>/dev/null
+                $ODAFileConverter_geometry >/dev/null 2>/dev/null
         # rm "$b.json.err" 2>/dev/null
         if [ -e "$dir/$b.dxf.err" ]; then
             mv "$dir/$b.dxf.err" "$b.json.err"

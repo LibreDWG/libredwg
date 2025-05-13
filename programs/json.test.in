@@ -196,9 +196,11 @@ check_oda() {
             echo "./dwgwrite${EXEEXT} -y -v0 -o $b.dwg $b.json"
             $TESTPROG "./dwgwrite${EXEEXT}" -y -v0 -o "$b.dwg" "$b.json" 2>/dev/null
         fi
+        # shellcheck disable=SC2086,SC2154
         if [ -n "$can_teigha" ] && [ -f "$b.dwg" ]; then
             echo $baseFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" from "$dwg"
-            $TeighaFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" >/dev/null 2>/dev/null
+            $TeighaFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" \
+                $ODAFileConverter_geometry >/dev/null 2>/dev/null
             if [ -e "../$b.dxf.err" ]; then
                 mv "../$b.dxf.err" "$b.json.err"
                 cat "$b.json.err"

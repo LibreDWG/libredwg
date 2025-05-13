@@ -102,9 +102,11 @@ check_subentity() {
             base="$(basename "$tgt" .dxf)"
             rm -f "$base.dwg.err"
             convert_year_dwg
+            # shellcheck disable=SC2086,SC2154
             if [ -n "$r" ]; then
                 echo timeout 30 "$baseFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf"
-                timeout 30 "$ODAFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf" >/dev/null 2>/dev/null
+                timeout 30 "$ODAFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf" \
+                        $ODAFileConverter_geometry >/dev/null 2>/dev/null
                 if test -f "$base.dwg.err"; then
                     cat "$base.dwg.err"
                     echo FAIL "$baseFileConverter" "$tgt" "$year"
@@ -260,9 +262,11 @@ check_roundtrip() {
         if [ -n "$HAVE_ODA" ]; then
             rm -f "$dxf.err"
             convert_year_dxf
+            # shellcheck disable=SC2086,SC2154
             if [ -n "$r" ]; then
                 echo timeout 30 "$baseFileConverter" . .. "ACAD$r" DXF 0 1 "$tgt"
-                timeout 30 "$ODAFileConverter" . .. "ACAD$r" DXF 0 1 "$tgt" >/dev/null 2>/dev/null
+                timeout 30 "$ODAFileConverter" . .. "ACAD$r" DXF 0 1 "$tgt" \
+                        $ODAFileConverter_geometry >/dev/null 2>/dev/null
                 if test -f "$dxf.err"; then
                     cat "$dxf.err"
                     rm -- "$dxf.err"
