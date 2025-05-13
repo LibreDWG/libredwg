@@ -105,9 +105,7 @@ compile_commands.json
 /test/unit-testing/*.gcda
 
 # specific filenames
-/.rb.sh
-/.rb-*.sh
-/.upwork.sh
+/.*.sh
 /.version
 /.tarball-version
 /.vs.spec
