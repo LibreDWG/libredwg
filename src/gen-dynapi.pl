@@ -1956,8 +1956,9 @@ open $in, "<", $api_c or die "$api_c: $!";
 open my $out, ">", "$api_c.tmp" or die "$api_c.tmp: $!";
 my $gen = 0;
 while (<$in>) {
-  if (m/^\/\* Start auto-generated/) {
+  if (m/^\s*\/\* Start auto-generated/) {
     print $out $_;
+    print $out "// clang-format: off\n";
 
     $tmpl = "dwg_get_OBJECT (ent_\$lname, \$name)\n";
     # out_classes ($out, \@entity_names, \%FIXED, $tmpl);
@@ -1966,7 +1967,7 @@ while (<$in>) {
     print $out "/* unstable */\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
     print $out "#  ifdef DEBUG_CLASSES\n";
-    out_classes ($out, \@entity_names, \%DEBUGGING, "  ".$tmpl);
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
     out_classes ($out, \@entity_names, \%UNHANDLED, "// ".$tmpl);
     print $out "#  endif\n\n";
 
@@ -1978,9 +1979,10 @@ while (<$in>) {
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
     print $out "#  ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
-    out_classes ($out, \@object_names, \%UNHANDLED, "// ".$tmpl);
-    out_classes ($out, \@unhandled_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#  endif\n";
+    print $out "// clang-format: on\n";
 
     print $out <<'EOF';
 
@@ -2001,6 +2003,7 @@ while (<$in>) {
  * Extracts all entities of this type from a block header (mspace or pspace),
  * and returns a malloced NULL-terminated array.
  */
+// clang-format: off
 //< \fn Dwg_Entity_TEXT* dwg_getall_TEXT (Dwg_Object_Ref *hdr)
 EOF
 
@@ -2014,6 +2017,7 @@ EOF
 
     print $out <<'EOF';
 
+// clang-format: on
 /********************************************************************
  *     Functions to return NULL-terminated array of all objects     *
  ********************************************************************/
@@ -2024,20 +2028,22 @@ EOF
  * NULL-terminated array.
  */
 
+// clang-format: off
 EOF
 
     $tmpl = "DWG_GETALL_OBJECT (\$name)\n";
     out_classes ($out, \@object_names, \%STABLE, $tmpl);
     print $out "/* unstable */\n";
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
-    print $out "#  ifdef DEBUG_CLASSES\n";
+    print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
-    out_classes ($out, \@object_names, \%UNHANDLED, "// ".$tmpl);
-    out_classes ($out, \@unhandled_names, \%UNHANDLED, "// ".$tmpl);
-    print $out "#  endif\n";
+    out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
+    print $out "#endif\n";
 
     print $out <<'EOF';
 
+// clang-format: on
 /*******************************************************************
  *     Functions created from macro to cast dwg_object to entity     *
  *                 Usage :- dwg_object_to_ENTITY(),                  *
@@ -2048,6 +2054,7 @@ EOF
  * \fn Dwg_Entity_ENTITY *dwg_object_to_ENTITY(Dwg_Object *obj)
  * cast a Dwg_Object to Entity
  */
+// clang-format: off
 /* fixed <500 */
 EOF
 
@@ -2059,12 +2066,13 @@ EOF
     print $out "/* unstable */\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
     print $out "#  ifdef DEBUG_CLASSES\n";
-    out_classes ($out, \@entity_names, \%DEBUGGING, "  ".$tmpl);
-    out_classes ($out, \@entity_names, \%UNHANDLED, "  // ".$tmpl);
+    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "// ".$tmpl);
     print $out "#  endif\n";
 
     print $out <<'EOF';
 
+// clang-format: on
 /*******************************************************************
  *     Functions created from macro to cast dwg object to object     *
  *                 Usage :- dwg_object_to_OBJECT(),                  *
@@ -2074,6 +2082,7 @@ EOF
  * \fn Dwg_Object_OBJECT *dwg_object_to_OBJECT(Dwg_Object *obj)
  * cast a Dwg_Object to Object
  */
+// clang-format: off
 EOF
 
     $tmpl = "CAST_DWG_OBJECT_TO_OBJECT (\$name)\n";
@@ -2081,9 +2090,9 @@ EOF
     print $out "/* unstable */\n";
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
     print $out "#  ifdef DEBUG_CLASSES\n";
-    out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
-    out_classes ($out, \@object_names, \%UNHANDLED, "  // ".$tmpl);
-    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  // ".$tmpl);
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "// ".$tmpl);
     print $out "#  endif\n";
     print $out "// clang-format: on\n";
     print $out "/* End auto-generated content */\n";
@@ -2105,32 +2114,33 @@ open $in, "<", $api_h or die "$api_h: $!";
 open $out, ">", "$api_h.tmp" or die "$api_h.tmp: $!";
 $gen = 0;
 while (<$in>) {
-  if (m/^\/\* Start auto-generated/) {
+  if (m/^\s*\/\* Start auto-generated/) {
     print $out $_;
+    print $out "  // clang-format: off\n";
 
-    $tmpl = "typedef struct _dwg_entity_\$name\t\tdwg_ent_\$lname;\n";
+    $tmpl = "  typedef struct _dwg_entity_\$name\t\tdwg_ent_\$lname;\n";
     out_classes ($out, \@entity_names, \%FIXED, $tmpl);
-    print $out "/* untyped > 500 */\n";
+    print $out "  /* untyped > 500 */\n";
     out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
-    print $out "/* unstable */\n";
+    print $out "  /* unstable */\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
-    print $out "/* debugging */\n";
+    print $out "  /* debugging */\n";
     out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
-    out_classes ($out, \@entity_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
 
-    $tmpl = "typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
+    $tmpl = "  typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
     out_classes ($out, \@object_names, \%FIXED, $tmpl);
-    print $out "/* untyped > 500 */\n";
+    print $out "  /* untyped > 500 */\n";
     # without UNDERLAYDEFINITION
     my %STABLEVAR1 = %STABLEVAR;
     delete %STABLEVAR1{qw(PDFDEFINITION DGNDEFINITION DWFDEFINITION)};
     out_classes ($out, \@object_names, \%STABLEVAR1, $tmpl);
     my %STABLEVAR2 = map {$_ => 1} qw(PDFDEFINITION DGNDEFINITION DWFDEFINITION);
-    $tmpl = "typedef struct _dwg_abstractobject_UNDERLAYDEFINITION\t\tdwg_obj_\$lname;\n";
+    $tmpl = "  typedef struct _dwg_abstractobject_UNDERLAYDEFINITION\t\tdwg_obj_\$lname;\n";
     out_classes ($out, \@object_names, \%STABLEVAR2, $tmpl);
-    $tmpl = "typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
+    $tmpl = "  typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
 
-    print $out "/* unstable */\n";
+    print $out "  /* unstable */\n";
     # without ASSOCARRAYPARAMETERS
     my %UNSTABLE1 = %UNSTABLE;
     delete %UNSTABLE1{qw(ASSOCARRAYMODIFYPARAMETERS ASSOCARRAYPATHPARAMETERS
@@ -2138,34 +2148,36 @@ while (<$in>) {
     out_classes ($out, \@object_names, \%UNSTABLE1, $tmpl);
     my %UNSTABLE2 = map {$_ => 1} qw(ASSOCARRAYMODIFYPARAMETERS ASSOCARRAYPATHPARAMETERS
                                        ASSOCARRAYPOLARPARAMETERS ASSOCARRAYRECTANGULARPARAMETERS);
-    $tmpl = "typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS\t\tdwg_obj_\$lname;\n";
+    $tmpl = "  typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS\t\tdwg_obj_\$lname;\n";
     out_classes ($out, \@object_names, \%UNSTABLE2, $tmpl);
     #out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
-    print $out "/* debugging */\n";
-    $tmpl = "typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
+    print $out "  /* debugging */\n";
+    $tmpl = "  typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
     out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
-    out_classes ($out, \@object_names, \%UNHANDLED, "// ".$tmpl);
-    out_classes ($out, \@unhandled_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "//".$tmpl);
     print $out "\n\n";
 
-    $tmpl = "dwg_get_OBJECT_DECL (ent_\$lname, \$name);\n";
+    $tmpl = "  dwg_get_OBJECT_DECL (ent_\$lname, \$name);\n";
     out_classes ($out, \@entity_names, \%FIXED, $tmpl);
-    print $out "/* untyped > 500 */\n";
+    print $out "  /* untyped > 500 */\n";
     out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
-    print $out "/* unstable */\n";
+    print $out "  /* unstable */\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
     print $out "#ifdef DEBUG_CLASSES\n";
+    $tmpl = "    dwg_get_OBJECT_DECL (ent_\$lname, \$name);\n";
     out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
     out_classes ($out, \@entity_names, \%UNHANDLED, "// ".$tmpl);
     print $out "#endif\n\n";
 
-    $tmpl = "dwg_get_OBJECT_DECL (obj_\$lname, \$name);\n";
+    $tmpl = "  dwg_get_OBJECT_DECL (obj_\$lname, \$name);\n";
     out_classes ($out, \@object_names, \%FIXED, $tmpl);
-    print $out "/* untyped > 500 */\n";
+    print $out "  /* untyped > 500 */\n";
     out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
-    print $out "/* unstable */\n";
+    print $out "  /* unstable */\n";
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
     print $out "#ifdef DEBUG_CLASSES\n";
+    $tmpl = "    dwg_get_OBJECT_DECL (obj_\$lname, \$name);\n";
     out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "// ".$tmpl);
     out_classes ($out, \@unhandled_names, \%UNHANDLED, "// ".$tmpl);
@@ -2180,15 +2192,15 @@ while (<$in>) {
 /// extract all owned entities from a block header (mspace or pspace)
 EOF
 
-    $tmpl = "DWG_GETALL_ENTITY_DECL (\$name);\n";
+    $tmpl = "  DWG_GETALL_ENTITY_DECL (\$name);\n";
     out_classes ($out, \@entity_names, \%FIXED, $tmpl);
-    print $out "/* untyped > 500 */\n";
+    print $out "  /* untyped > 500 */\n";
     out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
-    print $out "/* unstable */\n";
+    print $out "  /* unstable */\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
-    print $out "/* debugging */\n";
+    print $out "  /* debugging */\n";
     out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
-    out_classes ($out, \@entity_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
 
     print $out <<'EOF';
 
@@ -2204,17 +2216,17 @@ EOF
 
 EOF
 
-    $tmpl = "DWG_GETALL_OBJECT_DECL (\$name);\n";
+    $tmpl = "  DWG_GETALL_OBJECT_DECL (\$name);\n";
     out_classes ($out, \@object_names, \%FIXED, $tmpl);
-    print $out "/* untyped > 500 */\n";
+    print $out "  /* untyped > 500 */\n";
     out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
-    print $out "/* unstable */\n";
+    print $out "  /* unstable */\n";
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
-    print $out "#ifdef DEBUG_CLASSES\n";
-    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
-    out_classes ($out, \@object_names, \%UNHANDLED, "// ".$tmpl);
-    out_classes ($out, \@unhandled_names, \%UNHANDLED, "// ".$tmpl);
-    print $out "#endif\n";
+    print $out "#  ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "//".$tmpl);
+    print $out "#  endif\n";
 
     print $out <<'EOF';
 
@@ -2231,17 +2243,17 @@ EOF
 /* fixed <500 */
 EOF
 
-    $tmpl = "CAST_DWG_OBJECT_TO_ENTITY_DECL (\$name);\n";
+    $tmpl = "  CAST_DWG_OBJECT_TO_ENTITY_DECL (\$name);\n";
     out_classes ($out, \@entity_names, \%FIXED, $tmpl);
-    print $out "/* untyped > 500 */\n";
-    $tmpl = "CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (\$name);\n";
+    print $out "  /* untyped > 500 */\n";
+    $tmpl = "  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (\$name);\n";
     out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
-    print $out "/* unstable */\n";
+    print $out "  /* unstable */\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
-    print $out "#ifdef DEBUG_CLASSES\n";
+    print $out "#  ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@entity_names, \%DEBUGGING, "  ".$tmpl);
-    out_classes ($out, \@entity_names, \%UNHANDLED, "  // ".$tmpl);
-    print $out "#endif\n";
+    out_classes ($out, \@entity_names, \%UNHANDLED, "  //".$tmpl);
+    print $out "#  endif\n";
 
     print $out <<'EOF';
 
@@ -2256,25 +2268,26 @@ EOF
  */
 EOF
 
-    $tmpl = "CAST_DWG_OBJECT_TO_OBJECT_DECL (\$name);\n";
+    $tmpl = "  CAST_DWG_OBJECT_TO_OBJECT_DECL (\$name);\n";
     out_classes ($out, \@object_names, \%FIXED, $tmpl);
-    print $out "/* untyped > 500 */\n";
+    print $out "  /* untyped > 500 */\n";
     out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
-    print $out "/* unstable */\n";
+    print $out "  /* unstable */\n";
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
-    print $out "#ifdef DEBUG_CLASSES\n";
+    print $out "#  ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
-    out_classes ($out, \@object_names, \%UNHANDLED, "  // ".$tmpl);
-    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  // ".$tmpl);
-    print $out "#endif\n";
+    out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
+    print $out "#  endif\n";
 
-    print $out "/* End auto-generated content */\n";
+    print $out "  // clang-format: on\n";
+    print $out "  /* End auto-generated content */\n";
     $gen = 1;
   }
   if (!$gen) {
     print $out $_;
   }
-  if (m/^\/\* End auto-generated/) {
+  if (m/^\s*\/\* End auto-generated/) {
     $gen = 0;
   }
 }
@@ -2308,8 +2321,9 @@ while (<$in>) {
   if (/^} Dwg_Object_Type/) {
     $enum = 0;
   }
-  if (m/    \/\* Start auto-generated entity-union/) {
+  if (m/^\s*\/\* Start auto-generated entity-union/) {
     print $out $_;
+    print $out "    // clang-format: off\n";
     $tmpl =    "    Dwg_Entity_\$name *\$name;\n";
     out_classes ($out, \@entity_names, \%FIXED, $tmpl);
     print $out "    /* untyped > 500 */\n";
@@ -2318,15 +2332,17 @@ while (<$in>) {
     $tmpl =    "    Dwg_Entity_\$name *\$xname;\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
     print $out "    /* debugging */\n";
-    #print $out "#ifdef DEBUG_CLASSES\n";
-    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
+    #print $out "#  ifdef DEBUG_CLASSES\n";
+    out_classes ($out, \@entity_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@entity_names, \%UNHANDLED, "//".$tmpl);
     #print $out "#endif\n";
+    print $out "    // clang-format: on\n";
     print $out "    /* End auto-generated entity-union */\n";
     $gen = 1;
   }
-  elsif (m/    \/\* Start auto-generated object-union/) {
+  elsif (m/\s*\/\* Start auto-generated object-union/) {
     print $out $_;
+    print $out "    // clang-format: off\n";
     $tmpl =    "    Dwg_Object_\$name *\$name;\n";
     out_classes ($out, \@object_names, \%FIXED, $tmpl);
     print $out "    /* untyped > 500 */\n";
@@ -2337,12 +2353,14 @@ while (<$in>) {
     out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
     out_classes ($out, \@unhandled_names, \%UNHANDLED, "//".$tmpl);
+    print $out "    // clang-format: off\n";
     print $out "    /* End auto-generated object-union */\n";
     $gen = 1;
   }
-  elsif (m/^\/\* Start auto-generated content/) {
+  elsif (m/^\s*\/\* Start auto-generated content/) {
     print $out $_;
 
+    print $out "// clang-format: off\n";
     $tmpl = "EXPORT int dwg_setup_\$name (Dwg_Object *obj);\n";
     out_classes ($out, \@entity_names, \%FIXED, $tmpl);
     out_classes ($out, \@object_names, \%FIXED, $tmpl);
@@ -2360,6 +2378,7 @@ while (<$in>) {
     out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
 
+    print $out "// clang-format: on\n";
     print $out "/* End auto-generated content */\n";
     $gen = 1;
   }
@@ -2380,9 +2399,10 @@ open $in, "<", $free_h or die "$free_h: $!";
 open $out, ">", "$free_h.tmp" or die "$free_h.tmp: $!";
 $gen = 0;
 while (<$in>) {
-  if (m/^\/\* Start auto-generated content/) {
+  if (m/^\s*\/\* Start auto-generated content/) {
     print $out $_;
 
+    print $out "// clang-format: off\n";
     $tmpl = "int dwg_free_\$name (Bit_Chain *restrict dat, Dwg_Object *restrict obj);\n" .
       "int dwg_free_\$name_private (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat, Dwg_Object *restrict obj);\n";
     out_classes ($out, \@entity_names, \%STABLE, $tmpl);
@@ -2400,6 +2420,7 @@ while (<$in>) {
     out_classes ($out, \@entity_names, \%UNHANDLED, $unhtmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, $unhtmpl);
     out_classes ($out, \@unhandled_names, \%UNHANDLED, $unhtmpl);
+    print $out "// clang-format: on\n";
     print $out "/* End auto-generated content */\n";
     $gen = 1;
   }
@@ -2423,20 +2444,24 @@ if (1) {
   while (<$in>) {
     if (m/^\s+\/\* Start auto-generated variable/) {
       print $out $_;
+      print $out "  // clang-format: off\n";
       my $e = 500;
       for (@VARTYPES) {
-        printf $out "  %-37s /* %d */\n", "\"$_\",", $e++;
+        printf $out "  %-59s /* %d */\n", "\"$_\",", $e++;
       }
+      print $out "  // clang-format: on\n";
       print $out "  /* End auto-generated variable */\n";
       $gen = 1;
     }
     if (m/^\s+\/\* Start auto-generated dxfnames/) {
       print $out $_;
+      print $out "  // clang-format: off\n";
       my $e = 500;
       for (@VARTYPES) {
         my $dxfname = dxfname $_;
-        printf $out "  %-45s /* %d */\n", "\"$dxfname\",", $e++;
+        printf $out "  %-59s /* %d */\n", "\"$dxfname\",", $e++;
       }
+      print $out "  // clang-format: on\n";
       print $out "  /* End auto-generated dxfnames */\n";
       $gen = 1;
     }
@@ -2459,6 +2484,7 @@ open $out, ">", "$ifile.tmp" or die "$ifile.tmp: $!";
 while (<$in>) {
   if (m/^\/\* Start auto-generated/) {
     print $out $_;
+    print $out "// clang-format: off\n";
     print $out "/* dwg_getall_ API */\n";
     $tmpl = "EXPORT Dwg_Entity_\$name** dwg_getall_\$name (Dwg_Object_Ref* hdr);\n";
     out_classes ($out, \@entity_names, \%STABLE, $tmpl);
@@ -2499,6 +2525,7 @@ while (<$in>) {
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
     out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
+    print $out "// clang-format: on\n";
     print $out "/* End auto-generated content */\n";
     close $out;
     $done++;

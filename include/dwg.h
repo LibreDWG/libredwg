@@ -9414,6 +9414,7 @@ typedef struct _dwg_object_entity
     Dwg_DIMENSION_common *DIMENSION_common;
     // clang-format off
     /* Start auto-generated entity-union. Do not touch. */
+    // clang-format: off
     Dwg_Entity__3DFACE *_3DFACE;
     Dwg_Entity__3DSOLID *_3DSOLID;
     Dwg_Entity_ARC *ARC;
@@ -9489,31 +9490,32 @@ typedef struct _dwg_object_entity
     Dwg_Entity_POINTCLOUD *POINTCLOUD;
     Dwg_Entity_POINTCLOUDEX *POINTCLOUDEX;
     /* debugging */
-    Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
-    Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
-    Dwg_Entity_BASEPOINTPARAMETERENTITY *BASEPOINTPARAMETERENTITY;
-    Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
-    Dwg_Entity_FLIPGRIPENTITY *FLIPGRIPENTITY;
-    Dwg_Entity_FLIPPARAMETERENTITY *FLIPPARAMETERENTITY;
-    Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
-    Dwg_Entity_LINEARGRIPENTITY *LINEARGRIPENTITY;
-    Dwg_Entity_LINEARPARAMETERENTITY *LINEARPARAMETERENTITY;
-    Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
-    Dwg_Entity_MPOLYGON *MPOLYGON;
-    Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
-    Dwg_Entity_NURBSURFACE *NURBSURFACE;
-    Dwg_Entity_POINTPARAMETERENTITY *POINTPARAMETERENTITY;
-    Dwg_Entity_POLARGRIPENTITY *POLARGRIPENTITY;
-    Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
-    Dwg_Entity_ROTATIONGRIPENTITY *ROTATIONGRIPENTITY;
-    Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
-    Dwg_Entity_RTEXT *RTEXT;
-    Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
-    Dwg_Entity_TABLE *TABLE;
-    Dwg_Entity_VISIBILITYGRIPENTITY *VISIBILITYGRIPENTITY;
-    Dwg_Entity_VISIBILITYPARAMETERENTITY *VISIBILITYPARAMETERENTITY;
-    Dwg_Entity_XYGRIPENTITY *XYGRIPENTITY;
-    Dwg_Entity_XYPARAMETERENTITY *XYPARAMETERENTITY;
+      Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
+      Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
+      Dwg_Entity_BASEPOINTPARAMETERENTITY *BASEPOINTPARAMETERENTITY;
+      Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
+      Dwg_Entity_FLIPGRIPENTITY *FLIPGRIPENTITY;
+      Dwg_Entity_FLIPPARAMETERENTITY *FLIPPARAMETERENTITY;
+      Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
+      Dwg_Entity_LINEARGRIPENTITY *LINEARGRIPENTITY;
+      Dwg_Entity_LINEARPARAMETERENTITY *LINEARPARAMETERENTITY;
+      Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
+      Dwg_Entity_MPOLYGON *MPOLYGON;
+      Dwg_Entity_NAVISWORKSMODEL *NAVISWORKSMODEL;
+      Dwg_Entity_NURBSURFACE *NURBSURFACE;
+      Dwg_Entity_POINTPARAMETERENTITY *POINTPARAMETERENTITY;
+      Dwg_Entity_POLARGRIPENTITY *POLARGRIPENTITY;
+      Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
+      Dwg_Entity_ROTATIONGRIPENTITY *ROTATIONGRIPENTITY;
+      Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
+      Dwg_Entity_RTEXT *RTEXT;
+      Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
+      Dwg_Entity_TABLE *TABLE;
+      Dwg_Entity_VISIBILITYGRIPENTITY *VISIBILITYGRIPENTITY;
+      Dwg_Entity_VISIBILITYPARAMETERENTITY *VISIBILITYPARAMETERENTITY;
+      Dwg_Entity_XYGRIPENTITY *XYGRIPENTITY;
+      Dwg_Entity_XYPARAMETERENTITY *XYPARAMETERENTITY;
+    // clang-format: on
     /* End auto-generated entity-union */
     // clang-format on
   } tio;
@@ -9586,6 +9588,7 @@ typedef struct _dwg_object_object
   {
     // clang-format off
     /* Start auto-generated object-union. Do not touch. */
+    // clang-format: off
     Dwg_Object_APPID *APPID;
     Dwg_Object_APPID_CONTROL *APPID_CONTROL;
     Dwg_Object_BLOCK_CONTROL *BLOCK_CONTROL;
@@ -10613,6 +10616,7 @@ typedef struct _dwg_object_object
 //    Dwg_Object_VAACIMAGEINVENTORY *VAACIMAGEINVENTORY;
 //    Dwg_Object_VAACXREFPANELOBJECT *VAACXREFPANELOBJECT;
 //    Dwg_Object_XREFPANELOBJECT *XREFPANELOBJECT;
+    // clang-format: off
     /* End auto-generated object-union */
     // clang-format on
   } tio;
@@ -11704,6 +11708,7 @@ EXPORT int dwg_object_name (const char *const restrict name, // in
 */
 // clang-format off
 /* Start auto-generated content. Do not touch. */
+// clang-format: off
 EXPORT int dwg_setup__3DFACE (Dwg_Object *obj);
 EXPORT int dwg_setup__3DSOLID (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC (Dwg_Object *obj);
@@ -12829,6 +12834,7 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   //EXPORT int dwg_setup_VAACXREFPANELOBJECT (Dwg_Object *obj);
   //EXPORT int dwg_setup_XREFPANELOBJECT (Dwg_Object *obj);
 #endif
+// clang-format: on
 /* End auto-generated content */
 // clang-format on
 
