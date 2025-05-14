@@ -2439,6 +2439,8 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->R11_HANDSEED->handleref.code = 0;
         _obj->R11_HANDSEED->handleref.size = 8;
       }
+    // always use the header_vars.HANDSEED
+    _obj->R11_HANDSEED->handleref.value = dwg->header_vars.HANDSEED->handleref.value;
     bit_write_RLL_BE (dat, _obj->R11_HANDSEED->handleref.value);
     _obj->R11_HANDSEED->absolute_ref = _obj->R11_HANDSEED->handleref.value;
     LOG_TRACE ("R11_HANDSEED: " FORMAT_H " [H 5]\n",
@@ -2579,7 +2581,7 @@ encode_auxheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
     }
 
-    // clang-format off
+  // clang-format off
   #include "auxheader.spec"
   // clang-format on
 
@@ -6613,39 +6615,37 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   Dwg_Version_Type old_from = dat->from_version;
+  BITCODE_H last_hdl;
+  BITCODE_RLL seed = 0;
 
   if (!_obj->HANDSEED) // minimal or broken DXF
     {
-      BITCODE_H last_hdl;
-      BITCODE_RLL seed = 0;
       dwg->opts |= DWG_OPTS_MINIMAL;
       dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
       LOG_TRACE ("encode from minimal DXF\n");
-
       _obj->HANDSEED = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
-      // check the object map for the next available handle
-      last_hdl = dwg->num_object_refs
-                     ? dwg->object_ref[dwg->num_object_refs - 1]
-                     : NULL;
-      if (last_hdl)
-        {
-          // find the largest handle
-          seed = last_hdl->absolute_ref;
-          LOG_TRACE ("compute HANDSEED " FORMAT_RLLx " ", seed);
-          for (unsigned i = 0; i < dwg->num_object_refs; i++)
-            {
-              Dwg_Object_Ref *ref = dwg->object_ref[i];
-              if (ref->absolute_ref > seed)
-                seed = ref->absolute_ref;
-            }
-          _obj->HANDSEED->absolute_ref = seed + 1;
-          LOG_TRACE ("-> " FORMAT_RLLx "\n", seed);
-        }
-      else
-        _obj->HANDSEED->absolute_ref = 0x72E;
     }
+  // check the object map for the next available handle
+  last_hdl = dwg->num_object_refs ? dwg->object_ref[dwg->num_object_refs - 1]
+                                  : NULL;
+  if (last_hdl)
+    {
+      // find the largest handle
+      seed = last_hdl->absolute_ref;
+      LOG_TRACE ("compute HANDSEED " FORMAT_RLLx " ", seed);
+      for (unsigned i = 0; i < dwg->num_object_refs; i++)
+        {
+          Dwg_Object_Ref *ref = dwg->object_ref[i];
+          if (ref->absolute_ref > seed)
+            seed = ref->absolute_ref;
+        }
+      _obj->HANDSEED->absolute_ref = seed + 1;
+      LOG_TRACE ("-> " FORMAT_RLLx "\n", seed);
+    }
+  else
+    _obj->HANDSEED->absolute_ref = 0x72E;
 
-    // clang-format off
+  // clang-format off
   #include "header_variables.spec"
   // clang-format on
 
