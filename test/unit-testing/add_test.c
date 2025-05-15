@@ -78,7 +78,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   dwg_point_3d pt2 = { 2.5, 1.5, 0.0 };
   Dwg_Object_BLOCK_HEADER *hdr;
   int n_failed;
-  char dwgfile[1024];
+  char dwgfile[256];
   int todo = 0;
 
   strcpy (dwgfile, file);
@@ -1014,6 +1014,13 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   ok ("read %s", name);
   dwg_free (dwg);
   free (dwg);
+  if (debug >= 2)
+    {
+      char cmd[280];
+      snprintf (cmd, sizeof(cmd), "../../oda %s", dwgfile);
+      if (system(cmd))
+        fail ("oda %s", dwgfile);
+    }
 
   n_failed = numfailed ();
   if (!n_failed && (!debug || debug != -1))
