@@ -1014,6 +1014,13 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   ok ("read %s", name);
   dwg_free (dwg);
   free (dwg);
+  if (debug >= 2)
+    {
+      char cmd[128];
+      snprintf (cmd, sizeof(cmd), "../../oda %s", dwgfile);
+      if (system(cmd))
+        fail ("oda %s", dwgfile);
+    }
 
   n_failed = numfailed ();
   if (!n_failed && (!debug || debug != -1))
