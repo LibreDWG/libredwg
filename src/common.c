@@ -274,6 +274,10 @@ dwg_version_type (const Dwg_Version_Type version)
 EXPORT Dwg_Version_Type
 dwg_version_hdr_type (const char *hdr)
 {
+#ifndef HAVE_NONNULL
+  if (!hdr)
+    return R_INVALID;
+#endif
   for (int i = R_AFTER - 1; i > 0; i--)
     {
       if (strEQ (dwg_versions[i].hdr, hdr))
@@ -287,6 +291,10 @@ dwg_version_hdr_type (const char *hdr)
 Dwg_Version_Type
 dwg_version_hdr_type2 (const char *hdr, unsigned dwg_version)
 {
+#ifndef HAVE_NONNULL
+  if (!hdr)
+    return R_INVALID;
+#endif
   for (int i = R_AFTER - 1; i > 0; i--)
     {
       if (strEQ (dwg_versions[i].hdr, hdr))
