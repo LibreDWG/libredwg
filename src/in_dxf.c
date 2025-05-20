@@ -5637,6 +5637,7 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   o->num_entries = 1;
   if (!o->entries)
     {
+      o->num_entries = 0;
       return NULL;
     }
   if (pair->code == 90 && !pair->value.i)
@@ -5673,9 +5674,14 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->entries = (Dwg_LAYER_entry *)realloc (
               o->entries, o->num_entries * sizeof (Dwg_LAYER_entry));
           if (!o->entries)
-            return NULL;
+            {
+              o->num_entries = 0;
+              return NULL;
+            }
           break;
         default:
+          o->entries = NULL;
+          o->num_entries = 0;
           LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "LAYER_INDEX");
           return NULL;
         }
