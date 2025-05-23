@@ -4896,6 +4896,11 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
                          obj->name, key, pair->value.u, pair->code);
               o->borders = (Dwg_GridFormat *)xcalloc (o->num_borders,
                                                       sizeof (Dwg_GridFormat));
+              if (!o->borders)
+                {
+                  o->num_borders = 0;
+                  return NULL;
+                }
             }
           else if (mode == CONTENTFORMAT)
             {
@@ -5556,6 +5561,11 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->ref[i].num_intsectobj = pair->value.i;
           o->ref[i].intsectobj
               = (BITCODE_H *)xcalloc (pair->value.i, sizeof (BITCODE_H));
+          if (!o->ref[i].intsectobj)
+            {
+              o->ref[i].num_intsectobj = 0;
+              return NULL;
+            }
           j = 0;
           LOG_TRACE ("%s.ref[%d].num_intsectobj = %d [BS %d]\n", obj->name, i,
                      pair->value.i, pair->code);
@@ -5806,7 +5816,10 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   value->vars = (Dwg_VALUEPARAM_vars *)xcalloc (value->num_vars,
                                                 sizeof (Dwg_VALUEPARAM_vars));
   if (!value->vars)
-    return 0;
+    {
+      value->num_vars = 0;
+      return 0;
+    }
   for (unsigned j = 0; j < value->num_vars; j++)
     {
       pair = add_EVALVARIANT (dwg, dat, &value->vars[j].value);
@@ -5845,7 +5858,10 @@ add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       o->edges = (Dwg_EVAL_Edge *)realloc (
           o->edges, o->num_edges * sizeof (Dwg_EVAL_Edge));
       if (!o->edges)
-        return NULL;
+        {
+          o->num_edges = 0;
+          return NULL;
+        }
       o->num_edges++;
       o->edges[i].id = pair->value.i; // 92
       LOG_TRACE ("%s.edges[%d].id = %d [BL %d]\n", obj->name, i, pair->value.i,
@@ -5928,6 +5944,7 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   o->num_nodes = 1;
   if (!o->nodes)
     {
+      o->num_nodes = 0;
       return NULL;
     }
   while (pair != NULL && pair->code != 0)
@@ -6006,7 +6023,10 @@ add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   deps = (Dwg_ASSOCACTION_Deps *)xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
   if (!deps)
-    return NULL;
+    {
+      o->num_actions = 0;
+      return NULL;
+    }
   for (unsigned i = 0; i < num; i++)
     {
       BITCODE_H hdl;
@@ -6085,7 +6105,10 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   num = o->num_deps;
   deps = (Dwg_ASSOCACTION_Deps *)xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
   if (!deps)
-    return NULL;
+    {
+      o->num_deps = 0;
+      return NULL;
+    }
   for (unsigned i = 0; i < num; i++)
     {
       BITCODE_H hdl;
@@ -6333,7 +6356,10 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       o->steps = (BITCODE_BL *)xcalloc (o->num_steps, sizeof (BITCODE_BL));
       if (!o->steps)
-        return pair;
+        {
+          o->num_steps = 0;
+          return pair;
+        }
       for (unsigned i = 0; i < o->num_steps; i++)
         {
           pair = dxf_read_pair (dat);
@@ -7641,7 +7667,10 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
       // FIELD_VECTOR (actions, BL, num_actions, 91);
       o->actions = (BITCODE_BL *)xcalloc (o->num_actions, sizeof (BITCODE_BL));
       if (!o->actions)
-        return pair;
+        {
+          o->num_actions = 0;
+          return pair;
+        }
       for (unsigned i = 0; i < o->num_actions; i++)
         {
           pair = dxf_read_pair (dat);
@@ -7658,7 +7687,10 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
     {
       o->deps = (BITCODE_H *)xcalloc (o->num_deps, sizeof (BITCODE_H));
       if (!o->deps)
-        return pair;
+        {
+          o->num_deps = 0;
+          return pair;
+        }
       for (unsigned i = 0; i < o->num_deps; i++)
         {
           pair = dxf_read_pair (dat);
@@ -7847,7 +7879,10 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
     {
       o->pts = (BITCODE_2RD *)xcalloc (o->num_pts, sizeof (BITCODE_2RD));
       if (!o->pts)
-        return pair;
+        {
+          o->num_pts = 0;
+          return pair;
+        }
       for (unsigned i = 0; i < o->num_pts; i++)
         {
           pair = dxf_read_pair (dat);
@@ -7869,7 +7904,10 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
       o->hdls = (Dwg_BLOCKSTRETCHACTION_handles *)xcalloc (
           o->num_hdls, sizeof (Dwg_BLOCKSTRETCHACTION_handles));
       if (!o->hdls)
-        return pair;
+        {
+          o->num_hdls = 0;
+          return pair;
+        }
       for (unsigned i = 0; i < o->num_hdls; i++)
         {
           pair = dxf_read_pair (dat);
@@ -7907,7 +7945,10 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
       o->codes = (Dwg_BLOCKSTRETCHACTION_codes *)xcalloc (
           o->num_codes, sizeof (Dwg_BLOCKSTRETCHACTION_codes));
       if (!o->codes)
-        return pair;
+        {
+          o->num_codes = 0;
+          return pair;
+        }
       for (unsigned i = 0; i < o->num_codes; i++)
         {
           pair = dxf_read_pair (dat);
@@ -7978,7 +8019,10 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
     {
       o->blocks = (BITCODE_H *)xcalloc (o->num_blocks, sizeof (BITCODE_H));
       if (!o->blocks)
-        return pair;
+        {
+          o->num_blocks = 0;
+          return pair;
+        }
       for (unsigned i = 0; i < o->num_blocks; i++)
         {
           pair = dxf_read_pair (dat);
@@ -7996,7 +8040,10 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
       o->states = (Dwg_BLOCKVISIBILITYPARAMETER_state *)xcalloc (
           o->num_states, sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state));
       if (!o->states)
-        return pair;
+        {
+          o->num_states = 0;
+          return pair;
+        }
       for (unsigned i = 0; i < o->num_states; i++)
         {
           pair = dxf_read_pair (dat);
@@ -8018,7 +8065,10 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
               o->states[i].blocks = (BITCODE_H *)xcalloc (
                   o->states[i].num_blocks, sizeof (BITCODE_H));
               if (!o->states[i].blocks)
-                return pair;
+                {
+                  o->states[i].num_blocks = 0;
+                  return pair;
+                }
               for (unsigned j = 0; j < o->states[i].num_blocks; j++)
                 {
                   pair = dxf_read_pair (dat);
@@ -8044,7 +8094,10 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
               o->states[i].params = (BITCODE_H *)xcalloc (
                   o->states[i].num_params, sizeof (BITCODE_H));
               if (!o->states[i].params)
-                return pair;
+                {
+                  o->states[i].num_params = 0;
+                  return pair;
+                }
               for (unsigned j = 0; j < o->states[i].num_params; j++)
                 {
                   pair = dxf_read_pair (dat);
@@ -8084,7 +8137,10 @@ add_BlockParam_PropInfo (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       prop->connections = (Dwg_BLOCKPARAMETER_connection *)xcalloc (
           prop->num_connections, sizeof (Dwg_BLOCKPARAMETER_connection));
       if (!prop->connections)
-        return pair;
+        {
+          prop->num_connections = 0;
+          return pair;
+        }
       for (unsigned j = 0; j < prop->num_connections; j++)
         {
           pair = dxf_read_pair (dat);
@@ -8309,7 +8365,10 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj,
     return NULL;
   o->valuelist = (double *)xcalloc (o->num_valuelist, sizeof (double));
   if (!o->valuelist)
-    return dxf_read_pair (dat);
+    {
+      o->num_valuelist = 0;
+      return dxf_read_pair (dat);
+    }
 
   for (unsigned i = 0; i < o->num_valuelist; i++)
     {
@@ -8413,6 +8472,11 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   if (o->num_hatch_angles)
     {
       o->hatch_angles = (BITCODE_BD *)xcalloc (o->num_hatch_angles, 8);
+      if (!o->hatch_angles)
+        {
+          o->num_hatch_angles = 0;
+          return dxf_read_pair (dat);
+        }
       for (unsigned i = 0; i < o->num_hatch_angles; i++)
         {
           // FIELD_BD (hatch_angles[i], 40);
