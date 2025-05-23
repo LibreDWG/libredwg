@@ -65,7 +65,11 @@
 #ifdef MAX_MEM
 #  define MAX_SIZE_BUF MAX_MEM
 #else
-#  define MAX_SIZE_BUF UINT64_C (0x7FFFFFFFFFFFFFFF)
+#  ifdef HAVE_ASAN
+#    define MAX_SIZE_BUF UINT64_C (0x10000000000)
+#else
+#    define MAX_SIZE_BUF UINT64_C (0x7FFFFFFFFFFFFFFF)
+#  endif
 #endif
 
 #if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
