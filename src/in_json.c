@@ -514,7 +514,7 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   char *old;
 
   *lenp = 0;
-  if (t->type != JSMN_STRING)
+  if (t->type != JSMN_STRING || !pos)
     {
       LOG_ERROR ("Expected JSON STRING");
       json_advance_unknown (dat, tokens, t->type, 0);
@@ -1945,6 +1945,13 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     LOG_ERROR (
                         "Invalid %s ACIS %u json format. len %d, size %d",
                         obj->name, acis_version, len - l, size);
+                  if (!pos)
+                    {
+                      LOG_ERROR ("Invalid %s ACIS %u json format. NULL string",
+                                 obj->name, acis_version);
+                      free (s);
+                      return DWG_ERR_INVALIDTYPE;
+                    }
                   if ((read = in_hex2bin ((unsigned char *)&s[15], pos, blen)
                               != blen))
                     LOG_ERROR ("in_hex2bin with key %s at pos %u of %u",
@@ -2198,7 +2205,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   = len ? (unsigned char *)malloc (blen + 1) : NULL;
               char *pos = str;
               char *old;
-              if (buf)
+              if (buf && pos)
                 {
                   if ((read = in_hex2bin (buf, pos, blen) != blen))
                     LOG_ERROR ("in_hex2bin with key %s at pos %" PRIuSIZE
@@ -3486,11 +3493,18 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               const unsigned blen = len / 2;
               unsigned read;
               BITCODE_TF buf = (BITCODE_TF)malloc (blen + 1);
-              if ((read = in_hex2bin (buf, hex, blen) != blen))
-                LOG_ERROR ("in_hex2bin with key %s at pos %u of %u", key, read,
-                           blen);
-              buf[blen] = '\0';
-              free (hex);
+              if (hex)
+                {
+                  if ((read = in_hex2bin (buf, hex, blen) != blen))
+                    LOG_ERROR ("in_hex2bin with key %s at pos %u of %u", key, read,
+                               blen);
+                  buf[blen] = '\0';
+                  free (hex);
+                }
+              else
+                {
+                  memset (buf, 0, blen);
+                }
               if (!obj->num_unknown_rest)
                 obj->num_unknown_rest = blen * 8; // minus some padding bits
               if (obj->unknown_rest)

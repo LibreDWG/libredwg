@@ -4332,6 +4332,8 @@ in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // ...
   };
   const char *_end = pos + (destlen << 1);
+  if (!pos)
+    return 0;
   /* slower
   const char *_end4 = pos + ((destlen << 1) & ~0x3);
   const int64_t magic = INT64_C(0x1001001000000000);
