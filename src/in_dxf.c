@@ -486,6 +486,7 @@ dxf_read_rll (Bit_Chain *dat)
         {
           LOG_ERROR ("%s: \\n missing after %ld (at %" PRIuSIZE ")",
                      __FUNCTION__, (long)num, dat->byte);
+          num = 0UL;
           dat->byte = dat->size;
         }
       return num;
