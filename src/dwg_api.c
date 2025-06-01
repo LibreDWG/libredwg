@@ -27517,19 +27517,38 @@ dwg_add_LEADER (
     const Dwg_Entity_MTEXT *restrict associated_annotation, /* maybe NULL */
     const unsigned type)
 {
-  API_ADD_ENTITY (LEADER);
+  BITCODE_H annotative = NULL;
+  Dwg_Object_DIMSTYLE *annot_style = NULL;
+  Dwg_Object *annot_o = NULL;
+  API_ADD_PREP (LEADER);
   if (!num_points)
     {
       LOG_ERROR ("no num_points")
-      API_UNADD_ENTITY;
       return NULL;
     }
   if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r13", "LEADER")
-      API_UNADD_ENTITY;
       return NULL;
     }
+  // dimstyles need to be created before the entity
+  if (associated_annotation)
+    {
+      annot_o = dwg_obj_generic_to_object (associated_annotation, &error);
+      if (error || !annot_o || annot_o->fixedtype != DWG_TYPE_MTEXT)
+        {
+          LOG_ERROR ("Invalid associated_annotation object");
+          return NULL;
+        }
+      // use DIMSTYLE "Annotative"
+      annotative = dwg_find_tablehandle (dwg, "Annotative", "DIMSTYLE");
+      if (!annotative)
+        { // create it
+          annot_style = dwg_add_DIMSTYLE (dwg, (const BITCODE_T) "Annotative");
+        }
+    }
+  
+  API_ADD_ENTITY2 (LEADER);
   _obj->points = (BITCODE_3BD *)calloc (num_points, sizeof (BITCODE_3BD));
   _obj->num_points = num_points;
   for (unsigned i = 0; i < num_points; i++)
@@ -27546,35 +27565,6 @@ dwg_add_LEADER (
   _obj->origin.z = points[0].z;
   // TODO type => path_type + annot_type + arrowhead_on
   // TODO check more valid types
-  if (associated_annotation)
-    {
-      BITCODE_H annotative;
-      Dwg_Object *o
-          = dwg_obj_generic_to_object (associated_annotation, &error);
-      if (error || !o || o->fixedtype != DWG_TYPE_MTEXT)
-        {
-          LOG_ERROR ("Invalid associated_annotation object");
-          return NULL;
-        }
-      _obj->annot_type = 1;
-      _obj->associated_annotation = dwg_add_handleref (
-          dwg, 5, dwg_obj_generic_handlevalue ((void *)associated_annotation),
-          obj);
-      add_obj_reactor (o->tio.object, obj->handle.value);
-      // use DIMSTYLE "Annotative"
-      annotative = dwg_find_tablehandle (dwg, "Annotative", "DIMSTYLE");
-      if (annotative)
-        _obj->dimstyle
-            = dwg_add_handleref (dwg, 5, annotative->absolute_ref, NULL);
-      else
-        { // create it
-          Dwg_Object_DIMSTYLE *annot
-              = dwg_add_DIMSTYLE (dwg, (const BITCODE_T) "Annotative");
-          if (annot)
-            _obj->dimstyle = dwg_add_handleref (
-                dwg, 5, dwg_obj_generic_handlevalue (annot), NULL);
-        }
-    }
   // defaults:
   _obj->x_direction.x = 1.0;
   if (!_obj->dimstyle && dwg->header_vars.DIMSTYLE)
@@ -27586,6 +27576,21 @@ dwg_add_LEADER (
   // TODO more calcs ...
   _obj->box_width = 0.82;
   _obj->arrowhead_type = 8;
+  if (associated_annotation)
+    {
+      _obj->annot_type = 1;
+      _obj->associated_annotation = dwg_add_handleref (
+          dwg, 5, dwg_obj_generic_handlevalue ((void *)associated_annotation),
+          obj);
+      add_obj_reactor (annot_o->tio.object, obj->handle.value);
+      // use DIMSTYLE "Annotative"
+      if (annotative)
+        _obj->dimstyle
+            = dwg_add_handleref (dwg, 5, annotative->absolute_ref, NULL);
+      else if (annot_style) // created above
+        _obj->dimstyle = dwg_add_handleref (
+            dwg, 5, dwg_obj_generic_handlevalue (annot_style), NULL);
+    }
   return _obj;
 }
 
