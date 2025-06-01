@@ -2884,7 +2884,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       {                                                                       \
         LOG_ERROR ("HATCH no paths or wrong j %u\n", j);                      \
         if (o->paths)                                                         \
-          free (o->paths);                                                    \
+          {                                                                   \
+            free (o->paths);                                                  \
+            o->paths = NULL;                                                  \
+          }                                                                   \
         o->num_paths = 0;                                                     \
         dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
@@ -2939,7 +2942,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       {                                                                       \
         LOG_ERROR ("HATCH no paths[%d].segs or wrong k %d\n", j, k);          \
         if (o->paths && o->paths[j].segs)                                     \
-          free (o->paths[j].segs);                                            \
+          {                                                                   \
+            free (o->paths[j].segs);                                          \
+            o->paths[j].segs = NULL;                                          \
+          }                                                                   \
         o->paths[j].num_segs_or_paths = 0;                                    \
         dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
@@ -3060,6 +3066,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         else                                                                  \
           {                                                                   \
             free (o->paths[j].segs[k].control_points);                        \
+            o->paths[j].segs[k].control_points = NULL;                        \
             o->paths[j].segs[k].num_control_points = 0;                       \
           }                                                                   \
         dxf_free_pair (pair);                                                 \
@@ -9247,6 +9254,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               {
                 dwg->num_objects--;
                 free (obj->tio.object->tio.BLOCK_HEADER);
+                obj->tio.object->tio.BLOCK_HEADER = NULL;
                 obj = &dwg->object[0];
                 _obj = obj->tio.object->tio.APPID;
                 LOG_TRACE ("Reuse existing BLOCK_HEADER.*Model_Space %X [0]\n",
