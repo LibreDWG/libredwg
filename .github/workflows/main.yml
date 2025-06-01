@@ -41,7 +41,6 @@ jobs:
       name: checkout for tag
       uses: actions/checkout@v4
       with:
-        fetch-tags: true
         submodules: recursive
     - if: startsWith(github.ref, 'refs/heads/')
       name: checkout for commit --depth 50
