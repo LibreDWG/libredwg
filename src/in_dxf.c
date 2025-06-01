@@ -7329,6 +7329,11 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   if (pair->code == 72)
     {
+      if (o->num_verts)
+        {
+          LOG_ERROR ("MLINE.num_verts already set");
+          return 2;
+        }
       o->num_verts = pair->value.i;
       o->parent = obj->tio.entity;
       o->verts = (Dwg_MLINE_vertex *)xcalloc (o->num_verts,
@@ -7356,6 +7361,11 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   else if (pair->code == 73)
     {
+      if (o->num_lines)
+        {
+          LOG_ERROR ("MLINE.num_lines already set");
+          return 2;
+        }
       o->num_lines = pair->value.i;
       if (o->num_verts && !o->verts[0].lines)
         {
