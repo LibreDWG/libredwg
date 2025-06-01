@@ -25467,6 +25467,34 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
     dwg->header_vars.numentities++;                                           \
   dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
 
+/* split into 2 to add controls before */
+#define API_ADD_PREP(token)                                                   \
+  int error;                                                                  \
+  Dwg_Object *obj;                                                            \
+  Dwg_Entity_##token *_obj;                                                   \
+  Dwg_Object *blkobj = dwg_obj_generic_to_object (blkhdr, &error);            \
+  Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                   \
+  if (!dwg || !blkobj                                                         \
+      || !(blkobj->fixedtype == DWG_TYPE_BLOCK_HEADER                         \
+           || dwg_obj_has_subentity (blkobj)))                                \
+    {                                                                         \
+      LOG_ERROR ("Entity %s can not be added to %s", #token,                  \
+                 blkobj ? dwg_type_name (blkobj->fixedtype) : "NULL");        \
+      return NULL;                                                            \
+    }
+
+#define API_ADD_ENTITY2(token)                                                \
+  NEW_ENTITY (dwg, obj);                                                      \
+  ADD_ENTITY (token);                                                         \
+  obj->tio.entity->ownerhandle                                                \
+      = dwg_add_handleref (dwg, 5, blkobj->handle.value, obj);                \
+  dwg_set_next_objhandle (obj);                                               \
+  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));                \
+  IN_POSTPROCESS_HANDLES (obj);                                               \
+  if (dwg->header.version < R_10)                                             \
+    dwg->header_vars.numentities++;                                           \
+  dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
+
 #define API_UNADD_ENTITY                                                      \
   if (dwg->header.version < R_13b1)                                           \
     obj->type = -(long)(obj->type);                                           \
@@ -26588,7 +26616,6 @@ dwg_require_DIMSTYLE_Standard (Dwg_Data *restrict dwg)
 
 #define DIMENSION_DEFAULTS                                                    \
   _obj->extrusion.z = 1.0;                                                    \
-  dwg_require_DIMSTYLE_Standard (dwg);                                        \
   if (dwg->header_vars.DIMSTYLE)                                              \
   _obj->dimstyle = dwg_add_handleref (                                        \
       dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL)
@@ -26599,13 +26626,14 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict xline2_pt,
                            const dwg_point_3d *restrict text_midpt)
 {
-  API_ADD_ENTITY (DIMENSION_ALIGNED);
+  API_ADD_PREP (DIMENSION_ALIGNED);
   if (dwg->header.version <= R_2_22)
     {
       LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_ALIGNED")
-      API_UNADD_ENTITY;
       return NULL;
     }
+  dwg_require_DIMSTYLE_Standard (dwg);
+  API_ADD_ENTITY2 (DIMENSION_ALIGNED);
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (xline1_pt);
   ADD_CHECK_3DPOINT (xline2_pt);
@@ -26635,13 +26663,14 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict xline2end_pt,
                           const dwg_point_3d *restrict text_midpt)
 {
-  API_ADD_ENTITY (DIMENSION_ANG2LN);
+  API_ADD_PREP (DIMENSION_ANG2LN);
   if (dwg->header.version <= R_2_22)
     {
       LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_ANG2LN")
-      API_UNADD_ENTITY;
       return NULL;
     }
+  dwg_require_DIMSTYLE_Standard (dwg);
+  API_ADD_ENTITY2 (DIMENSION_ANG2LN);
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (center_pt);
   ADD_CHECK_3DPOINT (xline1end_pt);
@@ -26675,13 +26704,14 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict xline2_pt,
                           const dwg_point_3d *restrict text_midpt)
 {
-  API_ADD_ENTITY (DIMENSION_ANG3PT);
+  API_ADD_PREP (DIMENSION_ANG3PT);
   if (dwg->header.version <= R_2_22)
     {
       LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_ANG3PT")
-      API_UNADD_ENTITY;
       return NULL;
     }
+  dwg_require_DIMSTYLE_Standard (dwg);
+  API_ADD_ENTITY2 (DIMENSION_ANG3PT);
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (center_pt);
   ADD_CHECK_3DPOINT (xline1_pt);
@@ -26713,13 +26743,14 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const dwg_point_3d *restrict far_chord_pt,
                             const double leader_len)
 {
-  API_ADD_ENTITY (DIMENSION_DIAMETER);
+  API_ADD_PREP (DIMENSION_DIAMETER);
   if (dwg->header.version <= R_2_22)
     {
       LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_DIAMETER")
-      API_UNADD_ENTITY;
       return NULL;
     }
+  dwg_require_DIMSTYLE_Standard (dwg);
+  API_ADD_ENTITY2 (DIMENSION_DIAMETER);
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (chord_pt);
   ADD_CHECK_3DPOINT (far_chord_pt);
@@ -26745,13 +26776,14 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const dwg_point_3d *restrict leader_endpt,
                             const bool use_x_axis)
 {
-  API_ADD_ENTITY (DIMENSION_ORDINATE);
+  API_ADD_PREP (DIMENSION_ORDINATE);
   if (dwg->header.version <= R_2_22)
     {
       LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_ORDINATE")
-      API_UNADD_ENTITY;
       return NULL;
     }
+  dwg_require_DIMSTYLE_Standard (dwg);
+  API_ADD_ENTITY2 (DIMENSION_ORDINATE);
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (feature_location_pt);
   ADD_CHECK_3DPOINT (leader_endpt);
@@ -26776,13 +26808,14 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict chord_pt,
                           const double leader_len)
 {
-  API_ADD_ENTITY (DIMENSION_RADIUS);
+  API_ADD_PREP (DIMENSION_RADIUS);
   if (dwg->header.version <= R_2_22)
     {
       LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_RADIUS")
-      API_UNADD_ENTITY;
       return NULL;
     }
+  dwg_require_DIMSTYLE_Standard (dwg);
+  API_ADD_ENTITY2 (DIMENSION_RADIUS);
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (center_pt);
   ADD_CHECK_3DPOINT (chord_pt);
@@ -26809,13 +26842,14 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict def_pt,
                           const double rotation_angle)
 {
-  API_ADD_ENTITY (DIMENSION_LINEAR);
+  API_ADD_PREP (DIMENSION_LINEAR);
   if (dwg->header.version <= R_2_22)
     {
       LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_LINEAR")
-      API_UNADD_ENTITY;
       return NULL;
     }
+  dwg_require_DIMSTYLE_Standard (dwg);
+  API_ADD_ENTITY2 (DIMENSION_LINEAR);
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (xline1_pt);
   ADD_CHECK_3DPOINT (xline2_pt);
