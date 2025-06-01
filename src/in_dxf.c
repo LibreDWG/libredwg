@@ -5696,6 +5696,10 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               o->num_entries = 0;
               return NULL;
             }
+          else
+            {
+              memset (&o->entries[o->num_entries - 1], 0, sizeof (Dwg_LAYER_entry));
+            }
           break;
         default:
           o->entries = NULL;
