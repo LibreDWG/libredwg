@@ -4540,13 +4540,21 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
 
   // Reserve memory space for object references
   if (!dwg->num_object_refs)
-    dwg->object_ref = (Dwg_Object_Ref **)calloc (REFS_PER_REALLOC,
-                                                 sizeof (Dwg_Object_Ref *));
+    {
+      BITCODE_RLL max_refs = dwg->header_vars.HANDSEED ?
+        dwg->header_vars.HANDSEED->absolute_ref : REFS_PER_REALLOC;
+      if (max_refs < REFS_PER_REALLOC)
+        max_refs = REFS_PER_REALLOC;
+      dwg->object_ref = (Dwg_Object_Ref **)calloc (max_refs,
+                                                   sizeof (Dwg_Object_Ref *));
+    }
   else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
     {
       dwg->object_ref = (Dwg_Object_Ref **)realloc (
           dwg->object_ref, (dwg->num_object_refs + REFS_PER_REALLOC)
                                * sizeof (Dwg_Object_Ref *));
+      memset (&dwg->object_ref[dwg->num_object_refs], 0,
+              REFS_PER_REALLOC * sizeof (Dwg_Object_Ref *));
       dwg->dirty_refs = 1;
       LOG_TRACE ("REALLOC dwg->object_ref vector to %u\n",
                  dwg->num_object_refs + REFS_PER_REALLOC)
@@ -5276,6 +5284,7 @@ dwg_add_object (Dwg_Data *restrict dwg)
   else if (num >= dwg->num_alloced_objects)
     {
       Dwg_Object *restrict old = dwg->object;
+      BITCODE_BL old_num = dwg->num_alloced_objects;
       if (!dwg->num_alloced_objects)
         dwg->num_alloced_objects = 1;
       while (num >= dwg->num_alloced_objects)
@@ -5286,6 +5295,8 @@ dwg_add_object (Dwg_Data *restrict dwg)
       if (realloced)
         {
           dwg->dirty_refs = 1;
+          memset (&dwg->object[old_num], 0,
+                  (dwg->num_alloced_objects - old_num) * sizeof (Dwg_Object));
           LOG_TRACE ("REALLOC dwg->object vector to %u\n",
                      dwg->num_alloced_objects)
         }
