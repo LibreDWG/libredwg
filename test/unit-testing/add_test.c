@@ -689,12 +689,12 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       break;
     case DWG_TYPE_LAYOUT:
       {
-        Dwg_Entity_VIEWPORT *viewport = dwg_add_VIEWPORT (hdr, "Model");
-        Dwg_Object *vp = dwg_obj_generic_to_object (viewport, &error);
+        Dwg_Object_VPORT *vport = dwg_add_VPORT (dwg, "*Active");
+        Dwg_Object *vp = dwg_obj_generic_to_object (vport, &error);
         if (vp && !error)
           dwg_add_LAYOUT (vp, "Model", "ANSI_A_(8.50_x_11.00_Inches)");
         else
-          fail ("no VIEWPORT created");
+          fail ("no VPORT created");
       }
       break;
     case TEMP_PDFDEFINITION3: // same def

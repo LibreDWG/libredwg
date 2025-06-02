@@ -48,6 +48,8 @@
 #include "encode.h"
 #include "hash.h"
 
+#define NEED_VPORT_FOR_MODEL_LAYOUT
+
 /** We don't pass in Dwg_Object*'s, so we don't know if the object
  *  is >= r2007 or <r13 or what. Default is r2000.
  *  So we need some dwg_api_init_version(&dwg) to store the version.
@@ -28772,7 +28774,7 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
     Dwg_Object *dictobj;
     Dwg_Object_Ref *dictref;
     Dwg_Object *nod;
-    unsigned long ownerhandle;
+    unsigned long ownerhandle = 0UL;
 
     API_ADD_OBJECT (LAYOUT);
 
@@ -28807,18 +28809,20 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
       }
     else if (vp->fixedtype == DWG_TYPE_VPORT)
       {
-        ownerhandle = vp->tio.object->ownerhandle->absolute_ref;
+        ownerhandle = dwg->header_vars.BLOCK_RECORD_MSPACE->absolute_ref;
         _obj->active_viewport
             = dwg_add_handleref (dwg, 4, vp->handle.value, NULL);
       }
     else
       {
+        // to a pspace block
         ownerhandle = vp->tio.entity->ownerhandle->absolute_ref;
         _obj->active_viewport
             = dwg_add_handleref (dwg, 4, vp->handle.value, NULL);
       }
 
-    _obj->block_header = dwg_add_handleref (dwg, 4, ownerhandle, NULL);
+    if (ownerhandle)
+      _obj->block_header = dwg_add_handleref (dwg, 4, ownerhandle, NULL);
     // TODO copy the plotsettings and viewport settings as default
 
     dictref = dwg_find_dictionary (dwg, "ACAD_LAYOUT");
