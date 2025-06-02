@@ -15314,7 +15314,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
           LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
-      if (f->is_string && dwg->header.from_version < R_13b1 &&
+      if (obj && f->is_string && dwg->header.from_version < R_13b1 &&
           (obj->fixedtype == DWG_TYPE_STYLE || obj->fixedtype == DWG_TYPE_LTYPE))
         {
           //find_name (fieldname, r11_fixed_strings))
