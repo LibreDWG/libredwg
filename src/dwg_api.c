@@ -27331,6 +27331,7 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
               = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
           if (!obj->tio.object->num_reactors)
             add_obj_reactor (obj->tio.object, nod->handle.value);
+          _obj->cloning = 1;
         }
     }
   else /* not a direct NOD item */
