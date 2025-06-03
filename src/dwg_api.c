@@ -48,7 +48,7 @@
 #include "encode.h"
 #include "hash.h"
 
-#define NEED_VPORT_FOR_MODEL_LAYOUT
+#undef NEED_VPORT_FOR_MODEL_LAYOUT
 
 /** We don't pass in Dwg_Object*'s, so we don't know if the object
  *  is >= r2007 or <r13 or what. Default is r2000.
@@ -28750,7 +28750,8 @@ dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
   }
 }
 
-/* either added to the VIEWPORT entity in pspace, or VPORT object in mspace. */
+/* either added to a p/mspace BLOCK_HEADER, to a VIEWPORT entity in pspace,
+   or a VPORT object in mspace. */
 EXPORT Dwg_Object_LAYOUT *
 dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
                 const char *restrict canonical_media_name)
@@ -28758,10 +28759,11 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
   int err;
   Dwg_Data *dwg = vp->parent;
 #ifdef NEED_VPORT_FOR_MODEL_LAYOUT
-  if (vp->fixedtype != DWG_TYPE_VPORT && vp->fixedtype != DWG_TYPE_VIEWPORT)
+  if (vp->fixedtype != DWG_TYPE_VPORT && vp->fixedtype != DWG_TYPE_VIEWPORT
+      && vp->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
-      LOG_ERROR ("LAYOUT can only be added to VPORT (in mspace) or VIEWPORT "
-                 "(in pspace)");
+      LOG_ERROR ("LAYOUT can only be added to VPORT (in mspace) or "
+                 "the *Paper_Space BLOCK_HEADER or VIEWPORT (in pspace)");
       return NULL;
     }
 #endif
@@ -28801,7 +28803,7 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
         _obj->UCSYDIR = dwg->header_vars.UCSYDIR;
       }
 
-    // either VIEWPORT or VPORT
+    // either VIEWPORT or VPORT or to a pspace or mspace BLOCK_HEADER
     if (vp->fixedtype == DWG_TYPE_BLOCK_HEADER)
       {
         ownerhandle = vp->handle.value;
@@ -28813,9 +28815,9 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
         _obj->active_viewport
             = dwg_add_handleref (dwg, 4, vp->handle.value, NULL);
       }
-    else
+    else if (vp->fixedtype == DWG_TYPE_VIEWPORT)
       {
-        // to a pspace block
+        // in pspace
         ownerhandle = vp->tio.entity->ownerhandle->absolute_ref;
         _obj->active_viewport
             = dwg_add_handleref (dwg, 4, vp->handle.value, NULL);

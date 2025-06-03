@@ -689,12 +689,11 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       break;
     case DWG_TYPE_LAYOUT:
       {
-        Dwg_Object_VPORT *vport = dwg_add_VPORT (dwg, "*Active");
-        Dwg_Object *vp = dwg_obj_generic_to_object (vport, &error);
-        if (vp && !error)
-          dwg_add_LAYOUT (vp, "Model", "ANSI_A_(8.50_x_11.00_Inches)");
+        Dwg_Object *ps = dwg_paper_space_object (dwg);
+        if (ps && !error)
+          dwg_add_LAYOUT (ps, "Layout2", "ANSI_A_(8.50_x_11.00_Inches)");
         else
-          fail ("no VPORT created");
+          fail ("no *Paper_Space BLOCK_HEADER found");
       }
       break;
     case TEMP_PDFDEFINITION3: // same def
