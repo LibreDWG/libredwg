@@ -690,7 +690,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
     case DWG_TYPE_LAYOUT:
       {
         Dwg_Object *ps = dwg_paper_space_object (dwg);
-        if (ps && !error)
+        if (ps)
           dwg_add_LAYOUT (ps, "Layout2", "ANSI_A_(8.50_x_11.00_Inches)");
         else
           fail ("no *Paper_Space BLOCK_HEADER found");
