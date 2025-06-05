@@ -37,12 +37,12 @@ jobs:
           - CFLAGS="-O2 -fno-omit-frame-pointer -fsanitize=undefined -fno-var-tracking" --disable-bindings --disable-docs --enable-check-less
           - --enable-debug
     steps:
-    - if: startsWith(github.ref, 'refs/tags/')
+    - if: ${{ startsWith(github.ref, 'refs/tags/') }}
       name: checkout for tag
       uses: actions/checkout@v4
       with:
         submodules: recursive
-    - if: startsWith(github.ref, 'refs/heads/')
+    - if: ${{ !startsWith(github.ref, 'refs/tags/') }}
       name: checkout for commit --depth 50
       uses: actions/checkout@v4
       with:
