@@ -3819,10 +3819,10 @@ Ref_cmp (const Dwg_Object_Ref *pKey, const Dwg_Object_Ref **ppR)
 {
   int retVal = (int)pKey->handleref.code - (int)(*ppR)->handleref.code;
   if (0 != retVal)
-    {
-      return retVal;
-    }
-  return (long)pKey->absolute_ref - (long)(*ppR)->absolute_ref;
+    return retVal;
+  return pKey->absolute_ref > (*ppR)->absolute_ref    ? 1
+         : pKey->absolute_ref == (*ppR)->absolute_ref ? 0
+                                                      : 1;
 }
 
 void
