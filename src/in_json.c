@@ -912,16 +912,16 @@ json_records (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   return NULL;
 }
 
-// of primitives only
+// of primitives only. may return NULL
 static void *
 json_vector (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
              const char *key, const char *type, BITCODE_BL *nump)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  BITCODE_BL *a_bl;
-  BITCODE_RLL *a_rll;
-  BITCODE_BD *a_bd;
-  BITCODE_TV *a_tv;
+  BITCODE_BL *a_bl = NULL;
+  BITCODE_RLL *a_rll = NULL;
+  BITCODE_BD *a_bd = NULL;
+  BITCODE_TV *a_tv = NULL;
   void *arr;
   int len = t->size;
   int size, is_str = 0, is_float = 0;
@@ -980,23 +980,23 @@ json_vector (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
           json_advance_unknown (dat, tokens, t->type, 0);
           return arr;
         }
-      if (is_str)
+      if (is_str && a_tv)
         {
           a_tv[k] = json_string (dat, tokens);
           JSON_TOKENS_CHECK_OVERFLOW_NULL;
           LOG_TRACE ("%s[%d]: %s [%s]\n", key, k, a_tv[k], type);
         }
-      else if (is_float)
+      else if (is_float && a_bd)
         {
           a_bd[k] = json_float (dat, tokens);
           LOG_TRACE ("%s[%d]: %f [%s]\n", key, k, a_bd[k], type);
         }
-      else if (strEQc (type, "RLL"))
+      else if (strEQc (type, "RLL") && a_rll)
         {
           a_rll[k] = json_longlong (dat, tokens);
           LOG_TRACE ("%s[%d]: " FORMAT_RLL " [%s]\n", key, k, a_rll[k], type);
         }
-      else if (strEQc (type, "BL"))
+      else if (strEQc (type, "BL") && a_bl)
         {
           a_bl[k] = json_long (dat, tokens);
           LOG_TRACE ("%s[%d]: " FORMAT_BL " [%s]\n", key, k, a_bl[k], type);
