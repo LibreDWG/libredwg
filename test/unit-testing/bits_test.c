@@ -1568,6 +1568,12 @@ bit_read_UMC_tests (void)
 {
   Bit_Chain bitchain;
   BITCODE_UMC umc;
+  // Handle delta and following address delta from the R2000 object map.
+  unsigned char entry[] = { 0xc7, 0xff, 0xff, 0xff, 0xff, 0xff,
+                            0xff, 0xff, 0xff, 0x01, 0xf9, 0x4e };
+  unsigned char output[sizeof (entry)] = { 0 };
+  Bit_Chain map = EMPTY_CHAIN (sizeof (entry));
+  const BITCODE_UMC delta = UINT64_C (0xFFFFFFFFFFFFFFC7);
 
 #define test_UMC(s, x)                                                        \
   bitchain = strtobt (s);                                                     \
@@ -1601,6 +1607,59 @@ bit_read_UMC_tests (void)
             "11111111"
             "01111111",
             0xFFFFFFFFFFFFFF);
+  test_UMC ("11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "01111111",
+            0x7FFFFFFFFFFFFFFF);
+  test_UMC ("11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "11111111"
+            "00000001",
+            UINT64_MAX);
+
+  map.chain = entry;
+  map.opts = loglevel;
+  umc = bit_read_UMC (&map);
+  if (umc == delta && map.byte == 10 && bit_read_MC (&map) == -1913)
+    ok ("bit_read_UMC preserves the following MC");
+  else
+    fail ("bit_read_UMC preserves the following MC");
+
+  map.chain = output;
+  map.byte = 0;
+  bit_write_UMC (&map, delta);
+  if (map.byte == 10 && !memcmp (output, entry, 10))
+    ok ("bit_write_UMC 64-bit handle delta");
+  else
+    fail ("bit_write_UMC 64-bit handle delta");
+
+  map.chain = entry;
+  map.byte = 0;
+  map.size = 9;
+  if (bit_read_UMC (&map) == 0 && map.byte == 9)
+    ok ("bit_read_UMC rejects truncated input");
+  else
+    fail ("bit_read_UMC rejects truncated input");
+
+  map.byte = 0;
+  map.size = sizeof (entry);
+  entry[9] = 0x02;
+  if (bit_read_UMC (&map) == 0 && map.byte == 10)
+    ok ("bit_read_UMC rejects values wider than 64 bits");
+  else
+    fail ("bit_read_UMC rejects values wider than 64 bits");
 }
 
 static void

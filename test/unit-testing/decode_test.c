@@ -595,6 +595,53 @@ r2007_class_versions_test (void)
   dwg_free (&dwg);
 }
 
+static void
+object_map_handle_test (void)
+{
+  // The R2000 POINT at the end of a wrapped handle delta, including its CRC.
+  unsigned char point[] = { 0x18, 0x00, 0x46, 0xe5, 0x80, 0x00, 0x00,
+                            0x02, 0x3f, 0xff, 0xff, 0xff, 0xff, 0xff,
+                            0xff, 0xfe, 0x65, 0x34, 0x21, 0xda, 0xb8,
+                            0xc1, 0x01, 0x01, 0x44, 0x9c, 0x21, 0xc4 };
+  unsigned char delta[] = { 0xc7, 0xff, 0xff, 0xff, 0xff,
+                            0xff, 0xff, 0xff, 0xff, 0x01 };
+  const BITCODE_HV handle = UINT64_C (0xFFFFFFFFFFFFFFF9);
+  Bit_Chain map = EMPTY_CHAIN (sizeof (delta));
+
+  map.chain = delta;
+  for (int i = 0; i < 2; i++)
+    {
+      Bit_Chain dat = EMPTY_CHAIN (sizeof (point));
+      Dwg_Data dwg = { 0 };
+      BITCODE_HV map_handle;
+      int prescan, error;
+
+      map.byte = 0;
+      map_handle = 0x32 + bit_read_UMC (&map);
+      dwg.header.version = dwg.header.from_version = R_2000;
+      dwg.object_map = hash_new (16);
+      dat.version = dat.from_version = R_2000;
+      dat.chain = point;
+      prescan = dwg_decode_add_object (&dwg, &dat, &dat, 0, 0, 1, map_handle);
+      loglevel = test_loglevel;
+      if (prescan <= 0 && hash_get (dwg.object_map, handle) == 0
+          && (!i || hash_get (dwg.object_map, map_handle) == HASH_NOT_FOUND))
+        pass ();
+      else
+        fail ("Object prescan reads the embedded 64-bit handle");
+      error = dwg_decode_add_object (&dwg, &dat, &dat, 0, 0, 2, map_handle);
+      loglevel = test_loglevel;
+      if (error == (i ? DWG_ERR_INVALIDHANDLE : 0)
+          && dwg.object[0].handle.value == handle)
+        ok ("Object map %s", i ? "reports a mismatched handle"
+                               : "accepts a wrapped handle delta");
+      else
+        fail ("Object map handle check returned 0x%x", error);
+      dwg_free (&dwg);
+      delta[0]++;
+    }
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -611,6 +658,7 @@ main (int argc, char const *argv[])
   class_object_stream_tests ();
   r2007_rs_correction_tests ();
   r2007_class_versions_test ();
+  object_map_handle_test ();
 
   return numfailed () ? 1 : 0;
 }
