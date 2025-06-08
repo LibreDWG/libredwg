@@ -1654,12 +1654,12 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         size_t len;
                         unsigned char *s
                             = json_binary (dat, tokens, "eed", &len);
+                        // FIXME wrong obj with ubsan
                         if (eed_need_size (dat, obj->eed, i,
                                            (len + 2) & INT_MAX, &have))
                           data = obj->eed[i].data;
                         memcpy (&data->u.eed_4.data, s, len & 0xFF);
                         data->u.eed_4.length = len & 0xFF;
-                        // LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
                         free (s);
                         break;
                       }
@@ -3515,8 +3515,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_TRACE ("unknown_rest: %.*s\n", t->end - t->start,
                          &dat->chain[t->start])
             }
-          else if (strEQc (key, "eed") && !obj->tio.object->num_eed
-                   && t->type == JSMN_ARRAY)
+          else if (strEQc (key, "eed")
+                   // obj->tio.object shares a common prefix with entity until eed
+                   && !obj->tio.object->num_eed && t->type == JSMN_ARRAY)
             {
               json_eed (dat, dwg, tokens, obj->tio.object);
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
