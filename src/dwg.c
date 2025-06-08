@@ -2111,7 +2111,14 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
       else if (offset < 0)
         {
           hdl->code = 12;
-          hdl->value = -offset;
+          if ((unsigned)offset == 0x80000000) // invalid negation
+            {
+              LOG_ERROR ("HANDLE 12 overflow for object " FORMAT_RL, obj->index);
+              hdl->value = 0;
+              return 1;
+            }
+          else
+            hdl->value = -offset;
           dwg_set_handle_size (hdl);
         }
     }
