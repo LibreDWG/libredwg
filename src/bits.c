@@ -984,6 +984,8 @@ bit_read_MC (Bit_Chain *dat)
               byte[i] &= 0xbf;
             }
           result |= (((BITCODE_UMC)byte[i]) << j);
+          if (result == 0x80000000) // GH #1153 negation overflow
+            goto err_mc;
           return (negative ? -((BITCODE_MC)result) : (BITCODE_MC)result);
         }
       else
@@ -992,6 +994,7 @@ bit_read_MC (Bit_Chain *dat)
       result |= ((BITCODE_UMC)byte[i]) << j;
     }
 
+ err_mc:
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
       "bit_read_MC: error parsing modular char. i=%d, j=%d, result=" FORMAT_UMC
