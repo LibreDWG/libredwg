@@ -1054,72 +1054,44 @@ bit_write_MC (Bit_Chain *dat, BITCODE_MC val)
     bit_write_RC (dat, byte[j]);
 }
 
-/** Read unsigned modular char (max 5 bytes, unsigned).
+/** Read unsigned modular char (max 10 bytes).
     Can be quite large if there are many deleted handles.
  */
 BITCODE_UMC
 bit_read_UMC (Bit_Chain *dat)
 {
-  int i, j;
-// eg handle FD485E65F
-#define MAX_BYTE_UMC 8
-  unsigned char byte[MAX_BYTE_UMC] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-  BITCODE_UMC result;
+  unsigned int shift;
+  BITCODE_UMC result = 0;
 
-  result = 0;
-  for (i = MAX_BYTE_UMC - 1, j = 0; i >= 0; i--, j += 7)
+  for (shift = 0; shift < 64; shift += 7)
     {
-      byte[i] = bit_read_RC (dat);
-      if (!(byte[i] & 0x80))
-        {
-          result |= (((BITCODE_UMC)byte[i]) << j);
-          return result;
-        }
-      else
-        byte[i] &= 0x7f;
-
-      result |= ((BITCODE_UMC)byte[i]) << j;
+      const size_t pos = dat->byte;
+      const unsigned char byte = bit_read_RC (dat);
+      // The tenth byte may only contain bit 63, with no continuation.
+      if (dat->byte == pos || (shift == 63 && byte > 1))
+        break;
+      result |= (BITCODE_UMC)(byte & 0x7f) << shift;
+      if (!(byte & 0x80))
+        return result;
     }
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-  LOG_ERROR (
-      "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=" FORMAT_UMC,
-      i, j, result);
-  LOG_HANDLE ("  @%" PRIuSIZE ".%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n",
-              dat->byte - 6, dat->bit, dat->chain[dat->byte - 6],
-              dat->chain[dat->byte - 5], dat->chain[dat->byte - 4],
-              dat->chain[dat->byte - 3], dat->chain[dat->byte - 2],
-              dat->chain[dat->byte - 1]);
-  return 0; /* error... */
+  LOG_ERROR ("bit_read_UMC: invalid modular char at %" PRIuSIZE ".%u",
+             dat->byte, dat->bit);
+  return 0;
 }
 
-/** Write 1 modular char (max 8 bytes, unsigned).
+/** Write unsigned modular char (max 10 bytes).
  */
 void
 bit_write_UMC (Bit_Chain *dat, BITCODE_UMC val)
 {
-  int i, j;
-  unsigned char byte[MAX_BYTE_UMC];
-  BITCODE_UMC mask;
-  BITCODE_UMC value;
-
-  value = val;
-  mask = 0x0000007f;
-  for (i = MAX_BYTE_UMC - 1, j = 0; i >= 0; i--, j += 7)
+  while (val > 0x7f)
     {
-      byte[i] = (unsigned char)((value & mask) >> j);
-      byte[i] |= 0x80;
-      mask = mask << 7;
+      bit_write_RC (dat, (unsigned char)((val & 0x7f) | 0x80));
+      val >>= 7;
     }
-  for (i = 0; i < 4; i++)
-    if (byte[i] & 0x7f)
-      break;
-
-  if (byte[i] & 0x40 && i > 0)
-    i--;
-  byte[i] &= 0x7f;
-  for (j = MAX_BYTE_UMC - 1; j >= i; j--)
-    bit_write_RC (dat, byte[j]);
+  bit_write_RC (dat, (unsigned char)val);
 }
 
 /** Read 1 modular short (max 2 words).
@@ -1368,7 +1340,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   if (dat->from_version < R_13b1)
     {
       handle->size = handle->code;
-      if (handle->size > sizeof (BITCODE_RC *))
+      if (handle->size > sizeof (u.c))
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Invalid handle-reference, longer than 8 bytes: " FORMAT_H,
@@ -1384,7 +1356,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     }
 
   // size must not exceed 8
-  if (handle->size > sizeof (BITCODE_RC *) || handle->code > 14)
+  if (handle->size > sizeof (u.c) || handle->code > 14)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_WARN ("Invalid handle-reference, longer than 8 bytes: " FORMAT_H,

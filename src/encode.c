@@ -82,7 +82,7 @@ static BITCODE_BL rcount1 = 0, rcount2 = 0;
 static size_t
 bit_umc_size (BITCODE_UMC value)
 {
-  unsigned char bytes[8] = { 0 };
+  unsigned char bytes[10] = { 0 };
   Bit_Chain dat = EMPTY_CHAIN (sizeof (bytes));
 
   dat.chain = bytes;

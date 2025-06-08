@@ -796,15 +796,9 @@ handles_section:
 
   do
     {
-      BITCODE_RLL last_handle = 0;
       size_t last_offset = 0;
       BITCODE_RLL pre_handle = 0; // from the handleoffs, for the prescan
       size_t oldpos = 0, secpos;
-      BITCODE_RLL maxh
-          = (BITCODE_RLL)dwg->header.section[SECTION_HANDLES_R13].size << 1;
-      BITCODE_RLL max_handles
-          = maxh < INT32_MAX ? maxh
-                             : dwg->header.section[SECTION_HANDLES_R13].size;
       int added;
       pvz = dat->byte;
 
@@ -824,29 +818,23 @@ handles_section:
           BITCODE_MC prevsize;
           BITCODE_UMC handleoff;
           BITCODE_MC offset;
-          // BITCODE_RLL last_handle = dwg->num_objects
-          //   ? dwg->object[dwg->num_objects - 1].handle.value : 0;
           if (prescan_objects != 2)
             num = dwg->num_objects;
 
           oldpos = dat->byte;
-          // The offset from the previous handle. default: 1, unsigned.
-          // Basically how many objects have been deleted here.
+          // The handle delta is stored as UMC and added modulo 2^64.
           handleoff = bit_read_UMC (dat);
           // The offset from the previous address. default: obj->size, signed.
           offset = bit_read_MC (dat);
           prevsize = num ? dwg->object[num - 1].size + 4 : 0L;
 
-          if ((handleoff == 0) || (handleoff > (max_handles - last_handle))
-              || (offset > -4 && offset < prevsize - 8))
+          if (!handleoff || (offset > -4 && offset < prevsize - 8))
             {
               if (offset == prevsize)
                 LOG_WARN ("handleoff " FORMAT_UMC
-                          " looks wrong, max_handles %x - "
-                          "last_handle " FORMAT_HV " = " FORMAT_RLLx
+                          " looks wrong after handle " FORMAT_HV
                           " (@%" PRIuSIZE ")",
-                          handleoff, (unsigned)max_handles, last_handle,
-                          max_handles - last_handle, oldpos);
+                          handleoff, pre_handle, oldpos);
               if (offset == 1
                   || (offset > 0 && offset < prevsize && prevsize > 0)
                   || (offset < 0 && labs ((long)offset) < prevsize
@@ -857,11 +845,6 @@ handles_section:
                               " looks wrong, should be prevsize " FORMAT_MC
                               " + 4",
                               offset, prevsize - 4);
-                  // handleoff = 1;
-                  // offset = prevsize;
-                  // LOG_WARN ("Recover invalid handleoff to %" PRIuSIZE " and
-                  // offset to %ld",
-                  //           handleoff, offset);
                 }
             }
           last_offset += offset;
@@ -887,7 +870,6 @@ handles_section:
                                          prescan_objects, pre_handle);
           if (added > 0)
             error |= added; // else not added (skipped) or -1 for re-allocated
-          last_handle = dwg->object[num].handle.value;
           if (prescan_objects == 2)
             num++;
           // LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
@@ -2656,7 +2638,6 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       size_t last_offset;
       BITCODE_RLL pre_handle; // from the handleoffs, for the prescan
       size_t oldpos = 0, secpos = hdl_dat.byte;
-      size_t max_handles = hdl_dat.size * 2;
       uint16_t crc1, crc2;
 
       section_size = bit_read_RS_BE (&hdl_dat);
@@ -2680,19 +2661,16 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           int added;
           BITCODE_UMC handleoff;
-          BITCODE_RLL last_handle;
           BITCODE_MC offset;
           BITCODE_MC prevsize;
           if (prescan_objects != 2)
             num = dwg->num_objects;
-          last_handle = num ? dwg->object[num - 1].handle.value : 0;
           prevsize = num ? dwg->object[num - 1].size + 4 : 0;
           oldpos = hdl_dat.byte;
-          // the offset from the previous handle. default: 1, unsigned
+          // The handle delta is stored as UMC and added modulo 2^64.
           handleoff = bit_read_UMC (&hdl_dat);
-          // A failed modular char read (nine or more high-bit bytes in a row)
-          // derails the stream; resync one byte later instead of trusting the
-          // garbage. Only on !handleoff: the other conditions below also fire
+          // A failed modular char read derails the stream. Try resyncing one
+          // byte later, only on !handleoff: the conditions below also fire
           // on entries that parsed fine, and resyncing on them costs good
           // entries (Leader.dwg would lose all its modelspace entities).
           // Not at the end of the buffer, where the read did not advance.
@@ -2703,10 +2681,10 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           // the offset from the previous address. default: obj->size
           offset = bit_read_MC (&hdl_dat);
-          if (!handleoff || handleoff > max_handles - last_handle
-              || (offset > -4 && offset < prevsize))
+          if (!handleoff)
+            LOG_WARN ("Invalid handleoff (@%" PRIuSIZE ")", oldpos);
+          if (!handleoff || (offset > -4 && offset < prevsize))
             {
-              LOG_WARN ("Ignore invalid handleoff (@%" PRIuSIZE ")", oldpos);
               if (offset == 1
                   || (offset > 0 && offset < prevsize && prevsize > 0)
                   || (offset < 0 && labs ((long)offset) < prevsize
@@ -2717,11 +2695,6 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                               " looks wrong, should be prevsize " FORMAT_MC
                               " + 4",
                               offset, prevsize - 4);
-                  // handleoff = 1;
-                  // offset = prevsize;
-                  // LOG_WARN ("Recover invalid handleoff to %" PRIuSIZE " and
-                  // offset to %ld",
-                  //           handleoff, offset);
                 }
             }
           last_offset += offset;
@@ -5801,7 +5774,7 @@ int
 dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                        Bit_Chain *hdl_dat, size_t address, BITCODE_BL num,
                        const int prescan_objects,
-                       const BITCODE_RLL prescan_handle)
+                       const BITCODE_RLL map_handle)
 {
   size_t objpos, restartpos;
   Bit_Chain abs_dat = { 0 };
@@ -5912,9 +5885,14 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
         }
       else if (obj->type - 500 < dwg->num_classes && dwg->dwg_class)
         obj->name = dwg->dwg_class[obj->type - 500].dxfname;
-      // the handle from the handle map, so that refs can be resolved
-      obj->handle.value = prescan_handle;
-      hash_set (dwg->object_map, prescan_handle, (uint64_t)num);
+      // Use the handle in the object header to resolve prescan references.
+      // A corrupt delta can change all subsequent map handles on the page.
+      VERSIONS (R_2000, R_2007)
+      {
+        bit_read_RL (dat); // bitsize
+      }
+      if (!bit_read_H (dat, &obj->handle) && obj->handle.value)
+        hash_set (dwg->object_map, obj->handle.value, (uint64_t)num);
       *dat = abs_dat;
       return realloced ? -1 : error; // re-alloced or not
     }
@@ -6316,6 +6294,13 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   /* Reset to previous addresses for return */
   *dat = abs_dat;
 
+  if (obj->handle.value && map_handle != obj->handle.value)
+    {
+      LOG_WARN ("Object-map handle " FORMAT_HV
+                " differs from object handle " FORMAT_HV " at @%" PRIuSIZE,
+                map_handle, obj->handle.value, address);
+      return error | DWG_ERR_INVALIDHANDLE;
+    }
   return realloced ? -1 : error; // re-alloced or not
 }
 
