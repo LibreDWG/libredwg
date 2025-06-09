@@ -154,5 +154,6 @@ if [ -f "$b.dwg" ]; then
             fi
         fi
     fi
+    test -f "test/$b.dxf.err" && cat "test/$b.dxf.err"
 fi
 exit $exitcode
