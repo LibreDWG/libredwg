@@ -50,6 +50,17 @@
 static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat);
 static unsigned int loglevel;
 
+struct opt_s
+{
+  unsigned dwg : 1;
+  unsigned dxf : 1;
+  unsigned binary : 1;
+  unsigned json : 1;
+  unsigned geojson : 1;
+  unsigned verify : 1;
+  unsigned force_free : 1;
+};
+
 // accepts only ASCII strings, for fuzzing only
 #ifdef HAVE_SSCANF_S
 #  define SSCANF_S sscanf_s
@@ -98,7 +109,7 @@ log_p (unsigned level, char *p)
 }
 
 static int
-help (void)
+help (struct opt_s *opt)
 {
   printf ("\nUsage: dwgadd [OPTIONS] -o outfile addfile\n");
   printf ("Create a DWG (or DXF, JSON) by adding entities with instructions "
@@ -115,18 +126,20 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r1.1, r1.2, r1.4, r2.6, r2.10, r9, r10, r11, r12, "
-          "r14, r2000 (default)\n");
-  printf ("           Planned versions:\n");
+  printf ("             r1.1, r1.2, r1.4, r2.6, r2.10, r9, r10, r11, r13,"
+          " r14, r2000 (default),\n");
+  if (!opt->dxf && !opt->binary && !opt->json)
+    printf ("           Planned versions:\n");
   printf ("             r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile, --file outfile (default: stdout)\n");
 #else
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r1.1, r1.2, r1.4, r2.6, r2.10, r9, r10, r11, r12, "
-          "r14, r2000 (default)\n");
-  printf ("              Planned versions:\n");
+  printf ("                r1.1, r1.2, r1.4, r2.6, r2.10, r9, r10, r11, r13, "
+          "r14, r2000 (default),\n");
+  if (!opt->dxf && !opt->binary && !opt->json)
+    printf ("              Planned versions:\n");
   printf ("                r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile (default: stdout)\n");
 #endif
@@ -148,17 +161,8 @@ main (int argc, char *argv[])
   Bit_Chain out_dat = { 0 };
   const char *outfile = NULL;
   Dwg_Version_Type dwg_version = R_2000;
+  struct opt_s opt;
   // boolean options
-  struct opt_s
-  {
-    unsigned dwg : 1;
-    unsigned dxf : 1;
-    unsigned binary : 1;
-    unsigned json : 1;
-    unsigned geojson : 1;
-    unsigned verify : 1;
-    unsigned force_free : 1;
-  } opt;
   int retval = 0;
   int c;
   FILE *fp;
@@ -224,7 +228,7 @@ main (int argc, char *argv[])
           if (strEQc (long_options[option_index].name, "version"))
             return fn_version ();
           else if (strEQc (long_options[option_index].name, "help"))
-            return help ();
+            return help (&opt);
           else if (strEQc (long_options[option_index].name, "force-free"))
             opt.force_free = 1;
 #  ifndef DISABLE_DXF
@@ -273,7 +277,7 @@ main (int argc, char *argv[])
 #endif
           break;
         case 'h':
-          return help ();
+          return help (&opt);
         case '?':
           fprintf (stderr, "%s: invalid option '-%c' ignored\n", argv[0],
                    optopt);
