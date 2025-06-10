@@ -25156,7 +25156,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     {
       dwg_set_next_hdl (dwg, UINT64_C (0x10));
     }
-  if (version > R_11)
+  if (version >= R_9)
     {
       const char *standard
           = dwg->header.version < R_13 ? "STANDARD" : "Standard";
