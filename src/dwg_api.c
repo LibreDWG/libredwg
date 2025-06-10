@@ -25107,10 +25107,10 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // UCS_CONTROL_OBJECT: (3.1.7) abs:7 [H 0]
       dwg_add_UCS (dwg, &pt0, NULL, NULL, NULL);
       // dwg->ucs_control = *dwg->object[5].tio.object->tio.UCS_CONTROL;
-      //  VPORT_CONTROL_OBJECT: (3.1.8) abs:8 [H 0]
+      // VPORT_CONTROL_OBJECT: (3.1.8) abs:8 [H 0]
       dwg_add_VPORT (dwg, NULL);
       // dwg->vport_control = *dwg->object[6].tio.object->tio.VPORT_CONTROL;
-      //  APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
+      // APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
       dwg_add_APPID (dwg, NULL);
     }
   if (version >= R_11)
