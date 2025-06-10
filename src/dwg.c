@@ -2165,6 +2165,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
           = (Dwg_Object_Ref *)ordered_ref_find (dwg, code, absref);
       if (NULL != refi)
         {
+          LOG_HANDLE ("[use handleref " FORMAT_REF "] ", ARGS_REF (refi))
           return refi;
         }
     }
@@ -3876,6 +3877,8 @@ ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref)
           else
             {
               dwg->object_ordered_ref = pNew;
+              memset (&dwg->object_ordered_ref[dwg->num_object_ordered_refs], 0,
+                      REFS_PER_REALLOC * sizeof (Dwg_Object_Ref *));
             }
         }
     }
