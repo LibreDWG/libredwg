@@ -351,6 +351,10 @@
   FIELD_RD (unit2_ratio, 0);
   FIELD_RD (unit3_ratio, 0);
   FIELD_RD (unit4_ratio, 0);
+  DECODER {
+    if (FIELD_VALUE (unit1_name))
+      free (FIELD_VALUE (unit1_name));
+  }
   FIELD_TFv (unit1_name, 32, 1);
   FIELD_TFv (unit2_name, 32, 1);
   FIELD_TFv (unit3_name, 32, 1);
