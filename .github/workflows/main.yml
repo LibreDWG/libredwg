@@ -299,7 +299,7 @@ jobs:
         name: msys-failure.tgz
         path: msys-failure.tgz
   vs2019:
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 20
     steps:
     - name: checkout
@@ -307,7 +307,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release .
+    - run: cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release .
     - run: cmake --build . --config Release
     - run: copy Release/libredwg.dll test/unit-testing/Release/
     - run: ctest . --output-on-failure
@@ -319,7 +319,7 @@ jobs:
         name: msvc-failure.tgz
         path: msvc-failure.tgz
   vs2019-ninja:
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 20
     #env:
     #  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
