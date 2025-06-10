@@ -3608,12 +3608,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
 
   if (obj && obj->fixedtype == DWG_TYPE_BLOCK)
     {
-      // skip *MODEL_SPACE before r11
-      if (dat->version < R_11 && obj->tio.entity->tio.BLOCK->name
-          && strcasecmp (obj->tio.entity->tio.BLOCK->name, "*MODEL_SPACE"))
-        ;
-      else
-        error |= dwg_dxf_object (dat, obj, i);
+      error |= dwg_dxf_object (dat, obj, i);
     }
   else
     {
@@ -3703,7 +3698,11 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (obj->supertype == DWG_SUPERTYPE_OBJECT
           && obj->type == DWG_TYPE_BLOCK_HEADER)
         {
-          error |= dxf_block_write (dat, obj, mspace, pspace, &i);
+          // skip *MODEL_SPACE before r11
+          if (dat->version < R_11 && obj == mspace)
+            ;
+          else
+            error |= dxf_block_write (dat, obj, mspace, pspace, &i);
         }
     }
 

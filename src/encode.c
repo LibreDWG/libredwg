@@ -5017,14 +5017,25 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
             {
               Dwg_Object *next_endblk
                   = dwg_get_next_object (dwg, DWG_TYPE_ENDBLK, obj->index);
-              if (0 && next_endblk && next_endblk->index > obj->index)
-                index += (next_endblk->index - obj->index);
+              if (next_endblk && next_endblk->index > obj->index)
+                {
+                  index += (next_endblk->index - obj->index);
+                  LOG_TRACE ("BLOCK: advance to %d. ENDBLK: %d, we are at %d "
+                             "Addr: %zx (0x%zx)\n",
+                             index + 1, next_endblk->index, obj->index,
+                             obj->address, dat->byte);
+                  continue;
+                }
               else
-                in_blocks = true;
+                {
+                  LOG_TRACE ("in BLOCK\n");
+                  in_blocks = true;
+                }
             }
           if (obj->tio.entity->entmode == 3)
             {
-              LOG_TRACE ("Skip block %s in entities section, number: %d, "
+              LOG_TRACE ("Skip %s in entities section belonging to a block, "
+                         "number: %d, "
                          "type: %d, Addr: %zx (0x%zx)\n",
                          obj->name, obj->index, obj->type, obj->address,
                          dat->byte);
@@ -5032,25 +5043,59 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
             }
           if (in_blocks)
             {
-              LOG_TRACE ("Skip block %s in entities section, number: %d, "
+              if (obj->fixedtype == DWG_TYPE_ENDBLK)
+                {
+                  LOG_TRACE ("out of BLOCK\n");
+                  in_blocks = false;
+                  continue;
+                }
+              else
+                {
+                  LOG_TRACE ("Skip in block %s in entities section, number: %d, "
+                             "type: %d, Addr: %zx (0x%zx)\n",
+                             obj->name, obj->index, obj->type, obj->address,
+                             dat->byte);
+                  continue;
+                }
+            }
+        }
+      else if (dat->version >= R_2_0b && section == BLOCKS_SECTION_INDEX)
+        {
+          if (dat->version < R_2_0b || obj->tio.entity->entmode != 3)
+            {
+              LOG_TRACE ("Skip entity %s not in block section, number: %d, "
                          "type: %d, Addr: %zx (0x%zx)\n",
                          obj->name, obj->index, obj->type, obj->address,
                          dat->byte);
               continue;
             }
-        }
-      else if (dat->version >= R_2_0b && section == BLOCKS_SECTION_INDEX)
-        {
-          // if (dat->version < R_2_0b || obj->tio.entity->entmode != 3)
-          //   {
-          //     LOG_TRACE ("Skip entity %s in block section, number: %d, "
-          //                "type: %d, Addr: %zx (0x%zx)\n",
-          //                obj->name, obj->index, obj->type, obj->address,
-          //                dat->byte);
-          //     continue;
-          //   }
           if (obj->fixedtype == DWG_TYPE_BLOCK)
-            in_blocks = true;
+            {
+              Dwg_Object *next_endblk
+                  = dwg_get_next_object (dwg, DWG_TYPE_ENDBLK, obj->index);
+              if (next_endblk && strEQc (obj->tio.entity->tio.BLOCK->name, "*MODEL_SPACE"))
+                {
+                  // skip model_space entities
+                  int adv = next_endblk->index - obj->index;
+                  LOG_TRACE ("Skip %d *MODEL_SPACE block entities, number: %d, "
+                             "type: %d, Addr: %zx (0x%zx)\n",
+                             adv, obj->index, obj->type, obj->address,
+                             dat->byte);
+                  index += adv;
+                  continue;
+                }
+              // skip empty BLOCKS, i.e. MODEL_SPACE
+              if (next_endblk && next_endblk->index == obj->index + 1)
+                {
+                  LOG_TRACE ("Skip empty block, number: %d, "
+                             "type: %d, Addr: %zx (0x%zx)\n",
+                             obj->index, obj->type, obj->address,
+                             dat->byte);
+                  continue;
+                }
+              else
+                in_blocks = true;
+            }
           if (!in_blocks)
             {
               LOG_TRACE ("Skip entity %s in block section, number: %d, "
