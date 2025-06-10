@@ -24928,7 +24928,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.unit2_ratio = 1.0;
   dwg->header_vars.unit3_ratio = 1.0;
   dwg->header_vars.unit4_ratio = 1.0;
-  if (version > R_11) // also meter sometimes. unit1_text
+  if (version >= R_10) // also meter sometimes. unit1_text
     {
       if (dwg->header_vars.unit1_name)
         free (dwg->header_vars.unit1_name);
