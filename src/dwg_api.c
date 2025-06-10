@@ -24934,6 +24934,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
         free (dwg->header_vars.unit1_name);
       dwg->header_vars.unit1_name = dwg_add_u8_input (dwg, "m");
     }
+  dwg->header_vars.SNAPUNIT = (BITCODE_2RD){ 1.0, 1.0 };
   dwg->header_vars.DIMASO = 1;
   dwg->header_vars.DIMSHO = 1; // Obsolete
   dwg->header_vars.REGENMODE = 1;
@@ -25039,11 +25040,15 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     {
       dwg->header_vars.PLIMMAX = (BITCODE_2DPOINT){ 12.0, 9.0 };
       dwg->header_vars.LIMMAX = (BITCODE_2DPOINT){ 12.0, 9.0 };
+      dwg->header_vars.VIEWCTR = (BITCODE_3RD){ 7.21903, 5.22844, 0 };
+      dwg->header_vars.VIEWSIZE = 10.4569;
     }
   else
     {
       dwg->header_vars.PLIMMAX = (BITCODE_2DPOINT){ 420.0, 297.0 };
       dwg->header_vars.LIMMAX = (BITCODE_2DPOINT){ 420.0, 297.0 };
+      dwg->header_vars.VIEWCTR = (BITCODE_3RD){ 210.0, 148.5, 0 };
+      dwg->header_vars.VIEWSIZE = 228.422194;
     }
   // UCSORG: (0.0, 0.0, 0.0) [3BD 10]
   dwg->header_vars.UCSXDIR = (BITCODE_3BD){ 1.0, 0.0, 0.0 };
@@ -25175,12 +25180,13 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
       // if (ctrl)
       //   dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
-      //   STYLE: (0.1.11)
+      // STYLE: (0.1.11)
       style = dwg_add_STYLE (dwg, standard);
       if (style)
         {
           style->font_file = dwg_add_u8_input (dwg, "txt");
           style->last_height = 0.2;
+          style->width_factor = 1.0;
         }
       // TEXTSTYLE: (5.1.11) [H 7]
       dwg->header_vars.TEXTSTYLE
@@ -25190,9 +25196,9 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
       // if (ctrl)
       //   dwg->style_control = ctrl->tio.object->tio.STYLE_CONTROL;
-      //   APPID "ACAD": (0.1.12)
+      // APPID "ACAD": (0.1.12)
       dwg_add_APPID (dwg, "ACAD");
-      //  hole at 13. already in r13
+      // hole at 13. already in r13
       dwg_set_next_hdl (dwg, UINT64_C (0x14));
       ctrl = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
       ltype_ctrl = ctrl->tio.object->tio.LTYPE_CONTROL;
