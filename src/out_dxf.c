@@ -409,6 +409,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);                    \
             free (name);                                                      \
           }                                                                   \
+        else if (dxf == 2 && strEQc (#nam, "DIMSTYLE"))                       \
+          fprintf (dat->fh, "%3i\r\n*UNNAMED\r\n", dxf);                      \
         else                                                                  \
           fprintf (dat->fh, "%3i\r\n\r\n", dxf);                              \
       }                                                                       \
