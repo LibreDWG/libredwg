@@ -24967,7 +24967,10 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.SPLINETYPE = 6;
   dwg->header_vars.SHADEDGE = 3;
   dwg->header_vars.SHADEDIF = 70;
-  dwg->header_vars.MAXACTVP = 48;
+  if (version <= R_11)
+    dwg->header_vars.MAXACTVP = 16;
+  else
+    dwg->header_vars.MAXACTVP = 48;
   dwg->header_vars.ISOLINES = 4;
   dwg->header_vars.TEXTQLTY = 50;
   dwg->header_vars.LTSCALE = 1.0;
@@ -25316,11 +25319,15 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
         obj->type = DWG_TYPE_UNUSED_r11; // don't encode it
       }
   }
+  if (dwg->header.version >= R_10)
+    {
+      // VPORT (0.1.26)
+      vport_active = dwg_add_VPORT (
+          dwg, dwg->header.version >= R_13b1 ? "*Active" : "*ACTIVE");
+    }
   if (dwg->header.version >= R_2000)
     {
 #ifdef NEED_VPORT_FOR_MODEL_LAYOUT
-      // VPORT (0.1.26)
-      vport_active = dwg_add_VPORT (dwg, "*Active");
       // LAYOUT (0.1.27)
       obj = dwg_obj_generic_to_object (vport_active, &error);
       layout = dwg_add_LAYOUT (obj, "Model", canonical_media_name);
