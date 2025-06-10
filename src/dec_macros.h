@@ -346,7 +346,7 @@
     PRE (R_13b1)                                                              \
     {                                                                         \
       size_t _pos = bit_position (dat);                                       \
-      if (ref)                                                                \
+      if (ref && !ref->handleref.is_global)                                   \
         free (ref);                                                           \
       ref = dwg_decode_preR13_handleref (dat, code /*as size */, dwg);        \
       LOG_TRACE (#nam ": %hd [H(%s) %d]", (short)ref->r11_idx,                \
