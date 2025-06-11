@@ -3147,8 +3147,9 @@ dxf_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.codepage);
     }
 
-    // clang-format off
-  #include "header_variables_dxf.spec"
+  // header_variables_r11.spec is only for DWG
+  // clang-format off
+#include "header_variables_dxf.spec"
   // clang-format on
 
   return 0;
