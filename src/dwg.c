@@ -1015,6 +1015,9 @@ dwg_block_control (Dwg_Data *dwg)
     {
       Dwg_Object *obj;
       Dwg_Object_Ref *ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT;
+      if (!ctrl)
+        dwg->header_vars.BLOCK_CONTROL_OBJECT = ctrl =
+          dwg_find_table_control (dwg, "BLOCK_CONTROL");
       if (!ctrl || !(obj = dwg_ref_object (dwg, ctrl))
           || obj->fixedtype != DWG_TYPE_BLOCK_CONTROL)
         {
