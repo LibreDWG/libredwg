@@ -24936,7 +24936,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     }
   dwg->header_vars.SNAPUNIT = (BITCODE_2RD){ 1.0, 1.0 };
   dwg->header_vars.DIMASO = 1;
-  dwg->header_vars.DIMSHO = 1; // Obsolete
+  dwg->header_vars.DIMSHO = 0; // Obsolete
   dwg->header_vars.REGENMODE = 1;
   dwg->header_vars.FILLMODE = 1;
   dwg->header_vars.PSLTSCALE = 1;
@@ -24947,7 +24947,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.VISRETAIN = 1;
   dwg->header_vars.ATTREQ = 1;
   dwg->header_vars.MIRRTEXT = 1;
-  dwg->header_vars.WORLDVIEW = 1;
+  dwg->header_vars.WORLDVIEW = 1; // since r11
   dwg->header_vars.TILEMODE = 1;
   dwg->header_vars.DELOBJ = 1;
   dwg->header_vars.PROXYGRAPHICS = 1;
@@ -24956,7 +24956,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.LUNITS = 2;
   dwg->header_vars.LUPREC = 4;
   dwg->header_vars.ATTMODE = 1;
-  dwg->header_vars.COORDS = 1;
+  dwg->header_vars.COORDS = version >= R_14 ? 1 : 0;
+  dwg->header_vars.HANDLING = version > R_10 ? 1 : 0;
   dwg->header_vars.PICKSTYLE = 1;
   dwg->header_vars.SPLINESEGS = 8;
   dwg->header_vars.SURFU = 6;
@@ -25025,6 +25026,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     dwg->header_vars.oldCECOLOR_lo = 15;
   if (version < R_10)
     {
+      dwg->header_vars.FASTZOOM = 1;
       dwg->header_vars.VPOINTX = (BITCODE_3RD){ 1.0, 0.0, 0.0 };
       dwg->header_vars.VPOINTY = (BITCODE_3RD){ 0.0, 1.0, 0.0 };
       dwg->header_vars.VPOINTZ = (BITCODE_3RD){ 0.0, 0.0, 1.0 };

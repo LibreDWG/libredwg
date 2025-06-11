@@ -74,7 +74,7 @@
   }
   HEADER_2D (LIMMIN);
   HEADER_2D (LIMMAX);
-  PRE (R_9) { // tested r2.6
+  PRE (R_10) { // tested r2.6 and r9
     HEADER_2D (VIEWCTR);
     HEADER_RD (VIEWSIZE, 40);
     HEADER_RS (SNAPMODE, 70);
@@ -162,7 +162,7 @@
     HEADER_RD (DIMALTF, 40);
     HEADER_RD (DIMLFAC, 40);
   }
-  SINCE (R_9) {
+  SINCE (R_10) {
     HEADER_RS (DIMTOFL, 70);
     HEADER_RD (DIMTVP, 40);
     HEADER_RS (DIMTIX, 70);
@@ -225,6 +225,7 @@
   }
   SINCE (R_2010b)
     HEADER_RS (DIMTXTDIRECTION, 70);
+
   HEADER_RS (LUNITS, 70);
   HEADER_RS (LUPREC, 70);
   HEADER_RS (AXISMODE, 70);
@@ -238,7 +239,7 @@
   SINCE (R_11b1)
     HEADER_RD (PELEVATION, 40);
   HEADER_RD (THICKNESS, 40);
-  PRE (R_9) {
+  PRE (R_10) {
     HEADER_3D (VIEWDIR);
   }
   HEADER_RS (LIMCHECK, 70);
@@ -255,7 +256,7 @@
     ENDSEC ();
     return 0;
   }
-  PRE (R_9)
+  PRE (R_10)
     HEADER_RS (FASTZOOM, 70);
   HEADER_RS (SKPOLY, 70);
 
@@ -278,19 +279,23 @@
     HEADER_RS (COORDS, 70); // 2
   SINCE (R_9) {
     HEADER_RS (SPLFRAME, 70);
-    HEADER_RS (SPLINETYPE, 70);
+    SINCE (R_10) {
+      HEADER_RS (SPLINETYPE, 70);
+    }
     HEADER_RS (SPLINESEGS, 70);
   }
   VERSIONS (R_9, R_14) {
     HEADER_RS (ATTDIA, 70);   // default 1
     HEADER_RS (ATTREQ, 70);
-    HEADER_RS (HANDLING, 70); // default 1
+  }
+  VERSIONS (R_10, R_14) {
+    HEADER_RS (HANDLING, 70); // default 1 >r10
   }
   //HEADER_H (HANDSEED, 5); //default: 20000, before r13: 0xB8BC
   SINCE (R_10) {
     FIELD_DATAHANDLE (HANDSEED, 0, 5);
   }
-  SINCE (R_9) {
+  SINCE (R_10) {
     HEADER_RS (SURFTAB1, 70); // 6
     HEADER_RS (SURFTAB2, 70); // 6
     HEADER_RS (SURFTYPE, 70); // 6
@@ -303,7 +308,7 @@
   VERSION (R_10) {
     HEADER_RS (FLATLAND, 70);
   }
-  SINCE (R_9) {
+  SINCE (R_10) {
     HEADER_HANDLE_NAME (UCSNAME, 2, UCS);
     HEADER_3D (UCSORG);
   }
@@ -360,12 +365,13 @@
   HEADER_RD (USERR4, 40);
   HEADER_RD (USERR5, 40);
 
-  SINCE (R_9)
-    HEADER_RS (WORLDVIEW, 70);
   UNTIL (R_10) {
     ENDSEC ();
     return 0;
   }
+
+  SINCE (R_11)
+    HEADER_RS (WORLDVIEW, 70);
 
   //VERSION (R_13b1) {
   //  HEADER_RS (WIREFRAME, 70); //Undocumented

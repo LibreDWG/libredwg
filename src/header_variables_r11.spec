@@ -12,7 +12,8 @@
 /*****************************************************************************/
 
 /*
- * header_variables_r11.spec: DWG pre-R13 header variables specification
+ * header_variables_r11.spec: DWG pre-R13 header variables specification.
+ * For DXF see header_variables_dxf.spec
  * written by Reini Urban
  * modified by Michal Josef Špaček
  */
@@ -159,7 +160,7 @@
 #ifndef IS_JSON
   FIELD_TFF (MENUEXT, 46, 0);
 #endif
-  DECODER {    
+  DECODER {
     if (_obj->MENUEXT[1]) {
       size_t len = strlen ((char*)&_obj->MENUEXT[1]) + 1;
       _obj->MENU = (char*)realloc (_obj->MENU, strlen (_obj->MENU) + len + 1);
