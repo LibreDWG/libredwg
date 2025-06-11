@@ -4964,12 +4964,126 @@ encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 */
 
-// blocks might be mixed in-between normal entities. from BLOCK to ENDBLK
-// extras begin with a jump, until a jump back
+static void
+encode_preR13_entity (Dwg_Object *restrict obj, EntitySectionIndexR11 section,
+                      Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                      bool in_blocks, bool in_extras,
+                      int *restrict error)
+{
+  size_t size_pos = 0UL;
+  if (dat->byte + obj->size < dat->size)
+    bit_chain_alloc_size (dat, obj->size);
+  obj->address = dat->byte;
+  LOG_INFO ("===========================\n"
+            "Entity %s, number: %d, Addr: %" PRIuSIZE " (0x%zx)\n",
+            obj->name, obj->index, obj->address, dat->byte);
+  PRE (R_2_0b)
+    {
+      bit_write_RS (dat, obj->type);
+      LOG_INFO ("type: %d [RS]\n", obj->type);
+      if (obj->type > 64)
+        LOG_INFO ("deleted\n");
+    }
+  LATER_VERSIONS
+    {
+      bit_write_RC (dat, obj->type);
+      size_pos = dat->byte + 1; // past the flag
+      LOG_INFO ("type: %d [RC]\n", obj->type)
+    }
+
+#define CASE_ENCODE_TYPE(ty)                    \
+  case DWG_TYPE_##ty:                           \
+    *error |= dwg_encode_##ty (dat, obj);       \
+    break
+
+  switch (obj->fixedtype)
+    {
+      CASE_ENCODE_TYPE (LINE);
+      CASE_ENCODE_TYPE (POINT);
+      CASE_ENCODE_TYPE (CIRCLE);
+      CASE_ENCODE_TYPE (SHAPE);
+      CASE_ENCODE_TYPE (REPEAT);
+      CASE_ENCODE_TYPE (ENDREP);
+      CASE_ENCODE_TYPE (TEXT);
+      CASE_ENCODE_TYPE (ARC);
+      CASE_ENCODE_TYPE (TRACE);
+      CASE_ENCODE_TYPE (LOAD); /* convert from pre r2.0 */
+      CASE_ENCODE_TYPE (SOLID);
+      CASE_ENCODE_TYPE (BLOCK);
+      CASE_ENCODE_TYPE (ENDBLK);
+      CASE_ENCODE_TYPE (INSERT);
+      CASE_ENCODE_TYPE (ATTDEF);
+      CASE_ENCODE_TYPE (ATTRIB);
+      CASE_ENCODE_TYPE (SEQEND);
+      CASE_ENCODE_TYPE (JUMP);
+      CASE_ENCODE_TYPE (POLYLINE_2D);
+      CASE_ENCODE_TYPE (POLYLINE_3D);
+      CASE_ENCODE_TYPE (POLYLINE_PFACE);
+      CASE_ENCODE_TYPE (POLYLINE_MESH);
+      CASE_ENCODE_TYPE (VERTEX_2D);
+      CASE_ENCODE_TYPE (VERTEX_3D);
+      CASE_ENCODE_TYPE (VERTEX_MESH);
+      CASE_ENCODE_TYPE (VERTEX_PFACE);
+      CASE_ENCODE_TYPE (VERTEX_PFACE_FACE);
+      CASE_ENCODE_TYPE (_3DLINE);
+      CASE_ENCODE_TYPE (_3DFACE);
+      CASE_ENCODE_TYPE (DIMENSION_ORDINATE);
+      CASE_ENCODE_TYPE (DIMENSION_LINEAR);
+      CASE_ENCODE_TYPE (DIMENSION_ALIGNED);
+      CASE_ENCODE_TYPE (DIMENSION_ANG3PT);
+      CASE_ENCODE_TYPE (DIMENSION_ANG2LN);
+      CASE_ENCODE_TYPE (DIMENSION_RADIUS);
+      CASE_ENCODE_TYPE (DIMENSION_DIAMETER);
+      CASE_ENCODE_TYPE (VIEWPORT);
+    default:
+      DEBUG_HERE;
+      LOG_ERROR ("Unknown object type %d", obj->type)
+        break;
+    }
+
+  if (in_blocks && obj->fixedtype == DWG_TYPE_ENDBLK)
+    in_blocks = false;
+  else if (!in_blocks && obj->fixedtype == DWG_TYPE_BLOCK)
+    in_blocks = true;
+  if (in_extras && obj->fixedtype == DWG_TYPE_JUMP)
+    in_extras = false; // jump back
+
+  SINCE (R_2_0)
+    {
+      // patchup size
+      if (!obj->size)
+        {
+          size_t pos = dat->byte;
+          obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
+          SINCE (R_11)
+            {
+              obj->size += 2; // crc16
+            }
+          dat->byte = size_pos;
+          bit_write_RS (dat, obj->size);
+          LOG_TRACE ("-size: %u [RL] (@%" PRIuSIZE ".%u)\n", obj->size,
+                     dat->byte, dat->bit);
+          dat->byte = pos;
+        }
+      SINCE (R_11)
+        {
+          BITCODE_RS crc = bit_calc_CRC (0xC0C1, &dat->chain[obj->address],
+                                         obj->size - 2);
+          LOG_TRACE ("crc: %04X [RSx] from 0x%zx-0x%zx\n", crc, obj->address,
+                     dat->byte);
+          bit_write_RS (dat, crc);
+        }
+    }
+}
+
+// blocks might be mixed in-between normal entities. from BLOCK to ENDBLK.
+// extras begin with a jump, until a jump back.
 static BITCODE_RL
 encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                         Dwg_Data *restrict dwg, int *restrict error)
 {
+  Dwg_Object *restrict mspace = dwg_model_space_object (dwg);
+  Dwg_Object *restrict pspace = dwg_paper_space_object (dwg);
   BITCODE_RL numentities = 0;
   bool in_blocks = false;
   bool in_extras = false;
@@ -4979,10 +5093,57 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
             : section == BLOCKS_SECTION_INDEX ? "Blocks"
                                               : "Extras",
             dat->byte);
+
+  // only iterate BLOCK_HEADER's
+  if (dat->version >= R_2_0b && section == BLOCKS_SECTION_INDEX)
+    {
+      BITCODE_RLL mspace_ref = mspace ? mspace->handle.value : 0;
+      BITCODE_RLL pspace_ref = pspace ? pspace->handle.value : 0;
+
+      for (unsigned index = 0; index < dwg->num_objects; index++)
+        {
+          Dwg_Object *obj = &dwg->object[index];
+          // skip *MODEL_SPACE before r11
+          if (dat->version < R_11 && obj == mspace)
+            continue;
+
+          if (obj->supertype == DWG_SUPERTYPE_OBJECT
+              && obj->type == DWG_TYPE_BLOCK_HEADER)
+            {
+              Dwg_Object *restrict hdr = obj;
+              Dwg_Object *restrict endblk = NULL;
+              obj = get_first_owned_block (hdr);
+              while (obj)
+                {
+                  if (obj->supertype == DWG_SUPERTYPE_ENTITY
+                      && obj->fixedtype != DWG_TYPE_ENDBLK && obj->tio.entity != NULL
+                      && obj->fixedtype != DWG_TYPE_JUMP
+                      && (obj->tio.entity->entmode != 2
+                          || (obj->tio.entity->ownerhandle != NULL
+                              && obj->tio.entity->ownerhandle->absolute_ref != mspace_ref
+                              && obj->tio.entity->ownerhandle->absolute_ref
+                              != pspace_ref)))
+                    {
+                      encode_preR13_entity (obj, section, dat, dwg, true, in_extras, error);
+                      numentities++;
+                    }
+                  obj = get_next_owned_block_entity (hdr, obj); // until last_entity
+                }
+              endblk = get_last_owned_block (hdr);
+              if (endblk)
+                {
+                  encode_preR13_entity (endblk, section, dat, dwg, true, in_extras, error);
+                  LOG_INFO ("\n")
+                }
+              numentities++;
+            }
+        }
+      return numentities;
+    }
+
   for (unsigned index = 0; index < dwg->num_objects; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
-      size_t size_pos = 0UL;
       // skip table objects or uninitialized entities
       if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
         {
@@ -5110,113 +5271,10 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
       if (section == EXTRAS_SECTION_INDEX && !in_extras)
         continue;
       // jump back below
-
-      if (dat->byte + obj->size < dat->size)
-        bit_chain_alloc_size (dat, obj->size);
+      encode_preR13_entity (obj, section, dat, dwg, in_blocks, in_extras, error);
       numentities++;
-      obj->address = dat->byte;
-      LOG_INFO ("===========================\n"
-                "Entity %s, number: %d, Addr: %" PRIuSIZE " (0x%zx)\n",
-                obj->name, obj->index, obj->address, dat->byte);
-      PRE (R_2_0b)
-      {
-        bit_write_RS (dat, obj->type);
-        LOG_INFO ("type: %d [RS]\n", obj->type)
-        if (obj->type > 64)
-          LOG_INFO ("deleted\n")
-      }
-      LATER_VERSIONS
-      {
-        bit_write_RC (dat, obj->type);
-        size_pos = dat->byte + 1; // past the flag
-        LOG_INFO ("type: %d [RC]\n", obj->type)
-      }
-
-#define CASE_ENCODE_TYPE(ty)                                                  \
-  case DWG_TYPE_##ty:                                                         \
-    *error |= dwg_encode_##ty (dat, obj);                                     \
-    break
-
-      switch (obj->fixedtype)
-        {
-          CASE_ENCODE_TYPE (LINE);
-          CASE_ENCODE_TYPE (POINT);
-          CASE_ENCODE_TYPE (CIRCLE);
-          CASE_ENCODE_TYPE (SHAPE);
-          CASE_ENCODE_TYPE (REPEAT);
-          CASE_ENCODE_TYPE (ENDREP);
-          CASE_ENCODE_TYPE (TEXT);
-          CASE_ENCODE_TYPE (ARC);
-          CASE_ENCODE_TYPE (TRACE);
-          CASE_ENCODE_TYPE (LOAD); /* convert from pre r2.0 */
-          CASE_ENCODE_TYPE (SOLID);
-          CASE_ENCODE_TYPE (BLOCK);
-          CASE_ENCODE_TYPE (ENDBLK);
-          CASE_ENCODE_TYPE (INSERT);
-          CASE_ENCODE_TYPE (ATTDEF);
-          CASE_ENCODE_TYPE (ATTRIB);
-          CASE_ENCODE_TYPE (SEQEND);
-          CASE_ENCODE_TYPE (JUMP);
-          CASE_ENCODE_TYPE (POLYLINE_2D);
-          CASE_ENCODE_TYPE (POLYLINE_3D);
-          CASE_ENCODE_TYPE (POLYLINE_PFACE);
-          CASE_ENCODE_TYPE (POLYLINE_MESH);
-          CASE_ENCODE_TYPE (VERTEX_2D);
-          CASE_ENCODE_TYPE (VERTEX_3D);
-          CASE_ENCODE_TYPE (VERTEX_MESH);
-          CASE_ENCODE_TYPE (VERTEX_PFACE);
-          CASE_ENCODE_TYPE (VERTEX_PFACE_FACE);
-          CASE_ENCODE_TYPE (_3DLINE);
-          CASE_ENCODE_TYPE (_3DFACE);
-          CASE_ENCODE_TYPE (DIMENSION_ORDINATE);
-          CASE_ENCODE_TYPE (DIMENSION_LINEAR);
-          CASE_ENCODE_TYPE (DIMENSION_ALIGNED);
-          CASE_ENCODE_TYPE (DIMENSION_ANG3PT);
-          CASE_ENCODE_TYPE (DIMENSION_ANG2LN);
-          CASE_ENCODE_TYPE (DIMENSION_RADIUS);
-          CASE_ENCODE_TYPE (DIMENSION_DIAMETER);
-          CASE_ENCODE_TYPE (VIEWPORT);
-        default:
-          DEBUG_HERE;
-          LOG_ERROR ("Unknown object type %d", obj->type)
-          break;
-        }
-
-      if (in_blocks && obj->fixedtype == DWG_TYPE_ENDBLK)
-        in_blocks = false;
-      else if (!in_blocks && obj->fixedtype == DWG_TYPE_BLOCK)
-        in_blocks = true;
-      if (in_extras && obj->fixedtype == DWG_TYPE_JUMP)
-        in_extras = false; // jump back
-
-      SINCE (R_2_0)
-      {
-        // patchup size
-        if (!obj->size)
-          {
-            size_t pos = dat->byte;
-            obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
-            SINCE (R_11)
-            {
-              obj->size += 2; // crc16
-            }
-            dat->byte = size_pos;
-            bit_write_RS (dat, obj->size);
-            LOG_TRACE ("-size: %u [RL] (@%" PRIuSIZE ".%u)\n", obj->size,
-                       dat->byte, dat->bit)
-            dat->byte = pos;
-          }
-        SINCE (R_11)
-        {
-          BITCODE_RS crc = bit_calc_CRC (0xC0C1, &dat->chain[obj->address],
-                                         obj->size - 2);
-          LOG_TRACE ("crc: %04X [RSx] from 0x%zx-0x%zx\n", crc, obj->address,
-                     dat->byte);
-          bit_write_RS (dat, crc);
-        }
-      }
     }
-  return numentities;
+    return numentities;
 }
 
 // expand aliases: name => CLASSES.dxfname
