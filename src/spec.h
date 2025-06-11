@@ -738,14 +738,14 @@
         {                                                                         \
           FIELD_CAST (flag, RC, RC, 70);                                          \
         }                                                                         \
-      /* clang-format off */                                                    \
-      DECODER_OR_ENCODER                                                        \
-        {                                                                       \
-          LOG_FLAG_##acdbname                                                   \
-        }                                                                       \
-      FIELD_TFv (name, 32, 2);                                                  \
-      VERSION (R_11)                                                            \
-        FIELD_RSd (used, 0); \
+      /* clang-format off */                                                      \
+      DECODER_OR_ENCODER                                                          \
+        {                                                                         \
+          LOG_FLAG_##acdbname                                                     \
+        }                                                                         \
+      FIELD_TFv (name, 32, 2);                                                    \
+      VERSION (R_11)                                                              \
+        FIELD_RSd (used, 0);                                                      \
       /* clang-format on */                                                       \
     }                                                                             \
     LATER_VERSIONS                                                                \
