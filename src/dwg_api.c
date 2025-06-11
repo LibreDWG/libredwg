@@ -25209,12 +25209,16 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       ltype_ctrl = ctrl->tio.object->tio.LTYPE_CONTROL;
       // LTYPE->byblock: (3.1.14)
       ltype = dwg_add_LTYPE (dwg, "BYBLOCK");
+      if (ltype)
+        ltype->flag &= ~64; // not loaded
       ltype_ctrl->num_entries--;
       ltype_ctrl->byblock = dwg_add_handleref (dwg, 3, UINT64_C (0x14), NULL);
       dwg->header_vars.LTYPE_BYBLOCK
           = dwg_add_handleref (dwg, 5, UINT64_C (0x14), NULL);
       // LTYPE->bylayer: (3.1.15)
-      dwg_add_LTYPE (dwg, "BYLAYER");
+      ltype = dwg_add_LTYPE (dwg, "BYLAYER");
+      if (ltype)
+        ltype->flag &= ~64; // not loaded
       ltype_ctrl->num_entries--;
       ltype_ctrl->bylayer = dwg_add_handleref (dwg, 3, UINT64_C (0x15), NULL);
       dwg->header_vars.LTYPE_BYLAYER
@@ -27885,7 +27889,7 @@ dwg_add_STYLE (Dwg_Data *restrict dwg, const char *restrict name)
 EXPORT Dwg_Object_LTYPE *
 dwg_add_LTYPE (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  API_ADD_TABLE (LTYPE, LTYPE_CONTROL, { _obj->alignment = 0x41; });
+  API_ADD_TABLE (LTYPE, LTYPE_CONTROL, { _obj->flag = 64; _obj->alignment = 0x41; });
 }
 
 EXPORT Dwg_Object_VIEW *

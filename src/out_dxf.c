@@ -1760,8 +1760,10 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     ; /* skip 70 for AcDbBlockTableRecord here. done in AcDbBlockBegin */     \
   else                                                                        \
     {                                                                         \
-      /* mask off 64, the loaded bit 6 */                                     \
-      VALUE_RC (_obj->flag & ~64, 70);                                        \
+      /* mask off 64, the loaded bit 6, since >= r13 */                       \
+      SINCE (R_13b1)                                                          \
+        _obj->flag &= ~64;                                                    \
+      VALUE_RC (_obj->flag, 70);                                              \
     }
 
 // unused
