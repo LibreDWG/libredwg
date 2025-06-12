@@ -368,7 +368,7 @@
   SINCE (R_13b1) {
     // TODO: r13-r14: 6B flags + 6B common params
     FIELD_BB (entmode, 0);
-    FIELD_BL (num_reactors, 0); //ODA bug: BB as BS
+    FIELD_BL (num_reactors, 0); // ODA bug: BB as BS
   }
 
   VERSIONS (R_13b1, R_14) //ODA bug

@@ -5073,7 +5073,9 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
             {
               Dwg_Object *next_endblk
                   = dwg_get_next_object (dwg, DWG_TYPE_ENDBLK, obj->index);
-              if (next_endblk && strEQc (obj->tio.entity->tio.BLOCK->name, "*MODEL_SPACE"))
+              if (next_endblk && obj->tio.entity && obj->tio.entity->tio.BLOCK
+                  && obj->tio.entity->tio.BLOCK->name
+                  && strEQc (obj->tio.entity->tio.BLOCK->name, "*MODEL_SPACE"))
                 {
                   // skip model_space entities
                   int adv = next_endblk->index - obj->index;

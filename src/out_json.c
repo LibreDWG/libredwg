@@ -1231,6 +1231,8 @@ json_common_entity_data (Bit_Chain *restrict dat,
 
   // clang-format off
   #include "common_entity_handle_data.spec"
+  PRE (R_13)
+    FIELD_BB (entmode, 0); // also needed for preR13, to detect BLOCKS
   #include "common_entity_data.spec"
   // clang-format on
 

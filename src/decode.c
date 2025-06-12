@@ -6791,6 +6791,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           obj->index = num;
           obj->parent = dwg;
           obj->address = dat->byte;
+          if (entity_section == BLOCKS_SECTION_INDEX)
+            obj->address |= 0x40000000; // to set entmode to 3
           obj->supertype = DWG_SUPERTYPE_ENTITY;
 
           LOG_HANDLE ("@offset 0x%zx\n", dat->byte - start);
