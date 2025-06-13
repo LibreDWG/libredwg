@@ -25126,11 +25126,13 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (version >= R_11)
     {
       // DIMSTYLE_CONTROL_OBJECT: (3.1.A) abs:A [H 0]
-      // We don't create DIMSTYLE Standard upfront, only on demand.
+      // We don't create the DIMSTYLE Standard 3.1.1D upfront, only on demand.
       dwg_add_DIMSTYLE (dwg, NULL);
+    }
+  if (version >= R_11 && version <= R_2000)
+    {
       // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
-      if (version <= R_2000)
-        dwg_add_VX (dwg, NULL);
+      dwg_add_VX (dwg, NULL);
     }
   if (version > R_11)
     {
@@ -25266,7 +25268,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
               = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
         }
     }
-  // DIMSTYLE: (5.1.1D) abs:1D [H 2]
+  // DIMSTYLE: STANDARD (5.1.1D) abs:1D [H 2] (only if used)
 
   // hole until 1F
   dwg_set_next_hdl (dwg, UINT64_C (0x1F));
