@@ -9282,7 +9282,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                            ARGS_H (obj->handle));
                 if (ctrl_id)
                   {
-                    // add to ctrl "entries" HANDLE_VECTOR
+                    // add to ctrl "entries" HANDLE_VECTOR.
+                    // mspace and pspace are filtered out later
                     Dwg_Object_BLOCK_CONTROL *_ctrl
                         = dwg->object[ctrl_id].tio.object->tio.BLOCK_CONTROL;
                     BITCODE_H *hdls = NULL;
@@ -12387,58 +12388,77 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               {
                 Dwg_Object_BLOCK_CONTROL *_ctrl
                     = ctrl->tio.object->tio.BLOCK_CONTROL;
-                ref = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
-                PUSH_HV (_ctrl, num_entries, entries, ref);
-              }
-              // undo BLOCK_CONTROL.entries and LTYPE_CONTROL.entries
-              if (strEQc (table, "BLOCK_RECORD"))
-                {
-                  Dwg_Object_BLOCK_CONTROL *_ctrl
-                      = ctrl->tio.object->tio.BLOCK_CONTROL;
-                  if (_ctrl->model_space
-                      && obj->handle.value == _ctrl->model_space->absolute_ref)
-                    i--;
-                  else if (_ctrl->paper_space
-                           && obj->handle.value
-                                  == _ctrl->paper_space->absolute_ref)
-                    i--;
-                }
-              else if (strEQc (table, "LTYPE"))
-                {
-                  Dwg_Object_LTYPE *_obj = obj->tio.object->tio.LTYPE;
-                  Dwg_Object_LTYPE_CONTROL *_ctrl
+                // dont add mspace, pspace entries, nor some LTYPE_CONTROL.entries
+                if (strEQc (table, "BLOCK_RECORD"))
+                  {
+                    if (_ctrl->model_space
+                        && obj->handle.value
+                               == _ctrl->model_space->absolute_ref)
+                      ;
+                    else if (_ctrl->paper_space
+                             && obj->handle.value
+                                    == _ctrl->paper_space->absolute_ref)
+                      ;
+                    else
+                      {
+                        ref = dwg_add_handleref (dwg, 2, obj->handle.value,
+                                                 NULL);
+                        PUSH_HV (_ctrl, num_entries, entries, ref);
+                      }
+                  }
+                else if (strEQc (table, "LTYPE"))
+                  {
+                    Dwg_Object_LTYPE *_obj = obj->tio.object->tio.LTYPE;
+                    Dwg_Object_LTYPE_CONTROL *_lctrl
                       = ctrl->tio.object->tio.LTYPE_CONTROL;
-                  int j = _ctrl->num_entries;
-                  if (_ctrl->bylayer
-                      && obj->handle.value == _ctrl->bylayer->absolute_ref)
-                    i--;
-                  else if (_ctrl->byblock
-                           && obj->handle.value
-                                  == _ctrl->byblock->absolute_ref)
-                    i--;
-                  else
-                    {
-                      if (dwg->header.from_version > R_2004 && _obj->name
-                          && _obj->has_strings_area)
-                        {
-                          _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
-                          if (!_obj->strings_area)
-                            {
-                              free (dxfname);
-                              goto outofmem;
-                            }
-                        }
-                      if (dwg->header.from_version <= R_2004)
-                        {
-                          _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
-                          if (!_obj->strings_area)
-                            {
-                              free (dxfname);
-                              goto outofmem;
-                            }
-                        }
-                    }
-                }
+                    if (_lctrl->bylayer
+                        && obj->handle.value == _lctrl->bylayer->absolute_ref)
+                      ;
+                    else if (_lctrl->byblock
+                             && obj->handle.value
+                             == _lctrl->byblock->absolute_ref)
+                      ;
+                    // already exists?
+                    else if (_lctrl->num_entries
+                             && _lctrl->entries
+                             && _lctrl->entries[_lctrl->num_entries - 1]
+                             && obj->handle.value
+                                    == _lctrl->entries[_lctrl->num_entries - 1]
+                                           ->absolute_ref)
+                      ;
+                    else
+                      {
+                        ref = dwg_add_handleref (dwg, 2, obj->handle.value,
+                                                 NULL);
+                        PUSH_HV (_ctrl, num_entries, entries, ref);
+                      }
+                    if (dwg->header.from_version > R_2004 && _obj->name
+                        && _obj->has_strings_area)
+                      {
+                        _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
+                        if (!_obj->strings_area)
+                          {
+                            free (dxfname);
+                            goto outofmem;
+                          }
+                      }
+                    if (dwg->header.from_version <= R_2004)
+                      {
+                        _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
+                        if (!_obj->strings_area)
+                          {
+                            free (dxfname);
+                            goto outofmem;
+                          }
+                      }
+                  }
+                else
+                  {
+                    ref = dwg_add_handleref (dwg, 2, obj->handle.value,
+                                             NULL);
+                    PUSH_HV (_ctrl, num_entries, entries, ref);
+                  }
+              }
             }
           // next table
           // fixup entries vs num_entries (no NULL entries)
