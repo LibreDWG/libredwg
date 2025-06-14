@@ -9116,7 +9116,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
 
   {
     const Dwg_DYNAPI_field *f1;
-    BITCODE_B is_xref_ref = 1;
+    BITCODE_B is_xref_ref = 1; // TODO only if it used by some entity <r14
     // set defaults not in dxf:
     if (dwg_dynapi_entity_field (obj->name, "is_xref_ref"))
       dwg_dynapi_entity_set_value (_obj, obj->name, "is_xref_ref",
