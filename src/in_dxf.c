@@ -13177,13 +13177,24 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
         else if ((vars->DICTIONARY_##name                                     \
                   = dwg_find_dictionary (dwg, "ACAD_" #name)))                \
           LOG_TRACE ("HEADER.DICTIONARY_" #name " = " FORMAT_REF "\n",        \
-                     ARGS_REF (vars->DICTIONARY_##name))                      \
-      }
+                     ARGS_REF (vars->DICTIONARY_##name));                     \
+      }                                                                       \
+    /* set owner to NOD 4.1.C */                                              \
+    obj = dwg_ref_object (dwg, vars->DICTIONARY_##name);                      \
+    if (obj && obj->tio.object && obj->fixedtype == DWG_TYPE_DICTIONARY)      \
+      {                                                                       \
+        Dwg_Object_Object *_obj = obj->tio.object;                            \
+        if (!_obj->ownerhandle)                                               \
+          _obj->ownerhandle = dwg_add_handleref (dwg, 4, 0xC, obj);           \
+        else if (!_obj->ownerhandle->absolute_ref)                            \
+          _obj->ownerhandle = dwg_add_handleref (dwg, 4, 0xC, obj);           \
+      }                                                                       \
 
 static void
 resolve_header_dicts (Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
+  Dwg_Object *obj;
 
   if (!vars->DICTIONARY_NAMED_OBJECT)
     vars->DICTIONARY_NAMED_OBJECT = dwg_add_handleref (dwg, 3, 0xC, NULL);
