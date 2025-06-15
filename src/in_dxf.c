@@ -59,6 +59,12 @@ static unsigned int loglevel;
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
+// from dwg_api.c
+EXPORT Dwg_Object_DICTIONARY *
+dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
+                    const char *restrict name, /* the NOD entry */
+                    const char *restrict text, /* maybe NULL */
+                    const BITCODE_RLL absolute_ref);
 // from dwg.c
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
@@ -13224,7 +13230,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
         if (!_obj->ownerhandle || !_obj->ownerhandle->absolute_ref)           \
           {                                                                   \
             Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);\
-            BITCODE_RL nod_hdl = nod ? nod->handle.value : 0xC;               \
+            BITCODE_RLL nod_hdl = nod ? nod->handle.value : UINT64_C(0xC);    \
             _obj->ownerhandle = dwg_add_handleref (dwg, 4, nod_hdl, obj);     \
           }                                                                   \
       }                                                                       \
@@ -13236,7 +13242,23 @@ resolve_header_dicts (Dwg_Data *restrict dwg)
   Dwg_Object *obj;
 
   if (!vars->DICTIONARY_NAMED_OBJECT)
-    vars->DICTIONARY_NAMED_OBJECT = dwg_add_handleref (dwg, 3, 0xC, NULL);
+    {
+      Dwg_Object_DICTIONARY *nod;
+      BITCODE_RLL hdl = UINT64_C(0xC);
+      obj = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY); // the NOD
+      if (!obj)
+        {
+          int error;
+          nod = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT",
+                                    0UL);
+          obj = dwg_obj_generic_to_object (nod, &error);
+          if (obj)
+            hdl = obj->handle.value;
+        }
+      else
+        hdl = obj->handle.value;
+      vars->DICTIONARY_NAMED_OBJECT = dwg_add_handleref (dwg, 3, hdl, NULL);
+    }
   // only possible after OBJECTS
   CHECK_DICTIONARY_HDR (ACAD_GROUP)
   CHECK_DICTIONARY_HDR (ACAD_MLINESTYLE)
