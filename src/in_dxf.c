@@ -1540,7 +1540,14 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
   if (_verp)
     hdr->dwg_version = _verp->dwg_version;
   if (hdr->version <= R_14)
-    hdr->is_maint = 0x0;
+    {
+      hdr->is_maint = 0x0;
+      if (hdr->version == R_13 && vars->PROXYGRAPHICS > 0)
+        {
+          hdr->dwg_version = R_13c3;
+          hdr->is_maint = 0x5;
+        }
+    }
   else if (hdr->version <= R_2000)
     {
       hdr->is_maint = 0xf; // 0x6 - 0xf
