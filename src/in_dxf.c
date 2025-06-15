@@ -1417,6 +1417,17 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         goto next_hdrvalue; // for mult. 10,20,30 values
     }
 
+  VERSIONS (R_13, R_14)
+  {
+    _obj->unit1_ratio = 412148564080.0; // m to ??
+    _obj->unit2_ratio = 6.162483e-14;
+    _obj->unit3_ratio = 1.62263e+13;
+    _obj->unit4_ratio = 2.63294e+26;
+    _obj->unit1_name = dwg_add_u8_input (dwg, "meter");
+    _obj->unit2_name = dwg_add_u8_input (dwg, "inch");
+    _obj->unit3_name = dwg_add_u8_input (dwg, "inch");
+    _obj->unit4_name = dwg_add_u8_input (dwg, "sq inch");
+  }
   SINCE (R_2000b)
   {
     BITCODE_BSd celweight = dxf_revcvt_lweight (_obj->CELWEIGHT);

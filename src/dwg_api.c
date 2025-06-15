@@ -24925,14 +24925,29 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     return error;
 
   dwg->header_vars.unit1_ratio = 412148564080.0; // m to ??
-  dwg->header_vars.unit2_ratio = 1.0;
-  dwg->header_vars.unit3_ratio = 1.0;
-  dwg->header_vars.unit4_ratio = 1.0;
-  if (version >= R_10) // also meter sometimes. unit1_text
+  if (version >= R_13 && version < R_2000)
     {
+      dwg->header_vars.unit2_ratio = 6.162483e-14;
+      dwg->header_vars.unit3_ratio = 1.62263e+13;
+      dwg->header_vars.unit4_ratio = 2.63294e+26;
       if (dwg->header_vars.unit1_name)
         free (dwg->header_vars.unit1_name);
-      dwg->header_vars.unit1_name = dwg_add_u8_input (dwg, "m");
+      dwg->header_vars.unit1_name = dwg_add_u8_input (dwg, "meter");
+      dwg->header_vars.unit2_name = dwg_add_u8_input (dwg, "inch");
+      dwg->header_vars.unit3_name = dwg_add_u8_input (dwg, "inch");
+      dwg->header_vars.unit4_name = dwg_add_u8_input (dwg, "sq inch");
+    }
+  else
+    {
+      dwg->header_vars.unit2_ratio = 1.0;
+      dwg->header_vars.unit3_ratio = 1.0;
+      dwg->header_vars.unit4_ratio = 1.0;
+      if (version >= R_10) // also meter sometimes. unit1_text
+        {
+          if (dwg->header_vars.unit1_name)
+            free (dwg->header_vars.unit1_name);
+          dwg->header_vars.unit1_name = dwg_add_u8_input (dwg, "m");
+        }
     }
   dwg->header_vars.SNAPUNIT = (BITCODE_2RD){ 1.0, 1.0 };
   dwg->header_vars.DIMASO = 1;

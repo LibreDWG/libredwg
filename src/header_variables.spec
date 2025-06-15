@@ -46,11 +46,17 @@
 
   SINCE (R_13b1)
     {
-      IF_ENCODE_FROM_EARLIER_OR_DXF {
+      IF_ENCODE_FROM_EARLIER {
         FIELD_VALUE (unit1_ratio) = 412148564080.0;
-        FIELD_VALUE (unit2_ratio) = 1.0;
-        FIELD_VALUE (unit3_ratio) = 1.0;
-        FIELD_VALUE (unit4_ratio) = 1.0;
+        VERSIONS (R_13b1, R_2004) {
+          FIELD_VALUE (unit2_ratio) = 6.162483e-14;
+          FIELD_VALUE (unit3_ratio) = 1.62263e+13;
+          FIELD_VALUE (unit4_ratio) = 2.63294e+26;
+        } else {
+          FIELD_VALUE (unit2_ratio) = 1.0;
+          FIELD_VALUE (unit3_ratio) = 1.0;
+          FIELD_VALUE (unit4_ratio) = 1.0;
+        }
       }
       FIELD_BD (unit1_ratio, 0); // unit conversions. i.e. meter / inch
       FIELD_BD (unit2_ratio, 0);
@@ -58,9 +64,19 @@
       FIELD_BD (unit4_ratio, 0);
     }
   VERSIONS (R_13b1, R_2004) { // undocumented as such in the ODA spec
-      IF_ENCODE_FROM_EARLIER_OR_DXF {
-        free (FIELD_VALUE (unit1_name));
-        FIELD_VALUE (unit1_name) = strdup ("m");
+      IF_ENCODE_FROM_EARLIER
+      {
+        if (!(FIELD_VALUE (unit1_name)))
+        {
+          VERSIONS (R_13b1, R_2004) {
+            FIELD_VALUE (unit1_name) = strdup ("meter");
+            FIELD_VALUE (unit2_name) = strdup ("inch");
+            FIELD_VALUE (unit3_name) = strdup ("inch");
+            FIELD_VALUE (unit4_name) = strdup ("sq inch");
+          } else {
+            FIELD_VALUE (unit1_name) = strdup ("m");
+          }
+        }
       }
       FIELD_TV (unit1_name, 0);
       FIELD_TV (unit2_name, 0);
