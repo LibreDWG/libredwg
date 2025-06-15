@@ -12659,11 +12659,15 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     entmode = ent->entmode = 1;
                   else
                     entmode = 0;
+                  if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
+                    ent->isbylayerlt = 1;
                 }
               else if (obj->type == DWG_TYPE_ENDBLK)
                 {
                   Dwg_Object_Entity *ent = obj->tio.entity;
                   Dwg_Entity_BLOCK *_obj = obj->tio.entity->tio.BLOCK;
+                  if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
+                    ent->isbylayerlt = 1;
                   ent->entmode = entmode;
                   LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
                              entmode);
@@ -12680,7 +12684,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       LOG_TRACE ("BLOCK_HEADER.endblk_entity = " FORMAT_REF
                                  " [H] (blocks)\n",
                                  ARGS_REF (_hdr->endblk_entity));
-
+                      if (strcasecmp (_hdr->name, "*PAPER_SPACE") == 0)
+                        ent->entmode = 1;
                       if (_hdr->last_entity)
                         {
                           LOG_TRACE ("BLOCK_HEADER.last_entity = " FORMAT_REF
@@ -12697,6 +12702,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   ent->entmode = entmode;
                   LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
                              entmode);
+                  if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
+                    ent->isbylayerlt = 1;
                   // add to entities
                   if (ent->ownerhandle
                       && (blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
