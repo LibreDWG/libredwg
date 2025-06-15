@@ -413,6 +413,8 @@
   SINCE (R_13c3) {
     HEADER_RS (PROXYGRAPHICS, 70);
     HEADER_RS (MEASUREMENT, 70);
+  } else if (dat->version >= R_13 && _obj->PROXYGRAPHICS > 0) {
+    HEADER_RS (PROXYGRAPHICS, 70);
   }
   SINCE (R_2000b) {
     HEADER_RS (CELWEIGHT, 370);
