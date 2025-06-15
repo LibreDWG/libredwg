@@ -12386,6 +12386,17 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
                              obj->handle.size, obj->handle.value);
                 }
+              // set ownerhandles
+              if (dat->version >= R_13 && dat->version < R_14)
+                {
+                  if (obj->tio.object && !obj->tio.object->ownerhandle)
+                    {
+                      obj->tio.object->ownerhandle
+                        = dwg_add_handleref (dwg, 4, ctrl->handle.value, NULL);
+                      LOG_TRACE ("%s.ownerhandle = (4.%d." FORMAT_RLLx ")\n", obj->name,
+                                 ctrl->handle.size, ctrl->handle.value);
+                    }
+                }
               {
                 Dwg_Object_BLOCK_CONTROL *_ctrl
                     = ctrl->tio.object->tio.BLOCK_CONTROL;
