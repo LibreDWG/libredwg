@@ -2190,8 +2190,8 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     bit_write_RS (dat, (BITCODE_RS)length);
   else
     {
-      if (dat->version > R_13c3 && length)
-        length++;
+      if (dat->version > R_14 && length)
+        length++; // TV-ZERO
       bit_write_BS (dat, (BITCODE_BS)length);
     }
   for (i = 0; i < length; i++)
