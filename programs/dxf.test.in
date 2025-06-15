@@ -336,6 +336,7 @@ do
     check_pline_order
 done
 
+# r13,r14 deleted 2 INSERT's
 for year in 2000 2004 2007 2010 2013 2018 # r14 r13
 do
     base=example
