@@ -13221,10 +13221,12 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
     if (obj && obj->tio.object && obj->fixedtype == DWG_TYPE_DICTIONARY)      \
       {                                                                       \
         Dwg_Object_Object *_obj = obj->tio.object;                            \
-        if (!_obj->ownerhandle)                                               \
-          _obj->ownerhandle = dwg_add_handleref (dwg, 4, 0xC, obj);           \
-        else if (!_obj->ownerhandle->absolute_ref)                            \
-          _obj->ownerhandle = dwg_add_handleref (dwg, 4, 0xC, obj);           \
+        if (!_obj->ownerhandle || !_obj->ownerhandle->absolute_ref)           \
+          {                                                                   \
+            Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);\
+            BITCODE_RL nod_hdl = nod ? nod->handle.value : 0xC;               \
+            _obj->ownerhandle = dwg_add_handleref (dwg, 4, nod_hdl, obj);     \
+          }                                                                   \
       }                                                                       \
 
 static void
@@ -13354,10 +13356,15 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // dwg->header.version probably here still unknown. <r2000: 0x17
       // later fixed up when reading $ACADVER and the BLOCK_HEADER.name
       _obj->name = dwg_add_u8_input (dwg, "*Model_Space");
+      LOG_TRACE ("%s.name = %s [TV 2]\n", dxfname, _obj->name);
       _obj->is_xref_ref = 1;
       obj->tio.object->is_xdic_missing = 1;
       dwg_add_handle (&obj->handle, 0, 0x1F, obj);
+      LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
+                 obj->handle.size, obj->handle.value);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
+      LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [H 330]\n", dxfname,
+                 ARGS_REF (obj->tio.object->ownerhandle));
     }
 
   while (dat->byte < dat->size)

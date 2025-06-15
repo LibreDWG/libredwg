@@ -3900,6 +3900,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
             if (obj)
               {
+                obj->handle.value = 0x19;
                 LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
                            obj->handle.value);
                 _obj->is_on = 1;
