@@ -69,11 +69,20 @@
         FIELD_VALUE (isbylayerlt) = FIELD_VALUE (ltype_flags) < 3 ? 1 : 0;
 #endif
 #ifdef IS_DXF
-      switch (FIELD_VALUE (ltype_flags)) {
-      case 0: break; //VALUE_TV ("ByLayer", 6); break;
-      case 1: VALUE_TV ("ByBlock", 6); break;
-      case 2: VALUE_TV ("Continuous", 6); break;
-      default: break;
+      PRE (R_2000) {
+        switch (FIELD_VALUE (ltype_flags)) {
+        case 0: break; //VALUE_TV ("BYLAYER", 6); break;
+        case 1: VALUE_TV ("BYBLOCK", 6); break;
+        case 2: VALUE_TV ("CONTINUOUS", 6); break;
+        default: break;
+        }
+      } LATER_VERSIONS {
+        switch (FIELD_VALUE (ltype_flags)) {
+        case 0: break; //VALUE_TV ("ByLayer", 6); break;
+        case 1: VALUE_TV ("ByBlock", 6); break;
+        case 2: VALUE_TV ("Continuous", 6); break;
+        default: break;
+        }
       }
 #endif
       if (!FIELD_VALUE (isbylayerlt))

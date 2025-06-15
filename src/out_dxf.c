@@ -1590,42 +1590,42 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 // r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
 dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
-                     char *restrict name, const int dxf)
+                     char *restrict value, const int dxf)
 {
-  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && name != NULL)
+  if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && value != NULL)
     {
       if (IS_FROM_TU (dat))
         {
-          name = bit_convert_TU ((BITCODE_TU)name);
+          value = bit_convert_TU ((BITCODE_TU)value);
         }
       if (dat->from_version >= R_2000 && dat->version < R_2000)
-        { // convert the other way round, from newer to older
-          if (strEQc (name, "Standard"))
+        { // upcase. convert the other way round, from newer to older
+          if (strEQc (value, "Standard"))
             fprintf (dat->fh, "%3i\r\nSTANDARD\r\n", dxf);
-          else if (strEQc (name, "ByLayer"))
+          else if (strEQc (value, "ByLayer"))
             fprintf (dat->fh, "%3i\r\nBYLAYER\r\n", dxf);
-          else if (strEQc (name, "ByBlock"))
+          else if (strEQc (value, "ByBlock"))
             fprintf (dat->fh, "%3i\r\nBYBLOCK\r\n", dxf);
-          else if (strEQc (name, "*Active"))
+          else if (strEQc (value, "*Active"))
             fprintf (dat->fh, "%3i\r\n*ACTIVE\r\n", dxf);
           else
-            fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
+            fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
         }
       else
-        { // convert some standard names
-          if (dat->version >= R_2000 && strEQc (name, "STANDARD"))
+        { // downcase some standard names
+          if (dat->version >= R_2000 && strEQc (value, "STANDARD"))
             fprintf (dat->fh, "%3i\r\nStandard\r\n", dxf);
-          else if (dat->version >= R_2000 && strEQc (name, "BYLAYER"))
+          else if (dat->version >= R_2000 && strEQc (value, "BYLAYER"))
             fprintf (dat->fh, "%3i\r\nByLayer\r\n", dxf);
-          else if (dat->version >= R_2000 && strEQc (name, "BYBLOCK"))
+          else if (dat->version >= R_2000 && strEQc (value, "BYBLOCK"))
             fprintf (dat->fh, "%3i\r\nByBlock\r\n", dxf);
-          else if (dat->version >= R_2000 && strEQc (name, "*ACTIVE"))
+          else if (dat->version >= R_2000 && strEQc (value, "*ACTIVE"))
             fprintf (dat->fh, "%3i\r\n*Active\r\n", dxf);
           else
-            fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
+            fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
         }
       if (IS_FROM_TU (dat))
-        free (name);
+        free (value);
     }
   else
     {
