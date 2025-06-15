@@ -12353,6 +12353,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           BITCODE_BL ctrl_id;
           strncpy (table, pair->value.s, 79);
           table[79] = '\0';
+          dxf_free_pair (pair);
           pair = new_table_control (table, dat, dwg); // until 0 table
           ctrl_id = dwg->num_objects - 1;             // dwg->object might move
           while (pair && pair->code == 0 && pair->value.s
