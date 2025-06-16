@@ -549,12 +549,12 @@
   {                                                                           \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
     _obj->nam = bit_read_TF (dat, (size_t)len);                               \
-    LOG_TRACE (#nam ": \"%s\" [TF %" PRIuSIZE " " #dxf "]", _obj->nam, (size_t)len);    \
+    LOG_TRACE (#nam ": \"%s\" [TF %" PRIuSIZE " " #dxf "]", _obj->nam, (size_t)len); \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
-    LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit)                    \
+    LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit)          \
     LOG_TRACE ("\n")                                                          \
-    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
