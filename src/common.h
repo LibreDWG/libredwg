@@ -635,6 +635,19 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
       _obj->numfield++;                                                       \
     }
 
+// push to handle vector at the end if it not already exists.
+#define PUSH_HV_NEW(_obj, numfield, hvfield, ref)                             \
+  if (_obj->numfield <= 0                                                     \
+      || find_hv ( _obj->hvfield, _obj->numfield, ref->absolute_ref) < 0)     \
+    {                                                                         \
+      _obj->hvfield = (BITCODE_H *)realloc (                                  \
+          _obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H));          \
+      _obj->hvfield[_obj->numfield] = ref;                                    \
+      LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,   \
+                 ARGS_REF (_obj->hvfield[_obj->numfield]));                   \
+      _obj->numfield++;                                                       \
+    }
+
 // no need to free global handles, just the HV.
 // returns the last
 #define POP_HV(_obj, numfield, hvfield) _obj->hvfield[--_obj->numfield]
@@ -645,6 +658,8 @@ BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p) __nonnull_all;
 // deletes an entry from an HV ("handle vector") at index i
 void delete_hv (BITCODE_H *entries, BITCODE_BS *num_entriesp,
                 BITCODE_BS index) __nonnull_all;
+BITCODE_BSd find_hv (BITCODE_H *entries, BITCODE_BS num_entries,
+                     BITCODE_RLL handle_value) __nonnull_all;
 
 // used in dwg.spec
 Dwg_Object *

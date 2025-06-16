@@ -506,6 +506,26 @@ delete_hv (BITCODE_H *entries, BITCODE_BS *num_p, BITCODE_BS i)
     }
 }
 
+// find if handle already exists, returs index or -1
+BITCODE_BSd find_hv (BITCODE_H *entries, BITCODE_BS num_entries,
+                    BITCODE_RLL handle_value)
+{
+  BITCODE_BS i;
+#ifndef HAVE_NONNULL
+  if (!entries || !num_entries)
+    return -1; // empty handle vector
+#else
+  if (!num_entries)
+    return -1; // empty handle vector
+#endif
+  for (i = 0; i < num_entries; i++)
+    {
+      if (entries[i] && (entries[i]->handleref.value == handle_value))
+        return i;
+    }
+  return -1; // not found
+}
+
 /* from my dwg11.c, 1995 - rurban */
 struct tm *
 cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date)
