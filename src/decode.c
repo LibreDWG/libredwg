@@ -496,7 +496,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("Fixup illegal Header Length");
       dwg->header_vars.size = dwg->header.section[SECTION_HEADER_R13].size;
       if (dwg->header_vars.size > 20)
-        dwg->header_vars.size -= 16 + 4;
+        dwg->header_vars.size -= (16 + 4);
     }
   dat->bit = 0;
 
