@@ -103,7 +103,7 @@ BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *restrict name) __nonnull_all;
 int is_textlike (Dwg_Object *restrict obj) __nonnull_all;
 
-BITCODE_RC dxf_find_lweight (const int lw);
+BITCODE_RC dxf_find_lweight (const int16_t lw);
 
 // for sscanf with BD we need to use %lf not %g
 #undef FORMAT_BD

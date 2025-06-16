@@ -1054,7 +1054,7 @@ search:
 
 /* convert to flag */
 BITCODE_RC
-dxf_find_lweight (const int lw)
+dxf_find_lweight (const int16_t lw)
 {
   // See acdb.h: 100th of a mm, enum of
   const int lweights[] = { 0,
@@ -3902,7 +3902,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               break;
             case 171:
-              lline->linewt = dxf_find_lweight (pair->value.i);
+              lline->linewt = dxf_find_lweight ((int16_t)pair->value.i);
               LOG_TRACE ("%s.leaders[].lines[%d].linewt = %d [BL %d]\n",
                          obj->name, i, lline->linewt, pair->code);
               break;
@@ -5274,7 +5274,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           CHK_borders;
           assert (o->rowstyles[i].num_borders);
-          o->rowstyles[i].borders[j].linewt = dxf_find_lweight (pair->value.i);
+          o->rowstyles[i].borders[j].linewt = dxf_find_lweight ((int16_t)pair->value.i);
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].linewt = %d [BSd %d]\n",
                      obj->name, i, j, o->rowstyles[i].borders[j].linewt,
                      pair->code);
@@ -10436,7 +10436,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           else if (pair->code == 370 && obj->fixedtype == DWG_TYPE_LAYER)
             {
               Dwg_Object_LAYER *layer = obj->tio.object->tio.LAYER;
-              layer->linewt = dxf_find_lweight (pair->value.i);
+              layer->linewt = dxf_find_lweight ((int16_t)pair->value.i);
               LOG_TRACE ("LAYER.linewt = %d\n", layer->linewt);
               layer->flag |= layer->linewt << 5;
               LOG_TRACE ("LAYER.flag = 0x%x [BS 70]\n", layer->flag);
@@ -10445,7 +10445,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           else if (pair->code == 370 && obj->supertype == DWG_SUPERTYPE_ENTITY
                    && strEQc (subclass, "AcDbEntity"))
             {
-              BITCODE_RC linewt = dxf_find_lweight (pair->value.i);
+              BITCODE_RC linewt = dxf_find_lweight ((int16_t)pair->value.i);
               dwg_dynapi_common_set_value (_obj, "linewt", &linewt, 0);
               LOG_TRACE ("COMMON.linewt => %d [RC 370]\n", linewt);
               goto next_pair;

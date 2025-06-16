@@ -767,6 +767,7 @@
       FIELD_HANDLE (xref, 5, 0); /* NULLHDL without is_xref_dep */                \
       FIELD_VALUE (flag)                                                          \
           |= FIELD_VALUE (is_xref_dep) << 4 | FIELD_VALUE (is_xref_ref) << 6;     \
+      LOG_TRACE ("=> flag %u [BL 70]\n", FIELD_VALUE (flag));                     \
     }                                                                             \
     RESET_VER
 #endif
