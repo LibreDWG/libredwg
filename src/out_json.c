@@ -169,9 +169,12 @@ static char *_path_field (const char *path);
 #define VALUE_B(value, dxf) VALUE (value, B, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
+#define VALUE_RSd(value, dxf) VALUE (value, RSd, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
+#define VALUE_RLd(value, dxf) VALUE (value, RLd, dxf)
 #define VALUE_RLx(value, dxf) VALUE ((BITCODE_RL)value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
+#define VALUE_RLLd(value, dxf) VALUE (value, RLLd, dxf)
 #ifdef IS_RELEASE
 #  define VALUE_RD(value, dxf)                                                \
     if (bit_isnan (value))                                                    \
@@ -1179,18 +1182,18 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
                      rbuf->type);
           break;
         case DWG_VT_INT16:
-          VALUE_RS (rbuf->value.i16, 0);
-          LOG_TRACE ("xdata[%u]: %d [RS %d]\n", i, (int)rbuf->value.i16,
+          VALUE_RSd (rbuf->value.i16, 0);
+          LOG_TRACE ("xdata[%u]: %d [RSd %d]\n", i, (int)rbuf->value.i16,
                      rbuf->type);
           break;
         case DWG_VT_INT32:
-          VALUE_RL (rbuf->value.i32, 0);
-          LOG_TRACE ("xdata[%u]: %d [RL %d]\n", i, (int)rbuf->value.i32,
+          VALUE_RLd (rbuf->value.i32, 0);
+          LOG_TRACE ("xdata[%u]: %d [RLd %d]\n", i, (int)rbuf->value.i32,
                      rbuf->type);
           break;
         case DWG_VT_INT64:
-          VALUE_RLL (rbuf->value.i64, 0);
-          LOG_TRACE ("xdata[%u]: %ld [RLL %d]\n", i, (long)rbuf->value.i64,
+          VALUE_RLLd (rbuf->value.i64, 0);
+          LOG_TRACE ("xdata[%u]: %ld [RLLd %d]\n", i, (long)rbuf->value.i64,
                      rbuf->type);
           break;
         case DWG_VT_POINT3D:

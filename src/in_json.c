@@ -4084,7 +4084,7 @@ json_SecondHeader_Handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   _obj->handles[j].hdl[vcount] =
                     (BITCODE_RC)json_long (dat, tokens) & 0xFF;
-                  JSON_TOKENS_CHECK_OVERFLOW_ERR               
+                  JSON_TOKENS_CHECK_OVERFLOW_ERR
                   LOG_TRACE ("hdl[%d]: " FORMAT_RC " [RC %d]\n", vcount,
                                _obj->handles[j].hdl[vcount], 0);
                 }

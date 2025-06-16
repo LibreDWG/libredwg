@@ -4989,22 +4989,22 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         case DWG_VT_INT16:
           if (dat->byte + 2 > end_address)
             break;
-          rbuf->value.i16 = bit_read_RS (dat);
+          rbuf->value.i16 = (short)bit_read_RS (dat);
           LOG_TRACE ("xdata[%u]: %d [RS %d]\n", num_xdata,
                      (int)rbuf->value.i16, rbuf->type);
           break;
         case DWG_VT_INT32:
           if (dat->byte + 4 > end_address)
             break;
-          rbuf->value.i32 = bit_read_RL (dat);
-          LOG_TRACE ("xdata[%u]: %d [RL %d]\n", num_xdata,
+          rbuf->value.i32 = (int32_t)bit_read_RL (dat);
+          LOG_TRACE ("xdata[%u]: %d [RLd %d]\n", num_xdata,
                      (int)rbuf->value.i32, rbuf->type);
           break;
         case DWG_VT_INT64:
           if (dat->byte + 8 > end_address)
             break;
-          rbuf->value.i64 = bit_read_RLL (dat);
-          LOG_TRACE ("xdata[%u]: " FORMAT_RLL " [RLL %d]\n", num_xdata,
+          rbuf->value.i64 = (int64_t)bit_read_RLL (dat);
+          LOG_TRACE ("xdata[%u]: " FORMAT_RLLd " [RLLd %d]\n", num_xdata,
                      rbuf->value.i64, rbuf->type);
           break;
         case DWG_VT_POINT3D:

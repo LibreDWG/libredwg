@@ -3770,13 +3770,26 @@ DWG_TABLE (LAYER)
   SINCE (R_2000b) {
     // separate DXF flag 70 from the internal DWG flag0 bitmask
     int flag0;
+    DECODER {
+      if (dwg->opts & DWG_OPTS_INDXF) {
+        FIELD_VALUE (flag) |= FIELD_VALUE (flag0) & 0x3e0;
+      }
+    }
     ENCODER {
-      FIELD_VALUE (flag0) = (FIELD_VALUE (frozen) ? 1 : 0) +
-              (FIELD_VALUE (off) ? 2 : 0) +
-              (FIELD_VALUE (frozen_in_new) ? 4 : 0) +
-              (FIELD_VALUE (locked) ? 8 : 0) +
-              (FIELD_VALUE (plotflag) ? 16 : 0) +
-              (FIELD_VALUE (linewt) ? (FIELD_VALUE (linewt) & 0x1F) << 5 : 0);
+      // with json we only use flag0, with DXF we use flag
+      if (dwg->opts & DWG_OPTS_INDXF) {
+        FIELD_VALUE (off)           = FIELD_VALUE (color.index) < 0;
+        FIELD_VALUE (frozen)        = FIELD_VALUE (flag) & 1;
+        FIELD_VALUE (frozen_in_new) = FIELD_VALUE (flag) & 2;
+        FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;
+      }
+      if (!(dwg->opts & DWG_OPTS_INJSON))
+        FIELD_VALUE (flag0) = (FIELD_VALUE (frozen) ? 1 : 0) +
+          (FIELD_VALUE (off) ? 2 : 0) +
+          (FIELD_VALUE (frozen_in_new) ? 4 : 0) +
+          (FIELD_VALUE (locked) ? 8 : 0) +
+          (FIELD_VALUE (plotflag) ? 16 : 0) +
+          (FIELD_VALUE (linewt) ? (FIELD_VALUE (linewt) & 0x1F) << 5 : 0);
     }
     FIELD_BSx (flag0, 0); // -> 70,290,370
     flag0 = FIELD_VALUE (flag0);
@@ -3791,7 +3804,7 @@ DWG_TABLE (LAYER)
     FIELD_VALUE (locked) = (flag0 & 8) ? 1 : 0;
     LOG_LAYER_FLAG(locked);
     FIELD_VALUE (plotflag) = (flag0 & 16) ? 1 : 0;
-    LOG_LAYER_FLAG_REV(plotflag);
+    LOG_LAYER_FLAG(plotflag);
     FIELD_VALUE (linewt) = (flag0 & 0x03E0) >> 5;
     LOG_LAYER_FLAG(linewt);
     // DXF: frozen (1), frozen by default in new viewports (2),

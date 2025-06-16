@@ -6831,7 +6831,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           if (dat->byte + 2 > end)
             break;
           bit_write_RS (dat, rbuf->value.i16);
-          LOG_TRACE ("xdata[%u]: %d [RS %d]", j, (int)rbuf->value.i16,
+          LOG_TRACE ("xdata[%u]: " FORMAT_RLd " [RSd %d]", j, rbuf->value.i16,
                      rbuf->type);
           LOG_POS;
           break;
@@ -6839,7 +6839,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           if (dat->byte + 4 > end)
             break;
           bit_write_RL (dat, rbuf->value.i32);
-          LOG_TRACE ("xdata[%d]: %ld [RL %d]", j, (long)rbuf->value.i32,
+          LOG_TRACE ("xdata[%d]: " FORMAT_RLd " [RLd %d]", j, rbuf->value.i32,
                      rbuf->type);
           LOG_POS;
           break;
@@ -6847,7 +6847,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           if (dat->byte + 8 > end)
             break;
           bit_write_RLL (dat, rbuf->value.i64);
-          LOG_TRACE ("xdata[%u]: " FORMAT_RLL " [RLL %d]", j, rbuf->value.i64,
+          LOG_TRACE ("xdata[%u]: " FORMAT_RLLd " [RLLd %d]", j, rbuf->value.i64,
                      rbuf->type);
           LOG_POS;
           break;

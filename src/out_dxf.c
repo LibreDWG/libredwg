@@ -543,9 +543,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   }
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
+#define VALUE_RSd(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RLd(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
+#define VALUE_RLLd(value, dxf) VALUE (value, RLL, dxf)
 #define VALUE_RLx(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_MC(value, dxf) VALUE (value, MC, dxf)
 #define VALUE_MS(value, dxf) VALUE (value, MS, dxf)
@@ -1555,13 +1557,13 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           VALUE_RC (rbuf->value.i8, dxftype);
           break;
         case DWG_VT_INT16:
-          VALUE_RS (rbuf->value.i16, dxftype);
+          VALUE_RSd (rbuf->value.i16, dxftype);
           break;
         case DWG_VT_INT32:
-          VALUE_RL (rbuf->value.i32, dxftype);
+          VALUE_RLd (rbuf->value.i32, dxftype);
           break;
         case DWG_VT_INT64:
-          VALUE_RLL (rbuf->value.i64, dxftype);
+          VALUE_RLLd (rbuf->value.i64, dxftype);
           break;
         case DWG_VT_POINT3D:
           VALUE_RD (rbuf->value.pt[0], dxftype);
