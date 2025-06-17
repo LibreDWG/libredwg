@@ -9283,6 +9283,11 @@ Dxf_Pair *new_object (
           o->style = style;
         }
     }
+  else if (obj->fixedtype == DWG_TYPE_VERTEX_2D)
+    {
+      // TODO better the layer of its owner
+      obj->tio.entity->layer = dwg->header_vars.CLAYER; // default
+    }
   // Some objects have various subtypes under one name, like DIMENSION.
   // TODO OBJECTCONTEXTDATA, ...
 
