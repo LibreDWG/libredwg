@@ -8743,8 +8743,22 @@ static void
 dxf_postprocess_LAYOUT (Dwg_Object *restrict obj)
 {
   Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Object *_o = obj->tio.object;
   Dwg_Object_LAYOUT *_obj = obj->tio.object->tio.LAYOUT;
 
+  // fix LAYOUT 330 confusion. block_header vs ownerhandle
+  if (_o->ownerhandle && _o->num_reactors &&
+      _o->reactors[0]->absolute_ref != _o->ownerhandle->absolute_ref)
+    {
+      // must not be a BLOCK_HEADER, but a DICTIONARY
+      _obj->block_header = _o->ownerhandle;
+      LOG_TRACE ("LAYOUT.block_header = " FORMAT_REF " (fixup)\n",
+                 ARGS_REF (_obj->block_header));
+      _o->ownerhandle->absolute_ref = _o->ownerhandle->handleref.value =
+        _o->reactors[0]->absolute_ref;
+      LOG_TRACE ("LAYOUT.ownerhandle = " FORMAT_REF " (fixup)\n",
+                 ARGS_REF (_o->ownerhandle));
+    }
   if (dwg->header.version < R_2004)
     {
       _obj->plotsettings.plotview = dwg_find_tablehandle (
@@ -8959,7 +8973,8 @@ get_numfield_value (void *restrict _obj, const Dwg_DYNAPI_field *restrict f)
 
 /* For tables, entities and objects.
  */
-static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
+static __nonnull ((1, 2, 3, 4))
+Dxf_Pair *new_object (
     char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat,
     Dwg_Data *restrict dwg, BITCODE_BL ctrl_id, BITCODE_BL *i_p)
 {
@@ -9273,9 +9288,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
       // start_switch:
       switch (pair->code)
         { // common flags: name, xref
-        case 0:
+        case 0: // dead code. disabled in loop above
           if (strEQc (name, "SEQEND"))
             dxf_postprocess_SEQEND (obj);
+          else if (strEQc (name, "LAYOUT"))
+            dxf_postprocess_LAYOUT (obj);
+          else if (strEQc (name, "PLOTSETTINGS"))
+            dxf_postprocess_PLOTSETTINGS (obj);
           return pair;
         case 105: /* DIMSTYLE only for 5 */
           if (strNE (name, "DIMSTYLE"))
@@ -12311,11 +12330,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
       DXF_RETURN_EOF (pair);
     }
 
-  if (obj->type == DWG_TYPE_SEQEND)
+  if (obj->fixedtype == DWG_TYPE_SEQEND)
     dxf_postprocess_SEQEND (obj);
-  else if (obj->type == DWG_TYPE_LAYOUT)
+  else if (obj->fixedtype == DWG_TYPE_LAYOUT)
     dxf_postprocess_LAYOUT (obj);
-  else if (obj->type == DWG_TYPE_PLOTSETTINGS)
+  else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     dxf_postprocess_PLOTSETTINGS (obj);
   // set defaults not in dxf:
   else if (obj->type == DWG_TYPE__3DFACE && dwg->header.from_version >= R_2000)
