@@ -8615,8 +8615,6 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     1,1,0, 0 },
   { "unknown_r11",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LTYPE, unknown_r11),
     0,0,0, 0 },
-  { "unknown_r13",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LTYPE, unknown_r13),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LTYPE_CONTROL: (sorted by offset) */

@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2019-2024 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2019-2025 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -51443,21 +51443,6 @@ static int test_LTYPE (const Dwg_Object *obj)
     else
       fail ("LTYPE.unknown_r11 [RC] set+1 %u != %u", ltype->unknown_r11, unknown_r11);
     ltype->unknown_r11--;
-  }
-  {
-    BITCODE_RC unknown_r13;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "unknown_r13", &unknown_r13, NULL)
-        && unknown_r13 == ltype->unknown_r13)
-      pass ();
-    else
-      fail ("LTYPE.unknown_r13 [RC] %u != %u", ltype->unknown_r13, unknown_r13);
-    unknown_r13++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "unknown_r13", &unknown_r13, 0)
-        && unknown_r13 == ltype->unknown_r13)
-      pass ();
-    else
-      fail ("LTYPE.unknown_r13 [RC] set+1 %u != %u", ltype->unknown_r13, unknown_r13);
-    ltype->unknown_r13--;
   }
   {
     BITCODE_RSd used;
