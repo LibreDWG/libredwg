@@ -27088,12 +27088,24 @@ EXPORT Dwg_Entity_VIEWPORT *
 dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const char *restrict name)
 {
-  API_ADD_ENTITY (VIEWPORT);
+  Dwg_Object_VX_TABLE_RECORD *vx = NULL;
+  API_ADD_PREP (VIEWPORT);
   if (dwg->header.version < R_11)
     {
       LOG_ERROR ("Invalid entity %s <r11", "VIEWPORT")
-      API_UNADD_ENTITY;
       return NULL;
+    }
+  if (dwg->header.version < R_2004)
+    {
+      vx = dwg_add_VX (dwg, name);
+    }
+  API_ADD_ENTITY2 (VIEWPORT);
+  if (dwg->header.version < R_2004 && vx)
+    {
+      Dwg_Object *vxobj = dwg_obj_generic_to_object (vx, &error);
+      vx->is_on = 1;
+      vx->viewport = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+      _obj->vport_entity_header = dwg_add_handleref (dwg, 5, vxobj ? vxobj->handle.value : 0, NULL);
     }
   // TODO get defaults from name
   _obj->lens_length = 50.0;

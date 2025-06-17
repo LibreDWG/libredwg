@@ -75,6 +75,7 @@ EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
+BITCODE_RLL dwg_new_handseed (Dwg_Data *restrict dwg);
 // used in encode.c
 void dwg_set_handle_size (Dwg_Handle *restrict hdl);
 void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
@@ -2213,6 +2214,14 @@ dwg_add_handleref_free (const BITCODE_RC code, const BITCODE_RLL absref)
   return ref;
 }
 
+BITCODE_RLL
+dwg_new_handseed (Dwg_Data *restrict dwg)
+{
+  BITCODE_RLL old = dwg->header_vars.HANDSEED->absolute_ref;
+  dwg->header_vars.HANDSEED->handleref.value++;
+  dwg->header_vars.HANDSEED->absolute_ref++;
+  return old;
+}
 // Not checking the header_vars entry, only searching the objects
 // Returning a hardowner ref (code 3) to it, as stored in header_vars.
 EXPORT BITCODE_H

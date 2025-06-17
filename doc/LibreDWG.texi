@@ -734,6 +734,15 @@ All blocks are accessed via all other model_space BLOCK_HEADER's,
 holds a list of all table records, i.e. entries.  Each table record
 entry has a name and other common table fields.
 
+The VX table (also vport_entity table) is a special table until r2004
+for VIEWPORT entities, which are VPORT extensions, esp. for Paper
+Space, but have no old-style table records. So VX_CONTROL contains a
+list of matching VX_TABLE_RECORD's, which are pointed to by
+VIEWPORT.vport_entity_header handles. Likewise the VX_TABLE_RECORD
+object links in its viewport field back to the VIEWPORT. The VX table
+is not represented in DXF, on DXF import we need to create them with
+the VIEWPORT entities.
+
 @node EXTRAS
 @section EXTRAS entities section
 

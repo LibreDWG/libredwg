@@ -100,7 +100,8 @@
     }
   VERSIONS (R_13b1, R_2000)
     {
-      FIELD_HANDLE (VX_TABLE_RECORD, 5, 0); //current view
+      // => VX. VX.viewport <=> active_viewport in LAYOUT
+      FIELD_HANDLE (VX_TABLE_RECORD, 5, 0); // current view
     }
   SINCE (R_13b1)
     {

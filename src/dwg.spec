@@ -2535,7 +2535,7 @@ DWG_ENTITY (VIEWPORT)
 
   COMMON_ENTITY_HANDLE_DATA;
   VERSIONS (R_13b1, R_14) {
-    FIELD_HANDLE (vport_entity_header, 5, 0);
+    FIELD_HANDLE (vport_entity_header, 5, 0); // => VX
   }
   VERSIONS (R_2000b, R_2002) {
     HANDLE_VECTOR (frozen_layers, num_frozen_layers, 5, 341);
@@ -2546,7 +2546,7 @@ DWG_ENTITY (VIEWPORT)
     FIELD_HANDLE (clip_boundary, 5, 340);
   }
   VERSIONS (R_2000b, R_2002) {
-    FIELD_HANDLE (vport_entity_header, 5, 0);
+    FIELD_HANDLE (vport_entity_header, 5, 0);  // => VX
   }
   SINCE (R_2000b) {
     FIELD_HANDLE (named_ucs, 5, 345);

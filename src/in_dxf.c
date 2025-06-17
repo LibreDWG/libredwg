@@ -60,12 +60,16 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
 // from dwg_api.c
-EXPORT Dwg_Object_DICTIONARY *
+Dwg_Object_DICTIONARY *
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const char *restrict name, /* the NOD entry */
                     const char *restrict text, /* maybe NULL */
                     const BITCODE_RLL absolute_ref);
+Dwg_Object_VX_TABLE_RECORD *
+dwg_add_VX (Dwg_Data *restrict dwg, const char *restrict name /* maybe NULL */);
 // from dwg.c
+BITCODE_RLL
+dwg_new_handseed (Dwg_Data *restrict dwg);
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
@@ -9345,6 +9349,27 @@ Dxf_Pair *new_object (
                 LOG_TRACE ("Reuse existing BLOCK_HEADER.*Model_Space %X [0]\n",
                            pair->value.u)
               }
+          // special-case VIEWPORT -> VX.
+          if (strEQc (name, "VIEWPORT") && dwg->header.version < R_2004
+              && dwg->header.version > R_11 && pair->code == 5)
+            {
+              Dwg_Object_VX_TABLE_RECORD *vx = dwg_add_VX (dwg, "");
+              Dwg_Object *vxobj = dwg_obj_generic_to_object (vx, &error);
+              Dwg_Entity_VIEWPORT *_vobj = obj->tio.entity->tio.VIEWPORT;
+              if (dwg->header_vars.HANDSEED)
+                {
+                  vxobj->handle.value = dwg_new_handseed (dwg);
+                }
+              // vx->is_on = 1;
+              vx->viewport
+                  = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+              LOG_TRACE ("VX_TABLE_RECORD.viewport = " FORMAT_REF " [H 4]\n",
+                         ARGS_REF (vx->viewport));
+              _vobj->vport_entity_header
+                  = dwg_add_handleref (dwg, 5, vxobj->handle.value, NULL);
+              LOG_TRACE ("VIEWPORT.vport_entity_header = " FORMAT_REF " [H 5]\n",
+                         ARGS_REF (_vobj->vport_entity_header));
+            }
             if (strNE (name, "DIMSTYLE") || pair->code == 105)
               {
                 obj->handle.value = pair->value.u;
@@ -12925,8 +12950,16 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           if (pair->code == 0 && pair->value.s)
             {
-              Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
+              BITCODE_BL last_ent = dwg->num_objects - 1;
+              Dwg_Object *obj = &dwg->object[last_ent];
               Dwg_Object_Entity *ent = obj->tio.entity;
+              // FIXUP hack for added VX and VX_CONTROL
+              while (obj->supertype != DWG_SUPERTYPE_ENTITY)
+                {
+                  last_ent--;
+                  obj = &dwg->object[last_ent];
+                  ent = obj->tio.entity;
+                }
               if (ent->ownerhandle)
                 {
                   if (ent->ownerhandle->absolute_ref == mspace)

@@ -1718,6 +1718,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         CHK_MISSING_BLOCK_HEADER
         if (!dwg_is_valid_name (dwg, text))
           fn_error ("Invalid table record name\n");
+        // add's a VX also if <r2004
         ent = (lastent_t){ .u.viewport = dwg_add_VIEWPORT (hdr, text),
                            .type = DWG_TYPE_VIEWPORT };
       }
