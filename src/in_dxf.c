@@ -9511,14 +9511,24 @@ Dxf_Pair *new_object (
                 }
               else if (strEQc (obj->name, "VERTEX_2D"))
                 {
+                  Dwg_Object_Ref *owner = obj->tio.entity->ownerhandle;
+                  Dwg_Object *parent = dwg_ref_object (dwg, owner);
+                  if (parent && obj->tio.entity->layer
+                      && parent->supertype == DWG_SUPERTYPE_ENTITY
+                      && parent->tio.entity->layer
+                      && obj->tio.entity->layer->absolute_ref
+                             != parent->tio.entity->layer->absolute_ref)
+                    {
+                      obj->tio.entity->layer = parent->tio.entity->layer;
+                      LOG_TRACE ("=> VERTEX.layer = " FORMAT_REF "\n",
+                                 ARGS_REF (obj->tio.entity->layer));
+                    }
                   if (strEQc (subclass, "AcDb3dPolylineVertex"))
                     {
                       UPGRADE_ENTITY (VERTEX_2D, VERTEX_3D)
                     }
                   else if (strEQc (subclass, "AcDbPolyFaceMeshVertex"))
                     { // _MESH or _PFACE:
-                      Dwg_Object_Ref *owner = obj->tio.entity->ownerhandle;
-                      Dwg_Object *parent = dwg_ref_object (dwg, owner);
                       if (parent
                           && parent->fixedtype == DWG_TYPE_POLYLINE_PFACE)
                         {
