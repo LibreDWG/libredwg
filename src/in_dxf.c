@@ -9767,11 +9767,11 @@ Dxf_Pair *new_object (
                                               (num + 1) * sizeof (BITCODE_H));
                   obj->tio.object->reactors[num] = reactor;
                   obj->tio.object->num_reactors++;
-                  if (num == 0 && obj->fixedtype == DWG_TYPE_MLINESTYLE &&
-                      !obj->tio.object->ownerhandle)
+                  if (num == 0 && !dwg_obj_is_table(obj) && !obj->tio.object->ownerhandle)
                     {
                       obj->tio.object->ownerhandle = reactor;
-                      LOG_TRACE ("MLINESTYLE.ownerhandle = " FORMAT_REF "\n",
+                      LOG_TRACE ("%s.ownerhandle = " FORMAT_REF "\n",
+                                 obj->name,
                                  ARGS_REF (obj->tio.object->ownerhandle));
                     }
                 }
