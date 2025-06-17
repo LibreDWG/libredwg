@@ -6616,13 +6616,16 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
         case 330: // TODO: most likely {ACAD_REACTORS
           {
             BITCODE_H owh;
-            if (is_obj_absowner (obj))
-              owh = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
-            else // relative
-              owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
-            obj->tio.object->ownerhandle = owh;
-            LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [H 330]\n", ctrlname,
-                       ARGS_REF (owh));
+            if (!obj->tio.object->ownerhandle)
+              {
+                if (is_obj_absowner (obj))
+                  owh = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+                else // relative
+                  owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+                obj->tio.object->ownerhandle = owh;
+                LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [H 330]\n", ctrlname,
+                           ARGS_REF (owh));
+              }
           }
           break;
         case 340:
@@ -8774,6 +8777,24 @@ dxf_postprocess_LAYOUT (Dwg_Object *restrict obj)
 }
 
 static void
+dxf_postprocess_MLINESTYLE (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Object *_o = obj->tio.object;
+  Dwg_Object_MLINESTYLE *_obj = obj->tio.object->tio.MLINESTYLE;
+
+  // fix wrong ownerhandle
+  if (_o->ownerhandle && _o->num_reactors &&
+      _o->reactors[0]->absolute_ref != _o->ownerhandle->absolute_ref)
+    {
+      // must not be a BLOCK_HEADER, but a DICTIONARY
+      _o->ownerhandle = _o->reactors[0];
+      LOG_TRACE ("MLINESTYLE.ownerhandle = " FORMAT_REF " (fixup)\n",
+                 ARGS_REF (_o->ownerhandle));
+    }
+}
+
+static void
 dxf_postprocess_PLOTSETTINGS (Dwg_Object *restrict obj)
 {
   Dwg_Data *dwg = obj->parent;
@@ -9295,6 +9316,8 @@ Dxf_Pair *new_object (
             dxf_postprocess_LAYOUT (obj);
           else if (strEQc (name, "PLOTSETTINGS"))
             dxf_postprocess_PLOTSETTINGS (obj);
+          else if (strEQc (name, "MLINESTYLE"))  // FIXME. not triggered
+            dxf_postprocess_MLINESTYLE (obj);
           return pair;
         case 105: /* DIMSTYLE only for 5 */
           if (strNE (name, "DIMSTYLE"))
@@ -9744,6 +9767,13 @@ Dxf_Pair *new_object (
                                               (num + 1) * sizeof (BITCODE_H));
                   obj->tio.object->reactors[num] = reactor;
                   obj->tio.object->num_reactors++;
+                  if (num == 0 && obj->fixedtype == DWG_TYPE_MLINESTYLE &&
+                      !obj->tio.object->ownerhandle)
+                    {
+                      obj->tio.object->ownerhandle = reactor;
+                      LOG_TRACE ("MLINESTYLE.ownerhandle = " FORMAT_REF "\n",
+                                 ARGS_REF (obj->tio.object->ownerhandle));
+                    }
                 }
             }
           else if (pair->code == 330 && obj->fixedtype == DWG_TYPE_LAYOUT
@@ -12334,6 +12364,8 @@ Dxf_Pair *new_object (
     dxf_postprocess_SEQEND (obj);
   else if (obj->fixedtype == DWG_TYPE_LAYOUT)
     dxf_postprocess_LAYOUT (obj);
+  else if (obj->fixedtype == DWG_TYPE_MLINESTYLE)
+    dxf_postprocess_MLINESTYLE (obj); // FIXME. not triggered
   else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     dxf_postprocess_PLOTSETTINGS (obj);
   // set defaults not in dxf:
