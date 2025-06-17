@@ -12486,7 +12486,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              && obj->handle.value
                                     == _ctrl->paper_space->absolute_ref)
                       ;
-                    else if (find_hv (_ctrl->entries, _ctrl->num_entries, obj->handle.value) >= 0)
+                    else if (find_hv (_ctrl->entries, _ctrl->num_entries, obj->handle.value) < 0)
                       {
                         ref = dwg_add_handleref (dwg, 2, obj->handle.value,
                                                  NULL);
@@ -12506,7 +12506,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              == _lctrl->byblock->absolute_ref)
                       ;
                     // already exists?
-                    else if (find_hv (_lctrl->entries, _lctrl->num_entries, obj->handle.value) >= 0)
+                    else if (find_hv (_lctrl->entries, _lctrl->num_entries, obj->handle.value) < 0)
                       ;
                     else
                       {
