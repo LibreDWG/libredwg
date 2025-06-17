@@ -80,6 +80,7 @@ if [ -f "$b.dxf" ]; then
     esac
     test -z "$r" && can_teigha=0
 
+    # shellcheck disable=SC2086,SC2154
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         rd="$r"
         # can only write r12+ DWG's. DXF's all
@@ -88,7 +89,7 @@ if [ -f "$b.dxf" ]; then
         fi
         echo timeout 30 "$baseFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf"
         timeout 30 "$ODAFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf" \
-                >/dev/null 2>/dev/null
+                $ODAFileConverter_geometry >/dev/null 2>/dev/null
         if [ -e "test/$b.dwg.err" ]; then
             cat "test/$b.dwg.err"
             exitcode=1
@@ -101,10 +102,11 @@ if [ -f "$b.dxf" ]; then
 fi
 
 if [ -f "$b.dwg" ]; then
+    # shellcheck disable=SC2086,SC2154
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$ODAFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg" \
-                >/dev/null 2>/dev/null
+                $ODAFileConverter_geometry >/dev/null 2>/dev/null
         if [ -e "test/$b.dxf.err" ]; then
             cat "test/$b.dxf.err"
             exitcode=3
