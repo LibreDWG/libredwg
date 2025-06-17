@@ -3888,25 +3888,22 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                            (Dwg_Section_Type_r13 *)&section_order);
     LOG_TRACE ("num_sections => " FORMAT_RL "\n", dwg->header.num_sections);
 
-    // on downconvert add the missing VX_CONTROL object
+    // on downconvert or DXF import add the missing VX_CONTROL object
+    // (DXF never contains VX tables nor table records)
     if (dwg->header.version < R_2004 && !dwg->header_vars.VX_CONTROL_OBJECT)
       {
-        Dwg_Object *obj;
-        obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
+        Dwg_Object *obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
         if (!obj)
           {
-            Dwg_Object_VX_TABLE_RECORD *_obj = dwg_add_VX (dwg, "*");
-            Dwg_Object *o
-                = dwg_find_first_type (dwg, DWG_TYPE_VX_TABLE_RECORD);
+            dwg_add_VX (dwg, NULL);
             obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
             if (obj)
               {
-                obj->handle.value = 0x19;
+                obj->handle.value = 0xB;
                 LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
                            obj->handle.value);
-                _obj->is_on = 1;
                 dwg->header_vars.VX_TABLE_RECORD
-                    = dwg_add_handleref (dwg, 5, o->handle.value, NULL);
+                    = dwg_add_handleref (dwg, 5, 0, NULL);
               }
           }
         if (obj)

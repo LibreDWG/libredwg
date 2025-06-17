@@ -91,7 +91,7 @@
       IF_ENCODE_FROM_EARLIER_OR_DXF {
         FIELD_VALUE (unknown_8) = 24;
       }
-      FIELD_BL (unknown_8, 0);
+      FIELD_BLx (unknown_8, 0);
       FIELD_BL (unknown_9, 0);
     }
   VERSIONS (R_13b1, R_14) // or maybe UNTIL (R_14)
