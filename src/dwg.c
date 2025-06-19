@@ -3368,8 +3368,7 @@ void
 dwg_set_next_objhandle (Dwg_Object *obj)
 {
   Dwg_Data *dwg = obj->parent;
-  if (!dwg->object_map)
-    dwg->object_map = hash_new (200);
+  BITCODE_RLL seed;
   if (dwg->next_hdl)
     {
       obj->handle.value = dwg->next_hdl;
@@ -3378,22 +3377,27 @@ dwg_set_next_objhandle (Dwg_Object *obj)
       dwg->next_hdl = 0;
       return;
     }
-  if (!dwg->num_objects)
-    {
-      obj->handle.size = 1;
-      obj->handle.value = 1UL;
-    }
+  seed = dwg_new_handseed (dwg);
+  if (!dwg->object_map)
+    dwg->object_map = hash_new (200);
   else
     {
-      Dwg_Object *lastobj = &dwg->object[dwg->num_objects - 1];
-      /* ADD_OBJECT might have just added a zeroed object */
-      if (!lastobj->handle.value && dwg->num_objects > 1)
-        lastobj = &dwg->object[dwg->num_objects - 2];
-      obj->handle.value = lastobj->handle.value + 1;
-      dwg_set_handle_size (&obj->handle);
+      bool found = true;
+      while (found) {
+        uint64_t i = hash_get (dwg->object_map, seed);
+        if (i != HASH_NOT_FOUND)
+          {
+            LOG_WARN ("HANDSEED " FORMAT_RLLx " already exists: "
+                      FORMAT_BLL, seed, i);
+            seed = dwg_new_handseed (dwg);
+          }
+        else
+          found = false;
+      }
     }
+  obj->handle.value = seed;
+  dwg_set_handle_size (&obj->handle);
   hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
-  dwg->next_hdl = 0;
 }
 
 // <path-to>/dxf.ext => copy of "dxf", "ext"

@@ -25112,51 +25112,62 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
                                   : "ISO_A1_(841.00_x_594.00_MM)";
 
   // BLOCK_CONTROL_OBJECT: (3.1.1) abs:1 [H 0]
+  dwg_set_next_hdl (dwg, UINT64_C (0x1));
   block_control
       = dwg_add_BLOCK_CONTROL (dwg,
                                0x1F,                          // model space
                                version >= R_13b1 ? 0x20 : 0); // paper space
   // LAYER_CONTROL_OBJECT: (3.1.2) abs:2 [H 0]
+  dwg_set_next_hdl (dwg, UINT64_C (0x2));
   dwg_add_LAYER (dwg, NULL);
   // STYLE_CONTROL_OBJECT: (3.1.3) abs:3 [H 0]
+  dwg_set_next_hdl (dwg, UINT64_C (0x3));
   dwg_add_STYLE (dwg, NULL);
   // hole at 4
   dwg_set_next_hdl (dwg, UINT64_C (0x5));
   // LTYPE_CONTROL_OBJECT: (3.1.5) abs:5 [H 0]
   dwg_add_LTYPE (dwg, NULL);
   // VIEW_CONTROL_OBJECT: (3.1.6) abs:6 [H 0]
+  dwg_set_next_hdl (dwg, UINT64_C (0x6));
   dwg_add_VIEW (dwg, NULL);
   // dwg->view_control = *dwg->object[4].tio.object->tio.VIEW_CONTROL;
   if (version >= R_10)
     {
       // UCS_CONTROL_OBJECT: (3.1.7) abs:7 [H 0]
+      dwg_set_next_hdl (dwg, UINT64_C (0x7));
       dwg_add_UCS (dwg, &pt0, NULL, NULL, NULL);
       // dwg->ucs_control = *dwg->object[5].tio.object->tio.UCS_CONTROL;
       // VPORT_CONTROL_OBJECT: (3.1.8) abs:8 [H 0]
+      dwg_set_next_hdl (dwg, UINT64_C (0x8));
       dwg_add_VPORT (dwg, NULL);
       // dwg->vport_control = *dwg->object[6].tio.object->tio.VPORT_CONTROL;
       // APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
+      dwg_set_next_hdl (dwg, UINT64_C (0x9));
       dwg_add_APPID (dwg, NULL);
     }
   if (version >= R_11)
     {
       // DIMSTYLE_CONTROL_OBJECT: (3.1.A) abs:A [H 0]
       // We don't create the DIMSTYLE Standard 3.1.1D upfront, only on demand.
+      dwg_set_next_hdl (dwg, UINT64_C (0xA));
       dwg_add_DIMSTYLE (dwg, NULL);
     }
   if (version >= R_11 && version <= R_2000)
     {
       // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
+      dwg_set_next_hdl (dwg, UINT64_C (0xB));
       dwg_add_VX (dwg, NULL);
     }
   if (version > R_11)
     {
       // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
+      dwg_set_next_hdl (dwg, UINT64_C (0xC));
       nod = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT",
                                 0UL);
       dwg->header_vars.DICTIONARY_NAMED_OBJECT
           = dwg_add_handleref (dwg, 3, UINT64_C (0xC), NULL);
       // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
+      dwg_set_next_hdl (dwg, UINT64_C (0xD));
       dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", NULL,
                           UINT64_C (0));
       dwg->header_vars.DICTIONARY_ACAD_GROUP
@@ -25168,26 +25179,29 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     {
       Dwg_Object_PLACEHOLDER *plh;
       // DICTIONARY (5.1.E) //FIXME
+      dwg_set_next_hdl (dwg, UINT64_C (0xE));
       dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
                                (const BITCODE_T) "Normal", UINT64_C (0xF));
       dwg->header_vars.DICTIONARY_PLOTSTYLENAME
           = dwg_add_handleref (dwg, 5, UINT64_C (0xE), NULL);
       // PLOTSTYLE (2.1.F)
+      dwg_set_next_hdl (dwg, UINT64_C (0xF));
       plh = dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
       obj = dwg_obj_generic_to_object (plh, &error);
       obj->tio.object->ownerhandle
           = dwg_add_handleref (dwg, 4, UINT64_C (0xE), obj);
       add_obj_reactor (obj->tio.object, UINT64_C (0xE));
     }
-  else
-    {
-      dwg_set_next_hdl (dwg, UINT64_C (0x10));
-    }
+  //else
+  //  {
+  //    dwg_set_next_hdl (dwg, UINT64_C (0x10));
+  //  }
   if (version >= R_9)
     {
       const char *standard
           = dwg->header.version < R_13 ? "STANDARD" : "Standard";
       // LAYER: (0.1.10)
+      dwg_set_next_hdl (dwg, UINT64_C (0x10));
       layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
       if (layer)
         {
@@ -25203,6 +25217,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // if (ctrl)
       //   dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
       // STYLE: (0.1.11)
+      dwg_set_next_hdl (dwg, UINT64_C (0x11));
       style = dwg_add_STYLE (dwg, standard);
       if (style)
         {
@@ -25219,6 +25234,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // if (ctrl)
       //   dwg->style_control = ctrl->tio.object->tio.STYLE_CONTROL;
       // APPID "ACAD": (0.1.12)
+      dwg_set_next_hdl (dwg, UINT64_C (0x12));
       dwg_add_APPID (dwg, "ACAD");
       // hole at 13. already in r13
       dwg_set_next_hdl (dwg, UINT64_C (0x14));
@@ -25233,6 +25249,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       dwg->header_vars.LTYPE_BYBLOCK
           = dwg_add_handleref (dwg, 5, UINT64_C (0x14), NULL);
       // LTYPE->bylayer: (3.1.15)
+      dwg_set_next_hdl (dwg, UINT64_C (0x15));
       ltype = dwg_add_LTYPE (dwg, "BYLAYER");
       if (ltype)
         ltype->flag &= ~64; // not loaded
@@ -25244,6 +25261,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       dwg->header_vars.CELTYPE
           = dwg_add_handleref (dwg, 5, UINT64_C (0x15), NULL);
       // LTYPE_CONTINUOUS: (5.1.16)
+      dwg_set_next_hdl (dwg, UINT64_C (0x16));
       ltype = dwg_add_LTYPE (dwg, "CONTINUOUS");
       if (ltype)
         ltype->description = dwg_add_u8_input (dwg, "Solid line");
@@ -25254,10 +25272,12 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (version >= R_13b1)
     {
       // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
+      dwg_set_next_hdl (dwg, UINT64_C (0x17));
       dwg_add_DICTIONARY (dwg, "ACAD_MLINESTYLE", "Standard", UINT64_C (0x18));
       dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE
           = dwg_add_handleref (dwg, 5, UINT64_C (0x17), NULL);
       // MLINESTYLE: (0.1.18)
+      dwg_set_next_hdl (dwg, UINT64_C (0x18));
       mlstyle = dwg_add_MLINESTYLE (dwg, "Standard");
       if (mlstyle)
         {
@@ -25268,6 +25288,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
         }
 
       // DICTIONARY ACAD_PLOTSETTINGS: (5.1.19)
+      dwg_set_next_hdl (dwg, UINT64_C (0x19));
       dwg_add_DICTIONARY (dwg, "ACAD_PLOTSETTINGS", NULL, 0);
       dwg->header_vars.DICTIONARY_PLOTSETTINGS
           = dwg_add_handleref (dwg, 5, UINT64_C (0x19), NULL);
@@ -25275,6 +25296,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (version >= R_2000)
     {
       // DICTIONARY_LAYOUT: (5.1.1A)
+      dwg_set_next_hdl (dwg, UINT64_C (0x1A));
       layoutdict = dwg_add_DICTIONARY (dwg, "ACAD_LAYOUT", NULL, 0);
       if (layoutdict)
         {
@@ -25286,8 +25308,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   // DIMSTYLE: STANDARD (5.1.1D) abs:1D [H 2] (only if used)
 
   // hole until 1F
-  dwg_set_next_hdl (dwg, UINT64_C (0x1F));
   // BLOCK_RECORD_MSPACE: (5.1.1F)
+  dwg_set_next_hdl (dwg, UINT64_C (0x1F));
   mspace = dwg_add_BLOCK_HEADER (dwg, "*MODEL_SPACE");
   mspaceobj = dwg_obj_generic_to_object (mspace, &error);
   if (!mspaceobj)
@@ -25301,6 +25323,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (version >= R_13b1)
     {
       // BLOCK_RECORD_PSPACE: (5.1.20)
+      dwg_set_next_hdl (dwg, UINT64_C (0x20));
       pspace = dwg_add_BLOCK_HEADER (dwg, "*PAPER_SPACE");
       obj = dwg_obj_generic_to_object (pspace, &error);
       block_control->num_entries--;
@@ -25316,14 +25339,18 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
           = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
       dwg->block_control = *block_control;
       // BLOCK: (5.1.21)
+      dwg_set_next_hdl (dwg, UINT64_C (0x21));
       dwg_add_BLOCK (pspace, "*PAPER_SPACE");
       // ENDBLK: (5.1.22)
+      dwg_set_next_hdl (dwg, UINT64_C (0x22));
       dwg_add_ENDBLK (pspace);
     }
   // LAYOUT (0.1.23)
+  // dwg_set_next_hdl (dwg, UINT64_C (0x23));
   // layout = dwg_add_LAYOUT (layoutdict);
   // pspace->layout = dwg_add_handleref (dwg, 5, UINT64_C (0x23), NULL);
 
+  dwg_set_next_hdl (dwg, UINT64_C (0x24));
   {
     // BLOCK: (5.1.24)
     Dwg_Entity_BLOCK *block = dwg_add_BLOCK (mspace, "*MODEL_SPACE");
@@ -25333,6 +25360,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
         obj->type = DWG_TYPE_UNUSED_r11; // don't encode it
       }
   }
+  dwg_set_next_hdl (dwg, UINT64_C (0x25));
   {
     // ENDBLK: (5.1.25)
     Dwg_Entity_ENDBLK *endblk = dwg_add_ENDBLK (mspace);
@@ -25345,11 +25373,13 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (dwg->header.version >= R_10)
     {
       // VPORT (0.1.26)
+      dwg_set_next_hdl (dwg, UINT64_C (0x26));
       vport_active = dwg_add_VPORT (
           dwg, dwg->header.version >= R_13b1 ? "*Active" : "*ACTIVE");
     }
   if (dwg->header.version >= R_2000)
     {
+      dwg_set_next_hdl (dwg, UINT64_C (0x27));
 #ifdef NEED_VPORT_FOR_MODEL_LAYOUT
       // LAYOUT (0.1.27)
       obj = dwg_obj_generic_to_object (vport_active, &error);
@@ -25362,12 +25392,14 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
 
 #ifdef NEED_VPORT_FOR_MODEL_LAYOUT
       // VIEWPORT (0.1.28)
+      dwg_set_next_hdl (dwg, UINT64_C (0x28));
       pviewport = dwg_add_VIEWPORT (pspace, "");
-      // LAYOUT (0.1.29)
       obj = dwg_obj_generic_to_object (pviewport, &error);
 #else
       obj = dwg_obj_generic_to_object (pspace, &error);
 #endif
+      // LAYOUT (0.1.29)
+      dwg_set_next_hdl (dwg, UINT64_C (0x29));
       layout = dwg_add_LAYOUT (obj, "Layout1", canonical_media_name);
       obj = dwg_obj_generic_to_object (layout, &error);
       pspace->layout = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
@@ -27104,6 +27136,7 @@ dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       Dwg_Object *vxobj = dwg_obj_generic_to_object (vx, &error);
       vx->is_on = 1;
+      // FIXME vxobj->tio.object->ownerhandle
       vx->viewport = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
       _obj->vport_entity_header = dwg_add_handleref (dwg, 5, vxobj ? vxobj->handle.value : 0, NULL);
     }
@@ -27877,6 +27910,8 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
       _ctrl->num_entries++;                                                   \
       obj->tio.object->ownerhandle                                            \
           = dwg_add_handleref (dwg, 4, ctrlhdl, obj);                         \
+      LOG_TRACE (#record ".ownerhandle = " FORMAT_REF "\n",                  \
+                 ARGS_REF (obj->tio.object->ownerhandle));                    \
       _obj->is_xref_ref = 1;                                                  \
       return _obj;                                                            \
     }                                                                         \

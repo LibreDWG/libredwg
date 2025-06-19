@@ -12760,9 +12760,11 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     blkhdr = NULL;
                   if (!_obj || !_obj->name)
                     ;
-                  else if (bit_eq_T (dat, _obj->name, "*Model_Space"))
+                  else if (bit_eq_T (dat, _obj->name, "*Model_Space")
+                           || bit_eq_T (dat, _obj->name, "*MODEL_SPACE"))
                     entmode = ent->entmode = 2;
-                  else if (bit_eq_T (dat, _obj->name, "*Paper_Space"))
+                  else if (bit_eq_T (dat, _obj->name, "*Paper_Space")
+                           || bit_eq_T (dat, _obj->name, "*PAPER_SPACE"))
                     entmode = ent->entmode = 1;
                   else
                     entmode = 0;
