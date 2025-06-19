@@ -85,6 +85,7 @@ void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
 void ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref);
 const Dwg_Object_Ref *ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
                                         const unsigned long absref);
+static void dwg_init_handseed (Dwg_Data *dwg);
 
 /*------------------------------------------------------------------------------
  * Public functions
@@ -2217,11 +2218,13 @@ dwg_add_handleref_free (const BITCODE_RC code, const BITCODE_RLL absref)
 BITCODE_RLL
 dwg_new_handseed (Dwg_Data *restrict dwg)
 {
-  BITCODE_RLL old = dwg->header_vars.HANDSEED->absolute_ref;
+  if (!dwg->header_vars.HANDSEED)
+    dwg_init_handseed (dwg);
   dwg->header_vars.HANDSEED->handleref.value++;
   dwg->header_vars.HANDSEED->absolute_ref++;
-  return old;
+  return dwg->header_vars.HANDSEED->absolute_ref - 1;
 }
+
 // Not checking the header_vars entry, only searching the objects
 // Returning a hardowner ref (code 3) to it, as stored in header_vars.
 EXPORT BITCODE_H
@@ -3362,6 +3365,25 @@ void
 dwg_set_next_hdl (Dwg_Data *dwg, const BITCODE_RLL value)
 {
   dwg->next_hdl = value;
+}
+
+static void
+dwg_init_handseed (Dwg_Data *dwg)
+{
+  if (!dwg->num_objects)
+    {
+      dwg->header_vars.HANDSEED = dwg_add_handleref (dwg, 0, 0xC, NULL);
+      return;
+    }
+  else
+    {
+      Dwg_Object *lastobj = &dwg->object[dwg->num_objects - 1];
+      /* ADD_OBJECT might have just added a zeroed object */
+      if (!lastobj->handle.value && dwg->num_objects > 1)
+        lastobj = &dwg->object[dwg->num_objects - 2];
+      dwg->header_vars.HANDSEED
+        = dwg_add_handleref (dwg, 0, lastobj->handle.value + 1, NULL);
+    }
 }
 
 void

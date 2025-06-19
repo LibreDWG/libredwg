@@ -6587,14 +6587,9 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   FIELD_RS (R11_HANDLING, 0);
   {
-    if (!_obj->R11_HANDSEED)
-      _obj->R11_HANDSEED = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
-    _obj->R11_HANDSEED->handleref.code = 0;
-    _obj->R11_HANDSEED->handleref.size = 8;
-    _obj->R11_HANDSEED->handleref.value = bit_read_RLL_BE (dat);
-    _obj->R11_HANDSEED->absolute_ref = _obj->R11_HANDSEED->handleref.value;
-    LOG_TRACE ("R11_HANDSEED: " FORMAT_H " [H 5]\n",
-               ARGS_H (_obj->R11_HANDSEED->handleref));
+    _obj->HANDSEED = bit_read_RLL_BE (dat);
+    LOG_TRACE ("HANDSEED: " FORMAT_RLLx " [RLLx 5]\n",
+               _obj->HANDSEED);
   }
   FIELD_RS (num_aux_tables, 0);
   decode_preR13_section_chk (SECTION_BLOCK, dat, dwg);

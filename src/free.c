@@ -1673,7 +1673,7 @@ dwg_free (Dwg_Data *dwg)
       // FREE_IF (dwg->objfreespace...);
       FREE_IF (dwg->Template.description);
       FREE_IF (dwg->header.section);
-      FREE_IF (dwg->auxheader.R11_HANDSEED);
+      // FREE_IF (dwg->auxheader.R11_HANDSEED);
 
       for (i = 0; i < dwg->num_objects; ++i)
         {

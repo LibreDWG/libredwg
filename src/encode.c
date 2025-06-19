@@ -2432,20 +2432,13 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("extras_start %x/%x", _obj->extras_start,
                 dwg->header.extras_start);
     }
+  _obj->R11_HANDLING = dwg->header_vars.HANDLING;
   FIELD_RS (R11_HANDLING, 0);
   {
-    if (!_obj->R11_HANDSEED)
-      {
-        _obj->R11_HANDSEED = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
-        _obj->R11_HANDSEED->handleref.code = 0;
-        _obj->R11_HANDSEED->handleref.size = 8;
-      }
     // always use the header_vars.HANDSEED
-    _obj->R11_HANDSEED->handleref.value = dwg->header_vars.HANDSEED->handleref.value;
-    bit_write_RLL_BE (dat, _obj->R11_HANDSEED->handleref.value);
-    _obj->R11_HANDSEED->absolute_ref = _obj->R11_HANDSEED->handleref.value;
-    LOG_TRACE ("R11_HANDSEED: " FORMAT_H " [H 5]\n",
-               ARGS_H (_obj->R11_HANDSEED->handleref));
+    _obj->HANDSEED = dwg->header_vars.HANDSEED->handleref.value;
+    bit_write_RLL_BE (dat, _obj->HANDSEED);
+    LOG_TRACE ("HANDSEED: " FORMAT_HV "\n", _obj->HANDSEED);
   }
   FIELD_RS (num_aux_tables, 0);
   encode_preR13_section_chk (SECTION_BLOCK, dat, dwg);
