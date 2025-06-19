@@ -1606,7 +1606,7 @@ typedef struct _dwg_handle
 
 #define FORMAT_H "%u.%u." FORMAT_HV
 #define ARGS_H(hdl) (hdl).code, (hdl).size, (hdl).value
-#define FORMAT_REF "(%u.%u." FORMAT_HV ") abs:" FORMAT_BLL
+#define FORMAT_REF "(%u.%u." FORMAT_HV ") abs:" FORMAT_HV
 #define ARGS_REF(ref) (ref)->handleref.code, (ref)->handleref.size, \
     (ref)->handleref.value, (ref)->absolute_ref
 #define FORMAT_REF11 "(%d, %hd, " FORMAT_HV ")"
