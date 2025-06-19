@@ -177,6 +177,7 @@ typedef BITCODE_DOUBLE BITCODE_RD;
 #define FORMAT_RD "%g"
 /* Since R2004 */
 typedef uint64_t BITCODE_RLL;
+typedef uint64_t BITCODE_RLLx;
 typedef int64_t BITCODE_RLLd;
 typedef uint64_t BITCODE_BLL;
 #define FORMAT_RLLx "%" PRIX64
@@ -212,6 +213,8 @@ typedef BITCODE_DOUBLE BITCODE_DD;
 typedef BITCODE_DOUBLE BITCODE_BD;
 #define FORMAT_BD "%g"
 typedef BITCODE_RC BITCODE_4BITS;
+typedef BITCODE_RLLx BITCODE_HV; // handle value (not vector)
+#define FORMAT_HV FORMAT_RLLx
 #define FORMAT_4BITS "%1x"
 /* double stored as string. ARCALIGNEDTEXT */
 typedef BITCODE_TV BITCODE_D2T;
@@ -1597,16 +1600,16 @@ typedef struct _dwg_handle
 {
   BITCODE_RC code; /*!< OFFSETOBJHANDLE if > 6 */
   BITCODE_RC size;
-  BITCODE_RLL value;
+  BITCODE_HV value;
   BITCODE_B is_global; // to be freed or not
 } Dwg_Handle;
 
-#define FORMAT_H "%u.%u." FORMAT_RLLx
+#define FORMAT_H "%u.%u." FORMAT_HV
 #define ARGS_H(hdl) (hdl).code, (hdl).size, (hdl).value
-#define FORMAT_REF "(%u.%u." FORMAT_RLLx ") abs:" FORMAT_BLL
+#define FORMAT_REF "(%u.%u." FORMAT_HV ") abs:" FORMAT_BLL
 #define ARGS_REF(ref) (ref)->handleref.code, (ref)->handleref.size, \
     (ref)->handleref.value, (ref)->absolute_ref
-#define FORMAT_REF11 "(%d, %hd, " FORMAT_BLL ")"
+#define FORMAT_REF11 "(%d, %hd, " FORMAT_HV ")"
 #define ARGS_REF11(ref) (ref)->handleref.size, (ref)->r11_idx, \
        (ref)->absolute_ref
 
@@ -1700,7 +1703,7 @@ typedef struct _dwg_resbuf
     short   i16;
     int     i32;
     BITCODE_BLL i64;
-    BITCODE_RLL absref;
+    BITCODE_HV absref;
     double  dbl;
     struct _dwg_binary_chunk str;
   } value;
@@ -11197,7 +11200,7 @@ typedef struct _dwg_auxheader
   BITCODE_RL unknown_5rl[5];
   BITCODE_TIMERLL TDCREATE;
   BITCODE_TIMERLL TDUPDATE;
-  BITCODE_RL HANDSEED;
+  BITCODE_HV HANDSEED;
   BITCODE_RL plot_stamp;
   BITCODE_RS zero_1;
   BITCODE_RS numsaves_3;
@@ -11219,7 +11222,6 @@ typedef struct _dwg_auxheader
   BITCODE_RLx auxheader_address;      /* < R13 */
   BITCODE_RS num_aux_tables;          /* < R13 */
   BITCODE_BS R11_HANDLING;  /* TODO Merge with HANDSEED */
-  BITCODE_H R11_HANDSEED;   /* TODO Merge with HANDSEED */
 } Dwg_AuxHeader;
 
 typedef struct _dwg_summaryinfo
@@ -11572,9 +11574,9 @@ dwg_get_entity_layer (const Dwg_Object_Entity *restrict);
 EXPORT Dwg_Object *dwg_next_object (const Dwg_Object *obj);
 EXPORT Dwg_Object *dwg_next_entity (const Dwg_Object *obj);
 // next available 0 ref + 1, when all refs are alreay filled
-EXPORT BITCODE_RLL dwg_next_handle (const Dwg_Data *dwg);
+EXPORT BITCODE_HV dwg_next_handle (const Dwg_Data *dwg);
 // next available handle, computed form the HANDSEED, which is bumped
-EXPORT BITCODE_RLL dwg_next_handseed (Dwg_Data *dwg);
+EXPORT BITCODE_HV dwg_next_handseed (Dwg_Data *dwg);
 
 EXPORT Dwg_Object *dwg_ref_object (Dwg_Data *restrict dwg,
                                    Dwg_Object_Ref *restrict ref);
@@ -11604,9 +11606,9 @@ EXPORT Dwg_Object *dwg_get_next_object (const Dwg_Data *dwg,
                                         const BITCODE_RL index);
 
 EXPORT Dwg_Object *dwg_resolve_handle (const Dwg_Data *restrict dwg,
-                                       BITCODE_RLL absref);
+                                       BITCODE_HV absref);
 EXPORT Dwg_Object *dwg_resolve_handle_silent (const Dwg_Data *restrict dwg,
-                                              const BITCODE_RLL absref);
+                                              const BITCODE_HV absref);
 EXPORT int dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
                                   const Dwg_Object *restrict obj);
 
@@ -11634,7 +11636,7 @@ EXPORT Dwg_Object_Ref * dwg_new_ref (Dwg_Data *restrict dwg);
  *  There obj is NULL.
  */
 EXPORT int dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
-                           const BITCODE_RLL value,
+                           const BITCODE_HV value,
                            const Dwg_Object *restrict obj);
 
 /** Returns an existing ref with the same ownership (hard/soft, owner/pointer)
@@ -11643,7 +11645,7 @@ EXPORT int dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
 */
 EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
                                           const BITCODE_RC code,
-                                          const BITCODE_RLL value,
+                                          const BITCODE_HV value,
                                           const Dwg_Object *restrict obj);
 /** Return a link to the global ref or a new one. Or a NULLHDL. */
 EXPORT Dwg_Object_Ref *
@@ -11651,7 +11653,7 @@ dwg_dup_handleref (Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict ref);
 
 /** Creates a non-global, free'able handle ref. Never relative */
 EXPORT Dwg_Object_Ref *
-dwg_add_handleref_free (const BITCODE_RC code, const BITCODE_RLL absref);
+dwg_add_handleref_free (const BITCODE_RC code, const BITCODE_HV absref);
 
 EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT Dwg_Version_Type dwg_version_as (const char *version);

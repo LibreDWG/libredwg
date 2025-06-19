@@ -71,7 +71,7 @@
   FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
   FIELD_TIMERLL (TDCREATE, 0);
   FIELD_TIMERLL (TDUPDATE, 0);
-  FIELD_RLx (HANDSEED, 0);
+  FIELD_HV (HANDSEED, 0);
   FIELD_RL (plot_stamp, 0);
   FIELD_RS (zero_1, 0);
   FIELD_RS (numsaves_3, 0);

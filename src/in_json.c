@@ -233,6 +233,7 @@ static Bit_Chain *g_dat;
 #define FIELD_RLx(nam, dxf) _FIELD_LONGT (nam, RL, RLx)
 #define FIELD_RLd(nam, dxf) _FIELD_LONGT (nam, RL, RLd)
 #define FIELD_RLL(nam, dxf) _FIELD_LONGLONG (nam, RLL)
+#define FIELD_HV(nam, dxf) _FIELD_LONGLONG (nam, HV)
 #define FIELD_MC(nam, dxf) _FIELD_LONG (nam, MC)
 #define FIELD_MS(nam, dxf) _FIELD_LONG (nam, MS)
 
@@ -3940,7 +3941,7 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
       FIELD_TIMERLL (TDCREATE, 0)
       FIELD_TIMERLL (TDUPDATE, 0)
-      FIELD_RLx (HANDSEED, 0)
+      FIELD_HV (HANDSEED, 0)
       FIELD_RL (plot_stamp, 0)
       FIELD_RS (zero_1, 0)
       FIELD_RS (numsaves_3, 0)

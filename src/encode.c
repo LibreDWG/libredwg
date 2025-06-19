@@ -209,6 +209,7 @@ static bool env_var_checked_p;
 #define FIELD_RLd(nam, dxf) FIELD_CAST (nam, RL, RLd, dxf)
 #define FIELD_BL(nam, dxf) FIELDG (nam, BL, dxf)
 #define FIELD_BLL(nam, dxf) FIELDG (nam, BLL, dxf)
+#define FIELD_HV(nam, dxf) FIELD_CAST (nam, RLL, HV, dxf)
 #define FIELD_BD(nam, dxf) FIELDG (nam, BD, dxf)
 #define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
@@ -1381,7 +1382,7 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
 
   if (appid)
     {
-      LOG_INSANE ("APPID.LibreDWG found " FORMAT_RLLx "\n",
+      LOG_INSANE ("APPID.LibreDWG found " FORMAT_HV "\n",
                   appid->absolute_ref);
       return appid->absolute_ref;
     }
@@ -1519,7 +1520,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     { // POINT is better than DUMMY to preserve the next_entity chain.
       // TODO much better would be PROXY_ENTITY
       Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
-      LOG_WARN ("fixup unsupported %s " FORMAT_RLLx " as POINT", obj->dxfname,
+      LOG_WARN ("fixup unsupported %s " FORMAT_HV " as POINT", obj->dxfname,
                 obj->handle.value);
       if (!obj->tio.entity->xdicobjhandle)
         obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
@@ -1588,7 +1589,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           name = "DUMMY";
           dxfname = "DUMMY";
         }
-      LOG_INFO ("fixup unsupported %s " FORMAT_RLLx " as %s, Type %d\n",
+      LOG_INFO ("fixup unsupported %s " FORMAT_HV " as %s, Type %d\n",
                 obj->dxfname, obj->handle.value, name, obj->type);
       if (!obj->tio.object->xdicobjhandle)
         obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
@@ -2853,7 +2854,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       LOG_HANDLE ("\nSorting objects...\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Object(%3i): " FORMAT_RLLx " / idx: %u\n", i,
+        fprintf (OUTPUT, "Object(%3i): " FORMAT_HV " / idx: %u\n", i,
                  dwg->object[i].handle.value, dwg->object[i].index);
     }
   // init unsorted
@@ -2862,13 +2863,13 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       Dwg_Object *obj = &dwg->object[i];
       if (obj->type == DWG_TYPE_UNUSED)
         {
-          LOG_TRACE ("Skip unused object %s " FORMAT_BL " " FORMAT_RLLx "\n",
+          LOG_TRACE ("Skip unused object %s " FORMAT_BL " " FORMAT_HV "\n",
                      obj->name ? obj->name : "", i, obj->handle.value)
           continue;
         }
       if (obj->type == DWG_TYPE_FREED)
         {
-          LOG_TRACE ("Skip freed object %s " FORMAT_BL " " FORMAT_RLLx "\n",
+          LOG_TRACE ("Skip freed object %s " FORMAT_BL " " FORMAT_HV "\n",
                      obj->name ? obj->name : "", i, obj->handle.value)
           continue;
         }
@@ -2892,7 +2893,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Handle(%3i): " FORMAT_RLLx " / idx: " FORMAT_BL "\n",
+        fprintf (OUTPUT, "Handle(%3i): " FORMAT_HV " / idx: " FORMAT_BL "\n",
                  i, omap[i].handle, omap[i].index);
     }
 
@@ -2967,7 +2968,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {
       LOG_HANDLE ("\nSorted objects:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        LOG_HANDLE ("Object(%d): " FORMAT_RLLx " / Address: %" PRIuSIZE
+        LOG_HANDLE ("Object(%d): " FORMAT_HV " / Address: %" PRIuSIZE
                     " / Idx: " FORMAT_BL "\n",
                     i, omap[i].handle, omap[i].address, omap[i].index);
     }
@@ -3006,7 +3007,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         continue; // skipped objects
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
-      LOG_HANDLE ("Handleoff(%3i): " FORMAT_UMC " [UMC] (" FORMAT_RLLx "), ",
+      LOG_HANDLE ("Handleoff(%3i): " FORMAT_UMC " [UMC] (" FORMAT_HV "), ",
                   index, handleoff, omap[i].handle)
       last_handle = omap[i].handle;
 
@@ -6155,7 +6156,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       break;
     case 5:
       bit_write_RLL_BE (dat, data->u.eed_5.entity);
-      LOG_TRACE ("entity: " FORMAT_RLLx " [RLL_BE]", data->u.eed_5.entity);
+      LOG_TRACE ("entity: " FORMAT_HV " [RLL_BE]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
@@ -6678,7 +6679,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
     {
       // find the largest handle
       seed = last_hdl->absolute_ref;
-      LOG_TRACE ("compute HANDSEED " FORMAT_RLLx " ", seed);
+      LOG_TRACE ("compute HANDSEED " FORMAT_HV " ", seed);
       for (unsigned i = 0; i < dwg->num_object_refs; i++)
         {
           Dwg_Object_Ref *ref = dwg->object_ref[i];
@@ -6686,7 +6687,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
             seed = ref->absolute_ref;
         }
       _obj->HANDSEED->absolute_ref = seed + 1;
-      LOG_TRACE ("-> " FORMAT_RLLx "\n", seed);
+      LOG_TRACE ("-> " FORMAT_HV "\n", seed);
     }
   else
     _obj->HANDSEED->absolute_ref = 0x72E;
@@ -6883,7 +6884,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           if (dat->byte + 8 > end)
             break;
           bit_write_RLL (dat, rbuf->value.absref);
-          LOG_TRACE ("xdata[%u]: " FORMAT_RLLx " [H %d]", j,
+          LOG_TRACE ("xdata[%u]: " FORMAT_HV " [H %d]", j,
                      rbuf->value.absref, rbuf->type);
           LOG_POS;
           break;
@@ -7061,11 +7062,11 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   if (!owner || !owner->tio.entity || !owner->name)
     {
       if (obj->tio.entity->ownerhandle)
-        LOG_WARN ("Missing owner (" FORMAT_RLLx ") from " FORMAT_REF
+        LOG_WARN ("Missing owner (" FORMAT_HV ") from " FORMAT_REF
                   " [H 330]",
                   obj->handle.value, ARGS_REF (obj->tio.entity->ownerhandle))
       else
-        LOG_WARN ("Missing owner (" FORMAT_RLLx ")", obj->handle.value)
+        LOG_WARN ("Missing owner (" FORMAT_HV ")", obj->handle.value)
       return;
     }
 
@@ -7265,7 +7266,7 @@ in_postprocess_handles (Dwg_Object *restrict obj)
                   prev->tio.entity->nolinks = 0;
                   prev->tio.entity->next_entity
                       = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
-                  LOG_TRACE ("prev %s(" FORMAT_RLLx
+                  LOG_TRACE ("prev %s(" FORMAT_HV
                              ").next_entity = " FORMAT_REF "\n",
                              prev->name, prev->handle.value,
                              ARGS_REF (prev->tio.entity->next_entity));
@@ -7581,13 +7582,13 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
   if (hdl)
     {
       eedhdl = hdl->handleref.value;
-      LOG_TRACE ("Use APPID.ACAD_MLEADERVER (" FORMAT_RLLx ")\n", eedhdl);
+      LOG_TRACE ("Use APPID.ACAD_MLEADERVER (" FORMAT_HV ")\n", eedhdl);
     }
   else
     {
       appid = dwg_add_APPID (dwg, "ACAD_MLEADERVER");
       eedhdl = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.ACAD_MLEADERVER (" FORMAT_RLLx ")\n", eedhdl);
+      LOG_TRACE ("Added APPID.ACAD_MLEADERVER (" FORMAT_HV ")\n", eedhdl);
     }
   // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
   obj = &dwg->object[oindex];
@@ -7647,38 +7648,38 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (hdl)
     {
       eedhdl1 = hdl->handleref.value;
-      LOG_TRACE ("Use APPID.AcadAnnotative (" FORMAT_RLLx ")\n", eedhdl1);
+      LOG_TRACE ("Use APPID.AcadAnnotative (" FORMAT_HV ")\n", eedhdl1);
     }
   else
     {
       appid = dwg_add_APPID (dwg, "AcadAnnotative");
       eedhdl1 = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.AcadAnnotative (" FORMAT_RLLx ")\n", eedhdl1);
+      LOG_TRACE ("Added APPID.AcadAnnotative (" FORMAT_HV ")\n", eedhdl1);
     }
   hdl = dwg_find_tablehandle_silent (dwg, "ACAD_DSTYLE_DIMJAG", "APPID");
   if (hdl)
     {
       eedhdl2 = hdl->handleref.value;
-      LOG_TRACE ("Use APPID.ACAD_DSTYLE_DIMJAG (" FORMAT_RLLx ")\n", eedhdl2);
+      LOG_TRACE ("Use APPID.ACAD_DSTYLE_DIMJAG (" FORMAT_HV ")\n", eedhdl2);
     }
   else
     {
       appid = dwg_add_APPID (dwg, "ACAD_DSTYLE_DIMJAG");
       eedhdl2 = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMJAG (" FORMAT_RLLx ")\n",
+      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMJAG (" FORMAT_HV ")\n",
                  eedhdl2);
     }
   hdl = dwg_find_tablehandle_silent (dwg, "ACAD_DSTYLE_DIMTALN", "APPID");
   if (hdl)
     {
       eedhdl3 = hdl->handleref.value;
-      LOG_TRACE ("Use APPID.ACAD_DSTYLE_DIMTALN (" FORMAT_RLLx ")\n", eedhdl3);
+      LOG_TRACE ("Use APPID.ACAD_DSTYLE_DIMTALN (" FORMAT_HV ")\n", eedhdl3);
     }
   else
     {
       appid = dwg_add_APPID (dwg, "ACAD_DSTYLE_DIMTALN");
       eedhdl3 = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMTALN (" FORMAT_RLLx ")\n",
+      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMTALN (" FORMAT_HV ")\n",
                  eedhdl3);
     }
   // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
@@ -7693,7 +7694,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   idx = oo->num_eed;
   if (!dwg_has_eed_appid (oo, eedhdl1))
     {
-      LOG_TRACE ("Add EED for AcadAnnotative to " FORMAT_RLLx "\n",
+      LOG_TRACE ("Add EED for AcadAnnotative to " FORMAT_HV "\n",
                  obj->handle.value);
       oo->num_eed += 5;
       if (idx)
@@ -7741,7 +7742,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 
   if (!dwg_has_eed_appid (oo, eedhdl2))
     {
-      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMJAG to " FORMAT_RLLx "\n",
+      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMJAG to " FORMAT_HV "\n",
                  obj->handle.value);
       oo->num_eed += 2;
       if (idx)
@@ -7770,7 +7771,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
   if (!dwg_has_eed_appid (oo, eedhdl3))
     {
-      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMTALN to " FORMAT_RLLx "\n",
+      LOG_TRACE ("Add EED for ACAD_DSTYLE_DIMTALN to " FORMAT_HV "\n",
                  obj->handle.value);
       oo->num_eed += 2;
       if (idx)
@@ -7800,7 +7801,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (idx != oo->num_eed)
     {
       // eg. when the EED already had AcadAnnotative
-      LOG_WARN ("Already DIMSTYLE(" FORMAT_RLLx ") eed idx %u vs num_eed %u\n",
+      LOG_WARN ("Already DIMSTYLE(" FORMAT_HV ") eed idx %u vs num_eed %u\n",
                 obj->handle.value, idx, oo->num_eed);
       oo->eed[idx].data = NULL;
       oo->num_eed = idx;

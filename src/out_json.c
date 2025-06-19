@@ -499,6 +499,7 @@ static char *_path_field (const char *path);
 #define FIELD_RL(nam, dxf) FIELD (nam, RL, dxf)
 #define FIELD_RLd(nam, dxf) FIELD (nam, RLd, dxf)
 #define FIELD_RLL(nam, dxf) FIELD (nam, RLL, dxf)
+#define FIELD_HV(nam, dxf) FIELD (nam, RLL, dxf)
 #define FIELD_MC(nam, dxf) FIELD (nam, MC, dxf)
 #define FIELD_MS(nam, dxf) FIELD (nam, MS, dxf)
 // #define FIELD_TF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
@@ -1205,7 +1206,7 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
         case DWG_VT_HANDLE:
         case DWG_VT_OBJECTID:
           VALUE_RLL (rbuf->value.absref, 0);
-          LOG_TRACE ("xdata[%u]: " FORMAT_RLLx " [H %d]\n", i,
+          LOG_TRACE ("xdata[%u]: " FORMAT_HV " [H %d]\n", i,
                      rbuf->value.absref, rbuf->type);
           break;
         case DWG_VT_INVALID:

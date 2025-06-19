@@ -594,6 +594,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     fwrite (&s, 8, 1, dat->fh);                                               \
   }
 #define FIELD_RLL(nam, dxf) FIELD_BLL (nam, dxf)
+#define FIELD_HV(nam, dxf) FIELD_BLL (nam, dxf)
 #define HEADER_RLL(nam, dxf)                                                  \
   {                                                                           \
     GROUP (9);                                                                \

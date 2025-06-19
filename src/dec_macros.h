@@ -519,6 +519,7 @@
 #define SUB_FIELD_RCd(o, nam, dxf) SUB_FIELD_CAST (o, nam, RC, RCd, dxf)
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
 #define FIELD_RSx(nam, dxf) FIELD_CAST (nam, RS, RSx, dxf)
+#define FIELD_HV(nam, dxf) FIELD_CAST (nam, RLL, RLLx, dxf)
 #define FIELD_RD(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = bit_read_RD (dat);                                            \
