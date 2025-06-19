@@ -4586,8 +4586,11 @@ DWG_TABLE (APPID)
   COMMON_TABLE_FLAGS (RegApp)
   SINCE (R_13b1) {
     DXF {
-      FIELD_RS0 (unknown, 71); // in DXF only with ADE_PROJECTION
+      if (strncmp (_obj->name, "ADE_", 4) == 0) {
+        VALUE_RS (1, 71); // in DXF only with ADE_PROJECTION
+      }
     } else {
+      // TODO dependent on maint_version?
       FIELD_RC (unknown, 71);
     }
     START_OBJECT_HANDLE_STREAM;

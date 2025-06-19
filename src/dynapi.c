@@ -4866,7 +4866,7 @@ static const Dwg_DYNAPI_field _dwg_APPID_fields[] = {
   { "xref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_APPID, xref),
     1,0,0, 0 },
   { "unknown",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_APPID, unknown),
-    0,0,0, 71 },
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_APPID_CONTROL: (sorted by offset) */

@@ -3556,7 +3556,7 @@ typedef struct _dwg_object_APPID_CONTROL
 typedef struct _dwg_object_APPID
 {
   COMMON_TABLE_FIELDS;
-  BITCODE_RC unknown;
+  BITCODE_RC unknown; // TODO needed?
 } Dwg_Object_APPID;
 
 /**
