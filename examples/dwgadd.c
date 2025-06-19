@@ -1071,7 +1071,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         if (version < R_2_0b)
           fn_error ("Invalid entity ATTRIB <r2.0b\n");
-        if (insert.type == DWG_TYPE_UNUSED)
+        if (insert.type == DWG_TYPE_UNUSED || !insert.u.insert)
           {
             log_p (DWG_LOGLEVEL_ERROR, p);
             fn_error ("Missing INSERT for ATTRIB\n");

@@ -25860,6 +25860,13 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert, const double height,
   Dwg_Entity_ATTRIB *attrib;
   int err;
 
+#ifndef HAVE_NONNULL
+  if (!insert)
+    {
+      LOG_ERROR ("add_Attribute: Missing insert");
+      return NULL;
+    }
+#endif
   if (!dwg_is_valid_tag (tag))
     {
       LOG_ERROR ("add_Attribute: Invalid tag %s", tag);
