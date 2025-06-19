@@ -394,13 +394,25 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
         fprintf (dat->fh, "     1\r\n");                                      \
     }
 
+// if it's an anonymous BLOCK (starting with *)
+// we need to take the BLOCK name instead
 #define FIELD_HANDLE_NAME(nam, dxf, table)                                    \
   {                                                                           \
     Dwg_Object_Ref *ref = _obj->nam;                                          \
     Dwg_Object *o = ref ? dwg_ref_object ((Dwg_Data *)dwg, ref) : NULL;       \
     if (o && strEQc (o->dxfname, #table))                                     \
-      dxf_cvt_tablerecord (                                                   \
-          dat, o, o ? o->tio.object->tio.table->name : (char *)"0", dxf);     \
+      {                                                                       \
+        char *_name = o ? o->tio.object->tio.table->name : (char *)"0";       \
+        if (strEQc (#table, "BLOCK_HEADER") && _name[0] == '*')               \
+          {                                                                   \
+            Dwg_Object *bl = dwg_ref_object (                                 \
+                (Dwg_Data *)dwg,                                              \
+                o->tio.object->tio.BLOCK_HEADER->block_entity);               \
+            if (bl && bl->fixedtype == DWG_TYPE_BLOCK)                        \
+              _name = bl->tio.entity->tio.BLOCK->name;                        \
+          }                                                                   \
+        dxf_cvt_tablerecord (dat, o, _name, dxf);                             \
+      }                                                                       \
     else if (dat->from_version <= R_12)                                       \
       {                                                                       \
         char *name = dwg_handle_name ((Dwg_Data *)dwg, #table, ref);          \
