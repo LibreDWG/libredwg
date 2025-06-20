@@ -6473,18 +6473,33 @@ add_sub_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
-/* if it has an absolute ownerhandle */
+/* if it has an absolute ownerhandle:
+   1. all entities are relative
+   2. all early table records are relative
+   3. all early objects are absolute (<GROUP),
+   4. DICTIONARY, LAYER may be both
+ */
 static int
 is_obj_absowner (Dwg_Object *obj)
 {
   if (obj->supertype == DWG_SUPERTYPE_ENTITY)
-    return 0;
-  /* With DICTIONARY it may vary */
-  if (obj->type < DWG_TYPE_GROUP // needs to be absolute 4.1.X
-      && (obj->fixedtype == DWG_TYPE_DICTIONARY
-          || obj->fixedtype != DWG_TYPE_XRECORD))
+  if (dwg_obj_is_table (obj))
+    return obj->parent->header.version >= R_2004;
+  /* With DICTIONARY it may vary, mostly absolute */
+  if (obj->type < DWG_TYPE_GROUP) // needs to be absolute 4.1.X
     return 1;
-  if (obj->fixedtype == DWG_TYPE_LAYOUT)
+  // DICTIONARY: D-17 rel. >= 19 abs
+  if (obj->fixedtype == DWG_TYPE_DICTIONARY || obj->fixedtype == DWG_TYPE_DICTIONARYVAR)
+    return obj->handle.value > 0x19;
+  if (obj->fixedtype == DWG_TYPE_LAYOUT
+      || obj->fixedtype == DWG_TYPE_SCALE
+      || obj->fixedtype == DWG_TYPE_SORTENTSTABLE
+      || obj->fixedtype == DWG_TYPE_MATERIAL
+      // || obj->fixedtype == DWG_TYPE_DICTIONARY
+      // || obj->fixedtype == DWG_TYPE_DICTIONARYVAR
+      || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT
+      // || obj->fixedtype == DWG_TYPE_XRECORD
+      )
     return 1;
   else // may have relative ref: 8.0.0
     return 0;
@@ -6622,7 +6637,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             BITCODE_H owh;
             if (!obj->tio.object->ownerhandle)
               {
-                if (is_obj_absowner (obj))
+                if (is_obj_absowner (obj)) // table record
                   owh = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
                 else // relative
                   owh = dwg_add_handleref (dwg, 4, pair->value.u, obj);
@@ -13329,11 +13344,14 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
         Dwg_Object_Object *_obj = obj->tio.object;                            \
         if (!_obj->ownerhandle || !_obj->ownerhandle->absolute_ref)           \
           {                                                                   \
-            Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);\
-            BITCODE_RLL nod_hdl = nod ? nod->handle.value : UINT64_C(0xC);    \
-            _obj->ownerhandle = dwg_add_handleref (dwg, 4, nod_hdl, NULL);     \
+            Dwg_Object *nod                                                   \
+                = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);            \
+            BITCODE_RLL nod_hdl = nod ? nod->handle.value : UINT64_C (0xC);   \
+            bool is_abs = obj->handle.value >= 0x19;                          \
+            _obj->ownerhandle                                                 \
+                = dwg_add_handleref (dwg, 4, nod_hdl, is_abs ? NULL : obj);   \
           }                                                                   \
-      }                                                                       \
+      }
 
 static void
 resolve_header_dicts (Dwg_Data *restrict dwg)
