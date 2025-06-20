@@ -6479,12 +6479,17 @@ is_obj_absowner (Dwg_Object *obj)
 {
   if (obj->supertype == DWG_SUPERTYPE_ENTITY)
     return 0;
-  /* With DICTIONARY it may vary */
-  if (obj->type < DWG_TYPE_GROUP // needs to be absolute 4.1.X
-      && (obj->fixedtype == DWG_TYPE_DICTIONARY
-          || obj->fixedtype != DWG_TYPE_XRECORD))
+  /* With DICTIONARY it may vary, mostly absolute */
+  if (obj->type < DWG_TYPE_GROUP) // needs to be absolute 4.1.X
     return 1;
-  if (obj->fixedtype == DWG_TYPE_LAYOUT)
+  if (obj->fixedtype == DWG_TYPE_LAYOUT
+      || obj->fixedtype == DWG_TYPE_SCALE
+      || obj->fixedtype == DWG_TYPE_SORTENTSTABLE
+      || obj->fixedtype == DWG_TYPE_MATERIAL
+      || obj->fixedtype == DWG_TYPE_DICTIONARY
+      || obj->fixedtype == DWG_TYPE_DICTIONARYVAR
+      || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT
+      || obj->fixedtype == DWG_TYPE_XRECORD)
     return 1;
   else // may have relative ref: 8.0.0
     return 0;
