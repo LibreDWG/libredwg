@@ -303,10 +303,10 @@ endif
 
 log-dwg: all
 	find $(srcdir)/test/test-data $(srcdir)/test/test-old $(srcdir)/test/issues \
-	     $(srcdir)/test/ossfuzz -type f -print0 -iname \*.dwg -size -40M | \
-          xargs -0 -n1 -P8 ./log "$d"
-	find $(srcdir)/test/ossfuzz/indwg* -type f -printf0 -size -40M | \
-	  xargs -0 -n1 -P8 ./log "$d"
+	     $(srcdir)/test/ossfuzz -type f -iname \*.dwg -size -40M | \
+          xargs -n1 -P8 ./log
+	find $(srcdir)/test/ossfuzz/indwg* -type f -size -40M | \
+	  xargs -n1 -P8 ./log
 
 check-ossfuzz: all
 	+find $(srcdir)/test/ossfuzz -type f -print0 -iname \*.dwg -size -40M | \
