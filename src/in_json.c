@@ -1857,7 +1857,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 uint32_t l = json_long (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
                 rbuf->value.absref = (BITCODE_RLL)l;
-                LOG_TRACE ("xdata[%u]: " FORMAT_RLLx " [H %d]\n", i,
+                LOG_TRACE ("xdata[%u]: " FORMAT_HV " [H %d]\n", i,
                            rbuf->value.absref, (int)rbuf->type);
                 size += 8;
               }

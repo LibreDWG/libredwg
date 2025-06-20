@@ -614,7 +614,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     {
       obj->handle.value = dwg_next_handle (dwg);
       dwg_add_handle (&obj->handle, 0, obj->handle.value, obj);
-      LOG_TRACE ("=> handle: (0.%d." FORMAT_RLLx ")\n", obj->handle.size,
+      LOG_TRACE ("=> handle: (0.%d." FORMAT_HV ")\n", obj->handle.size,
                  obj->handle.value);
     }
   obj->common_size = bit_position (dat) - obj->bitsize_pos;

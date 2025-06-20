@@ -836,7 +836,7 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
         return ref->obj;
       else
         {
-          LOG_WARN ("Wrong ref_object: " FORMAT_RLLx " != " FORMAT_RLLx,
+          LOG_WARN ("Wrong ref_object: " FORMAT_HV " != " FORMAT_RLLx,
                     ref->obj->handle.value, ref->absolute_ref);
           ref->obj = NULL;
           // dwg_resolve_objectrefs_silent (dwg);
@@ -895,7 +895,7 @@ dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_RLL absref)
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   i = hash_get (dwg->object_map, absref);
   if (i != HASH_NOT_FOUND)
-    LOG_HANDLE ("[object_map{" FORMAT_RLLx "} => " FORMAT_BLL "] ", absref, i);
+    LOG_HANDLE ("[object_map{" FORMAT_HV "} => " FORMAT_BLL "] ", absref, i);
   if (i == HASH_NOT_FOUND
       || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
                                             // handle (read from DWG)
@@ -916,7 +916,7 @@ dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_RLL absref)
         }
       return NULL;
     }
-  LOG_INSANE ("[resolve " FORMAT_RLLx " => " FORMAT_BLL "] ", absref, i);
+  LOG_INSANE ("[resolve " FORMAT_HV " => " FORMAT_BLL "] ", absref, i);
   return &dwg->object[i]; // allow value 0
 }
 
@@ -2081,14 +2081,14 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
       hashkey = hash_get (dwg->object_map, absref);
       if (HASH_NOT_FOUND != hashkey && hashkey != obj->index)
         {
-          LOG_ERROR ("Duplicate handle " FORMAT_RLLx " for object " FORMAT_RL
+          LOG_ERROR ("Duplicate handle " FORMAT_HV " for object " FORMAT_RL
                      " already points to object %" PRIu64,
                      absref, obj->index, hashkey);
           return 1;
         }
       else if (HASH_NOT_FOUND == hashkey)
         hash_set (dwg->object_map, absref, (uint64_t)obj->index);
-      LOG_HANDLE ("object_map{" FORMAT_RLLx "} = %u\n", absref, obj->index);
+      LOG_HANDLE ("object_map{" FORMAT_HV "} = %u\n", absref, obj->index);
     }
 
   dwg_set_handle_size (hdl);
@@ -2698,7 +2698,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
 
       if (!hdlv[i])
         continue;
-      LOG_INSANE ("%s.entries[%u/%u]: resolve_handle " FORMAT_RLLx "\n",
+      LOG_INSANE ("%s.entries[%u/%u]: resolve_handle " FORMAT_HV "\n",
                   obj->name, i, num_entries, hdlv[i]->absolute_ref);
       hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
       if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID)
@@ -2803,7 +2803,7 @@ dwg_find_tablehandle_index (Dwg_Data *restrict dwg, const int index,
   if (index < (int)num_entries)
     {
       if (hdlv[index])
-        LOG_INSANE ("%s.entries[%u/%u]: " FORMAT_RLLx "\n", obj->name, index,
+        LOG_INSANE ("%s.entries[%u/%u]: " FORMAT_HV "\n", obj->name, index,
                     num_entries, hdlv[index]->absolute_ref);
       return hdlv[index];
     }
@@ -3346,14 +3346,14 @@ dwg_next_handle (const Dwg_Data *dwg)
         }
     }
   // compare against relative handles (deleted and purged?)
-  LOG_INSANE ("compute HANDSEED " FORMAT_RLLx, seed);
+  LOG_INSANE ("compute HANDSEED " FORMAT_HV, seed);
   for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
       if (ref && ref->absolute_ref > seed)
         seed = ref->absolute_ref;
     }
-  LOG_INSANE (" => " FORMAT_RLLx "\n", seed + 1);
+  LOG_INSANE (" => " FORMAT_HV "\n", seed + 1);
   return seed + 1;
 }
 
@@ -3409,7 +3409,7 @@ dwg_set_next_objhandle (Dwg_Object *obj)
         uint64_t i = hash_get (dwg->object_map, seed);
         if (i != HASH_NOT_FOUND)
           {
-            LOG_WARN ("HANDSEED " FORMAT_RLLx " already exists: "
+            LOG_WARN ("HANDSEED " FORMAT_HV " already exists: "
                       FORMAT_BLL, seed, i);
             seed = dwg_new_handseed (dwg);
           }

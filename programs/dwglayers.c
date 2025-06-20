@@ -183,7 +183,7 @@ main (int argc, char *argv[])
         name = layer->name;
       if (!name)
         {
-          LOG_ERROR ("Invalid layer " FORMAT_RLLx " ignored, empty name",
+          LOG_ERROR ("Invalid layer " FORMAT_HV " ignored, empty name",
                      _ctrl->entries[i]->obj->handle.value)
         }
       else

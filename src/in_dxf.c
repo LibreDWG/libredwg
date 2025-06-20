@@ -1896,7 +1896,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             {
               memcpy (&eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
               eed[i].handle.code = 5;
-              LOG_TRACE ("handle: " FORMAT_RLLx " [H] for APPID.%s\n",
+              LOG_TRACE ("handle: " FORMAT_HV " [H] for APPID.%s\n",
                          hdl->absolute_ref, pair->value.s);
             }
           // needs to be postponed, because we don't have the tables yet
@@ -2066,9 +2066,9 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             return;
           }
         eed[i].data->code = code; // 1005
-        sscanf (pos, FORMAT_RLLx, &l);
+        sscanf (pos, FORMAT_HV, &l);
         eed[i].data->u.eed_5.entity = l;
-        LOG_TRACE ("entity: " FORMAT_RLLx " [RLL]\n", l);
+        LOG_TRACE ("entity: " FORMAT_HV " [RLL]\n", l);
         eed[i].size += size;
         break;
       }
@@ -6481,8 +6481,8 @@ is_obj_absowner (Dwg_Object *obj)
     return 0;
   /* With DICTIONARY it may vary */
   if (obj->type < DWG_TYPE_GROUP // needs to be absolute 4.1.X
-      && obj->fixedtype != DWG_TYPE_DICTIONARY
-      && obj->fixedtype != DWG_TYPE_XRECORD)
+      && (obj->fixedtype == DWG_TYPE_DICTIONARY
+          || obj->fixedtype != DWG_TYPE_XRECORD))
     return 1;
   if (obj->fixedtype == DWG_TYPE_LAYOUT)
     return 1;
@@ -6734,7 +6734,7 @@ do_return:
       dwg_add_handle (&obj->handle, 0, next_handle, NULL);
       // adds header_vars->CONTROL ref
       (void)dwg_ctrl_table (dwg, name);
-      LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
+      LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                  obj->handle.size, obj->handle.value);
     }
   // default NULL handle
@@ -6967,7 +6967,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case DWG_VT_OBJECTID:
       xdata_size += 8;
       rbuf->value.absref = pair->value.rll;
-      LOG_TRACE ("xdata[%d]: " FORMAT_RLLx " [H %d]\n", num_xdata,
+      LOG_TRACE ("xdata[%d]: " FORMAT_HV " [H %d]\n", num_xdata,
                  rbuf->value.absref, rbuf->type);
       break;
     case DWG_VT_INVALID:
@@ -8708,11 +8708,11 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   if (!owner)
     {
       if (obj->tio.entity->ownerhandle)
-        LOG_WARN ("Missing owner (" FORMAT_RLLx ") from " FORMAT_REF
+        LOG_WARN ("Missing owner (" FORMAT_HV ") from " FORMAT_REF
                   " [H 330]",
                   obj->handle.value, ARGS_REF (obj->tio.entity->ownerhandle))
       else
-        LOG_WARN ("Missing owner (" FORMAT_RLLx ")", obj->handle.value)
+        LOG_WARN ("Missing owner (" FORMAT_HV ")", obj->handle.value)
       return;
     }
   obj->tio.entity->ownerhandle->obj = NULL;
@@ -11966,7 +11966,7 @@ Dxf_Pair *new_object (
                             {
                               if (pair->code > 300)
                                 LOG_TRACE (
-                                    "COMMON.%s = " FORMAT_RLLx " [H %d]\n",
+                                    "COMMON.%s = " FORMAT_HV " [H %d]\n",
                                     f->name, pair->value.rll, pair->code)
                               else
                                 LOG_TRACE ("COMMON.%s = %s [H %d]\n", f->name,
@@ -12498,7 +12498,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   BITCODE_RLL next_handle = dwg_next_handle (dwg);
                   dwg_add_handle (&obj->handle, 0, next_handle, NULL);
                   // ref = dwg_add_handleref (dwg, 3, next_handle, ctrl);
-                  LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
+                  LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                              obj->handle.size, obj->handle.value);
                 }
               // set ownerhandles
@@ -12508,7 +12508,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     {
                       obj->tio.object->ownerhandle
                         = dwg_add_handleref (dwg, 4, ctrl->handle.value, NULL);
-                      LOG_TRACE ("%s.ownerhandle = (4.%d." FORMAT_RLLx ")\n", obj->name,
+                      LOG_TRACE ("%s.ownerhandle = (4.%d." FORMAT_HV ")\n", obj->name,
                                  ctrl->handle.size, ctrl->handle.value);
                     }
                 }
@@ -12608,7 +12608,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 // adds header_vars->CONTROL ref
                 (void)dwg_ctrl_table (dwg, table);
                 // ref = dwg_add_handleref (dwg, 3, next_handle, ctrl);
-                LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", ctrl->name,
+                LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", ctrl->name,
                            ctrl->handle.size, ctrl->handle.value);
               }
             num_entries = _ctrl->num_entries;
@@ -12697,7 +12697,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 {
                   BITCODE_RLL next_handle = dwg_next_handle (dwg);
                   dwg_add_handle (&obj->handle, 0, next_handle, NULL);
-                  LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
+                  LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                              obj->handle.size, obj->handle.value);
                 }
               pair = new_object (name, dxfname, dat, dwg, 0, &i);
@@ -12857,7 +12857,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       BITCODE_RLL next_handle = dwg_next_handle (dwg);
       dwg_add_handle (&obj->handle, 0, next_handle, NULL);
-      LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
+      LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                  obj->handle.size, obj->handle.value);
     }
   dxf_free_pair (pair);
@@ -12879,7 +12879,7 @@ add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
   _ctrl = ctrl->tio.object->tio.BLOCK_HEADER;
   if (obj->supertype != DWG_SUPERTYPE_ENTITY)
     return;
-  LOG_TRACE ("add_to_BLOCK_HEADER %s: %s [" FORMAT_RLLx "]\n", _ctrl->name,
+  LOG_TRACE ("add_to_BLOCK_HEADER %s: %s [" FORMAT_HV "]\n", _ctrl->name,
              obj->name, obj->handle.value);
   if (obj->type == DWG_TYPE_ENDBLK)
     {
@@ -12936,7 +12936,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 {
                   BITCODE_RLL next_handle = dwg_next_handle (dwg);
                   dwg_add_handle (&obj->handle, 0, next_handle, NULL);
-                  LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
+                  LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                              obj->handle.size, obj->handle.value);
                 }
             }
@@ -12989,7 +12989,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               BITCODE_RLL next_handle = dwg_next_handle (dwg);
               dwg_add_handle (&obj->handle, 0, next_handle, NULL);
-              LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
+              LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                          obj->handle.size, obj->handle.value);
             }
         }
@@ -13331,7 +13331,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
           {                                                                   \
             Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);\
             BITCODE_RLL nod_hdl = nod ? nod->handle.value : UINT64_C(0xC);    \
-            _obj->ownerhandle = dwg_add_handleref (dwg, 4, nod_hdl, obj);     \
+            _obj->ownerhandle = dwg_add_handleref (dwg, 4, nod_hdl, NULL);     \
           }                                                                   \
       }                                                                       \
 
@@ -13482,7 +13482,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       _obj->is_xref_ref = 1;
       obj->tio.object->is_xdic_missing = 1;
       dwg_add_handle (&obj->handle, 0, 0x1F, obj);
-      LOG_TRACE ("%s.handle = (0.%d." FORMAT_RLLx ")\n", obj->name,
+      LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                  obj->handle.size, obj->handle.value);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
       LOG_TRACE ("%s.ownerhandle = " FORMAT_REF " [H 330]\n", dxfname,

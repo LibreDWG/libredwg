@@ -26,12 +26,12 @@
 #endif
 
 #define WARN_UNHANDLED_CLASS                                                  \
-  LOG_WARN ("Unhandled Class %s %d %s (0x%x%s) %u/" FORMAT_RLLx,              \
+  LOG_WARN ("Unhandled Class %s %d %s (0x%x%s) %u/" FORMAT_HV,              \
             is_entity ? "entity" : "object", klass->number, klass->dxfname,   \
             klass->proxyflag, klass->is_zombie ? "is_zombie" : "",            \
             obj->index, obj->handle.value)
 #define WARN_UNSTABLE_CLASS                                                   \
-  LOG_WARN ("Unstable Class %s %d %s (0x%x%s) %u/" FORMAT_RLLx,               \
+  LOG_WARN ("Unstable Class %s %d %s (0x%x%s) %u/" FORMAT_HV,               \
             is_entity ? "entity" : "object", klass->number, klass->dxfname,   \
             klass->proxyflag, klass->is_zombie ? "is_zombie" : "",            \
             obj->index, obj->handle.value)

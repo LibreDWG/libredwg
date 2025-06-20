@@ -1684,7 +1684,7 @@ match_BLOCK_HEADER (const char *restrict filename,
   MATCH_OBJECT (BLOCK_HEADER, description, 4);
 
   if (verbose)
-    fprintf (stderr, "HDR: %d, HANDLE: " FORMAT_RLLx "\n", hdr->index,
+    fprintf (stderr, "HDR: %d, HANDLE: " FORMAT_HV "\n", hdr->index,
              hdr->handle.value);
   for (obj = get_first_owned_entity (hdr); obj;
        obj = get_next_owned_entity (hdr, obj)) // without subentities
@@ -1692,7 +1692,7 @@ match_BLOCK_HEADER (const char *restrict filename,
       if (!obj)
         break;
       if (verbose)
-        fprintf (stderr, "%s [%d], HANDLE: " FORMAT_RLLx "\n", obj->name,
+        fprintf (stderr, "%s [%d], HANDLE: " FORMAT_HV "\n", obj->name,
                  obj->index, obj->handle.value);
       if (numtype) // search for allowed --type and skip if not
         {

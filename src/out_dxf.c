@@ -1088,7 +1088,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         SINCE (R_14)                                                          \
         {                                                                     \
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
-          LOG_TRACE ("ownerhandle: " FORMAT_RLLx " [330]\n",                  \
+          LOG_TRACE ("ownerhandle: " FORMAT_HV " [330]\n",                  \
                      obj->tio.object->ownerhandle->absolute_ref);             \
         }                                                                     \
       }                                                                       \
@@ -2902,7 +2902,7 @@ decl_dxf_process_INSERT (MINSERT)
       // TODO: looks good, but acad import crashes
       return dwg_dxf_MLINE (dat, obj);
 #  else
-      LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/" FORMAT_RLLx,
+      LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/" FORMAT_HV,
                 obj->index, obj->handle.value)
       if (0)
         dwg_dxf_MLINE (dat, obj);
@@ -2993,7 +2993,7 @@ decl_dxf_process_INSERT (MINSERT)
           else
             {
               LOG_WARN (
-                  "Unhandled Object TABLESTYLE in out_dxf %u/" FORMAT_RLLx,
+                  "Unhandled Object TABLESTYLE in out_dxf %u/" FORMAT_HV,
                   obj->index, obj->handle.value);
               return DWG_ERR_UNHANDLEDCLASS;
             }
@@ -3678,7 +3678,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
     }
   else
     {
-      LOG_WARN ("Empty ENDBLK for \"%s\" " FORMAT_RLLx, _hdr->name,
+      LOG_WARN ("Empty ENDBLK for \"%s\" " FORMAT_HV, _hdr->name,
                 hdr ? hdr->handle.value : 0);
       dxf_ENDBLK_empty (dat, hdr);
       LOG_INFO ("\n")
@@ -3802,7 +3802,7 @@ dxf_validate_DICTIONARY (Dwg_Object *obj)
   Dwg_Object_Ref *ownerhandle = obj->tio.object->ownerhandle;
   if (ownerhandle && !dwg_ref_object (obj->parent, ownerhandle))
     {
-      LOG_INFO ("Wrong DICTIONARY.ownerhandle " FORMAT_RLLx "\n",
+      LOG_INFO ("Wrong DICTIONARY.ownerhandle " FORMAT_HV "\n",
                 ownerhandle->absolute_ref);
       ownerhandle->absolute_ref = 0;
       return 0;

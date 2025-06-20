@@ -1490,7 +1490,7 @@ bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     }
   else
     {
-      LOG_ERROR ("Invalid handle size %u with " FORMAT_RLLx, handle->size,
+      LOG_ERROR ("Invalid handle size %u with " FORMAT_HV, handle->size,
                  handle->value)
       bit_write_RL_BE (dat, handle->value);
     }
