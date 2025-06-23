@@ -9890,7 +9890,7 @@ Dxf_Pair *new_object (
             {
               BITCODE_H ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
               dwg_dynapi_entity_set_value (_obj, obj->name, "imagedefreactor",
-                                           ref, 0);
+                                           &ref, 0);
               LOG_TRACE ("%s.imagedefreactor = " FORMAT_REF " [H %d]\n", name,
                          ARGS_REF (ref), pair->code);
               break;
