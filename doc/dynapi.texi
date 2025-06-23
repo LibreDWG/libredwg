@@ -5705,7 +5705,7 @@ B
 @item xref
 H
 @item unknown
-RC
+RC,	DXF 71
 
 @end vtable
 @end indentedblock

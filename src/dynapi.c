@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2519 "gen-dynapi.pl"
+#line 2546 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -4866,7 +4866,7 @@ static const Dwg_DYNAPI_field _dwg_APPID_fields[] = {
   { "xref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_APPID, xref),
     1,0,0, 0 },
   { "unknown",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_APPID, unknown),
-    0,0,0, 0 },
+    0,0,0, 71 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_APPID_CONTROL: (sorted by offset) */
@@ -14696,7 +14696,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2603 "gen-dynapi.pl"
+#line 2630 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
