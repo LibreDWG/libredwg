@@ -12742,6 +12742,9 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           LOG_TRACE ("BLOCK_HEADER.block_entity = " FORMAT_REF
                                      " [H] (blocks)\n",
                                      ARGS_REF (_hdr->block_entity));
+                          _hdr->base_pt.x = _obj->base_pt.x;
+                          _hdr->base_pt.y = _obj->base_pt.y;
+                          LOG_TRACE ("BLOCK_HEADER.base_pt = BLOCK.base_pt\n");
                         }
                       else if (blkhdr->fixedtype == DWG_TYPE_BLOCK_CONTROL)
                         {
