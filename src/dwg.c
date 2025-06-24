@@ -3248,6 +3248,7 @@ dwg_color_method_name (unsigned m)
     }
 }
 
+// not utf-8 converted, native (TV or TU)
 const char *
 dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
@@ -3257,6 +3258,7 @@ dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 
 // supports tables entries and everything with a name.
 // r2007 names are returned as malloc'ed utf-8
+// TV names in the resp. charset.
 ATTRIBUTE_MALLOC
 const char *
 dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,

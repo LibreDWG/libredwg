@@ -133,6 +133,9 @@
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
     LOG_TRACE ("%s: \"%ls\" [TU %d]", s, (wchar_t *)wstr, dxf)                \
     LOG_POS
+#  define LOG_TRACE_TU_AS(s, wstr, type, dxf)                                 \
+    LOG_TRACE ("%s: \"%ls\" [%s %d]", s, (wchar_t *)wstr, #type, dxf)         \
+    LOG_POS
 #  define LOG_TRACE_TU_I(s, i, wstr, type, dxf)                               \
     LOG_TRACE ("%s[%d]: \"%ls\" [%s %d]", s, (int)i, (wchar_t *)wstr, #type,  \
                dxf)                                                           \
@@ -144,6 +147,13 @@
       LOG_TRACE ("%s: \"", s)                                                 \
       LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                              \
       LOG_TRACE ("\" [TU %d]", dxf)                                           \
+      LOG_POS;                                                                \
+    }
+#  define LOG_TRACE_TU_AS(s, wstr, type, dxf)                                 \
+    {                                                                         \
+      LOG_TRACE ("%s: \"", s)                                                 \
+      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                              \
+      LOG_TRACE ("\" [%s %d]", #type, dxf)                                    \
       LOG_POS;                                                                \
     }
 #  define LOG_TRACE_TU_I(s, i, wstr, type, dxf)                               \

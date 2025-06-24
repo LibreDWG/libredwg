@@ -239,17 +239,23 @@ static bool env_var_checked_p;
 // may need to convert from/to TV<=>TU
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
-    if (dat->version < R_2007)                                                \
-      {                                                                       \
-        bit_write_T (dat, _obj->nam);                                         \
-        LOG_TRACE (#nam ": \"%s\" [T %d]", _obj->nam ? _obj->nam : "", dxf);  \
+    if (dat->version < R_2007) {                                              \
+      bit_write_T (dat, _obj->nam);                                           \
+      if (IS_FROM_TU (dat)) {                                                 \
+        LOG_TRACE_TU_AS (#nam, _obj->nam, TV, dxf);                           \
+      } else {                                                                \
+        LOG_TRACE (#nam ": \"%s\" [TV %d]", _obj->nam ? _obj->nam : "", dxf); \
         LOG_POS                                                               \
       }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        bit_write_T (str_dat, _obj->nam);                                     \
+    } else {                                                                  \
+      bit_write_T (str_dat, _obj->nam);                                       \
+      if (IS_FROM_TU (dat)) {                                                 \
         LOG_TRACE_TU (#nam, _obj->nam, dxf);                                  \
+      } else {                                                                \
+        LOG_TRACE (#nam ": \"%s\" [TU %d]", _obj->nam ? _obj->nam : "", dxf); \
+        LOG_POS                                                               \
       }                                                                       \
+    }                                                                         \
   }
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
