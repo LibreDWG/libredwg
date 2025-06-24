@@ -4160,7 +4160,7 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_TFF (version, 11, 0)
       FIELD_RC (is_maint, 0)
       FIELD_RC (zero_one_or_three, 0)
-      FIELD_BS (dwg_version, 0)
+      FIELD_BS (dwg_versions, 0)
       FIELD_RS (codepage, 0)
       FIELD_BS (num_sections, 0)
       FIELD_BS (num_handles, 0)

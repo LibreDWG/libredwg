@@ -3144,7 +3144,7 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       _obj->is_maint = dwg->header.is_maint;
       _obj->zero_one_or_three = dwg->header.zero_one_or_three;
-      _obj->dwg_version
+      _obj->dwg_versions
           = (BITCODE_RS)(((BITCODE_RS)dwg->header.maint_version << 8)
                          | dwg->header.dwg_version);
       _obj->codepage = dwg->header.codepage;

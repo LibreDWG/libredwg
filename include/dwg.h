@@ -11347,7 +11347,7 @@ typedef struct _dwg_secondheader
   BITCODE_RC version[11];
   BITCODE_RC is_maint;
   BITCODE_RC zero_one_or_three;
-  BITCODE_BS dwg_version;
+  BITCODE_BS dwg_versions; /* lo byte: dwg, hi: main */
   BITCODE_RS codepage;
   BITCODE_RC num_sections;
   Dwg_SecondHeader_Sections sections[7];
