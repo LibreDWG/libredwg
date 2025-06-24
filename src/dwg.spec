@@ -100,7 +100,7 @@ DWG_ENTITY (TEXT)
     {
       BITCODE_RC dataflags;
 #ifdef IS_ENCODER
-      if (dat->from_version < R_2000)
+      if (dat->from_version < R_2000 || dat->opts & DWG_OPTS_INDXF)
         dwg_set_dataflags (obj);
 #endif
       FIELD_RC (dataflags, 0);
@@ -338,7 +338,7 @@ DWG_ENTITY (ATTRIB)
     {
       BITCODE_RC dataflags;
 #ifdef IS_ENCODER
-      if (dat->from_version < R_2000)
+      if (dat->from_version < R_2000 || dat->opts & DWG_OPTS_INDXF)
         dwg_set_dataflags (obj);
 #endif
       FIELD_RC (dataflags, 0);
@@ -550,7 +550,7 @@ DWG_ENTITY (ATTDEF)
     {
       BITCODE_RC dataflags;
 #ifdef IS_ENCODER
-      if (dat->from_version < R_2000)
+      if (dat->from_version < R_2000 || dat->opts & DWG_OPTS_INDXF)
         dwg_set_dataflags (obj);
 #endif
       FIELD_RC (dataflags, 0);
