@@ -644,7 +644,7 @@
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
-        LOG_TRACE_TV (#nam ": \"%s\" [T %d]", _obj->nam, dxf)                 \
+        LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf)                 \
       }                                                                       \
     else                                                                      \
       {                                                                       \
