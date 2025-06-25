@@ -36,7 +36,11 @@ emscripten::val dwg_entity_polyline_2d_get_points_wrapper(Dwg_Object_Ptr obj_ptr
     emscripten::val result = emscripten::val::object();
     result.set("success", false);
     result.set("message", std::string("Failed to get points!"));
-    result.set("data", points);
+    emscripten::val points_obj = emscripten::val::array();
+    for (int i = 0; i < numpoints; ++i) {
+        points_obj.call<void>("push", point2d_to_js_object(&points[i]));
+    }
+    result.set("data", points_obj);
     return result;
   }
 

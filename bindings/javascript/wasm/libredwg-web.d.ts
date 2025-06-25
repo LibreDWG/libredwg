@@ -10,10 +10,10 @@ declare namespace RuntimeExports {
         export let currentPath: string;
         export let initialized: boolean;
         export let ignorePermissions: boolean;
-        export { ErrnoError };
         export let filesystems: any;
         export let syncFSRequests: number;
         export let readFiles: {};
+        export { ErrnoError };
         export { FSStream };
         export { FSNode };
         export function lookupPath(path: any, opts?: {}): {
@@ -114,11 +114,10 @@ declare namespace RuntimeExports {
         export function llseek(stream: any, offset: any, whence: any): any;
         export function read(stream: any, buffer: any, offset: any, length: any, position: any): any;
         export function write(stream: any, buffer: any, offset: any, length: any, position: any, canOwn: any): any;
-        export function allocate(stream: any, offset: any, length: any): void;
         export function mmap(stream: any, length: any, position: any, prot: any, flags: any): any;
         export function msync(stream: any, buffer: any, offset: any, length: any, mmapFlags: any): any;
         export function ioctl(stream: any, cmd: any, arg: any): any;
-        export function readFile(path: any, opts?: {}): any;
+        export function readFile(path: any, opts?: {}): Uint8Array<any>;
         export function writeFile(path: any, data: any, opts?: {}): void;
         export function cwd(): any;
         export function chdir(path: any): void;
@@ -185,17 +184,6 @@ declare namespace RuntimeExports {
      * @param {string} type
      */
     function setValue(ptr: number, value: number, type?: string): void;
-    let HEAPF32: any;
-    let HEAPF64: any;
-    let HEAP_DATA_VIEW: any;
-    let HEAP8: any;
-    let HEAPU8: any;
-    let HEAP16: any;
-    let HEAPU16: any;
-    let HEAP32: any;
-    let HEAPU32: any;
-    let HEAP64: any;
-    let HEAPU64: any;
 }
 declare class ErrnoError {
     constructor(errno: any);
@@ -247,6 +235,8 @@ export interface ClassHandle {
   delete(): void;
   deleteLater(): this;
   isDeleted(): boolean;
+  // @ts-ignore - If targeting lower than ESNext, this symbol might not exist.
+  [Symbol.dispose](): void;
   clone(): this;
 }
 export interface Dwg_Version_TypeValue<T extends number> {
