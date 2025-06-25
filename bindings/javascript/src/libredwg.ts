@@ -1056,8 +1056,15 @@ export class LibreDwg {
       : this.instance
   }
 
-  static async create(): Promise<LibreDwgEx> {
-    const wasmInstance = await createModule()
+  static async create(filepath?: string): Promise<LibreDwgEx> {
+    const wasmInstance =
+      filepath == null
+        ? await createModule()
+        : await createModule({
+            locateFile: (filename: string) => {
+              return `${filepath}/${filename}`
+            }
+          })
     return this.createByWasmInstance(wasmInstance)
   }
 }

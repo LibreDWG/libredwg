@@ -9,11 +9,27 @@ This is a DWG/DXF JavaScript parser based on libredwg. It can be used in browser
 
 Download and install emscripten according to [this doc](https://emscripten.org/docs/getting_started/downloads.html). Please make sure the following command is executed to activate `PATH` and other environment variables in the current terminal before building web assembly.
 
+Download and install [automake](https://www.gnu.org/software/automake/)
+
+Download and install [pnpm](https://pnpm.io)
+
+All can also be installed using homebrew:
+
 ```bash
-# Activate PATH and other environment variables for emscripten in the current terminal
+brew install emscripten
+brew install automake
+brew install pnpm
+```
+
+```bash
+# Activate PATH and other environment variables for emscripten in the current terminal if needed
 source ./emsdk_env.sh
 
+# run autogen
 ./autogen.sh
+
+# change directory
+cd bindings/javascript
 
 # Install npm dependencies to build JavaScript bindings for libredwg
 pnpm install
@@ -28,7 +44,7 @@ pnpm build:obj
 pnpm build:wasm
 
 # Copy web assembly (wasm file and JavaScript glue code file) from build directory to distribution directory of this package
-nnpm copy
+pnpm copy
 
 # Build web assembly wrapper so that it is easier to use it
 pnpm build
@@ -96,6 +112,17 @@ const db = this.libredwg.convert(dwg);
 // Affter conversion, 'dwg' isn't needed any more. So you can call
 // function 'dwg_free' to free its memory.
 this.libredwg.dwg_free(db);
+```
+
+### Usage with node.js
+
+```typescript
+import { Dwg_File_Type, LibreDwg } from '@mlightcad/libredwg-web'
+// manually reference the wasm directory
+const libredwg = await LibreDwg.create(
+  './node_modules/@mlightcad/libredwg-web/wasm/'
+)
+…
 ```
 
 ## Interfaces
