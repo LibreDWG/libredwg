@@ -30,7 +30,7 @@ jobs:
     - uses: pyvista/setup-headless-display-action@v1
       # see version at https://www.opendesign.com/guestfiles/oda_file_converter
     - run: |
-        deb=ODAFileConverter_QT6_lnxX64_8.3dll_26.4.deb
+        deb=ODAFileConverter_QT6_lnxX64_8.3dll_26.5.deb
         wget https://www.opendesign.com/guestfiles/get?filename=$deb
         mv get\?filename\=$deb $deb
         sudo add-apt-repository -y ppa:linuxuprising/libpng12
