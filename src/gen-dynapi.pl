@@ -3226,7 +3226,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
       const Dwg_Data *dwg
         = obj ? obj->parent
               : ((Dwg_Object_UNKNOWN_OBJ *)_obj)->parent->dwg;
-      const Dwg_Version_Type dwg_version = dwg ? dwg->header.from_version : R_INVALID;
+      const Dwg_Version_Type dwg_version = dwg ? dwg->header.version : R_INVALID;
       // but there are some fixed-length malloced strings preR13
       static const Dwg_DYNAPI_field r11_fixed_strings[] = {
           { "font_file", "TFv", 64, OFF (struct _dwg_object_STYLE, font_file), 1,1,1, 3 },

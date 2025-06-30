@@ -9932,7 +9932,7 @@ Dxf_Pair *new_object (
           if (ctrl_id && pair->code == 2)
             {
               dwg_dynapi_entity_set_value (_obj, obj->name, "name",
-                                           &pair->value, 1);
+                                           &pair->value, is_tu);
               LOG_TRACE ("%s.name = %s [T 2]\n", name, pair->value.s);
               if (!pair->value.s)
                 break;
