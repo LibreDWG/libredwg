@@ -87,8 +87,8 @@ if [ -f "$dir/$b.dwg" ] && [ -n "$r" ]; then
                 $ODAFileConverter_geometry >/dev/null 2>/dev/null
         # rm "$b.json.err" 2>/dev/null
         if [ -e "$dir/$b.dxf.err" ]; then
-            mv "$dir/$b.dxf.err" "$b.json.err"
-            cat "$b.json.err"
+            mv "$dir/$b.dxf.err" "$b.dwg.err"
+            cat "$b.dwg.err"
             exitcode=1
         else
             echo no oda error
