@@ -141,6 +141,8 @@ static array_hdls *obj_hdls = NULL;
     }                                                                         \
   dxf_free_pair (pair);                                                       \
   pair = NULL
+
+#define SUB_FIELD_VALUE(sub, nam) o->sub.nam
 #define EXPECT_SUB_INT_DXF(sub, field, dxf, _type)                            \
   EXPECT_DXF (obj->name, field, dxf);                                         \
   dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value, 1);    \
@@ -156,9 +158,16 @@ static array_hdls *obj_hdls = NULL;
                  pair ? pair->value.l : 0, sub, field, dxf);                  \
       return pair;                                                            \
     }                                                                         \
-  dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value, 1);    \
+  dwg_dynapi_subclass_set_value (dwg, o, #_type, field, &pair->value, 1);     \
   LOG_TRACE ("%s.%s.%s = %ld [" #_type " %d]\n", obj->name, sub, field,       \
              pair->value.l, pair->code);                                      \
+  dxf_free_pair (pair);                                                       \
+  pair = NULL;
+#define EXPECT_SUB_DBL_DXF(sub, field, dxf, _type)                            \
+  EXPECT_DXF (obj->name, field, dxf);                                         \
+  dwg_dynapi_subclass_set_value (dwg, o, #_type, #field, &pair->value, 1);     \
+  LOG_TRACE ("%s.%s.%s = %g [%s %d]\n", obj->name, sub, field,                \
+             pair->value.d, #_type, pair->code);                              \
   dxf_free_pair (pair);                                                       \
   pair = NULL;
 #define EXPECT_SUB_H_DXF(sub, field, htype, dxf, _type)                       \
@@ -172,11 +181,11 @@ static array_hdls *obj_hdls = NULL;
     }                                                                         \
   dxf_free_pair (pair);                                                       \
   pair = NULL
-#define EXPECT_SUB_T_DXF(sub, field, dxf)                                     \
+#define EXPECT_SUB_T_DXF(sub, field, dxf, _type)                              \
   EXPECT_DXF (obj->name, field, dxf);                                         \
   if (pair->value.s)                                                          \
     {                                                                         \
-      dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value.s,  \
+      dwg_dynapi_subclass_set_value (dwg, o, _type, field, &pair->value.s,    \
                                      1);                                      \
       LOG_TRACE ("%s.%s.%s = \"%s\" [T %d]\n", obj->name, sub, field,         \
                  pair->value.s, pair->code);                                  \
@@ -283,6 +292,48 @@ static array_hdls *obj_hdls = NULL;
                  pt.x, pt.y, pt.z, pair->code - 2);                           \
       dxf_free_pair (pair);                                                   \
     }
+#define SUB_FIELD_BD(sub, field, dxf, _type)                                  \
+  if (dxf)                                                                    \
+    {                                                                         \
+      BITCODE_BD pt;                                                          \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_DBL_DXF (sub, field, dxf, RD);                               \
+      pt = pair->value.d;                                                     \
+      dxf_free_pair (pair);                                                   \
+    }
+#define SUB_FIELD_2BD(sub, field, dxf)                                        \
+  if (dxf)                                                                    \
+    {                                                                         \
+      BITCODE_2BD pt;                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_DBL_DXF (sub, field.x, dxf, RD);                             \
+      pt.x = pair->value.d;                                                   \
+      dxf_free_pair (pair);                                                   \
+                                                                              \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_DBL_DXF (sub, field.y, dxf + 10, RD);                        \
+      pt.y = pair->value.d;                                                   \
+      dxf_free_pair (pair);                                                   \
+    }
+#define SUB_FIELD_3BD(sub, field, dxf)                                        \
+  if (dxf)                                                                    \
+    {                                                                         \
+      BITCODE_3BD pt;                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_DBL_DXF (sub, field.x, dxf, RD);                             \
+      pt.x = pair->value.d;                                                   \
+      dxf_free_pair (pair);                                                   \
+                                                                              \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_DBL_DXF (sub, field.y, dxf + 10, RD);                        \
+      pt.y = pair->value.d;                                                   \
+      dxf_free_pair (pair);                                                   \
+                                                                              \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_SUB_DBL_DXF (sub, field.z, dxf + 20, RD);                        \
+      pt.z = pair->value.d;                                                   \
+      dxf_free_pair (pair);                                                   \
+    }
 #define FIELD_HANDLE(field, code, dxf)                                        \
   if (dxf)                                                                    \
     {                                                                         \
@@ -305,7 +356,7 @@ static array_hdls *obj_hdls = NULL;
   if (dxf)                                                                    \
     {                                                                         \
       pair = dxf_read_pair (dat);                                             \
-      EXPECT_SUB_T_DXF (#sub, #field, dxf);                                   \
+      EXPECT_SUB_T_DXF (#sub, #field, dxf, "T");                              \
     }
 
 static void *
@@ -6473,6 +6524,212 @@ add_sub_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
+// need fixed input, or we get a duplicate group 90, num_childs
+static Dxf_Pair *
+add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_FIELD *o = obj->tio.object->tio.FIELD;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  BITCODE_BL i;
+
+  // SUBCLASS (AcDbField)
+  FIELD_T (id, 1);
+  FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
+  pair = dxf_read_pair (dat);
+  if (pair->code == 4) // optional
+    {
+      o->format = strdup (pair->value.s);
+      LOG_TRACE ("%s.format = %s [T 4]\n", obj->name, o->format);
+      dxf_free_pair (pair);
+      FIELD_BL (num_childs, 90);
+    }
+  else
+    {
+      EXPECT_UINT_DXF ("num_childs", 90, BL);
+      dxf_free_pair (pair);
+    }
+  if (o->num_childs)
+    {
+      o->childs = (BITCODE_H *)xcalloc (o->num_childs, sizeof (BITCODE_H));
+      if (!o->childs)
+        {
+          o->num_childs = 0;
+          return pair;
+        }
+      for (i = 0; i < o->num_childs; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->childs[i], 360);
+          o->childs[i] = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+          LOG_TRACE ("%s.childs[%d] = " FORMAT_REF " [H 360]\n", obj->name, i,
+                     ARGS_REF (o->childs[i]));
+          dxf_free_pair (pair);
+        }
+    }
+  FIELD_BL (num_objects, 97);
+  if (o->num_objects)
+    {
+      o->objects = (BITCODE_H *)xcalloc (o->num_objects, sizeof (BITCODE_H));
+      if (!o->objects)
+        {
+          o->num_objects = 0;
+          return pair;
+        }
+      for (i = 0; i < o->num_objects; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->objects[i], 331);
+          o->objects[i] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.objects[%u] = " FORMAT_REF " [H 331]\n", obj->name, i,
+                     ARGS_REF (o->objects[i]));
+          dxf_free_pair (pair);
+        }
+    }
+  //PRE (R_2007a) {
+  //  FIELD_T (format, 4);
+  //}
+  FIELD_BL (evaluation_option, 91);
+  FIELD_BL (filing_option, 92);
+  FIELD_BL (field_state, 94);
+  FIELD_BL (evaluation_status, 95);
+  FIELD_BL (evaluation_error_code, 96);
+  FIELD_T (evaluation_error_msg, 300);
+
+  FIELD_BL (num_childval, 93);
+  if (o->num_childval)
+    {
+      o->childval = (Dwg_FIELD_ChildValue *)xcalloc (o->num_childval, sizeof (Dwg_FIELD_ChildValue));
+      if (!o->childval)
+        {
+          o->num_childval = 0;
+          return pair;
+        }
+      for (i = 0; i < o->num_childval; i++)
+        {
+          // SUB_FIELD_T (childval[i],key, 6);
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, childval[i].key, 6);
+          o->childval[i].key = strdup (pair->value.s);
+          dxf_free_pair (pair);
+        next_field:
+          // SUB_FIELD_BL (childval[i],value.data_type, 90);
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, childval[i].value.data_type, 90);
+          o->childval[i].value.data_type = pair->value.u;
+          dxf_free_pair (pair);
+          /*
+            90
+            140
+            7  ACFD_FIELD_VALUE
+            90
+            91
+          */
+          switch (o->childval[i].value.data_type)
+            {
+            case 0: /* kUnknown */
+              SUB_FIELD_BL (childval[i],value.data_long, 91);
+              break;
+            case 1: /* kLong */
+              SUB_FIELD_BL (childval[i],value.data_long, 91);
+              break;
+            case 2: /* kDouble */
+              //SUB_FIELD_BD (childval[i],value.data_double, 140, RD);
+              pair = dxf_read_pair (dat);
+              EXPECT_DXF (obj->name, childval[i].value.data_double, 140);
+              o->childval[i].value.data_double = pair->value.d;
+              LOG_TRACE ("FIELD.childval[%u].value.data_double = %f [RD 140]\n", i,
+                         pair->value.d);
+              dxf_free_pair (pair);
+              break;
+            case 4:                           /* kString */
+              SUB_FIELD_T (childval[i],value.data_string, 1); /* and 2. TODO multiple lines */
+              break;
+            case 8: /* kDate */
+              SUB_FIELD_BL (childval[i],value.data_size, 92);
+              //TODO SUB_FIELD_BINARY (childval[i],value.data_date, SUB_FIELD_VALUE (childval[i],value.data_size), 310);
+              break;
+            case 16: /* kPoint */
+              //SUB_FIELD_2BD (childval[i],value.data_point, 11);
+              pair = dxf_read_pair (dat);
+              EXPECT_DXF (obj->name, childval[i].value.data_point.x, 11);
+              o->childval[i].value.data_point.x = pair->value.d;
+              dxf_free_pair (pair);
+
+              pair = dxf_read_pair (dat);
+              EXPECT_DXF (obj->name, childval[i].value.data_point.y, 21);
+              o->childval[i].value.data_point.y = pair->value.d;
+              dxf_free_pair (pair);
+              LOG_TRACE (
+                  "FIELD.childval[%u].value.data_point = (%f, %f) [2RD 11]\n",
+                  i, o->childval[i].value.data_point.x,
+                  o->childval[i].value.data_point.y);
+              break;
+            case 32: /* k3dPoint */
+              pair = dxf_read_pair (dat);
+              EXPECT_DXF (obj->name, childval[i].value.data_3dpoint.x, 11);
+              o->childval[i].value.data_3dpoint.x = pair->value.d;
+              dxf_free_pair (pair);
+              pair = dxf_read_pair (dat);
+              EXPECT_DXF (obj->name, childval[i].value.data_3dpoint.y, 21);
+              o->childval[i].value.data_3dpoint.y = pair->value.d;
+              dxf_free_pair (pair);
+              pair = dxf_read_pair (dat);
+              EXPECT_DXF (obj->name, childval[i].value.data_3dpoint.z, 31);
+              o->childval[i].value.data_3dpoint.z = pair->value.d;
+              dxf_free_pair (pair);
+              LOG_TRACE (
+                  "FIELD.childval[%u].value.data_3dpoint = (%f, %f, %f) [3RD 11]\n",
+                  i, o->childval[i].value.data_3dpoint.x,
+                  o->childval[i].value.data_3dpoint.y,
+                  o->childval[i].value.data_3dpoint.z);
+              break;
+            case 64: /* kObjectId */
+              pair = dxf_read_pair (dat);
+              EXPECT_DXF (obj->name, childval[i].value.data_handle, 330);
+              o->childval[i].value.data_handle
+                  = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+              dxf_free_pair (pair);
+              LOG_TRACE ("FIELD.childval[%u].value.data_handle = " FORMAT_REF
+                         " [H %d]\n",
+                         i, ARGS_REF (o->childval[i].value.data_handle), 330);
+              // SUB_FIELD_HANDLE (childval[i],value.data_handle, -1, 330);
+              break;
+            case 128: /* kBuffer */
+              LOG_ERROR ("Unknown data type in FIELD: \"kBuffer\".\n")
+              break;
+            case 256: /* kResBuf */
+            case 512: /* kGeneral since r2007*/
+            default:
+              LOG_ERROR ("Unknown data type in FIELD: \"kResBuf\".\n")
+              break;
+            // case 512: /* kGeneral since r2007*/
+              //SINCE (R_2007a) { SUB_FIELD_BL (childval[i],value.data_size, 0); }
+              //else
+              //  {
+              //    LOG_ERROR (
+              //               "Unknown data type in FIELD: \"kGeneral before "
+              //               "R_2007\".\n")
+              //  }
+              break;
+            }
+        }
+      // optional 7 Key (evaluated cache); hard-coded as ACFD_FIELD_VALUE
+      pair = dxf_read_pair (dat);
+      if (pair->code == 7)
+        {
+          dxf_free_pair (pair);
+          goto next_field; // one more cached field
+        }
+    }
+
+  FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
+  FIELD_BL (value_string_length, 98); //ODA bug TV
+
+  return NULL;
+}
+
+
 /* if it has an absolute ownerhandle:
    1. all entities are relative
    2. all early table records are relative
@@ -9606,6 +9863,15 @@ Dxf_Pair *new_object (
                                 obj->name);
                       *subclass = '\0';
                     }
+                }
+              if (strEQc (subclass, "AcDbField"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_FIELD (obj, dat); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
                 }
               if (strEQc (subclass, "AcDbDetailViewStyle")
                   && obj->fixedtype != DWG_TYPE_DETAILVIEWSTYLE)
