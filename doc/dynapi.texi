@@ -2396,14 +2396,14 @@ B,	DXF 75
 H,	DXF 3
 @item block
 H,	DXF 2
-@item first_arc_pt
-3BD,	DXF 15
-@item leader_len
+@item jog_angle
 BD,	DXF 40
-@item ovr_center
-3BD,	DXF 12
-@item jog_point
+@item jog_pt
 3BD,	DXF 13
+@item ovr_center
+3BD,	DXF 14
+@item chord_pt
+3BD,	DXF 15
 
 @end vtable
 @end indentedblock

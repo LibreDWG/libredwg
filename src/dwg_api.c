@@ -30842,25 +30842,25 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION *
 dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                                 const dwg_point_3d *restrict center_pt,
-                                const dwg_point_3d *restrict first_arc_pt,
+                                const dwg_point_3d *restrict chord_pt,
                                 const dwg_point_3d *restrict ovr_center,
-                                const dwg_point_3d *restrict jog_point,
-                                const double leader_len)
+                                const dwg_point_3d *restrict jog_pt,
+                                const double jog_angle)
 {
   API_ADD_ENTITY (LARGE_RADIAL_DIMENSION);
   _obj->def_pt.x = center_pt->x;
   _obj->def_pt.y = center_pt->y;
   _obj->def_pt.z = center_pt->z;
-  _obj->first_arc_pt.x = first_arc_pt->x;
-  _obj->first_arc_pt.y = first_arc_pt->y;
-  _obj->first_arc_pt.z = first_arc_pt->z;
+  _obj->chord_pt.x = chord_pt->x;
+  _obj->chord_pt.y = chord_pt->y;
+  _obj->chord_pt.z = chord_pt->z;
   _obj->ovr_center.x = ovr_center->x;
   _obj->ovr_center.y = ovr_center->y;
   _obj->ovr_center.z = ovr_center->z;
-  _obj->jog_point.x = jog_point->x;
-  _obj->jog_point.y = jog_point->y;
-  _obj->jog_point.z = jog_point->z;
-  _obj->leader_len = leader_len;
+  _obj->jog_pt.x = jog_pt->x;
+  _obj->jog_pt.y = jog_pt->y;
+  _obj->jog_pt.z = jog_pt->z;
+  _obj->jog_angle = jog_angle;
   return _obj;
 }
 

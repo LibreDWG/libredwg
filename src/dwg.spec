@@ -2032,16 +2032,23 @@ DWG_ENTITY (DIMENSION_DIAMETER)
 
 DWG_ENTITY_END
 
-/* varies */
+/* varies. i.e. a jogged radius dim */
 DWG_ENTITY (LARGE_RADIAL_DIMENSION)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbRadialDimensionLarge)
-  FIELD_3BD (def_pt, 0);
-  FIELD_3BD (first_arc_pt, 15);
-  FIELD_BD (leader_len, 40);
-  FIELD_3BD (ovr_center, 12);
-  FIELD_3BD (jog_point, 13);
+  DXF {
+    FIELD_3BD (jog_pt, 13);
+    FIELD_3BD (ovr_center, 14);
+    FIELD_3BD (chord_pt, 15);
+    FIELD_BD (jog_angle, 40);
+  } else {
+    FIELD_3BD (def_pt, 0);
+    FIELD_3BD (chord_pt, 0);
+    FIELD_BD (jog_angle, 0);
+    FIELD_3BD (ovr_center, 0);
+    FIELD_3BD (jog_pt, 0);
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (dimstyle, 5, 0);

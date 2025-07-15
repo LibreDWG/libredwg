@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   double elevation, act_measurement, horiz_dir, lspace_factor, text_rotation,
-      ins_rotation, leader_len;
+      ins_rotation, jog_angle;
   BITCODE_T user_text;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC class_version, flag, flag1;
@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   dwg_point_2d text_midpt, clone_ins_pt;
   dwg_point_3d def_pt, first_arc_pt, extrusion, ins_scale;
   BITCODE_H dimstyle, block;
-  dwg_point_3d ovr_center, jog_point;
+  dwg_point_3d ovr_center, chord_pt, jog_pt;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -48,11 +48,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (dim, LARGE_RADIAL_DIMENSION, flag, RC);
   CHK_ENTITY_H (dim, LARGE_RADIAL_DIMENSION, dimstyle);
   CHK_ENTITY_H (dim, LARGE_RADIAL_DIMENSION, block);
-  /* radius */
-  CHK_ENTITY_3RD (dim_large, LARGE_RADIAL_DIMENSION, first_arc_pt);
-  CHK_ENTITY_TYPE (dim_large, LARGE_RADIAL_DIMENSION, leader_len, BD);
-
+  /* jog radius */
+  CHK_ENTITY_3RD (dim_large, LARGE_RADIAL_DIMENSION, chord_pt);
   CHK_ENTITY_3RD (dim_large, LARGE_RADIAL_DIMENSION, ovr_center);
-  CHK_ENTITY_3RD (dim_large, LARGE_RADIAL_DIMENSION, jog_point);
+  CHK_ENTITY_3RD (dim_large, LARGE_RADIAL_DIMENSION, jog_pt);
+  CHK_ENTITY_TYPE (dim_large, LARGE_RADIAL_DIMENSION, jog_angle, BD);
 #endif
 }

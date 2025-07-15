@@ -2622,15 +2622,15 @@ typedef struct _dwg_entity_ARC_DIMENSION
 } Dwg_Entity_ARC_DIMENSION;
 
 /**
- arc dimension - LARGE_RADIAL_DIMENSION (varies) entity
+ jogged radius dimension - LARGE_RADIAL_DIMENSION (varies) entity
  */
 typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION
 {
   DIMENSION_COMMON;
-  BITCODE_3BD first_arc_pt; /*!< DXF 15 */
-  BITCODE_BD leader_len;    /*!< DXF 40 */
-  BITCODE_3BD ovr_center;   /*!< DXF 12-32 */
-  BITCODE_3BD jog_point;    /*!< DXF 13-33 */
+  BITCODE_BD jog_angle;     /*!< DXF 40 */
+  BITCODE_3BD jog_pt;       /*!< DXF 13-33 */
+  BITCODE_3BD ovr_center;   /*!< DXF 14-34 Overridden center */
+  BITCODE_3BD chord_pt;     /*!< DXF 15-35 */
 } Dwg_Entity_LARGE_RADIAL_DIMENSION;
 
 /**

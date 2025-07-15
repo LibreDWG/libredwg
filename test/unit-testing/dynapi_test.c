@@ -13608,6 +13608,14 @@ static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
         fail ("LARGE_RADIAL_DIMENSION.block [H]");
   }
   {
+    BITCODE_3BD chord_pt;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "chord_pt", &chord_pt, NULL)
+        && !memcmp (&chord_pt, &large_radial_dimension->chord_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("LARGE_RADIAL_DIMENSION.chord_pt [3BD]");
+  }
+  {
     BITCODE_RC class_version;
     if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "class_version", &class_version, NULL)
         && class_version == large_radial_dimension->class_version)
@@ -13668,14 +13676,6 @@ static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
         pass ();
     else
         fail ("LARGE_RADIAL_DIMENSION.extrusion [BE]");
-  }
-  {
-    BITCODE_3BD first_arc_pt;
-    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "first_arc_pt", &first_arc_pt, NULL)
-        && !memcmp (&first_arc_pt, &large_radial_dimension->first_arc_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("LARGE_RADIAL_DIMENSION.first_arc_pt [3BD]");
   }
   {
     BITCODE_RC flag;
@@ -13776,27 +13776,27 @@ static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
         fail ("LARGE_RADIAL_DIMENSION.ins_scale [3BD_1]");
   }
   {
-    BITCODE_3BD jog_point;
-    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "jog_point", &jog_point, NULL)
-        && !memcmp (&jog_point, &large_radial_dimension->jog_point, sizeof (BITCODE_3BD)))
-        pass ();
+    BITCODE_BD jog_angle;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "jog_angle", &jog_angle, NULL)
+        && jog_angle == large_radial_dimension->jog_angle)
+      pass ();
     else
-        fail ("LARGE_RADIAL_DIMENSION.jog_point [3BD]");
+      fail ("LARGE_RADIAL_DIMENSION.jog_angle [BD] %g != %g", large_radial_dimension->jog_angle, jog_angle);
+    jog_angle++;
+    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "jog_angle", &jog_angle, 0)
+        && jog_angle == large_radial_dimension->jog_angle)
+      pass ();
+    else
+      fail ("LARGE_RADIAL_DIMENSION.jog_angle [BD] set+1 %g != %g", large_radial_dimension->jog_angle, jog_angle);
+    large_radial_dimension->jog_angle--;
   }
   {
-    BITCODE_BD leader_len;
-    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "leader_len", &leader_len, NULL)
-        && leader_len == large_radial_dimension->leader_len)
-      pass ();
+    BITCODE_3BD jog_pt;
+    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "jog_pt", &jog_pt, NULL)
+        && !memcmp (&jog_pt, &large_radial_dimension->jog_pt, sizeof (BITCODE_3BD)))
+        pass ();
     else
-      fail ("LARGE_RADIAL_DIMENSION.leader_len [BD] %g != %g", large_radial_dimension->leader_len, leader_len);
-    leader_len++;
-    if (dwg_dynapi_entity_set_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "leader_len", &leader_len, 0)
-        && leader_len == large_radial_dimension->leader_len)
-      pass ();
-    else
-      fail ("LARGE_RADIAL_DIMENSION.leader_len [BD] set+1 %g != %g", large_radial_dimension->leader_len, leader_len);
-    large_radial_dimension->leader_len--;
+        fail ("LARGE_RADIAL_DIMENSION.jog_pt [3BD]");
   }
   {
     BITCODE_BD lspace_factor;
