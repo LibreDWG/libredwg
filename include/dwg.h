@@ -2358,7 +2358,12 @@ typedef struct _dwg_entity_VERTEX_2D
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_RC flag;
+  BITCODE_RC flag;  /*<! DXF 70 (see LOG_FLAG_VERTEX)
+                      1:  EXTRA_VERTEX
+                      2:  CURVE_FIT
+                      8:  SPLINE_FIT
+                      16: SPLINE_FRAME_CONTROL_POINT
+                    */
   BITCODE_3BD point;
   BITCODE_BD start_width;
   BITCODE_BD end_width;
@@ -2374,17 +2379,25 @@ typedef struct _dwg_entity_VERTEX_3D
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_RC flag;
+  BITCODE_RC flag;  /*<! DXF 70 (see LOG_FLAG_VERTEX)
+                      8:  SPLINE_FIT
+                      16: SPLINE_FRAME_CONTROL_POINT
+                      32: 3D
+                      64: MESH (AcDbPolyFaceMeshVertex)
+                    */
   BITCODE_3BD point;
 } Dwg_Entity_VERTEX_3D;
 
 /**
  VERTEX_MESH (12) - same as VERTEX_3D entity
+ flag: 64 (MESH)
  */
 typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_MESH;
 
 /**
  VERTEX_PFACE (13) - same as VERTEX_3D entity
+ flag: 64 (MESH)
+       128 (PFACE_MESH)
  */
 typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
 
