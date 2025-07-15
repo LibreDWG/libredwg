@@ -8999,10 +8999,10 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   AcDbRenderSettings_fields;
   SUBCLASS (AcDbRapidRTRenderSettings)
   FIELD_BL (rapidrt_version, 90);
-  FIELD_BL (render_target, 70);
+  FIELD_BL (render_target, 70); // level=0, time=1, infinite=2
   FIELD_BL (render_level, 90);
   FIELD_BL (render_time, 90);
-  FIELD_BL (lighting_model, 70);
+  FIELD_BL (lighting_model, 70); // simplistic=0, basic=1, advanced=2
   FIELD_BL (filter_type, 70);
   FIELD_BD (filter_width, 40);
   FIELD_BD (filter_height, 40);

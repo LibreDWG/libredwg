@@ -7425,11 +7425,13 @@ typedef struct _dwg_object_RAPIDRTRENDERSETTINGS
   struct _dwg_object_object *parent;
   RENDERSETTINGS_fields;
   // AcDbRapidRTRenderSettings
-  BITCODE_BL rapidrt_version; /*!< DXF 90 */
-  BITCODE_BL render_target;	/*!< DXF 70 */
+  BITCODE_BL rapidrt_version;   /*!< DXF 90 */
+  BITCODE_BL render_target;	/*!< DXF 70,
+      quit conditions: level=0 (iteration), time=1, infinite=2 */
   BITCODE_BL render_level;	/*!< DXF 90 */
   BITCODE_BL render_time;	/*!< DXF 90 */
-  BITCODE_BL lighting_model;	/*!< DXF 70 */
+  BITCODE_BL lighting_model;	/*!< DXF 70,
+      AcGiLightingMode: simplistic=0, basic=1, advanced=2 */
   BITCODE_BL filter_type;	/*!< DXF 70 */
   BITCODE_BD filter_width;	/*!< DXF 40 */
   BITCODE_BD filter_height;	/*!< DXF 40 */

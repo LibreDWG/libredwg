@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   BITCODE_B has_predefined; /*!< DXF 290, r2013 only */
   // AcDbRapidRTRenderSettings
   BITCODE_BL rapidrt_version; /*!< DXF 90 */
-  BITCODE_BL render_target;   /*!< DXF 70 */
+  BITCODE_BL render_target;   /*!< DXF 70, 0-2 */
   BITCODE_BL render_level;    /*!< DXF 90 */
   BITCODE_BL render_time;     /*!< DXF 90 */
   BITCODE_BL lighting_model;  /*!< DXF 70 */
@@ -43,9 +43,11 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, rapidrt_version, BL);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_target, BL);
+  CHK_ENTITY_MAX (_obj, RAPIDRTRENDERSETTINGS, render_target, BL, 2);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_level, BL);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, render_time, BL);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, lighting_model, BL);
+  CHK_ENTITY_MAX (_obj, RAPIDRTRENDERSETTINGS, lighting_model, BL, 2);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_type, BL);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_width, BD);
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, filter_height, BD);
