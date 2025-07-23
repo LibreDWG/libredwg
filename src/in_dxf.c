@@ -6607,15 +6607,15 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
         }
       for (i = 0; i < o->num_childval; i++)
         {
-          // SUB_FIELD_T (childval[i],key, 6);
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, childval[i].key, 6);
           o->childval[i].key = strdup (pair->value.s);
           dxf_free_pair (pair);
         next_field:
-          // SUB_FIELD_BL (childval[i],value.data_type, 90);
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, childval[i].value.data_type, 90);
+          LOG_TRACE ("FIELD.childval[%u].value.data_type = %u [RL 90]\n", i,
+                     pair->value.u);
           o->childval[i].value.data_type = pair->value.u;
           dxf_free_pair (pair);
           /*
@@ -6628,7 +6628,7 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           switch (o->childval[i].value.data_type)
             {
             case 0: /* kUnknown */
-              SUB_FIELD_BL (childval[i],value.data_long, 91);
+              SUB_FIELD_BL (childval[i],value.data_long, 91); // string length
               break;
             case 1: /* kLong */
               SUB_FIELD_BL (childval[i],value.data_long, 91);
@@ -6721,9 +6721,13 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           dxf_free_pair (pair);
           goto next_field; // one more cached field
         }
+      else if (i + 1 == o->num_childval) {
+        FIELD_T (value_string, 301);
+      }
     }
-
-  FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
+  if (pair->code != 301) {
+    FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
+  }
   FIELD_BL (value_string_length, 98); //ODA bug TV
 
   return NULL;
