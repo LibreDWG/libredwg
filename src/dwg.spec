@@ -6319,7 +6319,11 @@ DWG_OBJECT (FIELD)
   SUBCLASS (AcDbField)
   FIELD_T (id, 1);
   FIELD_T (code, 2); // and code 3 for subsequent >255 chunks
-  // DXF { }
+  DXF {
+    PRE (R_2007a) {
+      FIELD_TV (format, 4);
+    }
+  }
   FIELD_BL (num_childs, 90);
   VALUEOUTOFBOUNDS (num_childs, 20000)
   DXF {
@@ -6330,9 +6334,11 @@ DWG_OBJECT (FIELD)
   DXF {
     HANDLE_VECTOR (objects, num_objects, 5, 331);
   }
-  //PRE (R_2007a) {
-  //  FIELD_TV (format, 4);
-  //}
+#ifndef IS_DXF
+  PRE (R_2007a) {
+    FIELD_TV (format, 4);
+  }
+#endif
   FIELD_BL (evaluation_option, 91);
   FIELD_BL (filing_option, 92);
   FIELD_BL (field_state, 94);
@@ -6345,7 +6351,7 @@ DWG_OBJECT (FIELD)
     return error;
 
 #ifndef IS_DXF
-  FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
+  FIELD_T (value_string, 301);
   FIELD_BL (value_string_length, 98); //ODA bug TV
 #endif
 
@@ -6363,8 +6369,10 @@ DWG_OBJECT (FIELD)
       SET_PARENT_OBJ (childval[rcount1]);
   END_REPEAT_BLOCK
   END_REPEAT (childval)
-  FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
-  FIELD_BL (value_string_length, 98); //ODA bug TV
+  DXF {
+    FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
+    FIELD_BL (value_string_length, 98); //ODA bug TV
+  }
 
   START_OBJECT_HANDLE_STREAM;
   HANDLE_VECTOR (childs, num_childs, 3, 0);
