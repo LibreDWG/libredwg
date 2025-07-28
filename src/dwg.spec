@@ -7864,6 +7864,9 @@ DWG_OBJECT (MLEADERSTYLE)
   FIELD_BS (attach_left, 174);
   FIELD_BS (attach_right, 178);
   if (FIELD_VALUE (class_version) >= 2) {
+    ENCODER {
+      LOG_TRACE("  with class_version 2:\n");
+    }
     FIELD_BS (text_angle_type, 175);
   }
   FIELD_BS (text_align_type, 176);
@@ -7871,6 +7874,9 @@ DWG_OBJECT (MLEADERSTYLE)
   FIELD_BD (text_height, 45);
   FIELD_B (has_text_frame, 292);
   if (FIELD_VALUE (class_version) >= 2) {
+    ENCODER {
+      LOG_TRACE("  with class_version 2:\n");
+    }
     FIELD_B (text_always_left, 297);
   } else {
     DXF {
