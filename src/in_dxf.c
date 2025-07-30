@@ -1686,8 +1686,13 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
       if (pair != NULL && pair->code == 0 && pair->value.s
-          && strEQc (pair->value.s, "CLASS"))
+          && (strEQc (pair->value.s, "CLASS") || strEQc (pair->value.s, "ENDSEC")))
         {
+          if (strEQc (pair->value.s, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
           if (!pair)
@@ -1695,7 +1700,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       else
         {
-          LOG_ERROR ("2 CLASSES must be followed by 0 CLASS")
+          LOG_ERROR ("2 CLASSES must be followed by 0 CLASS or ENDSEC")
           DXF_RETURN_EOF (DWG_ERR_INVALIDDWG);
           return DWG_ERR_INVALIDDWG;
         }
