@@ -245,11 +245,23 @@ if(NOT LIBREDWG_DISABLE_JSON)
     src/in_json.c)
 endif()
 
+if(NOT LIBREDWG_DISABLE_DXF)
+  set(outdxf_SOURCES
+    src/out_dxf.c
+    src/out_dxfb.c)
+  set(indxf_SOURCES
+    src/in_dxf.c)
+  if(LIBREDWG_DISABLE_WRITE)
+    set(indxf_SOURCES
+      src/encode.c) # in_dxf depends on some functions
+  endif
+endif()
+
 if(NOT LIBREDWG_DISABLE_WRITE)
  set(write_SOURCES
     src/encode.c
-    src/in_dxf.c
-    ${injson_SOURCES}
+    ${outjson_SOURCES}
+    ${outdxf_SOURCES}
     src/reedsolomon.c)
 endif()
 
@@ -269,9 +281,8 @@ set(libredwg_SOURCES
     src/dxfclasses.c
     src/free.c
     src/geom.c
-    src/out_dxf.c
-    ${outjson_SOURCES}
-    src/out_dxfb.c
+    ${indxf_SOURCES}
+    ${injson_SOURCES}
     ${write_SOURCES}
     src/print.c)
 
@@ -299,14 +310,21 @@ if(NOT LIBREDWG_LIBONLY)
   if(NOT HAVE_GETOPT_H)
     set(getopt_c programs/getopt.c)
   endif(NOT HAVE_GETOPT_H)
-  set(executables_TARGETS dwgread dwg2dxf dwggrep dwglayers dwgbmp dwg2SVG)
+  set(executables_TARGETS dwgread dwggrep dwglayers dwgbmp dwg2SVG)
   add_executable(dwgread programs/dwgread.c ${getopt_c})
-  add_executable(dwg2dxf programs/dwg2dxf.c ${getopt_c})
+  if(NOT LIBREDWG_DISABLE_DXF)
+    add_executable(dxfread programs/dxfread.c ${getopt_c})
+    set(executables_TARGETS ${executables_TARGETS} dxfread)
+    if(NOT LIBREDWG_DISABLE_WRITE)
+      add_executable(dwg2dxf programs/dwg2dxf.c ${getopt_c})
+      add_executable(dxf2dwg programs/dxf2dwg.c ${getopt_c})
+      set(executables_TARGETS ${executables_TARGETS} dxf2dwg dwg2dxf)
+    endif(NOT LIBREDWG_DISABLE_WRITE)
+  endif(NOT LIBREDWG_DISABLE_DXF)
   if(NOT LIBREDWG_DISABLE_WRITE)
     add_executable(dwgrewrite programs/dwgrewrite.c ${getopt_c})
     add_executable(dwgwrite programs/dwgwrite.c ${getopt_c})
-    add_executable(dxf2dwg programs/dxf2dwg.c ${getopt_c})
-    set(executables_TARGETS ${executables_TARGETS} dwgrewrite dwgwrite dxf2dwg)
+    set(executables_TARGETS ${executables_TARGETS} dwgrewrite dwgwrite)
   endif(NOT LIBREDWG_DISABLE_WRITE)
   add_executable(dwggrep programs/dwggrep.c ${getopt_c})
   add_executable(dwglayers programs/dwglayers.c ${getopt_c})
