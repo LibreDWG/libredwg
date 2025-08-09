@@ -255,6 +255,7 @@ main (int argc, char *argv[])
           dwg_version = dwg_version_as (optarg);
           if (dwg_version == R_INVALID)
             {
+              i = (optind > 0 && optind < argc) ? optind - 1 : 1;
               fprintf (stderr, "Invalid version '%s'\n", argv[i]);
               return usage ();
             }
