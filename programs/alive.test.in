@@ -111,6 +111,24 @@ run ()
                     fi
                 fi
                 ;;
+    dxfread)    if [ -z "$DISABLE_JSON" ]; then
+                    if [ -n "$addarg" ]; then
+                        arg="-y -v2 $addarg -o $bdwg-$out.json $bdwg.dxf"
+                    else
+                        arg="-y -v2 $bdwg.dxf"
+                    fi
+                else
+                    if [ -n "$addarg" ]; then
+                        arg="-y -v2 $addarg -o $bdwg-$out.dwg $bdwg.dxf"
+                    else
+                        arg="-y -v2 $dwg.dxf"
+                    fi
+                fi
+                # no pre-r2 dxf yet (not sure this actually applies to reading)
+                if [ "$ddwg" = "r1.4" ]; then
+                    return
+                fi
+                ;;
     dxfwrite)   if [ -z "$DISABLE_JSON" ]; then
                     if [ -n "$addarg" ]; then
                         arg="-y -v2 $addarg -o $bdwg-$out.dxf $bdwg.json"
