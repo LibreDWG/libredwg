@@ -7,10 +7,11 @@
 # (by default: copies are made only if necessary).
 #
 # Tested with:
-# - autoconf (GNU Autoconf) 2.65, 2.69
-# - automake (GNU automake) 1.14 - 1.16.1
-# - ltmain.sh (GNU libtool) 2.2.6b - 2.4.6
+# - autoconf (GNU Autoconf) 2.65, 2.69, 2.72
+# - automake (GNU automake) 1.12 - 1.17
+# - ltmain.sh (GNU libtool) 2.2.6b - 2.5.4
 
+cd "$(dirname "$0")" || exit 1
 set -x
 rm -rf autom4te.cache config.status
 if test -d .git -a -f build-aux/git-version-gen; then

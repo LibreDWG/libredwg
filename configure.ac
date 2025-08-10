@@ -247,6 +247,12 @@ skipping unstable DWG features, unknown DWG versions and objects.])
 fi
 AM_CONDITIONAL([IS_RELEASE], [test x$ax_is_release = xyes])
 
+dnl Detect emscripten
+if test `basename "$CC"` = emcc; then
+  ac_cv_prog_cc_emcc=yes
+else
+  ac_cv_prog_cc_emcc=no
+fi
 dnl Disable unwanted warnings here
 enable_Werror=no
 ax_enable_compile_warnings=yes
@@ -255,7 +261,7 @@ ax_cv_check_cflags__Wswitch_enum=no
 dnl wasm does not support -fstack-protector yet
 if test x$enable_shared = xyes && \
    test x$ac_compiler_gnu = xyes && \
-   test x$CC != xemcc
+   test x$ac_cv_prog_cc_emcc != xyes
 then
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fno-semantic-interposition -fwrapv -fno-common -fvisibility=hidden \
@@ -267,6 +273,12 @@ else
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fwrapv -fno-common -fvisibility=hidden -fno-strict-aliasing \
      -fno-delete-null-pointer-checks -Wno-alloc-size])
+  if test x$ac_cv_prog_cc_emcc = xyes; then
+    enable_werror=no
+    dnl AM_LDFLAGS="-s ALLOW_MEMORY_GROWTH=1"
+    AM_LDFLAGS=""
+    CFLAGS="$CFLAGS -Wno-limited-postlink-optimizations -Wno-cast-align"
+  fi
 fi
 dnl if test x$ax_cv_check_cflags__Wunused_but_set_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-but-set-variable"
