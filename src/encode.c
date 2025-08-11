@@ -7309,66 +7309,40 @@ dwg_set_dataflags (Dwg_Object *obj)
   if (obj->fixedtype == DWG_TYPE_TEXT)
     {
       Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
-      if (_obj->elevation != 0.0)
-        _obj->dataflags |= 1;
-      if (_obj->alignment_pt.x != _obj->ins_pt.x
-          || _obj->alignment_pt.y != _obj->ins_pt.y)
-        _obj->dataflags |= 2;
-      if (_obj->oblique_angle != 0.0)
-        _obj->dataflags |= 4;
-      if (_obj->rotation != 0.0)
-        _obj->dataflags |= 8;
-      if (_obj->width_factor != 0.0)
-        _obj->dataflags |= 0x10;
-      if (_obj->generation != 0)
-        _obj->dataflags |= 0x20;
-      if (_obj->horiz_alignment != 0)
-        _obj->dataflags |= 0x40;
-      if (_obj->vert_alignment != 0)
-        _obj->dataflags |= 0x80;
+
+#define _SET_DATAFLAGS                                                        \
+  _obj->dataflags = 0xff;                                                     \
+  if (_obj->elevation != 0.0)                                                 \
+    _obj->dataflags &= ~1;                                                    \
+  if (_obj->alignment_pt.x != _obj->ins_pt.x                                  \
+      || _obj->alignment_pt.y != _obj->ins_pt.y)                              \
+    _obj->dataflags &= ~2;                                                    \
+  if (_obj->oblique_angle != 0.0)                                             \
+    _obj->dataflags &= ~4;                                                    \
+  if (_obj->rotation != 0.0)                                                  \
+    _obj->dataflags &= ~8;                                                    \
+  if (_obj->width_factor != 1.0)                                              \
+    _obj->dataflags &= ~0x10;                                                 \
+  if (_obj->generation != 0)                                                  \
+    _obj->dataflags &= ~0x20;                                                 \
+  if (_obj->horiz_alignment != 0)                                             \
+    _obj->dataflags &= ~0x40;                                                 \
+  if (_obj->vert_alignment != 0)                                              \
+    _obj->dataflags &= ~0x80
+
+      _SET_DATAFLAGS;
     }
   else if (obj->fixedtype == DWG_TYPE_ATTRIB)
     {
       Dwg_Entity_ATTRIB *_obj = obj->tio.entity->tio.ATTRIB;
-      if (_obj->elevation != 0.0)
-        _obj->dataflags |= 1;
-      if (_obj->alignment_pt.x != _obj->ins_pt.x
-          || _obj->alignment_pt.y != _obj->ins_pt.y)
-        _obj->dataflags |= 2;
-      if (_obj->oblique_angle != 0.0)
-        _obj->dataflags |= 4;
-      if (_obj->rotation != 0.0)
-        _obj->dataflags |= 8;
-      if (_obj->width_factor != 0.0)
-        _obj->dataflags |= 0x10;
-      if (_obj->generation != 0)
-        _obj->dataflags |= 0x20;
-      if (_obj->horiz_alignment != 0)
-        _obj->dataflags |= 0x40;
-      if (_obj->vert_alignment != 0)
-        _obj->dataflags |= 0x80;
+      _SET_DATAFLAGS;
     }
   else if (obj->fixedtype == DWG_TYPE_ATTDEF)
     {
       Dwg_Entity_ATTDEF *_obj = obj->tio.entity->tio.ATTDEF;
-      if (_obj->elevation != 0.0)
-        _obj->dataflags |= 1;
-      if (_obj->alignment_pt.x != _obj->ins_pt.x
-          || _obj->alignment_pt.y != _obj->ins_pt.y)
-        _obj->dataflags |= 2;
-      if (_obj->oblique_angle != 0.0)
-        _obj->dataflags |= 4;
-      if (_obj->rotation != 0.0)
-        _obj->dataflags |= 8;
-      if (_obj->width_factor != 0.0)
-        _obj->dataflags |= 0x10;
-      if (_obj->generation != 0)
-        _obj->dataflags |= 0x20;
-      if (_obj->horiz_alignment != 0)
-        _obj->dataflags |= 0x40;
-      if (_obj->vert_alignment != 0)
-        _obj->dataflags |= 0x80;
+      _SET_DATAFLAGS;
     }
+  #undef _SET_DATAFLAGS
 }
 
 #if 0
