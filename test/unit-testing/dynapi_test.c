@@ -25755,12 +25755,12 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
         fail ("VERTEX_PFACE_FACE.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_BS vertind[4];
+    BITCODE_BSd vertind[4];
     if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "vertind", &vertind, NULL)
-        && !memcmp (&vertind, &vertex_pface_face->vertind, sizeof (BITCODE_BS)))
+        && !memcmp (&vertind, &vertex_pface_face->vertind, sizeof (BITCODE_BSd)))
         pass ();
     else
-        fail ("VERTEX_PFACE_FACE.vertind [BS]");
+        fail ("VERTEX_PFACE_FACE.vertind [BSd]");
   }
   if (failed && (is_class_unstable ("VERTEX_PFACE_FACE") || is_class_debugging ("VERTEX_PFACE_FACE")))
     {

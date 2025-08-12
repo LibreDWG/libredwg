@@ -4122,7 +4122,7 @@ static const Dwg_DYNAPI_field _dwg_VERTEX_PFACE_FACE_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_VERTEX_PFACE_FACE, flag),
     0,0,0, 70 },
-  { "vertind",	"BS", 4 * sizeof (BITCODE_BS),  OFF (struct _dwg_entity_VERTEX_PFACE_FACE, vertind),
+  { "vertind",	"BSd", 4 * sizeof (BITCODE_BSd),  OFF (struct _dwg_entity_VERTEX_PFACE_FACE, vertind),
     0,0,0, 71 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

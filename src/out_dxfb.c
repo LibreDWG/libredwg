@@ -255,6 +255,11 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     if (_obj->nam != 0)                                                       \
       FIELD_BS (nam, dxf)                                                     \
   }
+#define FIELD_BSd0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_BSd (nam, dxf)                                                     \
+  }
 #define FIELD_BS1(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam != 1)                                                       \
@@ -389,6 +394,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define FIELD_BB(nam, dxf) FIELD_RC (nam, dxf)
 #define FIELD_3B(nam, dxf) FIELD_RC (nam, dxf)
 #define FIELD_BS(nam, dxf) FIELD_RS (nam, dxf)
+#define FIELD_BSd(nam, dxf) FIELD_RS (nam, dxf)
 #define FIELD_BL(nam, dxf) FIELD_RL (nam, dxf)
 #define HEADER_BLL(nam, dxf) HEADER_RLL (nam, dxf)
 #define FIELD_BD(nam, dxf) FIELD_RD (nam, dxf)

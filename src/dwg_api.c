@@ -18471,7 +18471,7 @@ dwg_ent_mline_get_verts (const dwg_ent_mline *restrict mline,
 
 /** Returns vertex_pface vertind
  */
-EXPORT BITCODE_BS
+EXPORT BITCODE_BSd
 dwg_ent_vertex_pface_face_get_vertind (const dwg_ent_vert_pface_face *face)
 {
   if (face)
@@ -18489,7 +18489,7 @@ dwg_ent_vertex_pface_face_get_vertind (const dwg_ent_vert_pface_face *face)
  */
 EXPORT void
 dwg_ent_vertex_pface_face_set_vertind (dwg_ent_vert_pface_face *restrict face,
-                                       const BITCODE_BS vertind[4])
+                                       const BITCODE_BSd vertind[4])
 {
   if (face
 #    ifndef HAVE_NONNULL

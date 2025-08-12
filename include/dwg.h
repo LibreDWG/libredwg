@@ -2409,7 +2409,7 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
   struct _dwg_object_entity *parent;
 
   BITCODE_RC flag;
-  BITCODE_BS vertind[4];
+  BITCODE_BSd vertind[4];
 } Dwg_Entity_VERTEX_PFACE_FACE;
 
 #define COMMON_ENTITY_POLYLINE                                                \

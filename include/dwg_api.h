@@ -8999,11 +8999,11 @@ extern "C"
    ********************************************************************/
 
   // Get/Set vertind of a vertex_pface_face entity
-  EXPORT BITCODE_BS dwg_ent_vertex_pface_face_get_vertind (
+  EXPORT BITCODE_BSd dwg_ent_vertex_pface_face_get_vertind (
       const dwg_ent_vert_pface_face *face) _deprecated_dynapi_getter;
 
   EXPORT void dwg_ent_vertex_pface_face_set_vertind (
-      dwg_ent_vert_pface_face *restrict face, const BITCODE_BS vertind[4])
+      dwg_ent_vert_pface_face *restrict face, const BITCODE_BSd vertind[4])
       __nonnull ((2)) _deprecated_dynapi_setter;
 
   /********************************************************************

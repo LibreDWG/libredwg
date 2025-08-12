@@ -1289,14 +1289,14 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
       VALUE_3BD (pt, 10)
     }
     VALUE_RC ((BITCODE_RC)128, 70);
-    FIELD_BS (vertind[0], 71);
-    FIELD_BS (vertind[1], 72);
-    FIELD_BS (vertind[2], 73);
-    FIELD_BS0 (vertind[3], 74);
+    FIELD_BSd (vertind[0], 71);
+    FIELD_BSd (vertind[1], 72);
+    FIELD_BSd (vertind[2], 73);
+    FIELD_BSd0 (vertind[3], 74);
   }
 #elif defined IS_JSON
   FIELD_RC (flag, 0);
-  FIELD_VECTOR_INL (vertind, BS, 4, 71);
+  FIELD_VECTOR_INL (vertind, BSd, 4, 71);
 #else
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
   PRE (R_13b1)
@@ -1306,24 +1306,24 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
       LOG_FLAG_VERTEX
     }
     if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX1)) {
-      FIELD_RS (vertind[0], 71);
+      FIELD_RSd (vertind[0], 71);
     }
     if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX2)) {
-      FIELD_RS (vertind[1], 72);
+      FIELD_RSd (vertind[1], 72);
     }
     if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX3)) {
-      FIELD_RS (vertind[2], 73);
+      FIELD_RSd (vertind[2], 73);
     }
     if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX4)) {
-      FIELD_RS (vertind[3], 74);
+      FIELD_RSd (vertind[3], 74);
     }
   }
   LATER_VERSIONS {
     FIELD_VALUE (flag) = 128;
-    FIELD_BS (vertind[0], 71);
-    FIELD_BS (vertind[1], 72);
-    FIELD_BS (vertind[2], 73);
-    FIELD_BS (vertind[3], 74);
+    FIELD_BSd (vertind[0], 71);
+    FIELD_BSd (vertind[1], 72);
+    FIELD_BSd (vertind[2], 73);
+    FIELD_BSd (vertind[3], 74);
   }
 #endif
   //TODO R13 has color_r11 and ltype_r11 for all vertices, not in DXF
