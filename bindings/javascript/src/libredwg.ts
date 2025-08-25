@@ -1,7 +1,15 @@
 import { MainModule } from '../wasm/libredwg-web'
 import createModule from '../wasm/libredwg-web.js'
 import { LibreDwgConverter } from './converter'
-import { DwgDatabase, DwgPoint2D, DwgPoint3D, DwgPoint4D } from './database'
+import {
+  DwgCodePage,
+  DwgDatabase,
+  DwgPoint2D,
+  DwgPoint3D,
+  DwgPoint4D,
+  DwgVersion,
+  dwgVersions
+} from './database'
 import { SvgConverter } from './svg'
 import {
   Dwg_Array_Ptr,
@@ -102,6 +110,26 @@ export class LibreDwg {
     // }
   }
 
+  /**
+   * Gets the version of the dwg.
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Return the version of the dwg
+   */
+  dwg_get_version_type(data: Dwg_Data_Ptr): DwgVersion {
+    const version = this.wasmInstance.dwg_get_version_type(data)
+    return dwgVersions[version]
+  }
+
+  /**
+   * Gets code page of the dwg.
+   * @param data Pointer to Dwg_Data instance.
+   * @returns Return code page of the dwg
+   */
+  dwg_get_codepage(data: Dwg_Data_Ptr): DwgCodePage {
+    const codepage = this.wasmInstance.dwg_get_codepage(data)
+    return codepage as DwgCodePage
+  }
+  
   /**
    * Extracts thumbnail image form dwg.
    * @param data Pointer to Dwg_Data instance.

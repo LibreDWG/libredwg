@@ -2,8 +2,9 @@
 #include <string>
 #include <sstream>
 
-#include "dwg.h"
 #include "dwg_api.h"
+#include "dwg.h"
+#include "common.h"
 #include "binding_common.h"
 
 using namespace emscripten;
@@ -39,6 +40,16 @@ emscripten::val dwg_read_file_wrapper(const std::string& filename) {
 //   result.set("data", reinterpret_cast<uintptr_t>(dwg));
 //   return result;
 // }
+
+int dwg_get_version_type_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg->header.version;
+}
+
+int dwg_get_codepage_wrapper(uintptr_t dwg_ptr) {
+  Dwg_Data* dwg = reinterpret_cast<Dwg_Data*>(dwg_ptr);
+  return dwg->header.codepage;
+}
 
 /* 
  * Supports multiple preview picture types.
@@ -794,6 +805,8 @@ EMSCRIPTEN_BINDINGS(libredwg_api) {
   DEFINE_FUNC(dwg_read_file);
   // DEFINE_FUNC(dxf_read_file);
   // DEFINE_FUNC(dwg_write_file);
+  DEFINE_FUNC(dwg_get_version_type);
+  DEFINE_FUNC(dwg_get_codepage);
   DEFINE_FUNC(dwg_bmp);
 
   DEFINE_FUNC(dwg_find_tablehandle);
