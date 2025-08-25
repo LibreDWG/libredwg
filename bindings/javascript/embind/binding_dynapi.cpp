@@ -98,6 +98,7 @@ emscripten::val get_obj_value(const Dwg_Data *dwg, T _obj, const Dwg_DYNAPI_fiel
     } else {
       char *utf8 = *(char **)((char*)_obj + f->offset);
       result.set("data", std::string(utf8));
+      free(utf8);
     }
   } else if (strEQc(f->type, "RL") || strEQc(f->type, "BL") || strEQc (f->type, "MS")) {
     // INT32
