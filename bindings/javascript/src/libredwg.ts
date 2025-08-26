@@ -3,6 +3,7 @@ import createModule from '../wasm/libredwg-web.js'
 import { LibreDwgConverter } from './converter'
 import {
   DwgCodePage,
+  dwgCodePageToEncoding,
   DwgDatabase,
   DwgPoint2D,
   DwgPoint3D,
@@ -70,6 +71,7 @@ export interface DwgThumbnail {
 export class LibreDwg {
   static instance: LibreDwgEx
   private wasmInstance!: MainModule
+  private decoder?: TextDecoder
 
   private constructor(wasmInstance: MainModule) {
     this.wasmInstance = wasmInstance
@@ -93,7 +95,7 @@ export class LibreDwg {
       )
       const result = this.wasmInstance.dwg_read_file(fileName)
       if (result.error != 0) {
-        console.log('Failed to open dwg file with error code: ', result.error)
+        console.log('Open dwg file with error code: ', result.error)
       }
       this.wasmInstance.FS.unlink(fileName)
       return result.data as Dwg_Data_Ptr
@@ -103,7 +105,7 @@ export class LibreDwg {
     //   this.wasmInstance.FS.writeFile(fileName, new Uint8Array(fileContent as ArrayBuffer));
     //   const result = this.wasmInstance.dxf_read_file(fileName);
     //   if (result.error != 0) {
-    //     console.log('Failed to open dxf file with error code: ', result.error);
+    //     console.log('Open dxf file with error code: ', result.error);
     //   }
     //   this.wasmInstance.FS.unlink(fileName);
     //   return result.data as Dwg_Data_Ptr;
@@ -129,7 +131,7 @@ export class LibreDwg {
     const codepage = this.wasmInstance.dwg_get_codepage(data)
     return codepage as DwgCodePage
   }
-  
+
   /**
    * Extracts thumbnail image form dwg.
    * @param data Pointer to Dwg_Data instance.
@@ -147,6 +149,9 @@ export class LibreDwg {
    * @returns Returns the converted DwgDatabase instance.
    */
   convert(data: Dwg_Data_Ptr) {
+    const codepage = this.dwg_get_codepage(data)
+    const encoding = dwgCodePageToEncoding(codepage)
+    this.decoder = new TextDecoder(encoding)
     const converter = new LibreDwgConverter(this as unknown as LibreDwgEx)
     return converter.convert(data)
   }
@@ -798,7 +803,14 @@ export class LibreDwg {
     obj: Dwg_Object_Object_TIO_Ptr | Dwg_Object_Entity_TIO_Ptr,
     field: string
   ): Dwg_Field_Value {
-    return this.wasmInstance.dwg_dynapi_entity_value(obj, field)
+    const value = this.wasmInstance.dwg_dynapi_entity_value(
+      obj,
+      field
+    ) as Dwg_Field_Value
+    if (value.bin && this.decoder) {
+      value.data = this.decoder.decode(value.bin)
+    }
+    return value
   }
 
   /**

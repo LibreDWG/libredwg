@@ -241,8 +241,23 @@ export interface Dwg_MLINE_Vertex {
   lines: Dwg_MLINE_Line[]
 }
 
+export type Dwg_Field_Value_Data_Type =
+  | string
+  | number
+  | Dwg_Color
+  | Dwg_Array_Ptr
+  | DwgPoint2D
+  | DwgPoint3D
+
 export interface Dwg_Field_Value {
   success: boolean
   message?: string
-  data?: string | number | Dwg_Color | Dwg_Array_Ptr | DwgPoint2D | DwgPoint3D
+  data?: Dwg_Field_Value_Data_Type
+  /**
+   * LibreDWG does not support converting strings to Unicode based on the DWG file’s codepage.
+   * If the codepage is not UTF-8, the raw string byte array is returned instead.
+   * It is the client’s responsibility to perform the conversion to Unicode.
+   * This field is used to store the raw string byte array if the DWG file's codepage isn't utf-8.
+   */
+  bin?: Uint8Array
 }
