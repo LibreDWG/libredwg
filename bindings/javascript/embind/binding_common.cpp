@@ -135,16 +135,20 @@ DEFINE_ARRAY_FUNC(int64_t)
 
 emscripten::val dwg_ptr_to_unsigned_char_array(unsigned char* array, size_t size) {
   if (array) {
-    std::vector<unsigned char> data(array, array + size);
-    return emscripten::val(emscripten::typed_memory_view(data.size(), data.data()));
+    emscripten::val result = emscripten::val::global("Uint8Array").new_(size);
+    emscripten::val memoryView = emscripten::val(emscripten::typed_memory_view(size, array));
+    result.call<void>("set", memoryView);
+    return result;
   }
   return emscripten::val::null();
 }
 
 emscripten::val dwg_ptr_to_signed_char_array(signed char* array, size_t size) {
   if (array) {
-    std::vector<unsigned char> data(array, array + size);
-    return emscripten::val(emscripten::typed_memory_view(data.size(), data.data()));
+    emscripten::val result = emscripten::val::global("Int8Array").new_(size);
+    emscripten::val memoryView = emscripten::val(emscripten::typed_memory_view(size, array));
+    result.call<void>("set", memoryView);
+    return result;
   }
   return emscripten::val::null();
 }
