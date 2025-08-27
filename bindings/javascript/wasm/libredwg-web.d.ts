@@ -429,10 +429,7 @@ interface EmbindModule {
   dwg_page_x_max(_0: number): number;
   dwg_page_y_min(_0: number): number;
   dwg_page_y_max(_0: number): number;
-  dwg_object_get_name(_0: number): string;
   dwg_object_get_dxfname(_0: number): string;
-  dwg_object_entity_get_layer_name(_0: number): string;
-  dwg_object_entity_get_ltype_name(_0: number): string;
   is_dwg_entity(_0: EmbindString): boolean;
   is_dwg_object(_0: EmbindString): boolean;
   dwg_dynapi_header_set_value(_0: number, _1: EmbindString, _2: number, _3: boolean): boolean;
@@ -492,12 +489,15 @@ interface EmbindModule {
   dwg_ptr_to_hatch_defline_array(_0: number, _1: number): any;
   dwg_ptr_to_hatch_path_array(_0: number, _1: number): any;
   dwg_ptr_to_mline_vertex_array(_0: number, _1: number): any;
+  dwg_object_get_name(_0: number): any;
   dwg_object_get_handle_object(_0: number): any;
   dwg_object_object_get_ownerhandle_object(_0: number): any;
   dwg_object_object_get_handle_object(_0: number): any;
   dwg_object_entity_get_ownerhandle_object(_0: number): any;
   dwg_object_entity_get_handle_object(_0: number): any;
   dwg_object_entity_get_color_object(_0: number): any;
+  dwg_object_entity_get_layer_name(_0: number): any;
+  dwg_object_entity_get_ltype_name(_0: number): any;
   dwg_ref_get_handle_object(_0: number): any;
   dwg_dynapi_header_value(_0: number, _1: EmbindString): any;
   dwg_dynapi_entity_value(_0: number, _1: EmbindString): any;

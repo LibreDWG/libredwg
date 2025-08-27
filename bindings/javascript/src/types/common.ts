@@ -261,3 +261,21 @@ export interface Dwg_Field_Value {
    */
   bin?: Uint8Array
 }
+
+/**
+ * This interface represents string returned by libredwg.
+ * 
+ * LibreDWG does not support converting strings to Unicode based on the DWG file’s codepage.
+ * If the codepage is not UTF-8, the raw string byte array is returned instead.
+ * It is the client’s responsibility to perform the conversion to Unicode.
+ */
+export interface Dwg_String {
+  /**
+   * This field represents utf-8 encoded string. It may contain some corruptted characters due to decoding.
+   */
+  data: string
+  /**
+   * This field is used to store the raw string byte array if the DWG file's codepage isn't utf-8.
+   */
+  bin?: Uint8Array
+}

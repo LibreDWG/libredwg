@@ -17,6 +17,8 @@ typedef uintptr_t Dwg_Object_Ref_Ptr;
 typedef uintptr_t Dwg_Object_Object_Ptr;
 typedef uintptr_t Dwg_Object_Entity_Ptr;
 
+emscripten::val char_array_to_js_object(char* utf8);
+
 emscripten::val handle_to_js_object(Dwg_Handle* handle);
 
 emscripten::val object_ref_to_js_object(BITCODE_H object_ref);

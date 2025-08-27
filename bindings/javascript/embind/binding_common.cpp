@@ -1,5 +1,13 @@
 #include "binding_common.h"
 
+emscripten::val char_array_to_js_object(char* utf8) {
+  emscripten::val str_obj = emscripten::val::object();
+  const std::string str = std::string(utf8);
+  str_obj.set("data", str);
+  str_obj.set("bin", dwg_ptr_to_unsigned_char_array((unsigned char*)utf8, str.length()));
+  return str_obj;
+}
+
 emscripten::val handle_to_js_object(Dwg_Handle* handle) {
   emscripten::val handle_obj = emscripten::val::object();
   handle_obj.set("code", handle->code);
@@ -504,9 +512,12 @@ int dwg_object_get_supertype_wrapper(Dwg_Object_Ptr obj_ptr) {
 /**
  * public entity/object name
  */
-std::string dwg_object_get_name_wrapper(Dwg_Object_Ptr obj_ptr) {
+emscripten::val dwg_object_get_name_wrapper(Dwg_Object_Ptr obj_ptr) {
   Dwg_Object* obj = reinterpret_cast<Dwg_Object*>(obj_ptr);
-  return (obj == NULL) ? 0 : std::string(obj->name);
+  if (obj) {
+    return char_array_to_js_object(obj->name);
+  }
+  return emscripten::val::null();
 }
 
 /**
@@ -712,19 +723,27 @@ emscripten::val dwg_object_entity_get_color_object_wrapper(Dwg_Object_Entity_Ptr
 /**
  * Get the name of the layer referenced by this entity
  */
-std::string dwg_object_entity_get_layer_name_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+emscripten::val dwg_object_entity_get_layer_name_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
   Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
   int error = 0;
-  return dwg_ent_get_layer_name(ent, &error);
+  char* name = dwg_ent_get_layer_name(ent, &error);
+  if (error == 0) {
+    return char_array_to_js_object(name);
+  }
+  return emscripten::val::null();
 }
 
 /**
  * Get the name of the line type referenced by this entity
  */
-std::string dwg_object_entity_get_ltype_name_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+emscripten::val dwg_object_entity_get_ltype_name_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
   Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
   int error = 0;
-  return dwg_ent_get_ltype_name(ent, &error);
+  char* name = dwg_ent_get_ltype_name(ent, &error);
+  if (error == 0) {
+    return char_array_to_js_object(name);
+  }
+  return emscripten::val::null();
 }
 
 double dwg_object_entity_get_ltype_flags_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
