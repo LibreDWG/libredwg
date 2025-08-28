@@ -713,37 +713,25 @@ emscripten::val dwg_object_entity_get_handle_object_wrapper(Dwg_Object_Entity_Pt
   return handle_to_js_object(handle);
 }
 
+emscripten::val dwg_object_entity_get_layer_object_ref_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  Dwg_Object_Ref* layer = dwg_ent_get_layer(ent, &error);
+  return object_ref_to_js_object(layer);
+}
+
+emscripten::val dwg_object_entity_get_ltype_object_ref_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
+  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
+  int error = 0;
+  Dwg_Object_Ref* layer = dwg_ent_get_ltype(ent, &error);
+  return object_ref_to_js_object(layer);
+}
+
 emscripten::val dwg_object_entity_get_color_object_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
   Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
   int error = 0;
   const Dwg_Color* color = dwg_ent_get_color(ent, &error);
   return color_to_js_object(color);
-}
-
-/**
- * Get the name of the layer referenced by this entity
- */
-emscripten::val dwg_object_entity_get_layer_name_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
-  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
-  int error = 0;
-  char* name = dwg_ent_get_layer_name(ent, &error);
-  if (error == 0) {
-    return char_array_to_js_object(name);
-  }
-  return emscripten::val::null();
-}
-
-/**
- * Get the name of the line type referenced by this entity
- */
-emscripten::val dwg_object_entity_get_ltype_name_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
-  Dwg_Object_Entity* ent = reinterpret_cast<Dwg_Object_Entity*>(ent_ptr);
-  int error = 0;
-  char* name = dwg_ent_get_ltype_name(ent, &error);
-  if (error == 0) {
-    return char_array_to_js_object(name);
-  }
-  return emscripten::val::null();
 }
 
 double dwg_object_entity_get_ltype_flags_wrapper(Dwg_Object_Entity_Ptr ent_ptr) {
@@ -848,9 +836,9 @@ EMSCRIPTEN_BINDINGS(libredwg_dwg_object_entity) {
   DEFINE_FUNC(dwg_object_entity_get_ownerhandle_object);
   DEFINE_FUNC(dwg_object_entity_get_handle);
   DEFINE_FUNC(dwg_object_entity_get_handle_object);
+  DEFINE_FUNC(dwg_object_entity_get_layer_object_ref);
+  DEFINE_FUNC(dwg_object_entity_get_ltype_object_ref);
   DEFINE_FUNC(dwg_object_entity_get_color_object);
-  DEFINE_FUNC(dwg_object_entity_get_layer_name);
-  DEFINE_FUNC(dwg_object_entity_get_ltype_name);
   DEFINE_FUNC(dwg_object_entity_get_ltype_flags);
   DEFINE_FUNC(dwg_object_entity_get_ltype_scale);
   DEFINE_FUNC(dwg_object_entity_get_line_weight);

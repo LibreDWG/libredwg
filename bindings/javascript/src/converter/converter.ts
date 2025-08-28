@@ -43,6 +43,7 @@ export class LibreDwgConverter {
   }
 
   convert(data: Dwg_Data_Ptr) {
+    this.entityConverter.clear()
     const db: DwgDatabase = {
       tables: {
         BLOCK_RECORD: {
@@ -74,7 +75,33 @@ export class LibreDwgConverter {
     const libredwg = this.libredwg
     this.convertHeader(data, db.header)
     const num_objects = libredwg.dwg_get_num_objects(data)
-    const results = []
+
+    for (let i = 0; i < num_objects; i++) {
+      const obj = libredwg.dwg_get_object(data, i)
+      const tio = libredwg.dwg_object_to_object_tio(obj)
+      if (tio) {
+        const fixedtype = libredwg.dwg_object_get_fixedtype(obj)
+        switch (fixedtype) {
+          case Dwg_Object_Type.DWG_TYPE_LAYER:
+            {
+              const layer = this.convertLayer(tio, obj)
+              db.tables.LAYER.entries.push(layer)
+              this.entityConverter.layers.set(layer.handle, layer.name)
+            }
+            break
+          case Dwg_Object_Type.DWG_TYPE_LTYPE:
+            {
+              const ltype = this.convertLineType(tio, obj)
+              db.tables.LTYPE.entries.push(ltype)
+              this.entityConverter.ltypes.set(ltype.handle, ltype.name)
+            }
+            break
+          default:
+            break
+        }
+      }
+    }
+
     for (let i = 0; i < num_objects; i++) {
       const obj = libredwg.dwg_get_object(data, i)
       const tio = libredwg.dwg_object_to_object_tio(obj)
@@ -93,12 +120,6 @@ export class LibreDwgConverter {
           case Dwg_Object_Type.DWG_TYPE_DIMSTYLE:
             db.tables.DIMSTYLE.entries.push(this.convertDimStyle(tio, obj))
             break
-          case Dwg_Object_Type.DWG_TYPE_LAYER:
-            db.tables.LAYER.entries.push(this.convertLayer(tio, obj))
-            break
-          case Dwg_Object_Type.DWG_TYPE_LTYPE:
-            db.tables.LTYPE.entries.push(this.convertLineType(tio, obj))
-            break
           case Dwg_Object_Type.DWG_TYPE_STYLE:
             db.tables.STYLE.entries.push(this.convertStyle(tio, obj))
             break
@@ -114,7 +135,6 @@ export class LibreDwgConverter {
           default:
             break
         }
-        results.push(tio)
       }
     }
     return db

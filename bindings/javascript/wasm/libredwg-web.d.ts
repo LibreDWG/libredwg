@@ -495,9 +495,9 @@ interface EmbindModule {
   dwg_object_object_get_handle_object(_0: number): any;
   dwg_object_entity_get_ownerhandle_object(_0: number): any;
   dwg_object_entity_get_handle_object(_0: number): any;
+  dwg_object_entity_get_layer_object_ref(_0: number): any;
+  dwg_object_entity_get_ltype_object_ref(_0: number): any;
   dwg_object_entity_get_color_object(_0: number): any;
-  dwg_object_entity_get_layer_name(_0: number): any;
-  dwg_object_entity_get_ltype_name(_0: number): any;
   dwg_ref_get_handle_object(_0: number): any;
   dwg_dynapi_header_value(_0: number, _1: EmbindString): any;
   dwg_dynapi_entity_value(_0: number, _1: EmbindString): any;

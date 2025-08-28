@@ -10,6 +10,7 @@ import {
   DwgBoundaryPathEdge,
   DwgBoundaryPathEdgeType,
   DwgCircleEntity,
+  DwgDatabase,
   DwgDimensionEntityCommon,
   DwgDimensionTextLineSpacing,
   DwgDimensionType,
@@ -81,9 +82,32 @@ type DwgDimensionCommonAttributes = Omit<
 
 export class LibreEntityConverter {
   libredwg: LibreDwgEx
+  layers: Map<number, string> = new Map()
+  ltypes: Map<number, string> = new Map()
 
   constructor(instance: LibreDwgEx) {
     this.libredwg = instance
+  }
+
+  prepare(db: DwgDatabase, force: boolean = false) {
+    if (force || this.layers.size == 0) {
+      this.layers.clear()
+      db.tables.LAYER.entries.forEach(layer => {
+        this.layers.set(layer.handle, layer.name)
+      })
+    }
+
+    if (force || this.ltypes.size == 0) {
+      this.ltypes.clear()
+      db.tables.LTYPE.entries.forEach(ltype => {
+        this.ltypes.set(ltype.handle, ltype.name)
+      })
+    }
+  }
+
+  clear() {
+    this.layers.clear()
+    this.ltypes.clear()
   }
 
   convert(object_ptr: Dwg_Object_Ptr): DwgEntity | undefined {
@@ -1951,11 +1975,11 @@ export class LibreEntityConverter {
   private getCommonAttrs(entity: Dwg_Object_Entity_Ptr): DwgCommonAttributes {
     const libredwg = this.libredwg
     const color = libredwg.dwg_object_entity_get_color_object(entity)
-    const layer = libredwg.dwg_object_entity_get_layer_name(entity)
+    const layer = this.getLayerName(entity)
     const handle = libredwg.dwg_object_entity_get_handle_object(entity)
     const ownerhandle =
       libredwg.dwg_object_entity_get_ownerhandle_object(entity)
-    const lineType = libredwg.dwg_object_entity_get_ltype_name(entity)
+    const lineType = this.getLtypeName(entity)
     const lineweight = libredwg.dwg_object_entity_get_line_weight(entity)
     const lineTypeScale = libredwg.dwg_object_entity_get_ltype_scale(entity)
     const isVisible = !libredwg.dwg_object_entity_get_invisible(entity)
@@ -1973,5 +1997,19 @@ export class LibreEntityConverter {
       isVisible: isVisible,
       transparency: 0 // TODO: Set the correct value
     }
+  }
+
+  private getLayerName(entity: Dwg_Object_Entity_Ptr) {
+    const libredwg = this.libredwg
+    const layer = libredwg.dwg_object_entity_get_layer_object_ref(entity)
+    const name = this.layers.get(layer.handleref.value)
+    return name ?? '0'
+  }
+
+  private getLtypeName(entity: Dwg_Object_Entity_Ptr) {
+    const libredwg = this.libredwg
+    const ltype = libredwg.dwg_object_entity_get_ltype_object_ref(entity)
+    const name = this.ltypes.get(ltype.handleref.value)
+    return name ?? ''
   }
 }

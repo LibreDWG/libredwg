@@ -50,7 +50,6 @@ import {
   Dwg_Object_VERTEX_2D_Ptr,
   Dwg_Object_VERTEX_3D_Ptr,
   Dwg_Object_VPORT_Ptr,
-  Dwg_String,
   Dwg_TABLE_Cell
 } from './types'
 
@@ -911,6 +910,30 @@ export class LibreDwg {
   }
 
   /**
+   * Returns the layer handle of one Dwg_Object_Entity instance.
+   * @group Dwg_Object_Entity Methods
+   * @param ptr Pointer to one Dwg_Object_Entity instance.
+   * @returns Returns the layer handle of one Dwg_Object_Entity instance.
+   */
+  dwg_object_entity_get_layer_object_ref(
+    ptr: Dwg_Object_Entity_Ptr
+  ): Dwg_Object_Ref {
+    return this.wasmInstance.dwg_object_entity_get_layer_object_ref(ptr)
+  }
+
+  /**
+   * Returns the line type handle of one Dwg_Object_Entity instance.
+   * @group Dwg_Object_Entity Methods
+   * @param ptr Pointer to one Dwg_Object_Entity instance.
+   * @returns Returns the line type handle of one Dwg_Object_Entity instance.
+   */
+  dwg_object_entity_get_ltype_object_ref(
+    ptr: Dwg_Object_Entity_Ptr
+  ): Dwg_Object_Ref {
+    return this.wasmInstance.dwg_object_entity_get_ltype_object_ref(ptr)
+  }
+
+  /**
    * Returns color value of one Dwg_Object_Entity instance.
    * @group Dwg_Object_Entity Methods
    * @param ptr Pointer to one Dwg_Object_Entity instance.
@@ -918,40 +941,6 @@ export class LibreDwg {
    */
   dwg_object_entity_get_color_object(ptr: Dwg_Object_Entity_Ptr): Dwg_Color {
     return this.wasmInstance.dwg_object_entity_get_color_object(ptr)
-  }
-
-  /**
-   * Returns layer name of one Dwg_Entity_* instance.
-   * @group Dwg_Entity_* Methods
-   * @param ptr Pointer to one Dwg_Entity_* instance.
-   * @returns Returns layer name of one Dwg_Entity_* instance.
-   */
-  dwg_object_entity_get_layer_name(
-    ptr: Dwg_Object_Entity_TIO_Ptr
-  ): string {
-    const wasmInstance = this.wasmInstance
-    const value = wasmInstance.dwg_object_entity_get_layer_name(ptr) as Dwg_String
-    if (value.bin && this.decoder) {
-      value.data = this.decoder.decode(value.bin)
-    }
-    return value.data
-  }
-
-  /**
-   * Returns line type name of one Dwg_Entity_* instance.
-   * @group Dwg_Entity_* Methods
-   * @param ptr Pointer to one Dwg_Entity_* instance.
-   * @returns Returns line type name of one Dwg_Entity_* instance.
-   */
-  dwg_object_entity_get_ltype_name(
-    ptr: Dwg_Object_Entity_TIO_Ptr
-  ): string {
-    const wasmInstance = this.wasmInstance
-    const value = wasmInstance.dwg_object_entity_get_ltype_name(ptr) as Dwg_String
-    if (value.bin && this.decoder) {
-      value.data = this.decoder.decode(value.bin)
-    }
-    return value.data
   }
 
   /**
