@@ -1448,13 +1448,8 @@
       FIELD_VALUE (num_inserts)++;                                            \
       LOG_INSANE ("num_inserts [RC " FORMAT_RL "]: %d\n",                     \
                   FIELD_VALUE (num_inserts), (unsigned char)vcount)           \
-      if (vcount != 1)                                                        \
-        {                                                                     \
-          LOG_WARN ("num_inserts [RC " FORMAT_RL "]: %d != 1",                \
-                    FIELD_VALUE (num_inserts), (unsigned char)vcount)         \
-          /*bit_advance_position (dat, -8);*/                                 \
+      if (vcount == 0)                                                        \
           break;                                                              \
-        }                                                                     \
     }                                                                         \
   LOG_TRACE ("num_inserts: %d [RC* 0]\n", FIELD_VALUE (num_inserts))
 
