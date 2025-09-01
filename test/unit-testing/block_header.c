@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   BITCODE_B hasattrs;     /* flag 70 bit 2 */
   BITCODE_B blkisxref;    /* flag 70 bit 3 */
   BITCODE_B xrefoverlaid; /* flag 70 bit 4 */
-  BITCODE_B loaded_bit;   /* flag 70 bit 6 */
+  BITCODE_B xref_loaded;   /* flag 70 bit 6 */
   BITCODE_BL num_owned;
   BITCODE_3DPOINT base_pt;
   BITCODE_TV xref_pname;
@@ -58,7 +58,7 @@ api_process (dwg_object *obj)
                    B); /* flag 70 bit 3 */
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xrefoverlaid,
                    B); /* flag 70 bit 4 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, loaded_bit,
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xref_loaded,
                    B); /* flag 70 bit 6 */
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, num_owned, BL);
   CHK_ENTITY_3RD (block_header, BLOCK_HEADER, base_pt);

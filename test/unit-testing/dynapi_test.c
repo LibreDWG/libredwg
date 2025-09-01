@@ -44960,21 +44960,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         fail ("BLOCK_HEADER.layout [H]");
   }
   {
-    BITCODE_B loaded_bit;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "loaded_bit", &loaded_bit, NULL)
-        && loaded_bit == block_header->loaded_bit)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.loaded_bit [B] " FORMAT_B " != " FORMAT_B "", block_header->loaded_bit, loaded_bit);
-    loaded_bit++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "loaded_bit", &loaded_bit, 0)
-        && loaded_bit == block_header->loaded_bit)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.loaded_bit [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->loaded_bit, loaded_bit);
-    block_header->loaded_bit--;
-  }
-  {
     BITCODE_TV name;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "name", &name, NULL)
         && name
@@ -45082,6 +45067,21 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCK_HEADER.xref [H]");
+  }
+  {
+    BITCODE_B xref_loaded;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "xref_loaded", &xref_loaded, NULL)
+        && xref_loaded == block_header->xref_loaded)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.xref_loaded [B] " FORMAT_B " != " FORMAT_B "", block_header->xref_loaded, xref_loaded);
+    xref_loaded++;
+    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "xref_loaded", &xref_loaded, 0)
+        && xref_loaded == block_header->xref_loaded)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.xref_loaded [B] set+1 " FORMAT_B " != " FORMAT_B "", block_header->xref_loaded, xref_loaded);
+    block_header->xref_loaded--;
   }
   {
     BITCODE_T xref_pname;

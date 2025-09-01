@@ -7483,7 +7483,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
     0,0,0, 0 },
   { "xrefoverlaid",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCK_HEADER, xrefoverlaid),
     0,0,0, 0 },
-  { "loaded_bit",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCK_HEADER, loaded_bit),
+  { "xref_loaded",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCK_HEADER, xref_loaded),
     0,0,0, 0 },
   { "num_owned",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCK_HEADER, num_owned),
     0,0,0, 0 },

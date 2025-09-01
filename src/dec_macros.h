@@ -1452,7 +1452,7 @@
         {                                                                     \
           LOG_WARN ("num_inserts [RC " FORMAT_RL "]: %d != 1",                \
                     FIELD_VALUE (num_inserts), (unsigned char)vcount)         \
-          bit_advance_position (dat, -8);                                     \
+          /*bit_advance_position (dat, -8);*/                                 \
           break;                                                              \
         }                                                                     \
     }                                                                         \

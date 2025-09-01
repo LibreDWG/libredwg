@@ -3659,7 +3659,7 @@ DWG_TABLE (BLOCK_HEADER)
     FIELD_B (xrefoverlaid, 0); // bit 8
   }
   SINCE (R_2000b) {
-    FIELD_B (loaded_bit, 0); // bit 32
+    FIELD_B (xref_loaded, 0); // bit 32
   }
   SINCE (R_13b1) {
     FIELD_VALUE (flag) |= FIELD_VALUE (anonymous) |

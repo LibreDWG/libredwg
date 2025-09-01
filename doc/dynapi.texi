@@ -8922,7 +8922,7 @@ B
 B
 @item xrefoverlaid
 B
-@item loaded_bit
+@item xref_loaded
 B
 @item num_owned
 BL
