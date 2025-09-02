@@ -1868,8 +1868,12 @@ dwg_resbuf_value_type (short gc)
                 return DWG_VT_BINARY;
               if (gc <= 1009)
                 return DWG_VT_STRING;
-              if (gc <= 1059)
+              if (gc <= 1039)
+                return DWG_VT_POINT3D;
+              if (gc <= 1042)
                 return DWG_VT_REAL;
+              if (gc <= 1069)
+                return DWG_VT_POINT3D;
               if (gc <= 1070)
                 return DWG_VT_INT16;
               if (gc == 1071)
@@ -1912,6 +1916,8 @@ dwg_resbuf_value_type (short gc)
                 return DWG_VT_BINARY;
               if (gc <= 329)
                 return DWG_VT_HANDLE;
+              /* 330-340 SoftPointer, 340-349 HardPointer
+                 350-359 SoftOwner, 360-369 HardOwner */
               if (gc <= 369)
                 return DWG_VT_OBJECTID;
               if (gc <= 389)
@@ -1923,10 +1929,8 @@ dwg_resbuf_value_type (short gc)
     {
       if (gc >= 210) // 210-299
         {
-          if (gc <= 239)
-            return DWG_VT_REAL;
           if (gc <= 269)
-            return DWG_VT_INVALID;
+            return DWG_VT_POINT3D;
           if (gc <= 279)
             return DWG_VT_INT16;
           if (gc <= 289)
@@ -1940,6 +1944,8 @@ dwg_resbuf_value_type (short gc)
             return DWG_VT_HANDLE;
           if (gc <= 109)
             return DWG_VT_INVALID;
+          if (gc <= 139)
+            return DWG_VT_POINT3D;
           if (gc <= 149)
             return DWG_VT_REAL;
           if (gc <= 169) // e.g. REQUIREDVERSIONS 160 r2013+
@@ -1960,9 +1966,7 @@ dwg_resbuf_value_type (short gc)
             return DWG_VT_INT16;
           if (gc <= 99)
             return DWG_VT_INT32;
-          if (gc <= 101)
-            return DWG_VT_STRING;
-          if (gc == 102)
+          if (gc <= 102)
             return DWG_VT_STRING;
         }
       else // 0-37
