@@ -1948,7 +1948,7 @@ dwg_resbuf_value_type (short gc)
                 return DWG_VT_STRING;
               if (gc <= 998)
                 return DWG_VT_INVALID;
-              if (gc == 999)
+              if (gc == 999) // comparison could be removed
                 return DWG_VT_STRING; // lgtm [cpp/constant-comparison]
             }
         }
@@ -1964,7 +1964,7 @@ dwg_resbuf_value_type (short gc)
                 return DWG_VT_STRING;
               if (gc <= 429)
                 return DWG_VT_INT32;
-              if (gc <= 439)
+              if (gc <= 439) // comparison could be removed
                 return DWG_VT_STRING; // lgtm [cpp/constant-comparison]
             }
           else // 330-389
@@ -1979,7 +1979,7 @@ dwg_resbuf_value_type (short gc)
                  350-359 SoftOwner, 360-369 HardOwner */
               if (gc <= 369)
                 return DWG_VT_OBJECTID;
-              if (gc <= 389)
+              if (gc <= 389) // comparison could be removed
                 return DWG_VT_INT16; // lgtm [cpp/constant-comparison]
             }
         }
@@ -1994,7 +1994,7 @@ dwg_resbuf_value_type (short gc)
             return DWG_VT_INT16;
           if (gc <= 289)
             return DWG_VT_INT8;
-          if (gc <= 299)
+          if (gc <= 299) // comparison could be removed
             return DWG_VT_BOOL; // lgtm [cpp/constant-comparison]
         }
       else // 105-209
@@ -2011,7 +2011,7 @@ dwg_resbuf_value_type (short gc)
             return DWG_VT_INT64;
           if (gc <= 179)
             return DWG_VT_INT16;
-          if (gc <= 209)
+          if (gc <= 209) // comparison could be removed
             return DWG_VT_INVALID; // lgtm [cpp/constant-comparison]
         }
     }
@@ -2038,7 +2038,7 @@ dwg_resbuf_value_type (short gc)
             return DWG_VT_HANDLE;
           if (gc <= 9)
             return DWG_VT_STRING; // but 9 never TU
-          if (gc <= 37)
+          if (gc <= 37) // comparison could be removed
             return DWG_VT_POINT3D; // lgtm [cpp/constant-comparison]
         }
     }
