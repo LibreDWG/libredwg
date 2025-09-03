@@ -50,5 +50,23 @@ if test -d "$srcdir/test/test-old"; then
     cd "$abs_builddir" || exit
 fi
 
+for d in "$srcdir"/test/issues/*/*.dwg; do
+    xd="$(dirname "$d")"
+    dir="$(basename "$xd")"
+    log="$(basename "$d" .dwg)_$dir.log"
+    echo "$d" || exit
+    @TIMEOUT_30@ ./libtool --mode=execute programs/dwgread -v3 "$d" 2>"$log"
+    #(sleep 10s; kill %1 2>/dev/null) &
+done
+
+for d in "$srcdir"/test/ossfuzz/indwg*/cluster*; do
+    xd="$(dirname "$d")"
+    dir="$(basename "$xd")"
+    log="$(basename "$d")_$dir.log"
+    echo "$d" || exit
+    @TIMEOUT_30@ ./libtool --mode=execute programs/dwgread -v3 "$d" 2>"$log"
+    #(sleep 10s; kill %1 2>/dev/null) &
+done
+
 #with background killing we would need to wait for all processes to end
 # while pgrep dwgread; do sleep 1; done

@@ -31,3 +31,23 @@ if test -d "$srcdir/test/test-old"; then
     done
     cd "$abs_builddir" || exit
 fi
+
+if test -d "$srcdir/test/issues"; then
+    echo test/issues
+    cd "$srcdir/test/issues" || exit
+    for d in *; do
+        test -d "$d" || continue
+        cd "$d" || continue
+        @PARALLEL@ @TIMEOUT_30@ "$abs_builddir/libtool" --mode=execute "$abs_builddir/programs/dwgread" -v4 {} \2\>$abs_builddir/{/.}_{//}_"$d".log ::: $(find . -iname \*.dwg)
+        cd .. || exit
+    done
+    cd "$abs_builddir" || exit
+fi
+
+if test -d "$srcdir/test/ossfuzz"; then
+    echo test/ossfuzz
+    cd "$srcdir/test/ossfuzz" || exit
+    @PARALLEL@ @TIMEOUT_30@ "$abs_builddir/libtool" --mode=execute "$abs_builddir/programs/dwgread" -v4 {} \2\>$abs_builddir/{/.}_{//}_indwg.log ::: indwg/cluster*
+    @PARALLEL@ @TIMEOUT_30@ "$abs_builddir/libtool" --mode=execute "$abs_builddir/programs/dwgread" -v4 {} \2\>$abs_builddir/{/.}_{//}_indwg11.log ::: indwg11/cluster*
+    cd "$abs_builddir" || exit
+fi
