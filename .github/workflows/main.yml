@@ -1,4 +1,4 @@
-name: Github CI
+name: Multi-Platform CI
 on:
   push:
     branches:
@@ -8,9 +8,17 @@ on:
     tags:
       - '0.*.*'
       - '0.*'
+      - 'nightly-*'
   pull_request:
     branches:
       - '*'
+  workflow_dispatch:
+    inputs:
+      build_artifacts:
+        description: 'Build and upload artifacts'
+        required: false
+        default: true
+        type: boolean
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -21,12 +29,14 @@ concurrency:
 #    os: [ubuntu-14.04, ubuntu-18.04, ubuntu-20.04, ubuntu-latest]
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
+  # Ubuntu builds for multiple versions
+  ubuntu:
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 50
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
+        os: [ubuntu-22.04, ubuntu-latest]
         CONFIGURE_ARGS:
           - CFLAGS="-O1 -fno-omit-frame-pointer -fsanitize=address -fno-var-tracking" --disable-bindings --disable-docs
           - CC="clang"
@@ -77,7 +87,7 @@ jobs:
     - uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
       with:
         create-symlink: true
-        key: ${{ github.job }}-${{ matrix.CONFIGURE_ARGS }}
+        key: ${{ github.job }}-${{ matrix.os }}-${{ matrix.CONFIGURE_ARGS }}
     - run: sh autogen.sh
     - if: contains(matrix.CONFIGURE_ARGS, '-fsanitize=address')
       name: Fix kernel mmap rnd bits for -fsanitize=address
@@ -96,6 +106,18 @@ jobs:
               !contains(matrix.CONFIGURE_ARGS, '--enable-debug') &&
               startsWith(github.ref, 'refs/heads/') }}
       run: make -j check
+    # Create Ubuntu artifacts for release config
+    - if: contains(matrix.CONFIGURE_ARGS, '--enable-release') && matrix.os == 'ubuntu-latest'
+      name: Create Linux artifact
+      run: |
+        make install DESTDIR=$PWD/install_dir
+        tar czf libredwg-linux-x86_64.tar.gz -C install_dir .
+    - if: contains(matrix.CONFIGURE_ARGS, '--enable-release') && matrix.os == 'ubuntu-latest'
+      name: Upload Linux artifact
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: libredwg-linux-x86_64
+        path: libredwg-linux-x86_64.tar.gz
     #  run: |
     #    python -m pip install cpp-coveralls
     #    make gcov
@@ -191,9 +213,129 @@ jobs:
       with:
         name: cmake-failure.tgz
         path: cmake-failure.tgz
+  # Fedora build using container
+  fedora:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    timeout-minutes: 30
+    steps:
+    - name: Install dependencies
+      run: |
+        dnf install -y git gcc gcc-c++ make autoconf automake libtool \
+          texinfo libxml2-devel pcre2-devel python3-devel swig \
+          redhat-rpm-config ccache which perl glibc-langpack-en
+    - name: checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - name: Configure git safe directory
+      run: git config --global --add safe.directory $GITHUB_WORKSPACE
+    - uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
+      with:
+        create-symlink: true
+        key: ${{ github.job }}
+    - run: sh autogen.sh
+    - run: ./configure --disable-werror
+    - run: make -j
+    - run: |
+        # Run tests with more verbose output and continue on error
+        make -j check VERBOSE=1 || {
+          echo "Tests failed, checking test logs..."
+          find . -name "*.log" -type f -exec echo "=== {} ===" \; -exec tail -20 {} \;
+          exit 1
+        }
+
+  # Debian build using container
+  debian:
+    runs-on: ubuntu-latest
+    container: debian:latest
+    timeout-minutes: 30
+    steps:
+    - name: Install dependencies
+      run: |
+        apt-get update
+        apt-get install -y git gcc g++ make autoconf automake libtool \
+          texinfo libxml2-dev libpcre2-dev python3-dev swig ccache
+    - name: checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - name: Configure git safe directory
+      run: git config --global --add safe.directory $GITHUB_WORKSPACE
+    - uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
+      with:
+        create-symlink: true
+        key: ${{ github.job }}
+    - run: sh autogen.sh
+    - run: ./configure --disable-werror
+    - run: make -j
+    - run: make -j check
+
+  # CentOS/RHEL build using container  
+  centos:
+    runs-on: ubuntu-latest
+    container: rockylinux:9
+    timeout-minutes: 30
+    steps:
+    - name: Install dependencies
+      run: |
+        dnf install -y epel-release
+        dnf config-manager --set-enabled crb
+        dnf install -y git gcc gcc-c++ make autoconf automake libtool \
+          texinfo libxml2-devel pcre2-devel python3-devel \
+          ccache which perl
+    - name: checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - name: Configure git safe directory
+      run: git config --global --add safe.directory $GITHUB_WORKSPACE
+    - uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
+      with:
+        create-symlink: true
+        key: ${{ github.job }}
+    - run: sh autogen.sh
+    - run: ./configure --disable-werror
+    - run: make -j
+    - run: make -j check
+
+  # Alpine Linux build (musl libc)
+  alpine:
+    runs-on: ubuntu-latest
+    container: alpine:latest
+    timeout-minutes: 30
+    steps:
+    - name: Install dependencies
+      run: |
+        apk add --no-cache git gcc g++ make autoconf automake libtool \
+          texinfo libxml2-dev pcre2-dev python3-dev swig ccache bash perl
+    - name: checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - name: Configure git safe directory
+      run: git config --global --add safe.directory $GITHUB_WORKSPACE
+    - uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
+      with:
+        create-symlink: true
+        key: ${{ github.job }}
+    - run: sh autogen.sh
+    - run: ./configure --disable-werror --disable-python
+    - run: make -j
+    - run: make -j check
+
   macOS:
     name: macOS
-    runs-on: macOS-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-13, macos-latest]
+        compiler: [gcc, clang]
     steps:
     - name: init
       run: brew install autoconf automake libtool texinfo 
@@ -211,12 +353,24 @@ jobs:
     - uses: hendrikmuhs/ccache-action@63069e3931dedbf3b63792097479563182fe70d1 # v1.2.18
       with:
         create-symlink: true
-        key: ${{ github.job }}
+        key: ${{ github.job }}-${{ matrix.os }}-${{ matrix.compiler }}
     - run: sh autogen.sh
-    - run: ./configure --disable-bindings --disable-werror
+    - run: CC="${{ matrix.compiler }}" ./configure --disable-bindings --disable-werror
     - run: PATH="/usr/local/opt/texinfo/bin:$PATH" make
     - run: PATH="/usr/local/opt/texinfo/bin:$PATH" make check
     #- run: make distcheck
+    # Create macOS artifacts
+    - if: matrix.compiler == 'clang' && matrix.os == 'macos-latest'
+      name: Create macOS artifact
+      run: |
+        make install DESTDIR=$PWD/install_dir
+        tar czf libredwg-macos-${{ matrix.os }}.tar.gz -C install_dir .
+    - if: matrix.compiler == 'clang' && matrix.os == 'macos-latest'
+      name: Upload macOS artifact
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: libredwg-macos-${{ matrix.os }}
+        path: libredwg-macos-${{ matrix.os }}.tar.gz
   mingw:
     name: mingw
     runs-on: windows-latest
@@ -273,6 +427,19 @@ jobs:
         path: mingw-failure.tgz
     - shell: msys2 {0}
       run: make -j check
+    # Create Windows MinGW artifacts
+    - if: success()
+      shell: msys2 {0}
+      name: Create Windows MinGW artifact
+      run: |
+        make install DESTDIR=$PWD/install_dir
+        tar czf libredwg-win64-mingw.tar.gz -C install_dir .
+    - if: success()
+      name: Upload Windows MinGW artifact
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: libredwg-win64-mingw
+        path: libredwg-win64-mingw.tar.gz
   mingw-cmake:
     runs-on: windows-latest
     timeout-minutes: 20
@@ -311,6 +478,21 @@ jobs:
     - run: cmake --build . --config Release
     - run: copy Release/libredwg.dll test/unit-testing/Release/
     - run: ctest . --output-on-failure
+    # Create Windows MSVC artifacts
+    - if: success()
+      name: Create Windows MSVC artifact
+      run: |
+        mkdir msvc-build
+        copy Release\*.dll msvc-build\
+        copy Release\*.exe msvc-build\
+        copy Release\*.lib msvc-build\
+        tar czf libredwg-win64-msvc.tar.gz msvc-build
+    - if: success()
+      name: Upload Windows MSVC artifact
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: libredwg-win64-msvc
+        path: libredwg-win64-msvc.tar.gz
     - if: failure()
       run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
@@ -352,3 +534,73 @@ jobs:
     - run: ninja
     - run: copy libredwg.dll test\unit-testing\
     - run: ctest . --output-on-failure
+  
+  # Aggregate all platform artifacts for releases
+  release-artifacts:
+    name: Release Artifacts
+    # Run on tags or successful master builds
+    if: |
+      always() && 
+      (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master' && github.event_name == 'push')) &&
+      !cancelled()
+    needs: [ubuntu, fedora, debian, alpine, centos, macOS, mingw, vs2019]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout for version info
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        fetch-depth: 1
+        
+    - name: Get version and build number
+      id: version
+      run: |
+        VERSION=$(grep AC_INIT configure.ac | sed 's/.*\[\([0-9.]*\)\].*/\1/')
+        BUILD_NUM=$(git rev-list --count HEAD)
+        SHORT_SHA=$(git rev-parse --short HEAD)
+        if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          RELEASE_NAME="Release $TAG_NAME"
+          PRERELEASE=false
+        else
+          TAG_NAME="$VERSION.$BUILD_NUM"
+          RELEASE_NAME="Nightly Build $VERSION.$BUILD_NUM ($SHORT_SHA)"
+          PRERELEASE=true
+        fi
+        echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+        echo "release_name=$RELEASE_NAME" >> $GITHUB_OUTPUT
+        echo "prerelease=$PRERELEASE" >> $GITHUB_OUTPUT
+        echo "Creating release: $RELEASE_NAME (tag: $TAG_NAME)"
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+    
+    - name: Create release checksums
+      run: |
+        cd artifacts
+        sha256sum */*.tar.gz > checksums.sha256
+        cat checksums.sha256
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2.3.2
+      with:
+        tag_name: ${{ steps.version.outputs.tag_name }}
+        name: ${{ steps.version.outputs.release_name }}
+        prerelease: ${{ steps.version.outputs.prerelease }}
+        body: |
+          LibreDWG ${{ steps.version.outputs.release_name }}
+          
+          Multi-platform builds for Linux, macOS, and Windows.
+          
+          ## Downloads
+          - Linux builds: libredwg-linux-*.tar.gz
+          - macOS builds: libredwg-macos-*.tar.gz  
+          - Windows MinGW: libredwg-win64-mingw.tar.gz
+          - Windows MSVC: libredwg-win64-msvc.tar.gz
+          
+          See checksums.sha256 for file integrity verification.
+        files: |
+          artifacts/*/*.tar.gz
+          artifacts/checksums.sha256
+        fail_on_unmatched_files: false
