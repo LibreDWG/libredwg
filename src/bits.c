@@ -1891,17 +1891,12 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
   read = write = 0;
   while (read < len)
     {
-#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
-      // for strict alignment CPU's like sparc only. also for UBSAN.
-      if ((uintptr_t)wstr % SIZEOF_SIZE_T)
-        {
-          unsigned char *b = (unsigned char *)wstr;
-          c = TU_to_int (b);
-          wstr++;
-        }
-      else
-#endif
-        c = *wstr++;
+      // Always use byte-wise access for consistency across platforms
+      // This fixes platform-specific corruption in Unicode escape sequences
+      unsigned char *b = (unsigned char *)&wstr[read];
+      // Read as little-endian bytes (DWG format is always LE)
+      c = b[0] | ((uint16_t)b[1] << 8);
+      
       read++;
       if (c < 256)
         {
@@ -3465,7 +3460,8 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
       LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", len);
       len = UINT16_MAX - 1;
     }
-  wstr = (BITCODE_TU)calloc (2, len + 1);
+  // Ensure proper alignment and size for uint16_t array
+  wstr = (BITCODE_TU)calloc (len + 1, sizeof(uint16_t));
   if (!wstr)
     {
       loglevel |= 1;
