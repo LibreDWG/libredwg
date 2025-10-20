@@ -40,7 +40,7 @@ jobs:
             - name: Build LibreDWG
               run: |
                   sh ./autogen.sh
-                  ./configure --enable-release --disable-docs --disable-json --disable-bindings
+                  ./configure --enable-release --disable-docs --disable-bindings
                   make -j$(nproc)
                   make install DESTDIR=$PWD/install-root
                   mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
