@@ -42,26 +42,33 @@ jobs:
                   sh ./autogen.sh
                   ./configure --enable-release --disable-docs --disable-json --disable-bindings
                   make -j$(nproc)
-                  mkdir target
-                  make install DESTDIR=libredwg-${{ matrix.platform }}
-                  tar -czf libredwg-${{ matrix.platform }}.tar.gz libredwg-${{ matrix.platform }}
+                  make install DESTDIR=$PWD/install-root
+                  mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
+                  tar -czf libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz libredwg-${{ inputs.version }}-${{ matrix.platform }}
+
+            - name: Generate checksums
+              run: |
+                  sha256sum libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz > libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
 
             - name: Upload artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: libredwg-${{ matrix.platform }}
-                  path: libredwg-${{ matrix.platform }}.tar.gz
+                  name: libredwg-${{ inputs.version }}-${{ matrix.platform }}
+                  path: |
+                      libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz
+                      libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
                   retention-days: 90
 
             - name: Upload to Release
               uses: softprops/action-gh-release@v1
               with:
-                  tag_name: libredwg-${{ inputs.version }}
+                  tag_name: ${{ inputs.version }}
                   name: LibreDWG ${{ inputs.version }}
                   body: |
                       Prebuilt LibreDWG binaries for macOS ARM64 and Linux ARM64.
                       Upstream release: https://github.com/LibreDWG/libredwg/releases/tag/${{ inputs.version }}
                   files: |
-                      libredwg-${{ matrix.platform }}.tar.gz
+                      libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz
+                      libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
                   draft: false
                   prerelease: false
