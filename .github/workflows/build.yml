@@ -1,0 +1,56 @@
+name: Build LibreDWG
+
+on:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: "Version to build (e.g., 0.1.0)"
+                required: true
+                type: string
+jobs:
+    build:
+        name: Build LibreDWG for ${{ matrix.platform }}
+        runs-on: ${{ matrix.runner }}
+        strategy:
+            matrix:
+                include:
+                    - platform: linux-arm64
+                      runner: blacksmith-2vcpu-ubuntu-2404-arm
+                    - platform: darwin-arm64
+                      runner: macos-26
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  submodules: recursive
+
+            - name: Build LibreDWG
+              run: |
+                  sh ./autogen.sh
+                  ./configure --enable-release --disable-docs --disable-json --disable-bindings
+                  make -j$(nproc)
+                  mkdir target
+                  make install DESTDIR=libredwg-${{ matrix.platform }}
+                  tar -czf libredwg-${{ matrix.platform }}.tar.gz libredwg-${{ matrix.platform }}
+
+            - name: Upload artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: libredwg-${{ matrix.platform }}
+                  path: libredwg-${{ matrix.platform }}.tar.gz
+                  retention-days: 90
+
+            - name: Upload to Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  tag_name: libredwg-${{ inputs.version }}
+                  name: LibreDWG ${{ inputs.version }}
+                  body: |
+                      Prebuilt LibreDWG binaries for macOS ARM64 and Linux ARM64.
+                      Upstream release: https://github.com/LibreDWG/libredwg/releases/tag/${{ inputs.version }}
+                  files: |
+                      libredwg-${{ matrix.platform }}.tar.gz
+                  draft: false
+                  prerelease: false
