@@ -41,6 +41,46 @@
 #include "encode.h"
 #include "out_dxf.h"
 
+static char *
+dxf_escape_eol (const char *restrict src)
+{
+  const char *p = src;
+  size_t extra = 0;
+  size_t len;
+  char *dest;
+  char *d;
+  while (*p)
+    {
+      if (*p == '\r' || *p == '\n')
+        extra++;
+      p++;
+    }
+  if (!extra)
+    return NULL;
+  len = (size_t)(p - src);
+  dest = (char *)malloc (len + extra + 1);
+  if (!dest)
+    return NULL;
+  d = dest;
+  for (p = src; *p; p++)
+    {
+      if (*p == '\r')
+        {
+          *d++ = '^';
+          *d++ = 'M';
+        }
+      else if (*p == '\n')
+        {
+          *d++ = '^';
+          *d++ = 'J';
+        }
+      else
+        *d++ = *p;
+    }
+  *d = '\0';
+  return dest;
+}
+
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -1290,9 +1330,10 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
 {
   if (str && *str)
     {
-      if (opts
-          && (strchr (str, '\n') || strchr (str, '\r')
-              || strstr (str, "\\M+")))
+      const bool needs_escape
+          = (strchr (str, '\n') != NULL) || (strchr (str, '\r') != NULL)
+            || (strstr (str, "\\M+") != NULL);
+      if ((opts || needs_escape) && needs_escape)
         {
           static char *cstr, *ubuf;
           const size_t origlen = strlen (str);
@@ -1318,26 +1359,50 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
           free (cstr);
           cstr = ubuf = bit_embed_TU (wstr);
           free (wstr);
-          len = (long)strlen (ubuf);
-          while (len > 0)
-            {
-              fprintf (dat->fh, "%3d\r\n", len < 250 ? dxf : 3);
-              fprintf (dat->fh, "%.*s\r\n", len > 250 ? 250 : (int)len, ubuf);
-              len -= 250;
-              ubuf += 250;
-            }
+          {
+            char *escaped;
+            const char *chunk;
+            long remaining;
+            const char *ptr;
+            escaped = dxf_escape_eol (ubuf);
+            chunk = escaped ? escaped : ubuf;
+            remaining = (long)strlen (chunk);
+            ptr = chunk;
+            while (remaining > 0)
+              {
+                int blk = remaining > 250 ? 250 : (int)remaining;
+                fprintf (dat->fh, "%3d\r\n", remaining <= 250 ? dxf : 3);
+                fprintf (dat->fh, "%.*s\r\n", blk, ptr);
+                remaining -= 250;
+                ptr += 250;
+              }
+            if (escaped)
+              free (escaped);
+          }
           free (cstr);
         }
       else // TFF
         {
-          long len = (long)strlen (str);
-          while (len > 0)
-            {
-              fprintf (dat->fh, "%3d\r\n", len < 250 ? dxf : 3);
-              fprintf (dat->fh, "%.*s\r\n", len > 250 ? 250 : (int)len, str);
-              len -= 250;
-              str += 250;
-            }
+          {
+            char *escaped;
+            const char *chunk;
+            const char *ptr;
+            long len2;
+            escaped = dxf_escape_eol (str);
+            chunk = escaped ? escaped : str;
+            len2 = (long)strlen (chunk);
+            ptr = chunk;
+            while (len2 > 0)
+              {
+                int blk = len2 > 250 ? 250 : (int)len2;
+                fprintf (dat->fh, "%3d\r\n", len2 <= 250 ? dxf : 3);
+                fprintf (dat->fh, "%.*s\r\n", blk, ptr);
+                len2 -= 250;
+                ptr += 250;
+              }
+            if (escaped)
+              free (escaped);
+          }
         }
     }
   else
