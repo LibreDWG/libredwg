@@ -1,0 +1,89 @@
+name: Release Binaries
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., 0.13.3)"
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: ${{ matrix.platform }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - platform: linux-aarch64
+            runner: blacksmith-2vcpu-ubuntu-2404-arm
+          - platform: macos-aarch64
+            runner: macos-26
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Verify architecture
+        run: |
+          echo "Platform: ${{ matrix.platform }}"
+          echo "Runner: ${{ matrix.runner }}"
+          uname -a
+          uname -m
+          if [ "$(uname -m)" != "aarch64" ] && [ "$(uname -m)" != "arm64" ]; then
+            echo "ERROR: Not running on ARM64/AArch64 architecture!"
+            echo "Expected: aarch64 or arm64, Got: $(uname -m)"
+            exit 1
+          fi
+          echo "✓ Architecture verified: $(uname -m)"
+
+      - name: Install dependencies (Linux)
+        if: matrix.platform == 'linux-aarch64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y autoconf automake libtool texinfo
+
+      - name: Install dependencies (macOS)
+        if: matrix.platform == 'macos-aarch64'
+        run: |
+          brew install autoconf automake libtool texinfo
+
+      - name: Build
+        run: |
+          sh ./autogen.sh
+          ./configure --enable-release --disable-docs --disable-bindings
+          make -j$(nproc)
+          make install DESTDIR=$PWD/install-root
+          mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
+          tar -czf libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz libredwg-${{ inputs.version }}-${{ matrix.platform }}
+
+      - name: Generate checksum
+        run: |
+          sha256sum libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz > libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: libredwg-${{ inputs.version }}-${{ matrix.platform }}
+          path: |
+            libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz
+            libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
+          retention-days: 90
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ inputs.version }}
+          name: LibreDWG ${{ inputs.version }}
+          body: |
+            Prebuilt binaries for AArch64 (ARM64) platforms.
+
+            Upstream: https://github.com/rite-build/libredwg/releases/tag/${{ inputs.version }}
+          files: |
+            libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz
+            libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
+          draft: false
+          prerelease: false
