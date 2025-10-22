@@ -125,13 +125,21 @@ else
   echo "Add this to your ~/.bashrc, ~/.zshrc, or ~/.profile to make it permanent."
 fi
 
-# macOS-specific: Add library path instructions
-if [ "$(uname -s)" = "Darwin" ] && [ "$PREFIX" != "/usr/local" ]; then
-  echo ""
-  echo "⚠️  On macOS, if you get library loading errors, also export:"
-  echo ""
-  echo "    export DYLD_LIBRARY_PATH=\"$PREFIX/lib:\$DYLD_LIBRARY_PATH\""
-  echo ""
+# Platform-specific: Add library path instructions for non-standard installations
+if [ "$PREFIX" != "/usr/local" ]; then
+  if [ "$(uname -s)" = "Darwin" ]; then
+    echo ""
+    echo "⚠️  On macOS, if you get library loading errors, also export:"
+    echo ""
+    echo "    export DYLD_LIBRARY_PATH=\"$PREFIX/lib:\$DYLD_LIBRARY_PATH\""
+    echo ""
+  elif [ "$(uname -s)" = "Linux" ]; then
+    echo ""
+    echo "⚠️  On Linux, if you get library loading errors, also export:"
+    echo ""
+    echo "    export LD_LIBRARY_PATH=\"$PREFIX/lib:\$LD_LIBRARY_PATH\""
+    echo ""
+  fi
 fi
 
 echo ""
