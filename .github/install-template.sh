@@ -125,6 +125,15 @@ else
   echo "Add this to your ~/.bashrc, ~/.zshrc, or ~/.profile to make it permanent."
 fi
 
+# macOS-specific: Add library path instructions
+if [ "$(uname -s)" = "Darwin" ] && [ "$PREFIX" != "/usr/local" ]; then
+  echo ""
+  echo "⚠️  On macOS, if you get library loading errors, also export:"
+  echo ""
+  echo "    export DYLD_LIBRARY_PATH=\"$PREFIX/lib:\$DYLD_LIBRARY_PATH\""
+  echo ""
+fi
+
 echo ""
 echo "Available commands:"
 echo "  - dwg2dxf, dxf2dwg, dwg2SVG"

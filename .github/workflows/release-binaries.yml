@@ -58,6 +58,19 @@ jobs:
           make -j$(nproc)
           make install DESTDIR=$PWD/install-root
           mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
+          
+          # Fix RPATH on macOS to make binaries relocatable
+          if [ "${{ matrix.platform }}" = "macos-aarch64" ]; then
+            cd libredwg-${{ inputs.version }}-${{ matrix.platform }}/usr/local
+            for bin in bin/*; do
+              if [ -f "$bin" ] && [ -x "$bin" ]; then
+                install_name_tool -add_rpath @executable_path/../lib "$bin" 2>/dev/null || true
+                install_name_tool -change /usr/local/lib/libredwg.0.dylib @rpath/libredwg.0.dylib "$bin" 2>/dev/null || true
+              fi
+            done
+            cd ../../..
+          fi
+          
           tar -czf libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz libredwg-${{ inputs.version }}-${{ matrix.platform }}
 
       - name: Generate install script
