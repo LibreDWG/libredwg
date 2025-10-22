@@ -60,6 +60,13 @@ jobs:
           mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
           tar -czf libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz libredwg-${{ inputs.version }}-${{ matrix.platform }}
 
+      - name: Generate install script
+        run: |
+          sed -e 's/VERSION_PLACEHOLDER/${{ inputs.version }}/g' \
+              -e 's/PLATFORM_PLACEHOLDER/${{ matrix.platform }}/g' \
+              .github/install-template.sh > install-${{ matrix.platform }}.sh
+          chmod +x install-${{ matrix.platform }}.sh
+
       - name: Generate checksum
         run: |
           sha256sum libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz > libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
@@ -71,6 +78,7 @@ jobs:
           path: |
             libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz
             libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
+            install-${{ matrix.platform }}.sh
           retention-days: 90
 
       - name: Create release
@@ -81,9 +89,29 @@ jobs:
           body: |
             Prebuilt binaries for AArch64 (ARM64) platforms.
 
-            Upstream: https://github.com/rite-build/libredwg/releases/tag/${{ inputs.version }}
+            ## Quick Install
+
+            **Linux AArch64:**
+            ```bash
+            curl -fsSL https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-linux-aarch64.sh | sh
+            ```
+
+            **macOS AArch64:**
+            ```bash
+            curl -fsSL https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-macos-aarch64.sh | sh
+            ```
+
+            Or download manually and install with custom prefix:
+            ```bash
+            ./install-linux-aarch64.sh --prefix /custom/path
+            ./install-macos-aarch64.sh --system  # installs to /usr/local
+            ```
+
+            ## Upstream
+            https://github.com/LibreDWG/libredwg/releases/tag/${{ inputs.version }}
           files: |
             libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz
             libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
+            install-${{ matrix.platform }}.sh
           draft: false
           prerelease: false
