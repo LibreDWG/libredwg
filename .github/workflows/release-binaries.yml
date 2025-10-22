@@ -51,36 +51,44 @@ jobs:
         run: |
           brew install autoconf automake libtool texinfo
 
-      - name: Build
+      - name: Configure
         run: |
           sh ./autogen.sh
           ./configure --enable-release --disable-docs --disable-bindings
+
+      - name: Compile
+        run: |
           make -j$(nproc)
+
+      - name: Install to staging
+        run: |
           make install DESTDIR=$PWD/install-root
           mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
-          
+
+      - name: Fix RPATH (macOS)
+        if: matrix.platform == 'macos-aarch64'
+        run: |
           cd libredwg-${{ inputs.version }}-${{ matrix.platform }}/usr/local
-          
-          # Fix RPATH to make binaries relocatable
-          if [ "${{ matrix.platform }}" = "macos-aarch64" ]; then
-            # macOS: Use install_name_tool
-            for bin in bin/*; do
-              if [ -f "$bin" ] && [ -x "$bin" ]; then
-                install_name_tool -add_rpath @executable_path/../lib "$bin" 2>/dev/null || true
-                install_name_tool -change /usr/local/lib/libredwg.0.dylib @rpath/libredwg.0.dylib "$bin" 2>/dev/null || true
-              fi
-            done
-          else
-            # Linux: Use patchelf
-            sudo apt-get install -y patchelf
-            for bin in bin/*; do
-              if [ -f "$bin" ] && [ -x "$bin" ]; then
-                patchelf --set-rpath '$ORIGIN/../lib' "$bin" 2>/dev/null || true
-              fi
-            done
-          fi
-          
-          cd ../../..
+          for bin in bin/*; do
+            if [ -f "$bin" ] && [ -x "$bin" ]; then
+              install_name_tool -add_rpath @executable_path/../lib "$bin" 2>/dev/null || true
+              install_name_tool -change /usr/local/lib/libredwg.0.dylib @rpath/libredwg.0.dylib "$bin" 2>/dev/null || true
+            fi
+          done
+
+      - name: Fix RPATH (Linux)
+        if: matrix.platform == 'linux-aarch64'
+        run: |
+          sudo apt-get install -y patchelf
+          cd libredwg-${{ inputs.version }}-${{ matrix.platform }}/usr/local
+          for bin in bin/*; do
+            if [ -f "$bin" ] && [ -x "$bin" ]; then
+              patchelf --set-rpath '$ORIGIN/../lib' "$bin" 2>/dev/null || true
+            fi
+          done
+
+      - name: Create tarball
+        run: |
           tar -czf libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz libredwg-${{ inputs.version }}-${{ matrix.platform }}
 
       - name: Generate install script
