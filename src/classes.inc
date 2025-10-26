@@ -241,12 +241,12 @@
   STABLE_CLASS    (ACTION, WIPEOUT)   /* ent, stable but causes acad redraw to crash (GH #244) */
   STABLE_CLASS    (ACTION, WIPEOUTVARIABLES)
   STABLE_CLASS    (ACTION, XRECORD)
+  STABLE_CLASS    (ACTION, MLEADERSTYLE)
 
   // unstable/undertested.
   // not enough coverage, but assumed mostly ok. field names may change.
   // DXF output skipped
 
-  UNSTABLE_CLASS     (ACTION, MLEADERSTYLE) // TODO class_version
   UNSTABLE_CLASS     (ACTION, ARC_DIMENSION)     /* ent */
   UNSTABLE_CLASS     (ACTION, PLANESURFACE)      /* ent */
   UNSTABLE_CLASS     (ACTION, ACSH_BREP_CLASS)
