@@ -2094,6 +2094,11 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               Dwg_Object *obj = &dwg->object[num + i];
               Dwg_Object_BLOCK_HEADER *_obj
                   = obj->tio.object->tio.BLOCK_HEADER;
+              if (!_obj || obj->fixedtype != DWG_TYPE_BLOCK_HEADER)
+                {
+                  LOG_ERROR ("Missing BLOCK_HEADER object at [%u]\n", num + i);
+                  return DWG_ERR_CRITICAL;
+                }
               PRE (R_13b1)
               {
                 if (strEQc (_obj->name, "*MODEL_SPACE"))
