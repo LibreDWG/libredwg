@@ -9930,8 +9930,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               o->flag = pair->value.i;
               // 1 => 512 closed
               // 128: plinegen
-              if (o->flag & 1)
-                o->flag = (o->flag - 1) + 512;
+              if (o->flag & 1 && o->flag & 512)
+                o->flag = 512;    // Set the exact viable minimum
               LOG_TRACE ("LWPOLYLINE.flag => %d [BS 70]\n", flag);
               break;
             }
