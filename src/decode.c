@@ -4231,8 +4231,8 @@ obj_has_strings (unsigned int type)
     case DWG_TYPE_OLEFRAME:
     case DWG_TYPE_MTEXT:
     case DWG_TYPE_LEADER:
-      return 1;
     case DWG_TYPE_TOLERANCE:
+      return 1;
     case DWG_TYPE_MLINE:
       return 0;
     case DWG_TYPE_BLOCK_CONTROL:
