@@ -43,7 +43,7 @@ jobs:
           - --enable-release
           - --enable-gcov --disable-bindings --disable-docs CFLAGS="-O0 -g"
           - --disable-write --disable-docs
-          - CFLAGS="-O2 -m32" --disable-bindings --disable-docs
+          - --host=i686-linux-gnu --disable-bindings --disable-docs
           - CFLAGS="-O2 -fno-omit-frame-pointer -fsanitize=undefined -fno-var-tracking" --disable-bindings --disable-docs --enable-check-less
           - --enable-debug
     steps:
@@ -63,7 +63,7 @@ jobs:
     #  uses: actions/setup-python@v5
     #  with:
     #    python-version: '3.11'
-    - if: contains(matrix.CONFIGURE_ARGS, '-m32')
+    - if: contains(matrix.CONFIGURE_ARGS, 'i686-linux-gnu')
       name: setup gcc-multilib
       run: |
         sudo apt-get -y update
