@@ -253,15 +253,29 @@
 #define FIELD_3BD_1(name, dxf)
 #define FIELD_DD(name, _default, dxf)
 
-#define _VALUE_RD(value) fprintf (dat->fh, FORMAT_RD, value)
+#define _VALUE_RD(value)                                                      \
+  do {                                                                        \
+    char _buf[256];                                                           \
+    snprintf (_buf, 255, FORMAT_RD, value);                                   \
+    /* Check for nan, inf, -inf which are not valid JSON */                  \
+    if (strcmp (_buf, "nan") == 0 || strcmp (_buf, "-nan") == 0               \
+        || strcmp (_buf, "inf") == 0 || strcmp (_buf, "-inf") == 0)           \
+      {                                                                       \
+        fprintf (dat->fh, "null");                                            \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        fprintf (dat->fh, "%s", _buf);                                        \
+      }                                                                       \
+  } while (0)
 #ifdef IS_RELEASE
 #  define VALUE_RD(value)                                                     \
-    {                                                                         \
-      if (bit_isnan (value))                                                  \
+    do {                                                                      \
+      if (bit_isnan (value) || isnan (value) || isinf (value))               \
         _VALUE_RD (0.0);                                                      \
       else                                                                    \
         _VALUE_RD (value);                                                    \
-    }
+    } while (0)
 #else
 #  define VALUE_RD(value) _VALUE_RD (value)
 #endif

@@ -22,6 +22,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <limits.h>
+#include <math.h>
 #ifdef HAVE_ICONV
 #  include <iconv.h>
 #endif
@@ -177,10 +178,12 @@ static char *_path_field (const char *path);
 #define VALUE_RLLd(value, dxf) VALUE (value, RLLd, dxf)
 #ifdef IS_RELEASE
 #  define VALUE_RD(value, dxf)                                                \
-    if (bit_isnan (value))                                                    \
-      _VALUE_RD (0.0, dxf)                                                    \
-    else                                                                      \
-      _VALUE_RD (value, dxf)
+    {                                                                         \
+      if (bit_isnan (value) || isnan (value) || isinf (value))               \
+        _VALUE_RD (0.0, dxf)                                                  \
+      else                                                                    \
+        _VALUE_RD (value, dxf)                                                \
+    }
 #else
 #  define VALUE_RD(value, dxf) _VALUE_RD (value, dxf)
 #endif
@@ -190,7 +193,14 @@ static char *_path_field (const char *path);
     size_t k;                                                                 \
     snprintf (_buf, 255, FORMAT_RD, value);                                   \
     k = strlen (_buf);                                                        \
-    if (k > 0 && strrchr (_buf, '.') && _buf[k - 1] == '0')                   \
+    /* Check for nan, inf, -inf which are not valid JSON */                  \
+    if (k >= 3 && (strcmp (_buf, "nan") == 0 || strcmp (_buf, "-nan") == 0   \
+                   || strcmp (_buf, "inf") == 0 || strcmp (_buf, "-inf") == 0)) \
+      {                                                                       \
+        strcpy (_buf, "null");                                                \
+        k = 4;                                                                \
+      }                                                                       \
+    else if (k > 0 && strrchr (_buf, '.') && _buf[k - 1] == '0')             \
       {                                                                       \
         for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)         \
           _buf[k] = '\0';                                                     \
