@@ -1145,7 +1145,7 @@ or converted utf8 string.
 @deftypefn {Function} bool dwg_dynapi_entity_value (void *@var{entity}, const char *@var{dxfname}, const char *@var{fieldname}, void *@var{out}, Dwg_DYNAPI_field *@var{fp})
 @var{entity} is of type @code{dwg_ent_generic}, that is the pointer to the object specific struct.
 @var{dxfname} is the dxfname of the object, @var{fieldname} is the field or property name of the field to be read from,
-*@var{out} the result pointer and the optiona *@var{fp} is filled by the information for this field.
+*@var{out} the result pointer and the optional *@var{fp} is filled by the information for this field.
 @end deftypefn
 
 @deftypefn {Function} bool dwg_dynapi_common_value (void *@var{entity}, const char *@var{fieldname}, void *@var{out}, Dwg_DYNAPI_field *@var{fp})

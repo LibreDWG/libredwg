@@ -59,7 +59,7 @@ someone should probably think about and resolve them!
 
   The optional number after those 4 numbers is the number of commits not yet
   merged to master. E.g. the 1 in 0.5.0.1093.1_967f.
-  And finally for local development builds the abbrevated git tag, e.g. the 967f
+  And finally for local development builds the abbreviated git tag, e.g. the 967f
   in 0.5.0.1093.1_967f.
 
   So a released version will be 2 or 3 numbers, a development version will also
@@ -177,7 +177,7 @@ someone should probably think about and resolve them!
     see NEWS'
   - merge it into master (ff)
   - update the tag: git tag -d 0.6.2; git tag -s -m 'release 0.6.2' 0.6.2
-  - make dist to create the source tarballs. if seperate build dirs, in a
+  - make dist to create the source tarballs. if separate build dirs, in a
     config with --enable-release only.
   - check if the source tarballs compile
   - push master and tags to run the CI and create the windows binaries on appveyor

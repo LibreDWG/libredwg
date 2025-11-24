@@ -6715,7 +6715,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
     real_start -= 16;
   }
 
-  // report unknown data before entites block
+  // report unknown data before entities block
   if (start != end && real_start > 0 && (BITCODE_RL)dat->byte != real_start)
     {
       LOG_WARN ("\n@0x%zx => start 0x%x", dat->byte, real_start);

@@ -3526,7 +3526,7 @@ typedef struct _dwg_object_VPORT
   BITCODE_2RD lower_left;
   BITCODE_2RD upper_right;
   BITCODE_B UCSFOLLOW;
-  BITCODE_BS circle_zoom; /* circle sides: nr of tesselations */
+  BITCODE_BS circle_zoom; /* circle sides: nr of tessellations */
   BITCODE_B FASTZOOM;
   BITCODE_RC UCSICON;     /* DXF 74:  0: icon_on, 1: icon_at_ucsorg */
   BITCODE_B GRIDMODE;     /* DXF 76: on or off */
@@ -4389,7 +4389,7 @@ typedef struct _dwg_object_PLOTSETTINGS
   BITCODE_BS shadeplot_type; /*!< DXF 76, 0 display, 1 wireframe, 2 hidden, 3
                                 rendered, 4 visualstyle, 5 renderPreset */
   BITCODE_BS
-      shadeplot_reslevel;         /*!< DXF 77, 0 draft, 1 preview, 2 nomal,
+      shadeplot_reslevel;         /*!< DXF 77, 0 draft, 1 preview, 2 normal,
                                                3 presentation, 4 maximum, 5 custom */
   BITCODE_BS shadeplot_customdpi; /*!< DXF 78, 100-32767 */
   BITCODE_H shadeplot;            /*!< DXF 333 optional. As in VIEWPORT */
@@ -11588,7 +11588,7 @@ dwg_get_entity_layer (const Dwg_Object_Entity *restrict);
 
 EXPORT Dwg_Object *dwg_next_object (const Dwg_Object *obj);
 EXPORT Dwg_Object *dwg_next_entity (const Dwg_Object *obj);
-// next available 0 ref + 1, when all refs are alreay filled
+// next available 0 ref + 1, when all refs are already filled
 EXPORT BITCODE_HV dwg_next_handle (const Dwg_Data *dwg);
 // next available handle, computed form the HANDSEED, which is bumped
 EXPORT BITCODE_HV dwg_next_handseed (Dwg_Data *dwg);

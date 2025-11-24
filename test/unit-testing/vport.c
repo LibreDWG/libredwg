@@ -37,7 +37,7 @@ api_process (dwg_object *obj)
   BITCODE_2RD lower_left;
   BITCODE_2RD upper_right;
   BITCODE_B UCSFOLLOW;
-  BITCODE_BS circle_zoom; /* circle sides: nr of tesselations */
+  BITCODE_BS circle_zoom; /* circle sides: nr of tessellations */
   BITCODE_B FASTZOOM;
   BITCODE_RC UCSICON;
   BITCODE_B GRIDMODE;
@@ -98,7 +98,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_2RD (_obj, VPORT, upper_right);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSFOLLOW, B);
   CHK_ENTITY_TYPE (_obj, VPORT, circle_zoom,
-                   BS); /* circle sides: nr of tesselations */
+                   BS); /* circle sides: nr of tessellations */
   CHK_ENTITY_TYPE (_obj, VPORT, FASTZOOM, B);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSICON, RC);
   CHK_ENTITY_TYPE (_obj, VPORT, GRIDMODE, B);
