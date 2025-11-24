@@ -2889,8 +2889,8 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
       _o = hobj->tio.object->tio.APPID;
       name = hobj->name;
       /* For BLOCK search the BLOCK entities instead.
-         The BLOCK_HEADER has only the abbrevated name, but we want "*D30", not
-         "*D" */
+         The BLOCK_HEADER has only the abbreviated name, but we want "*D30",
+         not "*D" */
       if (strEQc (table, "BLOCK") && hobj->fixedtype == DWG_TYPE_BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_bh = hobj->tio.object->tio.BLOCK_HEADER;

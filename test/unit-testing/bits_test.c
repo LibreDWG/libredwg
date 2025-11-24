@@ -464,7 +464,7 @@ bit_BL_tests (void)
   bitfree (&bitchain);
 }
 
-// seperate branches for bit=0 and bit=1
+// separate branches for bit=0 and bit=1
 static void
 bit_RD_tests (void)
 {
@@ -502,7 +502,7 @@ bit_RD_tests (void)
   bitfree (&bitchain);
 }
 
-// seperate branches for bit=0 and bit=1
+// separate branches for bit=0 and bit=1
 static void
 bit_BD_tests (void)
 {

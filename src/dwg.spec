@@ -11850,7 +11850,7 @@ DWG_ENTITY (JUMP)
       }
 
 #ifdef IS_DECODER
-    /* rest: TODO seperate unknown_bits from unknown_rest */
+    /* rest: TODO separate unknown_bits from unknown_rest */
     if (dat->byte < obj->address + obj->size)
       {
         len = obj->address + obj->size - dat->byte;
