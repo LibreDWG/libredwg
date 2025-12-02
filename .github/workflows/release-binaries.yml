@@ -77,6 +77,7 @@ jobs:
             git
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-libtool
+            mingw-w64-x86_64-python
             autoconf
             automake
             libtool
