@@ -97,7 +97,7 @@ jobs:
         shell: msys2 {0}
         run: |
           sh ./autogen.sh
-          ./configure --enable-release --disable-docs --disable-bindings
+          ./configure --prefix=/usr/local --enable-release --disable-docs --disable-bindings
 
       - name: Compile (Unix)
         if: matrix.platform != 'windows-x64'
