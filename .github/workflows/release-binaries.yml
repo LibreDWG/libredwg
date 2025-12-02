@@ -16,7 +16,7 @@ jobs:
       matrix:
         include:
           - platform: linux-aarch64
-            runner: 2vcpu-ubuntu-2404-arm
+            runner: public-2vcpu-ubuntu-2404-arm
           - platform: macos-aarch64
             runner: macos-26
           - platform: windows-x64
