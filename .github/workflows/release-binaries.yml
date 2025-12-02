@@ -19,6 +19,8 @@ jobs:
             runner: blacksmith-2vcpu-ubuntu-2404-arm
           - platform: macos-aarch64
             runner: macos-26
+          - platform: windows-x64
+            runner: windows-latest
     permissions:
       contents: write
     steps:
@@ -28,6 +30,7 @@ jobs:
           submodules: recursive
 
       - name: Verify architecture
+        if: matrix.platform != 'windows-x64'
         run: |
           echo "Platform: ${{ matrix.platform }}"
           echo "Runner: ${{ matrix.runner }}"
@@ -40,6 +43,19 @@ jobs:
           fi
           echo "✓ Architecture verified: $(uname -m)"
 
+      - name: Verify architecture (Windows)
+        if: matrix.platform == 'windows-x64'
+        shell: pwsh
+        run: |
+          Write-Host "Platform: ${{ matrix.platform }}"
+          Write-Host "Runner: ${{ matrix.runner }}"
+          Write-Host "Processor Architecture: $env:PROCESSOR_ARCHITECTURE"
+          if ($env:PROCESSOR_ARCHITECTURE -ne "AMD64") {
+            Write-Host "ERROR: Not running on x64 architecture!"
+            exit 1
+          }
+          Write-Host "✓ Architecture verified: x64"
+
       - name: Install dependencies (Linux)
         if: matrix.platform == 'linux-aarch64'
         run: |
@@ -51,16 +67,56 @@ jobs:
         run: |
           brew install autoconf automake libtool texinfo
 
-      - name: Configure
+      - name: Setup MSYS2 (Windows)
+        if: matrix.platform == 'windows-x64'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-libtool
+            autoconf
+            automake
+            libtool
+            texinfo
+            make
+            tar
+            gzip
+
+      - name: Configure (Unix)
+        if: matrix.platform != 'windows-x64'
         run: |
           sh ./autogen.sh
           ./configure --enable-release --disable-docs --disable-bindings
 
-      - name: Compile
+      - name: Configure (Windows)
+        if: matrix.platform == 'windows-x64'
+        shell: msys2 {0}
+        run: |
+          sh ./autogen.sh
+          ./configure --enable-release --disable-docs --disable-bindings
+
+      - name: Compile (Unix)
+        if: matrix.platform != 'windows-x64'
         run: |
           make -j$(nproc)
 
-      - name: Install to staging
+      - name: Compile (Windows)
+        if: matrix.platform == 'windows-x64'
+        shell: msys2 {0}
+        run: |
+          make -j$(nproc)
+
+      - name: Install to staging (Unix)
+        if: matrix.platform != 'windows-x64'
+        run: |
+          make install DESTDIR=$PWD/install-root
+          mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
+
+      - name: Install to staging (Windows)
+        if: matrix.platform == 'windows-x64'
+        shell: msys2 {0}
         run: |
           make install DESTDIR=$PWD/install-root
           mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
@@ -87,22 +143,63 @@ jobs:
             fi
           done
 
-      - name: Create tarball
+      - name: Copy DLLs (Windows)
+        if: matrix.platform == 'windows-x64'
+        shell: msys2 {0}
+        run: |
+          cd libredwg-${{ inputs.version }}-${{ matrix.platform }}/usr/local
+          # Copy libredwg DLL to bin directory for easier distribution
+          cp lib/*.dll bin/ 2>/dev/null || true
+          # Copy MinGW runtime DLLs needed by the executables
+          for dll in libgcc_s_seh-1.dll libwinpthread-1.dll libstdc++-6.dll; do
+            dllpath=$(which "$dll" 2>/dev/null || true)
+            if [ -n "$dllpath" ] && [ -f "$dllpath" ]; then
+              cp "$dllpath" bin/
+            fi
+          done
+
+      - name: Create tarball (Unix)
+        if: matrix.platform != 'windows-x64'
         run: |
           tar -czf libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz libredwg-${{ inputs.version }}-${{ matrix.platform }}
 
-      - name: Generate install script
+      - name: Create zip (Windows)
+        if: matrix.platform == 'windows-x64'
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "libredwg-${{ inputs.version }}-${{ matrix.platform }}" -DestinationPath "libredwg-${{ inputs.version }}-${{ matrix.platform }}.zip"
+
+      - name: Generate install script (Unix)
+        if: matrix.platform != 'windows-x64'
         run: |
           sed -e 's/VERSION_PLACEHOLDER/${{ inputs.version }}/g' \
               -e 's/PLATFORM_PLACEHOLDER/${{ matrix.platform }}/g' \
               .github/install-template.sh > install-${{ matrix.platform }}.sh
           chmod +x install-${{ matrix.platform }}.sh
 
-      - name: Generate checksum
+      - name: Generate install script (Windows)
+        if: matrix.platform == 'windows-x64'
+        shell: pwsh
+        run: |
+          $content = Get-Content -Path ".github/install-template.ps1" -Raw
+          $content = $content -replace 'VERSION_PLACEHOLDER', '${{ inputs.version }}'
+          $content = $content -replace 'PLATFORM_PLACEHOLDER', '${{ matrix.platform }}'
+          Set-Content -Path "install-${{ matrix.platform }}.ps1" -Value $content
+
+      - name: Generate checksum (Unix)
+        if: matrix.platform != 'windows-x64'
         run: |
           sha256sum libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz > libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
 
-      - name: Upload artifacts
+      - name: Generate checksum (Windows)
+        if: matrix.platform == 'windows-x64'
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash -Algorithm SHA256 "libredwg-${{ inputs.version }}-${{ matrix.platform }}.zip").Hash.ToLower()
+          "$hash  libredwg-${{ inputs.version }}-${{ matrix.platform }}.zip" | Out-File -FilePath "libredwg-${{ inputs.version }}-${{ matrix.platform }}.zip.sha256" -Encoding utf8 -NoNewline
+
+      - name: Upload artifacts (Unix)
+        if: matrix.platform != 'windows-x64'
         uses: actions/upload-artifact@v4
         with:
           name: libredwg-${{ inputs.version }}-${{ matrix.platform }}
@@ -112,13 +209,25 @@ jobs:
             install-${{ matrix.platform }}.sh
           retention-days: 90
 
-      - name: Create release
+      - name: Upload artifacts (Windows)
+        if: matrix.platform == 'windows-x64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: libredwg-${{ inputs.version }}-${{ matrix.platform }}
+          path: |
+            libredwg-${{ inputs.version }}-${{ matrix.platform }}.zip
+            libredwg-${{ inputs.version }}-${{ matrix.platform }}.zip.sha256
+            install-${{ matrix.platform }}.ps1
+          retention-days: 90
+
+      - name: Create release (Unix)
+        if: matrix.platform != 'windows-x64'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ inputs.version }}
           name: LibreDWG ${{ inputs.version }}
           body: |
-            Prebuilt binaries for AArch64 (ARM64) platforms.
+            Prebuilt binaries for multiple platforms.
 
             ## Quick Install
 
@@ -130,6 +239,11 @@ jobs:
             **macOS AArch64:**
             ```bash
             curl -fsSL https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-macos-aarch64.sh | sh
+            ```
+
+            **Windows x64:**
+            ```powershell
+            irm https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-windows-x64.ps1 | iex
             ```
 
             Or download manually and install with custom prefix:
@@ -144,5 +258,18 @@ jobs:
             libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz
             libredwg-${{ inputs.version }}-${{ matrix.platform }}.tar.gz.sha256
             install-${{ matrix.platform }}.sh
+          draft: false
+          prerelease: false
+
+      - name: Create release (Windows)
+        if: matrix.platform == 'windows-x64'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ inputs.version }}
+          name: LibreDWG ${{ inputs.version }}
+          files: |
+            libredwg-${{ inputs.version }}-${{ matrix.platform }}.zip
+            libredwg-${{ inputs.version }}-${{ matrix.platform }}.zip.sha256
+            install-${{ matrix.platform }}.ps1
           draft: false
           prerelease: false
