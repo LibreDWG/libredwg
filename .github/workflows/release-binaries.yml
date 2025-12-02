@@ -243,9 +243,13 @@ jobs:
             curl -fsSL https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-macos-aarch64.sh | sh
             ```
 
-            **Windows x64:**
+            **Windows x64 (run in PowerShell, not cmd.exe):**
             ```powershell
             irm https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-windows-x64.ps1 | iex
+            ```
+            Or from Command Prompt:
+            ```cmd
+            powershell -ExecutionPolicy Bypass -Command "irm https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-windows-x64.ps1 | iex"
             ```
 
             Or download manually and install with custom prefix:
