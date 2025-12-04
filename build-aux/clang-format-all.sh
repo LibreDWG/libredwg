@@ -69,11 +69,11 @@ find-dominating-file() {
 
 # Run clang-format -i on all of the things
 for dir in "$@"; do
-    if [ X$dir = Xbindings ]; then
+    if [ "$dir" = "bindings" ]; then
         echo skip bindings
         continue
     fi
-    pushd "${dir}"
+    pushd "${dir}" || exit
     if ! find-dominating-file . .clang-format; then
         echo "Failed to find dominating .clang-format starting at $PWD"
         continue
@@ -93,6 +93,7 @@ for dir in "$@"; do
                -o -name dynapi.c \) \
          -exec "${FMT}" -i -verbose '{}' \;
     echo "post clang-format fixups (clang-format bugs)"
+    # shellcheck disable=SC2046,2035
     sed -i -e's, (-Wformat - nonliteral) , (-Wformat-nonliteral)   ,;' \
            -e's, (-Wformat - nonliteral), (-Wformat-nonliteral),;' \
            -e's, (-Wmissing - prototypes), (-Wmissing-prototypes),;' \
@@ -107,9 +108,9 @@ for dir in "$@"; do
            -e's, (-Wanalyzer - possible - null - dereference), (-Wanalyzer-possible-null-dereference),;' \
            -e's, (-Wanalyzer - null - dereference), (-Wanalyzer-null-dereference),;' \
            -e's, (-Wanalyzer - malloc - leak), (-Wanalyzer-malloc-leak),;' \
-        `grep -l 'DIAG_IGNORE' */*.{c,h} *.{c,h}`
-    if [ X$dir = Xexamples ]; then
+        $(grep -l 'DIAG_IGNORE' */*.{c,h} *.{c,h})
+    if [ "$dir" = "examples" ]; then
         sed -i -e's/define SZ , 119/define SZ ,119/' dwgadd.c
     fi
-    popd &>/dev/null
+    popd || exit
 done

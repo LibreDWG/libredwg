@@ -1512,7 +1512,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TGrupoPuntos,
   DWG_TYPE_VAACIMAGEINVENTORY,
   DWG_TYPE_VAACXREFPANELOBJECT,
-  
+
   DWG_TYPE_FREED        = 0xfffd,
   DWG_TYPE_UNKNOWN_ENT  = 0xfffe,
   DWG_TYPE_UNKNOWN_OBJ  = 0xffff,
@@ -6166,7 +6166,7 @@ typedef struct _dwg_DIMASSOC_Ref
   BITCODE_BD osnap_dist;       /*!< DXF 40 */
   BITCODE_3BD osnap_pt;        /*!< DXF 10-30 */
   BITCODE_BS num_xrefs;
-  BITCODE_H *xrefs;            /*!< DXF 331 the geometry objects, 1 or 2 */ 
+  BITCODE_H *xrefs;            /*!< DXF 331 the geometry objects, 1 or 2 */
   BITCODE_BS main_subent_type; /*!< DXF 73 */
   BITCODE_BL main_gsmarker;    /*!< DXF 91 */
   BITCODE_BS num_xrefpaths;
@@ -6613,7 +6613,7 @@ typedef struct _dwg_object_ASSOCASMBODYACTIONPARAM
 {
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;
-  /* AcDbAssocSingleDependencyActionParam */ 
+  /* AcDbAssocSingleDependencyActionParam */
   BITCODE_BL asdap_class_version; // 0
   BITCODE_H  dep;
   /* AcDbAssocAsmbodyActionParam */
@@ -6657,7 +6657,7 @@ typedef struct _dwg_object_ASSOCEDGEACTIONPARAM
 typedef struct _dwg_object_ASSOCFACEACTIONPARAM
 {
   struct _dwg_object_object *parent;
-  ASSOCACTIONPARAM_fields;  
+  ASSOCACTIONPARAM_fields;
   /* AcDbAssocSingleDependencyActionParam */
   BITCODE_BL asdap_class_version; // 0
   BITCODE_H dep;
@@ -6678,7 +6678,7 @@ typedef struct _dwg_object_ASSOCPATHACTIONPARAM
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM
 {
   struct _dwg_object_object *parent;
-  ASSOCACTIONPARAM_fields;  
+  ASSOCACTIONPARAM_fields;
   /* AcDbAssocSingleDependencyActionParam */
   BITCODE_BL asdap_class_version; // 0
   BITCODE_H dep;
@@ -7035,7 +7035,7 @@ typedef struct _dwg_ACSH_HistoryNode
 } Dwg_ACSH_HistoryNode;
 
 //#define Dwg_EvalExpr evalexpr Dwg_EvalExpr evalexpr
-  
+
 typedef struct _dwg_object_ACSH_HISTORY_CLASS
 {
   struct _dwg_object_object *parent;

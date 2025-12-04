@@ -4525,7 +4525,7 @@ DWG_TABLE (VPORT)
         FIELD_BD (contrast, 142);
         FIELD_CMC (ambient_color, 63); // +421, 431
       }
-    
+
       FIELD_2RD (lower_left, 10);
       FIELD_2RD (upper_right, 11);
       FIELD_B (UCSFOLLOW, 0); // bit 3 of 71
@@ -4542,7 +4542,7 @@ DWG_TABLE (VPORT)
         FIELD_2RD (SNAPBASE, 13);
       }
       FIELD_2RD (SNAPUNIT, 14);
-    
+
       SINCE (R_2000b) {
         FIELD_B (ucs_at_origin, 0);
         FIELD_B (UCSVP, 71);
@@ -4552,7 +4552,7 @@ DWG_TABLE (VPORT)
         FIELD_BD (ucs_elevation, 146);
         FIELD_BS (UCSORTHOVIEW, 79);
       }
-    
+
       SINCE (R_2007a) {
         FIELD_BS (grid_flags, 60);
         FIELD_BS (grid_major, 61);
@@ -5253,7 +5253,7 @@ DWG_ENTITY (HATCH)
       FIELD_BD (angle, 52);
       FIELD_BD (scale_spacing, 41);
       FIELD_B (double_flag, 77);
-      
+
       FIELD_BS (num_deflines, 78);
       REPEAT (num_deflines, deflines, Dwg_HATCH_DefLine)
       REPEAT_BLOCK
@@ -5464,7 +5464,7 @@ DWG_ENTITY (MPOLYGON)
       FIELD_BD (angle, 52);
       FIELD_BD1 (scale_spacing, 41); //default 1.0
       FIELD_B (double_flag, 77);
-      
+
       FIELD_BS (num_deflines, 78);
       REPEAT (num_deflines, deflines, Dwg_HATCH_DefLine)
       REPEAT_BLOCK
@@ -6920,11 +6920,11 @@ DWG_ENTITY (TABLE)
   #endif
       }
     }
-  
+
     FIELD_BD0 (rotation, 50);
     FIELD_3BD (extrusion, 210);
     FIELD_B (has_attribs, 66);
-  
+
     SINCE (R_2004a) {
       FIELD_BL (num_owned, 0);
       VALUEOUTOFBOUNDS (num_owned, 10000)
@@ -6938,7 +6938,7 @@ DWG_ENTITY (TABLE)
             FIELD_HANDLE (last_attrib, 4, 0);
           }
       }
-  
+
     SINCE (R_2004a)
       {
   #if defined (IS_JSON) || defined (IS_DXF)
@@ -6950,7 +6950,7 @@ DWG_ENTITY (TABLE)
     if (FIELD_VALUE (has_attribs)) {
       FIELD_HANDLE (seqend, 3, 0);
     }
-  
+
     SUBCLASS (AcDbTable)
     FIELD_HANDLE (tablestyle, 5, 342);
     FIELD_BS (flag_for_table_value, 90);
@@ -7019,7 +7019,7 @@ DWG_ENTITY (TABLE)
                 SUB_FIELD_BL (cell,cell_flag_override, 0);
                 cell_flag = FIELD_VALUE (cell.cell_flag_override);
                 SUB_FIELD_RC (cell,virtual_edge_flag, 0);
-  
+
                 if (cell_flag & 0x01)
                   SUB_FIELD_RS (cell,cell_alignment, 170);
                 if (cell_flag & 0x02)
@@ -7060,9 +7060,9 @@ DWG_ENTITY (TABLE)
                   SUB_FIELD_BS (cell,left_grid_linewt, 278);
                 if (cell_flag & 0x20000)
                   SUB_FIELD_BS (cell,left_visibility, 288);
-  
+
                 SUB_FIELD_BL (cell,unknown, 0);
-  
+
                 // 20.4.99 Value, page 241
                 TABLE_value_fields (cell.value)
                 if (error & DWG_ERR_INVALIDTYPE)
@@ -7079,7 +7079,7 @@ DWG_ENTITY (TABLE)
 #endif
     #undef cell
     /* End Cell Data (remaining data applies to entire table)*/
-  
+
     /* COMMON: */
     FIELD_B (has_table_overrides, 0);
     if (FIELD_VALUE (has_table_overrides))
@@ -7139,7 +7139,7 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x400000)
           FIELD_BD (data_row_height, 140);
       }
-  
+
     FIELD_B (has_border_color_overrides, 0);
     if (FIELD_VALUE (has_border_color_overrides))
       {
@@ -7183,7 +7183,7 @@ DWG_ENTITY (TABLE)
         if (border_color & 0x20000)
           FIELD_CMTC (data_vert_right_color, 69);
       }
-  
+
     FIELD_B (has_border_lineweight_overrides, 0);
     if (FIELD_VALUE (has_border_lineweight_overrides))
       {
@@ -7227,7 +7227,7 @@ DWG_ENTITY (TABLE)
         if (border_linewt & 0x20000)
           FIELD_BS (data_vert_right_linewt, 0);
       }
-  
+
     FIELD_B (has_border_visibility_overrides, 0);
     if (FIELD_VALUE (has_border_visibility_overrides))
       {
@@ -7271,14 +7271,14 @@ DWG_ENTITY (TABLE)
         if (border_visibility & 0x20000)
           FIELD_BS (data_vert_right_visibility, 0);
       }
-  
+
     COMMON_ENTITY_HANDLE_DATA;
   }
   SINCE (R_2010b)
   {
     //... p237
     LOG_WARN ("TODO TABLE r2010+")
-  
+
     FIELD_BS (unknown_bs, 0); //default 38
     FIELD_3BD (hor_dir, 11);
     FIELD_BL (has_break_data, 0); //BL or B?
@@ -8228,7 +8228,7 @@ DWG_OBJECT_END
   END_REPEAT_BLOCK                                                      \
   END_REPEAT (valprefix.vars)                                           \
   FIELD_HANDLE (valprefix.controlled_objdep, 4, 330)
-    
+
 #define AcDbAssocDependency_fields                         \
   SUBCLASS (AcDbAssocDependency);                          \
   FIELD_BS (assocdep.class_version, 90); /* 2 */           \
@@ -9721,7 +9721,7 @@ DWG_OBJECT_END
   FIELD_BD (action_offset_y, 141);                \
   FIELD_BD (angle_offset, 0);                     \
   DXF { VALUE_RC ((BITCODE_RC)1, 280); } /* Action XY type. 1? */
-  
+
 #define AcDbBlockConstraintParameter_fields                \
   AcDbBlock2PtParameter_fields;                            \
   SUBCLASS (AcDbBlockConstraintParameter);                 \
@@ -10294,7 +10294,7 @@ DWG_ENTITY (GEOPOSITIONMARKER)
 DWG_ENTITY_END
 
 DWG_ENT_SUBCLASS (GEOPOSITIONMARKER, AcDbMTextObjectEmbedded)
-  
+
 #define SweepOptions_fields  \
   FIELD_BD (draft_angle, 42); \
   FIELD_BD (draft_start_distance, 43); \
@@ -11250,7 +11250,7 @@ DWG_OBJECT (IMAGE_BACKGROUND)
 DWG_OBJECT_END
 
 DWG_OBJECT (SKYLIGHT_BACKGROUND)
-  SUBCLASS (AcDbSkyBackground); 
+  SUBCLASS (AcDbSkyBackground);
   FIELD_BL (class_version, 90); /* 1 */
   FIELD_HANDLE (sunid, 5, 340);
   START_OBJECT_HANDLE_STREAM;
@@ -12628,7 +12628,7 @@ DWG_OBJECT (PARTIAL_VIEWING_INDEX)
 DWG_OBJECT_END
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
- 
+
 // (varies) DEBUGGING
 DWG_OBJECT (BREAKDATA)
   HANDLE_UNKNOWN_BITS;

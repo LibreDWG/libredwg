@@ -5,7 +5,7 @@
 #    Table format:  Format A
 #    Date:          04/24/96
 #    Contact: Shawn.Steele@microsoft.com
-#                   
+#
 #    General notes: none
 #
 #    Format: Three tab-separated columns

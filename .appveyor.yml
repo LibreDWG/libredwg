@@ -45,7 +45,7 @@ init:
   #     |  - Check online for a solution and close the program  |
   #     |  - Close the program                                  |
   # See: https://msdn.microsoft.com/en-us/library/bb513638%28VS.85%29.aspx
-  - reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1  
+  - reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   # git bash conflicts with MinGW makefiles, esp. the space in 'Program Files'
   - set "PATH=%PATH:C:\Program Files\Git\usr\bin;=%"

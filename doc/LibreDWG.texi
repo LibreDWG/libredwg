@@ -103,7 +103,7 @@ Ribbonsoft.
 LibreDWG @value{VERSION} provides the API/ABI version 1.
 We hope that this doesn't need to change much in the future.
 
-See @file{include/dwg.h} for @code{LIBREDWG_VERSION_MAJOR}, 
+See @file{include/dwg.h} for @code{LIBREDWG_VERSION_MAJOR},
 @code{LIBREDWG_VERSION_MINOR} and @code{LIBREDWG_SO_VERSION}.
 
 @ignore
@@ -312,7 +312,7 @@ LibreDWG.  To access LibreDWG interface elements (@pxref{Types},
 #include <dwg.h>
 @end example
 
-Optionally you can also use the 
+Optionally you can also use the
 @example
 #include <dwg_api.h>
 @end example
@@ -681,7 +681,7 @@ Some Objects meta-data
 @section Template
 
 Contains one Measurement Header variable.
- 
+
 @node AuxHeader
 @section AuxHeader
 

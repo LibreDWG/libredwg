@@ -2,26 +2,34 @@
 Language:      Cpp
 BasedOnStyle:  GNU
 IndentPPDirectives: AfterHash
+SkipMacroDefinitionBody: true
 SortIncludes:    false
 SortUsingDeclarations: false
-StatementMacros: ['SET_ENT',
-                 'dwg_get_OBJECT',
-                 'DWG_GETALL_ENTITY',
-                 'DWG_GETALL_OBJECT',
-                 'CAST_DWG_OBJECT_TO_ENTITY',
-                 'CAST_DWG_OBJECT_TO_ENTITY_BYNAME',
-                 'CAST_DWG_OBJECT_TO_OBJECT',
-                 'DISABLE_NODSTYLE',
-                 'ENCODE_CTRL_TO_TABLE',
-                 'DECODER_OR_ENCODER',
-                 'FIELD_TFv',
-                 'PRE',
-                 'LATER_VERSIONS',
-                 'SINCE',
-                 'UNTIL',
-                 'VERSION',
-                 'VERSIONS'
-                 ]
-WhitespaceSensitiveMacros: ['STRINGIZE', 'SZ']
+StatementMacros:
+  - SET_ENT
+  - dwg_get_OBJECT
+  - DWG_GETALL_ENTITY
+  - DWG_GETALL_OBJECT
+  - CAST_DWG_OBJECT_TO_ENTITY
+  - CAST_DWG_OBJECT_TO_ENTITY_BYNAME
+  - CAST_DWG_OBJECT_TO_OBJECT
+  - DISABLE_NODSTYLE
+  - ENCODE_CTRL_TO_TABLE
+  - DECODER_OR_ENCODER
+  - FIELD_TFv
+  - PRE
+  - LATER_VERSIONS
+  - SINCE
+  - UNTIL
+  - VERSION
+  - VERSIONS
+WhitespaceSensitiveMacros:
+  - STRINGIZE
+  - SZ
+  - CLANG_DIAG_IGNORE
+  - GCC14_DIAG_IGNORE
+  - GCC30_DIAG_IGNORE
+  - GCC31_DIAG_IGNORE
+  - GCC46_DIAG_IGNORE
+  - GCC80_DIAG_IGNORE
 ...
-

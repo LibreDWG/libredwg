@@ -20,7 +20,7 @@
 # VENDORS mapping data.
 #
 #	WARNING!  It is currently impossible to provide round-trip compatibility
-#		between BIG5 and Unicode.  
+#		between BIG5 and Unicode.
 #
 #	A number of characters are not currently mapped because
 #		of conflicts with other mappings.  They are as follows:
@@ -37,8 +37,8 @@
 #
 #	We currently map all of these characters to U+FFFD REPLACEMENT CHARACTER.
 #		It is also possible to map these characters to their duplicates, or to
-#		the user zone.  
-#	
+#		the user zone.
+#
 #	Notes:
 #
 #	1. In addition to the above, there is some uncertainty about the
@@ -51,11 +51,11 @@
 #	0xA3BC.  This character occurs within the Big Five block of tone marks
 #	for bopomofo and is intended to be the tone mark for the first tone in
 #	Mandarin Chinese.  We have selected the mapping U+02C9 MODIFIER LETTER
-#	MACRON (Mandarin Chinese first tone) to reflect this semantic.  
+#	MACRON (Mandarin Chinese first tone) to reflect this semantic.
 #	However, because bopomofo uses the absense of a tone mark to indicate
 #	the first Mandarin tone, most implementations of Big Five represent
 #	this character with a blank space, and so a mapping such as U+2003 EM
-#	SPACE might be preferred.  
+#	SPACE might be preferred.
 #
 #	Format:  Three tab-separated columns
 #		 Column #1 is the BIG5 code (in hex as 0xXXXX)

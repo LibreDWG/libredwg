@@ -45,4 +45,3 @@ CheckOptions:
   - key:             clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
     value:           'false'
 ...
-

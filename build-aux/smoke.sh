@@ -1,21 +1,22 @@
 #!/bin/sh
 
-find -name .deps -type d -exec rm -rf '{}' 2>/dev/null \;
+cd "$(dirname "$0")/.." || exit 1
+find . -name .deps -type d -exec rm -rf '{}' \;
 git clean -dxf src examples programs test/testcases test/unit-testing test/xmlsuite
 sh autogen.sh
 # autoreconf
-make=make
+make="make"
 
-case `uname` in
+case "$(uname)" in
 Darwin) # macports compilers
-make=gmake
+make="gmake"
 
 # for dejagnu
 #export PKG_CONFIG_PATH=/opt/local/lib/pkgconfig
 #export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages
-# for pslib    
-CFLAGS=-I/usr/local/include
-LDFLAGS=-L/usr/local/lib
+# for pslib
+export CFLAGS="-I/usr/local/include"
+export LDFLAGS="-L/usr/local/lib"
 
 gmake -s -j4 clean
 echo clang-mp-devel -fsanitize=address,undefined -fno-omit-frame-pointer --enable-trace

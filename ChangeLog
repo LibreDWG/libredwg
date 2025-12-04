@@ -5300,7 +5300,7 @@ Full history from the git log
 
 	Fixes Stack-buffer-overflow in decompress_rNUMBER
 	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=44432
-	
+
 	`sizeof (r2007_file_header) + 1` is passed in `read_file_header` which leads to off by one write buffer overflow.
 
 2022-07-29  Aleks L  <93376818+sashashura@users.noreply.github.com>
@@ -5308,7 +5308,7 @@ Full history from the git log
 	Fixes Heap-buffer-overflow in dwg_decode_MINSERT_private
 	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=31741 and
 	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=31591
-	
+
 	The out of bounds read happens in `TRACE_DD` macro at `dat->chain[dat->byte]` because of corrupted `dat->byte`: `dat->byte` equals to `dat->size`.
 	The corruption happens before in `bit_advance_position`. When `advance == 2`, `dat->size == 2`, `dat->byte == 1`, `dat->bit == 6` it calculates `pos == 14` and `endpos == 16`.
 	Then it passes the overflow check: `if (pos + advance > endpos)` and after
@@ -5322,7 +5322,7 @@ Full history from the git log
 
 	Fixes Segv on unknown address in dwg_free_summaryinfo
 	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=33059
-	
+
 	`dwg.summaryinfo.props[0].value` in `dwg_free_summaryinfo` is uninitialized pointer. It happens when `dwg_read_dxf` fails and partially initialized summary info object is created.
 
 2022-07-28  Reini Urban  <rurban@cpan.org>
@@ -5511,7 +5511,7 @@ Full history from the git log
 
 	Fixes Heap-use-after-free in dwg_free_TABLEGEOMETRY_private
 	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=46847
-	
+
 	The title is somewhat misleading, because it is a read out of bounds, but the memory out of the bounds is previously allocated and then freed, so it says use after free.
 	In `add_TABLEGEOMETRY_Cell` function when `o->num_cells` equals to zero, the call to calloc doesn't return NULL because of https://linux.die.net/man/3/calloc#:~:text=If%20nmemb%20or%20size%20is%200%2C%20then%20calloc()%20returns%20either%20NULL%2C%20or%20a%20unique%20pointer%20value%20that%20can%20later%20be%20successfully%20passed%20to%20free().
 	So it passes the check
@@ -5534,7 +5534,7 @@ Full history from the git log
 
 	Fixes Stack-buffer-overflow in dynapi_set_helper
 	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=46918
-	
+
 	`dwg_dynapi_header_set_value` in `json_HEADER` is called with a pointer to long:
 	```cpp
 	          long num = json_long (dat, tokens);

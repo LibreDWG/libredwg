@@ -301,6 +301,13 @@ if HAVE_SHFMT
 	  $(SHFMT) $(SHFMT_FLAGS) -w $(top_srcdir)/$$s; done
 endif
 
+check-precommit:
+	if command -v prek; then \
+	  cd $(srcdir); prek run -a ; \
+	elif command -v pre-commit; then \
+	  cd $(srcdir); pre-commit run -a ; \
+	fi
+
 log-dwg: all
 	find $(srcdir)/test/test-data $(srcdir)/test/test-old $(srcdir)/test/issues \
 	     $(srcdir)/test/ossfuzz -type f -iname \*.dwg -size -40M | \

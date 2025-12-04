@@ -39,7 +39,7 @@
 #	There is an alternative order some people might be preferred,
 #		where all the entries are in order of the top (or only) byte.
 #		This alternate order can be generated from the one given here
-#		by a simple sort.  
+#		by a simple sort.
 #
 #  Revision History:
 #

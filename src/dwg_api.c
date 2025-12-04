@@ -27638,7 +27638,7 @@ dwg_add_LEADER (
           annot_style = dwg_add_DIMSTYLE (dwg, (const BITCODE_T) "Annotative");
         }
     }
-  
+
   API_ADD_ENTITY2 (LEADER);
   _obj->points = (BITCODE_3BD *)calloc (num_points, sizeof (BITCODE_3BD));
   _obj->num_points = num_points;

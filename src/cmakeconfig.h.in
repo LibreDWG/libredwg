@@ -25,7 +25,7 @@
 #  define DISABLE_JSON
 #else
 #  undef DISABLE_JSON
-#endif   
+#endif
 
 /* Number of dxf after-comma places. */
 #cmakedefine DXF_PRECISION
@@ -344,7 +344,7 @@
 #  undef USE_WRITE
 #else
 #  define USE_WRITE
-#endif   
+#endif
 
 /* Needed for strdup */
 #define _POSIX_C_SOURCE 200809L

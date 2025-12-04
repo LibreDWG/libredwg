@@ -17,6 +17,7 @@ top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
 DEBUG_CLASSES="@DEBUG_CLASSES@"
 TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
+# shellcheck disable=2157
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
 elif [ -n "@WINE@" ]; then

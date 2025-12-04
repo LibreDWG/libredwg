@@ -1,3 +1,4 @@
+#!/usr/bin/env perl -wS
 eval '(exit $?0)' && eval 'exec perl -wS "$0" "$@"'
   & eval 'exec perl -wS "$0" $argv:q'
     if 0;

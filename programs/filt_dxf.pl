@@ -8,7 +8,7 @@
 die "Usage: diff -bu <(./filt_dxf.pl dxf1) <(./filt_dxf.pl dxf2)\n" if @ARGV;
 
 if (/(-?[0-9]+\.[0-9]+(?:E\+[0-9]+)?)/) {
-  s/^(\Q$1\E)/sprintf("%.06f",$1)/e;
+    s/^(\Q$1\E)/sprintf("%.06f",$1)/e;
 }
 
 # 1.1000000 => 1.1 no ending zero if it doesn't end with zero

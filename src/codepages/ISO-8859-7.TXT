@@ -16,7 +16,7 @@
 #       ISO 8859-7:2003 characters map into Unicode.
 #
 #	ISO 8859-7:1987 is equivalent to ISO-IR-126, ELOT 928,
-#	and ECMA 118. ISO 8859-7:2003 adds two currency signs 
+#	and ECMA 118. ISO 8859-7:2003 adds two currency signs
 #	and one other character not in the earlier standard.
 #
 #	Format:  Three tab-separated columns

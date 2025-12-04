@@ -157,6 +157,7 @@ run ()
     dwgadd)     arg="-o dwgadd.dwg $DATADIR/../../examples/dwgadd.example"
                 ;;
     esac
+    # shellcheck disable=2157
     if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
         TESTPROG="$LOG_COMPILER $LOG_FLAGS"
         log="$TEST_SUITE_LOG"

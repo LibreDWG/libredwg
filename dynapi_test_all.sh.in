@@ -4,6 +4,7 @@ top_builddir="@top_builddir@"
 # dummy to please shellcheck
 test -z "$top_builddir" && echo $top_builddir
 
+# shellcheck disable=2157
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
 elif [ -n "@WINE@" ]; then
