@@ -994,7 +994,7 @@ bit_read_MC (Bit_Chain *dat)
       result |= ((BITCODE_UMC)byte[i]) << j;
     }
 
- err_mc:
+err_mc:
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
       "bit_read_MC: error parsing modular char. i=%d, j=%d, result=" FORMAT_UMC

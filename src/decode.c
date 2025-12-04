@@ -2142,7 +2142,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         {
           size_t orig_size = dat->size;
           dec.byte = es.fields.address;
-              /* == j * info->max_decomp_size;*/ // offset
+          /* == j * info->max_decomp_size;*/ // offset
           LOG_INSANE ("dec offset: %" PRIuSIZE "\n", dec.byte)
           dec.size = dec.byte + info->max_decomp_size; /*es.fields.page_size;*/
           LOG_INSANE ("dec size: %" PRIuSIZE "\n", dec.size)
@@ -4541,12 +4541,13 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
   // Reserve memory space for object references
   if (!dwg->num_object_refs)
     {
-      BITCODE_RLL max_refs = dwg->header_vars.HANDSEED ?
-        dwg->header_vars.HANDSEED->absolute_ref : REFS_PER_REALLOC;
+      BITCODE_RLL max_refs = dwg->header_vars.HANDSEED
+                                 ? dwg->header_vars.HANDSEED->absolute_ref
+                                 : REFS_PER_REALLOC;
       if (max_refs < REFS_PER_REALLOC)
         max_refs = REFS_PER_REALLOC;
-      dwg->object_ref = (Dwg_Object_Ref **)calloc (max_refs,
-                                                   sizeof (Dwg_Object_Ref *));
+      dwg->object_ref
+          = (Dwg_Object_Ref **)calloc (max_refs, sizeof (Dwg_Object_Ref *));
     }
   else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
     {
@@ -5168,8 +5169,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                       seq = seqend ? dwg_next_object (seqend->obj) : NULL;
                       if (seq && seq->type == DWG_TYPE_SEQEND)
                         {
-                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 " FORMAT_HV
-                                    "",
+                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 " FORMAT_HV "",
                                     seq->handle.value);
                           seqend = _obj->seqend
                               = dwg_find_objectref (dwg, seq);
@@ -6588,8 +6588,7 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   FIELD_RS (R11_HANDLING, 0);
   {
     _obj->HANDSEED = bit_read_RLL_BE (dat);
-    LOG_TRACE ("HANDSEED: " FORMAT_HV " [RLLx 5]\n",
-               _obj->HANDSEED);
+    LOG_TRACE ("HANDSEED: " FORMAT_HV " [RLLx 5]\n", _obj->HANDSEED);
   }
   FIELD_RS (num_aux_tables, 0);
   decode_preR13_section_chk (SECTION_BLOCK, dat, dwg);

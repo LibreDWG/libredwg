@@ -36,6 +36,7 @@ for d in $TODO $DATA; do
     rm "./$b.json" 2>/dev/null
 done
 
+# shellcheck disable=2157
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
 elif [ -n "@WINE@" ]; then

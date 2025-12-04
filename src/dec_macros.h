@@ -644,7 +644,7 @@
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
-        LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf)                 \
+        LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf)                \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -960,7 +960,7 @@
           LOG_TRACE (#o "." #color ".rgb: 0x%06x [ENC.BL %d]\n",              \
                      (unsigned)_obj->o.color.rgb, dxf + 420 - 62);            \
         if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
-          LOG_TRACE (#o "." #color ".handle: " FORMAT_HV " [ENC.H %d]\n",   \
+          LOG_TRACE (#o "." #color ".handle: " FORMAT_HV " [ENC.H %d]\n",     \
                      _obj->o.color.handle->handleref.value, dxf + 430 - 62);  \
       }                                                                       \
   }
@@ -1449,7 +1449,7 @@
       LOG_INSANE ("num_inserts [RC " FORMAT_RL "]: %d\n",                     \
                   FIELD_VALUE (num_inserts), (unsigned char)vcount)           \
       if (vcount == 0)                                                        \
-          break;                                                              \
+        break;                                                                \
     }                                                                         \
   LOG_TRACE ("num_inserts: %d [RC* 0]\n", FIELD_VALUE (num_inserts))
 

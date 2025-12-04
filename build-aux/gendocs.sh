@@ -282,7 +282,7 @@ echo "Making output for $srcfile"
 echo " in `pwd`"
 mkdir -p "$outdir/"
 
-# 
+#
 if $generate_info; then
   cmd="$SETLANG $MAKEINFO -o $PACKAGE.info $commonarg $infoarg \"$srcfile\""
   echo "Generating info... ($cmd)"
@@ -295,7 +295,7 @@ if $generate_info; then
   # separately on the web.
 fi  # end info
 
-# 
+#
 if $generate_tex; then
   cmd="$SETLANG $TEXI2DVI $dirargs $texarg \"$srcfile\""
   printf "\nGenerating dvi... ($cmd)\n"
@@ -314,7 +314,7 @@ if $generate_tex; then
   ls -l "$outdir/$PACKAGE.pdf"
 fi # end tex (dvi + pdf)
 
-# 
+#
 if $generate_ascii; then
   opt="-o $PACKAGE.txt --no-split --no-headers $commonarg"
   cmd="$SETLANG $MAKEINFO $opt \"$srcfile\""
@@ -327,7 +327,7 @@ if $generate_ascii; then
   ls -l "$outdir/$PACKAGE.txt" "$outdir/$PACKAGE.txt.gz"
 fi
 
-# 
+#
 
 if $generate_html; then
 # Split HTML at level $1.  Used for texi2html.
@@ -406,7 +406,7 @@ else # use texi2html:
 fi
 fi # end html
 
-# 
+#
 printf "\nMaking .tar.gz for sources...\n"
 d=`dirname $srcfile`
 (
@@ -417,7 +417,7 @@ d=`dirname $srcfile`
 )
 texi_tgz_size=`calcsize "$outdir/$PACKAGE.texi.tar.gz"`
 
-# 
+#
 # Do everything again through docbook.
 if test -n "$docbook"; then
   opt="-o - --docbook $commonarg"
@@ -457,7 +457,7 @@ if test -n "$docbook"; then
   mv $PACKAGE-db.pdf "$outdir/"
 fi
 
-# 
+#
 printf "\nMaking index.html for $PACKAGE...\n"
 if test -z "$use_texi2html"; then
   CONDS="/%%IF  *HTML_SECTION%%/,/%%ENDIF  *HTML_SECTION%%/d;\

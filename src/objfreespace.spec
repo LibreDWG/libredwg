@@ -56,4 +56,3 @@
     FIELD_RLL (maxrl, 0);       // 0xffffffff
     FIELD_RLL (maxrl_hi, 0);    // 0x0
   }
-

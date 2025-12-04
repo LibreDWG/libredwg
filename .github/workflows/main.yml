@@ -196,7 +196,7 @@ jobs:
     runs-on: macOS-latest
     steps:
     - name: init
-      run: brew install autoconf automake libtool texinfo 
+      run: brew install autoconf automake libtool texinfo
     - name: link texinfo
       run: brew link texinfo --force
     - name: setup-python

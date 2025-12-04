@@ -71,7 +71,9 @@ branch="$VCS_BRANCH_NAME"
 pr="$VCS_PULL_REQUEST"
 slug="$VCS_SLUG"
 tag="$VCS_TAG"
+# shellcheck disable=2153
 build_url="$CI_BUILD_URL"
+# shellcheck disable=2153
 build="$CI_BUILD_ID"
 job="$CI_JOB_ID"
 
@@ -1482,7 +1484,9 @@ fi
 upload_file=$(mktemp /tmp/codecov.XXXXXX)
 adjustments_file=$(mktemp /tmp/codecov.adjustments.XXXXXX)
 
+# shellcheck disable=2329
 cleanup() {
+    # shellcheck disable=2317
     rm -f "$upload_file" "$adjustments_file" "$upload_file.gz"
 }
 
@@ -1878,6 +1882,7 @@ else
     exit ${exit_with}
   fi
 
+  # shellcheck disable=2317
   say "    ${r}X> Failed to upload coverage reports${x}"
 fi
 

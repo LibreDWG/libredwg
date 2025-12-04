@@ -17,6 +17,7 @@ EXEEXT="@EXEEXT@"
 TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
+# shellcheck disable=2157
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
 elif [ -n "@WINE@" ]; then

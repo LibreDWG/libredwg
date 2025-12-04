@@ -664,11 +664,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       if (_obj->nam != 0)                                                     \
         FIELD_BS (nam, dxf)                                                   \
     }
-#define FIELD_BSd0(nam, dxf)                                                   \
+#define FIELD_BSd0(nam, dxf)                                                  \
   if (dxf)                                                                    \
     {                                                                         \
       if (_obj->nam != 0)                                                     \
-        FIELD_BSd (nam, dxf)                                                   \
+        FIELD_BSd (nam, dxf)                                                  \
     }
 #define FIELD_BS1(nam, dxf)                                                   \
   if (dxf)                                                                    \
@@ -1094,7 +1094,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         SINCE (R_14)                                                          \
         {                                                                     \
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
-          LOG_TRACE ("ownerhandle: " FORMAT_HV " [330]\n",                  \
+          LOG_TRACE ("ownerhandle: " FORMAT_HV " [330]\n",                    \
                      obj->tio.object->ownerhandle->absolute_ref);             \
         }                                                                     \
       }                                                                       \
@@ -1783,7 +1783,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     {                                                                         \
       /* mask off 64, the loaded bit 6, since >= r13 */                       \
       SINCE (R_13b1)                                                          \
-        _obj->flag &= ~64;                                                    \
+      _obj->flag &= ~64;                                                      \
       VALUE_RC (_obj->flag, 70);                                              \
     }
 
@@ -2613,8 +2613,8 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           LOG_WARN ("Skip %s", klass->dxfname)
           return DWG_ERR_UNHANDLEDCLASS;
         }
-      // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF, IMAGEDEF_REACTOR,
-      // XRECORD, IDBUFFER
+      // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF,
+      // IMAGEDEF_REACTOR, XRECORD, IDBUFFER
       else if (!is_entity && strNEc (klass->dxfname, "DICTIONARYVAR")
                && strNEc (klass->dxfname, "MATERIAL")
                && strNEc (klass->dxfname, "RASTERVARIABLES")
@@ -2909,8 +2909,8 @@ decl_dxf_process_INSERT (MINSERT)
       // TODO: looks good, but acad import crashes
       return dwg_dxf_MLINE (dat, obj);
 #  else
-      LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/" FORMAT_HV,
-                obj->index, obj->handle.value)
+      LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/" FORMAT_HV, obj->index,
+                obj->handle.value)
       if (0)
         dwg_dxf_MLINE (dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
@@ -2999,9 +2999,8 @@ decl_dxf_process_INSERT (MINSERT)
             return dwg_dxf_TABLESTYLE (dat, obj);
           else
             {
-              LOG_WARN (
-                  "Unhandled Object TABLESTYLE in out_dxf %u/" FORMAT_HV,
-                  obj->index, obj->handle.value);
+              LOG_WARN ("Unhandled Object TABLESTYLE in out_dxf %u/" FORMAT_HV,
+                        obj->index, obj->handle.value);
               return DWG_ERR_UNHANDLEDCLASS;
             }
 #  endif
@@ -3171,8 +3170,8 @@ dxf_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.codepage);
     }
 
-  // header_variables_r11.spec is only for DWG
-  // clang-format off
+    // header_variables_r11.spec is only for DWG
+    // clang-format off
 #include "header_variables_dxf.spec"
   // clang-format on
 

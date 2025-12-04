@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   BITCODE_B hasattrs;     /* flag 70 bit 2 */
   BITCODE_B blkisxref;    /* flag 70 bit 3 */
   BITCODE_B xrefoverlaid; /* flag 70 bit 4 */
-  BITCODE_B xref_loaded;   /* flag 70 bit 6 */
+  BITCODE_B xref_loaded;  /* flag 70 bit 6 */
   BITCODE_BL num_owned;
   BITCODE_3DPOINT base_pt;
   BITCODE_TV xref_pname;

@@ -6,7 +6,7 @@ under the terms of the GNU General Public License version 3 (or at you option
 any later version).
 
 DWG is a file format created in the 70's for the emerging CAD applications.
-Currently it is the native file format of AutoCAD, a proprietary CAD program 
+Currently it is the native file format of AutoCAD, a proprietary CAD program
 developed by AutoDesk.
 
 LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we

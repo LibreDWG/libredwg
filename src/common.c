@@ -507,8 +507,8 @@ delete_hv (BITCODE_H *entries, BITCODE_BS *num_p, BITCODE_BS i)
 }
 
 // find if handle already exists, returns index or -1
-BITCODE_BSd find_hv (BITCODE_H *entries, BITCODE_BS num_entries,
-                    BITCODE_RLL handle_value)
+BITCODE_BSd
+find_hv (BITCODE_H *entries, BITCODE_BS num_entries, BITCODE_RLL handle_value)
 {
   BITCODE_BS i;
 #ifndef HAVE_NONNULL

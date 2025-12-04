@@ -23,8 +23,7 @@
 #include "common.h"
 #include "escape.h"
 
-char *
-ATTRIBUTE_MALLOC
+char *ATTRIBUTE_MALLOC
 htmlescape (const char *restrict src, const Dwg_Codepage cp)
 {
   size_t len;
@@ -114,8 +113,7 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
   return dest;
 }
 
-char *
-ATTRIBUTE_MALLOC
+char *ATTRIBUTE_MALLOC
 htmlwescape (BITCODE_TU wstr)
 {
   int len = 0;

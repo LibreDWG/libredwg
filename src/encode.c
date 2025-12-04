@@ -239,23 +239,34 @@ static bool env_var_checked_p;
 // may need to convert from/to TV<=>TU
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
-    if (dat->version < R_2007) {                                              \
-      bit_write_T (dat, _obj->nam);                                           \
-      if (IS_FROM_TU (dat)) {                                                 \
-        LOG_TRACE_TU_AS (#nam, _obj->nam, TV, dxf);                           \
-      } else {                                                                \
-        LOG_TRACE (#nam ": \"%s\" [TV %d]", _obj->nam ? _obj->nam : "", dxf); \
-        LOG_POS                                                               \
+    if (dat->version < R_2007)                                                \
+      {                                                                       \
+        bit_write_T (dat, _obj->nam);                                         \
+        if (IS_FROM_TU (dat))                                                 \
+          {                                                                   \
+            LOG_TRACE_TU_AS (#nam, _obj->nam, TV, dxf);                       \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            LOG_TRACE (#nam ": \"%s\" [TV %d]", _obj->nam ? _obj->nam : "",   \
+                       dxf);                                                  \
+            LOG_POS                                                           \
+          }                                                                   \
       }                                                                       \
-    } else {                                                                  \
-      bit_write_T (str_dat, _obj->nam);                                       \
-      if (IS_FROM_TU (dat)) {                                                 \
-        LOG_TRACE_TU (#nam, _obj->nam, dxf);                                  \
-      } else {                                                                \
-        LOG_TRACE (#nam ": \"%s\" [TU %d]", _obj->nam ? _obj->nam : "", dxf); \
-        LOG_POS                                                               \
+    else                                                                      \
+      {                                                                       \
+        bit_write_T (str_dat, _obj->nam);                                     \
+        if (IS_FROM_TU (dat))                                                 \
+          {                                                                   \
+            LOG_TRACE_TU (#nam, _obj->nam, dxf);                              \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            LOG_TRACE (#nam ": \"%s\" [TU %d]", _obj->nam ? _obj->nam : "",   \
+                       dxf);                                                  \
+            LOG_POS                                                           \
+          }                                                                   \
       }                                                                       \
-    }                                                                         \
   }
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
@@ -1388,8 +1399,7 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
 
   if (appid)
     {
-      LOG_INSANE ("APPID.LibreDWG found " FORMAT_HV "\n",
-                  appid->absolute_ref);
+      LOG_INSANE ("APPID.LibreDWG found " FORMAT_HV "\n", appid->absolute_ref);
       return appid->absolute_ref;
     }
   LOG_INSANE ("no APPID.LibreDWG found\n");
@@ -2581,7 +2591,7 @@ encode_auxheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
     }
 
-  // clang-format off
+    // clang-format off
   #include "auxheader.spec"
   // clang-format on
 
@@ -2674,9 +2684,8 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   size_t size_adr;
   Dwg_Section_Type sec_id;
   SINCE (R_2004a)
-    sec_id = SECTION_HEADER;
-  else
-    sec_id = (Dwg_Section_Type)SECTION_HEADER_R13;
+  sec_id = SECTION_HEADER;
+  else sec_id = (Dwg_Section_Type)SECTION_HEADER_R13;
   assert (!dat->bit);
   LOG_INFO ("\n=======> Header Variables:   %4zu\n", dat->byte);
   if (!dwg->header.section)
@@ -2727,7 +2736,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dwg->header.section[sec_id].number = 1;
   dwg->header.section[sec_id].address = dat->byte; // FIXME
   write_sentinel (dat, DWG_SENTINEL_CLASS_BEGIN);
-  size_adr = dat->byte;    // Size position
+  size_adr = dat->byte;  // Size position
   bit_write_RL (dat, 0); // Size placeholder
 
   SINCE (R_2004a)
@@ -5050,10 +5059,11 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                 }
               else
                 {
-                  LOG_TRACE ("Skip in block %s in entities section, number: %d, "
-                             "type: %d, Addr: %zx (0x%zx)\n",
-                             obj->name, obj->index, obj->type, obj->address,
-                             dat->byte);
+                  LOG_TRACE (
+                      "Skip in block %s in entities section, number: %d, "
+                      "type: %d, Addr: %zx (0x%zx)\n",
+                      obj->name, obj->index, obj->type, obj->address,
+                      dat->byte);
                   continue;
                 }
             }
@@ -5078,10 +5088,10 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                 {
                   // skip model_space entities
                   int adv = next_endblk->index - obj->index;
-                  LOG_TRACE ("Skip %d *MODEL_SPACE block entities, number: %d, "
-                             "type: %d, Addr: %zx (0x%zx)\n",
-                             adv, obj->index, obj->type, obj->address,
-                             dat->byte);
+                  LOG_TRACE (
+                      "Skip %d *MODEL_SPACE block entities, number: %d, "
+                      "type: %d, Addr: %zx (0x%zx)\n",
+                      adv, obj->index, obj->type, obj->address, dat->byte);
                   index += adv;
                   continue;
                 }
@@ -5090,8 +5100,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                 {
                   LOG_TRACE ("Skip empty block, number: %d, "
                              "type: %d, Addr: %zx (0x%zx)\n",
-                             obj->index, obj->type, obj->address,
-                             dat->byte);
+                             obj->index, obj->type, obj->address, dat->byte);
                   continue;
                 }
               else
@@ -6509,12 +6518,12 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
-  // PRE (R_13b1)
-  // {
-  //   if (dat->from_version >= R_13b1)
-  //     downgrade_preR13_header_variables (dat, dwg);
-  // }
-  // clang-format off
+// PRE (R_13b1)
+// {
+//   if (dat->from_version >= R_13b1)
+//     downgrade_preR13_header_variables (dat, dwg);
+// }
+// clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 
@@ -6844,8 +6853,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           if (dat->byte + 8 > end)
             break;
           bit_write_RLL (dat, rbuf->value.i64);
-          LOG_TRACE ("xdata[%u]: " FORMAT_RLLd " [RLLd %d]", j, rbuf->value.i64,
-                     rbuf->type);
+          LOG_TRACE ("xdata[%u]: " FORMAT_RLLd " [RLLd %d]", j,
+                     rbuf->value.i64, rbuf->type);
           LOG_POS;
           break;
         case DWG_VT_POINT3D:
@@ -6883,8 +6892,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           if (dat->byte + 8 > end)
             break;
           bit_write_RLL (dat, rbuf->value.absref);
-          LOG_TRACE ("xdata[%u]: " FORMAT_HV " [H %d]", j,
-                     rbuf->value.absref, rbuf->type);
+          LOG_TRACE ("xdata[%u]: " FORMAT_HV " [H %d]", j, rbuf->value.absref,
+                     rbuf->type);
           LOG_POS;
           break;
         case DWG_VT_INVALID:
@@ -7061,8 +7070,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   if (!owner || !owner->tio.entity || !owner->name)
     {
       if (obj->tio.entity->ownerhandle)
-        LOG_WARN ("Missing owner (" FORMAT_HV ") from " FORMAT_REF
-                  " [H 330]",
+        LOG_WARN ("Missing owner (" FORMAT_HV ") from " FORMAT_REF " [H 330]",
                   obj->handle.value, ARGS_REF (obj->tio.entity->ownerhandle))
       else
         LOG_WARN ("Missing owner (" FORMAT_HV ")", obj->handle.value)
@@ -7265,8 +7273,8 @@ in_postprocess_handles (Dwg_Object *restrict obj)
                   prev->tio.entity->nolinks = 0;
                   prev->tio.entity->next_entity
                       = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
-                  LOG_TRACE ("prev %s(" FORMAT_HV
-                             ").next_entity = " FORMAT_REF "\n",
+                  LOG_TRACE ("prev %s(" FORMAT_HV ").next_entity = " FORMAT_REF
+                             "\n",
                              prev->name, prev->handle.value,
                              ARGS_REF (prev->tio.entity->next_entity));
                   ent->nolinks = 0;
@@ -7328,7 +7336,7 @@ dwg_set_dataflags (Dwg_Object *obj)
   if (_obj->horiz_alignment != 0)                                             \
     _obj->dataflags &= ~0x40;                                                 \
   if (_obj->vert_alignment != 0)                                              \
-    _obj->dataflags &= ~0x80
+  _obj->dataflags &= ~0x80
 
       _SET_DATAFLAGS;
     }
@@ -7342,7 +7350,7 @@ dwg_set_dataflags (Dwg_Object *obj)
       Dwg_Entity_ATTDEF *_obj = obj->tio.entity->tio.ATTDEF;
       _SET_DATAFLAGS;
     }
-  #undef _SET_DATAFLAGS
+#undef _SET_DATAFLAGS
 }
 
 #if 0
@@ -7639,8 +7647,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     {
       appid = dwg_add_APPID (dwg, "ACAD_DSTYLE_DIMJAG");
       eedhdl2 = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMJAG (" FORMAT_HV ")\n",
-                 eedhdl2);
+      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMJAG (" FORMAT_HV ")\n", eedhdl2);
     }
   hdl = dwg_find_tablehandle_silent (dwg, "ACAD_DSTYLE_DIMTALN", "APPID");
   if (hdl)
@@ -7652,8 +7659,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     {
       appid = dwg_add_APPID (dwg, "ACAD_DSTYLE_DIMTALN");
       eedhdl3 = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMTALN (" FORMAT_HV ")\n",
-                 eedhdl3);
+      LOG_TRACE ("Added APPID.ACAD_DSTYLE_DIMTALN (" FORMAT_HV ")\n", eedhdl3);
     }
   // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
   obj = &dwg->object[oindex];

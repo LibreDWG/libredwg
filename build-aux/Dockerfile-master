@@ -18,7 +18,7 @@ RUN apt-get update && \
     make && \
     make install && \
     cd /libxmlInstall && \
-    rm -rf gg libxml2-$LIBXML2VER.tar.gz libxml2-$LIBXML2VER            
+    rm -rf gg libxml2-$LIBXML2VER.tar.gz libxml2-$LIBXML2VER
 WORKDIR /app
 RUN git clone --depth=1 git://git.sv.gnu.org/libredwg.git && \
     cd libredwg && \

@@ -1,0 +1,84 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # see https://github.com/pre-commit/pre-commit-hooks/
+      - id: check-added-large-files # prevents giant files from being committed.
+        exclude: src/codepages/(GB2312|JOHAB|WINDOWS-949)\.(h|TXT)
+      - id: check-case-conflict # checks for files that would conflict in case-insensitive filesystems.
+      - id: check-merge-conflict # checks for files that contain merge conflict strings.
+      - id: check-json # checks json for syntax errors and duplicate keys
+      - id: check-yaml # checks yaml files for parseable syntax.
+      - id: detect-private-key # detects the presence of private keys.
+      - id: end-of-file-fixer # ensures that a file is either empty, or ends with one newline.
+        exclude: src/codepages/.*\.(h|TXT)|test/test-data
+      - id: fix-byte-order-marker # removes utf-8 byte order marker.
+      - id: mixed-line-ending # replaces or checks mixed line ending.
+      - id: requirements-txt-fixer # sorts entries in requirements.txt.
+      - id: trailing-whitespace # trims trailing whitespace.
+        exclude: src/codepages/.*\.(h|TXT)
+      - id: check-executables-have-shebangs
+        exclude: build-aux/appveyor-deploy.bat
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: check-vcs-permalinks
+      - id: detect-aws-credentials
+      - id: file-contents-sorter
+
+  - repo: https://github.com/pycontribs/mirrors-prettier
+    rev: v3.6.2
+    hooks:
+      - id: prettier
+        types: ["css", "markdown", "javascript"]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.8
+    hooks:
+      - id: ruff
+      - id: ruff-format
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        # files: \.(sh|in)$
+        exclude: build-aux/gendocs.sh
+
+  - repo: https://github.com/henryykt/pre-commit-perl
+    rev: v0.0.5
+    hooks:
+    #- id: perlcritic
+    - id: perltidy
+
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v21.1.7
+    hooks:
+      - id: clang-format
+        entry: build-aux/clang-format.sh
+        files: \.(c|h)$
+        exclude: include/dwg\.h|src/config\.h|src/objects\.c|src/dxfclasses\.c|src/dynapi\.c|test/unit-testing/dynapi_test\.c|src/codepages/.*\.h
+
+  #- repo: local
+  #  hooks:
+  #    - id: cppcheck
+  #      name: cppcheck
+  #      entry: cppcheck
+  #      language: system
+  #      args:
+  #        [
+  #          -j4,
+  #          --inline-suppr,
+  #          #--check-level=exhaustive,
+  #          --suppress=unusedFunction,
+  #          --suppress=unmatchedSuppression,
+  #          --suppress=missingIncludeSystem,
+  #          --suppress=toomanyconfigs,
+  #          --error-exitcode=0,
+  #          -Iinclude,
+  #          -Isrc,
+  #          -UDEBUG
+  #        ]
+  #      files: \.(c|h)$
+  #      exclude: test/

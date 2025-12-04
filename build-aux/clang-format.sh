@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# clang-format-all: a tool to run clang-format on an entire project
+# clang-format.sh: a tool to run clang-format on an entire project
 # Copyright (C) 2016 Evan Klitzke <evan@eklitzke.org>
 # Copyright (C) 2019 Reini Urban <rurban@cpan.org>
 #
@@ -18,16 +18,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 function usage {
-    echo "Usage: $0 DIR..."
+    echo "Usage: clang-format.sh FILE..."
+    echo "Given: $*"
     exit 1
 }
-
+if [ "$1" = "-style=file" ]; then
+    shift
+fi
 if [ $# -eq 0 ]; then
-    usage
+    usage "$@"
 fi
 
 # Variable that will hold the name of the clang-format command
-FMT=""
+FMT="clang-format"
 
 # Some distros just call it clang-format. Others (e.g. Ubuntu) are insistent
 # that the version number be part of the command. We prefer clang-format if
@@ -48,11 +51,15 @@ if [ -z "$FMT" ]; then
 fi
 
 # Check all of the arguments first to make sure they're all directories
-for dir in "$@"; do
-    if [ ! -d "${dir}" ]; then
-        echo "${dir} is not a directory"
-        usage
-    fi
+for f in "$@"; do
+    case "$f" in
+        -*) ;;
+        *) if [ ! -e "${f}" ]; then
+               echo "${f} does not exist"
+               usage "$@"
+           fi
+           ;;
+    esac
 done
 
 # Find a dominating file, starting from a given directory and going up.
@@ -67,33 +74,31 @@ find-dominating-file() {
     return $?
 }
 
+if ! find-dominating-file . .clang-format; then
+    echo "Failed to find dominating .clang-format starting at $PWD"
+    exit
+fi
 # Run clang-format -i on all of the things
-for dir in "$@"; do
-    if [ "$dir" = "bindings" ]; then
-        echo skip bindings
+for f in "$@"; do
+    if [ "$f" = include/dwg.h ] || \
+       [ "$f" = src/config.h ] || \
+       [ "$f" = src/objects.c ] || \
+       [ "$f" = src/dxfclasses.c ] || \
+       [ "$f" = src/dynapi.c ] || \
+       [ "$f" = test/unit-testing/dynapi_test.c ]; then
+        echo "Skipping $f"
         continue
     fi
-    pushd "${dir}" || exit
-    if ! find-dominating-file . .clang-format; then
-        echo "Failed to find dominating .clang-format starting at $PWD"
-        continue
-    fi
-    find . \
-         \( -name '*.c' \
-         -o -name '*.h' \) \
-         -a \! \( -path './bindings/*' \
-               -o -path './codepages/*' \
-               -o -name dwg.h \
-               -o -name dwg_api.h \
-               -o -name dwg_api.c \
-               -o -name config.h \
-               -o -name objects.c \
-               -o -name dxfclasses.c \
-               -o -name dynapi_test.c \
-               -o -name dynapi.c \) \
-         -exec "${FMT}" -i -verbose '{}' \;
+    case "$f" in
+        src/codepages/*.h)
+            echo "Skipping $f"
+            continue
+            ;;
+        *)  ;;
+    esac
+    "${FMT}" -i -verbose "$f"
     echo "post clang-format fixups (clang-format bugs)"
-    # shellcheck disable=SC2046,2035
+    # shellcheck disable=SC2046
     sed -i -e's, (-Wformat - nonliteral) , (-Wformat-nonliteral)   ,;' \
            -e's, (-Wformat - nonliteral), (-Wformat-nonliteral),;' \
            -e's, (-Wmissing - prototypes), (-Wmissing-prototypes),;' \
@@ -103,14 +108,12 @@ for dir in "$@"; do
            -e's, (-Wformat - y2k), (-Wformat-y2k),;' \
            -e's, (-Wmaybe - uninitialized), (-Wmaybe-uninitialized),;' \
            -e's, (-Wstringop - truncation), (-Wstringop-truncation),;' \
-           -e's, (-Wstringop - overflow), (-Wstringop-overflow),;' \
            -e's, (-Wanalyzer - allocation - size) , (-Wanalyzer-allocation-size)   ,;' \
            -e's, (-Wanalyzer - possible - null - dereference), (-Wanalyzer-possible-null-dereference),;' \
            -e's, (-Wanalyzer - null - dereference), (-Wanalyzer-null-dereference),;' \
            -e's, (-Wanalyzer - malloc - leak), (-Wanalyzer-malloc-leak),;' \
-        $(grep -l 'DIAG_IGNORE' */*.{c,h} *.{c,h})
-    if [ "$dir" = "examples" ]; then
-        sed -i -e's/define SZ , 119/define SZ ,119/' dwgadd.c
+        $(grep -l 'DIAG_IGNORE' "$f")
+    if [ "$f" = examples/dwgadd.c ]; then
+        sed -i -e's/define SZ , 119/define SZ ,119/' "$f"
     fi
-    popd || exit
 done

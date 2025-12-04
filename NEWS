@@ -103,7 +103,7 @@ Minor bugfixes:
   * Fixed many more minor fuzzer errors with illegal input, detected by the
     oss-fuzz service and others. More bounds and type checks, null-derefs,
     double-free, missing zero-termination in fuzzer inputs.
-    
+
     Fixed GH fuzzing issues 911, 901, 899, 890, 880, 881, 859, 850,
     848, 708, 707, 704, 697, 696, 695, 694, 692, 677, 616, 615, 594,
     581, 578, 528, 527, 524, 518, 497, 494, 493, 492, 491, 490, 489,
@@ -912,7 +912,7 @@ Other newsworthy changes:
     "Out of memory"
   * Harmonized in_dxfb with in_dxf, but still WIP
 
-
+
 LibreDWG version 0.6.2 - released 2018/11/07 - still alpha:
 
 Important bugfixes:
@@ -923,14 +923,14 @@ Important bugfixes:
   * Fixed EED realloc on decoding when end - dat->byte == 1
     (PR #41, Denis Pryt)
 
-
+
 LibreDWG version 0.6.1 - released 2018/11/05 - still alpha:
 
 Important bugfixes:
   * fix wrong FIELD_2DD_VECTOR in dwg decode (GH #40).
 
 
-
+
 LibreDWG version 0.6 - released 2018/08/13 - still alpha:
 
 API breaking changes:
@@ -980,7 +980,7 @@ New features:
   * Changed and clarified the semver version numbering on development checkouts with
     major.minor[.patch[.build.nonmastercommits-gittag]]. See HACKING.
 
-
+
 LibreDWG version 0.5 - released 2018/07/05:
 
 This is the first public release ever, after several years of silence.

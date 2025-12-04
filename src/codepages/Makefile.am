@@ -32,7 +32,7 @@ EAST3_TXT = BIG5.TXT
 GB_URL    = https://raw.githubusercontent.com/freebsd/freebsd-src/main/tools/tools/locale/etc/charmaps
 GB_TXT    = GB2312.TXT
 ALL_TXT = $(ISO8859_TXT) $(PC_TXT) $(MS_TXT) MACINTOSH.TXT $(EAST1_TXT) $(EAST2_TXT) \
-	$(EAST3_TXT) $(GB_TXT) 
+	$(EAST3_TXT) $(GB_TXT)
 
 EXTRA_HEADERS = ISO-8859-2.h ISO-8859-3.h ISO-8859-4.h ISO-8859-5.h \
 	ISO-8859-6.h ISO-8859-7.h ISO-8859-8.h ISO-8859-9.h CP437.h CP850.h \

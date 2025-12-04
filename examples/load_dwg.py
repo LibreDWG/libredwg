@@ -1,32 +1,36 @@
 #! /usr/bin/env python3
 
-#import libredwg
-from libredwg import *
+from libredwg import (
+    Dwg_Data,
+    dwg_read_file,
+    new_Dwg_Object_Array,
+    Dwg_Object_Array_getitem,
+)
 
 import sys
 
-if (len(sys.argv) != 2):
-        print("Usage: load_dwg.py <filename>")
-        exit()
+if len(sys.argv) != 2:
+    print("Usage: load_dwg.py <filename>")
+    exit()
 
 filename = sys.argv[1]
 a = Dwg_Data()
 a.object = new_Dwg_Object_Array(1000)
 error = dwg_read_file(filename, a)
 
-if (error > 0): # critical errors
+if error > 0:  # critical errors
     print("Error: ", error)
-    if (error > 127):
+    if error > 127:
         exit()
 
 print(".dwg version: %s" % a.header.version)
 print("Num objects: %d " % a.num_objects)
 
-#XXX TODO Error: Dwg_Object_LAYER_CONTROL object has no attribute 'tio'
-#print "Num layers: %d" % a.layer_control.tio.object.tio.LAYER_CONTROL.num_entries
+# XXX TODO Error: Dwg_Object_LAYER_CONTROL object has no attribute 'tio'
+# print "Num layers: %d" % a.layer_control.tio.object.tio.LAYER_CONTROL.num_entries
 
-#XXX ugly, but works
+# XXX ugly, but works
 for i in range(0, a.num_objects):
     obj = Dwg_Object_Array_getitem(a.object, i)
-    print(" Supertype: " ,   obj.supertype)
-    print("      Type: " ,   obj.type)
+    print(" Supertype: ", obj.supertype)
+    print("      Type: ", obj.type)

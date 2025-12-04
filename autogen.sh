@@ -20,12 +20,12 @@ if test -d .git -a -f build-aux/git-version-gen; then
         rm .tarball-version
     fi
     v=$(build-aux/git-version-gen .tarball-version)
-    echo $v >.version
+    echo "$v" >.version
 fi
 
 amver=$(automake --version | head -n1 | perl -lne'/ \d\.(\d+)/ && print $1')
-if [ $amver -gt 0 -a $amver -lt 14 ]; then
-    if [ $amver -lt 13 ]; then
+if [ "$amver" -gt 0 ] && [ "$amver" -lt 14 ]; then
+    if [ "$amver" -lt 13 ]; then
         perl -p -i.bak -e 's/1.14 gnu no-define serial-tests dist-xz info-in-builddir/1.11 gnu no-define/' configure.ac
     else
         perl -p -i.bak -e 's/1.14 gnu no-define serial-tests dist-xz info-in-builddir/1.13 gnu no-define serial-tests dist-xz/' configure.ac
@@ -35,9 +35,7 @@ fi
 set -e
 autoreconf --install --symlink "$@" -I m4
 
-if
-    command -v git &
-    >/dev/null
+if command -v git >/dev/null
 then
     git submodule update --init --recursive
 else

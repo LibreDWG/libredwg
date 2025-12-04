@@ -1,17 +1,17 @@
 #!/usr/bin/python
 # -*- indent-tabs-mode:1 tab-width:4 mode:python minor-mode:whitespace -*-
-#*****************************************************************************/
-#*  LibreDWG - free implementation of the DWG file format                    */
-#*                                                                           */
-#*  Copyright (C) 2011, 2018 Free Software Foundation, Inc.                  */
-#*  Copyright (C) 2011 Guruprasad Rane                                       */
-#*                                                                           */
-#*  This library is free software, licensed under the terms of the GNU       */
-#*  General Public License as published by the Free Software Foundation,     */
-#*  either version 3 of the License, or (at your option) any later version.  */
-#*  You should have received a copy of the GNU General Public License        */
-#*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
-#*****************************************************************************/
+# *****************************************************************************/
+# *  LibreDWG - free implementation of the DWG file format                    */
+# *                                                                           */
+# *  Copyright (C) 2011, 2018 Free Software Foundation, Inc.                  */
+# *  Copyright (C) 2011 Guruprasad Rane                                       */
+# *                                                                           */
+# *  This library is free software, licensed under the terms of the GNU       */
+# *  General Public License as published by the Free Software Foundation,     */
+# *  either version 3 of the License, or (at your option) any later version.  */
+# *  You should have received a copy of the GNU General Public License        */
+# *  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+# *****************************************************************************/
 #
 # txttoxml.py Version 0.1 Date:6th November 2011
 # created by Guruprasad Rane <raneguruprasad@gmail.com>
@@ -23,54 +23,56 @@ import sys
 import os
 import re
 
+
 def processData(strTemp):
-	First_line = re.compile(r"\w{3}\s\w{3}\s\d+\s\d{1,2}:\d{1,2}:\d{1,2}\s\d{4}")
-	if re.search(First_line, strTemp):
-		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DwgData>\n"
+    First_line = re.compile(r"\w{3}\s\w{3}\s\d+\s\d{1,2}:\d{1,2}:\d{1,2}\s\d{4}")
+    if re.search(First_line, strTemp):
+        return '<?xml version="1.0" encoding="UTF-8"?>\n<DwgData>\n'
 
-	strTemp = strTemp.replace(";", "")
-	strTemp = strTemp.strip()
-	listTemp = strTemp.split(" = ")
-	if strTemp == "Property values:":
-		strTemp = "\" "
+    strTemp = strTemp.replace(";", "")
+    strTemp = strTemp.strip()
+    listTemp = strTemp.split(" = ")
+    if strTemp == "Property values:":
+        strTemp = '" '
 
-	elif strTemp[:13] == "#<VLA-OBJECT ":
-		strTemp = strTemp.replace("#<VLA-OBJECT ", "type=\"")
-		strTemp = strTemp.replace(" ", "\" id=\"")
-		strTemp = strTemp.replace("type=\"", " type=\"")
-		strTemp = strTemp.replace(">", "\" desc=\"")
+    elif strTemp[:13] == "#<VLA-OBJECT ":
+        strTemp = strTemp.replace("#<VLA-OBJECT ", 'type="')
+        strTemp = strTemp.replace(" ", '" id="')
+        strTemp = strTemp.replace('type="', ' type="')
+        strTemp = strTemp.replace(">", '" desc="')
 
-	elif len(listTemp)==2:
-		strTemp1 = listTemp[0]
-		strTemp2 = listTemp[1]
-		strTemp1 = strTemp1.replace(" (RO)", "")
-		strTemp2 = strTemp2.replace("#<VLA-OBJECT ", "")
-		strTemp2 = strTemp2.replace(">", "")
-		strTemp2 = strTemp2.strip("\"")
-		strTemp  = strTemp1 + "=\"" + strTemp2 + "\" "
+    elif len(listTemp) == 2:
+        strTemp1 = listTemp[0]
+        strTemp2 = listTemp[1]
+        strTemp1 = strTemp1.replace(" (RO)", "")
+        strTemp2 = strTemp2.replace("#<VLA-OBJECT ", "")
+        strTemp2 = strTemp2.replace(">", "")
+        strTemp2 = strTemp2.strip('"')
+        strTemp = strTemp1 + '="' + strTemp2 + '" '
 
-	elif strTemp == "/>":
-		strTemp = strTemp + "\n"
+    elif strTemp == "/>":
+        strTemp = strTemp + "\n"
 
-	return strTemp
+    return strTemp
+
 
 DwgTxtFileName = sys.argv[1]
 if not os.path.exists(DwgTxtFileName):
-	sys.exit("File not found")
+    sys.exit("File not found")
 if len(sys.argv) > 1:
-	OutDir = sys.argv[2]
+    OutDir = sys.argv[2]
 else:
-	OutDir = "."
+    OutDir = "."
 
-Extension = DwgTxtFileName.split('.')
-if Extension[-1] == 'txt':
-	XMLFileName = OutDir + "/" + DwgTxtFileName.rstrip('txt') + "xml"
+Extension = DwgTxtFileName.split(".")
+if Extension[-1] == "txt":
+    XMLFileName = OutDir + "/" + DwgTxtFileName.rstrip("txt") + "xml"
 else:
-	XMLFileName = OutDir + "/" + DwgTxtFileName + "xml"
+    XMLFileName = OutDir + "/" + DwgTxtFileName + "xml"
 
 if os.path.exists(DwgTxtFileName) and os.path.exists(OutDir):
-	FR = open(DwgTxtFileName,'r')
-	FW = open(XMLFileName,'w')
-	for Line in FR:
-		FW.write(processData(Line))
-	FW.write("/>\n</DwgData>")
+    FR = open(DwgTxtFileName, "r")
+    FW = open(XMLFileName, "w")
+    for Line in FR:
+        FW.write(processData(Line))
+    FW.write("/>\n</DwgData>")

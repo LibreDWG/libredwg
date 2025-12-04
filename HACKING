@@ -65,7 +65,7 @@ someone should probably think about and resolve them!
   So a released version will be 2 or 3 numbers, a development version will also
   carry the 4-digit build number, and if it's a branch also two more elements.
 
-  Version numbers are generated manually for a release by pushing a 2-3 number tag, 
+  Version numbers are generated manually for a release by pushing a 2-3 number tag,
   and automatically by bumping the version in .appveyor.yml.
 
 * make regen-dynapi
@@ -419,4 +419,3 @@ Store the HEX string from the log into a file, like acds.hex.
   Local variables:
   mode: org
   End:
-

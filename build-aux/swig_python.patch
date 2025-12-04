@@ -5,8 +5,8 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
 +++ bindings/python/swig_python.c	2019-03-27 13:37:08.000000000 +0100
 @@ -2480,7 +2480,7 @@
  */
- 
- SWIGRUNTIME PyObject* 
+
+ SWIGRUNTIME PyObject*
 -SWIG_Python_NewShadowInstance(SwigPyClientData *data, PyObject *swig_this)
 +SWIG_Python_NewShadowInstance(SwigPyClientData *data, PyObject *this)
  {
@@ -61,7 +61,7 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
  #endif
  #endif
  }
- 
+
  SWIGRUNTIME void
 -SWIG_Python_SetSwigThis(PyObject *inst, PyObject *swig_this)
 +SWIG_Python_SetSwigThis(PyObject *inst, PyObject *this)
@@ -81,13 +81,13 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
 - PyDict_SetItem(dict, SWIG_This(), swig_this);
 + PyDict_SetItem(dict, SWIG_This(), this);
   Py_DECREF(dict);
- } 
- 
+ }
+
 @@ -230852,6 +230852,17 @@
  #ifdef __cplusplus
  extern "C"
  #endif
-+SWIGEXPORT 
++SWIGEXPORT
 +#if PY_VERSION_HEX >= 0x03000000
 +PyObject*
 +#else
@@ -98,6 +98,6 @@ diff -u bindings/python/swig_python.c.orig bindings/python/swig_python.c
 +#ifdef __cplusplus
 +extern "C"
 +#endif
- 
- SWIGEXPORT 
+
+ SWIGEXPORT
  #if PY_VERSION_HEX >= 0x03000000

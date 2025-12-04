@@ -68,7 +68,7 @@ shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 	llvmfuzz_standalone_tz.sh llvmfuzz_standalone_data.sh \
 	autogen.sh dxf-roundtrip.sh unit_testing_all.sh.in test-dxf.sh
 	build-aux/gendocs.sh build-aux/codecov_io.sh build-aux/smoke.sh \
-	build-aux/clang-format-all.sh \
+	build-aux/clang-format.sh build-aux/clang-format-all.sh \
 	programs/dwgfilter.in programs/alive.test.in programs/dxf.test.in \
 	programs/json.test.in programs/svg.test.in \
 	examples/dwgadd_test.sh.in

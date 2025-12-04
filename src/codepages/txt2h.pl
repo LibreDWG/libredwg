@@ -6,11 +6,12 @@
 
 use strict;
 use warnings;
-use File::Basename;
+use File::Basename qw( basename );
 my $in = shift;
 open my $F, $in or die;
 
 $in = basename $in, '.TXT';
+
 # $in =~ s/\.TXT$//;
 $in =~ s/-/_/g;
 $in = lc $in;
@@ -23,19 +24,21 @@ print "#include <stdint.h>\n\n";
 print "/* unsorted rhs values */\n";
 print "static const uint16_t cptbl_$in\[\] = {\n";
 
-my ($los, $his, $lod, $hid, @out, @exclow) = (0xffff, 0, 0xffff, 0);
+my ( $los, $his, $lod, $hid, @out, @exclow ) = ( 0xffff, 0, 0xffff, 0 );
 my @alnum;
 my $lastsrc = 0;
+
 sub add_line {
-    my ($arr, $src, $d, $cmt) = @_;
-    for (my $i = $lastsrc + 1; $i < hex($src); $i++) {
-        push @$arr, sprintf("  /*[0x%x] = */%u,\n", $i, $i < 127 ? $i : 0);
+    my ( $arr, $src, $d, $cmt ) = @_;
+    for ( my $i = $lastsrc + 1; $i < hex($src); $i++ ) {
+        push @$arr, sprintf( "  /*[0x%x] = */%u,\n", $i, $i < 127 ? $i : 0 );
     }
     push @$arr, "  /*[$src] = */$d,$cmt\n";
     $lastsrc = hex($src);
 }
+
 sub add_alnum {
-    my ($arr, $src, $d, $cmt) = @_;
+    my ( $arr, $src, $d, $cmt ) = @_;
     push @$arr, "  $src,$cmt\n";
 }
 
@@ -44,28 +47,31 @@ while (<$F>) {
     /^#/ and next;
     next unless /^(0x[0-9a-fA-F]+)\s+(0x[0-9a-fA-F]+)(.*)/;
     my $src = $1;
-    my $d = $2;
+    my $d   = $2;
     my $cmt = $3;
-    my $sn = hex($src);
-    my $dn = hex($d);
+    my $sn  = hex($src);
+    my $dn  = hex($d);
     $cmt =~ s/\t#//;
+
     if ($cmt) {
         $cmt = "\t// $cmt";
     }
-    if ($sn > 0x7f and / (LETTER|DIGIT) /) {
-        add_alnum (\@alnum, $src, $d, $cmt);
+    if ( $sn > 0x7f and / (LETTER|DIGIT) / ) {
+        add_alnum( \@alnum, $src, $d, $cmt );
     }
-    if ($sn <= 0x7f and $sn != $dn) {
+    if ( $sn <= 0x7f and $sn != $dn ) {
+
         # exceptions
-        if (($in eq 'johab' and $src eq '0x5C') or
-            ($in eq 'cp932' and $src eq '0x5C') or
-            ($in eq 'cp932' and $src eq '0x7E') or
-            ($in eq 'cp864' and $src eq '0x25'))
+        if (   ( $in eq 'johab' and $src eq '0x5C' )
+            or ( $in eq 'cp932' and $src eq '0x5C' )
+            or ( $in eq 'cp932' and $src eq '0x7E' )
+            or ( $in eq 'cp864' and $src eq '0x25' ) )
         {
             warn "$in: $src != $d\n";
-            add_line (\@out, $src, $d, $cmt);
-            add_line (\@exclow, $src, $d, $cmt);
-        } else {
+            add_line( \@out,    $src, $d, $cmt );
+            add_line( \@exclow, $src, $d, $cmt );
+        }
+        else {
             die "$in: $src != $d";
         }
     }
@@ -73,8 +79,8 @@ while (<$F>) {
     $his = $sn if $sn > $his;
     $lod = $dn if $dn < $lod;
     $hid = $dn if $dn > $hid;
-    if ($sn > 0x7f) {
-        add_line (\@out, $src, $d, $cmt);
+    if ( $sn > 0x7f ) {
+        add_line( \@out, $src, $d, $cmt );
     }
 }
 
@@ -83,12 +89,12 @@ print $_ for @out;
 print "};\n";
 
 my $type = 'uint16_t';
-if ($his < 256) {
+if ( $his < 256 ) {
     $type = 'uint8_t';
 }
 print "/* sorted, without the first 127 characters */\n";
 print "static const $type cptbl_alnum_$in\[\] = {\n";
-printf ("  %u,\t\t// size of vector\n", scalar @alnum);
+printf( "  %u,\t\t// size of vector\n", scalar @alnum );
 print $_ for @alnum;
 print "};\n";
 

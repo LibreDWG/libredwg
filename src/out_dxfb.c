@@ -255,10 +255,10 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     if (_obj->nam != 0)                                                       \
       FIELD_BS (nam, dxf)                                                     \
   }
-#define FIELD_BSd0(nam, dxf)                                                   \
+#define FIELD_BSd0(nam, dxf)                                                  \
   {                                                                           \
     if (_obj->nam != 0)                                                       \
-      FIELD_BSd (nam, dxf)                                                     \
+      FIELD_BSd (nam, dxf)                                                    \
   }
 #define FIELD_BS1(nam, dxf)                                                   \
   {                                                                           \

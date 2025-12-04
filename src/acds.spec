@@ -244,7 +244,7 @@
             SUB_FIELD_VECTOR (schdat.schemas[rcount2],index, RLL, num_index, 0);
             SUB_FIELD_RS (schdat.schemas[rcount2],num_props, 0);
             REPEAT2 (schdat.schemas[rcount2].num_props, schdat.schemas[rcount2].props, Dwg_AcDs_Schema_Prop)
-#define prop schdat.schemas[rcount2].props[rcount3] 
+#define prop schdat.schemas[rcount2].props[rcount3]
             REPEAT_BLOCK
                 SUB_FIELD_RL (prop,flags, 91); // 1, 2, 8
                 SUB_FIELD_RL (prop,namidx, 2);

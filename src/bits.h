@@ -82,7 +82,8 @@ typedef struct _bit_chain
 #define EMPTY_CHAIN(size)                                                     \
   { NULL, size, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, 0 }
 
-// only if from r2007+ DWG. not JSON, DXF (FIXME TABLE.name). add API converts to TU
+// only if from r2007+ DWG. not JSON, DXF (FIXME TABLE.name). add API converts
+// to TU
 #define IS_FROM_TU(dat)                                                       \
   (dat->from_version >= R_2007) && !(dat->opts & DWG_OPTS_IN)
 #define IS_FROM_TU_DWG(dwg)                                                   \
