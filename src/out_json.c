@@ -281,16 +281,16 @@ static char *_path_field (const char *path);
 
 // Converts to UTF-8
 #ifdef HAVE_NATIVE_WCHAR2
-#  define VALUE_TEXT_TU(wstr)                                                 \
-    if (wstr)                                                                 \
-      {                                                                       \
-        wchar_t *_buf = malloc (6 * wcslen ((wchar_t *)wstr) + 2);            \
-        fprintf (dat->fh, "\"%ls\"", wcquote (_buf, (wchar_t *)wstr));        \
-        free (_buf);                                                          \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        fprintf (dat->fh, "\"%ls\"", wstr ? (wchar_t *)wstr : L"");           \
+#  define VALUE_TEXT_TU(wstr)                                                           \
+    if (wstr)                                                                           \
+      {                                                                                 \
+        wchar_t *_buf = malloc ((6 * wcslen ((wchar_t *)wstr) + 1) * sizeof(wchar_t));  \
+        fprintf (dat->fh, "\"%ls\"", wcquote (_buf, (wchar_t *)wstr));                  \
+        free (_buf);                                                                    \
+      }                                                                                 \
+    else                                                                                \
+      {                                                                                 \
+        fprintf (dat->fh, "\"%ls\"", wstr ? (wchar_t *)wstr : L"");                     \
       }
 #else
 #  define VALUE_TEXT_TU(wstr) print_wcquote (dat, (BITCODE_TU)wstr)
