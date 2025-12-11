@@ -70,12 +70,45 @@ try {
     $Checksum = "libredwg-$Version-$Platform.zip.sha256"
     $BaseUrl = "https://github.com/$Repo/releases/download/$Version"
 
+    # Retry download function with exponential backoff
+    function Download-WithRetry {
+        param(
+            [string]$Uri,
+            [string]$OutFile,
+            [int]$MaxAttempts = 3
+        )
+        
+        $attempt = 1
+        $delay = 1
+        
+        while ($attempt -le $MaxAttempts) {
+            try {
+                $ProgressPreference = 'SilentlyContinue'
+                Invoke-WebRequest -Uri $Uri -OutFile $OutFile -UseBasicParsing -ErrorAction Stop
+                $ProgressPreference = 'Continue'
+                return $true
+            } catch {
+                if ($attempt -lt $MaxAttempts) {
+                    Write-Host "    Download failed (attempt $attempt/$MaxAttempts), retrying in ${delay}s..." -ForegroundColor Yellow
+                    Start-Sleep -Seconds $delay
+                    $delay = $delay * 2
+                }
+                $attempt++
+            }
+        }
+        
+        Write-Host "ERROR: Failed to download after $MaxAttempts attempts" -ForegroundColor Red
+        return $false
+    }
+
     Write-Host "==> Downloading $ZipFile..." -ForegroundColor Cyan
     
-    $ProgressPreference = 'SilentlyContinue'
-    Invoke-WebRequest -Uri "$BaseUrl/$ZipFile" -OutFile $ZipFile -UseBasicParsing
-    Invoke-WebRequest -Uri "$BaseUrl/$Checksum" -OutFile $Checksum -UseBasicParsing
-    $ProgressPreference = 'Continue'
+    if (-not (Download-WithRetry -Uri "$BaseUrl/$ZipFile" -OutFile $ZipFile)) {
+        exit 1
+    }
+    if (-not (Download-WithRetry -Uri "$BaseUrl/$Checksum" -OutFile $Checksum)) {
+        exit 1
+    }
 
     # Verify checksum
     Write-Host "==> Verifying checksum..." -ForegroundColor Cyan

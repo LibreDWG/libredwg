@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -euo pipefail
 
 # LibreDWG Installation Script
 # Platform: PLATFORM_PLACEHOLDER
@@ -73,17 +73,50 @@ TARBALL="libredwg-${VERSION}-${PLATFORM}.tar.gz"
 CHECKSUM="libredwg-${VERSION}-${PLATFORM}.tar.gz.sha256"
 BASE_URL="https://github.com/${REPO}/releases/download/${VERSION}"
 
-echo "==> Downloading $TARBALL..."
+# Determine which download tool to use
 if command -v curl >/dev/null 2>&1; then
-  curl -fsSL "${BASE_URL}/${TARBALL}" -o "$TARBALL"
-  curl -fsSL "${BASE_URL}/${CHECKSUM}" -o "$CHECKSUM"
+  DOWNLOAD_CMD="curl"
 elif command -v wget >/dev/null 2>&1; then
-  wget -q "${BASE_URL}/${TARBALL}" -O "$TARBALL"
-  wget -q "${BASE_URL}/${CHECKSUM}" -O "$CHECKSUM"
+  DOWNLOAD_CMD="wget"
 else
   echo "❌ Error: curl or wget is required"
   exit 1
 fi
+
+# Retry download function with exponential backoff
+download_with_retry() {
+  local url="$1"
+  local output="$2"
+  local max_attempts=3
+  local attempt=1
+  local delay=1
+
+  while [ $attempt -le $max_attempts ]; do
+    if [ "$DOWNLOAD_CMD" = "curl" ]; then
+      if curl -fsSL "$url" -o "$output"; then
+        return 0
+      fi
+    elif [ "$DOWNLOAD_CMD" = "wget" ]; then
+      if wget -q "$url" -O "$output"; then
+        return 0
+      fi
+    fi
+
+    if [ $attempt -lt $max_attempts ]; then
+      echo "    Download failed (attempt $attempt/$max_attempts), retrying in ${delay}s..."
+      sleep "$delay"
+      delay=$((delay * 2))
+    fi
+    attempt=$((attempt + 1))
+  done
+
+  echo "❌ Error: Failed to download after $max_attempts attempts"
+  return 1
+}
+
+echo "==> Downloading $TARBALL..."
+download_with_retry "${BASE_URL}/${TARBALL}" "$TARBALL"
+download_with_retry "${BASE_URL}/${CHECKSUM}" "$CHECKSUM"
 
 # Verify checksum
 echo "==> Verifying checksum..."
