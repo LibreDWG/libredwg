@@ -176,6 +176,24 @@ static char *_path_field (const char *path);
 #define VALUE_RLx(value, dxf) VALUE ((BITCODE_RL)value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
 #define VALUE_RLLd(value, dxf) VALUE (value, RLLd, dxf)
+
+/* JSON_PRINT_* macros for safe value output in vectors.
+   RD and BD use _VALUE_RD to properly sanitize nan/inf to null. */
+#define JSON_PRINT_B(value) fprintf (dat->fh, FORMAT_B, value)
+#define JSON_PRINT_BB(value) fprintf (dat->fh, FORMAT_BB, value)
+#define JSON_PRINT_RC(value) fprintf (dat->fh, FORMAT_RC, value)
+#define JSON_PRINT_RS(value) fprintf (dat->fh, FORMAT_RS, value)
+#define JSON_PRINT_RSd(value) fprintf (dat->fh, FORMAT_RSd, value)
+#define JSON_PRINT_RL(value) fprintf (dat->fh, FORMAT_RL, value)
+#define JSON_PRINT_RLd(value) fprintf (dat->fh, FORMAT_RLd, value)
+#define JSON_PRINT_RLL(value) fprintf (dat->fh, FORMAT_RLL, value)
+#define JSON_PRINT_RLLd(value) fprintf (dat->fh, FORMAT_RLLd, value)
+#define JSON_PRINT_BL(value) fprintf (dat->fh, FORMAT_BL, value)
+#define JSON_PRINT_BLd(value) fprintf (dat->fh, FORMAT_BLd, value)
+#define JSON_PRINT_BS(value) fprintf (dat->fh, FORMAT_BS, value)
+#define JSON_PRINT_BSd(value) fprintf (dat->fh, FORMAT_BSd, value)
+#define JSON_PRINT_RD(value) _VALUE_RD (value, 0)
+#define JSON_PRINT_BD(value) _VALUE_RD (value, 0)
 #ifdef IS_RELEASE
 #  define VALUE_RD(value, dxf)                                                \
     {                                                                         \
@@ -215,6 +233,7 @@ static char *_path_field (const char *path);
     VALUE_RD (pt.y, 0);                                                       \
     fprintf (dat->fh, "%s]%s", JSON_SPC, JSON_SPC);                           \
   }
+#define VALUE_BD(value, dxf) VALUE_RD (value, dxf)
 #define VALUE_2DD(pt, def, dxf) VALUE_2RD (pt, dxf)
 #define VALUE_3RD(pt, dxf)                                                    \
   {                                                                           \
@@ -660,6 +679,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 // FIELD_VECTOR_N(nam, type, size):
 // reads data of the type indicated by 'type' 'size' times and stores
 // it all in the vector called 'nam'.
+// Uses JSON_PRINT_##type to properly sanitize RD/BD nan/inf values.
 #define FIELD_VECTOR_N(nam, type, size, dxf)                                  \
   KEY (nam);                                                                  \
   ARRAY;                                                                      \
@@ -667,7 +687,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->nam[vcount]);    \
+          FIRSTPREFIX JSON_PRINT_##type (_obj->nam[vcount]);                  \
         }                                                                     \
     }                                                                         \
   else                                                                        \
@@ -680,7 +700,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->o.nam[vcount]);  \
+          FIRSTPREFIX JSON_PRINT_##type (_obj->o.nam[vcount]);                \
         }                                                                     \
     }                                                                         \
   else                                                                        \
@@ -1208,8 +1228,14 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
                      rbuf->type);
           break;
         case DWG_VT_POINT3D:
-          fprintf (dat->fh, "[" FORMAT_RD "," FORMAT_RD "," FORMAT_RD "]",
-                   rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2]);
+          /* Use VALUE_RD to properly sanitize nan/inf values */
+          fprintf (dat->fh, "[");
+          VALUE_RD (rbuf->value.pt[0], 0);
+          fprintf (dat->fh, ",");
+          VALUE_RD (rbuf->value.pt[1], 0);
+          fprintf (dat->fh, ",");
+          VALUE_RD (rbuf->value.pt[2], 0);
+          fprintf (dat->fh, "]");
           LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]\n", i, rbuf->value.pt[0],
                      rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
           break;
