@@ -36,7 +36,7 @@ jobs:
       - name: Build Docker image
         if: matrix.use_docker
         run: |
-          docker build -f ${{ matrix.dockerfile }} -t libredwg-builder build-aux
+          docker build -f ${{ matrix.dockerfile }} -t libredwg-builder .
 
       - name: Verify architecture
         if: matrix.platform != 'windows-x64'
