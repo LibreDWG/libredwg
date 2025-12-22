@@ -17,6 +17,10 @@ jobs:
         include:
           - platform: linux-aarch64
             runner: public-2vcpu-ubuntu-2404-arm
+          - platform: linux-aarch64-glibc234
+            runner: public-2vcpu-ubuntu-2404-arm
+            use_docker: true
+            dockerfile: build-aux/Dockerfile.amazonlinux-aarch64
           - platform: macos-aarch64
             runner: macos-26
           - platform: windows-x64
@@ -28,6 +32,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Build Docker image
+        if: matrix.use_docker
+        run: |
+          docker build -f ${{ matrix.dockerfile }} -t libredwg-builder build-aux
 
       - name: Verify architecture
         if: matrix.platform != 'windows-x64'
@@ -57,7 +66,7 @@ jobs:
           Write-Host "✓ Architecture verified: x64"
 
       - name: Install dependencies (Linux)
-        if: matrix.platform == 'linux-aarch64'
+        if: matrix.platform == 'linux-aarch64' && !matrix.use_docker
         run: |
           sudo apt-get update
           sudo apt-get install -y autoconf automake libtool texinfo
@@ -86,8 +95,13 @@ jobs:
             tar
             gzip
 
+      - name: Configure (Unix - Docker)
+        if: matrix.use_docker
+        run: |
+          docker run --rm -v $PWD:/work -w /work libredwg-builder sh -c "sh ./autogen.sh && ./configure --enable-release --disable-docs --disable-bindings"
+
       - name: Configure (Unix)
-        if: matrix.platform != 'windows-x64'
+        if: matrix.platform != 'windows-x64' && !matrix.use_docker
         run: |
           sh ./autogen.sh
           ./configure --enable-release --disable-docs --disable-bindings
@@ -99,8 +113,13 @@ jobs:
           sh ./autogen.sh
           ./configure --prefix=/usr/local --enable-release --disable-docs --disable-bindings
 
+      - name: Compile (Unix - Docker)
+        if: matrix.use_docker
+        run: |
+          docker run --rm -v $PWD:/work -w /work libredwg-builder sh -c "make -j\$(nproc)"
+
       - name: Compile (Unix)
-        if: matrix.platform != 'windows-x64'
+        if: matrix.platform != 'windows-x64' && !matrix.use_docker
         run: |
           make -j$(nproc)
 
@@ -110,8 +129,14 @@ jobs:
         run: |
           make -j$(nproc)
 
+      - name: Install to staging (Unix - Docker)
+        if: matrix.use_docker
+        run: |
+          docker run --rm -v $PWD:/work -w /work libredwg-builder sh -c "make install DESTDIR=/work/install-root"
+          mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
+
       - name: Install to staging (Unix)
-        if: matrix.platform != 'windows-x64'
+        if: matrix.platform != 'windows-x64' && !matrix.use_docker
         run: |
           make install DESTDIR=$PWD/install-root
           mv install-root libredwg-${{ inputs.version }}-${{ matrix.platform }}
@@ -135,7 +160,7 @@ jobs:
           done
 
       - name: Fix RPATH (Linux)
-        if: matrix.platform == 'linux-aarch64'
+        if: startsWith(matrix.platform, 'linux-aarch64')
         run: |
           sudo apt-get install -y patchelf
           cd libredwg-${{ inputs.version }}-${{ matrix.platform }}/usr/local
@@ -233,9 +258,14 @@ jobs:
 
             ## Quick Install
 
-            **Linux AArch64:**
+            **Linux AArch64 (glibc 2.38+):**
             ```bash
             curl -fsSL https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-linux-aarch64.sh | sh
+            ```
+
+            **Linux AArch64 (glibc 2.34+):**
+            ```bash
+            curl -fsSL https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-linux-aarch64-glibc234.sh | sh
             ```
 
             **macOS AArch64:**
