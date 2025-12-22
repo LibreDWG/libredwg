@@ -1,0 +1,22 @@
+# Amazon Linux AArch64 build environment with glibc 2.34
+# Base image from AWS CodeBuild
+FROM public.ecr.aws/codebuild/amazonlinux-aarch64-standard:3.0
+
+# Install build dependencies
+RUN yum update -y && \
+    yum groupinstall -y "Development Tools" && \
+    yum install -y \
+    autoconf \
+    automake \
+    libtool \
+    texinfo \
+    gcc \
+    make \
+    tar \
+    gzip \
+    which \
+    && yum clean all
+
+WORKDIR /work
+
+CMD [ "sh" ]
