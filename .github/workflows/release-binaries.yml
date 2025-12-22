@@ -98,7 +98,7 @@ jobs:
       - name: Configure (Unix - Docker)
         if: matrix.use_docker
         run: |
-          docker run --rm -v $PWD:/work -w /work libredwg-builder sh -c "sh ./autogen.sh && ./configure --enable-release --disable-docs --disable-bindings"
+          docker run --rm -v $PWD:/work -w /work libredwg-builder sh -c "git config --global --add safe.directory /work && sh ./autogen.sh && ./configure --enable-release --disable-docs --disable-bindings"
 
       - name: Configure (Unix)
         if: matrix.platform != 'windows-x64' && !matrix.use_docker
