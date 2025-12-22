@@ -1,6 +1,6 @@
 # Amazon Linux AArch64 build environment with glibc 2.34
-# Base image from AWS CodeBuild
-FROM public.ecr.aws/codebuild/amazonlinux-aarch64-standard:3.0
+# Base image from Docker Hub (amazonlinux:2023 has glibc 2.34)
+FROM amazonlinux:2023
 
 # Install build dependencies
 RUN yum update -y && \
