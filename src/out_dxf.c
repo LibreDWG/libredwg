@@ -130,12 +130,32 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 
 #define VALUE_TV(value, dxf)                                                  \
   {                                                                           \
-    dxf_fixup_string (dat, (char *)value, 1, dxf);                            \
+    if (dxf && value && dat->version >= R_2007)                               \
+      {                                                                       \
+        char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);             \
+        dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);              \
+        if (u8)                                                               \
+          free (u8);                                                          \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        dxf_fixup_string (dat, (char *)value, 1, dxf);                        \
+      }                                                                       \
   }
 #define VALUE_TV0(value, dxf)                                                 \
   if (dxf && value && *value)                                                 \
     {                                                                         \
-      dxf_fixup_string (dat, (char *)value, 1, dxf);                          \
+      if (dat->version >= R_2007)                                             \
+        {                                                                     \
+          char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);           \
+          dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);            \
+          if (u8)                                                             \
+            free (u8);                                                        \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+          dxf_fixup_string (dat, (char *)value, 1, dxf);                      \
+        }                                                                     \
     }
 // in_json writes all strings as TV, in_dxf and decode not.
 #define VALUE_TU(wstr, dxf)                                                   \
