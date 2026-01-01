@@ -130,12 +130,21 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 
 #define VALUE_TV(value, dxf)                                                  \
   {                                                                           \
-    dxf_fixup_string (dat, (char *)value, 1, dxf);                            \
+    if (dxf && value)                                                         \
+      {                                                                       \
+        char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);             \
+        dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);              \
+        if (u8)                                                               \
+          free (u8);                                                          \
+      }                                                                       \
   }
 #define VALUE_TV0(value, dxf)                                                 \
   if (dxf && value && *value)                                                 \
     {                                                                         \
-      dxf_fixup_string (dat, (char *)value, 1, dxf);                          \
+      char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);               \
+      dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);                \
+      if (u8)                                                                 \
+        free (u8);                                                            \
     }
 // in_json writes all strings as TV, in_dxf and decode not.
 #define VALUE_TU(wstr, dxf)                                                   \
@@ -3201,20 +3210,14 @@ RETURNS_NONNULL
 const char *
 dxf_codepage (BITCODE_RS code, Dwg_Data *dwg)
 {
-  const char *ret = dwg_codepage_dxfstr ((Dwg_Codepage)code);
+  // For DXF output, always use UTF-8 regardless of source DWG codepage
+  // Text will be converted during output
   if (dwg->header.from_version <= R_12 && code == 0)
     return "undefined";
-  if (!ret)
-    {
-      if (dwg->header.version >= R_2007)
-        return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
-      else if (dwg->header.version <= R_12)
-        return "undefined";
-      else
-        return "";
-    }
+  else if (dwg->header.version <= R_12)
+    return "undefined";
   else
-    return ret;
+    return "UTF8";
 }
 
 // see

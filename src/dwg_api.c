@@ -24910,7 +24910,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   // dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0
   dwg_ver_struct = (struct dwg_versions *)dwg_version_struct (version);
   if (!dwg->header.codepage)
-    dwg->header.codepage = 30; // FIXME: local OS codepage
+    dwg->header.codepage = 0; // CP_UTF8: LibreDWG outputs UTF-8 encoded text
 
   // with decode_r11 we already have proper numheader_vars
   if (!dwg->header.numheader_vars
