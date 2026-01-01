@@ -17,10 +17,6 @@ jobs:
         include:
           - platform: linux-aarch64
             runner: public-2vcpu-ubuntu-2404-arm
-          - platform: linux-aarch64-glibc234
-            runner: public-2vcpu-ubuntu-2404-arm
-            use_docker: true
-            dockerfile: build-aux/Dockerfile.amazonlinux-aarch64
           - platform: macos-aarch64
             runner: macos-26
           - platform: windows-x64
@@ -261,11 +257,6 @@ jobs:
             **Linux AArch64 (glibc 2.38+):**
             ```bash
             curl -fsSL https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-linux-aarch64.sh | sh
-            ```
-
-            **Linux AArch64 (glibc 2.34+):**
-            ```bash
-            curl -fsSL https://github.com/rite-build/libredwg/releases/download/${{ inputs.version }}/install-linux-aarch64-glibc234.sh | sh
             ```
 
             **macOS AArch64:**
