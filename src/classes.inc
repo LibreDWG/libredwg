@@ -241,12 +241,13 @@
   STABLE_CLASS    (ACTION, WIPEOUT)   /* ent, stable but causes acad redraw to crash (GH #244) */
   STABLE_CLASS    (ACTION, WIPEOUTVARIABLES)
   STABLE_CLASS    (ACTION, XRECORD)
+  STABLE_CLASS    (ACTION, MLEADERSTYLE)
+  STABLE_CLASS    (ACTION, MATERIAL)
 
   // unstable/undertested.
   // not enough coverage, but assumed mostly ok. field names may change.
   // DXF output skipped
 
-  UNSTABLE_CLASS     (ACTION, MLEADERSTYLE) // TODO class_version
   UNSTABLE_CLASS     (ACTION, ARC_DIMENSION)     /* ent */
   UNSTABLE_CLASS     (ACTION, PLANESURFACE)      /* ent */
   UNSTABLE_CLASS     (ACTION, ACSH_BREP_CLASS)
@@ -274,7 +275,6 @@
   UNSTABLE_CLASS     (ACTION, LARGE_RADIAL_DIMENSION) /* ent */
   UNSTABLE_CLASS     (ACTION, LAYOUTPRINTCONFIG) /* ent. CSD_APP, probably a mistake as ent */
   UNSTABLE_CLASS     (ACTION, LIGHTLIST)
-  UNSTABLE_CLASS     (ACTION, MATERIAL) // encode fails ODA
   UNSTABLE_CLASS     (ACTION, MENTALRAYRENDERSETTINGS) // not exported by Teigha
   UNSTABLE_CLASS     (ACTION, OBJECT_PTR)
   UNSTABLE_CLASS_CPP (ACTION, OBJECT_PTR, CAseDLPNTableRecord)
