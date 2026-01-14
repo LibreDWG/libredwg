@@ -1358,7 +1358,6 @@ is_dxf_class_importable (const char *name)
       if (stability == DWG_CLASS_UNSTABLE)
         {
           return !strEQc (name, "MATERIAL") &&      // 72 missing
-                 !strEQc (name, "ARC_DIMENSION") && // 2 missing
                  !strEQc (name, "SUN") &&           // 421 missing
                  !strEQc (name, "PROXY_ENTITY") &&  // 90 missing
                  !strEQc (name, "PROXY_OBJECT");    // 90 missing

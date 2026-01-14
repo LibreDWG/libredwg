@@ -2627,8 +2627,8 @@ typedef struct _dwg_entity_ARC_DIMENSION
   BITCODE_3BD xline2_pt;	/* DXF 14 */
   BITCODE_3BD center_pt;	/* DXF 15 */
   BITCODE_B is_partial;		/* DXF 70 */
-  BITCODE_BD arc_start_param;	/* DXF 41 */
-  BITCODE_BD arc_end_param;	/* DXF 42 */
+  BITCODE_BD arc_start_param;	/* DXF 40 */
+  BITCODE_BD arc_end_param;	/* DXF 41 */
   BITCODE_B has_leader;		/* DXF 71 */
   BITCODE_3BD leader1_pt;	/* DXF 16 */
   BITCODE_3BD leader2_pt;	/* DXF 17 */

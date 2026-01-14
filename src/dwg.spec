@@ -9195,7 +9195,6 @@ DWG_OBJECT_END
 
 DWG_ENTITY (ARC_DIMENSION)
 
-  HANDLE_UNKNOWN_BITS;
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbArcDimension)
   FIELD_3BD (def_pt, 0);
@@ -9203,8 +9202,8 @@ DWG_ENTITY (ARC_DIMENSION)
   FIELD_3BD (xline2_pt, 14);
   FIELD_3BD (center_pt, 15);
   FIELD_B (is_partial, 70);
-  FIELD_BD (arc_start_param, 41);
-  FIELD_BD (arc_end_param, 42);
+  FIELD_BD (arc_start_param, 40);
+  FIELD_BD (arc_end_param, 41);
   FIELD_B (has_leader, 71);
   FIELD_3BD (leader1_pt, 16);
   FIELD_3BD (leader2_pt, 17);

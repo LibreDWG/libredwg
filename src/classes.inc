@@ -248,7 +248,7 @@
   // not enough coverage, but assumed mostly ok. field names may change.
   // DXF output skipped
 
-  UNSTABLE_CLASS     (ACTION, ARC_DIMENSION)     /* ent */
+  STABLE_CLASS       (ACTION, ARC_DIMENSION)     /* ent */
   UNSTABLE_CLASS     (ACTION, PLANESURFACE)      /* ent */
   UNSTABLE_CLASS     (ACTION, ACSH_BREP_CLASS)
   UNSTABLE_CLASS     (ACTION, ACSH_CHAMFER_CLASS)
