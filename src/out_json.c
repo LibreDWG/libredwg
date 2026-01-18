@@ -612,12 +612,35 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     {
       KEYs (_path_field (key));
       HASH;
-      if (_obj->index)
+      if (_obj->index && _obj->index != 256) 
+        {
+          FIELD_BS(index, 62);
+        }
+      else if (_obj->method == 0xc2 || _obj->method == 0xc3 || _obj->method == 0) 
+        {
+          BITCODE_BS index;
+          if (_obj->method == 0xc3)
+            {
+              index = (BITCODE_BS)(_obj->rgb & 0xFF);
+            }
+          else
+            {
+              index = dwg_find_color_index (_obj->rgb & 0xFFFFFF);
+            }
+          if (index > 0 && index < 256) 
+            {
+              FIRSTPREFIX fprintf (dat->fh, "\"index\":%s%d", JSON_SPC, index);
+            } 
+          else if (_obj->index == 256) 
+            {
+              FIELD_BS (index, 62);
+            }
+        }
+      else if (_obj->index)
         {
           FIELD_BS (index, 62);
         }
-      FIRSTPREFIX fprintf (dat->fh, "\"rgb\":%s\"%06x\"", JSON_SPC,
-                           (unsigned)_obj->rgb);
+      FIRSTPREFIX fprintf (dat->fh, "\"rgb\":%s\"%08x\"", JSON_SPC, (unsigned)_obj->rgb);
       if (_obj->flag)
         {
           FIELD_BS (flag, 0);
