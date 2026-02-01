@@ -27,7 +27,7 @@
 #  include <stddef.h>
 #else /* cygwin */
 #  ifndef offsetof
-#    define offsetof(type, member) ((size_t)&(((type *)0)->member))
+#    define offsetof(type, member) ((size_t) & (((type *)0)->member))
 #  endif
 #endif
 #define OFF(st, f) offsetof (st, f)

@@ -2227,10 +2227,8 @@ api_common_object (dwg_object *obj)
 #define CHK_EVALEXPR(type)                                                    \
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, parentid, BLd);                \
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, major, BL);                    \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, minor, BL);                    \
-  /* variant_DXF type */                                                      \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value_code, BSd);              \
-  /* variant_value's */                                                       \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, minor, BL); /* variant_DXF type */                                                      \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value_code, BSd); /* variant_value's */                                                       \
   switch (_obj->evalexpr.value_code)                                          \
     {                                                                         \
     case 40:                                                                  \
@@ -2262,8 +2260,7 @@ api_common_object (dwg_object *obj)
 
 #define CHK_ACSH_HISTORYNODE()                                                \
   CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, major, BL);        \
-  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, minor, BL);        \
-  /* last 16x nums 40-55 */                                                   \
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, minor, BL); /* last 16x nums 40-55 */                                                   \
   if (!dwg_dynapi_subclass_value (&_obj->history_node, "ACSH_HistoryNode",    \
                                   "trans", &trans, NULL))                     \
     fail ("ACSH_HistoryNode.trans");                                          \

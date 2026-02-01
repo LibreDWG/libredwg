@@ -314,7 +314,7 @@ do_match (const int is16, const char *restrict filename,
 #  define MATCH_TYPE(type, ENTITY, text_field, dxfgroup)                      \
     text = (char *)obj->tio.type->tio.ENTITY->text_field;                     \
     if (text)                                                                 \
-      found += do_match (obj->parent->header.version >= R_2007, filename,     \
+    found += do_match (obj->parent->header.version >= R_2007, filename,       \
                        #ENTITY, dxfgroup, text)
 #else
 #  define MATCH_TYPE(type, ENTITY, text_field, dxfgroup)                      \

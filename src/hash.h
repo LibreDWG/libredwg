@@ -25,7 +25,7 @@
 #include <inttypes.h>
 
 #define HASH_LOAD 75 // in percent. recommended is 50
-#define HASH_NOT_FOUND (uint64_t)-1
+#define HASH_NOT_FOUND (uint64_t) - 1
 
 struct _hashbucket
 {

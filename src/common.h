@@ -67,7 +67,7 @@
 #else
 #  ifdef HAVE_ASAN
 #    define MAX_SIZE_BUF UINT64_C (0x10000000000)
-#else
+#  else
 #    define MAX_SIZE_BUF UINT64_C (0x7FFFFFFFFFFFFFFF)
 #  endif
 #endif
@@ -638,7 +638,7 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
 // push to handle vector at the end if it not already exists.
 #define PUSH_HV_NEW(_obj, numfield, hvfield, ref)                             \
   if (_obj->numfield <= 0                                                     \
-      || find_hv ( _obj->hvfield, _obj->numfield, ref->absolute_ref) < 0)     \
+      || find_hv (_obj->hvfield, _obj->numfield, ref->absolute_ref) < 0)      \
     {                                                                         \
       _obj->hvfield = (BITCODE_H *)realloc (                                  \
           _obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H));          \

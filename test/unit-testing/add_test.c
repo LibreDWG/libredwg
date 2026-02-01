@@ -1016,8 +1016,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   if (debug >= 2)
     {
       char cmd[280];
-      snprintf (cmd, sizeof(cmd), "../../oda %s", dwgfile);
-      if (system(cmd))
+      snprintf (cmd, sizeof (cmd), "../../oda %s", dwgfile);
+      if (system (cmd))
         fail ("oda %s", dwgfile);
     }
 

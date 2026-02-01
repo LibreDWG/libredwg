@@ -484,7 +484,8 @@ output_ELLIPSE (Dwg_Object *obj)
   /* The 2 points are already WCS */
   // transform_OCS (&center, ell->center, ell->extrusion);
   // transform_OCS (&sm_axis, ell->sm_axis, ell->extrusion);
-  radius.x = sqrt (ell->sm_axis.x * ell->sm_axis.x + ell->sm_axis.y * ell->sm_axis.y);
+  radius.x = sqrt (ell->sm_axis.x * ell->sm_axis.x
+                   + ell->sm_axis.y * ell->sm_axis.y);
   radius.y = radius.x * ell->axis_ratio;
 
   /*
@@ -494,7 +495,7 @@ output_ELLIPSE (Dwg_Object *obj)
   y_end = ell->center.y + radius.y * sin (ell->end_angle);
   */
 
-  angle_rad = atan2(ell->sm_axis.y, ell->sm_axis.x);
+  angle_rad = atan2 (ell->sm_axis.y, ell->sm_axis.x);
   angle_dec = angle_rad * 180.0 / M_PI;
 
   // TODO: start,end_angle => pathLength
@@ -506,8 +507,8 @@ output_ELLIPSE (Dwg_Object *obj)
   printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
           "ry=\"%f\" transform=\"rotate(%f %f %f)\"\n\t",
           obj->index, transform_X (ell->center.x), transform_Y (ell->center.y),
-          radius.x, radius.y,
-          transform_ANGLE (angle_dec), transform_X (ell->center.x), transform_Y (ell->center.y));
+          radius.x, radius.y, transform_ANGLE (angle_dec),
+          transform_X (ell->center.x), transform_Y (ell->center.y));
   common_entity (obj->tio.entity);
 }
 

@@ -307,14 +307,13 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
           dxf_print_rd (dat, (double)(value), dxf);                           \
         }                                                                     \
       else                                                                    \
-        {                                                                     \
-          /* -Wpointer-to-int-cast */                                         \
+        { /* -Wpointer-to-int-cast */                                         \
           const int32_t _si = (int32_t)(intptr_t)(value);                     \
           GROUP (dxf);                                                        \
           GCC46_DIAG_IGNORE (-Wformat-nonliteral)                             \
           snprintf (buf, 255, _fmt, value);                                   \
-          GCC46_DIAG_RESTORE                                                  \
-          /* not a string, empty num. must be zero */                         \
+          GCC46_DIAG_RESTORE /* not a string, empty   \
+                                                        num. must be zero */                         \
           if (strEQc (_fmt, "%s") && !*buf)                                   \
             fprintf (dat->fh, "0\r\n");                                       \
           else if (90 <= dxf && dxf < 100)                                    \
@@ -1759,8 +1758,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
         }                                                                     \
       else                                                                    \
         VALUE_TV ("*", 2)                                                     \
-    }                                                                         \
-  /* Empty name with xref shape names */                                      \
+    } /* Empty name with xref shape names */                                      \
   else if (strEQc (#acdbname, "TextStyle") && _obj->flag & 1                  \
            && dxf_is_xrefdep_name (dat, _obj->name))                          \
     VALUE_TV ("", 2)                                                          \
@@ -1769,19 +1767,19 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
   else                                                                        \
     VALUE_TV ("*", 2)                                                         \
   if (strEQc (#acdbname, "Layer") && dat->version >= R_2000)                  \
-    {                                                                         \
-      /* Mask off plotflag and linewt. */                                     \
-      BITCODE_RC _flag = _obj->flag & ~0x3e0;                                 \
-      /* Don't keep bit 16 when not xrefdep like "XREF|name" */               \
+    { /* Mask off plotflag and linewt. */                                     \
+      BITCODE_RC _flag = _obj->flag & ~0x3e0; /* Don't keep bit 16 when not      \
+                                                 xrefdep like "XREF|name" */               \
       if (_flag & 0x10 && !dxf_has_xrefdep_vertbar (dat, _obj->name))         \
         _flag &= ~0x10;                                                       \
       VALUE_RC (_flag, 70);                                                   \
     }                                                                         \
   else if (strEQc (#acdbname, "Block") && dat->version >= R_2000)             \
-    ; /* skip 70 for AcDbBlockTableRecord here. done in AcDbBlockBegin */     \
+    ; /* skip 70 for AcDbBlockTableRecord       \
+                                                                           here. \
+                                          done in AcDbBlockBegin */     \
   else                                                                        \
-    {                                                                         \
-      /* mask off 64, the loaded bit 6, since >= r13 */                       \
+    { /* mask off 64, the loaded bit 6, since >= r13 */                       \
       SINCE (R_13b1)                                                          \
         _obj->flag &= ~64;                                                    \
       VALUE_RC (_obj->flag, 70);                                              \
@@ -2613,8 +2611,8 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           LOG_WARN ("Skip %s", klass->dxfname)
           return DWG_ERR_UNHANDLEDCLASS;
         }
-      // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF, IMAGEDEF_REACTOR,
-      // XRECORD, IDBUFFER
+      // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF,
+      // IMAGEDEF_REACTOR, XRECORD, IDBUFFER
       else if (!is_entity && strNEc (klass->dxfname, "DICTIONARYVAR")
                && strNEc (klass->dxfname, "MATERIAL")
                && strNEc (klass->dxfname, "RASTERVARIABLES")
@@ -2909,8 +2907,8 @@ decl_dxf_process_INSERT (MINSERT)
       // TODO: looks good, but acad import crashes
       return dwg_dxf_MLINE (dat, obj);
 #  else
-      LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/" FORMAT_HV,
-                obj->index, obj->handle.value)
+      LOG_WARN ("Unhandled Entity MLINE in out_dxf %u/" FORMAT_HV, obj->index,
+                obj->handle.value)
       if (0)
         dwg_dxf_MLINE (dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
@@ -2999,9 +2997,8 @@ decl_dxf_process_INSERT (MINSERT)
             return dwg_dxf_TABLESTYLE (dat, obj);
           else
             {
-              LOG_WARN (
-                  "Unhandled Object TABLESTYLE in out_dxf %u/" FORMAT_HV,
-                  obj->index, obj->handle.value);
+              LOG_WARN ("Unhandled Object TABLESTYLE in out_dxf %u/" FORMAT_HV,
+                        obj->index, obj->handle.value);
               return DWG_ERR_UNHANDLEDCLASS;
             }
 #  endif
@@ -3171,8 +3168,8 @@ dxf_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.codepage);
     }
 
-  // header_variables_r11.spec is only for DWG
-  // clang-format off
+    // header_variables_r11.spec is only for DWG
+    // clang-format off
 #include "header_variables_dxf.spec"
   // clang-format on
 

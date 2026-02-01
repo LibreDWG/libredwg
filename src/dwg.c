@@ -1018,8 +1018,8 @@ dwg_block_control (Dwg_Data *dwg)
       Dwg_Object *obj;
       Dwg_Object_Ref *ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT;
       if (!ctrl)
-        dwg->header_vars.BLOCK_CONTROL_OBJECT = ctrl =
-          dwg_find_table_control (dwg, "BLOCK_CONTROL");
+        dwg->header_vars.BLOCK_CONTROL_OBJECT = ctrl
+            = dwg_find_table_control (dwg, "BLOCK_CONTROL");
       if (!ctrl || !(obj = dwg_ref_object (dwg, ctrl))
           || obj->fixedtype != DWG_TYPE_BLOCK_CONTROL)
         {
@@ -2122,7 +2122,8 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
           hdl->code = 12;
           if ((unsigned)offset == 0x80000000) // invalid negation
             {
-              LOG_ERROR ("HANDLE 12 overflow for object " FORMAT_RL, obj->index);
+              LOG_ERROR ("HANDLE 12 overflow for object " FORMAT_RL,
+                         obj->index);
               hdl->value = 0;
               return 1;
             }
@@ -3388,7 +3389,7 @@ dwg_init_handseed (Dwg_Data *dwg)
       if (!lastobj->handle.value && dwg->num_objects > 1)
         lastobj = &dwg->object[dwg->num_objects - 2];
       dwg->header_vars.HANDSEED
-        = dwg_add_handleref (dwg, 0, lastobj->handle.value + 1, NULL);
+          = dwg_add_handleref (dwg, 0, lastobj->handle.value + 1, NULL);
     }
 }
 
@@ -3411,17 +3412,18 @@ dwg_set_next_objhandle (Dwg_Object *obj)
   else
     {
       bool found = true;
-      while (found) {
-        uint64_t i = hash_get (dwg->object_map, seed);
-        if (i != HASH_NOT_FOUND)
-          {
-            LOG_WARN ("HANDSEED " FORMAT_HV " already exists: "
-                      FORMAT_BLL, seed, i);
-            seed = dwg_new_handseed (dwg);
-          }
-        else
-          found = false;
-      }
+      while (found)
+        {
+          uint64_t i = hash_get (dwg->object_map, seed);
+          if (i != HASH_NOT_FOUND)
+            {
+              LOG_WARN ("HANDSEED " FORMAT_HV " already exists: " FORMAT_BLL,
+                        seed, i);
+              seed = dwg_new_handseed (dwg);
+            }
+          else
+            found = false;
+        }
     }
   obj->handle.value = seed;
   dwg_set_handle_size (&obj->handle);
@@ -3921,8 +3923,8 @@ ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref)
           else
             {
               dwg->object_ordered_ref = pNew;
-              memset (&dwg->object_ordered_ref[dwg->num_object_ordered_refs], 0,
-                      REFS_PER_REALLOC * sizeof (Dwg_Object_Ref *));
+              memset (&dwg->object_ordered_ref[dwg->num_object_ordered_refs],
+                      0, REFS_PER_REALLOC * sizeof (Dwg_Object_Ref *));
             }
         }
     }

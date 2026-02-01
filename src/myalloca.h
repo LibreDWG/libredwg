@@ -36,8 +36,7 @@
 #  ifdef __cplusplus
 extern "C"
 #  endif
-    void *
-    alloca (size_t);
+    void *alloca (size_t);
 #endif
 
 #ifndef HAVE_ALLOCA

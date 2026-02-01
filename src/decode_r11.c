@@ -398,9 +398,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
               LOG_ERROR ("Out of memory");                                    \
               obj->num_unknown_rest = 0;                                      \
             }                                                                 \
-        }                                                                     \
-      /* In the table header the size OR number can be wrong. */              \
-      /* Here we catch the wrong number. */                                   \
+        } /* In the table header the size OR number can be wrong. */ /* Here    \
+                                                                        we      \
+                                                                        catch   \
+                                                                        the     \
+                                                                        wrong   \
+                                                                        number. \
+                                                                      */                                   \
       if (tbl->number > 0 && tbl->size < 33)                                  \
         return DWG_ERR_SECTIONNOTFOUND;                                       \
     }                                                                         \

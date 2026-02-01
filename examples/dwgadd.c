@@ -613,10 +613,10 @@ fn_error (const char *msg)
   if (!hdr)                                                                   \
     fn_error ("Missing block header\n");
 
-#define ADD_INITIAL                                           \
-  mspace = dwg_model_space_object (dwg);                      \
-  hdr = mspace ? mspace->tio.object->tio.BLOCK_HEADER : NULL; \
-  orig_num = dwg->num_objects;                                \
+#define ADD_INITIAL                                                           \
+  mspace = dwg_model_space_object (dwg);                                      \
+  hdr = mspace ? mspace->tio.object->tio.BLOCK_HEADER : NULL;                 \
+  orig_num = dwg->num_objects;                                                \
   initial = 0
 
 static int
@@ -1133,8 +1133,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           // clang-format off
         SET_ENT (xline, XLINE)
       // clang-format on
-      else if ((i = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf\n", text SZ,
-                              &pt1.x, &pt1.y, &pt1.z, &height))
+      else if ((i = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf\n",
+                              text SZ, &pt1.x, &pt1.y, &pt1.z, &height))
                >= 5)
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')

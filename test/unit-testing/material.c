@@ -83,8 +83,7 @@ api_process (dwg_object *obj)
         }                                                                     \
       else                                                                    \
         {                                                                     \
-          CHK_ENTITY_TYPE (_obj, MATERIAL, genproctype, BS);                  \
-          /* TODO procedural...*/                                             \
+          CHK_ENTITY_TYPE (_obj, MATERIAL, genproctype, BS); /* TODO procedural...*/                                             \
         }                                                                     \
     }
 

@@ -154,10 +154,9 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      {                                                                       \
-        /*if (dwg->header.version >= R_2007)                                  \
-          _obj->nam = (BITCODE_T)json_wstring (dat, tokens);                  \
-        else*/                                                                \
+      { /*if (dwg->header.version >= R_2007)                   \
+                                               _obj->nam =                    \
+                          (BITCODE_T)json_wstring (dat, tokens); else*/                                                                \
         _obj->nam = json_string (dat, tokens);                                \
       }                                                                       \
     else                                                                      \
@@ -1034,7 +1033,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   Dwg_Header *_obj = &dwg->header;
   Dwg_Object *obj = NULL;
-  char version[80] = {0};
+  char version[80] = { 0 };
   int size = t->size;
 
   if (t->type != JSMN_OBJECT)
@@ -1102,8 +1101,8 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (vbaproj_address, 0)
       FIELD_RL (r2004_header_address, 0) /* mostly 128/0x80 */
 
-      // clang-format on
-      else if (strEQc (key, "HEADER"))
+          // clang-format on
+          else if (strEQc (key, "HEADER"))
       {
         LOG_WARN ("Unexpected next section %s", key)
         tokens->index--;
@@ -1119,8 +1118,9 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("End of %s\n", section)
   // revised beta version
   {
-    Dwg_Version_Type v = *version ?
-      dwg_version_hdr_type2 (version, _obj->dwg_version) : R_INVALID;
+    Dwg_Version_Type v
+        = *version ? dwg_version_hdr_type2 (version, _obj->dwg_version)
+                   : R_INVALID;
     if (v != R_INVALID && v != dwg->header.from_version)
       {
         dat->from_version = dwg->header.from_version = v;
@@ -3497,8 +3497,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (hex)
                 {
                   if ((read = in_hex2bin (buf, hex, blen) != blen))
-                    LOG_ERROR ("in_hex2bin with key %s at pos %u of %u", key, read,
-                               blen);
+                    LOG_ERROR ("in_hex2bin with key %s at pos %u of %u", key,
+                               read, blen);
                   buf[blen] = '\0';
                   free (hex);
                 }
@@ -3517,7 +3517,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                          &dat->chain[t->start])
             }
           else if (strEQc (key, "eed")
-                   // obj->tio.object shares a common prefix with entity until eed
+                   // obj->tio.object shares a common prefix with entity until
+                   // eed
                    && !obj->tio.object->num_eed && t->type == JSMN_ARRAY)
             {
               json_eed (dat, dwg, tokens, obj->tio.object);

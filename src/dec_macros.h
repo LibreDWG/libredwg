@@ -644,7 +644,7 @@
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
-        LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf)                 \
+        LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf)                \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -960,7 +960,7 @@
           LOG_TRACE (#o "." #color ".rgb: 0x%06x [ENC.BL %d]\n",              \
                      (unsigned)_obj->o.color.rgb, dxf + 420 - 62);            \
         if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
-          LOG_TRACE (#o "." #color ".handle: " FORMAT_HV " [ENC.H %d]\n",   \
+          LOG_TRACE (#o "." #color ".handle: " FORMAT_HV " [ENC.H %d]\n",     \
                      _obj->o.color.handle->handleref.value, dxf + 430 - 62);  \
       }                                                                       \
   }
@@ -1079,7 +1079,7 @@
   _DEBUG_HERE (0UL)
 
 // check for overflow into next object (invalid num_elems)
-#define AVAIL_BITS(dat) (int64_t)((dat->size * 8) - bit_position (dat))
+#define AVAIL_BITS(dat) (int64_t) ((dat->size * 8) - bit_position (dat))
 #define TYPE_MAXELEMSIZE(type) dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(nam, type, size, dat)                                 \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
@@ -1119,8 +1119,7 @@
           AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);      \
       if (_obj->nam)                                                          \
         free (_obj->nam);                                                     \
-      size = 0;                                                               \
-      /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
+      size = 0; /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
 // for static TFF types with a size field
 #define _VECTOR_CHKCOUNT(nam, size, maxelemsize, dat)                         \
@@ -1449,7 +1448,7 @@
       LOG_INSANE ("num_inserts [RC " FORMAT_RL "]: %d\n",                     \
                   FIELD_VALUE (num_inserts), (unsigned char)vcount)           \
       if (vcount == 0)                                                        \
-          break;                                                              \
+        break;                                                                \
     }                                                                         \
   LOG_TRACE ("num_inserts: %d [RC* 0]\n", FIELD_VALUE (num_inserts))
 
@@ -1763,10 +1762,10 @@
                                                                               \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
-      Dwg_Object *restrict obj);                                              \
+      Dwg_Object *restrict obj); \
                                                                               \
-  /**Call dwg_setup_##token and write the fields from the bitstream dat to    \
-   * the entity or object. */                                                 \
+      /**Call dwg_setup_##token and write the fields from the bitstream dat   \
+       * to the entity or object. */                                                 \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                                  Dwg_Object *restrict obj)                    \
   {                                                                           \
