@@ -104,6 +104,7 @@ print "#define MIN_", uc $in, "_UC\t$lod\n";
 print "#define MAX_", uc $in, "_UC\t$hid\n";
 if (@exclow) {
     print "#if 0\n";
+    print "/* Exceptions, already integrated above. */\n";
     print "static const uint16_t cptbl_exc_$in\[\] = {\n";
     print $_ for @exclow;
     print "};\n";

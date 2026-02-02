@@ -101283,6 +101283,7 @@ static const uint16_t cptbl_alnum_cp932[] = {
 #define MIN_CP932_UC	32
 #define MAX_CP932_UC	65509
 #if 0
+/* Exceptions, already integrated above. */
 static const uint16_t cptbl_exc_cp932[] = {
   /*[0x5C] = */0x00A5,	//  YEN SIGN
   /*[0x7E] = */0x203E,	//  OVERLINE

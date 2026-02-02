@@ -348,6 +348,7 @@ static const uint8_t cptbl_alnum_cp864[] = {
 #define MIN_CP864_UC	0
 #define MAX_CP864_UC	65276
 #if 0
+/* Exceptions, already integrated above. */
 static const uint16_t cptbl_exc_cp864[] = {
   /*[0x25] = */0x066a,	// ARABIC PERCENT SIGN
 };

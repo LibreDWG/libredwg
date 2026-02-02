@@ -64548,6 +64548,7 @@ static const uint16_t cptbl_alnum_johab[] = {
 #define MIN_JOHAB_UC	32
 #define MAX_JOHAB_UC	65510
 #if 0
+/* Exceptions, already integrated above. */
 static const uint16_t cptbl_exc_johab[] = {
   /*[0x5C] = */0x20A9,	//   # WON SIGN
 };

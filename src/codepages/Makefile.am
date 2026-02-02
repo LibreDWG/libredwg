@@ -66,3 +66,8 @@ get-sources:
 .SUFFIXES = .TXT .h
 .TXT.h:
 	$(srcdir)/txt2h.pl $< >$@ && mv -fu $@ $(srcdir)/
+
+.PHONY: regen-h
+regen-h:
+	cd $(srcdir) && rm -f $(EXTRA_HEADERS)
+	$(MAKE)
