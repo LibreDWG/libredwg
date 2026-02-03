@@ -5881,7 +5881,7 @@ DWG_ENTITY (LWPOLYLINE)
         FIELD_2RD (points[rcount1], 10);
         if (FIELD_VALUE (num_widths) && FIELD_VALUE (widths) &&
             rcount1 < FIELD_VALUE (num_widths) &&
-            FIELD_VALUE (num_bulges) == FIELD_VALUE (num_points) &&
+            FIELD_VALUE (num_widths) == FIELD_VALUE (num_points) &&
             (FIELD_VALUE (widths[rcount1].start) != 0.0 ||
              FIELD_VALUE (widths[rcount1].end) != 0.0))
           {

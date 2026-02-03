@@ -48,6 +48,7 @@ enum _temp_complex_types
   TEMP_PDFDEFINITION2,
   TEMP_PDFDEFINITION3,
   TEMP_LWPOLYLINE_WIDTHS,
+  TEMP_LWPOLYLINE_WIDTHS_NO_BULGES,
 };
 
 static unsigned
@@ -109,6 +110,9 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
           break;
         case TEMP_LWPOLYLINE_WIDTHS:
           name = "LWPOLYLINE_WIDTHS";
+          break;
+        case TEMP_LWPOLYLINE_WIDTHS_NO_BULGES:
+          name = "LWPOLYLINE_WIDTHS_NO_BULGES";
           break;
         default:
           assert (name);
@@ -178,10 +182,23 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         lwpline->widths[2].start = 3.0; lwpline->widths[2].end = 1.5;
         lwpline->widths[3].start = 1.5; lwpline->widths[3].end = 1.0;
         lwpline->flag |= FLAG_LWPOLYLINE_HAS_NUM_WIDTHS;
+      }
+      break;
+    case TEMP_LWPOLYLINE_WIDTHS_NO_BULGES:
+      {
+        // Test widths WITHOUT bulges - this is the bug scenario
+        const dwg_point_2d pts[] = {
+          { 0.0, 0.0 }, { 10.0, 0.0 }
+        };
+        Dwg_Entity_LWPOLYLINE *lwpline = dwg_add_LWPOLYLINE (hdr, 2, pts);
 
-        // Need bulges count to match points for DXF output (per dwg.spec condition)
-        lwpline->num_bulges = 4;
-        lwpline->bulges = (BITCODE_BD *)calloc (4, sizeof (BITCODE_BD));
+        // Set per-vertex widths (tapered arrowhead pattern)
+        lwpline->num_widths = 2;
+        lwpline->widths = (Dwg_LWPOLYLINE_width *)calloc (2, sizeof (Dwg_LWPOLYLINE_width));
+        lwpline->widths[0].start = 0.0;  lwpline->widths[0].end = 10.0;
+        lwpline->widths[1].start = 10.0; lwpline->widths[1].end = 10.0;
+        lwpline->flag |= FLAG_LWPOLYLINE_HAS_NUM_WIDTHS;
+        // No bulges - this tests the fix for the DXF output bug
       }
       break;
     case DWG_TYPE_POLYLINE_2D:
@@ -966,6 +983,51 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         free (objs);
       }
       break;
+    case TEMP_LWPOLYLINE_WIDTHS_NO_BULGES:
+      {
+        Dwg_Entity_LWPOLYLINE **objs = dwg_getall_LWPOLYLINE (mspace_ref);
+        if (objs && objs[0])
+          {
+            Dwg_Entity_LWPOLYLINE *lwp = objs[0];
+            int width_ok = 1;
+
+            // Verify widths were preserved (this is the bug test)
+            if (lwp->num_widths != 2)
+              {
+                fail ("LWPOLYLINE_WIDTHS_NO_BULGES num_widths: %u != 2", lwp->num_widths);
+                width_ok = 0;
+              }
+            else if (lwp->widths)
+              {
+                // Check tapered width pattern
+                if (fabs (lwp->widths[0].start - 0.0) > 1e-6 ||
+                    fabs (lwp->widths[0].end - 10.0) > 1e-6)
+                  {
+                    fail ("LWPOLYLINE_WIDTHS_NO_BULGES widths[0]: start=%f end=%f",
+                          lwp->widths[0].start, lwp->widths[0].end);
+                    width_ok = 0;
+                  }
+                if (fabs (lwp->widths[1].start - 10.0) > 1e-6 ||
+                    fabs (lwp->widths[1].end - 10.0) > 1e-6)
+                  {
+                    fail ("LWPOLYLINE_WIDTHS_NO_BULGES widths[1]: start=%f end=%f",
+                          lwp->widths[1].start, lwp->widths[1].end);
+                    width_ok = 0;
+                  }
+                if (width_ok)
+                  ok ("LWPOLYLINE widths preserved WITHOUT bulges");
+              }
+            else
+              {
+                fail ("LWPOLYLINE_WIDTHS_NO_BULGES widths array is NULL after roundtrip");
+                width_ok = 0;
+              }
+          }
+        else
+          fail ("found no LWPOLYLINE_WIDTHS_NO_BULGES");
+        free (objs);
+      }
+      break;
       TEST_ENTITY (POLYLINE_2D);
       TEST_ENTITY (POLYLINE_3D);
       TEST_ENTITY (POLYLINE_MESH);
@@ -1318,6 +1380,7 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_ARC, "add_arc_2000", dxf);
       error += test_add (DWG_TYPE_LWPOLYLINE, "add_lwpline_2000", dxf);
       error += test_add ((const Dwg_Object_Type)TEMP_LWPOLYLINE_WIDTHS, "add_lwpline_widths_2000", dxf);
+      error += test_add ((const Dwg_Object_Type)TEMP_LWPOLYLINE_WIDTHS_NO_BULGES, "add_lwpline_widths_no_bulges_2000", dxf);
       error += test_add (DWG_TYPE_POLYLINE_2D, "add_pl2d_2000", dxf);
       error += test_add (DWG_TYPE_POLYLINE_3D, "add_pl3d_2000", dxf);
       error += test_add (DWG_TYPE_POLYLINE_MESH, "add_pmesh_2000", dxf);
