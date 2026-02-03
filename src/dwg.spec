@@ -5840,6 +5840,13 @@ DWG_ENTITY (LWPOLYLINE)
   VALUE_BS (((FIELD_VALUE (flag) & 256) ? 128 : 0) + (FIELD_VALUE (flag) & 512 ? 1 : 0), 70);
   FIELD_BD (const_width, 43);
 #else
+  ENCODER {
+    // Ensure flag bits are set correctly based on actual data
+    if (FIELD_VALUE (num_bulges) && FIELD_VALUE (bulges))
+      FIELD_VALUE (flag) |= 16;
+    if (FIELD_VALUE (num_widths) && FIELD_VALUE (widths))
+      FIELD_VALUE (flag) |= 32;
+  }
   FIELD_BS (flag, 70); // 512 closed, 256 plinegen, 4 constwidth, 8 elevation, 2 thickness
                        // 1 extrusion, 16 num_bulges, 1024 vertexidcount, 32 numwidths
   LOG_FLAG_LWPOLYLINE
