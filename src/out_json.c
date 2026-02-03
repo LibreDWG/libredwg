@@ -616,6 +616,17 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
         {
           FIELD_BS (index, 62);
         }
+      else
+        {
+          BITCODE_BS index = 0;
+          if (_obj->method == DWG_COLOR_METHOD_TRUECOLOR)
+            index = (BITCODE_BS)(_obj->rgb & 0xFF); /* first byte */
+          else if (_obj->method == DWG_COLOR_METHOD_BYLAYER
+                   || _obj->method == DWG_COLOR_METHOD_BYBLOCK)
+            index = dwg_find_color_index (_obj->rgb & 0x00FFFFFF);
+          if (index > 0 && index < 256)
+            FIELD_BS (index, 62);
+        }
       FIRSTPREFIX fprintf (dat->fh, "\"rgb\":%s\"%06x\"", JSON_SPC,
                            (unsigned)_obj->rgb);
       if (_obj->flag)

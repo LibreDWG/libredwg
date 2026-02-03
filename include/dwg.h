@@ -1641,6 +1641,18 @@ typedef enum DWG_HDL_CODE
    DWG_HDL_HARDPTR = 5,
 } Dwg_Hdl_Code;
 
+typedef enum DWG_COLOR_METHOD
+{
+  DWG_COLOR_METHOD_VOID = 0,
+  DWG_COLOR_METHOD_BYLAYER = 0xc0, /* (also c3 and rgb of 0x100) */
+  DWG_COLOR_METHOD_BYBLOCK = 0xc1, /* (also c3 and rgb of 0) */
+  DWG_COLOR_METHOD_ACI = 0xc2,     /* Color index, for entities (default),
+                                      with names with an additional name flag RC */
+  DWG_COLOR_METHOD_TRUECOLOR = 0xc3,
+  DWG_COLOR_METHOD_FGCOLOR = 0xc5,
+  DWG_COLOR_METHOD_NONE = 0xc8, /* (also c3 and rgb of 0x101) */
+} Dwg_Color_Method;
+
 /**
  CMC or ENC colors: color index or rgb value. layers are off when the index
  is negative.
@@ -1652,14 +1664,7 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
   BITCODE_BS flag;    /* 1: has name, 2: has book_name. */
   BITCODE_BS raw;     /* ENC only */
   BITCODE_BL rgb;     /* DXF 420 */
-  unsigned method;    /* first byte of rgb:
-                         0xc0 for ByLayer (also c3 and rgb of 0x100)
-                         0xc1 for ByBlock (also c3 and rgb of 0)
-                         0xc2 for entities (default), with names with an additional name flag RC,
-                         0xc3 for truecolor,
-                         0xc5 for foreground color
-                         0xc8 for none (also c3 and rgb of 0x101)
-                       */
+  Dwg_Color_Method method; /* first byte of rgb */
   BITCODE_T  name;       /* DXF 430 */
   BITCODE_T  book_name;  /* DXF 430, DXF: "book_name$name" */
   // Entities only:
