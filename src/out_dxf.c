@@ -312,8 +312,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
           GROUP (dxf);                                                        \
           GCC46_DIAG_IGNORE (-Wformat-nonliteral)                             \
           snprintf (buf, 255, _fmt, value);                                   \
-          GCC46_DIAG_RESTORE /* not a string, empty   \
-                                                        num. must be zero */                         \
+          GCC46_DIAG_RESTORE                                                  \
           if (strEQc (_fmt, "%s") && !*buf)                                   \
             fprintf (dat->fh, "0\r\n");                                       \
           else if (90 <= dxf && dxf < 100)                                    \
@@ -799,6 +798,9 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   dxf_CMC (dat, (Dwg_Color *)&_obj->o.color, dxf, 0)
 #define FIELD_CMC0(color, dxf) dxf_CMC (dat, (Dwg_Color *)&_obj->color, dxf, 1)
+#define HEADER_CMC(nam, dxf)                                                  \
+  HEADER_9 (nam);                                                             \
+  VALUE_RS (dwg->header_vars.nam.index, dxf)
 
 #define HEADER_TIMEBLL(nam, dxf)                                              \
   {                                                                           \
@@ -808,9 +810,6 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   GROUP (dxf);                                                                \
   fprintf (dat->fh, "%.09f\r\n", _obj->nam.value)
-#define HEADER_CMC(nam, dxf)                                                  \
-  HEADER_9 (nam);                                                             \
-  VALUE_RS (dwg->header_vars.nam.index, dxf)
 
 #define POINT_3D(nam, var, c1, c2, c3)                                        \
   {                                                                           \
@@ -1150,7 +1149,15 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
         }
       else if (color->method == 0xc3)
         {
-          VALUE_RS (color->rgb & 0x00ffffff, dxf);
+          if (abs (color->index) > 0 && abs (color->index) < 256)
+            {
+              VALUE_RSd (color->index, dxf);
+            }
+          else
+            {
+              // FIXME wrong for color off
+              VALUE_RS (color->rgb & 0xff, dxf);
+            }
           return;
         }
       else if (color->method == 0xc8)
@@ -1160,7 +1167,7 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
         }
       if (!opt || color->index)
         {
-          VALUE_RS (color->index, dxf);
+          VALUE_RSd (color->index, dxf);
         }
       if (color->method != 0xc2)
         return;
@@ -1208,7 +1215,7 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
   else
     {
       bit_downconvert_CMC (dat, color);
-      VALUE_RS (color->index, dxf);
+      VALUE_RSd (color->index, dxf);
     }
 }
 
@@ -1737,6 +1744,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     VALUE_TV ("AcDbSymbolTable", 100);                                        \
   }
 
+// clang-format off
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
   SINCE (R_13b1)                                                              \
   {                                                                           \
@@ -1758,7 +1766,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
         }                                                                     \
       else                                                                    \
         VALUE_TV ("*", 2)                                                     \
-    } /* Empty name with xref shape names */                                      \
+    } /* Empty name with xref shape names */                                  \
   else if (strEQc (#acdbname, "TextStyle") && _obj->flag & 1                  \
            && dxf_is_xrefdep_name (dat, _obj->name))                          \
     VALUE_TV ("", 2)                                                          \
@@ -1768,22 +1776,22 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     VALUE_TV ("*", 2)                                                         \
   if (strEQc (#acdbname, "Layer") && dat->version >= R_2000)                  \
     { /* Mask off plotflag and linewt. */                                     \
-      BITCODE_RC _flag = _obj->flag & ~0x3e0; /* Don't keep bit 16 when not      \
-                                                 xrefdep like "XREF|name" */               \
+      /* Don't keep bit 16 when not xrefdep like "XREF|name" */               \
+      BITCODE_RC _flag = _obj->flag & ~0x3e0;                                 \
       if (_flag & 0x10 && !dxf_has_xrefdep_vertbar (dat, _obj->name))         \
         _flag &= ~0x10;                                                       \
       VALUE_RC (_flag, 70);                                                   \
     }                                                                         \
   else if (strEQc (#acdbname, "Block") && dat->version >= R_2000)             \
-    ; /* skip 70 for AcDbBlockTableRecord       \
-                                                                           here. \
-                                          done in AcDbBlockBegin */     \
+    /* skip 70 for AcDbBlockTableRecord here. done in AcDbBlockBegin */       \
+    ;                                                                         \
   else                                                                        \
     { /* mask off 64, the loaded bit 6, since >= r13 */                       \
       SINCE (R_13b1)                                                          \
         _obj->flag &= ~64;                                                    \
       VALUE_RC (_obj->flag, 70);                                              \
     }
+// clang-format on
 
 // unused
 #define LAYER_TABLE_FLAGS(acdbname)                                           \

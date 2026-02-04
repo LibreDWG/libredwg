@@ -3832,9 +3832,11 @@ DWG_TABLE (LAYER)
   }
   SINCE (R_13b1) {
     DXF {
-      if (FIELD_VALUE(off)) {
-        FIELD_VALUE (color.index) = - FIELD_VALUE(color.index); // Negative value in case of disabled layer
+      if (FIELD_VALUE (color.index) == 256) {
+        FIELD_VALUE (color.index) = FIELD_VALUE (color.rgb) & 0xFF;
       }
+      // Negative value in case of disabled layer
+      FIELD_VALUE (color.index) = - FIELD_VALUE(color.index);
     }
     FIELD_CMC (color, 62);
   }

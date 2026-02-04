@@ -55,6 +55,8 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
 static int dxfb_3dsolid (Bit_Chain *restrict dat,
                          const Dwg_Object *restrict obj,
                          Dwg_Entity_3DSOLID *restrict _obj);
+static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
+                      const int dxf, const int opt);
 /*static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
                                   const Dwg_Object *restrict obj,
                                   char *restrict name, const int dxf); */
@@ -424,18 +426,14 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     GROUP (dxf);                                                              \
     fwrite (&_s, 2, 1, dat->fh);                                              \
   }
-#define VALUE_RSd(value, dxf)                                                 \
-  {                                                                           \
-    BITCODE_RSd _s = (BITCODE_RSd)(value);                                    \
-    GROUP (dxf);                                                              \
-    fwrite (&_s, 2, 1, dat->fh);                                              \
-  }
+#define VALUE_RSd(value, dxf) VALUE_RS (value, dxf)
 #define VALUE_RL(value, dxf)                                                  \
   {                                                                           \
     BITCODE_RL _s = (BITCODE_RL)value;                                        \
     GROUP (dxf);                                                              \
     fwrite (&_s, 4, 1, dat->fh);                                              \
   }
+#define VALUE_RLd(value, dxf) VALUE_RL (value, dxf)
 #define VALUE_RLL(value, dxf)                                                 \
   {                                                                           \
     BITCODE_RLL _s = (BITCODE_RLL)value;                                      \
@@ -667,104 +665,10 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
       FIELD_RD (nam.z, dxf + 2);                                              \
     }
 #define FIELD_3DPOINT(nam, dxf) FIELD_3RD (nam, dxf)
-#define FIELD_CMC(color, dxf)                                                 \
-  {                                                                           \
-    if (dat->version < R_2004)                                                \
-      {                                                                       \
-        if (dat->from_version >= R_2004)                                      \
-          bit_downconvert_CMC (dat, (Dwg_Color *)&_obj->color);               \
-        VALUE_RS (_obj->color.index, dxf);                                    \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        if (dat->from_version < R_2004)                                       \
-          bit_upconvert_CMC (dat, (Dwg_Color *)&_obj->color);                 \
-        if (dxf >= 90)                                                        \
-          {                                                                   \
-            VALUE_RL (_obj->color.rgb, dxf);                                  \
-          }                                                                   \
-        else if (_obj->color.method == 0xc3)                                  \
-          {                                                                   \
-            VALUE_RL (_obj->color.rgb & 0x00ffffff, dxf);                     \
-          }                                                                   \
-        else if (_obj->color.method == 0xc8)                                  \
-          {                                                                   \
-            VALUE_RS (257, dxf);                                              \
-          }                                                                   \
-        else                                                                  \
-          {                                                                   \
-            VALUE_RS (_obj->color.index, dxf);                                \
-            if (_obj->color.method == 0xc2)                                   \
-              VALUE_RL (_obj->color.rgb, (unsigned)(dxf + 420 - 62));         \
-          }                                                                   \
-      }                                                                       \
-  }
-#define FIELD_CMC0(color, dxf)                                                \
-  {                                                                           \
-    if (dat->version < R_2004)                                                \
-      {                                                                       \
-        if (dat->from_version >= R_2004)                                      \
-          bit_downconvert_CMC (dat, (Dwg_Color *)&_obj->color);               \
-        if (_obj->color.index)                                                \
-          VALUE_RS (_obj->color.index, dxf);                                  \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        if (dat->from_version < R_2004)                                       \
-          bit_upconvert_CMC (dat, (Dwg_Color *)&_obj->color);                 \
-        if (dxf >= 90)                                                        \
-          {                                                                   \
-            VALUE_RL (_obj->color.rgb, dxf);                                  \
-          }                                                                   \
-        else if (_obj->color.method == 0xc3)                                  \
-          {                                                                   \
-            VALUE_RL (_obj->color.rgb & 0x00ffffff, dxf);                     \
-          }                                                                   \
-        else if (_obj->color.method == 0xc8)                                  \
-          {                                                                   \
-            VALUE_RS (257, dxf);                                              \
-          }                                                                   \
-        else                                                                  \
-          {                                                                   \
-            if (_obj->color.index)                                            \
-              VALUE_RS (_obj->color.index, dxf);                              \
-            if (_obj->color.method == 0xc2)                                   \
-              VALUE_RL (_obj->color.rgb, (unsigned)(dxf + 420 - 62));         \
-          }                                                                   \
-      }                                                                       \
-  }
+#define FIELD_CMC(color, dxf) dxfb_CMC (dat, (Dwg_Color *)&_obj->color, dxf, 0)
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
-  {                                                                           \
-    if (dat->version < R_2004)                                                \
-      {                                                                       \
-        if (dat->from_version >= R_2004)                                      \
-          bit_downconvert_CMC (dat, (Dwg_Color *)&_obj->o.color);             \
-        VALUE_RS (_obj->o.color.index, dxf);                                  \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        if (dat->from_version < R_2004)                                       \
-          bit_upconvert_CMC (dat, (Dwg_Color *)&_obj->o.color);               \
-        if (dxf >= 90)                                                        \
-          {                                                                   \
-            VALUE_RL (_obj->o.color.rgb, dxf);                                \
-          }                                                                   \
-        else if (_obj->o.color.method == 0xc8)                                \
-          {                                                                   \
-            VALUE_RS (257, dxf);                                              \
-          }                                                                   \
-        else if (_obj->o.color.method == 0xc3)                                \
-          {                                                                   \
-            VALUE_RL (_obj->o.color.rgb & 0x00ffffff, dxf);                   \
-          }                                                                   \
-        else                                                                  \
-          {                                                                   \
-            VALUE_RS (_obj->o.color.index, dxf);                              \
-            if (_obj->o.color.method == 0xc2)                                 \
-              VALUE_RL (_obj->o.color.rgb, (unsigned)(dxf + 420 - 62));       \
-          }                                                                   \
-      }                                                                       \
-  }
+  dxfb_CMC (dat, (Dwg_Color *)&_obj->o.color, dxf, 0)
+#define FIELD_CMC0(color, dxf) dxfb_CMC (dat, (Dwg_Color *)&_obj->color, dxf, 1)
 #define HEADER_CMC(nam, dxf)                                                  \
   {                                                                           \
     HEADER_9 (nam);                                                           \
@@ -900,6 +804,94 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define START_STRING_STREAM
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
+
+// Skip index 256 bylayer
+// 257 is for method c8 NONE. Which index is for ByBlock?
+// If the dxf code is 90-99 rather emit the rgb only
+static void
+dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
+          const int opt)
+{
+  if (dat->version >= R_2004)
+    {
+      if (dat->from_version < R_2004)
+        bit_upconvert_CMC (dat, color);
+      if (dxf >= 90)
+        {
+          VALUE_RL (color->rgb, dxf);
+          return;
+        }
+      else if (color->method == 0xc3)
+        {
+          if (abs (color->index) > 0 && abs (color->index) < 256)
+            {
+              VALUE_RSd (color->index, dxf);
+            }
+          else
+            {
+              // FIXME wrong for color off
+              VALUE_RS (color->rgb & 0xff, dxf);
+            }
+          return;
+        }
+      else if (color->method == 0xc8)
+        {
+          VALUE_RS (257, dxf);
+          return;
+        }
+      if (!opt || color->index)
+        {
+          VALUE_RSd (color->index, dxf);
+        }
+      if (color->method != 0xc2)
+        return;
+      VALUE_RL (color->rgb, dxf + 420 - 62);
+      if (color->flag & 2 && color->book_name)
+        {
+          char name[256];
+          if (IS_FROM_TU (dat))
+            {
+              char *u8 = bit_convert_TU ((BITCODE_TU)color->book_name);
+              if (u8)
+                strncpy (name, u8, 127);
+              else
+                name[0] = '\0';
+              free (u8);
+              u8 = bit_convert_TU ((BITCODE_TU)color->name);
+              if (u8)
+                {
+                  if (*name)
+                    strcat (name, "$");
+                  strncat (name, u8, 127);
+                  free (u8);
+                }
+            }
+          else
+            {
+              strncpy (name, color->book_name, 127);
+              if (color->name)
+                {
+                  strcat (name, "$");
+                  strncat (name, color->name, 127);
+                }
+            }
+          VALUE_TV (name, dxf + 430 - 62);
+        }
+      else if (color->flag & 1 && color->name)
+        {
+          VALUE_T (color->name, dxf + 430 - 62);
+        }
+      else if (color->flag)
+        {
+          VALUE_TFF ("UNNAMED", dxf + 430 - 62);
+        }
+    }
+  else
+    {
+      bit_downconvert_CMC (dat, color);
+      VALUE_RSd (color->index, dxf);
+    }
+}
 
 #ifndef DEBUG_CLASSES
 static int
@@ -1331,6 +1323,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     VALUE_TV ("AcDbSymbolTable", 100);                                        \
   }
 
+// clang-format off
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
   SINCE (R_13b1)                                                              \
   {                                                                           \
@@ -1352,7 +1345,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
         }                                                                     \
       else                                                                    \
         VALUE_TV ("*", 2)                                                     \
-    } /* Empty name with xref shape names */                                      \
+    } /* Empty name with xref shape names */                                  \
   else if (strEQc (#acdbname, "TextStyle") && _obj->flag & 1                  \
            && dxf_is_xrefdep_name (dat, _obj->name))                          \
     VALUE_TV ("", 2)                                                          \
@@ -1362,20 +1355,18 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     VALUE_TV ("*", 2)                                                         \
   if (strEQc (#acdbname, "Layer") && dat->version >= R_2000)                  \
     { /* Mask off plotflag and linewt. */                                     \
-      BITCODE_RC _flag = _obj->flag & ~0x3e0; /* Don't keep bit 16 when not      \
-                                                 xrefdep like "XREF|name" */               \
+      BITCODE_RC _flag = _obj->flag & ~0x3e0;                                 \
       if (_flag & 0x10 && !dxf_has_xrefdep_vertbar (dat, _obj->name))         \
         _flag &= ~0x10;                                                       \
       VALUE_RC (_flag, 70);                                                   \
     }                                                                         \
   else if (strEQc (#acdbname, "Block") && dat->version >= R_2000)             \
-    ; /* skip 70 for AcDbBlockTableRecord       \
-                                                                           here. \
-                                          done in AcDbBlockBegin */     \
+    ; /* skip 70 for AcDbBlockTableRecord done in AcDbBlockBegin */           \
   else                                                                        \
     { /* mask off 64, the loaded bit 6 */                                     \
       VALUE_RS (_obj->flag & ~64, 70);                                        \
     }
+// clang-format off
 
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
   SINCE (R_14)                                                                \
