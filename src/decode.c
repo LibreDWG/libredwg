@@ -5825,6 +5825,7 @@ dwg_decode_unknown_bits (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (!obj->unknown_bits)
     {
       bit_set_position (dat, pos);
+      obj->num_unknown_bits = 0;
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   // [num_bits (commonsize, hdlpos, strsize) num_bytes TF]
