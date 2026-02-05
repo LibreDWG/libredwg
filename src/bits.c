@@ -3268,7 +3268,7 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
   const size_t srclen = strlen (src);
   size_t destlen = is_asian_cp ? srclen * 3 : trunc (srclen * 1.5);
   size_t i = 0;
-  char *str = (char *)calloc (1, destlen + 1);
+  char *str = (char *)calloc (destlen + 1, 1);
   unsigned char *tmp = (unsigned char *)src;
   uint16_t c = 0;
 
@@ -3465,7 +3465,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
       LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", len);
       len = UINT16_MAX - 1;
     }
-  wstr = (BITCODE_TU)calloc (2, len + 1);
+  wstr = (BITCODE_TU)calloc (len + 1, 2);
   if (!wstr)
     {
       loglevel |= 1;
@@ -3904,7 +3904,7 @@ bit_chain_init (Bit_Chain *dat, const size_t size)
       return;
 #endif
     }
-  dat->chain = (unsigned char *)calloc (1, size);
+  dat->chain = (unsigned char *)calloc (size, 1);
   if (!dat->chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
