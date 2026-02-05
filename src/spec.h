@@ -116,6 +116,9 @@
 #ifndef VALUE_TV
 #  define VALUE_TV(value, dxf)
 #endif
+#ifndef VALUE_TVc
+#  define VALUE_TVc(value, dxf) VALUE_TV (""value, dxf)
+#endif
 #ifndef VALUE_TF
 #  define VALUE_TF(value, dxf)
 #endif

@@ -3172,8 +3172,8 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
   return d;
 }
 
-static inline char *
-bit_is_U_expand (char *p)
+static char *
+bit_is_U_expand (const char *p)
 {
   char *s;
   if (p && strlen (p) >= 7 && (s = strstr (p, "\\U+")) && ishex (s[3])
@@ -3183,8 +3183,8 @@ bit_is_U_expand (char *p)
     return NULL;
 }
 
-static inline char *
-bit_is_M_expand (char *p)
+static char *
+bit_is_M_expand (const char *p)
 {
   char *s;
   if (p && strlen (p) >= 8 && (s = strstr (p, "\\M+")) && s[3] >= '1'
@@ -3195,15 +3195,16 @@ bit_is_M_expand (char *p)
     return NULL;
 }
 
-char *
-bit_u_expand (char *src)
+/* src is expanded (ie really shrinked) internally.
+   It must not be a string literal though. */
+const char *
+bit_u_expand (const char *src)
 {
-  char *ret = src;
-  char *p = src;
+  const char *ret = src;
   char *s;
   // convert all \U+XXXX sequences to UTF-8. always gets shorter, so in-place
-  while ((s = bit_is_U_expand (p)) // jumps forward to next \U or \M
-         || (s = bit_is_M_expand (p)))
+  while ((s = bit_is_U_expand (src)) // jumps forward to next \U or \M
+         || (s = bit_is_M_expand (src)))
     {
       uint16_t wc;
       int i;
@@ -3327,7 +3328,7 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
     }
   EXTEND_SIZE (str, i + 1, destlen);
   str[i] = '\0';
-  return bit_u_expand (str);
+  return (char *)bit_u_expand (str);
 }
 
 /** converts old codepage'd strings to UTF-8.
@@ -3338,7 +3339,21 @@ EXPORT ATTRIBUTE_MALLOC char *
 bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
 {
   if (codepage == CP_UTF8)
-    return bit_u_expand ((char *)src);
+    {
+      if (bit_is_U_expand (src) || bit_is_M_expand (src))
+        {
+          // NOTE: src is expanded/shrinked internally.
+          const size_t srclen = strlen (src);
+          size_t destlen = 1 + trunc (srclen * 2);
+          char *dest = (char *)calloc (destlen, 1);
+          memcpy (dest, src, srclen + 1);
+          return (char *)bit_u_expand (dest);
+        }
+      else
+        {
+          return (char *)src;
+        }
+    }
   else if (!src)
     return NULL;
   {
@@ -3421,7 +3436,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                 LOG_ERROR ("iconv \"%s\" failed with errno %d", src, errno);
                 iconv_close (cd);
                 free (odest);
-                return bit_u_expand (osrc);
+                return (char *)bit_u_expand (osrc);
               }
           }
       }
@@ -3433,7 +3448,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
         //*dest = '\0';
         iconv_close (cd);
         // always gets shorter, so inplace
-        return bit_u_expand (odest);
+        return (char *)bit_u_expand (odest);
       }
     else
       {
