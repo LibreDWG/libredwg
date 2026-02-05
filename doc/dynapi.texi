@@ -1114,9 +1114,9 @@ H,	DXF 2
 @item is_partial
 B,	DXF 70
 @item arc_start_param
-BD,	DXF 41
+BD,	DXF 40
 @item arc_end_param
-BD,	DXF 42
+BD,	DXF 41
 @item has_leader
 B,	DXF 71
 @item leader1_pt
@@ -16161,3 +16161,4 @@ H,	DXF 360
 
 @end vtable
 @end indentedblock
+

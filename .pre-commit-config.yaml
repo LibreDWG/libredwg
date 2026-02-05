@@ -6,7 +6,7 @@ repos:
     hooks:
       # see https://github.com/pre-commit/pre-commit-hooks/
       - id: check-added-large-files # prevents giant files from being committed.
-        exclude: ^(include/dwg_api\.h|src/dwg_api\.c|src/in_dxf\.c|test/unit-testing/dynapi_test\.c)$
+        exclude: ^(include/dwg_api\.h|src/dwg_api\.c|src/dynapi\.c|src/in_dxf\.c|test/unit-testing/dynapi_test\.c)$
       - id: check-case-conflict # checks for files that would conflict in case-insensitive filesystems.
       - id: check-merge-conflict # checks for files that contain merge conflict strings.
       - id: check-json # checks json for syntax errors and duplicate keys
