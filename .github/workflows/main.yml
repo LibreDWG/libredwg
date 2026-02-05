@@ -39,12 +39,12 @@ jobs:
     steps:
     - if: ${{ startsWith(github.ref, 'refs/tags/') }}
       name: checkout for tag
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         submodules: recursive
     - if: ${{ !startsWith(github.ref, 'refs/tags/') }}
       name: checkout for commit --depth 50
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-tags: true
         fetch-depth: 50
@@ -128,7 +128,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-    - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 1
         submodules: recursive
@@ -146,7 +146,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
-    - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 1
         submodules: recursive
@@ -169,11 +169,11 @@ jobs:
     #      - "-DLIBREDWG_DISABLE_WRITE=On"
     steps:
     - name: setup-python
-      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version: 3.12
     - name: checkout
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 1
         submodules: recursive
@@ -187,7 +187,7 @@ jobs:
     - if: failure()
       run: tar cfz cmake-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       with:
         name: cmake-failure.tgz
         path: cmake-failure.tgz
@@ -200,11 +200,11 @@ jobs:
     - name: link texinfo
       run: brew link texinfo --force
     - name: setup-python
-      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version: 3.12
     - name: checkout
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 1
         submodules: recursive
@@ -230,7 +230,7 @@ jobs:
     steps:
       # see https://github.com/msys2/setup-msys2
     - name: setup-msys2
-      uses: msys2/setup-msys2@fb197b72ce45fb24f17bf3f807a388985654d1f2 # v2.29.0
+      uses: msys2/setup-msys2@4f806de0a5a7294ffabaff804b38a9b435a73bda # v2.30.0
       with:
         path-type: minimal
         update: true
@@ -252,7 +252,7 @@ jobs:
           mingw-w64-x86_64-pcre2
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - name: checkout
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 1
         submodules: recursive
@@ -267,7 +267,7 @@ jobs:
       shell: msys2 {0}
       run: make -C src dwg_api.i; tar cfz mingw-failure.tgz src/dwg_api.i src/config.h
     - if: failure()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       with:
         name: mingw-failure.tgz
         path: mingw-failure.tgz
@@ -278,11 +278,11 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: setup-msys2
-      uses: msys2/setup-msys2@fb197b72ce45fb24f17bf3f807a388985654d1f2 # v2.29.0
+      uses: msys2/setup-msys2@4f806de0a5a7294ffabaff804b38a9b435a73bda # v2.30.0
       with:
         path-type: minimal
     - name: checkout
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 1
         submodules: recursive
@@ -294,7 +294,7 @@ jobs:
     - if: failure()
       run: tar cfz msys-failure.tgz make.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       with:
         name: msys-failure.tgz
         path: msys-failure.tgz
@@ -303,7 +303,7 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: checkout
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 1
         submodules: recursive
@@ -314,7 +314,7 @@ jobs:
     - if: failure()
       run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       with:
         name: msvc-failure.tgz
         path: msvc-failure.tgz
@@ -325,7 +325,7 @@ jobs:
     #  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
     - name: checkout
-      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 1
         submodules: recursive

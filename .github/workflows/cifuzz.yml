@@ -20,20 +20,21 @@ jobs:
     steps:
     - name: Build Fuzzers
       id: build
-      uses: google/oss-fuzz/infra/cifuzz/actions/build_fuzzers@master
+      # NOTE curl -s https://api.github.com/repos/google/oss-fuzz/commits/master | jq -r '.sha'
+      uses: google/oss-fuzz/infra/cifuzz/actions/build_fuzzers@be2d122ca65d2f65ae2a3518934a6ee5eefeb721
       with:
         oss-fuzz-project-name: 'libredwg'
         dry-run: false
         language: c
     - name: Run Fuzzers
-      uses: google/oss-fuzz/infra/cifuzz/actions/run_fuzzers@master
+      uses: google/oss-fuzz/infra/cifuzz/actions/run_fuzzers@be2d122ca65d2f65ae2a3518934a6ee5eefeb721
       with:
         oss-fuzz-project-name: 'libredwg'
         fuzz-seconds: 300
         dry-run: false
         language: c
     - name: Upload Crash
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       if: failure() && steps.build.outcome == 'success'
       with:
         name: artifacts
