@@ -138,7 +138,7 @@
 /* Define to 1 if htole64 is available in <endian.h>. */
 #undef HAVE_HTOLE64
 
-/* Define if you have the iconv() function. */
+/* Define if you have the iconv() function and it works. */
 #undef HAVE_ICONV
 
 /* Define to 1 if you have the <iconv.h> header file. */
