@@ -90,12 +90,36 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 
 #define VALUE_TV(value, dxf)                                                  \
   {                                                                           \
-    dxf_fixup_string (dat, (char *)value, 1, dxf);                            \
+    if (dxf && dat->version >= R_2007)                                        \
+      {                                                                       \
+        char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);             \
+        dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);              \
+        if (u8 && u8 != (char *)value)                                        \
+          free (u8);                                                          \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        dxf_fixup_string (dat, (char *)value, 1, dxf);                        \
+      }                                                                       \
+  }
+#define VALUE_TVc(cvalue, dxf)                                                \
+  {                                                                           \
+    dxf_fixup_string (dat, (char *)cvalue "", 1, dxf);                        \
   }
 #define VALUE_TV0(value, dxf)                                                 \
   if (dxf && value && *value)                                                 \
     {                                                                         \
-      dxf_fixup_string (dat, (char *)value, 1, dxf);                          \
+      if (dat->version >= R_2007)                                             \
+      {                                                                       \
+        char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);             \
+        dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);              \
+        if (u8 && u8 != (char *)value)                                        \
+          free (u8);                                                          \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        dxf_fixup_string (dat, (char *)value, 1, dxf);                        \
+      }                                                                       \
     }
 // in_json writes all strings as TV, in_dxf and decode not.
 #define VALUE_TU(wstr, dxf)                                                   \
@@ -108,14 +132,13 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       {                                                                       \
         char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                         \
         dxf_fixup_string (dat, u8, 1, dxf);                                   \
-        if (u8)                                                               \
+        if (u8 && u8 != (char*)wstr)                                          \
           free (u8);                                                          \
       }                                                                       \
   }
 #define VALUE_TFF(str, dxf)                                                   \
   {                                                                           \
-    if (dxf)                                                                  \
-      dxf_fixup_string (dat, (char *)str, 0, dxf);                            \
+    dxf_fixup_string (dat, (char *)str, 0, dxf);                              \
   }
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
@@ -292,7 +315,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define SUBCLASS(text)                                                        \
   if (dat->version >= R_13b1)                                                 \
     {                                                                         \
-      VALUE_TV (#text, 100);                                                  \
+      VALUE_TVc (#text, 100);                                                 \
     }
 
 #define GROUP(dxf) fprintf (dat->fh, "%3i\r\n", dxf)
@@ -1294,6 +1317,8 @@ static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
                   const int dxf)
 {
+  if (!dxf)
+    return;
   if (str && *str)
     {
       if (opts
@@ -1741,15 +1766,15 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     }                                                                         \
   SINCE (R_13b1)                                                              \
   {                                                                           \
-    VALUE_TV ("AcDbSymbolTable", 100);                                        \
+    VALUE_TVc ("AcDbSymbolTable", 100);                                       \
   }
 
 // clang-format off
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
   SINCE (R_13b1)                                                              \
   {                                                                           \
-    VALUE_TV ("AcDbSymbolTableRecord", 100);                                  \
-    VALUE_TV ("AcDb" #acdbname "TableRecord", 100);                           \
+    VALUE_TVc ("AcDbSymbolTableRecord", 100);                                 \
+    VALUE_TVc ("AcDb" #acdbname "TableRecord", 100);                          \
   }                                                                           \
   if (strEQc (#acdbname, "Block") && dat->version >= R_13b1)                  \
     {                                                                         \
@@ -1765,15 +1790,15 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
           VALUE_T (_obj->name, 2)                                             \
         }                                                                     \
       else                                                                    \
-        VALUE_TV ("*", 2)                                                     \
+        VALUE_TVc ("*", 2)                                                    \
     } /* Empty name with xref shape names */                                  \
   else if (strEQc (#acdbname, "TextStyle") && _obj->flag & 1                  \
            && dxf_is_xrefdep_name (dat, _obj->name))                          \
-    VALUE_TV ("", 2)                                                          \
+    VALUE_TVc ("", 2)                                                         \
   else if (_obj->name)                                                        \
     dxf_cvt_tablerecord (dat, obj, _obj->name, 2);                            \
   else                                                                        \
-    VALUE_TV ("*", 2)                                                         \
+    VALUE_TVc ("*", 2)                                                        \
   if (strEQc (#acdbname, "Layer") && dat->version >= R_2000)                  \
     { /* Mask off plotflag and linewt. */                                     \
       /* Don't keep bit 16 when not xrefdep like "XREF|name" */               \
@@ -1797,8 +1822,8 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
   SINCE (R_13b1)                                                              \
   {                                                                           \
-    VALUE_TV ("AcDbSymbolTableRecord", 100);                                  \
-    VALUE_TV ("AcDb" #acdbname "TableRecord", 100);                           \
+    VALUE_TVc ("AcDbSymbolTableRecord", 100);                                 \
+    VALUE_TVc ("AcDb" #acdbname "TableRecord", 100);                          \
   }                                                                           \
   if (_obj->name)                                                             \
     dxf_cvt_tablerecord (dat, obj, _obj->name, 2);                            \
@@ -3274,9 +3299,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         if (dat->version != dat->from_version && dat->from_version >= R_2000)
           {
             /* if saved from newer version, eg. AC1032: */
-            VALUE_TV ("ACAD", 1001);
-            VALUE_TV ("DbSaveVer", 1000);
-            VALUE_RS (dwg->header.dwg_version, 1071); // so that 69 is R_2018
+            VALUE_TVc ("ACAD", 1001) VALUE_TVc ("DbSaveVer", 1000) VALUE_RS (
+                dwg->header.dwg_version, 1071); // so that 69 is R_2018
           }
         for (i = 0; i < num_entries; i++)
           {
@@ -3898,7 +3922,7 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
 
-  VALUE_TV (PACKAGE_STRING, 999);
+  VALUE_TVc (PACKAGE_STRING, 999);
 
   // A minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
