@@ -58,7 +58,7 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                const char *restrict subclass, const char *restrict fieldname,
                const char *restrict key, int index)
 {
-  Dwg_DYNAPI_field field;
+  Dwg_DYNAPI_field field = { 0 };
   enum RESBUF_VALUE_TYPE vtype;
   Dwg_Version_Type dwg_version = dwg->header.version;
 
@@ -407,7 +407,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
   // check all fields against dxf->fields
   for (; f->value; f++)
     {
-      Dwg_DYNAPI_field field;
+      Dwg_DYNAPI_field field = { 0 };
       const Dwg_DYNAPI_field *fp, *fp1;
       enum RESBUF_VALUE_TYPE vtype;
       if (!f->name || !*f->name)
