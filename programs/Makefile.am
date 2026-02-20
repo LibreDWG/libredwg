@@ -22,45 +22,40 @@ AM_CFLAGS   = -I. -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD       = $(top_builddir)/src/libredwg.la
 CPPCHECK    = @CPPCHECK@
 
-bin_PROGRAMS    = dwgread
-noinst_PROGRAMS =
-dist_man1_MANS  = $(srcdir)/dwgread.1
-if !DISABLE_DXF
-bin_PROGRAMS   += dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep
-dist_bin_SCRIPTS = dwgfilter
-dist_man1_MANS += $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
-	          $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 \
+bin_PROGRAMS       = dwglayers dwggrep
+noinst_PROGRAMS    =
+dist_bin_SCRIPTS   = dwgfilter
+dist_man1_MANS     = $(srcdir)/dwglayers.1 \
 		  $(srcdir)/dwggrep.1 $(srcdir)/dwgfilter.1
-endif
 
-if !DISABLE_DXF
-if HAVE_LIBPS
-bin_PROGRAMS   += dwg2ps
-dist_man1_MANS += $(srcdir)/dwg2ps.1
-dwg2ps_SOURCES = dwg2ps.c
-dwg2ps_LDADD   = $(LDADD) -lps
-endif
-endif
-
-dwgread_SOURCES    = dwgread.c
-dwgbmp_SOURCES     = dwgbmp.c
-dwg2dxf_SOURCES    = dwg2dxf.c
 dwglayers_SOURCES  = dwglayers.c
-dwg2SVG_SOURCES    = dwg2SVG.c escape.c
 dwggrep_SOURCES    = dwggrep.c
 dwggrep_CFLAGS     = $(AM_CFLAGS) $(CFLAGS) $(PCRE2_CFLAGS)
 dwggrep_LDADD      = $(LDADD) $(PCRE2_LIBS)
 
 if USE_WRITE
-bin_PROGRAMS      += dwgrewrite
-dist_man1_MANS    += $(srcdir)/dwgrewrite.1
+bin_PROGRAMS      += dwgread dwgrewrite dwgwrite dwgbmp dwg2SVG
+dist_man1_MANS    += $(srcdir)/dwgread.1 $(srcdir)/dwgrewrite.1 \
+      $(srcdir)/dwgwrite.1 $(srcdir)/dwgbmp.1 $(srcdir)/dwg2SVG.1
 dwgrewrite_SOURCES = dwgrewrite.c
-if !DISABLE_DXF
-bin_PROGRAMS      += dxf2dwg dwgwrite dxfwrite
-dist_man1_MANS    += $(srcdir)/dxf2dwg.1 $(srcdir)/dwgwrite.1 $(srcdir)/dxfwrite.1
-dxf2dwg_SOURCES    = dxf2dwg.c
 dwgwrite_SOURCES   = dwgwrite.c
+dwgread_SOURCES    = dwgread.c
+dwgbmp_SOURCES     = dwgbmp.c
+dwg2SVG_SOURCES    = dwg2SVG.c escape.c
+if !DISABLE_DXF
+bin_PROGRAMS      += dxf2dwg dwg2dxf dxfwrite dxfread
+dist_man1_MANS    += $(srcdir)/dxf2dwg.1 $(srcdir)/dwg2dxf.1 \
+      $(srcdir)/dxfwrite.1 $(srcdir)/dxfread.1
+dxf2dwg_SOURCES    = dxf2dwg.c
+dxfread_SOURCES    = dxfread.c
 dxfwrite_SOURCES   = dxfwrite.c
+dwg2dxf_SOURCES    = dwg2dxf.c
+endif
+if HAVE_LIBPS
+bin_PROGRAMS   += dwg2ps
+dist_man1_MANS += $(srcdir)/dwg2ps.1
+dwg2ps_SOURCES = dwg2ps.c
+dwg2ps_LDADD   = $(LDADD) -lps
 endif
 endif
 

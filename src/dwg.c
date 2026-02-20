@@ -293,7 +293,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   return error;
 }
 
-#if !defined(DISABLE_DXF) && defined(USE_WRITE)
+#if !defined(DISABLE_DXF)
 /** dxf_read_file
  * returns 0 on success.
  *
