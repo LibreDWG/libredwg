@@ -675,20 +675,32 @@ free_preR13_object (Dwg_Object *obj)
     }
   else
     return;
-  if (obj->type == DWG_TYPE_FREED || obj->tio.object == NULL)
+  if (obj->type == DWG_TYPE_FREED)
     return;
 
+  /* preR13 objects can be entities or non-entities; they are allocated
+     differently (see in_json/in_dxf). Guard the correct union member.
+     Otherwise we may read past the end of the allocation (ASan). */
   if (obj->supertype == DWG_SUPERTYPE_ENTITY)
     {
       Dwg_Object_Entity *_obj = obj->tio.entity;
-      FIELD_HANDLE (layer, 2, 8);
-      if (_obj->flag_r11 & FLAG_R11_HAS_LTYPE) // 2
-        FIELD_HANDLE (ltype, 1, 6);
-      if (_obj->flag_r11 & FLAG_R11_HAS_HANDLING)
-        {   // 32
-          ; // obj->handle is static
+      if (!_obj)
+        return;
+      /* For injson/indxf we may create partial/unknown entities.
+         Do not touch potentially uninitialized handle pointers here. */
+      if (!(dwg->opts & DWG_OPTS_IN))
+        {
+          FIELD_HANDLE (layer, 2, 8);
+          if (_obj->flag_r11 & FLAG_R11_HAS_LTYPE) // 2
+            FIELD_HANDLE (ltype, 1, 6);
+          if (_obj->flag_r11 & FLAG_R11_HAS_HANDLING)
+            {   // 32
+              ; // obj->handle is static
+            }
         }
     }
+  else if (obj->tio.object == NULL)
+    return;
 
   if (obj->fixedtype == DWG_TYPE_UNUSED // deleted
       && dwg->header.version < R_2_0b && obj->type > 64)
