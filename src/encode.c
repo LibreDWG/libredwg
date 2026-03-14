@@ -786,14 +786,12 @@ static bool env_var_checked_p;
             {                                                                 \
               LOG_WARN ("Expected a CODE %d handle, got a %d", handle_code,   \
                         (hdlptr)->handleref.code);                            \
-            } /*else if (dat->version <= R_2000 &&    \
-                                        dat->from_version > R_2000            \
-                                               && (hdlptr)->handleref.code >  \
-                                        5 && handle_code == 4)                \
-                                        {                                     \
-                                          downconvert_relative_handle         \
-                                        (hdlptr, obj);                        \
-                                        }*/                                                               \
+            } /*else if (dat->version <= R_2000 &&                            \
+                         dat->from_version > R_2000 &&                        \
+                         (hdlptr)->handleref.code > 5 && handle_code == 4)    \
+            {                                                                 \
+              downconvert_relative_handle (hdlptr, obj);                      \
+            }*/                                                               \
           bit_write_H (hdl_dat, &(hdlptr)->handleref);                        \
           LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (hdlptr), dxf)  \
           LOG_HPOS                                                            \
@@ -1466,11 +1464,42 @@ add_DUMMY_eed (Dwg_Object *obj)
 
   if (!obj->num_unknown_bits)
     return 1;
-  // unknown_bits in chunks of 256
+  // unknown_bits in chunks of 255 (length stored in RC)
   len = obj->num_unknown_bits / 8;
   if (obj->num_unknown_bits % 8)
     len++;
-  size = ((len / 256) + 1) & 0xFFFF;
+  // EED size is stored in a 16-bit field. Truncate overly large payloads.
+  {
+    const size_t max_eed_size = 0x7FFF;
+    const size_t code0_size = size;
+    size_t max_len = (size_t)len;
+    size_t chunks = (max_len + 254) / 255;
+    size_t total = code0_size + max_len + (2 * chunks);
+    if (total > max_eed_size)
+      {
+        max_len
+            = (max_eed_size > code0_size) ? (max_eed_size - code0_size) : 0;
+        while (max_len)
+          {
+            chunks = (max_len + 254) / 255;
+            total = code0_size + max_len + (2 * chunks);
+            if (total <= max_eed_size)
+              break;
+            if (max_len > 255)
+              max_len -= 255;
+            else
+              max_len = 0;
+          }
+        if (max_len < (size_t)len)
+          {
+            LOG_WARN ("EED payload too large (%zu bytes), truncating to %zu",
+                      len, max_len);
+            len = max_len;
+            obj->num_unknown_bits = (BITCODE_BL)(max_len * 8);
+          }
+      }
+  }
+  size = (BITCODE_BS)((((len + 254) / 255) + 1) & 0xffff);
   if (size > 1) // we already reserved for two eeds
     {
       ent->eed = (Dwg_Eed *)realloc (ent->eed, (1 + size) * sizeof (Dwg_Eed));
@@ -1478,7 +1507,7 @@ add_DUMMY_eed (Dwg_Object *obj)
     }
   do
     {
-      unsigned l = len > 255 ? 255 : len & 0xFF;
+      unsigned l = len > 255 ? 255 : (unsigned)len;
       ent->num_eed++;
       ent->eed[i].size = 0;
       ent->eed[0].size += l + 2;
@@ -1491,8 +1520,8 @@ add_DUMMY_eed (Dwg_Object *obj)
                  data->u.eed_4.length);
       if (len > 255)
         {
-          len -= 256;
-          off += 256;
+          len -= 255;
+          off += 255;
           i++;
         }
       else
@@ -1536,7 +1565,21 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           obj->tio.entity->reactors = NULL;
         }
       */
-      if (dwg_supports_eed (dwg))
+      if (dwg->opts & DWG_OPTS_INJSON)
+        {
+          dwg_free_eed (obj);
+          if (obj->tio.entity)
+            {
+              if (obj->tio.entity->preview)
+                {
+                  free (obj->tio.entity->preview);
+                  obj->tio.entity->preview = NULL;
+                }
+              obj->tio.entity->preview_size = 0;
+              obj->tio.entity->preview_exists = 0;
+            }
+        }
+      if (dwg_supports_eed (dwg) && !(dwg->opts & DWG_OPTS_INJSON))
         add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
       free (obj->unknown_bits);
@@ -1574,7 +1617,9 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       const char *name;
       const char *dxfname;
 
-      if (dwg_supports_eed (dwg))
+      if (dwg->opts & DWG_OPTS_INJSON)
+        dwg_free_eed (obj);
+      if (dwg_supports_eed (dwg) && !(dwg->opts & DWG_OPTS_INJSON))
         add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
       // if PLACEHOLDER is available, or even PROXY_OBJECT.
@@ -5892,7 +5937,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_INFO (
               "overlarge MS size %lu > 0x7fff (was %lu) @%" PRIuSIZE "\n",
               (unsigned long)obj->size, (unsigned long)old_size, dat->byte);
-          if (dat->byte + obj->size + 2 < dat->size)
+          if (dat->byte + obj->size + 2 > dat->size)
             bit_chain_alloc_size (dat,
                                   (dat->byte + obj->size + 2) - dat->size);
           memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte],
@@ -6706,10 +6751,17 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
   int error = 0;
   int i;
   unsigned j = 0;
-  // BITCODE_BL num_xdata = _obj->num_xdata;
   size_t start = dat->byte, end = start + xdata_size;
   Dwg_Data *dwg = _obj->parent->dwg;
   Dwg_Object *obj = &dwg->object[_obj->parent->objid];
+
+  // BITCODE_BL num_xdata = _obj->num_xdata;
+  if ((dat->opts & DWG_OPTS_INJSON) && xdata_size > 0x7FFF)
+    {
+      LOG_WARN ("xdata_size %u too large, truncating to 0x7FFF", xdata_size);
+      xdata_size = 0x7FFF;
+      _obj->xdata_size = xdata_size;
+    }
 
   if (dat->opts
       & DWG_OPTS_IN) // loosen the overflow checks on dxf/json imports
