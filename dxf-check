@@ -82,6 +82,7 @@ if [ -f "$b.dxf" ]; then
 
     # shellcheck disable=SC2086,SC2154
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
+        rm -f "test/$b.dwg.err"
         rd="$r"
         # can only write r12+ DWG's. DXF's all
         if [ "$r" -lt 12 ]; then
@@ -104,6 +105,7 @@ fi
 if [ -f "$b.dwg" ]; then
     # shellcheck disable=SC2086,SC2154
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
+        rm -f "test/$b.dxf.err"
         echo timeout 30 "$baseFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$ODAFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg" \
                 $ODAFileConverter_geometry >/dev/null 2>/dev/null
