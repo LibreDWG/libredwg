@@ -5272,9 +5272,37 @@ DWG_ENTITY (HATCH)
   JSON { FIELD_B (has_derived, 0); }
   if (FIELD_VALUE (has_derived))
     FIELD_BD (pixel_size, 47);
+  ENCODER {
+    if (_obj->num_seeds && !_obj->seeds)
+      {
+        LOG_WARN ("HATCH.num_seeds %u but seeds NULL; force 0",
+                  _obj->num_seeds);
+        _obj->num_seeds = 0;
+      }
+  }
   FIELD_BL (num_seeds, 98);
   VALUEOUTOFBOUNDS (num_seeds, 10000)
+  DECODER {
+    int64_t avail_bits = (int64_t)(dat->size * 8) - bit_position (dat);
+    if (avail_bits < 0)
+      avail_bits = 0;
+    if (_obj->num_seeds && avail_bits < (int64_t)_obj->num_seeds * 128)
+      {
+        BITCODE_BL max_seeds = (BITCODE_BL)(avail_bits / 128);
+        LOG_WARN ("Truncate HATCH.num_seeds from %u to %u",
+                  _obj->num_seeds, max_seeds);
+        _obj->num_seeds = max_seeds;
+      }
+  }
+  DECODER {
+    if (_obj->num_seeds > 0)
+      {
+        FIELD_2RD_VECTOR (seeds, num_seeds, 10);
+      }
+  }
+#ifndef IS_DECODER
   FIELD_2RD_VECTOR (seeds, num_seeds, 10);
+#endif
 #ifdef IS_DXF
   SINCE (R_2004a)
     {
@@ -5283,7 +5311,20 @@ DWG_ENTITY (HATCH)
     }
 #endif
 
+  DECODER {
+    int64_t avail_bits = (int64_t)(hdl_dat->size * 8) - bit_position (hdl_dat);
+    if (avail_bits < 8)
+      {
+        LOG_WARN ("Skip HATCH common handles due to short handle stream");
+      }
+    else
+      {
+        COMMON_ENTITY_HANDLE_DATA;
+      }
+  }
+#ifndef IS_DECODER
   COMMON_ENTITY_HANDLE_DATA;
+#endif
 
 DWG_ENTITY_END
 
