@@ -6359,6 +6359,18 @@ DWG_OBJECT (FIELD)
 
   FIELD_BL (num_childval, 93);
   VALUEOUTOFBOUNDS (num_childval, 20000)
+  DECODER {
+    int64_t avail_bits = (int64_t)(dat->size * 8) - bit_position (dat);
+    if (avail_bits < 0)
+      avail_bits = 0;
+    if (_obj->num_childval
+        && (int64_t)_obj->num_childval * (int64_t)sizeof (Dwg_FIELD_ChildValue)
+               > avail_bits)
+      {
+        LOG_WARN ("Truncate FIELD.num_childval from %u to 0", _obj->num_childval);
+        _obj->num_childval = 0;
+      }
+  }
   REPEAT (num_childval, childval, Dwg_FIELD_ChildValue)
   REPEAT_BLOCK
       SUB_FIELD_T (childval[rcount1],key, 6);
@@ -6390,6 +6402,18 @@ DWG_OBJECT (FIELDLIST)
   FIELD_B (unknown, 0); // has handles?
 
   START_OBJECT_HANDLE_STREAM;
+  DECODER {
+    int64_t avail_bits = (int64_t)(hdl_dat->size * 8) - bit_position (hdl_dat);
+    if (avail_bits < 0)
+      avail_bits = 0;
+    if (_obj->num_fields && avail_bits < (int64_t)_obj->num_fields * 8)
+      {
+        BITCODE_BL max_fields = (BITCODE_BL)(avail_bits / 8);
+        LOG_WARN ("Truncate FIELDLIST.num_fields from %u to %u",
+                  _obj->num_fields, max_fields);
+        _obj->num_fields = max_fields;
+      }
+  }
   HANDLE_VECTOR (fields, num_fields, 0, 330); // 2 or 4, or 3.0.0
   SUBCLASS (AcDbFieldList)
 
