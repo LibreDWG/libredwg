@@ -154,8 +154,10 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      { /*if (dwg->header.version >= R_2007)                   \
-                                               _obj->nam =                    \
+      { /*if (dwg->header.version                                                                                          \
+                                                                                                                                       >= \
+                                                                                             R_2007)                                      \
+                                                        _obj->nam =                                                                       \
                           (BITCODE_T)json_wstring (dat, tokens); else*/                                                                \
         _obj->nam = json_string (dat, tokens);                                \
       }                                                                       \
@@ -3137,14 +3139,32 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   LOG_ERROR ("Illegal %s name %.*s", key, len,
                              &dat->chain[t->start])
-                  obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
-                  // exhaust the rest
+                  /* Illegal object name: consume remaining key/value pairs,
+                     then discard this partial object so later dwg_free() does
+                     not try to interpret it. */
                   for (; j < keys; j++)
                     {
                       json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
                       JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
                     }
+                  if (obj->tio.object)
+                    {
+                      free (obj->tio.object->tio.APPID);
+                      free (obj->tio.object);
+                      obj->tio.object = NULL;
+                    }
+                  if (obj->tio.entity)
+                    {
+                      free (obj->tio.entity->tio.POINT);
+                      free (obj->tio.entity);
+                      obj->tio.entity = NULL;
+                    }
+                  free (obj->name);
+                  obj->name = NULL;
+                  free (obj->dxfname);
+                  obj->dxfname = NULL;
+                  obj->type = DWG_TYPE_FREED;
                   tokens->index--;
                   break;
                 }
@@ -3157,14 +3177,32 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   LOG_ERROR ("Unknown object %s (no fields)", name);
                   // skip_object:
-                  obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
-                  // exhaust the rest
+                  /* Unknown object: consume remaining key/value pairs, then
+                     discard this partial object so later dwg_free() does not
+                     try to interpret it. */
                   for (; j < keys; j++)
                     {
                       json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
                       JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
                     }
+                  if (obj->tio.object)
+                    {
+                      free (obj->tio.object->tio.APPID);
+                      free (obj->tio.object);
+                      obj->tio.object = NULL;
+                    }
+                  if (obj->tio.entity)
+                    {
+                      free (obj->tio.entity->tio.POINT);
+                      free (obj->tio.entity);
+                      obj->tio.entity = NULL;
+                    }
+                  free (obj->name);
+                  obj->name = NULL;
+                  free (obj->dxfname);
+                  obj->dxfname = NULL;
+                  obj->type = DWG_TYPE_FREED;
                   tokens->index--;
                   break;
                 }
@@ -3189,6 +3227,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               _obj = (Dwg_Object_APPID *)calloc (1, objsize);
               obj->tio.object->tio.APPID = _obj;
               obj->tio.object->tio.APPID->parent = obj->tio.object;
+              /* Do not set obj->type/fixedtype here: valid JSON will provide a
+                 proper type later. For fuzzed/invalid JSON, we handle cleanup
+                 on the error path. */
               free (obj->name);
               obj->name = strdup (name);
               // TODO alias
@@ -3210,14 +3251,32 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   LOG_ERROR ("Illegal %s name %.*s", key, len,
                              &dat->chain[t->start])
-                  obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
-                  // exhaust the rest
+                  /* Illegal entity name: consume remaining key/value pairs,
+                     then discard this partial object so later dwg_free() does
+                     not try to interpret it. */
                   for (; j < keys; j++)
                     {
                       json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
                       JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
                     }
+                  if (obj->tio.object)
+                    {
+                      free (obj->tio.object->tio.APPID);
+                      free (obj->tio.object);
+                      obj->tio.object = NULL;
+                    }
+                  if (obj->tio.entity)
+                    {
+                      free (obj->tio.entity->tio.POINT);
+                      free (obj->tio.entity);
+                      obj->tio.entity = NULL;
+                    }
+                  free (obj->name);
+                  obj->name = NULL;
+                  free (obj->dxfname);
+                  obj->dxfname = NULL;
+                  obj->type = DWG_TYPE_FREED;
                   tokens->index--;
                   break;
                 }
@@ -3229,14 +3288,32 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (!fields || !objsize || !is_dwg_entity (name))
                 {
                   LOG_ERROR ("Unknown entity %s (no fields)", name);
-                  obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
-                  // exhaust the rest
+                  /* Unknown entity: consume remaining key/value pairs, then
+                     discard this partial object so later dwg_free() does not
+                     try to interpret it. */
                   for (; j < keys; j++)
                     {
                       json_advance_unknown (dat, tokens, t->type, 0); // value
                       tokens->index++; // next key
                       JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
                     }
+                  if (obj->tio.object)
+                    {
+                      free (obj->tio.object->tio.APPID);
+                      free (obj->tio.object);
+                      obj->tio.object = NULL;
+                    }
+                  if (obj->tio.entity)
+                    {
+                      free (obj->tio.entity->tio.POINT);
+                      free (obj->tio.entity);
+                      obj->tio.entity = NULL;
+                    }
+                  free (obj->name);
+                  obj->name = NULL;
+                  free (obj->dxfname);
+                  obj->dxfname = NULL;
+                  obj->type = DWG_TYPE_FREED;
                   tokens->index--;
                   break;
                 }
@@ -3251,6 +3328,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               _obj = (Dwg_Object_APPID *)calloc (1, objsize);
               obj->tio.entity->tio.POINT = (Dwg_Entity_POINT *)_obj;
               obj->tio.entity->tio.POINT->parent = obj->tio.entity;
+              /* Do not set obj->type/fixedtype here: valid JSON will provide a
+                 proper type later. For fuzzed/invalid JSON, we handle cleanup
+                 on the error path. */
               free (obj->name);
               obj->name = strdup (name);
               // if different, the alias is done via extra dxfname key (below)
@@ -3634,13 +3714,79 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   tokens->index--;
   return 0;
 harderr:
-  dwg->num_objects = i;
+  dwg->num_objects
+      = i + ((dwg->object && (dwg->object[i].tio.object || dwg->object[i].tio.entity
+                              || dwg->object[i].name || dwg->object[i].dxfname))
+                 ? 1
+                 : 0);
   LOG_TRACE ("End of %s (hard error)\n", section)
+  /* Ensure the last partially allocated object/entity is released on error
+     (LSan). `obj` is loop-scoped, so use the current index. */
+  if (dwg->object && i >= 0)
+    {
+      Dwg_Object *err_obj = &dwg->object[i > 0 ? i - 1 : i];
+      if (err_obj->supertype == DWG_SUPERTYPE_ENTITY)
+        {
+          if (err_obj->tio.entity)
+            {
+              /* Payload is stored in the union. Free the allocated block we
+                 created (objsize) via the POINT alias used during parsing. */
+              free (err_obj->tio.entity->tio.POINT);
+              free (err_obj->tio.entity);
+            }
+          err_obj->tio.entity = NULL;
+        }
+      else
+        {
+          if (err_obj->tio.object)
+            {
+              free (err_obj->tio.object->tio.APPID);
+              free (err_obj->tio.object);
+            }
+          err_obj->tio.object = NULL;
+        }
+      free (err_obj->name);
+      err_obj->name = NULL;
+      free (err_obj->dxfname);
+      err_obj->dxfname = NULL;
+      err_obj->type = DWG_TYPE_FREED;
+    }
   tokens->index--;
   return DWG_ERR_INVALIDDWG;
 typeerr:
-  dwg->num_objects = i;
+  dwg->num_objects
+      = i + ((dwg->object && (dwg->object[i].tio.object || dwg->object[i].tio.entity
+                              || dwg->object[i].name || dwg->object[i].dxfname))
+                 ? 1
+                 : 0);
   LOG_TRACE ("End of %s (type error)\n", section)
+  if (dwg->object && i >= 0)
+    {
+      Dwg_Object *err_obj = &dwg->object[i > 0 ? i - 1 : i];
+      if (err_obj->supertype == DWG_SUPERTYPE_ENTITY)
+        {
+          if (err_obj->tio.entity)
+            {
+              free (err_obj->tio.entity->tio.POINT);
+              free (err_obj->tio.entity);
+            }
+          err_obj->tio.entity = NULL;
+        }
+      else
+        {
+          if (err_obj->tio.object)
+            {
+              free (err_obj->tio.object->tio.APPID);
+              free (err_obj->tio.object);
+            }
+          err_obj->tio.object = NULL;
+        }
+      free (err_obj->name);
+      err_obj->name = NULL;
+      free (err_obj->dxfname);
+      err_obj->dxfname = NULL;
+      err_obj->type = DWG_TYPE_FREED;
+    }
   tokens->index--;
   return DWG_ERR_INVALIDTYPE;
 }
@@ -5159,6 +5305,10 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_ERROR ("Unexpected JSON key at %u of %ld tokens, got %s",
                      tokens.index, tokens.num_tokens, t_typename[t->type]);
           json_free_globals (&tokens);
+          /* On parse errors the caller will typically abort and free the DWG.
+             When used from tools/fuzzing, free here to avoid LSan leaks from
+             partially built OBJECTS. */
+          dwg_free (dwg);
           return DWG_ERR_INVALIDDWG;
         }
       if (len >= 80)

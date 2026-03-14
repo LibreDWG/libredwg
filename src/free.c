@@ -938,6 +938,15 @@ free_preR13_object (Dwg_Object *obj)
     case DWG_TYPE_DICTIONARY:
       dwg_free_DICTIONARY (dat, obj);
       break;
+    case DWG_TYPE_UNKNOWN_ENT:
+      dwg_free_UNKNOWN_ENT (dat, obj);
+      break;
+    case DWG_TYPE_UNKNOWN_OBJ:
+      dwg_free_UNKNOWN_OBJ (dat, obj);
+      break;
+    case DWG_TYPE_DUMMY:
+      dwg_free_DUMMY (dat, obj);
+      break;
     case DWG_TYPE_UNUSED:
       // deleted entity. leak? see above
       break;
