@@ -169,19 +169,35 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
 // the hex code
+// clang-format off
 #define VALUE_HANDLE(ref, nam, handle_code, dxf)                              \
   if (dxf)                                                                    \
     {                                                                         \
-      fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", dxf,                          \
-               ref ? ((BITCODE_H)ref)->absolute_ref : 0UL);                   \
+      BITCODE_HV _absref = ref ? ((BITCODE_H)ref)->absolute_ref : 0UL;        \
+      /* Some DWGs (e.g. td/2010/ES2_S.dwg) contain broken SORTENTSTABLE      \
+         references. Emitting those as DXF handles with value 0 (notably      \
+         group codes 331 and 5) produces invalid DXF which then yields        \
+         an invalid r2000 DWG on DXF->DWG conversion (invalid handle          \
+         0.0.0) and is rejected by ODA. Skip such invalid handle values       \
+         instead of exporting explicit zeros.                                 \
+       */                                                                     \
+      if (!_absref && (dxf == 331 || dxf == 5))                               \
+        ;                                                                     \
+      else                                                                    \
+        fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", dxf, _absref);              \
     }
 // the name in the table, referenced by the handle
 // names on: 6 7 8. which else? there are more styles: plot, ...
 // rather skip unknown handles
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   if (dxf != 0)                                                               \
-    {                                                                         \
-      if (!_obj->nam)                                                         \
+    { /* For some objects (notably SORTENTSTABLE) a NULL/zero handle          \
+         is invalid in DXF. Do not emit explicit 0 for those codes.           \
+       */                                                                     \
+      if ((dxf == 331 || dxf == 5)                                            \
+          && (!_obj->nam || !_obj->nam->obj || !_obj->nam->absolute_ref))     \
+        ;                                                                     \
+      else if (!_obj->nam)                                                    \
         fprintf (dat->fh, "%3i\r\n0\r\n", dxf);                               \
       else if (dxf == 6)                                                      \
         FIELD_HANDLE_NAME (nam, dxf, LTYPE)                                   \
@@ -197,6 +213,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
         fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", dxf,                        \
                  _obj->nam->obj ? _obj->nam->absolute_ref : 0UL);             \
     }
+// clang-format on
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
   if (dxf != 0)                                                               \
     {                                                                         \
