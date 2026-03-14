@@ -6605,7 +6605,116 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BL (evaluation_error_code, 96);
   FIELD_T (evaluation_error_msg, 300);
 
-  FIELD_BL (num_childval, 93);
+  // Some DXF writers emit an evaluated value (type 90 + payload) before
+  // num_childval (93). Tolerate and skip it.
+  pair = dxf_read_pair (dat);
+  if (pair && pair->code == 90)
+    {
+      BITCODE_BL data_type = pair->value.u;
+      dxf_free_pair (pair);
+      switch (data_type)
+        {
+        case 0: /* kUnknown */
+        case 1: /* kLong */
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 91)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 91",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          break;
+        case 2: /* kDouble */
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 140)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 140",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          break;
+        case 4: /* kString */
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 1)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 1",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          break;
+        case 8: /* kDate */
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 92)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 92",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          // Optional 310 payload; ignore if present.
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code == 310)
+            {
+              dxf_free_pair (pair);
+              pair = NULL;
+            }
+          break;
+        case 16: /* kPoint */
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 11)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 11",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 21)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 21",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          break;
+        case 32: /* k3dPoint */
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 11)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 11",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 21)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 21",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 31)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 31",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          break;
+        case 64: /* kObjectId */
+          pair = dxf_read_pair (dat);
+          if (pair && pair->code != 330)
+            LOG_ERROR ("FIELD: Unexpected DXF code %d, expected 330",
+                       pair->code);
+          dxf_free_pair (pair);
+          pair = NULL;
+          break;
+        default:
+          LOG_WARN ("Unknown data type in FIELD preamble: %u", data_type);
+          break;
+        }
+      if (!pair)
+        pair = dxf_read_pair (dat);
+    }
+  while (pair && pair->code != 93 && pair->code != 0)
+    {
+      LOG_ERROR (
+          "FIELD: Unexpected DXF code %d, expected 93 for \"num_childval\"",
+          pair->code);
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  if (!pair || pair->code == 0)
+    return pair;
+  o->num_childval = pair->value.u;
+  dxf_free_pair (pair);
   if (o->num_childval)
     {
       o->childval = (Dwg_FIELD_ChildValue *)xcalloc (
