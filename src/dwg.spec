@@ -12484,7 +12484,38 @@ DWG_OBJECT (BLOCKLOOKUPPARAMETER)
   FIELD_T (lookup_name, 303);
   FIELD_T (lookup_desc, 304);
   DXF { FIELD_BL (index, 94); }
-  FIELD_T (unknown_t, 0);
+  DECODER {
+    if (dat->from_version < R_2007)
+      {
+        int64_t avail = (int64_t)(dat->size * 8) - bit_position (dat);
+        BITCODE_BS len;
+        if (avail < 16)
+          {
+            LOG_ERROR ("Invalid BLOCKLOOKUPPARAMETER.unknown_t. No bytes left.\n");
+            FIELD_VALUE (unknown_t) = NULL;
+          }
+        else
+          {
+            // FIXME truncate overflows manually
+            len = bit_read_BS (dat);
+            if ((int64_t)len * 8 > (int64_t)((dat->size * 8) - bit_position (dat)))
+              {
+                LOG_WARN ("Truncate BLOCKLOOKUPPARAMETER.unknown_t length %u", len);
+                len = (BITCODE_BS)(((int64_t)(dat->size * 8) - bit_position (dat)) / 8);
+              }
+            FIELD_VALUE (unknown_t) = (BITCODE_T)bit_read_TF (dat, len);
+            LOG_TRACE_TV ("unknown_t: \"%s\" [TV %d]",
+                          FIELD_VALUE (unknown_t), 0);
+          }
+      }
+    else
+      {
+        FIELD_T (unknown_t, 0);
+      }
+  }
+  ENCODER {
+    FIELD_T (unknown_t, 0);
+  }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
