@@ -12946,6 +12946,13 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     obj->dxfname = NULL;
                   return DWG_ERR_INVALIDDWG;
                 }
+              // new_object may have reused an existing object (e.g.,
+              // *Paper_Space via "Reuse existing BLOCK_HEADER"), decrementing
+              // num_objects. In that case idx >= num_objects and obj points to
+              // a stale/partial object — skip the fixup to avoid a phantom
+              // handle/entry.
+              if (idx >= dwg->num_objects)
+                goto next_table_entry;
               // A minimal DXF will have no handle values
               if (!obj->handle.value)
                 {
@@ -13047,6 +13054,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       }
                   }
               }
+            next_table_entry:;
             }
           // next table
           // fixup entries vs num_entries (no NULL entries)
