@@ -17,25 +17,12 @@ conventions in `README`, `CONTRIBUTING`, and `HACKING`.
 - Primary build system: GNU Autotools (`autogen.sh`, `configure`, `make`).
 - CMake also exists (`CMakeLists.txt`) but Autotools is the canonical path.
 
-## Bootstrapping & build
+# Builds
 
-If working from a git checkout, regenerate build files with:
+Convenient build dirs are
 
-```sh
-sh ./autogen.sh
-```
-
-Then build & test via:
-
-```sh
-./configure
-make
-make check
-```
-
-Notes:
-- The codebase expects a C99 compiler.
-- `--enable-trace` and `--enable-release` are common configure flags (see `README`).
+- `.build-asan` to check OOB and leak errors. It is very slow though.
+- `.build-tcc` to check any logical errors. It is very fast.
 
 ## Tests
 
@@ -43,6 +30,18 @@ Notes:
 - When adding features/bugfixes, include or update testcases when reasonable.
 - If adequate test coverage is not possible, document why in the PR/commit message
   (mirrors `CONTRIBUTING`).
+- ODA roundtrips are checked with `../json-check dwgfile` and `../dxf-check dwgfile`
+  ODAFileConverter Command Line Format is:
+  - Quoted Input Folder
+  - Quoted Output Folder (must be different)
+  - Output_version {"ACAD9","ACAD10","ACAD12","ACAD13","ACAD14","ACAD2000","ACAD2004","ACAD2007","ACAD2010","ACAD2013","ACAD2018"}
+  - Output File type {"DWG","DXF","DXB"}
+  - Recurse Input Folder {"0","1"}
+  - Audit each file {"0","1"}
+  [optional] Input files filter
+    (default: "*.DWG;*.DXF")
+  We set the first arg to the path of the input file, the second arg to some other path,
+  Recurse to 0, Audit to 1 and the input file to the basename.
 
 ## Formatting / linting
 
@@ -50,10 +49,12 @@ Notes:
 - Use the repository helper script (see `HACKING`):
 
 ```sh
-bash build-aux/clang-format-all.sh src programs examples test
+build-aux/clang-format.sh changed-file
 ```
 
-Do **not** run formatting across unrelated files.
+Do **not** run formatting across unrelated files. If the formatting cannot
+be fixed, e.g. in macros, surround the macro with `// clang-format off` and
+`// clang-format on` markers. clang-format is not perfect.
 
 ## Generated files
 
@@ -78,6 +79,7 @@ When possible, write commit messages in GNU style:
 - Per-file bullets for non-trivial changes
 
 If referencing Savannah PRs, include text like `PR #NNNN`.
+For Github issues reference it like `GH #NNNN`.
 
 ## Legal
 
