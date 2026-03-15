@@ -743,6 +743,7 @@ static bool env_var_checked_p;
         }                                                                     \
     }
 
+// clang-format off
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   {                                                                           \
     PRE (R_13b1)                                                              \
@@ -799,6 +800,7 @@ static bool env_var_checked_p;
         }                                                                     \
     }                                                                         \
   }
+// clang-format on
 // for obj->handle 0.x.x only, DXF 5
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
@@ -917,10 +919,11 @@ static bool env_var_checked_p;
       error |= dwg_encode_common_entity_handle_data (dat, hdl_dat, obj);      \
     }
 
+// clang-format off
 #define START_HANDLE_STREAM                                                   \
   LOG_INSANE ("HANDLE_STREAM @%" PRIuSIZE ".%u\n", dat->byte - obj->address,  \
               dat->bit)                                                       \
-  if (1 || /* has floats */                                       \
+  if (1 || /* has floats */                                                   \
       !obj->bitsize || /* DD sizes can vary, but let unknown_bits asis */     \
       has_entity_DD (obj) || /* strings may be zero-terminated or not */      \
       obj_has_strings (obj)                                                   \
@@ -940,15 +943,14 @@ static bool env_var_checked_p;
   {                                                                           \
     size_t _hpos = bit_position (hdl_dat);                                    \
     if (_hpos > 0)                                                            \
-      { /* save away special accumulated hdls, need to write common    \
-                  first */  \
+      { /* save away special accumulated hdls, need to write common first */  \
         Bit_Chain dat1 = *hdl_dat;                                            \
         Bit_Chain dat2 = { 0 };                                               \
         bit_chain_init_dat (&dat2, 12, dat);                                  \
         hdl_dat = &dat2;                                                      \
         ENCODE_COMMON_HANDLES /* owner, xdic, reactors */                     \
-            obj_flush_hdlstream (obj, dat, hdl_dat); /* common */ /* special accumulated  \
-                                                         (e.g. xref) */                                 \
+        obj_flush_hdlstream (obj, dat, hdl_dat); /* common */                 \
+        /* special accumulated (e.g. xref) */                                 \
         obj_flush_hdlstream (obj, dat, &dat1);                                \
         bit_chain_free (&dat1);                                               \
         bit_chain_free (&dat2);                                               \
@@ -964,6 +966,7 @@ static bool env_var_checked_p;
       }                                                                       \
   }                                                                           \
   RESET_VER
+// clang-format on
 
 static void
 obj_flush_hdlstream (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -1047,6 +1050,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 
 #endif
 
+// clang-format off
 #define DWG_ENTITY(token)                                                     \
   static int dwg_encode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
@@ -1072,8 +1076,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     if (error & DWG_ERR_VALUEOUTOFBOUNDS && hdl_dat != dat                    \
         && hdl_dat->chain != dat->chain)                                      \
       {                                                                       \
-        LOG_HANDLE ("VALUEOUTOFBOUNDS bypassed DWG_ENTITY_END\n"); /*bit_chain_free     \
-                                                            (hdl_dat);*/                                         \
+        LOG_HANDLE ("VALUEOUTOFBOUNDS bypassed DWG_ENTITY_END\n");            \
+        /* bit_chain_free (hdl_dat); */                                       \
       }                                                                       \
     dwg_encode_unknown_rest (dat, obj);                                       \
     return error;                                                             \
@@ -1087,6 +1091,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
     Dwg_Data *dwg = obj->parent;                                              \
     Dwg_Object_Entity *_ent = obj->tio.entity;                                \
     Dwg_Entity_##token *_obj = _ent->tio.token;
+// clang-format on
 
 #define DWG_ENTITY_END                                                        \
   if (hdl_dat->byte > dat->byte)                                              \
@@ -6501,12 +6506,12 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
+  // clang-format off
 // PRE (R_13b1)
 // {
 //   if (dat->from_version >= R_13b1)
 //     downgrade_preR13_header_variables (dat, dwg);
 // }
-// clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 

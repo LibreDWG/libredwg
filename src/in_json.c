@@ -148,17 +148,18 @@ static Bit_Chain *g_dat;
     _obj->lenf = slen & 0xFFFFFFFF;                                           \
     JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
   }
+// clang-format off
 #define FIELD_T(nam, dxf)                                                     \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      { /*if (dwg->header.version                                                                                          \
-                                                                                                                                       >= \
-                                                                                             R_2007)                                      \
-                                                        _obj->nam =                                                                       \
-                          (BITCODE_T)json_wstring (dat, tokens); else*/                                                                \
+      { /*                                                                    \
+        if (dwg->header.version >= R_2007)                                    \
+          _obj->nam = (BITCODE_T)json_wstring (dat, tokens);                  \
+        else                                                                  \
+        */                                                                    \
         _obj->nam = json_string (dat, tokens);                                \
       }                                                                       \
     else                                                                      \
@@ -168,6 +169,7 @@ static Bit_Chain *g_dat;
       }                                                                       \
     JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
   }
+// clang-format on
 #define FIELD_T32(nam, dxf)                                                   \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
@@ -3715,10 +3717,12 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 0;
 harderr:
   dwg->num_objects
-      = i + ((dwg->object && (dwg->object[i].tio.object || dwg->object[i].tio.entity
-                              || dwg->object[i].name || dwg->object[i].dxfname))
-                 ? 1
-                 : 0);
+      = i
+        + ((dwg->object
+            && (dwg->object[i].tio.object || dwg->object[i].tio.entity
+                || dwg->object[i].name || dwg->object[i].dxfname))
+               ? 1
+               : 0);
   LOG_TRACE ("End of %s (hard error)\n", section)
   /* Ensure the last partially allocated object/entity is released on error
      (LSan). `obj` is loop-scoped, so use the current index. */
@@ -3755,10 +3759,12 @@ harderr:
   return DWG_ERR_INVALIDDWG;
 typeerr:
   dwg->num_objects
-      = i + ((dwg->object && (dwg->object[i].tio.object || dwg->object[i].tio.entity
-                              || dwg->object[i].name || dwg->object[i].dxfname))
-                 ? 1
-                 : 0);
+      = i
+        + ((dwg->object
+            && (dwg->object[i].tio.object || dwg->object[i].tio.entity
+                || dwg->object[i].name || dwg->object[i].dxfname))
+               ? 1
+               : 0);
   LOG_TRACE ("End of %s (type error)\n", section)
   if (dwg->object && i >= 0)
     {
