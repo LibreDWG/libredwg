@@ -207,6 +207,41 @@ dwg_find_color_index_tests (void)
 }
 
 static void
+common_strcasecmp_tests (void)
+{
+  // equal
+  if (my_strcasecmp ("abc", "abc") != 0)
+    fail ("strcasecmp abc == abc");
+  if (my_strcasecmp ("ABC", "abc") != 0)
+    fail ("strcasecmp ABC == abc");
+  if (my_strcasecmp ("abc", "ABC") != 0)
+    fail ("strcasecmp abc == ABC");
+  if (my_strcasecmp ("AbC", "aBc") != 0)
+    fail ("strcasecmp AbC == aBc");
+  if (my_strcasecmp ("", "") != 0)
+    fail ("strcasecmp empty == empty");
+
+  // less-than (negative result)
+  if (my_strcasecmp ("abc", "abd") >= 0)
+    fail ("strcasecmp abc < abd");
+  if (my_strcasecmp ("abc", "abcd") >= 0)
+    fail ("strcasecmp abc < abcd");
+  if (my_strcasecmp ("", "a") >= 0)
+    fail ("strcasecmp empty < a");
+
+  // greater-than (positive result)
+  if (my_strcasecmp ("abd", "abc") <= 0)
+    fail ("strcasecmp abd > abc");
+  if (my_strcasecmp ("abcd", "abc") <= 0)
+    fail ("strcasecmp abcd > abc");
+  if (my_strcasecmp ("a", "") <= 0)
+    fail ("strcasecmp a > empty");
+
+  if (!failed)
+    ok ("my_strcasecmp");
+}
+
+static void
 escape_htmlescape_tests (void)
 {
   char *s = htmlescape ("'test'&{}", CP_ISO_8859_1); // forces a realloc
@@ -254,6 +289,7 @@ main (int argc, char const *argv[])
   common_versions_tests ();
   common_cvt_TIMEBLL_tests ();
   dwg_find_color_index_tests ();
+  common_strcasecmp_tests ();
   escape_htmlescape_tests ();
   escape_htmlwescape_tests ();
   return failed;

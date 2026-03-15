@@ -603,7 +603,6 @@ tm_offset (void)
 
 // portability compat funcs
 
-#ifndef HAVE_STRCASECMP
 EXPORT int
 my_strcasecmp (const char *a, const char *b)
 {
@@ -617,7 +616,6 @@ my_strcasecmp (const char *a, const char *b)
     }
   return toupper ((unsigned char)*a) - toupper ((unsigned char)*b);
 }
-#endif
 
 #ifdef _MSC_VER
 EXPORT char *

@@ -72,8 +72,8 @@
 #  endif
 #endif
 
-#if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
 EXPORT int my_strcasecmp (const char *a, const char *b);
+#if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
 #  define strcasecmp my_strcasecmp
 #else
 #  include AX_STRCASECMP_HEADER
