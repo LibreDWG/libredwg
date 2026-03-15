@@ -605,21 +605,17 @@ tm_offset (void)
 
 #ifndef HAVE_STRCASECMP
 EXPORT int
-strcasecmp (const char *a, const char *b)
+my_strcasecmp (const char *a, const char *b)
 {
-  size_t l2;
-  int r1 = strcmp (a, b);
-  if (!r1)
-    return 0;
-  l2 = strlen (b);
-  for (size_t i = 0; i < strlen (a); i++)
+  while (*a && *b)
     {
-      if (i > l2)
-        return 1;
-      if (toupper (a[i]) != toupper (b[i]))
-        return toupper (a[i]) < toupper (b[i]);
+      int diff = toupper ((unsigned char)*a) - toupper ((unsigned char)*b);
+      if (diff)
+        return diff;
+      a++;
+      b++;
     }
-  return 0;
+  return toupper ((unsigned char)*a) - toupper ((unsigned char)*b);
 }
 #endif
 
