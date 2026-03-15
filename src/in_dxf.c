@@ -13696,7 +13696,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
           continue;
         }
       // TODO find field type => dxf code
-      if (strEQc (field, "block_header"))
+      if (strEQc (field, "block_header") || strEQc (field, "block"))
         hdl = dwg_find_tablehandle_silent (dwg, p.value.s, "BLOCK");
       else if (strEQc (field, "style"))
         {
