@@ -9763,6 +9763,23 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                            " [H 5]\n",
                            ARGS_REF (_vobj->vport_entity_header));
               }
+            // SORTENTSTABLE: subsequent 5 codes are sort_ents handles, not
+            // object handle
+            if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE && obj->handle.value)
+              {
+                Dwg_Object_SORTENTSTABLE *o
+                    = obj->tio.object->tio.SORTENTSTABLE;
+                if (o->num_ents > 0 && !o->sort_ents[o->num_ents - 1])
+                  {
+                    BITCODE_H hdl
+                        = dwg_add_handleref (dwg, 0, pair->value.u, obj);
+                    o->sort_ents[o->num_ents - 1] = hdl;
+                    LOG_TRACE ("SORTENTSTABLE.sort_ents[%d] = " FORMAT_REF
+                               " [H 5]\n",
+                               o->num_ents - 1, ARGS_REF (hdl));
+                  }
+                break;
+              }
             if (strNE (name, "DIMSTYLE") || pair->code == 105)
               {
                 obj->handle.value = pair->value.u;
@@ -10184,6 +10201,27 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                          obj->name, ARGS_REF (o->active_viewport));
               break;
             }
+          else if (pair->code == 331
+                   && obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
+            {
+              Dwg_Object_SORTENTSTABLE *o = obj->tio.object->tio.SORTENTSTABLE;
+              BITCODE_H hdl = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+              // DXF skips sort_ents with no obj (null sort handle), so two
+              // consecutive 331 codes can appear. If the last ents entry has
+              // no sort_ents yet, replace it (previous 331 had no paired 5).
+              if (o->num_ents > 0 && !o->sort_ents[o->num_ents - 1])
+                o->num_ents--;
+              o->num_ents++;
+              o->ents = (BITCODE_H *)realloc (
+                  o->ents, o->num_ents * sizeof (BITCODE_H));
+              o->sort_ents = (BITCODE_H *)realloc (
+                  o->sort_ents, o->num_ents * sizeof (BITCODE_H));
+              o->ents[o->num_ents - 1] = hdl;
+              o->sort_ents[o->num_ents - 1] = NULL;
+              LOG_TRACE ("SORTENTSTABLE.ents[%d] = " FORMAT_REF " [H 331]\n",
+                         o->num_ents - 1, ARGS_REF (hdl));
+              break;
+            }
           // fall through
         case 330:
           if (in_reactors)
@@ -10218,6 +10256,16 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                  ARGS_REF (obj->tio.object->ownerhandle));
                     }
                 }
+            }
+          else if (pair->code == 330
+                   && obj->fixedtype == DWG_TYPE_SORTENTSTABLE
+                   && obj->tio.object->ownerhandle)
+            {
+              Dwg_Object_SORTENTSTABLE *o = obj->tio.object->tio.SORTENTSTABLE;
+              o->block_owner = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+              LOG_TRACE ("SORTENTSTABLE.block_owner = " FORMAT_REF
+                         " [H 330]\n",
+                         ARGS_REF (o->block_owner));
             }
           else if (pair->code == 330 && obj->fixedtype == DWG_TYPE_LAYOUT
                    && obj->tio.object->ownerhandle)
