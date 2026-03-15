@@ -14069,7 +14069,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   free_array_hdls (header_hdls);
   free_array_hdls (eed_hdls);
   free_array_hdls (obj_hdls);
-  if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
+  if (dwg->header.version <= R_2000
+      && (dwg->header.from_version > R_2000 || (dwg->opts & DWG_OPTS_INDXF)))
     dwg_fixup_BLOCKS_entities (dwg);
   LOG_TRACE ("import from DXF\n");
   if (error > DWG_ERR_CRITICAL)

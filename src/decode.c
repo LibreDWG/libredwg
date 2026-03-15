@@ -6058,7 +6058,15 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
 {
   int changes = 0;
   int is_uni = 0;
-  if (dwg->header.version > R_2000 || dwg->header.from_version <= R_2000)
+  // also run for DXF imports (INDXF and ADD only, not INJSON), since
+  // in_postprocess_handles uses array index adjacency, not handle adjacency,
+  // to set nolinks.  dwg_add_Document sets DWG_OPTS_IN = INDXF|INJSON for
+  // API-created documents; real DXF imports set only INDXF.  Exclude the
+  // API-created case (INJSON set) to avoid clobbering first_entity before
+  // entities have been added.
+  if (dwg->header.version > R_2000
+      || (dwg->header.from_version <= R_2000
+          && (!(dwg->opts & DWG_OPTS_INDXF) || (dwg->opts & DWG_OPTS_INJSON))))
     return 0;
   is_uni = dwg->header.version >= R_2007;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
