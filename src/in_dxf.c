@@ -9753,10 +9753,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 Dwg_Object_VX_TABLE_RECORD *vx = dwg_add_VX (dwg, "");
                 Dwg_Object *vxobj = dwg_obj_generic_to_object (vx, &error);
                 Dwg_Entity_VIEWPORT *_vobj = obj->tio.entity->tio.VIEWPORT;
-                if (dwg->header_vars.HANDSEED)
-                  {
-                    vxobj->handle.value = dwg_new_handseed (dwg);
-                  }
                 // vx->is_on = 1;
                 vx->viewport = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
                 LOG_TRACE ("VX_TABLE_RECORD.viewport = " FORMAT_REF " [H 4]\n",
