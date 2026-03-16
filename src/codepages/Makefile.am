@@ -65,7 +65,9 @@ get-sources:
 
 .SUFFIXES = .TXT .h
 .TXT.h:
-	$(srcdir)/txt2h.pl $< >$@ && mv -fu $@ $(srcdir)/
+	if $(srcdir)/txt2h.pl $< >$@; then \
+	    if test . != $(srcdir); then mv -fu $@ $(srcdir)/; fi; \
+	fi
 
 .PHONY: regen-h
 regen-h:
