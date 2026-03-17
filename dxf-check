@@ -93,6 +93,7 @@ if [ -f "$b.dxf" ]; then
                 $ODAFileConverter_geometry >/dev/null 2>/dev/null
         if [ -e "test/$b.dwg.err" ]; then
             cat "test/$b.dwg.err"
+            mv "test/$b.dwg.err" "$b.dwg.err"
             exitcode=1
         fi
         mv -f "test/$b.dwg" "$b.oda.dwg"
@@ -111,6 +112,7 @@ if [ -f "$b.dwg" ]; then
                 $ODAFileConverter_geometry >/dev/null 2>/dev/null
         if [ -e "test/$b.dxf.err" ]; then
             cat "test/$b.dxf.err"
+            mv "test/$b.dwg.err" "$b.dwg.err"
             exitcode=3
         fi
     else
