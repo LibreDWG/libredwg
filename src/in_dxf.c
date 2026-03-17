@@ -609,7 +609,7 @@ dxf_read_binary (Bit_Chain *dat, unsigned char **p, size_t len)
       return NULL;
     }
   LOG_TRACE ("binary[%u]: ", size);
-  if ((read = in_hex2bin (data, pos, size) != size))
+  if ((read = in_hex2bin (data, pos, size)) != size)
     LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, size);
   dat->byte += read;
   if (p)
@@ -2723,6 +2723,10 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Entity_MESH *o = obj->tio.entity->tio.MESH;
   int j = 0;
   int vector = 0;
+
+  // No DXF group maps these trailing mesh flags; preserve stable defaults.
+  o->unknown_b1 = 1;
+  o->unknown_b2 = 0;
 
   // valid entry code: 91
   if (pair->code == 91)
@@ -7374,7 +7378,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         // const char *pos = pair->value.s;
         rbuf->value.str.u.data = (char *)s;
         rbuf->value.str.size = blen & 0xFFFF;
-        if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
+        if ((read = in_hex2bin (s, pair->value.s, blen)) != blen)
           LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read,
                      blen);
         xdata_size += 1 + (blen & 0xFFFF);
@@ -7498,7 +7502,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           return pair;
         }
       s = &ent->preview[written];
-      if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
+      if ((read = in_hex2bin (s, pair->value.s, blen)) != blen)
         LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read,
                    blen);
       written += read;
@@ -7547,7 +7551,7 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           _obj->preview = (BITCODE_TF)realloc (_obj->preview, written + blen);
           s = &_obj->preview[written];
-          if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
+          if ((read = in_hex2bin (s, pair->value.s, blen)) != blen)
             LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
                        read, blen);
           written += read;
@@ -10912,7 +10916,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                              blen, written, o->data_size);
                   goto invalid_dxf;
                 }
-              if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
+              if ((read = in_hex2bin (s, pair->value.s, blen)) != blen)
                 LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
                            read, blen);
               written += read;
@@ -13620,7 +13624,7 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              blen, written, dwg->thumbnail.size);
                   return 1;
                 }
-              if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
+              if ((read = in_hex2bin (s, pair->value.s, blen)) != blen)
                 LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
                            read, blen);
               written += read;

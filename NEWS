@@ -37,7 +37,6 @@ API/ABI changes (source-incompatible):
 
 Minor bugfixes:
   * Fixed EED size calculation and overflow errors.
-  * Fixed CRC check start address for handle-map objects (decode). (#e12563c)
   * Fixed bit_read_BLL / write_BLL for large preview_size values.
   * Fixed decode: heap-overflow-by-1 in section parsing.
   * Fixed decode: invalid section name_length in r2007.
@@ -58,8 +57,9 @@ Minor bugfixes:
   * Fixed DXF output: LAYER flag and 62/290 codes for disabled/frozen layers.
   * Fixed DXF output: ARC_DIMENSION codes 40,41.
   * Fixed DXF output: *X anonymous block name resolution.
-  * Fixed DXF input: empty CLASSES section. (GH #1068)
+  * Fixed DXF input: empty CLASSES section. GH #1068
   * Fixed DXF input: IMAGE.clip_verts and imagedefreactor.
+  * Fixed DXF input: AcDbSubDMesh binary preview import and mesh defaults. GH #272.
   * Fixed DXF input: duplicate table record entries.
   * Fixed DXF input: DICT.ownerhandle.
   * Fixed DXF input: DIMSTYLE code 5.
