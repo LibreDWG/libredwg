@@ -12063,19 +12063,31 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           else if (pair->code < 430)
                             {
-                              color.rgb = pair->value.l;
-                              color.method = pair->value.l >> 0x18;
-                              if (pair->value.l == 257)
+                              // Some objects (e.g. MULTILEADER codes 91/92/93)
+                              // store a color index in a code >= 90 range.
+                              // Detect by value: real RGB values are always
+                              // > 257 (high byte set, e.g. 0xc3rrggbb).
+                              if (pair->value.l <= 257)
                                 {
-                                  color.method = 0xc8;
-                                  color.rgb = 0xc8000000;
+                                  dxf_set_CMC_index (&color,
+                                                     (int)pair->value.l);
+                                  LOG_TRACE ("%s.%s.rgb = 0x%08x [%s %d]\n",
+                                             name, f->name, color.rgb, "CMC",
+                                             pair->code);
                                 }
-                              // color.alpha = (pair->value.l & 0xFF000000) >>
-                              // 24; if (color.alpha)
-                              //  color.alpha_type = 3;
-                              LOG_TRACE ("%s.%s.rgb = %08X [%s %d]\n", name,
-                                         f->name, pair->value.u, "CMC",
-                                         pair->code);
+                              else
+                                {
+                                  color.rgb = pair->value.l;
+                                  color.method = pair->value.l >> 0x18;
+                                  /*
+                                    color.alpha = (pair->value.l & 0xFF000000)
+                                    >> 24; if (color.alpha) color.alpha_type =
+                                    3;
+                                  */
+                                  LOG_TRACE ("%s.%s.rgb = %08X [%s %d]\n",
+                                             name, f->name, pair->value.u,
+                                             "CMC", pair->code);
+                                }
                             }
                           else if (pair->code < 440)
                             {
