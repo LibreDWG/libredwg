@@ -8,6 +8,7 @@ project(libredwg C)
 #                   -DDXF_PRECISION=6
 #                   -DGEOMJSON_PRECISION=6
 # for smaller builds and lib.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(MSVC)
   set(redwg libredwg)

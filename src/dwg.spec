@@ -8599,7 +8599,7 @@ DWG_OBJECT (VISUALSTYLE)
       FIELD_VALUE (display_brightness) = (double)FIELD_VALUE (display_brightness_bl);
     }
 #ifdef IS_DECODER
-    if ((long)obj->hdlpos - bit_position (dat) >= 1L + TYPE_MAXELEMSIZE (BL)) {
+    if ((long)obj->hdlpos - (long)bit_position (dat) >= 1L + TYPE_MAXELEMSIZE (BL)) {
 #endif
     FIELD_BL (display_shadow_type, 173); // 0
     DXF { FIELD_B (internal_only, 291); }

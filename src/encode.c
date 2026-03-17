@@ -5932,20 +5932,19 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       bit_set_position (dat, address * 8);
       if (obj->size > UINT32_C (0x7fff) && old_size <= UINT32_C (0x7fff))
         {
-          // with overlarge sizes >0x7fff memmove dat right by 2, one more RS
-          // added.
+          // FIXME with overlarge sizes >0x7fff memmove dat right by 2, one
+          // more CRC RS added.
           LOG_INFO (
               "overlarge MS size %lu > 0x7fff (was %lu) @%" PRIuSIZE "\n",
               (unsigned long)obj->size, (unsigned long)old_size, dat->byte);
-          if (dat->byte + obj->size + 2 > dat->size)
+          if (dat->byte + obj->size + 4 > dat->size)
             bit_chain_alloc_size (dat,
-                                  (dat->byte + obj->size + 2) - dat->size);
+                                  (dat->byte + obj->size + 4) - dat->size);
           memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte],
-                   obj->size);
+                   obj->size + 2);
           // obj->size += 2;
           // obj->bitsize += 16;
           obj->address += 2;
-          address += 2;
           obj->bitsize_pos += 16;
           pos += 16;
         }
@@ -5957,11 +5956,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                     (unsigned long)old_size, (unsigned long)obj->size,
                     dat->byte);
           memmove (&dat->chain[dat->byte], &dat->chain[dat->byte + 2],
-                   obj->size);
+                   obj->size + 2);
           // obj->size -= 2;
           // obj->bitsize -= 16;
           obj->address -= 2;
-          address -= 2;
           obj->bitsize_pos -= 16;
           pos -= 16;
         }
