@@ -43,6 +43,11 @@ Convenient build dirs are
   We set the first arg to the path of the input file, the second arg to some other path,
   Recurse to 0, Audit to 1 and the input file to the basename.
 
+Best is to use and fix just dxf-check. json roundtrips are only helpful for <=r2000 files.
+With dxf-check the original read is .log.orig. The encoder log is .dxf.log.
+The resulting encoded file read is .log. You only need to read these logs.
+With dxf-check changed sources are automatically rebuilt, so no need call make.
+
 ## Formatting / linting
 
 - The project formats C sources with `clang-format`.

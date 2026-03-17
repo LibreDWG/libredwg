@@ -1129,10 +1129,10 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
         }                                                                     \
-        SINCE (R_14)                                                          \
+        SINCE (R_13b1)                                                        \
         {                                                                     \
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
-          LOG_TRACE ("ownerhandle: " FORMAT_HV " [330]\n",                  \
+          LOG_TRACE ("ownerhandle: " FORMAT_HV " [330]\n",                    \
                      obj->tio.object->ownerhandle->absolute_ref);             \
         }                                                                     \
       }                                                                       \
