@@ -1,4 +1,4 @@
-version: 0.13.3.{build}
+version: 0.13.4.{build}
 max_jobs: 4
 image: Visual Studio 2019
 environment:

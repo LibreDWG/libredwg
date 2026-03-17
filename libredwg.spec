@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.13.3
+Version:        0.13.4
 Release:        0%{?dist}
 Summary:        GNU C library and programs to read and write DWG/DXF files
 
@@ -24,20 +24,20 @@ BuildRequires:  texinfo
 BuildRequires:  texinfo-tex
 # Required for tests.
 BuildRequires:  libxml2-devel
-BuildRequires:  python3-libxml2
+BuildRequires:  python3-lxml
 BuildRequires:  pcre2
 BuildRequires:  pcre2-utf16
 
-# no big-endian write support. TODO --disable-write
+# no big-endian write support.
 ExcludeArch:    sparc alpha ppc64 ppc s390
 
 %description
 LibreDWG is a free C library to read and write DWG files. At the moment
-our decoder (i.e. reader) is done, just some very advanced R2010+ and
-preR13 entities fail to read and are skipped over. The writer is good
-enough for R2000.  As programs we provide a reader, a writer, a
+our decoder (i.e. reader) is done, just some very advanced R2010+ entities
+fail to read and are skipped over. The writer is good enough for any version
+up to R2000.  As programs we provide a reader, a writer, a
 re-writer (i.e. SaveAS), an initial basic SVG and Postscript
-conversion, experimental dxf and json converters, dwggrep to search
+conversion, dxf and json converters, dwggrep to search
 for text, dwglayer to print the list of layers, and dwgfilter to use
 JQ expressions to query or change a DWG.
 
@@ -46,7 +46,7 @@ Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description    devel
-The %{name}-devel package contains libraries, perl5 and python bindings
+The %{name}-devel package contains libraries
 and header files for developing applications that use %{name}.
 For more serious development use the git repository, and add parallel,
 timeout and potion.
@@ -151,8 +151,8 @@ fi
 %{_mandir}/man1/dxfwrite.1.gz
 %{_mandir}/man5/dwgadd.5.gz
 %{_infodir}/LibreDWG.info*
-%{_sharedir}/libredwg/dwgadd.example*
-%{_sharedir}/libredwg/load_dwg.py
+%{_datadir}/libredwg/dwgadd.example*
+%{_datadir}/libredwg/load_dwg.py
 
 %files devel
 %doc TODO
@@ -172,6 +172,11 @@ fi
 
 
 %changelog
+* Mon Mar 17 2025 Reini Urban <reini.urban@gmail.com> 0.13.4-1
+- upstream release. Improved DXF roundtrips, CMC/CMTC color fixes,
+  many security/fuzzing fixes, API renames. Switch to python3-lxml.
+- Fix %%{_sharedir} to %%{_datadir}.
+
 * Mon Feb 26 2024 Reini Urban <reini.urban@gmail.com> 0.13.3-1
 - upstream bugfix.
 
