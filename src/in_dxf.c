@@ -1153,6 +1153,35 @@ dxf_find_lweight (const int16_t lw)
   return 0;
 }
 
+// Set a CMC color from a DXF color index, computing proper method and rgb
+// for use with CMTC fields (stored in R_2004 CMC format even in pre-R_2004
+// files).
+static void
+dxf_set_CMC_index (BITCODE_CMC *restrict color, const int index)
+{
+  color->index = index;
+  if (index == 0)
+    {
+      color->method = 0xc1;
+      color->rgb = 0xc1000000;
+    } // ByBlock
+  else if (index == 256)
+    {
+      color->method = 0xc2;
+      color->rgb = 0xc2000000;
+    } // entity/ByLayer
+  else if (index == 257)
+    {
+      color->method = 0xc8;
+      color->rgb = 0xc8000000;
+    } // None
+  else
+    {
+      color->method = 0xc3;
+      color->rgb = 0xc3000000 | dwg_rgb_palette_index ((BITCODE_BS)index);
+    }
+}
+
 // FIXME: support 430 (name), 440 (alpha)
 static int
 dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
@@ -1187,6 +1216,21 @@ dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       // optional 420, 430, 440 fields
       pos = bit_position (dat);
       error = dxf_read_CMC (dwg, dat, color, fieldname, dxf);
+      // Set default method/rgb for CMTC fields (R_2004 CMC format in
+      // pre-R_2004 files)
+      if (!color->rgb)
+        {
+          if (!color->method)
+            {
+              if (pair->value.i == 0)
+                color->method = 0xc1; // ByBlock
+              else
+                color->method = 0xc3; // palette index
+            }
+          color->rgb = ((BITCODE_BL)color->method << 24);
+          if (color->method == 0xc3)
+            color->rgb |= dwg_rgb_palette_index (color->index);
+        }
     }
   else if (pair->code < 430 && pair->code == (dxf + 420 - 62)) // truecolor
     {
@@ -5023,50 +5067,27 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
         case 62:
           if (mode == TABLEFORMAT)
             {
-              o->bg_color.rgb = pair->value.u;
-              o->bg_color.method = pair->value.u >> 0x18;
-              if (pair->value.u == 257)
-                {
-                  o->bg_color.method = 0xc8;
-                  o->bg_color.rgb = 0xc8000000;
-                }
-              else
-                o->bg_color.index = dwg_find_color_index (pair->value.u);
+              dxf_set_CMC_index (&o->bg_color, pair->value.i);
               LOG_TRACE ("%s.%s.bg_color = %08x [CMTC %d]\n", obj->name, key,
-                         pair->value.u, pair->code);
+                         o->bg_color.rgb, pair->code);
             }
           else if (mode == CONTENTFORMAT)
             {
-              o->content_format.content_color.rgb = pair->value.u;
-              o->content_format.content_color.method = pair->value.u >> 0x18;
-              if (pair->value.u == 257)
-                {
-                  o->content_format.content_color.method = 0xc8;
-                  o->content_format.content_color.rgb = 0xc8000000;
-                }
-              else
-                o->content_format.content_color.index
-                    = dwg_find_color_index (pair->value.u);
+              dxf_set_CMC_index (&o->content_format.content_color,
+                                 pair->value.i);
               LOG_TRACE (
                   "%s.%s.content_format.content_color = %08x [CMTC %d]\n",
-                  obj->name, key, pair->value.u, pair->code);
+                  obj->name, key, o->content_format.content_color.rgb,
+                  pair->code);
             }
           else if (mode == GRIDFORMAT)
             {
               if (grid < 0 || grid >= (int)o->num_borders)
                 return NULL;
-              o->borders[grid].color.rgb = pair->value.d;
-              o->borders[grid].color.method = pair->value.u >> 0x18;
-              if (pair->value.u == 257)
-                {
-                  o->borders[grid].color.method = 0xc8;
-                  o->borders[grid].color.rgb = 0xc8000000;
-                }
-              else
-                o->borders[grid].color.index
-                    = dwg_find_color_index (pair->value.u);
+              dxf_set_CMC_index (&o->borders[grid].color, pair->value.i);
               LOG_TRACE ("%s.%s.borders[%d].color = %08x [CMTC %d]\n",
-                         obj->name, key, grid, pair->value.u, pair->code);
+                         obj->name, key, grid, o->borders[grid].color.rgb,
+                         pair->code);
             }
           else
             goto unknown_default;
@@ -5277,14 +5298,13 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 62:
           CHK_rowstyles;
-          o->rowstyles[i].text_color.index = pair->value.i;
-          // TODO rgb with 420
+          dxf_set_CMC_index (&o->rowstyles[i].text_color, pair->value.i);
           LOG_TRACE ("%s.rowstyles[%d].text_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 63:
           CHK_rowstyles;
-          o->rowstyles[i].fill_color.index = pair->value.i;
+          dxf_set_CMC_index (&o->rowstyles[i].fill_color, pair->value.i);
           LOG_TRACE ("%s.rowstyles[%d].fill_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
@@ -5365,7 +5385,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j = pair->code - 64;
           CHK_borders;
           assert (j >= 0 && j <= 6);
-          o->rowstyles[i].borders[j].color.index = pair->value.i;
+          dxf_set_CMC_index (&o->rowstyles[i].borders[j].color, pair->value.i);
           LOG_TRACE (
               "%s.rowstyles[%d].borders[%d].color.index = %d [CMC %d]\n",
               obj->name, i, j, pair->value.i, pair->code);
