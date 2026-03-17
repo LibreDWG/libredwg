@@ -3104,11 +3104,12 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
   }                                                                           \
                                                                               \
   DXF {                                                                       \
-    SINCE (R_2007a) {                                                          \
+    SINCE (R_2007a) {                                                         \
       SUBCLASS (AcDb3dSolid);                                                 \
       FIELD_HANDLE (history_id, 4, 350);                                      \
     }                                                                         \
-  } else if (FIELD_VALUE (version) > 1) {                                     \
+  } else if (FIELD_VALUE (version) > 1                                        \
+             && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \
       FIELD_HANDLE (history_id, 4, 350);                                      \
   }                                                                           \
   FREE { FIELD_HANDLE (history_id, 4, 350); }

@@ -107,6 +107,9 @@
 #define FIELD_VALUE(nam) _obj->nam
 #define SUB_FIELD_VALUE(o, nam) _obj->o.nam
 
+#ifndef AVAIL_BITS
+#  define AVAIL_BITS(dat) (int64_t)((dat->size * 8) - bit_position (dat))
+#endif
 #ifndef VALUE_HANDLE
 #  define VALUE_HANDLE(value, nam, handle_code, dxf)
 #endif

@@ -44,6 +44,7 @@ Minor bugfixes:
   * Fixed decode: encrypted_section_header.unknown.
   * Fixed decode: wrong memmove in LZ77 back-reference decompression with
     NDEBUG (release builds). GH #1186, #1204.
+  * Fixed decode: guard optional 3DSOLID history_id handle read.
   * Fixed encode: copy_R2004_section overflow check.
   * Fixed encode: postprocess_SEQEND NULL-dereferences.
   * Fixed encode: scale_flag=1 for INSERT (DD 41).
