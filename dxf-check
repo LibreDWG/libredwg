@@ -106,17 +106,17 @@ fi
 if [ -f "$b.dwg" ]; then
     # shellcheck disable=SC2086,SC2154
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
-        rm -f "test/$b.dxf.err"
+        rm -f "test/$b.dxf.err" "$b.dxf.err"
         echo timeout 30 "$baseFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$ODAFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg" \
                 $ODAFileConverter_geometry >/dev/null 2>/dev/null
         if [ -e "test/$b.dxf.err" ]; then
             cat "test/$b.dxf.err"
-            mv "test/$b.dwg.err" "$b.dwg.err"
+            mv "test/$b.dxf.err" "$b.dxf.err"
             exitcode=3
         fi
     else
-        rm "test/$b.dxf.err" 2>/dev/null
+        rm "test/$b.dxf.err" "$b.dxf.err" 2>/dev/null
         if [ ! -x "$ODAFileConverter" ]; then
             echo "$baseFileConverter not installed"
         fi
@@ -128,7 +128,7 @@ if [ -f "$b.dwg" ]; then
     echo diff -bu "log1" "$log2"
     diff -I '^-(objref|found:)' -bu "$log1" "$log2"
 
-    test -f "test/$b.dxf.err" && cat "test/$b.dxf.err"
+    test -f "$b.dxf.err" && cat "$b.dxf.err"
 
     if [ -f "$log1" ] && [ -f "$log2" ]; then
         # Really interesting is the Section BLOCKS here. vs BLOCK_HEADER
@@ -160,6 +160,6 @@ if [ -f "$b.dwg" ]; then
             fi
         fi
     fi
-    test -f "test/$b.dxf.err" && cat "test/$b.dxf.err"
+    test -f "$b.dxf.err" && cat "$b.dxf.err"
 fi
 exit $exitcode
