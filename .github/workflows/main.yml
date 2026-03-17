@@ -74,7 +74,7 @@ jobs:
         build-aux/install-pslib
         build-aux/install-relaxng-svg11
         sudo npm i -g geojson-validation
-    - uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2.20
+    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
       with:
         create-symlink: true
         key: ${{ github.job }}-${{ matrix.CONFIGURE_ARGS }}
@@ -118,7 +118,7 @@ jobs:
     - if: contains(matrix.CONFIGURE_ARGS, '--enable-release') && startsWith(github.ref, 'refs/tags/')
       name: Release
       continue-on-error: true
-      uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+      uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
       with:
         body_path: dist.sha256
         files: |
@@ -133,7 +133,7 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: sudo apt-get -y update && sudo apt-get -y install gcc-powerpc64-linux-gnu libc6-ppc64-cross qemu-system-ppc binfmt-support qemu-user qemu-user-binfmt
-    - uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2.20
+    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
       with:
         key: ${{ github.job }}
     - run: sh autogen.sh
@@ -151,7 +151,7 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: sudo apt-get -y update && sudo apt-get -y install gcc-mips-linux-gnu gcc-multilib-mips-linux-gnu
-    - uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2.20
+    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
       with:
         key: ${{ github.job }}
     - run: sh autogen.sh
@@ -177,7 +177,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2.20
+    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
       with:
         create-symlink: true
         key: ${{ github.job }}
@@ -187,7 +187,7 @@ jobs:
     - if: failure()
       run: tar cfz cmake-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
       with:
         name: cmake-failure.tgz
         path: cmake-failure.tgz
@@ -208,7 +208,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2.20
+    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
       with:
         create-symlink: true
         key: ${{ github.job }}
@@ -270,7 +270,7 @@ jobs:
       shell: msys2 {0}
       run: make -C src dwg_api.i; tar cfz mingw-failure.tgz src/dwg_api.i src/config.h
     - if: failure()
-      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
       with:
         name: mingw-failure.tgz
         path: mingw-failure.tgz
@@ -289,7 +289,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2.20
+    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
       with:
         key: ${{ github.job }}
     - run: cmake -G "MinGW Makefiles" -DDISABLE_WERROR=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache .
@@ -297,7 +297,7 @@ jobs:
     - if: failure()
       run: tar cfz msys-failure.tgz make.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
       with:
         name: msys-failure.tgz
         path: msys-failure.tgz
@@ -317,7 +317,7 @@ jobs:
     - if: failure()
       run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
       with:
         name: msvc-failure.tgz
         path: msvc-failure.tgz
