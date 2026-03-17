@@ -49,6 +49,8 @@ Minor bugfixes:
   * Fixed encode: postprocess_SEQEND NULL-dereferences.
   * Fixed encode: scale_flag=1 for INSERT (DD 41).
   * Fixed encode: TEXT.dataflags on DXF import.
+  * Fixed encode: TEXT/ATTRIB/ATTDEF rotation and oblique_angle lost when
+    writing R_2000 via add API (dwg_set_dataflags not called). GH #1164.
   * Fixed encode: no TV-ZERO with r14.
   * Fixed DXF output: encode strings as UTF-8 for r2007+.
   * Fixed DXF output: negative color index.
