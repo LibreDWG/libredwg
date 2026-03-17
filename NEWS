@@ -43,6 +43,8 @@ Minor bugfixes:
   * Fixed decode: invalid section name_length in r2007.
   * Fixed decode: FIELD_NUM_INSERTS.
   * Fixed decode: encrypted_section_header.unknown.
+  * Fixed decode: wrong memmove in LZ77 back-reference decompression with
+    NDEBUG (release builds). GH #1186, #1204.
   * Fixed encode: copy_R2004_section overflow check.
   * Fixed encode: postprocess_SEQEND NULL-dereferences.
   * Fixed encode: scale_flag=1 for INSERT (DD 41).

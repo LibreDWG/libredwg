@@ -1300,19 +1300,18 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
           opcode1 = 0x11;
           LOG_INSANE (">O %x!\n", opcode1)
         }
-#ifdef NDEBUG
-      memmove (&dec->chain[pos], &dec->chain[pos - comp_offset], comp_bytes);
-#else
+      // GH #1204: memmove is wrong here: when comp_offset < comp_bytes the
+      // source and destination overlap and newly-written bytes must be read
+      // back (LZ77 run-length extension). memmove copies from original bytes.
       for (; pos < end; pos++)
         {
-          unsigned char b;
+#ifndef NDEBUG
           assert ((long)pos >= (long)comp_offset);
           assert (pos - comp_offset < dec->size);
-          b = dec->chain[pos - comp_offset];
           assert (pos < dec->size);
-          dec->chain[pos] = b;
-        }
 #endif
+          dec->chain[pos] = dec->chain[pos - comp_offset];
+        }
       dec->byte = end;
       // copy "literal data"
       lit_length = opcode1 & 3;
