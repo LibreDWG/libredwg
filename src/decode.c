@@ -4297,6 +4297,7 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       obj->handlestream_size = (obj->size * 8) - obj->bitsize;
       LOG_TRACE (" Hdlsize: " FORMAT_UMC ",", obj->handlestream_size);
     }
+  // dat->size = bit8 + hdl_dat->bit ? 1 : 0;
   hdl_dat->size = obj->size;
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
     {

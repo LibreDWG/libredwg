@@ -8598,12 +8598,18 @@ DWG_OBJECT (VISUALSTYLE)
     DECODER {
       FIELD_VALUE (display_brightness) = (double)FIELD_VALUE (display_brightness_bl);
     }
+#ifdef IS_DECODER
+    if ((long)obj->hdlpos - bit_position (dat) >= 1L + TYPE_MAXELEMSIZE (BL)) {
+#endif
     FIELD_BL (display_shadow_type, 173); // 0
     DXF { FIELD_B (internal_only, 291); }
     SINCE (R_2007a) {
       FIELD_BD (bd2007_45, 45);  // 0.0
     }
     FIELD_B (internal_only, 0);
+#ifdef IS_DECODER
+    }
+#endif
   }
   SINCE (R_2010b) {
     if (!_obj->ext_lighting_model) {
