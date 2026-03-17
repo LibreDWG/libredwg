@@ -52,6 +52,7 @@ VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
 JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec vcpkg.json build-aux/Dockerfile \
+	     build-aux/release.sh \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh \
 	     dxf-check dxfb-check json-check oda \
 	     json.in log.in svg.in rw.in geojson.in \
@@ -68,6 +69,7 @@ shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 	llvmfuzz_standalone_tz.sh llvmfuzz_standalone_data.sh \
 	autogen.sh dxf-roundtrip.sh unit_testing_all.sh.in test-dxf.sh
 	build-aux/gendocs.sh build-aux/codecov_io.sh build-aux/smoke.sh \
+	build-aux/release.sh \
 	build-aux/clang-format-all.sh \
 	programs/dwgfilter.in programs/alive.test.in programs/dxf.test.in \
 	programs/json.test.in programs/svg.test.in \
@@ -75,8 +77,8 @@ shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 
 .PHONY: check-dwg check-dxf check-dxfb check-json check-dwg-valgrind check-svg \
 	check-docker cppcheck log-dwg shfmt regen-shfmt check-shellcheck \
-	check-minimal regen-swig-patch release-web \
-        regen-man man manual refman scan-build gcov cover codecov coveralls \
+	check-minimal check-precommit check-release release release-web \
+        regen-swig-patch regen-man man manual refman scan-build gcov cover codecov coveralls \
 	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi \
 	maintainer-clean-local distuninstallcheck dist-hook
 
@@ -173,6 +175,9 @@ if !DISABLE_BINDINGS
 	if test -s xxxx; then mv xxxx build-aux/swig_python.patch; fi
 endif
 
+release:
+	$(SHELL) $(srcdir)/build-aux/release.sh $(VERSION)
+
 WEB_DIR = $(srcdir)/../libredwg-web
 release-web: manual refman
 	if test -d $(WEB_DIR)/manual; then \
@@ -209,6 +214,40 @@ TESTS_ENVIRONMENT = $(RPMLINT)
 # SPEC_LOG_COMPILER = $(RPMLINT)
 endif
 endif
+
+check-release : check-precommit
+	if ! printf '%s\n' "$(VERSION)" | grep -Eq '^[0-9]+\.[0-9]+(\.[0-9]+)?$$'; then \
+	  echo "VERSION must be N.N or N.N.N, got: $(VERSION)"; \
+	  exit 1; \
+	fi
+	if test -d .git && \
+	   (! test -f src/config.h || \
+	    ! grep -Eq '^#define[[:space:]]+IS_RELEASE([[:space:]]|$$)' src/config.h); then \
+	  echo "need release build config: src/config.h must contain '#define IS_RELEASE'"; \
+	  exit 1; \
+	fi
+	if test -f config.status && \
+	   grep -Eq "^ac_cs_config=.*--disable-[^'[:space:]]+" config.status; then \
+	  echo "configure arguments contain --disable-* options, not allowed for releases"; \
+	  exit 1; \
+	fi
+	if test -d .git && \
+	   (test "$(shell git rev-parse --abbrev-ref HEAD)" != "master" || \
+	    test "$(shell git diff --raw)" != "" || \
+	    test "$(shell git diff --cached --raw)" != ""); then \
+	  echo "You are not on a clean master branch, aborting."; \
+	  exit 1; \
+	fi
+	if test -d .git && \
+	   test "$(shell git ls --show-signature -n 1 | head -n2 | tail -n1 | cut -c1-5)" != "gpg: " ; then \
+	  echo "need gpg-signed git commit with -S"; \
+	  exit 1; \
+	fi
+	if test -d .git && \
+	   test "$(shell git ls --no-show-signature -n 1 | head -n5 | tail -n1 | cut -c5-11)" != "Release" ; then \
+	  echo "need git commit with -m Release"; \
+	  exit 1; \
+	fi
 
 check-minimal:
 	$(MAKE) -C src

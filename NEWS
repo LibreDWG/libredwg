@@ -25,6 +25,7 @@ Minor features:
   * dwgread/dwgwrite: support --fmt=minJSON already from 0.13.1; now also
     handles codepages in out-of-tree builds.
   * Python bindings: switch from py-libxml2 to py-lxml. (#84)
+  * Added automated release checks and helpers.
 
 API/ABI changes (source-incompatible):
   * Renamed BITCODE_RLLx to BITCODE_HV (handle value, 64-bit).
