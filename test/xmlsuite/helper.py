@@ -7,6 +7,7 @@ from lxml import etree
 
 class bcolors:
     """This class has all the colors to be used with colored output terminal."""
+
     HEADER = "\033[95m"
     OKBLUE = "\033[94m"
     OKGREEN = "\033[92m"
@@ -63,10 +64,7 @@ def processattr(attr):
                 round(result[2], 2),
             )
         elif len(result) == 2:
-            return "(%.2f %.2f)" % (
-                round(result[0], 2),
-                round(result[1], 2)
-            )
+            return "(%.2f %.2f)" % (round(result[0], 2), round(result[1], 2))
     return attr
 
 

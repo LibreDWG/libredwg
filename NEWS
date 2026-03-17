@@ -2,7 +2,7 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2026 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.13.4 - 2026-03-17 - beta:
+LibreDWG version 0.13.4 - 2026-03-18 - beta:
 
 Major features:
   * Much improved DXF import (indxf) roundtrip quality, esp. r2000 DWGs
