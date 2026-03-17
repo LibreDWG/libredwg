@@ -5788,10 +5788,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       bit_advance_position (dat, r);
     }
   bit_set_position (dat, (obj->address + obj->size) * 8 - 2);
-  /* The CRC is calculated starting after the initial MS size field.
-     For handle-map encoded objects, obj->address points *after* reading MS.
-     Align the CRC start with the encoder (see ES2_S_2010 XRECORD [247]). */
-  if (!bit_check_CRC (dat, obj->address - 2, 0xC0C1))
+  if (!bit_check_CRC (dat, address, 0xC0C1))
     error |= DWG_ERR_WRONGCRC;
 
   /* Reset to previous addresses for return */
