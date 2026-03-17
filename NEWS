@@ -1,6 +1,119 @@
 GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
-Copyright (C) 2024 Free Software Foundation, Inc.
+Copyright (C) 2026 Free Software Foundation, Inc.
 See the end for copying conditions.
+
+LibreDWG version 0.13.4 - 2026-03-17 - beta:
+
+Major features:
+  * Much improved DXF import (indxf) roundtrip quality, esp. r2000 DWGs
+    now pass ODA validation in most cases.  Fixed VIEWPORT/VX_TABLE_RECORD
+    pairing, SORTENTSTABLE, BLOCK_HEADER phantom entries, DIMENSION.block
+    name, MLINESTYLE and LAYOUT postprocessing, and entity ownership chains.
+  * Fixed CMTC/CMC color encoding: TABLESTYLE, CellStyle, CELLSTYLEMAP and
+    MULTILEADER color fields now carry correct method/rgb bytes.  Previously
+    method=0 caused ODA "Cannot set C to that value" / "CRC does not match".
+  * Added Dwg_Color_Method enum and improved JSON color representation.
+  * Renamed API type BITCODE_RLLx to BITCODE_HV for handle values.
+
+Minor features:
+  * Promoted WIPEOUT back to stable.
+  * configure: new --disable-docs option.
+  * configure: detect Emscripten (emcc).
+  * MSVC: set /utf-8 compilation option.
+  * codepages: new API dwg_is_valid_name_u8() and dwg_codepage_isalnum().
+  * dwg_api: new dwg_ent_set_ltype().
+  * dwgread/dwgwrite: support --fmt=minJSON already from 0.13.1; now also
+    handles codepages in out-of-tree builds.
+  * Python bindings: switch from py-libxml2 to py-lxml. (#84)
+
+API/ABI changes (source-incompatible):
+  * Renamed BITCODE_RLLx to BITCODE_HV (handle value, 64-bit).
+  * Renamed SecondHeader.dwg_version to dwg_versions.
+  * Renamed BLOCK_HEADER.loaded_bit to xref_loaded.
+  * Renamed IMAGE.size to image_size.
+  * Renamed LAYER.on to LAYER.off (the flag meaning was inverted).
+  * Merged R11_HANDSEED into HANDSEED.
+  * Changed LARGE_RADIAL_DIMENSION field names.
+
+Minor bugfixes:
+  * Fixed EED size calculation and overflow errors.
+  * Fixed CRC check start address for handle-map objects (decode). (#e12563c)
+  * Fixed bit_read_BLL / write_BLL for large preview_size values.
+  * Fixed decode: heap-overflow-by-1 in section parsing.
+  * Fixed decode: invalid section name_length in r2007.
+  * Fixed decode: FIELD_NUM_INSERTS.
+  * Fixed decode: encrypted_section_header.unknown.
+  * Fixed encode: copy_R2004_section overflow check.
+  * Fixed encode: postprocess_SEQEND NULL-dereferences.
+  * Fixed encode: scale_flag=1 for INSERT (DD 41).
+  * Fixed encode: TEXT.dataflags on DXF import.
+  * Fixed encode: no TV-ZERO with r14.
+  * Fixed DXF output: encode strings as UTF-8 for r2007+.
+  * Fixed DXF output: negative color index.
+  * Fixed DXF output: signed xdata integers.
+  * Fixed DXF output: LAYER flag and 62/290 codes for disabled/frozen layers.
+  * Fixed DXF output: ARC_DIMENSION codes 40,41.
+  * Fixed DXF output: *X anonymous block name resolution.
+  * Fixed DXF input: empty CLASSES section. (GH #1068)
+  * Fixed DXF input: IMAGE.clip_verts and imagedefreactor.
+  * Fixed DXF input: duplicate table record entries.
+  * Fixed DXF input: DICT.ownerhandle.
+  * Fixed DXF input: DIMSTYLE code 5.
+  * Fixed spec: BLOCKSTRETCHACTION handle and code fields.
+  * Fixed spec: VERTEX_PFACE_FACE.vertind is signed [BSd].
+  * Fixed spec: HATCH seeds and handles tolerance.
+  * Fixed spec: FIELD truncated data tolerance.
+  * Fixed spec: BLOCKLOOKUPPARAMETER unknown_t clamping.
+  * Fixed spec: ARC_DIMENSION dxf codes.
+  * Fixed spec: remove LTYPE.unknown_r13.
+  * Fixed Vertex entity index4 parsing.
+  * Fixed r2007 TOLERANCE entity.
+  * Fixed HATCH entity.
+  * Fixed DICTIONARYWDFLT object.
+  * Fixed BLOCKSTRETCHACTION object.
+  * Fixed LTYPE dashes on R13.
+  * Fixed SVG rotate syntax and ellipse drawing.
+  * Fixed preR13: block_control, entity iteration, CLAYER double-free.
+  * Fixed dwgadd: POLYLINE_3D, missing INSERT block, bad --as version.
+  * Fixed in_json: partial OBJECTS parse error cleanup.
+  * Fixed free: OOB in preR13 entity cleanup from JSON import.
+  * Fixed json: signed integers, NULL object guard.
+  * Fixed common: rename strcasecmp to my_strcasecmp (portability fix).
+  * Fixed OSV-2024-384 vulnerability.
+
+Security/fuzzing fixes:
+  * Fixed heap-overflow-by-1 in section parsing.
+    GH #1215, analog to ossfuzz 63483.
+  * Fixed OOB in preR13 entity cleanup from JSON import.
+    ossfuzz 470417487.
+  * Fixed double-free in indxf ent.310 handling.
+    ossfuzz 66109.
+  * Fixed encode: postprocess_SEQEND NULL-dereferences.
+    oss-fuzz 68030.
+  * Fixed encode: copy_R2004_section overflow check.
+    oss-fuzz 63824.
+  * Fixed dwg_dynapi_entity_set_value NULL dereference (fuzzing only).
+    GH #1122.
+  * Fixed decode_preR13: illegal header.entities_end OOM.
+    GH #1131.
+  * Fixed indxf: double-free in HATCH.path error paths.
+    GH #1146.
+  * Fixed indxf: double-free on failed MLINE num_* setting.
+    GH #1146.
+  * Fixed indxf: calloc failure NULL dereferences.
+    GH #1141.
+  * Fixed indxf: invalid preview_size and MAX_SIZE_BUF guard.
+    GH #1006.
+  * Fixed bits: bit_read_BLL for large preview_size.
+    GH #1019.
+  * Fixed decode_r2007: invalid section name_length.
+    GH #989.
+  * Fixed decode: UB in bsearch comparison function.
+    GH #1152.
+  * Fixed bits/api: UBSan invalid negation of handle values.
+    GH #1153, GH #1154.
+  * Fixed indxf: UBSan errors with NULL strings and failing alloc.
+    GH #1007.
 
 LibreDWG version 0.13.3 - 2023-02-26 - beta:
 
