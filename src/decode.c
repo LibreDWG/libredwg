@@ -4878,11 +4878,23 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
     {
       Dwg_Data *dwg = obj->parent->dwg;
       Dwg_Object *o = &dwg->object[obj->parent->objid];
-      if (xdata_size > o->size)
+      if (end_address > o->size)
         {
-          LOG_ERROR ("Invalid XRECORD.xdata_size " FORMAT_BL, xdata_size);
-          obj->xdata_size = 0;
-          return NULL;
+          LOG_WARN ("Invalid XRECORD.xdata_size " FORMAT_BL, xdata_size);
+          if ((o->bitsize / 8) <= (BITCODE_RL)start_address)
+            {
+              // fuzzers only
+              LOG_ERROR ("No room for xdata size:" FORMAT_RL
+                         " <= pos:" FORMAT_RL,
+                         (o->bitsize / 8), (BITCODE_RL)start_address);
+              obj->xdata_size = 0;
+              return NULL;
+            }
+          // Possible ACAD bug. Calculate by ourselves
+          xdata_size = (BITCODE_BL)((o->bitsize / 8) - start_address);
+          LOG_INFO ("calc xdata_size => " FORMAT_BL "\n", xdata_size);
+          obj->xdata_size = xdata_size;
+          end_address = start_address + (size_t)xdata_size;
         }
     }
   LOG_INSANE ("xdata:\n");

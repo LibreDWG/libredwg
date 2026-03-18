@@ -9556,7 +9556,7 @@ typedef struct _dwg_object_entity
                                   0 has no ownerhandle, 1 is PSPACE, 2 is MSPACE
                                   3 has ownerhandle. */
   BITCODE_BL num_reactors;
-  BITCODE_B is_xdic_missing;  /*!< r2004+ */
+  BITCODE_B is_xdic_missing;    /*!< r2004+ */
   BITCODE_B isbylayerlt;        /*!< r13-r14 */
   BITCODE_B nolinks;            /*!< r13-r2000 */
   BITCODE_B has_ds_data;        /*!< r2013+ AcDs datastore */
