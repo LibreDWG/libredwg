@@ -52,6 +52,8 @@ Minor bugfixes:
   * Fixed encode: TEXT/ATTRIB/ATTDEF rotation and oblique_angle lost when
     writing R_2000 via add API (dwg_set_dataflags not called). GH #1164.
   * Fixed encode: no TV-ZERO with r14.
+  * Fixed encode: bit_write_MS for overlarge MS sizes where value & 0xFFFF
+    lacks bit 15, causing wrong object sizes and CRC failures on DXF roundtrip.
   * Fixed DXF output: encode strings as UTF-8 for r2007+.
   * Fixed DXF output: negative color index.
   * Fixed DXF output: signed xdata integers.

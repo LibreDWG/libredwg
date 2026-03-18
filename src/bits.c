@@ -1143,9 +1143,13 @@ bit_read_MS (Bit_Chain *dat)
 void
 bit_write_MS (Bit_Chain *dat, BITCODE_MS value)
 {
-  bit_write_RS (dat, value);
   if (value > 0x7fff)
-    bit_write_RS (dat, value >> 15);
+    {
+      bit_write_RS (dat, (value & 0x7fff) | 0x8000);
+      bit_write_RS (dat, value >> 15);
+    }
+  else
+    bit_write_RS (dat, value);
 }
 
 /** Read bit-extrusion.
