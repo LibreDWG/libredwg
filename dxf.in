@@ -46,6 +46,7 @@ for d in "$@"; do
         --as=*) args="$args $d" ;;
         -m) args="$args $d" ;;
         -b) args="$args $d" ;;
+        -l*) log="$(echo "$d" | cut -c3-)" ;;
         -Ijson) ext=json ;;
         -Idxf) ext=dxf ;;
         -Idxfb)
@@ -130,7 +131,7 @@ for d in "$@"; do
                 echo "Assume DWG file for $d"
                 ;;
             esac
-            log="$b$dir.log"
+            [ -n "$log" ] || log="$b$dir.log"
             [ -n "$out" ] || out="$b$dir.dxf"
             if [ "$ext" = "dwg" ]; then
                 echo "$timeout $TESTPROG programs/dwg2dxf $args $v -o $out $d 2>$log"

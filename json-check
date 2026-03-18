@@ -2,6 +2,7 @@
 # dwg -> json
 # json -> dwg2
 # teigha dwg2 -> dxf just to confirm written DWG readability
+# logs: .log, .log.new
 v=-v4
 case $1 in
     -v*)
@@ -99,9 +100,9 @@ if [ -f "$b.dwg" ] && [ -n "$r" ]; then
         fi
     fi
 
-    ./log "-l$b.new.log" "$v" "$b.dwg"
+    ./log "-l$b.log.new" "$v" "$b.dwg"
     log1="$b.log"
-    log2="$b.new.log"
+    log2="$b.log.new"
     echo diff -bu "log1" "$log2"
     diff -bu "$log1" "$log2"
 

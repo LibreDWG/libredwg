@@ -44,8 +44,11 @@ Convenient build dirs are
   Recurse to 0, Audit to 1 and the input file to the basename.
 
 Best is to use and fix just dxf-check. json roundtrips are only helpful for <=r2000 files.
-With dxf-check the original read is .log.orig. The encoder log is .dxf.log.
-The resulting encoded file read is .log. You only need to read these logs.
+With dxf-check the original read is `.log`
+The encoder log is `.dxf.log`
+The resulting encoded file read is `.log.new`
+You only need to read these logs, not stdout.
+All the shell helpers, like log or dxf-check do not write to stdout, inspect the log files instead.
 With dxf-check changed sources are automatically rebuilt, so no need call make.
 
 ## Formatting / linting
@@ -93,10 +96,6 @@ This package is owned by the FSF.
 - Significant contributions (roughly > 15 lines of code or docs) may require FSF
   copyright assignment or an appropriate disclaimer.
 - See `CONTRIBUTING` and the GNU guidance linked there.
-
-## Security
-
-Follow `SECURITY.md` for vulnerability reporting (email the maintainer).
 
 ## Agent-specific safety rules
 

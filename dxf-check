@@ -3,6 +3,7 @@
 # teigha dxf -> dwg
 # dxf -> dwg2
 # teigha dwg2 -> dxf2
+# logs: .log, .dwg2dxf.log, .dxf.log, .log.new
 v=-v4
 case $1 in
     -v*)
@@ -48,14 +49,13 @@ case $r in
 esac
 
 # first create a dwg log to compare against
-./log "-l$b.log.orig" "$v" "$d"
+./log "$v" "$d"
 rm "./$b.dxf" "./$b.dwg" 2>/dev/null
 
-if ! ./dxf -y "$v" -o "$b.dxf" "$d"; then
+if ! ./dxf -y "-l$b.dwg2dxf.log" "$v" -o "$b.dxf" "$d"; then
     exit 2
 fi
 if [ -f "$b.dxf" ]; then
-    mv "./$b.log" "$b.dwg2dxf.log"
 
     # teigha can only write from r12-r2018
     can_teigha=1
@@ -122,10 +122,10 @@ if [ -f "$b.dwg" ]; then
         fi
     fi
 
-    ./log "$v" "$b.dwg"
-    log1="$b.log.orig"
-    log2="$b.log"
-    echo diff -bu "log1" "$log2"
+    ./log "$v" "-l$b.log.new" "$b.dwg"
+    log1="$b.log"
+    log2="$b.log.new"
+    echo diff -bu "$log1" "$log2"
     diff -I '^-(objref|found:)' -bu "$log1" "$log2"
 
     test -f "$b.dxf.err" && cat "$b.dxf.err"
