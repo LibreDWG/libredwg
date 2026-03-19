@@ -5739,7 +5739,6 @@ static int
 dwg_encode_raw_UNKNOWN_ENT (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error;
-  BITCODE_BL vcount;
   Bit_Chain _hdl_dat = { 0 };
   Bit_Chain *hdl_dat = &_hdl_dat;
   Bit_Chain *str_dat = dat;
@@ -5760,11 +5759,6 @@ dwg_encode_raw_UNKNOWN_ENT (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return DWG_ERR_UNHANDLEDCLASS;
     }
   dwg_encode_unknown_rest (dat, obj);
-  if (hdl_dat->byte > dat->byte)
-    {
-      dat->byte = hdl_dat->byte;
-      dat->bit = hdl_dat->bit;
-    }
   if (hdl_dat != dat && hdl_dat->chain != dat->chain)
     bit_chain_free (hdl_dat);
   return 0;
@@ -5774,11 +5768,9 @@ static int
 dwg_encode_raw_UNKNOWN_OBJ (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error;
-  BITCODE_BL vcount;
   Bit_Chain _hdl_dat = { 0 };
   Bit_Chain *hdl_dat = &_hdl_dat;
   Bit_Chain *str_dat = dat;
-  Dwg_Data *dwg = obj->parent;
 
   LOG_INFO ("Encode object UNKNOWN_OBJ\n");
   bit_chain_init_dat (hdl_dat, 128, dat);
@@ -5795,15 +5787,7 @@ dwg_encode_raw_UNKNOWN_OBJ (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         bit_chain_free (hdl_dat);
       return DWG_ERR_UNHANDLEDCLASS;
     }
-  if (obj->bitsize)
-    obj->hdlpos = (obj->address * 8) + obj->bitsize;
-  START_OBJECT_HANDLE_STREAM;
   dwg_encode_unknown_rest (dat, obj);
-  if (hdl_dat->byte > dat->byte)
-    {
-      dat->byte = hdl_dat->byte;
-      dat->bit = hdl_dat->bit;
-    }
   if (hdl_dat != dat && hdl_dat->chain != dat->chain)
     bit_chain_free (hdl_dat);
   return 0;
