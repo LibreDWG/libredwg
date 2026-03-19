@@ -4073,7 +4073,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
             break;
           case SECTION_PREVIEW:
-            error |= encode_r13_thumbnail (dwg, dat, header_crc_address);
+            {
+              bit_chain_alloc (&sec_dat[type]);
+              str_dat = hdl_dat = dat = &sec_dat[type];
+              bit_chain_set_version (dat, old_dat);
+              error |= encode_r13_thumbnail (dwg, dat, header_crc_address);
+              LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
+            }
             break;
           case SECTION_OBJECTS:
           case SECTION_UNKNOWN: // deferred
@@ -4308,29 +4314,33 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     section_info_rebuild (dwg, (Dwg_Section_Type)type);
                 }
               {
+                // For single-page sections store actual content size, not
+                // the theoretical max_decomp_size
+                if (info->num_sections == 1)
+                  info->max_decomp_size
+                      = MIN (max_decomp_size, (unsigned)ssize);
                 int ssi = 0;
                 do
                   {
+                    // actual content for this page (last page may be partial)
+                    unsigned page_content = MIN (
+                        max_decomp_size, (unsigned)(ssize > 0 ? ssize : 0));
                     Dwg_Section *sec = &dwg->header.section[si];
                     total_size += ssize;
                     sec->number = si + 1; // index starting at 1
                     if (type < SECTION_INFO)
                       {
                         // data section: on-disk = 32-byte encrypted page
-                        // header
-                        // + data padded to max_decomp_size
-                        sec->size = 32 + max_decomp_size;
-                        sec->decomp_data_size
-                            = max_decomp_size; // padded page size
+                        // header + actual content (no padding to max_decomp)
+                        sec->size = 32 + page_content;
+                        sec->decomp_data_size = page_content;
                       }
                     else
                       {
                         // system section: on-disk = 20-byte header + content
                         // size will be updated during stream write
-                        sec->size
-                            = 20 + MIN (max_decomp_size, (unsigned)ssize);
-                        sec->decomp_data_size
-                            = MIN (max_decomp_size, (unsigned)ssize);
+                        sec->size = 20 + page_content;
+                        sec->decomp_data_size = page_content;
                       }
                     sec->type = (Dwg_Section_Type)type;
                     sec->compression_type = info->compressed;
@@ -4548,8 +4558,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 {
                   Dwg_Section_Info *info2;
                   int type2 = stream_order[si2];
-                  if (type2 == SECTION_SYSTEM_MAP)
-                    break; // stop before SYSTEM_MAP itself
+                  if (type2 == SECTION_INFO || type2 == SECTION_SYSTEM_MAP)
+                    break; // stop before INFO and SYSTEM_MAP (written
+                           // explicitly)
                   info2
                       = find_section_info_type (dwg, (Dwg_Section_Type)type2);
                   if (!info2)
