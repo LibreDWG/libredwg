@@ -2874,7 +2874,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
  */
 static int
 encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
-                        Bit_Chain **restrict sec_dat)
+                        Bit_Chain *restrict sec_dat)
 {
   int error = 0;
   int ckr_missing = 1;
@@ -2893,8 +2893,8 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   SINCE (R_2004a)
   {
     sec_id = SECTION_OBJECTS;
-    bit_chain_alloc (sec_dat[sec_id]);
-    str_dat = hdl_dat = dat = sec_dat[sec_id];
+    bit_chain_alloc (&sec_dat[sec_id]);
+    str_dat = hdl_dat = dat = &sec_dat[sec_id];
     bit_chain_set_version (dat, old_dat);
   }
   LOG_INFO ("\n=======> Objects: %4zu\n", dat->byte);
@@ -3043,8 +3043,8 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   SINCE (R_2004a)
   {
     sec_id = SECTION_HANDLES;
-    bit_chain_init_dat (sec_dat[sec_id], (8 * dwg->num_objects) + 32, dat);
-    str_dat = hdl_dat = dat = sec_dat[sec_id];
+    bit_chain_init_dat (&sec_dat[sec_id], (8 * dwg->num_objects) + 32, dat);
+    str_dat = hdl_dat = dat = &sec_dat[sec_id];
   }
   else
   {
@@ -3297,7 +3297,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
   Dwg_Section_Type sec_id;
   Dwg_Version_Type orig_from_version = dwg->header.from_version;
-  Bit_Chain sec_dat[SECTION_SYSTEM_MAP + 1]; // to encode each r2004 section
+  Bit_Chain sec_dat[SECTION_SYSTEM_MAP + 1]
+      = { 0 }; // to encode each r2004 section
 
   dwg->cur_index = 0;
   if (dwg->opts)
@@ -3984,8 +3985,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               error |= encode_classes (dwg, dat);
               break;
             case SECTION_HANDLES_R13:
-              error
-                  |= encode_objects_handles (dwg, dat, (Bit_Chain **)&sec_dat);
+              error |= encode_objects_handles (dwg, dat, sec_dat);
               break;
             case SECTION_OBJFREESPACE_R13:
               error |= encode_objfreespace_2ndheader (dwg, dat);
@@ -4024,7 +4024,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_INFO ("\n");
     LOG_ERROR (WE_CAN "Writing R2004 sections not yet finished");
 
-    memset (&sec_dat, 0, (SECTION_SYSTEM_MAP + 1) * sizeof (Bit_Chain));
+    // Preserve sec_dat entries already populated by the VERSIONS block
+    // (SECTION_OBJECTS and SECTION_HANDLES from encode_objects_handles).
+    {
+      Bit_Chain saved_objects = sec_dat[SECTION_OBJECTS];
+      Bit_Chain saved_handles = sec_dat[SECTION_HANDLES];
+      memset (&sec_dat, 0, (SECTION_SYSTEM_MAP + 1) * sizeof (Bit_Chain));
+      sec_dat[SECTION_OBJECTS] = saved_objects;
+      sec_dat[SECTION_HANDLES] = saved_handles;
+    }
     if (dwg->header.section_infohdr.num_desc && !dwg->header.section_info)
       dwg->header.section_info = (Dwg_Section_Info *)calloc (
           dwg->header.section_infohdr.num_desc, sizeof (Dwg_Section_Info));
@@ -4059,10 +4067,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     unsigned total_size = 0;
     old_dat = dat;
 
-    // write remaining section data
-    for (type = SECTION_OBJFREESPACE; type < SECTION_SYSTEM_MAP; type++)
+    // write section data into sec_dat[type] chains
+    for (type = SECTION_HEADER; type < SECTION_SYSTEM_MAP; type++)
       {
-        if (type != SECTION_OBJECTS && type != SECTION_PREVIEW)
+        if (type != SECTION_OBJECTS && type != SECTION_PREVIEW
+            && type != SECTION_UNKNOWN)
           LOG_TRACE ("\n=== Section %s ===\n", dwg_section_name (dwg, type))
         switch (type)
           {
@@ -4072,11 +4081,32 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             error |= encode_header_vars (dwg, dat, orig_from_version);
             break;
           case SECTION_AUXHEADER:
+            {
+              Dwg_AuxHeader *_obj = &dwg->auxheader;
+              if (_obj->dwg_version)
+                {
+                  bit_chain_alloc (&sec_dat[type]);
+                  str_dat = hdl_dat = dat = &sec_dat[type];
+                  bit_chain_set_version (dat, old_dat);
+                  error |= encode_auxheader (dwg, dat);
+                  LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
+                }
+            }
             break;
           case SECTION_HANDLES:
-            bit_chain_init_dat (&sec_dat[type], 1000, dat);
-            str_dat = hdl_dat = dat = &sec_dat[type];
-            error |= encode_objects_handles (dwg, dat, (Bit_Chain **)&sec_dat);
+          case SECTION_OBJECTS:
+            // Already populated by encode_objects_handles in VERSIONS block
+            if (sec_dat[type].chain && sec_dat[type].byte)
+              break;
+            if (type == SECTION_HANDLES)
+              {
+                // Don't bit_chain_init_dat here; encode_objects_handles
+                // allocates sec_dat[SECTION_HANDLES] itself. Just set
+                // version so it can be copied to SECTION_OBJECTS.
+                bit_chain_set_version (&sec_dat[type], dat);
+                str_dat = hdl_dat = dat = &sec_dat[type];
+                error |= encode_objects_handles (dwg, dat, sec_dat);
+              }
             break;
           case SECTION_CLASSES:
             bit_chain_init_dat (&sec_dat[type],
@@ -4100,7 +4130,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
             }
             break;
-          case SECTION_OBJECTS:
           case SECTION_UNKNOWN: // deferred
           case SECTION_INFO:
           case SECTION_SYSTEM_MAP:
@@ -4268,9 +4297,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // system page maps, info and system_map the data_pages (system_map
       // sections) can include multiple pages of the same type.
       LOG_TRACE ("\n=== Section map and info page sizes ===\n");
-      for (si = 0, info_id = 0, type = SECTION_UNKNOWN;
-           type <= SECTION_SYSTEM_MAP; type++, i++)
+      for (si = 0, info_id = 0, i = 0; i < ARRAY_SIZE (stream_order); i++)
         {
+          type = stream_order[i];
           if (sec_dat[type].byte)
             {
               const unsigned int max_decomp_size
@@ -4381,6 +4410,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                        dwg_section_name (dwg, type));
         }
       dwg->fhdr.r2004_header.numsections = si;
+      // fix num_desc to actual count of written descriptors
+      dwg->header.section_infohdr.num_desc = info_id;
       // section_info [27] and section_map [28] as two last already added.
       if ((unsigned)si > dwg->header.num_sections) // needed?
         {
@@ -4461,6 +4492,22 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               FIELD_RL (encrypted, 0);
               bit_write_TF (dat, (unsigned char *)_obj->name, 64);
               LOG_TRACE ("name: %s\n", *_obj->name ? _obj->name : "");
+              // write page entries: number RL, size RL, address RLL
+              for (unsigned j = 0; j < _obj->num_sections; j++)
+                {
+                  Dwg_Section *sec = _obj->sections[j];
+                  if (sec)
+                    {
+                      uint64_t page_offset
+                          = (uint64_t)j * _obj->max_decomp_size;
+                      bit_write_RL (dat, sec->number);
+                      bit_write_RL (dat, sec->decomp_data_size);
+                      bit_write_RLL (dat, page_offset);
+                      LOG_TRACE (
+                          "  Page: %d size: %u address: 0x%" PRIx64 "\n",
+                          sec->number, sec->decomp_data_size, page_offset);
+                    }
+                }
             }
         }
 
