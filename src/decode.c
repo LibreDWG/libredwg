@@ -1659,10 +1659,11 @@ section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
   else if (id == SECTION_PREVIEW)
     {
       // resp. 0x1800 with r2013+, 0x4a000 with r2007-r2010
-      max_decomp_size = 0x7c00;
-      if (dwg->header.version >= R_2013)
-        max_decomp_size = 0x1800;
-      else if (dwg->header.version >= R_2007 && dwg->header.version <= R_2010)
+      max_decomp_size = 0x7fff; // was 0x7c00. GH #1045
+      // if (dwg->header.version >= R_2013)
+      //   max_decomp_size = 0x1800;
+      // else
+      if (dwg->header.version >= R_2007 && dwg->header.version <= R_2010)
         max_decomp_size = 0x4a000;
       else if (dwg->header.version == R_2004)
         max_decomp_size = 0x144400;
