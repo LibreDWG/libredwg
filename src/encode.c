@@ -1893,6 +1893,30 @@ store_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   return 0;
 }
 
+/* Return the on-disk size of a system section written via
+   store_R2004_section without emitting it. */
+static uint32_t
+stored_R2004_section_size (uint32_t decomp_data_size)
+{
+  uint32_t hdr_size = 1; // terminator 0x11
+
+  if (decomp_data_size > 3)
+    {
+      hdr_size++; // initial literal-length opcode byte
+      if (decomp_data_size > 18)
+        {
+          uint32_t offset = decomp_data_size - 18;
+          while (offset > 0xff)
+            {
+              hdr_size++;
+              offset -= 0xff;
+            }
+          hdr_size++; // final offset byte
+        }
+    }
+  return decomp_data_size + hdr_size;
+}
+
 /* R2004 Long Compression Offset
  */
 static void
@@ -4401,10 +4425,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             LOG_TRACE ("section_info %s is empty, skipped. size=0\n",
                        dwg_section_name (dwg, type));
         }
-      // si includes SECTION_INFO and SECTION_SYSTEM_MAP, but numsections in
-      // the r2004 header counts only the data sections before those two
-      // trailing system sections.
-      dwg->fhdr.r2004_header.numsections = si - 2;
+      // r2004_header.numsections counts all real section-map entries.
+      // section_info_id and section_map_id then live just above that range.
+      dwg->fhdr.r2004_header.numsections = si;
       // fix num_desc to actual count of written descriptors
       dwg->header.section_infohdr.num_desc = info_id;
       // section_info and section_map are the two last already added.
@@ -4456,11 +4479,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             // very unlikely, more than 1 page
             info->sections[0] = sec;
           }
-        if (_obj->compressed == 2 && sec->size <= MIN_COMPRESSED_SECTION)
-          _obj->compressed = 1;
-#ifndef HAVE_COMPRESS_R2004_SECTION
-        _obj->compressed = 1;
-#endif
+        _obj->compressed = 2;
+        _obj->max_size = 0x7400;
+        _obj->encrypted = 0;
+        _obj->num_desc2 = _obj->num_desc;
         LOG_HANDLE ("InfoHdr @%" PRIuSIZE ".0\n", dat->byte);
         FIELD_RL (num_desc, 0);
         FIELD_RL (compressed, 0);
@@ -4642,7 +4664,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               smap_data_size = (uint32_t)smap->byte + 8; // +8 for this entry
               {
                 Dwg_Section *sec_smap = &dwg->header.section[si - 1];
-                sec_smap->size = 20 + smap_data_size;
+                sec_smap->size
+                    = 20 + stored_R2004_section_size (smap_data_size);
                 bit_write_RL (smap, sec_smap->number);
                 bit_write_RL (smap, sec_smap->size);
               }
@@ -4734,7 +4757,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     cs1 = dwg_section_page_checksum (0, &cs_dat, 20, true);
                     cs_dat.byte = sec->address + 20;
                     cs2 = dwg_section_page_checksum (
-                        cs1, &cs_dat, (int32_t)content_size, false);
+                        cs1, &cs_dat, (int32_t)sec->comp_data_size, false);
                     dat->chain[checksum_pos] = cs2 & 0xFF;
                     dat->chain[checksum_pos + 1] = (cs2 >> 8) & 0xFF;
                     dat->chain[checksum_pos + 2] = (cs2 >> 16) & 0xFF;
@@ -4797,6 +4820,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         NULL, sizeof (Dwg_R2004_Header), 0UL, 0, 0, R_INVALID, R_INVALID, NULL,
         30
       };
+      BITCODE_RC overlap_hdr[sizeof (Dwg_R2004_Header)];
       Bit_Chain *orig_dat = dat;
       /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
       const char enc_file_ID_string[]
@@ -4807,6 +4831,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dat = &file_dat;
       LOG_TRACE ("\nSection R2004_Header @0x100\n");
       memcpy (_obj->file_ID_string, "AcFssFcAJMB", 12);
+      // The encrypted file header overlaps the first 12 bytes of the first
+      // data page at 0x100. Preserve those ciphertext bytes so the final
+      // header encryption does not clobber the SummaryInfo page header.
+      decrypt_R2004_header (overlap_hdr, &orig_dat->chain[0x80],
+                            sizeof (Dwg_R2004_Header));
 
       checksum = _obj->crc32;
       LOG_HANDLE ("old crc32: 0x%x\n", _obj->crc32);
@@ -4819,6 +4848,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // clang-format off
       #include "r2004_file_header.spec"
       // clang-format on
+      memcpy (&file_dat.chain[offsetof (Dwg_R2004_Header, decomp_data_size)],
+              &overlap_hdr[offsetof (Dwg_R2004_Header, decomp_data_size)],
+              sizeof (_obj->decomp_data_size) + sizeof (_obj->comp_data_size)
+                  + sizeof (_obj->compression_type));
 
       // go back and encrypt it
       dat = orig_dat;
