@@ -3351,12 +3351,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
   // We cannot write unknown_bits into another version, or when it's coming
-  // from DXF. Write a PLACEHOLDER/DUMMY or POINT instead. Later maybe PROXY.
+  // from DXF. Same-version JSON imports keep the raw unknown_bits dump.
+  // Otherwise write a PLACEHOLDER/DUMMY or POINT instead. Later maybe PROXY.
   // This is controversial and breaks roundtrip tests, but helps
   // ACAD imports.
   if (dwg_supports_eed (dwg)
       && (dwg->header.version != dwg->header.from_version
-          || (dwg->opts & DWG_OPTS_IN)))
+          || (dwg->opts & DWG_OPTS_INDXF)))
     {
       int fixup = 0;
       // Scan for invalid/unstable/unsupported objects and entities
@@ -3368,9 +3369,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
               || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
           // WIPEOUT causes hang, TABLEGEOMETRY crash, MATERIAL causes ODA
-          // errors
+          // errors. Keep same-version JSON imports untouched.
 #  ifndef DEBUG_CLASSES
-              || (dwg->opts & DWG_OPTS_IN
+              || (dwg->opts & DWG_OPTS_INDXF
                   && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) || */
                       obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
                       || obj->fixedtype == DWG_TYPE_MATERIAL))
@@ -3405,7 +3406,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
                       || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
 #  ifndef DEBUG_CLASSES
-                      || (dwg->opts & DWG_OPTS_IN
+                      || (dwg->opts & DWG_OPTS_INDXF
                           && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) ||
                                */
                               obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
@@ -5734,6 +5735,80 @@ dwg_encode_unknown_bits (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     return false;
 }
 
+static int
+dwg_encode_raw_UNKNOWN_ENT (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+{
+  int error;
+  BITCODE_BL vcount;
+  Bit_Chain _hdl_dat = { 0 };
+  Bit_Chain *hdl_dat = &_hdl_dat;
+  Bit_Chain *str_dat = dat;
+
+  LOG_INFO ("Encode entity UNKNOWN_ENT\n");
+  bit_chain_init_dat (hdl_dat, 128, dat);
+  error = dwg_encode_entity (obj, dat, hdl_dat, str_dat);
+  if (error)
+    {
+      if (hdl_dat != dat && hdl_dat->chain != dat->chain)
+        bit_chain_free (hdl_dat);
+      return error;
+    }
+  if (!dwg_encode_unknown_bits (dat, obj))
+    {
+      if (hdl_dat != dat && hdl_dat->chain != dat->chain)
+        bit_chain_free (hdl_dat);
+      return DWG_ERR_UNHANDLEDCLASS;
+    }
+  dwg_encode_unknown_rest (dat, obj);
+  if (hdl_dat->byte > dat->byte)
+    {
+      dat->byte = hdl_dat->byte;
+      dat->bit = hdl_dat->bit;
+    }
+  if (hdl_dat != dat && hdl_dat->chain != dat->chain)
+    bit_chain_free (hdl_dat);
+  return 0;
+}
+
+static int
+dwg_encode_raw_UNKNOWN_OBJ (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+{
+  int error;
+  BITCODE_BL vcount;
+  Bit_Chain _hdl_dat = { 0 };
+  Bit_Chain *hdl_dat = &_hdl_dat;
+  Bit_Chain *str_dat = dat;
+  Dwg_Data *dwg = obj->parent;
+
+  LOG_INFO ("Encode object UNKNOWN_OBJ\n");
+  bit_chain_init_dat (hdl_dat, 128, dat);
+  error = dwg_encode_object (obj, dat, hdl_dat, str_dat);
+  if (error)
+    {
+      if (hdl_dat != dat && hdl_dat->chain != dat->chain)
+        bit_chain_free (hdl_dat);
+      return error;
+    }
+  if (!dwg_encode_unknown_bits (dat, obj))
+    {
+      if (hdl_dat != dat && hdl_dat->chain != dat->chain)
+        bit_chain_free (hdl_dat);
+      return DWG_ERR_UNHANDLEDCLASS;
+    }
+  if (obj->bitsize)
+    obj->hdlpos = (obj->address * 8) + obj->bitsize;
+  START_OBJECT_HANDLE_STREAM;
+  dwg_encode_unknown_rest (dat, obj);
+  if (hdl_dat->byte > dat->byte)
+    {
+      dat->byte = hdl_dat->byte;
+      dat->bit = hdl_dat->bit;
+    }
+  if (hdl_dat != dat && hdl_dat->chain != dat->chain)
+    bit_chain_free (hdl_dat);
+  return 0;
+}
+
 int
 dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                        size_t address)
@@ -6061,6 +6136,20 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       break;
     case DWG_TYPE_PROXY_OBJECT:
       error = dwg_encode_PROXY_OBJECT (dat, obj);
+      break;
+    case DWG_TYPE_UNKNOWN_ENT:
+      if ((dwg->opts & DWG_OPTS_INJSON)
+          && dwg->header.version == dwg->header.from_version)
+        error = dwg_encode_raw_UNKNOWN_ENT (dat, obj);
+      else
+        error = DWG_ERR_UNHANDLEDCLASS;
+      break;
+    case DWG_TYPE_UNKNOWN_OBJ:
+      if ((dwg->opts & DWG_OPTS_INJSON)
+          && dwg->header.version == dwg->header.from_version)
+        error = dwg_encode_raw_UNKNOWN_OBJ (dat, obj);
+      else
+        error = DWG_ERR_UNHANDLEDCLASS;
       break;
     /*
     case DWG_TYPE_REPEAT:
