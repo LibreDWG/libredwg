@@ -4106,15 +4106,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             break;
           case SECTION_AUXHEADER:
             {
-              Dwg_AuxHeader *_obj = &dwg->auxheader;
-              if (_obj->dwg_version)
-                {
-                  bit_chain_alloc (&sec_dat[type]);
-                  str_dat = hdl_dat = dat = &sec_dat[type];
-                  bit_chain_set_version (dat, old_dat);
-                  error |= encode_auxheader (dwg, dat);
-                  LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
-                }
+              bit_chain_alloc (&sec_dat[type]);
+              str_dat = hdl_dat = dat = &sec_dat[type];
+              bit_chain_set_version (dat, old_dat);
+              error |= encode_auxheader (dwg, dat);
+              LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
             }
             break;
           case SECTION_HANDLES:
