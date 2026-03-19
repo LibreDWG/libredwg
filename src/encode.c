@@ -1291,7 +1291,6 @@ encode_patch_RSsize (Bit_Chain *dat, size_t size_adr)
     }
   size = (dat->byte - size_adr) & 0xFFFF;
   pos = bit_position (dat);
-  assert (size_adr);
   bit_set_position (dat, size_adr * 8);
   bit_write_RS_BE (dat, size);
   LOG_TRACE ("Size: " FORMAT_RS " [RS_BE] @%" PRIuSIZE "\n", size, size_adr);
@@ -3057,18 +3056,21 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
    * split into chunks of max. 2030
    */
   LOG_INFO ("\n=======> Object Map: %4zu\n", dat->byte);
-  size_adr = dat->byte; // Correct value of section size must be written later
   SINCE (R_2004a)
   {
     sec_id = SECTION_HANDLES;
     bit_chain_init_dat (&sec_dat[sec_id], (8 * dwg->num_objects) + 32, dat);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
+    size_adr = 0;
+    dat->byte += 2; // reserve initial RS_BE page size
   }
   else
   {
     sec_id = (Dwg_Section_Type)SECTION_HANDLES_R13;
     dwg->header.section[sec_id].number = 2;
     dwg->header.section[sec_id].address = dat->byte;
+    size_adr
+        = dat->byte; // Correct value of section size must be written later
     dat->byte += 2;
   }
 
@@ -3099,7 +3101,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       if (dat->byte - size_adr > 2030) // 2029
         {
           ckr_missing = 0;
-          assert (size_adr);
+          assert (size_adr || dwg->header.version >= R_2004);
 #ifdef ENCODE_PATCH_RSSIZE
           encode_patch_RSsize (dat, size_adr);
 #else
@@ -4783,10 +4785,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   page_hdr[1] = info->type;   // section_type
                   page_hdr[2] = content_size; // data_size (uncompressed)
                   page_hdr[3] = content_size; // page_size (decompressed)
-                  page_hdr[4] = k * max_decomp_size; // start offset in decomp
-                  page_hdr[5] = 0;                   // unknown
-                  page_hdr[6] = 0;                   // page_header_crc
-                  page_hdr[7] = 0;                   // data_crc
+                  // For the current uncompressed writer path the decoder uses
+                  // this as an offset into the page payload, not as the
+                  // decompressed stream position.
+                  page_hdr[4] = 0;
+                  page_hdr[5] = 0; // unknown
+                  page_hdr[6] = 0; // page_header_crc
+                  page_hdr[7] = 0; // data_crc
 
                   // encrypt: XOR with sec_mask
                   sec_mask = 0x4164536b ^ (uint32_t)sec->address;
