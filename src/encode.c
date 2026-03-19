@@ -2913,6 +2913,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     bit_chain_alloc (&sec_dat[sec_id]);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
     bit_chain_set_version (dat, old_dat);
+    dat->byte += 4; // r2004 object map offsets start after a 4-byte prefix
   }
   LOG_INFO ("\n=======> Objects: %4zu\n", dat->byte);
   size_adr = dat->byte;
@@ -4785,13 +4786,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   page_hdr[1] = info->type;   // section_type
                   page_hdr[2] = content_size; // data_size (uncompressed)
                   page_hdr[3] = content_size; // page_size (decompressed)
-                  // For the current uncompressed writer path the decoder uses
-                  // this as an offset into the page payload, not as the
-                  // decompressed stream position.
-                  page_hdr[4] = 0;
-                  page_hdr[5] = 0; // unknown
-                  page_hdr[6] = 0; // page_header_crc
-                  page_hdr[7] = 0; // data_crc
+                  page_hdr[4] = k * max_decomp_size; // start offset in decomp
+                  page_hdr[5] = 0;                   // unknown
+                  page_hdr[6] = 0;                   // page_header_crc
+                  page_hdr[7] = 0;                   // data_crc
 
                   // encrypt: XOR with sec_mask
                   sec_mask = 0x4164536b ^ (uint32_t)sec->address;

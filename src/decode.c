@@ -2177,11 +2177,12 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          const size_t offset = address + es.fields.address + 32;
-          // the remaining uncompressed size to read from
-          const BITCODE_RL size = MIN (info->size, info->max_decomp_size);
+          const size_t offset = address + 32;
+          const BITCODE_RL size
+              = MIN ((BITCODE_RL)(info->size - es.fields.address),
+                     es.fields.page_size);
           if (info->compressed == 2 || bytes_left < 0
-              || (j * info->max_decomp_size) + size > max_decomp_size
+              || es.fields.address + size > max_decomp_size
               || offset + size > dat->size)
             {
               LOG_ERROR ("Some section size or address out of bounds")
@@ -2191,7 +2192,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                                                : DWG_ERR_VALUEOUTOFBOUNDS;
             }
           assert (j < info->num_sections);
-          memcpy (dec.chain, &dat->chain[offset], size);
+          memcpy (&dec.chain[es.fields.address], &dat->chain[offset], size);
           bytes_left -= size;
           sec_dat->size += size;
         }
