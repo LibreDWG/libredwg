@@ -4038,7 +4038,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   VERSIONS (R_2007a, R_2007)
   {
-    LOG_ERROR (WE_CAN "We don't encode R2007 sections yet");
+    LOG_ERROR (WE_CAN "We don't encode r2007 yet");
     // dat->version = dwg->header.version = R_2010; // rather do 2010
     return DWG_ERR_NOTYETSUPPORTED;
   }
@@ -4047,7 +4047,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004a)
   {
     LOG_INFO ("\n");
-    LOG_ERROR (WE_CAN "Writing R2004 sections not yet finished");
+    SINCE (R_2007a) // r2010 is close though
+    {
+      LOG_ERROR (WE_CAN "Writing >r2004 not yet supported");
+      return DWG_ERR_NOTYETSUPPORTED;
+    }
 
     // Preserve sec_dat entries already populated by the VERSIONS block
     // (SECTION_OBJECTS and SECTION_HANDLES from encode_objects_handles).
