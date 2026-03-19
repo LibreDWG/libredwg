@@ -4318,8 +4318,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               info->fixedtype = (Dwg_Section_Type)type;
               info->type = type;
               info->unknown = 1;
-              if (name && si
-                  && type < SECTION_INFO) // not UNKNOWN and the last two
+              if (name && type < SECTION_INFO) // not UNKNOWN and the last two
                 strcpy (info->name, name);
               else
                 memset (info->name, 0, 64);
@@ -4362,7 +4361,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   info->max_decomp_size
                       = MIN (max_decomp_size, (unsigned)ssize);
                 int ssi = 0;
-                do
+                while (ssize > 0)
                   {
                     // actual content for this page (last page may be partial)
                     unsigned page_content = MIN (
@@ -4391,11 +4390,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                "size=%d\n",
                                si, dwg_section_name (dwg, type), info_id, ssi,
                                sec->number, (int)sec->size);
-                    ssize -= max_decomp_size;
+                    ssize -= (int)page_content;
                     ssi++; // info->sections index
                     si++;  // section index
                   }
-                while (ssize > (int)max_decomp_size); // keep same type
               }
               info_id++;
             }
@@ -4403,10 +4401,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             LOG_TRACE ("section_info %s is empty, skipped. size=0\n",
                        dwg_section_name (dwg, type));
         }
-      dwg->fhdr.r2004_header.numsections = si;
+      // si includes SECTION_INFO and SECTION_SYSTEM_MAP, but numsections in
+      // the r2004 header counts only the data sections before those two
+      // trailing system sections.
+      dwg->fhdr.r2004_header.numsections = si - 2;
       // fix num_desc to actual count of written descriptors
       dwg->header.section_infohdr.num_desc = info_id;
-      // section_info [27] and section_map [28] as two last already added.
+      // section_info and section_map are the two last already added.
       if ((unsigned)si > dwg->header.num_sections) // needed?
         {
           Dwg_Section *oldsecs = dwg->header.section;
@@ -4417,7 +4418,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             section_info_rebuild (dwg, SECTION_SYSTEM_MAP);
         }
       dwg->fhdr.r2004_header.section_info_id
-          = dwg->fhdr.r2004_header.numsections + 1; // a gap of 3
+          = dwg->fhdr.r2004_header.numsections + 1;
       dwg->fhdr.r2004_header.section_map_id
           = dwg->fhdr.r2004_header.numsections + 2;
       dwg->fhdr.r2004_header.section_array_size
