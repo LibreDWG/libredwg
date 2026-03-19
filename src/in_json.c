@@ -2597,7 +2597,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else if (t->type == JSMN_ARRAY
                && (strEQc (f->type, "BS") || strEQc (f->type, "BS*")
-                   || strEQc (f->type, "RS")))
+                   || strEQc (f->type, "BSd") || strEQc (f->type, "RS")))
         {
           const int size1 = t->size;
           const int max_k
