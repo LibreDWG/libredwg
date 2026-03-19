@@ -1874,6 +1874,25 @@ write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
 #endif
 }
 
+/* Write raw data wrapped in valid LZ "store" framing so that
+   decompress_R2004_section can decode it: literal_length + data + 0x11.
+   Used for system sections (SECTION_INFO, SECTION_SYSTEM_MAP). */
+static int
+store_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
+                     uint32_t decomp_data_size, uint32_t *comp_data_size)
+{
+  size_t start = dat->byte;
+  assert (decomp_data_size > 3); // system sections always > 3 bytes
+  // worst-case overhead: length header + data + terminator
+  if (dat->size < dat->byte + decomp_data_size + 20)
+    bit_chain_alloc_size (dat, decomp_data_size + 20);
+  assert (!dat->bit);
+  write_literal_length (dat, decomp, decomp_data_size);
+  bit_write_RC (dat, 0x11); // end of stream
+  *comp_data_size = (uint32_t)(dat->byte - start);
+  return 0;
+}
+
 /* R2004 Long Compression Offset
  */
 static void
@@ -4547,11 +4566,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             {
               Bit_Chain *smap = &sec_dat[SECTION_SYSTEM_MAP];
               uint32_t smap_data_size;
-              // update SECTION_INFO disk size now that its content is written
-              {
-                Dwg_Section *sec_inf = &dwg->header.section[si - 2];
-                sec_inf->size = 20 + (uint32_t)sec_dat[SECTION_INFO].byte;
-              }
+              // SECTION_INFO sec->size was already set correctly (20 +
+              // comp_data_size) when it was written in the previous iteration.
               // rebuild section map content (number, size) in stream order
               bit_set_position (smap, 0);
               for (int si2 = 0; si2 < (int)ARRAY_SIZE (stream_order); si2++)
@@ -4624,15 +4640,38 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
               if (type >= SECTION_INFO)
                 {
-                  // System section: 20-byte header
+                  // System section: 20-byte header + LZ-stored content
                   // section_type: 0x41630e3b (SYSTEM_MAP) or 0x4163003b (INFO)
                   uint32_t section_magic
                       = (type == SECTION_SYSTEM_MAP) ? 0x41630e3b : 0x4163003b;
-                  size_t checksum_pos;
+                  size_t checksum_pos, comp_data_pos;
                   content_size = (uint32_t)sec_dat[type].byte;
-                  sec->size = 20 + content_size;
-                  sec->comp_data_size = content_size;
                   sec->decomp_data_size = content_size;
+
+                  if (dat->byte + 20 + content_size + 20 > dat->size)
+                    bit_chain_alloc_size (dat, 20 + content_size + 20);
+
+                  bit_write_RL (dat, section_magic);
+                  bit_write_RL (dat, content_size); // decomp_data_size
+                  comp_data_pos = dat->byte;
+                  bit_write_RL (dat, 0); // comp_data_size placeholder
+                  bit_write_RL (dat, 2); // compression_type = 2 (LZ)
+                  checksum_pos = dat->byte;
+                  bit_write_RL (dat, 0); // checksum placeholder
+
+                  // write section content as LZ "store" (literals + 0x11)
+                  store_R2004_section (dat, sec_dat[type].chain, content_size,
+                                       &sec->comp_data_size);
+                  sec->size = 20 + sec->comp_data_size;
+
+                  // patch comp_data_size in the header
+                  dat->chain[comp_data_pos] = sec->comp_data_size & 0xFF;
+                  dat->chain[comp_data_pos + 1]
+                      = (sec->comp_data_size >> 8) & 0xFF;
+                  dat->chain[comp_data_pos + 2]
+                      = (sec->comp_data_size >> 16) & 0xFF;
+                  dat->chain[comp_data_pos + 3]
+                      = (sec->comp_data_size >> 24) & 0xFF;
 
                   if (type == SECTION_SYSTEM_MAP)
                     {
@@ -4641,22 +4680,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       dwg->fhdr.r2004_header.last_section_address
                           = (BITCODE_RLL)sec->address + sec->size - 0x100;
                       dwg->fhdr.r2004_header.secondheader_address = 0; // TODO
+                      dwg->fhdr.r2004_header.comp_data_size
+                          = sec->comp_data_size;
                     }
-
-                  if (dat->byte + 20 + content_size > dat->size)
-                    bit_chain_alloc_size (dat, 20 + content_size);
-
-                  bit_write_RL (dat, section_magic);
-                  bit_write_RL (dat, content_size); // decomp_data_size
-                  bit_write_RL (dat,
-                                content_size); // comp_data_size (uncompressed)
-                  bit_write_RL (dat, info->compressed); // compression_type
-                  checksum_pos = dat->byte;
-                  bit_write_RL (dat, 0); // checksum placeholder
-
-                  // write section content
-                  copy_R2004_section (dat, sec_dat[type].chain, content_size,
-                                      &sec->comp_data_size);
 
                   // compute and patch checksum
                   {
