@@ -182,12 +182,12 @@ someone should probably think about and resolve them!
   - check if the source tarballs compile
   - push master and tags to run the CI and create the windows binaries on appveyor
   - upload the dist tarballs
-    build-aux/gnupload --to ftp.gnu.org:libredwg libredwg-0.6.2.tar.gz libredwg-0.6.2.tar.xz
+    build-aux/gnupload --to ftp.gnu.org:libredwg libredwg-0.6.2.tar.?z
   - download the appveyor artifacts and sha256sum and sign it
     gpg -b -a libredwg-0.6.2-win32.zip; mv libredwg-0.6.2-win32.asc libredwg-0.6.2-win32.sig
     sha256sum libredwg-0.6.2*
-  - edit the github release, copy from the previous and fix up the text with the sha256sum's,
-    upload the dists and sigs to this page.
+  - edit the github release, copy from the previous and fix up the text with the
+    sha256sum's, upload the dists and sigs to this page.
   - regen the docs, the refman and manual
     make manual refman
   - update the libredwg-cvs checkout for the docs and GNU homepage with the updated docs via
