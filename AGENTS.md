@@ -85,6 +85,7 @@ When possible, write commit messages in GNU style:
 - Blank line
 - Optional short discussion
 - Per-file bullets for non-trivial changes
+- Wrap the body at col 78
 
 If referencing Savannah PRs, include text like `PR #NNNN`.
 For Github issues reference it like `GH #NNNN`.
