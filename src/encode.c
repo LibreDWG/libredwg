@@ -2790,6 +2790,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
   int error = 0;
   BITCODE_BL j;
+  BITCODE_BS max_num = 499;
   Dwg_Section_Type sec_id;
   size_t size_adr;
   SINCE (R_2004a)
@@ -2810,7 +2811,9 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   SINCE (R_2004a)
   {
-    BITCODE_BS max_num = dwg->num_classes + 500;
+    for (j = 0; j < dwg->num_classes; j++)
+      if (dwg->dwg_class[j].number > max_num)
+        max_num = dwg->dwg_class[j].number;
     bit_write_BS (dat, max_num);
     LOG_TRACE ("max_num: " FORMAT_BS " [BS]\n", max_num);
     bit_write_RS (dat, 0);
@@ -2852,9 +2855,9 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  klass->cppname, klass->appname, klass->is_zombie,
                  klass->item_class_id);
 
-      SINCE (R_2007a)
+      SINCE (R_2004a)
       {
-        if (dat->from_version < R_2007 && !klass->dwg_version)
+        if (!klass->dwg_version)
           {
             // defaults
             klass->dwg_version = (BITCODE_BL)dwg->header.dwg_version;
@@ -2862,8 +2865,8 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             // TODO num_instances
           }
         bit_write_BL (dat, klass->num_instances);
-        bit_write_BL (dat, klass->dwg_version);
-        bit_write_BL (dat, klass->maint_version);
+        bit_write_BS (dat, klass->dwg_version);
+        bit_write_BS (dat, klass->maint_version);
         bit_write_BL (dat, klass->unknown_1);
         bit_write_BL (dat, klass->unknown_2);
         LOG_TRACE (" %d %d\n", (int)klass->num_instances,
