@@ -3187,7 +3187,7 @@ DWG_OBJECT (DICTIONARY)
     if (dat->version != R_13c3 || dwg->header.is_maint > 4)
       FIELD_RC (is_hardowner, 280);
   }
-  VALUEOUTOFBOUNDS (numitems, 10000)
+  //VALUEOUTOFBOUNDS (numitems, 10000)
 #endif
 
 #ifdef IS_DXF
