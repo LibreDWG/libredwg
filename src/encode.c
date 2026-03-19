@@ -1964,121 +1964,187 @@ write_two_byte_offset (Bit_Chain *restrict dat, uint32_t offset)
 }
 #endif
 
-/* Not yet used. compress_R2004_section needs unit-tests first. */
-#ifdef DEBUG
-static void
-write_two_byte_offset (Bit_Chain *restrict dat, uint32_t oldlen,
-                       uint32_t offset, uint32_t len)
-{
-  const unsigned lookahead_buffer_size = COMPRESSION_BUFFER_SIZE;
-  uint32_t b1, b2;
-
-  LOG_INSANE ("2O %x %x %x: ", oldlen, offset, len)
-  if ((offset < 0xf) && (oldlen < 0x401))
-    {
-      b1 = (offset + 1) * 0x10 | ((oldlen - 1U) & 3) << 2;
-      b2 = (oldlen - 1U) >> 2;
-    }
-  else
-    {
-      if (oldlen <= lookahead_buffer_size)
-        {
-          b2 = oldlen - 1;
-          write_length (dat, 0x20, offset, 0x21);
-        }
-      else
-        {
-          b2 = oldlen - lookahead_buffer_size;
-          write_length (dat, ((b2 >> 0xb) & 8U) | 0x10, offset, 9);
-        }
-      b1 = (b2 & 0xff) << 2;
-      b2 = b2 >> 6;
-    }
-  if (len < 4)
-    b1 = b1 | len;
-  LOG_INSANE ("> %x %x\n", b1, b2)
-  bit_write_RC (dat, b1 & 0xff);
-  bit_write_RC (dat, b2 & 0xff);
-}
-
-/* Finds the longest match to the substring starting at i
-   in the lookahead buffer (size ?) from the history window (size ?). */
+/* Hash-based match finder for LZ77 compression (ODA section 4.7).
+   Uses a 0x8000-entry hash table for O(1) match lookup.
+   Returns match length (>= 3) or 0. Sets *dist_p to backward distance.
+   Based on the ODA specs and the ACadSharp DwgLZ77AC18Compressor. */
+#if defined(DEBUG) || defined(ENCODE_TEST_C)
 static int
-find_longest_match (BITCODE_RC *restrict decomp, uint32_t decomp_data_size,
-                    uint32_t i, uint32_t *lenp)
+compress_find_match (BITCODE_RC *restrict src, uint32_t src_size, uint32_t pos,
+                     int32_t *hash_table, uint32_t *dist_p)
 {
-  const unsigned lookahead_buffer_size = COMPRESSION_BUFFER_SIZE;
-  const unsigned window_size = COMPRESSION_WINDOW_SIZE;
-  int offset = 0;
-  uint32_t bufend = MIN (i + lookahead_buffer_size, decomp_data_size + 1);
-  *lenp = 0;
-  // only substring lengths >= 2, anything else compression is longer
-  for (uint32_t j = i + 2; j < bufend; j++)
+  int match_len = 0;
+  uint32_t v1, v2, v3, v4;
+  int idx;
+  int32_t prev;
+  uint32_t dist;
+
+  if (pos + 3 >= src_size)
+    return 0;
+
+  /* 4-byte rolling hash */
+  v1 = (uint32_t)src[pos + 3] << 6;
+  v2 = v1 ^ src[pos + 2];
+  v3 = (v2 << 5) ^ src[pos + 1];
+  v4 = (v3 << 5) ^ src[pos];
+  idx = (int)((v4 + (v4 >> 5)) & 0x7FFF);
+
+  prev = hash_table[idx];
+  if (prev >= 0)
+    dist = pos - (uint32_t)prev;
+  else
+    dist = 0;
+
+  if (prev >= 0 && dist <= 0xBFFF)
     {
-      int start = MAX (0, (int)(i - window_size));
-      BITCODE_RC *s = &decomp[i];
-      uint32_t slen = j - i;
-      for (int k = start; k < (int)i; k++)
+      if (dist > 0x400 && src[pos + 3] != src[(uint32_t)prev + 3])
         {
-          int curr_offset = i - k;
-          // unsigned int repetitions = slen / curr_offset;
-          // unsigned int last = slen % curr_offset;
-          BITCODE_RC *match = &decomp[k]; // ...
-          // int matchlen = k + last;
-          if ((memcmp (s, match, slen) == 0) && slen > *lenp)
+          /* Try secondary hash slot */
+          idx = (idx & 0x7FF) ^ 0x401F;
+          prev = hash_table[idx];
+          if (prev >= 0)
+            dist = pos - (uint32_t)prev;
+          if (prev < 0 || dist > 0xBFFF
+              || (dist > 0x400 && src[pos + 3] != src[(uint32_t)prev + 3]))
             {
-              offset = curr_offset;
-              *lenp = slen;
+              hash_table[idx] = (int32_t)pos;
+              return 0;
+            }
+        }
+      if (src[pos] == src[(uint32_t)prev]
+          && src[pos + 1] == src[(uint32_t)prev + 1]
+          && src[pos + 2] == src[(uint32_t)prev + 2])
+        {
+          uint32_t p = (uint32_t)prev + 3;
+          uint32_t c = pos + 3;
+          match_len = 3;
+          while (c < src_size && src[p] == src[c])
+            {
+              p++;
+              c++;
+              match_len++;
             }
         }
     }
-  if (offset)
+
+  hash_table[idx] = (int32_t)pos;
+  *dist_p = dist;
+  return match_len >= 3 ? match_len : 0;
+}
+
+/* Write the LZ77 match encoding (two-byte offset + optional length opcode).
+   match_dist:    backward distance (1-based, max 0xBFFF)
+   match_len:     number of matching bytes (>= 3)
+   trailing_lits: number of literal bytes that follow (0-3 in low bits,
+                  >= 4 means low bits are 0, separate literal_length follows)
+ */
+static void
+compress_write_match (Bit_Chain *restrict dat, uint32_t match_dist,
+                      uint32_t match_len, uint32_t trailing_lits)
+{
+  uint32_t b1, b2;
+
+  LOG_INSANE ("WM dist=%u len=%u lits=%u: ", match_dist, match_len,
+              trailing_lits)
+  if (match_len < 0x0F && match_dist <= 0x400)
     {
-      LOG_INSANE (">M %u (%u)\n", offset, *lenp)
+      /* Compact encoding: 2 bytes total, decompressor opcode >= 0x40 */
+      uint32_t d = match_dist - 1;
+      b1 = ((match_len + 1) << 4) | ((d & 3) << 2);
+      b2 = d >> 2;
     }
-  return offset;
+  else if (match_dist <= 0x4000)
+    {
+      /* Medium encoding: length opcode 0x20..0x3F + two-byte offset */
+      uint32_t d = match_dist - 1;
+      write_length (dat, 0x20, match_len, 0x21);
+      b1 = (d & 0xFF) << 2;
+      b2 = d >> 6;
+    }
+  else
+    {
+      /* Long encoding: length opcode 0x10..0x1F + two-byte offset */
+      uint32_t d = match_dist - 0x4000;
+      write_length (dat, ((d >> 11) & 8) | 0x10, match_len, 9);
+      b1 = (d & 0xFF) << 2;
+      b2 = d >> 6;
+    }
+
+  if (trailing_lits < 4)
+    b1 |= trailing_lits;
+
+  LOG_INSANE ("> %x %x\n", b1 & 0xFF, b2 & 0xFF)
+  bit_write_RC (dat, b1 & 0xFF);
+  bit_write_RC (dat, b2 & 0xFF);
 }
 
 /* Compress the decomp buffer into dat of a DWG r2004+ file. Sets
-   comp_data_size. Variant of the LZ77 algo. ODA section 4.7
+   comp_data_size. LZ77 variant, ODA section 4.7.
+   Based on ACadSharp DwgLZ77AC18Compressor.
+   Format: [literal_length + data]* [match [literal_length + data]]* 0x11
 */
 static int
 compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                         uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
-  uint32_t i = 0;
-  uint32_t match = 0, oldlen = 0;
-  uint32_t len = 0;
-  size_t pos = bit_position (dat);
-  LOG_WARN ("compress_R2004_section %d", decomp_data_size);
-  assert (decomp_data_size > MIN_COMPRESSED_SECTION);
-  while (i < decomp_data_size - MIN_COMPRESSED_SECTION)
+  size_t start = dat->byte;
+  int32_t *hash_table;
+  uint32_t curr_offset = 0;    /* start of pending literal run */
+  uint32_t pos = 4;            /* current scan position (skip first 4 bytes) */
+  uint32_t prev_match_len = 0; /* saved match length from previous iter */
+  uint32_t prev_match_dist = 0;
+  uint32_t lits, match_len, match_dist;
+
+  assert (!dat->bit);
+  /* Small inputs: just store uncompressed */
+  if (decomp_data_size <= 0x18)
+    return store_R2004_section (dat, decomp, decomp_data_size, comp_data_size);
+
+  /* Ensure enough output space */
+  if (dat->size < dat->byte + decomp_data_size + 20)
+    bit_chain_alloc_size (dat, decomp_data_size + 20);
+
+  hash_table = (int32_t *)calloc (0x8000, sizeof (int32_t));
+  if (!hash_table)
+    return store_R2004_section (dat, decomp, decomp_data_size, comp_data_size);
+  memset (hash_table, -1, 0x8000 * sizeof (int32_t));
+
+  while (pos < decomp_data_size - 0x13)
     {
-      int offset = find_longest_match (decomp, decomp_data_size, i, &len);
-      if (offset)
+      match_len = (uint32_t)compress_find_match (decomp, decomp_data_size, pos,
+                                                 hash_table, &match_dist);
+      if (match_len < 3)
         {
-          // encode offset + len
-          if (match)
-            write_two_byte_offset (dat, oldlen, match, len);
-          write_literal_length (dat, &decomp[i], len);
-          i += match;
-          match = offset;
-          oldlen = len;
+          pos++;
+          continue;
         }
-      else
-        {
-          i += 1; // no match found
-        }
+
+      /* Number of literal bytes between last match end and this match */
+      lits = pos - curr_offset;
+
+      /* Write previous match (delayed) with trailing literal count */
+      if (prev_match_len)
+        compress_write_match (dat, prev_match_dist, prev_match_len, lits);
+
+      /* Write literal bytes */
+      write_literal_length (dat, &decomp[curr_offset], lits);
+
+      pos += match_len;
+      curr_offset = pos;
+      prev_match_len = match_len;
+      prev_match_dist = match_dist;
     }
-  len = decomp_data_size - i;
-  if (match)
-    write_two_byte_offset (dat, oldlen, match, len);
-  write_literal_length (dat, &decomp[i], len);
-  bit_write_RC (dat, 0x11);
-  bit_write_RC (dat, 0);
-  bit_write_RC (dat, 0);
-  *comp_data_size = (bit_position (dat) - pos) & 0xFFFFFFFF;
-  LOG_INSANE ("> 11 0 => %u\n", *comp_data_size)
+
+  /* Final trailing literals */
+  lits = decomp_data_size - curr_offset;
+  if (prev_match_len)
+    compress_write_match (dat, prev_match_dist, prev_match_len, lits);
+  write_literal_length (dat, &decomp[curr_offset], lits);
+
+  bit_write_RC (dat, 0x11); /* end of stream */
+  *comp_data_size = (uint32_t)(dat->byte - start);
+
+  free (hash_table);
   return 0;
 }
 #endif

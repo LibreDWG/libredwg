@@ -16,6 +16,7 @@
 // CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "encode.c"
 // CLANG_DIAG_RESTORE
+#include "../../src/decode.h"
 #include "tests_common.h"
 
 BITCODE_RL size = SECTION_R13_SIZE;
@@ -183,6 +184,146 @@ test_section_move_before (const Dwg_Data *dwg)
   size = SECTION_R13_SIZE;
 }
 
+#ifndef HAVE_COMPRESS_R2004_SECTION
+static void
+store_R2004_section_tests (void)
+{
+  int result;
+  uint32_t comp_data_size;
+  Bit_Chain comp = { 0 }, dec = { 0 };
+  /* from decode_test.c: decompressed AuxHeader data (123 bytes) */
+  unsigned char decomp_auxh_bin[123]
+      = { 0xff, 0x88, 0x01, 0x21, 0x00, 0x1d, 0x00, 0x19, 0x00, 0x00, 0x00,
+          0xff, 0xff, 0xff, 0xff, 0x0f, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x16, 0x00, 0x2e, 0x00, 0x16, 0x00, 0x2e, 0x00, 0x04, 0x00,
+          0x65, 0x05, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00,
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x01, 0x00, 0x00, 0x02, 0x00, 0x07, 0x00, 0xea, 0x74, 0x25,
+          0x00, 0x9a, 0xe6, 0x33, 0x04, 0xb0, 0x82, 0x25, 0x00, 0xe0, 0x1c,
+          0xf7, 0x01, 0xe9, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x0d, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x00, 0x00, 0x00, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x00 };
+  unsigned char decomp_ofs_bin[53]
+      = { 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0xb0, 0x82, 0x25,
+          0x00, 0xe0, 0x1c, 0xf7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x04, 0x32,
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00,
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00 };
+
+  /* Test 1: store auxh, decompress, compare */
+  bit_chain_alloc_size (&comp, sizeof decomp_auxh_bin * 2);
+  comp.byte = 0;
+  comp.bit = 0;
+  result = store_R2004_section (&comp, decomp_auxh_bin, sizeof decomp_auxh_bin,
+                                &comp_data_size);
+  if (result)
+    {
+      fail ("store_R2004_section auxh returned %d", result);
+      goto test2;
+    }
+  /* decompress and verify roundtrip */
+  comp.byte = 0;
+  comp.bit = 0;
+  comp.size = comp_data_size;
+  bit_chain_alloc_size (&dec, sizeof decomp_auxh_bin);
+  dec.size = sizeof decomp_auxh_bin;
+  dec.byte = 0;
+  dec.bit = 0;
+  result = decompress_R2004_section (&comp, &dec);
+  if (result == 0 && dec.size == sizeof decomp_auxh_bin
+      && memcmp (dec.chain, decomp_auxh_bin, sizeof decomp_auxh_bin) == 0)
+    pass ();
+  else
+    fail ("store_R2004_section auxh roundtrip %d %lu", result,
+          (unsigned long)dec.size);
+
+test2:
+  /* Test 2: store ofs, decompress, compare */
+  comp.byte = 0;
+  comp.bit = 0;
+  if (comp.size < sizeof decomp_ofs_bin * 2)
+    bit_chain_alloc_size (&comp, sizeof decomp_ofs_bin * 2);
+  result = store_R2004_section (&comp, decomp_ofs_bin, sizeof decomp_ofs_bin,
+                                &comp_data_size);
+  if (result)
+    {
+      fail ("store_R2004_section ofs returned %d", result);
+      goto cleanup;
+    }
+  comp.byte = 0;
+  comp.bit = 0;
+  comp.size = comp_data_size;
+  dec.byte = 0;
+  dec.bit = 0;
+  dec.size = sizeof decomp_ofs_bin;
+  result = decompress_R2004_section (&comp, &dec);
+  if (result == 0
+      && memcmp (dec.chain, decomp_ofs_bin, sizeof decomp_ofs_bin) == 0)
+    ok ("store_R2004_section");
+  else
+    fail ("store_R2004_section ofs roundtrip %d %lu", result,
+          (unsigned long)dec.size);
+
+cleanup:
+  free (comp.chain);
+  free (dec.chain);
+}
+#else
+static void
+compress_R2004_section_tests (void)
+{
+  int result;
+  uint32_t comp_data_size;
+  Bit_Chain comp = { 0 }, dec = { 0 };
+  unsigned char decomp_auxh_bin[123]
+      = { 0xff, 0x88, 0x01, 0x21, 0x00, 0x1d, 0x00, 0x19, 0x00, 0x00, 0x00,
+          0xff, 0xff, 0xff, 0xff, 0x0f, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x16, 0x00, 0x2e, 0x00, 0x16, 0x00, 0x2e, 0x00, 0x04, 0x00,
+          0x65, 0x05, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00,
+          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x01, 0x00, 0x00, 0x02, 0x00, 0x07, 0x00, 0xea, 0x74, 0x25,
+          0x00, 0x9a, 0xe6, 0x33, 0x04, 0xb0, 0x82, 0x25, 0x00, 0xe0, 0x1c,
+          0xf7, 0x01, 0xe9, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x0d, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x00, 0x00, 0x00, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+          0x00, 0x00 };
+
+  /* compress auxh, decompress, compare */
+  bit_chain_alloc_size (&comp, sizeof decomp_auxh_bin * 2);
+  comp.byte = 0;
+  comp.bit = 0;
+  result = compress_R2004_section (&comp, decomp_auxh_bin,
+                                   sizeof decomp_auxh_bin, &comp_data_size);
+  if (result)
+    {
+      fail ("compress_R2004_section auxh returned %d", result);
+      goto cleanup;
+    }
+  /* decompress and verify roundtrip */
+  comp.byte = 0;
+  comp.bit = 0;
+  comp.size = comp_data_size;
+  bit_chain_alloc_size (&dec, sizeof decomp_auxh_bin);
+  dec.size = sizeof decomp_auxh_bin;
+  dec.byte = 0;
+  dec.bit = 0;
+  result = decompress_R2004_section (&comp, &dec);
+  if (result == 0 && dec.size == sizeof decomp_auxh_bin
+      && memcmp (dec.chain, decomp_auxh_bin, sizeof decomp_auxh_bin) == 0)
+    ok ("compress_R2004_section");
+  else
+    fail ("compress_R2004_section auxh roundtrip %d %lu", result,
+          (unsigned long)dec.size);
+
+cleanup:
+  free (comp.chain);
+  free (dec.chain);
+}
+#endif
+
 int
 main (int argc, char const *argv[])
 {
@@ -196,5 +337,11 @@ main (int argc, char const *argv[])
   test_section_remove (&dwg);
   test_section_move_before (&dwg);
 
+  // TODO combine these two
+#ifndef HAVE_COMPRESS_R2004_SECTION
+  store_R2004_section_tests ();
+#else
+  compress_R2004_section_tests ();
+#endif
   return failed;
 }

@@ -94,6 +94,8 @@ void bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
 void dwg_free_xdata_resbuf (Dwg_Resbuf *restrict rbuf);
 
 /* reused with encode */
+int decompress_R2004_section (Bit_Chain *restrict src,
+                              Bit_Chain *restrict dec);
 void decrypt_R2004_header (BITCODE_RC *restrict dest,
                            const BITCODE_RC *restrict src, size_t size);
 void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);

@@ -24,6 +24,8 @@ compile_commands.json
 /.build-*/
 /.build/
 /.build32/
+/.claude
+/.agents
 /.ccls-cache/
 /.fuzz-*/
 .vscode/
@@ -87,6 +89,8 @@ compile_commands.json
 /doc/ACAD_R11.html
 /doc/R13DXF.html
 /doc/inc-*
+/doc/*.md
+/doc/autocad*
 /examples/*.log
 /examples/*.pi
 /examples/*.qi
