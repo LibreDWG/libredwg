@@ -3581,7 +3581,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #define WE_CAN                                                                \
   "This version of LibreDWG is only capable of encoding "                     \
-  "versions r1.1-r2000 (code: MC0.0-AC1015) DWG files.\n"
+  "versions r1.1-r2004 (code: MC0.0-AC1018) DWG files.\n"
 
   PRE (R_13b1)
   {
@@ -4039,8 +4039,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   VERSIONS (R_2007a, R_2007)
   {
     LOG_ERROR (WE_CAN "We don't encode R2007 sections yet");
-    dat->version = dwg->header.version = R_2010; // rather do 2010
-    // return DWG_ERR_NOTYETSUPPORTED;
+    // dat->version = dwg->header.version = R_2010; // rather do 2010
+    return DWG_ERR_NOTYETSUPPORTED;
   }
 
   /* r2004 file header (compressed + encrypted) */
