@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2010,2018-2025 Free Software Foundation, Inc.         */
+/*  Copyright (C) 2009-2010,2018-2026 Free Software Foundation, Inc.         */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -19,7 +19,7 @@
  * modified by Thien-Thi Nguyen
  * modified by Till Heuschmann
  * modified by Anderson Pierre Cardoso
- * modified by Reini Urban
+ * modified and rewritten by Reini Urban
  */
 
 // #define HAVE_COMPRESS_R2004_SECTION
