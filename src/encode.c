@@ -1964,6 +1964,8 @@ write_two_byte_offset (Bit_Chain *restrict dat, uint32_t offset)
 }
 #endif
 
+/* Not yet used. compress_R2004_section needs unit-tests first. */
+#ifdef DEBUG
 static void
 write_two_byte_offset (Bit_Chain *restrict dat, uint32_t oldlen,
                        uint32_t offset, uint32_t len)
@@ -2079,6 +2081,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   LOG_INSANE ("> 11 0 => %u\n", *comp_data_size)
   return 0;
 }
+#endif
 
 static Dwg_Section_Info *
 find_section_info_type (const Dwg_Data *restrict dwg, Dwg_Section_Type type)
@@ -4386,12 +4389,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     section_info_rebuild (dwg, (Dwg_Section_Type)type);
                 }
               {
+                int ssi = 0;
                 // For single-page sections store actual content size, not
                 // the theoretical max_decomp_size
                 if (info->num_sections == 1)
                   info->max_decomp_size
                       = MIN (max_decomp_size, (unsigned)ssize);
-                int ssi = 0;
                 while (ssize > 0)
                   {
                     // actual content for this page (last page may be partial)
@@ -4517,7 +4520,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               bit_write_TF (dat, (unsigned char *)_obj->name, 64);
               LOG_TRACE ("name: %s\n", *_obj->name ? _obj->name : "");
               // write page entries: number RL, size RL, address RLL
-              for (unsigned j = 0; j < _obj->num_sections; j++)
+              for (j = 0; j < _obj->num_sections; j++)
                 {
                   Dwg_Section *sec = _obj->sections[j];
                   if (sec)
