@@ -2197,29 +2197,23 @@ section_move_before (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
 static void
 section_info_rebuild (Dwg_Data *dwg, Dwg_Section_Type lasttype)
 {
-#ifdef __cplusplus
-  int type;
-#else
-  Dwg_Section_Type type;
-#endif
-  // we only need to rebuild sections up to the given type
-  for (type = SECTION_UNKNOWN; type <= lasttype; type++)
+  (void)lasttype;
+  for (unsigned idx = 0; idx < dwg->header.section_infohdr.num_desc; idx++)
     {
-      Dwg_Section_Info *info
-          = find_section_info_type (dwg, (Dwg_Section_Type)type);
-      if (info)
+      Dwg_Section_Info *info = &dwg->header.section_info[idx];
+      if (info->sections && info->num_sections)
         {
           unsigned ssi = 0;
           for (unsigned i = 0; i < dwg->header.num_sections; i++)
             {
               Dwg_Section *sec = &dwg->header.section[i];
-              if (sec->type == type) // first section
+              if (sec->type == info->fixedtype)
                 {
                   info->sections[ssi] = sec;
                   ssi++;
+                  if (ssi >= info->num_sections)
+                    break;
                 }
-              else if (sec->type > type) // sorted by type
-                break;
             }
         }
     }
