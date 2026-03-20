@@ -4867,36 +4867,64 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   BITCODE_RC *chain_page;
                   uint32_t page_hdr[8];
                   uint32_t sec_mask;
+                  size_t page_hdr_pos;
 
                   content_size = sec->decomp_data_size; // = max_decomp_size
                   chain_page
                       = sec_dat[type].chain + (size_t)k * max_decomp_size;
+                  if (dat->byte + 32 + content_size + 32 > dat->size)
+                    bit_chain_alloc_size (dat, 32 + content_size + 32);
+
+                  // reserve encrypted page header, write payload, then patch
+                  // header with actual compressed data size.
+                  page_hdr_pos = dat->byte;
+                  dat->byte += 32;
+
+                  if (info->compressed == 2)
+                      compress_R2004_section (dat, chain_page, content_size,
+                                              &sec->comp_data_size);
+                  else
+                      copy_R2004_section (dat, chain_page, content_size,
+                                          &sec->comp_data_size);
+
+                  sec->size = 32 + sec->comp_data_size;
 
                   // build unencrypted page header
-                  page_hdr[0] = 0x4163043b;   // page_type
-                  page_hdr[1] = info->type;   // section_type
-                  page_hdr[2] = content_size; // data_size (uncompressed)
-                  page_hdr[3] = content_size; // page_size (decompressed)
+                  page_hdr[0] = 0x4163043b;          // page_type
+                  page_hdr[1] = info->type;          // section_type
+                  page_hdr[2] = sec->comp_data_size; // compressed bytes
+                  page_hdr[3] = content_size;        // decompressed bytes
                   page_hdr[4] = k * max_decomp_size; // start offset in decomp
                   page_hdr[5] = 0;                   // unknown
                   page_hdr[6] = 0;                   // page_header_crc
                   page_hdr[7] = 0;                   // data_crc
 
-                  // encrypt: XOR with sec_mask
-                  sec_mask = 0x4164536b ^ (uint32_t)sec->address;
-                  for (int n = 0; n < 8; n++)
-                    page_hdr[n]
-                        = htole32 (le32toh (htole32 (page_hdr[n])) ^ sec_mask);
+                  {
+                    Bit_Chain page_dat = *dat;
+                    Bit_Chain hdr_dat = { 0 };
+                    uint32_t data_crc, page_hdr_crc;
 
-                  if (dat->byte + 32 + content_size > dat->size)
-                    bit_chain_alloc_size (dat, 32 + content_size);
+                    page_dat.byte = page_hdr_pos + 32;
+                    data_crc = dwg_section_page_checksum (
+                        0, &page_dat, (int32_t)sec->comp_data_size, false);
 
-                  memcpy (&dat->chain[dat->byte], page_hdr, 32);
-                  dat->byte += 32;
+                    // Build clear-text header checksums before applying mask.
+                    page_hdr[6] = 0;        // page_header_crc placeholder
+                    page_hdr[7] = data_crc; // data_crc
+                    hdr_dat.chain = (unsigned char *)page_hdr;
+                    hdr_dat.size = 32;
+                    hdr_dat.byte = 0;
+                    page_hdr_crc = dwg_section_page_checksum (
+                        data_crc, &hdr_dat, 32, false);
+                    page_hdr[6] = page_hdr_crc;
 
-                  // write content (data padded to max_decomp_size)
-                  copy_R2004_section (dat, chain_page, content_size,
-                                      &sec->comp_data_size);
+                    // encrypt: XOR with sec_mask
+                    sec_mask = 0x4164536b ^ (uint32_t)sec->address;
+                    for (int n = 0; n < 8; n++)
+                      page_hdr[n] = htole32 (le32toh (htole32 (page_hdr[n]))
+                                             ^ sec_mask);
+                    memcpy (&dat->chain[page_hdr_pos], page_hdr, 32);
+                  }
 
                   LOG_HANDLE ("Write page %s[%u] @" FORMAT_RLL
                               " size=%u mask=0x%x\n",
@@ -4942,10 +4970,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // clang-format off
       #include "r2004_file_header.spec"
       // clang-format on
-      memcpy (&file_dat.chain[offsetof (Dwg_R2004_Header, decomp_data_size)],
-              &overlap_hdr[offsetof (Dwg_R2004_Header, decomp_data_size)],
-              sizeof (_obj->decomp_data_size) + sizeof (_obj->comp_data_size)
-                  + sizeof (_obj->compression_type));
+      // The encrypted file header overlaps bytes 0x100..0x10b (12 bytes) of
+      // the first data page. Preserve exactly those overlapped plaintext
+      // fields (comp_data_size, compression_type, checksum) from the
+      // pre-existing ciphertext so we don't clobber the first page header.
+      memcpy (&file_dat.chain[offsetof (Dwg_R2004_Header, comp_data_size)],
+              &overlap_hdr[offsetof (Dwg_R2004_Header, comp_data_size)],
+              sizeof (_obj->comp_data_size) + sizeof (_obj->compression_type)
+                  + sizeof (_obj->checksum));
 
       // go back and encrypt it
       dat = orig_dat;
