@@ -22,7 +22,7 @@
  * modified and rewritten by Reini Urban
  */
 
-// #define HAVE_COMPRESS_R2004_SECTION
+#define HAVE_COMPRESS_R2004_SECTION
 #define ENCODE_PATCH_RSSIZE
 
 #include "config.h"
@@ -1873,6 +1873,7 @@ write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
 #endif
 }
 
+#ifndef HAVE_COMPRESS_R2004_SECTION
 /* Write raw data wrapped in valid LZ "store" framing so that
    decompress_R2004_section can decode it: literal_length + data + 0x11.
    Used for system sections (SECTION_INFO, SECTION_SYSTEM_MAP). */
@@ -1891,6 +1892,7 @@ store_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   *comp_data_size = (uint32_t)(dat->byte - start);
   return 0;
 }
+#endif
 
 /* Return the on-disk size of a system section written via
    store_R2004_section without emitting it. */
@@ -1968,7 +1970,6 @@ write_two_byte_offset (Bit_Chain *restrict dat, uint32_t offset)
    Uses a 0x8000-entry hash table for O(1) match lookup.
    Returns match length (>= 3) or 0. Sets *dist_p to backward distance.
    Based on the ODA specs and the ACadSharp DwgLZ77AC18Compressor. */
-#if defined(DEBUG) || defined(ENCODE_TEST_C)
 static int
 compress_find_match (BITCODE_RC *restrict src, uint32_t src_size, uint32_t pos,
                      int32_t *hash_table, uint32_t *dist_p)
@@ -2087,6 +2088,9 @@ static int
 compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                         uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
+#ifndef HAVE_COMPRESS_R2004_SECTION
+  return store_R2004_section (dat, decomp, decomp_data_size, comp_data_size);
+#else
   size_t start = dat->byte;
   int32_t *hash_table;
   uint32_t curr_offset = 0;    /* start of pending literal run */
@@ -2096,9 +2100,16 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   uint32_t lits, match_len, match_dist;
 
   assert (!dat->bit);
-  /* Small inputs: just store uncompressed */
+  /* Small inputs: encode as a pure literal stream. */
   if (decomp_data_size <= 0x18)
-    return store_R2004_section (dat, decomp, decomp_data_size, comp_data_size);
+    {
+      if (dat->size < dat->byte + decomp_data_size + 20)
+        bit_chain_alloc_size (dat, decomp_data_size + 20);
+      write_literal_length (dat, decomp, decomp_data_size);
+      bit_write_RC (dat, 0x11); /* end of stream */
+      *comp_data_size = (uint32_t)(dat->byte - start);
+      return 0;
+    }
 
   /* Ensure enough output space */
   if (dat->size < dat->byte + decomp_data_size + 20)
@@ -2106,7 +2117,13 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
 
   hash_table = (int32_t *)calloc (0x8000, sizeof (int32_t));
   if (!hash_table)
-    return store_R2004_section (dat, decomp, decomp_data_size, comp_data_size);
+    {
+      /* Valid LZ stream fallback if memory is tight. */
+      write_literal_length (dat, decomp, decomp_data_size);
+      bit_write_RC (dat, 0x11); /* end of stream */
+      *comp_data_size = (uint32_t)(dat->byte - start);
+      return 0;
+    }
   memset (hash_table, -1, 0x8000 * sizeof (int32_t));
 
   while (pos < decomp_data_size - 0x13)
@@ -2146,8 +2163,8 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
 
   free (hash_table);
   return 0;
-}
 #endif
+}
 
 static Dwg_Section_Info *
 find_section_info_type (const Dwg_Data *restrict dwg, Dwg_Section_Type type)
@@ -4800,10 +4817,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   checksum_pos = dat->byte;
                   bit_write_RL (dat, 0); // checksum placeholder
 
-                  // write section content as LZ "store" (literals + 0x11)
-                  store_R2004_section (dat, sec_dat[type].chain, content_size,
-                                       &sec->comp_data_size);
+                  // write section content as compressed stream
+                  compress_R2004_section (dat, sec_dat[type].chain,
+                                          content_size, &sec->comp_data_size);
                   sec->size = 20 + sec->comp_data_size;
+                  // TODO patch map size
 
                   // patch comp_data_size in the header
                   dat->chain[comp_data_pos] = sec->comp_data_size & 0xFF;
@@ -4951,8 +4969,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   UNTIL (R_2002)
   {
-    /* Patch section addresses
-     */
+    /* Patch section addresses */
     assert (section_address);
     dat->byte = section_address;
     dat->bit = 0;
