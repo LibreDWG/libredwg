@@ -4521,6 +4521,8 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       // clang-format off
       if (0) ;
+      FIELD_RL (size, 0)
+      FIELD_BINARY (unknown_bits, size, 0)
       FIELD_RL (class_version, 0)
       FIELD_T16 (appinfo_name, 0)
       FIELD_TFFx (version_checksum, 16, 0)
@@ -4537,8 +4539,11 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // clang-format on
     }
 
-  _obj->num_strings = 3;
-  LOG_TRACE ("num_strings => 3\n");
+  if (!_obj->unknown_bits || !_obj->size)
+    {
+      _obj->num_strings = 3;
+      LOG_TRACE ("num_strings => 3\n");
+    }
   LOG_TRACE ("End of %s\n", section);
   tokens->index--;
   return 0;

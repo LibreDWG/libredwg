@@ -2474,6 +2474,8 @@ json_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
 
   RECORD (AppInfo); // single hash
+  FIRSTPREFIX fprintf (dat->fh, "\"size\":%s%d", JSON_SPC, _obj->size);
+  FIELD_BINARY (unknown_bits, _obj->size, 0);
 
   // clang-format off
   #include "appinfo.spec"

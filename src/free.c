@@ -1598,6 +1598,7 @@ dwg_free_appinfo (Dwg_Data *dwg)
   // clang-format off
   #include "appinfo.spec"
   // clang-format on
+  FREE_IF (_obj->unknown_bits);
   return 0;
 }
 static int

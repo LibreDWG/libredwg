@@ -1821,6 +1821,21 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
     }
 }
 
+static int
+filedeplist_is_empty (const Dwg_FileDepList *obj)
+{
+  return obj->num_features == 0 && obj->num_files == 0;
+}
+
+static int
+security_is_empty (const Dwg_Security *obj)
+{
+  return obj->unknown_1 == 0 && obj->unknown_2 == 0 && obj->unknown_3 == 0
+         && obj->crypto_id == 0 && (!obj->crypto_name || !obj->crypto_name[0])
+         && obj->algo_id == 0 && obj->key_len == 0 && obj->encr_size == 0
+         && (!obj->encr_buffer || !obj->encr_buffer[0]);
+}
+
 /* r2004 compressed sections, LZ77 WIP */
 
 #define MIN_COMPRESSED_SECTION 19
@@ -4280,25 +4295,32 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               bit_chain_alloc (&sec_dat[type]);
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
+              if (_obj->size && _obj->unknown_bits)
+                bit_write_TF (dat, _obj->unknown_bits, _obj->size);
+              else
+                {
 #include "appinfo.spec"
+                }
               LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte)
             }
             break;
           case SECTION_APPINFOHISTORY:
             {
-#if 0
               Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
+              if (!_obj->size || !_obj->unknown_bits)
+                break;
               bit_chain_alloc (&sec_dat[type]);
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
-#  include "appinfohistory.spec"
+              bit_write_TF (dat, _obj->unknown_bits, _obj->size);
               LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte)
-#endif
             }
             break;
           case SECTION_FILEDEPLIST:
             {
               Dwg_FileDepList *_obj = &dwg->filedeplist;
+              if (filedeplist_is_empty (_obj))
+                break;
               bit_chain_alloc (&sec_dat[type]);
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
@@ -4309,6 +4331,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           case SECTION_SECURITY:
             {
               Dwg_Security *_obj = &dwg->security;
+              if (security_is_empty (_obj))
+                break;
               bit_chain_alloc (&sec_dat[type]);
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);

@@ -2821,6 +2821,7 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
+  Dwg_AppInfo *_obj = &dwg->appinfo;
   // type: 0xc or 0xb
   // not compressed, page size: 0x80
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_APPINFO);
@@ -2841,6 +2842,10 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 #endif
 
   LOG_TRACE ("AppInfo (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  _obj->size = sec_dat.size & 0xFFFFFFFF;
+  FREE_IF (_obj->unknown_bits);
+  _obj->unknown_bits = bit_read_TF (&sec_dat, _obj->size);
+  bit_set_position (&sec_dat, 0);
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
