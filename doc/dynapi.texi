@@ -14161,13 +14161,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment

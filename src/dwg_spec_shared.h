@@ -516,7 +516,6 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           END_REPEAT (silhouettes);                                           \
         }                                                                     \
     }                                                                         \
-                                                                              \
   FIELD_B (acis_empty_bit, 0); /* ?? */                                       \
   if (FIELD_VALUE (version) > 1)                                              \
     {                                                                         \
@@ -557,7 +556,6 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
     }                                                                         \
     FIELD_BL (end_marker, 0);                                                 \
   }                                                                           \
-                                                                              \
   DXF {                                                                       \
     SINCE (R_2007a) {                                                         \
       SUBCLASS (AcDb3dSolid);                                                 \

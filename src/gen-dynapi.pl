@@ -190,6 +190,9 @@ while (<$in>) {
             $n = $1;
             $h{$n}{seqend} = 'H' if $n eq 'COMMON_ENTITY_POLYLINE'; # has no ;
         }
+        elsif (/^#define (DIMENSION_COMMON)/) {
+            $n = $1;
+        }
     }
     elsif (/^\}/) {    # close the struct
         $n = '';
@@ -213,9 +216,13 @@ while (<$in>) {
 #$h{Dwg_Bitcode_2BD} = '2BD';
 #$h{Dwg_Bitcode_3RD} = '3RD';
 #$h{Dwg_Bitcode_2RD} = '2RD';
-$ENT{LAYER}->{flag}           = 'BS';
-$ENT{LAYER}->{name}           = 'T';
-$ENT{DIMSTYLE}->{name}        = 'T';
+$ENT{LAYER}->{flag}    = 'BS';
+$ENT{LAYER}->{name}    = 'T';
+$ENT{DIMSTYLE}->{name} = 'T';
+$ENT{$_}->{user_text}  = 'T'
+    for qw(ARC_DIMENSION DIMENSION_ORDINATE DIMENSION_LINEAR DIMENSION_ALIGNED
+    DIMENSION_ANG3PT DIMENSION_ANG2LN DIMENSION_RADIUS DIMENSION_DIAMETER
+    LARGE_RADIAL_DIMENSION);
 $SUBCLASSES{DIMENSION_common} = [qw(AcDbDimension)];
 $SUBCLASSES{ACTION_3DSOLID}   = [qw(AcDbModelerGeometry AcDb3dSolid)];
 $SUBCLASSES{TABLECONTENTs}
@@ -282,13 +289,14 @@ sub embedded_struct {
     }
 }
 
+my %defined;    #define subclass_fields, shared across dxfin_spec calls
+
 # parse a spec for its objects, subclasses and dxf values
 sub dxf_in {
     $in = shift;
     my $v  = qr /[\w\.\[\]]+/;
     my $vx = qr /[\w\.\[\]>-]+/;
     my $outdef;
-    my %defined;    #define subclass_fields
     while (<$in>) {
         $f = '';
         s/DXF \{ //;
@@ -311,7 +319,7 @@ sub dxf_in {
                 warn "define $n";
             }
             elsif (
-                /^\#define (COMMON_3DSOLID|ACTION_3DSOLID|COMMON_ENTITY_DIMENSION)/
+                /^\#define (COMMON_3DSOLID|ACTION_3DSOLID|COMMON_ENTITY_DIMENSION|DIMENSION_COMMON)/
                 )
             {
                 $n = $1;
@@ -573,6 +581,9 @@ sub dxf_in {
         elsif (/^\s+(COMMON_ENTITY_DIMENSION)/) {
             expand_define( $1, $n, \%defined );
         }
+        elsif (/^\s+(DIMENSION_COMMON)/) {
+            expand_define( $1, $n, \%defined );    # not reached
+        }
         elsif ( /^$/ && $defined{$n} ) {
             warn "undef $n\n";
             @old = ();
@@ -591,6 +602,7 @@ sub dxfin_spec {
     dxf_in($in);
     close $in;
 }
+dxfin_spec "$srcdir/dwg_spec_shared.h";
 dxfin_spec "$srcdir/dwg.spec";
 dxfin_spec "$srcdir/dwg2.spec";
 $DXF{'BLOCK'}->{'name'}                           = 2;     # and 3
@@ -902,6 +914,9 @@ sub out_declarator {
     elsif ( !$bc && $ns =~ /_entity_POLYLINE_/ ) {
         $bc = $h{COMMON_ENTITY_POLYLINE}{$name};
     }
+    elsif ( !$bc && $ns =~ /_DIMENSION_common/ ) {
+        $bc = $h{DIMENSION_COMMON}{$name};
+    }
     $type = $bc if $bc;
     if ( $name eq 'encr_sat_data' ) {
         $type = 'char **';
@@ -949,7 +964,7 @@ sub out_declarator {
         $type = 'BL*';
 
         #} elsif ($type eq 'TFv') {
-        #  $type = 'TV';
+        #   $type = 'TV';
     }
     elsif ( $type eq 'Dwg_Object_Ref*' ) {
         $type = 'H';
