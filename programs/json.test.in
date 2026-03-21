@@ -62,8 +62,8 @@ check_roundtrip() {
             *2007*)       as=--as=r2000 ;;
             *201*)        as=--as=r2000 ;;
         esac
-        echo "./dwgread${EXEEXT} -y -v2 -o $json $dwg 2>$log1"
-        if ! $TESTPROG "./dwgread${EXEEXT}" -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null; then
+        echo "./dwgread${EXEEXT} -v2 -o $json $dwg 2>$log1"
+        if ! $TESTPROG "./dwgread${EXEEXT}" -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null; then
             echo "json $dwg failed"
             tail "$log1"
             if [ -z $todo ]; then i=$((i+1)); fi
