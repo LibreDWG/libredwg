@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2025 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -1277,6 +1277,7 @@ json_common_object_handle_data (Bit_Chain *restrict dat,
 }
 
 #include "dwg.spec"
+#include "dwg2.spec"
 
 static int
 ishex (int c)

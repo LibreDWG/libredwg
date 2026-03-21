@@ -249,6 +249,7 @@ endif()
 if(NOT LIBREDWG_DISABLE_WRITE)
  set(write_SOURCES
     src/encode.c
+    src/encode2.c
     src/in_dxf.c
     ${injson_SOURCES}
     src/reedsolomon.c)
@@ -261,6 +262,7 @@ set(libredwg_SOURCES
     src/classes.c
     src/objects.c
     src/decode.c
+    src/decode2.c
     src/decode_r11.c
     src/decode_r2007.c
     src/dwg.c

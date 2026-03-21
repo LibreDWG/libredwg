@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2010,2018-2025 Free Software Foundation, Inc.         */
+/*  Copyright (C) 2009-2010,2018-2026 Free Software Foundation, Inc.         */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -84,19 +84,8 @@ static int decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static int decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static int decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
-static Dwg_Resbuf *dwg_decode_xdata (Bit_Chain *restrict dat,
-                                     Dwg_Object_XRECORD *restrict obj,
-                                     BITCODE_BL size);
-
 static int dwg_decode_ole2 (Dwg_Entity_OLE2FRAME *restrict _obj);
 
-static int dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat,
-                              Bit_Chain *str_dat,
-                              Dwg_Object_Object *restrict obj);
-
-static int dwg_decode_entity (Bit_Chain *restrict dat,
-                              Bit_Chain *restrict hdl_dat, Bit_Chain *str_dat,
-                              Dwg_Object_Entity *restrict ent);
 static int dwg_decode_common_entity_handle_data (Bit_Chain *dat,
                                                  Bit_Chain *hdl_dat,
                                                  Dwg_Object *restrict obj);
@@ -4327,7 +4316,7 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
    PRE(R_13b1) goes into decode_entity_preR13 instead.
  */
-static int
+int
 dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Dwg_Object_Entity *restrict ent)
 {
@@ -4425,7 +4414,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
    There is no COMMON_ENTITY_DATA for objects.
    Check page 269, par 28 (Extended Object Data)
  */
-static int
+int
 dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Dwg_Object_Object *restrict _obj)
 {
@@ -4865,7 +4854,7 @@ dwg_free_xdata_resbuf (Dwg_Resbuf *rbuf)
 }
 
 // TODO: unify with eed[], use an array not linked list.
-static Dwg_Resbuf *
+Dwg_Resbuf *
 dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                   BITCODE_BL xdata_size)
 {
@@ -5124,6 +5113,25 @@ bit_read_BB_noadv (Bit_Chain *dat)
 /* OBJECTS *******************************************************************/
 
 #include "dwg.spec"
+
+/* Forward declarations for functions generated from dwg2.spec in decode2.c.
+   Uses objects.inc which also covers first-half (static) functions, so
+   suppress the redundant-decls warning for those. */
+#undef DWG_ENTITY
+#undef DWG_ENTITY_END
+#undef DWG_OBJECT
+#undef DWG_OBJECT_END
+GCC46_DIAG_IGNORE (-Wredundant-decls)
+#define DWG_ENTITY(token)                                                     \
+  extern int dwg_decode_##token (Bit_Chain *restrict dat,                     \
+                                 Dwg_Object *restrict obj);
+#define DWG_ENTITY_END
+#define DWG_OBJECT(token)                                                     \
+  extern int dwg_decode_##token (Bit_Chain *restrict dat,                     \
+                                 Dwg_Object *restrict obj);
+#define DWG_OBJECT_END
+#include "objects.inc"
+GCC46_DIAG_RESTORE
 
 /*--------------------------------------------------------------------------------
  * Private functions which depend on the preceding

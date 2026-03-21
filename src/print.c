@@ -394,6 +394,7 @@ static BITCODE_BL rcount1, rcount2;
   }
 
 #include "dwg.spec"
+#include "dwg2.spec"
 
 /* Returns 0 on success
    Dispatches on the variable types.

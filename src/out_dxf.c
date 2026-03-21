@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2025 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -1849,6 +1849,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 #ifndef DISABLE_DXF
 
 #  include "dwg.spec"
+#  include "dwg2.spec"
 
 #endif
 

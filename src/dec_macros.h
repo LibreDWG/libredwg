@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2025 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -21,6 +21,13 @@
 
 #ifndef DEC_MACROS_H
 #define DEC_MACROS_H
+
+/* DWG2_SPEC: decode2.c defines this to make dwg_decode_##token non-static */
+#ifdef DWG2_SPEC
+#  define DWG_DECODE_FUNC /* non-static */
+#else
+#  define DWG_DECODE_FUNC static
+#endif
 
 #include "config.h"
 #if defined HAVE_CTYPE_H || defined _MSC_VER
@@ -1773,10 +1780,10 @@
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj); \
                                                                               \
-      /**Call dwg_setup_##token and write the fields from the bitstream dat   \
-       * to the entity or object. */                                                 \
-  static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
-                                 Dwg_Object *restrict obj)                    \
+      /** Call dwg_setup_##token and write the fields from the bitstream dat  \
+       * to the entity or object. */                                             \
+  DWG_DECODE_FUNC int dwg_decode_##token (Bit_Chain *restrict dat,            \
+                                          Dwg_Object *restrict obj)           \
   {                                                                           \
     int error = dwg_setup_##token (obj);                                      \
     Bit_Chain hdl_dat = *dat;                                                 \
@@ -1887,12 +1894,12 @@
     obj->tio.object->objid = obj->index; /* obj ptr itself might move */      \
     return 0;                                                                 \
   }                                                                           \
-  static int dwg_decode_##token##_private (                                   \
+  static int dwg_decode_##token##_private (                                  \
       Bit_Chain *obj_dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,             \
       Dwg_Object *restrict obj);                                              \
                                                                               \
-  static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
-                                 Dwg_Object *restrict obj)                    \
+  DWG_DECODE_FUNC int dwg_decode_##token (Bit_Chain *restrict dat,            \
+                                          Dwg_Object *restrict obj)           \
   {                                                                           \
     int error = dwg_setup_##token (obj);                                      \
     Bit_Chain hdl_dat = *dat;                                                 \
@@ -1902,7 +1909,7 @@
     {                                                                         \
       Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
       error                                                                   \
-          = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
+          = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj);\
     }                                                                         \
     else                                                                      \
     {                                                                         \

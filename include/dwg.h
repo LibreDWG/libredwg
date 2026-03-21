@@ -2526,7 +2526,7 @@ typedef struct _dwg_entity_LINE
   BITCODE_T user_text;                           \
   BITCODE_BD text_rotation;                      \
   BITCODE_BD horiz_dir;                          \
-  BITCODE_3BD ins_scale;                         \
+  BITCODE_3BD_1 ins_scale;                       \
   BITCODE_BD ins_rotation;                       \
   BITCODE_BS attachment;                         \
   BITCODE_BS lspace_style;                       \

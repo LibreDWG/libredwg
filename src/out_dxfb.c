@@ -1383,6 +1383,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
   FIELD_RS (flag, 70)
 
 #include "dwg.spec"
+#include "dwg2.spec"
 
 static int
 dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,

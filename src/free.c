@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2025 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -476,6 +476,7 @@ dwg_free_eed (Dwg_Object *obj)
 }
 
 #include "dwg.spec"
+#include "dwg2.spec"
 
 // could be a hash or switch, but there are not that many DEBUGGING classes.
 // but a switch is fine, as we get all missing types in objects.inc, generated

@@ -1,5 +1,5 @@
 #!/usr/bin/env perl -w
-# Copyright (C) 2019-2025 Free Software Foundation, Inc., GPL3
+# Copyright (C) 2019-2026 Free Software Foundation, Inc., GPL3
 #
 # Generate src/dynapi.c and test/unit-testing/dynapi_test.c
 # C structs/arrays for all dwg objects and its fields for a dynamic API.
@@ -592,6 +592,7 @@ sub dxfin_spec {
     close $in;
 }
 dxfin_spec "$srcdir/dwg.spec";
+dxfin_spec "$srcdir/dwg2.spec";
 $DXF{'BLOCK'}->{'name'}                           = 2;     # and 3
 $DXF{'BLOCK'}->{'filename'}                       = 4;
 $DXF{'3DLINE'}->{'thickness'}                     = 39;
@@ -1537,7 +1538,7 @@ print $inc <<"EOF";
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2019-2025 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2019-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -2878,7 +2879,7 @@ __DATA__
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2025 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
