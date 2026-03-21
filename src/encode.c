@@ -4544,7 +4544,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
 {
   BITCODE_RL numentities = 0;
   bool in_blocks = false;
-  bool in_extras = false;
+  bool past_blocks = false;
   LOG_INFO ("===========================\n"
             "%s from 0x%zx\n",
             section == ENTITIES_SECTION_INDEX ? "Entities"
@@ -4592,6 +4592,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
               if (next_endblk && next_endblk->index > obj->index)
                 {
                   index += (next_endblk->index - obj->index);
+                  past_blocks = true;
                   LOG_TRACE ("BLOCK: advance to %d. ENDBLK: %d, we are at %d "
                              "Addr: %zx (0x%zx)\n",
                              index + 1, next_endblk->index, obj->index,
@@ -4606,9 +4607,19 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
             }
           if (obj->tio.entity->entmode == 3)
             {
+              past_blocks = true;
               LOG_TRACE ("Skip %s in entities section belonging to a block, "
                          "number: %d, "
                          "type: %d, Addr: %zx (0x%zx)\n",
+                         obj->name, obj->index, obj->type, obj->address,
+                         dat->byte);
+              continue;
+            }
+          // extras entities come after all block entities
+          if (past_blocks)
+            {
+              LOG_TRACE ("Skip extras %s in entities section, "
+                         "number: %d, type: %d, Addr: %zx (0x%zx)\n",
                          obj->name, obj->index, obj->type, obj->address,
                          dat->byte);
               continue;
@@ -4679,11 +4690,17 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
               continue;
             }
         }
-      if (!in_extras && obj->fixedtype == DWG_TYPE_JUMP)
-        in_extras = true; // jump into
-      if (section == EXTRAS_SECTION_INDEX && !in_extras)
-        continue;
-      // jump back below
+      // extras entities come after all block entities in the object list
+      if (section == EXTRAS_SECTION_INDEX)
+        {
+          if (obj->tio.entity->entmode == 3)
+            {
+              past_blocks = true;
+              continue; // skip block entities
+            }
+          if (!past_blocks)
+            continue; // skip main entities (before blocks)
+        }
 
       if (dat->byte + obj->size < dat->size)
         bit_chain_alloc_size (dat, obj->size);
@@ -4760,8 +4777,6 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
         in_blocks = false;
       else if (!in_blocks && obj->fixedtype == DWG_TYPE_BLOCK)
         in_blocks = true;
-      if (in_extras && obj->fixedtype == DWG_TYPE_JUMP)
-        in_extras = false; // jump back
 
       SINCE (R_2_0)
       {
