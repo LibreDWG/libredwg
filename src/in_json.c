@@ -824,6 +824,25 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               color->alpha = (BITCODE_RC)num;
               color->alpha_type = 3;
             }
+          else if (strEQc (key, "alpha_raw"))
+            {
+              uint32_t num = json_long (dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW_VOID
+              LOG_TRACE ("%s.%s.alpha_raw %u [CMC]\n", name, fname,
+                         (unsigned)num);
+              color->alpha_raw = (BITCODE_BL)num;
+              color->alpha_type = color->alpha_raw >> 24;
+              color->alpha = color->alpha_raw & 0xff;
+            }
+          else if (strEQc (key, "alpha_type"))
+            {
+              uint32_t num = json_long (dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW_VOID
+              LOG_TRACE ("%s.%s.alpha_type %u [CMC]\n", name, fname,
+                         (unsigned)num);
+              color->alpha_type = (BITCODE_BB)num;
+              color->alpha_raw = (color->alpha_type << 24) | color->alpha;
+            }
           else if (strEQc (key, "handle")) // [4, value] ARRAY
             {
               color->handle
@@ -852,6 +871,11 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               tokens->index++;
               JSON_TOKENS_CHECK_OVERFLOW_VOID
             }
+        }
+      if ((color->flag & 0x20) && !color->alpha_raw && !color->alpha_type)
+        {
+          color->alpha_type = 1;
+          color->alpha_raw = color->alpha_type << 24;
         }
     }
   else if (t->type == JSMN_PRIMITIVE)
@@ -2573,7 +2597,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else if (t->type == JSMN_ARRAY
                && (strEQc (f->type, "BS") || strEQc (f->type, "BS*")
-                   || strEQc (f->type, "RS")))
+                   || strEQc (f->type, "BSd") || strEQc (f->type, "RS")))
         {
           const int size1 = t->size;
           const int max_k
@@ -4497,6 +4521,8 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       // clang-format off
       if (0) ;
+      FIELD_RL (size, 0)
+      FIELD_BINARY (unknown_bits, size, 0)
       FIELD_RL (class_version, 0)
       FIELD_T16 (appinfo_name, 0)
       FIELD_TFFx (version_checksum, 16, 0)
@@ -4513,8 +4539,11 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // clang-format on
     }
 
-  _obj->num_strings = 3;
-  LOG_TRACE ("num_strings => 3\n");
+  if (!_obj->unknown_bits || !_obj->size)
+    {
+      _obj->num_strings = 3;
+      LOG_TRACE ("num_strings => 3\n");
+    }
   LOG_TRACE ("End of %s\n", section);
   tokens->index--;
   return 0;

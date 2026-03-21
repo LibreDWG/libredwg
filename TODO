@@ -50,7 +50,8 @@
 * merge decode_r2007 with the 2004 decoder. It is almost the same, just
   the sections have multiple pages. Only for this version. 2010+ uses
   the 2004 format.
-* encode for 2004+: fix the remaining bugs, almost done.
+* encode for 2010+. not much todo
+* encode for 2007. extra file probably. merge decode_r2007 first.
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
 * finish GeoJSON http://geojson.org/geojson-spec.html
   MLINE, SPLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?)

@@ -139,12 +139,11 @@ Here is a list of features that are still missing:
 
 @table @asis
 
-@item Writing r2004+ DWG
-Writing DWG formats for r2004 and later: r2007, r2010, r2013, r2018 is an
-ongoing effort. You need to patch the code to enable writing to the r2004+ format.
-See the @code{work/2004} branch.
+@item Writing r2007+ DWG
+Writing DWG formats for r2007 and later: r2010, r2013, r2018 is an
+ongoing effort.
 Writing to the specific r2007 format is not implemented.
-We write as default in the r2000 or older formats only.
+We write as default in the r2004 or older formats only.
 
 @item Reading binary DXF
 DXF support is now mostly implemented.
@@ -1012,10 +1011,9 @@ Those entities do have a type > 127. You need to filter them out by yourself, wh
 @cindex functions, write path
 
 Encoding DWG files, i.e. DWG write support, can be disabled via
-@code{./configure --disable-write}. The default formats and only useful
-ones are currently r1.1 - r2000. Experimentally work is ongoing for the r2004
-format, which is also used for r2010, r2013, and r2018.
-The r2007 format version is not covered yet.
+@code{./configure --disable-write}. The supported formats are
+currently r1.1 - r2004.
+The r2007 and higher format versions are not covered yet.
 The pre-r13 formats are much simpler and can be written, but need some
 hand-holding and manual conversions when converting from newer formats still.
 
@@ -1231,7 +1229,7 @@ It sets DWG_OPTS_IN.
 
 DWG to DXF/JSON: decode keeps the T and TU strings as TV or TU. out_dxf/json translate them to TV or UTF-8 and quotes them via \U+XXXX.
 
-add api to DWG/DXF: add reads strings as UTF-8, and encodes it from UTF-8 to TV or TU. (TU not yet, as we don't encode r2004+ yet). add sets DWG_OPTS_IN.
+add api to DWG/DXF: add reads strings as UTF-8, and encodes it from UTF-8 to TV or TU. (TU not yet, as we don't encode r2007+ yet). add sets DWG_OPTS_IN.
 
 
 @node Other Formats

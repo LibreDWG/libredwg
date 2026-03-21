@@ -11267,6 +11267,8 @@ typedef struct _dwg_summaryinfo
    the .dwg file (encrypted = 2). */
 typedef struct _dwg_appinfo
 {
+  BITCODE_RL size;
+  BITCODE_TF unknown_bits;
   BITCODE_RL class_version; // 3
   BITCODE_RL num_strings;   // 2-3
   BITCODE_T16 appinfo_name;  // AppInfoDataList

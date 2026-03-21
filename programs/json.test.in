@@ -1,7 +1,7 @@
 #!/bin/bash
 # json.test
 #
-# Copyright (C) 2018-2025 Free Software Foundation, Inc.
+# Copyright (C) 2018-2026 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -55,9 +55,12 @@ check_roundtrip() {
         log1="$(basename "$dwg" .dwg).log.orig"
         log2="$(basename "$dwg" .dwg).log"
         todo=
+        as=
         case $dwg in
-            *r11/A*)  todo=1 ;;
-            *r1.*)   todo=1 ;;
+            *r11/A*)      todo=1 ;;
+            *r1.*)        todo=1 ;;
+            *2007*)       as=--as=r2000 ;;
+            *201*)        as=--as=r2000 ;;
         esac
         echo "./dwgread${EXEEXT} -y -v2 -o $json $dwg 2>$log1"
         if ! $TESTPROG "./dwgread${EXEEXT}" -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null; then
@@ -65,8 +68,9 @@ check_roundtrip() {
             tail "$log1"
             if [ -z $todo ]; then i=$((i+1)); fi
         fi
-        echo "./dwgwrite${EXEEXT} -y -v0 -o $tgt $json"
-        if ! $TESTPROG "./dwgwrite${EXEEXT}" -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null; then
+        echo "./dwgwrite${EXEEXT} -y -v0 $as -o $tgt $json"
+        # shellcheck disable=SC2086
+        if ! $TESTPROG "./dwgwrite${EXEEXT}" -y -v0 $as -o "$tgt" "$json" 2>/dev/null >/dev/null; then
             echo "dwgwrite $json failed"
             if [ -z $todo ]; then i=$((i+1)); fi
         fi
@@ -89,14 +93,14 @@ check_roundtrip() {
             echo "$json" "roundtrip fail: $expect1 vs $got1 entities, $expect2 vs $got2 objects"
             if [ -z $todo ]; then
                 i=$((i+1))
+                echo "expect entities: $expect1" >"$log"
+                # shellcheck disable=SC2129
+                echo "got    entities: $got1"    >>"$log"
+                echo "expect objects:  $expect2" >>"$log"
+                echo "got    objects:  $got2"    >>"$log"
             else
                 rm "./$log1" "./$log2" 2>/dev/null
             fi
-            echo "expect entities: $expect1" >"$log"
-            # shellcheck disable=SC2129
-            echo "got    entities: $got1"    >>"$log"
-            echo "expect objects:  $expect2" >>"$log"
-            echo "got    objects:  $got2"    >>"$log"
         fi
     fi
 }
@@ -148,7 +152,7 @@ for dwg in $DATA $TODO; do
     check_roundtrip
 done
 
-# teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
+# oda/teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
 can_teigha=1
 baseFileConverter=ODAFileConverter
 case $(uname) in
@@ -205,7 +209,9 @@ check_oda() {
             if [ -e "../$b.dxf.err" ]; then
                 mv "../$b.dxf.err" "$b.json.err"
                 cat "$b.json.err"
-                i=$((i+1))
+                if [ -z "$todo_oda" ]; then
+                    i=$((i+1))
+                fi
             fi
             rm -f "../$b.dxf" "./$b.dwg" "./$b.json"
         else
@@ -219,9 +225,15 @@ then
     echo ""
     echo $baseFileConverter roundtrip checks
     # example_r14: CRC does not match
-    for dwg in sample_2000 example_2000 2000/Arc 2000/Text 2000/circle 2000/PolyLine2D 2000/RAY\
-               2000/Spline r11/entities-3d r11/entities-2d
+    # example_2000, example_2004: ODA regression (AcDbVisualStyle cast)
+    for dwg in sample_2000 example_2000 2000/Arc 2000/Text 2000/circle \
+               2000/PolyLine2D 2000/RAY 2000/Spline \
+               r11/entities-3d r11/entities-2d example_2004
     do
+        todo_oda=
+        case $dwg in
+            example_2000|example_2004) todo_oda=1 ;;
+        esac
         check_oda
     done
 else

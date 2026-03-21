@@ -633,6 +633,12 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
         {
           FIELD_BS (flag, 0);
         }
+      if (_obj->flag & 0x20)
+        {
+          FIELD_BL (alpha_raw, 0);
+          FIELD_BB (alpha_type, 0);
+          FIELD_RC (alpha, 0);
+        }
       if (_obj->flag > 0 && _obj->flag < 8)
         {
           if (_obj->flag & 1)
@@ -2468,6 +2474,8 @@ json_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
 
   RECORD (AppInfo); // single hash
+  FIRSTPREFIX fprintf (dat->fh, "\"size\":%s%d", JSON_SPC, _obj->size);
+  FIELD_BINARY (unknown_bits, _obj->size, 0);
 
   // clang-format off
   #include "appinfo.spec"

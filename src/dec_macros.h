@@ -38,6 +38,15 @@
 // redeclare versions to be from, not target
 #include "importer.h"
 
+#ifndef FREE_IF
+#  define FREE_IF(ptr)                                                        \
+    if (ptr)                                                                  \
+      {                                                                       \
+        free (ptr);                                                           \
+        ptr = NULL;                                                           \
+      }
+#endif
+
 // different to out_json
 #define ARGS_HREF11(ref) ref->handleref.size, ref->r11_idx, ref->absolute_ref
 #define FORMAT_HREF11 "[%u, %hd, " FORMAT_HV "]"

@@ -408,6 +408,10 @@
 #ifdef IS_JSON
       field_cmc (dat, "color", &_ent->color);
 #else
+#ifdef IS_ENCODER
+      flags = _ent->color.flag;
+      _ent->color.raw = (_ent->color.index & 0x1ff) | (flags << 8);
+#endif
       DXF {
         // 0: byblock
         if (_ent->color.index != 256) // not bylayer

@@ -70,8 +70,7 @@ static void ATTRIBUTE_FORMAT (1, 2) fail (const char *fmt, ...)
 }
 
 #if 0
-static void
-ATTRIBUTE_FORMAT (1, 2)
+static void ATTRIBUTE_FORMAT (1, 2)
 todo (const char *fmt, ...)
 {
   va_list ap;

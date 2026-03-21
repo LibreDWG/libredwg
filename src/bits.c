@@ -3864,10 +3864,11 @@ void
 bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                Dwg_Color *restrict color)
 {
-  bit_write_BS (dat, (color->index & 0x1ff) | (color->flag << 8));
+  uint16_t flag = color->flag;
+
+  bit_write_BS (dat, (color->index & 0x1ff) | (flag << 8));
   if (dat->version >= R_2004)
     {
-      uint16_t flag = color->flag;
       if (flag & 0x20)
         bit_write_BL (dat, color->alpha);
       if (!(flag & 0x40) && (flag & 0x80))

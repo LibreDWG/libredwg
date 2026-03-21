@@ -1209,7 +1209,7 @@ two_byte_offset (Bit_Chain *restrict dat, int plus, int *restrict offset)
 /* Decompresses a system section of a 2004+ DWG file.
  * With a LZ77 variant.
  */
-static int
+int
 decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
 {
   unsigned int i, lit_length;
@@ -2178,11 +2178,12 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          const size_t offset = address + es.fields.address + 32;
-          // the remaining uncompressed size to read from
-          const BITCODE_RL size = MIN (info->size, info->max_decomp_size);
+          const size_t offset = address + 32;
+          const BITCODE_RL size
+              = MIN ((BITCODE_RL)(info->size - es.fields.address),
+                     es.fields.page_size);
           if (info->compressed == 2 || bytes_left < 0
-              || (j * info->max_decomp_size) + size > max_decomp_size
+              || es.fields.address + size > max_decomp_size
               || offset + size > dat->size)
             {
               LOG_ERROR ("Some section size or address out of bounds")
@@ -2192,7 +2193,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                                                : DWG_ERR_VALUEOUTOFBOUNDS;
             }
           assert (j < info->num_sections);
-          memcpy (dec.chain, &dat->chain[offset], size);
+          memcpy (&dec.chain[es.fields.address], &dat->chain[offset], size);
           bytes_left -= size;
           sec_dat->size += size;
         }
@@ -2821,6 +2822,7 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
+  Dwg_AppInfo *_obj = &dwg->appinfo;
   // type: 0xc or 0xb
   // not compressed, page size: 0x80
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_APPINFO);
@@ -2841,6 +2843,10 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 #endif
 
   LOG_TRACE ("AppInfo (%" PRIuSIZE ")\n-------------------\n", sec_dat.size)
+  _obj->size = sec_dat.size & 0xFFFFFFFF;
+  FREE_IF (_obj->unknown_bits);
+  _obj->unknown_bits = bit_read_TF (&sec_dat, _obj->size);
+  bit_set_position (&sec_dat, 0);
   old_dat = *dat;
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
