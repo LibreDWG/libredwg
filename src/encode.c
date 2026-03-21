@@ -2861,8 +2861,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     numentities
         = encode_preR13_entities (ENTITIES_SECTION_INDEX, dat, dwg, &error);
     dwg->cur_index += numentities;
-    if (!dwg->header.entities_end)
-      dwg->header.entities_end = dat->byte & 0xFFFFFFFF;
+    dwg->header.entities_end = dat->byte & 0xFFFFFFFF;
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", numentities,
                dwg->header.entities_start, dwg->header.entities_end);
     write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_END);
