@@ -25,7 +25,7 @@ api_process (dwg_object *obj)
   BITCODE_H reactor;
   BITCODE_B show_intensity;
   BITCODE_BS intensity_scheme;
-  Dwg_POINTCLOUD_IntensityStyle intensity_style;
+  Dwg_POINTCLOUD_IntensityStyle intensity_style = { 0 };
   BITCODE_B show_clipping;
   BITCODE_BL num_clippings;
   Dwg_POINTCLOUD_Clippings *clippings;
