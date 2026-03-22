@@ -37,7 +37,8 @@ decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo \
-	$(top_builddir)/src/decode_r2007.lo
+	$(top_builddir)/src/decode_r2007.lo \
+	$(top_builddir)/src/decode2.lo
 encode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/dwg.lo \
 	$(top_builddir)/src/common.lo \
@@ -45,7 +46,9 @@ encode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo \
 	$(top_builddir)/src/decode.lo \
-	$(top_builddir)/src/decode_r2007.lo
+	$(top_builddir)/src/decode_r2007.lo \
+	$(top_builddir)/src/decode2.lo \
+	$(top_builddir)/src/encode2.lo
 hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
 	$(top_builddir)/src/bits.lo \

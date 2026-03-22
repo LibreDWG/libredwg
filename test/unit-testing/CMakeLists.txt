@@ -54,6 +54,7 @@ add_executable(decode_test
   ../../src/objects.c
   ../../src/classes.c
   ../../src/print.c
+  ../../src/decode2.c
   tests_common.h)
 #set_property(TARGET decode_test
 #  PROPERTY LINK_LIBRARIES -lm ${CMAKE_THREAD_LIBS_INIT})

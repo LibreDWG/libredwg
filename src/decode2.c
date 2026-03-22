@@ -55,7 +55,7 @@ static bool is_teigha = false;
 #ifdef DWG_ABORT
 static unsigned int errors = 0;
 #  ifndef DWG_ABORT_LIMIT
-#    define DWG_ABORT_LIMIT 200
+#    define DWG_ABORT_LIMIT 20
 #  endif
 #endif
 
