@@ -14,7 +14,8 @@ think is not the best strategy for a free software project which aims
 to get lots of contributors. LibreDWG is written in English. At the
 moment our decoder (i.e. reader) is done, it can read all DWG
 versions, just some very advanced R2010+ objects fail to read and are
-skipped over. The writer is good enough for R1.4 - R2000. Among the
+skipped over. The writer is good enough for R1.4 - R2004.
+R2010-R2018 write support is coming soon. Among the
 example applications we wrote using LibreDWG is a reader, a writer, a
 rewriter (i.e. saveas), an initial SVG and Postscript conversion, dxf
 and json converters, dwggrep to search for text, and dwglayer to print
@@ -88,7 +89,7 @@ Optionally:
 See INSTALL for generic instructions.  Basically, you do:
 
 $ sh ./autogen.sh (if you checked out the source code from git)
-$ ./configure [--enable-trace] [--disable-write] [--disable-shared]
+$ ./configure [--disable-bindings] [--disable-docs] [--disable-shared]
 $ make
 $ make check
 $ sudo make install
@@ -110,10 +111,11 @@ customize the installation dirs.  Other options recognized by configure are:
 
   --enable-trace
 
-    Enable runtime tracing (default: no).  When enabled, the environment
-    variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
-    Its value is an integer: 0 (no output) through 9 (full verbosity).
-    Most tools do support a --verbosity|-v flag instead.
+    Enable runtime tracing via LIBREDWG_TRACE (default: no). When
+    enabled, the environment variable LIBREDWG_TRACE is consulted on
+    the first decode/encode attempt. Its value is an integer: 0 (no
+    output) through 9 (full verbosity). Most tools do support a
+    --verbosity|-v flag instead.
 
   --with-dxf-precision=rfc
 
@@ -128,8 +130,8 @@ customize the installation dirs.  Other options recognized by configure are:
   --disable-write
 
     Disable DWG write support (default: no).
-    Write support only works for earlier versions until r2004. Rewriting most DWG's
-    <= r2004 usually works fine.
+    Write support only works for earlier versions until r2004.
+    Rewriting most DWG's <= r2004 usually works fine.
 
   --disable-bindings
 
@@ -147,7 +149,7 @@ customize the installation dirs.  Other options recognized by configure are:
 
     Disable python bindings and tests.
     Related: --enable-python=python3.6
-    Enforce a specific version.
+    to enforce a specific version.
 
   --enable-debug
 
@@ -171,7 +173,7 @@ See the following scripts how we build on Windows:
 * build-aux/msys2.bat: msys2 deps
 * .appveyor.yml: windows smoker
 
-We do support mingw, clang-cl and now also Visual Studio 2019 via cmake.
+We do support mingw, clang-cl and Visual Studio >= 2019 via cmake.
 stdint.h and inttypes.h must be available.
 Pre-compiled Windows binaries are here: https://github.com/LibreDWG/libredwg/releases
 
@@ -229,7 +231,7 @@ that uses our lib:
   features is in the test/xmlsuite directory. It also features code to output entities
   in XML, but does not use the python bindings.
 
-Copyright (C) 2009, 2010, 2015, 2018-2025 Free Software Foundation, Inc.
+Copyright (C) 2009, 2010, 2015, 2018-2026 Free Software Foundation, Inc.
 
 This library is free software, licensed under the terms of the GNU
 General Public License as published by the Free Software Foundation,
