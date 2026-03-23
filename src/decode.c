@@ -1312,11 +1312,13 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
             lit_length = read_literal_length (src, opcode1);
         }
       LOG_INSANE ("L %d\n", lit_length)
-      if (lit_length && (size_t)end < dec->size)
+      if (lit_length && end + (size_t)lit_length <= dec->size)
         {
           opcode1 = copy_bytes (lit_length, src, dec);
           LOG_INSANE ("<O %x\n", opcode1)
         }
+      else if (lit_length)
+        break;
     }
 #ifdef DEBUG
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
