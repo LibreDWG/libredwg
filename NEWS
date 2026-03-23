@@ -2,6 +2,20 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2026 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.14 - 2026-?-? - beta:
+
+Major features:
+  * Write support for r2004 (AC1018) DWG files.  The encoder now produces
+    compressed, encrypted section headers and the LZ77-compressed object
+    data layout required since r2004.
+  * Split large object files (encode, decode) into 2 objects, significantly
+    reducing peak memory usage during compilation and enabling parallel
+    builds to scale better.
+  * dwgadd: handle fields (e.g. layer, ltype, style) can now be set by
+    table-record name in addition to raw handle references.  A string value
+    like `line.layer = "FOO"` is resolved via dwg_find_tablehandle() at
+    parse time.
+
 LibreDWG version 0.13.4 - 2026-03-18 - beta:
 
 Major features:
