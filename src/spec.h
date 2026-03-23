@@ -1051,6 +1051,7 @@
     }
 #endif
 
+// clang-format off
 #ifndef LOG_FLAG_LWPOLYLINE
 #  define LOG_FLAG_LWPOLYLINE_W(w)                                            \
     if (_obj->flag & FLAG_LWPOLYLINE_##w)                                     \
@@ -1061,22 +1062,23 @@
       if (_obj->flag)                                                         \
         {                                                                     \
           LOG_TRACE ("      ");                                               \
-          LOG_FLAG_LWPOLYLINE_W (HAS_EXTRUSION);                              \
-          LOG_FLAG_LWPOLYLINE_W (HAS_THICKNESS);                              \
-          LOG_FLAG_LWPOLYLINE_W (HAS_CONSTWIDTH);                             \
-          LOG_FLAG_LWPOLYLINE_W (HAS_ELEVATION);                              \
-          LOG_FLAG_LWPOLYLINE_W (HAS_NUM_BULGES);                             \
-          LOG_FLAG_LWPOLYLINE_W (HAS_NUM_WIDTHS);                             \
-          LOG_FLAG_LWPOLYLINE_W (UNKNOWN_64);                                 \
-          LOG_FLAG_LWPOLYLINE_W (UNKNOWN_128);                                \
-          LOG_FLAG_LWPOLYLINE_W (PLINEGEN);                                   \
-          LOG_FLAG_LWPOLYLINE_W (CLOSED);                                     \
-          LOG_FLAG_LWPOLYLINE_W (VERTEXIDCOUNT);                              \
+          LOG_FLAG_LWPOLYLINE_W (HAS_EXTRUSION);  /* 1 */                     \
+          LOG_FLAG_LWPOLYLINE_W (HAS_THICKNESS);  /* 2 */                     \
+          LOG_FLAG_LWPOLYLINE_W (HAS_CONSTWIDTH); /* 4 */                     \
+          LOG_FLAG_LWPOLYLINE_W (HAS_ELEVATION);  /* 8 */                     \
+          LOG_FLAG_LWPOLYLINE_W (HAS_NUM_BULGES); /* 16 */                    \
+          LOG_FLAG_LWPOLYLINE_W (HAS_NUM_WIDTHS); /* 32 */                    \
+          LOG_FLAG_LWPOLYLINE_W (UNKNOWN_64);     /* 64 */                    \
+          LOG_FLAG_LWPOLYLINE_W (UNKNOWN_128);    /* 128 */                   \
+          LOG_FLAG_LWPOLYLINE_W (PLINEGEN);       /* 256 */                   \
+          LOG_FLAG_LWPOLYLINE_W (CLOSED);         /* 512 */                   \
+          LOG_FLAG_LWPOLYLINE_W (VERTEXIDCOUNT);  /* 1024 */                  \
           LOG_FLAG_MAX (_obj->flag, 2047);                                    \
           LOG_TRACE ("\n");                                                   \
         }                                                                     \
     }
 #endif
+// clang-format on
 
 #ifndef LOG_FLAG_POLYLINE
 #  define LOG_FLAG_POLYLINE_W(w)                                              \

@@ -2465,7 +2465,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       pair = dxf_read_pair (dat);
       if (pair == NULL || pair->code == 0)
         {
-          LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", o->flag);
+          // LOG_INFO ("LWPOLYLINE.flag = %d [BS 70]\n", o->flag);
           return pair;
         }
       else if (pair->code == 43)
@@ -2477,10 +2477,11 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 70)
         {
+          o->flag = pair->value.i;
           if (pair->value.i & 1) /* only if closed or not */
-            o->flag |= 512;
+            o->flag = (o->flag - 1) + 512;
           else if (pair->value.i & 128) /* plinegen? */
-            o->flag |= 256;
+            o->flag = (o->flag - 128) + 256;
           LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", o->flag);
         }
       else if (pair->code == 38)
@@ -10626,7 +10627,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               // 128: plinegen
               if (o->flag & 1)
                 o->flag = (o->flag - 1) + 512;
-              LOG_TRACE ("LWPOLYLINE.flag => %d [BS 70]\n", flag);
+              LOG_TRACE ("LWPOLYLINE.flag => %d [BS 70]\n", o->flag);
               break;
             }
           else if (pair->code == 70
