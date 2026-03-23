@@ -11871,7 +11871,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                         LOG_WARN ("%s.%s [BS 176] not found in dynapi", name,
                                   fieldname);
                     }
-                  else if (f->dxf == pair->code) // matching DXF code
+                  else if (f->dxf == pair->code // matching DXF code
+                           || (strEQc (f->type, "CMC") && f->size > 8
+                               && (pair->code == f->dxf + (420 - 62)
+                                   || pair->code == f->dxf + (430 - 62)
+                                   || pair->code == f->dxf + (440 - 62))))
                     {
                     matching_pair:
                       if (obj->fixedtype == DWG_TYPE_VISUALSTYLE
@@ -12065,6 +12069,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 LOG_TRACE ("%s.%s.rgb = 0x%08x [%s %d]\n",
                                            name, f->name, color.rgb, "CMC",
                                            pair->code);
+                            }
+                          else if (pair->code >= 420 && pair->code < 430)
+                            {
+                              // DXF code 420-429: true 24-bit RGB color
+                              color.rgb = pair->value.l | 0xc3000000;
+                              color.method = 0xc3;
+                              LOG_TRACE ("%s.%s.rgb = %08X [%s %d]\n", name,
+                                         f->name, color.rgb, "CMC",
+                                         pair->code);
                             }
                           else if (pair->code < 430)
                             {
