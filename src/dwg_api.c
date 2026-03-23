@@ -25702,7 +25702,8 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
               = dwg_add_handleref (dwg, 4, 0, NULL);
         }
       else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER
-               && !_owner->first_entity && !_owner->num_owned
+               && (!_owner->first_entity || !_owner->first_entity->absolute_ref)
+               && !_owner->num_owned
                && !dwg_obj_is_subentity (obj))
         {
           BITCODE_H ref;
@@ -25714,7 +25715,9 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
           LOG_TRACE ("%s.entities[%d] = " FORMAT_REF "\n", owner->name,
                      _owner->num_owned, ARGS_REF (ref));
           PUSH_HV (_owner, num_owned, entities, ref)
-          // ent->nolinks = 1;
+          ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+          ent->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+          ent->nolinks = 0;
           LOG_TRACE ("%s.num_owned = %u\n", owner->name, _owner->num_owned);
         }
       else
@@ -25765,7 +25768,20 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
                 }
             }
           else
-            ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+            {
+              // first entity added to a loaded (previously empty) block
+              if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER
+                  && (!_owner->first_entity
+                      || !_owner->first_entity->absolute_ref))
+                {
+                  _owner->first_entity
+                      = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+                  LOG_TRACE ("%s.first_entity = " FORMAT_REF "\n", owner->name,
+                             ARGS_REF (_owner->first_entity));
+                }
+              ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+            }
+          ent->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
         }
     }
   IN_POSTPROCESS_HANDLES (obj);
