@@ -1009,10 +1009,44 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                      ent.type);                                               \
           exit (1);                                                           \
         }                                                                     \
-      str = strdup (text);                                                    \
-      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &str, 1);            \
-      free (str);                                                             \
-      LOG_TRACE (#var ".%s = \"%s\"\n", s1, text);                            \
+      {                                                                       \
+        const Dwg_DYNAPI_field *ef                                            \
+            = dwg_dynapi_entity_field (#name, s1);                            \
+        const Dwg_DYNAPI_field *cf                                            \
+            = ef ? NULL : dwg_dynapi_common_entity_field (s1);                \
+        const Dwg_DYNAPI_field *hf                                            \
+            = (ef && strEQc (ef->type, "H"))                                  \
+                  ? ef                                                        \
+                  : (cf && strEQc (cf->type, "H")) ? cf : NULL;               \
+        if (hf)                                                               \
+          {                                                                   \
+            char tbl[64];                                                     \
+            size_t k;                                                         \
+            BITCODE_H hdl;                                                    \
+            for (k = 0; s1[k] && k < sizeof (tbl) - 1; k++)                  \
+              tbl[k] = toupper ((unsigned char)s1[k]);                        \
+            tbl[k] = '\0';                                                    \
+            hdl = dwg_find_tablehandle (dwg, text, tbl);                      \
+            if (hdl)                                                          \
+              {                                                               \
+                if (cf)                                                       \
+                  dwg_dynapi_common_set_value (ent.u.var, s1, &hdl, 0);      \
+                else                                                          \
+                  dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &hdl,   \
+                                               0);                           \
+                LOG_TRACE (#var ".%s = \"%s\"\n", s1, text);                  \
+              }                                                               \
+            else                                                              \
+              LOG_WARN (#var ".%s = \"%s\": table not found\n", s1, text);   \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            str = strdup (text);                                              \
+            dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &str, 1);      \
+            free (str);                                                       \
+            LOG_TRACE (#var ".%s = \"%s\"\n", s1, text);                      \
+          }                                                                   \
+      }                                                                       \
     }
 
       if (memBEGINc (p, "pspace\n"))
