@@ -69,9 +69,9 @@ static void ATTRIBUTE_FORMAT (1, 2) fail (const char *fmt, ...)
     printf ("not ok %d\t# %s\n", ++num, buffer);
 }
 
-#if 0
-static void ATTRIBUTE_FORMAT (1, 2)
-todo (const char *fmt, ...)
+#if 1
+void ATTRIBUTE_FORMAT (1, 2) todo (const char *fmt, ...);
+void ATTRIBUTE_FORMAT (1, 2) todo (const char *fmt, ...)
 {
   va_list ap;
 

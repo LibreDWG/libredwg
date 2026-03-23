@@ -37,7 +37,7 @@ dnl- If any interfaces have been added since the last public release,
 dnl  then increment age.
 dnl- If any interfaces have been removed or changed since the last public release,
 dnl  then set age to 0.
-LIBREDWG_SO_VERSION=0:13:0
+LIBREDWG_SO_VERSION=0:14:0
 AC_DEFINE_UNQUOTED([LIBREDWG_SO_VERSION], ["${LIBREDWG_SO_VERSION}"],
           [Defined in configure.ac to the libtool version-info of the shared lib.])
 AC_SUBST([LIBREDWG_SO_VERSION])
