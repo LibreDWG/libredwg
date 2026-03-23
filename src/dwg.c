@@ -1268,8 +1268,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
   if (R_13b1 <= version && version <= R_2000)
     {
       Dwg_Object *obj;
-      if (_hdr->last_entity == NULL
-          || current->handle.value >= _hdr->last_entity->absolute_ref)
+      if (_hdr->last_entity == NULL || current == _hdr->last_entity->obj)
         return NULL;
       obj = dwg_next_entity (current);
       while (obj
@@ -1281,6 +1280,9 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
                  || obj->fixedtype == DWG_TYPE_VERTEX_PFACE
                  || obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE))
         {
+          if (obj
+              == _hdr->last_entity->obj) // stop before skipping last_entity
+            return obj;
           obj = dwg_next_entity (obj);
           // this may happen with r2000 attribs
           if (obj && obj->tio.entity != NULL
