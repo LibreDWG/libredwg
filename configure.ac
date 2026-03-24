@@ -50,6 +50,9 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AC_CONFIG_HEADERS([src/config.h])
+AH_TOP([#ifndef CONFIG_H
+#define CONFIG_H 1])
+AH_BOTTOM([#endif /* CONFIG_H */])
 AC_MSG_CHECKING([PACKAGE_VERSION])
 AC_MSG_RESULT($PACKAGE_VERSION)
 AC_MSG_CHECKING([LIBREDWG_SO_VERSION])
@@ -222,7 +225,11 @@ darwin*|macos*)
     AC_DEFINE([_POSIX_C_SOURCE],[900000L],[Needed for all APPLE extensions])
     ;;
 *)
-    AC_DEFINE([_POSIX_C_SOURCE],[200809L],[Needed for strdup])
+    AH_VERBATIM([_POSIX_C_SOURCE],
+[/* Needed for strdup */
+#ifndef _POSIX_C_SOURCE
+# define _POSIX_C_SOURCE 200809L
+#endif])
     ;;
 esac
 case "$host_os" in
