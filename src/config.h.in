@@ -45,6 +45,9 @@
 /* Define to 1 if <alloca.h> works. */
 #undef HAVE_ALLOCA_H
 
+/* AddressSanitizer detected in CFLAGS or CC */
+#undef HAVE_ASAN
+
 /* Define if __attribute__((visibility("default"))) is supported. */
 #undef HAVE_ATTRIBUTE_VISIBILITY_DEFAULT
 

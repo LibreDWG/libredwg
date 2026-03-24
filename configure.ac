@@ -201,6 +201,7 @@ case $CFLAGS in
      *-fsanitize=leak*)        HAVE_ASAN=yes ;;
      *-fsanitize=*,leak*)      HAVE_ASAN=yes ;;
 esac
+AC_DEFINE(HAVE_ASAN,1,[AddressSanitizer detected in CFLAGS or CC])
 AC_SUBST(HAVE_ASAN)
 AM_CONDITIONAL([HAVE_ASAN], [test -n "$HAVE_ASAN"])
 
