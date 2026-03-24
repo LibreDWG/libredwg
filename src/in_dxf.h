@@ -61,7 +61,11 @@ typedef struct _dxf_pair
   {
     unsigned int u;
     int i;
-    char *s;
+    struct
+    {
+      char *ptr;
+      BITCODE_BL len;
+    } s;
     long l;
     uint64_t rll;
     double d;
