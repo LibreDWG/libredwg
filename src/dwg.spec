@@ -556,7 +556,7 @@ DWG_ENTITY (ATTDEF)
 
   SUBCLASS (AcDbAttributeDefinition);
   DXF {
-    VALUE_RS (0, 280); // 0 = 2010+ (class_version)
+    VALUE_RC (0, 280); // 0 = 2010+ (class_version)
     FIELD_T (prompt, 3);
     FIELD_T (tag, 2);
     FIELD_RC (mtext_type, 70);
@@ -1225,7 +1225,7 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
     LATER_VERSIONS {
       VALUE_3BD (pt, 10)
     }
-    VALUE_RC ((BITCODE_RC)128, 70);
+    VALUE_RS ((BITCODE_RS)128, 70);
     FIELD_BSd (vertind[0], 71);
     FIELD_BSd (vertind[1], 72);
     FIELD_BSd (vertind[2], 73);
@@ -1374,7 +1374,7 @@ DWG_ENTITY (POLYLINE_3D)
     BITCODE_RC flag = FIELD_VALUE (flag);
     FIELD_B (has_vertex, 66);
     KEY (elevation); VALUE_3BD (pt, 10);
-    KEY (flag); VALUE_RC ((BITCODE_RC)(flag | 8), 70);
+    KEY (flag); VALUE_RS ((BITCODE_RS)(flag | 8), 70);
   }
   else {
     FIELD_VALUE (has_vertex) = 1;
@@ -2126,7 +2126,7 @@ DWG_ENTITY (POLYLINE_PFACE)
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     FIELD_B (has_vertex, 66);
     KEY (elevation); VALUE_3BD (pt, 10);
-    KEY (flag); VALUE_RC ((BITCODE_RC)64, 70);
+    KEY (flag); VALUE_RS ((BITCODE_RS)64, 70);
   }
   else {
     FIELD_VALUE (has_vertex) = 1;

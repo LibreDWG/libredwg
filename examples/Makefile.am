@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010-2021 Free Software Foundation, Inc.
+## Copyright (C) 2010-2026 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -237,7 +237,7 @@ alldxf_unknowns = \
 	alldxf_WIPEOUT.inc
 
 EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc $(alldxf_unknowns)
-EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm dwgadd.pod dwgadd_test.sh
+EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm dwgadd.pod dwgadd_test.sh compare_dxfb.py
 EXTRA_DIST += unknown.pi ACAD_EVALUATION_GRAPH.pi
 EXTRA_man1_MANS = $(srcdir)/dwgfuzz.1
 dist_man1_MANS = $(srcdir)/dwgadd.1
