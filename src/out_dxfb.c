@@ -437,11 +437,20 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define VALUE_RC(value, dxf)                                                  \
   {                                                                           \
     if (dxf)                                                                  \
-    {                                                                         \
-      BITCODE_RC _c = (BITCODE_RC)(value);                                    \
-      GROUP (dxf);                                                            \
-      fwrite (&_c, 1, 1, dat->fh);                                            \
-    }                                                                         \
+      {                                                                       \
+        if ((dxf) >= 280 && (dxf) <= 289)                                     \
+          {                                                                   \
+            BITCODE_RS _s = (BITCODE_RS)(BITCODE_RC)(value);                  \
+            GROUP (dxf);                                                      \
+            fwrite (&_s, 2, 1, dat->fh);                                      \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            BITCODE_RC _c = (BITCODE_RC)(value);                              \
+            GROUP (dxf);                                                      \
+            fwrite (&_c, 1, 1, dat->fh);                                      \
+          }                                                                   \
+      }                                                                       \
   }
 #define VALUE_RS(value, dxf)                                                  \
   {                                                                           \
@@ -481,9 +490,9 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       switch (dwg_resbuf_value_type (dxf))                                    \
         {                                                                     \
         case DWG_VT_BOOL:                                                     \
-        case DWG_VT_INT8:                                                     \
           VALUE_RC (value, dxf);                                              \
           break;                                                              \
+        case DWG_VT_INT8:                                                     \
         case DWG_VT_INT16:                                                    \
           VALUE_RS (value, dxf);                                              \
           break;                                                              \
@@ -856,7 +865,7 @@ dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
     {
       if (dat->from_version < R_2004)
         bit_upconvert_CMC (dat, color);
-      if (dxf >= 90)
+      if (dxf >= 90 && dxf <= 99)
         {
           VALUE_RL (color->rgb, dxf);
           return;
@@ -929,7 +938,7 @@ dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
   else
     {
       bit_downconvert_CMC (dat, color);
-      if (dxf >= 90)
+      if (dxf >= 90 && dxf <= 99)
         {
           VALUE_RL ((BITCODE_RL)color->index, dxf);
         }
@@ -1987,9 +1996,9 @@ dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       {
         VALUE_RL (dwg->dwg_class[j].num_instances, 91);
       }
-      VALUE_RC (dwg->dwg_class[j].is_zombie, 280); // acad: was-a-zombie
+      VALUE_RS (dwg->dwg_class[j].is_zombie, 280); // acad: was-a-zombie
       // Is-an-entity. 1f2 for entities, 1f3 for objects
-      VALUE_RC (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);
+      VALUE_RS (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);
     }
   ENDSEC ();
   return 0;
