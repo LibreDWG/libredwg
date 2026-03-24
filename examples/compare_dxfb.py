@@ -41,7 +41,7 @@ def dxf_value_type(code):
     if 270 <= code <= 279:
         return ("int16", 2)
     if 280 <= code <= 289:
-        return ("int8", 1)
+        return ("int16", 2)  # ODA/ACAD use int16, not int8
     if 290 <= code <= 299:
         return ("bool", 1)
     if 300 <= code <= 309:
