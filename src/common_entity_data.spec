@@ -314,7 +314,7 @@
 #else
         VERSIONS (R_13b1, R_2007)
           {
-            FIELD_CAST (preview_size, RL, BLL, 92);
+            FIELD_CAST (preview_size, BLL, RL, 92);
           }
         SINCE (R_2010b)
           {
