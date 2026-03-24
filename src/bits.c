@@ -3180,8 +3180,11 @@ static char *
 bit_is_U_expand (const char *p)
 {
   char *s;
-  if (p && strlen (p) >= 7 && (s = strstr (p, "\\U+")) && ishex (s[3])
-      && ishex (s[4]) && ishex (s[5]) && ishex (s[6]))
+  if (!p || strlen (p) < 7)
+    return NULL;
+
+  s = (char *)strstr (p, "\\U+");
+  if (s && ishex (s[3]) && ishex (s[4]) && ishex (s[5]) && ishex (s[6]))
     return s;
   else
     return NULL;
@@ -3191,9 +3194,12 @@ static char *
 bit_is_M_expand (const char *p)
 {
   char *s;
-  if (p && strlen (p) >= 8 && (s = strstr (p, "\\M+")) && s[3] >= '1'
-      && s[3] <= '5' && ishex (s[4]) && ishex (s[5]) && ishex (s[6])
-      && ishex (s[7]))
+  if (!p || strlen (p) < 8)
+    return NULL;
+
+  s = (char *)strstr (p, "\\M+");
+  if (s && s[3] >= '1' && s[3] <= '5' && ishex (s[4]) && ishex (s[5])
+      && ishex (s[6]) && ishex (s[7]))
     return s;
   else
     return NULL;
