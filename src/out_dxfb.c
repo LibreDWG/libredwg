@@ -929,7 +929,14 @@ dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
   else
     {
       bit_downconvert_CMC (dat, color);
-      VALUE_RSd (color->index, dxf);
+      if (dxf >= 90)
+        {
+          VALUE_RL ((BITCODE_RL)color->index, dxf);
+        }
+      else
+        {
+          VALUE_RSd (color->index, dxf);
+        }
     }
 }
 
@@ -1980,9 +1987,9 @@ dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       {
         VALUE_RL (dwg->dwg_class[j].num_instances, 91);
       }
-      VALUE_RS (dwg->dwg_class[j].is_zombie, 280); // acad: was-a-zombie
+      VALUE_RC (dwg->dwg_class[j].is_zombie, 280); // acad: was-a-zombie
       // Is-an-entity. 1f2 for entities, 1f3 for objects
-      VALUE_RS (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);
+      VALUE_RC (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);
     }
   ENDSEC ();
   return 0;
@@ -2344,12 +2351,24 @@ dxfb_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
   BITCODE_RLL mspace_ref = mspace ? mspace->handle.value : 0;
   BITCODE_RLL pspace_ref = pspace ? pspace->handle.value : 0;
 
-  if (obj)
-    error |= dwg_dxfb_object (dat, obj, i);
+  if (obj && obj->fixedtype == DWG_TYPE_BLOCK)
+    {
+      error |= dwg_dxfb_object (dat, obj, i);
+    }
   else
     {
-      LOG_ERROR ("BLOCK_HEADER.block_entity missing");
-      return DWG_ERR_INVALIDDWG;
+      SINCE (R_2004a)
+      {
+        if (IS_FROM_TU (dat))
+          {
+            char *s = bit_convert_TU ((BITCODE_TU)_hdr->name);
+            LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", s);
+            free (s);
+          }
+        else
+          LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", _hdr->name);
+        return DWG_ERR_INVALIDDWG;
+      }
     }
   // Skip all *Model_Space and *Paper_Space entities, esp. new ones: UNDERLAY,
   // MULTILEADER, ... They are all under ENTITIES later. Note: the objects may
@@ -2370,15 +2389,15 @@ dxfb_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
                   && obj->tio.entity->ownerhandle->absolute_ref
                          != pspace_ref)))
         error |= dwg_dxfb_object (dat, obj, i);
-      obj = get_next_owned_entity (hdr, obj); // until last_entity
+      obj = get_next_owned_block_entity (hdr, obj); // until last_entity
     }
   endblk = get_last_owned_block (hdr);
   if (endblk)
     error |= dwg_dxfb_ENDBLK (dat, endblk);
   else
     {
-      LOG_WARN ("Empty ENDBLK for \"%s\" " FORMAT_BL, _hdr->name,
-                hdr ? hdr->tio.object->objid : 0);
+      LOG_WARN ("Empty ENDBLK for \"%s\" " FORMAT_HV, _hdr->name,
+                hdr ? hdr->handle.value : 0);
       dxfb_ENDBLK_empty (dat, hdr);
     }
   return error;
@@ -2408,7 +2427,11 @@ dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         if (obj->supertype == DWG_SUPERTYPE_OBJECT
             && obj->type == DWG_TYPE_BLOCK_HEADER)
           {
-            error |= dxfb_block_write (dat, obj, mspace, pspace, &i);
+            // skip *MODEL_SPACE before r11
+            if (dat->version < R_11 && obj == mspace)
+              ;
+            else
+              error |= dxfb_block_write (dat, obj, mspace, pspace, &i);
           }
       }
   }
