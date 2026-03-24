@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2025 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -587,41 +587,9 @@ dxf_read_rd (Bit_Chain *dat)
     }
 }
 
-#  if 0
-// not yet needed. only with write2004
-// ASCII: series of 310 HEX encoded
-// BINARY: ??
-static unsigned char *
-dxf_read_binary (Bit_Chain *dat, unsigned char **p, size_t len)
-{
-  unsigned char *data;
-  const char *pos = (char*)&dat->chain[dat->byte];
-  const int is_binary = dat->opts & DWG_OPTS_DXFB;
-  const size_t size = len / 2;
-  size_t read;
-  if (dat->byte + size >= dat->size)
-    return NULL;
-  //if (is_binary)
-  data = p && *p ? (unsigned char *)realloc (*p, size) : (unsigned char *)malloc (size);
-  if (!data)
-    {
-      LOG_ERROR ("Out of memory");
-      return NULL;
-    }
-  LOG_TRACE ("binary[%u]: ", size);
-  if ((read = in_hex2bin (data, pos, size)) != size)
-    LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE, read, size);
-  dat->byte += read;
-  if (p)
-    *p = data;
-  return data;
-}
-#  endif
-
 // Target (dynapi) expects UTF8 strings.
 // Unicode strings are UTF-8 with quoted \\U+
 // Convert old asian MIF \\M+nxxxx to this \\U+XXXX repr. also.
-// BINARY: no length prefixes, just zero-terminated strings
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
 {
@@ -732,6 +700,56 @@ dxf_read_string (Bit_Chain *dat, char **string)
     }
 }
 
+// Target value is an uppercase hex string.
+// ASCII DXF stores this as HEX; DXFB stores length + raw bytes.
+static void
+dxf_read_binary (Bit_Chain *dat, char **string)
+{
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
+  if (dat->byte >= dat->size)
+    return;
+  if (!is_binary)
+    {
+      // wait. dont we need hex2bin then?
+      dxf_read_string (dat, string);
+      return;
+    }
+
+  {
+    const BITCODE_RC len = bit_read_RC (dat);
+    if (dat->byte + len > dat->size)
+      {
+        LOG_ERROR ("Premature DXFB end in binary value");
+        dat->byte = dat->size;
+        return;
+      }
+    if (!string)
+      {
+        dat->byte += len;
+        return;
+      }
+    {
+      static const char hexdig[] = "0123456789ABCDEF";
+      const size_t hexlen = (size_t)len * 2;
+      char *dst = !*string ? (char *)malloc (hexlen + 1)
+                           : (char *)realloc (*string, hexlen + 1);
+      if (!dst)
+        {
+          LOG_ERROR ("Out of memory");
+          return;
+        }
+      for (size_t i = 0; i < len; i++)
+        {
+          const BITCODE_RC b = bit_read_RC (dat);
+          dst[i * 2] = hexdig[(b >> 4) & 0xF];
+          dst[i * 2 + 1] = hexdig[b & 0xF];
+        }
+      dst[hexlen] = '\0';
+      *string = dst;
+    }
+  }
+}
+
 static void
 dxf_free_pair (Dxf_Pair *pair)
 {
@@ -814,8 +832,7 @@ dxf_read_pair (Bit_Chain *dat)
       LOG_TRACE ("  dxf (%d, %f)\n", pair->code, pair->value.d);
       break;
     case DWG_VT_BINARY:
-      // zero-terminated. TODO hex decode here already?
-      dxf_read_string (dat, &pair->value.s);
+      dxf_read_binary (dat, &pair->value.s);
       if (!pair->value.s)
         pair->value.s = (char *)calloc (1, 1);
       if (!pair->value.s)
