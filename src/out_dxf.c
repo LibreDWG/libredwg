@@ -338,31 +338,33 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define GROUP(dxf) fprintf (dat->fh, "%3i\r\n", dxf)
 /* avoid empty numbers, and fixup some bad %f GNU/BSD libc formatting */
 #define VALUE(value, type, dxf)                                               \
-  if (dxf)                                                                    \
-    {                                                                         \
-      const char *_fmt = dxf_format (dxf);                                    \
-      assert (_fmt);                                                          \
-      if (strEQc (_fmt, DXF_FORMAT_FLT))                                      \
-        {                                                                     \
-          dxf_print_rd (dat, (double)(value), dxf);                           \
-        }                                                                     \
-      else                                                                    \
-        { /* -Wpointer-to-int-cast */                                         \
-          const int32_t _si = (int32_t)(intptr_t)(value);                     \
-          GROUP (dxf);                                                        \
-          GCC46_DIAG_IGNORE (-Wformat-nonliteral)                             \
-          snprintf (buf, 255, _fmt, value);                                   \
-          GCC46_DIAG_RESTORE                                                  \
-          if (strEQc (_fmt, "%s") && !*buf)                                   \
-            fprintf (dat->fh, "0\r\n");                                       \
-          else if (90 <= dxf && dxf < 100)                                    \
-            {                                                                 \
-              fprintf (dat->fh, "%9i\r\n", _si);                              \
-            }                                                                 \
-          else                                                                \
-            fprintf (dat->fh, "%s\r\n", buf);                                 \
-        }                                                                     \
-    }
+  {                                                                           \
+    if (dxf)                                                                  \
+      {                                                                       \
+        const char *_fmt = dxf_format (dxf);                                  \
+        assert (_fmt);                                                        \
+        if (strEQc (_fmt, DXF_FORMAT_FLT))                                    \
+          {                                                                   \
+            dxf_print_rd (dat, (double)(value), dxf);                         \
+          }                                                                   \
+        else                                                                  \
+          { /* -Wpointer-to-int-cast */                                       \
+            const int32_t _si = (int32_t)(intptr_t)(value);                   \
+            GROUP (dxf);                                                      \
+            GCC46_DIAG_IGNORE (-Wformat-nonliteral)                           \
+            snprintf (buf, 255, _fmt, value);                                 \
+            GCC46_DIAG_RESTORE                                                \
+            if (strEQc (_fmt, "%s") && !*buf)                                 \
+              fprintf (dat->fh, "0\r\n");                                     \
+            else if (90 <= dxf && dxf < 100)                                  \
+              {                                                               \
+                fprintf (dat->fh, "%9i\r\n", _si);                            \
+              }                                                               \
+            else                                                              \
+              fprintf (dat->fh, "%s\r\n", buf);                               \
+          }                                                                   \
+      }                                                                       \
+  }
 
 static void
 dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
@@ -416,21 +418,25 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     }
 }
 #define VALUE_BSd(value, dxf)                                                 \
-  if (dxf)                                                                    \
-    {                                                                         \
-      GROUP (dxf);                                                            \
-      fprintf (dat->fh, "%6i\r\n", value);                                    \
-    }
+  {                                                                           \
+    if (dxf)                                                                  \
+      {                                                                       \
+        GROUP (dxf);                                                          \
+        fprintf (dat->fh, "%6i\r\n", value);                                  \
+      }                                                                       \
+  }
 #define VALUE_RD(value, dxf) dxf_print_rd (dat, value, dxf)
 #define VALUE_B(value, dxf)                                                   \
-  if (dxf)                                                                    \
-    {                                                                         \
-      GROUP (dxf);                                                            \
-      if (value == 0)                                                         \
-        fprintf (dat->fh, "     0\r\n");                                      \
-      else                                                                    \
-        fprintf (dat->fh, "     1\r\n");                                      \
-    }
+  {                                                                           \
+    if (dxf)                                                                  \
+      {                                                                       \
+        GROUP (dxf);                                                          \
+        if (value == 0)                                                       \
+          fprintf (dat->fh, "     0\r\n");                                    \
+        else                                                                  \
+          fprintf (dat->fh, "     1\r\n");                                    \
+      }                                                                       \
+  }
 
 // if it's an anonymous BLOCK (starting with *)
 // we need to take the BLOCK name instead
