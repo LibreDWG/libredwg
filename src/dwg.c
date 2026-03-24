@@ -1531,12 +1531,18 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
 
   if (R_13b1 <= version && version <= R_2000)
     {
+      Dwg_Object *obj;
       /* With r2000 we rather follow the next_entity chain. It may jump around
        * the linked list. */
-      if (!_hdr->last_entity
-          || current->handle.value == _hdr->last_entity->absolute_ref)
+      if (!_hdr->last_entity || current == _hdr->last_entity->obj)
         return NULL;
-      return dwg_next_entity (current);
+      obj = dwg_next_entity (current);
+      /* Detect cycle: if the next entity's ownerhandle points to a different
+         block, the next_entity chain has crossed a block boundary. */
+      if (obj && obj->tio.entity && obj->tio.entity->ownerhandle
+          && obj->tio.entity->ownerhandle->absolute_ref != hdr->handle.value)
+        return NULL;
+      return obj;
     }
   if (version > R_2000 || version < R_13b1)
     {

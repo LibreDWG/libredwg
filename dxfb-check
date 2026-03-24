@@ -51,7 +51,7 @@ esac
 ./log "-l$b.log.orig" "$v" "$d"
 rm "./$b.dxf" "./$b.dwg" 2>/dev/null
 
-if ! ./dxf -b -y "$v" -o "$b.dxfb" "$d"; then
+if ! timeout 10 ./dxf -b -y "$v" -o "$b.dxfb" "$d"; then
    exit 2
 fi
 if [ -f "$b.dxfb" ]; then
@@ -95,7 +95,7 @@ if [ -f "$b.dxfb" ]; then
         fi
     fi
 
-    if ! ./dwg -y "$v" "$b.dxfb"; then
+    if ! timeout 10 ./dwg -y "$v" "$b.dxfb"; then
         exit 1
     fi
 fi
