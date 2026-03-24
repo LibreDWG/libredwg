@@ -88,7 +88,7 @@ endif
 
 TESTS = alive.test
 if !DISABLE_DXF
-TESTS += dxf.test
+TESTS += dxf.test dxfb.test
 if !DISABLE_JSON
 if HAVE_JQ
 TESTS += json.test
@@ -116,7 +116,7 @@ CLEANFILES += {example_,sample_,entities,ACEB10}*.dwg
 CLEANFILES += example_*.{log1,log2}
 endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i *.ii *.log
-DISTCLEANFILES       = core alive.test dxf.test json.test svg.test
+DISTCLEANFILES       = core alive.test dxf.test dxfb.test json.test svg.test
 
 .PHONY: man dsymutil clean-dsymutil check-syntax check-cppcheck check-minimal
 
