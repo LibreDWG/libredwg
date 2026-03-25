@@ -124,6 +124,10 @@ int dwg_validate_INSERT (Dwg_Object *restrict obj);
 int dwg_validate_POLYLINE (Dwg_Object *restrict obj);
 /* reused with many */
 int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg);
+Dwg_Object_Ref *dwg_add_entity_link (Dwg_Data *restrict dwg,
+                                     const Dwg_Object *restrict first,
+                                     const char *restrict field,
+                                     const BITCODE_RLL handle_val);
 void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj);
 
 /* from decode_r2007.c */

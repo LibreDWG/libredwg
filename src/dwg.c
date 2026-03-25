@@ -1186,6 +1186,7 @@ get_first_owned_entity (const Dwg_Object *hdr)
       Dwg_Data *dwg = hdr->parent;
       if (dwg->dirty_refs)
         dwg_resolve_objectrefs_silent (dwg);
+      _hdr->__iterator = 0; /* reset step counter for cycle detection */
       /* With r2000 we rather follow the next_entity chain */
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
@@ -1268,8 +1269,19 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
   if (R_13b1 <= version && version <= R_2000)
     {
       Dwg_Object *obj;
+      BITCODE_BL max_steps;
       if (_hdr->last_entity == NULL || current == _hdr->last_entity->obj)
         return NULL;
+      /* Cycle detection: __iterator was reset in get_first_owned_entity */
+      _hdr->__iterator++;
+      max_steps = _hdr->num_owned ? _hdr->num_owned : hdr->parent->num_objects;
+      if (_hdr->__iterator > max_steps)
+        {
+          LOG_WARN ("Cycle in entity link chain for BLOCK_HEADER " FORMAT_HV
+                    "\n",
+                    hdr->handle.value);
+          return NULL;
+        }
       obj = dwg_next_entity (current);
       while (obj
              && (obj->fixedtype == DWG_TYPE_ATTDEF
@@ -1532,10 +1544,21 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
   if (R_13b1 <= version && version <= R_2000)
     {
       Dwg_Object *obj;
+      BITCODE_BL max_steps;
       /* With r2000 we rather follow the next_entity chain. It may jump around
        * the linked list. */
       if (!_hdr->last_entity || current == _hdr->last_entity->obj)
         return NULL;
+      /* Cycle detection: __iterator was reset in get_first_owned_entity */
+      _hdr->__iterator++;
+      max_steps = _hdr->num_owned ? _hdr->num_owned : dwg->num_objects;
+      if (_hdr->__iterator > max_steps)
+        {
+          LOG_WARN ("Cycle in entity link chain for BLOCK_HEADER " FORMAT_HV
+                    "\n",
+                    hdr->handle.value);
+          return NULL;
+        }
       obj = dwg_next_entity (current);
       /* Detect cycle: if the next entity's ownerhandle points to a different
          block, the next_entity chain has crossed a block boundary. */

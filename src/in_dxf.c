@@ -13370,8 +13370,10 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER
                       && (_hdr = blkhdr->tio.object->tio.BLOCK_HEADER))
                     {
-                      _hdr->last_entity = dwg_add_handleref (
-                          dwg, 4, obj->handle.value, NULL);
+                      _hdr->last_entity = dwg_add_entity_link (
+                          dwg,
+                          _hdr->first_entity ? _hdr->first_entity->obj : NULL,
+                          "last_entity", obj->handle.value);
 
                       if (!_hdr->first_entity)
                         {
@@ -13435,10 +13437,17 @@ add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
     }
   if (!_ctrl->first_entity)
     _ctrl->last_entity = _ctrl->first_entity
-        = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+        = dwg_add_entity_link (dwg, NULL, "first_entity", obj->handle.value);
   else
-    // always overwrite. and it is global, so we can reuse it.
-    _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+    {
+      // always overwrite. and it is global, so we can reuse it.
+      BITCODE_H ref = dwg_add_entity_link (
+          dwg, _ctrl->first_entity ? _ctrl->first_entity->obj : NULL,
+          "last_entity", obj->handle.value);
+      if (!ref) // cycle detected
+        return;
+      _ctrl->last_entity = ref;
+    }
   PUSH_HV (_ctrl, num_owned, entities, _ctrl->last_entity);
 }
 

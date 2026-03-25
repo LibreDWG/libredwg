@@ -6860,25 +6860,34 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
           owned[0] = first;
         }
       else
-        while (ref && ref->absolute_ref
-               && ref->absolute_ref != last->absolute_ref)
-          {
-            Dwg_Object *ref_obj = dwg_ref_object (dwg, ref);
-            if (!ref_obj || ref_obj->supertype != DWG_SUPERTYPE_ENTITY
-                || !ref_obj->tio.entity)
-              continue;
-            owned[i] = ref;
-            if (ref)
-              LOG_TRACE ("%s.%s[%u] = " FORMAT_REF "[H 0]\n", owner->name,
-                         owhdls, i, ARGS_REF (ref));
-            ref = ref_obj->tio.entity->next_entity;
-            i++;
-            if (i > 1)
-              {
-                num_owned = i;
-                owned = (BITCODE_H *)realloc (owned, i * sizeof (BITCODE_H));
-              }
-          }
+        {
+          const unsigned max_steps = dwg->num_objects;
+          unsigned steps = 0;
+          while (ref && ref->absolute_ref
+                 && ref->absolute_ref != last->absolute_ref)
+            {
+              Dwg_Object *ref_obj = dwg_ref_object (dwg, ref);
+              if (steps++ > max_steps)
+                {
+                  LOG_WARN ("Cycle in subentity chain for %s\n", owner->name);
+                  break;
+                }
+              if (!ref_obj || ref_obj->supertype != DWG_SUPERTYPE_ENTITY
+                  || !ref_obj->tio.entity)
+                continue;
+              owned[i] = ref;
+              if (ref)
+                LOG_TRACE ("%s.%s[%u] = " FORMAT_REF "[H 0]\n", owner->name,
+                           owhdls, i, ARGS_REF (ref));
+              ref = ref_obj->tio.entity->next_entity;
+              i++;
+              if (i > 1)
+                {
+                  num_owned = i;
+                  owned = (BITCODE_H *)realloc (owned, i * sizeof (BITCODE_H));
+                }
+            }
+        }
       dwg_dynapi_entity_set_value (ow, owner->name, "num_owned", &num_owned,
                                    0);
       dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);

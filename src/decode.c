@@ -91,6 +91,7 @@ static int dwg_decode_common_entity_handle_data (Bit_Chain *dat,
                                                  Dwg_Object *restrict obj);
 static int resolve_objectref_vector (Bit_Chain *restrict dat,
                                      Dwg_Data *restrict dwg);
+static int dwg_validate_entity_links (Dwg_Data *restrict dwg);
 static int secondheader_private (Bit_Chain *restrict dat,
                                  Dwg_Data *restrict dwg);
 static int objfreespace_private (Bit_Chain *restrict dat,
@@ -949,6 +950,7 @@ handles_section:
   LOG_TRACE ("num_object_refs: %lu\n", (unsigned long)dwg->num_object_refs)
   LOG_TRACE ("Resolving pointers from ObjectRef vector:\n")
   error |= resolve_objectref_vector (dat, dwg);
+  dwg_validate_entity_links (dwg);
   return error;
 }
 
@@ -6075,6 +6077,120 @@ dwg_validate_POLYLINE (Dwg_Object *restrict obj)
         }
     }
   return 1;
+}
+
+/* Creates a handleref for an entity link (prev/next/first/last entity),
+   checking for cycles by traversing from first via next_entity.
+   Returns NULL if adding handle_val would create a cycle.
+   Used from importers (in_dxf.c, in_json.c) where ->obj pointers are valid.
+   Not used in the decode path itself, since refs are resolved post-decode. */
+Dwg_Object_Ref *
+dwg_add_entity_link (Dwg_Data *restrict dwg, const Dwg_Object *restrict first,
+                     const char *restrict field, const BITCODE_RLL handle_val)
+{
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  if (!handle_val)
+    return dwg_add_handleref (dwg, 4, 0, NULL);
+  /* Check for cycles: traverse from first via next_entity */
+  if (first)
+    {
+      const Dwg_Object *obj = first;
+      BITCODE_BL steps = 0;
+      const BITCODE_BL max_steps = dwg->num_objects;
+      while (obj && steps++ < max_steps)
+        {
+          if (obj->handle.value == handle_val)
+            {
+              LOG_WARN ("Cycle in entity link %s: handle " FORMAT_RLLx
+                        " already in chain\n",
+                        field, handle_val);
+              return NULL;
+            }
+          if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
+            break;
+          {
+            const Dwg_Object_Ref *next = obj->tio.entity->next_entity;
+            if (!next || !next->absolute_ref || !next->obj)
+              break;
+            obj = next->obj;
+          }
+        }
+    }
+  return dwg_add_handleref (dwg, 4, handle_val, NULL);
+}
+
+/* Validate r13-r2000 entity link chains for cycles, using a visited bitset.
+   Called after resolve_objectref_vector in decode_R13_R2000.
+   Clears cyclic next_entity links when detected. */
+static int
+dwg_validate_entity_links (Dwg_Data *restrict dwg)
+{
+  int changes = 0;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  if (dwg->header.version > R_2000 || dwg->header.version < R_13b1)
+    return 0;
+  LOG_TRACE ("\ndwg_validate_entity_links:\n");
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *hdr_obj = &dwg->object[i];
+      if (hdr_obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+        {
+          Dwg_Object_BLOCK_HEADER *_hdr
+              = hdr_obj->tio.object->tio.BLOCK_HEADER;
+          Dwg_Object *cur, *prev;
+          BITCODE_BL steps = 0;
+          const BITCODE_BL max_steps = dwg->num_objects;
+          uint8_t *visited;
+          size_t visited_size;
+
+          if (!_hdr || !_hdr->first_entity || !_hdr->first_entity->obj)
+            continue;
+
+          visited_size = ((size_t)max_steps + 7) / 8;
+          visited = calloc (visited_size, 1);
+          if (!visited)
+            continue;
+
+          prev = NULL;
+          cur = _hdr->first_entity->obj;
+          while (cur && steps < max_steps)
+            {
+              Dwg_Object_Entity *ent;
+              BITCODE_BL idx = cur->index;
+
+              if (idx >= max_steps)
+                {
+                  if (prev && prev->tio.entity)
+                    prev->tio.entity->next_entity = NULL;
+                  changes++;
+                  break;
+                }
+              if ((visited[idx / 8] >> (idx % 8)) & 1)
+                {
+                  LOG_WARN (
+                      "Cycle in entity links for BLOCK_HEADER " FORMAT_RLLx
+                      ": entity " FORMAT_RLLx " already visited, clearing\n",
+                      hdr_obj->handle.value, cur->handle.value);
+                  if (prev && prev->tio.entity)
+                    prev->tio.entity->next_entity = NULL;
+                  changes++;
+                  break;
+                }
+              visited[idx / 8] |= (uint8_t)(1 << (idx % 8));
+
+              ent = cur->tio.entity;
+              if (!ent || !ent->next_entity || !ent->next_entity->obj)
+                break;
+              prev = cur;
+              cur = ent->next_entity->obj;
+              steps++;
+            }
+
+          free (visited);
+        }
+    }
+  LOG_TRACE ("\n");
+  return changes;
 }
 
 /* Set prev_ and next_entity handles from all block headers.
