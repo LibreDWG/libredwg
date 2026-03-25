@@ -188,14 +188,21 @@ static char *_path_field (const char *path);
   {                                                                           \
     char _buf[256];                                                           \
     size_t k;                                                                 \
-    snprintf (_buf, 255, FORMAT_RD, value);                                   \
-    k = strlen (_buf);                                                        \
-    if (k > 0 && strrchr (_buf, '.') && _buf[k - 1] == '0')                   \
+    if (bit_isnan (value))                                                    \
       {                                                                       \
-        for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)         \
-          _buf[k] = '\0';                                                     \
+        fprintf (dat->fh, "0.0");                                             \
       }                                                                       \
-    fprintf (dat->fh, "%s", _buf);                                            \
+    else                                                                      \
+      {                                                                       \
+        snprintf (_buf, 255, FORMAT_RD, value);                               \
+        k = strlen (_buf);                                                    \
+        if (k > 0 && strrchr (_buf, '.') && _buf[k - 1] == '0')               \
+          {                                                                   \
+            for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)   \
+              _buf[k] = '\0';                                                 \
+          }                                                                   \
+        fprintf (dat->fh, "%s", _buf);                                       \
+      }                                                                       \
   }
 #define VALUE_2RD(pt, dxf)                                                    \
   {                                                                           \
@@ -1554,11 +1561,22 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
     return (char *)"";
   if (strlen (src) && codepage > CP_US_ASCII && codepage <= CP_ANSI_1258)
     {
-      // may malloc
-      tmp = bit_TV_to_utf8 ((char *restrict)src, codepage);
-      if (tmp)
-        s = (unsigned char *)tmp;
-      // else conversion failed. ignore
+      // check if pure ASCII (same in all ANSI codepages and UTF-8)
+      bool _is_ascii = true;
+      for (const unsigned char *_p = (const unsigned char *)src; *_p; _p++)
+        if (*_p >= 0x80)
+          {
+            _is_ascii = false;
+            break;
+          }
+      if (!_is_ascii)
+        {
+          // may malloc
+          tmp = bit_TV_to_utf8 ((char *restrict)src, codepage);
+          if (tmp)
+            s = (unsigned char *)tmp;
+          // else conversion failed. ignore
+        }
     }
   while ((c = *s++))
     {

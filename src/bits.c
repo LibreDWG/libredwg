@@ -3458,7 +3458,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
       {
         iconv_close (cd);
         free (odest);
-        return bit_TV_to_utf8_codepage (src, codepage);
+        return bit_TV_to_utf8_codepage (osrc, codepage);
       }
 #else
     return bit_TV_to_utf8_codepage (src, codepage);
