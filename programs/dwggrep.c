@@ -2011,7 +2011,7 @@ main (int argc, char *argv[])
       Dwg_Object_Ref *mspace_ref = NULL;
       filename = argv[j];
       memset (&dwg, 0, sizeof (Dwg_Data));
-      dwg.opts = 0;
+      dwg.opts = DWG_OPTS_AUDIT;
       error = dwg_read_file (filename, &dwg);
       if (error > DWG_ERR_CRITICAL)
         {

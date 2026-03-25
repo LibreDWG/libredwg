@@ -95,6 +95,23 @@
         {
           FIELD_HANDLE (prev_entity, 4, 0);
           FIELD_HANDLE (next_entity, 4, 0);
+#ifdef IS_DECODER
+          /* validate decoded links for self-loops */
+          if (_obj->next_entity
+              && _obj->next_entity->absolute_ref == obj->handle.value)
+            {
+              LOG_WARN ("next_entity self-loop on %s " FORMAT_H,
+                        obj->name, ARGS_H (obj->handle));
+              _obj->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+            }
+          if (_obj->prev_entity
+              && _obj->prev_entity->absolute_ref == obj->handle.value)
+            {
+              LOG_WARN ("prev_entity self-loop on %s " FORMAT_H,
+                        obj->name, ARGS_H (obj->handle));
+              _obj->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+            }
+#endif
         }
     }
 

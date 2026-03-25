@@ -11453,6 +11453,7 @@ typedef struct _dwg_struct
 #define DWG_OPTS_INDXF    0x40
 #define DWG_OPTS_INJSON   0x80
 #define DWG_OPTS_IN       (DWG_OPTS_INDXF | DWG_OPTS_INJSON)
+#define DWG_OPTS_AUDIT    0x100
 
 typedef enum RESBUF_VALUE_TYPE
 {
@@ -11670,6 +11671,12 @@ EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
                                           const BITCODE_RC code,
                                           const BITCODE_HV value,
                                           const Dwg_Object *restrict obj);
+/** Add an entity link with cycle detection.
+ *  Sets *field to handleref, or NULL on cycle. Returns 1 on cycle. */
+EXPORT int dwg_add_entity_link (Dwg_Data *restrict dwg,
+                                const Dwg_Object *restrict obj,
+                                Dwg_Object_Ref **restrict field,
+                                const BITCODE_RLL absref);
 /** Return a link to the global ref or a new one. Or a NULLHDL. */
 EXPORT Dwg_Object_Ref *
 dwg_dup_handleref (Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict ref);

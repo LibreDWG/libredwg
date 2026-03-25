@@ -3694,7 +3694,8 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   LOG_TRACE ("Resolving pointers from ObjectRef vector:\n")
-  return error | resolve_objectref_vector (dat, dwg);
+  error |= resolve_objectref_vector (dat, dwg);
+  return error;
 }
 
 /*--------------------------------------------------------------------------------
@@ -6178,8 +6179,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                     {
                       LOG_TRACE ("first_entity: " FORMAT_HV "\n",
                                  hdl->absolute_ref);
-                      _obj->first_entity
-                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
+                      dwg_add_entity_link (dwg, obj, &_obj->first_entity,
+                                           hdl->absolute_ref);
                     }
                   else if (_obj->first_entity->absolute_ref
                            != hdl->absolute_ref)
@@ -6189,8 +6190,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                                 _objname, _obj->first_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;
-                      _obj->first_entity
-                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
+                      dwg_add_entity_link (dwg, obj, &_obj->first_entity,
+                                           hdl->absolute_ref);
                     }
                 }
               if (ent->prev_entity == NULL)
@@ -6202,7 +6203,7 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                     }
                   LOG_TRACE (" " FORMAT_HV ": prev_entity " FORMAT_RLLx ", ",
                              hdl->absolute_ref, prev_ref);
-                  ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
+                  dwg_add_entity_link (dwg, o, &ent->prev_entity, prev_ref);
                 }
               else if (ent->prev_entity->absolute_ref != prev_ref)
                 {
@@ -6212,12 +6213,12 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                             _objname, j, ent->prev_entity->absolute_ref,
                             prev_ref);
                   changes++;
-                  ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
+                  dwg_add_entity_link (dwg, o, &ent->prev_entity, prev_ref);
                 }
               if (ent->next_entity == NULL)
                 {
                   LOG_TRACE (" next_entity " FORMAT_HV "\n", next_ref);
-                  ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
+                  dwg_add_entity_link (dwg, o, &ent->next_entity, next_ref);
                   if (!next_ref)
                     {
                       LOG_TRACE ("    nolinks: 0\n");
@@ -6232,7 +6233,7 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                             _objname, j, ent->next_entity->absolute_ref,
                             next_ref);
                   changes++;
-                  ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
+                  dwg_add_entity_link (dwg, o, &ent->next_entity, next_ref);
                 }
               if (j == _obj->num_owned - 1) // last: next_entity must be NULL
                 {
@@ -6240,8 +6241,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                     {
                       LOG_TRACE ("last_entity: " FORMAT_HV "\n",
                                  hdl->absolute_ref);
-                      _obj->last_entity
-                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
+                      dwg_add_entity_link (dwg, obj, &_obj->last_entity,
+                                           hdl->absolute_ref);
                     }
                   else if (_obj->last_entity->absolute_ref
                            != hdl->absolute_ref)
@@ -6251,8 +6252,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                                 _objname, _obj->last_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;
-                      _obj->last_entity
-                          = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
+                      dwg_add_entity_link (dwg, obj, &_obj->last_entity,
+                                           hdl->absolute_ref);
                     }
                 }
             }
