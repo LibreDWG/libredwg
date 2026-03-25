@@ -7005,16 +7005,26 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       ent->prev_entity = dwg_link_prev (NULL, owned_obj);
       if (ent->prev_entity)
         {
-          LOG_TRACE ("%s[0].prev_entity = " FORMAT_REF "[H 0]\n",
-                     owned_obj->name, ARGS_REF (ent->prev_entity));
+          if (dwg_add_entity_link (dwg, owned_obj, &ent->prev_entity,
+                                   ent->prev_entity->absolute_ref))
+            ; /* cycle detected, nulled */
+          else
+            LOG_TRACE ("%s[0].prev_entity = " FORMAT_REF "[H 0]\n",
+                       owned_obj->name, ARGS_REF (ent->prev_entity));
         }
       else
         ent->nolinks = 0;
       ent->next_entity
           = dwg_link_next (num_owned > 1 ? owned[1] : NULL, owned_obj);
       if (ent->next_entity)
-        LOG_TRACE ("%s[0].next_entity = " FORMAT_REF "[H 0]\n",
-                   owned_obj->name, ARGS_REF (ent->next_entity));
+        {
+          if (dwg_add_entity_link (dwg, owned_obj, &ent->next_entity,
+                                   ent->next_entity->absolute_ref))
+            ; /* cycle detected, nulled */
+          else
+            LOG_TRACE ("%s[0].next_entity = " FORMAT_REF "[H 0]\n",
+                       owned_obj->name, ARGS_REF (ent->next_entity));
+        }
       else
         ent->nolinks = 0;
       if (ent->nolinks == 1 && num_owned == 1)
@@ -7031,8 +7041,12 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
           ent->prev_entity = dwg_link_prev (owned[i - 1], owned_obj);
           if (ent->prev_entity)
             {
-              LOG_TRACE ("%s[%u].prev_entity = " FORMAT_REF "[H 0]\n",
-                         owned_obj->name, i, ARGS_REF (ent->prev_entity));
+              if (dwg_add_entity_link (dwg, owned_obj, &ent->prev_entity,
+                                       ent->prev_entity->absolute_ref))
+                ; /* cycle detected, nulled */
+              else
+                LOG_TRACE ("%s[%u].prev_entity = " FORMAT_REF "[H 0]\n",
+                           owned_obj->name, i, ARGS_REF (ent->prev_entity));
             }
           if (i == num_owned - 1) // the last
             {
@@ -7046,8 +7060,15 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
             {
               ent->next_entity = dwg_link_next (owned[i + 1], owned_obj);
               if (ent->next_entity)
-                LOG_TRACE ("%s[%u].next_entity = " FORMAT_REF "[H 0]\n",
-                           owned_obj->name, i, ARGS_REF (ent->next_entity));
+                {
+                  if (dwg_add_entity_link (dwg, owned_obj, &ent->next_entity,
+                                           ent->next_entity->absolute_ref))
+                    ; /* cycle detected, nulled */
+                  else
+                    LOG_TRACE ("%s[%u].next_entity = " FORMAT_REF "[H 0]\n",
+                               owned_obj->name, i,
+                               ARGS_REF (ent->next_entity));
+                }
             }
         }
     }
@@ -7143,17 +7164,18 @@ in_postprocess_handles (Dwg_Object *restrict obj)
               if (prev->index + 1 != obj->index)
                 {
                   prev->tio.entity->nolinks = 0;
-                  prev->tio.entity->next_entity
-                      = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
-                  LOG_TRACE ("prev %s(" FORMAT_HV ").next_entity = " FORMAT_REF
-                             "\n",
-                             prev->name, prev->handle.value,
-                             ARGS_REF (prev->tio.entity->next_entity));
+                  if (!dwg_add_entity_link (dwg, prev,
+                                            &prev->tio.entity->next_entity,
+                                            obj->handle.value))
+                    LOG_TRACE ("prev %s(" FORMAT_HV
+                               ").next_entity = " FORMAT_REF "\n",
+                               prev->name, prev->handle.value,
+                               ARGS_REF (prev->tio.entity->next_entity));
                   ent->nolinks = 0;
-                  ent->prev_entity
-                      = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
-                  LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", name,
-                             ARGS_REF (ent->prev_entity));
+                  if (!dwg_add_entity_link (dwg, obj, &ent->prev_entity,
+                                            prev->handle.value))
+                    LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", name,
+                               ARGS_REF (ent->prev_entity));
                 }
               else
                 {

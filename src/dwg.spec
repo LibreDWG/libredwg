@@ -3670,12 +3670,55 @@ DWG_TABLE (BLOCK_HEADER)
         {
           FIELD_HANDLE (first_entity, 4, 0);
           FIELD_HANDLE (last_entity, 4, 0);
+#ifdef IS_DECODER
+          /* validate: first/last must not point to the block header itself */
+          if (_obj->first_entity
+              && _obj->first_entity->absolute_ref == obj->handle.value)
+            {
+              LOG_WARN ("BLOCK_HEADER first_entity self-ref on " FORMAT_H,
+                        ARGS_H (obj->handle));
+              _obj->first_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+            }
+          if (_obj->last_entity
+              && _obj->last_entity->absolute_ref == obj->handle.value)
+            {
+              LOG_WARN ("BLOCK_HEADER last_entity self-ref on " FORMAT_H,
+                        ARGS_H (obj->handle));
+              _obj->last_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+            }
+#endif
         }
     }
   IF_FREE_OR_SINCE (R_2004a)
     {
       if (FIELD_VALUE (num_owned) < 0xf00000) {
         HANDLE_VECTOR (entities, num_owned, 4, 0);
+#ifdef IS_DECODER
+        if (dwg->opts & DWG_OPTS_AUDIT)
+          {
+            /* Check entities vector for duplicates */
+            for (BITCODE_BL _ei = 0; _ei < _obj->num_owned; _ei++)
+              {
+                if (!_obj->entities[_ei])
+                  continue;
+                for (BITCODE_BL _ej = _ei + 1; _ej < _obj->num_owned; _ej++)
+                  {
+                    if (_obj->entities[_ej]
+                        && _obj->entities[_ei]->absolute_ref
+                               == _obj->entities[_ej]->absolute_ref)
+                      {
+                        LOG_WARN ("Duplicate entity " FORMAT_RLLx
+                                  " in BLOCK_HEADER " FORMAT_H
+                                  " entities[%u] == [%u]",
+                                  _obj->entities[_ei]->absolute_ref,
+                                  ARGS_H (obj->handle), _ei, _ej);
+                        _obj->entities[_ej]
+                            = dwg_add_handleref (dwg, 4, 0, NULL);
+                      }
+                  }
+              }
+          }
+#endif
       }
     }
   IF_FREE_OR_SINCE (R_13b1) {

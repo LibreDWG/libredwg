@@ -220,8 +220,11 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   int error;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
-  memset (dwg, 0, sizeof (Dwg_Data));
-  dwg->opts = loglevel;
+  {
+    unsigned int saved_opts = dwg->opts & (DWG_OPTS_LOGLEVEL | DWG_OPTS_AUDIT);
+    memset (dwg, 0, sizeof (Dwg_Data));
+    dwg->opts = saved_opts;
+  }
 
   if (strEQc (filename, "-"))
     {
@@ -2215,6 +2218,60 @@ dwg_dup_handleref (Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict ref)
                               NULL);
   else
     return dwg_add_handleref (dwg, 5, 0, NULL);
+}
+
+/** Add an entity link (next_entity, prev_entity, first_entity, last_entity)
+ *  with cycle detection. Sets *field to the new handleref, or to NULL handle
+ *  if a cycle would be created.
+ *  \param dwg    the DWG struct
+ *  \param obj    the entity or block_header whose link field is being set
+ *  \param field  pointer to the Dwg_Object_Ref* field to set
+ *  \param absref the target handle value
+ *  Returns 0 on success, 1 if cycle was detected and link was nulled.
+ */
+EXPORT int
+dwg_add_entity_link (Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
+                     Dwg_Object_Ref **restrict field, const BITCODE_RLL absref)
+{
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  if (!absref)
+    {
+      *field = dwg_add_handleref (dwg, 4, 0, NULL);
+      return 0;
+    }
+  /* self-loop: always check, cheap */
+  if (obj && absref == obj->handle.value)
+    {
+      LOG_WARN ("Entity link self-loop on %s " FORMAT_H, obj->name,
+                ARGS_H (obj->handle));
+      *field = dwg_add_handleref (dwg, 4, 0, NULL);
+      return 1;
+    }
+  /* linear chain walk: check for longer cycles */
+  if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY)
+    {
+      Dwg_Object *cur = dwg_resolve_handle (dwg, absref);
+      BITCODE_BL max_steps = dwg->num_objects;
+      while (cur && cur->supertype == DWG_SUPERTYPE_ENTITY && cur->tio.entity
+             && max_steps--)
+        {
+          Dwg_Object_Ref *next = cur->tio.entity->next_entity;
+          if (!next || !next->absolute_ref)
+            break;
+          if (next->absolute_ref == obj->handle.value)
+            {
+              LOG_WARN ("Entity link cycle: %s " FORMAT_H
+                        " -> ... -> " FORMAT_H,
+                        obj->name, ARGS_H (obj->handle), ARGS_H (cur->handle));
+              *field = dwg_add_handleref (dwg, 4, 0, NULL);
+              return 1;
+            }
+          cur = next->obj ? next->obj
+                          : dwg_resolve_handle (dwg, next->absolute_ref);
+        }
+    }
+  *field = dwg_add_handleref (dwg, 4, absref, (Dwg_Object *)obj);
+  return 0;
 }
 
 // Creates a non-global, free'able handle ref.
