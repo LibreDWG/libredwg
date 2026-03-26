@@ -1230,10 +1230,10 @@ dwg_next_entity (const Dwg_Object *restrict obj)
       if (next && next->absolute_ref)
         {
           Dwg_Object *next_obj = dwg_ref_object_silent (obj->parent, next);
-          return (obj == next_obj
-                  || next_obj->supertype != DWG_SUPERTYPE_ENTITY)
-                     ? NULL
-                     : next_obj;
+          if (!next_obj || obj == next_obj
+              || next_obj->supertype != DWG_SUPERTYPE_ENTITY)
+            return NULL;
+          return next_obj;
         }
       else
         goto next_obj;
@@ -1561,10 +1561,98 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
         }
       obj = dwg_next_entity (current);
       /* Detect cycle: if the next entity's ownerhandle points to a different
-         block, the next_entity chain has crossed a block boundary. */
-      if (obj && obj->tio.entity && obj->tio.entity->ownerhandle
-          && obj->tio.entity->ownerhandle->absolute_ref != hdr->handle.value)
-        return NULL;
+         BLOCK_HEADER, the next_entity chain has crossed a block boundary.
+         Note: VERTEX/ATTRIB subentities have ownerhandle → POLYLINE/INSERT,
+         not BLOCK_HEADER, so only check when owner is a BLOCK_HEADER. */
+      if (obj && obj->tio.entity && obj->tio.entity->ownerhandle)
+        {
+          Dwg_Object *owner
+              = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
+          if (owner && owner->fixedtype == DWG_TYPE_BLOCK_HEADER
+              && owner->handle.value != hdr->handle.value)
+            obj = NULL; /* chain crossed into another block */
+        }
+      /* Chain repair: only if current's next_entity was NULL/unset (absolute
+         ref == 0).  If next_entity has a non-zero handle that merely fails
+         to resolve, it is an end-of-chain marker — do not repair. */
+      {
+        Dwg_Object_Ref *nxt = current->tio.entity->next_entity;
+        if (nxt && nxt->absolute_ref)
+          return obj; /* next_entity set but unresolvable: end of chain */
+      }
+      /* Scan for the entity whose prev_entity points back to current.
+         This handles malformed entities (e.g. failed-to-decode ARC_DIMENSION)
+         whose next_entity link was not stored but whose successor still has
+         prev_entity set. */
+      if (!obj && current != _hdr->last_entity->obj)
+        {
+          for (BITCODE_BL j = 0; j < dwg->num_objects; j++)
+            {
+              Dwg_Object *cand = &dwg->object[j];
+              if (cand->supertype == DWG_SUPERTYPE_ENTITY && cand->tio.entity
+                  && cand->tio.entity->prev_entity
+                  && cand->tio.entity->prev_entity->obj == current
+                  && cand != current)
+                {
+                  LOG_TRACE ("repair broken entity chain at " FORMAT_RLLx
+                             ": next => " FORMAT_RLLx "\n",
+                             current->handle.value, cand->handle.value);
+                  obj = cand;
+                  break;
+                }
+            }
+        }
+      /* Secondary chain repair: the gap entity itself may have a NULL
+         prev_entity (also garbled, e.g. buffer-overflow during decode).
+         In that case find entity X whose prev_entity points to a "gap"
+         entity Y that: has handle between current and last_entity, has a
+         NULL prev_entity, AND has the smallest handle > current (to avoid
+         jumping past other gap entities).  Return Y so the next iteration
+         can then find X via the primary repair above. */
+      if (!obj && current != _hdr->last_entity->obj)
+        {
+          BITCODE_RLL cur_h = current->handle.value;
+          BITCODE_RLL last_h = _hdr->last_entity->obj->handle.value;
+          Dwg_Object *best_gap = NULL;
+          for (BITCODE_BL j = 0; j < dwg->num_objects; j++)
+            {
+              Dwg_Object *cand = &dwg->object[j];
+              if (cand->supertype == DWG_SUPERTYPE_ENTITY && cand->tio.entity
+                  && cand->tio.entity->prev_entity
+                  && cand->tio.entity->prev_entity->obj)
+                {
+                  Dwg_Object *gap = cand->tio.entity->prev_entity->obj;
+                  /* cand must belong to our block: either no ownerhandle
+                     (entmode 1/2: model/paper space), or ownerhandle == hdr */
+                  Dwg_Object *cand_owner
+                      = cand->tio.entity->ownerhandle
+                            ? dwg_ref_object_silent (
+                                  dwg, cand->tio.entity->ownerhandle)
+                            : NULL;
+                  if (cand->tio.entity->ownerhandle
+                      && (!cand_owner || cand_owner != (Dwg_Object *)hdr))
+                    continue; /* cand is in a different block */
+                  if (gap != current && gap != cand
+                      && gap->supertype == DWG_SUPERTYPE_ENTITY
+                      && gap->tio.entity
+                      && gap->tio.entity->prev_entity == NULL
+                      && !gap->tio.entity->nolinks /* nolinks=1 means NULL prev
+                                                      by design */
+                      && gap->handle.value > cur_h
+                      && gap->handle.value < last_h
+                      && (!best_gap
+                          || gap->handle.value < best_gap->handle.value))
+                    best_gap = gap;
+                }
+            }
+          if (best_gap)
+            {
+              LOG_TRACE ("repair2 broken entity chain at " FORMAT_RLLx
+                         ": next => " FORMAT_RLLx "\n",
+                         current->handle.value, best_gap->handle.value);
+              obj = best_gap;
+            }
+        }
       return obj;
     }
   if (version > R_2000 || version < R_13b1)
