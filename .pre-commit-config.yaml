@@ -18,6 +18,7 @@ repos:
       - id: mixed-line-ending # replaces or checks mixed line ending.
       - id: requirements-txt-fixer # sorts entries in requirements.txt.
       - id: trailing-whitespace # trims trailing whitespace.
+        exclude: \.scr$
       - id: check-executables-have-shebangs
         exclude: build-aux/appveyor-deploy.bat
       - id: check-symlinks
