@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2024 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2026 Free Software Foundation, Inc.                   */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -186,6 +186,11 @@ main (int argc, char *argv[])
 #endif
         case 'O':
           fmt = strdup (optarg);
+          if (!strcasecmp (fmt, "DXB"))
+            {
+              free ((char *)fmt);
+              fmt = strdup ("dxfb");
+            }
           break;
         case 'o':
           outfile = strdup (optarg);
@@ -194,8 +199,9 @@ main (int argc, char *argv[])
 #ifndef DISABLE_DXF
               if (strstr (outfile, ".dxf") || strstr (outfile, ".DXF"))
                 fmt = strdup ("dxf");
-              else if (strstr (outfile, ".dxfb") || strstr (outfile, ".DXFB"))
-                fmt = strdup ("dxfb");
+              else if (strstr (outfile, ".dxfb") || strstr (outfile, ".DXFB")
+                       || strstr (outfile, ".dxb") || strstr (outfile, ".DXB"))
+                fmt = strdup ("dxfb"); // TODO change to dxb?
               else
 #endif
 #ifndef DISABLE_JSON
@@ -284,7 +290,7 @@ main (int argc, char *argv[])
       // we want the native dump, converters are separate.
 #ifndef DISABLE_DXF
 #  ifndef DISABLE_JSON
-      if (!strcasecmp (fmt, "json") || !strcasecmp (fmt, "minjson"))
+      if (!strcasecmp (fmt, "JSON") || !strcasecmp (fmt, "MINJSON"))
         {
           if ((opts & 0xf) > 1 && outfile)
             fprintf (stderr, "Writing %sJSON file %s\n",
@@ -293,20 +299,20 @@ main (int argc, char *argv[])
         }
       else
 #  endif
-          if (!strcasecmp (fmt, "dxfb"))
+          if (!strcasecmp (fmt, "DXFB"))
         {
           if ((opts & 0xf) > 1 && outfile)
             fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
           error = dwg_write_dxfb (&dat, &dwg);
         }
-      else if (!strcasecmp (fmt, "dxf"))
+      else if (!strcasecmp (fmt, "DXF"))
         {
           if ((opts & 0xf) > 1 && outfile)
-            fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
+            fprintf (stderr, "Writing DXF file %s\n", outfile);
           error = dwg_write_dxf (&dat, &dwg);
         }
 #  ifndef DISABLE_JSON
-      else if (!strcasecmp (fmt, "geojson"))
+      else if (!strcasecmp (fmt, "GEOJSON"))
         {
           if ((opts & 0xf) > 1 && outfile)
             fprintf (stderr, "Writing GeoJSON file %s\n", outfile);
