@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# dwg -> dxfb
-# dxfb -> dwg2
-# teigha dxfb -> dwg (check out_dxfb)
+# dwg -> dxb
+# dxb -> dwg2
+# teigha dxb -> dwg (check out_dxfb)
 # teigha dwg2 -> dxf (check in_dxf)
 v=-v4
 case $1 in
@@ -51,11 +51,11 @@ esac
 ./log "-l$b.log.orig" "$v" "$d"
 rm "./$b.dxf" "./$b.dwg" 2>/dev/null
 
-if ! timeout 10 ./dxf -b -y "$v" -o "$b.dxfb" "$d"; then
+if ! timeout 10 ./dxf -b -y "$v" -o "$b.dxb" "$d"; then
    exit 2
 fi
-if [ -f "$b.dxfb" ]; then
-    mv "./$b.log" "$b.dwg2dxfb.log"
+if [ -f "$b.dxb" ]; then
+    mv "./$b.log" "$b.dwg2dxb.log"
     # teigha can only write from r12-r2018
     can_teigha=1
     case $(uname) in
@@ -80,22 +80,22 @@ if [ -f "$b.dxfb" ]; then
     test -z "$r" && can_teigha=0
 
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
-        echo timeout 30 "$baseFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxfb"
-        timeout 30 "$ODAFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxfb" \
+        echo timeout 30 "$baseFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxb"
+        timeout 30 "$ODAFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxb" \
                 >/dev/null 2>/dev/null
         if [ -e "./$b.dwg.err" ]; then
-            mv "$b.dwg.err" "$b.dxfb2dwg.err"
-            cat "$b.dxfb2dwg.err"
+            mv "$b.dwg.err" "$b.dxb2dwg.err"
+            cat "$b.dxb2dwg.err"
             exitcode=1
         fi
     else
-        rm "$b.dxfb2dwg.err" 2>/dev/null
+        rm "$b.dxb2dwg.err" 2>/dev/null
         if [ ! -x "$ODAFileConverter" ]; then
             echo "$baseFileConverter not installed"
         fi
     fi
 
-    if ! timeout 10 ./dwg -y "$v" "$b.dxfb"; then
+    if ! timeout 10 ./dwg -y "$v" "$b.dxb"; then
         exit 1
     fi
 fi
@@ -106,12 +106,12 @@ if [ -f "$b.dwg" ]; then
         timeout 30 "$ODAFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg" \
                 >/dev/null 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
-            mv "$b.dxf.err" "$b.dxfb.err"
-            cat "$b.dxfb.err"
+            mv "$b.dxf.err" "$b.dxb.err"
+            cat "$b.dxb.err"
             exitcode=3
         fi
     else
-        rm "$b.dxfb.err" 2>/dev/null
+        rm "$b.dxb.err" 2>/dev/null
         echo "$baseFileConverter not installed"
     fi
 
@@ -121,7 +121,7 @@ if [ -f "$b.dwg" ]; then
     echo diff -bu "log1" "$log2"
     diff -I '^-(objref|found:)' -bu "$log1" "$log2"
 
-    test -f "$b.dxfb.err" && cat "$b.dxfb.err"
+    test -f "$b.dxb.err" && cat "$b.dxb.err"
 
     if false && [ -f "$log1" ] && [ -f "$log2" ]; then
         # Really interesting is the Section BLOCKS here. vs BLOCK_HEADER
