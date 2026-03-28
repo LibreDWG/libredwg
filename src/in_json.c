@@ -1479,6 +1479,16 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               klass->item_class_id = json_long (dat, tokens);
               LOG_TRACE ("item_class_id %u\n", klass->item_class_id)
             }
+          else if (strEQc (key, "dwg_version"))
+            {
+              klass->dwg_version = json_long (dat, tokens);
+              LOG_TRACE ("dwg_version %u\n", klass->dwg_version)
+            }
+          else if (strEQc (key, "maint_version"))
+            {
+              klass->maint_version = json_long (dat, tokens);
+              LOG_TRACE ("maint_version %u\n", klass->maint_version)
+            }
           else
             {
               LOG_WARN ("Unknown CLASS key %s %.*s", key, t->end - t->start,

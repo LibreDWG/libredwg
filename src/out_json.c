@@ -2061,9 +2061,15 @@ json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       FIELD_T (cppname, 2);
       FIELD_T (appname, 3);
       FIELD_BS (proxyflag, 90);
-      FIELD_BL (num_instances, 91);
+      FIRSTPREFIX fprintf (dat->fh, JSON_KEY FORMAT_BL, "num_instances",
+                           JSON_SPC, _obj->num_instances);
       FIELD_B (is_zombie, 280);
       FIELD_BS (item_class_id, 281);
+      SINCE (R_2004a)
+      {
+        FIELD_BL (dwg_version, 0);
+        FIELD_BL (maint_version, 0);
+      }
       ENDHASH
       CLEARFIRST;
     }
