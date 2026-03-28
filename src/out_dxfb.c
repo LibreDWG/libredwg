@@ -192,7 +192,7 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define GROUP(code)                                                           \
   if (dat->version < R_14)                                                    \
     {                                                                         \
-      if (code >= 1000)                                                       \
+      if (code >= 255)                                                        \
         {                                                                     \
           uint16_t icode = (uint16_t)(code);                                  \
           fputc (0xff, dat->fh);                                              \
@@ -568,7 +568,7 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define HEADER_RL(nam, dxf)                                                   \
   {                                                                           \
     HEADER_9 (nam);                                                           \
-    VALUE_RL (dwg->header_vars.nam, dxf);                                     \
+    VALUE_INT (dwg->header_vars.nam, dxf);                                    \
   }
 
 #define HEADER_B(nam, dxf) HEADER_RC (nam, dxf)

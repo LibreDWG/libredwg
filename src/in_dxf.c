@@ -818,7 +818,17 @@ dxf_read_pair (Bit_Chain *dat)
     }
   if (is_binary)
     LOG_HANDLE ("%4zx: ", dat->byte);
-  pair->code = (short)dxf_read_rs (dat);
+  // pre-R14 binary DXF uses 1-byte group codes (0xFF prefix for codes >= 255)
+  if (is_binary && dat->version < R_14)
+    {
+      BITCODE_RC c = bit_read_RC (dat);
+      if (c == 0xff)
+        pair->code = (short)bit_read_RS (dat);
+      else
+        pair->code = (short)c;
+    }
+  else
+    pair->code = (short)dxf_read_rs (dat);
   if (dat->size - dat->byte < 4) // at least EOF\n
     goto err;
   pair->type = dwg_resbuf_value_type (pair->code);
@@ -14094,6 +14104,13 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           dat->opts |= DWG_OPTS_DXFB;
           dat->byte = 22;
+          // auto-detect pre-R14 (1-byte group codes) vs R14+ (2-byte)
+          // After sentinel, code 0 for SECTION: pre-R14 has 0x00 'S',
+          // R14+ has 0x00 0x00 'S'
+          if (dat->size > 23 && dat->chain[23] != 0)
+            dat->version = R_13;
+          else
+            dat->version = R_14;
         }
     }
   if (dat->size < 256)
@@ -14327,11 +14344,19 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   dwg->opts |= DWG_OPTS_DXFB; // binary
   dat->opts |= DWG_OPTS_DXFB;
-  if (dat->size >= 22 && dat->byte < 22
+  if (dat->size >= 22
       && !memcmp (dat->chain, "AutoCAD Binary DXF",
                   sizeof ("AutoCAD Binary DXF") - 1))
     {
-      dat->byte = 22;
+      if (dat->byte < 22)
+        dat->byte = 22;
+      // auto-detect pre-R14 (1-byte group codes) vs R14+ (2-byte)
+      // After sentinel, code 0 for SECTION: pre-R14 has 0x00 'S',
+      // R14+ has 0x00 0x00 'S'
+      if (dat->size > 23 && dat->chain[23] != 0)
+        dat->version = R_13;
+      else
+        dat->version = R_14;
     }
   return dwg_read_dxf (dat, dwg);
 }
