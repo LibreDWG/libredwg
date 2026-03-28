@@ -72,8 +72,8 @@ static char *_path_field (const char *path);
 
 #define PREFIX _prefix (dat);
 #define IS_MINJS (dat->opts & DWG_OPTS_MINIMAL)
-#define JSON_SPC IS_MINJS ? "" : " "
-#define JSON_NL IS_MINJS ? "" : "\n"
+#define JSON_SPC (IS_MINJS ? "" : " ")
+#define JSON_NL (IS_MINJS ? "" : "\n")
 #define JSON_KEY "\"%s\":%s"
 
 #define PRINTFIRST                                                            \
@@ -638,6 +638,10 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
           FIELD_BL (alpha_raw, 0);
           FIELD_BB (alpha_type, 0);
           FIELD_RC (alpha, 0);
+        }
+      if (_obj->flag & 0x40)
+        {
+          FIELD_HANDLE (handle, 0, 0);
         }
       if (_obj->flag > 0 && _obj->flag < 8)
         {
