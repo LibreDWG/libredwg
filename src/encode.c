@@ -3269,9 +3269,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004a)
   {
     LOG_INFO ("\n");
-    SINCE (R_2007a) // r2010 is close though
+    VERSIONS (R_2007a, R_2007) // r2010 is close though
     {
-      LOG_ERROR (WE_CAN "Writing >r2004 not yet supported");
+      LOG_ERROR (WE_CAN "Writing r2007 not yet supported");
       return DWG_ERR_NOTYETSUPPORTED;
     }
 
