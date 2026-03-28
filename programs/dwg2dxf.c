@@ -64,8 +64,8 @@ help (void)
 {
   printf ("\nUsage: dwg2dxf [OPTION]... DWGFILES...\n");
   printf ("Converts DWG files to DXF.\n");
-  printf ("Default DXFFILE: DWGFILE with .dxf extension in the current "
-          "directory.\n"
+  printf ("Default DXFFILE: DWGFILE with .dxf extension (.dxb with -b) in the "
+          "current directory.\n"
           "Existing files are not overwritten, unless -y is given.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
@@ -77,7 +77,7 @@ help (void)
   printf ("             r9, r10, r11, r2018\n");
   printf ("  -m, --minimal             only $ACADVER, HANDSEED and "
           "ENTITIES\n");
-  printf ("  -b, --binary              save as binary DXF\n");
+  printf ("  -b, --binary              save as binary DXB\n");
   printf ("  -y, --overwrite           overwrite existing files\n");
   printf ("  -o outfile, --file        optional, only valid with one single "
           "DWGFILE\n");
@@ -246,7 +246,7 @@ main (int argc, char *argv[])
       if (!filename_out)
         {
           need_free = 1;
-          filename_out = suffix (filename_in, "dxf");
+          filename_out = suffix (filename_in, binary ? "dxb" : "dxf");
         }
       if (strEQ (filename_in, filename_out))
         {
