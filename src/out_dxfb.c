@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2021 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -12,7 +12,6 @@
 
 /*
  * out_dxfb.c: write as Binary DXF
- * Does not work yet.
  * written by Reini Urban
  */
 
@@ -27,7 +26,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "decode.h"
-#include "decode_r11.h"
+// #include "decode_r11.h"
 #include "out_dxf.h"
 
 static unsigned int loglevel;
@@ -972,6 +971,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
     int error = 0;                                                            \
+    const Dwg_Data *dwg = obj->parent;                                        \
     Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
@@ -1005,7 +1005,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     else                                                                      \
       RECORD (token)                                                          \
     LOG_INFO ("Entity " #token ":\n")                                         \
-    SINCE (R_11)                                                              \
+    if (dat->version > R_11 || dwg->header_vars.HANDLING)                     \
     {                                                                         \
       LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))       \
       VALUE_H (obj->handle.value, 5);                                         \
@@ -1040,7 +1040,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
-    LOG_INFO ("Object " #token ":\n")                                         \
+    LOG_INFO ("Object " #token "\n")                                         \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
         LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
@@ -1071,9 +1071,11 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
         }                                                                     \
-        SINCE (R_14)                                                          \
+        SINCE (R_13b1)                                                        \
         {                                                                     \
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
+          LOG_TRACE ("ownerhandle: " FORMAT_HV " [330]\n",                    \
+                     obj->tio.object->ownerhandle->absolute_ref);             \
         }                                                                     \
       }                                                                       \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
@@ -1276,13 +1278,13 @@ dxfb_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else
         { // convert some standard names
-          if (dat->version >= R_13b1 && strEQc (name, "STANDARD"))
+          if (dat->version >= R_2000 && strEQc (name, "STANDARD"))
             VALUE_TV ("Standard", dxf)
-          else if (dat->version >= R_13b1 && strEQc (name, "BYLAYER"))
+          else if (dat->version >= R_2000 && strEQc (name, "BYLAYER"))
             VALUE_TV ("ByLayer", dxf)
-          else if (dat->version >= R_13b1 && strEQc (name, "BYBLOCK"))
+          else if (dat->version >= R_2000 && strEQc (name, "BYBLOCK"))
             VALUE_TV ("ByBlock", dxf)
-          else if (dat->version >= R_13b1 && strEQc (name, "*ACTIVE"))
+          else if (dat->version >= R_2000 && strEQc (name, "*ACTIVE"))
             VALUE_TV ("*Active", dxf)
           else
             VALUE_TV (name, dxf)
@@ -1333,7 +1335,8 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
       else
         VALUE_TV (name, dxf)
     }
-  else if (dat->version >= R_13b1 && dat->from_version < R_13b1) // to newer
+  else if (dat->version
+           >= R_13b1 /*&& dat->from_version < R_13b1*/) // to newer
     {
       if (strlen (name) < 10)
         VALUE_TV (name, dxf)
@@ -1417,15 +1420,13 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     ; /* skip 70 for AcDbBlockTableRecord done in AcDbBlockBegin */           \
   else                                                                        \
     { /* mask off 64, the loaded bit 6 */                                     \
-      VALUE_RS (_obj->flag & ~64, 70);                                        \
+      SINCE (R_13b1)                                                          \
+        _obj->flag &= ~64;                                                    \
+      VALUE_RS (_obj->flag, 70);                                              \
     }
 // clang-format off
 
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
-  SINCE (R_14)                                                                \
-  {                                                                           \
-    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
-  }                                                                           \
   SINCE (R_13b1)                                                              \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100)                                   \
@@ -1435,8 +1436,12 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     dxfb_cvt_tablerecord (dat, obj, _obj->name, 2);                           \
   FIELD_RS (flag, 70)
 
-#include "dwg.spec"
-#include "dwg2.spec"
+#ifndef DISABLE_DXF
+
+#  include "dwg.spec"
+#  include "dwg2.spec"
+
+#endif
 
 static int
 dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
@@ -1807,13 +1812,7 @@ decl_dxfb_process_INSERT (MINSERT)
     case DWG_TYPE_TOLERANCE:
       return dwg_dxfb_TOLERANCE (dat, obj);
     case DWG_TYPE_MLINE:
-      if (0)
-        {
-          // bypass -Wunused-function
-          dwg_dxfb_JUMP (dat, obj);
-          dwg_dxfb_LOAD (dat, obj);
-        }
-#ifdef DEBUG_CLASSES
+#if 1 || defined DEBUG_CLASSES
       // TODO: looks good, but acad import crashes
       return dwg_dxfb_MLINE (dat, obj);
 #else
@@ -1849,12 +1848,15 @@ decl_dxfb_process_INSERT (MINSERT)
       break;
     /* preR13: no dxfb */
     case DWG_TYPE_REPEAT:
+      return dwg_dxfb_REPEAT (dat, obj);
     case DWG_TYPE_ENDREP:
+      return dwg_dxfb_ENDREP (dat, obj);
     case DWG_TYPE__3DLINE:
+      return dwg_dxfb__3DLINE (dat, obj);
     case DWG_TYPE_LOAD:
+      return dwg_dxfb_LOAD (dat, obj);
     case DWG_TYPE_JUMP:
-      LOG_INFO ("Skip unsupported object %s\n", obj->name);
-      break;
+      return dwg_dxfb_JUMP (dat, obj);
 
     case DWG_TYPE_GROUP:
       return dwg_dxfb_GROUP (dat, obj);

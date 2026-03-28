@@ -289,15 +289,17 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       LATER_VERSIONS                                                          \
       VALUE_T (value, dxf)                                                    \
     }
+// clang-format off
 #define HEADER_VALUE_T0(nam, dxf, value)                                      \
   if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
     {                                                                         \
       HEADER_9 (nam);                                                         \
       PRE (R_2007a)                                                           \
-      VALUE_TV ((char *)value, dxf)                                           \
+        VALUE_TV ((char *)value, dxf)                                         \
       LATER_VERSIONS                                                          \
-      VALUE_T (value, dxf)                                                    \
+        VALUE_T (value, dxf)                                                  \
     }
+// clang-format on
 #define HEADER_VALUE_TU0(nam, dxf, value)                                     \
   if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
     {                                                                         \
