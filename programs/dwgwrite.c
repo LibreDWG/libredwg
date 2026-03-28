@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2023 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -309,7 +309,8 @@ main (int argc, char *argv[])
             fmt = (char *)"json";
           else
 #  endif
-              if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
+              if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB")
+                  || strstr (infile, ".dxb") || strstr (infile, ".DXB"))
             fmt = (char *)"dxfb";
           else if (strstr (infile, ".dxf") || strstr (infile, ".DXF"))
             fmt = (char *)"dxf";
@@ -347,8 +348,8 @@ main (int argc, char *argv[])
 
 #ifndef DISABLE_DXF
 #  ifndef DISABLE_JSON
-  if ((fmt && !strcasecmp (fmt, "json"))
-      || (infile && !strcasecmp (infile, ".json")))
+  if ((fmt && !strcasecmp (fmt, "JSON"))
+      || (infile && (strstr (infile, ".json") || strstr (infile, ".JSON"))))
     {
       if (opts > 1)
         fprintf (stderr, "Reading JSON file %s\n",
@@ -359,8 +360,10 @@ main (int argc, char *argv[])
     }
   else
 #  endif
-      if ((fmt && !strcasecmp (fmt, "dxfb"))
-          || (infile && !strcasecmp (infile, ".dxfb")))
+      if ((fmt && !strcasecmp (fmt, "DXFB"))
+          || (infile
+              && (strstr (infile, ".dxfb") || strstr (infile, ".dxb")
+                  || strstr (infile, ".DXB"))))
     {
       if (opts > 1)
         {
@@ -374,8 +377,8 @@ main (int argc, char *argv[])
       else
         error = dwg_read_dxfb (&dat, &dwg);
     }
-  else if ((fmt && !strcasecmp (fmt, "dxf"))
-           || (infile && !strcasecmp (infile, ".dxf")))
+  else if ((fmt && !strcasecmp (fmt, "DXF"))
+           || (infile && (strstr (infile, ".dxf") || strstr (infile, ".DXF"))))
     {
       if (opts > 1)
         {
