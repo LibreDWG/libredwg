@@ -11395,6 +11395,7 @@ typedef struct _dwg_struct
   BITCODE_BL num_entities;       /*!< number of entities in object */
   BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
   BITCODE_BL cur_index;          /*!< how many we have written currently */
+  BITCODE_RS last_viewport_id;   /*!< auto-incremented VIEWPORT id for DXF */
   Dwg_Object_Ref **object_ref;   /*!< array of most handles */
   struct _inthash *object_map;   /*!< map of all handles */
   int dirty_refs;                /* 1 if we added an object, and invalidated all

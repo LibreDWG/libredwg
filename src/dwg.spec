@@ -2389,8 +2389,17 @@ DWG_ENTITY (VIEWPORT)
     FIELD_BD (height, 41);
   }
   DXF {
-    FIELD_VALUE (on_off) = 1;
-    FIELD_VALUE (id) = 1;
+    // The overall paperspace viewport (entmode 0) has on_off=0, id=0.
+    // Active viewports auto-increment id starting at 1.
+    if (_ent->entmode == 0) {
+      FIELD_VALUE (on_off) = 0;
+      FIELD_VALUE (id) = 0;
+      dwg->last_viewport_id = 0;
+    } else {
+      FIELD_VALUE (on_off) = 1;
+      dwg->last_viewport_id++;
+      FIELD_VALUE (id) = dwg->last_viewport_id;
+    }
     FIELD_RS (on_off, 68);
     FIELD_RS (id, 69);
   }
@@ -3561,6 +3570,12 @@ DWG_TABLE (BLOCK_HEADER)
         VALUE_TFF ("{BLKREFS", 102);
         HANDLE_VECTOR (inserts, num_inserts, 4, 331);
         VALUE_TFF ("}", 102);
+      }
+    SINCE (R_2007a) // AC1020 aka R_2006
+      {
+        FIELD_BS (insert_units, 70);
+        FIELD_B (explodable, 280);
+        FIELD_RC (block_scaling, 281);
       }
     // The DXF TABLE.BLOCK_RECORD only has this. More later in the BLOCKS section.
     return 0;
