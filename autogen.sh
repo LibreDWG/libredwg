@@ -33,7 +33,7 @@ if [ "$amver" -gt 0 ] && [ "$amver" -lt 14 ]; then
 fi
 
 set -e
-autoreconf --install --symlink "$@" -I m4
+autoreconf -f --install --symlink "$@" -I m4
 
 if command -v git >/dev/null
 then
