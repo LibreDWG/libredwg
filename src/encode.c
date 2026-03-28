@@ -911,6 +911,7 @@ section_encrypted (const Dwg_Data *dwg, const Dwg_Section_Type id)
     }
 }
 
+#if 0  /* unused, LZ compressor not yet ODA-compatible */
 /* 1 for yes, 0 for no */
 static int
 section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
@@ -942,6 +943,7 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
       return 0;
     }
 }
+#endif /* unused */
 
 static int
 filedeplist_is_empty (const Dwg_FileDepList *obj)
@@ -1010,7 +1012,6 @@ write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
 #endif
 }
 
-#ifndef HAVE_COMPRESS_R2004_SECTION
 /* Write raw data wrapped in valid LZ "store" framing so that
    decompress_R2004_section can decode it: literal_length + data + 0x11.
    Used for system sections (SECTION_INFO, SECTION_SYSTEM_MAP). */
@@ -1029,7 +1030,6 @@ store_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   *comp_data_size = (uint32_t)(dat->byte - start);
   return 0;
 }
-#endif
 
 /* Return the on-disk size of a system section written via
    store_R2004_section without emitting it. */
@@ -3588,11 +3588,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               info->max_decomp_size = max_decomp_size;
               info->encrypted
                   = section_encrypted (dwg, (Dwg_Section_Type)type);
-              info->compressed
-                  = 1 + section_compressed (dwg, (Dwg_Section_Type)type);
-#ifndef HAVE_COMPRESS_R2004_SECTION
+              // always uncompressed for now, LZ compressor not yet
+              // ODA-compatible. TODO: re-enable when fixed.
               info->compressed = 1;
-#endif
               // pre-calc numsections for both
               if ((unsigned)ssize <= max_decomp_size)
                 info->num_sections = 1;
@@ -3937,7 +3935,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               if (info->fixedtype == SECTION_SUMMARYINFO)
                 dwg->header.summaryinfo_address = (uint32_t)sec->address;
               else if (info->fixedtype == SECTION_PREVIEW)
-                dwg->header.thumbnail_address = (uint32_t)sec->address;
+                dwg->header.thumbnail_address
+                    = (uint32_t)sec->address + 32; // after page header
               else if (info->fixedtype == SECTION_VBAPROJECT)
                 dwg->header.vbaproj_address = (uint32_t)sec->address;
 
@@ -3962,11 +3961,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   checksum_pos = dat->byte;
                   bit_write_RL (dat, 0); // checksum placeholder
 
-                  // write section content as compressed stream
-                  compress_R2004_section (dat, sec_dat[type].chain,
-                                          content_size, &sec->comp_data_size);
+                  // write section content as compressed stream.
+                  // For SYSTEM_MAP use store (not compress) so the size
+                  // matches stored_R2004_section_size used in the self-entry.
+                  if (type == SECTION_SYSTEM_MAP)
+                    store_R2004_section (dat, sec_dat[type].chain,
+                                         content_size, &sec->comp_data_size);
+                  else
+                    compress_R2004_section (dat, sec_dat[type].chain,
+                                            content_size,
+                                            &sec->comp_data_size);
                   sec->size = 20 + sec->comp_data_size;
-                  // TODO patch map size
 
                   // patch comp_data_size in the header
                   dat->chain[comp_data_pos] = sec->comp_data_size & 0xFF;
@@ -3983,7 +3988,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                           = (BITCODE_RLL)sec->address - 0x100;
                       dwg->fhdr.r2004_header.last_section_address
                           = (BITCODE_RLL)sec->address + sec->size - 0x100;
-                      dwg->fhdr.r2004_header.secondheader_address = 0; // TODO
+                      // secondheader_address is set after all sections
                       dwg->fhdr.r2004_header.comp_data_size
                           = sec->comp_data_size;
                     }
@@ -4025,12 +4030,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   page_hdr_pos = dat->byte;
                   dat->byte += 32;
 
-                  if (info->compressed == 2)
-                    compress_R2004_section (dat, chain_page, content_size,
-                                            &sec->comp_data_size);
-                  else
-                    copy_R2004_section (dat, chain_page, content_size,
-                                        &sec->comp_data_size);
+                  // always use raw copy for data section pages,
+                  // as the LZ compressor output is not yet ODA-compatible
+                  copy_R2004_section (dat, chain_page, content_size,
+                                      &sec->comp_data_size);
 
                   sec->size = 32 + sec->comp_data_size;
 
@@ -4079,6 +4082,29 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             }
           bit_chain_free (&sec_dat[type]);
         }
+    }
+
+    // Patchup thumbnail_address at 0x0D for R2004+
+    {
+      size_t oldpos = dat->byte;
+      dat->byte = 0x0D;
+      bit_write_RL (dat, dwg->header.thumbnail_address);
+      LOG_TRACE ("header.thumbnail_address => " FORMAT_RL " [RL] @0x0d\n",
+                 dwg->header.thumbnail_address);
+      dat->byte = oldpos;
+    }
+
+    // Reserve space for secondheader (108 bytes, copy of encrypted
+    // R2004_Header without padding)
+    {
+      size_t secondheader_pos = dat->byte;
+      dwg->fhdr.r2004_header.secondheader_address
+          = (BITCODE_RLL)secondheader_pos - 0x100;
+      if (dat->byte + 108 > dat->size)
+        bit_chain_alloc_size (dat, 108);
+      dat->byte += 108;
+      LOG_TRACE ("secondheader reserved @0x%" PRIX64 "\n",
+                 (uint64_t)secondheader_pos);
     }
 
     {
@@ -4137,6 +4163,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           LOG_ERROR ("r2004_file_header encryption error");
           return error | DWG_ERR_INVALIDDWG;
         }
+      // Write secondheader: copy of encrypted R2004_Header (108 bytes,
+      // without the 12-byte padding)
+      {
+        size_t secondheader_pos = (size_t)_obj->secondheader_address + 0x100;
+        memcpy (&dat->chain[secondheader_pos], &dat->chain[0x80], 108);
+        LOG_TRACE ("secondheader written @0x%" PRIX64 "\n",
+                   (uint64_t)secondheader_pos);
+      }
     } // R2004_Header
   } // R_2004
 
