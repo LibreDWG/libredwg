@@ -6152,7 +6152,11 @@ dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   _ent = obj->tio.entity;
   _obj = _ent;
 
-  // clang-format off
+  // deferred from common_entity_data, which writes to the wrong hdl stream
+  if (dat->version >= R_2004 && _ent->color.flag & 0x40)
+    FIELD_HANDLE (color.handle, 0, 430);
+
+    // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 

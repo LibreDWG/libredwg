@@ -453,7 +453,9 @@
         }
       if (flags & 0x40)
         {
+#ifndef IS_ENCODER
           FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9
+#endif
         }
       else if (flags & 0x80) // and not a reference
         {
