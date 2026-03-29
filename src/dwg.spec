@@ -3624,11 +3624,11 @@ DWG_TABLE (BLOCK_HEADER)
                           FIELD_VALUE (blkisxref) << 2 |
                           FIELD_VALUE (xrefoverlaid) << 3;
   }
-  SINCE (R_2004a) { // but not in 2007
-    FIELD_BL (num_owned, 0);
-    if (FIELD_VALUE (num_owned) > 0xf00000)
+  SINCE (R_2004a) {
+    if (!FIELD_VALUE (blkisxref) && !FIELD_VALUE (xrefoverlaid))
       {
-        LOG_WARN ("Unreasonable high num_owned value")
+        FIELD_BL (num_owned, 0);
+        VALUEOUTOFBOUNDS (num_owned, 0xf00000)
       }
   }
 
