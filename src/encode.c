@@ -4070,6 +4070,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_RL (dat, dwg->header.thumbnail_address);
       LOG_TRACE ("header.thumbnail_address => " FORMAT_RL " [RL] @0x0d\n",
                  dwg->header.thumbnail_address);
+      // Patchup summaryinfo_address at 0x20
+      dat->byte = 0x20;
+      bit_write_RL (dat, dwg->header.summaryinfo_address);
+      LOG_TRACE ("header.summaryinfo_address => " FORMAT_RL " [RL] @0x20\n",
+                 dwg->header.summaryinfo_address);
       dat->byte = oldpos;
     }
 
