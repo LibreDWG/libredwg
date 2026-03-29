@@ -4134,6 +4134,23 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       decrypt_R2004_header (overlap_hdr, &orig_dat->chain[0x80],
                             sizeof (Dwg_R2004_Header));
 
+      // Initialize defaults before CRC calculation, so the CRC covers
+      // the corrected values (header_size, x04, ...).
+      if ((orig_dat->from_version
+           && orig_dat->from_version < orig_dat->version)
+          || dwg->opts & DWG_OPTS_INDXF)
+        {
+          if (!_obj->header_size)
+            _obj->header_size = 108;
+          if (!_obj->x04)
+            _obj->x04 = 4;
+          if (!_obj->x20)
+            _obj->x20 = 0x20;
+          if (!_obj->x80)
+            _obj->x80 = 0x80;
+          if (!_obj->x40)
+            _obj->x40 = 0x40;
+        }
       checksum = _obj->crc32;
       LOG_HANDLE ("old crc32: 0x%x\n", _obj->crc32);
       _obj->crc32 = 0;
@@ -4145,6 +4162,21 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // clang-format off
       #include "r2004_file_header.spec"
       // clang-format on
+
+      // Recalculate CRC32 from the actual on-disk bytes, since the spec's
+      // IF_ENCODE_FROM_EARLIER_OR_DXF block may have modified fields after
+      // the initial CRC calculation from the in-memory struct.
+      {
+        uint32_t new_crc32;
+        memset (&file_dat.chain[0x68], 0, 4); // zero CRC field
+        new_crc32 = bit_calc_CRC32 (0, file_dat.chain, 0x6c);
+        _obj->crc32 = new_crc32;
+        file_dat.chain[0x68] = new_crc32 & 0xFF;
+        file_dat.chain[0x69] = (new_crc32 >> 8) & 0xFF;
+        file_dat.chain[0x6a] = (new_crc32 >> 16) & 0xFF;
+        file_dat.chain[0x6b] = (new_crc32 >> 24) & 0xFF;
+        LOG_HANDLE ("patched crc32: 0x%x\n", new_crc32);
+      }
       // The encrypted file header overlaps bytes 0x100..0x10b (12 bytes) of
       // the first data page. Preserve exactly those overlapped plaintext
       // fields (comp_data_size, compression_type, checksum) from the
