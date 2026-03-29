@@ -40,24 +40,34 @@
 #endif
       FIELD_TFFx (version_checksum, 16, 0);
       FIELD_T16 (version, 0); // "Teigha(R) 4.3.2.0", AutoCAD: "19.0.55.0.0"
-      FIELD_TFFx (comment_checksum, 16, 0);
-      // "Autodesk DWG.  This file is a Trusted DWG last saved by an Autodesk application or Autodesk licensed application.",
-      // "This file was last saved by an Open Design Alliance (ODA) application or an ODA licensed application."
-      FIELD_T16 (comment, 0);
-      DECODER {
-        // some DWG's miss that
-        if (dat->byte + 16 < dat->size) {
+      if (FIELD_VALUE (num_strings) >= 2) {
+        FIELD_TFFx (comment_checksum, 16, 0);
+        // "Autodesk DWG.  This file is a Trusted DWG last saved by an Autodesk application or Autodesk licensed application.",
+        // "This file was last saved by an Open Design Alliance (ODA) application or an ODA licensed application."
+        FIELD_T16 (comment, 0);
+      }
+      if (FIELD_VALUE (num_strings) >= 3) {
+        DECODER {
+          // some DWG's miss that
+          if (dat->byte + 16 < dat->size) {
+            FIELD_TFFx (product_checksum, 16, 0);
+            FIELD_T16 (product_info, 0); // XML ProductInformation with:
+            /*
+    name: "AutoCAD"/"AutoCAD LT", build_version: "A.<num>...", "F.<num>...", "M.<num>..",
+          registry_version, install_id_string: "ACAD-<num>:<num>", "ACADLT-<num>:<num>", registry_localeID
+    name: "Teigha(R)", CompanyName: ""Open Design Alliance", registry_version, install_id_string: "ODA",
+          registry_localeID
+            */
+          }
+        }
+        else {
           FIELD_TFFx (product_checksum, 16, 0);
-          FIELD_T16 (product_info, 0); // XML ProductInformation with:
-          /*
-  name: "AutoCAD"/"AutoCAD LT", build_version: "A.<num>...", "F.<num>...", "M.<num>..",
-        registry_version, install_id_string: "ACAD-<num>:<num>", "ACADLT-<num>:<num>", registry_localeID
-  name: "Teigha(R)", CompanyName: ""Open Design Alliance", registry_version, install_id_string: "ODA",
-        registry_localeID
-          */
+          FIELD_T16 (product_info, 0);
         }
       }
-      else {
+      FREE {
+        FIELD_TFFx (comment_checksum, 16, 0);
+        FIELD_T16 (comment, 0);
         FIELD_TFFx (product_checksum, 16, 0);
         FIELD_T16 (product_info, 0);
       }

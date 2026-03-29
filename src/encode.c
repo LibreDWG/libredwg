@@ -1744,9 +1744,9 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   FIELD_RS (R11_HANDLING, 0);
   {
     // always use the header_vars.HANDSEED
-    _obj->HANDSEED = dwg->header_vars.HANDSEED->handleref.value;
-    bit_write_RLL_BE (dat, _obj->HANDSEED);
-    LOG_TRACE ("HANDSEED: " FORMAT_HV "\n", _obj->HANDSEED);
+    _obj->HANDSEED = dwg->header_vars.HANDSEED->handleref.value & 0xFFFFFFFF;
+    bit_write_RL_BE (dat, _obj->HANDSEED);
+    LOG_TRACE ("HANDSEED: " FORMAT_RLx "\n", _obj->HANDSEED);
   }
   FIELD_RS (num_aux_tables, 0);
   encode_preR13_section_chk (SECTION_BLOCK, dat, dwg);

@@ -49,7 +49,7 @@
       LOG_ERROR ("Invalid segidx_offset");
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  if ((size_t)(_obj->num_segidx * sizeof (Dwg_AcDs_Segment)) >
+  if ((size_t)(_obj->num_segidx * sizeof (Dwg_AcDs_SegmentIndex)) >
       (size_t)(dat->size - dat->byte))
     {
       LOG_ERROR ("Invalid num_segidx");
