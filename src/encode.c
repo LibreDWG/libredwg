@@ -821,7 +821,7 @@ fixup_NOD (Dwg_Data *restrict dwg,
            Dwg_Object *restrict obj) // named object dict
 {
   Dwg_Object_DICTIONARY *_obj;
-  int is_tu = dwg->header.version >= R_2007;
+  int is_tu = IS_FROM_TU_DWG (dwg);
   if (obj->handle.value != 0xC)
     return;
   _obj = obj->tio.object->tio.DICTIONARY;
@@ -2794,9 +2794,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
   section_address = dat->byte;
 
-#define WE_CAN                                                                \
-  "This version of LibreDWG is only capable of encoding "                     \
-  "versions r1.1-r2004 (code: MC0.0-AC1018) DWG files.\n"
+#define WE_CAN                                                          \
+  "This version of LibreDWG is not capable of encoding "                \
+  "versions r2007 DWG files.\n"
 
   PRE (R_13b1)
   {
@@ -3255,12 +3255,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   SINCE (R_2004a)
   {
     LOG_INFO ("\n");
-    SINCE (R_2007a) // r2010 is close though
-    {
-      LOG_ERROR (WE_CAN "Writing >r2004 not yet supported");
-      return DWG_ERR_NOTYETSUPPORTED;
-    }
-
     // Preserve sec_dat entries already populated by the VERSIONS block
     // (SECTION_OBJECTS and SECTION_HANDLES from encode_objects_handles).
     {
