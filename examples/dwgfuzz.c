@@ -121,12 +121,12 @@ help (void)
   printf ("MODE:\n");
 #ifdef USE_WRITE
 #  ifndef DISABLE_DXF
-  printf ("  -indxf:   import from DXF,  export as r2000 DWG\n");
+  printf ("  -indxf:   import from DXF,  export as DWG\n");
 #  endif
 #  ifndef DISABLE_JSON
-  printf ("  -injson:  import from JSON, export as r2000 DWG\n");
+  printf ("  -injson:  import from JSON, export as DWG\n");
 #  endif
-  printf ("  -rw:      import from DWG,  export as r2000 DWG, re-import from "
+  printf ("  -rw:      import from DWG,  export as DWG, re-import from "
           "this DWG (rewrite)\n");
   printf ("  -add:     import from special add file, export as DWG and DXF, "
           "re-import from this\n");
@@ -293,7 +293,8 @@ main (int argc, char *argv[])
         case INDXF:
           if (dwg_read_dxf (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              out_dat.version = R_2000;
+              if (dat.version == R_2007)
+                out_dat.version = R_2010;
               if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
                 exit (0);
               free (out_dat.chain);
@@ -304,7 +305,8 @@ main (int argc, char *argv[])
         case RW:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              out_dat.version = R_2000;
+              if (dat.version == R_2007)
+                out_dat.version = R_2010;
               if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
                 exit (0);
               if (dwg_decode (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
@@ -341,7 +343,8 @@ main (int argc, char *argv[])
         case INJSON:
           if (dwg_read_json (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              out_dat.version = R_2000;
+              if (dat.version == R_2007)
+                out_dat.version = R_2010;
               if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
                 exit (0);
             }
