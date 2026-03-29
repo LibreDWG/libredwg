@@ -6093,8 +6093,10 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
           LOG_HANDLE ("hdlpos: %" PRIuSIZE "\n", obj->hdlpos);
         }
     }
-    // and set the string stream (restricted to size)
-    error |= obj_string_stream (dat, obj, str_dat);
+    // and set the string stream (restricted to size).
+    // skip during encode when bitsize is not yet known.
+    if (obj->bitsize)
+      error |= obj_string_stream (dat, obj, str_dat);
   }
 
   SINCE (R_13b1)
@@ -6297,7 +6299,8 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
       obj->hdlpos = bit_position (dat) + obj->bitsize;
     SINCE (R_2007a)
     {
-      obj_string_stream (dat, obj, str_dat);
+      if (obj->bitsize)
+        obj_string_stream (dat, obj, str_dat);
     }
     if (!_obj || !obj->tio.object)
       return DWG_ERR_INVALIDDWG;
