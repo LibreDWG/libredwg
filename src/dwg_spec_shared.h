@@ -588,7 +588,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   PRE (R_2007a) { FIELD_VALUE (value.data_type) &= ~0x200; }                  \
   LATER_VERSIONS { FIELD_BL (value.format_flags, 93); }                       \
   FIELD_BL (value.data_type, 90);                                             \
-  if (!(dat->version >= R_2007 && FIELD_VALUE (value.format_flags) & 1))      \
+  if (!(dat->version >= R_2007 && (FIELD_VALUE (value.format_flags) & 3)))    \
     {                                                                         \
       switch (FIELD_VALUE (value.data_type))                                  \
         {                                                                     \
@@ -609,31 +609,31 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size), 310); \
           break;                                                              \
         case 16: /* kPoint */                                                 \
+          FIELD_BL (value.data_size, 92);                                     \
           FIELD_2RD (value.data_point, 11);                                   \
           break;                                                              \
         case 32: /* k3dPoint */                                               \
+          FIELD_BL (value.data_size, 92);                                     \
           FIELD_3RD (value.data_3dpoint, 11);                                 \
           break;                                                              \
         case 64: /* kObjectId */                                              \
           FIELD_HANDLE (value.data_handle, -1, 330);                          \
           break;                                                              \
         case 128: /* kBuffer */                                               \
-          LOG_ERROR ("Unknown data type in TABLE entity: \"kBuffer\".\n")     \
+          LOG_ERROR ("Unknown data type in TABLE_value_fields: kBuffer")      \
           break;                                                              \
         case 256: /* kResBuf */                                               \
-          LOG_ERROR ("Unknown data type in TABLE entity: \"kResBuf\".\n")     \
+          LOG_ERROR ("Unknown data type in TABLE_value_fields: kResBuf")      \
           break;                                                              \
         case 512: /* kGeneral since r2007*/                                   \
           SINCE (R_2007a) { FIELD_BL (value.data_size, 0); }                  \
           else                                                                \
           {                                                                   \
-            LOG_ERROR (                                                       \
-                "Unknown data type in TABLE entity: \"kGeneral before "       \
-                "R_2007\".\n")                                                \
+            LOG_ERROR ("Unknown data type in TABLE_value_fields: kGeneral <r2007") \
           }                                                                   \
           break;                                                              \
         default:                                                              \
-          LOG_ERROR ("Invalid data type in TABLE entity\n")                   \
+          LOG_ERROR ("Invalid data type in TABLE_value_fields\n")             \
           DEBUG_HERE_OBJ                                                      \
           FIELD_VALUE (value.format_flags) = 0;                               \
           FIELD_VALUE (value.data_type) = 0;                                  \
