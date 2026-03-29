@@ -134,40 +134,42 @@ main (int argc, char *argv[])
 #  ifdef AFL_SHARED_MEM
   dat.chain = __AFL_FUZZ_TESTCASE_BUF;
 #  endif
-  while (__AFL_LOOP (10000))
-    { // llvm_mode persistent, non-forking mode
+  {
+    while (__AFL_LOOP (10000))
+      { // llvm_mode persistent, non-forking mode
 #  ifdef AFL_SHARED_MEM
-      dat.size = __AFL_FUZZ_TESTCASE_LEN;
+        dat.size = __AFL_FUZZ_TESTCASE_LEN;
 #  elif 1 // still 1000x faster than the old file-forking fuzzer.
-      /* from stdin: */
-      dat.size = 0;
-      dat_read_stream (&dat, stdin);
+        /* from stdin: */
+        dat.size = 0;
+        dat_read_stream (&dat, stdin);
 #  else
-      /* else from file */
-      stat (argv[1], &attrib);
-      fp = fopen (argv[1], "rb");
-      if (!fp)
-        return 0;
-      dat.size = attrib.st_size;
-      dat_read_file (&dat, fp, argv[1]);
-      fclose (fp);
+        /* else from file */
+        stat (argv[1], &attrib);
+        fp = fopen (argv[1], "rb");
+        if (!fp)
+          return 0;
+        dat.size = attrib.st_size;
+        dat_read_file (&dat, fp, argv[1]);
+        fclose (fp);
 #  endif
-      if (dat.size < 100)
-        continue; // useful minimum input length
+        if (dat.size < 100)
+          continue; // useful minimum input length
 
-      if (dwg_read_json (&dat, &dwg) <= DWG_ERR_CRITICAL)
-        {
-          memset (&out_dat, 0, sizeof (out_dat));
-          bit_chain_set_version (&out_dat, &dat);
-          dwg.header.version = out_dat.version = dwg.header.from_version;
-          out_dat.codepage = dwg.header.codepage;
-          if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
-            exit (0);
-          free (out_dat.chain);
-        }
-      else
-        exit (0);
-    }
+        if (dwg_read_json (&dat, &dwg) <= DWG_ERR_CRITICAL)
+          {
+            memset (&out_dat, 0, sizeof (out_dat));
+            bit_chain_set_version (&out_dat, &dat);
+            dwg.header.version = out_dat.version = dwg.header.from_version;
+            out_dat.codepage = dwg.header.codepage;
+            if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
+              exit (0);
+            free (out_dat.chain);
+          }
+        else
+          exit (0);
+      }
+  }
   dwg_free (&dwg);
 }
 #  define main orig_main
