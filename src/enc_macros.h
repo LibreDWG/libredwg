@@ -217,7 +217,7 @@
   }
 #define FIELD_T16(nam, dxf)                                                   \
   {                                                                           \
-    if (dat->version < R_2007)                                                \
+    if (!IS_FROM_TU (dat))                                                    \
       {                                                                       \
         bit_write_T16 (str_dat, _obj->nam);                                   \
         LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", _obj->nam, dxf);               \
@@ -232,7 +232,7 @@
   {                                                                           \
     if (_obj->nam)                                                            \
       bit_write_T32 (str_dat, _obj->nam);                                     \
-    if (dat->version < R_2007)                                                \
+    if (!IS_FROM_TU (dat))                                                    \
       LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);                 \
     else                                                                      \
       LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
@@ -241,7 +241,7 @@
   {                                                                           \
     if (_obj->nam)                                                            \
       bit_write_TU32 (str_dat, _obj->nam);                                    \
-    if (dat->version < R_2007)                                                \
+    if (!IS_FROM_TU (dat))                                                    \
       LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf);                \
     else                                                                      \
       LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
@@ -555,7 +555,10 @@
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           if (dat->version != dat->from_version)                              \
-            FIELD_##type (nam[vcount], dxf) else if (dat->version < R_2007)   \
+            {                                                                 \
+              FIELD_##type (nam[vcount], dxf)                                 \
+            }                                                                 \
+          else if (!IS_FROM_TU (dat))                                         \
             {                                                                 \
               bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);              \
               LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]", (int)vcount,            \
@@ -565,7 +568,13 @@
           else                                                                \
             {                                                                 \
               bit_write_##type (dat, _obj->nam[vcount]);                      \
-              LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf);                    \
+              if (IS_FROM_TU (dat)) {                                         \
+                LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf);                  \
+              } else {                                                        \
+                LOG_TRACE (#nam "[%d]: \"%s\" [TU %d]", (int)vcount,          \
+                           _obj->nam[vcount] ? _obj->nam[vcount] : "", dxf);  \
+                LOG_POS                                                       \
+              }                                                               \
             }                                                                 \
         }                                                                     \
       RESET_VER                                                               \
@@ -576,7 +585,7 @@
       OVERFLOW_CHECK_LV (nam, _obj->size)                                     \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          if (dat->version < R_2007)                                          \
+          if (!IS_FROM_TU (dat))                                              \
             {                                                                 \
               size_t _len = strlen (_obj->nam[vcount]);                       \
               bit_write_BS (dat, _len & 0xFFFFFFFF);                          \
@@ -588,7 +597,13 @@
           else                                                                \
             {                                                                 \
               bit_write_##type (dat, _obj->nam[vcount]);                      \
-              LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf);                    \
+              if (IS_FROM_TU (dat)) {                                         \
+                LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf);                  \
+              } else {                                                        \
+                LOG_TRACE (#nam "[%d]: \"%s\" [TU %d]", (int)vcount,          \
+                           _obj->nam[vcount] ? _obj->nam[vcount] : "", dxf);  \
+                LOG_POS                                                       \
+              }                                                               \
             }                                                                 \
         }                                                                     \
       RESET_VER                                                               \

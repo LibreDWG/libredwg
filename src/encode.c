@@ -5211,7 +5211,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     bit_write_BOT (dat, obj->type);
     LOG_INFO (", Size: " FORMAT_MS " [MS], Hdlsize: " FORMAT_UMC
               " [UMC], Type: %d [BOT], Address: %" PRIuSIZE "\n",
-              obj->size, obj->handlestream_size, obj->type, obj->address)
+              obj->size, obj->handlestream_size, obj->type, obj->address);
     // clear stale bitsize and handlestream_size from JSON/DXF import,
     // will be recalculated in START_HANDLE_STREAM and the fixup
     obj->bitsize = 0;

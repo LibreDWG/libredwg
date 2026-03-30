@@ -21,6 +21,7 @@
 #include <math.h>
 #include <assert.h>
 
+// extern unsigned int loglevel;
 static int tracelevel;
 static int debug;
 static int cnt = 0;
