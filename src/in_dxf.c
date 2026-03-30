@@ -48,7 +48,6 @@
 #include "classes.h"
 #include "free.h"
 
-static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 

@@ -542,6 +542,14 @@ typedef enum DWG_BITS
 extern const char version_codes[DWG_VERSIONS][7];
 extern const char *dwg_bits_name[];
 extern const unsigned char dwg_bits_size[];
+#  ifndef DYNAPI_TEST_C
+extern const struct dwg_versions dwg_versions[DWG_VERSIONS];
+#  endif
+#endif
+
+#if !defined COMMON_C && !defined COMMON_TEST_C && !defined DECODE_TEST_C     \
+    && !defined ENCODE_TEST_C
+EXPORT extern unsigned int loglevel;
 #endif
 
 /**
@@ -611,10 +619,9 @@ EXPORT char *strrplc (const char *s, const char *from,
 #define rad2deg(ang) (ang) * 90.0 / M_PI_2
 #define deg2rad(ang) (ang) * M_PI_2 / 90.0
 
-#if !defined(HAVE_MEMMEM) || defined(COMMON_TEST_C)
-// only if _GNU_SOURCE
 void *my_memmem (const void *h0, size_t k, const void *n0, size_t l)
     __nonnull ((1, 3));
+#if !defined(HAVE_MEMMEM)
 #  define memmem my_memmem
 #elif !defined(_GNU_SOURCE) && defined(IS_DECODER) && !defined(__linux__)
 /* HAVE_MEMMEM and _GNU_SOURCE are unreliable on non-Linux systems.
@@ -719,4 +726,4 @@ bool dwg_is_valid_tag (const char *tag) __nonnull_all;
 bool dwg_has_eed_appid (Dwg_Object_Object *restrict obj,
                         const BITCODE_RLL absref) __nonnull_all;
 
-#endif
+#endif // ifndef COMMON_H

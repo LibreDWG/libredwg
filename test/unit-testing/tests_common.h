@@ -5,8 +5,9 @@
 #include <stddef.h>
 #include <stdarg.h>
 #if !defined DECODE_TEST_C && !defined ENCODE_TEST_C
-static unsigned int loglevel;
-#  define DWG_LOGLEVEL loglevel
+#  ifndef DWG_LOGLEVEL
+#    define DWG_LOGLEVEL loglevel
+#  endif
 #  include "logging.h"
 #endif
 #include "common.h"

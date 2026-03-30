@@ -1,6 +1,6 @@
 // TODO unstable
 #define DWG_TYPE DWG_TYPE_DIMASSOC
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)
@@ -12,8 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_RC rotated_type;
   Dwg_DIMASSOC_Ref *ref;
   // BITCODE_BS j;
-  BITCODE_BL num_intsectobj, num_xrefs, num_xrefpaths,
-    num_intersec_xrefpaths;
+  BITCODE_BL num_intsectobj, num_xrefs, num_xrefpaths, num_intersec_xrefpaths;
   BITCODE_H *intsectobj, *xrefs;
   BITCODE_T *xrefpaths;
   // BITCODE_BL intersec_gsmarker;
@@ -57,6 +56,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, num_intersec_xrefpaths, BL);
       CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, num_intersec_xrefpaths, BL, 100);
       // num_intersec_xrefpaths = ref[i].num_intersec_xrefpaths;
-      // CHK_SUBCLASS_TV (ref[i], DIMASSOC_Ref, intersec_xrefpaths, num_intersec_xrefpaths);
+      // CHK_SUBCLASS_TV (ref[i], DIMASSOC_Ref, intersec_xrefpaths,
+      // num_intersec_xrefpaths);
     }
 }

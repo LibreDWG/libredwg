@@ -49,8 +49,6 @@ char *basename (char *);
 #endif
 #include "free.h"
 
-/* The logging level per .o */
-static unsigned int loglevel;
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
    LIBREDWG_TRACE and set `loglevel' appropriately.  */

@@ -29,7 +29,6 @@
 // #include "decode_r11.h"
 #include "out_dxf.h"
 
-static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 

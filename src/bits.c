@@ -45,7 +45,6 @@ static unsigned int errors = 0;
 #  endif
 #endif
 
-static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 #include "bits.h"

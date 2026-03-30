@@ -14979,7 +14979,7 @@ dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
     // CHK_SUBCLASS_* e.g. layout->plotsetting via PLOTSETTING
     if (obj && strNE (obj->name, name)) // objid may be 0
       {
-        const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
+        //const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
         LOG_ERROR ("%s: Invalid entity type %s, wanted %s", __FUNCTION__,
                    obj->name, name);
         return false;
@@ -14988,8 +14988,8 @@ dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
       const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (name, fieldname);
       if (!f)
         {
-          int loglevel = (obj && obj->parent) ? obj->parent->opts & DWG_OPTS_LOGLEVEL
-                                              : DWG_LOGLEVEL_ERROR;
+          //int loglevel = (obj && obj->parent) ? obj->parent->opts & DWG_OPTS_LOGLEVEL
+          //                                    : DWG_LOGLEVEL_ERROR;
           LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
@@ -15020,7 +15020,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
     // CHK_SUBCLASS_* e.g. layout->plotsetting via PLOTSETTING
     if (obj && strNE (obj->name, name)) // objid may be 0
       {
-        const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
+        //const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
         LOG_ERROR ("%s: Invalid entity type %s, wanted %s", __FUNCTION__,
                    obj->name, name);
         return false;
@@ -15032,7 +15032,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
 
       if (!f || !f->is_string)
         {
-          int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : DWG_LOGLEVEL_ERROR;
+          //int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : DWG_LOGLEVEL_ERROR;
           LOG_ERROR ("%s: Invalid %s text field %s", __FUNCTION__, name, fieldname);
           return false;
         }
@@ -15081,7 +15081,7 @@ dwg_dynapi_header_value (const Dwg_Data *restrict dwg,
       }
     else
       {
-        const int loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+        //const int loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
         LOG_ERROR ("%s: Invalid header field %s", __FUNCTION__, fieldname);
         return false;
       }
@@ -15131,7 +15131,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
       }
     else
       {
-        const int loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+        //const int loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
         LOG_ERROR ("%s: Invalid header text field %s", __FUNCTION__, fieldname);
         return false;
       }
@@ -15152,7 +15152,7 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (!obj || error)
       {
-        const int loglevel = DWG_LOGLEVEL_ERROR;
+        //const int loglevel = DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: dwg_obj_generic_to_object failed", __FUNCTION__);
         return false;
       }
@@ -15169,7 +15169,7 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL; // DWG_LOGLEVEL_ERROR;
+        //const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL; // DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: Unhandled %s.supertype ", __FUNCTION__, obj->name);
         return false;
       }
@@ -15187,7 +15187,7 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
+        //const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
         LOG_ERROR ("%s: Invalid common field %s", __FUNCTION__, fieldname);
         return false;
       }
@@ -15212,7 +15212,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
 
     if (!obj || error)
       {
-        const int loglevel = DWG_LOGLEVEL_ERROR;
+        //const int loglevel = DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: dwg_obj_generic_to_object failed", __FUNCTION__);
         return false;
       }
@@ -15236,7 +15236,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        const int loglevel = DWG_LOGLEVEL_ERROR;
+        //const int loglevel = DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: Unhandled %s.supertype ", __FUNCTION__, obj->name);
         return false;
       }
@@ -15268,7 +15268,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        const int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : DWG_LOGLEVEL_ERROR;
+        //const int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: Invalid common text field %s", __FUNCTION__, fieldname);
         return false;
       }
@@ -15355,13 +15355,13 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
     if (error)
       {
-        const int loglevel = DWG_LOGLEVEL_ERROR;
+        //const int loglevel = DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: dwg_obj_generic_to_object failed", __FUNCTION__);
         return false;
       }
     if (obj && strNE (obj->name, name))
       {
-        const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
+        //const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
         LOG_ERROR ("%s: Invalid entity type %s, wanted %s", __FUNCTION__,
                    obj->name, name);
         return false;
@@ -15384,7 +15384,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
 
       if (!f)
         {
-          const int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : 0;
+          //const int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : 0;
           LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
@@ -15487,7 +15487,7 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
       }
     else
       {
-        const int loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+        //const int loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
         LOG_ERROR ("%s: Invalid header field %s", __FUNCTION__, fieldname);
         return false;
       }
@@ -15511,7 +15511,7 @@ dwg_dynapi_common_set_value (void *restrict _obj,
     Dwg_Data *dwg;
     if (!obj || error)
       {
-        const int loglevel = DWG_LOGLEVEL_ERROR;
+        //const int loglevel = DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: dwg_obj_generic_to_object failed", __FUNCTION__);
         return false;
       }
@@ -15534,14 +15534,14 @@ dwg_dynapi_common_set_value (void *restrict _obj,
       }
     else
       {
-        const int loglevel = DWG_LOGLEVEL_ERROR;
+        //const int loglevel = DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: Unhandled %s.supertype ", __FUNCTION__, obj->name);
         return false;
       }
 
     if (!f)
       {
-        const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
+        //const int loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
         LOG_ERROR ("%s: Invalid %s common field %s", __FUNCTION__, obj->name, fieldname);
         return false;
       }

@@ -24,8 +24,8 @@
 int
 verbosity (int argc, char **argv, int i, unsigned int *opts)
 {
-  unsigned int loglevel = 2;
   char log_str[4];
+  loglevel = 2;
   if (!strcmp (argv[i], "--verbose") || // --verbose 2 or --verbose
       !strcmp (argv[i], "-v"))          // -v 0 or -v
     {

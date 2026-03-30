@@ -36,7 +36,6 @@
 #include "hash.h"
 #include "free.h"
 
-static unsigned int loglevel;
 #ifdef USE_TRACING
 static int env_var_checked_p;
 #endif

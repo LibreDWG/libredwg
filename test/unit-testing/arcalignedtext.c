@@ -1,6 +1,6 @@
 // DEBUGGING,no coverage yet
 #define DWG_TYPE DWG_TYPE_ARCALIGNEDTEXT
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

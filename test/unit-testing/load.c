@@ -1,6 +1,6 @@
 // pre2.0 only
 #define DWG_TYPE DWG_TYPE_LOAD
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

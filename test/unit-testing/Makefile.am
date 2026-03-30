@@ -34,7 +34,6 @@ common_test_LDADD = $(LDADD) \
 decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/codepages.lo \
-	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/decode2.lo \
 	$(top_builddir)/src/decode_r2007.lo \
 	$(top_builddir)/src/dwg.lo \
@@ -42,7 +41,6 @@ decode_test_LDADD = $(LDADD) \
 encode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/codepages.lo \
-	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/decode.lo \
 	$(top_builddir)/src/decode2.lo \
 	$(top_builddir)/src/decode_r2007.lo \
@@ -454,7 +452,7 @@ update-ignorance:
 
 EXTRA_DIST = \
 	tests_common.h \
-	common.c \
+	tests_common.c \
 	dynapi_test.c.in \
 	dynapi_test.c \
 	check-objects.pl

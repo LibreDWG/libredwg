@@ -1,5 +1,5 @@
 #define DWG_TYPE DWG_TYPE_LAYERFILTER
-#include "common.c"
+#include "tests_common.c"
 #include "bits.h"
 
 void

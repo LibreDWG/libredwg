@@ -30,9 +30,14 @@
 #include "common.h"
 #include "logging.h"
 
+/* The central logging level for all modules. */
+#if !defined COMMON_TEST_C && !defined DECODE_TEST_C && !defined ENCODE_TEST_C
+EXPORT unsigned int loglevel;
+#endif
+
 // See also
 // http://devel.gvsig.org/sites/org.gvsig.dwg/2.0-SNAPSHOT/gvsig-base-library-pom/org.gvsig.dwg/xref/org/gvsig/dwg/lib/DwgFile.html
-const struct dwg_versions dwg_versions[] = {
+const struct dwg_versions dwg_versions[DWG_VERSIONS] = {
   /* r,          type,    hdr,    desc,         dwg_version */
   { R_INVALID, "invalid", "INVALI", "No DWG", 0 },
   { R_1_1, "r1.1", "MC0.0", "MicroCAD Release 1.1", 0 },
@@ -383,7 +388,6 @@ strrplc (const char *s, const char *from, const char *to)
     return NULL;
 }
 
-#if !defined(HAVE_MEMMEM) || defined(COMMON_TEST_C)
 // naive from scratch implementation, not from glibc.
 // see also examples/unknown.c:membits
 void *__nonnull ((1, 3))
@@ -416,7 +420,6 @@ void *__nonnull ((1, 3))
   while (++h <= plast);
   return NULL;
 }
-#endif
 
 /*
  32 types, with 3 categories: Face, Edge, Display, plus 58 props r2013+

@@ -36,7 +36,6 @@
 #include "classes.h"
 #include "in_json.h"
 
-static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 

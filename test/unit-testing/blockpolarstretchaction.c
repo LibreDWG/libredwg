@@ -1,7 +1,7 @@
 // TODO DEBUGGING GRUE_LTM_1090+_from_cadforum.cz,
 // Annotation_-_Metric_from_autocad_2021_2018
 #define DWG_TYPE DWG_TYPE_BLOCKPOLARSTRETCHACTION
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

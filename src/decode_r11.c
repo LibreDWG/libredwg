@@ -47,7 +47,7 @@
 /* The logging level for the read (decode) path.
  * Yes, this library is not thread-safe.
  */
-static unsigned int loglevel;
+
 /* the current version per spec block */
 static int cur_ver = 0;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;

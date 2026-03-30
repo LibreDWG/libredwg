@@ -25,6 +25,9 @@
 #else
 #  define _USE_BSD 1
 #endif
+#ifndef _BSD_SOURCE
+#  define _BSD_SOURCE 1
+#endif
 #ifndef _DEFAULT_SOURCE
 #  define _DEFAULT_SOURCE 1
 #endif
@@ -53,8 +56,6 @@
 #include "dynapi.h"
 #include "free.h"
 
-/* The logging level for the write (encode) path.  */
-static unsigned int loglevel;
 /* the current version per spec block */
 static Dwg_Version_Type cur_ver = R_INVALID;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;

@@ -1,6 +1,6 @@
 // unstable. 3dsolid point still wrong
 #define DWG_TYPE DWG_TYPE_ACSH_BREP_CLASS
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

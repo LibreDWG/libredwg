@@ -1,6 +1,6 @@
 // unstable, just some field names missing
 #define DWG_TYPE DWG_TYPE_ACSH_CHAMFER_CLASS
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

@@ -46,7 +46,6 @@ endif()
 add_executable(decode_test
   decode_test.c
   ../../src/dwg.c
-  ../../src/common.c
   ../../src/bits.c
   ../../src/codepages.c
   ../../src/hash.c

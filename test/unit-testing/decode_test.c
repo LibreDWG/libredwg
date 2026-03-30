@@ -10,11 +10,14 @@
 #  define _USE_BSD 1
 #endif
 
+extern unsigned int loglevel;
+
 #define IS_DECODER
 #include <stdlib.h>
-#include "../../src/common.h"
+// #include "common.h"
 // CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "decode.c"
+#include "common.c"
 // CLANG_DIAG_RESTORE
 #include "tests_common.h"
 

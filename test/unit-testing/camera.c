@@ -1,6 +1,6 @@
 // no coverage, named view, not persistent in a DWG. CAMERADISPLAY=1
 #define DWG_TYPE DWG_TYPE_CAMERA
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

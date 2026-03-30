@@ -10,13 +10,16 @@
 #  define _USE_BSD 1
 #endif
 
+extern unsigned int loglevel;
+
 #define IS_ENCODER
 #include <stdlib.h>
-#include "../../src/common.h"
+// #include "common.h"
 // CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "encode.c"
+#include "common.c"
 // CLANG_DIAG_RESTORE
-#include "../../src/decode.h"
+#include "decode.h"
 #include "tests_common.h"
 
 BITCODE_RL size = SECTION_R13_SIZE;

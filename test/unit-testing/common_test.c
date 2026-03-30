@@ -2,10 +2,14 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <locale.h>
-#include "tests_common.h"
+#include <assert.h>
 #include "../../src/codepages.h"
 #include "../../src/common.c"
 #include "../../programs/escape.c"
+
+extern unsigned int loglevel;
+
+#include "tests_common.h"
 
 static void
 common_memmem_tests (void)

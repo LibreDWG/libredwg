@@ -79,8 +79,6 @@ void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
 void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
                              Dwg_Object_MLINESTYLE *restrict o);
 
-/* The logging level for the write (encode) path.  */
-static unsigned int loglevel;
 /* the current version per spec block */
 static Dwg_Version_Type cur_ver = R_INVALID;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;

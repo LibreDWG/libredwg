@@ -1,6 +1,6 @@
 // stable, just indxf needs to be tested
 #define DWG_TYPE DWG_TYPE_ASSOCGEOMDEPENDENCY
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

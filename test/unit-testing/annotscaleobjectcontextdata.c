@@ -1,7 +1,7 @@
 // TODO DEBUGGING
 // needed at all? or just a subclass?
 #define DWG_TYPE DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

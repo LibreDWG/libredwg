@@ -1,6 +1,6 @@
 // stable
 #define DWG_TYPE DWG_TYPE_RENDERENVIRONMENT
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)

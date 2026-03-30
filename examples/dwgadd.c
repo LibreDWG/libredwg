@@ -48,7 +48,6 @@
 #endif
 
 static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat);
-static unsigned int loglevel;
 
 struct opt_s
 {

@@ -1,6 +1,6 @@
 // TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_GEOMAPIMAGE
-#include "common.c"
+#include "tests_common.c"
 
 void
 api_process (dwg_object *obj)
