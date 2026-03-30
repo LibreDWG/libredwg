@@ -3260,7 +3260,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   VERSIONS (R_2007a, R_2007)
   {
-    LOG_ERROR (WE_CAN "We don't encode r2007 yet");
+    LOG_ERROR (WE_CAN);
     // dat->version = dwg->header.version = R_2010; // rather do 2010
     return DWG_ERR_NOTYETSUPPORTED;
   }
@@ -5229,6 +5229,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     LOG_INFO (", Size: " FORMAT_MS " [MS], Hdlsize: " FORMAT_UMC
               " [UMC], Type: %d [BOT], Address: %" PRIuSIZE "\n",
               obj->size, obj->handlestream_size, obj->type, obj->address)
+    // clear stale bitsize and handlestream_size from JSON/DXF import,
+    // will be recalculated in START_HANDLE_STREAM and the fixup
+    obj->bitsize = 0;
+    obj->handlestream_size = 0;
   }
 
   /* Write the specific type to dat */
@@ -5655,7 +5659,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       bit_write_MS (dat, obj->size);
       LOG_TRACE ("-size: %u [MS] @%" PRIuSIZE "\n", obj->size, address);
-      SINCE (R_2013b)
+      SINCE (R_2010b)
       {
         if (!obj->handlestream_size && obj->bitsize)
           obj->handlestream_size = (obj->size * 8) - obj->bitsize;
