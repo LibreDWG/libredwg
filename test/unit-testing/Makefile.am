@@ -388,18 +388,18 @@ testobjects += $(testdebug)
 endif
 
 check_minimal = \
-	bits_test \
-	common_test \
-	hash_test \
-	dynapi_test \
-	dxf_test
+	bits_test$(EXEEXT) \
+	common_test$(EXEEXT) \
+	hash_test$(EXEEXT) \
+	dynapi_test$(EXEEXT) \
+	dxf_test$(EXEEXT)
 if USE_WRITE
-check_minimal += add_test
+check_minimal += add_test$(EXEEXT)
 endif
 if !HAVE_MINGW
-check_minimal += decode_test
+check_minimal += decode_test$(EXEEXT)
 if USE_WRITE
-check_minimal += encode_test
+check_minimal += encode_test$(EXEEXT)
 endif
 endif
 

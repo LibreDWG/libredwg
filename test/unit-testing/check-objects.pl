@@ -8,6 +8,7 @@ Use -v for verbose ok messages
 =cut
 
 use strict;
+use Config;
 use File::Basename qw( dirname );
 my $v;
 $v++ if shift eq '-v';
@@ -42,10 +43,15 @@ if ( $len_o < 100 ) {
 
 open my $fm, "<", $makefile or die "$makefile not found: $!";
 my ( $in, %m, $m );
+my $exeext = $Config{exe_ext} || '';
+
 while (<$fm>) {
     if ( $in and /^check_PROGRAMS/ ) {
         $in = 0;
         last;
+    }
+    if (/^EXEEXT = .exe/) {
+        $exeext = '.exe';
     }
     if (/^testobjects (\+)?=/) {
         $in = 1;
@@ -56,7 +62,8 @@ while (<$fm>) {
         $m{$u}++;
         warn "ok - $u in Makefile.am\n" if $v;
         if ( !exists $o{$u}
-            && $m !~ /^(bits|common|decode|hash|dynapi|dxf|add)_test$/ )
+            && $m
+            !~ /^(bits|common|decode|hash|dynapi|dxf|add)_test\$\(EXEEXT\)$/ )
         {
             warn "ok - TODO $u not in objects.inc\n";    # harmless
         }
