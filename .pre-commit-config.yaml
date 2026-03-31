@@ -13,7 +13,7 @@ repos:
       - id: check-yaml # checks yaml files for parseable syntax.
       - id: detect-private-key # detects the presence of private keys.
       - id: end-of-file-fixer # ensures that a file is either empty, or ends with one newline.
-        exclude: ^(doc/dynapi\.texi|src/dynapi\.c)$
+        exclude: ^(doc/dynapi\.texi|src/dynapi\.c|test/unit-testing/dynapi_test\.c)$
       - id: fix-byte-order-marker # removes utf-8 byte order marker.
       - id: mixed-line-ending # replaces or checks mixed line ending.
       - id: requirements-txt-fixer # sorts entries in requirements.txt.

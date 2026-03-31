@@ -6018,18 +6018,18 @@ DWG_ENTITY (PROXY_ENTITY)
     }
   }
   PRE (R_2018) {
-    FIELD_BLx (dwg_versions, 95);
-    FIELD_VALUE (maint_version) = FIELD_VALUE(dwg_versions) >> 8;
-    FIELD_VALUE (dwg_version) = FIELD_VALUE(dwg_versions) & 0xff;
+    FIELD_BLx (version, 95);
+    FIELD_VALUE (maint_version) = FIELD_VALUE(version) >> 8;
+    FIELD_VALUE (dwg_version) = FIELD_VALUE(version) & 0xff;
     LOG_TRACE ("> maint_version: %x\n", _obj->maint_version);
     LOG_TRACE ("> dwg_version: %x\n", _obj->dwg_version);
   }
   SINCE (R_2018) {
     FIELD_BLx (dwg_version, 0);
     FIELD_BLx (maint_version, 0);
-    FIELD_VALUE (dwg_versions) = (FIELD_VALUE(maint_version) << 8) + FIELD_VALUE(dwg_version);
+    FIELD_VALUE (version) = (FIELD_VALUE(maint_version) << 8) + FIELD_VALUE(dwg_version);
     DXF {
-      FIELD_BLx (dwg_versions, 95);
+      FIELD_BLx (version, 95);
     }
   }
   SINCE (R_2000b) {
@@ -6145,18 +6145,18 @@ DWG_OBJECT (PROXY_OBJECT)
     }
   }
   PRE (R_2018) {
-    FIELD_BLx (dwg_versions, 95);
-    FIELD_VALUE (maint_version) = FIELD_VALUE(dwg_versions) >> 8;
-    FIELD_VALUE (dwg_version) = FIELD_VALUE(dwg_versions) & 0xff;
+    FIELD_BLx (version, 95);
+    FIELD_VALUE (maint_version) = FIELD_VALUE(version) >> 8;
+    FIELD_VALUE (version) = FIELD_VALUE(version) & 0xff;
     LOG_TRACE ("> maint_version: %x\n", _obj->maint_version);
     LOG_TRACE ("> dwg_version: %x\n", _obj->dwg_version);
   }
   SINCE (R_2018) {
     FIELD_BLx (dwg_version, 0);
     FIELD_BLx (maint_version, 0);
-    FIELD_VALUE (dwg_versions) = (FIELD_VALUE(maint_version) << 8) + FIELD_VALUE(dwg_version);
+    FIELD_VALUE (version) = (FIELD_VALUE(maint_version) << 8) + FIELD_VALUE(dwg_version);
     DXF {
-      FIELD_BLx (dwg_versions, 95);
+      FIELD_BLx (version, 95);
     }
   }
   SINCE (R_2000b)

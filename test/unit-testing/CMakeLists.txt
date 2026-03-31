@@ -64,7 +64,6 @@ add_test(decode_test ${TARGET_SYSTEM_EMULATOR} decode_test${CMAKE_EXECUTABLE_SUF
 
 add_executable(dxf_test
   dxf_test.c
-  ../../src/common.c
   ../../src/dynapi.c
   ../../src/objects.c
   ../../src/classes.c

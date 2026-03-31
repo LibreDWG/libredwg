@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   int error;
   BITCODE_BL proxy_id;
   BITCODE_BL class_id;
-  BITCODE_BL dwg_versions;
+  BITCODE_BL version;
   BITCODE_BL dwg_version;
   BITCODE_BL maint_version;
   BITCODE_B from_dxf;
@@ -22,7 +22,7 @@ api_process (dwg_object *obj)
   if (proxy_id != 499)
     fail ("PROXY_OBJECT.proxy_id %d not 499", (int)proxy_id);
   CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, class_id, BL); // index in CLASSES
-  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, dwg_versions,
+  CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, version,
                    BL); // <r2018, later computed
   CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, dwg_version,
                    BL); // r2018+, earlier computed

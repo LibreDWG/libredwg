@@ -3831,7 +3831,7 @@ typedef struct _dwg_entity_PROXY_ENTITY
 
   BITCODE_BL proxy_id;      /*!< DXF 90 always 498, same as obj->type */
   BITCODE_BL class_id;      /*!< DXF 91 class index */
-  BITCODE_BL dwg_versions;  /*!< DXF 95, combination of maint_version<<8 + maint_version */
+  BITCODE_BL version;       /*!< DXF 95, combination of maint_version<<8 + maint_version */
   BITCODE_BL maint_version; /*!< DXF hiword of 95 */
   BITCODE_BL dwg_version;   /*!< DXF loword of 95 */
   BITCODE_B from_dxf;       /*!< DXF 70 */
@@ -3853,7 +3853,7 @@ typedef struct _dwg_object_PROXY_OBJECT
 
   BITCODE_BL proxy_id;      /*!< DXF 90 always 499, same as obj->type */
   BITCODE_BL class_id;      /*!< DXF 91 class index */
-  BITCODE_BL dwg_versions;  /*!< DXF 95, combination of maint_version<<8 + maint_version */
+  BITCODE_BL version;  /*!< DXF 95, combination of maint_version<<8 + maint_version */
   BITCODE_BL maint_version; /*!< DXF hiword of 95 */
   BITCODE_BL dwg_version;   /*!< DXF loword of 95 */
   BITCODE_B from_dxf;       /*!< DXF 70 */

@@ -3764,7 +3764,7 @@ struct _dwg_object_entity*
 BL,	DXF 90
 @item class_id
 BL,	DXF 91
-@item dwg_versions
+@item version
 BL,	DXF 95
 @item maint_version
 BL,	DXF 95
@@ -11211,7 +11211,7 @@ struct _dwg_object_object*
 BL,	DXF 90
 @item class_id
 BL,	DXF 91
-@item dwg_versions
+@item version
 BL,	DXF 95
 @item maint_version
 BL
