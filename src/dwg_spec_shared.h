@@ -447,7 +447,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
     {
       if (FIELD_VALUE (encr_sat_data))
         {
-          LOG_HANDLE ("Free %s.num_blocks %u\n", obj->name, _obj->num_blocks)
+          LOG_HANDLE ("Free %s.num_blocks %u\n", obj->name, _obj->num_blocks);
           for (BITCODE_BL i = 0; i <= FIELD_VALUE (num_blocks); i++)
             {
               if (FIELD_VALUE (encr_sat_data[i]) != NULL)
@@ -620,20 +620,18 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           FIELD_HANDLE (value.data_handle, -1, 330);                          \
           break;                                                              \
         case 128: /* kBuffer */                                               \
-          LOG_ERROR ("Unknown data type in TABLE_value_fields: kBuffer")      \
+          LOG_ERROR ("Unknown data type in TABLE_value_fields: kBuffer");     \
           break;                                                              \
         case 256: /* kResBuf */                                               \
-          LOG_ERROR ("Unknown data type in TABLE_value_fields: kResBuf")      \
+          LOG_ERROR ("Unknown data type in TABLE_value_fields: kResBuf");     \
           break;                                                              \
         case 512: /* kGeneral since r2007*/                                   \
           SINCE (R_2007a) { FIELD_BL (value.data_size, 0); }                  \
           else                                                                \
-          {                                                                   \
-            LOG_ERROR ("Unknown data type in TABLE_value_fields: kGeneral <r2007") \
-          }                                                                   \
+            LOG_ERROR ("Unknown data type in TABLE_value_fields: kGeneral <r2007"); \
           break;                                                              \
         default:                                                              \
-          LOG_ERROR ("Invalid data type in TABLE_value_fields\n")             \
+          LOG_ERROR ("Invalid data type in TABLE_value_fields");              \
           DEBUG_HERE_OBJ                                                      \
           FIELD_VALUE (value.format_flags) = 0;                               \
           FIELD_VALUE (value.data_type) = 0;                                  \

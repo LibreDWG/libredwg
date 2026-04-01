@@ -849,7 +849,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
           if (dwg.object[i].fixedtype >= DWG_TYPE_UNKNOWN_ENT)
             break;
           if (strNE (dwg.object[i].dxfname, dxf->name))
-            LOG_WARN ("Invalid handle 0x%X for %s", dxf->handle, dxf->name)
+            LOG_WARN ("Invalid handle 0x%X for %s", dxf->handle, dxf->name);
           else
             error += test_object (&dwg, &dwg.object[i], dxf, name);
           break;
@@ -938,7 +938,7 @@ main (int argc, char *argv[])
                 {
                   free (dwgfile);
                   if (!g_counter) // use --enable-debug
-                    LOG_WARN ("Unhandled %s", dxf->name)
+                    LOG_WARN ("Unhandled %s", dxf->name);
                   continue;
                 }
             }
@@ -956,7 +956,7 @@ main (int argc, char *argv[])
       // GH #268. skip 2018/Helix.dwg. podman works fine.
       if (is_docker && strEQ (dxffile, "test/test-data/2018/Helix.dxf"))
         {
-          LOG_ERROR ("Skip %s in docker", dwgfile)
+          LOG_ERROR ("Skip %s in docker", dwgfile);
           free (dwgfile);
           continue;
         }
@@ -977,7 +977,7 @@ main (int argc, char *argv[])
             strncpy (path, "../../../", sizeof (path) - 1);
           strncat (path, dwgfile, sizeof (path) - 1);
           if (stat (path, &attrib))
-            LOG_WARN ("%s not found\n", path)
+            LOG_WARN ("%s not found\n", path);
           else
             error += test_dxf (dxf, name, path);
         }

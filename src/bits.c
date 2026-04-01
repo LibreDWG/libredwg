@@ -76,7 +76,7 @@ bit_advance_position (Bit_Chain *dat, long advance)
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("buffer underflow at pos %" PRIuSIZE ".%u, size %" PRIuSIZE
                  ", advance by %ld",
-                 dat->byte, dat->bit, dat->size, advance)
+                 dat->byte, dat->bit, dat->size, advance);
       dat->byte = 0;
       dat->bit = 0;
       return;
@@ -104,7 +104,7 @@ bit_set_position (Bit_Chain *dat, size_t bitpos)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", have %" PRIuSIZE,
-                 __FUNCTION__, dat->byte, dat->size)
+                 __FUNCTION__, dat->byte, dat->size);
     }
 }
 
@@ -141,7 +141,7 @@ bit_reset_chain (Bit_Chain *dat)
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
         LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u >= %" PRIuSIZE,    \
-                   func, dat->byte, dat->bit, dat->size)                      \
+                   func, dat->byte, dat->bit, dat->size);                     \
         return retval;                                                        \
       }
 #endif
@@ -153,7 +153,7 @@ bit_reset_chain (Bit_Chain *dat)
     {                                                                         \
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                               \
       LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ".%u + %ld > %" PRIuSIZE, \
-                 func, dat->byte, dat->bit, (long)(plus), dat->size)          \
+                 func, dat->byte, dat->bit, (long)(plus), dat->size);         \
       return retval;                                                          \
     }
 
@@ -606,7 +606,7 @@ bit_read_BL (Bit_Chain *dat)
   else /* if (two_bit_code == 3) */
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("bit_read_BL: unexpected 2-bit code: '11'")
+      LOG_ERROR ("bit_read_BL: unexpected 2-bit code: '11'");
       return 256;
     }
 }
@@ -815,7 +815,7 @@ bit_write_3B (Bit_Chain *dat, unsigned char value)
   if (value > 7)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Invalid bit_write_3B value %u > 7", value)
+      LOG_ERROR ("Invalid bit_write_3B value %u > 7", value);
       bit_write_B (dat, 0);
       return;
     }
@@ -907,7 +907,7 @@ bit_read_BD (Bit_Chain *dat)
   else /* if (two_bit_code == 3) */
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("bit_read_BD: unexpected 2-bit code: '11'")
+      LOG_ERROR ("bit_read_BD: unexpected 2-bit code: '11'");
       return bit_nan ();
     }
 }
@@ -1001,7 +1001,7 @@ err_mc:
       " @%" PRIuSIZE ".@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
       i, j, result, dat->byte - 5, dat->bit, dat->chain[dat->byte - 5],
       dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
-      dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
+      dat->chain[dat->byte - 2], dat->chain[dat->byte - 1]);
   return 0; /* error... */
 }
 
@@ -1070,12 +1070,12 @@ bit_read_UMC (Bit_Chain *dat)
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
       "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=" FORMAT_UMC,
-      i, j, result)
+      i, j, result);
   LOG_HANDLE ("  @%" PRIuSIZE ".%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n",
               dat->byte - 6, dat->bit, dat->chain[dat->byte - 6],
               dat->chain[dat->byte - 5], dat->chain[dat->byte - 4],
               dat->chain[dat->byte - 3], dat->chain[dat->byte - 2],
-              dat->chain[dat->byte - 1])
+              dat->chain[dat->byte - 1]);
   return 0; /* error... */
 }
 
@@ -1133,7 +1133,7 @@ bit_read_MS (Bit_Chain *dat)
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
       "bit_read_MS: error parsing modular short, i=%d,j=%d,result=" FORMAT_MS,
-      i, j, result)
+      i, j, result);
   return 0; /* error... */
 }
 
@@ -1494,7 +1494,7 @@ bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   else
     {
       LOG_ERROR ("Invalid handle size %u with " FORMAT_HV, handle->size,
-                 handle->value)
+                 handle->value);
       bit_write_RL_BE (dat, handle->value);
     }
   return;
@@ -1515,7 +1515,7 @@ bit_read_CRC (Bit_Chain *dat)
       dat->bit = 0;
     }
   result = bit_read_RS (dat);
-  LOG_TRACE ("read CRC at %" PRIuSIZE ": %04X\n", dat->byte, result)
+  LOG_TRACE ("read CRC at %" PRIuSIZE ": %04X\n", dat->byte, result);
 
   return result;
 }
@@ -1541,7 +1541,7 @@ bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
                  ", size %" PRIuSIZE,
-                 __FUNCTION__, start_address, dat->byte, dat->size)
+                 __FUNCTION__, start_address, dat->byte, dat->size);
       return 0;
     }
   assert (dat->byte >= start_address);
@@ -1554,17 +1554,17 @@ bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
         LOG_HANDLE (" check_CRC %" PRIuSIZE "-%" PRIuSIZE " = %" PRIuSIZE
                     ": %04X == %04X\n",
-                    start_address, dat->byte - 2, size, calculated, read)
+                    start_address, dat->byte - 2, size, calculated, read);
       else
         LOG_TRACE (" check_CRC %" PRIuSIZE ": %04X == %04X\n", size,
-                   calculated, read)
+                   calculated, read);
       return 1;
     }
   else
     {
       LOG_WARN ("check_CRC mismatch %" PRIuSIZE "-%" PRIuSIZE " = %" PRIuSIZE
                 ": %04X <=> %04X\n",
-                start_address, dat->byte - 2, size, calculated, read)
+                start_address, dat->byte - 2, size, calculated, read);
       return 0;
     }
 }
@@ -1588,7 +1588,7 @@ bit_write_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
                  ", size %" PRIuSIZE,
-                 __FUNCTION__, start_address, dat->byte, dat->size)
+                 __FUNCTION__, start_address, dat->byte, dat->size);
       return 0;
     }
   assert (dat->byte >= start_address);
@@ -1618,7 +1618,7 @@ bit_write_CRC_BE (Bit_Chain *dat, size_t start_address, uint16_t seed)
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %" PRIuSIZE "-%" PRIuSIZE
                  ", size %" PRIuSIZE,
-                 __FUNCTION__, start_address, dat->byte, dat->size)
+                 __FUNCTION__, start_address, dat->byte, dat->size);
       return 0;
     }
   assert (dat->byte >= start_address);
@@ -1853,11 +1853,11 @@ bit_read_TV (Bit_Chain *restrict dat)
       // only observed >=r2004 as writer app
       if (length > 0 && dat->from_version > R_2000
           && chain[length - 1] != '\0')
-        LOG_HANDLE ("TV-not-ZERO %u\n ", length)
+        LOG_HANDLE ("TV-not-ZERO %u\n ", length);
       // and preR2000 the final \0 is not included in the length (ie == strlen)
       else if (length > 0 && dat->from_version < R_2000
                && chain[length - 1] == '\0')
-        LOG_HANDLE ("TV-ZERO %u\n", length)
+        LOG_HANDLE ("TV-ZERO %u\n", length);
     }
   // normally not needed, as the DWG since r2004 itself contains the ending \0
   // as last char
@@ -2326,7 +2326,7 @@ bit_read_TU (Bit_Chain *restrict dat)
   if (!ws)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
       return NULL;
     }
   for (i = 0; i < length; i++)
@@ -2349,7 +2349,7 @@ bit_read_TU_size (Bit_Chain *restrict dat, unsigned int len)
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
       return NULL;
     }
   for (i = 0; i < len; i++)
@@ -2376,7 +2376,7 @@ bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
       return NULL;
     }
   for (i = 0; i < length; i++)
@@ -2404,7 +2404,7 @@ bit_read_T16 (Bit_Chain *restrict dat)
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
       return NULL;
     }
   for (i = 0; i < length; i++)
@@ -2429,7 +2429,7 @@ bit_read_TU16 (Bit_Chain *restrict dat)
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
       return NULL;
     }
   for (i = 0; i < length; i++)
@@ -2457,14 +2457,14 @@ bit_read_T32 (Bit_Chain *restrict dat)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
-                     __FUNCTION__, dat->byte, size)
+                     __FUNCTION__, dat->byte, size);
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
       if (!wstr)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("Out of memory")
+          LOG_ERROR ("Out of memory");
           return NULL;
         }
       for (i = 0; i < len; i++)
@@ -2479,14 +2479,14 @@ bit_read_T32 (Bit_Chain *restrict dat)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
-                     __FUNCTION__, dat->byte, size)
+                     __FUNCTION__, dat->byte, size);
           return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
       if (!str)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("Out of memory")
+          LOG_ERROR ("Out of memory");
           return NULL;
         }
       for (i = 0; i < size; i++)
@@ -2516,14 +2516,14 @@ bit_read_TU32 (Bit_Chain *restrict dat)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
-                     __FUNCTION__, dat->byte, size)
+                     __FUNCTION__, dat->byte, size);
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
       if (!wstr)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("Out of memory")
+          LOG_ERROR ("Out of memory");
           return NULL;
         }
       rl1 = bit_read_RL (dat);
@@ -2552,14 +2552,14 @@ bit_read_TU32 (Bit_Chain *restrict dat)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("%s buffer overflow at %" PRIuSIZE ", size " FORMAT_BLL,
-                     __FUNCTION__, dat->byte, size)
+                     __FUNCTION__, dat->byte, size);
           return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
       if (!str)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("Out of memory")
+          LOG_ERROR ("Out of memory");
           return NULL;
         }
       for (i = 0; i < size; i++)
@@ -2836,7 +2836,7 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
   if (!str)
     {
       loglevel |= 1;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
       return NULL;
     }
   i = 0;
@@ -2941,7 +2941,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
   if (!str)
     {
       loglevel |= 1;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
       return NULL;
     }
   i = 0;
@@ -3493,7 +3493,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
   if (!wstr)
     {
       loglevel |= 1;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
       return NULL;
     }
   while (len > 0 && (c = *str++))
@@ -3847,7 +3847,7 @@ bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
           if (!color->handle)
             {
               loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-              LOG_ERROR ("Out of memory")
+              LOG_ERROR ("Out of memory");
               return;
             }
           bit_read_H (hdl_dat, &(color->handle->handleref)); // => DBCOLOR
@@ -3922,7 +3922,7 @@ bit_chain_init (Bit_Chain *dat, const size_t size)
   if (size > MAX_MEM_ALLOC)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
 #ifdef DWG_ABORT
       abort ();
 #else
@@ -3933,7 +3933,7 @@ bit_chain_init (Bit_Chain *dat, const size_t size)
   if (!dat->chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Out of memory")
+      LOG_ERROR ("Out of memory");
 #ifdef DWG_ABORT
       abort ();
 #else
@@ -3985,7 +3985,7 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
       else
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("Out of memory")
+          LOG_ERROR ("Out of memory");
 #ifdef DWG_ABORT
           abort ();
 #else

@@ -78,7 +78,7 @@ VERSIONS (R_13, R_2000) {
                      _obj->handles[rcount1].num_hdl);
           for (int i = 0; i < MIN (_obj->handles[rcount1].num_hdl, 8); i++)
             LOG_TRACE ("%hX", _obj->handles[rcount1].hdl[i]);
-          LOG_TRACE ("\n")
+          LOG_TRACE ("\n");
         }
   END_REPEAT_BLOCK
   END_REPEAT_F (handles)

@@ -27,12 +27,13 @@
 #include <unistd.h>
 #include <getopt.h>
 
-#include <dwg.h>
-#define DWG_LOGLEVEL loglevel
 #include "logging.h"
+// #define DWG_LOGLEVEL loglevel
+#include "common.h"
+
+#include <dwg.h>
 #include <dwg_api.h>
 
-#include "common.h"
 #include "decode.h"
 #include "encode.h"
 #include "bits.h"
@@ -299,20 +300,20 @@ main (int argc, char *argv[])
   fp = fopen (argv[i], "rb");
   if (!fp)
     {
-      LOG_ERROR ("Could not read %s", argv[i])
+      LOG_ERROR ("Could not read %s", argv[i]);
       exit (1);
     }
-  LOG_INFO ("dwgadd read %s\n", argv[i])
+  LOG_INFO ("dwgadd read %s\n", argv[i]);
   dat_read_file (&dat, fp, argv[i]);
   if (dat.size == 0)
     {
-      LOG_ERROR ("empty %s", argv[i])
+      LOG_ERROR ("empty %s", argv[i]);
       free (dat.chain);
       exit (1);
     }
 
   dwgp = &dwg;
-  LOG_INFO ("dwgadd process %s\n", argv[i])
+  LOG_INFO ("dwgadd process %s\n", argv[i]);
   if ((retval = dwg_add_dat (&dwgp, &dat)) == 0)
     {
       int error;
@@ -328,14 +329,14 @@ main (int argc, char *argv[])
           outfile = "/dev/stdout";
 #endif
           if (opt.verify)
-            LOG_ERROR ("Cannot --verify with %s\n", outfile)
+            LOG_ERROR ("Cannot --verify with %s\n", outfile);
           opt.verify = false;
         }
-      LOG_INFO ("\ndwgadd write %s\n", outfile)
+      LOG_INFO ("\ndwgadd write %s\n", outfile);
       out_dat.fh = fopen (outfile, "wb");
       if (!out_dat.fh)
         {
-          LOG_ERROR ("Could not write %s", outfile)
+          LOG_ERROR ("Could not write %s", outfile);
           free (dat.chain);
           exit (1);
         }
@@ -366,7 +367,7 @@ main (int argc, char *argv[])
         }
       if (error >= DWG_ERR_CRITICAL)
         {
-          LOG_ERROR ("dwgadd -o %s failed with error 0x%x", outfile, error)
+          LOG_ERROR ("dwgadd -o %s failed with error 0x%x", outfile, error);
           retval = error;
         }
       if (!opt.dwg)
@@ -384,7 +385,7 @@ main (int argc, char *argv[])
           dat.fh = fopen (outfile, "rb");
           memset (&dwg, 0, sizeof (Dwg_Data));
           dwg.opts = opts;
-          LOG_INFO ("\ndwgadd verify %s\n", outfile)
+          LOG_INFO ("\ndwgadd verify %s\n", outfile);
           dat_read_file (&dat, dat.fh, outfile);
 
 #ifndef DISABLE_DXF
@@ -398,13 +399,13 @@ main (int argc, char *argv[])
               if (opt.json)
             error = dwg_read_json (&dat, &dwg);
           else if (opt.geojson)
-            LOG_ERROR ("--verify skipped with --geojson")
+            LOG_ERROR ("--verify skipped with --geojson");
           else
 #endif
             error = dwg_decode (&dat, &dwg); // dat -> dwg
           if (error >= DWG_ERR_CRITICAL)
             {
-              LOG_ERROR ("--verify failed with error 0x%x", error)
+              LOG_ERROR ("--verify failed with error 0x%x", error);
               retval = error;
             }
           fclose (dat.fh);
@@ -417,7 +418,7 @@ main (int argc, char *argv[])
       fclose (fp);
       dwg_free (&dwg);
       free (dat.chain);
-      LOG_ERROR ("dwgadd failed to add objects")
+      LOG_ERROR ("dwgadd failed to add objects");
     }
 
   return retval;
@@ -747,7 +748,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             }
           if (1 == SSCANF_S (p, "readdwg " FMT_PATH, text SZ))
             {
-              LOG_INFO ("readdwg %s\n", text)
+              LOG_INFO ("readdwg %s\n", text);
               if ((error = dwg_read_file (text, *dwgp)) >= DWG_ERR_CRITICAL)
                 {
                   LOG_ERROR ("Invalid readdwg \"%s\" => error 0x%x", text,
@@ -774,7 +775,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             }
           if (1 == SSCANF_S (p, "readdxf " FMT_PATH, text SZ))
             {
-              LOG_INFO ("readdxf %s\n", text)
+              LOG_INFO ("readdxf %s\n", text);
               if ((error = dxf_read_file (text, *dwgp)) >= DWG_ERR_CRITICAL)
                 {
                   LOG_ERROR ("Invalid readdxf \"%s\" => error 0x%x", text,
@@ -802,7 +803,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           if (1 == SSCANF_S (p, "readjson " FMT_PATH, text SZ))
             {
               Bit_Chain in_dat = EMPTY_CHAIN (0);
-              LOG_INFO ("readjson %s\n", text)
+              LOG_INFO ("readjson %s\n", text);
               in_dat.fh = fopen (text, "rb");
               if (in_dat.fh)
                 dat_read_file (&in_dat, in_dat.fh, text);
@@ -2191,7 +2192,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         char *n = strchr (p, '\n');
         int size = n ? n - p : (int)strlen (p);
-        LOG_WARN ("Ignored %.*s", size, p)
+        LOG_WARN ("Ignored %.*s", size, p);
       }
 
       p = next_line (p, end);

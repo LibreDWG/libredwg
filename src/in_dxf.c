@@ -1382,7 +1382,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                      dwg_version_codes (dat->from_version));
           if (dat->from_version == R_INVALID)
             {
-              LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version)
+              LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version);
               return DWG_ERR_INVALIDDWG;
             }
           if (is_tu && dwg->num_objects
@@ -1813,7 +1813,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       else
         {
-          LOG_ERROR ("2 CLASSES must be followed by 0 CLASS or ENDSEC")
+          LOG_ERROR ("2 CLASSES must be followed by 0 CLASS or ENDSEC");
           DXF_RETURN_EOF (DWG_ERR_INVALIDDWG);
           return DWG_ERR_INVALIDDWG;
         }
@@ -2155,7 +2155,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       if (!eed[i].data || eed[i].data->code != code - 10)
         {
           LOG_ERROR ("Wrong EED DXF code %d, expected %d", code + 1000,
-                     eed[i].data ? eed[i].data->code + 1010 : 1020)
+                     eed[i].data ? eed[i].data->code + 1010 : 1020);
           return;
         }
       eed[i].data->u.eed_10.point.y = pair->value.d;
@@ -2171,7 +2171,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       if (!eed[i].data || eed[i].data->code != code - 20)
         {
           LOG_ERROR ("Wrong EED DXF code %d, expected %d", code + 1000,
-                     eed[i].data ? eed[i].data->code + 1020 : 1030)
+                     eed[i].data ? eed[i].data->code + 1020 : 1030);
           return;
         }
       eed[i].data->u.eed_10.point.z = pair->value.d;
@@ -3690,14 +3690,14 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_deflines;
           if (!o->deflines[j].dashes)
             {
-              LOG_ERROR ("DXF 79 num_dashes missing for HATCH.dashes 49")
+              LOG_ERROR ("DXF 79 num_dashes missing for HATCH.dashes 49");
               goto unknown_HATCH;
             }
           k++;
           if (!o->deflines[j].dashes || k < 0
               || k >= (int)o->deflines[j].num_dashes)
             {
-              LOG_ERROR ("add_HATCH dashes")
+              LOG_ERROR ("add_HATCH dashes");
               dxf_free_pair (pair);
               return NULL;
             }
@@ -5474,7 +5474,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         default:
           if (is_type_stable (obj->fixedtype))
-            LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "TABLESTYLE")
+            LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "TABLESTYLE");
           else
             LOG_WARN ("Unknown DXF code %d for %s", pair->code, "TABLESTYLE");
         }
@@ -5695,7 +5695,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             i++;
           if (!(i >= 0 && i <= 3))
             {
-              LOG_ERROR ("Invalid DIMASSOC_Ref index %d", i)
+              LOG_ERROR ("Invalid DIMASSOC_Ref index %d", i);
               return pair;
             }
           o->rotated_type = pair->value.i;
@@ -5711,7 +5711,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           if (!(i >= 0 && i <= 3))
             {
-              LOG_ERROR ("Invalid DIMASSOC_Ref index %d", i)
+              LOG_ERROR ("Invalid DIMASSOC_Ref index %d", i);
               return pair;
             }
           if (!have_rotated_type) // not already bumped
@@ -5958,7 +5958,7 @@ add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     case DWG_VT_INT64:
     case DWG_VT_BOOL:
     default:
-      LOG_ERROR ("Invalid EvalVariant.value.type %d", pair->code)
+      LOG_ERROR ("Invalid EvalVariant.value.type %d", pair->code);
       break;
     }
   dxf_free_pair (pair);
@@ -6173,10 +6173,10 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->nodes[i].edge_flags = pair->value.i;
           if (pair->value.i != 32)
             LOG_WARN ("%s.nodes[%d].edge_flags = %d [BL %d] != 32", obj->name,
-                      i, pair->value.i, pair->code)
+                      i, pair->value.i, pair->code);
           else
             LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,
-                       pair->value.i, pair->code)
+                       pair->value.i, pair->code);
           break;
         case 360:
           o->nodes[i].evalexpr
@@ -6920,12 +6920,12 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
               // SUB_FIELD_HANDLE (childval[i],value.data_handle, -1, 330);
               break;
             case 128: /* kBuffer */
-              LOG_ERROR ("Unknown data type in FIELD: \"kBuffer\".\n")
+              LOG_ERROR ("Unknown data type in FIELD: \"kBuffer\".\n");
               break;
             case 256: /* kResBuf */
             case 512: /* kGeneral since r2007*/
             default:
-              LOG_ERROR ("Unknown data type in FIELD: \"kResBuf\".\n")
+              LOG_ERROR ("Unknown data type in FIELD: \"kResBuf\".\n");
               break;
               // case 512: /* kGeneral since r2007*/
               // SINCE (R_2007a) { SUB_FIELD_BL (childval[i],value.data_size,
@@ -7142,7 +7142,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                 {
                   LOG_ERROR ("Invalid DIMSTYLE_CONTROL.num_morehandles %d or "
                              "index %d",
-                             o->num_morehandles, j)
+                             o->num_morehandles, j);
                   break;
                 }
               assert (o->morehandles);
@@ -7211,7 +7211,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               else
                 {
                   LOG_TRACE ("%s.num_morehandles = %u [BL 71]\n", ctrlname,
-                             pair->value.u)
+                             pair->value.u);
                 }
               break;
             }
@@ -7485,7 +7485,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case DWG_VT_INVALID:
     default:
     invalid:
-      LOG_ERROR ("Invalid group code in rbuf: %d", rbuf->type)
+      LOG_ERROR ("Invalid group code in rbuf: %d", rbuf->type);
     }
 
   num_xdata++;
@@ -8217,7 +8217,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
         }
       else
         {
-          LOG_ERROR ("Invalid DXF code %d for %s", pair->code, "AcDbEvalExpr")
+          LOG_ERROR ("Invalid DXF code %d for %s", pair->code, "AcDbEvalExpr");
           return pair;
         }
       dxf_free_pair (pair);
@@ -9245,9 +9245,9 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
     {
       if (obj->tio.entity->ownerhandle)
         LOG_WARN ("Missing owner (" FORMAT_HV ") from " FORMAT_REF " [H 330]",
-                  obj->handle.value, ARGS_REF (obj->tio.entity->ownerhandle))
+                  obj->handle.value, ARGS_REF (obj->tio.entity->ownerhandle));
       else
-        LOG_WARN ("Missing owner (" FORMAT_HV ")", obj->handle.value)
+        LOG_WARN ("Missing owner (" FORMAT_HV ")", obj->handle.value);
       return;
     }
   obj->tio.entity->ownerhandle->obj = NULL;
@@ -9521,9 +9521,9 @@ get_numfield_value (void *restrict _obj, const Dwg_DYNAPI_field *restrict f)
   else if (strEQc (f->name, "ref"))
     {
       if (f->size != 4) // fixed size
-        LOG_WARN ("Need 4 ref array elements, have %ld", num)
+        LOG_WARN ("Need 4 ref array elements, have %ld", num);
       else
-        LOG_TRACE ("Check ref[] 4 ok\n")
+        LOG_TRACE ("Check ref[] 4 ok\n");
     }
   else
     LOG_ERROR ("Unknown num_%s field", f->name);
@@ -9566,14 +9566,14 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
 
   if (ctrl_id || i)
     {
-      LOG_TRACE ("add %s [%d]\n", name, i)
+      LOG_TRACE ("add %s [%d]\n", name, i);
     }
   else
     {
       if (strcmp (name, dxfname) != 0)
-        LOG_TRACE ("add %s (%s)\n", name, dxfname)
+        LOG_TRACE ("add %s (%s)\n", name, dxfname);
       else
-        LOG_TRACE ("add %s\n", name)
+        LOG_TRACE ("add %s\n", name);
     }
 
   if (is_entity)
@@ -9881,7 +9881,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 obj = &dwg->object[0];
                 _obj = obj->tio.object->tio.APPID;
                 LOG_TRACE ("Reuse existing BLOCK_HEADER.*Model_Space %X [0]\n",
-                           pair->value.u)
+                           pair->value.u);
               }
             // special-case VIEWPORT -> VX.
             if (strEQc (name, "VIEWPORT") && dwg->header.version < R_2004
@@ -9992,7 +9992,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   obj_hdls = array_push (obj_hdls, "layer", pair->value.s.ptr,
                                          obj->tio.object->objid);
                   LOG_TRACE ("%s.layer: name %s -> H later\n", obj->name,
-                             pair->value.s.ptr)
+                             pair->value.s.ptr);
                 }
               else
                 {
@@ -10215,7 +10215,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 {
                   dxf_free_pair (pair);
                   pair = dxf_read_pair (dat);
-                  LOG_TRACE ("add_ASSOCNETWORK\n")
+                  LOG_TRACE ("add_ASSOCNETWORK\n");
                   pair = add_ASSOCNETWORK (obj, dat, pair); // NULL for success
                   if (!pair)
                     goto next_pair;
@@ -10227,7 +10227,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     if (strEQc (subclass, #cppname))                                          \
       {                                                                       \
         dxf_free_pair (pair);                                                 \
-        LOG_TRACE ("add_" #addmethod "\n")                                    \
+        LOG_TRACE ("add_" #addmethod "\n");                                   \
         pair = add_##addmethod (obj, dat); /* NULL for success */             \
         if (!pair)                                                            \
           goto next_pair;                                                     \
@@ -10252,7 +10252,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     else if (strEQc (subclass, #SUBCLASS))                                    \
     {                                                                         \
       dxf_free_pair (pair);                                                   \
-      LOG_TRACE ("add_" #SUBCLASS "\n")                                       \
+      LOG_TRACE ("add_" #SUBCLASS "\n");                                      \
       pair = add_##SUBCLASS (obj, dat);                                       \
       if (!pair) /* NULL for success */                                       \
         goto next_pair;                                                       \
@@ -10294,7 +10294,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           else if (pair->value.s.ptr && strEQc (name, "XRECORD"))
             pair = add_xdata (dat, obj, pair);
           else
-            LOG_WARN ("Unknown DXF code 102 %s in %s", pair->value.s.ptr, name)
+            LOG_WARN ("Unknown DXF code 102 %s in %s", pair->value.s.ptr,
+                      name);
           break;
         case 331:
           if (ctrl_id && in_blkrefs) // BLKREFS TODO
@@ -11200,7 +11201,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else if (ucsicon == 2)
                 ucsicon = 1;
               o->UCSICON = ucsicon;
-              LOG_TRACE ("VPORT.UCSICON = %d [BB 74]\n", o->UCSICON)
+              LOG_TRACE ("VPORT.UCSICON = %d [BB 74]\n", o->UCSICON);
               goto next_pair;
             }
           else if (pair->code == 65 && obj->fixedtype == DWG_TYPE_VPORT)
@@ -11209,10 +11210,10 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               o->UCSVP = pair->value.i;
               o->UCSFOLLOW = o->VIEWMODE & 4 ? 1 : 0;
               o->VIEWMODE |= o->UCSVP;
-              LOG_TRACE ("VPORT.UCSVP = %d [B 65]\n", o->UCSVP)
-              LOG_TRACE ("VPORT.UCSFOLLOW => %d [B 0] (calc)\n", o->UCSFOLLOW)
+              LOG_TRACE ("VPORT.UCSVP = %d [B 65]\n", o->UCSVP);
+              LOG_TRACE ("VPORT.UCSFOLLOW => %d [B 0] (calc)\n", o->UCSFOLLOW);
               LOG_TRACE ("VPORT.VIEWMODE => %d [4BITS 71] (calc)\n",
-                         o->VIEWMODE)
+                         o->VIEWMODE);
               goto next_pair;
             }
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_LWPOLYLINE)
@@ -11778,7 +11779,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               for (f = &fields[0]; f->name; f++)
                 {
                   LOG_INSANE ("-%s.%s [%d %s] vs %d\n", obj->name, f->name,
-                              f->dxf, f->type, pair->code)
+                              f->dxf, f->type, pair->code);
                   // VECTORs. need to be malloced, and treated specially
                   if (pair->code != 3 && f->is_malloc && !f->is_string
                       && strNE (f->name, "parent")) // parent set in NEW_OBJECT
@@ -11948,7 +11949,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           else if (j > size)
                             LOG_ERROR ("%s.%s overflow %d > %ld", name,
-                                       num_f->name, j, size)
+                                       num_f->name, j, size);
                         }
                       else if (f->dxf == pair->code)
                         {
@@ -12512,7 +12513,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 {
                   LOG_INSANE ("-%s.%s [%d %s] vs %d\n",
                               is_entity ? "ENTITY" : "OBJECT", f->name, f->dxf,
-                              f->type, pair->code)
+                              f->type, pair->code);
                   if ((pair->code == 62 || pair->code == 420
                        || pair->code == 430 || pair->code == 440)
                       && (f->size > 8
@@ -12581,13 +12582,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                                                &handle, 0);
                                   LOG_TRACE ("COMMON.%s = %X [H %d]\n",
                                              f->name, pair->value.u,
-                                             pair->code)
+                                             pair->code);
                                 }
                               else
                                 {
                                   LOG_WARN ("TODO resolve common handle "
                                             "name %s %s",
-                                            f->name, pair->value.s.ptr)
+                                            f->name, pair->value.s.ptr);
                                 }
                             }
                           else
@@ -12595,10 +12596,10 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                               if (pair->code > 300)
                                 LOG_TRACE (
                                     "COMMON.%s = " FORMAT_HV " [H %d]\n",
-                                    f->name, pair->value.rll, pair->code)
+                                    f->name, pair->value.rll, pair->code);
                               else
                                 LOG_TRACE ("COMMON.%s = %s [H %d]\n", f->name,
-                                           pair->value.s.ptr, pair->code)
+                                           pair->value.s.ptr, pair->code);
                               dwg_dynapi_common_set_value (_obj, f->name,
                                                            &handle, 0);
                             }
@@ -12663,7 +12664,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           // This would corrupt the previous preview chain,
                           // don't append
                           LOG_ERROR ("Skip duplicate/interrupted %s.preview",
-                                     obj->name)
+                                     obj->name);
                           goto next_pair;
                         }
                       else
@@ -12680,7 +12681,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 {
                                   LOG_ERROR ("Skip duplicate %s.%s [%s %d]",
                                              obj->name, f->name, f->type,
-                                             pair->code)
+                                             pair->code);
                                   goto next_pair;
                                 }
                             }
@@ -12699,7 +12700,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             {
                               LOG_TRACE ("COMMON.%s = \"%s\" [%s %d]\n",
                                          f->name, pair->value.s.ptr, f->type,
-                                         pair->code)
+                                         pair->code);
                             }
                           else
                             {
@@ -12711,17 +12712,17 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 }
                               if (strchr (f->type, 'D'))
                                 LOG_TRACE ("COMMON.%s = %f [%s %d]\n", f->name,
-                                           pair->value.d, f->type, pair->code)
+                                           pair->value.d, f->type, pair->code);
                               else
                                 LOG_TRACE ("COMMON.%s = %ld [%s %d]\n",
                                            f->name, pair->value.l, f->type,
-                                           pair->code)
+                                           pair->code);
                             }
                           goto next_pair; // found, early exit
                         }
                     }
                 }
-              LOG_INSANE ("----\n")
+              LOG_INSANE ("----\n");
               // still needed? already handled above
               // not in dynapi: 92 as 310 size prefix for PROXY vector preview
               // FIXME 92 is just for pre-r2010 entities. r2010+ is 160
@@ -12809,7 +12810,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                        && ((obj->fixedtype == DWG_TYPE_REGION)
                            || (obj->fixedtype == DWG_TYPE_BODY)
                            || (obj->fixedtype == DWG_TYPE__3DSOLID)))
-                LOG_TRACE ("Unknown DXF code %d for %s\n", pair->code, name)
+                LOG_TRACE ("Unknown DXF code %d for %s\n", pair->code, name);
               else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY
                        && pair->code == 92)
                 {
@@ -13050,7 +13051,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
   return pair;
 
 invalid_dxf:
-  LOG_ERROR ("Invalid DXF code %d for %s", pair->code, name)
+  LOG_ERROR ("Invalid DXF code %d for %s", pair->code, name);
   dxf_free_pair (pair);
   return NULL;
 }
@@ -13846,15 +13847,15 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
                 hdl = dwg_add_handleref (dwg, 5, hdl->absolute_ref, NULL);
               dwg_dynapi_header_set_value (dwg, field, &hdl, 1);
               LOG_TRACE ("HEADER.%s %s => " FORMAT_REF " [H %d]\n", field,
-                         p.value.s.ptr, ARGS_REF (hdl), (int)p.code)
+                         p.value.s.ptr, ARGS_REF (hdl), (int)p.code);
             }
           else
             LOG_WARN ("Unknown HEADER.%s %s dxf:%d", field, p.value.s.ptr,
-                      (int)p.code)
+                      (int)p.code);
         }
       else
         LOG_WARN ("Unknown HEADER.%s %s dxf:%d", field, p.value.s.ptr,
-                  (int)p.code)
+                  (int)p.code);
     }
 }
 
@@ -13954,7 +13955,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
       // background, named_ucs, base_ucs, shadeplot, sun, livesection (VIEW,
       // VIEWPORT)
       else
-        LOG_WARN ("missing code for %s", field)
+        LOG_WARN ("missing code for %s", field);
       if (hdl)
         {
           Dwg_Object_APPID *_obj = obj->tio.object->tio.APPID;
@@ -13968,7 +13969,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
                      p.value.s.ptr, ARGS_REF (hdl), (int)p.code);
         }
       else
-        LOG_WARN ("Unknown %s.%s %s", obj->name, field, p.value.s.ptr)
+        LOG_WARN ("Unknown %s.%s %s", obj->name, field, p.value.s.ptr);
     }
 }
 
@@ -13978,12 +13979,12 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
         vars->DICTIONARY_##name = dwg_find_dictionary (dwg, #name);           \
         if (vars->DICTIONARY_##name)                                          \
           LOG_TRACE ("HEADER.DICTIONARY_" #name " = " FORMAT_REF "\n",        \
-                     ARGS_REF (vars->DICTIONARY_##name))                      \
+                     ARGS_REF (vars->DICTIONARY_##name));                     \
         else if ((vars->DICTIONARY_##name                                     \
                   = dwg_find_dictionary (dwg, "ACAD_" #name)))                \
           LOG_TRACE ("HEADER.DICTIONARY_" #name " = " FORMAT_REF "\n",        \
                      ARGS_REF (vars->DICTIONARY_##name));                     \
-      } /* set owner to NOD 4.1.C */                                              \
+      } /* set owner to NOD 4.1.C */                                          \
     obj = dwg_ref_object (dwg, vars->DICTIONARY_##name);                      \
     if (obj && obj->tio.object && obj->fixedtype == DWG_TYPE_DICTIONARY)      \
       {                                                                       \
@@ -14080,7 +14081,7 @@ resolve_postponed_eed_refs (Dwg_Data *restrict dwg)
               dwg->object[objid].name, objid, j, name, ARGS_H (eed[j].handle));
         }
       else
-        LOG_WARN ("Unknown eed[].handle for APPID.%s", name)
+        LOG_WARN ("Unknown eed[].handle for APPID.%s", name);
     }
 }
 

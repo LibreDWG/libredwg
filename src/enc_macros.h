@@ -21,18 +21,18 @@
 #undef LOG_POS
 #define LOG_POS                                                               \
   LOG_INSANE (" @%" PRIuSIZE ".%u",                                           \
-              obj ? dat->byte - obj->address : dat->byte, dat->bit)           \
-  LOG_TRACE ("\n")
+              obj ? dat->byte - obj->address : dat->byte, dat->bit);          \
+  LOG_TRACE ("\n");
 #define LOG_RPOS                                                              \
-  LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, dat->bit)                      \
-  LOG_TRACE ("\n")
+  LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, dat->bit);                     \
+  LOG_TRACE ("\n");
 #define LOG_HPOS                                                              \
   LOG_INSANE (" @%" PRIuSIZE ".%u",                                           \
               obj && hdl_dat->byte > obj->address                             \
                   ? hdl_dat->byte - obj->address                              \
                   : hdl_dat->byte,                                            \
-              hdl_dat->bit)                                                   \
-  LOG_TRACE ("\n")
+              hdl_dat->bit);                                                  \
+  LOG_TRACE ("\n");
 
 #define VALUE(value, type, dxf)                                               \
   {                                                                           \
@@ -60,11 +60,11 @@
     FIELD_G_TRACE (nam, type, dxf);                                           \
   }
 #define FIELD_TRACE(nam, type)                                                \
-  LOG_TRACE (#nam ": " FORMAT_##type, _obj->nam)                              \
+  LOG_TRACE (#nam ": " FORMAT_##type, _obj->nam);                             \
   LOG_POS
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
   LOG_TRACE (#nam ": " FORMAT_##type " [" #type " " #dxfgroup "]",            \
-             (BITCODE_##type)_obj->nam)                                       \
+             (BITCODE_##type)_obj->nam);                                      \
   LOG_POS
 #define FIELD_CAST(nam, type, cast, dxf)                                      \
   {                                                                           \
@@ -220,7 +220,7 @@
     if (dat->version < R_2007)                                                \
       {                                                                       \
         bit_write_T16 (str_dat, _obj->nam);                                   \
-        LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", _obj->nam, dxf)                \
+        LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", _obj->nam, dxf);               \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -233,18 +233,18 @@
     if (_obj->nam)                                                            \
       bit_write_T32 (str_dat, _obj->nam);                                     \
     if (dat->version < R_2007)                                                \
-      LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf)                  \
+      LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);                 \
     else                                                                      \
-      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf)                         \
+      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
   }
 #define FIELD_TU32(nam, dxf)                                                  \
   {                                                                           \
     if (_obj->nam)                                                            \
       bit_write_TU32 (str_dat, _obj->nam);                                    \
     if (dat->version < R_2007)                                                \
-      LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf)                 \
+      LOG_TRACE (#nam ": \"%s\" [TU32 %d]\n", _obj->nam, dxf);                \
     else                                                                      \
-      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf)                         \
+      LOG_TRACE_TU (#nam, (BITCODE_TU)_obj->nam, dxf);                        \
   }
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf);
 
@@ -254,9 +254,9 @@
   {                                                                           \
     BITCODE_BB b1 = _FIELD_DD (nam, _default, dxf);                           \
     if (b1 == 3)                                                              \
-      LOG_TRACE (#nam ": %f [DD %d]", _obj->nam, dxf)                         \
+      LOG_TRACE (#nam ": %f [DD %d]", _obj->nam, dxf);                        \
     else                                                                      \
-      LOG_TRACE (#nam ": %f [DD/%d %d]", _obj->nam, b1, dxf)                  \
+      LOG_TRACE (#nam ": %f [DD/%d %d]", _obj->nam, b1, dxf);                 \
     LOG_POS                                                                   \
   }
 #define FIELD_2DD(nam, def, dxf)                                              \
@@ -264,10 +264,10 @@
     BITCODE_BB b2, b1 = _FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);          \
     b2 = _FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                    \
     if (b1 == 3 && b2 == 3)                                                   \
-      LOG_TRACE (#nam ": (%f, %f) [2DD %d]", _obj->nam.x, _obj->nam.y, dxf)   \
+      LOG_TRACE (#nam ": (%f, %f) [2DD %d]", _obj->nam.x, _obj->nam.y, dxf);  \
     else                                                                      \
       LOG_TRACE (#nam ": (%f, %f) [2DD/%d%d %d]", _obj->nam.x, _obj->nam.y,   \
-                 b1, b2, dxf)                                                 \
+                 b1, b2, dxf);                                                \
     LOG_POS                                                                   \
   }
 #define FIELD_3DD(nam, def, dxf)                                              \
@@ -276,21 +276,21 @@
     _FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                         \
     _FIELD_DD (nam.z, FIELD_VALUE (def.z), dxf + 20);                         \
     LOG_TRACE (#nam ": (%f, %f, %f) [3DD %d]", _obj->nam.x, _obj->nam.y,      \
-               _obj->nam.z, dxf)                                              \
+               _obj->nam.z, dxf);                                             \
     LOG_POS                                                                   \
   }
 #define FIELD_2RD(nam, dxf)                                                   \
   {                                                                           \
     bit_write_RD (dat, _obj->nam.x);                                          \
     bit_write_RD (dat, _obj->nam.y);                                          \
-    LOG_TRACE (#nam ": (%f, %f) [2RD %d]", _obj->nam.x, _obj->nam.y, dxf)     \
+    LOG_TRACE (#nam ": (%f, %f) [2RD %d]", _obj->nam.x, _obj->nam.y, dxf);    \
     LOG_POS                                                                   \
   }
 #define FIELD_2BD(nam, dxf)                                                   \
   {                                                                           \
     bit_write_BD (dat, _obj->nam.x);                                          \
     bit_write_BD (dat, _obj->nam.y);                                          \
-    LOG_TRACE (#nam ": (%f, %f) [2BD %d]", _obj->nam.x, _obj->nam.y, dxf)     \
+    LOG_TRACE (#nam ": (%f, %f) [2BD %d]", _obj->nam.x, _obj->nam.y, dxf);    \
     LOG_POS                                                                   \
   }
 #define FIELD_2BD_1(nam, dxf) FIELD_2BD (nam, dxf)
@@ -300,7 +300,7 @@
     bit_write_RD (dat, _obj->nam.y);                                          \
     bit_write_RD (dat, _obj->nam.z);                                          \
     LOG_TRACE (#nam ": (%f, %f, %f) [3RD %d]", _obj->nam.x, _obj->nam.y,      \
-               _obj->nam.z, dxf)                                              \
+               _obj->nam.z, dxf);                                             \
     LOG_POS                                                                   \
   }
 #define FIELD_3BD(nam, dxf)                                                   \
@@ -309,7 +309,7 @@
     bit_write_BD (dat, _obj->nam.y);                                          \
     bit_write_BD (dat, _obj->nam.z);                                          \
     LOG_TRACE (#nam ": (%f, %f, %f) [3BD %d]", _obj->nam.x, _obj->nam.y,      \
-               _obj->nam.z, dxf)                                              \
+               _obj->nam.z, dxf);                                             \
     LOG_POS                                                                   \
   }
 #define FIELD_3BD_1(nam, dxf) FIELD_3BD (nam, dxf)
@@ -355,7 +355,7 @@
           LOG_TRACE (#color ".bookname: %s [CMC.T]\n",                        \
                      _obj->color.book_name);                                  \
         LOG_INSANE (" @%" PRIuSIZE ".%u\n",                                   \
-                    obj ? dat->byte - obj->address : dat->byte, dat->bit)     \
+                    obj ? dat->byte - obj->address : dat->byte, dat->bit);    \
       }                                                                       \
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
@@ -363,7 +363,7 @@
     bit_write_CMC (dat, str_dat, &_obj->o.color);                             \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf);  \
     LOG_INSANE (" @%" PRIuSIZE ".%u\n",                                       \
-                obj ? dat->byte - obj->address : dat->byte, dat->bit)         \
+                obj ? dat->byte - obj->address : dat->byte, dat->bit);        \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
@@ -376,7 +376,7 @@
           LOG_TRACE (#color ".bookname: %s [CMC.T]\n",                        \
                      _obj->o.color.book_name);                                \
         LOG_INSANE (" @%" PRIuSIZE ".%u\n",                                   \
-                    obj ? dat->byte - obj->address : dat->byte, dat->bit)     \
+                    obj ? dat->byte - obj->address : dat->byte, dat->bit);    \
       }                                                                       \
   }
 
@@ -419,10 +419,10 @@
           LOG_INSANE ("\n");                                                  \
         }                                                                     \
     }
-#define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len)
-#define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len)
-#define LOG_TRACE_TFv(var, len) LOG_TFv (TRACE, var, len)
-#define LOG_INSANE_TFv(var, len) LOG_TFv (INSANE, var, len)
+#define LOG_TRACE_TF(var, len) LOG_TF (TRACE, var, len);
+#define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len);
+#define LOG_TRACE_TFv(var, len) LOG_TFv (TRACE, var, len);
+#define LOG_INSANE_TFv(var, len) LOG_TFv (INSANE, var, len);
 
 #define FIELD_BE(nam, dxf)                                                    \
   {                                                                           \
@@ -430,14 +430,10 @@
                   FIELD_VALUE (nam.z));                                       \
     if (dat->version >= R_2000 && FIELD_VALUE (nam.x) == 0.0                  \
         && FIELD_VALUE (nam.y) == 0.0 && FIELD_VALUE (nam.z) == 1.0)          \
-      {                                                                       \
-        LOG_TRACE (#nam ": default 0,0,1 [B %d]", dxf)                        \
-      }                                                                       \
+      LOG_TRACE (#nam ": default 0,0,1 [B %d]", dxf);                         \
     else                                                                      \
-      {                                                                       \
-        LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]", _obj->nam.x, _obj->nam.y,   \
-                   _obj->nam.z, dxf)                                          \
-      }                                                                       \
+      LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]", _obj->nam.x, _obj->nam.y,     \
+                   _obj->nam.z, dxf);                                         \
     LOG_POS                                                                   \
   }
 
@@ -548,7 +544,7 @@
         {                                                                     \
           bit_write_##type (dat, _obj->nam[vcount]);                          \
           LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [%s %d]", (long)vcount,   \
-                     _obj->nam[vcount], #type, dxf)                           \
+                     _obj->nam[vcount], #type, dxf);                          \
           LOG_POS                                                             \
         }                                                                     \
     }
@@ -563,13 +559,13 @@
             {                                                                 \
               bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);              \
               LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]", (int)vcount,            \
-                         _obj->nam[vcount], dxf)                              \
+                         _obj->nam[vcount], dxf);                             \
               LOG_POS                                                         \
             }                                                                 \
           else                                                                \
             {                                                                 \
               bit_write_##type (dat, _obj->nam[vcount]);                      \
-              LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf)                     \
+              LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf);                    \
             }                                                                 \
         }                                                                     \
       RESET_VER                                                               \
@@ -586,13 +582,13 @@
               bit_write_BS (dat, _len & 0xFFFFFFFF);                          \
               bit_write_TF (dat, (BITCODE_TF)_obj->nam[vcount], _len);        \
               LOG_TRACE (#nam "[%d]: \"%s\" [TV1 %d]", (int)vcount,           \
-                         _obj->nam[vcount], dxf)                              \
+                         _obj->nam[vcount], dxf);                             \
               LOG_POS                                                         \
             }                                                                 \
           else                                                                \
             {                                                                 \
               bit_write_##type (dat, _obj->nam[vcount]);                      \
-              LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf)                     \
+              LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf);                    \
             }                                                                 \
         }                                                                     \
       RESET_VER                                                               \
@@ -632,7 +628,7 @@
                          typesize);                                           \
               break;                                                          \
             }                                                                 \
-          LOG_TRACE (#nam "[%u]: %d\n", vcount, _obj->nam[vcount])            \
+          LOG_TRACE (#nam "[%u]: %d\n", vcount, _obj->nam[vcount]);           \
         }                                                                     \
     }
 
@@ -652,12 +648,12 @@
       else if (size == 8)                                                     \
         bit_write_RLL (dat, (hdlptr)->handleref.value);                       \
       else                                                                    \
-        LOG_ERROR (#nam ": Invalid size %d %hd [H %d]", size, idx, dxf)       \
+        LOG_ERROR (#nam ": Invalid size %d %hd [H %d]", size, idx, dxf);      \
       LOG_TRACE (#nam ": %hd [%s %d]", idx,                                   \
                  size == 1   ? "RC"                                           \
                  : size == 2 ? "RSd"                                          \
                              : "RLL",                                         \
-                 dxf)                                                         \
+                 dxf);                                                        \
       LOG_POS                                                                 \
     }                                                                         \
     IF_ENCODE_SINCE_R13                                                       \
@@ -668,7 +664,7 @@
           Dwg_Handle null_handle = { 0, 0, 0UL, 0 };                          \
           null_handle.code = handle_code;                                     \
           bit_write_H (hdl_dat, &null_handle);                                \
-          LOG_TRACE (#nam ": (%d.0.0) abs:0 [H %d]", handle_code, dxf)        \
+          LOG_TRACE (#nam ": (%d.0.0) abs:0 [H %d]", handle_code, dxf);       \
           LOG_HPOS                                                            \
         }                                                                     \
       else                                                                    \
@@ -686,7 +682,7 @@
               downconvert_relative_handle (hdlptr, obj);                      \
             }*/                                                               \
           bit_write_H (hdl_dat, &(hdlptr)->handleref);                        \
-          LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (hdlptr), dxf)  \
+          LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (hdlptr), dxf); \
           LOG_HPOS                                                            \
         }                                                                     \
     }                                                                         \
@@ -724,7 +720,7 @@
       {                                                                       \
         bit_write_H (hdl_dat, NULL);                                          \
         LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, handle_code,    \
-                   dxf)                                                       \
+                   dxf);                                                      \
         LOG_HPOS                                                              \
       }                                                                       \
     else                                                                      \
@@ -738,7 +734,7 @@
           }                                                                   \
         bit_write_H (hdl_dat, &_obj->nam->handleref);                         \
         LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]", (int)vcount,          \
-                   ARGS_REF (_obj->nam), dxf)                                 \
+                   ARGS_REF (_obj->nam), dxf);                                \
         LOG_HPOS                                                              \
       }                                                                       \
   }
@@ -762,7 +758,7 @@
       bit_write_RC (dat, 1);                                                  \
     }                                                                         \
   bit_write_RC (dat, 0);                                                      \
-  LOG_TRACE ("num_inserts: %d [RC* 0]", FIELD_VALUE (num_inserts))            \
+  LOG_TRACE ("num_inserts: %d [RC* 0]", FIELD_VALUE (num_inserts));           \
   LOG_POS
 
 #define HANDLE_VECTOR(nam, sizefield, code, dxf)                              \
@@ -813,7 +809,7 @@
 // clang-format off
 #define START_HANDLE_STREAM                                                   \
   LOG_INSANE ("HANDLE_STREAM @%" PRIuSIZE ".%u\n", dat->byte - obj->address,  \
-              dat->bit)                                                       \
+              dat->bit);                                                      \
   if (1 || /* has floats */                                                   \
       !obj->bitsize || /* DD sizes can vary, but let unknown_bits asis */     \
       has_entity_DD (obj) || /* strings may be zero-terminated or not */      \

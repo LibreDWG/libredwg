@@ -1136,16 +1136,16 @@ test_code (const char *dir, const char *filename, int cov)
       || (!numpassed () && !numfailed ()))
     {
       if (cov)
-        LOG_INFO ("Testing with %s:\n", path)
+        LOG_INFO ("Testing with %s:\n", path);
     }
   else if (cov)
     {
-      LOG_INFO ("Skipping %s:\n", path)
+      LOG_INFO ("Skipping %s:\n", path);
       return 0;
     }
   if (stat (path, &attrib))
     {
-      LOG_INFO ("file not found:\n")
+      LOG_INFO ("file not found:\n");
       return 0;
     }
 #endif

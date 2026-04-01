@@ -148,7 +148,7 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     obj->dxfname = dxfname;                                                   \
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       (void)dwg_encode_get_class (obj->parent, obj);                          \
-    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)               \
+    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index);              \
     _obj = calloc (1, sizeof (Dwg_Object_##token));                           \
     obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                  \
     obj->tio.object->tio.token->parent = obj->tio.object;                     \
@@ -165,8 +165,8 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     obj->dxfname = dxfname;                                                   \
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       (void)dwg_encode_get_class (obj->parent, obj);                          \
-    LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)               \
-    GCC14_DIAG_IGNORE (-Wanalyzer-allocation-size)                          \
+    LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index);              \
+    GCC14_DIAG_IGNORE (-Wanalyzer-allocation-size)                            \
     _obj = calloc (1, sizeof (Dwg_Entity_##token));                           \
     GCC14_DIAG_RESTORE                                                        \
     obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                  \
@@ -181,7 +181,7 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     obj->dxfname = dxfname;                                                   \
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       (void)dwg_encode_get_class (obj->parent, obj);                          \
-    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)               \
+    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index);              \
     _obj = reinterpret_cast<Dwg_Object_APPID *> (                             \
         calloc (1, sizeof (Dwg_Object_##token)));                             \
     obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                  \
@@ -194,7 +194,7 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     obj->dxfname = dxfname;                                                   \
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       (void)dwg_encode_get_class (obj->parent, obj);                          \
-    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)               \
+    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index);              \
     _obj = reinterpret_cast<Dwg_Object_##tgt *> (                             \
         calloc (1, sizeof (Dwg_Object_##token)));                             \
     obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                  \
@@ -210,7 +210,7 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     obj->dxfname = dxfname;                                                   \
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       (void)dwg_encode_get_class (obj->parent, obj);                          \
-    LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)               \
+    LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index);              \
     _obj = reinterpret_cast<Dwg_Object_APPID *> (                             \
         (char *)calloc (1, sizeof (Dwg_Entity_##token)));                     \
     obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                  \

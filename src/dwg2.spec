@@ -537,7 +537,7 @@ DWG_ENTITY (TABLE)
               break;
             default:
               LOG_ERROR ("Invalid scale_flag in TABLE entity %d\n",
-                        (int)FIELD_VALUE (scale_flag))
+                         (int)FIELD_VALUE (scale_flag));
               _obj->scale_flag = 0;
               DEBUG_HERE_OBJ
               return DWG_ERR_INVALIDTYPE;
@@ -905,7 +905,7 @@ DWG_ENTITY (TABLE)
   SINCE (R_2010b)
   {
     //... p237
-    LOG_WARN ("TODO TABLE r2010+")
+    LOG_WARN ("TODO TABLE r2010+");
 
     FIELD_BS (unknown_bs, 0); //default 38
     FIELD_3BD (hor_dir, 11);
@@ -1005,7 +1005,7 @@ DWG_OBJECT (TABLESTYLE)
         FIELD_BL0 (ovr.type, 91);
         FIELD_T0 (ovr.name, 300);
         DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
-        LOG_WARN ("TODO TABLESTYLE r2010+ missing fields")
+        LOG_WARN ("TODO TABLESTYLE r2010+ missing fields");
       }
   }
 
@@ -1835,7 +1835,7 @@ DWG_OBJECT_END
         case DWG_VT_INT64:                                                    \
         case DWG_VT_BOOL:                                                     \
         default:                                                              \
-          LOG_ERROR ("Invalid EvalVariant.value.type %d", _obj->value.code)   \
+          LOG_ERROR ("Invalid EvalVariant.value.type %d", _obj->value.code);  \
           break;                                                              \
         }                                                                     \
     else /* dxf */                                                            \
@@ -2724,7 +2724,7 @@ DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
           REPEAT_BLOCK                                                        \
             _obj->gentextures[rcount1].material = _obj;                       \
             SUB_FIELD_T (gentextures[rcount1], genprocname, 300);             \
-            LOG_WARN ("recursive MATERIAL.gentextures")                       \
+            LOG_WARN ("recursive MATERIAL.gentextures");                      \
             CALL_SUBCLASS (_obj->gentextures[rcount1].material, MATERIAL,     \
                            Texture_diffusemap);                               \
             SET_PARENT_OBJ (gentextures[rcount1]);                            \
@@ -2937,8 +2937,8 @@ DWG_OBJECT (ACSH_WEDGE_CLASS)
   //HANDLE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShWedge)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShWedge);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //29
   FIELD_BD (length, 40);
@@ -2951,8 +2951,8 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_SPHERE_CLASS)
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShSpere)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShSpere);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //29
   FIELD_BD (radius, 40);
@@ -2963,8 +2963,8 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_CYLINDER_CLASS)
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShCylinder)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShCylinder);
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
   FIELD_BD (height, 40);
@@ -2978,8 +2978,8 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_CONE_CLASS)
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShCone)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShCone);
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
   /* same as Cylinder */
@@ -2994,8 +2994,8 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_PYRAMID_CLASS)
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShPyramid)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShPyramid);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //29
   FIELD_BD (height, 40);
@@ -3009,7 +3009,7 @@ DWG_OBJECT (ACSH_FILLET_CLASS)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShFillet)
+  SUBCLASS (AcDbShFillet);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //1 or 29
   FIELD_BL (bl92, 92);
@@ -3028,7 +3028,7 @@ DWG_OBJECT (ACSH_CHAMFER_CLASS)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShChamfer)
+  SUBCLASS (AcDbShChamfer);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //1
   FIELD_BL (bl92, 92);
@@ -3043,8 +3043,8 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_TORUS_CLASS)
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShTorus)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShTorus);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //1
   FIELD_BD (major_radius, 40);
@@ -3056,8 +3056,8 @@ DWG_OBJECT (ACSH_BREP_CLASS)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShBrep)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShBrep);
   FIELD_BL (major, 90); // also in DWG?
   FIELD_BL (minor, 91);
   ACTION_3DSOLID;
@@ -3067,7 +3067,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_BOOLEAN_CLASS)
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShBoolean)
+  SUBCLASS (AcDbShBoolean);
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
   FIELD_RCd (operation, 280);
@@ -3077,7 +3077,7 @@ DWG_OBJECT (ACSH_BOOLEAN_CLASS)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_HISTORY_CLASS)
-  SUBCLASS (AcDbShHistory)
+  SUBCLASS (AcDbShHistory);
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
   FIELD_HANDLE (owner, 2, 360);
@@ -3089,7 +3089,7 @@ DWG_OBJECT_END
 
 /* TODO replace by CALL_PRIVATE (ASSOCACTION) */
 #define AcDbAssocAction_fields                                                \
-  SUBCLASS (AcDbAssocAction)                                                  \
+  SUBCLASS (AcDbAssocAction);                                                 \
   /* until r2010: 1, 2013+: 2 */                                              \
   FIELD_BS (class_version, 90);                                               \
   /* 0 WellDefined, 1 UnderConstrained, 2 OverConstrained,                    \
@@ -3120,7 +3120,7 @@ DWG_OBJECT_END
       FIELD_BL (num_values, 90);                                              \
       REPEAT (num_values, values, Dwg_VALUEPARAM)                             \
       REPEAT_BLOCK                                                            \
-          AcDbValueParam_fields (values[rcount1])                             \
+        AcDbValueParam_fields (values[rcount1]);                              \
       END_REPEAT_BLOCK                                                        \
       END_REPEAT (values);                                                    \
     }
@@ -3148,7 +3148,7 @@ DWG_OBJECT_END
   FIELD_B (dependent_on_compound_object, 290)
 
 #define AcDbAssocPersSubentId_fields            \
-  SUBCLASS (AcDbAssocPersSubentId)              \
+  SUBCLASS (AcDbAssocPersSubentId);             \
   FIELD_T (classname, 1);                       \
   FIELD_B (dependent_on_compound_object, 290)
 
@@ -3175,7 +3175,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCGEOMDEPENDENCY)
   AcDbAssocDependency_fields;
-  SUBCLASS (AcDbAssocGeomDependency)
+  SUBCLASS (AcDbAssocGeomDependency);
   FIELD_BS (class_version, 90); // always 0
   FIELD_B (enabled, 290);       // always 1
   AcDbAssocPersSubentId_fields;
@@ -3187,7 +3187,7 @@ DWG_OBJECT_END
 // Object1 --ReadDep--> Action1 --WriteDep1--> Object2 --ReadDep--> Action2 ...
 DWG_OBJECT (ASSOCNETWORK)
   AcDbAssocAction_fields;
-  SUBCLASS (AcDbAssocNetwork)
+  SUBCLASS (AcDbAssocNetwork);
   FIELD_BS (network_version, 90);
   FIELD_BL (network_action_index, 90);
   FIELD_BL (num_actions, 90);
@@ -3215,7 +3215,7 @@ DWG_OBJECT_END
     FIELD_BL (be_major, 98);                    \
     FIELD_BL (be_minor, 99);                    \
   } else {                                      \
-    PRE (R_2007a) {                              \
+    PRE (R_2007a) {                             \
       VALUE_BL (25, 98);                        \
       VALUE_BL (104, 99);                       \
     } LATER_VERSIONS {                          \
@@ -3227,7 +3227,7 @@ DWG_OBJECT_END
 
 #define AcDbBlockGrip_fields                    \
   AcDbBlockElement_fields;                      \
-  SUBCLASS (AcDbBlockGrip)                      \
+  SUBCLASS (AcDbBlockGrip);                     \
   FIELD_BL (bg_bl91, 91);                       \
   FIELD_BL (bg_bl92, 92);                       \
   FIELD_3BD (bg_location, 1010);                \
@@ -3240,24 +3240,24 @@ DWG_OBJECT_END
   FIELD_B (show_properties, 280);               \
   FIELD_B (chain_actions, 281)
 
-#define AcDbBlockAction_fields                                                \
-  AcDbBlockElement_fields;                                                    \
-  SUBCLASS (AcDbBlockAction)                                                  \
-  DXF                                                                         \
-  {                                                                           \
-    FIELD_BL (num_actions, 70);                                               \
-    FIELD_VECTOR (actions, BL, num_actions, 91);                              \
-    FIELD_BL (num_deps, 71);                                                  \
-    HANDLE_VECTOR (deps, num_deps, 4, 330);                                   \
-    FIELD_3BD (display_location, 1010);                                       \
-  }                                                                           \
-  else                                                                        \
-  {                                                                           \
-    FIELD_3BD (display_location, 0);                                          \
-    FIELD_BL (num_deps, 71);                                                  \
-    HANDLE_VECTOR (deps, num_deps, 4, 330);                                   \
-    FIELD_BL (num_actions, 70);                                               \
-    FIELD_VECTOR (actions, BL, num_actions, 91);                              \
+#define AcDbBlockAction_fields                                 \
+  AcDbBlockElement_fields;                                     \
+  SUBCLASS (AcDbBlockAction);                                  \
+  DXF                                                          \
+  {                                                            \
+    FIELD_BL (num_actions, 70);                                \
+    FIELD_VECTOR (actions, BL, num_actions, 91);               \
+    FIELD_BL (num_deps, 71);                                   \
+    HANDLE_VECTOR (deps, num_deps, 4, 330);                    \
+    FIELD_3BD (display_location, 1010);                        \
+  }                                                            \
+  else                                                         \
+  {                                                            \
+    FIELD_3BD (display_location, 0);                           \
+    FIELD_BL (num_deps, 71);                                   \
+    HANDLE_VECTOR (deps, num_deps, 4, 330);                    \
+    FIELD_BL (num_actions, 70);                                \
+    FIELD_VECTOR (actions, BL, num_actions, 91);               \
   }
 
 #define AcDbBlockGripExpr_fields                                              \
@@ -3291,15 +3291,15 @@ DWG_OBJECT_END
 #define AcDbBlockParamValueSet_fields(var, i_code, d_code, s_code, t_code)    \
   DXF { SUB_FIELD_T (var, desc, t_code); }                                    \
   JSON { SUB_FIELD_T (var, desc, t_code); }                                   \
-  SUB_FIELD_BL (var, flags, i_code)                                           \
-  SUB_FIELD_BD (var, minimum, d_code)                                         \
-  SUB_FIELD_BD (var, maximum, d_code + 1)                                     \
-  SUB_FIELD_BD (var, increment, d_code + 2)                                   \
-  SUB_FIELD_BS (var, num_valuelist, s_code)                                   \
+  SUB_FIELD_BL (var, flags, i_code);                                          \
+  SUB_FIELD_BD (var, minimum, d_code);                                        \
+  SUB_FIELD_BD (var, maximum, d_code + 1);                                    \
+  SUB_FIELD_BD (var, increment, d_code + 2);                                  \
+  SUB_FIELD_BS (var, num_valuelist, s_code);                                  \
   SUB_FIELD_VECTOR (var, valuelist, BD, num_valuelist, d_code + 3)
 
 #define BlockParam_PropInfo(_prop, num_code, d_code, t_code)         \
-  SUB_FIELD_BL (_prop, num_connections, num_code)                    \
+  SUB_FIELD_BL (_prop, num_connections, num_code);                   \
   REPEAT2 (_prop.num_connections, _prop.connections, Dwg_BLOCKPARAMETER_connection) \
   REPEAT_BLOCK                                                       \
       SUB_FIELD_BL (_prop.connections[rcount2], code, d_code);       \
@@ -3340,7 +3340,7 @@ DWG_OBJECT_END
 
 #define AcDbBlockActionWithBasePt_fields          \
   AcDbBlockAction_fields;                         \
-  SUBCLASS (AcDbBlockActionWithBasePt)            \
+  SUBCLASS (AcDbBlockActionWithBasePt);           \
   FIELD_3BD (offset, 0);                          \
   BlockAction_ConnectionPts (conn_pts, 0, 2, 92, 301); \
   DXF { FIELD_3BD (offset, 1011); }               \
@@ -3363,7 +3363,7 @@ DWG_OBJECT_END
 
 #define AcDbBlockLinearConstraintParameter_fields     \
   AcDbBlockConstraintParameter_fields;                \
-  SUBCLASS (AcDbBlockLinearConstraintParameter)       \
+  SUBCLASS (AcDbBlockLinearConstraintParameter);      \
   FIELD_T (expr_name, 305);                           \
   FIELD_T (expr_description, 306);                    \
   FIELD_BD (value, 140);                              \
@@ -3372,7 +3372,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKVISIBILITYGRIP)
   AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockVisibilityGrip)
+  SUBCLASS (AcDbBlockVisibilityGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -3384,21 +3384,21 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNMENTGRIP)
   AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockAlignmentGrip)
+  SUBCLASS (AcDbBlockAlignmentGrip);
   FIELD_3BD_1 (orientation, 140);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNMENTPARAMETER)
   AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockAlignmentParameter)
+  SUBCLASS (AcDbBlockAlignmentParameter);
   FIELD_B (align_perpendicular, 280)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARPARAMETER)
   AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockLinearParameter)
+  SUBCLASS (AcDbBlockLinearParameter);
   FIELD_T (distance_name, 305);
   FIELD_T (distance_desc, 306);
   FIELD_BD (distance, 140);
@@ -3408,7 +3408,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKBASEPOINTPARAMETER)
   AcDbBlock1PtParameter_fields;
-  SUBCLASS (AcDbBlockBasepointParameter)
+  SUBCLASS (AcDbBlockBasepointParameter);
   FIELD_3BD (pt, 1011);
   FIELD_3BD (base_pt, 1012)
   START_OBJECT_HANDLE_STREAM;
@@ -3416,7 +3416,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPPARAMETER)
   AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockFlipParameter)
+  SUBCLASS (AcDbBlockFlipParameter);
   FIELD_T (flip_label, 305);
   FIELD_T (flip_label_desc, 306);
   FIELD_T (base_state_label, 307);
@@ -3429,7 +3429,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPGRIP)
   AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockFlipGrip)
+  SUBCLASS (AcDbBlockFlipGrip);
   FIELD_BL (combined_state, 0);
   FIELD_3BD_1 (orientation, 140);
   DXF { FIELD_BL (combined_state, 93); }
@@ -3440,20 +3440,20 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARGRIP)
   AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockLinearGrip)
+  SUBCLASS (AcDbBlockLinearGrip);
   FIELD_3BD_1 (orientation, 140);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPGRIP)
   AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockLookupGrip)
+  SUBCLASS (AcDbBlockLookupGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKXYPARAMETER)
   AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockXYParameter)
+  SUBCLASS (AcDbBlockXYParameter);
   FIELD_T (x_label, 305);
   FIELD_T (x_label_desc, 306);
   FIELD_T (y_label, 307);
@@ -3472,7 +3472,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKMOVEACTION)
   AcDbBlockAction_fields;
-  SUBCLASS (AcDbBlockMoveAction)
+  SUBCLASS (AcDbBlockMoveAction);
   BlockAction_ConnectionPt (conn_pts[0], 92, 301);
   BlockAction_ConnectionPt (conn_pts[1], 93, 302);
   AcDbBlockAction_doubles_fields;
@@ -3481,14 +3481,14 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPACTION)
   AcDbBlockAction_fields;
-  SUBCLASS (AcDbBlockFlipAction)
+  SUBCLASS (AcDbBlockFlipAction);
   BlockAction_ConnectionPts (conn_pts, 0, 4, 92, 301);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATIONPARAMETER)
   AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockRotationParameter)
+  SUBCLASS (AcDbBlockRotationParameter);
   FIELD_3BD (def_base_angle_pt, 0);
   FIELD_T (angle_name, 305);
   FIELD_T (angle_desc, 306);
@@ -3501,20 +3501,20 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATEACTION)
   AcDbBlockActionWithBasePt_fields;
-  SUBCLASS (AcDbBlockRotationAction)
+  SUBCLASS (AcDbBlockRotationAction);
   BlockAction_ConnectionPts (conn_pts, 2, 1, 94, 303);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATIONGRIP)
   AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockRotationGrip)
+  SUBCLASS (AcDbBlockRotationGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSCALEACTION)
   AcDbBlockActionWithBasePt_fields;
-  SUBCLASS (AcDbBlockScaleAction)
+  SUBCLASS (AcDbBlockScaleAction);
   BlockAction_ConnectionPts (conn_pts, 0, 3, 94, 303);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -3522,7 +3522,7 @@ DWG_OBJECT_END
 // ACAD_ENHANCEDBLOCK?
 DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
   AcDbBlock1PtParameter_fields;
-  SUBCLASS (AcDbBlockVisibilityParameter)
+  SUBCLASS (AcDbBlockVisibilityParameter);
   FIELD_B (is_initialized, 281);
   FIELD_T (blockvisi_name, 301);
   FIELD_T (blockvisi_desc, 302);
@@ -3551,7 +3551,7 @@ DWG_OBJECT_END
 DWG_OBJECT (EVALUATION_GRAPH)
 
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbEvalGraph)
+  SUBCLASS (AcDbEvalGraph);
   FIELD_BLd (first_nodeid, 96);
   FIELD_BLd (first_nodeid_copy, 97);// always same as first_nodeid
   FIELD_BL (num_nodes, 0);
@@ -3601,10 +3601,10 @@ DWG_ENTITY (PLANESURFACE)
   //FIELD_BL (bindata_size, 90);
   //FIELD_TF (bindata, FIELD_VALUE (bindata_size), 1); // in DXF as encrypted ASCII
 
-  SUBCLASS (AcDbSurface)
+  SUBCLASS (AcDbSurface);
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  //SUBCLASS (AcDbPlaneSurface)
+  //SUBCLASS (AcDbPlaneSurface);
   //FIELD_BL (class_version, 90);
   //if (FIELD_VALUE (class_version) > 10)
   //  return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -3622,7 +3622,7 @@ DWG_ENTITY_END
   FIELD_HANDLE (scale, 2, 340)
 
 #define AcDbTextObjectContextData_fields                                \
-  SUBCLASS (AcDbTextObjectContextData)                                  \
+  SUBCLASS (AcDbTextObjectContextData);                                 \
   FIELD_BS (horizontal_mode, 70);                                       \
   FIELD_BD (rotation, 50);                                              \
   FIELD_2RD (ins_pt, 10);                                               \
@@ -3655,7 +3655,7 @@ DWG_ENTITY_END
 DWG_OBJECT (DIMASSOC)
 
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbDimAssoc)
+  SUBCLASS (AcDbDimAssoc);
   FIELD_BLx (associativity, 90);
   FIELD_B (trans_space_flag, 70);
   FIELD_RC (rotated_type, 71);
@@ -3722,7 +3722,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocSweptSurfaceActionBody)
+  SUBCLASS (AcDbAssocSweptSurfaceActionBody);
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -3730,21 +3730,21 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCEDGECHAMFERACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocEdgeChamferActionBody)
+  SUBCLASS (AcDbAssocEdgeChamferActionBody);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCEDGEFILLETACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocEdgeFilletActionBody)
+  SUBCLASS (AcDbAssocEdgeFilletActionBody);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocActionBody_fields;
-  SUBCLASS (AcDbAssocRestoreEntityStateActionBody)
+  SUBCLASS (AcDbAssocRestoreEntityStateActionBody);
   FIELD_BL (class_version, 90);
   FIELD_HANDLE (entity, 5, 330); // hardptr
   START_OBJECT_HANDLE_STREAM;
@@ -3753,7 +3753,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCMLEADERACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocAnnotationActionBody_fields;
-  SUBCLASS (AcDbAssocMLeaderActionBody)
+  SUBCLASS (AcDbAssocMLeaderActionBody);
   FIELD_BL (class_version, 90);
   FIELD_BL (num_actions, 90);
   VALUEOUTOFBOUNDS (num_actions, 100)
@@ -3771,8 +3771,8 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocAnnotationActionBody_fields;
-  SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY)
-  //SUBCLASS (AcDbAssocAlignedDimActionBody)
+  SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY);
+  //SUBCLASS (AcDbAssocAlignedDimActionBody);
   FIELD_BL (class_version, 90);
   //or status, 90 //has d_node or r_node?
   START_OBJECT_HANDLE_STREAM;
@@ -3783,7 +3783,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocAnnotationActionBody_fields;
-  SUBCLASS (Assoc3PointAngularDimActionBody)
+  SUBCLASS (Assoc3PointAngularDimActionBody);
   FIELD_BS (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (r_node, 4, 330);
@@ -3794,7 +3794,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCORDINATEDIMACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocAnnotationActionBody_fields;
-  SUBCLASS (AssocOrdinatedDimActionBody)
+  SUBCLASS (AssocOrdinatedDimActionBody);
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (r_node, 5, 330);
@@ -3804,7 +3804,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCROTATEDDIMACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocAnnotationActionBody_fields;
-  SUBCLASS (AssocRotatedDimActionBody)
+  SUBCLASS (AssocRotatedDimActionBody);
   FIELD_BS (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (r_node, 5, 330);
@@ -3814,7 +3814,7 @@ DWG_OBJECT_END
 // subclass only
 //DWG_OBJECT (OBJECTCONTEXTDATA)
 //  HANDLE_UNKNOWN_BITS;
-//  SUBCLASS (AcDbObjectContextData)
+//  SUBCLASS (AcDbObjectContextData);
 //  SINCE (R_2010b) {
 //    FIELD_BS (class_version, 70);
 //    if (FIELD_VALUE (class_version) > 10)
@@ -3832,7 +3832,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (CONTEXTDATAMANAGER)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbContextDataManager)
+  SUBCLASS (AcDbContextDataManager);
   FIELD_HANDLE (objectcontext, 5, 0);
   FIELD_BL (num_submgrs, 0);
   REPEAT (num_submgrs, submgrs, Dwg_CONTEXTDATA_submgr)
@@ -3857,7 +3857,7 @@ DWG_OBJECT_END
 DWG_OBJECT (SUNSTUDY)
 
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbSunStudy)
+  SUBCLASS (AcDbSunStudy);
   FIELD_BL (class_version, 90);
   VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_T (setup_name, 1);
@@ -3913,7 +3913,7 @@ DWG_ENT_SUBCLASS_DECL (GEOPOSITIONMARKER, AcDbMTextObjectEmbedded);
 DWG_ENTITY (GEOPOSITIONMARKER)
 
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbGeoPositionMarker)
+  SUBCLASS (AcDbGeoPositionMarker);
   FIELD_BL (class_version, 90); // 0
   FIELD_3BD (position, 10);
   FIELD_BD (radius, 40);
@@ -3956,13 +3956,13 @@ DWG_ENTITY (EXTRUDEDSURFACE)
   HANDLE_UNKNOWN_BITS;
   ACTION_3DSOLID;
   //FIELD_BS (modeler_format_version, 70); //def 1
-  SUBCLASS (AcDbSurface)
+  SUBCLASS (AcDbSurface);
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbExtrudedSurface)
+  SUBCLASS (AcDbExtrudedSurface);
 #ifdef IS_DXF
   //FIELD_BL (class_version, 90); // or entity type?
-  CALL_SUBENT (_obj->entity, 90)
+  CALL_SUBENT (_obj->entity, 90);
 #else
   // here and at SweptSurface
   SweepOptions_fields;
@@ -3973,7 +3973,7 @@ DWG_ENTITY (EXTRUDEDSURFACE)
   SweepOptions_fields;
 #else
   //FIELD_BL (class_version, 90); // or entity type?
-  CALL_SUBENT (_obj->entity, 90)
+  CALL_SUBENT (_obj->entity, 90);
 #endif
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -3988,12 +3988,12 @@ DWG_ENTITY (LOFTEDSURFACE)
   HANDLE_UNKNOWN_BITS;
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
-  VALUEOUTOFBOUNDS (modeler_format_version, 3)
+  VALUEOUTOFBOUNDS (modeler_format_version, 3);
 
-  SUBCLASS (AcDbSurface)
+  SUBCLASS (AcDbSurface);
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbLoftedSurface)
+  SUBCLASS (AcDbLoftedSurface);
   FIELD_VECTOR_N (loft_entity_transmatrix, BD, 16, 40);
   //90 77
   //90 544
@@ -4017,8 +4017,8 @@ DWG_ENTITY (LOFTEDSURFACE)
   FIELD_B (virtual_guide, 297);
   FIELD_BS (num_cross_sections, 0);
   FIELD_BS (num_guide_curves, 0);
-  VALUEOUTOFBOUNDS (num_cross_sections, 5000)
-  VALUEOUTOFBOUNDS (num_guide_curves, 5000)
+  VALUEOUTOFBOUNDS (num_cross_sections, 5000);
+  VALUEOUTOFBOUNDS (num_guide_curves, 5000);
 
   COMMON_ENTITY_HANDLE_DATA;
   HANDLE_VECTOR (cross_sections, num_cross_sections, 5, 310);
@@ -4034,12 +4034,12 @@ DWG_ENTITY (REVOLVEDSURFACE)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
 
-  SUBCLASS (AcDbSurface)
+  SUBCLASS (AcDbSurface);
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbRevolvedSurface)
+  SUBCLASS (AcDbRevolvedSurface);
   FIELD_BL (class_version, 90);
-  VALUEOUTOFBOUNDS (class_version, 10)
+  VALUEOUTOFBOUNDS (class_version, 10);
 
   FIELD_BL (id, 90);
   //FIELD_BL (bindata_size, 90);
@@ -4066,24 +4066,24 @@ DWG_ENTITY (SWEPTSURFACE)
   ACTION_3DSOLID;
   FIELD_BS (modeler_format_version, 70); //def 1
 
-  SUBCLASS (AcDbSurface)
+  SUBCLASS (AcDbSurface);
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbSweptSurface)
+  SUBCLASS (AcDbSweptSurface);
   FIELD_BL (class_version, 90);
-  VALUEOUTOFBOUNDS (class_version, 10)
+  VALUEOUTOFBOUNDS (class_version, 10);
 
   FIELD_BL (sweep_entity_id, 90);
 #ifndef IS_JSON
   FIELD_BL (sweepdata_size, 90);
 #endif
-  VALUEOUTOFBOUNDS (sweepdata_size, 5000)
+  VALUEOUTOFBOUNDS (sweepdata_size, 5000);
   FIELD_BINARY (sweepdata, FIELD_VALUE (sweepdata_size), 310);
   FIELD_BL (path_entity_id, 90);
 #ifndef IS_JSON
   FIELD_BL (pathdata_size, 90);
 #endif
-  VALUEOUTOFBOUNDS (pathdata_size, 5000)
+  VALUEOUTOFBOUNDS (pathdata_size, 5000);
   FIELD_BINARY (pathdata, FIELD_VALUE (pathdata_size), 310);
   // here and at ExtrudedSurface
   SweepOptions_fields;
@@ -4093,10 +4093,10 @@ DWG_ENTITY_END
 DWG_ENTITY (NURBSURFACE)
   HANDLE_UNKNOWN_BITS;
   ACTION_3DSOLID;
-  SUBCLASS (AcDbSurface)
+  SUBCLASS (AcDbSurface);
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbNurbSurface)
+  SUBCLASS (AcDbNurbSurface);
   SINCE (R_2013b) {
     FIELD_BS (short170, 170);
     FIELD_B (cv_hull_display, 290);
@@ -4113,9 +4113,9 @@ DWG_ENTITY_END
 // The static variant
 DWG_OBJECT (PERSUBENTMGR)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPersSubentManager)
+  SUBCLASS (AcDbPersSubentManager);
   FIELD_BL (class_version, 90); //2
-  VALUEOUTOFBOUNDS (class_version, 3)
+  VALUEOUTOFBOUNDS (class_version, 3);
   FIELD_BL (unknown_0, 90); //always 0
   FIELD_BL (unknown_2, 90); //always 2
 
@@ -4133,7 +4133,7 @@ DWG_OBJECT_END
 // The dynamic variant
 DWG_OBJECT (ASSOCPERSSUBENTMANAGER)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbAssocPersSubentManager)
+  SUBCLASS (AcDbAssocPersSubentManager);
   FIELD_BL (class_version, 90); //1 or 2 (r2013+)
   FIELD_BL (unknown_3, 90); //3
   FIELD_BL (unknown_0, 90); //0
@@ -4207,8 +4207,8 @@ DWG_OBJECT (ACSH_SWEEP_CLASS)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShSweepBase)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShSweepBase);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //29
   FIELD_3BD (direction, 10); //0,0,0
@@ -4243,7 +4243,7 @@ DWG_OBJECT (ACSH_SWEEP_CLASS)
   FIELD_B (shsw_b296, 296); //1
   FIELD_3BD (pt2, 11); //0,0,0
 
-  SUBCLASS (AcDbShSweep)
+  SUBCLASS (AcDbShSweep);
   // align_option
   // miter_option
 
@@ -4254,8 +4254,8 @@ DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShSweepBase)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShSweepBase);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //29
   FIELD_3BD (direction, 10); //0,0,0
@@ -4290,7 +4290,7 @@ DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   FIELD_B (shsw_b296, 296); //1
   FIELD_3BD (pt2, 11); //0,0,0
 
-  SUBCLASS (AcDbShExtrusion)
+  SUBCLASS (AcDbShExtrusion);
 
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -4299,8 +4299,8 @@ DWG_OBJECT (ACSH_LOFT_CLASS)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShLoft)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShLoft);
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
   FIELD_BL (num_crosssects, 92);
@@ -4328,8 +4328,8 @@ DWG_OBJECT (ACSH_REVOLVE_CLASS)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
-  SUBCLASS (AcDbShRevolve)
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShRevolve);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //29
   FIELD_3BD (axis_pt, 10);
@@ -4350,7 +4350,7 @@ DWG_OBJECT_END
 // also called NAVISWORKSREFERENCE
 DWG_ENTITY (NAVISWORKSMODEL)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbNavisworksModel)
+  SUBCLASS (AcDbNavisworksModel);
   FIELD_BS (flags, 70);
   FIELD_HANDLE (definition, 2, 340);
   FIELD_VECTOR_N (transmatrix, BD, 16, 40);
@@ -4362,7 +4362,7 @@ DWG_ENTITY_END
 // Stored in ACAD_BIM_DEFINITIONS dictionary
 DWG_OBJECT (NAVISWORKSMODELDEF)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbNavisworksModelDef)
+  SUBCLASS (AcDbNavisworksModelDef);
   FIELD_BS (flags, 70);
   FIELD_T (path, 1);
   FIELD_B (status, 290);
@@ -4376,11 +4376,11 @@ DWG_OBJECT_END
 DWG_OBJECT (GEOMAPIMAGE)
   HANDLE_UNKNOWN_BITS;
 
-  //SUBCLASS (AcDbImage)
-  //SUBCLASS (AcDbRasterImage)
-  SUBCLASS (AcDbGeomapImage)
+  //SUBCLASS (AcDbImage);
+  //SUBCLASS (AcDbRasterImage);
+  SUBCLASS (AcDbGeomapImage);
   FIELD_BL (class_version, 90);
-  VALUEOUTOFBOUNDS (class_version, 10)
+  VALUEOUTOFBOUNDS (class_version, 10);
   FIELD_3DPOINT (pt0, 10);
   //FIELD_3DPOINT (uvec, 11);
   //FIELD_3DPOINT (vvec, 12);
@@ -4424,7 +4424,7 @@ DWG_OBJECT (ANGDIMOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
   AcDbDimensionObjectContextData_fields;
-  SUBCLASS (AcDbAngularDimensionObjectContextData)
+  SUBCLASS (AcDbAngularDimensionObjectContextData);
   FIELD_3BD (arc_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -4433,7 +4433,7 @@ DWG_OBJECT (DMDIMOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
   AcDbDimensionObjectContextData_fields;
-  SUBCLASS (AcDbDiametricDimensionObjectContextData)
+  SUBCLASS (AcDbDiametricDimensionObjectContextData);
   FIELD_3BD (first_arc_pt, 11);
   FIELD_3BD (def_pt, 12);
   START_OBJECT_HANDLE_STREAM;
@@ -4443,7 +4443,7 @@ DWG_OBJECT (ORDDIMOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
   AcDbDimensionObjectContextData_fields;
-  SUBCLASS (AcDbOrdinateDimensionObjectContextData)
+  SUBCLASS (AcDbOrdinateDimensionObjectContextData);
   FIELD_3BD (feature_location_pt, 11); // = origin
   FIELD_3BD (leader_endpt, 12);
   START_OBJECT_HANDLE_STREAM;
@@ -4453,7 +4453,7 @@ DWG_OBJECT (RADIMOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
   AcDbDimensionObjectContextData_fields;
-  SUBCLASS (AcDbRadialDimensionObjectContextData)
+  SUBCLASS (AcDbRadialDimensionObjectContextData);
   FIELD_3BD (first_arc_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -4462,7 +4462,7 @@ DWG_OBJECT (RADIMLGOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
   AcDbDimensionObjectContextData_fields;
-  SUBCLASS (AcDbRadialDimensionLargeObjectContextData)
+  SUBCLASS (AcDbRadialDimensionLargeObjectContextData);
   FIELD_3BD (ovr_center, 12);
   FIELD_3BD (jog_point, 13);
   START_OBJECT_HANDLE_STREAM;
@@ -4471,7 +4471,7 @@ DWG_OBJECT_END
 DWG_OBJECT (MLEADEROBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbMLeaderObjectContextData)
+  SUBCLASS (AcDbMLeaderObjectContextData);
   // ?? ...
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -4480,7 +4480,7 @@ DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
   AcDbTextObjectContextData_fields;
-  SUBCLASS (AcDbMTextAttributeObjectContextData)
+  SUBCLASS (AcDbMTextAttributeObjectContextData);
   FIELD_B (enable_context, 290);
   // if scale is not 1:1
   if (FIELD_VALUE (enable_context))
@@ -4508,9 +4508,9 @@ DWG_OBJECT (DATATABLE)
   HANDLE_UNKNOWN_BITS;
 #ifdef IS_DXF
   UNTIL (R_2002) {
-    SUBCLASS (ACDBDATATABLE)
+    SUBCLASS (ACDBDATATABLE);
   } LATER_VERSIONS {
-    SUBCLASS (AcDbDataTable)
+    SUBCLASS (AcDbDataTable);
   }
 #endif
   DEBUG_HERE_OBJ
@@ -4545,7 +4545,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (DATALINK)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbDataLink)
+  SUBCLASS (AcDbDataLink);
   FIELD_T (data_adapter, 1);
   FIELD_T (description, 300);
   FIELD_T (tooltip, 301);
@@ -4584,7 +4584,7 @@ DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
   AcDbDimensionObjectContextData_fields;
-  SUBCLASS (AcDbAlignedDimensionObjectContextData)
+  SUBCLASS (AcDbAlignedDimensionObjectContextData);
   FIELD_3BD (dimline_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -4605,7 +4605,7 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   FIELD_BD (extents_width, 42);
   FIELD_BD (extents_height, 43);
   FIELD_BL (column_type, 71);
-  VALUEOUTOFBOUNDS (column_type, 2)
+  VALUEOUTOFBOUNDS (column_type, 2);
   if (FIELD_VALUE (column_type))
     {
       FIELD_BL (num_column_heights, 72);
@@ -4633,7 +4633,7 @@ DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbBlkrefObjectContextData);
-  FIELD_BD (rotation, 50)
+  FIELD_BD (rotation, 50);
   FIELD_3BD (ins_pt, 10);
   FIELD_3BD_1 (scale_factor, 42);
   START_OBJECT_HANDLE_STREAM;
@@ -4642,7 +4642,7 @@ DWG_OBJECT_END
 DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbLeaderObjectContextData)
+  SUBCLASS (AcDbLeaderObjectContextData);
   FIELD_BL (num_points, 70); /* 3 */
   FIELD_3DPOINT_VECTOR (points, num_points, 10);
   FIELD_3DPOINT (x_direction, 11);
@@ -4656,7 +4656,7 @@ DWG_OBJECT_END
 DWG_OBJECT (FCFOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbFcfObjectContextData)
+  SUBCLASS (AcDbFcfObjectContextData);
   FIELD_3BD (location, 10);
   FIELD_3BD (horiz_dir, 11);
   START_OBJECT_HANDLE_STREAM;
@@ -4664,7 +4664,7 @@ DWG_OBJECT_END
 
 // stable and needed for the NOD
 DWG_OBJECT (DETAILVIEWSTYLE)
-  SUBCLASS (AcDbModelDocViewStyle)
+  SUBCLASS (AcDbModelDocViewStyle);
   FIELD_BS (mdoc_class_version, 70); // 0
   FIELD_T (desc, 3);
   FIELD_B (is_modified_for_recompute, 290);
@@ -4744,7 +4744,7 @@ DWG_OBJECT_END
 // stable and needed for the NOD
 // subclass: VIEWSTYLE_ModelDoc => "AcDbModelDocViewStyle"
 DWG_OBJECT (SECTIONVIEWSTYLE)
-  SUBCLASS (AcDbModelDocViewStyle)
+  SUBCLASS (AcDbModelDocViewStyle);
   FIELD_BS (mdoc_class_version, 70); // 0
   FIELD_T (desc, 3);
   FIELD_B (is_modified_for_recompute, 290);
@@ -4835,7 +4835,7 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
 DWG_OBJECT_END
 
 DWG_OBJECT (GRADIENT_BACKGROUND)
-  SUBCLASS (AcDbGradientBackground)
+  SUBCLASS (AcDbGradientBackground);
   FIELD_BL (class_version, 90); /* 1 */
   // all rgb's with method c2
   FIELD_BLx (color_top, 90);
@@ -4849,7 +4849,7 @@ DWG_OBJECT_END
 
 // DXF: GRADIENT_BACKGROUND with ODA! (looks like an ODA bug)
 DWG_OBJECT (GROUND_PLANE_BACKGROUND)
-  SUBCLASS (AcDbGroundPlaneBackground)
+  SUBCLASS (AcDbGroundPlaneBackground);
   FIELD_BL (class_version, 90); /* 1 */
   // all rgb's with method c2
   FIELD_BLx (color_sky_zenith, 90);
@@ -4863,7 +4863,7 @@ DWG_OBJECT_END
 
 // DXF: RAPIDRTRENDERENVIRONMENT
 DWG_OBJECT (IBL_BACKGROUND)
-  SUBCLASS (AcDbIBLBackground)
+  SUBCLASS (AcDbIBLBackground);
   FIELD_BL (class_version, 90); /* 2 */
   FIELD_B (enable, 290);
   FIELD_T (name, 1);
@@ -4874,7 +4874,7 @@ DWG_OBJECT (IBL_BACKGROUND)
 DWG_OBJECT_END
 
 DWG_OBJECT (IMAGE_BACKGROUND)
-  SUBCLASS (AcDbImageBackground)
+  SUBCLASS (AcDbImageBackground);
   FIELD_BL (class_version, 90); /* 1 */
   FIELD_T (filename, 300);
   FIELD_B (fit_to_screen, 290);
@@ -4893,7 +4893,7 @@ DWG_OBJECT (SKYLIGHT_BACKGROUND)
 DWG_OBJECT_END
 
 DWG_OBJECT (SOLID_BACKGROUND)
-  SUBCLASS (AcDbSolidBackground)
+  SUBCLASS (AcDbSolidBackground);
   FIELD_BL (class_version, 90); /* 1 */
   FIELD_BLx (color, 90);
   START_OBJECT_HANDLE_STREAM;
@@ -4926,7 +4926,7 @@ DWG_OBJECT_END
 
 // officially documented, dbRender.h (ACAD_RENDER_ENVIRONMENT ??)
 DWG_OBJECT (RENDERENVIRONMENT)
-  SUBCLASS (AcDbRenderEnvironment)
+  SUBCLASS (AcDbRenderEnvironment);
   FIELD_BL (class_version, 90);     /*!< default 1 */
   FIELD_B (fog_enabled, 290);
   FIELD_B (fog_background_enabled, 290);
@@ -4944,7 +4944,7 @@ DWG_OBJECT_END
 
 // officially documented, dbRender.h
 DWG_OBJECT (RENDERGLOBAL)
-  SUBCLASS (AcDbRenderGlobal)
+  SUBCLASS (AcDbRenderGlobal);
   FIELD_BL (class_version, 90);     /*!< default 2 */
   FIELD_BL (procedure, 90);         /*!< 0 view, 1 crop, 2 selection */
   FIELD_BL (destination, 90);       /*!< 0 window, 1 viewport */
@@ -4958,7 +4958,7 @@ DWG_OBJECT (RENDERGLOBAL)
 DWG_OBJECT_END
 
 DWG_ENTITY (LAYOUTPRINTCONFIG)
-  SUBCLASS (CAcLayoutPrintConfig)
+  SUBCLASS (CAcLayoutPrintConfig);
   FIELD_BS (class_version, 0);
   FIELD_BS (flag, 93);
   COMMON_ENTITY_HANDLE_DATA;
@@ -4969,19 +4969,19 @@ DWG_ENTITY_END
 // AutoCAD Mechanical
 DWG_OBJECT (ACMESCOPE)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcMeScope)
+  SUBCLASS (AcMeScope);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ACMECOMMANDHISTORY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcMeCommandHistory)
+  SUBCLASS (AcMeCommandHistory);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ACMESTATEMGR)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcMeStateMgr)
+  SUBCLASS (AcMeStateMgr);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -5005,16 +5005,16 @@ DWG_OBJECT_END
 
 // dxfname: ACDBCURVEPATH
 DWG_OBJECT (CURVEPATH)
-  //SUBCLASS (AcDbNamedPath)
-  SUBCLASS (AcDbCurvePath)
+  //SUBCLASS (AcDbNamedPath);
+  SUBCLASS (AcDbCurvePath);
   FIELD_BL (class_version, 90);
   FIELD_HANDLE (entity, 5, 340);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (POINTPATH)
-  //SUBCLASS (AcDbNamedPath)
-  SUBCLASS (AcDbPointPath)
+  //SUBCLASS (AcDbNamedPath);
+  SUBCLASS (AcDbPointPath);
   FIELD_BS (class_version, 90);
   FIELD_3BD (point, 10);
   START_OBJECT_HANDLE_STREAM;
@@ -5029,10 +5029,10 @@ DWG_OBJECT (TVDEVICEPROPERTIES)
   FIELD_BLL (alt_hltcolor, 0);
   FIELD_BLL (geom_shader_usage, 0);
   // ver > 3
-  FIELD_BL (blending_mode, 0)
+  FIELD_BL (blending_mode, 0);
   //ver 2 or >4:
-  FIELD_BD (antialiasing_level, 0)
-  FIELD_BD (bd2, 0)
+  FIELD_BD (antialiasing_level, 0);
+  FIELD_BD (bd2, 0);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -5162,37 +5162,37 @@ DWG_OBJECT_END
 
 DWG_ENTITY (ALIGNMENTPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbBlockAlignmentParameterEntity)
+  SUBCLASS (AcDbBlockAlignmentParameterEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (BASEPOINTPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbBlockBasepointParameterEntity)
+  SUBCLASS (AcDbBlockBasepointParameterEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (FLIPPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbBlockFlipParameterEntity)
+  SUBCLASS (AcDbBlockFlipParameterEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (LINEARPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbBlockLinearParameterEntity)
+  SUBCLASS (AcDbBlockLinearParameterEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (POINTPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbBlockPointParameterEntity)
+  SUBCLASS (AcDbBlockPointParameterEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (ROTATIONPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbBlockRotationParameterEntity)
+  SUBCLASS (AcDbBlockRotationParameterEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
@@ -5200,7 +5200,7 @@ DWG_ENTITY_END
 DWG_ENTITY (BLOCKANGULARCONSTRAINTPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
   AcDbBlockConstraintParameter_fields;
-  SUBCLASS (AcDbBlockAngularConstraintParameterEntity)
+  SUBCLASS (AcDbBlockAngularConstraintParameterEntity);
   FIELD_3BD (center_pt, 0);
   FIELD_3BD (label_pt, 0);
   FIELD_T (expr_name, 305); // A copy of the EvalExpr.name.
@@ -5219,14 +5219,14 @@ DWG_ENTITY_END
 
 DWG_ENTITY (VISIBILITYPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbBlockVisibilityParameterEntity)
+  SUBCLASS (AcDbBlockVisibilityParameterEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (FLIPGRIPENTITY)
   HANDLE_UNKNOWN_BITS;
   //BLOCKGRIP_fields
-  SUBCLASS (AcDbBlockFlipGripEntity)
+  SUBCLASS (AcDbBlockFlipGripEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
@@ -5234,41 +5234,41 @@ DWG_ENTITY_END
 DWG_ENTITY (LINEARGRIPENTITY)
   HANDLE_UNKNOWN_BITS;
   //BLOCKGRIP_fields
-  SUBCLASS (AcDbBlockLinearGripEntity)
+  SUBCLASS (AcDbBlockLinearGripEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (POLARGRIPENTITY)
   HANDLE_UNKNOWN_BITS;
   //BLOCKGRIP_fields
-  SUBCLASS (AcDbBlockPolarGripEntity)
+  SUBCLASS (AcDbBlockPolarGripEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (ROTATIONGRIPENTITY)
   HANDLE_UNKNOWN_BITS;
   //BLOCKGRIP_fields
-  SUBCLASS (AcDbBlockRotationGripEntity)
+  SUBCLASS (AcDbBlockRotationGripEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (VISIBILITYGRIPENTITY)
   HANDLE_UNKNOWN_BITS;
   //BLOCKGRIP_fields
-  SUBCLASS (AcDbBlockVisibilityGripEntity)
+  SUBCLASS (AcDbBlockVisibilityGripEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (XYGRIPENTITY)
   HANDLE_UNKNOWN_BITS;
   //BLOCKGRIP_fields
-  SUBCLASS (AcDbBlockXYGripEntity)
+  SUBCLASS (AcDbBlockXYGripEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (XYPARAMETERENTITY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbBlockXYParameterEntity)
+  SUBCLASS (AcDbBlockXYParameterEntity);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
@@ -5277,7 +5277,7 @@ DWG_ENTITY_END
 DWG_OBJECT (DYNAMICBLOCKPROXYNODE)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
-  //SUBCLASS (AcDbDynamicBlockProxyNode)
+  //SUBCLASS (AcDbDynamicBlockProxyNode);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -5286,11 +5286,11 @@ DWG_OBJECT_END
 
 DWG_ENTITY (POINTCLOUD)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPointCloud)
+  SUBCLASS (AcDbPointCloud);
   FIELD_BS (class_version, 70);
   FIELD_3BD (origin, 10);
-  FIELD_T (saved_filename, 1)
-  FIELD_BL (num_source_files, 90)
+  FIELD_T (saved_filename, 1);
+  FIELD_BL (num_source_files, 90);
   if (!FIELD_VALUE (num_source_files))
     {
       FIELD_3BD (extents_min, 11);
@@ -5318,7 +5318,7 @@ DWG_ENTITY (POINTCLOUD)
           SUB_FIELD_BS (clippings[rcount1], type, 0);
           if (_obj->clippings[rcount1].type == 3) // polygon
             {
-              SUB_FIELD_BL (clippings[rcount1], num_vertices, 0)
+              SUB_FIELD_BL (clippings[rcount1], num_vertices, 0);
             }
           else // box or rectangle
             _obj->clippings[rcount1].num_vertices = 2;
@@ -5333,13 +5333,13 @@ DWG_ENTITY (POINTCLOUD)
         END_REPEAT (clippings)
       }
     }
-  FIELD_VECTOR_T (source_files, T, num_source_files, 2)
+  FIELD_VECTOR_T (source_files, T, num_source_files, 2);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_ENTITY (POINTCLOUDEX)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPointCloud)
+  SUBCLASS (AcDbPointCloud);
   FIELD_BS (class_version, 70); // 1
   FIELD_3BD (extents_min, 10);
   FIELD_3BD (extents_max, 11);
@@ -5351,7 +5351,7 @@ DWG_ENTITY (POINTCLOUDEX)
   FIELD_B (is_locked, 290);
   FIELD_HANDLE (pointclouddefex, 5, 330);
   FIELD_HANDLE (reactor, 3, 360);
-  FIELD_T (name, 1)
+  FIELD_T (name, 1);
   FIELD_B (show_intensity, 291);
 
   DXF {
@@ -5406,7 +5406,7 @@ DWG_ENTITY (POINTCLOUDEX)
       SUB_FIELD_3BD (croppings[rcount1], crop_plane, 13);
       SUB_FIELD_3BD (croppings[rcount1], crop_x_dir, 213);
       SUB_FIELD_3BD (croppings[rcount1], crop_y_dir, 213);
-      SUB_FIELD_BL (croppings[rcount1], num_pts, 93)
+      SUB_FIELD_BL (croppings[rcount1], num_pts, 93);
       SUB_FIELD_3BD_VECTOR (croppings[rcount1], pts, num_pts, 13);
       SET_PARENT_OBJ (croppings[rcount1]);
   END_REPEAT_BLOCK
@@ -5457,7 +5457,7 @@ DWG_ENTITY (JUMP)
             break;
           default:
             LOG_ERROR ("Invalid jump_entity_section %x ignored",
-                       (_obj->jump_address_raw & 0xff000000) >> 24)
+                       (_obj->jump_address_raw & 0xff000000) >> 24);
           }
       }
     LOG_TRACE ("jump_entity_section: ");
@@ -5502,7 +5502,7 @@ DWG_ENTITY_END
 /* Stored in ACAD_POINTCLOUD_DICT dictionary */
 DWG_OBJECT (POINTCLOUDDEF)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPointCloudDef)
+  SUBCLASS (AcDbPointCloudDef);
   FIELD_BL (class_version, 90);
   FIELD_T (source_filename, 1); /* .pcg or .isd */
   FIELD_B (is_loaded, 280);
@@ -5525,7 +5525,7 @@ DWG_OBJECT_END
 /* Stored in ACAD_POINTCLOUD_DICT dictionary */
 DWG_OBJECT (POINTCLOUDDEFEX)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPointCloudDefEx)
+  SUBCLASS (AcDbPointCloudDefEx);
   FIELD_BL (class_version, 90);
   FIELD_T (source_filename, 1); /* .pcg or .isd */
   FIELD_B (is_loaded, 280);
@@ -5537,21 +5537,21 @@ DWG_OBJECT_END
 
 DWG_OBJECT (POINTCLOUDDEF_REACTOR)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPointCloudDefReactor)
+  SUBCLASS (AcDbPointCloudDefReactor);
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (POINTCLOUDDEF_REACTOR_EX)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPointCloudDefReactorEx)
+  SUBCLASS (AcDbPointCloudDefReactorEx);
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (POINTCLOUDCOLORMAP)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPointCloudColorMap)
+  SUBCLASS (AcDbPointCloudColorMap);
   FIELD_BS (class_version, 70);
   FIELD_T (def_intensity_colorscheme, 1);
   FIELD_T (def_elevation_colorscheme, 1);
@@ -5706,7 +5706,7 @@ DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   FIELD_3BD (workplane[2], 10); // 0,1,0
   FIELD_HANDLE (h1, 4, 360);
   FIELD_BL (num_actions, 90); // 2
-  VALUEOUTOFBOUNDS (num_actions, 100)
+  VALUEOUTOFBOUNDS (num_actions, 100);
   HANDLE_VECTOR (actions, num_actions, 4, 360);
 
   FIELD_BL (num_nodes, 90); // 9
@@ -5722,7 +5722,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCVARIABLE)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocAction_fields;
-  SUBCLASS (AcDbAssocVariable)
+  SUBCLASS (AcDbAssocVariable);
   FIELD_BL (av_class_version, 90); /* 2 */
   FIELD_T (name, 1);
   FIELD_T (t58, 1);
@@ -5840,7 +5840,7 @@ DWG_OBJECT_END
 // not enough coverage
 DWG_OBJECT (BLOCKPOLARPARAMETER)
   AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockPolarParameter)
+  SUBCLASS (AcDbBlockPolarParameter);
   FIELD_T (angle_name, 305);
   FIELD_T (angle_desc, 306);
   FIELD_T (distance_name, 305);
@@ -5854,18 +5854,18 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPOLARGRIP)
   AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockPolarGrip)
+  SUBCLASS (AcDbBlockPolarGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCDIMDEPENDENCYBODY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbAssocDependencyBody)
+  SUBCLASS (AcDbAssocDependencyBody);
   FIELD_BS (adb_version, 90); // always 1
-  SUBCLASS (AcDbImpAssocDimDependencyBodyBase)
+  SUBCLASS (AcDbImpAssocDimDependencyBodyBase);
   FIELD_BS (dimbase_version, 90); // always 1
   FIELD_T (name, 1);
-  SUBCLASS (AcDbAssocDimDependencyBody)
+  SUBCLASS (AcDbAssocDimDependencyBody);
   FIELD_BS (class_version, 90); // 1
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -5873,7 +5873,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKARRAYACTION)
   HANDLE_UNKNOWN_BITS;
   AcDbBlockAction_fields;
-  SUBCLASS (AcDbBlockArrayAction)
+  SUBCLASS (AcDbBlockArrayAction);
   BlockAction_ConnectionPts (conn_pts, 0, 4, 92, 301);
   FIELD_BD (column_offset, 140);
   FIELD_BD (row_offset, 141);
@@ -5883,7 +5883,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKANGULARCONSTRAINTPARAMETER)
   HANDLE_UNKNOWN_BITS;
   AcDbBlockConstraintParameter_fields;
-  SUBCLASS (AcDbBlockAngularConstraintParameter)
+  SUBCLASS (AcDbBlockAngularConstraintParameter);
   FIELD_3BD (center_pt, 0);
   FIELD_3BD (end_pt, 0);
   FIELD_T (expr_name, 305); // A copy of the EvalExpr.name
@@ -5998,28 +5998,28 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCARRAYMODIFYPARAMETERS)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocArrayCommonParameters_fields;
-  SUBCLASS (AcDbAssocArrayModifyParameters)
+  SUBCLASS (AcDbAssocArrayModifyParameters);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCARRAYPATHPARAMETERS)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocArrayCommonParameters_fields;
-  SUBCLASS (AcDbAssocArrayPathParameters)
+  SUBCLASS (AcDbAssocArrayPathParameters);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCARRAYPOLARPARAMETERS)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocArrayCommonParameters_fields;
-  SUBCLASS (AcDbAssocArrayPolarParameters)
+  SUBCLASS (AcDbAssocArrayPolarParameters);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocArrayCommonParameters_fields;
-  SUBCLASS (AcDbAssocArrayRectangularParameters)
+  SUBCLASS (AcDbAssocArrayRectangularParameters);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -6028,12 +6028,12 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPARAMDEPENDENCYBODY)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbAssocDependencyBody)
+  SUBCLASS (AcDbAssocDependencyBody);
   FIELD_BS (adb_version, 90); // always 1
-  SUBCLASS (AcDbImpAssocDimDependencyBodyBase)
+  SUBCLASS (AcDbImpAssocDimDependencyBodyBase);
   FIELD_BS (dimbase_version, 90); // always 1
   FIELD_T (name, 1);
-  SUBCLASS (AcDbBlockParameterDependencyBody)
+  SUBCLASS (AcDbBlockParameterDependencyBody);
   FIELD_BS (class_version, 90); // 0
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -6041,7 +6041,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKDIAMETRICCONSTRAINTPARAMETER)
   HANDLE_UNKNOWN_BITS;
   AcDbBlockConstraintParameter_fields;
-  SUBCLASS (AcDbBlockDiametricConstraintParameter)
+  SUBCLASS (AcDbBlockDiametricConstraintParameter);
   FIELD_T (expr_name, 305); // A copy of the EvalExpr.name. expr being distance
   FIELD_T (expr_description, 306);
   FIELD_BD (distance, 140); /* -1.0 */
@@ -6052,7 +6052,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER)
   HANDLE_UNKNOWN_BITS;
   AcDbBlockConstraintParameter_fields;
-  SUBCLASS (AcDbBlockRadialConstraintParameter)
+  SUBCLASS (AcDbBlockRadialConstraintParameter);
   FIELD_T (expr_name, 305); // A copy of the EvalExpr.name. expr being distance
   FIELD_T (expr_description, 306);
   FIELD_BD (distance, 140);
@@ -6062,13 +6062,13 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNEDCONSTRAINTPARAMETER)
   AcDbBlockLinearConstraintParameter_fields;
-  SUBCLASS (AcDbBlockAlignedConstraintParameter)
+  SUBCLASS (AcDbBlockAlignedConstraintParameter);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARCONSTRAINTPARAMETER)
   AcDbBlockLinearConstraintParameter_fields;
-  //SUBCLASS (AcDbBlockLinearConstraintParameter)
+  //SUBCLASS (AcDbBlockLinearConstraintParameter);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -6138,8 +6138,7 @@ DWG_OBJECT (BLOCKLOOKUPPARAMETER)
                 len = (BITCODE_BS)(((int64_t)(dat->size * 8) - bit_position (dat)) / 8);
               }
             FIELD_VALUE (unknown_t) = (BITCODE_T)bit_read_TF (dat, len);
-            LOG_TRACE_TV ("unknown_t: \"%s\" [TV %d]",
-                          FIELD_VALUE (unknown_t), 0);
+            LOG_TRACE_TV ("unknown_t: \"%s\" [TV %d]", FIELD_VALUE (unknown_t), 0);
           }
       }
     else
@@ -6327,14 +6326,14 @@ DWG_OBJECT_END
 // EXACXREFPANELOBJECT
 DWG_OBJECT (XREFPANELOBJECT)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS(ExAcXREFPanelObject)
+  SUBCLASS(ExAcXREFPanelObject);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 // FIXME Class only, not an object.
 DWG_OBJECT (NPOCOLLECTION)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS(AcDbImpNonPersistentObjectsCollection)
+  SUBCLASS(AcDbImpNonPersistentObjectsCollection);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

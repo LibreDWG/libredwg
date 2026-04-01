@@ -9500,7 +9500,9 @@ extern "C"
                                     const char *restrict name) __nonnull_all;
 
   /* utf-8 string without lowercase letters, space or !. maxlen 256 */
+#ifndef DWG_IS_VALID_TAG_DEFINED
   EXPORT bool dwg_is_valid_tag (const char *tag) __nonnull_all;
+#endif
 
   EXPORT Dwg_Entity_TEXT *
   dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,

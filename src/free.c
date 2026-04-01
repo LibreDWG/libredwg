@@ -85,7 +85,7 @@ static BITCODE_BL rcount1, rcount2;
   {                                                                           \
   }
 #define FIELD_TRACE(name, type)                                               \
-  LOG_TRACE (#name ": " FORMAT_##type "\n", _obj->name)
+  LOG_TRACE (#name ": " FORMAT_##type "\n", _obj->name);
 #define FIELD_G_TRACE(name, type, dxfgroup)                                   \
   LOG_TRACE (#name ": " FORMAT_##type " [" #type " %d]\n", _obj->name,        \
              dxfgroup)
@@ -315,7 +315,7 @@ static BITCODE_BL rcount1, rcount2;
     int error = 0;                                                            \
     if (obj->tio.entity)                                                      \
       {                                                                       \
-        LOG_HANDLE ("Free entity " #token " [%d]\n", obj->index)              \
+        LOG_HANDLE ("Free entity " #token " [%d]\n", obj->index);             \
         if (obj->tio.entity->tio.token)                                       \
           error = dwg_free_##token##_private (dat, dat, dat, obj);            \
                                                                               \
@@ -362,7 +362,7 @@ static BITCODE_BL rcount1, rcount2;
     if (obj->tio.object)                                                      \
       {                                                                       \
         _obj = obj->tio.object->tio.token;                                    \
-        LOG_HANDLE ("Free object " #token " [%d]\n", obj->index)              \
+        LOG_HANDLE ("Free object " #token " [%d]\n", obj->index);             \
         error = dwg_free_##token##_private (dat, dat, dat, obj);              \
         dwg_free_common_object_data (obj);                                    \
         dwg_free_eed (obj);                                                   \
@@ -666,7 +666,7 @@ free_preR13_object (Dwg_Object *obj)
   Bit_Chain *dat = &pdat;
 
   // if (obj->name)
-  //   LOG_HANDLE ("free_preR13_object: %s %d\n", obj->name, obj->index)
+  //   LOG_HANDLE ("free_preR13_object: %s %d\n", obj->name, obj->index);
   if (obj && obj->parent)
     {
       dwg = obj->parent;
@@ -750,7 +750,7 @@ free_preR13_object (Dwg_Object *obj)
               break;
             default:
               LOG_ERROR ("Unknown preR11 %s.flag_r11 %d", obj->name,
-                         obj->tio.entity->flag_r11)
+                         obj->tio.entity->flag_r11);
             }
           break;
         // now the rest
@@ -1665,7 +1665,7 @@ dwg_free (Dwg_Data *dwg)
           env_var_checked_p = 1;
         }
 #endif /* USE_TRACING */
-      LOG_INFO ("\n============\ndwg_free\n")
+      LOG_INFO ("\n============\ndwg_free\n");
       // copied table fields have duplicate pointers, but are freed only once
       for (i = 0; i < dwg->num_objects; ++i)
         {
@@ -1716,10 +1716,10 @@ dwg_free (Dwg_Data *dwg)
       FREE_IF (dwg->dwg_class);
       if (dwg->object_ref)
         {
-          LOG_HANDLE ("free %d global refs\n", dwg->num_object_refs)
+          LOG_HANDLE ("free %d global refs\n", dwg->num_object_refs);
           for (i = 0; i < dwg->num_object_refs; ++i)
             {
-              LOG_INSANE ("free ref %d\n", i)
+              LOG_INSANE ("free ref %d\n", i);
               FREE_IF (dwg->object_ref[i]);
             }
         }

@@ -30,11 +30,6 @@
 #include "common.h"
 #include "logging.h"
 
-/* The central logging level for all modules. */
-#if !defined COMMON_TEST_C && !defined DECODE_TEST_C && !defined ENCODE_TEST_C
-EXPORT unsigned int loglevel;
-#endif
-
 // See also
 // http://devel.gvsig.org/sites/org.gvsig.dwg/2.0-SNAPSHOT/gvsig-base-library-pom/org.gvsig.dwg/xref/org/gvsig/dwg/lib/DwgFile.html
 const struct dwg_versions dwg_versions[DWG_VERSIONS] = {

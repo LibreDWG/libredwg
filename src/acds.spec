@@ -277,7 +277,7 @@
             END_REPEAT (schdat.schemas[rcount2].props)
         END_REPEAT_BLOCK
         END_REPEAT (schdat.schemas)
-        LOG_WARN ("AcDs %s segment yet unhandled", _obj->segments[rcount1].name)
+        LOG_WARN ("AcDs %s segment yet unhandled", _obj->segments[rcount1].name);
         break;
       case 5: // search
         if (_obj->search_segidx != rcount1)
@@ -318,7 +318,7 @@
         //break;
       default:
 #ifndef IS_FREE
-        LOG_WARN ("AcDs %s segment yet unhandled", _obj->segments[rcount1].name)
+        LOG_WARN ("AcDs %s segment yet unhandled", _obj->segments[rcount1].name);
 #endif
         break;
       }
@@ -359,17 +359,17 @@
             if (!dwg->num_acis_sab_hdl)
               {
                 LOG_ERROR ("Not enough %u 3DSOLIDs for the %u-th AcDs SAB data",
-                           wanted, num_acis_sab_data)
+                           wanted, num_acis_sab_data);
                 return DWG_ERR_INVALIDHANDLE;
               }
             hdl = SHIFT_HV (dwg, num_acis_sab_hdl, acis_sab_hdl);
             o = dwg_resolve_handle (dwg, hdl->handleref.value);
             LOG_TRACE ("%s.acis_sab_hdl[%u] = " FORMAT_REF "\n", o->name,
-                       dwg->num_acis_sab_hdl + 1, ARGS_REF (hdl))
+                       dwg->num_acis_sab_hdl + 1, ARGS_REF (hdl));
             if (!o || !dwg_obj_is_3dsolid (o))
               {
                 LOG_ERROR ("Matching object %s " FORMAT_REF " not a 3DSOLID",
-                           o ? o->name : "", ARGS_REF (hdl))
+                           o ? o->name : "", ARGS_REF (hdl));
                 free (hdl);
                 error |= DWG_ERR_INVALIDHANDLE;
                 continue;
@@ -387,7 +387,7 @@
             // o->tio.entity->has_ds_data = 0; // maybe there is more, like the
             // wires and silhuettes
             LOG_TRACE ("%s.acis_data = %" PRIuSIZE " " FORMAT_REF "\n", o->name, size,
-                       ARGS_REF (hdl))
+                       ARGS_REF (hdl));
             free (hdl); // it is a non-global, free'able handleref. Created in
                         // common_entity_data.spec
             i = (j + size) & UINT_MAX; // next offset to try
@@ -403,7 +403,7 @@
     if (wanted == num_acis_sab_data)
       {
         LOG_TRACE ("Matching number of %u 3DSOLID entities and AcDs SAB data\n",
-                   wanted)
+                   wanted);
       }
     else
       {

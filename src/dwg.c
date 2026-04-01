@@ -105,7 +105,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   if (!dat->chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Not enough memory.\n")
+      LOG_ERROR ("Not enough memory");
       fclose (fp);
       dat->fh = NULL;
       return DWG_ERR_OUTOFMEM;
@@ -116,8 +116,8 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Could not read file (%" PRIuSIZE " out of %" PRIuSIZE
-                 "): %s\n",
-                 size, dat->size, filename)
+                 "): %s",
+                 size, dat->size, filename);
       fclose (fp);
       free (dat->chain);
       dat->chain = NULL;
@@ -247,7 +247,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
     }
   if (!fp)
     {
-      LOG_ERROR ("Could not open file: %s\n", filename)
+      LOG_ERROR ("Could not open file: %s\n", filename);
       return DWG_ERR_IOERROR;
     }
 
@@ -275,7 +275,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   error = dwg_decode (&bit_chain, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Failed to decode file: %s 0x%x\n", filename, error)
+      LOG_ERROR ("Failed to decode file: %s 0x%x", filename, error);
       free (bit_chain.chain);
       bit_chain.chain = NULL;
       bit_chain.size = 0;
@@ -313,7 +313,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 
   if (!filename || stat (filename, &attrib))
     {
-      LOG_ERROR ("File not found: %s\n", filename ? filename : "(null)")
+      LOG_ERROR ("File not found: %s", filename ? filename : "(null)");
       return DWG_ERR_IOERROR;
     }
   if (!(S_ISREG (attrib.st_mode)
@@ -322,13 +322,13 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 #  endif
             ))
     {
-      LOG_ERROR ("Error: %s\n", filename)
+      LOG_ERROR ("%s", filename);
       return DWG_ERR_IOERROR;
     }
   fp = fopen (filename, "rb");
   if (!fp)
     {
-      LOG_ERROR ("Could not open file: %s\n", filename)
+      LOG_ERROR ("Could not open file: %s", filename);
       return DWG_ERR_IOERROR;
     }
 
@@ -346,7 +346,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dat.chain = (unsigned char *)calloc (1, dat.size + 2);
   if (!dat.chain)
     {
-      LOG_ERROR ("Not enough memory.\n");
+      LOG_ERROR ("Not enough memory");
       fclose (fp);
       return DWG_ERR_OUTOFMEM;
     }
@@ -361,8 +361,8 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   if (size != dat.size)
     {
       LOG_ERROR ("Could not read the entire file (%" PRIuSIZE
-                 " out of %" PRIuSIZE "): %s\n",
-                 size, dat.size, filename)
+                 " out of %" PRIuSIZE "): %s",
+                 size, dat.size, filename);
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -378,7 +378,7 @@ ENDSEC
    */
   if (size < 31)
     {
-      LOG_ERROR ("File %s too small, %" PRIuSIZE " byte.\n", filename, size)
+      LOG_ERROR ("File %s too small, %" PRIuSIZE " byte.", filename, size);
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -396,7 +396,7 @@ ENDSEC
   if (!memcmp (dat.chain, "AC10", 4) || !memcmp (dat.chain, "AC1.", 4)
       || !memcmp (dat.chain, "AC2.10", 4) || !memcmp (dat.chain, "MC0.0", 4))
     {
-      LOG_ERROR ("This is a DWG, not a DXF file: %s\n", filename)
+      LOG_ERROR ("This is a DWG, not a DXF file: %s", filename);
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -415,7 +415,7 @@ ENDSEC
   dwg->opts |= (DWG_OPTS_INDXF | loglevel);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Failed to decode DXF file: %s\n", filename)
+      LOG_ERROR ("Failed to decode DXF file: %s", filename);
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -462,7 +462,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   error = dwg_encode ((Dwg_Data *)dwg, &dat);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Failed to encode Dwg_Data\n");
+      LOG_ERROR ("Failed to encode Dwg_Data");
       /* In development we want to look at the corpses */
 #  ifdef IS_RELEASE
       if (dat.size > 0)
@@ -484,20 +484,20 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 #  endif
   )
     {
-      LOG_ERROR ("The file already exists. We won't overwrite it.")
+      LOG_ERROR ("The file already exists. We won't overwrite it.");
       return error | DWG_ERR_IOERROR;
     }
   fh = fopen (filename, "wb");
   if (!fh || !dat.chain)
     {
-      LOG_ERROR ("Failed to create the file: %s\n", filename)
+      LOG_ERROR ("Failed to create the file: %s", filename);
       return error | DWG_ERR_IOERROR;
     }
 
   // Write the data into the file
   if (fwrite (dat.chain, sizeof (char), dat.size, fh) != dat.size)
     {
-      LOG_ERROR ("Failed to write data into the file: %s\n", filename)
+      LOG_ERROR ("Failed to write data into the file: %s", filename);
       fclose (fh);
       free (dat.chain);
       dat.chain = NULL;
@@ -537,7 +537,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
   dat = *(Bit_Chain *)&dwg->thumbnail;
   if (!dat.size || !dat.chain)
     {
-      LOG_INFO ("no THUMBNAIL Image Data\n")
+      LOG_INFO ("no THUMBNAIL Image Data");
       return NULL;
     }
   // dat.byte = 0; sentinel at 16
@@ -567,7 +567,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
       return NULL;
     }
   num_headers = bit_read_RC (&dat);
-  LOG_INFO ("num_headers: %d [RC]\n", (int)num_headers)
+  LOG_INFO ("num_headers: %d [RC]\n", (int)num_headers);
 
   found = 0;
   header_size = 0;
@@ -580,23 +580,23 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
         }
       type = bit_read_RC (&dat);
       *typep = type;
-      LOG_TRACE ("\t[%i] Code: %i [RC]\n", i, type)
+      LOG_TRACE ("\t[%i] Code: %i [RC]\n", i, type);
       address = bit_read_RL (&dat);
       if (type == 1)
         {
           BITCODE_RL h_size = bit_read_RL (&dat);
-          LOG_TRACE ("\t\tHeader data start: " FORMAT_RL " [RL]\n", address)
+          LOG_TRACE ("\t\tHeader data start: " FORMAT_RL " [RL]\n", address);
           header_size += h_size;
           LOG_TRACE ("\t\tHeader data size: " FORMAT_RL " [RL] (" FORMAT_RL
                      ")\n",
-                     h_size, header_size)
+                     h_size, header_size);
         }
       else if (type == 2 && found == 0)
         {
           *size = bit_read_RL (&dat);
           found = 1;
-          LOG_TRACE ("\t\tBMP data start: " FORMAT_RL " [RL]\n", address)
-          LOG_INFO ("\t\tBMP size: %i [RL]\n", *size)
+          LOG_TRACE ("\t\tBMP data start: " FORMAT_RL " [RL]\n", address);
+          LOG_INFO ("\t\tBMP size: %i [RL]\n", *size);
           if (*size > (dat.size - 4))
             {
               LOG_ERROR ("BMP thumbnail overflow > %" PRIuSIZE, dat.size - 4);
@@ -607,21 +607,21 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
         {
           osize = bit_read_RL (&dat);
           *size = osize;
-          LOG_TRACE ("\t\tWMF data start: " FORMAT_RL " [RL]\n", address)
-          LOG_INFO ("\t\tWMF size: %i [RL]\n", osize)
+          LOG_TRACE ("\t\tWMF data start: " FORMAT_RL " [RL]\n", address);
+          LOG_INFO ("\t\tWMF size: %i [RL]\n", osize);
         }
       else if (type == 6) // PNG default since r2013
         {
           osize = bit_read_RL (&dat);
           *size = osize;
-          LOG_TRACE ("\t\tPNG data start: " FORMAT_RL " [RL]\n", address)
-          LOG_INFO ("\t\tPNG size: %i [RL]\n", osize)
+          LOG_TRACE ("\t\tPNG data start: " FORMAT_RL " [RL]\n", address);
+          LOG_INFO ("\t\tPNG size: %i [RL]\n", osize);
         }
       else
         {
           osize = bit_read_RL (&dat);
-          LOG_TRACE ("\t\tData start: " FORMAT_RL " [RL]\n", address)
-          LOG_TRACE ("\t\tSize of unknown type %i: %i [RL]\n", type, osize)
+          LOG_TRACE ("\t\tData start: " FORMAT_RL " [RL]\n", address);
+          LOG_TRACE ("\t\tSize of unknown type %i: %i [RL]\n", type, osize);
         }
     }
   dat.byte += header_size;
@@ -842,7 +842,7 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     }
   // if (dwg->header.from_version < R_12 && !ref->absolute_ref)
   //   { // resolve r11_idx to absolute_ref, looking up in the table entries
-  //     LOG_WARN ("Cannot resolve r11_idx %u", ref->r11_idx)
+  //     LOG_WARN ("Cannot resolve r11_idx %u", ref->r11_idx);
   //   }
   //  Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE
   //  handle types.
@@ -2181,7 +2181,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
           = (Dwg_Object_Ref *)ordered_ref_find (dwg, code, absref);
       if (NULL != refi)
         {
-          LOG_HANDLE ("[use handleref " FORMAT_REF "] ", ARGS_REF (refi))
+          LOG_HANDLE ("[use handleref " FORMAT_REF "] ", ARGS_REF (refi));
           return refi;
         }
     }
@@ -2200,7 +2200,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
     }
   ref->absolute_ref = absref;
   ref->obj = NULL;
-  LOG_HANDLE ("[add handleref " FORMAT_REF "] ", ARGS_REF (ref))
+  LOG_HANDLE ("[add handleref " FORMAT_REF "] ", ARGS_REF (ref));
   // fill ->obj later
   ordered_ref_add (dwg, ref);
   return ref;
@@ -2255,14 +2255,14 @@ dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
               // probably importing from a minimal DXF
               LOG_TRACE ("dwg_find_table_control: table control object %s has "
                          "no handle\n",
-                         table)
+                         table);
               return NULL;
             }
         }
     }
   // if we haven't read all objects yet, ignore this error
   LOG_TRACE ("dwg_find_table_control: table control object %s not found\n",
-             table)
+             table);
   return NULL;
 }
 
@@ -2278,7 +2278,7 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (!obj || !obj->tio.object || obj->fixedtype != DWG_TYPE_DICTIONARY)
     {
-      LOG_ERROR ("dwg_find_dictionary: 1st NOD DICTIONARY not found")
+      LOG_ERROR ("dwg_find_dictionary: 1st NOD DICTIONARY not found");
       return NULL;
     }
   nod = obj->tio.object->tio.DICTIONARY;
@@ -2306,7 +2306,7 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
       if (IS_FROM_TU_DWG (dwg))
         free (u8);
     }
-  LOG_TRACE ("dwg_find_dictionary: DICTIONARY with %s not found\n", name)
+  LOG_TRACE ("dwg_find_dictionary: DICTIONARY with %s not found\n", name);
   return NULL;
 }
 

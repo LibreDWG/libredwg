@@ -323,8 +323,8 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   }
 
 #define SECTION(section)                                                      \
-  LOG_INFO ("\nSection " #section "\n")                                       \
-  fprintf (dat->fh, "  0\r\nSECTION\r\n  2\r\n" #section "\r\n")
+  LOG_INFO ("\nSection " #section "\n");                                      \
+  fprintf (dat->fh, "  0\r\nSECTION\r\n  2\r\n" #section "\r\n");
 #define ENDSEC() fprintf (dat->fh, "  0\r\nENDSEC\r\n")
 #define TABLE(table) fprintf (dat->fh, "  0\r\nTABLE\r\n  2\r\n" #table "\r\n")
 #define ENDTAB() fprintf (dat->fh, "  0\r\nENDTAB\r\n")
@@ -1070,7 +1070,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
       record (obj->dxfname);                                                  \
     else                                                                      \
       RECORD (token);                                                         \
-    LOG_INFO ("Entity " #token "\n")                                          \
+    LOG_INFO ("Entity " #token "\n");                                         \
     if (obj->handle.value)                                                    \
       LOG_TRACE ("handle: " FORMAT_H "\n", ARGS_H (obj->handle));             \
     if (dat->version > R_11 || dwg->header_vars.HANDLING)                     \
@@ -1103,7 +1103,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
   {                                                                           \
     int error = 0;                                                            \
     Bit_Chain *hdl_dat = dat, *str_dat = dat;                                 \
-    LOG_INFO ("Object " #token "\n")                                          \
+    LOG_INFO ("Object " #token "\n");                                         \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
         LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
@@ -1140,7 +1140,8 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         {                                                                     \
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
           LOG_TRACE ("ownerhandle: " FORMAT_HV " [330]\n",                    \
-                     obj->tio.object->ownerhandle->absolute_ref);             \
+                     obj->tio.object->ownerhandle ?                           \
+                     obj->tio.object->ownerhandle->absolute_ref : 0UL);       \
         }                                                                     \
       }                                                                       \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
@@ -1154,7 +1155,9 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
               free (_name);                                                   \
           }                                                                   \
         else                                                                  \
-          LOG_TRACE ("handle: " FORMAT_H "\n", ARGS_H (obj->handle))          \
+          {                                                                   \
+            LOG_TRACE ("handle: " FORMAT_H "\n", ARGS_H (obj->handle));       \
+          }                                                                   \
       }                                                                       \
     error |= dwg_dxf_##token##_private (dat, hdl_dat, str_dat, obj);          \
     error |= dxf_write_eed (dat, obj->tio.object);                            \
@@ -2062,7 +2065,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 // header only
 #  define SAB_RD(key)                                                         \
     c = bit_read_RC (&src); /* 6 */                                           \
-    LOG_HANDLE (#key " [%d] ", c)                                             \
+    LOG_HANDLE (#key " [%d] ", c);                                            \
     key = bit_read_RD (&src);                                                 \
     dest.byte += sprintf ((char *)&dest.chain[dest.byte], "%g ", key);        \
     LOG_TRACE ("%g ", key)
@@ -2090,7 +2093,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
       unsigned len;                                                           \
       int s;                                                                  \
       c = bit_read_RC (&src);                                                 \
-      LOG_HANDLE (#key " [%d] ", c)                                           \
+      LOG_HANDLE (#key " [%d] ", c);                                          \
       len = bit_read_RC (&src);                                               \
       s = sprintf ((char *)&dest.chain[dest.byte], "%u ", len & 0xFF);        \
       dest.byte += s;                                                         \
@@ -2177,7 +2180,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   c = bit_read_RC (&src); // type tag
   while (src.byte < src.size)
     {
-      LOG_HANDLE ("[%d] ", c)
+      LOG_HANDLE ("[%d] ", c);
       switch (c)
         {
         // check size, realloc encr_sat_data[i], set dest
@@ -2286,7 +2289,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
               }
             if (dest.byte + len + 1 >= dest.size)
               bit_chain_alloc (&dest);
-            LOG_TRACE ("%.*s%s", (int)len, &src.chain[src.byte], " ")
+            LOG_TRACE ("%.*s%s", (int)len, &src.chain[src.byte], " ");
             bit_write_TF (&dest, &src.chain[src.byte], len);
             src.byte += len;
             bit_write_TF (&dest, (BITCODE_TF) " ", 1);
@@ -2312,7 +2315,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
                 LOG_TRACE ("Split overlong SAT line\n");
                 l = 0;
               }
-            LOG_TRACE ("%.*s%s", (int)len, &src.chain[src.byte], " ")
+            LOG_TRACE ("%.*s%s", (int)len, &src.chain[src.byte], " ");
             bit_write_TF (&dest, &src.chain[src.byte], len);
             src.byte += len;
             bit_write_TF (&dest, (BITCODE_TF) " ", 1);
@@ -2354,7 +2357,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             s = sprintf ((char *)&dest.chain[dest.byte], "%" PRId8 " ", ll);
             dest.byte += s;
             l += s;
-            LOG_TRACE ("%" PRId8 " ", ll)
+            LOG_TRACE ("%" PRId8 " ", ll);
           }
           break;
         case 3: // short constant
@@ -2366,7 +2369,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             s = sprintf ((char *)&dest.chain[dest.byte], "%" PRId16 " ", ll);
             dest.byte += s;
             l += s;
-            LOG_TRACE ("%" PRId16 " ", ll)
+            LOG_TRACE ("%" PRId16 " ", ll);
           }
           break;
         case 4:  // long constant
@@ -2379,7 +2382,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             s = sprintf ((char *)&dest.chain[dest.byte], "$%" PRId32 " ", ll);
             dest.byte += s;
             l += s;
-            LOG_TRACE ("$%" PRId32 " ", ll)
+            LOG_TRACE ("$%" PRId32 " ", ll);
           }
           break;
         case 5: // float constant
@@ -2397,7 +2400,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             s = sprintf ((char *)&dest.chain[dest.byte], "%g ", (double)f);
             dest.byte += s;
             l += s;
-            LOG_TRACE ("%g ", (double)f)
+            LOG_TRACE ("%g ", (double)f);
           }
           break;
         case 12: // 4 byte pointer index
@@ -2415,7 +2418,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             s = sprintf ((char *)&dest.chain[dest.byte], "$%" PRId32 " ", ll);
             dest.byte += s;
             l += s;
-            LOG_TRACE ("$%" PRId32 " ", ll)
+            LOG_TRACE ("$%" PRId32 " ", ll);
           }
           break;
         case 19: // 3x double-float position
@@ -2451,7 +2454,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
               }
             dest.byte += s;
             l += s;
-            LOG_TRACE ("$%" PRId64 " ", i64)
+            LOG_TRACE ("$%" PRId64 " ", i64);
           }
           break;
         default:
@@ -2539,9 +2542,9 @@ dxf_check_history_id (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         _obj->history_id = dwg_add_handleref (dwg, 4, hdl->value, obj);
       if (_obj->history_id)
         LOG_TRACE ("Empty %s.history_id => " FORMAT_REF "\n", obj->name,
-                   ARGS_REF (_obj->history_id))
+                   ARGS_REF (_obj->history_id));
       else
-        LOG_WARN ("Empty %s.history_id\n", obj->name)
+        LOG_WARN ("Empty %s.history_id\n", obj->name);
     }
 }
 
@@ -2616,7 +2619,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       caret = l > 1 ? strchr (s, '^') : NULL;
                     }
                   if (l > 255)
-                    LOG_ERROR ("Overlong SAT line \"%s\" len=%d", s, l)
+                    LOG_ERROR ("Overlong SAT line \"%s\" len=%d", s, l);
                   if (s[l - 1] == '\r')
                     fprintf (dat->fh, "%.*s\n", l, s);
                   else
@@ -2666,7 +2669,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           && strNEc (klass->dxfname, "LWPOLYLINE")
           && strNEc (klass->dxfname, "HATCH"))
         {
-          LOG_WARN ("Skip %s", klass->dxfname)
+          LOG_WARN ("Skip %s", klass->dxfname);
           return DWG_ERR_UNHANDLEDCLASS;
         }
       // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF,
@@ -2679,7 +2682,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                && strNEc (klass->dxfname, "IMAGEDEF_REACTOR")
                && strNEc (klass->dxfname, "XRECORD"))
         {
-          LOG_WARN ("Skip %s", klass->dxfname)
+          LOG_WARN ("Skip %s", klass->dxfname);
           return DWG_ERR_UNHANDLEDCLASS;
         }
     }
@@ -3735,14 +3738,14 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
   if (endblk)
     {
       error |= dwg_dxf_ENDBLK (dat, endblk);
-      LOG_INFO ("\n")
+      LOG_INFO ("\n");
     }
   else
     {
       LOG_WARN ("Empty ENDBLK for \"%s\" " FORMAT_HV, _hdr->name,
                 hdr ? hdr->handle.value : 0);
       dxf_ENDBLK_empty (dat, hdr);
-      LOG_INFO ("\n")
+      LOG_INFO ("\n");
     }
   return error;
 }

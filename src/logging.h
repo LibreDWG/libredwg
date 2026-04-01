@@ -30,6 +30,7 @@
 #endif
 
 #include "codepages.h"
+#include "common.h"
 
 /*
  * If more logging levels are necessary, put them in the right place and
@@ -51,34 +52,30 @@
 #  define DWG_LOGLEVEL DWG_LOGLEVEL_ERROR
 #endif
 
+#if !defined COMMON_C && !defined COMMON_TEST_C && !defined DECODE_TEST_C     \
+    && !defined ENCODE_TEST_C
+EXPORT extern unsigned int loglevel;
+#endif
+
+/* Logging functions defined in logging.c (use runtime loglevel from common.c)
+ */
+EXPORT void ATTRIBUTE_FORMAT (2, 3)
+    logger (const unsigned int minlevel, const char *restrict fmt, ...);
+
+EXPORT void ATTRIBUTE_FORMAT (1, 2) log_error (const char *restrict fmt, ...);
+
+EXPORT void ATTRIBUTE_FORMAT (1, 2) log_warn (const char *restrict fmt, ...);
+
+EXPORT void log_text32 (const unsigned int minlevel, const BITCODE_TU wstr);
+
 #define HANDLER fprintf
 #define OUTPUT stderr
 
-#define LOG(level, ...)                                                       \
-  {                                                                           \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level)                                 \
-      {                                                                       \
-        HANDLER (OUTPUT, __VA_ARGS__);                                        \
-      }                                                                       \
-  }
-#define LOG_ERROR(...)                                                        \
-  {                                                                           \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR)                                   \
-      {                                                                       \
-        HANDLER (OUTPUT, "ERROR: ");                                          \
-        LOG (ERROR, __VA_ARGS__)                                              \
-        HANDLER (OUTPUT, "\n");                                               \
-      }                                                                       \
-  }
-#define LOG_WARN(...)                                                         \
-  {                                                                           \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR)                                   \
-      {                                                                       \
-        HANDLER (OUTPUT, "Warning: ");                                        \
-        LOG (ERROR, __VA_ARGS__)                                              \
-        HANDLER (OUTPUT, "\n");                                               \
-      }                                                                       \
-  }
+#define LOG(level, ...) logger (DWG_LOGLEVEL_##level, __VA_ARGS__)
+#ifndef LOG_ERROR
+#  define LOG_ERROR(...) log_error (__VA_ARGS__)
+#endif
+#define LOG_WARN(...) log_warn (__VA_ARGS__)
 
 // speed up fuzzing, avoid unnecessary branches
 #ifdef __AFL_COMPILER
@@ -106,22 +103,22 @@
 
 #ifndef LOG_POS
 #  define LOG_POS                                                             \
-    LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, dat->bit)                    \
+    LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, dat->bit);                   \
     LOG_TRACE ("\n")
 #endif
 #define LOG_TRACE_TV(fmt, str, dxf)                                           \
   if (dwg_codepage_isasian ((Dwg_Codepage)dat->codepage))                     \
     {                                                                         \
       char *nstr = bit_TV_to_utf8 (str, dat->codepage);                       \
-      LOG_TRACE (fmt, nstr, dxf)                                              \
+      LOG_TRACE (fmt, nstr, dxf);                                             \
       if (nstr && nstr != str)                                                \
         free (nstr);                                                          \
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      LOG_TRACE (fmt, str, dxf)                                               \
+      LOG_TRACE (fmt, str, dxf);                                              \
     }                                                                         \
-  LOG_POS                                                                     \
+  LOG_POS;                                                                    \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE && str                              \
       && dat->codepage != CP_ANSI_1252 && !(dat->codepage < CP_ISO_8859_1)    \
       && strlen (str) && bit_TF_contains_high (str, strlen (str)))            \
@@ -131,36 +128,36 @@
 
 #ifdef HAVE_NATIVE_WCHAR2
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
-    LOG_TRACE ("%s: \"%ls\" [TU %d]", s, (wchar_t *)wstr, dxf)                \
+    LOG_TRACE ("%s: \"%ls\" [TU %d]", s, (wchar_t *)wstr, dxf);               \
     LOG_POS
 #  define LOG_TRACE_TU_AS(s, wstr, type, dxf)                                 \
-    LOG_TRACE ("%s: \"%ls\" [%s %d]", s, (wchar_t *)wstr, #type, dxf)         \
+    LOG_TRACE ("%s: \"%ls\" [%s %d]", s, (wchar_t *)wstr, #type, dxf);        \
     LOG_POS
 #  define LOG_TRACE_TU_I(s, i, wstr, type, dxf)                               \
     LOG_TRACE ("%s[%d]: \"%ls\" [%s %d]", s, (int)i, (wchar_t *)wstr, #type,  \
-               dxf)                                                           \
+               dxf);                                                          \
     LOG_POS
 #  define LOG_TEXT_UNICODE(level, args) LOG (level, args)
 #else
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
     {                                                                         \
-      LOG_TRACE ("%s: \"", s)                                                 \
-      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                              \
-      LOG_TRACE ("\" [TU %d]", dxf)                                           \
+      LOG_TRACE ("%s: \"", s);                                                \
+      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr);                             \
+      LOG_TRACE ("\" [TU %d]", dxf);                                          \
       LOG_POS;                                                                \
     }
 #  define LOG_TRACE_TU_AS(s, wstr, type, dxf)                                 \
     {                                                                         \
-      LOG_TRACE ("%s: \"", s)                                                 \
-      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                              \
-      LOG_TRACE ("\" [%s %d]", #type, dxf)                                    \
+      LOG_TRACE ("%s: \"", s);                                                \
+      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr);                             \
+      LOG_TRACE ("\" [%s %d]", #type, dxf);                                   \
       LOG_POS;                                                                \
     }
 #  define LOG_TRACE_TU_I(s, i, wstr, type, dxf)                               \
     {                                                                         \
-      LOG_TRACE ("%s[%d]: \"", s, (int)i)                                     \
-      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                              \
-      LOG_TRACE ("\" [" #type " %d]", dxf)                                    \
+      LOG_TRACE ("%s[%d]: \"", s, (int)i);                                    \
+      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr);                             \
+      LOG_TRACE ("\" [" #type " %d]", dxf);                                   \
       LOG_POS;                                                                \
     }
 #  define LOG_TEXT_UNICODE(level, wstr)                                       \
@@ -174,18 +171,10 @@
     }
 #endif
 #define LOG_TRACE_TW(s, wstr, dxf)                                            \
-  LOG_TRACE ("%s: \"", s)                                                     \
-  LOG_TEXT32 (TRACE, (BITCODE_TW)wstr)                                        \
-  LOG_TRACE ("\" [TW %d]", dxf)                                               \
+  LOG_TRACE ("%s: \"", s);                                                    \
+  LOG_TEXT32 (TRACE, (BITCODE_TW)wstr);                                       \
+  LOG_TRACE ("\" [TW %d]", dxf);                                              \
   LOG_POS
-#define LOG_TEXT32(level, wstr)                                               \
-  {                                                                           \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                         \
-      {                                                                       \
-        char *_u8 = bit_convert_TU (wstr);                                    \
-        HANDLER (OUTPUT, "%s", _u8);                                          \
-        free (_u8);                                                           \
-      }                                                                       \
-  }
+#define LOG_TEXT32(level, wstr) dwg_log_text32 (level, wstr)
 
 #endif

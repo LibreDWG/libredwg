@@ -28,7 +28,7 @@
 /* (1/7) */
 DWG_ENTITY (TEXT)
 
-  SUBCLASS (AcDbText)
+  SUBCLASS (AcDbText);
   PRE (R_13b1) {
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (height, 40);
@@ -193,7 +193,7 @@ DWG_ENT_SUBCLASS_DECL (ATTDEF, AcDbMTextObjectEmbedded);
 /* (2/16) */
 DWG_ENTITY (ATTRIB)
 
-  SUBCLASS (AcDbText)
+  SUBCLASS (AcDbText);
   PRE (R_13b1)
     {
       FIELD_2RD (ins_pt, 10);
@@ -209,7 +209,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_TV (tag, 2);
       DECODER {
         if (FIELD_VALUE (tag) && !dwg_is_valid_tag (FIELD_VALUE (tag)))
-          LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag))
+          LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag));
       }
       FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
       LOG_FLAG_ATTRIB
@@ -342,7 +342,7 @@ DWG_ENTITY (ATTRIB)
       }
     }
 
-  SUBCLASS (AcDbAttribute)
+  SUBCLASS (AcDbAttribute);
   DXF {
     FIELD_T (tag, 2);
     FIELD_RC (flags, 70);
@@ -392,7 +392,7 @@ DWG_ENTITY_END
 /* (3/15) */
 DWG_ENTITY (ATTDEF)
 
-  SUBCLASS (AcDbText)
+  SUBCLASS (AcDbText);
   PRE (R_13b1)
     {
       FIELD_2RD (ins_pt, 10);
@@ -409,7 +409,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_TV (tag, 2);
       DECODER {
         if (FIELD_VALUE (tag) && !dwg_is_valid_tag (FIELD_VALUE (tag)))
-          LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag))
+          LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag));
       }
       FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
       LOG_FLAG_ATTDEF
@@ -609,7 +609,7 @@ DWG_ENT_SUBCLASS (ATTDEF, AcDbMTextObjectEmbedded);
 /* (4/12) */
 DWG_ENTITY (BLOCK)
 
-  SUBCLASS (AcDbBlockBegin)
+  SUBCLASS (AcDbBlockBegin);
 #ifndef IS_DXF
   PRE (R_2_0b) {
     FIELD_TV (name, 2);
@@ -691,7 +691,7 @@ DWG_ENTITY_END
 /* (5/13) */
 DWG_ENTITY (ENDBLK)
 
-  SUBCLASS (AcDbBlockEnd)
+  SUBCLASS (AcDbBlockEnd);
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
@@ -699,7 +699,7 @@ DWG_ENTITY_END
 /* (6/17) */
 DWG_ENTITY (SEQEND)
 
-  //SUBCLASS (AcDbSequenceEnd) //unused
+  //SUBCLASS (AcDbSequenceEnd); //unused
   PRE (R_13b1) {
     FIELD_RLx (begin_addr_r11, 0);
   }
@@ -710,7 +710,7 @@ DWG_ENTITY_END
 /* (7/14) */
 DWG_ENTITY (INSERT)
 
-  SUBCLASS (AcDbBlockReference)
+  SUBCLASS (AcDbBlockReference);
 #ifdef IS_DXF
     FIELD_RS0 (has_attribs, 66);
     FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
@@ -896,7 +896,7 @@ DWG_ENTITY_END
 /* (8) 20.4.10 */
 DWG_ENTITY (MINSERT)
 
-  SUBCLASS (AcDbMInsertBlock)
+  SUBCLASS (AcDbMInsertBlock);
 #ifdef IS_DXF
     FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
     if (FIELD_VALUE (has_attribs))
@@ -1056,8 +1056,8 @@ DWG_ENTITY_END
 /* (10/20) */
 DWG_ENTITY (VERTEX_2D)
 
-  SUBCLASS (AcDbVertex)
-  SUBCLASS (AcDb2dVertex)
+  SUBCLASS (AcDbVertex);
+  SUBCLASS (AcDb2dVertex);
   PRE (R_13b1)
   {
     FIELD_2RD (point, 10);
@@ -1145,8 +1145,8 @@ DWG_ENTITY_END
 /* (11/20) */
 DWG_ENTITY (VERTEX_3D)
 
-  SUBCLASS (AcDbVertex)
-  SUBCLASS (AcDb3dPolylineVertex)
+  SUBCLASS (AcDbVertex);
+  SUBCLASS (AcDb3dPolylineVertex);
   PRE (R_13b1)
   {
     FIELD_2RD (point, 10);
@@ -1169,8 +1169,8 @@ DWG_ENTITY_END
 /* (12/20) */
 DWG_ENTITY (VERTEX_MESH)
 
-  SUBCLASS (AcDbVertex)
-  SUBCLASS (AcDbPolyFaceMeshVertex)
+  SUBCLASS (AcDbVertex);
+  SUBCLASS (AcDbPolyFaceMeshVertex);
   PRE (R_13b1)
   {
     FIELD_2RD (point, 10);
@@ -1191,8 +1191,8 @@ DWG_ENTITY_END
 /* (13/20) */
 DWG_ENTITY (VERTEX_PFACE)
 
-  SUBCLASS (AcDbVertex)
-  SUBCLASS (AcDbPolyFaceMeshVertex)
+  SUBCLASS (AcDbVertex);
+  SUBCLASS (AcDbPolyFaceMeshVertex);
   PRE (R_13b1)
   {
     FIELD_2RD (point, 10);
@@ -1215,7 +1215,7 @@ DWG_ENTITY_END
 /* (14/20) */
 DWG_ENTITY (VERTEX_PFACE_FACE)
 
-  SUBCLASS (AcDbFaceRecord)
+  SUBCLASS (AcDbFaceRecord);
 #ifdef IS_DXF
   {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
@@ -1274,8 +1274,8 @@ DWG_ENTITY_END
 */
 DWG_ENTITY (POLYLINE_2D)
 
-  //SUBCLASS (AcDbCurve)
-  SUBCLASS (AcDb2dPolyline)
+  //SUBCLASS (AcDbCurve);
+  SUBCLASS (AcDb2dPolyline);
   PRE (R_13b1)
   {
     if (R11OPTS (1)) {
@@ -1368,7 +1368,7 @@ DWG_ENTITY_END
 /* (16/19) */
 DWG_ENTITY (POLYLINE_3D)
 
-  SUBCLASS (AcDb3dPolyline)
+  SUBCLASS (AcDb3dPolyline);
   DXF {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     BITCODE_RC flag = FIELD_VALUE (flag);
@@ -1428,8 +1428,8 @@ DWG_ENTITY_END
 /* (17/8) */
 DWG_ENTITY (ARC)
 
-  //SUBCLASS (AcDbCurve)
-  SUBCLASS (AcDbCircle)
+  //SUBCLASS (AcDbCurve);
+  SUBCLASS (AcDbCircle);
   PRE (R_13b1) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
@@ -1445,7 +1445,7 @@ DWG_ENTITY (ARC)
     FIELD_BD (radius, 40);
     FIELD_BT0 (thickness, 39);
     FIELD_BE (extrusion, 210);
-    SUBCLASS (AcDbArc)
+    SUBCLASS (AcDbArc);
     FIELD_BD (start_angle, 50);
     FIELD_BD (end_angle, 51);
   }
@@ -1457,8 +1457,8 @@ DWG_ENTITY_END
 /* (18/3) */
 DWG_ENTITY (CIRCLE)
 
-  //SUBCLASS (AcDbCurve)
-  SUBCLASS (AcDbCircle)
+  //SUBCLASS (AcDbCurve);
+  SUBCLASS (AcDbCircle);
   PRE (R_13b1) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
@@ -1481,8 +1481,8 @@ DWG_ENTITY_END
 /* (19/1) */
 DWG_ENTITY (LINE)
 
-  //SUBCLASS (AcDbCurve)
-  SUBCLASS (AcDbLine)
+  //SUBCLASS (AcDbCurve);
+  SUBCLASS (AcDbLine);
   PRE (R_10) {
       FIELD_2RD (start, 10)
       FIELD_2RD (end, 11)
@@ -1559,8 +1559,8 @@ DWG_ENTITY_END
 
 /* removed: COMMON_ENTITY_DIMENSION - now in dwg_spec_shared.h */
 #if 0
-    SUBCLASS (AcDbDimension)                                                  \
-    SINCE (R_2010b)                                                            \
+    SUBCLASS (AcDbDimension);                                                 \
+    SINCE (R_2010b)                                                           \
     {                                                                         \
       FIELD_RC (class_version, 280); /* 0=r2010 */                            \
       VALUEOUTOFBOUNDS (class_version, 10)                                    \
@@ -1676,7 +1676,7 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_ORDINATE)
 
   COMMON_ENTITY_DIMENSION
-  SUBCLASS (AcDbOrdinateDimension)
+  SUBCLASS (AcDbOrdinateDimension);
   PRE (R_13b1) {
     if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
       if (dat->version >= R_10) {
@@ -1724,7 +1724,7 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_LINEAR)
 
   COMMON_ENTITY_DIMENSION
-  SUBCLASS (AcDbAlignedDimension)
+  SUBCLASS (AcDbAlignedDimension);
   PRE (R_13b1) {
     if (R11OPTS (8)) {
       if (dat->version >= R_10) {
@@ -1757,7 +1757,7 @@ DWG_ENTITY (DIMENSION_LINEAR)
     FIELD_3BD (def_pt, 0);
     FIELD_BD (oblique_angle, 52);
     FIELD_BD0 (dim_rotation, 50);
-    SUBCLASS (AcDbRotatedDimension)
+    SUBCLASS (AcDbRotatedDimension);
 
     COMMON_ENTITY_HANDLE_DATA;
     FIELD_HANDLE (dimstyle, 5, 0);
@@ -1770,7 +1770,7 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_ALIGNED)
 
   COMMON_ENTITY_DIMENSION
-  SUBCLASS (AcDbAlignedDimension)
+  SUBCLASS (AcDbAlignedDimension);
   PRE (R_13b1) {
     if (R11OPTS (8)) {
       if (dat->version >= R_10) {
@@ -1809,7 +1809,7 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_ANG3PT)
 
   COMMON_ENTITY_DIMENSION
-  SUBCLASS (AcDb3PointAngularDimension)
+  SUBCLASS (AcDb3PointAngularDimension);
   PRE (R_13b1) {
     if (R11OPTS (8)) {
       if (dat->version >= R_10) {
@@ -1856,7 +1856,7 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_ANG2LN)
 
   COMMON_ENTITY_DIMENSION
-  SUBCLASS (AcDb2LineAngularDimension)
+  SUBCLASS (AcDb2LineAngularDimension);
   JSON { FIELD_3RD (def_pt, 0) }
   PRE (R_13b1) {
     if (R11OPTS (8)) {
@@ -1909,7 +1909,7 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_RADIUS)
 
   COMMON_ENTITY_DIMENSION
-  SUBCLASS (AcDbRadialDimension)
+  SUBCLASS (AcDbRadialDimension);
   PRE (R_13b1) {
     if (R11OPTS (32)) {
       if (dat->version >= R_10) {
@@ -1942,7 +1942,7 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_DIAMETER)
 
   COMMON_ENTITY_DIMENSION
-  SUBCLASS (AcDbDiametricDimension)
+  SUBCLASS (AcDbDiametricDimension);
   PRE (R_13b1) {
     if (R11OPTS (32)) {
       if (dat->version >= R_10) {
@@ -1975,7 +1975,7 @@ DWG_ENTITY_END
 DWG_ENTITY (LARGE_RADIAL_DIMENSION)
 
   COMMON_ENTITY_DIMENSION
-  SUBCLASS (AcDbRadialDimensionLarge)
+  SUBCLASS (AcDbRadialDimensionLarge);
   DXF {
     FIELD_3BD (jog_pt, 13);
     FIELD_3BD (ovr_center, 14);
@@ -1997,7 +1997,7 @@ DWG_ENTITY_END
 /* (27/2) */
 DWG_ENTITY (POINT)
 
-  SUBCLASS (AcDbPoint)
+  SUBCLASS (AcDbPoint);
   PRE (R_13b1) {
     FIELD_RD (x, 10);
     FIELD_RD (y, 20);
@@ -2024,7 +2024,7 @@ DWG_ENTITY_END
 /* (28/22) */
 DWG_ENTITY (_3DFACE)
 
-  SUBCLASS (AcDbFace)
+  SUBCLASS (AcDbFace);
   PRE (R_10) {
     if (R11OPTS (1)) {
       FIELD_3RD (corner1, 10)
@@ -2121,7 +2121,7 @@ DWG_ENTITY_END
 /* (29) */
 DWG_ENTITY (POLYLINE_PFACE)
 
-  SUBCLASS (AcDbPolyFaceMesh)
+  SUBCLASS (AcDbPolyFaceMesh);
   DXF {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     FIELD_B (has_vertex, 66);
@@ -2169,7 +2169,7 @@ DWG_ENTITY_END
 /* (30) */
 DWG_ENTITY (POLYLINE_MESH)
 
-  SUBCLASS (AcDbPolygonMesh)
+  SUBCLASS (AcDbPolygonMesh);
   DXF {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     BITCODE_BS flag = FIELD_VALUE (flag) | 16U;
@@ -2942,7 +2942,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
     {
       if (FIELD_VALUE (encr_sat_data))
         {
-          LOG_HANDLE ("Free %s.num_blocks %u\n", obj->name, _obj->num_blocks)
+          LOG_HANDLE ("Free %s.num_blocks %u\n", obj->name, _obj->num_blocks);
           for (BITCODE_BL i = 0; i <= FIELD_VALUE (num_blocks); i++)
             {
               if (FIELD_VALUE (encr_sat_data[i]) != NULL)
@@ -3892,7 +3892,7 @@ DWG_TABLE (STYLE)
                             (FIELD_VALUE (is_shape) ? 1 : 0);
       LOG_TRACE ("flag => %d [RC 70]\n", FIELD_VALUE (flag));
       DECODER_OR_ENCODER {
-        LOG_TRACE ("  ")
+        LOG_TRACE ("  ");
         LOG_FLAG_TextStyle
       }
     }
@@ -4178,7 +4178,7 @@ DWG_TABLE (VIEW)
       FIELD_VALUE (aspect_ratio) = FIELD_VALUE (VIEWSIZE) == 0.0
         ? 0.0
         : FIELD_VALUE (view_width) / FIELD_VALUE (VIEWSIZE);
-      LOG_TRACE ("aspect_ratio: %f (calc)\n", FIELD_VALUE (aspect_ratio))
+      LOG_TRACE ("aspect_ratio: %f (calc)\n", FIELD_VALUE (aspect_ratio));
     }
     JSON {
       FIELD_BD (aspect_ratio, 0);
@@ -4418,7 +4418,7 @@ DWG_TABLE (VPORT)
       FIELD_RD (aspect_ratio, 41);
       DECODER {
         FIELD_VALUE (view_width) = FIELD_VALUE (aspect_ratio) * FIELD_VALUE (VIEWSIZE);
-        LOG_TRACE ("view_width: %f (calc)\n", FIELD_VALUE (view_width))
+        LOG_TRACE ("view_width: %f (calc)\n", FIELD_VALUE (view_width));
       }
       FIELD_RD (lens_length, 42);
       FIELD_RD (front_clip_z, 43);
@@ -4444,7 +4444,7 @@ DWG_TABLE (VPORT)
         FIELD_VALUE (aspect_ratio) = FIELD_VALUE (VIEWSIZE) == 0.0
           ? 0.0
           : FIELD_VALUE (view_width) / FIELD_VALUE (VIEWSIZE);
-        LOG_TRACE ("aspect_ratio: %f (calc)\n", FIELD_VALUE (aspect_ratio))
+        LOG_TRACE ("aspect_ratio: %f (calc)\n", FIELD_VALUE (aspect_ratio));
       }
       JSON {
         FIELD_BD (aspect_ratio, 0);
@@ -5641,7 +5641,7 @@ DWG_OBJECT (PLOTSETTINGS)
             = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
           if (_obj->plotview)
             LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
-                       ARGS_REF (_obj->plotview))
+                       ARGS_REF (_obj->plotview));
         }
     }
   }
@@ -5653,7 +5653,7 @@ DWG_OBJECT (PLOTSETTINGS)
             = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
           if (_obj->plotview)
             LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
-                       ARGS_REF (_obj->plotview))
+                       ARGS_REF (_obj->plotview));
         }
     }
     DXF {
@@ -5735,7 +5735,7 @@ DWG_OBJECT (LAYOUT)
                                       _obj->plotsettings.plotview_name, "VIEW");
           if (_obj->plotsettings.plotview)
             LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
-                       ARGS_REF (_obj->plotsettings.plotview))
+                       ARGS_REF (_obj->plotsettings.plotview));
         }
     }
   }
@@ -5747,7 +5747,7 @@ DWG_OBJECT (LAYOUT)
               _obj->plotsettings.plotview_name, "VIEW");
           if (_obj->plotsettings.plotview)
             LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
-                       ARGS_REF (_obj->plotsettings.plotview))
+                       ARGS_REF (_obj->plotsettings.plotview));
         }
     }
     FIELD_HANDLE (plotsettings.plotview, 4, 0);

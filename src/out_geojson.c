@@ -704,7 +704,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case DWG_TYPE_MINSERT:
       // a grid of INSERT's (named points)
       // dwg_geojson_MINSERT(dat, obj);
-      LOG_TRACE ("MINSERT not yet supported")
+      LOG_TRACE ("MINSERT not yet supported");
       break;
     case DWG_TYPE_POLYLINE_2D:
       {
@@ -841,7 +841,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           free (pts);
         }
       else
-        LOG_TRACE ("ARC not yet supported")
+        LOG_TRACE ("ARC not yet supported");
       break;
     case DWG_TYPE_CIRCLE:
       // dwg_geojson_CIRCLE(dat, obj);
@@ -872,7 +872,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           free (pts);
         }
       else
-        LOG_TRACE ("CIRCLE not yet supported")
+        LOG_TRACE ("CIRCLE not yet supported");
       break;
     case DWG_TYPE_LINE:
       {
@@ -909,31 +909,31 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case DWG_TYPE__3DFACE:
       // really a Polygon
       // dwg_geojson__3DFACE(dat, obj);
-      LOG_TRACE ("3DFACE not yet supported")
+      LOG_TRACE ("3DFACE not yet supported");
       break;
     case DWG_TYPE_POLYLINE_PFACE:
       // dwg_geojson_POLYLINE_PFACE(dat, obj);
-      LOG_TRACE ("POLYLINE_PFACE not yet supported")
+      LOG_TRACE ("POLYLINE_PFACE not yet supported");
       break;
     case DWG_TYPE_POLYLINE_MESH:
       // dwg_geojson_POLYLINE_MESH(dat, obj);
-      LOG_TRACE ("POLYLINE_MESH not yet supported")
+      LOG_TRACE ("POLYLINE_MESH not yet supported");
       break;
     case DWG_TYPE_SOLID:
       // dwg_geojson_SOLID(dat, obj);
-      LOG_TRACE ("SOLID not yet supported")
+      LOG_TRACE ("SOLID not yet supported");
       break;
     case DWG_TYPE_TRACE:
       // dwg_geojson_TRACE(dat, obj);
-      LOG_TRACE ("TRACE not yet supported")
+      LOG_TRACE ("TRACE not yet supported");
       break;
     case DWG_TYPE_ELLIPSE:
       // dwg_geojson_ELLIPSE(dat, obj);
-      LOG_TRACE ("ELLIPSE not yet supported")
+      LOG_TRACE ("ELLIPSE not yet supported");
       break;
     case DWG_TYPE_SPLINE:
       // dwg_geojson_SPLINE(dat, obj);
-      LOG_TRACE ("SPLINE not yet supported")
+      LOG_TRACE ("SPLINE not yet supported");
       break;
     case DWG_TYPE_HATCH:
       // dwg_geojson_HATCH(dat, obj);
@@ -949,11 +949,11 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       break;
     case DWG_TYPE_RAY:
       // dwg_geojson_RAY(dat, obj);
-      LOG_TRACE ("RAY not yet supported")
+      LOG_TRACE ("RAY not yet supported");
       break;
     case DWG_TYPE_XLINE:
       // dwg_geojson_XLINE(dat, obj);
-      LOG_TRACE ("XLINE not yet supported")
+      LOG_TRACE ("XLINE not yet supported");
       break;
     case DWG_TYPE_TEXT:
       {
@@ -981,7 +981,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       }
     case DWG_TYPE_MLINE:
       // dwg_geojson_MLINE(dat, obj);
-      LOG_TRACE ("MLINE not yet supported")
+      LOG_TRACE ("MLINE not yet supported");
       break;
     case DWG_TYPE_LWPOLYLINE:
       return dwg_geojson_LWPOLYLINE (dat, obj, is_last);

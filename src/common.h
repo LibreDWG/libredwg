@@ -547,11 +547,6 @@ extern const struct dwg_versions dwg_versions[DWG_VERSIONS];
 #  endif
 #endif
 
-#if !defined COMMON_C && !defined COMMON_TEST_C && !defined DECODE_TEST_C     \
-    && !defined ENCODE_TEST_C
-EXPORT extern unsigned int loglevel;
-#endif
-
 /**
  * Index of sentinels into sentinels[]
  */
@@ -717,10 +712,11 @@ void
 dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
                                 Dwg_Object_LTYPE *restrict _obj) __nonnull_all;
 
-// in the public API, but we don't use that for most internal modules
+// in the public API, but we don't use the heavy API for most internal modules
 #if !defined _DWG_API_H_ && !defined _DWG_API_C && !defined DYNAPI_TEST_C     \
     && !defined ADD_TEST_C && !defined DXF_TEST_C
-bool dwg_is_valid_tag (const char *tag) __nonnull_all;
+#  define DWG_IS_VALID_TAG_DEFINED
+EXPORT bool dwg_is_valid_tag (const char *tag) __nonnull_all;
 #endif
 
 bool dwg_has_eed_appid (Dwg_Object_Object *restrict obj,

@@ -259,6 +259,7 @@ set(libredwg_SOURCES
     src/bits.c
     src/codepages.c
     src/common.c
+    src/logging.c
     src/classes.c
     src/objects.c
     src/decode.c

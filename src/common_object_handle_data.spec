@@ -26,8 +26,8 @@
         > AVAIL_BITS (hdl_dat))
       {
         LOG_ERROR ("num_reactors: " FORMAT_BL " > AVAIL_BITS(hdl_dat): %" PRId64 "\n",
-                   FIELD_VALUE (num_reactors), AVAIL_BITS (hdl_dat))
-          FIELD_VALUE (num_reactors) = 0;
+                   FIELD_VALUE (num_reactors), AVAIL_BITS (hdl_dat));
+        FIELD_VALUE (num_reactors) = 0;
         return DWG_ERR_VALUEOUTOFBOUNDS;
       }
 #endif

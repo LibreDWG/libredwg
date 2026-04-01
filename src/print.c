@@ -156,7 +156,7 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_3DPOINT(name, dxf) FIELD_3BD (name, dxf)
 #define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
-    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf)     \
+    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf);    \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
@@ -172,7 +172,7 @@ static BITCODE_BL rcount1, rcount2;
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
-    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf)   \
+    LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf);  \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
         LOG_TRACE (#color ".rgb: 0x%06x [CMC.BL %d]\n",                       \
@@ -228,7 +228,7 @@ static BITCODE_BL rcount1, rcount2;
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
-                     _obj->name[vcount])                                      \
+                     _obj->name[vcount]);                                     \
         }                                                                     \
     }
 #define FIELD_VECTOR_T(name, type, size, dxf)                                 \
@@ -238,11 +238,11 @@ static BITCODE_BL rcount1, rcount2;
         {                                                                     \
           PRE (R_2007a)                                                       \
           {                                                                   \
-            LOG_TRACE (#name "[%ld]: %s\n", (long)vcount, _obj->name[vcount]) \
+            LOG_TRACE (#name "[%ld]: %s\n", (long)vcount, _obj->name[vcount]);\
           }                                                                   \
           else                                                                \
           {                                                                   \
-            LOG_TRACE_TU (#name, _obj->name[vcount], dxf)                     \
+            LOG_TRACE_TU (#name, _obj->name[vcount], dxf);                    \
           }                                                                   \
         }                                                                     \
     }
@@ -358,11 +358,11 @@ static BITCODE_BL rcount1, rcount2;
     Bit_Chain *str_dat = dat;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
     int error = 0;                                                            \
-    LOG_INFO ("Entity " #token ":\n")                                         \
+    LOG_INFO ("Entity " #token ":\n");                                        \
     _ent = obj->tio.entity;                                                   \
     _obj = ent = _ent->tio.token;                                             \
     dwg_print_##token##_private (dat, hdl_dat, str_dat, obj);                 \
-    LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))
+    LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle));
 
 #define DWG_ENTITY_END                                                        \
   return 0;                                                                   \
@@ -384,10 +384,10 @@ static BITCODE_BL rcount1, rcount2;
     Bit_Chain *str_dat = dat;                                                 \
     Dwg_Data *dwg = obj->parent;                                              \
     int error = 0;                                                            \
-    LOG_INFO ("Object " #token ":\n")                                         \
+    LOG_INFO ("Object " #token ":\n");                                        \
     dwg_print_##token##_private (dat, hdl_dat, str_dat, obj);                 \
     _obj = obj->tio.object->tio.token;                                        \
-    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))
+    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle));
 
 #define DWG_OBJECT_END                                                        \
   return 0;                                                                   \

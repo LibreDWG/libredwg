@@ -959,7 +959,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     Dwg_Entity_##token *ent, *_obj;                                           \
     Dwg_Object_Entity *_ent;                                                  \
     const char *name = #token;                                                \
-    LOG_INFO ("Entity " #token ":\n")                                         \
+    LOG_INFO ("Entity " #token ":\n");                                        \
     _ent = obj->tio.entity;                                                   \
     if (!_ent || !_ent->tio.token)                                            \
       return DWG_ERR_INTERNALERROR;                                           \
@@ -1016,7 +1016,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     Bit_Chain *hdl_dat = dat;                                                 \
     const char *name = #token;                                                \
     Dwg_Object_##token *_obj;                                                 \
-    LOG_INFO ("Object " #token ":\n")                                         \
+    LOG_INFO ("Object " #token ":\n");                                        \
     if (!obj->tio.object || !obj->tio.object->tio.token)                      \
       return DWG_ERR_INTERNALERROR;                                           \
     _obj = obj->tio.object->tio.token;                                        \
@@ -2313,7 +2313,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           ENDSEC ();
           break;
         default:
-          LOG_WARN ("Missing TABLE %u", id)
+          LOG_WARN ("Missing TABLE %u", id);
         }
       CLEARFIRST;
     }

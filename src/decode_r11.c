@@ -132,7 +132,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
 
   if (dat->byte + 10 > dat->size)
     {
-      LOG_ERROR ("%s.size overflow @%" PRIuSIZE, name, dat->byte)
+      LOG_ERROR ("%s.size overflow @%" PRIuSIZE, name, dat->byte);
       return DWG_ERR_SECTIONNOTFOUND;
     }
   tbl->type = (Dwg_Section_Type)id;
@@ -210,7 +210,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   if (tbl->number > 0 && tbl->size < 33)
     {
       LOG_ERROR ("Wrong %s.number " FORMAT_RLd " or size %u", tbl->name,
-                 tbl->number, (unsigned)tbl->size)
+                 tbl->number, (unsigned)tbl->size);
       return 1; // DWG_ERR_SECTIONNOTFOUND;
     }
   if (tbl->number > 0
@@ -248,7 +248,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (" FORMAT_RLL
              "-" FORMAT_RLL ")\n\n",
              tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
-             tbl->address + (tbl->number * tbl->size))
+             tbl->address + (tbl->number * tbl->size));
 
   // with sentinel in case of R11
   SINCE (R_11)
@@ -398,17 +398,12 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
               LOG_ERROR ("Out of memory");                                    \
               obj->num_unknown_rest = 0;                                      \
             }                                                                 \
-        } /* In the table header the size OR number can be wrong. */ /* Here    \
-                                                                        we      \
-                                                                        catch   \
-                                                                        the     \
-                                                                        wrong   \
-                                                                        number. \
-                                                                      */                                   \
+          } /* In the table header the size OR number can be wrong. */        \
+                                                                              \
       if (tbl->number > 0 && tbl->size < 33)                                  \
         return DWG_ERR_SECTIONNOTFOUND;                                       \
     }                                                                         \
-  LOG_TRACE ("\n")                                                            \
+  LOG_TRACE ("\n");                                                           \
   dat->byte = pos
 
   switch (id)
@@ -683,7 +678,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     strcpy (dwg->header.section[0].name, "HEADER");
 
     // The 5 tables (num_sections always 5): 3 RS + 1 RL address
-    LOG_INFO ("==========================================\n")
+    LOG_INFO ("==========================================\n");
     // dat_save = *dat;
     error |= decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
     if (error >= DWG_ERR_CRITICAL)
@@ -704,18 +699,18 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("@0x%zx\n", dat->byte); // 0x5e
   if (dat->size < 0x1f0)             // AC1.50 0x1f9 74 vars
     {
-      LOG_ERROR ("DWG too small %" PRIuSIZE, (size_t)dat->size)
+      LOG_ERROR ("DWG too small %" PRIuSIZE, (size_t)dat->size);
       return DWG_ERR_INVALIDDWG;
     }
 
-  LOG_TRACE ("==========================================\n")
+  LOG_TRACE ("==========================================\n");
   error |= decode_preR13_header_variables (dat, dwg);
   LOG_TRACE ("@0x%zx\n", dat->byte);
   if (error >= DWG_ERR_CRITICAL)
     return error;
   if (dat->byte + 2 >= dat->size)
     {
-      LOG_ERROR ("post HEADER overflow")
+      LOG_ERROR ("post HEADER overflow");
       return error | DWG_ERR_CRITICAL;
     }
   SINCE (R_11)

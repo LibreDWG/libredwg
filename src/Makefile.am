@@ -34,6 +34,7 @@ libredwg_la_SOURCES = \
 	common.c \
 	codepages.c \
 	bits.c \
+	logging.c \
 	decode.c \
 	decode2.c \
 	decode_r11.c \

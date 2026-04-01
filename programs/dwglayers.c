@@ -184,7 +184,7 @@ main (int argc, char *argv[])
       if (!name)
         {
           LOG_ERROR ("Invalid layer " FORMAT_HV " ignored, empty name",
-                     _ctrl->entries[i]->obj->handle.value)
+                     _ctrl->entries[i]->obj->handle.value);
         }
       else
         {

@@ -210,24 +210,16 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
     }
 #define FIELD_TV(nam, dxf)                                                    \
   if (_obj->nam != NULL && dxf != 0)                                          \
-    {                                                                         \
-      VALUE_TV (_obj->nam, dxf)                                               \
-    }
+    VALUE_TV (_obj->nam, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
   if (_obj->nam != NULL && dxf != 0)                                          \
-    {                                                                         \
-      VALUE_TU (_obj->nam, dxf)                                               \
-    }
+    VALUE_TU (_obj->nam, dxf)
 #define VALUE_T(value, dxf)                                                   \
   {                                                                           \
     if (IS_FROM_TU (dat))                                                     \
-      {                                                                       \
-        VALUE_TU (value, dxf)                                                 \
-      }                                                                       \
+      VALUE_TU (value, dxf)                                                 \
     else                                                                      \
-      {                                                                       \
-        VALUE_TV ((char *)value, dxf)                                         \
-      }                                                                       \
+      VALUE_TV ((char *)value, dxf)                                         \
   }
 #define VALUE_T0(value, dxf)                                                  \
   if (!bit_empty_T (dat, value))                                              \
@@ -393,9 +385,7 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define RECORD(token) VALUE_TV (#token, 0)
 #define SUBCLASS(text)                                                        \
   if (dat->version >= R_13b1)                                                 \
-    {                                                                         \
-      VALUE_TV (#text, 100)                                                   \
-    }
+      VALUE_TV (#text, 100)
 
 /*
 #define VALUE(code, value) \
@@ -617,9 +607,7 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       ref->obj = dwg_resolve_handle (obj->parent, ref->absolute_ref);         \
     if (ref && ref->obj && ref->obj->supertype == DWG_SUPERTYPE_OBJECT        \
         && ref->obj->fixedtype == DWG_TYPE_##table)                           \
-      {                                                                       \
-        VALUE_TV (ref->obj->tio.object->tio.table->name, dxf)                 \
-      }                                                                       \
+      VALUE_TV (ref->obj->tio.object->tio.table->name, dxf)                   \
     else                                                                      \
       VALUE_TV ("", dxf)                                                      \
   }
@@ -1002,11 +990,11 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     else if (obj->type >= 498 && obj->dxfname)                                \
       VALUE_TV (obj->dxfname, 0)                                              \
     else                                                                      \
-      RECORD (token)                                                          \
-    LOG_INFO ("Entity " #token ":\n")                                         \
+      RECORD (token);                                                         \
+    LOG_INFO ("Entity " #token ":\n");                                        \
     if (dat->version > R_11 || dwg->header_vars.HANDLING)                     \
     {                                                                         \
-      LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))       \
+      LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle));      \
       VALUE_H (obj->handle.value, 5);                                         \
     }                                                                         \
     error |= dxfb_common_entity_handle_data (dat, obj);                       \
@@ -1039,7 +1027,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
-    LOG_INFO ("Object " #token "\n")                                         \
+    LOG_INFO ("Object " #token "\n");                                         \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
         LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
@@ -1062,7 +1050,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
         else if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT)                     \
           RECORD (ACAD_PROXY_OBJECT)                                          \
         else if (obj->type != DWG_TYPE_BLOCK_HEADER)                          \
-          RECORD (token)                                                      \
+          RECORD (token);                                                     \
         SINCE (R_13b1)                                                        \
         {                                                                     \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
@@ -1088,7 +1076,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
               free (_name);                                                   \
           }                                                                   \
         else                                                                  \
-          LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))   \
+          LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle));  \
       }                                                                       \
     error |= dwg_dxfb_##token##_private (dat, hdl_dat, str_dat, obj);         \
     error |= dxfb_write_eed (dat, obj->tio.object);                           \
@@ -1124,7 +1112,7 @@ dxfb_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
           if (appid && appid->fixedtype == DWG_TYPE_APPID)
             VALUE_T (appid->tio.object->tio.APPID->name, 1001)
           else
-            VALUE_TFF ("ACAD", 1001);
+            VALUE_TFF ("ACAD", 1001)
         }
       if (_obj->data)
         {
@@ -1525,7 +1513,7 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           && strNEc (klass->dxfname, "LWPOLYLINE")
           && strNEc (klass->dxfname, "HATCH"))
         {
-          LOG_WARN ("Skip %s\n", klass->dxfname)
+          LOG_WARN ("Skip %s\n", klass->dxfname);
           return DWG_ERR_UNHANDLEDCLASS;
         }
       // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF_REACTOR,
@@ -1537,7 +1525,7 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                && strNEc (klass->dxfname, "IMAGEDEF_REACTOR")
                && strNEc (klass->dxfname, "XRECORD"))
         {
-          LOG_WARN ("Skip %s\n", klass->dxfname)
+          LOG_WARN ("Skip %s\n", klass->dxfname);
           return DWG_ERR_UNHANDLEDCLASS;
         }
     }
