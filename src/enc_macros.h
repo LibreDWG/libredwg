@@ -161,6 +161,7 @@
       }                                                                       \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
+// clang-format off
 // zero-terminated fixed buffer, which might be shorter
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
@@ -170,25 +171,28 @@
           { /* empty field, write zeros */                                    \
             for (int _i = 0; _i < (int)(len); _i++)                           \
               bit_write_RC (dat, 0);                                          \
-          } /* The source might not be long enough. or it is, just with a zero */ /* Luckily TFF's are only preR13 */                                   \
+          }                                                                   \
         else                                                                  \
           {                                                                   \
             bit_write_TFv (dat, (BITCODE_TF)_obj->nam, len);                  \
           }                                                                   \
       }                                                                       \
     LOG_TRACE (#nam ": \"%s\" [TFv %d %d]", _obj->nam, (int)len, dxf);        \
-    LOG_POS /*LOG_TRACE_TFv (FIELD_VALUE (nam), (int)len);*/                          \
+    LOG_POS                                                                   \
+    /*LOG_TRACE_TFv (FIELD_VALUE (nam), (int)len);*/                          \
   }
 #define FIELD_BINARY(nam, len, dxf)                                           \
   {                                                                           \
     LOG_TRACE (#nam ": %s [TF %d %d]\n", _obj->nam, (int)len, dxf);           \
-    if (len > 0 && len < 0xFFFFFF)                                            \
+    if (len > 0)                                                              \
       {                                                                       \
         if (!_obj->nam)                                                       \
           { /* empty field, write zeros */                                    \
             for (int _i = 0; _i < (int)(len); _i++)                           \
               bit_write_RC (dat, 0);                                          \
-          } /* The source might not be long enough. or it is, just with a zero */ /* Luckily TFF's are only preR13 */                                   \
+          }                                                                   \
+         /* The source might not be long enough. or it is, just with a zero */\
+         /* Luckily TFF's are only preR13 */                                  \
         else                                                                  \
           {                                                                   \
             bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                   \
@@ -196,6 +200,8 @@
       }                                                                       \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
+// clang-format on
+
 #define FIELD_TFF(nam, len, dxf) FIELD_TF (nam, len, dxf)
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \

@@ -13230,9 +13230,41 @@ H
 @indentedblock
 @vtable @code
 
-@item attachment
+@item entmode
+BB
+@item num_reactors
 BL
+@item has_ds_data
+B
+@item color
+CMC
+@item is_xdic_missing
+B
+@item ltype_scale
+BD
+@item ltype_flags
+BB
+@item plotstyle_flags
+BB
+@item material_flags
+BB
+@item shadow_flags
+RC
+@item has_full_visualstyle
+B
+@item has_face_visualstyle
+B
+@item has_edge_visualstyle
+B
+@item invisible
+BS
+@item linewt
+RC
+@item layer
+H
 @item ins_pt
+3BD
+@item extrusion
 3BD
 @item x_axis_dir
 3BD
@@ -13240,11 +13272,47 @@ BL
 BD
 @item rect_width
 BD
+@item text_height
+BD
+@item attachment
+BS
+@item flow_dir
+BS
 @item extents_width
 BD
 @item extents_height
 BD
+@item text
+T
+@item style
+H
+@item linespace_style
+BS
+@item linespace_factor
+BD
+@item unknown_b0
+B
+@item bg_fill_flag
+BL
+@item bg_fill_scale
+BL
+@item bg_fill_color
+CMC
+@item bg_fill_trans
+BL
+@item is_not_annotative
+B
+@item class_version
+BS
+@item default_flag
+B
+@item appid
+H
+@item ignore_attachment
+BL
 @item column_type
+BS
+@item numfragments
 BL
 @item column_width
 BD

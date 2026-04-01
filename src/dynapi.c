@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2546 "gen-dynapi.pl"
+#line 2894 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -10844,9 +10844,41 @@ static const Dwg_DYNAPI_field _dwg_ASSOCSURFACEACTIONBODY_fields[] = {
 };
 /* from typedef struct _dwg_AcDbMTextObjectEmbedded: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDbMTextObjectEmbedded_fields[] = {
-  { "attachment",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, attachment),
+  { "entmode",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_AcDbMTextObjectEmbedded, entmode),
     0,0,0, 0 },
+  { "num_reactors",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, num_reactors),
+    0,0,0, 0 },
+  { "has_ds_data",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, has_ds_data),
+    0,0,0, 0 },
+  { "color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_AcDbMTextObjectEmbedded, color),
+    0,0,0, 0 },
+  { "is_xdic_missing",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, is_xdic_missing),
+    0,0,0, 0 },
+  { "ltype_scale",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, ltype_scale),
+    0,0,0, 0 },
+  { "ltype_flags",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_AcDbMTextObjectEmbedded, ltype_flags),
+    0,0,0, 0 },
+  { "plotstyle_flags",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_AcDbMTextObjectEmbedded, plotstyle_flags),
+    0,0,0, 0 },
+  { "material_flags",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_AcDbMTextObjectEmbedded, material_flags),
+    0,0,0, 0 },
+  { "shadow_flags",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_AcDbMTextObjectEmbedded, shadow_flags),
+    0,0,0, 0 },
+  { "has_full_visualstyle",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, has_full_visualstyle),
+    0,0,0, 0 },
+  { "has_face_visualstyle",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, has_face_visualstyle),
+    0,0,0, 0 },
+  { "has_edge_visualstyle",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, has_edge_visualstyle),
+    0,0,0, 0 },
+  { "invisible",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_AcDbMTextObjectEmbedded, invisible),
+    0,0,0, 0 },
+  { "linewt",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_AcDbMTextObjectEmbedded, linewt),
+    0,0,0, 0 },
+  { "layer",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_AcDbMTextObjectEmbedded, layer),
+    1,0,0, 0 },
   { "ins_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, ins_pt),
+    1,0,0, 0 },
+  { "extrusion",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, extrusion),
     1,0,0, 0 },
   { "x_axis_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, x_axis_dir),
     1,0,0, 0 },
@@ -10854,11 +10886,47 @@ static const Dwg_DYNAPI_field _dwg_AcDbMTextObjectEmbedded_fields[] = {
     0,0,0, 0 },
   { "rect_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, rect_width),
     0,0,0, 0 },
+  { "text_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, text_height),
+    0,0,0, 0 },
+  { "attachment",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_AcDbMTextObjectEmbedded, attachment),
+    0,0,0, 0 },
+  { "flow_dir",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_AcDbMTextObjectEmbedded, flow_dir),
+    0,0,0, 0 },
   { "extents_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, extents_width),
     0,0,0, 0 },
   { "extents_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, extents_height),
     0,0,0, 0 },
-  { "column_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, column_type),
+  { "text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_AcDbMTextObjectEmbedded, text),
+    1,1,1, 0 },
+  { "style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_AcDbMTextObjectEmbedded, style),
+    1,0,0, 0 },
+  { "linespace_style",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_AcDbMTextObjectEmbedded, linespace_style),
+    0,0,0, 0 },
+  { "linespace_factor",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, linespace_factor),
+    0,0,0, 0 },
+  { "unknown_b0",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, unknown_b0),
+    0,0,0, 0 },
+  { "bg_fill_flag",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, bg_fill_flag),
+    0,0,0, 0 },
+  { "bg_fill_scale",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, bg_fill_scale),
+    0,0,0, 0 },
+  { "bg_fill_color",	"CMC", sizeof (BITCODE_CMC),  OFF (struct _dwg_AcDbMTextObjectEmbedded, bg_fill_color),
+    0,0,0, 0 },
+  { "bg_fill_trans",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, bg_fill_trans),
+    0,0,0, 0 },
+  { "is_not_annotative",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, is_not_annotative),
+    0,0,0, 0 },
+  { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_AcDbMTextObjectEmbedded, class_version),
+    0,0,0, 0 },
+  { "default_flag",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_AcDbMTextObjectEmbedded, default_flag),
+    0,0,0, 0 },
+  { "appid",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_AcDbMTextObjectEmbedded, appid),
+    1,0,0, 0 },
+  { "ignore_attachment",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, ignore_attachment),
+    0,0,0, 0 },
+  { "column_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_AcDbMTextObjectEmbedded, column_type),
+    0,0,0, 0 },
+  { "numfragments",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_AcDbMTextObjectEmbedded, numfragments),
     0,0,0, 0 },
   { "column_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_AcDbMTextObjectEmbedded, column_width),
     0,0,0, 0 },
@@ -14704,7 +14772,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2630 "gen-dynapi.pl"
+#line 2978 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;

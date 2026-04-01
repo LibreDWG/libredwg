@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
   dwg_point_2d ins_pt, alignment_pt, pt2d;
   BITCODE_H style;
   Dwg_AcDbMTextObjectEmbedded mtext;
-  Dwg_Version_Type version = obj->parent->header.version;
+  Dwg_Version_Type dwg_version = obj->parent->header.version;
 
   dwg_ent_attdef *attdef = dwg_object_to_ATTDEF (obj);
 
@@ -44,7 +44,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (attdef, ATTDEF, field_length, BS);
   CHK_ENTITY_TYPE (attdef, ATTDEF, flags, RC);
   CHK_ENTITY_H (attdef, ATTDEF, style);
-  if (version >= R_2007)
+  if (dwg_version >= R_2007)
     {
       CHK_ENTITY_TYPE (attdef, ATTDEF, is_locked_in_block, RC);
       CHK_ENTITY_MAX (attdef, ATTDEF, is_locked_in_block, RC, 1);
@@ -52,7 +52,7 @@ api_process (dwg_object *obj)
       CHK_ENTITY_MAX (attdef, ATTDEF, keep_duplicate_records, RC, 1);
       CHK_ENTITY_TYPE (attdef, ATTDEF, lock_position_flag, B);
     }
-  if (version >= R_2018)
+  if (dwg_version >= R_2018)
     {
       CHK_ENTITY_TYPE (attdef, ATTDEF, mtext_type, RC);
       CHK_ENTITY_MAX (attdef, ATTDEF, mtext_type, RC, 4);
@@ -65,14 +65,27 @@ api_process (dwg_object *obj)
         fail ("ATTDEF.mtext");
       else
         {
-          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, attachment, BS);
           CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, ins_pt);
-          // CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, x_axis_dir);
+          CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, x_axis_dir);
+          CHK_SUBCLASS_3RD (mtext, AcDbMTextObjectEmbedded, extrusion);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_height, BD);
           CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, rect_width, BD);
-          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, column_type, BS);
-          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded,
-                             num_column_heights, BS);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, text_height, BD);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, attachment, BS);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, flow_dir, BS);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, extents_height,
+                             BD);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, extents_width,
+                             BD);
+          CHK_SUBCLASS_UTF8TEXT (mtext, AcDbMTextObjectEmbedded, text);
+          CHK_SUBCLASS_H (mtext, AcDbMTextObjectEmbedded, style);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, linespace_style,
+                             BS);
+          CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, linespace_factor,
+                             BD);
+          // CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded, column_type,
+          // BS); CHK_SUBCLASS_TYPE (mtext, AcDbMTextObjectEmbedded,
+          // num_column_heights, BS);
         }
     }
 }

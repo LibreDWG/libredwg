@@ -470,7 +470,7 @@ DWG_ENTITY (ATTDEF)
       LOG_TEXT_GENERATION
       FIELD_BS0 (horiz_alignment, 72);
       LOG_HORIZ_ALIGNMENT
-      FIELD_BS (vert_alignment, 0);
+      FIELD_BS (vert_alignment, 74);
       LOG_VERT_ALIGNMENT
       DXF {
         if (_obj->alignment_pt.x != 0.0 &&
@@ -510,7 +510,7 @@ DWG_ENTITY (ATTDEF)
         FIELD_T (default_value, 1);
       } else {
         if (!(dataflags & 0x02))
-          FIELD_2DD (alignment_pt, ins_pt, 0);
+          FIELD_2DD (alignment_pt, ins_pt, 11);
         FIELD_BE (extrusion, 210);
         FIELD_BT (thickness, 39);
       }
@@ -544,7 +544,7 @@ DWG_ENTITY (ATTDEF)
         LOG_HORIZ_ALIGNMENT
       }
       if (!(dataflags & 0x80)) {
-        FIELD_BS (vert_alignment, 0);
+        FIELD_BS (vert_alignment, 0); // 74
         LOG_VERT_ALIGNMENT
       }
       DXF {
@@ -578,7 +578,7 @@ DWG_ENTITY (ATTDEF)
   IF_FREE_OR_SINCE (R_2018)
     {
       // 1=single line, 2=multi line attrib, 4=multi line attdef
-      FIELD_RC (mtext_type, 0);
+      FIELD_RC (mtext_type, 0); // 70
       if (FIELD_VALUE (mtext_type) > 1)
         CALL_SUBCLASS (_obj, ATTDEF, AcDbMTextObjectEmbedded);
     }
@@ -1645,14 +1645,14 @@ DWG_ENTITY_END
         FIELD_BD0 (ins_rotation, 54);                                         \
       }                                                                       \
     }                                                                         \
-    SINCE (R_2000b)                                                            \
+    SINCE (R_2000b)                                                           \
     {                                                                         \
       FIELD_BS (attachment, 71);                                              \
       FIELD_BS1 (lspace_style, 72);                                           \
       FIELD_BD1 (lspace_factor, 41);                                          \
       FIELD_BD (act_measurement, 42);                                         \
     }                                                                         \
-    SINCE (R_2007a)                                                            \
+    SINCE (R_2007a)                                                           \
     {                                                                         \
       FIELD_B (unknown, 73); /* always 0 */                                   \
       FIELD_B (flip_arrow1, 74);                                              \

@@ -2165,21 +2165,56 @@ typedef struct _dwg_entity_TEXT
  */
 typedef struct _dwg_AcDbMTextObjectEmbedded
 {
-  BITCODE_BL attachment;      	/*<! DXF 70 */
+  /* common fields */
+  BITCODE_BB entmode;      	/*<! DXF 70 */
+  BITCODE_BL num_reactors;
+  BITCODE_B has_ds_data;
+  BITCODE_CMC color;
+  BITCODE_B is_xdic_missing;
+  BITCODE_BD ltype_scale;
+  BITCODE_BB ltype_flags;
+  BITCODE_BB plotstyle_flags;
+  BITCODE_BB material_flags;
+  BITCODE_RC shadow_flags;
+  BITCODE_B has_full_visualstyle;
+  BITCODE_B has_face_visualstyle;
+  BITCODE_B has_edge_visualstyle;
+  BITCODE_BS invisible;
+  BITCODE_RC linewt;
+  BITCODE_H layer;
+  /* MTEXT fields. See there. */
   BITCODE_3BD ins_pt; 		/*!< DXF 10 */
+  BITCODE_3BD extrusion; 	/*!< DXF 210 */
   BITCODE_3BD x_axis_dir; 	/*!< DXF 11 */
   BITCODE_BD rect_height;	/*!< DXF 40 */
   BITCODE_BD rect_width;	/*!< DXF 41 */
+  BITCODE_BD text_height;       /*!< DXF 40 */
+  BITCODE_BS attachment;        /*<! DXF 71 */
+  BITCODE_BS flow_dir;          /*!< DXF 72 */
   BITCODE_BD extents_width;	/*!< DXF 42 */
   BITCODE_BD extents_height;	/*!< DXF 43 */
-  BITCODE_BL column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic.
-                                     Note: BS in MTEXT! */
+  BITCODE_T text;               /*!< DXF 1 */
+  BITCODE_H style;              /*!< DXF 7 */
+  BITCODE_BS linespace_style;   /*!< DXF 73. r2000+ */
+  BITCODE_BD linespace_factor;  /*!< DXF 44. r2000+ */
+  BITCODE_B unknown_b0;         // always 0
+  BITCODE_BL bg_fill_flag;      /*!< DXF 90. r2004+ */
+  BITCODE_BL bg_fill_scale;     /*!< DXF 45. r2004+ */
+  BITCODE_CMC bg_fill_color;    /*!< DXF 63. r2004+ */
+  BITCODE_BL bg_fill_trans;     /*!< DXF 441. r2004+. unused */
+  BITCODE_B is_not_annotative;  /*!< r2018+: */
+  BITCODE_BS class_version;     /*!< always 0 */
+  BITCODE_B default_flag;       /*!< DXF 70 */
+  BITCODE_H appid;
+  BITCODE_BL ignore_attachment;
+  BITCODE_BS column_type;       /*!< DXF 71 0: none, 1: static, 2: dynamic. */
+  BITCODE_BL numfragments;      /*!< DXF 72 if static */
   BITCODE_BD column_width;      /*!< DXF 44 */
   BITCODE_BD gutter;            /*!< DXF 45 */
   BITCODE_B auto_height;        /*!< DXF 73 */
   BITCODE_B flow_reversed;      /*!< DXF 74 */
-  BITCODE_BL num_column_heights;/*!< DXF 72 or numfragments */
-  BITCODE_BD *column_heights;   /*!< DXF 46 if dynamic and not auto_height */
+  BITCODE_BL num_column_heights;/*!< DXF 72 if dynamic and not auto_height */
+  BITCODE_BD *column_heights;   /*!< DXF 46 */
 } Dwg_AcDbMTextObjectEmbedded;
 
 /** \ref Dwg_Entity_ATTRIB
