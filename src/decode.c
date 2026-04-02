@@ -3572,9 +3572,14 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     #include "header.spec"
     // clang-format on
   }
-  LOG_HANDLE ("\nempty R2004 slack (@%" PRIuSIZE ".0-%u.0, %ld):\n",
-              dat->byte - 54, 0x80, (long)(0x80 - (dat->byte - 54)));
-  LOG_TF (HANDLE, &dat->chain[dat->byte], (int)(0x80 - dat->byte));
+  if ((dat->byte - 54) > 0x80)
+    {
+      LOG_HANDLE ("\nempty R2004 slack (@%" PRIuSIZE ".0-%u.0, %ld):\n",
+                  dat->byte - 54, 0x80, (long)(0x80 - (dat->byte - 54)));
+      if (dat->byte > 54 && dat->chain)
+        LOG_TF (HANDLE, &dat->chain[dat->byte],
+                (int)(0x80 - (dat->byte - 54)));
+    }
 
   error |= decode_R2004_header (dat, dwg);
   if (error > DWG_ERR_CRITICAL)
