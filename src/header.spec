@@ -50,7 +50,7 @@
     FIELD_RC (zero_one_or_three, 0);
     FIELD_RL (thumbnail_address, 0); //@0x0d
     FIELD_RC (dwg_version, 0); // of app which stored it. eg. SaveAs
-    FIELD_RC (maint_version, 0);
+    FIELD_RC (maint_version, 0); // the actual dwg version
     ENCODER {
        if (!FIELD_VALUE (codepage))
          FIELD_VALUE (codepage) = dat->codepage;

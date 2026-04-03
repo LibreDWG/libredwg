@@ -72,7 +72,7 @@ help (void)
   printf ("Default DWGFILE: DXFFILE with .dwg extension in the current "
           "directory.\n"
           "Existing files are not overwritten, unless -y is given.\n"
-          "Encoding currently only works for R13-R2000.\n"
+          "Encoding currently does not work for r2007.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -341,8 +341,8 @@ main (int argc, char *argv[])
         {
           printf (" as %s\n", version);
           dwg.header.version = dwg_version;
-          if (dwg_version > R_2000)
-            printf ("Warning: encode currently only works for R13-R2000.\n");
+          if (dwg_version > R_2004)
+            printf ("Warning: encode does not work for R2007.\n");
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
         }
@@ -350,7 +350,7 @@ main (int argc, char *argv[])
         {
           // FIXME: for now only R_13b1 - R_2000. later remove this line.
           if (dwg.header.from_version < R_13b1
-              || dwg.header.from_version >= R_2004)
+              || dwg.header.from_version == R_2007)
             dwg.header.version = dwg_version;
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
