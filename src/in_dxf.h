@@ -154,7 +154,19 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     obj->tio.object->tio.token->parent = obj->tio.object;                     \
     obj->tio.object->objid = obj->index
 
-#  define ADD_OBJECT1(token, tgt) ADD_OBJECT (token)
+#  define ADD_OBJECT1(token, tgt)                                             \
+    obj->type = obj->fixedtype = DWG_TYPE_##token;                            \
+    obj->name = (char *)#token;                                               \
+    obj->dxfname = dxfname;                                                   \
+    if (obj->type >= DWG_TYPE_GROUP)                                          \
+      (void)dwg_encode_get_class (obj->parent, obj);                          \
+    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index);              \
+    GCC14_DIAG_IGNORE (-Walloc-size)                                          \
+    _obj = calloc (1, sizeof (Dwg_Object_##token));                           \
+    GCC14_DIAG_RESTORE                                                        \
+    obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                  \
+    obj->tio.object->tio.token->parent = obj->tio.object;                     \
+    obj->tio.object->objid = obj->index
 
 #  define ADD_ENTITY(token)                                                   \
     obj->type = obj->fixedtype = DWG_TYPE_##token;                            \
@@ -166,7 +178,7 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       (void)dwg_encode_get_class (obj->parent, obj);                          \
     LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index);              \
-    GCC14_DIAG_IGNORE (-Wanalyzer-allocation-size)                            \
+    GCC14_DIAG_IGNORE (-Walloc-size)                                          \
     _obj = calloc (1, sizeof (Dwg_Entity_##token));                           \
     GCC14_DIAG_RESTORE                                                        \
     obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                  \
@@ -224,6 +236,7 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     {                                                                         \
       ADD_OBJECT (token);                                                     \
     }
+/* Need the largest CONTROL object here */
 #define ADD_TABLE_IF1(nam, token)                                             \
   if (strEQc (name, #nam))                                                    \
     {                                                                         \

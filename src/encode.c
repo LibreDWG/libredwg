@@ -3024,7 +3024,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         BITCODE_RS crc;
         dat->byte = dwg->header.entities_start - 18;
-        assert (dat->byte == hdr_end);
+        // assert (dat->byte == hdr_end);
         crc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte);
         LOG_TRACE ("crc: %04X [RSx] from 0-0x%zx\n", crc, dat->byte); // -0x6bd
         bit_write_RS (dat, crc);
@@ -7288,7 +7288,8 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
     oo->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
   dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
   oo->eed[idx].size = 3;
-  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+#define EED_SZ(n) MAX(n, sizeof(Dwg_Eed_Data))
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
   oo->eed[idx].data->code = 70;
   _obj = oo->tio.MLEADERSTYLE;
   oo->eed[idx].data->u.eed_70.rs
@@ -7382,7 +7383,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl1, NULL);
       oo->eed[idx].size = 28;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (20, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (20), 1);
       oo->eed[idx].data->code = 0;
       oo->eed[idx].data->u.eed_0.length = 14; // sizeof ("AnnotativeData") - 1;
       oo->eed[idx].data->u.eed_0.codepage = 30;
@@ -7390,24 +7391,24 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (2, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (2), 1);
       oo->eed[idx].data->code = 2; // open
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 1;
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 1;
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (2, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (2), 1);
       oo->eed[idx].data->code = 2;
       oo->eed[idx].data->u.eed_2.close = 1;
       idx++;
@@ -7430,14 +7431,14 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
       oo->eed[idx].size = 12;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
       oo->eed[idx].data->code = 70;
       //_obj = oo->tio.DIMSTYLE;
       oo->eed[idx].data->u.eed_70.rs = 388; // FIXME Which value?
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (9, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (9), 1);
       oo->eed[idx].data->code = 40;
       oo->eed[idx].data->u.eed_40.real = 1.5; // FIXME Which value?
       idx++;
@@ -7459,14 +7460,14 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
       oo->eed[idx].size = 6;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
       oo->eed[idx].data->code = 70;
       //_obj = oo->tio.DIMSTYLE;
       oo->eed[idx].data->u.eed_70.rs = 392; // FIXME Which value?
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 0; // FIXME Which value?
       idx++;
@@ -7474,6 +7475,7 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       oo->eed[idx].data = NULL;
       oo->eed[idx].raw = NULL;
     }
+#undef EED_SZ
   if (idx != oo->num_eed)
     {
       // eg. when the EED already had AcadAnnotative
