@@ -1923,7 +1923,8 @@ static void
 add_eed (Dwg_Object *restrict obj, const char *restrict name,
          Dxf_Pair *restrict pair)
 {
-  int code, size = 0, j;
+  int code, j;
+  unsigned size = 0;
   int i, prev = 0;
   Dwg_Eed *eed;
   Dwg_Data *dwg = obj->parent;
@@ -1990,7 +1991,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           {
             /* code [RC] + len [RS] + cp [RS] + str[len] */
             size = 1 + 2 + 2 + len;
-            eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size + 1);
+            eed[i].data = (Dwg_Eed_Data *)xcalloc (
+                1, MAX (size + 1, sizeof (Dwg_Eed_Data)));
             if (!eed[i].data)
               {
                 LOG_ERROR ("Out of memory");
@@ -2018,7 +2020,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
                 BITCODE_TU tu = bit_utf8_to_TU (pair->value.s.ptr, 0);
                 len = bit_wcs2len (tu) & 0x0FFFFFFF;
                 size = 1 + 2 + 2 + (len * 2); // now with padding
-                eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size + 2);
+                eed[i].data = (Dwg_Eed_Data *)xcalloc (
+                    1, MAX (size + 2, sizeof (Dwg_Eed_Data)));
                 if (!eed[i].data)
                   {
                     LOG_ERROR ("Out of memory");
@@ -2081,7 +2084,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 2: // 1002 . "{" => 0, or 1002 . "}" => 1
       /* code [RC] + close [RC] */
       size = 1 + 1;
-      eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      eed[i].data
+          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2101,7 +2105,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
                                 : strlen (pair->value.s.ptr) >> 1;
         /* code [RC] + len+0 + length [RC] */
         size = 1 + (blen & INT_MAX) + 1 + 1;
-        eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+        eed[i].data
+            = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
         if (!eed[i].data)
           {
             LOG_ERROR ("Out of memory");
@@ -2133,7 +2138,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 15:
       /* code [RC] + 3*RD */
       size = 1 + (3 * 8);
-      eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      eed[i].data
+          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2181,9 +2187,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 40:
     case 41:
     case 42:
-      /* code [RC] + 3*RD */
+      /* code [RC] + RD */
       size = 1 + 8;
-      eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      eed[i].data
+          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2198,7 +2205,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 70:
       /* code [RC] + RS */
       size = 1 + 2;
-      eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      eed[i].data
+          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2213,7 +2221,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 71:
       /* code [RC] + RL */
       size = 1 + 4;
-      eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+      eed[i].data
+          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2232,7 +2241,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         BITCODE_RLL l = 0;
         /* code [RC] + RLL */
         size = 1 + 8;
-        eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
+        eed[i].data
+            = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
         if (!eed[i].data)
           {
             LOG_ERROR ("Out of memory");
