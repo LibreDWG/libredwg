@@ -1552,12 +1552,16 @@ bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
   if (calculated == read)
     {
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
-        LOG_HANDLE (" check_CRC %" PRIuSIZE "-%" PRIuSIZE " = %" PRIuSIZE
-                    ": %04X == %04X\n",
-                    start_address, dat->byte - 2, size, calculated, read);
+        {
+          LOG_HANDLE (" check_CRC %" PRIuSIZE "-%" PRIuSIZE " = %" PRIuSIZE
+                      ": %04X == %04X\n",
+                      start_address, dat->byte - 2, size, calculated, read);
+        }
       else
-        LOG_TRACE (" check_CRC %" PRIuSIZE ": %04X == %04X\n", size,
-                   calculated, read);
+        {
+          LOG_TRACE (" check_CRC %" PRIuSIZE ": %04X == %04X\n", size,
+                     calculated, read);
+        }
       return 1;
     }
   else
@@ -1853,11 +1857,15 @@ bit_read_TV (Bit_Chain *restrict dat)
       // only observed >=r2004 as writer app
       if (length > 0 && dat->from_version > R_2000
           && chain[length - 1] != '\0')
-        LOG_HANDLE ("TV-not-ZERO %u\n ", length);
+        {
+          LOG_HANDLE ("TV-not-ZERO %u\n ", length);
+        }
       // and preR2000 the final \0 is not included in the length (ie == strlen)
       else if (length > 0 && dat->from_version < R_2000
                && chain[length - 1] == '\0')
-        LOG_HANDLE ("TV-ZERO %u\n", length);
+        {
+          LOG_HANDLE ("TV-ZERO %u\n", length);
+        }
     }
   // normally not needed, as the DWG since r2004 itself contains the ending \0
   // as last char

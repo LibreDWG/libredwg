@@ -84,15 +84,15 @@ EXPORT void log_text32 (const unsigned int minlevel, const BITCODE_TU wstr);
 #  undef LOG
 #  undef LOG_WARN
 #  undef LOG_ERROR
-#  define LOG(...)                                                            \
-    {                                                                         \
-    }
-#  define LOG_WARN(...)                                                       \
-    {                                                                         \
-    }
-#  define LOG_ERROR(...)                                                      \
-    {                                                                         \
-    }
+#  define LOG(...)                                                      \
+    ({                                                                  \
+    })
+#  define LOG_WARN(...)                                                 \
+    ({                                                                  \
+    })
+#  define LOG_ERROR(...)                                                \
+    ({                                                                  \
+    })
 #endif
 
 #define LOG_INFO(...) LOG (INFO, __VA_ARGS__)

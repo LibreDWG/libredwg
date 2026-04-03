@@ -40,7 +40,7 @@
     }
   }
 
-  FIELD_VECTOR_INL (aux_intro, RC, 3, 0) /* ff 77 01 */
+  FIELD_VECTOR_INL (aux_intro, RC, 3, 0); /* ff 77 01 */
   FIELD_RSx (dwg_version, 0);
   FIELD_RSx (maint_version, 0);
   FIELD_RL (numsaves, 0);
@@ -52,8 +52,8 @@
   FIELD_RSx (maint_version_1, 0);
   FIELD_RSx (dwg_version_2, 0);
   FIELD_RSx (maint_version_2, 0);
-  FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0) /* 5, 0x893, 5, 0x893, 0, 1 */
-  FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0) /* all 0 */
+  FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0); /* 5, 0x893, 5, 0x893, 0, 1 */
+  FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0); /* all 0 */
   FIELD_TIMERLL (TDCREATE, 0);
   FIELD_TIMERLL (TDUPDATE, 0);
   FIELD_RLx (HANDSEED, 0);
@@ -71,5 +71,5 @@
     FIELD_RL (zero_8, 0);
   }
   SINCE (R_2018) {
-    FIELD_VECTOR_INL (zero_18, RS, 3, 0)
+    FIELD_VECTOR_INL (zero_18, RS, 3, 0);
   }
