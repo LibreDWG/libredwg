@@ -1197,11 +1197,10 @@ two_byte_offset (Bit_Chain *restrict dat, int plus, int *restrict offset)
 int
 decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
 {
-  unsigned int i, lit_length;
+  unsigned int lit_length;
   int comp_offset, comp_bytes;
   size_t pos, end;
   unsigned char opcode1 = 0, opcode2;
-  size_t start_byte = src->byte;
 
   if (src->byte > src->size) // bytes left to read from
     {
@@ -1667,7 +1666,6 @@ static int
 read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                          uint32_t comp_data_size, uint32_t decomp_data_size)
 {
-  Bit_Chain *orig_dat = dat;
   Bit_Chain dec = { 0 };
   BITCODE_BL i, j;
   int error;
@@ -1791,9 +1789,9 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       if (info->num_sections < 1000000)
         {
-          int32_t old_section_number = 0;
           // bug in Teigha with Template, with num_sections=0
           /*
+          int32_t old_section_number = 0;
           if (info->num_sections == 0
               && info->fixedtype == SECTION_TEMPLATE
               // && is_teigha
@@ -1915,7 +1913,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               else
                 {
                   LOG_TRACE ("Page: %4" PRId32 "    ", page.number);
-                  old_section_number = page.number;
+                  // old_section_number = page.number;
                   prev_address = page.address;
                 }
               LOG_TRACE (" size: %5" PRIu32, page.size); // compressed
@@ -3477,9 +3475,8 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
    * Section Page Map
    */
   {
-    BITCODE_RL checksum, checksum1, checksum2;
+    BITCODE_RL checksum1, checksum2;
     Bit_Chain *dat = file_dat;
-    size_t old_address = dat->byte;
     size_t start;
     BITCODE_RC *map;
     LOG_INSANE ("@0x%zx\n", dat->byte);
@@ -3557,7 +3554,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
 static int
 decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  int j, error = 0;
+  int error = 0;
   Dwg_Section *section;
 
   {
@@ -4326,13 +4323,11 @@ int
 dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Dwg_Object_Entity *restrict ent)
 {
-  unsigned int i;
   int error = 0;
   Dwg_Data *dwg = ent->dwg;
   Dwg_Object *obj = &dwg->object[ent->objid];
   Dwg_Object_Entity *_obj = ent;
   Dwg_Object_Entity *_ent = ent;
-  Dwg_Class *klass = NULL;
   size_t objectpos = bit_position (dat);
   int has_wrong_bitsize = 0;
 
@@ -4424,7 +4419,6 @@ int
 dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Dwg_Object_Object *restrict _obj)
 {
-  unsigned int i;
   int error = 0;
   Dwg_Data *dwg = _obj->dwg;
   Dwg_Object *obj = &dwg->object[_obj->objid];
@@ -4714,7 +4708,6 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
                                 Dwg_Object *restrict obj,
                                 Dwg_Data *restrict dwg, unsigned int code)
 {
-  int err;
   Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
   if (!ref)
     {
@@ -4865,14 +4858,9 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                   BITCODE_BL xdata_size)
 {
   Dwg_Resbuf *rbuf, *root = NULL, *curr = NULL;
-  unsigned char codepage;
   size_t start_address, end_address, curr_address;
   BITCODE_BL i, num_xdata = 0;
   BITCODE_RS length;
-  int error;
-
-  static int cnt = 0;
-  cnt++;
 
   start_address = dat->byte;
   end_address = start_address + (size_t)xdata_size;

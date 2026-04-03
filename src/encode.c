@@ -1417,15 +1417,11 @@ section_move_before (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
 {
   int ret = 0;
   unsigned b;
-  unsigned id_pos;
-  Dwg_Section_Type_r13 old_before;
   LOG_TRACE ("section_move_before %u %u\n", (unsigned)id, (unsigned)before);
   b = section_find (psection_order, *pnum, before);
   // find before
   if (b >= SECTION_R13_SIZE) // not found
     return 0;
-  // x x b y y
-  old_before = psection_order[b];
   assert (*pnum + 1 <= SECTION_R13_SIZE);
   memmove (&psection_order[b + 1], &psection_order[b],
            (*pnum - b) * sizeof (Dwg_Section_Type_r13));
@@ -2537,8 +2533,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   int error = 0;
   BITCODE_BL i, j;
   size_t section_address, header_crc_address = 0;
-  size_t size_adr;
-  unsigned int sec_size = 0;
   Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
   Dwg_Section_Type sec_id;
   Dwg_Version_Type orig_from_version = dwg->header.from_version;
@@ -2807,9 +2801,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   PRE (R_13b1)
   {
     BITCODE_RL numentities, addr;
-    size_t hdr_offset, hdr_end;
-    BITCODE_BL last_entity_idx, end_idx;
-    BITCODE_BLd first_entity_idx = 0;
+    size_t hdr_offset;
     Dwg_Object *first_block;
 
     if (dwg->header.version == R_INVALID
@@ -2837,7 +2829,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     hdr_offset = dat->byte;
     encode_preR13_header_variables (dat, dwg);
-    hdr_end = dat->byte;
     // the sentinel starts 16 before entities_start
     SINCE (R_11)
     {
@@ -2921,10 +2912,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
     SINCE (R_2_0b)
     {
-      BITCODE_RL num_block_entities, num_extra_entities, blocks_end,
-          extras_end, jump_index;
-      BITCODE_RL endblk_index = dwg->num_objects - 1;
-      Dwg_Object *last_endblk;
+      BITCODE_RL num_block_entities, num_extra_entities;
 
       error |= encode_preR13_section (SECTION_BLOCK, dat, dwg);
       error |= encode_preR13_section (SECTION_LAYER, dat, dwg);
@@ -3503,7 +3491,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       int ssize;
       int si, info_id;
-      unsigned address;
 
       const Dwg_Section_Type section_map_order[] = {
         // R2004_Header
@@ -4116,7 +4103,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
       const char enc_file_ID_string[]
           = "\x68\x40\xF8\xF7\x92\x2A\xB5\xEF\x18\xDD\x0B\xF1";
-      uint32_t checksum;
 
       file_dat.chain = (unsigned char *)calloc (1, sizeof (Dwg_R2004_Header));
       dat = &file_dat;
@@ -4128,7 +4114,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       decrypt_R2004_header (overlap_hdr, &orig_dat->chain[0x80],
                             sizeof (Dwg_R2004_Header));
 
-      checksum = _obj->crc32;
       LOG_HANDLE ("old crc32: 0x%x\n", _obj->crc32);
       _obj->crc32 = 0;
       // recalc the CRC32, without the padding, but the crc32 as 0

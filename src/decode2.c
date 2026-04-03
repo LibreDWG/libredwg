@@ -49,7 +49,6 @@
 /* the current version per spec block */
 static int cur_ver = 0;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
-static bool is_teigha = false;
 
 #ifdef DWG_ABORT
 static unsigned int errors = 0;
@@ -58,9 +57,6 @@ static unsigned int errors = 0;
 #  endif
 #endif
 
-#ifdef USE_TRACING
-static bool env_var_checked_p;
-#endif /* USE_TRACING */
 #define DWG_LOGLEVEL loglevel
 
 #include "logging.h"

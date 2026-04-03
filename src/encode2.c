@@ -60,9 +60,6 @@
 static Dwg_Version_Type cur_ver = R_INVALID;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
 
-#ifdef USE_TRACING
-static bool env_var_checked_p;
-#endif /* USE_TRACING */
 #define DWG_LOGLEVEL loglevel
 
 #include "logging.h"

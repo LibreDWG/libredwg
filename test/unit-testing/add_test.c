@@ -305,8 +305,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
     case DWG_TYPE_ELLIPSE:
       {
         const dwg_point_3d ctr = { 11.143259, 9.537395, 0.0 };
-        Dwg_Entity_ELLIPSE *ellipse
-            = dwg_add_ELLIPSE (hdr, &ctr, -8.750802, 0.336109);
+        dwg_add_ELLIPSE (hdr, &ctr, -8.750802, 0.336109);
       }
       break;
     case DWG_TYPE_REGION:
