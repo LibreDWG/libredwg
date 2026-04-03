@@ -9588,7 +9588,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
 
   if (is_entity)
     {
+      GCC14_DIAG_IGNORE (-Walloc-size)
       NEW_ENTITY (dwg, obj);
+      GCC14_DIAG_RESTORE
 
       obj->tio.entity->is_xdic_missing = 1;
       obj->tio.entity->color.index = 256; // ByLayer
@@ -9654,11 +9656,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           // ADD_OBJECT by name
           // check all objects
           #undef DWG_OBJECT
-          #define DWG_OBJECT(token)         \
-              if (strEQc (name, #token))    \
-                {                           \
-                  ADD_OBJECT (token);       \
-                  goto found_obj;           \
+          #define DWG_OBJECT(token)                \
+              if (strEQc (name, #token))           \
+                {                                  \
+                  GCC14_DIAG_IGNORE (-Walloc-size) \
+                  ADD_OBJECT (token);              \
+                  GCC14_DIAG_RESTORE               \
+                  goto found_obj;                  \
                 }
 
           #include "objects.inc"
