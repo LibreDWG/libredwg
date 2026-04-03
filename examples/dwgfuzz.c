@@ -71,7 +71,15 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat);
 static int
 version (void)
 {
+#if FUZZ_MODE == FUZZ_INMEM
   printf ("dwgfuzz %s INMEM\n", PACKAGE_VERSION);
+#elif FUZZ_MODE == FUZZ_FILE
+  printf ("dwgfuzz %s FILE\n", PACKAGE_VERSION);
+#elif FUZZ_MODE == FUZZ_STDIN
+  printf ("dwgfuzz %s STDIN\n", PACKAGE_VERSION);
+#else
+  error unknown FUZZ_MODE
+#endif
 #ifndef __AFL_COMPILER
   printf ("not instrumented\n");
 #else
