@@ -122,8 +122,8 @@ int
 main (int argc, char *argv[])
 {
   Dwg_Data dwg;
-  Bit_Chain dat = { NULL, 0, 0, 0, 0 };
-  Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
+  Bit_Chain dat = { 0 };
+  Bit_Chain out_dat = { 0 };
   FILE *fp;
 
   __AFL_INIT ();
