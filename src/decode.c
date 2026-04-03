@@ -5801,6 +5801,14 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   restartpos = bit_position (dat);
   *dat = abs_dat;
   bit_set_position (dat, objpos + restartpos);
+  if (dat->byte >= dat->size)
+    {
+      LOG_ERROR ("Invalid object position (overflow): %" PRIuSIZE
+                 " > %" PRIuSIZE,
+                 dat->byte, dat->size);
+      *dat = abs_dat;
+      return error | DWG_ERR_INVALIDDWG;
+    }
 
   /* Now 1 padding bits until next byte, and then a RS CRC */
   if (dat->bit)
