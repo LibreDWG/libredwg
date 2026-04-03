@@ -4887,8 +4887,12 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           end_address = start_address + (size_t)xdata_size;
         }
     }
-  LOG_INSANE ("xdata:\n");
-  LOG_INSANE_TF (&dat->chain[dat->byte], (int)xdata_size);
+  if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
+    {
+      LOG_INSANE ("XDATA size: " FORMAT_BL " (end @%" PRIuSIZE ")\n",
+                  xdata_size, end_address);
+      LOG_INSANE_TF (&dat->chain[dat->byte], (int)xdata_size);
+    }
   curr_address = dat->byte;
 
   while (dat->byte < end_address)
