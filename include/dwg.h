@@ -347,6 +347,7 @@ typedef struct dwg_versions {
   const char *const hdr; // char[6] mostly
   const char *const desc;
   uint8_t dwg_version;
+  uint8_t is_maint;
 } Dwg_Versions;
 
 typedef enum DWG_CLASS_STABILITY {

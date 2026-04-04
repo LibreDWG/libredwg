@@ -2693,60 +2693,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         || (dwg->header.version >= R_13b1 && !_obj->dwg_version))
       {
         _obj->zero_one_or_three = 1;
-        if (_verp)
-          // the version the DWG was written with
-          _obj->dwg_version = _verp->dwg_version;
         if (dwg->header.version > R_13b1)
           // the version the DWG is targetting
           _obj->maint_version = _obj->dwg_version;
-        switch (dwg->header.version)
-          {
-          case R_2000:
-            _obj->is_maint = 0xf;
-            break;
-          case R_2004:
-            _obj->is_maint = 0x68;
-            break;
-          case R_2007:
-            _obj->is_maint = 0x32;
-            break;
-          case R_2010:
-            _obj->is_maint = 0x6d;
-            break;
-          case R_2013:
-            _obj->is_maint = 0x7d;
-            break;
-          case R_2018:
-            _obj->is_maint = 0x1d;
-            break;
-          case R_INVALID:
-          case R_AFTER:
-          case R_1_1:
-          case R_1_2:
-          case R_1_3:
-          case R_1_4:
-          case R_2_0:
-          case R_2_10:
-          case R_2_21:
-          case R_2_22:
-          case R_2_4:
-          case R_2_5:
-          case R_2_6:
-          case R_9:
-          case R_9c1:
-          case R_10:
-          case R_11b1:
-          case R_11b2:
-          case R_11:
-          case R_13b1:
-          case R_13b2:
-          case R_13:
-          case R_13c3:
-          case R_14:
-          default:
-            break;
-          }
+        if (_verp)
+          // the version the DWG was written with
+          _obj->dwg_version = _verp->dwg_version;
       }
+    if (_verp)
+      _obj->is_maint = _verp->is_maint;
     if (!_obj->app_dwg_version)
       _obj->app_dwg_version = _obj->dwg_version;
     if (!_obj->app_maint_version)
