@@ -84,12 +84,12 @@ typedef struct _bit_chain
     NULL, size, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, 0                      \
   }
 
-// only if from r2007+ DWG. not JSON, DXF (FIXME TABLE.name). add API converts
-// to TU
+// only if from r2007+ DWG. not JSON, DXF (FIXME TABLE.name).
+// add API converts to TU
 #define IS_FROM_TU(dat)                                                       \
-  (dat->from_version >= R_2007) && !(dat->opts & DWG_OPTS_IN)
+  ((dat->from_version >= R_2007) && !(dat->opts & DWG_OPTS_IN))
 #define IS_FROM_TU_DWG(dwg)                                                   \
-  (dwg->header.from_version >= R_2007) && !(dwg->opts & DWG_OPTS_IN)
+  ((dwg->header.from_version >= R_2007) && !(dwg->opts & DWG_OPTS_IN))
 #define TU_to_int(b) le16toh (((uint16_t)b[1] << 8) + b[0])
 
 /* Functions for raw data manipulations.

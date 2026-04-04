@@ -2706,7 +2706,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
 {
   size_t i, length;
 
-  if (dat->version >= R_2007)
+  if (IS_FROM_TU (dat))
     {
       if (chain)
         length = bit_wcs2len ((BITCODE_TU)chain) + 1;
