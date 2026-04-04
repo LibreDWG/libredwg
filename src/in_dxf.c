@@ -6581,6 +6581,26 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           dxf_free_pair (pair);
         }
     }
+  FIELD_BL (num_subents, 90);
+  if (o->num_subents > 0)
+    {
+      o->subents = (BITCODE_BL *)xcalloc (o->num_subents, sizeof (BITCODE_BL));
+      if (!o->subents)
+        {
+          o->num_subents = 0;
+          return pair;
+        }
+      for (unsigned i = 0; i < o->num_subents; i++)
+        {
+          pair = dxf_read_pair (dat);
+          if (!pair || pair->code != 90)
+            return pair;
+          o->subents[i] = pair->value.u;
+          LOG_TRACE ("%s.subents[%d] = %u [BL %d]\n", obj->name, i,
+                     pair->value.u, pair->code);
+          dxf_free_pair (pair);
+        }
+    }
   return NULL;
 }
 
