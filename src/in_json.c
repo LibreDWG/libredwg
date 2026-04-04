@@ -1768,11 +1768,17 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Dwg_Resbuf *rbuf;
   BITCODE_BL size = 0;
   const char *name = "XRECORD";
-  obj->xdata = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
-  rbuf = obj->xdata;
   obj->num_xdata = t->size;
   LOG_INSANE ("num_xdata: " FORMAT_BL "\n", obj->num_xdata);
   tokens->index++; // array of objects
+  if (!obj->num_xdata)
+    {
+      obj->xdata = NULL;
+      obj->xdata_size = 0;
+      return 0;
+    }
+  obj->xdata = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
+  rbuf = obj->xdata;
   for (unsigned i = 0; i < obj->num_xdata; i++)
     {
       char key[80];
