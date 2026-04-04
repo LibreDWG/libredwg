@@ -19,7 +19,7 @@
 #include "spec.h"
 
   // char version[11] handled separately
-  FIELD_RC (is_maint, 0);
+  FIELD_RC (is_maint, 0); // Maintenance release version
 
   VERSIONS (R_2_0b, R_13b1) {
     FIELD_RC (zero_one_or_three, 0); // 1,3,5,0xcd,0

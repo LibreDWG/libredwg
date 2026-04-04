@@ -11139,13 +11139,13 @@ typedef struct _dwg_header
 {
   Dwg_Version_Type version;      /* calculated from the header magic */
   Dwg_Version_Type from_version; /* option. set by --as (convert from) */
-  BITCODE_RC is_maint;
+  BITCODE_RC is_maint; /* Maintenance release version. See dwg_versions[] */
   BITCODE_RC zero_one_or_three;
   BITCODE_RS numentity_sections; /* < R13, always 3 */
   BITCODE_RS numheader_vars;    /* < R13 */
   BITCODE_RL thumbnail_address; /* THUMBNAIL or AdDb:Preview */
-  BITCODE_RC dwg_version;
-  BITCODE_RC maint_version;
+  BITCODE_RC dwg_version;       /* version the DWG was written with */
+  BITCODE_RC maint_version;     /* version the DWG is targetting */
   BITCODE_RL entities_start;    /* < R13 */
   BITCODE_RL entities_end;      /* < R13 */
   BITCODE_RL blocks_start;      /* < R13 */
