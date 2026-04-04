@@ -1182,7 +1182,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 #define DXF_3DSOLID dxf_3dsolid (dat, obj, (Dwg_Entity_3DSOLID *)_obj);
 
 // Skip index 256 bylayer
-// 257 is for method c8 NONE. Which index is for ByBlock?
+// 257 is for method c8 NONE. Which index is for ByBlock? index 0
 // If the dxf code is 90-99 rather emit the rgb only
 static void
 dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,

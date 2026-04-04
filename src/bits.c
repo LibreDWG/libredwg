@@ -3807,9 +3807,12 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
       if (dat->from_version < R_2004)
         bit_upconvert_CMC (dat, color);
       bit_write_BS (dat, 0); // index override
-      bit_write_BL (dat, color->rgb);
       if (!color->method && color->rgb & 0xFF000000)
         color->method = color->rgb >> 0x18;
+      else if (color->method >= 0xc0 && color->method <= 0xc8)
+        color->rgb
+            = ((BITCODE_BL)color->method << 24) | (color->rgb & 0x00FFFFFF);
+      bit_write_BL (dat, color->rgb);
       if (color->method == 0xc2) // for entity
         {
           if (color->name && !bit_empty_T (dat, color->name))

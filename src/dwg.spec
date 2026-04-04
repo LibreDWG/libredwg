@@ -4634,7 +4634,7 @@ DWG_TABLE (DIMSTYLE)
       FIELD_TFv (DIMBLK2_T, 66, 7);      //?? unsupported by ODA
       // DEBUG_HERE; //e18
       // dat->byte += 50; //unknown: DIMSHO, DIMASO (global)
-      FIELD_RS (DIMCLRD_N, 176); // e4a
+      FIELD_RS (DIMCLRD_N, 176); // FIXME: => CMC and special <r13 branch
       FIELD_RS (DIMCLRE_N, 177);
       FIELD_RS (DIMCLRT_N, 178); // e4e
       FIELD_RC (DIMUPT, 0);      //??

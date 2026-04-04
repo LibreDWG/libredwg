@@ -1264,12 +1264,14 @@ dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       LOG_ERROR ("empty CMC field %s", fieldname);
       return 1;
     }
-  if (pair->code < 90 && dxf == pair->code)
+  if ((pair->code < 90 || pair->code > 99) && dxf == pair->code)
     {
       color->index = pair->value.i;
       if (pair->value.i == 256) // bylayer
         color->method = 0xc2;
-      if (pair->value.i == 257) // none
+      else if (pair->value.i == 0) // byblock
+        color->method = 0xc1;
+      else if (pair->value.i == 257) // none
         color->method = 0xc8;
       else if (dwg->header.version >= R_2004)
         {
@@ -1537,12 +1539,12 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           else if (strEQc (f->type, "CMC"))
             {
-              static BITCODE_CMC color = { 0 };
-              if (pair->code <= 70)
+              BITCODE_CMC color = { 0 };
+              if (pair->code <= 70 || pair->code > 99)
                 {
                   LOG_TRACE ("HEADER.%s.index %d [CMC %d]\n", &field[1],
                              pair->value.i, pair->code);
-                  color.index = pair->value.i;
+                  dxf_set_CMC_index (&color, pair->value.i);
                   dwg_dynapi_header_set_value (dwg, &field[1], &color, 0);
                 }
             }
@@ -2455,7 +2457,7 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (j < 0)
             j++;
           CHK_array (j, lines);
-          o->lines[j].color.index = pair->value.i;
+          dxf_set_CMC_index (&o->lines[j].color, pair->value.i);
           LOG_TRACE ("MLINESTYLE.lines[%d].color.index = %d [CMC 62]\n", j,
                      pair->value.i);
         }
@@ -2465,6 +2467,7 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             j++;
           CHK_array (j, lines);
           o->lines[j].color.rgb = pair->value.u;
+          o->lines[j].color.method = pair->value.u >> 0x18;
           LOG_TRACE ("MLINESTYLE.lines[%d].color.rgb = %08X [CMC 420]\n", j,
                      pair->value.u);
         }
@@ -3837,7 +3840,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               return NULL;
             }
           assert (j < (int)o->num_colors);
-          o->colors[j].color.index = pair->value.i;
+          dxf_set_CMC_index (&o->colors[j].color, pair->value.i);
           LOG_TRACE ("HATCH.colors[%d].color.index = %u [CMC 63]\n", j,
                      pair->value.i);
         }
@@ -4090,7 +4093,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
-                  lline->color.index = pair->value.i;
+                  dxf_set_CMC_index (&lline->color, pair->value.i);
                   LOG_TRACE (
                       "%s.leaders[].lines[%d].color.index = %d [CMC %d]\n",
                       obj->name, i, pair->value.i, pair->code);
@@ -4526,14 +4529,14 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 90:
               if (!ctx->has_content_txt)
                 goto unknown_mleader;
-              ctx->content.txt.color.index = pair->value.i;
+              dxf_set_CMC_index (&ctx->content.txt.color, pair->value.i);
               LOG_TRACE ("%s.ctx.content.txt.color.index = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
             case 91:
               if (!ctx->has_content_txt)
                 goto unknown_mleader;
-              ctx->content.txt.bg_color.index = pair->value.i;
+              dxf_set_CMC_index (&ctx->content.txt.bg_color, pair->value.i);
               LOG_TRACE ("%s.ctx.content.txt.bg_color.index = %d [BS %d]\n",
                          obj->name, pair->value.i, pair->code);
               break;
@@ -4717,12 +4720,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
-                  ctx->content.blk.color.index = pair->value.i;
-                  if (pair->value.i == 257)
-                    {
-                      ctx->content.blk.color.method = 0xc8;
-                      ctx->content.blk.color.rgb = 0xc8000000;
-                    }
+                  dxf_set_CMC_index (&ctx->content.blk.color, pair->value.i);
                   LOG_TRACE (
                       "%s.leaders[].lines[%d].color.index = %d [CMC %d]\n",
                       obj->name, i, pair->value.i, pair->code);
@@ -12130,20 +12128,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           BITCODE_CMC color;
                           dwg_dynapi_entity_value (_obj, obj->name, f->name,
                                                    &color, NULL);
-                          if (pair->code < 90)
+                          if (pair->code < 90 || pair->code > 99)
                             {
-                              color.index = pair->value.i;
-                              if (pair->value.i == 256)
-                                color.method = 0xc2;
-                              else if (pair->value.i == 257)
-                                color.method = 0xc8;
-                              else if (pair->value.i < 256
-                                       && dat->from_version >= R_2004)
-                                {
-                                  color.method = 0xc3;
-                                  color.rgb = 0xc3000000 | color.index;
-                                  color.index = 256;
-                                }
+                              dxf_set_CMC_index (&color, pair->value.i);
                               LOG_TRACE ("%s.%s.index = %d [%s %d]\n", name,
                                          f->name, color.index, "CMC",
                                          pair->code);
@@ -12481,7 +12468,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                       dwg_dynapi_common_value (_obj, f->name, &color, NULL);
                       if (pair->code == 62)
                         {
-                          color.index = pair->value.i;
+                          dxf_set_CMC_index (&color, pair->value.i);
                           LOG_TRACE ("COMMON.%s.index = %d [%s %d]\n", f->name,
                                      pair->value.i, "CMC", pair->code);
                         }
