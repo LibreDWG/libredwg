@@ -787,6 +787,18 @@ AC_SUBST([with_perl_install])
 
 AM_CONDITIONAL([HAVE_SWIG_PYTHON], [test -n "$SWIG" && test -n "$PYTHON_VERSION"])
 AM_CONDITIONAL([HAVE_PYTHON], [test x$enable_python != xno])
+
+dnl Get python shared extension for -shrext on Windows (.pyd)
+PYTHON_SO_LDFLAGS=
+if test -n "$PYTHON_VERSION" && test x$enable_python != xno; then
+  AC_MSG_CHECKING([python extension suffix])
+  PYTHON_SO=`$PYTHON -c "import sysconfig; print(sysconfig.get_config_var('EXT_SUFFIX') or sysconfig.get_config_var('SO') or '.so')" 2>/dev/null`
+  AC_MSG_RESULT([$PYTHON_SO])
+  case $PYTHON_SO in
+    .pyd) PYTHON_SO_LDFLAGS="-shrext .pyd" ;;
+  esac
+fi
+AC_SUBST([PYTHON_SO_LDFLAGS])
 AM_CONDITIONAL([HAVE_SWIG_PERL], [test -n "$SWIG" && test -n "$PERL_VERSION"])
 AM_CONDITIONAL([HAVE_PERL], [test -n "$PERL"])
 dnl only needed with python bindings
