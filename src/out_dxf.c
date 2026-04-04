@@ -193,8 +193,13 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
     { /* For some objects (notably SORTENTSTABLE) a NULL/zero handle          \
          is invalid in DXF. Do not emit explicit 0 for those codes.           \
        */                                                                     \
-      if ((dxf == 331 || dxf == 5)                                            \
+      if (dxf == 331                                                          \
           && (!_obj->nam || !_obj->nam->obj || !_obj->nam->absolute_ref))     \
+        ;                                                                     \
+      /* sort_ents (code 5) are sort-order handles, not object references.    \
+         They may not resolve to objects, so only check absolute_ref. */      \
+      else if (dxf == 5                                                       \
+          && (!_obj->nam || !_obj->nam->absolute_ref))                        \
         ;                                                                     \
       else if (!_obj->nam)                                                    \
         fprintf (dat->fh, "%3i\r\n0\r\n", dxf);                               \
@@ -210,7 +215,9 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
         FIELD_HANDLE_NAME (nam, dxf, LAYER)                                   \
       else if (dat->version >= R_13b1)                                        \
         fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", dxf,                        \
-                 _obj->nam->obj ? _obj->nam->absolute_ref : 0UL);             \
+                 /* sort handles (code 5) use absolute_ref directly */         \
+                 (dxf == 5 || _obj->nam->obj)                                  \
+                   ? _obj->nam->absolute_ref : 0UL);                           \
     }
 // clang-format on
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \

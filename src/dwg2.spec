@@ -163,6 +163,10 @@ DWG_OBJECT (SORTENTSTABLE)
   DXF {
     for (vcount = 0; vcount < _obj->num_ents; vcount++)
       {
+        // skip both ent and sort_ent if ent is invalid, to keep pairing
+        if (!_obj->ents[vcount] || !_obj->ents[vcount]->obj
+            || !_obj->ents[vcount]->absolute_ref)
+          continue;
         FIELD_HANDLE (ents[vcount], 4, 331);
         FIELD_HANDLE (sort_ents[vcount], 0, 5);
       }
