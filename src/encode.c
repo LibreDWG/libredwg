@@ -5737,14 +5737,15 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
             {
               BITCODE_RS length = data->u.eed_0.length;
               BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string, 0);
+              LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]", (int)length,
+                         data->u.eed_0.string);
               if ((length * 2) + 5 + dat->byte < dat->size)
                 bit_chain_alloc_size (dat, (length * 2) + 5 + dat->byte);
               bit_write_RS (dat, length);
               for (int j = 0; j < length; j++)
-                bit_write_RS (dat, *dest++);
-              data->u.eed_0_r2007.length = length;
-              LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]", (int)length,
-                         data->u.eed_0.string);
+                bit_write_RS (dat, dest[j]);
+              // data->u.eed_0_r2007.length = length;
+              free (dest);
             }
           else
             {

@@ -3500,7 +3500,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
   wstr = (BITCODE_TU)calloc (len + 1, 2);
   if (!wstr)
     {
-      loglevel |= 1;
+      // loglevel |= 1;
       LOG_ERROR ("Out of memory");
       return NULL;
     }
