@@ -2657,6 +2657,7 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
           bit_write_RS (dat, (BITCODE_RS)length);
           for (size_t i = 0; i <= length; i++)
             bit_write_RS (dat, wstr[i]);
+          free (wstr);
         }
       else
         {
