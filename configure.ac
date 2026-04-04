@@ -799,6 +799,7 @@ if test -z "$ODAFILECONVERTER"; then
   AC_CHECK_PROGS([ODAFILECONVERTER], [TeighaFileConverter])
 fi
 AM_CONDITIONAL([HAVE_ODA], [test -n "$ODAFILECONVERTER"])
+AC_CHECK_PROGS([XVFB_RUN], [xvfb-run])
 
 AC_CHECK_PROGS([CPPCHECK], [cppcheck])
 if test -n "$CPPCHECK"; then

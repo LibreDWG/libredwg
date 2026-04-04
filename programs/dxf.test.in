@@ -39,6 +39,11 @@ ODAFileConverter="@ODAFILECONVERTER@"
 if [ -n "$HAVE_ODA" ]; then
     baseFileConverter="$(basename "$ODAFileConverter")"
 fi
+XVFB_RUN="@XVFB_RUN@"
+if [ -n "$XVFB_RUN" ]; then
+    ODAFileConverter="$XVFB_RUN $ODAFileConverter"
+    baseFileConverter="$XVFB_RUN $baseFileConverter"
+fi
 
 i=0
 rm -f ./*dxf.log
@@ -106,7 +111,7 @@ check_subentity() {
             # shellcheck disable=SC2086,SC2154
             if [ -n "$r" ]; then
                 echo timeout 30 "$baseFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf"
-                timeout 30 "$ODAFileConverter" .. . "ACAD$r" DWG 0 1 "$base.dxf" \
+                timeout 30 $ODAFileConverter .. . "ACAD$r" DWG 0 1 "$base.dxf" \
                         $ODAFileConverter_geometry >/dev/null 2>/dev/null
                 if test -f "$base.dwg.err"; then
                     cat "$base.dwg.err"
@@ -266,7 +271,7 @@ check_roundtrip() {
             # shellcheck disable=SC2086,SC2154
             if [ -n "$r" ]; then
                 echo timeout 30 "$baseFileConverter" . .. "ACAD$r" DXF 0 1 "$tgt"
-                timeout 30 "$ODAFileConverter" . .. "ACAD$r" DXF 0 1 "$tgt" \
+                timeout 30 $ODAFileConverter . .. "ACAD$r" DXF 0 1 "$tgt" \
                         $ODAFileConverter_geometry >/dev/null 2>/dev/null
                 if test -f "$dxf.err"; then
                     cat "$dxf.err"

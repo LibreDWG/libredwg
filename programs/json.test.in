@@ -30,6 +30,16 @@ GEOJSONLINT="@GEOJSONLINT@"
 [ -z "$SED" ] && echo "$SED"
 [ -z "$JQ" ] && echo "$JQ"
 [ -z "$GEOJSONLINT" ] && echo "$GEOJSONLINT"
+HAVE_ODA="@HAVE_ODA@"
+ODAFileConverter="@ODAFILECONVERTER@"
+if [ -n "$HAVE_ODA" ]; then
+    baseFileConverter="$(basename "$ODAFileConverter")"
+fi
+XVFB_RUN="@XVFB_RUN@"
+if [ -n "$XVFB_RUN" ]; then
+    ODAFileConverter="$XVFB_RUN $ODAFileConverter"
+    baseFileConverter="@XVFB_RUN@ $baseFileConverter"
+fi
 
 for d in $TODO $DATA; do
     b="$(basename "$d")"
@@ -160,24 +170,9 @@ done
 
 # oda/teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
 can_teigha=1
-baseFileConverter=ODAFileConverter
-case $(uname) in
-    Darwin)  ODAFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
-    Linux)   ODAFileConverter=/usr/bin/ODAFileConverter ;;
-    Windows) ODAFileConverter=ODAFileConverter ;;
-    *)       can_teigha=0 ;;
-esac
-if [ -n "$can_teigha" ] && [ ! -x "$ODAFileConverter" ]; then
-    baseFileConverter=TeighaFileConverter
-    case $(uname) in
-        Darwin)  ODAFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-        Linux)   ODAFileConverter=/usr/bin/TeighaFileConverter ;;
-        Windows) ODAFileConverter=TeighaFileConverter ;;
-    esac
-fi
 
 check_oda() {
-    if [ -x "$ODAFileConverter" ]
+    if [ -n "$ODAFileConverter" ]
     then
         b="$(basename "$dwg")"
         dir="$(dirname "$dwg")"
@@ -226,10 +221,10 @@ check_oda() {
     fi
 }
 
-if [ -n "$can_teigha" ] && [ -x "$ODAFileConverter" ]
+if [ -n "$can_teigha" ] && [ -n "$ODAFileConverter" ]
 then
     echo ""
-    echo $baseFileConverter roundtrip checks
+    echo "$baseFileConverter roundtrip checks"
     # example_r14: CRC does not match
     # example_2000, example_2004: ODA regression (AcDbVisualStyle cast)
     for dwg in sample_2000 example_2000 2000/Arc 2000/Text 2000/circle \

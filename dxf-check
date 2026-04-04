@@ -48,6 +48,27 @@ case $r in
        ;;
 esac
 
+can_teigha=1
+case $(uname) in
+    Darwin)  ODAFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+    Linux)   ODAFileConverter=/usr/bin/ODAFileConverter ;;
+    Windows) ODAFileConverter=ODAFileConverter ;;
+    *)       ODAFileConverter= ;;
+esac
+baseFileConverter=ODAFileConverter
+if [ ! -x "$ODAFileConverter" ]; then
+    case $(uname) in
+        Darwin)  ODAFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+        Linux)   ODAFileConverter=/usr/bin/TeighaFileConverter ;;
+        Windows) ODAFileConverter=TeighaFileConverter ;;
+        *)       ODAFileConverter= ;;
+    esac
+    baseFileConverter=TeighaFileConverter
+fi
+if test -x "$ODAFileConverter" && command -v xvfb-run 2>/dev/null; then
+    ODAFileConverter="xvfb-run $ODAFileConverter"
+fi
+
 # first create a dwg log to compare against
 ./log "$v" "$d"
 rm "./$b.dxf" "./$b.dwg" 2>/dev/null
@@ -58,21 +79,6 @@ fi
 if [ -f "$b.dxf" ]; then
 
     # teigha can only write from r12-r2018
-    can_teigha=1
-    case $(uname) in
-        Darwin)  ODAFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
-        Linux)   ODAFileConverter=/usr/bin/ODAFileConverter ;;
-        Windows) ODAFileConverter=ODAFileConverter ;;
-    esac
-    baseFileConverter=ODAFileConverter
-    if [ ! -x "$ODAFileConverter" ]; then
-        case $(uname) in
-            Darwin)  ODAFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-            Linux)   ODAFileConverter=/usr/bin/TeighaFileConverter ;;
-            Windows) ODAFileConverter=TeighaFileConverter ;;
-        esac
-        baseFileConverter=TeighaFileConverter
-    fi
     case $r in
         1\.*)    can_teigha=0 ;;
         2\.*)    can_teigha=0 ;;
@@ -81,7 +87,7 @@ if [ -f "$b.dxf" ]; then
     test -z "$r" && can_teigha=0
 
     # shellcheck disable=SC2086,SC2154
-    if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
+    if [ -n "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         rm -f "test/$b.dwg.err"
         rd="$r"
         # can only write r12+ DWG's. DXF's all
@@ -89,7 +95,8 @@ if [ -f "$b.dxf" ]; then
             rd=12
         fi
         echo timeout 30 "$baseFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf"
-        timeout 30 "$ODAFileConverter" . test "ACAD$rd" DWG 0 1 "$b.dxf" \
+        # shellcheck disable=SC2086
+        timeout 30 $ODAFileConverter . test "ACAD$rd" DWG 0 1 "$b.dxf" \
                 $ODAFileConverter_geometry >/dev/null 2>/dev/null
         if [ -e "test/$b.dwg.err" ]; then
             cat "test/$b.dwg.err"
@@ -105,10 +112,11 @@ fi
 
 if [ -f "$b.dwg" ]; then
     # shellcheck disable=SC2086,SC2154
-    if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
+    if [ -n "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         rm -f "test/$b.dxf.err" "$b.dxf.err"
         echo timeout 30 "$baseFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg"
-        timeout 30 "$ODAFileConverter" . test "ACAD$r" DXF 0 1 "$b.dwg" \
+        # shellcheck disable=SC2086
+        timeout 30 $ODAFileConverter . test "ACAD$r" DXF 0 1 "$b.dwg" \
                 $ODAFileConverter_geometry >/dev/null 2>/dev/null
         if [ -e "test/$b.dxf.err" ]; then
             cat "test/$b.dxf.err"
@@ -117,7 +125,7 @@ if [ -f "$b.dwg" ]; then
         fi
     else
         rm "test/$b.dxf.err" "$b.dxf.err" 2>/dev/null
-        if [ ! -x "$ODAFileConverter" ]; then
+        if [ -z "$ODAFileConverter" ]; then
             echo "$baseFileConverter not installed"
         fi
     fi
