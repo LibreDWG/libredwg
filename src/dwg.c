@@ -3334,6 +3334,12 @@ dwg_next_handseed (Dwg_Data *dwg)
     {
       BITCODE_RLL seed;
       seed = dwg->header_vars.HANDSEED->absolute_ref + 1;
+      // skip handles already in the object_map (GH #1229)
+      if (dwg->object_map)
+        {
+          while (hash_get (dwg->object_map, seed) != HASH_NOT_FOUND)
+            seed++;
+        }
       dwg->header_vars.HANDSEED->absolute_ref
           = dwg->header_vars.HANDSEED->handleref.value = seed;
       dwg->auxheader.HANDSEED = seed;
