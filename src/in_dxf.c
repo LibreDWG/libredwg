@@ -7457,33 +7457,17 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case DWG_VT_BINARY:
       if (!pair->value.s.ptr)
         goto invalid;
-      if (dat->opts & DWG_OPTS_DXFB)
-        {
-          size_t blen = pair->value.s.len;
-          unsigned char *s = (unsigned char *)malloc (blen);
-          rbuf->value.str.u.data = (char *)s;
-          rbuf->value.str.size = blen & 0xFFFF;
-          memcpy (s, pair->value.s.ptr, blen);
-          xdata_size += 1 + (blen & 0xFFFF);
-          LOG_TRACE ("xdata[%d]: ", num_xdata);
-          // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
-        }
-      else
-        {
-          // convert from hex
-          size_t len = strlen (pair->value.s.ptr);
-          size_t blen = len / 2;
-          size_t read;
-          unsigned char *s = (unsigned char *)malloc (blen);
-          rbuf->value.str.u.data = (char *)s;
-          rbuf->value.str.size = blen & 0xFFFF;
-          if ((read = in_hex2bin (s, pair->value.s.ptr, blen)) != blen)
-            LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
-                       read, blen);
-          xdata_size += 1 + (blen & 0xFFFF);
-          LOG_TRACE ("xdata[%d]: ", num_xdata);
-          // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
-        }
+      {
+        // dxf_read_binary already decoded hex to binary for text DXF
+        size_t blen = pair->value.s.len;
+        unsigned char *s = (unsigned char *)malloc (blen);
+        rbuf->value.str.u.data = (char *)s;
+        rbuf->value.str.size = blen & 0xFFFF;
+        memcpy (s, pair->value.s.ptr, blen);
+        xdata_size += 1 + (blen & 0xFFFF);
+        LOG_TRACE ("xdata[%d]: ", num_xdata);
+        // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
+      }
       break;
     case DWG_VT_HANDLE:
     case DWG_VT_OBJECTID:
@@ -7585,9 +7569,8 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   while (pair != NULL && pair->code == 310 && pair->value.s.ptr)
     {
-      const size_t blen = (dat->opts & DWG_OPTS_DXFB)
-                              ? pair->value.s.len
-                              : strlen (pair->value.s.ptr) / 2;
+      // dxf_read_binary already decoded hex to binary for text DXF
+      const size_t blen = pair->value.s.len;
       BITCODE_TF s;
 
       if (!ent->preview_size)
@@ -7600,15 +7583,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           return pair;
         }
       s = &ent->preview[written];
-      if (dat->opts & DWG_OPTS_DXFB)
-        memcpy (s, pair->value.s.ptr, blen);
-      else
-        {
-          size_t read;
-          if ((read = in_hex2bin (s, pair->value.s.ptr, blen)) != blen)
-            LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
-                       read, blen);
-        }
+      memcpy (s, pair->value.s.ptr, blen);
       written += blen;
       LOG_TRACE ("%s.preview += %" PRIuSIZE " (%" PRIuSIZE "/" FORMAT_BLL
                  ")\n",
@@ -7646,41 +7621,20 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   while (pair != NULL && pair->code == 310)
     {
       const char *pos = pair->value.s.ptr;
-      if (dat->opts & DWG_OPTS_DXFB)
-        {
-          const size_t blen = pair->value.s.len;
-          if (blen)
-            {
-              _obj->preview
-                  = (BITCODE_TF)realloc (_obj->preview, written + blen);
-              memcpy (&_obj->preview[written], pos, blen);
-              written += blen;
-              LOG_TRACE ("BLOCK_HEADER.preview += %" PRIuSIZE " (%" PRIuSIZE
-                         ")\n",
-                         blen, written);
-            }
-        }
-      else
-        {
-          const size_t len = pos ? strlen (pos) : 0;
-          const size_t blen = len / 2;
-          size_t read;
-          BITCODE_TF s;
-
-          if (len)
-            {
-              _obj->preview
-                  = (BITCODE_TF)realloc (_obj->preview, written + blen);
-              s = &_obj->preview[written];
-              if ((read = in_hex2bin (s, pair->value.s.ptr, blen)) != blen)
-                LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
-                           read, blen);
-              written += read;
-              LOG_TRACE ("BLOCK_HEADER.preview += %" PRIuSIZE " (%" PRIuSIZE
-                         ")\n",
-                         blen, written);
-            }
-        }
+      {
+        // dxf_read_binary already decoded hex to binary for text DXF
+        const size_t blen = pair->value.s.len;
+        if (blen)
+          {
+            _obj->preview
+                = (BITCODE_TF)realloc (_obj->preview, written + blen);
+            memcpy (&_obj->preview[written], pos, blen);
+            written += blen;
+            LOG_TRACE ("BLOCK_HEADER.preview += %" PRIuSIZE " (%" PRIuSIZE
+                       ")\n",
+                       blen, written);
+          }
+      }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
@@ -11026,10 +10980,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             }
           else if (pair->code == 310 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
             {
+              // dxf_read_binary already decoded hex to binary for text DXF
               Dwg_Entity_OLE2FRAME *o = obj->tio.entity->tio.OLE2FRAME;
-              const size_t blen = (dat->opts & DWG_OPTS_DXFB)
-                                      ? pair->value.s.len
-                                      : strlen (pair->value.s.ptr) / 2;
+              const size_t blen = pair->value.s.len;
               unsigned char *s = (unsigned char *)&o->data[written];
               if (!o->data)
                 {
@@ -11046,16 +10999,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                              blen, written, o->data_size);
                   goto invalid_dxf;
                 }
-              if (dat->opts & DWG_OPTS_DXFB)
-                memcpy (s, pair->value.s.ptr, blen);
-              else
-                {
-                  size_t read;
-                  if ((read = in_hex2bin (s, pair->value.s.ptr, blen)) != blen)
-                    LOG_ERROR ("in_hex2bin read only %" PRIuSIZE
-                               " of %" PRIuSIZE,
-                               read, blen);
-                }
+              memcpy (s, pair->value.s.ptr, blen);
               written += blen;
               LOG_TRACE ("OLE2FRAME.data += %" PRIuSIZE " (%" PRIuSIZE
                          "/%u) [TF 310]\n",
@@ -13766,9 +13710,8 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         case 310:
           if (pair->value.s.ptr)
             {
-              const size_t blen = (dat->opts & DWG_OPTS_DXFB)
-                                      ? pair->value.s.len
-                                      : strlen (pair->value.s.ptr) / 2;
+              // dxf_read_binary already decoded hex to binary for text DXF
+              const size_t blen = pair->value.s.len;
               unsigned char *s = &dwg->thumbnail.chain[written];
               if (blen + written > dwg->thumbnail.size)
                 {
@@ -13779,16 +13722,7 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              blen, written, dwg->thumbnail.size);
                   return 1;
                 }
-              if (dat->opts & DWG_OPTS_DXFB)
-                memcpy (s, pair->value.s.ptr, blen);
-              else
-                {
-                  size_t read;
-                  if ((read = in_hex2bin (s, pair->value.s.ptr, blen)) != blen)
-                    LOG_ERROR ("in_hex2bin read only %" PRIuSIZE
-                               " of %" PRIuSIZE,
-                               read, blen);
-                }
+              memcpy (s, pair->value.s.ptr, blen);
               written += blen;
               LOG_TRACE ("PREVIEW.chain += %" PRIuSIZE " (%" PRIuSIZE
                          "/%" PRIuSIZE ")\n",
