@@ -3927,9 +3927,12 @@ dxf_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain *pic = (Bit_Chain *)&dwg->thumbnail;
   if (pic->chain && pic->size && pic->size > 10)
     {
+      // R2004+ chain starts with 16-byte sentinel at byte 0, skip it
+      const size_t off = pic->byte;
+      const size_t sz = pic->size - off;
       SECTION (THUMBNAILIMAGE);
-      VALUE_RL (pic->size, 90);
-      VALUE_BINARY (pic->chain, pic->size, 310);
+      VALUE_RL (sz, 90);
+      VALUE_BINARY (pic->chain + off, sz, 310);
       ENDSEC ();
     }
   return 0;
