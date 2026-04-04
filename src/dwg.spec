@@ -4947,7 +4947,7 @@ DWG_OBJECT (MLINESTYLE)
   FIELD_BD (end_angle, 52);   /*!< default 90 deg */
 #endif
   FIELD_RCu (num_lines, 71);
-  REPEAT (num_lines, lines, Dwg_MLINESTYLE_line)
+  REPEAT_C (num_lines, lines, Dwg_MLINESTYLE_line)
   REPEAT_BLOCK
       SUB_FIELD_BD (lines[rcount1], offset, 49);
       SUB_FIELD_CMC (lines[rcount1], color, 62); /*!< default: 0 */

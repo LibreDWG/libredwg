@@ -140,7 +140,7 @@
             {                                                                 \
               GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type " %d]"),   \
-                         rcount1, rcount2, _obj->nam, dxfgroup);              \
+                         rcount1, rcount2, (BITCODE_##type)_obj->nam, dxfgroup);\
               GCC46_DIAG_RESTORE                                              \
               free (s2);                                                      \
               free (s1);                                                      \
@@ -149,7 +149,7 @@
             {                                                                 \
               GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type " %d]"),   \
-                         rcount1, _obj->nam, dxfgroup);                       \
+                         rcount1, (BITCODE_##type)_obj->nam, dxfgroup);       \
               GCC46_DIAG_RESTORE                                              \
               free (s1);                                                      \
             }                                                                 \
