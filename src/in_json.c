@@ -1636,6 +1636,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                           if (len)
                             memcpy (&data->u.eed_0.string, s,
                                     (len + 1) & 0xFFFF);
+                          else
+                            *data->u.eed_0.string = '\0';
                           LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
                           have++; // ignore the ending NUL
                           free (s);
