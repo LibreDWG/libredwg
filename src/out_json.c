@@ -1348,7 +1348,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
           fprintf (dat->fh, "\\r");
         }
       // convert to utf-8
-      else if (c < 0x1f || c > 0xff)
+      else if (c < 0x1f || c > 0x7f)
         {
           if (c < 0x80)
             {
@@ -1376,7 +1376,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
 #  endif
         }
       else
-        fprintf (dat->fh, "%c", (char)(c & 0xff));
+        fprintf (dat->fh, "%c", (char)c);
     }
   fprintf (dat->fh, "\"");
 }
