@@ -27,11 +27,6 @@
       FIELD_VALUE (x20) = 0x20;
       FIELD_VALUE (x80) = 0x80;
       FIELD_VALUE (x40) = 0x40;
-      //??
-      FIELD_VALUE (last_section_id) = 19;
-      FIELD_VALUE (numsections) = 17;
-      FIELD_VALUE (section_map_id) = 19;
-      FIELD_VALUE (section_array_size) = 19;
     }
   }
   FIELD_TFF (file_ID_string, 12, 0) //pre-allocated: "AcFssFcAJMB"
