@@ -2225,7 +2225,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             int len = bit_read_RC (&src);
             if (len == 0)
               return 0;
-            if (src.byte + len >= src.size)
+            if (src.byte + len > src.size)
               {
                 LOG_ERROR ("Invalid SAB len=%d [RC]", len);
                 bit_chain_free (&dest);
@@ -2286,7 +2286,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 8: // short len
           {
             BITCODE_RS len = bit_read_RS (&src);
-            if (src.byte + len >= src.size)
+            if (src.byte + len > src.size)
               {
                 LOG_ERROR ("Invalid SAB");
                 bit_chain_free (&dest);
@@ -2306,7 +2306,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 9: // long len
           {
             BITCODE_RL len = bit_read_RL (&src);
-            if (src.byte + len >= src.size)
+            if (src.byte + len > src.size)
               {
                 LOG_ERROR ("Invalid SAB");
                 bit_chain_free (&dest);
