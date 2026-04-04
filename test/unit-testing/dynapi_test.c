@@ -46920,21 +46920,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         fail ("DIMSTYLE.DIMCLRD [CMC]");
   }
   {
-    BITCODE_RS DIMCLRD_N;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMCLRD_N", &DIMCLRD_N, NULL)
-        && DIMCLRD_N == dimstyle->DIMCLRD_N)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMCLRD_N [RS] %hu != %hu", dimstyle->DIMCLRD_N, DIMCLRD_N);
-    DIMCLRD_N++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRD_N", &DIMCLRD_N, 0)
-        && DIMCLRD_N == dimstyle->DIMCLRD_N)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMCLRD_N [RS] set+1 %hu != %hu", dimstyle->DIMCLRD_N, DIMCLRD_N);
-    dimstyle->DIMCLRD_N--;
-  }
-  {
     BITCODE_CMC DIMCLRE;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMCLRE", &DIMCLRE, NULL)
         && !memcmp (&DIMCLRE, &dimstyle->DIMCLRE, sizeof (BITCODE_CMC)))
@@ -46943,42 +46928,12 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         fail ("DIMSTYLE.DIMCLRE [CMC]");
   }
   {
-    BITCODE_RS DIMCLRE_N;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMCLRE_N", &DIMCLRE_N, NULL)
-        && DIMCLRE_N == dimstyle->DIMCLRE_N)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMCLRE_N [RS] %hu != %hu", dimstyle->DIMCLRE_N, DIMCLRE_N);
-    DIMCLRE_N++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRE_N", &DIMCLRE_N, 0)
-        && DIMCLRE_N == dimstyle->DIMCLRE_N)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMCLRE_N [RS] set+1 %hu != %hu", dimstyle->DIMCLRE_N, DIMCLRE_N);
-    dimstyle->DIMCLRE_N--;
-  }
-  {
     BITCODE_CMC DIMCLRT;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMCLRT", &DIMCLRT, NULL)
         && !memcmp (&DIMCLRT, &dimstyle->DIMCLRT, sizeof (BITCODE_CMC)))
         pass ();
     else
         fail ("DIMSTYLE.DIMCLRT [CMC]");
-  }
-  {
-    BITCODE_RS DIMCLRT_N;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMCLRT_N", &DIMCLRT_N, NULL)
-        && DIMCLRT_N == dimstyle->DIMCLRT_N)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMCLRT_N [RS] %hu != %hu", dimstyle->DIMCLRT_N, DIMCLRT_N);
-    DIMCLRT_N++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMCLRT_N", &DIMCLRT_N, 0)
-        && DIMCLRT_N == dimstyle->DIMCLRT_N)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMCLRT_N [RS] set+1 %hu != %hu", dimstyle->DIMCLRT_N, DIMCLRT_N);
-    dimstyle->DIMCLRT_N--;
   }
   {
     BITCODE_BS DIMDEC;
