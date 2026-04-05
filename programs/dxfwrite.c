@@ -275,7 +275,8 @@ main (int argc, char *argv[])
               else if (strstr (infile, ".json") || strstr (infile, ".JSON"))
                 fmt = (char *)"json";
 #  endif
-              else if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
+              else if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB")
+                       || strstr (infile, ".DXB"))
                 fmt = (char *)"dxfb";
               else if (strstr (infile, ".dxf") || strstr (infile, ".DXF"))
                 fmt = (char *)"dxf";
@@ -310,8 +311,8 @@ main (int argc, char *argv[])
       else
         dat.fh = stdin;
 
-      if ((fmt && !strcasecmp (fmt, "dwg"))
-          || (infile && !strcasecmp (infile, ".dwg")))
+      if ((fmt && !strcasecmp (fmt, "DWG"))
+          || (infile && !strcasecmp (infile, ".DWG")))
         {
           if (opts > 1)
             fprintf (stderr, "Reading DWG file %s\n",
@@ -320,8 +321,8 @@ main (int argc, char *argv[])
         }
 #ifndef DISABLE_DXF
 #  ifndef DISABLE_JSON
-      else if ((fmt && !strcasecmp (fmt, "json"))
-               || (infile && !strcasecmp (infile, ".json")))
+      else if ((fmt && !strcasecmp (fmt, "JSON"))
+               || (infile && !strcasecmp (infile, ".JSON")))
         {
           if (opts > 1)
             fprintf (stderr, "Reading JSON file %s\n",
@@ -329,16 +330,18 @@ main (int argc, char *argv[])
           error = dwg_read_json (&dat, &dwg);
         }
 #  endif
-      else if ((fmt && !strcasecmp (fmt, "dxfb"))
-               || (infile && !strcasecmp (infile, ".dxfb")))
+      else if ((fmt && (!strcasecmp (fmt, "DXFB") || !strcasecmp (fmt, "DXB")))
+               || (infile
+                   && (!strcasecmp (infile, ".DXFB")
+                       || !strcasecmp (infile, ".DXB"))))
         {
           if (opts > 1)
             fprintf (stderr, "Reading Binary DXF file %s\n",
                      infile ? infile : "from stdin");
           error = dxf_read_file (infile ? infile : "-", &dwg);
         }
-      else if ((fmt && !strcasecmp (fmt, "dxf"))
-               || (infile && !strcasecmp (infile, ".dxf")))
+      else if ((fmt && !strcasecmp (fmt, "DXF"))
+               || (infile && !strcasecmp (infile, ".DXF")))
         {
           if (opts > 1)
             fprintf (stderr, "Reading DXF file %s\n",

@@ -364,7 +364,7 @@ main (int argc, char *argv[])
     }
   else
 #  endif
-      if ((fmt && !strcasecmp (fmt, "DXFB"))
+      if ((fmt && (!strcasecmp (fmt, "DXFB") || !strcasecmp (fmt, "DXB")))
           || (infile
               && (strstr (infile, ".dxfb") || strstr (infile, ".dxb")
                   || strstr (infile, ".DXB"))))
