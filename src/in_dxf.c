@@ -11815,19 +11815,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                         {
                           BITCODE_BL num_clip_verts = 0;
                           BITCODE_2RD *clip_verts;
-                          // 11 has no num_clip_verts: realloc. clip_inverts
-                          // has.
-                          if (pair->code == 14 || pair->code == 24)
-                            {
-                              // FIXME: num_clip_verts must match clip_verts[]
-                              // But num_clip_verts can be set elsewhere,
-                              // without reallocing the array.
-                              dwg_dynapi_entity_value (_obj, obj->name,
-                                                       "num_clip_verts",
-                                                       &num_clip_verts, NULL);
-                              LOG_INSANE ("%s.num_clip_verts = %d, j = %d\n",
-                                          name, num_clip_verts, j);
-                            }
+                          // 11 has no explicit DXF count, so keep using the
+                          // entity state accumulated from previous 11/21
+                          // pairs. 14/24 still relies on a count field set
+                          // earlier.
+                          dwg_dynapi_entity_value (_obj, obj->name,
+                                                   "num_clip_verts",
+                                                   &num_clip_verts, NULL);
+                          LOG_INSANE ("%s.num_clip_verts = %d, j = %d\n", name,
+                                      num_clip_verts, j);
                           if (!num_clip_verts
                               && obj->fixedtype == DWG_TYPE_IMAGE)
                             num_clip_verts = 2;
@@ -11837,6 +11833,16 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           // assert (j == 0 || j < (int)num_clip_verts);
                           if (pair->code < 20)
                             {
+                              // Underlays do not emit a separate DXF count
+                              // before their 11/21 clip polygon pairs.
+                              if (pair->code == 11 && j >= (int)num_clip_verts)
+                                {
+                                  num_clip_verts = j + 1;
+                                  dwg_dynapi_entity_set_value (
+                                      _obj, obj->name, "num_clip_verts",
+                                      &num_clip_verts, 0);
+                                }
+
                               // no need to realloc
                               if (!j && pair->code == 14)
                                 {
@@ -11852,7 +11858,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 {
                                   clip_verts = (BITCODE_2RD *)realloc (
                                       clip_verts,
-                                      (j + 1) * sizeof (BITCODE_2RD));
+                                      num_clip_verts * sizeof (BITCODE_2RD));
+                                  if (!clip_verts)
+                                    goto invalid_dxf;
                                   memset (&clip_verts[j], 0,
                                           sizeof (BITCODE_2RD));
                                   dwg_dynapi_entity_set_value (_obj, obj->name,
