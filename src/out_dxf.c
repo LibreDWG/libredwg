@@ -1222,7 +1222,7 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
           VALUE_RS (257, dxf);
           return;
         }
-      if (!opt || color->index)
+      if (!opt || color->index || color->method == 0xc1)
         {
           VALUE_RSd (color->index, dxf);
         }

@@ -3809,6 +3809,12 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
       bit_write_BS (dat, 0); // index override
       if (!color->method && color->rgb & 0xFF000000)
         color->method = color->rgb >> 0x18;
+      else if (!color->method)
+        {
+          // default uninitialized CMC to ByBlock
+          color->method = 0xc1;
+          color->rgb = 0xc1000000;
+        }
       else if (color->method >= 0xc0 && color->method <= 0xc8)
         color->rgb
             = ((BITCODE_BL)color->method << 24) | (color->rgb & 0x00FFFFFF);
