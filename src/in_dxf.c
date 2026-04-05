@@ -4109,10 +4109,30 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE ("%s.leaders[].lines[%d].arrow_size = %f [BD %d]\n",
                          obj->name, i, pair->value.d, pair->code);
               break;
+            case 340:
+              lline->ltype
+                  = dwg_add_handleref (obj->parent, 5, pair->value.u, obj);
+              LOG_TRACE ("%s.leaders[].lines[%d].ltype = " FORMAT_REF
+                         " [H %d]\n",
+                         obj->name, i, ARGS_REF (lline->ltype), pair->code);
+              break;
+            case 341:
+              lline->arrow_handle
+                  = dwg_add_handleref (obj->parent, 5, pair->value.u, obj);
+              LOG_TRACE ("%s.leaders[].lines[%d].arrow_handle = " FORMAT_REF
+                         " [H %d]\n",
+                         obj->name, i, ARGS_REF (lline->arrow_handle),
+                         pair->code);
+              break;
             case 93:
               lline->flags = pair->value.i;
-              LOG_TRACE ("%s.leaders[].lines[%d].line_index = %d [BL %d]\n",
+              LOG_TRACE ("%s.leaders[].lines[%d].flags = %d [BL %d]\n",
                          obj->name, i, pair->value.i, pair->code);
+              break;
+            case 271:
+              lnode->attach_dir = pair->value.i;
+              LOG_TRACE ("%s.leaders[].attach_dir = %d [BS %d]\n", obj->name,
+                         pair->value.i, pair->code);
               break;
             case 305: // end
               break;
