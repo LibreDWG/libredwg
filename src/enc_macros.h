@@ -554,7 +554,8 @@
       OVERFLOW_CHECK_LV (nam, _obj->size)                                     \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          if (dat->version != dat->from_version)                              \
+          if (dat->version != dat->from_version                               \
+              || dat->version >= R_2007)                                      \
             {                                                                 \
               FIELD_##type (nam[vcount], dxf)                                 \
             }                                                                 \
