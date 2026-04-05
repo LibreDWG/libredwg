@@ -825,6 +825,26 @@
 #define START_HANDLE_STREAM                                                   \
   LOG_INSANE ("HANDLE_STREAM @%" PRIuSIZE ".%u\n", dat->byte - obj->address,  \
               dat->bit);                                                      \
+  /* R2007+ object string stream footer */                                    \
+  if (dat->version >= R_2007 && str_dat != dat) {                             \
+    size_t _str_bits = bit_position (str_dat);                                \
+    if (_str_bits) {                                                          \
+      BITCODE_RS _data_size = (BITCODE_RS)_str_bits;                          \
+      bit_copy_chain (dat, str_dat);                                          \
+      if (_data_size & 0x8000) {                                              \
+        bit_write_RS (dat, (_data_size >> 15) & 0x7FFF);                      \
+        bit_write_RS (dat, (_data_size & 0x7FFF) | 0x8000);                   \
+      } else                                                                  \
+        bit_write_RS (dat, _data_size);                                       \
+      bit_write_B (dat, 1);                                                   \
+      obj->has_strings = 1;                                                   \
+      LOG_TRACE ("-obj string footer: data_size %u, has_strings 1\n",         \
+                 (unsigned)_data_size);                                        \
+    } else {                                                                  \
+      bit_write_B (dat, 0);                                                   \
+      obj->has_strings = 0;                                                   \
+    }                                                                         \
+  }                                                                           \
   if (1 || /* has floats */                                                   \
       !obj->bitsize || /* DD sizes can vary, but let unknown_bits asis */     \
       has_entity_DD (obj) || /* strings may be zero-terminated or not */      \
