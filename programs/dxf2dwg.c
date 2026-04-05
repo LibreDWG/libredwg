@@ -341,8 +341,11 @@ main (int argc, char *argv[])
         {
           printf (" as %s\n", version);
           dwg.header.version = dwg_version;
-          if (dwg_version > R_2004)
-            printf ("Warning: encode does not work for R2007.\n");
+          if (dwg_version >= R_2007a && dwg_version <= R_2007)
+            {
+              printf ("ERROR: encode does not work for R2007.\n");
+              exit (1);
+            }
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
         }

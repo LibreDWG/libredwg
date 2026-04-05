@@ -74,9 +74,10 @@ help (void)
   printf ("           Valid versions:\n");
   printf (
       "             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,\n"
-      "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000, r2004\n");
+      "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000, r2004,\n"
+      "             r2010, r2013, r2018\n");
   printf ("           Planned versions:\n");
-  printf ("             r2007, r2010, r2013, r2018\n");
+  printf ("             r2007\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt,  --format fmt     DXF, DXFB, JSON\n");
 #  else
@@ -93,10 +94,11 @@ help (void)
   printf ("  -a rNNNN    save as version\n");
   printf ("           Valid versions:\n");
   printf (
-      "             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4\n"
-      "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000, r2004\n");
+      "             r1.1, r1.2, r1.3, r1.4, r2.0, r2.10, r2.21, r2.22, r2.4,\n"
+      "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000, r2004, r2010,\n"
+      "             r2013, r2018\n");
   printf ("           Planned versions:\n");
-  printf ("             r2007, r2010, r2013, r2018\n");
+  printf ("             r2007\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt      fmt: DXF, DXFB, JSON\n");
 #  else
@@ -414,19 +416,9 @@ main (int argc, char *argv[])
     goto free;
 
   if (dwg_version == R_INVALID)
-    {
-      dwg_version = dwg.header.from_version;
-      /*
-      // FIXME: for now only r1.4 - R_2000.
-      if (dwg_version >= R_2004)
-        dwg_version = R_2000;
-      else if (dwg_version < R_1_4)
-        dwg_version = R_1_4;
-      */
-    }
+    dwg_version = dwg.header.from_version;
   if (dwg.header.from_version == R_INVALID)
     fprintf (stderr, "Unknown DWG header.from_version\n");
-  // FIXME: for now only r1.4 - R_2000. later remove this line.
   dat.version = dwg.header.version = dwg_version;
 
   if (!outfile)

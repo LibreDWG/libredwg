@@ -75,7 +75,7 @@ help (void)
   printf ("  --as rNNNN                save as version\n");
   printf ("              Valid versions:\n");
   printf ("                r9, r10, r11, r12, r13, r14, r2000, r2004, r2007,"
-          "                r2010, r2013, r2018, r2021\n");
+          "                r2010, r2013, r2018\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt,  --format fmt     DWG, DXF, DXFB, JSON\n");
 #  else
@@ -94,7 +94,7 @@ help (void)
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
   printf ("                r9, r10, r11, r12, r13, r14, r2000, r2004, r2007,"
-          "                r2010, r2013, r2018, r2021\n");
+          "                r2010, r2013, r2018\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt      fmt: DWG, DXF, DXFB, JSON\n");
 #  else
