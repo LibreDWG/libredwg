@@ -1984,10 +1984,105 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   write_sentinel (dat, DWG_SENTINEL_VARIABLE_BEGIN);
   size_adr = dat->byte;
   bit_write_RL (dat, 540); // Size placeholder
-  error = dwg_encode_header_variables (dat, dat, dat, dwg);
-  // undo minimal HEADER hack
-  if (dat->from_version != orig_from_version)
-    dat->from_version = orig_from_version;
+
+  SINCE (R_2007a)
+  {
+    // R2007+: use split streams (main, handle, string).
+    // The section layout after sentinel+size+hsize+bitsize is:
+    //   [main data] [string data + data_size(RS) + endbit(B)] [handle data]
+    // bitsize = 32 + main_bits + string_bits + 16 + 1
+    size_t bitsize_hi_adr = 0, bitsize_adr;
+    size_t data_start;
+    BITCODE_RL bitsize;
+    Bit_Chain hdl_dat = { 0 }, str_dat = { 0 };
+
+    if (dwg->header.maint_version > 3 || dat->version >= R_2018)
+      {
+        bitsize_hi_adr = dat->byte;
+        bit_write_RL (dat, 0); // bitsize_hi placeholder
+      }
+    bitsize_adr = dat->byte;
+    bit_write_RL (dat, 0); // bitsize placeholder
+    data_start = dat->byte;
+
+    // Allocate separate buffers for handle and string streams
+    bit_chain_alloc (&hdl_dat);
+    hdl_dat.version = dat->version;
+    hdl_dat.from_version = dat->from_version;
+    hdl_dat.opts = dat->opts;
+    bit_chain_alloc (&str_dat);
+    str_dat.version = dat->version;
+    str_dat.from_version = dat->from_version;
+    str_dat.opts = dat->opts;
+
+    error = dwg_encode_header_variables (dat, &hdl_dat, &str_dat, dwg);
+    if (dat->from_version != orig_from_version)
+      dat->from_version = orig_from_version;
+
+    // Assemble: main data (already in dat) + string data + footer + handle
+    // data
+    {
+      size_t main_end = bit_position (dat);
+      size_t str_bits = bit_position (&str_dat);
+      size_t hdl_bits = bit_position (&hdl_dat);
+      BITCODE_RS data_size = (BITCODE_RS)str_bits;
+
+      // Append string stream data
+      if (str_bits)
+        bit_copy_chain (dat, &str_dat);
+      // String footer: data_size(RS) + endbit(B)
+      if (data_size & 0x8000)
+        {
+          bit_write_RS (dat, (data_size >> 15) & 0x7FFF);
+          bit_write_RS (dat, (data_size & 0x7FFF) | 0x8000);
+        }
+      else
+        bit_write_RS (dat, data_size);
+      bit_write_B (dat, str_bits ? 1 : 0); // endbit
+      LOG_TRACE ("header string stream data_size: %u endbit: %d\n",
+                 (unsigned)data_size, str_bits ? 1 : 0);
+
+      // bitsize: 32 (bitsize field) + main + string + footer
+      bitsize = (BITCODE_RL)(32 + bit_position (dat) - data_start * 8);
+
+      // Append handle stream data
+      if (hdl_bits)
+        bit_copy_chain (dat, &hdl_dat);
+    }
+
+    // Pad to byte boundary
+    if (dat->bit)
+      {
+        dat->bit = 0;
+        dat->byte++;
+      }
+
+    // Patch bitsize and bitsize_hi
+    {
+      size_t pos = bit_position (dat);
+      if (bitsize_hi_adr)
+        {
+          bit_set_position (dat, bitsize_hi_adr * 8);
+          bit_write_RL (dat, 0);
+        }
+      bit_set_position (dat, bitsize_adr * 8);
+      bit_write_RL (dat, bitsize);
+      LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%" PRIuSIZE "\n", bitsize,
+                 bitsize_adr);
+      bit_set_position (dat, pos);
+    }
+    free (hdl_dat.chain);
+    free (str_dat.chain);
+  }
+  else
+  {
+    // pre-R2007: flat format
+    error = dwg_encode_header_variables (dat, dat, dat, dwg);
+    // undo minimal HEADER hack
+    if (dat->from_version != orig_from_version)
+      dat->from_version = orig_from_version;
+  }
+
   encode_patch_RLsize (dat, size_adr);
   bit_write_CRC (dat, size_adr, 0xC0C1);
   write_sentinel (dat, DWG_SENTINEL_VARIABLE_END);
@@ -2010,6 +2105,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   BITCODE_BS max_num = 499;
   Dwg_Section_Type sec_id;
   size_t size_adr;
+  size_t hsize_adr = 0, bitsize_adr = 0, data_start = 0;
   SINCE (R_2004a)
   sec_id = SECTION_CLASSES;
   else sec_id = (Dwg_Section_Type)SECTION_CLASSES_R13;
@@ -2028,6 +2124,18 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   SINCE (R_2004a)
   {
+    if ((dat->version >= R_2010 && dwg->header.maint_version > 3)
+        || dat->version >= R_2018)
+      {
+        hsize_adr = dat->byte;
+        bit_write_RL (dat, 0); // hsize placeholder
+      }
+    if (dat->version >= R_2007)
+      {
+        bitsize_adr = dat->byte;
+        bit_write_RL (dat, 0); // bitsize placeholder
+      }
+    data_start = dat->byte;
     for (j = 0; j < dwg->num_classes; j++)
       if (dwg->dwg_class[j].number > max_num)
         max_num = dwg->dwg_class[j].number;
@@ -2038,56 +2146,125 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     bit_write_B (dat, 1);
     LOG_TRACE ("btrue: " FORMAT_B " [B]\n", 1);
   }
-  for (j = 0; j < dwg->num_classes; j++)
-    {
-      Dwg_Class *klass;
-      klass = &dwg->dwg_class[j];
-      bit_write_BS (dat, klass->number);
-      bit_write_BS (dat, klass->proxyflag);
-      SINCE (R_2007a)
+  SINCE (R_2007a)
+  {
+    // R2007+ classes use split streams: main stream for non-string fields,
+    // separate string stream for class name strings.
+    // Phase 1: write non-string class fields to main stream
+    for (j = 0; j < dwg->num_classes; j++)
       {
-        bit_write_T (dat, klass->appname);
-        bit_write_T (dat, klass->cppname);
+        Dwg_Class *klass = &dwg->dwg_class[j];
+        bit_write_BS (dat, klass->number);
+        bit_write_BS (dat, klass->proxyflag);
+        bit_write_B (dat, klass->is_zombie);
+        bit_write_BS (dat, klass->item_class_id);
+        LOG_TRACE ("Class %d 0x%x %s\n"
+                   " %s \"%s\" %d 0x%x\n",
+                   klass->number, klass->proxyflag, klass->dxfname,
+                   klass->cppname, klass->appname, klass->is_zombie,
+                   klass->item_class_id);
+        SINCE (R_2004a)
+        {
+          if (!klass->dwg_version)
+            {
+              klass->dwg_version = (BITCODE_BL)dwg->header.dwg_version;
+              klass->maint_version = (BITCODE_BL)dwg->header.maint_version;
+            }
+          bit_write_BL (dat, klass->num_instances);
+          bit_write_BS (dat, klass->dwg_version);
+          bit_write_BS (dat, klass->maint_version);
+          bit_write_BL (dat, klass->unknown_1);
+          bit_write_BL (dat, klass->unknown_2);
+          LOG_TRACE (" %d %d\n", (int)klass->num_instances,
+                     (int)klass->dwg_version);
+        }
       }
+
+    // Phase 2: write string data
+    {
+      size_t str_start = bit_position (dat);
+      BITCODE_RS data_size;
+      for (j = 0; j < dwg->num_classes; j++)
+        {
+          Dwg_Class *klass = &dwg->dwg_class[j];
+          bit_write_T (dat, klass->appname);
+          bit_write_T (dat, klass->cppname);
+          if (klass->dxfname_u)
+            bit_write_TU (dat, klass->dxfname_u);
+          else
+            bit_write_T (dat, klass->dxfname);
+        }
+      // Phase 3: string stream footer
+      data_size = (BITCODE_RS)(bit_position (dat) - str_start);
+      if (data_size & 0x8000)
+        {
+          bit_write_RS (dat, (data_size >> 15) & 0x7FFF);
+          bit_write_RS (dat, (data_size & 0x7FFF) | 0x8000);
+        }
       else
+        bit_write_RS (dat, data_size);
+      bit_write_B (dat, 1); // endbit: has strings
+      LOG_TRACE ("string stream data_size: %u endbit: 1\n",
+                 (unsigned)data_size);
+    }
+  }
+  else
+  {
+    for (j = 0; j < dwg->num_classes; j++)
       {
+        Dwg_Class *klass = &dwg->dwg_class[j];
+        bit_write_BS (dat, klass->number);
+        bit_write_BS (dat, klass->proxyflag);
         bit_write_TV (dat, klass->appname);
         bit_write_TV (dat, klass->cppname);
+        bit_write_TV (dat, klass->dxfname);
+        bit_write_B (dat, klass->is_zombie);
+        bit_write_BS (dat, klass->item_class_id);
+        LOG_TRACE ("Class %d 0x%x %s\n"
+                   " %s \"%s\" %d 0x%x\n",
+                   klass->number, klass->proxyflag, klass->dxfname,
+                   klass->cppname, klass->appname, klass->is_zombie,
+                   klass->item_class_id);
+        SINCE (R_2004a)
+        {
+          if (!klass->dwg_version)
+            {
+              klass->dwg_version = (BITCODE_BL)dwg->header.dwg_version;
+              klass->maint_version = (BITCODE_BL)dwg->header.maint_version;
+            }
+          bit_write_BL (dat, klass->num_instances);
+          bit_write_BS (dat, klass->dwg_version);
+          bit_write_BS (dat, klass->maint_version);
+          bit_write_BL (dat, klass->unknown_1);
+          bit_write_BL (dat, klass->unknown_2);
+          LOG_TRACE (" %d %d\n", (int)klass->num_instances,
+                     (int)klass->dwg_version);
+        }
       }
-      SINCE (R_2007a) // only when we have it. like not for 2004 => 2007
-      // conversions
-      {
-        if (klass->dxfname_u)
-          bit_write_TU (dat, klass->dxfname_u);
-        else
-          bit_write_T (dat, klass->dxfname);
-      }
-      else // we always have this one
-          bit_write_TV (dat, klass->dxfname);
-      bit_write_B (dat, klass->is_zombie);
-      bit_write_BS (dat, klass->item_class_id);
-      LOG_TRACE ("Class %d 0x%x %s\n"
-                 " %s \"%s\" %d 0x%x\n",
-                 klass->number, klass->proxyflag, klass->dxfname,
-                 klass->cppname, klass->appname, klass->is_zombie,
-                 klass->item_class_id);
+  }
 
-      SINCE (R_2004a)
+  /* Patch hsize and bitsize for R2007+ */
+  if (bitsize_adr)
+    {
+      BITCODE_RL bitsize;
+      // bitsize includes the bitsize field itself (32 bits) plus all data
+      // up to and including the string stream endbit
+      bitsize = (BITCODE_RL)(32 + bit_position (dat) - data_start * 8);
       {
-        if (!klass->dwg_version)
+        BITCODE_RL hsize = (BITCODE_RL)(bitsize / 8);
+        size_t pos = bit_position (dat);
+        if (hsize_adr)
           {
-            // defaults
-            klass->dwg_version = (BITCODE_BL)dwg->header.dwg_version;
-            klass->maint_version = (BITCODE_BL)dwg->header.maint_version;
-            // TODO num_instances
+            bit_set_position (dat, hsize_adr * 8);
+            bit_write_RL (dat, hsize);
+            LOG_TRACE ("hsize: " FORMAT_RL " [RL] @%" PRIuSIZE "\n", hsize,
+                       hsize_adr);
           }
-        bit_write_BL (dat, klass->num_instances);
-        bit_write_BS (dat, klass->dwg_version);
-        bit_write_BS (dat, klass->maint_version);
-        bit_write_BL (dat, klass->unknown_1);
-        bit_write_BL (dat, klass->unknown_2);
-        LOG_TRACE (" %d %d\n", (int)klass->num_instances,
-                   (int)klass->dwg_version);
+        bit_set_position (dat, bitsize_adr * 8);
+        bit_write_RL (dat, bitsize);
+        LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%" PRIuSIZE "\n", bitsize,
+                   bitsize_adr);
+        bit_set_position (dat, pos);
       }
     }
 
@@ -3531,11 +3708,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 }
               {
                 int ssi = 0;
-                // For single-page sections store actual content size, not
-                // the theoretical max_decomp_size
-                if (info->num_sections == 1)
-                  info->max_decomp_size
-                      = MIN (max_decomp_size, (unsigned)ssize);
+                // Keep aligned max_decomp_size, not the actual content
+                // size. ODA expects the aligned page boundary.
                 while (ssize > 0)
                   {
                     // actual content for this page (last page may be partial)
@@ -3848,7 +4022,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               sec->address = dat->byte; // actual stream position
 
               if (info->fixedtype == SECTION_SUMMARYINFO)
-                dwg->header.summaryinfo_address = (uint32_t)sec->address;
+                dwg->header.summaryinfo_address
+                    = (uint32_t)sec->address + 32; // after page header
               else if (info->fixedtype == SECTION_PREVIEW)
                 dwg->header.thumbnail_address
                     = (uint32_t)sec->address + 32; // after page header

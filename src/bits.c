@@ -2655,14 +2655,14 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
         { // convert to unicode, expand \\U+
           BITCODE_TU wstr = bit_utf8_to_TU (chain, 0);
           bit_write_RS (dat, (BITCODE_RS)length);
-          for (size_t i = 0; i <= length; i++)
+          for (size_t i = 0; i < length; i++)
             bit_write_RS (dat, wstr[i]);
           free (wstr);
         }
       else
         {
-          bit_write_RS (dat, (BITCODE_RS)length + 1);
-          for (size_t i = 0; i <= length; i++)
+          bit_write_RS (dat, (BITCODE_RS)length);
+          for (size_t i = 0; i < length; i++)
             bit_write_RS (dat, chain[i]);
         }
     }
@@ -2670,7 +2670,7 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
     {
       if (IS_FROM_TU (dat))
         {
-          // convert from unicode to ascii via utf8
+          // convert from unicode to codepage via utf8
           char dest[1024];
           char *u8 = bit_convert_TU ((BITCODE_TU)chain);
           bit_utf8_to_TV (dest, (unsigned char *)u8, 1024, strlen (u8), 0,

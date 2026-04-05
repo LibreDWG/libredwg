@@ -794,7 +794,7 @@
 
 #define SECTION_STRING_STREAM                                                 \
   {                                                                           \
-    Bit_Chain sav_dat = *dat;                                                 \
+    Bit_Chain *sav_dat = dat;                                                 \
     dat = str_dat;
 
 /* TODO: dump all TU strings here */
@@ -807,7 +807,7 @@
       obj_string_stream (dat, obj, dat);
 
 #define END_STRING_STREAM                                                     \
-  *dat = sav_dat;                                                             \
+  dat = sav_dat;                                                              \
   }
 #define ENCODE_COMMON_HANDLES                                                 \
   if (obj->supertype == DWG_SUPERTYPE_OBJECT && dat->version >= R_13b1)       \
