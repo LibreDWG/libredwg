@@ -24904,7 +24904,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   else
     version = dwg->header.version = dwg->header.from_version;
 
-  // dwg->header.is_maint = 0xf;
+  // dwg->header.maint_rel_version = 0xf;
   if (version > R_2_5)
     dwg->header.zero_one_or_three = 1;
   // dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0

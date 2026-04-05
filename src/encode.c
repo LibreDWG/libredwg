@@ -2450,7 +2450,7 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           // TODO detect what it is
           _obj->junk_r14 = UINT64_C (0x989543D074AE8021);
         }
-      _obj->is_maint = dwg->header.is_maint;
+      _obj->maint_rel_version = dwg->header.maint_rel_version;
       _obj->zero_one_or_three = dwg->header.zero_one_or_three;
       _obj->dwg_versions
           = (BITCODE_RS)(((BITCODE_RS)dwg->header.maint_version << 8)
@@ -2701,7 +2701,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->dwg_version = _verp->dwg_version;
       }
     if (_verp)
-      _obj->is_maint = _verp->is_maint;
+      _obj->maint_rel_version = _verp->maint_rel_version;
     if (!_obj->app_dwg_version)
       _obj->app_dwg_version = _obj->dwg_version;
     if (!_obj->app_maint_version)

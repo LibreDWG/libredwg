@@ -1699,7 +1699,7 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
     dxf_set_default_DWGCODEPAGE (dat, dwg);
 
   // R_2007:
-  // is_maint: 0x32 [RC 0]
+  // maint_rel_version: 0x32 [RC 0]
   // zero_one_or_three: 0x3 [RC 0]
   // thumbnail_addr: 3360 [RL 0]
   // dwg_version: 0x1f [RC 0]
@@ -1716,7 +1716,7 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
   // r2004_header_address: 128 [RL 0]
 
   // R_2000:
-  // is_maint: 0xf [RC 0]
+  // maint_rel_version: 0xf [RC 0]
   // zero_one_or_three: 0x1 [RC 0]
   // thumbnail_addr: 220 [RL 0]
   // dwg_version: 0x1f [RC 0]
@@ -1727,16 +1727,16 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
     hdr->dwg_version = _verp->dwg_version;
   if (hdr->version <= R_14)
     {
-      hdr->is_maint = 0x0;
+      hdr->maint_rel_version = 0x0;
       if (hdr->version == R_13 && vars->PROXYGRAPHICS > 0)
         {
           hdr->dwg_version = R_13c3;
-          hdr->is_maint = 0x5;
+          hdr->maint_rel_version = 0x5;
         }
     }
   else if (hdr->version <= R_2000)
     {
-      hdr->is_maint = 0xf; // 0x6 - 0xf
+      hdr->maint_rel_version = 0xf; // 0x6 - 0xf
       hdr->zero_one_or_three = 1;
       hdr->thumbnail_address = 220;
       if (!hdr->dwg_version)
@@ -1744,15 +1744,15 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
       hdr->maint_version = 0x8;
     }
   else if (hdr->version <= R_2004)
-    hdr->is_maint = 0x68;
+    hdr->maint_rel_version = 0x68;
   else if (hdr->version <= R_2007)
-    hdr->is_maint = 0x32;
+    hdr->maint_rel_version = 0x32;
   else if (hdr->version <= R_2010)
-    hdr->is_maint = 0x6d;
+    hdr->maint_rel_version = 0x6d;
   else if (hdr->version <= R_2013)
-    hdr->is_maint = 0x7d;
+    hdr->maint_rel_version = 0x7d;
   else if (hdr->version <= R_2018)
-    hdr->is_maint = 0x4;
+    hdr->maint_rel_version = 0x4;
 
   if (!vars->FINGERPRINTGUID)
     {

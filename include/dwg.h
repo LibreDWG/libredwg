@@ -347,7 +347,7 @@ typedef struct dwg_versions {
   const char *const hdr; // char[6] mostly
   const char *const desc;
   uint8_t dwg_version;
-  uint8_t is_maint;
+  uint8_t maint_rel_version;
 } Dwg_Versions;
 
 typedef enum DWG_CLASS_STABILITY {
@@ -11136,7 +11136,7 @@ typedef struct _dwg_header
 {
   Dwg_Version_Type version;      /* calculated from the header magic */
   Dwg_Version_Type from_version; /* option. set by --as (convert from) */
-  BITCODE_RC is_maint; /* Maintenance release version. See dwg_versions[] */
+  BITCODE_RC maint_rel_version;  /* See dwg_versions[] */
   BITCODE_RC zero_one_or_three;
   BITCODE_RS numentity_sections; /* < R13, always 3 */
   BITCODE_RS numheader_vars;    /* < R13 */
@@ -11403,7 +11403,7 @@ typedef struct _dwg_secondheader
   BITCODE_RL size;
   BITCODE_RL address;
   BITCODE_RC version[11];
-  BITCODE_RC is_maint;
+  BITCODE_RC maint_rel_version;
   BITCODE_RC zero_one_or_three;
   BITCODE_BS dwg_versions; /* lo byte: dwg, hi: main */
   BITCODE_RS codepage;

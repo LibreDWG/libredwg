@@ -33,7 +33,8 @@
 // See also
 // http://devel.gvsig.org/sites/org.gvsig.dwg/2.0-SNAPSHOT/gvsig-base-library-pom/org.gvsig.dwg/xref/org/gvsig/dwg/lib/DwgFile.html
 const struct dwg_versions dwg_versions[DWG_VERSIONS] = {
-  /* r,          type,    hdr,    desc,         dwg_version, is_maint */
+  /* r,          type,    hdr,    desc,         dwg_version, maint_rel_version
+   */
   { R_INVALID, "invalid", "INVALI", "No DWG", 0, 0 },
   { R_1_1, "r1.1", "MC0.0", "MicroCAD Release 1.1", 0, 0 },
   { R_1_2, "r1.2", "AC1.2", "AutoCAD Release 1.2", 0, 0 },

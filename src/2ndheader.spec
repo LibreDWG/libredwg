@@ -25,7 +25,7 @@ VERSIONS (R_13, R_2000) {
 #endif
   FIELD_BL (address, 0);
   FIELD_TFF (version, 11, 0);
-  FIELD_RC (is_maint, 0);
+  FIELD_RC (maint_rel_version, 0);
   FIELD_RC (zero_one_or_three, 0);
   FIELD_BSx (dwg_versions, 0);
   DECODER {

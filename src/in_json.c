@@ -1100,7 +1100,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
         }
       // clang-format off
-      FIELD_RC (is_maint, 0)
+      FIELD_RC (maint_rel_version, 0)
       FIELD_RC (zero_one_or_three, 0)
       // preR13 only
       FIELD_RS (numentity_sections, 0)
@@ -4352,7 +4352,7 @@ json_SecondHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (size, 0)
       FIELD_RL (address, 0)
       FIELD_TFF (version, 11, 0)
-      FIELD_RC (is_maint, 0)
+      FIELD_RC (maint_rel_version, 0)
       FIELD_RC (zero_one_or_three, 0)
       FIELD_BS (dwg_versions, 0)
       FIELD_RS (codepage, 0)
