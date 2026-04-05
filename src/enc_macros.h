@@ -829,6 +829,8 @@
   /* R2007+ object string stream footer */                                    \
   if (dat->version >= R_2007 && str_dat != dat) {                             \
     size_t _str_bits = bit_position (str_dat);                                \
+    LOG_INSANE ("-str_dat: %" PRIuSIZE " bits, chain %p, dat chain %p\n",     \
+                _str_bits, (void*)str_dat->chain, (void*)dat->chain);         \
     if (_str_bits) {                                                          \
       BITCODE_RS _data_size = (BITCODE_RS)_str_bits;                          \
       bit_copy_chain (dat, str_dat);                                          \

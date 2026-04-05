@@ -2779,7 +2779,7 @@ DWG_OBJECT (MATERIAL)
   DXF {
     SINCE (R_2007a)
       CALL_SUBCLASS (_obj, MATERIAL, Texture_diffusemap);
-      /* MAT_TEXTURE (diffusemap, 0) */
+    /* MAT_TEXTURE (diffusemap, 0) */
     //DXF { VALUE_B (1, 292); } /* genproctableend  */
     //DXF { VALUE_BS (value, 277); } /* ?? */
   }

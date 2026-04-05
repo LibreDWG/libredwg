@@ -2901,6 +2901,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         if (dwg->header.version > R_13b1)
           // the version the DWG is targetting
           _obj->maint_version = _obj->dwg_version;
+        if (dwg->header.version >= R_2004)
+          _obj->zero_one_or_three = 3;
         if (_verp)
           // the version the DWG was written with
           _obj->dwg_version = _verp->dwg_version;
