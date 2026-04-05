@@ -282,9 +282,9 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
         && hdl_dat->chain != dat->chain)                                      \
       {                                                                       \
         bit_chain_free (hdl_dat);                                             \
-        if (str_dat != dat && str_dat->chain)                                 \
-          bit_chain_free (str_dat);                                           \
       }                                                                       \
+    if (str_dat != dat && str_dat->chain)                                     \
+      bit_chain_free (str_dat);                                               \
     dwg_encode_unknown_rest (dat, obj);                                       \
     return error;                                                             \
   }                                                                           \
@@ -4433,7 +4433,9 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
     return (BITCODE_T)tag;
 }
 
+#define HANDLE_STREAM_ERROR_CLEANUP
 #include "dwg.spec"
+#undef HANDLE_STREAM_ERROR_CLEANUP
 // clang-format on
 
 /* Forward declarations for functions generated from dwg2.spec in encode2.c.

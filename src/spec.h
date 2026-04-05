@@ -72,6 +72,21 @@
     ((sizeof (var) == 1 && n <= 0xff) || (sizeof (var) == 2 && n <= 0xffff)   \
      || (sizeof (var) >= 4))
 
+#  ifdef HANDLE_STREAM_ERROR_CLEANUP
+#    define RETURN_VALUEOUTOFBOUNDS                                        \
+      do                                                                   \
+        {                                                                  \
+          if (hdl_dat != dat && hdl_dat->chain != dat->chain)              \
+            bit_chain_free (hdl_dat);                                      \
+          if (str_dat != dat && str_dat->chain)                            \
+            bit_chain_free (str_dat);                                      \
+          return DWG_ERR_VALUEOUTOFBOUNDS;                                 \
+        }                                                                  \
+      while (0)
+#  else
+#    define RETURN_VALUEOUTOFBOUNDS return DWG_ERR_VALUEOUTOFBOUNDS
+#  endif
+
 #  ifndef IS_FREE
 #    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
       if (_IN_RANGE (_obj->field, maxvalue) && _obj->field > maxvalue)        \
@@ -79,7 +94,7 @@
           LOG_ERROR ("Invalid %s." #field " %lu", obj ? obj->name : "",       \
                      (unsigned long)_obj->field);                             \
           _obj->field = 0;                                                    \
-          return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+          RETURN_VALUEOUTOFBOUNDS;                                            \
         }
 #    define SUB_VALUEOUTOFBOUNDS(o, field, maxvalue)                          \
       if (_IN_RANGE (_obj->o.field, maxvalue) && _obj->o.field > maxvalue)    \
@@ -87,18 +102,18 @@
           LOG_ERROR ("Invalid %s." #field " %lu", obj ? obj->name : "",       \
                      (unsigned long)_obj->o.field);                           \
           _obj->o.field = 0;                                                  \
-          return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+          RETURN_VALUEOUTOFBOUNDS;                                            \
         }
 #  else
 #    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
       if (_IN_RANGE (_obj->field, maxvalue) && _obj->field > maxvalue)        \
         {                                                                     \
-          return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+          RETURN_VALUEOUTOFBOUNDS;                                            \
         }
 #    define SUB_VALUEOUTOFBOUNDS(o, field, maxvalue)                          \
       if (_IN_RANGE (_obj->o.field, maxvalue) && _obj->o.field > maxvalue)    \
         {                                                                     \
-          return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+          RETURN_VALUEOUTOFBOUNDS;                                            \
         }
 #  endif
 
@@ -576,6 +591,8 @@
       {                                                                       \
         if (hdl_dat != dat && hdl_dat->chain != dat->chain)                   \
           bit_chain_free (hdl_dat);                                           \
+        if (str_dat != dat && str_dat->chain)                                 \
+          bit_chain_free (str_dat);                                           \
         return error;                                                         \
       }
 #elif defined IS_FREE
@@ -807,7 +824,7 @@
       {                                                                       \
         LOG_ERROR ("Invalid %s." #name " rcount1 %ld", SAFEDXFNAME,           \
                    (long)times);                                              \
-        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+        RETURN_VALUEOUTOFBOUNDS;                                              \
       }                                                                       \
     if (_obj->name != NULL)                                                   \
       for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
@@ -818,7 +835,7 @@
       {                                                                       \
         LOG_ERROR ("Invalid %s." #name " rcount" #idx " %ld", SAFEDXFNAME,    \
                    (long)_obj->times);                                        \
-        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+        RETURN_VALUEOUTOFBOUNDS;                                              \
       }                                                                       \
     if (_obj->times > 0 && _obj->name != NULL)                                \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times;            \
@@ -859,7 +876,7 @@
       {                                                                       \
         LOG_ERROR ("Invalid %s." #name " rcount" #idx " %ld", SAFEDXFNAME,    \
                    (long)times);                                              \
-        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+        RETURN_VALUEOUTOFBOUNDS;                                              \
       }                                                                       \
     if (_obj->name != NULL)                                                   \
       for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
