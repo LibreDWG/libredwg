@@ -296,8 +296,13 @@ EXPORT char *bit_utf8_to_TV (char *restrict dest,
     returns NULL on errors, or the unchanged src string, or a copy.
  */
 EXPORT
+/* NOTE: not ATTRIBUTE_MALLOC — function may return the input `src`
+   pointer unchanged (codepage 0, CP_UTF8 without \U+/\M+ markers,
+   iconv EINVAL fallback, empty src). Marking it malloc lets -O2 elide
+   the `u8 != value` aliasing guard in VALUE_TV → free() of caller's
+   stack buffer. */
 char *bit_TV_to_utf8 (const char *restrict src,
-                      const BITCODE_RS codepage) ATTRIBUTE_MALLOC;
+                      const BITCODE_RS codepage);
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg)

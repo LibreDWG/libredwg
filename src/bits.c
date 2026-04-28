@@ -3353,7 +3353,8 @@ bit_TV_to_utf8_codepage (const char *restrict src, const BITCODE_RS codepage)
     convert \U+XXXX or \MnXXXX also if representable.
     returns NULL on errors, or the unchanged src string, or a copy.
  */
-EXPORT ATTRIBUTE_MALLOC char *
+/* NOTE: not ATTRIBUTE_MALLOC — see bits.h prototype. */
+EXPORT char *
 bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
 {
   if (codepage == CP_UTF8)
