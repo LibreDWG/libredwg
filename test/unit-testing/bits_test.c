@@ -1092,6 +1092,78 @@ bit_TV_to_utf8_tests (void)
       printf ("\n");
     }
   free (p);
+
+  /* --- Aliasing-return contract regression (PR #1250) ---
+     bit_TV_to_utf8 documents (and the dxf_CMC / VALUE_TV call sites
+     rely on) returning the input `src` pointer unchanged on several
+     fast paths. If the function is ever (re-)annotated with
+     __attribute__((malloc)) the optimizer will exploit that and elide
+     the `u8 != value` aliasing guard in VALUE_TV at -O2/-O3, freeing
+     a caller stack buffer. These pointer-equality assertions lock the
+     contract in so a future "tightening" cannot silently break it.
+
+     The assertions deliberately use plain pointer-equality (not
+     value-equality) — that is the property the optimizer cares about. */
+  /* Path 1: CP_UTF8 with pure-ASCII input and no \U+/\M+ markers.
+     This is the path actually triggered in dxf_CMC for the Panchvati
+     R2018 DWG that surfaced the bug. */
+  {
+    const char *ascii_src = "Layer1$RAL 9010";
+    char *aliased = bit_TV_to_utf8 (ascii_src, CP_UTF8);
+    if (aliased == ascii_src)
+      ok ("bit_TV_to_utf8_tests aliasing CP_UTF8 ASCII no-marker returns src");
+    else
+      {
+        fail ("bit_TV_to_utf8 CP_UTF8 ASCII: expected pointer-equal "
+              "to src %p, got %p",
+              (const void *)ascii_src, (const void *)aliased);
+        if (aliased && aliased != ascii_src)
+          free (aliased);
+      }
+  }
+
+  /* Path 2: CP_UTF8 with empty input. Hits the same line-3372
+     branch as path 1 (no \U+/\M+ markers in empty string) and
+     returns the input pointer. Unlike the iconv `!srclen` branch
+     (bits.c:3389), this path aliases on every build regardless of
+     HAVE_ICONV — that's the property that makes it a useful
+     guarantee for VALUE_TV's caller. */
+  {
+    const char *empty_src = "";
+    char *aliased_empty = bit_TV_to_utf8 (empty_src, CP_UTF8);
+    if (aliased_empty == empty_src)
+      ok ("bit_TV_to_utf8_tests aliasing CP_UTF8 empty-string returns src");
+    else
+      {
+        fail ("bit_TV_to_utf8 CP_UTF8 empty: expected pointer-equal "
+              "to src %p, got %p",
+              (const void *)empty_src, (const void *)aliased_empty);
+        if (aliased_empty && aliased_empty != empty_src)
+          free (aliased_empty);
+      }
+  }
+
+  /* Path 3: codepage with no iconv charset mapping (CP_UNDEFINED, used
+     by R11 drawings). Reaches the `!charset` short-circuit at
+     bits.c:3390 and returns the input pointer. Some builds (e.g.
+     without HAVE_ICONV) route through bit_TV_to_utf8_codepage and may
+     return a fresh allocation via bit_u_expand — also legal. The
+     contract is "either alias src OR a fresh malloc"; what's NOT
+     legal is an attribute-malloc claim that optimizes the alias
+     check away. */
+  {
+    const char *r11_src = "Test";
+    char *aliased_r11 = bit_TV_to_utf8 (r11_src, CP_UNDEFINED);
+    if (aliased_r11 == r11_src)
+      ok ("bit_TV_to_utf8_tests aliasing CP_UNDEFINED returns src");
+    else
+      {
+        ok ("bit_TV_to_utf8_tests CP_UNDEFINED returned a copy "
+            "(also valid; aliasing is opportunistic on this build)");
+        if (aliased_r11)
+          free (aliased_r11);
+      }
+  }
 }
 
 static void
