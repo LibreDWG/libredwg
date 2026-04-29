@@ -13225,6 +13225,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   }
                 else if (dat->version <= R_12 && strEQc (table, "VPORT") && obj
                          && obj->tio.object && obj->tio.object->tio.VPORT
+                         && obj->tio.object->tio.VPORT->name
                          && strEQc (obj->tio.object->tio.VPORT->name,
                                     "*ACTIVE")
                          && !(obj->tio.object->tio.VPORT->flag & 128))
