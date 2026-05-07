@@ -1109,10 +1109,8 @@ DWG_ENTITY (VERTEX_2D)
      the encoder routine with the compression technique described in
      the spec. --Juca */
     DXF_OR_PRINT {
-      if (FIELD_VALUE (flag) != 0) {
-        FIELD_BD0 (start_width, 40);
-        FIELD_BD0 (end_width, 41);
-      }
+      FIELD_BD0 (start_width, 40);
+      FIELD_BD0 (end_width, 41);
     }
     DECODER
     {
@@ -1145,8 +1143,7 @@ DWG_ENTITY (VERTEX_2D)
     }
 
     DXF {
-      if (FIELD_VALUE (flag) != 0)
-        FIELD_BD0 (bulge, 42);
+      FIELD_BD0 (bulge, 42);
     } else {
       FIELD_BD (bulge, 42);
     }
