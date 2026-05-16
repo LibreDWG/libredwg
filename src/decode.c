@@ -2129,7 +2129,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
 
       // check if compressed at all
       if (info->compressed == 2 && bytes_left > 0
-          && es.fields.address <= max_decomp_size)
+          && es.fields.address <= max_decomp_size
+          && es.fields.address + info->max_decomp_size <= max_decomp_size)
         {
           size_t orig_size = dat->size;
           dec.byte = es.fields.address;
@@ -2138,6 +2139,11 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           dec.size = dec.byte + info->max_decomp_size; /*es.fields.page_size;*/
           LOG_INSANE ("dec size: %" PRIuSIZE "\n", dec.size);
           dat->size = dat->byte + es.fields.data_size;
+          if (dat->size > orig_size)
+            {
+              LOG_ERROR ("Compressed section data_size overflow");
+              dat->size = orig_size;
+            }
 #ifdef DEBUG
           if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
             {
