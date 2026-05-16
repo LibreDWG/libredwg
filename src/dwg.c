@@ -205,6 +205,34 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
   return 0;
 }
 
+static void
+dwg_fixup_viewport_ids (Dwg_Data *restrict dwg)
+{
+  BITCODE_BL i;
+  BITCODE_RS last_id = 0;
+  for (i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype == DWG_SUPERTYPE_ENTITY
+          && obj->fixedtype == DWG_TYPE_VIEWPORT)
+        {
+          Dwg_Entity_VIEWPORT *_obj = obj->tio.entity->tio.VIEWPORT;
+          if (obj->tio.entity->entmode == 0)
+            {
+              _obj->on_off = 0;
+              _obj->id = 0;
+              last_id = 0;
+            }
+          else
+            {
+              _obj->on_off = 1;
+              last_id++;
+              _obj->id = last_id;
+            }
+        }
+    }
+}
+
 /** dwg_read_file
  * returns 0 on success.
  *
@@ -288,6 +316,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   bit_chain.chain = NULL;
   bit_chain.size = 0;
 
+  dwg_fixup_viewport_ids (dwg);
   return error;
 }
 
