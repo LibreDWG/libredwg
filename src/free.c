@@ -528,14 +528,22 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   // no matching class
   if (i < 0 || i >= (int)dwg->num_classes)
     {
-      LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
+      if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
+          || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+        LOG_TRACE ("No class for %s type %d found", obj->name, obj->type);
+      else
+        LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
       return dwg_free_variable_no_class (dwg, obj);
     }
 
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname || !obj->dxfname)
     {
-      LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
+      if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
+          || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+        LOG_TRACE ("No class for %s type %d found", obj->name, obj->type);
+      else
+        LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
       return dwg_free_variable_no_class (dwg, obj);
     }
 
@@ -564,7 +572,11 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   #undef WARN_UNSTABLE_CLASS
   // clang-format on
 
-  LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
+      || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+    LOG_TRACE ("No class for %s type %d found", obj->name, obj->type);
+  else
+    LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
   return dwg_free_variable_no_class (dwg, obj);
 }
 
