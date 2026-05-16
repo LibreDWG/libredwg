@@ -636,10 +636,11 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (_obj->rowstyles)
     for (unsigned i = 0; i < 3; i++)
       {
-        for (unsigned j = 0; j < 6; j++)
-          {
-            SUB_FIELD_CMTC (rowstyles[i].borders[j], color, 0);
-          }
+        if (_obj->rowstyles[i].borders)
+          for (unsigned j = 0; j < 6; j++)
+            {
+              SUB_FIELD_CMTC (rowstyles[i].borders[j], color, 0);
+            }
         FREE_IF (_obj->rowstyles[i].borders);
         SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
         SUB_FIELD_CMTC (rowstyles[i], text_color, 0);
