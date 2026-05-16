@@ -5113,6 +5113,19 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
         bit_chain_alloc_size (dat, obj->size);
       numentities++;
       obj->address = dat->byte;
+      // Pre-r13 SEQEND needs begin_addr_r11 set to the owner's address
+      if (dat->version < R_13b1 && obj->fixedtype == DWG_TYPE_SEQEND)
+        {
+          Dwg_Object *owner
+              = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
+          if (owner && owner->address)
+            {
+              obj->tio.entity->tio.SEQEND->begin_addr_r11
+                  = (BITCODE_RL)owner->address;
+              LOG_TRACE ("SEQEND.begin_addr_r11 = 0x%x (owner %s)\n",
+                         (BITCODE_RL)owner->address, owner->name);
+            }
+        }
       LOG_INFO ("===========================\n"
                 "Entity %s, number: %d, Addr: %" PRIuSIZE " (0x%zx)\n",
                 obj->name, obj->index, obj->address, dat->byte);
@@ -5241,6 +5254,16 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                       _ent->opts_r11 |= 128;
                     if (_a->vert_alignment)
                       _ent->opts_r11 |= 512;
+                    break;
+                  }
+                case DWG_TYPE_POLYLINE_2D:
+                case DWG_TYPE_POLYLINE_3D:
+                case DWG_TYPE_POLYLINE_PFACE:
+                case DWG_TYPE_POLYLINE_MESH:
+                  {
+                    Dwg_Entity_POLYLINE_2D *_p = _ent->tio.POLYLINE_2D;
+                    if (_p->has_vertex)
+                      _ent->flag_r11 |= FLAG_R11_HAS_ATTRIBS;
                     break;
                   }
                 case DWG_TYPE_BLOCK:
@@ -7322,11 +7345,12 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       for (BITCODE_BL i = obj->index - 1; i > 0; i--)
         {
           Dwg_Object *_o = &dwg->object[i];
-          if (_o->type == DWG_TYPE_INSERT || _o->type == DWG_TYPE_MINSERT
-              || _o->type == DWG_TYPE_POLYLINE_2D
-              || _o->type == DWG_TYPE_POLYLINE_3D
-              || _o->type == DWG_TYPE_POLYLINE_PFACE
-              || _o->type == DWG_TYPE_POLYLINE_MESH)
+          if (_o->fixedtype == DWG_TYPE_INSERT
+              || _o->fixedtype == DWG_TYPE_MINSERT
+              || _o->fixedtype == DWG_TYPE_POLYLINE_2D
+              || _o->fixedtype == DWG_TYPE_POLYLINE_3D
+              || _o->fixedtype == DWG_TYPE_POLYLINE_PFACE
+              || _o->fixedtype == DWG_TYPE_POLYLINE_MESH)
             {
               owner = _o;
               obj->tio.entity->ownerhandle

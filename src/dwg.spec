@@ -1302,6 +1302,9 @@ DWG_ENTITY (POLYLINE_2D)
   SUBCLASS (AcDb2dPolyline);
   PRE (R_13b1)
   {
+    DXF {
+      FIELD_B (has_vertex, 66);
+    }
     if (R11OPTS (1)) {
       FIELD_CAST (flag, RC, BS, 70);
       LOG_FLAG_POLYLINE

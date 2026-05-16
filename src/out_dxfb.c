@@ -618,6 +618,9 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define HEADER_HANDLE_NAME(nam, dxf, table)                                   \
   HEADER_9 (nam);                                                             \
   VALUE_HANDLE_NAME (dwg->header_vars.nam, dxf, table)
+/* For binary DXF, empty names are acceptable (no "Empty Record name" error) */
+#define HEADER_HANDLE_NAME0(nam, dxf, table)                                  \
+  HEADER_HANDLE_NAME (nam, dxf, table)
 
 #define FIELD_BLL(nam, dxf)                                                   \
   {                                                                           \

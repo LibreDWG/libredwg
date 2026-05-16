@@ -1713,6 +1713,8 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
   if (hdr->version <= R_14)
     {
       hdr->maint_rel_version = 0x0;
+      if (hdr->version < R_13b1)
+        hdr->dwg_version = 0x0;
       if (hdr->version == R_13 && vars->PROXYGRAPHICS > 0)
         {
           hdr->dwg_version = R_13c3;
@@ -9216,11 +9218,12 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
       for (i = obj->index - 1; i > 0; i--)
         {
           Dwg_Object *_o = &dwg->object[i];
-          if (_o->type == DWG_TYPE_INSERT || _o->type == DWG_TYPE_MINSERT
-              || _o->type == DWG_TYPE_POLYLINE_2D
-              || _o->type == DWG_TYPE_POLYLINE_3D
-              || _o->type == DWG_TYPE_POLYLINE_PFACE
-              || _o->type == DWG_TYPE_POLYLINE_MESH)
+          if (_o->fixedtype == DWG_TYPE_INSERT
+              || _o->fixedtype == DWG_TYPE_MINSERT
+              || _o->fixedtype == DWG_TYPE_POLYLINE_2D
+              || _o->fixedtype == DWG_TYPE_POLYLINE_3D
+              || _o->fixedtype == DWG_TYPE_POLYLINE_PFACE
+              || _o->fixedtype == DWG_TYPE_POLYLINE_MESH)
             {
               owner = _o;
               obj->tio.entity->ownerhandle
@@ -13766,6 +13769,15 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     ent->entmode = 2;
                   else if (pspace && ent->ownerhandle->absolute_ref == pspace)
                     ent->entmode = 1;
+                  else if (dwg->header.from_version < R_13b1)
+                    {
+                      // SEQEND/VERTEX: owner is INSERT/POLYLINE, not mspace.
+                      // Inherit entmode from the parent entity.
+                      Dwg_Object *owner_obj = dwg_resolve_handle (
+                          dwg, ent->ownerhandle->absolute_ref);
+                      if (owner_obj && owner_obj->tio.entity)
+                        ent->entmode = owner_obj->tio.entity->entmode;
+                    }
                   add_to_BLOCK_HEADER (obj, ent->ownerhandle);
                 }
               else

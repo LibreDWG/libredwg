@@ -509,6 +509,24 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define HEADER_HANDLE_NAME(nam, dxf, table)                                   \
   HEADER_9 (nam);                                                             \
   FIELD_HANDLE_NAME (nam, dxf, table)
+/* Skip entirely when name resolves to empty -- ODA rejects empty record names
+ */
+#define HEADER_HANDLE_NAME0(nam, dxf, table)                                  \
+  {                                                                           \
+    Dwg_Object_Ref *_ref0 = _obj->nam;                                        \
+    Dwg_Object *_o0                                                           \
+        = _ref0 ? dwg_ref_object ((Dwg_Data *)dwg, _ref0) : NULL;            \
+    char *_n0 = (_o0 && strEQc (_o0->dxfname, #table))                       \
+                    ? _o0->tio.object->tio.table->name                        \
+                    : dwg_handle_name ((Dwg_Data *)dwg, #table, _ref0);       \
+    if (_n0 && *_n0)                                                          \
+      {                                                                       \
+        HEADER_9 (nam);                                                       \
+        fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, _n0);                        \
+      }                                                                       \
+    if (_o0 == NULL && _n0)                                                   \
+      free (_n0);                                                              \
+  }
 
 #define FIELD_DATAHANDLE(nam, code, dxf)                                      \
   {                                                                           \
@@ -2712,8 +2730,8 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {                                                                         \
       int error = 0;                                                          \
       Dwg_Entity_POLYLINE_##token *_obj                                       \
-          = obj->tio.entity->tio.POLYLINE_##token;                            \
-                                                                              \
+          = obj->tio.entity->tio.POLYLINE_##token; \
+                                                                                \
       VERSIONS (R_13b1, R_2000)                                               \
       {                                                                       \
         Dwg_Object *last_vertex                                               \
@@ -2872,11 +2890,16 @@ decl_dxf_process_INSERT (MINSERT)
     case DWG_TYPE_BLOCK:
       return dwg_dxf_BLOCK (dat, obj);
     case DWG_TYPE_ENDBLK:
-      LOG_WARN ("stale %s subentity", obj->dxfname);
-      return 0; // dwg_dxf_ENDBLK(dat, obj);
+      if (dat->version >= R_13b1)
+        LOG_WARN ("stale %s subentity", obj->dxfname);
+      return 0;
     case DWG_TYPE_SEQEND:
-      LOG_WARN ("stale %s subentity", obj->dxfname);
-      return 0; // dwg_dxf_SEQEND(dat, obj);
+      if (dat->version >= R_13b1)
+        {
+          LOG_WARN ("stale %s subentity", obj->dxfname);
+          return 0;
+        }
+      return dwg_dxf_SEQEND (dat, obj);
 
     case DWG_TYPE_INSERT:
       error = dwg_dxf_INSERT (dat, obj);
@@ -2898,22 +2921,28 @@ decl_dxf_process_INSERT (MINSERT)
       return error | dxf_process_VERTEX_MESH (dat, obj, i);
 
     case DWG_TYPE_ATTRIB:
-      LOG_WARN ("stale %s subentity", obj->dxfname);
+      if (dat->version >= R_13b1)
+        LOG_WARN ("stale %s subentity", obj->dxfname);
       return dwg_dxf_ATTRIB (dat, obj);
     case DWG_TYPE_VERTEX_2D:
-      LOG_WARN ("stale %s subentity", obj->dxfname);
+      if (dat->version >= R_13b1)
+        LOG_WARN ("stale %s subentity", obj->dxfname);
       return dwg_dxf_VERTEX_2D (dat, obj);
     case DWG_TYPE_VERTEX_3D:
-      LOG_WARN ("stale %s subentity", obj->dxfname);
+      if (dat->version >= R_13b1)
+        LOG_WARN ("stale %s subentity", obj->dxfname);
       return dwg_dxf_VERTEX_3D (dat, obj);
     case DWG_TYPE_VERTEX_MESH:
-      LOG_WARN ("stale %s subentity", obj->dxfname);
+      if (dat->version >= R_13b1)
+        LOG_WARN ("stale %s subentity", obj->dxfname);
       return dwg_dxf_VERTEX_MESH (dat, obj);
     case DWG_TYPE_VERTEX_PFACE:
-      LOG_WARN ("stale %s subentity", obj->dxfname);
+      if (dat->version >= R_13b1)
+        LOG_WARN ("stale %s subentity", obj->dxfname);
       return dwg_dxf_VERTEX_PFACE (dat, obj);
     case DWG_TYPE_VERTEX_PFACE_FACE:
-      LOG_WARN ("stale %s subentity", obj->dxfname);
+      if (dat->version >= R_13b1)
+        LOG_WARN ("stale %s subentity", obj->dxfname);
       return dwg_dxf_VERTEX_PFACE_FACE (dat, obj);
 
     case DWG_TYPE_ARC:
@@ -3746,17 +3775,42 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
   else
     obj = get_first_owned_entity (hdr); // first_entity or entities[0]
 
-  while (obj)
+  if (dat->version < R_13b1 && obj)
     {
-      if (obj->supertype == DWG_SUPERTYPE_ENTITY
-          && obj->fixedtype != DWG_TYPE_ENDBLK && obj->tio.entity != NULL
-          && (obj->tio.entity->entmode != 2
-              || (obj->tio.entity->ownerhandle != NULL
-                  && obj->tio.entity->ownerhandle->absolute_ref != mspace_ref
-                  && obj->tio.entity->ownerhandle->absolute_ref
-                         != pspace_ref)))
-        error |= dwg_dxf_object (dat, obj, i);
-      obj = get_next_owned_block_entity (hdr, obj); // until last_entity
+      // Pre-R13: SEQEND/VERTEX are not in _hdr->entities[], iterate by index.
+      // owner->obj may be NULL (not yet resolved), so compare absolute_ref.
+      Dwg_Data *dwg = hdr->parent;
+      BITCODE_RLL hdr_ref = hdr->handle.value;
+      for (int j = obj->index; (BITCODE_BL)j < dwg->num_objects; j++)
+        {
+          Dwg_Object *o = &dwg->object[j];
+          Dwg_Object_Ref *ohdl;
+          if (o->supertype != DWG_SUPERTYPE_ENTITY || !o->tio.entity)
+            continue;
+          if (o->fixedtype == DWG_TYPE_BLOCK
+              || o->fixedtype == DWG_TYPE_ENDBLK)
+            continue;
+          ohdl = o->tio.entity->ownerhandle;
+          if (!ohdl || !ohdl->absolute_ref || ohdl->absolute_ref != hdr_ref)
+            continue; // not owned by this block
+          error |= dwg_dxf_object (dat, o, &j);
+        }
+    }
+  else
+    {
+      while (obj)
+        {
+          if (obj->supertype == DWG_SUPERTYPE_ENTITY
+              && obj->fixedtype != DWG_TYPE_ENDBLK && obj->tio.entity != NULL
+              && (obj->tio.entity->entmode != 2
+                  || (obj->tio.entity->ownerhandle != NULL
+                      && obj->tio.entity->ownerhandle->absolute_ref
+                             != mspace_ref
+                      && obj->tio.entity->ownerhandle->absolute_ref
+                             != pspace_ref)))
+            error |= dwg_dxf_object (dat, obj, i);
+          obj = get_next_owned_block_entity (hdr, obj); // until last_entity
+        }
     }
   endblk = get_last_owned_block (hdr);
   if (endblk)
@@ -3829,56 +3883,74 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return DWG_ERR_INVALIDDWG;
 
   SECTION (ENTITIES);
-  // how to order the entities:
-  // 1. first all ms, then all ps
-#  if 1
-  // First mspace
-  obj = get_first_owned_entity (ms); // first_entity or entities[0]
-  while (obj)
+  if (dat->version < R_13b1)
     {
-      int i = obj->index;
-      error |= dwg_dxf_object (dat, obj, &i);
-      obj = get_next_owned_block_entity (ms, obj); // until last_entity
+      // Pre-R13: iterate all objects in file order. SEQEND and VERTEX are
+      // not in _hdr->entities[] but their owner is INSERT/POLYLINE, not ms/ps.
+      // owner->obj may be NULL (not yet resolved), compare absolute_ref.
+      BITCODE_RLL ms_ref = ms ? ms->handle.value : 0;
+      BITCODE_RLL ps_ref = ps ? ps->handle.value : 0;
+      for (int i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
+        {
+          Dwg_Object *o = &dwg->object[i];
+          Dwg_Object_Ref *ohdl;
+          if (o->supertype != DWG_SUPERTYPE_ENTITY || !o->tio.entity)
+            continue;
+          if (o->fixedtype == DWG_TYPE_BLOCK
+              || o->fixedtype == DWG_TYPE_ENDBLK)
+            continue;
+          ohdl = o->tio.entity->ownerhandle;
+          if (!ohdl || !ohdl->absolute_ref)
+            {
+              error |= dwg_dxf_object (dat, o, &i); // assume ms
+              continue;
+            }
+          if (ohdl->absolute_ref == ms_ref || ohdl->absolute_ref == ps_ref)
+            {
+              error |= dwg_dxf_object (dat, o, &i); // directly in ms/ps
+              continue;
+            }
+          // Check if owner is an entity (SEQEND/VERTEX owned by
+          // INSERT/POLYLINE) by resolving it and checking its owner's
+          // absolute_ref.
+          {
+            Dwg_Object *owner_obj
+                = dwg_resolve_handle (dwg, ohdl->absolute_ref);
+            if (owner_obj && owner_obj->supertype == DWG_SUPERTYPE_ENTITY
+                && owner_obj->tio.entity)
+              {
+                ohdl = owner_obj->tio.entity->ownerhandle;
+                if (ohdl
+                    && (ohdl->absolute_ref == ms_ref
+                        || ohdl->absolute_ref == ps_ref))
+                  error |= dwg_dxf_object (dat, o, &i); // sub-entity in ms
+              }
+            // else: skip (block entity owned by a different block)
+          }
+        }
     }
-  // Then all pspace entities. just filter out other BLOCKS entities
-  if (ps)
+  else
     {
-      obj = get_first_owned_entity (ps);
+      // R13+: use owned-entity linked list (ATTRIB/VERTEX accessed via owner's
+      // first_attrib/first_vertex pointers, not via the entity chain).
+      obj = get_first_owned_entity (ms); // first_entity or entities[0]
       while (obj)
         {
           int i = obj->index;
           error |= dwg_dxf_object (dat, obj, &i);
-          obj = get_next_owned_block_entity (ps, obj);
+          obj = get_next_owned_block_entity (ms, obj); // until last_entity
         }
-    }
-#  elif 0
-  // 2. all entities in iteration order. filter out not owned by ms or ps
-  // entities.
-  obj = get_first_owned_entity (ms);
-  if (!obj)
-    obj = get_first_owned_entity (ps);
-  while (obj)
-    {
-      int i = obj->index;
-      Dwg_Object_Ref *owner = obj->tio.entity->ownerhandle;
-      if (!owner || (owner->obj == ms || owner->obj == ps))
-        error |= dwg_dxf_object (dat, obj, &i);
-      obj = dwg_next_entity (obj);
-    }
-#  else
-  // 3. all objects in handle order, filter out not owned ms or ps entities.
-  for (int i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
-    {
-      Dwg_Object *obj = &dwg->object[i];
-      if (obj->supertype == DWG_SUPERTYPE_ENTITY && obj->type != DWG_TYPE_BLOCK
-          && obj->type != DWG_TYPE_ENDBLK)
+      if (ps)
         {
-          Dwg_Object_Ref *owner = obj->tio.entity->ownerhandle;
-          if (!owner || (owner->obj == ms || owner->obj == ps))
-            error |= dwg_dxf_object (dat, obj, &i);
+          obj = get_first_owned_entity (ps);
+          while (obj)
+            {
+              int i = obj->index;
+              error |= dwg_dxf_object (dat, obj, &i);
+              obj = get_next_owned_block_entity (ps, obj);
+            }
         }
     }
-#  endif
   ENDSEC ();
   return error;
 }
