@@ -2088,6 +2088,14 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           continue;
         }
       address = info->sections[i]->address;
+      if (address + 32 > dat->size)
+        {
+          LOG_ERROR ("Section %s address %u + 32 > %" PRIuSIZE, info->name,
+                     address, dat->size);
+          free (dec.chain);
+          sec_dat->chain = NULL;
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
       memcpy (es.long_data, &dat->chain[address], 32);
       dat->byte = address + 32;
       // bit_read_fixed (dat, es.char_data, 32);
