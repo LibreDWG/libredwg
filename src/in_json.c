@@ -2871,7 +2871,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               if (f1)
                 {
                   // subclass offset for _obj
-                  void *off = &((char *)_obj)[f->offset + f1->offset];
+                  void *off = &((char *)_obj)[f->offset];
                   if (!_set_struct_field (dat, obj, tokens, off, subclass,
                                           key1, sfields))
                     ++tokens->index;
