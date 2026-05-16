@@ -279,6 +279,8 @@ size_t bit_strnlen (const char *restrict str, const size_t maxlen);
 
 /* Convert UCS-2LE to UTF-8, returning a copy. */
 EXPORT char *bit_convert_TU (const BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
+EXPORT char *bit_convert_TU_len (const BITCODE_TU restrict wstr,
+                                 const size_t max_wchars) ATTRIBUTE_MALLOC;
 EXPORT char *bit_TU_to_utf8_len (const BITCODE_TU restrict wstr,
                                  const int len) ATTRIBUTE_MALLOC;
 
@@ -301,8 +303,7 @@ EXPORT
    iconv EINVAL fallback, empty src). Marking it malloc lets -O2 elide
    the `u8 != value` aliasing guard in VALUE_TV → free() of caller's
    stack buffer. */
-char *bit_TV_to_utf8 (const char *restrict src,
-                      const BITCODE_RS codepage);
+char *bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage);
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg)

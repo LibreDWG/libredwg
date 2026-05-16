@@ -2919,6 +2919,109 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
   return str;
 }
 
+/* Bounded variant: returns NULL if not null-terminated within max_wchars. */
+char *
+bit_convert_TU_len (const BITCODE_TU restrict wstr, const size_t max_wchars)
+{
+  BITCODE_TU tmp = wstr;
+  char *str;
+  size_t wlen = 0;
+  int i, len = 0;
+  uint16_t c = 0;
+
+  if (!wstr || !max_wchars)
+    return NULL;
+  wlen = bit_wcs2nlen (wstr, max_wchars);
+  if (wlen == 0 && wstr[0] != 0)
+    return NULL; /* not null-terminated within max_wchars */
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+    {
+      unsigned char *b = (unsigned char *)wstr;
+      c = TU_to_int (b);
+      while (c && wlen--)
+        {
+          len++;
+          if (c >= 0x80)
+            {
+              len++;
+              if (c >= 0x800)
+                len++;
+            }
+          b += 2;
+          c = TU_to_int (b);
+        }
+    }
+  else
+#endif
+    {
+      while ((c = *tmp++) && wlen--)
+        {
+          len++;
+          if (c >= 0x80)
+            {
+              len++;
+              if (c >= 0x800)
+                len++;
+            }
+        }
+    }
+  str = (char *)malloc (len + 1);
+  if (!str)
+    {
+      loglevel |= 1;
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  i = 0;
+  tmp = wstr;
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+    {
+      unsigned char *b = (unsigned char *)wstr;
+      c = TU_to_int (b);
+      while (c && i < len)
+        {
+          if (c < 0x80)
+            str[i++] = c & 0xFF;
+          else if (c < 0x800)
+            {
+              str[i++] = (c >> 6) | 0xC0;
+              str[i++] = (c & 0x3F) | 0x80;
+            }
+          else
+            {
+              str[i++] = (c >> 12) | 0xE0;
+              str[i++] = ((c >> 6) & 0x3F) | 0x80;
+              str[i++] = (c & 0x3F) | 0x80;
+            }
+          b += 2;
+          c = TU_to_int (b);
+        }
+    }
+  else
+#endif
+    while ((c = *tmp++) && i < len)
+      {
+        if (c < 0x80)
+          str[i++] = c & 0xFF;
+        else if (c < 0x800)
+          {
+            str[i++] = (c >> 6) | 0xC0;
+            str[i++] = (c & 0x3F) | 0x80;
+          }
+        else
+          {
+            str[i++] = (c >> 12) | 0xE0;
+            str[i++] = ((c >> 6) & 0x3F) | 0x80;
+            str[i++] = (c & 0x3F) | 0x80;
+          }
+      }
+  if (i <= len + 1)
+    str[i] = '\0';
+  return str;
+}
+
 #define EXTEND_SIZE(str, i, len)                                              \
   if (i > len)                                                                \
     {                                                                         \

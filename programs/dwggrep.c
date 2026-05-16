@@ -517,7 +517,31 @@ match_LTYPE (const char *restrict filename, const Dwg_Object *restrict obj)
   MATCH_OBJECT (LTYPE, description, 3);
   if (!opt_tables)
     {
-      MATCH_OBJECT (LTYPE, strings_area, 3);
+      Dwg_Object_LTYPE *_obj = obj->tio.object->tio.LTYPE;
+      for (BITCODE_BL i = 0; _obj && _obj->dashes && i < _obj->numdashes; i++)
+        if (_obj->dashes[i].text)
+          {
+            if (obj->parent->header.version >= R_2007)
+              {
+                size_t max_wchars
+                    = _obj->strings_area
+                          ? (512
+                             - ((BITCODE_RC *)_obj->dashes[i].text
+                                - _obj->strings_area))
+                                / 2
+                          : 0;
+                text = bit_convert_TU_len ((BITCODE_TU)_obj->dashes[i].text,
+                                           max_wchars);
+                if (text)
+                  {
+                    found += do_match (1, filename, "LTYPE", 9, text);
+                    free (text);
+                  }
+              }
+            else
+              found
+                  += do_match (0, filename, "LTYPE", 9, _obj->dashes[i].text);
+          }
     }
   return found;
 }
