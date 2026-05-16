@@ -3723,7 +3723,8 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 eed_need_size (unsigned long need, BITCODE_BS have)
 {
-  if (need > (unsigned long)have)
+  // 1 more for the initial eed.data.code byte
+  if ((need + 1) > (unsigned long)have)
     {
       LOG_ERROR ("Invalid EED size %lu > %u", need, (unsigned)have);
       return 1;

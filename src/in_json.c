@@ -1521,7 +1521,8 @@ eed_need_size (Bit_Chain *restrict dat, Dwg_Eed *restrict eed,
     {
       BITCODE_BS size;
       unsigned int isize;
-      int diff = need - *havep;
+      // 1 more for the initial eed_data.code byte
+      int diff = (need + 1) - *havep;
       // find isize
       for (isize = i; !eed[isize].size && isize > 0; isize--)
         ;
@@ -1627,7 +1628,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         {
                           char *s = json_string (dat, tokens);
                           BITCODE_RS len = strlen (s) & 0xFFFF;
-                          if (eed_need_size (dat, obj->eed, i, len + 1 + 5,
+                          if (eed_need_size (dat, obj->eed, i, len + 1 + 4,
                                              &have))
                             data = obj->eed[i].data;
                           data->u.eed_0.is_tu = 0;
@@ -1668,7 +1669,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       }
                       break;
                     case 1:
-                      if (eed_need_size (dat, obj->eed, i, 3, &have))
+                      if (eed_need_size (dat, obj->eed, i, 2, &have))
                         data = obj->eed[i].data;
                       data->u.eed_1.appid_index
                           = (BITCODE_RS)json_long (dat, tokens);
@@ -1684,7 +1685,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                  data->u.eed_2.close);
                       break;
                     case 3:
-                      eed_need_size (dat, obj->eed, i, 4, &have);
+                      if (eed_need_size (dat, obj->eed, i, 8, &have))
+                        data = obj->eed[i].data;
                       data->u.eed_3.layer = json_long (dat, tokens);
                       LOG_TRACE ("eed[%u].data.layer " FORMAT_RLL "\n", i,
                                  data->u.eed_3.layer);
@@ -1696,7 +1698,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             = json_binary (dat, tokens, "eed", &len);
                         // FIXME wrong obj with ubsan
                         if (eed_need_size (dat, obj->eed, i,
-                                           (len + 2) & INT_MAX, &have))
+                                           (len + 1) & INT_MAX, &have))
                           data = obj->eed[i].data;
                         memcpy (&data->u.eed_4.data, s, len & 0xFF);
                         data->u.eed_4.length = len & 0xFF;
