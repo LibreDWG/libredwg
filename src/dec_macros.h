@@ -1751,6 +1751,12 @@
         else                                                                  \
           obj->name = (char *)#token;                                         \
       }                                                                       \
+    if (strEQc (#token, "UNKNOWN_ENT"))                                       \
+      {                                                                       \
+        obj->name = (char *)#token;                                           \
+        obj->dxfname = (char *)#token;                                        \
+        obj->fixedtype = DWG_TYPE_UNKNOWN_ENT;                                \
+      }                                                                       \
     if (obj->parent->opts & DWG_OPTS_IN)                                      \
       {                                                                       \
         obj->dxfname = strdup (obj->dxfname);                                 \
@@ -1877,6 +1883,12 @@
           obj->dxfname = (char *)"ACAD_PROXY_OBJECT";                         \
         else                                                                  \
           obj->dxfname = (char *)#token;                                      \
+      }                                                                       \
+    if (strEQc (#token, "UNKNOWN_OBJ"))                                       \
+      {                                                                       \
+        obj->name = (char *)#token;                                           \
+        obj->dxfname = (char *)#token;                                        \
+        obj->fixedtype = DWG_TYPE_UNKNOWN_OBJ;                                \
       }                                                                       \
     if (obj->parent->opts & DWG_OPTS_IN)                                      \
       {                                                                       \
