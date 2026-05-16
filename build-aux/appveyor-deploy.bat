@@ -22,6 +22,8 @@ move /y bin\libredwg-0.dll libredwg-0.dll
 rmdir bin
 rem libssp-0.dll needed for -fstack-protector
 copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libssp-0.dll *.*
+rem libgcc_s_dw2-1.dll needed for win32 dwarf2 eh
+if "%ARCH%" == "win32" copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libgcc_s_dw2-1.dll *.*
 copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libpcre2-16-0.dll *.*
 copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libpcre2-8-0.dll *.*
 copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libiconv-2.dll *.*
