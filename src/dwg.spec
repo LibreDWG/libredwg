@@ -1460,14 +1460,8 @@ DWG_ENTITY (ARC)
   PRE (R_13b1) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
-#ifdef IS_DXF
-    // DXF angles are in degrees; r11 DWG stores radians
-    FIELD_BD (start_angle, 50);
-    FIELD_BD (end_angle, 51);
-#else
     FIELD_RD (start_angle, 50);
     FIELD_RD (end_angle, 51);
-#endif
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
     if (R11OPTS (2))

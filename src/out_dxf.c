@@ -646,7 +646,18 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     VALUE_RD (pt.z, dxf + 20);                                                \
   }
 
-#define FIELD_RD(nam, dxf) VALUE_RD (_obj->nam, dxf)
+#define FIELD_RD(nam, dxf)                                                  \
+  {                                                                           \
+    if (dxf >= 50 && dxf < 55)                                                \
+      {                                                                       \
+        BITCODE_RD _f = rad2deg (_obj->nam);                                  \
+        VALUE_RD (_f, dxf);                                                   \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        VALUE_RD (_obj->nam, dxf);                                            \
+      }                                                                       \
+  }
 #define FIELD_B(nam, dxf) VALUE_B (_obj->nam, dxf)
 #define FIELD_BB(nam, dxf) FIELDG (nam, BB, dxf)
 #define FIELD_3B(nam, dxf) FIELDG (nam, 3B, dxf)
