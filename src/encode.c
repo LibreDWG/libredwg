@@ -5137,6 +5137,146 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
         LOG_INFO ("type: %d [RC]\n", (int)r11type);
       }
 
+      // Pre-r13 entities imported from DXF need opts_r11 and flag_r11 computed
+      // from field values since they're not stored in DXF format.
+      SINCE (R_2_0b)
+      {
+        PRE (R_13b1)
+        {
+          Dwg_Object_Entity *_ent = obj->tio.entity;
+          if (!_ent->opts_r11)
+            {
+              switch (obj->fixedtype)
+                {
+                case DWG_TYPE_TEXT:
+                  {
+                    Dwg_Entity_TEXT *_t = _ent->tio.TEXT;
+                    if (_t->rotation != 0.0)
+                      _ent->opts_r11 |= 1;
+                    if (_t->width_factor != 0.0 && _t->width_factor != 1.0)
+                      _ent->opts_r11 |= 2;
+                    if (_t->oblique_angle != 0.0)
+                      _ent->opts_r11 |= 4;
+                    if (_t->generation)
+                      _ent->opts_r11 |= 16;
+                    if (_t->horiz_alignment)
+                      _ent->opts_r11 |= 32;
+                    if (_t->alignment_pt.x != 0.0 || _t->alignment_pt.y != 0.0)
+                      _ent->opts_r11 |= 64;
+                    if (_t->vert_alignment)
+                      _ent->opts_r11 |= 256;
+                    break;
+                  }
+                case DWG_TYPE_INSERT:
+                case DWG_TYPE_MINSERT:
+                  {
+                    Dwg_Entity_INSERT *_i = _ent->tio.INSERT;
+                    if (_i->scale.x != 1.0)
+                      _ent->opts_r11 |= 1;
+                    if (_i->scale.y != 1.0)
+                      _ent->opts_r11 |= 2;
+                    if (_i->rotation != 0.0)
+                      _ent->opts_r11 |= 4;
+                    if (_i->scale.z != 1.0)
+                      _ent->opts_r11 |= 8;
+                    if (_i->num_cols > 1)
+                      _ent->opts_r11 |= 16;
+                    if (_i->num_rows > 1)
+                      _ent->opts_r11 |= 32;
+                    if (_i->col_spacing != 0.0)
+                      _ent->opts_r11 |= 64;
+                    if (_i->row_spacing != 0.0)
+                      _ent->opts_r11 |= 128;
+                    // Sync has_attribs → flag_r11 HAS_ATTRIBS
+                    if (_i->has_attribs)
+                      _ent->flag_r11 |= FLAG_R11_HAS_ATTRIBS;
+                    break;
+                  }
+                case DWG_TYPE_SHAPE:
+                  {
+                    Dwg_Entity_SHAPE *_s = _ent->tio.SHAPE;
+                    if (_s->rotation != 0.0)
+                      _ent->opts_r11 |= 1;
+                    if (_s->style)
+                      _ent->opts_r11 |= 2;
+                    if (_s->width_factor != 0.0 && _s->width_factor != 1.0)
+                      _ent->opts_r11 |= 4;
+                    if (_s->oblique_angle != 0.0)
+                      _ent->opts_r11 |= 8;
+                    break;
+                  }
+                case DWG_TYPE_ATTDEF:
+                  {
+                    Dwg_Entity_ATTDEF *_a = _ent->tio.ATTDEF;
+                    if (_a->rotation != 0.0)
+                      _ent->opts_r11 |= 2;
+                    if (_a->width_factor != 0.0 && _a->width_factor != 1.0)
+                      _ent->opts_r11 |= 4;
+                    if (_a->oblique_angle != 0.0)
+                      _ent->opts_r11 |= 8;
+                    if (_a->generation)
+                      _ent->opts_r11 |= 32;
+                    if (_a->horiz_alignment)
+                      _ent->opts_r11 |= 64;
+                    if (_a->alignment_pt.x != 0.0 || _a->alignment_pt.y != 0.0)
+                      _ent->opts_r11 |= 128;
+                    if (_a->vert_alignment)
+                      _ent->opts_r11 |= 512;
+                    break;
+                  }
+                case DWG_TYPE_ATTRIB:
+                  {
+                    Dwg_Entity_ATTRIB *_a = _ent->tio.ATTRIB;
+                    if (_a->rotation != 0.0)
+                      _ent->opts_r11 |= 2;
+                    if (_a->width_factor != 0.0 && _a->width_factor != 1.0)
+                      _ent->opts_r11 |= 4;
+                    if (_a->oblique_angle != 0.0)
+                      _ent->opts_r11 |= 8;
+                    if (_a->generation)
+                      _ent->opts_r11 |= 32;
+                    if (_a->horiz_alignment)
+                      _ent->opts_r11 |= 64;
+                    if (_a->alignment_pt.x != 0.0 || _a->alignment_pt.y != 0.0)
+                      _ent->opts_r11 |= 128;
+                    if (_a->vert_alignment)
+                      _ent->opts_r11 |= 512;
+                    break;
+                  }
+                case DWG_TYPE_BLOCK:
+                  {
+                    // R11 BLOCK entities use opts_r11=4 for HAS_BLOCK_NAME.
+                    // Pre-r11 files (r2.6, r2.10, r10) stored blocks without
+                    // name in opts_r11, so don't add it for those versions.
+                    if (dat->version >= R_11)
+                      {
+                        Dwg_Entity_BLOCK *_b = _ent->tio.BLOCK;
+                        if (_b->name && *_b->name)
+                          _ent->opts_r11 |= 4;
+                        if (_b->xref_pname && *_b->xref_pname)
+                          _ent->opts_r11 |= 2;
+                      }
+                    break;
+                  }
+                default:
+                  break;
+                }
+            }
+          // Sync TRACE/SOLID entity-specific elevation → common elevation_r11
+          if (!_ent->elevation_r11
+              && (obj->fixedtype == DWG_TYPE_TRACE
+                  || obj->fixedtype == DWG_TYPE_SOLID))
+            {
+              BITCODE_RD elev = _ent->tio.TRACE->elevation;
+              if (elev != 0.0)
+                {
+                  _ent->elevation_r11 = elev;
+                  _ent->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+                }
+            }
+        }
+      }
+
 #define CASE_ENCODE_TYPE(ty)                                                  \
   case DWG_TYPE_##ty:                                                         \
     *error |= dwg_encode_##ty (dat, obj);                                     \

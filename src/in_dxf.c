@@ -67,6 +67,8 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
 Dwg_Object_VX_TABLE_RECORD *
 dwg_add_VX (Dwg_Data *restrict dwg,
             const char *restrict name /* maybe NULL */);
+Dwg_Object_BLOCK_HEADER *dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg,
+                                               const char *restrict name);
 // from dwg.c
 BITCODE_RLL
 dwg_new_handseed (Dwg_Data *restrict dwg);
@@ -12696,6 +12698,18 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 LOG_TRACE ("COMMON.%s = %ld [%s %d]\n",
                                            f->name, pair->value.l, f->type,
                                            pair->code);
+                              // Pre-r13: sync flag_r11 bits when r11-specific
+                              // common fields are set from DXF data.
+                              if (is_entity && dat->from_version <= R_12)
+                                {
+                                  if (pair->code == 38 && pair->value.d != 0.0)
+                                    obj->tio.entity->flag_r11
+                                        |= FLAG_R11_HAS_ELEVATION;
+                                  else if (pair->code == 39
+                                           && pair->value.d != 0.0)
+                                    obj->tio.entity->flag_r11
+                                        |= FLAG_R11_HAS_THICKNESS;
+                                }
                             }
                           goto next_pair; // found, early exit
                         }
@@ -13477,6 +13491,57 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       if (bit_eq_T (dat, _obj->name, "*Model_Space")
                           || bit_eq_T (dat, _obj->name, "*MODEL_SPACE"))
                         blkhdr = &dwg->object[0]; // pre-created at startup
+                      else
+                        {
+                          // User-defined block (incl. *D star-blocks except
+                          // mspace): find or create BLOCK_HEADER
+                          const char *blkname = (const char *)_obj->name;
+                          BITCODE_H hdr_ref = dwg_find_tablehandle_silent (
+                              dwg, blkname, "BLOCK");
+                          if (hdr_ref)
+                            blkhdr = dwg_ref_object (dwg, hdr_ref);
+                          if (!blkhdr)
+                            {
+                              Dwg_Object *bctrl = dwg_get_first_object (
+                                  dwg, DWG_TYPE_BLOCK_CONTROL);
+                              BITCODE_BL newidx, bctrl_idx;
+                              Dwg_Object_BLOCK_CONTROL *_bctrl = NULL;
+                              BITCODE_RSd new_r11_idx = 0;
+                              // dwg_set_next_objhandle uses dwg_new_handseed
+                              // which fails (returns 0) when HANDSEED is
+                              // uninitialized during DXF import. Pre-set
+                              // dwg->next_hdl so it picks the right value.
+                              dwg->next_hdl = dwg_next_handle (dwg);
+                              if (bctrl)
+                                {
+                                  _bctrl
+                                      = bctrl->tio.object->tio.BLOCK_CONTROL;
+                                  bctrl_idx = bctrl->index;
+                                  new_r11_idx
+                                      = (BITCODE_RSd)_bctrl->num_entries;
+                                }
+                              dwg_add_BLOCK_HEADER (dwg, blkname);
+                              // dwg->object may have been reallocated
+                              newidx = dwg->num_objects - 1;
+                              blkhdr = &dwg->object[newidx];
+                              // Set r11_idx on the new BLOCK_CONTROL.entries
+                              // ref so postprocessing resolves block names to
+                              // the correct table index.
+                              if (_bctrl)
+                                {
+                                  bctrl = &dwg->object[bctrl_idx];
+                                  _bctrl
+                                      = bctrl->tio.object->tio.BLOCK_CONTROL;
+                                  if (_bctrl->num_entries > 0)
+                                    _bctrl->entries[_bctrl->num_entries - 1]
+                                        ->r11_idx
+                                        = new_r11_idx;
+                                }
+                              LOG_TRACE ("r11: created BLOCK_HEADER %s "
+                                         "[r11_idx %d]\n",
+                                         blkname, (int)new_r11_idx);
+                            }
+                        }
                       if (blkhdr)
                         {
                           Dwg_Object_BLOCK_HEADER *_hdr

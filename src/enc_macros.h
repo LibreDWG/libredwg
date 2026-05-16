@@ -654,9 +654,7 @@
     PRE (R_13b1)                                                              \
     {                                                                         \
       short idx = (hdlptr) ? (hdlptr)->r11_idx : -1;                          \
-      short size = (hdlptr)           ? hdlptr->handleref.size                \
-                   : handle_code == 1 ? 1                                     \
-                                      : 2; /* = handle_size really, not code */                                    \
+      short size = handle_code == 1 ? 1 : 2;                                    \
       if (size == 1)                                                          \
         bit_write_RC (dat, idx);                                              \
       else if (size == 2)                                                     \

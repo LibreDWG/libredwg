@@ -3432,6 +3432,20 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         TABLE (STYLE);
         COMMON_TABLE_CONTROL_FLAGS;
         TABLE_WRITE_FIXUP_NUMENTRIES (STYLE);
+        // Exclude empty-named STYLE entries (shape xrefs): ODA rejects empty
+        // record names
+        for (i = 0; i < num_entries; i++)
+          {
+            if (!_ctrl->entries || !_ctrl->entries[i])
+              continue;
+            obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+            if (obj && obj->type == DWG_TYPE_STYLE)
+              {
+                Dwg_Object_STYLE *_style = obj->tio.object->tio.STYLE;
+                if (_style->name && !*_style->name)
+                  _ctrl->num_entries--;
+              }
+          }
         error |= dwg_dxf_STYLE_CONTROL (dat, ctrl);
         _ctrl->num_entries = num_entries;
         for (i = 0; i < num_entries; i++)
@@ -3443,6 +3457,9 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_STYLE)
               {
+                Dwg_Object_STYLE *_style = obj->tio.object->tio.STYLE;
+                if (_style->name && !*_style->name)
+                  continue;
                 error |= dwg_dxf_STYLE (dat, obj);
               }
           }

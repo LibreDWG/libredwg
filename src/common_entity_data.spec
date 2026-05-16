@@ -60,10 +60,10 @@
           LOG_TRACE("size: %d [RS]", obj->size);
           LOG_POS;
         }
-        if (obj->type != DWG_TYPE_JUMP_r11)
+        if (obj->fixedtype != DWG_TYPE_JUMP)
           FIELD_HANDLE (layer, 2, 8);
       }
-      if (obj->type != DWG_TYPE_JUMP_r11)
+      if (obj->fixedtype != DWG_TYPE_JUMP)
         {
           FIELD_RSx (opts_r11, 0); // i.e. dataflags
 #ifdef IS_DECODER
