@@ -561,7 +561,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
   LOG_TRACE ("Thumbnail: " FORMAT_RL "\n", dwg->header.thumbnail_address);
   osize = bit_read_RL (&dat); /* overall size of all images */
   LOG_TRACE ("overall size: " FORMAT_RL " [RL]\n", osize);
-  if (osize > (dat.size - 4))
+  if (dat.size < 5 || osize > dat.size - 4)
     {
       LOG_ERROR ("Preview overflow > %" PRIuSIZE, dat.size - 4);
       return NULL;
@@ -573,7 +573,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
   header_size = 0;
   for (i = 0; i < num_headers; i++)
     {
-      if (dat.byte > dat.size)
+      if (dat.byte >= dat.size)
         {
           LOG_ERROR ("Preview overflow");
           break;
@@ -597,9 +597,10 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
           found = 1;
           LOG_TRACE ("\t\tBMP data start: " FORMAT_RL " [RL]\n", address);
           LOG_INFO ("\t\tBMP size: %i [RL]\n", *size);
-          if (*size > (dat.size - 4))
+          if (*size > dat.size - dat.byte)
             {
-              LOG_ERROR ("BMP thumbnail overflow > %" PRIuSIZE, dat.size - 4);
+              LOG_ERROR ("BMP thumbnail overflow > %" PRIuSIZE,
+                         dat.size - dat.byte);
               return NULL;
             }
         }
@@ -627,10 +628,10 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
   dat.byte += header_size;
   if (*size)
     LOG_TRACE ("Image offset: %" PRIuSIZE "\n", dat.byte);
-  if (header_size + *size > dat.size)
+  if (dat.byte + *size > dat.size)
     {
-      LOG_ERROR ("Preview overflow " FORMAT_RL " + " FORMAT_RL " > %" PRIuSIZE,
-                 header_size, *size, dat.size);
+      LOG_ERROR ("Preview overflow " FORMAT_RL " + %" PRIuSIZE " > %" PRIuSIZE,
+                 *size, dat.byte, dat.size);
       *size = 0;
       return NULL;
     }
