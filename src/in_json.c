@@ -2196,10 +2196,20 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           && (strEQc (f->type, "BD") || strEQc (f->type, "RD")
               || strEQc (f->type, "BT")))
         {
-          double num = json_float (dat, tokens);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR;
-          LOG_TRACE ("%s.%s: %f [%s]\n", name, key, num, f->type);
-          dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+          if (f->size > sizeof (double))
+            {
+              json_float (dat, tokens);
+              LOG_ERROR ("%s.%s: Invalid type, array expected for [%s]\n",
+                         name, key, f->type);
+              error |= DWG_ERR_INVALIDTYPE;
+            }
+          else
+            {
+              double num = json_float (dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
+              LOG_TRACE ("%s.%s: %f [%s]\n", name, key, num, f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+            }
         }
       // all numfields are calculated from actual array sizes
       // for easier adding or deleting entries.
@@ -2218,23 +2228,45 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                    || strEQc (f->type, "BSd") || strEQc (f->type, "RCd")
                    || strEQc (f->type, "RSd") || strEQc (f->type, "4BITS")))
         {
-          uint32_t num = json_long (dat, tokens);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR
-          LOG_TRACE ("%s.%s: " FORMAT_BL " [%s]\n", name, key, num, f->type);
-          dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
-          if (strEQc (name, "JUMP") && strEQc (key, "jump_address_raw"))
+          if (f->size > sizeof (uint32_t))
             {
-              json_fixup_JUMP ((Dwg_Entity_JUMP *)_obj);
-              LOG_TRACE ("%s.%s: " FORMAT_BLx " [RLx]\n", name, key, num);
+              json_long (dat, tokens);
+              LOG_ERROR ("%s.%s: Invalid type, array expected for [%s]\n",
+                         name, key, f->type);
+              error |= DWG_ERR_INVALIDTYPE;
+            }
+          else
+            {
+              uint32_t num = json_long (dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              LOG_TRACE ("%s.%s: " FORMAT_BL " [%s]\n", name, key, num,
+                         f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+              if (strEQc (name, "JUMP") && strEQc (key, "jump_address_raw"))
+                {
+                  json_fixup_JUMP ((Dwg_Entity_JUMP *)_obj);
+                  LOG_TRACE ("%s.%s: " FORMAT_BLx " [RLx]\n", name, key, num);
+                }
             }
         }
       else if (t->type == JSMN_PRIMITIVE
                && (strEQc (f->type, "RLL") || strEQc (f->type, "BLL")))
         {
-          uint64_t num = json_longlong (dat, tokens);
-          JSON_TOKENS_CHECK_OVERFLOW_ERR
-          LOG_TRACE ("%s.%s: " FORMAT_RLL " [%s]\n", name, key, num, f->type);
-          dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+          if (f->size > sizeof (uint64_t))
+            {
+              json_longlong (dat, tokens);
+              LOG_ERROR ("%s.%s: Invalid type, array expected for [%s]\n",
+                         name, key, f->type);
+              error |= DWG_ERR_INVALIDTYPE;
+            }
+          else
+            {
+              uint64_t num = json_longlong (dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              LOG_TRACE ("%s.%s: " FORMAT_RLL " [%s]\n", name, key, num,
+                         f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+            }
         }
       // TFF not yet in dynapi.c
       else if (t->type == JSMN_STRING
