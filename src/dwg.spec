@@ -4579,7 +4579,7 @@ DWG_TABLE (APPID)
   COMMON_TABLE_FLAGS (RegApp)
   SINCE (R_13b1) {
     DXF {
-      if (strncmp (_obj->name, "ADE_", 4) == 0) {
+      if (_obj->name && strncmp (_obj->name, "ADE_", 4) == 0) {
         VALUE_RS (1, 71); // in DXF only with ADE_PROJECTION
       }
     } else {
