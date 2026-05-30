@@ -1,5 +1,18 @@
 #!/bin/sh
 set -e
-wget -q http://yupotan.sppd.ne.jp/relax-ng/svg11/svg11-relaxng-20060604.zip
+ZIP=svg11-relaxng-20060604.zip
+SHA256=d744594b116b6722b15ff65f57075f1f6692166eb2d2ab9111c00512bcf5d83f
+SRCDIR="$(dirname "$0")"
+cd "$SRCDIR"/.. || exit 1
+
+# Prefer the vendored copy; fall back to download over HTTPS with hash check.
+if [ -f "$SRCDIR/$ZIP" ]; then
+    cp "$SRCDIR/$ZIP" "$ZIP"
+else
+    wget -q "https://yupotan.sppd.ne.jp/relax-ng/svg11/$ZIP"
+fi
+
+echo "$SHA256  $ZIP" | sha256sum -c -
 test -d /usr/local/share/relaxng || sudo mkdir -p /usr/local/share/relaxng
-sudo unzip svg11-relaxng-20060604.zip -d /usr/local/share/relaxng/
+sudo unzip -o "$ZIP" -d /usr/local/share/relaxng/
+rm -f "$ZIP"

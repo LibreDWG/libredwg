@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 VER=1.1.39
+SHA256=2a20ad621148339b0759c4d4e96719362dee64c9a096dbba625ba053846349f0
 wget -q https://download.gnome.org/sources/libxslt/1.1/libxslt-$VER.tar.xz
+echo "$SHA256  libxslt-$VER.tar.xz" | sha256sum -c -
 tar xfJ libxslt-$VER.tar.xz
 cd libxslt-$VER
 ./configure

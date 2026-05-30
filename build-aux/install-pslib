@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 VER=0.4.8
+SHA256=81a58dbc12ee514cb4a3e1d608ec86e8a9b3c43ad8098e8f57759b03f8e31fae
 wget -q -O pslib-$VER.tar.gz https://sourceforge.net/projects/pslib/files/pslib/$VER/pslib-$VER.tar.gz/download
+echo "$SHA256  pslib-$VER.tar.gz" | sha256sum -c -
 tar xfz pslib-$VER.tar.gz
 cd pslib-$VER
 # sh autogen.sh
