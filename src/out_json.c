@@ -1603,7 +1603,7 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
           *dest++ = '\\';
           *dest++ = 'r';
         }
-      else if (c < 0x1f && dest + 5 < endp)
+      else if (c <= 0x1f && dest + 5 < endp)
         {
           *dest++ = '\\';
           *dest++ = 'u';
@@ -1647,12 +1647,16 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         { // split lines by \n
           for (; *p; p++)
             {
-              char buf[256]; // acis lines are not much longer
+              char buf[256 * 6]; // max json_cquote expansion
               // and skip the final ^M
               if ((*p == '\r' || *p == '\n') && p - s < 256)
                 {
-                  FIRSTPREFIX fprintf (dat->fh, "\"%.*s\"", (int)(p - s), s);
-                  // json_cquote (buf, s, p - s, dat->codepage));
+                  const char saved = *p;
+                  *(char *)p = '\0';
+                  FIRSTPREFIX fprintf (
+                      dat->fh, "\"%s\"",
+                      json_cquote (buf, s, sizeof (buf), dat->codepage));
+                  *(char *)p = saved;
                   if (*p == '\r' && *(p + 1) == '\n')
                     p++;
                   s = p + 1;
