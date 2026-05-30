@@ -128,17 +128,19 @@ static r2007_page *read_pages_map (Bit_Chain *dat, int64_t size_comp,
                                    int64_t correction) ATTRIBUTE_MALLOC;
 static int read_file_header (Bit_Chain *restrict dat,
                              Dwg_R2007_Header *restrict file_header);
-static void read_instructions (BITCODE_RC *restrict *restrict src,
-                               BITCODE_RC *restrict opcode,
-                               uint32_t *restrict offset,
-                               uint32_t *restrict length);
+static int read_instructions (BITCODE_RC *restrict *restrict src,
+                              const BITCODE_RC *restrict src_end,
+                              BITCODE_RC *restrict opcode,
+                              uint32_t *restrict offset,
+                              uint32_t *restrict length);
 static inline BITCODE_RC *copy_bytes_2 (BITCODE_RC *restrict dst,
                                         const BITCODE_RC *restrict src);
 static inline BITCODE_RC *copy_bytes_3 (BITCODE_RC *restrict dst,
                                         const BITCODE_RC *restrict src);
 static void copy_bytes (BITCODE_RC *dst, uint32_t length, uint32_t offset);
-static uint32_t read_literal_length (BITCODE_RC *restrict *restrict src,
-                                     unsigned char opcode);
+static int read_literal_length (BITCODE_RC *restrict *restrict src,
+                                const BITCODE_RC *restrict src_end,
+                                unsigned char opcode, uint32_t *restrict lenp);
 static void copy_compressed_bytes (BITCODE_RC *restrict dst,
                                    BITCODE_RC *restrict src, int length);
 static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
@@ -359,42 +361,64 @@ copy_compressed_bytes (BITCODE_RC *restrict dst, BITCODE_RC *restrict src,
 }
 
 /* See spec version 5.1 page 50 */
-static uint32_t
-read_literal_length (BITCODE_RC *restrict *src, unsigned char opcode)
+static int
+read_literal_length (BITCODE_RC *restrict *src,
+                     const BITCODE_RC *restrict src_end, unsigned char opcode,
+                     uint32_t *restrict lenp)
 {
   uint32_t length = opcode + 8;
 
   if (length == 0x17)
     {
-      int n = *(*src)++;
-
+      int n;
+      if (*src >= src_end)
+        {
+          LOG_ERROR ("Decompression error: read past end in literal length");
+          return DWG_ERR_INTERNALERROR;
+        }
+      n = *(*src)++;
       length += n;
 
       if (n == 0xff)
         {
           do
             {
+              if (src_end - *src < 2)
+                {
+                  LOG_ERROR (
+                      "Decompression error: read past end in literal length");
+                  return DWG_ERR_INTERNALERROR;
+                }
               n = *(*src)++;
               n |= (*(*src)++ << 8);
-
               length += n;
             }
           while (n == 0xFFFF);
         }
     }
 
-  return length;
+  *lenp = length;
+  return 0;
 }
 
 /* See spec version 5.1 page 53 */
-static void
-read_instructions (BITCODE_RC *restrict *src, unsigned char *restrict opcode,
-                   uint32_t *restrict offset, uint32_t *restrict length)
+static int
+read_instructions (BITCODE_RC *restrict *src,
+                   const BITCODE_RC *restrict src_end,
+                   unsigned char *restrict opcode, uint32_t *restrict offset,
+                   uint32_t *restrict length)
 {
+#define CHECK_SRC(n)                                                          \
+  if (src_end - *src < (n))                                                   \
+    {                                                                         \
+      LOG_ERROR ("Decompression error: read past end in instructions");       \
+      return DWG_ERR_INTERNALERROR;                                           \
+    }
   switch (*opcode >> 4)
     {
     case 0:
       *length = (*opcode & 0xf) + 0x13;
+      CHECK_SRC (2);
       *offset = *(*src)++;
       *opcode = *(*src)++;
       *length = ((*opcode >> 3) & 0x10) + *length;
@@ -403,25 +427,30 @@ read_instructions (BITCODE_RC *restrict *src, unsigned char *restrict opcode,
 
     case 1:
       *length = (*opcode & 0xf) + 3;
+      CHECK_SRC (2);
       *offset = *(*src)++;
       *opcode = *(*src)++;
       *offset = ((*opcode & 0xf8) << 5) + 1 + *offset;
       break;
 
     case 2:
+      CHECK_SRC (2);
       *offset = *(*src)++;
       *offset = ((*(*src)++ << 8) & 0xff00) | *offset;
       *length = *opcode & 7;
 
       if ((*opcode & 8) == 0)
         {
+          CHECK_SRC (1);
           *opcode = *(*src)++;
           *length = (*opcode & 0xf8) + *length;
         }
       else
         {
           (*offset)++;
+          CHECK_SRC (1);
           *length = (*(*src)++ << 3) + *length;
+          CHECK_SRC (1);
           *opcode = *(*src)++;
           *length = (((*opcode & 0xf8) << 8) + *length) + 0x100;
         }
@@ -430,10 +459,13 @@ read_instructions (BITCODE_RC *restrict *src, unsigned char *restrict opcode,
     default:
       *length = *opcode >> 4;
       *offset = *opcode & 15;
+      CHECK_SRC (1);
       *opcode = *(*src)++;
       *offset = (((*opcode & 0xf8) << 1) + *offset) + 1;
       break;
     }
+#undef CHECK_SRC
+  return 0;
 }
 
 /* par 4.7 Compression, page 32 (same as format 2004)
@@ -477,7 +509,10 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
   while (src < src_end)
     {
       if (length == 0)
-        length = read_literal_length (&src, opcode);
+        {
+          if (read_literal_length (&src, src_end, opcode, &length) != 0)
+            return DWG_ERR_INTERNALERROR;
+        }
 
       if ((dst + length) > dst_end || (src + length) > src_end)
         {
@@ -510,7 +545,8 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
 
       opcode = *src++;
 
-      read_instructions (&src, &opcode, &offset, &length);
+      if (read_instructions (&src, src_end, &opcode, &offset, &length) != 0)
+        return DWG_ERR_INTERNALERROR;
 
       while (1)
         {
@@ -546,8 +582,10 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
           if ((opcode >> 4) == 0x0f)
             opcode &= 0xf;
 
-          read_instructions ((unsigned char **)&src, &opcode, &offset,
-                             &length);
+          if (read_instructions ((unsigned char **)&src, src_end, &opcode,
+                                 &offset, &length)
+              != 0)
+            return DWG_ERR_INTERNALERROR;
         }
     }
   return 0;
