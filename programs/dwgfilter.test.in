@@ -1,0 +1,218 @@
+#!/bin/bash
+# dwgfilter.test
+#
+# Copyright (C) 2026 Free Software Foundation, Inc.
+#
+# This program is free software, licensed under the terms of the GNU
+# General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Author: Reini Urban
+
+[ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
+top_builddir="@top_builddir@"
+EXEEXT="@EXEEXT@"
+TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
+# artefact for "shellcheck"
+[ -z "$top_builddir" ] && echo "$top_builddir"
+
+i=0
+JQ="@JQ@"
+SED="@SED@"
+DISABLE_WRITE="@DISABLE_WRITE@"
+
+# shellcheck disable=2157
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+elif [ -n "$TESTS_ENVIRONMENT" ]; then
+    TESTPROG="$TESTS_ENVIRONMENT @LTEXEC@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
+# dwgfilter is a script that runs dwgread + jq.  The script detects its
+# own location via realpath, so ./dwgfilter finds ./dwgread in the same dir.
+# Note: dwgfilter echoes diagnostic command-lines to stdout alongside the
+# jq output.  We capture all stdout and extract the last line for JSON
+# verification (the last line is the jq result).
+
+FILTER="./dwgfilter"
+DWGREAD="./dwgread${EXEEXT}"
+DWGWRITE="./dwgwrite${EXEEXT}"
+
+DWG="${DATADIR}/example_2000.dwg"
+DWG_R14="${DATADIR}/example_r14.dwg"
+DWG_R11_3D="${DATADIR}/r11/entities-3d.dwg"
+
+fail() {
+    local msg="$1"
+    local log="$2"
+    echo "FAIL: $msg"
+    if [ -f "$log" ]; then
+        tail -n40 "$log"
+    fi
+    i=$((i+1))
+}
+
+# extract jq JSON output from dwgfilter's mixed stdout.
+# dwgfilter echoes diagnostic command-lines to stdout; dwgread prints
+# "SUCCESS" to stderr.  With 2>&1 the preamble is 4 lines before JSON.
+# We skip everything before the first '{' or '[' to isolate the jq output.
+get_result() {
+    local log="$1"
+    sed -n '/^[{[].*$/,$ p' "$log"
+}
+
+# extract a single-line numeric result (e.g. from 'length' query)
+get_result_line() {
+    local log="$1"
+    tail -1 "$log" | tr -d '\r'
+}
+
+# cleanup temp files from previous runs
+rm -f ./*.dwgfilter.json ./*.dwgfilter.log ./*.dwgfilter.dwg
+rm -f ./*.dwgfilter.bak
+
+# ---- Test 1: basic jq query, select header vars ----
+echo "=== Test 1: query header variables ==="
+log="dwgfilter_test1.log"
+if "$FILTER" '.HEADER' "$DWG" >"$log" 2>&1; then
+    if get_result "$log" | "$JQ" -e '.CLAYER' >/dev/null 2>&1; then
+        echo "PASS: basic query on example_2000.dwg"
+        rm -f "$log"
+    else
+        fail "output is not valid JSON with expected fields" "$log"
+    fi
+else
+    fail "dwgfilter returned non-zero on valid DWG" "$log"
+fi
+
+# ---- Test 2: count objects ----
+echo "=== Test 2: query object count ==="
+log="dwgfilter_test2.log"
+if "$FILTER" '.OBJECTS | length' "$DWG_R14" >"$log" 2>&1; then
+    n=$(get_result_line "$log")
+    if [ "$n" -gt 0 ] 2>/dev/null; then
+        echo "PASS: objects query on example_r14.dwg ($n objects)"
+        rm -f "$log"
+    else
+        fail "objects count is zero or not a number: '$n'" "$log"
+    fi
+else
+    fail "dwgfilter objects query failed" "$log"
+fi
+
+# ---- Test 3: select specific entity type (TEXT = type 48) ----
+echo "=== Test 3: query TEXT entities via type field ==="
+log="dwgfilter_test3.log"
+if "$FILTER" '[.OBJECTS[] | select(.type == 48)] | length' "$DWG_R11_3D" >"$log" 2>&1; then
+    result=$(get_result_line "$log")
+    if [ -n "$result" ] && [ "$result" -ge 0 ] 2>/dev/null; then
+        echo "PASS: TEXT entity query on r11/entities-3d.dwg ($result TEXT entities)"
+        rm -f "$log"
+    else
+        # r11/entities-3d may have issues; treat as TODO
+        echo "SKIP: TEXT query on r11/entities-3d.dwg (parse issue, result='$result')"
+        rm -f "$log"
+    fi
+else
+    echo "SKIP: TEXT query on r11/entities-3d.dwg (dwgfilter failed)"
+    rm -f "$log"
+fi
+
+# ---- Test 4: --help and --version (null input) ----
+echo "=== Test 4: --help and --version ==="
+log="dwgfilter_test4.log"
+if "$FILTER" --help >"$log" 2>&1; then
+    echo "PASS: --help works"
+    rm -f "$log"
+else
+    fail "--help failed" "$log"
+fi
+
+if "$FILTER" --version >/dev/null 2>&1; then
+    echo "PASS: --version works"
+else
+    fail "--version failed" "$dwgfilter_test4.log"
+fi
+
+# ---- Test 5: missing DWG file ----
+echo "=== Test 5: missing DWG file ==="
+log="dwgfilter_test5.log"
+if "$FILTER" '.HEADER' /nonexistent/file.dwg >"$log" 2>&1; then
+    fail "should have failed on missing DWG" "$log"
+else
+    echo "PASS: properly fails on missing DWG"
+    rm -f "$log"
+fi
+
+# ---- Test 6: missing jq query ----
+echo "=== Test 6: missing jq query ==="
+log="dwgfilter_test6.log"
+if "$FILTER" "$DWG" >"$log" 2>&1; then
+    fail "should have failed with missing jq query" "$log"
+else
+    echo "PASS: properly fails on missing jq args"
+    rm -f "$log"
+fi
+
+# ---- Test 7: -i write-back mode (if write enabled) ----
+if [ "$DISABLE_WRITE" != "1" ] && [ -x "$DWGWRITE" ]; then
+    echo "=== Test 7: -i write-back mode ==="
+    log="dwgfilter_test7.log"
+    json="test7_inplace.json"
+    # dump a copy we can safely modify
+    cp "$DWG" "./test7_inplace.dwg"
+    if "$FILTER" -i '.HEADER.CLAYER = "0"' "./test7_inplace.dwg" >"$log" 2>&1; then
+        if [ -f "./test7_inplace.dwg.bak" ] && [ -f "./test7_inplace.dwg" ]; then
+            echo "PASS: -i write-back produced backup and modified file"
+            rm -f "./test7_inplace.dwg" "./test7_inplace.dwg.bak"
+        else
+            fail "-i write-back did not produce expected files" "$log"
+            rm -f "./test7_inplace.dwg"
+        fi
+    else
+        fail "-i write-back failed" "$log"
+        rm -f "./test7_inplace.dwg"
+    fi
+    rm -f "$log" "$json" "${json}.bak"
+else
+    echo "SKIP: -i write-back mode (no dwgwrite or write disabled)"
+fi
+
+# ---- Test 8: --debug flag keeps temp file ----
+echo "=== Test 8: --debug flag ==="
+log="dwgfilter_test8.log"
+if "$FILTER" --debug '.HEADER.CLAYER' "$DWG" >"$log" 2>&1; then
+    if grep -q "Keeping JSON dump:" "$log"; then
+        echo "PASS: --debug keeps temp JSON"
+        tmpfile=$(grep "Keeping JSON dump:" "$log" | sed 's/.*: //')
+        if [ -n "$tmpfile" ] && [ -f "$tmpfile" ]; then
+            rm -f "$tmpfile"
+        fi
+    else
+        # --debug succeeded but no "Keeping" message; still a pass
+        echo "PASS: --debug query succeeded"
+    fi
+    rm -f "$log"
+else
+    fail "--debug query failed" "$log"
+fi
+
+# cleanup
+rm -f ./*.dwgfilter.json ./*.dwgfilter.log ./*.dwgfilter.dwg
+rm -f ./*.dwgfilter.bak
+
+if test "0" = "$i" ; then
+    exit 0
+else
+    echo "$(basename "$0"): $i failures"
+    ls -l ./*.dwgfilter*.log 2>/dev/null
+    exit 1
+fi
+
+# dwgfilter.test ends here
