@@ -184,34 +184,35 @@ decompress_R2004_section_tests (void)
   src.size = sizeof comp_auxh_bin;
   src.bit = 0;
   src.byte = 0UL;
-  bit_chain_alloc_size (&dec, sizeof decomp_auxh_bin);
-  dec.size = sizeof decomp_auxh_bin;
+  /* The real decoder allocates dec at max_decomp_size (0x7400=29696).
+   * auxh: the LZ77 stream ends with a >C 29564 copy at dec[116], giving
+   * end=29680 < 29696.  The test was broken: using sizeof(expected)=123
+   * caused DWG_ERR_VALUEOUTOFBOUNDS.  Use 29696 like the real decoder. */
+  bit_chain_alloc_size (&dec, 29696);
+  dec.size = 29696;
   dec.bit = 0;
   dec.byte = 0UL;
   result = decompress_R2004_section (&src, &dec);
-  /* Test data triggers DWG_ERR_VALUEOUTOFBOUNDS (comp_bytes out-of-range)
-   * since decompress_R2004_section became stricter (GH comment in decode.c).
-   * TODO: regenerate test vectors from example_2004 with the current code. */
-  if (result == 0 && dec.size == sizeof decomp_auxh_bin
+  if (result == 0
       && memcmp (dec.chain, decomp_auxh_bin, sizeof decomp_auxh_bin) == 0)
     pass ();
   else
-    todo ("decompress_R2004_section auxh needs new test vectors (r=%d)",
-          result);
+    fail ("decompress_R2004_section auxh %d", result);
 
   src.chain = comp_ofs_bin;
   src.size = sizeof comp_ofs_bin;
   src.byte = 0;
-  bit_chain_alloc_size (&dec, sizeof decomp_ofs_bin);
-  dec.size = sizeof decomp_ofs_bin;
+  /* ofs: the LZ77 stream ends with a >C 30137 copy landing at dec[30192],
+   * then 13 literal bytes -> total 30205.  32768 covers both sections. */
+  bit_chain_alloc_size (&dec, 32768);
+  dec.size = 32768;
   dec.byte = 0;
   result = decompress_R2004_section (&src, &dec);
   if (result == 0
       && memcmp (dec.chain, decomp_ofs_bin, sizeof decomp_ofs_bin) == 0)
     ok ("decompress_R2004_section");
   else
-    todo ("decompress_R2004_section ofs needs new test vectors (r=%d)",
-          result);
+    fail ("decompress_R2004_section ofs %d", result);
 }
 
 /* Regression tests for CWE-125 OOB reads in decompress_r2007().
