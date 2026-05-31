@@ -146,9 +146,6 @@ static void copy_compressed_bytes (BITCODE_RC *restrict dst,
 static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
                               int data_size,
                               const unsigned src_size) ATTRIBUTE_MALLOC;
-static int decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
-                             BITCODE_RC *restrict src, const unsigned src_size,
-                             const BITCODE_RC *restrict dst_end);
 
 #define copy_1(offset) *dst++ = *(src + offset);
 #define copy_2(offset) dst = copy_bytes_2 (dst, src + offset);
@@ -472,7 +469,7 @@ read_instructions (BITCODE_RC *restrict *src,
    TODO: replace by decompress_R2004_section(dat, decomp, comp_data_size)
    Note that dst + dst_size might deviate from dst_end.
 */
-static int
+int
 decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
                   BITCODE_RC *restrict src, const unsigned src_size,
                   const BITCODE_RC *restrict dst_end)
