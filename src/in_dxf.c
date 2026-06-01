@@ -2290,6 +2290,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
   int num_dashes = (int)o->numdashes;
   int is_tu = 0;
+  unsigned dash_i = 0;
 
   o->dashes
       = (Dwg_LTYPE_dash *)xcalloc (o->numdashes, sizeof (Dwg_LTYPE_dash));
@@ -2372,7 +2373,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 9)
         {
-          static unsigned dash_i = 0;
+          size_t strings_size, needed;
           is_tu = obj->parent->header.version >= R_2007;
           CHK_dashes (j, dashes);
           o->dashes[j].text
@@ -2380,19 +2381,33 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("LTYPE.dashes[%d].text = %s [T 9]\n", j,
                      pair->value.s.ptr);
           // write into strings_area
+          strings_size = is_tu ? 512 : 256;
           if (!o->strings_area)
-            o->strings_area = (BITCODE_TF)xcalloc (is_tu ? 512 : 256, 1);
+            o->strings_area = (BITCODE_TF)xcalloc (strings_size, 1);
           if (is_tu)
             {
+              needed = ((strlen (pair->value.s.ptr) * 2) + 2);
+              if (dash_i + needed > strings_size)
+                {
+                  LOG_WARN ("LTYPE strings_area overflow, truncating");
+                  goto skip_overflow;
+                }
               bit_wcs2cpy ((BITCODE_TU)&o->strings_area[dash_i],
                            (BITCODE_TU)o->dashes[j].text);
-              dash_i += ((strlen (pair->value.s.ptr) * 2) & UINT_MAX) + 2;
+              dash_i += needed;
             }
           else
             {
+              needed = strlen (pair->value.s.ptr) + 1;
+              if (dash_i + needed > strings_size)
+                {
+                  LOG_WARN ("LTYPE strings_area overflow, truncating");
+                  goto skip_overflow;
+                }
               strcpy ((char *)&o->strings_area[dash_i], o->dashes[j].text);
-              dash_i += (strlen (pair->value.s.ptr) & UINT_MAX) + 1;
+              dash_i += needed;
             }
+        skip_overflow:;
         }
       else
         break; // not a Dwg_LTYPE_dash
@@ -3412,6 +3427,60 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                         j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
+      else if (pair->code == 12 && !is_plpath && !o->num_seeds)
+        {
+          CHK_paths;
+          CHK_segs;
+          if (o->paths[j].segs[k].curve_type == 4)
+            {
+              o->paths[j].segs[k].start_tangent.x = pair->value.d;
+            }
+          else
+            goto unknown_HATCH;
+        }
+      else if (pair->code == 22 && !is_plpath && !o->num_seeds)
+        {
+          CHK_paths;
+          CHK_segs;
+          if (o->paths[j].segs[k].curve_type == 4)
+            {
+              o->paths[j].segs[k].start_tangent.y = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].start_tangent = (%f, %f) "
+                         "[2RD 12]\n",
+                         j, k, o->paths[j].segs[k].start_tangent.x,
+                         pair->value.d);
+            }
+          else
+            goto unknown_HATCH;
+        }
+      else if (pair->code == 13 && !is_plpath && !o->num_seeds)
+        {
+          CHK_paths;
+          CHK_segs;
+          if (o->paths[j].segs[k].curve_type == 4)
+            {
+              o->paths[j].segs[k].end_tangent.x = pair->value.d;
+            }
+          else
+            goto unknown_HATCH;
+        }
+      else if (pair->code == 23 && !is_plpath && !o->num_seeds)
+        {
+          CHK_paths;
+          CHK_segs;
+          if (o->paths[j].segs[k].curve_type == 4)
+            {
+              o->paths[j].segs[k].end_tangent.y = pair->value.d;
+              LOG_TRACE ("HATCH.paths[%d].segs[%d].end_tangent = (%f, %f) "
+                         "[2RD 13]\n",
+                         j, k, o->paths[j].segs[k].end_tangent.x,
+                         pair->value.d);
+              // done with this spline segment, next 97 is num_boundary_handles
+              k = -1;
+            }
+          else
+            goto unknown_HATCH;
+        }
       else if (pair->code == 40 && !is_plpath)
         {
           CHK_paths;
@@ -3567,7 +3636,6 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 97 && !is_plpath)
         {
           CHK_paths;
-          CHK_segs;
           if (k < 0 || o->paths[j].segs[k].curve_type != 4)
             {
               next_330_boundary_handles = true;
@@ -3580,13 +3648,16 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           else
             {
+              CHK_segs;
               next_330_boundary_handles = false;
               o->paths[j].segs[k].num_fitpts = pair->value.l;
+              l = -1; // reset fitpts index
               LOG_TRACE (
                   "HATCH.paths[%d].segs[%d].num_fitpts  = %ld [BL 97]\n", j, k,
                   pair->value.l);
-              o->paths[j].segs[k].fitpts = (BITCODE_2RD *)xcalloc (
-                  pair->value.l, sizeof (BITCODE_2RD));
+              if (pair->value.l > 0)
+                o->paths[j].segs[k].fitpts = (BITCODE_2RD *)xcalloc (
+                    pair->value.l, sizeof (BITCODE_2RD));
             }
         }
       else if (pair->code == 97 && is_plpath)
