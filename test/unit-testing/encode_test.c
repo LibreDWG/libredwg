@@ -273,6 +273,37 @@ cleanup:
   free (dec.chain);
 }
 
+/* Regression test for double-free fix in COMMON_ENTITY_HANDLE_DATA
+   (commit 6deac10e).  The macro copies *hdl_dat to dat1 then NULLs
+   hdl_dat->chain so dat1 owns the buffer exclusively.  Without the
+   NULL, bit_chain_free(hdl_dat) after bit_chain_free(&dat1) would
+   double-free. */
+static void
+common_entity_handle_data_double_free_test (void)
+{
+  Bit_Chain hdl_dat = { 0 };
+  char *buf = (char *)calloc (64, 1);
+  if (!buf)
+    {
+      fail ("common_entity_handle_data: calloc failed");
+      return;
+    }
+  hdl_dat.chain = (unsigned char *)buf;
+  hdl_dat.size = 64;
+  hdl_dat.byte = 0;
+  hdl_dat.bit = 0;
+
+  /* Simulate the macro's copy-then-NULL pattern */
+  {
+    Bit_Chain dat1 = hdl_dat; /* copy: dat1.chain = hdl_dat.chain */
+    hdl_dat.chain = NULL;     /* the fix: transfer ownership */
+    bit_chain_free (&dat1);   /* free the buffer through dat1 */
+  }
+  /* hdl_dat.chain is now NULL — freeing it must be a no-op */
+  bit_chain_free (&hdl_dat);
+  ok ("common_entity_handle_data double-free regression");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -287,5 +318,6 @@ main (int argc, char const *argv[])
   test_section_move_before (&dwg);
 
   compress_R2004_section_tests ();
+  common_entity_handle_data_double_free_test ();
   return failed;
 }

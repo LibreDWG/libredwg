@@ -3467,7 +3467,13 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
           // NOTE: src is expanded/shrinked internally.
           const size_t srclen = strlen (src);
           size_t destlen = 1 + trunc (srclen * 2);
-          char *dest = (char *)calloc (destlen, 1);
+          char *dest = (char *)calloc (destlen + 1, 1);
+          if (!dest)
+            {
+              loglevel |= 1;
+              LOG_ERROR ("Out of memory");
+              return NULL;
+            }
           memcpy (dest, src, srclen + 1);
           return (char *)bit_u_expand (dest);
         }
@@ -3493,7 +3499,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
     if (!charset || !srclen)
       return (char *)src;
     osrc = (char *)src;
-    odest = dest = (char *)calloc (odestlen, 1);
+    odest = dest = (char *)calloc (odestlen + 1, 1);
     if (!odest || destlen > 0x2FFFE)
       {
         loglevel |= 1;
@@ -3525,23 +3531,24 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
             if (errno != EINVAL) // probably dest buffer too small
               {
                 char *dest_new;
-                destlen *= 2;
-                if (destlen > 0x2FFFE)
+                size_t offset = (size_t)(dest - odest);
+                odestlen *= 2;
+                if (odestlen > 0x2FFFE)
                   {
                     loglevel |= 1;
                     LOG_ERROR ("bit_TV_to_utf8: overlarge destlen %" PRIuSIZE
                                " for %s",
-                               destlen, src);
+                               odestlen, src);
                     iconv_close (cd);
                     free (odest);
                     return NULL;
                   }
-                dest_new = (char *)realloc (odest, destlen);
+                dest_new = (char *)realloc (odest, odestlen + 1);
                 if (dest_new)
                   {
-                    odest = dest = dest_new;
-                    odestlen = destlen;
-                    dest_new[destlen - 1] = '\0';
+                    odest = dest_new;
+                    dest = dest_new + offset;
+                    destlen = odestlen - offset;
                   }
                 else
                   {
@@ -3567,7 +3574,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
     if (errno == 0 && destlen <= 0x2FFFE && (uintptr_t)dest >= (uintptr_t)odest
         && (uintptr_t)dest <= (uintptr_t)odest + odestlen)
       {
-        //*dest = '\0';
+        *dest = '\0';
         iconv_close (cd);
         // always gets shorter, so inplace
         return (char *)bit_u_expand (odest);

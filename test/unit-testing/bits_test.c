@@ -1164,6 +1164,31 @@ bit_TV_to_utf8_tests (void)
           free (aliased_r11);
       }
   }
+  /* --- iconv NUL-termination regression (commit dc8e3509) ---
+     bit_TV_to_utf8 iconv path must always NUL-terminate.  When iconv
+     fills the destination buffer exactly, dest points past the
+     allocation and *dest='\0' would OOB-write without the +1 in the
+     calloc/realloc sizing.  Verify strlen returns sane results on
+     the iconv path for a multi-byte codepage. */
+  {
+    // CP_ANSI_932 (Shift-JIS): multi-byte input triggers iconv
+    const char *sjis_input = "\x83\x82\x83\x6d"; // モノ
+    p = bit_TV_to_utf8 (sjis_input, CP_ANSI_932);
+    if (!p)
+      fail ("bit_TV_to_utf8 iconv NUL-term: returned NULL");
+    else
+      {
+        size_t len = strlen (p);
+        if (len == 0 || len > 32)
+          fail ("bit_TV_to_utf8 iconv NUL-term: strlen=%zu (expected "
+                "3..15)",
+                len);
+        else
+          ok ("bit_TV_to_utf8 iconv NUL-term");
+      }
+    if (p != sjis_input)
+      free (p);
+  }
 }
 
 static void
