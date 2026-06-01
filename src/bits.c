@@ -3570,8 +3570,10 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
           }
       }
     // flush the remains
-    iconv (cd, NULL, NULL, (char **)&dest, (size_t *)&destlen);
-    if (errno == 0 && destlen <= 0x2FFFE && (uintptr_t)dest >= (uintptr_t)odest
+    errno = 0;
+    nconv = iconv (cd, NULL, NULL, (char **)&dest, (size_t *)&destlen);
+    if (nconv != (size_t)-1 && destlen <= 0x2FFFE
+        && (uintptr_t)dest >= (uintptr_t)odest
         && (uintptr_t)dest <= (uintptr_t)odest + odestlen)
       {
         *dest = '\0';
@@ -3583,7 +3585,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
       {
         iconv_close (cd);
         free (odest);
-        return bit_TV_to_utf8_codepage (src, codepage);
+        return bit_TV_to_utf8_codepage (osrc, codepage);
       }
 #else
     return bit_TV_to_utf8_codepage (src, codepage);
