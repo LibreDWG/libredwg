@@ -3514,7 +3514,8 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
         if (errno != 22)
           LOG_WARN ("iconv_open (\"%s\", \"%s\") failed with errno %d",
                     utf8_cs, charset, errno);
-        free (odest);
+        if (odest)
+          free (odest);
         return bit_TV_to_utf8_codepage (src, codepage);
       }
     while (nconv == (size_t)-1)
@@ -3540,7 +3541,8 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                                " for %s",
                                odestlen, src);
                     iconv_close (cd);
-                    free (odest);
+                    if (odest)
+                      free (odest);
                     return NULL;
                   }
                 dest_new = (char *)realloc (odest, odestlen + 1);
@@ -3555,7 +3557,8 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                     loglevel |= 1;
                     LOG_ERROR ("Out of memory");
                     iconv_close (cd);
-                    // free (odest);
+                    if (odest)
+                      free (odest);
                     return NULL;
                   }
               }
@@ -3564,7 +3567,8 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                 loglevel |= 1;
                 LOG_ERROR ("iconv \"%s\" failed with errno %d", src, errno);
                 iconv_close (cd);
-                free (odest);
+                if (odest)
+                  free (odest);
                 return (char *)bit_u_expand (osrc);
               }
           }
@@ -3584,7 +3588,8 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
     else
       {
         iconv_close (cd);
-        free (odest);
+        if (odest)
+          free (odest);
         return bit_TV_to_utf8_codepage (osrc, codepage);
       }
 #else
