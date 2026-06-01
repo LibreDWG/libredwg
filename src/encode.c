@@ -5355,23 +5355,30 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
       else if (!in_blocks && obj->fixedtype == DWG_TYPE_BLOCK)
         in_blocks = true;
 
-      SINCE (R_2_0)
+      SINCE (R_2_0b)
       {
         // patchup size
-        if (!obj->size)
+        // Pre-R13 entity sizes are fixed. Still always recalculate after
+        // JSON import which may have set obj->size from the source.
+        size_t pos = dat->byte;
+        size_t computed_size = dat->byte - obj->address;
+        SINCE (R_11)
+        {
+          computed_size += 2; // crc16
+        }
+        if (computed_size > UINT16_MAX)
           {
-            size_t pos = dat->byte;
-            obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
-            SINCE (R_11)
-            {
-              obj->size += 2; // crc16
-            }
-            dat->byte = size_pos;
-            bit_write_RS (dat, obj->size);
-            LOG_TRACE ("-size: %u [RL] (@%" PRIuSIZE ".%u)\n", obj->size,
-                       dat->byte, dat->bit);
-            dat->byte = pos;
+            LOG_ERROR ("Entity size %" PRIuSIZE " exceeds RS limit (0xFFFF)",
+                       computed_size);
+            *error |= DWG_ERR_VALUEOUTOFBOUNDS;
+            computed_size = UINT16_MAX;
           }
+        obj->size = (BITCODE_RL)computed_size;
+        dat->byte = size_pos;
+        bit_write_RS (dat, (BITCODE_RS)obj->size);
+        LOG_TRACE ("-size: %u [RS] (@%" PRIuSIZE ".%u)\n",
+                   (unsigned)(BITCODE_RS)obj->size, dat->byte, dat->bit);
+        dat->byte = pos;
         SINCE (R_11)
         {
           BITCODE_RS crc = bit_calc_CRC (0xC0C1, &dat->chain[obj->address],
