@@ -2394,7 +2394,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               bit_wcs2cpy ((BITCODE_TU)&o->strings_area[dash_i],
                            (BITCODE_TU)o->dashes[j].text);
-              dash_i += needed;
+              dash_i += (unsigned)needed;
             }
           else
             {
@@ -2405,7 +2405,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   goto skip_overflow;
                 }
               strcpy ((char *)&o->strings_area[dash_i], o->dashes[j].text);
-              dash_i += needed;
+              dash_i += (unsigned)needed;
             }
         skip_overflow:;
         }
