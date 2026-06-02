@@ -1003,50 +1003,24 @@ security_is_empty (const Dwg_Security *obj)
 #define COMPRESSION_BUFFER_SIZE 0x400
 #define COMPRESSION_WINDOW_SIZE 0x800
 
-static void write_length (Bit_Chain *dat, uint32_t u1, uint32_t match,
-                          uint32_t u2);
+static void write_opcode (Bit_Chain *dat, unsigned char opcode,
+                          int comp_offset, unsigned value);
 
 /* R2004 Write literal length
  */
-static unsigned char
-write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
-                      uint32_t len)
+static void
+write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
+                      int len, int comp_offset)
 {
-#if 0
-  if (len <= (0x0F + 3)) // single byte, opcode 0
-    {
-      bit_write_RC (dat, len - 3);
-      return 0;
-    }
-  else if (len < 0xf0)
-    {
-      bit_write_RC (dat, len);
-      return length & 0xff;
-    }
-  else
-    {
-      uint32_t total = 0x0f;
-      while (leng >= 0xf0)
-        {
-          bit_write_RC (dat, 0);
-          len -= 0xFF;
-          total += 0xFF;
-        }
-      bit_write_RC (dat, len - 3); // ??
-      return 0;
-    }
-#else
-  if (len)
-    {
-      if (len > 3)
-        {
-          write_length (dat, 0, len - 1, 0x11);
-        }
-      LOG_INSANE ("LIT %x\n", len);
-      bit_write_TF (dat, buf, len);
-    }
-  return 0;
-#endif
+  int off = comp_offset;
+  if (len <= 0)
+    return;
+  if (len > 3)
+    write_opcode (dat, 0, len - 1, 0x11);
+  for (int i=0; i < len; i++) {
+    BITCODE_RC b = decomp[off++];
+    bit_write_RC (dat, b);
+  }
 }
 
 /* Write raw data wrapped in valid LZ "store" framing so that
@@ -1062,7 +1036,7 @@ store_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   if (dat->size < dat->byte + decomp_data_size + 20)
     bit_chain_alloc_size (dat, decomp_data_size + 20);
   assert (!dat->bit);
-  write_literal_length (dat, decomp, decomp_data_size);
+  write_literal_length (dat, decomp, decomp_data_size, 0);
   bit_write_RC (dat, 0x11); // end of stream
   *comp_data_size = (uint32_t)(dat->byte - start);
   return 0;
@@ -1092,34 +1066,32 @@ stored_R2004_section_size (uint32_t decomp_data_size)
   return decomp_data_size + hdr_size;
 }
 
-/* R2004 Long Compression Offset
- */
 static void
-write_long_compression_offset (Bit_Chain *dat, uint32_t offset)
+write_length (Bit_Chain *dat, unsigned len)
 {
-  while (offset > 0xff)
+  LOG_INSANE (">L %u\n", len);
+  while (len > 0xFF)
     {
+      len -= 0xFF;
       bit_write_RC (dat, 0);
-      offset -= 0xff;
     }
-  LOG_INSANE (">O 00 %x", offset);
-  bit_write_RC (dat, (unsigned char)offset);
+  bit_write_RC (dat, len);
 }
 
 static void
-write_length (Bit_Chain *dat, uint32_t u1, uint32_t match, uint32_t u2)
+write_opcode (Bit_Chain *dat, unsigned char opcode, int comp_offset,
+              unsigned value)
 {
-  if (u2 < match)
+  assert (comp_offset > 0);
+  if (comp_offset <= value)
     {
-      LOG_INSANE (">L %x ", u1 & 0xff);
-      bit_write_RC (dat, u1 & 0xff);
-      write_long_compression_offset (dat, match - u2);
-      LOG_INSANE ("\n");
+      opcode |= comp_offset - 2;
+      bit_write_RC (dat, opcode);
     }
   else
     {
-      LOG_INSANE (">L %x\n", (u1 | (match - 2)) & 0xff);
-      bit_write_RC (dat, (u1 | (match - 2)) & 0xff);
+      bit_write_RC (dat, opcode);
+      write_length (dat, (unsigned)comp_offset - value);
     }
 }
 
@@ -1232,7 +1204,7 @@ compress_write_match (Bit_Chain *restrict dat, uint32_t match_dist,
     {
       /* Medium encoding: length opcode 0x20..0x3F + two-byte offset */
       uint32_t d = match_dist - 1;
-      write_length (dat, 0x20, match_len, 0x21);
+      write_opcode (dat, 0x20, match_len, 0x21);
       b1 = (d & 0xFF) << 2;
       b2 = d >> 6;
     }
@@ -1240,7 +1212,7 @@ compress_write_match (Bit_Chain *restrict dat, uint32_t match_dist,
     {
       /* Long encoding: length opcode 0x10..0x1F + two-byte offset */
       uint32_t d = match_dist - 0x4000;
-      write_length (dat, ((d >> 11) & 8) | 0x10, match_len, 9);
+      write_opcode (dat, ((d >> 11) & 8) | 0x10, match_len, 9);
       b1 = (d & 0xFF) << 2;
       b2 = d >> 6;
     }
@@ -1279,7 +1251,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
     {
       if (dat->size < dat->byte + decomp_data_size + 20)
         bit_chain_alloc_size (dat, decomp_data_size + 20);
-      write_literal_length (dat, decomp, decomp_data_size);
+      write_literal_length (dat, decomp, decomp_data_size, 0);
       bit_write_RC (dat, 0x11); /* end of stream */
       *comp_data_size = (uint32_t)(dat->byte - start);
       return 0;
@@ -1293,7 +1265,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   if (!hash_table)
     {
       /* Valid LZ stream fallback if memory is tight. */
-      write_literal_length (dat, decomp, decomp_data_size);
+      write_literal_length (dat, decomp, decomp_data_size, 0);
       bit_write_RC (dat, 0x11); /* end of stream */
       *comp_data_size = (uint32_t)(dat->byte - start);
       return 0;
@@ -1318,7 +1290,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
         compress_write_match (dat, prev_match_dist, prev_match_len, lits);
 
       /* Write literal bytes */
-      write_literal_length (dat, &decomp[curr_offset], lits);
+      write_literal_length (dat, &decomp[curr_offset], lits, 0);
 
       pos += match_len;
       curr_offset = pos;
@@ -1330,7 +1302,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   lits = decomp_data_size - curr_offset;
   if (prev_match_len)
     compress_write_match (dat, prev_match_dist, prev_match_len, lits);
-  write_literal_length (dat, &decomp[curr_offset], lits);
+  write_literal_length (dat, &decomp[curr_offset], lits, 0);
 
   bit_write_RC (dat, 0x11); /* end of stream */
   *comp_data_size = (uint32_t)(dat->byte - start);
