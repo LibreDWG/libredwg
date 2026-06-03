@@ -622,6 +622,16 @@ classes_section:
       Dwg_Class *klass;
 
       i = dwg->num_classes;
+      /* CWE-400: bound max classes to prevent DoS via crafted input.
+         Each class entry is at minimum ~10 bytes on disk;
+         sizeof(Dwg_Class) is a very generous upper bound. */
+      if ((size_t)i >= 100 + (size / sizeof (Dwg_Class)))
+        {
+          LOG_ERROR ("Too many classes: %u, max %" PRIuSIZE, (unsigned)i,
+                     100 + (size / sizeof (Dwg_Class)));
+          error |= DWG_ERR_VALUEOUTOFBOUNDS;
+          goto handles_section;
+        }
       if (i == 0)
         dwg->dwg_class = (Dwg_Class *)malloc (sizeof (Dwg_Class));
       else
