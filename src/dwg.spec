@@ -6172,7 +6172,7 @@ DWG_OBJECT (PROXY_OBJECT)
   PRE (R_2018) {
     FIELD_BLx (version, 95);
     FIELD_VALUE (maint_version) = FIELD_VALUE(version) >> 8;
-    FIELD_VALUE (version) = FIELD_VALUE(version) & 0xff;
+    FIELD_VALUE (dwg_version) = FIELD_VALUE(version) & 0xff;
     LOG_TRACE ("> maint_version: %x\n", _obj->maint_version);
     LOG_TRACE ("> dwg_version: %x\n", _obj->dwg_version);
   }
