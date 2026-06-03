@@ -2317,9 +2317,12 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dwg->header.section[sec_id].size
       = (dat->byte - dwg->header.section[sec_id].address) & 0xFFFFFFFF;
   LOG_TRACE ("       Classes (end): %4zu\n", dat->byte);
-  // FIXME: for all versions?
-  bit_write_RL (dat, 0x0DCA);
-  LOG_TRACE ("unknown: %04X [RL]\n", 0x0DCA);
+  /* R_2004+ class sentinel already written via write_sentinel above.
+     r2000 expects an RL sentinel 0x0002 after the section. */
+  if (dat->version < R_2004)
+    bit_write_RL (dat, 0x0002);
+  else
+    bit_write_RL (dat, 0x0DCA);
   return error;
 }
 
@@ -2919,7 +2922,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           // the version the DWG was written with
           _obj->dwg_version = _verp->dwg_version;
       }
-    if (_verp)
+    if (_verp && !_obj->maint_rel_version)
       _obj->maint_rel_version = _verp->maint_rel_version;
     if (!_obj->app_dwg_version)
       _obj->app_dwg_version = _obj->dwg_version;
