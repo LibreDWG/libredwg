@@ -5181,13 +5181,13 @@ DWG_ENTITY (HATCH)
                         }
                       break;
                     default:
-                      LOG_ERROR ("Invalid HATCH.curve_type %d\n",
+                      LOG_WARN ("Invalid HATCH.curve_type %d\n",
                                 FIELD_VALUE (seg.curve_type));
                       DEBUG_HERE_OBJ
                       FIELD_VALUE (seg.curve_type) = 0;
                       JSON_END_REPEAT (segx);
                       JSON_END_REPEAT (paths);
-                      return DWG_ERR_VALUEOUTOFBOUNDS;
+                      return 0;
                 }
               SET_PARENT (seg, &_obj->paths[rcount1]);
 #undef seg
@@ -5433,13 +5433,13 @@ DWG_ENTITY (MPOLYGON)
                         }
                       break;
                     default:
-                      LOG_ERROR ("Invalid HATCH.curve_type %d\n",
+                      LOG_WARN ("Invalid HATCH.curve_type %d\n",
                                 FIELD_VALUE (segx[rcount2].curve_type));
                       DEBUG_HERE_OBJ
                       FIELD_VALUE (seg.curve_type) = 0;
                       JSON_END_REPEAT (segx);
                       JSON_END_REPEAT (paths);
-                      return DWG_ERR_VALUEOUTOFBOUNDS;
+                      return 0;
                 }
               SET_PARENT (seg, &_obj->paths[rcount1]);
 #undef seg
