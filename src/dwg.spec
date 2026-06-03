@@ -3850,8 +3850,11 @@ DWG_TABLE (LAYER)
   SINCE (R_2007a) {
     ENCODER {
 #ifndef DEBUG_CLASSES
-      _obj->material->absolute_ref = 0;
-      _obj->material->handleref.value = 0;
+      if (_obj->material)
+        {
+          _obj->material->absolute_ref = 0;
+          _obj->material->handleref.value = 0;
+        }
 #endif
     }
     FIELD_HANDLE (material, 5, 0);
