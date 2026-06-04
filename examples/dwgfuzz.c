@@ -306,6 +306,7 @@ main (int argc, char *argv[])
               if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
                 exit (0);
               free (out_dat.chain);
+              out_dat.chain = NULL;
             }
           break;
 #endif
@@ -320,6 +321,7 @@ main (int argc, char *argv[])
               if (dwg_decode (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
                 exit (0);
               free (out_dat.chain);
+              out_dat.chain = NULL;
             }
           break;
         case ADD:
