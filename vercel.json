@@ -1,0 +1,9 @@
+{
+  "buildCommand": "bash build.sh",
+  "outputDirectory": "public",
+  "functions": {
+    "api/healthz.py": {
+      "includeFiles": "api/bin/**"
+    }
+  }
+}
