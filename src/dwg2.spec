@@ -1003,6 +1003,7 @@ DWG_OBJECT (TABLESTYLE)
     if (FIELD_VALUE (numoverrides))
       {
         FIELD_BL (unknown_bl3, 0);
+        memset (&ovr.cellstyle, 0, sizeof (ovr.cellstyle));
         CellStyle_fields (ovr.cellstyle);
         DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
         FIELD_BL0 (ovr.id, 90);
