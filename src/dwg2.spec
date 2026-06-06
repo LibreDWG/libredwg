@@ -1003,7 +1003,7 @@ DWG_OBJECT (TABLESTYLE)
     if (FIELD_VALUE (numoverrides))
       {
         FIELD_BL (unknown_bl3, 0);
-        CellStyle_fields (ovr.cellstyle);
+        CellStyle_fields (ovr.cellstyle); // lgtm[cpp/use-after-free]
         DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
         FIELD_BL0 (ovr.id, 90);
         FIELD_BL0 (ovr.type, 91);
