@@ -2246,7 +2246,8 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
     {
       ref->handleref.size = 2;
       if (dwg->header_vars.HANDSEED && dwg->header_vars.HANDSEED->absolute_ref
-          && absref > dwg->header_vars.HANDSEED->absolute_ref)
+          && absref > dwg->header_vars.HANDSEED->absolute_ref
+          && absref <= 0xFFFFFFFF)
         {
           dwg->header_vars.HANDSEED->absolute_ref = absref;
         }

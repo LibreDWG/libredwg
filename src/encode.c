@@ -6810,7 +6810,22 @@ encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
-  // clang-format off
+  // Fix corrupted HANDSEED from EED data with bogus 64-bit handles
+  if (_obj->HANDSEED && _obj->HANDSEED->absolute_ref > 0xFFFFFFFF)
+    {
+      BITCODE_RLL seed = 0;
+      for (unsigned i = 0; i < dwg->num_object_refs; i++)
+        {
+          Dwg_Object_Ref *ref = dwg->object_ref[i];
+          if (ref->absolute_ref > seed && ref->absolute_ref <= 0xFFFFFFFF)
+            seed = ref->absolute_ref;
+        }
+      _obj->HANDSEED->absolute_ref = seed + 1;
+      LOG_TRACE ("Fix pre-R13 HANDSEED -> " FORMAT_HV "\n",
+                 _obj->HANDSEED->absolute_ref);
+    }
+
+    // clang-format off
 // PRE (R_13b1)
 // {
 //   if (dat->from_version >= R_13b1)
@@ -6979,13 +6994,23 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (last_hdl)
     {
       // find the largest handle
-      seed = last_hdl->absolute_ref;
-      LOG_TRACE ("compute HANDSEED " FORMAT_HV " ", seed);
+      seed = _obj->HANDSEED ? _obj->HANDSEED->absolute_ref : 0;
+      LOG_TRACE ("compute HANDSEED: version=%d, seed=" FORMAT_HV
+                 ", last_hdl=" FORMAT_HV "\n",
+                 (int)dat->version, seed,
+                 last_hdl ? last_hdl->absolute_ref : 0);
+      if (dat->version <= R_12 && seed > 0xFFFFFFFF)
+        seed = 0;
       for (unsigned i = 0; i < dwg->num_object_refs; i++)
         {
           Dwg_Object_Ref *ref = dwg->object_ref[i];
           if (ref->absolute_ref > seed)
-            seed = ref->absolute_ref;
+            {
+              // ignore corrupted handles (e.g. from EED data)
+              if (dat->version <= R_12 && ref->absolute_ref > 0xFFFFFFFF)
+                continue;
+              seed = ref->absolute_ref;
+            }
         }
       _obj->HANDSEED->absolute_ref = seed + 1;
       LOG_TRACE ("-> " FORMAT_HV "\n", seed);
