@@ -6171,7 +6171,8 @@ dwg_validate_entity_links (Dwg_Data *restrict dwg)
   for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
     {
       Dwg_Object *hdr_obj = &dwg->object[i];
-      if (hdr_obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+      if (hdr_obj->fixedtype == DWG_TYPE_BLOCK_HEADER && hdr_obj->tio.object
+          && hdr_obj->tio.object->tio.BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_hdr
               = hdr_obj->tio.object->tio.BLOCK_HEADER;
@@ -6217,7 +6218,8 @@ dwg_validate_entity_links (Dwg_Data *restrict dwg)
               visited[idx / 8] |= (uint8_t)(1 << (idx % 8));
 
               ent = cur->tio.entity;
-              if (!ent || !ent->next_entity || !ent->next_entity->obj)
+              if (cur->supertype != DWG_SUPERTYPE_ENTITY || !ent
+                  || !ent->next_entity || !ent->next_entity->obj)
                 break;
               prev = cur;
               cur = ent->next_entity->obj;
@@ -6414,6 +6416,7 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
             free (_objname);
         }
     }
+  dwg_validate_entity_links (dwg);
   LOG_TRACE ("\n");
   return changes;
 }

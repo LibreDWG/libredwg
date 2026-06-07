@@ -7479,7 +7479,8 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       for (unsigned i = 1; i < num_owned; i++)
         {
           owned_obj = dwg_ref_object (dwg, owned[i]);
-          if (!owned_obj || owned_obj->supertype != DWG_SUPERTYPE_ENTITY)
+          if (!owned_obj || owned_obj->supertype != DWG_SUPERTYPE_ENTITY
+              || !owned_obj->tio.entity)
             continue;
           ent = owned_obj->tio.entity;
           ent->prev_entity = dwg_link_prev (owned[i - 1], owned_obj);
