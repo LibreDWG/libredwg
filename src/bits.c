@@ -3569,7 +3569,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                 iconv_close (cd);
                 if (odest)
                   free (odest);
-                return (char *)bit_u_expand (osrc);
+                return bit_TV_to_utf8_codepage (osrc, codepage);
               }
           }
       }
