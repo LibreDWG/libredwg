@@ -5184,13 +5184,13 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                 case DWG_TYPE_MINSERT:
                   {
                     Dwg_Entity_INSERT *_i = _ent->tio.INSERT;
-                    if (_i->scale.x != 1.0)
+                    if (_i->scale.x != 0.0 && _i->scale.x != 1.0)
                       _ent->opts_r11 |= 1;
-                    if (_i->scale.y != 1.0)
+                    if (_i->scale.y != 0.0 && _i->scale.y != 1.0)
                       _ent->opts_r11 |= 2;
                     if (_i->rotation != 0.0)
                       _ent->opts_r11 |= 4;
-                    if (_i->scale.z != 1.0)
+                    if (_i->scale.z != 0.0 && _i->scale.z != 1.0)
                       _ent->opts_r11 |= 8;
                     if (_i->num_cols > 1)
                       _ent->opts_r11 |= 16;
