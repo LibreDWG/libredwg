@@ -1189,6 +1189,26 @@ bit_TV_to_utf8_tests (void)
     if (p != sjis_input)
       free (p);
   }
+
+  /* --- GHSA-5p98-8245-6hxq: const-input write / crash on iconv error ---
+     bit_TV_to_utf8 must not write to the caller-provided const src buffer
+     on the iconv error path.  Passing a string literal with \U+XXXX
+     markers and CP_UTF16 (which triggers an iconv conversion failure)
+     must not SIGSEGV and must leave the input unmodified.
+     Fixed by using bit_TV_to_utf8_codepage fallback instead of
+     bit_u_expand in-place expansion. */
+  {
+    const char *literal = "\\U+0234";
+    p = bit_TV_to_utf8 (literal, CP_UTF16);
+    // Reaching here without SIGSEGV is the primary pass condition.
+    if (strEQc (literal, "\\U+0234"))
+      ok ("bit_TV_to_utf8 GHSA-5p98-8245-6hxq const input not modified");
+    else
+      fail ("bit_TV_to_utf8 GHSA-5p98-8245-6hxq modified const input: got %s",
+            literal);
+    if (p && p != literal)
+      free (p);
+  }
 }
 
 static void
