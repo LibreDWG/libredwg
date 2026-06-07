@@ -4995,7 +4995,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
         }
       else if (dat->version >= R_2_0b && section == BLOCKS_SECTION_INDEX)
         {
-          if (dat->version < R_2_0b || obj->tio.entity->entmode != 3)
+          if (dat->version < R_2_0b)
             {
               LOG_TRACE ("Skip entity %s not in block section, number: %d, "
                          "type: %d, Addr: %zx (0x%zx)\n",
