@@ -973,6 +973,9 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_HANDLE ("-objref[%3ld]: HANDLE" FORMAT_REF "\n", (long)i,
                   ARGS_REF (ref));
       assert (ref->handleref.is_global == 1);
+      // skip code 0 refs (e.g. HANDSEED), they are handle values, not obj refs
+      if (ref->handleref.code == 0)
+        continue;
       // search the handle in all objects
       obj = dwg_resolve_handle (dwg, ref->absolute_ref);
       if (obj)
@@ -1023,7 +1026,7 @@ dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg)
     {
       // scan num_objects for the id (absolute_ref)
       Dwg_Object *restrict obj
-          = dwg_resolve_handle (dwg, dwg->object_ref[i]->absolute_ref);
+          = dwg_resolve_handle_silent (dwg, dwg->object_ref[i]->absolute_ref);
       dwg->object_ref[i]->obj = obj;
     }
   dwg->dirty_refs = 0;
