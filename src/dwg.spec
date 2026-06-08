@@ -2335,8 +2335,11 @@ DWG_ENTITY (SHAPE)
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (scale, 40);
     DXF {
-      // TODO style is optional. convert from style_id
-      FIELD_HANDLE (style, 5, 2);
+      // style_id (the shape index in the SHAPEFILE) has no DXF
+      // representation (the actual shape name string is unknown to us, as
+      // we don't parse SHX files), so emit the referenced STYLE name (the
+      // SHAPEFILE) via code 7, which in_dxf resolves back to a STYLE handle.
+      FIELD_HANDLE (style, 5, 7);
     } else {
       FIELD_CAST (style_id, RC, BS, 0);
     }

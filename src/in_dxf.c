@@ -9787,6 +9787,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     if (dwg_dynapi_entity_field (obj->name, "is_xref_ref"))
       dwg_dynapi_entity_set_value (_obj, obj->name, "is_xref_ref",
                                    &is_xref_ref, 0);
+    if (dwg_dynapi_entity_field (obj->name, "used"))
+      {
+        BITCODE_RSd used = -1;
+        dwg_dynapi_entity_set_value (_obj, obj->name, "used", &used, 0);
+        LOG_TRACE ("%s.used = -1 (default)\n", obj->name);
+      }
     if ((f1 = dwg_dynapi_entity_field (obj->name, "scale_flag"))
         && (memBEGINc (f1->type, "BB")))
       {
@@ -10846,43 +10852,47 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               o->flag1 = (o->flag1 & 0x80) ? o->flag1 & 0x7F : o->flag1 | 1;
               o->flag1 = (o->flag1 & 0x20) ? o->flag1 | 2 : o->flag1 & 0xDF;
               LOG_TRACE ("DIMENSION.flag1 => %d [RC]\n", o->flag1);
-              // Skip this flag logic, it is unreliable. Detecting subclasses
-              // is far better.
-              switch (o->flag & 31)
-                {
-                case 0: // rotated, horizontal or vertical
-                  LOG_TRACE ("Looks like %s\n", "DIMENSION_LINEAR");
-                  // UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_LINEAR);
-                  break;
-                case 1:
-                  LOG_TRACE ("Looks like %s\n", "DIMENSION_ALIGNED");
-                  // UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ALIGNED);
-                  break;
-                case 2: // already?
-                  LOG_TRACE ("Looks like %s\n", "DIMENSION_ANG2LN");
-                  // UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG2LN);
-                  break;
-                case 3:
-                  LOG_TRACE ("Looks like %s\n", "DIMENSION_DIAMETER");
-                  // UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_DIAMETER);
-                  break;
-                case 4:
-                  LOG_TRACE ("Looks like %s\n", "DIMENSION_RADIUS");
-                  // UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_RADIUS);
-                  break;
-                case 5:
-                  LOG_TRACE ("Looks like %s\n", "DIMENSION_ANG3PT");
-                  // UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT);
-                  break;
-                case 6:
-                  LOG_TRACE ("Looks like DIMENSION_LINEAR\n");
-                  // UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ORDINATE);
-                  break;
-                default:
-                  LOG_ERROR ("Invalid DIMENSION.flag %d", o->flag & 31);
-                  error |= DWG_ERR_INVALIDTYPE;
-                  break;
-                }
+              // For r11/pre-R13 there are no 100 AcDb* subclass markers to
+              // detect the real subtype from, so the flag is the only
+              // information we have. Unlike with R13+ DXF (where detecting
+              // subclasses is far better and more reliable), use it here to
+              // upgrade the generic DIMENSION_ANG2LN (the biggest DIMENSION
+              // struct, used as a placeholder until now) to its real subtype.
+              if (dat->version <= R_12)
+                switch (o->flag & 31)
+                  {
+                  case 0: // rotated, horizontal or vertical
+                    LOG_TRACE ("Looks like %s\n", "DIMENSION_LINEAR");
+                    UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_LINEAR);
+                    break;
+                  case 1:
+                    LOG_TRACE ("Looks like %s\n", "DIMENSION_ALIGNED");
+                    UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ALIGNED);
+                    break;
+                  case 2: // already?
+                    LOG_TRACE ("Looks like %s\n", "DIMENSION_ANG2LN");
+                    break;
+                  case 3:
+                    LOG_TRACE ("Looks like %s\n", "DIMENSION_DIAMETER");
+                    UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_DIAMETER);
+                    break;
+                  case 4:
+                    LOG_TRACE ("Looks like %s\n", "DIMENSION_RADIUS");
+                    UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_RADIUS);
+                    break;
+                  case 5:
+                    LOG_TRACE ("Looks like %s\n", "DIMENSION_ANG3PT");
+                    UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT);
+                    break;
+                  case 6:
+                    LOG_TRACE ("Looks like %s\n", "DIMENSION_ORDINATE");
+                    UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ORDINATE);
+                    break;
+                  default:
+                    LOG_ERROR ("Invalid DIMENSION.flag %d", o->flag & 31);
+                    error |= DWG_ERR_INVALIDTYPE;
+                    break;
+                  }
               break;
             }
           // fall through

@@ -2915,8 +2915,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->maint_version = _obj->dwg_version;
         if (dwg->header.version >= R_2004)
           _obj->zero_one_or_three = 3;
-        if (_verp)
-          // the version the DWG was written with
+        if (_verp && dwg->header.version >= R_13b1)
+          // the version the DWG was written with.
+          // pre-R13b1 must stay 0 (set by dxf_fixup_header or decode)
           _obj->dwg_version = _verp->dwg_version;
       }
     if (_verp)
@@ -2965,6 +2966,33 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         LOG_ERROR (WE_CAN "Invalid or missing FILEHEADER.version");
         return DWG_ERR_INVALIDDWG;
       }
+
+    // on DXF/JSON import add the missing VX_CONTROL object, needed for the
+    // VX section header size/number written into the auxheader and TABLES
+    // (DXF never contains VX tables nor table records)
+    SINCE (R_11)
+    {
+      if (!dwg->header_vars.VX_CONTROL_OBJECT)
+        {
+          Dwg_Object *obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
+          if (!obj)
+            {
+              dwg_add_VX (dwg, NULL);
+              obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
+              if (obj)
+                {
+                  obj->handle.value = 0xB;
+                  LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
+                             obj->handle.value);
+                  dwg->header_vars.VX_TABLE_RECORD
+                      = dwg_add_handleref (dwg, 5, 0, NULL);
+                }
+            }
+          if (obj)
+            dwg->header_vars.VX_CONTROL_OBJECT
+                = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
+        }
+    }
 
     SINCE (R_2_0b)
     {
@@ -5278,6 +5306,178 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                           _ent->opts_r11 |= 4;
                         if (_b->xref_pname && *_b->xref_pname)
                           _ent->opts_r11 |= 2;
+                      }
+                    break;
+                  }
+                case DWG_TYPE_DIMENSION_LINEAR:
+                case DWG_TYPE_DIMENSION_ALIGNED:
+                case DWG_TYPE_DIMENSION_ANG2LN:
+                case DWG_TYPE_DIMENSION_ANG3PT:
+                case DWG_TYPE_DIMENSION_RADIUS:
+                case DWG_TYPE_DIMENSION_DIAMETER:
+                case DWG_TYPE_DIMENSION_ORDINATE:
+                  {
+                    // All DIMENSION_* entities share the DIMENSION_COMMON
+                    // prefix, so any of the tio pointers can read it.
+                    Dwg_Entity_DIMENSION_ANG2LN *_d
+                        = _ent->tio.DIMENSION_ANG2LN;
+                    // flag low bits encode the subtype, needed by the
+                    // decoder to pick the right DIMENSION_* layout back.
+                    // dwg_add_DIMENSION_* never sets DIMENSION_COMMON.flag.
+                    switch (obj->fixedtype)
+                      {
+                      case DWG_TYPE_DIMENSION_ALIGNED:
+                        _d->flag = (_d->flag & ~15) | 1;
+                        break;
+                      case DWG_TYPE_DIMENSION_ANG2LN:
+                        _d->flag = (_d->flag & ~15) | 2;
+                        break;
+                      case DWG_TYPE_DIMENSION_DIAMETER:
+                        _d->flag = (_d->flag & ~15) | 3;
+                        break;
+                      case DWG_TYPE_DIMENSION_RADIUS:
+                        _d->flag = (_d->flag & ~15) | 4;
+                        break;
+                      case DWG_TYPE_DIMENSION_ANG3PT:
+                        _d->flag = (_d->flag & ~15) | 5;
+                        break;
+                      case DWG_TYPE_DIMENSION_ORDINATE:
+                        _d->flag = (_d->flag & ~15) | 6;
+                        break;
+                      default: // DIMENSION_LINEAR: subtype 0
+                        _d->flag = _d->flag & ~15;
+                        break;
+                      }
+                    if (_d->clone_ins_pt.x != 0.0 || _d->clone_ins_pt.y != 0.0)
+                      _ent->opts_r11 |= 1;
+                    // flag is essential to recover the subtype on read-back
+                    _ent->opts_r11 |= 2;
+                    if (_d->user_text && *_d->user_text)
+                      _ent->opts_r11 |= 4;
+                    if (_d->text_rotation != 0.0)
+                      _ent->opts_r11 |= 0x400;
+                    if (_d->dimstyle)
+                      _ent->opts_r11 |= 0x8000;
+                    switch (obj->fixedtype)
+                      {
+                      case DWG_TYPE_DIMENSION_LINEAR:
+                        {
+                          Dwg_Entity_DIMENSION_LINEAR *_l
+                              = _ent->tio.DIMENSION_LINEAR;
+                          if (_l->xline1_pt.x != 0.0 || _l->xline1_pt.y != 0.0
+                              || _l->xline1_pt.z != 0.0)
+                            _ent->opts_r11 |= 8;
+                          if (_l->xline2_pt.x != 0.0 || _l->xline2_pt.y != 0.0
+                              || _l->xline2_pt.z != 0.0)
+                            _ent->opts_r11 |= 16;
+                          if (_l->dim_rotation != 0.0)
+                            _ent->opts_r11 |= 0x100;
+                          if (_l->oblique_angle != 0.0)
+                            _ent->opts_r11 |= 0x200;
+                          if (_l->extrusion.x != 0.0 || _l->extrusion.y != 0.0
+                              || _l->extrusion.z != 1.0)
+                            _ent->opts_r11 |= 0x4000;
+                          break;
+                        }
+                      case DWG_TYPE_DIMENSION_ALIGNED:
+                        {
+                          Dwg_Entity_DIMENSION_ALIGNED *_a
+                              = _ent->tio.DIMENSION_ALIGNED;
+                          if (_a->xline1_pt.x != 0.0 || _a->xline1_pt.y != 0.0
+                              || _a->xline1_pt.z != 0.0)
+                            _ent->opts_r11 |= 8;
+                          if (_a->xline2_pt.x != 0.0 || _a->xline2_pt.y != 0.0
+                              || _a->xline2_pt.z != 0.0)
+                            _ent->opts_r11 |= 16;
+                          if (_a->oblique_angle != 0.0)
+                            _ent->opts_r11 |= 0x100;
+                          break;
+                        }
+                      case DWG_TYPE_DIMENSION_ANG2LN:
+                        {
+                          Dwg_Entity_DIMENSION_ANG2LN *_o = _d;
+                          if (_o->xline1start_pt.x != 0.0
+                              || _o->xline1start_pt.y != 0.0
+                              || _o->xline1start_pt.z != 0.0)
+                            _ent->opts_r11 |= 8;
+                          if (_o->xline1end_pt.x != 0.0
+                              || _o->xline1end_pt.y != 0.0
+                              || _o->xline1end_pt.z != 0.0)
+                            _ent->opts_r11 |= 16;
+                          if (_o->xline2start_pt.x != 0.0
+                              || _o->xline2start_pt.y != 0.0
+                              || _o->xline2start_pt.z != 0.0)
+                            _ent->opts_r11 |= 32;
+                          if (_o->xline2end_pt.x != 0.0
+                              || _o->xline2end_pt.y != 0.0
+                              || _o->xline2end_pt.z != 0.0)
+                            _ent->opts_r11 |= 64;
+                          break;
+                        }
+                      case DWG_TYPE_DIMENSION_ANG3PT:
+                        {
+                          Dwg_Entity_DIMENSION_ANG3PT *_p
+                              = _ent->tio.DIMENSION_ANG3PT;
+                          if (_p->xline1_pt.x != 0.0 || _p->xline1_pt.y != 0.0
+                              || _p->xline1_pt.z != 0.0)
+                            _ent->opts_r11 |= 8;
+                          if (_p->xline2_pt.x != 0.0 || _p->xline2_pt.y != 0.0
+                              || _p->xline2_pt.z != 0.0)
+                            _ent->opts_r11 |= 16;
+                          if (_p->center_pt.x != 0.0 || _p->center_pt.y != 0.0
+                              || _p->center_pt.z != 0.0)
+                            _ent->opts_r11 |= 32;
+                          if (_p->xline2end_pt.x != 0.0
+                              || _p->xline2end_pt.y != 0.0)
+                            _ent->opts_r11 |= 64;
+                          break;
+                        }
+                      case DWG_TYPE_DIMENSION_RADIUS:
+                        {
+                          Dwg_Entity_DIMENSION_RADIUS *_r
+                              = _ent->tio.DIMENSION_RADIUS;
+                          if (_r->first_arc_pt.x != 0.0
+                              || _r->first_arc_pt.y != 0.0
+                              || _r->first_arc_pt.z != 0.0)
+                            _ent->opts_r11 |= 32;
+                          if (_r->leader_len != 0.0)
+                            _ent->opts_r11 |= 128;
+                          if (_d->extrusion.x != 0.0 || _d->extrusion.y != 0.0
+                              || _d->extrusion.z != 1.0)
+                            _ent->opts_r11 |= 0x4000;
+                          break;
+                        }
+                      case DWG_TYPE_DIMENSION_DIAMETER:
+                        {
+                          Dwg_Entity_DIMENSION_DIAMETER *_dia
+                              = _ent->tio.DIMENSION_DIAMETER;
+                          if (_dia->first_arc_pt.x != 0.0
+                              || _dia->first_arc_pt.y != 0.0
+                              || _dia->first_arc_pt.z != 0.0)
+                            _ent->opts_r11 |= 32;
+                          if (_dia->leader_len != 0.0)
+                            _ent->opts_r11 |= 128;
+                          if (_d->extrusion.x != 0.0 || _d->extrusion.y != 0.0
+                              || _d->extrusion.z != 1.0)
+                            _ent->opts_r11 |= 0x4000;
+                          break;
+                        }
+                      case DWG_TYPE_DIMENSION_ORDINATE:
+                        {
+                          Dwg_Entity_DIMENSION_ORDINATE *_ord
+                              = _ent->tio.DIMENSION_ORDINATE;
+                          if (_ord->feature_location_pt.x != 0.0
+                              || _ord->feature_location_pt.y != 0.0
+                              || _ord->feature_location_pt.z != 0.0)
+                            _ent->opts_r11 |= 8;
+                          if (_ord->leader_endpt.x != 0.0
+                              || _ord->leader_endpt.y != 0.0
+                              || _ord->leader_endpt.z != 0.0)
+                            _ent->opts_r11 |= 16;
+                          break;
+                        }
+                      default:
+                        break;
                       }
                     break;
                   }

@@ -89,14 +89,19 @@
     }                                                                         \
     DXF                                                                       \
     {                                                                         \
-      if (dat->from_version >= R_2007)                                        \
-        {                                                                     \
-          FIELD_T (user_text, 1);                                             \
-        }                                                                     \
-      else if (_obj->user_text && strlen (_obj->user_text))                   \
-        {                                                                     \
-          FIELD_TV (user_text, 1);                                            \
-        }                                                                     \
+      /* PRE (R_13b1) above already wrote user_text for pre-R13. avoid a    \
+         duplicate code 1 here */                                            \
+      if (dat->version >= R_13b1)                                            \
+        {                                                                    \
+          if (dat->from_version >= R_2007)                                   \
+            {                                                                \
+              FIELD_T (user_text, 1);                                        \
+            }                                                                \
+          else if (_obj->user_text && strlen (_obj->user_text))              \
+            {                                                                \
+              FIELD_TV (user_text, 1);                                       \
+            }                                                                \
+        }                                                                    \
     }                                                                         \
     else                                                                      \
     {                                                                         \
