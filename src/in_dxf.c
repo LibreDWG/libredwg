@@ -14097,8 +14097,9 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
                          p.value.s.ptr, ARGS_REF (hdl), (int)p.code);
             }
           else
-            LOG_WARN ("Unknown HEADER.%s %s dxf:%d", field, p.value.s.ptr,
-                      (int)p.code);
+            LOG_TRACE (
+                "Unknown HEADER.%s %s dxf:%d (will be resolved later)\n",
+                field, p.value.s.ptr, (int)p.code);
         }
       else
         LOG_WARN ("Unknown HEADER.%s %s dxf:%d", field, p.value.s.ptr,
