@@ -2892,6 +2892,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       remove_EXEMPT_FROM_CAD_STANDARDS_APPID (dat, dwg);
     }
 
+#define WE_CAN                                                          \
+  "This version of LibreDWG is not capable of encoding "                \
+  "versions r2007 DWG files.\n"
+
+  /* r2007 encoding is not supported. fall back to r2010 */
+  if (dwg->header.version >= R_2007a && dwg->header.version <= R_2007)
+    {
+      LOG_ERROR (WE_CAN);
+      dwg->header.version = dat->version = R_2010;
+    }
+
   /*------------------------------------------------------------
    * Header
    */
@@ -2949,10 +2960,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     // clang-format on
   }
   section_address = dat->byte;
-
-#define WE_CAN                                                          \
-  "This version of LibreDWG is not capable of encoding "                \
-  "versions r2007 DWG files.\n"
 
   PRE (R_13b1)
   {
@@ -3426,13 +3433,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         error |= encode_objfreespace_2ndheader (dwg, dat);
       }
   } // VERSIONS (R_13b1, R_2004)
-
-  VERSIONS (R_2007a, R_2007)
-  {
-    LOG_ERROR (WE_CAN);
-    // dat->version = dwg->header.version = R_2010; // rather do 2010
-    return DWG_ERR_NOTYETSUPPORTED;
-  }
 
   /* r2004 file header (compressed + encrypted) */
   SINCE (R_2004a)
