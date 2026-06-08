@@ -25208,7 +25208,9 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
           layer->color = (BITCODE_CMC){ 7, CMC_DEFAULTS };
           layer->ltype = dwg_add_handleref (dwg, 5, UINT64_C (0x16),
                                             NULL); // Continuous
-          layer->plotstyle = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL);
+          if (version >= R_2000)
+            layer->plotstyle
+                = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL);
           // CLAYER: (5.1.F) abs:F [H 8]
           dwg->header_vars.CLAYER
               = dwg_add_handleref (dwg, 5, UINT64_C (0x10), NULL);
@@ -25410,6 +25412,9 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
       // possibly update the obj if realloced
+      // skip code 0 refs (e.g. HANDSEED), they are handle values, not obj refs
+      if (ref->handleref.code == 0)
+        continue;
       if ((obj = dwg_resolve_handle (dwg, ref->absolute_ref)))
         ref->obj = obj;
     }
