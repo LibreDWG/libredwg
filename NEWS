@@ -2,7 +2,7 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2026 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.14 - 2026-?-? - beta:
+LibreDWG version 0.14 - 2026-06-27 - beta:
 
 Major features:
   * Write support for r2004 (AC1018) DWG files.  The encoder now produces
@@ -15,6 +15,95 @@ Major features:
     table-record name in addition to raw handle references.  A string value
     like `line.layer = "FOO"` is resolved via dwg_find_tablehandle() at
     parse time.
+  * Added DXB (binary DXF) support: dwgwrite/dwgread/dwg2dxf accept DXB
+    input/output, and dxfwrite accepts DXB.  Added dxfb.test.
+
+Minor features:
+  * R2007+ split string stream encoding for Header, Classes, and objects.
+  * Added cycle checks in entity link chains.  GH #1226.
+  * Added regression tests for decompress_r2007 OOB reads and R2004 section
+    decompression.  Added dwgfilter.test.
+  * Added release helpers and improved CI (ODAFileConverter QT6, xvfb-run).
+  * dwgfuzz: show mode with --version.
+
+API/ABI changes (source-incompatible):
+  * Renamed HEADER/2NDHEADER.is_maint to maint_rel_version.
+  * Renamed PROXY_OBJECT.dwg_versions.
+  * Bumped SO_VERSION to 0:14:0.
+
+Minor bugfixes:
+  * encode: r2007 DWG files are encoded by falling back to r2010.  Direct
+    r2007 encoding is not yet supported.
+  * encode: fixed many r2004 section, page, object layout, and CRC bugs.
+  * encode: fixed r2004 file header CRC32 and section page CRC handling.
+  * encode: fixed MS overlarge object size calculation and CRC start address
+    for overlarge objects.  GH #1222.
+  * encode: fixed many r11 and pre-R13 entity/block encoding issues,
+    including entmode, types, entities_end, auxheader.plot_stamp, and
+    HANDSEED 32-bit masking.
+  * encode: fixed XRECORD off-by-one, EED TU leak, FIELD_T16 leak, and
+    logical precedence bug.
+  * encode: fixed color.handle order in entity handle stream.
+  * decode: fixed multiple decompression overflows and generalized OOB checks
+    in r2004/r2007 decoders.  GH #1251, #1254, #1255.
+  * decode: fixed r2004 section address bounds check.  GH #1239.
+  * decode: fixed MLINESTYLE loop.  GH #1230.
+  * decode: fixed XRECORD.xdata_size <r2004.
+  * DXF: improved r11 DXF import/encode roundtrips, including POLYLINE
+    vertices, SEQEND, BLOCK, rotation angles, and entity section assignments.
+  * DXF: fixed CMC color writing and DIMSTYLE.DIMTFILLCLR method after indxf
+    roundtrip.
+  * DXF: fixed SORTENTSTABLE output, VIEWPORT id, SAB_to_SAT1 off-by-one
+    (GH #1184), and thumbnail sentinel prefix skipping.
+  * DXF: fixed LWPOLYLINE.flag CLOSED logic and SubDMesh binary import
+    (GH #272).
+  * DXF: fixed PERSUBENTMGR missing num_subents/subents parsing.
+  * DXF: fixed double hex-decoding of binary pair values.
+  * DXF: fixed spurious CMLSTYLE warning during import.
+  * JSON: fixed non-UTF8 output for codepoints 0x80-0xff.  GH #1039.
+  * JSON: fixed empty XRECORD xdata roundtrip.  GH #1043.
+  * JSON: fixed DBCOLOR.color.handle and class dwg_version/maint_version
+    preservation.
+  * Fixed entity linking for loaded empty blocks, dwg_next_entity NULL
+    dereference, and cycle validation in fixup_BLOCKS_entities.
+  * Fixed UNKNOWN_ENT/UNKNOWN_OBJ name and fixedtype override.  GH #1238.
+  * Fixed dwg_bmp thumbnail overflow checks.  GH #1252, #1255.
+  * Fixed "Object handle not found" warnings during decode and in
+    dwg_add_Document for pre-R2000.
+  * spec: fixed HATCH curve_type 0 crash.  GH #1107.
+  * spec: fixed DIMSTYLE.DIMCLRD_N.  GH #1234.
+  * spec: fixed LAYER.material null-deref.
+  * spec: fixed FIELD/TABLE_value_fields parsing.
+  * spec: fixed AcDbMTextObjectEmbedded fields.
+  * spec: harmonized VPORT/VIEW/VIEWPORT fields with HEADER.
+  * spec: fixed r2004+ sections checked against ODA specs.
+  * Fixed PROXY_OBJECT version corruption in JSON roundtrip.
+  * Promoted DIMASSOC to unstable.
+  * Fixed compilation on modern GCC, macOS CI, mingw, and Windows
+    (appveyor-deploy).
+  * Many compiler warning fixes (-Walloc-size, -Wunused-variables,
+    -Warray-bounds, -Wdiscarded-qualifiers, MSVC C4267).
+
+Security/fuzzing fixes:
+  * Fixed CVE-2026-xxxxx DoS in decode_R13_R2000.  GH #1261.
+  * Fixed GHSA-5p98-8245-6hxq: const-input write/crash in bit_TV_to_utf8
+    iconv error path.
+  * Fixed heap OOB read in bit_TV_to_utf8 (iconv path).
+  * Fixed heap-buffer-overflow in bit_convert_TU via dwggrep LTYPE search.
+    GH #1246.
+  * Fixed NULL pointer dereference in free_TABLESTYLE_r2010.  GH #1143.
+  * Fixed NULL pointer dereferences in DXF output for corrupted DWG input.
+  * Fixed OOM in add_ent_preview on fuzzed DXF input.  GH #1006, #1144.
+  * Fixed use-after-free in dxf2dwg on error path.  GH #474.
+  * Fixed stack buffer overflow in JSON scalar field size checks.
+  * Fixed OOB reads in decompress_r2007 (CWE-125).
+  * Fixed JSON escaping in 3DSOLID acis_data and json_cquote 0x1f byte
+    (CWE-116).
+  * Fixed CI supply-chain: https+sha256 for build helpers, vendor svg11 schema
+    (CWE-494).
+  * Replaced predictable temp file in dwgfilter with mktemp (CWE-377).
+  * Fixed fuzzer overflows in xdata and dwg_decode_add_object.
+  * Fixed double-free in dwgfuzz RW and INDXF modes.  GH #1270.
 
 LibreDWG version 0.13.4 - 2026-03-18 - beta:
 
