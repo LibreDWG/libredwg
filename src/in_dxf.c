@@ -13080,11 +13080,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n", name,
                              "oblique_angle", ang, pair->value.d, "BD", 52);
                 }
-              else if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED
+              else if ((obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED
+                        || obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)
                        && pair->code == 50)
                 {
                   BITCODE_BD ang = deg2rad (pair->value.d);
                   UPGRADE_ENTITY (DIMENSION_ALIGNED, DIMENSION_LINEAR)
+                  UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_LINEAR)
                   dwg_dynapi_entity_set_value (_obj, "DIMENSION_LINEAR",
                                                "dim_rotation", &ang, 1);
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n", name,

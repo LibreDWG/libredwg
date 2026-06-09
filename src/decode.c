@@ -6419,6 +6419,45 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
             free (_objname);
         }
     }
+  // DXF roundtrip may leave VERTEX/SEQEND children of block polylines
+  // with entmode=2 (model space).  Fix them up by scanning backwards
+  // for the POLYLINE/INSERT owner and inheriting its entmode.
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
+        continue;
+      if (obj->tio.entity->entmode != 2)
+        continue;
+      if (obj->fixedtype != DWG_TYPE_VERTEX_2D
+          && obj->fixedtype != DWG_TYPE_VERTEX_3D
+          && obj->fixedtype != DWG_TYPE_VERTEX_MESH
+          && obj->fixedtype != DWG_TYPE_VERTEX_PFACE
+          && obj->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE
+          && obj->fixedtype != DWG_TYPE_SEQEND)
+        continue;
+      // Scan backwards for the POLYLINE/INSERT owner
+      for (BITCODE_BL j = i; j > 0; j--)
+        {
+          Dwg_Object *owner = &dwg->object[j - 1];
+          if (owner->fixedtype == DWG_TYPE_INSERT
+              || owner->fixedtype == DWG_TYPE_MINSERT
+              || owner->fixedtype == DWG_TYPE_POLYLINE_2D
+              || owner->fixedtype == DWG_TYPE_POLYLINE_3D
+              || owner->fixedtype == DWG_TYPE_POLYLINE_PFACE
+              || owner->fixedtype == DWG_TYPE_POLYLINE_MESH)
+            {
+              if (owner->tio.entity->entmode == 3)
+                {
+                  obj->tio.entity->entmode = 3;
+                  LOG_TRACE ("Fixup %s.entmode -> 3 (owner %s)\n", obj->name,
+                             owner->name);
+                  changes++;
+                }
+              break;
+            }
+        }
+    }
   dwg_validate_entity_links (dwg);
   LOG_TRACE ("\n");
   return changes;
