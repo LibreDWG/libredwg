@@ -3794,11 +3794,14 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
 
   if (dat->version < R_13b1 && obj)
     {
-      // Pre-R13: SEQEND/VERTEX are not in _hdr->entities[], iterate by index.
-      // owner->obj may be NULL (not yet resolved), so compare absolute_ref.
+      // Pre-R13: SEQEND/VERTEX are not in _hdr->entities[].
+      // Iterate objects and for each POLYLINE/INSERT directly owned
+      // by this block, also write its trailing VERTEX/SEQEND children
+      // (which share the same ownerhandle and immediately follow in the
+      // object array, as the DXF import places them there).
       Dwg_Data *dwg = hdr->parent;
       BITCODE_RLL hdr_ref = hdr->handle.value;
-      for (int j = obj->index; (BITCODE_BL)j < dwg->num_objects; j++)
+      for (int j = 0; (BITCODE_BL)j < dwg->num_objects; j++)
         {
           Dwg_Object *o = &dwg->object[j];
           Dwg_Object_Ref *ohdl;
@@ -3808,9 +3811,36 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
               || o->fixedtype == DWG_TYPE_ENDBLK)
             continue;
           ohdl = o->tio.entity->ownerhandle;
-          if (!ohdl || !ohdl->absolute_ref || ohdl->absolute_ref != hdr_ref)
-            continue; // not owned by this block
+          if (!ohdl || !ohdl->absolute_ref)
+            continue;
+          if (ohdl->absolute_ref != hdr_ref)
+            continue;
+          // Directly owned by this block (POLYLINE, INSERT, etc.)
           error |= dwg_dxf_object (dat, o, &j);
+          // After a POLYLINE, also write trailing VERTEX/SEQEND that
+          // belong to the same block (their ownerhandle points to this
+          // POLYLINE, found by forward scan).
+          if (o->fixedtype == DWG_TYPE_POLYLINE_2D
+              || o->fixedtype == DWG_TYPE_POLYLINE_3D
+              || o->fixedtype == DWG_TYPE_POLYLINE_MESH
+              || o->fixedtype == DWG_TYPE_POLYLINE_PFACE)
+            {
+              int k = j + 1;
+              while ((BITCODE_BL)k < dwg->num_objects)
+                {
+                  Dwg_Object *child = &dwg->object[k];
+                  if (child->fixedtype != DWG_TYPE_VERTEX_2D
+                      && child->fixedtype != DWG_TYPE_VERTEX_3D
+                      && child->fixedtype != DWG_TYPE_VERTEX_MESH
+                      && child->fixedtype != DWG_TYPE_VERTEX_PFACE
+                      && child->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE
+                      && child->fixedtype != DWG_TYPE_SEQEND)
+                    break;
+                  error |= dwg_dxf_object (dat, child, &k);
+                  j = k; // advance outer index past written children
+                  k++;
+                }
+            }
         }
     }
   else

@@ -3036,6 +3036,61 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     dwg->header.entities_start = dat->byte & 0xFFFFFFFF;
     // LOG_TRACE ("\nentities 0x%x:\n", dwg->header.entities_start);
     dwg->cur_index = 0;
+
+    // Pre-R13 DXF import may leave block vertices with entmode=2
+    // (model space) even though they belong to non-model-space blocks.
+    // Fix up entmode based on the ownership chain so the section
+    // assignment logic can place them correctly.
+    if (dat->version >= R_2_0b && dat->version < R_13b1)
+      {
+        for (BITCODE_BL k = 0; k < dwg->num_objects; k++)
+          {
+            Dwg_Object *ent = &dwg->object[k];
+            Dwg_Object_Ref *owner;
+            Dwg_Object *owner_obj;
+            if (ent->supertype != DWG_SUPERTYPE_ENTITY || !ent->tio.entity)
+              continue;
+            if (ent->tio.entity->entmode != 2)
+              continue;
+            // Follow the owner chain to find the BLOCK_HEADER
+            owner = ent->tio.entity->ownerhandle;
+            if (!owner)
+              continue;
+            owner_obj = dwg_ref_object (dwg, owner);
+            if (!owner_obj || !owner_obj->tio.entity)
+              continue;
+            // If the direct owner is a POLYLINE/VERTEX, follow its owner
+            if (owner_obj->fixedtype == DWG_TYPE_POLYLINE_2D
+                || owner_obj->fixedtype == DWG_TYPE_POLYLINE_3D
+                || owner_obj->fixedtype == DWG_TYPE_POLYLINE_MESH
+                || owner_obj->fixedtype == DWG_TYPE_POLYLINE_PFACE
+                || owner_obj->fixedtype == DWG_TYPE_VERTEX_2D
+                || owner_obj->fixedtype == DWG_TYPE_VERTEX_3D
+                || owner_obj->fixedtype == DWG_TYPE_VERTEX_MESH
+                || owner_obj->fixedtype == DWG_TYPE_VERTEX_PFACE)
+              {
+                if (owner_obj->tio.entity->ownerhandle)
+                  owner_obj = dwg_ref_object (
+                      dwg, owner_obj->tio.entity->ownerhandle);
+              }
+            if (!owner_obj)
+              continue;
+            // Check if the ultimate owner is a non-model-space block
+            if (owner_obj->fixedtype == DWG_TYPE_BLOCK_HEADER
+                && owner_obj->tio.object
+                && owner_obj->tio.object->tio.BLOCK_HEADER)
+              {
+                const char *bname
+                    = owner_obj->tio.object->tio.BLOCK_HEADER->name;
+                if (bname && strcmp (bname, "*MODEL_SPACE") != 0
+                    && strcmp (bname, "*PAPER_SPACE") != 0)
+                  {
+                    ent->tio.entity->entmode = 3;
+                  }
+              }
+          }
+      }
+
     // collect all entities (non-blocks)
     numentities
         = encode_preR13_entities (ENTITIES_SECTION_INDEX, dat, dwg, &error);
@@ -4991,6 +5046,41 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                          dat->byte);
               continue;
             }
+          // DXF roundtrip may leave VERTEX/SEQEND children of block
+          // polylines with entmode=2 (model space).  Scan backwards
+          // for the owner POLYLINE/INSERT (like dxf_postprocess_SEQEND)
+          // to check its entmode and redirect to the blocks section.
+          if (obj->fixedtype == DWG_TYPE_VERTEX_2D
+              || obj->fixedtype == DWG_TYPE_VERTEX_3D
+              || obj->fixedtype == DWG_TYPE_VERTEX_MESH
+              || obj->fixedtype == DWG_TYPE_VERTEX_PFACE
+              || obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE
+              || obj->fixedtype == DWG_TYPE_SEQEND)
+            {
+              Dwg_Object *owner = NULL;
+              for (BITCODE_BL k = obj->index; k > 0; k--)
+                {
+                  Dwg_Object *_o = &dwg->object[k - 1];
+                  if (_o->fixedtype == DWG_TYPE_INSERT
+                      || _o->fixedtype == DWG_TYPE_MINSERT
+                      || _o->fixedtype == DWG_TYPE_POLYLINE_2D
+                      || _o->fixedtype == DWG_TYPE_POLYLINE_3D
+                      || _o->fixedtype == DWG_TYPE_POLYLINE_PFACE
+                      || _o->fixedtype == DWG_TYPE_POLYLINE_MESH)
+                    {
+                      owner = _o;
+                      break;
+                    }
+                }
+              if (owner && owner->tio.entity
+                  && owner->tio.entity->entmode == 3)
+                {
+                  LOG_TRACE ("Skip %s in entities section, owner %s is block "
+                             "entity, number: %d\n",
+                             obj->name, owner->name, obj->index);
+                  continue;
+                }
+            }
           // extras entities come after all block entities,
           // but mspace entities (entmode==2) may follow blocks in DXF
           // roundtrip
@@ -5023,14 +5113,6 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
         }
       else if (dat->version >= R_2_0b && section == BLOCKS_SECTION_INDEX)
         {
-          if (dat->version < R_2_0b)
-            {
-              LOG_TRACE ("Skip entity %s not in block section, number: %d, "
-                         "type: %d, Addr: %zx (0x%zx)\n",
-                         obj->name, obj->index, obj->type, obj->address,
-                         dat->byte);
-              continue;
-            }
           if (obj->fixedtype == DWG_TYPE_BLOCK)
             {
               Dwg_Object *next_endblk
@@ -5115,13 +5197,52 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                     }
                 }
             }
-          if (!in_blocks)
+          if (obj->fixedtype == DWG_TYPE_ENDBLK)
             {
-              LOG_TRACE ("Skip entity %s in block section, number: %d, "
+              LOG_TRACE ("in BLOCK end (ENDBLK), number: %d, "
                          "type: %d, Addr: %zx (0x%zx)\n",
-                         obj->name, obj->index, obj->type, obj->address,
-                         dat->byte);
-              continue;
+                         obj->index, obj->type, obj->address, dat->byte);
+              // in_blocks is still true; ENDBLK is encoded below.
+            }
+          else if (!in_blocks)
+            {
+              // Allow VERTEX/SEQEND whose POLYLINE owner has entmode=3
+              // (redirected from entities section by the owner check).
+              bool owner_is_block_poly = false;
+              if (obj->fixedtype == DWG_TYPE_VERTEX_2D
+                  || obj->fixedtype == DWG_TYPE_VERTEX_3D
+                  || obj->fixedtype == DWG_TYPE_VERTEX_MESH
+                  || obj->fixedtype == DWG_TYPE_VERTEX_PFACE
+                  || obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE
+                  || obj->fixedtype == DWG_TYPE_SEQEND)
+                {
+                  Dwg_Object *owner = NULL;
+                  for (BITCODE_BL k = obj->index; k > 0; k--)
+                    {
+                      Dwg_Object *_o = &dwg->object[k - 1];
+                      if (_o->fixedtype == DWG_TYPE_INSERT
+                          || _o->fixedtype == DWG_TYPE_MINSERT
+                          || _o->fixedtype == DWG_TYPE_POLYLINE_2D
+                          || _o->fixedtype == DWG_TYPE_POLYLINE_3D
+                          || _o->fixedtype == DWG_TYPE_POLYLINE_PFACE
+                          || _o->fixedtype == DWG_TYPE_POLYLINE_MESH)
+                        {
+                          owner = _o;
+                          break;
+                        }
+                    }
+                  if (owner && owner->tio.entity
+                      && owner->tio.entity->entmode == 3)
+                    owner_is_block_poly = true;
+                }
+              if (!owner_is_block_poly)
+                {
+                  LOG_TRACE ("Skip entity %s in block section, number: %d, "
+                             "type: %d, Addr: %zx (0x%zx)\n",
+                             obj->name, obj->index, obj->type, obj->address,
+                             dat->byte);
+                  continue;
+                }
             }
         }
       // extras entities come after all block entities in the object list
@@ -5171,8 +5292,10 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
         if (r11type == DWG_TYPE_UNUSED_r11 || r11type == DWG_TYPE_UNKNOWN_r11)
           r11type = (Dwg_Object_Type_r11)(obj->type
                                           & 0x7F); // fallback, keep as is
-        if (obj->type & 0x80)
-          r11type |= 0x80; // preserve deleted flag
+        if ((obj->type & 0x80) && obj->type != obj->fixedtype)
+          r11type |= 0x80; // preserve deleted flag (only for decoded DWG,
+                           // not for DXF/JSON import where obj->type is
+                           // the modern fixedtype with unrelated bit 7)
         bit_write_RC (dat, (BITCODE_RC)r11type);
         size_pos = dat->byte + 1; // past the flag
         LOG_INFO ("type: %d [RC]\n", (int)r11type);
@@ -5284,14 +5407,38 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                       _ent->opts_r11 |= 512;
                     break;
                   }
+                case DWG_TYPE_VERTEX_2D:
+                case DWG_TYPE_VERTEX_3D:
+                case DWG_TYPE_VERTEX_MESH:
+                case DWG_TYPE_VERTEX_PFACE:
+                case DWG_TYPE_VERTEX_PFACE_FACE:
+                  {
+                    Dwg_Entity_VERTEX_2D *_v = _ent->tio.VERTEX_2D;
+                    if (_v->flag)
+                      _ent->opts_r11 |= 8; // HAS_FLAG
+                    if (!_ent->elevation_r11 && _v->point.z != 0.0)
+                      {
+                        _ent->elevation_r11 = _v->point.z;
+                        _ent->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+                      }
+                    break;
+                  }
                 case DWG_TYPE_POLYLINE_2D:
                 case DWG_TYPE_POLYLINE_3D:
                 case DWG_TYPE_POLYLINE_PFACE:
                 case DWG_TYPE_POLYLINE_MESH:
                   {
                     Dwg_Entity_POLYLINE_2D *_p = _ent->tio.POLYLINE_2D;
+                    // Always write the polyline flag so ODA can determine
+                    // the subtype (2D, 3D, MESH, PFACE).  Without the flag
+                    // field ODA reports "Illegal entity type".
+                    _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_FLAG;
                     if (_p->has_vertex)
                       _ent->flag_r11 |= FLAG_R11_HAS_ATTRIBS;
+                    if (_p->num_m_verts)
+                      _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_M_VERTS;
+                    if (_p->num_n_verts)
+                      _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_N_VERTS;
                     break;
                   }
                 case DWG_TYPE_BLOCK:
@@ -5499,6 +5646,19 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
             }
         }
       }
+
+      // DXF roundtrip may leave block polylines without their VERTEX
+      // children (the vertices land in the entities section instead).
+      // Clear HAS_ATTRIBS so ODA does not expect VERTEX children here
+      // and bail out with "Illegal entity type".
+      if (section == BLOCKS_SECTION_INDEX
+          && (obj->fixedtype == DWG_TYPE_POLYLINE_2D
+              || obj->fixedtype == DWG_TYPE_POLYLINE_3D
+              || obj->fixedtype == DWG_TYPE_POLYLINE_MESH
+              || obj->fixedtype == DWG_TYPE_POLYLINE_PFACE))
+        {
+          obj->tio.entity->flag_r11 &= ~FLAG_R11_HAS_ATTRIBS;
+        }
 
 #define CASE_ENCODE_TYPE(ty)                                                  \
   case DWG_TYPE_##ty:                                                         \
