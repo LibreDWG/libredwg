@@ -40,13 +40,13 @@
 
 // Number of output converters selectable via out: 0 encode, 1 dxf, 2 dxfb, 3 json, 4 geojson
 #ifdef DISABLE_DXF
-#  ifdef DISABLE_JSON
-#    define LLVMFUZZ_NUM_OUTPUTS 1
-#  else
-#    define LLVMFUZZ_NUM_OUTPUTS 3
-#  endif
+#  define LLVMFUZZ_NUM_OUTPUTS 1
 #else
-#  define LLVMFUZZ_NUM_OUTPUTS 5
+#  ifdef DISABLE_JSON
+#    define LLVMFUZZ_NUM_OUTPUTS 3
+#  else
+#    define LLVMFUZZ_NUM_OUTPUTS 5
+#  endif
 #endif
 
 int out;
