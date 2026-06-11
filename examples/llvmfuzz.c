@@ -94,10 +94,13 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
   /* The libfuzzer path otherwise leaves out/ver at 0, so only dwg_encode runs.
      Derive them from the input (without consuming it, so the existing corpus
      keeps decoding) to also drive the out_dxf/out_dxfb/out_json encoders. */
+  out = 0;
+  ver = 0;
   if (size)
     {
       unsigned int h = 2166136261u;
-      for (size_t i = 0; i < size; i++)
+      const size_t n = size > 4096 ? 4096 : size;
+      for (size_t i = 0; i < n; i++)
         h = (h ^ data[i]) * 16777619u;
       out = (int)(h % LLVMFUZZ_NUM_OUTPUTS);
       ver = (int)((h >> 8) % 20);
