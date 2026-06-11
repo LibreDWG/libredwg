@@ -189,10 +189,14 @@ main (int argc, char *argv[])
 #endif
   } mode
       = INVALID;
-  __AFL_INIT ();
-
   if (argc <= 1 || !*argv[1])
     return 1;
+  if (strEQc (argv[1], "--version"))
+    return version ();
+  if (strEQc (argv[1], "--help"))
+    return help ();
+
+  __AFL_INIT ();
   if (strEQc (argv[1], "-dwg"))
     mode = DWG;
 #ifdef USE_WRITE
@@ -221,10 +225,6 @@ main (int argc, char *argv[])
   else if (strEQc (argv[1], "-geojson"))
     mode = GEOJSON;
 #endif
-  else if (strEQc (argv[1], "--version"))
-    return version ();
-  else if (strEQc (argv[1], "--help"))
-    return help ();
   else
     return 1;
   if (mode == INVALID)
