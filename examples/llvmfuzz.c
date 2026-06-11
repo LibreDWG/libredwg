@@ -38,6 +38,17 @@
 #  include "in_dxf.h"
 #endif
 
+// Number of output converters selectable via out: 0 encode, 1 dxf, 2 dxfb, 3 json, 4 geojson
+#ifdef DISABLE_DXF
+#  ifdef DISABLE_JSON
+#    define LLVMFUZZ_NUM_OUTPUTS 1
+#  else
+#    define LLVMFUZZ_NUM_OUTPUTS 3
+#  endif
+#else
+#  define LLVMFUZZ_NUM_OUTPUTS 5
+#endif
+
 int out;
 int ver;
 
@@ -78,6 +89,21 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
   struct ly_ctx *ctx = NULL;
 
   static char tmp_file[256];
+
+#ifndef STANDALONE
+  /* The libfuzzer path otherwise leaves out/ver at 0, so only dwg_encode runs.
+     Derive them from the input (without consuming it, so the existing corpus
+     keeps decoding) to also drive the out_dxf/out_dxfb/out_json encoders. */
+  if (size)
+    {
+      unsigned int h = 2166136261u;
+      for (size_t i = 0; i < size; i++)
+        h = (h ^ data[i]) * 16777619u;
+      out = (int)(h % LLVMFUZZ_NUM_OUTPUTS);
+      ver = (int)((h >> 8) % 20);
+    }
+#endif
+
   dat.chain = (unsigned char *)data;
   dat.size = size;
   memset (&dwg, 0, sizeof (dwg));
@@ -239,16 +265,7 @@ int
 main (int argc, char *argv[])
 {
   unsigned seed;
-  const unsigned int possible_outputformats =
-#  ifdef DISABLE_DXF
-#    ifdef DISABLE_JSON
-      1;
-#    else
-      3;
-#    endif
-#  else
-      5;
-#  endif
+  const unsigned int possible_outputformats = LLVMFUZZ_NUM_OUTPUTS;
 
   if (argc <= 1 || !*argv[1])
     return usage ();
