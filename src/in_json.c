@@ -1696,12 +1696,11 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         size_t len;
                         unsigned char *s
                             = json_binary (dat, tokens, "eed", &len);
-                        // FIXME wrong obj with ubsan
                         if (eed_need_size (dat, obj->eed, i,
                                            (len + 1) & INT_MAX, &have))
                           data = obj->eed[i].data;
-                        memcpy (&data->u.eed_4.data, s, len & 0xFF);
                         data->u.eed_4.length = len & 0xFF;
+                        memcpy (&data->u.eed_4.data, s, len & 0xFF);
                         free (s);
                         break;
                       }
