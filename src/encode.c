@@ -2931,7 +2931,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           // pre-R13b1 must stay 0 (set by dxf_fixup_header or decode)
           _obj->dwg_version = _verp->dwg_version;
       }
-    if (_verp)
+    if (_verp && !_obj->maint_rel_version)
       _obj->maint_rel_version = _verp->maint_rel_version;
     if (!_obj->app_dwg_version)
       _obj->app_dwg_version = _obj->dwg_version;
