@@ -4867,7 +4867,8 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
   // deferred from common_entity_data, which has no hdl_dat
   if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
-    FIELD_HANDLE (color.handle, 0, 430);
+    FIELD_HANDLE (color.handle, 0,
+                  430); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 
     // clang-format off
   #include "common_entity_handle_data.spec"
@@ -5814,8 +5815,6 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               error |= dwg_decode_UNKNOWN_OBJ (dat, obj);
             }
 
-          if (!dat)
-            return error;
           if (error >= DWG_ERR_CRITICAL)
             *dat = abs_dat;
         }

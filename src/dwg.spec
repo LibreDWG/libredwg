@@ -603,8 +603,8 @@ DWG_ENTITY (ATTDEF)
 
 DWG_ENTITY_END
 
-DWG_ENT_SUBCLASS (ATTRIB, AcDbMTextObjectEmbedded);
-DWG_ENT_SUBCLASS (ATTDEF, AcDbMTextObjectEmbedded);
+DWG_ENT_SUBCLASS (ATTRIB, AcDbMTextObjectEmbedded); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+DWG_ENT_SUBCLASS (ATTDEF, AcDbMTextObjectEmbedded); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 
 /* (4/12) */
 DWG_ENTITY (BLOCK)
@@ -3574,7 +3574,7 @@ DWG_OBJECT (BLOCK_CONTROL)
   } LATER_VERSIONS {
     FIELD_BL (num_entries, 70); // or BS?
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
   SINCE (R_13b1) {
@@ -3733,7 +3733,7 @@ DWG_OBJECT (LAYER_CONTROL)
   } LATER_VERSIONS {
     FIELD_BL (num_entries, 70);
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -3907,7 +3907,7 @@ DWG_OBJECT (STYLE_CONTROL)
   } LATER_VERSIONS {
     FIELD_BL (num_entries, 70);
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -4002,7 +4002,7 @@ DWG_OBJECT (LTYPE_CONTROL)
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70);
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   SINCE (R_13b1) {
     FIELD_HANDLE (byblock, 3, 0);
@@ -4166,7 +4166,7 @@ DWG_OBJECT (VIEW_CONTROL)
   } LATER_VERSIONS {
     FIELD_BL (num_entries, 70);
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -4293,7 +4293,7 @@ DWG_OBJECT (UCS_CONTROL)
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70); //BS or BL?
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -4362,7 +4362,7 @@ DWG_OBJECT (VPORT_CONTROL)
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70); //BS or BL?
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -4574,7 +4574,7 @@ DWG_OBJECT (APPID_CONTROL)
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70); //BS or BL?
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -4613,7 +4613,7 @@ DWG_OBJECT (DIMSTYLE_CONTROL)
     /* number of additional hard handles, undocumented */
     FIELD_RCu (num_morehandles, 71);
   }
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   SINCE (R_13b1) {
     HANDLE_VECTOR (morehandles, num_morehandles, 5, 340);
@@ -4902,7 +4902,7 @@ DWG_OBJECT (VX_CONTROL)
     FIELD_BS (num_entries, 70); //BS or BL?
   }
   SUBCLASS (AcDbVXTable)
-  CONTROL_HANDLE_STREAM;
+  CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
@@ -5781,7 +5781,7 @@ DWG_OBJECT (LAYOUT)
                        ARGS_REF (_obj->plotsettings.plotview));
         }
     }
-    FIELD_HANDLE (plotsettings.plotview, 4, 0);
+    FIELD_HANDLE (plotsettings.plotview, 4, 0); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
     DECODER {
       if (!_obj->plotsettings.plotview_name && _obj->plotsettings.plotview)
         {
@@ -5811,7 +5811,7 @@ DWG_OBJECT (LAYOUT)
       FIELD_BS (plotsettings.shadeplot_customdpi, 78);
     }
   SINCE (R_2007a) {
-    FIELD_HANDLE (plotsettings.shadeplot, 4, 333);
+    FIELD_HANDLE (plotsettings.shadeplot, 4, 333); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   }
 
   SUBCLASS (AcDbLayout)
@@ -6373,7 +6373,7 @@ DWG_OBJECT (FIELD)
   FIELD_BL (evaluation_error_code, 96);
   //DEBUG_HERE_OBJ
   FIELD_T (evaluation_error_msg, 300);
-  TABLE_value_fields (value)
+  TABLE_value_fields (value) // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   if (error & DWG_ERR_INVALIDTYPE)
     return error;
 

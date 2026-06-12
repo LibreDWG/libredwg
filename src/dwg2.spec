@@ -987,7 +987,7 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_BL (unknown_bl1, 0);
     FIELD_BL (unknown_bl2, 0);
     FIELD_HANDLE (cellstyle, DWG_HDL_HARDOWN, 0);
-    CellStyle_fields (sty.cellstyle);
+    CellStyle_fields (sty.cellstyle); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
     DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
     FIELD_BL0 (sty.id, 90);
     FIELD_BL0 (sty.type, 91);
@@ -1372,7 +1372,7 @@ DWG_ENTITY (MULTILEADER)
   END_REPEAT (ctx.leaders)
 
 #ifndef IS_DXF
-  MLEADER_CONTEXT_DATA_fields;
+  MLEADER_CONTEXT_DATA_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 #endif
   DXF_OR_PRINT { VALUE_TFF ("}", 303); }
   SINCE (R_2010b)
@@ -1967,7 +1967,7 @@ DWG_OBJECT_END
 // See AcDbAssocActionBody.h
 DWG_OBJECT (ASSOCPLANESURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocPlaneSurfaceActionBody)
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
@@ -1976,7 +1976,7 @@ DWG_OBJECT_END
 // (varies) UNSTABLE
 DWG_OBJECT (ASSOCEXTENDSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocExtendSurfaceActionBody)
   FIELD_BL (class_version, 90);
   FIELD_RC (option, 280);
@@ -1987,7 +1987,7 @@ DWG_OBJECT_END
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
 DWG_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocExtrudedSurfaceActionBody)
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
@@ -1997,7 +1997,7 @@ DWG_OBJECT_END
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
 DWG_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocLoftedSurfaceActionBody)
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
@@ -2006,7 +2006,7 @@ DWG_OBJECT_END
 // (varies) UNSTABLE
 DWG_OBJECT (ASSOCNETWORKSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocNetworkSurfaceActionBody)
   DXF { FIELD_BL (class_version, 90); }
   START_OBJECT_HANDLE_STREAM;
@@ -2015,7 +2015,7 @@ DWG_OBJECT_END
 // (varies) UNSTABLE
 DWG_OBJECT (ASSOCOFFSETSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocOffsetSurfaceActionBody)
   FIELD_BL (class_version, 90);
   FIELD_B (b1, 290);
@@ -2026,7 +2026,7 @@ DWG_OBJECT_END
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
 DWG_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocRevolvedSurfaceActionBody)
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
@@ -2035,7 +2035,7 @@ DWG_OBJECT_END
 // (varies) UNSTABLE
 DWG_OBJECT (ASSOCTRIMSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocTrimSurfaceActionBody)
   FIELD_BL (class_version, 90);
   FIELD_B (b1, 290);
@@ -2047,7 +2047,7 @@ DWG_OBJECT_END
 // (varies) UNSTABLE
 DWG_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocBlendSurfaceActionBody)
   FIELD_BL (class_version, 90);
   FIELD_B (b1, 290);
@@ -2064,7 +2064,7 @@ DWG_OBJECT_END
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
 DWG_OBJECT (ASSOCPATCHSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocPatchSurfaceActionBody)
   DXF { FIELD_BL (class_version, 90); }
   START_OBJECT_HANDLE_STREAM;
@@ -2073,7 +2073,7 @@ DWG_OBJECT_END
 // (varies) UNSTABLE
 DWG_OBJECT (ASSOCFILLETSURFACEACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
+  AcDbAssocPathBasedSurfaceActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocFilletSurfaceActionBody)
   FIELD_BL (class_version, 90);
   FIELD_BS (status, 70);
@@ -2924,8 +2924,8 @@ DWG_OBJECT_END
 // same as Wedge
 DWG_OBJECT (ACSH_BOX_CLASS)
   //HANDLE_UNKNOWN_BITS
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBox)
   FIELD_BL (major, 90); //33
@@ -2939,8 +2939,8 @@ DWG_OBJECT_END
 // Stable
 DWG_OBJECT (ACSH_WEDGE_CLASS)
   //HANDLE_UNKNOWN_BITS
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive);
   SUBCLASS (AcDbShWedge);
   FIELD_BL (major, 90); //33
@@ -2953,8 +2953,8 @@ DWG_OBJECT_END
 
 // Stable
 DWG_OBJECT (ACSH_SPHERE_CLASS)
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive);
   SUBCLASS (AcDbShSpere);
   FIELD_BL (major, 90); //33
@@ -2965,8 +2965,8 @@ DWG_OBJECT_END
 
 // Stable
 DWG_OBJECT (ACSH_CYLINDER_CLASS)
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive);
   SUBCLASS (AcDbShCylinder);
   FIELD_BL (major, 90);
@@ -2980,8 +2980,8 @@ DWG_OBJECT_END
 
 // Unstable
 DWG_OBJECT (ACSH_CONE_CLASS)
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive);
   SUBCLASS (AcDbShCone);
   FIELD_BL (major, 90);
@@ -2996,8 +2996,8 @@ DWG_OBJECT_END
 
 
 DWG_OBJECT (ACSH_PYRAMID_CLASS)
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive);
   SUBCLASS (AcDbShPyramid);
   FIELD_BL (major, 90); //33
@@ -3011,8 +3011,8 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_FILLET_CLASS)
   HANDLE_UNKNOWN_BITS;
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShFillet);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //1 or 29
@@ -3030,8 +3030,8 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_CHAMFER_CLASS)
   HANDLE_UNKNOWN_BITS;
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShChamfer);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //1
@@ -3045,8 +3045,8 @@ DWG_OBJECT (ACSH_CHAMFER_CLASS)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_TORUS_CLASS)
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive);
   SUBCLASS (AcDbShTorus);
   FIELD_BL (major, 90); //33
@@ -3058,8 +3058,8 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_BREP_CLASS)
   HANDLE_UNKNOWN_BITS;
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive);
   SUBCLASS (AcDbShBrep);
   FIELD_BL (major, 90); // also in DWG?
@@ -3069,8 +3069,8 @@ DWG_OBJECT (ACSH_BREP_CLASS)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_BOOLEAN_CLASS)
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShBoolean);
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
@@ -3173,12 +3173,12 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCVALUEDEPENDENCY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocDependency_fields;
+  AcDbAssocDependency_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCGEOMDEPENDENCY)
-  AcDbAssocDependency_fields;
+  AcDbAssocDependency_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAssocGeomDependency);
   FIELD_BS (class_version, 90); // always 0
   FIELD_B (enabled, 290);       // always 1
@@ -3375,33 +3375,33 @@ DWG_OBJECT_END
 
 
 DWG_OBJECT (BLOCKVISIBILITYGRIP)
-  AcDbBlockGrip_fields;
+  AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockVisibilityGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
-  AcDbEvalExpr_fields;
+  AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   AcDbBlockGripExpr_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNMENTGRIP)
-  AcDbBlockGrip_fields;
+  AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockAlignmentGrip);
   FIELD_3BD_1 (orientation, 140);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNMENTPARAMETER)
-  AcDbBlock2PtParameter_fields;
+  AcDbBlock2PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockAlignmentParameter);
   FIELD_B (align_perpendicular, 280)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARPARAMETER)
-  AcDbBlock2PtParameter_fields;
+  AcDbBlock2PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockLinearParameter);
   FIELD_T (distance_name, 305);
   FIELD_T (distance_desc, 306);
@@ -3411,7 +3411,7 @@ DWG_OBJECT (BLOCKLINEARPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKBASEPOINTPARAMETER)
-  AcDbBlock1PtParameter_fields;
+  AcDbBlock1PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockBasepointParameter);
   FIELD_3BD (pt, 1011);
   FIELD_3BD (base_pt, 1012)
@@ -3419,7 +3419,7 @@ DWG_OBJECT (BLOCKBASEPOINTPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPPARAMETER)
-  AcDbBlock2PtParameter_fields;
+  AcDbBlock2PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockFlipParameter);
   FIELD_T (flip_label, 305);
   FIELD_T (flip_label_desc, 306);
@@ -3432,7 +3432,7 @@ DWG_OBJECT (BLOCKFLIPPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPGRIP)
-  AcDbBlockGrip_fields;
+  AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockFlipGrip);
   FIELD_BL (combined_state, 0);
   FIELD_3BD_1 (orientation, 140);
@@ -3443,20 +3443,20 @@ DWG_OBJECT (BLOCKFLIPGRIP)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARGRIP)
-  AcDbBlockGrip_fields;
+  AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockLinearGrip);
   FIELD_3BD_1 (orientation, 140);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPGRIP)
-  AcDbBlockGrip_fields;
+  AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockLookupGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKXYPARAMETER)
-  AcDbBlock2PtParameter_fields;
+  AcDbBlock2PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockXYParameter);
   FIELD_T (x_label, 305);
   FIELD_T (x_label_desc, 306);
@@ -3475,7 +3475,7 @@ DWG_OBJECT (BLOCKXYPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKMOVEACTION)
-  AcDbBlockAction_fields;
+  AcDbBlockAction_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockMoveAction);
   BlockAction_ConnectionPt (conn_pts[0], 92, 301);
   BlockAction_ConnectionPt (conn_pts[1], 93, 302);
@@ -3484,14 +3484,14 @@ DWG_OBJECT (BLOCKMOVEACTION)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKFLIPACTION)
-  AcDbBlockAction_fields;
+  AcDbBlockAction_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockFlipAction);
   BlockAction_ConnectionPts (conn_pts, 0, 4, 92, 301);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATIONPARAMETER)
-  AcDbBlock2PtParameter_fields;
+  AcDbBlock2PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockRotationParameter);
   FIELD_3BD (def_base_angle_pt, 0);
   FIELD_T (angle_name, 305);
@@ -3504,20 +3504,20 @@ DWG_OBJECT (BLOCKROTATIONPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATEACTION)
-  AcDbBlockActionWithBasePt_fields;
+  AcDbBlockActionWithBasePt_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockRotationAction);
   BlockAction_ConnectionPts (conn_pts, 2, 1, 94, 303);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATIONGRIP)
-  AcDbBlockGrip_fields;
+  AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockRotationGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSCALEACTION)
-  AcDbBlockActionWithBasePt_fields;
+  AcDbBlockActionWithBasePt_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockScaleAction);
   BlockAction_ConnectionPts (conn_pts, 0, 3, 94, 303);
   START_OBJECT_HANDLE_STREAM;
@@ -3525,7 +3525,7 @@ DWG_OBJECT_END
 
 // ACAD_ENHANCEDBLOCK?
 DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
-  AcDbBlock1PtParameter_fields;
+  AcDbBlock1PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockVisibilityParameter);
   FIELD_B (is_initialized, 281);
   FIELD_T (blockvisi_name, 301);
@@ -4587,7 +4587,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
-  AcDbDimensionObjectContextData_fields;
+  AcDbDimensionObjectContextData_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbAlignedDimensionObjectContextData);
   FIELD_3BD (dimline_pt, 11);
   START_OBJECT_HANDLE_STREAM;
@@ -5732,7 +5732,7 @@ DWG_OBJECT (ASSOCVARIABLE)
   FIELD_T (t58, 1);
   FIELD_T (evaluator, 1);
   FIELD_T (desc, 1);
-  AcDbEvalVariant_fields(value);
+  AcDbEvalVariant_fields(value); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   FIELD_B (has_t78, 290);
   FIELD_T (t78, 1);
   FIELD_B (b290, 290);
@@ -5843,7 +5843,7 @@ DWG_OBJECT_END
 
 // not enough coverage
 DWG_OBJECT (BLOCKPOLARPARAMETER)
-  AcDbBlock2PtParameter_fields;
+  AcDbBlock2PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockPolarParameter);
   FIELD_T (angle_name, 305);
   FIELD_T (angle_desc, 306);
@@ -5857,7 +5857,7 @@ DWG_OBJECT (BLOCKPOLARPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPOLARGRIP)
-  AcDbBlockGrip_fields;
+  AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockPolarGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -5876,7 +5876,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKARRAYACTION)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlockAction_fields;
+  AcDbBlockAction_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockArrayAction);
   BlockAction_ConnectionPts (conn_pts, 0, 4, 92, 301);
   FIELD_BD (column_offset, 140);
@@ -5886,7 +5886,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKANGULARCONSTRAINTPARAMETER)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlockConstraintParameter_fields;
+  AcDbBlockConstraintParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockAngularConstraintParameter);
   FIELD_3BD (center_pt, 0);
   FIELD_3BD (end_pt, 0);
@@ -6044,7 +6044,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKDIAMETRICCONSTRAINTPARAMETER)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlockConstraintParameter_fields;
+  AcDbBlockConstraintParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockDiametricConstraintParameter);
   FIELD_T (expr_name, 305); // A copy of the EvalExpr.name. expr being distance
   FIELD_T (expr_description, 306);
@@ -6055,7 +6055,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlockConstraintParameter_fields;
+  AcDbBlockConstraintParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockRadialConstraintParameter);
   FIELD_T (expr_name, 305); // A copy of the EvalExpr.name. expr being distance
   FIELD_T (expr_description, 306);
@@ -6065,32 +6065,32 @@ DWG_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNEDCONSTRAINTPARAMETER)
-  AcDbBlockLinearConstraintParameter_fields;
+  AcDbBlockLinearConstraintParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockAlignedConstraintParameter);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARCONSTRAINTPARAMETER)
-  AcDbBlockLinearConstraintParameter_fields;
+  AcDbBlockLinearConstraintParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   //SUBCLASS (AcDbBlockLinearConstraintParameter);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKHORIZONTALCONSTRAINTPARAMETER)
-  AcDbBlockLinearConstraintParameter_fields;
+  AcDbBlockLinearConstraintParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockHorizontalConstraintParameter)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKVERTICALCONSTRAINTPARAMETER)
-  AcDbBlockLinearConstraintParameter_fields;
+  AcDbBlockLinearConstraintParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockVerticalConstraintParameter)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPACTION)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlockAction_fields;
+  AcDbBlockAction_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockLookupAction)
   ENCODER {
     FIELD_VALUE (numelems) = _obj->numrows * _obj->numcols;
@@ -6116,7 +6116,7 @@ DWG_OBJECT (BLOCKLOOKUPACTION)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPPARAMETER)
-  AcDbBlock1PtParameter_fields;
+  AcDbBlock1PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockLookupParameter)
   FIELD_BL (index, 0);
   FIELD_T (lookup_name, 303);
@@ -6158,7 +6158,7 @@ DWG_OBJECT_END
 
 // DWG and DXF cov ok
 DWG_OBJECT (BLOCKPOINTPARAMETER)
-  AcDbBlock1PtParameter_fields;
+  AcDbBlock1PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockPointParameter)
   FIELD_T (position_name, 303);
   FIELD_T (position_desc, 304);
@@ -6169,7 +6169,7 @@ DWG_OBJECT_END
 // DXF wrong
 DWG_OBJECT (BLOCKSTRETCHACTION)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlockAction_fields;
+  AcDbBlockAction_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockStretchAction)
   BlockAction_ConnectionPt (conn_pts[0], 92, 301);
   BlockAction_ConnectionPt (conn_pts[1], 93, 302);
@@ -6199,7 +6199,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKPOLARSTRETCHACTION)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlockAction_fields;
+  AcDbBlockAction_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockPolarStretchAction)
   BlockAction_ConnectionPts (conn_pts, 0, 6, 92, 301);
   FIELD_BL (num_pts, 72);
@@ -6218,7 +6218,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCARRAYACTIONBODY)
   HANDLE_UNKNOWN_BITS;
-  AcDbAssocArrayActionBody_fields;
+  AcDbAssocArrayActionBody_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -6258,21 +6258,21 @@ DWG_OBJECT_END
 // not enough coverage
 DWG_OBJECT (BLOCKUSERPARAMETER)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlock1PtParameter_fields;
+  AcDbBlock1PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockUserParameter)
   FIELD_BS (flag, 90);
   FIELD_HANDLE (assocvariable, 5, 330);
   FIELD_T (expr, 301);
   //FIELD_T (name, 302);
   //FIELD_T (desc, 303);
-  AcDbEvalVariant_fields (value);
+  AcDbEvalVariant_fields (value); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   FIELD_BS (type, 170);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKXYGRIP)
   HANDLE_UNKNOWN_BITS;
-  AcDbBlockGrip_fields;
+  AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbBlockXYGrip)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

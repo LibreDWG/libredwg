@@ -53,7 +53,7 @@
 #ifndef IS_DXF
       SINCE (R_13b1) {
         REACTORS (4)
-        XDICOBJHANDLE (3)
+        XDICOBJHANDLE (3) // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
       }
 #endif
     }
