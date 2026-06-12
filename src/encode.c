@@ -1455,12 +1455,28 @@ section_move_before (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
                      Dwg_Section_Type_r13 id, Dwg_Section_Type_r13 before)
 {
   int ret = 0;
-  unsigned b;
+  unsigned b, i;
   LOG_TRACE ("section_move_before %u %u\n", (unsigned)id, (unsigned)before);
   b = section_find (psection_order, *pnum, before);
   // find before
   if (b >= SECTION_R13_SIZE) // not found
     return 0;
+  i = section_find (psection_order, *pnum, id);
+  if (i < SECTION_R13_SIZE && i < *pnum)
+    {
+      // id is already counted: remove it in-place, then re-insert before b,
+      // without growing *pnum
+      memmove (&psection_order[i], &psection_order[i + 1],
+               (*pnum - 1 - i) * sizeof (Dwg_Section_Type_r13));
+      if (i < b)
+        b--; // removing an earlier element shifts b left by one
+      memmove (&psection_order[b + 1], &psection_order[b],
+               (*pnum - 1 - b) * sizeof (Dwg_Section_Type_r13));
+      psection_order[b] = id;
+      LOG_TRACE ("section_move_before %u %u (re-order)\n", (unsigned)id,
+                 (unsigned)before);
+      return 0;
+    }
   assert (*pnum + 1 <= SECTION_R13_SIZE);
   memmove (&psection_order[b + 1], &psection_order[b],
            (*pnum - b) * sizeof (Dwg_Section_Type_r13));
