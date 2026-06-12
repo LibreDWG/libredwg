@@ -3609,8 +3609,8 @@ dwg_sections_init (Dwg_Data *dwg)
        * section, but treated as one)
        */
       if (!dwg->header.num_sections
-          || (dwg->header.from_version > R_2000
-              && dwg->header.version <= R_2000))
+          || ((dwg->header.from_version > R_2000)
+              != (dwg->header.version > R_2000)))
         {
           dwg->header.num_sections = dwg->header.version < R_13c3    ? 3
                                      : dwg->header.version < R_2000b ? 5
@@ -3619,8 +3619,8 @@ dwg_sections_init (Dwg_Data *dwg)
             dwg->header.num_sections = 5;
         }
       if (!dwg->header.sections
-          || (dwg->header.from_version > R_2000
-              && dwg->header.version <= R_2000))
+          || ((dwg->header.from_version > R_2000)
+              != (dwg->header.version > R_2000)))
         // ODA writes zeros
         dwg->header.sections = dwg->header.num_sections;
       // newer DWG's have proper HEADER.sections
