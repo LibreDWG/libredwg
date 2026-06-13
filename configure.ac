@@ -535,11 +535,15 @@ AS_IF([test x$enable_docs = xno],
 dnl --enable-check-less
 AC_MSG_CHECKING([for --enable-check-less])
 AC_ARG_ENABLE([check-less],AS_HELP_STRING([--enable-check-less],[
-    Enable check less unit-tests (default: no).  When enabled (e.g. in mingw),
-    the unit-tests include only the minimal API tests.]),
+    Enable check less unit-tests (default: no, except under OSS-Fuzz/CIFuzz).
+    When enabled (e.g. in mingw or OSS-Fuzz), the unit-tests include only the
+    minimal API tests.]),
   [check_less=yes
   AC_MSG_RESULT([yes])],
-  AC_MSG_RESULT([no (default)]))
+  [AS_IF([test "x$CIFUZZ" != x || test "x$OSS_FUZZ_PROJECT_NAME" != x],
+    [check_less=yes
+     AC_MSG_RESULT([yes (CIFuzz/OSS-Fuzz detected)])],
+    [AC_MSG_RESULT([no (default)])])])
 AM_CONDITIONAL([CHECK_LESS], [test x$check_less = xyes])
 
 
