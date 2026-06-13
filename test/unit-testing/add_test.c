@@ -1138,6 +1138,46 @@ test_names (void)
   return numfailed ();
 }
 
+// smoke/rel* branches bump VERSION ahead of the next release tag, so the
+// configure-time PACKAGE_VERSION (derived from `git describe`) still refers
+// to the previous tag until the branch itself is tagged. Detect this so we
+// can skip the major/minor vs tag consistency checks below.
+static int
+on_smoke_rel_branch (void)
+{
+  static const char prefix[] = "smoke/rel";
+  const char *branch = getenv ("GITHUB_REF_NAME");
+  if (!branch)
+    branch = getenv ("GITHUB_HEAD_REF");
+  if (!branch)
+    branch = getenv ("CI_COMMIT_REF_NAME");
+  if (!branch)
+    branch = getenv ("CI_COMMIT_BRANCH");
+  if (branch)
+    return !strncmp (branch, prefix, sizeof (prefix) - 1);
+
+  {
+#ifdef _WIN32
+    FILE *fp = _popen ("git rev-parse --abbrev-ref HEAD 2>/dev/null", "r");
+#else
+    FILE *fp = popen ("git rev-parse --abbrev-ref HEAD 2>/dev/null", "r");
+#endif
+    char buf[128];
+    int found = 0;
+    if (fp)
+      {
+        if (fgets (buf, sizeof (buf), fp))
+          found = !strncmp (buf, prefix, sizeof (prefix) - 1);
+#ifdef _WIN32
+        _pclose (fp);
+#else
+        pclose (fp);
+#endif
+      }
+    return found;
+  }
+}
+
 static int
 test_api_version (void)
 {
@@ -1156,16 +1196,22 @@ test_api_version (void)
   if (d0) // or git hash only. no tags fetched
     {
       assert (d0);
-      d1 = strchr (&d0[1], '.');
-      assert (d1);
-      // d2 = strchr (&d1[1], '.');
+      // FIXME: detected "0.14" (single dot only) and skip this test then
+      // d1 = strchr (&d0[1], '.');
+      // assert (d1);
 
       // assert (strEQc(dwg_api_so_version (), "0:14:0")); //
       // LIBREDWG_SO_VERSION check that major and minor match the tag
       i0 = atoi (version);
       i1 = atoi (&d0[1]);
-      assert (major == i0);
-      assert (minor == i1);
+      if ((major != i0 || minor != i1) && on_smoke_rel_branch ())
+        todo ("smoke/rel branch: VERSION %d.%d bumped ahead of tag %ld.%ld",
+              major, minor, i0, i1);
+      else
+        {
+          assert (major == i0);
+          assert (minor == i1);
+        }
     }
   else
     {
