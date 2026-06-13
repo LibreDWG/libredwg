@@ -11154,28 +11154,39 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 LOG_WARN ("Unhandled LAYOUT.1 in subclass %s", subclass);
               goto next_pair;
             }
-          else if (pair->code == 3 && obj->fixedtype == DWG_TYPE_MTEXT)
+          else if ((pair->code == 3 || pair->code == 1)
+                   && obj->fixedtype == DWG_TYPE_MTEXT)
             {
+              // MTEXT text > 250 chars is split into 250-char chunks: the
+              // leading chunks use code 3 and the final (< 250) chunk uses
+              // code 1. Concatenate them in order (a short MTEXT has only the
+              // code 1). The previous code overwrote instead of appending, so
+              // only the last chunk survived.
               Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
               size_t len = strlen (pair->value.s.ptr);
               if (!o->text)
                 {
                   o->text = strdup (pair->value.s.ptr);
                   written = len;
-                  LOG_TRACE ("MTEXT.text = %s (%" PRIuSIZE ") [TV 3]\n",
-                             pair->value.s.ptr, len);
+                  LOG_TRACE ("MTEXT.text = %s (%" PRIuSIZE ") [TV %d]\n",
+                             pair->value.s.ptr, len, pair->code);
                 }
               else
                 {
-                  assert (o->text);
-                  if (strlen (o->text) < len)
-                    o->text = (char *)realloc (o->text, len + 1);
-                  strcpy (o->text, pair->value.s.ptr);
-                  written += len;
-                  LOG_TRACE ("MTEXT.text += %" PRIuSIZE "/%" PRIuSIZE
-                             " [TV 3]\n",
-                             len, written);
+                  size_t oldlen = strlen (o->text);
+                  char *newtext
+                      = (char *)realloc (o->text, oldlen + len + 1);
+                  if (newtext)
+                    {
+                      o->text = newtext;
+                      memcpy (o->text + oldlen, pair->value.s.ptr, len + 1);
+                      written = oldlen + len;
+                    }
+                  LOG_TRACE ("MTEXT.text += %" PRIuSIZE " => %" PRIuSIZE
+                             " [TV %d]\n",
+                             len, written, pair->code);
                 }
+              goto next_pair;
             }
           /*
           else if (pair->code == 2 && obj->fixedtype == DWG_TYPE_LAYOUT)
