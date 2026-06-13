@@ -1999,12 +1999,27 @@ encode_r13_thumbnail (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         LOG_TRACE ("Thumbnail size: 5 [RL]\n");
         bit_write_RC (dat, 0); // num_pictures
         LOG_TRACE ("Thumbnail num_pictures: 0 [RC]\n");
+        write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_END);
       }
     else
       {
-        bit_write_TF (dat, dwg->thumbnail.chain, dwg->thumbnail.size);
+        // thumbnail.byte is the offset to the image data: 0 for r13-r2000
+        // (chain points past the BEGIN sentinel) and 16 for r2004+ (chain is
+        // the section base, kept as the freeable pointer). We emit our own
+        // BEGIN sentinel above, so write only the size bytes of content.
+        bit_write_TF (dat, dwg->thumbnail.chain + dwg->thumbnail.byte,
+                      dwg->thumbnail.size);
+        // For r2004+ the decoder keeps the trailing END sentinel inside
+        // thumbnail.size (decode.c: size = sec_dat.size - 16, byte = 16; the
+        // JSON writer likewise retains it), so it was just emitted as part of
+        // the content above. Adding a second one would grow the Preview
+        // section by 16 bytes on every round-trip. For r13-r2000 the END
+        // sentinel is separate from thumbnail.size, so it must be written.
+        PRE (R_2004a)
+        {
+          write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_END);
+        }
       }
-    write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_END);
     {
       BITCODE_RL bmpsize;
       BITCODE_RC type;
@@ -6428,15 +6443,18 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_PROXY_OBJECT (dat, obj);
       break;
     case DWG_TYPE_UNKNOWN_ENT:
-      if ((dwg->opts & DWG_OPTS_INJSON)
-          && dwg->header.version == dwg->header.from_version)
+      // We can re-emit the raw class blob verbatim whenever we still hold it
+      // (decoded from DWG or imported from JSON) and the target version equals
+      // the source version, so the bit layout is unchanged.
+      if (dwg->header.version == dwg->header.from_version && obj->unknown_bits
+          && obj->num_unknown_bits)
         error = dwg_encode_raw_UNKNOWN_ENT (dat, obj);
       else
         error = DWG_ERR_UNHANDLEDCLASS;
       break;
     case DWG_TYPE_UNKNOWN_OBJ:
-      if ((dwg->opts & DWG_OPTS_INJSON)
-          && dwg->header.version == dwg->header.from_version)
+      if (dwg->header.version == dwg->header.from_version && obj->unknown_bits
+          && obj->num_unknown_bits)
         error = dwg_encode_raw_UNKNOWN_OBJ (dat, obj);
       else
         error = DWG_ERR_UNHANDLEDCLASS;
