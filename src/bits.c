@@ -2218,6 +2218,17 @@ ishex (int c)
           || (c >= 'A' && c <= 'F'));
 }
 
+// c must be ishex()
+static unsigned
+hexval (int c)
+{
+  if (c >= '0' && c <= '9')
+    return (unsigned)(c - '0');
+  if (c >= 'a' && c <= 'f')
+    return (unsigned)(c - 'a' + 10);
+  return (unsigned)(c - 'A' + 10);
+}
+
 /** Write ASCII or Unicode text.
  */
 void
@@ -2282,25 +2293,95 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
               const char *endp = s + len;
               BITCODE_TU ws = (BITCODE_TU)malloc ((len + 1) * 2);
               const BITCODE_TU orig = ws;
+              // DXF in-memory strings are UTF-8 (in_dxf keeps them as read);
+              // decode multi-byte sequences to UTF-16 so non-ASCII is not
+              // double-encoded by a bare byte copy. Other producers of TV here
+              // (JSON, add API, old-DWG up-convert) already hold codepage
+              // bytes with non-representable chars as \U+xxxx escapes, so they
+              // keep the byte-wise path. Both honour the inline \U+xxxx
+              // escape.
+              const bool is_utf8 = (dat->opts & DWG_OPTS_INDXF) != 0;
               while (s < endp)
                 {
-                  uint16_t c = *s++;
-                  // in this case the resulting len is shorter
-                  if (c == '\\' && s[0] == 'U' && s[1] == '+' && ishex (s[2])
-                      && ishex (s[3]) && ishex (s[4]) && ishex (s[5]))
+                  unsigned char c = (unsigned char)*s;
+                  // \U+xxxx escape: shorter result
+                  if (c == '\\' && s + 6 < endp && s[1] == 'U' && s[2] == '+'
+                      && ishex (s[3]) && ishex (s[4]) && ishex (s[5])
+                      && ishex (s[6]))
                     {
-                      unsigned x;
-                      if (sscanf (&s[2], "%04X", &x) > 0)
+                      *ws++
+                          = (uint16_t)((hexval (s[3]) << 12)
+                                       | (hexval (s[4]) << 8)
+                                       | (hexval (s[5]) << 4) | hexval (s[6]));
+                      s += 7;
+                      continue;
+                    }
+                  if (!is_utf8 || c < 0x80)
+                    {
+                      *ws++ = c;
+                      s++;
+                    }
+                  else if ((c & 0xe0) == 0xc0 && s + 1 < endp
+                           && (s[1] & 0xc0) == 0x80)
+                    {
+                      uint32_t cp = ((uint32_t)(c & 0x1f) << 6)
+                                    | (uint32_t)(s[1] & 0x3f);
+                      if (cp >= 0x80) // reject overlong encoding
                         {
-                          // fprintf (stderr, "* sscanf: 0x%04X\n", x);
-                          *ws++ = x;
-                          s += 6;
+                          *ws++ = (uint16_t)cp;
+                          s += 2;
                         }
                       else
-                        *ws++ = c;
+                        {
+                          *ws++ = c;
+                          s++;
+                        }
                     }
-                  else
-                    *ws++ = c;
+                  else if ((c & 0xf0) == 0xe0 && s + 2 < endp
+                           && (s[1] & 0xc0) == 0x80 && (s[2] & 0xc0) == 0x80)
+                    {
+                      uint32_t cp = ((uint32_t)(c & 0x0f) << 12)
+                                    | ((uint32_t)(s[1] & 0x3f) << 6)
+                                    | (uint32_t)(s[2] & 0x3f);
+                      // reject overlong encodings and UTF-16 surrogates
+                      if (cp >= 0x800 && (cp < 0xD800 || cp > 0xDFFF))
+                        {
+                          *ws++ = (uint16_t)cp;
+                          s += 3;
+                        }
+                      else
+                        {
+                          *ws++ = c;
+                          s++;
+                        }
+                    }
+                  else if ((c & 0xf8) == 0xf0 && s + 3 < endp
+                           && (s[1] & 0xc0) == 0x80 && (s[2] & 0xc0) == 0x80
+                           && (s[3] & 0xc0) == 0x80)
+                    {
+                      // 4-byte UTF-8 -> UTF-16 surrogate pair
+                      uint32_t cp = ((uint32_t)(c & 0x07) << 18)
+                                    | ((uint32_t)(s[1] & 0x3f) << 12)
+                                    | ((uint32_t)(s[2] & 0x3f) << 6)
+                                    | (uint32_t)(s[3] & 0x3f);
+                      if (cp >= 0x10000 && cp <= 0x10FFFF)
+                        {
+                          cp -= 0x10000;
+                          *ws++ = (uint16_t)(0xD800 + (cp >> 10));
+                          *ws++ = (uint16_t)(0xDC00 + (cp & 0x3FF));
+                          s += 4;
+                        }
+                      else
+                        {
+                          *ws++ = c;
+                          s++;
+                        }
+                    }
+                  else // invalid byte: pass through
+                    {
+                      *ws++ = c;
+                      s++;
+                    }
                 }
               *ws = 0;
               // bit_write_TU (dat, orig);
@@ -4479,10 +4560,25 @@ in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
   char *pos = (char *)src;
   for (size_t i = 0; i < destlen; i++)
     {
-      if (sscanf (pos, SCANF_2X, &dest[i]))
-        pos += 2;
-      else
-        return i;
+      // Safe alternative to sscanf (pos, "%2hhX", &dest[i]) (CWE-120): decode
+      // exactly two hex nibbles by hand, no format string.
+      unsigned char b = 0;
+      for (int n = 0; n < 2; n++)
+        {
+          const char ch = pos[n];
+          int d;
+          if (ch >= '0' && ch <= '9')
+            d = ch - '0';
+          else if (ch >= 'A' && ch <= 'F')
+            d = ch - 'A' + 10;
+          else if (ch >= 'a' && ch <= 'f')
+            d = ch - 'a' + 10;
+          else
+            return i;
+          b = (unsigned char)((b << 4) | d);
+        }
+      dest[i] = b;
+      pos += 2;
     }
   return destlen;
 #else
