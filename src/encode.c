@@ -1793,7 +1793,10 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   FIELD_RS (R11_HANDLING, 0);
   {
     // always use the header_vars.HANDSEED
-    _obj->HANDSEED = dwg->header_vars.HANDSEED->handleref.value & 0xFFFFFFFF;
+    if (dwg->header_vars.HANDSEED)
+      _obj->HANDSEED = dwg->header_vars.HANDSEED->handleref.value & 0xFFFFFFFF;
+    else
+      _obj->HANDSEED = 0;
     bit_write_RL_BE (dat, _obj->HANDSEED);
     LOG_TRACE ("HANDSEED: " FORMAT_RLx "\n", _obj->HANDSEED);
   }
@@ -5427,7 +5430,6 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                 case DWG_TYPE_VERTEX_3D:
                 case DWG_TYPE_VERTEX_MESH:
                 case DWG_TYPE_VERTEX_PFACE:
-                case DWG_TYPE_VERTEX_PFACE_FACE:
                   {
                     Dwg_Entity_VERTEX_2D *_v = _ent->tio.VERTEX_2D;
                     if (_v->flag)
@@ -5437,6 +5439,14 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                         _ent->elevation_r11 = _v->point.z;
                         _ent->flag_r11 |= FLAG_R11_HAS_ELEVATION;
                       }
+                    break;
+                  }
+                case DWG_TYPE_VERTEX_PFACE_FACE:
+                  {
+                    Dwg_Entity_VERTEX_PFACE_FACE *_vf
+                        = _ent->tio.VERTEX_PFACE_FACE;
+                    if (_vf->flag)
+                      _ent->opts_r11 |= 8; // HAS_FLAG
                     break;
                   }
                 case DWG_TYPE_POLYLINE_2D:
@@ -5451,10 +5461,35 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                     _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_FLAG;
                     if (_p->has_vertex)
                       _ent->flag_r11 |= FLAG_R11_HAS_ATTRIBS;
-                    if (_p->num_m_verts)
-                      _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_M_VERTS;
-                    if (_p->num_n_verts)
-                      _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_N_VERTS;
+                    // num_m_verts/num_n_verts live at different offsets
+                    // depending on the entity type (and PFACE calls them
+                    // numverts/numfaces).  3D has neither.
+                    if (obj->fixedtype == DWG_TYPE_POLYLINE_PFACE)
+                      {
+                        Dwg_Entity_POLYLINE_PFACE *_pf
+                            = _ent->tio.POLYLINE_PFACE;
+                        if (_pf->numverts)
+                          _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_M_VERTS;
+                        if (_pf->numfaces)
+                          _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_N_VERTS;
+                      }
+                    else if (obj->fixedtype == DWG_TYPE_POLYLINE_MESH)
+                      {
+                        Dwg_Entity_POLYLINE_MESH *_pm
+                            = _ent->tio.POLYLINE_MESH;
+                        if (_pm->num_m_verts)
+                          _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_M_VERTS;
+                        if (_pm->num_n_verts)
+                          _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_N_VERTS;
+                      }
+                    else if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
+                      {
+                        if (_p->num_m_verts)
+                          _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_M_VERTS;
+                        if (_p->num_n_verts)
+                          _ent->opts_r11 |= OPTS_R11_POLYLINE_HAS_N_VERTS;
+                      }
+                    // POLYLINE_3D: no m/n verts
                     break;
                   }
                 case DWG_TYPE_BLOCK:

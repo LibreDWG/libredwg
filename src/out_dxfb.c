@@ -1065,7 +1065,9 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
         {                                                                     \
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
           LOG_TRACE ("ownerhandle: " FORMAT_HV " [330]\n",                    \
-                     obj->tio.object->ownerhandle->absolute_ref);             \
+                     obj->tio.object->ownerhandle                             \
+                        ? obj->tio.object->ownerhandle->absolute_ref          \
+                        : 0UL);                                              \
         }                                                                     \
       }                                                                       \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
@@ -2288,16 +2290,15 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     if (!mspace)
       return DWG_ERR_INVALIDDWG;
     RECORD (BLOCK_RECORD);
-    error |= dwg_dxfb_BLOCK_HEADER (dat, mspace);
-
+    if (mspace->tio.object && mspace->tio.object->tio.BLOCK_HEADER)
+      error |= dwg_dxfb_BLOCK_HEADER (dat, mspace);
     ref = dwg_paper_space_ref (dwg);
     pspace = ref ? dwg_ref_object (dwg, ref) : NULL;
-    if (pspace)
+    if (pspace && pspace->tio.object && pspace->tio.object->tio.BLOCK_HEADER)
       {
         RECORD (BLOCK_RECORD);
         error |= dwg_dxfb_BLOCK_HEADER (dat, pspace);
       }
-
     for (i = 0; i < _ctrl->num_entries; i++)
       {
         if (!_ctrl->entries)
@@ -2305,7 +2306,8 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         if (!_ctrl->entries[i])
           continue;
         obj = dwg_ref_object (dwg, _ctrl->entries[i]);
-        if (obj && obj->type == DWG_TYPE_BLOCK_HEADER && obj != mspace
+        if (obj && obj->type == DWG_TYPE_BLOCK_HEADER && obj->tio.object
+            && obj->tio.object->tio.BLOCK_HEADER && obj != mspace
             && obj != pspace)
           {
             RECORD (BLOCK_RECORD);
