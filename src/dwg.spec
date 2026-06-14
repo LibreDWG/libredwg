@@ -3385,13 +3385,11 @@ DWG_ENTITY (MTEXT)
         }
         FIELD_BD (rect_width, 40);
         FIELD_BD (rect_height, 41);
-        DXF {
-          FIELD_BD (extents_width, 42);
-          FIELD_BD (extents_height, 43);
-        } else {
-          FIELD_BD (extents_height, 43);
-          FIELD_BD (extents_width, 42);
-        }
+        // GH #1278: the R2018 embedded MTEXT stores the extents width-first
+        // (1st double = width), same as DXF. (Earlier the binary was read
+        // height-first here, swapping width<->height for wide-and-short text.)
+        FIELD_BD (extents_width, 42);
+        FIELD_BD (extents_height, 43);
         // end redundant fields
 
         FIELD_BS (column_type, 71);
