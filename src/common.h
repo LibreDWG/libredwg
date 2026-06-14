@@ -622,8 +622,12 @@ void *my_memmem (const void *h0, size_t k, const void *n0, size_t l)
 /* HAVE_MEMMEM and _GNU_SOURCE are unreliable on non-Linux systems.
    This fails on FreeBSD and macos.
    Rather declare it by ourselves, and don't use _GNU_SOURCE. */
+/* macOS already declares memmem() in <string.h>; redeclaring it trips
+   -Werror=redundant-decls. */
+#  if !defined(__APPLE__)
 void *memmem (const void *h0, size_t k, const void *n0, size_t l)
     __nonnull ((1, 3));
+#  endif
 #endif
 
 // push to handle vector at the end. It really is unshift.
