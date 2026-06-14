@@ -2282,25 +2282,63 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
               const char *endp = s + len;
               BITCODE_TU ws = (BITCODE_TU)malloc ((len + 1) * 2);
               const BITCODE_TU orig = ws;
+              // DXF in-memory strings are UTF-8 (in_dxf keeps them as read);
+              // decode multi-byte sequences to UTF-16 so non-ASCII is not
+              // double-encoded by a bare byte copy. Other producers of TV here
+              // (JSON, add API, old-DWG up-convert) already hold codepage bytes
+              // with non-representable chars as \U+xxxx escapes, so they keep
+              // the byte-wise path. Both honour the inline \U+xxxx escape.
+              const bool is_utf8 = (dat->opts & DWG_OPTS_INDXF) != 0;
               while (s < endp)
                 {
-                  uint16_t c = *s++;
-                  // in this case the resulting len is shorter
-                  if (c == '\\' && s[0] == 'U' && s[1] == '+' && ishex (s[2])
-                      && ishex (s[3]) && ishex (s[4]) && ishex (s[5]))
+                  unsigned char c = (unsigned char)*s;
+                  // \U+xxxx escape: shorter result
+                  if (c == '\\' && s + 6 < endp + 1 && s[1] == 'U'
+                      && s[2] == '+' && ishex (s[3]) && ishex (s[4])
+                      && ishex (s[5]) && ishex (s[6]))
                     {
                       unsigned x;
-                      if (sscanf (&s[2], "%04X", &x) > 0)
+                      if (sscanf (&s[3], "%04X", &x) > 0)
                         {
-                          // fprintf (stderr, "* sscanf: 0x%04X\n", x);
-                          *ws++ = x;
-                          s += 6;
+                          *ws++ = (uint16_t)x;
+                          s += 7;
+                          continue;
                         }
-                      else
-                        *ws++ = c;
                     }
-                  else
-                    *ws++ = c;
+                  if (!is_utf8 || c < 0x80)
+                    {
+                      *ws++ = c;
+                      s++;
+                    }
+                  else if ((c & 0xe0) == 0xc0 && s + 1 < endp)
+                    {
+                      *ws++ = (uint16_t)(((c & 0x1f) << 6) | (s[1] & 0x3f));
+                      s += 2;
+                    }
+                  else if ((c & 0xf0) == 0xe0 && s + 2 < endp)
+                    {
+                      *ws++ = (uint16_t)(((c & 0x0f) << 12)
+                                         | ((s[1] & 0x3f) << 6)
+                                         | (s[2] & 0x3f));
+                      s += 3;
+                    }
+                  else if ((c & 0xf8) == 0xf0 && s + 3 < endp)
+                    {
+                      // 4-byte UTF-8 -> UTF-16 surrogate pair
+                      uint32_t cp = ((uint32_t)(c & 0x07) << 18)
+                                    | ((uint32_t)(s[1] & 0x3f) << 12)
+                                    | ((uint32_t)(s[2] & 0x3f) << 6)
+                                    | (uint32_t)(s[3] & 0x3f);
+                      cp -= 0x10000;
+                      *ws++ = (uint16_t)(0xD800 + (cp >> 10));
+                      *ws++ = (uint16_t)(0xDC00 + (cp & 0x3FF));
+                      s += 4;
+                    }
+                  else // invalid byte: pass through
+                    {
+                      *ws++ = c;
+                      s++;
+                    }
                 }
               *ws = 0;
               // bit_write_TU (dat, orig);
