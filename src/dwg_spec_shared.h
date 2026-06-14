@@ -696,8 +696,8 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   }                                                          \
   SUB_FIELD_BS (mtext, attachment, 71);                      \
   SUB_FIELD_BS (mtext, flow_dir, 72);                        \
-  SUB_FIELD_BD (mtext, extents_height, 43);                  \
   SUB_FIELD_BD (mtext, extents_width, 42);                   \
+  SUB_FIELD_BD (mtext, extents_height, 43);                  \
   SUB_FIELD_T (mtext, text, 1);                              \
   SUB_FIELD_HANDLE0 (mtext, style, 5, 7);                    \
   SUB_FIELD_BS (mtext, linespace_style, 73);                 \

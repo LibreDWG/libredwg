@@ -3385,13 +3385,8 @@ DWG_ENTITY (MTEXT)
         }
         FIELD_BD (rect_width, 40);
         FIELD_BD (rect_height, 41);
-        DXF {
-          FIELD_BD (extents_width, 42);
-          FIELD_BD (extents_height, 43);
-        } else {
-          FIELD_BD (extents_height, 43);
-          FIELD_BD (extents_width, 42);
-        }
+        FIELD_BD (extents_width, 42);
+        FIELD_BD (extents_height, 43);
         // end redundant fields
 
         FIELD_BS (column_type, 71);
