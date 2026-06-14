@@ -645,7 +645,10 @@ dxf_read_string (Bit_Chain *dat, char **string)
   else
     {
       int i;
-      dxf_skip_ws (dat);
+      // Do not skip leading whitespace here: dxf_read_rs already consumed the
+      // group-code line incl. its newline, so we are positioned at the start of
+      // the value line, and leading spaces in a string value are significant
+      // (e.g. an MTEXT continuation chunk that begins with a space).
       if (dat->byte >= dat->size
           || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         return;
@@ -1656,26 +1659,41 @@ dxf_set_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   Dwg_Header *hdr = &dwg->header;
+  char *cp_tmp = NULL;
+  const char *cp_str;
 
   if (!vars->DWGCODEPAGE)
     return;
+  // r2007+ stores header TV strings as TU (UTF-16); decode to UTF-8 for the
+  // textual codepage-name lookup, otherwise only the first byte is seen (e.g.
+  // "ANSI_1252" reads as "A") and the codepage is wrongly UNDEFINED. Detect TU
+  // by the embedded NUL — codepage names are pure ASCII, so a UTF-16LE copy has
+  // a 0 second byte, whereas a plain UTF-8 name does not. (Keyed on the actual
+  // bytes, not from_version, since a down-convert may already have re-encoded
+  // the header strings to UTF-8.)
+  if (vars->DWGCODEPAGE[0] && vars->DWGCODEPAGE[1] == 0)
+    cp_str = cp_tmp = bit_convert_TU ((BITCODE_TU)vars->DWGCODEPAGE);
+  else
+    cp_str = vars->DWGCODEPAGE;
+  if (!cp_str)
+    return;
   // r11 usually has "undefined"
-  if (hdr->from_version <= R_12 && strEQc (vars->DWGCODEPAGE, "undefined"))
+  if (hdr->from_version <= R_12 && strEQc (cp_str, "undefined"))
     hdr->codepage = CP_UNDEFINED;
   else
     {
-      hdr->codepage = dwg_codepage_int (vars->DWGCODEPAGE);
+      hdr->codepage = dwg_codepage_int (cp_str);
       if (hdr->codepage == CP_UNDEFINED)
         {
-          LOG_ERROR ("Invalid DWGCODEPAGE %s", vars->DWGCODEPAGE);
+          LOG_ERROR ("Invalid DWGCODEPAGE %s", cp_str);
         }
       else
         {
-          LOG_TRACE ("HEADER.codepage = %u [%s]\n", hdr->codepage,
-                     vars->DWGCODEPAGE);
+          LOG_TRACE ("HEADER.codepage = %u [%s]\n", hdr->codepage, cp_str);
           dat->codepage = hdr->codepage;
         }
     }
+  free (cp_tmp);
 }
 
 static void
