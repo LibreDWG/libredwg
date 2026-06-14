@@ -2087,8 +2087,13 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         const size_t blen = (dwg->opts & DWG_OPTS_DXFB)
                                 ? pair->value.s.len
                                 : strlen (pair->value.s.ptr) >> 1;
+        const size_t cblen = blen > 0xff ? 0xff : blen;
+        if (blen > 0xff)
+          LOG_WARN ("EED binary data too long: %" PRIuSIZE " > 255, "
+                    "truncating",
+                    blen);
         /* code [RC] + len+0 + length [RC] */
-        size = 1 + (blen & INT_MAX) + 1 + 1;
+        size = 1 + (cblen & INT_MAX) + 1 + 1;
         eed[i].data
             = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
         if (!eed[i].data)
@@ -2098,18 +2103,18 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             return;
           }
         eed[i].data->code = code; // 1004
-        eed[i].data->u.eed_4.length = blen & 0xFF;
-        LOG_TRACE ("binary[%" PRIuSIZE "]: ", blen);
+        eed[i].data->u.eed_4.length = cblen & 0xFF;
+        LOG_TRACE ("binary[%" PRIuSIZE "]: ", cblen);
         if (dwg->opts & DWG_OPTS_DXFB)
-          memcpy (eed[i].data->u.eed_4.data, pair->value.s.ptr, blen);
+          memcpy (eed[i].data->u.eed_4.data, pair->value.s.ptr, cblen);
         else
           {
             size_t read;
             if ((read = in_hex2bin (eed[i].data->u.eed_4.data,
-                                    pair->value.s.ptr, blen)
-                        != blen))
+                                    pair->value.s.ptr, cblen)
+                        != cblen))
               LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
-                         read, blen);
+                         read, cblen);
           }
         eed[i].size += size;
       }
