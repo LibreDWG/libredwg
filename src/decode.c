@@ -1284,12 +1284,14 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
       pos = dec->byte;
       LOG_INSANE ("co: %d %ld->%" PRIuSIZE "\n", comp_bytes,
                   (long)pos - comp_offset, pos);
-      // This seems to be a comp_bytes encoding bug,
-      // copying past the decompressed_size. rather cap it and stop
-      // decompression. ACadSharp decompresses all comp_bytes, enlarging the
-      // buffer (but not using it)
+      // A final back-reference may legitimately fill the buffer exactly to
+      // dec->size (the trailing copy lands in the unused tail past the real
+      // page data and is never read). 0.13.3 allowed this (dst + comp_bytes >
+      // dst_end); the refactor's `>=` rejected the exact-fill case and aborted
+      // the whole section mid-stream, dropping/garbling thousands of objects
+      // on real R2018 files. Only error when the copy would overrun the buffer.
       end = pos + comp_bytes;
-      if (end >= dec->size || (long)pos < comp_offset
+      if (end > dec->size || (long)pos < comp_offset
           || (size_t)(pos - comp_offset) >= dec->size
           || (size_t)comp_offset > dec->size)
         {
