@@ -2044,9 +2044,15 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   int error;
   size_t size_adr;
   Dwg_Section_Type sec_id;
+  BITCODE_RLL address;
   SINCE (R_2004a)
-  sec_id = SECTION_HEADER;
-  else sec_id = (Dwg_Section_Type)SECTION_HEADER_R13;
+  {
+    sec_id = SECTION_HEADER;
+  }
+  else
+  {
+    sec_id = (Dwg_Section_Type)SECTION_HEADER_R13;
+  }
   assert (!dat->bit);
   LOG_INFO ("\n=======> Header Variables:   %4zu\n", dat->byte);
   if (!dwg->header.section)
@@ -2161,10 +2167,18 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   encode_patch_RLsize (dat, size_adr);
   bit_write_CRC (dat, size_adr, 0xC0C1);
   write_sentinel (dat, DWG_SENTINEL_VARIABLE_END);
-  assert ((int64_t)dat->byte > (int64_t)dwg->header.section[0].address);
+  address = dwg->header.section[0].address;
+  if ((BITCODE_RLL)dat->byte <= address)
+    {
+      LOG_WARN ("header.section[0].address " FORMAT_RLLx
+                " >= dat->byte " FORMAT_RLLx "; "
+                "resetting to 0",
+                address, (BITCODE_RLL)dat->byte);
+      address = 0;
+      dwg->header.section[0].address = 0;
+    }
   dwg->header.section[0].size
-      = ((int64_t)dat->byte - (int64_t)dwg->header.section[0].address)
-        & 0xFFFFFFFF;
+      = (BITCODE_RL)(((BITCODE_RLL)dat->byte - address) & 0xFFFFFFFFu);
   LOG_TRACE ("         Header Variables (end): %4zu\n", dat->byte);
   return error;
 }

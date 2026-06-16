@@ -219,8 +219,13 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       LOG_ERROR ("%s.size overflow %" PRIuSIZE " > %" PRIuSIZE, tbl->name,
                  (size_t)(tbl->address + (tbl->number * tbl->size)),
                  dat->size);
-      // VPORT.size bug in DWG, ignore it.
-      return id == SECTION_VPORT ? 0 : 1;
+      // VPORT.size bug in DWG. fix it up.
+      if (id == SECTION_VPORT)
+        {
+          tbl->size = dat->version == R_11 ? 253 : 249;
+          return 0;
+        }
+      return 1;
     }
   return 0;
 }

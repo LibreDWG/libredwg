@@ -1289,7 +1289,8 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
       // page data and is never read). 0.13.3 allowed this (dst + comp_bytes >
       // dst_end); the refactor's `>=` rejected the exact-fill case and aborted
       // the whole section mid-stream, dropping/garbling thousands of objects
-      // on real R2018 files. Only error when the copy would overrun the buffer.
+      // on real R2018 files. Only error when the copy would overrun the
+      // buffer.
       end = pos + comp_bytes;
       if (end > dec->size || (long)pos < comp_offset
           || (size_t)(pos - comp_offset) >= dec->size
@@ -7364,9 +7365,17 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             default:
               dat->byte--;
               DEBUG_HERE;
-              LOG_ERROR ("Unknown object type %d", obj->type);
+              obj->type = (BITCODE_BS)(DWG_TYPE_UNKNOWN_r11 | (obj->type & 0x80));
+              obj->fixedtype = DWG_TYPE_UNKNOWN_ENT;
               error |= DWG_ERR_SECTIONNOTFOUND;
               dat->byte++;
+              if (dat->byte >= dat->size)
+                {
+                  LOG_ERROR ("%s buffer overflow at %" PRIuSIZE
+                             ".%u >= %" PRIuSIZE,
+                             __FUNCTION__, dat->byte, dat->bit, dat->size);
+                  return DWG_ERR_INVALIDDWG;
+                }
               break;
             }
 
@@ -7461,7 +7470,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               }
             }
           // add to block header
-          if (_hdr && obj->supertype == DWG_SUPERTYPE_ENTITY
+          if (_hdr && obj->supertype == DWG_SUPERTYPE_ENTITY && obj->tio.entity
               && obj->fixedtype != DWG_TYPE_UNUSED
               && obj->fixedtype != DWG_TYPE_JUMP
               && obj->type != DWG_TYPE_VERTEX_r11
