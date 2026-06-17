@@ -4641,6 +4641,11 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           LOG_ERROR ("No " #token " found");                                  \
           return DWG_ERR_INVALIDTYPE;                                         \
         }                                                                     \
+      if (!ctrl->tio.object)                                                  \
+        {                                                                     \
+          LOG_ERROR ("Invalid " #token " object (no tio.object)");            \
+          return DWG_ERR_INVALIDTYPE;                                         \
+        }                                                                     \
       _ctrl = ctrl->tio.object->tio.token;                                    \
       tblnum = _ctrl->num_entries;                                            \
       if (tblnum)                                                             \
@@ -4666,16 +4671,21 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         num = 0;                                                              \
       continue;                                                               \
     }                                                                         \
-  _obj = obj->tio.object->tio.token;                                          \
-  LOG_TRACE ("contents table " #token " [%d]: (0x%zx, 0x%zx)\n", i,           \
-             obj->address, dat->byte);                                        \
   if (obj->fixedtype != DWG_TYPE_##token)                                     \
     {                                                                         \
       LOG_ERROR ("Wrong type %s at [%d], expected %s",                        \
                  dwg_type_name (obj->fixedtype), num + i,                     \
                  "DWG_TYPE_" #token);                                         \
       continue;                                                               \
-    }
+    }                                                                         \
+  if (!obj->tio.object)                                                       \
+    {                                                                         \
+      LOG_ERROR ("Invalid %s object [%d] (no tio.object)", #token, num + i);  \
+      continue;                                                               \
+    }                                                                         \
+  _obj = obj->tio.object->tio.token;                                          \
+  LOG_TRACE ("contents table " #token " [%d]: (0x%zx, 0x%zx)\n", i,           \
+             obj->address, dat->byte);
 
 #define CHK_ENDPOS                                                            \
   dwg->cur_index += tblnum;                                                   \
