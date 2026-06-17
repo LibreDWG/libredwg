@@ -7335,8 +7335,8 @@ dwg_encode_handleref_with_code (Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                                 Dwg_Object_Ref *restrict ref,
                                 unsigned int code)
 {
-  // XXX fixme. create the handle, then check the code. allow relative handle
-  // soft codes.
+  if (!ref || !obj)
+    return;
   dwg_encode_handleref (hdl_dat, obj, dwg, ref);
   if (ref->absolute_ref == 0 && ref->handleref.code != code)
     {
