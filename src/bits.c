@@ -2187,15 +2187,23 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     {
       size_t destlen = length * 2;
       char *dest = (char *)malloc (destlen);
-      while (!bit_utf8_to_TV (dest, (unsigned char *)chain, destlen, length, 0,
-                              dat->codepage))
+      if (!dest)
         {
-          destlen *= 2;
-          dest = (char *)realloc (dest, destlen);
+          LOG_ERROR ("Out of memory");
+          length = 0;
         }
-      need_free = true;
-      chain = dest;
-      length = strlen (dest);
+      else
+        {
+          while (!bit_utf8_to_TV (dest, (unsigned char *)chain, destlen,
+                                  length, 0, dat->codepage))
+            {
+              destlen *= 2;
+              dest = (char *)realloc (dest, destlen);
+            }
+          need_free = true;
+          chain = dest;
+          length = strlen (dest);
+        }
     }
   if (dat->from_version < R_13b1)
     bit_write_RS (dat, (BITCODE_RS)length);
