@@ -1477,7 +1477,8 @@ section_move_before (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
                  (unsigned)before);
       return 0;
     }
-  assert (*pnum + 1 <= SECTION_R13_SIZE);
+  if (*pnum >= SECTION_R13_SIZE)
+    return 0; // array full, cannot insert
   memmove (&psection_order[b + 1], &psection_order[b],
            (*pnum - b) * sizeof (Dwg_Section_Type_r13));
   (*pnum)++;
