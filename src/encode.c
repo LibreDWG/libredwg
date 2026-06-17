@@ -3507,33 +3507,38 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       for (unsigned id = 0;
            id < dwg->header.num_sections && id < SECTION_R13_SIZE; id++)
         {
-          switch (section_order[id])
+          if (section_order[id] >= SECTION_R13_SIZE)
             {
-            case SECTION_HEADER_R13:
-              error |= encode_header_vars (dwg, dat, orig_from_version);
-              break;
-            case SECTION_CLASSES_R13:
-              error |= encode_classes (dwg, dat);
-              break;
-            case SECTION_HANDLES_R13:
-              error |= encode_objects_handles (dwg, dat, sec_dat);
-              break;
-            case SECTION_OBJFREESPACE_R13:
-              error |= encode_objfreespace_2ndheader (dwg, dat);
-              break;
-            case SECTION_TEMPLATE_R13:
-              error |= encode_template (dwg, dat);
-              break;
-            case SECTION_AUXHEADER_R2000:
-              error |= encode_auxheader (dwg, dat);
-              break;
-            case SECTION_THUMBNAIL_R13:
-              error |= encode_r13_thumbnail (dwg, dat, header_crc_address);
-              break;
-            default:
               LOG_WARN ("Unhandled section %u [%u]", section_order[id], id);
-              break;
             }
+          else
+            switch (section_order[id])
+              {
+              case SECTION_HEADER_R13:
+                error |= encode_header_vars (dwg, dat, orig_from_version);
+                break;
+              case SECTION_CLASSES_R13:
+                error |= encode_classes (dwg, dat);
+                break;
+              case SECTION_HANDLES_R13:
+                error |= encode_objects_handles (dwg, dat, sec_dat);
+                break;
+              case SECTION_OBJFREESPACE_R13:
+                error |= encode_objfreespace_2ndheader (dwg, dat);
+                break;
+              case SECTION_TEMPLATE_R13:
+                error |= encode_template (dwg, dat);
+                break;
+              case SECTION_AUXHEADER_R2000:
+                error |= encode_auxheader (dwg, dat);
+                break;
+              case SECTION_THUMBNAIL_R13:
+                error |= encode_r13_thumbnail (dwg, dat, header_crc_address);
+                break;
+              default:
+                LOG_WARN ("Unhandled section %u [%u]", section_order[id], id);
+                break;
+              }
         }
     }
     if (dwg->header.sections == 3 && dwg->secondheader.codepage)
