@@ -1404,7 +1404,12 @@ section_move_top (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
           return 0;
         }
     }
-  // not found: insert
+  // not found: insert if there's room
+  if (*pnum >= SECTION_R13_SIZE)
+    {
+      LOG_WARN ("section_move_top %u overflow, cannot insert", sec_id);
+      return -1;
+    }
   psection_order[0] = sec_id;
   // move x'n right by 1
   // f x x x y y y
@@ -1413,7 +1418,6 @@ section_move_top (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
   psection_order[1] = old_first;
   LOG_TRACE ("section_move_top %u (inserted)\n", sec_id);
   (*pnum)++;
-  assert (*pnum <= SECTION_R13_SIZE);
   return 1;
 }
 
