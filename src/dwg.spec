@@ -3817,8 +3817,15 @@ DWG_TABLE (LAYER)
       if (FIELD_VALUE (color.index) == 256) {
         FIELD_VALUE (color.index) = FIELD_VALUE (color.rgb) & 0xFF;
       }
-      // Negative value in case of disabled layer
-      FIELD_VALUE (color.index) = - FIELD_VALUE(color.index);
+      // DXF group 62 is negative iff the layer is off. Derive the sign from
+      // the decoded `off` flag, using abs() so an already-signed index cannot
+      // double-negate. Previously this negated unconditionally, exporting an
+      // ON layer as OFF (its entities became invisible).
+      if (FIELD_VALUE (off)) {
+        FIELD_VALUE (color.index) = -abs (FIELD_VALUE (color.index));
+      } else {
+        FIELD_VALUE (color.index) = abs (FIELD_VALUE (color.index));
+      }
     }
     FIELD_CMC (color, 62);
   }
