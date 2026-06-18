@@ -11190,6 +11190,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               if (!o->text)
                 {
                   o->text = strdup (pair->value.s.ptr);
+                  if (!o->text)
+                    {
+                      // No text yet: nothing to keep, fail the parse. Don't use
+                      // invalid_dxf (the DXF is valid; that would log a
+                      // misleading "Invalid DXF code").
+                      LOG_ERROR ("Out of memory for MTEXT.text");
+                      dxf_free_pair (pair);
+                      return NULL;
+                    }
                   written = len;
                   LOG_TRACE ("MTEXT.text = %s (%" PRIuSIZE ") [TV %d]\n",
                              pair->value.s.ptr, len, pair->code);
@@ -11204,10 +11213,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                       o->text = newtext;
                       memcpy (o->text + oldlen, pair->value.s.ptr, len + 1);
                       written = oldlen + len;
+                      // Only trace success when the chunk was actually appended.
+                      LOG_TRACE ("MTEXT.text += %" PRIuSIZE " => %" PRIuSIZE
+                                 " [TV %d]\n",
+                                 len, written, pair->code);
                     }
-                  LOG_TRACE ("MTEXT.text += %" PRIuSIZE " => %" PRIuSIZE
-                             " [TV %d]\n",
-                             len, written, pair->code);
+                  else
+                    // realloc failure leaves the existing o->text valid; keep
+                    // the partial text and continue rather than aborting.
+                    LOG_ERROR ("Out of memory appending MTEXT.text chunk");
                 }
               goto next_pair;
             }
