@@ -4557,11 +4557,13 @@ size_t
 in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
 {
 #if 0
+  // Reference implementation (the #else lookup path below is what's used).
+  // Decodes two hex nibbles per byte by hand, without scanf; assumes src holds
+  // at least 2*destlen hex chars per the caller's contract (a non-hex char,
+  // incl. NUL, stops early and returns the count decoded so far).
   char *pos = (char *)src;
   for (size_t i = 0; i < destlen; i++)
     {
-      // Safe alternative to sscanf (pos, "%2hhX", &dest[i]) (CWE-120): decode
-      // exactly two hex nibbles by hand, no format string.
       unsigned char b = 0;
       for (int n = 0; n < 2; n++)
         {
