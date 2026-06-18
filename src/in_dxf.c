@@ -646,9 +646,10 @@ dxf_read_string (Bit_Chain *dat, char **string)
     {
       int i;
       // Do not skip leading whitespace here: dxf_read_rs already consumed the
-      // group-code line incl. its newline, so we are positioned at the start of
-      // the value line, and leading spaces in a string value are significant
-      // (e.g. an MTEXT continuation chunk that begins with a space).
+      // group-code line incl. its newline, so we are positioned at the start
+      // of the value line, and leading spaces in a string value are
+      // significant (e.g. an MTEXT continuation chunk that begins with a
+      // space).
       if (dat->byte >= dat->size
           || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         return;
@@ -1667,10 +1668,10 @@ dxf_set_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
   // r2007+ stores header TV strings as TU (UTF-16); decode to UTF-8 for the
   // textual codepage-name lookup, otherwise only the first byte is seen (e.g.
   // "ANSI_1252" reads as "A") and the codepage is wrongly UNDEFINED. Detect TU
-  // by the embedded NUL — codepage names are pure ASCII, so a UTF-16LE copy has
-  // a 0 second byte, whereas a plain UTF-8 name does not. (Keyed on the actual
-  // bytes, not from_version, since a down-convert may already have re-encoded
-  // the header strings to UTF-8.)
+  // by the embedded NUL — codepage names are pure ASCII, so a UTF-16LE copy
+  // has a 0 second byte, whereas a plain UTF-8 name does not. (Keyed on the
+  // actual bytes, not from_version, since a down-convert may already have
+  // re-encoded the header strings to UTF-8.)
   if (vars->DWGCODEPAGE[0] && vars->DWGCODEPAGE[1] == 0)
     cp_str = cp_tmp = bit_convert_TU ((BITCODE_TU)vars->DWGCODEPAGE);
   else
@@ -11190,6 +11191,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               if (!o->text)
                 {
                   o->text = strdup (pair->value.s.ptr);
+                  if (!o->text)
+                    {
+                      // No text yet: nothing to keep, fail the parse. Don't
+                      // use invalid_dxf (the DXF is valid; that would log a
+                      // misleading "Invalid DXF code").
+                      LOG_ERROR ("Out of memory for MTEXT.text");
+                      dxf_free_pair (pair);
+                      return NULL;
+                    }
                   written = len;
                   LOG_TRACE ("MTEXT.text = %s (%" PRIuSIZE ") [TV %d]\n",
                              pair->value.s.ptr, len, pair->code);
@@ -11197,17 +11207,23 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else
                 {
                   size_t oldlen = strlen (o->text);
-                  char *newtext
-                      = (char *)realloc (o->text, oldlen + len + 1);
+                  char *newtext = (char *)realloc (o->text, oldlen + len + 1);
                   if (newtext)
                     {
                       o->text = newtext;
                       memcpy (o->text + oldlen, pair->value.s.ptr, len + 1);
                       written = oldlen + len;
+                      // Only trace success when the chunk was actually
+                      // appended.
+                      LOG_TRACE ("MTEXT.text += %" PRIuSIZE " => %" PRIuSIZE
+                                 " [TV %d]\n",
+                                 len, written, pair->code);
                     }
-                  LOG_TRACE ("MTEXT.text += %" PRIuSIZE " => %" PRIuSIZE
-                             " [TV %d]\n",
-                             len, written, pair->code);
+                  else
+                    // realloc failure leaves the existing o->text valid; keep
+                    // the partial text and continue rather than aborting.
+                    LOG_ERROR ("Out of memory appending MTEXT.text chunk. "
+                               "Keep it partial.");
                 }
               goto next_pair;
             }
