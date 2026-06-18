@@ -6061,6 +6061,17 @@ dwg_encode_unknown_bits (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     return false;
 }
 
+/* We can re-emit the raw UNKNOWN_ENT/UNKNOWN_OBJ class blob verbatim whenever
+   we still hold it (decoded from DWG or imported from JSON) and the target
+   version equals the source version, so the bit layout is unchanged. */
+static bool
+can_emit_raw_unknown (const Dwg_Data *restrict dwg,
+                      const Dwg_Object *restrict obj)
+{
+  return dwg->header.version == dwg->header.from_version && obj->unknown_bits
+         && obj->num_unknown_bits;
+}
+
 static int
 dwg_encode_raw_UNKNOWN_ENT (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
@@ -6454,18 +6465,13 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_PROXY_OBJECT (dat, obj);
       break;
     case DWG_TYPE_UNKNOWN_ENT:
-      // We can re-emit the raw class blob verbatim whenever we still hold it
-      // (decoded from DWG or imported from JSON) and the target version equals
-      // the source version, so the bit layout is unchanged.
-      if (dwg->header.version == dwg->header.from_version && obj->unknown_bits
-          && obj->num_unknown_bits)
+      if (can_emit_raw_unknown (dwg, obj))
         error = dwg_encode_raw_UNKNOWN_ENT (dat, obj);
       else
         error = DWG_ERR_UNHANDLEDCLASS;
       break;
     case DWG_TYPE_UNKNOWN_OBJ:
-      if (dwg->header.version == dwg->header.from_version && obj->unknown_bits
-          && obj->num_unknown_bits)
+      if (can_emit_raw_unknown (dwg, obj))
         error = dwg_encode_raw_UNKNOWN_OBJ (dat, obj);
       else
         error = DWG_ERR_UNHANDLEDCLASS;
