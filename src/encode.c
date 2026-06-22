@@ -1902,10 +1902,13 @@ encode_auxheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
   BITCODE_BL vcount;
+  BITCODE_RL olds, news;
   int error = 0;
-  const BITCODE_RL olds
-      = dwg->secondheader.sections[SECTION_AUXHEADER_R2000].size;
-  BITCODE_RL news = dwg->header.section[SECTION_AUXHEADER_R2000].size;
+
+  encode_check_num_sections ((Dwg_Section_Type_r11)SECTION_AUXHEADER_R2000,
+                             dwg);
+  olds = dwg->secondheader.sections[SECTION_AUXHEADER_R2000].size;
+  news = dwg->header.section[SECTION_AUXHEADER_R2000].size;
 
   assert (!dat->bit);
   LOG_INFO ("\n=======> AuxHeader: %8zu\n", dat->byte); // size: 123
