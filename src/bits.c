@@ -3688,8 +3688,12 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
 {
   BITCODE_TU wstr;
   size_t i = 0;
-  size_t len = strlen (str);
+  size_t len;
   unsigned char c;
+
+  if (!str)
+    return NULL;
+  len = strlen (str);
 
   if (len > MAX_SIZE_T)
     {
