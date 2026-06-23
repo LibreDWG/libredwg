@@ -1391,6 +1391,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (dat->from_version == R_INVALID)
             {
               LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version);
+              dxf_free_pair (pair);
               return DWG_ERR_INVALIDDWG;
             }
           if (is_tu && dwg->num_objects
@@ -1597,6 +1598,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (pair->code != 9 /* && pair->code != 0 */)
         goto next_hdrvalue; // for mult. 10,20,30 values
     }
+  if (pair)
+    dxf_free_pair (pair);
 
   VERSIONS (R_13, R_14)
   {
@@ -1628,7 +1631,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                (int)_obj->MEASUREMENT);
   }
 
-  dxf_free_pair (pair);
   return 0;
 }
 
