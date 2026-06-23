@@ -2962,13 +2962,29 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           f1 = dwg_dynapi_entity_field (name, key);
           if (f1 && *rest)
             {
-              void *off = &((char *)_obj)[f1->offset];
+              void *off;
               const char *subclass1 = dwg_dynapi_subclass_name (f1->type);
               const Dwg_DYNAPI_field *sfields1
                   = subclass1 ? dwg_dynapi_subclass_fields (subclass1) : NULL;
+              int is_ptr = f1->type[strlen (f1->type) - 1] == '*';
+              if (is_ptr)
+                {
+                  off = *(void **)((char *)_obj + f1->offset);
+                  if (!off && subclass1)
+                    {
+                      int subsize = dwg_dynapi_subclass_size (subclass1);
+                      if (subsize > 0)
+                        {
+                          off = calloc (1, subsize);
+                          *(void **)((char *)_obj + f1->offset) = off;
+                        }
+                    }
+                }
+              else
+                off = &((char *)_obj)[f1->offset];
               if (!sfields1 && subclass1)
                 sfields1 = dwg_dynapi_entity_fields (subclass1);
-              if (!sfields1
+              if (!off || !sfields1
                   || !_set_struct_field (dat, obj, tokens, off, subclass1,
                                          rest, sfields1))
                 ++tokens->index;
@@ -2978,13 +2994,29 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           f1 = dwg_dynapi_subclass_field (name, key);
           if (f1 && *rest)
             {
-              void *off = &((char *)_obj)[f1->offset];
+              void *off;
               const char *subclass1 = dwg_dynapi_subclass_name (f1->type);
               const Dwg_DYNAPI_field *sfields1
                   = subclass1 ? dwg_dynapi_subclass_fields (subclass1) : NULL;
+              int is_ptr = f1->type[strlen (f1->type) - 1] == '*';
+              if (is_ptr)
+                {
+                  off = *(void **)((char *)_obj + f1->offset);
+                  if (!off && subclass1)
+                    {
+                      int subsize = dwg_dynapi_subclass_size (subclass1);
+                      if (subsize > 0)
+                        {
+                          off = calloc (1, subsize);
+                          *(void **)((char *)_obj + f1->offset) = off;
+                        }
+                    }
+                }
+              else
+                off = &((char *)_obj)[f1->offset];
               if (!sfields1 && subclass1)
                 sfields1 = dwg_dynapi_entity_fields (subclass1);
-              if (!sfields1
+              if (!off || !sfields1
                   || !_set_struct_field (dat, obj, tokens, off, subclass1,
                                          rest, sfields1))
                 ++tokens->index;
