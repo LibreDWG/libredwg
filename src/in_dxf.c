@@ -11959,7 +11959,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             {
                               // Underlays do not emit a separate DXF count
                               // before their 11/21 clip polygon pairs.
-                              if (pair->code == 11 && j >= (int)num_clip_verts)
+                              if ((pair->code == 11 || pair->code == 14)
+                                  && j >= (int)num_clip_verts)
                                 {
                                   num_clip_verts = j + 1;
                                   dwg_dynapi_entity_set_value (
@@ -11978,7 +11979,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                                                f->name,
                                                                &clip_verts, 0);
                                 }
-                              else if (pair->code == 11)
+                              else if (pair->code == 11 || pair->code == 14)
                                 {
                                   clip_verts = (BITCODE_2RD *)realloc (
                                       clip_verts,
@@ -11997,6 +11998,20 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           else if (pair->code < 30)
                             {
+                              if (!clip_verts)
+                                {
+                                  if (num_clip_verts > 0)
+                                    {
+                                      clip_verts = (BITCODE_2RD *)xcalloc (
+                                          num_clip_verts,
+                                          sizeof (BITCODE_2RD));
+                                      if (!clip_verts)
+                                        goto invalid_dxf;
+                                      dwg_dynapi_entity_set_value (
+                                          _obj, obj->name, f->name,
+                                          &clip_verts, 0);
+                                    }
+                                }
                               if (j >= 0 && j < (int)num_clip_verts
                                   && clip_verts)
                                 {
@@ -12006,14 +12021,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                       "clip_verts", j, clip_verts[j].x,
                                       clip_verts[j].y, pair->code - 10);
                                   j++;
-                                }
-                              if (pair->code == 21)
-                                {
-                                  dwg_dynapi_entity_set_value (
-                                      _obj, obj->name, "num_clip_verts", &j,
-                                      0);
-                                  LOG_TRACE ("%s.num_clip_verts = %d\n", name,
-                                             j);
                                 }
                             }
                           goto next_pair;
