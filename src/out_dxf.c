@@ -163,7 +163,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   }
 #define FIELD_BINARY(name, size, dxf)                                         \
   if (dxf)                                                                    \
-  VALUE_BINARY (_obj->name, size, dxf)
+    VALUE_BINARY (_obj->name, size, dxf)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1

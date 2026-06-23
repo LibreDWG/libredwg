@@ -3586,10 +3586,7 @@ DWG_TABLE (BLOCK_HEADER)
   DXF {
     // not allowed to be skipped, can be 0
     VALUE_HANDLE (_obj->layout, layout, 5, 340);
-    if (FIELD_VALUE (preview_size))
-      {
-        FIELD_BINARY (preview, FIELD_VALUE (preview_size), 310);
-      }
+    FIELD_BINARY (preview, FIELD_VALUE (preview_size), 310);
     if (FIELD_VALUE (num_inserts))
       {
         VALUE_TFF ("{BLKREFS", 102);

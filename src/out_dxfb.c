@@ -126,7 +126,7 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define VALUE_TFF(str, dxf) VALUE_TV (str, dxf)
 #define VALUE_BINARY(value, size, dxf)                                          \
   {                                                                             \
-    if (dxf)                                                                    \
+    if (dxf && value && size)                                                   \
     {                                                                           \
       long _len = (long)(size);                                                 \
       const BITCODE_RC *_v = (const BITCODE_RC *)(value);                       \

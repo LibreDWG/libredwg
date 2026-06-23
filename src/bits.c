@@ -1750,7 +1750,7 @@ void
 bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
               size_t length)
 {
-  if (!chain)
+  if (!chain || (uintptr_t)chain < 4096)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       if (length > 0)
