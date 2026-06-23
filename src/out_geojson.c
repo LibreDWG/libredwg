@@ -809,7 +809,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             end_angle += M_PI;
           num_pts
               = (int)trunc (viewres / rad2deg (end_angle - _obj->start_angle));
-          if (num_pts > 10000 || num_pts < 0)
+          if (num_pts <= 0 || num_pts > 10000)
             {
               LOG_ERROR ("Invalid angles");
               return DWG_ERR_VALUEOUTOFBOUNDS;
