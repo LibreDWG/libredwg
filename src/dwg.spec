@@ -2523,11 +2523,11 @@ DWG_ENTITY (VIEWPORT)
     FIELD_HANDLE (vport_entity_header, 5, 0); // => VX
   }
   VERSIONS (R_2000b, R_2002) {
-    HANDLE_VECTOR (frozen_layers, num_frozen_layers, 5, 341);
+    HANDLE_VECTOR (frozen_layers, num_frozen_layers, 5, 331);
     FIELD_HANDLE (clip_boundary, 5, 340);
   }
   SINCE (R_2004a) {
-    HANDLE_VECTOR (frozen_layers, num_frozen_layers, 4, 341);
+    HANDLE_VECTOR (frozen_layers, num_frozen_layers, 4, 331);
     FIELD_HANDLE (clip_boundary, 5, 340);
   }
   VERSIONS (R_2000b, R_2002) {
