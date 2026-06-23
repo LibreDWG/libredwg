@@ -3504,7 +3504,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     VERSIONS (R_13b1, R_2000)
     {
-      for (unsigned id = 0; id < dwg->header.num_sections; id++)
+      for (unsigned id = 0;
+           id < dwg->header.num_sections && id < SECTION_R13_SIZE; id++)
         {
           switch (section_order[id])
             {
