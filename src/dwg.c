@@ -3971,7 +3971,7 @@ Ref_cmp (const Dwg_Object_Ref *pKey, const Dwg_Object_Ref **ppR)
     return retVal;
   return pKey->absolute_ref > (*ppR)->absolute_ref    ? 1
          : pKey->absolute_ref == (*ppR)->absolute_ref ? 0
-                                                      : 1;
+                                                      : -1;
 }
 
 void

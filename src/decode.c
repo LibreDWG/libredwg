@@ -6930,6 +6930,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
     {
       LOG_ERROR ("Corrupt end " FORMAT_RL " fixed to filesize", end);
       end = dat->size & 0xFFFFFFFF;
+      if (start < end && size > end - start)
+        size = end - start;
     }
   if (entity_section != BLOCKS_SECTION_INDEX)
     {
@@ -7461,7 +7463,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                               obj->num_unknown_rest = 0;
                             }
                         }
-                      if (obj->address + obj->size >= start && start > 60)
+                      if (obj->address + obj->size >= start && start > 60
+                          && obj->address + obj->size - 2 > dat->byte)
                         dat->byte = obj->address + obj->size - 2;
                     }
                   if (!bit_check_CRC (dat, obj->address, 0xC0C1))
