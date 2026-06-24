@@ -16,6 +16,7 @@ conventions in `README`, `CONTRIBUTING`, and `HACKING`.
 - C library and tools to read/write DWG.
 - Primary build system: GNU Autotools (`autogen.sh`, `configure`, `make`).
 - CMake also exists (`CMakeLists.txt`) but Autotools is the canonical path.
+- Must be C99 safe, with -Werror. Esp. -Werror=declaration-after-statement
 
 # Builds
 
@@ -104,4 +105,6 @@ This package is owned by the FSF.
   uncommitted work.
 - Do not delete/clean untracked files (e.g. `.build*`, local archives, patches)
   unless explicitly requested.
+- Never do `make clean` if you don't see a result. `make` in all .build* dirs
+  besides .build-tcc can last >10m.
 - Prefer incremental edits over rewriting entire files.
