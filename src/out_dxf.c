@@ -1340,8 +1340,8 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
       // 5: 936 Simplified Chinese
       // See
       // https://docs.intellicad.org/files/oda/2021_11/oda_drawings_docs/frames.html?frmname=topic&frmfile=FontHandling.html
-      else if (c == '\\' && dest + 7 < dend && memBEGINc (s, "M+")
-               && s[3] >= '1' && s[3] <= '5')
+      else if (c == '\\' && dest + 7 < dend && s + 6 < send
+               && memBEGINc (s, "M+") && s[3] >= '1' && s[3] <= '5')
         {
           const Dwg_Codepage mif_tbl[]
               = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
