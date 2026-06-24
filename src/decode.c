@@ -2854,10 +2854,10 @@ read_2004_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_APPINFO);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
-      LOG_ERROR ("Failed to read uncompressed %s section", "AppInfo");
+      LOG_INFO ("%s section not found\n", "AppInfo");
       if (sec_dat.chain)
         free (sec_dat.chain);
-      return error;
+      return 0;
     }
 #ifdef DEBUG
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)
@@ -7367,7 +7367,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             default:
               dat->byte--;
               DEBUG_HERE;
-              obj->type = (BITCODE_BS)(DWG_TYPE_UNKNOWN_r11 | (obj->type & 0x80));
+              obj->type
+                  = (BITCODE_BS)(DWG_TYPE_UNKNOWN_r11 | (obj->type & 0x80));
               obj->fixedtype = DWG_TYPE_UNKNOWN_ENT;
               error |= DWG_ERR_SECTIONNOTFOUND;
               dat->byte++;
