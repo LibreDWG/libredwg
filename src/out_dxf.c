@@ -1527,12 +1527,9 @@ dxf_is_xrefdep_name (Bit_Chain *restrict dat, const char *name)
   if (IS_FROM_TU (dat))
     {
       BITCODE_TU wstr = (BITCODE_TU)name;
-#if defined(HAVE_NATIVE_WCHAR2) && defined(HAVE_WCSSTR)
-      if (wstr && *wstr && wcsstr (&wstr[1], L"$0$"))
-        return true;
-      else
-        return false;
-#else
+      // Always convert to UTF-8 first. The "$0$" marker is ASCII and cannot
+      // collide with UTF-8 continuation bytes, so this matches the previous
+      // native wcsstr() path on all platforms.  GH #655.
       bool result;
       char *u8 = bit_convert_TU (wstr);
       if (u8 && *u8 && strstr (&u8[1], "$0$"))
@@ -1542,7 +1539,6 @@ dxf_is_xrefdep_name (Bit_Chain *restrict dat, const char *name)
       if (u8)
         free (u8);
       return result;
-#endif
     }
   else
     {
@@ -1564,12 +1560,9 @@ dxf_has_xrefdep_vertbar (Bit_Chain *restrict dat, const char *name)
   if (IS_FROM_TU (dat))
     {
       BITCODE_TU wstr = (BITCODE_TU)name;
-#if defined(HAVE_NATIVE_WCHAR2) && defined(HAVE_WCSCHR)
-      if (wstr && *wstr && wcschr (&wstr[1], L'|'))
-        return true;
-      else
-        return false;
-#else
+      // Always convert to UTF-8 first. The "|" marker is ASCII and cannot
+      // collide with UTF-8 continuation bytes, so this matches the previous
+      // native wcschr() path on all platforms.  GH #655.
       bool result;
       char *u8 = bit_convert_TU (wstr);
       if (u8 && *u8 && strchr (&u8[1], '|'))
@@ -1579,7 +1572,6 @@ dxf_has_xrefdep_vertbar (Bit_Chain *restrict dat, const char *name)
       if (u8)
         free (u8);
       return result;
-#endif
     }
   else
     {
