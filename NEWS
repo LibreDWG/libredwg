@@ -61,6 +61,9 @@ Minor bugfixes:
   * DXF: fixed double hex-decoding of binary pair values.
   * DXF: fixed spurious CMLSTYLE warning during import.
   * JSON: fixed non-UTF8 output for codepoints 0x80-0xff.  GH #1039.
+  * JSON: fixed blank or garbled r2007+ unicode text on native 2-byte
+    wchar_t platforms (Windows).  The "%ls" fprintf path truncated at the
+    first non-ASCII character; now always emit proper UTF-8.  GH #655.
   * JSON: fixed empty XRECORD xdata roundtrip.  GH #1043.
   * JSON: fixed DBCOLOR.color.handle and class dwg_version/maint_version
     preservation.
