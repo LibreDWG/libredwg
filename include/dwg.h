@@ -26,7 +26,7 @@
 
 /* keep in sync with release tags */
 #define LIBREDWG_VERSION_MAJOR 0
-#define LIBREDWG_VERSION_MINOR 13
+#define LIBREDWG_VERSION_MINOR 14
 #define LIBREDWG_VERSION       ((LIBREDWG_VERSION_MAJOR * 100) + LIBREDWG_VERSION_MINOR)
 
 /* for uint64_t, but not in swig */

@@ -1,3 +1,3934 @@
+2026-06-27  Reini Urban  <reini.urban@gmail.com>
+
+	Release 0.14
+	Updated manpage dates, ChangeLog and NEWS.
+	Added dwgfuzz --help and --version for dwgfuzz.1
+	Fix build-aux/release.sh
+
+2026-06-27  Reini Urban  <reini.urban@gmail.com>
+
+	fix: MB_LEN_MAX cross-compilation error for aarch64
+	GCC internal limits.h defines MB_LEN_MAX=1, but glibc's bits/wchar2.h
+	requires MB_LEN_MAX=16. Add the same guard already present in bits.h to
+	codepages.h, before including <wchar.h>.
+
+	* src/codepages.h: guard MB_LEN_MAX before <wchar.h> include
+
+2026-06-26  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	spec: un-union MLINESTYLE_line.lt
+	The lt field was a union of index (BSd, pre-2018) and ltype (H, post-2018).
+	When add_MLINESTYLE_lines set lt.index from a DXF code 6 value,
+	lt.ltype would contain garbage (0x3), causing dwg_free_MLINESTYLE_private
+	to dereference it as a pointer → SEGV. Too fragile.
+
+	Change lt.index→lt_index and lt.ltype→lt_ltype as separate fields.
+	Affects dwg.spec, in_dxf.c, dwg.c, dwg_api.c, gen-dynapi.pl, dynapi.c,
+	dwg.h, and dynapi.texi.
+
+	Fixes ossfuzz 42533974
+
+2026-06-26  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	indxf: Fix ossfuzz 42536446 and 42535236
+	- Fix SEGV in add_HATCH: CHK_fitpts macro now checks for NULL fitpts
+	  pointer and frees it on error (#42536446). Also add NULL check after
+	  xcalloc for fitpts in code 97 handler.
+
+	- Fix double-free in dxf_entities_read: new_object type-change code
+	  now does not free caller's dxfname. The caller handles cleanup
+	  on failure (#42535236).
+
+2026-06-26  Reini Urban  <reini.urban@gmail.com>
+
+	encode: Fix global-buffer-overflow in section_move_before
+	Fixes oss-fuzz issue 528059079.  The attacker-controlled
+	dwg->header.num_sections could exceed SECTION_R13_SIZE (7), causing
+	memmove in section_move_before to read past the section_order[]
+	array.  Cap *pnum at entry to all section_order helper functions.
+
+	* src/encode.c (section_move_top, section_find, section_remove,
+	  section_move_before): Clamp *pnum to SECTION_R13_SIZE to prevent
+	  OOB reads/writes on the section_order array.
+
+2026-06-26  Reini Urban  <reini.urban@gmail.com>
+
+	Fix assertion and leaks in --as=r2004 encoding path
+	Fix assertion dat->byte <= 0x140 that fails when encoding R2018→R2004.
+	The VERSIONS(R_13b1,R_2004) block writes legacy section data to the
+	main dat chain before old_dat is saved, advancing dat->byte far past
+	320 bytes.  Replace hardcoded version-specific bounds with the real
+	invariant: dat->byte < dat->size.
+	GH #1091
+
+	* src/encode.c (dwg_encode): Replace PRE/LATER_VERSIONS assert bounds
+	  0x100/0x140 with dat->byte < dat->size.
+	  Free orphaned section_info[i].sections before reducing num_desc
+	  during encode to prevent leak on re-read.
+
+	* src/decode.c (read_R2004_section_info): Free info->sections before
+	  calloc to prevent leak on re-decode.
+
+2026-06-26  Reini Urban  <rurban@cpan.org>
+
+	free: fix double-free in free_TABLESTYLE_r2010 on downconvert
+	downconvert_TABLESTYLE shallow-copies the r2010+ cellstyle text_style
+	handle and the content_color/bg_color name strings into rowstyles[0].
+	free_TABLESTYLE_r2010 then freed those aliases while the spec free
+	(dwg_free_TABLESTYLE) frees the same originals, double-freeing them when
+	an r2010+ TABLESTYLE is re-encoded down to <= r2007.
+
+	PR GH #1298, but rewritten.
+	Reported-by: Saddam <saddamr3e@gmail.com>
+
+2026-06-25  Reini Urban  <reini.urban@gmail.com>
+
+	dxf: unify TU xref name checks on native 2-byte wchar_t platforms
+	Remove the remaining HAVE_NATIVE_WCHAR2 special cases in
+	out_dxf.c (dxf_is_xrefdep_name and dxf_has_xrefdep_vertbar).  Both
+	helpers now always convert the TU string to UTF-8 via bit_convert_TU
+	and search for the ASCII "$0$" / "|" markers there.
+
+	The previous native wcsstr()/wcschr() paths happened to work because
+	the search targets are ASCII, but they kept a divergent platform-only
+	code path next to the portable UTF-8 fallback.  JSON output already
+	received a similar cleanup for GH #655; apply the same philosophy to
+	DXF.
+	See GH #655
+
+	Co-Authored-By: Kimi-k2.7 <kimi@moonshot.cn>
+
+2026-06-25  Reini Urban  <reini.urban@gmail.com>
+
+	json: fix blank/garbled r2007+ unicode text on Windows (GH #655)
+	On native 2-byte wchar_t platforms (HAVE_NATIVE_WCHAR2, e.g. Windows)
+	the JSON UTF-16 output path went through wcquote() + fprintf("%ls").
+	"%ls" converts the wide string to the C locale's narrow multibyte
+	encoding via wcrtomb(), which under the default "C" locale truncates
+	at the first non-ASCII character.  For r2007+ strings starting with a
+	non-ASCII codepoint (Cyrillic, Korean, U+0192 ...) this emitted an
+	empty "text_value", and for Western text it produced non-UTF-8 bytes.
+
+	JSON must always be UTF-8 regardless of platform locale, so always use
+	the manual UTF-16->UTF-8 emitter print_wcquote().  GH #655.
+
+	* src/out_json.c (VALUE_TEXT_TU): always expand to print_wcquote.
+	  (print_wcquote): compile unconditionally.
+	  (wcquote): removed, no longer used.
+	* NEWS: mention the fix.
+
+	Reported-by: Gian Maria Gentilini <<gentilinigm@users.noreply.github.com>>
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-25  Reini Urban  <reini.urban@gmail.com>
+
+	bits: check unchecked realloc in bit_write_TV
+	On DWG_OPTS_INJSON conversion the destination buffer was grown with an
+	unchecked realloc.  On failure this leaked the old buffer and passed NULL
+	back into bit_utf8_to_TV, causing a null-deref crash.
+
+	* src/bits.c (bit_write_TV): Capture realloc result in a tmp, on OOM log
+	  the error, free the old buffer, set length to 0 and break out cleanly.
+	  The grown buffer is only adopted when non-NULL.  Also set loglevel
+	  before the adjacent malloc-failure LOG_ERROR so it is not suppressed.
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-25  Saddam  <saddamr3e@gmail.com>
+
+	Fix UBSan pointer-overflow in bsearch_ex on empty array
+
+2026-06-25  Reini Urban  <reini.urban@gmail.com>
+
+	AGENTS: add gortex support
+
+2026-06-25  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: make VIEWPORT.frozen_layers dxf group code version dependent
+	The 341 -> 331 group code change matches the handle type change
+	from hard pointer to soft pointer.
+	So the dxf codes must be dependent on the version and handle type.
+
+	Also fix the dynapi for injson, and the indxf case.
+	test-case:
+	../dxf-check ../to/2010/from_knowledge.autodesk.com/plot_screening_and_fill_patterns.dwg
+	haven't fund any pre-2004 VIEWPORT.frozen_layers in the wild.
+
+2026-06-25  Emptyset110  <21324784@qq.com>
+
+	dxf: VIEWPORT frozen_layers use DXF group code 331, not 341
+	AcDbViewport per-viewport frozen-layer handles are soft-pointer
+	references; the DXF reference assigns them group code 331. dwg.spec
+	emitted them as 341 (hard-pointer band, like the adjacent
+	clip_boundary=340), so dwg2dxf output is read as having no
+	per-viewport frozen layers by spec-conformant parsers (ezdxf,
+	AutoCAD). DWG decode and -O JSON were unaffected (they key on the
+	field name), which hid it from the symmetric round-trip. Verified:
+	SW049 sheet 260 now reads its 9 frozen layers via ezdxf, matching
+	dwgread -O JSON.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	decode: demote missing AppInfo section from ERROR to INFO
+	* src/decode.c (read_2004_section_appinfo): treat missing AppInfo
+	  section as non-critical, matching read_2004_section_appinfohistory
+	  and the r2007 decoder.  AppInfo is optional; its absence should not
+	  propagate DWG_ERR_SECTIONNOTFOUND into the cumulative error result.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+
+	Fix global-buffer-overflow in section_move_top insert
+	Fix ASAN global-buffer-overflow WRITE when section_move_top
+	inserts with *pnum >= SECTION_R13_SIZE, causing memmove to write
+	past psection_order[7].  The UBSan index-out-of-bounds fix
+	(0ff2bb926) only guarded the switch; this guards the array write.
+
+	* src/encode.c (section_move_top): Refuse insert and return -1
+	  when *pnum >= SECTION_R13_SIZE instead of asserting.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	Fix null-dereference WRITE in bit_write_TV on OOM
+	Fix ossfuzz 524392897: when malloc fails in
+	bit_write_TV JSON-to-codepage conversion, dest is NULL and
+	bit_utf8_to_TV writes to it.
+
+	* src/bits.c (bit_write_TV): Check dest for NULL after malloc,
+	  log error and set length=0 on failure.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	Fix null-dereference in dwg_encode_handleref_with_code
+	Fix ossfuzz 524854787: null dereference of BITCODE_H
+	(Dwg_Object_Ref *) when corrupt DWG has null handle fields
+	(e.g. BLOCK_HEADER.block_entity or endblk_entity).
+	Add null guard for ref and obj.
+
+	* src/encode.c (dwg_encode_handleref_with_code): Return early
+	  if ref or obj is NULL.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	Fix UBSan index-out-of-bounds in section_order switch
+	Fix ossfuzz 524832524 again: UBSan catches section_order[id]
+	with sentinel value SECTION_R13_SIZE (7) indexing into the switch
+	jump table of 7 entries (enum values 0-6).  Wrap the switch in a
+	bounds check so the sentinel hits the LOG_WARN path instead.
+
+	* src/encode.c (dwg_encode): Guard section_order switch with
+	  section_order[id] < SECTION_R13_SIZE check.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	Fix heap-buffer-overflow WRITE in dwg_encode_add_object overlarge MS
+	Fix ossfuzz 526016910: OOB write when an object's size
+	changes from <=0x7fff to >0x7fff during encode.  The memmove shifts
+	obj->size+3 bytes right by 2, ending at dat->byte+obj->size+5,
+	but the bit_chain_alloc_size guard only reserved +4 extra bytes.
+
+	* src/encode.c (dwg_encode_add_object): Reserve +5 bytes instead
+	  of +4 for the overlarge MS size memmove.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	Fix heap-buffer-overflow in cquote for truncated \M+ sequence
+	Fix ossfuzz issue 525088817: OOB read when a header string
+	ends with a truncated \M+ escape.  memBEGINc only checks 2 chars
+	but s[3] and sscanf(&s[3]) need 7.
+
+	* src/out_dxf.c (cquote): Add source-buffer check s + 6 < send
+	  before accessing the \M+nXXXX sequence.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	Fix infinite loop in decode_preR13_entities corrupt R11 DWG
+	Fix ossfuzz timeout (6039899330117632): corrupted R11 DWG with
+	bogus entities_end caused an infinite entity-decode loop.
+
+	* src/decode.c (decode_preR13_entities): Clamp size when end is
+	  fixed to dat->size to prevent infinite while loop.  Prevent
+	  dat->byte from moving backwards when corrupted entities decode
+	  to zero length (LATER_VERSIONS position correction).
+	* src/dwg.c (Ref_cmp): Fix sign: return -1 instead of 1 when
+	  pKey->absolute_ref < (*ppR)->absolute_ref, breaking bsearch.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+
+	Fix ossfuzz 525291340: SEGV in dwg_dxfb_BLOCK_HEADER preview write
+	The fuzzed DWG data can set dwg->opts loglevel bits to enable TRACE
+	logging, which causes LOG_TRACE in FIELD_BINARY to dereference
+	_obj->preview as %s even when the pointer is corrupted.
+
+	* src/out_dxfb.c (BLOCK_HEADER DXF): Guard FIELD_BINARY(preview, ...) with
+	  _obj->preview and _obj->size null checks.
+	* src/bits.c (bit_write_TF): Defensively reject chain pointers below
+	  page size (4096) as corrupted, treating them like NULL (write zeros).
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+
+	Revert "Fix ossfuzz 525291340: null-deref in dwg_dxfb_BLOCK_HEADER"
+	This reverts commit 8feb782ab9a156d5ab90979904f5ee294cd88de8.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	Fix ossfuzz 524832524: index-out-of-bounds in dwg_encode section_order
+	* src/encode.c (dwg_encode): Clamp section iteration to SECTION_R13_SIZE
+	  (7) to prevent reading past the static section_order array when
+	  num_sections is inflated by fuzzed DWG header data.
+
+	Fix ossfuzz 42534122: heap-buffer-overflow in dxf_entities_read clip_verts
+	* src/in_dxf.c (new_object, clip_verts handling): Extend num_clip_verts
+	  growth check to cover DXF code 14 (not just 11), add realloc for
+	  code 14 when j > 0, and guard the y-write path (code < 30) against
+	  unallocated clip_verts by allocating on first access.
+
+	Fix ossfuzz 525088107: heap-buffer-overflow in dwg_geojson_object
+	* src/out_geojson.c (dwg_geojson_object, ARC case): Reject num_pts <= 0
+	  to prevent malloc(0) returning a 1-byte region that is then read as
+	  a BITCODE_2BD (16 bytes) in the pts[0] access.
+
+	Fix ossfuzz 525291340: null-deref in dwg_dxfb_BLOCK_HEADER
+	* src/dwg.spec (BLOCK_HEADER DXF): Guard FIELD_BINARY(preview, ...) with
+	  _obj->preview null check to prevent fwrite from reading a corrupted
+	  pointer set during fuzzed DWG decode.
+
+	Fix ossfuzz 42510991: memory leak in dxf_header_read
+	* src/in_dxf.c (dxf_header_read): Free pair on early return when
+	  ACADVER is invalid, and after the while-loop exits with an
+	  unexpected group code on garbled DXF input.
+
+	Fix ossfuzz 42533395: heap-buffer-overflow in dynapi_set_helper via JSON import
+	* src/in_json.c (_set_struct_field): For pointer-typed subclass fields
+	  (type ending in '*'), dereference the pointer and allocate the subclass
+	  struct when NULL before recursing into _set_struct_field.  Previously
+	  the code treated the pointer's address in the parent struct as the
+	  subclass buffer, writing past the parent allocation.
+
+2026-06-24  Reini Urban  <reini.urban@gmail.com>
+
+	Revise AGENTS.md clean rules
+
+2026-06-19  Reini Urban  <reini.urban@gmail.com>
+
+	Fix ossfuzz 524394694: ASSERT section[0].address in encode_header_vars
+	Replace the assertion with a validated check and reset bogus
+	section[0].address to 0 when fuzzed DWG decode sets it past the
+	current write position. The address/size for R2004+ is kept on
+	section[0] to maintain consistency with the section map writer.
+
+	* src/encode.c (encode_auxheader): skip empty AuxHeader.
+	  (encode_header_vars): validate section[0].address and reset
+	  when invalid, instead of asserting.
+	* src/decode.c: set fixedtype DWG_TYPE_UNKNOWN_ENT for unknown
+	  objects; skip tio.entity NULL objects in block header.
+	* src/decode_r11.c: set tbl->size to 0 on overflow.
+
+2026-06-19  Pascal Bourguignon  <pjb@informatimago.com>
+
+	bits: fix misleading CWE-120 comment on in_hex2bin reference path
+	The disabled (#if 0) reference implementation of in_hex2bin carried a
+	"Safe alternative to sscanf ... (CWE-120)" comment, but the relevant concern
+	for that hand-rolled loop is an out-of-bounds read, not a format-string
+	overflow, and the active implementation is the #else lookup path. Reword the
+	comment to describe it accurately (reference-only; relies on the caller's
+	2*destlen contract) and drop the misleading security justification.
+
+	Addresses review feedback on #1282.
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-19  Pascal Bourguignon  <pjb@informatimago.com>
+
+	encode: extract can_emit_raw_unknown() for UNKNOWN_ENT/OBJ gating
+	The condition deciding whether an UNKNOWN_ENT/UNKNOWN_OBJ raw blob can be
+	re-emitted verbatim (same version && raw bits still held) was duplicated in
+	both switch cases. Extract it into a can_emit_raw_unknown() predicate so the
+	two paths can't drift apart. No behavior change (verified: example_2018
+	--as r2018 still round-trips with no object loss or wrong-size).
+
+	Addresses review feedback on #1286.
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-19  Pascal Bourguignon  <pjb@informatimago.com>
+
+	out_dxf: only negate LAYER colour (DXF 62) when the layer is off
+	The LAYER table writer negated the group-62 colour index unconditionally, so
+	every ON layer was exported with a negative 62 (= "layer off") and its
+	entities became invisible after dwg2dxf; a DWG->DXF->DWG round-trip flipped
+	the layer off. libredwg's own decoder reports the layer as on, so this was an
+	exporter-only inconsistency.
+
+	Derive the sign from the decoded `off` flag: negate only when off, using
+	abs() so an already-signed index cannot double-negate, with explicit braces.
+	An ON layer now exports its true positive ACI (62=7 instead of -7) and an OFF
+	layer exports negative; the DWG->DXF->DWG round-trip preserves on/off.
+
+	This re-applies the fix from the earlier #1283 (which did not land on master)
+	and incorporates the review feedback there (sign via -abs(), braces).
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-17  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix index-out-of-bounds in section_move_before
+	When section_order is full (*pnum reaches SECTION_R13_SIZE) and
+	section_move_before tries to insert a section not already in the
+	array, the old assert() was the only guard.  In release builds
+	(NDEBUG) this became a memmove past the end of the static array.
+
+	Replace the assert with a runtime bounds check that returns early
+	when the array is full, matching the existing 'before not found'
+	early-return pattern.
+
+	* src/encode.c (section_move_before): Replace assert with runtime
+	  if (*pnum >= SECTION_R13_SIZE) return 0 guard.
+
+	Fixes oss-fuzz Issue 524832524
+	GH #831
+
+2026-06-17  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix null-deref in encode_preR13_section PREP_CTRL and PREP_TABLE
+	When a fuzzed DWG has an object with a fixedtype matching that of a
+	CONTROL table object but is actually an entity (tio.object == NULL),
+	the PREP_CTRL macro would null-dereference ctrl->tio.object->tio.token.
+	Similarly, PREP_TABLE accessed obj->tio.object->tio.token before
+	checking obj->fixedtype, and without a NULL guard on tio.object.
+
+	* src/encode.c (PREP_CTRL): Add !ctrl->tio.object guard before deref.
+	  (PREP_TABLE): Move fixedtype check before tio.object access and add
+	  !obj->tio.object guard.
+
+	Fixes oss-fuzz Issue 524854787
+	GH #832
+
+2026-06-15  Pascal Bourguignon  <pjb@informatimago.com>
+
+	decode: fix R2004+ decompression aborting on exact buffer-fill (data loss)
+	decompress_R2004_section rejected a back-reference copy whose end landed
+	*exactly* on the decompressed buffer size (`end >= dec->size`). A real R2018
+	section legitimately ends with a copy that fills the buffer to the brim (the
+	trailing run lands in the unused tail past the page's real data and is never
+	read), so this false positive aborted the whole section mid-stream with
+	"Invalid decompression bytes". The short section then left every later
+	bit_read run off the end, dropping/garbling thousands of objects — a
+	regression vs 0.13.3 introduced by the 2004-decompression refactor (the
+	pre-refactor code used `dst + comp_bytes > dst_end`, i.e. strict `>`).
+
+	Restore the strict comparison (`end > dec->size`): only error when the copy
+	would actually overrun the buffer; allow the exact-fill case. The copy then
+	writes at most dec->size bytes (buffer is over-allocated by 1024), so this is
+	still safe against OOB.
+
+	On a real R2018 file that previously hit 5+ "Invalid decompression bytes"
+	and produced unusable JSON, the decode is now clean (0 errors) and recovers
+	the same 121 objects as 0.13.3. r2004–r2018 corpus decode unaffected.
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-15  Pascal Bourguignon  <pjb@informatimago.com>
+
+	encode: fix R2018 decode→encode→decode object loss and thumbnail growth
+	Two defects broke faithful same-version round-trips of R2004+ DWGs
+	(R2018/AC1032 in particular); both are fixed in encode_r13_thumbnail and
+	the dwg_encode_add_object dispatch.
+
+	1. UNKNOWN_OBJ/UNKNOWN_ENT proxy objects (custom classes libredwg keeps as
+	   raw blobs) were only re-emitted when the input was JSON
+	   (DWG_OPTS_INJSON). A DWG→DWG re-encode at the same version wrote just the
+	   common header and dropped the blob, producing "Wrong object size" errors
+	   and losing objects (6 dropped, 474→473 on example_2018). Gate on
+	   version == from_version && unknown_bits instead, so DWG and JSON inputs
+	   are handled identically (the raw encoder already requires same-version).
+
+	2. The AcDb:Preview thumbnail grew 16 bytes on every round-trip and tripped
+	   "Preview overflow". The r2004+ decoder keeps the trailing THUMBNAIL_END
+	   sentinel inside thumbnail.size (decode.c: size = sec_dat.size - 16,
+	   byte = 16; the JSON writer likewise retains it), so encode_r13_thumbnail
+	   must not append its own END sentinel for SINCE(R_2004a) — it is already
+	   part of the content. r13-r2000 keep the END separate and still write it.
+	   Also write content from chain + thumbnail.byte so the leading sentinel is
+	   skipped.
+
+	Result: dwgrewrite --as r2018 on example_2018/sample_2018 yields 474/474
+	objects, a byte-identical thumbnail stable across repeated round-trips, and
+	no new errors; r2010/r2013 and the r13/r14/r2000 paths are unaffected.
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-15  Pascal Bourguignon  <pjb@informatimago.com>
+
+	in_dxf: preserve leading spaces in string values; fix r2007+ DWGCODEPAGE read
+	Two DXF-import string fidelity fixes:
+
+	- dxf_read_string stripped leading whitespace from every value via
+	  dxf_skip_ws, but dxf_read_rs already consumed the group-code line and its
+	  newline, so we are at the value-line start where leading spaces are
+	  significant. An MTEXT continuation chunk beginning with a space (e.g.
+	  "...un des" + " maîtres...") lost that space, joining the words. Drop the
+	  skip.
+
+	- dxf_set_DWGCODEPAGE read header_vars.DWGCODEPAGE as a C string, but r2007+
+	  stores header TV vars as TU (UTF-16), so "ANSI_1252" was seen as "A" and
+	  the codepage came out UNDEFINED ("Invalid DWGCODEPAGE A"). Decode the TU
+	  name first, detected by the embedded NUL (codepage names are pure ASCII).
+
+	With these and the bit_write_T UTF-8 fix, a real R2018 multiline-MTEXT
+	dwg2dxf | dxf2dwg --as r2018 round-trip reproduces the text byte-identically.
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-15  Pascal Bourguignon  <pjb@informatimago.com>
+
+	bits: decode UTF-8 DXF strings to UTF-16 when encoding to r2007+
+	bit_write_T, when emitting a non-TU (DXF/JSON/API) string to an r2007+
+	target, built the UTF-16 by copying each input byte and zero-extending it.
+	For DXF input — whose in-memory strings are UTF-8 (in_dxf keeps them as
+	read) — that double-encoded every non-ASCII character: "été" was written as
+	"Ã©tÃ©". A decode→DXF→r2018 round-trip of a French multiline MTEXT thus
+	mojibaked all accented text (non-ASCII char count doubled).
+
+	Decode real UTF-8 multi-byte sequences (2/3-byte, and 4-byte to a surrogate
+	pair) for DXF input, gated on DWG_OPTS_INDXF. JSON and the add API store
+	codepage bytes (json_string runs bit_utf8_to_TV) with non-representable
+	characters already escaped as \U+xxxx, and old-DWG up-converts likewise hold
+	codepage bytes, so those keep the byte-wise path unchanged. The inline
+	\U+xxxx escape is still honoured on both paths.
+
+	Now dwg2dxf | dxf2dwg --as r2018 of accented text round-trips byte-identical;
+	JSON and DWG->DWG paths are unaffected.
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+	Co-Authored-By: Reini Urban <reini.urban@gmail.com>
+
+	Also replace the (dead, #if 0) sscanf "%2hhX" reference path in
+	in_hex2bin() with a hand-rolled two-nibble hex decode, to clear a CWE-120
+	scanf warning flagged on this PR (the format was already width/size-safe,
+	but this drops the format string entirely).
+
+	Rejects overlong encodings / surrogate-range / out-of-range code points.
+
+2026-06-15  Pascal Bourguignon  <pjb@informatimago.com>
+
+	in_dxf: concatenate MTEXT text split across group codes 3 and 1
+	MTEXT text longer than 250 characters is emitted in DXF as one or more
+	250-char chunks under group code 3 followed by a final (<250) chunk under
+	group code 1. The importer overwrote o->text on each code 3 (and only
+	reallocated when the new chunk was longer), and let the final code 1 fall
+	through to the generic field setter, which overwrote again. The result was
+	a single surviving fragment — a 1497-char paragraph imported as one byte.
+
+	Handle codes 3 and 1 together for MTEXT and append each chunk (a short
+	MTEXT still has only the code 1, handled as the first chunk). On
+	dwg2dxf | dxf2dwg of a real R2018 multiline MTEXT the full text and all
+	\P paragraph breaks now survive; short single-chunk MTEXT is unchanged.
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-15  Pascal Bourguignon  <pjb@informatimago.com>
+
+	build: don't redeclare memmem() on macOS
+	macOS declares memmem() in <string.h>, so the non-Linux fallback
+	declaration in common.h is redundant there and fails the build under
+	-Werror=redundant-decls. Guard it with !defined(__APPLE__).
+
+	Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+
+2026-06-15  Reini Urban  <reini.urban@gmail.com>
+	    Pascal J. Bourguignon  <informatimago@gmail.com>
+
+	spec: fix swapped extents_width/height in R2018 MTEXT embedding
+	The redundant embedded object in R2018+ MTEXT uses DXF field order
+	(extents_width 42, then extents_height 43) matching the DXF branch, but
+	the binary DWG branch had them reversed (height first, width second).
+	This swapped the decoded values compared to the non-redundant path.
+
+	GH #1278
+	A fellow lisp hacker.
+	Verified by Opus 4.8 (Pascal) and Sonnet 4.6 (Reini)
+
+2026-06-14  Reini Urban  <reini.urban@gmail.com>
+
+	fix 3 ossfuzz crashes
+	ossfuzz #523804647: Null-dereference in encode_r11_auxheader at encode.c:1796
+	when dwg->header_vars.HANDSEED is NULL.  Add null guard.
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=523804647
+
+	ossfuzz #523387982: Heap-buffer-overflow in encode_preR13_entities at encode.c:5454
+	when a Dwg_Entity_POLYLINE_PFACE (56 bytes) is accessed through a
+	Dwg_Entity_POLYLINE_2D pointer whose num_m_verts/num_n_verts fields
+	lie 72 bytes past the PFACE allocation.  Split the unified case to use
+	the correct struct pointer per fixedtype.
+	Also fix VERTEX_PFACE_FACE which lacks a point field.
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=523387982
+
+	ossfuzz #523782030: SEGV in dwg_dxfb_BLOCK_HEADER at out_dxfb.c:1067
+	when LOG_TRACE unconditionally evaluates obj->tio.object->ownerhandle->
+	absolute_ref before the log-level guard.  Add ternary null check.
+	Also guard callers against uninitialized BLOCK_HEADER tio.
+	https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=523782030
+
+2026-06-14  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: fix EED code 1004 binary data overflows in add_eed
+	- Emit LOG_WARN when blen > 0xff ("EED binary data too long... truncating")
+	- size, allocation, eed_4.length, and both memcpy/in_hex2bin calls now
+	  consistently use cblen instead of the untruncated blen
+
+	This keeps the __counted_by(length) eed_4.data array consistent with
+	the actual copied/allocated size (previously length silently wrapped
+	mod 256 while blen bytes were copied into a buffer sized for the
+	untruncated length — correct memory-wise but a latent correctness
+	mismatch for binary EED data > 255 bytes).
+
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+2026-06-13  Reini Urban  <reini.urban@gmail.com>
+
+	test: skip version/tag mismatch assertions on smoke/rel* branches
+	smoke/rel* branches bump LIBREDWG_VERSION_M{AJOR,MINOR} ahead of the
+	next release tag, so PACKAGE_VERSION (derived from git describe) still
+	refers to the previous tag until the branch is tagged, tripping
+	test_api_version's major/minor vs tag assertions.
+
+	Detect smoke/rel* via CI branch env vars (GITHUB_REF_NAME,
+	GITHUB_HEAD_REF, CI_COMMIT_REF_NAME, CI_COMMIT_BRANCH) or, as a
+	fallback, `git rev-parse --abbrev-ref HEAD`, and report a todo()
+	instead of asserting on a mismatch there.
+
+2026-06-13  Reini Urban  <reini.urban@gmail.com>
+
+	configure: auto-enable --check-less under OSS-Fuzz/CIFuzz
+	The CIFuzz build (build.sh) runs make check-prep -C test/unit-testing/
+	after building the fuzzer, compiling ~300 ASAN+debug unit-test
+	binaries statically linked against libredwg.a. This regularly exhausts
+	the GitHub Actions runner's disk ("No space left on device" linking
+	ray/rastervariables/proxy_object), failing the whole fuzzer build even
+	though the fuzzer itself built fine.
+
+	Detect CIFUZZ or OSS_FUZZ_PROJECT_NAME in the environment and default
+	check_less=yes in that case, so check_PROGRAMS shrinks to the minimal
+	API test set, without affecting normal builds.
+
+2026-06-13  Reini Urban  <reini.urban@gmail.com>
+
+	Fix -Werror=format-overflow in xmlsuite common.c
+	GCC's null-destination-pointer check flags sprintf into the result of
+	malloc that isn't checked for NULL. Add the standard if (!result)
+	return NULL; guard used elsewhere in the codebase to each of the five
+	helper functions.
+
+2026-06-12  Reini Urban  <reini.urban@gmail.com>
+
+	encode: Fix heap-buffer-overflow in encode_auxheader
+	for cross-boundary version conversion
+
+	When a fuzzed AC1013 (R13c3) file has an unusual header.num_sections=3
+	(decode doesn't normalize this since from_version==version) and is
+	re-encoded as R2004, dwg_sections_init's recompute condition only
+	handled downgrades (from_version > R_2000 && version <= R_2000),
+	leaving num_sections=3 and header.section[] sized for 5 entries.
+
+	The SINCE(R_2004a) encode path unconditionally calls encode_auxheader,
+	which writes header.section[SECTION_AUXHEADER_R2000] (index 5) - one
+	element past the end of the array.
+
+	Replace the one-directional check with a symmetric XOR
+	((from_version > R_2000) != (version > R_2000)) so both upgrades and
+	downgrades across the R_2000 boundary trigger the recompute.
+
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+2026-06-12  Reini Urban  <reini.urban@gmail.com>
+
+	Fix assertion failure in section_move_before for R13 encoding
+	When decoding an AC1500 (R2000b) file with header.sections=6 and
+	re-encoding as R13, two section_move_before calls occur during section
+	reordering. The first legitimately grows *pnum 6->7 (THUMBNAIL). The
+	second moves TEMPLATE, which is already within the counted range -
+	a reorder, not an insert - but the old code still tried to grow *pnum
+	7->8, tripping assert(*pnum + 1 <= SECTION_R13_SIZE).
+
+	Detect when id is already within [0, *pnum) and reorder it in-place
+	via memmove without touching *pnum, mirroring the analogous branch in
+	section_move_top.
+
+2026-06-12  Reini Urban  <reini.urban@gmail.com>
+
+	Triage CodeQL alerts: dead code + use-after-free false positives
+	decode.c: remove unreachable `if (!dat) return error` in
+	dwg_decode_add_object - dat is unconditionally dereferenced at function
+	entry (abs_dat = *dat), so it can never be NULL here (CodeQL #82).
+
+	Add inline codeql[cpp/use-after-free] suppressions for the VALUE_HANDLE
+	pre-R13 free()+reassign pattern in FIELD_HANDLE/CONTROL_HANDLE_STREAM/
+	XDICOBJHANDLE/*_fields call sites across dwg.spec, dwg2.spec and
+	common_*.spec. Same pattern already reviewed and dismissed as false
+	positive in #181 (dwg2.spec:1006): ref is freed and immediately
+	reassigned to a fresh allocation before any further dereference.
+
+2026-06-12  Reini Urban  <reini.urban@gmail.com>
+
+	fix dxfwrite buffer overflow with __counted_by on eed_4
+	* src/in_json.c (json_eed): set data->u.eed_4.length before memcpy
+	  into the flexible array data->u.eed_4.data.  The __counted_by(length)
+	  attribute requires the length to be set first, otherwise FORTIFY_SOURCE
+	  aborts on the memcpy because it sees length as zero.
+
+2026-06-11  Reini Urban  <reini.urban@gmail.com>
+
+	fix json-check example_r14 roundtrip regression
+	Revert two changes from d868ddf1b that broke r14 DWG output.
+
+	* src/bits.c (bit_write_TV): restore TV-ZERO null terminator for r14
+	  by using >= R_14 instead of > R_14.  r14 TV fields need the trailing
+	  \0 byte, otherwise ODA misidentifies class names on re-read.
+	* src/encode.c (dwg_encode): do not unconditionally overwrite
+	  maint_rel_version from the dwg_versions table.  When importing from
+	  JSON the value from the input file (e.g. 0xa for example_r14) must
+	  be preserved.
+
+2026-06-11  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	Fix r11 DXF roundtrips: ODA validation and entity encoding
+	Fixes ODA "Illegal entity type" and "Invalid DXF code" errors
+	for r11 DXF roundtrip on files with block POLYLINE/VERTEX entities
+	and DIMENSION entities without subtype flags.
+
+	* src/out_dxf.c (dxf_block_write): When writing block-owned POLYLINE
+	  entities to the BLOCKS section, also forward-scan for trailing
+	  VERTEX/SEQEND children and write them to the same section.  Without
+	  this, block VERTEX entities land in ENTITIES, and ODA sees
+	  HAS_ATTRIBS on block polylines expecting VERTEX to follow, but
+	  finds no vertices and reports "Illegal entity type".
+
+	* src/in_dxf.c (new_object): Handle DXF code 50 (dim_rotation) also
+	  for DWG_TYPE_DIMENSION_ANG2LN, upgrading to DIMENSION_LINEAR.
+	  Some r11 DIMENSION entities lack the flag (code 70), leaving them
+	  as the placeholder ANG2LN type.  Without this, code 50 triggers
+	  "Invalid DXF code 50 for DIMENSION".
+
+	* src/encode.c (encode_preR13_entities): Set OPTS_R11_POLYLINE_HAS_FLAG
+	  on all POLYLINE entities so the subtype flag is always written.
+	  Compute HAS_M_VERTS/HAS_N_VERTS for mesh polylines.  Sync
+	  elevation_r11 from point.z for VERTEX entities.  Set HAS_FLAG (bit 8)
+	  for VERTEX when the vertex flag is non-zero.  Clear HAS_ATTRIBS for
+	  block POLYLINE entities after flag computation to prevent ODA from
+	  expecting VERTEX children that are not present.  Add backward-scan
+	  owner lookup for VERTEX/SEQEND section assignment.
+
+	* src/decode.c (dwg_fixup_BLOCKS_entities): Add post-import fixup
+	  loop that scans VERTEX/SEQEND entities backward for their
+	  POLYLINE/INSERT owner and inherits its entmode, correcting entmode=2
+	  (model space) to entmode=3 (block) for DXF roundtrip cases.
+
+	Verified with AIRPLANE.DWG and TUTORIAL.DWG r11 DXF roundtrips.
+
+	Also fixes regressions from commit 82ee35d5c (GH #1236).
+
+	* BLOCKS_SECTION_INDEX: Remove dead 'dat->version < R_2_0b' code
+	  (leftover from 82ee35d5c).  Fix ENDBLK handling: use 'else if
+	  (!in_blocks)' so ENDBLK is properly encoded in BLOCKS section.
+
+	* Type 0x80 flag: Fix spurious deleted flag (type 146 instead of
+	  18) on entity types for DXF/JSON-imported entities.  obj->type
+	  is the modern fixedtype whose bit 7 is coincidentally set; only
+	  apply the deleted flag when obj->type != obj->fixedtype.
+
+	Reduces dxf-check failures from 49 to 46 (fixes 3 files).
+
+	- Verified entities-2d.dwg roundtrip now keeps POLYLINE_2D →
+	  VERTEX_2D ×3 → SEQEND sequential in ENTITIES, with EXTRAS empty (size 0)
+	- Verified pure DXF→DWG roundtrip shows the same correct structure
+	- Ran dxf-check on all r9-r12 test DWGs (entities-2d, entities-3d,
+	  PL1, ACEL10, Drawing_r11, r9/entities, etc.)
+	— exit codes identical before/after, no regressions
+
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+2026-06-09  Reini Urban  <reini.urban@gmail.com>
+
+	Fix spurious CMLSTYLE warning during DXF import
+	When importing DXF, resolve_postponed_header_refs is called twice:
+	once after the TABLES section and once after OBJECTS.  CMLSTYLE references
+	a MLINESTYLE object in the OBJECTS section, so the first lookup fails.
+	Downgrade the warning to LOG_TRACE since the handle is resolved correctly
+	on the second pass.
+
+2026-06-09  Reini Urban  <reini.urban@gmail.com>
+
+	Fix r2007 DWG encoding by falling back to r2010
+	r2007 encoding was not supported, returning DWG_ERR_NOTYETSUPPORTED
+	and producing a truncated ~4KB file.  Now we fall back to r2010
+	before writing the header, producing a valid DWG that LibreDWG can
+	read.
+
+	* src/encode.c (dwg_encode): Move the r2007 -> r2010 fallback
+	  before the file header is written.
+
+2026-06-08  Reini Urban  <reini.urban@gmail.com>
+
+	Fix spurious "Object handle not found" warnings during decode
+	Two issues in the object reference resolution paths caused spurious
+	warnings for handle values like HANDSEED, which are not references to
+	other objects.
+
+	* src/decode.c (resolve_objectref_vector): Skip code-0 handle refs.
+	  Code-0 handles represent handle values (e.g. HANDSEED), not object
+	  references, so resolving them as object references always fails.
+
+	* src/decode.c (dwg_resolve_objectrefs_silent): Use
+	  dwg_resolve_handle_silent instead of dwg_resolve_handle.  The latter
+	  overwrites the global loglevel with dwg->opts, defeating the purpose
+	  of the "silent" function which sets loglevel=0 to suppress warnings.
+
+2026-06-08  Reini Urban  <reini.urban@gmail.com>
+
+	Fix "Object handle not found" warnings in dwg_add_Document for pre-R2000
+	Two issues caused spurious warnings when creating documents for r11 and
+	other pre-R2000 versions:
+
+	* src/dwg_api.c (dwg_add_Document): Skip resolving code-0 handle refs
+	  (e.g. HANDSEED) in the object_ref resolution loop.  Code-0 handles are
+	  handle values, not references to other objects, so resolving them as
+	  object references always fails with a warning.
+
+	* src/dwg_api.c (dwg_add_Document): Only set the default LAYER plotstyle
+	  to 0xF for R_2000 and later.  The PLOTSTYLE object at handle 0xF is only
+	  created for R_2000+, so referencing it in earlier versions caused an
+	  "Object handle not found" warning.  This aligns with dwg_add_LAYER,
+	  which already guards plotstyle assignment behind version >= R_2000.
+
+2026-06-08  Reini Urban  <reini.urban@gmail.com>
+
+	Fix pre-R13b1 dwg_version and improve r11 DXF import/encode
+	Fix the dwg_version RC field in the file header, which was 0x10
+	for pre-R13b1 files produced from DXF import.
+	Pre-R13b1 files need dwg_version=0 (set by dxf_fixup_header).
+	Only R13+ uses the dwg_versions struct value.
+
+	Improve r11 roundtrip quality:
+	- Add VX_CONTROL object on DXF/JSON import, needed for VX section header
+	- Compute correct DIMENSION opts_r11 for all dimension subtypes
+	- Fix SHAPE entity: change style_id DXF code from 2 to 7
+	- Fix DIMENSION_COMMON: avoid duplicate user_text code 1 for pre-R13
+	- Initialize used=-1 on new objects in DXF import
+	- Re-enable DIMENSION flag-based subtype detection for pre-R13 files
+
+	* src/encode.c: Guard dwg_version assignment with version >= R_13b1.
+	  Add VX_CONTROL creation on DXF/JSON import. Add opts_r11 computation
+	  for DIMENSION subtypes.
+	* src/in_dxf.c: Add used=-1 initialization on new objects. Re-enable
+	  DIMENSION flag-based subtype upgrade for r11/pre-R13 files.
+	* src/dwg.spec: Fix SHAPE style_id DXF code (2 -> 7).
+	* src/dwg_spec_shared.h: Fix DIMENSION_COMMON user_text to not
+	  duplicate code 1 for pre-R13.
+	* doc/dynapi.texi: Regenerated for SHAPE.style_id code change.
+
+	The roundtrip for r11/entities-2d still fails ODA validation due to
+	remaining structural differences (lost deleted entities, table entry
+	counts, entity property flags). Further work needed.
+
+2026-06-08  Reini Urban  <reini.urban@gmail.com>
+
+	validate entity links also in fixup_BLOCKS_entities
+	GH #1226
+
+	And add a couple of null-ptr and type protections for more robust
+	cycle checks and fuzzed input.
+
+2026-06-07  Reini Urban  <reini.urban@gmail.com>
+
+	Fix GHSA-5p98-8245-6hxq: const-input write/crash in bit_TV_to_utf8 iconv error path
+	bit_TV_to_utf8 could write to the caller-provided const src buffer
+	via bit_u_expand on an iconv error path, causing SIGSEGV for string
+	literals and silent input corruption for mutable buffers.
+
+	* src/bits.c (bit_TV_to_utf8): Use bit_TV_to_utf8_codepage fallback
+	  instead of in-place bit_u_expand on iconv error, consistent with
+	  the other three error paths in the same function.
+	* test/unit-testing/bits_test.c (bit_TV_to_utf8_tests): Add
+	  regression test with const string literal, \U+XXXX marker, and
+	  CP_UTF16 that triggers the exact iconv error path.
+	* SECURITY.md: mention the new WebUI
+
+	CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L
+	Reported-by: Bin-infinite
+
+2026-06-07  Reini Urban  <reini.urban@gmail.com>
+
+	Fix pre-R13 entity section assignment: remove entmode filter in BLOCKS
+	The BLOCKS section encoder was filtering entities by entmode!=3, but after
+	JSON import, entmode might be 0 (not preserved for pre-R13). BLOCK/ENDBLK
+	boundaries are already tracked via fixedtype and in_blocks state, so the
+	entmode filter is redundant and harmful.
+
+	Fixes GH #1236 - oda Illegal entity type in pre-R13 JSON roundtrips.
+
+2026-06-07  Reini Urban  <reini.urban@gmail.com>
+
+	Fix pre-R13 HANDSEED encode: mask absolute_ref to 32 bits
+	bit_write_RLL_BE was writing the full 64-bit absolute_ref which carried
+	garbage in the upper 32 bits from bogus dwg_add_handleref propagation.
+	Make the encoder robust by masking to 32 bits at the write point —
+	this is the direct fix for the RLL_BE write path.
+
+	Fix pre-R13 HANDSEED filters for bogus 64-bit handles
+	* dwg_add_handleref: guard against >32-bit absref poisoning HANDSEED
+	  for pre-R12 files (root cause fix)
+	* encode_preR13_header_variables: add safety-net filter for HANDSEED
+	  >0xFFFFFFFF, recomputing from valid 32-bit refs
+	* dwg_encode_header_variables: use _obj->HANDSEED as seed start,
+	  add pre-R12 guard matching existing object_ref scan filter
+
+	encode: improve MINSERT r11 opts calc
+
+2026-06-07  Reini Urban  <reini.urban@gmail.com>
+
+	Fix OOB write in encode.c subentity loop; add CodeQL suppression in dwg2.spec
+	encode.c in_postprocess_SEQEND: realloc owned[] before writing owned[i],
+	not after — second iteration wrote owned[1] one slot past the initial
+	calloc(1,...) allocation before the realloc happened (GH #1273).
+
+	dwg2.spec: extend lgtm suppression comment to also cover CodeQL
+	(codeql[cpp/use-after-free]) for the CellStyle_fields false-positive.
+
+2026-06-07  Reini Urban  <reini.urban@gmail.com>
+
+	Suppress false positive CodeQL UAF: CellStyle_fields
+	Also not detected as false by copilot, but by deepseek v4 pro.
+
+	Add cycle checks in entity link chains (GH #1226)
+	- Add dwg_add_entity_link(dwg, first, field, handle_val) for safe entity
+	  link creation with cycle detection via next_entity chain traversal.
+	  Used from importers where ->obj pointers are already valid.
+	- Add dwg_validate_entity_links(dwg): post-decode bitset-based cycle
+	  detector for r13-r2000 entity chains. Called after resolve_objectref_vector
+	  in decode_R13_R2000. Clears cyclic next_entity links.
+	- Add __iterator-based step counter in get_next_owned_entity and
+	  get_next_owned_block_entity for r13-r2000 to prevent infinite loops.
+	  get_first_owned_entity resets __iterator=0 for r13-r2000 path.
+	- Add max_steps cycle guard in in_postprocess_SEQEND for vertex/attrib chains.
+	- Use dwg_add_entity_link in in_dxf.c for first/last entity assignments.
+
+2026-06-04  Reini Urban  <reini.urban@gmail.com>
+
+	examples/dwgfuzz.c: fix double-free in RW and INDXF modes (GH #1270)
+	Set out_dat.chain = NULL after each in-case free, so the unconditional
+	free at the common exit path becomes free(NULL) (a no-op).
+
+2026-06-03  Reini Urban  <reini.urban@gmail.com>
+
+	spec: fix LAYER.material null-deref
+	Fixes GH #1269
+
+2026-06-03  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	spec: fix HATCH curve_type 0 crash (GH #1107)
+	Demote LOG_ERROR to LOG_WARN for unknown HATCH.curve_type values
+	and use return 0 instead of DWG_ERR_VALUEOUTOFBOUNDS so the
+	partially-decoded HATCH survives the roundtrip without aborting.
+
+	ezdxf writes some HATCH boundary segments with curve_type 0, which
+	is unknown but harmless — the segment should be skipped, not aborted.
+
+	* src/dwg.spec (HATCH curve_type default): s/LOG_ERROR/LOG_WARN/,
+	  s/return DWG_ERR_VALUEOUTOFBOUNDS/return 0/ in both locations
+	  (HATCH and MPOLYGON decode paths).
+
+2026-06-03  Reini Urban  <reini.urban@gmail.com>
+	    omp + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	decode: fix CVE-2026-xxxxx DoS in decode_R13_R2000 (GH #1261)
+	CWE-400: Uncontrolled Resource Consumption in the R13-R2000 class
+	decoding loop. A crafted DWG could force unbounded realloc via a
+	malformed classes section, causing denial of service.
+
+	Add a num_classes upper bound check before realloc, derived from the
+	section data size, matching the existing pattern in
+	read_2004_section_classes() for R2004+.
+
+	* src/decode.c (decode_R13_R2000): Check i > 100 + size/sizeof(Dwg_Class)
+	  before each realloc; fail with DWG_ERR_VALUEOUTOFBOUNDS and jump to
+	  handles_section cleanup.
+
+2026-06-03  Reini Urban  <reini.urban@gmail.com>
+
+	Fix PROXY_OBJECT version corruption in json roundtrip
+	The decoder for PROXY_OBJECT was overwriting the version field with
+	just the low byte (dwg_version), discarding the maint_version high byte.
+	This is a copy-paste error from PROXY_ENTITY, which correctly assigns
+	to dwg_version instead of clobbering version.  The truncated version
+	field (e.g. 15 instead of 527) caused ODA to throw "No ClassId" when
+	reading the written DWG, breaking json-check roundtrips for any file
+	containing a PROXY_OBJECT.
+
+	* src/dwg.spec (PROXY_OBJECT): Assign dwg_version from version low
+	  byte, matching PROXY_ENTITY behavior.
+
+2026-06-02  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix MSVC C4267 warning: size_t to unsigned cast
+	Cast needed (size_t) to unsigned in dash_i accumulation; the value is
+	bounded by strings_size (max 512) so the cast is safe.  Fixes /WX build
+	on Windows MSVC.
+
+2026-06-02  Reini Urban  <reini.urban@gmail.com>
+	    Copilot Autofix powered by AI  <175728472+Copilot@users.noreply.github.com>
+
+	encode: force size recalculation for pre-R13 entities after JSON import
+	In encode_preR13_entities, the size patchup was skipped when obj->size
+	was already non-zero. JSON import sets obj->size from the source file's
+	entity sizes, but the encoder may write different amounts of data
+	depending on flag_r11/opts_r11 computation (e.g. 2RD vs 3RD points for
+	LINE entities based on FLAG_R11_HAS_ELEVATION). This caused entity
+	size mismatches, decoder offset errors, and "Critical: INVALIDDWG" on
+	the JSON roundtrip of R11 files like ACEB10.dwg.
+
+	Fixes json-check r11/ACEB10 roundtrip.
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+
+	Merge remote-tracking branch 'refs/remotes/origin/work/hatch-gh1209' into work/hatch-gh1209
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+	    codewhale + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	in_dxf: fix HATCH spline tangent DXF codes and LTYPE strings_area overflow
+	* add_HATCH: handle DXF codes 12/22 (start_tangent) and 13/23 (end_tangent)
+	  for spline boundary paths (curve_type 4).  After end_tangent, set k=-1
+	  so the next code 97 is handled as num_boundary_handles.
+
+	* add_HATCH: move CHK_segs in code 97 handler into the num_fitpts branch
+	  only, fixing a false error when k=-1 from the end_tangent handler.
+
+	* add_HATCH: skip xcalloc(0) for HATCH fitpts to avoid encoder error
+	  When num_fitpts is 0, xcalloc(0, size) on glibc returns a non-NULL
+	  pointer, triggering the encoder validation "Invalid ... fitpts 0, set
+	  to 0" error.  Only allocate fitpts when num_fitpts > 0.
+
+	* add_LTYPE_dashes: fix heap buffer overflow via group-code-9 strings
+	  (CWE-122).  Remove static dash_i counter (Variant B: persisted across
+	  LTYPE calls) and add bounds check before copying into the 256/512-byte
+	  strings_area buffer (Variant A: up to 4096-byte strings).
+
+	GH #1209
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+
+	bits: fix memory leak on realloc failure in iconv retry path
+	On realloc failure, free(odest) was commented out, leaking the original
+	iconv output buffer.  Uncomment it.
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+
+	bits: fix stale errno check and src advancement in iconv success path
+	After the iconv flush call, the success check used errno==0, but errno
+	is not reset by successful iconv calls. If a prior E2BIG retry left
+	errno set, the success path was taken as failure, freeing the correctly
+	converted buffer and falling back.
+
+	Also, the fallback passed src (which iconv advanced past consumed input)
+	instead of osrc (the original pointer saved before conversion).
+
+	Fix: check nconv != (size_t)-1 instead of errno, and pass osrc to the
+	fallback codepage conversion.
+
+	Reported-by: code review
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+	    omp + opus 4.6  <noreply@anthropic.com>
+
+	encode: Fix double-free in bit_chain_free in 3DSOLID/BODY/REGION
+	In COMMON_ENTITY_HANDLE_DATA (enc_macros.h), path 1 copies hdl_dat to
+	a local dat1, then redirects hdl_dat to dat2. When dat1 is freed, it
+	NULLs dat1.chain but the original struct (wrapper's _hdl_dat) still
+	holds the dangling pointer. The DWG_ENTITY wrapper then double-frees
+	through the stale _hdl_dat.chain.
+
+	Fix: NULL hdl_dat->chain right after copying to dat1, so dat1 owns
+	the buffer exclusively and the original struct can't be double-freed.
+
+	Same class as CVE-2021-36080 (fixed in 9b6e0ff9 for MTEXT), but this
+	3DSOLID/BODY/REGION instance was missed.
+
+	Reported-by: Adam Taguirov <adam@sigreturn.com>
+
+	* src/enc_macros.h (COMMON_ENTITY_HANDLE_DATA): NULL hdl_dat->chain
+	after copying to dat1, before redirecting hdl_dat to dat2.
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+	    omp + opus 4.6  <noreply@anthropic.com>
+	    codewhale + DeepSeek V4 Pro  <deepseek@deepseek.com>
+	    codewhale + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	bits: Fix heap OOB read in bit_TV_to_utf8 (iconv path)
+	Uncomment the NUL termination (*dest = '\0') in the iconv success path
+	of bit_TV_to_utf8(). When iconv fills the destination buffer exactly,
+	dest points one past the allocation and no NUL remains within bounds.
+	The following bit_u_expand()/strlen() then reads past the heap chunk
+	(CWE-125 OOB read / CWE-200 heap disclosure).
+
+	Also extend all calloc/realloc sizes by +1 to always leave room for
+	the terminator, even on the exact-fill and retry paths.
+
+	Reported-by: Adam Taguirov <adam@sigreturn.com>
+
+	* src/bits.c (bit_TV_to_utf8): Uncomment *dest = '\0' at the iconv
+	  success path. Extend calloc and realloc by +1 for the NUL terminator
+	  on the CP_UTF8 path, the iconv initial alloc, and the iconv retry
+	  realloc.
+	  Also in the iconv E2BIG retry path, fix two bugs:
+	  1. destlen tracks remaining space; when iconv fills the buffer,
+	  destlen=0, so destlen*=2 stays 0, then dest_new[destlen-1] writes
+	  at dest_new[SIZE_MAX] (heap OOB-write underflow). Double odestlen
+	  instead and compute the new destlen from it.
+	  2. After realloc, dest was reset to dest_new (base), losing its
+	  position within the buffer. The next iconv call would overwrite
+	  previously converted output instead of appending. Preserve the
+	  offset: dest = dest_new + (dest_old - odest_old).
+
+	  Also remove the now-unnecessary dest_new[destlen-1]='\0' hack since
+	  the NUL terminator is written at the success path
+	  and the extra +1 in the allocation always leaves room.
+	* test/unit-testing/bits_test.c: iconv NUL-termination test for
+	  bit_TV_to_utf8 (commit dc8e3509).
+	* test/unit-testing/encode_test.c: double-free test for
+	  COMMON_ENTITY_HANDLE_DATA (commit 6deac10e).
+
+	GH #1209
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+	    codewhale + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	in_dxf: fix HATCH spline tangent DXF codes and LTYPE strings_area overflow
+	* add_HATCH: handle DXF codes 12/22 (start_tangent) and 13/23 (end_tangent)
+	  for spline boundary paths (curve_type 4).  After end_tangent, set k=-1
+	  so the next code 97 is handled as num_boundary_handles.
+
+	* add_HATCH: move CHK_segs in code 97 handler into the num_fitpts branch
+	  only, fixing a false error when k=-1 from the end_tangent handler.
+
+	* add_HATCH: skip xcalloc(0) for HATCH fitpts to avoid encoder error
+	  When num_fitpts is 0, xcalloc(0, size) on glibc returns a non-NULL
+	  pointer, triggering the encoder validation "Invalid ... fitpts 0, set
+	  to 0" error.  Only allocate fitpts when num_fitpts > 0.
+
+	* add_LTYPE_dashes: fix heap buffer overflow via group-code-9 strings
+	  (CWE-122).  Remove static dash_i counter (Variant B: persisted across
+	  LTYPE calls) and add bounds check before copying into the 256/512-byte
+	  strings_area buffer (Variant A: up to 4096-byte strings).
+
+	GH #1209
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+	    omp + opus 4.6  <noreply@anthropic.com>
+
+	encode: Fix double-free in bit_chain_free in 3DSOLID/BODY/REGION
+	In COMMON_ENTITY_HANDLE_DATA (enc_macros.h), path 1 copies hdl_dat to
+	a local dat1, then redirects hdl_dat to dat2. When dat1 is freed, it
+	NULLs dat1.chain but the original struct (wrapper's _hdl_dat) still
+	holds the dangling pointer. The DWG_ENTITY wrapper then double-frees
+	through the stale _hdl_dat.chain.
+
+	Fix: NULL hdl_dat->chain right after copying to dat1, so dat1 owns
+	the buffer exclusively and the original struct can't be double-freed.
+
+	Same class as CVE-2021-36080 (fixed in 9b6e0ff9 for MTEXT), but this
+	3DSOLID/BODY/REGION instance was missed.
+
+	Reported-by: Adam Taguirov <adam@sigreturn.com>
+
+	* src/enc_macros.h (COMMON_ENTITY_HANDLE_DATA): NULL hdl_dat->chain
+	after copying to dat1, before redirecting hdl_dat to dat2.
+
+2026-06-01  Reini Urban  <reini.urban@gmail.com>
+	    omp + opus 4.6  <noreply@anthropic.com>
+	    codewhale + DeepSeek V4 Pro  <deepseek@deepseek.com>
+	    codewhale + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	bits: Fix heap OOB read in bit_TV_to_utf8 (iconv path)
+	Uncomment the NUL termination (*dest = '\0') in the iconv success path
+	of bit_TV_to_utf8(). When iconv fills the destination buffer exactly,
+	dest points one past the allocation and no NUL remains within bounds.
+	The following bit_u_expand()/strlen() then reads past the heap chunk
+	(CWE-125 OOB read / CWE-200 heap disclosure).
+
+	Also extend all calloc/realloc sizes by +1 to always leave room for
+	the terminator, even on the exact-fill and retry paths.
+
+	Reported-by: Adam Taguirov <adam@sigreturn.com>
+
+	* src/bits.c (bit_TV_to_utf8): Uncomment *dest = '\0' at the iconv
+	  success path. Extend calloc and realloc by +1 for the NUL terminator
+	  on the CP_UTF8 path, the iconv initial alloc, and the iconv retry
+	  realloc.
+	  Also in the iconv E2BIG retry path, fix two bugs:
+	  1. destlen tracks remaining space; when iconv fills the buffer,
+	  destlen=0, so destlen*=2 stays 0, then dest_new[destlen-1] writes
+	  at dest_new[SIZE_MAX] (heap OOB-write underflow). Double odestlen
+	  instead and compute the new destlen from it.
+	  2. After realloc, dest was reset to dest_new (base), losing its
+	  position within the buffer. The next iconv call would overwrite
+	  previously converted output instead of appending. Preserve the
+	  offset: dest = dest_new + (dest_old - odest_old).
+
+	  Also remove the now-unnecessary dest_new[destlen-1]='\0' hack since
+	  the NUL terminator is written at the success path
+	  and the extra +1 in the allocation always leaves room.
+	* test/unit-testing/bits_test.c: iconv NUL-termination test for
+	  bit_TV_to_utf8 (commit dc8e3509).
+	* test/unit-testing/encode_test.c: double-free test for
+	  COMMON_ENTITY_HANDLE_DATA (commit 6deac10e).
+
+	GH #1209
+
+2026-05-31  Reini Urban  <reini.urban@gmail.com>
+	    codewhale + DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	tests: add dwgfilter.test for programs/dwgfilter
+	Test basic jq queries against DWG JSON output: header variables,
+	object counts, entity type filtering, --help/--version, error
+	handling, --debug flag, and -i write-back mode.
+
+	* programs/dwgfilter.test.in: New file.
+	* programs/Makefile.am (TESTS): Add dwgfilter.test (HAVE_JQ).
+	  (DISTCLEANFILES): Add dwgfilter.test.
+	* configure.ac (AC_CONFIG_FILES): Add dwgfilter.test.
+	* CMakeLists.txt: Add dwgfilter.test (NOT DISABLE_JSON).
+
+2026-05-31  Reini Urban  <reini.urban@gmail.com>
+
+	tests: fix decompress_R2004_section test vectors (wrong dec.size)
+	The two decompress_R2004_section test cases used dec.size equal to the
+	expected output length (123 and 53 bytes).  The real decoder allocates
+	dec at max_decomp_size (0x7400 = 29696) per section.  With the smaller
+	buffers the decompressor hit the end-of-buffer guard added to cap the
+	large LZ77 back-copy that fills the page:
+
+	  auxh: >C 29564 at dec[116] -> end=29680; 29680 >= 123 -> VALUEOUTOFBOUNDS
+	  ofs:  iteration 4 end=55 >= 53, and later >C 30137 -> end=30192
+
+	Fix: allocate 29696 for auxh (exact real-decoder size) and 32768 for ofs
+	(covers the >C 30137 copy landing at dec[30192] plus 13 literals = 30205).
+	The meaningful bytes in dec.chain[0..N-1] are identical; only the
+	memcmp range is kept at sizeof(expected).
+
+	* test/unit-testing/decode_test.c (decompress_R2004_section_tests):
+	  Change dec allocation from sizeof(expected) to 29696/32768.  Remove
+	  the now-wrong dec.size == sizeof(expected) check from the auxh test.
+	  Restore fail() from todo().
+
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+2026-05-31  Reini Urban  <reini.urban@gmail.com>
+
+	tests: add decompress_r2007 OOB regression tests (CWE-125)
+	Regression tests for the two heap-buffer-overflow read sites in
+	decompress_r2007() that were fixed since commit 939a6f5:
+
+	- Test B: read_literal_length() do/while(n==0xFFFF) loop with a
+	  2008-byte 0xff-filled buffer (mirrors calloc(block_count=8,251)
+	  in read_data_page()).  Unguarded, the loop walks past the end;
+	  with the src_end bound check it returns DWG_ERR_INTERNALERROR.
+
+	- Test A: read_instructions() case-0 two-byte read with src==src_end.
+	  Minimal 12-byte stream ending at the instruction opcode; with the
+	  CHECK_SRC(2) guard it returns DWG_ERR_INTERNALERROR.
+
+	src_size=2008 mirrors the real allocation: size_comp is an
+	attacker-controlled R2007 page-header field.
+
+	* src/decode_r2007.c (decompress_r2007): Remove static; the forward
+	  declaration becomes redundant with the decode.h prototype.
+	* src/decode.h: Declare decompress_r2007 under the existing
+	  '/* from decode_r2007.c */' block, parallel to obj_string_stream.
+	* test/unit-testing/decode_test.c (decompress_r2007_tests): New
+	  function with tests A and B.  Wire into main(); fix main() to
+	  return numfailed()?1:0 instead of always 0.
+	  (decompress_R2004_section_tests): Convert the two fail() calls to
+	  todo(): the test vectors trigger DWG_ERR_VALUEOUTOFBOUNDS since
+	  decompress_R2004_section became stricter about out-of-range copy ops
+	  (see the GH comment in decode.c); they need regenerated vectors.
+
+	Co-Authored-by: Michalis Vasileiadis
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+2026-05-31  Reini Urban  <reini.urban@gmail.com>
+
+	F-1 CWE-494: Fix CI supply-chain: https+sha256 for build helpers, vendor svg11 schema
+	install-relaxng-svg11: the original script fetched over plaintext HTTP
+	with no integrity check, then ran `sudo unzip` on unverified content —
+	allowing an on-path MITM to write arbitrary files as root in the runner.
+	Fix: vendor the immutable 2006 svg11-relaxng-20060604.zip (41 KB) into
+	build-aux/ and copy it locally; add a sha256 check before extraction.
+	Falls back to HTTPS download + same sha256 check if the vendored copy
+	is absent.
+
+	install-libxslt, install-pslib: already used HTTPS but had no integrity
+	check.  Add pinned sha256 verification after download.
+
+	Reported-by: Michalis Vasileiadis
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+2026-05-31  Reini Urban  <reini.urban@gmail.com>
+	    cubic-dev-ai[bot]  <191113872+cubic-dev-ai[bot]@users.noreply.github.com>
+	    Copilot Autofix powered by AI  <175728472+Copilot@users.noreply.github.com>
+
+	F-2 CWE-377: Replace predictable temp file in dwgfilter with mktemp
+	Replace /tmp/dwgfilter-$$.json (PID-only entropy, world-writable /tmp)
+	with mktemp so the path is unpredictable.  Add a trap to clean up the
+	temp file on EXIT/INT/TERM in normal mode; in --debug mode the trap is
+	skipped and the path is printed so the file can be inspected.
+
+	On BSD/macOS mktemp, the X placeholders must be at the end of the template.
+
+	Reported-by: Michalis Vasileiadis
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+2026-05-31  Reini Urban  <reini.urban@gmail.com>
+	    DeepSeek V4 Pro  <deepseek@deepseek.com>
+
+	F-4 CWE-116: Fix JSON escaping in 3DSOLID acis_data and json_cquote 0x1f byte
+	out_json.c json_cquote: change `c < 0x1f` to `c <= 0x1f` so byte 0x1f
+	(unit separator) is escaped per RFC 8259 (U+0000..U+001F must be escaped).
+
+	out_json.c json_3dsolid: restore the json_cquote() call that was commented
+	out, replacing the raw fprintf that emitted attacker-controlled SAT text
+	(including `"` and `\`) unescaped into JSON output.
+
+	Reported-by: Michalis Vasileiadis
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+	Review fixes suggested by GH Copilot:
+
+2026-05-31  Reini Urban  <reini.urban@gmail.com>
+	    Copilot Autofix powered by AI  <175728472+Copilot@users.noreply.github.com>
+
+	F-3 CWE-125: Fix OOB reads in decompress_r2007 (read_instructions, read_literal_length)
+	Pass src_end to read_instructions() and read_literal_length() and bounds-check
+	every *(*src)++ before it executes.  Both functions now return int (0 / DWG_ERR_*)
+	so callers in decompress_r2007() can propagate the error.
+
+	read_literal_length: the do-while loop accumulating 0xFFFF-continued lengths
+	had no bound check at all, allowing src to walk arbitrarily past the buffer.
+
+	read_instructions cases 0 and 1: each consumed 2 bytes past src without
+	checking src < src_end; case 2 had up to 4 unchecked reads.
+
+	Forward declarations updated to match.
+
+	Reported-by: Michalis Vasileiadis
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+	fix: avoid undefined behavior in CHECK_SRC pointer arithmetic
+
+	Replace `*src + (n) > src_end` with `src_end - *src < (n)` to avoid
+	undefined behavior when pointer is already at buffer end.
+
+2026-05-25  Reini Urban  <reini.urban@gmail.com>
+
+	Fix NULL pointer dereferences in DXF output for corrupted DWG input
+	* src/dwg.spec (APPID DXF block): check _obj->name for NULL before
+	  strncmp, caused SEGV on malformed APPID table records.
+	* src/out_dxf.c (FIELD_HANDLE_NAME): add NULL checks for o->dxfname
+	  and o->tio.object->tio.BLOCK_HEADER->name to avoid SEGV and
+	  bit_convert_TU crash when name pointers are NULL or corrupt.
+
+2026-05-25  Reini Urban  <reini.urban@gmail.com>
+
+	Fix stack buffer overflow in JSON scalar field size checks
+	When a JSON primitive is provided for a VECTOR_INL field (e.g.
+	LTYPE.dashes_r11 which is RD with size 96), _set_struct_field
+	passed a pointer to a local variable to dwg_dynapi_field_set_value
+	which then read the full field size from stack, causing ASAN
+	stack-buffer-overflow.
+
+	* src/in_json.c (_set_struct_field): check f->size before calling
+	  dwg_dynapi_field_set_value with local scalars for BD/RD/BT,
+	  RC/B/BB/RS/BS/RL/BL/4BITS variants, and RLL/BLL. Throw
+	  DWG_ERR_INVALIDTYPE if the field is larger than expected.
+
+2026-05-18  Reini Urban  <reini.urban@gmail.com>
+
+	Fix r11 DXF roundtrips: rotation angle unit conversion
+	* src/out_dxf.c (FIELD_RD): Convert radians to degrees for DXF group
+	codes 50-54, matching VALUE_BD. Pre-R13 entities use FIELD_RD for
+	angles in dwg.spec, but DXF expects degrees while r11 DWG stores
+	radians.
+
+	Fixes INSERT, ATTDEF, ATTRIB, TEXT rotation and ARC start/end angles
+	in r11 DXF roundtrips.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-18  Reini Urban  <reini.urban@gmail.com>
+
+	Fix r11 DXF roundtrips: POLYLINE vertices, SEQEND, BLOCK
+	- src/out_dxf.c (decl_dxf_process_VERTEX): Add PRE (R_13b1) block to
+	  output VERTEX and SEQEND sub-entities for pre-R13 POLYLINE DXF.
+	- out_dxf.c: For pre-R13 DXF output, replace _hdr->entities[] iteration
+	  with ownerhandle-based object-order iteration so SEQEND and VERTEX
+	  sub-entities (not in entities list) are correctly output in sequence.
+	  Use two-level owner resolution so SEQEND/VERTEX (owned by INSERT/POLYLINE)
+	  are correctly included in model space output.
+	- out_dxf.c: Fix SEQEND output for pre-R13 (was commented out as 'stale').
+	  Remove stale warnings for ATTRIB/VERTEX in pre-R13 mode.
+	- out_dxf.c: Add HEADER_HANDLE_NAME0 macro that skips output when name
+	  resolves to empty, preventing ODA "Empty Record name" error from
+	  $UCSNAME/$PUCSNAME with no active UCS.
+	- src/encode.c: Set FLAG_R11_HAS_ATTRIBS on POLYLINE when has_vertex
+	  is true, so the encoder writes the correct flag_r11.
+	- src/in_dxf.c (dxf_fixup_header): Reset dwg_version to 0 for pre-R13.
+	- src/dwg.spec (POLYLINE_2D): Output group 66 (has_vertex) for r11 DXF.
+	- header_variables_dxf.spec: Use HEADER_HANDLE_NAME0 for UCSNAME, PUCSNAME.
+	  Add SINCE(R_13b1) guard to $CMLSTYLE/$CMLJUST/$CMLSCALE (R13+ only).
+	- in_dxf.c: Propagate entmode from parent INSERT/POLYLINE to SEQEND/VERTEX
+	  so encoder places them in the entities section (not extras).
+	- encode.c: Pre-encode SEQEND.begin_addr_r11 from owner address (already
+	  present), add DWG_TYPE_BLOCK opts_r11 case (HAS_BLOCK_NAME for named blocks).
+
+	Fixes missing POLYLINE vertices and SEQEND in r11 DXF roundtrips and
+	empty r11 record names.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-18  Reini Urban  <reini.urban@gmail.com>
+
+	Fix r11 DXF roundtrips for entities-2d
+	out_dxf: Skip STYLE table entries with empty names (SHAPE xrefs) since
+	ODA rejects empty record names in r11 DXF output.
+
+	in_dxf: For r11 DXF import, create BLOCK_HEADER objects for user-defined
+	and star-blocks (*D etc.) when reading the BLOCKS section, since r11 DXF
+	has no TABLE BLOCK section. Use dwg_next_handle to avoid HANDSEED
+	issues and set r11_idx on entries for correct postprocessing resolution.
+
+	in_dxf: Set flag_r11 HAS_ELEVATION/HAS_THICKNESS bits when codes 38/39
+	are read for pre-r13 entities in the common entity field loop.
+
+	common_entity_data.spec: Fix JUMP check to use obj->fixedtype != DWG_TYPE_JUMP
+	instead of obj->type != DWG_TYPE_JUMP_r11, since DWG_TYPE_CIRCLE (0x12=18)
+	collides with DWG_TYPE_JUMP_r11 (18), causing DXF-imported CIRCLE entities
+	to incorrectly skip layer and opts_r11 fields.
+
+	dwg.spec (ARC): Use FIELD_BD for start/end_angle in IS_DXF output so
+	radian values are converted to degrees. DXF angles are in degrees but
+	r11 DWG stores them in radians.
+
+	encode.c: Pre-compute opts_r11 for TEXT, INSERT, MINSERT, SHAPE, BLOCK entities
+	before encoding pre-r13 DWG, since DXF format does not store r11-specific
+	opts_r11 flags. Also sync TRACE/SOLID elevation to elevation_r11.
+
+	Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+	Fix r11 dwgadd test: pre-R13 handle size mismatch for code 1
+
+	In encode_preR13_entities, VALUE_HANDLE used handleref.size to decide
+	whether to write an RC (1 byte) or RS (2 byte) handle.  For API-created
+	objects dwg_add_handleref forces handleref.size to 2 for all pre-R13
+	handles, but the decoder uses the handle_code argument (code==1 => RC,
+	else RS) to decide the size.
+
+	This caused a 1-byte misalignment for SHAPE entities, which use a
+	code-1 style handle in r11 (and older).  The misaligned decoder then
+	read garbage types and entered an infinite loop.
+
+	Fix by using handle_code to pick the size, matching the decoder.
+
+	src/enc_macros.h (VALUE_HANDLE): For pre-R13, ignore handleref.size
+	and use handle_code == 1 ? 1 : 2.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Fix heap-buffer-overflow in bit_convert_TU via dwggrep LTYPE search (GH #1246)
+	A malformed DWG can cause LTYPE.strings_area (a 512-byte binary buffer)
+	to lack a wide null terminator. When dwggrep searched it as a single
+	TU string via bit_convert_TU, the scan read past the allocation.
+
+	Fix by:
+	* Adding bit_convert_TU_len() which limits the scan to max_wchars and
+	  returns NULL if no null terminator is found within bounds.
+	* Changing dwggrep match_LTYPE to search individual dashes[i].text
+	  strings (which are properly bounded within strings_area) instead of
+	  the raw binary buffer, using bit_convert_TU_len for R2007+.
+
+	* src/bits.c (bit_convert_TU_len): New bounded TU-to-UTF8 converter.
+	* src/bits.h: Declare bit_convert_TU_len.
+	* programs/dwggrep.c (match_LTYPE): Search dashes text safely.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Fix NULL pointer dereference in free_TABLESTYLE_r2010 (GH #1143)
+	Guard the borders[] inner loop with a NULL check for rowstyles[i].borders.
+	When a TABLESTYLE object is partially initialized (e.g. from fuzzed input),
+	the borders array may be NULL but the unconditional loop tried to access
+	borders[j], causing a SEGV at a small offset from zero.
+
+	* src/free.c (free_TABLESTYLE_r2010): Add _obj->rowstyles[i].borders NULL check.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Fix OOM in add_ent_preview on fuzzed DXF input (GH #1006, GH #1144)
+	Cap entity preview_size at 16MB (0x1000000) to prevent ASAN abort on
+	huge allocation requests from malformed DXF files. The existing
+	MAX_SIZE_BUF check (1TB in ASAN builds) was too permissive.
+
+	* src/in_dxf.c (add_ent_preview): Add preview_size > 0x1000000 guard.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Fix use-after-free in dxf2dwg on error path (GH #474)
+	When dxf_read_file fails with a critical error, dxf2dwg frees
+	filename_out but does not clear the pointer.  On the next loop
+	iteration strEQ(filename_in, filename_out) accesses freed memory.
+
+	programs/dxf2dwg.c (main): Set filename_out to NULL after free.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Populate VIEWPORT id after DWG read (GH #1213)
+	For R13+ DWG files the VIEWPORT entity does not store the id (DXF 69)
+	and on_off (DXF 68) fields in its binary format; they are only
+	computed during DXF export.  This caused the API to report id=0 for
+	all viewports after reading a DWG.
+
+	Add a post-processing step in dwg_read_file that iterates over all
+	objects and assigns auto-incremented viewport ids (starting at 1) to
+	active viewports, and id=0/on_off=0 to the overall paperspace
+	viewport (entmode 0).
+
+	src/dwg.c (dwg_fixup_viewport_ids, dwg_read_file): New helper and call.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Fix R2004 section address bounds check (GH #1239)
+	read_2004_compressed_section read 32 bytes from dat->chain[address]
+	without verifying that address + 32 fit within the input buffer size.
+
+	src/decode.c (read_2004_compressed_section): Add check
+	  address + 32 > dat->size before the memcpy.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Fix UNKNOWN_ENT/UNKNOWN_OBJ name and fixedtype override (GH #1238)
+	When an object decode falls back to UNKNOWN_ENT or UNKNOWN_OBJ, the
+	setup macros did not override obj->name and obj->fixedtype if they had
+	already been set by a previous classification (e.g. UNHANDLED_CLASS in
+	classes.inc).  This caused dwg_dynapi_entity_value to look up fields for
+	the wrong entity type and read past the small UNKNOWN_ENT allocation.
+
+	src/dec_macros.h (DWG_ENTITY, DWG_OBJECT): Force obj->name, obj->dxfname,
+	  and obj->fixedtype to UNKNOWN_ENT / UNKNOWN_OBJ.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Fix R2004 decompression buffer overflows (GH #1254, #1255, #1251)
+	Two related bugs caused heap-buffer-overflows during R2004 section
+	decompression:
+
+	2. read_2004_compressed_section set dec.size larger than the actual
+	   calloc allocation when es.fields.address + info->max_decomp_size
+	   exceeded max_decomp_size.  The decompressor then wrote past the
+	   allocated buffer.
+
+	3. dat->size was inflated by es.fields.data_size without capping to
+	   the actual file size, causing the decompressor to read past the
+	   input buffer.
+
+	src/decode.c (read_2004_compressed_section): Add bounds checks for
+	  es.fields.address + info->max_decomp_size and cap dat->size to
+	  orig_size.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	Fix dwg_bmp thumbnail overflow checks (GH #1252, #1255)
+	Several overflow checks in dwg_bmp were incorrect:
+
+	* The check `osize > (dat.size - 4)` could underflow when dat.size < 4
+	  because dat.size is size_t (unsigned).  Add `dat.size < 5` guard.
+
+	* The loop guard `dat.byte > dat.size` used strict greater-than, allowing
+	  reads when dat.byte == dat.size.  Use >= instead.
+
+	* The BMP size check `*size > (dat.size - 4)` did not account for bytes
+	  already consumed by header entries.  Check against `dat.size - dat.byte`.
+
+	* The final overflow check `header_size + *size > dat.size` did not account
+	  for the header entry bytes already consumed.  Check `dat.byte + *size`.
+
+	src/dwg.c (dwg_bmp): Fix all four checks.
+
+	Co-Authored-by: Kimi-k2.6 <kimi@moonshot.cn>
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	fix dwg_next_entity NULL pointer dereference
+	Fixes GH #1253
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+	    "opencode + DeepSeek V4 Pro /high"  <deepseek@deepseek.com>
+
+	fix 2 long-standing eed off-by-one bugs
+	fix UAF in eed_need_size case 3 and buffer overflows
+
+	eed_need_size adds 1 internally for the code byte that sits at offset 0
+	in the packed Dwg_Eed_Data struct.  This fixes buffer overflows in cases
+	10-15 (3RD, 24 bytes), 40-42 (RD, 8 bytes), 70 (RS, 2 bytes), 71 (RL, 4
+	bytes).
+	Also fix the use-after-free in case 3 by refreshing the data
+	pointer after eed_need_size reallocation, matching the pattern used by
+	other cases.  Adjust need values in cases 0, 1, 3, 4 to match.
+
+	Fixes GH #1257
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+	    "opencode + DeepSeek V4 Pro /high"  <deepseek@deepseek.com>
+
+	demote UNKNOWN_OBJ/ENT warn to trace in dwg_free_variable_type
+	The dxf_test exercises unstable (UNKNOWN_OBJ/UNKNOWN_ENT) objects
+	which naturally have no matching class.  Demote the LOG_WARN to
+	LOG_TRACE for these expected cases, keeping LOG_WARN for genuine
+	surprises.
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+	    "opencode + DeepSeek V4 Pro /high"  <deepseek@deepseek.com>
+
+	dynapi: fix double-offset in JSON embedded struct parser
+	in_json.c _set_struct_field at the embedded struct handler computes the
+	field address with both the parent offset and the field offset, then
+	passes it to _set_struct_field which internally calls
+	dwg_dynapi_field_set_value adding the field offset again.  This double-
+	offset writes to the wrong memory location, corrupting adjacent fields.
+
+	When data_long=0xDEADBEEF is then followed by a data_string= set via
+	dot notation, the corrupted string pointer causes free(0xDEADBEEF) to
+	crash.
+
+	Fixes GH #1258
+
+
+	The bug was found by Claude, and Claude only suggested a simple NULL
+	guard in TABLE_value_fields. I asked DeepSeek 4 to check the proper fix,
+	and it found the real root-cause then, the double-offset! Better than
+	Claude already, for a tenth of the price.
+
+2026-05-16  Reini Urban  <reini.urban@gmail.com>
+
+	win32: fix appveyor-deploy to include libgcc_s_dw2-1.dll
+	Fixes GH #1259
+
+2026-05-06  Reini Urban  <reini.urban@gmail.com>
+
+	ci: oda updated to ODAFileConverter_QT6_lnxX64_8.3dll_27.1.deb
+	and does not need libpng12 anymore
+
+2026-04-29  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: fix a null-deref
+	fuzzing mostly, because there is always a VPORT name.
+
+2026-04-28  mmgehlot  <gehlot.21@gmail.com>
+
+	test/bits: add aliasing-return regression for bit_TV_to_utf8
+	Lock in the contract that bit_TV_to_utf8 may return its input `src`
+	pointer unchanged on the fast paths exercised by VALUE_TV in
+	out_dxf.c. Without explicit pointer-equality assertions, a future
+	contributor could "tighten" the function to never alias and re-add
+	ATTRIBUTE_MALLOC, silently re-introducing the optimizer-induced
+	free() of caller stack buffers that this PR fixes.
+
+	Asserts pointer equality on three paths reachable from the public
+	function:
+
+	  1. CP_UTF8 + pure-ASCII input without \U+/\M+ markers — the path
+	     actually triggered in dxf_CMC for the Panchvati R2018 DWG that
+	     surfaced the bug. Aliases on every build.
+	  2. CP_UTF8 + empty string — same line-3372 branch as (1); aliases
+	     on every build regardless of HAVE_ICONV.
+	  3. CP_UNDEFINED — typically aliases via the `!charset`
+	     short-circuit. On builds without iconv this routes through
+	     bit_TV_to_utf8_codepage and may return a fresh allocation; both
+	     are accepted (the contract is "alias OR fresh malloc", what's
+	     forbidden is an attribute-malloc claim that lets the optimizer
+	     elide the alias guard).
+
+	Addresses qodo-code-review's PR #1250 finding "No regression test
+	for aliasing" (PR Compliance ID 5: add tests for bug fixes).
+
+	Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+2026-04-28  mmgehlot  <gehlot.21@gmail.com>
+
+	bits: drop ATTRIBUTE_MALLOC from bit_TV_to_utf8
+	bit_TV_to_utf8 is documented to "return ... the unchanged src string,
+	or a copy" and in fact returns the input pointer on at least four
+	paths:
+
+	  - bit_TV_to_utf8_codepage: codepage == 0 fallback
+	  - bit_TV_to_utf8: CP_UTF8 with no \U+/\M+ markers
+	  - bit_TV_to_utf8: HAVE_ICONV + iconv() EINVAL fallback (returns
+	    bit_u_expand(osrc), and bit_u_expand returns its input pointer
+	    unchanged in pointer value)
+	  - bit_TV_to_utf8: empty srclen via charset short-circuit
+
+	Despite that, the prototype/definition were annotated
+	__attribute__((malloc)). That attribute promises every non-NULL
+	return is fresh, non-aliasing memory — which is false here.
+
+	Under -O2/-O3, GCC and Clang exploit the malloc attribute to prove
+	the alias guard in the VALUE_TV macro is dead code:
+
+	    char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);
+	    dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);
+	    if (u8 && u8 != (char *)value)   <-- compiler proves "always true"
+	      free (u8);                     <-- becomes unconditional
+
+	The guard is elided and free() is called on the caller's input
+	pointer. In dxf_CMC (out_dxf.c:1261) the input is `char name[256]`
+	on the stack, producing:
+
+	  free(): invalid pointer  (SIGABRT, exit 134)
+
+	Reproduced on a real-world Panchvati DWG (R2018) at -O2. AddressSanitizer
+	confirms:
+
+	  ERROR: AddressSanitizer: attempting free on address which was not
+	  malloc()-ed: 0x7ff7b8b20e20
+	    #1 dxf_CMC out_dxf.c:1261
+	  This frame has 1 object(s):
+	      [32, 288) 'name' (line 1234) <== bad-free target
+	  SUMMARY: bad-free out_dxf.c:1261 in dxf_CMC
+
+	The bug only manifests at -O2/-O3 because -O0/-O1 do not exploit
+	the attribute hint, which is why test suites and debug builds
+	miss it.
+
+	Fix: remove ATTRIBUTE_MALLOC from both the prototype (src/bits.h)
+	and the definition (src/bits.c) of bit_TV_to_utf8. The function's
+	existing semantics (input-aliased return value is legitimate, and
+	the VALUE_TV alias guard is correct) are preserved; we just stop
+	lying to the optimizer.
+
+	A separate audit of bit_TV_to_utf8_codepage shows it has the same
+	issue (also annotated ATTRIBUTE_MALLOC, also returns (char *)src on
+	codepage==0). It is static and only reached via bit_TV_to_utf8
+	fallbacks; the alias guard at every reachable call site is the same
+	VALUE_TV macro, so it is covered by this fix in practice. A
+	follow-up may want to drop the attribute there too for defensiveness.
+
+	Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+
+2026-04-24  Reini Urban  <reini.urban@gmail.com>
+
+	decode: generalize the decompressor oob checks
+	Fixes GH #1239
+
+	decode: fix a teigha empty TEMPLATE bug
+	GH #1239, poc_r2004_memcpy.dwg
+
+2026-04-23  Reini Urban  <reini.urban@gmail.com>
+
+	decode: fix another decompression overflow
+	some regular overflow.
+	Fixes GH #1242, #1243, Thanks to HackC0der for some fuzzing
+
+	decode: fix decompression overflow
+	es.fields.address + size wrapping over, to < dec.size.
+	Fixes GH #1245, #1248, Thanks to HackC0der for some fuzzing
+
+2026-04-10  Reini Urban  <reini.urban@gmail.com>
+
+	spec: harmonize VPORT/VIEW/VIEWPORT fields with HEADER
+	r11 stores some VPORT fields in VPORT not the header.
+	So we best use the HEADER name, which is fixed due to be being named
+	in DXF.
+	on indxf set the header vars from the *Active VPORT.
+
+	rename circle_zoom_percent => circle_zoom, twist_angle => VIEWTWIST,
+	lens_length => LENSLENGTH, front_clip_z => FRONTZ, back_clip_z => BACKZ.
+
+2026-04-09  Reini Urban  <reini.urban@gmail.com>
+
+	WIP r11 in_dxf: register more block and table handles
+
+2026-04-08  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: Fix LTYPE entries for pre-R13 DXF roundtrip
+	Wrong find_hv logic!
+
+	For r11/r12 DXF, BYBLOCK and BYLAYER linetype entries have no handles
+	(abs:0 placeholders). Patch their absolute_ref/handleref.value when the
+	actual LTYPE object is encountered during dxf_tables_read, and also
+	update LTYPE_BYLAYER/BYBLOCK header vars accordingly.
+
+	Also fix the inverted find_hv logic: the old code had the push in the
+	`else` branch (entry already present), so CONTINUOUS and other regular
+	linetype entries were never added to LTYPE_CONTROL.entries. This caused
+	all layer/entity ltype refs to resolve to -1 in the r11/entities-2d
+	roundtrip.
+
+	* src/in_dxf.c (dxf_tables_read): Detect bylayer/byblock with abs:0
+	and set their refs by name match. Invert find_hv < 0 branch to add
+	entry when not already present.
+
+2026-04-08  Reini Urban  <reini.urban@gmail.com>
+
+	r11: set the 3 special HEADER.LTYPE_* handles
+	when looking them up.
+	see dwg_find_tablehandle_index for the special index values.
+
+	dxf: fix r11 dwg_handle_name
+	i.e. table names, like $TEXTSTYLE, $CLAYER, ...
+
+2026-04-07  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: set ref->r11_idx in PUSH_HV
+	esp. for table controls.
+	also preserve table index for pre-R13
+
+	but the blocks and entities are still wrong.
+
+2026-04-07  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix r11 entities and blocks entmode and types from in_dxf
+	Fix three related issues in the r11 encode/decode DXF roundtrip:
+
+	1. in_dxf.c: set entmode=3 (not 0) for regular block entities in
+	   dxf_blocks_read. Modelspace blocks still get entmode=2.
+
+	2. dwg.spec BLOCK entity: add pre-R13 DXF output for block name (code 2),
+	   using same BLOCK_HEADER lookup as R13+. Without the name, in_dxf
+	   cannot distinguish *MODEL_SPACE from named blocks.
+
+	3. encode.c encode_preR13_entities filtered loop:
+	   - Fix ENTITIES_SECTION_INDEX: allow entmode==2 entities through even
+	     after past_blocks is set (mspace entities come after block objects
+	     in DXF-roundtrip object lists).
+	   - Fix EXTRAS_SECTION_INDEX: skip entmode==2 entities (they belong in
+	     ENTITIES section, not EXTRAS).
+	   - Add fixedtype_to_r11_type() to convert modern entity fixedtype to
+	     R11 type codes. Entities created via in_dxf have obj->type set to
+	     modern enum values (e.g. DWG_TYPE_POINT=27), but R11 DWG format
+	     needs the legacy type codes (e.g. DWG_TYPE_POINT_r11=2).
+
+2026-04-06  Reini Urban  <reini.urban@gmail.com>
+
+	test: log xvfb-run in dxf-check json-check
+	as in dxf.test
+
+	encode: fix missing r11 auxheader.plot_stamp
+	fixes writing r11 DWG
+
+	doc updates for 0.14
+
+2026-04-06  Reini Urban  <reini.urban@gmail.com>
+
+	encode: shift larger>127 objects on changed UMC handlestream_size
+	add a small helper to measure actual UMC width, track the originally
+	written handle-size width, and shift the BOT/payload when the
+	rewritten UMC needs more or fewer bytes.
+
+	Didn't fix the CRC DXF 2010 roundtrip errors yet, but getting closer.
+
+2026-04-06  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix r2010 dxf roundtrip Out of range regression
+	Copy $ACADMAINTVER from header_vars to hdr->maint_version in
+	dxf_fixup_header. maint_version > 3 controls whether bitsize_hi is
+	written in section headers, which ODA requires for R_2004+.
+	The previous WIP commit correctly set header.version = from_version
+	(R_2010) during DXF import, but lost the maint_version = 0x8 that
+	was previously set in the R_2000 code path.
+
+	WIP: investigate r2010 ODA CRC header layout failures
+	set R2004_Header.unknown_long
+	fix 2ndheader padding.
+	set more dwg versions in in_dxf already.
+	write empty sections AppInfoHistory and FileDepList, dont skip em.
+
+2026-04-05  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: preserve underlay clip vertex counts
+	* src/in_dxf.c (new_object): Reuse num_clip_verts while
+	reading underlay DXF clip vertex pairs and grow the array as
+	vertices are imported.
+
+	encode: fix XRECORD off-by-one errors
+	and change padding from 1-bits to 0-bits for the handles
+
+	in_dxf: add missing MULTILEADER LEADER_LINE DXF codes
+	Add cases for DXF codes 340 (ltype handle), 341 (arrow_handle),
+	and 271 (attach_dir) in add_MULTILEADER_lines. These R2010+
+	fields were missing, causing early error return and cascading
+	failures for subsequent MULTILEADER fields during DXF import.
+	Also fix the log message for code 93 (flags, not line_index).
+
+	fix DIMSTYLE.DIMTFILLCLR wrong CMC method after INDXF roundtrip
+	bit_write_CMC: default uninitialized CMC (method=0, rgb=0) to ByBlock
+	(0xc1) instead of writing invalid method 0x00.
+	dxf_CMC: with FIELD_CMC0 (opt=1), still write index for ByBlock
+	(method 0xc1), since index=0 is a meaningful value, not a default to suppress.
+
+	encode2: apply R2007+ split string stream to dwg2.spec objects
+	encode2.c had its own DWG_ENTITY/DWG_OBJECT macro copies that were
+	not updated with the split stream changes. This caused VISUALSTYLE,
+	LIGHT, and other dwg2.spec objects to write strings inline instead of
+	to the separate str_dat buffer.
+
+	encode: set zero_one_or_three = 3 with r2004+
+
+	enc_macros: FIELD_VECTOR_T use FIELD_T for R2007+ split streams
+	FIELD_VECTOR_T had a shortcut for same-version encoding that wrote
+	strings directly to dat with bit_write_TV, bypassing the split string
+	stream. For R2007+, always use FIELD_T which writes to str_dat.
+
+2026-04-05  Reini Urban  <reini.urban@gmail.com>
+
+	encode: R2007+ object-level split string stream
+	For R2007+ objects, allocate a separate str_dat buffer so FIELD_T
+	writes strings to a separate stream. At START_HANDLE_STREAM, assemble
+	the string footer (data_size RS + has_strings B) and copy the string
+	data before computing bitsize.
+
+	Fix dwg_encode_entity/object to not overwrite the separate str_dat
+	chain with dat's chain pointer.
+
+2026-04-05  Reini Urban  <reini.urban@gmail.com>
+
+	WIP encode: R2007+ split-stream encoding for Header and Classes sections
+	- encode_header_vars: use separate Bit_Chain buffers for main, handle,
+	  and string streams. Assemble as [main][strings+footer][handles] with
+	  proper bitsize/hsize fields.
+	- encode_classes: split non-string fields (main stream) from class name
+	  strings (string stream) with proper string footer (data_size + endbit).
+	- enc_macros.h: fix SECTION_STRING_STREAM/END_STRING_STREAM to save/restore
+	  dat as pointer instead of value copy, preventing str_dat corruption.
+	- encode.c: add hsize(RL) and bitsize(RL) to classes section for R2010+.
+	- encode.c: fix summaryinfo_address to add +32 for page header offset.
+	- encode.c: keep max_decomp_size aligned (don't reduce to actual data size).
+	- bits.c: fix bit_write_T16 R2007+ to not write null terminator (match reader).
+
+	ODA error improved from "Out of range" to "CRC does not match".
+
+2026-04-05  Reini Urban  <reini.urban@gmail.com>
+
+	dxfwrite: accept DXB
+
+	programs: can write all but r2007
+
+	spec: rename HEADER/2NDHEADER.is_maint to maint_rel_version
+	because that is how it is documented in the ODA specs
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	in_json: fix empty XRECORD xdata roundtrip GH #1043
+	When num_xdata is 0, skip the Resbuf allocation and return early
+	with xdata = NULL and xdata_size = 0. Previously the unconditional
+	calloc left a non-NULL xdata pointer, causing the encoder to write
+	a spurious 2-byte empty resbuf entry.
+
+	out_json: fix non-UTF8 output for codepoints 0x80-0xff GH #1039
+	print_wcquote had c > 0xff which let Latin-1 range characters
+	(like ä ü ø) pass through as raw bytes instead of converting
+	to UTF-8.
+
+	python: fix _LibreDWG.so missing on Windows GH #975
+	Add -avoid-version to prevent libtool from producing _LibreDWG-0.dll,
+	and detect Python's EXT_SUFFIX to pass -shrext .pyd on Windows.
+
+	in_dxf: fix PERSUBENTMGR missing num_subents/subents parsing
+	add_PERSUBENTMGR() returned after reading steps[] without reading
+	num_subents and subents[]. The remaining DXF 90 codes were then
+	re-interpreted as class_version etc., corrupting the object data
+	and causing ODA to reject with "Object improperly read:
+	<AcDbPersSubentManager>".
+
+	out_dxf: fix off-by-one in dwg_convert_SAB_to_SAT1 GH #1184
+	The boundary check `src.byte + len >= src.size` rejected valid SAB data
+	when the record ended exactly at the buffer boundary. Changed to `>`
+	since reading `len` bytes from `src.byte` only needs `src.byte + len`
+	to be at most `src.size`.
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	out_dxf: fix SORTENTSTABLE sort_ents output
+	FIELD_HANDLE was skipping sort_ents (DXF code 5) when ->obj was NULL,
+	but sort_ents are sort-order handles that don't necessarily point to
+	real objects. This broke the 331/5 pairing in the DXF output, causing
+	ODA to reject the file with "Object improperly read: <AcDbSortentsTable>".
+
+	Fix: for DXF code 5 handles, only check absolute_ref (not ->obj) in
+	both the skip condition and the output value. Also guard the DXF loop
+	in the spec to skip both ent and sort_ent together when the ent is
+	invalid.
+
+	Fixes dxf-check 2004/HatchG roundtrips and SORTENTSTABLE ODA error.
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	test: use xvfb-run with some ODAFileConverter's
+
+	decode: fix MLINESTYLE loop GH #1230
+	the display of lt.index = 32767 as BSd is correct.
+
+	dwg_next_handseed: skip existing handles in object_map GH #1229
+	dwg_next_handseed blindly incremented HANDSEED without checking if
+	the handle was already taken. For r10 files with low HANDSEED values,
+	this caused duplicate handle errors during table reading.
+
+	spec: fix DIMSTYLE.DIMCLRD_N GH #1234
+	get rid f the RS method <r13. rather add a CMC branch <r13 to use RS.
+	Problem with in_dxf of DIMSTYLE 176-178.
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	dxf,encode: fix writing CMC
+	compose method and rgb, fixing empty method errors.
+
+	FIXME: DIMCLR{D,E,T}_N RS => CMC for <r13
+	because in_dxf sees only 176 mapping to DIMCLRD_N, which is only valid for <r13
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	encode: don't overwrite computed R2004 header fields from DXF
+	The r2004_file_header.spec IF_ENCODE_FROM_EARLIER_OR_DXF block
+	hardcoded last_section_id, numsections, section_map_id and
+	section_array_size to placeholder values (19/17/19/19),
+	clobbering the correctly computed values from the section map
+	and info page setup. This caused the decoder to see a wrong
+	section_map_address and trigger a repair.
+
+	out_dxf: skip thumbnail sentinel prefix in DXF output
+	For R2004+, thumbnail.chain starts with a 16-byte sentinel
+	at byte 0 (thumbnail.byte = 16). Writing it into the DXF caused
+	encode_r13_thumbnail to wrap it in sentinels again, producing a
+	double sentinel that corrupted the overall_size on re-read.
+	Skip the sentinel prefix using pic->byte offset.
+
+	in_dxf: fix double hex-decoding of binary pair values
+	dxf_read_binary already decodes hex to binary for text DXF,
+	so remove the redundant in_hex2bin calls in add_xdata,
+	entity preview, BLOCK_HEADER preview, OLE2FRAME and
+	THUMBNAILIMAGE readers. Use memcpy with pair->value.s.len
+	uniformly, like the DXFB path.
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	in_json: fix eed strlen overflow
+	by terminating an empty string.
+	testcase: ./dwg example_2018.json
+
+	dxf-check of 2004 dwgs regressed from 4 to 34 failures.
+	It converted to r2000 before.
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix FIELD_T16 leak
+
+	encode: fix dwg_encode_eed_data TU leak
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix logical precedence problem
+	with FIELD_T16: if (!IS_FROM_TU (dat))
+
+	testcase: ./dwg example_2004.json
+
+2026-04-04  Reini Urban  <reini.urban@gmail.com>
+
+	document dwg_version and maint_version
+	maint_version is the really important info.
+	is_maint is misnamed. Should be maint_rel_version.
+
+	encode: replace is_maint switch by lookup table
+	add the is_maint byte to dwg_versions[]
+
+2026-04-03  Reini Urban  <reini.urban@gmail.com>
+
+	encode: set is_maint and maint_version
+	dxf2dwg: keep the version, unless it is r2007
+
+	encode: more IS_FROM_TU fixes
+	when reading from JSON or DXF, we have UTF-8
+
+	encode: fix r2010+ object encoding for JSON/DXF import
+	Clear stale obj->bitsize and obj->handlestream_size for R_2010b+
+	before encoding. When importing from JSON, these contain values from
+	the original DWG, causing obj_string_stream to reposition dat to an
+	invalid absolute position (realloc: invalid pointer crash).
+	Also fix handlestream_size fixup version guard from R_2013b to R_2010b,
+	since R_2010 also has the UMC handlestream_size field.
+
+	encode: fix r2004 file header CRC32 calculation
+	The CRC32 was calculated from the in-memory struct before the spec's
+	IF_ENCODE_FROM_EARLIER_OR_DXF block modified fields. Recalculate the
+	CRC from the actual on-disk bytes in file_dat after the spec has
+	written everything, to ensure the CRC covers the final values.
+
+	encode: patchup summaryinfo_address for r2004+
+	The summaryinfo_address in the DWG file header was written as 0
+	because it's set after sections are written but the header is
+	written earlier. Add a patchup at 0x20 similar to thumbnail_address.
+
+	encode: fix r2004 file_header for DXF import
+	The R2004_Header file_dat was initialized with R_INVALID versions,
+	so SINCE(R_2004a) in r2004_file_header.spec was skipped and
+	header_size stayed 0, causing ODA "Out of range" errors.
+	Copy version/from_version/opts from dat into file_dat.
+	Also use IF_ENCODE_FROM_EARLIER_OR_DXF in the spec so header fields
+	are initialized for same-version DXF imports.
+
+	encode: skip obj_string_stream when bitsize is not yet known
+	During encode, obj->bitsize is 0 (calculated after encoding).
+	obj_string_stream computes start = obj->bitsize - 1 = 0xFFFFFFFF,
+	causing bit_set_position buffer overflow errors for every r2007+ object.
+	Guard both entity and object encode paths.
+
+	encode: fix fixup_NOD is_tu check for DXF import
+	Use IS_FROM_TU_DWG() instead of version >= R_2007, which accounts
+	for the DWG_OPTS_IN flag. When importing from DXF, strings are UTF-8
+	not TU, even when the target version is R_2007+.
+	Fixes heap-buffer-overflow in bit_convert_TU.
+	Also allow r2010+ encoding, and update WE_CAN message.
+
+	improve/update fuzzing
+
+	dwgfuzz: show mode with --version
+
+	more fuzzing compilation fixes
+
+	fix fuzzing, esp. the LOG macros must be statements now
+	and yes, fuzzing only works with the 2 modern compilers.
+
+	decode: fix fuzzer overflow case in xdata
+	with wrong xdata_size overflowing also dat->size
+
+	decode: fix fuzzer overflow in dwg_decode_add_object
+	Fixes CIFuzz
+
+	chore: fix some -Wunused-variables
+
+2026-04-03  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix more -Walloc-size warnings
+	we use the smallest APPID object for the start, and alloc later.
+	Suppress the -Walloc-size warnings for these cases. The compiler is
+	right.
+
+	We still need -Wno-alloc-size though.
+
+2026-04-03  Reini Urban  <reini.urban@gmail.com>
+
+	encode,in_dxf: fix -Walloc-size warnings
+	Expand ADD_OBJECT1 macro with GCC14_DIAG_IGNORE(-Walloc-size) around
+	the calloc, since _obj is intentionally declared as the largest control
+	type but allocation uses the actual (smaller) type.
+
+	In encode use the bigger size for the cast to be corret.
+
+2026-04-03  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix -Werror=array-bounds in add_eed
+	Allocate at least sizeof(Dwg_Eed_Data) for EED data to avoid GCC
+	warning about partial out-of-bounds access when the EED stream size
+	is smaller than the struct size.
+
+	make regen-unknown
+
+	decode: 2004 header underflow
+
+	add logging.c
+	replace LOG macros by functions
+	GH #1231
+
+2026-04-02  Reini Urban  <reini.urban@gmail.com>
+
+	WIP common: export a single loglevel for all
+	mainly for decode2 and encode2, but then also for all the others,
+	because we must think of LTO/odr.
+
+	Also had to rename unit-test/common.c to unit-test/tests_common.c
+	to avoid name clashes.
+
+	Fixes GH #1224 disappeared log lines for dwg2 objects
+
+2026-04-02  Reini Urban  <reini.urban@gmail.com>
+
+	spec: fix AcDbMTextObjectEmbedded fields
+	The specs seem to be better than me.
+
+	repro: ./log ../to/2018/from_ACadSharp/AecObjects.dwg
+	the 2nd ATTDEF
+
+	GH #1233
+
+2026-03-31  Reini Urban  <reini.urban@gmail.com>
+
+	spec: rename PROXY_OBJECT.dwg_versions
+	rename to version. conflicts with the new global.
+	it was private, but for testing I needed to export it.
+
+	test: fix check_minimal for mingw
+
+2026-03-30  Reini Urban  <reini.urban@gmail.com>
+
+	spec: DIMASSOC honor the last has_lastpt_ref
+	There is only one error case missing, where there's an additional point.
+	But all other last has_lastpt_ref: 0 cases end there.
+
+	GH #1031
+
+2026-03-30  Reini Urban  <reini.urban@gmail.com>
+
+	promote DIMASSOC to unstable
+	lots of coverage
+
+2026-03-30  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Improve DIMASSOC object
+
+2026-03-30  Reini Urban  <reini.urban@gmail.com>
+
+	fix dimassoc unit-test for DEBUGGING
+
+2026-03-29  Reini Urban  <reini.urban@gmail.com>
+
+	spec: Fix r2004+ sections, checked against ODA specs
+	- auxheader zero_18: maint_version fields now always read as RS (not
+	  RL for R_2018+), HANDSEED reads as RL (not RLL) zero_18: { 0 0 0 }
+	  reads correctly
+	- appinfo comment_checksum: Guarded with num_strings >= 2/3. no more
+	  error with num_strings=1
+	- AcDs num_segidx: Changed bounds check from sizeof(Dwg_AcDs_Segment)
+	  to sizeof(Dwg_AcDs_SegmentIndex). 72 segments now pass validation
+
+2026-03-29  Reini Urban  <reini.urban@gmail.com>
+
+	spec: fix FIELD/TABLE TABLE_value_fields parsing
+	Skip value data when format_flags bit 1 (mask 0x02) is set, per ODA
+	spec "Not present in case bit 1 in Flags is set". Also add missing
+	data_size BL before kPoint (2RD) and k3dPoint (3RD) values.
+
+	Fixes bit_read_TU buffer overflow in FIELD objects.
+
+2026-03-29  Reini Urban  <reini.urban@gmail.com>
+
+	decode: skip num_owned for xref BLOCK_HEADERs
+	xref blocks (blkisxref or xrefoverlaid) don't store num_owned in the
+	data stream. Reading it shifted all subsequent fields by 2 bits,
+	causing garbage base_pt.z, wrong num_inserts, and invalid preview_size.
+
+	Fixes GH #1179 Level0.dwg decode errors with those xref's.
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix color.handle order in entity handle stream
+	The encoder wrote color.handle to hdl_dat during common_entity_data.spec,
+	but START_HANDLE_STREAM flushed common handles (layer) before the
+	accumulated special handles (color.handle), reversing the order.
+	The decoder expects color.handle before layer.
+
+	Move color.handle writing to dwg_encode_common_entity_handle_data,
+	so it's part of the common handle stream in the correct order.
+	Fixes ODA "Object improperly read: <AcDbPolyline>" on dbcolor_2004.
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	json: fix DBCOLOR.color.handle field
+
+	encode: fix R2004+ ODA recovery errors
+	Fix thumbnail_address to point after the 32-byte encrypted page header.
+	Patch offset 0x0D in the file header after all sections are written.
+	Write secondheader (108-byte copy of encrypted R2004_Header) after all
+	sections, fixing the secondheader_address TODO.
+	Use store_R2004_section for SYSTEM_MAP so the pre-computed size in the
+	self-entry matches the actual on-disk size.
+	Disable LZ compression for data section pages (use raw copy with
+	compressed=1) as the compressor output is not yet ODA-compatible.
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	json: preserve class dwg_version, maint_version and num_instances
+	Write dwg_version and maint_version per class to JSON for R2004+.
+	Fix num_instances not being written due to the FIELD macro skipping
+	fields with "num_" prefix. Read them back in the JSON reader.
+
+	Without this, dwgwrite from JSON defaults all class versions to
+	the file header version, causing ODA to reject the written DWG.
+
+	Fixes json-check blank_Acad2004 roundtrips.
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	out_dxf: fix VIEWPORT id, add BLOCK_RECORD fields
+	Fix VIEWPORT DXF output: the overall paperspace viewport (entmode 0)
+	gets on_off=0 and id=0. Active viewports auto-increment id starting
+	at 1 via new dwg->last_viewport_id counter.
+
+	Add missing insert_units (70), explodable (280), block_scaling (281)
+	fields to BLOCK_RECORD TABLE entries for R2007+.
+
+	Fixes GH #1213
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	update generated src/config.h.in
+
+	ci: fix macos, need autoreconf -f
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	dxfb: fix pre-R14 binary DXF group codes and roundtrip
+	Fix GROUP macro in out_dxfb.c: use 0xFF escape prefix for codes >= 255,
+	not >= 1000. Codes 255-999 (280, 281, 330, etc.) were silently truncated
+	to their low byte, corrupting pre-R14 binary DXF output.
+
+	Fix in_dxf.c reader to handle 1-byte group codes for pre-R14 binary DXF,
+	with 0xFF escape for codes >= 255. Auto-detect the format by checking
+	byte 23 after the sentinel.
+
+	Also fix HEADER_RL to use VALUE_INT to respect DXF code sizes.
+
+	Surprisingly fixes the last failing dxfb.test failure with example_2007
+	roundtrips.
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	dxfb: more harmonization with out_dxf
+
+	dxfb-check: default to .dxb extension
+
+	dwgwrite: accept -I dxb or .dxb input files
+	and its uppercase variants
+
+	dwgread: also accept -O DXB for dxfb
+
+	dwg2dxf: default to .dxb extension with -b
+
+	add dxfb.test
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	dxfb: fix binary value sizes for codes 280-289 and CMC colors
+	Fix binary DXF value sizes: VALUE_RC for codes 280/281 in classes,
+	HEADER_RC for ENDCAPS/JOINSTYLE, VALUE_RL for CMC codes >= 90.
+	Harmonize dxfb block/entity write loops with out_dxf.
+	Add timeout to dxfb-check.
+
+	ODA uses int16 (2 bytes) for group codes 280-289, not int8 (1 byte)
+	as originally assumed. Fix VALUE_RC macro to write 2 bytes for codes
+	280-289. Fix VALUE_INT dispatch: DWG_VT_INT8 falls through to INT16.
+	Fix dxfb_CMC: only use VALUE_RL for codes 90-99, not all codes >= 90
+	(was incorrectly writing 4 bytes for CMC color codes 176-178).
+	Revert HEADER_RS back for ENDCAPS/JOINSTYLE (code 280 needs int16).
+	ODA now converts the dxfb output successfully.
+
+2026-03-28  Reini Urban  <reini.urban@gmail.com>
+
+	dxfb: fix and use dxf_read_binary
+	We need a seperate Dxf_Pair len field for binary strings.
+
+	dxfb: some type fixes and some testing
+	use RS for group 70. fix solid BINARY fields.
+
+2026-03-28  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Revert removing of spaces in script files
+	The script file contains spaces on the end of lines, which each means
+	<ENTER>.
+	The space is functional part of the script.
+
+	commit ab63c4a7342bf09954e5066934b775f8aa100052
+	Author: Reini Urban <reini.urban@gmail.com>
+	Date:   Thu Dec 4 10:49:37 2025 +0100
+
+	    prek: install and changes
+
+2026-03-28  Guilherme V. Favretto  <97709742+guifavretto@users.noreply.github.com>
+
+	bits: fix -Werror=discarded-qualifiers
+
+2026-03-28  Guilherme V. Favretto  <97709742+guifavretto@users.noreply.github.com>
+
+	Fix compilation issues on modern systems with GCC
+	In systems with modern glibc (like Arch Linux), including system
+	headers before config.h could lead to _POSIX_C_SOURCE macro
+	redefinition errors. Added include guards to config.h and a #ifndef
+	protection for _POSIX_C_SOURCE to prevent this.
+
+	* configure.ac: Add AH_TOP and AH_BOTTOM for CONFIG_H include guards.
+	  Use AH_VERBATIM to wrap _POSIX_C_SOURCE in #ifndef.
+
+2026-03-24  Reini Urban  <reini.urban@gmail.com>
+
+	dxfb: sync with out_dxf. if (dxf) guards missing
+	e.g. VALUE_BINARY
+	preventing dxfb-check roundtrips for example_2000
+
+	asan: fix asan: allocation-size-too-big errors
+	HAVE_ASAN was never defined
+
+2026-03-24  Trail of bits  <disclose@trailofbits.com>
+
+	Fix decompress_R2004_section buffer overflow
+	With ossfuzz. Security relevant with special crafted DWG files
+
+2026-03-23  Reini Urban  <reini.urban@gmail.com>
+
+	bump the SO_VERSION to 0:14:0
+	for the r2004 write
+
+2026-03-23  Reini Urban  <reini.urban@gmail.com>
+
+	get_next_owned_entity: stop before skipping last_entity if it's a sub-entity type
+	When last_entity is an ATTDEF (e.g. block "BLOKO" in example_r14.dwg),
+	the while loop that skips sub-entity types (ATTDEF, ATTRIB, VERTEX...)
+	advanced past last_entity before checking it, because the existing
+	early-exit check was placed after the advance. This caused the
+	traversal to continue beyond the block's boundary, emitting entities
+	from subsequent blocks (duplicate SVG IDs, extra entities).
+
+	Add an early-exit check before the advance inside the while loop so
+	that if last_entity itself is a sub-entity type, it is returned
+	immediately without skipping it.
+
+	Reproducer: dwg2SVG example_r14.dwg produced duplicate dwg-object IDs
+	due to block traversal running into the next block's entities.
+
+	Fixes GH #1114
+
+2026-03-23  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: accept CMC extension codes 420/430/440 in specific object fields
+	Extend the matching condition to also accept CMC extension codes
+	computed as f->dxf + (420|430|440 - 62). Also add a specific branch
+	for codes 420-429 in the CMC handler to OR the value with 0xc3000000
+	(setting method=truecolor), matching the behavior of dxf_read_CMC.
+
+	Fixes: DBCOLOR "Invalid DXF code 420" error in hatch_color_ref.dxf
+
+2026-03-23  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix LWPOLYLINE.flag CLOSED logic
+	take the 70 value and convert 1 to 512, and 128 to 256.
+	Fixes GH #1189
+
+2026-03-23  Reini Urban  <reini.urban@gmail.com>
+
+	dwg_insert_entity: fix entity linking for loaded empty blocks
+	When a DWG is loaded from file, BLOCK_HEADER.first_entity is a
+	non-NULL pointer to a null handle (absolute_ref=0), not a NULL
+	pointer. The previous !_owner->first_entity check failed in this
+	case, so first_entity was never updated and prev/next_entity links
+	were not set on the added entity.
+
+	Fix the condition to also check absolute_ref, set both prev_entity
+	and next_entity to null handles (code 4) for the first entity in
+	a block, and set nolinks=0. Also set next_entity=null for any new
+	last entity in the else branch, and add a fallback to update
+	first_entity when adding to a loaded empty block.
+
+	Fixes GH #1105
+
+2026-03-23  Reini Urban  <reini.urban@gmail.com>
+
+	Update NEWS
+
+2026-03-23  Reini Urban  <reini.urban@gmail.com>
+
+	dwgadd: implement table-by-name for SET_ENT string fields
+	Instead of a handle for a table member, you can now also use a name.
+	dwg_dynapi_common_set_value() for common entity fields (e.g. layer) and
+	dwg_dynapi_entity_set_value() for entity-specific handle fields.
+	Non-handle string fields fall through to the existing code path.
+
+	* examples/dwgadd.c (SET_ENT): add handle-by-name resolution in the
+	  string branch.
+	* examples/dwgadd.example_r11: use uppercase "FOO" — pre-R13 requires
+	  uppercase symbol table names.
+
+2026-03-23  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: add testcase to set layer
+	this does not work yet, as the layer must be a handle, not a name.
+	TODO: translate a string to a handle via dwg_find_tablehandle().
+
+2026-03-23  Reini Urban  <reini.urban@gmail.com>
+
+	more README
+
+2026-03-22  Reini Urban  <reini.urban@gmail.com>
+
+	unit-test: fix uninitialized intensity_style in pointcloud.c
+	clang warns about passing uninitialized struct as const pointer
+	to CHK_SUBCLASS_TYPE. Initialize to zero.
+
+2026-03-22  Reini Urban  <reini.urban@gmail.com>
+
+	gen-dynapi: fix SUBCLASSES regression from dwg_spec_shared.h
+	The %defined hash was local to each dxf_in() call, so when
+	dwg_spec_shared.h processed ACTION_3DSOLID/COMMON_3DSOLID defines,
+	the next dxfin_spec call for dwg.spec/dwg2.spec got a fresh empty
+	%defined. expand_define() then failed to find these defines and
+	never copied the AcDbModelerGeometry/AcDb3dSolid superclass entries
+	to ASSOCASMBODYACTIONPARAM, EXTRUDEDSURFACE, LOFTEDSURFACE,
+	NURBSURFACE, PLANESURFACE, REVOLVEDSURFACE, SWEPTSURFACE,
+	and ACSH_BREP_CLASS.
+
+	Fix: make %defined global so it persists across dxfin_spec calls.
+	Also restore the 8 superclass entries in dynapi.c.
+
+2026-03-22  Reini Urban  <reini.urban@gmail.com>
+
+	encode r11: always update entities_end after encoding
+	The encoder only set entities_end when it was zero (from the input
+	file). Since the input usually has a valid entities_end, the encoder
+	kept the stale value instead of computing the new one from the output.
+	This caused the second decode pass to read too few entities bytes,
+	then interpret the BLOCK sentinel as garbage entity data, producing
+	cascading errors like 'Invalid obj->size 53196 changed to 56'.
+
+	Remove the 'if (!dwg->header.entities_end)' guard so entities_end is
+	always set to dat->byte after encoding entities.
+
+2026-03-22  Reini Urban  <reini.urban@gmail.com>
+
+	fix preR13 encode extras entities in wrong section
+	encode_preR13_entities() for ENTITIES_SECTION_INDEX was not skipping
+	extras entities (POLYLINE_2D + JUMP at end of object list, after block
+	entities), writing them into the table section area and shifting
+	blocks_start by 17 bytes. This corrupted all table records
+	(BLOCK_HEADER, LAYER, STYLE, LTYPE, VPORT).
+
+	Replace the broken in_extras JUMP-based detection with past_blocks flag:
+	for ENTITIES_SECTION_INDEX, skip entities after block region;
+	for EXTRAS_SECTION_INDEX, only include entities after block region.
+
+	Fixes json roundtrip for r10/entities.
+
+2026-03-22  Reini Urban  <reini.urban@gmail.com>
+
+	json.test: honor TODO list for all checks, allow extra entities
+	The TODO failures (r11/ACEB10, r1.4/entities) were only skipped in
+	check_roundtrip() but not in the json/minjson/geojson checks.
+	Also allow roundtrips to produce extra entities (>= not ==).
+
+	fix json.test: dwgread -y is invalid
+	wrong tests got undetected for some time
+
+2026-03-22  Reini Urban  <reini.urban@gmail.com>
+
+	tests: link decode2/encode2 for decode_test/encode_test
+	The spec split created decode2.c and encode2.c but the test builds
+	didn't know about them, causing link errors (e.g. dwg_decode_CAMERA).
+
+	* test/unit-testing/CMakeLists.txt: add decode2.c to decode_test sources
+	* test/unit-testing/Makefile.am: add decode2.lo to decode_test_LDADD,
+	  encode2.lo to encode_test_LDADD
+
+2026-03-22  Reini Urban  <reini.urban@gmail.com>
+
+	split dwg.spec into dwg.spec + dwg2.spec to reduce compile times
+	Split the 12,801-line dwg.spec at the FIELDLIST/GEODATA boundary into
+	two halves. encode.c and decode.c each get a companion *2.c file that
+	compiles the second half with non-static functions, roughly halving
+	their .o sizes (encode: 23MB->13MB, decode: 20MB->14MB).
+
+	Other consumers (free, print, out_dxf, out_dxfb, out_json) simply
+	include both spec files.  Shared macros (COMMON_ENTITY_DIMENSION,
+	WIRESTRUCT_fields, 3DSOLID helpers, TABLE_value_fields) live in the
+	new dwg_spec_shared.h.  Encode field macros extracted to enc_macros.h.
+
+	Fixes GH #353
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	Merge branch 'smoke/write2004-1'
+
+	encode_test: merge store/compress_R2004_section tests
+	compress_R2004_section already dispatches to store_R2004_section
+	internally, so the ifdef split was unnecessary. Keep both test
+	vectors (auxh + ofs).
+
+	encode/json: preserve AppInfo payload on roundtrip
+	And skip encoding empty Security and FileDepList sections
+
+	encode: fix R2004 section page CRC handling
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix unknown tail bits, a MSB problem
+	* src/encode.c (dwg_encode_unknown_bits, dwg_encode_unknown_rest):
+	Write full unknown-bytes first, then replay remaining mod bits explicitly.
+	Avoid bit-position rewind that dropped low tail bits in non-byte-aligned payloads.
+	(dwg_encode_add_object): Restore object end padding bits to 1 as required.
+
+	Fixes json-check example_2000 ODA cast failure caused by TABLESTYLE tail-bit
+	corruption (rowstyles[2].text_style handle drift).
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: enable r2004 compressor path
+	- Enable HAVE_COMPRESS_R2004_SECTION in encode.c.
+	- Compile compress_R2004_section in normal builds (not DEBUG-only).
+	- Use compress_R2004_section for SECTION_INFO/SECTION_SYSTEM_MAP when
+	  compression is enabled.
+	- Keep store_R2004_section only as the !HAVE_COMPRESS_R2004_SECTION path.
+	- Remove fake-store fallback calls inside compress_R2004_section;
+	  use literal-stream fallback instead.
+
+	Added unit-test to encode_test.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix compress_R2004_section LZ77 compressor
+	Rewrite the R2004 LZ77 compressor based on the ODA specs.
+	Uses hash-based match finding instead of
+	brute-force search, with delayed match writing for proper trailing
+	literal count encoding.
+
+	Add roundtrip tests (compress → decompress → compare) for both
+	store_R2004_section and compress_R2004_section.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	doc: fix for the new encode 2004 feature
+	also fix some compilation warnings.
+
+	encode: fail cleanly for >r2004, fix wrong warning
+	Writing r2004 works now. The SINCE(R_2004a) block erroneously logged
+	"Writing R2004 sections not yet finished" even for r2004 itself.
+	For >r2004 (r2010+), return DWG_ERR_NOTYETSUPPORTED instead of
+	continuing into broken state and crashing with realloc corruption.
+
+	in_json: handle BSd type in BS array parser
+	The VERTEX_PFACE_FACE.vertind field is type BSd (signed short) stored
+	as a JSON array, but BSd was missing from the JSMN_ARRAY handler for
+	BS/BS*/RS types, causing JSON parse errors and lost objects.
+
+	encode: bump copyright header
+
+	json.test: fix roundtrips, mark ODA regressions
+	- Use unquoted $as to avoid passing empty string arg to dwgwrite.
+	- Add --as=r2000 for r2007+ roundtrips (writing >r2004 unsupported).
+	- Only write .json.log for non-TODO roundtrip failures.
+	- Add example_2004 to ODA check list.
+	- Mark example_2000 and example_2004 as ODA regression TODOs:
+	  example_2000: "Object of class AcDbVisualStyle can't be cast to AcDbTableStyle"
+	  example_2004: ".dwg file needs recovery"
+
+	encode: fail on encoding r2007
+
+	json: preserve r2004 color alpha
+	- export/import color.alpha_raw so JSON round-trips the alpha flag
+	- reinstate encoder color.raw synthesis so the encoder sees the flag set
+	- stop pruning the alpha bit in bit_write_ENC since JSON now carries the payload
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: stop duplicating raw unknown tails
+	* src/encode.c (dwg_encode_raw_UNKNOWN_OBJ,
+	  dwg_encode_raw_UNKNOWN_ENT): Do not append deferred
+	  handle/unknown tail data a second time after writing preserved
+	  same-version unknown_bits.
+
+	This keeps ./rw example_2004 unchanged and restores object 214 in
+	../json-check example_2004 to the original r2004 size/bitsize boundary
+	(Size 365, bitsize 2883). The remaining failure is now isolated to later
+	unstable entity color encoding rather than UNKNOWN_OBJ preservation.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: write raw same-version unknown objects
+	* src/encode.c (dwg_encode): Keep same-version JSON unknown objects and entities on the raw path instead of rewriting them as placeholders.
+	* src/encode.c (dwg_encode_raw_UNKNOWN_OBJ, dwg_encode_raw_UNKNOWN_ENT, dwg_encode_add_object): Add dedicated raw UNKNOWN_OBJ/UNKNOWN_ENT helpers so imported unknown_bits are written again through the normal common object/entity preamble. For UNKNOWN_OBJ also flush the deferred handle stream instead of collapsing the object to a stub.
+
+	This keeps ./rw example_2004 unchanged and improves ../json-check example_2004 from WRONGCRC UNHANDLEDCLASS INVALIDHANDLE VALUEOUTOFBOUNDS to UNHANDLEDCLASS VALUEOUTOFBOUNDS. The remaining mismatch is later in the preserved UNKNOWN_OBJ bit layout/size accounting.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: always write r2004 AuxHeader section
+	* src/encode.c (dwg_encode):
+	Do not skip AcDb:AuxHeader when auxheader.dwg_version is unset.
+	encode_auxheader already has a defaults path, and JSON-driven r2004
+	writes rely on it.
+
+	This restores the AuxHeader section-info entry for example_2004 and
+	removes the later SECTIONNOTFOUND failure on reread.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix r2004 classes section encoding
+	* src/encode.c (encode_classes):
+	Write the r2004 per-class metadata fields in the format the
+	decoder expects, and compute max_num from the highest class
+	number instead of assuming a dense count-based range.
+
+	This restores sane AcDb:Classes decoding for example_2004 while
+	keeping the writer on the uncompressed r2004 path.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode,decode: fix more r2004 object stream layout
+	* src/encode.c (encode_objects_handles, dwg_encode):
+	Reserve the r2004 object map prefix in the object stream and keep
+	page_hdr[4] as the real decompressed-page start offset.
+
+	* src/decode.c (read_2004_compressed_section):
+	Fix uncompressed r2004 multi-page reconstruction to copy each page
+	from the right file offset into the right decompressed offset.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix more r2004 object and handle layout
+	* src/encode.c (encode_objects_handles): Keep the first Handles split
+	assertion guarded for r2004, reserve the initial Handles page-size
+	slot, and patch it at offset 0 for the first r2004 Handles page.
+	(encode_preR13): Keep uncompressed r2004 page headers using start
+	offset 0, which matches the current uncompressed reader path.
+	(encode_preR13): Preserve the earlier r2004 section/header structural
+	fixes while moving the remaining failure further into object/handle
+	decoding.
+
+	This checkpoint gets example_2004 past the former SECTION_SYSTEM_MAP,
+	SummaryInfo, AcDbObjects bounds, and initial Handles framing failures.
+	The remaining errors are later object-map/object-payload mismatches,
+	not the top-level r2004 section structure.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix more r2004 section structure
+	* src/encode.c (encode_preR13): Fix r2004 section/header bookkeeping
+	  for section counts, ids, and system-map sizes.
+	  (store_R2004_section, stored_R2004_section_size): Keep the
+	  uncompressed system-section path, but account for stored size
+	  correctly.
+	  (encode_preR13): Compute SECTION_SYSTEM_MAP checksums from
+	  comp_data_size, initialize section_infohdr consistently, and preserve
+	  the encrypted header overlap at 0x100 so SummaryInfo is not clobbered.
+
+	This fixes the top-level r2004 structural issues seen in example_2004:
+	SECTION_SYSTEM_MAP now verifies,
+	last_section_id/section_info_id/section_map_id are consistent, and the
+	SummaryInfo page header is no longer corrupted by the final header
+	write.
+
+	The remaining failure is later in AcDbObjects page metadata/layout;
+	./rw example_2004 is unchanged.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix more r2004 section info layout
+	* src/encode.c (dwg_encode): Keep the first data section name in the
+	section info table.
+	(dwg_encode): Emit the last partial r2004 page entry instead of
+	dropping it when a section spans multiple pages.
+	(dwg_encode): Fix r2004 header numsections so the trailing INFO and
+	SYSTEM_MAP pages are not counted as data sections.
+
+	Validation:
+	./dwg -y -v4 example_2004.min.json still succeeds.
+	./log -lmanual_2004.log.new -v4 example_2004.dwg progresses further in
+	r2004 decode, but the generated file still fails later with WRONGCRC
+	VALUEOUTOFBOUNDS and SECTIONNOTFOUND.
+	./rw example_2004 remains unchanged and completes successfully.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: rebuild moved r2004 section infos
+	* src/encode.c (section_info_rebuild): Rebuild all stored section_info
+	section pointers after section-array reallocations instead of assuming
+	sections stay sorted by enum type.
+
+	Validation:
+	../json-check example_2004 progresses further: section map
+	and section info parse farther before the remaining SECTIONNOTFOUND
+	failure.
+	./rw example_2004 remains unchanged and completes successfully.
+
+2026-03-21  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix r2004 json-check crash
+	* src/encode.c (encode_objects_handles): Use a Bit_Chain array
+	directly for r2004 object and handle sections instead of casting it
+	through Bit_Chain **.
+	(dwg_encode): Zero-initialize sec_dat before preserving populated
+	entries for SECTION_OBJECTS and SECTION_HANDLES.
+	(dwg_encode): Keep numbering section pages in stream order for the
+	preserved r2004 sections.
+
+	Validation: ../json-check example_2004 no longer crashes in dwgwrite,
+	but the reread still fails with SECTIONNOTFOUND.
+	./rw example_2004 remains unchanged and completes successfully.
+
+2026-03-20  Reini Urban  <reini.urban@gmail.com>
+
+	encode: wip r2004 use LZ store framing for system sections
+	System sections (SECTION_INFO, SECTION_SYSTEM_MAP) must be written with
+	valid LZ framing (literal_length + data + 0x11 terminator) because the
+	decoder always runs decompress_R2004_section on them. Previously used raw
+	copy_R2004_section which caused buffer overflow on re-decode.
+
+	Add store_R2004_section() that wraps raw data in LZ "store" format.
+	Set compression_type=2 in system section headers.
+	Patch comp_data_size in header after writing.
+
+2026-03-20  Reini Urban  <reini.urban@gmail.com>
+
+	encode: wip r2004 section fixes - preview chain, page sizes, section map rebuild
+	- fix SECTION_PREVIEW writing to wrong chain (was appending to SummaryInfo)
+	- use actual content size per page instead of max_decomp_size
+	- break before SECTION_INFO in section map rebuild loop to avoid duplicates
+
+	encode: fix r2004 section writing with correct page headers and section map
+	- Data sections get 32-byte encrypted page header (XOR'd with sec_mask)
+	  before max_decomp_size bytes of content per page
+	- System sections (SECTION_INFO, SECTION_SYSTEM_MAP) get 20-byte header
+	  with section magic (0x4163003b / 0x41630e3b), sizes, compression type,
+	  and Adler-32 checksum
+	- Section map rebuilt in stream order (not enum order) after data sections
+	  are written, storing only (number, size) pairs without addresses
+	- Remove spurious FIELD_RLL(address) from preliminary section map write;
+	  decoder computes addresses from accumulated sizes
+	- Fix alloc condition: was '<' instead of '>' causing buffer overflow
+
+2026-03-19  Reini Urban  <reini.urban@gmail.com>
+
+	decode: change section_max_decomp_size for Preview
+	The specs don't reflect the sizes from the field.
+	Fixes part of GH #1045
+
+	decode: skip DICTIONARY.numitems < 10000 check
+	See GH #1045, a large dictionary with obj->size 8381480 and numitems 26189.
+	FIELD_VECTOR_T does a proper overflow check.
+
+	post-release docs
+	didn't use make release yet
+
+2026-03-19  Reini Urban  <rurban@cpan.org>
+
+	dwgwrite: write to the proper version
+
+2026-03-18  Reini Urban  <reini.urban@gmail.com>
+
+	Release 0.13.4
+	see NEWS
+
+	build: add release helpers
+
+	harmonize dxf-check, json-check log files
+	logs: .log, .log.new. for dxf also an intermediate .dwg2dxf.log.
+	This avoids the clash of .log with .log.orig
+
+	decode: fixup wrong XRECORD.xdata_size <r2004
+	Maybe an ACAD bug, writing a wrong xdata_size.
+	E.g. with 2000/Multileader.
+
+2026-03-18  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix bit_write_MS for overlarge values where value & 0xFFFF < 0x8000
+	For overlarge MS values (> 0x7fff) where the lower 16 bits don't naturally
+	have bit 15 set (e.g. 88177 = 0x15831), the first RS word was written without
+	the required bit-15 flag. The reader uses bit 15 of the first word to decide
+	whether to read a second word; without it, the size was decoded incorrectly.
+
+	Values like 45924 (0xB364) happened to work because their lower 16 bits
+	already had bit 15 set, masking this bug. Values like 88177 (0x5831 lower 16)
+	caused wrong object sizes and cascading CRC failures on DXF roundtrip.
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	fixup dxf-check f06058da1c9b5ccb
+	didn't move the dxf.err file back.
+
+	dxf: fix ownerhandle version mismatch
+	src/common_object_handle_data.spec has R_13b1, do that in out_dxf also.
+	Fixes DICTIONARY.ownerhandle in example_r13.dwg dxf roundtrips.
+	GH #1223
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix CRC start address for overlarge MS objects. Fixes GH #1222
+	When obj->size crosses the 0x7fff boundary (overlarge MS needing 2 RS
+	words instead of 1), the memmove shifts data right by 2 bytes and
+	obj->address is correctly adjusted. But `address += 2` wrongly shifted
+	the CRC start address into the middle of the MS size field, so the
+	written CRC covered only bytes 2..N instead of 0..N of the object.
+
+	Also the size was not big enough.
+
+	The decode side always passes the pre-MS object start to bit_check_CRC,
+	so remove `address += 2` (overlarge) and `address -= 2` (downsize) to
+	keep `address` at the true object start for bit_write_CRC.
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	decode: the last 2 VISUALSTYLE fields only when room
+	Unfortunately dat->size is not yet shrinked to its actual size.
+	Fixes e.g. timoria/TestFiles/2000/test_write_2000_new_All.dwg
+
+	ci: pinact run -u
+
+	decode: guard optional 3DSOLID history_id handle read
+	* src/dwg.spec (COMMON_3DSOLID): For non-DXF decode, read
+	  history_id only when version > 1 and at least 8 bits remain in
+	  hdl_dat. This avoids trailing bit_read_RC overflow reports on
+	  objects with no history_id.
+	* src/spec.h: Add fallback AVAIL_BITS macro so spec expressions that
+	  reference it also compile in non-decoder builds.
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix SubDMesh DXF binary import (GH #272)
+	* src/in_dxf.c (in_hex2bin callers): Fix precedence bug so read gets the decoded byte count
+	  instead of a boolean.
+	* src/in_dxf.c (add_MESH): Initialize unknown_b1/unknown_b2 defaults for DXF-imported MESH.
+
+	This fixes dxf-check for Rotterdam_Centrum/Bruggen/Erasmusbrug.dwg ODA AcDbSubDMesh read errors
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	Revert "decode: fix CRC check start for handle-map objects"
+	This reverts commit e12563c5a18bd9639298306cd354ce76cc8d8342.
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	spec: fix dwg_set_dataflags for TEXT/ATTRIB/ATTDEF via add API. GH #1164
+	When using dwg_add_TEXT/ATTRIB/ATTDEF and setting rotation or oblique_angle
+	via the API, dwg_set_dataflags() was not called during encoding because
+	dwg_add_empty(R_2000) sets from_version = R_2000, making the condition
+	  dat->from_version < R_2000
+	false. Change to <= R_2000 so the dataflags are always recomputed when
+	encoding R_2000 output, covering both API-created objects (from_version ==
+	version) and objects whose fields were modified after decode.
+
+	Applies to TEXT, ATTRIB and ATTDEF — all three share the same condition.
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	decode: fix wrong memmove for LZ77 back-reference decompression. GH #1204
+	The #ifdef NDEBUG path used memmove() to copy compressed back-references,
+	but memmove copies from the original source bytes. When comp_offset <
+	comp_bytes the source and destination windows overlap and the LZ77
+	run-length extension requires reading back newly-written bytes as pos
+	advances. memmove defeats this, producing wrong output in release builds.
+
+	Fix: always use the byte-by-byte loop; keep the asserts under #ifndef NDEBUG.
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	libredwg.spec: upgrade to 0.13.4
+	- Fix %{_sharedir} -> %{_datadir} (standard RPM macro)
+	- python3-lxml already correct (switched from python3-libxml2)
+	- SO version stays at 0.0.13 (no ABI bump in configure.ac)
+	- Add changelog entry
+
+	NEWS: add 0.13.4 release notes
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix CMC color index for entity fields with DXF code >= 90
+	The generic entity field dispatcher treated any CMC field with DXF code
+	>= 90 as an RGB truecolor value (pair->value.l >> 0x18 = method). But
+	MULTILEADER uses codes 91/92/93 for line_color, text_color, block_color
+	as plain color indices (0=ByBlock, 256=ByLayer, etc.), not RGB values.
+
+	When value=0 was stored as rgb=0x00000000, ODA read method=0x00 (invalid,
+	valid range 0xc0-0xc8), emitting "Color index 65535" and misaligning the
+	bit-stream, triggering "CRC does not match".
+
+	Fix: in the code >= 90 branch, distinguish by value: real RGB truecolors
+	always have high byte set (> 257), so values <= 257 are color indices
+	and are routed through dxf_set_CMC_index() for correct method/rgb.
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix CMTC color method/rgb for TABLESTYLE and CellStyle color fields
+	Add dxf_set_CMC_index() helper that properly maps a DXF color index to the
+	CMC method and rgb bytes required by the R_2004 CMTC encoding: index 0 →
+	0xc1 (ByBlock), 256 → 0xc2 (ByLayer), 257 → 0xc8 (None), others → 0xc3
+	plus palette RGB.
+
+	Previously add_TABLESTYLE and add_CellStyle only set color->index from DXF
+	code 62, leaving method=0 and rgb=0.  When SUB_FIELD_CMTC later writes
+	those colors it forces R_2004 mode (full BS+BL+RC CMC), so rgb=0x00000000
+	gave ODA method=0 (invalid, valid range 0xc0–0xc8) causing "Cannot set C
+	to that value" and a misaligned bit-stream that triggered "CRC does not
+	match".
+
+	Also fix dxf_read_CMC to compute a default method/rgb when no 420 truecolor
+	code follows the 62 index code, using the same mapping.
+
+2026-03-17  Reini Urban  <reini.urban@gmail.com>
+
+	dxf-check: move oda errs to .
+
+2026-03-16  Reini Urban  <reini.urban@gmail.com>
+
+	build: fix codepages build with build-in-srcdir
+
+	in_dxf: resolve DIMENSION.block field name to BLOCK handle
+	The 'block' field (DXF code 2, anonymous dimension block name like '*D8')
+	was stored in obj_hdls for deferred resolution but resolve_postponed_object_refs
+	only handled 'block_header', not 'block'. Add 'block' alongside 'block_header'
+	to resolve it to the BLOCK table handle, preventing duplicate anonymous blocks.
+
+	in_dxf: fix phantom BLOCK_HEADER entry when new_object reuses existing object
+	When new_object uses the 'Reuse existing BLOCK_HEADER' path it
+	decrements dwg->num_objects, making idx >= num_objects. The outer
+	dxf_tables_read loop then accessed a stale partial object at idx,
+	which got an auto-assigned handle (0x47A) and was added as a phantom
+	entry to BLOCK_CONTROL.entries, causing ODA 'Duplicate Record name (429)'.
+
+2026-03-16  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix SORTENTSTABLE DXF import: parse ents[], sort_ents[], block_owner
+	Handle codes 331 (ents handles), 5 (sort_ents handles), and the
+	subsequent 330 (block_owner) for SORTENTSTABLE objects in new_object().
+
+	Fixes GH #1091: ODA 'AcDbSortentsTable can't be cast to AcDbEntity'
+	caused by code 5 overwriting the object handle with sort_ents values.
+
+2026-03-16  Reini Urban  <reini.urban@gmail.com>
+
+	decode,in_dxf: fix nolinks for r2000 entity chains from DXF
+	in_postprocess_handles sets entity nolinks=1 when the previous entity
+	is at array index obj->index-1.  But objects in the r2000 binary are
+	written in handle-sorted order, not array order.  When non-entity
+	objects (APPID, VPORT table records) have handles between two
+	consecutive entity handles, they appear between the entities in binary.
+	Setting nolinks=1 makes ODA follow the binary-next object as the
+	entity chain, which is a non-entity, causing:
+	  "Object of class AcDbRegAppTableRecord can't be cast to AcDbEntity"
+	  "Object of class AcDbViewportTableRecord can't be cast to AcDbEntity"
+
+	Fix: call dwg_fixup_BLOCKS_entities after DXF import to recompute
+	nolinks based on handle arithmetic (cur-1 / cur+1) rather than array
+	adjacency.  This clears the incorrect nolinks=1 flags and sets the
+	explicit prev/next_entity handles that ODA requires.
+
+	Fixes 2000/A.dwg and sample_2000.dwg DXF roundtrips (GH #1091).
+
+2026-03-16  Reini Urban  <reini.urban@gmail.com>
+
+	in_dxf: fix VX_TABLE_RECORD handle mismatch for VIEWPORT
+	dwg_add_VX creates a VX_TABLE_RECORD and adds it to VX_CONTROL.entries
+	using the handle returned by dwg_new_handseed.  Calling dwg_new_handseed
+	a second time and overwriting vxobj->handle.value left VX_CONTROL.entries
+	pointing to a non-existent handle while VIEWPORT.vport_entity_header
+	pointed to a different, skipped handle.
+
+	ODA then failed to write the DXF with "Object was permanently erased".
+
+	Fix: remove the second dwg_new_handseed call; use the handle that
+	dwg_add_VX already assigned.
+
+	Fixes Ceco.NET-People-Men-Sm-471.dwg DXF roundtrip (GH #1091).
+
+2026-03-16  Reini Urban  <reini.urban@gmail.com>
+
+	fix EED size calculation and overflows
+	working on fixing json roundtrips for
+	to/2000/from_uloz.to/VÝKRES_VÝZTUŽE_STROP.dwg
+
+2026-03-16  Reini Urban  <reini.urban@gmail.com>
+
+	common: add my_strcasecmp unit tests
+	Compile my_strcasecmp unconditionally so it can be tested and used
+	regardless of HAVE_STRCASECMP. The #define strcasecmp my_strcasecmp
+	alias is still only set when the system lacks strcasecmp.
+
+	Add common_strcasecmp_tests() to test/unit-testing/common_test.c
+
+	Closes GH #1207
+
+2026-03-16  Reini Urban  <reini.urban@gmail.com>
+
+	common: fix and rename strcasecmp to my_strcasecmp
+	Rename the fallback implementation to my_strcasecmp and add
+
+	Fix the broken implementation:
+	- Drop the bogus strcmp() shortcut (case-sensitive, useless here)
+	- Return proper negative/0/positive instead of 0/1
+	- Handle strlen(a) < strlen(b) correctly via final char difference
+	- Use (unsigned char) cast before toupper() as required by the standard
+
+	GH #1207
+
+2026-03-15  Reini Urban  <reini.urban@gmail.com>
+
+	chore: clang-format off macros
+	to bypass prek clang-format
+
+	docs: Better AGENTS.md recipes for reprodcucers
+
+	dwg.spec: relax HATCH seeds and handles
+
+	dwg.spec: tolerate truncated FIELD data
+
+	dwg.spec: clamp BLOCKLOOKUPPARAMETER unknown_t
+
+	in_dxf: tolerate FIELD value preamble
+
+	dxf-check: clear stale ODA error files
+
+2026-03-14  Reini Urban  <reini.urban@gmail.com>
+
+	decode: fix CRC check start for handle-map objects
+	The per-object CRC for r13b1-r2000 handle-map objects must start after the
+	initial MS size field. dwg_decode_add_object() used the handle-map entry
+	address, which caused false WRONGCRC reports (notably for ES2_S_2010 XRECORD
+	[247]).
+
+	* src/decode.c (dwg_decode_add_object): Check CRC starting at obj->address-2
+	  to match the encoder.
+
+2026-03-14  Reini Urban  <reini.urban@gmail.com>
+
+	dxf: avoid exporting invalid SORTENTSTABLE handle refs
+	When exporting SORTENTSTABLE, some inputs (e.g. td/2010/ES2_S.dwg) contain
+	NULL/zero handle references which were written to DXF as 331/5 = 0. This
+	produces malformed DXF and breaks DXF->DWG (r2000) roundtrips, triggering
+	invalid handles rejected by ODA.
+
+	* src/out_dxf.c (VALUE_HANDLE, FIELD_HANDLE): Skip emitting DXF handle group
+	  codes 331 and 5 when the resolved absolute_ref is 0.
+
+2026-03-14  Reini Urban  <reini.urban@gmail.com>
+
+	in_json: make partial OBJECTS entries releasable on parse errors
+	Fuzzed/invalid JSON can abort after json_OBJECTS already allocated
+	object/entity containers and their payloads. With preR13 input, the free path
+	ignored UNKNOWN_OBJ/UNKNOWN_ENT, so those allocations were not released,
+	triggering LeakSanitizer.
+
+	* src/in_json.c (json_OBJECTS): Set type/fixedtype to UNKNOWN_OBJ/UNKNOWN_ENT
+	  immediately after allocation so dwg_free can dispatch a proper free handler.
+	* src/free.c (free_preR13_object): Handle UNKNOWN_OBJ/UNKNOWN_ENT (and DUMMY)
+	  in the preR13 switch.
+
+2026-03-13  Reini Urban  <reini.urban@gmail.com>
+
+	free: avoid OOB in preR13 entity cleanup with injson
+	When reading malformed/partial JSON (DWG_OPTS_INJSON), preR13 entities may be
+	created without initialized layer/ltype handle pointers. The preR13 free path
+	unconditionally touched these handles, which could read past the end of the
+	allocation under ASan.
+
+	* src/free.c (free_preR13_object): Guard correct union member for entities and
+	  skip freeing preR13 entity handles for DWG_OPTS_IN inputs.
+
+	Fixes ossfuzz 470417487
+
+2026-03-13  Reini Urban  <reini.urban@gmail.com>
+
+	docs: add AGENTS.md with repository guidance for coding agents
+
+2026-02-11  Reini Urban  <reini.urban@gmail.com>
+
+	fix -Wdefault-const-init-field-unsafe with clang
+
+2026-02-10  Reini Urban  <reini.urban@gmail.com>
+
+	dxf: encode to UTF-8 for r2007+
+	add a VALUE_TVc for const string literals.
+	bit_u_expand always shrinks, but still do a copy then.
+
+	@matabar also tried a fix, but his was incorrect.
+	But thanks for the analysis!
+
+2026-02-10  Reini Urban  <reini.urban@gmail.com>
+
+	bits: swap wrong calloc args
+	harmless, but be consistent
+
+	spec: fix ARC_DIMENSION dxf codes 40,41
+	for arc_start_param and arc_end_param.
+	See github.com/mozman/ezdxf examples_dxf/uncommon.dxf#L1434 e.g.
+
+2026-02-06  Reini Urban  <rurban@cpan.org>
+
+	switch py-libxml2 to py-lxml (#84)
+	tested ok.
+
+2026-02-05  Reini Urban  <reini.urban@gmail.com>
+
+	dxf: negative color index
+	GH #1214
+
+	also add missing the CMC method to the binary variant for consistency.
+
+2026-02-05  Reini Urban  <reini.urban@gmail.com>
+
+	ci: pinact run -u
+	also ossfuzz manually:
+	curl -s https://api.github.com/repos/google/oss-fuzz/commits/master | jq -r '.sha'
+
+2026-02-04  Reini Urban  <reini.urban@gmail.com>
+
+	decode: fix heap-overflow by 1
+	Fixes fuzzing case GH #1215, analog to ossfuzz 63483
+	Thanks to @Keryer (Qi Kery)
+
+	json: improve color index, add Dwg_Color_Method enum
+	See GH #1216
+
+2026-02-03  Reini Urban  <reini.urban@gmail.com>
+
+	codepages: add comments about exceptions
+	and add a regen-h target
+
+	oda: get deb version dynamically
+
+	oda: bump to 26.12
+
+	prek: run with clang-format
+
+	prek: install and changes
+
+2025-12-17  Sakura  <1178743577@qq.com>
+
+	fix: memory out of bounds
+
+2025-12-02  Reini Urban  <reini.urban@gmail.com>
+
+	ci: pinact run -u
+	actions/checkout@v6.0.0, codeql-action@v4.31.6
+
+2025-11-24  luzpaz  <luzpaz@users.noreply.github.com>
+
+	Fix various typos Found via: `codespell -q 3 -S "./.git,*.patch,ChangeLog,./NEWS,./src/codepages" -L 2rd,aadd,addd,aded,afe,ba,baed,beed,caf,childs,daa,ded,ede,fo,gir,gord,gost,nam,noo,oce,re-use,ro,siz,te,teh,tekst,ue,uptodate`
+
+2025-11-19  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix Vertex entity index4 parsing
+
+2025-11-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix r2007 TOLERANCE entity
+	TOLERANCE entity need a has_strings bit.
+
+2025-10-28  Reini Urban  <reini.urban@gmail.com>
+
+	json: protect from NULL or wrong _obj
+	fatal. Thanks to 7erryX (GH #1190)
+
+2025-10-18  Reini Urban  <reini.urban@gmail.com>
+
+	CI: bump oda to 26.9
+
+	gh: switch from -m32 to modern --host=i686-linux-gnu
+	for latest distros
+
+2025-09-03  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+	    Reini Urban  <reini.urban@gmail.com>
+
+	Fix some REAL xdata types
+	dwg_resbuf_value_type missed some REAL and POINT3D ranges.
+	Fixes GH #1178
+
+2025-09-01  Reini Urban  <reini.urban@gmail.com>
+
+	oda: bump to 26.7
+
+	decode: fix FIELD_NUM_INSERTS
+	Fixes GH #1177
+
+	spec: rename BLOCK_HEADER.loaded_bit to xref_loaded
+
+2025-08-12  Reini Urban  <reini.urban@gmail.com>
+
+	spec: use signed VERTEX_PFACE_FACE.vertind [BSd]
+	e.g. -5 instead of 65531
+
+2025-08-11  Reini Urban  <reini.urban@gmail.com>
+
+	encode: fix dwg_set_dataflags
+	oops, critical encoder bug!
+	dataflags are reverse, if a bit is absent then the field needs to be used.
+	also the default with_factor is 1.0
+
+	thanks to Erfan Sadigh Nejati for finding this bug.
+	Fixes GH #1164
+
+2025-08-10  Reini Urban  <reini.urban@gmail.com>
+
+	configure: detect emcc
+	and fix failing probes because of -Werror -Wlimited-postlink-optimizations
+	Fixes the configure & make part of GH #1073
+
+2025-08-09  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix dwgadd error with bad --as version
+
+2025-07-30  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: fix empty CLASSES GH #1068
+
+2025-07-28  Reini Urban  <reini.urban@gmail.com>
+
+	encode: log MLEADERSTYLE class_version: 2
+	taken from APPID.ACAD_MLEADERVER eed
+
+	decode: fixup FIELD.value_string and format
+
+2025-07-23  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: more FIELD improvements
+	can now read good DXF's with FIELD's,
+	but not yet our written FIELD's
+
+2025-07-15  Reini Urban  <reini.urban@gmail.com>
+
+	doc: document more VERTEX_* flags
+	in addition to our LOG_FLAG_VERTEX
+
+	rapidrtrendersettings docs
+	and max checks. still wrong
+
+	api: change LARGE_RADIAL_DIMENSION fields
+	first_arc_pt => chord_pt
+	leader_len => jog_angle
+	jog_point => jog_pt
+	ovr_center: DXF 12 => 14
+
+	indxf: add_FIELD
+	special-cases all over.
+	not covering all yet.
+
+2025-07-03  Reini Urban  <reini.urban@gmail.com>
+
+	oda: back to 26.4
+	26.5 disappeared
+
+	gh: pinact run -u
+	security: pin our github actions
+
+2025-06-30  Reini Urban  <reini.urban@gmail.com>
+
+	dynapi: fix indxf conversion from r2007+ to strings
+	Fixes GH #1163 part 2
+	JSON and DXF import leaves TABLE.name as TV (i.e. UTF-8)
+	for the future encode to r2000
+
+	oda: bump to 26.5
+
+	oda: create .dwg.err not .json.err
+
+2025-06-25  Reini Urban  <reini.urban@gmail.com>
+
+	encode: set TEXT.dataflags also on indxf
+
+	logging: fix TV for indxf
+
+2025-06-24  Reini Urban  <reini.urban@gmail.com>
+
+	logging: mark T as TV
+
+	api: rename SecondHeader.dwg_version to dwg_versions
+	lo-byte dwg_version, high-byte maint_version
+
+2025-06-23  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: fix IMAGE.imagedefreactor setter
+	wrong dynapi usage, ref even refs
+
+	dynapi: fix #lines
+
+	indxf: fix IMAGE.clip_verts
+	by defaulting num_clip_verts to 2
+
+	indxf: set BLOCK_HEADER.base_pt = BLOCK.base_pt
+
+	more obj_absowner
+	: check if rel or abs
+	if [ -z $1 ]; then
+	    h=4
+	else
+	    h=$1
+	fi
+	for f in *.json; do
+	  echo $f
+	  jq .FILEHEADER.version "$f"
+	  echo "ownerhandle = ($h."
+	  jq ".OBJECTS[] | select(.ownerhandle[0] == $h) | [.object, .entity]" "$f" | sort -u
+	done
+
+2025-06-20  Reini Urban  <reini.urban@gmail.com>
+
+	Replace more FORMAT_RLLx with FORMAT_HV
+
+	make: fix log-dwg
+	wrong xargs syntax
+
+	dxf: minor tunings
+	write APPID 71 1 only with ADE_PROJECTION.
+	use absolute handles with DICTIONARY
+
+2025-06-19  Reini Urban  <reini.urban@gmail.com>
+
+	dxf: fix *X block name resolution
+	use the BLOCK.name not BLOCK_HEADER.name for anonymous block names.
+	Fixes a part of GH #1091
+
+	trace: back to HEX for abs handles
+
+	dwgadd: protect from missing insert block
+	i.e. BLOCK not found
+
+	api: merge R11_HANDSEED with HANDSEED
+	also add dwg_init_handseed(), needed for some examples
+
+2025-06-19  Reini Urban  <reini.urban@gmail.com>
+
+	api: replace BITCODE_RLLx with BITCODE_HV
+	for handle value. It inistally was RL, but later upgraded to RLL
+	(64-bit long long handles).
+
+	change the auxheader version from RL to HV
+
+2025-06-19  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: fixup dwg_set_next_objhandle
+	per default use the next HANDSEED. only for initial add_Document
+	use dwg->next_hdl.
+	Fixes Object of class AcDbVXTable can't be cast to AcDbBlockHeader.
+
+	also set *MODEL_SPACE entmode = 2 correctly for older versions.
+
+2025-06-18  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: VIEWPORT needs to create a matching VX_TABLE_RECORD
+	TODO: and if the VIEWPORT is *Active, it needs to set HEADER.VX_TABLE_RECORD
+	On LAYOUT.active_viewport
+
+2025-06-17  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: improve VERTEX layer
+	to use the parents layer.
+	still not 100% correct though
+
+	indxf: fix empty layer in VERTEX subents
+	set it to the CLAYER for an immediate fix
+
+	indxf: fixup find_hv logic
+	no duplicate entries. e.g. BLOCK_HEADERs
+	down from 31 dxf r14 roundtrip errors to 12.
+
+2025-06-17  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: set more ownerhandles
+	in fact for most objects take them from reactors.
+	just not table records.
+
+	this reduced the r2000 dxf roundtrip errors from 36 to 20.
+
+2025-06-17  Reini Urban  <reini.urban@gmail.com>
+
+	spec: remove LTYPE.unknown_r13
+	looks very wrong. and it's not in ODA's spec
+
+	indxf: add dxf_postprocess_MLINESTYLE
+	analog to LAYOUT. owned by a DICTIONARY, but no block_header field.
+	strangely it is not triggered, so I added it to the reactors code also.
+
+	encode: no default VX, just VX_CONTROL
+	helps dxf roundtrips
+
+	dxf-check: use $ODAFileConverter_geometry
+	put annoying popups to the side, on X only
+
+	WIP indxf: enable and fix dxf_postprocess_LAYOUT
+	to fixup the ownerhandle vs block_header 330 confusion.
+	BLOCK_HEADER vs DICTIONARY
+
+	fixup dxf: fix LAYER.flag roundtrips
+	no free => flag tracing
+
+2025-06-16  Reini Urban  <reini.urban@gmail.com>
+
+	dxf: fix LAYER.flag roundtrips
+	flag0, linewt (wrong type), plotflag (on if plotstyle?)
+	GH #1091
+
+	fix signed xdata ints from/to json/dxf
+	Fixes GH #1040
+
+	encode: rename internal pvzadr to size_adr
+
+	decode: trace TF and BINARY
+	e.g. for string_area
+	./dxf-check sample_2000|less
+
+	indxf: fix duplicate table record entries
+	esp. with r2000. GH #1091
+
+2025-06-15  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: fix wrong DICT.ownerhandle
+	when there is no NOD, or NOD not at 0.1.C
+	Fixes ODA error: Object of class AcDbBlockBegin can't be cast to AcDbDictionary
+	GH #1159
+
+	indxf: fixup DICT.ownerhandle to NOD if NOD is elsewhere
+	e.g. r13 dxf
+	also fix to stable VX_CONTROL handle
+
+	dxf: set more unitX_name and ratios
+	for r13-r14
+
+	encode: write no TV-ZERO with r14
+	only since r2000
+
+	dxf.test: insert order for r13, r14
+	acad/oda add 2 INSERT's for roundtrips or whatever.
+
+	dxf.test: pline order is fixed for r13, r14
+	insert order TODO in GH #1159
+
+2025-06-15  Reini Urban  <rurban@cpan.org>
+
+	dxf.test: add failing r14,r13 INSERT dxf conversion
+	wrong SEQEND
+
+2025-06-15  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: set default isbylayerlt
+	and pspace entmode on the pspace BLOCK.
+	See Part 5 of GH #1159
+
+	indxf: set R_13c3
+	because the AC1013 $ACADVER is not set in DXF
+
+	indxf: add r13 table record ownerhandles
+	only needed for r13, later they are 0.
+	Part 4 of GH #1159
+
+	dxf: uppercase ltypes <r2000
+	also fix in internal identifier
+
+	dxf: r13c3 confusion - PROXYGRAPHICS
+	we dont know if r13 or r13c3 on indxf.
+	so emit $PROXYGRAPHICS if it is set with r13 also
+
+	indxf: fix dxf_tables_read leak
+
+	indxf: set NOD dicts owner
+	Fixes part 3 of GH #1159
+
+2025-06-14  Reini Urban  <reini.urban@gmail.com>
+
+	bump copyright years
+	now checked properly
+
+	indxf: comment about is_xref_ref
+	which can be 0 <r14 on unused table records.
+	we would need a table_used hash to record usage.
+
+	indxf: fix duplicate control entries
+	don't add and remove, just add if not wrong.
+	Fixes GH #1159
+
+2025-06-13  Reini Urban  <reini.urban@gmail.com>
+
+	dwg_api: DIMSTYLE comments for add
+
+2025-06-13  Reini Urban  <reini.urban@gmail.com>
+
+	decode_r11: set entmode 3 for blocks
+	there was a wrong obj->address check, we can fake.
+	and store it also in out_json.
+
+	now some BLOCK's have no name
+
+2025-06-13  Reini Urban  <reini.urban@gmail.com>
+
+	preR13: fix dwg.block_control and HEADER.BLOCK_CONTROL_OBJECT missing
+
+	set the ltype flag to 64 (loaded)
+	by default. just BYBLOCK,BYLAYER are never loaded.
+	and >r13 this bit is ignored.
+
+	outdxf: fix some wrong r9 header vars
+	some missing, and some only since r10.
+	and fix some early defaults.
+	from michal's new blank dxf's GH #1100
+
+	add: more preR13 defaults
+	need VPORT.*Active since r10 already.
+	GH #1100
+
+	add: more HEADER defaults
+
+	WIP encode: fix preR13 entities iteration
+	fix the in-BLOCK logic, but broke json-check r11/entities-3d,
+	missing the BLOCKs
+	GH #1100
+
+	decode_preR13: fix CLAYER double-free
+	GH #1102, GH #1100 Fixes  Missing TEXTSTYLE, CLAYER, CELTYPE and DIMSTYLE values in header
+
+	dwg_add_handleref: trace re-used handleref
+	and clean enlarged object_ordered_ref areas.
+	trying to fix r10 CLAYER double-free
+
+	add: set standard table records with r9 already
+	GH #1100
+
+	add: set unit1_text with r10 already
+
+2025-06-10  Reini Urban  <reini.urban@gmail.com>
+
+	dwgadd: better --help output
+	we can save as planned versions with dxf or json
+
+	dxf-check: improve. print oda errors at the end again
+	json-check-2000 errors:
+	LINKRODS_from_autocad_r13.json.err
+	STEERING_from_autocad_r13.json.err
+	example_r14.json.er
+
+	ci: bump windows-2019 to 2022
+	will be retired soon
+
+2025-06-08  Reini Urban  <reini.urban@gmail.com>
+
+	injson: eed structure comment
+
+	fix dwg_add_handle ubsan: invalid negation
+	Fixes GH #1154
+
+	bits ubsan: handle wrong negation
+	Fixes GH #1153
+	0x80000000 (-2147483648) negated stays negative
+
+2025-06-06  Reini Urban  <reini.urban@gmail.com>
+
+	injson: fix uninitialized ptrs
+
+	decode: fix UB in bsearch cmp
+	Fixes GH #1152
+
+2025-06-06  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Add tests for read_MC/UMC/MS
+
+2025-06-05  Reini Urban  <reini.urban@gmail.com>
+
+	ci: fix PRs
+
+	fixup fix add_LAYOUT
+
+2025-06-03  Reini Urban  <reini.urban@gmail.com>
+
+	add: fix add_LAYOUT and its test
+	undefine NEED_VPORT_FOR_MODEL_LAYOUT, a LAYOUT
+	can be attached to the pspace BLOCK_HEADER without a VIEWPORT.
+	test ok now, fixes LAYOUT in GH #1137
+
+	WIP fix add LAYOUT test
+	Attach a layout to a VPORT in mspace, not VIEWPORT.
+	Fix the LAYOUT.block_header for this case.
+	Set NEED_VPORT_FOR_MODEL_LAYOUT for the add LAYOUT api.
+	See GH #1137
+
+	decode: clear new dwg->object and dwg->object_ref on realloc
+	See GH #1045
+
+2025-06-02  Reini Urban  <reini.urban@gmail.com>
+
+	dynapi: fix a dwg_dynapi_entity_set_value null deref
+	Fixes GH #1122. Fuzzing only
+
+	add: set DICTIONARY.cloning to all NOD members also
+
+	add: fix add_LEADER with associated_annotation
+	analog to before. create a required DIMSTYLE before the entity.
+	GH #1137
+
+2025-06-01  Reini Urban  <reini.urban@gmail.com>
+
+	add: fix add_DIMENSION
+	first create the dimstyle, then the entity.
+	Fixes GH #1148
+
+	indxf: fix LAYER_INDEX.numlayers realloc
+	clear the new struct. in case of errors, the free of handle would fail.
+	Fixes GH #1147 part 3
+
+	ci: fixup checkout for tag
+
+	ci: no fetch-depth: 50, broken with tags
+
+	indxf: fail on MLINE num_* setting twice
+	with fuzzed or bad input.
+	Fixes last part 3 of GH #1146
+
+	indxf: fix double-free in HATCH.path errors
+	with fuzzed or bad input.
+	Fixes part 2 of GH #1146
+
+2025-05-31  Reini Urban  <reini.urban@gmail.com>
+
+	ci: Update oda version
+
+	indxf: fix failed dxf_read_rll
+	when no number can be read, set the number to 0.
+	Fixes GH #1146
+
+	injson: fix NULL in_hex2bin argument
+	Fixes GH #1142
+
+	add_test: add oda check with LIBREDWG_DEBUG 2
+	passes
+
+2025-05-26  Reini Urban  <reini.urban@gmail.com>
+
+	encode: always compute the HANDSEED
+	dont take anything granted.
+	Fixes GH #1127 (part of GH #1105)
+
+2025-05-23  Reini Urban  <reini.urban@gmail.com>
+
+	adjust MAX_SIZE_BUF on ASAN
+	See GH #1144
+
+	indxf: protect calloc failures
+	set the counter to 0
+	Fixes fuzzing null-deref GH #1141
+
+2025-05-21  Reini Urban  <reini.urban@gmail.com>
+
+	injson: fix uninit access on missing FILEHEADER.version/dwg_version
+	Fixes uninitialized/2/testcase by Matteo Marini.
+
+2025-05-20  Reini Urban  <reini.urban@gmail.com>
+
+	indxf: fix invalid LAYER_INDEX.entries
+	a Matteo Marini testcase submitted privately (uninitialized/1)
+
+2025-05-13  Reini Urban  <reini.urban@gmail.com>
+
+	tests: rename $TeighaFileConverter to $ODAFileConverter
+
+	silence ODAFileConverter_geometry popups on X
+	.profile: export ODAFileConverter_geometry="-geometry 150x150+0-0"
+
+	gitignore local helper scripts
+
+	build-aux/clang-format-all.sh src include test/unit-testing/
+
+	dynapi: fix regen indentation
+	Fixes GH #1136 and conforms to clang-format
+
+	fix distclean: clean dxf.err leftovers
+	and remove dynapi_test.c target, which is really for build_dir
+	but have no .c in build_dir.
+
+	fix git-version-gen
+	by fetching more commits and tags.
+	since we always tag builds via appveyor,
+	depth 50 should be enough to catch such a tag.
+
+	add library version api
+	So that other programs can inspect the version parts.
+	Fixes GH #1133
+
+2025-05-12  Reini Urban  <reini.urban@gmail.com>
+
+	update TODO: pre-R13
+
+	remove unused vars
+	detected by clang-cl
+
+	config.rpath: egrep -> grep -E
+
+2025-05-12  Reini Urban  <reini@spexai.com>
+
+	extend git-version-gen to NEWS parsing
+
+	single LIBREDWG_SO_VERSION source
+	move from dwg.h back to configure.ac
+	grep this for cmake
+
+	bump VERSION_MINOR to 13
+
+2025-05-03  Reini Urban  <reini.urban@gmail.com>
+
+	decode: fix dat.chain double-free
+	the chain may be reallocated but is copied.
+	e.g in solid_background
+
+2025-05-02  Reini Urban  <reini.urban@gmail.com>
+
+	dxf: don't split utf-8 sequences, cquote all
+	Fixes rest of GH #986
+
+	debug: add all missing unhandled types
+
+	unit-testing: more coverages
+	for SOLID_BACKGROUND, GEODATA, LARGE_RADIAL_DIMENSION.
+	not distributed, but public samples.
+
+2025-04-30  Reini Urban  <reini.urban@gmail.com>
+
+	encode: wrong __counted_by optimizations
+	with eed and some additional fields before the final char[].
+	fails with gcc-15 and esp. with mingw.
+	wrong memcpy **buffer overflow** warnings.
+
+	indxf: explicit realloc(0) to free
+	detected with valgrind
+
+	decode_preR13: better GH #1131 protection
+	also with the 2 other wrong sizes.
+	CiFuzzer detected still an OOM
+
+	decode_preR13: protect from illegal header.entities_end
+	also abort when decoding a single entity makes no progress,
+	due to overflow.
+	Fuzzed in GH #1131
+
+2025-04-22  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix hardcoded HANDSEED value for AC1015 DWG file
+	In DWG AC1015 is more handles than 0x25, there were conflict.
+
+	Fix DWG file format
+	It's breaker for opening in AutoCAD R14, AutoCAD 2000.
+
+2025-04-22  Reini Urban  <reini.urban@gmail.com>
+
+	fix dwg_section_page_checksum usage
+	need to do this for every section on encode.
+	first the header weith a zero'd checksum field to get the seed for the body.
+	Fixes GH #1044
+
+2025-04-20  Reini Urban  <reini.urban@gmail.com>
+
+	decode_test: tcc does not zero structs
+
+2025-04-20  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix encoding of LAYER table flag0
+
+	Add default value for LAYER table linewt variable
+
+	Fix LAYER table boolean values
+
+2025-04-19  Reini Urban  <reini.urban@gmail.com>
+
+	decode: windows/msvc portability quirks
+
+2025-04-18  Reini Urban  <reini.urban@gmail.com>
+
+	decode: skip old section checks
+	which break now 2004/Leader, 2018/Leader, ...
+
+	decode_test: new decompression unit tests
+
+	change/extend bit_explore_chain
+
+	decode: fix encrypted_section_header.unknown
+	wrong ODA specs.
+
+	decode read_R2004_section_info refactoring
+	use FIELDs and dec streams.
+
+	refactor 2004 decompression
+	See GH #439 for the decompression bug analysis.
+	Simplify to use our bit chains
+
+	fix PRI_SIZE_T_MODIFIER on 32bit and windows
+
+2025-04-17  Reini Urban  <reini.urban@gmail.com>
+
+	decode: remove some DEBUG checks
+
+	decomp: sync -v9 decompress logging with work/decomp-gh439
+	count position from 0, not the end
+
+2025-04-11  Reini Urban  <reini.urban@gmail.com>
+
+	DEBUG decompression sections
+
+2025-04-11  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix ellipse drawing in SVG
+
+	Fix SVG rotate syntax
+
+2025-04-05  Reini Urban  <reini.urban@gmail.com>
+
+	reedsolomon: fix DEBUG code
+
+	decode: fix eed DEBUG sanity checks
+
+2025-04-05  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Log decrypted R2004 header
+
+	Change logging of decrypted block to LOG_TF_HEX
+
+	Split LOG_TF to LOG_TF_HEX and rest
+
+2025-04-04  Reini Urban  <reini@spexai.com>
+
+	mingw: update python2 to mingw-w64-x86_64-python
+	mingw-w64-x86_64-python3 is now a virtual package provided by mingw-w64-x86_64-python
+	mingw-w64-x86_64-python2 is gone.
+
+2025-04-04  Daniel Nikolov  <114946180+danikolovv@users.noreply.github.com>
+
+	fix docs: Functions Decoding
+	change first and second example.
+	process_BLOCK_HEADER (block_control->entries[i]);
+
+2025-03-22  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	BLOCK_RECORD isn't present in AC1009 DXF
+
+2025-03-22  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix DXF defaults for AC1009
+	Main issue is PUCSXDIR/PUCSYDIR with value (0.0, 0.0, 0.0) which is
+	invalid in AutoCAD. These values are present from AutoCAD R11.
+
+	HANDSEED is present from AutoCAD R10.
+
+	The oldCECOLOR_lo is present in range R1.5 and R12
+
 2026-03-17  Reini Urban  <reini.urban@gmail.com>
 
 	Release 0.13.4

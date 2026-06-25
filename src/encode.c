@@ -1874,7 +1874,7 @@ encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "2ndheader.spec"
   // clang-format on
 
@@ -3019,7 +3019,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     if (!_obj->num_sections || !_obj->sections)
       dwg_sections_init (dwg);
 
-    // clang-format off
+      // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -3590,7 +3590,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
   else
       /* End of the file */
-      dat->size = dat->byte;
+      dat->size
+      = dat->byte;
 
   SINCE (R_2004a)
   {
@@ -7233,7 +7234,7 @@ dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (dat->version >= R_2004 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
 
-  // clang-format off
+    // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 
@@ -7495,7 +7496,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   else
     _obj->HANDSEED->absolute_ref = 0x72E;
 
-  // clang-format off
+    // clang-format off
   #include "header_variables.spec"
   // clang-format on
 
