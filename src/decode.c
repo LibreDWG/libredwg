@@ -2709,7 +2709,7 @@ auxheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "auxheader.spec"
   // clang-format on
 
@@ -2735,7 +2735,7 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "2ndheader.spec"
   // clang-format on
 
@@ -2762,7 +2762,7 @@ objfreespace_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "objfreespace.spec"
   // clang-format on
 
@@ -2820,7 +2820,7 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "appinfo.spec"
   // clang-format on
 
@@ -3844,7 +3844,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         for (j = 0;
              j < (BITCODE_BS)MIN (lens, (unsigned long)((size - 3) / 2)); j++)
           data->u.eed_0_r2007.string[j] = bit_read_RS (dat);
-        // data->u.eed_0_r2007.string[j] = 0; //already calloc'ed
+          // data->u.eed_0_r2007.string[j] = 0; //already calloc'ed
 #ifdef _WIN32
         LOG_TRACE ("wstring: len=%d [RS] \"" FORMAT_TU "\" [TU]", (int)lens,
                    data->u.eed_0_r2007.string);
@@ -4438,7 +4438,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
-  // clang-format off
+    // clang-format off
   #include "common_entity_data.spec"
   // clang-format on
 
@@ -4874,7 +4874,7 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
     FIELD_HANDLE (color.handle, 0,
                   430); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 
-  // clang-format off
+    // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 
