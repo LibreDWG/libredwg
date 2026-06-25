@@ -108,3 +108,4 @@ This package is owned by the FSF.
 - Never do `make clean` if you don't see a result. `make` in all .build* dirs
   besides .build-tcc can last >10m.
 - Prefer incremental edits over rewriting entire files.
+- If there is a ./AGENTS-gortex.md file, read that.
