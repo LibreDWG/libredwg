@@ -2189,6 +2189,7 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
       char *dest = (char *)malloc (destlen);
       if (!dest)
         {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Out of memory");
           length = 0;
         }
@@ -2197,12 +2198,26 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
           while (!bit_utf8_to_TV (dest, (unsigned char *)chain, destlen,
                                   length, 0, dat->codepage))
             {
+              char *tmp;
               destlen *= 2;
-              dest = (char *)realloc (dest, destlen);
+              tmp = (char *)realloc (dest, destlen);
+              if (!tmp)
+                {
+                  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+                  LOG_ERROR ("Out of memory");
+                  free (dest);
+                  dest = NULL;
+                  length = 0;
+                  break;
+                }
+              dest = tmp;
             }
-          need_free = true;
-          chain = dest;
-          length = strlen (dest);
+          if (dest)
+            {
+              need_free = true;
+              chain = dest;
+              length = strlen (dest);
+            }
         }
     }
   if (dat->from_version < R_13b1)
