@@ -42,12 +42,8 @@ static unsigned int cur_ver = 0;
 static BITCODE_BL rcount1, rcount2;
 
 /* see also examples/unknown.c */
-#ifdef HAVE_NATIVE_WCHAR2
-static wchar_t *wcquote (wchar_t *restrict dest, const wchar_t *restrict src);
-#else
 static void print_wcquote (Bit_Chain *restrict dat,
                            dwg_wchar_t *restrict wstr);
-#endif
 void json_write_TFv (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
                      const size_t len);
 // write even past the \0, to keep existing slack
@@ -279,22 +275,13 @@ static char *_path_field (const char *path);
       }                                                                       \
   }
 
-// Converts to UTF-8
-#ifdef HAVE_NATIVE_WCHAR2
-#  define VALUE_TEXT_TU(wstr)                                                           \
-    if (wstr)                                                                           \
-      {                                                                                 \
-        wchar_t *_buf = malloc ((6 * wcslen ((wchar_t *)wstr) + 1) * sizeof(wchar_t));  \
-        fprintf (dat->fh, "\"%ls\"", wcquote (_buf, (wchar_t *)wstr));                  \
-        free (_buf);                                                                    \
-      }                                                                                 \
-    else                                                                                \
-      {                                                                                 \
-        fprintf (dat->fh, "\"%ls\"", wstr ? (wchar_t *)wstr : L"");                     \
-      }
-#else
-#  define VALUE_TEXT_TU(wstr) print_wcquote (dat, (BITCODE_TU)wstr)
-#endif
+// Converts to UTF-8.
+// Note: JSON must always be UTF-8, independent of the platform locale, so we
+// always use the manual UTF-16->UTF-8 emitter, even on native 2-byte wchar_t
+// (Windows). The old "%ls" fprintf path relied on the C locale's narrow
+// conversion (wcrtomb), which silently truncated at the first non-ASCII char
+// and produced blank/garbled text for r2007+ unicode strings. GH #655.
+#define VALUE_TEXT_TU(wstr) print_wcquote (dat, (BITCODE_TU)wstr)
 #define FIELD_TEXT_TU(nam, wstr)                                              \
   {                                                                           \
     KEY (nam);                                                                \
@@ -1297,8 +1284,6 @@ hex (unsigned char c)
   return c >= 10 ? 'a' + c - 10 : '0' + c;
 }
 
-#ifndef HAVE_NATIVE_WCHAR2
-
 static void
 print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
 {
@@ -1312,7 +1297,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
   fprintf (dat->fh, "\"");
   while (1)
     {
-#  ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
       // for strict alignment CPU's like sparc only. also for UBSAN.
       if ((uintptr_t)wstr % SIZEOF_SIZE_T)
         {
@@ -1321,7 +1306,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
           ws++;
         }
       else
-#  endif
+#endif
         c = *ws++;
       if (!c)
         break;
@@ -1363,7 +1348,7 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
               fprintf (dat->fh, "%c%c%c", (c >> 12) | 0xE0,
                        ((c >> 6) & 0x3F) | 0x80, (c & 0x3F) | 0x80);
             }
-#  if 0
+#if 0
           // FIXME: handle surrogate pairs properly
           if (c >= 0xd800 && c < 0xdc00)
             {
@@ -1373,68 +1358,13 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
             ;
           else
             fprintf (dat->fh, "\\u%04x", c);
-#  endif
+#endif
         }
       else
         fprintf (dat->fh, "%c", (char)c);
     }
   fprintf (dat->fh, "\"");
 }
-
-#else
-
-static wchar_t *
-wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
-{
-  wchar_t c;
-  wchar_t *d = dest;
-  wchar_t *s = (wchar_t *)src;
-  while ((c = *s++))
-    {
-      if (c == L'"')
-        {
-          *dest++ = L'\\';
-          *dest++ = c;
-        }
-      else if (c == L'\\' && s[0] == L'U' && s[1] == L'+' && ishex (s[2])
-               && ishex (s[3]) && ishex (s[4]) && ishex (s[5]))
-        {
-          *dest++ = '\\';
-          *dest++ = 'u';
-          s += 2;
-        }
-      else if (c == L'\\')
-        {
-          *dest++ = L'\\';
-          *dest++ = c;
-        }
-      else if (c == L'\n')
-        {
-          *dest++ = L'\\';
-          *dest++ = L'n';
-        }
-      else if (c == L'\r')
-        {
-          *dest++ = L'\\';
-          *dest++ = L'r';
-        }
-      else if (c < 0x1f)
-        {
-          *dest++ = L'\\';
-          *dest++ = L'u';
-          *dest++ = L'0';
-          *dest++ = L'0';
-          *dest++ = hex (c >> 4);
-          *dest++ = hex (c & 0xf);
-        }
-      else
-        *dest++ = c;
-    }
-  *dest = 0; // add final delim, skipped above
-  return d;
-}
-
-#endif /* HAVE_NATIVE_WCHAR2 */
 
 /* Don't write past the strlen.
    TODO: convert to utf8.
