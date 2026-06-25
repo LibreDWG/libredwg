@@ -4205,7 +4205,7 @@ static const Dwg_DYNAPI_field _dwg_VIEWPORT_fields[] = {
   { "vport_entity_header",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_VIEWPORT, vport_entity_header),
     1,0,0, 0 },
   { "frozen_layers",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_entity_VIEWPORT, frozen_layers),
-    1,1,0, 341 },
+    1,1,0, 331 },
   { "clip_boundary",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_VIEWPORT, clip_boundary),
     1,0,0, 340 },
   { "named_ucs",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_VIEWPORT, named_ucs),

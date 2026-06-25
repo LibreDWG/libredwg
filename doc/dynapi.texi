@@ -4830,7 +4830,7 @@ CMC,	DXF 63
 @item vport_entity_header
 H
 @item frozen_layers
-H*,	DXF 341
+H*,	DXF 331
 @item clip_boundary
 H,	DXF 340
 @item named_ucs

@@ -10433,6 +10433,23 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               inserts[curr_inserts++] = hdl;
               break;
             }
+          else if (pair->code == 331 && dwg->header.from_version >= R_2004a
+                   && strEQc (name, "VIEWPORT"))
+            {
+              Dwg_Entity_VIEWPORT *o = obj->tio.entity->tio.VIEWPORT;
+              int code = dwg->header.version >= R_2004 ? 4 : 5;
+              BITCODE_H hdl
+                  = dwg_add_handleref (dwg, code, pair->value.u, obj);
+              LOG_TRACE ("VIEWPORT.frozen_layers[%d] = " FORMAT_REF
+                         " [H* 341]\n",
+                         o->num_frozen_layers, ARGS_REF (hdl));
+              o->frozen_layers = (BITCODE_H *)realloc (
+                  o->frozen_layers,
+                  (o->num_frozen_layers + 1) * sizeof (BITCODE_H));
+              o->frozen_layers[o->num_frozen_layers] = hdl;
+              o->num_frozen_layers++;
+              break;
+            }
           else if (pair->code == 331 && obj->fixedtype == DWG_TYPE_LAYOUT)
             {
               Dwg_Object_LAYOUT *o = obj->tio.object->tio.LAYOUT;
@@ -10587,8 +10604,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               break;
             }
           // fall through
-        case 341:
-          if (pair->code == 341 && strEQc (name, "VIEWPORT"))
+        case 341: // hard pointers
+          if (pair->code == 341 && dwg->header.from_version < R_2004a
+              && strEQc (name, "VIEWPORT"))
             {
               Dwg_Entity_VIEWPORT *o = obj->tio.entity->tio.VIEWPORT;
               int code = dwg->header.version >= R_2004 ? 4 : 5;
