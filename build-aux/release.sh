@@ -16,8 +16,8 @@ if test -z "$srcdir"; then
   exit 1
 fi
 
-if ! printf '%s\n' "$(VERSION)" | grep -Eq '^[0-9]+\.[0-9]+(\.[0-9]+)?$$'; then \
-    echo "VERSION must be N.N or N.N.N, got: $(VERSION)"; \
+if ! printf '%s\n' "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+(\.[0-9]+)?'; then \
+    echo "VERSION must be N.N or N.N.N, got: $VERSION"; \
     exit 1; \
     fi
 if ! head -n 10 "$srcdir/NEWS" | grep -Eq "[Vv]ersion[[:space:]]+$VERSION([[:space:]]|[-:]|$$)"; then
@@ -28,19 +28,20 @@ if ! head -n 1 "$srcdir/.appveyor.yml" | grep -Eq "^[[:space:]]*version:[[:space
   echo ".appveyor.yml first line must contain version: $VERSION" >&2
   exit 1
 fi
-if ! grep -Eq "^Version:[[:space:]]*$VERSION([[:space:]]|$$)" "$srcdir/libredwg.spec"; then
+if ! grep -Eq "^Version:[[:space:]]*$VERSION|$$)" "$srcdir/libredwg.spec"; then
   echo "libredwg.spec Version: must be $VERSION" >&2
   exit 1
 fi
-if ! grep -Eq "^[[:space:]]*Release[[:space:]]+$VERSION([[:space:]]|$$)" "$srcdir/ChangeLog"; then
+if ! grep -Eq "^[[:space:]]*Release[[:space:]]+$VERSION|$$)" "$srcdir/ChangeLog"; then
   echo "Latest 'Release $VERSION' commit missing in ChangeLog" >&2
   exit 1
 fi
 
 make -s -j check || exit 1
 
-git tag -f "$(VERSION)" -s -m"release $(VERSION)"
-cd "$srcdir" && sh autogen.sh
+git tag -f "$VERSION" -s -m"release $VERSION"
+( cd "$srcdir" && sh autogen.sh )
+sed -i -e"s,${VERSION}_dirty,$VERSION," config.status || true
 make regen-man
 
 for f in examples/*.1 examples/*.5 programs/*.1; do
@@ -49,10 +50,12 @@ for f in examples/*.1 examples/*.5 programs/*.1; do
   fi
 done
 git commit --amend --no-edit -S
+git tag -f "${VERSION}" -s -m"release ${VERSION}"
 
+make distcheck || exit 1
 make dist || exit 1
 make check-release || exit 1
 
 git push
 git push --tags
-build-aux/gnupload --to ftp.gnu.org:libredwg "libredwg-${VERSION}.tar.gz" "libredwg-${VERSION}.tar.xz"
+"$srcdir"/build-aux/gnupload --to ftp.gnu.org:libredwg "libredwg-${VERSION}.tar.gz" "libredwg-${VERSION}.tar.xz"
