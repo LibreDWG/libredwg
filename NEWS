@@ -69,10 +69,13 @@ Minor bugfixes:
     preservation.
   * Fixed entity linking for loaded empty blocks, dwg_next_entity NULL
     dereference, and cycle validation in fixup_BLOCKS_entities.
+  * Fixed VIEWPORT entity id=0 after DWG read for R13+.  GH #1213.
   * Fixed UNKNOWN_ENT/UNKNOWN_OBJ name and fixedtype override.  GH #1238.
   * Fixed dwg_bmp thumbnail overflow checks.  GH #1252, #1255.
   * Fixed "Object handle not found" warnings during decode and in
     dwg_add_Document for pre-R2000.
+  * Fixed dwg_next_handseed: skip existing handles in object_map to prevent
+    duplicate handle errors on r10 files.  GH #1229.
   * spec: fixed HATCH curve_type 0 crash.  GH #1107.
   * spec: fixed DIMSTYLE.DIMCLRD_N.  GH #1234.
   * spec: fixed LAYER.material null-deref.
@@ -81,11 +84,59 @@ Minor bugfixes:
   * spec: harmonized VPORT/VIEW/VIEWPORT fields with HEADER.
   * spec: fixed r2004+ sections checked against ODA specs.
   * Fixed PROXY_OBJECT version corruption in JSON roundtrip.
+  * Fixed ossfuzz 42533395: heap-buffer-overflow in dynapi_set_helper via
+    JSON import of pointer-typed subclass fields.
+  * Fixed ossfuzz 42510991: memory leak in dxf_header_read when encountering
+    garbled DXF header data.
+  * Fixed ossfuzz 525291340: null-deref in dwg_dxfb_BLOCK_HEADER preview
+    write with corrupted pointer from fuzzed DWG decode.
+  * Fixed ossfuzz 525088107: heap-buffer-overflow in dwg_geojson_object ARC
+    case with degenerate angle computation producing 0 points.
+  * Fixed ossfuzz 42534122: heap-buffer-overflow in dxf_entities_read clip_verts
+    handling when DXF codes 14/24 arrive without preceding code 11.
+  * Fixed ossfuzz 524832524: index-out-of-bounds in dwg_encode section_order
+    when num_sections is inflated by fuzzed header data.
+  * Fixed ossfuzz 526016910: heap-buffer-overflow WRITE in dwg_encode_add_object
+    when overlarge MS size change exceeds bit_chain allocation.
+  * Fixed ossfuzz 525088817: heap-buffer-overflow in cquote/dxf_fixup_string
+    when header string ends with truncated \M+ escape sequence.
+  * Fixed ossfuzz 524854787: null-deref in dwg_encode_handleref_with_code and
+    encode_preR13_section PREP_CTRL/PREP_TABLE with fuzzed null handles.
+  * Fixed ossfuzz 524392897: null-dereference WRITE in bit_write_TV/bit_utf8_to_TV
+    when malloc fails during JSON-to-codepage conversion.
+  * Fixed ossfuzz 42536446: SEGV in add_HATCH when CHK_fitpts missed NULL
+    check for fitpts pointer, causing write to address 0x8.
+  * Fixed ossfuzz 42535236: double-free in dxf_entities_read when
+    type-change code freed the caller's dxfname pointer.
+  * Fixed ossfuzz 42533974: SEGV in dwg_free_MLINESTYLE_private caused by
+    union aliasing of lt.index (BSd) and lt.ltype (H) in MLINESTYLE_line.
+    Un-unionized the two fields to lt_index and lt_ltype.
   * Promoted DIMASSOC to unstable.
   * Fixed compilation on modern GCC, macOS CI, mingw, and Windows
     (appveyor-deploy).
   * Many compiler warning fixes (-Walloc-size, -Wunused-variables,
     -Warray-bounds, -Wdiscarded-qualifiers, MSVC C4267).
+  * Fixed Python binding shared library naming on Windows
+    (_LibreDWG-0.dll → _LibreDWG.pyd).  GH #975.
+
+  * encode: fixed assertion failure and memory leaks in R2018→R2004
+    downconvert path.  Replace hardcoded version-specific bounds with
+    real buffer invariant dat->byte < dat->size.  GH #1091.
+  * free: fixed double-free in free_TABLESTYLE_r2010 on r2010→r2007
+    downconvert.  The shallow-copied cellstyle text_style handle and
+    color name strings were freed by both free_TABLESTYLE_r2010 and
+    dwg_free_TABLESTYLE.  PR GH #1298.
+  * DXF: fixed VIEWPORT frozen_layers using wrong group code 341
+    (hard-pointer) instead of 331 (soft-pointer).  The wrong code hid
+    per-viewport frozen layers from spec-conformant DXF parsers (ezdxf,
+    AutoCAD).
+  * DXF: unified TU xref name checks on native 2-byte wchar_t platforms.
+    Removed divergent HAVE_NATIVE_WCHAR2 special cases for
+    dxf_is_xrefdep_name and dxf_has_xrefdep_vertbar.  GH #655.
+  * bits: checked unchecked realloc in bit_write_TV.  On OOM the old
+    buffer leaked and NULL was passed to bit_utf8_to_TV, causing a
+    null-deref crash.
+  * Fixed UBSan pointer-overflow in bsearch_ex on empty array.
 
 Security/fuzzing fixes:
   * Fixed CVE-2026-xxxxx DoS in decode_R13_R2000.  GH #1261.
@@ -100,13 +151,22 @@ Security/fuzzing fixes:
   * Fixed use-after-free in dxf2dwg on error path.  GH #474.
   * Fixed stack buffer overflow in JSON scalar field size checks.
   * Fixed OOB reads in decompress_r2007 (CWE-125).
+  * Fixed ossfuzz 524394694: replaced debug assert with validated check in
+    encode_header_vars for fuzzed section[0].address.
   * Fixed JSON escaping in 3DSOLID acis_data and json_cquote 0x1f byte
     (CWE-116).
   * Fixed CI supply-chain: https+sha256 for build helpers, vendor svg11 schema
     (CWE-494).
   * Replaced predictable temp file in dwgfilter with mktemp (CWE-377).
   * Fixed fuzzer overflows in xdata and dwg_decode_add_object.
+  * Fixed ossfuzz 523804647, 523387982, 523782030: null-deref in
+    encode_r11_auxheader, heap OOB in encode_preR13_entities PFACE/2D
+    pointer mismatch, and SEGV in dwg_dxfb_BLOCK_HEADER LOG_TRACE.
+    Also ossfuzz 524161871 524166377 521044421 521058561 521099499.
   * Fixed double-free in dwgfuzz RW and INDXF modes.  GH #1270.
+  * Fixed ossfuzz 528059079: global-buffer-overflow in section_move_before
+    when attacker-controlled header.num_sections exceeds SECTION_R13_SIZE
+    causing memmove to read past the section_order[] array.
 
 LibreDWG version 0.13.4 - 2026-03-18 - beta:
 
