@@ -3891,7 +3891,7 @@ bsearch_ex (const void *pKey, const void *pBase, size_t numBase,
 {
   size_t numNow = numBase;
   char *pLo = (char *)pBase;
-  char *pHi = (char *)pBase + (numNow - 1) * nItemWidth;
+  char *pHi;
   if (NULL != ppBefore)
     {
       *ppBefore = NULL;
@@ -3900,6 +3900,7 @@ bsearch_ex (const void *pKey, const void *pBase, size_t numBase,
     {
       return NULL;
     }
+  pHi = (char *)pBase + (numNow - 1) * nItemWidth;
   for (; pLo <= pHi;)
     {
       if (0 == numNow)
