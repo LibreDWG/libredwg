@@ -28220,13 +28220,13 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
         _obj->lines[1].color = (BITCODE_CMC){ 256, CMC_DEFAULTS };
         if (dwg->header.version >= R_2018)
           {
-            _obj->lines[0].lt.ltype = NULL; // FIXME
-            _obj->lines[1].lt.ltype = NULL;
+            _obj->lines[0].lt_ltype = NULL; // FIXME
+            _obj->lines[1].lt_ltype = NULL;
           }
         else
           {
-            _obj->lines[0].lt.index = 32767;
-            _obj->lines[1].lt.index = 32767;
+            _obj->lines[0].lt_index = 32767;
+            _obj->lines[1].lt_index = 32767;
           }
       }
     return _obj;
