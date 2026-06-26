@@ -3845,8 +3845,8 @@ dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o)
             : 32767; // or 32766 for BYBLOCK
   for (BITCODE_RC j = 0; j < o->num_lines; j++)
     {
-      // TODO lookup lt.ltype
-      o->lines[j].lt.index = lt_index;
+      // TODO lookup lt_ltype
+      o->lines[j].lt_index = lt_index;
     }
 }
 
@@ -3858,28 +3858,28 @@ dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
   // lookup on LTYPE_CONTROL list
   for (BITCODE_RC j = 0; j < o->num_lines; j++)
     {
-      BITCODE_BSd lt_index = o->lines[j].lt.index;
-      LOG_TRACE ("MLINESTYLE.lines[%d].lt.index = %d [BSd 6]\n", j,
+      BITCODE_BSd lt_index = o->lines[j].lt_index;
+      LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = %d [BSd 6]\n", j,
                  (int)lt_index);
       if (lt_index == 0)
-        o->lines[j].lt.ltype = dwg->header_vars.LTYPE_CONTINUOUS;
+        o->lines[j].lt_ltype = dwg->header_vars.LTYPE_CONTINUOUS;
       else if (lt_index == 32767)
-        o->lines[j].lt.ltype = dwg->header_vars.LTYPE_BYLAYER;
+        o->lines[j].lt_ltype = dwg->header_vars.LTYPE_BYLAYER;
       else if (lt_index == 32766)
-        o->lines[j].lt.ltype = dwg->header_vars.LTYPE_BYBLOCK;
+        o->lines[j].lt_ltype = dwg->header_vars.LTYPE_BYBLOCK;
       else if (lt_index > 0)
         {
           BITCODE_H hdl
               = dwg_find_tablehandle_index (dwg, (int)lt_index, "LTYPE");
-          o->lines[j].lt.ltype
+          o->lines[j].lt_ltype
               = dwg_add_handleref (dwg, 5, hdl ? hdl->absolute_ref : 0, NULL);
           if (hdl)
-            LOG_TRACE ("MLINESTYLE.lines[%d].lt.ltype %s => " FORMAT_REF
+            LOG_TRACE ("MLINESTYLE.lines[%d].lt_ltype %s => " FORMAT_REF
                        " [H]\n",
                        j, o->name, ARGS_REF (hdl));
         }
       else
-        o->lines[j].lt.ltype = dwg_add_handleref (dwg, 5, 0, NULL);
+        o->lines[j].lt_ltype = dwg_add_handleref (dwg, 5, 0, NULL);
     }
 }
 
