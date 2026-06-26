@@ -3155,8 +3155,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     if (dwg->header.from_version < R_13b1 && dwg->header.section)
       {
-        for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
-             id++)
+        Dwg_Section_Type_r11 max_id
+            = dwg->header.num_sections <= SECTION_VX
+                  ? (Dwg_Section_Type_r11)dwg->header.num_sections
+                  : SECTION_VX;
+        for (Dwg_Section_Type_r11 id = SECTION_BLOCK; id <= max_id; id++)
           {
             Dwg_Section *tbl = &dwg->header.section[id];
             BITCODE_RL pos = dat->byte & 0xFFFFFFFF;
