@@ -15136,9 +15136,9 @@ struct _dwg_object_MLINESTYLE*
 BD,	DXF 49
 @item color
 CMC,	DXF 62
-@item lt.index
+@item lt_index
 BSd,	DXF 6
-@item lt.ltype
+@item lt_ltype
 H,	DXF 6
 
 @end vtable
