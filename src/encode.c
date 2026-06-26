@@ -1353,7 +1353,8 @@ section_move_top (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
                   Dwg_Section_Type_r13 sec_id)
 {
   Dwg_Section_Type_r13 old_first = psection_order[0];
-  assert (*pnum <= SECTION_R13_SIZE);
+  if (*pnum > SECTION_R13_SIZE)
+    *pnum = SECTION_R13_SIZE;
   if (psection_order[0] == sec_id)
     {
       LOG_TRACE ("section_move_top %u (already)\n", sec_id);
@@ -1397,6 +1398,8 @@ static unsigned
 section_find (Dwg_Section_Type_r13 *psection_order, BITCODE_RL num,
               Dwg_Section_Type_r13 id)
 {
+  if (num > SECTION_R13_SIZE)
+    num = SECTION_R13_SIZE;
   LOG_TRACE ("section_find %u\n", (unsigned)id);
   for (unsigned i = 0; i < num; i++)
     {
@@ -1412,7 +1415,10 @@ static int
 section_remove (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
                 Dwg_Section_Type_r13 id)
 {
-  unsigned i = section_find (psection_order, *pnum, id);
+  unsigned i;
+  if (*pnum > SECTION_R13_SIZE)
+    *pnum = SECTION_R13_SIZE;
+  i = section_find (psection_order, *pnum, id);
   LOG_TRACE ("section_remove %u [%u]\n", (unsigned)id, i);
   if (i >= *pnum) // not found
     return 0;
@@ -1432,6 +1438,8 @@ section_move_before (Dwg_Section_Type_r13 *psection_order, BITCODE_RL *pnum,
 {
   int ret = 0;
   unsigned b, i;
+  if (*pnum > SECTION_R13_SIZE)
+    *pnum = SECTION_R13_SIZE;
   LOG_TRACE ("section_move_before %u %u\n", (unsigned)id, (unsigned)before);
   b = section_find (psection_order, *pnum, before);
   // find before
