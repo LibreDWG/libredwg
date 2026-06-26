@@ -3322,11 +3322,14 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 #  define CHK_fitpts                                                          \
     if (!o->paths[j].segs || l < 0                                            \
+        || !o->paths[j].segs[k].fitpts                                        \
         || l >= (int)o->paths[j].segs[k].num_fitpts)                          \
       {                                                                       \
         LOG_ERROR ("HATCH no paths[%d].segs or "                              \
                    "wrong l %d fitpts index\n",                               \
                    j, l);                                                     \
+        o->paths[j].segs[k].num_fitpts = 0;                                   \
+        free(o->paths[j].segs[k].fitpts);                                     \
         dxf_free_pair (pair);                                                 \
         return NULL;                                                          \
       }                                                                       \
@@ -3367,12 +3370,6 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 4: /* SPLINE */
               l++;
               CHK_fitpts;
-              if (!o->paths[j].segs[k].fitpts)
-                {
-                  o->paths[j].segs[k].num_fitpts = 0;
-                  dxf_free_pair (pair);
-                  return NULL;
-                }
               o->paths[j].segs[k].fitpts[l].x = pair->value.d;
               // LOG_TRACE ("HATCH.paths[%d].segs[%d].fitpts[%d].x = %f [
               // 2RD 11]\n",
@@ -3682,8 +3679,16 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   "HATCH.paths[%d].segs[%d].num_fitpts  = %ld [BL 97]\n", j, k,
                   pair->value.l);
               if (pair->value.l > 0)
-                o->paths[j].segs[k].fitpts = (BITCODE_2RD *)xcalloc (
-                    pair->value.l, sizeof (BITCODE_2RD));
+                {
+                  o->paths[j].segs[k].fitpts = (BITCODE_2RD *)xcalloc (
+                      pair->value.l, sizeof (BITCODE_2RD));
+                  if (!o->paths[j].segs[k].fitpts)
+                    {
+                      o->paths[j].segs[k].num_fitpts = 0;
+                      dxf_free_pair (pair);
+                      return NULL;
+                    }
+                }
             }
         }
       else if (pair->code == 97 && is_plpath)
@@ -10117,7 +10122,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
                       obj->name = (char *)"DIMENSION_LINEAR";
-                      free (obj->dxfname);
                       obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
@@ -10128,7 +10132,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                       // new pairs
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
                       obj->name = (char *)"DIMENSION_ALIGNED";
-                      free (obj->dxfname);
                       obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
@@ -10137,7 +10140,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
                       obj->name = (char *)"DIMENSION_ORDINATE";
-                      free (obj->dxfname);
                       obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
@@ -10146,7 +10148,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
                       obj->name = (char *)"DIMENSION_DIAMETER";
-                      free (obj->dxfname);
                       obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
