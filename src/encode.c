@@ -1866,7 +1866,7 @@ encode_secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-    // clang-format off
+  // clang-format off
   #include "2ndheader.spec"
   // clang-format on
 
@@ -3011,7 +3011,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     if (!_obj->num_sections || !_obj->sections)
       dwg_sections_init (dwg);
 
-      // clang-format off
+    // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -3582,8 +3582,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
   else
       /* End of the file */
-      dat->size
-      = dat->byte;
+      dat->size = dat->byte;
 
   SINCE (R_2004a)
   {
@@ -3946,6 +3945,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // section_info_id and section_map_id then live just above that range.
       dwg->fhdr.r2004_header.numsections = si;
       // fix num_desc to actual count of written descriptors
+      // free sections for entries being dropped
+      for (unsigned u = info_id; u < dwg->header.section_infohdr.num_desc; u++)
+        free (dwg->header.section_info[u].sections);
+
       dwg->header.section_infohdr.num_desc = info_id;
       // section_info and section_map are the two last already added.
       if ((unsigned)si > dwg->header.num_sections) // needed?
@@ -4108,14 +4111,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             }
           assert (dat->chain[0] == 'A');
           assert (dat->chain[1] == 'C');
-          PRE (R_2004a)
-          {
-            assert (dat->byte <= 0x100);
-          }
-          LATER_VERSIONS
-          {
-            assert (dat->byte <= 0x140);
-          }
+          assert (dat->byte < dat->size);
         }
 #endif
 
@@ -7229,7 +7225,7 @@ dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (dat->version >= R_2004 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
 
-    // clang-format off
+  // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 
@@ -7491,7 +7487,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   else
     _obj->HANDSEED->absolute_ref = 0x72E;
 
-    // clang-format off
+  // clang-format off
   #include "header_variables.spec"
   // clang-format on
 
