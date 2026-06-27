@@ -13920,6 +13920,8 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           dxf_free_pair (pair);
           pair = new_object (name, dxfname, dat, dwg, 0, NULL);
+          dxfname
+              = NULL; /* new_object may have freed dxfname (UPGRADE_ENTITY) */
           if (!pair)
             {
               Dwg_Object *obj = &dwg->object[idx];
@@ -13990,6 +13992,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+// clang-format off
 static int
 dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -14009,6 +14012,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               // LOG_HANDLE ("dxfname = strdup (%s)\n", dxfname);
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, NULL);
+              dxfname = NULL; /* new_object may have freed dxfname via UPGRADE_ENTITY */
               if (!pair)
                 {
                   Dwg_Object *obj = &dwg->object[idx];
@@ -14034,6 +14038,8 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dxf_free_pair (pair);
   return 0;
 }
+// clang-format on
+// clang-format off
 
 // redirected from ACDSDATA for now
 static int
@@ -14059,6 +14065,7 @@ dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dxf_free_pair (pair);
   return DWG_ERR_INVALIDTYPE;
 }
+// clang-format on
 
 // read to THUMBNAIL dwg->thumbnail, size 90. not entity->preview
 static int
