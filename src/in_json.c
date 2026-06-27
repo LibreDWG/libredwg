@@ -3718,14 +3718,22 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (t->type == JSMN_STRING && is_entity && strEQc (key, "tag"))
                 {
                   int sz = t->end - t->start;
-                  char *tag = (char *)malloc (sz + 1);
-                  memcpy (tag, &dat->chain[t->start], sz);
-                  tag[sz] = '\0';
-                  if (sz <= 0 || !dwg_is_valid_tag (tag))
+                  if (sz <= 0)
                     {
-                      LOG_WARN ("Invalid %s.tag: %s\n", obj->name, tag);
+                      LOG_WARN ("Invalid tag size %d\n", sz);
                     }
-                  free (tag);
+                  else
+                    {
+                      char *tag = (char *)malloc (sz + 1);
+                      if (tag)
+                        {
+                          memcpy (tag, &dat->chain[t->start], sz);
+                          tag[sz] = '\0';
+                          if (!dwg_is_valid_tag (tag))
+                            LOG_WARN ("Invalid %s.tag: %s\n", obj->name, tag);
+                          free (tag);
+                        }
+                    }
                 }
               if (_set_struct_field (dat, obj, tokens, _obj, name, key,
                                      fields))
