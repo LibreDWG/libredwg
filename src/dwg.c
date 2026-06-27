@@ -3965,14 +3965,16 @@ bsearch_ex (const void *pKey, const void *pBase, size_t numBase,
 }
 
 static int
-Ref_cmp (const Dwg_Object_Ref *pKey, const Dwg_Object_Ref **ppR)
+Ref_cmp (const void *key, const void *elem)
 {
-  int retVal = (int)pKey->handleref.code - (int)(*ppR)->handleref.code;
+  const Dwg_Object_Ref *pKey = (const Dwg_Object_Ref *)key;
+  const Dwg_Object_Ref *pR = *(const Dwg_Object_Ref **)elem;
+  int retVal = (int)pKey->handleref.code - (int)pR->handleref.code;
   if (0 != retVal)
     return retVal;
-  return pKey->absolute_ref > (*ppR)->absolute_ref    ? 1
-         : pKey->absolute_ref == (*ppR)->absolute_ref ? 0
-                                                      : -1;
+  return pKey->absolute_ref > pR->absolute_ref    ? 1
+         : pKey->absolute_ref == pR->absolute_ref ? 0
+                                                  : -1;
 }
 
 void
@@ -4026,8 +4028,7 @@ ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref)
     }
   pFound = (Dwg_Object_Ref **)bsearch_ex (
       ref, dwg->object_ordered_ref, dwg->num_object_ordered_refs,
-      sizeof (Dwg_Object_Ref *), (int (*) (const void *, const void *))Ref_cmp,
-      (const void **)&pBefore);
+      sizeof (Dwg_Object_Ref *), Ref_cmp, (const void **)&pBefore);
   if (NULL == pFound)
     {
       // OK, no duplicates
@@ -4074,8 +4075,7 @@ ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
     {
       Dwg_Object_Ref **pFound = (Dwg_Object_Ref **)bsearch (
           &nKey, dwg->object_ordered_ref, dwg->num_object_ordered_refs,
-          sizeof (Dwg_Object_Ref *),
-          (int (*) (const void *, const void *))Ref_cmp);
+          sizeof (Dwg_Object_Ref *), Ref_cmp);
       if (NULL != pFound)
         {
           return *pFound;
