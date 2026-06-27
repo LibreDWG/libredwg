@@ -306,17 +306,23 @@ bit_write_RC (Bit_Chain *dat, unsigned char value)
 
   if (dat->bit == 0)
     {
-      while (dat->byte >= dat->size)
+      if (dat->byte >= dat->size)
         bit_chain_alloc (dat);
+      if (dat->byte >= dat->size)
+        return;
       dat->chain[dat->byte] = value;
     }
   else
     {
-      while (dat->byte + 1 >= dat->size)
+      if (dat->byte + 1 >= dat->size)
         bit_chain_alloc (dat);
+      if (dat->byte >= dat->size)
+        return;
       byte = dat->chain[dat->byte];
       remainder = byte & (0xff << (8 - dat->bit));
       dat->chain[dat->byte] = remainder | (value >> dat->bit);
+      if (dat->byte + 1 >= dat->size)
+        return;
       byte = dat->chain[dat->byte + 1];
       remainder = byte & (0xff >> dat->bit);
       dat->chain[dat->byte + 1] = remainder | (value << (8 - dat->bit));
