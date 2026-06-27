@@ -3861,7 +3861,8 @@ harderr:
       err_obj->dxfname = NULL;
       err_obj->type = DWG_TYPE_FREED;
     }
-  tokens->index--;
+  if (tokens->index)
+    tokens->index--;
   return DWG_ERR_INVALIDDWG;
 typeerr:
   dwg->num_objects
@@ -3899,7 +3900,8 @@ typeerr:
       err_obj->dxfname = NULL;
       err_obj->type = DWG_TYPE_FREED;
     }
-  tokens->index--;
+  if (tokens->index)
+    tokens->index--;
   return DWG_ERR_INVALIDTYPE;
 }
 
