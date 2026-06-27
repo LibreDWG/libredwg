@@ -4653,17 +4653,16 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         }                                                                     \
       _ctrl = ctrl->tio.object->tio.token;                                    \
       tblnum = _ctrl->num_entries;                                            \
-      if (tblnum)                                                             \
+      if (tblnum && _ctrl->entries)                                           \
         ref = dwg_ref_object (dwg, _ctrl->entries[0]);                        \
       num = ref ? ref->index : 0;                                             \
-    }                                                                         \
-  LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum);
-  if (num + tblnum >= dwg->num_objects)
-    {
-      LOG_ERROR ("Invalid num %u + tblnum %u", (unsigned)num,
-                 (unsigned)tblnum);
-      return DWG_ERR_INVALIDTYPE;
-    }
+}                                                                             \
+LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum);                  \
+if (num + tblnum >= dwg->num_objects)                                          \
+  {                                                                            \
+    LOG_ERROR ("Invalid num %u + tblnum %u", (unsigned)num, (unsigned)tblnum); \
+    return DWG_ERR_INVALIDTYPE;                                                \
+  }
 
 #define PREP_TABLE(token)                                                     \
   size_t size_adr = dat->byte;                                                \
