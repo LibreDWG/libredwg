@@ -4069,8 +4069,8 @@ ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
   nKey.handleref.code = code;
   nKey.absolute_ref = absref;
 
-  // bsearch first,if possible
-  if (0 != dwg->num_object_ordered_refs && NULL != dwg->object_ordered_ref)
+  // bsearch first, if possible
+  if (dwg->object_ordered_ref && dwg->num_object_ordered_refs > 4)
     {
       Dwg_Object_Ref **pFound = (Dwg_Object_Ref **)bsearch (
           &nKey, dwg->object_ordered_ref, dwg->num_object_ordered_refs,
