@@ -180,6 +180,8 @@ bit_write_B (Bit_Chain *dat, unsigned char value)
 {
   if (dat->byte >= dat->size)
     bit_chain_alloc (dat);
+  if (dat->byte >= dat->size)
+    return;
 
   if (value)
     dat->chain[dat->byte] |= 0x80 >> dat->bit;
@@ -215,8 +217,6 @@ bit_read_BB (Bit_Chain *dat)
   return result;
 }
 
-/** Write 2 bits.
- */
 void
 bit_write_BB (Bit_Chain *dat, unsigned char value)
 {
@@ -225,6 +225,8 @@ bit_write_BB (Bit_Chain *dat, unsigned char value)
 
   if (dat->byte >= dat->size)
     bit_chain_alloc (dat);
+  if (dat->byte >= dat->size)
+    return;
   byte = dat->chain[dat->byte];
   if (dat->bit < 7)
     {
@@ -236,6 +238,8 @@ bit_write_BB (Bit_Chain *dat, unsigned char value)
       dat->chain[dat->byte] = (byte & 0xfe) | (value >> 1);
       if (dat->byte + 1 >= dat->size)
         bit_chain_alloc (dat);
+      if (dat->byte + 1 >= dat->size)
+        return;
       byte = dat->chain[dat->byte + 1];
       dat->chain[dat->byte + 1] = (byte & 0x7f) | ((value & 0x01) << 7);
     }
@@ -1770,6 +1774,8 @@ bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
     }
   if (dat->byte + length > dat->size)
     bit_chain_alloc_size (dat, (dat->byte + length) - dat->size);
+  if (dat->byte + length > dat->size)
+    return;
   if (dat->bit == 0)
     {
       memcpy (&dat->chain[dat->byte], chain, length);
@@ -1804,6 +1810,8 @@ bit_write_TFv (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
     }
   if (dat->byte + length > dat->size)
     bit_chain_alloc_size (dat, (dat->byte + length) - dat->size);
+  if (dat->byte + length > dat->size)
+    return;
   len = strlen ((char *)chain);
   if (dat->bit == 0)
     {
@@ -4550,8 +4558,10 @@ bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
       LOG_ERROR ("bit_copy_chain: dat->chain == tmp_dat->chain");
       return;
     }
-  while (dat->byte + size > dat->size)
+  if (dat->byte + size > dat->size)
     bit_chain_alloc (dat);
+  if (dat->byte + size > dat->size)
+    return;
   // check if both dat's are byte aligned (handles are)
   if (!dat->bit && !tmp_dat->bit)
     {
