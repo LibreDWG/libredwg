@@ -22,6 +22,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 #if defined HAVE_WCHAR_H
+// cross-compilation problem:
+// /usr/lib/gcc/arm-linux-gnueabi/9/include-fixed/limits.h defines it as 1
+#  if defined(MB_LEN_MAX) && MB_LEN_MAX != 16 && MB_LEN_MAX != 32
+#    undef MB_LEN_MAX
+#    define MB_LEN_MAX 16
+#  endif
 #  include <wchar.h>
 // clang/*/include/stddef.h(74,24): typedef __WCHAR_TYPE__ wchar_t
 #elif defined __clang__
