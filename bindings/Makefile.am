@@ -47,7 +47,7 @@ perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile
 	-if grep "NOOP = rem" perl/Makefile; then false; else \
 	    cd perl && $(MAKE) PERL="$(PERL)" \
 	                       OPTIMIZE="-I$(abs_top_srcdir)/include -I$(abs_top_builddir)/src" \
-	                       OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs"; fi
+	                       OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs -lredwg"; fi
 
 perl/Makefile: perl/Makefile.PL
 if !HAVE_INSRCDIR
@@ -64,7 +64,7 @@ check-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	-if grep "NOOP = rem" perl/Makefile; then false; else \
 	    LD_LIBRARY_PATH="$(abs_top_builddir)/src/.libs" $(MAKE) -C perl test \
 	      PERL="$(PERL)" OPTIMIZE="-I$(abs_top_srcdir)/include -I$(abs_top_builddir)/src" \
-              OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs"; fi
+              OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs -lredwg"; fi
 
 install-am: $(dist_perl_PERL) perl/Makefile perl/LibreDWG.$(OBJEXT)
 	@echo Making install for perl
