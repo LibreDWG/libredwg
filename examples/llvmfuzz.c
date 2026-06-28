@@ -112,6 +112,9 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
   dat.size = size;
   memset (&dwg, 0, sizeof (dwg));
 
+  /* Cap input size to prevent OOM/timeout in fuzzing */
+  if (size > 10 * 1024 * 1024)
+    return 0;
   // Detect the input format: DWG, DXF or JSON
   if (dat.size > 2 && dat.chain[0] == 'A' && dat.chain[1] == 'C')
     {
