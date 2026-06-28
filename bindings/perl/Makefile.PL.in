@@ -21,16 +21,18 @@ if (-d '../../bindings' &&
 
 # swig_perl.c is 9MB, too big
 $ccopts =~ s/-O\d //;
+#  use add'l LDFLAGS or CCFLAGS only for in-tree build
 $ldopts .= " -lredwg";
-$lddlflags .= " -lredwg";
+
+my @libs = ('-lredwg');
 
 WriteMakefile (
   NAME         => 'LibreDWG',
   VERSION      => '@PACKAGE_VERSION@',
   ($ccopts ? (CCFLAGS => $ccopts) : ()),
-  ($ldopts ? (LDFLAGS => $ldopts) : ()),
   ($lddlflags ? (LDDLFLAGS => $lddlflags) : ()),
-  #LIBS => ['-lredwg'],
+  LIBS => \@libs,
+  ($ldopts ? (LDFLAGS => $ldopts) : ()),
   OPTIMIZE => '',
   clean => { FILES => 'MYMETA.json MYMETA.yml' },
   ($] >= 5.005

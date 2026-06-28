@@ -21,7 +21,7 @@
 %module LibreDWG
 
 %{
-#include "../src/config.h"
+#include "config.h"
 #include "dwg_api.h"
 %}
 
