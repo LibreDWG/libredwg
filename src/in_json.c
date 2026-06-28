@@ -3651,16 +3651,26 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               const int len = t->end - t->start;
               char *hex = json_string (dat, tokens);
-              const unsigned blen = len / 2;
-              unsigned read;
-              BITCODE_TF buf = (BITCODE_TF)malloc (blen + 1);
-              if ((read = in_hex2bin (buf, hex, blen) != blen))
-                LOG_ERROR ("in_hex2bin with key %s at pos %u of %u", key, read,
-                           blen);
+              const size_t blen = len / 2;
+              size_t read;
+              BITCODE_TF buf;
+              if (!hex)
+                return DWG_ERR_INVALIDDWG;
+              buf = (BITCODE_TF)malloc (blen + 1);
+              if (!buf)
+                {
+                  free (hex);
+                  return DWG_ERR_OUTOFMEM;
+                }
+              if ((read = in_hex2bin (buf, hex, blen)) != blen)
+                LOG_ERROR ("in_hex2bin with key %s at pos %" PRIuSIZE
+                           " of %" PRIuSIZE,
+                           key, read, blen);
               buf[blen] = '\0';
               free (hex);
               if (!obj->num_unknown_bits)
-                obj->num_unknown_bits = blen * 8; // minus some padding bits
+                obj->num_unknown_bits
+                    = (BITCODE_RL)(blen * 8); // minus some padding bits
               if (obj->unknown_bits)
                 free (obj->unknown_bits);
               obj->unknown_bits = buf;
@@ -3679,14 +3689,15 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               const int len = t->end - t->start;
               char *hex = json_string (dat, tokens);
-              const unsigned blen = len / 2;
-              unsigned read;
+              const size_t blen = len / 2;
+              size_t read;
               BITCODE_TF buf = (BITCODE_TF)malloc (blen + 1);
               if (hex)
                 {
-                  if ((read = in_hex2bin (buf, hex, blen) != blen))
-                    LOG_ERROR ("in_hex2bin with key %s at pos %u of %u", key,
-                               read, blen);
+                  if ((read = in_hex2bin (buf, hex, blen)) != blen)
+                    LOG_ERROR ("in_hex2bin with key %s at pos %" PRIuSIZE
+                               " of %" PRIuSIZE,
+                               key, read, blen);
                   buf[blen] = '\0';
                   free (hex);
                 }
@@ -3695,7 +3706,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   memset (buf, 0, blen);
                 }
               if (!obj->num_unknown_rest)
-                obj->num_unknown_rest = blen * 8; // minus some padding bits
+                obj->num_unknown_rest
+                    = (BITCODE_RL)(blen * 8); // minus some padding bits
               if (obj->unknown_rest)
                 free (obj->unknown_rest);
               obj->unknown_rest = buf;
