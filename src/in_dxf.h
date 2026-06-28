@@ -261,6 +261,8 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     obj->type = obj->fixedtype = DWG_TYPE_##TO;                               \
     obj->name = (char *)#TO;                                                  \
     free (obj->dxfname);                                                      \
+    dxfname                                                                   \
+        = NULL; /* obj->dxfname was freed and may equal caller's dxfname */   \
     obj->dxfname = strdup (obj->name);                                        \
     strcpy (name, obj->name);                                                 \
     LOG_TRACE ("change type to %s\n", name);                                  \
@@ -277,6 +279,8 @@ BITCODE_RC dxf_find_lweight (const int16_t lw);
     obj->type = obj->fixedtype = DWG_TYPE_##TO;                               \
     obj->name = (char *)#TO;                                                  \
     free (obj->dxfname);                                                      \
+    dxfname                                                                   \
+        = NULL; /* obj->dxfname was freed and may equal caller's dxfname */   \
     obj->dxfname = strdup (obj->name);                                        \
     strcpy (name, obj->name);                                                 \
     LOG_TRACE ("change type to %s\n", name);                                  \
