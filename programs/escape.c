@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2019,2023 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2019,2023,2026 Free Software Foundation, Inc.              */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -22,6 +22,11 @@
 
 #include "common.h"
 #include "escape.h"
+
+#define SAFE_APPEND(d, end, s)                    \
+      if (d + (sizeof(s) - 1) >= end) goto done;  \
+      strcat (d, s);                              \
+      d += (sizeof(s) - 1)
 
 char *ATTRIBUTE_MALLOC
 htmlescape (const char *restrict src, const Dwg_Codepage cp)
@@ -52,39 +57,32 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
           *d = 0;
           end = dest + len;
         }
+
       switch (*s)
         {
         case '"':
-          strcat (d, "&quot;");
-          d += 6;
+          SAFE_APPEND (d, end, "&quot;");
           break;
         case '\'':
-          strcat (d, "&#39;");
-          d += 5;
+          SAFE_APPEND (d, end, "&#39;");
           break;
         case '`':
-          strcat (d, "&#96;");
-          d += 5;
+          SAFE_APPEND (d, end, "&#96;");
           break;
         case '&':
-          strcat (d, "&amp;");
-          d += 5;
+          SAFE_APPEND (d, end, "&amp;");
           break;
         case '<':
-          strcat (d, "&lt;");
-          d += 4;
+          SAFE_APPEND (d, end, "&lt;");
           break;
         case '>':
-          strcat (d, "&gt;");
-          d += 4;
+          SAFE_APPEND (d, end, "&gt;");
           break;
         case '{':
-          strcat (d, "&#123;");
-          d += 6;
+          SAFE_APPEND (d, end, "&#123;");
           break;
         case '}':
-          strcat (d, "&#125;");
-          d += 6;
+          SAFE_APPEND (d, end, "&#125;");
           break;
         default:
           {
@@ -97,7 +95,8 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
               {
                 if (!d)
                   return NULL;
-                sprintf (d, "&#x%X;", (unsigned)wc); // 4 + 4
+                snprintf (d, (size_t)(end - d), "&#x%X;",
+                          (unsigned)wc); // 4 + 4
                 d += strlen (d);
               }
             else
@@ -109,6 +108,7 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
         }
       s++;
     }
+done:
   *d = 0;
   return dest;
 }
@@ -117,7 +117,7 @@ char *ATTRIBUTE_MALLOC
 htmlwescape (BITCODE_TU wstr)
 {
   int len = 0;
-  char *dest, *d;
+  char *dest, *d, *end;
   BITCODE_TU tmp = wstr;
   BITCODE_RS c;
 
@@ -129,6 +129,7 @@ htmlwescape (BITCODE_TU wstr)
   d = dest = (char *)calloc (len, 1);
   if (!d)
     return NULL;
+  end = dest + len;
 
   while (*wstr)
     {
@@ -142,47 +143,40 @@ htmlwescape (BITCODE_TU wstr)
           len += 16;
           d = dest + off;
           *d = 0;
+          end = dest + len;
         }
       switch (*wstr)
         {
-        case 34:
-          strcat (d, "&quot;");
-          d += 6;
+        case 34: // '"'
+          SAFE_APPEND (d, end, "&quot;");
           break;
-        case 39:
-          strcat (d, "&#39;");
-          d += 5;
+        case 39: // '\''
+          SAFE_APPEND (d, end, "&#39;");
           break;
-        case 38:
-          strcat (d, "&amp;");
-          d += 5;
+        case 38: // '&'
+          SAFE_APPEND (d, end, "&amp;");
           break;
-        case 60:
-          strcat (d, "&lt;");
-          d += 4;
+        case 60: // '<'
+          SAFE_APPEND (d, end, "&lt;");
           break;
-        case 62:
-          strcat (d, "&gt;");
-          d += 4;
+        case 62: // '>'
+          SAFE_APPEND (d, end, "&gt;");
           break;
-        case 96:
-          strcat (d, "&#96;");
-          d += 5;
+        case 96: // '`'
+          SAFE_APPEND (d, end, "&#96;");
           break;
-        case 123:
-          strcat (d, "&#123;");
-          d += 6;
+        case 123: // '{'
+          SAFE_APPEND (d, end, "&#123;");
           break;
-        case 125:
-          strcat (d, "&#125;");
-          d += 6;
+        case 125: // '}'
+          SAFE_APPEND (d, end, "&#125;");
           break;
         default:
           if (*wstr >= 127 || *wstr < 20) // utf8 encodings
             {
               if (!d)
                 return NULL;
-              sprintf (d, "&#x%X;", *wstr);
+              snprintf (d, (size_t)(end - d), "&#x%X;", *wstr);
               d += strlen (d);
               *d = 0;
             }
@@ -194,6 +188,9 @@ htmlwescape (BITCODE_TU wstr)
         }
       wstr++;
     }
+done:
   *d = 0;
   return dest;
 }
+
+#undef SAFE_APPEND
