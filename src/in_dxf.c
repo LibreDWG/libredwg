@@ -9633,7 +9633,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     Dwg_Data *restrict dwg, BITCODE_BL ctrl_id, BITCODE_BL *i_p)
 {
   const int is_tu = 1;
-  Dwg_Object *obj;
+  Dwg_Object *obj = NULL;
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Object_APPID *_obj = NULL; // the smallest
   // we'd really need a Dwg_Object_TABLE or Dwg_Object_Generic type
@@ -10231,7 +10231,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     {
                       LOG_ERROR ("Illegal subclass %s in object %s", subclass,
                                  obj->name);
-                      return NULL;
+                      goto invalid_dxf;
                     }
                   else
                     {
@@ -10254,7 +10254,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 {
                   LOG_ERROR ("Invalid subclass %s in object %s", subclass,
                              obj->name);
-                  return NULL;
+                  goto invalid_dxf;
                 }
 
               // with PERSUBENTMGR
@@ -11219,7 +11219,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                       // misleading "Invalid DXF code").
                       LOG_ERROR ("Out of memory for MTEXT.text");
                       dxf_free_pair (pair);
-                      return NULL;
+                      goto fail;
                     }
                   written = len;
                   LOG_TRACE ("MTEXT.text = %s (%" PRIuSIZE ") [TV %d]\n",
@@ -11642,7 +11642,10 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 {
                   hn->trans = (BITCODE_BD *)xcalloc (16, sizeof (BITCODE_BD));
                   if (!hn->trans)
-                    return NULL;
+                    {
+                      dxf_free_pair (pair);
+                      goto fail;
+                    }
                   // BD* starting at 40-55
                   for (j = 0; j < 16; j++)
                     {
@@ -12065,7 +12068,10 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             {
                               pts = (double *)xcalloc (size, is2d ? 16 : 24);
                               if (!pts)
-                                return NULL;
+                                {
+                                  dxf_free_pair (pair);
+                                  goto fail;
+                                }
                               LOG_TRACE ("%s.%s size: %ld\n", name, f->name,
                                          size);
                               pts[0] = pair->value.d;
@@ -13210,6 +13216,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
 invalid_dxf:
   LOG_ERROR ("Invalid DXF code %d for %s", pair->code, name);
   dxf_free_pair (pair);
+fail:
+  if (obj)
+    {
+      obj->dxfname = NULL; // prevent double-free by caller
+      dwg_free_object (obj);
+      dwg->num_objects--;
+    }
   return NULL;
 }
 
@@ -13698,8 +13711,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                       = bctrl->tio.object->tio.BLOCK_CONTROL;
                                   if (_bctrl->num_entries > 0)
                                     _bctrl->entries[_bctrl->num_entries - 1]
-                                        ->r11_idx
-                                        = new_r11_idx;
+                                        ->r11_idx = new_r11_idx;
                                 }
                               LOG_TRACE ("r11: created BLOCK_HEADER %s "
                                          "[r11_idx %d]\n",
