@@ -118,7 +118,6 @@ Minor bugfixes:
     -Warray-bounds, -Wdiscarded-qualifiers, MSVC C4267).
   * Fixed Python binding shared library naming on Windows
     (_LibreDWG-0.dll → _LibreDWG.pyd).  GH #975.
-
   * encode: fixed assertion failure and memory leaks in R2018→R2004
     downconvert path.  Replace hardcoded version-specific bounds with
     real buffer invariant dat->byte < dat->size.  GH #1091.
@@ -139,12 +138,15 @@ Minor bugfixes:
   * Fixed UBSan pointer-overflow in bsearch_ex on empty array.
 
 Security/fuzzing fixes:
-  * Fixed CVE-2026-xxxxx DoS in decode_R13_R2000.  GH #1261.
-  * Fixed GHSA-5p98-8245-6hxq: const-input write/crash in bit_TV_to_utf8
-    iconv error path.
+  * Fixed CVE-2026-xxxxx (GHSA-gp83-hcvh-g255) DoS in decode_R13_R2000.  GH #1261.
+  * Fixed CVE-2026-54610 (GHSA-5p98-8245-6hxq):
+    const-input write/crash in bit_TV_to_utf8 iconv error path.
   * Fixed heap OOB read in bit_TV_to_utf8 (iconv path).
   * Fixed heap-buffer-overflow in bit_convert_TU via dwggrep LTYPE search.
     GH #1246.
+  * Fixed decode_preR13 again: illegal header.entities_end OOM.
+    GH #1131. CVE-2026-xxxxx (GHSA-7625-26gc-xqvp) by batam111
+    Severity: Moderate 5.5/10
   * Fixed NULL pointer dereference in free_TABLESTYLE_r2010.  GH #1143.
   * Fixed NULL pointer dereferences in DXF output for corrupted DWG input.
   * Fixed OOM in add_ent_preview on fuzzed DXF input.  GH #1006, #1144.
