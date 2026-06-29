@@ -271,6 +271,14 @@ escape_htmlescape_tests (void)
   else
     fail ("htmlescape CP949 => %s", s);
   free (s);
+
+  // all 8 special chars back-to-back: exercises SAFE_APPEND bounds and realloc growth
+  s = htmlescape ("\"'`&<>{}", CP_ISO_8859_1);
+  if (strEQc (s, "&quot;&#39;&#96;&amp;&lt;&gt;&#123;&#125;"))
+    pass ();
+  else
+    fail ("htmlescape all specials => %s", s);
+  free (s);
 }
 
 static void
