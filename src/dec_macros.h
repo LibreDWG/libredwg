@@ -696,7 +696,7 @@
   }
 #define TRACE_DD                                                              \
   {                                                                           \
-    BITCODE_BB result;                                                        \
+    BITCODE_BB result = 0;                                                    \
     BITCODE_RC byte;                                                          \
     if ((dat->byte * 8) + 8 + dat->bit > dat->size * 8)                       \
       {                                                                       \
@@ -706,16 +706,19 @@
                    " advance by 8",                                           \
                    __FUNCTION__, dat->byte, dat->bit, dat->size);             \
       }                                                                       \
-    byte = dat->chain[dat->byte];                                             \
-    if (dat->bit < 7)                                                         \
-      result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);                 \
     else                                                                      \
       {                                                                       \
-        result = (byte & 0x01) << 1;                                          \
-        if (dat->byte < dat->size - 1)                                        \
+        byte = dat->chain[dat->byte];                                         \
+        if (dat->bit < 7)                                                     \
+          result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);             \
+        else                                                                  \
           {                                                                   \
-            byte = dat->chain[dat->byte + 1];                                 \
-            result |= (byte & 0x80) >> 7;                                     \
+            result = (byte & 0x01) << 1;                                      \
+            if (dat->byte < dat->size - 1)                                    \
+              {                                                               \
+                byte = dat->chain[dat->byte + 1];                             \
+                result |= (byte & 0x80) >> 7;                                 \
+              }                                                               \
           }                                                                   \
       }                                                                       \
     LOG_HANDLE ("DD code %u\n", result);                                      \
