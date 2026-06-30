@@ -55,39 +55,38 @@ for d in "$@"; do
         [ "$dir" = "_test-data" ] && dir=""
         [ "$dir" = "_td" ] && dir=""
         [ "$dir" = "_." ] && dir=""
-        if [ -z "$ext" ]; then
-            case $(basename "$d") in
-            *.dwg)
-                ext=dwg
-                b=$(basename "$d" .$ext)
-                ;;
-            *.DWG)
-                ext=dwg
-                b=$(basename "$d" .DWG)
-                ;;
-            *.dxf)
-                ext=dxf
-                b=$(basename "$d" .$ext)
-                ;;
-            *.DXF)
-                ext=dxf
-                b=$(basename "$d" .DXF)
-                ;;
-            *.json)
-                ext=json
-                b=$(basename "$d" .$ext)
-                ;;
-            *.JSON)
-                ext=json
-                b=$(basename "$d" .JSON)
-                ;;
-            *)
-                ext=dwg
-                b=$(basename "$d" .$ext)
-                echo "Assume DWG file for $d"
-                ;;
-            esac
-        fi
+        # resolve basename and extension from the final filename
+        case $(basename "$d") in
+        *.dwg)
+            ext=dwg
+            b=$(basename "$d" .dwg)
+            ;;
+        *.DWG)
+            ext=dwg
+            b=$(basename "$d" .DWG)
+            ;;
+        *.dxf)
+            ext=dxf
+            b=$(basename "$d" .dxf)
+            ;;
+        *.DXF)
+            ext=dxf
+            b=$(basename "$d" .DXF)
+            ;;
+        *.json)
+            ext=json
+            b=$(basename "$d" .json)
+            ;;
+        *.JSON)
+            ext=json
+            b=$(basename "$d" .JSON)
+            ;;
+        *)
+            ext=dwg
+            b=$(basename "$d")
+            echo "Assume DWG file for $d"
+            ;;
+        esac
         log="$b$dir.log"
         out="$b$dir.geojson"
         echo "$timeout $TESTPROG programs/dwgread $v -OGeoJSON -o $out $d 2>$log"
