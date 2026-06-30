@@ -23,12 +23,10 @@
 #include "common.h"
 #include "escape.h"
 
-#define SAFE_APPEND(d, end, s)                       \
-  do {                                               \
-    if ((d) + (sizeof (s) - 1) >= (end)) goto done;  \
-    memcpy ((d), s, sizeof (s) - 1);                \
-    (d) += sizeof (s) - 1;                           \
-  } while (0)
+#define SAFE_APPEND(d, end, s)                        \
+  if ((d) + (sizeof (s) - 1) >= (end)) goto done;    \
+  strcat ((d), s);                                    \
+  (d) += sizeof (s) - 1
 
 char *ATTRIBUTE_MALLOC
 htmlescape (const char *restrict src, const Dwg_Codepage cp)
