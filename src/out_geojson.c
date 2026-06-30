@@ -1009,12 +1009,19 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       {
         Dwg_Entity_SPLINE *_obj = obj->tio.entity->tio.SPLINE;
         BITCODE_BL num_pts;
+        int use_fit_pts;
         // Use fit points if available, otherwise control points
-        if (_obj->num_fit_pts > 0)
-          num_pts = _obj->num_fit_pts;
+        if (_obj->num_fit_pts > 0 && _obj->fit_pts)
+          {
+            num_pts = _obj->num_fit_pts;
+            use_fit_pts = 1;
+          }
+        else if (_obj->num_ctrl_pts > 0 && _obj->ctrl_pts)
+          {
+            num_pts = _obj->num_ctrl_pts;
+            use_fit_pts = 0;
+          }
         else
-          num_pts = _obj->num_ctrl_pts;
-        if (num_pts == 0)
           break;
         FEATURE (AcDbEntity : AcDbSpline, obj);
         GEOMETRY (LineString);
@@ -1023,7 +1030,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         for (BITCODE_BL j = 0; j < num_pts; j++)
           {
             double px, py;
-            if (_obj->num_fit_pts > 0)
+            if (use_fit_pts)
               {
                 px = _obj->fit_pts[j].x;
                 py = _obj->fit_pts[j].y;
