@@ -2163,7 +2163,13 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           dec.byte = es.fields.address;
           /* == j * info->max_decomp_size;*/ // offset
           LOG_INSANE ("dec offset: %" PRIuSIZE "\n", dec.byte);
-          dec.size = dec.byte + info->max_decomp_size; /*es.fields.page_size;*/
+          /* dec.size stays pinned to max_decomp_size (the true allocation).
+             Overwriting it here with a smaller per-section value causes
+             bit_chain_alloc to realloc the buffer to a smaller size, then
+             dec.byte and dec.size drift past the shrunk allocation resulting
+             in a heap-buffer-overflow WRITE (GHSA-qg2f-8389-w95j). The
+             pre-loop guard already ensures address+max_decomp_size <=
+             max_decomp_size, so the decompress bounds check is still valid. */
           LOG_INSANE ("dec size: %" PRIuSIZE "\n", dec.size);
           dat->size = dat->byte + es.fields.data_size;
           if (dat->size > orig_size)
