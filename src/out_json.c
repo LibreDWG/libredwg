@@ -1864,7 +1864,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
           int num_bytes = obj->num_unknown_bits / 8;
-          if (obj->num_unknown_bits & 8)
+          if (obj->num_unknown_bits & 7)
             num_bytes++;
 
           if (obj->fixedtype == DWG_TYPE_FREED)
