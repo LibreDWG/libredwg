@@ -993,9 +993,9 @@ bit_read_MC (Bit_Chain *dat)
               byte[i] &= 0xbf;
             }
           result |= (((BITCODE_UMC)byte[i]) << j);
-          if (result == 0x80000000) // GH #1153 negation overflow
+          if (result > (BITCODE_UMC)INT32_MAX) // GH #1153 negation overflow
             goto err_mc;
-          return (negative ? -((BITCODE_MC)result) : (BITCODE_MC)result);
+          return (negative ? -(BITCODE_MC)result : (BITCODE_MC)result);
         }
       else
         byte[i] &= 0x7f;
