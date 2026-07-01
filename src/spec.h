@@ -575,7 +575,7 @@
 #  define HANDLE_UNKNOWN_BITS                                                 \
     {                                                                         \
       unsigned num_bytes = obj->num_unknown_bits / 8;                         \
-      if (obj->num_unknown_bits & 8)                                          \
+      if (obj->num_unknown_bits & 7)                                          \
         num_bytes++;                                                          \
       KEY (num_unknown_bits);                                                 \
       VALUE_RL (obj->num_unknown_bits, 0);                                    \
@@ -609,7 +609,7 @@
 #  define UNKNOWN_BITS_REST                                                   \
     {                                                                         \
       unsigned num_bytes = obj->num_unknown_rest / 8;                         \
-      if (obj->num_unknown_rest & 8)                                          \
+      if (obj->num_unknown_rest & 7)                                          \
         num_bytes++;                                                          \
       KEY (num_unknown_rest);                                                 \
       VALUE_RL (obj->num_unknown_rest, 0);                                    \
