@@ -1640,7 +1640,7 @@ encode_check_num_sections (Dwg_Section_Type_r11 id, Dwg_Data *restrict dwg)
       dwg->header.section = (Dwg_Section *)realloc (
           dwg->header.section, sizeof (Dwg_Section) * (id + 2));
       memset (&dwg->header.section[num_sections - 1], 0,
-              (id + 1 - num_sections) * sizeof (Dwg_Section));
+              (id + 2 - (num_sections - 1)) * sizeof (Dwg_Section));
       dwg->header.num_sections = (BITCODE_RL)id;
     }
 }
