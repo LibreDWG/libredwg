@@ -6854,6 +6854,14 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string, 0);
               LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]", (int)length,
                          data->u.eed_0.string);
+              // Guard against fuzzer input with embedded NULs where
+              // strlen(string) < length but bit_utf8_to_TU allocated
+              // based on strlen().  Clamp to the actual converted length.
+              {
+                size_t tu_len = strlen (data->u.eed_0.string);
+                if (length > tu_len)
+                  length = (BITCODE_RS)tu_len;
+              }
               if ((length * 2) + 5 + dat->byte < dat->size)
                 bit_chain_alloc_size (dat, (length * 2) + 5 + dat->byte);
               bit_write_RS (dat, length);
@@ -7608,8 +7616,15 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
               {
                 // TODO: same len when converted to TU? normally yes
                 BITCODE_TU news = bit_utf8_to_TU (rbuf->value.str.u.data, 0);
-                bit_write_RS (dat, rbuf->value.str.size);
-                for (i = 0; i < rbuf->value.str.size; i++)
+                BITCODE_RS size = rbuf->value.str.size;
+                // Guard against fuzzer input with embedded NULs
+                {
+                  size_t tu_len = strlen (rbuf->value.str.u.data);
+                  if (size > tu_len)
+                    size = (BITCODE_RS)tu_len;
+                }
+                bit_write_RS (dat, size);
+                for (i = 0; i < size; i++)
                   bit_write_RS (dat, news[i]);
                 LOG_TRACE_TU ("xdata", news, rbuf->type);
                 free (news);
