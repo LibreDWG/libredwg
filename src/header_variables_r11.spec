@@ -355,6 +355,18 @@
   DECODER {
     if (FIELD_VALUE (unit1_name))
       free (FIELD_VALUE (unit1_name));
+    if (FIELD_VALUE (unit2_name))
+      free (FIELD_VALUE (unit2_name));
+    if (FIELD_VALUE (unit3_name))
+      free (FIELD_VALUE (unit3_name));
+    if (FIELD_VALUE (unit4_name))
+      free (FIELD_VALUE (unit4_name));
+  }
+  FREE {
+    FIELD_TV (unit1_name, 0);
+    FIELD_TV (unit2_name, 0);
+    FIELD_TV (unit3_name, 0);
+    FIELD_TV (unit4_name, 0);
   }
   FIELD_TFv (unit1_name, 32, 1);
   FIELD_TFv (unit2_name, 32, 1);

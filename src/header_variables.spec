@@ -85,6 +85,9 @@
   }
   FREE {
     FIELD_TV (unit1_name, 0);
+    FIELD_TV (unit2_name, 0);
+    FIELD_TV (unit3_name, 0);
+    FIELD_TV (unit4_name, 0);
   }
   SINCE (R_13b1)
     {
