@@ -6291,18 +6291,22 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
           for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
             {
               Dwg_Object_Ref *hdl = _obj->entities[j];
-              Dwg_Object *o
-                  = hdl ? dwg_ref_object (dwg, hdl) : NULL; // may fail!
-              Dwg_Object_Entity *ent = o ? o->tio.entity : NULL;
               Dwg_Object_Ref *prev = j > 0 ? _obj->entities[j - 1] : NULL;
               Dwg_Object_Ref *next
                   = j + 1 < _obj->num_owned ? _obj->entities[j + 1] : NULL;
               BITCODE_RLL prev_ref = prev ? prev->absolute_ref : 0;
               BITCODE_RLL next_ref = next ? next->absolute_ref : 0;
-              BITCODE_RLL cur_ref = hdl ? hdl->absolute_ref : 0;
+              BITCODE_RLL cur_ref = 0;
+              Dwg_Object *o = NULL;
+              Dwg_Object_Entity *ent = NULL;
 
+              if (!hdl)
+                continue;
+              cur_ref = hdl->absolute_ref;
               LOG_HANDLE ("entities[%u]: " FORMAT_REF " \n", j,
                           ARGS_REF (hdl));
+              o = dwg_ref_object (dwg, hdl); // may fail!
+              ent = o ? o->tio.entity : NULL;
               if (!o)
                 continue;
               if (o->supertype != DWG_SUPERTYPE_ENTITY)

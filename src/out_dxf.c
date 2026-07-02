@@ -1783,7 +1783,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
         fprintf (dat->fh, "%3i\r\n$MODEL_SPACE\r\n", dxf);
       else if (strEQc (name, "*Paper_Space"))
         fprintf (dat->fh, "%3i\r\n$PAPER_SPACE\r\n", dxf);
-      else if (!memcmp (name, "*Paper_Space", sizeof ("*Paper_Space") - 1))
+      else if (strlen (name) >= 12 && !memcmp (name, "*Paper_Space", 12))
         fprintf (dat->fh, "%3i\r\n$PAPER_SPACE%s\r\n", dxf, &name[12]);
       else
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
@@ -1796,7 +1796,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
         fprintf (dat->fh, "%3i\r\n*Model_Space\r\n", dxf);
       else if (strEQc (name, "$PAPER_SPACE"))
         fprintf (dat->fh, "%3i\r\n*Paper_Space\r\n", dxf);
-      else if (!memcmp (name, "$PAPER_SPACE", sizeof ("$PAPER_SPACE") - 1))
+      else if (strlen (name) >= 12 && !memcmp (name, "$PAPER_SPACE", 12))
         fprintf (dat->fh, "%3i\r\n*Paper_Space%s\r\n", dxf, &name[12]);
       else
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
