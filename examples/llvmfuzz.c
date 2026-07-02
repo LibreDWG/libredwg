@@ -218,7 +218,19 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
             out_dat.version = dwg.header.version = R_14;
             break;
           case 13:
+            out_dat.version = dwg.header.version = R_2000;
+            break;
+          case 14:
             out_dat.version = dwg.header.version = R_2004;
+            break;
+          case 15:
+            out_dat.version = dwg.header.version = R_2010;
+            break;
+          case 16:
+            out_dat.version = dwg.header.version = R_2013;
+            break;
+          case 17:
+            out_dat.version = dwg.header.version = R_2018;
             break;
           default: // favor this one
             out_dat.version = dwg.header.version = R_2000;
@@ -264,7 +276,9 @@ extern int LLVMFuzzerInitialize(int *argc, char ***argv);
 static int
 usage (void)
 {
-  printf ("\nUsage: OUT=0 VER=3 llvmfuzz_standalone INPUT...");
+  printf ("\nUsage: OUT=0 VER=3 llvmfuzz_standalone INPUT...\n");
+  printf ("VER: 0=r1.4, 1=r2.0, 2=r2.10, 3=r2.10, 4=r2.4, 5=r2.6, 6=r9, 7=r10, 8=r11,\n"          "     9=r12, 10=r13, 11=r13c3, 12=r14, 13=r2000, 14=r2004, 15=r2010, 16=r2013, 17=r2018. default r2000\n");
+  printf ("OUT: 0=encode to dwg, 1=dxf, 2=json, 3=dxfb\n");
   return 1;
 }
 // llvmfuzz_standalone reproducer, see OUT and VER env vars
@@ -337,7 +351,7 @@ main (int argc, char *argv[])
         fprintf (stderr, "SEED=%04u ", seed);
       fprintf (stderr, "OUT=%d ", out);
 #  endif
-      if (out == 0)
+      if (1)
         {
           ver = rand () % 20;
 #  ifdef STANDALONE
