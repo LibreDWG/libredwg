@@ -88,6 +88,17 @@
     FIELD_TV (unit2_name, 0);
     FIELD_TV (unit3_name, 0);
     FIELD_TV (unit4_name, 0);
+    FIELD_TV (MENU, 1);
+    FIELD_TV (DIMPOST, 1);
+    FIELD_TV (DIMAPOST, 1);
+    FIELD_TV (DIMBLK_T, 1);
+    FIELD_TV (DIMBLK1_T, 1);
+    FIELD_TV (DIMBLK2_T, 1);
+    FIELD_TV (HYPERLINKBASE, 1);
+    FIELD_TV (STYLESHEET, 1);
+    FIELD_TV (FINGERPRINTGUID, 2);
+    FIELD_TV (VERSIONGUID, 2);
+    FIELD_TV (PROJECTNAME, 1);
   }
   SINCE (R_13b1)
     {

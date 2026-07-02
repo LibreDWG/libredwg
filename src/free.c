@@ -1592,6 +1592,16 @@ dwg_free_header_vars (Dwg_Data *dwg)
   // clang-format on
 
   FIELD_TV (DWGCODEPAGE, 0);
+  FREE_IF (_obj->HYPERLINKBASE);
+  FREE_IF (_obj->STYLESHEET);
+  FREE_IF (_obj->FINGERPRINTGUID);
+  FREE_IF (_obj->VERSIONGUID);
+  FREE_IF (_obj->PROJECTNAME);
+  FREE_IF (_obj->DIMPOST);
+  FREE_IF (_obj->DIMAPOST);
+  FREE_IF (_obj->DIMBLK_T);
+  FREE_IF (_obj->DIMBLK1_T);
+  FREE_IF (_obj->DIMBLK2_T);
   return 0;
 }
 
@@ -1656,7 +1666,6 @@ dwg_free_acds (Dwg_Data *dwg)
   BITCODE_RL rcount3 = 0, rcount4, vcount;
   int error = 0;
 
-  // clang-format off
   #include "acds.spec"
   // clang-format on
   return 0;
@@ -1666,7 +1675,6 @@ void
 dwg_free (Dwg_Data *dwg)
 {
   BITCODE_BL i;
-  BITCODE_BS v;
   if (dwg)
     {
       pdat.version = dwg->header.version;
@@ -1693,11 +1701,8 @@ dwg_free (Dwg_Data *dwg)
           if (!dwg_obj_is_control (&dwg->object[i]))
             dwg_free_object (&dwg->object[i]);
         }
-      v = dwg->header.from_version ? dwg->header.from_version : dwg->header.version;
-      if (v < R_13b1)
-        dwg_free_preR13_header_vars (dwg);
-      else
-        dwg_free_header_vars (dwg);
+      dwg_free_preR13_header_vars (dwg);
+      dwg_free_header_vars (dwg);
       dwg_free_summaryinfo (dwg);
       if (dwg->header.section_infohdr.num_desc)
         {
