@@ -1666,6 +1666,7 @@ void
 dwg_free (Dwg_Data *dwg)
 {
   BITCODE_BL i;
+  BITCODE_BS v;
   if (dwg)
     {
       pdat.version = dwg->header.version;
@@ -1692,7 +1693,8 @@ dwg_free (Dwg_Data *dwg)
           if (!dwg_obj_is_control (&dwg->object[i]))
             dwg_free_object (&dwg->object[i]);
         }
-      if (dwg->header.version < R_13b1)
+      v = dwg->header.from_version ? dwg->header.from_version : dwg->header.version;
+      if (v < R_13b1)
         dwg_free_preR13_header_vars (dwg);
       else
         dwg_free_header_vars (dwg);
