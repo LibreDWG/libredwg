@@ -626,7 +626,7 @@ classes_section:
       /* CWE-400: bound max classes to prevent DoS via crafted input.
          Each class entry is at minimum ~10 bytes on disk;
          sizeof(Dwg_Class) is a very generous upper bound. */
-      if ((size_t)i >= 100 + (size / sizeof (Dwg_Class)))
+      if ((size_t)i >= 100 + (size / sizeof (Dwg_Class)) || i >= 65535)
         {
           LOG_ERROR ("Too many classes: %u, max %" PRIuSIZE, (unsigned)i,
                      100 + (size / sizeof (Dwg_Class)));
@@ -7019,6 +7019,11 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
           else if (num >= dwg->num_alloced_objects)
             {
+              if (num >= 10000000)
+                {
+                  LOG_ERROR ("Too many objects, abort");
+                  return DWG_ERR_VALUEOUTOFBOUNDS;
+                }
               while (num >= dwg->num_alloced_objects)
                 dwg->num_alloced_objects *= 2;
               dwg->object = (Dwg_Object *)realloc (
