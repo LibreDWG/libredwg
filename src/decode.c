@@ -550,19 +550,14 @@ classes_section:
   LOG_INFO ("         Classes (end)  : %4lu\n",
             (long)(dwg->header.section[SECTION_CLASSES_R13].address
                    + dwg->header.section[SECTION_CLASSES_R13].size));
-  LOG_INFO ("         Length         : %4lu\n",
-            (long)dwg->header.section[SECTION_CLASSES_R13].size);
-  // check sentinel
   dat->byte = dwg->header.section[SECTION_CLASSES_R13].address;
-  if (dat->byte + 16 > dat->size
-      || dwg->header.section[SECTION_CLASSES_R13].address
-                 + dwg->header.section[SECTION_CLASSES_R13].size
-             > dat->size)
+  if (dwg->header.section[SECTION_CLASSES_R13].size < 30)
     {
-      LOG_ERROR ("Invalid Classes section, skipped");
+      LOG_ERROR ("Classes section too small, skipped");
       error |= DWG_ERR_SECTIONNOTFOUND;
       goto handles_section;
     }
+  // check sentinel
   if (memcmp (dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN), &dat->chain[dat->byte],
               16)
       == 0)
