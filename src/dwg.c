@@ -299,6 +299,14 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
     }
   fclose (fp);
 
+  if (bit_chain.size < 6)
+    {
+      LOG_ERROR ("File %s too small, %zu byte", filename, bit_chain.size);
+      free (bit_chain.chain);
+      bit_chain.chain = NULL;
+      return DWG_ERR_INVALIDDWG;
+    }
+
   /* Decode the dwg structure */
   error = dwg_decode (&bit_chain, dwg);
   if (error >= DWG_ERR_CRITICAL)
