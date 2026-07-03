@@ -42,4 +42,7 @@ EXPORT void arc_split (BITCODE_2BD *pts, const int num_pts,
                        BITCODE_BD end_angle, const BITCODE_BD radius)
     __nonnull ((1));
 
+// Normalize an angle to [0, 2*PI).  Handles inf, nan and denormals.
+double angle_normalize (double angle);
+
 #endif /* _GEOM_H_ */

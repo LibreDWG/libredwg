@@ -139,6 +139,18 @@ angle_vector_2d (BITCODE_2BD *out, BITCODE_2BD ctr, BITCODE_BD angle,
   out->x = ctr.x + (len * cos (angle));
   out->y = ctr.y + (len * sin (angle));
 }
+// Normalize an angle to [0, 2*PI).  Handles inf, nan and denormals.
+double
+angle_normalize (double angle)
+{
+  if (!isfinite (angle))
+    return 0.0;
+  angle = fmod (angle, 2 * M_PI);
+  if (angle < 0)
+    angle += 2 * M_PI;
+  return angle;
+}
+
 
 // Segmentation of arc,curves into plines for geojson.
 void
@@ -150,13 +162,13 @@ arc_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD ctr,
   if (!pts)
     return;
 #endif
-  while (start_angle > end_angle)
-    end_angle += M_PI;
+  start_angle = angle_normalize (start_angle);
+  end_angle = angle_normalize (end_angle);
+  if (end_angle < start_angle)
+    end_angle += 2 * M_PI;
   // shoot vectors from ctr to ang
   ang = start_angle;
   angd = (end_angle - start_angle) / num_pts;
-  while ((angd = (end_angle - start_angle) / (num_pts - 1)) < 0)
-    start_angle += M_PI;
   // fprintf (stderr, "ctr (%g,%g) ang: %g - %g\n", ctr.x, ctr.y, ang,
   // end_angle);
   for (int i = 0; i < num_pts; i++, ang += angd)

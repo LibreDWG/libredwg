@@ -830,10 +830,10 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         Dwg_Entity_ARC *_obj = obj->tio.entity->tio.ARC;
         BITCODE_2BD ctr = { _obj->center.x, _obj->center.y };
         BITCODE_2BD *pts;
-        double end_angle = _obj->end_angle;
+        double end_angle = angle_normalize (_obj->end_angle);
         double angle_span;
         int num_pts;
-        while (end_angle - _obj->start_angle < 1e-6)
+        if (end_angle < _obj->start_angle)
           end_angle += 2 * M_PI;
         angle_span = end_angle - _obj->start_angle;
         num_pts = calc_curve_segments (dwg, _obj->radius, angle_span);
@@ -965,7 +965,9 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         // Default to full ellipse if angles are 0 and 2*PI
         if (start_angle == 0.0 && end_angle == 0.0)
           end_angle = 2 * M_PI;
-        while (end_angle - start_angle < 1e-6)
+        start_angle = angle_normalize (start_angle);
+        end_angle = angle_normalize (end_angle);
+        if (end_angle < start_angle)
           end_angle += 2 * M_PI;
         angle_span = end_angle - start_angle;
         num_pts = calc_curve_segments (dwg, major_r, angle_span);
