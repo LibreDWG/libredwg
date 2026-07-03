@@ -6125,25 +6125,29 @@ DWG_ENTITY (PROXY_ENTITY)
 #elif defined(IS_ENCODER) || defined(IS_JSON) || defined(IS_FREE)
   HANDLE_VECTOR (objids, num_objids, ANYCODE, 0);
 #elif defined(IS_DXF)
-  for (rcount1 = 0; rcount1 < _obj->num_objids; rcount1++)
+  if (_obj->objids)
     {
-      int dxf = 330;
-      if (!_obj->objids[rcount1]) {
-        LOG_ERROR ("Illegal %s.objids[%u]", obj->name, rcount1);
-      }
-      else
+      for (rcount1 = 0; rcount1 < _obj->num_objids; rcount1++)
         {
-          unsigned code = _obj->objids[rcount1]->handleref.code;
-          switch (code)
+          int dxf = 330;
+          if (!_obj->objids[rcount1])
             {
-            case 2: dxf = 330; break;
-            case 3: dxf = 340; break;
-            case 4: case 6: case 8: case 10: case 12: dxf = 350; break;
-            case 5: dxf = 360; break;
-            default: LOG_ERROR ("Illegal %s objids[%u].code %u", obj->name,
-                                rcount1, code);
+              LOG_ERROR ("Illegal %s.objids[%u]", obj->name, rcount1);
             }
-          VALUE_HANDLE (_obj->objids[rcount1], objids, code, dxf);
+          else
+            {
+              unsigned code = _obj->objids[rcount1]->handleref.code;
+              switch (code)
+                {
+                case 2: dxf = 330; break;
+                case 3: dxf = 340; break;
+                case 4: case 6: case 8: case 10: case 12: dxf = 350; break;
+                case 5: dxf = 360; break;
+                default: LOG_ERROR ("Illegal %s objids[%u].code %u", obj->name,
+                                    rcount1, code);
+                }
+              VALUE_HANDLE (_obj->objids[rcount1], objids, code, dxf);
+            }
         }
     }
   SINCE (R_2000b) { // end of Object ID's
