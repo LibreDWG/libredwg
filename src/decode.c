@@ -72,6 +72,32 @@ static bool env_var_checked_p;
 // #undef LOG_POS
 // #define LOG_POS LOG_INSANE (" @%" PRIuSIZE ".%u\n", dat->byte, dat->bit);
 
+#define DEFAULT_MAX_R2004_DECOMP_SIZE 0x2f000000U
+
+static bool max_decomp_size_checked_p;
+static uint32_t max_r2004_decomp_size = DEFAULT_MAX_R2004_DECOMP_SIZE;
+
+static uint32_t
+get_max_r2004_decomp_size (void)
+{
+  if (!max_decomp_size_checked_p)
+    {
+      char *probe = getenv ("LIBREDWG_MAX_DECOMP_SIZE");
+      if (probe && probe[0])
+        {
+          char *endptr = NULL;
+          unsigned long value = strtoul (probe, &endptr, 0);
+          if (endptr != probe && endptr && *endptr == '\0' && value > 0
+              && value <= UINT32_MAX)
+            max_r2004_decomp_size = (uint32_t)value;
+          else
+            LOG_WARN ("Ignore invalid LIBREDWG_MAX_DECOMP_SIZE=%s", probe);
+        }
+      max_decomp_size_checked_p = true;
+    }
+  return max_r2004_decomp_size;
+}
+
 /*------------------------------------------------------------------------------
  * Private functions
  */
@@ -1685,9 +1711,10 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   Bit_Chain dec = { 0 };
   BITCODE_BL i, j;
   int error;
+  const uint32_t max_decomp_size = get_max_r2004_decomp_size ();
 
-  if (decomp_data_size > 0x2f000000 && // 790Mb
-      (decomp_data_size > 8 * comp_data_size || comp_data_size > dat->size))
+  if (decomp_data_size > max_decomp_size
+      && (decomp_data_size > 8 * comp_data_size || comp_data_size > dat->size))
     {
       LOG_ERROR ("Invalid r2004_header.decomp_data_size %" PRIu32,
                  decomp_data_size);
@@ -2054,7 +2081,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   max_decomp_size = info->num_sections * info->max_decomp_size;
-  if (max_decomp_size == 0 || max_decomp_size > 0x2f000000) // 790Mb
+  if (max_decomp_size == 0
+      || max_decomp_size > get_max_r2004_decomp_size ())
     {
       LOG_ERROR ("Invalid section %s count or max decompression size. "
                  "Sections: " FORMAT_RL ", Max size: " FORMAT_RL,
