@@ -4743,7 +4743,7 @@ if (num + tblnum >= dwg->num_objects)                                          \
             Dwg_Object *obj = NULL;
             Dwg_Object_BLOCK_HEADER *_obj;
             // use entries[] directly to get the right BLOCK_HEADER per index
-            if (_bctrl && i < (int)_bctrl->num_entries && _bctrl->entries[i])
+            if (_bctrl && _bctrl->entries && i < (int)_bctrl->num_entries && _bctrl->entries[i])
               obj = dwg_ref_object (dwg, _bctrl->entries[i]);
             if (!obj)
               obj = dwg_get_next_object (dwg, DWG_TYPE_BLOCK_HEADER, num + i);
