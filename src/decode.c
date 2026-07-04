@@ -6936,8 +6936,10 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
     {
       LOG_ERROR ("Corrupt end " FORMAT_RL " fixed to filesize", end);
       end = dat->size & 0xFFFFFFFF;
-      if (start < end && size > end - start)
+      if (start < end)
         size = end - start;
+      else
+        size = 0;
     }
   if (entity_section != BLOCKS_SECTION_INDEX)
     {
@@ -7005,6 +7007,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
       dat->bit = 0;
       while (dat->byte < oldpos + size)
         {
+          size_t iter_start = dat->byte;
           Dwg_Object *obj;
           Dwg_Object_Type_r11 abstype;
           BITCODE_RC pline_flag;
@@ -7517,7 +7520,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                          dat->byte, dat->size);
               return DWG_ERR_INVALIDDWG;
             }
-          if (dat->byte == oldpos)
+          if (dat->byte == iter_start)
             {
               LOG_ERROR (
                   "No advance in decode_preR13_entities, abort at %" PRIuSIZE,
