@@ -11390,7 +11390,7 @@ typedef struct _dwg_secondheader_sections
 
 typedef struct _dwg_secondheader_handles
 {
-  BITCODE_RCd num_hdl;
+  BITCODE_RC num_hdl;
   BITCODE_RCd nr;
   BITCODE_RC hdl[8];
   const char *name;

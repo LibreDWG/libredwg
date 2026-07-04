@@ -65,7 +65,7 @@ VERSIONS (R_13, R_2000) {
   VALUEOUTOFBOUNDS (num_handles, 14);
   REPEAT_F (num_handles, 14, handles, Dwg_SecondHeader_Handles)
   REPEAT_BLOCK
-      SUB_FIELD_RCd (handles[rcount1], num_hdl, 0); // max 8, the size
+      SUB_FIELD_RC (handles[rcount1], num_hdl, 0); // max 8, the size
       SUB_VALUEOUTOFBOUNDS (handles[rcount1], num_hdl, 8);
       SUB_FIELD_RCd (handles[rcount1], nr, 0);
       SUB_VALUEOUTOFBOUNDS (handles[rcount1], nr, 13);
