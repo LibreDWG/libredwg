@@ -829,7 +829,8 @@ static void
 remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
 {
   int last = _obj->numitems - 1;
-  if (i < (int)_obj->numitems && _obj->itemhandles[i] != NULL)
+  if (i < (int)_obj->numitems && _obj->itemhandles != NULL
+      && _obj->itemhandles[i] != NULL)
     {
       LOG_TRACE ("Disable link to " FORMAT_REF " for NOD.%s\n",
                  ARGS_REF (_obj->itemhandles[i]), name);
@@ -4743,7 +4744,8 @@ if (num + tblnum >= dwg->num_objects)                                          \
             Dwg_Object *obj = NULL;
             Dwg_Object_BLOCK_HEADER *_obj;
             // use entries[] directly to get the right BLOCK_HEADER per index
-            if (_bctrl && _bctrl->entries && i < (int)_bctrl->num_entries && _bctrl->entries[i])
+            if (_bctrl && _bctrl->entries && i < (int)_bctrl->num_entries
+                && _bctrl->entries[i])
               obj = dwg_ref_object (dwg, _bctrl->entries[i]);
             if (!obj)
               obj = dwg_get_next_object (dwg, DWG_TYPE_BLOCK_HEADER, num + i);
