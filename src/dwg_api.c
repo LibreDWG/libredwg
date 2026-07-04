@@ -29101,6 +29101,8 @@ dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
 EXPORT double
 dwg_geom_angle_normalize (double angle)
 {
+  if (!isfinite (angle))
+    return 0.0;
   if (fabs (angle) > M_PI)
     {
       while (angle > M_PI)
