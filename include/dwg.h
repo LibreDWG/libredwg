@@ -11254,8 +11254,7 @@ typedef struct _dwg_auxheader
   BITCODE_RL unknown_5rl[5];
   BITCODE_TIMERLL TDCREATE;
   BITCODE_TIMERLL TDUPDATE;
-  BITCODE_RL HANDSEED; // only 31bit
-  BITCODE_RL plot_stamp;
+  BITCODE_RLL HANDSEED;
   BITCODE_RS zero_1;
   BITCODE_RS numsaves_3;
   BITCODE_RL zero_2;

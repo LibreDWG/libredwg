@@ -6845,11 +6845,8 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 dwg->header.extras_start);
     }
   FIELD_RS (R11_HANDLING, 0);
-  {
-    _obj->HANDSEED = bit_read_RL_BE (dat);
-    LOG_TRACE ("HANDSEED: " FORMAT_RLx " [RLx 5]\n", _obj->HANDSEED);
-  }
-  FIELD_RL (plot_stamp, 0);
+  _obj->HANDSEED = bit_read_RLL_BE (dat);
+  LOG_TRACE ("HANDSEED: " FORMAT_RLLx " [RLLx 0]\n", _obj->HANDSEED);
   FIELD_RS (num_aux_tables, 0);
   decode_preR13_section_chk (SECTION_BLOCK, dat, dwg);
   decode_preR13_section_chk (SECTION_LAYER, dat, dwg);

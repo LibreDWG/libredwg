@@ -91,6 +91,7 @@
 #define FIELD_RSx(nam, dxf) FIELD_CAST (nam, RS, RSx, dxf)
 #define FIELD_RSd(nam, dxf) FIELD_CAST (nam, RS, RSd, dxf)
 #define FIELD_RLx(nam, dxf) FIELD_CAST (nam, RL, RLx, dxf)
+#define FIELD_RLLx(nam, dxf) FIELD_CAST (nam, RLL, RLLx, dxf)
 #define FIELD_BLx(nam, dxf) FIELD_CAST (nam, BL, BLx, dxf)
 #define FIELD_BLd(nam, dxf) FIELD_CAST (nam, BL, BLd, dxf)
 #define FIELD_RLd(nam, dxf) FIELD_CAST (nam, RL, RLd, dxf)

@@ -120,6 +120,8 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_RLL(name, dxf) FIELDG (name, RLL, dxf);
 #define FIELD_RLx(name, dxf)                                                  \
   LOG_TRACE (#name ": %x [RL " #dxf "]\n", _obj->name)
+#define FIELD_RLLx(name, dxf)                                                  \
+  LOG_TRACE (#name ": " FORMAT_RLLx " [RLL " #dxf "]\n", _obj->name)
 #define FIELD_MC(name, dxf) FIELDG (name, MC, dxf);
 #define FIELD_MS(name, dxf) FIELDG (name, MS, dxf);
 #define FIELD_TF(name, len, dxf)                                              \

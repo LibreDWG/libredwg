@@ -98,16 +98,22 @@ static Bit_Chain *g_dat;
     _obj->o.nam = (BITCODE_##type)json_long (dat, tokens);                    \
     LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->o.nam);                    \
   }
+#define _FIELD_LONGT(nam, type, fmt)                                          \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    _obj->nam = (BITCODE_##type)json_long (dat, tokens);                      \
+    LOG_TRACE (#nam ": " FORMAT_##fmt "\n", _obj->nam);                       \
+  }
 #define _FIELD_LONGLONG(nam, type)                                            \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
     _obj->nam = (BITCODE_##type)json_longlong (dat, tokens);                  \
     LOG_TRACE (#nam ": " FORMAT_##type "\n", _obj->nam);                      \
   }
-#define _FIELD_LONGT(nam, type, fmt)                                          \
+#define _FIELD_LONGLONGT(nam, type, fmt)                                      \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
-    _obj->nam = (BITCODE_##type)json_long (dat, tokens);                      \
+    _obj->nam = (BITCODE_##type)json_longlong (dat, tokens);                  \
     LOG_TRACE (#nam ": " FORMAT_##fmt "\n", _obj->nam);                       \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
@@ -235,6 +241,7 @@ static Bit_Chain *g_dat;
 #define FIELD_RLx(nam, dxf) _FIELD_LONGT (nam, RL, RLx)
 #define FIELD_RLd(nam, dxf) _FIELD_LONGT (nam, RL, RLd)
 #define FIELD_RLL(nam, dxf) _FIELD_LONGLONG (nam, RLL)
+#define FIELD_RLLx(nam, dxf) _FIELD_LONGLONGT (nam, RLL, RLLx)
 #define FIELD_HV(nam, dxf) _FIELD_LONGLONG (nam, HV)
 #define FIELD_MC(nam, dxf) _FIELD_LONG (nam, MC)
 #define FIELD_MS(nam, dxf) _FIELD_LONG (nam, MS)
@@ -4222,8 +4229,7 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
       FIELD_TIMERLL (TDCREATE, 0)
       FIELD_TIMERLL (TDUPDATE, 0)
-      FIELD_RLx (HANDSEED, 0)
-      FIELD_RL (plot_stamp, 0)
+      FIELD_RLLx (HANDSEED, 0)
       FIELD_RS (zero_1, 0)
       FIELD_RS (numsaves_3, 0)
       FIELD_RL (zero_2, 0)
