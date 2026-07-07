@@ -70,16 +70,6 @@ VERSIONS (R_13, R_2000) {
       SUB_FIELD_RCd (handles[rcount1], nr, 0);
       SUB_VALUEOUTOFBOUNDS (handles[rcount1], nr, 13);
       SUB_FIELD_VECTOR_INL (handles[rcount1], hdl, RC, _obj->handles[rcount1].num_hdl, 0);
-      // log this handle backup similar to real handles
-      if (_obj->handles[rcount1].name && DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
-        {
-          LOG_TRACE ("[%u] %s: 0.%hu.", (unsigned)rcount1,
-                     _obj->handles[rcount1].name,
-                     _obj->handles[rcount1].num_hdl);
-          for (int i = 0; i < MIN (_obj->handles[rcount1].num_hdl, 8); i++)
-            LOG_TRACE ("%hX", _obj->handles[rcount1].hdl[i]);
-          LOG_TRACE ("\n");
-        }
   END_REPEAT_BLOCK
   END_REPEAT_F (handles)
 }

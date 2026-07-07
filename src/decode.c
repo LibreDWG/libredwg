@@ -2738,6 +2738,20 @@ secondheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
     // clang-format off
   #include "2ndheader.spec"
+
+  // Compute handle values from raw big-endian bytes (reverse of bit_H_to_dat)
+  for (unsigned i = 0; i < _obj->num_handles; i++)
+    {
+      Dwg_SecondHeader_Handles *h = &_obj->handles[i];
+      if (h->num_hdl <= 8)
+        {
+          h->value = 0;
+          for (int k = 0; k < h->num_hdl; k++)
+            h->value = (h->value << 8) | h->hdl[k];
+        }
+      LOG_TRACE ("[%u] %s: 0.%hu." FORMAT_HV "\n", (unsigned)i,
+                 h->name ? h->name : "", h->num_hdl, h->value);
+    }
   // clang-format on
 
   if (!bit_check_CRC (dat, _obj->address + 16, 0xC0C1))
