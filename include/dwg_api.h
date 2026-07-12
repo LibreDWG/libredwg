@@ -9827,7 +9827,7 @@ extern "C"
   EXPORT Dwg_Object_ACSH_CHAMFER_CLASS *dwg_add_ACSH_CHAMFER_CLASS (
       Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
       const dwg_point_3d *restrict origin_pt,
-      const dwg_point_3d *restrict normal, const int bl92,
+      const dwg_point_3d *restrict normal, const int method,
       const double base_dist, const double other_dist, const int num_edges,
       const int32_t *edges, const int32_t base_face) __nonnull_all;
   EXPORT Dwg_Object_ACSH_CONE_CLASS *
@@ -9902,7 +9902,7 @@ extern "C"
   // dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   //                  const dwg_point_3d *restrict origin_pt,
   //                  const dwg_point_3d *restrict normal, /* maybe NULL */
-  //                  const int bl92, const double base_dist,
+  //                  const int method, const double base_dist,
   //                  const double other_dist, const int num_edges,
   //                  const int32_t* edges, const int bl95)  __nonnull ((1,2));
   // EXPORT Dwg_Entity_3DSOLID*

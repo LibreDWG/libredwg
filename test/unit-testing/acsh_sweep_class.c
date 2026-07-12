@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BL major;
   BITCODE_BL minor;
   BITCODE_3BD direction;             /*!< DXF 10 */
-  BITCODE_BL bl92;                   /*!< DXF 92 */
+  BITCODE_BL method;                 /*!< DXF 92 */
   BITCODE_BL shsw_text_size;         /*!< DXF 90 */
   BITCODE_TF shsw_text;              /*!< DXF 310 */
   BITCODE_BL shsw_bl93;              /*!< DXF 93 */
@@ -47,7 +47,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, major, BL);          /*!< DXF 90 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, minor, BL);          /*!< DXF 91 */
   CHK_ENTITY_3RD (_obj, ACSH_SWEEP_CLASS, direction);           /*!< DXF 10 */
-  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, bl92, BL);           /*!< DXF 92 */
+  CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, method, BL);         /*!< DXF 92 */
   CHK_ENTITY_TYPE (_obj, ACSH_SWEEP_CLASS, shsw_text_size, BL); /*!< DXF 90 */
   // if (!dwg_dynapi_entity_value (_obj, "ACSH_SWEEP_CLASS", "shsw_text",
   // &shsw_text, NULL))

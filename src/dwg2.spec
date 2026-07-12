@@ -3016,7 +3016,7 @@ DWG_OBJECT (ACSH_FILLET_CLASS)
   SUBCLASS (AcDbShFillet);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //1 or 29
-  FIELD_BL (bl92, 92);
+  FIELD_BL (method, 92);
   FIELD_BL (num_edges, 93);
   FIELD_VECTOR (edges, BL, num_edges, 94)
   FIELD_BL (num_radiuses, 95);
@@ -3034,7 +3034,7 @@ DWG_OBJECT (ACSH_CHAMFER_CLASS)
   SUBCLASS (AcDbShChamfer);
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //1
-  FIELD_BL (bl92, 92);
+  FIELD_BL (method, 92);
   FIELD_BD (base_dist, 41);
   FIELD_BD (other_dist, 42);
   FIELD_BL (num_edges, 93);
@@ -4217,7 +4217,7 @@ DWG_OBJECT (ACSH_SWEEP_CLASS)
   // sweep_options
   // sweep_entity
   // path_entity
-  FIELD_BL (bl92, 92); //77
+  FIELD_BL (method, 92); //77
 #ifndef IS_JSON
   FIELD_BL (shsw_text_size, 90); //744
 #endif
@@ -4264,7 +4264,7 @@ DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   // sweep_options
   // sweep_entity
   // path_entity
-  FIELD_BL (bl92, 92); //77
+  FIELD_BL (method, 92); //77
 #ifndef IS_JSON
   FIELD_BL (shsw_text_size, 90); //744
 #endif

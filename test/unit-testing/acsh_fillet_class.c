@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   // AcDbShFillet
   BITCODE_BL major;             /*!< DXF 90 */
   BITCODE_BL minor;             /*!< DXF 91 */
-  BITCODE_BL bl92;              /*!< DXF 92 */
+  BITCODE_BL method;            /*!< DXF 92 */
   BITCODE_BL num_edges;         /*!< DXF 93 */
   BITCODE_BL *edges;            /*!< DXF 94 */
   BITCODE_BL num_radiuses;      /*!< DXF 95 */
@@ -31,6 +31,7 @@ api_process (dwg_object *obj)
     BITCODE_BL i;
     CHK_ENTITY_TYPE (_obj, ACSH_FILLET_CLASS, major, BL);
     CHK_ENTITY_TYPE (_obj, ACSH_FILLET_CLASS, minor, BL);
+    CHK_ENTITY_TYPE (_obj, ACSH_FILLET_CLASS, method, BL);
     CHK_ENTITY_TYPE (_obj, ACSH_FILLET_CLASS, num_edges, BL);
     CHK_ENTITY_VECTOR_TYPE (_obj, ACSH_FILLET_CLASS, edges, num_edges, BL);
     CHK_ENTITY_TYPE (_obj, ACSH_FILLET_CLASS, num_radiuses, BL);

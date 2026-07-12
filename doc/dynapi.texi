@@ -5160,7 +5160,7 @@ Dwg_ACSH_HistoryNode
 BL,	DXF 90
 @item minor
 BL,	DXF 91
-@item bl92
+@item method
 BL,	DXF 92
 @item base_dist
 BD,	DXF 41
@@ -5253,7 +5253,7 @@ BL,	DXF 90
 BL,	DXF 91
 @item direction
 3BD,	DXF 10
-@item bl92
+@item method
 BL,	DXF 92
 @item shsw_text_size
 BL,	DXF 90
@@ -5320,7 +5320,7 @@ Dwg_ACSH_HistoryNode
 BL,	DXF 90
 @item minor
 BL,	DXF 91
-@item bl92
+@item method
 BL,	DXF 92
 @item num_edges
 BL,	DXF 93
@@ -5510,7 +5510,7 @@ BL,	DXF 90
 BL,	DXF 91
 @item direction
 3BD,	DXF 10
-@item bl92
+@item method
 BL,	DXF 92
 @item shsw_text_size
 BL,	DXF 90

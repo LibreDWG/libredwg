@@ -1,4 +1,4 @@
-// unstable, just the bl92 field name missing
+// unstable
 #define DWG_TYPE DWG_TYPE_ACSH_CHAMFER_CLASS
 #include "tests_common.c"
 
@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   // AcDbShChamfer
   BITCODE_BL major;
   BITCODE_BL minor;
-  BITCODE_BL bl92;       /*!< DXF 92 */
+  BITCODE_BL method;     /*!< DXF 92 */
   BITCODE_BD base_dist;  /*!< DXF 41 */
   BITCODE_BD other_dist; /*!< DXF 42 */
   BITCODE_BL num_edges;  /*!< DXF 93 */
@@ -27,7 +27,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, ACSH_CHAMFER_CLASS, major, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_CHAMFER_CLASS, minor, BL);
-  CHK_ENTITY_TYPE (_obj, ACSH_CHAMFER_CLASS, bl92, BL);
+  CHK_ENTITY_TYPE (_obj, ACSH_CHAMFER_CLASS, method, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_CHAMFER_CLASS, base_dist, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_CHAMFER_CLASS, other_dist, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_CHAMFER_CLASS, num_edges, BL);

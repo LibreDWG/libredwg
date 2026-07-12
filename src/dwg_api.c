@@ -29597,7 +29597,7 @@ EXPORT Dwg_Object_ACSH_CHAMFER_CLASS *
 dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                             const dwg_point_3d *restrict origin_pt,
                             const dwg_point_3d *restrict normal,
-                            const int bl92, const double base_dist,
+                            const int method, const double base_dist,
                             const double other_dist, const int num_edges,
                             const int32_t *edges, const int32_t base_face)
 {
@@ -29609,7 +29609,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   {
     API_ADD_OBJECT (ACSH_CHAMFER_CLASS);
     dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
-    _obj->bl92 = bl92;
+    _obj->method = method;
     _obj->base_dist = base_dist;
     _obj->other_dist = other_dist;
     _obj->num_edges = num_edges;
@@ -29627,9 +29627,9 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-                 const int bl92, const double base_dist,
+                 const int method, const double base_dist,
                  const double other_dist, const int num_edges,
-                 const int32_t* edges, const int bl95)
+                 const int32_t* edges, const int base_face)
 {
   int err;
   Dwg_Data *dwg;
@@ -29693,7 +29693,7 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
     _obj = dwg_add_ACSH_CHAMFER_CLASS (
         (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
-        normal ? normal : &defnormal, bl92,
+        normal ? normal : &defnormal, method,
         base_dist, other_dist, num_edges, edges, base_face);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;

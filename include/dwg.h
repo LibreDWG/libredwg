@@ -7151,10 +7151,10 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShSweepBase
-  BITCODE_BL major;            /*!< DXF 90 */
-  BITCODE_BL minor;            /*!< DXF 91 */
+  BITCODE_BL major;           /*!< DXF 90 */
+  BITCODE_BL minor;           /*!< DXF 91 */
   BITCODE_3BD direction;      /*!< DXF 10 */
-  BITCODE_BL bl92;            /*!< DXF 92 */
+  BITCODE_BL method;          /*!< DXF 92 */
   BITCODE_BL shsw_text_size;  /*!< DXF 90 */
   BITCODE_TF shsw_text;       /*!< DXF 310 */
   BITCODE_BL shsw_bl93;       /*!< DXF 93 */
@@ -7190,10 +7190,10 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShSweepBase
-  BITCODE_BL major;        /*!< DXF 90 */
-  BITCODE_BL minor;        /*!< DXF 91 */
-  BITCODE_3BD direction;  /*!< DXF 10 */
-  BITCODE_BL bl92;        /*!< DXF 92 */
+  BITCODE_BL major;           /*!< DXF 90 */
+  BITCODE_BL minor;           /*!< DXF 91 */
+  BITCODE_3BD direction;      /*!< DXF 10 */
+  BITCODE_BL method;          /*!< DXF 92 */
   BITCODE_BL shsw_text_size;  /*!< DXF 90 */
   BITCODE_TF shsw_text;       /*!< DXF 310 */
   BITCODE_BL shsw_bl93;       /*!< DXF 93 */
@@ -7245,7 +7245,7 @@ typedef struct _dwg_object_ACSH_FILLET_CLASS
   // AcDbShFillet
   BITCODE_BL major;       /*!< DXF 90 */
   BITCODE_BL minor;       /*!< DXF 91 */
-  BITCODE_BL bl92;	 /*!< DXF 92 */
+  BITCODE_BL method;	 /*!< DXF 92 */
   BITCODE_BL num_edges;	 /*!< DXF 93 */
   BITCODE_BL *edges;     /*!< DXF 94 */
   BITCODE_BL num_radiuses;	/*!< DXF 95 */
@@ -7266,7 +7266,7 @@ typedef struct _dwg_object_ACSH_CHAMFER_CLASS
   // AcDbShChamfer
   BITCODE_BL major;     /*!< DXF 90 */
   BITCODE_BL minor;     /*!< DXF 91 */
-  BITCODE_BL bl92;	/*!< DXF 92, flat or edge chamfer options? */
+  BITCODE_BL method;	/*!< DXF 92 */
   BITCODE_BD base_dist;	/*!< DXF 41 (left_range?) */
   BITCODE_BD other_dist;/*!< DXF 42 (right_range or -1)? */
   BITCODE_BL num_edges;	/*!< DXF 93 */

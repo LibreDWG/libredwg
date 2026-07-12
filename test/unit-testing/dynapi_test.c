@@ -27535,21 +27535,6 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
     acsh_chamfer_class->base_face--;
   }
   {
-    BITCODE_BL bl92;
-    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "bl92", &bl92, NULL)
-        && bl92 == acsh_chamfer_class->bl92)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.bl92 [BL] %u != %u", acsh_chamfer_class->bl92, bl92);
-    bl92++;
-    if (dwg_dynapi_entity_set_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "bl92", &bl92, 0)
-        && bl92 == acsh_chamfer_class->bl92)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.bl92 [BL] set+1 %u != %u", acsh_chamfer_class->bl92, bl92);
-    acsh_chamfer_class->bl92--;
-  }
-  {
     BITCODE_BL* edges;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "num_edges", &count, NULL)
@@ -27589,6 +27574,21 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_CHAMFER_CLASS.major [BL] set+1 %u != %u", acsh_chamfer_class->major, major);
     acsh_chamfer_class->major--;
+  }
+  {
+    BITCODE_BL method;
+    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "method", &method, NULL)
+        && method == acsh_chamfer_class->method)
+      pass ();
+    else
+      fail ("ACSH_CHAMFER_CLASS.method [BL] %u != %u", acsh_chamfer_class->method, method);
+    method++;
+    if (dwg_dynapi_entity_set_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "method", &method, 0)
+        && method == acsh_chamfer_class->method)
+      pass ();
+    else
+      fail ("ACSH_CHAMFER_CLASS.method [BL] set+1 %u != %u", acsh_chamfer_class->method, method);
+    acsh_chamfer_class->method--;
   }
   {
     BITCODE_BL minor;
@@ -27971,21 +27971,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     acsh_extrusion_class->bank--;
   }
   {
-    BITCODE_BL bl92;
-    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "bl92", &bl92, NULL)
-        && bl92 == acsh_extrusion_class->bl92)
-      pass ();
-    else
-      fail ("ACSH_EXTRUSION_CLASS.bl92 [BL] %u != %u", acsh_extrusion_class->bl92, bl92);
-    bl92++;
-    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "bl92", &bl92, 0)
-        && bl92 == acsh_extrusion_class->bl92)
-      pass ();
-    else
-      fail ("ACSH_EXTRUSION_CLASS.bl92 [BL] set+1 %u != %u", acsh_extrusion_class->bl92, bl92);
-    acsh_extrusion_class->bl92--;
-  }
-  {
     BITCODE_B check_intersections;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "check_intersections", &check_intersections, NULL)
         && check_intersections == acsh_extrusion_class->check_intersections)
@@ -28083,6 +28068,21 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_EXTRUSION_CLASS.major [BL] set+1 %u != %u", acsh_extrusion_class->major, major);
     acsh_extrusion_class->major--;
+  }
+  {
+    BITCODE_BL method;
+    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "method", &method, NULL)
+        && method == acsh_extrusion_class->method)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.method [BL] %u != %u", acsh_extrusion_class->method, method);
+    method++;
+    if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "method", &method, 0)
+        && method == acsh_extrusion_class->method)
+      pass ();
+    else
+      fail ("ACSH_EXTRUSION_CLASS.method [BL] set+1 %u != %u", acsh_extrusion_class->method, method);
+    acsh_extrusion_class->method--;
   }
   {
     BITCODE_BL minor;
@@ -28316,21 +28316,6 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_BL bl92;
-    if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "bl92", &bl92, NULL)
-        && bl92 == acsh_fillet_class->bl92)
-      pass ();
-    else
-      fail ("ACSH_FILLET_CLASS.bl92 [BL] %u != %u", acsh_fillet_class->bl92, bl92);
-    bl92++;
-    if (dwg_dynapi_entity_set_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "bl92", &bl92, 0)
-        && bl92 == acsh_fillet_class->bl92)
-      pass ();
-    else
-      fail ("ACSH_FILLET_CLASS.bl92 [BL] set+1 %u != %u", acsh_fillet_class->bl92, bl92);
-    acsh_fillet_class->bl92--;
-  }
-  {
     BITCODE_BL* edges;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "num_edges", &count, NULL)
@@ -28380,6 +28365,21 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_FILLET_CLASS.major [BL] set+1 %u != %u", acsh_fillet_class->major, major);
     acsh_fillet_class->major--;
+  }
+  {
+    BITCODE_BL method;
+    if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "method", &method, NULL)
+        && method == acsh_fillet_class->method)
+      pass ();
+    else
+      fail ("ACSH_FILLET_CLASS.method [BL] %u != %u", acsh_fillet_class->method, method);
+    method++;
+    if (dwg_dynapi_entity_set_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "method", &method, 0)
+        && method == acsh_fillet_class->method)
+      pass ();
+    else
+      fail ("ACSH_FILLET_CLASS.method [BL] set+1 %u != %u", acsh_fillet_class->method, method);
+    acsh_fillet_class->method--;
   }
   {
     BITCODE_BL minor;
@@ -29214,21 +29214,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     acsh_sweep_class->bank--;
   }
   {
-    BITCODE_BL bl92;
-    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "bl92", &bl92, NULL)
-        && bl92 == acsh_sweep_class->bl92)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.bl92 [BL] %u != %u", acsh_sweep_class->bl92, bl92);
-    bl92++;
-    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "bl92", &bl92, 0)
-        && bl92 == acsh_sweep_class->bl92)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.bl92 [BL] set+1 %u != %u", acsh_sweep_class->bl92, bl92);
-    acsh_sweep_class->bl92--;
-  }
-  {
     BITCODE_B check_intersections;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "check_intersections", &check_intersections, NULL)
         && check_intersections == acsh_sweep_class->check_intersections)
@@ -29326,6 +29311,21 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_SWEEP_CLASS.major [BL] set+1 %u != %u", acsh_sweep_class->major, major);
     acsh_sweep_class->major--;
+  }
+  {
+    BITCODE_BL method;
+    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "method", &method, NULL)
+        && method == acsh_sweep_class->method)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.method [BL] %u != %u", acsh_sweep_class->method, method);
+    method++;
+    if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "method", &method, 0)
+        && method == acsh_sweep_class->method)
+      pass ();
+    else
+      fail ("ACSH_SWEEP_CLASS.method [BL] set+1 %u != %u", acsh_sweep_class->method, method);
+    acsh_sweep_class->method--;
   }
   {
     BITCODE_BL minor;
