@@ -4447,7 +4447,7 @@ static const Dwg_DYNAPI_field _dwg_ACSH_CHAMFER_CLASS_fields[] = {
     0,0,0, 93 },
   { "edges",	"BL*", sizeof (BITCODE_BL*),  OFF (struct _dwg_object_ACSH_CHAMFER_CLASS, edges),
     1,1,0, 94 },
-  { "bl95",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_CHAMFER_CLASS, bl95),
+  { "base_face",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ACSH_CHAMFER_CLASS, base_face),
     0,0,0, 95 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

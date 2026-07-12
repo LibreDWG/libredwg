@@ -27520,6 +27520,21 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
     acsh_chamfer_class->base_dist--;
   }
   {
+    BITCODE_BL base_face;
+    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "base_face", &base_face, NULL)
+        && base_face == acsh_chamfer_class->base_face)
+      pass ();
+    else
+      fail ("ACSH_CHAMFER_CLASS.base_face [BL] %u != %u", acsh_chamfer_class->base_face, base_face);
+    base_face++;
+    if (dwg_dynapi_entity_set_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "base_face", &base_face, 0)
+        && base_face == acsh_chamfer_class->base_face)
+      pass ();
+    else
+      fail ("ACSH_CHAMFER_CLASS.base_face [BL] set+1 %u != %u", acsh_chamfer_class->base_face, base_face);
+    acsh_chamfer_class->base_face--;
+  }
+  {
     BITCODE_BL bl92;
     if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "bl92", &bl92, NULL)
         && bl92 == acsh_chamfer_class->bl92)
@@ -27533,21 +27548,6 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_CHAMFER_CLASS.bl92 [BL] set+1 %u != %u", acsh_chamfer_class->bl92, bl92);
     acsh_chamfer_class->bl92--;
-  }
-  {
-    BITCODE_BL bl95;
-    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "bl95", &bl95, NULL)
-        && bl95 == acsh_chamfer_class->bl95)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.bl95 [BL] %u != %u", acsh_chamfer_class->bl95, bl95);
-    bl95++;
-    if (dwg_dynapi_entity_set_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "bl95", &bl95, 0)
-        && bl95 == acsh_chamfer_class->bl95)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.bl95 [BL] set+1 %u != %u", acsh_chamfer_class->bl95, bl95);
-    acsh_chamfer_class->bl95--;
   }
   {
     BITCODE_BL* edges;

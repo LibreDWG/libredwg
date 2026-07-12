@@ -7271,7 +7271,7 @@ typedef struct _dwg_object_ACSH_CHAMFER_CLASS
   BITCODE_BD other_dist;/*!< DXF 42 (right_range or -1)? */
   BITCODE_BL num_edges;	/*!< DXF 93 */
   BITCODE_BL *edges;    /*!< DXF 94 */
-  BITCODE_BL bl95;	/*!< DXF 95 probably our nodeid */
+  BITCODE_BL base_face;	/*!< DXF 95 guessed. the face next to the chamfered edge */
 } Dwg_Object_ACSH_CHAMFER_CLASS;
 
 typedef struct _dwg_object_ACSH_CYLINDER_CLASS

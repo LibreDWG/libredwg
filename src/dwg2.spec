@@ -3029,7 +3029,6 @@ DWG_OBJECT (ACSH_FILLET_CLASS)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_CHAMFER_CLASS)
-  HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShChamfer);
@@ -3040,7 +3039,7 @@ DWG_OBJECT (ACSH_CHAMFER_CLASS)
   FIELD_BD (other_dist, 42);
   FIELD_BL (num_edges, 93);
   FIELD_VECTOR (edges, BL, num_edges, 94)
-  FIELD_BL (bl95, 95);
+  FIELD_BL (base_face, 95);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -3057,7 +3056,6 @@ DWG_OBJECT (ACSH_TORUS_CLASS)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_BREP_CLASS)
-  HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   AcDbShHistoryNode_fields (history_node); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   SUBCLASS (AcDbShPrimitive);

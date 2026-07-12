@@ -9829,7 +9829,7 @@ extern "C"
       const dwg_point_3d *restrict origin_pt,
       const dwg_point_3d *restrict normal, const int bl92,
       const double base_dist, const double other_dist, const int num_edges,
-      const int32_t *edges, const int bl95) __nonnull_all;
+      const int32_t *edges, const int32_t base_face) __nonnull_all;
   EXPORT Dwg_Object_ACSH_CONE_CLASS *
   dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                            const dwg_point_3d *restrict origin_pt,

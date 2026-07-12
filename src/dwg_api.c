@@ -29599,7 +29599,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                             const dwg_point_3d *restrict normal,
                             const int bl92, const double base_dist,
                             const double other_dist, const int num_edges,
-                            const int32_t *edges, const int bl95)
+                            const int32_t *edges, const int32_t base_face)
 {
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
@@ -29618,7 +29618,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
         _obj->edges = (BITCODE_BL *)calloc (num_edges, 4);
         memcpy (_obj->edges, edges, num_edges * 4);
       }
-    _obj->bl95 = bl95;
+    _obj->base_face = base_face;
     return _obj;
   }
 }
@@ -29694,7 +29694,7 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     _obj = dwg_add_ACSH_CHAMFER_CLASS (
         (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
         normal ? normal : &defnormal, bl92,
-        base_dist, other_dist, num_edges, edges, bl95);
+        base_dist, other_dist, num_edges, edges, base_face);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }

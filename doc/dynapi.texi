@@ -5170,7 +5170,7 @@ BD,	DXF 42
 BL,	DXF 93
 @item edges
 BL*,	DXF 94
-@item bl95
+@item base_face
 BL,	DXF 95
 
 @end vtable
