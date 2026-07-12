@@ -11327,6 +11327,18 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                          ARGS_REF (hdl));
               goto next_pair;
             }
+          // PlotStyleNameType enum, when the plot style is not ById (no 390
+          // handle). 0 ByLayer, 1 ByBlock, 2 DictDefault, 3 ById. Maps 1:1
+          // to the DWG plotstyle_flags BB.
+          else if (pair->code == 380 && obj->supertype == DWG_SUPERTYPE_ENTITY
+                   && strEQc (subclass, "AcDbEntity"))
+            {
+              BITCODE_BB flags = (BITCODE_BB)(pair->value.i & 3);
+              dwg_dynapi_common_set_value (_obj, "plotstyle_flags", &flags, 0);
+              LOG_TRACE ("COMMON.plotstyle_flags = %u [BB 380]\n",
+                         (unsigned)flags);
+              goto next_pair;
+            }
           else if (pair->code == 347 && obj->supertype == DWG_SUPERTYPE_ENTITY
                    && strEQc (subclass, "AcDbEntity"))
             {

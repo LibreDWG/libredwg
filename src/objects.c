@@ -1006,7 +1006,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str234,                      "LINE",                       DWG_TYPE_LINE,	1,	STABLE},
       {-1}, {-1},
 #line 309 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str237,                     "MLEADERSTYLE",                      DWG_TYPE_MLEADERSTYLE,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str237,                     "MLEADERSTYLE",                      DWG_TYPE_MLEADERSTYLE,	0,	STABLE},
 #line 191 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str238,     "ACDBASSOCEXTENDSURFACEACTIONBODY",  DWG_TYPE_ASSOCEXTENDSURFACEACTIONBODY,	0,	UNSTABLE},
       {-1},

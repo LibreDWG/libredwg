@@ -709,6 +709,7 @@ extern "C"
   typedef struct _dwg_object_LAYERFILTER		dwg_obj_layerfilter;
   typedef struct _dwg_object_LAYER_INDEX		dwg_obj_layer_index;
   typedef struct _dwg_object_LAYOUT		dwg_obj_layout;
+  typedef struct _dwg_object_MLEADERSTYLE		dwg_obj_mleaderstyle;
   typedef struct _dwg_object_PLACEHOLDER		dwg_obj_placeholder;
   typedef struct _dwg_object_PLOTSETTINGS		dwg_obj_plotsettings;
   typedef struct _dwg_object_RASTERVARIABLES		dwg_obj_rastervariables;
@@ -796,7 +797,6 @@ extern "C"
   typedef struct _dwg_object_LIGHTLIST		dwg_obj_lightlist;
   typedef struct _dwg_object_MATERIAL		dwg_obj_material;
   typedef struct _dwg_object_MENTALRAYRENDERSETTINGS		dwg_obj_mentalrayrendersettings;
-  typedef struct _dwg_object_MLEADERSTYLE		dwg_obj_mleaderstyle;
   typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA		dwg_obj_mtextobjectcontextdata;
   typedef struct _dwg_object_OBJECT_PTR		dwg_obj_object_ptr;
   typedef struct _dwg_object_PARTIAL_VIEWING_INDEX		dwg_obj_partial_viewing_index;
@@ -1835,6 +1835,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER);
   dwg_get_OBJECT_DECL (obj_layer_index, LAYER_INDEX);
   dwg_get_OBJECT_DECL (obj_layout, LAYOUT);
+  dwg_get_OBJECT_DECL (obj_mleaderstyle, MLEADERSTYLE);
   dwg_get_OBJECT_DECL (obj_placeholder, PLACEHOLDER);
   dwg_get_OBJECT_DECL (obj_plotsettings, PLOTSETTINGS);
   dwg_get_OBJECT_DECL (obj_rastervariables, RASTERVARIABLES);
@@ -1922,7 +1923,6 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
   dwg_get_OBJECT_DECL (obj_material, MATERIAL);
   dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS);
-  dwg_get_OBJECT_DECL (obj_mleaderstyle, MLEADERSTYLE);
   dwg_get_OBJECT_DECL (obj_mtextobjectcontextdata, MTEXTOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
   dwg_get_OBJECT_DECL (obj_partial_viewing_index, PARTIAL_VIEWING_INDEX);
@@ -2980,6 +2980,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (LAYERFILTER);
   DWG_GETALL_OBJECT_DECL (LAYER_INDEX);
   DWG_GETALL_OBJECT_DECL (LAYOUT);
+  DWG_GETALL_OBJECT_DECL (MLEADERSTYLE);
   DWG_GETALL_OBJECT_DECL (PLACEHOLDER);
   DWG_GETALL_OBJECT_DECL (PLOTSETTINGS);
   DWG_GETALL_OBJECT_DECL (RASTERVARIABLES);
@@ -3067,7 +3068,6 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (LIGHTLIST);
   DWG_GETALL_OBJECT_DECL (MATERIAL);
   DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
-  DWG_GETALL_OBJECT_DECL (MLEADERSTYLE);
   DWG_GETALL_OBJECT_DECL (MTEXTOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (OBJECT_PTR);
   DWG_GETALL_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
@@ -4131,6 +4131,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYERFILTER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_INDEX);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUT);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADERSTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PLACEHOLDER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PLOTSETTINGS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (RASTERVARIABLES);
@@ -4218,7 +4219,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MATERIAL);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADERSTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
