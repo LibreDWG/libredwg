@@ -147,11 +147,7 @@
 #define WIRESTRUCT_fields(name)                       \
   SUB_FIELD_RC (name, type, 0);                       \
   SUB_FIELD_BLd (name, selection_marker, 0);          \
-  PRE (R_2004a) {                                     \
-    FIELD_CAST (name.color, BS, BL, 0);               \
-  } else {                                            \
-    SUB_FIELD_BL (name, color, 0);                    \
-  }                                                   \
+  FIELD_CAST (name.color, BS, BL, 0);                 \
   SUB_FIELD_BLd (name, acis_index, 0); /* TODO: align num_points to 255 */                 \
   SUB_FIELD_BL (name, num_points, 0);                 \
   FIELD_3DPOINT_VECTOR (name.points, name.num_points, 0); \
