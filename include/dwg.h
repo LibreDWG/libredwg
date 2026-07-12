@@ -9521,6 +9521,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_XLINE *XLINE;
     /* untyped > 500 */
     Dwg_Entity__3DLINE *_3DLINE;
+    Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_CAMERA *CAMERA;
     Dwg_Entity_DGNUNDERLAY *DGNUNDERLAY;
     Dwg_Entity_DWFUNDERLAY *DWFUNDERLAY;
@@ -9538,7 +9539,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
     Dwg_Entity_WIPEOUT *WIPEOUT;
     /* unstable */
-    Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
     Dwg_Entity_LAYOUTPRINTCONFIG *LAYOUTPRINTCONFIG;
@@ -11842,6 +11842,7 @@ EXPORT int dwg_setup_VX_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_VX_TABLE_RECORD (Dwg_Object *obj);
 /* untyped > 500 */
 EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
+EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_setup_DGNUNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_setup_DWFUNDERLAY (Dwg_Object *obj);
@@ -11918,7 +11919,6 @@ EXPORT int dwg_setup_PDFDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup_DGNDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup_DWFDEFINITION (Dwg_Object *obj);
 /* unstable */
-EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);

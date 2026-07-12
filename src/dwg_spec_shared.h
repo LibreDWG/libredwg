@@ -81,6 +81,8 @@
           flag |= 4;                                                          \
         else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG3PT)                 \
           flag |= 5;                                                          \
+        else if (obj->fixedtype == DWG_TYPE_ARC_DIMENSION)                    \
+          flag |= 5;                                                          \
         else if (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE)               \
           flag |= 6;                                                          \
         FIELD_VALUE (flag) = flag;                                            \

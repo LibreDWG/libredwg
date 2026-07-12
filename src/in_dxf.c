@@ -10886,11 +10886,22 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                            &ver, is_tu);
               break;
             }
-          else if (pair->code == 70
-                   && obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)
+          else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_ARC_DIMENSION
+                   && strEQc (subclass, "AcDbArcDimension"))
             {
-              Dwg_Entity_DIMENSION_ANG2LN *o
-                  = obj->tio.entity->tio.DIMENSION_ANG2LN;
+              Dwg_Entity_ARC_DIMENSION *o = obj->tio.entity->tio.ARC_DIMENSION;
+              o->is_partial = pair->value.i ? 1 : 0;
+              LOG_TRACE ("ARC_DIMENSION.is_partial = %d [B 70]\n",
+                         o->is_partial);
+              break;
+            }
+          else if (pair->code == 70
+                   && (obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN
+                       || obj->fixedtype == DWG_TYPE_ARC_DIMENSION))
+            {
+              Dwg_DIMENSION_common *o
+                  = (Dwg_DIMENSION_common *)
+                        obj->tio.entity->tio.DIMENSION_ANG2LN;
               o->flag = o->flag1 = pair->value.i;
               LOG_TRACE ("DIMENSION.flag = %d [RC 70]\n", pair->value.i);
               o->flag1 &= 0xE0; /* clear the upper flag bits, and fix them: */
@@ -10903,7 +10914,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               // subclasses is far better and more reliable), use it here to
               // upgrade the generic DIMENSION_ANG2LN (the biggest DIMENSION
               // struct, used as a placeholder until now) to its real subtype.
-              if (dat->version <= R_12)
+              if (dat->version <= R_12
+                  && obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)
                 switch (o->flag & 31)
                   {
                   case 0: // rotated, horizontal or vertical
@@ -11122,6 +11134,26 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 goto start_loop;
               else
                 goto search_field;
+            }
+          // 41 and 71 also exist as lspace_factor/attachment in the earlier
+          // AcDbDimension subclass, which the generic loop would match first.
+          else if (pair->code == 41 && obj->fixedtype == DWG_TYPE_ARC_DIMENSION
+                   && strEQc (subclass, "AcDbArcDimension"))
+            {
+              Dwg_Entity_ARC_DIMENSION *o = obj->tio.entity->tio.ARC_DIMENSION;
+              o->arc_end_param = pair->value.d;
+              LOG_TRACE ("ARC_DIMENSION.arc_end_param = %f [BD 41]\n",
+                         o->arc_end_param);
+              goto next_pair;
+            }
+          else if (pair->code == 71 && obj->fixedtype == DWG_TYPE_ARC_DIMENSION
+                   && strEQc (subclass, "AcDbArcDimension"))
+            {
+              Dwg_Entity_ARC_DIMENSION *o = obj->tio.entity->tio.ARC_DIMENSION;
+              o->has_leader = pair->value.i ? 1 : 0;
+              LOG_TRACE ("ARC_DIMENSION.has_leader = %d [B 71]\n",
+                         o->has_leader);
+              goto next_pair;
             }
           else if (pair->code == 91
                    && obj->fixedtype == DWG_TYPE_EVALUATION_GRAPH)
@@ -13603,7 +13635,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     }
                 }
               pair = new_object (name, dxfname, dat, dwg, 0, &i);
-              dxfname = NULL; /* new_object may have freed dxfname via UPGRADE_ENTITY */
+              dxfname = NULL; /* new_object may have freed dxfname via
+                                 UPGRADE_ENTITY */
               obj = &dwg->object[idx];
               if (!pair)
                 {
@@ -13712,7 +13745,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                       = bctrl->tio.object->tio.BLOCK_CONTROL;
                                   if (_bctrl->num_entries > 0)
                                     _bctrl->entries[_bctrl->num_entries - 1]
-                                        ->r11_idx = new_r11_idx;
+                                        ->r11_idx
+                                        = new_r11_idx;
                                 }
                               LOG_TRACE ("r11: created BLOCK_HEADER %s "
                                          "[r11_idx %d]\n",

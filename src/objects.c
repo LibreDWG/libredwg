@@ -1251,7 +1251,7 @@ in_word_set (const char *str, size_t len)
 #line 367 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str447,                          "XRECORD",                           DWG_TYPE_XRECORD,	0,	STABLE},
 #line 56 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str448,             "ARC_DIMENSION",              DWG_TYPE_ARC_DIMENSION,	1,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str448,             "ARC_DIMENSION",              DWG_TYPE_ARC_DIMENSION,	1,	STABLE},
       {-1},
 #line 339 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str450,                  "SECTION_MANAGER",                   DWG_TYPE_SECTION_MANAGER,	0,	STABLE},

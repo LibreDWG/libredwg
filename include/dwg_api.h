@@ -592,6 +592,7 @@ extern "C"
   typedef struct _dwg_entity_VIEWPORT		dwg_ent_viewport;
   /* untyped > 500 */
   typedef struct _dwg_entity_3DLINE		dwg_ent__3dline;
+  typedef struct _dwg_entity_ARC_DIMENSION		dwg_ent_arc_dimension;
   typedef struct _dwg_entity_CAMERA		dwg_ent_camera;
   typedef struct _dwg_entity_DGNUNDERLAY		dwg_ent_dgnunderlay;
   typedef struct _dwg_entity_DWFUNDERLAY		dwg_ent_dwfunderlay;
@@ -609,7 +610,6 @@ extern "C"
   typedef struct _dwg_entity_SECTIONOBJECT		dwg_ent_sectionobject;
   typedef struct _dwg_entity_WIPEOUT		dwg_ent_wipeout;
   /* unstable */
-  typedef struct _dwg_entity_ARC_DIMENSION		dwg_ent_arc_dimension;
   typedef struct _dwg_entity_HELIX		dwg_ent_helix;
   typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION		dwg_ent_large_radial_dimension;
   typedef struct _dwg_entity_LAYOUTPRINTCONFIG		dwg_ent_layoutprintconfig;
@@ -1716,6 +1716,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_viewport, VIEWPORT);
   /* untyped > 500 */
   dwg_get_OBJECT_DECL (ent__3dline, _3DLINE);
+  dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
   dwg_get_OBJECT_DECL (ent_camera, CAMERA);
   dwg_get_OBJECT_DECL (ent_dgnunderlay, DGNUNDERLAY);
   dwg_get_OBJECT_DECL (ent_dwfunderlay, DWFUNDERLAY);
@@ -1733,7 +1734,6 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
   dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
   /* unstable */
-  dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
   dwg_get_OBJECT_DECL (ent_helix, HELIX);
   dwg_get_OBJECT_DECL (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION);
   dwg_get_OBJECT_DECL (ent_layoutprintconfig, LAYOUTPRINTCONFIG);
@@ -2852,6 +2852,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (XLINE);
   /* untyped > 500 */
   DWG_GETALL_ENTITY_DECL (_3DLINE);
+  DWG_GETALL_ENTITY_DECL (ARC_DIMENSION);
   DWG_GETALL_ENTITY_DECL (CAMERA);
   DWG_GETALL_ENTITY_DECL (DGNUNDERLAY);
   DWG_GETALL_ENTITY_DECL (DWFUNDERLAY);
@@ -2869,7 +2870,6 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (SECTIONOBJECT);
   DWG_GETALL_ENTITY_DECL (WIPEOUT);
   /* unstable */
-  DWG_GETALL_ENTITY_DECL (ARC_DIMENSION);
   DWG_GETALL_ENTITY_DECL (HELIX);
   DWG_GETALL_ENTITY_DECL (LARGE_RADIAL_DIMENSION);
   DWG_GETALL_ENTITY_DECL (LAYOUTPRINTCONFIG);
@@ -4003,6 +4003,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_DECL (XLINE);
   /* untyped > 500 */
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (_3DLINE);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARC_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (CAMERA);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (DGNUNDERLAY);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (DWFUNDERLAY);
@@ -4020,7 +4021,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SECTIONOBJECT);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT);
   /* unstable */
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARC_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HELIX);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LARGE_RADIAL_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LAYOUTPRINTCONFIG);
