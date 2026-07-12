@@ -207,7 +207,9 @@ decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                 return DWG_ERR_OUTOFMEM;
               FIELD_BL (block_size[i], 0);
               if (FIELD_VALUE (block_size[i]) > 0
-                  && AVAIL_BITS (dat) > 8 * FIELD_VALUE (block_size[i]))
+                  && FIELD_VALUE (block_size[i]) < MAX_SIZE_TF
+                  && AVAIL_BITS (dat)
+                         > (int64_t)FIELD_VALUE (block_size[i]) * 8)
                 {
                   BITCODE_BL len = FIELD_VALUE (block_size[i]);
                   FIELD_TFv (encr_sat_data[i], len, 1);
