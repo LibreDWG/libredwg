@@ -2048,14 +2048,22 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Empty sections for %s", info->name);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  max_decomp_size = info->num_sections * info->max_decomp_size;
-  if (max_decomp_size == 0 || max_decomp_size > 0x2f000000) // 790Mb
-    {
-      LOG_ERROR ("Invalid section %s count or max decompression size. "
-                 "Sections: " FORMAT_RL ", Max size: " FORMAT_RL,
-                 info->name, info->num_sections, info->max_decomp_size);
-      return DWG_ERR_VALUEOUTOFBOUNDS;
-    }
+  // Compute in 64-bit: both factors are uint32 (BITCODE_RL), so the product
+  // overflows the uint32_t max_decomp_size and wraps to a small value, letting
+  // the guard below pass while info->size (checked as int64 at :2059) stays
+  // large -> under-allocation and a later OOB sentinel scan. GH security.
+  {
+    uint64_t max_decomp_size64
+        = (uint64_t)info->num_sections * (uint64_t)info->max_decomp_size;
+    if (max_decomp_size64 == 0 || max_decomp_size64 > 0x2f000000) // 790Mb
+      {
+        LOG_ERROR ("Invalid section %s count or max decompression size. "
+                   "Sections: " FORMAT_RL ", Max size: " FORMAT_RL,
+                   info->name, info->num_sections, info->max_decomp_size);
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+      }
+    max_decomp_size = (uint32_t)max_decomp_size64;
+  }
   if (info->size > (int64_t)info->num_sections * (int64_t)info->max_decomp_size
       || info->size < 0)
     {
