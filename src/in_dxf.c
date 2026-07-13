@@ -9361,8 +9361,16 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
       num_owned = j + 1;
       if (dwg->header.from_version >= R_13b1)
         {
+          // Match the encoder's expected handle relation-code for the owned
+          // list, else it warns "Expected a CODE 4 handle, got a 3":
+          // INSERT/MINSERT.attribs[] and POLYLINE_PFACE/MESH.vertex[] are
+          // soft pointers (code 4); only POLYLINE_2D/3D.vertex[] is code 3.
+          BITCODE_RC hdlcode = (owner->fixedtype == DWG_TYPE_POLYLINE_2D
+                                || owner->fixedtype == DWG_TYPE_POLYLINE_3D)
+                                   ? 3
+                                   : 4;
           owned = (BITCODE_H *)realloc (owned, num_owned * sizeof (BITCODE_H));
-          owned[j] = dwg_add_handleref (dwg, 3, _o->handle.value, owner);
+          owned[j] = dwg_add_handleref (dwg, hdlcode, _o->handle.value, owner);
           LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", owner->name,
                      owhdls, j, ARGS_REF (owned[j]));
         }
