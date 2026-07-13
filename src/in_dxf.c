@@ -14012,8 +14012,12 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER
                       && (_hdr = blkhdr->tio.object->tio.BLOCK_HEADER))
                     {
+                      // BLOCK_HEADER.entities[] is a soft pointer (code 4)
+                      // list, per the encoder (HANDLE_VECTOR(entities, ...,
+                      // 4)). Using code 3 here made the encoder warn "Expected
+                      // a CODE 4 handle, got a 3" for every owned entity.
                       BITCODE_H ref = dwg_add_handleref (
-                          dwg, 3, obj->handle.value, NULL);
+                          dwg, 4, obj->handle.value, NULL);
                       PUSH_HV (_hdr, num_owned, entities, ref)
                     }
                   if (ent->ownerhandle
