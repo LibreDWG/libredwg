@@ -2548,8 +2548,20 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   if (i + 2 >= num_blocks)
     _obj->block_size = (BITCODE_BL *)realloc (_obj->block_size,
                                               (i + 2) * sizeof (BITCODE_BL));
-  _obj->num_blocks = i;
+  // the final "smaller rest" block was written at index i without
+  // incrementing i, so the count is i + 1 (block_size[num_blocks] == 0
+  // terminator). Without the +1 the last block is dropped; for a small
+  // single-block SAT that drops all data (num_blocks == 0) and produces an
+  // empty, invalid ACIS body (ODA "General modeling failure").
+  _obj->num_blocks = i + 1;
   _obj->block_size[i + 1] = 0;
+  // free_3dsolid iterates i <= num_blocks (inclusive) and dereferences
+  // encr_sat_data[num_blocks], so give it a matching NULL-terminated slot
+  // (block_size[] above already has its 0 terminator at the same index).
+  _obj->encr_sat_data
+      = (char **)realloc (_obj->encr_sat_data, (i + 2) * sizeof (char *));
+  if (_obj->encr_sat_data)
+    _obj->encr_sat_data[i + 1] = NULL;
   return 0;
 }
 
