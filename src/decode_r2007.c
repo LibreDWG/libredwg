@@ -859,6 +859,18 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
+      // page->offset is the SOURCE offset into dat->chain, accumulated from
+      // unbounded page sizes in read_pages_map. Only section_page->offset (the
+      // dest into decomp) is checked above; validate the source here too, else
+      // "dat->size - dat->byte" (both size_t) underflows in the uncompressed
+      // guard below and the memcpy reads past the file buffer. GH security.
+      if (page->offset >= dat->size)
+        {
+          free (decomp);
+          LOG_ERROR ("Invalid page->offset %ld >= %ld", (long)page->offset,
+                     (long)dat->size);
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
       dat->byte = page->offset;
       // only if compressed. TODO: Isn't there a compressed flag as with 2004+?
       // theoretically the sizes could still be the same.
