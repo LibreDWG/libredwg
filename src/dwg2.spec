@@ -2776,13 +2776,10 @@ DWG_OBJECT (MATERIAL)
   MAT_COLOR (diffuse_color, 71, 41, 91);
 
   MAT_MAP (diffusemap, 42, 72, 3, 73, 74, 75, 43);
-  DXF {
-    SINCE (R_2007a)
-      CALL_SUBCLASS (_obj, MATERIAL, Texture_diffusemap);
-    /* MAT_TEXTURE (diffusemap, 0) */
-    //DXF { VALUE_B (1, 292); } /* genproctableend  */
-    //DXF { VALUE_BS (value, 277); } /* ?? */
-  }
+  // diffusemap.source==2 emits its procedural texture inline via MAT_MAP,
+  // like every other map. Do NOT emit it again here unconditionally: for the
+  // common source!=2 case that produced a spurious 277/278/460/279/461 block
+  // (no procedural texture), which ODA rejects as a MATERIAL syntax error.
   MAT_COLOR (specular_color, 76, 45, 92);
   DXF { FIELD_BD (specular_gloss_factor, 44); }
   MAT_MAP (specularmap, 46, 77, 4, 78, 79, 170, 47);
