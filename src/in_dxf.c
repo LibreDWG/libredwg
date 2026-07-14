@@ -678,6 +678,17 @@ dxf_read_string (Bit_Chain *dat, char **string)
                   dat->byte += 7;
                 }
             }
+          // reverse cquote(): embedded LF/CR are written as ^J / ^M
+          else if (s[0] == '^' && s[1] == 'J' && dat->byte + 1 < dat->size)
+            {
+              buf[i++] = '\n';
+              dat->byte++;
+            }
+          else if (s[0] == '^' && s[1] == 'M' && dat->byte + 1 < dat->size)
+            {
+              buf[i++] = '\r';
+              dat->byte++;
+            }
           else
             buf[i++] = *s;
         }
