@@ -4859,7 +4859,15 @@ DWG_ENTITY (HATCH)
     int64_t avail_bits = (int64_t)(hdl_dat->size * 8) - bit_position (hdl_dat);
     if (avail_bits < 8)
       {
-        LOG_WARN ("Skip HATCH common handles due to short handle stream");
+        // Not an error: the common entity handles (layer, and conditionally
+        // ltype/plotstyle/material/... only when their *_flags == 3) were
+        // already read by dwg_decode_common_entity_handle_data. For a
+        // ByLayer/default HATCH those conditional handles are absent, so the
+        // handle stream legitimately ends right after layer + boundary_handles
+        // and the trailing COMMON_ENTITY_HANDLE_DATA (a stream reposition) has
+        // nothing left to do.
+        LOG_HANDLE ("HATCH: handle stream exhausted after boundary_handles "
+                    "(no override ltype/plotstyle/material)\n");
       }
     else
       {
