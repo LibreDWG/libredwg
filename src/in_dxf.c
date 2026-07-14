@@ -5584,6 +5584,38 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               "%s.rowstyles[%d].borders[%d].color.index = %d [CMC %d]\n",
               obj->name, i, j, pair->value.i, pair->code);
           break;
+        // true-color (RGB) counterparts of the 62..69 index colors, DXF
+        // adds 358 to the index code (62->420, 63->421, 64..69->422..427)
+        case 420:
+          CHK_rowstyles;
+          o->rowstyles[i].text_color.rgb = pair->value.u;
+          o->rowstyles[i].text_color.method = pair->value.u >> 0x18;
+          LOG_TRACE ("%s.rowstyles[%d].text_color.rgb = %08X [CMC %d]\n",
+                     obj->name, i, pair->value.u, pair->code);
+          break;
+        case 421:
+          CHK_rowstyles;
+          o->rowstyles[i].fill_color.rgb = pair->value.u;
+          o->rowstyles[i].fill_color.method = pair->value.u >> 0x18;
+          LOG_TRACE ("%s.rowstyles[%d].fill_color.rgb = %08X [CMC %d]\n",
+                     obj->name, i, pair->value.u, pair->code);
+          break;
+        case 422:
+        case 423:
+        case 424:
+        case 425:
+        case 426:
+        case 427:
+          CHK_rowstyles;
+          j = pair->code - 422;
+          CHK_borders;
+          assert (j >= 0 && j <= 6);
+          o->rowstyles[i].borders[j].color.rgb = pair->value.u;
+          o->rowstyles[i].borders[j].color.method = pair->value.u >> 0x18;
+          LOG_TRACE (
+              "%s.rowstyles[%d].borders[%d].color.rgb = %08X [CMC %d]\n",
+              obj->name, i, j, pair->value.u, pair->code);
+          break;
         default:
           if (is_type_stable (obj->fixedtype))
             LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "TABLESTYLE");
