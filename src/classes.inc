@@ -248,6 +248,7 @@
   // not enough coverage, but assumed mostly ok. field names may change.
   // DXF output skipped
 
+  UNSTABLE_CLASS     (ACTION, TABLESTYLE)        // field names
   UNSTABLE_CLASS     (ACTION, PLANESURFACE)      /* ent */
   UNSTABLE_CLASS     (ACTION, ACSH_BREP_CLASS)   // pretty stable, but cannot roundtrip
   UNSTABLE_CLASS     (ACTION, ACSH_CHAMFER_CLASS) // bl92?
@@ -285,7 +286,6 @@
   UNSTABLE_CLASS     (ACTION, RENDERENTRY)
   UNSTABLE_CLASS     (ACTION, RENDERGLOBAL)
   UNSTABLE_CLASS     (ACTION, SPATIAL_INDEX)
-  UNSTABLE_CLASS     (ACTION, TABLESTYLE)    // for r2010+ some bits missing at the end
   UNSTABLE_CLASS     (ACTION, SECTION_SETTINGS)
   UNSTABLE_CLASS     (ACTION, SOLID_BACKGROUND)
   UNSTABLE_CLASS     (ACTION, SKYLIGHT_BACKGROUND)

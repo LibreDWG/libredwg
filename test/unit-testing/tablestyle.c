@@ -1,4 +1,4 @@
-// TODO unstable
+// unstable: field names
 #define DWG_TYPE DWG_TYPE_TABLESTYLE
 #include "tests_common.c"
 
@@ -6,7 +6,7 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BS class_version;
+  // BITCODE_BS class_version;
   BITCODE_BS flags;
   BITCODE_BS flow_direction;
   BITCODE_BD horiz_cell_margin;
@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
   BITCODE_BL i, j, num_rowstyles;
   Dwg_TABLESTYLE_rowstyles *rowstyles;
   Dwg_TABLESTYLE_CellStyle sty;
-  BITCODE_RC unknown_rc;
+  BITCODE_RCd unknown_rc;
   BITCODE_BL unknown_bl1;
   BITCODE_BL unknown_bl2;
   BITCODE_H cellstyle;
@@ -24,7 +24,8 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_tablestyle *tblstyle = dwg_object_to_TABLESTYLE (obj);
 
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, class_version, BL);
+  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_rc, RCd);
+  // CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, class_version, BS);
   {
     BITCODE_T name;
     CHK_ENTITY_UTF8TEXT (tblstyle, TABLESTYLE, name);
@@ -41,16 +42,9 @@ api_process (dwg_object *obj)
                                 &rowstyles, NULL))
     fail ("TABLESTYLE.rowstyles");
 
-#ifndef DEBUG_CLASSS
-  if (dwg_version >= R_2010)
-    {
-      printf ("skip: TABLESTYLE r2010+ not yet implemented\n");
-    }
-#else
   if (dwg_version >= R_2010)
     {
       BITCODE_T name;
-      CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_rc, RC);
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_bl1, BL);
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_bl2, BL);
       CHK_ENTITY_H (tblstyle, TABLESTYLE, cellstyle);
@@ -129,7 +123,6 @@ api_process (dwg_object *obj)
                              double_line_spacing, BD);
         }
     }
-#endif
 
   for (i = 0; i < num_rowstyles; i++)
     {

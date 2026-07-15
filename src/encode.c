@@ -8366,7 +8366,93 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
     }
 }
 
-// from >2007 to 2000, need to add a EED with the APPID.ACAD_MLEADERVER
+// from <=2007 to >2007, need to populate sty.cellstyle from rowstyles
+void
+upconvert_TABLESTYLE (Dwg_Object *restrict obj)
+{
+  Dwg_Object_TABLESTYLE *_obj
+      = obj->tio.object ? obj->tio.object->tio.TABLESTYLE : NULL;
+  if (!obj || obj->fixedtype != DWG_TYPE_TABLESTYLE || !_obj)
+    {
+      LOG_ERROR ("Invalid type %u for upconvert_TABLESTYLE",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  LOG_TRACE ("Upconverting TABLESTYLE\n");
+
+  // sty: the default (data) cellstyle
+  if (!_obj->sty.id)
+    {
+      _obj->sty.id = 4;                 // table
+      _obj->sty.type = 1;               // data
+      _obj->sty.name = (char *)"Table"; // shallow
+    }
+  if (_obj->num_rowstyles >= 1 && _obj->rowstyles)
+    {
+      Dwg_TABLESTYLE_rowstyles *data = &_obj->rowstyles[0];
+      Dwg_CellStyle *sty = &_obj->sty.cellstyle;
+      sty->type = 5; // table
+      sty->data_flags = 1;
+      sty->property_override_flags = 0;
+      sty->merge_flags = 0;
+      sty->content_layout = 1; // flow
+      if (!sty->content_format.text_style)
+        sty->content_format.text_style = data->text_style;
+      sty->content_format.text_height = data->text_height;
+      sty->content_format.cell_alignment = data->text_alignment;
+      sty->content_format.content_color = data->text_color;
+      sty->bg_color = data->fill_color;
+      sty->content_format.value_data_type = data->data_type;
+      sty->content_format.value_unit_type = data->unit_type;
+      // borders: populate if already allocated (don't allocate new ones,
+      // the free path won't handle them since spec macros own the lifecycle)
+      if (sty->borders)
+        {
+          for (unsigned i = 0; i < sty->num_borders && i < data->num_borders;
+               i++)
+            {
+              sty->borders[i].linewt = data->borders[i].linewt;
+              sty->borders[i].visible = data->borders[i].visible;
+              sty->borders[i].color = data->borders[i].color;
+            }
+        }
+      // overrides from title rowstyle
+      if (_obj->num_rowstyles >= 2)
+        {
+          Dwg_TABLESTYLE_rowstyles *title = &_obj->rowstyles[1];
+          Dwg_CellStyle *ovr = &_obj->ovr.cellstyle;
+          _obj->ovr.parent = _obj;
+          _obj->ovr.id = 1; // title
+          _obj->ovr.type = 1;
+          _obj->ovr.name = (char *)"_TITLE"; // shallow
+          ovr->type = 1;                     // cell
+          ovr->data_flags = 1;
+          ovr->property_override_flags = 0;
+          ovr->merge_flags = 0;
+          ovr->content_layout = 1;
+          ovr->content_format.text_style = title->text_style;
+          ovr->content_format.text_height = title->text_height;
+          ovr->content_format.cell_alignment = title->text_alignment;
+          ovr->content_format.content_color = title->text_color;
+          ovr->bg_color = title->fill_color;
+          ovr->content_format.value_data_type = title->data_type;
+          ovr->content_format.value_unit_type = title->unit_type;
+          // borders: populate if already allocated
+          if (ovr->borders)
+            {
+              for (unsigned i = 0;
+                   i < ovr->num_borders && i < title->num_borders; i++)
+                {
+                  ovr->borders[i].linewt = title->borders[i].linewt;
+                  ovr->borders[i].visible = title->borders[i].visible;
+                  ovr->borders[i].color = title->borders[i].color;
+                }
+            }
+          _obj->numoverrides = 1;
+        }
+    }
+}
+
 // class_version
 static void
 downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)

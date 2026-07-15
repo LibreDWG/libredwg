@@ -3111,7 +3111,7 @@ decl_dxf_process_INSERT (MINSERT)
 #  if defined DEBUG_CLASSES
           return dwg_dxf_TABLESTYLE (dat, obj);
 #  else
-          if (dat->version >= R_2000 && dat->version < R_2010)
+          if (dat->version >= R_2000)
             return dwg_dxf_TABLESTYLE (dat, obj);
           else
             {

@@ -979,8 +979,8 @@ DWG_OBJECT (TABLESTYLE)
   }
   LATER_VERSIONS { // r2010+
 #ifdef IS_ENCODER
-    //if (dwg->header.from_version <= R_2007)
-    //  upconvert_TABLESTYLE (obj);
+    if (dwg->header.from_version <= R_2007)
+      upconvert_TABLESTYLE (obj);
 #endif
     FIELD_RCd (unknown_rc, 70);
     FIELD_T (name, 3);
@@ -999,7 +999,7 @@ DWG_OBJECT (TABLESTYLE)
         _obj->sty.cellstyle.property_override_flags & 0x10000;
     }
     FIELD_BL (numoverrides, 0);
-    // FIXME style overrides for 0-6
+    // style overrides for 0-5 (data=0, title=1, header=2, custom=3-5)
     if (FIELD_VALUE (numoverrides))
       {
         FIELD_BL (unknown_bl3, 0);
@@ -1009,7 +1009,6 @@ DWG_OBJECT (TABLESTYLE)
         FIELD_BL0 (ovr.type, 91);
         FIELD_T0 (ovr.name, 300);
         DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
-        LOG_WARN ("TODO TABLESTYLE r2010+ missing fields");
       }
   }
 
