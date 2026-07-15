@@ -2837,8 +2837,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   if (f1)
                     {
                       // subclass offset for _obj
-                      void *off
-                          = &((char *)_obj)[/* f->offset + */ f1->offset];
+                      void *off = &elems[k * size_elem];
                       LOG_INSANE ("subclass offset %u, %u of %u\n", f->offset,
                                   f1->offset,
                                   dwg_dynapi_fields_size (subclass));
@@ -2858,8 +2857,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                           char *subclass1
                               = dwg_dynapi_subclass_name (f1->type);
                           const Dwg_DYNAPI_field *sfields1
-                              = subclass1 ? dwg_dynapi_subclass_fields (sb1)
-                                          : NULL;
+                              = subclass1
+                                    ? dwg_dynapi_subclass_fields (subclass1)
+                                    : NULL;
                           if (!sfields1
                               || !_set_struct_field (
                                   dat, obj, tokens,

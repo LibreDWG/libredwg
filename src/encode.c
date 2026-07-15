@@ -8241,129 +8241,74 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
       return;
     }
   LOG_WARN ("Downconverting TABLESTYLE with loosing information");
-  if (!_obj->num_rowstyles)
-    {
-      _obj->num_rowstyles = 3;
-      _obj->rowstyles = (Dwg_TABLESTYLE_rowstyles *)calloc (
-          3, sizeof (Dwg_TABLESTYLE_rowstyles));
-    }
-  // 0: data, 1: title, 2: header
-  // assert (strEQc (_obj->sty.name, "Table"));
+  // The three rowstyles (data/title/header) and their six borders (top,
+  // horizontal-inside, bottom, left, vertical-inside, right) are now embedded
+  // named members, always present. Move the r2010 sty/ovr cellstyle content
+  // into them, transferring ownership of the handle/CMC-name pointers (NULL
+  // the source) so the spec free doesn't double-free the shared pointers.
   LOG_TRACE ("TABLESTYLE.sty.name: %s\n", _obj->sty.name);
-  _obj->rowstyles[0].text_style
-      = _obj->sty.cellstyle.content_format.text_style;
-  _obj->rowstyles[0].text_height
-      = _obj->sty.cellstyle.content_format.text_height;
-  _obj->rowstyles[0].text_alignment
-      = _obj->sty.cellstyle.content_format.cell_alignment;
-  _obj->rowstyles[0].text_color
-      = _obj->sty.cellstyle.content_format.content_color;
-  _obj->rowstyles[0].fill_color = _obj->sty.cellstyle.bg_color;
-  _obj->rowstyles[0].has_bgcolor = _obj->sty.cellstyle.bg_color.method != 0xc8;
-  _obj->rowstyles[0].data_type
-      = _obj->sty.cellstyle.content_format.value_data_type;
-  _obj->rowstyles[0].unit_type
-      = _obj->sty.cellstyle.content_format.value_unit_type;
-#if 0
   {
-    size_t destlen;
-    char *u8 = bit_convert_TU ((BITCODE_TU)_obj->sty.cellstyle
-                               .content_format.value_format_string);
-    if (u8 && (destlen = strlen (u8)))
+    Dwg_CellStyle *sty = &_obj->sty.cellstyle;
+    Dwg_TABLESTYLE_rowstyle *data = &_obj->data_rowstyle;
+    Dwg_TABLESTYLE_rowstyle *header = &_obj->header_rowstyle;
+    Dwg_TABLESTYLE_border *db[6]
+        = { &data->top_border,  &data->hor_border,  &data->bot_border,
+            &data->left_border, &data->vert_border, &data->right_border };
+    Dwg_TABLESTYLE_border *hb[6] = {
+      &header->top_border,  &header->hor_border,  &header->bot_border,
+      &header->left_border, &header->vert_border, &header->right_border
+    };
+
+    data->text_height = sty->content_format.text_height;
+    data->text_alignment = sty->content_format.cell_alignment;
+    data->data_type = sty->content_format.value_data_type;
+    data->unit_type = sty->content_format.value_unit_type;
+    data->has_bgcolor = sty->bg_color.method != 0xc8;
+    // move the owning pointers
+    data->text_style = sty->content_format.text_style;
+    sty->content_format.text_style = NULL;
+    data->text_color = sty->content_format.content_color;
+    sty->content_format.content_color.name = NULL;
+    sty->content_format.content_color.book_name = NULL;
+    data->fill_color = sty->bg_color;
+    sty->bg_color.name = NULL;
+    sty->bg_color.book_name = NULL;
+    if (sty->borders)
       {
-        char *dest = malloc (destlen + 1);
-        _obj->rowstyles[0].format_string = (BITCODE_TU)bit_utf8_to_TV (
-            dest, (unsigned char *)u8, destlen, destlen - 1, 0,
-            dwg->header.codepage);
+        for (unsigned i = 0; i < 6 && i < sty->num_borders; i++)
+          {
+            db[i]->linewt = sty->borders[i].linewt;
+            db[i]->visible = sty->borders[i].visible;
+            db[i]->color = sty->borders[i].color; // moves the CMC name
+            sty->borders[i].color.name = NULL;
+            sty->borders[i].color.book_name = NULL;
+          }
+        free (sty->borders);
+        sty->borders = NULL;
+        sty->num_borders = 0;
       }
-    free (u8);
+    // title/header have no separate r2010 source; keep ByBlock defaults
+    _obj->title_rowstyle.text_color.method = 0xc1;
+    _obj->title_rowstyle.fill_color.method = 0xc1;
+    header->text_color.method = 0xc1;
+    header->fill_color.method = 0xc1;
+    if (_obj->numoverrides && _obj->ovr.cellstyle.borders)
+      {
+        Dwg_CellStyle *ovr = &_obj->ovr.cellstyle;
+        LOG_TRACE ("TABLESTYLE.ovr.name: %s\n", _obj->ovr.name);
+        for (unsigned i = 0; i < 6 && i < ovr->num_borders; i++)
+          {
+            hb[i]->linewt = ovr->borders[i].linewt;
+            hb[i]->visible = ovr->borders[i].visible;
+            hb[i]->color = ovr->borders[i].color; // moves the CMC name
+            ovr->borders[i].color.name = NULL;
+            ovr->borders[i].color.book_name = NULL;
+          }
+        free (ovr->borders);
+        ovr->borders = NULL;
+        ovr->num_borders = 0;
+      }
   }
-#endif
-  if (!_obj->rowstyles[0].num_borders)
-    {
-      _obj->rowstyles[0].num_borders = 6;
-      _obj->rowstyles[0].borders = (Dwg_TABLESTYLE_border *)calloc (
-          6, sizeof (Dwg_TABLESTYLE_border));
-    }
-  // borders/grid: top, horizontal inside, bottom, left, vertical inside, right
-  if (_obj->sty.cellstyle.borders)
-    {
-      for (unsigned i = 0; i < 6; i++)
-        {
-          if (i >= _obj->sty.cellstyle.num_borders)
-            break;
-          _obj->rowstyles[0].borders[i].linewt
-              = _obj->sty.cellstyle.borders[i].linewt;
-          _obj->rowstyles[0].borders[i].visible
-              = _obj->sty.cellstyle.borders[i].visible;
-          _obj->rowstyles[0].borders[i].color
-              = _obj->sty.cellstyle.borders[i].color;
-        }
-      free (_obj->sty.cellstyle.borders);
-      _obj->sty.cellstyle.borders = NULL;
-      _obj->sty.cellstyle.num_borders = 0;
-    }
-  // title
-  if (!_obj->rowstyles[1].num_borders)
-    {
-      _obj->rowstyles[1].num_borders = 6;
-      _obj->rowstyles[1].borders = (Dwg_TABLESTYLE_border *)calloc (
-          6, sizeof (Dwg_TABLESTYLE_border));
-      _obj->rowstyles[1].text_color.method = 0xc1;
-      _obj->rowstyles[1].fill_color.method = 0xc1;
-    }
-  if (_obj->ovr.type == 1)
-    {
-      // assert (strEQc (_obj->ovr.name, "_TITLE"));
-      LOG_TRACE ("TABLESTYLE.ovr.name: %s\n", _obj->ovr.name);
-      _obj->rowstyles[0].text_style
-          = _obj->ovr.cellstyle.content_format.text_style;
-      _obj->rowstyles[0].text_height
-          = _obj->ovr.cellstyle.content_format.text_height;
-      _obj->rowstyles[0].text_alignment
-          = _obj->ovr.cellstyle.content_format.cell_alignment;
-      _obj->rowstyles[0].text_color
-          = _obj->ovr.cellstyle.content_format.content_color;
-      _obj->rowstyles[0].fill_color = _obj->ovr.cellstyle.bg_color;
-      if (_obj->ovr.cellstyle.borders)
-        {
-          for (unsigned i = 0; i < 6; i++)
-            {
-              if (i >= _obj->ovr.cellstyle.num_borders)
-                break;
-              _obj->rowstyles[0].borders[i].linewt
-                  = _obj->ovr.cellstyle.borders[i].linewt;
-              _obj->rowstyles[0].borders[i].visible
-                  = _obj->ovr.cellstyle.borders[i].visible;
-              _obj->rowstyles[0].borders[i].color
-                  = _obj->ovr.cellstyle.borders[i].color;
-            }
-          // free (_obj->ovr.cellstyle.borders);
-          //_obj->ovr.cellstyle.borders = NULL;
-          //_obj->ovr.cellstyle.num_borders = 0;
-        }
-    }
-  // header
-  if (!_obj->rowstyles[2].num_borders)
-    {
-      _obj->rowstyles[2].num_borders = 6;
-      _obj->rowstyles[2].borders = (Dwg_TABLESTYLE_border *)calloc (
-          6, sizeof (Dwg_TABLESTYLE_border));
-      _obj->rowstyles[2].text_color.method = 0xc1;
-      _obj->rowstyles[2].fill_color.method = 0xc1;
-      if (_obj->ovr.cellstyle.borders)
-        {
-          for (unsigned i = 0; i < _obj->rowstyles[2].num_borders; i++)
-            {
-              _obj->rowstyles[2].borders[i].linewt
-                  = _obj->ovr.cellstyle.borders[i].linewt;
-              _obj->rowstyles[2].borders[i].visible
-                  = _obj->ovr.cellstyle.borders[i].visible;
-              _obj->rowstyles[2].borders[i].color
-                  = _obj->ovr.cellstyle.borders[i].color;
-            }
-        }
-    }
 }
 
 // from >2007 to 2000, need to add a EED with the APPID.ACAD_MLEADERVER

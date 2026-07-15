@@ -15652,7 +15652,7 @@ dwg_dynapi_subclass_set_value (Dwg_Data *restrict dwg,
   old = &((char*)ptr)[f->offset];
   if (f->is_string)
     dynapi_set_helper (old, f, dwg->header.version,
-                           dwg->opts & DWG_OPTS_IN, value, is_utf8);
+                       dwg->opts & DWG_OPTS_IN, value, is_utf8);
   else
     memcpy (old, value, f->size);
   return true;
