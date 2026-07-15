@@ -1017,7 +1017,7 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_T (name, 3);
     FIELD_BL (unknown_bl1, 0);
     FIELD_BL (unknown_bl2, 0);
-    FIELD_HANDLE (cellstyle, DWG_HDL_HARDOWN, 0);
+    FIELD_HANDLE (cellstyle_handle, DWG_HDL_HARDOWN, 0);
     CellStyle_fields (sty.cellstyle); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
     DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
     FIELD_BL0 (sty.id, 90);
@@ -1057,7 +1057,7 @@ DWG_OBJECT_END
 DWG_OBJECT (CELLSTYLEMAP)
   SUBCLASS (AcDbCellStyleMap)
   FIELD_BL (num_cells, 90);
-  REPEAT (num_cells, cells, Dwg_TABLESTYLE_CellStyle)
+  REPEAT (num_cells, cells, Dwg_TABLESTYLE_cellstyle)
   REPEAT_BLOCK
       DXF { VALUE_TFF ("CELLSTYLE", 300); }
       CellStyle_fields (cells[rcount1].cellstyle);
