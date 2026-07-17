@@ -678,7 +678,19 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_RLL(nam, dxf) FIELDG (nam, RLL, dxf)
 #define FIELD_MC(nam, dxf) FIELDG (nam, MC, dxf)
 #define FIELD_MS(nam, dxf) FIELDG (nam, MS, dxf)
-#define FIELD_TF(nam, len, dxf) VALUE_TV (_obj->nam, dxf)
+/* Group codes 310-319 hold binary chunks: hex-encode them. Writing them
+   through the string path (VALUE_TV) emits the raw bytes (and applies the
+   r2007+ codepage conversion to them), producing invalid DXF that readers
+   reject, e.g. PROXY_ENTITY.proxy_data. */
+#define FIELD_TF(nam, len, dxf)                                               \
+  {                                                                           \
+    if ((dxf) >= 310 && (dxf) <= 319)                                         \
+      {                                                                       \
+        VALUE_BINARY (_obj->nam, len, dxf)                                    \
+      }                                                                       \
+    else                                                                      \
+      VALUE_TV (_obj->nam, dxf)                                               \
+  }
 #define FIELD_TFF(nam, len, dxf) VALUE_TV (_obj->nam, dxf)
 #define FIELD_TV(nam, dxf)                                                    \
   if (dxf)                                                                    \
