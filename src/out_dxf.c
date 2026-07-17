@@ -1128,7 +1128,11 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
     if (obj->handle.value)                                                    \
       LOG_TRACE ("handle: " FORMAT_H "\n", ARGS_H (obj->handle));             \
     if (dat->version > R_11 || dwg->header_vars.HANDLING)                     \
-      fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", 5, obj->handle.value);        \
+      {                                                                       \
+        if (!obj->handle.value)                                               \
+          dxf_fixup_zero_handle (obj);                                        \
+        fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", 5, obj->handle.value);      \
+      }                                                                       \
     error |= dxf_common_entity_handle_data (dat, obj);                        \
     error |= dwg_dxf_##token##_private (dat, hdl_dat, str_dat, obj);          \
     error |= dxf_write_eed (dat, obj->tio.object);                            \
@@ -1186,6 +1190,8 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         {                                                                     \
           BITCODE_BL vcount;                                                  \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
+          if (!obj->handle.value)                                             \
+            dxf_fixup_zero_handle (obj);                                      \
           VALUE_H (obj->handle.value, dxf);                                   \
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
@@ -1394,6 +1400,22 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
      \M+xxxxx => \U+XXXX (shift-jis)
    split by intermediate UCS-2, convert all unicode to \\U+
  */
+/* Objects can arrive from partial decodes with handle 0, which readers
+   reject outright ("Invalid handle 0"), killing the whole file. Assign a
+   fresh unique handle at write time instead. */
+static BITCODE_RLL
+dxf_fixup_zero_handle (const Dwg_Object *restrict obj)
+{
+  static BITCODE_RLL last = 0;
+  Dwg_Object *o = (Dwg_Object *)obj;
+  BITCODE_RLL next = dwg_next_handle (obj->parent);
+  if (next <= last)
+    next = last + 1;
+  last = next;
+  o->handle.value = next;
+  return next;
+}
+
 static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
                   const int dxf)
@@ -3744,6 +3766,9 @@ dxf_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
   // Dwg_Entity_ENDBLK *_obj;
   obj->parent = dwg;
   obj->index = dwg->num_objects;
+  // a real handle: readers reject the 0 that calloc leaves ("Invalid
+  // handle 0"), killing the whole file for the sake of a filler ENDBLK
+  obj->handle.value = dwg_next_handle (dwg);
   dwg_setup_ENDBLK (obj);
   obj->tio.entity->ownerhandle
       = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
