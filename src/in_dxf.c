@@ -6212,8 +6212,10 @@ add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   while (pair != NULL && pair->code == 92)
     {
       i++;
+      // i+1, not num_edges: on the first edge num_edges is still 0 and
+      // realloc'ing to 0 bytes made the edges[0] write below a heap overflow
       o->edges = (Dwg_EVAL_Edge *)realloc (
-          o->edges, o->num_edges * sizeof (Dwg_EVAL_Edge));
+          o->edges, (i + 1) * sizeof (Dwg_EVAL_Edge));
       if (!o->edges)
         {
           o->num_edges = 0;
@@ -6316,6 +6318,9 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             break;
           o->num_nodes = i + 1;
           o->nodes[i].id = pair->value.i;
+          // each node carries four 92 group codes; without this reset the
+          // second node's first 92 was misread as the start of the edge list
+          j = 0;
           LOG_TRACE ("%s.nodes[%d].id = %d [BL %d]\n", obj->name, i,
                      pair->value.i, pair->code);
           break;
@@ -6325,13 +6330,11 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      pair->value.i, pair->code);
           break;
         case 95:
-          o->nodes[i].edge_flags = pair->value.i;
-          if (pair->value.i != 32)
-            LOG_WARN ("%s.nodes[%d].edge_flags = %d [BL %d] != 32", obj->name,
-                      i, pair->value.i, pair->code);
-          else
-            LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,
-                       pair->value.i, pair->code);
+          // 95 is the node's nextid (see dwg.spec); it was clobbering
+          // edge_flags and warning on perfectly valid files
+          o->nodes[i].nextid = pair->value.i;
+          LOG_TRACE ("%s.nodes[%d].nextid = %d [BLd %d]\n", obj->name, i,
+                     pair->value.i, pair->code);
           break;
         case 360:
           o->nodes[i].evalexpr
@@ -7001,129 +7004,121 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           o->num_childval = 0;
           return pair;
         }
-      for (i = 0; i < o->num_childval; i++)
-        {
-          pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, childval[i].key, 6);
-          o->childval[i].key = strdup (pair->value.s.ptr);
-          dxf_free_pair (pair);
-        next_field:
-          pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, childval[i].value.data_type, 90);
-          LOG_TRACE ("FIELD.childval[%u].value.data_type = %u [RL 90]\n", i,
-                     pair->value.u);
-          o->childval[i].value.data_type = pair->value.u;
-          dxf_free_pair (pair);
-          /*
-            90
-            140
-            7  ACFD_FIELD_VALUE
-            90
-            91
-          */
-          switch (o->childval[i].value.data_type)
-            {
-            case 0:                                            /* kUnknown */
-              SUB_FIELD_BL (childval[i], value.data_long, 91); // string length
-              break;
-            case 1: /* kLong */
-              SUB_FIELD_BL (childval[i], value.data_long, 91);
-              break;
-            case 2: /* kDouble */
-              // SUB_FIELD_BD (childval[i],value.data_double, 140, RD);
-              pair = dxf_read_pair (dat);
-              EXPECT_DXF (obj->name, childval[i].value.data_double, 140);
-              o->childval[i].value.data_double = pair->value.d;
-              LOG_TRACE (
-                  "FIELD.childval[%u].value.data_double = %f [RD 140]\n", i,
-                  pair->value.d);
-              dxf_free_pair (pair);
-              break;
-            case 4: /* kString */
-              SUB_FIELD_T (childval[i], value.data_string,
-                           1); /* and 2. TODO multiple lines */
-              break;
-            case 8: /* kDate */
-              SUB_FIELD_BL (childval[i], value.data_size, 92);
-              // TODO SUB_FIELD_BINARY (childval[i],value.data_date,
-              // SUB_FIELD_VALUE (childval[i],value.data_size), 310);
-              break;
-            case 16: /* kPoint */
-              // SUB_FIELD_2BD (childval[i],value.data_point, 11);
-              pair = dxf_read_pair (dat);
-              EXPECT_DXF (obj->name, childval[i].value.data_point.x, 11);
-              o->childval[i].value.data_point.x = pair->value.d;
-              dxf_free_pair (pair);
-
-              pair = dxf_read_pair (dat);
-              EXPECT_DXF (obj->name, childval[i].value.data_point.y, 21);
-              o->childval[i].value.data_point.y = pair->value.d;
-              dxf_free_pair (pair);
-              LOG_TRACE (
-                  "FIELD.childval[%u].value.data_point = (%f, %f) [2RD 11]\n",
-                  i, o->childval[i].value.data_point.x,
-                  o->childval[i].value.data_point.y);
-              break;
-            case 32: /* k3dPoint */
-              pair = dxf_read_pair (dat);
-              EXPECT_DXF (obj->name, childval[i].value.data_3dpoint.x, 11);
-              o->childval[i].value.data_3dpoint.x = pair->value.d;
-              dxf_free_pair (pair);
-              pair = dxf_read_pair (dat);
-              EXPECT_DXF (obj->name, childval[i].value.data_3dpoint.y, 21);
-              o->childval[i].value.data_3dpoint.y = pair->value.d;
-              dxf_free_pair (pair);
-              pair = dxf_read_pair (dat);
-              EXPECT_DXF (obj->name, childval[i].value.data_3dpoint.z, 31);
-              o->childval[i].value.data_3dpoint.z = pair->value.d;
-              dxf_free_pair (pair);
-              LOG_TRACE ("FIELD.childval[%u].value.data_3dpoint = (%f, %f, "
-                         "%f) [3RD 11]\n",
-                         i, o->childval[i].value.data_3dpoint.x,
-                         o->childval[i].value.data_3dpoint.y,
-                         o->childval[i].value.data_3dpoint.z);
-              break;
-            case 64: /* kObjectId */
-              pair = dxf_read_pair (dat);
-              EXPECT_DXF (obj->name, childval[i].value.data_handle, 330);
-              o->childval[i].value.data_handle
-                  = dwg_add_handleref (dwg, 3, pair->value.u, obj);
-              dxf_free_pair (pair);
-              LOG_TRACE ("FIELD.childval[%u].value.data_handle = " FORMAT_REF
-                         " [H %d]\n",
-                         i, ARGS_REF (o->childval[i].value.data_handle), 330);
-              // SUB_FIELD_HANDLE (childval[i],value.data_handle, -1, 330);
-              break;
-            case 128: /* kBuffer */
-              LOG_ERROR ("Unknown data type in FIELD: \"kBuffer\".\n");
-              break;
-            case 256: /* kResBuf */
-            case 512: /* kGeneral since r2007*/
-            default:
-              LOG_ERROR ("Unknown data type in FIELD: \"kResBuf\".\n");
-              break;
-              // case 512: /* kGeneral since r2007*/
-              // SINCE (R_2007a) { SUB_FIELD_BL (childval[i],value.data_size,
-              // 0); } else
-              //  {
-              //    LOG_ERROR (
-              //               "Unknown data type in FIELD: \"kGeneral before "
-              //               "R_2007\".\n")
-              //  }
-              break;
-            }
-        }
-      // optional 7 Key (evaluated cache); hard-coded as ACFD_FIELD_VALUE
-      pair = dxf_read_pair (dat);
-      if (pair->code == 7)
-        {
-          dxf_free_pair (pair);
-          goto next_field; // one more cached field
-        }
-      else if (i + 1 == o->num_childval)
-        {
-          FIELD_T (value_string, 301);
-        }
+      // Both childval layouts are tolerated here:
+      // - LibreDWG's own legacy output: 6 key, 90 data_type, typed payload
+      // - AutoCAD: 6 key, 93 data_type, optional payload pairs (90 long,
+      //   140 double, 330 id, 1 string, 11/21/31 point), 300/302 format
+      //   strings and a "304 ACVALUE_END" terminator; the evaluated cache
+      //   value follows under a 7 key. One unexpected pair must not abort
+      //   the whole DXF import.
+      {
+        Dwg_FIELD_ChildValue *cur = NULL;
+        int has_type = 0;
+        i = 0;
+        pair = dxf_read_pair (dat);
+        while (pair != NULL && pair->code != 0)
+          {
+            switch (pair->code)
+              {
+              case 6: // next child value
+                if (i < o->num_childval)
+                  {
+                    cur = &o->childval[i];
+                    cur->key = strdup (pair->value.s.ptr);
+                    LOG_TRACE ("FIELD.childval[%u].key = %s [T 6]\n",
+                               (unsigned)i, cur->key);
+                    i++;
+                    has_type = 0;
+                  }
+                else
+                  {
+                    LOG_WARN ("FIELD: more childval keys than num_childval %u",
+                              (unsigned)o->num_childval);
+                    cur = NULL;
+                  }
+                break;
+              case 7: // evaluated cache value (ACFD_FIELD_VALUE): skip payload
+                cur = NULL;
+                break;
+              case 93:
+                if (cur)
+                  {
+                    cur->value.data_type = pair->value.u;
+                    has_type = 1;
+                    LOG_TRACE ("FIELD.childval[%u].value.data_type = %u [BL 93]\n",
+                               (unsigned)(i - 1), pair->value.u);
+                  }
+                break;
+              case 90:
+                if (cur && !has_type)
+                  { // legacy layout: 90 carries the data type
+                    cur->value.data_type = pair->value.u;
+                    has_type = 1;
+                    LOG_TRACE ("FIELD.childval[%u].value.data_type = %u [BL 90]\n",
+                               (unsigned)(i - 1), pair->value.u);
+                  }
+                else if (cur)
+                  cur->value.data_long = pair->value.i;
+                break;
+              case 91:
+                if (cur)
+                  cur->value.data_long = pair->value.i;
+                break;
+              case 140:
+                if (cur)
+                  cur->value.data_double = pair->value.d;
+                break;
+              case 330:
+                if (cur)
+                  cur->value.data_handle
+                      = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+                break;
+              case 11:
+                if (cur)
+                  cur->value.data_point.x = pair->value.d;
+                break;
+              case 21:
+                if (cur)
+                  cur->value.data_point.y = pair->value.d;
+                break;
+              case 31:
+                if (cur)
+                  cur->value.data_3dpoint.z = pair->value.d;
+                break;
+              case 1:
+                if (cur)
+                  {
+                    if (dat->version >= R_2007)
+                      cur->value.data_string
+                          = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
+                    else
+                      cur->value.data_string = strdup (pair->value.s.ptr);
+                  }
+                break;
+              case 301:
+                if (dat->version >= R_2007)
+                  o->value_string
+                      = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
+                else
+                  o->value_string = strdup (pair->value.s.ptr);
+                LOG_TRACE ("FIELD.value_string = %s [T 301]\n",
+                           pair->value.s.ptr);
+                break;
+              case 98:
+                o->value_string_length = pair->value.u;
+                LOG_TRACE ("FIELD.value_string_length = %u [BL 98]\n",
+                           pair->value.u);
+                break;
+              default: // 300/302 format strings, 92/94/95/96 sizes, 304 end
+                LOG_TRACE ("FIELD: ignore DXF code %d in value block\n",
+                           pair->code);
+                break;
+              }
+            dxf_free_pair (pair);
+            pair = dxf_read_pair (dat);
+          }
+        return pair;
+      }
     }
   if (pair->code != 301)
     {
@@ -8652,6 +8647,15 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 
           if (o->hdls[i].num_indexes)
             {
+              // the indexes array was never allocated: writing below
+              // dereferenced the NULL left by the hdls xcalloc
+              o->hdls[i].indexes = (BITCODE_BL *)xcalloc (
+                  o->hdls[i].num_indexes, sizeof (BITCODE_BL));
+              if (!o->hdls[i].indexes)
+                {
+                  o->hdls[i].num_indexes = 0;
+                  return pair;
+                }
               for (unsigned j = 0; j < o->hdls[i].num_indexes; j++)
                 {
                   pair = dxf_read_pair (dat);
@@ -8693,7 +8697,16 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 
           if (o->codes[i].num_indexes)
             {
-              for (unsigned j = 0; j < o->hdls[i].num_indexes; j++)
+              // same missing allocation as hdls above, plus the loop bound
+              // was copy-pasted from hdls[i]
+              o->codes[i].indexes = (BITCODE_BL *)xcalloc (
+                  o->codes[i].num_indexes, sizeof (BITCODE_BL));
+              if (!o->codes[i].indexes)
+                {
+                  o->codes[i].num_indexes = 0;
+                  return pair;
+                }
+              for (unsigned j = 0; j < o->codes[i].num_indexes; j++)
                 {
                   pair = dxf_read_pair (dat);
                   EXPECT_DXF (obj->name, o->codes[i].indexes[j], 94);
