@@ -1322,15 +1322,14 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
   char *s = (char *)src;
   while ((s < send) && (c = *s++) && dest < dend)
     {
-      if (c == '\n' && dest + 1 < dend)
+      if (c > 0 && c < 0x20 && c != '\t' && dest + 1 < dend)
         {
+          /* caret-encode all C0 control chars, the general rule AutoCAD
+             uses: LF -> ^J, CR -> ^M, ETX -> ^C ... Raw control bytes
+             (seen in GEODATA coord_system_def tails) produce DXF every
+             reader rejects. Tab stays literal like AutoCAD keeps it. */
           *dest++ = '^';
-          *dest++ = 'J';
-        }
-      else if (c == '\r' && dest + 1 < dend)
-        {
-          *dest++ = '^';
-          *dest++ = 'M';
+          *dest++ = c + 0x40;
         }
       // Convert Asian MIF \M+nxxxx to \U+xxxx
       // 1: 932 ShiftJIS
@@ -1382,6 +1381,26 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
      \M+xxxxx => \U+XXXX (shift-jis)
    split by intermediate UCS-2, convert all unicode to \\U+
  */
+/* Write a string value escaping any raw C0 control byte (except tab) as
+   caret notation — the last line of defense for DXF pair-stream integrity,
+   whatever an upstream decode bug smuggled into the string. */
+static void
+dxf_fputs_escaped (FILE *fh, const char *restrict s, int n)
+{
+  for (int k = 0; k < n; k++)
+    {
+      unsigned char c = (unsigned char)s[k];
+      if (c < 0x20 && c != '\t')
+        {
+          fputc ('^', fh);
+          fputc (c + 0x40, fh);
+        }
+      else
+        fputc (c, fh);
+    }
+  fprintf (fh, "\r\n");
+}
+
 static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
                   const int dxf)
@@ -1390,21 +1409,41 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
     return;
   if (str && *str)
     {
-      if (opts
-          && (strchr (str, '\n') || strchr (str, '\r')
-              || strstr (str, "\\M+")))
+      bool has_ctrl = false;
+      for (const char *p = str; *p; p++)
+        if (*p > 0 && *p < 0x20 && *p != '\t')
+          {
+            has_ctrl = true;
+            break;
+          }
+      if (opts && (has_ctrl || strstr (str, "\\M+")))
         {
-          static char *cstr, *ubuf;
-          const size_t origlen = strlen (str);
-          long len = (long)((2 * origlen) + 1);
+          static char *cstr, *ubuf, *embedded;
+          long len;
           BITCODE_TU wstr;
-          cstr = malloc (len);
-          if (!cstr)
+          /* Embed first, quote last: bit_utf8_to_TU misdecodes invalid
+             UTF-8 (garbage decoder tails) into arbitrary code units, and
+             bit_embed_TU then emits code points < 0x20 as raw control
+             bytes — quoting before the round-trip left raw LF/ETX in the
+             output, desyncing the DXF pair stream for every reader. */
+          wstr = bit_utf8_to_TU (str, 0);
+          embedded = bit_embed_TU (wstr);
+          free (wstr);
+          if (!embedded)
             {
               LOG_ERROR ("Out of memory");
               return;
             }
-          len = (long)strlen (cquote (cstr, len, str));
+          len = (long)((2 * strlen (embedded)) + 1);
+          cstr = malloc (len);
+          if (!cstr)
+            {
+              free (embedded);
+              LOG_ERROR ("Out of memory");
+              return;
+            }
+          len = (long)strlen (cquote (cstr, len, embedded));
+          free (embedded);
           if (len < 0)
             {
               LOG_ERROR ("Overlong DXF string");
@@ -1414,17 +1453,26 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
             {
               LOG_TRACE ("Split overlong string");
             }
-          wstr = bit_utf8_to_TU (cstr, 0);
-          free (cstr);
-          cstr = ubuf = bit_embed_TU (wstr);
-          free (wstr);
-          len = (long)strlen (ubuf);
+          ubuf = cstr;
           while (len > 0)
             {
-              fprintf (dat->fh, "%3d\r\n", len < 250 ? dxf : 3);
-              fprintf (dat->fh, "%.*s\r\n", len > 250 ? 250 : (int)len, ubuf);
-              len -= 250;
-              ubuf += 250;
+              int n = len > 250 ? 250 : (int)len;
+              if (len > 250)
+                {
+                  /* never split a \U+XXXX escape across chunks: a chunk
+                     ending in a partial escape crashes/corrupts readers */
+                  for (int k = n > 6 ? n - 6 : 1; k < n; k++)
+                    if (ubuf[k] == '\\')
+                      {
+                        n = k;
+                        break;
+                      }
+                }
+              fprintf (dat->fh, "%3d\r\n",
+                       n == len ? dxf : (dxf >= 300 ? dxf + 2 : 3));
+              dxf_fputs_escaped (dat->fh, ubuf, n);
+              len -= n;
+              ubuf += n;
             }
           free (cstr);
         }
@@ -1433,10 +1481,23 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
           long len = (long)strlen (str);
           while (len > 0)
             {
-              fprintf (dat->fh, "%3d\r\n", len < 250 ? dxf : 3);
-              fprintf (dat->fh, "%.*s\r\n", len > 250 ? 250 : (int)len, str);
-              len -= 250;
-              str += 250;
+              int n = len > 250 ? 250 : (int)len;
+              if (len > 250)
+                {
+                  /* never split a \U+XXXX escape across chunks: a chunk
+                     ending in a partial escape crashes/corrupts readers */
+                  for (int k = n > 6 ? n - 6 : 1; k < n; k++)
+                    if (str[k] == '\\')
+                      {
+                        n = k;
+                        break;
+                      }
+                }
+              fprintf (dat->fh, "%3d\r\n",
+                       n == len ? dxf : (dxf >= 300 ? dxf + 2 : 3));
+              dxf_fputs_escaped (dat->fh, str, n);
+              len -= n;
+              str += n;
             }
         }
     }
