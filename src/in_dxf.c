@@ -3675,6 +3675,12 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               next_330_boundary_handles = true;
               o->paths[j].num_boundary_handles = pair->value.l;
               // o->num_boundary_handles += pair->value.l;
+              // each path carries its own handle list; without this reset
+              // the 330s of every path after the first were rejected,
+              // leaving num_boundary_handles set with a NULL array - which
+              // the encoder then turns into a short handle stream,
+              // corrupting the rest of the HATCH (pattern lost)
+              hdl_idx = -1;
               LOG_TRACE (
                   "HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n", j,
                   pair->value.l);
@@ -3708,6 +3714,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->paths[j].num_boundary_handles = pair->value.l;
           next_330_boundary_handles = true;
           // o->num_boundary_handles += pair->value.l;
+          hdl_idx = -1; // see the non-polyline 97 handler above
           LOG_TRACE (
               "HATCH.paths[%d].num_boundary_handles = %ld [BL 97] (1)\n", j,
               pair->value.l);
