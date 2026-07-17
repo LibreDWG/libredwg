@@ -2944,6 +2944,10 @@ DWG_ENTITY (MTEXT)
         FIELD_BD (extents_height, 43);
         // end redundant fields
 
+        // Partial decodes leave garbage here (256, 35141...); a 71 value
+        // > 2 crashes DXF readers (ezdxf ColumnType) — treat as "no columns"
+        if (FIELD_VALUE (column_type) > 2)
+          FIELD_VALUE (column_type) = 0;
         FIELD_BS (column_type, 71);
         if (FIELD_VALUE (column_type))
           {
