@@ -4054,11 +4054,13 @@ ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref)
     }
   else
     {
-      // There are duplicates, disable bsearch
-      // It should never happen !
-      free (dwg->object_ordered_ref);
-      dwg->object_ordered_ref = NULL;
-      dwg->num_object_ordered_refs = -1;
+      // Duplicate (code, absref) pair. This DOES happen: dwg_add_handleref
+      // only dedupes via ordered_ref_find on some paths (e.g. obj == NULL),
+      // yet always calls ordered_ref_add. Disabling the index here demoted
+      // every later lookup to a linear scan over all refs — quadratic DXF
+      // import (minutes for a 19 MB file). Refs with the same key are
+      // interchangeable by design (the dedupe branch returns any of them),
+      // so just skip the duplicate and keep the index alive.
     }
 }
 
