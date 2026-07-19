@@ -9359,9 +9359,27 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("dxf_postprocess_SEQEND:\n");
-  // r12 and earlier: search for owner backwards
-  if (dwg->header.from_version < R_13b1 && !owner
-      && !obj->tio.entity->ownerhandle)
+  // Writers like ezdxf (and AutoCAD's own DXF) set 330 of a SEQEND to the
+  // owning BLOCK_RECORD, not to the INSERT/POLYLINE parent. Trusting that
+  // owner wrote num_owned = <all entities of the block> onto the
+  // BLOCK_HEADER (a field it does have) with no matching entities array —
+  // an out-of-bounds crash later in dwg_fixup_BLOCKS_entities. Only real
+  // SEQEND parents qualify; anything else falls back to the backwards
+  // search below.
+  if (owner && owner->fixedtype != DWG_TYPE_INSERT
+      && owner->fixedtype != DWG_TYPE_MINSERT
+      && owner->fixedtype != DWG_TYPE_POLYLINE_2D
+      && owner->fixedtype != DWG_TYPE_POLYLINE_3D
+      && owner->fixedtype != DWG_TYPE_POLYLINE_PFACE
+      && owner->fixedtype != DWG_TYPE_POLYLINE_MESH)
+    {
+      LOG_TRACE ("SEQEND.330 points to %s, not a SEQEND parent; searching "
+                 "backwards\n", owner->name);
+      owner = NULL;
+    }
+  // search for the owner backwards (r12 has no ownerhandle; later versions
+  // may carry a wrong one, see above)
+  if (!owner)
     {
       for (i = obj->index - 1; i > 0; i--)
         {
