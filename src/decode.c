@@ -125,6 +125,12 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->dwg_class = NULL;
   dwg->object_ref = NULL;
   dwg->object = NULL;
+  if (dwg->object_ordered_ref)
+    {
+      free (dwg->object_ordered_ref);
+      dwg->object_ordered_ref = NULL;
+    }
+  dwg->num_object_ordered_refs = 0;
   dwg->object_map = hash_new (dat->size / 1000);
   if (!dwg->object_map)
     {
