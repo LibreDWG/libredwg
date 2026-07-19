@@ -10063,6 +10063,28 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
         LOG_TRACE ("%s.extrusion = (0,0,1) (default)\n", obj->name);
         pt.z = 0.0;
       }
+    // DIMENSION common fields that live only in the DWG, not the DXF: a
+    // writer like ezdxf omits them, and the calloc zeros are degenerate —
+    // a (0,0,0) insertion scale, line-spacing style/factor 0, and
+    // act_measurement 0 (AutoCAD writes -1 = "recompute"). AutoCAD/ODA
+    // reject or mis-scale those, so apply the same defaults ODA does. The
+    // 71/72/41/... pairs that the DXF *does* carry overwrite these later.
+    if (dwg_dynapi_entity_field (obj->name, "ins_scale"))
+      {
+        BITCODE_BS lspace_style = 1;
+        BITCODE_BD one = 1.0, neg1 = -1.0;
+        pt.x = pt.y = pt.z = 1.0;
+        dwg_dynapi_entity_set_value (_obj, obj->name, "ins_scale", &pt, 0);
+        dwg_dynapi_entity_set_value (_obj, obj->name, "lspace_style",
+                                     &lspace_style, 0);
+        dwg_dynapi_entity_set_value (_obj, obj->name, "lspace_factor",
+                                     &one, 0);
+        dwg_dynapi_entity_set_value (_obj, obj->name, "act_measurement",
+                                     &neg1, 0);
+        LOG_TRACE ("%s dimension defaults: ins_scale (1,1,1), lspace 1/1.0,"
+                   " act_measurement -1\n", obj->name);
+        pt.x = pt.y = pt.z = 0.0;
+      }
   }
   // more DXF defaults
   if (obj->fixedtype == DWG_TYPE_LAYOUT)
