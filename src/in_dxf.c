@@ -8510,7 +8510,10 @@ add_AcDbBlockRotationAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 {
   Dwg_Data *dwg = obj->parent;
   Dxf_Pair *pair;
-  pair = add_BlockAction_ConnectionPts (obj, dat, 2, 1, 94, 303);
+  // conn_pts[2] of a rotation action is written as group 96/305 (the DXF
+  // writer emits dxf + vcount with vcount starting at 2, matching AutoCAD);
+  // expecting 94/303 here rejected every real file carrying one.
+  pair = add_BlockAction_ConnectionPts (obj, dat, 2, 1, 96, 305);
   if (pair)
     return pair;
   return NULL;
