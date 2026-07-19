@@ -12366,7 +12366,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                               dwg_dynapi_entity_set_value (_obj, obj->name,
                                                            f->name, &pts, 0);
                             }
-                          else if (j > 0 && j < size)
+                          // j >= 0 (not > 0): the FIRST point's .y (code 20,
+                          // still j==0 after the .x set pts[0] above) must be
+                          // stored too, or a 2D point vector like HATCH.seeds
+                          // loses every point's y (a (x,0) seed AutoCAD/ODA
+                          // reject). 2D points also never advanced j.
+                          else if (j >= 0 && j < size)
                             {
                               int _i = is2d ? j * 2 : j * 3;
                               dwg_dynapi_entity_value (_obj, obj->name,
@@ -12377,12 +12382,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 }
                               else if (pair->code < 30 && pts != NULL)
                                 {
-                                  if (is2d)
-                                    LOG_TRACE (
-                                        "%s.%s[%d] = (%f, %f) [%s %d]\n", name,
-                                        f->name, j, pts[_i], pair->value.d,
-                                        f->type, pair->code);
                                   pts[_i + 1] = pair->value.d;
+                                  if (is2d)
+                                    {
+                                      LOG_TRACE (
+                                          "%s.%s[%d] = (%f, %f) [%s %d]\n",
+                                          name, f->name, j, pts[_i],
+                                          pts[_i + 1], f->type, pair->code);
+                                      j++; // 2D point complete
+                                    }
                                 }
                               else if (*f->type == '3' && pts)
                                 {
