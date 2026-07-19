@@ -9497,6 +9497,38 @@ dxf_postprocess_PLOTSETTINGS (Dwg_Object *restrict obj)
     _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
 }
 
+static void
+dxf_postprocess_SORTENTSTABLE (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Object *_o = obj->tio.object;
+  Dwg_Object_SORTENTSTABLE *_obj = _o->tio.SORTENTSTABLE;
+  Dwg_Object *dict;
+
+  // block_owner must be the BLOCK_HEADER whose entities this table sorts,
+  // i.e. the owner of the extension dictionary that owns the table. An empty
+  // table carries no explicit block_owner in DXF, and the importer misread
+  // the object owner (the dictionary) as block_owner -> AutoCAD/ODA reject
+  // the owning block ("Invalid input <AcDbBlockTableRecord>", BlockEnd needs
+  // recovery). A non-empty table's block_owner differs from its owner and is
+  // trusted as-is.
+  if (!_o->ownerhandle)
+    return;
+  if (_obj->block_owner
+      && _obj->block_owner->absolute_ref != _o->ownerhandle->absolute_ref)
+    return;
+  dict = dwg_ref_object (dwg, _o->ownerhandle);
+  if (dict && dict->supertype == DWG_SUPERTYPE_OBJECT
+      && dict->tio.object->ownerhandle
+      && dict->tio.object->ownerhandle->absolute_ref)
+    {
+      _obj->block_owner = dwg_add_handleref (
+          dwg, 4, dict->tio.object->ownerhandle->absolute_ref, NULL);
+      LOG_TRACE ("SORTENTSTABLE.block_owner = " FORMAT_REF " (fixup)\n",
+                 ARGS_REF (_obj->block_owner));
+    }
+}
+
 // separate model_space and paper_space into its own fields, out of entries[]
 static int
 move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
@@ -13472,6 +13504,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     dxf_postprocess_MLINESTYLE (obj); // FIXME. not triggered
   else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     dxf_postprocess_PLOTSETTINGS (obj);
+  else if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
+    dxf_postprocess_SORTENTSTABLE (obj);
   // set defaults not in dxf:
   else if (obj->type == DWG_TYPE__3DFACE && dwg->header.from_version >= R_2000)
     {
