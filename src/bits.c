@@ -2247,7 +2247,12 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     bit_write_RS (dat, (BITCODE_RS)length);
   else
     {
-      if (dat->version >= R_14 && length)
+      // The trailing NUL in the TV length is an r2004+ convention: the
+      // reader side only ever observed zero-terminated strings from
+      // >= r2004 writer apps, and pre-r2004 lengths equal strlen (ODA's
+      // ACAD2000 output confirms: "SOLID" is written as 5, not 6). Writing
+      // the NUL into r2000 made every string one byte off AutoCAD's layout.
+      if (dat->version >= R_2004 && length)
         length++; // TV-ZERO
       bit_write_BS (dat, (BITCODE_BS)length);
     }
