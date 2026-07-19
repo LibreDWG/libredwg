@@ -13901,6 +13901,19 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           _hdr->base_pt.x = _obj->base_pt.x;
                           _hdr->base_pt.y = _obj->base_pt.y;
                           LOG_TRACE ("BLOCK_HEADER.base_pt = BLOCK.base_pt\n");
+                          // A bound/local block (e.g. "A$C..." from a bound
+                          // xref) keeps a stray xref bit in its BLOCK_RECORD
+                          // flag 70, but a real xref must have an xref path.
+                          // No path => it is local: clear blkisxref, or
+                          // AutoCAD/BricsCAD render it as an unresolved Xref.
+                          if (_hdr->blkisxref
+                              && bit_empty_T (dat, _obj->xref_pname))
+                            {
+                              _hdr->blkisxref = 0;
+                              _hdr->xrefoverlaid = 0;
+                              LOG_TRACE ("BLOCK_HEADER.blkisxref = 0 "
+                                         "(no xref path, local block)\n");
+                            }
                         }
                       else if (blkhdr->fixedtype == DWG_TYPE_BLOCK_CONTROL)
                         {
