@@ -725,7 +725,7 @@ EXPORT double
 dwg_page_x_min (const Dwg_Data *dwg)
 {
   assert (dwg);
-  return dwg->header_vars.EXTMIN.x;
+  return dwg->header_vars.PEXTMIN.x;
 }
 
 EXPORT double
