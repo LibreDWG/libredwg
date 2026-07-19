@@ -9497,6 +9497,38 @@ dxf_postprocess_PLOTSETTINGS (Dwg_Object *restrict obj)
     _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
 }
 
+static void
+dxf_postprocess_SORTENTSTABLE (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_Object *_o = obj->tio.object;
+  Dwg_Object_SORTENTSTABLE *_obj = _o->tio.SORTENTSTABLE;
+  Dwg_Object *dict;
+
+  // block_owner must be the BLOCK_HEADER whose entities this table sorts,
+  // i.e. the owner of the extension dictionary that owns the table. An empty
+  // table carries no explicit block_owner in DXF, and the importer misread
+  // the object owner (the dictionary) as block_owner -> AutoCAD/ODA reject
+  // the owning block ("Invalid input <AcDbBlockTableRecord>", BlockEnd needs
+  // recovery). A non-empty table's block_owner differs from its owner and is
+  // trusted as-is.
+  if (!_o->ownerhandle)
+    return;
+  if (_obj->block_owner
+      && _obj->block_owner->absolute_ref != _o->ownerhandle->absolute_ref)
+    return;
+  dict = dwg_ref_object (dwg, _o->ownerhandle);
+  if (dict && dict->supertype == DWG_SUPERTYPE_OBJECT
+      && dict->tio.object->ownerhandle
+      && dict->tio.object->ownerhandle->absolute_ref)
+    {
+      _obj->block_owner = dwg_add_handleref (
+          dwg, 4, dict->tio.object->ownerhandle->absolute_ref, NULL);
+      LOG_TRACE ("SORTENTSTABLE.block_owner = " FORMAT_REF " (fixup)\n",
+                 ARGS_REF (_obj->block_owner));
+    }
+}
+
 // separate model_space and paper_space into its own fields, out of entries[]
 static int
 move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
@@ -10219,8 +10251,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     = obj->tio.object->tio.SORTENTSTABLE;
                 if (o->num_ents > 0 && !o->sort_ents[o->num_ents - 1])
                   {
+                    // sort_ents are code-0 ordering handles that alias real
+                    // entity handles; pass NULL so they are NOT registered in
+                    // the object_map (obj would collide with the true entity,
+                    // corrupting handle resolution on large files).
                     BITCODE_H hdl
-                        = dwg_add_handleref (dwg, 0, pair->value.u, obj);
+                        = dwg_add_handleref (dwg, 0, pair->value.u, NULL);
                     o->sort_ents[o->num_ents - 1] = hdl;
                     LOG_TRACE ("SORTENTSTABLE.sort_ents[%d] = " FORMAT_REF
                                " [H 5]\n",
@@ -13468,6 +13504,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     dxf_postprocess_MLINESTYLE (obj); // FIXME. not triggered
   else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     dxf_postprocess_PLOTSETTINGS (obj);
+  else if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
+    dxf_postprocess_SORTENTSTABLE (obj);
   // set defaults not in dxf:
   else if (obj->type == DWG_TYPE__3DFACE && dwg->header.from_version >= R_2000)
     {
@@ -13901,6 +13939,19 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           _hdr->base_pt.x = _obj->base_pt.x;
                           _hdr->base_pt.y = _obj->base_pt.y;
                           LOG_TRACE ("BLOCK_HEADER.base_pt = BLOCK.base_pt\n");
+                          // A bound/local block (e.g. "A$C..." from a bound
+                          // xref) keeps a stray xref bit in its BLOCK_RECORD
+                          // flag 70, but a real xref must have an xref path.
+                          // No path => it is local: clear blkisxref, or
+                          // AutoCAD/BricsCAD render it as an unresolved Xref.
+                          if (_hdr->blkisxref
+                              && bit_empty_T (dat, _obj->xref_pname))
+                            {
+                              _hdr->blkisxref = 0;
+                              _hdr->xrefoverlaid = 0;
+                              LOG_TRACE ("BLOCK_HEADER.blkisxref = 0 "
+                                         "(no xref path, local block)\n");
+                            }
                         }
                       else if (blkhdr->fixedtype == DWG_TYPE_BLOCK_CONTROL)
                         {
@@ -14011,7 +14062,11 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            || bit_eq_T (dat, _obj->name, "*PAPER_SPACE"))
                     entmode = ent->entmode = 1;
                   else
-                    entmode = ent->entmode = 3; // regular block entities
+                    // Regular block members use entmode 0 (explicit owner =
+                    // block record), matching AutoCAD/ODA. entmode 3 (model
+                    // space) makes conformant readers resolve the BlockBegin
+                    // owner to *Model_Space -> "BlockBegin owner Id invalid".
+                    entmode = ent->entmode = 0; // regular block entities
                   if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
                     ent->isbylayerlt = 1;
                 }
