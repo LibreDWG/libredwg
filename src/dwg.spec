@@ -4743,9 +4743,17 @@ DWG_ENTITY (HATCH)
                         {
 #define seg segx[rcount2]
                           SUB_FIELD_BL (seg, num_fitpts, 97);
-                          FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
-                          SUB_FIELD_2RD (seg, start_tangent, 12);
-                          SUB_FIELD_2RD (seg, end_tangent, 13);
+                          // AutoCAD writes the fit points and the two
+                          // tangents only when the spline edge was defined by
+                          // fit points (num_fitpts > 0). Reading the tangents
+                          // unconditionally overran the object and dropped the
+                          // remaining hatch edges/paths.
+                          if (FIELD_VALUE (seg.num_fitpts))
+                            {
+                              FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
+                              SUB_FIELD_2RD (seg, start_tangent, 12);
+                              SUB_FIELD_2RD (seg, end_tangent, 13);
+                            }
                         }
                       break;
                     default:
