@@ -3572,6 +3572,16 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
         if (section_type != 0x41630e3b)
           LOG_INFO ("Not found\n");
       }
+    /* start may point near the end of the file (small or truncated
+       files), where reading the 0x100-byte page map header would run
+       past the end of the chain buffer. GHSA-c8cq-gr5h-7c6j */
+    if (start > dat->size || dat->size - start < 0x100)
+      {
+        LOG_ERROR ("Invalid Section Page Map address 0x%zx (file size "
+                   "0x%zx)\n",
+                   start, dat->size);
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+      }
     map = &dat->chain[start];
     LOG_INSANE ("section_map_address: 0x%zx + 0x100:\n", start);
     LOG_INSANE_TF (map, 0x100);
