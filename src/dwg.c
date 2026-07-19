@@ -3503,11 +3503,30 @@ dwg_set_next_objhandle (Dwg_Object *obj)
   BITCODE_RLL seed;
   if (dwg->next_hdl)
     {
-      obj->handle.value = dwg->next_hdl;
-      dwg_set_handle_size (&obj->handle);
-      hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
+      // Only honor the requested handle if it is still free. A stale next_hdl
+      // (e.g. left over from DXF import when a table record is added later at
+      // encode time, like the "LibreDWG"/ACAD_MLEADERVER APPIDs) would
+      // otherwise collide with an existing object and produce a DWG whose
+      // handle map is ambiguous ("... TableRecord can't be cast to
+      // AcDbEntity" in AutoCAD/BricsCAD/ODA). On collision, fall through to a
+      // fresh handseed.
+      uint64_t existing = dwg->object_map
+                              ? hash_get (dwg->object_map, dwg->next_hdl)
+                              : HASH_NOT_FOUND;
+      if (existing == HASH_NOT_FOUND || existing == (uint64_t)obj->index)
+        {
+          obj->handle.value = dwg->next_hdl;
+          dwg_set_handle_size (&obj->handle);
+          if (!dwg->object_map)
+            dwg->object_map = hash_new (200);
+          hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
+          dwg->next_hdl = 0;
+          return;
+        }
+      LOG_WARN ("next_hdl " FORMAT_HV " already used by object %" PRIu64
+                ", using a fresh handseed",
+                dwg->next_hdl, existing);
       dwg->next_hdl = 0;
-      return;
     }
   seed = dwg_new_handseed (dwg);
   if (!dwg->object_map)
