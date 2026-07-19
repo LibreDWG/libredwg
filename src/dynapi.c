@@ -15273,7 +15273,8 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
 static void
 dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
                    const Dwg_Version_Type dwg_version,
-                   const void *restrict value, const bool is_utf8)
+                   const void *restrict value, const bool is_utf8,
+                   const BITCODE_RS codepage)
 {
   // TODO: sanity checks. is_malloc (TF), copy zero's (TFv)
   // if text strcpy or wcscpy, or do utf8 conversion.
@@ -15396,7 +15397,8 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
             }
         }
       old = &((char*)_obj)[f->offset];
-      dynapi_set_helper (old, f, dwg_version, value, is_utf8);
+      dynapi_set_helper (old, f, dwg_version, value, is_utf8,
+                         dwg ? dwg->header.codepage : 0);
       return true;
     }
   }
@@ -15449,7 +15451,8 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
               }
           }
         old = &((char*)_obj)[f->offset];
-        dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
+        dynapi_set_helper (old, f, dwg->header.version, value, is_utf8,
+                           dwg->header.codepage);
 
         // Set also FLAGS
         if (strEQc (fieldname, "CELWEIGHT"))
@@ -15549,7 +15552,8 @@ dwg_dynapi_common_set_value (void *restrict _obj,
         memcpy (old, value, size);
       }
     else
-      dynapi_set_helper (old, f, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
+      dynapi_set_helper (old, f, dwg ? dwg->header.version : R_INVALID, value, is_utf8,
+                         dwg ? dwg->header.codepage : 0);
 
     if (dwg && obj->supertype == DWG_SUPERTYPE_ENTITY && strEQc (fieldname, "ltype"))
       { // set also isbylayerlt and ltype_flags
@@ -15635,7 +15639,8 @@ dwg_dynapi_subclass_set_value (Dwg_Data *restrict dwg,
     }
   old = &((char*)ptr)[f->offset];
   if (f->is_string)
-    dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
+    dynapi_set_helper (old, f, dwg->header.version, value, is_utf8,
+                           dwg->header.codepage);
   else
     memcpy (old, value, f->size);
   return true;
@@ -15669,7 +15674,8 @@ dwg_dynapi_field_set_value (const Dwg_Data *restrict dwg, /* only needed if unic
     return false;
 #endif
   off = &((char*)ptr)[field->offset];
-  dynapi_set_helper (off, field, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
+  dynapi_set_helper (off, field, dwg ? dwg->header.version : R_INVALID, value, is_utf8,
+                         dwg ? dwg->header.codepage : 0);
   return true;
 }
 

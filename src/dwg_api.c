@@ -24771,32 +24771,11 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
     }
   else
     {
-      // TODO Encode unicode to \U+... bit_utf8_to_TV. codepage conversions
-#if 0
-      int size = 1024;
-      char *dest = (char *)malloc (size);
-      char *tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
-                                  dwg->header.codepage);
-      if (!dest)
-        {
-          LOG_ERROR ("%s: Out of memory", __FUNCTION__);
-          return NULL;
-        }
-      while (!tgt)
-        {
-          size *= 2;
-          if (size >= 1>>32)
-            {
-              LOG_ERROR ("%s: Out of memory", __FUNCTION__);
-              return NULL;
-            }
-          dest = (char*)realloc (dest, size);
-          tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
-                                dwg->header.codepage);
-        }
-      return tgt;
-#endif
-      if (dwg->header.version <= R_12 && strlen (u8str) < 32)
+      const BITCODE_RS codepage = dwg->header.codepage;
+      size_t len = strlen (u8str), size;
+      char *dest, *tgt;
+
+      if (dwg->header.version <= R_12 && len < 32)
         {
           // those old names are usually 32byte, and bit_write_TF
           // might heap-overflow then.
@@ -24805,8 +24784,43 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
           buf[32] = '\0';
           return buf;
         }
-      else
+      // Convert UTF-8 to the DWG's single-byte codepage (TV). Characters not
+      // representable in the codepage become \U+XXXX escapes. Without this,
+      // r2000 stored the raw UTF-8 bytes in codepage TV fields, which
+      // AutoCAD/BricsCAD/ODA read as mojibake (e.g. accented/n-tilde letters
+      // split into two wrong glyphs). ASCII and codepage 0/1 need no work.
+      if (codepage <= 1)
         return strdup (u8str);
+      size = (len * 2) + 2;
+      dest = (char *)malloc (size);
+      if (!dest)
+        {
+          LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+          return NULL;
+        }
+      tgt = bit_utf8_to_TV (dest, (unsigned char *)u8str, size, len, 0,
+                            codepage);
+      while (!tgt && size < (1UL << 24))
+        {
+          char *ndest;
+          size *= 2;
+          ndest = (char *)realloc (dest, size);
+          if (!ndest)
+            {
+              free (dest);
+              LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+              return NULL;
+            }
+          dest = ndest;
+          tgt = bit_utf8_to_TV (dest, (unsigned char *)u8str, size, len, 0,
+                                codepage);
+        }
+      if (!tgt)
+        {
+          free (dest);
+          return strdup (u8str); // fallback: keep UTF-8
+        }
+      return tgt;
     }
 }
 
