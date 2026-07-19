@@ -12217,6 +12217,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   = dwg_dynapi_entity_fields (obj->name);
               if (!pair || pair->code == 0)
                 break;
+              // The MTEXT R2018 "Embedded Object" reuses the main-entity DXF
+              // codes (40=rect_width, 41=rect_height, 10/11 points...), which
+              // would clobber the already-read text_height/rect_width and blow
+              // up the text scale. r2000 output drops the embedded object, so
+              // skip its fields once in_embedobj is set.
+              if (in_embedobj && obj->fixedtype == DWG_TYPE_MTEXT)
+                goto next_pair;
               if (!fields)
                 {
                   LOG_ERROR ("Illegal object name %s, no dynapi fields",
