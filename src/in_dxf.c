@@ -12597,9 +12597,16 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                    || strchr (f->type, '3')
                                    || strEQc (f->type, "BE")))
                         {
-                          // pt.x = 0.0;
-                          // if (pair->value.d == 0.0) // ignore defaults
-                          //  goto next_pair;
+                          // Read-modify-write: keep .y/.z. Setting only .x
+                          // from a fresh-but-stale `pt` (reused across fields)
+                          // leaked the previous point's y/z into this one —
+                          // e.g. an INSERT whose DXF has group 41 (xscale) but
+                          // omits 42/43 got scale.y/z from the insertion point
+                          // (a degenerate huge scale). The matching 42/43 (.y,
+                          // .z) pairs, when present, overwrite these below.
+                          pt.x = pt.y = pt.z = 0.0;
+                          dwg_dynapi_entity_value (_obj, obj->name, f->name,
+                                                   &pt, NULL);
                           pt.x = pair->value.d;
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &pt, 1);
