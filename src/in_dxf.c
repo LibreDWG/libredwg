@@ -14028,7 +14028,11 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            || bit_eq_T (dat, _obj->name, "*PAPER_SPACE"))
                     entmode = ent->entmode = 1;
                   else
-                    entmode = ent->entmode = 3; // regular block entities
+                    // Regular block members use entmode 0 (explicit owner =
+                    // block record), matching AutoCAD/ODA. entmode 3 (model
+                    // space) makes conformant readers resolve the BlockBegin
+                    // owner to *Model_Space -> "BlockBegin owner Id invalid".
+                    entmode = ent->entmode = 0; // regular block entities
                   if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
                     ent->isbylayerlt = 1;
                 }
