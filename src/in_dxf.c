@@ -13443,6 +13443,17 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n", name,
                              "dim_rotation", ang, pair->value.d, "BD", 50);
                 }
+              // group 16,26,36 (dimension-arc definition point) is valid
+              // DXF on angular dimensions; subtypes whose DWG struct has no
+              // such field (DIMENSION_ANG3PT as written by AutoCAD/ezdxf)
+              // must skip it, not abort the whole file.
+              else if (obj->supertype == DWG_SUPERTYPE_ENTITY
+                       && memBEGINc (obj->name, "DIMENSION")
+                       && (pair->code == 16 || pair->code == 26
+                           || pair->code == 36))
+                {
+                  LOG_WARN ("Ignored DXF code %d for %s", pair->code, name);
+                }
               // accept wrong colors
               else if (is_dxf_class_importable (obj->name)
                        && (pair->code < 60 || pair->code > 68))
