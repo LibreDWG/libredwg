@@ -3156,7 +3156,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->paths[j].flag = pair->value.u;
           LOG_TRACE ("HATCH.paths[%d].flag = %u [BL 92]\n", j, pair->value.u);
           is_plpath = pair->value.u & 2;
-          o->has_derived = pair->value.u & 4;
+          // has_derived is the OR of every path flag's 0x4 bit (the decoder
+          // computes it that way); a plain '=' left it holding only the last
+          // path's bit, so the encoder skipped pixel_size while the reader
+          // expected it -> misaligned num_seeds and an unreadable HATCH.
+          o->has_derived |= (pair->value.u & 4) ? 1 : 0;
           LOG_TRACE ("HATCH.has_derived = %d [B 0]\n", o->has_derived);
         }
       else if (pair->code == 93)
