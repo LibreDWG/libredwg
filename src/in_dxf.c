@@ -10063,6 +10063,22 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
         LOG_TRACE ("%s.extrusion = (0,0,1) (default)\n", obj->name);
         pt.z = 0.0;
       }
+    // MTEXT flow direction and line spacing live only in the DWG, not the
+    // DXF; ezdxf omits them so the calloc zeros ship, and flow_dir 0 /
+    // line-spacing style 0 / factor 0 make AutoCAD/BricsCAD mis-lay-out the
+    // text. ODA writes flow_dir 1 (by style), lspace style 1, factor 1.0.
+    if (obj->fixedtype == DWG_TYPE_MTEXT)
+      {
+        Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
+        if (o->flow_dir == 0)
+          { o->flow_dir = 1; LOG_TRACE ("MTEXT.flow_dir = 1 [default]\n"); }
+        if (o->linespace_style == 0)
+          { o->linespace_style = 1;
+            LOG_TRACE ("MTEXT.linespace_style = 1 [default]\n"); }
+        if (o->linespace_factor == 0.0)
+          { o->linespace_factor = 1.0;
+            LOG_TRACE ("MTEXT.linespace_factor = 1.0 [default]\n"); }
+      }
     // DIMENSION common fields that live only in the DWG, not the DXF: a
     // writer like ezdxf omits them, and the calloc zeros are degenerate —
     // a (0,0,0) insertion scale, line-spacing style/factor 0, and
