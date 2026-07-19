@@ -10219,8 +10219,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     = obj->tio.object->tio.SORTENTSTABLE;
                 if (o->num_ents > 0 && !o->sort_ents[o->num_ents - 1])
                   {
+                    // sort_ents are code-0 ordering handles that alias real
+                    // entity handles; pass NULL so they are NOT registered in
+                    // the object_map (obj would collide with the true entity,
+                    // corrupting handle resolution on large files).
                     BITCODE_H hdl
-                        = dwg_add_handleref (dwg, 0, pair->value.u, obj);
+                        = dwg_add_handleref (dwg, 0, pair->value.u, NULL);
                     o->sort_ents[o->num_ents - 1] = hdl;
                     LOG_TRACE ("SORTENTSTABLE.sort_ents[%d] = " FORMAT_REF
                                " [H 5]\n",
