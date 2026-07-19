@@ -3080,6 +3080,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int j = -1;
   int k = -1;
   int l = -1;
+  int knots_left = 0; // spline knots pending; they precede rational weights
   int hdl_idx = -1;
   bool next_330_boundary_handles = false;
 
@@ -3261,6 +3262,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_paths;
           CHK_segs;
           o->paths[j].segs[k].num_knots = pair->value.l;
+          knots_left = (int)pair->value.l;
           LOG_TRACE ("HATCH.paths[%d].segs[%d].num_knots = %ld [BL 95]\n", j,
                      k, pair->value.l);
           o->paths[j].segs[k].knots
@@ -3537,7 +3539,13 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   j, k, pair->value.d);
               break;
             case 4: /* SPLINE */
-              if (l >= 0 && o->paths[j].segs[k].is_rational)
+              // A rational spline stores its knots (num_knots of them) BEFORE
+              // the per-control-point weights, and both use DXF code 40. While
+              // knots remain, code 40 is a knot even when is_rational is set;
+              // keying only on is_rational sent every knot after the first to
+              // the weight branch, corrupting the knots and overrunning the
+              // control-point array ("wrong l N control_points index").
+              if (knots_left <= 0 && l >= 0 && o->paths[j].segs[k].is_rational)
                 {
                   CHK_control_points;
                   o->paths[j].segs[k].control_points[l].weight = pair->value.d;
@@ -3563,6 +3571,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   l++;
                   CHK_knots;
                   o->paths[j].segs[k].knots[l] = pair->value.d;
+                  knots_left--;
                   LOG_TRACE (
                       "HATCH.paths[%d].segs[%d].knots[%d] = %f [BD 40]\n", j,
                       k, l, pair->value.d);
