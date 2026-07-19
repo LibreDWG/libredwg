@@ -1257,13 +1257,27 @@ bit_write_TV_tests (void)
   else
     fail ("bit_write_TV @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
+  // r2000: BS length + bytes, NO trailing-NUL in the length (ODA's ACAD2000
+  // output writes "SOLID" as 5, not 6). "GNU" -> BS(3) + 3 bytes = @4.2.
   bit_set_position (&bitchain, 0);
-  bitchain.from_version = R_13;
+  bitchain.from_version = bitchain.version = R_2000;
+  bit_write_TV (&bitchain, (char *)"GNU");
+  if (bitchain.byte == 4 && bitchain.bit == 2)
+    ok ("bit_write_TV (R_2000, no TV-ZERO)");
+  else
+    fail ("bit_write_TV R_2000 @%" PRIuSIZE ".%u", bitchain.byte,
+          bitchain.bit);
+
+  // r2004+: the length includes the trailing NUL (TV-ZERO). "GNU" -> BS(4)
+  // + 3 bytes = @5.2.
+  bit_set_position (&bitchain, 0);
+  bitchain.from_version = bitchain.version = R_2004;
   bit_write_TV (&bitchain, (char *)"GNU");
   if (bitchain.byte == 5 && bitchain.bit == 2)
-    ok ("bit_write_TV (>R_13)");
+    ok ("bit_write_TV (R_2004, TV-ZERO)");
   else
-    fail ("bit_write_TV @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
+    fail ("bit_write_TV R_2004 @%" PRIuSIZE ".%u", bitchain.byte,
+          bitchain.bit);
 
   bitfree (&bitchain);
 }
