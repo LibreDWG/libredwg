@@ -9504,6 +9504,29 @@ dxf_postprocess_PLOTSETTINGS (Dwg_Object *restrict obj)
     _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
 }
 
+static void
+dxf_postprocess_MTEXT (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
+
+  // MTEXT.text is assembled from raw UTF-8 DXF chunks (code 1/3). For a
+  // single-byte codepage target (r2000 and earlier) it must be converted to
+  // that codepage, or the raw UTF-8 bytes land in a codepage TV field and
+  // AutoCAD/BricsCAD/ODA render accented / n-tilde letters as mojibake.
+  // dwg_add_u8_input performs the conversion (and leaves r2007+ / TU alone).
+  if (o && o->text && dwg->header.version < R_2007
+      && dwg->header.codepage > 1)
+    {
+      char *conv = dwg_add_u8_input (dwg, o->text);
+      if (conv && conv != o->text)
+        {
+          free (o->text);
+          o->text = conv;
+        }
+    }
+}
+
 // separate model_space and paper_space into its own fields, out of entries[]
 static int
 move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
@@ -13475,6 +13498,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     dxf_postprocess_MLINESTYLE (obj); // FIXME. not triggered
   else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     dxf_postprocess_PLOTSETTINGS (obj);
+  else if (obj->fixedtype == DWG_TYPE_MTEXT)
+    dxf_postprocess_MTEXT (obj);
   // set defaults not in dxf:
   else if (obj->type == DWG_TYPE__3DFACE && dwg->header.from_version >= R_2000)
     {
