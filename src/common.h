@@ -33,6 +33,15 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <math.h>
+
+/* rcc and some other compilers lack isfinite as macro or function */
+#ifndef isfinite
+static inline int
+isfinite (double x)
+{
+  return !isinf (x) && !isnan (x);
+}
+#endif
 #include <time.h>
 #include "dwg.h"
 
