@@ -658,7 +658,11 @@ dxf_read_string (Bit_Chain *dat, char **string)
            dat->byte++)
         {
           char *s = (char *)&dat->chain[dat->byte];
-          if (memBEGINc (s, "\\M+") && s[3] >= '1' && s[3] <= '5')
+          // Compare the 3 bytes directly: memBEGINc would strlen() the whole
+          // remaining multi-MB buffer for EVERY character of EVERY string,
+          // making DXF import quadratic in file size (a 19 MB DXF "hangs").
+          if (dat->byte + 3 < dat->size && s[0] == '\\' && s[1] == 'M'
+              && s[2] == '+' && s[3] >= '1' && s[3] <= '5')
             {
               const Dwg_Codepage mif_tbl[]
                   = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
