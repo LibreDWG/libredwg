@@ -459,8 +459,13 @@ sub dxf_in {
                 next if $DXF{$n}->{$f};
             }
 
-            # (scale.x, 41) as is
-            $DXF{$n}->{$f} = $dxf  if $dxf;
+            # (scale.x, 41) as is.
+            # Keep the FIRST dxf code for a field: some entities re-read a
+            # field in a later (embedded/redundant) context with a different
+            # group code (e.g. MTEXT rect_width is 41 in the primary object
+            # but re-appears as 40 in the annotative context), which used to
+            # clobber the canonical mapping and mis-import the field.
+            $DXF{$n}->{$f} = $dxf  if $dxf and !exists $DXF{$n}->{$f};
             $ENT{$n}->{$f} = 'TF'  if $type eq 'BINARY';
             $ENT{$n}->{$f} = $type if $type =~ /^T/;
             $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
