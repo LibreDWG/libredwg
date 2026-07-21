@@ -1300,15 +1300,23 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
       const unsigned char *uchar_value = (const unsigned char *)&value;
       const unsigned char *uchar_default
           = (const unsigned char *)&default_value;
-      const uint16_t *uint_value = (const uint16_t *)&uchar_value;
-      const uint16_t *uint_default = (const uint16_t *)&uchar_default;
-      // dbl: 7654 3210, little-endian only
-      // check the first 2 bits for eq
-      if (le16toh (uint_value[0]) == le16toh (uint_default[0]))
+      // Alias the DOUBLE bytes, not the address of the pointer variable:
+      // (const uint16_t *)&uchar_value compared two stack addresses, so the
+      // DD mode (which 4/6 bytes to emit) was chosen from garbage and
+      // partial-mode writes corrupted the value (e.g. an INSERT yscale of 1
+      // came back as the insertion-point Y). Must alias the value bytes.
+      const uint16_t *uint_value = (const uint16_t *)uchar_value;
+      const uint16_t *uint_default = (const uint16_t *)uchar_default;
+      // dbl: 7654 3210, little-endian only. bit_read_DD keeps the HIGH bytes
+      // of the default (word3 = bytes 6-7 for code 2, words 2+3 = bytes 4-7
+      // for code 1) and reads the rest, so the encoder must pick the mode by
+      // the HIGH words, not the low ones — comparing uint_value[0]/[1]
+      // mis-selected the partial modes and corrupted the value.
+      if (le16toh (uint_value[3]) == le16toh (uint_default[3]))
         {
-          // first 4 bits eq, i.e. next 2 bits also
+          // top 2 bytes eq; is the whole high half (top 4 bytes) eq too?
           // cppcheck-suppress objectIndex
-          if (le16toh (uint_value[1]) == le16toh (uint_default[1]))
+          if (le16toh (uint_value[2]) == le16toh (uint_default[2]))
             {
               bits = 1;
               bit_write_BB (dat, 1);
@@ -2247,7 +2255,12 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     bit_write_RS (dat, (BITCODE_RS)length);
   else
     {
-      if (dat->version >= R_14 && length)
+      // The trailing NUL in the TV length is an r2004+ convention: the
+      // reader side only ever observed zero-terminated strings from
+      // >= r2004 writer apps, and pre-r2004 lengths equal strlen (ODA's
+      // ACAD2000 output confirms: "SOLID" is written as 5, not 6). Writing
+      // the NUL into r2000 made every string one byte off AutoCAD's layout.
+      if (dat->version >= R_2004 && length)
         length++; // TV-ZERO
       bit_write_BS (dat, (BITCODE_BS)length);
     }
