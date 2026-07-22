@@ -8530,7 +8530,10 @@ add_AcDbBlockRotationAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 {
   Dwg_Data *dwg = obj->parent;
   Dxf_Pair *pair;
-  pair = add_BlockAction_ConnectionPts (obj, dat, 2, 1, 94, 303);
+  // conn_pts[2] of a rotation action is written as group 96/305 (the DXF
+  // writer emits dxf + vcount with vcount starting at 2, matching AutoCAD);
+  // expecting 94/303 here rejected every real file carrying one.
+  pair = add_BlockAction_ConnectionPts (obj, dat, 2, 1, 96, 305);
   if (pair)
     return pair;
   return NULL;
@@ -9376,9 +9379,27 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("dxf_postprocess_SEQEND:\n");
-  // r12 and earlier: search for owner backwards
-  if (dwg->header.from_version < R_13b1 && !owner
-      && !obj->tio.entity->ownerhandle)
+  // Writers like ezdxf (and AutoCAD's own DXF) set 330 of a SEQEND to the
+  // owning BLOCK_RECORD, not to the INSERT/POLYLINE parent. Trusting that
+  // owner wrote num_owned = <all entities of the block> onto the
+  // BLOCK_HEADER (a field it does have) with no matching entities array —
+  // an out-of-bounds crash later in dwg_fixup_BLOCKS_entities. Only real
+  // SEQEND parents qualify; anything else falls back to the backwards
+  // search below.
+  if (owner && owner->fixedtype != DWG_TYPE_INSERT
+      && owner->fixedtype != DWG_TYPE_MINSERT
+      && owner->fixedtype != DWG_TYPE_POLYLINE_2D
+      && owner->fixedtype != DWG_TYPE_POLYLINE_3D
+      && owner->fixedtype != DWG_TYPE_POLYLINE_PFACE
+      && owner->fixedtype != DWG_TYPE_POLYLINE_MESH)
+    {
+      LOG_TRACE ("SEQEND.330 points to %s, not a SEQEND parent; searching "
+                 "backwards\n", owner->name);
+      owner = NULL;
+    }
+  // search for the owner backwards (r12 has no ownerhandle; later versions
+  // may carry a wrong one, see above)
+  if (!owner)
     {
       for (i = obj->index - 1; i > 0; i--)
         {
@@ -12365,7 +12386,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                               dwg_dynapi_entity_set_value (_obj, obj->name,
                                                            f->name, &pts, 0);
                             }
-                          else if (j > 0 && j < size)
+                          // j >= 0 (not > 0): the FIRST point's .y (code 20,
+                          // still j==0 after the .x set pts[0] above) must be
+                          // stored too, or a 2D point vector like HATCH.seeds
+                          // loses every point's y (a (x,0) seed AutoCAD/ODA
+                          // reject). 2D points also never advanced j.
+                          else if (j >= 0 && j < size)
                             {
                               int _i = is2d ? j * 2 : j * 3;
                               dwg_dynapi_entity_value (_obj, obj->name,
@@ -12376,12 +12402,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 }
                               else if (pair->code < 30 && pts != NULL)
                                 {
-                                  if (is2d)
-                                    LOG_TRACE (
-                                        "%s.%s[%d] = (%f, %f) [%s %d]\n", name,
-                                        f->name, j, pts[_i], pair->value.d,
-                                        f->type, pair->code);
                                   pts[_i + 1] = pair->value.d;
+                                  if (is2d)
+                                    {
+                                      LOG_TRACE (
+                                          "%s.%s[%d] = (%f, %f) [%s %d]\n",
+                                          name, f->name, j, pts[_i],
+                                          pts[_i + 1], f->type, pair->code);
+                                      j++; // 2D point complete
+                                    }
                                 }
                               else if (*f->type == '3' && pts)
                                 {
@@ -12588,9 +12617,16 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                    || strchr (f->type, '3')
                                    || strEQc (f->type, "BE")))
                         {
-                          // pt.x = 0.0;
-                          // if (pair->value.d == 0.0) // ignore defaults
-                          //  goto next_pair;
+                          // Read-modify-write: keep .y/.z. Setting only .x
+                          // from a fresh-but-stale `pt` (reused across fields)
+                          // leaked the previous point's y/z into this one —
+                          // e.g. an INSERT whose DXF has group 41 (xscale) but
+                          // omits 42/43 got scale.y/z from the insertion point
+                          // (a degenerate huge scale). The matching 42/43 (.y,
+                          // .z) pairs, when present, overwrite these below.
+                          pt.x = pt.y = pt.z = 0.0;
+                          dwg_dynapi_entity_value (_obj, obj->name, f->name,
+                                                   &pt, NULL);
                           pt.x = pair->value.d;
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &pt, 1);
@@ -13462,6 +13498,17 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                                "dim_rotation", &ang, 1);
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n", name,
                              "dim_rotation", ang, pair->value.d, "BD", 50);
+                }
+              // group 16,26,36 (dimension-arc definition point) is valid
+              // DXF on angular dimensions; subtypes whose DWG struct has no
+              // such field (DIMENSION_ANG3PT as written by AutoCAD/ezdxf)
+              // must skip it, not abort the whole file.
+              else if (obj->supertype == DWG_SUPERTYPE_ENTITY
+                       && memBEGINc (obj->name, "DIMENSION")
+                       && (pair->code == 16 || pair->code == 26
+                           || pair->code == 36))
+                {
+                  LOG_WARN ("Ignored DXF code %d for %s", pair->code, name);
                 }
               // accept wrong colors
               else if (is_dxf_class_importable (obj->name)
