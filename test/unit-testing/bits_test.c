@@ -55,6 +55,17 @@ bit_read_BB_tests (void)
   else
     fail ("bit_read_BB %d", result);
   bitfree (&bitchain);
+
+  bitchain = strtobt ("00000001"
+                      "10000000");
+  bit_set_position (&bitchain, 7);
+  result = bit_read_BB (&bitchain);
+  if (result == 0x3 && bitchain.byte == 1 && bitchain.bit == 1)
+    pass ();
+  else
+    fail ("bit_read_BB bit=7 %d @%" PRIuSIZE ".%u", result, bitchain.byte,
+          bitchain.bit);
+  bitfree (&bitchain);
 }
 
 static void
@@ -68,6 +79,19 @@ bit_write_BB_tests (void)
     pass ();
   else
     fail ("bit_write_BB %d", bitchain.chain[0]);
+  bitfree (&bitchain);
+
+  bitchain = strtobt ("00000000"
+                      "00000000");
+  bit_set_position (&bitchain, 7);
+  bit_write_BB (&bitchain, 0x3);
+
+  if (bitchain.chain[0] == 0x01 && bitchain.chain[1] == 0x80
+      && bitchain.byte == 1 && bitchain.bit == 1)
+    pass ();
+  else
+    fail ("bit_write_BB bit=7 %02X %02X @%" PRIuSIZE ".%u", bitchain.chain[0],
+          bitchain.chain[1], bitchain.byte, bitchain.bit);
   bitfree (&bitchain);
 }
 
@@ -247,6 +271,17 @@ bit_read_RC_tests (void)
   else
     fail ("bit_read_RC");
   bitfree (&bitchain);
+
+  bitchain = strtobt ("01111111"
+                      "10000000");
+  bit_set_position (&bitchain, 1);
+  result = bit_read_RC (&bitchain);
+  if (result == 0xFF && bitchain.byte == 1 && bitchain.bit == 1)
+    pass ();
+  else
+    fail ("bit_read_RC bit=1 %02X @%" PRIuSIZE ".%u", result, bitchain.byte,
+          bitchain.bit);
+  bitfree (&bitchain);
 }
 
 static void
@@ -258,6 +293,18 @@ bit_write_RC_tests (void)
     pass ();
   else
     fail ("bit_write_RC");
+  bitfree (&bitchain);
+
+  bitchain = strtobt ("00000000"
+                      "00000000");
+  bit_set_position (&bitchain, 1);
+  bit_write_RC (&bitchain, 0xFF);
+  if (bitchain.chain[0] == 0x7F && bitchain.chain[1] == 0x80
+      && bitchain.byte == 1 && bitchain.bit == 1)
+    pass ();
+  else
+    fail ("bit_write_RC bit=1 %02X %02X @%" PRIuSIZE ".%u", bitchain.chain[0],
+          bitchain.chain[1], bitchain.byte, bitchain.bit);
   bitfree (&bitchain);
 }
 
