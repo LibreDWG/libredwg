@@ -24,7 +24,8 @@ int numpassed (void);
 int numfailed (void);
 int is_make_silent (void);
 
-static inline void pass (void);
+static inline void pass_ (const char *name);
+#define pass() pass_ (__func__)
 static void fail (const char *fmt, ...) ATTRIBUTE_FORMAT (1, 2);
 static void ok (const char *fmt, ...) ATTRIBUTE_FORMAT (1, 2);
 
@@ -52,10 +53,13 @@ static void ATTRIBUTE_FORMAT (1, 2) ok (const char *fmt, ...)
 }
 
 static inline void
-pass (void)
+pass_ (const char *name)
 {
   passed++;
-  num++;
+  if (loglevel >= 2)
+    printf ("ok %d  # %s\n", ++num, name);
+  else
+    num++;
 }
 
 static void ATTRIBUTE_FORMAT (1, 2) fail (const char *fmt, ...)
