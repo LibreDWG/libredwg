@@ -9472,6 +9472,7 @@ typedef struct _dwg_object_entity
     /* Start auto-generated entity-union. Do not touch. */
     // clang-format: off
     Dwg_Entity__3DFACE *_3DFACE;
+    Dwg_Entity__3DLINE *_3DLINE;
     Dwg_Entity__3DSOLID *_3DSOLID;
     Dwg_Entity_ARC *ARC;
     Dwg_Entity_ATTDEF *ATTDEF;
@@ -9520,7 +9521,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_VIEWPORT *VIEWPORT;
     Dwg_Entity_XLINE *XLINE;
     /* untyped > 500 */
-    Dwg_Entity__3DLINE *_3DLINE;
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_CAMERA *CAMERA;
     Dwg_Entity_DGNUNDERLAY *DGNUNDERLAY;
@@ -11768,6 +11768,7 @@ EXPORT int dwg_object_name (const char *const restrict name, // in
 /* Start auto-generated content. Do not touch. */
 // clang-format: off
 EXPORT int dwg_setup__3DFACE (Dwg_Object *obj);
+EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup__3DSOLID (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC (Dwg_Object *obj);
 EXPORT int dwg_setup_ATTDEF (Dwg_Object *obj);
@@ -11841,7 +11842,6 @@ EXPORT int dwg_setup_VPORT_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_VX_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_VX_TABLE_RECORD (Dwg_Object *obj);
 /* untyped > 500 */
-EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_setup_DGNUNDERLAY (Dwg_Object *obj);
