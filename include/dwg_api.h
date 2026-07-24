@@ -548,6 +548,7 @@ extern "C"
   /* Start auto-generated content. Do not touch. */
   // clang-format: off
   typedef struct _dwg_entity__3DFACE		dwg_ent__3dface;
+  typedef struct _dwg_entity_3DLINE		dwg_ent__3dline;
   typedef struct _dwg_entity__3DSOLID		dwg_ent__3dsolid;
   typedef struct _dwg_entity_ARC		dwg_ent_arc;
   typedef struct _dwg_entity_ATTDEF		dwg_ent_attdef;
@@ -591,7 +592,6 @@ extern "C"
   typedef struct _dwg_entity_VERTEX_PFACE_FACE		dwg_ent_vert_pface_face;
   typedef struct _dwg_entity_VIEWPORT		dwg_ent_viewport;
   /* untyped > 500 */
-  typedef struct _dwg_entity_3DLINE		dwg_ent__3dline;
   typedef struct _dwg_entity_ARC_DIMENSION		dwg_ent_arc_dimension;
   typedef struct _dwg_entity_CAMERA		dwg_ent_camera;
   typedef struct _dwg_entity_DGNUNDERLAY		dwg_ent_dgnunderlay;
@@ -1672,6 +1672,7 @@ extern "C"
 
 
   dwg_get_OBJECT_DECL (ent__3dface, _3DFACE);
+  dwg_get_OBJECT_DECL (ent__3dline, _3DLINE);
   dwg_get_OBJECT_DECL (ent__3dsolid, _3DSOLID);
   dwg_get_OBJECT_DECL (ent_arc, ARC);
   dwg_get_OBJECT_DECL (ent_attdef, ATTDEF);
@@ -1715,7 +1716,6 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_vert_pface_face, VERTEX_PFACE_FACE);
   dwg_get_OBJECT_DECL (ent_viewport, VIEWPORT);
   /* untyped > 500 */
-  dwg_get_OBJECT_DECL (ent__3dline, _3DLINE);
   dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
   dwg_get_OBJECT_DECL (ent_camera, CAMERA);
   dwg_get_OBJECT_DECL (ent_dgnunderlay, DGNUNDERLAY);
@@ -2803,6 +2803,7 @@ extern "C"
 
 /// extract all owned entities from a block header (mspace or pspace)
   DWG_GETALL_ENTITY_DECL (_3DFACE);
+  DWG_GETALL_ENTITY_DECL (_3DLINE);
   DWG_GETALL_ENTITY_DECL (_3DSOLID);
   DWG_GETALL_ENTITY_DECL (ARC);
   DWG_GETALL_ENTITY_DECL (ATTDEF);
@@ -2851,7 +2852,6 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (VIEWPORT);
   DWG_GETALL_ENTITY_DECL (XLINE);
   /* untyped > 500 */
-  DWG_GETALL_ENTITY_DECL (_3DLINE);
   DWG_GETALL_ENTITY_DECL (ARC_DIMENSION);
   DWG_GETALL_ENTITY_DECL (CAMERA);
   DWG_GETALL_ENTITY_DECL (DGNUNDERLAY);
@@ -3954,6 +3954,7 @@ extern "C"
  */
 /* fixed <500 */
   CAST_DWG_OBJECT_TO_ENTITY_DECL (_3DFACE);
+  CAST_DWG_OBJECT_TO_ENTITY_DECL (_3DLINE);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (_3DSOLID);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (ARC);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (ATTDEF);
@@ -4002,7 +4003,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_DECL (VIEWPORT);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (XLINE);
   /* untyped > 500 */
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (_3DLINE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARC_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (CAMERA);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (DGNUNDERLAY);
@@ -9590,6 +9590,10 @@ extern "C"
   dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict start_pt,
                 const dwg_point_3d *restrict end_pt) __nonnull_all;
+  EXPORT Dwg_Entity__3DLINE *
+  dwg_add_3DLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const dwg_point_3d *restrict start_pt,
+                  const dwg_point_3d *restrict end_pt) __nonnull_all;
   EXPORT Dwg_Entity_DIMENSION_ALIGNED *dwg_add_DIMENSION_ALIGNED (
       Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       const dwg_point_3d *restrict xline1_pt,

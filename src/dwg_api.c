@@ -254,7 +254,6 @@ dwg_get_OBJECT (ent_viewport, VIEWPORT)
 /* Start auto-generated content. Do not touch. */
 // clang-format: off
 /* untyped > 500 */
-dwg_get_OBJECT (ent__3dline, _3DLINE)
 dwg_get_OBJECT (ent_arc_dimension, ARC_DIMENSION)
 dwg_get_OBJECT (ent_camera, CAMERA)
 dwg_get_OBJECT (ent_dgnunderlay, DGNUNDERLAY)
@@ -2510,6 +2509,7 @@ DWG_GETALL_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
 // clang-format: off
 /* fixed <500 */
 CAST_DWG_OBJECT_TO_ENTITY (_3DFACE)
+CAST_DWG_OBJECT_TO_ENTITY (_3DLINE)
 CAST_DWG_OBJECT_TO_ENTITY (_3DSOLID)
 CAST_DWG_OBJECT_TO_ENTITY (ARC)
 CAST_DWG_OBJECT_TO_ENTITY (ATTDEF)
@@ -2558,7 +2558,6 @@ CAST_DWG_OBJECT_TO_ENTITY (VERTEX_PFACE_FACE)
 CAST_DWG_OBJECT_TO_ENTITY (VIEWPORT)
 CAST_DWG_OBJECT_TO_ENTITY (XLINE)
 /* untyped > 500 */
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (_3DLINE)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ARC_DIMENSION)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (CAMERA)
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME (DGNUNDERLAY)
@@ -26692,9 +26691,44 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           obj->tio.entity->opts_r11 |= 2;
         }
     }
-  // There is 3DLINE entity in R_10, but duplicit with LINE (without
-  // HAS_ELEVATION)
+  // There is 3DLINE entity in R_10, but duplicit with LINE
   if (dwg->header.version == R_10)
+    {
+      if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+    }
+  return _obj;
+}
+
+EXPORT Dwg_Entity__3DLINE *
+dwg_add_3DLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                const dwg_point_3d *restrict start_pt,
+                const dwg_point_3d *restrict end_pt)
+{
+  API_ADD_ENTITY (_3DLINE);
+  if (dwg->header.version < R_2_4 || dwg->header.version > R_10)
+    {
+      LOG_ERROR ("Invalid entity %s for this DWG version", "3DLINE");
+      API_UNADD_ENTITY;
+      return NULL;
+    }
+  ADD_CHECK_3DPOINT (start_pt);
+  ADD_CHECK_3DPOINT (end_pt);
+  _obj->start.x = start_pt->x;
+  _obj->start.y = start_pt->y;
+  _obj->start.z = start_pt->z;
+  _obj->end.x = end_pt->x;
+  _obj->end.y = end_pt->y;
+  _obj->end.z = end_pt->z;
+  obj->type = DWG_TYPE_3DLINE_r11;
+  if (dwg->header.version < R_10)
+    {
+      if (_obj->start.z != 0.0)
+        obj->tio.entity->opts_r11 |= 1;
+      if (_obj->end.z != 0.0)
+        obj->tio.entity->opts_r11 |= 2;
+    }
+  else
     {
       if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;

@@ -2143,12 +2143,10 @@ for (@object_names) {
 }
 $STABLE{_3DSOLID}++;
 $STABLE{_3DFACE}++;
-
-# $UNSTABLE{_3DLINE}++;
-delete $STABLE{'3DLINE'};
-delete $FIXED{'3DLINE'};
+$STABLE{_3DLINE}++;
 $FIXED{_3DSOLID}++;
 $FIXED{_3DFACE}++;
+$FIXED{_3DLINE}++;
 for ( keys %STABLE ) {
     $STABLEVAR{$_}++ unless $FIXED{$_};
 }
