@@ -275,6 +275,56 @@ decompress_r2007_tests (void)
   }
 }
 
+/* Regression test for GHSA-pcp5-hv9w-8f78: read_data_section() set the
+ * source cursor from an unbounded page->offset (dat->byte = page->offset)
+ * without checking it against dat->size. In the uncompressed branch
+ * (comp_size == uncomp_size) the guard
+ *   uncomp_size > dat->size - dat->byte
+ * then underflowed (both size_t) once page->offset > dat->size, letting the
+ * following memcpy read past the file buffer. Build a minimal one-page,
+ * one-section, uncompressed setup with page->offset past dat->size and
+ * confirm it is rejected up front instead of read OOB. */
+static void
+read_data_section_tests (void)
+{
+  Bit_Chain dat = { 0 };
+  Bit_Chain sec_dat = { 0 };
+  unsigned char filebuf[64];
+  r2007_page page = { 0 };
+  r2007_section_page section_page = { 0 };
+  r2007_section_page *pages_arr[1];
+  r2007_section section = { 0 };
+  int error;
+
+  memset (filebuf, 0, sizeof (filebuf));
+  dat.chain = filebuf;
+  dat.size = sizeof (filebuf);
+
+  page.id = 1;
+  page.size = 32;
+  page.offset = dat.size + 1000; /* attacker: past the file buffer */
+
+  section_page.offset = 0; /* dest into decomp: in-bounds */
+  section_page.size = 16;
+  section_page.id = 1; /* matches page.id */
+  section_page.uncomp_size = 16;
+  section_page.comp_size
+      = 16; /* uncompressed branch: comp_size==uncomp_size */
+  pages_arr[0] = &section_page;
+
+  section.data_size = 64; /* max_decomp_size */
+  section.num_pages = 1;
+  section.type = SECTION_HEADER;
+  section.pages = pages_arr;
+
+  error = read_data_section (&sec_dat, &dat, &section, &page, SECTION_HEADER);
+  if (error == (int)DWG_ERR_VALUEOUTOFBOUNDS)
+    ok ("read_data_section: rejects out-of-bounds page->offset");
+  else
+    fail ("read_data_section: page->offset OOB not rejected: 0x%x", error);
+  free (sec_dat.chain);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -285,6 +335,7 @@ main (int argc, char const *argv[])
   two_byte_offset_tests ();
   decompress_R2004_section_tests ();
   decompress_r2007_tests ();
+  read_data_section_tests ();
 
   return numfailed () ? 1 : 0;
 }

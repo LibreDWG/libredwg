@@ -49,44 +49,6 @@ static unsigned int cur_ver = 0;
 #define DBG_MAX_COUNT 0x100000
 #define DBG_MAX_SIZE 0xff0000 /* should be dat->size */
 
-/* page map */
-typedef struct _r2007_page
-{
-  int64_t id;
-  uint64_t size;
-  uint64_t offset;
-  struct _r2007_page *next;
-} r2007_page;
-
-/* section page */
-typedef struct _r2007_section_page
-{
-  uint64_t offset;
-  uint64_t size;
-  int64_t id;
-  uint64_t uncomp_size; // src_size
-  uint64_t comp_size;
-  uint64_t checksum;
-  uint64_t crc;
-} r2007_section_page;
-
-/* section map */
-typedef struct _r2007_section
-{
-  uint64_t data_size; // max size of page
-  uint64_t max_size;
-  int64_t encrypted;
-  uint64_t hashcode;   // checksum in r2004
-  int64_t name_length; // 0x22
-  int64_t unknown;     // 0x00
-  int64_t encoded;
-  int64_t num_pages;
-  DWGCHAR *name;
-  Dwg_Section_Type type;
-  r2007_section_page **pages;
-  struct _r2007_section *next;
-} r2007_section;
-
 /* imported */
 int rs_decode_block (BITCODE_RC *blk, int fix);
 
@@ -99,10 +61,6 @@ static void sections_destroy (r2007_section *section);
 static r2007_section *read_sections_map (Bit_Chain *dat, int64_t size_comp,
                                          int64_t size_uncomp,
                                          int64_t correction) ATTRIBUTE_MALLOC;
-static int read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
-                              r2007_section *restrict sections_map,
-                              r2007_page *restrict pages_map,
-                              Dwg_Section_Type sec_type);
 static int read_2007_section_classes (Bit_Chain *restrict dat,
                                       Dwg_Data *restrict dwg,
                                       r2007_section *restrict sections_map,
@@ -778,7 +736,7 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   return error;
 }
 
-static int
+int
 read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
                    r2007_section *restrict sections_map,
                    r2007_page *restrict pages_map, Dwg_Section_Type sec_type)
