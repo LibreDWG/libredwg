@@ -1068,8 +1068,13 @@ DWG_ENTITY (_3DLINE)
     }
   }
   SINCE (R_10) {
-    FIELD_3RD (start, 10)
-    FIELD_3RD (end, 11)
+    if (!R11FLAG (FLAG_R11_HAS_ELEVATION)) {
+      FIELD_3RD (start, 10)
+      FIELD_3RD (end, 11)
+    } else {
+      FIELD_2RD (start, 10)
+      FIELD_2RD (end, 11)
+    }
 
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
