@@ -325,6 +325,53 @@ read_data_section_tests (void)
   free (sec_dat.chain);
 }
 
+/* Regression test for GHSA-2m5x-9p64-6m3f: read_2004_compressed_section()
+ * computed
+ *   max_decomp_size = info->num_sections * info->max_decomp_size;
+ * with both factors uint32 (BITCODE_RL) into a uint32_t, wrapping mod 2^32.
+ * The old guard checked the WRAPPED value against 0x2f000000 and passed,
+ * while a second guard used a non-wrapping int64 product and admitted
+ * info->size up to ~4.29e9 -- under-allocating the section buffer while
+ * later stamping sec_dat->size from the huge info->size, letting a
+ * subsequent sentinel/bit_read_* scan run gigabytes past the allocation.
+ * Reproduce the advisory's exact numbers (num_sections=3235,
+ * max_decomp_size=0x144400 -> true product 4,296,494,080, 32-bit wrap
+ * 1,526,784) and confirm the fixed 64-bit guard rejects it up front,
+ * before any allocation or per-section scan happens. */
+static void
+read_2004_compressed_section_tests (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+  Bit_Chain sec_dat = { 0 };
+  Dwg_Section_Info info;
+  int error;
+
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&info, 0, sizeof (info));
+  info.num_sections = 3235;
+  info.max_decomp_size = 0x144400;
+  info.size = 0xFFFFFFFF;
+  info.compressed = 2;
+  info.fixedtype = SECTION_CLASSES;
+  strcpy (info.name, "AcDb:Classes");
+  info.sections = (Dwg_Section **)calloc ((size_t)info.num_sections,
+                                          sizeof (Dwg_Section *));
+
+  dwg.header.section_infohdr.num_desc = 1;
+  dwg.header.section_info = &info;
+
+  error = read_2004_compressed_section (&dat, &dwg, &sec_dat, SECTION_CLASSES);
+  if (error == (int)DWG_ERR_VALUEOUTOFBOUNDS && sec_dat.chain == NULL)
+    ok ("read_2004_compressed_section: rejects 32-bit overflow "
+        "(num_sections * max_decomp_size)");
+  else
+    fail ("read_2004_compressed_section: overflow not rejected: err=0x%x "
+          "chain=%p",
+          error, (void *)sec_dat.chain);
+  free (info.sections);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -336,6 +383,7 @@ main (int argc, char const *argv[])
   decompress_R2004_section_tests ();
   decompress_r2007_tests ();
   read_data_section_tests ();
+  read_2004_compressed_section_tests ();
 
   return numfailed () ? 1 : 0;
 }
