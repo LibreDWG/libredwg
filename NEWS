@@ -2,6 +2,84 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2026 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.14.1 - 2026-07-25 - beta:
+
+Security fixes:
+  * Fixed CVE-2026-63474 (GHSA-qg2f-8389-w95j, Moderate): heap-buffer-overflow
+    WRITE in decompress_R2004_section, bypassing an earlier fix.
+    read_2004_compressed_section reset dec.size to a smaller per-section
+    value inside its loop, so bit_chain_alloc could shrink the live
+    decompression buffer while dec.byte/sec_dat->size kept tracking the
+    larger logical stream.  Reported by yPin9.
+  * Fixed GHSA-qcxp-m6vj-h5h8 (High): heap-use-after-free importing a
+    pre-R2004 DXF VIEWPORT.  new_object()'s VIEWPORT -> VX_TABLE_RECORD
+    path kept a stale Dwg_Object *obj across dwg_add_VX(), which can
+    realloc dwg->object[].  Reported by RigelYoung.
+  * Fixed GHSA-c8cq-gr5h-7c6j (Moderate): heap-buffer-overflow (OOB read)
+    in decode_R2004_header from an unvalidated section-page-map offset.
+    Reported by ba-am.
+  * Fixed GHSA-2m5x-9p64-6m3f (Moderate): 32-bit overflow in
+    read_2004_compressed_section's num_sections * max_decomp_size product
+    under-allocated the section buffer while sec_dat->size still tracked
+    the unclamped logical size, driving a heap OOB read.  Reported by
+    manus-use (zx/Jace).
+  * Fixed GHSA-pcp5-hv9w-8f78 (Moderate): unvalidated page->offset in
+    decode_r2007's read_data_section underflowed "dat->size - dat->byte"
+    (both size_t), letting a memcpy read past the file buffer.  Reported
+    by manus-use (zx/Jace).
+  * Fixed GHSA-6v3v-3gmq-63v4 (Moderate): 32-bit overflow in
+    decode_3dsolid's block_size bounds check ("AVAIL_BITS(dat) > 8 *
+    block_size") let an oversized SAT block size bypass the guard,
+    corrupting the heap and causing a double-free during dwg_free.
+    Reported by lcany.
+  * Fixed GHSA-46mp-4x39-p444 (Moderate): non-finite (Infinity/NaN)
+    MLINESTYLE start_angle/end_angle hung the DXF writer (dwg2dxf) in an
+    unbounded normalization while loop.  Also hardened the public
+    dwg_geom_angle_normalize() helper against the same bug class.
+    Reported by thesecguy45.
+  * Fixed GHSA-6q9w-j39m-jg37 (Moderate): NULL-pointer dereference in
+    remove_NOD_item — the first bounds check was missing the
+    itemhandles != NULL guard the second check already had (incomplete
+    fix for GH #357).  Reported by yPin9.
+  * Fixed GHSA-9g8v-9575-xgrf (Moderate): Dwg_SecondHeader_Handles.num_hdl
+    was signed; a raw 0xFF byte decoded to -1 and bypassed its ">8" bounds
+    check, driving an unbounded byte-vector read in dwg_write_json that
+    leaked process memory into the JSON output.  Reported by yPin9.
+  * Fixed GHSA-q4c2-xfww-pp93 (Low): heap-use-after-free in
+    dwg_add_MLINESTYLE — a stale Dwg_Object *obj was kept across
+    dwg_add_DICTIONARY(), which can realloc dwg->object[].  Reported by
+    RigelYoung.
+  * Fixed CVE-2026-62250 (GHSA-7625-26gc-xqvp), completing the fix
+    shipped in 0.14: decode_preR13_entities's unbounded OOM from a
+    corrupt entities_end.  The 0.14 fix only reclamped size when
+    size > end - start, and its no-advance guard only worked for the
+    first entity.  GH #1131.  Reported by batam111.
+
+Minor bugfixes / fuzzing fixes:
+  * Fixed several more heap-buffer-overflow and double-free bugs found by
+    continued oss-fuzz/ASan runs: preR13 section header encoding, eed/xdata
+    TU conversion, TRACE_DD (oss-fuzz #42531271), out_json
+    unknown_rest/unknown_bits, dxf_blocks_read/dxf_entities_read/
+    UPGRADE_ENTITY dxfname double-frees, and in_json in_hex2bin NULL-deref.
+  * Fixed several OOM/infinite-loop guards: unbounded bit_chain_alloc loops
+    in write functions, Ref_cmp function-pointer cast UBSan SIGILL, the
+    pre-R13 section address loop, and encode_preR13_section null entries.
+  * Fixed HANDSEED value in 2ndheader handles and R11 HANDSEED encoding
+    (RLL_BE).  GH #1303, #1304.
+  * DXF/HATCH: fixed associative-hatch pattern loss (hdl_idx reset per
+    path), has_derived OR-ing across every path, rational spline knots vs.
+    weights, and spurious warnings on a legitimately-exhausted handle
+    stream.
+  * in_dxf: fixed handle codes for SEQEND-owned vertex/attribs and
+    BLOCK_HEADER.entities[], TABLESTYLE row true-color import, MATERIAL
+    color/mapper subfields, and hex-encoding of binary TF chunks
+    (group codes 310-319).
+  * 3DSOLID/REGION: fixed an off-by-one dropping the last SAT block on
+    DXF export.
+  * Fixed dwg_page_x_min to use the correct header variable.
+  * spec: implemented TABLESTYLE upconvert to r2010+; promoted
+    MLEADERSTYLE and ARC_DIMENSION to stable.
+
 LibreDWG version 0.14 - 2026-06-27 - beta:
 
 Major features:
@@ -138,15 +216,17 @@ Minor bugfixes:
   * Fixed UBSan pointer-overflow in bsearch_ex on empty array.
 
 Security/fuzzing fixes:
-  * Fixed CVE-2026-xxxxx (GHSA-gp83-hcvh-g255) DoS in decode_R13_R2000.  GH #1261.
+  * Fixed CVE-2026-62254 (GHSA-gp83-hcvh-g255) DoS in decode_R13_R2000.  GH #1261.
   * Fixed CVE-2026-54610 (GHSA-5p98-8245-6hxq):
     const-input write/crash in bit_TV_to_utf8 iconv error path.
+    Reported by Bin-infinite.
   * Fixed heap OOB read in bit_TV_to_utf8 (iconv path).
   * Fixed heap-buffer-overflow in bit_convert_TU via dwggrep LTYPE search.
     GH #1246.
-  * Fixed decode_preR13 again: illegal header.entities_end OOM.
-    GH #1131. CVE-2026-xxxxx (GHSA-7625-26gc-xqvp) by batam111
-    Severity: Moderate 5.5/10
+  * Fixed decode_preR13 again: illegal header.entities_end infinite loop
+    on a corrupted R11 DWG (ossfuzz timeout).  GH #1131.
+    (This mitigation was still incomplete; see the full fix for
+    CVE-2026-62250/GHSA-7625-26gc-xqvp in 0.14.1.)
   * Fixed NULL pointer dereference in free_TABLESTYLE_r2010.  GH #1143.
   * Fixed NULL pointer dereferences in DXF output for corrupted DWG input.
   * Fixed OOM in add_ent_preview on fuzzed DXF input.  GH #1006, #1144.
