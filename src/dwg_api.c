@@ -28178,8 +28178,13 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
     dictref = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
     if (!dictref)
       {
+        // dwg_add_DICTIONARY -> API_ADD_OBJECT(DICTIONARY) may grow and
+        // realloc dwg->object[], invalidating obj. Re-fetch by index before
+        // dereferencing it again (GHSA-q4c2-xfww-pp93).
+        BITCODE_BL obj_idx = obj->index;
         dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE",
                                    name, obj->handle.value);
+        obj = &dwg->object[obj_idx];
         if (dict)
           {
             obj->tio.object->ownerhandle = dwg_add_handleref (

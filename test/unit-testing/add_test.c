@@ -1247,6 +1247,64 @@ test_api_version (void)
   return numfailed ();
 }
 
+// GHSA-q4c2-xfww-pp93: dwg_add_MLINESTYLE() kept a stale Dwg_Object *obj
+// pointer across the nested dwg_add_DICTIONARY() call it makes when
+// ACAD_MLINESTYLE is missing. dwg_add_DICTIONARY() may grow and realloc
+// dwg->object[], so obj must be re-fetched by index afterwards. Reproduce
+// the exact object-pool growth boundary from the advisory's PoC on a bare
+// (dictionary-less) Dwg_Data, so ASan/valgrind catch any regression.
+static int
+test_mlinestyle_obj_realloc (void)
+{
+  Dwg_Data dwg;
+  Dwg_Object_MLINESTYLE *mlstyle;
+  int i;
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  dwg.header.version = R_2000;
+  dwg.header.from_version = R_2000;
+
+  for (i = 0; i < 1023; i++)
+    {
+      if (dwg_add_object (&dwg) < 0)
+        {
+          fail ("mlinestyle_obj_realloc: unexpected realloc filling slot %d",
+                i);
+          dwg_free (&dwg);
+          return numfailed ();
+        }
+    }
+  if (dwg.num_objects != 1023 || dwg.num_alloced_objects != 1024)
+    {
+      fail ("mlinestyle_obj_realloc: unexpected pool state num_objects=%u "
+            "num_alloced_objects=%u",
+            (unsigned)dwg.num_objects, (unsigned)dwg.num_alloced_objects);
+      dwg_free (&dwg);
+      return numfailed ();
+    }
+
+  // ACAD_MLINESTYLE is absent, so dwg_add_MLINESTYLE() creates it via
+  // dwg_add_DICTIONARY(), crossing the 1024-object growth boundary.
+  mlstyle = dwg_add_MLINESTYLE (&dwg, "asan-mlstyle");
+  if (!mlstyle)
+    fail ("mlinestyle_obj_realloc: dwg_add_MLINESTYLE failed at the "
+          "growth boundary");
+  else
+    {
+      int error;
+      Dwg_Object *obj = dwg_obj_generic_to_object (mlstyle, &error);
+      if (error || !obj || !obj->tio.object->ownerhandle)
+        fail ("mlinestyle_obj_realloc: MLINESTYLE has no ownerhandle after "
+              "dwg->object[] growth");
+      else
+        ok ("mlinestyle_obj_realloc: MLINESTYLE survives dwg->object[] "
+            "growth at the dictionary-creation boundary");
+    }
+  dwg_free (&dwg);
+  return numfailed ();
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1265,7 +1323,8 @@ main (int argc, char *argv[])
   else
     debug = 0;
 
-  error = test_names ();
+  error = test_mlinestyle_obj_realloc ();
+  error += test_names ();
   error += test_api_version ();
 
 #ifndef DISABLE_DXF
