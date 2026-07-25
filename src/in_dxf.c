@@ -10222,9 +10222,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             if (strEQc (name, "VIEWPORT") && dwg->header.version < R_2004
                 && dwg->header.version > R_11 && pair->code == 5)
               {
+                // dwg_add_VX -> API_ADD_TABLE may add object(s) and realloc
+                // dwg->object[], invalidating obj. Re-fetch by index before
+                // dereferencing it again (GHSA-qcxp-m6vj-h5h8).
+                BITCODE_BL objidx = obj->index;
                 Dwg_Object_VX_TABLE_RECORD *vx = dwg_add_VX (dwg, "");
                 Dwg_Object *vxobj = dwg_obj_generic_to_object (vx, &error);
-                Dwg_Entity_VIEWPORT *_vobj = obj->tio.entity->tio.VIEWPORT;
+                Dwg_Entity_VIEWPORT *_vobj;
+                obj = &dwg->object[objidx];
+                _vobj = obj->tio.entity->tio.VIEWPORT;
                 // vx->is_on = 1;
                 vx->viewport = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
                 LOG_TRACE ("VX_TABLE_RECORD.viewport = " FORMAT_REF " [H 4]\n",

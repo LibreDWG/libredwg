@@ -37,6 +37,10 @@ static int cnt = 0;
 #include "classes.h"
 #include "bits.h"
 #include "out_dxf.h"
+#ifndef DISABLE_DXF
+#  include "decode.h"
+#  include "in_dxf.h"
+#endif
 
 enum _temp_complex_types
 { // and test-cases
@@ -1305,6 +1309,58 @@ test_mlinestyle_obj_realloc (void)
   return numfailed ();
 }
 
+#ifndef DISABLE_DXF
+// GHSA-qcxp-m6vj-h5h8: importing a pre-R2004 DXF VIEWPORT entity makes
+// new_object() call dwg_add_VX() to create its VX_TABLE_RECORD. That may
+// grow and realloc dwg->object[], but new_object() kept dereferencing (and
+// writing through) its local, now-stale Dwg_Object *obj afterwards -- a
+// heap-use-after-free. Reproduce the advisory's exact boundary: 1022
+// preceding POINT entities fill the 1024-slot initial object pool exactly,
+// so the VIEWPORT's dwg_add_VX() call crosses the growth boundary.
+static int
+test_viewport_vx_realloc (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  char *buf, *p;
+  const size_t cap = 4096 + ((size_t)1022 * 48);
+  int i, error;
+
+  failed = 0;
+  buf = (char *)malloc (cap);
+  if (!buf)
+    {
+      fail ("viewport_vx_realloc: out of memory");
+      return numfailed ();
+    }
+  p = buf;
+  p += sprintf (p, "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1014\n"
+                   "  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n");
+  for (i = 1; i <= 1022; i++)
+    p += sprintf (
+        p, "  0\nPOINT\n  5\n%X\n  8\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n",
+        0x100 + i);
+  p += sprintf (p, "  0\nVIEWPORT\n  5\n5000\n  8\n0\n 10\n0.0\n 20\n0.0\n"
+                   "  30\n0.0\n 40\n1.0\n 41\n1.0\n 68\n1\n 69\n1\n"
+                   "  0\nENDSEC\n  0\nEOF\n");
+
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)buf;
+  dat.size = (size_t)(p - buf);
+
+  error = dwg_read_dxf (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("viewport_vx_realloc: dwg_read_dxf failed with 0x%x", error);
+  else
+    ok ("viewport_vx_realloc: DXF VIEWPORT survives dwg->object[] growth "
+        "at the VX_TABLE_RECORD-creation boundary");
+  dwg_free (&dwg);
+  free (buf);
+  return numfailed ();
+}
+#endif
+
 int
 main (int argc, char *argv[])
 {
@@ -1323,7 +1379,12 @@ main (int argc, char *argv[])
   else
     debug = 0;
 
+#ifndef DISABLE_DXF
+  error = test_viewport_vx_realloc ();
+  error += test_mlinestyle_obj_realloc ();
+#else
   error = test_mlinestyle_obj_realloc ();
+#endif
   error += test_names ();
   error += test_api_version ();
 
