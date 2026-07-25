@@ -372,6 +372,55 @@ read_2004_compressed_section_tests (void)
   free (info.sections);
 }
 
+/* Regression test for GHSA-6v3v-3gmq-63v4: decode_3dsolid()'s bound check
+ *   AVAIL_BITS(dat) > 8 * FIELD_VALUE(block_size[i])
+ * multiplied in 32-bit unsigned, wrapping for block_size > 0x1FFFFFFF and
+ * bypassing the guard, so FIELD_TFv() then tried to read the attacker's
+ * huge block_size from the bitstream -- a heap OOB read that manifested
+ * as heap corruption / a double-free during dwg_free cleanup on a crafted
+ * DWG. Encode a minimal ACIS v1 3DSOLID prefix (acis_empty=0, unknown=0,
+ * version=1, block_size[0]=0x20000000) into a tiny 16-byte Bit_Chain:
+ * 8 * 0x20000000 wraps to 0 in 32-bit, so the old check
+ * "AVAIL_BITS(dat) > 0" would pass and attempt to read ~512MB past the
+ * buffer. Confirm the fix rejects the oversized block_size instead. */
+static void
+decode_3dsolid_tests (void)
+{
+  Bit_Chain dat = { 0 };
+  Bit_Chain hdl_dat = { 0 };
+  Dwg_Object obj;
+  Dwg_Entity_3DSOLID _obj;
+  int error;
+
+  bitprepare (&dat, 16);
+  bit_write_B (&dat, 0);           /* acis_empty = 0 */
+  bit_write_B (&dat, 0);           /* unknown = 0 */
+  bit_write_BS (&dat, 1);          /* version = 1 (SAT) */
+  bit_write_BL (&dat, 0x20000000); /* block_size[0]: overflows *8 in 32-bit */
+  dat.bit = 0;
+  dat.byte = 0;
+
+  memset (&obj, 0, sizeof (obj));
+  memset (&_obj, 0, sizeof (_obj));
+
+  error = decode_3dsolid (&dat, &hdl_dat, &obj, &_obj);
+  if (error < DWG_ERR_CRITICAL && _obj.block_size && _obj.block_size[0] == 0)
+    ok ("decode_3dsolid: rejects oversized block_size (32-bit *8 overflow)");
+  else
+    fail ("decode_3dsolid: oversized block_size not rejected: err=0x%x "
+          "block_size[0]=%u",
+          error, _obj.block_size ? (unsigned)_obj.block_size[0] : ~0u);
+
+  free (_obj.block_size);
+  if (_obj.encr_sat_data)
+    {
+      free (_obj.encr_sat_data[0]);
+      free (_obj.encr_sat_data);
+    }
+  free (_obj.acis_data);
+  bitfree (&dat);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -384,6 +433,7 @@ main (int argc, char const *argv[])
   decompress_r2007_tests ();
   read_data_section_tests ();
   read_2004_compressed_section_tests ();
+  decode_3dsolid_tests ();
 
   return numfailed () ? 1 : 0;
 }
