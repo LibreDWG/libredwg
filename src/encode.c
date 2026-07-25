@@ -6200,7 +6200,9 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_WARN ("\nObject %s unsupported", obj->name);
         }
     }
-  if (dat->byte + obj->size < dat->size)
+  // Grow when there is NOT already enough room; the condition was
+  // inverted before, leaving the buffer undersized on this path.
+  if (dat->byte + obj->size >= dat->size)
     bit_chain_alloc_size (dat, obj->size);
 
   // First write an approximate size here.
