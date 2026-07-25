@@ -6644,6 +6644,9 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_INFO ("was overlarge MS size %lu => %lu @%" PRIuSIZE "\n",
                     (unsigned long)old_size, (unsigned long)obj->size,
                     dat->byte);
+          if (dat->byte + obj->size + 5 > dat->size)
+            bit_chain_alloc_size (dat,
+                                  (dat->byte + obj->size + 5) - dat->size);
           memmove (&dat->chain[dat->byte], &dat->chain[dat->byte + 2],
                    obj->size + 3);
           // obj->size -= 2;
