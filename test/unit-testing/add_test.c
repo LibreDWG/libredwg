@@ -20,6 +20,10 @@
 #include <string.h>
 #include <math.h>
 #include <assert.h>
+#ifndef _WIN32
+#  include <setjmp.h>
+#  include <signal.h>
+#endif
 
 // extern unsigned int loglevel;
 static int tracelevel;
@@ -1031,6 +1035,88 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   return n_failed;
 }
 
+#if !defined(_WIN32) && !defined(DISABLE_DXF)
+static sigjmp_buf mlinestyle_angle_timeout_jmp;
+
+ATTRIBUTE_NORETURN static void
+mlinestyle_angle_timeout_handler (int sig)
+{
+  (void)sig;
+  siglongjmp (mlinestyle_angle_timeout_jmp, 1);
+}
+
+/* GHSA-46mp-4x39-p444: converting a crafted DWG with a non-finite
+ * MLINESTYLE start_angle/end_angle hung dwg2dxf. The DXF writer
+ * normalized the angle with an unbounded "while (angle > 91.0) angle -=
+ * 90.0;" loop; for +-Infinity the subtraction never changes the value,
+ * so the loop condition never flips and the process hangs forever. Force
+ * start_angle=INFINITY, end_angle=NAN on a real MLINESTYLE object and
+ * confirm dwg_write_dxf() returns within a bounded wall-clock time
+ * instead of hanging, via a SIGALRM + siglongjmp escape hatch so a
+ * regression fails the test instead of hanging the whole suite. */
+static int
+test_mlinestyle_nonfinite_angle (void)
+{
+  Dwg_Data *dwg;
+  Dwg_Object_MLINESTYLE *mlstyle;
+  Bit_Chain dat = { 0 };
+  int error;
+  struct sigaction sa, old_sa;
+
+  failed = 0;
+  dwg = dwg_new_Document (R_2000, 0, tracelevel);
+  mlstyle = dwg_add_MLINESTYLE (dwg, "nonfinite-angle");
+  if (!mlstyle)
+    {
+      fail ("mlinestyle_nonfinite_angle: dwg_add_MLINESTYLE failed");
+      dwg_free (dwg);
+      free (dwg);
+      return numfailed ();
+    }
+  mlstyle->start_angle = (double)INFINITY;
+  mlstyle->end_angle = (double)NAN;
+
+  dat.version = dwg->header.version;
+  dat.from_version = dwg->header.from_version;
+  dat.opts = dwg->opts;
+  dat.fh = fopen ("/dev/null", "wb");
+  if (!dat.fh)
+    {
+      fail ("mlinestyle_nonfinite_angle: fopen /dev/null failed");
+      dwg_free (dwg);
+      free (dwg);
+      return numfailed ();
+    }
+
+  memset (&sa, 0, sizeof (sa));
+  sa.sa_handler = mlinestyle_angle_timeout_handler;
+  sigaction (SIGALRM, &sa, &old_sa);
+
+  if (sigsetjmp (mlinestyle_angle_timeout_jmp, 1) != 0)
+    {
+      fail ("mlinestyle_nonfinite_angle: dwg_write_dxf hung with "
+            "non-finite angles (infinite-loop regression)");
+    }
+  else
+    {
+      alarm (5);
+      error = dwg_write_dxf (&dat, dwg);
+      alarm (0);
+      if (error >= DWG_ERR_CRITICAL)
+        fail ("mlinestyle_nonfinite_angle: dwg_write_dxf failed: 0x%x", error);
+      else
+        ok ("mlinestyle_nonfinite_angle: DXF writer terminates with "
+            "non-finite MLINESTYLE angles");
+    }
+  sigaction (SIGALRM, &old_sa, NULL);
+
+  fclose (dat.fh);
+  dwg_free (dwg);
+  free (dwg);
+  return numfailed ();
+}
+#endif
+
 static int
 test_names (void)
 {
@@ -1379,7 +1465,11 @@ main (int argc, char *argv[])
   else
     debug = 0;
 
-#ifndef DISABLE_DXF
+#if !defined(_WIN32) && !defined(DISABLE_DXF)
+  error = test_viewport_vx_realloc ();
+  error += test_mlinestyle_obj_realloc ();
+  error += test_mlinestyle_nonfinite_angle ();
+#elif !defined(DISABLE_DXF)
   error = test_viewport_vx_realloc ();
   error += test_mlinestyle_obj_realloc ();
 #else
