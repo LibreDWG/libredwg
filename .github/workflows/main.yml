@@ -39,12 +39,12 @@ jobs:
     steps:
     - if: ${{ startsWith(github.ref, 'refs/tags/') }}
       name: checkout for tag
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         submodules: recursive
     - if: ${{ !startsWith(github.ref, 'refs/tags/') }}
       name: checkout for commit --depth 50
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-tags: true
         fetch-depth: 50
@@ -74,7 +74,7 @@ jobs:
         build-aux/install-pslib
         build-aux/install-relaxng-svg11
         sudo npm i -g geojson-validation
-    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
+    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
       with:
         create-symlink: true
         key: ${{ github.job }}-${{ matrix.CONFIGURE_ARGS }}
@@ -118,7 +118,7 @@ jobs:
     - if: contains(matrix.CONFIGURE_ARGS, '--enable-release') && startsWith(github.ref, 'refs/tags/')
       name: Release
       continue-on-error: true
-      uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
+      uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
       with:
         body_path: dist.sha256
         files: |
@@ -128,12 +128,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 1
         submodules: recursive
     - run: sudo apt-get -y update && sudo apt-get -y install gcc-powerpc64-linux-gnu libc6-ppc64-cross qemu-system-ppc binfmt-support qemu-user qemu-user-binfmt
-    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
+    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
       with:
         key: ${{ github.job }}
     - run: sh autogen.sh
@@ -146,12 +146,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 1
         submodules: recursive
     - run: sudo apt-get -y update && sudo apt-get -y install gcc-mips-linux-gnu gcc-multilib-mips-linux-gnu
-    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
+    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
       with:
         key: ${{ github.job }}
     - run: sh autogen.sh
@@ -169,15 +169,15 @@ jobs:
     #      - "-DLIBREDWG_DISABLE_WRITE=On"
     steps:
     - name: setup-python
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: 3.12
     - name: checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
+    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
       with:
         create-symlink: true
         key: ${{ github.job }}
@@ -187,7 +187,7 @@ jobs:
     - if: failure()
       run: tar cfz cmake-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: cmake-failure.tgz
         path: cmake-failure.tgz
@@ -200,15 +200,15 @@ jobs:
     - name: link texinfo
       run: brew link texinfo --force
     - name: setup-python
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: 3.12
     - name: checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
+    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
       with:
         create-symlink: true
         key: ${{ github.job }}
@@ -230,7 +230,7 @@ jobs:
     steps:
       # see https://github.com/msys2/setup-msys2
     - name: setup-msys2
-      uses: msys2/setup-msys2@4f806de0a5a7294ffabaff804b38a9b435a73bda # v2.30.0
+      uses: msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884 # v2.32.0
       with:
         path-type: minimal
         update: true
@@ -255,7 +255,7 @@ jobs:
           python-lxml
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - name: checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 1
         submodules: recursive
@@ -270,7 +270,7 @@ jobs:
       shell: msys2 {0}
       run: make -C src dwg_api.i; tar cfz mingw-failure.tgz src/dwg_api.i src/config.h
     - if: failure()
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: mingw-failure.tgz
         path: mingw-failure.tgz
@@ -281,15 +281,15 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: setup-msys2
-      uses: msys2/setup-msys2@4f806de0a5a7294ffabaff804b38a9b435a73bda # v2.30.0
+      uses: msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884 # v2.32.0
       with:
         path-type: minimal
     - name: checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: hendrikmuhs/ccache-action@1bbbcda0748b3e340dee71a314fa68ffcbd6df79 # v1.2.21
+    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
       with:
         key: ${{ github.job }}
     - run: cmake -G "MinGW Makefiles" -DDISABLE_WERROR=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache .
@@ -297,7 +297,7 @@ jobs:
     - if: failure()
       run: tar cfz msys-failure.tgz make.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: msys-failure.tgz
         path: msys-failure.tgz
@@ -306,7 +306,7 @@ jobs:
     timeout-minutes: 20
     steps:
     - name: checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 1
         submodules: recursive
@@ -317,7 +317,7 @@ jobs:
     - if: failure()
       run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
     - if: failure()
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: msvc-failure.tgz
         path: msvc-failure.tgz
@@ -328,7 +328,7 @@ jobs:
     #  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
     - name: checkout
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 1
         submodules: recursive
