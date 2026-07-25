@@ -304,6 +304,28 @@ common_entity_handle_data_double_free_test (void)
   ok ("common_entity_handle_data double-free regression");
 }
 
+/* Regression test for GHSA-6q9w-j39m-jg37 (incomplete fix for GH #357 from
+   2022, commit 065a3119). remove_NOD_item's first bounds check
+     if (i < numitems && itemhandles[i] != NULL)
+   dereferenced _obj->itemhandles[i] without first checking
+   _obj->itemhandles != NULL, unlike the second check a few lines below
+   which already had the guard. A DICTIONARY with numitems > 0 but a NULL
+   itemhandles array (a malformed/edge-case state reachable during encode)
+   crashed with a NULL-pointer dereference. */
+static void
+remove_NOD_item_null_itemhandles_test (void)
+{
+  Dwg_Object_DICTIONARY obj;
+
+  memset (&obj, 0, sizeof (obj));
+  obj.numitems = 1;
+  obj.itemhandles = NULL;
+  obj.texts = NULL;
+
+  remove_NOD_item (&obj, 0, "ACAD_TEST");
+  ok ("remove_NOD_item: survives NULL itemhandles with numitems > 0");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -319,5 +341,6 @@ main (int argc, char const *argv[])
 
   compress_R2004_section_tests ();
   common_entity_handle_data_double_free_test ();
+  remove_NOD_item_null_itemhandles_test ();
   return failed;
 }
