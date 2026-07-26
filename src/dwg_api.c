@@ -26663,7 +26663,12 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict start_pt,
               const dwg_point_3d *restrict end_pt)
 {
-  API_ADD_ENTITY (LINE);
+  API_ADD_PREP (LINE);
+  if (dwg->header.version >= R_2_4 && dwg->header.version < R_10
+      && (start_pt->z != 0.0 || end_pt->z != 0.0))
+    return (Dwg_Entity_LINE *)dwg_add_3DLINE (blkhdr, start_pt, end_pt);
+
+  API_ADD_ENTITY2 (LINE);
   ADD_CHECK_3DPOINT (start_pt);
   ADD_CHECK_3DPOINT (end_pt);
   _obj->start.x = start_pt->x;
@@ -26675,22 +26680,6 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
   if (dwg->header.version <= R_11)
     obj->type = DWG_TYPE_LINE_r11;
-  // In case of 3d line we are changing type to 3DLINE entity
-  if (dwg->header.version >= R_2_4 && dwg->header.version < R_10)
-    {
-      if (_obj->start.z != 0.0)
-        {
-          obj->type = DWG_TYPE_3DLINE_r11;
-          obj->fixedtype = DWG_TYPE__3DLINE;
-          obj->tio.entity->opts_r11 |= 1;
-        }
-      if (_obj->end.z != 0.0)
-        {
-          obj->type = DWG_TYPE_3DLINE_r11;
-          obj->fixedtype = DWG_TYPE__3DLINE;
-          obj->tio.entity->opts_r11 |= 2;
-        }
-    }
   // There is 3DLINE entity in R_10, but duplicit with LINE
   if (dwg->header.version == R_10)
     {
