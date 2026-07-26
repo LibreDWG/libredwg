@@ -2494,6 +2494,30 @@ is_table_name (const char *restrict name)
     assert (o->array);                                                        \
     assert (i >= 0 && i < (int)o->num_##array)
 
+static void
+free_LTYPE_dashes (Dwg_Object_LTYPE *restrict ltype)
+{
+  int i;
+
+  if (!ltype)
+    return;
+
+  if (ltype->dashes)
+    {
+      for (i = 0; i < (int)ltype->numdashes; i++)
+        {
+          free (ltype->dashes[i].text);
+          ltype->dashes[i].text = NULL;
+        }
+      free (ltype->dashes);
+      ltype->dashes = NULL;
+    }
+  free (ltype->strings_area);
+  ltype->strings_area = NULL;
+  ltype->numdashes = 0;
+  ltype->has_strings_area = 0;
+}
+
 static Dxf_Pair *
 add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   Dxf_Pair *restrict pair)
@@ -2504,6 +2528,8 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int is_tu = 0;
   unsigned dash_i = 0;
 
+  free_LTYPE_dashes (o);
+  o->numdashes = (BITCODE_RC)num_dashes;
   o->dashes
       = (Dwg_LTYPE_dash *)xcalloc (o->numdashes, sizeof (Dwg_LTYPE_dash));
   if (!o->dashes)
@@ -2588,6 +2614,8 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           size_t strings_size, needed;
           is_tu = obj->parent->header.version >= R_2007;
           CHK_dashes (j, dashes);
+          free (o->dashes[j].text);
+          o->dashes[j].text = NULL;
           o->dashes[j].text = dxf_pair_string (obj->parent, pair->value.s.ptr);
           LOG_TRACE ("LTYPE.dashes[%d].text = %s [T 9]\n", j,
                      pair->value.s.ptr);
