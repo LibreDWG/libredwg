@@ -1606,7 +1606,10 @@ calc_preR13_ctrl_size (Dwg_Data *restrict dwg, Dwg_Object *obj)
         obj->size = 249;
       break;
     case DWG_TYPE_APPID_CONTROL:
-      obj->size = 37;
+      if (ver == R_11)
+        obj->size = 37;
+      else if (ver == R_10)
+        obj->size = 33;
       break;
     case DWG_TYPE_DIMSTYLE_CONTROL:
       obj->size = 324;
