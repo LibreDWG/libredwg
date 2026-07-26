@@ -1082,30 +1082,57 @@ dwg_model_space_ref (Dwg_Data *dwg)
   Dwg_Object_BLOCK_CONTROL *block_control;
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
-  if (dwg->header_vars.BLOCK_RECORD_MSPACE && !dwg->dirty_refs
-      && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
-    return dwg->header_vars.BLOCK_RECORD_MSPACE;
-  if (dwg->block_control.model_space && !dwg->dirty_refs
-      && dwg->block_control.model_space->obj)
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE)
     {
+      if (!dwg->header_vars.BLOCK_RECORD_MSPACE->obj
+          && dwg->header_vars.BLOCK_RECORD_MSPACE->absolute_ref)
+        dwg->header_vars.BLOCK_RECORD_MSPACE->obj = dwg_resolve_handle (
+            dwg, dwg->header_vars.BLOCK_RECORD_MSPACE->absolute_ref);
+      if (dwg->header_vars.BLOCK_RECORD_MSPACE->obj
+          || dwg->header_vars.BLOCK_RECORD_MSPACE->absolute_ref)
+        return dwg->header_vars.BLOCK_RECORD_MSPACE;
+    }
+  if (dwg->block_control.model_space)
+    {
+      if (!dwg->block_control.model_space->obj
+          && dwg->block_control.model_space->absolute_ref)
+        dwg->block_control.model_space->obj = dwg_resolve_handle (
+            dwg, dwg->block_control.model_space->absolute_ref);
+      if (!dwg->block_control.model_space->obj
+          && !dwg->block_control.model_space->absolute_ref)
+        goto check_block_control;
       dwg->header_vars.BLOCK_RECORD_MSPACE = dwg->block_control.model_space;
       return dwg->block_control.model_space;
     }
+check_block_control:
   block_control = dwg_block_control (dwg);
-  if (block_control && block_control->model_space && !dwg->dirty_refs
-      && block_control->model_space->obj)
+  if (block_control && block_control->model_space)
     {
+      if (!block_control->model_space->obj
+          && block_control->model_space->absolute_ref)
+        block_control->model_space->obj = dwg_resolve_handle (
+            dwg, block_control->model_space->absolute_ref);
+      if (!block_control->model_space->obj
+          && !block_control->model_space->absolute_ref)
+        goto check_first_object;
       dwg->block_control.model_space = block_control->model_space;
       dwg->header_vars.BLOCK_RECORD_MSPACE = block_control->model_space;
       return block_control->model_space;
     }
+check_first_object:
   obj = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
   if (!obj)
     return NULL;
   block_control = obj->tio.object->tio.BLOCK_CONTROL;
-  if (block_control && block_control->model_space && !dwg->dirty_refs
-      && block_control->model_space->obj)
+  if (block_control && block_control->model_space)
     {
+      if (!block_control->model_space->obj
+          && block_control->model_space->absolute_ref)
+        block_control->model_space->obj = dwg_resolve_handle (
+            dwg, block_control->model_space->absolute_ref);
+      if (!block_control->model_space->obj
+          && !block_control->model_space->absolute_ref)
+        return NULL;
       dwg->block_control.model_space = block_control->model_space;
       dwg->header_vars.BLOCK_RECORD_MSPACE = block_control->model_space;
       return block_control->model_space;
