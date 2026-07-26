@@ -1260,7 +1260,9 @@ bit_write_TV_tests (void)
   bit_set_position (&bitchain, 0);
   bitchain.from_version = R_13;
   bit_write_TV (&bitchain, (char *)"GNU");
-  if (bitchain.byte == 5 && bitchain.bit == 2)
+  // bitprepare sets version to R_2000; pre-R_2004 lengths equal
+  // strlen (no trailing NUL counted)
+  if (bitchain.byte == 4 && bitchain.bit == 2)
     ok ("bit_write_TV (>R_13)");
   else
     fail ("bit_write_TV @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
