@@ -641,6 +641,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       Dwg_Entity_ATTDEF *attdef;
       Dwg_Entity_ATTRIB *attrib;
       Dwg_Entity_LINE *line;
+      Dwg_Entity__3DLINE *_3dline;
       Dwg_Entity_RAY *ray;
       Dwg_Entity_XLINE *xline;
       Dwg_Entity_CIRCLE *circle;
@@ -1120,6 +1121,26 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
           // clang-format off
         SET_ENT (attrib, ATTRIB)
+      // clang-format on
+      else if (6
+               == SSCANF_S (p, "3dline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x,
+                            &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
+      {
+        if (version < R_2_4)
+          fn_error ("Invalid entity 3DLINE\n");
+        LOG_TRACE ("add_3DLINE %s (%f %f %f) (%f %f %f)\n", hdr_s, pt1.x,
+                   pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        CHK_MISSING_BLOCK_HEADER
+        if (version < R_11)
+          ent = (lastent_t){ .u._3dline = dwg_add_3DLINE (hdr, &pt1, &pt2),
+                             .type = DWG_TYPE__3DLINE };
+        else
+          ent = (lastent_t){ .u.line = dwg_add_LINE (hdr, &pt1, &pt2),
+                             .type = DWG_TYPE_LINE };
+      }
+      else
+          // clang-format off
+        SET_ENT (_3dline, _3DLINE)
       // clang-format on
       else if (6
                == SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x,

@@ -113,6 +113,10 @@ Assign "VALUES" to a HEADER field. See the full documentation of valid HEADER fi
 .PD
 Create a line variable and entity. You may set all other fields via the
 \&\f(CW\*(C`line.field = value\*(C'\fR syntax. E.g. \f(CW\*(C`line.layer = "0"\*(C'\fR
+.IP "\fB3dline\fR (3dpoint) (3dpoint)" 4
+.IX Item "3dline (3dpoint) (3dpoint)"
+Explicit 3D line command. Writes a 3DLINE entity for DWG versions r2.4
+through r10, and a LINE entity for r11 and later.
 .IP "\fBray\fR (3dpoint) (3dpoint)" 4
 .IX Item "ray (3dpoint) (3dpoint)"
 .PD 0
