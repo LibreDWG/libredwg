@@ -3015,9 +3015,9 @@ BE,	DXF 210
 @item x_axis_dir
 3BD,	DXF 11
 @item rect_height
-BD,	DXF 41
+BD,	DXF 46
 @item rect_width
-BD,	DXF 40
+BD,	DXF 41
 @item text_height
 BD,	DXF 40
 @item attachment

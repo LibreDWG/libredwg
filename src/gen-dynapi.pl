@@ -100,10 +100,8 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
-my (%h,          $n,        %structs, %unions,
-    %ENT,        %DXF,      %SIZE,    %SUBCLASS,
-    %SUBCLASSES, %DWG_TYPE, @unhandled_names
-);
+my ( %h, $n, %structs, %unions, %ENT, %DXF, %SIZE, %SUBCLASS,
+    %SUBCLASSES, %DWG_TYPE, @unhandled_names, $embedded_object, );
 local (
     @entity_names,     @object_names,     @subclasses,
     $max_entity_names, $max_object_names, $max_subclasses
@@ -289,6 +287,28 @@ sub embedded_struct {
     }
 }
 
+# Record $f's DXF group code for struct $n.
+# A field name can be re-read later inside a DXF 101 "Embedded Object"
+# sub-section (see $embedded_object below) -- e.g. MTEXT's R2018
+# embedded/annotative section reuses the outer entity's own field names
+# (rect_width, rect_height, ...) under different group codes for the
+# embedded subobject. That re-use must not silently clobber the field's
+# canonical/primary dxf code, established by the first (normal,
+# non-embedded) occurrence. So: while inside such a sub-section, the
+# first dxf code already recorded for a field wins; outside of it,
+# behave as before (last write wins, e.g. for version-conditional
+# redefinitions).
+sub set_dxf {
+    my ( $n, $f, $dxf ) = @_;
+    return unless $dxf;
+    if ($embedded_object) {
+        $DXF{$n}->{$f} = $dxf unless exists $DXF{$n}->{$f};
+    }
+    else {
+        $DXF{$n}->{$f} = $dxf;
+    }
+}
+
 my %defined;    #define subclass_fields, shared across dxfin_spec calls
 
 # parse a spec for its objects, subclasses and dxf values
@@ -305,18 +325,22 @@ sub dxf_in {
                 $n = $2;
                 $n =~ s/^_3/3/;
                 warn $n;
+                $embedded_object = 0;
             }
             elsif (/^\s*SECTION\s?\(HEADER\)/) {
                 $n = 'header_variables';
                 warn $n;
+                $embedded_object = 0;
             }
             elsif (/^int DWG_FUNC_N\s?\(ACTION,_HATCH(\w+)\)/) {
                 $n = 'HATCH';
                 warn $n;
+                $embedded_object = 0;
             }
             elsif (/^\#define (COMMON_ENTITY_POLYLINE)/) {
                 $n = $1;
                 warn "define $n";
+                $embedded_object = 0;
             }
             elsif (
                 /^\#define (COMMON_3DSOLID|ACTION_3DSOLID|COMMON_ENTITY_DIMENSION|DIMENSION_COMMON)/
@@ -325,17 +349,20 @@ sub dxf_in {
                 $n = $1;
                 $defined{$n}++;
                 warn "define $n";
+                $embedded_object = 0;
             }
             elsif (/^\#define (\w+)_fields/) {
                 $n = $1;
                 $defined{$n}++;
                 warn "define $n fields";
+                $embedded_object = 0;
             }
         }
         elsif (/^\#define (\w+)_fields/) {
             $n = $1;
             $defined{$n}++;
             warn "define $n fields";
+            $embedded_object = 0;
 
             # i.e. after #define
         }
@@ -343,11 +370,20 @@ sub dxf_in {
             $n = $2;
             $n =~ s/^_3/3/;
             warn $n;
+            $embedded_object = 0;
         }
         elsif (/^DWG_(ENTITY|OBJECT)_END/) {    # close
-            $n      = '';
-            @old    = ();
-            $outdef = 0;
+            $n               = '';
+            @old             = ();
+            $outdef          = 0;
+            $embedded_object = 0;
+        }
+        elsif (/VALUE_TFF\s*\(\s*"Embedded Object"\s*,\s*101\s*\)/) {
+
+            # DXF 101 subclass marker: an embedded/annotative sub-object
+            # follows, whose fields reuse the enclosing struct's own
+            # field names under unrelated group codes (see set_dxf above).
+            $embedded_object = 1;
         }
         elsif ( !$n ) {
             ;
@@ -417,16 +453,16 @@ sub dxf_in {
             if ( $n eq 'MLEADER_AnnotContext' && $f eq 'mleaderstyle' ) {
                 $n = 'MULTILEADER';    # pop back
             }
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif (/^\s+VALUE_HANDLE\s*\(.+,\s*(\w+),\s*\d,\s*(\d+)\)/) {
             $f = $1;
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif (/^\s+FIELD_TF\s*\((\w+),\s*(\d*),\s*(\d+)\)/) {
             my $type = 'TF';
-            $f              = $1;
-            $DXF{$n}->{$f}  = $3 if $3;
+            $f = $1;
+            set_dxf( $n, $f, $3 );
             $SIZE{$n}->{$f} = $2;
             $ENT{$n}->{$f}  = 'TF';
         }
@@ -460,7 +496,7 @@ sub dxf_in {
             }
 
             # (scale.x, 41) as is
-            $DXF{$n}->{$f} = $dxf  if $dxf;
+            set_dxf( $n, $f, $dxf );
             $ENT{$n}->{$f} = 'TF'  if $type eq 'BINARY';
             $ENT{$n}->{$f} = $type if $type =~ /^T/;
             $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
@@ -470,7 +506,7 @@ sub dxf_in {
         {
             my $type = $1;
             $f = $1;
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif ( @old
             && /^\s+SUB_FIELD_VECTOR\s*\($v,\s*(\w+),\s*\w+,\s*\w+,\s*(\d+)\)/
@@ -478,26 +514,26 @@ sub dxf_in {
         {
             my $type = $1;
             $f = $1;
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif ( @old && /^\s+SUB_FIELD_(.+?)\s*\($v,\s*(\w+),\s*(\d+)\)/ ) {
             my $type = $1;
             $f = $2;
-            $DXF{$n}->{$f} = $3 if $3;
+            set_dxf( $n, $f, $3 );
         }
         elsif (/^\s+FIELD_(?:CMC|ENC)\s*\((\w+),\s*(\d+)\)/) {
             $f = $1;
             if ($2) {
-                $DXF{$n}->{$f} = $2;
+                set_dxf( $n, $f, $2 );
                 if ( $2 < 90 ) {
-                    $DXF{$n}->{"$f.index"}     = $2;
-                    $DXF{$n}->{"$f.rbg"}       = $2 + 420 - 62;
-                    $DXF{$n}->{"$f.name"}      = $2 + 430 - 62;
-                    $DXF{$n}->{"$f.book_name"} = $2 + 430 - 62;
-                    $DXF{$n}->{"$f.alpha"}     = $2 + 440 - 62;
+                    set_dxf( $n, "$f.index",     $2 );
+                    set_dxf( $n, "$f.rbg",       $2 + 420 - 62 );
+                    set_dxf( $n, "$f.name",      $2 + 430 - 62 );
+                    set_dxf( $n, "$f.book_name", $2 + 430 - 62 );
+                    set_dxf( $n, "$f.alpha",     $2 + 440 - 62 );
                 }
                 else {
-                    $DXF{$n}->{"$f.rbg"} = $2;
+                    set_dxf( $n, "$f.rbg", $2 );
                 }
             }
         }
@@ -505,7 +541,7 @@ sub dxf_in {
             my $type = $1;
             $f = $2;
             $type =~ s/^TFv$/TV/;    # fixed but alloc'd
-            $DXF{$n}->{$f} = $3    if $3;
+            set_dxf( $n, $f, $3 );
             $ENT{$n}->{$f} = 'TF'  if $type eq 'BINARY';
             $ENT{$n}->{$f} = $type if $type =~ /^T/;
             $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
@@ -513,42 +549,42 @@ sub dxf_in {
         elsif ( @old && /^\s+SUB_FIELD_(.+?)\s*\(\w+,\s*(\w+),.*,\s*(\d+)\)/ )
         {
             my $type = $1;
-            $f             = $2;
-            $DXF{$n}->{$f} = $3    if $3;
+            $f = $2;
+            set_dxf( $n, $f, $3 );
             $ENT{$n}->{$f} = 'TF'  if $type eq 'BINARY';
             $ENT{$n}->{$f} = $type if $type =~ /^T/;
             $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
         }
         elsif (/^\s+HANDLE_VECTOR(?:_N)?\s*\((\w+),.*?,\s*(\d+)\)/) {
             $f = $1;
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif (/^\s+SUB_HANDLE_VECTOR\s*\([^,]+?, (\w+), .+, (\d+)\)/) {
             $f = $1;
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif (/^\s+HEADER_.+\s*\((\w+),\s*(\d+)\)/) {    # HEADER_RC
             $f = $1;
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif (/^\s+HEADER_.+\s*\((\w+),\s*(\d+),\s*\w+\)/) {
             $f = $1;
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif (/^\s+HEADER_.+\s*\((\w+),\s*\w+,\s*(\d+),\s*\D.+\)/) {
             $f = $1;
 
             #$f =~ s/^_3/3/;
-            $DXF{$n}->{$f} = $2 if $2;
+            set_dxf( $n, $f, $2 );
         }
         elsif (/^\s+HEADER_([23])D\s*\((\w+)\)/) {
             $f = $2;
-            $DXF{$n}->{$f} = $1 eq '2' ? 20 : 30;
+            set_dxf( $n, $f, $1 eq '2' ? 20 : 30 );
         }
         elsif (/^\s+VALUE_(.+)\s*\((\w.+),.*,\s*(\d+)\)/) {
             my $type = $1;
-            $f             = $2;
-            $DXF{$n}->{$f} = $3    if $3;
+            $f = $2;
+            set_dxf( $n, $f, $3 );
             $ENT{$n}->{$f} = $type if $type =~ /^T/;
         }
         elsif (/^\s+SUBCLASS\s*\((\w.+)\)/) {
