@@ -50,7 +50,6 @@
 
 #undef NEED_VPORT_FOR_MODEL_LAYOUT
 
-
 /** We don't pass in Dwg_Object*'s, so we don't know if the object
  *  is >= r2007 or <r13 or what. Default is r2000.
  *  So we need some dwg_api_init_version(&dwg) to store the version.
@@ -15779,7 +15778,7 @@ dwg_ent_viewport_set_VIEWTWIST (dwg_ent_viewport *restrict vp,
  */
 EXPORT double
 dwg_ent_viewport_get_VIEWTWIST (const dwg_ent_viewport *restrict vp,
-                                  int *restrict error)
+                                int *restrict error)
 {
   if (vp)
     {
@@ -15835,7 +15834,7 @@ dwg_ent_viewport_get_VIEWSIZE (const dwg_ent_viewport *restrict vp,
  */
 EXPORT void
 dwg_ent_viewport_set_LENSLENGTH (dwg_ent_viewport *restrict vp,
-                                  const double lenslength, int *restrict error)
+                                 const double lenslength, int *restrict error)
 {
   if (vp)
     {
@@ -15908,8 +15907,8 @@ dwg_ent_viewport_get_FRONTZ (const dwg_ent_viewport *restrict vp,
 /** Sets viewport back clip z value
  */
 EXPORT void
-dwg_ent_viewport_set_BACKZ (dwg_ent_viewport *restrict vp,
-                            const double back_z, int *restrict error)
+dwg_ent_viewport_set_BACKZ (dwg_ent_viewport *restrict vp, const double back_z,
+                            int *restrict error)
 {
   if (vp)
     {
@@ -24771,42 +24770,46 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
     }
   else
     {
-      // TODO Encode unicode to \U+... bit_utf8_to_TV. codepage conversions
-#if 0
-      int size = 1024;
+      // Encode UTF-8 to the target codepage via bit_utf8_to_TV, escaping
+      // characters unrepresentable in that codepage as \U+XXXX, the same
+      // way AutoCAD itself encodes them.
+      size_t len = strlen (u8str);
+      size_t size = (len * 4) + 8;
       char *dest = (char *)malloc (size);
-      char *tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
-                                  dwg->header.codepage);
+      char *tgt;
       if (!dest)
         {
           LOG_ERROR ("%s: Out of memory", __FUNCTION__);
           return NULL;
         }
+      tgt = bit_utf8_to_TV (dest, (const unsigned char *)u8str, size, len, 0,
+                            dwg->header.codepage);
       while (!tgt)
         {
+          char *tmp;
           size *= 2;
-          if (size >= 1>>32)
+          tmp = (char *)realloc (dest, size);
+          if (!tmp)
             {
               LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+              free (dest);
               return NULL;
             }
-          dest = (char*)realloc (dest, size);
-          tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
-                                dwg->header.codepage);
+          dest = tmp;
+          tgt = bit_utf8_to_TV (dest, (const unsigned char *)u8str, size, len,
+                                0, dwg->header.codepage);
         }
-      return tgt;
-#endif
-      if (dwg->header.version <= R_12 && strlen (u8str) < 32)
+      if (dwg->header.version <= R_12 && strlen (tgt) < 32)
         {
           // those old names are usually 32byte, and bit_write_TF
           // might heap-overflow then.
           char *buf = (char *)malloc (33);
-          strncpy (buf, u8str, 32);
+          strncpy (buf, tgt, 32);
           buf[32] = '\0';
+          free (tgt);
           return buf;
         }
-      else
-        return strdup (u8str);
+      return tgt;
     }
 }
 
@@ -25192,10 +25195,10 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
           = dwg_add_handleref (dwg, 4, UINT64_C (0xE), obj);
       add_obj_reactor (obj->tio.object, UINT64_C (0xE));
     }
-  //else
-  //  {
-  //    dwg_set_next_hdl (dwg, UINT64_C (0x10));
-  //  }
+  // else
+  //   {
+  //     dwg_set_next_hdl (dwg, UINT64_C (0x10));
+  //   }
   if (version >= R_9)
     {
       const char *standard
@@ -25707,9 +25710,9 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
               = dwg_add_handleref (dwg, 4, 0, NULL);
         }
       else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER
-               && (!_owner->first_entity || !_owner->first_entity->absolute_ref)
-               && !_owner->num_owned
-               && !dwg_obj_is_subentity (obj))
+               && (!_owner->first_entity
+                   || !_owner->first_entity->absolute_ref)
+               && !_owner->num_owned && !dwg_obj_is_subentity (obj))
         {
           BITCODE_H ref;
           _owner->first_entity = _owner->last_entity
@@ -27166,7 +27169,8 @@ dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       vx->is_on = 1;
       // FIXME vxobj->tio.object->ownerhandle
       vx->viewport = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-      _obj->vport_entity_header = dwg_add_handleref (dwg, 5, vxobj ? vxobj->handle.value : 0, NULL);
+      _obj->vport_entity_header
+          = dwg_add_handleref (dwg, 5, vxobj ? vxobj->handle.value : 0, NULL);
     }
   // TODO get defaults from name
   _obj->LENSLENGTH = 50.0;
@@ -27886,8 +27890,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
 }
 
 #define API_ADD_TABLE(record, control, ...)                                   \
-  Dwg_Object_##record *_record = NULL;                                        \
-  /* first check TABLE_CONTROL */                                             \
+  Dwg_Object_##record *_record = NULL; /* first check TABLE_CONTROL */        \
   Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);          \
   Dwg_Object_##control *_ctrl;                                                \
   BITCODE_RLL ctrlhdl, ctrlidx;                                               \
@@ -27981,7 +27984,10 @@ dwg_add_STYLE (Dwg_Data *restrict dwg, const char *restrict name)
 EXPORT Dwg_Object_LTYPE *
 dwg_add_LTYPE (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  API_ADD_TABLE (LTYPE, LTYPE_CONTROL, { _obj->flag = 64; _obj->alignment = 0x41; });
+  API_ADD_TABLE (LTYPE, LTYPE_CONTROL, {
+    _obj->flag = 64;
+    _obj->alignment = 0x41;
+  });
 }
 
 EXPORT Dwg_Object_VIEW *
