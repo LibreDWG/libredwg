@@ -6737,6 +6737,8 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   FIELD_BL (numassocsteps, 90);
   FIELD_BL (numassocsubents, 90);
   FIELD_BL (num_steps, 90);
+  free (o->steps);
+  o->steps = NULL;
   if (o->num_steps > 0)
     {
       o->steps = (BITCODE_BL *)xcalloc (o->num_steps, sizeof (BITCODE_BL));
@@ -6757,6 +6759,8 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
     }
   FIELD_BL (num_subents, 90);
+  free (o->subents);
+  o->subents = NULL;
   if (o->num_subents > 0)
     {
       o->subents = (BITCODE_BL *)xcalloc (o->num_subents, sizeof (BITCODE_BL));
