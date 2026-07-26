@@ -7743,6 +7743,8 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   Dwg_Data *dwg = obj->parent;
   BITCODE_BL num;
   BITCODE_H hdl;
+  BITCODE_H *itemhandles;
+  BITCODE_TV *texts;
 
   if (pair->code == 360)
     _obj->is_hardowner = 1;
@@ -7750,15 +7752,21 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   hdl = dwg_add_handleref (dwg, 2, pair->value.u, obj);
   LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [H* %d]\n", obj->name, num,
              ARGS_REF (hdl), pair->code);
-  _obj->itemhandles = (BITCODE_H *)realloc (_obj->itemhandles,
-                                            (num + 1) * sizeof (BITCODE_H));
-  _obj->texts
-      = (BITCODE_TV *)realloc (_obj->texts, (num + 1) * sizeof (BITCODE_TV));
-  if (!_obj->itemhandles || !_obj->texts)
+  itemhandles = (BITCODE_H *)realloc (_obj->itemhandles,
+                                      (num + 1) * sizeof (BITCODE_H));
+  if (!itemhandles)
     {
       LOG_ERROR ("Out of memory");
       return;
     }
+  _obj->itemhandles = itemhandles;
+  texts = (BITCODE_TV *)realloc (_obj->texts, (num + 1) * sizeof (BITCODE_TV));
+  if (!texts)
+    {
+      LOG_ERROR ("Out of memory");
+      return;
+    }
+  _obj->texts = texts;
   _obj->itemhandles[num] = hdl;
   _obj->texts[num] = dwg_add_u8_input (dwg, text);
   LOG_TRACE ("%s.texts[%d] = %s [T* 3]\n", obj->name, num, text);
