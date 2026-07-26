@@ -5928,7 +5928,10 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
                   // a static string, which cannot be free'd. important for
                   // indxf
                   if (dwg->opts & DWG_OPTS_IN)
-                    obj->dxfname = strdup ((char *)alias);
+                    {
+                      free (obj->dxfname);
+                      obj->dxfname = strdup ((char *)alias);
+                    }
                   else
                     obj->dxfname = (char *)alias;
                   obj->type = 500 + i;
@@ -5956,7 +5959,10 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
       if (!klass->dxfname)
         return NULL;
       if (dwg->opts & DWG_OPTS_IN)
-        obj->dxfname = strdup (klass->dxfname);
+        {
+          free (obj->dxfname);
+          obj->dxfname = strdup (klass->dxfname);
+        }
       else
         obj->dxfname = klass->dxfname;
     }
