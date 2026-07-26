@@ -14260,12 +14260,16 @@ add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_BLOCK_HEADER *_ctrl;
   Dwg_Object *ctrl = dwg_ref_object (dwg, ownerhandle);
+  Dwg_Object_Entity *ent;
+  Dwg_Object *prev = NULL;
+  BITCODE_H ref;
 
   if (!ctrl || ctrl->fixedtype != DWG_TYPE_BLOCK_HEADER)
     return;
   _ctrl = ctrl->tio.object->tio.BLOCK_HEADER;
   if (obj->supertype != DWG_SUPERTYPE_ENTITY)
     return;
+  ent = obj->tio.entity;
   LOG_TRACE ("add_to_BLOCK_HEADER %s: %s [" FORMAT_HV "]\n", _ctrl->name,
              obj->name, obj->handle.value);
   if (obj->type == DWG_TYPE_ENDBLK)
@@ -14283,17 +14287,38 @@ add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
       return;
     }
   if (!_ctrl->first_entity)
-    _ctrl->last_entity = _ctrl->first_entity
-        = dwg_add_entity_link (dwg, NULL, "first_entity", obj->handle.value);
+    {
+      _ctrl->last_entity = _ctrl->first_entity
+          = dwg_add_entity_link (dwg, NULL, "first_entity", obj->handle.value);
+      if (!ent->prev_entity)
+        ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+      if (!ent->next_entity)
+        ent->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+      ent->nolinks = 0;
+    }
   else
     {
       // always overwrite. and it is global, so we can reuse it.
-      BITCODE_H ref = dwg_add_entity_link (
+      prev = _ctrl->last_entity ? dwg_ref_object (dwg, _ctrl->last_entity)
+                                : NULL;
+      ref = dwg_add_entity_link (
           dwg, _ctrl->first_entity ? _ctrl->first_entity->obj : NULL,
           "last_entity", obj->handle.value);
       if (!ref) // cycle detected
         return;
       _ctrl->last_entity = ref;
+      if (prev && prev->supertype == DWG_SUPERTYPE_ENTITY && prev->tio.entity)
+        {
+          prev->tio.entity->next_entity
+              = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+          ent->prev_entity = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+          prev->tio.entity->nolinks = 0;
+        }
+      else if (!ent->prev_entity)
+        ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+      if (!ent->next_entity)
+        ent->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+      ent->nolinks = 0;
     }
   PUSH_HV (_ctrl, num_owned, entities, _ctrl->last_entity);
 }
@@ -14357,6 +14382,13 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   last_ent--;
                   obj = &dwg->object[last_ent];
                   ent = obj->tio.entity;
+                }
+              if (!obj->handle.value)
+                {
+                  BITCODE_RLL next_handle = dwg_next_handle (dwg);
+                  dwg_add_handle (&obj->handle, 0, next_handle, obj);
+                  LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
+                             obj->handle.size, obj->handle.value);
                 }
               if (ent->ownerhandle)
                 {

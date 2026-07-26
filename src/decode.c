@@ -6313,12 +6313,24 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                      (unsigned)_obj->num_owned);
           if (!_obj->entities)
             {
-              _obj->first_entity = dwg_add_handleref (dwg, 4, 0, NULL);
-              _obj->last_entity = dwg_add_handleref (dwg, 4, 0, NULL);
-              if (_obj->num_owned)
-                LOG_ERROR ("BLOCK_HEADER %s: %u => 0 num_owned\n", _objname,
-                           (unsigned)_obj->num_owned);
-              _obj->num_owned = 0;
+              if ((!_obj->first_entity || !_obj->first_entity->absolute_ref)
+                  && (!_obj->last_entity || !_obj->last_entity->absolute_ref))
+                {
+                  _obj->first_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+                  _obj->last_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+                  if (_obj->num_owned)
+                    LOG_ERROR ("BLOCK_HEADER %s: %u => 0 num_owned\n",
+                               _objname, (unsigned)_obj->num_owned);
+                  _obj->num_owned = 0;
+                }
+              else
+                {
+                  LOG_TRACE ("Preserve existing BLOCK_HEADER %s entity chain\n",
+                             _objname);
+                }
+              if (is_uni)
+                free (_objname);
+              continue;
             }
           // link from first_entity to last_entity
           for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
