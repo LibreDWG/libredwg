@@ -10268,7 +10268,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 if (o->num_ents > 0 && !o->sort_ents[o->num_ents - 1])
                   {
                     BITCODE_H hdl
-                        = dwg_add_handleref (dwg, 0, pair->value.u, obj);
+                        = dwg_add_handleref (dwg, 0, pair->value.u, NULL);
                     o->sort_ents[o->num_ents - 1] = hdl;
                     LOG_TRACE ("SORTENTSTABLE.sort_ents[%d] = " FORMAT_REF
                                " [H 5]\n",
@@ -13532,6 +13532,43 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     dxf_postprocess_MLINESTYLE (obj); // FIXME. not triggered
   else if (obj->fixedtype == DWG_TYPE_PLOTSETTINGS)
     dxf_postprocess_PLOTSETTINGS (obj);
+  else if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
+    {
+      Dwg_Object_SORTENTSTABLE *o = obj->tio.object->tio.SORTENTSTABLE;
+      /* When block_owner was not set by an explicit 330 code (empty table),
+         derive it from the ownership chain: ownerhandle -> DICTIONARY ->
+         BLOCK_HEADER.  */
+      if (!o->block_owner && obj->tio.object->ownerhandle)
+        {
+          Dwg_Object *owner
+              = dwg_ref_object (dwg, obj->tio.object->ownerhandle);
+          if (owner && owner->fixedtype == DWG_TYPE_DICTIONARY
+              && owner->tio.object->ownerhandle)
+            {
+              Dwg_Object *blk
+                  = dwg_ref_object (dwg, owner->tio.object->ownerhandle);
+              if (blk && blk->fixedtype == DWG_TYPE_BLOCK_HEADER)
+                {
+                  o->block_owner
+                      = dwg_add_handleref (dwg, 4, blk->handle.value, NULL);
+                  LOG_TRACE ("SORTENTSTABLE.block_owner = " FORMAT_REF
+                             " [H 330] (derived)\n",
+                             ARGS_REF (o->block_owner));
+                }
+            }
+        }
+    }
+  else if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    {
+      Dwg_Object_BLOCK_HEADER *hdr = obj->tio.object->tio.BLOCK_HEADER;
+      /* A block with no xref path must not have the xref flag bit set,
+         or conformant readers render it as an unresolved Xref placeholder.  */
+      if (hdr->blkisxref && (!hdr->xref_pname || !*hdr->xref_pname))
+        {
+          hdr->blkisxref = 0;
+          LOG_TRACE ("BLOCK_HEADER.blkisxref = 0 (no xref path)\n");
+        }
+    }
   // set defaults not in dxf:
   else if (obj->type == DWG_TYPE__3DFACE && dwg->header.from_version >= R_2000)
     {
@@ -14075,7 +14112,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            || bit_eq_T (dat, _obj->name, "*PAPER_SPACE"))
                     entmode = ent->entmode = 1;
                   else
-                    entmode = ent->entmode = 3; // regular block entities
+                    entmode = ent->entmode = 0; // regular block entities
                   if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
                     ent->isbylayerlt = 1;
                 }

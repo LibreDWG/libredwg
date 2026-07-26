@@ -3503,11 +3503,24 @@ dwg_set_next_objhandle (Dwg_Object *obj)
   BITCODE_RLL seed;
   if (dwg->next_hdl)
     {
-      obj->handle.value = dwg->next_hdl;
-      dwg_set_handle_size (&obj->handle);
-      hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
-      dwg->next_hdl = 0;
-      return;
+      /* Check that the candidate handle is not already in use.
+         When a table record is added after the main DXF import pass,
+         next_hdl may point to a handle already owned by another object.  */
+      if (dwg->object_map
+          && hash_get (dwg->object_map, dwg->next_hdl) != HASH_NOT_FOUND)
+        {
+          LOG_WARN ("next_hdl " FORMAT_HV " already in object_map",
+                    dwg->next_hdl);
+          dwg->next_hdl = 0;
+        }
+      else
+        {
+          obj->handle.value = dwg->next_hdl;
+          dwg_set_handle_size (&obj->handle);
+          hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
+          dwg->next_hdl = 0;
+          return;
+        }
     }
   seed = dwg_new_handseed (dwg);
   if (!dwg->object_map)
