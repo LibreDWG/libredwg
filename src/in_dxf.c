@@ -13927,6 +13927,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   char name[80];
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Object *obj;
+  Dwg_Object *cur_blkhdr = NULL;
 
   name[0] = '\0'; // init
   while (pair)    // read next 0 TABLE
@@ -13997,6 +13998,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   Dwg_Object_Entity *ent = obj->tio.entity;
                   Dwg_Entity_BLOCK *_obj = obj->tio.entity->tio.BLOCK;
                   i = 0;
+                  cur_blkhdr = NULL;
                   if (ent->ownerhandle
                       && (blkhdr = dwg_ref_object (dwg, ent->ownerhandle)))
                     {
@@ -14013,6 +14015,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           _hdr->base_pt.x = _obj->base_pt.x;
                           _hdr->base_pt.y = _obj->base_pt.y;
                           LOG_TRACE ("BLOCK_HEADER.base_pt = BLOCK.base_pt\n");
+                          cur_blkhdr = blkhdr;
                         }
                       else if (blkhdr->fixedtype == DWG_TYPE_BLOCK_CONTROL)
                         {
@@ -14040,11 +14043,18 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                   " [H] (blocks)\n",
                                   ARGS_REF (_ctrl->paper_space));
                             }
+                          if (_obj->name)
+                            {
+                              BITCODE_H hdr_ref = dwg_find_tablehandle_silent (
+                                  dwg, (const char *)_obj->name, "BLOCK");
+                              if (hdr_ref)
+                                cur_blkhdr = dwg_ref_object (dwg, hdr_ref);
+                            }
                         }
                     }
-                  else if (dat->from_version <= R_12 && _obj && _obj->name)
+                  else if (_obj && _obj->name)
                     {
-                      // R11/R12: no ownerhandle on BLOCK entities.
+                      // DXF BLOCK entities may miss the ownerhandle.
                       // Find or create the BLOCK_HEADER by name.
                       if (bit_eq_T (dat, _obj->name, "*Model_Space")
                           || bit_eq_T (dat, _obj->name, "*MODEL_SPACE"))
@@ -14110,6 +14120,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           // (set in next iteration's "complete old obj")
                           _hdr->base_pt.x = _obj->base_pt.x;
                           _hdr->base_pt.y = _obj->base_pt.y;
+                          cur_blkhdr = blkhdr;
                         }
                     }
                   else
@@ -14133,6 +14144,9 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   Dwg_Entity_BLOCK *_obj = obj->tio.entity->tio.BLOCK;
                   if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
                     ent->isbylayerlt = 1;
+                  if (!ent->ownerhandle && cur_blkhdr)
+                    ent->ownerhandle = dwg_add_handleref (
+                        dwg, 4, cur_blkhdr->handle.value, NULL);
                   ent->entmode = entmode;
                   LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
                              entmode);
@@ -14158,6 +14172,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                      ARGS_REF (_hdr->last_entity));
                         }
                     }
+                  cur_blkhdr = NULL;
                 }
               // normal entity
               else if (obj->supertype == DWG_SUPERTYPE_ENTITY)
@@ -14169,6 +14184,9 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              entmode);
                   if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
                     ent->isbylayerlt = 1;
+                  if (!ent->ownerhandle && cur_blkhdr)
+                    ent->ownerhandle = dwg_add_handleref (
+                        dwg, 4, cur_blkhdr->handle.value, NULL);
                   // add to entities
                   if (ent->ownerhandle
                       && (blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
@@ -14243,7 +14261,7 @@ add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
   Dwg_Object_BLOCK_HEADER *_ctrl;
   Dwg_Object *ctrl = dwg_ref_object (dwg, ownerhandle);
 
-  if (!ctrl || ctrl->type != DWG_TYPE_BLOCK_HEADER)
+  if (!ctrl || ctrl->fixedtype != DWG_TYPE_BLOCK_HEADER)
     return;
   _ctrl = ctrl->tio.object->tio.BLOCK_HEADER;
   if (obj->supertype != DWG_SUPERTYPE_ENTITY)
