@@ -2467,6 +2467,8 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int num_lines = pair->value.i;
   Dwg_Object_MLINESTYLE *o = obj->tio.object->tio.MLINESTYLE;
   Dwg_Data *dwg = obj->parent;
+  free (o->lines);
+  o->lines = NULL;
   o->num_lines = num_lines;
   LOG_TRACE ("MLINESTYLE.num_lines = %d [RC 71]\n", num_lines);
   o->lines = (Dwg_MLINESTYLE_line *)xcalloc (num_lines,
