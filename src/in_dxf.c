@@ -9229,6 +9229,9 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BLd (hatch_transparency, 90);
   FIELD_B (unknown_b1, 290);
   FIELD_B (unknown_b2, 290);
+  free (o->hatch_angles);
+  o->hatch_angles = NULL;
+  o->num_hatch_angles = 0;
   FIELD_BL (num_hatch_angles, 90);
   if (o->num_hatch_angles)
     {
