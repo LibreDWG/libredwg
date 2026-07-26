@@ -381,6 +381,17 @@ xcalloc (size_t n, size_t s)
 #ifndef DISABLE_DXF
 
 static void
+free_CellStyle_borders (Dwg_CellStyle *restrict cellstyle)
+{
+  if (!cellstyle)
+    return;
+
+  free (cellstyle->borders);
+  cellstyle->borders = NULL;
+  cellstyle->num_borders = 0;
+}
+
+static void
 free_GEODATA_geomesh_pts (Dwg_Object_GEODATA *restrict geodata)
 {
   if (!geodata)
@@ -5139,6 +5150,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
         case 300:
           if (mode == CONTENTFORMAT)
             {
+              free (o->content_format.value_format_string);
+              o->content_format.value_format_string = NULL;
               if (obj->parent->header.version >= R_2007)
                 o->content_format.value_format_string
                     = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
@@ -5295,6 +5308,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
         case 94:
           if (mode == TABLEFORMAT)
             {
+              free_CellStyle_borders (o);
               o->num_borders = pair->value.u;
               j = 0;
               LOG_TRACE ("%s.%s.num_borders = " FORMAT_BL " [BL %d]\n",
@@ -5595,6 +5609,8 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 1:
           CHK_rowstyles;
+          free (o->rowstyles[i].format_string);
+          o->rowstyles[i].format_string = NULL;
           o->rowstyles[i].format_string
               = bit_utf8_to_TU (pair->value.s.ptr, 0);
           LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
