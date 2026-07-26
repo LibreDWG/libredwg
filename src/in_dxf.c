@@ -9779,6 +9779,8 @@ add_MATERIAL (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   // a map filename (source==1), kept as UTF-8 like all other imported strings
 #  define MAT_T(field, dxf)                                                   \
     case dxf:                                                                 \
+      free (o->field);                                                        \
+      o->field = NULL;                                                        \
       o->field = pair->value.s.ptr ? strdup (pair->value.s.ptr) : NULL;       \
       LOG_TRACE ("MATERIAL." #field " = %s [T %d]\n",                         \
                  pair->value.s.ptr ? pair->value.s.ptr : "", pair->code);     \
