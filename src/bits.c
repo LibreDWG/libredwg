@@ -1300,15 +1300,18 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
       const unsigned char *uchar_value = (const unsigned char *)&value;
       const unsigned char *uchar_default
           = (const unsigned char *)&default_value;
-      const uint16_t *uint_value = (const uint16_t *)&uchar_value;
-      const uint16_t *uint_default = (const uint16_t *)&uchar_default;
+      // reinterpret the double's own storage as 16-bit words, not the
+      // address of the local uchar_value/uchar_default pointer variables
+      const uint16_t *uint_value = (const uint16_t *)uchar_value;
+      const uint16_t *uint_default = (const uint16_t *)uchar_default;
       // dbl: 7654 3210, little-endian only
-      // check the first 2 bits for eq
-      if (le16toh (uint_value[0]) == le16toh (uint_default[0]))
+      // bit_read_DD keeps the HIGH-order word(s) of the default_value,
+      // so mode selection must compare those, highest word first
+      if (le16toh (uint_value[3]) == le16toh (uint_default[3]))
         {
-          // first 4 bits eq, i.e. next 2 bits also
+          // top word also eq at the next-highest word: high 4 bytes eq
           // cppcheck-suppress objectIndex
-          if (le16toh (uint_value[1]) == le16toh (uint_default[1]))
+          if (le16toh (uint_value[2]) == le16toh (uint_default[2]))
             {
               bits = 1;
               bit_write_BB (dat, 1);
@@ -2247,7 +2250,9 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     bit_write_RS (dat, (BITCODE_RS)length);
   else
     {
-      if (dat->version >= R_14 && length)
+      // r2004+ writer apps include the trailing NUL in the length;
+      // pre-r2004 (incl. r2000) lengths must equal strlen exactly
+      if (dat->version >= R_2004 && length)
         length++; // TV-ZERO
       bit_write_BS (dat, (BITCODE_BS)length);
     }
