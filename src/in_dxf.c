@@ -2861,6 +2861,8 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (pair->code == 91)
     {
       vector = pair->code;
+      free (o->subdiv_vertex);
+      o->subdiv_vertex = NULL;
       o->num_subdiv_vertex = pair->value.u;
       LOG_TRACE ("MESH.num_subdiv_vertex = %u [BL 91]\n", pair->value.u);
       if (pair->value.u)
@@ -2886,6 +2888,8 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j = 0;
           vector = pair->code;
+          free (o->vertex);
+          o->vertex = NULL;
           o->num_vertex = pair->value.u;
           LOG_TRACE ("MESH.num_vertex = %u [BL 92]\n", pair->value.u);
           if (pair->value.u)
@@ -2903,6 +2907,8 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j = 0;
           vector = pair->code;
+          free (o->faces);
+          o->faces = NULL;
           o->num_faces = pair->value.u;
           LOG_TRACE ("MESH.num_faces = %u [BL %d]\n", pair->value.u,
                      pair->code);
@@ -2921,6 +2927,8 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j = 0;
           vector = pair->code;
+          free (o->edges);
+          o->edges = NULL;
           o->num_edges = pair->value.u;
           LOG_TRACE ("MESH.num_edges = %u [BL %d]\n", pair->value.u,
                      pair->code);
@@ -2939,6 +2947,8 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j = 0;
           vector = pair->code;
+          free (o->crease);
+          o->crease = NULL;
           o->num_crease = pair->value.u;
           LOG_TRACE ("MESH.num_crease = %u [BL %d]\n", pair->value.u,
                      pair->code);
@@ -3034,6 +3044,8 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           else if (vector == 95)
             {
+              free (o->crease);
+              o->crease = NULL;
               o->num_crease = pair->value.u;
               LOG_TRACE ("MESH.num_crease = %u [BL %d]\n", pair->value.u,
                          pair->code);
