@@ -1,3 +1,4 @@
+
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -6236,8 +6237,8 @@ add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   while (pair != NULL && pair->code == 92)
     {
       i++;
-      o->edges = (Dwg_EVAL_Edge *)realloc (
-          o->edges, o->num_edges * sizeof (Dwg_EVAL_Edge));
+      o->edges = (Dwg_EVAL_Edge *)realloc (o->edges,
+                                           (i + 1) * sizeof (Dwg_EVAL_Edge));
       if (!o->edges)
         {
           o->num_edges = 0;
@@ -6342,19 +6343,20 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->nodes[i].id = pair->value.i;
           LOG_TRACE ("%s.nodes[%d].id = %d [BL %d]\n", obj->name, i,
                      pair->value.i, pair->code);
+          j = 0;
           break;
-        case 93: // must be 32
+        case 93:
           o->nodes[i].edge_flags = pair->value.i;
           LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,
                      pair->value.i, pair->code);
           break;
         case 95:
-          o->nodes[i].edge_flags = pair->value.i;
+          o->nodes[i].nextid = pair->value.i;
           if (pair->value.i != 32)
-            LOG_WARN ("%s.nodes[%d].edge_flags = %d [BL %d] != 32", obj->name,
-                      i, pair->value.i, pair->code);
+            LOG_WARN ("%s.nodes[%d].nextid = %d [BL %d] != 32", obj->name, i,
+                      pair->value.i, pair->code);
           else
-            LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,
+            LOG_TRACE ("%s.nodes[%d].nextid = %d [BL %d]\n", obj->name, i,
                        pair->value.i, pair->code);
           break;
         case 360:
@@ -7033,10 +7035,13 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           dxf_free_pair (pair);
         next_field:
           pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, childval[i].value.data_type, 90);
-          LOG_TRACE ("FIELD.childval[%u].value.data_type = %u [RL 90]\n", i,
-                     pair->value.u);
+          // AutoCAD uses group 93 for the data type here (some writers use
+          // 90); accept either, but do not abort on other codes.
+          if (!pair || (pair->code != 90 && pair->code != 93))
+            return pair;
           o->childval[i].value.data_type = pair->value.u;
+          LOG_TRACE ("FIELD.childval[%u].value.data_type = %u [BL %d]\n", i,
+                     o->childval[i].value.data_type, pair->code);
           dxf_free_pair (pair);
           /*
             90
@@ -8673,9 +8678,12 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           LOG_TRACE ("%s.hdls[%d].num_indexes = %u [BS 74]\n", obj->name, i,
                      (unsigned)o->hdls[i].num_indexes);
           dxf_free_pair (pair);
-
           if (o->hdls[i].num_indexes)
             {
+              o->hdls[i].indexes = (BITCODE_BL *)xcalloc (
+                  o->hdls[i].num_indexes, sizeof (BITCODE_BL));
+              if (!o->hdls[i].indexes)
+                return NULL;
               for (unsigned j = 0; j < o->hdls[i].num_indexes; j++)
                 {
                   pair = dxf_read_pair (dat);
@@ -8714,15 +8722,18 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           LOG_TRACE ("%s.codes[%d].num_indexes = %d [BS 76]\n", obj->name, i,
                      o->codes[i].num_indexes);
           dxf_free_pair (pair);
-
           if (o->codes[i].num_indexes)
             {
-              for (unsigned j = 0; j < o->hdls[i].num_indexes; j++)
+              o->codes[i].indexes = (BITCODE_BL *)xcalloc (
+                  o->codes[i].num_indexes, sizeof (BITCODE_BL));
+              if (!o->codes[i].indexes)
+                return NULL;
+              for (unsigned j = 0; j < o->codes[i].num_indexes; j++)
                 {
                   pair = dxf_read_pair (dat);
                   EXPECT_DXF (obj->name, o->codes[i].indexes[j], 94);
                   o->codes[i].indexes[j] = pair->value.i;
-                  LOG_TRACE ("%s.codes[%d].indexes[%d] = %d [BL 94]\n",
+                  LOG_TRACE ("%s.codes[%d].indexes[%d] = %u [BL 94]\n",
                              obj->name, i, j, o->codes[i].indexes[j]);
                   dxf_free_pair (pair);
                 }
