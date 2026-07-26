@@ -132,8 +132,11 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       ok ("LIBREDWG_DEBUG cnt %d %s", cnt, name);
     }
 
-  dwg = dwg_new_Document (as_dxf ? R_2018 : R_2000, 0 /*metric/iso */,
-                          tracelevel);
+  dwg = dwg_new_Document (
+      type == DWG_TYPE__3DLINE                   ? R_9
+      : as_dxf                                 ? R_2018
+                                               : R_2000,
+      0 /*metric/iso */, tracelevel);
   mspace = dwg_model_space_object (dwg);
   mspace_ref = dwg_model_space_ref (dwg);
   if (!mspace)
@@ -287,6 +290,13 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       {
         const dwg_point_3d pt3 = { 2.5, 0.0, 0.0 };
         dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, NULL);
+      }
+      break;
+    case DWG_TYPE__3DLINE:
+      {
+        const dwg_point_3d pt3d_1 = { 1.0, 2.0, 3.0 };
+        const dwg_point_3d pt3d_2 = { 4.0, 5.0, 6.0 };
+        dwg_add_3DLINE (hdr, &pt3d_1, &pt3d_2);
       }
       break;
     case DWG_TYPE_SOLID:
@@ -905,6 +915,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       TEST_ENTITY (DIMENSION_LINEAR);
       TEST_ENTITY (POINT);
       TEST_ENTITY (_3DFACE);
+      TEST_ENTITY (_3DLINE);
       TEST_ENTITY (SOLID);
       TEST_ENTITY (TRACE);
       TEST_ENTITY (SHAPE);
@@ -1507,6 +1518,7 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_DIMENSION_LINEAR, "add_dimlin_2000", dxf);
       error += test_add (DWG_TYPE_POINT, "add_point_2000", dxf);
       error += test_add (DWG_TYPE__3DFACE, "add_3dface_2000", dxf);
+      error += test_add (DWG_TYPE__3DLINE, "add_3dline_r9", dxf);
       error += test_add (DWG_TYPE_SOLID, "add_solid_2000", dxf);
       error += test_add (DWG_TYPE_TRACE, "add_trace_2000", dxf);
       error += test_add (DWG_TYPE_SHAPE, "add_shape_2000", dxf);
