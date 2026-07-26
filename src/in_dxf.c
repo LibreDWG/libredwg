@@ -8534,7 +8534,7 @@ add_AcDbBlockRotationAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 {
   Dwg_Data *dwg = obj->parent;
   Dxf_Pair *pair;
-  pair = add_BlockAction_ConnectionPts (obj, dat, 2, 1, 94, 303);
+  pair = add_BlockAction_ConnectionPts (obj, dat, 2, 1, 96, 305);
   if (pair)
     return pair;
   return NULL;
@@ -9380,9 +9380,27 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("dxf_postprocess_SEQEND:\n");
+  // Validate that the 330 owner is a real SEQEND parent entity.
+  // Both ezdxf and AutoCAD DXF may point the 330 at the owning
+  // BLOCK_RECORD instead of the INSERT/POLYLINE parent entity.
+  if (owner)
+    {
+      if (owner->fixedtype != DWG_TYPE_INSERT
+          && owner->fixedtype != DWG_TYPE_MINSERT
+          && owner->fixedtype != DWG_TYPE_POLYLINE_2D
+          && owner->fixedtype != DWG_TYPE_POLYLINE_3D
+          && owner->fixedtype != DWG_TYPE_POLYLINE_PFACE
+          && owner->fixedtype != DWG_TYPE_POLYLINE_MESH)
+        {
+          LOG_TRACE ("SEQEND.owner " FORMAT_H
+                     " (%s) is not a valid parent, falling back to search\n",
+                     ARGS_H (owner->handle), owner->name);
+          owner = NULL;
+          obj->tio.entity->ownerhandle = NULL;
+        }
+    }
   // r12 and earlier: search for owner backwards
-  if (dwg->header.from_version < R_13b1 && !owner
-      && !obj->tio.entity->ownerhandle)
+  if (!owner && !obj->tio.entity->ownerhandle)
     {
       for (i = obj->index - 1; i > 0; i--)
         {
@@ -12375,14 +12393,16 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                               dwg_dynapi_entity_set_value (_obj, obj->name,
                                                            f->name, &pts, 0);
                             }
-                          else if (j > 0 && j < size)
+                          else if (j >= 0 && j < size)
                             {
                               int _i = is2d ? j * 2 : j * 3;
                               dwg_dynapi_entity_value (_obj, obj->name,
                                                        f->name, &pts, NULL);
                               if (pair->code < 20 && pts != NULL)
                                 {
-                                  pts[_i] = pair->value.d;
+                                  // first point .x already set above, skip
+                                  if (j > 0)
+                                    pts[_i] = pair->value.d;
                                 }
                               else if (pair->code < 30 && pts != NULL)
                                 {
@@ -12392,6 +12412,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                         f->name, j, pts[_i], pair->value.d,
                                         f->type, pair->code);
                                   pts[_i + 1] = pair->value.d;
+                                  if (is2d)
+                                    {
+                                      j++;
+                                      if (j == size)
+                                        j = 0;
+                                    }
                                 }
                               else if (*f->type == '3' && pts)
                                 {
@@ -12400,7 +12426,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                       name, f->name, j, pts[_i], pts[_i + 1],
                                       pair->value.d, f->type, pair->code);
                                   pts[_i + 2] = pair->value.d;
-                                  if (j == size - 1)
+                                  j++;
+                                  if (j == size)
                                     j = 0; // restart
                                 }
                             }
@@ -12601,6 +12628,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           // pt.x = 0.0;
                           // if (pair->value.d == 0.0) // ignore defaults
                           //  goto next_pair;
+                          dwg_dynapi_entity_value (_obj, obj->name, f->name,
+                                                   &pt, NULL);
                           pt.x = pair->value.d;
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &pt, 1);
@@ -13244,6 +13273,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                        && (pair->code == 2 || pair->code == 210
                            || pair->code == 220 || pair->code == 230))
                 ; // ignore the POLYLINE elevation.x,y. DXF artifacts
+              else if (strEQc (name, "DIMENSION")
+                       && (pair->code == 16 || pair->code == 26
+                           || pair->code == 36))
+                ; // ignore arc definition point for subtypes without
+                  // xline2end_pt (e.g. ANG3PT)
               else if (strEQc (name, "HATCH")
                        && (pair->code == 10 || pair->code == 20))
                 ; // ignore the whole PLINE and VERTEX_PFACE_FACE 3BD 10
