@@ -380,6 +380,28 @@ xcalloc (size_t n, size_t s)
 
 #ifndef DISABLE_DXF
 
+static void
+free_GEODATA_geomesh_pts (Dwg_Object_GEODATA *restrict geodata)
+{
+  if (!geodata)
+    return;
+
+  free (geodata->geomesh_pts);
+  geodata->geomesh_pts = NULL;
+  geodata->num_geomesh_pts = 0;
+}
+
+static void
+free_GEODATA_geomesh_faces (Dwg_Object_GEODATA *restrict geodata)
+{
+  if (!geodata)
+    return;
+
+  free (geodata->geomesh_faces);
+  geodata->geomesh_faces = NULL;
+  geodata->num_geomesh_faces = 0;
+}
+
 /* With mips32 -O2 inline would fail. */
 static void
 dxf_skip_ws (Bit_Chain *dat)
@@ -4987,6 +5009,7 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
         case 93:
           i = -1;
+          free_GEODATA_geomesh_pts (o);
           o->num_geomesh_pts = pair->value.u;
           o->geomesh_pts = (Dwg_GEODATA_meshpt *)xcalloc (
               pair->value.u, sizeof (Dwg_GEODATA_meshpt));
@@ -4997,6 +5020,7 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 96:
           i = -1;
+          free_GEODATA_geomesh_faces (o);
           o->num_geomesh_faces = pair->value.u;
           o->geomesh_faces = (Dwg_GEODATA_meshface *)xcalloc (
               pair->value.u, sizeof (Dwg_GEODATA_meshface));
