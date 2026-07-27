@@ -26663,12 +26663,7 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict start_pt,
               const dwg_point_3d *restrict end_pt)
 {
-  API_ADD_PREP (LINE);
-  if (dwg->header.version >= R_2_4 && dwg->header.version < R_10
-      && (start_pt->z != 0.0 || end_pt->z != 0.0))
-    return (Dwg_Entity_LINE *)dwg_add_3DLINE (blkhdr, start_pt, end_pt);
-
-  API_ADD_ENTITY2 (LINE);
+  API_ADD_ENTITY (LINE);
   ADD_CHECK_3DPOINT (start_pt);
   ADD_CHECK_3DPOINT (end_pt);
   _obj->start.x = start_pt->x;
@@ -26680,12 +26675,26 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
   if (dwg->header.version <= R_11)
     obj->type = DWG_TYPE_LINE_r11;
-  // There is 3DLINE entity in R_10, but duplicit with LINE
-  if (dwg->header.version == R_10)
+  // Re-type to 3DLINE for pre-R10 versions when z != 0
+  if (dwg->header.version >= R_2_4 && dwg->header.version < R_10)
     {
-      if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+      if (_obj->start.z != 0.0)
+        {
+          obj->type = DWG_TYPE_3DLINE_r11;
+          obj->fixedtype = DWG_TYPE__3DLINE;
+          obj->tio.entity->opts_r11 |= 1;
+        }
+      if (_obj->end.z != 0.0)
+        {
+          obj->type = DWG_TYPE_3DLINE_r11;
+          obj->fixedtype = DWG_TYPE__3DLINE;
+          obj->tio.entity->opts_r11 |= 2;
+        }
     }
+  // R_10 has 3DLINE entity but it's duplicative with LINE
+  if (dwg->header.version == R_10 && _obj->start.z == 0.0
+      && _obj->end.z == 0.0)
+    obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
   return _obj;
 }
 
@@ -27919,8 +27928,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
   BITCODE_RLL ctrlhdl, ctrlidx;                                               \
   if (name && !dwg_is_valid_name_u8 (dwg, name))                              \
     {                                                                         \
-      LOG_WARN ("Invalid symbol table record name \"%s\"\n", name);           \
-      /*return NULL;*/                                                        \
+      LOG_WARN ("Invalid symbol table record name \"%s\"\n", name); /*return NULL;*/                                                        \
     }                                                                         \
   if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)           \
     {                                                                         \

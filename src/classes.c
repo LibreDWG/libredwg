@@ -359,7 +359,7 @@ static const char *const _dwg_type_names_variable[] = {
   "LINEARGRIPENTITY",                                         /* 737 */
   "ROTATIONGRIPENTITY",                                       /* 738 */
   "XYGRIPENTITY",                                             /* 739 */
-  "_3DLINE",                                                  /* 740 */
+  "3DLINE",                                                   /* 740 */
   "REPEAT",                                                   /* 741 */
   "ENDREP",                                                   /* 742 */
   "JUMP",                                                     /* 743 */

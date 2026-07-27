@@ -1607,7 +1607,7 @@ print $inc <<"EOF";
 EOF
 
 for my $name (@entity_names) {
-    my $xname = $name =~ /^3/ ? "_$name" : $name;    # 3DFACE, 3DSOLID
+    my $xname = $name =~ /^3/ ? "_$name" : $name;    # 3DFACE, 3DSOLID, 3DLINE
     next if $name eq 'DIMENSION_';
     next if $name eq 'PROXY_LWPOLYLINE';
     print $inc "DWG_ENTITY ($xname)\n";
@@ -1734,7 +1734,7 @@ EOF
             my $xname = $name =~ /^3/ ? "_$name" : $name;    # 3DFACE, 3DSOLID
                 #next if $name eq 'DIMENSION_';
             next if $name =~ /^(PROXY_LWPOLYLINE|UNKNOWN_)/;
-            print $fh "  else" if $name ne '3DFACE';    # the first
+            print $fh "  else" if $name ne '3DFACE';    # for the first
             print $fh <<"EOF";
   if (obj->fixedtype == DWG_TYPE_$xname)
     error += test_$xname(obj);
@@ -2011,7 +2011,7 @@ EOF
             my $xname = $name =~ /^3/ ? "_$name" : $name;    # 3DFACE, 3DSOLID
             next               if $name eq 'DIMENSION_';
             next               if $name =~ /^(PROXY_LWPOLYLINE|UNKNOWN_)/;
-            print $fh "  else" if $name ne '3DFACE';         # the first
+            print $fh "  else" if $name ne '3DFACE';         # for the first
             print $fh <<"EOF";
   if (obj->fixedtype == DWG_TYPE_$xname)
     error += test_$xname (obj);
@@ -2219,13 +2219,18 @@ GCC46_DIAG_IGNORE(-Wmissing-field-initializers)
 EOF
 $n = 28;
 for my $name (@entity_names) {
-    my $xname = $name =~ /^3/ ? "_$name" : $name;    # 3DFACE, 3DSOLID
+    my $xname = $name =~ /^3/ ? "_$name" : $name;    # 3DFACE, 3DSOLID, 3DLINE
         #next if $name eq 'DIMENSION_';
         #next if $name eq 'PROXY_LWPOLYLINE';
     my $dxfname = dxfname($name);
     printf $inc "%-${n}s %-${n}s  DWG_TYPE_%s,\t1,\t%s\n", "\"$name\",",
         "\"$dxfname\",",
         $xname, stability($xname);
+    if ($name =~ /^3/) {
+        printf $inc "%-${n}s %-${n}s  DWG_TYPE_%s,\t1,\t%s\n", "\"_$name\",",
+            "\"$dxfname\",",
+            $xname, stability($xname);
+    }
 }
 print $inc "# Objects\n";
 $n = 35;
@@ -2686,7 +2691,7 @@ while (<$in>) {
             next;
         }
 
-        # $n =~ s/^_3/3/;
+        $n =~ s/^_3/3/;
         push @VARTYPES, $n;
         $VARTYPES{$n} = $enum++;
     }

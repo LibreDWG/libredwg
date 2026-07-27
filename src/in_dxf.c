@@ -14339,6 +14339,12 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            ? dwg->header_vars.BLOCK_RECORD_PSPACE->absolute_ref
                            : 0UL;
   BITCODE_H mspace_ref = dwg_model_space_ref (dwg);
+  if (!mspace_ref)
+    {
+      Dwg_Object *ms = dwg_model_space_object (dwg);
+      if (ms)
+        mspace_ref = dwg_add_handleref (dwg, 4, ms->handle.value, NULL);
+    }
 
   while (pair != NULL && pair->code == 0 && pair->value.s.ptr)
     {
@@ -14380,6 +14386,11 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               BITCODE_BL last_ent = dwg->num_objects - 1;
               Dwg_Object *obj = &dwg->object[last_ent];
               Dwg_Object_Entity *ent = obj->tio.entity;
+              if (!obj->handle.value)
+                {
+                  BITCODE_RLL next_handle = dwg_next_handle (dwg);
+                  dwg_add_handle (&obj->handle, 0, next_handle, obj);
+                }
               // FIXUP hack for added VX and VX_CONTROL
               while (obj->supertype != DWG_SUPERTYPE_ENTITY)
                 {

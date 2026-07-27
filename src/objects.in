@@ -49,6 +49,7 @@ GCC46_DIAG_IGNORE(-Wmissing-field-initializers)
 # Entities
 "3DFACE",                    "3DFACE",                     DWG_TYPE__3DFACE,	1,	STABLE
 "3DLINE",                    "3DLINE",                     DWG_TYPE__3DLINE,	1,	STABLE
+"_3DLINE",                   "_3DLINE",                    DWG_TYPE__3DLINE,	1,	STABLE
 "3DSOLID",                   "3DSOLID",                    DWG_TYPE__3DSOLID,	1,	STABLE
 "ALIGNMENTPARAMETERENTITY",  "ALIGNMENTPARAMETERENTITY",   DWG_TYPE_ALIGNMENTPARAMETERENTITY,	1,	DEBUGGING
 "ARC",                       "ARC",                        DWG_TYPE_ARC,	1,	STABLE
