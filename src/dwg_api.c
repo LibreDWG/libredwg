@@ -26692,8 +26692,8 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         }
     }
   // R_10 has 3DLINE entity but it's duplicative with LINE
-  if (dwg->header.version == R_10 && _obj->start.z == 0.0
-      && _obj->end.z == 0.0)
+  if ((dwg->header.version == R_10 || dwg->header.version == R_11)
+      && _obj->start.z == 0.0 && _obj->end.z == 0.0)
     obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
   return _obj;
 }
