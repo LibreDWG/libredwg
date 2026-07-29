@@ -27078,7 +27078,8 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       && (!pt4 || pt4->z == 0.0))
     {
       _obj->z_is_zero = 1;
-      obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+      if (dwg->header.version == R_10 || dwg->header.version == R_11)
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   if (dwg->header.version <= R_12)
     obj->type = DWG_TYPE_3DFACE_r11;
