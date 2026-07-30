@@ -27012,15 +27012,26 @@ dwg_add_POINT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict pt)
 {
   API_ADD_ENTITY (POINT);
+  if (dwg->header.version < R_2_4 && pt->z != 0.0)
+    {
+      LOG_ERROR ("No 3D point support");
+      return NULL;
+    }
   ADD_CHECK_3DPOINT (pt);
   _obj->x = pt->x;
   _obj->y = pt->y;
   _obj->z = pt->z;
   if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_POINT_r11;
+  if (dwg->header.version == R_11 || dwg->header.version == R_10)
     {
-      obj->type = DWG_TYPE_POINT_r11;
       if (_obj->z == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+    }
+  if (dwg->header.version >= R_2_4 && dwg->header.version <= R_9 && _obj->z != 0.0)
+    {
+       obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+       obj->tio.entity->elevation_r11 = pt->z;
     }
   return _obj;
 }
