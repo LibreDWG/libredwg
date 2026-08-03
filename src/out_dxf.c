@@ -1271,7 +1271,10 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
             {
               char *u8 = bit_convert_TU ((BITCODE_TU)color->book_name);
               if (u8)
-                strncpy (name, u8, 127);
+                {
+                  strncpy (name, u8, 127);
+                  name[127] = '\0';
+                }
               else
                 name[0] = '\0';
               free (u8);
@@ -1287,6 +1290,7 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
           else
             {
               strncpy (name, color->book_name, 127);
+              name[127] = '\0';
               if (color->name)
                 {
                   strcat (name, "$");
