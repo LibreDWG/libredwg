@@ -1284,7 +1284,7 @@ test_api_version (void)
 {
   const char *version = dwg_api_version_string ();
   long i0, i1, i2;
-  char *d0, *d1, *d2;
+  const char *d0, *d1, *d2;
   const int major = dwg_api_version_major ();
   const int minor = dwg_api_version_minor ();
 
