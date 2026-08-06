@@ -6772,9 +6772,14 @@ decode_preR13_sentinel (const Dwg_Sentinel sentinel,
   LOG_TRACE_TF (r11_sentinel, 16);
   if (memcmp (r11_sentinel, wanted, 16))
     {
-      size_t pos = MAX (dat->byte, 200) - 200;
-      size_t len = MIN (dat->size - dat->byte, 400);
-      // search +- 1000 bytes around
+      /* Search +- 1000 bytes around, as the comment always said. It was
+         actually +-200 (pos = byte - 200, len = 400), which misses real files:
+         a r11 drawing here has every table sentinel displaced from where the
+         header's table address puts it, LAYER_BEGIN by -300 and VIEW_BEGIN by
+         -608, so this recovery never fired and the whole file was rejected. */
+      const size_t window = 1000;
+      size_t pos = dat->byte > window ? dat->byte - window : 0;
+      size_t len = MIN (dat->size - pos, 2 * window);
       char *found = (char *)memmem (&dat->chain[pos], len, wanted, 16);
       if (!found)
         {
