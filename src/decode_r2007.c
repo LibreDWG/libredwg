@@ -682,6 +682,20 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
   return true;
 }
 
+/* Size on disk of a Reed-Solomon coded data page holding size_comp payload
+   bytes: RS works on 0xFB-byte blocks expanded to 0xFF, and the page is then
+   padded to a multiple of 32.  A page whose size matches this exactly is RS
+   coded; a page stored verbatim is only padded to 32 and comes out smaller.
+   The section page record has no flag for it (unlike r2004+), so the size is
+   the only thing to go by.  */
+static int64_t
+page_size_if_rs_coded (const int64_t size_comp)
+{
+  const int64_t pesize = (size_comp + 7) & ~7;
+  const int64_t block_count = (pesize + 0xFB - 1) / 0xFB;
+  return (block_count * 0xFF + 31) & ~31;
+}
+
 static int
 read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                 int64_t page_size, int64_t size_comp, int64_t size_uncomp,
@@ -830,9 +844,16 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       dat->byte = page->offset;
-      // only if compressed. TODO: Isn't there a compressed flag as with 2004+?
-      // theoretically the sizes could still be the same.
-      if (section_page->comp_size != section_page->uncomp_size)
+      /* Reed-Solomon coding is independent of compression: read_data_page()
+         undoes the RS coding first and only then decompresses, when
+         comp_size < uncomp_size.  An uncompressed page can therefore still be
+         RS coded, and copying it straight out of dat->chain hands the caller
+         the RS codewords -- payload interleaved with parity.  Take the RS path
+         whenever the page on disk is exactly as large as the RS coded form of
+         its payload; page->size is the only evidence available. */
+      if (section_page->comp_size != section_page->uncomp_size
+          || (int64_t)page->size
+                 == page_size_if_rs_coded (section_page->comp_size))
         {
           error = read_data_page (dat, &decomp[section_page->offset],
                                   page->size, section_page->comp_size,
@@ -840,7 +861,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
           if (error)
             {
               free (decomp);
-              LOG_ERROR ("Failed to read compressed page");
+              LOG_ERROR ("Failed to read page");
               return error;
             }
         }
