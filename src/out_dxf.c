@@ -1874,19 +1874,24 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
         free (name);
       return;
     }
-  if (dat->version == dat->from_version) // no conversion
+  /* The name depends on the DXF being written, not on where the drawing came
+     from: a pre-R13 DXF spells the two spaces $MODEL_SPACE and $PAPER_SPACE,
+     whatever they are called internally. Keying this off
+     "version != from_version" left an r11 -> r11 conversion writing
+     *MODEL_SPACE, which is not what AutoCAD writes (GH #1337). */
+  if (dat->version == dat->from_version && dat->version >= R_13b1)
     {
       fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
     }
-  else if (dat->version < R_13b1 && dat->from_version >= R_13b1) // to older
+  else if (dat->version < R_13b1) // to pre-R13
     {
-      if (strlen (name) < 10)
-        fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
-      else if (strEQc (name, "*Model_Space"))
+      if (strEQc (name, "*Model_Space") || strEQc (name, "*MODEL_SPACE"))
         fprintf (dat->fh, "%3i\r\n$MODEL_SPACE\r\n", dxf);
-      else if (strEQc (name, "*Paper_Space"))
+      else if (strEQc (name, "*Paper_Space") || strEQc (name, "*PAPER_SPACE"))
         fprintf (dat->fh, "%3i\r\n$PAPER_SPACE\r\n", dxf);
       else if (strlen (name) >= 12 && !memcmp (name, "*Paper_Space", 12))
+        fprintf (dat->fh, "%3i\r\n$PAPER_SPACE%s\r\n", dxf, &name[12]);
+      else if (strlen (name) >= 12 && !memcmp (name, "*PAPER_SPACE", 12))
         fprintf (dat->fh, "%3i\r\n$PAPER_SPACE%s\r\n", dxf, &name[12]);
       else
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
