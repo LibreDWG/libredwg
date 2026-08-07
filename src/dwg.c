@@ -421,10 +421,15 @@ ENDSEC
       dat.size = 0;
       return DWG_ERR_IOERROR;
     }
-  // properly end the buffer for strtol()/... readers
+  /* properly end the buffer for strtol()/... readers. The NUL has to go after
+     the newline we just appended, not on top of it: the chain is calloc'd with
+     two spare bytes for exactly this. Overwriting it left the buffer ending in
+     "...\n0\0" for a DXF without a trailing newline, and dxf_read_string
+     bails out when it finds no '\n' in what is left -- so the file's last
+     group pair was lost and the whole import failed. */
   if (dat.chain[size - 1] != '\n')
     {
-      dat.chain[size] = '\n';
+      dat.chain[size++] = '\n';
       dat.size++;
     }
   dat.chain[size] = '\0';
