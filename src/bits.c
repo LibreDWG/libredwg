@@ -2925,6 +2925,28 @@ bit_read_T (Bit_Chain *restrict dat)
     return (BITCODE_T)bit_read_TV (dat);
 }
 
+/* U+D800..U+DFFF are UTF-16 surrogate halves. They stand for a code point only
+   in pairs, and RFC 3629 forbids encoding them in UTF-8 at all -- which is why
+   bit_utf8_to_TU above already refuses them on the way in ("reject overlong
+   encodings and UTF-16 surrogates"). Writing them out regardless, as the
+   "windows ucs-2 has no D800-DC00 surrogate pairs, go straight up" comments
+   below assumed was safe, produces a DXF that no UTF-8 decoder accepts: iconv
+   and Python reject the file, and AutoCAD refuses the whole drawing over a
+   single such name (GH #1021, an APPID whose name in the DWG is damaged). One
+   surrogate makes 106000 good lines unreadable.
+
+   U+FFFD is the standard substitute and takes the same three bytes, so nothing
+   else about these loops changes. Combining a genuine pair into the
+   supplementary code point it denotes would recover more, and is the natural
+   next step; this only guarantees the output is well-formed. */
+#define NO_LONE_SURROGATE(c)                                                  \
+  do                                                                          \
+    {                                                                         \
+      if ((c) >= 0xD800 && (c) <= 0xDFFF)                                     \
+        (c) = 0xFFFD;                                                         \
+    }                                                                         \
+  while (0)
+
 /* converts UCS-2LE to UTF-8.
    first pass to get the dest len. single malloc.
  */
@@ -3001,6 +3023,7 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
             }
           else /* if (c < 0x10000) */
             {
+              NO_LONE_SURROGATE (c);
               str[i++] = (c >> 12) | 0xE0;
               str[i++] = ((c >> 6) & 0x3F) | 0x80;
               str[i++] = (c & 0x3F) | 0x80;
@@ -3030,6 +3053,7 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
               str = realloc(str, i+3);
               len = i+2;
             }*/
+            NO_LONE_SURROGATE (c);
             str[i++] = (c >> 12) | 0xE0;
             str[i++] = ((c >> 6) & 0x3F) | 0x80;
             str[i++] = (c & 0x3F) | 0x80;
@@ -3123,6 +3147,7 @@ bit_convert_TU_len (const BITCODE_TU restrict wstr, const size_t max_wchars)
             }
           else
             {
+              NO_LONE_SURROGATE (c);
               str[i++] = (c >> 12) | 0xE0;
               str[i++] = ((c >> 6) & 0x3F) | 0x80;
               str[i++] = (c & 0x3F) | 0x80;
@@ -3144,6 +3169,7 @@ bit_convert_TU_len (const BITCODE_TU restrict wstr, const size_t max_wchars)
           }
         else
           {
+            NO_LONE_SURROGATE (c);
             str[i++] = (c >> 12) | 0xE0;
             str[i++] = ((c >> 6) & 0x3F) | 0x80;
             str[i++] = (c & 0x3F) | 0x80;
@@ -3211,6 +3237,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
           else /* if (c < 0x10000) */
             {
               EXTEND_SIZE (str, i + 2, len);
+              NO_LONE_SURROGATE (c);
               str[i++] = (c >> 12) | 0xE0;
               str[i++] = ((c >> 6) & 0x3F) | 0x80;
               str[i++] = (c & 0x3F) | 0x80;
@@ -3242,6 +3269,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
               len = i+2;
             }*/
             EXTEND_SIZE (str, i + 2, len);
+            NO_LONE_SURROGATE (c);
             str[i++] = (c >> 12) | 0xE0;
             str[i++] = ((c >> 6) & 0x3F) | 0x80;
             str[i++] = (c & 0x3F) | 0x80;
