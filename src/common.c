@@ -252,6 +252,11 @@ dwg_version_codes (const Dwg_Version_Type version)
 EXPORT Dwg_Version_Type
 dwg_version_as (const char *version)
 {
+  // "r12" is the common name of the AC1009 format (R_12 == R_11 in the
+  // enum); the tools' usage lists it as valid, but the table (indexed by
+  // enum, so it cannot carry an alias row) only has "r11".
+  if (strEQ (version, "r12"))
+    return R_11;
   for (int i = R_AFTER - 1; i > 0; i--)
     {
       if (strEQ (dwg_versions[i].type, version))
