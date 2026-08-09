@@ -13565,6 +13565,20 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n", name,
                              "dim_rotation", ang, pair->value.d, "BD", 50);
                 }
+              else if (obj->fixedtype == DWG_TYPE_MTEXT
+                       && pair->code == 50)
+                {
+                  // valid alternative to the group 11 direction vector:
+                  // rotation in degrees (AutoCAD and ezdxf both write it)
+                  Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
+                  BITCODE_BD ang = deg2rad (pair->value.d);
+                  o->x_axis_dir.x = cos (ang);
+                  o->x_axis_dir.y = sin (ang);
+                  o->x_axis_dir.z = 0.0;
+                  LOG_TRACE ("MTEXT.x_axis_dir = (%f, %f, 0) (from DEG %f)"
+                             " [3BD 11 from 50]\n",
+                             o->x_axis_dir.x, o->x_axis_dir.y, pair->value.d);
+                }
               // accept wrong colors
               else if (is_dxf_class_importable (obj->name)
                        && (pair->code < 60 || pair->code > 68))
