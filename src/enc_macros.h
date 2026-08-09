@@ -671,7 +671,8 @@
                  dxf);                                                        \
       LOG_POS                                                                 \
     }                                                                         \
-    IF_ENCODE_SINCE_R13                                                       \
+    SINCE (R_13b1) /* the target, matching the PRE above; a pre-R13 source   \
+                      encoded to R13+ must still write its handle stream */   \
     {                                                                         \
       RESET_VER                                                               \
       if (!hdlptr)                                                            \
@@ -728,7 +729,7 @@
   }
 
 #define FIELD_HANDLE_N(nam, vcount, handle_code, dxf)                         \
-  IF_ENCODE_SINCE_R13                                                         \
+  SINCE (R_13b1) /* the target; see VALUE_HANDLE */                           \
   {                                                                           \
     RESET_VER                                                                 \
     if (!_obj->nam)                                                           \
