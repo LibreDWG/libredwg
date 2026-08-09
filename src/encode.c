@@ -7944,7 +7944,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       // need to turn code 3 into absolute 4.
       if (owned[0])
         {
-          hdl = dwg_add_handleref (dwg, 4, owned[0]->handleref.value, NULL);
+          hdl = dwg_add_handleref (dwg, 4, owned[0]->absolute_ref, NULL);
           dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &hdl, 0);
           LOG_TRACE ("%s[0].%s = " FORMAT_REF "[H 0]\n", owner->name,
                      firstfield, ARGS_REF (hdl));
@@ -7952,7 +7952,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       if (owned[num_owned - 1])
         {
           hdl = dwg_add_handleref (
-              dwg, 4, owned[num_owned - 1]->handleref.value, NULL);
+              dwg, 4, owned[num_owned - 1]->absolute_ref, NULL);
           dwg_dynapi_entity_set_value (ow, owner->name, lastfield, &hdl, 0);
           LOG_TRACE ("%s[%u].%s = " FORMAT_REF "[H 0]\n", owner->name,
                      num_owned - 1, lastfield, ARGS_REF (hdl));
