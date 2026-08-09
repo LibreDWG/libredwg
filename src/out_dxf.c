@@ -3046,27 +3046,57 @@ decl_dxf_process_INSERT (MINSERT)
 
     case DWG_TYPE_ATTRIB:
       if (dat->version >= R_13b1)
-        LOG_WARN ("stale %s subentity", obj->dxfname);
+        {
+          // already written via its parent entity; writing it again
+          // here would duplicate it after the SEQEND
+          LOG_WARN ("stale %s subentity", obj->dxfname);
+          return 0;
+        }
       return dwg_dxf_ATTRIB (dat, obj);
     case DWG_TYPE_VERTEX_2D:
       if (dat->version >= R_13b1)
-        LOG_WARN ("stale %s subentity", obj->dxfname);
+        {
+          // already written via its parent entity; writing it again
+          // here would duplicate it after the SEQEND
+          LOG_WARN ("stale %s subentity", obj->dxfname);
+          return 0;
+        }
       return dwg_dxf_VERTEX_2D (dat, obj);
     case DWG_TYPE_VERTEX_3D:
       if (dat->version >= R_13b1)
-        LOG_WARN ("stale %s subentity", obj->dxfname);
+        {
+          // already written via its parent entity; writing it again
+          // here would duplicate it after the SEQEND
+          LOG_WARN ("stale %s subentity", obj->dxfname);
+          return 0;
+        }
       return dwg_dxf_VERTEX_3D (dat, obj);
     case DWG_TYPE_VERTEX_MESH:
       if (dat->version >= R_13b1)
-        LOG_WARN ("stale %s subentity", obj->dxfname);
+        {
+          // already written via its parent entity; writing it again
+          // here would duplicate it after the SEQEND
+          LOG_WARN ("stale %s subentity", obj->dxfname);
+          return 0;
+        }
       return dwg_dxf_VERTEX_MESH (dat, obj);
     case DWG_TYPE_VERTEX_PFACE:
       if (dat->version >= R_13b1)
-        LOG_WARN ("stale %s subentity", obj->dxfname);
+        {
+          // already written via its parent entity; writing it again
+          // here would duplicate it after the SEQEND
+          LOG_WARN ("stale %s subentity", obj->dxfname);
+          return 0;
+        }
       return dwg_dxf_VERTEX_PFACE (dat, obj);
     case DWG_TYPE_VERTEX_PFACE_FACE:
       if (dat->version >= R_13b1)
-        LOG_WARN ("stale %s subentity", obj->dxfname);
+        {
+          // already written via its parent entity; writing it again
+          // here would duplicate it after the SEQEND
+          LOG_WARN ("stale %s subentity", obj->dxfname);
+          return 0;
+        }
       return dwg_dxf_VERTEX_PFACE_FACE (dat, obj);
 
     case DWG_TYPE_ARC:
