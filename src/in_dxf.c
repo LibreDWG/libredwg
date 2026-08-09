@@ -890,6 +890,24 @@ dxf_read_pair (Bit_Chain *dat)
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s.ptr);
       // dynapi_set_helper converts from utf-8 to unicode, not here.
       // we need to know the type of the target field, if TV or T
+      if (dat->from_version <= R_12 && pair->code == 2 && pair->value.s.ptr
+          && pair->value.s.ptr[0] == '$')
+        {
+          // AutoCAD R12 DXFs name the layout blocks $MODEL_SPACE and
+          // $PAPER_SPACE; every matcher downstream knows only the r13+
+          // spellings, so such drawings imported with an unfiled model
+          // space and every entity unreachable.
+          if (!strcasecmp (pair->value.s.ptr + 1, "MODEL_SPACE"))
+            {
+              free (pair->value.s.ptr);
+              pair->value.s.ptr = strdup ("*Model_Space");
+            }
+          else if (!strcasecmp (pair->value.s.ptr + 1, "PAPER_SPACE"))
+            {
+              free (pair->value.s.ptr);
+              pair->value.s.ptr = strdup ("*Paper_Space");
+            }
+        }
       break;
     case DWG_VT_BOOL:
       pair->value.i = dxf_read_rc (dat);
