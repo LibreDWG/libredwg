@@ -7976,7 +7976,14 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict o, Bit_Chain *restrict dat,
           return 0;
         }
       j = 0;
-      // o->scenario = 2;
+      if (!o->num_ctrl_pts && !o->num_knots)
+        {
+          // Only fit points (e.g. ezdxf output): this can only be stored
+          // as a scenario-2 (bezier) spline. Scenario 1 would encode zero
+          // knots and zero control points: an empty spline, silently lost.
+          o->scenario = 2;
+          LOG_TRACE ("=> SPLINE.scenario = 2 [BL 0] (fit points only)\n");
+        }
       o->flag |= 1024;
       LOG_TRACE ("SPLINE.num_fit_pts = %d [BS 74]\n", o->num_fit_pts);
       return 1; // found
