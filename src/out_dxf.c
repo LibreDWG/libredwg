@@ -2792,6 +2792,60 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 
 /* returns 0 on success
  */
+/* An entity of a class we cannot parse still carries its common entity
+   data and, usually, its proxy graphics blob. Emit it as ACAD_PROXY_ENTITY
+   with that blob — as ODA-based converters do — so conformant viewers draw
+   the graphics instead of silently losing the entity. The class data bits
+   are passed through in DWG form (group 93/310), like our PROXY_ENTITY
+   writer does. */
+static int
+dwg_dxf_UNKNOWN_ENT_as_proxy (Bit_Chain *restrict dat,
+                              const Dwg_Object *restrict obj)
+{
+  int error = 0;
+  const Dwg_Data *dwg = obj->parent;
+  const Dwg_Object_Entity *_ent = obj->tio.entity;
+  RECORD (ACAD_PROXY_ENTITY);
+  if (dat->version > R_11 || dwg->header_vars.HANDLING)
+    {
+      if (!obj->handle.value)
+        dxf_fixup_zero_handle (obj);
+      fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", 5, obj->handle.value);
+    }
+  error |= dxf_common_entity_handle_data (dat, (Dwg_Object *)obj);
+  VALUE_TFF ("AcDbProxyEntity", 100);
+  VALUE_BL (498, 90); // proxy entity class id
+  VALUE_BL (obj->type, 91); // application entity's class id
+  {
+    BITCODE_BL version = ((BITCODE_BL)dwg->header.maint_version << 8)
+                         | dwg->header.dwg_version;
+    fprintf (dat->fh, " 95\r\n%u\r\n", (unsigned)version);
+  }
+  if (dat->version >= R_2000)
+    fprintf (dat->fh, " 70\r\n0\r\n"); // original data format: dwg
+  // The graphics blob goes in the proxy-data group (92 size + 310 hex);
+  // our own in_dxf reads it back via add_ent_preview, so the DXF still
+  // round-trips through dxf2dwg. Viewers (ezdxf, ODA) draw it.
+  if (_ent->preview_is_proxy && _ent->preview_size && _ent->preview)
+    {
+      VALUE_BL ((BITCODE_BL)_ent->preview_size, 92);
+      VALUE_BINARY (_ent->preview, (size_t)_ent->preview_size, 310);
+    }
+  else
+    {
+      VALUE_BL (0, 92);
+    }
+  /* The class data bits (group 93 + its 310 stream) are NOT emitted: a
+     conformant data section also carries the object-id reference lists
+     split out of the data, which we cannot reconstruct without parsing
+     the class, and readers can do nothing with the data anyway without
+     the object enabler. data_numbits 0 keeps the record well-formed. */
+  VALUE_BL (0, 93);
+  VALUE_BL (0, 94); // end of objids
+  error |= dxf_write_eed (dat, obj->tio.object);
+  return error;
+}
+
 static int
 dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                        Dwg_Object *restrict obj)
@@ -2803,8 +2857,10 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   i = obj->type - 500;
   if (i < 0 || i >= dwg->num_classes)
     return DWG_ERR_INVALIDTYPE;
-  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
-      || obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+    // preserve it as a proxy instead of dropping the entity
+    return dwg_dxf_UNKNOWN_ENT_as_proxy (dat, obj);
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
     return DWG_ERR_UNHANDLEDCLASS;
 
   klass = &dwg->dwg_class[i];
