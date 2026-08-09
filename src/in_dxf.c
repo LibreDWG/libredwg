@@ -908,6 +908,42 @@ dxf_read_pair (Bit_Chain *dat)
               pair->value.s.ptr = strdup ("*Paper_Space");
             }
         }
+      if (dat->from_version >= R_2007 && dat->version < R_2007
+          && pair->code != 0 && pair->value.s.ptr && *pair->value.s.ptr)
+        {
+          // An r2007+ DXF is UTF-8-encoded, but the pre-r2007 target stores
+          // codepage strings, and dynapi_set_helper copies them through
+          // unconverted: every non-ASCII char arrives double-encoded in the
+          // DWG. Convert here, so the value carries the same encoding as if
+          // read from a pre-r2007 DXF.
+          size_t len = strlen (pair->value.s.ptr);
+          size_t size = (len * 4) + 8;
+          char *dest = (char *)malloc (size);
+          char *tgt = dest ? bit_utf8_to_TV (dest,
+                                             (unsigned char *)pair->value.s.ptr,
+                                             size, len, 0, dat->codepage)
+                           : NULL;
+          while (dest && !tgt)
+            {
+              char *tmp;
+              size *= 2;
+              if (size >= 1 << 20)
+                break;
+              tmp = (char *)realloc (dest, size);
+              if (!tmp)
+                break;
+              dest = tmp;
+              tgt = bit_utf8_to_TV (dest, (unsigned char *)pair->value.s.ptr,
+                                    size, len, 0, dat->codepage);
+            }
+          if (tgt)
+            {
+              free (pair->value.s.ptr);
+              pair->value.s.ptr = tgt;
+            }
+          else
+            free (dest);
+        }
       break;
     case DWG_VT_BOOL:
       pair->value.i = dxf_read_rc (dat);
