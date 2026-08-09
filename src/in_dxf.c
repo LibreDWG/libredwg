@@ -13082,6 +13082,18 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                         {
                           color.rgb = pair->value.l;
                           color.method = pair->value.l >> 0x18;
+                          if (!color.method)
+                            {
+                              // a plain 420 RGB has an empty top byte; 0 is
+                              // an invalid CMC method the encoder discards,
+                              // losing the true color. It is method 0xc3.
+                              color.method = 0xc3;
+                              color.rgb |= 0xc3000000;
+                            }
+                          // the r2004+ entity color encoding writes the rgb
+                          // only when the 0x80 rgb-present flag is set, as
+                          // the 440 handler below already does for alpha
+                          color.flag |= 0x80;
                           if (pair->value.l == 257)
                             {
                               color.method = 0xc8;
