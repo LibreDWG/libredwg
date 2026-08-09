@@ -4066,6 +4066,14 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
           break;   // ByBlock
         case 0xc2: // Entity
         case 0xc3: // TrueColor
+          // Keep an existing palette index whose rgb round-trips: several
+          // palette entries share one rgb (e.g. 1 and 10, 5 and 170), and
+          // dwg_find_color_index returns the first match, silently
+          // recoloring the entity.
+          if (color->index > 0 && color->index < 256
+              && dwg_rgb_palette_index (color->index)
+                     == (color->rgb & 0x00FFFFFF))
+            break;
           color->index = dwg_find_color_index (color->rgb);
           if (color->index == 256)
             color->index = color->rgb & 0xff;
