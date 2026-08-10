@@ -9529,6 +9529,13 @@ extern "C"
                  const char *restrict name) __nonnull_all;
   EXPORT Dwg_Entity_ENDBLK *
   dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
+  EXPORT Dwg_Entity_REPEAT *
+  dwg_add_REPEAT (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
+  EXPORT Dwg_Entity_ENDREP *
+  dwg_add_ENDREP (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const BITCODE_RS numcols, const BITCODE_RS numrows,
+                  const BITCODE_RD colspacing,
+                  const BITCODE_RD rowspacing) __nonnull_all;
   EXPORT Dwg_Entity_SEQEND *
   dwg_add_SEQEND (dwg_ent_generic *restrict owner) __nonnull_all;
 
