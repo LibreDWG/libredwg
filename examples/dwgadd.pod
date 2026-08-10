@@ -91,6 +91,14 @@ Starts a new block.
 
 Ends the current block.
 
+=item B<repeat>
+
+Add a legacy REPEAT entity. Valid only for DWG versions C<r2.10> and older.
+
+=item B<endrep> numcols numrows colspacing rowspacing
+
+Add a legacy ENDREP entity. Valid only for DWG versions C<r2.10> and older.
+
 =item B<insert> (ins_pt) "name" xscale yscale zscale rotation
 
 =item B<minsert> (ins_pt) "name" xscale yscale zscale rotation numrows numcols rowspacing colspacing

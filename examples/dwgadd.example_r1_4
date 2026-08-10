@@ -9,6 +9,9 @@ block "BLOKO"
 line (0 1 0) (1 1 0)
 endblk
 insert (0 1 0) "BLOKO" 1 1 1 0
+repeat
+line (3 0 0) (4 0 0)
+endrep 2 3 1.25 2.5
 arc (0.0 1.0 0.0) 0.5 0.0 3.0
 circle (0.0 1.0 0.0) 0.5
 solid (0 0 0) (2 0) (2 1) (0 2)
