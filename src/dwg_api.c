@@ -26041,6 +26041,42 @@ dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
   return _obj;
 }
 
+EXPORT Dwg_Entity_REPEAT *
+dwg_add_REPEAT (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
+{
+  API_ADD_PREP (REPEAT);
+  if (dwg->header.version > R_2_10)
+    {
+      LOG_ERROR ("Invalid entity %s >r2.10", "REPEAT");
+      return NULL;
+    }
+  API_ADD_ENTITY2 (REPEAT);
+  obj->type = DWG_TYPE_REPEAT_r11;
+  return _obj;
+}
+
+EXPORT Dwg_Entity_ENDREP *
+dwg_add_ENDREP (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                const BITCODE_RS numcols, const BITCODE_RS numrows,
+                const BITCODE_RD colspacing, const BITCODE_RD rowspacing)
+{
+  API_ADD_PREP (ENDREP);
+  if (dwg->header.version > R_2_10)
+    {
+      LOG_ERROR ("Invalid entity %s >r2.10", "ENDREP");
+      return NULL;
+    }
+  API_ADD_ENTITY2 (ENDREP);
+  ADD_CHECK_DOUBLE (colspacing);
+  ADD_CHECK_DOUBLE (rowspacing);
+  _obj->numcols = numcols;
+  _obj->numrows = numrows;
+  _obj->colspacing = colspacing;
+  _obj->rowspacing = rowspacing;
+  obj->type = DWG_TYPE_ENDREP_r11;
+  return _obj;
+}
+
 // owned by POLYLINE or INSERT
 EXPORT Dwg_Entity_SEQEND *
 dwg_add_SEQEND (dwg_ent_generic *restrict owner)
