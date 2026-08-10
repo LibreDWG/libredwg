@@ -134,6 +134,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
 
   dwg = dwg_new_Document (
       type == DWG_TYPE__3DLINE                   ? R_9
+      : type == DWG_TYPE_REPEAT || type == DWG_TYPE_ENDREP
+                                                ? R_2_10
       : as_dxf                                 ? R_2018
                                                : R_2000,
       0 /*metric/iso */, tracelevel);
@@ -221,6 +223,20 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         dwg_add_LINE (blk, &pt1, &pt2);
         dwg_add_ENDBLK (blk);
         dwg_add_INSERT (hdr, &pt1, "bloko", 1.0, 1.0, 1.0, 0.0);
+      }
+      break;
+    case DWG_TYPE_REPEAT:
+      {
+        dwg_add_REPEAT (hdr);
+        dwg_add_LINE (hdr, &pt1, &pt2);
+        dwg_add_ENDREP (hdr, 2, 3, 1.25, 2.5);
+      }
+      break;
+    case DWG_TYPE_ENDREP:
+      {
+        dwg_add_REPEAT (hdr);
+        dwg_add_LINE (hdr, &pt1, &pt2);
+        dwg_add_ENDREP (hdr, 2, 3, 1.25, 2.5);
       }
       break;
     case DWG_TYPE_MINSERT:
@@ -904,6 +920,62 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       TEST_ENTITY (POLYLINE_PFACE);
       TEST_ENTITY (SPLINE);
       TEST_ENTITY (INSERT);
+    case DWG_TYPE_REPEAT:
+      {
+        Dwg_Entity_REPEAT **reps = dwg_getall_REPEAT (mspace_ref);
+        Dwg_Entity_ENDREP **ends = dwg_getall_ENDREP (mspace_ref);
+        if (reps && reps[0] && !reps[1])
+          ok ("found 1 REPEAT");
+        else if (!reps)
+          fail ("found no REPEAT at all");
+        else if (!reps[0])
+          fail ("found no REPEAT");
+        else
+          fail ("found many REPEAT's");
+        if (ends && ends[0] && !ends[1])
+          ok ("found 1 ENDREP");
+        else if (!ends)
+          fail ("found no ENDREP at all");
+        else if (!ends[0])
+          fail ("found no ENDREP");
+        else
+          fail ("found many ENDREP's");
+        free (reps);
+        free (ends);
+      }
+      break;
+    case DWG_TYPE_ENDREP:
+      {
+        Dwg_Entity_REPEAT **reps = dwg_getall_REPEAT (mspace_ref);
+        Dwg_Entity_ENDREP **ends = dwg_getall_ENDREP (mspace_ref);
+        Dwg_Entity_ENDREP *end;
+        if (reps && reps[0] && !reps[1])
+          ok ("found 1 REPEAT");
+        else if (!reps)
+          fail ("found no REPEAT at all");
+        else if (!reps[0])
+          fail ("found no REPEAT");
+        else
+          fail ("found many REPEAT's");
+        if (ends && ends[0] && !ends[1])
+          ok ("found 1 ENDREP");
+        else if (!ends)
+          fail ("found no ENDREP at all");
+        else if (!ends[0])
+          fail ("found no ENDREP");
+        else
+          fail ("found many ENDREP's");
+        end = ends && ends[0] ? ends[0] : NULL;
+        if (end && end->numcols == 2 && end->numrows == 3
+            && end->colspacing == 1.25 && end->rowspacing == 2.5)
+          ok ("ENDREP fields preserved");
+        else if (end)
+          fail ("ENDREP fields changed to %d,%d %.9g,%.9g", end->numcols,
+                end->numrows, end->colspacing, end->rowspacing);
+        free (reps);
+        free (ends);
+      }
+      break;
       TEST_ENTITY (MINSERT);
       TEST_ENTITY (ATTRIB);
       TEST_ENTITY (DIMENSION_ALIGNED);
@@ -1504,6 +1576,8 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_POLYLINE_PFACE, "add_pface_2000", dxf);
       error += test_add (DWG_TYPE_SPLINE, "add_spline_2000", dxf);
       error += test_add (DWG_TYPE_INSERT, "add_insert_2000", dxf);
+      error += test_add (DWG_TYPE_REPEAT, "add_repeat_r210", dxf);
+      error += test_add (DWG_TYPE_ENDREP, "add_endrep_r210", dxf);
       error += test_add (DWG_TYPE_MINSERT, "add_minsert_2000", dxf);
       if (debug == cnt || debug == -1)
         error += test_add (DWG_TYPE_ATTRIB, "add_attrib_2000", dxf);
