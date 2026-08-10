@@ -1,4 +1,4 @@
-# example dwgadd file for r2.10. strings are utf8 and must not exceed length 255
+# example dwgadd file for r2.6. strings are utf8 and must not exceed length 255
 HEADER.VIEWSIZE = 1.2345
 HEADER.LUPREC = 3
 HEADER.MENU = "other"
@@ -12,9 +12,6 @@ line (0 1 0) (1 1 0)
 endblk
 insert (0 1 0) "BLOKO" 1 1 1 0
 attrib 8 0 (0.0 2.0 0.0) TAG "text1"
-repeat
-line (3 0 0) (4 0 0)
-endrep 2 3 1.25 2.5
 polyline_2d 2 ((0 1) (2 3))
 polyline_3d 2 ((0 1 2) (3 4 5))
 arc (0.0 1.0 0.0) 0.5 0.0 3.0
