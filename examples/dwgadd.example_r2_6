@@ -1,0 +1,23 @@
+# example dwgadd file for r2.6. strings are utf8 and must not exceed length 255
+HEADER.VIEWSIZE = 1.2345
+HEADER.LUPREC = 3
+HEADER.MENU = "other"
+HEADER.INSBASE = (1 0 0)
+HEADER.LIMMIN = (12 9)
+point (2 0 0)
+text "test" (0.0 1.0 0.0) 8
+block "BLOKO"
+attdef 8 0 "prompt" (0.0 1.0 0.0) TAG "default_text"
+line (0 1 0) (1 1 0)
+endblk
+insert (0 1 0) "BLOKO" 1 1 1 0
+attrib 8 0 (0.0 2.0 0.0) TAG "text1"
+polyline_2d 2 ((0 1) (2 3))
+polyline_3d 2 ((0 1 2) (3 4 5))
+arc (0.0 1.0 0.0) 0.5 0.0 3.0
+circle (0.0 1.0 0.0) 0.5
+polyline_pface 5 3 ((0 0 0) (2 0 0) (2 2 0) (1 2 0) (1 1 0)) ((0 1 2 3) (1 2 3 4) (2 3 4 5))
+polyline_mesh 3 2 ((0 0 0) (2 0 0) (2 2 0) (1 2 0) (1 1 0) (0 1 0))
+solid (0 0 0) (2 0) (2 1) (0 2)
+trace (0 0 0) (2 0) (2 1) (0 2)
+shape "ROMAN.SHX" (0 0 0) 2 45
