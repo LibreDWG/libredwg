@@ -602,6 +602,14 @@ next_line (char *restrict p, const char *restrict end)
   return p;
 }
 
+static int
+match_line_cmd (const char *restrict p, const char *restrict cmd)
+{
+  const size_t len = strlen (cmd);
+  return memBEGIN (p, cmd, len)
+         && (p[len] == '\n' || p[len] == '\r' || p[len] == '\0');
+}
+
 static ATTRIBUTE_NORETURN void
 fn_error (const char *msg)
 {
@@ -1053,7 +1061,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       }                                                                       \
     }
 
-      if (memBEGINc (p, "pspace\n"))
+      if (match_line_cmd (p, "pspace"))
         {
           Dwg_Object *pspace = dwg_paper_space_object (dwg);
           if (pspace)
@@ -1065,7 +1073,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           else
             fn_error ("Empty pspace object\n");
         }
-      else if (memBEGINc (p, "mspace\n"))
+      else if (match_line_cmd (p, "mspace"))
         {
           if (mspace)
             {
@@ -1246,7 +1254,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           // clang-format off
         SET_ENT (block, BLOCK)
       // clang-format on
-      else if (memBEGINc (p, "endblk\n"))
+      else if (match_line_cmd (p, "endblk"))
       {
         LOG_TRACE ("add_ENDBLK\n");
         dwg_add_ENDBLK (hdr);
@@ -1255,7 +1263,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           // clang-format off
         SET_ENT (endblk, ENDBLK)
       // clang-format on
-      else if (memBEGINc (p, "repeat\n"))
+      else if (match_line_cmd (p, "repeat"))
       {
         Dwg_Entity_REPEAT *_repeat;
         if (repeat_open)
