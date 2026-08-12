@@ -30905,7 +30905,7 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     break;
                   }
                 // same base: i++ and inc name
-                sscanf (text, "%s - %d", text1, &i1);
+                sscanf (text, "%79s - %d", text1, &i1);
                 if (strEQ (text1, base))
                   {
                     i++;
