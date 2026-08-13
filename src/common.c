@@ -389,6 +389,49 @@ strrplc (const char *s, const char *from, const char *to)
     return NULL;
 }
 
+/* replace [rcount1], [rcount2] and [vcount] with concrete indexes. */
+EXPORT char *
+format_field_name (const char *s, long row_count1, long row_count2,
+                   long value_count)
+{
+  char *dest = (char *)calloc (1, 128);
+  size_t j = 0;
+  bool changed = false;
+
+  if (!dest)
+    return NULL;
+  for (size_t i = 0; s[i] && j < 127;)
+    {
+      if (!strncmp (&s[i], "[rcount1]", 9))
+        {
+          j += (size_t)snprintf (&dest[j], 128 - j, "[%ld]", row_count1);
+          i += 9;
+          changed = true;
+        }
+      else if (!strncmp (&s[i], "[rcount2]", 9))
+        {
+          j += (size_t)snprintf (&dest[j], 128 - j, "[%ld]", row_count2);
+          i += 9;
+          changed = true;
+        }
+      else if (!strncmp (&s[i], "[vcount]", 8))
+        {
+          j += (size_t)snprintf (&dest[j], 128 - j, "[%ld]", value_count);
+          i += 8;
+          changed = true;
+        }
+      else
+        dest[j++] = s[i++];
+    }
+  assert (j < 128);
+  if (!changed)
+    {
+      free (dest);
+      return NULL;
+    }
+  return dest;
+}
+
 // naive from scratch implementation, not from glibc.
 // see also examples/unknown.c:membits
 void *__nonnull ((1, 3))
