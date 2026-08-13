@@ -129,6 +129,14 @@
     FIELD_G_TRACE (o.nam, cast, dxf);                                         \
   }
 
+#define LOG_TRACE_TV_NAME(nam, value, dxfgroup)                               \
+  {                                                                           \
+    char *_name = format_field_name (#nam, rcount1, rcount2, 0);              \
+    LOG_TRACE_TV_N (_name ? _name : #nam, value, dxfgroup);                   \
+    if (_name)                                                                \
+      free (_name);                                                           \
+  }
+
 #define LOG_TRACE_TU_NAME(nam, value, dxfgroup)                               \
   {                                                                           \
     char *_name = format_field_name (#nam, rcount1, rcount2, 0);              \
@@ -669,7 +677,7 @@
 #define FIELD_TV(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = bit_read_TV (dat);                                            \
-    LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);                   \
+    LOG_TRACE_TV_NAME (nam, _obj->nam, dxf);                                  \
   }
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
@@ -682,7 +690,7 @@
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
-        LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);               \
+        LOG_TRACE_TV_NAME (nam, _obj->nam, dxf);                              \
       }                                                                       \
     else                                                                      \
       {                                                                       \
