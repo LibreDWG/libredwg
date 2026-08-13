@@ -137,6 +137,14 @@
       free (_name);                                                           \
   }
 
+#define LOG_TRACE_TV_NAME_I(nam, idx, value, dxfgroup)                        \
+  {                                                                           \
+    char *_name = format_field_name (#nam, rcount1, rcount2, idx);            \
+    LOG_TRACE_TV_N (_name ? _name : #nam, value, dxfgroup);                   \
+    if (_name)                                                                \
+      free (_name);                                                           \
+  }
+
 #define LOG_TRACE_TU_NAME(nam, value, dxfgroup)                               \
   {                                                                           \
     char *_name = format_field_name (#nam, rcount1, rcount2, 0);              \
@@ -1293,8 +1301,8 @@
           PRE (R_2007a)                                                       \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
-            LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
-                       _obj->name[vcount], dxf);                              \
+            LOG_TRACE_TV_NAME_I (name[vcount], vcount, _obj->name[vcount],    \
+                                 dxf);                                        \
             LOG_POS                                                           \
             if (!_obj->name[vcount])                                          \
               return DWG_ERR_VALUEOUTOFBOUNDS;                                \
