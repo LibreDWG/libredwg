@@ -379,8 +379,11 @@
         {                                                                     \
           if (ref)                                                            \
             {                                                                 \
-              LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (ref),      \
-                         dxf);                                                \
+              char *_name = format_field_name (#nam, rcount1, rcount2, 0);    \
+              LOG_TRACE ("%s: " FORMAT_REF " [H %d]",                         \
+                         _name ? _name : #nam, ARGS_REF (ref), dxf);          \
+              if (_name)                                                      \
+                free (_name);                                                 \
               if (dwg_ref_object_silent (dwg, ref)                            \
                   && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                       \
                 {                                                             \
@@ -445,10 +448,10 @@
         {                                                                     \
           if (ref)                                                            \
             {                                                                 \
-              char *_name = strrplc (#nam, "[vcount]", "");                   \
-              LOG_TRACE ("%s[%d]: " FORMAT_REF " [H* %d]",                    \
-                         _name ? _name : #nam, (int)vcount, ARGS_REF (ref),   \
-                         dxf);                                                \
+              char *_name = format_field_name (#nam, rcount1, rcount2,        \
+                                               vcount);                       \
+              LOG_TRACE ("%s: " FORMAT_REF " [H* %d]",                        \
+                         _name ? _name : #nam, ARGS_REF (ref), dxf);          \
               if (_name)                                                      \
                 free (_name);                                                 \
               if (dwg_ref_object_silent (dwg, ref)                            \
