@@ -139,6 +139,16 @@
       free (_name);                                                           \
   }
 
+#define LOG_TRACE_TU_NAME_I(nam, idx, value, type, dxfgroup)                  \
+  {                                                                           \
+    char *_name = format_field_name (#nam, rcount1, rcount2, vcount);         \
+    GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+    LOG_TRACE_TU_I (_name ? _name : #nam, idx, value, type, dxfgroup);        \
+    GCC46_DIAG_RESTORE                                                        \
+    if (_name)                                                                \
+      free (_name);                                                           \
+  }
+
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
@@ -1284,7 +1294,7 @@
           LATER_VERSIONS                                                      \
           {                                                                   \
             _obj->name[vcount] = (char *)bit_read_##type (dat);               \
-            LOG_TRACE_TU_I (#name, vcount, _obj->name[vcount], type, dxf);    \
+            LOG_TRACE_TU_NAME_I (name, vcount, _obj->name[vcount], type, dxf);\
             if (!_obj->name[vcount])                                          \
               return DWG_ERR_VALUEOUTOFBOUNDS;                                \
           }                                                                   \
