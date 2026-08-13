@@ -129,6 +129,16 @@
     FIELD_G_TRACE (o.nam, cast, dxf);                                         \
   }
 
+#define LOG_TRACE_TU_NAME(nam, value, dxfgroup)                               \
+  {                                                                           \
+    char *_name = format_field_name (#nam, rcount1, rcount2, 0);              \
+    GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+    LOG_TRACE_TU (_name ? _name : #nam, value, dxfgroup);                     \
+    GCC46_DIAG_RESTORE                                                        \
+    if (_name)                                                                \
+      free (_name);                                                           \
+  }
+
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
@@ -654,7 +664,7 @@
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = (BITCODE_TU)bit_read_TU (str_dat);                            \
-    LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);                  \
+    LOG_TRACE_TU_NAME (nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);              \
   }
 // clang-format on
 #define FIELD_T(nam, dxf)                                                     \
@@ -669,11 +679,11 @@
         if (!obj || obj->has_strings) /* header_vars */                       \
           {                                                                   \
             _obj->nam = (BITCODE_T)bit_read_TU (str_dat);                     \
-            LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);          \
+            LOG_TRACE_TU_NAME (nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);      \
           }                                                                   \
         else                                                                  \
           {                                                                   \
-            LOG_TRACE_TU (#nam, L"", dxf);                                    \
+            LOG_TRACE_TU_NAME (nam, L"", dxf);                                \
             LOG_INSANE (" !has_strings\n");                                   \
           }                                                                   \
       }                                                                       \
