@@ -1130,10 +1130,10 @@ json_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
               VALUE_RD (data->u.eed_40.real, 0);
               break;
             case 70:
-              VALUE_RS (data->u.eed_70.rs, 0);
+              VALUE_RSd ((int16_t)data->u.eed_70.rs, 0);
               break;
             case 71:
-              VALUE_RL (data->u.eed_71.rl, 0);
+              VALUE_RLd ((int32_t)data->u.eed_71.rl, 0);
               break;
             default:
               VALUE_RC (0, 0);
