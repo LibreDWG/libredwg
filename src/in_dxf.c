@@ -6838,6 +6838,79 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 static Dxf_Pair *
+add_ASSOCPERSSUBENTMANAGER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                            Dxf_Pair *restrict pair)
+{
+  Dwg_Object_ASSOCPERSSUBENTMANAGER *o
+      = obj->tio.object->tio.ASSOCPERSSUBENTMANAGER;
+  Dwg_Data *dwg = obj->parent;
+
+  EXPECT_UINT_DXF ("class_version", 90, BL);
+  FIELD_BL (unknown_3, 90);
+  FIELD_BL (unknown_0, 90);
+  FIELD_BL (unknown_2, 90);
+
+  FIELD_BL (numassocsteps, 90);
+  FIELD_BL (numassocsubents, 90);
+  FIELD_BL (num_steps, 90);
+  free (o->steps);
+  o->steps = NULL;
+  if (o->num_steps > 0)
+    {
+      o->steps = (BITCODE_BL *)xcalloc (o->num_steps, sizeof (BITCODE_BL));
+      if (!o->steps)
+        {
+          o->num_steps = 0;
+          return pair;
+        }
+      for (unsigned i = 0; i < o->num_steps; i++)
+        {
+          pair = dxf_read_pair (dat);
+          if (!pair || pair->code != 90)
+            return pair;
+          o->steps[i] = pair->value.u;
+          LOG_TRACE ("%s.steps[%d] = %u [BL %d]\n", obj->name, i,
+                     pair->value.u, pair->code);
+          dxf_free_pair (pair);
+        }
+    }
+
+  FIELD_BL (num_subents, 90);
+  free (o->subents);
+  o->subents = NULL;
+  if (o->num_subents > 0)
+    {
+      o->subents = (BITCODE_BL *)xcalloc (o->num_subents, sizeof (BITCODE_BL));
+      if (!o->subents)
+        {
+          o->num_subents = 0;
+          return pair;
+        }
+      for (unsigned i = 0; i < o->num_subents; i++)
+        {
+          pair = dxf_read_pair (dat);
+          if (!pair || pair->code != 90)
+            return pair;
+          o->subents[i] = pair->value.u;
+          LOG_TRACE ("%s.subents[%d] = %u [BL %d]\n", obj->name, i,
+                     pair->value.u, pair->code);
+          dxf_free_pair (pair);
+        }
+    }
+
+  FIELD_BL (unknown_bl3, 90);
+
+  pair = dxf_read_pair (dat);
+  if (!pair || pair->code != 290)
+    return pair;
+  o->unknown_b4 = pair->value.i ? 1 : 0;
+  LOG_TRACE ("%s.unknown_b4 = %d [B %d]\n", obj->name, o->unknown_b4,
+             pair->code);
+  dxf_free_pair (pair);
+  return NULL;
+}
+
+static Dxf_Pair *
 add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 {
   Dwg_Object_ASSOCDEPENDENCY *o = obj->tio.object->tio.ASSOCDEPENDENCY;
@@ -10594,13 +10667,24 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   goto invalid_dxf;
                 }
 
-              // with PERSUBENTMGR
+              // with PERSUBENTMGR or ASSOCPERSSUBENTMANAGER
               if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR
                   && strEQc (subclass, "AcDbPersSubentManager"))
                 {
                   dxf_free_pair (pair);
                   pair = dxf_read_pair (dat);
                   pair = add_PERSUBENTMGR (obj, dat, pair); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (obj->fixedtype == DWG_TYPE_ASSOCPERSSUBENTMANAGER
+                       && strEQc (subclass, "AcDbAssocPersSubentManager"))
+                {
+                  dxf_free_pair (pair);
+                  pair = dxf_read_pair (dat);
+                  pair = add_ASSOCPERSSUBENTMANAGER (obj, dat, pair);
                   if (!pair)
                     goto next_pair;
                   else
@@ -11447,6 +11531,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_PERSUBENTMGR)
             {
               pair = add_PERSUBENTMGR (obj, dat, pair); // NULL for success
+              if (!pair)
+                goto next_pair;
+              else
+                goto start_loop; /* failure */
+            }
+          else if (pair->code == 90
+                   && obj->fixedtype == DWG_TYPE_ASSOCPERSSUBENTMANAGER)
+            {
+              pair = add_ASSOCPERSSUBENTMANAGER (obj, dat, pair);
               if (!pair)
                 goto next_pair;
               else
