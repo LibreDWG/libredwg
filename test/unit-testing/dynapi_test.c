@@ -34697,514 +34697,64 @@ static int test_ASSOCPERSSUBENTMANAGER (const Dwg_Object *obj)
     assocperssubentmanager->unknown_3--;
   }
   {
-    BITCODE_B unknown_b37;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_b37", &unknown_b37, NULL)
-        && unknown_b37 == assocperssubentmanager->unknown_b37)
+    BITCODE_B unknown_b4;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_b4", &unknown_b4, NULL)
+        && unknown_b4 == assocperssubentmanager->unknown_b4)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_b37 [B] " FORMAT_B " != " FORMAT_B "", assocperssubentmanager->unknown_b37, unknown_b37);
-    unknown_b37++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_b37", &unknown_b37, 0)
-        && unknown_b37 == assocperssubentmanager->unknown_b37)
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_b4 [B] " FORMAT_B " != " FORMAT_B "", assocperssubentmanager->unknown_b4, unknown_b4);
+    unknown_b4++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_b4", &unknown_b4, 0)
+        && unknown_b4 == assocperssubentmanager->unknown_b4)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_b37 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocperssubentmanager->unknown_b37, unknown_b37);
-    assocperssubentmanager->unknown_b37--;
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_b4 [B] set+1 " FORMAT_B " != " FORMAT_B "", assocperssubentmanager->unknown_b4, unknown_b4);
+    assocperssubentmanager->unknown_b4--;
   }
   {
-    BITCODE_BL unknown_bl10;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl10", &unknown_bl10, NULL)
-        && unknown_bl10 == assocperssubentmanager->unknown_bl10)
+    BITCODE_BL unknown_bl1;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1, NULL)
+        && unknown_bl1 == assocperssubentmanager->unknown_bl1)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl10 [BL] %u != %u", assocperssubentmanager->unknown_bl10, unknown_bl10);
-    unknown_bl10++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl10", &unknown_bl10, 0)
-        && unknown_bl10 == assocperssubentmanager->unknown_bl10)
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl1 [BL] %u != %u", assocperssubentmanager->unknown_bl1, unknown_bl1);
+    unknown_bl1++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl1", &unknown_bl1, 0)
+        && unknown_bl1 == assocperssubentmanager->unknown_bl1)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl10 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl10, unknown_bl10);
-    assocperssubentmanager->unknown_bl10--;
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl1 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl1, unknown_bl1);
+    assocperssubentmanager->unknown_bl1--;
   }
   {
-    BITCODE_BL unknown_bl11;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl11", &unknown_bl11, NULL)
-        && unknown_bl11 == assocperssubentmanager->unknown_bl11)
+    BITCODE_BL unknown_bl2;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2, NULL)
+        && unknown_bl2 == assocperssubentmanager->unknown_bl2)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl11 [BL] %u != %u", assocperssubentmanager->unknown_bl11, unknown_bl11);
-    unknown_bl11++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl11", &unknown_bl11, 0)
-        && unknown_bl11 == assocperssubentmanager->unknown_bl11)
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl2 [BL] %u != %u", assocperssubentmanager->unknown_bl2, unknown_bl2);
+    unknown_bl2++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl2", &unknown_bl2, 0)
+        && unknown_bl2 == assocperssubentmanager->unknown_bl2)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl11 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl11, unknown_bl11);
-    assocperssubentmanager->unknown_bl11--;
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl2 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl2, unknown_bl2);
+    assocperssubentmanager->unknown_bl2--;
   }
   {
-    BITCODE_BL unknown_bl12;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl12", &unknown_bl12, NULL)
-        && unknown_bl12 == assocperssubentmanager->unknown_bl12)
+    BITCODE_BL unknown_bl3;
+    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3, NULL)
+        && unknown_bl3 == assocperssubentmanager->unknown_bl3)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl12 [BL] %u != %u", assocperssubentmanager->unknown_bl12, unknown_bl12);
-    unknown_bl12++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl12", &unknown_bl12, 0)
-        && unknown_bl12 == assocperssubentmanager->unknown_bl12)
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl3 [BL] %u != %u", assocperssubentmanager->unknown_bl3, unknown_bl3);
+    unknown_bl3++;
+    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl3", &unknown_bl3, 0)
+        && unknown_bl3 == assocperssubentmanager->unknown_bl3)
       pass ();
     else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl12 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl12, unknown_bl12);
-    assocperssubentmanager->unknown_bl12--;
-  }
-  {
-    BITCODE_BL unknown_bl13;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl13", &unknown_bl13, NULL)
-        && unknown_bl13 == assocperssubentmanager->unknown_bl13)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl13 [BL] %u != %u", assocperssubentmanager->unknown_bl13, unknown_bl13);
-    unknown_bl13++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl13", &unknown_bl13, 0)
-        && unknown_bl13 == assocperssubentmanager->unknown_bl13)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl13 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl13, unknown_bl13);
-    assocperssubentmanager->unknown_bl13--;
-  }
-  {
-    BITCODE_BL unknown_bl14;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl14", &unknown_bl14, NULL)
-        && unknown_bl14 == assocperssubentmanager->unknown_bl14)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl14 [BL] %u != %u", assocperssubentmanager->unknown_bl14, unknown_bl14);
-    unknown_bl14++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl14", &unknown_bl14, 0)
-        && unknown_bl14 == assocperssubentmanager->unknown_bl14)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl14 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl14, unknown_bl14);
-    assocperssubentmanager->unknown_bl14--;
-  }
-  {
-    BITCODE_BL unknown_bl15;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl15", &unknown_bl15, NULL)
-        && unknown_bl15 == assocperssubentmanager->unknown_bl15)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl15 [BL] %u != %u", assocperssubentmanager->unknown_bl15, unknown_bl15);
-    unknown_bl15++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl15", &unknown_bl15, 0)
-        && unknown_bl15 == assocperssubentmanager->unknown_bl15)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl15 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl15, unknown_bl15);
-    assocperssubentmanager->unknown_bl15--;
-  }
-  {
-    BITCODE_BL unknown_bl16;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl16", &unknown_bl16, NULL)
-        && unknown_bl16 == assocperssubentmanager->unknown_bl16)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl16 [BL] %u != %u", assocperssubentmanager->unknown_bl16, unknown_bl16);
-    unknown_bl16++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl16", &unknown_bl16, 0)
-        && unknown_bl16 == assocperssubentmanager->unknown_bl16)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl16 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl16, unknown_bl16);
-    assocperssubentmanager->unknown_bl16--;
-  }
-  {
-    BITCODE_BL unknown_bl17;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl17", &unknown_bl17, NULL)
-        && unknown_bl17 == assocperssubentmanager->unknown_bl17)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl17 [BL] %u != %u", assocperssubentmanager->unknown_bl17, unknown_bl17);
-    unknown_bl17++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl17", &unknown_bl17, 0)
-        && unknown_bl17 == assocperssubentmanager->unknown_bl17)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl17 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl17, unknown_bl17);
-    assocperssubentmanager->unknown_bl17--;
-  }
-  {
-    BITCODE_BL unknown_bl18;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl18", &unknown_bl18, NULL)
-        && unknown_bl18 == assocperssubentmanager->unknown_bl18)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl18 [BL] %u != %u", assocperssubentmanager->unknown_bl18, unknown_bl18);
-    unknown_bl18++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl18", &unknown_bl18, 0)
-        && unknown_bl18 == assocperssubentmanager->unknown_bl18)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl18 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl18, unknown_bl18);
-    assocperssubentmanager->unknown_bl18--;
-  }
-  {
-    BITCODE_BL unknown_bl19;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl19", &unknown_bl19, NULL)
-        && unknown_bl19 == assocperssubentmanager->unknown_bl19)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl19 [BL] %u != %u", assocperssubentmanager->unknown_bl19, unknown_bl19);
-    unknown_bl19++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl19", &unknown_bl19, 0)
-        && unknown_bl19 == assocperssubentmanager->unknown_bl19)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl19 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl19, unknown_bl19);
-    assocperssubentmanager->unknown_bl19--;
-  }
-  {
-    BITCODE_BL unknown_bl20;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl20", &unknown_bl20, NULL)
-        && unknown_bl20 == assocperssubentmanager->unknown_bl20)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl20 [BL] %u != %u", assocperssubentmanager->unknown_bl20, unknown_bl20);
-    unknown_bl20++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl20", &unknown_bl20, 0)
-        && unknown_bl20 == assocperssubentmanager->unknown_bl20)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl20 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl20, unknown_bl20);
-    assocperssubentmanager->unknown_bl20--;
-  }
-  {
-    BITCODE_BL unknown_bl21;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl21", &unknown_bl21, NULL)
-        && unknown_bl21 == assocperssubentmanager->unknown_bl21)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl21 [BL] %u != %u", assocperssubentmanager->unknown_bl21, unknown_bl21);
-    unknown_bl21++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl21", &unknown_bl21, 0)
-        && unknown_bl21 == assocperssubentmanager->unknown_bl21)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl21 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl21, unknown_bl21);
-    assocperssubentmanager->unknown_bl21--;
-  }
-  {
-    BITCODE_BL unknown_bl22;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl22", &unknown_bl22, NULL)
-        && unknown_bl22 == assocperssubentmanager->unknown_bl22)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl22 [BL] %u != %u", assocperssubentmanager->unknown_bl22, unknown_bl22);
-    unknown_bl22++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl22", &unknown_bl22, 0)
-        && unknown_bl22 == assocperssubentmanager->unknown_bl22)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl22 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl22, unknown_bl22);
-    assocperssubentmanager->unknown_bl22--;
-  }
-  {
-    BITCODE_BL unknown_bl23;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl23", &unknown_bl23, NULL)
-        && unknown_bl23 == assocperssubentmanager->unknown_bl23)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl23 [BL] %u != %u", assocperssubentmanager->unknown_bl23, unknown_bl23);
-    unknown_bl23++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl23", &unknown_bl23, 0)
-        && unknown_bl23 == assocperssubentmanager->unknown_bl23)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl23 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl23, unknown_bl23);
-    assocperssubentmanager->unknown_bl23--;
-  }
-  {
-    BITCODE_BL unknown_bl24;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl24", &unknown_bl24, NULL)
-        && unknown_bl24 == assocperssubentmanager->unknown_bl24)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl24 [BL] %u != %u", assocperssubentmanager->unknown_bl24, unknown_bl24);
-    unknown_bl24++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl24", &unknown_bl24, 0)
-        && unknown_bl24 == assocperssubentmanager->unknown_bl24)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl24 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl24, unknown_bl24);
-    assocperssubentmanager->unknown_bl24--;
-  }
-  {
-    BITCODE_BL unknown_bl25;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl25", &unknown_bl25, NULL)
-        && unknown_bl25 == assocperssubentmanager->unknown_bl25)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl25 [BL] %u != %u", assocperssubentmanager->unknown_bl25, unknown_bl25);
-    unknown_bl25++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl25", &unknown_bl25, 0)
-        && unknown_bl25 == assocperssubentmanager->unknown_bl25)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl25 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl25, unknown_bl25);
-    assocperssubentmanager->unknown_bl25--;
-  }
-  {
-    BITCODE_BL unknown_bl26;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl26", &unknown_bl26, NULL)
-        && unknown_bl26 == assocperssubentmanager->unknown_bl26)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl26 [BL] %u != %u", assocperssubentmanager->unknown_bl26, unknown_bl26);
-    unknown_bl26++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl26", &unknown_bl26, 0)
-        && unknown_bl26 == assocperssubentmanager->unknown_bl26)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl26 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl26, unknown_bl26);
-    assocperssubentmanager->unknown_bl26--;
-  }
-  {
-    BITCODE_BL unknown_bl27;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl27", &unknown_bl27, NULL)
-        && unknown_bl27 == assocperssubentmanager->unknown_bl27)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl27 [BL] %u != %u", assocperssubentmanager->unknown_bl27, unknown_bl27);
-    unknown_bl27++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl27", &unknown_bl27, 0)
-        && unknown_bl27 == assocperssubentmanager->unknown_bl27)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl27 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl27, unknown_bl27);
-    assocperssubentmanager->unknown_bl27--;
-  }
-  {
-    BITCODE_BL unknown_bl28;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl28", &unknown_bl28, NULL)
-        && unknown_bl28 == assocperssubentmanager->unknown_bl28)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl28 [BL] %u != %u", assocperssubentmanager->unknown_bl28, unknown_bl28);
-    unknown_bl28++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl28", &unknown_bl28, 0)
-        && unknown_bl28 == assocperssubentmanager->unknown_bl28)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl28 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl28, unknown_bl28);
-    assocperssubentmanager->unknown_bl28--;
-  }
-  {
-    BITCODE_BL unknown_bl29;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl29", &unknown_bl29, NULL)
-        && unknown_bl29 == assocperssubentmanager->unknown_bl29)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl29 [BL] %u != %u", assocperssubentmanager->unknown_bl29, unknown_bl29);
-    unknown_bl29++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl29", &unknown_bl29, 0)
-        && unknown_bl29 == assocperssubentmanager->unknown_bl29)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl29 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl29, unknown_bl29);
-    assocperssubentmanager->unknown_bl29--;
-  }
-  {
-    BITCODE_BL unknown_bl30;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl30", &unknown_bl30, NULL)
-        && unknown_bl30 == assocperssubentmanager->unknown_bl30)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl30 [BL] %u != %u", assocperssubentmanager->unknown_bl30, unknown_bl30);
-    unknown_bl30++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl30", &unknown_bl30, 0)
-        && unknown_bl30 == assocperssubentmanager->unknown_bl30)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl30 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl30, unknown_bl30);
-    assocperssubentmanager->unknown_bl30--;
-  }
-  {
-    BITCODE_BL unknown_bl31;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl31", &unknown_bl31, NULL)
-        && unknown_bl31 == assocperssubentmanager->unknown_bl31)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl31 [BL] %u != %u", assocperssubentmanager->unknown_bl31, unknown_bl31);
-    unknown_bl31++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl31", &unknown_bl31, 0)
-        && unknown_bl31 == assocperssubentmanager->unknown_bl31)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl31 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl31, unknown_bl31);
-    assocperssubentmanager->unknown_bl31--;
-  }
-  {
-    BITCODE_BL unknown_bl32;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl32", &unknown_bl32, NULL)
-        && unknown_bl32 == assocperssubentmanager->unknown_bl32)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl32 [BL] %u != %u", assocperssubentmanager->unknown_bl32, unknown_bl32);
-    unknown_bl32++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl32", &unknown_bl32, 0)
-        && unknown_bl32 == assocperssubentmanager->unknown_bl32)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl32 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl32, unknown_bl32);
-    assocperssubentmanager->unknown_bl32--;
-  }
-  {
-    BITCODE_BL unknown_bl33;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl33", &unknown_bl33, NULL)
-        && unknown_bl33 == assocperssubentmanager->unknown_bl33)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl33 [BL] %u != %u", assocperssubentmanager->unknown_bl33, unknown_bl33);
-    unknown_bl33++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl33", &unknown_bl33, 0)
-        && unknown_bl33 == assocperssubentmanager->unknown_bl33)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl33 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl33, unknown_bl33);
-    assocperssubentmanager->unknown_bl33--;
-  }
-  {
-    BITCODE_BL unknown_bl34;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl34", &unknown_bl34, NULL)
-        && unknown_bl34 == assocperssubentmanager->unknown_bl34)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl34 [BL] %u != %u", assocperssubentmanager->unknown_bl34, unknown_bl34);
-    unknown_bl34++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl34", &unknown_bl34, 0)
-        && unknown_bl34 == assocperssubentmanager->unknown_bl34)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl34 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl34, unknown_bl34);
-    assocperssubentmanager->unknown_bl34--;
-  }
-  {
-    BITCODE_BL unknown_bl35;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl35", &unknown_bl35, NULL)
-        && unknown_bl35 == assocperssubentmanager->unknown_bl35)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl35 [BL] %u != %u", assocperssubentmanager->unknown_bl35, unknown_bl35);
-    unknown_bl35++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl35", &unknown_bl35, 0)
-        && unknown_bl35 == assocperssubentmanager->unknown_bl35)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl35 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl35, unknown_bl35);
-    assocperssubentmanager->unknown_bl35--;
-  }
-  {
-    BITCODE_BL unknown_bl36;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl36", &unknown_bl36, NULL)
-        && unknown_bl36 == assocperssubentmanager->unknown_bl36)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl36 [BL] %u != %u", assocperssubentmanager->unknown_bl36, unknown_bl36);
-    unknown_bl36++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl36", &unknown_bl36, 0)
-        && unknown_bl36 == assocperssubentmanager->unknown_bl36)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl36 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl36, unknown_bl36);
-    assocperssubentmanager->unknown_bl36--;
-  }
-  {
-    BITCODE_BL unknown_bl6;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl6", &unknown_bl6, NULL)
-        && unknown_bl6 == assocperssubentmanager->unknown_bl6)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl6 [BL] %u != %u", assocperssubentmanager->unknown_bl6, unknown_bl6);
-    unknown_bl6++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl6", &unknown_bl6, 0)
-        && unknown_bl6 == assocperssubentmanager->unknown_bl6)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl6 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl6, unknown_bl6);
-    assocperssubentmanager->unknown_bl6--;
-  }
-  {
-    BITCODE_BL unknown_bl6a;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl6a", &unknown_bl6a, NULL)
-        && unknown_bl6a == assocperssubentmanager->unknown_bl6a)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl6a [BL] %u != %u", assocperssubentmanager->unknown_bl6a, unknown_bl6a);
-    unknown_bl6a++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl6a", &unknown_bl6a, 0)
-        && unknown_bl6a == assocperssubentmanager->unknown_bl6a)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl6a [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl6a, unknown_bl6a);
-    assocperssubentmanager->unknown_bl6a--;
-  }
-  {
-    BITCODE_BL unknown_bl7;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl7", &unknown_bl7, NULL)
-        && unknown_bl7 == assocperssubentmanager->unknown_bl7)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl7 [BL] %u != %u", assocperssubentmanager->unknown_bl7, unknown_bl7);
-    unknown_bl7++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl7", &unknown_bl7, 0)
-        && unknown_bl7 == assocperssubentmanager->unknown_bl7)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl7 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl7, unknown_bl7);
-    assocperssubentmanager->unknown_bl7--;
-  }
-  {
-    BITCODE_BL unknown_bl7a;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl7a", &unknown_bl7a, NULL)
-        && unknown_bl7a == assocperssubentmanager->unknown_bl7a)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl7a [BL] %u != %u", assocperssubentmanager->unknown_bl7a, unknown_bl7a);
-    unknown_bl7a++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl7a", &unknown_bl7a, 0)
-        && unknown_bl7a == assocperssubentmanager->unknown_bl7a)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl7a [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl7a, unknown_bl7a);
-    assocperssubentmanager->unknown_bl7a--;
-  }
-  {
-    BITCODE_BL unknown_bl8;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl8", &unknown_bl8, NULL)
-        && unknown_bl8 == assocperssubentmanager->unknown_bl8)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl8 [BL] %u != %u", assocperssubentmanager->unknown_bl8, unknown_bl8);
-    unknown_bl8++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl8", &unknown_bl8, 0)
-        && unknown_bl8 == assocperssubentmanager->unknown_bl8)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl8 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl8, unknown_bl8);
-    assocperssubentmanager->unknown_bl8--;
-  }
-  {
-    BITCODE_BL unknown_bl9;
-    if (dwg_dynapi_entity_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl9", &unknown_bl9, NULL)
-        && unknown_bl9 == assocperssubentmanager->unknown_bl9)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl9 [BL] %u != %u", assocperssubentmanager->unknown_bl9, unknown_bl9);
-    unknown_bl9++;
-    if (dwg_dynapi_entity_set_value (assocperssubentmanager, "ASSOCPERSSUBENTMANAGER", "unknown_bl9", &unknown_bl9, 0)
-        && unknown_bl9 == assocperssubentmanager->unknown_bl9)
-      pass ();
-    else
-      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl9 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl9, unknown_bl9);
-    assocperssubentmanager->unknown_bl9--;
+      fail ("ASSOCPERSSUBENTMANAGER.unknown_bl3 [BL] set+1 %u != %u", assocperssubentmanager->unknown_bl3, unknown_bl3);
+    assocperssubentmanager->unknown_bl3--;
   }
   if (failed && (is_class_unstable ("ASSOCPERSSUBENTMANAGER") || is_class_debugging ("ASSOCPERSSUBENTMANAGER")))
     {

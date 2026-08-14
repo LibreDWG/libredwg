@@ -6553,7 +6553,6 @@ typedef struct _dwg_object_PERSUBENTMGR
 } Dwg_Object_PERSUBENTMGR;
 
 // The dynamic variant of above. May be frozen as static PERSUBENTMGR
-// TODO subentities
 typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
 {
   struct _dwg_object_object *parent;
@@ -6561,45 +6560,14 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
   BITCODE_BL unknown_3;     /*!< DXF 90 always 3 */
   BITCODE_BL unknown_0;     /*!< DXF 90 always 0 */
   BITCODE_BL unknown_2;     /*!< DXF 90 always 2 */
-  BITCODE_BL num_steps;   /*!< DXF 90 3 */
-  BITCODE_BL num_subents; /*!< DXF 90 5 */
-  BITCODE_BL *steps;      /*!< DXF 90 */
-  BITCODE_BL *subents;    /*!< FIXME: subent struct */
-
-  BITCODE_BL unknown_bl6;   /*!< DXF 90 5 */
-  BITCODE_BL unknown_bl6a;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl7a;  /*!< DXF 90 3 */
-  BITCODE_BL unknown_bl7;   /*!< DXF 90 2 */
-  BITCODE_BL unknown_bl8;   /*!< DXF 90 2 */
-  BITCODE_BL unknown_bl9;   /*!< DXF 90 2 */
-  BITCODE_BL unknown_bl10;  /*!< DXF 90 21 */
-  BITCODE_BL unknown_bl11;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl12;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl13;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl14;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl15;  /*!< DXF 90 1 */
-  BITCODE_BL unknown_bl16;  /*!< DXF 90 3 */
-  BITCODE_BL unknown_bl17;  /*!< DXF 90 1 */
-  BITCODE_BL unknown_bl18;  /*!< DXF 90 1000000000 */
-  BITCODE_BL unknown_bl19;  /*!< DXF 90 1001 */
-  BITCODE_BL unknown_bl20;  /*!< DXF 90 1 */
-  BITCODE_BL unknown_bl21;  /*!< DXF 90 1000000000 */
-  BITCODE_BL unknown_bl22;  /*!< DXF 90 51001 */
-  BITCODE_BL unknown_bl23;  /*!< DXF 90 1 */
-  BITCODE_BL unknown_bl24;  /*!< DXF 90 1000000000 */
-  BITCODE_BL unknown_bl25;  /*!< DXF 90 351001 */
-  BITCODE_BL unknown_bl26;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl27;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl28;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl29;  /*!< DXF 90 900 */
-  BITCODE_BL unknown_bl30;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl31;  /*!< DXF 90 900 */
-  BITCODE_BL unknown_bl32;  /*!< DXF 90 0 */
-  BITCODE_BL unknown_bl33;  /*!< DXF 90 2 */
-  BITCODE_BL unknown_bl34;  /*!< DXF 90 2 */
-  BITCODE_BL unknown_bl35;  /*!< DXF 90 3 0100000011 */
-  BITCODE_BL unknown_bl36;  /*!< DXF 90 0 */
-  BITCODE_B  unknown_b37;   /*!< DXF 290 0 */
+  BITCODE_BL unknown_bl1;    /*!< DXF 90 */
+  BITCODE_BL unknown_bl2;    /*!< DXF 90 */
+  BITCODE_BL num_steps;      /*!< DXF 90 */
+  BITCODE_BL *steps;         /*!< DXF 90 */
+  BITCODE_BL num_subents;    /*!< DXF 90 */
+  BITCODE_BL *subents;       /*!< DXF 90 */
+  BITCODE_BL unknown_bl3;    /*!< DXF 90 */
+  BITCODE_B unknown_b4;      /*!< DXF 290 */
 } Dwg_Object_ASSOCPERSSUBENTMANAGER;
 
 

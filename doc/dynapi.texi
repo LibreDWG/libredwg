@@ -6716,81 +6716,21 @@ BL,	DXF 90
 BL,	DXF 90
 @item unknown_2
 BL,	DXF 90
-@item num_steps
+@item unknown_bl1
 BL,	DXF 90
-@item num_subents
+@item unknown_bl2
+BL,	DXF 90
+@item num_steps
 BL,	DXF 90
 @item steps
 BL*,	DXF 90
+@item num_subents
+BL,	DXF 90
 @item subents
-BL*
-@item unknown_bl6
+BL*,	DXF 90
+@item unknown_bl3
 BL,	DXF 90
-@item unknown_bl6a
-BL,	DXF 90
-@item unknown_bl7a
-BL,	DXF 90
-@item unknown_bl7
-BL,	DXF 90
-@item unknown_bl8
-BL,	DXF 90
-@item unknown_bl9
-BL,	DXF 90
-@item unknown_bl10
-BL,	DXF 90
-@item unknown_bl11
-BL,	DXF 90
-@item unknown_bl12
-BL,	DXF 90
-@item unknown_bl13
-BL,	DXF 90
-@item unknown_bl14
-BL,	DXF 90
-@item unknown_bl15
-BL,	DXF 90
-@item unknown_bl16
-BL,	DXF 90
-@item unknown_bl17
-BL,	DXF 90
-@item unknown_bl18
-BL,	DXF 90
-@item unknown_bl19
-BL,	DXF 90
-@item unknown_bl20
-BL,	DXF 90
-@item unknown_bl21
-BL,	DXF 90
-@item unknown_bl22
-BL,	DXF 90
-@item unknown_bl23
-BL,	DXF 90
-@item unknown_bl24
-BL,	DXF 90
-@item unknown_bl25
-BL,	DXF 90
-@item unknown_bl26
-BL,	DXF 90
-@item unknown_bl27
-BL,	DXF 90
-@item unknown_bl28
-BL,	DXF 90
-@item unknown_bl29
-BL,	DXF 90
-@item unknown_bl30
-BL,	DXF 90
-@item unknown_bl31
-BL,	DXF 90
-@item unknown_bl32
-BL,	DXF 90
-@item unknown_bl33
-BL,	DXF 90
-@item unknown_bl34
-BL,	DXF 90
-@item unknown_bl35
-BL,	DXF 90
-@item unknown_bl36
-BL,	DXF 90
-@item unknown_b37
+@item unknown_b4
 B,	DXF 290
 
 @end vtable
