@@ -47,6 +47,7 @@
 #endif
 #include "my_getopt.h"
 #include <math.h>
+#include <float.h>
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
 #endif
@@ -105,6 +106,55 @@ help (void)
   return 0;
 }
 
+/* Every geometry printf goes through this. The measuring pass below has to
+   walk the same code without emitting, and it cannot simply skip the call:
+   the arguments are where transform_X and transform_Y live, so not evaluating
+   them measures nothing. So it writes to the null device instead.
+   fprintf (stderr, ...) is untouched. */
+#ifdef _WIN32
+#  define NULL_DEVICE "NUL"
+#else
+#  define NULL_DEVICE "/dev/null"
+#endif
+static FILE *measure_sink = NULL;
+
+#define printf(...) fprintf (measuring ? measure_sink : stdout, __VA_ARGS__)
+
+/* The viewBox has to be the box of what actually gets drawn, and that is not
+   $EXTMIN/$EXTMAX: this program renders "some 2D elements", so the header box
+   also covers entities it skips, and real drawings carry entities outside
+   their recorded extents too. Framing by the header box left the geometry off
+   screen or smaller than a pixel -- the empty SVGs of GH #523.
+
+   So the drawn space is walked twice: once with output suppressed to collect
+   the box, then again to emit. Coordinates are recorded before the transform,
+   since the transform itself needs the box.
+
+   Inside a <defs> symbol the coordinates are block-local -- the <use> that
+   instantiates it already carries the placement -- so translating them there
+   as well displaced every block by the model origin a second time. They are
+   left alone on the way out, and kept out of the box: what belongs in it is
+   the insertion point, which the <use> does pass through transform_X. */
+static bool measuring = false;
+static bool in_block_definition = false;
+static double drawn_xmin, drawn_ymin, drawn_xmax, drawn_ymax;
+
+/* Counts coordinates put on the page, so output_BLOCK_HEADER can tell which
+   of its entities actually drew something. */
+static unsigned long coords_drawn = 0;
+
+static void
+record_XY (double v, double *lo, double *hi)
+{
+  if (!isfinite (v) || in_block_definition)
+    return;
+  coords_drawn++;
+  if (v < *lo)
+    *lo = v;
+  if (v > *hi)
+    *hi = v;
+}
+
 static double
 transform_ANGLE (double angle)
 {
@@ -114,13 +164,15 @@ transform_ANGLE (double angle)
 static double
 transform_X (double x)
 {
-  return x - model_xmin;
+  record_XY (x, &drawn_xmin, &drawn_xmax);
+  return in_block_definition ? x : x - model_xmin;
 }
 
 static double
 transform_Y (double y)
 {
-  return page_height - (y - model_ymin);
+  record_XY (y, &drawn_ymin, &drawn_ymax);
+  return in_block_definition ? -y : page_height - (y - model_ymin);
 }
 
 static bool
@@ -164,9 +216,15 @@ static double
 entity_lweight (Dwg_Object_Entity *ent)
 {
   // TODO: resolve BYLAYER 256, see above.
-  // stroke-width:%0.1fpx. 100th of a mm
+  /* dxf_cvt_lweight gives 100ths of a mm, so mm is lw/100 -- it was lw/1000,
+     and printed with %.1f, which turned every ordinary lineweight into
+     stroke-width:0.0 and drew nothing. 0 is a legitimate value meaning
+     "thinnest line", so it also needs a width it can be seen at. The stroke
+     is emitted with vector-effect:non-scaling-stroke, so these are device
+     widths and stay visible whatever the viewBox spans. */
   int lw = dxf_cvt_lweight (ent->linewt);
-  return lw < 0 ? 0.1 : (double)(lw * 0.001);
+  double mm = lw > 0 ? (double)lw * 0.01 : 0.0;
+  return mm < 0.05 ? 0.05 : mm;
 }
 
 static char *
@@ -218,7 +276,8 @@ common_entity (Dwg_Object_Entity *ent)
   char *color;
   lweight = entity_lweight (ent);
   color = entity_color (ent);
-  printf ("      style=\"fill:none;stroke:%s;stroke-width:%.1fpx\" />\n",
+  printf ("      style=\"fill:none;stroke:%s;stroke-width:%.2fmm;"
+          "vector-effect:non-scaling-stroke\" />\n",
           color, lweight);
   if (*color == '#')
     free (color);
@@ -820,7 +879,18 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
   obj = get_first_owned_entity (ref->obj);
   while (obj)
     {
-      num += output_object (obj);
+      /* Count what was drawn, not what was handled. The caller reads this as
+         "how many paper-space entities we did print" and falls back to model
+         space when it is zero -- but output_object returns 1 for every type it
+         recognises, including VIEWPORT and SEQEND, which draw nothing, and
+         entities it skips as invisible. Every paper space holds a VIEWPORT, so
+         the count was never zero, model space was never drawn, and its
+         geometry only ever appeared inside <defs>, which no renderer draws.
+         That is the empty SVG of GH #523. */
+      unsigned long before = coords_drawn;
+      output_object (obj);
+      if (coords_drawn > before)
+        num++;
       obj = get_next_owned_entity (ref->obj, obj);
     }
 
@@ -855,6 +925,62 @@ output_SVG (Dwg_Data *dwg)
     dy = 100.0;
   page_width = dx;
   page_height = dy;
+
+  /* First pass: walk what we are about to draw, emitting nothing, so the
+     viewBox can be the box of the geometry instead of the header's. */
+  drawn_xmin = drawn_ymin = DBL_MAX;
+  drawn_xmax = drawn_ymax = -DBL_MAX;
+  measure_sink = fopen (NULL_DEVICE, "w");
+  measuring = measure_sink != NULL;
+  if (!mspace && (ref = dwg_paper_space_ref (dwg)))
+    num = output_BLOCK_HEADER (ref);
+  if (!num && (ref = dwg_model_space_ref (dwg)))
+    output_BLOCK_HEADER (ref);
+  for (i = 0; i < dwg->block_control.num_entries; i++)
+    {
+      if (dwg->block_control.entries && (ref = dwg->block_control.entries[i]))
+        {
+          in_block_definition = true;
+          output_BLOCK_HEADER (ref);
+          in_block_definition = false;
+        }
+    }
+  measuring = false;
+  if (measure_sink)
+    {
+      fclose (measure_sink);
+      measure_sink = NULL;
+    }
+  num = 0;
+
+  if (drawn_xmin <= drawn_xmax && drawn_ymin <= drawn_ymax)
+    {
+      /* A margin, so that a stroke on the outermost line, and the geometry of
+         an inserted symbol reaching past its insertion point, are not clipped
+         at the edge. Proportional on purpose: padding by the largest block
+         extent instead would let one unused block whose definition sits at
+         absolute coordinates blow the box back up to millions of units. */
+      const double margin = 0.02 * MAX (drawn_xmax - drawn_xmin,
+                                        drawn_ymax - drawn_ymin);
+      model_xmin = drawn_xmin - margin;
+      model_ymin = drawn_ymin - margin;
+      dx = (drawn_xmax + margin) - model_xmin;
+      dy = (drawn_ymax + margin) - model_ymin;
+      if (dx > 0.0 && dy > 0.0 && isfinite (dx) && isfinite (dy))
+        {
+          /* model_xmax/model_ymax are the clip box output_XLINE reads, so keep
+             the four of them describing the same rectangle. */
+          model_xmax = model_xmin + dx;
+          model_ymax = model_ymin + dy;
+          page_width = dx;
+          page_height = dy;
+        }
+      else
+        {
+          model_xmin = dwg_model_x_min (dwg);
+          model_ymin = dwg_model_y_min (dwg);
+        }
+    }
   // scale *= (scale_x > scale_y ? scale_x : scale_y);
 
   // optional, for xmllint
@@ -869,8 +995,8 @@ output_SVG (Dwg_Data *dwg)
           "   xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
           "   version=\"1.1\" baseProfile=\"basic\"\n"
           "   width=\"100%%\" height=\"100%%\"\n"
-          "   viewBox=\"%f %f %f %f\">\n",
-          model_xmin, model_ymin, page_width, page_height);
+          "   viewBox=\"0 0 %f %f\">\n",
+          page_width, page_height);
 
   if (!mspace && (ref = dwg_paper_space_ref (dwg)))
     num = output_BLOCK_HEADER (
@@ -878,11 +1004,13 @@ output_SVG (Dwg_Data *dwg)
   if (!num && (ref = dwg_model_space_ref (dwg)))
     output_BLOCK_HEADER (ref);
   printf ("\t<defs>\n");
+  in_block_definition = true;
   for (i = 0; i < dwg->block_control.num_entries; i++)
     {
       if (dwg->block_control.entries && (ref = dwg->block_control.entries[i]))
         output_BLOCK_HEADER (ref);
     }
+  in_block_definition = false;
   printf ("\t</defs>\n");
   printf ("</svg>\n");
   fflush (stdout);
