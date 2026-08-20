@@ -2592,11 +2592,22 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                               " looks wrong, should be prevsize " FORMAT_MC
                               " + 4",
                               offset, prevsize - 4);
-                  // handleoff = 1;
-                  // offset = prevsize;
-                  // LOG_WARN ("Recover invalid handleoff to %" PRIuSIZE " and
-                  // offset to %ld",
-                  //           handleoff, offset);
+                }
+              /* Resynchronise when the modular char itself failed to parse
+                 (bit_read_UMC returns 0 on error). Trusting those bytes
+                 fabricates an object at an impossible address and derails every
+                 entry after it; retrying one byte later recovers the rest of the
+                 page.
+
+                 Only on !handleoff. The other two conditions above are
+                 heuristics that also fire on entries which parsed fine, and
+                 those are better used than skipped -- resyncing on them costs
+                 good entries (test-data/2004/Leader.dwg loses all 10). */
+              if (!handleoff && oldpos + 1 < startpos + (size_t)section_size)
+                {
+                  hdl_dat.byte = oldpos + 1;
+                  hdl_dat.bit = 0;
+                  continue;
                 }
             }
           last_offset += offset;
