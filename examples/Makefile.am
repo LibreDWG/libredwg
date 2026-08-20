@@ -26,7 +26,7 @@ if USE_WRITE
 bin_PROGRAMS     = dwgadd
 endif
 check_PROGRAMS   = load_dwg dwg2svg2 dwgfuzz
-EXTRA_PROGRAMS   = unknown bd bits llvmfuzz llvmfuzz_standalone odaversion
+EXTRA_PROGRAMS   = unknown bd bits llvmfuzz llvmfuzz_standalone dwgapi_fuzz dwgapi_fuzz_standalone odaversion
 
 load_dwg_SOURCES = load_dwg.c
 load_dwg_LDADD   = $(top_builddir)/src/libredwg.la
@@ -68,6 +68,26 @@ else
 llvmfuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE
 endif
 llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo \
+	                      $(top_builddir)/src/codepages.lo
+dwgapi_fuzz_SOURCES            = dwgapi_fuzz.c
+dwgapi_fuzz_LDADD              = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo \
+	                      $(top_builddir)/src/codepages.lo
+dwgapi_fuzz_standalone_SOURCES = dwgapi_fuzz.c
+if HAVE_ASAN_OR_LINUX
+# needs CC=clang
+dwgapi_fuzz_CFLAGS             = $(CFLAGS) $(AM_CFLAGS) -DHAVE_ASAN \
+                              -fsanitize=fuzzer,address,undefined -fno-omit-frame-pointer
+# cflags already includes asan
+if HAVE_ASAN
+dwgapi_fuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE
+else
+dwgapi_fuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE -DHAVE_ASAN \
+                              -fsanitize=address,undefined -fno-omit-frame-pointer
+endif
+else
+dwgapi_fuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE
+endif
+dwgapi_fuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo \
 	                      $(top_builddir)/src/codepages.lo
 odaversion_SOURCES          = odaversion.c
 
