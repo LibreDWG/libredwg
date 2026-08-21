@@ -3986,17 +3986,21 @@ bsearch_ex (const void *pKey, const void *pBase, size_t numBase,
   return NULL;
 }
 
+/* absolute_ref is the primary key on purpose: refs are created in roughly
+   ascending handle order, so with the handle first a new ref lands at the
+   END of the array and ordered_ref_add's memmove copies nothing.  With the
+   code first it lands at the end of its code block, in the MIDDLE, and
+   every insert shifts all higher-code refs: O(N^2) over an import
+   (GH #1395).  The order is private to ordered_ref_add/ordered_ref_find,
+   which both use this comparator.  */
 static int
 Ref_cmp (const void *key, const void *elem)
 {
   const Dwg_Object_Ref *pKey = (const Dwg_Object_Ref *)key;
   const Dwg_Object_Ref *pR = *(const Dwg_Object_Ref **)elem;
-  int retVal = (int)pKey->handleref.code - (int)pR->handleref.code;
-  if (0 != retVal)
-    return retVal;
-  return pKey->absolute_ref > pR->absolute_ref    ? 1
-         : pKey->absolute_ref == pR->absolute_ref ? 0
-                                                  : -1;
+  if (pKey->absolute_ref != pR->absolute_ref)
+    return pKey->absolute_ref > pR->absolute_ref ? 1 : -1;
+  return (int)pKey->handleref.code - (int)pR->handleref.code;
 }
 
 void
