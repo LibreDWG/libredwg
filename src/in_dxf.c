@@ -14919,8 +14919,12 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
         if (vars->DICTIONARY_##name)                                          \
           LOG_TRACE ("HEADER.DICTIONARY_" #name " = " FORMAT_REF "\n",        \
                      ARGS_REF (vars->DICTIONARY_##name));                     \
-        else if ((vars->DICTIONARY_##name                                     \
-                  = dwg_find_dictionary (dwg, "ACAD_" #name)))                \
+        /* the fallback prepends ACAD_; skip it when the name already      \
+           carries the prefix (ACAD_GROUP, ACAD_MLINESTYLE), else we'd     \
+           search for a doubled ACAD_ACAD_ prefix that can never exist */  \
+        else if (!memBEGINc (#name, "ACAD_")                                  \
+                 && (vars->DICTIONARY_##name                                  \
+                     = dwg_find_dictionary (dwg, "ACAD_" #name)))             \
           LOG_TRACE ("HEADER.DICTIONARY_" #name " = " FORMAT_REF "\n",        \
                      ARGS_REF (vars->DICTIONARY_##name));                     \
       } /* set owner to NOD 4.1.C */                                          \
