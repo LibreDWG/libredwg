@@ -309,6 +309,8 @@ codepage_helper (const Dwg_Codepage codepage, const wchar_t wc, const int dir,
   uint16_t maxc;
   assert (codepage != CP_UTF8 && codepage != CP_UTF16
           && codepage != CP_US_ASCII && codepage != CP_ISO_8859_1);
+  if ((unsigned)codepage > CP_ANSI_1258 || !cp_fntbl[codepage])
+    return 0;
   fntbl = cp_fntbl[codepage];
   maxc = fntbl[0];
   assert (maxc);
@@ -442,9 +444,12 @@ dwg_codepage_isalnum (const Dwg_Codepage cp, const wchar_t c)
 #endif
     default:
       {
-        const uint8_t *fntbl = cp_alnumtbl[cp];
+        const uint8_t *fntbl;
         assert (cp != CP_UTF8 && cp != CP_UTF16 && cp != CP_US_ASCII
                 && cp != CP_ISO_8859_1);
+        if ((unsigned)cp > CP_ANSI_1258)
+          return false;
+        fntbl = cp_alnumtbl[cp];
         // 8 or 16bit?
         if (fntbl)
           {
