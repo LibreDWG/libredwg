@@ -9585,6 +9585,8 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
       return;
     }
   obj->tio.entity->ownerhandle->obj = NULL;
+  // AutoCAD stores subentities with entmode 0, owned by the parent entity
+  obj->tio.entity->entmode = 0;
   owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attribs";
   ow = owner->tio.entity->tio.POLYLINE_2D;
 
@@ -9598,6 +9600,14 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
     {
       Dwg_Object *_o = &dwg->object[i];
       num_owned = j + 1;
+      if (_o->supertype == DWG_SUPERTYPE_ENTITY && _o->tio.entity)
+        {
+          // as with the SEQEND: entmode 0, owned by the parent entity,
+          // whatever the 330 in the DXF pointed to
+          _o->tio.entity->entmode = 0;
+          _o->tio.entity->ownerhandle
+              = dwg_add_handleref (dwg, 4, owner->handle.value, _o);
+        }
       if (dwg->header.from_version >= R_13b1)
         {
           // Match the encoder's expected handle relation-code for the owned
@@ -14542,7 +14552,22 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   obj = &dwg->object[last_ent];
                   ent = obj->tio.entity;
                 }
-              if (ent->ownerhandle)
+              if (obj->fixedtype == DWG_TYPE_ATTRIB
+                  || obj->fixedtype == DWG_TYPE_SEQEND
+                  || obj->fixedtype == DWG_TYPE_VERTEX_2D
+                  || obj->fixedtype == DWG_TYPE_VERTEX_3D
+                  || obj->fixedtype == DWG_TYPE_VERTEX_MESH
+                  || obj->fixedtype == DWG_TYPE_VERTEX_PFACE
+                  || obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE)
+                {
+                  // Subentity: owned by its INSERT/POLYLINE parent, not by
+                  // the block. AutoCAD stores it with entmode 0 and keeps it
+                  // out of the block's entity chain; filing it under the
+                  // block corrupts the chain for conformant readers.
+                  // dxf_postprocess_SEQEND resets its owner to the parent.
+                  ent->entmode = 0;
+                }
+              else if (ent->ownerhandle)
                 {
                   if (ent->ownerhandle->absolute_ref == mspace)
                     ent->entmode = 2;
@@ -14550,7 +14575,6 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     ent->entmode = 1;
                   else if (dwg->header.from_version < R_13b1)
                     {
-                      // SEQEND/VERTEX: owner is INSERT/POLYLINE, not mspace.
                       // Inherit entmode from the parent entity.
                       Dwg_Object *owner_obj = dwg_resolve_handle (
                           dwg, ent->ownerhandle->absolute_ref);
