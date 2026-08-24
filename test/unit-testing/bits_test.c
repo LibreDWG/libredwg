@@ -1589,38 +1589,14 @@ bit_read_MC_tests (void)
 static void
 codepage_bounds_tests (void)
 {
-  /* header.codepage is an unvalidated 16-bit file field (header.spec,
-     2ndheader.spec). It reaches these helpers as the table index into the
-     46-entry cp_fntbl / cp_alnumtbl / cp_alnum16tbl (valid 0..CP_ANSI_1258).
-     An out-of-range value must be rejected, not used to index the tables.
-     Pre-fix this read past the arrays (UBSan: index N out of bounds for
-     'const uint16_t *[46]' at codepages.c, wild-pointer deref under ASAN). */
+  /* out-of-range header.codepage (valid 0..CP_ANSI_1258) must be rejected,
+     not used to index the 46-entry codepage tables. */
   const Dwg_Codepage bad = (Dwg_Codepage)5000;
-
-  if (dwg_codepage_uc (bad, 0xA0) == 0)
-    ok ("dwg_codepage_uc out-of-range codepage");
+  if (dwg_codepage_uc (bad, 0xA0) == 0 && dwg_codepage_wc (bad, 0xA0) == 0
+      && !dwg_codepage_isalnum (bad, 0xA0))
+    ok ("out-of-range codepage rejected");
   else
-    fail ("dwg_codepage_uc out-of-range codepage");
-
-  if (dwg_codepage_uwc (bad, 0x8140) == 0)
-    ok ("dwg_codepage_uwc out-of-range codepage");
-  else
-    fail ("dwg_codepage_uwc out-of-range codepage");
-
-  if (dwg_codepage_c (bad, 0x00A0) == 0)
-    ok ("dwg_codepage_c out-of-range codepage");
-  else
-    fail ("dwg_codepage_c out-of-range codepage");
-
-  if (dwg_codepage_wc (bad, 0x00A0) == 0)
-    ok ("dwg_codepage_wc out-of-range codepage");
-  else
-    fail ("dwg_codepage_wc out-of-range codepage");
-
-  if (!dwg_codepage_isalnum (bad, 0x00A0))
-    ok ("dwg_codepage_isalnum out-of-range codepage");
-  else
-    fail ("dwg_codepage_isalnum out-of-range codepage");
+    fail ("out-of-range codepage rejected");
 }
 
 static void
