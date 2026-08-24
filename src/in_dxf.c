@@ -13778,6 +13778,31 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
       o->has_no_flags = 1;
       LOG_TRACE ("_3DFACE.has_no_flags = 1 [B]\n");
     }
+  else if (obj->fixedtype == DWG_TYPE_MTEXT)
+    {
+      // DXF omits the optional groups 72/73/44 when they hold their default
+      // (ezdxf and AutoCAD both do), and importing the missing group as 0
+      // gave such an MTEXT a line spacing factor of 0.0 — every line of the
+      // paragraph draws on top of the first one. 0 is not a valid value for
+      // any of the three (the factor's documented range is 0.25-4.0), so
+      // this can never override a real value.
+      Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
+      if (!o->flow_dir)
+        {
+          o->flow_dir = 1;
+          LOG_TRACE ("MTEXT.flow_dir = 1 (default) [BS 72]\n");
+        }
+      if (!o->linespace_style)
+        {
+          o->linespace_style = 1;
+          LOG_TRACE ("MTEXT.linespace_style = 1 (default) [BS 73]\n");
+        }
+      if (o->linespace_factor == 0.0)
+        {
+          o->linespace_factor = 1.0;
+          LOG_TRACE ("MTEXT.linespace_factor = 1.0 (default) [BD 44]\n");
+        }
+    }
   else if (is_textlike (obj))
     postprocess_TEXTlike (obj);
 
