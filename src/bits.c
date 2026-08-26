@@ -4609,7 +4609,7 @@ bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
       return;
     }
   if (dat->byte + size > dat->size)
-    bit_chain_alloc (dat);
+    bit_chain_alloc_size (dat, size);
   if (dat->byte + size > dat->size)
     return;
   // check if both dat's are byte aligned (handles are)

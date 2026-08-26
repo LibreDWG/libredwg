@@ -7006,10 +7006,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   int did_raw = 0;
   int need_recalc = does_cross_unicode_datversion (dat);
 
-  bit_chain_init (&dat1, 1024);
-  dat1.from_version = dat->from_version;
-  dat1.version = dat->version;
-  dat1.opts = dat->opts;
+  bit_chain_init_dat (&dat1, 1024, dat);
 
   // Skip DICTIONARY AE3 AcDsRecords/AcDsSchemas 1070 . 2, wrong ACIS version
   if (dat->opts & DWG_OPTS_INDXF && dat->version < R_2007
