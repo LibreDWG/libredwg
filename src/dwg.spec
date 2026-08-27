@@ -322,7 +322,6 @@ DWG_ENTITY (ATTRIB)
 #endif
         FIELD_T (text_value, 1);
       }
-
       if (!(dataflags & 0x20)) {
         FIELD_BS (generation, 71);
         LOG_TEXT_GENERATION
@@ -347,39 +346,48 @@ DWG_ENTITY (ATTRIB)
     FIELD_T (tag, 2);
     FIELD_RC (flags, 70);
     LOG_FLAG_ATTDEF
-    FIELD_BS0 (field_length, 73);
+    FIELD_BS0 (field_length, 73); // DXF 72? unused
     FIELD_BS0 (vert_alignment, 74);
     LOG_VERT_ALIGNMENT
     SINCE (R_2004a) {
       FIELD_RC (is_locked_in_block, 280);
-      SUBCLASS (AcDbXrecord);
-      FIELD_RC (keep_duplicate_records, 280);
+      if (FIELD_VALUE (keep_duplicate_records)) {
+        SUBCLASS (AcDbXrecord);
+        FIELD_RC (keep_duplicate_records, 280);
+      }
     }
-  }
-  SINCE (R_2010b)
-    {
-      FIELD_RC (is_locked_in_block, 0);
-      VALUEOUTOFBOUNDS (is_locked_in_block, 2)
-    }
-  SINCE (R_2018b)
-    {
-      FIELD_RC (mtext_type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
-      if (FIELD_VALUE (mtext_type) > 1)
-        CALL_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
-    }
-
-  SINCE (R_13b1) {
-    FIELD_T (tag, 0);
-    FIELD_BS0 (field_length, 0);
-    FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
-    LOG_FLAG_ATTDEF
-    SINCE (R_2007a) {
-      FIELD_B (lock_position_flag, 0); // 70
-    }
-    // XRECORD subclass
-    SINCE (R_2010b) {
-      FIELD_RC (keep_duplicate_records, 0);
-      VALUEOUTOFBOUNDS (keep_duplicate_records, 1)
+    SINCE (R_2018b)
+      {
+        FIELD_RC (mtext_type, 71); // 1=single line, 2=multi line attrib, 4=multi line attdef
+        if (FIELD_VALUE (mtext_type) > 1)
+          CALL_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
+      }
+  } else {
+    SINCE (R_2010b)
+      {
+        FIELD_RC (is_locked_in_block, 280);
+        VALUEOUTOFBOUNDS (is_locked_in_block, 2)
+      }
+    SINCE (R_2018b)
+      {
+        FIELD_RC (mtext_type, 71); // 1=single line, 2=multi line attrib, 4=multi line attdef
+        if (FIELD_VALUE (mtext_type) > 1)
+          CALL_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
+      }
+    SINCE (R_13b1) {
+      // no tags, dxf already above
+      FIELD_T (tag, 2);
+      FIELD_BS0 (field_length, 73);
+      FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
+      LOG_FLAG_ATTDEF
+      SINCE (R_2007a) {
+        FIELD_B (lock_position_flag, 0); // 70
+      }
+      // XRECORD subclass (TODO)
+      SINCE (R_2010b) {
+        FIELD_RC (keep_duplicate_records, 0);
+        VALUEOUTOFBOUNDS (keep_duplicate_records, 1)
+      }
     }
   }
   COMMON_ENTITY_HANDLE_DATA;
