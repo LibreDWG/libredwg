@@ -333,7 +333,6 @@ DWG_ENTITY (ATTRIB)
 #endif
         FIELD_T (text_value, 1);
       }
-
       if (!(dataflags & 0x20)) {
         FIELD_BS (generation, 71);
         LOG_TEXT_GENERATION
@@ -361,7 +360,7 @@ DWG_ENTITY (ATTRIB)
     FIELD_T (tag, 2);
     FIELD_RC (flags, 70);
     LOG_FLAG_ATTDEF
-    FIELD_BS0 (field_length, 73);
+    FIELD_BS0 (field_length, 73); // DXF 72? unused
     FIELD_BS0 (vert_alignment, 74);
     LOG_VERT_ALIGNMENT
     SINCE (R_2007a) {
