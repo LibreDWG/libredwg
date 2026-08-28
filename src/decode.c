@@ -6783,8 +6783,12 @@ decode_preR13_sentinel (const Dwg_Sentinel sentinel,
       char *found = (char *)memmem (&dat->chain[pos], len, wanted, 16);
       if (!found)
         {
-          LOG_ERROR ("%s not found at %" PRIuSIZE, sentinel_name,
-                     dat->byte - 16);
+          /* A warning, not an error: whether a missing sentinel is fatal is
+             the caller's call -- the table reader in decode_r11.c carries on
+             from the header's own table address -- and a caller that does
+             give up still reports it through "Failed to decode file". */
+          LOG_WARN ("%s not found at %" PRIuSIZE, sentinel_name,
+                    dat->byte - 16);
           error = DWG_ERR_SECTIONNOTFOUND;
         }
       else
