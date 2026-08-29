@@ -2200,7 +2200,7 @@ typedef struct _dwg_AcDbMTextObjectEmbedded
   BITCODE_BD linespace_factor;  /*!< DXF 44. r2000+ */
   BITCODE_B unknown_b0;         // always 0
   BITCODE_BL bg_fill_flag;      /*!< DXF 90. r2004+ */
-  BITCODE_BL bg_fill_scale;     /*!< DXF 45. r2004+ */
+  BITCODE_BD bg_fill_scale;     /*!< DXF 45. r2004+ */
   BITCODE_CMC bg_fill_color;    /*!< DXF 63. r2004+ */
   BITCODE_BL bg_fill_trans;     /*!< DXF 441. r2004+. unused */
   BITCODE_B is_not_annotative;  /*!< r2018+: */
@@ -3148,7 +3148,7 @@ typedef struct _dwg_entity_MTEXT
                                1 = Use background fill color,
                                2 = Use drawing window color as background fill color.
                               16 = textframe (r2018+) */
-  BITCODE_BL bg_fill_scale;  /*!< DXF 45. r2004+
+  BITCODE_BD bg_fill_scale;  /*!< DXF 45. r2004+
                                margin around the text. */
   BITCODE_CMC bg_fill_color; /*!< DXF 63. r2004+. on bg_fill_flag==1 */
   BITCODE_BL bg_fill_trans;  /*!< DXF 441. r2004+. unused */

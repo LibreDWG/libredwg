@@ -2918,7 +2918,7 @@ DWG_ENTITY (MTEXT)
       FIELD_BL0 (bg_fill_flag, 90);
       if (FIELD_VALUE (bg_fill_flag) & (dat->version <= R_2018 ? 1 : 16))
         {
-          FIELD_BL (bg_fill_scale, 45); // def: 1.5
+          FIELD_BD (bg_fill_scale, 45); // def: 1.5
           FIELD_CMC (bg_fill_color, 63);
           FIELD_BL (bg_fill_trans, 441);
         }
