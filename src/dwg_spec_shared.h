@@ -707,7 +707,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   if (SUB_FIELD_VALUE (mtext, bg_fill_flag) &                \
       (dat->version <= R_2018 ? 1 : 16))                     \
     {                                                        \
-      SUB_FIELD_BL (mtext, bg_fill_scale, 45);               \
+      SUB_FIELD_BD (mtext, bg_fill_scale, 45);               \
       SUB_FIELD_CMC (mtext, bg_fill_color, 63);              \
       SUB_FIELD_BL (mtext, bg_fill_trans, 441);              \
     }                                                        \

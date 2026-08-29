@@ -9,7 +9,8 @@ api_process (dwg_object *obj)
       linespace_factor;
   BITCODE_BS attachment, flow_dir, linespace_style, class_version;
   BITCODE_B unknown_b0, is_not_annotative, default_flag;
-  BITCODE_BL bg_fill_flag, bg_fill_scale, bg_fill_trans;
+  BITCODE_BL bg_fill_flag, bg_fill_trans;
+  BITCODE_BD bg_fill_scale;
   BITCODE_CMC bg_fill_color;
   char *text;
   dwg_point_3d ins_pt, extrusion, x_axis_dir;
@@ -51,7 +52,7 @@ api_process (dwg_object *obj)
   {
     CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_flag, BL);
     CHK_ENTITY_MAX (mtext, MTEXT, bg_fill_flag, BL, 31);
-    CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_scale, BL);
+    CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_scale, BD);
     CHK_ENTITY_CMC (mtext, MTEXT, bg_fill_color);
     CHK_ENTITY_TYPE (mtext, MTEXT, bg_fill_trans, BL);
   }

@@ -1264,7 +1264,7 @@
 -    Background scale factor
 +IF Background fill flag has bit 0x01 set, or in case of R2018 bit 0x10:
 +    Background fill scale factor
-                          BL  45  default = 1.5
+                          BD  45  default = 1.5
 -    Background color    CMC  63
 -    Background transparency
 +    Background fill color CMC 63
