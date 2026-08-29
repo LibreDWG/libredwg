@@ -17078,18 +17078,18 @@ static int test_MTEXT (const Dwg_Object *obj)
     mtext->bg_fill_flag--;
   }
   {
-    BITCODE_BL bg_fill_scale;
+    BITCODE_BD bg_fill_scale;
     if (dwg_dynapi_entity_value (mtext, "MTEXT", "bg_fill_scale", &bg_fill_scale, NULL)
         && bg_fill_scale == mtext->bg_fill_scale)
       pass ();
     else
-      fail ("MTEXT.bg_fill_scale [BL] %u != %u", mtext->bg_fill_scale, bg_fill_scale);
+      fail ("MTEXT.bg_fill_scale [BD] %g != %g", mtext->bg_fill_scale, bg_fill_scale);
     bg_fill_scale++;
     if (dwg_dynapi_entity_set_value (mtext, "MTEXT", "bg_fill_scale", &bg_fill_scale, 0)
         && bg_fill_scale == mtext->bg_fill_scale)
       pass ();
     else
-      fail ("MTEXT.bg_fill_scale [BL] set+1 %u != %u", mtext->bg_fill_scale, bg_fill_scale);
+      fail ("MTEXT.bg_fill_scale [BD] set+1 %g != %g", mtext->bg_fill_scale, bg_fill_scale);
     mtext->bg_fill_scale--;
   }
   {

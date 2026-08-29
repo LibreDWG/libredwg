@@ -3041,7 +3041,7 @@ B
 @item bg_fill_flag
 BL,	DXF 90
 @item bg_fill_scale
-BL,	DXF 45
+BD,	DXF 45
 @item bg_fill_color
 CMC,	DXF 63
 @item bg_fill_trans
@@ -13229,7 +13229,7 @@ B
 @item bg_fill_flag
 BL
 @item bg_fill_scale
-BL
+BD
 @item bg_fill_color
 CMC
 @item bg_fill_trans
