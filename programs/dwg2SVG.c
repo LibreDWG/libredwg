@@ -118,6 +118,10 @@ help (void)
 #endif
 static FILE *measure_sink = NULL;
 
+/* glibc's fortified headers can already define printf as a macro, and
+   redefining one is an error under -Werror (clang -Wmacro-redefined). The
+   undef is a no-op wherever it is a plain function. */
+#undef printf
 #define printf(...) fprintf (measuring ? measure_sink : stdout, __VA_ARGS__)
 
 /* The viewBox has to be the box of what actually gets drawn, and that is not
