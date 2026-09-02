@@ -909,9 +909,7 @@ json_TIMEBLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       JSON_TOKENS_CHECK_OVERFLOW_VOID
       date->ms = json_long (dat, tokens);
       JSON_TOKENS_CHECK_OVERFLOW_VOID
-      date->value
-          = date->days
-            + (86400.0 * date->ms); // just for display, not calculations
+      date->value = date->days + (date->ms / TIMEBLL_MS_PER_DAY);
     }
   else
     {
@@ -920,7 +918,7 @@ json_TIMEBLL (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       JSON_TOKENS_CHECK_OVERFLOW_VOID
       date->value = num;
       date->days = (BITCODE_BL)trunc (num);
-      date->ms = (BITCODE_BL)(86400.0 * (date->value - date->days));
+      date->ms = (BITCODE_BL)((date->value - date->days) * TIMEBLL_MS_PER_DAY);
     }
   LOG_TRACE ("%s: %.08f (%u, %u) [TIMEBLL]\n", name, date->value, date->days,
              date->ms);
