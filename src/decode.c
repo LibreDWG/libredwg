@@ -6952,12 +6952,14 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
   BITCODE_BL num = dwg->num_objects;
   BITCODE_RL real_start = start;
   size_t oldpos;
-  BITCODE_RLL hdr_handle = 0;
+  BITCODE_RLL hdr_handle = 0, phdr_handle = 0;
+  Dwg_Object *phdr = NULL;
+  Dwg_Object_BLOCK_HEADER *_phdr = NULL;
   const char *entities_section[]
       = { "entities", "blocks entities", "extras entities" };
   Dwg_Object *hdr = NULL;
   Dwg_Object_BLOCK_HEADER *_hdr = NULL;
-  BITCODE_BL block_idx = 0, hdr_index = 0;
+  BITCODE_BL block_idx = 0, hdr_index = 0, phdr_index = 0;
 
   LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx " (%u), size " FORMAT_RL
              ")\n",
@@ -6994,6 +6996,22 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           hdr_handle = hdr->handle.value;
           LOG_TRACE ("owned by BLOCK %s (" FORMAT_HV ")\n", _hdr->name,
                      hdr_handle);
+        }
+      /* The r11 entities section holds both spaces, told apart by the
+         FLAG_R11_HAS_PSPACE flag which the decoder turns into entmode 1. Each
+         has to land in its own BLOCK_HEADER, or a reader walking the layouts
+         finds an empty paper space and a model space holding both (GH #1337). */
+      phdr = dwg_paper_space_object (dwg);
+      if (phdr && phdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
+        {
+          phdr_index = phdr->index;
+          _phdr = phdr->tio.object->tio.BLOCK_HEADER;
+          _phdr->block_offset_r11 = (BITCODE_RL)-1;
+          if (!phdr->handle.value)
+            phdr->handle.value = dwg_next_handle (dwg);
+          phdr_handle = phdr->handle.value;
+          LOG_TRACE ("paper space is BLOCK %s (" FORMAT_HV ")\n", _phdr->name,
+                     phdr_handle);
         }
     }
   // TODO search current offset in block_offset_r11 in BLOCK_HEADER's
@@ -7535,17 +7553,21 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               && obj->fixedtype != DWG_TYPE_SEQEND)
             {
               BITCODE_H ref;
+              /* paper space, if this drawing has one and the entity says so */
+              const bool to_pspace = _phdr && phdr_handle
+                                     && obj->tio.entity->entmode == 1;
+              Dwg_Object_BLOCK_HEADER *_owner = to_pspace ? _phdr : _hdr;
               if (!obj->handle.value)
                 obj->handle.value = dwg_next_handle (dwg);
-              hdr = &dwg->object[hdr_index];
+              hdr = &dwg->object[to_pspace ? phdr_index : hdr_index];
               ref = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
               // if (dwg->dirty_refs)
               // find _hdr again from hdr_handle
-              LOG_TRACE ("BLOCK_HEADER \"%s\".", _hdr->name);
+              LOG_TRACE ("BLOCK_HEADER \"%s\".", _owner->name);
               if (obj->fixedtype != DWG_TYPE_BLOCK)
-                PUSH_HV (_hdr, num_owned, entities, ref);
-              obj->tio.entity->ownerhandle
-                  = dwg_add_handleref (dwg, 4, hdr_handle, obj);
+                PUSH_HV (_owner, num_owned, entities, ref);
+              obj->tio.entity->ownerhandle = dwg_add_handleref (
+                  dwg, 4, to_pspace ? phdr_handle : hdr_handle, obj);
               obj->tio.entity->ownerhandle->r11_idx = block_idx;
               LOG_TRACE ("ownerhandle: " FORMAT_HREF11 "\n",
                          ARGS_HREF11 (obj->tio.entity->ownerhandle));
