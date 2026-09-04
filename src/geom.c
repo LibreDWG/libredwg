@@ -180,3 +180,193 @@ arc_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD ctr,
       pts[i].y = pt.y;
     }
 }
+
+
+/*----------------------------------------------------------------------
+ * V4 Residue Topology Spatial Transformations
+ *----------------------------------------------------------------------*/
+
+static inline void v4_transform_3d(double *x, double *y, double *z) {
+    double s0, d0, s1, d1;
+
+    if (!x || !y || !z) return;
+
+    s0 = *x + *y;
+    d0 = *x - *y;
+    s1 = *z + 1.0;
+    d1 = *z - 1.0;
+
+    *x = s0 + s1;
+    *y = d0 + d1;
+    *z = s0 - s1;
+}
+
+static inline void v4_transform_2d(double *x, double *y) {
+    double s0, d0;
+    if (!x || !y) return;
+
+    s0 = *x + *y;
+    d0 = *x - *y;
+
+    *x = s0 + 1.0;
+    *y = d0 - 1.0;
+}
+
+EXPORT void dwg_geom_v4_transform_2d(double *x, double *y) {
+    v4_transform_2d(x, y);
+}
+
+EXPORT uint32_t dwg_transform_v4(Dwg_Data *dwg) {
+    uint32_t count = 0;
+    uint32_t i;
+
+    if (!dwg || !dwg->object) return 0;
+
+    for (i = 0; i < dwg->num_objects; i++) {
+        Dwg_Object *obj = &dwg->object[i];
+        if (!obj || !obj->tio.entity) continue;
+
+        switch (obj->type) {
+            case DWG_TYPE_POINT: {
+                Dwg_Entity_POINT *e = obj->tio.entity->tio.POINT;
+                if (e) {
+                    v4_transform_3d(&e->x, &e->y, &e->z);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_LINE: {
+                Dwg_Entity_LINE *e = obj->tio.entity->tio.LINE;
+                if (e) {
+                    v4_transform_3d(&e->start.x, &e->start.y, &e->start.z);
+                    v4_transform_3d(&e->end.x, &e->end.y, &e->end.z);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_CIRCLE: {
+                Dwg_Entity_CIRCLE *e = obj->tio.entity->tio.CIRCLE;
+                if (e) {
+                    v4_transform_3d(&e->center.x, &e->center.y, &e->center.z);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_ARC: {
+                Dwg_Entity_ARC *e = obj->tio.entity->tio.ARC;
+                if (e) {
+                    v4_transform_3d(&e->center.x, &e->center.y, &e->center.z);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_ELLIPSE: {
+                Dwg_Entity_ELLIPSE *e = obj->tio.entity->tio.ELLIPSE;
+                if (e) {
+                    v4_transform_3d(&e->center.x, &e->center.y, &e->center.z);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE__3DFACE: {
+                Dwg_Entity__3DFACE *e = obj->tio.entity->tio._3DFACE;
+                if (e) {
+                    v4_transform_3d(&e->corner1.x, &e->corner1.y, &e->corner1.z);
+                    v4_transform_3d(&e->corner2.x, &e->corner2.y, &e->corner2.z);
+                    v4_transform_3d(&e->corner3.x, &e->corner3.y, &e->corner3.z);
+                    v4_transform_3d(&e->corner4.x, &e->corner4.y, &e->corner4.z);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_SOLID: {
+                Dwg_Entity_SOLID *e = obj->tio.entity->tio.SOLID;
+                if (e) {
+                    v4_transform_3d(&e->corner1.x, &e->corner1.y, &e->elevation);
+                    v4_transform_3d(&e->corner2.x, &e->corner2.y, &e->elevation);
+                    v4_transform_3d(&e->corner3.x, &e->corner3.y, &e->elevation);
+                    v4_transform_3d(&e->corner4.x, &e->corner4.y, &e->elevation);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_TRACE: {
+                Dwg_Entity_TRACE *e = obj->tio.entity->tio.TRACE;
+                if (e) {
+                    v4_transform_3d(&e->corner1.x, &e->corner1.y, &e->elevation);
+                    v4_transform_3d(&e->corner2.x, &e->corner2.y, &e->elevation);
+                    v4_transform_3d(&e->corner3.x, &e->corner3.y, &e->elevation);
+                    v4_transform_3d(&e->corner4.x, &e->corner4.y, &e->elevation);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_LWPOLYLINE: {
+                Dwg_Entity_LWPOLYLINE *e = obj->tio.entity->tio.LWPOLYLINE;
+                uint32_t j;
+                double z;
+
+                if (e && e->points) {
+                    for (j = 0; j < e->num_points; j++) {
+                        z = e->elevation;
+                        v4_transform_3d(&e->points[j].x, &e->points[j].y, &z);
+                        e->elevation = z;
+                    }
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_SPLINE: {
+                Dwg_Entity_SPLINE *e = obj->tio.entity->tio.SPLINE;
+                uint32_t j;
+
+                if (e) {
+                    if (e->ctrl_pts) {
+                        for (j = 0; j < e->num_ctrl_pts; j++) {
+                            v4_transform_3d(&e->ctrl_pts[j].x, &e->ctrl_pts[j].y, &e->ctrl_pts[j].z);
+                        }
+                    }
+                    if (e->fit_pts) {
+                        for (j = 0; j < e->num_fit_pts; j++) {
+                            v4_transform_3d(&e->fit_pts[j].x, &e->fit_pts[j].y, &e->fit_pts[j].z);
+                        }
+                    }
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_INSERT: {
+                Dwg_Entity_INSERT *e = obj->tio.entity->tio.INSERT;
+                if (e) {
+                    v4_transform_3d(&e->ins_pt.x, &e->ins_pt.y, &e->ins_pt.z);
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_TEXT: {
+                Dwg_Entity_TEXT *e = obj->tio.entity->tio.TEXT;
+                double z;
+
+                if (e) {
+                    z = e->elevation;
+                    v4_transform_3d(&e->ins_pt.x, &e->ins_pt.y, &z);
+                    e->elevation = z;
+                    count++;
+                }
+                break;
+            }
+            case DWG_TYPE_MTEXT: {
+                Dwg_Entity_MTEXT *e = obj->tio.entity->tio.MTEXT;
+                if (e) {
+                    v4_transform_3d(&e->ins_pt.x, &e->ins_pt.y, &e->ins_pt.z);
+                    count++;
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    return count;
+}
