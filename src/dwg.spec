@@ -2424,15 +2424,35 @@ DWG_ENTITY (VIEWPORT)
     FIELD_BD (height, 41);
   }
   DXF {
-    // The overall paperspace viewport (entmode 0) has on_off=0, id=0.
-    // Active viewports auto-increment id starting at 1.
-    if (_ent->entmode == 0) {
-      FIELD_VALUE (on_off) = 0;
-      FIELD_VALUE (id) = 0;
-      dwg->last_viewport_id = 0;
-    } else {
-      FIELD_VALUE (on_off) = 1;
+    // Neither field is stored in a DWG, so both are derived. AutoCAD numbers
+    // the viewports of EACH layout 1..N and turns none of them off, so the
+    // counter belongs to the block the viewport lives in.
+    //
+    // It used to restart on entmode 0, taking that for "the overall
+    // paperspace viewport". But entmode 0 only says the entity carries an
+    // explicit owner handle, which is how every layout stores its entities
+    // except the one that was current when the file was saved: every
+    // viewport of every other layout came out off (68 = 0, 69 = 0), and a
+    // consumer that honors the status draws an empty sheet.
+    //
+    // The owning block is derived exactly as the group 330 in
+    // common_entity_handle_data.spec derives it.
+    {
+      Dwg_Object_Ref *_owner_ref
+          = _ent->ownerhandle    ? _ent->ownerhandle
+            : _ent->entmode == 1 ? dwg->header_vars.BLOCK_RECORD_PSPACE
+            : _ent->entmode == 2 ? dwg->header_vars.BLOCK_RECORD_MSPACE
+                                 : NULL;
+      const BITCODE_RLL _owner = _owner_ref ? _owner_ref->absolute_ref : 0;
+      if (_owner != dwg->last_viewport_owner)
+        {
+          dwg->last_viewport_owner = _owner;
+          dwg->last_viewport_id = 0;
+        }
       dwg->last_viewport_id++;
+      // 68 is not a boolean: a positive value is the stacking order, "1 is
+      // the active viewport, 2 is the next, and so forth".
+      FIELD_VALUE (on_off) = dwg->last_viewport_id;
       FIELD_VALUE (id) = dwg->last_viewport_id;
     }
     FIELD_RS (on_off, 68);
