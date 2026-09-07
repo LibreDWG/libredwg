@@ -186,7 +186,7 @@ arc_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD ctr,
  * V4 Residue Topology Spatial Transformations
  *----------------------------------------------------------------------*/
 
-static inline void v4_transform_3d(double *x, double *y, double *z) {
+static void v4_transform_3d(double *x, double *y, double *z) {
     double s0, d0, s1, d1;
 
     if (!x || !y || !z) return;
@@ -201,7 +201,7 @@ static inline void v4_transform_3d(double *x, double *y, double *z) {
     *z = s0 - s1;
 }
 
-static inline void v4_transform_2d(double *x, double *y) {
+static void v4_transform_2d(double *x, double *y) {
     double s0, d0;
     if (!x || !y) return;
 
