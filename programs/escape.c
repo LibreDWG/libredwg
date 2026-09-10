@@ -557,6 +557,76 @@ mtext_escape_line (const char *line)
   return dest;
 }
 
+const char *
+mtext_attachment_anchor (BITCODE_BS attachment)
+{
+  switch (attachment)
+    {
+    case 2:
+    case 5:
+    case 8:
+      return "middle";
+    case 3:
+    case 6:
+    case 9:
+      return "end";
+    default:
+      return "start";
+    }
+}
+
+double
+mtext_svg_angle (double x_axis_x, double x_axis_y)
+{
+  double angle;
+
+  if (!isfinite (x_axis_x) || !isfinite (x_axis_y)
+      || (x_axis_x == 0.0 && x_axis_y == 0.0))
+    return 0.0;
+  angle = -atan2 (x_axis_y, x_axis_x) * 180.0 / M_PI;
+  return isfinite (angle) ? angle : 0.0;
+}
+
+double
+mtext_line_height (double text_height, double linespace_factor)
+{
+  double line_height;
+
+  if (!isfinite (text_height) || text_height <= 0.0)
+    return 0.0;
+  line_height = text_height * (5.0 / 3.0);
+  if (isfinite (linespace_factor) && linespace_factor > 0.0)
+    line_height *= linespace_factor;
+  if (!isfinite (line_height) || line_height <= 0.0)
+    line_height = text_height * (5.0 / 3.0);
+  return isfinite (line_height) && line_height > 0.0 ? line_height : 0.0;
+}
+
+double
+mtext_attachment_first_offset (BITCODE_BS attachment, double text_height,
+                               double line_height, unsigned int num_lines)
+{
+  double block_height;
+  double ascent;
+
+  if (!isfinite (text_height) || text_height <= 0.0)
+    return 0.0;
+  if (num_lines == 0)
+    num_lines = 1;
+  if (!isfinite (line_height) || line_height <= 0.0)
+    line_height = text_height * (5.0 / 3.0);
+  block_height = text_height
+                 + line_height * (double)(num_lines - 1);
+  if (!isfinite (block_height) || block_height <= 0.0)
+    block_height = text_height;
+  ascent = 0.8 * text_height;
+  if (attachment >= 4 && attachment <= 6)
+    return ascent - block_height / 2.0;
+  if (attachment >= 7 && attachment <= 9)
+    return ascent - block_height;
+  return ascent;
+}
+
 /* Return the byte length of a visible MTEXT character.  \U+XXXX remains
    atomic here because mtext_escape_line() expands it after wrapping. */
 static size_t

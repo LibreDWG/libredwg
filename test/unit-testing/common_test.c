@@ -394,6 +394,61 @@ mtext_wrap_text_tests (void)
     }
 }
 
+static void
+mtext_attachment_tests (void)
+{
+  static const char *anchors[] = { "start", "middle", "end" };
+  static const double expected[] = {
+    8.0, 8.0, 8.0, -13.6666666667, -13.6666666667, -13.6666666667,
+    -35.3333333333, -35.3333333333, -35.3333333333
+  };
+  unsigned int attachment;
+  double line_height;
+
+  line_height = mtext_line_height (10.0, 1.0);
+  if (fabs (line_height - 16.6666666667) < 1e-9)
+    pass ();
+  else
+    fail ("mtext_line_height default => %g", line_height);
+  if (fabs (mtext_line_height (10.0, 2.0) - 33.3333333333) < 1e-9
+      && fabs (mtext_line_height (10.0, 0.0) - 16.6666666667) < 1e-9
+      && mtext_line_height (NAN, 1.0) == 0.0)
+    pass ();
+  else
+    fail ("mtext_line_height spacing/invalid");
+  if (fabs (mtext_svg_angle (1.0, 0.0)) < 1e-9
+      && fabs (mtext_svg_angle (sqrt (0.5), sqrt (0.5)) + 45.0) < 1e-9
+      && fabs (mtext_svg_angle (0.0, 1.0) + 90.0) < 1e-9
+      && fabs (mtext_svg_angle (cos (0.37), sin (0.37))
+               + 0.37 * 180.0 / M_PI)
+             < 1e-9
+      && mtext_svg_angle (0.0, 0.0) == 0.0
+      && mtext_svg_angle (NAN, 1.0) == 0.0)
+    pass ();
+  else
+    fail ("mtext_svg_angle rotation/degenerate");
+
+  for (attachment = 1; attachment <= 9; attachment++)
+    {
+      const char *anchor = mtext_attachment_anchor (attachment);
+      const char *expected_anchor = anchors[(attachment - 1) % 3];
+      double offset = mtext_attachment_first_offset (
+          attachment, 10.0, line_height, 3);
+      if (strcmp (anchor, expected_anchor) == 0
+          && fabs (offset - expected[attachment - 1]) < 1e-9)
+        pass ();
+      else
+        fail ("mtext_attachment[%u] => %s/%g", attachment, anchor, offset);
+    }
+  if (strcmp (mtext_attachment_anchor (0), "start") == 0
+      && fabs (mtext_attachment_first_offset (0, 10.0, line_height, 0)
+               - 8.0)
+             < 1e-9)
+    pass ();
+  else
+    fail ("mtext_attachment invalid values");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -409,5 +464,6 @@ main (int argc, char const *argv[])
   mtext_escape_line_tests ();
   mtext_normalization_tests ();
   mtext_wrap_text_tests ();
+  mtext_attachment_tests ();
   return failed;
 }

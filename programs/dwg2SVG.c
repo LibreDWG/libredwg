@@ -378,42 +378,6 @@ mtext_plaintext (const char *src)
   return dest;
 }
 
-static const char *
-mtext_anchor (BITCODE_BS attachment)
-{
-  switch (attachment)
-    {
-    case 2:
-    case 5:
-    case 8:
-      return "middle";
-    case 3:
-    case 6:
-    case 9:
-      return "end";
-    default:
-      return "start";
-    }
-}
-
-static const char *
-mtext_baseline (BITCODE_BS attachment)
-{
-  switch (attachment)
-    {
-    case 4:
-    case 5:
-    case 6:
-      return "middle";
-    case 7:
-    case 8:
-    case 9:
-      return "text-after-edge";
-    default:
-      return "text-before-edge";
-    }
-}
-
 static void
 output_MTEXT (Dwg_Object *obj)
 {
@@ -429,12 +393,12 @@ output_MTEXT (Dwg_Object *obj)
   char *color;
   const char *fontfamily;
   const char *anchor;
-  const char *baseline;
   double angle;
   double line_height;
-  double first_dy;
+  double first_offset;
+  double line_y;
+  double insertion_y;
   int num_lines;
-  int first;
   int text_utf8_owned;
   double width_factor;
 
@@ -455,8 +419,10 @@ output_MTEXT (Dwg_Object *obj)
       || !isfinite (mtext->text_height) || mtext->text_height <= 0.0)
     return;
 
-  /* ins_pt is OCS; x_axis_dir is DXF 11 in WCS (see dwg_api.c). */
-  transform_OCS (&ins_pt, mtext->ins_pt, mtext->extrusion);
+  /* MTEXT ins_pt and x_axis_dir are WCS values (see dwg_api.c).  This
+     renderer is intentionally planar: extrusion is validated above, but
+     does not rotate the WCS insertion point into a full 3D OCS frame. */
+  ins_pt = mtext->ins_pt;
   if (isnan_3BD (ins_pt) || !isfinite (ins_pt.x) || !isfinite (ins_pt.y))
     return;
   /* MTEXT::text is TU for R2007+ DWG files and TV otherwise.  Normalize it
@@ -489,53 +455,51 @@ output_MTEXT (Dwg_Object *obj)
   plain = wrapped;
 
   fontfamily = text_fontfamily (dwg, mtext->style);
-  anchor = mtext_anchor (mtext->attachment);
-  baseline = mtext_baseline (mtext->attachment);
-  angle = -atan2 (mtext->x_axis_dir.y, mtext->x_axis_dir.x) * 180.0 / M_PI;
-  if (!isfinite (angle))
-    angle = 0.0;
-  line_height = mtext->text_height * 1.6666666667;
-  if (isfinite (mtext->linespace_factor) && mtext->linespace_factor > 0.0)
-    line_height *= mtext->linespace_factor;
-  if (!isfinite (line_height) || line_height <= 0.0)
-    line_height = mtext->text_height;
+  anchor = mtext_attachment_anchor (mtext->attachment);
+  /* DXF 11 is a WCS direction.  Project it onto the drawing plane and use
+     the inverse sign required by SVG's downward Y axis.  A direction with
+     no usable XY component has no planar angle; keep the text unrotated. */
+  angle = mtext_svg_angle (mtext->x_axis_dir.x, mtext->x_axis_dir.y);
+  line_height = mtext_line_height (mtext->text_height,
+                                   mtext->linespace_factor);
+  if (line_height <= 0.0)
+    return;
   num_lines = 1;
   for (line = plain; *line; line++)
     if (*line == '\n')
       num_lines++;
-  first_dy = 0.0;
-  if (mtext->attachment >= 4 && mtext->attachment <= 6)
-    first_dy = -line_height * (double)(num_lines - 1) / 2.0;
-  else if (mtext->attachment >= 7 && mtext->attachment <= 9)
-    first_dy = -line_height * (double)(num_lines - 1);
+  first_offset = mtext_attachment_first_offset (
+      mtext->attachment, mtext->text_height, line_height,
+      (unsigned int)num_lines);
+  insertion_y = transform_Y (ins_pt.y);
   color = entity_color (obj->tio.entity);
   if (!color)
     color = (char *)"black";
 
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"%s\" font-size=\"%f\" fill=\"%s\" "
-          "text-anchor=\"%s\" dominant-baseline=\"%s\" "
+          "text-anchor=\"%s\" alignment-baseline=\"alphabetic\" "
           "transform=\"rotate(%f %f %f)\">\n",
           obj->index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
-          fontfamily, mtext->text_height, color, anchor, baseline, angle,
+          fontfamily, mtext->text_height, color, anchor, angle,
           transform_X (ins_pt.x), transform_Y (ins_pt.y));
-  first = 1;
   line = plain;
+  line_y = insertion_y + first_offset;
   for (;;)
     {
       next = strchr (line, '\n');
       if (next)
         *next = '\0';
       escaped = mtext_escape_line (line);
-      printf ("\t\t<tspan x=\"%f\" dy=\"%f\">%s</tspan>\n",
-              transform_X (ins_pt.x), first ? first_dy : line_height,
+      printf ("\t\t<tspan x=\"%f\" y=\"%f\">%s</tspan>\n",
+              transform_X (ins_pt.x), line_y,
               escaped ? escaped : "");
       if (escaped)
         free (escaped);
       if (!next)
         break;
       line = next + 1;
-      first = 0;
+      line_y += line_height;
     }
   printf ("\t</text>\n");
   if (*color == '#')
