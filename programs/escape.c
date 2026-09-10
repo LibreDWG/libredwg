@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
 
 #include "common.h"
 #include "escape.h"
@@ -553,6 +554,155 @@ mtext_escape_line (const char *line)
         }
       free (escaped);
     }
+  return dest;
+}
+
+/* Return the byte length of a visible MTEXT character.  \U+XXXX remains
+   atomic here because mtext_escape_line() expands it after wrapping. */
+static size_t
+mtext_unit_len (const char *p, const char *end)
+{
+  size_t left;
+  size_t n;
+
+  left = (size_t)(end - p);
+  if (left >= 7 && p[0] == '\\' && p[1] == 'U' && p[2] == '+'
+      && mtext_hex_value (p[3]) >= 0 && mtext_hex_value (p[4]) >= 0
+      && mtext_hex_value (p[5]) >= 0 && mtext_hex_value (p[6]) >= 0)
+    return 7;
+  if ((unsigned char)p[0] < 0x80)
+    return 1;
+  if ((unsigned char)p[0] >= 0xC2 && (unsigned char)p[0] <= 0xDF)
+    n = 2;
+  else if ((unsigned char)p[0] >= 0xE0 && (unsigned char)p[0] <= 0xEF)
+    n = 3;
+  else if ((unsigned char)p[0] >= 0xF0 && (unsigned char)p[0] <= 0xF4)
+    n = 4;
+  else
+    return 1;
+  if (left < n)
+    return 1;
+  while (--n)
+    if ((p[n] & 0xC0) != 0x80)
+      return 1;
+  return (size_t)((unsigned char)p[0] < 0xE0
+                      ? 2
+                      : (unsigned char)p[0] < 0xF0 ? 3 : 4);
+}
+
+static bool
+mtext_ascii_space (char c)
+{
+  return c == ' ' || c == '\t' || c == '\r' || c == '\f' || c == '\v';
+}
+
+static double
+mtext_span_width (const char *p, const char *end, double advance)
+{
+  double width;
+
+  width = 0.0;
+  while (p < end)
+    {
+      width += advance;
+      p += mtext_unit_len (p, end);
+    }
+  return width;
+}
+
+/* With no font metrics available to dwg2SVG, approximate every visible code
+   point as 0.6 times its text height, scaled by the STYLE width factor. */
+char *
+mtext_wrap_text (const char *src, double rect_width, double text_height,
+                 double width_factor)
+{
+  const char *end;
+  const char *p;
+  const char *word;
+  const char *word_end;
+  const char *space;
+  const char *space_end;
+  char *dest;
+  char *d;
+  double advance;
+  double line_width;
+  double word_width;
+  double space_width;
+  size_t len;
+
+  if (!src)
+    return NULL;
+  len = strlen (src);
+  if (len > (SIZE_MAX - 1) / 2)
+    return NULL;
+  dest = (char *)malloc (len * 2 + 1);
+  if (!dest)
+    return NULL;
+  if (!isfinite (rect_width) || rect_width <= 0.0
+      || !isfinite (text_height) || text_height <= 0.0
+      || !isfinite (width_factor) || width_factor <= 0.0)
+    {
+      memcpy (dest, src, len + 1);
+      return dest;
+    }
+  advance = 0.6 * text_height * width_factor;
+  if (!isfinite (advance) || advance <= 0.0)
+    {
+      memcpy (dest, src, len + 1);
+      return dest;
+    }
+
+  end = src + len;
+  p = src;
+  d = dest;
+  line_width = 0.0;
+  while (p < end)
+    {
+      if (*p == '\n')
+        {
+          *d++ = *p++;
+          line_width = 0.0;
+          continue;
+        }
+      space = p;
+      while (p < end && mtext_ascii_space (*p))
+        p++;
+      space_end = p;
+      word = p;
+      while (p < end && *p != '\n' && !mtext_ascii_space (*p))
+        p += mtext_unit_len (p, end);
+      word_end = p;
+      space_width = mtext_span_width (space, space_end, advance);
+      word_width = mtext_span_width (word, word_end, advance);
+
+      if (word < word_end && line_width > 0.0
+          && line_width + space_width + word_width > rect_width)
+        {
+          *d++ = '\n';
+          line_width = 0.0;
+        }
+      else
+        {
+          memcpy (d, space, (size_t)(space_end - space));
+          d += space_end - space;
+          line_width += space_width;
+        }
+      while (word < word_end)
+        {
+          size_t unit_len = mtext_unit_len (word, word_end);
+
+          if (line_width > 0.0 && line_width + advance > rect_width)
+            {
+              *d++ = '\n';
+              line_width = 0.0;
+            }
+          memcpy (d, word, unit_len);
+          d += unit_len;
+          word += unit_len;
+          line_width += advance;
+        }
+    }
+  *d = '\0';
   return dest;
 }
 

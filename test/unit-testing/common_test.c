@@ -353,6 +353,47 @@ mtext_normalization_tests (void)
     free (u8);
 }
 
+static void
+mtext_wrap_text_tests (void)
+{
+  static const struct
+  {
+    const char *input;
+    double rect_width;
+    double text_height;
+    double width_factor;
+    const char *expected;
+  } cases[] = {
+    { "one two", 0.0, 10.0, 1.0, "one two" },
+    { "one two", NAN, 10.0, 1.0, "one two" },
+    { "one two", -1.0, 10.0, 1.0, "one two" },
+    { "one two", 100.0, 10.0, 1.0, "one two" },
+    { "one two", 18.0, 10.0, 1.0, "one\ntwo" },
+    { "one two\nthree four", 30.0, 10.0, 1.0,
+      "one\ntwo\nthree\nfour" },
+    { "one\n\ntwo", 100.0, 10.0, 1.0, "one\n\ntwo" },
+    { "abcdef", 12.0, 10.0, 1.0, "ab\ncd\nef" },
+    { "\xC3\xA8\xE4\xB8\x96", 6.0, 10.0, 1.0,
+      "\xC3\xA8\n\xE4\xB8\x96" },
+    { "\\U+0041B", 6.0, 10.0, 1.0, "\\U+0041\nB" },
+    { "abcd", 12.0, 5.0, 1.0, "abcd" },
+    { "abcd", 12.0, 10.0, 2.0, "a\nb\nc\nd" },
+  };
+  size_t i;
+
+  for (i = 0; i < sizeof (cases) / sizeof (cases[0]); i++)
+    {
+      char *s = mtext_wrap_text (cases[i].input, cases[i].rect_width,
+                                 cases[i].text_height, cases[i].width_factor);
+      if (s && strcmp (s, cases[i].expected) == 0)
+        pass ();
+      else
+        fail ("mtext_wrap_text[%" PRIuSIZE "] => %s", i,
+              s ? s : "(null)");
+      free (s);
+    }
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -367,5 +408,6 @@ main (int argc, char const *argv[])
   escape_htmlutf8escape_tests ();
   mtext_escape_line_tests ();
   mtext_normalization_tests ();
+  mtext_wrap_text_tests ();
   return failed;
 }

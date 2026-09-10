@@ -255,6 +255,20 @@ text_fontfamily (Dwg_Data *dwg, BITCODE_H style_ref)
   return "Courier";
 }
 
+static double
+mtext_width_factor (Dwg_Data *dwg, BITCODE_H style_ref)
+{
+  Dwg_Object *o;
+  Dwg_Object_STYLE *style;
+
+  o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
+  style = o && o->tio.object ? o->tio.object->tio.STYLE : NULL;
+  if (style && o->fixedtype == DWG_TYPE_STYLE
+      && isfinite (style->width_factor) && style->width_factor > 0.0)
+    return style->width_factor;
+  return 1.0;
+}
+
 static char *
 mtext_plaintext (const char *src)
 {
@@ -407,6 +421,7 @@ output_MTEXT (Dwg_Object *obj)
   Dwg_Entity_MTEXT *mtext;
   BITCODE_3DPOINT ins_pt;
   char *plain;
+  char *wrapped;
   char *text_utf8;
   char *line;
   char *next;
@@ -421,6 +436,7 @@ output_MTEXT (Dwg_Object *obj)
   int num_lines;
   int first;
   int text_utf8_owned;
+  double width_factor;
 
   if (!obj || !obj->parent || !obj->tio.entity
       || !obj->tio.entity->tio.MTEXT)
@@ -463,6 +479,14 @@ output_MTEXT (Dwg_Object *obj)
     free (text_utf8);
   if (!plain)
     return;
+
+  width_factor = mtext_width_factor (dwg, mtext->style);
+  wrapped = mtext_wrap_text (plain, mtext->rect_width, mtext->text_height,
+                             width_factor);
+  free (plain);
+  if (!wrapped)
+    return;
+  plain = wrapped;
 
   fontfamily = text_fontfamily (dwg, mtext->style);
   anchor = mtext_anchor (mtext->attachment);
