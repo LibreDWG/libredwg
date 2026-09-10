@@ -20,7 +20,7 @@
  *
  * TODO: all entities: 3DSOLID, SHAPE, ARC_DIMENSION, ATTRIB, DIMENSION*,
  *         *SURFACE, GEOPOSITIONMARKER/CAMERA/LIGHT, HATCH, HELIX,
- *         IMAGE/WIPEOUT/UNDERLAY, LEADER, MESH, MINSERT, MLINE, MTEXT,
+ *         IMAGE/WIPEOUT/UNDERLAY, LEADER, MESH, MINSERT, MLINE,
  * MULTILEADER, OLE2FRAME, OLEFRAME, POLYLINE_3D, POLYLINE_MESH,
  * POLYLINE_PFACE, RAY, XLINE, SPLINE, TABLE, TOLERANCE, VIEWPORT?
  *       common_entity_data: ltype, ltype_scale.
@@ -31,6 +31,7 @@
 #include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #ifdef HAVE_STRCASESTR
 #  undef __DARWIN_C_LEVEL
 #  define __DARWIN_C_LEVEL __DARWIN_C_FULL
@@ -224,7 +225,6 @@ common_entity (Dwg_Object_Entity *ent)
     free (color);
 }
 
-// TODO: MTEXT
 static const char *
 text_fontfamily (Dwg_Data *dwg, BITCODE_H style_ref)
 {
@@ -253,6 +253,362 @@ text_fontfamily (Dwg_Data *dwg, BITCODE_H style_ref)
       return "Verdana";
     }
   return "Courier";
+}
+
+static char *
+mtext_plaintext (const char *src)
+{
+  size_t len;
+  char *dest;
+  char *d;
+  const char *s;
+  int digits;
+
+  if (!src)
+    return NULL;
+  len = strlen (src);
+  dest = (char *)malloc (len + 1);
+  if (!dest)
+    return NULL;
+  d = dest;
+  s = src;
+  while (*s)
+    {
+      if (*s != '\\')
+        {
+          if (*s != '{' && *s != '}')
+            *d++ = *s;
+          s++;
+          continue;
+        }
+      s++;
+      if (!*s)
+        break;
+      if (*s == 'P')
+        {
+          *d++ = '\n';
+          s++;
+        }
+      else if (*s == '\\' || *s == '~')
+        {
+          *d++ = *s == '~' ? ' ' : *s;
+          s++;
+        }
+      else if (*s == 'L' || *s == 'l' || *s == 'O' || *s == 'o'
+               || *s == 'K' || *s == 'k')
+        s++;
+      else if (*s == 'X' || *s == 'x')
+        {
+          s++;
+          if (*s == ';')
+            s++;
+        }
+      else if (*s == 'p')
+        {
+          s++;
+          while (*s && *s != ';')
+            s++;
+          if (*s == ';')
+            s++;
+        }
+      else if (*s == 'S' || *s == 's')
+        {
+          /* Preserve the useful part of a stacked fraction. */
+          s++;
+          while (*s && *s != ';')
+            *d++ = *s++;
+          if (*s == ';')
+            s++;
+        }
+      else if (*s == 'A' || *s == 'a' || *s == 'C' || *s == 'c'
+               || *s == 'F' || *s == 'f' || *s == 'H' || *s == 'h'
+               || *s == 'Q' || *s == 'q' || *s == 'T' || *s == 't'
+               || *s == 'W' || *s == 'w')
+        {
+          s++;
+          while (*s && *s != ';')
+            s++;
+          if (*s == ';')
+            s++;
+        }
+      else if (*s == 'U' && s[1] == '+')
+        {
+          if (s[2] && s[3] && s[4] && s[5]
+              && isxdigit ((unsigned char)s[2])
+              && isxdigit ((unsigned char)s[3])
+              && isxdigit ((unsigned char)s[4])
+              && isxdigit ((unsigned char)s[5]))
+            {
+              /* Keep AutoCAD Unicode escapes for mtext_escape_line(). */
+              *d++ = '\\';
+              *d++ = *s++;
+              *d++ = *s++;
+              for (digits = 0; digits < 4; digits++)
+                *d++ = *s++;
+            }
+          else
+            {
+              /* Do not expose a malformed Unicode control sequence. */
+              s += 2;
+              while (*s && isxdigit ((unsigned char)*s))
+                s++;
+            }
+        }
+      else
+        {
+          s++;
+        }
+    }
+  *d = '\0';
+  return dest;
+}
+
+static int
+mtext_hex_value (char c)
+{
+  if (c >= '0' && c <= '9')
+    return c - '0';
+  if (c >= 'a' && c <= 'f')
+    return c - 'a' + 10;
+  if (c >= 'A' && c <= 'F')
+    return c - 'A' + 10;
+  return -1;
+}
+
+static bool
+mtext_append (char **dest, size_t *used, const char *src)
+{
+  size_t len;
+  char *new_dest;
+
+  len = strlen (src);
+  new_dest = (char *)realloc (*dest, *used + len + 1);
+  if (!new_dest)
+    return false;
+  memcpy (new_dest + *used, src, len + 1);
+  *dest = new_dest;
+  *used += len;
+  return true;
+}
+
+static char *
+mtext_escape_line (Dwg_Data *dwg, const char *line)
+{
+  const char *p;
+  const char *u;
+  const char *hex;
+  char *part;
+  char *escaped;
+  char *dest;
+  char unicode[32];
+  size_t used;
+  size_t part_len;
+  int digits;
+  int value;
+  unsigned long codepoint;
+
+  p = line;
+  dest = NULL;
+  used = 0;
+  while ((u = strstr (p, "\\U+")))
+    {
+      hex = u + 3;
+      codepoint = 0;
+      for (digits = 0; digits < 4; digits++)
+        {
+          value = mtext_hex_value (hex[digits]);
+          if (value < 0)
+            break;
+          codepoint = (codepoint << 4) | (unsigned)value;
+        }
+      if (digits < 4)
+        {
+          p = hex;
+          continue;
+        }
+      part_len = (size_t)(u - p);
+      part = (char *)malloc (part_len + 1);
+      if (!part)
+        {
+          free (dest);
+          return NULL;
+        }
+      memcpy (part, p, part_len);
+      part[part_len] = '\0';
+      if (dwg->header.version >= R_2007)
+        escaped = htmlwescape ((BITCODE_TU)part);
+      else
+        escaped = htmlescape (part, dwg->header.codepage);
+      free (part);
+      if (escaped)
+        {
+          if (!mtext_append (&dest, &used, escaped))
+            {
+              free (escaped);
+              free (dest);
+              return NULL;
+            }
+          free (escaped);
+        }
+      snprintf (unicode, sizeof (unicode), "&#x%lX;", codepoint);
+      if (!mtext_append (&dest, &used, unicode))
+        {
+          free (dest);
+          return NULL;
+        }
+      p = hex + 4;
+    }
+  if (dwg->header.version >= R_2007)
+    escaped = htmlwescape ((BITCODE_TU)p);
+  else
+    escaped = htmlescape (p, dwg->header.codepage);
+  if (escaped)
+    {
+      if (!mtext_append (&dest, &used, escaped))
+        {
+          free (escaped);
+          free (dest);
+          return NULL;
+        }
+      free (escaped);
+    }
+  return dest;
+}
+
+static const char *
+mtext_anchor (BITCODE_BS attachment)
+{
+  switch (attachment)
+    {
+    case 2:
+    case 5:
+    case 8:
+      return "middle";
+    case 3:
+    case 6:
+    case 9:
+      return "end";
+    default:
+      return "start";
+    }
+}
+
+static const char *
+mtext_baseline (BITCODE_BS attachment)
+{
+  switch (attachment)
+    {
+    case 4:
+    case 5:
+    case 6:
+      return "middle";
+    case 7:
+    case 8:
+    case 9:
+      return "text-after-edge";
+    default:
+      return "text-before-edge";
+    }
+}
+
+static void
+output_MTEXT (Dwg_Object *obj)
+{
+  Dwg_Data *dwg;
+  Dwg_Entity_MTEXT *mtext;
+  BITCODE_3DPOINT ins_pt;
+  char *plain;
+  char *line;
+  char *next;
+  char *escaped;
+  char *color;
+  const char *fontfamily;
+  const char *anchor;
+  const char *baseline;
+  double angle;
+  double line_height;
+  double first_dy;
+  int num_lines;
+  int first;
+
+  if (!obj || !obj->parent || !obj->tio.entity
+      || !obj->tio.entity->tio.MTEXT)
+    return;
+  dwg = obj->parent;
+  mtext = obj->tio.entity->tio.MTEXT;
+  if (!mtext->text || entity_invisible (obj)
+      || isnan_3BD (mtext->ins_pt) || isnan_3BD (mtext->extrusion)
+      || isnan_3BD (mtext->x_axis_dir)
+      || !isfinite (mtext->ins_pt.x) || !isfinite (mtext->ins_pt.y)
+      || !isfinite (mtext->ins_pt.z) || !isfinite (mtext->extrusion.x)
+      || !isfinite (mtext->extrusion.y) || !isfinite (mtext->extrusion.z)
+      || !isfinite (mtext->x_axis_dir.x)
+      || !isfinite (mtext->x_axis_dir.y)
+      || !isfinite (mtext->x_axis_dir.z)
+      || !isfinite (mtext->text_height) || mtext->text_height <= 0.0)
+    return;
+
+  /* ins_pt is OCS; x_axis_dir is DXF 11 in WCS (see dwg_api.c). */
+  transform_OCS (&ins_pt, mtext->ins_pt, mtext->extrusion);
+  if (isnan_3BD (ins_pt) || !isfinite (ins_pt.x) || !isfinite (ins_pt.y))
+    return;
+  plain = mtext_plaintext (mtext->text);
+  if (!plain)
+    return;
+
+  fontfamily = text_fontfamily (dwg, mtext->style);
+  anchor = mtext_anchor (mtext->attachment);
+  baseline = mtext_baseline (mtext->attachment);
+  angle = -atan2 (mtext->x_axis_dir.y, mtext->x_axis_dir.x) * 180.0 / M_PI;
+  if (!isfinite (angle))
+    angle = 0.0;
+  line_height = mtext->text_height * 1.6666666667;
+  if (isfinite (mtext->linespace_factor) && mtext->linespace_factor > 0.0)
+    line_height *= mtext->linespace_factor;
+  if (!isfinite (line_height) || line_height <= 0.0)
+    line_height = mtext->text_height;
+  num_lines = 1;
+  for (line = plain; *line; line++)
+    if (*line == '\n')
+      num_lines++;
+  first_dy = 0.0;
+  if (mtext->attachment >= 4 && mtext->attachment <= 6)
+    first_dy = -line_height * (double)(num_lines - 1) / 2.0;
+  else if (mtext->attachment >= 7 && mtext->attachment <= 9)
+    first_dy = -line_height * (double)(num_lines - 1);
+  color = entity_color (obj->tio.entity);
+  if (!color)
+    color = (char *)"black";
+
+  printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
+          "font-family=\"%s\" font-size=\"%f\" fill=\"%s\" "
+          "text-anchor=\"%s\" dominant-baseline=\"%s\" "
+          "transform=\"rotate(%f %f %f)\">\n",
+          obj->index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
+          fontfamily, mtext->text_height, color, anchor, baseline, angle,
+          transform_X (ins_pt.x), transform_Y (ins_pt.y));
+  first = 1;
+  line = plain;
+  for (;;)
+    {
+      next = strchr (line, '\n');
+      if (next)
+        *next = '\0';
+      escaped = mtext_escape_line (dwg, line);
+      printf ("\t\t<tspan x=\"%f\" dy=\"%f\">%s</tspan>\n",
+              transform_X (ins_pt.x), first ? first_dy : line_height,
+              escaped ? escaped : "");
+      if (escaped)
+        free (escaped);
+      if (!next)
+        break;
+      line = next + 1;
+      first = 0;
+    }
+  printf ("\t</text>\n");
+  if (*color == '#')
+    free (color);
+  free (plain);
 }
 
 static void
@@ -719,6 +1075,9 @@ output_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_TEXT:
       output_TEXT (obj);
+      break;
+    case DWG_TYPE_MTEXT:
+      output_MTEXT (obj);
       break;
     case DWG_TYPE_ARC:
       output_ARC (obj);
