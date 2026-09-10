@@ -332,6 +332,92 @@ mtext_escape_line_tests (void)
 }
 
 static void
+mtext_escape_line_many_unicode_tests (void)
+{
+  char input[7 * 128 + 1];
+  char expected[6 * 128 + 1];
+  char *s;
+  size_t i;
+
+  for (i = 0; i < 128; i++)
+    {
+      memcpy (input + i * 7, "\\U+0041", 7);
+      memcpy (expected + i * 6, "&#x41;", 6);
+    }
+  input[sizeof (input) - 1] = '\0';
+  expected[sizeof (expected) - 1] = '\0';
+  s = mtext_escape_line (input);
+  if (s && strcmp (s, expected) == 0)
+    pass ();
+  else
+    fail ("mtext_escape_line repeated Unicode => %s", s ? s : "(null)");
+  free (s);
+}
+
+static void
+mtext_stacked_unicode_tests (void)
+{
+  char *plain;
+  char *escaped;
+
+  plain = mtext_plaintext ("\\S\\U+0041/2;");
+  escaped = mtext_escape_line (plain);
+  if (plain && escaped && strcmp (plain, "\\U+0041/2") == 0
+      && strcmp (escaped, "&#x41;/2") == 0)
+    pass ();
+  else
+    fail ("mtext stacked Unicode => %s / %s", plain ? plain : "(null)",
+          escaped ? escaped : "(null)");
+  free (escaped);
+  free (plain);
+}
+
+static void
+mtext_plaintext_tests (void)
+{
+  static const struct
+  {
+    const char *input;
+    const char *expected;
+  } cases[] = {
+    { "plain", "plain" },
+    { "one\\Ptwo\\\\three\\~four", "one\ntwo\\three four" },
+    { "\\Lunder\\l \\Oover\\o \\Kstrike\\k", "under over strike" },
+    { "\\A1;A\\C256;C\\FArial|b1;F\\H1.5x;H\\Q15;Q\\T0.8;T\\W2;W\\pql;P",
+      "ACFHQTWP" },
+    { "\\pxi-2,l2;ok\\pbroken;tail", "okbroken;tail" },
+    { "one\\Xtwo\\X;three", "one\ntwo\nthree" },
+    { "{outer {inner} \\{left\\}right}", "outer inner {left}right" },
+    { "\\S1/2; \\S3#4; \\S5^ 6;", "1/2 3/4 5/6" },
+    { "\\Sleft/right\\;more;", "left/right;more" },
+    { "\\S1/2 tail", "1/2 tail" },
+    { "\\Splain;tail", "plain;tail" },
+    { "\\Hbad;text\\H1.5tail\\C12;ok\\pbroken tail",
+      "bad;text1.5tailokbroken tail" },
+    { "\\A?;a\\C?;c\\F;f\\H?;h\\Q?;q\\T?;t\\W?;w\\p;P",
+      "?;a?;c;f?;h?;q?;t?;w;P" },
+    { "\\A1tail \\C2tail \\FArial \\H1.5x \\Q0 \\T1 \\W1 \\pql",
+      "1tail 2tail Arial 1.5x 0 1 1 ql" },
+    { "before\\Zafter\\?mark\\", "beforeafter?mark" },
+    { "a\\P\\L\\O\\Kb", "a\nb" },
+    { "Caff\xC3\xA8 \\U+4E16 \\U+0041", "Caff\xC3\xA8 \\U+4E16 \\U+0041" },
+    { "\\U+12tail \\U+12G4end", "U+12tail U+12G4end" },
+  };
+  size_t i;
+
+  for (i = 0; i < sizeof (cases) / sizeof (cases[0]); i++)
+    {
+      char *s = mtext_plaintext (cases[i].input);
+      if (s && strcmp (s, cases[i].expected) == 0)
+        pass ();
+      else
+        fail ("mtext_plaintext[%" PRIuSIZE "] => %s", i,
+              s ? s : "(null)");
+      free (s);
+    }
+}
+
+static void
 mtext_normalization_tests (void)
 {
   uint16_t tu[] = { 'C', 'a', 'f', 'f', 0x00E8, ' ', 0x4E16, 0x754C, 0 };
@@ -462,6 +548,9 @@ main (int argc, char const *argv[])
   escape_htmlwescape_tests ();
   escape_htmlutf8escape_tests ();
   mtext_escape_line_tests ();
+  mtext_escape_line_many_unicode_tests ();
+  mtext_stacked_unicode_tests ();
+  mtext_plaintext_tests ();
   mtext_normalization_tests ();
   mtext_wrap_text_tests ();
   mtext_attachment_tests ();

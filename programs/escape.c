@@ -421,20 +421,303 @@ mtext_hex_value (char c)
 }
 
 static bool
-mtext_append (char **dest, size_t *used, const char *src)
+mtext_param_end (const char *src, const char **end)
+{
+  const char *p;
+
+  for (p = src; *p; p++)
+    {
+      if (*p == ';')
+        {
+          *end = p;
+          return true;
+        }
+      if (*p == '\\' || *p == '{' || *p == '}' || *p == '\n'
+          || *p == '\r')
+        return false;
+    }
+  return false;
+}
+
+static bool
+mtext_numeric_param (const char *src, const char *end, bool height)
+{
+  const char *p;
+  bool digits;
+
+  if (src == end)
+    return false;
+  p = src;
+  if (*p == '+' || *p == '-')
+    p++;
+  digits = false;
+  while (p < end && *p >= '0' && *p <= '9')
+    {
+      digits = true;
+      p++;
+    }
+  if (p < end && *p == '.')
+    {
+      p++;
+      while (p < end && *p >= '0' && *p <= '9')
+        {
+          digits = true;
+          p++;
+        }
+    }
+  if (!digits)
+    return false;
+  return p == end || (height && p + 1 == end && (*p == 'x' || *p == 'X'));
+}
+
+static bool
+mtext_paragraph_param (const char *src, const char *end)
+{
+  const char *p;
+  bool property;
+
+  if (src == end)
+    return false;
+  p = src;
+  if (*p == 'x')
+    p++;
+  property = false;
+  while (p < end)
+    {
+      if (*p == 'i' || *p == 'l' || *p == 'r' || *p == 'q' || *p == 't')
+        {
+          property = true;
+          p++;
+        }
+      else if ((*p >= '0' && *p <= '9') || *p == '+' || *p == '-'
+               || *p == '.' || *p == ',')
+        p++;
+      else
+        return false;
+    }
+  return property;
+}
+
+static bool
+mtext_stacked_end (const char *src, const char **end)
+{
+  const char *p;
+  bool delimiter;
+
+  delimiter = false;
+  for (p = src; *p; p++)
+    {
+      if (*p == '\\' && p[1])
+        {
+          p++;
+          continue;
+        }
+      if (*p == ';')
+        {
+          if (p > src && delimiter)
+            {
+              *end = p;
+              return true;
+            }
+          return false;
+        }
+      if (*p == '/' || *p == '#' || *p == '^')
+        delimiter = true;
+      if (*p == '\n' || *p == '\r' || *p == '{' || *p == '}')
+        return false;
+    }
+  return false;
+}
+
+/* Flatten MTEXT controls to UTF-8 text.  Rich formatting is deliberately
+   ignored here; malformed controls consume only their introducer/code so
+   that following ordinary text remains visible. */
+char *ATTRIBUTE_MALLOC
+mtext_plaintext (const char *src)
+{
+  const char *s;
+  const char *end;
+  char *dest;
+  char *d;
+  size_t len;
+
+  if (!src)
+    return NULL;
+  len = strlen (src);
+  if (len == SIZE_MAX)
+    return NULL;
+  dest = (char *)malloc (len + 1);
+  if (!dest)
+    return NULL;
+  d = dest;
+  for (s = src; *s;)
+    {
+      char code;
+
+      if (*s == '{' || *s == '}')
+        {
+          s++;
+          continue;
+        }
+      if (*s != '\\')
+        {
+          *d++ = *s++;
+          continue;
+        }
+      s++;
+      if (!*s)
+        break;
+      code = *s++;
+      switch (code)
+        {
+        case 'P':
+          *d++ = '\n';
+          break;
+        case '\\':
+          *d++ = '\\';
+          break;
+        case '~':
+          *d++ = ' ';
+          break;
+        case '{':
+        case '}':
+        case ';':
+          *d++ = code;
+          break;
+        case 'L':
+        case 'l':
+        case 'O':
+        case 'o':
+        case 'K':
+        case 'k':
+          break;
+        case 'X':
+        case 'x':
+          *d++ = '\n';
+          if (*s == ';')
+            s++;
+          break;
+        case 'U':
+          if (s[0] == '+' && s[1] && s[2] && s[3] && s[4]
+              && mtext_hex_value (s[1]) >= 0 && mtext_hex_value (s[2]) >= 0
+              && mtext_hex_value (s[3]) >= 0 && mtext_hex_value (s[4]) >= 0)
+            {
+              *d++ = '\\';
+              *d++ = code;
+              *d++ = *s++;
+              *d++ = *s++;
+              *d++ = *s++;
+              *d++ = *s++;
+              *d++ = *s++;
+            }
+          else
+            *d++ = code;
+          break;
+        case 'S':
+        case 's':
+          if (mtext_stacked_end (s, &end))
+            {
+              while (s < end)
+                {
+                  if (end - s >= 7 && s[0] == '\\' && s[1] == 'U'
+                      && s[2] == '+' && mtext_hex_value (s[3]) >= 0
+                      && mtext_hex_value (s[4]) >= 0
+                      && mtext_hex_value (s[5]) >= 0
+                      && mtext_hex_value (s[6]) >= 0)
+                    {
+                      memcpy (d, s, 7);
+                      d += 7;
+                      s += 7;
+                    }
+                  else if (*s == '\\' && s + 1 < end)
+                    {
+                      *d++ = s[1];
+                      s += 2;
+                    }
+                  else if (*s == '#' || *s == '^')
+                    {
+                      *d++ = '/';
+                      if (*s == '^' && s + 1 < end && s[1] == ' ')
+                        s++;
+                      s++;
+                    }
+                  else
+                    *d++ = *s++;
+                }
+              s = end + 1;
+            }
+          break;
+        case 'A':
+        case 'a':
+        case 'C':
+        case 'c':
+        case 'H':
+        case 'h':
+        case 'Q':
+        case 'q':
+        case 'T':
+        case 't':
+        case 'W':
+        case 'w':
+          if (mtext_param_end (s, &end)
+              && mtext_numeric_param (s, end, code == 'H' || code == 'h'))
+            s = end + 1;
+          break;
+        case 'F':
+        case 'f':
+          if (mtext_param_end (s, &end) && s < end)
+            s = end + 1;
+          break;
+        case 'p':
+          if (mtext_param_end (s, &end) && mtext_paragraph_param (s, end))
+            s = end + 1;
+          break;
+        default:
+          /* Unknown controls have no visible syntax.  Preserve punctuation
+             as text, but consume an unknown alphabetic control code. */
+          if ((unsigned char)code < 'A' || (unsigned char)code > 'Z')
+            if ((unsigned char)code < 'a' || (unsigned char)code > 'z')
+              *d++ = code;
+          break;
+        }
+    }
+  *d = '\0';
+  return dest;
+}
+
+static bool
+mtext_append (char **dest, size_t *used, size_t *cap, const char *src)
 {
   size_t len;
+  size_t required;
+  size_t new_cap;
   char *new_dest;
 
   len = strlen (src);
   if (*used == SIZE_MAX || len > SIZE_MAX - *used - 1)
     return false;
-  new_dest = (char *)realloc (*dest, *used + len + 1);
-  if (!new_dest)
-    return false;
-  memcpy (new_dest + *used, src, len + 1);
-  *dest = new_dest;
+  required = *used + len + 1;
+  if (required > *cap)
+    {
+      new_cap = *cap ? *cap : 32;
+      while (required > new_cap)
+        {
+          if (new_cap > SIZE_MAX / 2)
+            {
+              new_cap = required;
+              break;
+            }
+          new_cap *= 2;
+        }
+      new_dest = (char *)realloc (*dest, new_cap);
+      if (!new_dest)
+        return false;
+      *dest = new_dest;
+      *cap = new_cap;
+    }
+  memcpy (*dest + *used, src, len);
   *used += len;
+  (*dest)[*used] = '\0';
   return true;
 }
 
@@ -449,6 +732,7 @@ mtext_escape_line (const char *line)
   char *dest;
   char unicode[32];
   size_t used;
+  size_t cap;
   size_t part_len;
   int digits;
   int value;
@@ -459,6 +743,7 @@ mtext_escape_line (const char *line)
   p = line;
   dest = NULL;
   used = 0;
+  cap = 0;
   while ((u = strstr (p, "\\U+")))
     {
       hex = u + 3;
@@ -498,7 +783,7 @@ mtext_escape_line (const char *line)
           free (part);
           if (escaped)
             {
-              if (!mtext_append (&dest, &used, escaped))
+              if (!mtext_append (&dest, &used, &cap, escaped))
                 {
                   free (escaped);
                   free (dest);
@@ -527,7 +812,7 @@ mtext_escape_line (const char *line)
       free (part);
       if (escaped)
         {
-          if (!mtext_append (&dest, &used, escaped))
+          if (!mtext_append (&dest, &used, &cap, escaped))
             {
               free (escaped);
               free (dest);
@@ -536,7 +821,7 @@ mtext_escape_line (const char *line)
           free (escaped);
         }
       snprintf (unicode, sizeof (unicode), "&#x%lX;", codepoint);
-      if (!mtext_append (&dest, &used, unicode))
+      if (!mtext_append (&dest, &used, &cap, unicode))
         {
           free (dest);
           return NULL;
@@ -546,7 +831,7 @@ mtext_escape_line (const char *line)
   escaped = htmlutf8escape (p);
   if (escaped)
     {
-      if (!mtext_append (&dest, &used, escaped))
+      if (!mtext_append (&dest, &used, &cap, escaped))
         {
           free (escaped);
           free (dest);
