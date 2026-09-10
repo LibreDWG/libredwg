@@ -96,7 +96,7 @@ check_roundtrip() {
             if [ -n "$r" ]; then
                 echo timeout 30 "$baseFileConverter" . .. "ACAD$r" DXB 0 1 "$tgt"
                 timeout 30 $ODAFileConverter . .. "ACAD$r" DXB 0 1 "$tgt" \
-                        $ODAFileConverter_geometry >/dev/null 2>/dev/null
+                        $ODAFileConverter_geometry >/dev/null 2>/dev/null </dev/null
                 if test -f "$dxf.err"; then
                     cat "$dxf.err"
                     rm -- "$dxf.err"

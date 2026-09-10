@@ -39,7 +39,7 @@ checkODA() {
     dxf="$(basename "$DWG" .dwg).dxf"
     rm -f "$dxf.err"
     echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$DWG"
-    timeout 30 "$ODAFileConverter" . . "ACAD$r" DXF 0 1 "$DWG" >/dev/null 2>/dev/null
+    timeout 30 "$ODAFileConverter" . . "ACAD$r" DXF 0 1 "$DWG" >/dev/null 2>/dev/null </dev/null
     ret=$?
     if test -f "$dxf.err"; then
         cat "$dxf.err"

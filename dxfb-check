@@ -82,7 +82,7 @@ if [ -f "$b.dxb" ]; then
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxb"
         timeout 30 "$ODAFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxb" \
-                >/dev/null 2>/dev/null
+                >/dev/null 2>/dev/null </dev/null
         if [ -e "./$b.dwg.err" ]; then
             mv "$b.dwg.err" "$b.dxb2dwg.err"
             cat "$b.dxb2dwg.err"
@@ -104,7 +104,7 @@ if [ -f "$b.dwg" ]; then
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$ODAFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg" \
-                >/dev/null 2>/dev/null
+                >/dev/null 2>/dev/null </dev/null
         if [ -e "./$b.dxf.err" ]; then
             mv "$b.dxf.err" "$b.dxb.err"
             cat "$b.dxb.err"

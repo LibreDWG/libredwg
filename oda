@@ -84,7 +84,7 @@ if [ -f "$dir/$b.dwg" ] && [ -n "$r" ]; then
     if [ -x "$ODAFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" "$dir" . "ACAD$r" DXF 0 1 "$b.dwg"
         timeout 30 "$ODAFileConverter" "$dir" . "ACAD$r" DXF 0 1 "$b.dwg" \
-                $ODAFileConverter_geometry >/dev/null 2>/dev/null
+                $ODAFileConverter_geometry >/dev/null 2>/dev/null </dev/null
         # rm "$b.json.err" 2>/dev/null
         if [ -e "$dir/$b.dxf.err" ]; then
             mv "$dir/$b.dxf.err" "$b.dwg.err"
