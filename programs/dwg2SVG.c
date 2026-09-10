@@ -225,27 +225,14 @@ common_entity (Dwg_Object_Entity *ent)
 }
 
 // TODO: MTEXT
-static void
-output_TEXT (Dwg_Object *obj)
+static const char *
+text_fontfamily (Dwg_Data *dwg, BITCODE_H style_ref)
 {
-  Dwg_Data *dwg = obj->parent;
-  Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
-  char *escaped;
-  const char *fontfamily;
-  BITCODE_H style_ref = text->style;
-  Dwg_Object *o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
-  Dwg_Object_STYLE *style = o ? o->tio.object->tio.STYLE : NULL;
-  BITCODE_2DPOINT pt;
+  Dwg_Object *o;
+  Dwg_Object_STYLE *style;
 
-  if (!text->text_value || entity_invisible (obj))
-    return;
-  if (isnan_2BD (text->ins_pt) || isnan_3BD (text->extrusion))
-    return;
-  if (dwg->header.version >= R_2007)
-    escaped = htmlwescape ((BITCODE_TU)text->text_value);
-  else
-    escaped = htmlescape (text->text_value, dwg->header.codepage);
-
+  o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
+  style = o && o->tio.object ? o->tio.object->tio.STYLE : NULL;
   if (style && o->fixedtype == DWG_TYPE_STYLE && style->font_file
       && *style->font_file
 #ifdef HAVE_STRCASESTR
@@ -262,14 +249,31 @@ output_TEXT (Dwg_Object *obj)
       if ((strstr (style->font_file, "arial"))
           || strstr (style->font_file, "Arial"))
 #endif
-        {
-          fontfamily = "Arial";
-        }
-      else
-        fontfamily = "Verdana";
+        return "Arial";
+      return "Verdana";
     }
+  return "Courier";
+}
+
+static void
+output_TEXT (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
+  char *escaped;
+  const char *fontfamily;
+  BITCODE_2DPOINT pt;
+
+  if (!text->text_value || entity_invisible (obj))
+    return;
+  if (isnan_2BD (text->ins_pt) || isnan_3BD (text->extrusion))
+    return;
+  if (dwg->header.version >= R_2007)
+    escaped = htmlwescape ((BITCODE_TU)text->text_value);
   else
-    fontfamily = "Courier";
+    escaped = htmlescape (text->text_value, dwg->header.codepage);
+
+  fontfamily = text_fontfamily (dwg, text->style);
 
   transform_OCS_2d (&pt, text->ins_pt, text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
