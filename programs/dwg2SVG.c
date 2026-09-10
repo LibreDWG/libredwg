@@ -333,11 +333,11 @@ mtext_plaintext (const char *src)
         }
       else if (*s == 'U' && s[1] == '+')
         {
-          if (s[2] && s[3] && s[4] && s[5]
-              && isxdigit ((unsigned char)s[2])
-              && isxdigit ((unsigned char)s[3])
-              && isxdigit ((unsigned char)s[4])
-              && isxdigit ((unsigned char)s[5]))
+          digits = 0;
+          while (digits < 4 && s[2 + digits]
+                 && isxdigit ((unsigned char)s[2 + digits]))
+            digits++;
+          if (digits == 4)
             {
               /* Keep AutoCAD Unicode escapes for mtext_escape_line(). */
               *d++ = '\\';
@@ -348,10 +348,11 @@ mtext_plaintext (const char *src)
             }
           else
             {
-              /* Do not expose a malformed Unicode control sequence. */
-              s += 2;
-              while (*s && isxdigit ((unsigned char)*s))
-                s++;
+              /* Preserve malformed controls as ordinary text. */
+              *d++ = '\\';
+              *d++ = *s++;
+              if (*s == '+')
+                *d++ = *s++;
             }
         }
       else
@@ -360,118 +361,6 @@ mtext_plaintext (const char *src)
         }
     }
   *d = '\0';
-  return dest;
-}
-
-static int
-mtext_hex_value (char c)
-{
-  if (c >= '0' && c <= '9')
-    return c - '0';
-  if (c >= 'a' && c <= 'f')
-    return c - 'a' + 10;
-  if (c >= 'A' && c <= 'F')
-    return c - 'A' + 10;
-  return -1;
-}
-
-static bool
-mtext_append (char **dest, size_t *used, const char *src)
-{
-  size_t len;
-  char *new_dest;
-
-  len = strlen (src);
-  new_dest = (char *)realloc (*dest, *used + len + 1);
-  if (!new_dest)
-    return false;
-  memcpy (new_dest + *used, src, len + 1);
-  *dest = new_dest;
-  *used += len;
-  return true;
-}
-
-static char *
-mtext_escape_line (Dwg_Data *dwg, const char *line)
-{
-  const char *p;
-  const char *u;
-  const char *hex;
-  char *part;
-  char *escaped;
-  char *dest;
-  char unicode[32];
-  size_t used;
-  size_t part_len;
-  int digits;
-  int value;
-  unsigned long codepoint;
-
-  p = line;
-  dest = NULL;
-  used = 0;
-  while ((u = strstr (p, "\\U+")))
-    {
-      hex = u + 3;
-      codepoint = 0;
-      for (digits = 0; digits < 4; digits++)
-        {
-          value = mtext_hex_value (hex[digits]);
-          if (value < 0)
-            break;
-          codepoint = (codepoint << 4) | (unsigned)value;
-        }
-      if (digits < 4)
-        {
-          p = hex;
-          continue;
-        }
-      part_len = (size_t)(u - p);
-      part = (char *)malloc (part_len + 1);
-      if (!part)
-        {
-          free (dest);
-          return NULL;
-        }
-      memcpy (part, p, part_len);
-      part[part_len] = '\0';
-      if (dwg->header.version >= R_2007)
-        escaped = htmlwescape ((BITCODE_TU)part);
-      else
-        escaped = htmlescape (part, dwg->header.codepage);
-      free (part);
-      if (escaped)
-        {
-          if (!mtext_append (&dest, &used, escaped))
-            {
-              free (escaped);
-              free (dest);
-              return NULL;
-            }
-          free (escaped);
-        }
-      snprintf (unicode, sizeof (unicode), "&#x%lX;", codepoint);
-      if (!mtext_append (&dest, &used, unicode))
-        {
-          free (dest);
-          return NULL;
-        }
-      p = hex + 4;
-    }
-  if (dwg->header.version >= R_2007)
-    escaped = htmlwescape ((BITCODE_TU)p);
-  else
-    escaped = htmlescape (p, dwg->header.codepage);
-  if (escaped)
-    {
-      if (!mtext_append (&dest, &used, escaped))
-        {
-          free (escaped);
-          free (dest);
-          return NULL;
-        }
-      free (escaped);
-    }
   return dest;
 }
 
@@ -518,6 +407,7 @@ output_MTEXT (Dwg_Object *obj)
   Dwg_Entity_MTEXT *mtext;
   BITCODE_3DPOINT ins_pt;
   char *plain;
+  char *text_utf8;
   char *line;
   char *next;
   char *escaped;
@@ -530,6 +420,7 @@ output_MTEXT (Dwg_Object *obj)
   double first_dy;
   int num_lines;
   int first;
+  int text_utf8_owned;
 
   if (!obj || !obj->parent || !obj->tio.entity
       || !obj->tio.entity->tio.MTEXT)
@@ -552,7 +443,24 @@ output_MTEXT (Dwg_Object *obj)
   transform_OCS (&ins_pt, mtext->ins_pt, mtext->extrusion);
   if (isnan_3BD (ins_pt) || !isfinite (ins_pt.x) || !isfinite (ins_pt.y))
     return;
-  plain = mtext_plaintext (mtext->text);
+  /* MTEXT::text is TU for R2007+ DWG files and TV otherwise.  Normalize it
+     once before parsing controls; all later processing operates on UTF-8. */
+  if (IS_FROM_TU_DWG (dwg))
+    {
+      text_utf8 = bit_convert_TU ((BITCODE_TU)mtext->text);
+      text_utf8_owned = 1;
+    }
+  else
+    {
+      text_utf8 = bit_TV_to_utf8 ((const char *)mtext->text,
+                                  dwg->header.codepage);
+      text_utf8_owned = text_utf8 != (const char *)mtext->text;
+    }
+  if (!text_utf8)
+    return;
+  plain = mtext_plaintext (text_utf8);
+  if (text_utf8_owned)
+    free (text_utf8);
   if (!plain)
     return;
 
@@ -594,7 +502,7 @@ output_MTEXT (Dwg_Object *obj)
       next = strchr (line, '\n');
       if (next)
         *next = '\0';
-      escaped = mtext_escape_line (dwg, line);
+      escaped = mtext_escape_line (line);
       printf ("\t\t<tspan x=\"%f\" dy=\"%f\">%s</tspan>\n",
               transform_X (ins_pt.x), first ? first_dy : line_height,
               escaped ? escaped : "");

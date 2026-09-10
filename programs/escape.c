@@ -19,6 +19,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include "common.h"
 #include "escape.h"
@@ -198,6 +199,360 @@ htmlwescape (BITCODE_TU wstr)
       wstr++;
     }
   *d = 0;
+  return dest;
+}
+
+/* Escape an already normalized UTF-8 string for use as XML text.  Invalid
+   UTF-8 and code points which XML cannot represent are replaced, rather than
+   copied as invalid output. */
+char *ATTRIBUTE_MALLOC
+htmlutf8escape (const char *restrict src)
+{
+  const unsigned char *s;
+  char *dest;
+  size_t cap;
+  size_t used;
+
+  if (!src)
+    return NULL;
+  if (strlen (src) > SIZE_MAX - 16)
+    return NULL;
+  cap = strlen (src) + 16;
+  dest = (char *)malloc (cap);
+  if (!dest)
+    return NULL;
+  used = 0;
+  s = (const unsigned char *)src;
+  while (*s)
+    {
+      uint32_t cp;
+      size_t n;
+      size_t avail;
+      int valid;
+
+      cp = *s;
+      n = 1;
+      valid = 1;
+      avail = strnlen ((const char *)s, 4);
+      if (cp >= 0xC2 && cp <= 0xDF && avail >= 2)
+        {
+          cp = ((uint32_t)(s[0] & 0x1F) << 6) | (s[1] & 0x3F);
+          n = 2;
+          if (s[1] < 0x80 || s[1] > 0xBF)
+            valid = 0;
+        }
+      else if (cp >= 0xE0 && cp <= 0xEF && avail >= 3)
+        {
+          cp = ((uint32_t)(s[0] & 0x0F) << 12)
+               | ((uint32_t)(s[1] & 0x3F) << 6) | (s[2] & 0x3F);
+          n = 3;
+          if (s[1] < 0x80 || s[1] > 0xBF || s[2] < 0x80 || s[2] > 0xBF
+              || (s[0] == 0xE0 && s[1] < 0xA0)
+              || (s[0] == 0xED && s[1] > 0x9F))
+            valid = 0;
+        }
+      else if (cp >= 0xF0 && cp <= 0xF4 && avail >= 4)
+        {
+          cp = ((uint32_t)(s[0] & 0x07) << 18)
+               | ((uint32_t)(s[1] & 0x3F) << 12)
+               | ((uint32_t)(s[2] & 0x3F) << 6) | (s[3] & 0x3F);
+          n = 4;
+          if (s[1] < 0x80 || s[1] > 0xBF || s[2] < 0x80 || s[2] > 0xBF
+              || s[3] < 0x80 || s[3] > 0xBF
+              || (s[0] == 0xF0 && s[1] < 0x90)
+              || (s[0] == 0xF4 && s[1] > 0x8F))
+            valid = 0;
+        }
+      else if (cp >= 0x80)
+        valid = 0;
+      if ((cp >= 0xC2 && cp <= 0xDF && avail < 2)
+          || (cp >= 0xE0 && cp <= 0xEF && avail < 3)
+          || (cp >= 0xF0 && cp <= 0xF4 && avail < 4))
+        valid = 0;
+
+      if (!valid || cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF)
+          || (cp < 0x20 && cp != 0x09 && cp != 0x0A && cp != 0x0D)
+          || cp == 0xFFFE || cp == 0xFFFF)
+        {
+          cp = 0xFFFD;
+          n = 1;
+          valid = 0;
+        }
+
+      if (cp < 0x80)
+        {
+          const char *replacement;
+          char one;
+
+          replacement = NULL;
+          switch (cp)
+            {
+            case '"': replacement = "&quot;"; break;
+            case '\'': replacement = "&#39;"; break;
+            case '`': replacement = "&#96;"; break;
+            case '&': replacement = "&amp;"; break;
+            case '<': replacement = "&lt;"; break;
+            case '>': replacement = "&gt;"; break;
+            case '{': replacement = "&#123;"; break;
+            case '}': replacement = "&#125;"; break;
+            default: break;
+            }
+          if (replacement)
+            {
+              size_t len = strlen (replacement);
+              if (used + len + 1 > cap)
+                {
+                  size_t new_cap = cap;
+                  char *new_dest;
+                  while (used + len + 1 > new_cap)
+                    {
+                      if (new_cap > SIZE_MAX / 2)
+                        {
+                          free (dest);
+                          return NULL;
+                        }
+                      new_cap *= 2;
+                    }
+                  new_dest = (char *)realloc (dest, new_cap);
+                  if (!new_dest)
+                    {
+                      free (dest);
+                      return NULL;
+                    }
+                  dest = new_dest;
+                  cap = new_cap;
+                }
+              memcpy (dest + used, replacement, len);
+              used += len;
+            }
+          else
+            {
+              one = (char)cp;
+              if (used + 2 > cap)
+                {
+                  char *new_dest;
+                  if (cap > SIZE_MAX / 2)
+                    {
+                      free (dest);
+                      return NULL;
+                    }
+                  new_dest = (char *)realloc (dest, cap * 2);
+                  if (!new_dest)
+                    {
+                      free (dest);
+                      return NULL;
+                    }
+                  dest = new_dest;
+                  cap *= 2;
+                }
+              dest[used++] = one;
+            }
+        }
+      else if (cp == 0xFFFD && (!valid || n == 1))
+        {
+          static const char replacement[] = "&#xFFFD;";
+          size_t len = sizeof (replacement) - 1;
+          if (used + len + 1 > cap)
+            {
+              size_t new_cap;
+              char *new_dest;
+              if (cap > SIZE_MAX / 2)
+                {
+                  free (dest);
+                  return NULL;
+                }
+              new_cap = cap * 2;
+              new_dest = (char *)realloc (dest, new_cap);
+              if (!new_dest)
+                {
+                  free (dest);
+                  return NULL;
+                }
+              dest = new_dest;
+              cap = new_cap;
+            }
+          memcpy (dest + used, replacement, len);
+          used += len;
+        }
+      else
+        {
+          if (used + n + 1 > cap)
+            {
+              size_t new_cap = cap;
+              char *new_dest;
+              while (used + n + 1 > new_cap)
+                {
+                  if (new_cap > SIZE_MAX / 2)
+                    {
+                      free (dest);
+                      return NULL;
+                    }
+                  new_cap *= 2;
+                }
+              new_dest = (char *)realloc (dest, new_cap);
+              if (!new_dest)
+                {
+                  free (dest);
+                  return NULL;
+                }
+              dest = new_dest;
+              cap = new_cap;
+            }
+          memcpy (dest + used, s, n);
+          used += n;
+        }
+      s += n;
+    }
+  dest[used] = '\0';
+  return dest;
+}
+
+static int
+mtext_hex_value (char c)
+{
+  if (c >= '0' && c <= '9')
+    return c - '0';
+  if (c >= 'a' && c <= 'f')
+    return c - 'a' + 10;
+  if (c >= 'A' && c <= 'F')
+    return c - 'A' + 10;
+  return -1;
+}
+
+static bool
+mtext_append (char **dest, size_t *used, const char *src)
+{
+  size_t len;
+  char *new_dest;
+
+  len = strlen (src);
+  if (*used == SIZE_MAX || len > SIZE_MAX - *used - 1)
+    return false;
+  new_dest = (char *)realloc (*dest, *used + len + 1);
+  if (!new_dest)
+    return false;
+  memcpy (new_dest + *used, src, len + 1);
+  *dest = new_dest;
+  *used += len;
+  return true;
+}
+
+char *
+mtext_escape_line (const char *line)
+{
+  const char *p;
+  const char *u;
+  const char *hex;
+  char *part;
+  char *escaped;
+  char *dest;
+  char unicode[32];
+  size_t used;
+  size_t part_len;
+  int digits;
+  int value;
+  unsigned long codepoint;
+
+  if (!line)
+    return NULL;
+  p = line;
+  dest = NULL;
+  used = 0;
+  while ((u = strstr (p, "\\U+")))
+    {
+      hex = u + 3;
+      codepoint = 0;
+      digits = 0;
+      for (; digits < 4; digits++)
+        {
+          if (!hex[digits])
+            break;
+          value = mtext_hex_value (hex[digits]);
+          if (value < 0)
+            break;
+          codepoint = (codepoint << 4) | (unsigned)value;
+        }
+      if (digits < 4 || codepoint > 0x10FFFF
+          || (codepoint >= 0xD800 && codepoint <= 0xDFFF)
+          || (codepoint < 0x20 && codepoint != 0x09 && codepoint != 0x0A
+              && codepoint != 0x0D)
+          || codepoint == 0xFFFE || codepoint == 0xFFFF)
+        {
+          /* Keep malformed and non-XML Unicode controls as escaped text. */
+          part_len = (size_t)(hex + (*hex ? 1 : 0) - p);
+          if (part_len == SIZE_MAX)
+            {
+              free (dest);
+              return NULL;
+            }
+          part = (char *)malloc (part_len + 1);
+          if (!part)
+            {
+              free (dest);
+              return NULL;
+            }
+          memcpy (part, p, part_len);
+          part[part_len] = '\0';
+          escaped = htmlutf8escape (part);
+          free (part);
+          if (escaped)
+            {
+              if (!mtext_append (&dest, &used, escaped))
+                {
+                  free (escaped);
+                  free (dest);
+                  return NULL;
+                }
+              free (escaped);
+            }
+          p = *hex ? hex + 1 : hex;
+          continue;
+        }
+      part_len = (size_t)(u - p);
+      if (part_len == SIZE_MAX)
+        {
+          free (dest);
+          return NULL;
+        }
+      part = (char *)malloc (part_len + 1);
+      if (!part)
+        {
+          free (dest);
+          return NULL;
+        }
+      memcpy (part, p, part_len);
+      part[part_len] = '\0';
+      escaped = htmlutf8escape (part);
+      free (part);
+      if (escaped)
+        {
+          if (!mtext_append (&dest, &used, escaped))
+            {
+              free (escaped);
+              free (dest);
+              return NULL;
+            }
+          free (escaped);
+        }
+      snprintf (unicode, sizeof (unicode), "&#x%lX;", codepoint);
+      if (!mtext_append (&dest, &used, unicode))
+        {
+          free (dest);
+          return NULL;
+        }
+      p = hex + 4;
+    }
+  escaped = htmlutf8escape (p);
+  if (escaped)
+    {
+      if (!mtext_append (&dest, &used, escaped))
+        {
+          free (escaped);
+          free (dest);
+          return NULL;
+        }
+      free (escaped);
+    }
   return dest;
 }
 

@@ -4,6 +4,7 @@
 #include <locale.h>
 #include <assert.h>
 #include "../../src/codepages.h"
+#include "../../src/bits.h"
 #include "../../src/common.c"
 #include "../../programs/escape.c"
 
@@ -285,6 +286,73 @@ escape_htmlwescape_tests (void)
   free (s);
 }
 
+static void
+escape_htmlutf8escape_tests (void)
+{
+  char malformed[] = "ok\xC3\x28";
+  char *s = htmlutf8escape ("Caff\xC3\xA8 \xE4\xB8\x96\xE7\x95\x8C & <");
+  if (strEQc (s, "Caff\xC3\xA8 \xE4\xB8\x96\xE7\x95\x8C &amp; &lt;"))
+    pass ();
+  else
+    fail ("htmlutf8escape Unicode/XML => %s", s);
+  free (s);
+
+  s = htmlutf8escape (malformed);
+  if (strEQc (s, "ok&#xFFFD;("))
+    pass ();
+  else
+    fail ("htmlutf8escape malformed UTF-8 => %s", s);
+  free (s);
+}
+
+static void
+mtext_escape_line_tests (void)
+{
+  static const char *const cases[] = { "\\U+",       "\\U+1",
+                                       "\\U+12G4tail", "\\U+0041",
+                                       "\\U+D800",   "\\U+0001",
+                                       "\\U+FFFE",   "\\U+FFFF",
+                                       "Caff\xC3\xA8 \\U+4E16 & <" };
+  static const char *const expected[] = {
+    "\\U+", "\\U+1", "\\U+12G4tail", "&#x41;", "\\U+D800",
+    "\\U+0001", "\\U+FFFE", "\\U+FFFF",
+    "Caff\xC3\xA8 &#x4E16; &amp; &lt;" };
+  size_t i;
+
+  for (i = 0; i < sizeof (cases) / sizeof (cases[0]); i++)
+    {
+      char *s = mtext_escape_line (cases[i]);
+      if (s && strcmp (s, expected[i]) == 0)
+        pass ();
+      else
+        fail ("mtext_escape_line[%" PRIuSIZE "] => %s", i,
+              s ? s : "(null)");
+      free (s);
+    }
+}
+
+static void
+mtext_normalization_tests (void)
+{
+  uint16_t tu[] = { 'C', 'a', 'f', 'f', 0x00E8, ' ', 0x4E16, 0x754C, 0 };
+  char tv[] = "Caff\xC3\xA8 \xE4\xB8\x96\xE7\x95\x8C";
+  char *u8;
+
+  u8 = bit_convert_TU (tu);
+  if (u8 && strcmp (u8, tv) == 0)
+    pass ();
+  else
+    fail ("TU normalization => %s", u8 ? u8 : "(null)");
+  free (u8);
+  u8 = bit_TV_to_utf8 (tv, CP_UTF8);
+  if (u8 == tv && strcmp (u8, tv) == 0)
+    pass ();
+  else
+    fail ("TV normalization/alias => %s", u8 ? u8 : "(null)");
+  if (u8 != tv)
+    free (u8);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -296,5 +364,8 @@ main (int argc, char const *argv[])
   common_strcasecmp_tests ();
   escape_htmlescape_tests ();
   escape_htmlwescape_tests ();
+  escape_htmlutf8escape_tests ();
+  mtext_escape_line_tests ();
+  mtext_normalization_tests ();
   return failed;
 }

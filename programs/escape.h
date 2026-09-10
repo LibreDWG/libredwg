@@ -25,5 +25,7 @@
 char *ATTRIBUTE_MALLOC htmlescape (const char *restrict src,
                                    const Dwg_Codepage codepage);
 char *ATTRIBUTE_MALLOC htmlwescape (BITCODE_TU wsrc);
+char *ATTRIBUTE_MALLOC htmlutf8escape (const char *restrict src);
+char *ATTRIBUTE_MALLOC mtext_escape_line (const char *line);
 
 #endif
