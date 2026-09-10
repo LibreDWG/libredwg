@@ -312,11 +312,12 @@ mtext_escape_line_tests (void)
                                        "\\U+12G4tail", "\\U+0041",
                                        "\\U+D800",   "\\U+0001",
                                        "\\U+FFFE",   "\\U+FFFF",
-                                       "Caff\xC3\xA8 \\U+4E16 & <" };
+                                       "Caff\xC3\xA8 \\U+4E16 & <",
+                                       "Hello\xC2\xA0World" };
   static const char *const expected[] = {
     "\\U+", "\\U+1", "\\U+12G4tail", "&#x41;", "\\U+D800",
     "\\U+0001", "\\U+FFFE", "\\U+FFFF",
-    "Caff\xC3\xA8 &#x4E16; &amp; &lt;" };
+    "Caff\xC3\xA8 &#x4E16; &amp; &lt;", "Hello\xC2\xA0World" };
   size_t i;
 
   for (i = 0; i < sizeof (cases) / sizeof (cases[0]); i++)
@@ -381,7 +382,9 @@ mtext_plaintext_tests (void)
     const char *expected;
   } cases[] = {
     { "plain", "plain" },
-    { "one\\Ptwo\\\\three\\~four", "one\ntwo\\three four" },
+    { "one\\Ptwo\\\\three\\~four",
+      "one\ntwo\\three\xC2\xA0" "four" },
+    { "Hello\\~World", "Hello\xC2\xA0World" },
     { "\\Lunder\\l \\Oover\\o \\Kstrike\\k", "under over strike" },
     { "\\A1;A\\C256;C\\FArial|b1;F\\H1.5x;H\\Q15;Q\\T0.8;T\\W2;W\\pql;P",
       "ACFHQTWP" },
@@ -462,6 +465,10 @@ mtext_wrap_text_tests (void)
     { "\xC3\xA8\xE4\xB8\x96", 6.0, 10.0, 1.0,
       "\xC3\xA8\n\xE4\xB8\x96" },
     { "\\U+0041B", 6.0, 10.0, 1.0, "\\U+0041\nB" },
+    { "Hello World", 30.0, 10.0, 1.0, "Hello\nWorld" },
+    { "Hello\xC2\xA0World", 30.0, 10.0, 1.0,
+      "Hello\xC2\xA0W\norld" },
+    { "A\xC2\xA0 B", 6.0, 10.0, 1.0, "A\xC2\xA0 \nB" },
     { "abcd", 12.0, 5.0, 1.0, "abcd" },
     { "abcd", 12.0, 10.0, 2.0, "a\nb\nc\nd" },
   };

@@ -577,7 +577,9 @@ mtext_plaintext (const char *src)
           *d++ = '\\';
           break;
         case '~':
-          *d++ = ' ';
+          /* MTEXT \~ is a non-breaking space, not an ordinary breakpoint. */
+          *d++ = (char)0xC2;
+          *d++ = (char)0xA0;
           break;
         case '{':
         case '}':
@@ -951,6 +953,20 @@ mtext_ascii_space (char c)
   return c == ' ' || c == '\t' || c == '\r' || c == '\f' || c == '\v';
 }
 
+static bool
+mtext_nbsp (const char *p, const char *end)
+{
+  return end - p >= 2 && (unsigned char)p[0] == 0xC2
+         && (unsigned char)p[1] == 0xA0;
+}
+
+static bool
+mtext_nbsp_before (const char *p, const char *begin)
+{
+  return p - begin >= 2 && (unsigned char)p[-2] == 0xC2
+         && (unsigned char)p[-1] == 0xA0;
+}
+
 static double
 mtext_span_width (const char *p, const char *end, double advance)
 {
@@ -1031,7 +1047,8 @@ mtext_wrap_text (const char *src, double rect_width, double text_height,
       word_width = mtext_span_width (word, word_end, advance);
 
       if (word < word_end && line_width > 0.0
-          && line_width + space_width + word_width > rect_width)
+          && line_width + space_width + word_width > rect_width
+          && !mtext_nbsp (word, word_end) && !mtext_nbsp_before (space, src))
         {
           *d++ = '\n';
           line_width = 0.0;
@@ -1046,7 +1063,13 @@ mtext_wrap_text (const char *src, double rect_width, double text_height,
         {
           size_t unit_len = mtext_unit_len (word, word_end);
 
-          if (line_width > 0.0 && line_width + advance > rect_width)
+          /* A non-breaking space must remain attached to both neighboring
+             characters.  If either side would otherwise trigger a hard
+             wrap, keep the unit on the current line and let it exceed the
+             approximate width. */
+          if (line_width > 0.0 && line_width + advance > rect_width
+              && !mtext_nbsp (word, word_end)
+              && !mtext_nbsp_before (word, src))
             {
               *d++ = '\n';
               line_width = 0.0;
