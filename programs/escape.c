@@ -203,6 +203,212 @@ htmlwescape (BITCODE_TU wstr)
   return dest;
 }
 
+static bool
+utf8_cont (unsigned char c)
+{
+  return (c & 0xC0) == 0x80;
+}
+
+/* Expected sequence length for a leading byte, or 0 if it cannot start one.
+   0xC0/0xC1 would be overlong and 0xF5.. are out of range. */
+static int
+utf8_seq_len (unsigned char b0)
+{
+  if (b0 < 0x80)
+    return 1;
+  if (b0 < 0xC2)
+    return 0;
+  if (b0 < 0xE0)
+    return 2;
+  if (b0 < 0xF0)
+    return 3;
+  if (b0 < 0xF5)
+    return 4;
+  return 0;
+}
+
+/* Allowed range of the second byte, rejecting overlong forms, surrogates and
+   code points beyond U+10FFFF. */
+static bool
+utf8_second_ok (unsigned char b0, unsigned char b1)
+{
+  unsigned char lo = 0x80;
+  unsigned char hi = 0xBF;
+
+  if (b0 == 0xE0)
+    lo = 0xA0;
+  else if (b0 == 0xED)
+    hi = 0x9F;
+  else if (b0 == 0xF0)
+    lo = 0x90;
+  else if (b0 == 0xF4)
+    hi = 0x8F;
+  return b1 >= lo && b1 <= hi;
+}
+
+static bool
+utf8_tail_ok (const unsigned char *s, int len)
+{
+  int i;
+
+  for (i = 2; i < len; i++)
+    if (!utf8_cont (s[i]))
+      return false;
+  return true;
+}
+
+static uint32_t
+utf8_decode (const unsigned char *s, int len)
+{
+  static const uint32_t lead_mask[5] = { 0x00, 0x7F, 0x1F, 0x0F, 0x07 };
+  uint32_t cp;
+  int i;
+
+  cp = s[0] & lead_mask[len];
+  for (i = 1; i < len; i++)
+    cp = (cp << 6) | (s[i] & 0x3F);
+  return cp;
+}
+
+/* Decode one UTF-8 sequence: *cp is the code point and *n its byte count.  On
+   malformed input returns false with *cp set to the replacement character. */
+static bool
+utf8_next (const unsigned char *s, size_t avail, uint32_t *cp, size_t *n)
+{
+  int len;
+
+  len = utf8_seq_len (s[0]);
+  *n = 1;
+  if (len == 0 || (size_t)len > avail)
+    {
+      *cp = 0xFFFD;
+      return false;
+    }
+  if (len == 1)
+    {
+      *cp = s[0];
+      return true;
+    }
+  if (!utf8_second_ok (s[0], s[1]))
+    {
+      *cp = 0xFFFD;
+      return false;
+    }
+  if (len > 2 && !utf8_tail_ok (s, len))
+    {
+      *cp = 0xFFFD;
+      return false;
+    }
+  *cp = utf8_decode (s, len);
+  *n = (size_t)len;
+  return true;
+}
+
+static const char *
+html_entity (uint32_t cp)
+{
+  switch (cp)
+    {
+    case '"':
+      return "&quot;";
+    case '\'':
+      return "&#39;";
+    case '`':
+      return "&#96;";
+    case '&':
+      return "&amp;";
+    case '<':
+      return "&lt;";
+    case '>':
+      return "&gt;";
+    case '{':
+      return "&#123;";
+    case '}':
+      return "&#125;";
+    default:
+      return NULL;
+    }
+}
+
+static bool
+str_reserve (char **dest, size_t *cap, size_t need)
+{
+  size_t new_cap;
+  char *new_dest;
+
+  if (need <= *cap)
+    return true;
+  new_cap = *cap ? *cap : 32;
+  while (need > new_cap)
+    {
+      if (new_cap > SIZE_MAX / 2)
+        {
+          new_cap = need;
+          break;
+        }
+      new_cap *= 2;
+    }
+  new_dest = (char *)realloc (*dest, new_cap);
+  if (!new_dest)
+    return false;
+  *dest = new_dest;
+  *cap = new_cap;
+  return true;
+}
+
+static bool
+html_append (char **dest, size_t *used, size_t *cap, const char *src,
+             size_t len)
+{
+  if (!str_reserve (dest, cap, *used + len + 1))
+    return false;
+  memcpy (*dest + *used, src, len);
+  *used += len;
+  return true;
+}
+
+/* Code points XML text cannot carry: C0 controls except tab/LF/CR, surrogates
+   and the two non-characters. */
+static bool
+xml_codepoint_forbidden (uint32_t cp)
+{
+  if (cp == 0xFFFE || cp == 0xFFFF)
+    return true;
+  if (cp < 0x20 && cp != 0x09 && cp != 0x0A && cp != 0x0D)
+    return true;
+  return cp >= 0xD800 && cp <= 0xDFFF;
+}
+
+static bool
+xml_codepoint_usable (uint32_t cp, bool valid)
+{
+  if (!valid || cp > 0x10FFFF)
+    return false;
+  return !xml_codepoint_forbidden (cp);
+}
+
+/* Append one decoded code point, escaping the XML metacharacters. */
+static bool
+utf8_emit (char **dest, size_t *used, size_t *cap, uint32_t cp,
+           const unsigned char *s, size_t n, bool valid)
+{
+  const char *replacement;
+  char one;
+
+  if (cp < 0x80)
+    {
+      replacement = html_entity (cp);
+      if (replacement)
+        return html_append (dest, used, cap, replacement,
+                            strlen (replacement));
+      one = (char)cp;
+      return html_append (dest, used, cap, &one, 1);
+    }
+  if (cp == 0xFFFD && (!valid || n == 1))
+    return html_append (dest, used, cap, "&#xFFFD;", sizeof ("&#xFFFD;") - 1);
+  return html_append (dest, used, cap, (const char *)s, n);
+}
+
 /* Escape an already normalized UTF-8 string for use as XML text.  Invalid
    UTF-8 and code points which XML cannot represent are replaced, rather than
    copied as invalid output. */
@@ -229,194 +435,20 @@ htmlutf8escape (const char *restrict src)
       uint32_t cp;
       size_t n;
       size_t avail;
-      int valid;
+      bool valid;
 
-      cp = *s;
-      n = 1;
-      valid = 1;
       avail = strnlen ((const char *)s, 4);
-      if (cp >= 0xC2 && cp <= 0xDF && avail >= 2)
-        {
-          cp = ((uint32_t)(s[0] & 0x1F) << 6) | (s[1] & 0x3F);
-          n = 2;
-          if (s[1] < 0x80 || s[1] > 0xBF)
-            valid = 0;
-        }
-      else if (cp >= 0xE0 && cp <= 0xEF && avail >= 3)
-        {
-          cp = ((uint32_t)(s[0] & 0x0F) << 12) | ((uint32_t)(s[1] & 0x3F) << 6)
-               | (s[2] & 0x3F);
-          n = 3;
-          if (s[1] < 0x80 || s[1] > 0xBF || s[2] < 0x80 || s[2] > 0xBF
-              || (s[0] == 0xE0 && s[1] < 0xA0)
-              || (s[0] == 0xED && s[1] > 0x9F))
-            valid = 0;
-        }
-      else if (cp >= 0xF0 && cp <= 0xF4 && avail >= 4)
-        {
-          cp = ((uint32_t)(s[0] & 0x07) << 18)
-               | ((uint32_t)(s[1] & 0x3F) << 12)
-               | ((uint32_t)(s[2] & 0x3F) << 6) | (s[3] & 0x3F);
-          n = 4;
-          if (s[1] < 0x80 || s[1] > 0xBF || s[2] < 0x80 || s[2] > 0xBF
-              || s[3] < 0x80 || s[3] > 0xBF || (s[0] == 0xF0 && s[1] < 0x90)
-              || (s[0] == 0xF4 && s[1] > 0x8F))
-            valid = 0;
-        }
-      else if (cp >= 0x80)
-        valid = 0;
-      if ((cp >= 0xC2 && cp <= 0xDF && avail < 2)
-          || (cp >= 0xE0 && cp <= 0xEF && avail < 3)
-          || (cp >= 0xF0 && cp <= 0xF4 && avail < 4))
-        valid = 0;
-
-      if (!valid || cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF)
-          || (cp < 0x20 && cp != 0x09 && cp != 0x0A && cp != 0x0D)
-          || cp == 0xFFFE || cp == 0xFFFF)
+      valid = utf8_next (s, avail, &cp, &n);
+      if (!xml_codepoint_usable (cp, valid))
         {
           cp = 0xFFFD;
           n = 1;
-          valid = 0;
         }
 
-      if (cp < 0x80)
+      if (!utf8_emit (&dest, &used, &cap, cp, s, n, valid))
         {
-          const char *replacement;
-          char one;
-
-          replacement = NULL;
-          switch (cp)
-            {
-            case '"':
-              replacement = "&quot;";
-              break;
-            case '\'':
-              replacement = "&#39;";
-              break;
-            case '`':
-              replacement = "&#96;";
-              break;
-            case '&':
-              replacement = "&amp;";
-              break;
-            case '<':
-              replacement = "&lt;";
-              break;
-            case '>':
-              replacement = "&gt;";
-              break;
-            case '{':
-              replacement = "&#123;";
-              break;
-            case '}':
-              replacement = "&#125;";
-              break;
-            default:
-              break;
-            }
-          if (replacement)
-            {
-              size_t len = strlen (replacement);
-              if (used + len + 1 > cap)
-                {
-                  size_t new_cap = cap;
-                  char *new_dest;
-                  while (used + len + 1 > new_cap)
-                    {
-                      if (new_cap > SIZE_MAX / 2)
-                        {
-                          free (dest);
-                          return NULL;
-                        }
-                      new_cap *= 2;
-                    }
-                  new_dest = (char *)realloc (dest, new_cap);
-                  if (!new_dest)
-                    {
-                      free (dest);
-                      return NULL;
-                    }
-                  dest = new_dest;
-                  cap = new_cap;
-                }
-              memcpy (dest + used, replacement, len);
-              used += len;
-            }
-          else
-            {
-              one = (char)cp;
-              if (used + 2 > cap)
-                {
-                  char *new_dest;
-                  if (cap > SIZE_MAX / 2)
-                    {
-                      free (dest);
-                      return NULL;
-                    }
-                  new_dest = (char *)realloc (dest, cap * 2);
-                  if (!new_dest)
-                    {
-                      free (dest);
-                      return NULL;
-                    }
-                  dest = new_dest;
-                  cap *= 2;
-                }
-              dest[used++] = one;
-            }
-        }
-      else if (cp == 0xFFFD && (!valid || n == 1))
-        {
-          static const char replacement[] = "&#xFFFD;";
-          size_t len = sizeof (replacement) - 1;
-          if (used + len + 1 > cap)
-            {
-              size_t new_cap;
-              char *new_dest;
-              if (cap > SIZE_MAX / 2)
-                {
-                  free (dest);
-                  return NULL;
-                }
-              new_cap = cap * 2;
-              new_dest = (char *)realloc (dest, new_cap);
-              if (!new_dest)
-                {
-                  free (dest);
-                  return NULL;
-                }
-              dest = new_dest;
-              cap = new_cap;
-            }
-          memcpy (dest + used, replacement, len);
-          used += len;
-        }
-      else
-        {
-          if (used + n + 1 > cap)
-            {
-              size_t new_cap = cap;
-              char *new_dest;
-              while (used + n + 1 > new_cap)
-                {
-                  if (new_cap > SIZE_MAX / 2)
-                    {
-                      free (dest);
-                      return NULL;
-                    }
-                  new_cap *= 2;
-                }
-              new_dest = (char *)realloc (dest, new_cap);
-              if (!new_dest)
-                {
-                  free (dest);
-                  return NULL;
-                }
-              dest = new_dest;
-              cap = new_cap;
-            }
-          memcpy (dest + used, s, n);
-          used += n;
+          free (dest);
+          return NULL;
         }
       s += n;
     }
@@ -548,6 +580,215 @@ mtext_stacked_end (const char *src, const char **end)
   return false;
 }
 
+/* MTEXT control classification.  A lookup table keeps the dispatcher free of a
+   large switch, so every helper stays simple. */
+enum
+{
+  MTEXT_CTL_NONE = 0, /* unknown: keep non-alphabetic, drop alphabetic */
+  MTEXT_CTL_COPY,     /* literal punctuation: \ { } ; */
+  MTEXT_CTL_IGNORE,   /* formatting-only controls */
+  MTEXT_CTL_NEWLINE,  /* \P and \X */
+  MTEXT_CTL_NBSP,     /* \~ */
+  MTEXT_CTL_UNICODE,  /* \U+XXXX */
+  MTEXT_CTL_STACKED,  /* \S ... ; */
+  MTEXT_CTL_PARAM     /* numeric/string/paragraph parameters */
+};
+
+static const unsigned char mtext_ctl_kind[256]
+    = { ['\\'] = MTEXT_CTL_COPY,   ['{'] = MTEXT_CTL_COPY,
+        ['}'] = MTEXT_CTL_COPY,    [';'] = MTEXT_CTL_COPY,
+        ['L'] = MTEXT_CTL_IGNORE,  ['l'] = MTEXT_CTL_IGNORE,
+        ['O'] = MTEXT_CTL_IGNORE,  ['o'] = MTEXT_CTL_IGNORE,
+        ['K'] = MTEXT_CTL_IGNORE,  ['k'] = MTEXT_CTL_IGNORE,
+        ['P'] = MTEXT_CTL_NEWLINE, ['X'] = MTEXT_CTL_NEWLINE,
+        ['x'] = MTEXT_CTL_NEWLINE, ['~'] = MTEXT_CTL_NBSP,
+        ['U'] = MTEXT_CTL_UNICODE, ['S'] = MTEXT_CTL_STACKED,
+        ['s'] = MTEXT_CTL_STACKED, ['A'] = MTEXT_CTL_PARAM,
+        ['a'] = MTEXT_CTL_PARAM,   ['C'] = MTEXT_CTL_PARAM,
+        ['c'] = MTEXT_CTL_PARAM,   ['H'] = MTEXT_CTL_PARAM,
+        ['h'] = MTEXT_CTL_PARAM,   ['Q'] = MTEXT_CTL_PARAM,
+        ['q'] = MTEXT_CTL_PARAM,   ['T'] = MTEXT_CTL_PARAM,
+        ['t'] = MTEXT_CTL_PARAM,   ['W'] = MTEXT_CTL_PARAM,
+        ['w'] = MTEXT_CTL_PARAM,   ['F'] = MTEXT_CTL_PARAM,
+        ['f'] = MTEXT_CTL_PARAM,   ['p'] = MTEXT_CTL_PARAM };
+
+static bool
+mtext_hex4_ok (const char *p)
+{
+  return p[0] && p[1] && p[2] && p[3] && mtext_hex_value (p[0]) >= 0
+         && mtext_hex_value (p[1]) >= 0 && mtext_hex_value (p[2]) >= 0
+         && mtext_hex_value (p[3]) >= 0;
+}
+
+static bool
+mtext_is_alpha (char c)
+{
+  return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+
+static bool
+mtext_numeric_code (char c)
+{
+  return strchr ("AaCcHhQqTtWw", c) != NULL;
+}
+
+static bool
+mtext_string_code (char c)
+{
+  return strchr ("Ff", c) != NULL;
+}
+
+static bool
+mtext_unicode_at (const char *s, const char *end)
+{
+  return end - s >= 7 && s[0] == '\\' && s[1] == 'U' && s[2] == '+'
+         && mtext_hex4_ok (s + 3);
+}
+
+static const char *
+mtext_plain_copy (char **d, const char *s, char code)
+{
+  *(*d)++ = code;
+  return s;
+}
+
+static const char *
+mtext_plain_ignore (char **d, const char *s, char code)
+{
+  (void)d;
+  (void)code;
+  return s;
+}
+
+static const char *
+mtext_plain_newline (char **d, const char *s, char code)
+{
+  *(*d)++ = '\n';
+  if ((code == 'X' || code == 'x') && *s == ';')
+    s++;
+  return s;
+}
+
+static const char *
+mtext_plain_nbsp (char **d, const char *s, char code)
+{
+  (void)code;
+  *(*d)++ = (char)0xC2;
+  *(*d)++ = (char)0xA0;
+  return s;
+}
+
+static const char *
+mtext_plain_unknown (char **d, const char *s, char code)
+{
+  if (!mtext_is_alpha (code))
+    *(*d)++ = code;
+  return s;
+}
+
+static const char *
+mtext_plain_unicode (char **d, const char *s, char code)
+{
+  (void)code;
+  if (s[0] == '+' && mtext_hex4_ok (s + 1))
+    {
+      *(*d)++ = '\\';
+      *(*d)++ = 'U';
+      memcpy (*d, s, 5);
+      *d += 5;
+      return s + 5;
+    }
+  *(*d)++ = 'U';
+  return s;
+}
+
+static const char *
+mtext_plain_stacked_unit (char **d, const char *s, const char *end)
+{
+  if (mtext_unicode_at (s, end))
+    {
+      memcpy (*d, s, 7);
+      *d += 7;
+      return s + 7;
+    }
+  if (*s == '\\' && s + 1 < end)
+    {
+      *(*d)++ = s[1];
+      return s + 2;
+    }
+  if (*s == '#' || *s == '^')
+    {
+      *(*d)++ = '/';
+      if (*s == '^' && s + 1 < end && s[1] == ' ')
+        s++;
+      return s + 1;
+    }
+  *(*d)++ = *s;
+  return s + 1;
+}
+
+static const char *
+mtext_plain_stacked (char **d, const char *s, char code)
+{
+  const char *end;
+
+  (void)code;
+  if (!mtext_stacked_end (s, &end))
+    return s;
+  while (s < end)
+    s = mtext_plain_stacked_unit (d, s, end);
+  return end + 1;
+}
+
+static const char *
+mtext_plain_param (char **d, const char *s, char code)
+{
+  const char *end;
+
+  (void)d;
+  if (!mtext_param_end (s, &end))
+    return s;
+  if (code == 'p')
+    {
+      if (mtext_paragraph_param (s, end))
+        return end + 1;
+      return s;
+    }
+  if (mtext_numeric_code (code))
+    {
+      if (mtext_numeric_param (s, end, code == 'H' || code == 'h'))
+        return end + 1;
+      return s;
+    }
+  if (mtext_string_code (code) && s < end)
+    return end + 1;
+  return s;
+}
+
+typedef const char *(*mtext_plain_handler) (char **, const char *, char);
+
+static const mtext_plain_handler mtext_plain_handlers[] = {
+  mtext_plain_unknown, /* MTEXT_CTL_NONE */
+  mtext_plain_copy,    /* MTEXT_CTL_COPY */
+  mtext_plain_ignore,  /* MTEXT_CTL_IGNORE */
+  mtext_plain_newline, /* MTEXT_CTL_NEWLINE */
+  mtext_plain_nbsp,    /* MTEXT_CTL_NBSP */
+  mtext_plain_unicode, /* MTEXT_CTL_UNICODE */
+  mtext_plain_stacked, /* MTEXT_CTL_STACKED */
+  mtext_plain_param    /* MTEXT_CTL_PARAM */
+};
+
+/* Consume one backslash control (s points at the code) and append its visible
+   text.  Returns the next input position. */
+static const char *
+mtext_plain_control (char **d, const char *s)
+{
+  char code = *s++;
+  unsigned char kind = mtext_ctl_kind[(unsigned char)code];
+
+  return mtext_plain_handlers[kind](d, s, code);
+}
+
 /* Flatten MTEXT controls to UTF-8 text.  Rich formatting is deliberately
    ignored here; malformed controls consume only their introducer/code so
    that following ordinary text remains visible. */
@@ -555,7 +796,6 @@ char *ATTRIBUTE_MALLOC
 mtext_plaintext (const char *src)
 {
   const char *s;
-  const char *end;
   char *dest;
   char *d;
   size_t len;
@@ -571,8 +811,6 @@ mtext_plaintext (const char *src)
   d = dest;
   for (s = src; *s;)
     {
-      char code;
-
       if (*s == '{' || *s == '}')
         {
           s++;
@@ -586,121 +824,7 @@ mtext_plaintext (const char *src)
       s++;
       if (!*s)
         break;
-      code = *s++;
-      switch (code)
-        {
-        case 'P':
-          *d++ = '\n';
-          break;
-        case '\\':
-          *d++ = '\\';
-          break;
-        case '~':
-          /* MTEXT \~ is a non-breaking space, not an ordinary breakpoint. */
-          *d++ = (char)0xC2;
-          *d++ = (char)0xA0;
-          break;
-        case '{':
-        case '}':
-        case ';':
-          *d++ = code;
-          break;
-        case 'L':
-        case 'l':
-        case 'O':
-        case 'o':
-        case 'K':
-        case 'k':
-          break;
-        case 'X':
-        case 'x':
-          *d++ = '\n';
-          if (*s == ';')
-            s++;
-          break;
-        case 'U':
-          if (s[0] == '+' && s[1] && s[2] && s[3] && s[4]
-              && mtext_hex_value (s[1]) >= 0 && mtext_hex_value (s[2]) >= 0
-              && mtext_hex_value (s[3]) >= 0 && mtext_hex_value (s[4]) >= 0)
-            {
-              *d++ = '\\';
-              *d++ = code;
-              *d++ = *s++;
-              *d++ = *s++;
-              *d++ = *s++;
-              *d++ = *s++;
-              *d++ = *s++;
-            }
-          else
-            *d++ = code;
-          break;
-        case 'S':
-        case 's':
-          if (mtext_stacked_end (s, &end))
-            {
-              while (s < end)
-                {
-                  if (end - s >= 7 && s[0] == '\\' && s[1] == 'U'
-                      && s[2] == '+' && mtext_hex_value (s[3]) >= 0
-                      && mtext_hex_value (s[4]) >= 0
-                      && mtext_hex_value (s[5]) >= 0
-                      && mtext_hex_value (s[6]) >= 0)
-                    {
-                      memcpy (d, s, 7);
-                      d += 7;
-                      s += 7;
-                    }
-                  else if (*s == '\\' && s + 1 < end)
-                    {
-                      *d++ = s[1];
-                      s += 2;
-                    }
-                  else if (*s == '#' || *s == '^')
-                    {
-                      *d++ = '/';
-                      if (*s == '^' && s + 1 < end && s[1] == ' ')
-                        s++;
-                      s++;
-                    }
-                  else
-                    *d++ = *s++;
-                }
-              s = end + 1;
-            }
-          break;
-        case 'A':
-        case 'a':
-        case 'C':
-        case 'c':
-        case 'H':
-        case 'h':
-        case 'Q':
-        case 'q':
-        case 'T':
-        case 't':
-        case 'W':
-        case 'w':
-          if (mtext_param_end (s, &end)
-              && mtext_numeric_param (s, end, code == 'H' || code == 'h'))
-            s = end + 1;
-          break;
-        case 'F':
-        case 'f':
-          if (mtext_param_end (s, &end) && s < end)
-            s = end + 1;
-          break;
-        case 'p':
-          if (mtext_param_end (s, &end) && mtext_paragraph_param (s, end))
-            s = end + 1;
-          break;
-        default:
-          /* Unknown controls have no visible syntax.  Preserve punctuation
-             as text, but consume an unknown alphabetic control code. */
-          if ((unsigned char)code < 'A' || (unsigned char)code > 'Z')
-            if ((unsigned char)code < 'a' || (unsigned char)code > 'z')
-              *d++ = code;
-          break;
-        }
+      s = mtext_plain_control (&d, s);
     }
   *d = '\0';
   return dest;
