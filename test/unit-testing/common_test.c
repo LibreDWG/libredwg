@@ -398,6 +398,7 @@ mtext_plaintext_tests (void)
     { "\\A1;A\\C256;C\\FArial|b1;F\\H1.5x;H\\Q15;Q\\T0.8;T\\W2;W\\pql;P",
       "ACFHQTWP" },
     { "\\pxi-2,l2;ok\\pbroken;tail", "okbroken;tail" },
+    { "\\pxsm1,ql;ok\\pxt1;x\\pxql;y\\pqc;\\pq*;z", "okxyz" },
     { "one\\Xtwo\\X;three", "one\ntwo\nthree" },
     { "{outer {inner} \\{left\\}right}", "outer inner {left}right" },
     { "\\S1/2; \\S3#4; \\S5^ 6;", "1/2 3/4 5/6" },

@@ -499,13 +499,17 @@ mtext_paragraph_param (const char *src, const char *end)
   property = false;
   while (p < end)
     {
-      if (*p == 'i' || *p == 'l' || *p == 'r' || *p == 'q' || *p == 't')
+      /* Paragraph sub-codes: indents i/l/r, tab stops t, alignment q with
+         l/c/r/j/d, line spacing s/m/a/e, plus the "*" wildcard. */
+      if (*p == 'i' || *p == 'l' || *p == 'r' || *p == 'q' || *p == 't'
+          || *p == 's' || *p == 'm' || *p == 'a' || *p == 'e' || *p == 'c'
+          || *p == 'j' || *p == 'd')
         {
           property = true;
           p++;
         }
       else if ((*p >= '0' && *p <= '9') || *p == '+' || *p == '-' || *p == '.'
-               || *p == ',')
+               || *p == ',' || *p == '*')
         p++;
       else
         return false;
