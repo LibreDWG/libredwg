@@ -4,6 +4,7 @@
 #include <locale.h>
 #include <assert.h>
 #include "../../src/codepages.h"
+#include "../../src/bits.h"
 #include "../../src/common.c"
 #include "../../programs/escape.c"
 
@@ -285,6 +286,270 @@ escape_htmlwescape_tests (void)
   free (s);
 }
 
+static void
+escape_htmlutf8escape_tests (void)
+{
+  char malformed[] = "ok\xC3\x28";
+  char *s = htmlutf8escape ("Caff\xC3\xA8 \xE4\xB8\x96\xE7\x95\x8C & <");
+  if (strEQc (s, "Caff\xC3\xA8 \xE4\xB8\x96\xE7\x95\x8C &amp; &lt;"))
+    pass ();
+  else
+    fail ("htmlutf8escape Unicode/XML => %s", s);
+  free (s);
+
+  s = htmlutf8escape (malformed);
+  if (strEQc (s, "ok&#xFFFD;("))
+    pass ();
+  else
+    fail ("htmlutf8escape malformed UTF-8 => %s", s);
+  free (s);
+}
+
+static void
+mtext_escape_line_tests (void)
+{
+  static const char *const cases[] = { "\\U+",
+                                       "\\U+1",
+                                       "\\U+12G4tail",
+                                       "\\U+0041",
+                                       "\\U+D800",
+                                       "\\U+0001",
+                                       "\\U+FFFE",
+                                       "\\U+FFFF",
+                                       "Caff\xC3\xA8 \\U+4E16 & <",
+                                       "Hello\xC2\xA0World" };
+  static const char *const expected[] = { "\\U+",
+                                          "\\U+1",
+                                          "\\U+12G4tail",
+                                          "&#x41;",
+                                          "\\U+D800",
+                                          "\\U+0001",
+                                          "\\U+FFFE",
+                                          "\\U+FFFF",
+                                          "Caff\xC3\xA8 &#x4E16; &amp; &lt;",
+                                          "Hello\xC2\xA0World" };
+  size_t i;
+
+  for (i = 0; i < sizeof (cases) / sizeof (cases[0]); i++)
+    {
+      char *s = mtext_escape_line (cases[i]);
+      if (s && strcmp (s, expected[i]) == 0)
+        pass ();
+      else
+        fail ("mtext_escape_line[%" PRIuSIZE "] => %s", i, s ? s : "(null)");
+      free (s);
+    }
+}
+
+static void
+mtext_escape_line_many_unicode_tests (void)
+{
+  char input[7 * 128 + 1];
+  char expected[6 * 128 + 1];
+  char *s;
+  size_t i;
+
+  for (i = 0; i < 128; i++)
+    {
+      memcpy (input + i * 7, "\\U+0041", 7);
+      memcpy (expected + i * 6, "&#x41;", 6);
+    }
+  input[sizeof (input) - 1] = '\0';
+  expected[sizeof (expected) - 1] = '\0';
+  s = mtext_escape_line (input);
+  if (s && strcmp (s, expected) == 0)
+    pass ();
+  else
+    fail ("mtext_escape_line repeated Unicode => %s", s ? s : "(null)");
+  free (s);
+}
+
+static void
+mtext_stacked_unicode_tests (void)
+{
+  char *plain;
+  char *escaped;
+
+  plain = mtext_plaintext ("\\S\\U+0041/2;");
+  escaped = mtext_escape_line (plain);
+  if (plain && escaped && strcmp (plain, "\\U+0041/2") == 0
+      && strcmp (escaped, "&#x41;/2") == 0)
+    pass ();
+  else
+    fail ("mtext stacked Unicode => %s / %s", plain ? plain : "(null)",
+          escaped ? escaped : "(null)");
+  free (escaped);
+  free (plain);
+}
+
+static void
+mtext_plaintext_tests (void)
+{
+  static const struct
+  {
+    const char *input;
+    const char *expected;
+  } cases[] = {
+    { "plain", "plain" },
+    { "one\\Ptwo\\\\three\\~four", "one\ntwo\\three\xC2\xA0"
+                                   "four" },
+    { "Hello\\~World", "Hello\xC2\xA0World" },
+    { "\\Lunder\\l \\Oover\\o \\Kstrike\\k", "under over strike" },
+    { "\\A1;A\\C256;C\\FArial|b1;F\\H1.5x;H\\Q15;Q\\T0.8;T\\W2;W\\pql;P",
+      "ACFHQTWP" },
+    { "\\pxi-2,l2;ok\\pbroken;tail", "okbroken;tail" },
+    { "\\pxsm1,ql;ok\\pxt1;x\\pxql;y\\pqc;\\pq*;z", "okxyz" },
+    { "one\\Xtwo\\X;three", "one\ntwo\nthree" },
+    { "{outer {inner} \\{left\\}right}", "outer inner {left}right" },
+    { "\\S1/2; \\S3#4; \\S5^ 6;", "1/2 3/4 5/6" },
+    { "\\Sleft/right\\;more;", "left/right;more" },
+    { "\\S1/2 tail", "1/2 tail" },
+    { "\\Splain;tail", "plain;tail" },
+    { "\\Hbad;text\\H1.5tail\\C12;ok\\pbroken tail",
+      "bad;text1.5tailokbroken tail" },
+    { "\\A?;a\\C?;c\\F;f\\H?;h\\Q?;q\\T?;t\\W?;w\\p;P",
+      "?;a?;c;f?;h?;q?;t?;w;P" },
+    { "\\A1tail \\C2tail \\FArial \\H1.5x \\Q0 \\T1 \\W1 \\pql",
+      "1tail 2tail Arial 1.5x 0 1 1 ql" },
+    { "before\\Zafter\\?mark\\", "beforeafter?mark" },
+    { "a\\P\\L\\O\\Kb", "a\nb" },
+    { "Caff\xC3\xA8 \\U+4E16 \\U+0041", "Caff\xC3\xA8 \\U+4E16 \\U+0041" },
+    { "\\U+12tail \\U+12G4end", "U+12tail U+12G4end" },
+  };
+  size_t i;
+
+  for (i = 0; i < sizeof (cases) / sizeof (cases[0]); i++)
+    {
+      char *s = mtext_plaintext (cases[i].input);
+      if (s && strcmp (s, cases[i].expected) == 0)
+        pass ();
+      else
+        fail ("mtext_plaintext[%" PRIuSIZE "] => %s", i, s ? s : "(null)");
+      free (s);
+    }
+}
+
+static void
+mtext_normalization_tests (void)
+{
+  uint16_t tu[] = { 'C', 'a', 'f', 'f', 0x00E8, ' ', 0x4E16, 0x754C, 0 };
+  char tv[] = "Caff\xC3\xA8 \xE4\xB8\x96\xE7\x95\x8C";
+  char *u8;
+
+  u8 = bit_convert_TU (tu);
+  if (u8 && strcmp (u8, tv) == 0)
+    pass ();
+  else
+    fail ("TU normalization => %s", u8 ? u8 : "(null)");
+  free (u8);
+  u8 = bit_TV_to_utf8 (tv, CP_UTF8);
+  if (u8 == tv && strcmp (u8, tv) == 0)
+    pass ();
+  else
+    fail ("TV normalization/alias => %s", u8 ? u8 : "(null)");
+  if (u8 != tv)
+    free (u8);
+}
+
+static void
+mtext_wrap_text_tests (void)
+{
+  static const struct
+  {
+    const char *input;
+    double rect_width;
+    double text_height;
+    double width_factor;
+    const char *expected;
+  } cases[] = {
+    { "one two", 0.0, 10.0, 1.0, "one two" },
+    { "one two", (double)NAN, 10.0, 1.0, "one two" },
+    { "one two", -1.0, 10.0, 1.0, "one two" },
+    { "one two", 100.0, 10.0, 1.0, "one two" },
+    { "one two", 18.0, 10.0, 1.0, "one\ntwo" },
+    { "one two\nthree four", 30.0, 10.0, 1.0, "one\ntwo\nthree\nfour" },
+    { "one\n\ntwo", 100.0, 10.0, 1.0, "one\n\ntwo" },
+    { "abcdef", 12.0, 10.0, 1.0, "ab\ncd\nef" },
+    { "\xC3\xA8\xE4\xB8\x96", 6.0, 10.0, 1.0, "\xC3\xA8\n\xE4\xB8\x96" },
+    { "\\U+0041B", 6.0, 10.0, 1.0, "\\U+0041\nB" },
+    { "Hello World", 30.0, 10.0, 1.0, "Hello\nWorld" },
+    { "Hello\xC2\xA0World", 30.0, 10.0, 1.0, "Hello\xC2\xA0W\norld" },
+    { "A\xC2\xA0 B", 6.0, 10.0, 1.0, "A\xC2\xA0 \nB" },
+    { "abcd", 12.0, 5.0, 1.0, "abcd" },
+    { "abcd", 12.0, 10.0, 2.0, "a\nb\nc\nd" },
+  };
+  size_t i;
+
+  for (i = 0; i < sizeof (cases) / sizeof (cases[0]); i++)
+    {
+      char *s = mtext_wrap_text (cases[i].input, cases[i].rect_width,
+                                 cases[i].text_height, cases[i].width_factor);
+      if (s && strcmp (s, cases[i].expected) == 0)
+        pass ();
+      else
+        fail ("mtext_wrap_text[%" PRIuSIZE "] => %s", i, s ? s : "(null)");
+      free (s);
+    }
+}
+
+static void
+mtext_attachment_tests (void)
+{
+  static const char *anchors[] = { "start", "middle", "end" };
+  static const double expected[] = { 8.0,
+                                     8.0,
+                                     8.0,
+                                     -13.6666666667,
+                                     -13.6666666667,
+                                     -13.6666666667,
+                                     -35.3333333333,
+                                     -35.3333333333,
+                                     -35.3333333333 };
+  unsigned int attachment;
+  double line_height;
+
+  line_height = mtext_line_height (10.0, 1.0);
+  if (fabs (line_height - 16.6666666667) < 1e-9)
+    pass ();
+  else
+    fail ("mtext_line_height default => %g", line_height);
+  if (fabs (mtext_line_height (10.0, 2.0) - 33.3333333333) < 1e-9
+      && fabs (mtext_line_height (10.0, 0.0) - 16.6666666667) < 1e-9
+      && mtext_line_height ((double)NAN, 1.0) == 0.0)
+    pass ();
+  else
+    fail ("mtext_line_height spacing/invalid");
+  if (fabs (mtext_svg_angle (1.0, 0.0)) < 1e-9
+      && fabs (mtext_svg_angle (sqrt (0.5), sqrt (0.5)) + 45.0) < 1e-9
+      && fabs (mtext_svg_angle (0.0, 1.0) + 90.0) < 1e-9
+      && fabs (mtext_svg_angle (cos (0.37), sin (0.37)) + 0.37 * 180.0 / M_PI)
+             < 1e-9
+      && mtext_svg_angle (0.0, 0.0) == 0.0
+      && mtext_svg_angle ((double)NAN, 1.0) == 0.0)
+    pass ();
+  else
+    fail ("mtext_svg_angle rotation/degenerate");
+
+  for (attachment = 1; attachment <= 9; attachment++)
+    {
+      const char *anchor = mtext_attachment_anchor (attachment);
+      const char *expected_anchor = anchors[(attachment - 1) % 3];
+      double offset
+          = mtext_attachment_first_offset (attachment, 10.0, line_height, 3);
+      if (strcmp (anchor, expected_anchor) == 0
+          && fabs (offset - expected[attachment - 1]) < 1e-9)
+        pass ();
+      else
+        fail ("mtext_attachment[%u] => %s/%g", attachment, anchor, offset);
+    }
+  if (strcmp (mtext_attachment_anchor (0), "start") == 0
+      && fabs (mtext_attachment_first_offset (0, 10.0, line_height, 0) - 8.0)
+             < 1e-9)
+    pass ();
+  else
+    fail ("mtext_attachment invalid values");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -296,5 +561,13 @@ main (int argc, char const *argv[])
   common_strcasecmp_tests ();
   escape_htmlescape_tests ();
   escape_htmlwescape_tests ();
+  escape_htmlutf8escape_tests ();
+  mtext_escape_line_tests ();
+  mtext_escape_line_many_unicode_tests ();
+  mtext_stacked_unicode_tests ();
+  mtext_plaintext_tests ();
+  mtext_normalization_tests ();
+  mtext_wrap_text_tests ();
+  mtext_attachment_tests ();
   return failed;
 }
