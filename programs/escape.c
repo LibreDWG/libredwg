@@ -244,8 +244,8 @@ htmlutf8escape (const char *restrict src)
         }
       else if (cp >= 0xE0 && cp <= 0xEF && avail >= 3)
         {
-          cp = ((uint32_t)(s[0] & 0x0F) << 12)
-               | ((uint32_t)(s[1] & 0x3F) << 6) | (s[2] & 0x3F);
+          cp = ((uint32_t)(s[0] & 0x0F) << 12) | ((uint32_t)(s[1] & 0x3F) << 6)
+               | (s[2] & 0x3F);
           n = 3;
           if (s[1] < 0x80 || s[1] > 0xBF || s[2] < 0x80 || s[2] > 0xBF
               || (s[0] == 0xE0 && s[1] < 0xA0)
@@ -259,8 +259,7 @@ htmlutf8escape (const char *restrict src)
                | ((uint32_t)(s[2] & 0x3F) << 6) | (s[3] & 0x3F);
           n = 4;
           if (s[1] < 0x80 || s[1] > 0xBF || s[2] < 0x80 || s[2] > 0xBF
-              || s[3] < 0x80 || s[3] > 0xBF
-              || (s[0] == 0xF0 && s[1] < 0x90)
+              || s[3] < 0x80 || s[3] > 0xBF || (s[0] == 0xF0 && s[1] < 0x90)
               || (s[0] == 0xF4 && s[1] > 0x8F))
             valid = 0;
         }
@@ -288,15 +287,32 @@ htmlutf8escape (const char *restrict src)
           replacement = NULL;
           switch (cp)
             {
-            case '"': replacement = "&quot;"; break;
-            case '\'': replacement = "&#39;"; break;
-            case '`': replacement = "&#96;"; break;
-            case '&': replacement = "&amp;"; break;
-            case '<': replacement = "&lt;"; break;
-            case '>': replacement = "&gt;"; break;
-            case '{': replacement = "&#123;"; break;
-            case '}': replacement = "&#125;"; break;
-            default: break;
+            case '"':
+              replacement = "&quot;";
+              break;
+            case '\'':
+              replacement = "&#39;";
+              break;
+            case '`':
+              replacement = "&#96;";
+              break;
+            case '&':
+              replacement = "&amp;";
+              break;
+            case '<':
+              replacement = "&lt;";
+              break;
+            case '>':
+              replacement = "&gt;";
+              break;
+            case '{':
+              replacement = "&#123;";
+              break;
+            case '}':
+              replacement = "&#125;";
+              break;
+            default:
+              break;
             }
           if (replacement)
             {
@@ -432,8 +448,7 @@ mtext_param_end (const char *src, const char **end)
           *end = p;
           return true;
         }
-      if (*p == '\\' || *p == '{' || *p == '}' || *p == '\n'
-          || *p == '\r')
+      if (*p == '\\' || *p == '{' || *p == '}' || *p == '\n' || *p == '\r')
         return false;
     }
   return false;
@@ -489,8 +504,8 @@ mtext_paragraph_param (const char *src, const char *end)
           property = true;
           p++;
         }
-      else if ((*p >= '0' && *p <= '9') || *p == '+' || *p == '-'
-               || *p == '.' || *p == ',')
+      else if ((*p >= '0' && *p <= '9') || *p == '+' || *p == '-' || *p == '.'
+               || *p == ',')
         p++;
       else
         return false;
@@ -723,7 +738,7 @@ mtext_append (char **dest, size_t *used, size_t *cap, const char *src)
   return true;
 }
 
-char *
+char *ATTRIBUTE_MALLOC
 mtext_escape_line (const char *line)
 {
   const char *p;
@@ -902,8 +917,7 @@ mtext_attachment_first_offset (BITCODE_BS attachment, double text_height,
     num_lines = 1;
   if (!isfinite (line_height) || line_height <= 0.0)
     line_height = text_height * (5.0 / 3.0);
-  block_height = text_height
-                 + line_height * (double)(num_lines - 1);
+  block_height = text_height + line_height * (double)(num_lines - 1);
   if (!isfinite (block_height) || block_height <= 0.0)
     block_height = text_height;
   ascent = 0.8 * text_height;
@@ -942,9 +956,9 @@ mtext_unit_len (const char *p, const char *end)
   while (--n)
     if ((p[n] & 0xC0) != 0x80)
       return 1;
-  return (size_t)((unsigned char)p[0] < 0xE0
-                      ? 2
-                      : (unsigned char)p[0] < 0xF0 ? 3 : 4);
+  return (size_t)((unsigned char)p[0] < 0xE0   ? 2
+                  : (unsigned char)p[0] < 0xF0 ? 3
+                                               : 4);
 }
 
 static bool
@@ -983,7 +997,7 @@ mtext_span_width (const char *p, const char *end, double advance)
 
 /* With no font metrics available to dwg2SVG, approximate every visible code
    point as 0.6 times its text height, scaled by the STYLE width factor. */
-char *
+char *ATTRIBUTE_MALLOC
 mtext_wrap_text (const char *src, double rect_width, double text_height,
                  double width_factor)
 {
@@ -1009,9 +1023,8 @@ mtext_wrap_text (const char *src, double rect_width, double text_height,
   dest = (char *)malloc (len * 2 + 1);
   if (!dest)
     return NULL;
-  if (!isfinite (rect_width) || rect_width <= 0.0
-      || !isfinite (text_height) || text_height <= 0.0
-      || !isfinite (width_factor) || width_factor <= 0.0)
+  if (!isfinite (rect_width) || rect_width <= 0.0 || !isfinite (text_height)
+      || text_height <= 0.0 || !isfinite (width_factor) || width_factor <= 0.0)
     {
       memcpy (dest, src, len + 1);
       return dest;

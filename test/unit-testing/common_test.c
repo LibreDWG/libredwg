@@ -308,16 +308,26 @@ escape_htmlutf8escape_tests (void)
 static void
 mtext_escape_line_tests (void)
 {
-  static const char *const cases[] = { "\\U+",       "\\U+1",
-                                       "\\U+12G4tail", "\\U+0041",
-                                       "\\U+D800",   "\\U+0001",
-                                       "\\U+FFFE",   "\\U+FFFF",
+  static const char *const cases[] = { "\\U+",
+                                       "\\U+1",
+                                       "\\U+12G4tail",
+                                       "\\U+0041",
+                                       "\\U+D800",
+                                       "\\U+0001",
+                                       "\\U+FFFE",
+                                       "\\U+FFFF",
                                        "Caff\xC3\xA8 \\U+4E16 & <",
                                        "Hello\xC2\xA0World" };
-  static const char *const expected[] = {
-    "\\U+", "\\U+1", "\\U+12G4tail", "&#x41;", "\\U+D800",
-    "\\U+0001", "\\U+FFFE", "\\U+FFFF",
-    "Caff\xC3\xA8 &#x4E16; &amp; &lt;", "Hello\xC2\xA0World" };
+  static const char *const expected[] = { "\\U+",
+                                          "\\U+1",
+                                          "\\U+12G4tail",
+                                          "&#x41;",
+                                          "\\U+D800",
+                                          "\\U+0001",
+                                          "\\U+FFFE",
+                                          "\\U+FFFF",
+                                          "Caff\xC3\xA8 &#x4E16; &amp; &lt;",
+                                          "Hello\xC2\xA0World" };
   size_t i;
 
   for (i = 0; i < sizeof (cases) / sizeof (cases[0]); i++)
@@ -326,8 +336,7 @@ mtext_escape_line_tests (void)
       if (s && strcmp (s, expected[i]) == 0)
         pass ();
       else
-        fail ("mtext_escape_line[%" PRIuSIZE "] => %s", i,
-              s ? s : "(null)");
+        fail ("mtext_escape_line[%" PRIuSIZE "] => %s", i, s ? s : "(null)");
       free (s);
     }
 }
@@ -382,8 +391,8 @@ mtext_plaintext_tests (void)
     const char *expected;
   } cases[] = {
     { "plain", "plain" },
-    { "one\\Ptwo\\\\three\\~four",
-      "one\ntwo\\three\xC2\xA0" "four" },
+    { "one\\Ptwo\\\\three\\~four", "one\ntwo\\three\xC2\xA0"
+                                   "four" },
     { "Hello\\~World", "Hello\xC2\xA0World" },
     { "\\Lunder\\l \\Oover\\o \\Kstrike\\k", "under over strike" },
     { "\\A1;A\\C256;C\\FArial|b1;F\\H1.5x;H\\Q15;Q\\T0.8;T\\W2;W\\pql;P",
@@ -414,8 +423,7 @@ mtext_plaintext_tests (void)
       if (s && strcmp (s, cases[i].expected) == 0)
         pass ();
       else
-        fail ("mtext_plaintext[%" PRIuSIZE "] => %s", i,
-              s ? s : "(null)");
+        fail ("mtext_plaintext[%" PRIuSIZE "] => %s", i, s ? s : "(null)");
       free (s);
     }
 }
@@ -454,20 +462,17 @@ mtext_wrap_text_tests (void)
     const char *expected;
   } cases[] = {
     { "one two", 0.0, 10.0, 1.0, "one two" },
-    { "one two", NAN, 10.0, 1.0, "one two" },
+    { "one two", (double)NAN, 10.0, 1.0, "one two" },
     { "one two", -1.0, 10.0, 1.0, "one two" },
     { "one two", 100.0, 10.0, 1.0, "one two" },
     { "one two", 18.0, 10.0, 1.0, "one\ntwo" },
-    { "one two\nthree four", 30.0, 10.0, 1.0,
-      "one\ntwo\nthree\nfour" },
+    { "one two\nthree four", 30.0, 10.0, 1.0, "one\ntwo\nthree\nfour" },
     { "one\n\ntwo", 100.0, 10.0, 1.0, "one\n\ntwo" },
     { "abcdef", 12.0, 10.0, 1.0, "ab\ncd\nef" },
-    { "\xC3\xA8\xE4\xB8\x96", 6.0, 10.0, 1.0,
-      "\xC3\xA8\n\xE4\xB8\x96" },
+    { "\xC3\xA8\xE4\xB8\x96", 6.0, 10.0, 1.0, "\xC3\xA8\n\xE4\xB8\x96" },
     { "\\U+0041B", 6.0, 10.0, 1.0, "\\U+0041\nB" },
     { "Hello World", 30.0, 10.0, 1.0, "Hello\nWorld" },
-    { "Hello\xC2\xA0World", 30.0, 10.0, 1.0,
-      "Hello\xC2\xA0W\norld" },
+    { "Hello\xC2\xA0World", 30.0, 10.0, 1.0, "Hello\xC2\xA0W\norld" },
     { "A\xC2\xA0 B", 6.0, 10.0, 1.0, "A\xC2\xA0 \nB" },
     { "abcd", 12.0, 5.0, 1.0, "abcd" },
     { "abcd", 12.0, 10.0, 2.0, "a\nb\nc\nd" },
@@ -481,8 +486,7 @@ mtext_wrap_text_tests (void)
       if (s && strcmp (s, cases[i].expected) == 0)
         pass ();
       else
-        fail ("mtext_wrap_text[%" PRIuSIZE "] => %s", i,
-              s ? s : "(null)");
+        fail ("mtext_wrap_text[%" PRIuSIZE "] => %s", i, s ? s : "(null)");
       free (s);
     }
 }
@@ -491,10 +495,15 @@ static void
 mtext_attachment_tests (void)
 {
   static const char *anchors[] = { "start", "middle", "end" };
-  static const double expected[] = {
-    8.0, 8.0, 8.0, -13.6666666667, -13.6666666667, -13.6666666667,
-    -35.3333333333, -35.3333333333, -35.3333333333
-  };
+  static const double expected[] = { 8.0,
+                                     8.0,
+                                     8.0,
+                                     -13.6666666667,
+                                     -13.6666666667,
+                                     -13.6666666667,
+                                     -35.3333333333,
+                                     -35.3333333333,
+                                     -35.3333333333 };
   unsigned int attachment;
   double line_height;
 
@@ -505,18 +514,17 @@ mtext_attachment_tests (void)
     fail ("mtext_line_height default => %g", line_height);
   if (fabs (mtext_line_height (10.0, 2.0) - 33.3333333333) < 1e-9
       && fabs (mtext_line_height (10.0, 0.0) - 16.6666666667) < 1e-9
-      && mtext_line_height (NAN, 1.0) == 0.0)
+      && mtext_line_height ((double)NAN, 1.0) == 0.0)
     pass ();
   else
     fail ("mtext_line_height spacing/invalid");
   if (fabs (mtext_svg_angle (1.0, 0.0)) < 1e-9
       && fabs (mtext_svg_angle (sqrt (0.5), sqrt (0.5)) + 45.0) < 1e-9
       && fabs (mtext_svg_angle (0.0, 1.0) + 90.0) < 1e-9
-      && fabs (mtext_svg_angle (cos (0.37), sin (0.37))
-               + 0.37 * 180.0 / M_PI)
+      && fabs (mtext_svg_angle (cos (0.37), sin (0.37)) + 0.37 * 180.0 / M_PI)
              < 1e-9
       && mtext_svg_angle (0.0, 0.0) == 0.0
-      && mtext_svg_angle (NAN, 1.0) == 0.0)
+      && mtext_svg_angle ((double)NAN, 1.0) == 0.0)
     pass ();
   else
     fail ("mtext_svg_angle rotation/degenerate");
@@ -525,8 +533,8 @@ mtext_attachment_tests (void)
     {
       const char *anchor = mtext_attachment_anchor (attachment);
       const char *expected_anchor = anchors[(attachment - 1) % 3];
-      double offset = mtext_attachment_first_offset (
-          attachment, 10.0, line_height, 3);
+      double offset
+          = mtext_attachment_first_offset (attachment, 10.0, line_height, 3);
       if (strcmp (anchor, expected_anchor) == 0
           && fabs (offset - expected[attachment - 1]) < 1e-9)
         pass ();
@@ -534,8 +542,7 @@ mtext_attachment_tests (void)
         fail ("mtext_attachment[%u] => %s/%g", attachment, anchor, offset);
     }
   if (strcmp (mtext_attachment_anchor (0), "start") == 0
-      && fabs (mtext_attachment_first_offset (0, 10.0, line_height, 0)
-               - 8.0)
+      && fabs (mtext_attachment_first_offset (0, 10.0, line_height, 0) - 8.0)
              < 1e-9)
     pass ();
   else

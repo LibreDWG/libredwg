@@ -35,8 +35,7 @@ const char *mtext_attachment_anchor (BITCODE_BS attachment);
 double mtext_svg_angle (double x_axis_x, double x_axis_y);
 double mtext_line_height (double text_height, double linespace_factor);
 double mtext_attachment_first_offset (BITCODE_BS attachment,
-                                      double text_height,
-                                      double line_height,
+                                      double text_height, double line_height,
                                       unsigned int num_lines);
 
 #endif

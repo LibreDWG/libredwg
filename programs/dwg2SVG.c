@@ -263,8 +263,8 @@ mtext_width_factor (Dwg_Data *dwg, BITCODE_H style_ref)
 
   o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
   style = o && o->tio.object ? o->tio.object->tio.STYLE : NULL;
-  if (style && o->fixedtype == DWG_TYPE_STYLE
-      && isfinite (style->width_factor) && style->width_factor > 0.0)
+  if (style && o->fixedtype == DWG_TYPE_STYLE && isfinite (style->width_factor)
+      && style->width_factor > 0.0)
     return style->width_factor;
   return 1.0;
 }
@@ -293,21 +293,18 @@ output_MTEXT (Dwg_Object *obj)
   int text_utf8_owned;
   double width_factor;
 
-  if (!obj || !obj->parent || !obj->tio.entity
-      || !obj->tio.entity->tio.MTEXT)
+  if (!obj || !obj->parent || !obj->tio.entity || !obj->tio.entity->tio.MTEXT)
     return;
   dwg = obj->parent;
   mtext = obj->tio.entity->tio.MTEXT;
-  if (!mtext->text || entity_invisible (obj)
-      || isnan_3BD (mtext->ins_pt) || isnan_3BD (mtext->extrusion)
-      || isnan_3BD (mtext->x_axis_dir)
+  if (!mtext->text || entity_invisible (obj) || isnan_3BD (mtext->ins_pt)
+      || isnan_3BD (mtext->extrusion) || isnan_3BD (mtext->x_axis_dir)
       || !isfinite (mtext->ins_pt.x) || !isfinite (mtext->ins_pt.y)
       || !isfinite (mtext->ins_pt.z) || !isfinite (mtext->extrusion.x)
       || !isfinite (mtext->extrusion.y) || !isfinite (mtext->extrusion.z)
-      || !isfinite (mtext->x_axis_dir.x)
-      || !isfinite (mtext->x_axis_dir.y)
-      || !isfinite (mtext->x_axis_dir.z)
-      || !isfinite (mtext->text_height) || mtext->text_height <= 0.0)
+      || !isfinite (mtext->x_axis_dir.x) || !isfinite (mtext->x_axis_dir.y)
+      || !isfinite (mtext->x_axis_dir.z) || !isfinite (mtext->text_height)
+      || mtext->text_height <= 0.0)
     return;
 
   /* MTEXT ins_pt and x_axis_dir are WCS values (see dwg_api.c).  This
@@ -325,8 +322,8 @@ output_MTEXT (Dwg_Object *obj)
     }
   else
     {
-      text_utf8 = bit_TV_to_utf8 ((const char *)mtext->text,
-                                  dwg->header.codepage);
+      text_utf8
+          = bit_TV_to_utf8 ((const char *)mtext->text, dwg->header.codepage);
       text_utf8_owned = text_utf8 != (const char *)mtext->text;
     }
   if (!text_utf8)
@@ -351,17 +348,17 @@ output_MTEXT (Dwg_Object *obj)
      the inverse sign required by SVG's downward Y axis.  A direction with
      no usable XY component has no planar angle; keep the text unrotated. */
   angle = mtext_svg_angle (mtext->x_axis_dir.x, mtext->x_axis_dir.y);
-  line_height = mtext_line_height (mtext->text_height,
-                                   mtext->linespace_factor);
+  line_height
+      = mtext_line_height (mtext->text_height, mtext->linespace_factor);
   if (line_height <= 0.0)
     return;
   num_lines = 1;
   for (line = plain; *line; line++)
     if (*line == '\n')
       num_lines++;
-  first_offset = mtext_attachment_first_offset (
-      mtext->attachment, mtext->text_height, line_height,
-      (unsigned int)num_lines);
+  first_offset
+      = mtext_attachment_first_offset (mtext->attachment, mtext->text_height,
+                                       line_height, (unsigned int)num_lines);
   insertion_y = transform_Y (ins_pt.y);
   color = entity_color (obj->tio.entity);
   if (!color)
@@ -383,8 +380,7 @@ output_MTEXT (Dwg_Object *obj)
         *next = '\0';
       escaped = mtext_escape_line (line);
       printf ("\t\t<tspan x=\"%f\" y=\"%f\">%s</tspan>\n",
-              transform_X (ins_pt.x), line_y,
-              escaped ? escaped : "");
+              transform_X (ins_pt.x), line_y, escaped ? escaped : "");
       if (escaped)
         free (escaped);
       if (!next)
