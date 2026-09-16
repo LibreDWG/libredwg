@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2019 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2019,2026 Free Software Foundation, Inc.                        */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -44,5 +44,13 @@ EXPORT void arc_split (BITCODE_2BD *pts, const int num_pts,
 
 // Normalize an angle to [0, 2*PI).  Handles inf, nan and denormals.
 double angle_normalize (double angle);
+
+
+/* Fast V4 Spatial Geometry Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
+ * Note: V4 refers to the Klein 4-group integer matrix over the S12 lattice,
+ * not some Version 4 or 4D vectors.
+ */
+EXPORT uint32_t dwg_transform_v4(Dwg_Data *dwg);
+EXPORT void dwg_geom_v4_transform_2d(double *x, double *y);
 
 #endif /* _GEOM_H_ */
