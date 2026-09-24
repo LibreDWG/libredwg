@@ -5896,7 +5896,7 @@ static const Dwg_DYNAPI_field _dwg_BLKREFOBJECTCONTEXTDATA_fields[] = {
   { "ins_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLKREFOBJECTCONTEXTDATA, ins_pt),
     1,0,0, 10 },
   { "scale_factor",	"3BD_1", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLKREFOBJECTCONTEXTDATA, scale_factor),
-    1,0,0, 42 },
+    1,0,0, 41 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER: (sorted by offset) */
@@ -8948,9 +8948,9 @@ static const Dwg_DYNAPI_field _dwg_MTEXTOBJECTCONTEXTDATA_fields[] = {
   { "attachment",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, attachment),
     0,0,0, 70 },
   { "ins_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, ins_pt),
-    1,0,0, 10 },
-  { "x_axis_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, x_axis_dir),
     1,0,0, 11 },
+  { "x_axis_dir",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, x_axis_dir),
+    1,0,0, 10 },
   { "rect_height",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, rect_height),
     0,0,0, 41 },
   { "rect_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MTEXTOBJECTCONTEXTDATA, rect_width),
