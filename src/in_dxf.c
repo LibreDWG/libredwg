@@ -2113,7 +2113,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           dwg_free_eed (obj);
           return;
         }
-      if (strEQc (pair->value.s.ptr, "ACAD"))
+      // ACAD is 5.1.12 in files AutoCAD writes, but not in every DXF
+      // (ezdxf puts it at 2A): trust the APPID table when it has one.
+      if (strEQc (pair->value.s.ptr, "ACAD")
+          && !dwg_find_tablehandle_silent (dwg, "ACAD", "APPID"))
         {
           dwg_add_handle (&eed[i].handle, 5, 0x12, NULL);
           LOG_TRACE ("handle: 5.1.12 [H] for APPID.%s\n", pair->value.s.ptr);
