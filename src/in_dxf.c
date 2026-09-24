@@ -83,6 +83,9 @@ static char buf[4096];
 static long start, end; // stream offsets
 static array_hdls *header_hdls = NULL;
 static array_hdls *eed_hdls = NULL;
+// the slot a 1001 reserved for its group's first value (see add_eed)
+static Dwg_Object *appid_obj = NULL;
+static int appid_slot = 0;
 static array_hdls *obj_hdls = NULL;
 
 // static long num_dxf_objs;  // how many elements are added
@@ -2005,7 +2008,9 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
               dwg_free_eed (obj);
               return;
             }
-          if (i)
+          // A 1001 just filled slot i with its APPID handle and gave the
+          // slot back for its first value: keep that handle.
+          if (i && !(appid_obj == obj && appid_slot == i))
             memset (&eed[i], 0, sizeof (Dwg_Eed));
         }
       else
@@ -2020,13 +2025,17 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         }
       obj->tio.object->eed = eed;
       obj->tio.object->num_eed++;
+      appid_obj = NULL;
     }
   else // add to old eed
     i--;
   // search for previous size index
   for (j = i; j >= 0; j--)
     if (eed[j].handle.code)
-      prev = j;
+      {
+        prev = j;
+        break;
+      }
   if (!(prev >= 0 && prev <= i))
     {
       LOG_ERROR ("Invalid EED, no prev %d size 1000 code", prev);
@@ -2107,6 +2116,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 1:
       obj->tio.object->num_eed--;
       prev = i;
+      appid_obj = obj;
+      appid_slot = i;
       if (!pair->value.s.ptr || !*pair->value.s.ptr)
         {
           LOG_ERROR ("Invalid empty DXF code 1001");
