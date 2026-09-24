@@ -3620,7 +3620,6 @@ DWG_ENTITY_END
   FIELD_HANDLE (scale, 2, 340)
 
 #define AcDbTextObjectContextData_fields                                \
-  SUBCLASS (AcDbTextObjectContextData);                                 \
   FIELD_BS (horizontal_mode, 70);                                       \
   FIELD_BD (rotation, 50);                                              \
   FIELD_2RD (ins_pt, 10);                                               \
@@ -3633,7 +3632,6 @@ DWG_ENTITY_END
   DXF { FIELD_HANDLE (dimension.block, 5, 2); }         \
   DXF { FIELD_B (dimension.b293, 293); }                \
   FIELD_2RD (dimension.def_pt, 10); /* text location */ \
-  DXF { VALUE_RD (0.0, 30); }                           \
   FIELD_B (dimension.is_def_textloc, 294); /* 1 */      \
   FIELD_BD (dimension.text_rotation, 140);              \
   FIELD_HANDLE (dimension.block, 5, 0);                 \
@@ -4562,13 +4560,9 @@ DWG_OBJECT_END
 DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   AcDbAnnotScaleObjectContextData_fields;
   FIELD_BL (attachment, 70);
-  DXF {
-    FIELD_3BD (ins_pt, 10);
-    FIELD_3BD (x_axis_dir, 11);
-  } else {
-    FIELD_3BD (x_axis_dir, 0);
-    FIELD_3BD (ins_pt, 0); /* ODA bug */
-  }
+  // DWG and DXF alike: the direction first, then the insertion point
+  FIELD_3BD (x_axis_dir, 10);
+  FIELD_3BD (ins_pt, 11);
   FIELD_BD (rect_width, 40);
   FIELD_BD (rect_height, 41);
   FIELD_BD (extents_width, 42);
@@ -4601,17 +4595,16 @@ DWG_OBJECT_END
 DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbBlkrefObjectContextData);
   FIELD_BD (rotation, 50);
   FIELD_3BD (ins_pt, 10);
-  FIELD_3BD_1 (scale_factor, 42);
+  FIELD_3BD_1 (scale_factor, 41);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
   HANDLE_UNKNOWN_BITS;
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbLeaderObjectContextData);
+  // no subclass marker of its own in DXF
   FIELD_BL (num_points, 70); /* 3 */
   FIELD_3DPOINT_VECTOR (points, num_points, 10);
   FIELD_3DPOINT (x_direction, 11);
