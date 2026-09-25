@@ -381,6 +381,62 @@ xcalloc (size_t n, size_t s)
 #ifndef DISABLE_DXF
 
 static void
+free_BLOCKVISIBILITYPARAMETER_states (
+    Dwg_Object_BLOCKVISIBILITYPARAMETER *restrict visibility)
+{
+  BITCODE_BL i;
+
+  if (!visibility || !visibility->states)
+    return;
+
+  for (i = 0; i < visibility->num_states; i++)
+    {
+      free (visibility->states[i].name);
+      visibility->states[i].name = NULL;
+      free (visibility->states[i].blocks);
+      visibility->states[i].blocks = NULL;
+      visibility->states[i].num_blocks = 0;
+      free (visibility->states[i].params);
+      visibility->states[i].params = NULL;
+      visibility->states[i].num_params = 0;
+    }
+  free (visibility->states);
+  visibility->states = NULL;
+  visibility->num_states = 0;
+}
+
+static void
+free_BLOCKPARAMETER_propinfo (Dwg_BLOCKPARAMETER_PropInfo *restrict propinfo)
+{
+  BITCODE_BL i;
+
+  if (!propinfo || !propinfo->connections)
+    return;
+
+  for (i = 0; i < propinfo->num_connections; i++)
+    {
+      free (propinfo->connections[i].name);
+      propinfo->connections[i].name = NULL;
+    }
+  free (propinfo->connections);
+  propinfo->connections = NULL;
+  propinfo->num_connections = 0;
+}
+
+static void
+free_BLOCKPARAMVALUESET_data (Dwg_BLOCKPARAMVALUESET *restrict valueset)
+{
+  if (!valueset)
+    return;
+
+  free (valueset->desc);
+  valueset->desc = NULL;
+  free (valueset->valuelist);
+  valueset->valuelist = NULL;
+  valueset->num_valuelist = 0;
+}
+
+static void
 free_GEODATA_geomesh_pts (Dwg_Object_GEODATA *restrict geodata)
 {
   if (!geodata)
@@ -8556,6 +8612,12 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dwg_Object_BLOCKMOVEACTION *o = obj->tio.object->tio.BLOCKMOVEACTION;
   Dxf_Pair *pair;
 
+  free (o->actions);
+  o->actions = NULL;
+  o->num_actions = 0;
+  free (o->deps);
+  o->deps = NULL;
+  o->num_deps = 0;
   FIELD_BL (num_actions, 70);
   if (o->num_actions)
     {
@@ -8611,13 +8673,14 @@ add_BlockAction_ConnectionPts (Dwg_Object *restrict obj,
   Dwg_Object_BLOCKFLIPACTION *o = obj->tio.object->tio.BLOCKFLIPACTION;
   Dxf_Pair *pair;
   Dwg_BLOCKACTION_connectionpts conn_pts[6];
+  BITCODE_T old_names[6] = { 0 };
   const char *const field = "conn_pts";
   const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, field);
 
   if (!f)
     return (Dxf_Pair *)-1;
-  if (first)
-    dwg_dynapi_field_get_value (o, f, &conn_pts);
+  memset (&conn_pts, 0, sizeof (conn_pts));
+  dwg_dynapi_field_get_value (o, f, &conn_pts);
   for (int i = first; i < (first + repeat); i++)
     {
       pair = dxf_read_pair (dat);
@@ -8632,12 +8695,15 @@ add_BlockAction_ConnectionPts (Dwg_Object *restrict obj,
     {
       pair = dxf_read_pair (dat);
       EXPECT_DXF (obj->name, "conn_pts[].name", t_code + i - first);
+      old_names[i] = conn_pts[i].name;
       conn_pts[i].name = strdup (pair->value.s.ptr);
       LOG_TRACE ("%s.conn_pts[%d].name = %s [BL %d]\n", obj->name, i,
                  pair->value.s.ptr, t_code + i - first);
       dxf_free_pair (pair);
     }
   // memcpy'ing back the content
+  for (int i = first; i < (first + repeat); i++)
+    free (old_names[i]);
   dwg_dynapi_field_set_value (dwg, o, f, &conn_pts, 0);
   return NULL;
 }
@@ -8713,6 +8779,8 @@ add_AcDbBlockMoveAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
   EXPECT_DXF (obj->name, conn_pts[0].name, 301);
+  free (o->conn_pts[0].name);
+  o->conn_pts[0].name = NULL;
   o->conn_pts[0].name = strdup (pair->value.s.ptr);
   LOG_TRACE ("%s.conn_pts[0] = (%u, %s)\n", obj->name, o->conn_pts[0].code,
              o->conn_pts[0].name);
@@ -8723,6 +8791,8 @@ add_AcDbBlockMoveAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
   EXPECT_DXF (obj->name, conn_pts[0].name, 302);
+  free (o->conn_pts[1].name);
+  o->conn_pts[1].name = NULL;
   o->conn_pts[1].name = strdup (pair->value.s.ptr);
   LOG_TRACE ("%s.conn_pts[1] = (%u, %s)\n", obj->name, o->conn_pts[1].code,
              o->conn_pts[1].name);
@@ -8915,6 +8985,10 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
                                   Dxf_Pair *restrict pair)
 {
   Dwg_Data *dwg = obj->parent;
+  free (o->blocks);
+  o->blocks = NULL;
+  o->num_blocks = 0;
+  free_BLOCKVISIBILITYPARAMETER_states (o);
   EXPECT_INT_DXF ("num_blocks", 93, BL);
   if (o->num_blocks)
     {
@@ -9027,6 +9101,7 @@ add_BlockParam_PropInfo (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
   Dxf_Pair *pair;
 
+  free_BLOCKPARAMETER_propinfo (prop);
   pair = dxf_read_pair (dat);
   EXPECT_DXF (obj->name, prop->num_connections, num_code);
   prop->num_connections = pair->value.u;
@@ -9147,6 +9222,8 @@ add_AcDbBlock2PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   EXPECT_DXF (obj->name, "num_prop_states", 170);
   LOG_TRACE ("%s.num_prop_states = %d [BL 170]\n", obj->name, pair->value.u);
   dxf_free_pair (pair);
+  free (o->prop_states);
+  o->prop_states = NULL;
   o->prop_states = (BITCODE_BL *)xcalloc (4, sizeof (BITCODE_BL));
   if (!o->prop_states)
     return dxf_read_pair (dat);
@@ -9226,6 +9303,7 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj,
         code = &codes[5];
     }
   // subclass not object
+  free_BLOCKPARAMVALUESET_data (o);
   EXPECT_DXF ("BlockParamValueSet", "desc", (*code)[3]); // t_code
   o->desc = strdup (pair->value.s.ptr);
   LOG_TRACE ("%s.value_set.desc = \"%s\"\n", obj->name, pair->value.s.ptr);
