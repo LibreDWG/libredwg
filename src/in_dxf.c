@@ -13803,6 +13803,22 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           LOG_TRACE ("MTEXT.linespace_factor = 1.0 (default) [BD 44]\n");
         }
     }
+  else if (obj->fixedtype == DWG_TYPE_MINSERT)
+    {
+      // the 70/71 groups are omitted when the count is 1; without this a
+      // single-column MINSERT came back as num_cols 0
+      Dwg_Entity_MINSERT *o = obj->tio.entity->tio.MINSERT;
+      if (!o->num_cols)
+        {
+          o->num_cols = 1;
+          LOG_TRACE ("MINSERT.num_cols = 1 (default) [BS 70]\n");
+        }
+      if (!o->num_rows)
+        {
+          o->num_rows = 1;
+          LOG_TRACE ("MINSERT.num_rows = 1 (default) [BS 71]\n");
+        }
+    }
   else if (is_textlike (obj))
     postprocess_TEXTlike (obj);
 
