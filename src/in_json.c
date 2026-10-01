@@ -1996,9 +1996,13 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   unsigned read;
                   char *pos = (char *)&dat->chain[t->start];
                   if ((len - l) != 15 || size != 2)
-                    LOG_ERROR (
-                        "Invalid %s ACIS %u json format. len %d, size %d",
-                        obj->name, acis_version, len - l, size);
+                    {
+                      LOG_ERROR (
+                          "Invalid %s ACIS %u json format. len %d, size %d",
+                          obj->name, acis_version, len - l, size);
+                      free (s);
+                      return DWG_ERR_INVALIDTYPE;
+                    }
                   if (!pos)
                     {
                       LOG_ERROR ("Invalid %s ACIS %u json format. NULL string",
