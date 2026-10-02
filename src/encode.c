@@ -8377,6 +8377,11 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
     }
 }
 
+/* r2007+ sources keep T fields as UTF-16, where bit_write_T would scan an
+   ASCII literal as wide chars, past its end.  Shallow like those. */
+static DWGCHAR cellstyle_name_table[] = { 'T', 'a', 'b', 'l', 'e', 0 };
+static DWGCHAR cellstyle_name_title[] = { '_', 'T', 'I', 'T', 'L', 'E', 0 };
+
 // from <=2007 to >2007, need to populate sty.cellstyle from rowstyles
 void
 upconvert_TABLESTYLE (Dwg_Object *restrict obj)
@@ -8394,9 +8399,11 @@ upconvert_TABLESTYLE (Dwg_Object *restrict obj)
   // sty: the default (data) cellstyle
   if (!_obj->sty.id)
     {
-      _obj->sty.id = 4;                 // table
-      _obj->sty.type = 1;               // data
-      _obj->sty.name = (char *)"Table"; // shallow
+      _obj->sty.id = 4;   // table
+      _obj->sty.type = 1; // data
+      _obj->sty.name = IS_FROM_TU_DWG (obj->parent)
+                           ? (char *)cellstyle_name_table
+                           : (char *)"Table";
     }
   if (_obj->num_rowstyles >= 1 && _obj->rowstyles)
     {
@@ -8435,8 +8442,10 @@ upconvert_TABLESTYLE (Dwg_Object *restrict obj)
           _obj->ovr.parent = _obj;
           _obj->ovr.id = 1; // title
           _obj->ovr.type = 1;
-          _obj->ovr.name = (char *)"_TITLE"; // shallow
-          ovr->type = 1;                     // cell
+          _obj->ovr.name = IS_FROM_TU_DWG (obj->parent)
+                               ? (char *)cellstyle_name_title
+                               : (char *)"_TITLE";
+          ovr->type = 1; // cell
           ovr->data_flags = 1;
           ovr->property_override_flags = 0;
           ovr->merge_flags = 0;
