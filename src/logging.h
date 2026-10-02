@@ -106,17 +106,20 @@ EXPORT void log_text32 (const unsigned int minlevel, const BITCODE_TU wstr);
     LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, dat->bit);                   \
     LOG_TRACE ("\n")
 #endif
-#define LOG_TRACE_TV(fmt, str, dxf)                                           \
+
+#define LOG_TRACE_TV_DO(str, stmt)                                            \
   if (dwg_codepage_isasian ((Dwg_Codepage)dat->codepage))                     \
     {                                                                         \
       char *nstr = bit_TV_to_utf8 (str, dat->codepage);                       \
-      LOG_TRACE (fmt, nstr, dxf);                                             \
+      const char *_tv_str = nstr;                                             \
+      stmt;                                                                   \
       if (nstr && nstr != str)                                                \
         free (nstr);                                                          \
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      LOG_TRACE (fmt, str, dxf);                                              \
+      const char *_tv_str = str;                                              \
+      stmt;                                                                   \
     }                                                                         \
   LOG_POS;                                                                    \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE && str                              \
@@ -125,6 +128,12 @@ EXPORT void log_text32 (const unsigned int minlevel, const BITCODE_TU wstr);
     {                                                                         \
       LOG_INSANE_TF (str, strlen (str));                                      \
     }
+
+#define LOG_TRACE_TV(fmt, str, dxf)                                           \
+  LOG_TRACE_TV_DO (str, LOG_TRACE (fmt, _tv_str, dxf))
+
+#define LOG_TRACE_TV_N(name, str, dxf)                                        \
+  LOG_TRACE_TV_DO (str, LOG_TRACE ("%s: \"%s\" [TV %d]", name, _tv_str, dxf))
 
 #ifdef HAVE_NATIVE_WCHAR2
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
