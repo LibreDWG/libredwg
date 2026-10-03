@@ -4633,7 +4633,11 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
                                * sizeof (Dwg_Object_Ref *));
       memset (&dwg->object_ref[dwg->num_object_refs], 0,
               REFS_PER_REALLOC * sizeof (Dwg_Object_Ref *));
-      dwg->dirty_refs = 1;
+      /* No dirty_refs here: only the array of POINTERS moved.  The refs
+         it points to, and their cached ref->obj, are untouched -- unlike
+         dwg_add_object, which dirties only when dwg->object itself moved.
+         Dirtying per chunk made every 16384th ref trigger a full
+         dwg_resolve_objectrefs_silent sweep: O(N^2) imports (GH #1395). */
       LOG_TRACE ("REALLOC dwg->object_ref vector to %u\n",
                  dwg->num_object_refs + REFS_PER_REALLOC);
     }

@@ -482,6 +482,24 @@ const unsigned char _dwg_VISUALSTYLE_proptypes[58] = {
   /* [56] */ 3, 3
 };
 
+/* A handle vector has no separately tracked capacity, and some call sites
+   (re)allocate one to its exact size.  So PUSH_HV keeps its realloc on every
+   push, but rounds the requested size up to the next power of two: realloc
+   knows the vector's real old size, so the push stays correct however the
+   vector was last allocated, and the calls between two crossings resolve to
+   the same size and do not copy.  N pushes then copy O(N) handles instead of
+   the O(N^2) an exact num+1 realloc costs (GH #1395).
+   Deliberately not static inline in common.h: on a cold path gcc declines to
+   inline it, and -Werror=inline then fails the build (mips32 CI).  */
+size_t
+hv_alloc_size (const size_t num)
+{
+  size_t cap = 8;
+  while (cap < num)
+    cap <<= 1;
+  return cap * sizeof (BITCODE_H);
+}
+
 // returns the first ref from the handle vector.
 BITCODE_H
 shift_hv (BITCODE_H *hv, BITCODE_BL *num_p)
