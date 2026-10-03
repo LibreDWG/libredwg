@@ -202,12 +202,15 @@
       _obj->TDUCREATE.days  = _obj->TDCREATE.days;
       // adjust for timezone offset
       _obj->TDUCREATE.ms    = _obj->TDUCREATE.ms - off;
-      _obj->TDUCREATE.value = _obj->TDUCREATE.days + (_obj->TDUCREATE.ms * 1e-8);
+      _obj->TDUCREATE.value = _obj->TDUCREATE.days + (_obj->TDUCREATE.ms / TIMEBLL_MS_PER_DAY);
       LOG_TRACE ("=> TDUCREATE: [" FORMAT_BL ", " FORMAT_BL "] %f [TIMEBLL 40]\n",
                    _obj->TDUCREATE.days, _obj->TDUCREATE.ms, _obj->TDUCREATE.value);
       _obj->TDUUPDATE.days  = _obj->TDUPDATE.days;
       _obj->TDUUPDATE.ms    = _obj->TDUPDATE.ms - off;
-      _obj->TDUUPDATE.value = _obj->TDUPDATE.days + (_obj->TDUPDATE.ms * 1e-8);
+      /* from TDUUPDATE, which is what the two lines above just set: the
+         value has to agree with the days/ms it belongs to, timezone
+         adjustment included. */
+      _obj->TDUUPDATE.value = _obj->TDUUPDATE.days + (_obj->TDUUPDATE.ms / TIMEBLL_MS_PER_DAY);
       LOG_TRACE ("=> TDUUPDATE: [" FORMAT_BL ", " FORMAT_BL "] %f [TIMEBLL 40]\n",
                    _obj->TDUUPDATE.days, _obj->TDUUPDATE.ms, _obj->TDUUPDATE.value);
     }

@@ -539,7 +539,7 @@ cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date)
 
 #define TRUNC(n) (long)floor (n)
 
-  t = 0.864 * date.ms / 1000.0; /*t=1000000 = 1 day, means 86400 in seconds */
+  t = date.ms / 1000.0; /* ms elapsed in the day -> seconds */
   if (date.days > 2299161)
     {
       jalpha = TRUNC (((date.days - 1867216) - 0.25) / 36524.25);

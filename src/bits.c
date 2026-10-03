@@ -3937,7 +3937,7 @@ bit_read_TIMEBLL (Bit_Chain *dat)
       date.days = bit_read_BL (dat);
       date.ms = bit_read_BL (dat);
     }
-  date.value = date.days + (date.ms * 1e-8);
+  date.value = date.days + (date.ms / TIMEBLL_MS_PER_DAY);
   return date;
 }
 
@@ -3966,7 +3966,7 @@ bit_read_TIMERLL (Bit_Chain *dat)
   date.days = bit_read_RL (dat);
   date.ms = bit_read_RL (dat);
   // just for display, not calculations
-  date.value = date.days + (date.ms * 1e-8);
+  date.value = date.days + (date.ms / TIMEBLL_MS_PER_DAY);
   return date;
 }
 

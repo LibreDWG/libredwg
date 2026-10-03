@@ -25015,7 +25015,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     days += 2440588L;
     dwg->header_vars.TDUCREATE
         = (BITCODE_TIMEBLL){ (BITCODE_BL)days, (BITCODE_BL)ms,
-                             days + (ms * 1e-8) };
+                             days + (ms / TIMEBLL_MS_PER_DAY) };
   }
   dwg->header_vars.TDUUPDATE = dwg->header_vars.TDUCREATE;
   // CECOLOR.index: 256 [CMC.BS 62]
