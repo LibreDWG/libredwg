@@ -2061,6 +2061,22 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   {
     uint64_t max_decomp_size64
         = (uint64_t)info->num_sections * (uint64_t)info->max_decomp_size;
+    /* num_sections * max_decomp_size is only an upper-bound *estimate* of the
+       decompressed section. Each page carries its own StartOffset into the
+       buffer, so what the buffer really has to span is info->size, the declared
+       decompressed total. On some r2018 files the estimate comes out 1-3 pages
+       short of info->size; rejecting those loses the whole drawing
+       (num_objects: 0) even though every page is fine. Allocate whichever is
+       larger and keep the sanity cap. */
+    if (info->size > 0 && (uint64_t)info->size > max_decomp_size64)
+      {
+        LOG_TRACE ("Section %s: declared size %" PRId64 " exceeds the %"
+                   PRIu64 " estimate (" FORMAT_RL " * " FORMAT_RL
+                   "), allocating the declared size\n",
+                   info->name, info->size, max_decomp_size64,
+                   info->num_sections, info->max_decomp_size);
+        max_decomp_size64 = (uint64_t)info->size;
+      }
     if (max_decomp_size64 == 0 || max_decomp_size64 > 0x2f000000) // 790Mb
       {
         LOG_ERROR ("Invalid section %s count or max decompression size. "
@@ -2070,12 +2086,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       }
     max_decomp_size = (uint32_t)max_decomp_size64;
   }
-  if (info->size > (int64_t)info->num_sections * (int64_t)info->max_decomp_size
-      || info->size < 0)
+  if (info->size < 0)
     {
-      LOG_ERROR ("Invalid section %s size %" PRId64 " > %u * " FORMAT_RL,
-                 info->name, info->size, info->num_sections,
-                 info->max_decomp_size);
+      LOG_ERROR ("Invalid section %s size %" PRId64, info->name, info->size);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   LOG_HANDLE ("Alloc section %s size %" PRIu32 "\n", info->name,
@@ -2164,9 +2177,19 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       LOG_INSANE ("bytes_left:               %ld\n", bytes_left);
 
       // check if compressed at all
+      /* Bound the page by what it actually decompresses to, not by the
+         section-wide maximum: the last page is normally shorter, so
+         address + max_decomp_size overshoots the buffer while
+         address + page_size fits. When that happens for a *compressed*
+         section, control falls into the else branch below, which rejects it
+         outright on `info->compressed == 2` and loses the whole section. The
+         else branch already computes the real size this way. */
       if (info->compressed == 2 && bytes_left > 0
           && es.fields.address <= max_decomp_size
-          && es.fields.address + info->max_decomp_size <= max_decomp_size)
+          && es.fields.address
+                     + MIN ((BITCODE_RL)(info->size - es.fields.address),
+                            es.fields.page_size)
+                 <= max_decomp_size)
         {
           size_t orig_size = dat->size;
           dec.byte = es.fields.address;
