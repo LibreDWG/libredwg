@@ -4138,6 +4138,16 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               dat->byte = end; // skip eed
               continue;        // continue for next size = bit_read_BS(dat)
             }
+          {
+            /* Keep what this item used, not the rest of the EED: a large
+               EED of many items otherwise takes quadratic memory. */
+            size_t used = dat->byte - sav_byte + 8;
+            if (used < sizeof (Dwg_Eed_Data))
+              used = sizeof (Dwg_Eed_Data);
+            if (used < (size_t)size + 8)
+              obj->eed[idx].data
+                  = (Dwg_Eed_Data *)realloc (obj->eed[idx].data, used);
+          }
 
           if (_obj->fixedtype == DWG_TYPE_MLEADERSTYLE
               && obj->tio.MLEADERSTYLE->class_version == 2
