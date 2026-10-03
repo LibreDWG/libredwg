@@ -5,18 +5,23 @@
 #  ifndef MY_GETOPT_H
 #    define MY_GETOPT_H
 
+/* Defined once, in getopt.c, with the initial values the original BSD getopt
+   gives them at file scope. A single GETOPT_EXTERN macro cannot carry the
+   initialisers: written that way they would define the variables in every
+   translation unit including this header. Leaving them uninitialised here is
+   what led to opterr and optind being assigned inside getopt() instead, which
+   reset the scan position to argv[1] on every call and made any option make
+   the caller's getopt loop run forever. */
 #    ifdef GETOPT_C
-#      define GETOPT_EXTERN
+int opterr = 1, /* if error message should be printed */
+    optind = 1, /* index into parent argv vector */
+    optopt,     /* character checked for validity */
+    optreset;   /* reset getopt */
+char *optarg;   /* argument associated with option */
 #    else
-#      define GETOPT_EXTERN extern
+extern int opterr, optind, optopt, optreset;
+extern char *optarg;
 #    endif
-
-GETOPT_EXTERN
-int opterr,                 /* if error message should be printed */
-    optind,                 /* index into parent argv vector */
-    optopt,                 /* character checked for validity */
-    optreset;               /* reset getopt */
-GETOPT_EXTERN char *optarg; /* argument associated with option */
 
 int getopt (int nargc, char *const nargv[], const char *ostr);
 #  endif
