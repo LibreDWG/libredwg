@@ -430,6 +430,17 @@
         LOG_TRACE (" color.flag: 0x%x\n", _ent->color.flag);
 #endif
       flags = _ent->color.flag;
+      // The RGB comes first, then the transparency (ODA 2.11 ENC, and
+      // ACadSharp). With both, reading the transparency first swapped them:
+      // a true color line got index 183 and an RGB of 0x01000000.
+      if ((flags & 0x80) && !(flags & 0x40)) // and not a reference
+        {
+          DXF {
+            VALUE_BL (_ent->color.rgb & 0x00ffffff, 420);
+          } else {
+            FIELD_BLx (color.rgb, 420); // ODA bug, documented as BS
+          }
+        }
       if (flags & 0x20)
         {
 #ifdef IS_ENCODER
@@ -457,14 +468,6 @@
 #ifndef IS_ENCODER
           FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9 lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 #endif
-        }
-      else if (flags & 0x80) // and not a reference
-        {
-          DXF {
-            VALUE_BL (_ent->color.rgb & 0x00ffffff, 420);
-          } else {
-            FIELD_BLx (color.rgb, 420); // ODA bug, documented as BS
-          }
         }
       if ((flags & 0x41) == 0x41)
         {
