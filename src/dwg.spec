@@ -2924,7 +2924,11 @@ DWG_ENTITY (MTEXT)
   SINCE (R_2004a)
     {
       FIELD_BL0 (bg_fill_flag, 90);
-      if (FIELD_VALUE (bg_fill_flag) & (dat->version <= R_2018 ? 1 : 16))
+      // R2018+ also has the scale, color and transparency with only 0x10
+      // (text frame) set, as ACadSharp reads them. Missing them misaligned
+      // the rest of the MTEXT.
+      if ((FIELD_VALUE (bg_fill_flag) & 1)
+          || (dat->version >= R_2018b && (FIELD_VALUE (bg_fill_flag) & 0x10)))
         {
           FIELD_BD (bg_fill_scale, 45); // def: 1.5
           FIELD_CMC (bg_fill_color, 63);
