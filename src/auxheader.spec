@@ -65,10 +65,11 @@
   FIELD_RL (numsaves_4, 0);
   FIELD_RL (zero_5, 0);
   FIELD_RL (zero_6, 0);
-  SINCE (R_2004a) {
-    FIELD_RL (zero_7, 0);
-    FIELD_RL (zero_8, 0);
-  }
+  // ODA 27 has these two for all versions: AutoCAD's R2000 AuxHeader is
+  // 123 bytes. Without them R2000 output had a 115-byte AuxHeader, and other
+  // readers (ACadSharp) read past its end.
+  FIELD_RL (zero_7, 0);
+  FIELD_RL (zero_8, 0);
   SINCE (R_2018) {
     FIELD_VECTOR_INL (zero_18, RS, 3, 0);
   }
