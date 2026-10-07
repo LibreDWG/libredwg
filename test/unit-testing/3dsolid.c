@@ -184,11 +184,25 @@ api_process (dwg_object *obj)
     CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, has_revision_guid, B);
     if (has_revision_guid)
       {
-        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_guid, TF);
+        /* an array: compare the contents, not the addresses */
+        if (!dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_guid",
+                                      &revision_guid, NULL)
+            || memcmp (revision_guid, _3dsolid->revision_guid,
+                       sizeof (revision_guid)))
+          fail ("3DSOLID.revision_guid");
+        else
+          pass ();
         CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_major, BL);
         CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_minor1, BS);
         CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_minor2, BS);
-        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_bytes, TF);
+        /* an array: compare the contents, not the addresses */
+        if (!dwg_dynapi_entity_value (_3dsolid, "3DSOLID", "revision_bytes",
+                                      &revision_bytes, NULL)
+            || memcmp (revision_bytes, _3dsolid->revision_bytes,
+                       sizeof (revision_bytes)))
+          fail ("3DSOLID.revision_bytes");
+        else
+          pass ();
       }
     CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, end_marker, BL);
   }
