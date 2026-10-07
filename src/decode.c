@@ -6278,6 +6278,65 @@ dwg_validate_entity_links (Dwg_Data *restrict dwg)
   return changes;
 }
 
+/* r2004+ keep the entities owned by another entity (the VERTEX of a POLYLINE,
+   the ATTRIB of an INSERT) in a handle list, r13-r2000 in a linked list: the
+   owner has first and last handles, and each owned entity prev and next
+   handles. Build the r2000 form from the list, else the owned entities of a
+   r2004+ drawing written as r2000 cannot be reached (first/last were 0). */
+static int
+fixup_owned_chain (Dwg_Data *restrict dwg, Dwg_Object *restrict owner,
+                   BITCODE_H *list, BITCODE_BL num, BITCODE_H *firstp,
+                   BITCODE_H *lastp)
+{
+  int changes = 0;
+  if (!list || !num)
+    return 0;
+  for (BITCODE_BL j = 0; j < num; j++)
+    {
+      Dwg_Object_Ref *hdl = list[j];
+      Dwg_Object *o = hdl ? dwg_ref_object (dwg, hdl) : NULL;
+      BITCODE_RLL prev_ref
+          = (j > 0 && list[j - 1]) ? list[j - 1]->absolute_ref : 0;
+      BITCODE_RLL next_ref
+          = (j + 1 < num && list[j + 1]) ? list[j + 1]->absolute_ref : 0;
+      Dwg_Object_Entity *ent;
+      if (!o || o->supertype != DWG_SUPERTYPE_ENTITY || !o->tio.entity)
+        continue;
+      ent = o->tio.entity;
+      if (!ent->prev_entity || ent->prev_entity->absolute_ref != prev_ref)
+        {
+          ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
+          changes++;
+        }
+      if (!ent->next_entity || ent->next_entity->absolute_ref != next_ref)
+        {
+          ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
+          changes++;
+        }
+      // as AutoCAD: no links when they are just -1 and +1
+      ent->nolinks = (prev_ref && next_ref && prev_ref == hdl->absolute_ref - 1
+                      && next_ref == hdl->absolute_ref + 1);
+    }
+  // first and last are absolute soft pointers, as AutoCAD writes them. A
+  // relative code (6 = this handle + 1) is legal, but other readers
+  // (ACadSharp) resolve it against handle 0, i.e. to the BLOCK_CONTROL.
+  if (list[0]
+      && (!*firstp || (*firstp)->absolute_ref != list[0]->absolute_ref
+          || (*firstp)->handleref.code != 4))
+    {
+      *firstp = dwg_add_handleref (dwg, 4, list[0]->absolute_ref, NULL);
+      changes++;
+    }
+  if (list[num - 1]
+      && (!*lastp || (*lastp)->absolute_ref != list[num - 1]->absolute_ref
+          || (*lastp)->handleref.code != 4))
+    {
+      *lastp = dwg_add_handleref (dwg, 4, list[num - 1]->absolute_ref, NULL);
+      changes++;
+    }
+  return changes;
+}
+
 /* Set prev_ and next_entity handles from all block headers.
    Needed after decode or import from r2004+ to r13-r2000. */
 int
@@ -6463,6 +6522,49 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
             }
           if (is_uni)
             free (_objname);
+        }
+    }
+  // the owned entities: VERTEX of POLYLINE, ATTRIB of INSERT and MINSERT
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity
+          || !obj->tio.entity->tio.POLYLINE_2D)
+        continue;
+      switch (obj->fixedtype)
+        {
+        case DWG_TYPE_POLYLINE_2D:
+        case DWG_TYPE_POLYLINE_3D:
+        case DWG_TYPE_POLYLINE_PFACE:
+        case DWG_TYPE_POLYLINE_MESH:
+          {
+            // all start with COMMON_ENTITY_POLYLINE
+            Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+            changes
+                += fixup_owned_chain (dwg, obj, _obj->vertex, _obj->num_owned,
+                                      &_obj->first_vertex, &_obj->last_vertex);
+          }
+          break;
+        case DWG_TYPE_INSERT:
+          {
+            Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+            if (_obj->has_attribs)
+              changes += fixup_owned_chain (
+                  dwg, obj, _obj->attribs, _obj->num_owned,
+                  &_obj->first_attrib, &_obj->last_attrib);
+          }
+          break;
+        case DWG_TYPE_MINSERT:
+          {
+            Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+            if (_obj->has_attribs)
+              changes += fixup_owned_chain (
+                  dwg, obj, _obj->attribs, _obj->num_owned,
+                  &_obj->first_attrib, &_obj->last_attrib);
+          }
+          break;
+        default:
+          break;
         }
     }
   // DXF roundtrip may leave VERTEX/SEQEND children of block polylines
