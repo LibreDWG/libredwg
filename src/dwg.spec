@@ -4575,6 +4575,15 @@ DWG_OBJECT (MLINESTYLE)
                  VALUE_TFF ("", 6); break;
         }
 #else
+#  ifdef IS_ENCODER
+        // R2018+ to earlier: convert the linetype handle to the index
+        // (32767 BYLAYER, 32766 BYBLOCK, else the position in the
+        // LTYPE_CONTROL entries; AutoCAD's R2000 and R2018 saves agree).
+        // Without it every line was written as index 0, CONTINUOUS.
+        if (dat->from_version >= R_2018b)
+          _obj->lines[rcount1].lt_index = dwg_mlinestyle_ltindex (
+              dwg, _obj->lines[rcount1].lt_ltype);
+#  endif
         SUB_FIELD_BSd (lines[rcount1], lt_index, 6);
 #endif
       }

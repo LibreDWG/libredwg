@@ -4629,6 +4629,34 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
 }
 
 #define HANDLE_STREAM_ERROR_CLEANUP
+/* MLINESTYLE.lines[].lt_ltype: the R2018+ linetype handle as the index used
+   until R2018: 32767 BYLAYER, 32766 BYBLOCK, else the position in the
+   LTYPE_CONTROL entries (AutoCAD's R2000 and R2018 saves of the same drawing
+   agree: the BYLAYER handle is index 32767). */
+static BITCODE_BSd
+dwg_mlinestyle_ltindex (Dwg_Data *restrict dwg, BITCODE_H ltype)
+{
+  Dwg_Object *ctrl;
+  Dwg_Object_LTYPE_CONTROL *lc;
+  BITCODE_RLL ref;
+  if (!ltype)
+    return 32767;
+  ref = ltype->absolute_ref;
+  ctrl = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
+  lc = (ctrl && ctrl->tio.object) ? ctrl->tio.object->tio.LTYPE_CONTROL
+                                  : NULL;
+  if (!lc)
+    return 32767;
+  if (lc->bylayer && lc->bylayer->absolute_ref == ref)
+    return 32767;
+  if (lc->byblock && lc->byblock->absolute_ref == ref)
+    return 32766;
+  for (BITCODE_BS i = 0; lc->entries && i < lc->num_entries; i++)
+    if (lc->entries[i] && lc->entries[i]->absolute_ref == ref)
+      return (BITCODE_BSd)i;
+  return 32767;
+}
+
 #include "dwg.spec"
 #undef HANDLE_STREAM_ERROR_CLEANUP
 // clang-format on
