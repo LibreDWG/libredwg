@@ -4043,7 +4043,15 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (dat->version < R_11 && obj == mspace)
             ;
           else
-            error |= dxf_block_write (dat, obj, mspace, pspace, &i);
+            {
+              /* Pass a copy of the loop index: dxf_block_write() advances it
+                 past the sub-entities of the INSERTs and POLYLINEs it
+                 writes, which is right for the ENTITIES walk but here
+                 skips the BLOCK_HEADERs that follow, and their bodies
+                 never reach the output (GH #1409). */
+              int j = i;
+              error |= dxf_block_write (dat, obj, mspace, pspace, &j);
+            }
         }
     }
 
