@@ -466,6 +466,12 @@
       if (flags & 0x40)
         {
 #ifndef IS_ENCODER
+#ifdef IS_DECODER
+          // R2007+: read once, later, by dwg_decode_common_entity_handle_data.
+          // Reading it here as well consumed the next handle, the layer, so
+          // entities with a color book color lost their layer.
+          if (dat->from_version < R_2007)
+#endif
           FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9 lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 #endif
         }
