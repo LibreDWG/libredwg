@@ -2166,12 +2166,16 @@ typedef struct _dwg_entity_TEXT
  */
 typedef struct _dwg_AcDbMTextObjectEmbedded
 {
-  /* common fields */
+  /* common entity fields, starting from the entmode. R2018+: the order
+     differs from the common entity data, see dwg_spec_shared.h */
   BITCODE_BB entmode;      	/*<! DXF 70 */
+  BITCODE_H ownerhandle;        /* only if entmode == 0, can be 0 */
   BITCODE_BL num_reactors;
+  BITCODE_H *reactors;
   BITCODE_B has_ds_data;
-  BITCODE_CMC color;
+  BITCODE_CMC color;            /* ENC */
   BITCODE_B is_xdic_missing;
+  BITCODE_H xdicobjhandle;
   BITCODE_BD ltype_scale;
   BITCODE_BB ltype_flags;
   BITCODE_BB plotstyle_flags;
@@ -2183,6 +2187,12 @@ typedef struct _dwg_AcDbMTextObjectEmbedded
   BITCODE_BS invisible;
   BITCODE_RC linewt;
   BITCODE_H layer;
+  BITCODE_H ltype;              /* if ltype_flags == 3 */
+  BITCODE_H material;           /* if material_flags == 3 */
+  BITCODE_H plotstyle;          /* if plotstyle_flags == 3 */
+  BITCODE_H full_visualstyle;
+  BITCODE_H face_visualstyle;
+  BITCODE_H edge_visualstyle;
   /* MTEXT fields. See there. */
   BITCODE_3BD ins_pt; 		/*!< DXF 10 */
   BITCODE_3BD extrusion; 	/*!< DXF 210 */
@@ -2254,11 +2264,11 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_H style;
   BITCODE_RC mtext_type;    /* R2018+ */
   Dwg_AcDbMTextObjectEmbedded mtext;
-  BITCODE_B is_really_locked;      	/*<! DXF 70 */
-  BITCODE_BS annotative_data_size;/* R2018+ */
-  BITCODE_RC* annotative_data;    /* R2018+ */
-  BITCODE_BS annotative_flag;     /* R2018+ */
-  BITCODE_H  annotative_style;    /* R2018+ */
+  BITCODE_B is_really_locked;      	/*<! unused */
+  BITCODE_BS annotative_data_size;/* R2018+, if mtext_type > 1 */
+  BITCODE_RC* annotative_data;    /* R2018+, if annotative_data_size > 0 */
+  BITCODE_BS annotative_flag;     /* R2018+, unknown BS, 0 */
+  BITCODE_H  annotative_style;    /* R2018+, the registered application */
 } Dwg_Entity_ATTRIB;
 
 /** \ref Dwg_Entity_ATTDEF
@@ -2297,11 +2307,11 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_H style;
   BITCODE_RC mtext_type;          /* R2018+ */
   Dwg_AcDbMTextObjectEmbedded mtext;
-  BITCODE_B is_really_locked;      	/*<! DXF 70 */
-  BITCODE_BS annotative_data_size;/* R2018+ */
-  BITCODE_RC* annotative_data;    /* R2018+ */
-  BITCODE_BS annotative_flag;    /* R2018+ */
-  BITCODE_H  annotative_style;    /* R2018+ */
+  BITCODE_B is_really_locked;      	/*<! unused */
+  BITCODE_BS annotative_data_size;/* R2018+, if mtext_type > 1 */
+  BITCODE_RC* annotative_data;    /* R2018+, if annotative_data_size > 0 */
+  BITCODE_BS annotative_flag;     /* R2018+, unknown BS, 0 */
+  BITCODE_H  annotative_style;    /* R2018+, the registered application */
   // BITCODE_BS num_secondary_atts;  /* R2018+ TODO */
   // BITCODE_H *secondary_atts;
 
