@@ -99,7 +99,9 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
                 d = dest + _off;
                 end = dest + len;
               }
-            if (dwg_codepage_is_twobyte (cp, *s))
+            // a lead byte without a trail byte would consume the
+            // terminator and scan past the end of src
+            if (dwg_codepage_is_twobyte (cp, *s) && s[1])
               cc = cc << 8 | *++s;
             wc = dwg_codepage_uwc (cp, cc);
             if (wc > 127 || wc < 0x20)
