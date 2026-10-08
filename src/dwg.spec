@@ -5487,6 +5487,12 @@ DWG_ENTITY (LWPOLYLINE)
   VALUE_BS (((FIELD_VALUE (flag) & 256) ? 128 : 0) + (FIELD_VALUE (flag) & 512 ? 1 : 0), 70);
   FIELD_BD (const_width, 43);
 #else
+  ENCODER {
+    // the vertex ids are R2010+: before, 1024 is no flag, and other readers
+    // (ACadSharp) read a num_vertexids that is not there.
+    if (dat->version < R_2010b && (FIELD_VALUE (flag) & 1024))
+      FIELD_VALUE (flag) &= ~1024;
+  }
   FIELD_BS (flag, 70); // 512 closed, 256 plinegen, 4 constwidth, 8 elevation, 2 thickness
                        // 1 extrusion, 16 num_bulges, 1024 vertexidcount, 32 numwidths
   LOG_FLAG_LWPOLYLINE
