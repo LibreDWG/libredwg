@@ -171,20 +171,19 @@ static char *_path_field (const char *path);
 #define VALUE_RLx(value, dxf) VALUE ((BITCODE_RL)value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
 #define VALUE_RLLd(value, dxf) VALUE (value, RLLd, dxf)
-#ifdef IS_RELEASE
-#  define VALUE_RD(value, dxf)                                                \
-    if (bit_isnan (value))                                                    \
-      _VALUE_RD (0.0, dxf)                                                    \
-    else                                                                      \
-      _VALUE_RD (value, dxf)
-#else
-#  define VALUE_RD(value, dxf) _VALUE_RD (value, dxf)
-#endif
+// JSON has no NaN or Infinity: "nan", "-nan" or "inf" made the whole output
+// unreadable (gh44-error.dwg, a misread RAPIDRTRENDERSETTINGS; a
+// SPATIAL_FILTER matrix from DXF). Write 0.0, also in non-release builds and
+// in vectors.
+#define VALUE_RD(value, dxf) _VALUE_RD (value, dxf)
 #define _VALUE_RD(value, dxf)                                                 \
   {                                                                           \
     char _buf[256];                                                           \
     size_t k;                                                                 \
-    snprintf (_buf, 255, FORMAT_RD, value);                                   \
+    double _v = (double)(value);                                              \
+    if (!isfinite (_v))                                                       \
+      _v = 0.0;                                                               \
+    snprintf (_buf, 255, FORMAT_RD, _v);                                      \
     k = strlen (_buf);                                                        \
     if (k > 0 && strrchr (_buf, '.') && _buf[k - 1] == '0')                   \
       {                                                                       \
@@ -665,7 +664,15 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->nam[vcount]);    \
+          if (#type[0] == 'B' && #type[1] == 'D' && !#type[2])                \
+            {                                                                 \
+              FIRSTPREFIX _VALUE_RD (_obj->nam[vcount], dxf);                 \
+            }                                                                 \
+          else                                                                \
+            {                                                                 \
+              FIRSTPREFIX fprintf (dat->fh, FORMAT_##type,                    \
+                                   _obj->nam[vcount]);                        \
+            }                                                                 \
         }                                                                     \
     }                                                                         \
   else                                                                        \
@@ -678,7 +685,15 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->o.nam[vcount]);  \
+          if (#type[0] == 'B' && #type[1] == 'D' && !#type[2])                \
+            {                                                                 \
+              FIRSTPREFIX _VALUE_RD (_obj->o.nam[vcount], dxf);               \
+            }                                                                 \
+          else                                                                \
+            {                                                                 \
+              FIRSTPREFIX fprintf (dat->fh, FORMAT_##type,                    \
+                                   _obj->o.nam[vcount]);                      \
+            }                                                                 \
         }                                                                     \
     }                                                                         \
   else                                                                        \
