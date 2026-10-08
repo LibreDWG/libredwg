@@ -193,6 +193,12 @@ DWG_ENT_SUBCLASS_DECL (ATTDEF, AcDbMTextObjectEmbedded);
 /* (2/16) */
 DWG_ENTITY (ATTRIB)
 
+#ifdef IS_ENCODER
+  // R2018+ multi-line to an earlier, single-line only version
+  if (dat->version < R_2018b && dat->from_version >= R_2018b
+      && FIELD_VALUE (mtext_type) > 1)
+    encode_attrib_mtext_text (dat, &_obj->text_value, _obj->mtext.text);
+#endif
   SUBCLASS (AcDbText);
   PRE (R_13b1)
     {
@@ -408,6 +414,12 @@ DWG_ENTITY_END
 /* (3/15) */
 DWG_ENTITY (ATTDEF)
 
+#ifdef IS_ENCODER
+  // R2018+ multi-line to an earlier, single-line only version
+  if (dat->version < R_2018b && dat->from_version >= R_2018b
+      && FIELD_VALUE (mtext_type) > 1)
+    encode_attrib_mtext_text (dat, &_obj->default_value, _obj->mtext.text);
+#endif
   SUBCLASS (AcDbText);
   PRE (R_13b1)
     {

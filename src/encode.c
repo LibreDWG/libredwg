@@ -4629,6 +4629,116 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
 }
 
 #define HANDLE_STREAM_ERROR_CLEANUP
+/* R2018+ multi-line ATTRIB/ATTDEF (mtext_type > 1) written to an earlier
+   version, which has only single-line attributes. AutoCAD's own R2010 and
+   R2013 saves of the same drawing (ACadSharp samples sample_AC1024.dwg,
+   sample_AC1027.dwg vs sample_AC1032.dwg) have the text of the multi-line
+   attribute as text_value, while R2018 has an empty text_value and the text
+   only in the embedded MTEXT. So with an empty text_value take the MTEXT text,
+   with the MTEXT formatting codes stripped. Which codes AutoCAD strips, and
+   what a paragraph break \P becomes, is not verified (here a space). */
+static uint32_t
+mtext_get (const void *s, int wide, size_t i)
+{
+  return wide ? ((const BITCODE_RS *)s)[i] : ((const unsigned char *)s)[i];
+}
+static void
+mtext_put (void *d, int wide, size_t i, uint32_t c)
+{
+  if (wide)
+    ((BITCODE_RS *)d)[i] = (BITCODE_RS)c;
+  else
+    ((unsigned char *)d)[i] = (unsigned char)c;
+}
+static void
+encode_attrib_mtext_text (Bit_Chain *restrict dat, BITCODE_T *text_value,
+                          const BITCODE_T mtext)
+{
+  const int wide = IS_FROM_TU (dat);
+  const int w = wide ? 2 : 1;
+  size_t len, i, j;
+  void *dest;
+  if (!mtext)
+    return;
+  if (*text_value
+      && (wide ? *(BITCODE_RS *)*text_value != 0 : **text_value != 0))
+    return; // not empty
+  len = wide ? bit_wcs2len ((BITCODE_TU)mtext) : strlen (mtext);
+  if (!len)
+    return;
+  dest = calloc (len + 1, w);
+  if (!dest)
+    return;
+  for (i = j = 0; i < len; i++)
+    {
+      uint32_t c = mtext_get (mtext, wide, i);
+      if (c == '{' || c == '}')
+        continue;
+      if (c != '\\' || i + 1 >= len)
+        {
+          mtext_put (dest, wide, j++, c);
+          continue;
+        }
+      c = mtext_get (mtext, wide, ++i);
+      switch (c)
+        {
+        case 'P': // paragraph break
+        case 'X':
+        case '~': // non-breaking space
+          mtext_put (dest, wide, j++, ' ');
+          break;
+        case '\\':
+        case '{':
+        case '}':
+          mtext_put (dest, wide, j++, c);
+          break;
+        case 'L': // under-, overline, strike-through on/off
+        case 'l':
+        case 'O':
+        case 'o':
+        case 'K':
+        case 'k':
+          break;
+        case 'S': // stacked a^b; a/b; a#b;
+          for (i++; i < len; i++)
+            {
+              c = mtext_get (mtext, wide, i);
+              if (c == ';')
+                break;
+              mtext_put (dest, wide, j++, (c == '^' || c == '#') ? '/' : c);
+            }
+          break;
+        case 'U': // \U+XXXX, \M+NXXXX: as in TEXT
+        case 'M':
+          mtext_put (dest, wide, j++, '\\');
+          mtext_put (dest, wide, j++, c);
+          break;
+        case 'A': // codes with an argument until ;
+        case 'C':
+        case 'c':
+        case 'F':
+        case 'f':
+        case 'H':
+        case 'Q':
+        case 'T':
+        case 'W':
+        case 'p':
+          for (i++; i < len; i++)
+            if (mtext_get (mtext, wide, i) == ';')
+              break;
+          break;
+        default:
+          mtext_put (dest, wide, j++, '\\');
+          mtext_put (dest, wide, j++, c);
+          break;
+        }
+    }
+  mtext_put (dest, wide, j, 0);
+  free (*text_value);
+  *text_value = (BITCODE_T)dest;
+  LOG_TRACE ("multi-line attribute: text_value from the MTEXT text\n");
+}
+
 #include "dwg.spec"
 #undef HANDLE_STREAM_ERROR_CLEANUP
 // clang-format on
