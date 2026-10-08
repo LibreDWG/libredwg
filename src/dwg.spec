@@ -2917,6 +2917,15 @@ DWG_ENTITY (MTEXT)
 
   SINCE (R_2000b)
     {
+      // R13/R14 have no line spacing: AutoCAD's defaults, at least 1 (73)
+      // and 1.0 (44). 0.0 collapsed the lines.
+      IF_ENCODE_FROM_EARLIER {
+        if (FIELD_VALUE (linespace_factor) == 0.0)
+          {
+            FIELD_VALUE (linespace_style) = 1;
+            FIELD_VALUE (linespace_factor) = 1.0;
+          }
+      }
       FIELD_BS (linespace_style, 73);
       FIELD_BD (linespace_factor, 44);
       FIELD_B (unknown_b0, 0);
