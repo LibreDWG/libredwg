@@ -43,6 +43,15 @@
   FIELD_VECTOR_INL (aux_intro, RC, 3, 0); /* ff 77 01 */
   FIELD_RSx (dwg_version, 0);
   FIELD_RSx (maint_version, 0);
+  // R2018: the three maintenance versions are RL. These are the upper
+  // halves, not 3 RS at the end: AutoCAD's R2013 and R2018 saves of the same
+  // drawing are 123 and 129 bytes, and only so all later fields match
+  // (minus_1 was 0xffff0000 and TDCREATE garbage before).
+#ifndef IS_JSON
+  SINCE (R_2018b) {
+    FIELD_RS (zero_18[0], 0);
+  }
+#endif
   FIELD_RL (numsaves, 0);
   FIELD_RLd (minus_1, 0);
   FIELD_RS (numsaves_1, 0);
@@ -50,8 +59,18 @@
   FIELD_RL (zero, 0);
   FIELD_RSx (dwg_version_1, 0);
   FIELD_RSx (maint_version_1, 0);
+#ifndef IS_JSON
+  SINCE (R_2018b) {
+    FIELD_RS (zero_18[1], 0);
+  }
+#endif
   FIELD_RSx (dwg_version_2, 0);
   FIELD_RSx (maint_version_2, 0);
+#ifndef IS_JSON
+  SINCE (R_2018b) {
+    FIELD_RS (zero_18[2], 0);
+  }
+#endif
   FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0); /* 5, 0x893, 5, 0x893, 0, 1 */
   FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0); /* all 0 */
   FIELD_TIMERLL (TDCREATE, 0);
@@ -70,6 +89,9 @@
   // readers (ACadSharp) read past its end.
   FIELD_RL (zero_7, 0);
   FIELD_RL (zero_8, 0);
-  SINCE (R_2018) {
+#ifdef IS_JSON
+  // the names in_json knows
+  SINCE (R_2018b) {
     FIELD_VECTOR_INL (zero_18, RS, 3, 0);
   }
+#endif
