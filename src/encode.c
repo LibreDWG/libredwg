@@ -6852,18 +6852,31 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
               char *dest;
-              if (length + 5 + dat->byte < dat->size)
-                bit_chain_alloc_size (dat,
-                                      (length + 5 + dat->byte) - dat->size);
-              if (length > 255)
-                {
-                  LOG_ERROR ("eed: overlong string %d stripped", (int)length);
-                  length = 255;
-                }
               dest = bit_embed_TU_size (s, length);
+              // The length is of the converted string: characters above
+              // U+00FF become \U+XXXX, longer than one byte.
+              if (dest)
+                {
+                  size_t dlen = strlen (dest);
+                  if (dlen > 255)
+                    {
+                      LOG_ERROR ("eed: overlong string %d stripped",
+                                 (int)dlen);
+                      dlen = 255;
+                    }
+                  length = (BITCODE_RS)dlen;
+                }
+              else
+                length = 0;
+              // was "< dat->size": the unsigned difference underflowed
+              if (dat->byte + length + 5 >= dat->size)
+                bit_chain_alloc_size (dat, length + 5);
               bit_write_RC (dat, length);
-              bit_write_RS (dat, dat->codepage);
-              bit_write_TF (dat, (unsigned char *)dest, length);
+              // big-endian as in the other branch, the decoder and ODA:
+              // little-endian gave 0x1E00 for ANSI_1252, and ACadSharp
+              // failed on the STYLE with its font name in the EED.
+              bit_write_RS_BE (dat, dat->codepage);
+              bit_write_TF (dat, (unsigned char *)(dest ? dest : ""), length);
               LOG_TRACE ("string: len=" FORMAT_RS " [RC] cp=" FORMAT_RS
                          " [RS] \"%s\" [TF]",
                          length, dat->codepage, dest);
