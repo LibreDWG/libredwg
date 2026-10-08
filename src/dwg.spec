@@ -376,11 +376,14 @@ DWG_ENTITY (ATTRIB)
     SINCE (R_2007a) {
       FIELD_B (lock_position_flag, 0); // 70
     }
-    // XRECORD subclass
+    // Not in the DWG: in AutoCAD's R2010, R2013 and R2018 files the data
+    // stream ends after the lock_position_flag (ODA 20.4.4, ACadSharp).
+    // Only ATTDEF has the repeated version RC (here keep_duplicate_records).
+#if !defined(IS_DECODER) && !defined(IS_ENCODER)
     SINCE (R_2010b) {
       FIELD_RC (keep_duplicate_records, 0);
-      VALUEOUTOFBOUNDS (keep_duplicate_records, 1)
     }
+#endif
   }
   COMMON_ENTITY_HANDLE_DATA;
   SINCE (R_13b1) {
