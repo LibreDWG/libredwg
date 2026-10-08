@@ -3404,7 +3404,10 @@ DWG_TABLE (LAYER)
   }
   VERSIONS (R_13b1, R_14) {
     DECODER {
-      FIELD_VALUE (off) = FIELD_VALUE (color.index) < 0;
+      // Off is the bit read above, or a negative color. AutoCAD's R14
+      // drawings keep the color positive and set the bit (sample_AC1014
+      // LAYER_OFF), overwriting the bit turned off layers on.
+      FIELD_VALUE (off) = FIELD_VALUE (off) || FIELD_VALUE (color.index) < 0;
       LOG_LAYER_FLAG(off);
     }
     // for DWG
