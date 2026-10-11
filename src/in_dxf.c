@@ -12337,6 +12337,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else
                 goto search_field;
             }
+          else if (obj->fixedtype == DWG_TYPE_SHAPE && pair->code == 2)
+            {
+              // the shape name: its number in the SHX file is unknown to us
+              // (we don't read SHX). The generic importer took dynapi's
+              // style_id (DXF 2) and stored the string pointer as the number,
+              // different on every run and platform.
+              LOG_TRACE ("SHAPE.name %s ignored [2]\n", pair->value.s.ptr);
+              goto next_pair;
+            }
           else if (obj->fixedtype == DWG_TYPE_HATCH)
             {
               // the elevation point comes before the paths (91); after them
