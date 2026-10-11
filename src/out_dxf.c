@@ -2877,6 +2877,26 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+/* R13-R2000: the next VERTEX or ATTRIB of an owner, by the entity links
+   (handle + 1 with nolinks), not the next object: the SEQEND may lie between
+   them (sample_AC1015: ATTRIB 79D, SEQEND 79E, ATTRIB 79F, 7A0), and the
+   attributes after it were lost in the DXF. */
+static Dwg_Object *
+dxf_owned_next (Dwg_Object *restrict o)
+{
+  Dwg_Data *dwg = o->parent;
+  Dwg_Object_Entity *ent
+      = o->supertype == DWG_SUPERTYPE_ENTITY ? o->tio.entity : NULL;
+  Dwg_Object *next = NULL;
+  if (ent && ent->nolinks)
+    next = dwg_resolve_handle_silent (dwg, o->handle.value + 1);
+  else if (ent && ent->next_entity && ent->next_entity->absolute_ref)
+    next = dwg_resolve_handle_silent (dwg, ent->next_entity->absolute_ref);
+  if (!next || next == o)
+    next = dwg_next_object (o);
+  return next;
+}
+
 /* process unsorted vertices until SEQEND */
 #  define decl_dxf_process_VERTEX(token)                                      \
     static int dxf_process_VERTEX_##token (Bit_Chain *restrict dat,           \
@@ -2899,7 +2919,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         *i = *i + 1;                                                          \
         do                                                                    \
           {                                                                   \
-            o = dwg_next_object (o);                                          \
+            o = dxf_owned_next (o);                                           \
             if (!o)                                                           \
               return DWG_ERR_INVALIDHANDLE;                                   \
             if (strEQc (#token, "PFACE")                                      \
@@ -2913,7 +2933,8 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
               }                                                               \
             *i = *i + 1;                                                      \
           }                                                                   \
-        while (o->fixedtype != DWG_TYPE_SEQEND && o != last_vertex);          \
+        while (o->fixedtype != DWG_TYPE_SEQEND && o != last_vertex            \
+               && *i < (int)o->parent->num_objects * 2);                      \
         o = _obj->seqend ? _obj->seqend->obj : NULL;                          \
         if (o && o->fixedtype == DWG_TYPE_SEQEND)                             \
           error |= dwg_dxf_SEQEND (dat, o);                                   \
@@ -2974,14 +2995,15 @@ decl_dxf_process_VERTEX (PFACE)
         *i = *i + 1;                                                          \
         do                                                                    \
           {                                                                   \
-            o = dwg_next_object (o);                                          \
+            o = dxf_owned_next (o);                                           \
             if (!o)                                                           \
               return DWG_ERR_INVALIDHANDLE;                                   \
             if (o->fixedtype == DWG_TYPE_ATTRIB)                              \
               error |= dwg_dxf_ATTRIB (dat, o);                               \
             *i = *i + 1;                                                      \
           }                                                                   \
-        while (o->fixedtype == DWG_TYPE_ATTRIB && o != last_attrib);          \
+        while (o->fixedtype == DWG_TYPE_ATTRIB && o != last_attrib            \
+               && *i < (int)o->parent->num_objects * 2);                      \
         o = _obj->seqend ? _obj->seqend->obj : NULL;                          \
         if (o && o->fixedtype == DWG_TYPE_SEQEND)                             \
           error |= dwg_dxf_SEQEND (dat, o);                                   \
