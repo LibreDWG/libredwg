@@ -8,7 +8,6 @@ api_process (dwg_object *obj)
   BITCODE_BS dlevel;
   BITCODE_B is_watertight;
   BITCODE_BL i, num_subdiv_vertex;
-  BITCODE_3BD *subdiv_vertex;
   BITCODE_BL num_vertex;
   BITCODE_3BD *vertex;
   BITCODE_BL num_faces;
@@ -23,15 +22,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, MESH, dlevel, BS);
   CHK_ENTITY_TYPE (_obj, MESH, is_watertight, B);
-  CHK_ENTITY_TYPE (_obj, MESH, num_subdiv_vertex, BL);
-  if (!dwg_dynapi_entity_value (_obj, "MESH", "subdiv_vertex", &subdiv_vertex,
-                                NULL))
-    fail ("MESH.subdiv_vertex");
-  for (i = 0; i < num_subdiv_vertex; i++)
-    {
-      ok ("MESH.subdiv_vertex[%u]: (%f, %f, %f)", i, subdiv_vertex[i].x,
-          subdiv_vertex[i].y, subdiv_vertex[i].z);
-    }
+  CHK_ENTITY_TYPE (_obj, MESH, num_subdiv_vertex, BL); // subdivision level
   CHK_ENTITY_TYPE (_obj, MESH, num_vertex, BL);
   if (!dwg_dynapi_entity_value (_obj, "MESH", "vertex", &vertex, NULL))
     fail ("MESH.vertex");
