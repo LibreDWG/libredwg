@@ -3926,8 +3926,10 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       }
       LATER_VERSIONS
       {
-        data->u.eed_3.layer = bit_read_RLL (dat);
-        LOG_TRACE ("layer: " FORMAT_RLL " [RLL]", data->u.eed_3.layer);
+        // big-endian as the entity handle (5): AutoCAD's sample_AC1015 has
+        // 00..00 08 F5 for its LAYER app_layer 8F5
+        data->u.eed_3.layer = bit_read_RLL_BE (dat);
+        LOG_TRACE ("layer: " FORMAT_RLL " [RLL_BE]", data->u.eed_3.layer);
       }
       break;
     case 4:
