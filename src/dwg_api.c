@@ -24595,8 +24595,10 @@ dwg_is_valid_tag (const char *tag)
     for (size_t i = 0; i < len; i++)
       {
         uint16_t c = wstr[i];
-        if (iswlower (c)
-            || !(c == '$' || c == '_' || c == '-' || iswalnum (c)))
+        // AutoCAD: any character but space and ! (and no lowercase, it
+        // converts them). "SPACEOBJECTS:NUMBER" (aec_objects) was rejected
+        // and the tag lost via DXF.
+        if (iswlower (c) || c == ' ' || c == '!' || c < 0x20)
           goto fail1;
       }
     free (wstr);
@@ -24607,11 +24609,13 @@ dwg_is_valid_tag (const char *tag)
   }
 #else
   // only ascii support, no wctype nor maxlen checks
+  if (!*tag)
+    return false;
   {
     uint8_t c;
     while (c = *tag++)
       {
-        if (islower (c) || !(c == '$' || c == '_' || c == '-' || isalnum (c)))
+        if (islower (c) || c == ' ' || c == '!' || c < 0x20)
           return false;
       }
   }
