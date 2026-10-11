@@ -589,11 +589,72 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   FREE_3DSOLID \
   COMMON_3DSOLID
 
+/* 20.4.99 Value: since R2007 a string (and kGeneral) value is a BL byte
+   count followed by the bytes in the data stream, UTF-16LE with the
+   terminating zero. Not a TV in the string stream as in the ODA spec 5.4.1:
+   that misaligns the R2010+ tables (checked with the data end of the table
+   entities), ACadSharp reads it the same way. */
+#ifdef IS_DECODER
+#  define TABLE_value_bytes(value)                                            \
+  {                                                                           \
+    BITCODE_BL _n;                                                            \
+    FIELD_BL (value.data_size, 92);                                           \
+    _n = _obj->value.data_size;                                               \
+    if (_n > 0 && (size_t)_n <= dat->size - dat->byte)                        \
+      {                                                                       \
+        BITCODE_RC *_s = (BITCODE_RC *)calloc (_n + 2, 1);                    \
+        if (_s && !bit_read_fixed (dat, _s, _n))                              \
+          {                                                                   \
+            _obj->value.data_string = (BITCODE_T)_s;                          \
+            LOG_TRACE_TU (#value ".data_string",                              \
+                          (BITCODE_TU)_obj->value.data_string, 1);            \
+          }                                                                   \
+        else                                                                  \
+          free (_s);                                                          \
+      }                                                                       \
+    else if (_n > 0)                                                          \
+      {                                                                       \
+        LOG_ERROR ("Invalid " #value ".data_size %u", (unsigned)_n);          \
+        _obj->value.data_size = 0;                                            \
+        error |= DWG_ERR_VALUEOUTOFBOUNDS;                                    \
+      }                                                                       \
+  }
+#elif defined(IS_ENCODER)
+#  define TABLE_value_bytes(value)                                            \
+  {                                                                           \
+    BITCODE_TU _ws = NULL;                                                    \
+    int _free_ws = 0;                                                         \
+    BITCODE_BL _n = 0;                                                        \
+    if (_obj->value.data_string)                                              \
+      {                                                                       \
+        if (IS_FROM_TU (dat))                                                 \
+          _ws = (BITCODE_TU)_obj->value.data_string;                          \
+        else                                                                  \
+          {                                                                   \
+            _ws = bit_utf8_to_TU (_obj->value.data_string, 0);                \
+            _free_ws = 1;                                                     \
+          }                                                                   \
+        if (_ws)                                                              \
+          _n = (BITCODE_BL)((bit_wcs2len (_ws) + 1) * 2);                     \
+      }                                                                       \
+    _obj->value.data_size = _n;                                               \
+    FIELD_BL (value.data_size, 92);                                           \
+    if (_n)                                                                   \
+      bit_write_TF (dat, (BITCODE_TF)_ws, _n);                                \
+    if (_free_ws)                                                             \
+      free (_ws);                                                             \
+  }
+#else
+#  define TABLE_value_bytes(value)                                            \
+  FIELD_BL (value.data_size, 92);                                             \
+  FIELD_T (value.data_string, 1);
+#endif
+
 #define TABLE_value_fields(value)                                             \
   PRE (R_2007a) { FIELD_VALUE (value.data_type) &= ~0x200; }                  \
   LATER_VERSIONS { FIELD_BL (value.format_flags, 93); }                       \
   FIELD_BL (value.data_type, 90);                                             \
-  if (!(dat->version >= R_2007 && (FIELD_VALUE (value.format_flags) & 3)))    \
+  if (!(dat->version >= R_2007 && (FIELD_VALUE (value.format_flags) & 1)))    \
     {                                                                         \
       switch (FIELD_VALUE (value.data_type))                                  \
         {                                                                     \
@@ -607,7 +668,14 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           FIELD_BD (value.data_double, 140);                                  \
           break;                                                              \
         case 4: /* kString */                                                 \
-          FIELD_T (value.data_string, 1); /* and 2. TODO multiple lines */    \
+          SINCE (R_2007a)                                                     \
+          {                                                                   \
+            TABLE_value_bytes (value)                                         \
+          }                                                                   \
+          else                                                                \
+          {                                                                   \
+            FIELD_T (value.data_string, 1); /* and 2. TODO multiple lines */  \
+          }                                                                   \
           break;                                                              \
         case 8: /* kDate */                                                   \
           FIELD_BL (value.data_size, 92);                                     \
@@ -631,7 +699,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           LOG_ERROR ("Unknown data type in TABLE_value_fields: kResBuf");     \
           break;                                                              \
         case 512: /* kGeneral since r2007*/                                   \
-          SINCE (R_2007a) { FIELD_BL (value.data_size, 0); }                  \
+          SINCE (R_2007a) { TABLE_value_bytes (value) }                       \
           else                                                                \
             LOG_ERROR ("Unknown data type in TABLE_value_fields: kGeneral <r2007"); \
           break;                                                              \

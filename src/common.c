@@ -377,12 +377,18 @@ strrplc (const char *s, const char *from, const char *to)
     {
       const size_t l1 = strlen (from);
       const size_t l2 = strlen (to);
-      char *dest = (char *)calloc (1, 80);
-      long i = p - s;
-      assert (strlen (s) - ((long)l1 - l2) < 80);
+      // the callers strcat a format suffix of up to 64 chars to the result.
+      // Nested table fields (TABLECONTENT cells, contents, attrs) are longer
+      // than 80 chars.
+      const size_t len = strlen (s) - l1 + l2;
+      const size_t size = len + 64 < 80 ? 80 : len + 64;
+      char *dest = (char *)calloc (1, size);
+      size_t i = (size_t)(p - s);
+      if (!dest)
+        return NULL;
       memcpy (dest, s, i);
-      strncat (dest, to, 79 - l2);
-      strncat (dest, s + i + l1, 79 - l1);
+      memcpy (dest + i, to, l2);
+      memcpy (dest + i + l2, s + i + l1, strlen (s + i + l1));
       return dest;
     }
   else

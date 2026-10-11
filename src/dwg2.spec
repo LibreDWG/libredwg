@@ -294,39 +294,105 @@ DWG_OBJECT_END
     }									\
   DXF { VALUE_TFF ("TABLEFORMAT_END", 309) }
 
-#if defined (DEBUG_CLASSES) || defined (IS_FREE)
+// Cell style data with the borders in the 4th repeat counter, for the cell
+// style overrides inside the cells loop (which already uses rcount2).
+#define CellStyle_fields4(sty)						\
+  DXF { VALUE_TFF ("TABLEFORMAT_BEGIN", 1) }				\
+  FIELD_BL (sty.type, 90);						\
+  FIELD_BSx (sty.data_flags, 170);					\
+  if (FIELD_VALUE (sty.data_flags))					\
+    {									\
+      FIELD_BLx (sty.property_override_flags, 91);			\
+      FIELD_BLx (sty.merge_flags, 92);					\
+      FIELD_CMTC (sty.bg_color, 62);					\
+      FIELD_BL (sty.content_layout, 93);				\
+      ContentFormat_fields (sty.content_format);			\
+      FIELD_BSx (sty.margin_override_flags, 171);			\
+      if (FIELD_VALUE (sty.margin_override_flags))			\
+	{								\
+	  DXF { VALUE_TFF ("MARGIN", 301) }				\
+	  DXF { VALUE_TFF ("CELLMARGIN_BEGIN", 1) }			\
+	  FIELD_BD (sty.vert_margin, 40);				\
+	  FIELD_BD (sty.horiz_margin, 40);				\
+	  FIELD_BD (sty.bottom_margin, 40);				\
+	  FIELD_BD (sty.right_margin, 40);				\
+	  FIELD_BD (sty.margin_horiz_spacing, 40);			\
+	  FIELD_BD (sty.margin_vert_spacing, 40);			\
+	  DXF { VALUE_TFF ("CELLMARGIN_END", 309) }			\
+	}								\
+      FIELD_BL (sty.num_borders, 94); /* 0-6 */			\
+      VALUEOUTOFBOUNDS (sty.num_borders, 6);				\
+      REPEAT4 (sty.num_borders, sty.borders, Dwg_GridFormat)		\
+      REPEAT_BLOCK							\
+	SUB_FIELD_BLx (sty.borders[rcount4],index_mask, 95);		\
+	if (FIELD_VALUE (sty.borders[rcount4].index_mask))		\
+	  {								\
+	    SUB_FIELD_BL (sty.borders[rcount4],border_overrides, 90);	\
+	    SUB_FIELD_BL (sty.borders[rcount4],border_type, 91);	\
+	    SUB_FIELD_CMTC (sty.borders[rcount4],color, 62);		\
+	    SUB_FIELD_BLd (sty.borders[rcount4],linewt, 92);		\
+	    SUB_FIELD_HANDLE (sty.borders[rcount4],ltype, 3, 340);	\
+	    SUB_FIELD_BL (sty.borders[rcount4],visible, 93);		\
+	    SUB_FIELD_BD (sty.borders[rcount4],double_line_spacing, 40);\
+	  }								\
+      END_REPEAT_BLOCK							\
+      END_REPEAT (sty.borders);						\
+    }									\
+  DXF { VALUE_TFF ("TABLEFORMAT_END", 309) }
 
 // clang-format off
 #define row tdata.rows[rcount1]
+#define tcol tdata.cols[rcount1]
 #define cell row.cells[rcount2]
 #define content cell.cell_contents[rcount3]
-#define geom cell.geometry[0]
+#define geom cell.geometry[rcount3]
 #define attr content.attrs[rcount4]
 #define merged fdata.merged_cells[rcount1]
 
-// pg.237 20.4.97 for TABLE (2010+) and TABLECONTENT
+// pg.237 20.4.97 for TABLE (2010+) and TABLECONTENT, without the
+// table style handle at the end (H 340).
+// Checked against the ODA spec 20.4.97, ACadSharp readTableContent, and the
+// data end of the R2010-R2018 tables in the test corpus.
 #define TABLECONTENTs_fields					\
   SUBCLASS (AcDbLinkedData)                                     \
   FIELD_T (ldata.name, 1);					\
   FIELD_T (ldata.description, 300);				\
   SUBCLASS (AcDbLinkedTableData)                                \
   FIELD_BL (tdata.num_cols, 90);				\
+  VALUEOUTOFBOUNDS (tdata.num_cols, 5000)			\
   REPEAT (tdata.num_cols, tdata.cols, Dwg_TableDataColumn)	\
   REPEAT_BLOCK							\
-      SUB_FIELD_T (tdata.cols[rcount1],name, 300);		\
+      SUB_FIELD_T (tcol,name, 300);				\
       DXF { VALUE_TFF ("LINKEDTABLEDATACOLUMN_BEGIN", 1) }      \
-      SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);	\
+      SUB_FIELD_BL (tcol,custom_data, 91);			\
+      SUB_FIELD_BL (tcol,num_customdata_items, 90);		\
+      REPEAT3 (tcol.num_customdata_items, tcol.customdata_items, Dwg_TABLE_CustomDataItem) \
+      REPEAT_BLOCK						\
+          SUB_FIELD_T (tcol.customdata_items[rcount3],name, 300); \
+          TABLE_value_fields (tcol.customdata_items[rcount3].value); \
+          if (error & DWG_ERR_INVALIDTYPE)			\
+            {							\
+              JSON_END_REPEAT (tcol.customdata_items);		\
+              JSON_END_REPEAT (tdata.cols);			\
+              return error;					\
+            }							\
+      END_REPEAT_BLOCK						\
+      END_REPEAT (tcol.customdata_items);			\
       DXF { VALUE_TFF ("DATAMAP_BEGIN", 1) }                    \
-      CellStyle_fields (tdata.cols[rcount1].cellstyle);		\
+      CellStyle_fields (tcol.cellstyle);			\
       DXF { VALUE_TFF ("DATAMAP_END", 309) }                    \
+      SUB_FIELD_BL (tcol,cellstyle_id, 90);			\
+      SUB_FIELD_BD (tcol,width, 40);				\
       DXF { VALUE_TFF ("LINKEDTABLEDATACOLUMN_END", 309) }      \
-      SET_PARENT (tdata.cols[rcount1], &_obj->tdata);		\
+      SET_PARENT (tcol, &_obj->tdata);				\
   END_REPEAT_BLOCK						\
   END_REPEAT (tdata.cols);					\
-  FIELD_BL (tdata.num_rows, 90);				\
+  FIELD_BL (tdata.num_rows, 91);				\
+  VALUEOUTOFBOUNDS (tdata.num_rows, 50000)			\
   REPEAT (tdata.num_rows, tdata.rows, Dwg_TableRow)		\
   REPEAT_BLOCK							\
       FIELD_BL (row.num_cells, 90);				\
+      VALUEOUTOFBOUNDS (row.num_cells, 5000)			\
       REPEAT2 (row.num_cells, row.cells, Dwg_TableCell)		\
       REPEAT_BLOCK						\
           SUB_FIELD_BL (cell,flag, 90);				\
@@ -356,6 +422,7 @@ DWG_OBJECT_END
               SUB_FIELD_BL (cell,unknown, 96);			\
             }							\
           SUB_FIELD_BL (cell,num_cell_contents, 95);		\
+          VALUEOUTOFBOUNDS (cell.num_cell_contents, 5000)	\
           DXF { VALUE_TFF ("CONTENT", 302) }                    \
           DXF { VALUE_TFF ("CELLCONTENT_BEGIN", 1) }            \
           REPEAT3 (cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent) \
@@ -381,6 +448,7 @@ DWG_OBJECT_END
                 SUB_FIELD_HANDLE (content,handle, 3, 340);	\
               }							\
               SUB_FIELD_BL (content,num_attrs, 91);		\
+              VALUEOUTOFBOUNDS (content.num_attrs, 5000)	\
               REPEAT4 (content.num_attrs, content.attrs, Dwg_TableCellContent_Attr) \
               REPEAT_BLOCK					\
                   SUB_FIELD_HANDLE (attr,attdef, 5, 330);	\
@@ -400,6 +468,8 @@ DWG_OBJECT_END
               SET_PARENT (content, &_obj->cell);                \
           END_REPEAT_BLOCK					\
           END_REPEAT (cell.cell_contents);			\
+          /* the cell style overrides of the cell, 20.4.101.4 */ \
+          CellStyle_fields4 (cell.cellstyle);			\
           SUB_FIELD_BL (cell, style_id, 90);			\
           SUB_FIELD_BL (cell, has_geom_data, 91);		\
           if (FIELD_VALUE (cell.has_geom_data))			\
@@ -407,9 +477,14 @@ DWG_OBJECT_END
               SUB_FIELD_BL (cell,geom_data_flag, 91);		\
               SUB_FIELD_BD (cell,width_w_gap, 40);		\
               SUB_FIELD_BD (cell,height_w_gap, 41);		\
-              SUB_FIELD_BL (cell,num_geometry, 94);		\
+              SUB_FIELD_BL (cell,geometry_flags, 94);		\
               SUB_FIELD_HANDLE (cell,tablegeometry, 4, 330);	\
-              REPEAT (cell.num_geometry, cell.geometry, Dwg_CellContentGeometry) \
+              /* one geometry if the flags are non-zero (ACadSharp) */ \
+              DECODER_OR_ENCODER {				\
+                FIELD_VALUE (cell.num_geometry)			\
+                  = FIELD_VALUE (cell.geometry_flags) ? 1 : 0;	\
+              }							\
+              REPEAT3 (cell.num_geometry, cell.geometry, Dwg_CellContentGeometry) \
               REPEAT_BLOCK					\
                   SUB_FIELD_3BD (geom,dist_top_left, 10);	\
                   SUB_FIELD_3BD (geom,dist_center, 11);		\
@@ -440,17 +515,20 @@ DWG_OBJECT_END
           SET_PARENT_FIELD (row.customdata_items[rcount3], row_parent, &_obj->row); \
       END_REPEAT_BLOCK						\
       END_REPEAT (row.customdata_items);			\
-      {								\
-        CellStyle_fields (row.cellstyle);			\
-        SUB_FIELD_BL (row,style_id, 90);			\
-        SUB_FIELD_BL (row,height, 40);				\
-      }								\
+      CellStyle_fields (row.cellstyle);				\
+      SUB_FIELD_BL (row,style_id, 90);				\
+      SUB_FIELD_BD (row,height, 40);				\
       SET_PARENT (row, &_obj->tdata);				\
   END_REPEAT_BLOCK						\
   END_REPEAT (tdata.rows);					\
   FIELD_BL (tdata.num_field_refs, 0);				\
+  VALUEOUTOFBOUNDS (tdata.num_field_refs, 50000)		\
   HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);	\
+  SUBCLASS (AcDbFormattedTableData)                             \
+  /* the table's cell style overrides, 20.4.101.4 */		\
+  CellStyle_fields (fdata.cellstyle);				\
   FIELD_BL (fdata.num_merged_cells, 90);			\
+  VALUEOUTOFBOUNDS (fdata.num_merged_cells, 50000)		\
   REPEAT (fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)	\
   REPEAT_BLOCK							\
       SUB_FIELD_BL (merged,top_row, 91);			\
@@ -466,61 +544,44 @@ DWG_OBJECT_END
 DWG_OBJECT (TABLECONTENT)
   HANDLE_UNKNOWN_BITS;
   TABLECONTENTs_fields;
-
-  START_OBJECT_HANDLE_STREAM;
+  SUBCLASS (AcDbTableContent)
   FIELD_HANDLE (tablestyle, 3, 340);
+  START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// pg.229 20.4.96, as ACAD_TABLE (varies)
-// works ok for the pre-2010 variant, deriving from INSERT
-// r2010+ it is TABLECONTENT
+// pg.229 20.4.96, as ACAD_TABLE (varies).
+// The table inherits from INSERT, in all versions. Until R2007 the table
+// data follows (20.4.96.1), since R2010 the table content (20.4.97, as in
+// TABLECONTENT without the common object data) and the break data.
 DWG_ENTITY (TABLE)
 
   HANDLE_UNKNOWN_BITS;
-  SINCE (R_2010b) //AC1024
-    {
-      FIELD_RC (unknown_rc, 0);
-      FIELD_HANDLE (tablestyle, 5, 342);
-      //FIELD_HANDLE (unknown_h, 5, 0);
-      FIELD_BL (unknown_bl, 0);
-      VERSIONS (R_2010b, R_2010)
-        FIELD_B (unknown_b, 0); // default 1
-      VERSIONS (R_2013b, R_2013)
-        FIELD_BL (unknown_bl1, 0);
-      // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
-      // FIXME: same offset as TABLECONTENT, or subclass
-      TABLECONTENTs_fields;
-
-#undef row
-#undef cell
-#undef content
-#undef geom
-#undef attr
-#undef merged
-
-    }
-  else {
-    SUBCLASS (AcDbBlockReference)
-    FIELD_3BD (ins_pt, 10);
-    VERSIONS (R_13b1, R_14) {
-      FIELD_3BD_1 (scale, 41);
-    }
-    JSON {
+  SUBCLASS (AcDbBlockReference)
+  FIELD_3BD (ins_pt, 10);
+  VERSIONS (R_13b1, R_14) {
+    FIELD_3BD_1 (scale, 41);
+  }
+  JSON {
+    SINCE (R_2000b) {
       FIELD_BB (scale_flag, 0);
       FIELD_3BD_1 (scale, 41);
     }
-    DXF_OR_PRINT {
+  }
+  DXF_OR_PRINT {
+    SINCE (R_2000b) {
       if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
         FIELD_3BD_1 (scale, 41);
     }
-    DECODER_OR_ENCODER {
+  }
+  DECODER
+    {
       SINCE (R_2000b)
       {
         FIELD_BB (scale_flag, 0);
         switch (FIELD_VALUE (scale_flag))
           {
             case 0:
-              FIELD_VALUE (scale.x) = 1.0;
+              FIELD_RD (scale.x, 41);
               FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
               FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
               break;
@@ -535,54 +596,143 @@ DWG_ENTITY (TABLE)
               FIELD_VALUE (scale.z) = FIELD_VALUE (scale.x);
               break;
             case 3:
+            default:
               FIELD_VALUE (scale.x) = 1.0;
               FIELD_VALUE (scale.y) = 1.0;
               FIELD_VALUE (scale.z) = 1.0;
               break;
-            default:
-              LOG_ERROR ("Invalid scale_flag in TABLE entity %d\n",
-                         (int)FIELD_VALUE (scale_flag));
-              _obj->scale_flag = 0;
-              DEBUG_HERE_OBJ
-              return DWG_ERR_INVALIDTYPE;
-              //break;
           }
-  #ifndef IS_FREE
         FIELD_3PT_TRACE (scale, DD, 41);
-  #endif
       }
     }
-
-    FIELD_BD0 (rotation, 50);
-    FIELD_3BD (extrusion, 210);
-    FIELD_B (has_attribs, 66);
-
-    SINCE (R_2004a) {
-      FIELD_BL (num_owned, 0);
-      VALUEOUTOFBOUNDS (num_owned, 10000)
-    }
-    FIELD_HANDLE (block_header, 5, 2);
-    VERSIONS (R_13b1, R_2000)
+  ENCODER
+    {
+      SINCE (R_2000b)
       {
-        if (FIELD_VALUE (has_attribs))
+        if (bit_eq_DD (FIELD_VALUE (scale.x), 1.0) &&
+            bit_eq_DD (FIELD_VALUE (scale.y), 1.0) &&
+            bit_eq_DD (FIELD_VALUE (scale.z), 1.0))
           {
-            FIELD_HANDLE (first_attrib, 4, 0);
-            FIELD_HANDLE (last_attrib, 4, 0);
+            FIELD_VALUE (scale_flag) = 3;
+            FIELD_BB (scale_flag, 0);
           }
+        else if (bit_eq_DD (FIELD_VALUE (scale.x), FIELD_VALUE (scale.y)) &&
+                 bit_eq_DD (FIELD_VALUE (scale.x), FIELD_VALUE (scale.z)))
+          {
+            FIELD_VALUE (scale_flag) = 2;
+            FIELD_BB (scale_flag, 0);
+            FIELD_RD (scale.x, 41);
+          }
+        else if (bit_eq_DD (FIELD_VALUE (scale.x), 1.0))
+          {
+            FIELD_VALUE (scale_flag) = 1;
+            FIELD_BB (scale_flag, 0);
+            FIELD_DD (scale.y, 1.0, 42);
+            FIELD_DD (scale.z, 1.0, 43);
+          }
+        else
+          {
+            FIELD_VALUE (scale_flag) = 0;
+            FIELD_BB (scale_flag, 0);
+            FIELD_RD (scale.x, 41);
+            FIELD_DD (scale.y, FIELD_VALUE (scale.x), 42);
+            FIELD_DD (scale.z, FIELD_VALUE (scale.x), 43);
+          }
+        FIELD_3PT_TRACE (scale, DD, 41);
       }
-
-    SINCE (R_2004a)
-      {
-  #if defined (IS_JSON) || defined (IS_DXF)
-        if (!_obj->attribs && _obj->num_owned)
-          _obj->num_owned = 0;
-  #endif
-        HANDLE_VECTOR (attribs, num_owned, 4, 0)
-      }
-    if (FIELD_VALUE (has_attribs)) {
-      FIELD_HANDLE (seqend, 3, 0);
     }
 
+  FIELD_BD0 (rotation, 50);
+  FIELD_3BD (extrusion, 210);
+  FIELD_B (has_attribs, 66);
+  SINCE (R_2004a) {
+    // as in INSERT, only with attribs (ACadSharp readInsertCommonData)
+    if (FIELD_VALUE (has_attribs))
+      {
+        FIELD_BL (num_owned, 0);
+        VALUEOUTOFBOUNDS (num_owned, 10000)
+      }
+  }
+  // the INSERT handles (the handle stream is separate)
+  FIELD_HANDLE (block_header, 5, 2);
+  VERSIONS (R_13b1, R_2000)
+    {
+      if (FIELD_VALUE (has_attribs))
+        {
+          FIELD_HANDLE (first_attrib, 4, 0);
+          FIELD_HANDLE (last_attrib, 4, 0);
+        }
+    }
+  SINCE (R_2004a)
+    {
+#if defined (IS_JSON) || defined (IS_DXF)
+      if (!_obj->attribs && _obj->num_owned)
+        _obj->num_owned = 0;
+#endif
+      HANDLE_VECTOR (attribs, num_owned, 4, 0)
+    }
+  if (FIELD_VALUE (has_attribs)) {
+    FIELD_HANDLE (seqend, 3, 0);
+  }
+
+  SINCE (R_2010b) //AC1024
+    {
+      FIELD_RC (unknown_rc, 0);
+      FIELD_HANDLE (unknown_h, 5, 0);
+      FIELD_BL (unknown_bl, 0);
+      VERSIONS (R_2010b, R_2010) {
+        FIELD_B (unknown_b, 0); // default 1
+      }
+      LATER_VERSIONS {
+        FIELD_BL (unknown_bl1, 0);
+      }
+      // the table content 20.4.97, without the common object data
+      TABLECONTENTs_fields;
+      SUBCLASS (AcDbTableContent)
+      FIELD_HANDLE (tablestyle, 5, 342);
+
+      FIELD_BS (unknown_bs, 0); //default 38
+      FIELD_3BD (hor_dir, 11);
+      FIELD_BL (has_break_data, 0);
+      if (FIELD_VALUE (has_break_data))
+        {
+          FIELD_BL (break_flag, 0);
+          FIELD_BL (break_flow_direction, 0);
+          FIELD_BD (break_spacing, 0);
+          FIELD_BL (break_unknown1, 0);
+          FIELD_BL (break_unknown2, 0);
+          FIELD_BL (num_break_heights, 0);
+          VALUEOUTOFBOUNDS (num_break_heights, 5000)
+          REPEAT (num_break_heights, break_heights, Dwg_TABLE_BreakHeight)
+          REPEAT_BLOCK
+              SUB_FIELD_3BD (break_heights[rcount1],position, 0);
+              SUB_FIELD_BD (break_heights[rcount1],height, 0);
+              SUB_FIELD_BL (break_heights[rcount1],flag, 0); // default: 2
+              SET_PARENT_OBJ (break_heights[rcount1]);
+          END_REPEAT_BLOCK
+          END_REPEAT (break_heights);
+        }
+      FIELD_BL (num_break_rows, 0);
+      VALUEOUTOFBOUNDS (num_break_rows, 5000)
+      REPEAT (num_break_rows, break_rows, Dwg_TABLE_BreakRow)
+      REPEAT_BLOCK
+          SUB_FIELD_3BD (break_rows[rcount1],position, 0);
+          SUB_FIELD_BL (break_rows[rcount1],start, 0);
+          SUB_FIELD_BL (break_rows[rcount1],end, 0);
+          SET_PARENT_OBJ (break_rows[rcount1]);
+      END_REPEAT_BLOCK
+      END_REPEAT (break_rows);
+
+#undef row
+#undef tcol
+#undef cell
+#undef content
+#undef geom
+#undef attr
+#undef merged
+    }
+  else {
+    // 20.4.96.1 until R2007
     SUBCLASS (AcDbTable)
     FIELD_HANDLE (tablestyle, 5, 342);
     FIELD_BS (flag_for_table_value, 90);
@@ -594,8 +744,21 @@ DWG_ENTITY (TABLE)
     FIELD_VECTOR (col_widths, BD, num_cols, 142);
     FIELD_VECTOR (row_heights, BD, num_rows, 141);
     FIELD_VALUE (num_cells) = (unsigned long)FIELD_VALUE (num_rows) * FIELD_VALUE (num_cols);
+    DECODER {
+      // A cell has at least 21 bits (BS RC B B BL BL BD H B). The generic
+      // REPEAT check compares with sizeof (Dwg_TABLE_Cell), much too big.
+      if ((int64_t)_obj->num_cells * 21 > AVAIL_BITS (dat))
+        {
+          LOG_ERROR ("Invalid %s.num_cells %lu", SAFEDXFNAME,
+                     (unsigned long)_obj->num_cells);
+          _obj->num_cells = 0;
+          _obj->num_rows = 0;
+          _obj->num_cols = 0;
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
+    }
     #define cell cells[rcount1]
-    REPEAT (num_cells, cells, Dwg_TABLE_Cell)
+    REPEAT_C (num_cells, cells, Dwg_TABLE_Cell)
     REPEAT_BLOCK
         //SUBCLASS (AcDbDataCell)
         SUB_FIELD_BS (cell,type, 171);
@@ -614,101 +777,99 @@ DWG_ENTITY (TABLE)
         }
         SUB_FIELD_BD (cell,rotation, 145);
 
-        if (FIELD_VALUE (cell.type) == 1)
-          { /* text cell */
-            SUB_FIELD_HANDLE0 (cell,text_style, 3, 344);
-            // TODO: <r2007 and empty style and shorter than 250, single dxf 1 line
-            // else split into mult. text lines
-            SUB_FIELD_T (cell,text_value, 1);
-            SUB_FIELD_B (cell,additional_data_flag, 0);
-          }
         if (FIELD_VALUE (cell.type) == 2)
           { /* block cell */
             SUB_FIELD_HANDLE0 (cell,block_handle, 3, 340);
             SUB_FIELD_BD (cell,block_scale, 144);
-            SUB_FIELD_B (cell,additional_data_flag, 0);
-            if (FIELD_VALUE (cell.additional_data_flag))
+            SUB_FIELD_B (cell,has_attr_defs, 0);
+            if (FIELD_VALUE (cell.has_attr_defs))
               {
                 #define attr cell.attr_defs[rcount2]
+                SUB_FIELD_BS (cell,num_attr_defs, 179);
+                VALUEOUTOFBOUNDS (cell.num_attr_defs, 5000)
                 REPEAT2 (cell.num_attr_defs, cell.attr_defs, Dwg_TABLE_AttrDef)
                 REPEAT_BLOCK
-                    SUB_FIELD_HANDLE (cell.attr_defs[rcount2],attdef, 4, 331);
-                    SUB_FIELD_BS (cell.attr_defs[rcount2],index, 179);
-                    SUB_FIELD_T (cell.attr_defs[rcount2],text, 300); // dxf?
+                    SUB_FIELD_HANDLE (attr,attdef, 4, 331);
+                    SUB_FIELD_BS (attr,index, 0);
+                    SUB_FIELD_T (attr,text, 300);
+                    SET_PARENT (attr, &_obj->cell);
                 END_REPEAT_BLOCK
                 END_REPEAT (cell.attr_defs);
-                //total_num_attr_defs += FIELD_VALUE (cell.num_attr_defs);
                 #undef attr
               }
           }
-        if (FIELD_VALUE (cells) &&
-            (FIELD_VALUE (cell.type) == 1 ||
-             FIELD_VALUE (cell.type) == 2))
-          { /* common to both text and block cells */
-            if (FIELD_VALUE (cell.additional_data_flag) == 1)
+        else
+          { /* text cell. 344: hard pointer to the FIELD, or 0 */
+            SUB_FIELD_HANDLE0 (cell,text_style, 3, 344);
+            // The text string is present only if the 344 handle is 0, and
+            // only before R2007. R2007 stores the text in the value fields.
+            PRE (R_2007a) {
+              if (FIELD_VALUE (cell.type) == 1
+                  && (!FIELD_VALUE (cell.text_style)
+                      || !FIELD_VALUE (cell.text_style->absolute_ref)))
+                SUB_FIELD_T (cell,text_value, 1);
+            }
+          }
+        /* common to both text and block cells: has override flag */
+        SUB_FIELD_B (cell,additional_data_flag, 0);
+        if (FIELD_VALUE (cell.additional_data_flag))
+          {
+            BITCODE_BL cell_flag;
+            SUB_FIELD_BL (cell,cell_flag_override, 0);
+            cell_flag = FIELD_VALUE (cell.cell_flag_override);
+            SUB_FIELD_RC (cell,virtual_edge_flag, 0);
+
+            if (cell_flag & 0x01)
+              SUB_FIELD_BS (cell,cell_alignment, 170); // BS, not RS as in the spec
+            if (cell_flag & 0x02)
+              SUB_FIELD_B (cell,bg_fill_none, 283);
+            if (cell_flag & 0x04)
+              SUB_FIELD_CMTC (cell,bg_color, 63);
+            if (cell_flag & 0x08)
+              SUB_FIELD_CMTC (cell,content_color, 64);
+            if (cell_flag & 0x10)
+              SUB_FIELD_HANDLE (cell,text_style_override, 5, 7);
+            if (cell_flag & 0x20)
+              SUB_FIELD_BD (cell,text_height, 140);
+            if (cell_flag & 0x00040)
+              SUB_FIELD_CMTC (cell,top_grid_color, 69);
+            if (cell_flag & 0x00400)
+              SUB_FIELD_BS (cell,top_grid_linewt, 279);
+            if (cell_flag & 0x04000)
+              SUB_FIELD_BS (cell,top_visibility, 289);
+            if (cell_flag & 0x00080)
+              SUB_FIELD_CMTC (cell,right_grid_color, 65);
+            if (cell_flag & 0x00800)
+              SUB_FIELD_BS (cell,right_grid_linewt, 275);
+            if (cell_flag & 0x08000)
+              SUB_FIELD_BS (cell,right_visibility, 285);
+            if (cell_flag & 0x00100)
+              SUB_FIELD_CMTC (cell,bottom_grid_color, 66);
+            if (cell_flag & 0x01000)
+              SUB_FIELD_BS (cell,bottom_grid_linewt, 276);
+            if (cell_flag & 0x10000)
+              SUB_FIELD_BS (cell,bottom_visibility, 286);
+            if (cell_flag & 0x00200)
+              SUB_FIELD_CMTC (cell,left_grid_color, 68);
+            if (cell_flag & 0x02000)
+              SUB_FIELD_BS (cell,left_grid_linewt, 278);
+            if (cell_flag & 0x20000)
+              SUB_FIELD_BS (cell,left_visibility, 288);
+          }
+        SINCE (R_2007a)
+          {
+            SUB_FIELD_BL (cell,unknown, 0);
+            // 20.4.99 Value, page 241
+            TABLE_value_fields (cell.value)
+            if (error & DWG_ERR_INVALIDTYPE)
               {
-                BITCODE_BL cell_flag;
-                SUB_FIELD_BL (cell,cell_flag_override, 0);
-                cell_flag = FIELD_VALUE (cell.cell_flag_override);
-                SUB_FIELD_RC (cell,virtual_edge_flag, 0);
-
-                if (cell_flag & 0x01)
-                  SUB_FIELD_RS (cell,cell_alignment, 170);
-                if (cell_flag & 0x02)
-                  SUB_FIELD_B (cell,bg_fill_none, 283);
-                if (cell_flag & 0x04)
-                  SUB_FIELD_CMTC (cell,bg_color, 63);
-                if (cell_flag & 0x08)
-                  {
-                    SUB_FIELD_CMTC (cell,content_color, 64);
-                    SUB_FIELD_HANDLE (cell,text_style, 3, 7); //?
-                  }
-                if (cell_flag & 0x10) {
-                  SUB_FIELD_HANDLE (cell,text_style, 3, 7);
-                }
-                if (cell_flag & 0x20)
-                  SUB_FIELD_BD (cell,text_height, 140);
-                if (cell_flag & 0x00040)
-                  SUB_FIELD_CMTC (cell,top_grid_color, 69);
-                if (cell_flag & 0x00400)
-                  SUB_FIELD_BS (cell,top_grid_linewt, 279);
-                if (cell_flag & 0x04000)
-                  SUB_FIELD_BS (cell,top_visibility, 289);
-                if (cell_flag & 0x00080)
-                  SUB_FIELD_CMTC (cell,right_grid_color, 65);
-                if (cell_flag & 0x00800)
-                  SUB_FIELD_BS (cell,right_grid_linewt, 275);
-                if (cell_flag & 0x08000)
-                  SUB_FIELD_BS (cell,right_visibility, 285);
-                if (cell_flag & 0x00100)
-                  SUB_FIELD_CMTC (cell,bottom_grid_color, 66);
-                if (cell_flag & 0x01000)
-                  SUB_FIELD_BS (cell,bottom_grid_linewt, 276);
-                if (cell_flag & 0x10000)
-                  SUB_FIELD_BS (cell,bottom_visibility, 286);
-                if (cell_flag & 0x00200)
-                  SUB_FIELD_CMTC (cell,left_grid_color, 68);
-                if (cell_flag & 0x02000)
-                  SUB_FIELD_BS (cell,left_grid_linewt, 278);
-                if (cell_flag & 0x20000)
-                  SUB_FIELD_BS (cell,left_visibility, 288);
-
-                SUB_FIELD_BL (cell,unknown, 0);
-
-                // 20.4.99 Value, page 241
-                TABLE_value_fields (cell.value)
-                if (error & DWG_ERR_INVALIDTYPE)
-                  {
-                    JSON_END_REPEAT (cells);
-                    return error;
-                  }
+                JSON_END_REPEAT (cells);
+                return error;
               }
           }
         SET_PARENT_OBJ (cell);
     END_REPEAT_BLOCK
-#ifndef IS_FREE // FIXME: bogus cells value 0x21, not a pointer
     END_REPEAT (cells);
-#endif
     #undef cell
     /* End Cell Data (remaining data applies to entire table)*/
 
@@ -721,7 +882,9 @@ DWG_ENTITY (TABLE)
         table_flag = FIELD_VALUE (table_flag_override);
         if (table_flag & 0x0001)
           FIELD_B (title_suppressed, 280);
-        FIELD_B (header_suppressed, 281); // yes, unchecked. always true
+        // header suppressed: always true, not stored
+        DECODER { FIELD_VALUE (header_suppressed) = 1; }
+        DXF { FIELD_B (header_suppressed, 281); }
         if (table_flag & 0x0004)
           FIELD_BS (flow_direction, 70);
         if (table_flag & 0x0008)
@@ -729,9 +892,9 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x0010)
           FIELD_BD (vert_cell_margin, 41);
         if (table_flag & 0x0020)
-          FIELD_CMTC (title_row_color, 64); // CMTC?
+          FIELD_CMTC (title_row_color, 64);
         if (table_flag & 0x0040)
-          FIELD_CMTC (header_row_color, 64); // CMTC?
+          FIELD_CMTC (header_row_color, 64);
         if (table_flag & 0x0080)
           FIELD_CMTC (data_row_color, 64);
         if (table_flag & 0x0100)
@@ -741,14 +904,11 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x0400)
           FIELD_B (data_row_fill_none, 283);
         if (table_flag & 0x0800)
-          FIELD_CMTC (title_row_fill_color, 63); // CMTC?
+          FIELD_CMTC (title_row_fill_color, 63);
         if (table_flag & 0x1000)
-          FIELD_CMTC (header_row_fill_color, 63); // CMTC?
+          FIELD_CMTC (header_row_fill_color, 63);
         if (table_flag & 0x2000)
-          {
-            FIELD_CMTC (data_row_fill_color, 63); // CMTC?
-            FIELD_HANDLE (title_row_style_override, ANYCODE, 7);
-          }
+          FIELD_CMTC (data_row_fill_color, 63);
         if (table_flag & 0x4000)
           FIELD_BS (title_row_alignment, 170);
         if (table_flag & 0x8000)
@@ -758,10 +918,7 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x20000)
           FIELD_HANDLE (title_text_style, 5, 7);
         if (table_flag & 0x40000)
-          {
-            FIELD_HANDLE (header_text_style, 5, 7);
-            //FIELD_HANDLE (header_row_style_override, ANYCODE, 7); ??
-          }
+          FIELD_HANDLE (header_text_style, 5, 7);
         if (table_flag & 0x80000)
           FIELD_HANDLE (data_text_style, 5, 7);
         if (table_flag & 0x100000)
@@ -904,59 +1061,10 @@ DWG_ENTITY (TABLE)
           FIELD_BS (data_vert_right_visibility, 0);
       }
 
-    COMMON_ENTITY_HANDLE_DATA;
   }
-  SINCE (R_2010b)
-  {
-    //... p237
-    LOG_WARN ("TODO TABLE r2010+");
-
-    FIELD_BS (unknown_bs, 0); //default 38
-    FIELD_3BD (hor_dir, 11);
-    FIELD_BL (has_break_data, 0); //BL or B?
-    if (FIELD_VALUE (has_break_data))
-      {
-        FIELD_BL (break_flag, 0);
-        FIELD_BL (break_flow_direction, 0);
-        FIELD_BD (break_spacing, 0);
-        FIELD_BL (break_unknown1, 0);
-        FIELD_BL (break_unknown2, 0);
-        FIELD_BL (num_break_heights, 0);
-        VALUEOUTOFBOUNDS (num_break_heights, 5000)
-        REPEAT (num_break_heights, break_heights, Dwg_TABLE_BreakHeight)
-        REPEAT_BLOCK
-            SUB_FIELD_3BD (break_heights[rcount1],position, 0);
-            SUB_FIELD_BD (break_heights[rcount1],height, 0);
-            SUB_FIELD_BL (break_heights[rcount1],flag, 0); // default: 2
-            SET_PARENT_OBJ (break_heights[rcount1]);
-        END_REPEAT_BLOCK
-        END_REPEAT (break_heights);
-      }
-    FIELD_BL (num_break_rows, 0);
-    VALUEOUTOFBOUNDS (num_break_rows, 5000)
-    REPEAT (num_break_rows, break_rows, Dwg_TABLE_BreakRow)
-    REPEAT_BLOCK
-        SUB_FIELD_3BD (break_rows[rcount1],position, 0);
-        SUB_FIELD_BL (break_rows[rcount1],start, 0);
-        SUB_FIELD_BL (break_rows[rcount1],end, 0);
-        SET_PARENT_OBJ (break_rows[rcount1]);
-    END_REPEAT_BLOCK
-    END_REPEAT (break_rows);
-
-    COMMON_ENTITY_HANDLE_DATA;
-    FIELD_HANDLE (tablestyle, 5, 342);
-  }
+  COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
-
-#undef row
-#undef cell
-#undef content
-#undef geom
-#undef attr
-#undef merged
-
-#endif /* DEBUG_CLASSES */
 
 // See TABLE and p20.4.101
 // Added with r2005. unstable for r2010+

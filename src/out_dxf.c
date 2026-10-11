@@ -1068,18 +1068,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
-#ifndef DEBUG_CLASSES
-static int
-dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
-{
-  (void)dat;
-  (void)obj;
-  return 0;
-}
-#else
 static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
                                  const Dwg_Object *restrict obj);
-#endif
 
 // The strcmp is being optimized away at compile-time!
 // https://godbolt.org/g/AqkhwL
