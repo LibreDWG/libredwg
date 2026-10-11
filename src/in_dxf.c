@@ -2206,9 +2206,10 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 4:
       {
         // BINARY
-        const size_t blen = (dwg->opts & DWG_OPTS_DXFB)
-                                ? pair->value.s.len
-                                : strlen (pair->value.s.ptr) >> 1;
+        // dxf_read_binary has decoded the hex already, also for ASCII DXF
+        // (decoding it again failed: "Invalid hex string member", and the
+        // EED binary data of every object was lost)
+        const size_t blen = pair->value.s.len;
         const size_t cblen = blen > 0xff ? 0xff : blen;
         if (blen > 0xff)
           LOG_WARN ("EED binary data too long: %" PRIuSIZE " > 255, "
@@ -2227,17 +2228,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].data->code = code; // 1004
         eed[i].data->u.eed_4.length = cblen & 0xFF;
         LOG_TRACE ("binary[%" PRIuSIZE "]: ", cblen);
-        if (dwg->opts & DWG_OPTS_DXFB)
+        if (cblen)
           memcpy (eed[i].data->u.eed_4.data, pair->value.s.ptr, cblen);
-        else
-          {
-            size_t read;
-            if ((read = in_hex2bin (eed[i].data->u.eed_4.data,
-                                    pair->value.s.ptr, cblen)
-                        != cblen))
-              LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
-                         read, cblen);
-          }
         eed[i].size += size;
       }
       break;
