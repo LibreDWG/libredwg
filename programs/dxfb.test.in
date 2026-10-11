@@ -116,11 +116,11 @@ check_roundtrip() {
             fi
         else
             if [ "$log1" = "example_r14.log1" ]; then
-                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT|LIGHT|MULTILEADER)')"
+                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT|LIGHT|MULTILEADER|TABLE)')"
             elif [ "$log1" = "example_r13.log1" ]; then
-                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT|LIGHT|MINSERT)')"
+                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT|LIGHT|MINSERT|TABLE)')"
             else
-                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT)')"
+                expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT|TABLE)')"
             fi
         fi
         got="$(grep -E -c '^Add entity' "$log2")"

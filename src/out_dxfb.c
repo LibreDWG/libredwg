@@ -1529,6 +1529,15 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
     }
 
+  // as in DXF, the tables are not written yet (the DXF groups of ACAD_TABLE
+  // differ from the DWG fields)
+  if (obj->fixedtype == DWG_TYPE_TABLE
+      || obj->fixedtype == DWG_TYPE_TABLECONTENT)
+    {
+      LOG_WARN ("Skip %s\n", klass->dxfname);
+      return DWG_ERR_UNHANDLEDCLASS;
+    }
+
     // clang-format off
   #include "classes.inc"
   // clang-format on

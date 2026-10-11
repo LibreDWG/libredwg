@@ -2870,7 +2870,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               || (dwg->opts & DWG_OPTS_INDXF
                   && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) || */
                       obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
-                      || obj->fixedtype == DWG_TYPE_MATERIAL))
+                      || obj->fixedtype == DWG_TYPE_MATERIAL
+                      // the ACAD_TABLE DXF groups are not imported
+                      || obj->fixedtype == DWG_TYPE_TABLE
+                      || obj->fixedtype == DWG_TYPE_TABLECONTENT))
 #  endif
           )
             {
@@ -2906,7 +2909,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                           && (/*obj->fixedtype == DWG_TYPE_WIPEOUT (GH #244) ||
                                */
                               obj->fixedtype == DWG_TYPE_TABLEGEOMETRY
-                              || obj->fixedtype == DWG_TYPE_MATERIAL))
+                              || obj->fixedtype == DWG_TYPE_MATERIAL
+                              || obj->fixedtype == DWG_TYPE_TABLE
+                              || obj->fixedtype == DWG_TYPE_TABLECONTENT))
 #  endif
                   )
                     {
