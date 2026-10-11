@@ -10447,7 +10447,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 Dwg_Entity_VIEWPORT *_vobj;
                 obj = &dwg->object[objidx];
                 _vobj = obj->tio.entity->tio.VIEWPORT;
-                // vx->is_on = 1;
+                vx->is_on = 1; // until its 68 says otherwise (postprocess)
                 vx->viewport = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
                 LOG_TRACE ("VX_TABLE_RECORD.viewport = " FORMAT_REF " [H 4]\n",
                            ARGS_REF (vx->viewport));
@@ -13847,6 +13847,26 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     }
   else if (is_textlike (obj))
     postprocess_TEXTlike (obj);
+  else if (obj->fixedtype == DWG_TYPE_VIEWPORT && dwg->header.version < R_2004
+           && dwg->header.version > R_11)
+    {
+      // A pre-r2004 DWG keeps a viewport on or off in its VX_TABLE_RECORD,
+      // not in the entity: with is_on left 0 every viewport converted to
+      // r2000 was off for ODA and AutoCAD. DXF 68: 0 off, anything else on.
+      Dwg_Entity_VIEWPORT *o = obj->tio.entity->tio.VIEWPORT;
+      if (o->vport_entity_header)
+        {
+          Dwg_Object *vxobj = dwg_resolve_handle (
+              dwg, o->vport_entity_header->absolute_ref);
+          if (vxobj && vxobj->fixedtype == DWG_TYPE_VX_TABLE_RECORD)
+            {
+              vxobj->tio.object->tio.VX_TABLE_RECORD->is_on
+                  = o->on_off != 0;
+              LOG_TRACE ("VX_TABLE_RECORD.is_on = %d (VIEWPORT.on_off %d)\n",
+                         o->on_off != 0, (int)o->on_off);
+            }
+        }
+    }
 
   return pair;
 
