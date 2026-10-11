@@ -11498,7 +11498,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               strncpy (revision_guid, pair->value.s.ptr, 38);
               revision_guid[38] = '\0';
               if (!dwg_dynapi_entity_set_value (
-                      _obj, obj->name, "revision_guid[39]", revision_guid, 0))
+                      _obj, obj->name, "revision_guid", revision_guid, 0))
                 break;
               if (revision_guid[0] != '{' ||  /* 8 */
                   revision_guid[9] != '-' ||  /* 4 */
@@ -11533,8 +11533,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                            &revision_minor1, 0);
               dwg_dynapi_entity_set_value (_obj, obj->name, "revision_minor2",
                                            &revision_minor2, 0);
-              dwg_dynapi_entity_set_value (
-                  _obj, obj->name, "revision_bytes[9]", revision_bytes, 0);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "revision_bytes",
+                                           revision_bytes, 0);
               break;
             }
           // fall through
@@ -12251,8 +12251,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             }
           else if (obj->fixedtype == DWG_TYPE_HATCH)
             {
+              // the elevation point comes before the paths (91); after them
+              // 10/20 are the seed points, and a seed at (0, 0) was dropped
+              // as "elevation": num_seeds 1 became 0 (sample_AC1015 via DXF)
               if ((pair->code == 10 || pair->code == 20)
-                  && pair->value.d == 0.0)
+                  && pair->value.d == 0.0
+                  && !obj->tio.entity->tio.HATCH->num_paths)
                 break; // elevation
               else if (pair->code == 91 || pair->code == 78
                        || pair->code == 453)
