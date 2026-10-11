@@ -5918,40 +5918,32 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #  undef CHK_cells
 #  undef CHK_geometry
 
-// starts with 71 or 75
+// starts with 71, 75 or 1.
+// The refs follow one another (dwg2.spec DIMASSOC): one per set bit of
+// associativity, each followed by its last-point companion when it
+// has_lastpt_ref. ODA's DXF (and out_dxf's) has no count before the 332s.
 static Dxf_Pair *
 add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               Dxf_Pair *restrict pair)
 {
   Dwg_Object_DIMASSOC *o = obj->tio.object->tio.DIMASSOC;
   Dwg_Data *dwg = obj->parent;
-  int i = -1, j = -1;
-  int have_rotated_type = 0;
-  o->ref = (Dwg_DIMASSOC_Ref *)xcalloc (4, sizeof (Dwg_DIMASSOC_Ref));
+  const int max_refs = 6; // REPEAT_CN (6, ref) in the spec
+  int i = -1;
+  Dwg_DIMASSOC_Ref *r = NULL;
   if (!o->ref)
-    {
-      return NULL;
-    }
+    o->ref = (Dwg_DIMASSOC_Ref *)xcalloc (max_refs, sizeof (Dwg_DIMASSOC_Ref));
+  if (!o->ref)
+    return NULL;
 
   while (pair != NULL && pair->code != 0)
     {
       switch (pair->code)
         {
-        case 0:
-          break;
-        case 71: // always before each ref
-          i++;
-          while (!(o->associativity & (1 << i)) && i < 4) // popcount x
-            i++;
-          if (!(i >= 0 && i <= 3))
-            {
-              LOG_ERROR ("Invalid DIMASSOC_Ref index %d", i);
-              return pair;
-            }
+        case 71:
           o->rotated_type = pair->value.i;
-          have_rotated_type = 1; // early bump
-          LOG_TRACE ("%s.rotated_type = %d [BS %d]\n", obj->name,
-                     pair->value.i, pair->code);
+          LOG_TRACE ("%s.rotated_type = %d [RC 71]\n", obj->name,
+                     pair->value.i);
           break;
         case 1:
           if (strNE (pair->value.s.ptr, "AcDbOsnapPointRef"))
@@ -5959,119 +5951,115 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_ERROR ("Invalid DIMASSOC subclass %s", pair->value.s.ptr);
               return pair;
             }
-          if (!(i >= 0 && i <= 3))
+          if (i + 1 >= max_refs)
             {
-              LOG_ERROR ("Invalid DIMASSOC_Ref index %d", i);
-              return pair;
+              LOG_WARN ("DIMASSOC: more than %d refs, ignored", max_refs);
+              r = NULL;
+              break;
             }
-          if (!have_rotated_type) // not already bumped
-            {
-              i++;
-              while (!(o->associativity & (1 << i)) && i < 4) // popcount x
-                i++;
-              if (i > 3)
-                i = 3;
-              assert (i >= 0 && i <= 3);
-            }
-          o->ref[i].classname = dwg_add_u8_input (dwg, pair->value.s.ptr);
-          LOG_TRACE ("%s.ref[%d].classname = %s [T %d]\n", obj->name, i,
-                     pair->value.s.ptr, pair->code);
-          have_rotated_type = 0;
+          i++;
+          r = &o->ref[i];
+          r->classname = dwg_add_u8_input (dwg, pair->value.s.ptr);
+          LOG_TRACE ("%s.ref[%d].classname = %s [T 1]\n", obj->name, i,
+                     pair->value.s.ptr);
           break;
         case 72:
-          if (i < 0 || i > 3)
-            break;
-          o->ref[i].osnap_type = pair->value.i;
-          LOG_TRACE ("%s.ref[%d].osnap_type = %d [RC %d]\n", obj->name, i,
-                     pair->value.i, pair->code);
+          if (r)
+            r->osnap_type = pair->value.i;
           break;
-        // FIXME: 301 xrefpaths[j]
         case 331:
-          {
-            BITCODE_BS n;
-            if (i < 0 || i > 3)
-              break;
-            n = o->ref[i].num_xrefs;
-            o->ref[i].xrefs = (BITCODE_H *)realloc (
-                o->ref[i].xrefs, (n + 1) * sizeof (BITCODE_H));
-            o->ref[i].xrefs[n]
-                = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-            LOG_TRACE ("%s.ref[%d].xrefs[%d] = " FORMAT_REF " [H* %d]\n",
-                       obj->name, i, n, ARGS_REF (o->ref[i].xrefs[n]),
-                       pair->code);
-            o->ref[i].num_xrefs++;
-          }
-          break;
-        case 74:
-          if (i < 0 || i > 3)
-            break;
-          o->ref[i].num_intsectobj = pair->value.i;
-          o->ref[i].intsectobj
-              = (BITCODE_H *)xcalloc (pair->value.i, sizeof (BITCODE_H));
-          if (!o->ref[i].intsectobj)
+          if (r)
             {
-              o->ref[i].num_intsectobj = 0;
-              return NULL;
+              BITCODE_BS n = r->num_xrefs;
+              BITCODE_H *v = (BITCODE_H *)realloc (r->xrefs,
+                                                   (n + 1) * sizeof (BITCODE_H));
+              if (!v)
+                return NULL;
+              r->xrefs = v;
+              r->xrefs[n] = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              r->num_xrefs++;
+              LOG_TRACE ("%s.ref[%d].xrefs[%d] = " FORMAT_REF " [H* 331]\n",
+                         obj->name, i, n, ARGS_REF (r->xrefs[n]));
             }
-          j = 0;
-          LOG_TRACE ("%s.ref[%d].num_intsectobj = %d [BS %d]\n", obj->name, i,
-                     pair->value.i, pair->code);
           break;
         case 332:
-          if (i < 0 || j < 0 || i > 3 || j >= (int)o->ref[i].num_intsectobj)
-            break;
-          o->ref[i].intsectobj[j]
-              = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-          LOG_TRACE ("%s.ref[%d].intsectobj[%d] = " FORMAT_REF " [H %d]\n",
-                     obj->name, i, j, ARGS_REF (o->ref[i].intsectobj[j]),
-                     pair->code);
-          j++;
+          if (r)
+            {
+              BITCODE_BL n = r->num_intsectobj;
+              BITCODE_H *v = (BITCODE_H *)realloc (
+                  r->intsectobj, (n + 1) * sizeof (BITCODE_H));
+              if (!v)
+                return NULL;
+              r->intsectobj = v;
+              r->intsectobj[n] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              r->num_intsectobj++;
+              LOG_TRACE ("%s.ref[%d].intsectobj[%d] = " FORMAT_REF
+                         " [H* 332]\n",
+                         obj->name, i, n, ARGS_REF (r->intsectobj[n]));
+            }
+          break;
+        case 301:
+        case 302:
+          if (r)
+            {
+              BITCODE_BS *num = pair->code == 301 ? &r->num_xrefpaths
+                                                  : &r->num_intersec_xrefpaths;
+              BITCODE_T **vec = pair->code == 301 ? &r->xrefpaths
+                                                  : &r->intersec_xrefpaths;
+              BITCODE_T *v = (BITCODE_T *)realloc (*vec, (*num + 1)
+                                                             * sizeof (BITCODE_T));
+              if (!v)
+                return NULL;
+              *vec = v;
+              v[*num] = dwg_add_u8_input (dwg, pair->value.s.ptr);
+              (*num)++;
+            }
           break;
         case 73:
-          if (i < 0)
-            break;
-          o->ref[i].main_subent_type = pair->value.i;
-          LOG_TRACE ("%s.ref[%d].main_subent_type = %d [BS %d]\n", obj->name,
-                     i, pair->value.i, pair->code);
+          if (r)
+            r->main_subent_type = pair->value.i;
           break;
-        case 75:
-          if (i < 0)
-            break;
-          o->ref[i].has_lastpt_ref = pair->value.i;
-          LOG_TRACE ("%s.ref[%d].has_lastpt_ref = %d [B %d]\n", obj->name, i,
-                     pair->value.i, pair->code);
+        case 74:
+          // older out_dxf wrote the 332 count here as a 74: the 74 after
+          // the 332s (the subent type) overwrites it then
+          if (r)
+            r->intersec_subent_type = pair->value.i;
           break;
         case 91:
-          if (i < 0)
-            break;
-          o->ref[i].main_gsmarker = pair->value.i;
-          LOG_TRACE ("%s.ref[%d].main_gsmarker = %d [BL %d]\n", obj->name, i,
-                     pair->value.i, pair->code);
+          if (r)
+            r->main_gsmarker = pair->value.i;
+          break;
+        case 92:
+          if (r)
+            r->intersec_gsmarker = pair->value.i;
+          break;
+        case 75:
+          if (r)
+            {
+              r->has_lastpt_ref = pair->value.i;
+              o->has_lastpt_ref = r->has_lastpt_ref;
+            }
           break;
         case 40:
-          if (i < 0)
-            break;
-          o->ref[i].osnap_dist = pair->value.d;
-          LOG_TRACE ("%s.ref[%d].osnap_dist = %f [BD %d]\n", obj->name, i,
-                     pair->value.d, pair->code);
+          if (r)
+            r->osnap_dist = pair->value.d;
           break;
         case 10:
-          if (i < 0)
-            break;
-          o->ref[i].osnap_pt.x = pair->value.d;
+          if (r)
+            r->osnap_pt.x = pair->value.d;
           break;
         case 20:
-          if (i < 0)
-            break;
-          o->ref[i].osnap_pt.y = pair->value.d;
+          if (r)
+            r->osnap_pt.y = pair->value.d;
           break;
         case 30:
-          if (i < 0)
-            break;
-          o->ref[i].osnap_pt.z = pair->value.d;
-          LOG_TRACE ("%s.ref[%d].osnap_pt = (%f, %f, %f) [3BD 10]\n",
-                     obj->name, i, o->ref[i].osnap_pt.x, o->ref[i].osnap_pt.y,
-                     pair->value.d);
+          if (r)
+            {
+              r->osnap_pt.z = pair->value.d;
+              LOG_TRACE ("%s.ref[%d].osnap_pt = (%f, %f, %f) [3BD 10]\n",
+                         obj->name, i, r->osnap_pt.x, r->osnap_pt.y,
+                         pair->value.d);
+            }
           break;
         default:
           LOG_ERROR ("Unknown DXF code %d for %s", pair->code, "DIMASSOC");
@@ -10372,6 +10360,18 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                pair->value.l == 0L)
         goto next_pair;
 #  endif
+      // DIMASSOC: the 330 in AcDbDimAssoc is the dimension, not an owner
+      // or a reactor. Left to the generic search it was lost, and ODA drops
+      // a DIMASSOC that names no dimension.
+      if (obj->fixedtype == DWG_TYPE_DIMASSOC && pair->code == 330
+          && strEQc (subclass, "AcDbDimAssoc"))
+        {
+          Dwg_Object_DIMASSOC *o = obj->tio.object->tio.DIMASSOC;
+          o->dimensionobj = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+          LOG_TRACE ("%s.dimensionobj = " FORMAT_REF " [H 330]\n", obj->name,
+                     ARGS_REF (o->dimensionobj));
+          goto next_pair;
+        }
       // start_switch:
       switch (pair->code)
         {       // common flags: name, xref
