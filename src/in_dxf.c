@@ -2911,24 +2911,11 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   o->unknown_b1 = 1;
   o->unknown_b2 = 0;
 
-  // valid entry code: 91
+  // valid entry code: 91, the subdivision level
   if (pair->code == 91)
     {
-      vector = pair->code;
-      free (o->subdiv_vertex);
-      o->subdiv_vertex = NULL;
       o->num_subdiv_vertex = pair->value.u;
       LOG_TRACE ("MESH.num_subdiv_vertex = %u [BL 91]\n", pair->value.u);
-      if (pair->value.u)
-        {
-          o->subdiv_vertex = (BITCODE_3BD *)xcalloc (o->num_subdiv_vertex,
-                                                     sizeof (BITCODE_3BD));
-          if (!o->subdiv_vertex)
-            {
-              o->num_subdiv_vertex = 0;
-              return NULL;
-            }
-        }
     }
 
   while (pair->code != 0)
@@ -3019,12 +3006,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 10)
         {
-          if (vector == 91)
-            {
-              CHK_array (j, subdiv_vertex);
-              o->subdiv_vertex[j].x = pair->value.d;
-            }
-          else if (vector == 92)
+          if (vector == 92)
             {
               CHK_array (j, vertex);
               o->vertex[j].x = pair->value.d;
@@ -3034,12 +3016,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 20)
         {
-          if (vector == 91)
-            {
-              CHK_array (j, subdiv_vertex);
-              o->subdiv_vertex[j].y = pair->value.d;
-            }
-          else if (vector == 92)
+          if (vector == 92)
             {
               CHK_array (j, vertex);
               o->vertex[j].y = pair->value.d;
@@ -3049,16 +3026,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 30)
         {
-          if (vector == 91)
-            {
-              CHK_array (j, subdiv_vertex);
-              o->subdiv_vertex[j].z = pair->value.d;
-              LOG_TRACE ("MESH.subdiv_vertex[%d] = (%f, %f, %f) [3BD 10]\n", j,
-                         o->subdiv_vertex[j].x, o->subdiv_vertex[j].y,
-                         o->subdiv_vertex[j].z);
-              j++;
-            }
-          else if (vector == 92)
+          if (vector == 92)
             {
               CHK_array (j, vertex);
               o->vertex[j].z = pair->value.d;
