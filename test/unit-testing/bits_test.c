@@ -955,10 +955,24 @@ bit_utf8_to_TV_tests (void)
     fail ("bit_utf8_to_TV %s as CP949", p);
   p = bit_utf8_to_TV (dest, (const unsigned char *)"시험", sizeof (dest),
                       strlen ("시험"), 0, CP_CP949);
-  if (strEQc (p, "\xdc\xc3\x7e\xe8"))
+  // BD C3 C7 E8 (Python, Windows). DC C3 7E E8 was the >> 4 lead byte bug.
+  if (strEQc (p, "\xbd\xc3\xc7\xe8"))
     pass ();
   else
     fail ("bit_utf8_to_TV %s as CP949", p);
+  p = bit_utf8_to_TV (dest, (const unsigned char *)"試験", sizeof (dest),
+                      strlen ("試験"), 0, CP_ANSI_932);
+  if (strEQc (p, "\x8e\x8e\x8c\xb1"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s as ANSI_932", p);
+  // half-width katakana are single bytes in ANSI_932 (windows-31j)
+  p = bit_utf8_to_TV (dest, (const unsigned char *)"ｱ試", sizeof (dest),
+                      strlen ("ｱ試"), 0, CP_ANSI_932);
+  if (strEQc (p, "\xb1\x8e\x8e"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s as ANSI_932", p);
   p = bit_utf8_to_TV (dest, (const unsigned char *)"█", sizeof (dest),
                       strlen ("█"), 0, CP_CP869);
   if (strEQc (p, "\xdb"))
