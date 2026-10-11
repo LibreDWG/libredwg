@@ -2785,7 +2785,8 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 40) // not const_width
         {
-          if (!j)
+          // the first 40 allocates: a vertex with no width writes none
+          if (!o->num_widths)
             {
               o->widths = (Dwg_LWPOLYLINE_width *)xcalloc (
                   num_points, sizeof (Dwg_LWPOLYLINE_width));
@@ -2794,7 +2795,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   o->num_widths = 0;
                   return NULL;
                 }
-              o->flag |= 4;
+              o->flag |= 32; // has widths. 4 is const_width
               o->num_widths = num_points;
             }
           CHK_array (j, widths);
@@ -2802,7 +2803,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("LWPOLYLINE.widths[%d].start = %f [BD 40]\n", j,
                      pair->value.d);
         }
-      else if (pair->code == 41 && (o->flag & 4)) // not const_width
+      else if (pair->code == 41 && (o->flag & 32)) // not const_width
         {
           CHK_array (j, widths);
           o->widths[j].end = pair->value.d;
