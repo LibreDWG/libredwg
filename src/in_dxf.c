@@ -2651,6 +2651,128 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+/* SPATIAL_FILTER: 70 n, n x (10, 20), 210, 11, 71, 72 [40], 73 [41],
+   12 x 40 inverse_transform, 12 x 40 transform. All the doubles are 40,
+   which the generic importer could not tell apart (clip_verts and both
+   matrices were garbage, NaN in the inverse). */
+static Dxf_Pair *
+new_SPATIAL_FILTER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                    Dxf_Pair *restrict pair)
+{
+  Dwg_Object_SPATIAL_FILTER *o = obj->tio.object->tio.SPATIAL_FILTER;
+  int j = -1;    // clip vertex
+  int k = 0;     // index into the 24 matrix doubles
+  int state = 0; // 1 after 72, 2 after 73: which 40/41 is a clip z
+  o->num_clip_verts = (BITCODE_BS)pair->value.i;
+  LOG_TRACE ("SPATIAL_FILTER.num_clip_verts = %u [BS 70]\n",
+             (unsigned)o->num_clip_verts);
+  if (o->num_clip_verts > 10000)
+    {
+      LOG_ERROR ("Invalid SPATIAL_FILTER.num_clip_verts %u",
+                 (unsigned)o->num_clip_verts);
+      o->num_clip_verts = 0;
+      return NULL;
+    }
+  if (o->num_clip_verts)
+    {
+      o->clip_verts
+          = (BITCODE_2RD *)xcalloc (o->num_clip_verts, sizeof (BITCODE_2RD));
+      if (!o->clip_verts)
+        {
+          o->num_clip_verts = 0;
+          return NULL;
+        }
+    }
+  if (!o->inverse_transform)
+    o->inverse_transform = (BITCODE_BD *)xcalloc (12, sizeof (BITCODE_BD));
+  if (!o->transform)
+    o->transform = (BITCODE_BD *)xcalloc (12, sizeof (BITCODE_BD));
+  if (!o->inverse_transform || !o->transform)
+    return NULL;
+  while (pair != NULL && pair->code != 0)
+    {
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+      if (pair == NULL || pair->code == 0)
+        return pair;
+      switch (pair->code)
+        {
+        case 10:
+          j++;
+          if (j < 0 || j >= (int)o->num_clip_verts)
+            return NULL;
+          o->clip_verts[j].x = pair->value.d;
+          break;
+        case 20:
+          if (j < 0 || j >= (int)o->num_clip_verts)
+            return NULL;
+          o->clip_verts[j].y = pair->value.d;
+          LOG_TRACE ("SPATIAL_FILTER.clip_verts[%d] = (%f, %f) [2RD 10]\n", j,
+                     o->clip_verts[j].x, o->clip_verts[j].y);
+          break;
+        case 210:
+          o->extrusion.x = pair->value.d;
+          break;
+        case 220:
+          o->extrusion.y = pair->value.d;
+          break;
+        case 230:
+          o->extrusion.z = pair->value.d;
+          break;
+        case 11:
+          o->origin.x = pair->value.d;
+          break;
+        case 21:
+          o->origin.y = pair->value.d;
+          break;
+        case 31:
+          o->origin.z = pair->value.d;
+          break;
+        case 71:
+          o->display_boundary_on = (BITCODE_BS)pair->value.i;
+          break;
+        case 72:
+          o->front_clip_on = (BITCODE_BS)pair->value.i;
+          state = 1;
+          break;
+        case 73:
+          o->back_clip_on = (BITCODE_BS)pair->value.i;
+          state = 2;
+          break;
+        case 40:
+          if (state == 1 && o->front_clip_on)
+            {
+              o->front_clip_z = pair->value.d;
+              state = 3; // the front z is read, the 40 after 73 are matrices
+            }
+          else if (k < 24)
+            {
+              if (k < 12)
+                o->inverse_transform[k] = pair->value.d;
+              else
+                o->transform[k - 12] = pair->value.d;
+              k++;
+            }
+          else
+            LOG_WARN ("SPATIAL_FILTER: ignored extra 40");
+          break;
+        case 41:
+          o->back_clip_z = pair->value.d;
+          break;
+        default:
+          if (pair->code >= 1000 && pair->code < 1999)
+            add_eed (obj, "SPATIAL_FILTER", pair);
+          else
+            {
+              LOG_ERROR ("Invalid DXF code %d for %s", pair->code,
+                         "SPATIAL_FILTER");
+              return NULL;
+            }
+        }
+    }
+  return pair;
+}
+
 static Dxf_Pair *
 new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 Dxf_Pair *restrict pair)
@@ -11838,6 +11960,14 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               LOG_TRACE ("VPORT.UCSFOLLOW => %d [B 0] (calc)\n", o->UCSFOLLOW);
               LOG_TRACE ("VPORT.VIEWMODE => %d [4BITS 71] (calc)\n",
                          o->VIEWMODE);
+              goto next_pair;
+            }
+          else if (pair->code == 70
+                   && obj->fixedtype == DWG_TYPE_SPATIAL_FILTER)
+            {
+              pair = new_SPATIAL_FILTER (obj, dat, pair);
+              if (pair != NULL && pair->code == 0)
+                return pair;
               goto next_pair;
             }
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_LWPOLYLINE)
