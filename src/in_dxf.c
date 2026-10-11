@@ -891,6 +891,37 @@ dxf_read_pair (Bit_Chain *dat)
           return NULL;
         }
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s.ptr);
+      // R2007+ DXF is UTF-8. Written as R2000 (TV, in the drawing codepage),
+      // non-ASCII must be converted here: dynapi_set_helper copies TV
+      // strings as they are, and R2000 got raw UTF-8 bytes (gh109_1, ANSI_936:
+      // "隔日1" read back as "闅旀棩1"). Unrepresentable characters become
+      // \U+XXXX as AutoCAD writes them. Older DXF is in the codepage already.
+      if (dat->from_version >= R_2007 && dat->version < R_2007
+          && pair->value.s.ptr)
+        {
+          const unsigned char *u = (const unsigned char *)pair->value.s.ptr;
+          size_t ulen = strlen (pair->value.s.ptr);
+          size_t ui;
+          for (ui = 0; ui < ulen && u[ui] < 0x80; ui++)
+            ;
+          if (ui < ulen) // not plain ASCII
+            {
+              size_t dsize = (ulen * 4) + 8;
+              char *dest = (char *)malloc (dsize);
+              char *tgt = dest ? bit_utf8_to_TV (dest, u, dsize, ulen, 0,
+                                                 dat->codepage)
+                               : NULL;
+              if (tgt)
+                {
+                  free (pair->value.s.ptr);
+                  pair->value.s.ptr = dest;
+                  LOG_TRACE ("  => \"%s\" [TV cp %u]\n", dest,
+                             (unsigned)dat->codepage);
+                }
+              else
+                free (dest);
+            }
+        }
       // dynapi_set_helper converts from utf-8 to unicode, not here.
       // we need to know the type of the target field, if TV or T
       if (dat->from_version <= R_12 && pair->code == 2 && pair->value.s.ptr
@@ -11840,6 +11871,24 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     // the partial text and continue rather than aborting.
                     LOG_ERROR ("Out of memory appending MTEXT.text chunk. "
                                "Keep it partial.");
+                }
+              // R2007+ DXF chunks are UTF-8; code 1 is the last one: convert
+              // the whole text to the target as all other DXF strings
+              // (dwg_add_u8_input: UTF-16, or the codepage with \U+XXXX).
+              // Kept as UTF-8, R2000 got raw UTF-8 bytes ("∅" became "âˆ…").
+              // Only R2007+ DXF is UTF-8; older DXF is in $DWGCODEPAGE
+              // already (example_2000: "108\xb0" for 108 degrees).
+              // For R2000 output dxf_read_pair has converted already.
+              if (pair->code == 1 && o->text
+                  && dwg->header.from_version >= R_2007
+                  && dwg->header.version >= R_2007)
+                {
+                  BITCODE_T conv = dwg_add_u8_input (dwg, (char *)o->text);
+                  if (conv)
+                    {
+                      free (o->text);
+                      o->text = conv;
+                    }
                 }
               goto next_pair;
             }
