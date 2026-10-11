@@ -10522,6 +10522,192 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                pair->value.l == 0L)
         goto next_pair;
 #  endif
+      // The annotation scale and column part of an MTEXT, after
+      // <101, Embedded Object>: 70, 10, 11, 40, 41, 42, 43, 71 [72 44 45 73 74
+      // 46...]. The generic importer took this 40 (rect width) as the text
+      // height and every such MTEXT got height 0 (sample_AC1032 via DXF).
+      if (in_embedobj && obj->fixedtype == DWG_TYPE_MTEXT)
+        {
+          Dwg_Entity_MTEXT *m = obj->tio.entity->tio.MTEXT;
+          int done = 1;
+          switch (pair->code)
+            {
+            case 70:
+              m->default_flag = pair->value.i ? 1 : 0;
+              m->is_not_annotative = 1;
+              break;
+            case 10:
+            case 20:
+            case 30:
+              break; // redundant ins_pt
+            case 11:
+            case 21:
+            case 31:
+              break; // redundant x_axis_dir
+            case 40:
+              m->rect_width = pair->value.d;
+              break;
+            case 41:
+              m->rect_height = pair->value.d;
+              break;
+            case 42:
+              m->extents_width = pair->value.d;
+              break;
+            case 43:
+              m->extents_height = pair->value.d;
+              break;
+            case 71:
+              m->column_type = (BITCODE_BS)pair->value.i;
+              break;
+            case 72:
+              if (m->column_type == 1)
+                m->numfragments = (BITCODE_BL)pair->value.i;
+              else
+                m->num_column_heights = (BITCODE_BL)pair->value.i;
+              break;
+            case 44:
+              m->column_width = pair->value.d;
+              break;
+            case 45:
+              m->gutter = pair->value.d;
+              break;
+            case 73:
+              m->auto_height = pair->value.i ? 1 : 0;
+              break;
+            case 74:
+              m->flow_reversed = pair->value.i ? 1 : 0;
+              break;
+            case 46:
+              {
+                // the column heights, num_column_heights of them
+                BITCODE_BL n = m->num_column_heights;
+                BITCODE_BL ci;
+                if (!n || n > 1000)
+                  break;
+                if (!m->column_heights)
+                  m->column_heights
+                      = (BITCODE_BD *)xcalloc (n + 1, sizeof (BITCODE_BD));
+                if (!m->column_heights)
+                  break;
+                // the next empty slot (heights are > 0)
+                for (ci = 0; ci < n && m->column_heights[ci] != 0.0; ci++)
+                  ;
+                if (ci < n)
+                  m->column_heights[ci] = pair->value.d;
+                break;
+              }
+            default:
+              done = 0;
+              in_embedobj = 0;
+            }
+          if (done)
+            {
+              LOG_TRACE ("MTEXT embedded: DXF %d\n", pair->code);
+              goto next_pair;
+            }
+        }
+      // The embedded MTEXT of R2018 multi-line ATTRIB/ATTDEF, after
+      // <101, Embedded Object>: 10, 40, 41, 46, 71, 72, 1, 7, 73, 44, 11, 210
+      // as out_dxf writes them (ACadSharp, ODA). Before, 46 was "Invalid DXF
+      // code" and dxf2dwg failed on any drawing with one (sample_AC1032).
+      if (in_embedobj
+          && (obj->fixedtype == DWG_TYPE_ATTRIB
+              || obj->fixedtype == DWG_TYPE_ATTDEF))
+        {
+          Dwg_AcDbMTextObjectEmbedded *m
+              = obj->fixedtype == DWG_TYPE_ATTRIB
+                    ? &obj->tio.entity->tio.ATTRIB->mtext
+                    : &obj->tio.entity->tio.ATTDEF->mtext;
+          int done = 1;
+          switch (pair->code)
+            {
+            case 10:
+              m->ins_pt.x = pair->value.d;
+              break;
+            case 20:
+              m->ins_pt.y = pair->value.d;
+              break;
+            case 30:
+              m->ins_pt.z = pair->value.d;
+              break;
+            case 40:
+              m->text_height = pair->value.d;
+              break;
+            case 41:
+              m->rect_width = pair->value.d;
+              break;
+            case 46:
+              m->rect_height = pair->value.d;
+              break;
+            case 71:
+              m->attachment = (BITCODE_BS)pair->value.i;
+              break;
+            case 72:
+              m->flow_dir = (BITCODE_BS)pair->value.i;
+              break;
+            case 1:
+            case 3:
+              {
+                // 3 are the first parts of a long text, 1 the last one
+                char *prev = m->text && !IS_FROM_TU_DWG (dwg) ? (char *)m->text
+                                                              : NULL;
+                if (pair->value.s.ptr)
+                  {
+                    if (prev)
+                      {
+                        size_t l1 = strlen (prev),
+                               l2 = strlen (pair->value.s.ptr);
+                        char *t = (char *)realloc (prev, l1 + l2 + 1);
+                        if (t)
+                          {
+                            memcpy (t + l1, pair->value.s.ptr, l2 + 1);
+                            m->text = (BITCODE_T)t;
+                          }
+                      }
+                    else if (dwg->header.version >= R_2007)
+                      m->text = dwg_add_u8_input (dwg, pair->value.s.ptr);
+                    else // TV, converted by dxf_read_pair if from UTF-8
+                      m->text = (BITCODE_T)strdup (pair->value.s.ptr);
+                  }
+                break;
+              }
+            case 7:
+              m->style = find_tablehandle (dwg, pair);
+              break;
+            case 73:
+              m->linespace_style = (BITCODE_BS)pair->value.i;
+              break;
+            case 44:
+              m->linespace_factor = pair->value.d;
+              break;
+            case 11:
+              m->x_axis_dir.x = pair->value.d;
+              break;
+            case 21:
+              m->x_axis_dir.y = pair->value.d;
+              break;
+            case 31:
+              m->x_axis_dir.z = pair->value.d;
+              break;
+            case 210:
+              m->extrusion.x = pair->value.d;
+              break;
+            case 220:
+              m->extrusion.y = pair->value.d;
+              break;
+            case 230:
+              m->extrusion.z = pair->value.d;
+              break;
+            default:
+              done = 0;
+              in_embedobj = 0; // the embedded object ends
+            }
+          if (done)
+            {
+              LOG_TRACE ("%s.mtext: DXF %d\n", obj->name, pair->code);
+              goto next_pair;
+            }
+        }
       // start_switch:
       switch (pair->code)
         {       // common flags: name, xref
