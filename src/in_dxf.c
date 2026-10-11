@@ -1813,6 +1813,35 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
   else
     dxf_set_default_DWGCODEPAGE (dat, dwg);
 
+  // DXF may omit any header variable; those where 0 is invalid get
+  // AutoCAD's defaults (acad.dwt, or acadiso.dwt with MEASUREMENT 1).
+  // FreeCAD's DXF has no $TEXTSIZE nor $DIMTXT: the DWG had text heights 0,
+  // which ACadSharp rejects ("TextHeight must be greater than zero").
+  {
+    const int metric = vars->MEASUREMENT == 1;
+#  define DXF_DEFAULT_IF_ZERO(var, imperial, iso)                             \
+    if (vars->var <= 0.0)                                                     \
+      {                                                                       \
+        vars->var = metric ? (iso) : (imperial);                              \
+        LOG_TRACE ("HEADER.%s => %g (default)\n", #var, vars->var);           \
+      }
+    DXF_DEFAULT_IF_ZERO (TEXTSIZE, 0.2, 2.5)
+    DXF_DEFAULT_IF_ZERO (DIMTXT, 0.18, 2.5)
+#  define DXF_ONE_IF_ZERO(var)                                                \
+    if (vars->var <= 0.0)                                                     \
+      {                                                                       \
+        vars->var = 1.0;                                                      \
+        LOG_TRACE ("HEADER.%s => 1 (default)\n", #var);                       \
+      }
+    DXF_ONE_IF_ZERO (LTSCALE)
+    DXF_ONE_IF_ZERO (CELTSCALE)
+    DXF_ONE_IF_ZERO (DIMLFAC)
+    DXF_ONE_IF_ZERO (DIMTFAC)
+#  undef DXF_ONE_IF_ZERO
+    DXF_DEFAULT_IF_ZERO (DIMALTF, 25.4, 0.03937007874016)
+#  undef DXF_DEFAULT_IF_ZERO
+  }
+
   if (_verp)
     {
       hdr->dwg_version = _verp->dwg_version;
