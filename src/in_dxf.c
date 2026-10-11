@@ -2659,11 +2659,14 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 70)
         {
-          o->flag = pair->value.i;
-          if (pair->value.i & 1) /* only if closed or not */
-            o->flag = (o->flag - 1) + 512;
-          else if (pair->value.i & 128) /* plinegen? */
-            o->flag = (o->flag - 128) + 256;
+          // DXF 1 closed, 128 plinegen; DWG 512 and 256. Keep the DWG bits
+          // set by other codes (4 const width, 16 bulges, 32 widths...),
+          // and map both DXF bits (else-if dropped plinegen of closed ones).
+          o->flag &= ~(512 | 256);
+          if (pair->value.i & 1)
+            o->flag |= 512;
+          if (pair->value.i & 128)
+            o->flag |= 256;
           LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", o->flag);
         }
       else if (pair->code == 38)
@@ -2740,7 +2743,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 91)
         {
-          if (!j)
+          if (!o->num_vertexids)
             {
               o->vertexids
                   = (BITCODE_BL *)xcalloc (num_points, sizeof (BITCODE_BL));
@@ -2750,15 +2753,16 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   return NULL;
                 }
               o->num_vertexids = num_points;
+              o->flag |= 1024;
             }
           CHK_array (j, vertexids);
           o->vertexids[j] = pair->value.i;
           LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %d [BL 91]\n", j,
                      pair->value.i);
         }
-      else if (pair->code == 40) // not const_width
+      else if (pair->code == 40 || pair->code == 41) // not const_width
         {
-          // the first 40 allocates: a vertex with no width writes none
+          // the first 40 or 41 allocates: a vertex with no width writes none
           if (!o->num_widths)
             {
               o->widths = (Dwg_LWPOLYLINE_width *)xcalloc (
@@ -2772,16 +2776,13 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               o->num_widths = num_points;
             }
           CHK_array (j, widths);
-          o->widths[j].start = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.widths[%d].start = %f [BD 40]\n", j,
-                     pair->value.d);
-        }
-      else if (pair->code == 41 && (o->flag & 32)) // not const_width
-        {
-          CHK_array (j, widths);
-          o->widths[j].end = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.widths[%d].end = %f [BD 41]\n", j,
-                     pair->value.d);
+          if (pair->code == 40)
+            o->widths[j].start = pair->value.d;
+          else
+            o->widths[j].end = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.widths[%d].%s = %f [BD %d]\n", j,
+                     pair->code == 40 ? "start" : "end", pair->value.d,
+                     pair->code);
         }
       else if (pair->code >= 1000 && pair->code < 1999)
         {
