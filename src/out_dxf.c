@@ -368,6 +368,13 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
               {                                                               \
                 fprintf (dat->fh, "%9i\r\n", _si);                            \
               }                                                               \
+            else if (420 <= dxf && dxf < 430)                                 \
+              {                                                               \
+                /* true colors are 24-bit RGB in DXF, as AutoCAD writes */    \
+                /* them: no 0xC2 method byte of the DWG (3258135347 was */    \
+                /* 0xC2333333 for 3355443) */                                 \
+                fprintf (dat->fh, "%9i\r\n", _si & 0xffffff);                 \
+              }                                                               \
             else                                                              \
               fprintf (dat->fh, "%s\r\n", buf);                               \
           }                                                                   \
@@ -3368,11 +3375,11 @@ dxf_format (int code)
   if (410 <= code && code <= 419)
     return "%s";
   if (420 <= code && code <= 429)
-    return "%9li"; // int32_t
+    return "%9i"; // int32_t, not long: negative on Windows, UB with uint32
   if (430 <= code && code <= 439)
     return "%s";
   if (440 <= code && code <= 449)
-    return "%9li"; // int32_t
+    return "%9i"; // int32_t
   if (450 <= code && code <= 459)
     return "%12li"; // long
   if (460 <= code && code <= 469)
