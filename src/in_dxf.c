@@ -9981,6 +9981,73 @@ postprocess_TEXTlike (Dwg_Object *obj)
   LOG_TRACE ("%s.dataflags => 0x%x\n", obj->name, dataflags);
 }
 
+/* The handle of the *Model_Space BLOCK_RECORD of an ASCII DXF, by a quick
+   scan, or 0x1F. object[0] is created as *Model_Space before the TABLES are
+   read; with the fixed 0x1F it collided with other objects of DXFs where
+   *Model_Space has another handle (gh209_1: *Model_Space 2, LAYER table 1F):
+   "Duplicate handle 1F", two model spaces, entities on wrong layers. */
+static BITCODE_RLL
+dxf_prescan_mspace_handle (const Bit_Chain *restrict dat)
+{
+  const char *p = (const char *)dat->chain;
+  const char *pend = p + dat->size;
+  if (dat->opts & DWG_OPTS_DXFB)
+    return 0x1F;
+  while (p < pend)
+    {
+      const char *q = NULL;
+      const char *r;
+      const char *line;
+      BITCODE_RLL h = 0;
+      int is_ms = 0;
+      // no memmem: not in MinGW
+      for (r = p; r + 12 <= pend; r++)
+        if (*r == 'B' && !memcmp (r, "BLOCK_RECORD", 12))
+          {
+            q = r;
+            break;
+          }
+      if (!q)
+        break;
+      // the code/value lines of this object, until the next code 0
+      line = q + 12;
+      while (line < pend && (*line == '\r' || *line == '\n'))
+        line++;
+      while (line < pend)
+        {
+          int code;
+          const char *val, *eol;
+          char *ep;
+          code = (int)strtol (line, &ep, 10);
+          if (ep == line)
+            break;
+          val = ep;
+          while (val < pend && *val != '\n')
+            val++;
+          val++;
+          if (val >= pend)
+            break;
+          eol = val;
+          while (eol < pend && *eol != '\n' && *eol != '\r')
+            eol++;
+          if (code == 0)
+            break;
+          if (code == 5)
+            h = strtoull (val, NULL, 16);
+          else if (code == 2 && eol - val == 12
+                   && !strncasecmp (val, "*Model_Space", 12))
+            is_ms = 1;
+          line = eol;
+          while (line < pend && (*line == '\r' || *line == '\n'))
+            line++;
+        }
+      if (is_ms && h)
+        return h;
+      p = q + 12;
+    }
+  return 0x1F;
+}
+
 int
 is_textlike (Dwg_Object *restrict obj)
 {
@@ -15521,7 +15588,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("%s.name = %s [TV 2]\n", dxfname, _obj->name);
       _obj->is_xref_ref = 1;
       obj->tio.object->is_xdic_missing = 1;
-      dwg_add_handle (&obj->handle, 0, 0x1F, obj);
+      dwg_add_handle (&obj->handle, 0, dxf_prescan_mspace_handle (dat), obj);
       LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                  obj->handle.size, obj->handle.value);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);
