@@ -2336,6 +2336,33 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].size += size;
         break;
       }
+    case 3:
+      {
+        // DXF has the layer name, DWG the handle of the LAYER (RLL)
+        BITCODE_H hdl = pair->value.s.ptr
+                            ? dwg_find_tablehandle_silent (
+                                  dwg, pair->value.s.ptr, "LAYER")
+                            : NULL;
+        size = 1 + 8;
+        eed[i].data
+            = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+        if (!eed[i].data)
+          {
+            LOG_ERROR ("Out of memory");
+            dwg_free_eed (obj);
+            return;
+          }
+        eed[i].data->code = code; // 1003
+        if (hdl)
+          eed[i].data->u.eed_3.layer = hdl->absolute_ref;
+        else
+          LOG_WARN ("EED layer %s not found, 0",
+                    pair->value.s.ptr ? pair->value.s.ptr : "");
+        LOG_TRACE ("layer: " FORMAT_RLL " [RLL]\n",
+                   eed[i].data->u.eed_3.layer);
+        eed[i].size += size;
+        break;
+      }
     default:
       LOG_ERROR ("Not yet implemented EED[%d] code %d", i, pair->code);
     }

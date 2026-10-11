@@ -1599,9 +1599,21 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
                 VALUE_TFF ("{", 1002)
               break;
             case 3:
-              GROUP (dxf);
-              fprintf (dat->fh, "%9" PRIu64 "\r\n", data->u.eed_3.layer);
-              // VALUE_RLL (data->u.eed_3.layer, dxf);
+              {
+                // DXF has the layer name, not the handle
+                Dwg_Object *lo
+                    = dwg_resolve_handle_silent (dwg, data->u.eed_3.layer);
+                char *lname = NULL;
+                char zero[] = "0";
+                char *lv;
+                int lerr = 0;
+                if (lo && lo->fixedtype == DWG_TYPE_LAYER)
+                  lname = dwg_obj_table_get_name (lo, &lerr);
+                lv = (lname && !lerr) ? lname : zero;
+                VALUE_TV (lv, dxf);
+                if (lname && IS_FROM_TU_DWG (dwg))
+                  free (lname);
+              }
               break;
             case 4:
               VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf);
