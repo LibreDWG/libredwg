@@ -2523,8 +2523,9 @@ DWG_ENTITY (MESH)
   SUBCLASS (AcDbSubDMesh)
   FIELD_BS (dlevel, 71);       // version, 2
   FIELD_B (is_watertight, 72); // blend_crease 0
-  FIELD_BL (num_subdiv_vertex, 91); // subdivision_levels 0
-  FIELD_3DPOINT_VECTOR (subdiv_vertex, num_subdiv_vertex, 10);
+  // DXF 91 is the subdivision level, not a vertex count. Only the
+  // level 0 mesh follows.
+  FIELD_BL (num_subdiv_vertex, 91);
   FIELD_BL (num_vertex, 92); //14 @14
   FIELD_3DPOINT_VECTOR (vertex, num_vertex, 10);
   FIELD_BL (num_faces, 93); // 30
