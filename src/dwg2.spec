@@ -349,6 +349,22 @@ DWG_OBJECT_END
 #define attr content.attrs[rcount4]
 #define merged fdata.merged_cells[rcount1]
 
+// The generic REPEAT check compares count * sizeof (struct) with the
+// available bits, which rejects valid tables (the structs are hundreds of
+// bytes, an empty cell only ~14 bits). Check with a minimal bit size.
+#ifdef IS_DECODER
+#  define TABLE_CHKCOUNT(nam, minbits)                                        \
+    if ((int64_t)_obj->nam * (minbits) > AVAIL_BITS (dat))                    \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s." #nam " %u", SAFEDXFNAME,                     \
+                   (unsigned)_obj->nam);                                      \
+        _obj->nam = 0;                                                        \
+        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
+      }
+#else
+#  define TABLE_CHKCOUNT(nam, minbits)
+#endif
+
 // pg.237 20.4.97 for TABLE (2010+) and TABLECONTENT, without the
 // table style handle at the end (H 340).
 // Checked against the ODA spec 20.4.97, ACadSharp readTableContent, and the
@@ -360,7 +376,8 @@ DWG_OBJECT_END
   SUBCLASS (AcDbLinkedTableData)                                \
   FIELD_BL (tdata.num_cols, 90);				\
   VALUEOUTOFBOUNDS (tdata.num_cols, 5000)			\
-  REPEAT (tdata.num_cols, tdata.cols, Dwg_TableDataColumn)	\
+  TABLE_CHKCOUNT (tdata.num_cols, 12)				\
+  REPEAT_C (tdata.num_cols, tdata.cols, Dwg_TableDataColumn)	\
   REPEAT_BLOCK							\
       SUB_FIELD_T (tcol,name, 300);				\
       DXF { VALUE_TFF ("LINKEDTABLEDATACOLUMN_BEGIN", 1) }      \
@@ -389,11 +406,13 @@ DWG_OBJECT_END
   END_REPEAT (tdata.cols);					\
   FIELD_BL (tdata.num_rows, 91);				\
   VALUEOUTOFBOUNDS (tdata.num_rows, 50000)			\
-  REPEAT (tdata.num_rows, tdata.rows, Dwg_TableRow)		\
+  TABLE_CHKCOUNT (tdata.num_rows, 12)				\
+  REPEAT_C (tdata.num_rows, tdata.rows, Dwg_TableRow)		\
   REPEAT_BLOCK							\
       FIELD_BL (row.num_cells, 90);				\
       VALUEOUTOFBOUNDS (row.num_cells, 5000)			\
-      REPEAT2 (row.num_cells, row.cells, Dwg_TableCell)		\
+      TABLE_CHKCOUNT (row.num_cells, 14)			\
+      REPEAT2_C (row.num_cells, row.cells, Dwg_TableCell)	\
       REPEAT_BLOCK						\
           SUB_FIELD_BL (cell,flag, 90);				\
           SUB_FIELD_T (cell,tooltip, 300);			\
@@ -425,7 +444,8 @@ DWG_OBJECT_END
           VALUEOUTOFBOUNDS (cell.num_cell_contents, 5000)	\
           DXF { VALUE_TFF ("CONTENT", 302) }                    \
           DXF { VALUE_TFF ("CELLCONTENT_BEGIN", 1) }            \
-          REPEAT3 (cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent) \
+          TABLE_CHKCOUNT (cell.num_cell_contents, 6)		\
+          REPEAT3_C (cell.num_cell_contents, cell.cell_contents, Dwg_TableCellContent) \
           REPEAT_BLOCK						\
               SUB_FIELD_BL (content,type, 90);			\
               if (FIELD_VALUE (content.type) == 1)		\

@@ -620,12 +620,20 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
       }                                                                       \
   }
 #elif defined(IS_ENCODER)
+/* before R2007 the bytes are the TV string with its zero (a guess for
+   kGeneral, the only pre-R2007 user: no example decodes to text) */
 #  define TABLE_value_bytes(value)                                            \
   {                                                                           \
     BITCODE_TU _ws = NULL;                                                    \
+    BITCODE_TF _bytes = NULL;                                                 \
     int _free_ws = 0;                                                         \
     BITCODE_BL _n = 0;                                                        \
-    if (_obj->value.data_string)                                              \
+    if (_obj->value.data_string && dat->version < R_2007)                     \
+      {                                                                       \
+        _bytes = (BITCODE_TF)_obj->value.data_string;                         \
+        _n = (BITCODE_BL)strlen (_obj->value.data_string) + 1;                \
+      }                                                                       \
+    else if (_obj->value.data_string)                                         \
       {                                                                       \
         if (IS_FROM_TU (dat))                                                 \
           _ws = (BITCODE_TU)_obj->value.data_string;                          \
@@ -636,11 +644,12 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           }                                                                   \
         if (_ws)                                                              \
           _n = (BITCODE_BL)((bit_wcs2len (_ws) + 1) * 2);                     \
+        _bytes = (BITCODE_TF)_ws;                                             \
       }                                                                       \
     _obj->value.data_size = _n;                                               \
     FIELD_BL (value.data_size, 92);                                           \
     if (_n)                                                                   \
-      bit_write_TF (dat, (BITCODE_TF)_ws, _n);                                \
+      bit_write_TF (dat, _bytes, _n);                                         \
     if (_free_ws)                                                             \
       free (_ws);                                                             \
   }
@@ -698,10 +707,8 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
         case 256: /* kResBuf */                                               \
           LOG_ERROR ("Unknown data type in TABLE_value_fields: kResBuf");     \
           break;                                                              \
-        case 512: /* kGeneral since r2007*/                                   \
-          SINCE (R_2007a) { TABLE_value_bytes (value) }                       \
-          else                                                                \
-            LOG_ERROR ("Unknown data type in TABLE_value_fields: kGeneral <r2007"); \
+        case 512: /* kGeneral. Also in R14-R2004 TABLECONTENT objects */      \
+          TABLE_value_bytes (value)                                           \
           break;                                                              \
         default:                                                              \
           LOG_ERROR ("Invalid data type in TABLE_value_fields");              \
