@@ -8238,6 +8238,154 @@ downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
 }
 #endif
 
+// the text of a R2010+ cell content for the pre-R2007 cell text (a copy):
+// the formatted value string (302) as shown, else the string value.
+static BITCODE_T
+table_content_text (const Dwg_TableCellContent *ct)
+{
+  BITCODE_TU src = NULL;
+  if (ct->type != 1)
+    return NULL;
+  if (ct->value.value_string && *(BITCODE_TU)ct->value.value_string)
+    src = (BITCODE_TU)ct->value.value_string;
+  else if ((ct->value.data_type == 4 || ct->value.data_type == 512)
+           && ct->value.data_string)
+    src = (BITCODE_TU)ct->value.data_string;
+  return src ? (BITCODE_T)bit_wcs2dup (src) : NULL;
+}
+
+/* R2010+ TABLE (table content, 20.4.97) to the pre-R2010 format (20.4.96.1)
+   for writing R2000/R2004: columns, rows, widths, heights, merged ranges,
+   the cell texts (UTF-16, converted by the encoder as all R2007+ strings)
+   and block cells, and the per content overrides text height, alignment
+   and color. Borders, row/column/table cell styles and fields are lost.
+   The table geometry itself is in the anonymous *T block and unchanged.
+   flag_for_table_value is taken from the R2010+ "unknown BS" (default 38),
+   which has the same values 6 / 22 in the corpus (a guess). */
+void
+downconvert_TABLE (Dwg_Object *restrict obj)
+{
+  Dwg_Entity_TABLE *_obj;
+  BITCODE_BL nr, nc;
+  if (!obj || obj->fixedtype != DWG_TYPE_TABLE || !obj->tio.entity)
+    return;
+  _obj = obj->tio.entity->tio.TABLE;
+  if (_obj->cells || _obj->col_widths || _obj->row_heights)
+    return; // already converted, or both present
+  nr = _obj->tdata.num_rows;
+  nc = _obj->tdata.num_cols;
+  LOG_TRACE ("downconvert_TABLE %u x %u\n", (unsigned)nr, (unsigned)nc);
+  _obj->flag_for_table_value = _obj->unknown_bs;
+  _obj->horiz_direction = _obj->hor_dir;
+  if (bit_isnan (_obj->horiz_direction.x)
+      || (_obj->horiz_direction.x == 0.0 && _obj->horiz_direction.y == 0.0
+          && _obj->horiz_direction.z == 0.0))
+    _obj->horiz_direction.x = 1.0;
+  _obj->num_rows = nr;
+  _obj->num_cols = nc;
+  _obj->num_cells = (unsigned long)nr * nc;
+  _obj->has_table_overrides = 0;
+  _obj->has_border_color_overrides = 0;
+  _obj->has_border_lineweight_overrides = 0;
+  _obj->has_border_visibility_overrides = 0;
+  if (!nr || !nc || !_obj->tdata.rows || !_obj->tdata.cols)
+    {
+      _obj->num_rows = _obj->num_cols = 0;
+      _obj->num_cells = 0;
+      return;
+    }
+  _obj->col_widths = (BITCODE_BD *)calloc (nc, sizeof (BITCODE_BD));
+  _obj->row_heights = (BITCODE_BD *)calloc (nr, sizeof (BITCODE_BD));
+  _obj->cells
+      = (Dwg_TABLE_Cell *)calloc (_obj->num_cells, sizeof (Dwg_TABLE_Cell));
+  if (!_obj->col_widths || !_obj->row_heights || !_obj->cells)
+    {
+      free (_obj->col_widths);
+      free (_obj->row_heights);
+      free (_obj->cells);
+      _obj->col_widths = NULL;
+      _obj->row_heights = NULL;
+      _obj->cells = NULL;
+      _obj->num_rows = _obj->num_cols = 0;
+      _obj->num_cells = 0;
+      return;
+    }
+  for (BITCODE_BL j = 0; j < nc; j++)
+    _obj->col_widths[j] = _obj->tdata.cols[j].width;
+  for (BITCODE_BL i = 0; i < nr; i++)
+    _obj->row_heights[i] = _obj->tdata.rows[i].height;
+  for (BITCODE_BL i = 0; i < nr; i++)
+    {
+      const Dwg_TableRow *row = &_obj->tdata.rows[i];
+      for (BITCODE_BL j = 0; j < nc; j++)
+        {
+          Dwg_TABLE_Cell *cell = &_obj->cells[(size_t)i * nc + j];
+          const Dwg_TableCell *src
+              = j < row->num_cells && row->cells ? &row->cells[j] : NULL;
+          const Dwg_TableCellContent *ct
+              = src && src->num_cell_contents && src->cell_contents
+                    ? &src->cell_contents[0]
+                    : NULL;
+          cell->parent = _obj;
+          cell->type = 1;
+          cell->merged_width_flag = 1;
+          cell->merged_height_flag = 1;
+          if (ct && ct->type == 4) // block
+            {
+              cell->type = 2;
+              cell->block_handle = ct->handle;
+              cell->block_scale = 1.0;
+              if (ct->has_content_format_overrides
+                  && ct->content_format.property_override_flags & 0x8)
+                cell->block_scale = ct->content_format.block_scale;
+            }
+          else if (ct)
+            cell->text_value = table_content_text (ct);
+          if (ct && ct->has_content_format_overrides)
+            {
+              const Dwg_ContentFormat *cf = &ct->content_format;
+              if (cf->property_override_flags & 0x10) // alignment
+                {
+                  cell->cell_flag_override |= 0x01;
+                  cell->cell_alignment = (BITCODE_BS)cf->cell_alignment;
+                }
+              if (cf->property_override_flags & 0x20) // content color
+                {
+                  cell->cell_flag_override |= 0x08;
+                  cell->content_color = cf->content_color; // shallow
+                }
+              if (cf->property_override_flags & 0x80) // text height
+                {
+                  cell->cell_flag_override |= 0x20;
+                  cell->text_height = cf->text_height;
+                }
+            }
+          cell->additional_data_flag = cell->cell_flag_override ? 1 : 0;
+        }
+    }
+  // merged ranges: the top left cell has the size, the others the merged
+  // value flag (as in the R2004 samples)
+  for (BITCODE_BL m = 0; m < _obj->fdata.num_merged_cells; m++)
+    {
+      const Dwg_FormattedTableMerged *mg = &_obj->fdata.merged_cells[m];
+      if (mg->top_row > mg->bottom_row || mg->left_col > mg->right_col
+          || mg->bottom_row >= nr || mg->right_col >= nc)
+        continue;
+      for (BITCODE_BL i = mg->top_row; i <= mg->bottom_row; i++)
+        for (BITCODE_BL j = mg->left_col; j <= mg->right_col; j++)
+          {
+            Dwg_TABLE_Cell *cell = &_obj->cells[(size_t)i * nc + j];
+            if (i == mg->top_row && j == mg->left_col)
+              {
+                cell->merged_width_flag = mg->right_col - mg->left_col + 1;
+                cell->merged_height_flag = mg->bottom_row - mg->top_row + 1;
+              }
+            else
+              cell->is_merged_value = 1;
+          }
+    }
+}
+
 // from >2007 to 2000
 void
 downconvert_TABLESTYLE (Dwg_Object *restrict obj)

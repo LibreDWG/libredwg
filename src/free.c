@@ -618,6 +618,26 @@ dwg_free_variable_type_private (Dwg_Object *restrict obj)
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+// after downconvert_TABLE(): the free spec follows from_version, so the
+// pre-R2010 cells made for writing R2000/R2004 are not freed there.
+// Handles and colors in them are shallow copies, only free the texts.
+static void
+free_TABLE_r2010 (Dwg_Object *restrict obj)
+{
+  Dwg_Entity_TABLE *_obj = obj->tio.entity ? obj->tio.entity->tio.TABLE : NULL;
+  if (!_obj)
+    return;
+  if (_obj->cells)
+    {
+      for (unsigned long i = 0; i < _obj->num_cells; i++)
+        FREE_IF (_obj->cells[i].text_value);
+      FREE_IF (_obj->cells);
+    }
+  FREE_IF (_obj->col_widths);
+  FREE_IF (_obj->row_heights);
+  _obj->num_cells = 0;
+}
+
 // after downconvert_TABLESTYLE()
 // we need to pass through the old code, as the new code is handled in the spec
 // free() following from_version, not version.
@@ -1015,6 +1035,8 @@ dwg_free_object (Dwg_Object *obj)
     {
       free_TABLESTYLE_r2010 (dat, obj);
     }
+  if (obj->fixedtype == DWG_TYPE_TABLE && dwg->header.from_version >= R_2010)
+    free_TABLE_r2010 (obj);
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
