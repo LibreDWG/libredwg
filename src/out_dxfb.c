@@ -28,6 +28,7 @@
 #include "decode.h"
 // #include "decode_r11.h"
 #include "out_dxf.h"
+#include "encode.h"
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -1483,6 +1484,12 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
+#define DXF_FN(name) dxfb_##name
+#define DXF_TABLE_FIXUP_HANDLE(obj)
+#include "out_dxf_table.inc"
+#undef DXF_FN
+#undef DXF_TABLE_FIXUP_HANDLE
+
 /* returns 0 on success
  */
 static int
@@ -1529,10 +1536,11 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
     }
 
-  // as in DXF, the tables are not written yet (the DXF groups of ACAD_TABLE
-  // differ from the DWG fields)
-  if (obj->fixedtype == DWG_TYPE_TABLE
-      || obj->fixedtype == DWG_TYPE_TABLECONTENT)
+  // the DXF groups of ACAD_TABLE are not the DWG fields of the spec. As in
+  // DXF, the table content is not written.
+  if (obj->fixedtype == DWG_TYPE_TABLE)
+    return dxfb_ACAD_TABLE (dat, obj);
+  if (obj->fixedtype == DWG_TYPE_TABLECONTENT)
     {
       LOG_WARN ("Skip %s\n", klass->dxfname);
       return DWG_ERR_UNHANDLEDCLASS;
