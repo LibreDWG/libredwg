@@ -1865,8 +1865,10 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
         }
-      else
-        { // downcase some standard names
+      else if (dat->from_version < R_2000 && dat->version >= R_2000)
+        { // downcase some standard names, only from R13/R14 to R2000+: a
+          // drawing of R2000+ with STANDARD (gh109_1) had its DIMENSIONs
+          // refer to Standard
           if (dat->version >= R_2000 && strEQc (value, "STANDARD"))
             fprintf (dat->fh, "%3i\r\nStandard\r\n", dxf);
           else if (dat->version >= R_2000 && strEQc (value, "BYLAYER"))
@@ -1878,6 +1880,8 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
         }
+      else
+        fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
       if (IS_FROM_TU (dat))
         free (value);
     }
