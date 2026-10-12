@@ -823,6 +823,8 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   obj->hdlpos = 0;
 }
 
+#endif
+
 /* Absolute value of a handle read from the object's own handle stream */
 static BITCODE_RLL
 proxy_abs_handle (const Dwg_Object *restrict obj, const Dwg_Handle *restrict h)
@@ -843,21 +845,22 @@ proxy_abs_handle (const Dwg_Object *restrict obj, const Dwg_Handle *restrict h)
     }
 }
 
-/** Write an unknown entity/object of a newer DWG as ACAD_PROXY_ENTITY or
- * ACAD_PROXY_OBJECT, as AutoCAD does for custom objects whose application
- * is not loaded (ODA spec 20.4.90, 29): keep the class number (91), the
- * drawing format of the source DWG (95), the proxy graphics (already in the
- * common entity data), the object data bits up to the handle stream and the
- * object's own handles (objids). The common handles (owner, reactors, xdic,
- * layer, ...) stay in their decoded fields.
- * Only for an R2000 target from an R2004+ DWG, decoded by us.
- * For R2007+ sources the data bits include the object's string stream and
- * its has_strings bit, unchanged: the same as what we decode as databits of
- * a native R2007+ proxy.
- * Returns 1 if converted, 0 to fall back to the POINT/PLACEHOLDER.
+/** The proxy data of an unknown entity/object decoded from an R2000+ DWG,
+ * as AutoCAD writes a custom object whose application is not loaded
+ * (ODA spec 20.4.90, 29): the object data bits up to the handle stream
+ * (with an R2007+ source incl. its string stream and has_strings bit, as we
+ * decode the databits of a native R2007+ proxy), the object's own handles
+ * (objids, the common handles stay in their decoded fields) and the drawing
+ * format (AcDbDwgVersion | maint << 16) of the source.
+ * The data is in the bit_read_bits format (a trailing partial byte LSB
+ * first). The objids are global refs, with their codes and relative offsets.
+ * Returns 1 on success, 0 if not possible: then nothing is allocated.
  */
-static int
-encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
+int
+dwg_proxy_from_unknown (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
+                        BITCODE_RC **datap, BITCODE_BL *numbitsp,
+                        BITCODE_H **objidsp, BITCODE_BL *num_objidsp,
+                        BITCODE_BL *versionp)
 {
   const int is_entity = obj->fixedtype == DWG_TYPE_UNKNOWN_ENT;
   const size_t nbits = obj->num_unknown_bits;
@@ -873,16 +876,18 @@ encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   BITCODE_BL num_exp = 0, num_objids = 0, n;
   Dwg_Object_Entity *ent = obj->tio.entity;
   Dwg_Object_Object *oobj = obj->tio.object;
-  BITCODE_BL num_reactors = is_entity ? ent->num_reactors : oobj->num_reactors;
-  BITCODE_H *reactors = is_entity ? ent->reactors : oobj->reactors;
-  BITCODE_BL dwgver = dwg->header.dwg_version;
+  BITCODE_BL num_reactors, dwgver;
+  BITCODE_H *reactors;
 
-  if (dwg->header.version < R_2000b || dwg->header.version > R_2002
-      || dwg->header.from_version < R_2004a || (dwg->opts & DWG_OPTS_IN)
+  if ((obj->fixedtype != DWG_TYPE_UNKNOWN_ENT
+       && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
+      || dwg->header.from_version < R_2000b || (dwg->opts & DWG_OPTS_IN)
       || !obj->unknown_bits || !nbits || ci < 0 || ci >= (int)dwg->num_classes
       || dwg_class_is_entity (&dwg->dwg_class[ci]) != is_entity
       || 8 * (size_t)obj->size < nbits)
     return 0;
+  num_reactors = is_entity ? ent->num_reactors : oobj->num_reactors;
+  reactors = is_entity ? ent->reactors : oobj->reactors;
   // unknown_bits are all bits after the common data until the object end,
   // incl. the handle stream at obj->hdlpos.
   start = 8 * (size_t)obj->size - nbits;
@@ -907,7 +912,7 @@ encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   c.codepage = dwg->header.codepage;
 
   // the common handles at the start of the handle stream, as decoded
-  exp_refs = (Dwg_Object_Ref **)calloc (num_reactors + 12, sizeof (BITCODE_H));
+  exp_refs = (Dwg_Object_Ref **)calloc (num_reactors + 14, sizeof (BITCODE_H));
   if (!exp_refs)
     {
       free (norm);
@@ -917,10 +922,16 @@ encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     exp_refs[num_exp++] = is_entity ? ent->ownerhandle : oobj->ownerhandle;
   for (n = 0; n < num_reactors; n++)
     exp_refs[num_exp++] = reactors ? reactors[n] : NULL;
-  if (!(is_entity ? ent->is_xdic_missing : oobj->is_xdic_missing))
+  if (dwg->header.from_version < R_2004a
+      || !(is_entity ? ent->is_xdic_missing : oobj->is_xdic_missing))
     exp_refs[num_exp++] = is_entity ? ent->xdicobjhandle : oobj->xdicobjhandle;
   if (is_entity)
     {
+      if (dwg->header.from_version < R_2004a && !ent->nolinks)
+        {
+          exp_refs[num_exp++] = ent->prev_entity;
+          exp_refs[num_exp++] = ent->next_entity;
+        }
       exp_refs[num_exp++] = ent->layer;
       if (ent->ltype_flags == 3)
         exp_refs[num_exp++] = ent->ltype;
@@ -964,6 +975,7 @@ encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     {
       Dwg_Handle h;
       Dwg_Object_Ref *ref;
+      BITCODE_H *tmp;
       if (bit_read_H (&c, &h) || bit_position (&c) > nbits)
         break;
       ref = dwg_new_ref (dwg);
@@ -973,13 +985,11 @@ encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
       ref->handleref.is_global = 1;
       ref->absolute_ref = proxy_abs_handle (obj, &h);
       ref->obj = NULL;
-      objids = (BITCODE_H *)realloc (objids,
-                                     (num_objids + 1) * sizeof (BITCODE_H));
-      if (!objids)
-        {
-          num_objids = 0;
-          break;
-        }
+      tmp = (BITCODE_H *)realloc (objids,
+                                  (num_objids + 1) * sizeof (BITCODE_H));
+      if (!tmp)
+        break;
+      objids = tmp;
       objids[num_objids++] = ref;
     }
   // the data bits, until the handle stream
@@ -991,31 +1001,209 @@ encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
       free (objids);
       return 0;
     }
-
-  LOG_INFO ("unsupported %s " FORMAT_HV " as %s, class %d, %" PRIuSIZE
-            " data bits, %u handles\n",
-            obj->dxfname, obj->handle.value,
-            is_entity ? "ACAD_PROXY_ENTITY" : "ACAD_PROXY_OBJECT",
-            (int)obj->type, hdl_off, (unsigned)num_objids);
-  // DWG 91: the class number. DWG 95: AcDbDwgVersion | maint << 16, as in
-  // the header of the source DWG (gh109_1: 0x6A001F, as in its DXF)
+  // the drawing format as in the header of the source DWG
+  // (gh109_1: 0x6A001F, as in its DXF)
+  dwgver = dwg->header.dwg_version;
   if (!dwgver)
     {
       const struct dwg_versions *v
           = dwg_version_struct (dwg->header.from_version);
       dwgver = v ? v->dwg_version : 0;
     }
+  *datap = data;
+  *numbitsp = (BITCODE_BL)hdl_off;
+  *objidsp = objids;
+  *num_objidsp = num_objids;
+  *versionp = dwgver | ((BITCODE_BL)dwg->header.maint_version << 16);
+  return 1;
+}
+
+/* Bits [from, from+n) of proxy data (bit_read_bits format), as plain bytes,
+   MSB first and zero padded, as in DXF 310/311. */
+BITCODE_RC *
+dwg_proxy_bits (const BITCODE_RC *restrict data, BITCODE_BL numbits,
+                BITCODE_BL from, BITCODE_BL n)
+{
+  const BITCODE_BL full = numbits / 8;
+  BITCODE_RC *out;
+  if (from + n > numbits || from + n < from)
+    return NULL;
+  out = (BITCODE_RC *)calloc ((n + 7) / 8 + 1, 1);
+  if (!out)
+    return NULL;
+  for (BITCODE_BL i = 0; i < n; i++)
+    {
+      const BITCODE_BL k = from + i;
+      const int bit = k < 8 * full ? (data[k / 8] >> (7 - k % 8)) & 1
+                                   : (data[full] >> (k - 8 * full)) & 1;
+      if (bit)
+        out[i / 8] |= 0x80 >> (i % 8);
+    }
+  return out;
+}
+
+/* The R2007+ string stream at the end of proxy data: its has_strings bit,
+   before it the RS size (with 0x8000 a 2nd RS with the high bits) and the
+   strings before that. Sets the number of data bits before the strings and
+   of the string bits. Returns 1 with strings, 0 without, -1 if invalid. */
+int
+dwg_proxy_split (const BITCODE_RC *restrict data, BITCODE_BL numbits,
+                 BITCODE_BL *dbits, BITCODE_BL *sbits)
+{
+  BITCODE_RC *b;
+  BITCODE_BL size, end;
+  if (!numbits || !data)
+    return -1;
+  b = dwg_proxy_bits (data, numbits, numbits - 1, 1);
+  if (!b)
+    return -1;
+  if (!(b[0] & 0x80))
+    {
+      free (b);
+      *dbits = numbits - 1;
+      *sbits = 0;
+      return 0;
+    }
+  free (b);
+  if (numbits < 17)
+    return -1;
+  end = numbits - 17;
+  b = dwg_proxy_bits (data, numbits, end, 16); // RS, little endian
+  if (!b)
+    return -1;
+  size = b[0] | (b[1] << 8);
+  free (b);
+  if (size & 0x8000)
+    {
+      BITCODE_BL hi;
+      if (end < 16)
+        return -1;
+      end -= 16;
+      b = dwg_proxy_bits (data, numbits, end, 16);
+      if (!b)
+        return -1;
+      hi = b[0] | (b[1] << 8);
+      free (b);
+      size = (size & 0x7FFF) | (hi << 15);
+    }
+  if (size > end)
+    return -1;
+  *dbits = end - size;
+  *sbits = size;
+  return 1;
+}
+
+/* The proxy data (bit_read_bits format) from its DXF parts, plain bytes:
+   the data bits, and since R2007 the string bits and has_strings (-1: no
+   string stream, as before R2007). */
+BITCODE_RC *
+dwg_proxy_join (const BITCODE_RC *restrict d, BITCODE_BL dbits,
+                const BITCODE_RC *restrict s, BITCODE_BL sbits,
+                int has_strings, BITCODE_BL *numbitsp)
+{
+  Bit_Chain c = { 0 };
+  BITCODE_RC *out;
+  BITCODE_BL i, n;
+  bit_chain_alloc_size (&c, (dbits + sbits) / 8 + 16);
+  if (!c.chain)
+    return NULL;
+  for (i = 0; i < dbits; i++)
+    bit_write_B (&c, d ? (d[i / 8] >> (7 - i % 8)) & 1 : 0);
+  if (has_strings > 0)
+    {
+      for (i = 0; i < sbits; i++)
+        bit_write_B (&c, s ? (s[i / 8] >> (7 - i % 8)) & 1 : 0);
+      if (sbits > 0x7FFF)
+        {
+          bit_write_RS (&c, (BITCODE_RS)((sbits >> 15) & 0xFFFF));
+          bit_write_RS (&c, (BITCODE_RS)((sbits & 0x7FFF) | 0x8000));
+        }
+      else
+        bit_write_RS (&c, (BITCODE_RS)sbits);
+    }
+  if (has_strings >= 0)
+    bit_write_B (&c, has_strings > 0);
+  n = (BITCODE_BL)bit_position (&c);
+  // to the bit_read_bits format: the trailing partial byte LSB first
+  if (n % 8)
+    {
+      const BITCODE_RC last = c.chain[n / 8];
+      BITCODE_RC t = 0;
+      for (i = 0; i < n % 8; i++)
+        if (last & (0x80 >> i))
+          t |= 1 << i;
+      c.chain[n / 8] = t;
+    }
+  out = (BITCODE_RC *)calloc (n / 8 + 2, 1);
+  if (out)
+    memcpy (out, c.chain, n / 8 + (n % 8 ? 1 : 0));
+  bit_chain_free (&c);
+  *numbitsp = n;
+  return out;
+}
+
+/* The class number of DXF 91 (proxies): 500 + the position in the DXF
+   CLASSES, which skip some classes since R2004 (see dxf_classes_write). */
+BITCODE_BL
+dwg_dxf_class_number (const Dwg_Data *restrict dwg, Dwg_Version_Type version,
+                      BITCODE_BL number)
+{
+  BITCODE_BL n = 500;
+  if (number < 500 || number - 500 >= dwg->num_classes)
+    return number;
+  for (BITCODE_BL j = 0; j < number - 500; j++)
+    {
+      const char *dxfname = dwg->dwg_class[j].dxfname;
+      if (!dxfname)
+        continue;
+      if (version >= R_2004
+          && (strEQc (dxfname, "ACDBPLACEHOLDER")
+              || strEQc (dxfname, "LAYOUT")))
+        continue;
+      n++;
+    }
+  return n;
+}
+
+#ifdef ENCODE_UNKNOWN_AS_DUMMY
+/** Write an unknown entity/object of a newer DWG as ACAD_PROXY_ENTITY or
+ * ACAD_PROXY_OBJECT, see dwg_proxy_from_unknown.
+ * Only for an R2000 target from an R2004+ DWG.
+ * Returns 1 if converted, 0 to fall back to the POINT/PLACEHOLDER.
+ */
+static int
+encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
+{
+  const int is_entity = obj->fixedtype == DWG_TYPE_UNKNOWN_ENT;
+  Dwg_Object_Entity *ent = obj->tio.entity;
+  Dwg_Object_Object *oobj = obj->tio.object;
+  BITCODE_RC *data;
+  BITCODE_BL numbits, num_objids, version;
+  BITCODE_H *objids;
+
+  if (dwg->header.version < R_2000b || dwg->header.version > R_2002
+      || dwg->header.from_version < R_2004a)
+    return 0;
+  if (!dwg_proxy_from_unknown (dwg, obj, &data, &numbits, &objids, &num_objids,
+                               &version))
+    return 0;
+  LOG_INFO ("unsupported %s " FORMAT_HV " as %s, class %d, " FORMAT_BL
+            " data bits, %u handles\n",
+            obj->dxfname, obj->handle.value,
+            is_entity ? "ACAD_PROXY_ENTITY" : "ACAD_PROXY_OBJECT",
+            (int)obj->type, numbits, (unsigned)num_objids);
+  // DWG 91: the class number. DWG 95: AcDbDwgVersion | maint << 16
 #  define SET_PROXY_FIELDS(_o, _parent)                                       \
   memset (_o, 0, sizeof (*_o));                                               \
   _o->parent = _parent;                                                       \
   _o->proxy_id = obj->type; /* the 1st BL in the DWG, see dwg.spec */         \
   _o->class_id = obj->type;                                                   \
-  _o->dwg_version = dwgver;                                                   \
-  _o->maint_version = dwg->header.maint_version;                              \
-  _o->version = _o->dwg_version | (_o->maint_version << 16);                  \
+  _o->version = version;                                                      \
+  _o->dwg_version = version & 0xFFFF;                                         \
+  _o->maint_version = version >> 16;                                          \
   _o->from_dxf = 0;                                                           \
-  _o->data_numbits = (BITCODE_BL)hdl_off;                                     \
-  _o->data_size = (BITCODE_BL)((hdl_off + 7) / 8);                            \
+  _o->data_numbits = numbits;                                                 \
+  _o->data_size = (numbits + 7) / 8;                                          \
   _o->data = data;                                                            \
   _o->num_objids = num_objids;                                                \
   _o->objids = objids

@@ -301,7 +301,12 @@
   // p20.4.1
   SINCE (R_13b1) {
     FIELD_B (preview_exists, 0);
+#ifdef IS_DXF
+    // a proxy has its graphics in AcDbProxyEntity
+    if (_ent->preview_exists && obj->fixedtype != DWG_TYPE_PROXY_ENTITY)
+#else
     if (_ent->preview_exists)
+#endif
       {
         // was DXF 160 (used for block previews?).
         // 92 also for all PROXY vector preview data with klass->is_zombie

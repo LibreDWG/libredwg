@@ -63,4 +63,19 @@ bool dwg_encode_unknown_bits (Bit_Chain *restrict dat,
 void downconvert_TABLESTYLE (Dwg_Object *restrict obj);
 void upconvert_TABLESTYLE (Dwg_Object *restrict obj);
 
+/* ACAD_PROXY_ENTITY/OBJECT data, see encode.c */
+int dwg_proxy_from_unknown (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
+                            BITCODE_RC **datap, BITCODE_BL *numbitsp,
+                            BITCODE_H **objidsp, BITCODE_BL *num_objidsp,
+                            BITCODE_BL *versionp);
+BITCODE_RC *dwg_proxy_bits (const BITCODE_RC *restrict data,
+                            BITCODE_BL numbits, BITCODE_BL from, BITCODE_BL n);
+int dwg_proxy_split (const BITCODE_RC *restrict data, BITCODE_BL numbits,
+                     BITCODE_BL *dbits, BITCODE_BL *sbits);
+BITCODE_RC *dwg_proxy_join (const BITCODE_RC *restrict d, BITCODE_BL dbits,
+                            const BITCODE_RC *restrict s, BITCODE_BL sbits,
+                            int has_strings, BITCODE_BL *numbitsp);
+BITCODE_BL dwg_dxf_class_number (const Dwg_Data *restrict dwg,
+                                 Dwg_Version_Type version, BITCODE_BL number);
+
 #endif

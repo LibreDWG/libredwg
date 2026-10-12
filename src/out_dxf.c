@@ -2809,6 +2809,72 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
+/* An unknown entity/object decoded from a DWG as ACAD_PROXY_ENTITY/OBJECT,
+   as AutoCAD writes it (see dwg_proxy_from_unknown). Was skipped before. */
+static int
+dwg_dxf_unknown_as_proxy (Bit_Chain *restrict dat,
+                          const Dwg_Object *restrict cobj)
+{
+  Dwg_Object *obj = (Dwg_Object *)cobj;
+  Dwg_Data *dwg = obj->parent;
+  const BITCODE_BS type = obj->type;
+  const Dwg_Object_Type fixedtype = obj->fixedtype;
+  char *name = obj->name;
+  char *dxfname = obj->dxfname;
+  BITCODE_RC *data;
+  BITCODE_BL numbits, num_objids, version;
+  BITCODE_H *objids;
+  int error;
+
+  if (!dwg_proxy_from_unknown (dwg, obj, &data, &numbits, &objids, &num_objids,
+                               &version))
+    return DWG_ERR_UNHANDLEDCLASS;
+#  define SET_PROXY_FIELDS(_o)                                                \
+    _o.proxy_id = _o.class_id = type;                                         \
+    _o.version = version;                                                     \
+    _o.dwg_version = version & 0xFFFF;                                        \
+    _o.maint_version = version >> 16;                                         \
+    _o.data_numbits = numbits;                                                \
+    _o.data_size = (numbits + 7) / 8;                                         \
+    _o.data = data;                                                           \
+    _o.num_objids = num_objids;                                               \
+    _o.objids = objids
+  if (fixedtype == DWG_TYPE_UNKNOWN_ENT)
+    {
+      Dwg_Entity_PROXY_ENTITY p = { 0 };
+      Dwg_Entity_UNKNOWN_ENT *save = obj->tio.entity->tio.UNKNOWN_ENT;
+      p.parent = obj->tio.entity;
+      SET_PROXY_FIELDS (p);
+      obj->tio.entity->tio.PROXY_ENTITY = &p;
+      obj->type = obj->fixedtype = DWG_TYPE_PROXY_ENTITY;
+      obj->name = (char *)"PROXY_ENTITY";
+      obj->dxfname = (char *)"ACAD_PROXY_ENTITY";
+      error = dwg_dxf_PROXY_ENTITY (dat, obj);
+      obj->tio.entity->tio.UNKNOWN_ENT = save;
+    }
+  else
+    {
+      Dwg_Object_PROXY_OBJECT p = { 0 };
+      Dwg_Object_UNKNOWN_OBJ *save = obj->tio.object->tio.UNKNOWN_OBJ;
+      p.parent = obj->tio.object;
+      SET_PROXY_FIELDS (p);
+      obj->tio.object->tio.PROXY_OBJECT = &p;
+      obj->type = obj->fixedtype = DWG_TYPE_PROXY_OBJECT;
+      obj->name = (char *)"PROXY_OBJECT";
+      obj->dxfname = (char *)"ACAD_PROXY_OBJECT";
+      error = dwg_dxf_PROXY_OBJECT (dat, obj);
+      obj->tio.object->tio.UNKNOWN_OBJ = save;
+    }
+#  undef SET_PROXY_FIELDS
+  obj->type = type;
+  obj->fixedtype = fixedtype;
+  obj->name = name;
+  obj->dxfname = dxfname;
+  free (data);
+  free (objids);
+  return error;
+}
+
 /* returns 0 on success
  */
 static int
@@ -3026,6 +3092,12 @@ decl_dxf_process_INSERT (MINSERT)
 
   switch (type)
     {
+    case DWG_TYPE_UNKNOWN_ENT:
+      return dwg_dxf_unknown_as_proxy (dat, obj);
+    case DWG_TYPE_UNKNOWN_OBJ:
+      return minimal ? 0 : dwg_dxf_unknown_as_proxy (dat, obj);
+    case DWG_TYPE_PROXY_OBJECT:
+      return minimal ? 0 : dwg_dxf_PROXY_OBJECT (dat, obj);
     case DWG_TYPE_TEXT:
       return dwg_dxf_TEXT (dat, obj);
     case DWG_TYPE_ATTDEF:
@@ -3203,9 +3275,7 @@ decl_dxf_process_INSERT (MINSERT)
     case DWG_TYPE_PLACEHOLDER:
       return minimal ? 0 : dwg_dxf_PLACEHOLDER (dat, obj);
     case DWG_TYPE_PROXY_ENTITY:
-      // avoid unused warnings
-      error |= dwg_dxf_PROXY_ENTITY (dat, obj);
-      return DWG_ERR_UNHANDLEDCLASS;
+      return dwg_dxf_PROXY_ENTITY (dat, obj);
     case DWG_TYPE_OLEFRAME:
       return minimal ? 0 : dwg_dxf_OLEFRAME (dat, obj);
     case DWG_TYPE_VBA_PROJECT:

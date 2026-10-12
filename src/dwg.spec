@@ -5630,32 +5630,146 @@ DWG_SUBENT (PROXY_LWPOLYLINE)
 DWG_ENTITY_END
 #endif /* no proxy subtypes yet */
 
+#ifdef IS_DECODER
+/* The proxy object ids: as many as we can read, a handle has at least 8
+   bits. Repeated handles are kept, the order counts. Relative handles
+   (6, 8, 10, 12) are made absolute to the object. */
+#  define PROXY_DECODE_OBJIDS                                                 \
+    while (bit_position (hdl_dat) + 8 <= 8 * hdl_dat->size)                   \
+      {                                                                       \
+        Dwg_Handle hdl;                                                       \
+        BITCODE_H *_ids;                                                      \
+        BITCODE_RLL _abs;                                                     \
+        if (bit_read_H (hdl_dat, &hdl))                                       \
+          break; /* error */                                                  \
+        _ids = (BITCODE_H *)realloc (                                         \
+            _obj->objids, (_obj->num_objids + 1) * sizeof (BITCODE_H));       \
+        if (!_ids)                                                            \
+          break;                                                              \
+        _obj->objids = _ids;                                                  \
+        _abs = hdl.code == 6     ? obj->handle.value + 1                      \
+               : hdl.code == 8   ? obj->handle.value - 1                      \
+               : hdl.code == 0xA ? obj->handle.value + hdl.value              \
+               : hdl.code == 0xC ? obj->handle.value - hdl.value              \
+                                 : hdl.value;                                 \
+        _obj->objids[_obj->num_objids++]                                      \
+            = dwg_add_handleref (dwg, hdl.code, _abs,                         \
+                                 hdl.code > 5 ? obj : NULL);                  \
+      }                                                                       \
+    LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
+#endif
+
+#ifdef IS_DXF
+/* ACAD_PROXY_ENTITY/OBJECT in DXF, as AutoCAD writes it (the AC1027
+   test/test-data/2013/gh109_1.dxf, the ACAD_PROXY_ENTITY reference):
+   90 498/499, 91 the class number as in the DXF CLASSES, the drawing format
+   (95, R2018+: 71 and 97), 70 the original data format, the graphics
+   (92, R2010+: 160, and 310), the data: from R2007 on the string stream
+   (162 bits, 311) and the data before it (161 bits, 310), else 93 bits and
+   310 with all of it; the object ids 330 soft pointer, 340 hard pointer,
+   350 soft owner, 360 hard owner and 94 0. Before R2007 in the order of
+   the DXF reference: graphics, data, ids, 95, 70. */
+#  define PROXY_DXF_FMT                                                       \
+    if (dat->version >= R_2018)                                               \
+      {                                                                       \
+        VALUE_BS (_obj->dwg_version, 71);                                     \
+        VALUE_BL (_obj->maint_version, 97);                                   \
+      }                                                                       \
+    else if (dat->version >= R_2000b)                                         \
+      VALUE_BL (_obj->dwg_version | (_obj->maint_version << 16), 95);         \
+    if (dat->version >= R_2000b)                                              \
+      VALUE_BS (_obj->from_dxf, 70);
+#  define PROXY_DXF_DATA                                                      \
+    {                                                                         \
+      BITCODE_BL _dbits = _obj->data_numbits, _sbits = 0;                     \
+      int _hs = -1;                                                           \
+      BITCODE_RC *_bits;                                                      \
+      /* the data format has a string stream since R2007 (AC1021: 27) */      \
+      if (dat->version >= R_2007a && _obj->dwg_version >= 27                  \
+          && _obj->data && _obj->data_numbits)                                \
+        _hs = dwg_proxy_split (_obj->data, _obj->data_numbits, &_dbits,       \
+                               &_sbits);                                      \
+      if (_hs < 0)                                                            \
+        {                                                                     \
+          _dbits = _obj->data_numbits;                                        \
+          VALUE_BL (_dbits, 93);                                              \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+          if (_hs > 0)                                                        \
+            {                                                                 \
+              VALUE_RLL (_sbits, 162);                                        \
+              _bits = dwg_proxy_bits (_obj->data, _obj->data_numbits, _dbits, \
+                                      _sbits);                                \
+              if (_bits && _sbits)                                            \
+                VALUE_BINARY (_bits, (_sbits + 7) / 8, 311);                  \
+              free (_bits);                                                   \
+            }                                                                 \
+          VALUE_RLL (_dbits, 161);                                            \
+        }                                                                     \
+      _bits = _obj->data ? dwg_proxy_bits (_obj->data, _obj->data_numbits, 0, \
+                                           _dbits)                            \
+                         : NULL;                                              \
+      if (_bits && _dbits)                                                    \
+        VALUE_BINARY (_bits, (_dbits + 7) / 8, 310);                          \
+      free (_bits);                                                           \
+    }
+#  define PROXY_DXF_OBJIDS                                                    \
+    for (rcount1 = 0; _obj->objids && rcount1 < _obj->num_objids; rcount1++)  \
+      {                                                                       \
+        BITCODE_H _ref = _obj->objids[rcount1];                               \
+        const unsigned _code = _ref ? _ref->handleref.code : 4;               \
+        /* the relative codes 6-12 do not tell the kind: as soft pointers */  \
+        const int _dxf = _code == 5   ? 340                                   \
+                         : _code == 2 ? 350                                   \
+                         : _code == 3 ? 360                                   \
+                                      : 330;                                  \
+        VALUE_HANDLE (_ref, objids, _code, _dxf);                             \
+      }                                                                       \
+    VALUE_BL (0, 94);
+#endif
+
 //(498) pg.149 r2000+
 // ACAD_PROXY_ENTITY really
 DWG_ENTITY (PROXY_ENTITY)
 
+#ifdef IS_DXF
+  {
+    const BITCODE_BL _cls = _obj->class_id ? _obj->class_id : _obj->proxy_id;
+    SUBCLASS (AcDbProxyEntity)
+    VALUE_BL (DWG_TYPE_PROXY_ENTITY, 90);
+    VALUE_BL (dwg_dxf_class_number (dwg, dat->version, _cls), 91);
+    if (dat->version >= R_2007a) { PROXY_DXF_FMT }
+    // the graphics, not in AcDbEntity
+    if (_ent->preview_exists && _ent->preview_size && _ent->preview)
+      {
+        if (dat->version >= R_2010b)
+          VALUE_RLL (_ent->preview_size, 160)
+        else
+          VALUE_BL (_ent->preview_size, 92);
+        VALUE_BINARY (_ent->preview, _ent->preview_size, 310);
+      }
+    PROXY_DXF_DATA
+    PROXY_DXF_OBJIDS
+    if (dat->version < R_2007a) { PROXY_DXF_FMT }
+  }
+#else
   //HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbProxyEntity)
-  FIELD_BL (proxy_id, 90); // always 499
-  DXF {
-    PRE (R_2018) {
-      FIELD_BL (class_id, 91);
-    }
-  }
+  // DWG: the class number (DXF 91), see ODA spec 20.4.90
+  FIELD_BL (proxy_id, 90);
   PRE (R_2018) {
+    // version | maint_version << 16 (ODA spec, ACadSharp)
     FIELD_BLx (version, 95);
-    FIELD_VALUE (maint_version) = FIELD_VALUE(version) >> 8;
-    FIELD_VALUE (dwg_version) = FIELD_VALUE(version) & 0xff;
+    FIELD_VALUE (maint_version) = FIELD_VALUE(version) >> 16;
+    FIELD_VALUE (dwg_version) = FIELD_VALUE(version) & 0xffff;
     LOG_TRACE ("> maint_version: %x\n", _obj->maint_version);
     LOG_TRACE ("> dwg_version: %x\n", _obj->dwg_version);
   }
   SINCE (R_2018) {
-    FIELD_BLx (dwg_version, 0);
-    FIELD_BLx (maint_version, 0);
-    FIELD_VALUE (version) = (FIELD_VALUE(maint_version) << 8) + FIELD_VALUE(dwg_version);
-    DXF {
-      FIELD_BLx (version, 95);
-    }
+    FIELD_BLx (dwg_version, 71);
+    FIELD_BLx (maint_version, 97);
+    FIELD_VALUE (version) = (FIELD_VALUE(maint_version) << 16) | FIELD_VALUE(dwg_version);
   }
   SINCE (R_2000b) {
     FIELD_B (from_dxf, 70); // Original Data Format: 0 dwg, 1 dxf
@@ -5663,11 +5777,10 @@ DWG_ENTITY (PROXY_ENTITY)
 
   // proxy_data_size is _ent->preview_size. see par 29
   DXF_OR_PRINT {
-    // preview 92/310 is also proxy data
     if (_obj->proxy_data) {
       FIELD_BL (proxy_data_size, 92)
       FIELD_TF (proxy_data, _obj->proxy_data_size, 310);
-    } // else from a DWG: the common entity graphics, already written
+    } // else from a DWG: the common entity graphics
   } else {
     // In the DWG the graphics are only in the common entity data
     // (ODA spec 20.4.90, 29; ACadSharp reads none here either).
@@ -5702,61 +5815,13 @@ DWG_ENTITY (PROXY_ENTITY)
   FREE {
     FIELD_BINARY (data, _obj->data_numbits / 8, 0);
   }
+#endif
 
   COMMON_ENTITY_HANDLE_DATA;
 #ifdef IS_DECODER
-  // as many as we can read, a handle has at least 8 bits
-  while (bit_position (hdl_dat) + 8 <= 8 * hdl_dat->size)
-    {
-      Dwg_Handle hdl;
-      if (bit_read_H (hdl_dat, &hdl))
-        break; // error
-      else
-        {
-          // keep repeated handles, the order counts
-          BITCODE_H *objids = (BITCODE_H *)realloc (
-              _obj->objids, (_obj->num_objids + 1) * sizeof (BITCODE_H));
-          if (!objids)
-            break;
-          _obj->objids = objids;
-          _obj->objids[_obj->num_objids++]
-              = dwg_add_handleref (dwg, hdl.code, hdl.value, NULL);
-        }
-    }
-  LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
+  PROXY_DECODE_OBJIDS
 #elif defined(IS_ENCODER) || defined(IS_JSON) || defined(IS_FREE)
   HANDLE_VECTOR (objids, num_objids, ANYCODE, 0);
-#elif defined(IS_DXF)
-  if (_obj->objids)
-    {
-      for (rcount1 = 0; rcount1 < _obj->num_objids; rcount1++)
-        {
-          int dxf = 330;
-          if (!_obj->objids[rcount1])
-            {
-              LOG_ERROR ("Illegal %s.objids[%u]", obj->name, rcount1);
-            }
-          else
-            {
-              unsigned code = _obj->objids[rcount1]->handleref.code;
-              switch (code)
-                {
-                case 2: dxf = 330; break;
-                case 3: dxf = 340; break;
-                case 4: case 6: case 8: case 10: case 12: dxf = 350; break;
-                case 5: dxf = 360; break;
-                default: LOG_ERROR ("Illegal %s objids[%u].code %u", obj->name,
-                                    rcount1, code);
-                }
-              VALUE_HANDLE (_obj->objids[rcount1], objids, code, dxf);
-            }
-        }
-    }
-  SINCE (R_2000b) { // end of Object ID's
-    if (FIELD_VALUE (num_objids)) {
-      VALUE_RS (0, 94);
-    }
-  }
 #endif
 
 DWG_ENTITY_END
@@ -5765,35 +5830,38 @@ DWG_ENTITY_END
 // ACAD_PROXY_OBJECT really
 DWG_OBJECT (PROXY_OBJECT)
 
-  //HANDLE_UNKNOWN_BITS;
 #ifdef IS_DXF
-  PRE (R_2000b) {
-    SUBCLASS (AcDbZombieObject)
-  }
-  LATER_VERSIONS {
-    SUBCLASS (AcDbProxyObject)
-  }
-#endif
-  FIELD_BL (proxy_id, 90); // always 499
-  DXF {
-    PRE (R_2018) {
-      FIELD_BL (class_id, 91);
+  {
+    const BITCODE_BL _cls = _obj->class_id ? _obj->class_id : _obj->proxy_id;
+    PRE (R_2000b) {
+      SUBCLASS (AcDbZombieObject)
     }
+    LATER_VERSIONS {
+      SUBCLASS (AcDbProxyObject)
+    }
+    VALUE_BL (DWG_TYPE_PROXY_OBJECT, 90);
+    VALUE_BL (dwg_dxf_class_number (dwg, dat->version, _cls), 91);
+    if (dat->version >= R_2007a) { PROXY_DXF_FMT }
+    PROXY_DXF_DATA
+    PROXY_DXF_OBJIDS
+    if (dat->version < R_2007a) { PROXY_DXF_FMT }
   }
+#else
+  //HANDLE_UNKNOWN_BITS;
+  // DWG: the class number (DXF 91), see ODA spec 20.4.90
+  FIELD_BL (proxy_id, 90);
   PRE (R_2018) {
+    // version | maint_version << 16 (ODA spec, ACadSharp)
     FIELD_BLx (version, 95);
-    FIELD_VALUE (maint_version) = FIELD_VALUE(version) >> 8;
-    FIELD_VALUE (dwg_version) = FIELD_VALUE(version) & 0xff;
+    FIELD_VALUE (maint_version) = FIELD_VALUE(version) >> 16;
+    FIELD_VALUE (dwg_version) = FIELD_VALUE(version) & 0xffff;
     LOG_TRACE ("> maint_version: %x\n", _obj->maint_version);
     LOG_TRACE ("> dwg_version: %x\n", _obj->dwg_version);
   }
   SINCE (R_2018) {
-    FIELD_BLx (dwg_version, 0);
-    FIELD_BLx (maint_version, 0);
-    FIELD_VALUE (version) = (FIELD_VALUE(maint_version) << 8) + FIELD_VALUE(dwg_version);
-    DXF {
-      FIELD_BLx (version, 95);
-    }
+    FIELD_BLx (dwg_version, 71);
+    FIELD_BLx (maint_version, 97);
+    FIELD_VALUE (version) = (FIELD_VALUE(maint_version) << 16) | FIELD_VALUE(dwg_version);
   }
   SINCE (R_2000b)
   {
@@ -5828,57 +5896,13 @@ DWG_OBJECT (PROXY_OBJECT)
   FREE {
     FIELD_BINARY (data, _obj->data_numbits / 8, 0);
   }
+#endif
 
   START_OBJECT_HANDLE_STREAM;
 #if defined(IS_DECODER)
-  // as many as we can read, a handle has at least 8 bits
-  while (bit_position (hdl_dat) + 8 <= 8 * hdl_dat->size)
-    {
-      Dwg_Handle hdl;
-      if (bit_read_H (hdl_dat, &hdl))
-        break; // error
-      else
-        {
-          // keep repeated handles, the order counts
-          BITCODE_H *objids = (BITCODE_H *)realloc (
-              _obj->objids, (_obj->num_objids + 1) * sizeof (BITCODE_H));
-          if (!objids)
-            break;
-          _obj->objids = objids;
-          _obj->objids[_obj->num_objids++]
-              = dwg_add_handleref (dwg, hdl.code, hdl.value, NULL);
-        }
-    }
-  LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
+  PROXY_DECODE_OBJIDS
 #elif defined(IS_ENCODER) || defined(IS_JSON) || defined(IS_FREE)
   HANDLE_VECTOR (objids, num_objids, ANYCODE, 0);
-#elif defined(IS_DXF)
-  for (rcount1 = 0; rcount1 < _obj->num_objids; rcount1++)
-    {
-      int dxf = 330;
-      if (!_obj->objids[rcount1]) {
-        LOG_ERROR ("Illegal %s.objids[%u]", obj->name, rcount1);
-      }
-      else
-        {
-          unsigned code = _obj->objids[rcount1]->handleref.code;
-          switch (code)
-            {
-            case 2: dxf = 330; break;
-            case 3: dxf = 340; break;
-            case 4: case 6: case 8: case 10: case 12: dxf = 350; break;
-            case 5: dxf = 360; break;
-            default: LOG_ERROR ("Illegal %s objids[%u].code %u", obj->name,
-                                rcount1, code);
-            }
-          VALUE_HANDLE (_obj->objids[rcount1], objids, code, dxf);
-        }
-    }
-  SINCE (R_2000b) { // end of Object ID's
-    if (FIELD_VALUE (num_objids)) {
-      VALUE_RS (0, 94);
-    }
-  }
 #endif
 
 DWG_OBJECT_END
