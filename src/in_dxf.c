@@ -1733,7 +1733,11 @@ dxf_set_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
   // has a 0 second byte, whereas a plain UTF-8 name does not. (Keyed on the
   // actual bytes, not from_version, since a down-convert may already have
   // re-encoded the header strings to UTF-8.)
-  if (vars->DWGCODEPAGE[0] && vars->DWGCODEPAGE[1] == 0)
+  // Only r2007+ header strings are TU (dynapi_set_helper), with at least 2
+  // wide chars incl. the terminator. A 1-char ASCII name in an older file is
+  // a 2 byte buffer, which the unbounded TU scan would overread.
+  if (hdr->version >= R_2007 && vars->DWGCODEPAGE[0]
+      && vars->DWGCODEPAGE[1] == 0)
     cp_str = cp_tmp = bit_convert_TU ((BITCODE_TU)vars->DWGCODEPAGE);
   else
     cp_str = vars->DWGCODEPAGE;
