@@ -1068,18 +1068,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
-#ifndef DEBUG_CLASSES
-static int
-dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
-{
-  (void)dat;
-  (void)obj;
-  return 0;
-}
-#else
 static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
                                  const Dwg_Object *restrict obj);
-#endif
 
 // The strcmp is being optimized away at compile-time!
 // https://godbolt.org/g/AqkhwL
@@ -2809,6 +2799,14 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
+#define DXF_FN(name) dxf_##name
+#define DXF_TABLE_FIXUP_HANDLE(obj)                                           \
+  if (!obj->handle.value)                                                     \
+  dxf_fixup_zero_handle ((Dwg_Object *)obj)
+#include "out_dxf_table.inc"
+#undef DXF_FN
+#undef DXF_TABLE_FIXUP_HANDLE
+
 /* returns 0 on success
  */
 static int
@@ -2854,6 +2852,10 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           return DWG_ERR_UNHANDLEDCLASS;
         }
     }
+
+  // the DXF groups of ACAD_TABLE are not the DWG fields of the spec
+  if (obj->fixedtype == DWG_TYPE_TABLE)
+    return dxf_ACAD_TABLE (dat, obj);
 
     // if (!is_entity)
     //  fprintf(dat->fh, "  0\r\n%s\r\n", dxfname);
@@ -3233,7 +3235,9 @@ decl_dxf_process_INSERT (MINSERT)
 #  if defined DEBUG_CLASSES
           return dwg_dxf_TABLESTYLE (dat, obj);
 #  else
-          if (dat->version >= R_2000)
+          // an R13/R14 DWG with tables has its TABLESTYLE: keep it, else
+          // the tables lost their style name (STANDARD) via DXF
+          if (dat->version >= R_2000 || dat->from_version < R_2000)
             return dwg_dxf_TABLESTYLE (dat, obj);
           else
             {

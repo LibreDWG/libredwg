@@ -11965,10 +11965,8 @@ H
 Dwg_TABLESTYLE_CellStyle
 @item numoverrides
 BL
-@item unknown_bl3
-BL
 @item ovr
-Dwg_TABLESTYLE_CellStyle
+Dwg_TABLESTYLE_CellStyle*
 @item num_rowstyles
 BL
 @item rowstyles
@@ -15576,6 +15574,8 @@ struct _dwg_TableRow*
 struct _dwg_TableDataColumn*
 @item cellstyle
 struct _dwg_CellStyle
+@item index
+BL
 
 @end vtable
 @end indentedblock
@@ -15625,7 +15625,7 @@ BL
 @item unit_type
 BL
 @item format_string
-TU
+T
 
 @end vtable
 @end indentedblock

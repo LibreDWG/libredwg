@@ -28,6 +28,7 @@
 #include "decode.h"
 // #include "decode_r11.h"
 #include "out_dxf.h"
+#include "encode.h"
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -944,18 +945,8 @@ dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
     }
 }
 
-#ifndef DEBUG_CLASSES
-static int
-dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
-{
-  (void)dat;
-  (void)obj;
-  return 0;
-}
-#else
 static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                                   const Dwg_Object *restrict obj);
-#endif
 
 #define DWG_ENTITY(token)                                                     \
   static int dwg_dxfb_##token##_private (Bit_Chain *dat, Bit_Chain *hdl_dat,  \
@@ -1493,6 +1484,12 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
+#define DXF_FN(name) dxfb_##name
+#define DXF_TABLE_FIXUP_HANDLE(obj)
+#include "out_dxf_table.inc"
+#undef DXF_FN
+#undef DXF_TABLE_FIXUP_HANDLE
+
 /* returns 0 on success
  */
 static int
@@ -1537,6 +1534,16 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           LOG_WARN ("Skip %s\n", klass->dxfname);
           return DWG_ERR_UNHANDLEDCLASS;
         }
+    }
+
+  // the DXF groups of ACAD_TABLE are not the DWG fields of the spec. As in
+  // DXF, the table content is not written.
+  if (obj->fixedtype == DWG_TYPE_TABLE)
+    return dxfb_ACAD_TABLE (dat, obj);
+  if (obj->fixedtype == DWG_TYPE_TABLECONTENT)
+    {
+      LOG_WARN ("Skip %s\n", klass->dxfname);
+      return DWG_ERR_UNHANDLEDCLASS;
     }
 
     // clang-format off

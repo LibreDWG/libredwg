@@ -106,6 +106,7 @@ EXTRA_HEADERS = \
 	revhistory.spec \
 	classes.inc \
 	objects.inc \
+	out_dxf_table.inc \
 	spec.h \
 	common.h \
 	importer.h \

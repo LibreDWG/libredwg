@@ -4532,13 +4532,15 @@ typedef struct _dwg_TABLE_Cell
   BITCODE_H text_style;
   BITCODE_H block_handle;
   BITCODE_BD block_scale;
-  BITCODE_B additional_data_flag;
+  BITCODE_B has_attr_defs;        /* block cell: attribute definitions follow */
+  BITCODE_B additional_data_flag; /* has override flag */
   BITCODE_BL cell_flag_override;
   BITCODE_RC virtual_edge_flag;
-  BITCODE_RS cell_alignment;
+  BITCODE_BS cell_alignment;
   BITCODE_B bg_fill_none;
   BITCODE_CMC bg_color;
   BITCODE_CMC content_color;
+  BITCODE_H text_style_override; /* 0x10 override, DXF 7 */
   BITCODE_BD text_height;
   BITCODE_CMC top_grid_color;
   BITCODE_BS top_grid_linewt;
@@ -4556,7 +4558,6 @@ typedef struct _dwg_TABLE_Cell
   Dwg_TABLE_value value;
   BITCODE_BL num_attr_defs;
   Dwg_TABLE_AttrDef *attr_defs;
-  // BITCODE_H text_style_override;
 } Dwg_TABLE_Cell;
 
 typedef struct _dwg_TABLE_BreakHeight
@@ -4632,32 +4633,6 @@ typedef struct _dwg_CellContentGeometry
   struct _dwg_TABLEGEOMETRY_Cell *geom_parent;
 } Dwg_CellContentGeometry;
 
-typedef struct _dwg_TableCell
-{
-  BITCODE_BL flag;
-  BITCODE_TV tooltip;
-  BITCODE_BL customdata;
-  BITCODE_BL num_customdata_items;
-  Dwg_TABLE_CustomDataItem *customdata_items;
-  BITCODE_BL has_linked_data;
-  BITCODE_H data_link;
-  BITCODE_BL num_rows;
-  BITCODE_BL num_cols;
-  BITCODE_BL unknown;
-  BITCODE_BL num_cell_contents;
-  Dwg_TableCellContent *cell_contents;
-  BITCODE_BL style_id;
-  BITCODE_BL has_geom_data;
-  BITCODE_BL geom_data_flag;
-  BITCODE_BD width_w_gap;
-  BITCODE_BD height_w_gap;
-  BITCODE_H tablegeometry;
-  BITCODE_BL num_geometry;
-  Dwg_CellContentGeometry *geometry;
-
-  struct _dwg_CellStyle *style_parent;
-  struct _dwg_TableRow *row_parent;
-} Dwg_TableCell;
 
 // almost like GridLine/TABLESTYLE_border
 // in ODA named OdTableGridLine, was BorderStyle
@@ -4701,6 +4676,35 @@ typedef struct _dwg_CellStyle
   struct _dwg_TableDataColumn *tabledatacolumn_parent;
 } Dwg_CellStyle;
 
+typedef struct _dwg_TableCell
+{
+  BITCODE_BL flag;
+  BITCODE_TV tooltip;
+  BITCODE_BL customdata;
+  BITCODE_BL num_customdata_items;
+  Dwg_TABLE_CustomDataItem *customdata_items;
+  BITCODE_BL has_linked_data;
+  BITCODE_H data_link;
+  BITCODE_BL num_rows;
+  BITCODE_BL num_cols;
+  BITCODE_BL unknown;
+  BITCODE_BL num_cell_contents;
+  Dwg_TableCellContent *cell_contents;
+  Dwg_CellStyle cellstyle; /* cell style overrides, 20.4.101.4 */
+  BITCODE_BL style_id;
+  BITCODE_BL has_geom_data;
+  BITCODE_BL geom_data_flag;
+  BITCODE_BD width_w_gap;
+  BITCODE_BD height_w_gap;
+  BITCODE_BL geometry_flags; /* geometry present if non-zero */
+  BITCODE_H tablegeometry;
+  BITCODE_BL num_geometry;   /* computed: 0 or 1 */
+  Dwg_CellContentGeometry *geometry;
+
+  struct _dwg_CellStyle *style_parent;
+  struct _dwg_TableRow *row_parent;
+} Dwg_TableCell;
+
 typedef struct _dwg_TableRow
 {
   struct _dwg_LinkedTableData *parent;
@@ -4711,7 +4715,7 @@ typedef struct _dwg_TableRow
   Dwg_TABLE_CustomDataItem *customdata_items;
   Dwg_CellStyle cellstyle;
   BITCODE_BL style_id;
-  BITCODE_BL height;
+  BITCODE_BD height;
 } Dwg_TableRow;
 
 typedef struct _dwg_TableDataColumn
@@ -4719,10 +4723,11 @@ typedef struct _dwg_TableDataColumn
   struct _dwg_LinkedTableData *parent;
   BITCODE_T name;
   BITCODE_BL custom_data;
-  // BITCODE_TV data;
+  BITCODE_BL num_customdata_items;
+  Dwg_TABLE_CustomDataItem *customdata_items;
   Dwg_CellStyle cellstyle;
   BITCODE_BL cellstyle_id;
-  BITCODE_BL width;
+  BITCODE_BD width;
 } Dwg_TableDataColumn;
 
 typedef struct _dwg_LinkedTableData
@@ -4921,6 +4926,7 @@ typedef struct _dwg_TABLESTYLE_CellStyle
   BITCODE_BL type; /* 1=data, 2=label */
   BITCODE_T  name;
   struct _dwg_CellStyle cellstyle;
+  BITCODE_BL index; /* r2010+ TABLESTYLE.ovr: the BL before each, 1-3 */
 } Dwg_TABLESTYLE_CellStyle;
 
 // very similar to GridLine, or GridFormat. but no overrides, type, ltype, ...
@@ -4950,7 +4956,7 @@ typedef struct _dwg_TABLESTYLE_rowstyles
 
   BITCODE_BL data_type;  // r2007+
   BITCODE_BL unit_type;
-  BITCODE_TU format_string;
+  BITCODE_T format_string;
 } Dwg_TABLESTYLE_rowstyles;
 
 typedef struct _dwg_object_TABLESTYLE
@@ -4970,9 +4976,8 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_BL unknown_bl2;
   BITCODE_H cellstyle;           //r2007+. was called template
   Dwg_TABLESTYLE_CellStyle sty;  //r2007+. Note: embedded struct
-  BITCODE_BL numoverrides;      // ??
-  BITCODE_BL unknown_bl3;
-  Dwg_TABLESTYLE_CellStyle ovr;  // ??
+  BITCODE_BL numoverrides;       // r2010+: the cell styles _TITLE,
+  Dwg_TABLESTYLE_CellStyle *ovr; // _HEADER, _DATA
 
   // 0: data, 1: title, 2: header
   BITCODE_BL num_rowstyles; // always 3
@@ -11985,6 +11990,8 @@ EXPORT int dwg_setup_ASSOCARRAYMODIFYPARAMETERS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYPATHPARAMETERS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYPOLARPARAMETERS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
+EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
+EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
   EXPORT int dwg_setup_ALIGNMENTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_ARCALIGNEDTEXT (Dwg_Object *obj);
@@ -12006,7 +12013,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_ROTATIONPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
   EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
-  EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
   EXPORT int dwg_setup_VISIBILITYGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_VISIBILITYPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_XYGRIPENTITY (Dwg_Object *obj);
@@ -12053,7 +12059,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_RADIMLGOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_RADIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_SUNSTUDY (Dwg_Object *obj);
-  EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
   EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
   //EXPORT int dwg_setup_ABSHDRAWINGSETTINGS (Dwg_Object *obj);
   //EXPORT int dwg_setup_ACAECUSTOBJ (Dwg_Object *obj);
