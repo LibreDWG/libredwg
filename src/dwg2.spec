@@ -2723,6 +2723,14 @@ DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
         case 5:                                                               \
           FIELD_T (genprocvaltext, 301); break;                               \
         case 6:                                                               \
+          DECODER                                                             \
+          {                                                                   \
+            if (_obj->gentextures)                                            \
+              {                                                               \
+                LOG_ERROR ("recursive MATERIAL.gentextures");                 \
+                return DWG_ERR_VALUEOUTOFBOUNDS;                              \
+              }                                                               \
+          }                                                                   \
           FIELD_BS (num_gentextures, 0);                                      \
           REPEAT (num_gentextures, gentextures, Dwg_MATERIAL_gentexture)      \
           REPEAT_BLOCK                                                        \
