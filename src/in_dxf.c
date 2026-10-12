@@ -13466,6 +13466,34 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   if (pair && pair->code == 0)
                     goto start_loop;
                 }
+              else if (strEQc (name, "BLOCK") && pair->code == 70
+                       && dat->from_version >= R_13b1
+                       && obj->tio.entity->ownerhandle)
+                {
+                  // r13+ DXF has no 70 in BLOCK_RECORD: the xref bits are
+                  // only in the BLOCK entity, while the DWG keeps them in
+                  // its BLOCK_HEADER. Ignored, an xref came back as an
+                  // empty plain block. (The xref path, group 1, is copied
+                  // when the BLOCK is linked to its header.)
+                  Dwg_Object *hdrobj
+                      = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
+                  obj->tio.entity->ownerhandle->obj = NULL; // still dirty
+                  if (hdrobj && hdrobj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+                    {
+                      Dwg_Object_BLOCK_HEADER *_hdr
+                          = hdrobj->tio.object->tio.BLOCK_HEADER;
+                      int bflag = pair->value.i;
+                      if (bflag & 4)
+                        _hdr->blkisxref = 1;
+                      if (bflag & 8)
+                        _hdr->xrefoverlaid = 1;
+                      if (bflag & 32)
+                        _hdr->xref_loaded = 1;
+                      LOG_TRACE ("BLOCK_HEADER.blkisxref = %d, "
+                                 "xrefoverlaid = %d [B 70] (BLOCK)\n",
+                                 _hdr->blkisxref, _hdr->xrefoverlaid);
+                    }
+                }
               else if (strEQc (name, "BLOCK")
                        && (pair->code == 70 || pair->code == 10
                            || pair->code == 20 || pair->code == 30
@@ -14264,6 +14292,30 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           _hdr->base_pt.x = _obj->base_pt.x;
                           _hdr->base_pt.y = _obj->base_pt.y;
                           LOG_TRACE ("BLOCK_HEADER.base_pt = BLOCK.base_pt\n");
+                          // The DWG keeps the xref path in the header
+                          // only; the DXF has it as the BLOCK's group 1.
+                          if (_obj->xref_pname
+                              && !bit_empty_T (dat, _obj->xref_pname)
+                              && (!_hdr->xref_pname
+                                  || bit_empty_T (dat, _hdr->xref_pname)))
+                            {
+                              char *u8 = NULL;
+                              int isnew = 0;
+                              if (dwg_dynapi_entity_utf8text (
+                                      _obj, "BLOCK", "xref_pname", &u8,
+                                      &isnew, NULL)
+                                  && u8)
+                                {
+                                  dwg_dynapi_entity_set_value (
+                                      _hdr, "BLOCK_HEADER", "xref_pname",
+                                      &u8, 1);
+                                  LOG_TRACE ("BLOCK_HEADER.xref_pname = %s "
+                                             "(BLOCK)\n",
+                                             u8);
+                                  if (isnew)
+                                    free (u8);
+                                }
+                            }
                         }
                       else if (blkhdr->fixedtype == DWG_TYPE_BLOCK_CONTROL)
                         {
