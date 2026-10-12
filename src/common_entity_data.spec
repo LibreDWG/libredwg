@@ -374,10 +374,17 @@
 
   VERSIONS (R_13b1, R_14) //ODA bug
     {
+#ifdef IS_ENCODER
+      // must be derived BEFORE the bit is written; the old fixup in
+      // common_entity_handle_data.spec ran after emission, so every
+      // ByLayer entity went out with isbylayerlt 0 and readers expected
+      // an explicit ltype handle that is not there
+      FIELD_VALUE (isbylayerlt) = FIELD_VALUE (ltype_flags) == 0 ? 1 : 0;
+#endif
       FIELD_B (isbylayerlt, 0);
 #ifdef IS_DECODER
-      if (FIELD_VALUE (isbylayerlt))
-        FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
+      // the ": 3" arm was dead code under "if (isbylayerlt)"
+      FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
 #endif
     }
   SINCE (R_2004a) //ODA bug
