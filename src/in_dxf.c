@@ -2482,7 +2482,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             o->strings_area = (BITCODE_TF)xcalloc (strings_size, 1);
           if (is_tu)
             {
-              needed = ((strlen (pair->value.s.ptr) * 2) + 2);
+              needed = (bit_wcs2len ((BITCODE_TU)o->dashes[j].text) * 2) + 2;
               if (dash_i + needed > strings_size)
                 {
                   LOG_WARN ("LTYPE strings_area overflow, truncating");
@@ -2494,7 +2494,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           else
             {
-              needed = strlen (pair->value.s.ptr) + 1;
+              needed = strlen (o->dashes[j].text) + 1;
               if (dash_i + needed > strings_size)
                 {
                   LOG_WARN ("LTYPE strings_area overflow, truncating");
