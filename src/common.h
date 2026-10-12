@@ -33,6 +33,16 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <math.h>
+
+/* A TIMEBLL/TIMERLL is a julian day number plus the milliseconds elapsed in
+   that day, so the fraction of a day it stands for is ms/86400000. The code
+   used to spell that as "ms * 1e-8" in seven places, "0.864 * ms / 1000" in
+   cvt_TIMEBLL and "86400.0 * ms" in json_TIMEBLL -- three mutually
+   incompatible conventions for one field, all of them wrong by 0.864 or worse.
+   dwg_add_Document fills the field itself with 1000 * (now % 86400), i.e.
+   milliseconds, three lines above computing the value as ms * 1e-8. GH #1309. */
+#define TIMEBLL_MS_PER_DAY 86400000.0
+
 #include <time.h>
 #include "dwg.h"
 
