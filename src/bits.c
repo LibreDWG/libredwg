@@ -4364,9 +4364,10 @@ bit_write_bits (Bit_Chain *restrict dat, const BITCODE_TF bits, size_t numbits)
     return;
   for (; i < (numbits / 8); i++)
     bit_write_RC (dat, bits[i]);
+  // the trailing bits are stored LSB first, as by bit_read_bits
   last = &bits[numbits / 8];
   for (i = 0; i < (numbits % 8); i++)
-    bit_write_B (dat, BIT (last, i));
+    bit_write_B (dat, (*last >> i) & 1);
 }
 
 void

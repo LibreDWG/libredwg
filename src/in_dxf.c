@@ -7917,6 +7917,190 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+/* ACAD_PROXY_ENTITY/OBJECT after <100 AcDbProxyEntity/AcDbProxyObject>,
+   as AutoCAD writes it (see dwg.spec PROXY_DXF_*, gh109_1.dxf): 90, 91 the
+   class number (the CLASSES order, as we number the classes), 95 or 71/97
+   the drawing format, 70, the graphics 92/160 + 310 into the common entity
+   preview, the data 93 + 310, or from R2007 on 162 + 311 (the string
+   stream) and 161 + 310 (the data before it), joined to the DWG layout of
+   the data bits, the object ids 330 soft pointer, 340 hard pointer, 350
+   soft owner, 360 hard owner and 94. Returns with the next 0 or EED (1001)
+   pair, or NULL. */
+static Dxf_Pair *
+add_PROXY (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+           Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  const int is_entity = obj->fixedtype == DWG_TYPE_PROXY_ENTITY;
+  BITCODE_BL *pclass_id, *pproxy_id, *pversion, *pdwg_version, *pmaint_version,
+      *pdata_numbits, *pdata_size, *pnum_objids;
+  BITCODE_B *pfrom_dxf;
+  BITCODE_RC **pdata;
+  BITCODE_H **pobjids;
+  BITCODE_RC *d = NULL, *s = NULL;
+  size_t dlen = 0, slen = 0;
+  BITCODE_BL dbits = 0, sbits = 0;
+  int last = 0;    // 'd' data, 's' strings
+  int split = 0;   // 161/162 or 93
+  int has_str = 0; // 162 seen
+  int skipped = 0;
+
+#  define PROXY_PTRS(o)                                                       \
+    pclass_id = &o->class_id;                                                 \
+    pproxy_id = &o->proxy_id;                                                 \
+    pversion = &o->version;                                                   \
+    pdwg_version = &o->dwg_version;                                           \
+    pmaint_version = &o->maint_version;                                       \
+    pfrom_dxf = &o->from_dxf;                                                 \
+    pdata_numbits = &o->data_numbits;                                         \
+    pdata_size = &o->data_size;                                               \
+    pdata = &o->data;                                                         \
+    pnum_objids = &o->num_objids;                                             \
+    pobjids = &o->objids
+  if (is_entity)
+    {
+      Dwg_Entity_PROXY_ENTITY *o = obj->tio.entity->tio.PROXY_ENTITY;
+      PROXY_PTRS (o);
+    }
+  else
+    {
+      Dwg_Object_PROXY_OBJECT *o = obj->tio.object->tio.PROXY_OBJECT;
+      PROXY_PTRS (o);
+    }
+#  undef PROXY_PTRS
+
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  while (pair != NULL && pair->code != 0 && pair->code != 1001)
+    {
+      switch (pair->code)
+        {
+        case 90: // 498 or 499
+          break;
+        case 91:
+          *pclass_id = *pproxy_id = pair->value.u;
+          LOG_TRACE ("%s.class_id = " FORMAT_BL " [BL 91]\n", obj->name,
+                     *pclass_id);
+          break;
+        case 95:
+          *pversion = pair->value.u;
+          *pdwg_version = pair->value.u & 0xFFFF;
+          *pmaint_version = pair->value.u >> 16;
+          LOG_TRACE ("%s.version = 0x%x [BL 95]\n", obj->name, *pversion);
+          break;
+        case 71:
+          *pdwg_version = pair->value.u;
+          *pversion = *pdwg_version | (*pmaint_version << 16);
+          break;
+        case 97:
+          *pmaint_version = pair->value.u;
+          *pversion = *pdwg_version | (*pmaint_version << 16);
+          break;
+        case 70:
+          *pfrom_dxf = pair->value.i ? 1 : 0;
+          LOG_TRACE ("%s.from_dxf = %d [B 70]\n", obj->name, *pfrom_dxf);
+          break;
+        case 92:
+        case 160:
+          if (is_entity)
+            {
+              pair = add_ent_preview (obj, dat, pair);
+              last = 0;
+              continue; // with the next pair after the 310s
+            }
+          break;
+        case 93:
+        case 161:
+          split = pair->code == 161;
+          dbits = pair->code == 161 ? (BITCODE_BL)pair->value.rll
+                                    : pair->value.u;
+          last = 'd';
+          break;
+        case 162:
+          has_str = 1;
+          sbits = (BITCODE_BL)pair->value.rll;
+          last = 's';
+          break;
+        case 310:
+        case 311:
+          if (pair->value.s.ptr && pair->value.s.len
+              && ((pair->code == 310 && last == 'd')
+                  || (pair->code == 311 && last == 's')))
+            {
+              BITCODE_RC **pbuf = pair->code == 310 ? &d : &s;
+              size_t *len = pair->code == 310 ? &dlen : &slen;
+              BITCODE_RC *tmp
+                  = (BITCODE_RC *)realloc (*pbuf, *len + pair->value.s.len);
+              if (!tmp)
+                {
+                  dxf_free_pair (pair);
+                  free (d);
+                  free (s);
+                  return NULL;
+                }
+              *pbuf = tmp;
+              memcpy (*pbuf + *len, pair->value.s.ptr, pair->value.s.len);
+              *len += pair->value.s.len;
+            }
+          break;
+        case 330:
+        case 340:
+        case 350:
+        case 360:
+          {
+            const int code = pair->code == 330   ? 4
+                             : pair->code == 340 ? 5
+                             : pair->code == 350 ? 2
+                                                 : 3;
+            BITCODE_H *ids = (BITCODE_H *)realloc (
+                *pobjids, (*pnum_objids + 1) * sizeof (BITCODE_H));
+            if (!ids)
+              break;
+            *pobjids = ids;
+            ids[*pnum_objids]
+                = dwg_add_handleref (dwg, code, pair->value.u, NULL);
+            LOG_TRACE ("%s.objids[%u] = " FORMAT_REF " [H %d]\n", obj->name,
+                       (unsigned)*pnum_objids, ARGS_REF (ids[*pnum_objids]),
+                       pair->code);
+            (*pnum_objids)++;
+          }
+          break;
+        case 94: // end of the object ids
+          break;
+        default:
+          // e.g. the DXF groups of the original object with 70 1
+          if (!skipped++)
+            LOG_WARN ("%s: skip DXF %d and more", obj->name, pair->code);
+          break;
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  if (dbits > 8 * dlen || sbits > 8 * slen)
+    {
+      LOG_ERROR ("%s: %u data bits > %u bytes, or %u string bits > %u bytes",
+                 obj->name, (unsigned)dbits, (unsigned)dlen, (unsigned)sbits,
+                 (unsigned)slen);
+      dbits = dbits > 8 * dlen ? 8 * dlen : dbits;
+      sbits = sbits > 8 * slen ? 8 * slen : sbits;
+    }
+  if (dbits || has_str)
+    {
+      BITCODE_BL numbits = 0;
+      // with 161: the DWG layout of an R2007+ object, the strings after
+      // the data, then their size and the has_strings bit
+      *pdata = dwg_proxy_join (d, dbits, s, sbits, split ? has_str : -1,
+                               &numbits);
+      *pdata_numbits = *pdata ? numbits : 0;
+      *pdata_size = (*pdata_numbits + 7) / 8;
+      LOG_TRACE ("%s.data_numbits = " FORMAT_BL " [BL %d]\n", obj->name,
+                 *pdata_numbits, split ? 161 : 93);
+    }
+  free (d);
+  free (s);
+  return pair;
+}
+
 // read to BLOCK_HEADER.preview (310), filling in the size
 static Dxf_Pair *
 add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -10506,6 +10690,18 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             {
               strncpy (subclass, pair->value.s.ptr, 79);
               subclass[79] = '\0';
+              if ((obj->fixedtype == DWG_TYPE_PROXY_ENTITY
+                   && strEQc (subclass, "AcDbProxyEntity"))
+                  || (obj->fixedtype == DWG_TYPE_PROXY_OBJECT
+                      && strEQc (subclass, "AcDbProxyObject")))
+                {
+                  pair = add_PROXY (obj, dat, pair);
+                  if (!pair)
+                    return NULL;
+                  if (pair->code == 0)
+                    return pair;
+                  goto start_loop; // EED
+                }
               // set the real objname
               if (strEQc (obj->name, "DIMENSION_ANG2LN")
                   || strEQc (obj->name, "DIMENSION"))
