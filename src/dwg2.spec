@@ -1124,6 +1124,11 @@ DWG_OBJECT (TABLESTYLE)
 #else
   UNTIL (R_2007) {
 #endif
+#ifdef IS_ENCODER
+    // before the margins and the flow direction, which it sets
+    if (dwg->header.from_version > R_2007)
+      downconvert_TABLESTYLE (obj);
+#endif
     FIELD_T (name, 3);
     FIELD_BS (flow_direction, 70);
     FIELD_BS (flags, 71);
@@ -1131,10 +1136,6 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_BD (vert_cell_margin, 41);
     FIELD_B (is_title_suppressed, 280);
     FIELD_B (is_header_suppressed, 281);
-#ifdef IS_ENCODER
-    if (dwg->header.from_version > R_2007)
-      downconvert_TABLESTYLE (obj);
-#endif
   }
 #ifndef IS_DXF
   LATER_VERSIONS { // r2010+
@@ -1158,18 +1159,23 @@ DWG_OBJECT (TABLESTYLE)
       FIELD_VALUE (flow_direction) =
         _obj->sty.cellstyle.property_override_flags & 0x10000;
     }
+    // the cell styles _TITLE, _HEADER and _DATA (ids 1, 2, 3), each after
+    // a BL (1, 2, 3 as the id in example_2018, sample_AC1032). As ACadSharp
+    // readTableStyle; the data ends at the string stream.
     FIELD_BL (numoverrides, 0);
-    // style overrides for 0-5 (data=0, title=1, header=2, custom=3-5)
-    if (FIELD_VALUE (numoverrides))
-      {
-        FIELD_BL (unknown_bl3, 0);
-        CellStyle_fields (ovr.cellstyle); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+    VALUEOUTOFBOUNDS (numoverrides, 5000)
+    REPEAT (numoverrides, ovr, Dwg_TABLESTYLE_CellStyle)
+    REPEAT_BLOCK
+        SUB_FIELD_BL (ovr[rcount1],index, 0);
+        CellStyle_fields (ovr[rcount1].cellstyle);
         DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
-        FIELD_BL0 (ovr.id, 90);
-        FIELD_BL0 (ovr.type, 91);
-        FIELD_T0 (ovr.name, 300);
+        SUB_FIELD_BL (ovr[rcount1],id, 90);
+        SUB_FIELD_BL (ovr[rcount1],type, 91);
+        SUB_FIELD_T (ovr[rcount1],name, 300);
         DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
-      }
+        SET_PARENT (ovr[rcount1], _obj);
+    END_REPEAT_BLOCK
+    END_REPEAT (ovr);
   }
 #endif
 
@@ -1210,11 +1216,16 @@ DWG_OBJECT (TABLESTYLE)
         END_REPEAT_BLOCK
         END_REPEAT (rowstyle.borders)
 
-        //SINCE (R_2007a) {
-        //  SUB_FIELD_BL (rowstyle,data_type, 90);
-        //  SUB_FIELD_BL (rowstyle,unit_type, 91);
-        //  SUB_FIELD_TU (rowstyle,format_string, 1);
-        //}
+#ifndef IS_DXF
+        // R2007: the value data type, unit type and format string after
+        // the borders (20.4.101.1; example_2007, sample_AC1021 end at the
+        // string stream)
+        SINCE (R_2007a) {
+          SUB_FIELD_BL (rowstyle,data_type, 90);
+          SUB_FIELD_BL (rowstyle,unit_type, 91);
+          SUB_FIELD_T (rowstyle,format_string, 1);
+        }
+#endif
         #undef border
     END_REPEAT_BLOCK
     END_REPEAT (rowstyles)

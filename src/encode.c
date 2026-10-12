@@ -8390,140 +8390,138 @@ downconvert_TABLE (Dwg_Object *restrict obj)
     }
 }
 
-// from >2007 to 2000
+// a R2010+ table cell style color for the pre-R2010 row styles: no names
+static void
+tablestyle_copy_color (Dwg_Color *restrict dst, const Dwg_Color *restrict src)
+{
+  memset (dst, 0, sizeof (*dst));
+  dst->method = src->method ? src->method : (Dwg_Color_Method)(src->rgb >> 24);
+  dst->rgb = src->rgb;
+  dst->index = src->index;
+  if (!dst->method) // unset: ByBlock
+    {
+      dst->method = 0xc1;
+      dst->rgb = 0xc1000000;
+    }
+}
+
+static const Dwg_TABLESTYLE_CellStyle *
+tablestyle_find_ovr (const Dwg_Object_TABLESTYLE *restrict _obj,
+                     const BITCODE_BL id)
+{
+  if (!_obj->ovr)
+    return NULL;
+  for (BITCODE_BL i = 0; i < _obj->numoverrides; i++)
+    if (_obj->ovr[i].id == id)
+      return &_obj->ovr[i];
+  return NULL;
+}
+
+/* R2010+ TABLESTYLE to the pre-R2010 fields (20.4.101.1), for writing
+   R2000-R2007 DWG and all DXF versions. The row styles data, title and
+   header come from the cell styles _DATA (id 3), _TITLE (1) and _HEADER
+   (2), else the table cell style; the margins and the flow direction from
+   the table cell style. As AutoCAD's own R2000/R2004 example_2000.dwg and
+   example_2018.dxf of the same drawing: a background color "none" is ACI 7
+   without background (283 0), the R2010+ border invisibility (93) is the
+   inverse of the visibility, missing borders are visible ByBlock. The
+   rowstyles are new allocations without color names, the handles are global
+   (free_TABLESTYLE_r2010). */
 void
 downconvert_TABLESTYLE (Dwg_Object *restrict obj)
 {
-  // Dwg_Data *dwg = obj->parent;
+  Dwg_Data *dwg = obj ? obj->parent : NULL;
   Dwg_Object_TABLESTYLE *_obj
-      = obj->tio.object ? obj->tio.object->tio.TABLESTYLE : NULL;
-  if (!obj || obj->fixedtype != DWG_TYPE_TABLESTYLE)
+      = obj && obj->tio.object ? obj->tio.object->tio.TABLESTYLE : NULL;
+  static const BITCODE_BL ids[3] = { 3, 1, 2 }; // data, title, header
+  const Dwg_CellStyle *table;
+  if (!obj || obj->fixedtype != DWG_TYPE_TABLESTYLE || !_obj || !dwg)
     {
       LOG_ERROR ("Invalid type %u for downconvert_TABLESTYLE",
                  obj ? obj->fixedtype : 0);
       return;
     }
-  LOG_WARN ("Downconverting TABLESTYLE with loosing information");
-  if (!_obj->num_rowstyles)
+  if (_obj->num_rowstyles && _obj->rowstyles)
+    return; // already converted, or from DXF
+  LOG_TRACE ("downconvert_TABLESTYLE\n");
+  table = &_obj->sty.cellstyle;
+  _obj->rowstyles = (Dwg_TABLESTYLE_rowstyles *)calloc (
+      3, sizeof (Dwg_TABLESTYLE_rowstyles));
+  if (!_obj->rowstyles)
+    return;
+  _obj->num_rowstyles = 3;
+  if (table->margin_override_flags & 1)
     {
-      _obj->num_rowstyles = 3;
-      _obj->rowstyles = (Dwg_TABLESTYLE_rowstyles *)calloc (
-          3, sizeof (Dwg_TABLESTYLE_rowstyles));
+      _obj->horiz_cell_margin = table->horiz_margin;
+      _obj->vert_cell_margin = table->vert_margin;
     }
-  // 0: data, 1: title, 2: header
-  // assert (strEQc (_obj->sty.name, "Table"));
-  LOG_TRACE ("TABLESTYLE.sty.name: %s\n", _obj->sty.name);
-  _obj->rowstyles[0].text_style
-      = _obj->sty.cellstyle.content_format.text_style;
-  _obj->rowstyles[0].text_height
-      = _obj->sty.cellstyle.content_format.text_height;
-  _obj->rowstyles[0].text_alignment
-      = _obj->sty.cellstyle.content_format.cell_alignment;
-  _obj->rowstyles[0].text_color
-      = _obj->sty.cellstyle.content_format.content_color;
-  _obj->rowstyles[0].fill_color = _obj->sty.cellstyle.bg_color;
-  _obj->rowstyles[0].has_bgcolor = _obj->sty.cellstyle.bg_color.method != 0xc8;
-  _obj->rowstyles[0].data_type
-      = _obj->sty.cellstyle.content_format.value_data_type;
-  _obj->rowstyles[0].unit_type
-      = _obj->sty.cellstyle.content_format.value_unit_type;
-#if 0
-  {
-    size_t destlen;
-    char *u8 = bit_convert_TU ((BITCODE_TU)_obj->sty.cellstyle
-                               .content_format.value_format_string);
-    if (u8 && (destlen = strlen (u8)))
-      {
-        char *dest = malloc (destlen + 1);
-        _obj->rowstyles[0].format_string = (BITCODE_TU)bit_utf8_to_TV (
-            dest, (unsigned char *)u8, destlen, destlen - 1, 0,
-            dwg->header.codepage);
-      }
-    free (u8);
-  }
-#endif
-  if (!_obj->rowstyles[0].num_borders)
+  else
+    _obj->horiz_cell_margin = _obj->vert_cell_margin = 0.06;
+  _obj->flow_direction = (table->property_override_flags & 0x10000) ? 1 : 0;
+  for (int r = 0; r < 3; r++)
     {
-      _obj->rowstyles[0].num_borders = 6;
-      _obj->rowstyles[0].borders = (Dwg_TABLESTYLE_border *)calloc (
+      Dwg_TABLESTYLE_rowstyles *row = &_obj->rowstyles[r];
+      const Dwg_TABLESTYLE_CellStyle *ovr = tablestyle_find_ovr (_obj, ids[r]);
+      const Dwg_CellStyle *cs = ovr ? &ovr->cellstyle : table;
+      const Dwg_ContentFormat *cf = &cs->content_format;
+      BITCODE_H style = cf->text_style;
+      Dwg_Color_Method bg;
+      row->parent = _obj;
+      if (!style || !style->absolute_ref)
+        style = table->content_format.text_style;
+      if (style && style->absolute_ref)
+        row->text_style
+            = dwg_add_handleref (dwg, 5, style->absolute_ref, NULL);
+      else
+        row->text_style
+            = dwg_find_tablehandle_silent (dwg, "Standard", "STYLE");
+      row->text_height = cf->text_height;
+      row->text_alignment = (BITCODE_BS)cf->cell_alignment;
+      tablestyle_copy_color (&row->text_color, &cf->content_color);
+      bg = cs->bg_color.method ? cs->bg_color.method
+                               : (Dwg_Color_Method)(cs->bg_color.rgb >> 24);
+      if (bg == 0xc8 || !bg) // none
+        {
+          row->fill_color.method = 0xc3;
+          row->fill_color.rgb = 0xc3000007;
+          row->fill_color.index = 7;
+          row->has_bgcolor = 0;
+        }
+      else
+        {
+          tablestyle_copy_color (&row->fill_color, &cs->bg_color);
+          row->has_bgcolor = 1;
+        }
+      row->data_type = cf->value_data_type;
+      row->unit_type = cf->value_unit_type;
+      row->num_borders = 6;
+      row->borders = (Dwg_TABLESTYLE_border *)calloc (
           6, sizeof (Dwg_TABLESTYLE_border));
-    }
-  // borders/grid: top, horizontal inside, bottom, left, vertical inside, right
-  if (_obj->sty.cellstyle.borders)
-    {
+      if (!row->borders)
+        {
+          row->num_borders = 0;
+          continue;
+        }
+      // top, horizontal inside, bottom, left, vertical inside, right
       for (unsigned i = 0; i < 6; i++)
         {
-          if (i >= _obj->sty.cellstyle.num_borders)
-            break;
-          _obj->rowstyles[0].borders[i].linewt
-              = _obj->sty.cellstyle.borders[i].linewt;
-          _obj->rowstyles[0].borders[i].visible
-              = _obj->sty.cellstyle.borders[i].visible;
-          _obj->rowstyles[0].borders[i].color
-              = _obj->sty.cellstyle.borders[i].color;
-        }
-      free (_obj->sty.cellstyle.borders);
-      _obj->sty.cellstyle.borders = NULL;
-      _obj->sty.cellstyle.num_borders = 0;
-    }
-  // title
-  if (!_obj->rowstyles[1].num_borders)
-    {
-      _obj->rowstyles[1].num_borders = 6;
-      _obj->rowstyles[1].borders = (Dwg_TABLESTYLE_border *)calloc (
-          6, sizeof (Dwg_TABLESTYLE_border));
-      _obj->rowstyles[1].text_color.method = 0xc1;
-      _obj->rowstyles[1].fill_color.method = 0xc1;
-    }
-  if (_obj->ovr.type == 1)
-    {
-      // assert (strEQc (_obj->ovr.name, "_TITLE"));
-      LOG_TRACE ("TABLESTYLE.ovr.name: %s\n", _obj->ovr.name);
-      _obj->rowstyles[0].text_style
-          = _obj->ovr.cellstyle.content_format.text_style;
-      _obj->rowstyles[0].text_height
-          = _obj->ovr.cellstyle.content_format.text_height;
-      _obj->rowstyles[0].text_alignment
-          = _obj->ovr.cellstyle.content_format.cell_alignment;
-      _obj->rowstyles[0].text_color
-          = _obj->ovr.cellstyle.content_format.content_color;
-      _obj->rowstyles[0].fill_color = _obj->ovr.cellstyle.bg_color;
-      if (_obj->ovr.cellstyle.borders)
-        {
-          for (unsigned i = 0; i < 6; i++)
+          Dwg_TABLESTYLE_border *b = &row->borders[i];
+          const Dwg_GridFormat *g = NULL;
+          for (BITCODE_BL j = 0; cs->borders && j < cs->num_borders; j++)
+            if (cs->borders[j].index_mask == (1U << i))
+              g = &cs->borders[j];
+          if (g)
             {
-              if (i >= _obj->ovr.cellstyle.num_borders)
-                break;
-              _obj->rowstyles[0].borders[i].linewt
-                  = _obj->ovr.cellstyle.borders[i].linewt;
-              _obj->rowstyles[0].borders[i].visible
-                  = _obj->ovr.cellstyle.borders[i].visible;
-              _obj->rowstyles[0].borders[i].color
-                  = _obj->ovr.cellstyle.borders[i].color;
+              b->linewt = g->linewt;
+              b->visible = g->visible ? 0 : 1; // R2010+: invisibility
+              tablestyle_copy_color (&b->color, &g->color);
             }
-          // free (_obj->ovr.cellstyle.borders);
-          //_obj->ovr.cellstyle.borders = NULL;
-          //_obj->ovr.cellstyle.num_borders = 0;
-        }
-    }
-  // header
-  if (!_obj->rowstyles[2].num_borders)
-    {
-      _obj->rowstyles[2].num_borders = 6;
-      _obj->rowstyles[2].borders = (Dwg_TABLESTYLE_border *)calloc (
-          6, sizeof (Dwg_TABLESTYLE_border));
-      _obj->rowstyles[2].text_color.method = 0xc1;
-      _obj->rowstyles[2].fill_color.method = 0xc1;
-      if (_obj->ovr.cellstyle.borders)
-        {
-          for (unsigned i = 0; i < _obj->rowstyles[2].num_borders; i++)
+          else
             {
-              _obj->rowstyles[2].borders[i].linewt
-                  = _obj->ovr.cellstyle.borders[i].linewt;
-              _obj->rowstyles[2].borders[i].visible
-                  = _obj->ovr.cellstyle.borders[i].visible;
-              _obj->rowstyles[2].borders[i].color
-                  = _obj->ovr.cellstyle.borders[i].color;
+              b->linewt = -2; // ByBlock
+              b->visible = 1;
+              b->color.method = 0xc1;
+              b->color.rgb = 0xc1000000;
             }
         }
     }
@@ -8590,13 +8588,20 @@ upconvert_TABLESTYLE (Dwg_Object *restrict obj)
       if (_obj->num_rowstyles >= 2)
         {
           Dwg_TABLESTYLE_rowstyles *title = &_obj->rowstyles[1];
-          Dwg_CellStyle *ovr = &_obj->ovr.cellstyle;
-          _obj->ovr.parent = _obj;
-          _obj->ovr.id = 1; // title
-          _obj->ovr.type = 1;
-          _obj->ovr.name = IS_FROM_TU_DWG (obj->parent)
-                               ? (char *)cellstyle_name_title
-                               : (char *)"_TITLE";
+          Dwg_CellStyle *ovr;
+          if (!_obj->ovr)
+            _obj->ovr = (Dwg_TABLESTYLE_CellStyle *)calloc (
+                1, sizeof (Dwg_TABLESTYLE_CellStyle));
+          if (!_obj->ovr)
+            return;
+          ovr = &_obj->ovr[0].cellstyle;
+          _obj->ovr[0].parent = _obj;
+          _obj->ovr[0].index = 1;
+          _obj->ovr[0].id = 1; // title
+          _obj->ovr[0].type = 1;
+          _obj->ovr[0].name = IS_FROM_TU_DWG (obj->parent)
+                                  ? (char *)cellstyle_name_title
+                                  : (char *)"_TITLE";
           ovr->type = 1; // cell
           ovr->data_flags = 1;
           ovr->property_override_flags = 0;

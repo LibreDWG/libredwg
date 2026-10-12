@@ -651,6 +651,27 @@ free_TABLE_r2010 (Dwg_Object *restrict obj)
   _obj->num_cells = 0;
 }
 
+// a R2010+ cell style, all pointers NULL afterwards
+static void
+free_CellStyle_r2010 (Dwg_CellStyle *restrict cs)
+{
+  if (cs->borders)
+    for (unsigned j = 0; j < cs->num_borders; j++)
+      {
+        VALUE_HANDLE (cs->borders[j].ltype, ltype, 3, 340);
+        FREE_IF (cs->borders[j].color.name);
+        FREE_IF (cs->borders[j].color.book_name);
+      }
+  FREE_IF (cs->borders);
+  cs->num_borders = 0;
+  FREE_IF (cs->bg_color.name);
+  FREE_IF (cs->bg_color.book_name);
+  FREE_IF (cs->content_format.content_color.name);
+  FREE_IF (cs->content_format.content_color.book_name);
+  VALUE_HANDLE (cs->content_format.text_style, text_style, 3, 340);
+  FREE_IF (cs->content_format.value_format_string);
+}
+
 // after downconvert_TABLESTYLE()
 // we need to pass through the old code, as the new code is handled in the spec
 // free() following from_version, not version.
@@ -667,47 +688,34 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
   LOG_HANDLE ("free_TABLESTYLE_r2010\n");
   if (_obj->rowstyles)
-    for (unsigned i = 0; i < 3; i++)
+    for (unsigned i = 0; i < _obj->num_rowstyles; i++)
       {
         if (_obj->rowstyles[i].borders)
-          for (unsigned j = 0; j < 6; j++)
+          for (unsigned j = 0; j < _obj->rowstyles[i].num_borders; j++)
             {
               SUB_FIELD_CMTC (rowstyles[i].borders[j], color, 0);
             }
         FREE_IF (_obj->rowstyles[i].borders);
-        // rowstyles[0].text_style, text_color and fill_color might be shallow
-        // copies of the cellstyle content_format/bg_color made by
-        // downconvert_TABLESTYLE. They are owned and freed via the spec free
-        // below, so freeing them here would double-free them.
-        if (_obj->ovr.type != 1 || i > 0)
-          {
-            SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
-            SUB_FIELD_CMTC (rowstyles[i], text_color, 0);
-            SUB_FIELD_CMTC (rowstyles[i], fill_color, 0);
-          }
+        SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
+        SUB_FIELD_CMTC (rowstyles[i], text_color, 0);
+        SUB_FIELD_CMTC (rowstyles[i], fill_color, 0);
+        FREE_IF (_obj->rowstyles[i].format_string);
       }
   FREE_IF (_obj->rowstyles);
   _obj->num_rowstyles = 0;
-  for (unsigned j = 0; j < _obj->sty.cellstyle.num_borders; j++)
-    {
-      SUB_FIELD_HANDLE (sty.cellstyle.borders[j], ltype, 3, 340);
-      SUB_FIELD_CMTC (sty.cellstyle.borders[j], color, 0);
-    }
-  FIELD_CMTC (sty.cellstyle.bg_color, 62);
-  FIELD_T (sty.cellstyle.content_format.value_format_string, 300);
-  if (_obj->numoverrides)
-    {
-      for (unsigned j = 0; j < _obj->ovr.cellstyle.num_borders; j++)
-        {
-          SUB_FIELD_HANDLE (ovr.cellstyle.borders[j], ltype, 3, 340);
-          SUB_FIELD_CMTC (ovr.cellstyle.borders[j], color, 0);
-        }
-      FIELD_CMTC (ovr.cellstyle.bg_color, 62);
-      FIELD_T (ovr.cellstyle.content_format.value_format_string, 300);
-    }
-  FIELD_TV (name, 3);
+  // the R2010+ cell styles: the spec frees them only when writing R2010+
+  free_CellStyle_r2010 (&_obj->sty.cellstyle);
   FIELD_TV (sty.name, 300);
-  FIELD_TV (ovr.name, 300);
+  if (_obj->ovr)
+    {
+      for (unsigned i = 0; i < _obj->numoverrides; i++)
+        {
+          free_CellStyle_r2010 (&_obj->ovr[i].cellstyle);
+          FREE_IF (_obj->ovr[i].name);
+        }
+      FREE_IF (_obj->ovr);
+    }
+  _obj->numoverrides = 0;
 }
 
 static void

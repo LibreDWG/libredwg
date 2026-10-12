@@ -1208,6 +1208,8 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
     strcpy (s, "num_blocks");
   else if (strEQc (key, "styles")) // conflicts? only for LTYPE
     strcpy (s, "num_dashes");
+  else if (strEQc (key, "ovr")) // TABLESTYLE
+    strcpy (s, "numoverrides");
   else if (strEQc (key, "cellstyle.borders"))
     strcpy (s, "cellstyle.num_borders");
   else if (strEQc (key, "segs") || strEQc (key, "polyline_paths"))
@@ -5510,6 +5512,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
 }
 
 // returns with 0
+static void dxf_table_color (BITCODE_CMC *restrict color, const int index);
+
 static Dxf_Pair *
 add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 Dxf_Pair *restrict pair)
@@ -5566,13 +5570,13 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 62:
           CHK_rowstyles;
-          dxf_set_CMC_index (&o->rowstyles[i].text_color, pair->value.i);
+          dxf_table_color (&o->rowstyles[i].text_color, pair->value.i);
           LOG_TRACE ("%s.rowstyles[%d].text_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
         case 63:
           CHK_rowstyles;
-          dxf_set_CMC_index (&o->rowstyles[i].fill_color, pair->value.i);
+          dxf_table_color (&o->rowstyles[i].fill_color, pair->value.i);
           LOG_TRACE ("%s.rowstyles[%d].fill_color.index = %d [CMC %d]\n",
                      obj->name, i, pair->value.i, pair->code);
           break;
@@ -5597,9 +5601,9 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 1:
           CHK_rowstyles;
           o->rowstyles[i].format_string
-              = bit_utf8_to_TU (pair->value.s.ptr, 0);
-          LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
-                     obj->name, i, pair->value.s.ptr, pair->code);
+              = dwg_add_u8_input (dwg, pair->value.s.ptr);
+          LOG_TRACE ("%s.rowstyles[%d].format_string = %s [T %d]\n", obj->name,
+                     i, pair->value.s.ptr, pair->code);
           break;
         case 274:
         case 275:
@@ -5625,8 +5629,9 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           CHK_borders;
           assert (o->rowstyles[i].num_borders);
-          o->rowstyles[i].borders[j].linewt
-              = dxf_find_lweight ((int16_t)pair->value.i);
+          // the lineweight itself (-2 ByBlock, as the R2000 DWG), not the
+          // index of the entity lineweights
+          o->rowstyles[i].borders[j].linewt = (BITCODE_BSd)pair->value.i;
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].linewt = %d [BSd %d]\n",
                      obj->name, i, j, o->rowstyles[i].borders[j].linewt,
                      pair->code);
@@ -5654,7 +5659,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j = pair->code - 64;
           CHK_borders;
           assert (j >= 0 && j <= 6);
-          dxf_set_CMC_index (&o->rowstyles[i].borders[j].color, pair->value.i);
+          dxf_table_color (&o->rowstyles[i].borders[j].color, pair->value.i);
           LOG_TRACE (
               "%s.rowstyles[%d].borders[%d].color.index = %d [CMC %d]\n",
               obj->name, i, j, pair->value.i, pair->code);
@@ -5663,15 +5668,19 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         // adds 358 to the index code (62->420, 63->421, 64..69->422..427)
         case 420:
           CHK_rowstyles;
-          o->rowstyles[i].text_color.rgb = pair->value.u;
-          o->rowstyles[i].text_color.method = pair->value.u >> 0x18;
+          // 24-bit RGB in DXF
+          o->rowstyles[i].text_color.rgb
+              = 0xc2000000 | (pair->value.u & 0xffffff);
+          o->rowstyles[i].text_color.method = 0xc2;
           LOG_TRACE ("%s.rowstyles[%d].text_color.rgb = %08X [CMC %d]\n",
                      obj->name, i, pair->value.u, pair->code);
           break;
         case 421:
           CHK_rowstyles;
-          o->rowstyles[i].fill_color.rgb = pair->value.u;
-          o->rowstyles[i].fill_color.method = pair->value.u >> 0x18;
+          // 24-bit RGB in DXF
+          o->rowstyles[i].fill_color.rgb
+              = 0xc2000000 | (pair->value.u & 0xffffff);
+          o->rowstyles[i].fill_color.method = 0xc2;
           LOG_TRACE ("%s.rowstyles[%d].fill_color.rgb = %08X [CMC %d]\n",
                      obj->name, i, pair->value.u, pair->code);
           break;
@@ -5685,8 +5694,10 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           j = pair->code - 422;
           CHK_borders;
           assert (j >= 0 && j <= 6);
-          o->rowstyles[i].borders[j].color.rgb = pair->value.u;
-          o->rowstyles[i].borders[j].color.method = pair->value.u >> 0x18;
+          // 24-bit RGB in DXF
+          o->rowstyles[i].borders[j].color.rgb
+              = 0xc2000000 | (pair->value.u & 0xffffff);
+          o->rowstyles[i].borders[j].color.method = 0xc2;
           LOG_TRACE (
               "%s.rowstyles[%d].borders[%d].color.rgb = %08X [CMC %d]\n",
               obj->name, i, j, pair->value.u, pair->code);

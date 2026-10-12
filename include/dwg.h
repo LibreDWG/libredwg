@@ -4926,6 +4926,7 @@ typedef struct _dwg_TABLESTYLE_CellStyle
   BITCODE_BL type; /* 1=data, 2=label */
   BITCODE_T  name;
   struct _dwg_CellStyle cellstyle;
+  BITCODE_BL index; /* r2010+ TABLESTYLE.ovr: the BL before each, 1-3 */
 } Dwg_TABLESTYLE_CellStyle;
 
 // very similar to GridLine, or GridFormat. but no overrides, type, ltype, ...
@@ -4955,7 +4956,7 @@ typedef struct _dwg_TABLESTYLE_rowstyles
 
   BITCODE_BL data_type;  // r2007+
   BITCODE_BL unit_type;
-  BITCODE_TU format_string;
+  BITCODE_T format_string;
 } Dwg_TABLESTYLE_rowstyles;
 
 typedef struct _dwg_object_TABLESTYLE
@@ -4975,9 +4976,8 @@ typedef struct _dwg_object_TABLESTYLE
   BITCODE_BL unknown_bl2;
   BITCODE_H cellstyle;           //r2007+. was called template
   Dwg_TABLESTYLE_CellStyle sty;  //r2007+. Note: embedded struct
-  BITCODE_BL numoverrides;      // ??
-  BITCODE_BL unknown_bl3;
-  Dwg_TABLESTYLE_CellStyle ovr;  // ??
+  BITCODE_BL numoverrides;       // r2010+: the cell styles _TITLE,
+  Dwg_TABLESTYLE_CellStyle *ovr; // _HEADER, _DATA
 
   // 0: data, 1: title, 2: header
   BITCODE_BL num_rowstyles; // always 3

@@ -9857,10 +9857,8 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_fields[] = {
     0,0,0, 0 },
   { "numoverrides",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, numoverrides),
     0,0,0, 0 },
-  { "unknown_bl3",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, unknown_bl3),
-    0,0,0, 0 },
-  { "ovr",	"Dwg_TABLESTYLE_CellStyle", sizeof (Dwg_TABLESTYLE_CellStyle),  OFF (struct _dwg_object_TABLESTYLE, ovr),
-    0,0,0, 0 },
+  { "ovr",	"Dwg_TABLESTYLE_CellStyle*", sizeof (Dwg_TABLESTYLE_CellStyle*),  OFF (struct _dwg_object_TABLESTYLE, ovr),
+    1,1,0, 0 },
   { "num_rowstyles",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, num_rowstyles),
     0,0,0, 0 },
   { "rowstyles",	"Dwg_TABLESTYLE_rowstyles*", sizeof (Dwg_TABLESTYLE_rowstyles*),  OFF (struct _dwg_object_TABLESTYLE, rowstyles),
@@ -12614,6 +12612,8 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_CellStyle_fields[] = {
     1,1,0, 0 },
   { "cellstyle",	"struct _dwg_CellStyle", sizeof (struct _dwg_CellStyle),  OFF (struct _dwg_TABLESTYLE_CellStyle, cellstyle),
     1,0,0, 0 },
+  { "index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TABLESTYLE_CellStyle, index),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_TABLESTYLE_border: (sorted by offset) */
@@ -12650,7 +12650,7 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_rowstyles_fields[] = {
     0,0,0, 0 },
   { "unit_type",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_TABLESTYLE_rowstyles, unit_type),
     0,0,0, 0 },
-  { "format_string",	"TU", sizeof (BITCODE_TU),  OFF (struct _dwg_TABLESTYLE_rowstyles, format_string),
+  { "format_string",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_TABLESTYLE_rowstyles, format_string),
     1,1,1, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
