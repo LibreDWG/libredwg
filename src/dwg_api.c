@@ -28987,7 +28987,10 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
     Dwg_Object *nod;
     unsigned long ownerhandle = 0UL;
 
+    // dwg_add_object might realloc dwg->object, invalidating vp
+    const BITCODE_BL vp_index = vp->index;
     API_ADD_OBJECT (LAYOUT);
+    vp = &dwg->object[vp_index];
 
     _obj->layout_name = dwg_add_u8_input (dwg, name);
     _obj->layout_flags = 1;
