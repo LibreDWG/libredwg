@@ -4672,8 +4672,10 @@ DWG_ENTITY (HATCH)
   FIELD_3BD (extrusion, 210);
   DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
   DXF {
-    if (FIELD_VALUE (is_solid_fill)) {
-      VALUE_TFF ("SOLID", 2); // not "SOLID,_I"
+    // The name as in the DWG, with the island style suffix (",_O", ",_I")
+    // as AutoCAD keeps it: "SOLID,_O" became "SOLID" via DXF.
+    if (FIELD_VALUE (is_solid_fill) && !FIELD_VALUE (name)) {
+      VALUE_TFF ("SOLID", 2);
     } else {
       FIELD_T (name, 2);
     }
@@ -4942,8 +4944,10 @@ DWG_ENTITY (MPOLYGON)
   FIELD_3BD (extrusion, 210);
   DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
   DXF {
-    if (FIELD_VALUE (is_solid_fill)) {
-      VALUE_TFF ("SOLID", 2); // not "SOLID,_I"
+    // The name as in the DWG, with the island style suffix (",_O", ",_I")
+    // as AutoCAD keeps it: "SOLID,_O" became "SOLID" via DXF.
+    if (FIELD_VALUE (is_solid_fill) && !FIELD_VALUE (name)) {
+      VALUE_TFF ("SOLID", 2);
     } else {
       FIELD_T (name, 2);
     }
