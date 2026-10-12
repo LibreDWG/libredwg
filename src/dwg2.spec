@@ -832,15 +832,26 @@ DWG_ENTITY (TABLE)
               // R2007 to R2000/R2004: the text is in the value (UTF-16),
               // text_value is empty. Without this every cell lost its text
               // (example_2007, sample_AC1021 written as R2000).
+              // The formatted text (302) first, as AutoCAD writes it in
+              // R2000: "0.500000", "$100.00", "35.00%", "CELL FORMAT 1"
+              // (sample_AC1021 vs AutoCAD's sample_AC1015); else the string.
               if (dat->from_version >= R_2007a
-                  && FIELD_VALUE (cell.value.data_type) == 4
-                  && FIELD_VALUE (cell.value.data_string)
                   && (!FIELD_VALUE (cell.text_value)
                       || !*(BITCODE_TU)FIELD_VALUE (cell.text_value)))
                 {
-                  free (FIELD_VALUE (cell.text_value));
-                  FIELD_VALUE (cell.text_value) = (BITCODE_T)bit_wcs2dup (
-                      (BITCODE_TU)FIELD_VALUE (cell.value.data_string));
+                  BITCODE_TU src = NULL;
+                  if (FIELD_VALUE (cell.value.value_string)
+                      && *(BITCODE_TU)FIELD_VALUE (cell.value.value_string))
+                    src = (BITCODE_TU)FIELD_VALUE (cell.value.value_string);
+                  else if (FIELD_VALUE (cell.value.data_type) == 4
+                           && FIELD_VALUE (cell.value.data_string))
+                    src = (BITCODE_TU)FIELD_VALUE (cell.value.data_string);
+                  if (src)
+                    {
+                      free (FIELD_VALUE (cell.text_value));
+                      FIELD_VALUE (cell.text_value)
+                          = (BITCODE_T)bit_wcs2dup (src);
+                    }
                 }
 #endif
               if (FIELD_VALUE (cell.type) == 1
