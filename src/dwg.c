@@ -1229,7 +1229,11 @@ get_first_owned_entity (const Dwg_Object *hdr)
         dwg_resolve_objectrefs_silent (dwg);
       _hdr->__iterator = 0; /* reset step counter for cycle detection */
       /* With r2000 we rather follow the next_entity chain */
-      return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
+      // by the handle: refs added by dwg_fixup_BLOCKS_entities (R2004+ to
+      // R2000) are not resolved yet, ->obj was NULL and dwg2dxf --as r2000
+      // wrote no entities
+      return _hdr->first_entity ? dwg_ref_object (dwg, _hdr->first_entity)
+                                : NULL;
     }
   else if (version >= R_2004 || version < R_13b1)
     {
@@ -1588,7 +1592,8 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
       BITCODE_BL max_steps;
       /* With r2000 we rather follow the next_entity chain. It may jump around
        * the linked list. */
-      if (!_hdr->last_entity || current == _hdr->last_entity->obj)
+      if (!_hdr->last_entity
+          || current->handle.value == _hdr->last_entity->absolute_ref)
         return NULL;
       /* Cycle detection: __iterator was reset in get_first_owned_entity */
       _hdr->__iterator++;
