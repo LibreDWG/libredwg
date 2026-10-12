@@ -500,8 +500,11 @@
     {
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
       FIELD_BB (ltype_flags, 0);
-      // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
-      FIELD_BB (plotstyle_flags, 0);
+      PRE (R_2007a)
+        {
+          // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
+          FIELD_BB (plotstyle_flags, 0);
+        }
     }
   SINCE (R_2007a)
     {
@@ -515,6 +518,8 @@
 #endif
 #endif
       FIELD_BB (material_flags, 0); //if not BYLAYER 00: 347 material handle
+      // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 plotstyle handle
+      FIELD_BB (plotstyle_flags, 0);
       DXF {
         if (FIELD_VALUE (material_flags)) // TODO BYBLOCK also?
           FIELD_HANDLE (material, 0, 347)
