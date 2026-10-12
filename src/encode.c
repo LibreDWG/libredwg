@@ -2799,6 +2799,58 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   return error;
 }
 
+/* R13/R14 to R2000+: the names AutoCAD 2000 uses. AutoCAD's R14 and R2000
+   saves of the same drawing (example_r14, example_2000): LTYPE BYBLOCK,
+   BYLAYER, CONTINUOUS become ByBlock, ByLayer, Continuous; STYLE and DIMSTYLE
+   STANDARD become Standard, and so the dictionary keys STANDARD (the
+   MLINESTYLE keeps its name STANDARD). */
+static void
+upconvert_r14_names (Dwg_Data *restrict dwg)
+{
+  static const char *const from[]
+      = { "BYBLOCK", "BYLAYER", "CONTINUOUS", "STANDARD" };
+  static const char *const to[]
+      = { "ByBlock", "ByLayer", "Continuous", "Standard" };
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_OBJECT || !obj->tio.object
+          || !obj->tio.object->tio.APPID)
+        continue;
+      if (obj->fixedtype == DWG_TYPE_LTYPE || obj->fixedtype == DWG_TYPE_STYLE
+          || obj->fixedtype == DWG_TYPE_DIMSTYLE)
+        {
+          // all table records start with the same common fields
+          char **namep = (char **)&obj->tio.object->tio.LTYPE->name;
+          unsigned k0 = obj->fixedtype == DWG_TYPE_LTYPE ? 0 : 3;
+          unsigned k1 = obj->fixedtype == DWG_TYPE_LTYPE ? 3 : 4;
+          if (!*namep)
+            continue;
+          for (unsigned k = k0; k < k1; k++)
+            if (strEQ (*namep, from[k]))
+              {
+                LOG_TRACE ("%s.name %s => %s\n", obj->name, *namep, to[k]);
+                free (*namep);
+                *namep = strdup (to[k]);
+                break;
+              }
+        }
+      else if (obj->fixedtype == DWG_TYPE_DICTIONARY
+               || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
+        {
+          Dwg_Object_DICTIONARY *d = obj->tio.object->tio.DICTIONARY;
+          for (BITCODE_BL j = 0; d->texts && j < d->numitems; j++)
+            if (d->texts[j] && strEQc ((char *)d->texts[j], "STANDARD"))
+              {
+                LOG_TRACE ("DICTIONARY.texts[%u] STANDARD => Standard\n",
+                           (unsigned)j);
+                free (d->texts[j]);
+                d->texts[j] = (BITCODE_T)strdup ("Standard");
+              }
+        }
+    }
+}
+
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -2844,6 +2896,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("Encode version %s (%s)\n",
                dwg_version_codes (dwg->header.version),
                dwg_version_type (dwg->header.version));
+
+  if (dwg->header.from_version >= R_13b1 && dwg->header.from_version < R_2000
+      && dwg->header.version >= R_2000)
+    upconvert_r14_names (dwg);
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
   // We cannot write unknown_bits into another version, or when it's coming
