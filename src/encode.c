@@ -822,6 +822,247 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     }
   obj->hdlpos = 0;
 }
+
+/* Absolute value of a handle read from the object's own handle stream */
+static BITCODE_RLL
+proxy_abs_handle (const Dwg_Object *restrict obj, const Dwg_Handle *restrict h)
+{
+  const BITCODE_RLL self = obj->handle.value;
+  switch (h->code)
+    {
+    case 6:
+      return self + 1;
+    case 8:
+      return self - 1;
+    case 0xA:
+      return self + h->value;
+    case 0xC:
+      return self - h->value;
+    default:
+      return h->value;
+    }
+}
+
+/** Write an unknown entity/object of a newer DWG as ACAD_PROXY_ENTITY or
+ * ACAD_PROXY_OBJECT, as AutoCAD does for custom objects whose application
+ * is not loaded (ODA spec 20.4.90, 29): keep the class number (91), the
+ * drawing format of the source DWG (95), the proxy graphics (already in the
+ * common entity data), the object data bits up to the handle stream and the
+ * object's own handles (objids). The common handles (owner, reactors, xdic,
+ * layer, ...) stay in their decoded fields.
+ * Only for an R2000 target from an R2004+ DWG, decoded by us.
+ * For R2007+ sources the data bits include the object's string stream and
+ * its has_strings bit, unchanged: the same as what we decode as databits of
+ * a native R2007+ proxy.
+ * Returns 1 if converted, 0 to fall back to the POINT/PLACEHOLDER.
+ */
+static int
+encode_unknown_as_proxy (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
+{
+  const int is_entity = obj->fixedtype == DWG_TYPE_UNKNOWN_ENT;
+  const size_t nbits = obj->num_unknown_bits;
+  const size_t full = nbits / 8;
+  const int rest = nbits % 8;
+  const int ci = (int)obj->type - 500;
+  size_t start, hdl_off;
+  unsigned char *norm;
+  BITCODE_RC *data;
+  Bit_Chain c = { 0 };
+  Dwg_Object_Ref **exp_refs;
+  BITCODE_H *objids = NULL;
+  BITCODE_BL num_exp = 0, num_objids = 0, n;
+  Dwg_Object_Entity *ent = obj->tio.entity;
+  Dwg_Object_Object *oobj = obj->tio.object;
+  BITCODE_BL num_reactors = is_entity ? ent->num_reactors : oobj->num_reactors;
+  BITCODE_H *reactors = is_entity ? ent->reactors : oobj->reactors;
+  BITCODE_BL dwgver = dwg->header.dwg_version;
+
+  if (dwg->header.version < R_2000b || dwg->header.version > R_2002
+      || dwg->header.from_version < R_2004a || (dwg->opts & DWG_OPTS_IN)
+      || !obj->unknown_bits || !nbits || ci < 0 || ci >= (int)dwg->num_classes
+      || dwg_class_is_entity (&dwg->dwg_class[ci]) != is_entity
+      || 8 * (size_t)obj->size < nbits)
+    return 0;
+  // unknown_bits are all bits after the common data until the object end,
+  // incl. the handle stream at obj->hdlpos.
+  start = 8 * (size_t)obj->size - nbits;
+  if (obj->hdlpos < start || obj->hdlpos > 8 * (size_t)obj->size
+      || num_reactors > 0xFFFF)
+    return 0;
+  hdl_off = obj->hdlpos - start;
+
+  // bit_read_bits keeps a trailing partial byte LSB first; make it one
+  // plain bit stream.
+  norm = (unsigned char *)calloc (full + 2, 1);
+  if (!norm)
+    return 0;
+  memcpy (norm, obj->unknown_bits, full);
+  for (int i = 0; i < rest; i++)
+    if ((obj->unknown_bits[full] >> i) & 1)
+      norm[full] |= 0x80 >> i;
+  c.chain = norm;
+  c.size = full + (rest ? 1 : 0);
+  c.version = c.from_version = dwg->header.from_version;
+  c.opts = dwg->opts;
+  c.codepage = dwg->header.codepage;
+
+  // the common handles at the start of the handle stream, as decoded
+  exp_refs = (Dwg_Object_Ref **)calloc (num_reactors + 12, sizeof (BITCODE_H));
+  if (!exp_refs)
+    {
+      free (norm);
+      return 0;
+    }
+  if (!is_entity || ent->entmode == 0)
+    exp_refs[num_exp++] = is_entity ? ent->ownerhandle : oobj->ownerhandle;
+  for (n = 0; n < num_reactors; n++)
+    exp_refs[num_exp++] = reactors ? reactors[n] : NULL;
+  if (!(is_entity ? ent->is_xdic_missing : oobj->is_xdic_missing))
+    exp_refs[num_exp++] = is_entity ? ent->xdicobjhandle : oobj->xdicobjhandle;
+  if (is_entity)
+    {
+      exp_refs[num_exp++] = ent->layer;
+      if (ent->ltype_flags == 3)
+        exp_refs[num_exp++] = ent->ltype;
+      if (dwg->header.from_version >= R_2007a)
+        {
+          if (ent->material_flags == 3)
+            exp_refs[num_exp++] = ent->material;
+          if (ent->shadow_flags == 3)
+            exp_refs[num_exp++] = ent->shadow;
+        }
+      if (ent->plotstyle_flags == 3)
+        exp_refs[num_exp++] = ent->plotstyle;
+      if (dwg->header.from_version >= R_2010b)
+        {
+          if (ent->has_full_visualstyle)
+            exp_refs[num_exp++] = ent->full_visualstyle;
+          if (ent->has_face_visualstyle)
+            exp_refs[num_exp++] = ent->face_visualstyle;
+          if (ent->has_edge_visualstyle)
+            exp_refs[num_exp++] = ent->edge_visualstyle;
+        }
+    }
+  bit_set_position (&c, hdl_off);
+  for (n = 0; n < num_exp; n++)
+    {
+      Dwg_Handle h;
+      const BITCODE_RLL want = exp_refs[n] ? exp_refs[n]->absolute_ref : 0;
+      if (nbits - bit_position (&c) < 8 || bit_read_H (&c, &h)
+          || bit_position (&c) > nbits || proxy_abs_handle (obj, &h) != want)
+        {
+          LOG_WARN ("%s " FORMAT_HV ": common handle %u not found, no proxy",
+                    obj->dxfname, obj->handle.value, (unsigned)n);
+          free (exp_refs);
+          free (norm);
+          return 0;
+        }
+    }
+  free (exp_refs);
+  // the object's own handles, as many as we can read
+  while (nbits - bit_position (&c) >= 8)
+    {
+      Dwg_Handle h;
+      Dwg_Object_Ref *ref;
+      if (bit_read_H (&c, &h) || bit_position (&c) > nbits)
+        break;
+      ref = dwg_new_ref (dwg);
+      if (!ref)
+        break;
+      ref->handleref = h; // keep the code and relative offsets
+      ref->handleref.is_global = 1;
+      ref->absolute_ref = proxy_abs_handle (obj, &h);
+      ref->obj = NULL;
+      objids = (BITCODE_H *)realloc (objids,
+                                     (num_objids + 1) * sizeof (BITCODE_H));
+      if (!objids)
+        {
+          num_objids = 0;
+          break;
+        }
+      objids[num_objids++] = ref;
+    }
+  // the data bits, until the handle stream
+  bit_set_position (&c, 0);
+  data = hdl_off ? bit_read_bits (&c, hdl_off) : NULL;
+  free (norm);
+  if (hdl_off && !data)
+    {
+      free (objids);
+      return 0;
+    }
+
+  LOG_INFO ("unsupported %s " FORMAT_HV " as %s, class %d, %" PRIuSIZE
+            " data bits, %u handles\n",
+            obj->dxfname, obj->handle.value,
+            is_entity ? "ACAD_PROXY_ENTITY" : "ACAD_PROXY_OBJECT",
+            (int)obj->type, hdl_off, (unsigned)num_objids);
+  // DWG 91: the class number. DWG 95: AcDbDwgVersion | maint << 16, as in
+  // the header of the source DWG (gh109_1: 0x6A001F, as in its DXF)
+  if (!dwgver)
+    {
+      const struct dwg_versions *v
+          = dwg_version_struct (dwg->header.from_version);
+      dwgver = v ? v->dwg_version : 0;
+    }
+#  define SET_PROXY_FIELDS(_o, _parent)                                       \
+  memset (_o, 0, sizeof (*_o));                                               \
+  _o->parent = _parent;                                                       \
+  _o->proxy_id = obj->type; /* the 1st BL in the DWG, see dwg.spec */         \
+  _o->class_id = obj->type;                                                   \
+  _o->dwg_version = dwgver;                                                   \
+  _o->maint_version = dwg->header.maint_version;                              \
+  _o->version = _o->dwg_version | (_o->maint_version << 16);                  \
+  _o->from_dxf = 0;                                                           \
+  _o->data_numbits = (BITCODE_BL)hdl_off;                                     \
+  _o->data_size = (BITCODE_BL)((hdl_off + 7) / 8);                            \
+  _o->data = data;                                                            \
+  _o->num_objids = num_objids;                                                \
+  _o->objids = objids
+  if (is_entity)
+    {
+      Dwg_Entity_PROXY_ENTITY *_obj = (Dwg_Entity_PROXY_ENTITY *)realloc (
+          ent->tio.UNKNOWN_ENT, sizeof (Dwg_Entity_PROXY_ENTITY));
+      if (!_obj)
+        {
+          free (data);
+          free (objids);
+          return 0;
+        }
+      ent->tio.PROXY_ENTITY = _obj;
+      SET_PROXY_FIELDS (_obj, ent);
+      obj->type = obj->fixedtype = DWG_TYPE_PROXY_ENTITY;
+      obj->name = (char *)"PROXY_ENTITY";
+      obj->dxfname = (char *)"ACAD_PROXY_ENTITY";
+      if (!ent->xdicobjhandle)
+        ent->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+    }
+  else
+    {
+      Dwg_Object_PROXY_OBJECT *_obj = (Dwg_Object_PROXY_OBJECT *)realloc (
+          oobj->tio.UNKNOWN_OBJ, sizeof (Dwg_Object_PROXY_OBJECT));
+      if (!_obj)
+        {
+          free (data);
+          free (objids);
+          return 0;
+        }
+      oobj->tio.PROXY_OBJECT = _obj;
+      SET_PROXY_FIELDS (_obj, oobj);
+      obj->type = obj->fixedtype = DWG_TYPE_PROXY_OBJECT;
+      obj->name = (char *)"PROXY_OBJECT";
+      obj->dxfname = (char *)"ACAD_PROXY_OBJECT";
+      if (!oobj->xdicobjhandle)
+        oobj->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
+    }
+#  undef SET_PROXY_FIELDS
+  free (obj->unknown_bits);
+  obj->unknown_bits = NULL;
+  obj->num_unknown_bits = 0;
+  obj->klass = NULL;
+  obj->hdlpos = 0;
+  return 1;
+}
 #endif
 
 #ifndef DEBUG_CLASSES
@@ -2859,6 +3100,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           || (dwg->opts & DWG_OPTS_INDXF)))
     {
       int fixup = 0;
+      // Unknown objects of a newer DWG keep their data as proxies
+      for (i = 0; i < dwg->num_objects; i++)
+        {
+          Dwg_Object *obj = &dwg->object[i];
+          if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
+              || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+            encode_unknown_as_proxy (dwg, obj);
+        }
       // Scan for invalid/unstable/unsupported objects and entities
       // and eliminate or replace them with placeholders.
       LOG_TRACE ("Scan for unsupported objects\n");

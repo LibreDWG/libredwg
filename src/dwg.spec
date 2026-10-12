@@ -5664,11 +5664,15 @@ DWG_ENTITY (PROXY_ENTITY)
   // proxy_data_size is _ent->preview_size. see par 29
   DXF_OR_PRINT {
     // preview 92/310 is also proxy data
-    FIELD_BL (proxy_data_size, 92)
+    if (_obj->proxy_data) {
+      FIELD_BL (proxy_data_size, 92)
+      FIELD_TF (proxy_data, _obj->proxy_data_size, 310);
+    } // else from a DWG: the common entity graphics, already written
   } else {
+    // In the DWG the graphics are only in the common entity data
+    // (ODA spec 20.4.90, 29; ACadSharp reads none here either).
     FIELD_VALUE (proxy_data_size) = _ent->preview_size;
   }
-  FIELD_TF (proxy_data, _obj->proxy_data_size, 310);
 
   DECODER {
     _obj->data_numbits = (obj->hdlpos - bit_position (dat)) & 0xFFFFFFFF;
@@ -5701,22 +5705,25 @@ DWG_ENTITY (PROXY_ENTITY)
 
   COMMON_ENTITY_HANDLE_DATA;
 #ifdef IS_DECODER
-  {
-    size_t pos = bit_position (hdl_dat);
-    unsigned char opts = dat->opts;
-    dat->opts &= 0xf0;
-    _obj->num_objids = 0;
-    while (hdl_dat->byte < hdl_dat->size)
-      {
-        Dwg_Handle hdl;
-        if (bit_read_H (hdl_dat, &hdl))
-          break;
-        else
-          _obj->num_objids++;
-      }
-    dat->opts = opts;
-    bit_set_position (hdl_dat, pos);
-  }
+  // as many as we can read, a handle has at least 8 bits
+  while (bit_position (hdl_dat) + 8 <= 8 * hdl_dat->size)
+    {
+      Dwg_Handle hdl;
+      if (bit_read_H (hdl_dat, &hdl))
+        break; // error
+      else
+        {
+          // keep repeated handles, the order counts
+          BITCODE_H *objids = (BITCODE_H *)realloc (
+              _obj->objids, (_obj->num_objids + 1) * sizeof (BITCODE_H));
+          if (!objids)
+            break;
+          _obj->objids = objids;
+          _obj->objids[_obj->num_objids++]
+              = dwg_add_handleref (dwg, hdl.code, hdl.value, NULL);
+        }
+    }
+  LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
 #elif defined(IS_ENCODER) || defined(IS_JSON) || defined(IS_FREE)
   HANDLE_VECTOR (objids, num_objids, ANYCODE, 0);
 #elif defined(IS_DXF)
@@ -5824,16 +5831,22 @@ DWG_OBJECT (PROXY_OBJECT)
 
   START_OBJECT_HANDLE_STREAM;
 #if defined(IS_DECODER)
-  while (hdl_dat->byte < hdl_dat->size - 1)
+  // as many as we can read, a handle has at least 8 bits
+  while (bit_position (hdl_dat) + 8 <= 8 * hdl_dat->size)
     {
       Dwg_Handle hdl;
       if (bit_read_H (hdl_dat, &hdl))
         break; // error
       else
         {
-          BITCODE_H ref
+          // keep repeated handles, the order counts
+          BITCODE_H *objids = (BITCODE_H *)realloc (
+              _obj->objids, (_obj->num_objids + 1) * sizeof (BITCODE_H));
+          if (!objids)
+            break;
+          _obj->objids = objids;
+          _obj->objids[_obj->num_objids++]
               = dwg_add_handleref (dwg, hdl.code, hdl.value, NULL);
-          PUSH_HV (_obj, num_objids, objids, ref);
         }
     }
   LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
