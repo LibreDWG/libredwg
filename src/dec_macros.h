@@ -858,7 +858,7 @@
       {                                                                       \
         struct tm tm;                                                         \
         char _buf[60] = "";                                                   \
-        if (_obj->nam.days)                                                   \
+        if (_obj->nam.days >= 1000)                                           \
           strftime (_buf, 60, STRFTIME_DATE, cvt_TIMEBLL (&tm, _obj->nam));   \
         else                                                                  \
           strftime (_buf, 60, STRFTIME_TIME, cvt_TIMEBLL (&tm, _obj->nam));   \
