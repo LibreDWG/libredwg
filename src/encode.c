@@ -67,6 +67,9 @@ Dwg_Object_APPID *dwg_add_APPID (Dwg_Data *restrict dwg,
 Dwg_Object_VX_TABLE_RECORD *dwg_add_VX (Dwg_Data *restrict dwg,
                                         const char *restrict name);
 BITCODE_RLL dwg_obj_generic_handlevalue (void *_obj);
+// from dxfclasses
+int dwg_require_class (Dwg_Data *restrict dwg,
+                       const char *const restrict dxfname, const size_t len);
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 
@@ -2888,8 +2891,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             {
               fixup = 0;
               // if not found leaves placeholder_type at 0 to use DUMMY
-              LOG_HANDLE ("find_class ACDBPLACEHOLDER\n");
-              dwg_find_class (dwg, "ACDBPLACEHOLDER", &placeholder_type);
+              // add the class when missing (DXF of R2007+ drawings has none),
+              // else every unsupported object became a DUMMY
+              {
+                int num = dwg_require_class (dwg, "ACDBPLACEHOLDER", 15);
+                LOG_HANDLE ("require_class ACDBPLACEHOLDER: %d\n", num);
+                placeholder_type = num >= 500 ? (BITCODE_BS)num : 0;
+              }
               if (placeholder_type < 500)
                 {
                   LOG_ERROR ("Invalid class_id %d for ACDBPLACEHOLDER",
