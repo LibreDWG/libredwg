@@ -1361,8 +1361,8 @@ is_dxf_class_importable (const char *name)
                  !strEQc (name, "SUN") &&          // 421 missing
                  !strEQc (name, "PROXY_ENTITY") && // 90 missing
                  !strEQc (name, "PROXY_OBJECT") && // 90 missing
-                 // the ACAD_TABLE DXF groups are not imported (343, ...)
-                 !strEQc (name, "TABLE") && !strEQc (name, "TABLECONTENT");
+                 // the DXF table content is not imported
+                 !strEQc (name, "TABLECONTENT");
         }
       else
         return stability == DWG_CLASS_STABLE;

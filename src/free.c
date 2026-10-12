@@ -618,9 +618,10 @@ dwg_free_variable_type_private (Dwg_Object *restrict obj)
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
-// after downconvert_TABLE(): the free spec follows from_version, so the
-// pre-R2010 cells made for writing R2000/R2004 are not freed there.
-// Handles and colors in them are shallow copies, only free the texts.
+// after downconvert_TABLE() or the DXF import of a R2010+ DXF: the free
+// spec follows from_version, so the pre-R2010 cells are not freed there.
+// Handles and colors in them are shallow copies, only free the texts, the
+// value strings and the attribute definitions (both only from DXF).
 static void
 free_TABLE_r2010 (Dwg_Object *restrict obj)
 {
@@ -630,7 +631,19 @@ free_TABLE_r2010 (Dwg_Object *restrict obj)
   if (_obj->cells)
     {
       for (unsigned long i = 0; i < _obj->num_cells; i++)
-        FREE_IF (_obj->cells[i].text_value);
+        {
+          Dwg_TABLE_Cell *cell = &_obj->cells[i];
+          FREE_IF (cell->text_value);
+          FREE_IF (cell->value.data_string);
+          FREE_IF (cell->value.format_string);
+          FREE_IF (cell->value.value_string);
+          if (cell->attr_defs)
+            {
+              for (BITCODE_BL j = 0; j < cell->num_attr_defs; j++)
+                FREE_IF (cell->attr_defs[j].text);
+              FREE_IF (cell->attr_defs);
+            }
+        }
       FREE_IF (_obj->cells);
     }
   FREE_IF (_obj->col_widths);

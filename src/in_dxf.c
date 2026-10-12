@@ -7647,6 +7647,721 @@ find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
 }
 
 // add pair to XRECORD
+/* A table color (CMTC) from ACI: as the AutoCAD R2000 samples, method 0xc3
+   with the index in the low byte; 0 ByBlock, 256 ByLayer, 257 none. */
+static void
+dxf_table_color (BITCODE_CMC *restrict color, const int index)
+{
+  memset (color, 0, sizeof (*color));
+  color->index = (BITCODE_BS)index;
+  if (index == 0)
+    color->method = 0xc1;
+  else if (index == 256)
+    color->method = 0xc0;
+  else if (index == 257 || index < 0 || index > 257)
+    color->method = 0xc8;
+  else
+    color->method = 0xc3;
+  color->rgb = ((BITCODE_BL)color->method << 24)
+               | (color->method == 0xc3 ? (BITCODE_BL)index : 0);
+}
+
+/* ACAD_TABLE after <100 AcDbTable>: the pre-R2010 table data as AutoCAD
+   writes it to all DXF versions (see out_dxf: dxf_ACAD_TABLE). The cell
+   text comes from group 1 (with 2/3 chunks) before R2007, else from the
+   CELL_VALUE (the formatted value 302, else the string 1). The R2010+ table
+   content (TABLECONTENT) is not read; the DWG writer gets the pre-R2010
+   fields. Returns with the next 0 or EED (1001) pair, or NULL. */
+static Dxf_Pair *
+add_ACAD_TABLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_TABLE *o = obj->tio.entity->tio.TABLE;
+  Dwg_TABLE_Cell *cell = NULL;
+  long ci = -1;     // current cell
+  int in_value = 0; // inside CELL_VALUE ... ACVALUE_END
+  int after_cells = 0;
+  BITCODE_BL nrh = 0, ncw = 0, ai = 0;
+  BITCODE_BL to_seen = 0, cell_seen = 0; // overrides read
+  int tcolor_k = 0, tlw_k = 0, tvis_k = 0;
+  char *text = NULL;  // UTF-8, 2/3 chunks of a cell text
+  char *vtext = NULL; // UTF-8 string value (1) in CELL_VALUE
+  char *vfmt = NULL;  // UTF-8 formatted value (302) in CELL_VALUE
+
+#  define TBL_SET_STR(dst, u8)                                                \
+    do                                                                        \
+      {                                                                       \
+        if (dst)                                                              \
+          free (dst);                                                         \
+        dst = dwg_add_u8_input (dwg, u8);                                     \
+      }                                                                       \
+    while (0)
+  // the cell text of the previous value: as the R2010+ conversion, the
+  // formatted value (302), else the string value
+#  define TBL_END_VALUE                                                       \
+    do                                                                        \
+      {                                                                       \
+        if (cell && !cell->text_value)                                        \
+          {                                                                   \
+            if (vfmt && *vfmt)                                                \
+              TBL_SET_STR (cell->text_value, vfmt);                           \
+            else if (vtext && *vtext)                                         \
+              TBL_SET_STR (cell->text_value, vtext);                          \
+          }                                                                   \
+        free (vtext);                                                         \
+        free (vfmt);                                                          \
+        vtext = vfmt = NULL;                                                  \
+        in_value = 0;                                                         \
+      }                                                                       \
+    while (0)
+
+  o->horiz_direction.x = 1.0;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  while (pair != NULL && pair->code != 0
+         && !(pair->code >= 1000 && pair->code < 1999))
+    {
+      if (in_value)
+        {
+          switch (pair->code)
+            {
+            case 93:
+              cell->value.format_flags = pair->value.u;
+              break;
+            case 90:
+              cell->value.data_type = pair->value.u;
+              break;
+            case 91:
+              cell->value.data_long = pair->value.u;
+              break;
+            case 140:
+              cell->value.data_double = pair->value.d;
+              break;
+            case 11:
+              cell->value.data_point.x = cell->value.data_3dpoint.x
+                  = pair->value.d;
+              break;
+            case 21:
+              cell->value.data_point.y = cell->value.data_3dpoint.y
+                  = pair->value.d;
+              break;
+            case 31:
+              cell->value.data_3dpoint.z = pair->value.d;
+              break;
+            case 330:
+              cell->value.data_handle
+                  = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              break;
+            case 2:
+            case 3:
+            case 1:
+              {
+                const char *s = pair->value.s.ptr ? pair->value.s.ptr : "";
+                size_t l0 = vtext ? strlen (vtext) : 0;
+                char *n = (char *)realloc (vtext, l0 + strlen (s) + 1);
+                if (!n)
+                  break;
+                strcpy (n + l0, s);
+                vtext = n;
+                if (pair->code == 1)
+                  {
+                    TBL_SET_STR (cell->value.data_string, vtext);
+                    cell->value.data_size = (BITCODE_BL)strlen (vtext) + 1;
+                  }
+              }
+              break;
+            case 94:
+              cell->value.unit_type = pair->value.u;
+              break;
+            case 300:
+              TBL_SET_STR (cell->value.format_string,
+                           pair->value.s.ptr ? pair->value.s.ptr : "");
+              break;
+            case 303:
+            case 302:
+              {
+                const char *s = pair->value.s.ptr ? pair->value.s.ptr : "";
+                size_t l0 = vfmt ? strlen (vfmt) : 0;
+                char *n = (char *)realloc (vfmt, l0 + strlen (s) + 1);
+                if (!n)
+                  break;
+                strcpy (n + l0, s);
+                vfmt = n;
+                if (pair->code == 302)
+                  TBL_SET_STR (cell->value.value_string, vfmt);
+              }
+              break;
+            case 304: // ACVALUE_END
+              TBL_END_VALUE;
+              break;
+            default: // 92 data size, 310 date, ...
+              break;
+            }
+          goto next;
+        }
+      if (ci < 0 && !after_cells)
+        {
+          switch (pair->code)
+            {
+            case 280: // R2010+ table data version
+              break;
+            case 342:
+              o->tablestyle = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              LOG_TRACE ("TABLE.tablestyle = " FORMAT_REF " [H 342]\n",
+                         ARGS_REF (o->tablestyle));
+              break;
+            case 343:
+              o->block_header = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              LOG_TRACE ("TABLE.block_header = " FORMAT_REF " [H 343]\n",
+                         ARGS_REF (o->block_header));
+              break;
+            case 11:
+              o->horiz_direction.x = pair->value.d;
+              break;
+            case 21:
+              o->horiz_direction.y = pair->value.d;
+              break;
+            case 31:
+              o->horiz_direction.z = pair->value.d;
+              break;
+            case 90:
+              o->flag_for_table_value = (BITCODE_BS)pair->value.u;
+              break;
+            case 91:
+            case 92:
+              if (pair->value.u > 5000 || o->cells || nrh || ncw)
+                {
+                  LOG_ERROR ("Invalid TABLE.%s %u",
+                             pair->code == 91 ? "num_rows" : "num_cols",
+                             pair->value.u);
+                  goto invalid;
+                }
+              if (pair->code == 91)
+                {
+                  o->num_rows = pair->value.u;
+                  free (o->row_heights);
+                  o->row_heights = (BITCODE_BD *)xcalloc (
+                      o->num_rows ? o->num_rows : 1, sizeof (BITCODE_BD));
+                  if (!o->row_heights)
+                    goto invalid;
+                }
+              else
+                {
+                  o->num_cols = pair->value.u;
+                  free (o->col_widths);
+                  o->col_widths = (BITCODE_BD *)xcalloc (
+                      o->num_cols ? o->num_cols : 1, sizeof (BITCODE_BD));
+                  if (!o->col_widths)
+                    goto invalid;
+                }
+              LOG_TRACE ("TABLE.%s = %u [BL %d]\n",
+                         pair->code == 91 ? "num_rows" : "num_cols",
+                         pair->value.u, pair->code);
+              break;
+            case 93:
+              o->table_flag_override = pair->value.u;
+              o->has_table_overrides = pair->value.u ? 1 : 0;
+              break;
+            case 94:
+              o->border_color_overrides_flag = pair->value.u;
+              o->has_border_color_overrides = pair->value.u ? 1 : 0;
+              break;
+            case 95:
+              o->border_lineweight_overrides_flag = pair->value.u;
+              o->has_border_lineweight_overrides = pair->value.u ? 1 : 0;
+              break;
+            case 96:
+              o->border_visibility_overrides_flag = pair->value.u;
+              o->has_border_visibility_overrides = pair->value.u ? 1 : 0;
+              break;
+            case 141:
+              if (!o->row_heights || nrh >= o->num_rows)
+                goto invalid;
+              o->row_heights[nrh++] = pair->value.d;
+              break;
+            case 142:
+              if (!o->col_widths || ncw >= o->num_cols)
+                goto invalid;
+              o->col_widths[ncw++] = pair->value.d;
+              break;
+            case 171:
+              goto new_cell;
+            default:
+              LOG_WARN ("Unknown DXF code %d for %s", pair->code, "TABLE");
+              break;
+            }
+          goto next;
+        }
+      if (pair->code == 171 && !after_cells)
+        {
+        new_cell:
+          if (in_value)
+            TBL_END_VALUE;
+          if (!o->cells)
+            {
+              o->num_cells = (unsigned long)o->num_rows * o->num_cols;
+              if (!o->num_cells)
+                goto invalid;
+              o->cells = (Dwg_TABLE_Cell *)xcalloc (o->num_cells,
+                                                    sizeof (Dwg_TABLE_Cell));
+              if (!o->cells)
+                goto invalid;
+            }
+          if (cell && text)
+            {
+              // 2/3 chunks without a final 1
+              TBL_SET_STR (cell->text_value, text);
+            }
+          free (text);
+          text = NULL;
+          ci++;
+          if ((unsigned long)ci >= o->num_cells)
+            {
+              LOG_ERROR ("Too many TABLE cells, max %lu", o->num_cells);
+              goto invalid;
+            }
+          cell = &o->cells[ci];
+          cell->parent = o;
+          cell->type = pair->value.i;
+          cell->merged_width_flag = cell->merged_height_flag = 1;
+          ai = 0;
+          cell_seen = 0;
+          goto next;
+        }
+        // a cell override group, if the cell override flag has its bit
+#  define CELL_OVR(bit) (cell && (cell->cell_flag_override & (bit))           \
+                         && !(cell_seen & (bit)) && (cell_seen |= (bit)))
+        // the visibility overrides 0x8000-0x20000 are not in 177 (16-bit),
+        // only their groups (out_dxf)
+#  define CELL_VIS(bit) (cell && !(cell_seen & (bit))                         \
+                         && (dwg->header.from_version < R_2007                \
+                             || (cell->cell_flag_override & (bit)))           \
+                         && (cell_seen |= (bit))                              \
+                         && (cell->cell_flag_override |= (bit))               \
+                         && (cell->additional_data_flag = 1))
+      if (!after_cells)
+        {
+          switch (pair->code)
+            {
+            case 172:
+              cell->flags = pair->value.i;
+              goto next;
+            case 173:
+              cell->is_merged_value = pair->value.i ? 1 : 0;
+              goto next;
+            case 174:
+              cell->is_autofit_flag = pair->value.i ? 1 : 0;
+              goto next;
+            case 175:
+              cell->merged_width_flag = pair->value.u;
+              goto next;
+            case 176:
+              cell->merged_height_flag = pair->value.u;
+              goto next;
+            case 177:
+            case 91:
+              // 0x40000 (no override groups) is not in 177 (example_2000)
+              cell->cell_flag_override = pair->value.u;
+              cell->additional_data_flag = cell->cell_flag_override ? 1 : 0;
+              goto next;
+            case 178:
+              cell->virtual_edge_flag = pair->value.i;
+              goto next;
+            case 145:
+              cell->rotation = pair->value.d;
+              goto next;
+            case 344:
+              if (pair->value.u)
+                cell->text_style
+                    = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+              goto next;
+            case 340:
+              cell->block_handle
+                  = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+              goto next;
+            case 144:
+              cell->block_scale = pair->value.d;
+              goto next;
+            case 179:
+              if (pair->value.u > 5000 || cell->attr_defs)
+                goto invalid;
+              cell->num_attr_defs = pair->value.u;
+              cell->has_attr_defs = cell->num_attr_defs ? 1 : 0;
+              if (cell->num_attr_defs)
+                {
+                  cell->attr_defs = (Dwg_TABLE_AttrDef *)xcalloc (
+                      cell->num_attr_defs, sizeof (Dwg_TABLE_AttrDef));
+                  if (!cell->attr_defs)
+                    goto invalid;
+                }
+              ai = 0;
+              goto next;
+            case 331:
+              if (!cell->attr_defs || ai >= cell->num_attr_defs)
+                goto invalid;
+              cell->attr_defs[ai].attdef
+                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              cell->attr_defs[ai].index = (BITCODE_BS)(ai + 1);
+              cell->attr_defs[ai].parent = cell;
+              ai++;
+              goto next;
+            case 300:
+              if (cell->attr_defs && ai > 0 && ai <= cell->num_attr_defs)
+                TBL_SET_STR (cell->attr_defs[ai - 1].text,
+                             pair->value.s.ptr ? pair->value.s.ptr : "");
+              goto next;
+            case 2:
+            case 3:
+            case 1:
+              {
+                const char *s = pair->value.s.ptr ? pair->value.s.ptr : "";
+                size_t l0 = text ? strlen (text) : 0;
+                char *n = (char *)realloc (text, l0 + strlen (s) + 1);
+                if (!n)
+                  goto invalid;
+                strcpy (n + l0, s);
+                text = n;
+                if (pair->code == 1)
+                  {
+                    if (*text)
+                      TBL_SET_STR (cell->text_value, text);
+                    free (text);
+                    text = NULL;
+                  }
+              }
+              goto next;
+            case 92:
+              cell->unknown = pair->value.u;
+              goto next;
+            case 301: // CELL_VALUE
+              in_value = 1;
+              goto next;
+            case 170:
+              if (CELL_OVR (0x01))
+                {
+                  cell->cell_alignment = pair->value.i;
+                  goto next;
+                }
+              break;
+            case 283:
+              if (CELL_OVR (0x02))
+                {
+                  cell->bg_fill_none = pair->value.i ? 1 : 0;
+                  goto next;
+                }
+              break;
+            case 63:
+              if (CELL_OVR (0x04))
+                {
+                  dxf_table_color (&cell->bg_color, pair->value.i);
+                  goto next;
+                }
+              break;
+            case 64:
+              if (CELL_OVR (0x08))
+                {
+                  dxf_table_color (&cell->content_color, pair->value.i);
+                  goto next;
+                }
+              break;
+            case 7:
+              if (CELL_OVR (0x10))
+                {
+                  cell->text_style_override = find_tablehandle (dwg, pair);
+                  goto next;
+                }
+              break;
+            case 140:
+              if (CELL_OVR (0x20))
+                {
+                  cell->text_height = pair->value.d;
+                  goto next;
+                }
+              break;
+            case 69:
+              if (CELL_OVR (0x40))
+                {
+                  dxf_table_color (&cell->top_grid_color, pair->value.i);
+                  goto next;
+                }
+              break;
+            case 65:
+              if (CELL_OVR (0x80))
+                {
+                  dxf_table_color (&cell->right_grid_color, pair->value.i);
+                  goto next;
+                }
+              break;
+            case 66:
+              if (CELL_OVR (0x100))
+                {
+                  dxf_table_color (&cell->bottom_grid_color, pair->value.i);
+                  goto next;
+                }
+              break;
+            case 68:
+              if (CELL_OVR (0x200))
+                {
+                  dxf_table_color (&cell->left_grid_color, pair->value.i);
+                  goto next;
+                }
+              break;
+            case 279:
+              if (CELL_OVR (0x400))
+                {
+                  cell->top_grid_linewt = pair->value.i;
+                  goto next;
+                }
+              break;
+            case 275:
+              if (CELL_OVR (0x800))
+                {
+                  cell->right_grid_linewt = pair->value.i;
+                  goto next;
+                }
+              break;
+            case 276:
+              if (CELL_OVR (0x1000))
+                {
+                  cell->bottom_grid_linewt = pair->value.i;
+                  goto next;
+                }
+              break;
+            case 278:
+              if (CELL_OVR (0x2000))
+                {
+                  cell->left_grid_linewt = pair->value.i;
+                  goto next;
+                }
+              break;
+            case 289:
+              if (CELL_OVR (0x4000))
+                {
+                  cell->top_visibility = pair->value.i;
+                  goto next;
+                }
+              break;
+            case 285:
+              if (CELL_VIS (0x8000))
+                {
+                  cell->right_visibility = pair->value.i;
+                  goto next;
+                }
+              break;
+            case 286:
+              if (CELL_VIS (0x10000))
+                {
+                  cell->bottom_visibility = pair->value.i;
+                  goto next;
+                }
+              break;
+            case 288:
+              if (CELL_VIS (0x20000))
+                {
+                  cell->left_visibility = pair->value.i;
+                  goto next;
+                }
+              break;
+            default:
+              break;
+            }
+          // not a group of this cell: the table overrides after the last
+          if ((unsigned long)ci + 1 < o->num_cells)
+            {
+              LOG_WARN ("Unknown DXF code %d for TABLE.cells[%ld]", pair->code,
+                        ci);
+              goto next;
+            }
+          if (cell && text)
+            TBL_SET_STR (cell->text_value, text);
+          free (text);
+          text = NULL;
+          after_cells = 1;
+        }
+#  undef CELL_OVR
+#  undef CELL_VIS
+      // the table overrides after the cells, in the DWG order
+      {
+        static const struct
+        {
+          BITCODE_BL bit;
+          short code;
+          char type; // B, S, D, C, H
+          const char *name;
+        } tov[] = {
+          { 0x0001, 280, 'B', "title_suppressed" },
+          { 0x0004, 70, 'S', "flow_direction" },
+          { 0x0008, 40, 'D', "horiz_cell_margin" },
+          { 0x0010, 41, 'D', "vert_cell_margin" },
+          { 0x0020, 64, 'C', "title_row_color" },
+          { 0x0040, 64, 'C', "header_row_color" },
+          { 0x0080, 64, 'C', "data_row_color" },
+          { 0x0100, 283, 'B', "title_row_fill_none" },
+          { 0x0200, 283, 'B', "header_row_fill_none" },
+          { 0x0400, 283, 'B', "data_row_fill_none" },
+          { 0x0800, 63, 'C', "title_row_fill_color" },
+          { 0x1000, 63, 'C', "header_row_fill_color" },
+          { 0x2000, 63, 'C', "data_row_fill_color" },
+          { 0x4000, 170, 'S', "title_row_alignment" },
+          { 0x8000, 170, 'S', "header_row_alignment" },
+          { 0x10000, 170, 'S', "data_row_alignment" },
+          { 0x20000, 7, 'H', "title_text_style" },
+          { 0x40000, 7, 'H', "header_text_style" },
+          { 0x80000, 7, 'H', "data_text_style" },
+          { 0x100000, 140, 'D', "title_row_height" },
+          { 0x200000, 140, 'D', "header_row_height" },
+          { 0x400000, 140, 'D', "data_row_height" },
+        };
+        static const char *const borders[18]
+            = { "title_horiz_top",  "title_horiz_ins",  "title_horiz_bottom",
+                "title_vert_left",  "title_vert_ins",   "title_vert_right",
+                "header_horiz_top", "header_horiz_ins", "header_horiz_bottom",
+                "header_vert_left", "header_vert_ins",  "header_vert_right",
+                "data_horiz_top",   "data_horiz_ins",   "data_horiz_bottom",
+                "data_vert_left",   "data_vert_ins",    "data_vert_right" };
+        static const short bcode[6] = { 64, 65, 66, 63, 68, 69 };
+        char fname[64];
+        int done = 0;
+        if (pair->code == 281)
+          {
+            o->header_suppressed = pair->value.i ? 1 : 0;
+            goto next;
+          }
+        // the next table override with this code
+        for (int k = 0; k < ARRAY_SIZE (tov) && !done; k++)
+          {
+            if (!(o->table_flag_override & tov[k].bit)
+                || (to_seen & tov[k].bit) || tov[k].code != pair->code)
+              continue;
+            to_seen |= tov[k].bit;
+            done = 1;
+            switch (tov[k].type)
+              {
+              case 'B':
+                {
+                  BITCODE_B v = pair->value.i ? 1 : 0;
+                  dwg_dynapi_entity_set_value (o, "TABLE", tov[k].name, &v, 0);
+                }
+                break;
+              case 'S':
+                {
+                  BITCODE_BS v = (BITCODE_BS)pair->value.i;
+                  dwg_dynapi_entity_set_value (o, "TABLE", tov[k].name, &v, 0);
+                }
+                break;
+              case 'D':
+                dwg_dynapi_entity_set_value (o, "TABLE", tov[k].name,
+                                             &pair->value.d, 0);
+                break;
+              case 'C':
+                {
+                  BITCODE_CMC c;
+                  dxf_table_color (&c, pair->value.i);
+                  dwg_dynapi_entity_set_value (o, "TABLE", tov[k].name, &c, 0);
+                }
+                break;
+              case 'H':
+                {
+                  BITCODE_H h = find_tablehandle (dwg, pair);
+                  dwg_dynapi_entity_set_value (o, "TABLE", tov[k].name, &h, 0);
+                }
+                break;
+              default:
+                break;
+              }
+          }
+        // border colors, lineweights and visibilities, in the flag order
+        while (!done && tcolor_k < 18 && o->border_color_overrides_flag
+               && pair->code >= 63 && pair->code <= 69)
+          {
+            int k = tcolor_k++;
+            if (!(o->border_color_overrides_flag & (1U << k)))
+              continue;
+            if (bcode[k % 6] != pair->code)
+              LOG_WARN ("TABLE border color %d for %s_color", pair->code,
+                        borders[k]);
+            {
+              BITCODE_CMC c;
+              dxf_table_color (&c, pair->value.i);
+              snprintf (fname, sizeof (fname), "%s_color", borders[k]);
+              dwg_dynapi_entity_set_value (o, "TABLE", fname, &c, 0);
+            }
+            done = 1;
+          }
+        while (!done && tlw_k < 18 && o->border_lineweight_overrides_flag
+               && pair->code >= 274 && pair->code <= 279)
+          {
+            int k = tlw_k++;
+            BITCODE_BS v = (BITCODE_BS)pair->value.i;
+            if (!(o->border_lineweight_overrides_flag & (1U << k)))
+              continue;
+            snprintf (fname, sizeof (fname), "%s_linewt", borders[k]);
+            dwg_dynapi_entity_set_value (o, "TABLE", fname, &v, 0);
+            done = 1;
+          }
+        while (!done && tvis_k < 18 && o->border_visibility_overrides_flag
+               && pair->code >= 284 && pair->code <= 289)
+          {
+            int k = tvis_k++;
+            BITCODE_BS v = (BITCODE_BS)pair->value.i;
+            if (!(o->border_visibility_overrides_flag & (1U << k)))
+              continue;
+            snprintf (fname, sizeof (fname), "%s_visibility", borders[k]);
+            dwg_dynapi_entity_set_value (o, "TABLE", fname, &v, 0);
+            done = 1;
+          }
+        if (!done)
+          LOG_WARN ("Unknown DXF code %d for %s", pair->code, "TABLE");
+      }
+    next:
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  if (in_value)
+    TBL_END_VALUE;
+  if (cell && text)
+    TBL_SET_STR (cell->text_value, text);
+  free (text);
+  if (!o->cells && o->num_rows && o->num_cols)
+    {
+      // a table without cells
+      o->num_cells = (unsigned long)o->num_rows * o->num_cols;
+      o->cells
+          = (Dwg_TABLE_Cell *)xcalloc (o->num_cells, sizeof (Dwg_TABLE_Cell));
+      if (!o->cells)
+        o->num_cells = o->num_rows = o->num_cols = 0;
+      else
+        for (unsigned long i = 0; i < o->num_cells; i++)
+          {
+            o->cells[i].parent = o;
+            o->cells[i].type = 1;
+            o->cells[i].merged_width_flag = 1;
+            o->cells[i].merged_height_flag = 1;
+          }
+    }
+  o->num_cells = (unsigned long)o->num_rows * o->num_cols;
+  LOG_TRACE ("TABLE: %u rows, %u cols, %ld cells read\n", o->num_rows,
+             o->num_cols, ci + 1);
+  // the INSERT defaults
+  if (o->scale.x == 0.0 && o->scale.y == 0.0 && o->scale.z == 0.0)
+    o->scale.x = o->scale.y = o->scale.z = 1.0;
+  if (o->extrusion.x == 0.0 && o->extrusion.y == 0.0 && o->extrusion.z == 0.0)
+    o->extrusion.z = 1.0;
+  return pair;
+
+invalid:
+  free (text);
+  free (vtext);
+  free (vfmt);
+  LOG_ERROR ("Invalid DXF code %d for TABLE", pair ? pair->code : -1);
+  if (pair)
+    dxf_free_pair (pair);
+  return NULL;
+#  undef TBL_SET_STR
+#  undef TBL_END_VALUE
+}
+
 static Dxf_Pair *
 add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
            Dxf_Pair *restrict pair)
@@ -10506,6 +11221,16 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             {
               strncpy (subclass, pair->value.s.ptr, 79);
               subclass[79] = '\0';
+              if (obj->fixedtype == DWG_TYPE_TABLE
+                  && strEQc (subclass, "AcDbTable"))
+                {
+                  pair = add_ACAD_TABLE (obj, dat, pair);
+                  if (!pair)
+                    return NULL;
+                  if (pair->code == 0)
+                    return pair;
+                  goto start_loop; // EED
+                }
               // set the real objname
               if (strEQc (obj->name, "DIMENSION_ANG2LN")
                   || strEQc (obj->name, "DIMENSION"))
