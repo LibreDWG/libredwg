@@ -828,6 +828,21 @@ DWG_ENTITY (TABLE)
             // The text string is present only if the 344 handle is 0, and
             // only before R2007. R2007 stores the text in the value fields.
             PRE (R_2007a) {
+#ifdef IS_ENCODER
+              // R2007 to R2000/R2004: the text is in the value (UTF-16),
+              // text_value is empty. Without this every cell lost its text
+              // (example_2007, sample_AC1021 written as R2000).
+              if (dat->from_version >= R_2007a
+                  && FIELD_VALUE (cell.value.data_type) == 4
+                  && FIELD_VALUE (cell.value.data_string)
+                  && (!FIELD_VALUE (cell.text_value)
+                      || !*(BITCODE_TU)FIELD_VALUE (cell.text_value)))
+                {
+                  free (FIELD_VALUE (cell.text_value));
+                  FIELD_VALUE (cell.text_value) = (BITCODE_T)bit_wcs2dup (
+                      (BITCODE_TU)FIELD_VALUE (cell.value.data_string));
+                }
+#endif
               if (FIELD_VALUE (cell.type) == 1
                   && (!FIELD_VALUE (cell.text_style)
                       || !FIELD_VALUE (cell.text_style->absolute_ref)))
