@@ -1107,7 +1107,7 @@
                  (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       if (_obj->nam)                                                          \
-        free (_obj->nam);                                                     \
+        free (_obj->nam), _obj->nam = NULL;                                   \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define SUB_VECTOR_CHKCOUNT(o, nam, type, size, dat)                          \
@@ -1121,7 +1121,7 @@
           (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),         \
           AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);      \
       if (_obj->o.nam)                                                        \
-        free (_obj->o.nam);                                                   \
+        free (_obj->o.nam), _obj->o.nam = NULL;                               \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define VECTOR_CHKCOUNT_LV(nam, type, size, dat)                              \
@@ -1135,7 +1135,7 @@
           (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),         \
           AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);      \
       if (_obj->nam)                                                          \
-        free (_obj->nam);                                                     \
+        free (_obj->nam), _obj->nam = NULL;                                   \
       size = 0; /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
 // for static TFF types with a size field
