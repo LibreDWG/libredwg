@@ -3235,7 +3235,9 @@ decl_dxf_process_INSERT (MINSERT)
 #  if defined DEBUG_CLASSES
           return dwg_dxf_TABLESTYLE (dat, obj);
 #  else
-          if (dat->version >= R_2000)
+          // an R13/R14 DWG with tables has its TABLESTYLE: keep it, else
+          // the tables lost their style name (STANDARD) via DXF
+          if (dat->version >= R_2000 || dat->from_version < R_2000)
             return dwg_dxf_TABLESTYLE (dat, obj);
           else
             {
