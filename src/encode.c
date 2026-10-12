@@ -2799,6 +2799,49 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   return error;
 }
 
+/**
+ * dwg_encode(): the current generic encoder entry point.
+ *
+ * TODO: 2007 maps.
+ * 2010+ uses the 2004 format.
+ * Returns a summary bitmask of all errors.
+ * Skip all MATERIAL objects, DICTS and common properties
+ */
+AFL_GCC_TOOBIG
+/* R2004+ to R2000 as AutoCAD does it (sample_AC1032 vs AutoCAD's own R2000
+   save sample_AC1015):
+   - gradient HATCHes become solid fills of the first gradient color: R2000
+     has no gradients, the entity color was ByLayer instead of 5.
+   - MTEXT line breaks (LF): dwg_fixup_mtext_linebreaks. */
+static void
+downconvert_for_r2000 (Dwg_Data *restrict dwg)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity
+          || !obj->tio.entity->tio.HATCH)
+        continue;
+      if (obj->fixedtype == DWG_TYPE_HATCH)
+        {
+          Dwg_Entity_HATCH *h = obj->tio.entity->tio.HATCH;
+          Dwg_Color *c = &obj->tio.entity->color;
+          if (h->is_gradient_fill && h->num_colors && h->colors
+              && h->colors[0].color.index > 0
+              && h->colors[0].color.index < 256)
+            {
+              LOG_TRACE ("HATCH " FORMAT_HV " gradient => color %d\n",
+                         obj->handle.value, h->colors[0].color.index);
+              c->index = h->colors[0].color.index;
+              c->flag = 0;
+              c->method = 0;
+              c->rgb = 0;
+              c->raw = c->index;
+            }
+        }
+    }
+}
+
 /* R13/R14 to R2000+: the names AutoCAD 2000 uses. AutoCAD's R14 and R2000
    saves of the same drawing (example_r14, example_2000): LTYPE BYBLOCK,
    BYLAYER, CONTINUOUS become ByBlock, ByLayer, Continuous; STYLE and DIMSTYLE
@@ -2900,6 +2943,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   if (dwg->header.from_version >= R_13b1 && dwg->header.from_version < R_2000
       && dwg->header.version >= R_2000)
     upconvert_r14_names (dwg);
+  if (dwg->header.from_version >= R_2004 && dwg->header.version < R_2004)
+    downconvert_for_r2000 (dwg);
+  dwg_fixup_mtext_linebreaks (dwg);
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
   // We cannot write unknown_bits into another version, or when it's coming

@@ -3305,6 +3305,69 @@ dwg_rgb_palette_index (BITCODE_BS index)
     }
 }
 
+/* MTEXT line breaks are \P. AutoCAD writes them so in DWG and DXF (its own
+   R2000 save of sample_AC1032, whose MTEXT has LF). A raw LF in DXF was
+   written as ^J, which DXF readers keep as text. */
+EXPORT void
+dwg_fixup_mtext_linebreaks (Dwg_Data *restrict dwg)
+{
+  const int is_tu = IS_FROM_TU_DWG (dwg);
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      Dwg_Entity_MTEXT *m;
+      size_t len, n = 0, k = 0;
+      if (obj->fixedtype != DWG_TYPE_MTEXT || !obj->tio.entity
+          || !obj->tio.entity->tio.MTEXT || !obj->tio.entity->tio.MTEXT->text)
+        continue;
+      m = obj->tio.entity->tio.MTEXT;
+      if (is_tu)
+        {
+          BITCODE_TU t = (BITCODE_TU)m->text, nt;
+          len = bit_wcs2len (t);
+          for (size_t j = 0; j < len; j++)
+            n += t[j] == 0x0A;
+          if (!n || !(nt = (BITCODE_TU)calloc (len + n + 1, sizeof (*nt))))
+            continue;
+          for (size_t j = 0; j < len; j++)
+            if (t[j] == 0x0D && j + 1 < len && t[j + 1] == 0x0A)
+              ; // CR LF is one break
+            else if (t[j] == 0x0A)
+              {
+                nt[k++] = '\\';
+                nt[k++] = 'P';
+              }
+            else
+              nt[k++] = t[j];
+          free (m->text);
+          m->text = (BITCODE_T)nt;
+        }
+      else
+        {
+          char *t = (char *)m->text, *nt;
+          len = strlen (t);
+          for (size_t j = 0; j < len; j++)
+            n += t[j] == '\n';
+          if (!n || !(nt = (char *)calloc (len + n + 1, 1)))
+            continue;
+          for (size_t j = 0; j < len; j++)
+            if (t[j] == '\r' && j + 1 < len && t[j + 1] == '\n')
+              ;
+            else if (t[j] == '\n')
+              {
+                nt[k++] = '\\';
+                nt[k++] = 'P';
+              }
+            else
+              nt[k++] = t[j];
+          free (m->text);
+          m->text = (BITCODE_T)nt;
+        }
+      LOG_TRACE ("MTEXT " FORMAT_HV ": %u line breaks => \\P\n",
+                 obj->handle.value, (unsigned)n);
+    }
+}
+
 /* The nearest ACI color 1-255 of an RGB (squared distance). */
 EXPORT BITCODE_BS
 dwg_nearest_color_index (BITCODE_BL rgb)
