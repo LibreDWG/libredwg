@@ -5857,6 +5857,10 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               // obj->type = DWG_TYPE_UNKNOWN_OBJ;
               error |= dwg_decode_UNKNOWN_OBJ (dat, obj);
             }
+          // keep the class name (AEC_WALL, TCH_WALL...), as other readers do:
+          // the JSON and DXF said only UNKNOWN_ENT
+          if (klass && klass->dxfname)
+            obj->dxfname = klass->dxfname;
 
           if (error >= DWG_ERR_CRITICAL)
             *dat = abs_dat;
