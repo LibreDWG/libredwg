@@ -1111,7 +1111,19 @@ DWG_ENTITY_END
 DWG_OBJECT (TABLESTYLE)
   HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbTableStyle)
+#ifdef IS_DXF
+  // AutoCAD writes the R2007 layout in DXF for all versions, R2010+ with a
+  // leading 280 0. The R2010+ cell styles (TABLEFORMAT_BEGIN...) could not
+  // be read by other DXF readers (ACadSharp).
+  if (dat->from_version >= R_2010b && !_obj->num_rowstyles)
+    downconvert_TABLESTYLE ((Dwg_Object *)obj);
+  SINCE (R_2010b) {
+    VALUE_RC (0, 280);
+  }
+  {
+#else
   UNTIL (R_2007) {
+#endif
     FIELD_T (name, 3);
     FIELD_BS (flow_direction, 70);
     FIELD_BS (flags, 71);
@@ -1124,6 +1136,7 @@ DWG_OBJECT (TABLESTYLE)
       downconvert_TABLESTYLE (obj);
 #endif
   }
+#ifndef IS_DXF
   LATER_VERSIONS { // r2010+
 #ifdef IS_ENCODER
     if (dwg->header.from_version <= R_2007)
@@ -1158,8 +1171,13 @@ DWG_OBJECT (TABLESTYLE)
         DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
       }
   }
+#endif
 
+#ifdef IS_DXF
+  {
+#else
   UNTIL (R_2007) {
+#endif
     FIELD_VALUE (num_rowstyles) = 3;
     // 0: data, 1: title, 2: header
     #define rowstyle rowstyles[rcount1]
@@ -1172,6 +1190,14 @@ DWG_OBJECT (TABLESTYLE)
         SUB_FIELD_CMTC (rowstyle,text_color, 62);
         SUB_FIELD_CMTC (rowstyle,fill_color, 63);
         SUB_FIELD_B (rowstyle,has_bgcolor, 283);
+#ifdef IS_DXF
+        // R2007+ DXF: the data type (kGeneral 512), unit and format
+        SINCE (R_2007a) {
+          VALUE_BL (_obj->rowstyle.data_type ? _obj->rowstyle.data_type : 512, 90);
+          VALUE_BL (_obj->rowstyle.unit_type, 91);
+          VALUE_TFF ("", 1);
+        }
+#endif
 
         _obj->rowstyle.num_borders = 6;
         // grid: top, horizontal inside, bottom, left, vertical inside, right
