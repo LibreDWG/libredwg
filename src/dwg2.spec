@@ -3922,6 +3922,15 @@ DWG_ENTITY (GEOPOSITIONMARKER)
   if (FIELD_VALUE (enable_frame_text)) {
     DXF { FIELD_VALUE (ins_pt) = FIELD_VALUE (position); }
     CALL_SUBCLASS (_obj, GEOPOSITIONMARKER, AcDbMTextObjectEmbedded);
+    // unverified, kept from the former AcDbMTextObjectEmbedded_fields
+    FIELD_B (is_really_locked, 0);
+    DXF {} else {
+      FIELD_BS (annotative_data_size, 70);
+      if (FIELD_VALUE (annotative_data_size) > 0)
+        {
+          FIELD_BINARY (annotative_data, FIELD_VALUE (annotative_data_size), 310);
+        }
+    }
   }
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
