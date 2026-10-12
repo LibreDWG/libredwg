@@ -625,12 +625,16 @@ classes_section:
 
       i = dwg->num_classes;
       /* CWE-400: bound max classes to prevent DoS via crafted input.
-         Each class entry is at minimum ~10 bytes on disk;
-         sizeof(Dwg_Class) is a very generous upper bound. */
-      if ((size_t)i >= 100 + (size / sizeof (Dwg_Class)) || i >= 65535)
+         Each entry has at least 13 bits (ODA spec 5.8: BS number, BS
+         version/proxy flags, 3 TV with a BS length, B, BS item class id;
+         a BS has at least 2 bits), so a valid section of size bytes holds
+         at most size*8/13 classes: the memory stays linear in the input.
+         sizeof(Dwg_Class) bytes per entry cut valid drawings with short
+         names, e.g. 385 of the 478 classes of an AEC drawing at R2000. */
+      if ((size_t)i >= 1 + (size * 8) / 13 || i >= 65535)
         {
           LOG_ERROR ("Too many classes: %u, max %" PRIuSIZE, (unsigned)i,
-                     100 + (size / sizeof (Dwg_Class)));
+                     1 + (size * 8) / 13);
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
           goto handles_section;
         }
@@ -2302,8 +2306,8 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
       dwg->layout_type = 0;
       dwg->num_classes = max_num - 499;
-      if (max_num < 500
-          || dwg->num_classes > 100 + (size / sizeof (Dwg_Class)))
+      // at least 13 bits per class, see decode_R13_R2000 (CWE-400)
+      if (max_num < 500 || dwg->num_classes > 1 + ((size_t)size * 8) / 13)
         {
           LOG_ERROR ("Invalid max class number %d", (int)max_num);
           dwg->num_classes = 0;
