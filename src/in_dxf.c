@@ -8149,7 +8149,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict o, Bit_Chain *restrict dat,
       if (j == 0)
         j = (int)o->num_ctrl_pts;
       j--;
-      if (!o->ctrl_pts || j >= (int)o->num_ctrl_pts)
+      if (!o->ctrl_pts || j < 0 || j >= (int)o->num_ctrl_pts)
         {
           LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
                      o->num_ctrl_pts);
