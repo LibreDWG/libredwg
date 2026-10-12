@@ -1254,7 +1254,17 @@ decompress_R2004_section (Bit_Chain *restrict src, Bit_Chain *restrict dec)
 
   opcode1 = bit_read_RC (src);
   if ((opcode1 & 0xF0) == 0)
-    opcode1 = copy_bytes (read_literal_length (src, opcode1), src, dec);
+    {
+      lit_length = read_literal_length (src, opcode1);
+      // the literal must fit into the output buffer
+      if ((size_t)lit_length > dec->size - dec->byte)
+        {
+          LOG_ERROR ("Invalid literal_length %u > %" PRIuSIZE " dec.size",
+                     lit_length, dec->size);
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
+      opcode1 = copy_bytes (lit_length, src, dec);
+    }
 
   while (src->byte < src->size && dec->byte < dec->size && opcode1 != 0x11)
     {
@@ -1702,15 +1712,16 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   int error;
 
   if (decomp_data_size > 0x2f000000 && // 790Mb
-      (decomp_data_size > 8 * comp_data_size || comp_data_size > dat->size))
+      ((uint64_t)decomp_data_size > 8 * (uint64_t)comp_data_size
+       || comp_data_size > dat->size))
     {
       LOG_ERROR ("Invalid r2004_header.decomp_data_size %" PRIu32,
                  decomp_data_size);
       return DWG_ERR_OUTOFMEM;
     }
   dec.size = decomp_data_size;
-  dec.chain
-      = (BITCODE_RC *)calloc (decomp_data_size + 1024, sizeof (BITCODE_RC));
+  dec.chain = (BITCODE_RC *)calloc ((size_t)decomp_data_size + 1024,
+                                    sizeof (BITCODE_RC));
   if (!dec.chain)
     {
       LOG_ERROR ("Out of memory");
