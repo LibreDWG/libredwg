@@ -2849,7 +2849,10 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!klass || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
   is_entity = dwg_class_is_entity (klass);
-  if (dat->version < R_2000)
+  // Only when converting newer drawings to R13/R14 DXF. An R13/R14 DWG that
+  // has these classes (MULTILEADER, WIPEOUT, MESH... saved by newer AutoCAD)
+  // keeps them in its DXF, with the same CLASSES; they were all dropped.
+  if (dat->version < R_2000 && dat->from_version >= R_2000)
     {
       // keep only: IMAGE, LWPOLYLINE, HATCH
       if (is_entity && strNE (klass->dxfname, "IMAGE")
