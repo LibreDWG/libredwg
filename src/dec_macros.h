@@ -1097,7 +1097,7 @@
 #define TYPE_MAXELEMSIZE(type) dwg_bits_size[BITS_##type]
 #define VECTOR_CHKCOUNT(nam, type, size, dat)                                 \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
-      || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
+      || (int64_t)(size) * TYPE_MAXELEMSIZE (type) > AVAIL_BITS (dat))        \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
                  " bits for " #type ", have %" PRId64 " for %s.",             \
@@ -1109,7 +1109,7 @@
     }
 #define SUB_VECTOR_CHKCOUNT(o, nam, type, size, dat)                          \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
-      || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
+      || (int64_t)(size) * TYPE_MAXELEMSIZE (type) > AVAIL_BITS (dat))        \
     {                                                                         \
       LOG_ERROR (                                                             \
           "Invalid " #nam " size %" PRId64 ". Need min. %" PRId64             \
@@ -1123,7 +1123,7 @@
     }
 #define VECTOR_CHKCOUNT_LV(nam, type, size, dat)                              \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
-      || (int64_t)((size) * TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))      \
+      || (int64_t)(size) * TYPE_MAXELEMSIZE (type) > AVAIL_BITS (dat))        \
     {                                                                         \
       LOG_ERROR (                                                             \
           "Invalid " #nam " size %" PRId64 ". Need min. %" PRId64             \
