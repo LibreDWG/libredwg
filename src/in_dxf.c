@@ -4214,7 +4214,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               lline->num_breaks = k + 1;
               lline->breaks = (Dwg_LEADER_Break *)realloc (
                   lline->breaks, (k + 1) * sizeof (Dwg_LEADER_Break));
-              memset (&ctx->leaders[k], 0, sizeof (Dwg_LEADER_Break));
+              memset (&lline->breaks[k], 0, sizeof (Dwg_LEADER_Break));
               lline->breaks[k].start.x = pair->value.d;
               LOG_TRACE (
                   "%s.leaders[].lines[%d].breaks[%d].start.x = %f [3BD %d]\n",
@@ -7290,7 +7290,10 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
       if (pair->code == 7)
         {
           dxf_free_pair (pair);
-          goto next_field; // one more cached field
+          // one more cached field: re-use the last child, never go beyond
+          // the allocated num_childval (i == num_childval here)
+          i = o->num_childval - 1;
+          goto next_field;
         }
       else if (i + 1 == o->num_childval)
         {
