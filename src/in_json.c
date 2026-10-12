@@ -1600,6 +1600,11 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, name,
                                                "eed[i].handles", NULL, -1);
+                  if (!hdl)
+                    {
+                      LOG_ERROR ("Invalid eed[%u].handle", i);
+                      break;
+                    }
                   memcpy (&obj->eed[i].handle, &hdl->handleref,
                           sizeof (Dwg_Handle));
                   if (isize != (int)i || isize > (int)obj->num_eed)
@@ -1651,7 +1656,10 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         /*PRE (R_2007a)*/
                         {
                           char *s = json_string (dat, tokens);
-                          BITCODE_RS len = strlen (s) & 0xFFFF;
+                          BITCODE_RS len;
+                          if (!s)
+                            break;
+                          len = strlen (s) & 0xFFFF;
                           if (eed_need_size (dat, obj->eed, i, len + 1 + 4,
                                              &have, &alloc))
                             data = obj->eed[i].data;
@@ -1734,6 +1742,10 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             = json_HANDLE (dat, dwg, tokens, name,
                                            "eed[i].u.eed_5.entity", NULL, -1);
                         JSON_TOKENS_CHECK_OVERFLOW_VOID
+                        if (!hdl)
+                          break;
+                        if (eed_need_size (dat, obj->eed, i, 8, &have, &alloc))
+                          data = obj->eed[i].data;
                         memcpy (&data->u.eed_5.entity, &hdl->handleref.value,
                                 sizeof (hdl->handleref.value));
                         break;
@@ -1826,7 +1838,10 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             case DWG_VT_STRING:
               {
                 char *s = json_string (dat, tokens);
-                size_t len = strlen (s);
+                size_t len;
+                if (!s)
+                  return DWG_ERR_INVALIDDWG;
+                len = strlen (s);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
                 if (len > 0xFFFF)
                   {
@@ -3671,7 +3686,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "num_unknown_bits"))
             {
-              obj->num_unknown_bits = json_long (dat, tokens);
+              BITCODE_RL num = json_long (dat, tokens);
+              // if the buffer is already there, its size wins
+              if (!obj->unknown_bits)
+                obj->num_unknown_bits = num;
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
               LOG_TRACE ("num_unknown_bits: %d\n", (int)obj->num_unknown_bits);
             }
@@ -3696,7 +3714,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                            key, read, blen);
               buf[blen] = '\0';
               free (hex);
-              if (!obj->num_unknown_bits)
+              // the count must never exceed the buffer
+              if (!obj->num_unknown_bits
+                  || obj->num_unknown_bits > (BITCODE_RL)(blen * 8))
                 obj->num_unknown_bits
                     = (BITCODE_RL)(blen * 8); // minus some padding bits
               if (obj->unknown_bits)
@@ -3709,7 +3729,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "num_unknown_rest"))
             {
-              obj->num_unknown_rest = json_long (dat, tokens);
+              BITCODE_RL num = json_long (dat, tokens);
+              // if the buffer is already there, its size wins
+              if (!obj->unknown_rest)
+                obj->num_unknown_rest = num;
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
               LOG_TRACE ("num_unknown_rest: %d\n", (int)obj->num_unknown_rest);
             }
@@ -3733,7 +3756,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   memset (buf, 0, blen);
                 }
-              if (!obj->num_unknown_rest)
+              // the count must never exceed the buffer
+              if (!obj->num_unknown_rest
+                  || obj->num_unknown_rest > (BITCODE_RL)(blen * 8))
                 obj->num_unknown_rest
                     = (BITCODE_RL)(blen * 8); // minus some padding bits
               if (obj->unknown_rest)
