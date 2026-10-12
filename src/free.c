@@ -642,11 +642,12 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               SUB_FIELD_CMTC (rowstyles[i].borders[j], color, 0);
             }
         FREE_IF (_obj->rowstyles[i].borders);
-        // rowstyles[0].text_style, text_color and fill_color might be shallow
-        // copies of the cellstyle content_format/bg_color made by
-        // downconvert_TABLESTYLE. They are owned and freed via the spec free
-        // below, so freeing them here would double-free them.
-        if (_obj->ovr.type != 1 || i > 0)
+        // rowstyles[0].text_style, text_color and fill_color are shallow
+        // copies of the sty.cellstyle (or ovr.cellstyle if ovr.type == 1)
+        // content_format/bg_color made by downconvert_TABLESTYLE. They are
+        // owned and freed via the spec free below, so freeing them here
+        // would double-free them.
+        if (i > 0)
           {
             SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
             SUB_FIELD_CMTC (rowstyles[i], text_color, 0);
