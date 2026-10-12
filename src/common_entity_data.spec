@@ -376,8 +376,10 @@
     {
       FIELD_B (isbylayerlt, 0);
 #ifdef IS_DECODER
-      if (FIELD_VALUE (isbylayerlt))
-        FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
+      // not ByLayer: the linetype handle (3). The if (isbylayerlt) before
+      // left every R13/R14 entity with an own linetype at 0 (ByLayer) when
+      // written as R2000 (example_r14: CONTINUOUS became ByLayer).
+      FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
 #endif
     }
   SINCE (R_2004a) //ODA bug
