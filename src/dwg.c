@@ -1229,7 +1229,11 @@ get_first_owned_entity (const Dwg_Object *hdr)
         dwg_resolve_objectrefs_silent (dwg);
       _hdr->__iterator = 0; /* reset step counter for cycle detection */
       /* With r2000 we rather follow the next_entity chain */
-      return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
+      // by the handle: refs added by dwg_fixup_BLOCKS_entities (R2004+ to
+      // R2000) are not resolved yet, ->obj was NULL and dwg2dxf --as r2000
+      // wrote no entities
+      return _hdr->first_entity ? dwg_ref_object (dwg, _hdr->first_entity)
+                                : NULL;
     }
   else if (version >= R_2004 || version < R_13b1)
     {
@@ -1588,7 +1592,8 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
       BITCODE_BL max_steps;
       /* With r2000 we rather follow the next_entity chain. It may jump around
        * the linked list. */
-      if (!_hdr->last_entity || current == _hdr->last_entity->obj)
+      if (!_hdr->last_entity
+          || current->handle.value == _hdr->last_entity->absolute_ref)
         return NULL;
       /* Cycle detection: __iterator was reset in get_first_owned_entity */
       _hdr->__iterator++;
@@ -2693,6 +2698,34 @@ dwg_ctrl_table (Dwg_Data *restrict dwg, const char *restrict table)
 // Note that we cannot set the ref->obj here, as it may still move by realloc
 // dwg->object[]
 // See also the silent variant: dwg_find_tablehandle_silent()
+/* A found table record: remember the special linetypes. */
+static BITCODE_H
+tablehandle_found (Dwg_Header_Variables *restrict vars,
+                   const char *restrict table, const char *restrict name,
+                   BITCODE_H ref)
+{
+  LOG_INSANE ("Found %s\n", name);
+  if (strEQc (table, "LTYPE"))
+    {
+      if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
+        {
+          if (!vars->LTYPE_BYLAYER)
+            vars->LTYPE_BYLAYER = ref;
+        }
+      else if (strEQc (name, "BYBLOCK") || strEQc (name, "ByBlock"))
+        {
+          if (!vars->LTYPE_BYBLOCK)
+            vars->LTYPE_BYBLOCK = ref;
+        }
+      else if (strEQc (name, "CONTINUOUS") || strEQc (name, "Continuous"))
+        {
+          if (!vars->LTYPE_CONTINUOUS)
+            vars->LTYPE_CONTINUOUS = ref;
+        }
+    }
+  return ref;
+}
+
 EXPORT BITCODE_H
 dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                       const char *restrict table)
@@ -2702,6 +2735,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
   Dwg_Header_Variables *vars = &dwg->header_vars;
+  BITCODE_H nocase_found = NULL;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (!dwg || !name || !table)
@@ -2786,37 +2820,29 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                                        &isnew, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
-      if (ok && hdlname
-          && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
+      // An exact match first, else the first one ignoring case: drawings of
+      // other software can have both STANDARD and Standard (gh109_1), and
+      // its DIMENSIONs referring to "STANDARD" got "Standard" via DXF.
+      if (ok && hdlname && !strEQ (name, hdlname)
+          && !strcasecmp (name, hdlname))
         {
-          LOG_INSANE ("Found %s\n", name);
+          if (!nocase_found)
+            nocase_found = hdlv[i];
           if (isnew)
             free (hdlname);
-
-          if (strEQc (table, "LTYPE"))
-            {
-              if (strEQc (name, "BYLAYER") || strEQc (name, "ByLayer"))
-                {
-                  if (!vars->LTYPE_BYLAYER)
-                    vars->LTYPE_BYLAYER = hdlv[i];
-                }
-              else if (strEQc (name, "BYBLOCK") || strEQc (name, "ByBlock"))
-                {
-                  if (!vars->LTYPE_BYBLOCK)
-                    vars->LTYPE_BYBLOCK = hdlv[i];
-                }
-              else if (strEQc (name, "CONTINUOUS")
-                       || strEQc (name, "Continuous"))
-                {
-                  if (!vars->LTYPE_CONTINUOUS)
-                    vars->LTYPE_CONTINUOUS = hdlv[i];
-                }
-            }
-          return hdlv[i];
+          continue;
+        }
+      if (ok && hdlname && strEQ (name, hdlname))
+        {
+          if (isnew)
+            free (hdlname);
+          return tablehandle_found (vars, table, name, hdlv[i]);
         }
       if (ok && isnew && hdlname)
         free (hdlname);
     }
+  if (nocase_found)
+    return tablehandle_found (vars, table, name, nocase_found);
 
   LOG_INSANE ("Not found in %u APPID entries\n", num_entries);
   return NULL;
