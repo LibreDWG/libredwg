@@ -8366,6 +8366,8 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
         {
           for (unsigned i = 0; i < _obj->rowstyles[2].num_borders; i++)
             {
+              if (i >= _obj->ovr.cellstyle.num_borders)
+                break;
               _obj->rowstyles[2].borders[i].linewt
                   = _obj->ovr.cellstyle.borders[i].linewt;
               _obj->rowstyles[2].borders[i].visible
