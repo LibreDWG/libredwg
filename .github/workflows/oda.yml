@@ -35,7 +35,7 @@ jobs:
         deb="$(perl -lne'/(ODAFileConverter_QT6_lnxX64[^{\s"<>]*\.deb)/ && print $1' oda.html | head -1)"
         wget -q -O $deb https://www.opendesign.com/guestfiles/get?filename=$deb
         sudo apt update
-        sudo apt-get -y install qt5dxcb-plugin
+        sudo apt-get -y install qt5dxcb-plugin libopengl0 libxcb-cursor0
         sudo dpkg -i $deb
         cd /usr/lib/x86_64-linux-gnu
         sudo ln -s libxcb-util.so.1 libxcb-util.so.0
