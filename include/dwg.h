@@ -3006,6 +3006,7 @@ typedef struct _dwg_3DSOLID_material
   BITCODE_BS revision_minor2;                                           \
   BITCODE_RC revision_bytes[9];                                         \
   BITCODE_BL end_marker;                                                \
+  BITCODE_BL unknown_2007; /* R2007+, before the R2013 revision guid */ \
   BITCODE_H history_id;                                                 \
   BITCODE_B has_revision_guid;                                          \
   BITCODE_B acis_empty_bit

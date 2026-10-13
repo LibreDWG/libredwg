@@ -376,8 +376,10 @@
     {
       FIELD_B (isbylayerlt, 0);
 #ifdef IS_DECODER
-      if (FIELD_VALUE (isbylayerlt))
-        FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
+      // not ByLayer: the linetype handle (3). The if (isbylayerlt) before
+      // left every R13/R14 entity with an own linetype at 0 (ByLayer) when
+      // written as R2000 (example_r14: CONTINUOUS became ByLayer).
+      FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
 #endif
     }
   SINCE (R_2004a) //ODA bug
@@ -430,6 +432,17 @@
         LOG_TRACE (" color.flag: 0x%x\n", _ent->color.flag);
 #endif
       flags = _ent->color.flag;
+      // The RGB comes first, then the transparency (ODA 2.11 ENC, and
+      // ACadSharp). With both, reading the transparency first swapped them:
+      // a true color line got index 183 and an RGB of 0x01000000.
+      if ((flags & 0x80) && !(flags & 0x40)) // and not a reference
+        {
+          DXF {
+            VALUE_BL (_ent->color.rgb & 0x00ffffff, 420);
+          } else {
+            FIELD_BLx (color.rgb, 420); // ODA bug, documented as BS
+          }
+        }
       if (flags & 0x20)
         {
 #ifdef IS_ENCODER
@@ -455,16 +468,14 @@
       if (flags & 0x40)
         {
 #ifndef IS_ENCODER
+#ifdef IS_DECODER
+          // R2007+: read once, later, by dwg_decode_common_entity_handle_data.
+          // Reading it here as well consumed the next handle, the layer, so
+          // entities with a color book color lost their layer.
+          if (dat->from_version < R_2007)
+#endif
           FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9 lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 #endif
-        }
-      else if (flags & 0x80) // and not a reference
-        {
-          DXF {
-            VALUE_BL (_ent->color.rgb & 0x00ffffff, 420);
-          } else {
-            FIELD_BLx (color.rgb, 420); // ODA bug, documented as BS
-          }
         }
       if ((flags & 0x41) == 0x41)
         {

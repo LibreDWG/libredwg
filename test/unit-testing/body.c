@@ -150,7 +150,14 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (body, BODY, revision_major, BL);
       CHK_ENTITY_TYPE (body, BODY, revision_minor1, BS);
       CHK_ENTITY_TYPE (body, BODY, revision_minor2, BS);
-      CHK_ENTITY_TYPE (body, BODY, revision_bytes, TV);
+      /* an array: compare the contents, not the addresses */
+      if (!dwg_dynapi_entity_value (body, "BODY", "revision_bytes",
+                                    &revision_bytes, NULL)
+          || memcmp (revision_bytes, body->revision_bytes,
+                     sizeof (revision_bytes)))
+        fail ("BODY.revision_bytes");
+      else
+        pass ();
       CHK_ENTITY_TYPE (body, BODY, end_marker, BL);
     }
 

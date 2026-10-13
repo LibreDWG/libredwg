@@ -2395,10 +2395,10 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                      dwg->dwg_class[i].item_class_id);
 
           dwg->dwg_class[i].num_instances = bit_read_BL (&sec_dat);
-          dwg->dwg_class[i].dwg_version = bit_read_BS (&sec_dat);
-          dwg->dwg_class[i].maint_version = bit_read_BS (&sec_dat);
+          dwg->dwg_class[i].dwg_version = bit_read_BL (&sec_dat);
+          dwg->dwg_class[i].maint_version = bit_read_BL (&sec_dat);
           dwg->dwg_class[i].unknown_1 = bit_read_BL (&sec_dat);
-          dwg->dwg_class[i].unknown_1 = bit_read_BL (&sec_dat);
+          dwg->dwg_class[i].unknown_2 = bit_read_BL (&sec_dat);
           LOG_TRACE ("num_instances:    %u\n",
                      dwg->dwg_class[i].num_instances);
           LOG_HANDLE ("dwg version:      %u (%u)\n",
@@ -3937,8 +3937,10 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       }
       LATER_VERSIONS
       {
-        data->u.eed_3.layer = bit_read_RLL (dat);
-        LOG_TRACE ("layer: " FORMAT_RLL " [RLL]", data->u.eed_3.layer);
+        // big-endian as the entity handle (5): AutoCAD's sample_AC1015 has
+        // 00..00 08 F5 for its LAYER app_layer 8F5
+        data->u.eed_3.layer = bit_read_RLL_BE (dat);
+        LOG_TRACE ("layer: " FORMAT_RLL " [RLL_BE]", data->u.eed_3.layer);
       }
       break;
     case 4:

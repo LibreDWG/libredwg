@@ -6933,8 +6933,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       }
       LATER_VERSIONS
       {
-        bit_write_RLL (dat, data->u.eed_3.layer);
-        LOG_TRACE ("layer: " FORMAT_RLL " [RLL]", data->u.eed_3.layer);
+        bit_write_RLL_BE (dat, data->u.eed_3.layer);
+        LOG_TRACE ("layer: " FORMAT_RLL " [RLL_BE]", data->u.eed_3.layer);
       }
       break;
     case 4:
