@@ -32,7 +32,7 @@ jobs:
     - run: |
         wget -q -O oda.html https://www.opendesign.com/guestfiles/oda_file_converter
         #deb=ODAFileConverter_QT6_lnxX64_8.3dll_27.1.deb
-        deb="$(perl -lne'/(ODAFileConverter_QT6_lnxX64.*\.deb)/ && print $1' oda.html)"
+        deb="$(perl -lne'/(ODAFileConverter_QT6_lnxX64[^{\s"<>]*\.deb)/ && print $1' oda.html | head -1)"
         wget -q -O $deb https://www.opendesign.com/guestfiles/get?filename=$deb
         sudo apt update
         sudo apt-get -y install qt5dxcb-plugin
