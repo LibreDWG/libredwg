@@ -5404,6 +5404,17 @@ DWG_OBJECT (LAYOUT)
   SINCE (R_2004a) {
     HANDLE_VECTOR (viewports, num_viewports, 4, 0);
   }
+  DXF {
+    // The overall (paperspace) viewport is the first entry of viewports.
+    // AutoCAD and ODA write it as 331 when active_viewport is NULL; without
+    // it a DXF reader cannot tell the sheet view from the model viewports.
+    if ((!_obj->active_viewport || !_obj->active_viewport->absolute_ref)
+        && _obj->num_viewports > 0 && _obj->viewports && _obj->viewports[0]
+        && _obj->viewports[0]->absolute_ref)
+      {
+        VALUE_HANDLE (_obj->viewports[0], viewports, 4, 331);
+      }
+  }
 
 DWG_OBJECT_END
 
