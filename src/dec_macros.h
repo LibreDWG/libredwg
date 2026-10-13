@@ -129,6 +129,42 @@
     FIELD_G_TRACE (o.nam, cast, dxf);                                         \
   }
 
+#define LOG_TRACE_TV_NAME(nam, value, dxfgroup)                               \
+  {                                                                           \
+    char *_name = format_field_name (#nam, rcount1, rcount2, 0);              \
+    LOG_TRACE_TV_N (_name ? _name : #nam, value, dxfgroup);                   \
+    if (_name)                                                                \
+      free (_name);                                                           \
+  }
+
+#define LOG_TRACE_TV_NAME_I(nam, idx, value, dxfgroup)                        \
+  {                                                                           \
+    char *_name = format_field_name (#nam, rcount1, rcount2, idx);            \
+    LOG_TRACE_TV_N (_name ? _name : #nam, value, dxfgroup);                   \
+    if (_name)                                                                \
+      free (_name);                                                           \
+  }
+
+#define LOG_TRACE_TU_NAME(nam, value, dxfgroup)                               \
+  {                                                                           \
+    char *_name = format_field_name (#nam, rcount1, rcount2, 0);              \
+    GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+    LOG_TRACE_TU (_name ? _name : #nam, value, dxfgroup);                     \
+    GCC46_DIAG_RESTORE                                                        \
+    if (_name)                                                                \
+      free (_name);                                                           \
+  }
+
+#define LOG_TRACE_TU_NAME_I(nam, idx, value, type, dxfgroup)                  \
+  {                                                                           \
+    char *_name = format_field_name (#nam, rcount1, rcount2, vcount);         \
+    GCC46_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+    LOG_TRACE_TU_I (_name ? _name : #nam, idx, value, type, dxfgroup);        \
+    GCC46_DIAG_RESTORE                                                        \
+    if (_name)                                                                \
+      free (_name);                                                           \
+  }
+
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
@@ -379,8 +415,11 @@
         {                                                                     \
           if (ref)                                                            \
             {                                                                 \
-              LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (ref),      \
-                         dxf);                                                \
+              char *_name = format_field_name (#nam, rcount1, rcount2, 0);    \
+              LOG_TRACE ("%s: " FORMAT_REF " [H %d]",                         \
+                         _name ? _name : #nam, ARGS_REF (ref), dxf);          \
+              if (_name)                                                      \
+                free (_name);                                                 \
               if (dwg_ref_object_silent (dwg, ref)                            \
                   && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                       \
                 {                                                             \
@@ -445,10 +484,10 @@
         {                                                                     \
           if (ref)                                                            \
             {                                                                 \
-              char *_name = strrplc (#nam, "[vcount]", "");                   \
-              LOG_TRACE ("%s[%d]: " FORMAT_REF " [H* %d]",                    \
-                         _name ? _name : #nam, (int)vcount, ARGS_REF (ref),   \
-                         dxf);                                                \
+              char *_name = format_field_name (#nam, rcount1, rcount2,        \
+                                               vcount);                       \
+              LOG_TRACE ("%s: " FORMAT_REF " [H* %d]",                        \
+                         _name ? _name : #nam, ARGS_REF (ref), dxf);          \
               if (_name)                                                      \
                 free (_name);                                                 \
               if (dwg_ref_object_silent (dwg, ref)                            \
@@ -646,12 +685,12 @@
 #define FIELD_TV(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = bit_read_TV (dat);                                            \
-    LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);                   \
+    LOG_TRACE_TV_NAME (nam, _obj->nam, dxf);                                  \
   }
 #define FIELD_TU(nam, dxf)                                                    \
   {                                                                           \
     _obj->nam = (BITCODE_TU)bit_read_TU (str_dat);                            \
-    LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);                  \
+    LOG_TRACE_TU_NAME (nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);              \
   }
 // clang-format on
 #define FIELD_T(nam, dxf)                                                     \
@@ -659,18 +698,18 @@
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
-        LOG_TRACE_TV (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);               \
+        LOG_TRACE_TV_NAME (nam, _obj->nam, dxf);                              \
       }                                                                       \
     else                                                                      \
       {                                                                       \
         if (!obj || obj->has_strings) /* header_vars */                       \
           {                                                                   \
             _obj->nam = (BITCODE_T)bit_read_TU (str_dat);                     \
-            LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);          \
+            LOG_TRACE_TU_NAME (nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);      \
           }                                                                   \
         else                                                                  \
           {                                                                   \
-            LOG_TRACE_TU (#nam, L"", dxf);                                    \
+            LOG_TRACE_TU_NAME (nam, L"", dxf);                                \
             LOG_INSANE (" !has_strings\n");                                   \
           }                                                                   \
       }                                                                       \
@@ -1262,8 +1301,8 @@
           PRE (R_2007a)                                                       \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
-            LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
-                       _obj->name[vcount], dxf);                              \
+            LOG_TRACE_TV_NAME_I (name[vcount], vcount, _obj->name[vcount],    \
+                                 dxf);                                        \
             LOG_POS                                                           \
             if (!_obj->name[vcount])                                          \
               return DWG_ERR_VALUEOUTOFBOUNDS;                                \
@@ -1271,7 +1310,7 @@
           LATER_VERSIONS                                                      \
           {                                                                   \
             _obj->name[vcount] = (char *)bit_read_##type (dat);               \
-            LOG_TRACE_TU_I (#name, vcount, _obj->name[vcount], type, dxf);    \
+            LOG_TRACE_TU_NAME_I (name, vcount, _obj->name[vcount], type, dxf);\
             if (!_obj->name[vcount])                                          \
               return DWG_ERR_VALUEOUTOFBOUNDS;                                \
           }                                                                   \

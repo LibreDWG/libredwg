@@ -595,6 +595,9 @@ const unsigned char *dwg_sentinel (const Dwg_Sentinel sentinel_id);
 // used by unit-tests
 EXPORT char *strrplc (const char *s, const char *from,
                       const char *to) __nonnull_all;
+EXPORT char *format_field_name (const char *s, long row_count1,
+                                long row_count2,
+                                long value_count) __nonnull ((1));
 
 #define strEQ(s1, s2) !strcmp ((s1), (s2))
 #define strNE(s1, s2) (strcmp ((s1), (s2)) != 0)
