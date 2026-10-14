@@ -343,8 +343,9 @@
     const char end[] = "\016\003End\016\002of\016\003ASM\r\004data";
     LOG_TRACE ("\nSearch for ACIS BinaryFile data:\n");
     num_acis_sab_data = 0;
-    while ((s = (char *)memmem (&dat->chain[i], dat->size - i, start,
-                                strlen (start))))
+    while (i < dat->size
+           && (s = (char *)memmem (&dat->chain[i], dat->size - i, start,
+                                   strlen (start))))
       {
         size_t j = s - (char*)&dat->chain[0]; // absolute_offset of found range
         if ((e = (char *)memmem (s, dat->size - j, end, strlen (end))))
