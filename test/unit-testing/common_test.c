@@ -206,7 +206,8 @@ dwg_find_color_index_tests (void)
   test_rgb_case (0xab00ff00, 3);
   test_rgb_case (0xab0000ff, 5);
   test_rgb_case (0xabffffff, 7);
-  test_rgb_case (0xabbebebe, 254);
+  test_rgb_case (0xabcccccc, 254); // ACI 254 is 204,204,204 (AutoCAD, ezdxf)
+  test_rgb_case (0xabbebebe, 256); // not in the palette
   test_rgb_case (0xab000007, 256);
 }
 

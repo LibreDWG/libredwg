@@ -2917,6 +2917,15 @@ DWG_ENTITY (MTEXT)
 
   SINCE (R_2000b)
     {
+      // R13/R14 have no line spacing: AutoCAD's defaults, at least 1 (73)
+      // and 1.0 (44). 0.0 collapsed the lines.
+      IF_ENCODE_FROM_EARLIER {
+        if (FIELD_VALUE (linespace_factor) == 0.0)
+          {
+            FIELD_VALUE (linespace_style) = 1;
+            FIELD_VALUE (linespace_factor) = 1.0;
+          }
+      }
       FIELD_BS (linespace_style, 73);
       FIELD_BD (linespace_factor, 44);
       FIELD_B (unknown_b0, 0);
@@ -3329,6 +3338,15 @@ DWG_TABLE (LAYER)
     // separate DXF flag 70 from the internal DWG flag0 bitmask
     int flag0;
     ENCODER {
+      // R13/R14 have no plot flag and lineweight: AutoCAD's defaults, plot
+      // and lineweight DEFAULT (31). 0 made every layer not plottable, 0.00mm.
+      IF_ENCODE_FROM_EARLIER {
+        if (dat->from_version < R_2000b && !(dwg->opts & DWG_OPTS_INJSON))
+          {
+            FIELD_VALUE (plotflag) = 1;
+            FIELD_VALUE (linewt) = 31;
+          }
+      }
       // with json we only use flag0, with DXF we use flag
       if (dwg->opts & DWG_OPTS_INDXF) {
         FIELD_VALUE (off)           = FIELD_VALUE (color.index) < 0;
@@ -4575,6 +4593,15 @@ DWG_OBJECT (MLINESTYLE)
                  VALUE_TFF ("", 6); break;
         }
 #else
+#  ifdef IS_ENCODER
+        // R2018+ to earlier: convert the linetype handle to the index
+        // (32767 BYLAYER, 32766 BYBLOCK, else the position in the
+        // LTYPE_CONTROL entries; AutoCAD's R2000 and R2018 saves agree).
+        // Without it every line was written as index 0, CONTINUOUS.
+        if (dat->from_version >= R_2018b)
+          _obj->lines[rcount1].lt_index = dwg_mlinestyle_ltindex (
+              dwg, _obj->lines[rcount1].lt_ltype);
+#  endif
         SUB_FIELD_BSd (lines[rcount1], lt_index, 6);
 #endif
       }
@@ -5460,6 +5487,12 @@ DWG_ENTITY (LWPOLYLINE)
   VALUE_BS (((FIELD_VALUE (flag) & 256) ? 128 : 0) + (FIELD_VALUE (flag) & 512 ? 1 : 0), 70);
   FIELD_BD (const_width, 43);
 #else
+  ENCODER {
+    // the vertex ids are R2010+: before, 1024 is no flag, and other readers
+    // (ACadSharp) read a num_vertexids that is not there.
+    if (dat->version < R_2010b && (FIELD_VALUE (flag) & 1024))
+      FIELD_VALUE (flag) &= ~1024;
+  }
   FIELD_BS (flag, 70); // 512 closed, 256 plinegen, 4 constwidth, 8 elevation, 2 thickness
                        // 1 extrusion, 16 num_bulges, 1024 vertexidcount, 32 numwidths
   LOG_FLAG_LWPOLYLINE

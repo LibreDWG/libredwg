@@ -546,6 +546,12 @@
   SINCE (R_2000b) {
     // DXF later after 6, see common_entity_handle_data.spec
     // Ideally CMC 60 should be deferred after layer 8, before linewt 370 also
+#ifdef IS_ENCODER
+    // R13/R14 have no lineweight: ByLayer (29) as AutoCAD 2000 opens them,
+    // not 0 (0.00mm)
+    if (dat->from_version < R_2000b && !_ent->linewt)
+      _ent->linewt = 29;
+#endif
 #ifndef IS_DXF
     FIELD_RC (linewt, 370);
 #endif

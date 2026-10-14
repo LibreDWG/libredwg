@@ -11710,6 +11710,10 @@ EXPORT BITCODE_BL dwg_rgb_palette_index (BITCODE_BS index);
    returns 256 if not found, i.e. the default ByLayer.
  */
 EXPORT BITCODE_BS dwg_find_color_index (BITCODE_BL rgb);
+/* MTEXT line breaks (LF) as \\P */
+EXPORT void dwg_fixup_mtext_linebreaks (Dwg_Data *restrict dwg);
+/* the nearest ACI color 1-255 */
+EXPORT BITCODE_BS dwg_nearest_color_index (BITCODE_BL rgb);
 
 /** Add the empty object to the DWG.
     Returns DWG_ERR_OUTOFMEM, -1 for realloced or 0 if not.

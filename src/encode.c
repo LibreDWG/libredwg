@@ -2808,6 +2808,101 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
  * Skip all MATERIAL objects, DICTS and common properties
  */
 AFL_GCC_TOOBIG
+/* R2004+ to R2000 as AutoCAD does it (sample_AC1032 vs AutoCAD's own R2000
+   save sample_AC1015):
+   - gradient HATCHes become solid fills of the first gradient color: R2000
+     has no gradients, the entity color was ByLayer instead of 5.
+   - MTEXT line breaks (LF): dwg_fixup_mtext_linebreaks. */
+static void
+downconvert_for_r2000 (Dwg_Data *restrict dwg)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity
+          || !obj->tio.entity->tio.HATCH)
+        continue;
+      if (obj->fixedtype == DWG_TYPE_HATCH)
+        {
+          Dwg_Entity_HATCH *h = obj->tio.entity->tio.HATCH;
+          Dwg_Color *c = &obj->tio.entity->color;
+          if (h->is_gradient_fill && h->num_colors && h->colors
+              && h->colors[0].color.index > 0
+              && h->colors[0].color.index < 256)
+            {
+              LOG_TRACE ("HATCH " FORMAT_HV " gradient => color %d\n",
+                         obj->handle.value, h->colors[0].color.index);
+              c->index = h->colors[0].color.index;
+              c->flag = 0;
+              c->method = 0;
+              c->rgb = 0;
+              c->raw = c->index;
+            }
+        }
+    }
+}
+
+/* R13/R14 to R2000+: the names AutoCAD 2000 uses. AutoCAD's R14 and R2000
+   saves of the same drawing (example_r14, example_2000): LTYPE BYBLOCK,
+   BYLAYER, CONTINUOUS become ByBlock, ByLayer, Continuous; STYLE and DIMSTYLE
+   STANDARD become Standard, and so the dictionary keys STANDARD (the
+   MLINESTYLE keeps its name STANDARD). */
+static void
+upconvert_r14_names (Dwg_Data *restrict dwg)
+{
+  static const char *const from[]
+      = { "BYBLOCK", "BYLAYER", "CONTINUOUS", "STANDARD" };
+  static const char *const to[]
+      = { "ByBlock", "ByLayer", "Continuous", "Standard" };
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_OBJECT || !obj->tio.object
+          || !obj->tio.object->tio.APPID)
+        continue;
+      if (obj->fixedtype == DWG_TYPE_LTYPE || obj->fixedtype == DWG_TYPE_STYLE
+          || obj->fixedtype == DWG_TYPE_DIMSTYLE)
+        {
+          // all table records start with the same common fields
+          char **namep = (char **)&obj->tio.object->tio.LTYPE->name;
+          unsigned k0 = obj->fixedtype == DWG_TYPE_LTYPE ? 0 : 3;
+          unsigned k1 = obj->fixedtype == DWG_TYPE_LTYPE ? 3 : 4;
+          if (!*namep)
+            continue;
+          for (unsigned k = k0; k < k1; k++)
+            if (strEQ (*namep, from[k]))
+              {
+                LOG_TRACE ("%s.name %s => %s\n", obj->name, *namep, to[k]);
+                free (*namep);
+                *namep = strdup (to[k]);
+                break;
+              }
+        }
+      else if (obj->fixedtype == DWG_TYPE_DICTIONARY
+               || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
+        {
+          Dwg_Object_DICTIONARY *d = obj->tio.object->tio.DICTIONARY;
+          for (BITCODE_BL j = 0; d->texts && j < d->numitems; j++)
+            if (d->texts[j] && strEQc ((char *)d->texts[j], "STANDARD"))
+              {
+                LOG_TRACE ("DICTIONARY.texts[%u] STANDARD => Standard\n",
+                           (unsigned)j);
+                free (d->texts[j]);
+                d->texts[j] = (BITCODE_T)strdup ("Standard");
+              }
+        }
+    }
+}
+
+/**
+ * dwg_encode(): the current generic encoder entry point.
+ *
+ * TODO: 2007 maps.
+ * 2010+ uses the 2004 format.
+ * Returns a summary bitmask of all errors.
+ * Skip all MATERIAL objects, DICTS and common properties
+ */
+AFL_GCC_TOOBIG
 EXPORT int
 dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 {
@@ -2844,6 +2939,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("Encode version %s (%s)\n",
                dwg_version_codes (dwg->header.version),
                dwg_version_type (dwg->header.version));
+
+  if (dwg->header.from_version >= R_13b1 && dwg->header.from_version < R_2000
+      && dwg->header.version >= R_2000)
+    upconvert_r14_names (dwg);
+  if (dwg->header.from_version >= R_2004 && dwg->header.version < R_2004)
+    downconvert_for_r2000 (dwg);
+  dwg_fixup_mtext_linebreaks (dwg);
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
   // We cannot write unknown_bits into another version, or when it's coming
@@ -4629,6 +4731,34 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
 }
 
 #define HANDLE_STREAM_ERROR_CLEANUP
+/* MLINESTYLE.lines[].lt_ltype: the R2018+ linetype handle as the index used
+   until R2018: 32767 BYLAYER, 32766 BYBLOCK, else the position in the
+   LTYPE_CONTROL entries (AutoCAD's R2000 and R2018 saves of the same drawing
+   agree: the BYLAYER handle is index 32767). */
+static BITCODE_BSd
+dwg_mlinestyle_ltindex (Dwg_Data *restrict dwg, BITCODE_H ltype)
+{
+  Dwg_Object *ctrl;
+  Dwg_Object_LTYPE_CONTROL *lc;
+  BITCODE_RLL ref;
+  if (!ltype)
+    return 32767;
+  ref = ltype->absolute_ref;
+  ctrl = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
+  lc = (ctrl && ctrl->tio.object) ? ctrl->tio.object->tio.LTYPE_CONTROL
+                                  : NULL;
+  if (!lc)
+    return 32767;
+  if (lc->bylayer && lc->bylayer->absolute_ref == ref)
+    return 32767;
+  if (lc->byblock && lc->byblock->absolute_ref == ref)
+    return 32766;
+  for (BITCODE_BS i = 0; lc->entries && i < lc->num_entries; i++)
+    if (lc->entries[i] && lc->entries[i]->absolute_ref == ref)
+      return (BITCODE_BSd)i;
+  return 32767;
+}
+
 #include "dwg.spec"
 #undef HANDLE_STREAM_ERROR_CLEANUP
 // clang-format on
@@ -6824,18 +6954,31 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
               char *dest;
-              if (length + 5 + dat->byte < dat->size)
-                bit_chain_alloc_size (dat,
-                                      (length + 5 + dat->byte) - dat->size);
-              if (length > 255)
-                {
-                  LOG_ERROR ("eed: overlong string %d stripped", (int)length);
-                  length = 255;
-                }
               dest = bit_embed_TU_size (s, length);
+              // The length is of the converted string: characters above
+              // U+00FF become \U+XXXX, longer than one byte.
+              if (dest)
+                {
+                  size_t dlen = strlen (dest);
+                  if (dlen > 255)
+                    {
+                      LOG_ERROR ("eed: overlong string %d stripped",
+                                 (int)dlen);
+                      dlen = 255;
+                    }
+                  length = (BITCODE_RS)dlen;
+                }
+              else
+                length = 0;
+              // was "< dat->size": the unsigned difference underflowed
+              if (dat->byte + length + 5 >= dat->size)
+                bit_chain_alloc_size (dat, length + 5);
               bit_write_RC (dat, length);
-              bit_write_RS (dat, dat->codepage);
-              bit_write_TF (dat, (unsigned char *)dest, length);
+              // big-endian as in the other branch, the decoder and ODA:
+              // little-endian gave 0x1E00 for ANSI_1252, and ACadSharp
+              // failed on the STYLE with its font name in the EED.
+              bit_write_RS_BE (dat, dat->codepage);
+              bit_write_TF (dat, (unsigned char *)(dest ? dest : ""), length);
               LOG_TRACE ("string: len=" FORMAT_RS " [RC] cp=" FORMAT_RS
                          " [RS] \"%s\" [TF]",
                          length, dat->codepage, dest);
