@@ -25324,7 +25324,12 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.BLOCK_RECORD_MSPACE->obj = mspaceobj;
   block_control->model_space
       = dwg_add_handleref (dwg, 3, mspaceobj->handle.value, NULL);
-  if (version >= R_13b1)
+  /* r11 and r12 have a paper space too -- that is what the entity flag
+     FLAG_R11_HAS_PSPACE marks, and AutoCAD writes a $PAPER_SPACE block for it.
+     Without the BLOCK_HEADER, dwg_paper_space_object() finds nothing, the
+     paper-space entities end up owned by model space, and the DXF loses the
+     block record entirely (GH #1337). */
+  if (version >= R_11)
     {
       // BLOCK_RECORD_PSPACE: (5.1.20)
       dwg_set_next_hdl (dwg, UINT64_C (0x20));
@@ -25344,10 +25349,26 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       dwg->block_control = *block_control;
       // BLOCK: (5.1.21)
       dwg_set_next_hdl (dwg, UINT64_C (0x21));
-      dwg_add_BLOCK (pspace, "*PAPER_SPACE");
+      {
+        Dwg_Entity_BLOCK *pblock = dwg_add_BLOCK (pspace, "*PAPER_SPACE");
+        if (dwg->header.version <= R_12) // fixup the type, as for mspace below
+          {
+            obj = dwg_obj_generic_to_object (pblock, &error);
+            if (obj)
+              obj->type = DWG_TYPE_UNUSED_r11; // don't encode it
+          }
+      }
       // ENDBLK: (5.1.22)
       dwg_set_next_hdl (dwg, UINT64_C (0x22));
-      dwg_add_ENDBLK (pspace);
+      {
+        Dwg_Entity_ENDBLK *pendblk = dwg_add_ENDBLK (pspace);
+        if (dwg->header.version <= R_12) // fixup the type
+          {
+            obj = dwg_obj_generic_to_object (pendblk, &error);
+            if (obj)
+              obj->type = DWG_TYPE_UNUSED_r11; // don't encode it
+          }
+      }
     }
   // LAYOUT (0.1.23)
   // dwg_set_next_hdl (dwg, UINT64_C (0x23));
