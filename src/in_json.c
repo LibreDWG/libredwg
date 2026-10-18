@@ -2204,6 +2204,94 @@ json_set_sizefield (void *restrict _obj,
 }
 #undef FIXUP_SIZE
 
+/* The unions are selected by a field of their struct, as the spec reads,
+   writes and frees them: MULTILEADER.ctx.content by has_content_txt or
+   has_content_blk, EvalExpr.value by value_code, EvalVariant.u by code.
+   Accept a member key only when its selector picks it, and a selector key
+   only while it picks no member yet, so a member already set never changes
+   its meaning. */
+static bool
+json_mleader_ctx_key_ok (const Dwg_MLEADER_AnnotContext *restrict ctx,
+                         const char *restrict key)
+{
+  if (strEQc (key, "has_content_txt") || strEQc (key, "has_content_blk"))
+    return !ctx->has_content_txt && !ctx->has_content_blk;
+  return true;
+}
+
+// MLEADER_Content_MText or _Block, only embedded in MULTILEADER.ctx.content
+static bool
+json_mleader_content_ok (const Dwg_Object *restrict obj,
+                         const char *restrict name)
+{
+  const Dwg_MLEADER_AnnotContext *ctx;
+  if (!obj->name || strNE (obj->name, "MULTILEADER"))
+    return false;
+  ctx = &obj->tio.entity->tio.MULTILEADER->ctx;
+  if (strEQc (name, "MLEADER_Content_MText"))
+    return ctx->has_content_txt && !ctx->has_content_blk;
+  return ctx->has_content_blk && !ctx->has_content_txt;
+}
+
+static bool
+json_evalexpr_key_ok (const Dwg_EvalExpr *restrict ee,
+                      const char *restrict key)
+{
+  static const struct
+  {
+    const char *key;
+    BITCODE_BSd value_code;
+  } members[] = {
+    { "value.num40", 40 },   { "value.pt2d", 10 },   { "value.pt3d", 11 },
+    { "value.text1", 1 },    { "value.long90", 90 }, { "value.handle91", 91 },
+    { "value.short70", 70 },
+  };
+  if (strEQc (key, "value_code"))
+    return !ee->value_code;
+  for (int i = 0; i < ARRAY_SIZE (members); i++)
+    if (strEQ (key, members[i].key))
+      return ee->value_code == members[i].value_code;
+  return true;
+}
+
+static bool
+json_evalvariant_key_ok (const Dwg_EvalVariant *restrict ev,
+                         const char *restrict key)
+{
+  static const struct
+  {
+    const char *key;
+    enum RESBUF_VALUE_TYPE type;
+  } members[] = {
+    { "u.bd", DWG_VT_REAL },     { "u.bl", DWG_VT_INT32 },
+    { "u.bs", DWG_VT_INT16 },    { "u.rc", DWG_VT_INT8 },
+    { "u.text", DWG_VT_STRING }, { "u.handle", DWG_VT_HANDLE },
+  };
+  if (strEQc (key, "code"))
+    return !ev->code;
+  for (int i = 0; i < ARRAY_SIZE (members); i++)
+    if (strEQ (key, members[i].key))
+      return ev->code && dwg_resbuf_value_type (ev->code) == members[i].type;
+  return true;
+}
+
+static bool
+json_union_key_ok (const Dwg_Object *restrict obj, const void *restrict _obj,
+                   const char *restrict name, const char *restrict key)
+{
+  if (strEQc (name, "MLEADER_AnnotContext"))
+    return json_mleader_ctx_key_ok ((const Dwg_MLEADER_AnnotContext *)_obj,
+                                    key);
+  if (strEQc (name, "MLEADER_Content_MText")
+      || strEQc (name, "MLEADER_Content_Block"))
+    return json_mleader_content_ok (obj, name);
+  if (strEQc (name, "EvalExpr"))
+    return json_evalexpr_key_ok ((const Dwg_EvalExpr *)_obj, key);
+  if (strEQc (name, "EvalVariant"))
+    return json_evalvariant_key_ok ((const Dwg_EvalVariant *)_obj, key);
+  return true;
+}
+
 // needs to be recursive, for search in subclasses
 static int
 _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
@@ -2218,6 +2306,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   LOG_INSANE ("-search %s key %s: %s %.*s\n", name, key, t_typename[t->type],
               t->end - t->start, &dat->chain[t->start]);
   JSON_TOKENS_CHECK_OVERFLOW_ERR;
+  if (!json_union_key_ok (obj, _obj, name, key))
+    {
+      LOG_ERROR ("%s.%s not selected by its union selector, ignored", name,
+                 key);
+      json_advance_unknown (dat, tokens, t->type, 0);
+      JSON_TOKENS_CHECK_OVERFLOW_ERR;
+      return 1; // found
+    }
   for (; f->name; f++)
     {
       if (strEQ (f->name, key))
@@ -2789,6 +2885,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               dwg_dynapi_field_set_value (dwg, _obj, f, s, true);
             }
           free (s);
+        }
+      // the field decides, not the json: a malloced array of structs, or an
+      // embedded struct
+      else if ((t->type == JSMN_ARRAY || t->type == JSMN_OBJECT)
+               && memBEGINc (f->type, "Dwg_")
+               && f->is_malloc != (t->type == JSMN_ARRAY))
+        {
+          LOG_ERROR ("%s.%s: Invalid %s for [%s], ignored", name, key,
+                     t_typename[t->type], f->type);
+          json_advance_unknown (dat, tokens, t->type, 0);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
         }
       // subclass arrays:
       else if (t->type == JSMN_ARRAY && memBEGINc (f->type, "Dwg_"))
@@ -3847,7 +3954,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         continue;
                     }
                 }
-              else if (t->type == JSMN_OBJECT && memBEGINc (name, "DICTIONARY")
+              // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
+              else if (t->type == JSMN_OBJECT
+                       && (strEQc (name, "DICTIONARY")
+                           || strEQc (name, "DICTIONARYWDFLT"))
                        && strEQc (key, "items"))
                 {
                   Dwg_Object_DICTIONARY *o = obj->tio.object->tio.DICTIONARY;

@@ -4563,7 +4563,9 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          pair->value.i, pair->code);
               break;
             case 290:
-              if (ctx->has_content_blk)
+              // content is a union: never select txt while blk is, nor
+              // deselect it once its fields may be set
+              if (pair->value.i ? ctx->has_content_blk : ctx->has_content_txt)
                 goto unknown_mleader;
               ctx->has_content_txt = pair->value.i;
               LOG_TRACE ("%s.ctx.has_content_txt = %d [B %d]\n", obj->name,
@@ -4804,6 +4806,9 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                          obj->name, i, pair->value.d, pair->code);
               break;
             case 296:
+              // and the same for blk (296 0 follows txt content)
+              if (pair->value.i ? ctx->has_content_txt : ctx->has_content_blk)
+                goto unknown_mleader;
               ctx->has_content_blk = pair->value.i;
               LOG_TRACE ("%s.ctx.has_content_blk = %i [B %d]\n", obj->name,
                          pair->value.i, pair->code);
@@ -6142,7 +6147,16 @@ add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   pair = dxf_read_pair (dat);
   if (!pair || pair->code == 0)
     return pair;
-  switch (dwg_resbuf_value_type (pair->value.i))
+  // u is a union, selected by code as in AcDbEvalVariant_fields
+  if (!value->code || pair->code != value->code)
+    {
+      if (value->code) // code 0 is followed by the 309 NULL marker
+        LOG_ERROR ("Invalid EvalVariant DXF code %d, expected %d", pair->code,
+                   value->code);
+      dxf_free_pair (pair);
+      return NULL;
+    }
+  switch (dwg_resbuf_value_type (value->code))
     {
     case DWG_VT_REAL:
       value->u.bd = pair->value.d;
@@ -8422,6 +8436,35 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #  undef CHK_verts
 #  undef CHK_lines
 
+/* Dwg_EvalExpr.value is a union, selected by value_code as in
+   AcDbEvalExpr_fields: the value_code whose member this DXF code sets,
+   or 0 if it sets none. */
+static int
+evalexpr_value_code (const int dxf)
+{
+  switch (dxf)
+    {
+    case 40:
+    case 140:
+      return 40;
+    case 10:
+    case 20:
+      return 10;
+    case 11:
+    case 21:
+    case 31:
+      return 11;
+    case 1:
+      return 1;
+    case 70:
+      return 70;
+    case 91:
+      return 91;
+    default:
+      return 0;
+    }
+}
+
 static Dxf_Pair *
 add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
                   Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
@@ -8460,6 +8503,14 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
           LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, evalexpr,
                      "value_code", pair->value.i, pair->code);
         }
+      // only the value member value_code selects
+      else if (evalexpr_value_code (pair->code)
+               && evalexpr_value_code (pair->code) != ee->value_code)
+        {
+          if (pair->code != 1 || ee->value_code) // the 1 before 70 is empty
+            LOG_ERROR ("Invalid DXF code %d for %s.value_code %d", pair->code,
+                       "AcDbEvalExpr", (int)ee->value_code);
+        }
       else if (pair->code == 40 || pair->code == 140)
         {
           ee->value.num40 = pair->value.d;
@@ -8494,6 +8545,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
         }
       else if (pair->code == 1)
         {
+          free (ee->value.text1);
           ee->value.text1 = strdup (pair->value.s.ptr);
           LOG_TRACE ("%s.%s.%s = %s [T %d]\n", obj->name, evalexpr,
                      "value.text1", pair->value.s.ptr, pair->code);
