@@ -1528,6 +1528,135 @@ test_viewport_vx_realloc (void)
   free (buf);
   return numfailed ();
 }
+
+static Dwg_Object *
+first_object_of_type (Dwg_Data *dwg, const Dwg_Object_Type type)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    if (dwg->object[i].fixedtype == type)
+      return &dwg->object[i];
+  return NULL;
+}
+
+// The DXF importer took some counts from a later group code, after the
+// array they count was already allocated: LTYPE.numdashes (73) after
+// the dashes, MLINE.num_lines (73) after a 73 of 0 allocated empty lines,
+// and before r2010 an entity's preview_size (160) after a 92 sized the
+// preview. The MLINE importer then wrote past the lines, and the writers
+// (encode, out_dxf, out_json) walked past all three arrays. Import each
+// sequence, check the counts and walk every array to its count, so
+// ASan/valgrind catch any regression.
+static int
+test_dxf_count_resets (void)
+{
+#  define DXF_HEADER(ver)                                                     \
+    "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\n" ver "\n  0\nENDSEC\n"
+  static const char *const ltype_dxf
+      = DXF_HEADER ("AC1015") "  0\nSECTION\n  2\nTABLES\n"
+                              "  0\nTABLE\n  2\nLTYPE\n  5\n5\n 70\n1\n"
+                              "  0\nLTYPE\n  5\n14\n"
+                              "100\nAcDbSymbolTableRecord\n"
+                              "100\nAcDbLinetypeTableRecord\n"
+                              "  2\nDASHED\n 70\n0\n  3\n__ __\n"
+                              " 72\n65\n 73\n1\n 40\n0.5\n"
+                              " 49\n0.5\n 74\n0\n"
+                              // a pair ends the dashes, then 73 again
+                              " 72\n65\n 73\n200\n"
+                              "  0\nENDTAB\n  0\nENDSEC\n  0\nEOF\n";
+  static const char *const mline_dxf
+      = DXF_HEADER ("AC1015") "  0\nSECTION\n  2\nENTITIES\n"
+                              "  0\nMLINE\n  5\n100\n100\nAcDbEntity\n"
+                              "  8\n0\n100\nAcDbMline\n  2\nSTANDARD\n"
+                              " 40\n1.0\n 70\n0\n 71\n1\n"
+                              " 72\n1\n 73\n0\n 73\n2\n"
+                              " 10\n0.0\n 20\n0.0\n 30\n0.0\n"
+                              " 11\n0.0\n 21\n0.0\n 31\n0.0\n"
+                              " 12\n1.0\n 22\n0.0\n 32\n0.0\n"
+                              " 13\n0.0\n 23\n1.0\n 33\n0.0\n"
+                              " 74\n1\n 41\n0.5\n 75\n0\n"
+                              " 74\n1\n 41\n-0.5\n 75\n0\n"
+                              "  0\nENDSEC\n  0\nEOF\n";
+  static const char *const preview_dxf
+      = DXF_HEADER ("AC1015") "  0\nSECTION\n  2\nENTITIES\n"
+                              "  0\nPOINT\n  5\n100\n100\nAcDbEntity\n"
+                              "  8\n0\n 92\n32\n"
+                              "310\n000102030405060708090A0B0C0D0E0F\n"
+                              "310\n101112131415161718191A1B1C1D1E1F\n"
+                              "160\n3000\n"
+                              "100\nAcDbPoint\n 10\n0.0\n 20\n0.0\n 30\n0.0\n"
+                              "  0\nENDSEC\n  0\nEOF\n";
+#  undef DXF_HEADER
+  const char *const dxfs[] = { ltype_dxf, mline_dxf, preview_dxf };
+  const Dwg_Object_Type types[]
+      = { DWG_TYPE_LTYPE, DWG_TYPE_MLINE, DWG_TYPE_POINT };
+  const unsigned int lvl = loglevel;
+
+  failed = 0;
+  for (int t = 0; t < ARRAY_SIZE (dxfs); t++)
+    {
+      Dwg_Data dwg;
+      Bit_Chain dat;
+      Dwg_Object *obj;
+      int error;
+
+      memset (&dwg, 0, sizeof (dwg));
+      memset (&dat, 0, sizeof (dat));
+      dat.chain = (unsigned char *)strdup (dxfs[t]);
+      dat.size = strlen (dxfs[t]);
+      error = dwg_read_dxf (&dat, &dwg);
+      loglevel = lvl; // dwg_read_dxf set it from dwg.opts
+      obj = first_object_of_type (&dwg, types[t]);
+      if (error >= DWG_ERR_CRITICAL || !obj)
+        fail ("dxf_count_resets: dwg_read_dxf %s failed with 0x%x",
+              dwg_type_name (types[t]), error);
+      else if (types[t] == DWG_TYPE_LTYPE)
+        {
+          Dwg_Object_LTYPE *o = obj->tio.object->tio.LTYPE;
+          double len = 0.0;
+          for (BITCODE_RC i = 0; o->dashes && i < o->numdashes; i++)
+            len += o->dashes[i].length;
+          if (o->numdashes != 1 || len != 0.5)
+            fail ("dxf_count_resets: LTYPE.numdashes %u, dashes length %f",
+                  (unsigned)o->numdashes, len);
+          else
+            ok ("dxf_count_resets: LTYPE.numdashes kept at the dashes "
+                "read");
+        }
+      else if (types[t] == DWG_TYPE_MLINE)
+        {
+          Dwg_Entity_MLINE *o = obj->tio.entity->tio.MLINE;
+          int num_segparms = 0;
+          for (BITCODE_BS v = 0; o->verts && v < o->num_verts; v++)
+            for (BITCODE_RC l = 0; o->verts[v].lines && l < o->num_lines; l++)
+              num_segparms += o->verts[v].lines[l].num_segparms;
+          if (o->num_verts != 1 || o->num_lines != 2 || num_segparms != 2)
+            fail ("dxf_count_resets: MLINE.num_verts %u num_lines %u, "
+                  "%d segparms",
+                  (unsigned)o->num_verts, (unsigned)o->num_lines,
+                  num_segparms);
+          else
+            ok ("dxf_count_resets: MLINE.num_lines 2 after 0 with the "
+                "lines it counts");
+        }
+      else
+        {
+          Dwg_Object_Entity *ent = obj->tio.entity;
+          unsigned sum = 0;
+          for (BITCODE_BLL i = 0; ent->preview && i < ent->preview_size; i++)
+            sum += ent->preview[i];
+          if (ent->preview_size != 32 || !ent->preview_exists || sum != 496)
+            fail ("dxf_count_resets: POINT.preview_size " FORMAT_BLL
+                  " exists %u, sum %u",
+                  ent->preview_size, (unsigned)ent->preview_exists, sum);
+          else
+            ok ("dxf_count_resets: POINT.preview_size kept at the preview "
+                "read, 160 ignored before r2010");
+        }
+      dwg_free (&dwg);
+      free (dat.chain);
+    }
+  return numfailed ();
+}
 #endif
 
 int
@@ -1550,10 +1679,12 @@ main (int argc, char *argv[])
 
 #if !defined(_WIN32) && !defined(DISABLE_DXF)
   error = test_viewport_vx_realloc ();
+  error += test_dxf_count_resets ();
   error += test_mlinestyle_obj_realloc ();
   error += test_mlinestyle_nonfinite_angle ();
 #elif !defined(DISABLE_DXF)
   error = test_viewport_vx_realloc ();
+  error += test_dxf_count_resets ();
   error += test_mlinestyle_obj_realloc ();
 #else
   error = test_mlinestyle_obj_realloc ();

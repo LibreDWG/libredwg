@@ -7874,6 +7874,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (ent->preview_size >= MAX_SIZE_BUF || ent->preview_size > 0x1000000)
     {
       LOG_ERROR ("Invalid %s.preview_size", obj->name);
+      ent->preview_size = 0; // not the size of the preview
       dxf_free_pair (pair);
       return NULL;
     }
@@ -8228,13 +8229,14 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   else if (pair->code == 73)
     {
-      if (o->num_lines)
+      // the lines of each vertex are allocated once, for a num_lines > 0
+      if (o->num_lines || (o->num_verts && o->verts[0].lines))
         {
           LOG_ERROR ("MLINE.num_lines already set");
           return 2;
         }
       o->num_lines = pair->value.i;
-      if (o->num_verts && !o->verts[0].lines)
+      if (o->num_lines && o->num_verts)
         {
           for (int _j = 0; _j < o->num_verts; _j++)
             {
@@ -11780,6 +11782,21 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                          ARGS_REF (hdl));
               goto next_pair;
             }
+          else if (pair->code == 73 && obj->fixedtype == DWG_TYPE_LTYPE)
+            {
+              Dwg_Object_LTYPE *o = obj->tio.object->tio.LTYPE;
+              // add_LTYPE_dashes allocated dashes for this numdashes
+              if (o->dashes)
+                {
+                  LOG_ERROR ("LTYPE.numdashes already set to %u",
+                             (unsigned)o->numdashes);
+                  goto next_pair;
+                }
+              o->numdashes = (BITCODE_RC)pair->value.i;
+              LOG_TRACE ("LTYPE.numdashes = %u [RC 73]\n",
+                         (unsigned)o->numdashes);
+              goto next_pair;
+            }
           else if (pair->code == 49 && obj->fixedtype == DWG_TYPE_LTYPE)
             {
               pair = add_LTYPE_dashes (obj, dat, pair);
@@ -13320,6 +13337,19 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                      obj->name);
                           goto next_pair;
                         }
+                      else if (pair->code == 160 && is_entity)
+                        {
+                          // preview_size only together with its preview,
+                          // also before r2010 (where it's 92)
+                          if (obj->tio.entity->preview)
+                            {
+                              LOG_ERROR ("Skip duplicate %s.preview_size",
+                                         obj->name);
+                              goto next_pair;
+                            }
+                          pair = add_ent_preview (obj, dat, pair);
+                          goto start_loop; // already fresh pair
+                        }
                       else
                         {
                           // Don't write a ptr twice. This will fuckup the
@@ -13357,12 +13387,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           else
                             {
-                              if (is_entity && pair->code == 160
-                                  && dwg->header.from_version >= R_2010)
-                                {
-                                  pair = add_ent_preview (obj, dat, pair);
-                                  goto start_loop; // already fresh pair
-                                }
                               if (strchr (f->type, 'D'))
                                 LOG_TRACE ("COMMON.%s = %f [%s %d]\n", f->name,
                                            pair->value.d, f->type, pair->code);
