@@ -2088,8 +2088,13 @@ find_sizefield (const Dwg_DYNAPI_field *restrict fields,
 {
   const Dwg_DYNAPI_field *f;
   char *s = (char *)malloc (strlen (key) + 12);
-  strcpy (s, key);
-  strcat (s, "_size");
+  if (strEQc (key, "data_date")) // TABLE_value
+    strcpy (s, "data_size");
+  else
+    {
+      strcpy (s, key);
+      strcat (s, "_size");
+    }
   for (f = &fields[0]; f->name; f++)
     {
       if (strEQ (s, f->name))
@@ -2101,6 +2106,114 @@ find_sizefield (const Dwg_DYNAPI_field *restrict fields,
     }
   free (s);
   return NULL;
+}
+
+static const Dwg_DYNAPI_field *
+json_find_field (const Dwg_DYNAPI_field *restrict fields,
+                 const char *restrict name)
+{
+  const Dwg_DYNAPI_field *f;
+  for (f = &fields[0]; f->name; f++)
+    {
+      if (strEQ (f->name, name))
+        return f;
+    }
+  return NULL;
+}
+
+// The pointer of a malloc'ed field, or NULL
+static void *
+json_field_ptr (void *restrict _obj, const Dwg_DYNAPI_field *restrict fields,
+                const char *restrict name)
+{
+  const Dwg_DYNAPI_field *f = json_find_field (fields, name);
+  void *ptr = NULL;
+  if (f && f->is_malloc)
+    memcpy (&ptr, &((char *)_obj)[f->offset], sizeof (ptr));
+  return ptr;
+}
+
+// Is key the size or count of a buffer which is already set? Then the
+// buffer's size wins, as with num_unknown_bits in json_OBJECTS. The num_
+// fields are always ignored, these are the others.
+static bool
+json_is_count_of_buffer (void *restrict _obj,
+                         const Dwg_DYNAPI_field *restrict fields,
+                         const char *restrict key)
+{
+  char buf[80];
+  const char *buffers[2] = { NULL, NULL };
+  const size_t len = strlen (key);
+  if (len > 5 && len < sizeof (buf) && strEQc (&key[len - 5], "_size"))
+    {
+      memcpy (buf, key, len - 5);
+      buf[len - 5] = '\0';
+      buffers[0] = buf;
+      if (strEQc (key, "data_size")) // TABLE_value
+        buffers[1] = "data_date";
+    }
+  else if (strEQc (key, "data_numbits")) // PROXY_*
+    buffers[0] = "data";
+  else if (strEQc (key, "numdashes")) // LTYPE
+    buffers[0] = "dashes";
+  else if (strEQc (key, "numitems")) // DICTIONARY*
+    buffers[0] = "texts";
+  else if (strEQc (key, "numelems")) // BLOCKLOOKUPACTION
+    {
+      buffers[0] = "exprs";
+      buffers[1] = "lut";
+    }
+  for (int i = 0; i < 2 && buffers[i]; i++)
+    {
+      if (json_field_ptr (_obj, fields, buffers[i]))
+        return true;
+    }
+  return false;
+}
+
+// BLOCKLOOKUPACTION: the encoder writes numrows * numcols exprs and lut,
+// which must not exceed numelems, the length of both.
+static void
+json_check_numelems (void *restrict _obj,
+                     const Dwg_DYNAPI_field *restrict fields)
+{
+  const Dwg_DYNAPI_field *rows = json_find_field (fields, "numrows");
+  const Dwg_DYNAPI_field *cols = json_find_field (fields, "numcols");
+  const Dwg_DYNAPI_field *elems = json_find_field (fields, "numelems");
+  BITCODE_BL numrows, numcols, numelems;
+  if (!rows || !cols || !elems)
+    return;
+  memcpy (&numrows, &((char *)_obj)[rows->offset], sizeof (numrows));
+  memcpy (&numcols, &((char *)_obj)[cols->offset], sizeof (numcols));
+  memcpy (&numelems, &((char *)_obj)[elems->offset], sizeof (numelems));
+  if ((uint64_t)numrows * numcols > numelems)
+    {
+      LOG_ERROR ("Invalid numrows " FORMAT_BL " * numcols " FORMAT_BL
+                 " > numelems " FORMAT_BL ", reset to 0",
+                 numrows, numcols, numelems);
+      numrows = 0;
+      memcpy (&((char *)_obj)[rows->offset], &numrows, sizeof (numrows));
+      memcpy (&((char *)_obj)[cols->offset], &numrows, sizeof (numrows));
+    }
+}
+
+// FIELD_VECTOR_N: a vector without a count field, of which the writers
+// always write the spec's size, whatever the JSON array had.
+static int
+json_vector_n_size (const Dwg_DYNAPI_field *restrict fields,
+                    const char *restrict name, const char *restrict key)
+{
+  if (find_numfield (fields, key))
+    return 0;
+  if (strEQc (key, "prop_states")) // BLOCK*PARAMETER
+    return 4;
+  if (strEQc (name, "SPATIAL_FILTER")
+      && (strEQc (key, "inverse_transform") || strEQc (key, "transform")))
+    return 12;
+  if (strEQc (key, "trans") || strstr (key, "transmatrix")
+      || strstr (key, "transform"))
+    return 16;
+  return 0;
 }
 
 #define FIXUP_NUMFIELD(type)                                                  \
@@ -2115,9 +2228,30 @@ find_sizefield (const Dwg_DYNAPI_field *restrict fields,
 static void
 json_set_numfield (void *restrict _obj,
                    const Dwg_DYNAPI_field *restrict fields,
-                   const char *restrict key, const long size)
+                   const char *restrict key, long size)
 {
-  const Dwg_DYNAPI_field *f = find_numfield (fields, key);
+  const Dwg_DYNAPI_field *f;
+  const char *other = NULL; // another array with the same count
+  if (strEQc (key, "shorts") || strEQc (key, "hdls"))
+    { // BLOCKPOLARSTRETCHACTION: num_hdls counts both
+      f = find_numfield (fields, "hdls");
+      other = strEQc (key, "hdls") ? "shorts" : "hdls";
+    }
+  else if (strEQc (key, "exprs") || strEQc (key, "lut"))
+    { // BLOCKLOOKUPACTION: numelems counts both
+      f = json_find_field (fields, "numelems");
+      other = strEQc (key, "lut") ? "exprs" : "lut";
+    }
+  else
+    f = find_numfield (fields, key);
+  // a shared count (both are BL) never exceeds the other array
+  if (f && f->size == 4 && other && json_field_ptr (_obj, fields, other))
+    {
+      BITCODE_BL num;
+      memcpy (&num, &((char *)_obj)[f->offset], 4);
+      if ((long)num < size)
+        size = (long)num;
+    }
   if (f)
     {
       switch (f->size)
@@ -2133,9 +2267,9 @@ json_set_numfield (void *restrict _obj,
         default:
           LOG_ERROR ("Unknown %s dynapi size %d", key, f->size);
         }
+      if (strEQc (f->name, "numelems"))
+        json_check_numelems (_obj, fields);
     }
-  else if (strEQc (key, "transmatrix"))
-    ; // ignore
   else if (strEQc (key, "ref"))
     {
       if (size != 4) // fixed size
@@ -2267,6 +2401,15 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           LOG_TRACE ("%s.%s: %.*s (ignored)\n", name, key, t->end - t->start,
                      &dat->chain[t->start]);
         }
+      // and the other sizes and counts, once their buffer is set
+      else if (t->type == JSMN_PRIMITIVE
+               && json_is_count_of_buffer (_obj, fields, key))
+        {
+          tokens->index++;
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+          LOG_TRACE ("%s.%s: %.*s (ignored)\n", name, key, t->end - t->start,
+                     &dat->chain[t->start]);
+        }
       else if (t->type == JSMN_PRIMITIVE
                && (strEQc (f->type, "RC") || strEQc (f->type, "B")
                    || strEQc (f->type, "BB") || strEQc (f->type, "RS")
@@ -2289,6 +2432,10 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_TRACE ("%s.%s: " FORMAT_BL " [%s]\n", name, key, num,
                          f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+              if ((strEQc (key, "numrows") || strEQc (key, "numcols"))
+                  && (json_field_ptr (_obj, fields, "exprs")
+                      || json_field_ptr (_obj, fields, "lut")))
+                json_check_numelems (_obj, fields);
               if (strEQc (name, "JUMP") && strEQc (key, "jump_address_raw"))
                 {
                   json_fixup_JUMP ((Dwg_Entity_JUMP *)_obj);
@@ -2323,7 +2470,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           char *str = json_string (dat, tokens);
           size_t len = strlen (str);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
-          if (f->dxf == 310) // is BINARY. TODO: TABLE/FIELD *.data_date
+          if (f->dxf == 310 || strEQc (key, "data_date")) // is BINARY
             {
               // convert from hex
               size_t blen = len / 2;
@@ -2344,6 +2491,24 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 }
               free (str);
               json_set_sizefield (_obj, fields, key, blen);
+              if (strEQc (key, "data")) // PROXY_*.data_numbits
+                {
+                  const Dwg_DYNAPI_field *nf
+                      = json_find_field (fields, "data_numbits");
+                  if (nf)
+                    {
+                      BITCODE_BL numbits;
+                      memcpy (&numbits, &((char *)_obj)[nf->offset], 4);
+                      // the count must never exceed the buffer
+                      if (!numbits || (uint64_t)numbits > (uint64_t)blen * 8)
+                        {
+                          numbits = (BITCODE_BL)(blen * 8);
+                          memcpy (&((char *)_obj)[nf->offset], &numbits, 4);
+                          LOG_TRACE ("%s.data_numbits = " FORMAT_BL "\n", name,
+                                     numbits);
+                        }
+                    }
+                }
               // set the ptr directly, no alloc, no conversion.
               old = &((char *)_obj)[f->offset];
               memcpy (old, &buf, f->size);
@@ -2591,9 +2756,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           if (f->is_malloc)
             {
-              nums = size1 ? (BITCODE_BD *)calloc (size1, sizeof (BITCODE_BD))
+              // a vector of fixed size gets at least that size
+              const int size_n = json_vector_n_size (fields, name, key);
+              nums = size1 ? (BITCODE_BD *)calloc (MAX (size1, size_n),
+                                                   sizeof (BITCODE_BD))
                            : NULL;
-              json_set_numfield (_obj, fields, key, size1);
+              if (!size_n)
+                json_set_numfield (_obj, fields, key, size1);
             }
           else
             {
@@ -2647,9 +2816,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           if (f->is_malloc)
             {
-              nums = size1 ? (BITCODE_BL *)calloc (size1, sizeof (BITCODE_BL))
+              // a vector of fixed size gets at least that size
+              const int size_n = json_vector_n_size (fields, name, key);
+              nums = size1 ? (BITCODE_BL *)calloc (MAX (size1, size_n),
+                                                   sizeof (BITCODE_BL))
                            : NULL;
-              json_set_numfield (_obj, fields, key, size1);
+              if (!size_n)
+                json_set_numfield (_obj, fields, key, size1);
             }
           else
             nums = (BITCODE_BL *)calloc (f->size, 1);

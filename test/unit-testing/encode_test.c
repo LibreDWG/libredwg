@@ -390,6 +390,125 @@ in_json_section_counts_test (void)
   dwg_free (&dwg);
   free (dat.chain);
 }
+
+/* In _set_struct_field only the num_ keys were ignored. The other counts
+   and sizes were taken as is, also after their buffer, a vector of fixed
+   size in the spec was allocated at the JSON array's length, num_hdls
+   counted hdls but not shorts, and numrows * numcols counted exprs and
+   lut unchecked. The writers then read past the buffers. The fixed size
+   checks of transform and prop_states fail before only with ASan. */
+static void
+in_json_object_counts_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+        "{\"object\":\"LTYPE\",\"index\":0,\"type\":57,\"handle\":[0,1,1],"
+        "\"dashes\":[{\"length\":1.0}],\"numdashes\":200},"
+        "{\"object\":\"DICTIONARY\",\"index\":1,\"type\":42,"
+        "\"handle\":[0,1,2],\"items\":{\"A\":[2,1,1,1]},\"numitems\":4096},"
+        "{\"entity\":\"LINE\",\"index\":2,\"type\":19,\"handle\":[0,1,3],"
+        "\"preview\":\"4142\",\"preview_size\":4096},"
+        "{\"object\":\"PROXY_OBJECT\",\"index\":3,\"type\":499,"
+        "\"handle\":[0,1,4],\"data_numbits\":4096,\"data\":\"4142\"},"
+        "{\"object\":\"FIELD\",\"index\":4,\"type\":500,\"handle\":[0,1,5],"
+        "\"value.data_type\":8,\"value.data_date\":\"4142\","
+        "\"value.data_size\":4096},"
+        "{\"object\":\"SPATIAL_FILTER\",\"index\":5,\"type\":501,"
+        "\"handle\":[0,1,6],\"inverse_transform\":[1.0],"
+        "\"transform\":[1.0]},"
+        "{\"object\":\"BLOCKFLIPPARAMETER\",\"index\":6,\"type\":502,"
+        "\"handle\":[0,1,7],\"prop_states\":[1]},"
+        "{\"object\":\"BLOCKPOLARSTRETCHACTION\",\"index\":7,\"type\":503,"
+        "\"handle\":[0,1,8],\"shorts\":[1],"
+        "\"hdls\":[[4,1,1,1],[4,1,2,2]]},"
+        "{\"object\":\"BLOCKLOOKUPACTION\",\"index\":8,\"type\":504,"
+        "\"handle\":[0,1,9],\"numrows\":2,\"numcols\":2,\"numelems\":4,"
+        "\"exprs\":[\"a\"],\"lut\":[{\"b282\":0}]}]}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_object_counts: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 9)
+    fail ("in_json_object_counts: dwg_read_json");
+  else
+    {
+      Dwg_Object_LTYPE *ltype = dwg.object[0].tio.object->tio.LTYPE;
+      Dwg_Object_DICTIONARY *dict = dwg.object[1].tio.object->tio.DICTIONARY;
+      Dwg_Object_Entity *line = dwg.object[2].tio.entity;
+      Dwg_Object_PROXY_OBJECT *proxy
+          = dwg.object[3].tio.object->tio.PROXY_OBJECT;
+      Dwg_Object_FIELD *field = dwg.object[4].tio.object->tio.FIELD;
+      Dwg_Object_SPATIAL_FILTER *filter
+          = dwg.object[5].tio.object->tio.SPATIAL_FILTER;
+      Dwg_Object_BLOCKFLIPPARAMETER *flip
+          = dwg.object[6].tio.object->tio.BLOCKFLIPPARAMETER;
+      Dwg_Object_BLOCKPOLARSTRETCHACTION *stretch
+          = dwg.object[7].tio.object->tio.BLOCKPOLARSTRETCHACTION;
+      Dwg_Object_BLOCKLOOKUPACTION *lookup
+          = dwg.object[8].tio.object->tio.BLOCKLOOKUPACTION;
+
+      if (ltype->numdashes == 1)
+        ok ("_set_struct_field: LTYPE.numdashes from dashes");
+      else
+        fail ("_set_struct_field: LTYPE.numdashes %u != 1",
+              (unsigned)ltype->numdashes);
+      if (dict->numitems == 1)
+        ok ("_set_struct_field: DICTIONARY.numitems from items");
+      else
+        fail ("_set_struct_field: DICTIONARY.numitems " FORMAT_BL " != 1",
+              dict->numitems);
+      if (line->preview_size == 2)
+        ok ("_set_struct_field: preview_size from preview");
+      else
+        fail ("_set_struct_field: preview_size %u != 2",
+              (unsigned)line->preview_size);
+      if (proxy->data_numbits == 16)
+        ok ("_set_struct_field: PROXY_OBJECT.data_numbits within data");
+      else
+        fail ("_set_struct_field: PROXY_OBJECT.data_numbits " FORMAT_BL
+              " != 16",
+              proxy->data_numbits);
+      if (field->value.data_size == 2)
+        ok ("_set_struct_field: FIELD.value.data_size from data_date");
+      else
+        fail ("_set_struct_field: FIELD.value.data_size " FORMAT_BL " != 2",
+              field->value.data_size);
+      if (filter->transform && filter->inverse_transform
+          && filter->transform[0] == 1.0 && filter->transform[11] == 0.0
+          && filter->inverse_transform[11] == 0.0)
+        ok ("_set_struct_field: SPATIAL_FILTER.transform has 12");
+      else
+        fail ("_set_struct_field: SPATIAL_FILTER.transform");
+      if (flip->prop_states && flip->prop_states[0] == 1
+          && flip->prop_states[3] == 0)
+        ok ("_set_struct_field: BLOCKFLIPPARAMETER.prop_states has 4");
+      else
+        fail ("_set_struct_field: BLOCKFLIPPARAMETER.prop_states");
+      if (stretch->num_hdls == 1)
+        ok ("_set_struct_field: BLOCKPOLARSTRETCHACTION.num_hdls within "
+            "shorts");
+      else
+        fail ("_set_struct_field: BLOCKPOLARSTRETCHACTION.num_hdls " FORMAT_BL
+              " != 1",
+              stretch->num_hdls);
+      if (lookup->numelems == 1
+          && lookup->numrows * lookup->numcols <= lookup->numelems)
+        ok ("_set_struct_field: BLOCKLOOKUPACTION.numelems within exprs");
+      else
+        fail ("_set_struct_field: BLOCKLOOKUPACTION.numelems " FORMAT_BL
+              " numrows " FORMAT_BL " numcols " FORMAT_BL,
+              lookup->numelems, lookup->numrows, lookup->numcols);
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+}
 #endif
 
 int
@@ -410,6 +529,7 @@ main (int argc, char const *argv[])
   remove_NOD_item_null_itemhandles_test ();
 #ifndef DISABLE_JSON
   in_json_section_counts_test ();
+  in_json_object_counts_test ();
 #endif
   return failed;
 }
