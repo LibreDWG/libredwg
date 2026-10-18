@@ -2984,7 +2984,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       *rest = '\0';
                       rest++;
                       f1 = dwg_dynapi_subclass_field (subclass, key1);
-                      if (f1 && *rest)
+                      // not an inline struct either, as in an embedded one
+                      if (f1 && f1->type[strlen (f1->type) - 1] == '*')
+                        {
+                          LOG_ERROR ("Cannot set pointer field %s.%s %s",
+                                     subclass, key1, f1->type);
+                          json_advance_unknown (
+                              dat, tokens, tokens->tokens[tokens->index].type,
+                              0);
+                          JSON_TOKENS_CHECK_OVERFLOW_ERR
+                        }
+                      else if (f1 && *rest)
                         {
                           char *sb1 = dwg_dynapi_subclass_name (f1->type);
                           const Dwg_DYNAPI_field *sfields1
@@ -3071,10 +3081,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   f1 = dwg_dynapi_subclass_field (subclass, key1);
                   if (f1 && f1->type[strlen (f1->type) - 1] == '*')
                     {
-                      // not an inline struct, see above
+                      // not an inline struct, see above. Skip all of the
+                      // value, an array or object has more tokens
                       LOG_ERROR ("Cannot set pointer field %s.%s %s", subclass,
                                  key1, f1->type);
-                      f1 = NULL; // skipped below
+                      json_advance_unknown (
+                          dat, tokens, tokens->tokens[tokens->index].type, 0);
+                      JSON_TOKENS_CHECK_OVERFLOW_ERR
                     }
                   else if (f1 && *rest)
                     {
