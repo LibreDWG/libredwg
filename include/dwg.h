@@ -6619,13 +6619,14 @@ typedef struct _dwg_object_ASSOCPOINTREFACTIONPARAM
 typedef struct _dwg_object_ASSOCASMBODYACTIONPARAM
 {
   struct _dwg_object_object *parent;
+  /* first, as in Dwg_Entity_3DSOLID: ACTION_3DSOLID casts _obj to it */
+  _3DSOLID_FIELDS;
   ASSOCACTIONPARAM_fields;
   /* AcDbAssocSingleDependencyActionParam */
   BITCODE_BL asdap_class_version; // 0
   BITCODE_H  dep;
   /* AcDbAssocAsmbodyActionParam */
   BITCODE_BL class_version;
-  _3DSOLID_FIELDS;
 } Dwg_Object_ASSOCASMBODYACTIONPARAM;
 
 typedef struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM
