@@ -1144,6 +1144,9 @@ dwg_write_geojson (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (!dwg->num_objects || !dat->fh)
     goto fail;
+  /* An imported (DXF, JSON) or API-built drawing keeps its strings as TV
+     (IS_FROM_TU_DWG). Read them so also through a caller's fresh chain. */
+  dat->opts |= dwg->opts & DWG_OPTS_IN;
 
   HASH;
   PAIR_Sc (type, "FeatureCollection");

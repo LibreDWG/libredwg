@@ -92,6 +92,12 @@ static array_hdls *obj_hdls = NULL;
 // static long size_dxf_objs; // how many elements are allocated
 // static Dxf_Objs *dxf_objs;
 
+/* An imported drawing keeps its T strings as read (TV), in every DXF
+   version and for every target version: IS_FROM_TU_DWG is false for it, so
+   dynapi stores them so and every reader (IS_FROM_TU) takes them so. Only
+   fields typed TU (dxfname_u, TU EED and xdata strings, the r2007+ LTYPE
+   strings_area) hold UTF-16. */
+
 #define EXPECT_DXF(nam, field, dxf)                                           \
   if (pair == NULL || pair->code != dxf)                                      \
     {                                                                         \
@@ -1404,7 +1410,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
-  int is_tu = 1;
   int i = 0;
   Dxf_Pair *pair;
 
@@ -1443,7 +1448,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           const char *version = pair->value.s.ptr;
           dat->from_version = dwg->header.from_version
               = dwg_version_hdr_type (version);
-          is_tu = dat->from_version >= R_2007;
           LOG_TRACE ("HEADER.from_version = %s,\tdat->from_version = %s\n",
                      dwg_version_codes (dwg->header.from_version),
                      dwg_version_codes (dat->from_version));
@@ -1452,14 +1456,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version);
               dxf_free_pair (pair);
               return DWG_ERR_INVALIDDWG;
-            }
-          if (is_tu && dwg->num_objects
-              && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
-            {
-              Dwg_Object_BLOCK_HEADER *o
-                  = dwg->object[0].tio.object->tio.BLOCK_HEADER;
-              free (o->name);
-              o->name = (char *)bit_utf8_to_TU ((char *)"*Model_Space", 0);
             }
           // currently we can only encode DWGs to r13-r2000, but DXF's to
           // almost everything.
@@ -1721,26 +1717,10 @@ dxf_set_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   Dwg_Header *hdr = &dwg->header;
-  char *cp_tmp = NULL;
-  const char *cp_str;
+  // dynapi keeps the imported header strings as TV in every version
+  // (IS_FROM_TU_DWG), so the name is read as stored, never guessed TU.
+  const char *cp_str = vars->DWGCODEPAGE;
 
-  if (!vars->DWGCODEPAGE)
-    return;
-  // r2007+ stores header TV strings as TU (UTF-16); decode to UTF-8 for the
-  // textual codepage-name lookup, otherwise only the first byte is seen (e.g.
-  // "ANSI_1252" reads as "A") and the codepage is wrongly UNDEFINED. Detect TU
-  // by the embedded NUL — codepage names are pure ASCII, so a UTF-16LE copy
-  // has a 0 second byte, whereas a plain UTF-8 name does not. (Keyed on the
-  // actual bytes, not from_version, since a down-convert may already have
-  // re-encoded the header strings to UTF-8.)
-  // Only r2007+ header strings are TU (dynapi_set_helper), with at least 2
-  // wide chars incl. the terminator. A 1-char ASCII name in an older file is
-  // a 2 byte buffer, which the unbounded TU scan would overread.
-  if (hdr->version >= R_2007 && vars->DWGCODEPAGE[0]
-      && vars->DWGCODEPAGE[1] == 0)
-    cp_str = cp_tmp = bit_convert_TU ((BITCODE_TU)vars->DWGCODEPAGE);
-  else
-    cp_str = vars->DWGCODEPAGE;
   if (!cp_str)
     return;
   // r11 usually has "undefined"
@@ -1759,7 +1739,6 @@ dxf_set_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
           dat->codepage = hdr->codepage;
         }
     }
-  free (cp_tmp);
 }
 
 static void
@@ -1821,22 +1800,12 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
     hdr->app_dwg_version = hdr->dwg_version;
 
   if (!vars->FINGERPRINTGUID)
-    {
-      vars->FINGERPRINTGUID
-          = dwg->header.from_version >= R_2007
-                ? (BITCODE_TV)bit_utf8_to_TU (
-                      (char *)"{00000000-0000-0000-0000-000000000000}", 0)
-                : strdup ("{00000000-0000-0000-0000-000000000000}");
-    }
+    vars->FINGERPRINTGUID = strdup ("{00000000-0000-0000-0000-000000000000}");
   if (!vars->VERSIONGUID)
-    {
-      vars->VERSIONGUID
-          = dwg->header.from_version >= R_2007
-                ? (BITCODE_TV)bit_utf8_to_TU (
-                      (char *)"{A6BF05D3-02A0-4EB8-9AEE-9443625E66B6}", 0)
-                : (BITCODE_TV)strdup (
-                      "{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
-    }
+    vars->VERSIONGUID
+        = strdup (dwg->header.from_version >= R_2007
+                      ? "{A6BF05D3-02A0-4EB8-9AEE-9443625E66B6}"
+                      : "{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
 }
 
 static int
@@ -2474,7 +2443,9 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 9)
         {
           size_t strings_size, needed;
-          is_tu = obj->parent->header.version >= R_2007;
+          // the area has the layout of the DXF version, as decoded ones do:
+          // dwg_convert_LTYPE_strings_area converts it from there
+          is_tu = obj->parent->header.from_version > R_2004;
           CHK_dashes (j, dashes);
           o->dashes[j].text
               = dwg_add_u8_input (obj->parent, pair->value.s.ptr);
@@ -2486,14 +2457,19 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             o->strings_area = (BITCODE_TF)xcalloc (strings_size, 1);
           if (is_tu)
             {
-              needed = (bit_wcs2len ((BITCODE_TU)o->dashes[j].text) * 2) + 2;
+              // the r2007+ area is UTF-16, the text a TV string: convert
+              BITCODE_TU wtext = bit_utf8_to_TU (pair->value.s.ptr, 0);
+              if (!wtext)
+                goto skip_overflow;
+              needed = (bit_wcs2len (wtext) * 2) + 2;
               if (dash_i + needed > strings_size)
                 {
                   LOG_WARN ("LTYPE strings_area overflow, truncating");
+                  free (wtext);
                   goto skip_overflow;
                 }
-              bit_wcs2cpy ((BITCODE_TU)&o->strings_area[dash_i],
-                           (BITCODE_TU)o->dashes[j].text);
+              bit_wcs2cpy ((BITCODE_TU)&o->strings_area[dash_i], wtext);
+              free (wtext);
               dash_i += (unsigned)needed;
             }
           else
@@ -4029,11 +4005,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           assert (j >= 0);
           assert (j < (int)o->num_colors);
-          if (dat->version >= R_2007)
-            o->colors[j].color.name
-                = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
-          else
-            o->colors[j].color.name = strdup (pair->value.s.ptr);
+          o->colors[j].color.name = strdup (pair->value.s.ptr);
           LOG_TRACE ("HATCH.colors[%d].color.name = %s [CMC 431]\n", j,
                      pair->value.s.ptr);
         }
@@ -4578,11 +4550,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 {
                   if (ctx->has_content_blk)
                     goto unknown_mleader;
-                  if (dat->version >= R_2007)
-                    ctx->content.txt.default_text
-                        = (char *)bit_utf8_to_TU (pair->value.s.ptr, 0);
-                  else
-                    ctx->content.txt.default_text = strdup (pair->value.s.ptr);
+                  ctx->content.txt.default_text = strdup (pair->value.s.ptr);
                   LOG_TRACE ("%s.ctx.content.txt.default_text = %s [%d T]\n",
                              obj->name, pair->value.s.ptr, pair->code);
                 }
@@ -5144,12 +5112,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
         case 300:
           if (mode == CONTENTFORMAT)
             {
-              if (obj->parent->header.version >= R_2007)
-                o->content_format.value_format_string
-                    = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
-              else
-                o->content_format.value_format_string
-                    = strdup (pair->value.s.ptr);
+              o->content_format.value_format_string
+                  = strdup (pair->value.s.ptr);
               LOG_TRACE (
                   "%s.%s.content_format.value_format_string = \"%s\" [T %d]\n",
                   obj->name, key, pair->value.s.ptr, pair->code);
@@ -13621,30 +13585,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           o->color.book_name = NULL;
                           LOG_TRACE ("%s.color.name = %s [%s %d]\n", name,
                                      pair->value.s.ptr, "CMC", pair->code);
-                          if (dwg->header.version >= R_2007)
-                            {
-                              char *tmp = o->color.name;
-                              o->color.name = (BITCODE_T)bit_utf8_to_TU (
-                                  o->color.name, 0);
-                              free (tmp);
-                            }
                         }
                       else
                         { // book with name
                           o->color.flag = 3;
                           o->color.name = strdup (x + 1);
                           x[0] = '\0';
-                          if (dwg->header.version >= R_2007)
-                            {
-                              char *tmp = o->color.book_name;
-                              o->color.book_name = (BITCODE_T)bit_utf8_to_TU (
-                                  o->color.book_name, 0);
-                              free (tmp);
-                              tmp = o->color.name;
-                              o->color.name = (BITCODE_T)bit_utf8_to_TU (
-                                  o->color.name, 0);
-                              free (tmp);
-                            }
                           LOG_TRACE ("%s.color.book+name = %s [%s %d]\n", name,
                                      pair->value.s.ptr, "CMC", pair->code);
                         }
@@ -13999,8 +13945,11 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                                  obj);
                         PUSH_HV (_ctrl, num_entries, entries, ref);
                       }
-                    if (dwg->header.from_version > R_2004 && _obj->name
-                        && _obj->has_strings_area)
+                    // keep the area add_LTYPE_dashes filled, in this layout
+                    if (_obj->strings_area)
+                      ;
+                    else if (dwg->header.from_version > R_2004 && _obj->name
+                             && _obj->has_strings_area)
                       {
                         _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
                         if (!_obj->strings_area)
@@ -14009,7 +13958,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                             goto outofmem;
                           }
                       }
-                    if (dwg->header.from_version <= R_2004)
+                    else if (dwg->header.from_version <= R_2004)
                       {
                         _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
                         if (!_obj->strings_area)
