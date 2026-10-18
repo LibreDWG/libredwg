@@ -790,6 +790,30 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
         }                                                                     \
       ENDARRAY;                                                               \
     }
+// as arrays, as above. The default from spec.h writes a "nam[vcount]" key
+// for each point, which in_json does not read.
+#define SUB_FIELD_2RD_VECTOR(o, nam, size, dxf)                               \
+  if (_obj->o.nam)                                                            \
+    {                                                                         \
+      KEY (nam);                                                              \
+      ARRAY;                                                                  \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          FIRSTPREFIX VALUE_2RD (_obj->o.nam[vcount], dxf);                   \
+        }                                                                     \
+      ENDARRAY;                                                               \
+    }
+#define SUB_FIELD_3BD_VECTOR(o, nam, size, dxf)                               \
+  if (_obj->o.nam)                                                            \
+    {                                                                         \
+      KEY (nam);                                                              \
+      ARRAY;                                                                  \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                     \
+          FIRSTPREFIX VALUE_3BD (_obj->o.nam[vcount], dxf);                   \
+        }                                                                     \
+      ENDARRAY;                                                               \
+    }
 
 #define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \
   if (_obj->nam)                                                              \

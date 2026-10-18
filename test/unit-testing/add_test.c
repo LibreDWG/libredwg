@@ -43,6 +43,8 @@ static int cnt = 0;
 #include "out_dxf.h"
 #ifndef DISABLE_JSON
 #  include "in_json.h"
+#  include "out_json.h"
+#  include "decode.h"
 #endif
 #ifndef DISABLE_DXF
 #  include "decode.h"
@@ -1719,6 +1721,61 @@ clippings_check (Dwg_Data *dwg, const char *from, const int is_dwg)
     }
 }
 
+/* As dwgread -O JSON and dwgwrite: write the DWG as JSON and import it
+   again. The clippings must keep their vertices. */
+static void
+clippings_json_check (Dwg_Data *dwg, const char *jsonfile)
+{
+  Dwg_Data dwg3;
+  Bit_Chain out = { 0 };
+  Bit_Chain dat = { 0 };
+  FILE *fp;
+  int error;
+
+  out.version = out.from_version = dwg->header.version;
+  out.codepage = dwg->header.codepage;
+  out.opts = dwg->opts;
+  out.fh = fopen (jsonfile, "wb");
+  if (!out.fh)
+    {
+      fail ("pointcloud_clippings: fopen %s failed", jsonfile);
+      return;
+    }
+  error = dwg_write_json (&out, dwg);
+  fclose (out.fh);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("pointcloud_clippings: dwg_write_json failed with 0x%x", error);
+      return;
+    }
+  fp = fopen (jsonfile, "rb");
+  if (!fp)
+    {
+      fail ("pointcloud_clippings: fopen %s failed", jsonfile);
+      return;
+    }
+  dat.opts = dwg->opts;
+  if (dat_read_file (&dat, fp, jsonfile)) // closes fp on errors
+    {
+      fail ("pointcloud_clippings: dat_read_file %s failed", jsonfile);
+      return;
+    }
+  fclose (fp);
+  memset (&dwg3, 0, sizeof (dwg3));
+  dwg3.opts = dwg->opts;
+  error = dwg_read_json (&dat, &dwg3);
+  free (dat.chain);
+  // on some errors dwg_read_json already freed it
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("pointcloud_clippings: dwg_read_json %s failed with 0x%x",
+            jsonfile, error);
+      return;
+    }
+  clippings_check (&dwg3, jsonfile, 1);
+  dwg_free (&dwg3);
+}
+
 static int
 test_pointcloud_clippings (void)
 {
@@ -1737,6 +1794,7 @@ test_pointcloud_clippings (void)
         "\"z_max\":1.0},"
         "{\"type\":2,\"vertices\":[[-0.5,-0.5],[0.5,0.5]]}]}]}";
   const char *dwgfile = "pointcloud_clippings.dwg";
+  const char *jsonfile = "pointcloud_clippings.json";
   struct stat attrib;
   Dwg_Data dwg, dwg2;
   Bit_Chain dat = { 0 };
@@ -1773,9 +1831,15 @@ test_pointcloud_clippings (void)
   else if ((error = dwg_read_file (dwgfile, &dwg2)) >= DWG_ERR_CRITICAL)
     fail ("pointcloud_clippings: dwg_read_file failed with 0x%x", error);
   else
-    clippings_check (&dwg2, dwgfile, 1);
+    {
+      clippings_check (&dwg2, dwgfile, 1);
+      clippings_json_check (&dwg2, jsonfile);
+    }
   if (!debug)
-    unlink (dwgfile);
+    {
+      unlink (dwgfile);
+      unlink (jsonfile);
+    }
   dwg_free (&dwg2);
   dwg_free (&dwg);
   if (!numfailed ())
