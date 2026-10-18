@@ -41,6 +41,9 @@ static int cnt = 0;
 #include "classes.h"
 #include "bits.h"
 #include "out_dxf.h"
+#ifndef DISABLE_JSON
+#  include "in_json.h"
+#endif
 #ifndef DISABLE_DXF
 #  include "decode.h"
 #  include "in_dxf.h"
@@ -1672,6 +1675,115 @@ test_clip_verts_rect (void)
 }
 #endif
 
+#ifndef DISABLE_JSON
+/* As for IMAGE, the POINTCLOUD spec set clippings[].num_vertices to 2 for
+   a box or rectangle in every action, but the JSON importer allocates the
+   vertices as its input gives them. With a single vertex, the r2013+
+   encoder read vertices[1] past it. Only the decoder may set the count;
+   the encoder writes a box or rectangle with another count as polygon. */
+// clippings[]: type in the JSON, num_vertices, type in the DWG
+static const struct
+{
+  BITCODE_BS type;
+  BITCODE_BL num_vertices;
+  BITCODE_BS dwg_type;
+} clippings_want[] = { { 2, 1, 3 }, { 1, 1, 3 }, { 2, 2, 2 } };
+
+static void
+clippings_check (Dwg_Data *dwg, const char *from, const int is_dwg)
+{
+  Dwg_Entity_POINTCLOUD *_obj = NULL;
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    if (dwg->object[i].fixedtype == DWG_TYPE_POINTCLOUD)
+      {
+        _obj = dwg->object[i].tio.entity->tio.POINTCLOUD;
+        break;
+      }
+  if (!_obj || !_obj->clippings
+      || _obj->num_clippings != ARRAY_SIZE (clippings_want))
+    {
+      fail ("pointcloud_clippings: no POINTCLOUD with %d clippings in %s",
+            (int)ARRAY_SIZE (clippings_want), from);
+      return;
+    }
+  for (int i = 0; i < ARRAY_SIZE (clippings_want); i++)
+    {
+      Dwg_POINTCLOUD_Clippings *clip = &_obj->clippings[i];
+      if (clip->type
+              != (is_dwg ? clippings_want[i].dwg_type : clippings_want[i].type)
+          || clip->num_vertices != clippings_want[i].num_vertices
+          || !clip->vertices || clip->vertices[0].x != -0.5)
+        fail ("pointcloud_clippings: %s clippings[%d].type %d, "
+              "num_vertices " FORMAT_BL,
+              from, i, (int)clip->type, clip->num_vertices);
+    }
+}
+
+static int
+test_pointcloud_clippings (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1032\"},\"CLASSES\":["
+        "{\"number\":500,\"dxfname\":\"ACDBPOINTCLOUD\","
+        "\"cppname\":\"AcDbPointCloud\",\"appname\":\"AcDbPointCloud\","
+        "\"proxyflag\":1025,\"num_instances\":1,\"is_zombie\":0,"
+        "\"item_class_id\":498}],\"OBJECTS\":["
+        "{\"entity\":\"POINTCLOUD\",\"index\":0,\"type\":500,"
+        "\"handle\":[0,2,256],\"class_version\":2,\"num_source_files\":0,"
+        "\"clippings\":["
+        // a rectangle and a box with one vertex
+        "{\"type\":2,\"vertices\":[[-0.5,-0.5]]},"
+        "{\"type\":1,\"vertices\":[[-0.5,-0.5]],\"z_min\":0.0,"
+        "\"z_max\":1.0},"
+        "{\"type\":2,\"vertices\":[[-0.5,-0.5],[0.5,0.5]]}]}]}";
+  const char *dwgfile = "pointcloud_clippings.dwg";
+  struct stat attrib;
+  Dwg_Data dwg, dwg2;
+  Bit_Chain dat = { 0 };
+  int error;
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dwg2, 0, sizeof (dwg2));
+  dwg.opts = dwg2.opts = tracelevel;
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("pointcloud_clippings: out of memory");
+      return numfailed ();
+    }
+  dat.size = strlen (json);
+  error = dwg_read_json (&dat, &dwg);
+  free (dat.chain);
+  // on some errors dwg_read_json already freed it
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("pointcloud_clippings: dwg_read_json failed with 0x%x", error);
+      return numfailed ();
+    }
+  clippings_check (&dwg, "the JSON", 0);
+
+  // as dwgwrite, write the version the JSON was written from (r2018)
+  dwg.header.version = dwg.header.from_version;
+  if (!stat (dwgfile, &attrib))
+    unlink (dwgfile);
+  error = dwg_write_file (dwgfile, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("pointcloud_clippings: dwg_write_file failed with 0x%x", error);
+  else if ((error = dwg_read_file (dwgfile, &dwg2)) >= DWG_ERR_CRITICAL)
+    fail ("pointcloud_clippings: dwg_read_file failed with 0x%x", error);
+  else
+    clippings_check (&dwg2, dwgfile, 1);
+  if (!debug)
+    unlink (dwgfile);
+  dwg_free (&dwg2);
+  dwg_free (&dwg);
+  if (!numfailed ())
+    ok ("pointcloud_clippings: POINTCLOUD writers stay within vertices");
+  return numfailed ();
+}
+#endif
+
 int
 main (int argc, char *argv[])
 {
@@ -1701,6 +1813,9 @@ main (int argc, char *argv[])
   error += test_mlinestyle_obj_realloc ();
 #else
   error = test_mlinestyle_obj_realloc ();
+#endif
+#ifndef DISABLE_JSON
+  error += test_pointcloud_clippings ();
 #endif
   error += test_names ();
   error += test_api_version ();

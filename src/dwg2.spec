@@ -5298,13 +5298,28 @@ DWG_ENTITY (POINTCLOUD)
         REPEAT (num_clippings, clippings, Dwg_POINTCLOUD_Clippings)
         REPEAT_BLOCK
           SUB_FIELD_B (clippings[rcount1], is_inverted, 0);
+          // as IMAGE: a box or rectangle is stored as its 2 corners,
+          // without a count. Other counts (from JSON) are written as polygon.
+          ENCODER {
+            if (_obj->clippings[rcount1].type != 3
+                && _obj->clippings[rcount1].num_vertices != 2)
+              {
+                LOG_WARN ("POINTCLOUD.clippings[%u].num_vertices " FORMAT_BL
+                          " for a box or rectangle, write a polygon",
+                          (unsigned)rcount1,
+                          _obj->clippings[rcount1].num_vertices);
+                _obj->clippings[rcount1].type = 3;
+              }
+          }
           SUB_FIELD_BS (clippings[rcount1], type, 0);
           if (_obj->clippings[rcount1].type == 3) // polygon
             {
               SUB_FIELD_BL (clippings[rcount1], num_vertices, 0);
             }
           else // box or rectangle
-            _obj->clippings[rcount1].num_vertices = 2;
+            {
+              DECODER { _obj->clippings[rcount1].num_vertices = 2; }
+            }
           SUB_FIELD_2RD_VECTOR (clippings[rcount1], vertices, num_vertices, 0);
           if (_obj->clippings[rcount1].type == 1) // box
             {
