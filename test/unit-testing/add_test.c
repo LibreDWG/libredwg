@@ -1543,9 +1543,12 @@ first_object_of_type (Dwg_Data *dwg, const Dwg_Object_Type type)
 // the dashes, MLINE.num_lines (73) after a 73 of 0 allocated empty lines,
 // and before r2010 an entity's preview_size (160) after a 92 sized the
 // preview. The MLINE importer then wrote past the lines, and the writers
-// (encode, out_dxf, out_json) walked past all three arrays. Import each
-// sequence, check the counts and walk every array to its count, so
-// ASan/valgrind catch any regression.
+// (encode, out_dxf, out_json) walked past all three arrays. The ASSOC*
+// importers set each count before reading its list, and the list only
+// once complete, so a repeated AcDbAssocAction or AcDbAssocNetwork whose
+// list ended early left the earlier, shorter one under the new count.
+// Import each sequence, check the counts and walk every array to its
+// count, so ASan/valgrind catch any regression.
 static int
 test_dxf_count_resets (void)
 {
@@ -1585,10 +1588,36 @@ test_dxf_count_resets (void)
                               "160\n3000\n"
                               "100\nAcDbPoint\n 10\n0.0\n 20\n0.0\n 30\n0.0\n"
                               "  0\nENDSEC\n  0\nEOF\n";
+  static const char *const assoc_dxf
+      = DXF_HEADER ("AC1018") "  0\nSECTION\n  2\nOBJECTS\n"
+                              "  0\nACDBASSOCNETWORK\n  5\n3E2\n330\n0\n"
+                              "100\nAcDbAssocAction\n 90\n2\n 90\n0\n"
+                              "330\n0\n360\n0\n 90\n0\n 90\n0\n"
+                              " 90\n1\n330\n3E2\n"
+                              " 90\n0\n 90\n1\n360\n3E2\n 90\n0\n 90\n1\n"
+                              " 90\n0\n  1\nd0\n 90\n0\n 90\n0\n"
+                              // again, the values end in the second
+                              "100\nAcDbAssocAction\n 90\n2\n 90\n0\n"
+                              "330\n0\n360\n0\n 90\n0\n 90\n0\n"
+                              " 90\n2\n330\n3E2\n330\n3E2\n"
+                              " 90\n0\n 90\n2\n360\n3E2\n360\n3E2\n"
+                              " 90\n0\n 90\n3\n"
+                              " 90\n0\n  1\nd1\n 90\n0\n 90\n0\n"
+                              " 90\n0\n  1\nd2\n 90\n0\n 70\n0\n"
+                              // again, the deps end in the second
+                              "100\nAcDbAssocAction\n 90\n2\n 90\n0\n"
+                              "330\n0\n360\n0\n 90\n0\n 90\n0\n"
+                              " 90\n3\n330\n3E2\n"
+                              "100\nAcDbAssocNetwork\n 90\n0\n 90\n0\n"
+                              " 90\n1\n330\n3E2\n 90\n1\n330\n3E2\n"
+                              // again, the actions end in the third
+                              "100\nAcDbAssocNetwork\n 90\n0\n 90\n0\n"
+                              " 90\n3\n330\n3E2\n330\n3E2\n"
+                              "  0\nENDSEC\n  0\nEOF\n";
 #  undef DXF_HEADER
-  const char *const dxfs[] = { ltype_dxf, mline_dxf, preview_dxf };
-  const Dwg_Object_Type types[]
-      = { DWG_TYPE_LTYPE, DWG_TYPE_MLINE, DWG_TYPE_POINT };
+  const char *const dxfs[] = { ltype_dxf, mline_dxf, preview_dxf, assoc_dxf };
+  const Dwg_Object_Type types[] = { DWG_TYPE_LTYPE, DWG_TYPE_MLINE,
+                                    DWG_TYPE_POINT, DWG_TYPE_ASSOCNETWORK };
   const unsigned int lvl = loglevel;
 
   failed = 0;
@@ -1637,6 +1666,38 @@ test_dxf_count_resets (void)
           else
             ok ("dxf_count_resets: MLINE.num_lines 2 after 0 with the "
                 "lines it counts");
+        }
+      else if (types[t] == DWG_TYPE_ASSOCNETWORK)
+        {
+          Dwg_Object_ASSOCNETWORK *o = obj->tio.object->tio.ASSOCNETWORK;
+          unsigned refs = 0, names = 0;
+          for (BITCODE_BL i = 0; o->deps && i < o->num_deps; i++)
+            refs += o->deps[i].dep && o->deps[i].dep->absolute_ref == 0x3E2;
+          for (BITCODE_BL i = 0; o->owned_params && i < o->num_owned_params;
+               i++)
+            refs += o->owned_params[i]
+                    && o->owned_params[i]->absolute_ref == 0x3E2;
+          for (BITCODE_BL i = 0; o->actions && i < o->num_actions; i++)
+            refs += o->actions[i].dep
+                    && o->actions[i].dep->absolute_ref == 0x3E2;
+          for (BITCODE_BL i = 0;
+               o->owned_actions && i < o->num_owned_actions; i++)
+            refs += o->owned_actions[i]
+                    && o->owned_actions[i]->absolute_ref == 0x3E2;
+          for (BITCODE_BL i = 0; o->values && i < o->num_values; i++)
+            names += o->values[i].name && strEQc (o->values[i].name, "d1");
+          if (o->num_deps != 1 || o->num_owned_params != 2
+              || o->num_values != 1 || o->num_actions != 2
+              || o->num_owned_actions != 1 || refs != 6 || names != 1)
+            fail ("dxf_count_resets: ASSOCNETWORK.num_deps %u "
+                  "num_owned_params %u num_values %u num_actions %u "
+                  "num_owned_actions %u, %u refs, %u names",
+                  (unsigned)o->num_deps, (unsigned)o->num_owned_params,
+                  (unsigned)o->num_values, (unsigned)o->num_actions,
+                  (unsigned)o->num_owned_actions, refs, names);
+          else
+            ok ("dxf_count_resets: ASSOCNETWORK counts kept at the lists "
+                "read");
         }
       else
         {
