@@ -394,9 +394,11 @@ in_json_section_counts_test (void)
 /* In _set_struct_field only the num_ keys were ignored. The other counts
    and sizes were taken as is, also after their buffer, a vector of fixed
    size in the spec was allocated at the JSON array's length, num_hdls
-   counted hdls but not shorts, and numrows * numcols counted exprs and
-   lut unchecked. The writers then read past the buffers. The fixed size
-   checks of transform and prop_states fail before only with ASan. */
+   counted hdls but not shorts, num_ents ents but not sort_ents,
+   num_segs_or_paths polyline_paths but not segs, and numrows * numcols
+   counted exprs and lut unchecked. The writers then read past the
+   buffers. The fixed size checks of transform and prop_states fail before
+   only with ASan. */
 static void
 in_json_object_counts_test (void)
 {
@@ -423,7 +425,15 @@ in_json_object_counts_test (void)
         "\"hdls\":[[4,1,1,1],[4,1,2,2]]},"
         "{\"object\":\"BLOCKLOOKUPACTION\",\"index\":8,\"type\":504,"
         "\"handle\":[0,1,9],\"numrows\":2,\"numcols\":2,\"numelems\":4,"
-        "\"exprs\":[\"a\"],\"lut\":[{\"b282\":0}]}]}";
+        "\"exprs\":[\"a\"],\"lut\":[{\"b282\":0}]},"
+        "{\"object\":\"SORTENTSTABLE\",\"index\":9,\"type\":505,"
+        "\"handle\":[0,1,10],\"sort_ents\":[[0,1,1,1]],"
+        "\"ents\":[[5,1,1,1],[5,1,2,2]]},"
+        "{\"entity\":\"HATCH\",\"index\":10,\"type\":78,"
+        "\"handle\":[0,1,11],\"paths\":[{\"flag\":1,"
+        "\"segs\":[{\"curve_type\":1}],"
+        "\"polyline_paths\":[{\"point\":[0.0,0.0]},"
+        "{\"point\":[1.0,1.0]}]}]}]}";
   Dwg_Data dwg;
   Bit_Chain dat = { 0 };
 
@@ -435,7 +445,7 @@ in_json_object_counts_test (void)
       return;
     }
   dat.size = strlen (json);
-  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 9)
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 11)
     fail ("in_json_object_counts: dwg_read_json");
   else
     {
@@ -453,6 +463,9 @@ in_json_object_counts_test (void)
           = dwg.object[7].tio.object->tio.BLOCKPOLARSTRETCHACTION;
       Dwg_Object_BLOCKLOOKUPACTION *lookup
           = dwg.object[8].tio.object->tio.BLOCKLOOKUPACTION;
+      Dwg_Object_SORTENTSTABLE *sortents
+          = dwg.object[9].tio.object->tio.SORTENTSTABLE;
+      Dwg_Entity_HATCH *hatch = dwg.object[10].tio.entity->tio.HATCH;
 
       if (ltype->numdashes == 1)
         ok ("_set_struct_field: LTYPE.numdashes from dashes");
@@ -505,6 +518,24 @@ in_json_object_counts_test (void)
         fail ("_set_struct_field: BLOCKLOOKUPACTION.numelems " FORMAT_BL
               " numrows " FORMAT_BL " numcols " FORMAT_BL,
               lookup->numelems, lookup->numrows, lookup->numcols);
+      if (sortents->num_ents == 1)
+        ok ("_set_struct_field: SORTENTSTABLE.num_ents within sort_ents");
+      else
+        fail ("_set_struct_field: SORTENTSTABLE.num_ents " FORMAT_BL " != 1",
+              sortents->num_ents);
+      if (hatch->num_paths == 1 && hatch->paths
+          && hatch->paths[0].num_segs_or_paths == 1)
+        ok ("_set_struct_field: HATCH.paths[0].num_segs_or_paths within "
+            "segs");
+      else
+        fail ("_set_struct_field: HATCH.paths[0].num_segs_or_paths");
+      // dwg_free frees only the one of segs and polyline_paths the flag
+      // selects
+      if (hatch->num_paths && hatch->paths)
+        {
+          free (hatch->paths[0].polyline_paths);
+          hatch->paths[0].polyline_paths = NULL;
+        }
     }
   dwg_free (&dwg);
   free (dat.chain);

@@ -2242,6 +2242,16 @@ json_set_numfield (void *restrict _obj,
       f = json_find_field (fields, "numelems");
       other = strEQc (key, "lut") ? "exprs" : "lut";
     }
+  else if (strEQc (key, "sort_ents") || strEQc (key, "ents"))
+    { // SORTENTSTABLE: num_ents counts both
+      f = find_numfield (fields, "ents");
+      other = strEQc (key, "ents") ? "sort_ents" : "ents";
+    }
+  else if (strEQc (key, "segs") || strEQc (key, "polyline_paths"))
+    { // HATCH_Path: num_segs_or_paths counts the one its flag selects
+      f = find_numfield (fields, key);
+      other = strEQc (key, "segs") ? "polyline_paths" : "segs";
+    }
   else
     f = find_numfield (fields, key);
   // a shared count (both are BL) never exceeds the other array
