@@ -2272,15 +2272,30 @@ json_set_numfield (void *restrict _obj,
     }
   else if (strEQc (key, "ref"))
     {
-      if (size != 4) // fixed size
-        LOG_WARN ("Need 4 ref array elements, have %ld", size);
+      if (size != 6) // fixed size
+        LOG_WARN ("Need 6 ref array elements, have %ld", size);
       else
-        LOG_TRACE ("Check ref[] 4 ok\n");
+        LOG_TRACE ("Check ref[] 6 ok\n");
     }
   else
     LOG_ERROR ("Unknown num_%s field", key);
 }
 #undef FIXUP_NUMFIELD
+
+// Subclass arrays which the specs walk a constant number of times
+// (REPEAT_CN), whatever the JSON array holds. Allocate at least that many,
+// as the decoder does. An empty array stays NULL, which the specs skip.
+static int
+json_subclass_fixed_elems (const char *restrict subclass)
+{
+  if (strEQc (subclass, "DIMASSOC_Ref"))
+    return 6; // REPEAT_CN (6, ref)
+  if (strEQc (subclass, "TABLESTYLE_rowstyles"))
+    return 3; // REPEAT_CN (3, rowstyles)
+  if (strEQc (subclass, "TABLESTYLE_border"))
+    return 6; // _REPEAT_CN (6, rowstyle.borders)
+  return 0;
+}
 
 #define FIXUP_SIZEFIELD(type)                                                 \
   {                                                                           \
@@ -2978,6 +2993,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       else if (t->type == JSMN_ARRAY && memBEGINc (f->type, "Dwg_"))
         {
           int num_elems = t->size;
+          int num_alloc;
           int size_elem;
           char *elems;
           const Dwg_DYNAPI_field *sfields;
@@ -3006,13 +3022,12 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               o->num_lines = num_elems;
               LOG_TRACE ("MLINE.num_lines = %d\n", num_elems);
             }
-          if (strEQc (subclass, "DIMASSOC_Ref") && num_elems != 4)
-            {
-              elems = (char *)calloc (MAX (4, num_elems), size_elem);
-              LOG_TRACE ("DIMASSOC num_refs = 4\n");
-            }
+          num_alloc = num_elems ? json_subclass_fixed_elems (subclass) : 0;
+          if (num_alloc > num_elems)
+            LOG_TRACE ("%s: allocate %d elems\n", key, num_alloc);
           else
-            elems = num_elems ? (char *)calloc (num_elems, size_elem) : NULL;
+            num_alloc = num_elems;
+          elems = num_alloc ? (char *)calloc (num_alloc, size_elem) : NULL;
           dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
           tokens->index++;
           // array of structs

@@ -509,6 +509,63 @@ in_json_object_counts_test (void)
   dwg_free (&dwg);
   free (dat.chain);
 }
+
+/* The specs walk DIMASSOC.ref 6 times, TABLESTYLE.rowstyles 3 times and
+   their borders 6 times (REPEAT_CN), whatever the JSON arrays held, but
+   _set_struct_field allocated the refs for max (4, the array's length)
+   and the rowstyles and borders for the array's length. dwg_free and the
+   writers then read past them. The checks of the last elements fail
+   before only with ASan. */
+static void
+in_json_subclass_fixed_elems_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+        "{\"object\":\"DIMASSOC\",\"index\":0,\"type\":500,"
+        "\"handle\":[0,1,1],\"associativity\":1,"
+        "\"ref\":[{\"classname\":\"AcDbOsnapPointRef\",\"osnap_type\":1}]},"
+        "{\"object\":\"TABLESTYLE\",\"index\":1,\"type\":501,"
+        "\"handle\":[0,1,2],\"rowstyles\":[{\"text_height\":1.0,"
+        "\"borders\":[{\"linewt\":1,\"visible\":1}]}]}]}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_subclass_fixed_elems: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 2)
+    fail ("in_json_subclass_fixed_elems: dwg_read_json");
+  else
+    {
+      Dwg_Object_DIMASSOC *dimassoc = dwg.object[0].tio.object->tio.DIMASSOC;
+      Dwg_Object_TABLESTYLE *style
+          = dwg.object[1].tio.object->tio.TABLESTYLE;
+
+      if (dimassoc->ref && dimassoc->ref[0].osnap_type == 1
+          && !dimassoc->ref[5].classname && !dimassoc->ref[5].osnap_type)
+        ok ("_set_struct_field: DIMASSOC.ref has 6");
+      else
+        fail ("_set_struct_field: DIMASSOC.ref");
+      if (style->rowstyles && style->rowstyles[0].text_height == 1.0
+          && style->rowstyles[0].borders
+          && style->rowstyles[0].borders[0].linewt == 1
+          && style->rowstyles[0].borders[5].linewt == 0
+          && style->rowstyles[2].text_height == 0.0
+          && !style->rowstyles[2].borders)
+        ok ("_set_struct_field: TABLESTYLE.rowstyles has 3, borders 6");
+      else
+        fail ("_set_struct_field: TABLESTYLE.rowstyles");
+    }
+  // as dwgwrite, so that dwg_free walks the objects with the R2004 spec
+  dwg.header.version = dwg.header.from_version;
+  dwg_free (&dwg);
+  free (dat.chain);
+}
 #endif
 
 int
@@ -530,6 +587,7 @@ main (int argc, char const *argv[])
 #ifndef DISABLE_JSON
   in_json_section_counts_test ();
   in_json_object_counts_test ();
+  in_json_subclass_fixed_elems_test ();
 #endif
   return failed;
 }
