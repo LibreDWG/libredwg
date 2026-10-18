@@ -12442,18 +12442,15 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                         {
                           BITCODE_BL num_clip_verts = 0;
                           BITCODE_2RD *clip_verts;
-                          // 11 has no explicit DXF count, so keep using the
-                          // entity state accumulated from previous 11/21
-                          // pairs. 14/24 still relies on a count field set
-                          // earlier.
+                          // The count grows with the 11/21 or 14/24 pairs:
+                          // underlays have no DXF count, and a rectangular
+                          // IMAGE or WIPEOUT clip boundary may come without
+                          // its 91.
                           dwg_dynapi_entity_value (_obj, obj->name,
                                                    "num_clip_verts",
                                                    &num_clip_verts, NULL);
                           LOG_INSANE ("%s.num_clip_verts = %d, j = %d\n", name,
                                       num_clip_verts, j);
-                          if (!num_clip_verts
-                              && obj->fixedtype == DWG_TYPE_IMAGE)
-                            num_clip_verts = 2;
                           dwg_dynapi_entity_value (_obj, obj->name,
                                                    "clip_verts", &clip_verts,
                                                    NULL);

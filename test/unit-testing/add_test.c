@@ -1528,6 +1528,148 @@ test_viewport_vx_realloc (void)
   free (buf);
   return numfailed ();
 }
+
+/* The IMAGE and WIPEOUT specs set num_clip_verts to 2 for a rectangular
+   clip boundary in every action, but the DXF and JSON importers allocate
+   clip_verts as their input gives it. With a single vertex, the writers
+   read clip_verts[1] past it. Only the decoder may set the count; the
+   encoder writes a rectangle with another count as polygon. */
+// handle, num_clip_verts, clip_boundary_type in the DWG (1 in the DXF)
+static const struct
+{
+  unsigned long handle;
+  BITCODE_BL num_clip_verts;
+  BITCODE_BS clip_boundary_type;
+} clip_verts_want[] = { { 0x100, 1, 2 }, { 0x101, 1, 2 }, { 0x102, 2, 1 } };
+
+static void
+clip_verts_check (Dwg_Data *dwg, const char *from, const int is_dwg)
+{
+  for (int i = 0; i < ARRAY_SIZE (clip_verts_want); i++)
+    {
+      Dwg_Object *obj = dwg_resolve_handle (dwg, clip_verts_want[i].handle);
+      BITCODE_BS clip_boundary_type = 0;
+      BITCODE_BL num_clip_verts = 0;
+      if (!obj || obj->supertype != DWG_SUPERTYPE_ENTITY
+          || !dwg_dynapi_entity_value (obj->tio.entity->tio.IMAGE, obj->name,
+                                       "clip_boundary_type",
+                                       &clip_boundary_type, NULL)
+          || !dwg_dynapi_entity_value (obj->tio.entity->tio.IMAGE, obj->name,
+                                       "num_clip_verts", &num_clip_verts,
+                                       NULL))
+        fail ("clip_verts_rect: %lX not in %s", clip_verts_want[i].handle,
+              from);
+      else if (num_clip_verts != clip_verts_want[i].num_clip_verts
+               || clip_boundary_type
+                      != (is_dwg ? clip_verts_want[i].clip_boundary_type : 1))
+        fail ("clip_verts_rect: %s %lX %s.clip_boundary_type %d, "
+              "num_clip_verts " FORMAT_BL,
+              from, clip_verts_want[i].handle, obj->name,
+              (int)clip_boundary_type, num_clip_verts);
+    }
+}
+
+static int
+test_clip_verts_rect (void)
+{
+#  define CLIP_ENT(name, subclass, handle, clip)                             \
+    "  0\n" name "\n  5\n" handle "\n  8\n0\n100\nAcDbEntity\n100\n" subclass \
+    "\n 90\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n 11\n1.0\n 21\n0.0\n 31\n0.0\n" \
+    " 12\n0.0\n 22\n1.0\n 32\n0.0\n 13\n1.0\n 23\n1.0\n 70\n7\n280\n1\n"      \
+    " 71\n1\n" clip
+  static const char dxf[]
+      = "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1015\n"
+        "  9\n$HANDSEED\n  5\n200\n"
+        "  0\nENDSEC\n  0\nSECTION\n  2\nCLASSES\n"
+        "  0\nCLASS\n  1\nIMAGE\n  2\nAcDbRasterImage\n  3\nISM\n"
+        " 90\n2175\n280\n0\n281\n1\n"
+        "  0\nCLASS\n  1\nWIPEOUT\n  2\nAcDbWipeout\n  3\nWipeOut\n"
+        " 90\n2175\n280\n0\n281\n1\n"
+        "  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n"
+        // a rectangle with one vertex
+        CLIP_ENT ("IMAGE", "AcDbRasterImage", "100",
+                  " 91\n1\n 14\n-0.5\n 24\n-0.5\n")
+        CLIP_ENT ("WIPEOUT", "AcDbWipeout", "101",
+                  " 91\n1\n 14\n-0.5\n 24\n-0.5\n")
+        // a rectangle without its count
+        CLIP_ENT ("IMAGE", "AcDbRasterImage", "102",
+                  " 14\n-0.5\n 24\n-0.5\n 14\n0.5\n 24\n0.5\n")
+        "  0\nENDSEC\n  0\nEOF\n";
+#  undef CLIP_ENT
+  const char *dxffile = "clip_verts_rect.dxf";
+  const char *dwgfile = "clip_verts_rect.dwg";
+  struct stat attrib;
+  Dwg_Data dwg, dwg2;
+  Bit_Chain dat = { 0 };
+  Bit_Chain out = { 0 };
+  int error;
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dwg2, 0, sizeof (dwg2));
+  dwg.opts = dwg2.opts = tracelevel;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("clip_verts_rect: out of memory");
+      return numfailed ();
+    }
+  dat.size = strlen (dxf);
+  error = dwg_read_dxf (&dat, &dwg);
+  free (dat.chain);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("clip_verts_rect: dwg_read_dxf failed with 0x%x", error);
+      dwg_free (&dwg);
+      return numfailed ();
+    }
+  clip_verts_check (&dwg, "the DXF", 0);
+
+  // Without tables, only a minimal DXF gets to the ENTITIES
+  dwg.opts |= DWG_OPTS_MINIMAL;
+  out.version = dwg.header.version;
+  out.from_version = dwg.header.from_version;
+  out.opts = dwg.opts;
+  out.fh = fopen (dxffile, "wb");
+  if (!out.fh)
+    fail ("clip_verts_rect: fopen %s failed", dxffile);
+  else
+    {
+      error = dwg_write_dxf (&out, &dwg);
+      fclose (out.fh);
+      if (error >= DWG_ERR_CRITICAL)
+        fail ("clip_verts_rect: dwg_write_dxf failed with 0x%x", error);
+      else if ((error = dxf_read_file (dxffile, &dwg2)) >= DWG_ERR_CRITICAL)
+        fail ("clip_verts_rect: dxf_read_file %s failed with 0x%x", dxffile,
+              error);
+      else
+        clip_verts_check (&dwg2, dxffile, 0);
+      dwg_free (&dwg2);
+    }
+  dwg.opts &= ~DWG_OPTS_MINIMAL;
+
+  memset (&dwg2, 0, sizeof (dwg2));
+  dwg2.opts = tracelevel;
+  if (!stat (dwgfile, &attrib))
+    unlink (dwgfile);
+  error = dwg_write_file (dwgfile, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("clip_verts_rect: dwg_write_file failed with 0x%x", error);
+  else if ((error = dwg_read_file (dwgfile, &dwg2)) >= DWG_ERR_CRITICAL)
+    fail ("clip_verts_rect: dwg_read_file failed with 0x%x", error);
+  else
+    clip_verts_check (&dwg2, dwgfile, 1);
+  if (!debug)
+    {
+      unlink (dxffile);
+      unlink (dwgfile);
+    }
+  dwg_free (&dwg2);
+  dwg_free (&dwg);
+  if (!numfailed ())
+    ok ("clip_verts_rect: IMAGE and WIPEOUT writers stay within clip_verts");
+  return numfailed ();
+}
 #endif
 
 int
@@ -1550,10 +1692,12 @@ main (int argc, char *argv[])
 
 #if !defined(_WIN32) && !defined(DISABLE_DXF)
   error = test_viewport_vx_realloc ();
+  error += test_clip_verts_rect ();
   error += test_mlinestyle_obj_realloc ();
   error += test_mlinestyle_nonfinite_angle ();
 #elif !defined(DISABLE_DXF)
   error = test_viewport_vx_realloc ();
+  error += test_clip_verts_rect ();
   error += test_mlinestyle_obj_realloc ();
 #else
   error = test_mlinestyle_obj_realloc ();

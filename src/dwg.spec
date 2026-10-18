@@ -5154,9 +5154,22 @@ DWG_ENTITY (IMAGE)
   SINCE (R_2010b) {
     FIELD_B (clip_mode, 0);
   }
+  // A rectangle is stored as its 2 corners, without a count. Other counts
+  // (from DXF or JSON) are written as polygon.
+  ENCODER {
+    if (FIELD_VALUE (clip_boundary_type) == 1
+        && FIELD_VALUE (num_clip_verts) != 2)
+      {
+        LOG_WARN ("IMAGE.num_clip_verts " FORMAT_BL " for a rectangle, "
+                  "write a polygon", _obj->num_clip_verts);
+        FIELD_VALUE (clip_boundary_type) = 2;
+      }
+  }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
   if (FIELD_VALUE (clip_boundary_type) == 1)
-    FIELD_VALUE (num_clip_verts) = 2;
+    {
+      DECODER { FIELD_VALUE (num_clip_verts) = 2; }
+    }
   else
     FIELD_BL (num_clip_verts, 91);
   FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 14);
