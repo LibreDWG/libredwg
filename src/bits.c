@@ -2795,27 +2795,32 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
         {
           bit_write_RS (dat, (BITCODE_RS)length);
           for (size_t i = 0; i < length; i++)
-            bit_write_RS (dat, chain[i]);
+            bit_write_RS (dat, ((BITCODE_TU)chain)[i]);
         }
     }
   else
     {
       if (IS_FROM_TU (dat))
         {
-          // convert from unicode to codepage via utf8
-          char dest[1024];
+          // unicode to codepage via utf8, where 2 bytes may become \U+XXXX
           char *u8 = bit_convert_TU ((BITCODE_TU)chain);
-          bit_utf8_to_TV (dest, (unsigned char *)u8, 1024, strlen (u8), 0,
-                          dat->codepage);
-          length = strlen (dest);
+          size_t destlen = u8 ? (strlen (u8) * 4) + 8 : 0;
+          char *dest = destlen ? (char *)malloc (destlen) : NULL;
+          if (dest
+              && !bit_utf8_to_TV (dest, (unsigned char *)u8, destlen,
+                                  strlen (u8), 0, dat->codepage))
+            *dest = '\0';
+          length = dest ? MIN (strlen (dest), INT16_MAX) : 0;
           if (length)
             {
+              dest[length] = '\0';
               bit_write_RS (dat, (BITCODE_RS)(length + 1));
               for (size_t i = 0; i <= length; i++)
                 bit_write_RC (dat, dest[i]);
             }
           else
             bit_write_RS (dat, 0);
+          free (dest);
           free (u8);
         }
       else
@@ -2879,7 +2884,12 @@ void
 bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
 {
   size_t i, length;
+  char *conv = NULL;
 
+  // the source is TU only if IS_FROM_TU, convert it to the target's
+  if (chain && IS_FROM_TU (dat) != (dat->version >= R_2007))
+    chain = conv = IS_FROM_TU (dat) ? bit_embed_TU ((BITCODE_TU)chain)
+                                    : (char *)bit_utf8_to_TU (chain, 0);
   if (dat->version >= R_2007)
     {
       if (chain)
@@ -2895,7 +2905,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
         }
       bit_write_RL (dat, (BITCODE_RL)(length * 4));
       for (i = 0; i < length; i++)
-        bit_write_RL (dat, chain[i]);
+        bit_write_RL (dat, ((BITCODE_TU)chain)[i]);
     }
   else
     {
@@ -2914,6 +2924,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
       for (i = 0; i < length; i++)
         bit_write_RC (dat, chain[i]);
     }
+  free (conv);
 }
 
 BITCODE_T

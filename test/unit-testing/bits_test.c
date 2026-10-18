@@ -1271,6 +1271,24 @@ bit_write_TV_tests (void)
 }
 
 static void
+bit_write_TU32_T16_tests (void)
+{
+  BITCODE_RS wide[1101] = { 0 }; // 1100 * U+0101, as T16 \U+0101 each
+  Bit_Chain bitchain;
+  bitprepare (&bitchain, 16);
+  bitchain.version = R_2010; // TV "AB" as TU32: RL 12, 3 * RL
+  bit_write_TU32 (&bitchain, (char *)"AB");
+  bitchain.from_version = R_2010;
+  bitchain.version = R_2000; // TU as T16: RS 7701, 7701 * RC
+  bit_write_T16 (&bitchain, (char *)memset (wide, 1, sizeof (wide) - 2));
+  if (bitchain.byte == 16 + 2 + 7701 && bitchain.chain[8] == 'B')
+    ok ("bit_write_TU32, bit_write_T16 convert the source");
+  else
+    fail ("bit_write_TU32, bit_write_T16 @%" PRIuSIZE, bitchain.byte);
+  bitfree (&bitchain);
+}
+
+static void
 bit_read_TF_tests (void)
 {
   Bit_Chain bitchain = strtobt ("01000111"   // 47 (G)
@@ -1721,6 +1739,7 @@ main (int argc, char const *argv[])
   bit_UMC_bug_tests ();
   bit_read_TV_tests ();
   bit_write_TV_tests ();
+  bit_write_TU32_T16_tests ();
   bit_read_TF_tests ();
   bit_write_TF_tests ();
   bit_read_BE_tests ();
