@@ -1130,7 +1130,7 @@ dxfb_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
           switch (data->code)
             {
             case 0:
-              if (IS_FROM_TU (dat))
+              if (data->u.eed_0.is_tu) // in its stored width, as out_dxf
                 VALUE_TU (data->u.eed_0_r2007.string, 1000)
               else
                 VALUE_TV (data->u.eed_0.string, 1000)
@@ -1199,7 +1199,8 @@ dxfb_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       switch (type)
         {
         case DWG_VT_STRING:
-          if (IS_FROM_TU (dat))
+          // in the width it is stored in, as out_json and encode take it
+          if (rbuf->value.str.is_tu)
             {
               VALUE_TU (rbuf->value.str.u.wdata, dxftype);
             }
@@ -2532,6 +2533,9 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
     dat->from_version = dat->version;
+  /* An imported (DXF, JSON) or API-built drawing keeps its strings as TV
+     (IS_FROM_TU_DWG). Read them so also through a caller's fresh chain. */
+  dat->opts |= dwg->opts & DWG_OPTS_IN;
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
   dwg_resolve_objectrefs_silent (dwg);

@@ -2612,6 +2612,9 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dat->version = dat->from_version;
   if (!dat->codepage)
     dat->codepage = dwg->header.codepage;
+  /* An imported (DXF, JSON) or API-built drawing keeps its strings as TV
+     (IS_FROM_TU_DWG). Read them so also through a caller's fresh chain. */
+  dat->opts |= dwg->opts & DWG_OPTS_IN;
   if (!dat->fh)
     goto fail;
   fprintf (dat->fh, "{%s%s%s\"created_by\":%s\"%s\"", JSON_NL, JSON_SPC,

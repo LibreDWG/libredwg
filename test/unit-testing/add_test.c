@@ -1479,6 +1479,228 @@ test_mlinestyle_obj_realloc (void)
 }
 
 #ifndef DISABLE_DXF
+// A DXF import keeps its T strings as read (TV) in every version, as dynapi,
+// dwg_add_u8_input and the readers (IS_FROM_TU) take them. For an r2007+
+// DXF the importer stored some strings UTF-16 (dynapi by the target
+// version) and others as read (the header strings stored before $ACADVER
+// was known, $LASTSAVEDBY, MTEXT text), and dwg_write_dxf, called with a
+// fresh output chain as dxfwrite does, read them all as UTF-16: a heap
+// over-read that copied heap bytes into the written DXF. Table names were
+// UTF-16 too, so no name lookup matched, and the LTYPE text was scanned as
+// UTF-16. Import an r2018 DXF with non-ASCII strings, without and with an
+// r2000 target hint (dxfwrite --as, dxf2dwg), check the strings, a table
+// lookup and the LTYPE strings area, and that dwg_write_dxf writes them
+// back.
+static int
+test_dxf_r2007_strings (void)
+{
+#  define U8_USER "rurban" // the summary strings are stored as codepage TV
+#  define U8_LAYER "Ebene_\xc3\xa4"
+#  define U8_MTEXT1 "Gr\xc3\xb6\xc3\x9f"                                         \
+                 "e und "
+#  define U8_MTEXT2 "Gewicht"
+#  define U8_EED "\xc3\x9c"                                                  \
+                  "bermass"
+  static const char header[]
+      = "  0\nSECTION\n  2\nHEADER\n"
+        "  9\n$ACADVER\n  1\nAC1032\n"
+        "  9\n$DWGCODEPAGE\n  3\nANSI_1252\n"
+        "  9\n$LASTSAVEDBY\n  1\n" U8_USER "\n"
+        "  9\n$DIMPOST\n  1\n<> mm\n"
+        "  0\nENDSEC\n"
+        "  0\nSECTION\n  2\nTABLES\n"
+        "  0\nTABLE\n  2\nAPPID\n  5\n9\n 70\n1\n"
+        "  0\nAPPID\n  5\n12\n100\nAcDbSymbolTableRecord\n"
+        "100\nAcDbRegAppTableRecord\n  2\nACAD\n 70\n0\n"
+        "  0\nENDTAB\n";
+  // a text dash: only for the import without hint, see below
+  static const char ltype[]
+      = "  0\nTABLE\n  2\nLTYPE\n  5\n5\n 70\n1\n"
+        "  0\nLTYPE\n  5\n14\n100\nAcDbSymbolTableRecord\n"
+        "100\nAcDbLinetypeTableRecord\n  2\nGAS\n 70\n0\n  3\nGas -GAS-\n"
+        " 72\n65\n 73\n2\n 40\n1.0\n"
+        " 49\n0.5\n 74\n2\n 75\n0\n 46\n0.1\n 50\n0.0\n 44\n0.0\n 45\n0.0\n"
+        "  9\nGAS\n"
+        " 49\n-0.5\n 74\n0\n"
+        "  0\nENDTAB\n";
+  static const char rest[]
+      = "  0\nTABLE\n  2\nLAYER\n  5\n2\n 70\n2\n"
+        "  0\nLAYER\n  5\n10\n100\nAcDbSymbolTableRecord\n"
+        "100\nAcDbLayerTableRecord\n  2\n0\n 70\n0\n 62\n7\n"
+        "  0\nLAYER\n  5\n11\n100\nAcDbSymbolTableRecord\n"
+        "100\nAcDbLayerTableRecord\n  2\n" U8_LAYER "\n 70\n0\n 62\n1\n"
+        "1001\nACAD\n1000\n" U8_EED "\n"
+        "  0\nENDTAB\n  0\nENDSEC\n"
+        "  0\nSECTION\n  2\nENTITIES\n"
+        "  0\nMTEXT\n  5\n100\n100\nAcDbEntity\n  8\n" U8_LAYER "\n"
+        "100\nAcDbMText\n 10\n0.0\n 20\n0.0\n 30\n0.0\n 40\n1.0\n"
+        "  3\n" U8_MTEXT1 "\n  1\n" U8_MTEXT2 "\n"
+        "  0\nENDSEC\n  0\nEOF\n";
+  const char *const file = "dxf_r2007_strings.dxf";
+  const Dwg_Version_Type hints[] = { R_INVALID, R_2000 };
+  const unsigned int lvl = loglevel;
+
+  failed = 0;
+  for (int h = 0; h < ARRAY_SIZE (hints); h++)
+    {
+      Dwg_Data dwg;
+      Bit_Chain dat;
+      Bit_Chain out = { 0 };
+      Dwg_Entity_MTEXT *mtext = NULL;
+      Dwg_Object_LTYPE *ltype_obj = NULL;
+      // An r2000 target converts an r2007+ strings area on every write and
+      // free (dwg_convert_LTYPE_strings_area), so leave the text dash to
+      // the import without hint, which keeps the r2018 layout.
+      const int with_ltype = hints[h] == R_INVALID;
+      const char *hint = h ? "r2000 hint" : "no hint";
+      char *written = NULL;
+      char *buf;
+      int error;
+
+      buf = (char *)malloc (sizeof (header) + sizeof (ltype) + sizeof (rest));
+      if (!buf)
+        {
+          fail ("dxf_r2007_strings: out of memory");
+          break;
+        }
+      strcpy (buf, header);
+      if (with_ltype)
+        strcat (buf, ltype);
+      strcat (buf, rest);
+      memset (&dwg, 0, sizeof (dwg));
+      memset (&dat, 0, sizeof (dat));
+      dwg.header.version = hints[h];
+      dat.chain = (unsigned char *)buf;
+      dat.size = strlen (buf);
+      error = dwg_read_dxf (&dat, &dwg);
+      loglevel = lvl; // dwg_read_dxf set it from dwg.opts
+      if (error >= DWG_ERR_CRITICAL)
+        {
+          fail ("dxf_r2007_strings (%s): dwg_read_dxf failed with 0x%x",
+                hint, error);
+          dwg_free (&dwg);
+          free (buf);
+          continue;
+        }
+      for (BITCODE_BL i = 0; i < dwg.num_objects; i++)
+        if (dwg.object[i].fixedtype == DWG_TYPE_MTEXT)
+          mtext = dwg.object[i].tio.entity->tio.MTEXT;
+        else if (dwg.object[i].fixedtype == DWG_TYPE_LTYPE
+                 && dwg.object[i].tio.object->tio.LTYPE->name
+                 && !strcmp (dwg.object[i].tio.object->tio.LTYPE->name,
+                             "GAS"))
+          ltype_obj = dwg.object[i].tio.object->tio.LTYPE;
+
+      if (dwg.header_vars.DIMPOST
+          && !strcmp (dwg.header_vars.DIMPOST, "<> mm"))
+        ok ("dxf_r2007_strings (%s): HEADER.DIMPOST kept as read", hint);
+      else
+        fail ("dxf_r2007_strings (%s): HEADER.DIMPOST not kept as read",
+              hint);
+      if (dwg.summaryinfo.LASTSAVEDBY
+          && !strcmp (dwg.summaryinfo.LASTSAVEDBY, U8_USER))
+        ok ("dxf_r2007_strings (%s): SUMMARY.LASTSAVEDBY TV", hint);
+      else
+        fail ("dxf_r2007_strings (%s): SUMMARY.LASTSAVEDBY not TV", hint);
+      if (mtext && mtext->text && !strcmp (mtext->text, U8_MTEXT1 U8_MTEXT2))
+        ok ("dxf_r2007_strings (%s): MTEXT.text kept as read", hint);
+      else
+        fail ("dxf_r2007_strings (%s): MTEXT.text not kept as read", hint);
+      if (dwg_find_tablehandle (&dwg, U8_LAYER, "LAYER"))
+        ok ("dxf_r2007_strings (%s): LAYER %s found by name", hint,
+            U8_LAYER);
+      else
+        fail ("dxf_r2007_strings (%s): LAYER %s not found by name", hint,
+              U8_LAYER);
+      if (with_ltype)
+        {
+          // the text as read, the r2018 strings area in UTF-16
+          uint16_t area[4] = { 0 };
+          if (ltype_obj && ltype_obj->strings_area)
+            memcpy (area, ltype_obj->strings_area, sizeof (area));
+          const char *text = ltype_obj && ltype_obj->numdashes == 2
+                                     && ltype_obj->dashes
+                                 ? ltype_obj->dashes[0].text
+                                 : NULL;
+          if (text && !strcmp (text, "GAS") && area[0] == 'G'
+              && area[1] == 'A' && area[2] == 'S' && area[3] == 0)
+            ok ("dxf_r2007_strings (%s): LTYPE text and strings_area", hint);
+          else
+            fail ("dxf_r2007_strings (%s): LTYPE %s text %s area %04x %04x "
+                  "%04x %04x",
+                  hint, ltype_obj ? "GAS" : "missing", text ? text : "NULL",
+                  area[0], area[1], area[2], area[3]);
+        }
+
+      // write it back as dxfwrite does, through a fresh chain
+      out.version = dwg.header.version;
+      out.fh = fopen (file, "wb");
+      if (!out.fh)
+        fail ("dxf_r2007_strings: cannot write %s", file);
+      else
+        {
+          struct stat attrib;
+          error = dwg_write_dxf (&out, &dwg);
+          loglevel = lvl; // dwg_write_dxf set it from dwg.opts
+          fclose (out.fh);
+          if (error >= DWG_ERR_CRITICAL)
+            fail ("dxf_r2007_strings (%s): dwg_write_dxf failed with 0x%x",
+                  hint, error);
+          else if (!stat (file, &attrib) && attrib.st_size > 0
+                   && (written = (char *)calloc (attrib.st_size + 1, 1)))
+            {
+              FILE *fp = fopen (file, "rb");
+              if (fp)
+                {
+                  if (fread (written, 1, attrib.st_size, fp)
+                      != (size_t)attrib.st_size)
+                    written[0] = '\0';
+                  fclose (fp);
+                }
+            }
+          // An r2000 DXF should hold the codepage, not UTF-8: check its
+          // ASCII strings only.
+          if (error >= DWG_ERR_CRITICAL)
+            ;
+          else if (written)
+            {
+              // (not the MTEXT: without a block record it is not written)
+              const char *const expect[]
+                  = { "\n<> mm\r\n", "\n" U8_USER "\r\n",
+                      "\n" U8_LAYER "\r\n", "\n" U8_EED "\r\n" };
+              const int n = dwg.header.version < R_2007 ? 1 : 4;
+              int k;
+              for (k = 0; k < n; k++)
+                if (!strstr (written, expect[k]))
+                  break;
+              if (k == n)
+                ok ("dxf_r2007_strings (%s): dwg_write_dxf wrote them back",
+                    hint);
+              else
+                fail ("dxf_r2007_strings (%s): dwg_write_dxf did not write "
+                      "back %.*s",
+                      hint, (int)strlen (expect[k]) - 3, expect[k] + 1);
+            }
+          else
+            fail ("dxf_r2007_strings (%s): cannot read %s back", hint, file);
+          free (written);
+          written = NULL;
+        }
+      dwg_free (&dwg);
+      free (buf);
+    }
+  if (!numfailed () && (!debug || debug != -1))
+    unlink (file);
+#  undef U8_USER
+#  undef U8_LAYER
+#  undef U8_MTEXT1
+#  undef U8_MTEXT2
+#  undef U8_EED
+  return numfailed ();
+}
+#endif
+
+#ifndef DISABLE_DXF
 // GHSA-qcxp-m6vj-h5h8: importing a pre-R2004 DXF VIEWPORT entity makes
 // new_object() call dwg_add_VX() to create its VX_TABLE_RECORD. That may
 // grow and realloc dwg->object[], but new_object() kept dereferencing (and
@@ -1560,6 +1782,9 @@ main (int argc, char *argv[])
 #endif
   error += test_names ();
   error += test_api_version ();
+#ifndef DISABLE_DXF
+  error += test_dxf_r2007_strings ();
+#endif
 
 #ifndef DISABLE_DXF
   for (; dxf < 2; dxf++)
