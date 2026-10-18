@@ -566,6 +566,65 @@ in_json_subclass_fixed_elems_test (void)
   dwg_free (&dwg);
   free (dat.chain);
 }
+
+/* dwg.spec MLINE walks MLINE.num_lines lines on every vertex, but
+   _set_struct_field set num_lines from each vertex's lines in turn, so it
+   ended as the last vertex's count, and allocated each vertex's lines for
+   its own count only. dwg_free and the writers then read past the lines
+   of an earlier vertex with fewer. The check of the first MLINE fails
+   before only with ASan. */
+static void
+in_json_mline_lines_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+        "{\"entity\":\"MLINE\",\"index\":0,\"type\":47,\"handle\":[0,1,1],"
+        "\"verts\":[{\"lines\":[{\"segparms\":[1.0]}]},"
+        "{\"lines\":[{\"segparms\":[1.0]},"
+        "{\"segparms\":[2.0],\"areafillparms\":[3.0]}]}]},"
+        "{\"entity\":\"MLINE\",\"index\":1,\"type\":47,\"handle\":[0,1,2],"
+        "\"verts\":[{\"lines\":[{\"segparms\":[1.0]},{\"segparms\":[2.0]}]},"
+        "{\"lines\":[{\"segparms\":[1.0]}]}]}]}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_mline_lines: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 2)
+    fail ("in_json_mline_lines: dwg_read_json");
+  else
+    {
+      Dwg_Entity_MLINE *first = dwg.object[0].tio.entity->tio.MLINE;
+      Dwg_Entity_MLINE *last = dwg.object[1].tio.entity->tio.MLINE;
+
+      if (first->num_lines == 2 && first->verts && first->verts[0].lines
+          && first->verts[0].lines[0].num_segparms == 1
+          && !first->verts[0].lines[1].num_segparms
+          && !first->verts[0].lines[1].segparms
+          && first->verts[1].lines[1].num_areafillparms == 1)
+        ok ("_set_struct_field: MLINE vertex lines grown to num_lines");
+      else
+        fail ("_set_struct_field: MLINE vertex lines, num_lines %u",
+              (unsigned)first->num_lines);
+      if (last->num_lines == 2 && last->verts && last->verts[1].lines
+          && last->verts[1].lines[0].num_segparms == 1
+          && !last->verts[1].lines[1].num_segparms
+          && !last->verts[1].lines[1].segparms)
+        ok ("_set_struct_field: MLINE.num_lines from the vertex with most");
+      else
+        fail ("_set_struct_field: MLINE.num_lines %u != 2",
+              (unsigned)last->num_lines);
+    }
+  dwg.header.version = dwg.header.from_version;
+  dwg_free (&dwg);
+  free (dat.chain);
+}
 #endif
 
 int
@@ -588,6 +647,7 @@ main (int argc, char const *argv[])
   in_json_section_counts_test ();
   in_json_object_counts_test ();
   in_json_subclass_fixed_elems_test ();
+  in_json_mline_lines_test ();
 #endif
   return failed;
 }

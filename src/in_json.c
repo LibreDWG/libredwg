@@ -2297,6 +2297,33 @@ json_subclass_fixed_elems (const char *restrict subclass)
   return 0;
 }
 
+// dwg.spec MLINE walks MLINE.num_lines lines on every vertex, whatever its
+// JSON array held, so every vertex's lines are allocated for num_lines.
+// Before num_lines grows, grow the lines of the vertices read so far,
+// zeroed.
+static int
+json_mline_num_lines (Dwg_Entity_MLINE *restrict o, int num_lines)
+{
+  for (BITCODE_BS i = 0; o->verts && i < o->num_verts; i++)
+    {
+      Dwg_MLINE_vertex *v = &o->verts[i];
+      Dwg_MLINE_line *lines;
+      if (!v->lines)
+        continue;
+      lines = (Dwg_MLINE_line *)realloc (v->lines,
+                                         num_lines * sizeof (Dwg_MLINE_line));
+      if (!lines)
+        return DWG_ERR_OUTOFMEM;
+      memset (&lines[o->num_lines], 0,
+              (num_lines - o->num_lines) * sizeof (Dwg_MLINE_line));
+      v->lines = lines;
+      v->num_lines = (BITCODE_RC)num_lines;
+    }
+  o->num_lines = (BITCODE_RC)num_lines;
+  LOG_TRACE ("MLINE.num_lines = %d\n", num_lines);
+  return 0;
+}
+
 #define FIXUP_SIZEFIELD(type)                                                 \
   {                                                                           \
     const BITCODE_##type _size = (BITCODE_##type)len;                         \
@@ -3016,13 +3043,27 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           LOG_TRACE ("new subclass %s %s [%d elems with size %d]\n", name,
                      subclass, num_elems, size_elem);
           json_set_numfield (_obj, fields, key, num_elems);
+          num_alloc = num_elems ? json_subclass_fixed_elems (subclass) : 0;
           if (strEQc (subclass, "MLINE_line") && num_elems)
             {
               Dwg_Entity_MLINE *o = obj->tio.entity->tio.MLINE;
-              o->num_lines = num_elems;
-              LOG_TRACE ("MLINE.num_lines = %d\n", num_elems);
+              if (num_elems > 255) // num_lines is RC
+                {
+                  LOG_ERROR ("Invalid %s.%s: %d lines", name, key, num_elems);
+                  free (subclass);
+                  json_advance_unknown (dat, tokens, t->type, 0);
+                  return DWG_ERR_INVALIDTYPE;
+                }
+              // the most lines of any vertex
+              if (num_elems > o->num_lines
+                  && json_mline_num_lines (o, num_elems))
+                {
+                  free (subclass);
+                  return DWG_ERR_OUTOFMEM;
+                }
+              ((Dwg_MLINE_vertex *)_obj)->num_lines = o->num_lines;
+              num_alloc = o->num_lines;
             }
-          num_alloc = num_elems ? json_subclass_fixed_elems (subclass) : 0;
           if (num_alloc > num_elems)
             LOG_TRACE ("%s: allocate %d elems\n", key, num_alloc);
           else
