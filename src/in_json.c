@@ -1361,6 +1361,17 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 0;
 }
 
+/* A skipped class must not leave its fields to the next one. */
+static void
+json_clear_class (Dwg_Class *restrict klass)
+{
+  free (klass->dxfname);
+  free (klass->dxfname_u);
+  free (klass->cppname);
+  free (klass->appname);
+  memset (klass, 0, sizeof (Dwg_Class));
+}
+
 static int
 json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               jsmntokens_t *restrict tokens)
@@ -1402,6 +1413,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (!oldkl->number || !oldkl->dxfname || !oldkl->appname
               || !oldkl->cppname || !oldkl->item_class_id)
             {
+              json_clear_class (oldkl);
               klass = oldkl;
               i--;
               size--;
@@ -1510,11 +1522,20 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (!oldkl->number || !oldkl->dxfname || !oldkl->appname
           || !oldkl->cppname || !oldkl->item_class_id)
         {
+          json_clear_class (oldkl);
           dwg->num_classes--;
           LOG_ERROR ("Illegal CLASS [%d]. Mandatory field missing, skipped",
                      dwg->num_classes);
         }
     }
+  // objects index their class by type - 500, written as its number
+  for (int i = 0; i < (int)dwg->num_classes; i++)
+    if (dwg->dwg_class[i].number != i + 500)
+      {
+        LOG_WARN ("Changed class number %d => %d", dwg->dwg_class[i].number,
+                  i + 500);
+        dwg->dwg_class[i].number = (BITCODE_BS)(i + 500);
+      }
   LOG_TRACE ("End of %s\n", section);
   tokens->index--;
   return 0;
@@ -3492,12 +3513,25 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "dxfname"))
             {
-              free (obj->dxfname);
+              char *dxfname = json_string (dat, tokens);
               saw_dxfname = true;
-              obj->dxfname = json_string (dat, tokens);
-              LOG_TRACE ("dxfname: %s\n", obj->dxfname);
-              if (!obj->dxfname)
-                obj->dxfname = strdup (name);
+              LOG_TRACE ("dxfname: %s\n", dxfname);
+              // after the type keep the dxfname of the name: the class of
+              // another dxfname would be another struct. UNKNOWN_* hold
+              // the dxfname of any class.
+              if (obj->fixedtype && dxfname && obj->dxfname
+                  && strNE (dxfname, obj->dxfname)
+                  && !memBEGINc (name, "UNKNOWN_"))
+                {
+                  LOG_WARN ("Ignore %s.dxfname %s, keep %s", name, dxfname,
+                            obj->dxfname);
+                  free (dxfname);
+                }
+              else
+                {
+                  free (obj->dxfname);
+                  obj->dxfname = dxfname ? dxfname : strdup (name);
+                }
 
               // Some objects have various subtypes under one name.
               // TODO OBJECTCONTEXTDATA, ...
@@ -3552,8 +3586,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
-                  if (obj->type <= DWG_TYPE_LAYOUT
-                      && obj->fixedtype != obj->type
+                  // a fixed type number, as PROXY_OBJECT, selects that
+                  // type's struct
+                  if (obj->type < 500 && obj->fixedtype != obj->type
                       && dwg->header.from_version >= R_13b1)
                     {
                       LOG_WARN ("Changed wrong type %d => %d", obj->type,
@@ -5364,6 +5399,49 @@ json_free_globals (jsmntokens_t *tokens)
   free (created_by);
 }
 
+/* The writers read a variable-type object by the struct of its class,
+   dwg_class[type - 500], but json_OBJECTS allocated it by the object's
+   name, and the CLASSES may come after the OBJECTS, in another order or
+   with an entry skipped. Type each object stored with a class by the
+   class of its name, as dwg_encode_get_class does for in_dxf, and give
+   that class the object's supertype.
+ */
+static void
+json_class_types (Dwg_Data *restrict dwg)
+{
+  if (dwg->header.from_version < R_13b1 || !dwg->num_classes)
+    return;
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      const BITCODE_BS type = obj->type;
+      const int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+      Dwg_Class *klass;
+
+      // variable types, and fixed ones stored with a class
+      // (LWPOLYLINE, LAYOUT, ...)
+      if ((obj->fixedtype < DWG_TYPE_ACDSRECORD && obj->type < 500)
+          || obj->fixedtype >= DWG_TYPE_FREED
+          || obj->type == DWG_TYPE_FREED || !obj->dxfname)
+        continue;
+      klass = dwg_encode_get_class (dwg, obj);
+      if (!klass || !klass->dxfname)
+        {
+          LOG_WARN ("No class %s for %s [%u]", obj->dxfname, obj->name, i);
+          continue;
+        }
+      if (obj->type != type)
+        LOG_WARN ("Changed %s.type %u => %u", obj->name, type, obj->type);
+      if (dwg_class_is_entity (klass) != is_entity)
+        {
+          LOG_WARN ("Changed class %s item_class_id to %s for %s",
+                    klass->dxfname, is_entity ? "ENTITY" : "OBJECT",
+                    obj->name);
+          klass->item_class_id = is_entity ? 0x1f2 : 0x1f3;
+        }
+    }
+}
+
 EXPORT int
 dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -5562,6 +5640,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                      tokens.index, tokens.num_tokens, __FUNCTION__, __LINE__);
           LOG_TRACE ("\n");
           json_free_globals (&tokens);
+          json_class_types (dwg);
           return error | DWG_ERR_INVALIDTYPE;
         }
       if (error >= DWG_ERR_CRITICAL)
@@ -5573,6 +5652,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   LOG_TRACE ("\n");
+  json_class_types (dwg);
   if (dat->version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
 
