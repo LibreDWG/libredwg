@@ -43,6 +43,7 @@ static int cnt = 0;
 #include "out_dxf.h"
 #ifndef DISABLE_JSON
 #  include "in_json.h"
+#  include "out_json.h"
 #endif
 #ifndef DISABLE_DXF
 #  include "decode.h"
@@ -1782,6 +1783,212 @@ test_json_dotted_pointer_keys_array (void)
 }
 #endif
 
+#ifndef DISABLE_JSON
+static Dwg_Object *
+object_named (Dwg_Data *dwg, const char *name)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    if (dwg->object[i].name && !strcmp (dwg->object[i].name, name))
+      return &dwg->object[i];
+  return NULL;
+}
+
+static int
+read_json_string (Dwg_Data *dwg, const char *json, const size_t size)
+{
+  Bit_Chain dat;
+  int error;
+  const int lvl = loglevel; // dwg_read_json sets it from dwg->opts
+  memset (dwg, 0, sizeof (Dwg_Data));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)malloc (size + 1);
+  if (!dat.chain)
+    return DWG_ERR_OUTOFMEM;
+  memcpy (dat.chain, json, size + 1);
+  dat.size = size;
+  error = dwg_read_json (&dat, dwg);
+  loglevel = lvl;
+  free (dat.chain);
+  return error;
+}
+
+static void
+check_json_class_types_classes (const Dwg_Data *dwg)
+{
+  if (dwg->num_classes != 2 || strcmp (dwg->dwg_class[0].dxfname, "MATERIAL")
+      || strcmp (dwg->dwg_class[1].dxfname, "SCALE")
+      || dwg->dwg_class[0].number != 500 || dwg->dwg_class[1].number != 501)
+    fail ("json_class_types: %u classes, the first %s %u: a skipped class "
+          "left its fields or its index",
+          (unsigned)dwg->num_classes,
+          dwg->num_classes ? dwg->dwg_class[0].dxfname : "",
+          dwg->num_classes ? dwg->dwg_class[0].number : 0);
+  else
+    ok ("json_class_types: skipped classes leave no fields nor index gap");
+}
+
+static void
+check_json_class_types_objects (Dwg_Data *dwg)
+{
+  Dwg_Object *obj = object_named (dwg, "SCALE");
+  if (!obj)
+    fail ("json_class_types: no SCALE");
+  else if (obj->type != 501 || strcmp (obj->dxfname, "SCALE"))
+    fail ("json_class_types: SCALE type %u dxfname %s, not its class 501",
+          (unsigned)obj->type, obj->dxfname);
+  else if (dwg->num_classes == 2 && dwg->dwg_class[1].item_class_id != 0x1f3)
+    fail ("json_class_types: SCALE class item_class_id 0x%x, not object",
+          (unsigned)dwg->dwg_class[1].item_class_id);
+  else
+    ok ("json_class_types: SCALE typed by its class, as an object");
+
+  obj = object_named (dwg, "MATERIAL");
+  if (!obj)
+    fail ("json_class_types: no MATERIAL");
+  else if (obj->type != 500)
+    fail ("json_class_types: MATERIAL type %u, not its class 500",
+          (unsigned)obj->type);
+  else
+    ok ("json_class_types: MATERIAL typed by its class");
+}
+
+// in_json allocates an object by its name, but the writers read a
+// variable-type object by its class, dwg_class[type - 500]. The CLASSES may
+// follow the OBJECTS, and a CLASSES entry missing a mandatory field is
+// skipped, which moved the later classes down one index and left its fields
+// to the next entry. Each object is now typed by the class of its name,
+// a skipped class leaves nothing behind, the classes are numbered by their
+// index, a class gets its object's supertype, and a dxfname after the type
+// cannot name another object.
+static int
+test_json_class_types (void)
+{
+  Dwg_Data dwg;
+  int error;
+  static const char json[]
+      = "{\n"
+        "  \"created_by\": \"add_test\",\n"
+        "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
+        "  \"OBJECTS\": [\n"
+        "    { \"object\": \"SCALE\", \"index\": 0, \"type\": 503,\n"
+        "      \"handle\": [0, 1, 1], \"dxfname\": \"MATERIAL\" },\n"
+        "    { \"object\": \"MATERIAL\", \"index\": 1, \"type\": 502,\n"
+        "      \"handle\": [0, 1, 2] }\n"
+        "  ],\n"
+        "  \"CLASSES\": [\n"
+        "    { \"number\": 500, \"dxfname\": \"MLEADERSTYLE\",\n"
+        "      \"cppname\": \"AcDbMLeaderStyle\", \"item_class_id\": 499 },\n"
+        "    { \"number\": 501, \"cppname\": \"AcDbDictionaryVar\",\n"
+        "      \"appname\": \"ObjectDBX Classes\", \"item_class_id\": 499 },\n"
+        "    { \"number\": 502, \"dxfname\": \"MATERIAL\",\n"
+        "      \"cppname\": \"AcDbMaterial\",\n"
+        "      \"appname\": \"ObjectDBX Classes\", \"item_class_id\": 499 },\n"
+        "    { \"number\": 503, \"dxfname\": \"SCALE\",\n"
+        "      \"cppname\": \"AcDbScale\",\n"
+        "      \"appname\": \"ObjectDBX Classes\", \"item_class_id\": 498 }\n"
+        "  ]\n"
+        "}\n";
+
+  failed = 0;
+  error = read_json_string (&dwg, json, sizeof (json) - 1);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("json_class_types: dwg_read_json failed with 0x%x", error);
+  check_json_class_types_classes (&dwg);
+  check_json_class_types_objects (&dwg);
+  dwg_free (&dwg);
+  return numfailed ();
+}
+
+// dwg_write_json to file, read back as a string (NULL when nothing was
+// written)
+static char *
+write_json_string (Dwg_Data *dwg, const char *file)
+{
+  Bit_Chain dat;
+  struct_stat_t attrib;
+  char *out = NULL;
+  long size;
+
+  memset (&dat, 0, sizeof (dat));
+  dat.version = dat.from_version = dwg->header.from_version;
+  dat.codepage = dwg->header.codepage;
+  dat.fh = fopen (file, "w+b");
+  if (!dat.fh)
+    return NULL;
+  dwg_write_json (&dat, dwg);
+  size = ftell (dat.fh);
+  if (size > 0 && (out = (char *)calloc (size + 1, 1)))
+    {
+      rewind (dat.fh);
+      if (fread (out, 1, size, dat.fh) != (size_t)size)
+        out[0] = '\0';
+    }
+  fclose (dat.fh);
+  if (!stat (file, &attrib))
+    unlink (file);
+  return out;
+}
+
+// The writers and dwg_free dispatch a variable-type object by the name of
+// its class (classes.inc), which must be the object's own type: else they
+// read its struct as another one. A SCALE whose only class is a MATERIAL
+// is written as an UNKNOWN_OBJ. A fixed type number of another object, as
+// PROXY_OBJECT's, is replaced by the object's own type.
+static int
+test_class_object_type (void)
+{
+  Dwg_Data dwg;
+  const char *file = "class_object_type.json";
+  char *out;
+  int error;
+  static const char json[]
+      = "{\n"
+        "  \"created_by\": \"add_test\",\n"
+        "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
+        "  \"CLASSES\": [\n"
+        "    { \"number\": 500, \"dxfname\": \"MATERIAL\",\n"
+        "      \"cppname\": \"AcDbMaterial\",\n"
+        "      \"appname\": \"ObjectDBX Classes\", \"item_class_id\": 499 }\n"
+        "  ],\n"
+        "  \"OBJECTS\": [\n"
+        "    { \"object\": \"SCALE\", \"index\": 0, \"type\": 500,\n"
+        "      \"handle\": [0, 1, 1], \"name\": \"1:1\" },\n"
+        "    { \"object\": \"SCALE\", \"index\": 1, \"type\": 499,\n"
+        "      \"handle\": [0, 1, 2], \"name\": \"1:2\" }\n"
+        "  ]\n"
+        "}\n";
+
+  failed = 0;
+  error = read_json_string (&dwg, json, sizeof (json) - 1);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("class_object_type: dwg_read_json failed with 0x%x", error);
+      dwg_free (&dwg);
+      return numfailed ();
+    }
+  if (dwg.num_objects != 2 || dwg.object[1].type != DWG_TYPE_SCALE)
+    fail ("class_object_type: SCALE type %u, not its own",
+          dwg.num_objects > 1 ? (unsigned)dwg.object[1].type : 0);
+  else
+    ok ("class_object_type: SCALE of type PROXY_OBJECT typed as SCALE");
+  out = write_json_string (&dwg, file);
+  if (!out)
+    fail ("class_object_type: no JSON written to %s", file);
+  else if (strstr (out, "\"object\": \"MATERIAL\"")
+           || strstr (out, "\"object\":\"MATERIAL\"")
+           || !strstr (out, "\"UNKNOWN_OBJ\""))
+    fail ("class_object_type: SCALE written by its MATERIAL class");
+  else if (strstr (out, "\"PROXY_OBJECT\""))
+    fail ("class_object_type: SCALE written as a PROXY_OBJECT");
+  else
+    ok ("class_object_type: SCALE with a MATERIAL class written as "
+        "UNKNOWN_OBJ");
+  free (out);
+  dwg_free (&dwg);
+  return numfailed ();
+}
+#endif
+
 int
 main (int argc, char *argv[])
 {
@@ -1817,6 +2024,8 @@ main (int argc, char *argv[])
   error += test_json_union_selectors ();
   error += test_json_dotted_pointer_keys_struct ();
   error += test_json_dotted_pointer_keys_array ();
+  error += test_json_class_types ();
+  error += test_class_object_type ();
 #endif
   error += test_names ();
   error += test_api_version ();

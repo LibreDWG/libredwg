@@ -6545,13 +6545,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                && (error = dwg_encode_variable_type (dwg, dat, obj))
                       & DWG_ERR_UNHANDLEDCLASS)
         {
-          int is_entity;
-          Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
-          if (klass)
-            is_entity = klass->item_class_id == 0x1f2
-                        && obj->supertype == DWG_SUPERTYPE_ENTITY;
-          else
-            is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+          // by the object's struct, not by its class
+          const int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
 
           assert (address);
           dat->byte = address; // restart and write into the UNKNOWN_OBJ object
