@@ -2984,7 +2984,19 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       *rest = '\0';
                       rest++;
                       f1 = dwg_dynapi_subclass_field (subclass, key1);
-                      if (f1 && *rest)
+                      // only an embedded struct is at the field's offset,
+                      // not one a pointer field points to
+                      if (f1 && *rest && f1->is_malloc)
+                        {
+                          LOG_ERROR ("%s.%s.%s: [%s] is not an embedded "
+                                     "struct, ignored",
+                                     subclass, key1, rest, f1->type);
+                          json_advance_unknown (
+                              dat, tokens,
+                              tokens->tokens[tokens->index].type, 0);
+                          JSON_TOKENS_CHECK_OVERFLOW_ERR
+                        }
+                      else if (f1 && *rest)
                         {
                           char *sb1 = dwg_dynapi_subclass_name (f1->type);
                           const Dwg_DYNAPI_field *sfields1
@@ -3058,7 +3070,18 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   *rest = '\0';
                   rest++;
                   f1 = dwg_dynapi_subclass_field (subclass, key1);
-                  if (f1 && *rest)
+                  // only an embedded struct is at the field's offset, not
+                  // one a pointer field points to
+                  if (f1 && *rest && f1->is_malloc)
+                    {
+                      LOG_ERROR ("%s.%s.%s: [%s] is not an embedded "
+                                 "struct, ignored",
+                                 subclass, key1, rest, f1->type);
+                      json_advance_unknown (
+                          dat, tokens, tokens->tokens[tokens->index].type, 0);
+                      JSON_TOKENS_CHECK_OVERFLOW_ERR
+                    }
+                  else if (f1 && *rest)
                     {
                       void *off = &((char *)_obj)[f->offset + f1->offset];
                       char *subclass1 = dwg_dynapi_subclass_name (f1->type);

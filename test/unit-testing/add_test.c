@@ -1676,6 +1676,110 @@ test_json_union_selectors (void)
   free (dat.chain);
   return numfailed ();
 }
+
+// A dotted key "a.b" in an embedded struct or in an array element sets b of
+// the struct embedded at a. When a is a pointer field, its struct is not
+// there: the key is ignored, rather than written over the pointer and past
+// it. First in an embedded struct (MULTILEADER.ctx.leaders).
+static int
+test_json_dotted_pointer_keys_struct (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  Dwg_Object *obj;
+  int error;
+  static const char json[]
+      = "{\n"
+        "  \"created_by\": \"add_test\",\n"
+        "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
+        "  \"OBJECTS\": [\n"
+        "    { \"entity\": \"MULTILEADER\", \"index\": 0, \"type\": 501,\n"
+        "      \"handle\": [0, 1, 1],\n"
+        "      \"ctx\": {\n"
+        "        \"leaders.lastleaderlinepoint\": [1.0, 2.0, 3.0] } }\n"
+        "  ]\n"
+        "}\n";
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)strdup (json);
+  dat.size = sizeof (json) - 1;
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("json_dotted_pointer_keys_struct: dwg_read_json failed with 0x%x",
+          error);
+  obj = first_object (&dwg, DWG_TYPE_MULTILEADER);
+  if (!obj)
+    fail ("json_dotted_pointer_keys_struct: no MULTILEADER");
+  else
+    {
+      Dwg_MLEADER_AnnotContext *ctx = &obj->tio.entity->tio.MULTILEADER->ctx;
+      if (ctx->leaders || ctx->scale_factor != 0.0
+          || ctx->content_base.x != 0.0)
+        fail ("json_dotted_pointer_keys_struct: "
+              "ctx.leaders.lastleaderlinepoint written into ctx "
+              "(scale_factor %f, content_base.x %f)",
+              ctx->scale_factor, ctx->content_base.x);
+      else
+        ok ("json_dotted_pointer_keys_struct: ctx.leaders.* ignored");
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
+// Then in an array element (MLINE.verts[].lines).
+static int
+test_json_dotted_pointer_keys_array (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  Dwg_Object *obj;
+  int error;
+  static const char json[]
+      = "{\n"
+        "  \"created_by\": \"add_test\",\n"
+        "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
+        "  \"OBJECTS\": [\n"
+        "    { \"entity\": \"MLINE\", \"index\": 0, \"type\": 47,\n"
+        "      \"handle\": [0, 1, 1],\n"
+        "      \"verts\": [ { \"vertex\": [1.0, 2.0, 0.0],\n"
+        "                   \"lines.segparms\": [1.5, 2.5] },\n"
+        "                 { \"vertex_direction\": [1.0, 0.0, 0.0] } ] }\n"
+        "  ]\n"
+        "}\n";
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)strdup (json);
+  dat.size = sizeof (json) - 1;
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("json_dotted_pointer_keys_array: dwg_read_json failed with 0x%x",
+          error);
+  obj = first_object (&dwg, DWG_TYPE_MLINE);
+  if (!obj)
+    fail ("json_dotted_pointer_keys_array: no MLINE");
+  else
+    {
+      Dwg_Entity_MLINE *mline = obj->tio.entity->tio.MLINE;
+      // unchecked, verts[0].lines.segparms went into verts[1]
+      if (mline->num_verts != 2 || !mline->verts)
+        fail ("json_dotted_pointer_keys_array: MLINE.verts not imported");
+      else if (mline->verts[0].lines || mline->verts[0].num_lines
+               || mline->verts[1].parent || mline->verts[1].vertex.x != 0.0)
+        fail ("json_dotted_pointer_keys_array: verts[0].lines.segparms "
+              "written into verts[1] (parent %p)",
+              (void *)mline->verts[1].parent);
+      else
+        ok ("json_dotted_pointer_keys_array: verts[].lines.* ignored");
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
 #endif
 
 int
@@ -1711,6 +1815,8 @@ main (int argc, char *argv[])
 #endif
 #ifndef DISABLE_JSON
   error += test_json_union_selectors ();
+  error += test_json_dotted_pointer_keys_struct ();
+  error += test_json_dotted_pointer_keys_array ();
 #endif
   error += test_names ();
   error += test_api_version ();
