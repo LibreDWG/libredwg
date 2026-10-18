@@ -410,7 +410,7 @@ dwg_print_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   Dwg_Class *klass;
 
   i = obj->type - 500;
-  if (i < 0 || i > (int)dwg->num_classes)
+  if (i < 0 || i >= (int)dwg->num_classes)
     return DWG_ERR_INVALIDTYPE;
 
   klass = &dwg->dwg_class[i];
@@ -627,10 +627,11 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
 
-          if (i > 0 && i < (int)dwg->num_classes)
+          if (i >= 0 && i < (int)dwg->num_classes)
             {
               klass = &dwg->dwg_class[i];
-              is_entity = klass ? dwg_class_is_entity (klass) : 0;
+              // by the object's struct, not by its class
+              is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
             }
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (klass && !is_entity)

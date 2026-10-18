@@ -1859,27 +1859,15 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       else if (DWG_ERR_UNHANDLEDCLASS
                & (error = dwg_json_variable_type (obj->parent, dat, obj)))
         {
-          Dwg_Data *dwg = obj->parent;
-          int is_entity = 0;
-          int i = obj->type - 500;
-          Dwg_Class *klass = NULL;
+          int is_entity;
           int num_bytes = obj->num_unknown_bits / 8;
           if (obj->num_unknown_bits & 7)
             num_bytes++;
 
           if (obj->fixedtype == DWG_TYPE_FREED)
             goto invalid_type;
-          if (i >= 0 && i < (int)dwg->num_classes
-              && obj->fixedtype < DWG_TYPE_FREED)
-            {
-              klass = &dwg->dwg_class[i];
-              is_entity = dwg_class_is_entity (klass);
-            }
-          else
-            {
-              if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
-                is_entity = 1;
-            }
+          // by the object's struct, not by its class
+          is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (!is_entity)
             {
