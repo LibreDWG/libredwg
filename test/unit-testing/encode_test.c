@@ -656,6 +656,87 @@ in_json_mline_lines_test (void)
   dwg_free (&dwg);
   free (dat.chain);
 }
+
+/* A dotted key a.b into the subclass array a, which was still NULL, got
+   one element allocated and its count kept. But the specs walk the refs
+   6 times, the rowstyles 3 times and their borders 6 times, an MLINE
+   vertex's lines MLINE.num_lines times, and LTYPE.numdashes was taken
+   before its dashes. dwg_free and the writers then read past the one
+   element. A dotted key into a NULL array is now an array of one element.
+   The LTYPE check fails before, the others only with ASan. */
+static void
+in_json_dotted_array_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+        "{\"object\":\"DIMASSOC\",\"index\":0,\"type\":500,"
+        "\"handle\":[0,1,1],\"associativity\":63,"
+        "\"ref.classname\":\"AcDbOsnapPointRef\"},"
+        "{\"object\":\"TABLESTYLE\",\"index\":1,\"type\":501,"
+        "\"handle\":[0,1,2],\"rowstyles.text_height\":1.0,"
+        "\"rowstyles.borders.linewt\":1},"
+        "{\"entity\":\"MLINE\",\"index\":2,\"type\":47,\"handle\":[0,1,3],"
+        "\"verts\":[{\"vertex\":[0.0,0.0,0.0]},"
+        "{\"lines\":[{\"segparms\":[1.0]},{\"segparms\":[2.0]}]}],"
+        "\"verts.lines.segparms\":[3.0]},"
+        "{\"object\":\"LTYPE\",\"index\":3,\"type\":57,\"handle\":[0,1,4],"
+        "\"numdashes\":200,\"dashes.length\":1.0}]}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_dotted_array: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 4)
+    fail ("in_json_dotted_array: dwg_read_json");
+  else
+    {
+      Dwg_Object_DIMASSOC *dimassoc = dwg.object[0].tio.object->tio.DIMASSOC;
+      Dwg_Object_TABLESTYLE *style = dwg.object[1].tio.object->tio.TABLESTYLE;
+      Dwg_Entity_MLINE *mline = dwg.object[2].tio.entity->tio.MLINE;
+      Dwg_Object_LTYPE *ltype = dwg.object[3].tio.object->tio.LTYPE;
+
+      if (dimassoc->ref && dimassoc->ref[0].classname
+          && !dimassoc->ref[5].classname && !dimassoc->ref[5].osnap_type)
+        ok ("_set_struct_field: DIMASSOC ref.classname, ref has 6");
+      else
+        fail ("_set_struct_field: DIMASSOC ref.classname");
+      if (style->rowstyles && style->rowstyles[0].text_height == 1.0
+          && style->rowstyles[0].borders
+          && style->rowstyles[0].borders[0].linewt == 1
+          && style->rowstyles[0].borders[5].linewt == 0
+          && style->rowstyles[2].text_height == 0.0
+          && !style->rowstyles[2].borders)
+        ok ("_set_struct_field: TABLESTYLE rowstyles.borders.linewt, "
+            "rowstyles has 3, borders 6");
+      else
+        fail ("_set_struct_field: TABLESTYLE rowstyles.borders.linewt");
+      if (mline->num_lines == 2 && mline->verts && mline->verts[0].lines
+          && mline->verts[0].lines[0].num_segparms == 1
+          && mline->verts[0].lines[0].segparms[0] == 3.0
+          && !mline->verts[0].lines[1].num_segparms
+          && !mline->verts[0].lines[1].segparms)
+        ok ("_set_struct_field: MLINE verts.lines.segparms, lines has "
+            "num_lines");
+      else
+        fail ("_set_struct_field: MLINE verts.lines.segparms, num_lines %u",
+              (unsigned)mline->num_lines);
+      if (ltype->numdashes == 1 && ltype->dashes
+          && ltype->dashes[0].length == 1.0)
+        ok ("_set_struct_field: LTYPE dashes.length, numdashes 1");
+      else
+        fail ("_set_struct_field: LTYPE dashes.length, numdashes %u != 1",
+              (unsigned)ltype->numdashes);
+    }
+  dwg.header.version = dwg.header.from_version;
+  dwg_free (&dwg);
+  free (dat.chain);
+}
 #endif
 
 int
@@ -679,6 +760,7 @@ main (int argc, char const *argv[])
   in_json_object_counts_test ();
   in_json_subclass_fixed_elems_test ();
   in_json_mline_lines_test ();
+  in_json_dotted_array_test ();
 #endif
   return failed;
 }

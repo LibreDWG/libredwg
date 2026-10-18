@@ -2334,6 +2334,50 @@ json_mline_num_lines (Dwg_Entity_MLINE *restrict o, int num_lines)
   return 0;
 }
 
+// How many elements to allocate for a subclass array of num_elems (> 0)
+// elements in _obj: as many as the specs walk, when that is more. For the
+// lines of an MLINE vertex, raises MLINE.num_lines as above and sets the
+// vertex's. 0 when out of memory.
+static int
+json_subclass_num_alloc (const Dwg_Object *restrict obj, void *restrict _obj,
+                         const char *restrict subclass, int num_elems)
+{
+  int num_alloc = json_subclass_fixed_elems (subclass);
+  if (strEQc (subclass, "MLINE_line"))
+    {
+      Dwg_Entity_MLINE *o = obj->tio.entity->tio.MLINE;
+      // the most lines of any vertex
+      if (num_elems > o->num_lines && json_mline_num_lines (o, num_elems))
+        return 0;
+      ((Dwg_MLINE_vertex *)_obj)->num_lines = o->num_lines;
+      num_alloc = o->num_lines;
+    }
+  return num_alloc > num_elems ? num_alloc : num_elems;
+}
+
+// A dotted key a.b into the subclass array a, which is still NULL: as for
+// an array of one element, set its count and allocate the elements the
+// specs walk.
+static void *
+json_dotted_array (const Dwg_Object *restrict obj, void *restrict _obj,
+                   const Dwg_DYNAPI_field *restrict fields,
+                   const Dwg_DYNAPI_field *restrict f,
+                   const char *restrict subclass)
+{
+  const int size_elem = dwg_dynapi_subclass_size (subclass);
+  int num_alloc;
+  char *elems;
+  if (size_elem <= 0 || !fields)
+    return NULL;
+  json_set_numfield (_obj, fields, f->name, 1);
+  num_alloc = json_subclass_num_alloc (obj, _obj, subclass, 1);
+  elems = num_alloc ? (char *)calloc (num_alloc, size_elem) : NULL;
+  if (!elems) // no elements, no count
+    json_set_numfield (_obj, fields, f->name, 0);
+  memcpy (&((char *)_obj)[f->offset], &elems, sizeof (elems));
+  return elems;
+}
+
 #define FIXUP_SIZEFIELD(type)                                                 \
   {                                                                           \
     const BITCODE_##type _size = (BITCODE_##type)len;                         \
@@ -3052,32 +3096,25 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           LOG_TRACE ("new subclass %s %s [%d elems with size %d]\n", name,
                      subclass, num_elems, size_elem);
-          json_set_numfield (_obj, fields, key, num_elems);
-          num_alloc = num_elems ? json_subclass_fixed_elems (subclass) : 0;
-          if (strEQc (subclass, "MLINE_line") && num_elems)
+          if (strEQc (subclass, "MLINE_line")
+              && num_elems > 255) // num_lines is RC
             {
-              Dwg_Entity_MLINE *o = obj->tio.entity->tio.MLINE;
-              if (num_elems > 255) // num_lines is RC
-                {
-                  LOG_ERROR ("Invalid %s.%s: %d lines", name, key, num_elems);
-                  free (subclass);
-                  json_advance_unknown (dat, tokens, t->type, 0);
-                  return DWG_ERR_INVALIDTYPE;
-                }
-              // the most lines of any vertex
-              if (num_elems > o->num_lines
-                  && json_mline_num_lines (o, num_elems))
-                {
-                  free (subclass);
-                  return DWG_ERR_OUTOFMEM;
-                }
-              ((Dwg_MLINE_vertex *)_obj)->num_lines = o->num_lines;
-              num_alloc = o->num_lines;
+              LOG_ERROR ("Invalid %s.%s: %d lines", name, key, num_elems);
+              free (subclass);
+              json_advance_unknown (dat, tokens, t->type, 0);
+              return DWG_ERR_INVALIDTYPE;
+            }
+          json_set_numfield (_obj, fields, key, num_elems);
+          num_alloc = num_elems ? json_subclass_num_alloc (obj, _obj, subclass,
+                                                           num_elems)
+                                : 0;
+          if (num_elems && !num_alloc)
+            {
+              free (subclass);
+              return DWG_ERR_OUTOFMEM;
             }
           if (num_alloc > num_elems)
             LOG_TRACE ("%s: allocate %d elems\n", key, num_alloc);
-          else
-            num_alloc = num_elems;
           elems = num_alloc ? (char *)calloc (num_alloc, size_elem) : NULL;
           dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
           tokens->index++;
@@ -3258,14 +3295,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   off = *(void **)((char *)_obj + f1->offset);
                   if (!off && subclass1)
-                    {
-                      int subsize = dwg_dynapi_subclass_size (subclass1);
-                      if (subsize > 0)
-                        {
-                          off = calloc (1, subsize);
-                          *(void **)((char *)_obj + f1->offset) = off;
-                        }
-                    }
+                    off = json_dotted_array (obj, _obj,
+                                             dwg_dynapi_entity_fields (name),
+                                             f1, subclass1);
                 }
               else
                 off = &((char *)_obj)[f1->offset];
@@ -3290,14 +3322,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   off = *(void **)((char *)_obj + f1->offset);
                   if (!off && subclass1)
-                    {
-                      int subsize = dwg_dynapi_subclass_size (subclass1);
-                      if (subsize > 0)
-                        {
-                          off = calloc (1, subsize);
-                          *(void **)((char *)_obj + f1->offset) = off;
-                        }
-                    }
+                    off = json_dotted_array (obj, _obj,
+                                             dwg_dynapi_subclass_fields (name),
+                                             f1, subclass1);
                 }
               else
                 off = &((char *)_obj)[f1->offset];
