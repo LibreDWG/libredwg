@@ -20,6 +20,9 @@ extern unsigned int loglevel;
 #include "common.c"
 // CLANG_DIAG_RESTORE
 #include "decode.h"
+#ifndef DISABLE_JSON
+#  include "in_json.h"
+#endif
 #include "tests_common.h"
 
 BITCODE_RL size = SECTION_R13_SIZE;
@@ -326,6 +329,69 @@ remove_NOD_item_null_itemhandles_test (void)
   ok ("remove_NOD_item: survives NULL itemhandles with numitems > 0");
 }
 
+#ifndef DISABLE_JSON
+/* The in_json R2004+ section readers took a count key after its buffer as
+   is, as json_OBJECTS did with num_unknown_bits before 0443a3df. The
+   section writers in encode and out_json, and dwg_free_acds, then read
+   past the 2-byte buffers, and past segidx[] and segments[]. The counts
+   must come from the buffers. */
+static void
+in_json_section_counts_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},"
+        "\"AppInfo\":{\"unknown_bits\":\"4142\",\"size\":4096},"
+        "\"AppInfoHistory\":{\"unknown_bits\":\"4142\",\"size\":4096},"
+        "\"Security\":{\"encr_buffer\":\"4142\",\"encr_size\":4096},"
+        "\"RevHistory\":{\"histories\":[1],\"num_histories\":4096},"
+        "\"AcDs\":{\"segidx\":[{\"offset\":1,\"size\":1},"
+        "{\"offset\":1,\"size\":1}],\"segments\":[{\"type\":0}],"
+        "\"num_segidx\":1000}}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_section_counts: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL)
+    fail ("in_json_section_counts: dwg_read_json");
+  else
+    {
+      if (dwg.appinfo.size == 2)
+        ok ("json_AppInfo: size from unknown_bits");
+      else
+        fail ("json_AppInfo: size " FORMAT_RL " != 2", dwg.appinfo.size);
+      if (dwg.appinfohistory.size == 2)
+        ok ("json_AppInfoHistory: size from unknown_bits");
+      else
+        fail ("json_AppInfoHistory: size " FORMAT_RL " != 2",
+              dwg.appinfohistory.size);
+      if (dwg.security.encr_size == 2)
+        ok ("json_Security: encr_size from encr_buffer");
+      else
+        fail ("json_Security: encr_size " FORMAT_RL " != 2",
+              dwg.security.encr_size);
+      if (dwg.revhistory.num_histories == 1)
+        ok ("json_RevHistory: num_histories from histories");
+      else
+        fail ("json_RevHistory: num_histories " FORMAT_RL " != 1",
+              dwg.revhistory.num_histories);
+      if (dwg.acds.num_segidx == 1)
+        ok ("json_AcDs: num_segidx within segidx and segments");
+      else
+        fail ("json_AcDs: num_segidx " FORMAT_RL " != 1",
+              dwg.acds.num_segidx);
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+}
+#endif
+
 int
 main (int argc, char const *argv[])
 {
@@ -342,5 +408,8 @@ main (int argc, char const *argv[])
   compress_R2004_section_tests ();
   common_entity_handle_data_double_free_test ();
   remove_NOD_item_null_itemhandles_test ();
+#ifndef DISABLE_JSON
+  in_json_section_counts_test ();
+#endif
   return failed;
 }

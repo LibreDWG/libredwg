@@ -153,6 +153,17 @@ static Bit_Chain *g_dat;
     _obj->lenf = slen & 0xFFFFFFFF;                                           \
     JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
   }
+// A count key of a FIELD_BINARY or FIELD_VECTOR is ignored: as all numfields
+// in _set_struct_field, the count is calculated from the actual size, and
+// never exceeds its buffer.
+#define FIELD_NUM(nam, dxf)                                                   \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    LOG_TRACE (#nam ": %.*s (ignored)\n", t->end - t->start,                  \
+               &dat->chain[t->start]);                                        \
+    json_advance_unknown (dat, tokens, t->type, 0);                           \
+    JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
+  }
 // clang-format off
 #define FIELD_T(nam, dxf)                                                     \
   else if (strEQc (key, #nam))                                                \
@@ -4671,7 +4682,7 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       // clang-format off
       if (0) ;
-      FIELD_RL (size, 0)
+      FIELD_NUM (size, 0)
       FIELD_BINARY (unknown_bits, size, 0)
       FIELD_RL (class_version, 0)
       FIELD_T16 (appinfo_name, 0)
@@ -4728,7 +4739,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       t = &tokens->tokens[tokens->index];
       // clang-format off
       if (0) ;
-      FIELD_RL (size, 0)
+      FIELD_NUM (size, 0)
       FIELD_BINARY (unknown_bits, size, 0)
       else
         {
@@ -4923,7 +4934,7 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_T32 (crypto_name, 0)
       FIELD_RL (algo_id, 0)
       FIELD_RL (key_len, 0)
-      FIELD_RL (encr_size, 0)
+      FIELD_NUM (encr_size, 0)
       FIELD_BINARY (encr_buffer, encr_size, 0)
       else
         {
@@ -4968,7 +4979,7 @@ json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (0) ;
       FIELD_RL (class_version, 0)
       FIELD_RL (class_minor, 0)
-      FIELD_RL (num_histories, 0)
+      FIELD_NUM (num_histories, 0)
       FIELD_VECTOR (histories, RL, num_histories, 0)
       else
         {
@@ -5243,6 +5254,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int error = 0;
   int size;
+  BITCODE_RL num_segments = 0;
   if (t->type != JSMN_OBJECT)
     {
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
@@ -5271,7 +5283,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RLd (ds_version, 0)
       FIELD_RLd (segidx_offset, 0)
       FIELD_RLd (segidx_unknown, 0)
-      FIELD_RLd (num_segidx, 0)
+      FIELD_NUM (num_segidx, 0)
       FIELD_RLd (schidx_segidx, 0)
       FIELD_RLd (datidx_segidx, 0)
       FIELD_RLd (search_segidx, 0)
@@ -5294,7 +5306,10 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         if (t->type != JSMN_ARRAY) // of OBJECTs
           json_advance_unknown (dat, tokens, t->type, 0);
         else if (t->size)
-          error |= json_AcDs_Segments (dat, dwg, tokens, _obj, t->size);
+          {
+            num_segments = (BITCODE_RL)t->size;
+            error |= json_AcDs_Segments (dat, dwg, tokens, _obj, t->size);
+          }
         else
           tokens->index++; // empty array
         // if (error >= DWG_ERR_CRITICAL)
@@ -5305,6 +5320,14 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         LOG_ERROR ("Unknown %s.%s ignored", section, key);
         json_advance_unknown (dat, tokens, t->type, 0);
       }
+      // segments are indexed by segidx: num_segidx must not exceed either,
+      // also when we return early
+      if (_obj->segments && _obj->num_segidx > num_segments)
+        {
+          LOG_WARN ("AcDs.num_segidx " FORMAT_RL " > " FORMAT_RL " segments",
+                    _obj->num_segidx, num_segments);
+          _obj->num_segidx = num_segments;
+        }
     }
 
   LOG_TRACE ("End of %s\n", section);
