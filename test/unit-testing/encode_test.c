@@ -20,6 +20,9 @@ extern unsigned int loglevel;
 #include "common.c"
 // CLANG_DIAG_RESTORE
 #include "decode.h"
+#ifndef DISABLE_JSON
+#  include "in_json.h"
+#endif
 #include "tests_common.h"
 
 BITCODE_RL size = SECTION_R13_SIZE;
@@ -326,6 +329,416 @@ remove_NOD_item_null_itemhandles_test (void)
   ok ("remove_NOD_item: survives NULL itemhandles with numitems > 0");
 }
 
+#ifndef DISABLE_JSON
+/* The in_json R2004+ section readers took a count key after its buffer as
+   is, as json_OBJECTS did with num_unknown_bits before 0443a3df. The
+   section writers in encode and out_json, and dwg_free_acds, then read
+   past the 2-byte buffers, and past segidx[] and segments[]. The counts
+   must come from the buffers. */
+static void
+in_json_section_counts_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},"
+        "\"AppInfo\":{\"unknown_bits\":\"4142\",\"size\":4096},"
+        "\"AppInfoHistory\":{\"unknown_bits\":\"4142\",\"size\":4096},"
+        "\"Security\":{\"encr_buffer\":\"4142\",\"encr_size\":4096},"
+        "\"RevHistory\":{\"histories\":[1],\"num_histories\":4096},"
+        "\"AcDs\":{\"segidx\":[{\"offset\":1,\"size\":1},"
+        "{\"offset\":1,\"size\":1}],\"segments\":[{\"type\":0}],"
+        "\"num_segidx\":1000}}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_section_counts: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL)
+    fail ("in_json_section_counts: dwg_read_json");
+  else
+    {
+      if (dwg.appinfo.size == 2)
+        ok ("json_AppInfo: size from unknown_bits");
+      else
+        fail ("json_AppInfo: size " FORMAT_RL " != 2", dwg.appinfo.size);
+      if (dwg.appinfohistory.size == 2)
+        ok ("json_AppInfoHistory: size from unknown_bits");
+      else
+        fail ("json_AppInfoHistory: size " FORMAT_RL " != 2",
+              dwg.appinfohistory.size);
+      if (dwg.security.encr_size == 2)
+        ok ("json_Security: encr_size from encr_buffer");
+      else
+        fail ("json_Security: encr_size " FORMAT_RL " != 2",
+              dwg.security.encr_size);
+      if (dwg.revhistory.num_histories == 1)
+        ok ("json_RevHistory: num_histories from histories");
+      else
+        fail ("json_RevHistory: num_histories " FORMAT_RL " != 1",
+              dwg.revhistory.num_histories);
+      if (dwg.acds.num_segidx == 1)
+        ok ("json_AcDs: num_segidx within segidx and segments");
+      else
+        fail ("json_AcDs: num_segidx " FORMAT_RL " != 1",
+              dwg.acds.num_segidx);
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+}
+
+/* In _set_struct_field only the num_ keys were ignored. The other counts
+   and sizes were taken as is, also after their buffer, a vector of fixed
+   size in the spec was allocated at the JSON array's length, num_hdls
+   counted hdls but not shorts, num_ents ents but not sort_ents,
+   num_segs_or_paths polyline_paths but not segs, and numrows * numcols
+   counted exprs and lut unchecked. The writers then read past the
+   buffers. The fixed size checks of transform and prop_states fail before
+   only with ASan. */
+static void
+in_json_object_counts_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+        "{\"object\":\"LTYPE\",\"index\":0,\"type\":57,\"handle\":[0,1,1],"
+        "\"dashes\":[{\"length\":1.0}],\"numdashes\":200},"
+        "{\"object\":\"DICTIONARY\",\"index\":1,\"type\":42,"
+        "\"handle\":[0,1,2],\"items\":{\"A\":[2,1,1,1]},\"numitems\":4096},"
+        "{\"entity\":\"LINE\",\"index\":2,\"type\":19,\"handle\":[0,1,3],"
+        "\"preview\":\"4142\",\"preview_size\":4096},"
+        "{\"object\":\"PROXY_OBJECT\",\"index\":3,\"type\":499,"
+        "\"handle\":[0,1,4],\"data_numbits\":4096,\"data\":\"4142\"},"
+        "{\"object\":\"FIELD\",\"index\":4,\"type\":500,\"handle\":[0,1,5],"
+        "\"value.data_type\":8,\"value.data_date\":\"4142\","
+        "\"value.data_size\":4096},"
+        "{\"object\":\"SPATIAL_FILTER\",\"index\":5,\"type\":501,"
+        "\"handle\":[0,1,6],\"inverse_transform\":[1.0],"
+        "\"transform\":[1.0]},"
+        "{\"object\":\"BLOCKFLIPPARAMETER\",\"index\":6,\"type\":502,"
+        "\"handle\":[0,1,7],\"prop_states\":[1]},"
+        "{\"object\":\"BLOCKPOLARSTRETCHACTION\",\"index\":7,\"type\":503,"
+        "\"handle\":[0,1,8],\"shorts\":[1],"
+        "\"hdls\":[[4,1,1,1],[4,1,2,2]]},"
+        "{\"object\":\"BLOCKLOOKUPACTION\",\"index\":8,\"type\":504,"
+        "\"handle\":[0,1,9],\"numrows\":2,\"numcols\":2,\"numelems\":4,"
+        "\"exprs\":[\"a\"],\"lut\":[{\"b282\":0}]},"
+        "{\"object\":\"SORTENTSTABLE\",\"index\":9,\"type\":505,"
+        "\"handle\":[0,1,10],\"sort_ents\":[[0,1,1,1]],"
+        "\"ents\":[[5,1,1,1],[5,1,2,2]]},"
+        "{\"entity\":\"HATCH\",\"index\":10,\"type\":78,"
+        "\"handle\":[0,1,11],\"paths\":[{\"flag\":1,"
+        "\"segs\":[{\"curve_type\":1}],"
+        "\"polyline_paths\":[{\"point\":[0.0,0.0]},"
+        "{\"point\":[1.0,1.0]}]}]}]}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_object_counts: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 11)
+    fail ("in_json_object_counts: dwg_read_json");
+  else
+    {
+      Dwg_Object_LTYPE *ltype = dwg.object[0].tio.object->tio.LTYPE;
+      Dwg_Object_DICTIONARY *dict = dwg.object[1].tio.object->tio.DICTIONARY;
+      Dwg_Object_Entity *line = dwg.object[2].tio.entity;
+      Dwg_Object_PROXY_OBJECT *proxy
+          = dwg.object[3].tio.object->tio.PROXY_OBJECT;
+      Dwg_Object_FIELD *field = dwg.object[4].tio.object->tio.FIELD;
+      Dwg_Object_SPATIAL_FILTER *filter
+          = dwg.object[5].tio.object->tio.SPATIAL_FILTER;
+      Dwg_Object_BLOCKFLIPPARAMETER *flip
+          = dwg.object[6].tio.object->tio.BLOCKFLIPPARAMETER;
+      Dwg_Object_BLOCKPOLARSTRETCHACTION *stretch
+          = dwg.object[7].tio.object->tio.BLOCKPOLARSTRETCHACTION;
+      Dwg_Object_BLOCKLOOKUPACTION *lookup
+          = dwg.object[8].tio.object->tio.BLOCKLOOKUPACTION;
+      Dwg_Object_SORTENTSTABLE *sortents
+          = dwg.object[9].tio.object->tio.SORTENTSTABLE;
+      Dwg_Entity_HATCH *hatch = dwg.object[10].tio.entity->tio.HATCH;
+
+      if (ltype->numdashes == 1)
+        ok ("_set_struct_field: LTYPE.numdashes from dashes");
+      else
+        fail ("_set_struct_field: LTYPE.numdashes %u != 1",
+              (unsigned)ltype->numdashes);
+      if (dict->numitems == 1)
+        ok ("_set_struct_field: DICTIONARY.numitems from items");
+      else
+        fail ("_set_struct_field: DICTIONARY.numitems " FORMAT_BL " != 1",
+              dict->numitems);
+      if (line->preview_size == 2)
+        ok ("_set_struct_field: preview_size from preview");
+      else
+        fail ("_set_struct_field: preview_size %u != 2",
+              (unsigned)line->preview_size);
+      if (proxy->data_numbits == 16)
+        ok ("_set_struct_field: PROXY_OBJECT.data_numbits within data");
+      else
+        fail ("_set_struct_field: PROXY_OBJECT.data_numbits " FORMAT_BL
+              " != 16",
+              proxy->data_numbits);
+      if (field->value.data_size == 2)
+        ok ("_set_struct_field: FIELD.value.data_size from data_date");
+      else
+        fail ("_set_struct_field: FIELD.value.data_size " FORMAT_BL " != 2",
+              field->value.data_size);
+      if (filter->transform && filter->inverse_transform
+          && filter->transform[0] == 1.0 && filter->transform[11] == 0.0
+          && filter->inverse_transform[11] == 0.0)
+        ok ("_set_struct_field: SPATIAL_FILTER.transform has 12");
+      else
+        fail ("_set_struct_field: SPATIAL_FILTER.transform");
+      if (flip->prop_states && flip->prop_states[0] == 1
+          && flip->prop_states[3] == 0)
+        ok ("_set_struct_field: BLOCKFLIPPARAMETER.prop_states has 4");
+      else
+        fail ("_set_struct_field: BLOCKFLIPPARAMETER.prop_states");
+      if (stretch->num_hdls == 1)
+        ok ("_set_struct_field: BLOCKPOLARSTRETCHACTION.num_hdls within "
+            "shorts");
+      else
+        fail ("_set_struct_field: BLOCKPOLARSTRETCHACTION.num_hdls " FORMAT_BL
+              " != 1",
+              stretch->num_hdls);
+      if (lookup->numelems == 1
+          && lookup->numrows * lookup->numcols <= lookup->numelems)
+        ok ("_set_struct_field: BLOCKLOOKUPACTION.numelems within exprs");
+      else
+        fail ("_set_struct_field: BLOCKLOOKUPACTION.numelems " FORMAT_BL
+              " numrows " FORMAT_BL " numcols " FORMAT_BL,
+              lookup->numelems, lookup->numrows, lookup->numcols);
+      if (sortents->num_ents == 1)
+        ok ("_set_struct_field: SORTENTSTABLE.num_ents within sort_ents");
+      else
+        fail ("_set_struct_field: SORTENTSTABLE.num_ents " FORMAT_BL " != 1",
+              sortents->num_ents);
+      if (hatch->num_paths == 1 && hatch->paths
+          && hatch->paths[0].num_segs_or_paths == 1)
+        ok ("_set_struct_field: HATCH.paths[0].num_segs_or_paths within "
+            "segs");
+      else
+        fail ("_set_struct_field: HATCH.paths[0].num_segs_or_paths");
+      // dwg_free frees only the one of segs and polyline_paths the flag
+      // selects
+      if (hatch->num_paths && hatch->paths)
+        {
+          free (hatch->paths[0].polyline_paths);
+          hatch->paths[0].polyline_paths = NULL;
+        }
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+}
+
+/* The specs walk DIMASSOC.ref 6 times, TABLESTYLE.rowstyles 3 times and
+   their borders 6 times (REPEAT_CN), whatever the JSON arrays held, but
+   _set_struct_field allocated the refs for max (4, the array's length)
+   and the rowstyles and borders for the array's length. dwg_free and the
+   writers then read past them. The checks of the last elements fail
+   before only with ASan. */
+static void
+in_json_subclass_fixed_elems_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+        "{\"object\":\"DIMASSOC\",\"index\":0,\"type\":500,"
+        "\"handle\":[0,1,1],\"associativity\":1,"
+        "\"ref\":[{\"classname\":\"AcDbOsnapPointRef\",\"osnap_type\":1}]},"
+        "{\"object\":\"TABLESTYLE\",\"index\":1,\"type\":501,"
+        "\"handle\":[0,1,2],\"rowstyles\":[{\"text_height\":1.0,"
+        "\"borders\":[{\"linewt\":1,\"visible\":1}]}]}]}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_subclass_fixed_elems: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 2)
+    fail ("in_json_subclass_fixed_elems: dwg_read_json");
+  else
+    {
+      Dwg_Object_DIMASSOC *dimassoc = dwg.object[0].tio.object->tio.DIMASSOC;
+      Dwg_Object_TABLESTYLE *style
+          = dwg.object[1].tio.object->tio.TABLESTYLE;
+
+      if (dimassoc->ref && dimassoc->ref[0].osnap_type == 1
+          && !dimassoc->ref[5].classname && !dimassoc->ref[5].osnap_type)
+        ok ("_set_struct_field: DIMASSOC.ref has 6");
+      else
+        fail ("_set_struct_field: DIMASSOC.ref");
+      if (style->rowstyles && style->rowstyles[0].text_height == 1.0
+          && style->rowstyles[0].borders
+          && style->rowstyles[0].borders[0].linewt == 1
+          && style->rowstyles[0].borders[5].linewt == 0
+          && style->rowstyles[2].text_height == 0.0
+          && !style->rowstyles[2].borders)
+        ok ("_set_struct_field: TABLESTYLE.rowstyles has 3, borders 6");
+      else
+        fail ("_set_struct_field: TABLESTYLE.rowstyles");
+    }
+  // as dwgwrite, so that dwg_free walks the objects with the R2004 spec
+  dwg.header.version = dwg.header.from_version;
+  dwg_free (&dwg);
+  free (dat.chain);
+}
+
+/* dwg.spec MLINE walks MLINE.num_lines lines on every vertex, but
+   _set_struct_field set num_lines from each vertex's lines in turn, so it
+   ended as the last vertex's count, and allocated each vertex's lines for
+   its own count only. dwg_free and the writers then read past the lines
+   of an earlier vertex with fewer. The check of the first MLINE fails
+   before only with ASan. */
+static void
+in_json_mline_lines_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+        "{\"entity\":\"MLINE\",\"index\":0,\"type\":47,\"handle\":[0,1,1],"
+        "\"verts\":[{\"lines\":[{\"segparms\":[1.0]}]},"
+        "{\"lines\":[{\"segparms\":[1.0]},"
+        "{\"segparms\":[2.0],\"areafillparms\":[3.0]}]}]},"
+        "{\"entity\":\"MLINE\",\"index\":1,\"type\":47,\"handle\":[0,1,2],"
+        "\"verts\":[{\"lines\":[{\"segparms\":[1.0]},{\"segparms\":[2.0]}]},"
+        "{\"lines\":[{\"segparms\":[1.0]}]}]}]}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_mline_lines: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 2)
+    fail ("in_json_mline_lines: dwg_read_json");
+  else
+    {
+      Dwg_Entity_MLINE *first = dwg.object[0].tio.entity->tio.MLINE;
+      Dwg_Entity_MLINE *last = dwg.object[1].tio.entity->tio.MLINE;
+
+      if (first->num_lines == 2 && first->verts && first->verts[0].lines
+          && first->verts[0].lines[0].num_segparms == 1
+          && !first->verts[0].lines[1].num_segparms
+          && !first->verts[0].lines[1].segparms
+          && first->verts[1].lines[1].num_areafillparms == 1)
+        ok ("_set_struct_field: MLINE vertex lines grown to num_lines");
+      else
+        fail ("_set_struct_field: MLINE vertex lines, num_lines %u",
+              (unsigned)first->num_lines);
+      if (last->num_lines == 2 && last->verts && last->verts[1].lines
+          && last->verts[1].lines[0].num_segparms == 1
+          && !last->verts[1].lines[1].num_segparms
+          && !last->verts[1].lines[1].segparms)
+        ok ("_set_struct_field: MLINE.num_lines from the vertex with most");
+      else
+        fail ("_set_struct_field: MLINE.num_lines %u != 2",
+              (unsigned)last->num_lines);
+    }
+  dwg.header.version = dwg.header.from_version;
+  dwg_free (&dwg);
+  free (dat.chain);
+}
+
+/* A dotted key a.b into the subclass array a, which was still NULL, got
+   one element allocated and its count kept. But the specs walk the refs
+   6 times, the rowstyles 3 times and their borders 6 times, an MLINE
+   vertex's lines MLINE.num_lines times, and LTYPE.numdashes was taken
+   before its dashes. dwg_free and the writers then read past the one
+   element. A dotted key into a NULL array is now an array of one element.
+   The LTYPE check fails before, the others only with ASan. */
+static void
+in_json_dotted_array_test (void)
+{
+  static const char json[]
+      = "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+        "{\"object\":\"DIMASSOC\",\"index\":0,\"type\":500,"
+        "\"handle\":[0,1,1],\"associativity\":63,"
+        "\"ref.classname\":\"AcDbOsnapPointRef\"},"
+        "{\"object\":\"TABLESTYLE\",\"index\":1,\"type\":501,"
+        "\"handle\":[0,1,2],\"rowstyles.text_height\":1.0,"
+        "\"rowstyles.borders.linewt\":1},"
+        "{\"entity\":\"MLINE\",\"index\":2,\"type\":47,\"handle\":[0,1,3],"
+        "\"verts\":[{\"vertex\":[0.0,0.0,0.0]},"
+        "{\"lines\":[{\"segparms\":[1.0]},{\"segparms\":[2.0]}]}],"
+        "\"verts.lines.segparms\":[3.0]},"
+        "{\"object\":\"LTYPE\",\"index\":3,\"type\":57,\"handle\":[0,1,4],"
+        "\"numdashes\":200,\"dashes.length\":1.0}]}";
+  Dwg_Data dwg;
+  Bit_Chain dat = { 0 };
+
+  memset (&dwg, 0, sizeof (dwg));
+  dat.chain = (unsigned char *)strdup (json);
+  if (!dat.chain)
+    {
+      fail ("in_json_dotted_array: strdup failed");
+      return;
+    }
+  dat.size = strlen (json);
+  if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL || dwg.num_objects != 4)
+    fail ("in_json_dotted_array: dwg_read_json");
+  else
+    {
+      Dwg_Object_DIMASSOC *dimassoc = dwg.object[0].tio.object->tio.DIMASSOC;
+      Dwg_Object_TABLESTYLE *style = dwg.object[1].tio.object->tio.TABLESTYLE;
+      Dwg_Entity_MLINE *mline = dwg.object[2].tio.entity->tio.MLINE;
+      Dwg_Object_LTYPE *ltype = dwg.object[3].tio.object->tio.LTYPE;
+
+      if (dimassoc->ref && dimassoc->ref[0].classname
+          && !dimassoc->ref[5].classname && !dimassoc->ref[5].osnap_type)
+        ok ("_set_struct_field: DIMASSOC ref.classname, ref has 6");
+      else
+        fail ("_set_struct_field: DIMASSOC ref.classname");
+      if (style->rowstyles && style->rowstyles[0].text_height == 1.0
+          && style->rowstyles[0].borders
+          && style->rowstyles[0].borders[0].linewt == 1
+          && style->rowstyles[0].borders[5].linewt == 0
+          && style->rowstyles[2].text_height == 0.0
+          && !style->rowstyles[2].borders)
+        ok ("_set_struct_field: TABLESTYLE rowstyles.borders.linewt, "
+            "rowstyles has 3, borders 6");
+      else
+        fail ("_set_struct_field: TABLESTYLE rowstyles.borders.linewt");
+      if (mline->num_lines == 2 && mline->verts && mline->verts[0].lines
+          && mline->verts[0].lines[0].num_segparms == 1
+          && mline->verts[0].lines[0].segparms[0] == 3.0
+          && !mline->verts[0].lines[1].num_segparms
+          && !mline->verts[0].lines[1].segparms)
+        ok ("_set_struct_field: MLINE verts.lines.segparms, lines has "
+            "num_lines");
+      else
+        fail ("_set_struct_field: MLINE verts.lines.segparms, num_lines %u",
+              (unsigned)mline->num_lines);
+      if (ltype->numdashes == 1 && ltype->dashes
+          && ltype->dashes[0].length == 1.0)
+        ok ("_set_struct_field: LTYPE dashes.length, numdashes 1");
+      else
+        fail ("_set_struct_field: LTYPE dashes.length, numdashes %u != 1",
+              (unsigned)ltype->numdashes);
+    }
+  dwg.header.version = dwg.header.from_version;
+  dwg_free (&dwg);
+  free (dat.chain);
+}
+#endif
+
 int
 main (int argc, char const *argv[])
 {
@@ -342,5 +755,12 @@ main (int argc, char const *argv[])
   compress_R2004_section_tests ();
   common_entity_handle_data_double_free_test ();
   remove_NOD_item_null_itemhandles_test ();
+#ifndef DISABLE_JSON
+  in_json_section_counts_test ();
+  in_json_object_counts_test ();
+  in_json_subclass_fixed_elems_test ();
+  in_json_mline_lines_test ();
+  in_json_dotted_array_test ();
+#endif
   return failed;
 }
