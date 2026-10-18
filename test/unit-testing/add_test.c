@@ -41,6 +41,9 @@ static int cnt = 0;
 #include "classes.h"
 #include "bits.h"
 #include "out_dxf.h"
+#ifndef DISABLE_JSON
+#  include "in_json.h"
+#endif
 #ifndef DISABLE_DXF
 #  include "decode.h"
 #  include "in_dxf.h"
@@ -1530,6 +1533,255 @@ test_viewport_vx_realloc (void)
 }
 #endif
 
+#if !defined(DISABLE_DXF) || !defined(DISABLE_JSON)
+static Dwg_Object *
+first_object (Dwg_Data *dwg, const Dwg_Object_Type type)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    if (dwg->object[i].fixedtype == type)
+      return &dwg->object[i];
+  return NULL;
+}
+#endif
+
+#ifndef DISABLE_DXF
+// The importers set a union member only when the struct's own selector
+// picks it, as the spec reads, writes and frees it: MULTILEADER.ctx.content
+// by has_content_txt/has_content_blk, EvalExpr.value by value_code. A DXF
+// code for another member is ignored.
+static int
+test_dxf_union_selectors (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  Dwg_Object *obj;
+  int error;
+  static const char dxf[]
+      = "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1018\n"
+        "  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n"
+        "  0\nMULTILEADER\n  5\n100\n  8\n0\n100\nAcDbEntity\n"
+        "100\nAcDbMLeader\n270\n2\n300\nCONTEXT_DATA{\n 40\n1.0\n"
+        "290\n1\n296\n1\n301\n}\n"
+        "  0\nENDSEC\n  0\nSECTION\n  2\nOBJECTS\n"
+        "  0\nACSH_BOX_CLASS\n  5\n101\n100\nAcDbEvalExpr\n 90\n1\n"
+        " 98\n33\n 99\n29\n  1\n\n 70\n40\n 40\n3.0\n 10\n1.0\n 20\n2.0\n"
+        "100\nAcDbShHistoryNode\n"
+        "  0\nENDSEC\n  0\nEOF\n";
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)strdup (dxf);
+  dat.size = sizeof (dxf) - 1;
+  error = dwg_read_dxf (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("dxf_union_selectors: dwg_read_dxf failed with 0x%x", error);
+
+  obj = first_object (&dwg, DWG_TYPE_MULTILEADER);
+  if (!obj)
+    fail ("dxf_union_selectors: no MULTILEADER");
+  else
+    {
+      Dwg_MLEADER_AnnotContext *ctx = &obj->tio.entity->tio.MULTILEADER->ctx;
+      if (ctx->has_content_txt != 1 || ctx->has_content_blk != 0)
+        fail ("dxf_union_selectors: MULTILEADER.ctx 296 accepted with txt "
+              "content (has_content_txt %d, has_content_blk %d)",
+              ctx->has_content_txt, ctx->has_content_blk);
+      else
+        ok ("dxf_union_selectors: MULTILEADER.ctx keeps txt content only");
+    }
+
+  obj = first_object (&dwg, DWG_TYPE_ACSH_BOX_CLASS);
+  if (!obj)
+    fail ("dxf_union_selectors: no ACSH_BOX_CLASS");
+  else
+    {
+      Dwg_EvalExpr *ee = &obj->tio.object->tio.ACSH_BOX_CLASS->evalexpr;
+      if (ee->value_code != 40 || ee->value.num40 != 3.0)
+        fail ("dxf_union_selectors: EvalExpr.value set by DXF 10 with "
+              "value_code %d (num40 %f)",
+              (int)ee->value_code, ee->value.num40);
+      else
+        ok ("dxf_union_selectors: EvalExpr.value keeps value_code 40 member");
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+#endif
+
+#ifndef DISABLE_JSON
+// Same for in_json, through the dynapi keys.
+static int
+test_json_union_selectors (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  Dwg_Object *obj;
+  int error;
+  static const char json[]
+      = "{\n"
+        "  \"created_by\": \"add_test\",\n"
+        "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
+        "  \"OBJECTS\": [\n"
+        "    { \"object\": \"ACSH_BOX_CLASS\", \"index\": 0, \"type\": 500,\n"
+        "      \"handle\": [0, 1, 1],\n"
+        "      \"evalexpr.value_code\": 40, \"evalexpr.value.num40\": 3.0,\n"
+        "      \"evalexpr.value.pt2d\": [1.0, 2.0] },\n"
+        "    { \"entity\": \"MULTILEADER\", \"index\": 1, \"type\": 501,\n"
+        "      \"handle\": [0, 1, 2],\n"
+        "      \"ctx.has_content_txt\": 1, \"ctx.has_content_blk\": 1,\n"
+        "      \"ctx.content.blk.scale\": [2.0, 2.0, 2.0] }\n"
+        "  ]\n"
+        "}\n";
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)strdup (json);
+  dat.size = sizeof (json) - 1;
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("json_union_selectors: dwg_read_json failed with 0x%x", error);
+
+  obj = first_object (&dwg, DWG_TYPE_ACSH_BOX_CLASS);
+  if (!obj)
+    fail ("json_union_selectors: no ACSH_BOX_CLASS");
+  else
+    {
+      Dwg_EvalExpr *ee = &obj->tio.object->tio.ACSH_BOX_CLASS->evalexpr;
+      if (ee->value_code != 40 || ee->value.num40 != 3.0)
+        fail ("json_union_selectors: evalexpr.value.pt2d set with value_code "
+              "%d (num40 %f)",
+              (int)ee->value_code, ee->value.num40);
+      else
+        ok ("json_union_selectors: evalexpr.value keeps value_code 40 member");
+    }
+
+  obj = first_object (&dwg, DWG_TYPE_MULTILEADER);
+  if (!obj)
+    fail ("json_union_selectors: no MULTILEADER");
+  else
+    {
+      Dwg_MLEADER_AnnotContext *ctx = &obj->tio.entity->tio.MULTILEADER->ctx;
+      if (ctx->has_content_txt != 1 || ctx->has_content_blk != 0
+          || ctx->content.txt.direction.x != 0.0)
+        fail ("json_union_selectors: ctx.content.blk set with txt content "
+              "(has_content_blk %d, txt.direction.x %f)",
+              ctx->has_content_blk, ctx->content.txt.direction.x);
+      else
+        ok ("json_union_selectors: ctx.content keeps txt content only");
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
+// A dotted key "a.b" in an embedded struct or in an array element sets b of
+// the struct embedded at a. When a is a pointer field, its struct is not
+// there: the key is ignored, rather than written over the pointer and past
+// it. First in an embedded struct (MULTILEADER.ctx.leaders).
+static int
+test_json_dotted_pointer_keys_struct (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  Dwg_Object *obj;
+  int error;
+  static const char json[]
+      = "{\n"
+        "  \"created_by\": \"add_test\",\n"
+        "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
+        "  \"OBJECTS\": [\n"
+        "    { \"entity\": \"MULTILEADER\", \"index\": 0, \"type\": 501,\n"
+        "      \"handle\": [0, 1, 1],\n"
+        "      \"ctx\": {\n"
+        "        \"leaders.lastleaderlinepoint\": [1.0, 2.0, 3.0] } }\n"
+        "  ]\n"
+        "}\n";
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)strdup (json);
+  dat.size = sizeof (json) - 1;
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("json_dotted_pointer_keys_struct: dwg_read_json failed with 0x%x",
+          error);
+  obj = first_object (&dwg, DWG_TYPE_MULTILEADER);
+  if (!obj)
+    fail ("json_dotted_pointer_keys_struct: no MULTILEADER");
+  else
+    {
+      Dwg_MLEADER_AnnotContext *ctx = &obj->tio.entity->tio.MULTILEADER->ctx;
+      if (ctx->leaders || ctx->scale_factor != 0.0
+          || ctx->content_base.x != 0.0)
+        fail ("json_dotted_pointer_keys_struct: "
+              "ctx.leaders.lastleaderlinepoint written into ctx "
+              "(scale_factor %f, content_base.x %f)",
+              ctx->scale_factor, ctx->content_base.x);
+      else
+        ok ("json_dotted_pointer_keys_struct: ctx.leaders.* ignored");
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
+// Then in an array element (MLINE.verts[].lines).
+static int
+test_json_dotted_pointer_keys_array (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  Dwg_Object *obj;
+  int error;
+  static const char json[]
+      = "{\n"
+        "  \"created_by\": \"add_test\",\n"
+        "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
+        "  \"OBJECTS\": [\n"
+        "    { \"entity\": \"MLINE\", \"index\": 0, \"type\": 47,\n"
+        "      \"handle\": [0, 1, 1],\n"
+        "      \"verts\": [ { \"vertex\": [1.0, 2.0, 0.0],\n"
+        "                   \"lines.segparms\": [1.5, 2.5] },\n"
+        "                 { \"vertex_direction\": [1.0, 0.0, 0.0] } ] }\n"
+        "  ]\n"
+        "}\n";
+
+  failed = 0;
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)strdup (json);
+  dat.size = sizeof (json) - 1;
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("json_dotted_pointer_keys_array: dwg_read_json failed with 0x%x",
+          error);
+  obj = first_object (&dwg, DWG_TYPE_MLINE);
+  if (!obj)
+    fail ("json_dotted_pointer_keys_array: no MLINE");
+  else
+    {
+      Dwg_Entity_MLINE *mline = obj->tio.entity->tio.MLINE;
+      // unchecked, verts[0].lines.segparms went into verts[1]
+      if (mline->num_verts != 2 || !mline->verts)
+        fail ("json_dotted_pointer_keys_array: MLINE.verts not imported");
+      else if (mline->verts[0].lines || mline->verts[0].num_lines
+               || mline->verts[1].parent || mline->verts[1].vertex.x != 0.0)
+        fail ("json_dotted_pointer_keys_array: verts[0].lines.segparms "
+              "written into verts[1] (parent %p)",
+              (void *)mline->verts[1].parent);
+      else
+        ok ("json_dotted_pointer_keys_array: verts[].lines.* ignored");
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+#endif
+
 int
 main (int argc, char *argv[])
 {
@@ -1557,6 +1809,14 @@ main (int argc, char *argv[])
   error += test_mlinestyle_obj_realloc ();
 #else
   error = test_mlinestyle_obj_realloc ();
+#endif
+#ifndef DISABLE_DXF
+  error += test_dxf_union_selectors ();
+#endif
+#ifndef DISABLE_JSON
+  error += test_json_union_selectors ();
+  error += test_json_dotted_pointer_keys_struct ();
+  error += test_json_dotted_pointer_keys_array ();
 #endif
   error += test_names ();
   error += test_api_version ();
