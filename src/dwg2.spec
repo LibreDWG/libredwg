@@ -1579,9 +1579,21 @@ DWG_ENTITY (WIPEOUT)
   SINCE (R_2010b) {
     FIELD_B (clip_mode, 0);
   }
+  // as IMAGE
+  ENCODER {
+    if (FIELD_VALUE (clip_boundary_type) == 1
+        && FIELD_VALUE (num_clip_verts) != 2)
+      {
+        LOG_WARN ("WIPEOUT.num_clip_verts " FORMAT_BL " for a rectangle, "
+                  "write a polygon", _obj->num_clip_verts);
+        FIELD_VALUE (clip_boundary_type) = 2;
+      }
+  }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
   if (FIELD_VALUE (clip_boundary_type) == 1)
-    FIELD_VALUE (num_clip_verts) = 2;
+    {
+      DECODER { FIELD_VALUE (num_clip_verts) = 2; }
+    }
   else
     FIELD_BL (num_clip_verts, 91);
   VALUEOUTOFBOUNDS (num_clip_verts, 5000)
@@ -5286,13 +5298,28 @@ DWG_ENTITY (POINTCLOUD)
         REPEAT (num_clippings, clippings, Dwg_POINTCLOUD_Clippings)
         REPEAT_BLOCK
           SUB_FIELD_B (clippings[rcount1], is_inverted, 0);
+          // as IMAGE: a box or rectangle is stored as its 2 corners,
+          // without a count. Other counts (from JSON) are written as polygon.
+          ENCODER {
+            if (_obj->clippings[rcount1].type != 3
+                && _obj->clippings[rcount1].num_vertices != 2)
+              {
+                LOG_WARN ("POINTCLOUD.clippings[%u].num_vertices " FORMAT_BL
+                          " for a box or rectangle, write a polygon",
+                          (unsigned)rcount1,
+                          _obj->clippings[rcount1].num_vertices);
+                _obj->clippings[rcount1].type = 3;
+              }
+          }
           SUB_FIELD_BS (clippings[rcount1], type, 0);
           if (_obj->clippings[rcount1].type == 3) // polygon
             {
               SUB_FIELD_BL (clippings[rcount1], num_vertices, 0);
             }
           else // box or rectangle
-            _obj->clippings[rcount1].num_vertices = 2;
+            {
+              DECODER { _obj->clippings[rcount1].num_vertices = 2; }
+            }
           SUB_FIELD_2RD_VECTOR (clippings[rcount1], vertices, num_vertices, 0);
           if (_obj->clippings[rcount1].type == 1) // box
             {

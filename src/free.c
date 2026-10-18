@@ -222,6 +222,8 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_2RD_VECTOR(name, size, dxf) FIELD_TV (name, dxf)
 #define FIELD_2DD_VECTOR(name, size, dxf) FIELD_TV (name, dxf)
 #define FIELD_3DPOINT_VECTOR(name, size, dxf) FIELD_TV (name, dxf)
+#define SUB_FIELD_2RD_VECTOR(o, name, size, dxf) FIELD_TV (o.name, dxf)
+#define SUB_FIELD_3BD_VECTOR(o, name, size, dxf) FIELD_TV (o.name, dxf)
 #define HANDLE_VECTOR_N(name, size, code, dxf)                                \
   if (_obj->name)                                                             \
     {                                                                         \
