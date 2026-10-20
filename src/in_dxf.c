@@ -3490,8 +3490,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                         j, k, o->paths[j].segs[k].curve_type, pair->code);
             }
         }
-      else if (pair->code == 21 && !is_plpath && !o->num_seeds
-               && pair->value.d != 0.0)
+      else if (pair->code == 21 && !is_plpath && !o->num_seeds)
         {
           CHK_paths;
           CHK_segs;
