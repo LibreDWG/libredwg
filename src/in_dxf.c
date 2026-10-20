@@ -9309,11 +9309,10 @@ add_AcDbBlockRotationParameter (Dwg_Object *restrict obj,
 }
 
 #  define FIELD_CMC(field, dxf) dxf_read_CMC (dwg, dat, &o->field, #field, dxf)
-#  define FIELD_CMC2004(field, dxf)                                           \
-    SINCE (R_2004a)                                                           \
-    {                                                                         \
-      FIELD_CMC (field, dxf);                                                 \
-    }
+// Not only since R_2004: a DXF writer that keeps an object it does not
+// know (e.g. ezdxf saving a 2018 drawing as R2000) passes its colors on.
+// dxf_read_CMC backs up when the color is not there.
+#  define FIELD_CMC2004(field, dxf) FIELD_CMC (field, dxf)
 
 // starts with 71 . 0
 // returns NULL on success
