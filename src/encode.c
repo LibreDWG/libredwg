@@ -8161,8 +8161,13 @@ dwg_set_dataflags (Dwg_Object *obj)
   _obj->dataflags = 0xff;                                                     \
   if (_obj->elevation != 0.0)                                                 \
     _obj->dataflags &= ~1;                                                    \
+  /* a non-left alignment places the text by its alignment point, even  \
+     when it equals the insertion point (as DXF writers that do not       \
+     compute the left baseline point write it): left out, it reads back   \
+     as 0,0 and the text jumps to the origin */                           \
   if (_obj->alignment_pt.x != _obj->ins_pt.x                                  \
-      || _obj->alignment_pt.y != _obj->ins_pt.y)                              \
+      || _obj->alignment_pt.y != _obj->ins_pt.y                               \
+      || _obj->horiz_alignment != 0 || _obj->vert_alignment != 0)             \
     _obj->dataflags &= ~2;                                                    \
   if (_obj->oblique_angle != 0.0)                                             \
     _obj->dataflags &= ~4;                                                    \
