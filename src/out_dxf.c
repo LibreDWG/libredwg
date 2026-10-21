@@ -4043,7 +4043,15 @@ dxf_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (dat->version < R_11 && obj == mspace)
             ;
           else
-            error |= dxf_block_write (dat, obj, mspace, pspace, &i);
+            {
+              /* dxf_block_write() may advance the index to the last written
+                 entity. Use a copy, otherwise all BLOCK_HEADERs between the
+                 current one and that entity are skipped, and their blocks are
+                 missing in the DXF (e.g. dynamic blocks whose entities are
+                 stored later in the object stream). */
+              int j = i;
+              error |= dxf_block_write (dat, obj, mspace, pspace, &j);
+            }
         }
     }
 
