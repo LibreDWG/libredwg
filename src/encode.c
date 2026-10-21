@@ -8525,6 +8525,7 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
     oo->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
   dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
   oo->eed[idx].size = 3;
+  oo->eed[idx].raw = NULL;
 #define EED_SZ(n) MAX(n, sizeof(Dwg_Eed_Data))
   oo->eed[idx].data = (Dwg_Eed_Data *)calloc (EED_SZ (3), 1);
   oo->eed[idx].data->code = 70;
