@@ -2101,10 +2101,24 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
   if (info->size > (int64_t)info->num_sections * (int64_t)info->max_decomp_size
       || info->size < 0)
     {
-      LOG_ERROR ("Invalid section %s size %" PRId64 " > %u * " FORMAT_RL,
-                 info->name, info->size, info->num_sections,
-                 info->max_decomp_size);
-      return DWG_ERR_VALUEOUTOFBOUNDS;
+      if (info->size < 0 || info->size > 0x2f000000) // 790Mb
+        {
+          LOG_ERROR ("Invalid section %s size %" PRId64 " > %u * " FORMAT_RL,
+                     info->name, info->size, info->num_sections,
+                     info->max_decomp_size);
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
+      /* Seen with large AcDb:AcDsPrototype_1b (ACIS datastorage) sections:
+         the pages are bigger than max_decomp_size, so the total size exceeds
+         num_sections * max_decomp_size. Allocate the real size instead of
+         rejecting the section. The per-page bounds checks below still use
+         max_decomp_size, i.e. the allocation. Add one page of headroom,
+         a page at the end may start below info->size and be checked with
+         the full page size. */
+      LOG_WARN ("Section %s size %" PRId64 " > %u * " FORMAT_RL,
+                info->name, info->size, info->num_sections,
+                info->max_decomp_size);
+      max_decomp_size = (uint32_t)info->size + info->max_decomp_size;
     }
   LOG_HANDLE ("Alloc section %s size %" PRIu32 "\n", info->name,
               max_decomp_size);
