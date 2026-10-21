@@ -2137,6 +2137,14 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
       c = bit_read_RC (&src);                                                 \
       LOG_HANDLE (#key " [%d] ", c);                                          \
       len = bit_read_RC (&src);                                               \
+      if (src.byte + len > src.size)                                          \
+        {                                                                     \
+          LOG_ERROR ("Invalid SAB " #key " len=%u", len);                     \
+          bit_chain_free (&dest);                                             \
+          _obj->num_blocks = 0;                                               \
+          _obj->encr_sat_data[0] = NULL;                                      \
+          return 1;                                                           \
+        }                                                                     \
       s = sprintf ((char *)&dest.chain[dest.byte], "%u ", len & 0xFF);        \
       dest.byte += s;                                                         \
       l += s;                                                                 \
