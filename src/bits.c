@@ -2892,8 +2892,13 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
 
   if (dat->version >= R_2007)
     {
-      if (chain)
-        length = bit_wcs2len ((BITCODE_TU)chain) + 1;
+      BITCODE_TU wstr = (BITCODE_TU)chain;
+      BITCODE_TU tmp = NULL;
+      // from JSON, DXF or a pre-r2007 DWG this is still a TV, not UCS-2
+      if (chain && !IS_FROM_TU (dat))
+        wstr = tmp = bit_utf8_to_TU (chain, 0);
+      if (wstr)
+        length = bit_wcs2len (wstr) + 1;
       else
         length = 0;
       if (length > UINT32_MAX / 4)
@@ -2901,11 +2906,12 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
           length = UINT32_MAX / 4;
-          chain[length - 1] = '\0';
+          wstr[length - 1] = '\0';
         }
       bit_write_RL (dat, (BITCODE_RL)(length * 4));
       for (i = 0; i < length; i++)
-        bit_write_RL (dat, chain[i]);
+        bit_write_RL (dat, wstr[i]);
+      free (tmp);
     }
   else
     {
