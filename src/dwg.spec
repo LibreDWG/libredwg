@@ -3396,6 +3396,16 @@ DWG_TABLE (LAYER)
         FIELD_VALUE (color.index) = abs (FIELD_VALUE (color.index));
       }
     }
+    ENCODER {
+      // DWG: off is the bit, the color stays positive as AutoCAD writes it.
+      // The negative DXF color of an off layer made an index of 65529,
+      // which ACadSharp rejects ("True index must be between 0 and 257").
+      if (FIELD_VALUE (color.index) < 0)
+        {
+          FIELD_VALUE (off) = 1;
+          FIELD_VALUE (color.index) = -FIELD_VALUE (color.index);
+        }
+    }
     FIELD_CMC (color, 62);
   }
   VERSIONS (R_13b1, R_14) {
@@ -4662,8 +4672,10 @@ DWG_ENTITY (HATCH)
   FIELD_3BD (extrusion, 210);
   DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
   DXF {
-    if (FIELD_VALUE (is_solid_fill)) {
-      VALUE_TFF ("SOLID", 2); // not "SOLID,_I"
+    // The name as in the DWG, with the island style suffix (",_O", ",_I")
+    // as AutoCAD keeps it: "SOLID,_O" became "SOLID" via DXF.
+    if (FIELD_VALUE (is_solid_fill) && !FIELD_VALUE (name)) {
+      VALUE_TFF ("SOLID", 2);
     } else {
       FIELD_T (name, 2);
     }
@@ -4932,8 +4944,10 @@ DWG_ENTITY (MPOLYGON)
   FIELD_3BD (extrusion, 210);
   DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
   DXF {
-    if (FIELD_VALUE (is_solid_fill)) {
-      VALUE_TFF ("SOLID", 2); // not "SOLID,_I"
+    // The name as in the DWG, with the island style suffix (",_O", ",_I")
+    // as AutoCAD keeps it: "SOLID,_O" became "SOLID" via DXF.
+    if (FIELD_VALUE (is_solid_fill) && !FIELD_VALUE (name)) {
+      VALUE_TFF ("SOLID", 2);
     } else {
       FIELD_T (name, 2);
     }

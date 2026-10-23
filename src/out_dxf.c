@@ -368,6 +368,13 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
               {                                                               \
                 fprintf (dat->fh, "%9i\r\n", _si);                            \
               }                                                               \
+            else if (420 <= dxf && dxf < 430)                                 \
+              {                                                               \
+                /* true colors are 24-bit RGB in DXF, as AutoCAD writes */    \
+                /* them: no 0xC2 method byte of the DWG (3258135347 was */    \
+                /* 0xC2333333 for 3355443) */                                 \
+                fprintf (dat->fh, "%9i\r\n", _si & 0xffffff);                 \
+              }                                                               \
             else                                                              \
               fprintf (dat->fh, "%s\r\n", buf);                               \
           }                                                                   \
@@ -1599,9 +1606,21 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
                 VALUE_TFF ("{", 1002)
               break;
             case 3:
-              GROUP (dxf);
-              fprintf (dat->fh, "%9" PRIu64 "\r\n", data->u.eed_3.layer);
-              // VALUE_RLL (data->u.eed_3.layer, dxf);
+              {
+                // DXF has the layer name, not the handle
+                Dwg_Object *lo
+                    = dwg_resolve_handle_silent (dwg, data->u.eed_3.layer);
+                char *lname = NULL;
+                char zero[] = "0";
+                char *lv;
+                int lerr = 0;
+                if (lo && lo->fixedtype == DWG_TYPE_LAYER)
+                  lname = dwg_obj_table_get_name (lo, &lerr);
+                lv = (lname && !lerr) ? lname : zero;
+                VALUE_TV (lv, dxf);
+                if (lname && IS_FROM_TU_DWG (dwg))
+                  free (lname);
+              }
               break;
             case 4:
               VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf);
@@ -1846,8 +1865,10 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
         }
-      else
-        { // downcase some standard names
+      else if (dat->from_version < R_2000 && dat->version >= R_2000)
+        { // downcase some standard names, only from R13/R14 to R2000+: a
+          // drawing of R2000+ with STANDARD (gh109_1) had its DIMENSIONs
+          // refer to Standard
           if (dat->version >= R_2000 && strEQc (value, "STANDARD"))
             fprintf (dat->fh, "%3i\r\nStandard\r\n", dxf);
           else if (dat->version >= R_2000 && strEQc (value, "BYLAYER"))
@@ -1859,6 +1880,8 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
         }
+      else
+        fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
       if (IS_FROM_TU (dat))
         free (value);
     }
@@ -2838,7 +2861,10 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!klass || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
   is_entity = dwg_class_is_entity (klass);
-  if (dat->version < R_2000)
+  // Only when converting newer drawings to R13/R14 DXF. An R13/R14 DWG that
+  // has these classes (MULTILEADER, WIPEOUT, MESH... saved by newer AutoCAD)
+  // keeps them in its DXF, with the same CLASSES; they were all dropped.
+  if (dat->version < R_2000 && dat->from_version >= R_2000)
     {
       // keep only: IMAGE, LWPOLYLINE, HATCH
       if (is_entity && strNE (klass->dxfname, "IMAGE")
@@ -2873,6 +2899,26 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+/* R13-R2000: the next VERTEX or ATTRIB of an owner, by the entity links
+   (handle + 1 with nolinks), not the next object: the SEQEND may lie between
+   them (sample_AC1015: ATTRIB 79D, SEQEND 79E, ATTRIB 79F, 7A0), and the
+   attributes after it were lost in the DXF. */
+static Dwg_Object *
+dxf_owned_next (Dwg_Object *restrict o)
+{
+  Dwg_Data *dwg = o->parent;
+  Dwg_Object_Entity *ent
+      = o->supertype == DWG_SUPERTYPE_ENTITY ? o->tio.entity : NULL;
+  Dwg_Object *next = NULL;
+  if (ent && ent->nolinks)
+    next = dwg_resolve_handle_silent (dwg, o->handle.value + 1);
+  else if (ent && ent->next_entity && ent->next_entity->absolute_ref)
+    next = dwg_resolve_handle_silent (dwg, ent->next_entity->absolute_ref);
+  if (!next || next == o)
+    next = dwg_next_object (o);
+  return next;
+}
+
 /* process unsorted vertices until SEQEND */
 #  define decl_dxf_process_VERTEX(token)                                      \
     static int dxf_process_VERTEX_##token (Bit_Chain *restrict dat,           \
@@ -2895,7 +2941,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         *i = *i + 1;                                                          \
         do                                                                    \
           {                                                                   \
-            o = dwg_next_object (o);                                          \
+            o = dxf_owned_next (o);                                           \
             if (!o)                                                           \
               return DWG_ERR_INVALIDHANDLE;                                   \
             if (strEQc (#token, "PFACE")                                      \
@@ -2909,7 +2955,8 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
               }                                                               \
             *i = *i + 1;                                                      \
           }                                                                   \
-        while (o->fixedtype != DWG_TYPE_SEQEND && o != last_vertex);          \
+        while (o->fixedtype != DWG_TYPE_SEQEND && o != last_vertex            \
+               && *i < (int)o->parent->num_objects * 2);                      \
         o = _obj->seqend ? _obj->seqend->obj : NULL;                          \
         if (o && o->fixedtype == DWG_TYPE_SEQEND)                             \
           error |= dwg_dxf_SEQEND (dat, o);                                   \
@@ -2970,14 +3017,15 @@ decl_dxf_process_VERTEX (PFACE)
         *i = *i + 1;                                                          \
         do                                                                    \
           {                                                                   \
-            o = dwg_next_object (o);                                          \
+            o = dxf_owned_next (o);                                           \
             if (!o)                                                           \
               return DWG_ERR_INVALIDHANDLE;                                   \
             if (o->fixedtype == DWG_TYPE_ATTRIB)                              \
               error |= dwg_dxf_ATTRIB (dat, o);                               \
             *i = *i + 1;                                                      \
           }                                                                   \
-        while (o->fixedtype == DWG_TYPE_ATTRIB && o != last_attrib);          \
+        while (o->fixedtype == DWG_TYPE_ATTRIB && o != last_attrib            \
+               && *i < (int)o->parent->num_objects * 2);                      \
         o = _obj->seqend ? _obj->seqend->obj : NULL;                          \
         if (o && o->fixedtype == DWG_TYPE_SEQEND)                             \
           error |= dwg_dxf_SEQEND (dat, o);                                   \
@@ -3342,11 +3390,11 @@ dxf_format (int code)
   if (410 <= code && code <= 419)
     return "%s";
   if (420 <= code && code <= 429)
-    return "%9li"; // int32_t
+    return "%9i"; // int32_t, not long: negative on Windows, UB with uint32
   if (430 <= code && code <= 439)
     return "%s";
   if (440 <= code && code <= 449)
-    return "%9li"; // int32_t
+    return "%9i"; // int32_t
   if (450 <= code && code <= 459)
     return "%12li"; // long
   if (460 <= code && code <= 469)
