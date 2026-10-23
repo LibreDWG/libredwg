@@ -45,4 +45,12 @@ EXPORT void arc_split (BITCODE_2BD *pts, const int num_pts,
 // Normalize an angle to [0, 2*PI).  Handles inf, nan and denormals.
 double angle_normalize (double angle);
 
+
+/* V4 Spatial Geometry Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
+ * Note: V4 refers to the Klein 4-group integer matrix over the S12 lattice,
+ * NOT DWG Version 4 or 4D vectors.
+ */
+EXPORT uint32_t dwg_transform_v4(Dwg_Data *dwg);
+EXPORT void dwg_geom_v4_transform_2d(double *x, double *y);
+
 #endif /* _GEOM_H_ */
