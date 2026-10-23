@@ -3661,21 +3661,38 @@ DWG_OBJECT (DIMASSOC)
 
   HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbDimAssoc);
+  // DXF: the dimension's handle first (AutoCAD's and ODA's order). In the
+  // DWG it lives in the handle stream, still ahead of the refs' handles.
+  FIELD_HANDLE (dimensionobj, 4, 330);
   FIELD_BLx (associativity, 90);
   FIELD_B (trans_space_flag, 70);
   FIELD_RC (rotated_type, 71);
-  FIELD_HANDLE (dimensionobj, 4, 330);
   REPEAT_CN (6, ref, Dwg_DIMASSOC_Ref) // i.e. AcDbOsnapPointRef
   REPEAT_BLOCK
-      // there could be more blocks, up to 5 or 6.
-      // 0 1 2 3 => 1 2 4 8. skip unset bits
-      if (!(FIELD_VALUE (associativity) & (1 << rcount1)) && !FIELD_VALUE(has_lastpt_ref))
-        {
+      // The refs follow one another: one per set bit of associativity
+      // (1 2 4 8, in bit order), each followed by its last-point companion
+      // when it has_lastpt_ref (a perpendicular's "from" point), which
+      // takes no bit. Indexing the refs by bit lost every ref after a
+      // companion: a dimension with two perpendiculars has 5 refs for its
+      // 2 bits (real plans, checked against ODA's DXF).
+      {
+        int _bits = 0, _used = 0, _j;
+        for (_j = 0; _j < 6; _j++)
+          if (FIELD_VALUE (associativity) & (1 << _j))
+            _bits++;
+        for (_j = 0; _j < (int)rcount1; _j++)
+          if (!(_j > 0 && _obj->ref[_j - 1].has_lastpt_ref))
+            _used++;
+        if (!_obj->ref
+            || (!(rcount1 > 0 && _obj->ref[rcount1 - 1].has_lastpt_ref)
+                && _used >= _bits))
+          {
 #ifdef IS_JSON
-          ENDHASH;
+            ENDHASH;
 #endif
-          continue;
-        }
+            continue;
+          }
+      }
       LOG_HANDLE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
@@ -3698,7 +3715,8 @@ DWG_OBJECT (DIMASSOC)
       if (FIELD_VALUE (ref[rcount1].osnap_type) == 6
           || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
         {
-          SUB_FIELD_BL (ref[rcount1], num_intsectobj, 74);
+          // a DWG count; DXF just lists the 332s (as it does the 331s)
+          SUB_FIELD_BL (ref[rcount1], num_intsectobj, 0);
           SUB_HANDLE_VECTOR (ref[rcount1], intsectobj, num_intsectobj, 5, 332);
           SUB_FIELD_BL (ref[rcount1], intersec_subent_type, 74);
           SUB_FIELD_BL (ref[rcount1], intersec_gsmarker, 92);
