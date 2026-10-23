@@ -13166,14 +13166,20 @@ H
 
 @item entmode
 BB
+@item ownerhandle
+H
 @item num_reactors
 BL
+@item reactors
+H*
 @item has_ds_data
 B
 @item color
 CMC
 @item is_xdic_missing
 B
+@item xdicobjhandle
+H
 @item ltype_scale
 BD
 @item ltype_flags
@@ -13195,6 +13201,18 @@ BS
 @item linewt
 RC
 @item layer
+H
+@item ltype
+H
+@item material
+H
+@item plotstyle
+H
+@item full_visualstyle
+H
+@item face_visualstyle
+H
+@item edge_visualstyle
 H
 @item ins_pt
 3BD
