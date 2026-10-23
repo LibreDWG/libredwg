@@ -10018,6 +10018,137 @@ add_MATERIAL (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #  undef MAT_BL
 }
 
+/* The common dimension body of a dimension's annotation scale context
+   (ALDIM/ANGDIM/DMDIM/ORDDIM/RADIM/RADIMLG OBJECTCONTEXTDATA) is the
+   embedded Dwg_OCD_Dimension "dimension", which the generic field search does
+   not see: its 2 (the *D block, by name) aborted the import as an invalid
+   code. Sets one group of subclass AcDbDimensionObjectContextData.
+   Returns 1 when consumed, 0 when not one of its groups. */
+static int
+dxf_set_ocd_dimension (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
+                       Dxf_Pair *restrict pair)
+{
+  Dwg_OCD_Dimension *d;
+  switch (obj->fixedtype)
+    {
+    case DWG_TYPE_ALDIMOBJECTCONTEXTDATA:
+      d = &obj->tio.object->tio.ALDIMOBJECTCONTEXTDATA->dimension;
+      break;
+    case DWG_TYPE_ANGDIMOBJECTCONTEXTDATA:
+      d = &obj->tio.object->tio.ANGDIMOBJECTCONTEXTDATA->dimension;
+      break;
+    case DWG_TYPE_DMDIMOBJECTCONTEXTDATA:
+      d = &obj->tio.object->tio.DMDIMOBJECTCONTEXTDATA->dimension;
+      break;
+    case DWG_TYPE_ORDDIMOBJECTCONTEXTDATA:
+      d = &obj->tio.object->tio.ORDDIMOBJECTCONTEXTDATA->dimension;
+      break;
+    case DWG_TYPE_RADIMOBJECTCONTEXTDATA:
+      d = &obj->tio.object->tio.RADIMOBJECTCONTEXTDATA->dimension;
+      break;
+    case DWG_TYPE_RADIMLGOBJECTCONTEXTDATA:
+      d = &obj->tio.object->tio.RADIMLGOBJECTCONTEXTDATA->dimension;
+      break;
+    default:
+      return 0;
+    }
+  switch (pair->code)
+    {
+    case 2:
+      if (pair->value.s.ptr)
+        {
+          BITCODE_H ref
+              = dwg_find_tablehandle_silent (dwg, pair->value.s.ptr, "BLOCK");
+          if (ref)
+            {
+              d->block = dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
+              LOG_TRACE ("%s.dimension.block = " FORMAT_REF " [H 2]\n",
+                         obj->name, ARGS_REF (d->block));
+            }
+          else
+            LOG_WARN ("%s.dimension.block: no block %s", obj->name,
+                      pair->value.s.ptr);
+        }
+      return 1;
+    case 10:
+      d->def_pt.x = pair->value.d;
+      LOG_TRACE ("%s.dimension.def_pt.x = %f [2RD 10]\n", obj->name,
+                 pair->value.d);
+      return 1;
+    case 20:
+      d->def_pt.y = pair->value.d;
+      LOG_TRACE ("%s.dimension.def_pt.y = %f [2RD 20]\n", obj->name,
+                 pair->value.d);
+      return 1;
+    case 140:
+      d->text_rotation = pair->value.d;
+      return 1;
+#  define OCD_B(code, field)                                                  \
+    case code:                                                                \
+      d->field = pair->value.i ? 1 : 0;                                       \
+      LOG_TRACE ("%s.dimension." #field " = %d [B %d]\n", obj->name,          \
+                 d->field, code);                                             \
+      return 1
+      OCD_B (293, b293);
+      OCD_B (294, is_def_textloc);
+      OCD_B (298, dimtofl);
+      OCD_B (291, dimosxd);
+      OCD_B (70, dimatfit);
+      OCD_B (292, dimtix);
+      OCD_B (71, dimtmove);
+      OCD_B (295, has_arrow2);
+      OCD_B (296, flip_arrow2);
+      OCD_B (297, flip_arrow1);
+#  undef OCD_B
+    case 280:
+      d->override_code = (BITCODE_RC)pair->value.i;
+      return 1;
+    default:
+      return 0;
+    }
+}
+
+/* Every annotation scale context starts with AcDbObjectContextData, whose
+   70 is class_version; a later 70 is the body's own field -- MTEXT's
+   attachment, TEXT's horizontal mode, LEADER's num_points. The generic search
+   took the first field with that code, class_version, for both: the body's
+   value was lost and the version overwritten, and ODA crashed on an MTEXT
+   context written so. Returns 1 when set. */
+static int
+dxf_set_context_70 (Dwg_Object *restrict obj, void *restrict _obj,
+                    Dxf_Pair *restrict pair)
+{
+  const Dwg_DYNAPI_field *f = dwg_dynapi_entity_fields (obj->name);
+  if (!f)
+    return 0;
+  for (; f->name; f++)
+    {
+      if (f->dxf != 70 || strEQc (f->name, "class_version"))
+        continue;
+      if (f->size == 4)
+        {
+          BITCODE_BL v = (BITCODE_BL)pair->value.i;
+          dwg_dynapi_entity_set_value (_obj, obj->name, f->name, &v, 0);
+        }
+      else if (f->size == 2)
+        {
+          BITCODE_BS v = (BITCODE_BS)pair->value.i;
+          dwg_dynapi_entity_set_value (_obj, obj->name, f->name, &v, 0);
+        }
+      else if (f->size == 1)
+        {
+          BITCODE_RC v = (BITCODE_RC)pair->value.i;
+          dwg_dynapi_entity_set_value (_obj, obj->name, f->name, &v, 0);
+        }
+      else
+        return 0;
+      LOG_TRACE ("%s.%s = %d [%s 70]\n", obj->name, f->name,
+                 (int)pair->value.i, f->type);
+      return 1;
+    }
+  return 0;
+}
+
 /* For tables, entities and objects.
  */
 static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
@@ -10032,6 +10163,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
   char ctrlname[80];
   char subclass[80];
   char text[256]; // FIXME
+  BITCODE_BL column_i = 0; // MTEXTOBJECTCONTEXTDATA.column_heights[]
   int in_xdict = 0;
   int in_reactors = 0;
   int in_blkrefs = 0;
@@ -10346,6 +10478,53 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                pair->value.l == 0L)
         goto next_pair;
 #  endif
+      // a dimension context's common body: its embedded struct
+      if (pair->code != 100 && pair->code != 0
+          && strEQc (subclass, "AcDbDimensionObjectContextData")
+          && dxf_set_ocd_dimension (dwg, obj, pair))
+        goto next_pair;
+      // MTEXT context columns: 72 counts the 46 heights that follow. The
+      // generic search ignored the vector and kept the count, so the writer
+      // read column_heights from NULL -- a DWG ODA crashed on.
+      if (obj->fixedtype == DWG_TYPE_MTEXTOBJECTCONTEXTDATA
+          && (pair->code == 72 || pair->code == 46))
+        {
+          Dwg_Object_MTEXTOBJECTCONTEXTDATA *o
+              = obj->tio.object->tio.MTEXTOBJECTCONTEXTDATA;
+          if (pair->code == 72)
+            {
+              BITCODE_BL n = (BITCODE_BL)pair->value.i;
+              if (n > 0xFFFF)
+                goto invalid_dxf;
+              free (o->column_heights);
+              o->column_heights
+                  = n ? (BITCODE_BD *)calloc (n, sizeof (BITCODE_BD)) : NULL;
+              if (n && !o->column_heights)
+                goto invalid_dxf;
+              o->num_column_heights = n;
+              column_i = 0;
+              LOG_TRACE ("%s.num_column_heights = %u [BL 72]\n", obj->name,
+                         (unsigned)n);
+            }
+          else if (column_i < o->num_column_heights && o->column_heights)
+            {
+              o->column_heights[column_i] = pair->value.d;
+              LOG_TRACE ("%s.column_heights[%u] = %f [BD 46]\n", obj->name,
+                         (unsigned)column_i, pair->value.d);
+              column_i++;
+            }
+          else
+            LOG_WARN ("%s: more column heights than num_column_heights %u",
+                      obj->name, (unsigned)o->num_column_heights);
+          goto next_pair;
+        }
+      // a context body's own 70, not the class_version of its first subclass
+      if (pair->code == 70 && *subclass
+          && strNE (subclass, "AcDbObjectContextData")
+          && strlen (obj->name) > 17
+          && strEQc (&obj->name[strlen (obj->name) - 17], "OBJECTCONTEXTDATA")
+          && dxf_set_context_70 (obj, _obj, pair))
+        goto next_pair;
       // start_switch:
       switch (pair->code)
         {       // common flags: name, xref

@@ -2572,7 +2572,7 @@ object_alias (char *restrict name)
   else if (strstr (name, "_BACKGROUND"))
     strcpy (name, "BACKGROUND");
   // ACDB_*OBJECTCONTEXTDATA_CLASS => *OBJECTCONTEXTDATA
-  else if (memBEGINc (name, "ACAD_") && len > 28
+  else if (memBEGINc (name, "ACDB_") && len > 28
            && strEQc (&name[len - 6], "_CLASS"))
     {
       name[len - 6] = '\0';
