@@ -2368,15 +2368,20 @@ dxfb_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
     {
       SINCE (R_2004a)
       {
+        // E.g. an orphaned duplicate *Model_Space from a DXF import. Skip
+        // just this block header: aborting would throw away every remaining
+        // block and the whole ENTITIES section, as r2000 (which falls
+        // through here) does not.
         if (IS_FROM_TU (dat))
           {
             char *s = bit_convert_TU ((BITCODE_TU)_hdr->name);
-            LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", s);
+            LOG_WARN ("BLOCK_HEADER %s first_owned_entity missing, skipped", s);
             free (s);
           }
         else
-          LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", _hdr->name);
-        return DWG_ERR_INVALIDDWG;
+          LOG_WARN ("BLOCK_HEADER %s first_owned_entity missing, skipped",
+                    _hdr->name);
+        return 0;
       }
     }
   // Skip all *Model_Space and *Paper_Space entities, esp. new ones: UNDERLAY,
