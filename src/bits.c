@@ -4064,6 +4064,11 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
       switch (color->method)
         {
         case 0x0:
+          // Entity colors (ENC) of R2004+ have no method: the index says it,
+          // 0 ByBlock, 256 ByLayer. Forcing 256 turned every ByBlock entity
+          // into ByLayer when written as R2000 (sample_AC1032 vs AutoCAD's
+          // sample_AC1015: 170 entities).
+          break;
         case 0xc0:
           color->index = 256;
           break; // ByLayer
@@ -4072,17 +4077,14 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
           break;   // ByBlock
         case 0xc2: // Entity
         case 0xc3: // TrueColor
-          // Keep an existing palette index whose rgb round-trips: several
-          // palette entries share one rgb (e.g. 1 and 10, 5 and 170), and
-          // dwg_find_color_index returns the first match, silently
-          // recoloring the entity.
-          if (color->index > 0 && color->index < 256
-              && dwg_rgb_palette_index (color->index)
-                     == (color->rgb & 0x00FFFFFF))
+          // Keep the index stored with the true color: AutoCAD stores its
+          // ACI fallback there (sample_AC1032: #803dc2 with 183) and writes
+          // it in its own R2000 save (sample_AC1015).
+          if (color->index > 0 && color->index < 256)
             break;
           color->index = dwg_find_color_index (color->rgb);
-          if (color->index == 256)
-            color->index = color->rgb & 0xff;
+          if (color->index == 256) // the nearest ACI, not the low byte
+            color->index = dwg_nearest_color_index (color->rgb);
           break;
         case 0xc8:
           color->index = 0;
