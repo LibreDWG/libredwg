@@ -2924,7 +2924,11 @@ DWG_ENTITY (MTEXT)
   SINCE (R_2004a)
     {
       FIELD_BL0 (bg_fill_flag, 90);
-      if (FIELD_VALUE (bg_fill_flag) & (dat->version <= R_2018 ? 1 : 16))
+      // R2018+ also has the scale, color and transparency with only 0x10
+      // (text frame) set, as ACadSharp reads them. Missing them misaligned
+      // the rest of the MTEXT.
+      if ((FIELD_VALUE (bg_fill_flag) & 1)
+          || (dat->version >= R_2018b && (FIELD_VALUE (bg_fill_flag) & 0x10)))
         {
           FIELD_BD (bg_fill_scale, 45); // def: 1.5
           FIELD_CMC (bg_fill_color, 63);
@@ -3400,7 +3404,10 @@ DWG_TABLE (LAYER)
   }
   VERSIONS (R_13b1, R_14) {
     DECODER {
-      FIELD_VALUE (off) = FIELD_VALUE (color.index) < 0;
+      // Off is the bit read above, or a negative color. AutoCAD's R14
+      // drawings keep the color positive and set the bit (sample_AC1014
+      // LAYER_OFF), overwriting the bit turned off layers on.
+      FIELD_VALUE (off) = FIELD_VALUE (off) || FIELD_VALUE (color.index) < 0;
       LOG_LAYER_FLAG(off);
     }
     // for DWG

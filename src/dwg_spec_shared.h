@@ -184,6 +184,13 @@ decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
   int acis_data_idx;
   int error = 0;
 
+  // R2013+: the SAB is in the AcDsPrototype_1b DataStorage section, and the
+  // entity starts directly with the wireframe data, without ACIS empty bit.
+  SINCE (R_2013b)
+  {
+    FIELD_VALUE (acis_empty) = 1;
+    return error;
+  }
   FIELD_B (acis_empty, 290);
   if (dat->byte >= dat->size)
     return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -537,6 +544,13 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
         END_REPEAT (materials);                                               \
       }                                                                       \
     }                                                                         \
+  /* ODA 20.4.41 "R2007+: Unknown BL". Missing it shifted the R2013 */        \
+  /* revision guid by 2 bits: AutoCAD's R2018 3DSOLID ends exactly after */   \
+  /* end_marker with it. */                                                   \
+  SINCE (R_2007a)                                                             \
+  {                                                                           \
+    FIELD_BL (unknown_2007, 0);                                               \
+  }                                                                           \
   SINCE (R_2013b)                                                             \
   {                                                                           \
     FIELD_B (has_revision_guid, 0);                                           \
