@@ -2258,9 +2258,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 14: // subident
           {
             int len = bit_read_RC (&src);
-            if (len == 0)
-              return 0;
-            if (src.byte + len > src.size)
+            if (len == 0 || src.byte + len > src.size)
               {
                 LOG_ERROR ("Invalid SAB len=%d [RC]", len);
                 bit_chain_free (&dest);
