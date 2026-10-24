@@ -723,7 +723,11 @@ dxf_read_string (Bit_Chain *dat, char **string)
             buf[i++] = *s;
         }
       if (dat->byte >= dat->size || i >= 4096)
-        return;
+        {
+          // callers with string == NULL read buf directly
+          buf[i < 4096 ? i : 4095] = '\0';
+          return;
+        }
       if (i && buf[i - 1] == '\r')
         buf[i - 1] = '\0';
       else
