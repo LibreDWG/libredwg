@@ -2882,8 +2882,22 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
 
   if (dat->version >= R_2007)
     {
-      if (chain)
-        length = bit_wcs2len ((BITCODE_TU)chain) + 1;
+      BITCODE_TU wstr;
+      bool allocated = false;
+      // The in-memory string width follows the source version, not the
+      // target: a narrow string (pre-R2007 DWG, or DXF/JSON/add-API input)
+      // must be widened to UCS before it is written, otherwise bit_wcs2len()
+      // would walk the narrow 1-byte buffer as 2-byte wchars and read past the
+      // heap allocation.  Mirrors bit_write_T() and the eed/xdata conversion.
+      if (chain && !IS_FROM_TU (dat))
+        {
+          wstr = bit_utf8_to_TU ((char *)chain, 0);
+          allocated = true;
+        }
+      else
+        wstr = (BITCODE_TU)chain;
+      if (wstr)
+        length = bit_wcs2len (wstr) + 1;
       else
         length = 0;
       if (length > UINT32_MAX / 4)
@@ -2891,11 +2905,13 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%" PRIuSIZE ")", length);
           length = UINT32_MAX / 4;
-          chain[length - 1] = '\0';
+          wstr[length - 1] = '\0';
         }
       bit_write_RL (dat, (BITCODE_RL)(length * 4));
       for (i = 0; i < length; i++)
-        bit_write_RL (dat, chain[i]);
+        bit_write_RL (dat, wstr[i]);
+      if (allocated)
+        free (wstr);
     }
   else
     {
