@@ -2534,6 +2534,9 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
     dat->from_version = dat->version;
+  // Propagate the input-format flags, so IS_FROM_TU (dat) reflects the actual
+  // source encoding (DXF/JSON input keeps T strings as single-byte TV).
+  dat->opts |= dwg->opts & DWG_OPTS_IN;
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
   dwg_resolve_objectrefs_silent (dwg);
