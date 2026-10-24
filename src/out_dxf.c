@@ -4247,6 +4247,11 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
     dat->from_version = dwg->header.from_version;
+  // Propagate the input-format flags, so IS_FROM_TU (dat) reflects the actual
+  // source encoding.  DXF/JSON input stores T strings as single-byte TV even
+  // for an r2007+ target, so without this the writer would scan them as wide
+  // TU and overread the buffer.  (dwg_encode does the same, see encode.c.)
+  dat->opts |= dwg->opts & DWG_OPTS_IN;
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
