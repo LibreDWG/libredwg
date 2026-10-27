@@ -863,6 +863,19 @@ dwg_next_object (const Dwg_Object *obj)
   return &dwg->object[obj->index + 1];
 }
 
+/* A cached ref->obj may point into a dwg->object array that was since
+   realloced (GHSA-8gv8-3gxc-4vhv). Only trust it if it points into the
+   current array; this does not dereference the pointer. */
+static int
+ref_obj_valid (const Dwg_Data *restrict dwg, const Dwg_Object *obj)
+{
+  const uintptr_t p = (uintptr_t)obj;
+  const uintptr_t lo = (uintptr_t)dwg->object;
+  return obj && dwg->object && p >= lo
+         && p < lo + (size_t)dwg->num_objects * sizeof (Dwg_Object)
+         && (p - lo) % sizeof (Dwg_Object) == 0;
+}
+
 /**
  * Find an object given its handle
  */
@@ -873,7 +886,7 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     return NULL;
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
-  if (ref->obj && !dwg->dirty_refs)
+  if (ref_obj_valid (dwg, ref->obj) && !dwg->dirty_refs)
     {
       if (ref->obj->handle.value
           == ref->absolute_ref) // not a wrong sort_ents import
@@ -912,7 +925,7 @@ EXPORT Dwg_Object *
 dwg_ref_object_relative (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
                          const Dwg_Object *restrict obj)
 {
-  if (ref->obj && !dwg->dirty_refs)
+  if (ref_obj_valid (dwg, ref->obj) && !dwg->dirty_refs)
     return ref->obj;
   if (dwg_resolve_handleref (ref, obj))
     {
@@ -988,7 +1001,7 @@ dwg_ref_object_silent (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     return NULL;
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
-  if (dwg->dirty_refs == 0 && ref->obj != NULL)
+  if (dwg->dirty_refs == 0 && ref_obj_valid (dwg, ref->obj))
     return ref->obj;
   if ((ref->handleref.code < 6
        && dwg_resolve_handleref ((Dwg_Object_Ref *)ref, NULL))
