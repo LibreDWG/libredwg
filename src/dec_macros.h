@@ -1138,7 +1138,7 @@
 // for static TFF types with a size field
 #define _VECTOR_CHKCOUNT(nam, size, maxelemsize, dat)                         \
   if ((int64_t)(size) > AVAIL_BITS (dat)                                      \
-      || (int64_t)((size) * (maxelemsize)) > AVAIL_BITS (dat))                \
+      || (int64_t)(size) * (int64_t)(maxelemsize) > AVAIL_BITS (dat))                \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \
                  " bits, have %" PRId64 " for %s. "                           \
@@ -1151,7 +1151,7 @@
 // for static TFF types with fixed size
 #define _VECTOR_CHKCOUNT_STATIC(nam, siz, maxelemsize, dat)                   \
   if ((int64_t)(8 * siz) > AVAIL_BITS (dat)                                   \
-      || (int64_t)((siz) * (maxelemsize)) > AVAIL_BITS (dat)                  \
+      || (int64_t)(siz) * (int64_t)(maxelemsize) > AVAIL_BITS (dat)          \
       || dat->byte + (siz) > dat->size)                                       \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " size %" PRId64 ". Need min. %" PRId64      \

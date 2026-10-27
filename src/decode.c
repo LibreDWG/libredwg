@@ -2098,9 +2098,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
          max_decomp_size, i.e. the allocation. Add one page of headroom,
          a page at the end may start below info->size and be checked with
          the full page size. */
-      LOG_WARN ("Section %s size %" PRId64 " > %u * " FORMAT_RL,
-                info->name, info->size, info->num_sections,
-                info->max_decomp_size);
+      LOG_WARN ("Section %s size %" PRId64 " > %u * " FORMAT_RL, info->name,
+                info->size, info->num_sections, info->max_decomp_size);
       max_decomp_size = (uint32_t)info->size + info->max_decomp_size;
     }
   LOG_HANDLE ("Alloc section %s size %" PRIu32 "\n", info->name,
@@ -2140,7 +2139,16 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           j--; // index for writing info->max_decomp_size chunks
           continue;
         }
-      address = info->sections[i]->address;
+      if (info->sections[i]->address
+          > 0xffffffffUL - 32) // no 32bit truncation
+        {
+          LOG_ERROR ("Section %s address %" PRIu64 " out of bounds",
+                     info->name, (uint64_t)info->sections[i]->address);
+          free (dec.chain);
+          sec_dat->chain = NULL;
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
+      address = (uint32_t)info->sections[i]->address;
       if ((size_t)address + 32 > dat->size)
         {
           LOG_ERROR ("Section %s address %u + 32 > %" PRIuSIZE, info->name,
@@ -2191,7 +2199,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       // check if compressed at all
       if (info->compressed == 2 && bytes_left > 0
           && es.fields.address <= max_decomp_size
-          && es.fields.address + info->max_decomp_size <= max_decomp_size)
+          && (uint64_t)es.fields.address + info->max_decomp_size
+                 <= max_decomp_size)
         {
           size_t orig_size = dat->size;
           dec.byte = es.fields.address;
@@ -2242,14 +2251,14 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          const size_t offset = address + 32;
+          const size_t offset = (size_t)address + 32;
           const BITCODE_RL size
               = MIN ((BITCODE_RL)(info->size - es.fields.address),
                      es.fields.page_size);
           if (info->compressed == 2 || bytes_left < 0
               || es.fields.address > max_decomp_size
-              || es.fields.address + size > max_decomp_size
-              || es.fields.address + size > dec.size
+              || (uint64_t)es.fields.address + size > max_decomp_size
+              || (uint64_t)es.fields.address + size > dec.size
               || offset + size > dat->size)
             {
               LOG_ERROR ("Some section size or address out of bounds");
