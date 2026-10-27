@@ -1753,7 +1753,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       {
                         BITCODE_3BD pt;
                         json_3DPOINT (dat, tokens, name, "eed", "3RD", &pt);
-                        if (eed_need_size (dat, obj->eed, i, 24, &have, &alloc))
+                        if (eed_need_size (dat, obj->eed, i, 24, &have,
+                                           &alloc))
                           data = obj->eed[i].data;
                         memcpy (&data->u.eed_10.point, &pt, 24);
                       }
