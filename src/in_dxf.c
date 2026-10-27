@@ -10631,7 +10631,39 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else if (strEQc (obj->name, "INSERT")
                        && strEQc (subclass, "AcDbMInsertBlock"))
                 {
+                  Dwg_Entity_INSERT *ins = (Dwg_Entity_INSERT *)_obj;
+                  // The layouts differ (GHSA-hh9f-2fpf-p5w6): the INSERT
+                  // buffer must not be reinterpreted as MINSERT. Move the
+                  // fields to a fresh object.
+                  Dwg_Entity_MINSERT *mins = (Dwg_Entity_MINSERT *)calloc (
+                      1, sizeof (Dwg_Entity_MINSERT));
+                  if (!mins)
+                    {
+                      LOG_ERROR ("Out of memory");
+                      goto invalid_dxf;
+                    }
                   UPGRADE_ENTITY (INSERT, MINSERT)
+                  mins->parent = ins->parent;
+                  mins->ins_pt = ins->ins_pt;
+                  mins->scale_flag = ins->scale_flag;
+                  mins->scale = ins->scale;
+                  mins->rotation = ins->rotation;
+                  mins->extrusion = ins->extrusion;
+                  mins->has_attribs = ins->has_attribs;
+                  mins->num_owned = ins->num_owned;
+                  mins->num_cols = ins->num_cols;
+                  mins->num_rows = ins->num_rows;
+                  mins->col_spacing = ins->col_spacing;
+                  mins->row_spacing = ins->row_spacing;
+                  mins->block_header = ins->block_header;
+                  mins->first_attrib = ins->first_attrib;
+                  mins->last_attrib = ins->last_attrib;
+                  mins->attribs = ins->attribs;
+                  mins->seqend = ins->seqend;
+                  free (ins->block_name);
+                  free (ins);
+                  obj->tio.entity->tio.MINSERT = mins;
+                  _obj = (void *)mins;
                 }
 
               // When we have all proper types, check proper subclasses.
