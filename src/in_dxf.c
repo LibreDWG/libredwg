@@ -4190,10 +4190,19 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 11:
               CHK_points;
+              {
+                Dwg_LEADER_Break *breaks = (Dwg_LEADER_Break *)realloc (
+                    lline->breaks, (k + 2) * sizeof (Dwg_LEADER_Break));
+                if (!breaks)
+                  {
+                    LOG_ERROR ("MULTILEADER.leaders[].lines[].breaks");
+                    dxf_free_pair (pair);
+                    return NULL;
+                  }
+                lline->breaks = breaks;
+              }
               k++;
               lline->num_breaks = k + 1;
-              lline->breaks = (Dwg_LEADER_Break *)realloc (
-                  lline->breaks, (k + 1) * sizeof (Dwg_LEADER_Break));
               memset (&lline->breaks[k], 0, sizeof (Dwg_LEADER_Break));
               lline->breaks[k].start.x = pair->value.d;
               LOG_TRACE (
