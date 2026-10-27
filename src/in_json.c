@@ -2903,6 +2903,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             LOG_TRACE ("subclass %s.%s done\n", name, key);
           free (subclass);
         }
+      // A pointer field holds the address of a separately allocated struct.
+      // Its slot in _obj is not an inline struct, so recursing with
+      // &_obj[f->offset] writes the sub-fields past the parent.
+      else if (t->type == JSMN_OBJECT && memBEGINc (f->type, "Dwg_")
+               && f->type[strlen (f->type) - 1] == '*')
+        {
+          LOG_ERROR ("Cannot set pointer field %s.%s %s from a JSON object",
+                     name, key, f->type);
+          json_advance_unknown (dat, tokens, t->type, 0);
+          return error | 1; // found, skipped
+        }
       // subclass structs (embedded):
       else if (t->type == JSMN_OBJECT && memBEGINc (f->type, "Dwg_"))
         {
@@ -2951,7 +2962,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   *rest = '\0';
                   rest++;
                   f1 = dwg_dynapi_subclass_field (subclass, key1);
-                  if (f1 && *rest)
+                  if (f1 && f1->type[strlen (f1->type) - 1] == '*')
+                    {
+                      // not an inline struct, see above
+                      LOG_ERROR ("Cannot set pointer field %s.%s %s", subclass,
+                                 key1, f1->type);
+                      f1 = NULL; // skipped below
+                    }
+                  else if (f1 && *rest)
                     {
                       void *off = &((char *)_obj)[f->offset + f1->offset];
                       char *subclass1 = dwg_dynapi_subclass_name (f1->type);
