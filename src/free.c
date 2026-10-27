@@ -633,6 +633,20 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return;
     }
   LOG_HANDLE ("free_TABLESTYLE_r2010\n");
+  // downconvert_TABLESTYLE shallow-copies ovr.cellstyle.borders[].color into
+  // rowstyles[0] and [2]. The ovr copy is freed below, so drop the aliases.
+  if (_obj->rowstyles && _obj->numoverrides && _obj->ovr.cellstyle.borders)
+    for (unsigned i = 0; i < 3; i++)
+      if (_obj->rowstyles[i].borders)
+        for (unsigned j = 0; j < 6 && j < _obj->ovr.cellstyle.num_borders; j++)
+          {
+            Dwg_TABLESTYLE_border *b = &_obj->rowstyles[i].borders[j];
+            const Dwg_GridFormat *o = &_obj->ovr.cellstyle.borders[j];
+            if (b->color.name && b->color.name == o->color.name)
+              b->color.name = NULL;
+            if (b->color.book_name && b->color.book_name == o->color.book_name)
+              b->color.book_name = NULL;
+          }
   if (_obj->rowstyles)
     for (unsigned i = 0; i < 3; i++)
       {
@@ -1667,7 +1681,7 @@ dwg_free_acds (Dwg_Data *dwg)
   BITCODE_RL rcount3 = 0, rcount4, vcount;
   int error = 0;
 
-  #include "acds.spec"
+#include "acds.spec"
   // clang-format on
   return 0;
 }
