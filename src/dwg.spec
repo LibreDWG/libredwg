@@ -2617,6 +2617,16 @@ DWG_ENTITY (SPLINE)
     FIELD_BD (ctrl_tol, 0); // def: 0.0000001
     FIELD_BL (num_knots, 72);
     FIELD_BL (num_ctrl_pts, 73);
+    DECODER {
+      // same limit as the HATCH SPLINE edge knots
+      if (FIELD_VALUE (num_knots) > 10000)
+        {
+          LOG_ERROR ("Invalid SPLINE.num_knots " FORMAT_BL,
+                     FIELD_VALUE (num_knots));
+          FIELD_VALUE (num_knots) = 0;
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
+    }
     FIELD_B (weighted, 0);
     DXF {
       FIELD_BL (num_fit_pts, 74); // i.e. 0
