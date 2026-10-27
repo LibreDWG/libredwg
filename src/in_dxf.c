@@ -13728,8 +13728,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n", name,
                              "dim_rotation", ang, pair->value.d, "BD", 50);
                 }
-              else if (obj->fixedtype == DWG_TYPE_MTEXT
-                       && pair->code == 50)
+              else if (obj->fixedtype == DWG_TYPE_MTEXT && pair->code == 50)
                 {
                   // valid alternative to the group 11 direction vector:
                   // rotation in degrees (AutoCAD and ezdxf both write it)
@@ -13847,12 +13846,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
       Dwg_Entity_VIEWPORT *o = obj->tio.entity->tio.VIEWPORT;
       if (o->vport_entity_header)
         {
-          Dwg_Object *vxobj = dwg_resolve_handle (
-              dwg, o->vport_entity_header->absolute_ref);
+          Dwg_Object *vxobj
+              = dwg_resolve_handle (dwg, o->vport_entity_header->absolute_ref);
           if (vxobj && vxobj->fixedtype == DWG_TYPE_VX_TABLE_RECORD)
             {
-              vxobj->tio.object->tio.VX_TABLE_RECORD->is_on
-                  = o->on_off != 0;
+              vxobj->tio.object->tio.VX_TABLE_RECORD->is_on = o->on_off != 0;
               LOG_TRACE ("VX_TABLE_RECORD.is_on = %d (VIEWPORT.on_off %d)\n",
                          o->on_off != 0, (int)o->on_off);
             }
@@ -14990,6 +14988,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
     }
 }
 
+// clang-format off
 #  define CHECK_DICTIONARY_HDR(name)                                          \
     if (!vars->DICTIONARY_##name)                                             \
       {                                                                       \
@@ -15020,6 +15019,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
                 = dwg_add_handleref (dwg, 4, nod_hdl, is_abs ? NULL : obj);   \
           }                                                                   \
       }
+// clang-format on
 
 static void
 resolve_header_dicts (Dwg_Data *restrict dwg)
