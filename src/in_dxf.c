@@ -8970,7 +8970,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
               if (!o->states[i].blocks)
                 {
                   o->states[i].num_blocks = 0;
-                  return pair;
+                  return dxf_read_pair (dat); // pair is already freed
                 }
               for (unsigned j = 0; j < o->states[i].num_blocks; j++)
                 {
@@ -8999,7 +8999,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
               if (!o->states[i].params)
                 {
                   o->states[i].num_params = 0;
-                  return pair;
+                  return dxf_read_pair (dat); // pair is already freed
                 }
               for (unsigned j = 0; j < o->states[i].num_params; j++)
                 {
@@ -9042,7 +9042,7 @@ add_BlockParam_PropInfo (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (!prop->connections)
         {
           prop->num_connections = 0;
-          return pair;
+          return dxf_read_pair (dat); // the pair above is already freed
         }
       for (unsigned j = 0; j < prop->num_connections; j++)
         {
