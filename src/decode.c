@@ -2141,7 +2141,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           continue;
         }
       address = info->sections[i]->address;
-      if (address + 32 > dat->size)
+      if ((size_t)address + 32 > dat->size)
         {
           LOG_ERROR ("Section %s address %u + 32 > %" PRIuSIZE, info->name,
                      address, dat->size);
