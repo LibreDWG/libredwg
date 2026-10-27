@@ -817,20 +817,23 @@ dwg_get_num_entities (const Dwg_Data *dwg)
 EXPORT Dwg_Object_Entity **
 dwg_get_entities (const Dwg_Data *dwg)
 {
-  BITCODE_BL i, ent_count = 0;
+  BITCODE_BL i, ent_count = 0, num = 0;
   Dwg_Object_Entity **entities;
 
   assert (dwg);
-  entities = (Dwg_Object_Entity **)calloc (dwg_get_num_entities (dwg),
+  // dwg->num_entities is only maintained by the binary decoders, not by the
+  // DXF/JSON importers or the API. Count the supertypes.
+  for (i = 0; i < dwg->num_objects; i++)
+    if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
+      num++;
+  entities = (Dwg_Object_Entity **)calloc (num ? num : 1,
                                            sizeof (Dwg_Object_Entity *));
+  if (!entities)
+    return NULL;
   for (i = 0; i < dwg->num_objects; i++)
     {
       if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
-        {
-          entities[ent_count] = dwg->object[i].tio.entity;
-          ent_count++;
-          assert (ent_count < dwg->num_objects);
-        }
+        entities[ent_count++] = dwg->object[i].tio.entity;
     }
   return entities;
 }
