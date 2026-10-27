@@ -3570,7 +3570,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
-                  if (obj->type <= DWG_TYPE_LAYOUT
+                  // 498/499 select the PROXY free body in dwg_free_object
+                  // (GHSA-v9c2-69pf-gwr5), so they must match fixedtype too.
+                  if ((obj->type <= DWG_TYPE_LAYOUT
+                       || obj->type == DWG_TYPE_PROXY_ENTITY
+                       || obj->type == DWG_TYPE_PROXY_OBJECT)
                       && obj->fixedtype != obj->type
                       && dwg->header.from_version >= R_13b1)
                     {
