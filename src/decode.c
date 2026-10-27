@@ -2126,7 +2126,8 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
 
   for (i = j = 0; i < info->num_sections; ++i, ++j)
     {
-      uint32_t address, sec_mask;
+      uint64_t address; // the section map keeps it 64bit, do not truncate
+      uint32_t sec_mask;
       if (!info->sections[i])
         {
           LOG_WARN ("Skip empty section %u %s", i, info->name);
@@ -2139,20 +2140,11 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
           j--; // index for writing info->max_decomp_size chunks
           continue;
         }
-      if (info->sections[i]->address
-          > 0xffffffffUL - 32) // no 32bit truncation
+      address = info->sections[i]->address;
+      if (address > dat->size || dat->size - address < 32)
         {
-          LOG_ERROR ("Section %s address %" PRIu64 " out of bounds",
-                     info->name, (uint64_t)info->sections[i]->address);
-          free (dec.chain);
-          sec_dat->chain = NULL;
-          return DWG_ERR_VALUEOUTOFBOUNDS;
-        }
-      address = (uint32_t)info->sections[i]->address;
-      if ((size_t)address + 32 > dat->size)
-        {
-          LOG_ERROR ("Section %s address %u + 32 > %" PRIuSIZE, info->name,
-                     address, dat->size);
+          LOG_ERROR ("Section %s address %" PRIu64 " + 32 > %" PRIuSIZE,
+                     info->name, address, dat->size);
           free (dec.chain);
           sec_dat->chain = NULL;
           return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -2162,13 +2154,14 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       // bit_read_fixed (dat, es.char_data, 32);
 
       //? if encrypted properties: security_type & 2 ??
-      sec_mask = htole32 (0x4164536b ^ address);
+      sec_mask = htole32 (0x4164536b ^ (uint32_t)address);
       {
         for (int k = 0; k < 8; ++k)
           es.long_data[k] = le32toh (es.long_data[k] ^ sec_mask);
       }
 
-      LOG_INFO ("=== Section %s (%u) @%u ===\n", info->name, i, address);
+      LOG_INFO ("=== Section %s (%u) @%" PRIu64 " ===\n", info->name, i,
+                address);
       if (es.fields.page_type != 0x4163043b)
         LOG_WARN ("page_type:      0x%x  (should be 0x4163043b)",
                   (unsigned)es.fields.page_type);
