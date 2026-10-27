@@ -2244,15 +2244,19 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
         }
       else
         {
-          const size_t offset = (size_t)address + 32;
-          const BITCODE_RL size
-              = MIN ((BITCODE_RL)(info->size - es.fields.address),
-                     es.fields.page_size);
+          const size_t offset = address + 32;
+          // 64 bit: address, size and page_size come from the file, their
+          // 32 bit sums wrap and pass the checks below
+          const uint64_t size
+              = es.fields.address > info->size
+                    ? es.fields.page_size
+                    : MIN ((uint64_t)(info->size - es.fields.address),
+                           (uint64_t)es.fields.page_size);
           if (info->compressed == 2 || bytes_left < 0
               || es.fields.address > max_decomp_size
               || (uint64_t)es.fields.address + size > max_decomp_size
               || (uint64_t)es.fields.address + size > dec.size
-              || offset + size > dat->size)
+              || (uint64_t)offset + size > dat->size)
             {
               LOG_ERROR ("Some section size or address out of bounds");
               free (dec.chain);
