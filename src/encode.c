@@ -3146,8 +3146,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               {
                 const char *bname
                     = owner_obj->tio.object->tio.BLOCK_HEADER->name;
-                if (bname && strcmp (bname, "*MODEL_SPACE") != 0
-                    && strcmp (bname, "*PAPER_SPACE") != 0)
+                // r13+ sources spell them *Model_Space/*Paper_Space
+                if (bname && strcasecmp (bname, "*MODEL_SPACE") != 0
+                    && strcasecmp (bname, "*PAPER_SPACE") != 0)
                   {
                     ent->tio.entity->entmode = 3;
                   }
@@ -3168,20 +3169,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
     encode_check_num_sections ((Dwg_Section_Type_r11)dwg->header.num_sections,
                                dwg);
-    if (dwg->header.from_version >= R_13b1)
-      {
-        /* r2000 has e.g.
-         * section 0: header vars
-         *         1: class section
-         *         2: object map
-         *         3: optional: ObjFreeSpace
-         *            optional: SecondHeader
-         *         4: and Template
-         *         5: optional: AuxHeader (no sentinels, since R13c3)
-         */
-        LOG_ERROR ("FIXME convert sections from CONTROL objects to tables");
-      }
-    if (dwg->header.from_version < R_13b1 && dwg->header.section)
+    /* For r13+ sources the section tables were already converted from the
+       CONTROL objects by ENCODE_CTRL_TO_TABLE while writing them, so their
+       addresses must be patched the same way: gating this on the source
+       version left every 0xDEADBEAF placeholder in the file, and no reader
+       (not even our own) could load the result. */
+    if (dwg->header.section)
       {
         Dwg_Section_Type_r11 max_id
             = dwg->header.num_sections <= SECTION_VX
