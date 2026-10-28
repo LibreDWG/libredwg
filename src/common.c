@@ -377,12 +377,12 @@ strrplc (const char *s, const char *from, const char *to)
     {
       const size_t l1 = strlen (from);
       const size_t l2 = strlen (to);
-      char *dest = (char *)calloc (1, 80);
+      char *dest = (char *)calloc (1, 160);
       long i = p - s;
-      assert (strlen (s) - ((long)l1 - l2) < 80);
+      assert (strlen (s) - ((long)l1 - l2) < 120);
       memcpy (dest, s, i);
-      strncat (dest, to, 79 - l2);
-      strncat (dest, s + i + l1, 79 - l1);
+      strncat (dest, to, 159 - l2);
+      strncat (dest, s + i + l1, 159 - l1);
       return dest;
     }
   else

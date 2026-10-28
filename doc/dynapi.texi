@@ -14010,7 +14010,7 @@ BD,	DXF 44
 BD,	DXF 45
 @item height
 BD,	DXF 46
-@item unknown
+@item flags
 BL,	DXF 95
 @item cell_parent
 struct _dwg_TableCell*
@@ -15842,6 +15842,8 @@ Dwg_TABLE_value
 struct _dwg_TableCell*
 @item row_parent
 struct _dwg_TableRow*
+@item col_parent
+struct _dwg_TableDataColumn*
 
 @end vtable
 @end indentedblock
@@ -15914,6 +15916,8 @@ BL
 BL
 @item cell_contents
 Dwg_TableCellContent*
+@item cellstyle
+Dwg_CellStyle
 @item style_id
 BL
 @item has_geom_data
@@ -15994,12 +15998,16 @@ struct _dwg_LinkedTableData*
 T,	DXF 300
 @item custom_data
 BL,	DXF 91
+@item num_customdata_items
+BL,	DXF 90
+@item customdata_items
+Dwg_TABLE_CustomDataItem*
 @item cellstyle
 Dwg_CellStyle
 @item cellstyle_id
 BL
 @item width
-BL
+BD
 
 @end vtable
 @end indentedblock
@@ -16027,7 +16035,7 @@ Dwg_CellStyle
 @item style_id
 BL
 @item height
-BL
+BD
 
 @end vtable
 @end indentedblock

@@ -267,26 +267,26 @@ DWG_OBJECT_END
 	}								\
       FIELD_BL (sty.num_borders, 94); /* 0-6 */			\
       VALUEOUTOFBOUNDS (sty.num_borders, 6);				\
-      REPEAT2 (sty.num_borders, sty.borders, Dwg_GridFormat)		\
+      REPEAT4 (sty.num_borders, sty.borders, Dwg_GridFormat)		\
       REPEAT_BLOCK							\
 	DXF {								\
-	  if (FIELD_VALUE (sty.borders[rcount2].index_mask))		\
+	  if (FIELD_VALUE (sty.borders[rcount4].index_mask))		\
 	    {								\
-	      SUB_FIELD_BL (sty.borders[rcount2],index_mask, 95);	\
+	      SUB_FIELD_BL (sty.borders[rcount4],index_mask, 95);	\
 	      VALUE_TFF ("GRIDFORMAT", 302);				\
 	      VALUE_TFF ("GRIDFORMAT_BEGIN", 1);			\
 	    }								\
 	}								\
-	SUB_FIELD_BLx (sty.borders[rcount2],index_mask, 0);		\
-	if (FIELD_VALUE (sty.borders[rcount2].index_mask))		\
+	SUB_FIELD_BLx (sty.borders[rcount4],index_mask, 0);		\
+	if (FIELD_VALUE (sty.borders[rcount4].index_mask))		\
 	  {								\
-	    SUB_FIELD_BL (sty.borders[rcount2],border_overrides, 90);	\
-	    SUB_FIELD_BL (sty.borders[rcount2],border_type, 91);	\
-	    SUB_FIELD_CMTC (sty.borders[rcount2],color, 62);		\
-	    SUB_FIELD_BLd (sty.borders[rcount2],linewt, 92);		\
-	    SUB_FIELD_HANDLE (sty.borders[rcount2],ltype, 3, 340);	\
-	    SUB_FIELD_BL (sty.borders[rcount2],visible, 93);		\
-	    SUB_FIELD_BD (sty.borders[rcount2],double_line_spacing, 40);\
+	    SUB_FIELD_BL (sty.borders[rcount4],border_overrides, 90);	\
+	    SUB_FIELD_BL (sty.borders[rcount4],border_type, 91);	\
+	    SUB_FIELD_CMTC (sty.borders[rcount4],color, 62);		\
+	    SUB_FIELD_BLd (sty.borders[rcount4],linewt, 92);		\
+	    SUB_FIELD_HANDLE (sty.borders[rcount4],ltype, 3, 340);	\
+	    SUB_FIELD_BL (sty.borders[rcount4],visible, 93);		\
+	    SUB_FIELD_BD (sty.borders[rcount4],double_line_spacing, 40);\
 	  }								\
 	DXF { VALUE_TFF ("GRIDFORMAT_END", 309) }			\
       END_REPEAT_BLOCK							\
@@ -300,7 +300,7 @@ DWG_OBJECT_END
 #define row tdata.rows[rcount1]
 #define cell row.cells[rcount2]
 #define content cell.cell_contents[rcount3]
-#define geom cell.geometry[0]
+#define geom cell.geometry[rcount4]
 #define attr content.attrs[rcount4]
 #define merged fdata.merged_cells[rcount1]
 
@@ -316,8 +316,24 @@ DWG_OBJECT_END
       SUB_FIELD_T (tdata.cols[rcount1],name, 300);		\
       DXF { VALUE_TFF ("LINKEDTABLEDATACOLUMN_BEGIN", 1) }      \
       SUB_FIELD_BL (tdata.cols[rcount1],custom_data, 91);	\
+      SUB_FIELD_BL (tdata.cols[rcount1],num_customdata_items, 90);	\
+      REPEAT3 (tdata.cols[rcount1].num_customdata_items, tdata.cols[rcount1].customdata_items, Dwg_TABLE_CustomDataItem) \
+      REPEAT_BLOCK						\
+          SUB_FIELD_T (tdata.cols[rcount1].customdata_items[rcount3],name, 300); \
+          TABLE_value_fields (tdata.cols[rcount1].customdata_items[rcount3].value); \
+          if (error & DWG_ERR_INVALIDTYPE)			\
+            {							\
+              JSON_END_REPEAT (tdata.cols[rcount1].customdata_items); \
+              JSON_END_REPEAT (tdata.cols);			\
+              return error;					\
+            }							\
+          SET_PARENT_FIELD (tdata.cols[rcount1].customdata_items[rcount3], col_parent, &_obj->tdata.cols[rcount1]); \
+      END_REPEAT_BLOCK						\
+      END_REPEAT (tdata.cols[rcount1].customdata_items);	\
       DXF { VALUE_TFF ("DATAMAP_BEGIN", 1) }                    \
       CellStyle_fields (tdata.cols[rcount1].cellstyle);		\
+      SUB_FIELD_BL (tdata.cols[rcount1],cellstyle_id, 90);	\
+      SUB_FIELD_BD (tdata.cols[rcount1],width, 40);		\
       DXF { VALUE_TFF ("DATAMAP_END", 309) }                    \
       DXF { VALUE_TFF ("LINKEDTABLEDATACOLUMN_END", 309) }      \
       SET_PARENT (tdata.cols[rcount1], &_obj->tdata);		\
@@ -400,6 +416,7 @@ DWG_OBJECT_END
               SET_PARENT (content, &_obj->cell);                \
           END_REPEAT_BLOCK					\
           END_REPEAT (cell.cell_contents);			\
+          CellStyle_fields (cell.cellstyle);			\
           SUB_FIELD_BL (cell, style_id, 90);			\
           SUB_FIELD_BL (cell, has_geom_data, 91);		\
           if (FIELD_VALUE (cell.has_geom_data))			\
@@ -409,7 +426,7 @@ DWG_OBJECT_END
               SUB_FIELD_BD (cell,height_w_gap, 41);		\
               SUB_FIELD_BL (cell,num_geometry, 94);		\
               SUB_FIELD_HANDLE (cell,tablegeometry, 4, 330);	\
-              REPEAT (cell.num_geometry, cell.geometry, Dwg_CellContentGeometry) \
+              REPEAT4 (cell.num_geometry, cell.geometry, Dwg_CellContentGeometry) \
               REPEAT_BLOCK					\
                   SUB_FIELD_3BD (geom,dist_top_left, 10);	\
                   SUB_FIELD_3BD (geom,dist_center, 11);		\
@@ -417,7 +434,7 @@ DWG_OBJECT_END
                   SUB_FIELD_BD (geom,content_height, 44);	\
                   SUB_FIELD_BD (geom,width, 45);		\
                   SUB_FIELD_BD (geom,height, 46);		\
-                  SUB_FIELD_BL (geom,unknown, 95);		\
+                  SUB_FIELD_BL (geom,flags, 95);		\
                   SET_PARENT_FIELD (geom, cell_parent, &_obj->cell); \
               END_REPEAT_BLOCK					\
               END_REPEAT (cell.geometry);			\
@@ -443,13 +460,14 @@ DWG_OBJECT_END
       {								\
         CellStyle_fields (row.cellstyle);			\
         SUB_FIELD_BL (row,style_id, 90);			\
-        SUB_FIELD_BL (row,height, 40);				\
+        SUB_FIELD_BD (row,height, 40);				\
       }								\
       SET_PARENT (row, &_obj->tdata);				\
   END_REPEAT_BLOCK						\
   END_REPEAT (tdata.rows);					\
   FIELD_BL (tdata.num_field_refs, 0);				\
   HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);	\
+  CellStyle_fields (fdata.cellstyle);				\
   FIELD_BL (fdata.num_merged_cells, 90);			\
   REPEAT (fdata.num_merged_cells, fdata.merged_cells, Dwg_FormattedTableMerged)	\
   REPEAT_BLOCK							\
@@ -477,29 +495,6 @@ DWG_OBJECT_END
 DWG_ENTITY (TABLE)
 
   HANDLE_UNKNOWN_BITS;
-  SINCE (R_2010b) //AC1024
-    {
-      FIELD_RC (unknown_rc, 0);
-      FIELD_HANDLE (tablestyle, 5, 342);
-      //FIELD_HANDLE (unknown_h, 5, 0);
-      FIELD_BL (unknown_bl, 0);
-      VERSIONS (R_2010b, R_2010)
-        FIELD_B (unknown_b, 0); // default 1
-      VERSIONS (R_2013b, R_2013)
-        FIELD_BL (unknown_bl1, 0);
-      // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
-      // FIXME: same offset as TABLECONTENT, or subclass
-      TABLECONTENTs_fields;
-
-#undef row
-#undef cell
-#undef content
-#undef geom
-#undef attr
-#undef merged
-
-    }
-  else {
     SUBCLASS (AcDbBlockReference)
     FIELD_3BD (ins_pt, 10);
     VERSIONS (R_13b1, R_14) {
@@ -558,7 +553,8 @@ DWG_ENTITY (TABLE)
     FIELD_B (has_attribs, 66);
 
     SINCE (R_2004a) {
-      FIELD_BL (num_owned, 0);
+      if (FIELD_VALUE (has_attribs))
+        FIELD_BL (num_owned, 0);
       VALUEOUTOFBOUNDS (num_owned, 10000)
     }
     FIELD_HANDLE (block_header, 5, 2);
@@ -582,6 +578,28 @@ DWG_ENTITY (TABLE)
     if (FIELD_VALUE (has_attribs)) {
       FIELD_HANDLE (seqend, 3, 0);
     }
+  SINCE (R_2010b) //AC1024
+    {
+      FIELD_RC (unknown_rc, 0);
+      FIELD_HANDLE (unknown_h, 5, 0);
+      FIELD_BL (unknown_bl, 0);
+      VERSIONS (R_2010b, R_2010)
+        FIELD_B (unknown_b, 0); // default 1
+      SINCE (R_2013)
+        FIELD_BL (unknown_bl1, 0);
+      // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
+      // FIXME: same offset as TABLECONTENT, or subclass
+      TABLECONTENTs_fields;
+
+#undef row
+#undef cell
+#undef content
+#undef geom
+#undef attr
+#undef merged
+
+    }
+  else {
 
     SUBCLASS (AcDbTable)
     FIELD_HANDLE (tablestyle, 5, 342);
@@ -1101,7 +1119,7 @@ DWG_OBJECT (TABLEGEOMETRY)
           SUB_FIELD_BD (geom,content_height, 44);
           SUB_FIELD_BD (geom,width, 45);
           SUB_FIELD_BD (geom,height, 46);
-          SUB_FIELD_BL (geom,unknown, 95);
+          SUB_FIELD_BL (geom,flags, 95);
           SET_PARENT_FIELD (geom, geom_parent, &_obj->cell);
           #undef geom
       END_REPEAT_BLOCK

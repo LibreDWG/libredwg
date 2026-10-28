@@ -42,8 +42,7 @@ api_process (dwg_object *obj)
                                  content_height, BD);
               CHK_SUBCLASS_TYPE (geometry[j], CellContentGeometry, width, BD);
               CHK_SUBCLASS_TYPE (geometry[j], CellContentGeometry, height, BD);
-              CHK_SUBCLASS_TYPE (geometry[j], CellContentGeometry, unknown,
-                                 BL);
+              CHK_SUBCLASS_TYPE (geometry[j], CellContentGeometry, flags, BL);
             }
       }
 }

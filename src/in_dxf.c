@@ -5887,8 +5887,8 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 95:
           CHK_cells;
           CHK_geometry;
-          o->cells[i].geometry[j].unknown = pair->value.i;
-          LOG_TRACE ("%s.cells[%d].geometry[%d].unknown = %d [BL %d]\n",
+          o->cells[i].geometry[j].flags = pair->value.i;
+          LOG_TRACE ("%s.cells[%d].geometry[%d].flags = %d [BL %d]\n",
                      obj->name, i, j, pair->value.i, pair->code);
           break;
         default:

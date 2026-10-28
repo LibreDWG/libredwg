@@ -593,7 +593,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   PRE (R_2007a) { FIELD_VALUE (value.data_type) &= ~0x200; }                  \
   LATER_VERSIONS { FIELD_BL (value.format_flags, 93); }                       \
   FIELD_BL (value.data_type, 90);                                             \
-  if (!(dat->version >= R_2007 && (FIELD_VALUE (value.format_flags) & 3)))    \
+  if (!(dat->version >= R_2007 && (FIELD_VALUE (value.format_flags) & 1)))    \
     {                                                                         \
       switch (FIELD_VALUE (value.data_type))                                  \
         {                                                                     \
@@ -607,7 +607,14 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           FIELD_BD (value.data_double, 140);                                  \
           break;                                                              \
         case 4: /* kString */                                                 \
-          FIELD_T (value.data_string, 1); /* and 2. TODO multiple lines */    \
+          SINCE (R_2007a)                                                     \
+            {                                                                   \
+              FIELD_BL (value.data_size, 92);                                 \
+              FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size),   \
+                            310);                                             \
+            }                                                                 \
+          else                                                                \
+            FIELD_T (value.data_string, 1);                                       \
           break;                                                              \
         case 8: /* kDate */                                                   \
           FIELD_BL (value.data_size, 92);                                     \
@@ -631,7 +638,12 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           LOG_ERROR ("Unknown data type in TABLE_value_fields: kResBuf");     \
           break;                                                              \
         case 512: /* kGeneral since r2007*/                                   \
-          SINCE (R_2007a) { FIELD_BL (value.data_size, 0); }                  \
+          SINCE (R_2007a)                                                     \
+            { /* same inline UTF-16LE bytes as kString */                     \
+              FIELD_BL (value.data_size, 92);                                 \
+              FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size),   \
+                            310);                                             \
+            }                                                                 \
           else                                                                \
             LOG_ERROR ("Unknown data type in TABLE_value_fields: kGeneral <r2007"); \
           break;                                                              \
