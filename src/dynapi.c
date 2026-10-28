@@ -8393,16 +8393,6 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
     1,0,0, 348 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_object_LAYERFILTER: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_LAYERFILTER_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYERFILTER, parent),
-    1,1,0, 0 },
-  { "num_names",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_LAYERFILTER, num_names),
-    0,0,0, 0 },
-  { "names",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_object_LAYERFILTER, names),
-    1,1,0, 8 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
 /* from typedef struct _dwg_object_LAYER_CONTROL: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_LAYER_CONTROL_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYER_CONTROL, parent),
@@ -8413,6 +8403,16 @@ static const Dwg_DYNAPI_field _dwg_LAYER_CONTROL_fields[] = {
     1,1,0, 0 },
   { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_LAYER_CONTROL, flags_r11),
     0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_object_LAYER_FILTER: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_LAYER_FILTER_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYER_FILTER, parent),
+    1,1,0, 0 },
+  { "num_names",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_LAYER_FILTER, num_names),
+    0,0,0, 0 },
+  { "names",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_object_LAYER_FILTER, names),
+    1,1,0, 8 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LAYER_INDEX: (sorted by offset) */
@@ -14124,8 +14124,8 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "JUMP", DWG_TYPE_JUMP /*(743)*/, _dwg_JUMP_fields, sizeof (struct _dwg_entity_JUMP) },	/* 948 */
   { "LARGE_RADIAL_DIMENSION", DWG_TYPE_LARGE_RADIAL_DIMENSION /*(652)*/, _dwg_LARGE_RADIAL_DIMENSION_fields, sizeof (struct _dwg_entity_LARGE_RADIAL_DIMENSION) },	/* 949 */
   { "LAYER", DWG_TYPE_LAYER /*(51)*/, _dwg_LAYER_fields, sizeof (struct _dwg_object_LAYER) },	/* 950 */
-  { "LAYERFILTER", DWG_TYPE_LAYERFILTER /*(653)*/, _dwg_LAYERFILTER_fields, sizeof (struct _dwg_object_LAYERFILTER) },	/* 951 */
-  { "LAYER_CONTROL", DWG_TYPE_LAYER_CONTROL /*(50)*/, _dwg_LAYER_CONTROL_fields, sizeof (struct _dwg_object_LAYER_CONTROL) },	/* 952 */
+  { "LAYER_CONTROL", DWG_TYPE_LAYER_CONTROL /*(50)*/, _dwg_LAYER_CONTROL_fields, sizeof (struct _dwg_object_LAYER_CONTROL) },	/* 951 */
+  { "LAYER_FILTER", DWG_TYPE_LAYER_FILTER /*(653)*/, _dwg_LAYER_FILTER_fields, sizeof (struct _dwg_object_LAYER_FILTER) },	/* 952 */
   { "LAYER_INDEX", DWG_TYPE_LAYER_INDEX /*(654)*/, _dwg_LAYER_INDEX_fields, sizeof (struct _dwg_object_LAYER_INDEX) },	/* 953 */
   { "LAYOUT", DWG_TYPE_LAYOUT /*(82)*/, _dwg_LAYOUT_fields, sizeof (struct _dwg_object_LAYOUT) },	/* 954 */
   { "LAYOUTPRINTCONFIG", DWG_TYPE_LAYOUTPRINTCONFIG /*(655)*/, _dwg_LAYOUTPRINTCONFIG_fields, sizeof (struct _dwg_entity_LAYOUTPRINTCONFIG) },	/* 955 */
@@ -14626,8 +14626,8 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "JUMP", {"AcDbEntity", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "LARGE_RADIAL_DIMENSION", {"AcDbEntity", "AcDbDimension", "AcDbRadialDimensionLarge", NULL, NULL, NULL, NULL, NULL} },
   { "LAYER", {"AcDbSymbolTableRecord", "AcDbLayerTableRecord", NULL, NULL, NULL, NULL, NULL, NULL} },
-  { "LAYERFILTER", {"AcDbObject", "AcDbLayerFilter", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "LAYER_CONTROL", {"AcDbSymbolTable", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
+  { "LAYER_FILTER", {"AcDbObject", "AcDbLayerFilter", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "LAYER_INDEX", {"AcDbObject", "AcDbIndex", "AcDbLayerIndex", NULL, NULL, NULL, NULL, NULL} },
   { "LAYOUT", {"AcDbObject", "AcDbPlotSettings", "AcDbLayout", NULL, NULL, NULL, NULL, NULL} },
   { "LAYOUTPRINTCONFIG", {"AcDbEntity", "CAcLayoutPrintConfig", NULL, NULL, NULL, NULL, NULL, NULL} },

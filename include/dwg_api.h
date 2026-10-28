@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2013,2018-2020 Free Software Foundation, Inc.              */
+/*  Copyright (C) 2013,2018-2026 Free Software Foundation, Inc.              */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -708,7 +708,7 @@ extern "C"
   typedef struct _dwg_object_IMAGEDEF		dwg_obj_imagedef;
   typedef struct _dwg_object_IMAGEDEF_REACTOR		dwg_obj_imagedef_reactor;
   typedef struct _dwg_object_INDEX		dwg_obj_index;
-  typedef struct _dwg_object_LAYERFILTER		dwg_obj_layerfilter;
+  typedef struct _dwg_object_LAYER_FILTER		dwg_obj_layer_filter;
   typedef struct _dwg_object_LAYER_INDEX		dwg_obj_layer_index;
   typedef struct _dwg_object_LAYOUT		dwg_obj_layout;
   typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA		dwg_obj_leaderobjectcontextdata;
@@ -1645,7 +1645,6 @@ extern "C"
 //  typedef struct _dwg_object_PARAMMGR		dwg_obj_parammgr;
 //  typedef struct _dwg_object_PARAMSCOPE		dwg_obj_paramscope;
 //  typedef struct _dwg_object_PILLAR		dwg_obj_pillar;
-//  typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT		dwg_obj_rapidrtrenderenvironment;
 //  typedef struct _dwg_object_ROTATEACTIONENTITY		dwg_obj_rotateactionentity;
 //  typedef struct _dwg_object_SCALEACTIONENTITY		dwg_obj_scaleactionentity;
 //  typedef struct _dwg_object_STDPART2D		dwg_obj_stdpart2d;
@@ -1834,7 +1833,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_imagedef, IMAGEDEF);
   dwg_get_OBJECT_DECL (obj_imagedef_reactor, IMAGEDEF_REACTOR);
   dwg_get_OBJECT_DECL (obj_index, INDEX);
-  dwg_get_OBJECT_DECL (obj_layerfilter, LAYERFILTER);
+  dwg_get_OBJECT_DECL (obj_layer_filter, LAYER_FILTER);
   dwg_get_OBJECT_DECL (obj_layer_index, LAYER_INDEX);
   dwg_get_OBJECT_DECL (obj_layout, LAYOUT);
   dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA);
@@ -2771,7 +2770,6 @@ extern "C"
 //     dwg_get_OBJECT_DECL (obj_parammgr, PARAMMGR);
 //     dwg_get_OBJECT_DECL (obj_paramscope, PARAMSCOPE);
 //     dwg_get_OBJECT_DECL (obj_pillar, PILLAR);
-//     dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT);
 //     dwg_get_OBJECT_DECL (obj_rotateactionentity, ROTATEACTIONENTITY);
 //     dwg_get_OBJECT_DECL (obj_scaleactionentity, SCALEACTIONENTITY);
 //     dwg_get_OBJECT_DECL (obj_stdpart2d, STDPART2D);
@@ -2979,7 +2977,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (IMAGEDEF);
   DWG_GETALL_OBJECT_DECL (IMAGEDEF_REACTOR);
   DWG_GETALL_OBJECT_DECL (INDEX);
-  DWG_GETALL_OBJECT_DECL (LAYERFILTER);
+  DWG_GETALL_OBJECT_DECL (LAYER_FILTER);
   DWG_GETALL_OBJECT_DECL (LAYER_INDEX);
   DWG_GETALL_OBJECT_DECL (LAYOUT);
   DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA);
@@ -3916,7 +3914,6 @@ extern "C"
 //  DWG_GETALL_OBJECT_DECL (PARAMMGR);
 //  DWG_GETALL_OBJECT_DECL (PARAMSCOPE);
 //  DWG_GETALL_OBJECT_DECL (PILLAR);
-//  DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT);
 //  DWG_GETALL_OBJECT_DECL (ROTATEACTIONENTITY);
 //  DWG_GETALL_OBJECT_DECL (SCALEACTIONENTITY);
 //  DWG_GETALL_OBJECT_DECL (STDPART2D);
@@ -4130,7 +4127,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGEDEF);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGEDEF_REACTOR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (INDEX);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYERFILTER);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_FILTER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_INDEX);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUT);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LEADEROBJECTCONTEXTDATA);
@@ -5067,7 +5064,6 @@ extern "C"
   //  CAST_DWG_OBJECT_TO_OBJECT_DECL (PARAMMGR);
   //  CAST_DWG_OBJECT_TO_OBJECT_DECL (PARAMSCOPE);
   //  CAST_DWG_OBJECT_TO_OBJECT_DECL (PILLAR);
-  //  CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT);
   //  CAST_DWG_OBJECT_TO_OBJECT_DECL (ROTATEACTIONENTITY);
   //  CAST_DWG_OBJECT_TO_OBJECT_DECL (SCALEACTIONENTITY);
   //  CAST_DWG_OBJECT_TO_OBJECT_DECL (STDPART2D);
@@ -10033,8 +10029,8 @@ extern "C"
                         /*, size, data */) __nonnull_all;
   EXPORT Dwg_Entity_PROXY_ENTITY *dwg_add_PROXY_ENTITY (
       Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */) __nonnull_all;
-  EXPORT Dwg_Object_LAYERFILTER *
-  dwg_add_LAYERFILTER (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
+  EXPORT Dwg_Object_LAYER_FILTER *
+  dwg_add_LAYER_FILTER (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
   EXPORT Dwg_Object_LAYER_INDEX *
   dwg_add_LAYER_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
   EXPORT Dwg_Object_SPATIAL_FILTER *dwg_add_SPATIAL_FILTER (
@@ -10276,7 +10272,7 @@ extern "C"
 #define HAVE_NO_DWG_ADD_WIPEOUTVARIABLES
 #define HAVE_NO_DWG_ADD_XYPARAMETERENTITY
 
-#define HAVE_NO_DWG_ADD_LAYERFILTER
+#define HAVE_NO_DWG_ADD_LAYER_FILTER
 #define HAVE_NO_DWG_ADD_LAYER_INDEX
 #define HAVE_NO_DWG_ADD_SPATIAL_FILTER
 #define HAVE_NO_DWG_ADD_SPATIAL_INDEX

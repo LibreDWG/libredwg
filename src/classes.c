@@ -272,7 +272,7 @@ static const char *const _dwg_type_names_variable[] = {
   "IMAGE_BACKGROUND",                                         /* 650 */
   "INDEX",                                                    /* 651 */
   "LARGE_RADIAL_DIMENSION",                                   /* 652 */
-  "LAYERFILTER",                                              /* 653 */
+  "LAYER_FILTER",                                             /* 653 */
   "LAYER_INDEX",                                              /* 654 */
   "LAYOUTPRINTCONFIG",                                        /* 655 */
   "LEADEROBJECTCONTEXTDATA",                                  /* 656 */
@@ -1635,7 +1635,7 @@ static const char *_dwg_dxfnames_variable[] = {
   "IMAGE_BACKGROUND",                                         /* 650 */
   "INDEX",                                                    /* 651 */
   "LARGE_RADIAL_DIMENSION",                                   /* 652 */
-  "LAYERFILTER",                                              /* 653 */
+  "LAYER_FILTER",                                             /* 653 */
   "LAYER_INDEX",                                              /* 654 */
   "LAYOUTPRINTCONFIG",                                        /* 655 */
   "ACDB_LEADEROBJECTCONTEXTDATA_CLASS",                       /* 656 */
@@ -2681,7 +2681,7 @@ obj_has_strings (const Dwg_Object *obj)
       || type == DWG_TYPE_SUN || type == DWG_TYPE_RENDERSETTINGS
       || type == DWG_TYPE_MENTALRAYRENDERSETTINGS
       || type == DWG_TYPE_RAPIDRTRENDERSETTINGS || type == DWG_TYPE_DBCOLOR
-      || type == DWG_TYPE_MATERIAL || type == DWG_TYPE_LAYERFILTER
+      || type == DWG_TYPE_MATERIAL || type == DWG_TYPE_LAYER_FILTER
       || type == DWG_TYPE_ASSOCDEPENDENCY
       || type == DWG_TYPE_ASSOCEDGEACTIONPARAM
       || type == DWG_TYPE_CONTEXTDATAMANAGER

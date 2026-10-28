@@ -618,7 +618,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_IMAGE_BACKGROUND,
   DWG_TYPE_INDEX,
   DWG_TYPE_LARGE_RADIAL_DIMENSION,
-  DWG_TYPE_LAYERFILTER,
+  DWG_TYPE_LAYER_FILTER,
   DWG_TYPE_LAYER_INDEX,
   DWG_TYPE_LAYOUTPRINTCONFIG,
   DWG_TYPE_LEADEROBJECTCONTEXTDATA,
@@ -8085,12 +8085,12 @@ typedef struct _dwg_object_SECTION_SETTINGS
   Dwg_SECTION_typesettings *types;
 } Dwg_Object_SECTION_SETTINGS;
 
-typedef struct _dwg_object_LAYERFILTER
+typedef struct _dwg_object_LAYER_FILTER
 {
   struct _dwg_object_object *parent;
   BITCODE_BL num_names;
   BITCODE_T *names;
-} Dwg_Object_LAYERFILTER;
+} Dwg_Object_LAYER_FILTER;
 
 typedef struct _dwg_entity_ARCALIGNEDTEXT
 {
@@ -8939,7 +8939,7 @@ typedef struct _dwg_COMPOUNDOBJECTID
 } Dwg_COMPOUNDOBJECTID;
 
 // ODA Arx
-//typedef Dwg_Object_LAYERFILTER Dwg_Object_PARTIAL_VIEWING_FILTER;
+//typedef Dwg_Object_LAYER_FILTER Dwg_Object_PARTIAL_VIEWING_FILTER;
 
 typedef struct _dwg_PARTIAL_VIEWING_INDEX_Entry
 {
@@ -9740,7 +9740,7 @@ typedef struct _dwg_object_object
     Dwg_Object_IMAGEDEF *IMAGEDEF;
     Dwg_Object_IMAGEDEF_REACTOR *IMAGEDEF_REACTOR;
     Dwg_Object_INDEX *INDEX;
-    Dwg_Object_LAYERFILTER *LAYERFILTER;
+    Dwg_Object_LAYER_FILTER *LAYER_FILTER;
     Dwg_Object_LAYER_INDEX *LAYER_INDEX;
     Dwg_Object_LAYOUT *LAYOUT;
     Dwg_Object_LEADEROBJECTCONTEXTDATA *LEADEROBJECTCONTEXTDATA;
@@ -10677,7 +10677,6 @@ typedef struct _dwg_object_object
 //    Dwg_Object_PARAMMGR *PARAMMGR;
 //    Dwg_Object_PARAMSCOPE *PARAMSCOPE;
 //    Dwg_Object_PILLAR *PILLAR;
-//    Dwg_Object_RAPIDRTRENDERENVIRONMENT *RAPIDRTRENDERENVIRONMENT;
 //    Dwg_Object_ROTATEACTIONENTITY *ROTATEACTIONENTITY;
 //    Dwg_Object_SCALEACTIONENTITY *SCALEACTIONENTITY;
 //    Dwg_Object_STDPART2D *STDPART2D;
@@ -11928,7 +11927,7 @@ EXPORT int dwg_setup_IDBUFFER (Dwg_Object *obj);
 EXPORT int dwg_setup_IMAGEDEF (Dwg_Object *obj);
 EXPORT int dwg_setup_IMAGEDEF_REACTOR (Dwg_Object *obj);
 EXPORT int dwg_setup_INDEX (Dwg_Object *obj);
-EXPORT int dwg_setup_LAYERFILTER (Dwg_Object *obj);
+EXPORT int dwg_setup_LAYER_FILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYER_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUT (Dwg_Object *obj);
 EXPORT int dwg_setup_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
@@ -12896,7 +12895,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   //EXPORT int dwg_setup_PARAMMGR (Dwg_Object *obj);
   //EXPORT int dwg_setup_PARAMSCOPE (Dwg_Object *obj);
   //EXPORT int dwg_setup_PILLAR (Dwg_Object *obj);
-  //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
   //EXPORT int dwg_setup_ROTATEACTIONENTITY (Dwg_Object *obj);
   //EXPORT int dwg_setup_SCALEACTIONENTITY (Dwg_Object *obj);
   //EXPORT int dwg_setup_STDPART2D (Dwg_Object *obj);

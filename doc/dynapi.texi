@@ -10098,23 +10098,6 @@ H,	DXF 348
 @end vtable
 @end indentedblock
 
-@strong{LAYERFILTER} @anchor{LAYERFILTER}
-@cindex object, LAYERFILTER
-@vindex LAYERFILTER
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item num_names
-BL
-@item names
-TV*,	DXF 8
-
-@end vtable
-@end indentedblock
-
 @strong{LAYER_CONTROL} @anchor{LAYER_CONTROL}
 @cindex object, LAYER_CONTROL
 @vindex LAYER_CONTROL
@@ -10134,6 +10117,23 @@ BS,	DXF 70
 H*
 @item flags_r11
 RS
+
+@end vtable
+@end indentedblock
+
+@strong{LAYER_FILTER} @anchor{LAYER_FILTER}
+@cindex object, LAYER_FILTER
+@vindex LAYER_FILTER
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item num_names
+BL
+@item names
+TV*,	DXF 8
 
 @end vtable
 @end indentedblock

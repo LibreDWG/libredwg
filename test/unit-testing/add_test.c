@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2020 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2020-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -805,7 +805,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
     case DWG_TYPE_TABLECONTENT:
     case DWG_TYPE_TABLEGEOMETRY:
     case DWG_TYPE_TABLESTYLE:
-    case DWG_TYPE_LAYERFILTER:
+    case DWG_TYPE_LAYER_FILTER:
     case DWG_TYPE_LAYER_INDEX:
     case DWG_TYPE_SPATIAL_FILTER:
     case DWG_TYPE_SPATIAL_INDEX:
@@ -1073,7 +1073,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         free (dicts);
       }
       break;
-      // TEST_OBJECT (LAYERFILTER);
+      // TEST_OBJECT (LAYER_FILTER);
       // TEST_OBJECT (LAYER_INDEX);
       // TEST_OBJECT (SPATIAL_FILTER);
       // TEST_OBJECT (SPATIAL_INDEX);
@@ -1625,8 +1625,8 @@ main (int argc, char *argv[])
       error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION3,
                          "add_pdfdef3_2000", dxf);
 #endif
-#ifdef HAVE_DWG_ADD_LAYERFILTER
-      error += test_add (DWG_TYPE_LAYERFILTER, "add_layfilt_2000", dxf);
+#ifdef HAVE_DWG_ADD_LAYER_FILTER
+      error += test_add (DWG_TYPE_LAYER_FILTER, "add_layfilt_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_LAYER_INDEX
       error += test_add (DWG_TYPE_LAYER_INDEX, "add_layidx_2000", dxf);

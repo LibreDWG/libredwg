@@ -311,7 +311,6 @@ struct stringpool_t
     char stringpool_str367[sizeof("ASSOCBLENDSURFACEACTIONBODY")];
     char stringpool_str373[sizeof("ASSOCOFFSETSURFACEACTIONBODY")];
     char stringpool_str374[sizeof("FIELDLIST")];
-    char stringpool_str376[sizeof("LAYERFILTER")];
     char stringpool_str378[sizeof("STYLE_CONTROL")];
     char stringpool_str379[sizeof("ACSH_BOX_CLASS")];
     char stringpool_str381[sizeof("POLYLINE_2D")];
@@ -410,6 +409,7 @@ struct stringpool_t
     char stringpool_str626[sizeof("PARTIAL_VIEWING_INDEX")];
     char stringpool_str631[sizeof("MTEXTATTRIBUTEOBJECTCONTEXTDATA")];
     char stringpool_str633[sizeof("GROUND_PLANE_BACKGROUND")];
+    char stringpool_str637[sizeof("LAYER_FILTER")];
     char stringpool_str642[sizeof("WIPEOUT")];
     char stringpool_str643[sizeof("TVDEVICEPROPERTIES")];
     char stringpool_str646[sizeof("DWFUNDERLAY")];
@@ -634,7 +634,6 @@ static const struct stringpool_t stringpool_contents =
     "ASSOCBLENDSURFACEACTIONBODY",
     "ASSOCOFFSETSURFACEACTIONBODY",
     "FIELDLIST",
-    "LAYERFILTER",
     "STYLE_CONTROL",
     "ACSH_BOX_CLASS",
     "POLYLINE_2D",
@@ -733,6 +732,7 @@ static const struct stringpool_t stringpool_contents =
     "PARTIAL_VIEWING_INDEX",
     "MTEXTATTRIBUTEOBJECTCONTEXTDATA",
     "GROUND_PLANE_BACKGROUND",
+    "LAYER_FILTER",
     "WIPEOUT",
     "TVDEVICEPROPERTIES",
     "DWFUNDERLAY",
@@ -1204,10 +1204,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str373,     "ACDBASSOCOFFSETSURFACEACTIONBODY",  DWG_TYPE_ASSOCOFFSETSURFACEACTIONBODY,	0,	UNSTABLE},
 #line 287 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str374,                        "FIELDLIST",                         DWG_TYPE_FIELDLIST,	0,	STABLE},
-      {-1},
-#line 300 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str376,                      "LAYERFILTER",                       DWG_TYPE_LAYERFILTER,	0,	STABLE},
-      {-1},
+      {-1}, {-1}, {-1},
 #line 350 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str378,                    "STYLE_CONTROL",                     DWG_TYPE_STYLE_CONTROL,	0,	STABLE},
 #line 155 "src/objects.in"
@@ -1235,7 +1232,7 @@ in_word_set (const char *str, size_t len)
 #line 218 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str398,                    "ACDBASSOCVARIABLE",                 DWG_TYPE_ASSOCVARIABLE,	0,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1},
-#line 301 "src/objects.in"
+#line 300 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str403,                    "LAYER_CONTROL",                     DWG_TYPE_LAYER_CONTROL,	0,	STABLE},
 #line 159 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str404,              "ACSH_CYLINDER_CLASS",               DWG_TYPE_ACSH_CYLINDER_CLASS,	0,	STABLE},
@@ -1467,7 +1464,10 @@ in_word_set (const char *str, size_t len)
       {-1},
 #line 291 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str633,          "GROUND_PLANE_BACKGROUND",           DWG_TYPE_GROUND_PLANE_BACKGROUND,	0,	UNSTABLE},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1},
+#line 301 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str637,                     "LAYER_FILTER",                      DWG_TYPE_LAYER_FILTER,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
 #line 146 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str642,                   "WIPEOUT",                    DWG_TYPE_WIPEOUT,	1,	STABLE},
 #line 357 "src/objects.in"

@@ -964,7 +964,7 @@ main (int argc, char *argv[])
               || DWG_TYPE == DWG_TYPE_INDEX
               || DWG_TYPE == DWG_TYPE_LARGE_RADIAL_DIMENSION
               || DWG_TYPE == DWG_TYPE_LAYER_INDEX
-              || DWG_TYPE == DWG_TYPE_LAYERFILTER
+              || DWG_TYPE == DWG_TYPE_LAYER_FILTER
               || DWG_TYPE == DWG_TYPE_LIGHTLIST
               || DWG_TYPE == DWG_TYPE_LONG_TRANSACTION
               || DWG_TYPE == DWG_TYPE_OLEFRAME

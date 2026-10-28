@@ -12407,11 +12407,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else
                 goto search_field;
             }
-          else if (pair->code == 8 && obj->fixedtype == DWG_TYPE_LAYERFILTER
+          else if (pair->code == 8 && obj->fixedtype == DWG_TYPE_LAYER_FILTER
                    && strEQc (subclass, "AcDbLayerFilter"))
             {
               // num_names
-              Dwg_Object_LAYERFILTER *o = obj->tio.object->tio.LAYERFILTER;
+              Dwg_Object_LAYER_FILTER *o = obj->tio.object->tio.LAYER_FILTER;
               if (!o->names)
                 {
                   o->names = (BITCODE_T *)xcalloc (1, sizeof (BITCODE_T));

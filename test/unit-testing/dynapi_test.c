@@ -50153,57 +50153,6 @@ static int test_LAYER (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_LAYERFILTER (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_LAYERFILTER *restrict layerfilter = obj->tio.object->tio.LAYERFILTER;
-  failed = 0;
-  if (!obj_obj || !layerfilter)
-    {
-      fail ("NULL LAYERFILTER");
-      return 1;
-    }
-  {
-    BITCODE_TV* names;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "num_names", &count, NULL)
-        && dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "names", &names, NULL)
-        && names == layerfilter->names)
-      pass ();
-    else
-      fail ("LAYERFILTER.names [TV*] * %u num_names", count);
-  }
-  {
-    BITCODE_BL num_names;
-    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "num_names", &num_names, NULL)
-        && num_names == layerfilter->num_names)
-      pass ();
-    else
-      fail ("LAYERFILTER.num_names [BL] %u != %u", layerfilter->num_names, num_names);
-    num_names++;
-    if (dwg_dynapi_entity_set_value (layerfilter, "LAYERFILTER", "num_names", &num_names, 0)
-        && num_names == layerfilter->num_names)
-      pass ();
-    else
-      fail ("LAYERFILTER.num_names [BL] set+1 %u != %u", layerfilter->num_names, num_names);
-    layerfilter->num_names--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (layerfilter, "LAYERFILTER", "parent", &parent, NULL)
-        && !memcmp (&parent, &layerfilter->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("LAYERFILTER.parent [struct _dwg_object_object*]");
-  }
-  if (failed && (is_class_unstable ("LAYERFILTER") || is_class_debugging ("LAYERFILTER")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "LAYERFILTER", failed);
-      failed = 0;
-    }
-  return failed;
-}
 static int test_LAYER_CONTROL (const Dwg_Object *obj)
 {
   int error = 0;
@@ -50266,6 +50215,57 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("LAYER_CONTROL") || is_class_debugging ("LAYER_CONTROL")))
     {
       ok ("%s failed %d tests (TODO unstable)", "LAYER_CONTROL", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_LAYER_FILTER (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_LAYER_FILTER *restrict layer_filter = obj->tio.object->tio.LAYER_FILTER;
+  failed = 0;
+  if (!obj_obj || !layer_filter)
+    {
+      fail ("NULL LAYER_FILTER");
+      return 1;
+    }
+  {
+    BITCODE_TV* names;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (layer_filter, "LAYER_FILTER", "num_names", &count, NULL)
+        && dwg_dynapi_entity_value (layer_filter, "LAYER_FILTER", "names", &names, NULL)
+        && names == layer_filter->names)
+      pass ();
+    else
+      fail ("LAYER_FILTER.names [TV*] * %u num_names", count);
+  }
+  {
+    BITCODE_BL num_names;
+    if (dwg_dynapi_entity_value (layer_filter, "LAYER_FILTER", "num_names", &num_names, NULL)
+        && num_names == layer_filter->num_names)
+      pass ();
+    else
+      fail ("LAYER_FILTER.num_names [BL] %u != %u", layer_filter->num_names, num_names);
+    num_names++;
+    if (dwg_dynapi_entity_set_value (layer_filter, "LAYER_FILTER", "num_names", &num_names, 0)
+        && num_names == layer_filter->num_names)
+      pass ();
+    else
+      fail ("LAYER_FILTER.num_names [BL] set+1 %u != %u", layer_filter->num_names, num_names);
+    layer_filter->num_names--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (layer_filter, "LAYER_FILTER", "parent", &parent, NULL)
+        && !memcmp (&parent, &layer_filter->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("LAYER_FILTER.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("LAYER_FILTER") || is_class_debugging ("LAYER_FILTER")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LAYER_FILTER", failed);
       failed = 0;
     }
   return failed;
@@ -63973,10 +63973,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_INDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER)
     error += test_LAYER(obj);
-  else  if (obj->fixedtype == DWG_TYPE_LAYERFILTER)
-    error += test_LAYERFILTER(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER_CONTROL)
     error += test_LAYER_CONTROL(obj);
+  else  if (obj->fixedtype == DWG_TYPE_LAYER_FILTER)
+    error += test_LAYER_FILTER(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER_INDEX)
     error += test_LAYER_INDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYOUT)
@@ -64603,10 +64603,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_INDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER)
     error += test_LAYER (obj);
-  else  if (obj->fixedtype == DWG_TYPE_LAYERFILTER)
-    error += test_LAYERFILTER (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER_CONTROL)
     error += test_LAYER_CONTROL (obj);
+  else  if (obj->fixedtype == DWG_TYPE_LAYER_FILTER)
+    error += test_LAYER_FILTER (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER_INDEX)
     error += test_LAYER_INDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYOUT)
@@ -67167,16 +67167,6 @@ test_sizes (void)
                size1, size2);
       error++;
     }
-  size1 = sizeof (Dwg_Object_LAYERFILTER);
-  size2 = dwg_dynapi_fields_size ("LAYERFILTER");
-  if (size1 != size2)
-    {
-      fprintf (stderr,
-               "sizeof(Dwg_Object_LAYERFILTER): %d != "
-               "dwg_dynapi_fields_size (\"LAYERFILTER\"): %d\n",
-               size1, size2);
-      error++;
-    }
   size1 = sizeof (Dwg_Object_LAYER_CONTROL);
   size2 = dwg_dynapi_fields_size ("LAYER_CONTROL");
   if (size1 != size2)
@@ -67184,6 +67174,16 @@ test_sizes (void)
       fprintf (stderr,
                "sizeof(Dwg_Object_LAYER_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"LAYER_CONTROL\"): %d\n",
+               size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_LAYER_FILTER);
+  size2 = dwg_dynapi_fields_size ("LAYER_FILTER");
+  if (size1 != size2)
+    {
+      fprintf (stderr,
+               "sizeof(Dwg_Object_LAYER_FILTER): %d != "
+               "dwg_dynapi_fields_size (\"LAYER_FILTER\"): %d\n",
                size1, size2);
       error++;
     }
