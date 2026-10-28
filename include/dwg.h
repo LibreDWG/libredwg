@@ -6621,17 +6621,19 @@ typedef struct _dwg_object_ASSOCPERSSUBENTMANAGER
   Dwg_ASSOCPARAMBASEDACTIONBODY pab
 
 #define ASSOCCOMPOUNDACTIONPARAM_fields \
-  BITCODE_BS class_version; \
+  BITCODE_BS acap_version; \
   BITCODE_BS bs1; \
   BITCODE_BL num_params; \
-  BITCODE_H *params; \
-  BITCODE_B has_child_param; \
+  BITCODE_H *params
+
+#define ASSOCCOMPOUNDACTIONPARAMCHILD_fields    \
   BITCODE_BS child_status; \
   BITCODE_BL child_id; \
   BITCODE_H child_param; \
   BITCODE_H h330_2; \
   BITCODE_BL bl2; \
   BITCODE_H h330_3
+
 
 typedef struct _dwg_object_ASSOCACTIONPARAM
 {
@@ -6649,6 +6651,7 @@ typedef struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;
   ASSOCCOMPOUNDACTIONPARAM_fields;
+  ASSOCCOMPOUNDACTIONPARAMCHILD_fields;
   BITCODE_BS status;
   BITCODE_RC osnap_mode;
   BITCODE_BD param; // 40 -1.0
@@ -6659,6 +6662,7 @@ typedef struct _dwg_object_ASSOCPOINTREFACTIONPARAM
   struct _dwg_object_object *parent;
   ASSOCACTIONPARAM_fields;
   ASSOCCOMPOUNDACTIONPARAM_fields;
+  ASSOCCOMPOUNDACTIONPARAMCHILD_fields;
 } Dwg_Object_ASSOCPOINTREFACTIONPARAM;
 
 typedef struct _dwg_object_ASSOCASMBODYACTIONPARAM
@@ -6724,7 +6728,7 @@ typedef struct _dwg_object_ASSOCPATHACTIONPARAM
   ASSOCACTIONPARAM_fields;
   ASSOCCOMPOUNDACTIONPARAM_fields;
   /* AcDbAssocPathActionParam */
-  BITCODE_BL version;	/*!< DXF 90 */
+  BITCODE_BL apap_version;	/*!< DXF 90 */
 } Dwg_Object_ASSOCPATHACTIONPARAM;
 
 typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM

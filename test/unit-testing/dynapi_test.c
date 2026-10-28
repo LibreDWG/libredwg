@@ -31958,19 +31958,19 @@ static int test_ASSOCCOMPOUNDACTIONPARAM (const Dwg_Object *obj)
     assoccompoundactionparam->aap_version--;
   }
   {
-    BITCODE_BL bl2;
-    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "bl2", &bl2, NULL)
-        && bl2 == assoccompoundactionparam->bl2)
+    BITCODE_BS acap_version;
+    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "acap_version", &acap_version, NULL)
+        && acap_version == assoccompoundactionparam->acap_version)
       pass ();
     else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.bl2 [BL] %u != %u", assoccompoundactionparam->bl2, bl2);
-    bl2++;
-    if (dwg_dynapi_entity_set_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "bl2", &bl2, 0)
-        && bl2 == assoccompoundactionparam->bl2)
+      fail ("ASSOCCOMPOUNDACTIONPARAM.acap_version [BS] %hu != %hu", assoccompoundactionparam->acap_version, acap_version);
+    acap_version++;
+    if (dwg_dynapi_entity_set_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "acap_version", &acap_version, 0)
+        && acap_version == assoccompoundactionparam->acap_version)
       pass ();
     else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.bl2 [BL] set+1 %u != %u", assoccompoundactionparam->bl2, bl2);
-    assoccompoundactionparam->bl2--;
+      fail ("ASSOCCOMPOUNDACTIONPARAM.acap_version [BS] set+1 %hu != %hu", assoccompoundactionparam->acap_version, acap_version);
+    assoccompoundactionparam->acap_version--;
   }
   {
     BITCODE_BS bs1;
@@ -31986,90 +31986,6 @@ static int test_ASSOCCOMPOUNDACTIONPARAM (const Dwg_Object *obj)
     else
       fail ("ASSOCCOMPOUNDACTIONPARAM.bs1 [BS] set+1 %hu != %hu", assoccompoundactionparam->bs1, bs1);
     assoccompoundactionparam->bs1--;
-  }
-  {
-    BITCODE_BL child_id;
-    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "child_id", &child_id, NULL)
-        && child_id == assoccompoundactionparam->child_id)
-      pass ();
-    else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.child_id [BL] %u != %u", assoccompoundactionparam->child_id, child_id);
-    child_id++;
-    if (dwg_dynapi_entity_set_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "child_id", &child_id, 0)
-        && child_id == assoccompoundactionparam->child_id)
-      pass ();
-    else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.child_id [BL] set+1 %u != %u", assoccompoundactionparam->child_id, child_id);
-    assoccompoundactionparam->child_id--;
-  }
-  {
-    BITCODE_H child_param;
-    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "child_param", &child_param, NULL)
-        && !memcmp (&child_param, &assoccompoundactionparam->child_param, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOCCOMPOUNDACTIONPARAM.child_param [H]");
-  }
-  {
-    BITCODE_BS child_status;
-    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "child_status", &child_status, NULL)
-        && child_status == assoccompoundactionparam->child_status)
-      pass ();
-    else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.child_status [BS] %hu != %hu", assoccompoundactionparam->child_status, child_status);
-    child_status++;
-    if (dwg_dynapi_entity_set_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "child_status", &child_status, 0)
-        && child_status == assoccompoundactionparam->child_status)
-      pass ();
-    else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.child_status [BS] set+1 %hu != %hu", assoccompoundactionparam->child_status, child_status);
-    assoccompoundactionparam->child_status--;
-  }
-  {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "class_version", &class_version, NULL)
-        && class_version == assoccompoundactionparam->class_version)
-      pass ();
-    else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.class_version [BS] %hu != %hu", assoccompoundactionparam->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "class_version", &class_version, 0)
-        && class_version == assoccompoundactionparam->class_version)
-      pass ();
-    else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.class_version [BS] set+1 %hu != %hu", assoccompoundactionparam->class_version, class_version);
-    assoccompoundactionparam->class_version--;
-  }
-  {
-    BITCODE_H h330_2;
-    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "h330_2", &h330_2, NULL)
-        && !memcmp (&h330_2, &assoccompoundactionparam->h330_2, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOCCOMPOUNDACTIONPARAM.h330_2 [H]");
-  }
-  {
-    BITCODE_H h330_3;
-    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "h330_3", &h330_3, NULL)
-        && !memcmp (&h330_3, &assoccompoundactionparam->h330_3, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOCCOMPOUNDACTIONPARAM.h330_3 [H]");
-  }
-  {
-    BITCODE_B has_child_param;
-    if (dwg_dynapi_entity_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "has_child_param", &has_child_param, NULL)
-        && has_child_param == assoccompoundactionparam->has_child_param)
-      pass ();
-    else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.has_child_param [B] " FORMAT_B " != " FORMAT_B "", assoccompoundactionparam->has_child_param, has_child_param);
-    has_child_param++;
-    if (dwg_dynapi_entity_set_value (assoccompoundactionparam, "ASSOCCOMPOUNDACTIONPARAM", "has_child_param", &has_child_param, 0)
-        && has_child_param == assoccompoundactionparam->has_child_param)
-      pass ();
-    else
-      fail ("ASSOCCOMPOUNDACTIONPARAM.has_child_param [B] set+1 " FORMAT_B " != " FORMAT_B "", assoccompoundactionparam->has_child_param, has_child_param);
-    assoccompoundactionparam->has_child_param--;
   }
   {
     BITCODE_BS is_r2013;
@@ -34187,6 +34103,21 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     assocosnappointrefactionparam->aap_version--;
   }
   {
+    BITCODE_BS acap_version;
+    if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "acap_version", &acap_version, NULL)
+        && acap_version == assocosnappointrefactionparam->acap_version)
+      pass ();
+    else
+      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.acap_version [BS] %hu != %hu", assocosnappointrefactionparam->acap_version, acap_version);
+    acap_version++;
+    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "acap_version", &acap_version, 0)
+        && acap_version == assocosnappointrefactionparam->acap_version)
+      pass ();
+    else
+      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.acap_version [BS] set+1 %hu != %hu", assocosnappointrefactionparam->acap_version, acap_version);
+    assocosnappointrefactionparam->acap_version--;
+  }
+  {
     BITCODE_BL bl2;
     if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "bl2", &bl2, NULL)
         && bl2 == assocosnappointrefactionparam->bl2)
@@ -34255,21 +34186,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
     assocosnappointrefactionparam->child_status--;
   }
   {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "class_version", &class_version, NULL)
-        && class_version == assocosnappointrefactionparam->class_version)
-      pass ();
-    else
-      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.class_version [BS] %hu != %hu", assocosnappointrefactionparam->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "class_version", &class_version, 0)
-        && class_version == assocosnappointrefactionparam->class_version)
-      pass ();
-    else
-      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.class_version [BS] set+1 %hu != %hu", assocosnappointrefactionparam->class_version, class_version);
-    assocosnappointrefactionparam->class_version--;
-  }
-  {
     BITCODE_H h330_2;
     if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "h330_2", &h330_2, NULL)
         && !memcmp (&h330_2, &assocosnappointrefactionparam->h330_2, sizeof (BITCODE_H)))
@@ -34284,21 +34200,6 @@ static int test_ASSOCOSNAPPOINTREFACTIONPARAM (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCOSNAPPOINTREFACTIONPARAM.h330_3 [H]");
-  }
-  {
-    BITCODE_B has_child_param;
-    if (dwg_dynapi_entity_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "has_child_param", &has_child_param, NULL)
-        && has_child_param == assocosnappointrefactionparam->has_child_param)
-      pass ();
-    else
-      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.has_child_param [B] " FORMAT_B " != " FORMAT_B "", assocosnappointrefactionparam->has_child_param, has_child_param);
-    has_child_param++;
-    if (dwg_dynapi_entity_set_value (assocosnappointrefactionparam, "ASSOCOSNAPPOINTREFACTIONPARAM", "has_child_param", &has_child_param, 0)
-        && has_child_param == assocosnappointrefactionparam->has_child_param)
-      pass ();
-    else
-      fail ("ASSOCOSNAPPOINTREFACTIONPARAM.has_child_param [B] set+1 " FORMAT_B " != " FORMAT_B "", assocosnappointrefactionparam->has_child_param, has_child_param);
-    assocosnappointrefactionparam->has_child_param--;
   }
   {
     BITCODE_BS is_r2013;
@@ -34524,19 +34425,34 @@ static int test_ASSOCPATHACTIONPARAM (const Dwg_Object *obj)
     assocpathactionparam->aap_version--;
   }
   {
-    BITCODE_BL bl2;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "bl2", &bl2, NULL)
-        && bl2 == assocpathactionparam->bl2)
+    BITCODE_BS acap_version;
+    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "acap_version", &acap_version, NULL)
+        && acap_version == assocpathactionparam->acap_version)
       pass ();
     else
-      fail ("ASSOCPATHACTIONPARAM.bl2 [BL] %u != %u", assocpathactionparam->bl2, bl2);
-    bl2++;
-    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "bl2", &bl2, 0)
-        && bl2 == assocpathactionparam->bl2)
+      fail ("ASSOCPATHACTIONPARAM.acap_version [BS] %hu != %hu", assocpathactionparam->acap_version, acap_version);
+    acap_version++;
+    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "acap_version", &acap_version, 0)
+        && acap_version == assocpathactionparam->acap_version)
       pass ();
     else
-      fail ("ASSOCPATHACTIONPARAM.bl2 [BL] set+1 %u != %u", assocpathactionparam->bl2, bl2);
-    assocpathactionparam->bl2--;
+      fail ("ASSOCPATHACTIONPARAM.acap_version [BS] set+1 %hu != %hu", assocpathactionparam->acap_version, acap_version);
+    assocpathactionparam->acap_version--;
+  }
+  {
+    BITCODE_BL apap_version;
+    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "apap_version", &apap_version, NULL)
+        && apap_version == assocpathactionparam->apap_version)
+      pass ();
+    else
+      fail ("ASSOCPATHACTIONPARAM.apap_version [BL] %u != %u", assocpathactionparam->apap_version, apap_version);
+    apap_version++;
+    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "apap_version", &apap_version, 0)
+        && apap_version == assocpathactionparam->apap_version)
+      pass ();
+    else
+      fail ("ASSOCPATHACTIONPARAM.apap_version [BL] set+1 %u != %u", assocpathactionparam->apap_version, apap_version);
+    assocpathactionparam->apap_version--;
   }
   {
     BITCODE_BS bs1;
@@ -34552,90 +34468,6 @@ static int test_ASSOCPATHACTIONPARAM (const Dwg_Object *obj)
     else
       fail ("ASSOCPATHACTIONPARAM.bs1 [BS] set+1 %hu != %hu", assocpathactionparam->bs1, bs1);
     assocpathactionparam->bs1--;
-  }
-  {
-    BITCODE_BL child_id;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "child_id", &child_id, NULL)
-        && child_id == assocpathactionparam->child_id)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.child_id [BL] %u != %u", assocpathactionparam->child_id, child_id);
-    child_id++;
-    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "child_id", &child_id, 0)
-        && child_id == assocpathactionparam->child_id)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.child_id [BL] set+1 %u != %u", assocpathactionparam->child_id, child_id);
-    assocpathactionparam->child_id--;
-  }
-  {
-    BITCODE_H child_param;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "child_param", &child_param, NULL)
-        && !memcmp (&child_param, &assocpathactionparam->child_param, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOCPATHACTIONPARAM.child_param [H]");
-  }
-  {
-    BITCODE_BS child_status;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "child_status", &child_status, NULL)
-        && child_status == assocpathactionparam->child_status)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.child_status [BS] %hu != %hu", assocpathactionparam->child_status, child_status);
-    child_status++;
-    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "child_status", &child_status, 0)
-        && child_status == assocpathactionparam->child_status)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.child_status [BS] set+1 %hu != %hu", assocpathactionparam->child_status, child_status);
-    assocpathactionparam->child_status--;
-  }
-  {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "class_version", &class_version, NULL)
-        && class_version == assocpathactionparam->class_version)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.class_version [BS] %hu != %hu", assocpathactionparam->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "class_version", &class_version, 0)
-        && class_version == assocpathactionparam->class_version)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.class_version [BS] set+1 %hu != %hu", assocpathactionparam->class_version, class_version);
-    assocpathactionparam->class_version--;
-  }
-  {
-    BITCODE_H h330_2;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "h330_2", &h330_2, NULL)
-        && !memcmp (&h330_2, &assocpathactionparam->h330_2, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOCPATHACTIONPARAM.h330_2 [H]");
-  }
-  {
-    BITCODE_H h330_3;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "h330_3", &h330_3, NULL)
-        && !memcmp (&h330_3, &assocpathactionparam->h330_3, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ASSOCPATHACTIONPARAM.h330_3 [H]");
-  }
-  {
-    BITCODE_B has_child_param;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "has_child_param", &has_child_param, NULL)
-        && has_child_param == assocpathactionparam->has_child_param)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.has_child_param [B] " FORMAT_B " != " FORMAT_B "", assocpathactionparam->has_child_param, has_child_param);
-    has_child_param++;
-    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "has_child_param", &has_child_param, 0)
-        && has_child_param == assocpathactionparam->has_child_param)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.has_child_param [B] set+1 " FORMAT_B " != " FORMAT_B "", assocpathactionparam->has_child_param, has_child_param);
-    assocpathactionparam->has_child_param--;
   }
   {
     BITCODE_BS is_r2013;
@@ -34694,21 +34526,6 @@ static int test_ASSOCPATHACTIONPARAM (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCPATHACTIONPARAM.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_BL version;
-    if (dwg_dynapi_entity_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "version", &version, NULL)
-        && version == assocpathactionparam->version)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.version [BL] %u != %u", assocpathactionparam->version, version);
-    version++;
-    if (dwg_dynapi_entity_set_value (assocpathactionparam, "ASSOCPATHACTIONPARAM", "version", &version, 0)
-        && version == assocpathactionparam->version)
-      pass ();
-    else
-      fail ("ASSOCPATHACTIONPARAM.version [BL] set+1 %u != %u", assocpathactionparam->version, version);
-    assocpathactionparam->version--;
   }
   if (failed && (is_class_unstable ("ASSOCPATHACTIONPARAM") || is_class_debugging ("ASSOCPATHACTIONPARAM")))
     {
@@ -35027,6 +34844,21 @@ static int test_ASSOCPOINTREFACTIONPARAM (const Dwg_Object *obj)
     assocpointrefactionparam->aap_version--;
   }
   {
+    BITCODE_BS acap_version;
+    if (dwg_dynapi_entity_value (assocpointrefactionparam, "ASSOCPOINTREFACTIONPARAM", "acap_version", &acap_version, NULL)
+        && acap_version == assocpointrefactionparam->acap_version)
+      pass ();
+    else
+      fail ("ASSOCPOINTREFACTIONPARAM.acap_version [BS] %hu != %hu", assocpointrefactionparam->acap_version, acap_version);
+    acap_version++;
+    if (dwg_dynapi_entity_set_value (assocpointrefactionparam, "ASSOCPOINTREFACTIONPARAM", "acap_version", &acap_version, 0)
+        && acap_version == assocpointrefactionparam->acap_version)
+      pass ();
+    else
+      fail ("ASSOCPOINTREFACTIONPARAM.acap_version [BS] set+1 %hu != %hu", assocpointrefactionparam->acap_version, acap_version);
+    assocpointrefactionparam->acap_version--;
+  }
+  {
     BITCODE_BL bl2;
     if (dwg_dynapi_entity_value (assocpointrefactionparam, "ASSOCPOINTREFACTIONPARAM", "bl2", &bl2, NULL)
         && bl2 == assocpointrefactionparam->bl2)
@@ -35095,21 +34927,6 @@ static int test_ASSOCPOINTREFACTIONPARAM (const Dwg_Object *obj)
     assocpointrefactionparam->child_status--;
   }
   {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (assocpointrefactionparam, "ASSOCPOINTREFACTIONPARAM", "class_version", &class_version, NULL)
-        && class_version == assocpointrefactionparam->class_version)
-      pass ();
-    else
-      fail ("ASSOCPOINTREFACTIONPARAM.class_version [BS] %hu != %hu", assocpointrefactionparam->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (assocpointrefactionparam, "ASSOCPOINTREFACTIONPARAM", "class_version", &class_version, 0)
-        && class_version == assocpointrefactionparam->class_version)
-      pass ();
-    else
-      fail ("ASSOCPOINTREFACTIONPARAM.class_version [BS] set+1 %hu != %hu", assocpointrefactionparam->class_version, class_version);
-    assocpointrefactionparam->class_version--;
-  }
-  {
     BITCODE_H h330_2;
     if (dwg_dynapi_entity_value (assocpointrefactionparam, "ASSOCPOINTREFACTIONPARAM", "h330_2", &h330_2, NULL)
         && !memcmp (&h330_2, &assocpointrefactionparam->h330_2, sizeof (BITCODE_H)))
@@ -35124,21 +34941,6 @@ static int test_ASSOCPOINTREFACTIONPARAM (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOCPOINTREFACTIONPARAM.h330_3 [H]");
-  }
-  {
-    BITCODE_B has_child_param;
-    if (dwg_dynapi_entity_value (assocpointrefactionparam, "ASSOCPOINTREFACTIONPARAM", "has_child_param", &has_child_param, NULL)
-        && has_child_param == assocpointrefactionparam->has_child_param)
-      pass ();
-    else
-      fail ("ASSOCPOINTREFACTIONPARAM.has_child_param [B] " FORMAT_B " != " FORMAT_B "", assocpointrefactionparam->has_child_param, has_child_param);
-    has_child_param++;
-    if (dwg_dynapi_entity_set_value (assocpointrefactionparam, "ASSOCPOINTREFACTIONPARAM", "has_child_param", &has_child_param, 0)
-        && has_child_param == assocpointrefactionparam->has_child_param)
-      pass ();
-    else
-      fail ("ASSOCPOINTREFACTIONPARAM.has_child_param [B] set+1 " FORMAT_B " != " FORMAT_B "", assocpointrefactionparam->has_child_param, has_child_param);
-    assocpointrefactionparam->has_child_param--;
   }
   {
     BITCODE_BS is_r2013;

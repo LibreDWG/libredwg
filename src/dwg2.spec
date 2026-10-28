@@ -5773,16 +5773,17 @@ DWG_OBJECT_END
 
 #define AcDbAssocCompoundActionParam_fields \
   SUBCLASS (AcDbAssocCompoundActionParam); \
-  FIELD_BS (class_version, 90); \
+  FIELD_BS (acap_version, 90); \
   FIELD_BS (bs1, 90); \
   FIELD_BL (num_params, 90); \
-  HANDLE_VECTOR (params, num_params, 4, 360); \
-  if (FIELD_VALUE (has_child_param)) /* FIXME */ \
-    { \
-      FIELD_BS (child_status, 90); \
-      FIELD_BL (child_id, 90); \
-      FIELD_HANDLE (child_param, 3, 330); \
-    } \
+  HANDLE_VECTOR (params, num_params, 4, 360)
+
+/* The child parameter block exists only for the AcDbAssocPointRefActionParam
+   and AcDbAssocOsnapPointRefActionParam subclasses (has_child = 1). */
+#define AcDbAssocCompoundActionParamChild_fields  \
+  FIELD_BS (child_status, 90); \
+  FIELD_BL (child_id, 90); \
+  FIELD_HANDLE (child_param, 3, 330); \
   if (FIELD_VALUE (child_id)) \
     { \
       FIELD_HANDLE (h330_2, 3, 330); \
@@ -5810,6 +5811,7 @@ DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocActionParam_fields;
   AcDbAssocCompoundActionParam_fields;
+  AcDbAssocCompoundActionParamChild_fields;
   SUBCLASS (AcDbAssocPathActionParam);
   SUBCLASS (ACDBASSOCOSNAPPOINTREFACTIONPARAM);
   FIELD_BS (status, 90);
@@ -5818,16 +5820,7 @@ DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// not enough coverage
-DWG_OBJECT (ASSOCPOINTREFACTIONPARAM)
-  HANDLE_UNKNOWN_BITS;
-  AcDbAssocActionParam_fields;
-  AcDbAssocCompoundActionParam_fields;
-  SUBCLASS (AcDbAssocPointRefActionParam);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// unused
+// yet unused. we use a SUBCLASS
 #define AcDbAssocPathActionParam_fields(pap)              \
   SUBCLASS (AcDbAssocPathActionParam);                    \
   SUB_FIELD_BL (pap,status, 90);                          \
@@ -5835,7 +5828,7 @@ DWG_OBJECT_END
   SUB_FIELD_BS (pap,bs1, 90);                             \
   SUB_FIELD_BL (pap,num_params, 90);                      \
   SUB_HANDLE_VECTOR (pap, params, num_params, 4, 360);    \
-  if (FIELD_VALUE (pap.has_child_param)) {                \
+  if (FIELD_VALUE (pap.has_child)) {                      \
     SUB_FIELD_BS (pap,child_status, 90);                  \
     SUB_FIELD_BL (pap,child_id, 90);                      \
     SUB_FIELD_HANDLE (pap,child_param, 3, 330);           \
@@ -5845,6 +5838,16 @@ DWG_OBJECT_END
     SUB_FIELD_BL (pap,bl2, 90);                           \
     SUB_FIELD_HANDLE (pap,h330_3, 3, 330);                \
   }
+
+// not enough coverage
+DWG_OBJECT (ASSOCPOINTREFACTIONPARAM)
+  HANDLE_UNKNOWN_BITS;
+  AcDbAssocActionParam_fields;
+  AcDbAssocCompoundActionParam_fields;
+  AcDbAssocCompoundActionParamChild_fields;
+  SUBCLASS (AcDbAssocPointRefActionParam);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 // not enough coverage
 DWG_OBJECT (ASSOCOBJECTACTIONPARAM)
@@ -5863,7 +5866,7 @@ DWG_OBJECT (ASSOCPATHACTIONPARAM)
   AcDbAssocActionParam_fields;
   AcDbAssocCompoundActionParam_fields;
   SUBCLASS (AcDbAssocPathActionParam);
-  FIELD_BL (version, 90);
+  FIELD_BL (apap_version, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
