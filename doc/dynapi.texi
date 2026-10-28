@@ -6377,6 +6377,14 @@ BS,	DXF 90
 B,	DXF 290
 @item classname
 T,	DXF 1
+@item has_classname
+B
+@item class_code
+BL
+@item num_values
+BL
+@item values
+BL*
 @item dependent_on_compound_object
 B,	DXF 290
 
@@ -6934,6 +6942,12 @@ BD,	DXF 40
 struct _dwg_object_object*
 @item assocdep
 Dwg_Object_ASSOCDEPENDENCY
+@item class_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item value
+Dwg_EvalVariant
 
 @end vtable
 @end indentedblock
@@ -6975,7 +6989,7 @@ BL
 Dwg_VALUEPARAM*
 @item name
 T,	DXF 1
-@item t58
+@item expression
 T,	DXF 1
 @item evaluator
 T,	DXF 1
@@ -6983,12 +6997,16 @@ T,	DXF 1
 T,	DXF 1
 @item value
 Dwg_EvalVariant
-@item has_t78
+@item has_cached_value
 B,	DXF 290
-@item t78
+@item cached_value
 T,	DXF 1
-@item b290
+@item flag
 B,	DXF 290
+@item num_var_deps
+BL,	DXF 90
+@item var_deps
+Dwg_ASSOCVARIABLE_Dep*
 
 @end vtable
 @end indentedblock
@@ -13168,6 +13186,22 @@ B
 BS
 @item assocdep
 H
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_ASSOCVARIABLE_Dep} @anchor{Dwg_ASSOCVARIABLE_Dep}
+@vindex Dwg_ASSOCVARIABLE_Dep
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_ASSOCVARIABLE*
+@item dependency
+H,	DXF 330
+@item flags
+BL,	DXF 90
 
 @end vtable
 @end indentedblock

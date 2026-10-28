@@ -6326,8 +6326,16 @@ typedef struct _dwg_object_ASSOCDEPENDENCY
   BITCODE_H  node; 				/*<! DXF 330 */
 } Dwg_Object_ASSOCDEPENDENCY;
 
+/* Until r2010 the classname is stored as text. Since r2013 a leading
+   flag and a class code (1 AcDbAssocSingleEdgePersSubentId without values,
+   3 AcDbAssocEdgePersSubentId with 3 values, 5
+   AcDbAssocAsmBasedEntityPersSubentId) replace it. */
 #define ASSOCPERSSUBENTID_fields                \
   BITCODE_T classname; /* DXF  1 */             \
+  BITCODE_B has_classname;                      \
+  BITCODE_BL class_code;                        \
+  BITCODE_BL num_values;                        \
+  BITCODE_BL *values;                           \
   BITCODE_B dependent_on_compound_object /* DXF 290 */
 
 #define ASSOCEDGEPERSSUBENTID_fields            \
@@ -6352,6 +6360,9 @@ typedef struct _dwg_object_ASSOCVALUEDEPENDENCY
 {
   struct _dwg_object_object *parent;
   Dwg_Object_ASSOCDEPENDENCY assocdep;
+  BITCODE_BL class_version;	/*<! DXF 90 */
+  BITCODE_T name;		/*<! DXF 1 */
+  Dwg_EvalVariant value;
 } Dwg_Object_ASSOCVALUEDEPENDENCY;
 
 // stable
@@ -6477,19 +6488,28 @@ typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
   Dwg_CONSTRAINTGROUPNODE *nodes;
 } Dwg_Object_ASSOC2DCONSTRAINTGROUP;
 
+typedef struct _dwg_ASSOCVARIABLE_Dep
+{
+  struct _dwg_object_ASSOCVARIABLE *parent;
+  BITCODE_H dependency;	/*<! DXF 330 */
+  BITCODE_BL flags;	/*<! DXF 90 */
+} Dwg_ASSOCVARIABLE_Dep;
+
 typedef struct _dwg_object_ASSOCVARIABLE
 {
   struct _dwg_object_object *parent;
   BITCODE_BS av_class_version;
   ASSOCACTION_fields;
   BITCODE_T name;
-  BITCODE_T t58;
+  BITCODE_T expression;
   BITCODE_T evaluator;
   BITCODE_T desc;
   Dwg_EvalVariant value;
-  BITCODE_B has_t78;
-  BITCODE_T t78;
-  BITCODE_B b290;
+  BITCODE_B has_cached_value;
+  BITCODE_T cached_value;
+  BITCODE_B flag;
+  BITCODE_BL num_var_deps;
+  Dwg_ASSOCVARIABLE_Dep *var_deps;
 } Dwg_Object_ASSOCVARIABLE;
 
 // NodeInfo

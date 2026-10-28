@@ -9,14 +9,15 @@ api_process (dwg_object *obj)
   BITCODE_BS av_class_version;
   ASSOCACTION_fields;
   BITCODE_T name;
-  BITCODE_T t58;
+  BITCODE_T expression;
   BITCODE_T evaluator;
   BITCODE_T desc;
   // BITCODE_BSd value_type;
   Dwg_EvalVariant value;
-  BITCODE_B has_t78;
-  BITCODE_T t78;
-  BITCODE_B b290;
+  BITCODE_B has_cached_value;
+  BITCODE_T cached_value;
+  BITCODE_B flag;
+  BITCODE_BL num_var_deps;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   // #ifdef DEBUG_CLASSES
@@ -45,7 +46,7 @@ api_process (dwg_object *obj)
 
   // ASSOCVARIABLE
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, name);
-  CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, t58);
+  CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, expression);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, evaluator);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, desc);
   CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, code, BS);
@@ -76,8 +77,17 @@ api_process (dwg_object *obj)
     default:
       fail ("Unknown ASSOCVARIABLE.value.code %u", _obj->value.code);
     }
-  CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, has_t78, B);
-  CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, t78);
-  CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, b290, B);
+  CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, has_cached_value, B);
+  if (has_cached_value)
+    {
+      CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, cached_value);
+    }
+  CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, flag, B);
+  CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_var_deps, BL);
+  for (unsigned i = 0; i < num_var_deps; i++)
+    {
+      CHK_SUBCLASS_H (_obj->var_deps[i], ASSOCVARIABLE_Dep, dependency);
+      CHK_SUBCLASS_TYPE (_obj->var_deps[i], ASSOCVARIABLE_Dep, flags, BL);
+    }
   // #endif
 }

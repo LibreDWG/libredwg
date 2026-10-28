@@ -3130,9 +3130,39 @@ DWG_OBJECT_END
   FIELD_BL (subent_index, 90);         \
   FIELD_B (dependent_on_compound_object, 290)
 
-#define AcDbAssocPersSubentId_fields            \
-  SUBCLASS (AcDbAssocPersSubentId);             \
-  FIELD_T (classname, 1);                       \
+#ifdef IS_DXF
+#  define AcDbAssocPersSubentId_dxf_classname                         \
+    if (FIELD_VALUE (classname)) {                                    \
+      FIELD_T (classname, 1);                                         \
+    } else if (FIELD_VALUE (class_code) == 1) {                       \
+      VALUE_TVc ("AcDbAssocSingleEdgePersSubentId", 1);               \
+    } else if (FIELD_VALUE (class_code) == 3) {                       \
+      VALUE_TVc ("AcDbAssocEdgePersSubentId", 1);                     \
+    } else if (FIELD_VALUE (class_code) == 5) {                       \
+      VALUE_TVc ("AcDbAssocAsmBasedEntityPersSubentId", 1);           \
+    }
+#else
+#  define AcDbAssocPersSubentId_dxf_classname FIELD_T (classname, 1);
+#endif
+
+#define AcDbAssocPersSubentId_fields                                  \
+  SUBCLASS (AcDbAssocPersSubentId);                                   \
+  DXF {                                                               \
+    AcDbAssocPersSubentId_dxf_classname                               \
+  }                                                                   \
+  else {                                                              \
+    PRE (R_2013) {                                                    \
+      FIELD_T (classname, 1);                                         \
+    } LATER_VERSIONS {                                                \
+      FIELD_B (has_classname, 0);                                     \
+      FIELD_BL (class_code, 0);                                       \
+      DECODER {                                                       \
+        FIELD_VALUE (num_values)                                      \
+            = FIELD_VALUE (class_code) == 3 ? 3 : 0;                  \
+      }                                                               \
+      FIELD_VECTOR (values, BL, num_values, 0);                       \
+    }                                                                 \
+  }                                                                   \
   FIELD_B (dependent_on_compound_object, 290)
 
 #define AcDbAssocEdgePersSubentId_fields \
@@ -3153,6 +3183,10 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCVALUEDEPENDENCY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocDependency_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+  SUBCLASS (AcDbAssocValueDependency);
+  FIELD_BL (class_version, 90);
+  FIELD_T (name, 1);
+  AcDbEvalVariant_fields (value);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -5695,13 +5729,23 @@ DWG_OBJECT (ASSOCVARIABLE)
   SUBCLASS (AcDbAssocVariable);
   FIELD_BL (av_class_version, 90); /* 2 */
   FIELD_T (name, 1);
-  FIELD_T (t58, 1);
+  FIELD_T (expression, 1);
   FIELD_T (evaluator, 1);
   FIELD_T (desc, 1);
   AcDbEvalVariant_fields(value); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
-  FIELD_B (has_t78, 290);
-  FIELD_T (t78, 1);
-  FIELD_B (b290, 290);
+  FIELD_B (has_cached_value, 290);
+  if (FIELD_VALUE (has_cached_value))
+    FIELD_T (cached_value, 1);
+  FIELD_B (flag, 290);
+  FIELD_BL (num_var_deps, 90);
+  VALUEOUTOFBOUNDS (num_var_deps, 1000);
+  REPEAT (num_var_deps, var_deps, Dwg_ASSOCVARIABLE_Dep)
+  REPEAT_BLOCK
+      SUB_FIELD_HANDLE (var_deps[rcount1], dependency, 4, 330);
+      SUB_FIELD_BL (var_deps[rcount1], flags, 90);
+      SET_PARENT_OBJ (var_deps[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (var_deps)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

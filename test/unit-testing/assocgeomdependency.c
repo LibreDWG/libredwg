@@ -35,6 +35,15 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, enabled, B);
   // AcDbAssocPersSubentId
-  CHK_ENTITY_UTF8TEXT (_obj, ASSOCGEOMDEPENDENCY, classname);
+  if (dwg_version < R_2013)
+    {
+      CHK_ENTITY_UTF8TEXT (_obj, ASSOCGEOMDEPENDENCY, classname);
+    }
+  else
+    {
+      CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, has_classname, B);
+      CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, class_code, BL);
+      CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, num_values, BL);
+    }
   CHK_ENTITY_TYPE (_obj, ASSOCGEOMDEPENDENCY, dependent_on_compound_object, B);
 }
