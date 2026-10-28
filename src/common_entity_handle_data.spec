@@ -64,10 +64,6 @@
   VERSIONS (R_13b1, R_14)
     {
       FIELD_HANDLE (layer, 5, 8);
-#ifdef IS_ENCODER
-      if (dat->from_version == R_2000)
-        FIELD_VALUE (isbylayerlt) = FIELD_VALUE (ltype_flags) < 3 ? 1 : 0;
-#endif
 #ifdef IS_DXF
       PRE (R_2000) {
         switch (FIELD_VALUE (ltype_flags)) {
@@ -85,8 +81,30 @@
         }
       }
 #endif
+#ifdef IS_ENCODER
+      // r13/r14 has no ByBlock/Continuous ltype flags: those entities
+      // reference the LTYPE record by handle. Sources that used the
+      // r2000+ flags carry no handle, so materialize it here.
+      if (!FIELD_VALUE (isbylayerlt)
+          && (!FIELD_VALUE (ltype) || !FIELD_VALUE (ltype)->absolute_ref)
+          && FIELD_VALUE (ltype_flags) >= 1 && FIELD_VALUE (ltype_flags) <= 2)
+        {
+          BITCODE_H _lth = dwg_find_tablehandle (
+              obj->parent,
+              FIELD_VALUE (ltype_flags) == 1 ? (char *)"BYBLOCK"
+                                             : (char *)"CONTINUOUS",
+              "LTYPE");
+          if (_lth && _lth->absolute_ref)
+            FIELD_VALUE (ltype) = dwg_add_handleref (obj->parent, 5,
+                                                     _lth->absolute_ref, NULL);
+        }
+#endif
       if (!FIELD_VALUE (isbylayerlt))
         FIELD_HANDLE (ltype, 5, 6);
+#ifdef IS_DXF
+      // group 48 exists since R13; it was only emitted under R_2000b below
+      FIELD_BD1 (ltype_scale, 48);
+#endif
     }
 
   VERSIONS (R_13b1, R_2000)
