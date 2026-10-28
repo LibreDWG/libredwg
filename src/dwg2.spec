@@ -3689,7 +3689,9 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_BL (ref[rcount1], num_xrefs, 0);
       SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
 
-      if (FIELD_VALUE (ref[rcount1].osnap_type) != 0)
+      /* An _End last-point reference without any xrefs has no main subent. */
+      if (FIELD_VALUE (ref[rcount1].osnap_type) != 0
+          && FIELD_VALUE (ref[rcount1].num_xrefs) > 0)
         {
           SUB_FIELD_BL (ref[rcount1], main_subent_type, 73);
           SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
@@ -5133,6 +5135,8 @@ DWG_OBJECT (ASSOCEDGEACTIONPARAM)
   FIELD_BL (class_version, 90);
   FIELD_HANDLE (param, 3, 330);
   FIELD_B (has_action, 290);
+  /* action_type: 11 arc, 17 ellipse, 19 line, 23 3d line segment,
+     27 generic 3d curve, 42 3d nurbs curve */
   FIELD_BL (action_type, 90);
   switch (_obj->action_type)
     {
