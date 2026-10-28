@@ -10463,13 +10463,11 @@ T,	DXF 1
 T,	DXF 1
 @item display_index
 BL,	DXF 90
-@item has_predefined
-B,	DXF 290
 @item mr_version
 BL,	DXF 90
-@item sampling1
+@item sampling_min
 BL,	DXF 90
-@item sampling2
+@item sampling_max
 BL,	DXF 90
 @item sampling_mr_filter
 BS,	DXF 70
@@ -11312,11 +11310,27 @@ BS,	DXF 70
 BS,	DXF 70
 @item start_day
 BS,	DXF 70
+@item start_hour
+BS,	DXF 70
 @item start_minute
 BS,	DXF 70
 @item start_second
 BS,	DXF 70
 @item start_msec
+BS,	DXF 70
+@item end_year
+BS,	DXF 70
+@item end_month
+BS,	DXF 70
+@item end_day
+BS,	DXF 70
+@item end_hour
+BS,	DXF 70
+@item end_minute
+BS,	DXF 70
+@item end_second
+BS,	DXF 70
+@item end_msec
 BS,	DXF 70
 @item render_time
 BD,	DXF 40

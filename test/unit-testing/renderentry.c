@@ -15,9 +15,17 @@ api_process (dwg_object *obj)
   BITCODE_BS start_year;     /*!< DXF 70 */
   BITCODE_BS start_month;    /*!< DXF 70 */
   BITCODE_BS start_day;      /*!< DXF 70 */
+  BITCODE_BS start_hour;     /*!< DXF 70 */
   BITCODE_BS start_minute;   /*!< DXF 70 */
   BITCODE_BS start_second;   /*!< DXF 70 */
   BITCODE_BS start_msec;     /*!< DXF 70 */
+  BITCODE_BS end_year;       /*!< DXF 70 */
+  BITCODE_BS end_month;      /*!< DXF 70 */
+  BITCODE_BS end_day;        /*!< DXF 70 */
+  BITCODE_BS end_hour;       /*!< DXF 70 */
+  BITCODE_BS end_minute;     /*!< DXF 70 */
+  BITCODE_BS end_second;     /*!< DXF 70 */
+  BITCODE_BS end_msec;       /*!< DXF 70 */
   BITCODE_BD render_time;    /*!< DXF 40 */
   BITCODE_BL memory_amount;  /*!< DXF 90 */
   BITCODE_BL material_count; /*!< DXF 90 */
@@ -37,9 +45,17 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, start_year, BS);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, start_month, BS);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, start_day, BS);
+  CHK_ENTITY_TYPE (_obj, RENDERENTRY, start_hour, BS);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, start_minute, BS);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, start_second, BS);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, start_msec, BS);
+  CHK_ENTITY_TYPE (_obj, RENDERENTRY, end_year, BS);
+  CHK_ENTITY_TYPE (_obj, RENDERENTRY, end_month, BS);
+  CHK_ENTITY_TYPE (_obj, RENDERENTRY, end_day, BS);
+  CHK_ENTITY_TYPE (_obj, RENDERENTRY, end_hour, BS);
+  CHK_ENTITY_TYPE (_obj, RENDERENTRY, end_minute, BS);
+  CHK_ENTITY_TYPE (_obj, RENDERENTRY, end_second, BS);
+  CHK_ENTITY_TYPE (_obj, RENDERENTRY, end_msec, BS);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, render_time, BD);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, memory_amount, BL);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, material_count, BL);

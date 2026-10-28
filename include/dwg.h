@@ -7370,8 +7370,7 @@ typedef struct _dwg_object_NAVISWORKSMODELDEF
   BITCODE_B environ_image_enabled;  /*!< DXF 290 */                           \
   BITCODE_T environ_image_filename; /*!< DXF 1 */                             \
   BITCODE_T description;            /*!< DXF 1 */                             \
-  BITCODE_BL display_index;         /*!< DXF 290 */                           \
-  BITCODE_B has_predefined          /*!< DXF 290, r2013 only */
+  BITCODE_BL display_index          /*!< DXF 290 */
 
 /**
  Class RENDERSETTINGS (varies)
@@ -7380,6 +7379,7 @@ typedef struct _dwg_object_RENDERSETTINGS
 {
   struct _dwg_object_object *parent;
   RENDERSETTINGS_fields;
+  BITCODE_B has_predefined;          /*!< DXF 290, r2013+ RENDERSETTINGS and RAPIDRT only */
 } Dwg_Object_RENDERSETTINGS;
 
 /**
@@ -7392,8 +7392,8 @@ typedef struct _dwg_object_MENTALRAYRENDERSETTINGS
   RENDERSETTINGS_fields;
   // AcDbMentalRayRenderSettings
   BITCODE_BL mr_version;		/*!< DXF 90, always 2 */
-  BITCODE_BL sampling1;			/*!< DXF 90 */
-  BITCODE_BL sampling2;			/*!< DXF 90 */
+  BITCODE_BL sampling_min;			/*!< DXF 90 */
+  BITCODE_BL sampling_max;			/*!< DXF 90 */
   BITCODE_BS sampling_mr_filter;	/*!< DXF 70 */
   BITCODE_BD sampling_filter1;		/*!< DXF 40 */
   BITCODE_BD sampling_filter2;		/*!< DXF 40 */
@@ -7444,6 +7444,7 @@ typedef struct _dwg_object_RAPIDRTRENDERSETTINGS
 {
   struct _dwg_object_object *parent;
   RENDERSETTINGS_fields;
+  BITCODE_B has_predefined;     /*!< DXF 290, r2013+ RENDERSETTINGS and RAPIDRT only */
   // AcDbRapidRTRenderSettings
   BITCODE_BL rapidrt_version;   /*!< DXF 90 */
   BITCODE_BL render_target;	/*!< DXF 70,
@@ -7511,9 +7512,17 @@ typedef struct _dwg_object_RENDERENTRY
   BITCODE_BS start_year;	/*!< DXF 70 */
   BITCODE_BS start_month;	/*!< DXF 70 */
   BITCODE_BS start_day;		/*!< DXF 70 */
+  BITCODE_BS start_hour;	/*!< DXF 70 */
   BITCODE_BS start_minute;	/*!< DXF 70 */
   BITCODE_BS start_second;	/*!< DXF 70 */
   BITCODE_BS start_msec;	/*!< DXF 70 */
+  BITCODE_BS end_year;		/*!< DXF 70 */
+  BITCODE_BS end_month;		/*!< DXF 70 */
+  BITCODE_BS end_day;		/*!< DXF 70 */
+  BITCODE_BS end_hour;		/*!< DXF 70 */
+  BITCODE_BS end_minute;	/*!< DXF 70 */
+  BITCODE_BS end_second;	/*!< DXF 70 */
+  BITCODE_BS end_msec;		/*!< DXF 70 */
   BITCODE_BD render_time;	/*!< DXF 40 */
   BITCODE_BL memory_amount;	/*!< DXF 90 */
   BITCODE_BL material_count;	/*!< DXF 90 */

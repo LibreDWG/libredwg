@@ -15,11 +15,10 @@ api_process (dwg_object *obj)
   BITCODE_T environ_image_filename;
   BITCODE_T description;
   BITCODE_BL display_index;
-  BITCODE_B has_predefined; /*!< DXF 290, r2013 only */
   // AcDbMentalRayRenderSettings
   BITCODE_BL mr_version;                 /*!< DXF 90, always 2 */
-  BITCODE_BL sampling1;                  /*!< DXF 90 */
-  BITCODE_BL sampling2;                  /*!< DXF 90 */
+  BITCODE_BL sampling_min;               /*!< DXF 90 */
+  BITCODE_BL sampling_max;               /*!< DXF 90 */
   BITCODE_BS sampling_mr_filter;         /*!< DXF 70 */
   BITCODE_BD sampling_filter1;           /*!< DXF 40 */
   BITCODE_BD sampling_filter2;           /*!< DXF 40 */
@@ -76,14 +75,13 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, environ_image_filename);
   CHK_ENTITY_UTF8TEXT (_obj, MENTALRAYRENDERSETTINGS, description);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, display_index, BL);
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, has_predefined, B);
 
   // AcDbMentalRayRenderSettings
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, mr_version, BL);
-  CHK_ENTITY_MAX (_obj, MENTALRAYRENDERSETTINGS, mr_version, BL,
-                  3); // currently 2
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling1, BL);
-  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling2, BL);
+  // currently 2
+  CHK_ENTITY_MAX (_obj, MENTALRAYRENDERSETTINGS, mr_version, BL, 3);
+  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling_min, BL);
+  CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling_max, BL);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling_mr_filter, BS);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling_filter1, BD);
   CHK_ENTITY_TYPE (_obj, MENTALRAYRENDERSETTINGS, sampling_filter2, BD);

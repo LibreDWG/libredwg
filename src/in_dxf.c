@@ -6664,7 +6664,7 @@ add_RENDERSETTINGS (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_T (environ_image_filename, 1);
   FIELD_T (description, 1);
   FIELD_BL (display_index, 90);
-  VERSION (R_2013)
+  SINCE (R_2013)
   {
     FIELD_B (has_predefined, 290);
   }
@@ -6706,9 +6706,17 @@ add_RENDERENTRY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BS (start_year, 70);
   FIELD_BS (start_month, 70);
   FIELD_BS (start_day, 70);
+  FIELD_BS (start_hour, 70);
   FIELD_BS (start_minute, 70);
   FIELD_BS (start_second, 70);
   FIELD_BS (start_msec, 70);
+  FIELD_BS (end_year, 70);
+  FIELD_BS (end_month, 70);
+  FIELD_BS (end_day, 70);
+  FIELD_BS (end_hour, 70);
+  FIELD_BS (end_minute, 70);
+  FIELD_BS (end_second, 70);
+  FIELD_BS (end_msec, 70);
   FIELD_BD (render_time, 40);
   FIELD_BL (memory_amount, 90);
   FIELD_BL (material_count, 90);

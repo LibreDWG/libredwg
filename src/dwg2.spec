@@ -2585,7 +2585,7 @@ DWG_OBJECT_END
 
 #define AcDbRenderSettings_fields                                             \
     SUBCLASS (AcDbRenderSettings)                                             \
-    VERSION (R_2013) { /* version 0x1f */                                     \
+    SINCE (R_2013) { /* version 0x1f */                                       \
       VALUE_BL (_obj->class_version + 1, 90)                                  \
     } else {                                                                  \
       FIELD_BL (class_version, 90);                                           \
@@ -2597,13 +2597,13 @@ DWG_OBJECT_END
     FIELD_B (environ_image_enabled, 290);                                     \
     FIELD_T (environ_image_filename, 1);                                      \
     FIELD_T (description, 1);                                                 \
-    FIELD_BL (display_index, 90);                                             \
-    VERSION (R_2013) {                                                        \
-      FIELD_B (has_predefined, 290);                                          \
-    }
+    FIELD_BL (display_index, 90);
 
 DWG_OBJECT (RENDERSETTINGS)
   AcDbRenderSettings_fields;
+  SINCE (R_2013) {
+    FIELD_B (has_predefined, 290);
+  }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -2611,8 +2611,8 @@ DWG_OBJECT (MENTALRAYRENDERSETTINGS)
   AcDbRenderSettings_fields;
   SUBCLASS (AcDbMentalRayRenderSettings);
   FIELD_BL (mr_version, 90); /* = 2 */
-  FIELD_BL (sampling1, 90);
-  FIELD_BL (sampling2, 90);
+  FIELD_BL (sampling_min, 90);
+  FIELD_BL (sampling_max, 90);
   FIELD_BS (sampling_mr_filter, 70);
   FIELD_BD (sampling_filter1, 40);
   FIELD_BD (sampling_filter2, 40);
@@ -2668,10 +2668,7 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   FIELD_BL (filter_type, 70);
   FIELD_BD (filter_width, 40);
   FIELD_BD (filter_height, 40);
-  VERSION (R_2013)
-    {}
-  else
-    FIELD_B (has_predefined, 290); // when RENDERSETTINGS does not handle it
+  FIELD_B (has_predefined, 290);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -4882,9 +4879,17 @@ DWG_OBJECT (RENDERENTRY)
   FIELD_BS (start_year, 70);
   FIELD_BS (start_month, 70);
   FIELD_BS (start_day, 70);
+  FIELD_BS (start_hour, 70);
   FIELD_BS (start_minute, 70);
   FIELD_BS (start_second, 70);
   FIELD_BS (start_msec, 70);
+  FIELD_BS (end_year, 70);
+  FIELD_BS (end_month, 70);
+  FIELD_BS (end_day, 70);
+  FIELD_BS (end_hour, 70);
+  FIELD_BS (end_minute, 70);
+  FIELD_BS (end_second, 70);
+  FIELD_BS (end_msec, 70);
   FIELD_BD (render_time, 40);
   FIELD_BL (memory_amount, 90);
   FIELD_BL (material_count, 90);

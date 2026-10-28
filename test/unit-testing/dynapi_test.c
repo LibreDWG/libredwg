@@ -51984,21 +51984,6 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->global_illumination_enabled--;
   }
   {
-    BITCODE_B has_predefined;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "has_predefined", &has_predefined, NULL)
-        && has_predefined == mentalrayrendersettings->has_predefined)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.has_predefined [B] " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->has_predefined, has_predefined);
-    has_predefined++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "has_predefined", &has_predefined, 0)
-        && has_predefined == mentalrayrendersettings->has_predefined)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.has_predefined [B] set+1 " FORMAT_B " != " FORMAT_B "", mentalrayrendersettings->has_predefined, has_predefined);
-    mentalrayrendersettings->has_predefined--;
-  }
-  {
     BITCODE_BD light_luminance_scale;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "light_luminance_scale", &light_luminance_scale, NULL)
         && light_luminance_scale == mentalrayrendersettings->light_luminance_scale)
@@ -52177,36 +52162,6 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     mentalrayrendersettings->ray_tracing_enabled--;
   }
   {
-    BITCODE_BL sampling1;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling1", &sampling1, NULL)
-        && sampling1 == mentalrayrendersettings->sampling1)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.sampling1 [BL] %u != %u", mentalrayrendersettings->sampling1, sampling1);
-    sampling1++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling1", &sampling1, 0)
-        && sampling1 == mentalrayrendersettings->sampling1)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.sampling1 [BL] set+1 %u != %u", mentalrayrendersettings->sampling1, sampling1);
-    mentalrayrendersettings->sampling1--;
-  }
-  {
-    BITCODE_BL sampling2;
-    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling2", &sampling2, NULL)
-        && sampling2 == mentalrayrendersettings->sampling2)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.sampling2 [BL] %u != %u", mentalrayrendersettings->sampling2, sampling2);
-    sampling2++;
-    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling2", &sampling2, 0)
-        && sampling2 == mentalrayrendersettings->sampling2)
-      pass ();
-    else
-      fail ("MENTALRAYRENDERSETTINGS.sampling2 [BL] set+1 %u != %u", mentalrayrendersettings->sampling2, sampling2);
-    mentalrayrendersettings->sampling2--;
-  }
-  {
     BITCODE_BD sampling_contrast_color1;
     if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_contrast_color1", &sampling_contrast_color1, NULL)
         && sampling_contrast_color1 == mentalrayrendersettings->sampling_contrast_color1)
@@ -52295,6 +52250,36 @@ static int test_MENTALRAYRENDERSETTINGS (const Dwg_Object *obj)
     else
       fail ("MENTALRAYRENDERSETTINGS.sampling_filter2 [BD] set+1 %g != %g", mentalrayrendersettings->sampling_filter2, sampling_filter2);
     mentalrayrendersettings->sampling_filter2--;
+  }
+  {
+    BITCODE_BL sampling_max;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_max", &sampling_max, NULL)
+        && sampling_max == mentalrayrendersettings->sampling_max)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_max [BL] %u != %u", mentalrayrendersettings->sampling_max, sampling_max);
+    sampling_max++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_max", &sampling_max, 0)
+        && sampling_max == mentalrayrendersettings->sampling_max)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_max [BL] set+1 %u != %u", mentalrayrendersettings->sampling_max, sampling_max);
+    mentalrayrendersettings->sampling_max--;
+  }
+  {
+    BITCODE_BL sampling_min;
+    if (dwg_dynapi_entity_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_min", &sampling_min, NULL)
+        && sampling_min == mentalrayrendersettings->sampling_min)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_min [BL] %u != %u", mentalrayrendersettings->sampling_min, sampling_min);
+    sampling_min++;
+    if (dwg_dynapi_entity_set_value (mentalrayrendersettings, "MENTALRAYRENDERSETTINGS", "sampling_min", &sampling_min, 0)
+        && sampling_min == mentalrayrendersettings->sampling_min)
+      pass ();
+    else
+      fail ("MENTALRAYRENDERSETTINGS.sampling_min [BL] set+1 %u != %u", mentalrayrendersettings->sampling_min, sampling_min);
+    mentalrayrendersettings->sampling_min--;
   }
   {
     BITCODE_BS sampling_mr_filter;
@@ -55748,6 +55733,111 @@ static int test_RENDERENTRY (const Dwg_Object *obj)
     renderentry->display_index--;
   }
   {
+    BITCODE_BS end_day;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "end_day", &end_day, NULL)
+        && end_day == renderentry->end_day)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_day [BS] %hu != %hu", renderentry->end_day, end_day);
+    end_day++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "end_day", &end_day, 0)
+        && end_day == renderentry->end_day)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_day [BS] set+1 %hu != %hu", renderentry->end_day, end_day);
+    renderentry->end_day--;
+  }
+  {
+    BITCODE_BS end_hour;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "end_hour", &end_hour, NULL)
+        && end_hour == renderentry->end_hour)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_hour [BS] %hu != %hu", renderentry->end_hour, end_hour);
+    end_hour++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "end_hour", &end_hour, 0)
+        && end_hour == renderentry->end_hour)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_hour [BS] set+1 %hu != %hu", renderentry->end_hour, end_hour);
+    renderentry->end_hour--;
+  }
+  {
+    BITCODE_BS end_minute;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "end_minute", &end_minute, NULL)
+        && end_minute == renderentry->end_minute)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_minute [BS] %hu != %hu", renderentry->end_minute, end_minute);
+    end_minute++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "end_minute", &end_minute, 0)
+        && end_minute == renderentry->end_minute)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_minute [BS] set+1 %hu != %hu", renderentry->end_minute, end_minute);
+    renderentry->end_minute--;
+  }
+  {
+    BITCODE_BS end_month;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "end_month", &end_month, NULL)
+        && end_month == renderentry->end_month)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_month [BS] %hu != %hu", renderentry->end_month, end_month);
+    end_month++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "end_month", &end_month, 0)
+        && end_month == renderentry->end_month)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_month [BS] set+1 %hu != %hu", renderentry->end_month, end_month);
+    renderentry->end_month--;
+  }
+  {
+    BITCODE_BS end_msec;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "end_msec", &end_msec, NULL)
+        && end_msec == renderentry->end_msec)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_msec [BS] %hu != %hu", renderentry->end_msec, end_msec);
+    end_msec++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "end_msec", &end_msec, 0)
+        && end_msec == renderentry->end_msec)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_msec [BS] set+1 %hu != %hu", renderentry->end_msec, end_msec);
+    renderentry->end_msec--;
+  }
+  {
+    BITCODE_BS end_second;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "end_second", &end_second, NULL)
+        && end_second == renderentry->end_second)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_second [BS] %hu != %hu", renderentry->end_second, end_second);
+    end_second++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "end_second", &end_second, 0)
+        && end_second == renderentry->end_second)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_second [BS] set+1 %hu != %hu", renderentry->end_second, end_second);
+    renderentry->end_second--;
+  }
+  {
+    BITCODE_BS end_year;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "end_year", &end_year, NULL)
+        && end_year == renderentry->end_year)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_year [BS] %hu != %hu", renderentry->end_year, end_year);
+    end_year++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "end_year", &end_year, 0)
+        && end_year == renderentry->end_year)
+      pass ();
+    else
+      fail ("RENDERENTRY.end_year [BS] set+1 %hu != %hu", renderentry->end_year, end_year);
+    renderentry->end_year--;
+  }
+  {
     BITCODE_T image_file_name;
     if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "image_file_name", &image_file_name, NULL)
         && image_file_name
@@ -55849,6 +55939,21 @@ static int test_RENDERENTRY (const Dwg_Object *obj)
     else
       fail ("RENDERENTRY.start_day [BS] set+1 %hu != %hu", renderentry->start_day, start_day);
     renderentry->start_day--;
+  }
+  {
+    BITCODE_BS start_hour;
+    if (dwg_dynapi_entity_value (renderentry, "RENDERENTRY", "start_hour", &start_hour, NULL)
+        && start_hour == renderentry->start_hour)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_hour [BS] %hu != %hu", renderentry->start_hour, start_hour);
+    start_hour++;
+    if (dwg_dynapi_entity_set_value (renderentry, "RENDERENTRY", "start_hour", &start_hour, 0)
+        && start_hour == renderentry->start_hour)
+      pass ();
+    else
+      fail ("RENDERENTRY.start_hour [BS] set+1 %hu != %hu", renderentry->start_hour, start_hour);
+    renderentry->start_hour--;
   }
   {
     BITCODE_BS start_minute;
