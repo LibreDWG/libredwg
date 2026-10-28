@@ -2506,11 +2506,8 @@ DWG_ENTITY_END
 
 #define AcDbAssocAnnotationActionBody_fields      \
   UNTIL (R_2010) {                                \
-    if (FIELD_VALUE (actionbody))                 \
-    {                                             \
-      AcDbAssocActionBody_fields;                 \
-      AcDbAssocParamBasedActionBody_fields (pab); \
-    }                                             \
+    AcDbAssocActionBody_fields;                   \
+    AcDbAssocParamBasedActionBody_fields (pab);   \
   }                                               \
   LATER_VERSIONS {                                \
     FIELD_BS (aaab_version, 90);                  \
@@ -3788,10 +3785,10 @@ DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY);
   //SUBCLASS (AcDbAssocAlignedDimActionBody);
   FIELD_BL (class_version, 90);
-  //or status, 90 //has d_node or r_node?
+  //or status, 90 //has dimension_node or read_node?
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (r_node, 4, 330);
-  FIELD_HANDLE (d_node, 4, 330);
+  FIELD_HANDLE (read_node, 4, 330);
+  FIELD_HANDLE (dimension_node, 4, 330);
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
@@ -3800,8 +3797,8 @@ DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
   SUBCLASS (Assoc3PointAngularDimActionBody);
   FIELD_BS (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (r_node, 4, 330);
-  FIELD_HANDLE (d_node, 4, 330);
+  FIELD_HANDLE (read_node, 4, 330);
+  FIELD_HANDLE (dimension_node, 4, 330);
   FIELD_HANDLE (assocdep, 5, 330);
 DWG_OBJECT_END
 
@@ -3811,8 +3808,8 @@ DWG_OBJECT (ASSOCORDINATEDIMACTIONBODY)
   SUBCLASS (AssocOrdinatedDimActionBody);
   FIELD_BL (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (r_node, 5, 330);
-  FIELD_HANDLE (d_node, 5, 330);
+  FIELD_HANDLE (read_node, 5, 330);
+  FIELD_HANDLE (dimension_node, 5, 330);
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOCROTATEDDIMACTIONBODY)
@@ -3821,8 +3818,8 @@ DWG_OBJECT (ASSOCROTATEDDIMACTIONBODY)
   SUBCLASS (AssocRotatedDimActionBody);
   FIELD_BS (class_version, 90);
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (r_node, 5, 330);
-  FIELD_HANDLE (d_node, 5, 330);
+  FIELD_HANDLE (read_node, 5, 330);
+  FIELD_HANDLE (dimension_node, 5, 330);
 DWG_OBJECT_END
 
 // subclass only

@@ -6957,8 +6957,8 @@ typedef struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY
   ASSOCANNOTATIONACTIONBODY_fields;
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;
   BITCODE_BL class_version; // 90 0
-  BITCODE_H  r_node; // 330
-  BITCODE_H  d_node; // 330
+  BITCODE_H  read_node; // 330
+  BITCODE_H  dimension_node; // 330
 } Dwg_Object_ASSOCALIGNEDDIMACTIONBODY;
 
 typedef struct _dwg_object_ASSOC3POINTANGULARDIMACTIONBODY
@@ -6967,8 +6967,8 @@ typedef struct _dwg_object_ASSOC3POINTANGULARDIMACTIONBODY
   ASSOCANNOTATIONACTIONBODY_fields;
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;
   BITCODE_BS class_version; /*!< DXF 90  */
-  BITCODE_H r_node;		/*!< DXF 330  */
-  BITCODE_H d_node;		/*!< DXF 330  */
+  BITCODE_H read_node;		/*!< DXF 330  */
+  BITCODE_H dimension_node;		/*!< DXF 330  */
   BITCODE_H assocdep;		/*!< DXF 330  */
 } Dwg_Object_ASSOC3POINTANGULARDIMACTIONBODY;
 
@@ -6978,8 +6978,8 @@ typedef struct _dwg_object_ASSOCORDINATEDIMACTIONBODY
   ASSOCANNOTATIONACTIONBODY_fields;
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;
   BITCODE_BL class_version;	/*!< DXF 90  */
-  BITCODE_H  r_node;		/*!< DXF 330 */
-  BITCODE_H  d_node;		/*!< DXF 330 */
+  BITCODE_H  read_node;		/*!< DXF 330 */
+  BITCODE_H  dimension_node;		/*!< DXF 330 */
 } Dwg_Object_ASSOCORDINATEDIMACTIONBODY;
 
 typedef struct _dwg_object_ASSOCROTATEDDIMACTIONBODY
@@ -6988,8 +6988,8 @@ typedef struct _dwg_object_ASSOCROTATEDDIMACTIONBODY
   ASSOCANNOTATIONACTIONBODY_fields;
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;
   BITCODE_BS class_version;	/*!< DXF 90  */
-  BITCODE_H  r_node;		/*!< DXF 330 */
-  BITCODE_H  d_node;		/*!< DXF 330 */
+  BITCODE_H  read_node;		/*!< DXF 330 */
+  BITCODE_H  dimension_node;		/*!< DXF 330 */
 } Dwg_Object_ASSOCROTATEDDIMACTIONBODY;
 
 typedef struct _dwg_object_ASSOCDIMDEPENDENCYBODY

@@ -10,8 +10,8 @@ api_process (dwg_object *obj)
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;
   BITCODE_H *deps;
   BITCODE_BS class_version; /*!< DXF 90  */
-  BITCODE_H r_node;         /*!< DXF 330  */
-  BITCODE_H d_node;         /*!< DXF 330  */
+  BITCODE_H read_node;      /*!< DXF 330  */
+  BITCODE_H dimension_node; /*!< DXF 330  */
   BITCODE_H assocdep;       /*!< DXF 330  */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -28,8 +28,8 @@ api_process (dwg_object *obj)
   CHK_ASSOCPARAMBASEDACTIONBODY (ASSOC3POINTANGULARDIMACTIONBODY);
 
   CHK_ENTITY_TYPE (_obj, ASSOC3POINTANGULARDIMACTIONBODY, class_version, BS);
-  CHK_ENTITY_H (_obj, ASSOC3POINTANGULARDIMACTIONBODY, r_node);
-  CHK_ENTITY_H (_obj, ASSOC3POINTANGULARDIMACTIONBODY, d_node);
+  CHK_ENTITY_H (_obj, ASSOC3POINTANGULARDIMACTIONBODY, read_node);
+  CHK_ENTITY_H (_obj, ASSOC3POINTANGULARDIMACTIONBODY, dimension_node);
   CHK_ENTITY_H (_obj, ASSOC3POINTANGULARDIMACTIONBODY, assocdep);
 #endif
 }

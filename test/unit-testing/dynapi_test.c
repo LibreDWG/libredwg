@@ -30639,12 +30639,12 @@ static int test_ASSOC3POINTANGULARDIMACTIONBODY (const Dwg_Object *obj)
     assoc3pointangulardimactionbody->class_version--;
   }
   {
-    BITCODE_H d_node;
-    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "d_node", &d_node, NULL)
-        && !memcmp (&d_node, &assoc3pointangulardimactionbody->d_node, sizeof (BITCODE_H)))
+    BITCODE_H dimension_node;
+    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "dimension_node", &dimension_node, NULL)
+        && !memcmp (&dimension_node, &assoc3pointangulardimactionbody->dimension_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOC3POINTANGULARDIMACTIONBODY.d_node [H]");
+        fail ("ASSOC3POINTANGULARDIMACTIONBODY.dimension_node [H]");
   }
   {
     Dwg_ASSOCPARAMBASEDACTIONBODY pab;
@@ -30663,12 +30663,12 @@ static int test_ASSOC3POINTANGULARDIMACTIONBODY (const Dwg_Object *obj)
         fail ("ASSOC3POINTANGULARDIMACTIONBODY.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_H r_node;
-    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "r_node", &r_node, NULL)
-        && !memcmp (&r_node, &assoc3pointangulardimactionbody->r_node, sizeof (BITCODE_H)))
+    BITCODE_H read_node;
+    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "read_node", &read_node, NULL)
+        && !memcmp (&read_node, &assoc3pointangulardimactionbody->read_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOC3POINTANGULARDIMACTIONBODY.r_node [H]");
+        fail ("ASSOC3POINTANGULARDIMACTIONBODY.read_node [H]");
   }
   if (failed && (is_class_unstable ("ASSOC3POINTANGULARDIMACTIONBODY") || is_class_debugging ("ASSOC3POINTANGULARDIMACTIONBODY")))
     {
@@ -30993,12 +30993,12 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     assocaligneddimactionbody->class_version--;
   }
   {
-    BITCODE_H d_node;
-    if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "d_node", &d_node, NULL)
-        && !memcmp (&d_node, &assocaligneddimactionbody->d_node, sizeof (BITCODE_H)))
+    BITCODE_H dimension_node;
+    if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "dimension_node", &dimension_node, NULL)
+        && !memcmp (&dimension_node, &assocaligneddimactionbody->dimension_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOCALIGNEDDIMACTIONBODY.d_node [H]");
+        fail ("ASSOCALIGNEDDIMACTIONBODY.dimension_node [H]");
   }
   {
     Dwg_ASSOCPARAMBASEDACTIONBODY pab;
@@ -31017,12 +31017,12 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
         fail ("ASSOCALIGNEDDIMACTIONBODY.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_H r_node;
-    if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "r_node", &r_node, NULL)
-        && !memcmp (&r_node, &assocaligneddimactionbody->r_node, sizeof (BITCODE_H)))
+    BITCODE_H read_node;
+    if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "read_node", &read_node, NULL)
+        && !memcmp (&read_node, &assocaligneddimactionbody->read_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOCALIGNEDDIMACTIONBODY.r_node [H]");
+        fail ("ASSOCALIGNEDDIMACTIONBODY.read_node [H]");
   }
   if (failed && (is_class_unstable ("ASSOCALIGNEDDIMACTIONBODY") || is_class_debugging ("ASSOCALIGNEDDIMACTIONBODY")))
     {
@@ -34122,12 +34122,12 @@ static int test_ASSOCORDINATEDIMACTIONBODY (const Dwg_Object *obj)
     assocordinatedimactionbody->class_version--;
   }
   {
-    BITCODE_H d_node;
-    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "d_node", &d_node, NULL)
-        && !memcmp (&d_node, &assocordinatedimactionbody->d_node, sizeof (BITCODE_H)))
+    BITCODE_H dimension_node;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "dimension_node", &dimension_node, NULL)
+        && !memcmp (&dimension_node, &assocordinatedimactionbody->dimension_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOCORDINATEDIMACTIONBODY.d_node [H]");
+        fail ("ASSOCORDINATEDIMACTIONBODY.dimension_node [H]");
   }
   {
     Dwg_ASSOCPARAMBASEDACTIONBODY pab;
@@ -34146,12 +34146,12 @@ static int test_ASSOCORDINATEDIMACTIONBODY (const Dwg_Object *obj)
         fail ("ASSOCORDINATEDIMACTIONBODY.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_H r_node;
-    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "r_node", &r_node, NULL)
-        && !memcmp (&r_node, &assocordinatedimactionbody->r_node, sizeof (BITCODE_H)))
+    BITCODE_H read_node;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "read_node", &read_node, NULL)
+        && !memcmp (&read_node, &assocordinatedimactionbody->read_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOCORDINATEDIMACTIONBODY.r_node [H]");
+        fail ("ASSOCORDINATEDIMACTIONBODY.read_node [H]");
   }
   if (failed && (is_class_unstable ("ASSOCORDINATEDIMACTIONBODY") || is_class_debugging ("ASSOCORDINATEDIMACTIONBODY")))
     {
@@ -35429,12 +35429,12 @@ static int test_ASSOCROTATEDDIMACTIONBODY (const Dwg_Object *obj)
     assocrotateddimactionbody->class_version--;
   }
   {
-    BITCODE_H d_node;
-    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "d_node", &d_node, NULL)
-        && !memcmp (&d_node, &assocrotateddimactionbody->d_node, sizeof (BITCODE_H)))
+    BITCODE_H dimension_node;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "dimension_node", &dimension_node, NULL)
+        && !memcmp (&dimension_node, &assocrotateddimactionbody->dimension_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOCROTATEDDIMACTIONBODY.d_node [H]");
+        fail ("ASSOCROTATEDDIMACTIONBODY.dimension_node [H]");
   }
   {
     Dwg_ASSOCPARAMBASEDACTIONBODY pab;
@@ -35453,12 +35453,12 @@ static int test_ASSOCROTATEDDIMACTIONBODY (const Dwg_Object *obj)
         fail ("ASSOCROTATEDDIMACTIONBODY.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_H r_node;
-    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "r_node", &r_node, NULL)
-        && !memcmp (&r_node, &assocrotateddimactionbody->r_node, sizeof (BITCODE_H)))
+    BITCODE_H read_node;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "read_node", &read_node, NULL)
+        && !memcmp (&read_node, &assocrotateddimactionbody->read_node, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("ASSOCROTATEDDIMACTIONBODY.r_node [H]");
+        fail ("ASSOCROTATEDDIMACTIONBODY.read_node [H]");
   }
   if (failed && (is_class_unstable ("ASSOCROTATEDDIMACTIONBODY") || is_class_debugging ("ASSOCROTATEDDIMACTIONBODY")))
     {

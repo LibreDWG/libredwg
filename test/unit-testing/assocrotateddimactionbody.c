@@ -9,8 +9,8 @@ api_process (dwg_object *obj)
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;
   BITCODE_H *deps;
   BITCODE_BS class_version;
-  BITCODE_H d_node;
-  BITCODE_H r_node;
+  BITCODE_H dimension_node;
+  BITCODE_H read_node;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_assocrotateddimactionbody *_obj
@@ -31,6 +31,6 @@ api_process (dwg_object *obj)
   }
 
   CHK_ENTITY_TYPE (_obj, ASSOCROTATEDDIMACTIONBODY, class_version, BS);
-  CHK_ENTITY_H (_obj, ASSOCROTATEDDIMACTIONBODY, d_node);
-  CHK_ENTITY_H (_obj, ASSOCROTATEDDIMACTIONBODY, r_node);
+  CHK_ENTITY_H (_obj, ASSOCROTATEDDIMACTIONBODY, dimension_node);
+  CHK_ENTITY_H (_obj, ASSOCROTATEDDIMACTIONBODY, read_node);
 }

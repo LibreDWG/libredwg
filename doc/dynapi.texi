@@ -5821,9 +5821,9 @@ H,	DXF 360
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item class_version
 BS,	DXF 90
-@item r_node
+@item read_node
 H,	DXF 330
-@item d_node
+@item dimension_node
 H,	DXF 330
 @item assocdep
 H,	DXF 330
@@ -5908,9 +5908,9 @@ H,	DXF 360
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item class_version
 BL,	DXF 90
-@item r_node
+@item read_node
 H,	DXF 330
-@item d_node
+@item dimension_node
 H,	DXF 330
 
 @end vtable
@@ -6600,9 +6600,9 @@ H,	DXF 360
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item class_version
 BL,	DXF 90
-@item r_node
+@item read_node
 H,	DXF 330
-@item d_node
+@item dimension_node
 H,	DXF 330
 
 @end vtable
@@ -6885,9 +6885,9 @@ H,	DXF 360
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item class_version
 BS,	DXF 90
-@item r_node
+@item read_node
 H,	DXF 330
-@item d_node
+@item dimension_node
 H,	DXF 330
 
 @end vtable
