@@ -2585,11 +2585,9 @@ DWG_OBJECT_END
 
 #define AcDbRenderSettings_fields                                             \
     SUBCLASS (AcDbRenderSettings)                                             \
-    VERSION (R_2013) { /* version 0x1f */                                     \
-      VALUE_BL (_obj->class_version + 1, 90)                                  \
-    } else {                                                                  \
-      FIELD_BL (class_version, 90);                                           \
-    }                                                                         \
+    /* R2013 too: AutoCAD's R2013 and R2018 RAPIDRTRENDERSETTINGS both */     \
+    /* have the class version 2 here, and has_predefined at the end. */       \
+    FIELD_BL (class_version, 90);                                             \
     FIELD_T (name, 1);                                                        \
     FIELD_B (fog_enabled, 290);                                               \
     FIELD_B (fog_background_enabled, 290);                                    \
@@ -2597,10 +2595,7 @@ DWG_OBJECT_END
     FIELD_B (environ_image_enabled, 290);                                     \
     FIELD_T (environ_image_filename, 1);                                      \
     FIELD_T (description, 1);                                                 \
-    FIELD_BL (display_index, 90);                                             \
-    VERSION (R_2013) {                                                        \
-      FIELD_B (has_predefined, 290);                                          \
-    }
+    FIELD_BL (display_index, 90)
 
 DWG_OBJECT (RENDERSETTINGS)
   AcDbRenderSettings_fields;
@@ -2668,10 +2663,7 @@ DWG_OBJECT (RAPIDRTRENDERSETTINGS)
   FIELD_BL (filter_type, 70);
   FIELD_BD (filter_width, 40);
   FIELD_BD (filter_height, 40);
-  VERSION (R_2013)
-    {}
-  else
-    FIELD_B (has_predefined, 290); // when RENDERSETTINGS does not handle it
+  FIELD_B (has_predefined, 290);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
