@@ -2412,14 +2412,19 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             o->strings_area = (BITCODE_TF)xcalloc (strings_size, 1);
           if (is_tu)
             {
-              needed = ((strlen (pair->value.s.ptr) * 2) + 2);
+              // dashes[j].text is TV from DXF, the r2007+ area is TU
+              BITCODE_TU wstr = bit_utf8_to_TU (pair->value.s.ptr, 0);
+              if (!wstr)
+                goto skip_overflow;
+              needed = (bit_wcs2len (wstr) * 2) + 2;
               if (dash_i + needed > strings_size)
                 {
                   LOG_WARN ("LTYPE strings_area overflow, truncating");
+                  free (wstr);
                   goto skip_overflow;
                 }
-              bit_wcs2cpy ((BITCODE_TU)&o->strings_area[dash_i],
-                           (BITCODE_TU)o->dashes[j].text);
+              bit_wcs2cpy ((BITCODE_TU)&o->strings_area[dash_i], wstr);
+              free (wstr);
               dash_i += (unsigned)needed;
             }
           else
