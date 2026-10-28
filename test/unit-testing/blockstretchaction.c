@@ -55,8 +55,8 @@ api_process (dwg_object *obj)
                                 indexes, _obj->codes[i].num_indexes, BL);
     }
 
-  CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_offset_x, BD);
-  CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_offset_y, BD);
+  CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, distance_multiplier, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, angle_offset, BD);
+  CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_xy_type, RC);
   // #endif
 }

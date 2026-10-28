@@ -33,8 +33,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_731[] = {
     { 1021, "3.612097431944214", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
     { 73, "0", NULL, 0, BITS_UNKNOWN, "num_hdls", 6, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 6, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 6, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -90,8 +90,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_732[] = {
     { 95, "54", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 3, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -131,8 +131,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_733[] = {
     { 94, "1", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 94, "2", NULL, 0, BITS_UNKNOWN, "hdls[].long2", 3, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 4, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.5235987755982988", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.5235987755982988", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -172,8 +172,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_734[] = {
     { 94, "1", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 94, "2", NULL, 0, BITS_UNKNOWN, "hdls[].long2", 3, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 4, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.7853981633974483", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.7853981633974483", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -213,8 +213,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_735[] = {
     { 94, "1", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 94, "2", NULL, 0, BITS_UNKNOWN, "hdls[].long2", 3, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 4, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "1.047197551196597", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "1.047197551196597", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -254,8 +254,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_736[] = {
     { 94, "1", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 94, "2", NULL, 0, BITS_UNKNOWN, "hdls[].long2", 3, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 4, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "1.570796326794896", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "1.570796326794896", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -298,8 +298,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_737[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "hdls[].long2", 4, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 4, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -359,8 +359,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_738[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 6, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 6, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -427,8 +427,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_739[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 9, {-1,-1,-1,-1,-1} },
-    { 140, "0.5", NULL, 0, BITS_UNKNOWN, "action_offset_x", 2, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "0.5", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 2, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 9, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -502,8 +502,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_740[] = {
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 9, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 9, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -552,8 +552,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_741[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "codes[].bl95", 7, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 7, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 7, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -1348,8 +1348,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_742[] = {
     { 95, "22", NULL, 0, BITS_UNKNOWN, "codes[].bl95", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "codes[].bs76", 159, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 159, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 154, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -1686,8 +1686,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_743[] = {
     { 76, "2", NULL, 0, BITS_UNKNOWN, "", 50, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 60, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 65, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 60, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -1773,8 +1773,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_744[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 14, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 14, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 13, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 13, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -1861,8 +1861,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_745[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 14, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 14, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 13, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 13, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -1949,8 +1949,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_746[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 14, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 14, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 13, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 13, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2036,8 +2036,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_747[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 15, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 15, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 15, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2279,8 +2279,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_748[] = {
     { 95, "152", NULL, 0, BITS_UNKNOWN, "codes[].bl95", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "codes[].bs76", 47, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 47, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 44, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2325,8 +2325,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_749[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "", 5, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 6, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 6, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 6, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2365,8 +2365,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_750[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "hdls[].short", 3, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 5, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "5.497787143782136", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "5.497787143782136", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2405,8 +2405,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_751[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "hdls[].short", 3, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 5, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.7853981633974483", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.7853981633974483", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2445,8 +2445,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_752[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "hdls[].short", 3, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 5, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "2.356194490192344", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "2.356194490192344", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2485,8 +2485,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_753[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "hdls[].short", 3, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 5, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.7853981633974483", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.7853981633974483", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2525,8 +2525,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_754[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "hdls[].short", 3, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 5, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "5.497787143782136", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "5.497787143782136", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2565,8 +2565,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_755[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "hdls[].short", 4, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 4, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 4, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "3.926990816987241", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "3.926990816987241", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2605,8 +2605,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_756[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "hdls[].short", 4, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 4, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 4, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "3.926990816987241", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "3.926990816987241", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 4, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2645,8 +2645,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_757[] = {
     { 74, "1", NULL, 0, BITS_UNKNOWN, "hdls[].short", 3, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 5, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 5, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "2.356194490192344", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "2.356194490192344", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 5, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2735,8 +2735,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_758[] = {
     { 95, "58", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 10, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 10, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2818,8 +2818,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_759[] = {
     { 95, "59", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "", 7, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 9, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -2959,8 +2959,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_760[] = {
     { 95, "59", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "", 19, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 17, {-1,-1,-1,-1,-1} },
-    { 140, "0.5", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "0.5", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "1", NULL, 0, BITS_UNKNOWN, "action_xy_type", 19, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -3001,8 +3001,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_761[] = {
     { 76, "2", NULL, 0, BITS_UNKNOWN, "codes[].bs76", 3, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "hdls[].long1", 3, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "hdls[].long2", 6, {-1,-1,-1,-1,-1} },
-    { 140, "0.5", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "0.5", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "2", NULL, 0, BITS_UNKNOWN, "action_xy_type", 3, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -3056,8 +3056,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_762[] = {
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 4, {-1,-1,-1,-1,-1} },
     { 94, "1", NULL, 0, BITS_UNKNOWN, "", 8, {-1,-1,-1,-1,-1} },
     { 75, "0", NULL, 0, BITS_UNKNOWN, "num_codes", 4, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "1", NULL, 0, BITS_UNKNOWN, "action_xy_type", 8, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -3157,8 +3157,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_763[] = {
     { 95, "57", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "2", NULL, 0, BITS_UNKNOWN, "action_xy_type", 8, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -3255,8 +3255,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_764[] = {
     { 95, "57", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 12, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "3.141592653589792", NULL, 0, BITS_UNKNOWN, "action_offset_y", 1, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "3.141592653589792", NULL, 0, BITS_UNKNOWN, "angle_offset", 1, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 12, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
@@ -3349,8 +3349,8 @@ static struct _unknown_field unknown_dxf_BLOCKSTRETCHACTION_765[] = {
     { 95, "59", NULL, 0, BITS_UNKNOWN, "", 2, {-1,-1,-1,-1,-1} },
     { 76, "1", NULL, 0, BITS_UNKNOWN, "", 11, {-1,-1,-1,-1,-1} },
     { 94, "0", NULL, 0, BITS_UNKNOWN, "", 9, {-1,-1,-1,-1,-1} },
-    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "action_offset_x", 1, {-1,-1,-1,-1,-1} },
-    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "action_offset_y", 2, {-1,-1,-1,-1,-1} },
+    { 140, "1.0", NULL, 0, BITS_UNKNOWN, "distance_multiplier", 1, {-1,-1,-1,-1,-1} },
+    { 141, "0.0", NULL, 0, BITS_UNKNOWN, "angle_offset", 2, {-1,-1,-1,-1,-1} },
     { 280, "0", NULL, 0, BITS_UNKNOWN, "action_xy_type", 9, {-1,-1,-1,-1,-1} },
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };

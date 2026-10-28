@@ -27,7 +27,7 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_UTF8TEXT (_obj->conn_pts[i], BLOCKACTION_connectionpts,
                              name);
     }
-  CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, action_offset_x, BD);
-  CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, action_offset_y, BD);
+  CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, distance_multiplier, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, angle_offset, BD);
+  CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, action_xy_type, RC);
 }

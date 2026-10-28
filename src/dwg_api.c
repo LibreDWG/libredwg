@@ -29165,9 +29165,9 @@ dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg, const int has_graph,
       _obj->edges[i].parent = _obj;
       _obj->edges[i].id = i;
       _obj->edges[i].nextid = -1;
-      _obj->edges[i].e1 = -1; // incoming edges
-      _obj->edges[i].e2 = -1;
-      _obj->edges[i].e3 = -1;
+      _obj->edges[i].incoming_edge = -1; // incoming edges
+      _obj->edges[i].source_node = -1;
+      _obj->edges[i].destination_node = -1;
       _obj->edges[i].out_edge[0] = -1;
       _obj->edges[i].out_edge[1] = -1;
       _obj->edges[i].out_edge[2] = -1;

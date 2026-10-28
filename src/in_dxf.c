@@ -6322,9 +6322,9 @@ add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
           return pair;
         }
-      o->edges[i].e1 = pair->value.i; // 94
-      LOG_TRACE ("%s.edges[%d].e1 = %d [BL %d]\n", obj->name, i, pair->value.i,
-                 pair->code);
+      o->edges[i].incoming_edge = pair->value.i; // 94
+      LOG_TRACE ("%s.edges[%d].incoming_edge = %d [BL %d]\n", obj->name, i,
+                 pair->value.i, pair->code);
       dxf_free_pair (pair);
 
       pair = dxf_read_pair (dat);
@@ -6333,9 +6333,9 @@ add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
           return pair;
         }
-      o->edges[i].e2 = pair->value.i; // 91
-      LOG_TRACE ("%s.edges[%d].e2 = %d [BL %d]\n", obj->name, i, pair->value.i,
-                 pair->code);
+      o->edges[i].source_node = pair->value.i; // 91
+      LOG_TRACE ("%s.edges[%d].source_node = %d [BL %d]\n", obj->name, i,
+                 pair->value.i, pair->code);
       dxf_free_pair (pair);
 
       pair = dxf_read_pair (dat);
@@ -6344,9 +6344,9 @@ add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
           return pair;
         }
-      o->edges[i].e3 = pair->value.i; // 91
-      LOG_TRACE ("%s.edges[%d].e3 = %d [BL %d]\n", obj->name, i, pair->value.i,
-                 pair->code);
+      o->edges[i].destination_node = pair->value.i; // 91
+      LOG_TRACE ("%s.edges[%d].destination_node = %d [BL %d]\n", obj->name, i,
+                 pair->value.i, pair->code);
       dxf_free_pair (pair);
 
       for (int j = 0; j < 5; j++)
@@ -8731,12 +8731,9 @@ add_AcDbBlockMoveAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
 
   // AcDbBlockAction_doubles
-  FIELD_BD (action_offset_x, 140);
-  FIELD_BD (action_offset_y, 141);
-  FIELD_BD (angle_offset, 0);
-  /* VALUE_RC (1, 280); Action XY type. 1? */
-  pair = dxf_read_pair (dat);
-  dxf_free_pair (pair);
+  FIELD_BD (distance_multiplier, 140);
+  FIELD_BD (angle_offset, 141);
+  FIELD_RC (action_xy_type, 280);
   return NULL;
 }
 
@@ -8884,12 +8881,9 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
     }
 
   // AcDbBlockAction_doubles
-  FIELD_BD (action_offset_x, 140);
-  FIELD_BD (action_offset_y, 141);
-  FIELD_BD (angle_offset, 0);
-  /* VALUE_RC (1, 280); Action XY type. 1? */
-  pair = dxf_read_pair (dat);
-  dxf_free_pair (pair);
+  FIELD_BD (distance_multiplier, 140);
+  FIELD_BD (angle_offset, 141);
+  FIELD_RC (action_xy_type, 280);
   return NULL;
 }
 

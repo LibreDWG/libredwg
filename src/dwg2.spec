@@ -3358,10 +3358,9 @@ DWG_OBJECT_END
   } */
 
 #define AcDbBlockAction_doubles_fields            \
-  FIELD_BD (action_offset_x, 140);                \
-  FIELD_BD (action_offset_y, 141);                \
-  FIELD_BD (angle_offset, 0);                     \
-  DXF { VALUE_RC ((BITCODE_RC)1, 280); } /* Action XY type. 1? */
+  FIELD_BD (distance_multiplier, 140);            \
+  FIELD_BD (angle_offset, 141);                   \
+  FIELD_RC (action_xy_type, 280)
 
 #define AcDbBlockConstraintParameter_fields                \
   AcDbBlock2PtParameter_fields;                            \
@@ -3585,9 +3584,9 @@ DWG_OBJECT (EVALUATION_GRAPH)
   REPEAT_BLOCK
       SUB_FIELD_BL (edges[rcount1], id, 92); // starting with 0
       SUB_FIELD_BLd (edges[rcount1], nextid, 93); //
-      SUB_FIELD_BLd (edges[rcount1], e1, 94); // incoming edges
-      SUB_FIELD_BLd (edges[rcount1], e2, 91); //
-      SUB_FIELD_BLd (edges[rcount1], e3, 91); //
+      SUB_FIELD_BLd (edges[rcount1], incoming_edge, 94); // incoming edges
+      SUB_FIELD_BLd (edges[rcount1], source_node, 91); //
+      SUB_FIELD_BLd (edges[rcount1], destination_node, 91); //
       SUB_FIELD_BLd (edges[rcount1], out_edge[0], 92); //
       SUB_FIELD_BLd (edges[rcount1], out_edge[1], 92); //
       SUB_FIELD_BLd (edges[rcount1], out_edge[2], 92); //

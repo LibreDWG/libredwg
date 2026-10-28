@@ -6510,9 +6510,9 @@ typedef struct _dwg_EVAL_Edge
   struct _dwg_object_EVALUATION_GRAPH *parent;
   BITCODE_BL  id;         /* 92 */
   BITCODE_BLd nextid;     /* 93 */
-  BITCODE_BLd e1;         /* 94 */
-  BITCODE_BLd e2;         /* 91 */
-  BITCODE_BLd e3;         /* 91 */
+  BITCODE_BLd incoming_edge;    /* 94 */
+  BITCODE_BLd source_node;      /* 91 */
+  BITCODE_BLd destination_node; /* 91 */
   BITCODE_BLd out_edge[5]; /* 5x 92 */
 } Dwg_EVAL_Edge;
 
@@ -8138,9 +8138,9 @@ typedef struct _dwg_object_CSACDOCUMENTOPTIONS
 
 // XY action params
 #define BLOCKACTION_doubles_fields              \
-  BITCODE_BD action_offset_x;                   \
-  BITCODE_BD action_offset_y;                   \
-  BITCODE_BD angle_offset
+  BITCODE_BD distance_multiplier; /* DXF 140 */ \
+  BITCODE_BD angle_offset;        /* DXF 141 */ \
+  BITCODE_RC action_xy_type       /* DXF 280 */
 
 #define BLOCKGRIP_fields                        \
   BLOCKELEMENT_fields;                          \

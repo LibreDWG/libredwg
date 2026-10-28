@@ -37712,34 +37712,19 @@ static int test_BLOCKFLIPACTION (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_BD action_offset_x;
-    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "action_offset_x", &action_offset_x, NULL)
-        && action_offset_x == blockflipaction->action_offset_x)
+    BITCODE_RC action_xy_type;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "action_xy_type", &action_xy_type, NULL)
+        && action_xy_type == blockflipaction->action_xy_type)
       pass ();
     else
-      fail ("BLOCKFLIPACTION.action_offset_x [BD] %g != %g", blockflipaction->action_offset_x, action_offset_x);
-    action_offset_x++;
-    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "action_offset_x", &action_offset_x, 0)
-        && action_offset_x == blockflipaction->action_offset_x)
+      fail ("BLOCKFLIPACTION.action_xy_type [RC] %u != %u", blockflipaction->action_xy_type, action_xy_type);
+    action_xy_type++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "action_xy_type", &action_xy_type, 0)
+        && action_xy_type == blockflipaction->action_xy_type)
       pass ();
     else
-      fail ("BLOCKFLIPACTION.action_offset_x [BD] set+1 %g != %g", blockflipaction->action_offset_x, action_offset_x);
-    blockflipaction->action_offset_x--;
-  }
-  {
-    BITCODE_BD action_offset_y;
-    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "action_offset_y", &action_offset_y, NULL)
-        && action_offset_y == blockflipaction->action_offset_y)
-      pass ();
-    else
-      fail ("BLOCKFLIPACTION.action_offset_y [BD] %g != %g", blockflipaction->action_offset_y, action_offset_y);
-    action_offset_y++;
-    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "action_offset_y", &action_offset_y, 0)
-        && action_offset_y == blockflipaction->action_offset_y)
-      pass ();
-    else
-      fail ("BLOCKFLIPACTION.action_offset_y [BD] set+1 %g != %g", blockflipaction->action_offset_y, action_offset_y);
-    blockflipaction->action_offset_y--;
+      fail ("BLOCKFLIPACTION.action_xy_type [RC] set+1 %u != %u", blockflipaction->action_xy_type, action_xy_type);
+    blockflipaction->action_xy_type--;
   }
   {
     BITCODE_BL* actions;
@@ -37821,6 +37806,21 @@ static int test_BLOCKFLIPACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKFLIPACTION.display_location [3BD]");
+  }
+  {
+    BITCODE_BD distance_multiplier;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "distance_multiplier", &distance_multiplier, NULL)
+        && distance_multiplier == blockflipaction->distance_multiplier)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.distance_multiplier [BD] %g != %g", blockflipaction->distance_multiplier, distance_multiplier);
+    distance_multiplier++;
+    if (dwg_dynapi_entity_set_value (blockflipaction, "BLOCKFLIPACTION", "distance_multiplier", &distance_multiplier, 0)
+        && distance_multiplier == blockflipaction->distance_multiplier)
+      pass ();
+    else
+      fail ("BLOCKFLIPACTION.distance_multiplier [BD] set+1 %g != %g", blockflipaction->distance_multiplier, distance_multiplier);
+    blockflipaction->distance_multiplier--;
   }
   {
     BITCODE_BL eed1071;
@@ -40044,34 +40044,19 @@ static int test_BLOCKMOVEACTION (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_BD action_offset_x;
-    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "action_offset_x", &action_offset_x, NULL)
-        && action_offset_x == blockmoveaction->action_offset_x)
+    BITCODE_RC action_xy_type;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "action_xy_type", &action_xy_type, NULL)
+        && action_xy_type == blockmoveaction->action_xy_type)
       pass ();
     else
-      fail ("BLOCKMOVEACTION.action_offset_x [BD] %g != %g", blockmoveaction->action_offset_x, action_offset_x);
-    action_offset_x++;
-    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "action_offset_x", &action_offset_x, 0)
-        && action_offset_x == blockmoveaction->action_offset_x)
+      fail ("BLOCKMOVEACTION.action_xy_type [RC] %u != %u", blockmoveaction->action_xy_type, action_xy_type);
+    action_xy_type++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "action_xy_type", &action_xy_type, 0)
+        && action_xy_type == blockmoveaction->action_xy_type)
       pass ();
     else
-      fail ("BLOCKMOVEACTION.action_offset_x [BD] set+1 %g != %g", blockmoveaction->action_offset_x, action_offset_x);
-    blockmoveaction->action_offset_x--;
-  }
-  {
-    BITCODE_BD action_offset_y;
-    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "action_offset_y", &action_offset_y, NULL)
-        && action_offset_y == blockmoveaction->action_offset_y)
-      pass ();
-    else
-      fail ("BLOCKMOVEACTION.action_offset_y [BD] %g != %g", blockmoveaction->action_offset_y, action_offset_y);
-    action_offset_y++;
-    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "action_offset_y", &action_offset_y, 0)
-        && action_offset_y == blockmoveaction->action_offset_y)
-      pass ();
-    else
-      fail ("BLOCKMOVEACTION.action_offset_y [BD] set+1 %g != %g", blockmoveaction->action_offset_y, action_offset_y);
-    blockmoveaction->action_offset_y--;
+      fail ("BLOCKMOVEACTION.action_xy_type [RC] set+1 %u != %u", blockmoveaction->action_xy_type, action_xy_type);
+    blockmoveaction->action_xy_type--;
   }
   {
     BITCODE_BL* actions;
@@ -40153,6 +40138,21 @@ static int test_BLOCKMOVEACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKMOVEACTION.display_location [3BD]");
+  }
+  {
+    BITCODE_BD distance_multiplier;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "distance_multiplier", &distance_multiplier, NULL)
+        && distance_multiplier == blockmoveaction->distance_multiplier)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.distance_multiplier [BD] %g != %g", blockmoveaction->distance_multiplier, distance_multiplier);
+    distance_multiplier++;
+    if (dwg_dynapi_entity_set_value (blockmoveaction, "BLOCKMOVEACTION", "distance_multiplier", &distance_multiplier, 0)
+        && distance_multiplier == blockmoveaction->distance_multiplier)
+      pass ();
+    else
+      fail ("BLOCKMOVEACTION.distance_multiplier [BD] set+1 %g != %g", blockmoveaction->distance_multiplier, distance_multiplier);
+    blockmoveaction->distance_multiplier--;
   }
   {
     BITCODE_BL eed1071;
@@ -42511,34 +42511,19 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_BD action_offset_x;
-    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_offset_x", &action_offset_x, NULL)
-        && action_offset_x == blockstretchaction->action_offset_x)
+    BITCODE_RC action_xy_type;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_xy_type", &action_xy_type, NULL)
+        && action_xy_type == blockstretchaction->action_xy_type)
       pass ();
     else
-      fail ("BLOCKSTRETCHACTION.action_offset_x [BD] %g != %g", blockstretchaction->action_offset_x, action_offset_x);
-    action_offset_x++;
-    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_offset_x", &action_offset_x, 0)
-        && action_offset_x == blockstretchaction->action_offset_x)
+      fail ("BLOCKSTRETCHACTION.action_xy_type [RC] %u != %u", blockstretchaction->action_xy_type, action_xy_type);
+    action_xy_type++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_xy_type", &action_xy_type, 0)
+        && action_xy_type == blockstretchaction->action_xy_type)
       pass ();
     else
-      fail ("BLOCKSTRETCHACTION.action_offset_x [BD] set+1 %g != %g", blockstretchaction->action_offset_x, action_offset_x);
-    blockstretchaction->action_offset_x--;
-  }
-  {
-    BITCODE_BD action_offset_y;
-    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_offset_y", &action_offset_y, NULL)
-        && action_offset_y == blockstretchaction->action_offset_y)
-      pass ();
-    else
-      fail ("BLOCKSTRETCHACTION.action_offset_y [BD] %g != %g", blockstretchaction->action_offset_y, action_offset_y);
-    action_offset_y++;
-    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "action_offset_y", &action_offset_y, 0)
-        && action_offset_y == blockstretchaction->action_offset_y)
-      pass ();
-    else
-      fail ("BLOCKSTRETCHACTION.action_offset_y [BD] set+1 %g != %g", blockstretchaction->action_offset_y, action_offset_y);
-    blockstretchaction->action_offset_y--;
+      fail ("BLOCKSTRETCHACTION.action_xy_type [RC] set+1 %u != %u", blockstretchaction->action_xy_type, action_xy_type);
+    blockstretchaction->action_xy_type--;
   }
   {
     BITCODE_BL* actions;
@@ -42630,6 +42615,21 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKSTRETCHACTION.display_location [3BD]");
+  }
+  {
+    BITCODE_BD distance_multiplier;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "distance_multiplier", &distance_multiplier, NULL)
+        && distance_multiplier == blockstretchaction->distance_multiplier)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.distance_multiplier [BD] %g != %g", blockstretchaction->distance_multiplier, distance_multiplier);
+    distance_multiplier++;
+    if (dwg_dynapi_entity_set_value (blockstretchaction, "BLOCKSTRETCHACTION", "distance_multiplier", &distance_multiplier, 0)
+        && distance_multiplier == blockstretchaction->distance_multiplier)
+      pass ();
+    else
+      fail ("BLOCKSTRETCHACTION.distance_multiplier [BD] set+1 %g != %g", blockstretchaction->distance_multiplier, distance_multiplier);
+    blockstretchaction->distance_multiplier--;
   }
   {
     BITCODE_BL eed1071;

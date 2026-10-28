@@ -56,9 +56,9 @@ api_process (dwg_object *obj)
         BITCODE_BLd edge[5];
         CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, id, BL);
         CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, nextid, BLd);
-        CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, e1, BLd);
-        CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, e2, BLd);
-        CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, e3, BLd);
+        CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, incoming_edge, BLd);
+        CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, source_node, BLd);
+        CHK_SUBCLASS_TYPE (_obj->edges[i], EVAL_Edge, destination_node, BLd);
         // CHK_SUBCLASS_VECTOR_TYPE (edges, EVAL_Edge, edge, 5, BLd);
         if (dwg_dynapi_subclass_value (&_obj->edges[i], "EVAL_Edge",
                                        "out_edge", &edge, NULL))
