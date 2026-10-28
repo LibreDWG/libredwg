@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
   BITCODE_T connection_string;         /*<! DXF 302  */
   BITCODE_BL option;                   /*<! DXF 90  2 */
   BITCODE_BL update_option;            /*<! DXF 91  1179649 */
-  BITCODE_BL bl92;                     /*<! DXF 92  1 */
+  BITCODE_BL flags;                    /*<! DXF 92  1 */
   BITCODE_BS year;                     /*<! DXF 170  */
   BITCODE_BS month;                    /*<! DXF 171  */
   BITCODE_BS day;                      /*<! DXF 172  */
@@ -22,7 +22,7 @@ api_process (dwg_object *obj)
   BITCODE_BS seconds;                  /*<! DXF 175  */
   BITCODE_BS msec;                     /*<! DXF 176  */
   BITCODE_BS path_option;              /*<! DXF 177  1 */
-  BITCODE_BL bl93;                     /*<! DXF 93   0 */
+  BITCODE_BL status_flags;             /*<! DXF 93   0 */
   BITCODE_T update_status;             /*<! DXF 304  */
   BITCODE_BL i, num_customdata;        // 94
   Dwg_DATALINK_customdata *customdata; // 330 + 304
@@ -39,7 +39,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, DATALINK, option, BL);
   CHK_ENTITY_TYPE (_obj, DATALINK, update_option, BL);
-  CHK_ENTITY_TYPE (_obj, DATALINK, bl92, BL);
+  CHK_ENTITY_TYPE (_obj, DATALINK, flags, BL);
   CHK_ENTITY_TYPE (_obj, DATALINK, year, BS);
   CHK_ENTITY_TYPE (_obj, DATALINK, month, BS);
   CHK_ENTITY_TYPE (_obj, DATALINK, day, BS);
@@ -48,7 +48,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DATALINK, seconds, BS);
   CHK_ENTITY_TYPE (_obj, DATALINK, msec, BS);
   CHK_ENTITY_TYPE (_obj, DATALINK, path_option, BS);
-  CHK_ENTITY_TYPE (_obj, DATALINK, bl93, BL);
+  CHK_ENTITY_TYPE (_obj, DATALINK, status_flags, BL);
   CHK_ENTITY_UTF8TEXT (_obj, DATALINK, update_status);
   CHK_ENTITY_TYPE (_obj, DATALINK, num_customdata, BL);
   if (!dwg_dynapi_entity_value (_obj, "DATALINK", "customdata", &customdata,

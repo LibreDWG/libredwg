@@ -4476,13 +4476,29 @@ DWG_OBJECT (DATATABLE)
 
       REPEAT2 (num_rows, cols[rcount1].rows, Dwg_DATATABLE_row) //CellType?
       REPEAT_BLOCK
-          // almost like Dwg_TABLE_value
-          //switch case 1:
-          SUB_FIELD_BL (cols[rcount1].rows[rcount2],value.data_long, 93);
-          //switch case 2:
-          SUB_FIELD_BD (cols[rcount1].rows[rcount2],value.data_double, 40);
-          //switch case 3:
-          SUB_FIELD_T (cols[rcount1].rows[rcount2],value.data_string, 3);
+          // the column type selects the cell payload
+          switch (_obj->cols[rcount1].type)
+            {
+            case 1: // integer
+              SUB_FIELD_BL (cols[rcount1].rows[rcount2],value.data_long, 93);
+              break;
+            case 2: // double
+              SUB_FIELD_BD (cols[rcount1].rows[rcount2],value.data_double, 40);
+              break;
+            case 3: // text
+              SUB_FIELD_T (cols[rcount1].rows[rcount2],value.data_string, 3);
+              break;
+            case 4: // point
+              SUB_FIELD_3BD (cols[rcount1].rows[rcount2],value.data_3dpoint, 10);
+              break;
+            case 5: // object id
+              SUB_FIELD_HANDLE (cols[rcount1].rows[rcount2],value.data_handle, 5, 331);
+              break;
+            default:
+              LOG_ERROR ("Unhandled DATATABLE column type %u",
+                         (unsigned)_obj->cols[rcount1].type);
+              break;
+            }
           SET_PARENT (cols[rcount1].rows[rcount2], &_obj->cols[rcount1]);
       END_REPEAT_BLOCK
       END_REPEAT (cols[rcount1].rows)
@@ -4503,7 +4519,7 @@ DWG_OBJECT (DATALINK)
   FIELD_T (connection_string, 302);
   FIELD_BL (option, 90); // 2
   FIELD_BL (update_option, 91); // 1179649
-  FIELD_BL (bl92, 92); // 1
+  FIELD_BL (flags, 92); // 1
   FIELD_BS (year, 170);
   FIELD_BS (month, 171);
   FIELD_BS (day, 172);
@@ -4512,7 +4528,7 @@ DWG_OBJECT (DATALINK)
   FIELD_BS (seconds, 175);
   FIELD_BS (msec, 176);
   FIELD_BS (path_option, 177); // 1
-  FIELD_BL (bl93, 93); // 0
+  FIELD_BL (status_flags, 93); // 0
   FIELD_T (update_status, 304);
   FIELD_BL (num_customdata, 94); // 2
   DXF { VALUE_TFF ("CUSTOMDATA", 305); }
@@ -4986,7 +5002,7 @@ DWG_OBJECT (TVDEVICEPROPERTIES)
   FIELD_BL (blending_mode, 0);
   //ver 2 or >4:
   FIELD_BD (antialiasing_level, 0);
-  FIELD_BD (bd2, 0);
+  FIELD_BD (reserved_double, 0);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -5059,14 +5075,14 @@ DWG_ENTITY_END
 // r2000+ expresstools. Remote Text
 DWG_ENTITY (RTEXT)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbRText);
+  SUBCLASS (RText);
   FIELD_3BD (pt, 10);
   DXF  {
     FIELD_BE (extrusion, 210);
   }
   else { FIELD_3DPOINT (extrusion, 210); }
   FIELD_BD (rotation, 50);
-  FIELD_BD (height, 50);
+  FIELD_BD (height, 40);
   DXF {
     FIELD_HANDLE (style, 5, 7);
   }

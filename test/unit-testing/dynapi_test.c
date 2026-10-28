@@ -44962,36 +44962,6 @@ static int test_DATALINK (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_BL bl92;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bl92", &bl92, NULL)
-        && bl92 == datalink->bl92)
-      pass ();
-    else
-      fail ("DATALINK.bl92 [BL] %u != %u", datalink->bl92, bl92);
-    bl92++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bl92", &bl92, 0)
-        && bl92 == datalink->bl92)
-      pass ();
-    else
-      fail ("DATALINK.bl92 [BL] set+1 %u != %u", datalink->bl92, bl92);
-    datalink->bl92--;
-  }
-  {
-    BITCODE_BL bl93;
-    if (dwg_dynapi_entity_value (datalink, "DATALINK", "bl93", &bl93, NULL)
-        && bl93 == datalink->bl93)
-      pass ();
-    else
-      fail ("DATALINK.bl93 [BL] %u != %u", datalink->bl93, bl93);
-    bl93++;
-    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "bl93", &bl93, 0)
-        && bl93 == datalink->bl93)
-      pass ();
-    else
-      fail ("DATALINK.bl93 [BL] set+1 %u != %u", datalink->bl93, bl93);
-    datalink->bl93--;
-  }
-  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (datalink, "DATALINK", "class_version", &class_version, NULL)
         && class_version == datalink->class_version)
@@ -45060,6 +45030,21 @@ static int test_DATALINK (const Dwg_Object *obj)
       pass ();
     else
       fail ("DATALINK.description [T] '%s' <> '%s'", description, datalink->description);
+  }
+  {
+    BITCODE_BL flags;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "flags", &flags, NULL)
+        && flags == datalink->flags)
+      pass ();
+    else
+      fail ("DATALINK.flags [BL] %u != %u", datalink->flags, flags);
+    flags++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "flags", &flags, 0)
+        && flags == datalink->flags)
+      pass ();
+    else
+      fail ("DATALINK.flags [BL] set+1 %u != %u", datalink->flags, flags);
+    datalink->flags--;
   }
   {
     BITCODE_H hardowner;
@@ -45196,6 +45181,21 @@ static int test_DATALINK (const Dwg_Object *obj)
     else
       fail ("DATALINK.seconds [BS] set+1 %hu != %hu", datalink->seconds, seconds);
     datalink->seconds--;
+  }
+  {
+    BITCODE_BL status_flags;
+    if (dwg_dynapi_entity_value (datalink, "DATALINK", "status_flags", &status_flags, NULL)
+        && status_flags == datalink->status_flags)
+      pass ();
+    else
+      fail ("DATALINK.status_flags [BL] %u != %u", datalink->status_flags, status_flags);
+    status_flags++;
+    if (dwg_dynapi_entity_set_value (datalink, "DATALINK", "status_flags", &status_flags, 0)
+        && status_flags == datalink->status_flags)
+      pass ();
+    else
+      fail ("DATALINK.status_flags [BL] set+1 %u != %u", datalink->status_flags, status_flags);
+    datalink->status_flags--;
   }
   {
     BITCODE_T tooltip;
@@ -59234,21 +59234,6 @@ static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
     tvdeviceproperties->antialiasing_level--;
   }
   {
-    BITCODE_BD bd2;
-    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "bd2", &bd2, NULL)
-        && bd2 == tvdeviceproperties->bd2)
-      pass ();
-    else
-      fail ("TVDEVICEPROPERTIES.bd2 [BD] %g != %g", tvdeviceproperties->bd2, bd2);
-    bd2++;
-    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "bd2", &bd2, 0)
-        && bd2 == tvdeviceproperties->bd2)
-      pass ();
-    else
-      fail ("TVDEVICEPROPERTIES.bd2 [BD] set+1 %g != %g", tvdeviceproperties->bd2, bd2);
-    tvdeviceproperties->bd2--;
-  }
-  {
     BITCODE_BL blending_mode;
     if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "blending_mode", &blending_mode, NULL)
         && blending_mode == tvdeviceproperties->blending_mode)
@@ -59314,6 +59299,21 @@ static int test_TVDEVICEPROPERTIES (const Dwg_Object *obj)
         pass ();
     else
         fail ("TVDEVICEPROPERTIES.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD reserved_double;
+    if (dwg_dynapi_entity_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "reserved_double", &reserved_double, NULL)
+        && reserved_double == tvdeviceproperties->reserved_double)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.reserved_double [BD] %g != %g", tvdeviceproperties->reserved_double, reserved_double);
+    reserved_double++;
+    if (dwg_dynapi_entity_set_value (tvdeviceproperties, "TVDEVICEPROPERTIES", "reserved_double", &reserved_double, 0)
+        && reserved_double == tvdeviceproperties->reserved_double)
+      pass ();
+    else
+      fail ("TVDEVICEPROPERTIES.reserved_double [BD] set+1 %g != %g", tvdeviceproperties->reserved_double, reserved_double);
+    tvdeviceproperties->reserved_double--;
   }
   {
     BITCODE_BL use_lut_palette;

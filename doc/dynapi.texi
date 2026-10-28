@@ -3977,7 +3977,7 @@ BE,	DXF 210
 @item rotation
 BD,	DXF 50
 @item height
-BD,	DXF 50
+BD,	DXF 40
 @item flags
 BS,	DXF 70
 @item text_value
@@ -9031,7 +9031,7 @@ T,	DXF 302
 BL,	DXF 90
 @item update_option
 BL,	DXF 91
-@item bl92
+@item flags
 BL,	DXF 92
 @item year
 BS,	DXF 170
@@ -9049,7 +9049,7 @@ BS,	DXF 175
 BS,	DXF 176
 @item path_option
 BS,	DXF 177
-@item bl93
+@item status_flags
 BL,	DXF 93
 @item update_status
 T,	DXF 304
@@ -12043,7 +12043,7 @@ BLL
 BL
 @item antialiasing_level
 BD
-@item bd2
+@item reserved_double
 BD
 
 @end vtable

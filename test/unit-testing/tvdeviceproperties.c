@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_BLL geom_shader_usage;
   BITCODE_BL blending_mode;
   BITCODE_BD antialiasing_level;
-  BITCODE_BD bd2;
+  BITCODE_BD reserved_double;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -28,6 +28,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, geom_shader_usage, BLL);
   CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, blending_mode, BL);
   CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, antialiasing_level, BD);
-  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, bd2, BD);
+  CHK_ENTITY_TYPE (_obj, TVDEVICEPROPERTIES, reserved_double, BD);
 #endif
 }

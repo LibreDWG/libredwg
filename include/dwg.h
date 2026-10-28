@@ -6174,7 +6174,7 @@ typedef struct _dwg_object_DATALINK
   BITCODE_T connection_string;	/*<! DXF 302  */
   BITCODE_BL option;	/*<! DXF 90  2 */
   BITCODE_BL update_option;/*<! DXF 91  1179649 */
-  BITCODE_BL bl92;	/*<! DXF 92  1 */
+  BITCODE_BL flags;	/*<! DXF 92  1 */
   BITCODE_BS year;	/*<! DXF 170  */
   BITCODE_BS month;	/*<! DXF 171  */
   BITCODE_BS day;	/*<! DXF 172  */
@@ -6183,7 +6183,7 @@ typedef struct _dwg_object_DATALINK
   BITCODE_BS seconds;	/*<! DXF 175  */
   BITCODE_BS msec;	/*<! DXF 176  */
   BITCODE_BS path_option; /*<! DXF 177  1 */
-  BITCODE_BL bl93;	  /*<! DXF 93   0 */
+  BITCODE_BL status_flags;	  /*<! DXF 93   0 */
   BITCODE_T update_status;/*<! DXF 304  */
   BITCODE_BL num_customdata; // 94
   Dwg_DATALINK_customdata *customdata; // 330 + 304
@@ -7589,7 +7589,7 @@ typedef struct _dwg_object_TVDEVICEPROPERTIES
   BITCODE_BL blending_mode;
   //ver 2 or >4:
   BITCODE_BD antialiasing_level;
-  BITCODE_BD bd2;
+  BITCODE_BD reserved_double;
 } Dwg_Object_TVDEVICEPROPERTIES;
 
 typedef struct _dwg_object_SKYLIGHT_BACKGROUND
