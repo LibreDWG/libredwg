@@ -26,6 +26,7 @@ compile_commands.json
 /.build32/
 /.claude
 /.agents
+/.opencode
 /.ccls-cache/
 /.fuzz-*/
 .vscode/
