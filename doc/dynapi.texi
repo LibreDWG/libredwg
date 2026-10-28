@@ -2833,7 +2833,7 @@ B,	DXF 72
 @item num_subdiv_vertex
 BL,	DXF 91
 @item subdiv_vertex
-3DPOINT*,	DXF 10
+3DPOINT*
 @item num_vertex
 BL,	DXF 92
 @item vertex
@@ -7040,7 +7040,7 @@ BD,	DXF 50
 @item ins_pt
 3BD,	DXF 10
 @item scale_factor
-3BD_1,	DXF 42
+3BD_1,	DXF 41
 
 @end vtable
 @end indentedblock
@@ -10205,7 +10205,7 @@ H,	DXF 345
 @item num_viewports
 BL
 @item viewports
-H*
+H*,	DXF 331
 
 @end vtable
 @end indentedblock
@@ -10782,9 +10782,9 @@ H,	DXF 340
 @item attachment
 BL,	DXF 70
 @item ins_pt
-3BD,	DXF 10
-@item x_axis_dir
 3BD,	DXF 11
+@item x_axis_dir
+3BD,	DXF 10
 @item rect_height
 BD,	DXF 41
 @item rect_width

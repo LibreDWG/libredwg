@@ -980,7 +980,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str175,                            "DUMMY",                             DWG_TYPE_DUMMY,	0,	STABLE},
       {-1}, {-1},
 #line 304 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str178,          "ACDB_LEADEROBJECTCONTEXTDATA_CLASS",  DWG_TYPE_LEADEROBJECTCONTEXTDATA,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str178,          "ACDB_LEADEROBJECTCONTEXTDATA_CLASS",  DWG_TYPE_LEADEROBJECTCONTEXTDATA,	0,	STABLE},
 #line 106 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str179,                 "OLE2FRAME",                  DWG_TYPE_OLE2FRAME,	1,	STABLE},
 #line 100 "src/objects.in"
@@ -1227,10 +1227,10 @@ in_word_set (const char *str, size_t len)
 #line 69 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str391,          "DIMENSION",                  DWG_TYPE_DIMENSION_ANG2LN,	1,	STABLE},
 #line 170 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str392,           "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ALDIMOBJECTCONTEXTDATA,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str392,           "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ALDIMOBJECTCONTEXTDATA,	0,	STABLE},
       {-1}, {-1}, {-1},
 #line 356 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str396,            "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_TEXTOBJECTCONTEXTDATA,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str396,            "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_TEXTOBJECTCONTEXTDATA,	0,	STABLE},
       {-1},
 #line 218 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str398,                    "ACDBASSOCVARIABLE",                 DWG_TYPE_ASSOCVARIABLE,	0,	UNSTABLE},
@@ -1291,7 +1291,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str451,                      "ACDBPLACEHOLDER",                   DWG_TYPE_PLACEHOLDER,	0,	STABLE},
       {-1},
 #line 220 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str453,          "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_BLKREFOBJECTCONTEXTDATA,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str453,          "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_BLKREFOBJECTCONTEXTDATA,	0,	STABLE},
 #line 198 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str454,              "ACDBASSOCGEOMDEPENDENCY",           DWG_TYPE_ASSOCGEOMDEPENDENCY,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1},
@@ -1552,7 +1552,7 @@ in_word_set (const char *str, size_t len)
 #line 364 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str761,                      "VISUALSTYLE",                       DWG_TYPE_VISUALSTYLE,	0,	STABLE},
 #line 316 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str762,           "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTOBJECTCONTEXTDATA,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str762,           "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTOBJECTCONTEXTDATA,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 112 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str767,              "ACDBPOINTCLOUDEX",           DWG_TYPE_POINTCLOUDEX,	1,	UNSTABLE},
