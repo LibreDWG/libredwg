@@ -9,6 +9,9 @@
 #include <unistd.h>
 #include <math.h>
 #include <sys/stat.h>
+#include <limits.h>
+#include <ctype.h>
+#include <assert.h>
 #ifdef __APPLE__
 #  define _DARWIN_C_SOURCE /* for DT_DIR */
 #endif
@@ -81,6 +84,95 @@ void print_api (dwg_object *obj);
 
 /// Low level printing function declaration
 void print_low_level (dwg_object *obj);
+
+#ifndef _WIN32
+/* The test-data/2018/<object>.dxf files for the objects without coverage
+   are in git, the DWGs are not. Convert it to a r2018 DWG with the
+   ODAFileConverter (or TeighaFileConverter) into test-data/2018/ itself and
+   test that. ODA needs an output folder different from the input folder, so
+   it writes into a temporary subdirectory first. Skipped when no converter
+   is installed, the directory is not writable or the conversion fails. */
+static int
+test_2018_dxf (const char *prefix, const char *lower, const int cov)
+{
+  char dxf[256], indir[PATH_MAX], sub[PATH_MAX], cmd[3 * PATH_MAX];
+  char base[96], out[PATH_MAX], dwg[PATH_MAX];
+  const char *oda = getenv ("ODAFILECONVERTER");
+  const char *xvfb = "";
+  struct stat attrib;
+  char *p;
+  int error = 0;
+
+  if (snprintf (dxf, sizeof (dxf), "%s/2018/%s.dxf", prefix, lower)
+          >= (int)sizeof (dxf)
+      || stat (dxf, &attrib))
+    return 0;
+  if (!oda || !*oda)
+    {
+      if (!system ("command -v ODAFileConverter >/dev/null 2>&1"))
+        oda = "ODAFileConverter";
+      else if (!system ("command -v TeighaFileConverter >/dev/null 2>&1"))
+        oda = "TeighaFileConverter";
+      else
+        {
+          if (cov)
+            LOG_INFO ("No ODAFileConverter, skip %s\n", dxf);
+          return 0;
+        }
+    }
+  // the converter needs a display
+  if (!getenv ("DISPLAY") && !system ("command -v xvfb-run >/dev/null 2>&1"))
+    xvfb = "xvfb-run -a ";
+  if (!realpath (dxf, indir))
+    return 0;
+  p = strrchr (indir, '/');
+  *p = '\0'; // the input folder, test-data/2018
+  if (snprintf (sub, sizeof (sub), "%s/oda-tmp-XXXXXX", indir)
+      >= (int)sizeof (sub))
+    return 0;
+  if (!mkdtemp (sub)) // not writable
+    return 0;
+  {
+    int n = snprintf (cmd, sizeof (cmd),
+                      "%s%s \"%s\" \"%s\" ACAD2018 DWG 0 1 \"%s.dxf\" "
+                      ">/dev/null 2>&1",
+                      xvfb, oda, indir, sub, lower);
+    if (n > 0 && (size_t)n < sizeof (cmd))
+      {
+        int rc = system (cmd);
+        if (rc && cov)
+          LOG_INFO ("%s returned %d\n", oda, rc);
+      }
+  }
+  {
+    int n1 = snprintf (out, sizeof (out), "%s/%s.dwg", sub, lower);
+    int n2 = snprintf (dwg, sizeof (dwg), "%s/%s.dwg", indir, lower);
+    if (n1 > 0 && (size_t)n1 < sizeof (out) && n2 > 0
+        && (size_t)n2 < sizeof (dwg) && !stat (out, &attrib)
+        && !rename (out, dwg))
+      {
+        int n3 = snprintf (base, sizeof (base), "2018/%s.dwg", lower);
+        if (cov)
+          LOG_INFO ("Converted %s with %s\n", dxf, oda);
+        if (n3 > 0 && (size_t)n3 < sizeof (base))
+          error = test_code (prefix, base, cov);
+      }
+    else if (cov)
+      LOG_INFO ("%s failed to convert %s\n", oda, dxf);
+  }
+  // the converter might leave an .err file
+  {
+    int n = snprintf (out, sizeof (out), "%s/%s.dxf.err", sub, lower);
+    if (n > 0 && (size_t)n < sizeof (out))
+      unlink (out);
+    n = snprintf (out, sizeof (out), "%s/%s.dwg.err", sub, lower);
+    if (n > 0 && (size_t)n < sizeof (out))
+      unlink (out);
+  }
+  rmdir (sub);
+  return error;
+}
+#endif
 
 /// Main function
 int
@@ -196,6 +288,38 @@ main (int argc, char *argv[])
           else
             error += test_code (prefix, *ptr, cov);
         }
+      // We created dozens of 2018 DXF's for each missing coverage, named by
+      // the lowercase objectname. The DXF is in git, the DWG is not: use the
+      // DWG if it exists, else convert the DXF via ODA.
+      {
+        char tmp[256];
+        char lower[80]; // type to string
+        const char *type_name = dwg_type_name (DWG_TYPE);
+        if (type_name)
+          {
+            size_t len = strlen (type_name);
+            const char *base;
+            int n;
+            assert (len < sizeof (lower));
+            for (size_t j = 0; j < len; j++)
+              {
+                lower[j] = (char)tolower ((unsigned char)type_name[j]);
+              }
+            lower[len] = '\0';
+            n = snprintf (tmp, sizeof (tmp), "%s/2018/%s.dwg", prefix, lower);
+            base = tmp + strlen (prefix) + 1; // 2018/name.dwg
+            if (n > 0 && (size_t)n < sizeof (tmp) && !stat (tmp, &attrib))
+              error += test_code (prefix, base, cov);
+#ifndef _WIN32
+            else
+              error += test_2018_dxf (prefix, lower, cov);
+#endif
+          }
+        else
+          {
+            fprintf (stderr, "Could not stringiy the type %u\n", DWG_TYPE);
+          }
+      }
       if (DWG_TYPE == DWG_TYPE_ATTDEF)
         {
           error += test_code_nodist (prefix,

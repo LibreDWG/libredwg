@@ -312,11 +312,58 @@ TESTDATA = \
     test-data/2018/RAY.txt \
     test-data/2018/Spline.dwg \
     test-data/2018/Spline.txt \
+    test-data/2018/TS1.dxf \
     test-data/2018/Text.dwg \
     test-data/2018/Text.txt \
-    test-data/2018/TS1.dxf \
+    test-data/2018/acad_proxy_entity.dxf \
+    test-data/2018/assocactionparam.dxf \
+    test-data/2018/assocarraymodifyparameters.dxf \
+    test-data/2018/assocarraypathparameters.dxf \
+    test-data/2018/assocarraypolarparameters.dxf \
+    test-data/2018/assocarrayrectangularparameters.dxf \
+    test-data/2018/assocasmbodyactionparam.dxf \
+    test-data/2018/assocblendsurfaceactionbody.dxf \
+    test-data/2018/assoccompoundactionparam.dxf \
+    test-data/2018/assocextendsurfaceactionbody.dxf \
+    test-data/2018/assocfaceactionparam.dxf \
+    test-data/2018/assocfilletsurfaceactionbody.dxf \
+    test-data/2018/assocnetworksurfaceactionbody.dxf \
+    test-data/2018/assocobjectactionparam.dxf \
+    test-data/2018/assocoffsetsurfaceactionbody.dxf \
+    test-data/2018/assocpatchsurfaceactionbody.dxf \
+    test-data/2018/assocpointrefactionparam.dxf \
+    test-data/2018/assoctrimsurfaceactionbody.dxf \
+    test-data/2018/blockalignedconstraintparameter.dxf \
+    test-data/2018/blockangularconstraintparameter.dxf \
+    test-data/2018/blockdiametricconstraintparameter.dxf \
+    test-data/2018/blocklinearconstraintparameter.dxf \
+    test-data/2018/blockradialconstraintparameter.dxf \
+    test-data/2018/blockuserparameter.dxf \
     test-data/2018/circle.dwg \
     test-data/2018/circle.txt \
+    test-data/2018/dgnunderlay.dxf \
+    test-data/2018/dwfdefinition.dxf \
+    test-data/2018/dwfunderlay.dxf \
+    test-data/2018/fcfobjectcontextdata.dxf \
+    test-data/2018/gradient_background.dxf \
+    test-data/2018/ground_plane_background.dxf \
+    test-data/2018/ibl_background.dxf \
+    test-data/2018/image_background.dxf \
+    test-data/2018/index.dxf \
+    test-data/2018/layer_filter.dxf \
+    test-data/2018/layer_index.dxf \
+    test-data/2018/lightlist.dxf \
+    test-data/2018/long_transaction.dxf \
+    test-data/2018/oleframe.dxf \
+    test-data/2018/pointcloud.dxf \
+    test-data/2018/pointcloudcolormap.dxf \
+    test-data/2018/pointclouddef.dxf \
+    test-data/2018/pointclouddef_reactor.dxf \
+    test-data/2018/pointclouddef_reactor_ex.dxf \
+    test-data/2018/pointclouddefex.dxf \
+    test-data/2018/pointcloudex.dxf \
+    test-data/2018/rendersettings.dxf \
+    test-data/2018/vba_project.dxf \
     test-data/example_2000.dwg \
     test-data/example_2000.dxf \
     test-data/example_2000.dxfb \
