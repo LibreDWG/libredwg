@@ -3487,7 +3487,7 @@ H,	DXF 330
 @item reactor
 H,	DXF 360
 @item show_intensity
-B
+B,	DXF 290
 @item intensity_scheme
 BS,	DXF 71
 @item intensity_style
@@ -3528,7 +3528,7 @@ BS,	DXF 70
 @item is_locked
 B,	DXF 290
 @item pointclouddefex
-H,	DXF 330
+H,	DXF 340
 @item reactor
 H,	DXF 360
 @item name
@@ -10387,19 +10387,19 @@ BD,	DXF 145
 @item refractionmap
 Dwg_MATERIAL_mapper
 @item color_bleed_scale
-BD,	DXF 460
+BD
 @item indirect_bump_scale
-BD,	DXF 461
+BD
 @item reflectance_scale
-BD,	DXF 462
+BD
 @item transmittance_scale
-BD,	DXF 463
+BD
 @item two_sided_material
-B,	DXF 290
+B
 @item luminance
-BD,	DXF 464
+BD
 @item luminance_mode
-BS,	DXF 270
+BS
 @item translucence
 BD,	DXF 148
 @item self_illumination

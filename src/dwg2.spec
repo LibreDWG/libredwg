@@ -2806,30 +2806,9 @@ DWG_OBJECT (MATERIAL)
     FIELD_BL0 (mode, 282);
   }
 
-#if 0
-  // missing:
-  FIELD_BD (indirect_bump_scale, 461);
-  FIELD_BD (reflectance_scale, 462);
-  FIELD_BD (transmittance_scale, 463);
-  FIELD_B (two_sided_material, 290);
-  FIELD_BD (luminance, 464);
-  FIELD_BS (luminance_mode, 270);
-  FIELD_BS (normalmap_method, 271);
-  FIELD_BD (normalmap_strength, 465); //def: 1.0
-  MAT_MAP (normalmap, 42, 72, 3, 73, 74, 75, 43);
-  FIELD_B (is_anonymous, 293);
-  FIELD_BS (global_illumination, 272); // 0 none, 1 cast, 2 receive, 3 cast&receive
-  FIELD_BS (final_gather, 273);        // 0 none, 1 cast, 2 receive, 3 cast&receive
-  FIELD_BD (color_bleed_scale, 460);
-
-  // saveas: ADVMATERIAL into xdic
-  //FIELD_B (genproctableend, 292); // always 1
-  //78
-  //172
-  //176
-  //270
-  //274
-#endif
+  // The advanced material properties (DXF 460-465, 270-273, 290, 293) are
+  // not part of the DWG object. They are stored in an ADVMATERIAL XRECORD
+  // in the extension dictionary of the material.
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -5279,7 +5258,7 @@ DWG_ENTITY (POINTCLOUD)
       SINCE (R_2013b) {
         FIELD_HANDLE (pointclouddef, 5, 330);
         FIELD_HANDLE (reactor, 3, 360);
-        FIELD_B (show_intensity, 0);
+        FIELD_B (show_intensity, 290);
         FIELD_BS (intensity_scheme, 71);
         SUB_FIELD_BD (intensity_style, min_intensity, 40);
         SUB_FIELD_BD (intensity_style, max_intensity, 41);
@@ -5314,7 +5293,7 @@ DWG_ENTITY_END
 
 DWG_ENTITY (POINTCLOUDEX)
   HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPointCloud);
+  SUBCLASS (AcDbPointCloudEx);
   FIELD_BS (class_version, 70); // 1
   FIELD_3BD (extents_min, 10);
   FIELD_3BD (extents_max, 11);
@@ -5324,7 +5303,7 @@ DWG_ENTITY (POINTCLOUDEX)
   FIELD_3BD (ucs_z_dir, 212);
 
   FIELD_B (is_locked, 290);
-  FIELD_HANDLE (pointclouddefex, 5, 330);
+  FIELD_HANDLE (pointclouddefex, 5, 340);
   FIELD_HANDLE (reactor, 3, 360);
   FIELD_T (name, 1);
   FIELD_B (show_intensity, 291);
