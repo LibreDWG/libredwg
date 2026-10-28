@@ -6473,6 +6473,22 @@ typedef struct _dwg_CONSTRAINTGROUPNODE
   BITCODE_3BD start_pt;   /* 10 */               \
   BITCODE_3BD end_pt      /* 11 */
 
+/* Class name table entry of a since r2013 ASSOC2DCONSTRAINTGROUP */
+typedef struct _dwg_CONSTRAINTGROUP_ClassType
+{
+  struct _dwg_object_ASSOC2DCONSTRAINTGROUP *parent;
+  BITCODE_T name; /* DXF 1 */
+} Dwg_CONSTRAINTGROUP_ClassType;
+
+/* Registry entry of a since r2013 ASSOC2DCONSTRAINTGROUP */
+typedef struct _dwg_CONSTRAINTGROUP_Registered
+{
+  struct _dwg_object_ASSOC2DCONSTRAINTGROUP *parent;
+  BITCODE_B flag;
+  BITCODE_BL class_index; /* 1-based index into class_types */
+  BITCODE_BL nodeid;
+} Dwg_CONSTRAINTGROUP_Registered;
+
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
 {
   struct _dwg_object_object *parent;
@@ -6484,8 +6500,17 @@ typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
   BITCODE_H h1; // 360
   BITCODE_BL num_actions;// 90
   BITCODE_H* actions;    // 360
-  BITCODE_BL num_nodes;  // 90 9
-  Dwg_CONSTRAINTGROUPNODE *nodes;
+  BITCODE_BL next_node_id; // 90 9, an id seed, not a node count
+  /* The node bodies are not yet decoded. They follow in the unknown bits.
+     Since r2013: the node registry */
+  BITCODE_BL root_id;
+  BITCODE_BL num_root_connections;
+  BITCODE_BL *root_connections;
+  BITCODE_B root_status;
+  BITCODE_BL num_class_types;
+  Dwg_CONSTRAINTGROUP_ClassType *class_types;
+  BITCODE_BL num_registered;
+  Dwg_CONSTRAINTGROUP_Registered *registered;
 } Dwg_Object_ASSOC2DCONSTRAINTGROUP;
 
 typedef struct _dwg_ASSOCVARIABLE_Dep

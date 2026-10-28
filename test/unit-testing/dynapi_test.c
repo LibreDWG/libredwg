@@ -30250,6 +30250,16 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->b1--;
   }
   {
+    Dwg_CONSTRAINTGROUP_ClassType* class_types;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_class_types", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "class_types", &class_types, NULL)
+        && class_types == assoc2dconstraintgroup->class_types)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.class_types [Dwg_CONSTRAINTGROUP_ClassType*] * %u num_class_types", count);
+  }
+  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "class_version", &class_version, NULL)
         && class_version == assoc2dconstraintgroup->class_version)
@@ -30313,14 +30323,19 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->max_assoc_dep_index--;
   }
   {
-    Dwg_CONSTRAINTGROUPNODE* nodes;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_nodes", &count, NULL)
-        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "nodes", &nodes, NULL)
-        && nodes == assoc2dconstraintgroup->nodes)
+    BITCODE_BL next_node_id;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "next_node_id", &next_node_id, NULL)
+        && next_node_id == assoc2dconstraintgroup->next_node_id)
       pass ();
     else
-      fail ("ASSOC2DCONSTRAINTGROUP.nodes [Dwg_CONSTRAINTGROUPNODE*] * %u num_nodes", count);
+      fail ("ASSOC2DCONSTRAINTGROUP.next_node_id [BL] %u != %u", assoc2dconstraintgroup->next_node_id, next_node_id);
+    next_node_id++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "next_node_id", &next_node_id, 0)
+        && next_node_id == assoc2dconstraintgroup->next_node_id)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.next_node_id [BL] set+1 %u != %u", assoc2dconstraintgroup->next_node_id, next_node_id);
+    assoc2dconstraintgroup->next_node_id--;
   }
   {
     BITCODE_BL num_actions;
@@ -30338,6 +30353,21 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->num_actions--;
   }
   {
+    BITCODE_BL num_class_types;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_class_types", &num_class_types, NULL)
+        && num_class_types == assoc2dconstraintgroup->num_class_types)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_class_types [BL] %u != %u", assoc2dconstraintgroup->num_class_types, num_class_types);
+    num_class_types++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_class_types", &num_class_types, 0)
+        && num_class_types == assoc2dconstraintgroup->num_class_types)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_class_types [BL] set+1 %u != %u", assoc2dconstraintgroup->num_class_types, num_class_types);
+    assoc2dconstraintgroup->num_class_types--;
+  }
+  {
     BITCODE_BL num_deps;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_deps", &num_deps, NULL)
         && num_deps == assoc2dconstraintgroup->num_deps)
@@ -30353,21 +30383,6 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     assoc2dconstraintgroup->num_deps--;
   }
   {
-    BITCODE_BL num_nodes;
-    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_nodes", &num_nodes, NULL)
-        && num_nodes == assoc2dconstraintgroup->num_nodes)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.num_nodes [BL] %u != %u", assoc2dconstraintgroup->num_nodes, num_nodes);
-    num_nodes++;
-    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_nodes", &num_nodes, 0)
-        && num_nodes == assoc2dconstraintgroup->num_nodes)
-      pass ();
-    else
-      fail ("ASSOC2DCONSTRAINTGROUP.num_nodes [BL] set+1 %u != %u", assoc2dconstraintgroup->num_nodes, num_nodes);
-    assoc2dconstraintgroup->num_nodes--;
-  }
-  {
     BITCODE_BL num_owned_params;
     if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_owned_params", &num_owned_params, NULL)
         && num_owned_params == assoc2dconstraintgroup->num_owned_params)
@@ -30381,6 +30396,36 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
     else
       fail ("ASSOC2DCONSTRAINTGROUP.num_owned_params [BL] set+1 %u != %u", assoc2dconstraintgroup->num_owned_params, num_owned_params);
     assoc2dconstraintgroup->num_owned_params--;
+  }
+  {
+    BITCODE_BL num_registered;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_registered", &num_registered, NULL)
+        && num_registered == assoc2dconstraintgroup->num_registered)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_registered [BL] %u != %u", assoc2dconstraintgroup->num_registered, num_registered);
+    num_registered++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_registered", &num_registered, 0)
+        && num_registered == assoc2dconstraintgroup->num_registered)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_registered [BL] set+1 %u != %u", assoc2dconstraintgroup->num_registered, num_registered);
+    assoc2dconstraintgroup->num_registered--;
+  }
+  {
+    BITCODE_BL num_root_connections;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_root_connections", &num_root_connections, NULL)
+        && num_root_connections == assoc2dconstraintgroup->num_root_connections)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_root_connections [BL] %u != %u", assoc2dconstraintgroup->num_root_connections, num_root_connections);
+    num_root_connections++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_root_connections", &num_root_connections, 0)
+        && num_root_connections == assoc2dconstraintgroup->num_root_connections)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.num_root_connections [BL] set+1 %u != %u", assoc2dconstraintgroup->num_root_connections, num_root_connections);
+    assoc2dconstraintgroup->num_root_connections--;
   }
   {
     BITCODE_BL num_values;
@@ -30422,6 +30467,56 @@ static int test_ASSOC2DCONSTRAINTGROUP (const Dwg_Object *obj)
         pass ();
     else
         fail ("ASSOC2DCONSTRAINTGROUP.parent [struct _dwg_object_object*]");
+  }
+  {
+    Dwg_CONSTRAINTGROUP_Registered* registered;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_registered", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "registered", &registered, NULL)
+        && registered == assoc2dconstraintgroup->registered)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.registered [Dwg_CONSTRAINTGROUP_Registered*] * %u num_registered", count);
+  }
+  {
+    BITCODE_BL* root_connections;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "num_root_connections", &count, NULL)
+        && dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "root_connections", &root_connections, NULL)
+        && root_connections == assoc2dconstraintgroup->root_connections)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.root_connections [BL*] * %u num_root_connections", count);
+  }
+  {
+    BITCODE_BL root_id;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "root_id", &root_id, NULL)
+        && root_id == assoc2dconstraintgroup->root_id)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.root_id [BL] %u != %u", assoc2dconstraintgroup->root_id, root_id);
+    root_id++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "root_id", &root_id, 0)
+        && root_id == assoc2dconstraintgroup->root_id)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.root_id [BL] set+1 %u != %u", assoc2dconstraintgroup->root_id, root_id);
+    assoc2dconstraintgroup->root_id--;
+  }
+  {
+    BITCODE_B root_status;
+    if (dwg_dynapi_entity_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "root_status", &root_status, NULL)
+        && root_status == assoc2dconstraintgroup->root_status)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.root_status [B] " FORMAT_B " != " FORMAT_B "", assoc2dconstraintgroup->root_status, root_status);
+    root_status++;
+    if (dwg_dynapi_entity_set_value (assoc2dconstraintgroup, "ASSOC2DCONSTRAINTGROUP", "root_status", &root_status, 0)
+        && root_status == assoc2dconstraintgroup->root_status)
+      pass ();
+    else
+      fail ("ASSOC2DCONSTRAINTGROUP.root_status [B] set+1 " FORMAT_B " != " FORMAT_B "", assoc2dconstraintgroup->root_status, root_status);
+    assoc2dconstraintgroup->root_status--;
   }
   {
     Dwg_VALUEPARAM* values;
@@ -68507,6 +68602,26 @@ test_sizes (void)
       fprintf (stderr,
                "sizeof(struct _dwg_CONSTRAINTGROUPNODE): %d != "
                "dwg_dynapi_fields_size (\"CONSTRAINTGROUPNODE\"): %d\n",
+               size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_CONSTRAINTGROUP_ClassType);
+  size2 = dwg_dynapi_fields_size ("CONSTRAINTGROUP_ClassType");
+  if (size1 != size2)
+    {
+      fprintf (stderr,
+               "sizeof(struct _dwg_CONSTRAINTGROUP_ClassType): %d != "
+               "dwg_dynapi_fields_size (\"CONSTRAINTGROUP_ClassType\"): %d\n",
+               size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_CONSTRAINTGROUP_Registered);
+  size2 = dwg_dynapi_fields_size ("CONSTRAINTGROUP_Registered");
+  if (size1 != size2)
+    {
+      fprintf (stderr,
+               "sizeof(struct _dwg_CONSTRAINTGROUP_Registered): %d != "
+               "dwg_dynapi_fields_size (\"CONSTRAINTGROUP_Registered\"): %d\n",
                size1, size2);
       error++;
     }

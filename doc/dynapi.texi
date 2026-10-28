@@ -5778,10 +5778,24 @@ H,	DXF 360
 BL,	DXF 90
 @item actions
 H*,	DXF 360
-@item num_nodes
+@item next_node_id
 BL,	DXF 90
-@item nodes
-Dwg_CONSTRAINTGROUPNODE*
+@item root_id
+BL,	DXF 90
+@item num_root_connections
+BL,	DXF 90
+@item root_connections
+BL*,	DXF 90
+@item root_status
+B,	DXF 70
+@item num_class_types
+BL,	DXF 90
+@item class_types
+Dwg_CONSTRAINTGROUP_ClassType*
+@item num_registered
+BL,	DXF 90
+@item registered
+Dwg_CONSTRAINTGROUP_Registered*
 
 @end vtable
 @end indentedblock
@@ -13940,6 +13954,38 @@ RC
 BL
 @item connections
 BL*
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_CONSTRAINTGROUP_ClassType} @anchor{Dwg_CONSTRAINTGROUP_ClassType}
+@vindex Dwg_CONSTRAINTGROUP_ClassType
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_ASSOC2DCONSTRAINTGROUP*
+@item name
+T,	DXF 1
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_CONSTRAINTGROUP_Registered} @anchor{Dwg_CONSTRAINTGROUP_Registered}
+@vindex Dwg_CONSTRAINTGROUP_Registered
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_ASSOC2DCONSTRAINTGROUP*
+@item flag
+B,	DXF 290
+@item class_index
+BL,	DXF 90
+@item nodeid
+BL,	DXF 90
 
 @end vtable
 @end indentedblock

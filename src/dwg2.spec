@@ -5713,13 +5713,32 @@ DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   VALUEOUTOFBOUNDS (num_actions, 100);
   HANDLE_VECTOR (actions, num_actions, 4, 360);
 
-  FIELD_BL (num_nodes, 90); // 9
-  REPEAT (num_nodes, nodes, Dwg_CONSTRAINTGROUPNODE)
-  REPEAT_BLOCK
-      AcConstraintGroupNode_fields (nodes[rcount1]);
-      SET_PARENT_OBJ (nodes[rcount1]);
-  END_REPEAT_BLOCK
-  END_REPEAT (nodes)
+  FIELD_BL (next_node_id, 90); // 9
+  SINCE (R_2013) {
+    FIELD_BL (root_id, 90);
+    FIELD_BL (num_root_connections, 90);
+    VALUEOUTOFBOUNDS (num_root_connections, 1000);
+    FIELD_VECTOR (root_connections, BL, num_root_connections, 90);
+    FIELD_B (root_status, 70);
+    FIELD_BL (num_class_types, 90);
+    VALUEOUTOFBOUNDS (num_class_types, 100);
+    REPEAT (num_class_types, class_types, Dwg_CONSTRAINTGROUP_ClassType)
+    REPEAT_BLOCK
+        SUB_FIELD_T (class_types[rcount1], name, 1);
+        SET_PARENT_OBJ (class_types[rcount1]);
+    END_REPEAT_BLOCK
+    END_REPEAT (class_types)
+    FIELD_BL (num_registered, 90);
+    VALUEOUTOFBOUNDS (num_registered, 10000);
+    REPEAT (num_registered, registered, Dwg_CONSTRAINTGROUP_Registered)
+    REPEAT_BLOCK
+        SUB_FIELD_B (registered[rcount1], flag, 290);
+        SUB_FIELD_BL (registered[rcount1], class_index, 90);
+        SUB_FIELD_BL (registered[rcount1], nodeid, 90);
+        SET_PARENT_OBJ (registered[rcount1]);
+    END_REPEAT_BLOCK
+    END_REPEAT (registered)
+  }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

@@ -13,8 +13,12 @@ api_process (dwg_object *obj)
   BITCODE_H h1;
   BITCODE_BL num_actions;
   BITCODE_H *actions;
-  BITCODE_BL num_nodes;
-  Dwg_CONSTRAINTGROUPNODE *nodes;
+  BITCODE_BL next_node_id;
+  BITCODE_BL root_id;
+  BITCODE_BL num_root_connections;
+  BITCODE_B root_status;
+  BITCODE_BL num_class_types;
+  BITCODE_BL num_registered;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   // #ifdef DEBUG_CLASSES
@@ -48,30 +52,23 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (_obj, ASSOC2DCONSTRAINTGROUP, h1);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_actions, BL);
   CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, actions, num_actions);
-  CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_nodes, BL);
-  CHK_ENTITY_MAX (_obj, ASSOC2DCONSTRAINTGROUP, num_nodes, BL, 200);
-  for (unsigned i = 0; i < num_nodes; i++)
+  CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, next_node_id, BL);
+  if (dwg_version >= R_2013)
     {
-      CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, nodeid, BL);
-      CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, status, RC);
-      CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, num_connections,
-                         BL);
-      CHK_SUBCLASS_MAX (_obj->nodes[i], CONSTRAINTGROUPNODE, num_connections,
-                        BL, _obj->num_actions);
-      if (_obj->nodes[i].num_connections > _obj->num_actions)
-        fail ("Invalid nodes[%u].num_connections", i);
-      else if (!_obj->nodes[i].connections)
-        fail ("Empty nodes[%u].connections", i);
-      else
-        for (unsigned j = 0;
-             j < MIN (_obj->num_actions, _obj->nodes[i].num_connections); j++)
-          {
-            if (!_obj->nodes[i].connections[j])
-              fail ("Invalid connections[%u]", j);
-            else
-              ok ("CONSTRAINTGROUPNODE[%d].connections[%d]: %d", i, j,
-                  (int)_obj->nodes[i].connections[j]);
-          }
+      CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, root_id, BL);
+      CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_root_connections, BL);
+      CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, root_status, B);
+      CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_class_types, BL);
+      CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_registered, BL);
+      for (unsigned i = 0; i < _obj->num_registered; i++)
+        {
+          CHK_SUBCLASS_TYPE (_obj->registered[i], CONSTRAINTGROUP_Registered,
+                             flag, B);
+          CHK_SUBCLASS_TYPE (_obj->registered[i], CONSTRAINTGROUP_Registered,
+                             class_index, BL);
+          CHK_SUBCLASS_TYPE (_obj->registered[i], CONSTRAINTGROUP_Registered,
+                             nodeid, BL);
+        }
     }
   // #endif
 }
