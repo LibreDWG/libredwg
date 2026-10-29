@@ -183,191 +183,294 @@ arc_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD ctr,
 }
 
 /*----------------------------------------------------------------------
- * V4 Residue Topology Spatial Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
- * Multiplication-free S12 residue lattice transformations.
+ * V4 Residue Topology Spatial Transformations (Klein Four-Group V4)
+ *
+ * MATHEMATICAL NOTICE
+ * The V4 map is invertible but NOT conformal. Its linear part P has
+ * det(P) = 4 and singular values 2, 2, 1, so a right angle becomes 70.53
+ * degrees, a circle becomes an ellipse, and arc sweep angles are not
+ * preserved. P is NOT an involution (P*P = [[3,1,1],[1,3,-1],[1,-1,3]]),
+ * so its inverse is NOT P/4. The "H*H = 4I" relation belongs to the
+ * 4-point Hadamard butterfly network, not to this spatial map.
+ *
+ * Entities inside a block definition are left alone: only the INSERT that
+ * references them is transformed, otherwise the block content would get
+ * the map twice.
  *----------------------------------------------------------------------*/
 
-static void v4_transform_3d(double *x, double *y, double *z) {
-    double s0, d0, s1, d1;
+static void
+v4_transform_3d (double *x, double *y, double *z)
+{
+  double s0, d0, s1, d1;
 
-    if (!x || !y || !z) return;
+  if (!x || !y || !z)
+    return;
 
-    s0 = *x + *y;
-    d0 = *x - *y;
-    s1 = *z + 1.0;
-    d1 = *z - 1.0;
+  s0 = *x + *y;
+  d0 = *x - *y;
+  s1 = *z + 1.0;
+  d1 = *z - 1.0;
 
-    *x = s0 + s1;
-    *y = d0 + d1;
-    *z = s0 - s1;
+  *x = s0 + s1;
+  *y = d0 + d1;
+  *z = s0 - s1;
 }
 
-static void v4_transform_2d(double *x, double *y) {
-    double s0, d0;
-    if (!x || !y) return;
+static void
+v4_transform_2d (double *x, double *y)
+{
+  double s0, d0;
 
-    s0 = *x + *y;
-    d0 = *x - *y;
+  if (!x || !y)
+    return;
 
-    *x = s0 + 1.0;
-    *y = d0 - 1.0;
+  s0 = *x + *y;
+  d0 = *x - *y;
+
+  *x = s0 + 1.0;
+  *y = d0 - 1.0;
 }
 
-EXPORT void dwg_geom_v4_transform_2d(double *x, double *y) {
-    v4_transform_2d(x, y);
+/* Entities owned by a block definition are skipped: only the INSERT that
+ * references them is transformed.
+ *
+ * Model space and paper space are themselves BLOCK_HEADERs, so the test is
+ * not "is the owner a block header" but "is the owner the mspace or pspace
+ * block". Compare by handle: the refs come from different places
+ * (header_vars vs block_control) and need not be the same object.
+ *
+ * Subentities (ATTRIB, VERTEX_*) are owned by a parent entity rather than
+ * by a space, so they are skipped too: their parent already moves them. */
+static int
+v4_is_block_member (const Dwg_Object *obj, Dwg_Data *dwg)
+{
+  Dwg_Object_Ref *ref;
+  Dwg_Object_Ref *space;
+  Dwg_Object *owner;
+
+  if (dwg_obj_is_subentity (obj))
+    return 1;
+
+  if (!obj->tio.entity || !obj->tio.entity->ownerhandle)
+    return 0; /* preR13 mspace: no owner handle */
+
+  ref = obj->tio.entity->ownerhandle;
+  owner = ref->obj;
+  if (!owner || owner->fixedtype != DWG_TYPE_BLOCK_HEADER)
+    return 0;
+
+  space = dwg_model_space_ref (dwg);
+  if (space && space->absolute_ref == ref->absolute_ref)
+    return 0;
+
+  space = dwg_paper_space_ref (dwg);
+  if (space && space->absolute_ref == ref->absolute_ref)
+    return 0;
+
+  /* Any other block header is a block definition. */
+  return 1;
 }
 
-EXPORT uint32_t dwg_transform_v4(Dwg_Data *dwg) {
-    uint32_t count = 0;
-    uint32_t i;
+EXPORT void
+dwg_geom_v4_transform_2d (double *x, double *y)
+{
+  v4_transform_2d (x, y);
+}
 
-    if (!dwg || !dwg->object) return 0;
+EXPORT uint32_t
+dwg_transform_v4 (Dwg_Data *dwg)
+{
+  uint32_t count = 0;
+  uint32_t i;
 
-    for (i = 0; i < dwg->num_objects; i++) {
-        Dwg_Object *obj = &dwg->object[i];
-        if (!obj || !obj->tio.entity) continue;
+  if (!dwg || !dwg->object)
+    return 0;
 
-        switch (obj->type) {
-            case DWG_TYPE_POINT: {
-                Dwg_Entity_POINT *e = obj->tio.entity->tio.POINT;
-                if (e) {
-                    v4_transform_3d(&e->x, &e->y, &e->z);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_LINE: {
-                Dwg_Entity_LINE *e = obj->tio.entity->tio.LINE;
-                if (e) {
-                    v4_transform_3d(&e->start.x, &e->start.y, &e->start.z);
-                    v4_transform_3d(&e->end.x, &e->end.y, &e->end.z);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_CIRCLE: {
-                Dwg_Entity_CIRCLE *e = obj->tio.entity->tio.CIRCLE;
-                if (e) {
-                    v4_transform_3d(&e->center.x, &e->center.y, &e->center.z);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_ARC: {
-                Dwg_Entity_ARC *e = obj->tio.entity->tio.ARC;
-                if (e) {
-                    v4_transform_3d(&e->center.x, &e->center.y, &e->center.z);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_ELLIPSE: {
-                Dwg_Entity_ELLIPSE *e = obj->tio.entity->tio.ELLIPSE;
-                if (e) {
-                    v4_transform_3d(&e->center.x, &e->center.y, &e->center.z);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE__3DFACE: {
-                Dwg_Entity__3DFACE *e = obj->tio.entity->tio._3DFACE;
-                if (e) {
-                    v4_transform_3d(&e->corner1.x, &e->corner1.y, &e->corner1.z);
-                    v4_transform_3d(&e->corner2.x, &e->corner2.y, &e->corner2.z);
-                    v4_transform_3d(&e->corner3.x, &e->corner3.y, &e->corner3.z);
-                    v4_transform_3d(&e->corner4.x, &e->corner4.y, &e->corner4.z);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_SOLID: {
-                Dwg_Entity_SOLID *e = obj->tio.entity->tio.SOLID;
-                if (e) {
-                    v4_transform_3d(&e->corner1.x, &e->corner1.y, &e->elevation);
-                    v4_transform_3d(&e->corner2.x, &e->corner2.y, &e->elevation);
-                    v4_transform_3d(&e->corner3.x, &e->corner3.y, &e->elevation);
-                    v4_transform_3d(&e->corner4.x, &e->corner4.y, &e->elevation);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_TRACE: {
-                Dwg_Entity_TRACE *e = obj->tio.entity->tio.TRACE;
-                if (e) {
-                    v4_transform_3d(&e->corner1.x, &e->corner1.y, &e->elevation);
-                    v4_transform_3d(&e->corner2.x, &e->corner2.y, &e->elevation);
-                    v4_transform_3d(&e->corner3.x, &e->corner3.y, &e->elevation);
-                    v4_transform_3d(&e->corner4.x, &e->corner4.y, &e->elevation);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_LWPOLYLINE: {
-                Dwg_Entity_LWPOLYLINE *e = obj->tio.entity->tio.LWPOLYLINE;
-                uint32_t j;
-                double z;
+  for (i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
 
-                if (e && e->points) {
-                    for (j = 0; j < e->num_points; j++) {
-                        z = e->elevation;
-                        v4_transform_3d(&e->points[j].x, &e->points[j].y, &z);
-                        e->elevation = z;
-                    }
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_SPLINE: {
-                Dwg_Entity_SPLINE *e = obj->tio.entity->tio.SPLINE;
-                uint32_t j;
+      /* supertype first: tio is a union, and reading it on a non-entity
+       * object yields garbage. */
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
+        continue;
 
-                if (e) {
-                    if (e->ctrl_pts) {
-                        for (j = 0; j < e->num_ctrl_pts; j++) {
-                            v4_transform_3d(&e->ctrl_pts[j].x, &e->ctrl_pts[j].y, &e->ctrl_pts[j].z);
-                        }
-                    }
-                    if (e->fit_pts) {
-                        for (j = 0; j < e->num_fit_pts; j++) {
-                            v4_transform_3d(&e->fit_pts[j].x, &e->fit_pts[j].y, &e->fit_pts[j].z);
-                        }
-                    }
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_INSERT: {
-                Dwg_Entity_INSERT *e = obj->tio.entity->tio.INSERT;
-                if (e) {
-                    v4_transform_3d(&e->ins_pt.x, &e->ins_pt.y, &e->ins_pt.z);
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_TEXT: {
-                Dwg_Entity_TEXT *e = obj->tio.entity->tio.TEXT;
-                double z;
+      if (v4_is_block_member (obj, dwg))
+        continue;
 
-                if (e) {
-                    z = e->elevation;
-                    v4_transform_3d(&e->ins_pt.x, &e->ins_pt.y, &z);
-                    e->elevation = z;
-                    count++;
-                }
-                break;
-            }
-            case DWG_TYPE_MTEXT: {
-                Dwg_Entity_MTEXT *e = obj->tio.entity->tio.MTEXT;
-                if (e) {
-                    v4_transform_3d(&e->ins_pt.x, &e->ins_pt.y, &e->ins_pt.z);
-                    count++;
-                }
-                break;
-            }
-            default:
-                break;
+      /* obj->fixedtype, not obj->type: from R2000 onwards obj->type holds
+       * a variable class index. */
+      switch (obj->fixedtype)
+        {
+        case DWG_TYPE_POINT:
+          {
+            Dwg_Entity_POINT *e = obj->tio.entity->tio.POINT;
+            if (!e)
+              break;
+            v4_transform_3d (&e->x, &e->y, &e->z);
+            count++;
+            break;
+          }
+        case DWG_TYPE_LINE:
+          {
+            Dwg_Entity_LINE *e = obj->tio.entity->tio.LINE;
+            if (!e)
+              break;
+            v4_transform_3d (&e->start.x, &e->start.y, &e->start.z);
+            v4_transform_3d (&e->end.x, &e->end.y, &e->end.z);
+            count++;
+            break;
+          }
+        case DWG_TYPE_CIRCLE:
+          {
+            Dwg_Entity_CIRCLE *e = obj->tio.entity->tio.CIRCLE;
+            if (!e)
+              break;
+            /* The centre maps cleanly. The radius cannot: the singular
+             * values in the entity plane are 2.00 and 1.41, so the image is
+             * an ellipse and no single scale factor is correct. */
+            v4_transform_3d (&e->center.x, &e->center.y, &e->center.z);
+            count++;
+            break;
+          }
+        case DWG_TYPE_ARC:
+          {
+            Dwg_Entity_ARC *e = obj->tio.entity->tio.ARC;
+            if (!e)
+              break;
+            v4_transform_3d (&e->center.x, &e->center.y, &e->center.z);
+            count++;
+            break;
+          }
+        case DWG_TYPE_ELLIPSE:
+          {
+            Dwg_Entity_ELLIPSE *e = obj->tio.entity->tio.ELLIPSE;
+            if (!e)
+              break;
+            v4_transform_3d (&e->center.x, &e->center.y, &e->center.z);
+            count++;
+            break;
+          }
+        case DWG_TYPE__3DFACE:
+          {
+            Dwg_Entity__3DFACE *e = obj->tio.entity->tio._3DFACE;
+            if (!e)
+              break;
+            v4_transform_3d (&e->corner1.x, &e->corner1.y, &e->corner1.z);
+            v4_transform_3d (&e->corner2.x, &e->corner2.y, &e->corner2.z);
+            v4_transform_3d (&e->corner3.x, &e->corner3.y, &e->corner3.z);
+            v4_transform_3d (&e->corner4.x, &e->corner4.y, &e->corner4.z);
+            count++;
+            break;
+          }
+        case DWG_TYPE_SOLID:
+          {
+            Dwg_Entity_SOLID *e = obj->tio.entity->tio.SOLID;
+            if (!e)
+              break;
+            /* SOLID stores ONE global elevation for all four corners. Each
+             * corner is mapped in the local plane; the shared elevation is
+             * mapped exactly once, not four times. */
+            v4_transform_2d (&e->corner1.x, &e->corner1.y);
+            v4_transform_2d (&e->corner2.x, &e->corner2.y);
+            v4_transform_2d (&e->corner3.x, &e->corner3.y);
+            v4_transform_2d (&e->corner4.x, &e->corner4.y);
+            e->elevation = -e->elevation - 1.0;
+            count++;
+            break;
+          }
+        case DWG_TYPE_TRACE:
+          {
+            Dwg_Entity_TRACE *e = obj->tio.entity->tio.TRACE;
+            if (!e)
+              break;
+            v4_transform_2d (&e->corner1.x, &e->corner1.y);
+            v4_transform_2d (&e->corner2.x, &e->corner2.y);
+            v4_transform_2d (&e->corner3.x, &e->corner3.y);
+            v4_transform_2d (&e->corner4.x, &e->corner4.y);
+            e->elevation = -e->elevation - 1.0;
+            count++;
+            break;
+          }
+        case DWG_TYPE_LWPOLYLINE:
+          {
+            Dwg_Entity_LWPOLYLINE *e = obj->tio.entity->tio.LWPOLYLINE;
+            uint32_t j;
+
+            if (!e || !e->points)
+              break;
+
+            /* Vertices live in the local plane. The global elevation is mapped
+             * once via the anchor (0, 0, e), as for TEXT, SOLID and TRACE. */
+            for (j = 0; j < e->num_points; j++)
+              v4_transform_2d (&e->points[j].x, &e->points[j].y);
+            e->elevation = -e->elevation - 1.0;
+            count++;
+            break;
+          }
+        case DWG_TYPE_SPLINE:
+          {
+            Dwg_Entity_SPLINE *e = obj->tio.entity->tio.SPLINE;
+            uint32_t j;
+
+            if (!e)
+              break;
+
+            if (e->ctrl_pts)
+              for (j = 0; j < e->num_ctrl_pts; j++)
+                v4_transform_3d (&e->ctrl_pts[j].x, &e->ctrl_pts[j].y,
+                                 &e->ctrl_pts[j].z);
+
+            if (e->fit_pts)
+              for (j = 0; j < e->num_fit_pts; j++)
+                v4_transform_3d (&e->fit_pts[j].x, &e->fit_pts[j].y,
+                                 &e->fit_pts[j].z);
+            count++;
+            break;
+          }
+        case DWG_TYPE_INSERT:
+          {
+            Dwg_Entity_INSERT *e = obj->tio.entity->tio.INSERT;
+            if (!e)
+              break;
+            v4_transform_3d (&e->ins_pt.x, &e->ins_pt.y, &e->ins_pt.z);
+            count++;
+            break;
+          }
+        case DWG_TYPE_TEXT:
+          {
+            Dwg_Entity_TEXT *e = obj->tio.entity->tio.TEXT;
+            if (!e)
+              break;
+            /* ins_pt is 2D: the z lives in the separate elevation field.
+             * Map the pair in the local plane and the global elevation
+             * once, as with LWPOLYLINE. */
+            v4_transform_2d (&e->ins_pt.x, &e->ins_pt.y);
+            e->elevation = -e->elevation - 1.0;
+
+            /* Optional second point (DXF 11). Same local plane: without it
+             * an aligned text would move to a different place than its
+             * insertion point. */
+            if (e->dataflags & 2)
+              v4_transform_2d (&e->alignment_pt.x, &e->alignment_pt.y);
+
+            count++;
+            break;
+          }
+
+        case DWG_TYPE_MTEXT:
+          {
+            Dwg_Entity_MTEXT *e = obj->tio.entity->tio.MTEXT;
+            if (!e)
+              break;
+            v4_transform_3d (&e->ins_pt.x, &e->ins_pt.y, &e->ins_pt.z);
+            count++;
+            break;
+          }
+        default:
+          break;
         }
     }
 
-    return count;
+  return count;
 }
