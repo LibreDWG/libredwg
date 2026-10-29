@@ -2032,14 +2032,18 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       if (type == SECTION_TEMPLATE && is_teigha && info->size >= 4
           && info->unknown == 1)
         {
-          Dwg_Section *sec = calloc (1, sizeof (Dwg_Section));
           // bug in Teigha with Template, with num_sections=0
+          BITCODE_BL sec_idx;
           info->num_sections = 1;
           info->sections = realloc (info->sections, sizeof (Dwg_Section *));
-          if (!info->sections || !sec)
+          if (!info->sections)
             return DWG_ERR_OUTOFMEM;
-          else
-            info->sections[0] = sec;
+          // use a real section, so that dwg_free releases it together with
+          // dwg->header.section and no orphan remains
+          sec_idx = dwg->header.num_sections;
+          if (add_section (dwg) != 0)
+            return DWG_ERR_OUTOFMEM;
+          info->sections[0] = &dwg->header.section[sec_idx];
         }
       /*
       else if (type == SECTION_UNKNOWN)

@@ -346,6 +346,7 @@ static BITCODE_BL rcount1, rcount2;
 
 #define DWG_ENTITY_END                                                        \
   FREE_IF (obj->unknown_rest);                                                \
+  FREE_IF (obj->unknown_bits);                                                \
   return error;                                                               \
   }
 
@@ -389,6 +390,7 @@ static BITCODE_BL rcount1, rcount2;
  * static */
 #define DWG_OBJECT_END                                                        \
   FREE_IF (obj->unknown_rest);                                                \
+  FREE_IF (obj->unknown_bits);                                                \
   return error;                                                               \
   }
 
