@@ -915,6 +915,51 @@ dxf_read_pair (Bit_Chain *dat)
               pair->value.s.ptr = strdup ("*Paper_Space");
             }
         }
+      // r2007+ DXF strings are UTF-8 (by spec), but a pre-r2007 target
+      // stores TV fields in the drawing's codepage. Without this, every
+      // non-ASCII string double-encodes (e.g. "CAÑERÍA Ø150" read back as
+      // "CAÃ‘ERÃ\x8dA Ã˜150"). Convert only for the broken combination
+      // (source >= r2007, target < r2007), so the value carries the same
+      // encoding as one read from a pre-r2007 DXF, and every downstream
+      // consumer (the generic dynapi fields, the dwg_add_u8_input call
+      // sites, EED) behaves identically to the already-working pre-r2007
+      // path. Unrepresentable chars degrade to \U+XXXX as AutoCAD does.
+      if (pair->value.s.ptr && pair->value.s.ptr[0]
+          && dat->from_version >= R_2007 && dat->version >= R_11
+          && dat->version < R_2007 && dat->codepage
+          && !(dat->opts & DWG_OPTS_DXFB))
+        {
+          size_t len = strlen (pair->value.s.ptr);
+          size_t size = len * 4 + 8;
+          char *tv = (char *)malloc (size);
+          char *tgt = NULL;
+          if (tv)
+            {
+              tgt = bit_utf8_to_TV (tv, (unsigned char *)pair->value.s.ptr,
+                                    size, len, 0, dat->codepage);
+              while (!tgt)
+                {
+                  char *tmp;
+                  size *= 2;
+                  tmp = (char *)realloc (tv, size);
+                  if (!tmp)
+                    {
+                      free (tv);
+                      break;
+                    }
+                  tv = tmp;
+                  tgt = bit_utf8_to_TV (tv, (unsigned char *)pair->value.s.ptr,
+                                        size, len, 0, dat->codepage);
+                }
+              if (tgt)
+                {
+                  free (pair->value.s.ptr);
+                  pair->value.s.ptr = tv;
+                }
+              else
+                free (tv);
+            }
+        }
       break;
     case DWG_VT_BOOL:
       pair->value.i = dxf_read_rc (dat);
@@ -977,6 +1022,20 @@ dxf_read_pair (Bit_Chain *dat)
       return NULL;
     }
   return pair;
+}
+
+/* A string pair's value is already in the target's encoding: pre-r2007
+   DXF strings are TV, and for a pre-r2007 target, r2007+ (UTF-8) strings
+   are converted to TV in dxf_read_pair. For a pre-r2007 target a plain
+   copy is correct; passing the bytes through dwg_add_u8_input again
+   would treat the codepage bytes as UTF-8 and mangle them. Only for a
+   r2007+ target (TU fields) the UTF-8 value still needs conversion,
+   which dwg_add_u8_input provides. */
+static BITCODE_T
+dxf_pair_string (Dwg_Data *restrict dwg, const char *restrict s)
+{
+  return dwg->header.version < R_2007 ? (BITCODE_T)strdup (s)
+                                      : dwg_add_u8_input (dwg, s);
 }
 
 #  define DXF_CHECK_EOF                                                       \
@@ -2485,7 +2544,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           is_tu = obj->parent->header.version >= R_2007;
           CHK_dashes (j, dashes);
           o->dashes[j].text
-              = dwg_add_u8_input (obj->parent, pair->value.s.ptr);
+              = dxf_pair_string (obj->parent, pair->value.s.ptr);
           LOG_TRACE ("LTYPE.dashes[%d].text = %s [T 9]\n", j,
                      pair->value.s.ptr);
           // write into strings_area
@@ -6116,7 +6175,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 i = 3;
               assert (i >= 0 && i <= 3);
             }
-          o->ref[i].classname = dwg_add_u8_input (dwg, pair->value.s.ptr);
+          o->ref[i].classname = dxf_pair_string (dwg, pair->value.s.ptr);
           LOG_TRACE ("%s.ref[%d].classname = %s [T %d]\n", obj->name, i,
                      pair->value.s.ptr, pair->code);
           have_rotated_type = 0;
@@ -6254,7 +6313,7 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 0:
           break;
         case 8:
-          o->entries[i].name = dwg_add_u8_input (dwg, pair->value.s.ptr);
+          o->entries[i].name = dxf_pair_string (dwg, pair->value.s.ptr);
           LOG_TRACE ("%s.entries[%d].name = %s [T %d]\n", obj->name, i,
                      pair->value.s.ptr, pair->code);
           break;
@@ -6335,7 +6394,7 @@ add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                  pair->code);
       break;
     case DWG_VT_STRING:
-      value->u.text = dwg_add_u8_input (dwg, pair->value.s.ptr);
+      value->u.text = dxf_pair_string (dwg, pair->value.s.ptr);
       LOG_TRACE ("%s.%s = %s [T %d]\n", "EvalVariant", "value",
                  pair->value.s.ptr, pair->code);
       break;
@@ -6381,7 +6440,7 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                  "VALUEPARAM", pair ? pair->code : -1, 1, "name");
       return 0;
     }
-  value->name = dwg_add_u8_input (dwg, pair->value.s.ptr);
+  value->name = dxf_pair_string (dwg, pair->value.s.ptr);
   LOG_TRACE ("%s.%s = %s [BL %d]\n", "VALUEPARAM", "name", pair->value.s.ptr,
              pair->code);
   dxf_free_pair (pair);
@@ -8020,7 +8079,7 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
       return;
     }
   _obj->itemhandles[num] = hdl;
-  _obj->texts[num] = dwg_add_u8_input (dwg, text);
+  _obj->texts[num] = dxf_pair_string (dwg, text);
   LOG_TRACE ("%s.texts[%d] = %s [T* 3]\n", obj->name, num, text);
   _obj->numitems = num + 1;
 }
@@ -12449,7 +12508,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   if (tbl_sty && pair && pair->code == 300)
                     {
                       tbl_sty->name
-                          = dwg_add_u8_input (dwg, pair->value.s.ptr);
+                          = dxf_pair_string (dwg, pair->value.s.ptr);
                       LOG_TRACE ("%s.%s.name = \"%s\" [BL %d]\n", obj->name,
                                  key, pair->value.s.ptr, pair->code);
                       dxf_free_pair (pair);
@@ -12774,7 +12833,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               if (!o->names || j < 0 || j >= (int)o->num_names)
                 goto invalid_dxf;
               assert (j >= 0 && j < (int)o->num_names && o->names);
-              o->names[j] = dwg_add_u8_input (dwg, pair->value.s.ptr);
+              o->names[j] = dxf_pair_string (dwg, pair->value.s.ptr);
               LOG_TRACE ("%s.%s[%d] = %s [%s %d]\n", name, "names", j,
                          pair->value.s.ptr, "T", pair->code);
               j++;
@@ -13400,7 +13459,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             {
                               color.flag |= 0x10;
                               color.name
-                                  = dwg_add_u8_input (dwg, pair->value.s.ptr);
+                                  = dxf_pair_string (dwg, pair->value.s.ptr);
                               LOG_TRACE ("%s.%s.name = %s [%s %d]\n", name,
                                          f->name, pair->value.s.ptr, "CMC",
                                          pair->code);
@@ -13734,7 +13793,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                         {
                           color.flag |= 0x10;
                           color.name
-                              = dwg_add_u8_input (dwg, pair->value.s.ptr);
+                              = dxf_pair_string (dwg, pair->value.s.ptr);
                           // TODO: book_name or name?
                           LOG_TRACE ("COMMON.%s.name = %s [%s %d]\n", f->name,
                                      pair->value.s.ptr, "CMC", pair->code);
