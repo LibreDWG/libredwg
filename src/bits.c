@@ -4030,8 +4030,11 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
           color->method = 0xc2;
           color->rgb = 0xc2000000 | (color->rgb & 0xffffff);
         }
-      // fixup index by palette lookup
-      color->index = dwg_find_color_index (color->rgb);
+      // Keep the index the file supplied when it is usable: for method
+      // 0xc3 it IS the colour, and for 0xc2 the lookup can only guess.
+      // Same reasoning as 9263d72d in bit_downconvert_CMC.
+      if (!(color->index > 0 && color->index < 256))
+        color->index = dwg_find_color_index (color->rgb);
     }
   return 0;
 }

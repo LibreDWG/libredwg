@@ -3393,7 +3393,12 @@ DWG_TABLE (LAYER)
   }
   SINCE (R_13b1) {
     DXF {
-      if (FIELD_VALUE (color.index) == 256) {
+      // Only for ACI colours (method 0xc3) the index is packed into the low
+      // byte of the rgb. For true RGB colours (method 0xc2) the low byte is
+      // just the blue channel; emitting it as group 62 is invalid (e.g. a
+      // layer colour 0, which would be ByBlock).
+      if (FIELD_VALUE (color.index) == 256
+          && FIELD_VALUE (color.method) == 0xc3) {
         FIELD_VALUE (color.index) = FIELD_VALUE (color.rgb) & 0xFF;
       }
       // DXF group 62 is negative iff the layer is off. Derive the sign from
