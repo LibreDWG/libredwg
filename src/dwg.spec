@@ -2432,17 +2432,39 @@ DWG_ENTITY (VIEWPORT)
     FIELD_BD (height, 41);
   }
   DXF {
-    // The overall paperspace viewport (entmode 0) has on_off=0, id=0.
-    // Active viewports auto-increment id starting at 1.
-    if (_ent->entmode == 0) {
-      FIELD_VALUE (on_off) = 0;
-      FIELD_VALUE (id) = 0;
-      dwg->last_viewport_id = 0;
-    } else {
-      FIELD_VALUE (on_off) = 1;
-      dwg->last_viewport_id++;
-      FIELD_VALUE (id) = dwg->last_viewport_id;
-    }
+    // Groups 68/69 only exist in the DXF block: 69 is the viewport id,
+    // 68 the stacking order (1 is the active viewport, 2 the next, ...)
+    // within the block the viewport lives in, restarting with each new
+    // block. entmode 0 only means "explicit owner handle", not
+    // "paperspace viewport": every layout stores its entities that way,
+    // except the one current when the file was saved (entmode 1). So
+    // derive the block as group 330 does (common_entity_handle_data.
+    // spec) and number it, unless it is an ordinary block: those are
+    // no view of a sheet and stay off (0, 0), as ODA writes them. An
+    // unresolvable owner is still numbered (top-level viewports of the
+    // current block).
+    Dwg_Object *vp_block = NULL;
+    if (_ent->ownerhandle)
+      vp_block = _ent->ownerhandle->obj;
+    else if (_ent->entmode == 1
+             && dwg->header_vars.BLOCK_RECORD_PSPACE)
+      vp_block = dwg->header_vars.BLOCK_RECORD_PSPACE->obj;
+    else if (_ent->entmode == 2 && dwg->header_vars.BLOCK_RECORD_MSPACE)
+      vp_block = dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
+    if (!vp_block || dxf_block_is_layout (dwg, vp_block))
+      {
+        if (vp_block != dwg->last_viewport_block)
+          dwg->last_viewport_id = 0;
+        dwg->last_viewport_block = vp_block;
+        dwg->last_viewport_id++;
+        FIELD_VALUE (on_off) = dwg->last_viewport_id;
+        FIELD_VALUE (id) = dwg->last_viewport_id;
+      }
+    else
+      {
+        FIELD_VALUE (on_off) = 0;
+        FIELD_VALUE (id) = 0;
+      }
     FIELD_RS (on_off, 68);
     FIELD_RS (id, 69);
   }

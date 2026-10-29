@@ -31,6 +31,7 @@
 
 /* for uint64_t, but not in swig */
 #ifndef SWIGIMPORTED
+#  include <stdbool.h>
 #  include <stddef.h>
 #  include <stdint.h>
 #  include <inttypes.h>
@@ -11458,6 +11459,8 @@ typedef struct _dwg_struct
   BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
   BITCODE_BL cur_index;          /*!< how many we have written currently */
   BITCODE_RS last_viewport_id;   /*!< auto-incremented VIEWPORT id for DXF */
+  Dwg_Object *last_viewport_block; /*< owning block of the last numbered
+                                       VIEWPORT, for the 68/69 counters */
   Dwg_Object_Ref **object_ref;   /*!< array of most handles */
   struct _inthash *object_map;   /*!< map of all handles */
   int dirty_refs;                /* 1 if we added an object, and invalidated all
@@ -11556,6 +11559,7 @@ EXPORT unsigned char *dwg_bmp (const Dwg_Data *restrict dwg,
  *  -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT.
  */
 EXPORT int dxf_cvt_lweight (const BITCODE_BSd value);
+bool dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk);
 
 /** Converts the 100th mm lineweight, with -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT,
     into the internal enum RC.
