@@ -1868,9 +1868,11 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     }
 }
 
-/* pre-r13 mspace and pspace blocks have different names:
-   *Model_Space => $MODEL_SPACE
-   *Paper_Space => $PAPER_SPACE
+/* mspace and pspace blocks are named $MODEL_SPACE / $PAPER_SPACE in pre-r13
+   DXF, and *Model_Space / *Paper_Space in r13+ DXF.
+   The name depends on the DXF version being written, not on where the
+   drawing came from.  Accept the DWG forms *MODEL_SPACE / *PAPER_SPACE
+   (pre-r13) as well.
    TODO: Better use proper EXTNAMES
  */
 static void
@@ -1893,32 +1895,30 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
         free (name);
       return;
     }
-  if (dat->version == dat->from_version) // no conversion
+  if (dat->version < R_13b1) // pre-r13 DXF
     {
-      fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
-    }
-  else if (dat->version < R_13b1 && dat->from_version >= R_13b1) // to older
-    {
-      if (strlen (name) < 10)
-        fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
-      else if (strEQc (name, "*Model_Space"))
+      if (strEQc (name, "$MODEL_SPACE") || strEQc (name, "*MODEL_SPACE")
+          || strEQc (name, "*Model_Space"))
         fprintf (dat->fh, "%3i\r\n$MODEL_SPACE\r\n", dxf);
-      else if (strEQc (name, "*Paper_Space"))
+      else if (strEQc (name, "$PAPER_SPACE") || strEQc (name, "*PAPER_SPACE")
+               || strEQc (name, "*Paper_Space"))
         fprintf (dat->fh, "%3i\r\n$PAPER_SPACE\r\n", dxf);
-      else if (strlen (name) >= 12 && !memcmp (name, "*Paper_Space", 12))
+      else if (strlen (name) >= 12
+               && (!memcmp (name, "*Paper_Space", 12)
+                   || !memcmp (name, "$PAPER_SPACE", 12)))
         fprintf (dat->fh, "%3i\r\n$PAPER_SPACE%s\r\n", dxf, &name[12]);
       else
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
     }
-  else if (dat->version >= R_13b1) // to newer
+  else // r13+ DXF
     {
-      if (strlen (name) < 10)
-        fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
-      else if (strEQc (name, "$MODEL_SPACE"))
+      if (strEQc (name, "$MODEL_SPACE") || strEQc (name, "*MODEL_SPACE"))
         fprintf (dat->fh, "%3i\r\n*Model_Space\r\n", dxf);
-      else if (strEQc (name, "$PAPER_SPACE"))
+      else if (strEQc (name, "$PAPER_SPACE") || strEQc (name, "*PAPER_SPACE"))
         fprintf (dat->fh, "%3i\r\n*Paper_Space\r\n", dxf);
-      else if (strlen (name) >= 12 && !memcmp (name, "$PAPER_SPACE", 12))
+      else if (strlen (name) >= 12
+               && (!memcmp (name, "$PAPER_SPACE", 12)
+                   || !memcmp (name, "*PAPER_SPACE", 12)))
         fprintf (dat->fh, "%3i\r\n*Paper_Space%s\r\n", dxf, &name[12]);
       else
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);

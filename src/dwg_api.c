@@ -25118,7 +25118,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   block_control
       = dwg_add_BLOCK_CONTROL (dwg,
                                0x1F,                          // model space
-                               version >= R_13b1 ? 0x20 : 0); // paper space
+                               version >= R_11 ? 0x20 : 0); // paper space
   // LAYER_CONTROL_OBJECT: (3.1.2) abs:2 [H 0]
   dwg_set_next_hdl (dwg, UINT64_C (0x2));
   dwg_add_LAYER (dwg, NULL);
@@ -25324,7 +25324,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.BLOCK_RECORD_MSPACE->obj = mspaceobj;
   block_control->model_space
       = dwg_add_handleref (dwg, 3, mspaceobj->handle.value, NULL);
-  if (version >= R_13b1)
+  if (version >= R_11)
     {
       // BLOCK_RECORD_PSPACE: (5.1.20)
       dwg_set_next_hdl (dwg, UINT64_C (0x20));
@@ -25344,10 +25344,24 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       dwg->block_control = *block_control;
       // BLOCK: (5.1.21)
       dwg_set_next_hdl (dwg, UINT64_C (0x21));
-      dwg_add_BLOCK (pspace, "*PAPER_SPACE");
+      {
+        Dwg_Entity_BLOCK *block = dwg_add_BLOCK (pspace, "*PAPER_SPACE");
+        if (dwg->header.version <= R_12) // fixup the type
+          {
+            obj = dwg_obj_generic_to_object (block, &error);
+            obj->type = DWG_TYPE_UNUSED_r11; // don't encode it
+          }
+      }
       // ENDBLK: (5.1.22)
       dwg_set_next_hdl (dwg, UINT64_C (0x22));
-      dwg_add_ENDBLK (pspace);
+      {
+        Dwg_Entity_ENDBLK *endblk = dwg_add_ENDBLK (pspace);
+        if (dwg->header.version <= R_12) // fixup the type
+          {
+            obj = dwg_obj_generic_to_object (endblk, &error);
+            obj->type = DWG_TYPE_UNUSED_r11; // don't encode it
+          }
+      }
     }
   // LAYOUT (0.1.23)
   // dwg_set_next_hdl (dwg, UINT64_C (0x23));

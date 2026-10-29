@@ -7000,6 +7000,9 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
   Dwg_Object *hdr = NULL;
   Dwg_Object_BLOCK_HEADER *_hdr = NULL;
   BITCODE_BL block_idx = 0, hdr_index = 0;
+  BITCODE_BL ps_hdr_index = 0;
+  Dwg_Object_BLOCK_HEADER *ps_hdr = NULL;
+  BITCODE_RLL ps_hdr_handle = 0;
 
   LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx " (%u), size " FORMAT_RL
              ")\n",
@@ -7036,6 +7039,20 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           hdr_handle = hdr->handle.value;
           LOG_TRACE ("owned by BLOCK %s (" FORMAT_HV ")\n", _hdr->name,
                      hdr_handle);
+        }
+      if (entity_section != BLOCKS_SECTION_INDEX)
+        {
+          // pre-R13: paper space entities (entmode 1) are owned by the
+          // *PAPER_SPACE header, created by dwg_add_Document() since R_11
+          Dwg_Object *ps = dwg_paper_space_object (dwg);
+          if (ps && ps->fixedtype == DWG_TYPE_BLOCK_HEADER)
+            {
+              if (!ps->handle.value)
+                ps->handle.value = dwg_next_handle (dwg);
+              ps_hdr_index = ps->index;
+              ps_hdr = ps->tio.object->tio.BLOCK_HEADER;
+              ps_hdr_handle = ps->handle.value;
+            }
         }
     }
   // TODO search current offset in block_offset_r11 in BLOCK_HEADER's
@@ -7577,17 +7594,25 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               && obj->fixedtype != DWG_TYPE_SEQEND)
             {
               BITCODE_H ref;
+              Dwg_Object *ehdr = &dwg->object[hdr_index];
+              Dwg_Object_BLOCK_HEADER *ehdr_data = _hdr;
+              BITCODE_RLL ehdr_handle = hdr_handle;
+              if (ps_hdr && obj->tio.entity->entmode == 1)
+                {
+                  ehdr = &dwg->object[ps_hdr_index];
+                  ehdr_data = ps_hdr;
+                  ehdr_handle = ps_hdr_handle;
+                }
               if (!obj->handle.value)
                 obj->handle.value = dwg_next_handle (dwg);
-              hdr = &dwg->object[hdr_index];
-              ref = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
+              ref = dwg_add_handleref (dwg, 3, obj->handle.value, ehdr);
               // if (dwg->dirty_refs)
-              // find _hdr again from hdr_handle
-              LOG_TRACE ("BLOCK_HEADER \"%s\".", _hdr->name);
+              // find ehdr_data again from ehdr_handle
+              LOG_TRACE ("BLOCK_HEADER \"%s\".", ehdr_data->name);
               if (obj->fixedtype != DWG_TYPE_BLOCK)
-                PUSH_HV (_hdr, num_owned, entities, ref);
+                PUSH_HV (ehdr_data, num_owned, entities, ref);
               obj->tio.entity->ownerhandle
-                  = dwg_add_handleref (dwg, 4, hdr_handle, obj);
+                  = dwg_add_handleref (dwg, 4, ehdr_handle, obj);
               obj->tio.entity->ownerhandle->r11_idx = block_idx;
               LOG_TRACE ("ownerhandle: " FORMAT_HREF11 "\n",
                          ARGS_HREF11 (obj->tio.entity->ownerhandle));
