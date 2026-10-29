@@ -1711,6 +1711,23 @@ api_common_entity (dwg_object *obj)
       else                                                                    \
         fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]", field);      \
     }
+// fixed-size array field: compare the content, not the address
+#define CHK_ENTITY_ARRAY(ent, name, field, size)                              \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
+    fail (#name "." #field);                                                  \
+  else                                                                        \
+    {                                                                         \
+      if (memcmp (ent->field, field, (size)) == 0)                            \
+        {                                                                     \
+          if (g_counter > g_countmax)                                         \
+            pass ();                                                          \
+          else                                                                \
+            ok (#name "." #field);                                            \
+        }                                                                     \
+      else                                                                    \
+        fail (#name "." #field);                                              \
+    }
+
 #define CHK_ENTITY_TYPE_CAST(ent, name, field, typ, cast)                     \
   {                                                                           \
     BITCODE_##cast _value;                                                    \

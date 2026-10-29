@@ -42,6 +42,36 @@
 
   FIELD_VECTOR_INL (aux_intro, RC, 3, 0); /* ff 77 01 */
   FIELD_RSx (dwg_version, 0);
+#ifdef IS_DECODER
+  SINCE (R_2018)
+  {
+    // R2018 has two known 129 byte auxheader layouts:
+    // AutoCAD writes maint_version as RL and adds two RS fields in
+    // the version area; ODAFileConverter writes the R2013 123 byte
+    // layout plus three trailing RS.  Detect via the constant -1
+    // marker field: at [11-15) in the ODA layout, at [13-17) in the
+    // AutoCAD layout.  All fields so far are byte aligned.
+    if (dat->size >= 129)
+      {
+        uint8_t *c = (uint8_t *)dat->chain;
+        BITCODE_RL m1_oda = (BITCODE_RL)c[11] | ((BITCODE_RL)c[12] << 8)
+            | ((BITCODE_RL)c[13] << 16) | ((BITCODE_RL)c[14] << 24);
+        BITCODE_RL m1_acad = (BITCODE_RL)c[13] | ((BITCODE_RL)c[14] << 8)
+            | ((BITCODE_RL)c[15] << 16) | ((BITCODE_RL)c[16] << 24);
+        if (m1_acad == 0xFFFFFFFF && m1_oda != 0xFFFFFFFF)
+          {
+            // Normalize the AutoCAD layout in-place to the ODA one:
+            // compact out the RL word of maint_version, the two RS
+            // fields in the version area, and zero the tail.
+            memmove (c + 7, c + 9, 18); // through dwg_version_1
+            memmove (c + 25, c + 27, 2); // maint_version_1
+            memmove (c + 27, c + 31, 4); // dwg/maint_version_2
+            memmove (c + 31, c + 37, 92); // unknown_6rs ... zero_8
+            memset (c + 123, 0, 6);
+          }
+      }
+  }
+#endif
   FIELD_RSx (maint_version, 0);
   FIELD_RL (numsaves, 0);
   FIELD_RLd (minus_1, 0);
@@ -65,7 +95,8 @@
   FIELD_RL (numsaves_4, 0);
   FIELD_RL (zero_5, 0);
   FIELD_RL (zero_6, 0);
-  SINCE (R_2004a) {
+  SINCE (R_2000b) {
+    // AutoCAD writes these since R2000 (123 byte auxheader)
     FIELD_RL (zero_7, 0);
     FIELD_RL (zero_8, 0);
   }

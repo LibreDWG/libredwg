@@ -2956,7 +2956,8 @@ DWG_ENTITY (MTEXT)
   SINCE (R_2004a)
     {
       FIELD_BL0 (bg_fill_flag, 90);
-      if (FIELD_VALUE (bg_fill_flag) & (dat->version <= R_2018 ? 1 : 16))
+      // 0x10 (text frame) also has the background fields since R2018
+      if (FIELD_VALUE (bg_fill_flag) & (dat->version >= R_2018 ? 17 : 1))
         {
           FIELD_BD (bg_fill_scale, 45); // def: 1.5
           FIELD_CMC (bg_fill_color, 63);
@@ -3437,7 +3438,9 @@ DWG_TABLE (LAYER)
   }
   VERSIONS (R_13b1, R_14) {
     DECODER {
-      FIELD_VALUE (off) = FIELD_VALUE (color.index) < 0;
+      // The off state is given by the bit or a negative color.
+      // OR them, do not overwrite the decoded bit.
+      FIELD_VALUE (off) |= FIELD_VALUE (color.index) < 0;
       LOG_LAYER_FLAG(off);
     }
     // for DWG

@@ -2598,11 +2598,7 @@ DWG_OBJECT_END
 
 #define AcDbRenderSettings_fields                                             \
     SUBCLASS (AcDbRenderSettings)                                             \
-    SINCE (R_2013) { /* version 0x1f */                                       \
-      VALUE_BL (_obj->class_version + 1, 90)                                  \
-    } else {                                                                  \
-      FIELD_BL (class_version, 90);                                           \
-    }                                                                         \
+    FIELD_BL (class_version, 90);                                             \
     FIELD_T (name, 1);                                                        \
     FIELD_B (fog_enabled, 290);                                               \
     FIELD_B (fog_background_enabled, 290);                                    \

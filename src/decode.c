@@ -2419,10 +2419,19 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                      dwg->dwg_class[i].item_class_id);
 
           dwg->dwg_class[i].num_instances = bit_read_BL (&sec_dat);
-          dwg->dwg_class[i].dwg_version = bit_read_BS (&sec_dat);
-          dwg->dwg_class[i].maint_version = bit_read_BS (&sec_dat);
+          if (dat->from_version >= R_2004)
+            {
+              // spec says BS, but AutoCAD writes BL
+              dwg->dwg_class[i].dwg_version = bit_read_BL (&sec_dat);
+              dwg->dwg_class[i].maint_version = bit_read_BL (&sec_dat);
+            }
+          else
+            {
+              dwg->dwg_class[i].dwg_version = bit_read_BS (&sec_dat);
+              dwg->dwg_class[i].maint_version = bit_read_BS (&sec_dat);
+            }
           dwg->dwg_class[i].unknown_1 = bit_read_BL (&sec_dat);
-          dwg->dwg_class[i].unknown_1 = bit_read_BL (&sec_dat);
+          dwg->dwg_class[i].unknown_2 = bit_read_BL (&sec_dat);
           LOG_TRACE ("num_instances:    %u\n",
                      dwg->dwg_class[i].num_instances);
           LOG_HANDLE ("dwg version:      %u (%u)\n",
@@ -3961,8 +3970,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       }
       LATER_VERSIONS
       {
-        data->u.eed_3.layer = bit_read_RLL (dat);
-        LOG_TRACE ("layer: " FORMAT_RLL " [RLL]", data->u.eed_3.layer);
+        data->u.eed_3.layer = bit_read_RLL_BE (dat);
+        LOG_TRACE ("layer: " FORMAT_HV " [RLL_BE]", data->u.eed_3.layer);
       }
       break;
     case 4:
@@ -4557,7 +4566,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   int has_wrong_bitsize = 0; // first possibly fatal problem
   BITCODE_BL vcount;
 
-  // obj->dat_address = dat->byte; // the data stream offset
+  // obj->dat_address = dat->byte; // the data stream
   obj->bitsize_pos = objectpos; // absolute. needed for encode
   VERSIONS (R_2000, R_2007)
   {
@@ -4957,11 +4966,6 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   int error = 0;
 
   _obj = _ent = obj->tio.entity;
-
-  // deferred from common_entity_data, which has no hdl_dat
-  if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
-    FIELD_HANDLE (color.handle, 0,
-                  430); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 
     // clang-format off
   #include "common_entity_handle_data.spec"

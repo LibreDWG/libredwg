@@ -184,9 +184,19 @@ decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
   int acis_data_idx;
   int error = 0;
 
-  FIELD_B (acis_empty, 290);
-  if (dat->byte >= dat->size)
-    return DWG_ERR_VALUEOUTOFBOUNDS;
+  PRE (R_2013b)
+  {
+    FIELD_B (acis_empty, 290);
+    if (dat->byte >= dat->size)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+  }
+  else
+    // no leading ACIS empty bit since R2013; the SAB data is in the
+    // has_ds_data AcDs blob (see common_entity_data.spec), not inline
+    {
+      FIELD_VALUE (acis_empty) = 1;
+      FIELD_VALUE (version) = 2;
+    }
   if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);

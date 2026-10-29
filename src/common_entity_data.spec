@@ -376,8 +376,8 @@
     {
       FIELD_B (isbylayerlt, 0);
 #ifdef IS_DECODER
-      if (FIELD_VALUE (isbylayerlt))
-        FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
+      // 11 = own ltype handle, 00 = ByLayer
+      FIELD_VALUE (ltype_flags) = FIELD_VALUE (isbylayerlt) ? 0 : 3;
 #endif
     }
   SINCE (R_2004a) //ODA bug
@@ -430,6 +430,21 @@
         LOG_TRACE (" color.flag: 0x%x\n", _ent->color.flag);
 #endif
       flags = _ent->color.flag;
+      if (flags & 0x40)
+        {
+#ifndef IS_ENCODER
+          FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9 lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
+#endif
+        }
+      else if (flags & 0x80) // and not a reference
+        {
+          // the true color RGB comes before the transparency
+          DXF {
+            VALUE_BL (_ent->color.rgb & 0x00ffffff, 420);
+          } else {
+            FIELD_BLx (color.rgb, 420); // ODA bug, documented as BS
+          }
+        }
       if (flags & 0x20)
         {
 #ifdef IS_ENCODER
@@ -450,20 +465,6 @@
             FIELD_BL (color.alpha_raw, 0);
             FIELD_BB (color.alpha_type, 0);
             FIELD_RC (color.alpha, 0);
-          }
-        }
-      if (flags & 0x40)
-        {
-#ifndef IS_ENCODER
-          FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9 lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
-#endif
-        }
-      else if (flags & 0x80) // and not a reference
-        {
-          DXF {
-            VALUE_BL (_ent->color.rgb & 0x00ffffff, 420);
-          } else {
-            FIELD_BLx (color.rgb, 420); // ODA bug, documented as BS
           }
         }
       if ((flags & 0x41) == 0x41)

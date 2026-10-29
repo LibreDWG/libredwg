@@ -184,11 +184,13 @@ api_process (dwg_object *obj)
     CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, has_revision_guid, B);
     if (has_revision_guid)
       {
-        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_guid, TF);
+        CHK_ENTITY_ARRAY (_3dsolid, 3DSOLID, revision_guid,
+                          sizeof (revision_guid));
         CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_major, BL);
         CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_minor1, BS);
         CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_minor2, BS);
-        CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, revision_bytes, TF);
+        CHK_ENTITY_ARRAY (_3dsolid, 3DSOLID, revision_bytes,
+                          sizeof (revision_bytes));
       }
     CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, end_marker, BL);
   }
