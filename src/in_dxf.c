@@ -13496,6 +13496,32 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   if (pair && pair->code == 0)
                     goto start_loop;
                 }
+              else if (strEQc (name, "BLOCK") && pair->code == 70
+                       && dat->from_version >= R_13b1)
+                {
+                  // r13+ BLOCK_RECORD has no 70: the xref/overlay/resolved
+                  // bits only exist in the BLOCK entity's 70. Propagate
+                  // them to the owning BLOCK_HEADER (bits 4, 8, 32).
+                  Dwg_Object_Entity *ent = obj->tio.entity;
+                  if (ent && ent->ownerhandle)
+                    {
+                      Dwg_Object *_hdr
+                          = dwg_ref_object (dwg, ent->ownerhandle);
+                      if (_hdr && _hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
+                        {
+                          Dwg_Object_BLOCK_HEADER *_h
+                              = _hdr->tio.object->tio.BLOCK_HEADER;
+                          _h->blkisxref = (pair->value.l & 4) != 0;
+                          _h->xrefoverlaid = (pair->value.l & 8) != 0;
+                          _h->xref_loaded = (pair->value.l & 0x80000000) != 0;
+                          _h->flag
+                              |= _h->blkisxref << 2 | _h->xrefoverlaid << 3;
+                          LOG_TRACE ("BLOCK_HEADER(%s) xref flags "
+                                     "from BLOCK 70 = %ld\n",
+                                     _h->name, pair->value.l);
+                        }
+                    }
+                }
               else if (strEQc (name, "BLOCK")
                        && (pair->code == 70 || pair->code == 10
                            || pair->code == 20 || pair->code == 30
@@ -14306,6 +14332,19 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           _hdr->base_pt.x = _obj->base_pt.x;
                           _hdr->base_pt.y = _obj->base_pt.y;
                           LOG_TRACE ("BLOCK_HEADER.base_pt = BLOCK.base_pt\n");
+                          // r13+: the xref path only exists in the BLOCK
+                          // entity's 1 (not in BLOCK_RECORD). Ordinary
+                          // blocks still carry their name in 1 (ODA
+                          // convention), so only borrow it for xrefs.
+                          if (_hdr->blkisxref || _hdr->xrefoverlaid)
+                            if (!_hdr->xref_pname && _obj->xref_pname)
+                              {
+                                _hdr->xref_pname = _obj->xref_pname;
+                                _obj->xref_pname = NULL;
+                                LOG_TRACE ("BLOCK_HEADER(%s).xref_pname = "
+                                           "\"%s\" (from BLOCK 1)\n",
+                                           _hdr->name, _hdr->xref_pname);
+                              }
                         }
                       else if (blkhdr->fixedtype == DWG_TYPE_BLOCK_CONTROL)
                         {
