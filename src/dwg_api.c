@@ -24593,7 +24593,8 @@ dwg_is_valid_tag (const char *tag)
       {
         uint16_t c = wstr[i];
         if (iswlower (c)
-            || !(c == '$' || c == '_' || c == '-' || iswalnum (c)))
+            || !(c == '$' || c == '_' || c == '-' || c == '#'
+                 || iswalnum (c)))
           goto fail1;
       }
     free (wstr);
@@ -24608,7 +24609,9 @@ dwg_is_valid_tag (const char *tag)
     uint8_t c;
     while (c = *tag++)
       {
-        if (islower (c) || !(c == '$' || c == '_' || c == '-' || isalnum (c)))
+        if (islower (c)
+            || !(c == '$' || c == '_' || c == '-' || c == '#'
+                 || isalnum (c)))
           return false;
       }
   }
