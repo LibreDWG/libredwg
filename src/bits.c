@@ -3949,7 +3949,8 @@ bit_read_TIMEBLL (Bit_Chain *dat)
       date.days = bit_read_BL (dat);
       date.ms = bit_read_BL (dat);
     }
-  date.value = date.days + (date.ms * 1e-8);
+  // ms are the milliseconds of the day: ms / 86400000 is the day fraction
+  date.value = date.days + (date.ms / 86400000.0);
   return date;
 }
 
@@ -3978,7 +3979,7 @@ bit_read_TIMERLL (Bit_Chain *dat)
   date.days = bit_read_RL (dat);
   date.ms = bit_read_RL (dat);
   // just for display, not calculations
-  date.value = date.days + (date.ms * 1e-8);
+  date.value = date.days + (date.ms / 86400000.0);
   return date;
 }
 

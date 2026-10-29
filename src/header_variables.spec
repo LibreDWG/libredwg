@@ -276,7 +276,7 @@
       _obj->TDCREATE.days  = _obj->TDUCREATE.days;
       // adjust for timezone offset
       _obj->TDCREATE.ms    = _obj->TDUCREATE.ms + off;
-      _obj->TDCREATE.value = _obj->TDCREATE.days + (_obj->TDCREATE.ms * 1e-8);
+      _obj->TDCREATE.value = _obj->TDCREATE.days + (_obj->TDCREATE.ms / 86400000.0);
       // relative times (days < 1000) have no valid calendar day for the date
       strftime (_buf, 60,
                 _obj->TDCREATE.days >= 1000 ? STRFTIME_DATE : STRFTIME_TIME,
@@ -285,7 +285,7 @@
                    _obj->TDCREATE.days, _obj->TDCREATE.ms, _buf);
       _obj->TDUPDATE.days  = _obj->TDUUPDATE.days;
       _obj->TDUPDATE.ms    = _obj->TDUUPDATE.ms + off;
-      _obj->TDUPDATE.value = _obj->TDUPDATE.days + (_obj->TDUPDATE.ms * 1e-8);
+      _obj->TDUPDATE.value = _obj->TDUPDATE.days + (_obj->TDUPDATE.ms / 86400000.0);
       // relative times (days < 1000) have no valid calendar day for the date
       strftime (_buf, 60,
                 _obj->TDUPDATE.days >= 1000 ? STRFTIME_DATE : STRFTIME_TIME,
