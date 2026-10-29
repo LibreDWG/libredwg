@@ -5,8 +5,8 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BS class_version;
-  BITCODE_BS i, num_lights;
+  BITCODE_BL class_version;
+  BITCODE_BL i, num_lights;
   Dwg_LIGHTLIST_light *lights;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
