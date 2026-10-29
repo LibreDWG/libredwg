@@ -5738,6 +5738,7 @@ DWG_ENTITY (PROXY_ENTITY)
     dat->opts = opts;
     bit_set_position (hdl_dat, pos);
   }
+  HANDLE_VECTOR (objids, num_objids, ANYCODE, 0);
 #elif defined(IS_ENCODER) || defined(IS_JSON) || defined(IS_FREE)
   HANDLE_VECTOR (objids, num_objids, ANYCODE, 0);
 #elif defined(IS_DXF)
