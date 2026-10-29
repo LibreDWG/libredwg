@@ -6890,7 +6890,12 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                 bit_chain_alloc_size (dat, (length * 2) + 5);
               bit_write_RS (dat, length);
               for (int j = 0; j < length; j++)
-                bit_write_RS (dat, *s++);
+                {
+                  // the packed string member is not 2-byte aligned
+                  BITCODE_RS c;
+                  memcpy (&c, &s[j], sizeof (c));
+                  bit_write_RS (dat, c);
+                }
 #ifdef _WIN32
               LOG_TRACE ("wstring: len=%d [RS] \"" FORMAT_TU "\" [TU]",
                          (int)data->u.eed_0_r2007.length,
