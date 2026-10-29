@@ -9,5 +9,5 @@ api_process (dwg_object *obj)
 
   dwg_obj_index *_obj = dwg_object_to_INDEX (obj);
 
-  CHK_ENTITY_TIMEBLL (_obj, LAYER_INDEX, last_updated);
+  CHK_ENTITY_TIMEBLL (_obj, INDEX, last_updated);
 }
