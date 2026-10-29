@@ -25,5 +25,17 @@
 char *ATTRIBUTE_MALLOC htmlescape (const char *restrict src,
                                    const Dwg_Codepage codepage);
 char *ATTRIBUTE_MALLOC htmlwescape (BITCODE_TU wsrc);
+char *ATTRIBUTE_MALLOC htmlutf8escape (const char *restrict src);
+char *ATTRIBUTE_MALLOC mtext_plaintext (const char *src);
+char *ATTRIBUTE_MALLOC mtext_escape_line (const char *line);
+char *ATTRIBUTE_MALLOC mtext_wrap_text (const char *src, double rect_width,
+                                        double text_height,
+                                        double width_factor);
+const char *mtext_attachment_anchor (BITCODE_BS attachment);
+double mtext_svg_angle (double x_axis_x, double x_axis_y);
+double mtext_line_height (double text_height, double linespace_factor);
+double mtext_attachment_first_offset (BITCODE_BS attachment,
+                                      double text_height, double line_height,
+                                      unsigned int num_lines);
 
 #endif

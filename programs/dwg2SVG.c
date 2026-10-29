@@ -20,7 +20,7 @@
  *
  * TODO: all entities: 3DSOLID, SHAPE, ARC_DIMENSION, ATTRIB, DIMENSION*,
  *         *SURFACE, GEOPOSITIONMARKER/CAMERA/LIGHT, HATCH, HELIX,
- *         IMAGE/WIPEOUT/UNDERLAY, LEADER, MESH, MINSERT, MLINE, MTEXT,
+ *         IMAGE/WIPEOUT/UNDERLAY, LEADER, MESH, MINSERT, MLINE,
  * MULTILEADER, OLE2FRAME, OLEFRAME, POLYLINE_3D, POLYLINE_MESH,
  * POLYLINE_PFACE, RAY, XLINE, SPLINE, TABLE, TOLERANCE, VIEWPORT?
  *       common_entity_data: ltype, ltype_scale.
@@ -31,6 +31,7 @@
 #include "../src/config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #ifdef HAVE_STRCASESTR
 #  undef __DARWIN_C_LEVEL
 #  define __DARWIN_C_LEVEL __DARWIN_C_FULL
@@ -224,28 +225,14 @@ common_entity (Dwg_Object_Entity *ent)
     free (color);
 }
 
-// TODO: MTEXT
-static void
-output_TEXT (Dwg_Object *obj)
+static const char *
+text_fontfamily (Dwg_Data *dwg, BITCODE_H style_ref)
 {
-  Dwg_Data *dwg = obj->parent;
-  Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
-  char *escaped;
-  const char *fontfamily;
-  BITCODE_H style_ref = text->style;
-  Dwg_Object *o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
-  Dwg_Object_STYLE *style = o ? o->tio.object->tio.STYLE : NULL;
-  BITCODE_2DPOINT pt;
+  Dwg_Object *o;
+  Dwg_Object_STYLE *style;
 
-  if (!text->text_value || entity_invisible (obj))
-    return;
-  if (isnan_2BD (text->ins_pt) || isnan_3BD (text->extrusion))
-    return;
-  if (dwg->header.version >= R_2007)
-    escaped = htmlwescape ((BITCODE_TU)text->text_value);
-  else
-    escaped = htmlescape (text->text_value, dwg->header.codepage);
-
+  o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
+  style = o && o->tio.object ? o->tio.object->tio.STYLE : NULL;
   if (style && o->fixedtype == DWG_TYPE_STYLE && style->font_file
       && *style->font_file
 #ifdef HAVE_STRCASESTR
@@ -262,14 +249,170 @@ output_TEXT (Dwg_Object *obj)
       if ((strstr (style->font_file, "arial"))
           || strstr (style->font_file, "Arial"))
 #endif
-        {
-          fontfamily = "Arial";
-        }
-      else
-        fontfamily = "Verdana";
+        return "Arial";
+      return "Verdana";
+    }
+  return "Courier";
+}
+
+static double
+mtext_width_factor (Dwg_Data *dwg, BITCODE_H style_ref)
+{
+  Dwg_Object *o;
+  Dwg_Object_STYLE *style;
+
+  o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
+  style = o && o->tio.object ? o->tio.object->tio.STYLE : NULL;
+  if (style && o->fixedtype == DWG_TYPE_STYLE && isfinite (style->width_factor)
+      && style->width_factor > 0.0)
+    return style->width_factor;
+  return 1.0;
+}
+
+static void
+output_MTEXT (Dwg_Object *obj)
+{
+  Dwg_Data *dwg;
+  Dwg_Entity_MTEXT *mtext;
+  BITCODE_3DPOINT ins_pt;
+  char *plain;
+  char *wrapped;
+  char *text_utf8;
+  char *line;
+  char *next;
+  char *escaped;
+  char *color;
+  const char *fontfamily;
+  const char *anchor;
+  double angle;
+  double line_height;
+  double first_offset;
+  double line_y;
+  double insertion_y;
+  int num_lines;
+  int text_utf8_owned;
+  double width_factor;
+
+  if (!obj || !obj->parent || !obj->tio.entity || !obj->tio.entity->tio.MTEXT)
+    return;
+  dwg = obj->parent;
+  mtext = obj->tio.entity->tio.MTEXT;
+  if (!mtext->text || entity_invisible (obj) || isnan_3BD (mtext->ins_pt)
+      || isnan_3BD (mtext->extrusion) || isnan_3BD (mtext->x_axis_dir)
+      || !isfinite (mtext->ins_pt.x) || !isfinite (mtext->ins_pt.y)
+      || !isfinite (mtext->ins_pt.z) || !isfinite (mtext->extrusion.x)
+      || !isfinite (mtext->extrusion.y) || !isfinite (mtext->extrusion.z)
+      || !isfinite (mtext->x_axis_dir.x) || !isfinite (mtext->x_axis_dir.y)
+      || !isfinite (mtext->x_axis_dir.z) || !isfinite (mtext->text_height)
+      || mtext->text_height <= 0.0)
+    return;
+
+  /* MTEXT ins_pt and x_axis_dir are WCS values (see dwg_api.c).  This
+     renderer is intentionally planar: extrusion is validated above, but
+     does not rotate the WCS insertion point into a full 3D OCS frame. */
+  ins_pt = mtext->ins_pt;
+  if (isnan_3BD (ins_pt) || !isfinite (ins_pt.x) || !isfinite (ins_pt.y))
+    return;
+  /* MTEXT::text is TU for R2007+ DWG files and TV otherwise.  Normalize it
+     once before parsing controls; all later processing operates on UTF-8. */
+  if (IS_FROM_TU_DWG (dwg))
+    {
+      text_utf8 = bit_convert_TU ((BITCODE_TU)mtext->text);
+      text_utf8_owned = 1;
     }
   else
-    fontfamily = "Courier";
+    {
+      text_utf8
+          = bit_TV_to_utf8 ((const char *)mtext->text, dwg->header.codepage);
+      text_utf8_owned = text_utf8 != (const char *)mtext->text;
+    }
+  if (!text_utf8)
+    return;
+  plain = mtext_plaintext (text_utf8);
+  if (text_utf8_owned)
+    free (text_utf8);
+  if (!plain)
+    return;
+
+  width_factor = mtext_width_factor (dwg, mtext->style);
+  wrapped = mtext_wrap_text (plain, mtext->rect_width, mtext->text_height,
+                             width_factor);
+  free (plain);
+  if (!wrapped)
+    return;
+  plain = wrapped;
+
+  fontfamily = text_fontfamily (dwg, mtext->style);
+  anchor = mtext_attachment_anchor (mtext->attachment);
+  /* DXF 11 is a WCS direction.  Project it onto the drawing plane and use
+     the inverse sign required by SVG's downward Y axis.  A direction with
+     no usable XY component has no planar angle; keep the text unrotated. */
+  angle = mtext_svg_angle (mtext->x_axis_dir.x, mtext->x_axis_dir.y);
+  line_height
+      = mtext_line_height (mtext->text_height, mtext->linespace_factor);
+  if (line_height <= 0.0)
+    return;
+  num_lines = 1;
+  for (line = plain; *line; line++)
+    if (*line == '\n')
+      num_lines++;
+  first_offset
+      = mtext_attachment_first_offset (mtext->attachment, mtext->text_height,
+                                       line_height, (unsigned int)num_lines);
+  insertion_y = transform_Y (ins_pt.y);
+  color = entity_color (obj->tio.entity);
+  if (!color)
+    color = (char *)"black";
+
+  printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
+          "font-family=\"%s\" font-size=\"%f\" fill=\"%s\" "
+          "text-anchor=\"%s\" alignment-baseline=\"alphabetic\" "
+          "transform=\"rotate(%f %f %f)\">\n",
+          obj->index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
+          fontfamily, mtext->text_height, color, anchor, angle,
+          transform_X (ins_pt.x), transform_Y (ins_pt.y));
+  line = plain;
+  line_y = insertion_y + first_offset;
+  for (;;)
+    {
+      next = strchr (line, '\n');
+      if (next)
+        *next = '\0';
+      escaped = mtext_escape_line (line);
+      printf ("\t\t<tspan x=\"%f\" y=\"%f\">%s</tspan>\n",
+              transform_X (ins_pt.x), line_y, escaped ? escaped : "");
+      if (escaped)
+        free (escaped);
+      if (!next)
+        break;
+      line = next + 1;
+      line_y += line_height;
+    }
+  printf ("\t</text>\n");
+  if (*color == '#')
+    free (color);
+  free (plain);
+}
+
+static void
+output_TEXT (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
+  char *escaped;
+  const char *fontfamily;
+  BITCODE_2DPOINT pt;
+
+  if (!text->text_value || entity_invisible (obj))
+    return;
+  if (isnan_2BD (text->ins_pt) || isnan_3BD (text->extrusion))
+    return;
+  if (dwg->header.version >= R_2007)
+    escaped = htmlwescape ((BITCODE_TU)text->text_value);
+  else
+    escaped = htmlescape (text->text_value, dwg->header.codepage);
+
+  fontfamily = text_fontfamily (dwg, text->style);
 
   transform_OCS_2d (&pt, text->ins_pt, text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
@@ -715,6 +858,9 @@ output_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_TEXT:
       output_TEXT (obj);
+      break;
+    case DWG_TYPE_MTEXT:
+      output_MTEXT (obj);
       break;
     case DWG_TYPE_ARC:
       output_ARC (obj);
