@@ -6582,6 +6582,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       {
         Dwg_Entity_DIMENSION_LINEAR *_obj = _ent->tio.DIMENSION_LINEAR;
         obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
+        obj->name = obj->dxfname = (char *)"DIMENSION_LINEAR";
         LOG_TRACE ("=> Entity DIMENSION_LINEAR\n");
         if (R11OPTS (8))
           {
@@ -6613,6 +6614,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       {
         Dwg_Entity_DIMENSION_ALIGNED *_obj = _ent->tio.DIMENSION_ALIGNED;
         obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
+        obj->name = obj->dxfname = (char *)"DIMENSION_ALIGNED";
         LOG_TRACE ("=> Entity DIMENSION_ALIGNED\n");
         if (R11OPTS (8))
           {
@@ -6640,6 +6642,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       {
         Dwg_Entity_DIMENSION_ANG2LN *_obj = _ent->tio.DIMENSION_ANG2LN;
         obj->fixedtype = DWG_TYPE_DIMENSION_ANG2LN;
+        obj->name = obj->dxfname = (char *)"DIMENSION_ANG2LN";
         if (R11OPTS (8))
           {
             if (dat->version >= R_10)
@@ -6673,6 +6676,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       {
         Dwg_Entity_DIMENSION_DIAMETER *_obj = _ent->tio.DIMENSION_DIAMETER;
         obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
+        obj->name = obj->dxfname = (char *)"DIMENSION_DIAMETER";
         LOG_TRACE ("=> Entity DIMENSION_DIAMETER\n");
         if (R11OPTS (32))
           {
@@ -6695,6 +6699,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       {
         Dwg_Entity_DIMENSION_RADIUS *_obj = _ent->tio.DIMENSION_RADIUS;
         obj->fixedtype = DWG_TYPE_DIMENSION_RADIUS;
+        obj->name = obj->dxfname = (char *)"DIMENSION_RADIUS";
         LOG_TRACE ("=> Entity DIMENSION_RADIUS\n");
         if (R11OPTS (32))
           {
@@ -6717,6 +6722,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       {
         Dwg_Entity_DIMENSION_ANG3PT *_obj = _ent->tio.DIMENSION_ANG3PT;
         obj->fixedtype = DWG_TYPE_DIMENSION_ANG3PT;
+        obj->name = obj->dxfname = (char *)"DIMENSION_ANG3PT";
         LOG_TRACE ("=> Entity DIMENSION_ANG3PT\n");
         if (R11OPTS (8))
           {
@@ -6751,6 +6757,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       {
         Dwg_Entity_DIMENSION_ORDINATE *_obj = _ent->tio.DIMENSION_ORDINATE;
         obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
+        obj->name = obj->dxfname = (char *)"DIMENSION_ORDINATE";
         LOG_TRACE ("=> Entity DIMENSION_ORDINATE\n");
         if (R11OPTS (8))
           { // if dxf 13 (extension_defining_pt)
