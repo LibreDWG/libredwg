@@ -10039,6 +10039,192 @@ add_MATERIAL (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #  undef MAT_BL
 }
 
+/* The common AcDbDimensionObjectContextData body of the
+   *DIM*OBJECTCONTEXTDATA classes. The generic field search cannot see the
+   embedded Dwg_OCD_Dimension struct, so set its groups here: 2 (the *D
+   block, by name), 10/20, 140, 280 and the flags 291-298/70/71. Returns 1
+   if the pair was consumed.
+ */
+static int
+dxf_set_ocd_dimension (Dwg_Object *restrict obj, Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  // all *DIM*OBJECTCONTEXTDATA embed Dwg_OCD_Dimension at the same offset
+  Dwg_OCD_Dimension *dim
+      = &obj->tio.object->tio.ALDIMOBJECTCONTEXTDATA->dimension;
+
+  switch (pair->code)
+    {
+    case 2: // the *D block, by name (or a hex handle)
+      {
+        BITCODE_H hdl
+            = dwg_find_tablehandle_silent (dwg, pair->value.s.ptr, "BLOCK");
+        if (hdl)
+          {
+            dim->block = dwg_add_handleref (dwg, 5, hdl->absolute_ref, NULL);
+            LOG_TRACE ("%s.dimension.block = %s " FORMAT_REF " [H 2]\n",
+                       obj->name, pair->value.s.ptr, ARGS_REF (dim->block));
+          }
+        else if (pair->value.s.ptr && *pair->value.s.ptr)
+          {
+            unsigned long hval = strtoul (pair->value.s.ptr, NULL, 16);
+            if (hval)
+              {
+                dim->block = dwg_add_handleref (dwg, 5, hval, NULL);
+                LOG_TRACE ("%s.dimension.block = 0x%lx " FORMAT_REF " [H 2]\n",
+                           obj->name, hval, ARGS_REF (dim->block));
+              }
+            else
+              LOG_WARN ("%s.dimension.block: unknown *D block %s [2]",
+                        obj->name, pair->value.s.ptr);
+          }
+        break;
+      }
+    case 10:
+      dim->def_pt.x = pair->value.d;
+      break;
+    case 20:
+      dim->def_pt.y = pair->value.d;
+      break;
+    case 140:
+      dim->text_rotation = pair->value.d;
+      break;
+    case 280:
+      dim->override_code = (BITCODE_RC)pair->value.l;
+      break;
+    case 291:
+      dim->dimosxd = pair->value.i;
+      break;
+    case 292:
+      dim->dimtix = pair->value.i;
+      break;
+    case 293:
+      dim->b293 = pair->value.i;
+      break;
+    case 294:
+      dim->is_def_textloc = pair->value.i;
+      break;
+    case 295:
+      dim->has_arrow2 = pair->value.i;
+      break;
+    case 296:
+      dim->flip_arrow2 = pair->value.i;
+      break;
+    case 297:
+      dim->flip_arrow1 = pair->value.i;
+      break;
+    case 298:
+      dim->dimtofl = pair->value.i;
+      break;
+    case 70: // dimatfit, after the body subclass
+      dim->dimatfit = pair->value.i;
+      break;
+    case 71: // dimtmove
+      dim->dimtmove = pair->value.i;
+      break;
+    default:
+      return 0;
+    }
+  return 1;
+}
+
+/* The 70 after the context body's subclass (MTEXT attachment, TEXT
+   horizontal mode, LEADER num_points) belongs to the body, not to the
+   common AcDbObjectContextData class version. Returns 1 if consumed.
+ */
+static int
+dxf_set_context_70 (Dwg_Object *restrict obj, Dxf_Pair *restrict pair)
+{
+  switch (obj->fixedtype)
+    {
+    case DWG_TYPE_MTEXTOBJECTCONTEXTDATA:
+      obj->tio.object->tio.MTEXTOBJECTCONTEXTDATA->attachment = pair->value.l;
+      break;
+    case DWG_TYPE_TEXTOBJECTCONTEXTDATA:
+      obj->tio.object->tio.TEXTOBJECTCONTEXTDATA->horizontal_mode
+          = pair->value.i;
+      break;
+    case DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA:
+      obj->tio.object->tio.MTEXTATTRIBUTEOBJECTCONTEXTDATA->horizontal_mode
+          = pair->value.i;
+      break;
+    default:
+      return 0;
+    }
+  return 1;
+}
+
+/* LEADER context body: 70 num_points, num_points x (10,20,30) points,
+   11/21/31 x_direction, 290 b290, 12/22/32 inspt_offset, 13/23/33 endptproj.
+   No subclass marker of its own in DXF, all under
+   AcDbAnnotScaleObjectContextData.
+ */
+static int
+dxf_set_leader_context (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
+                        BITCODE_BL *pt_idx)
+{
+  Dwg_Object_LEADEROBJECTCONTEXTDATA *o
+      = obj->tio.object->tio.LEADEROBJECTCONTEXTDATA;
+  switch (pair->code)
+    {
+    case 70:
+      o->num_points = pair->value.l;
+      *pt_idx = 0;
+      if (o->num_points > 0 && !o->points)
+        o->points = xcalloc (o->num_points, sizeof (BITCODE_3DPOINT));
+      return 1;
+    case 10:
+      if (!o->points || *pt_idx >= o->num_points)
+        return 0;
+      o->points[*pt_idx].x = pair->value.d;
+      return 1;
+    case 20:
+      if (!o->points || *pt_idx >= o->num_points)
+        return 0;
+      o->points[*pt_idx].y = pair->value.d;
+      return 1;
+    case 30:
+      if (!o->points || *pt_idx >= o->num_points)
+        return 0;
+      o->points[*pt_idx].z = pair->value.d;
+      (*pt_idx)++;
+      return 1;
+    case 11:
+      o->x_direction.x = pair->value.d;
+      return 1;
+    case 21:
+      o->x_direction.y = pair->value.d;
+      return 1;
+    case 31:
+      o->x_direction.z = pair->value.d;
+      return 1;
+    case 12:
+      o->inspt_offset.x = pair->value.d;
+      return 1;
+    case 22:
+      o->inspt_offset.y = pair->value.d;
+      return 1;
+    case 32:
+      o->inspt_offset.z = pair->value.d;
+      return 1;
+    case 13:
+      o->endptproj.x = pair->value.d;
+      return 1;
+    case 23:
+      o->endptproj.y = pair->value.d;
+      return 1;
+    case 33:
+      o->endptproj.z = pair->value.d;
+      return 1;
+    case 290:
+      o->b290 = pair->value.i;
+      return 1;
+    default:
+      break;
+    }
+  return 0;
+}
+
 /* For tables, entities and objects.
  */
 static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
@@ -10061,6 +10247,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
   int j = 0, k = 0, l = 0, error = 0;
+  BITCODE_BL column_idx = 0;    // MTEXTOBJECTCONTEXTDATA.column_heights[46]
+  BITCODE_BL leader_pt_idx = 0; // LEADEROBJECTCONTEXTDATA.points[10,20,30]
   BITCODE_BL i = i_p ? *i_p : 0;
   int cur_cell = -1;
   size_t written = 0;
@@ -12438,6 +12626,76 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                          pair->value.s.ptr, "T", pair->code);
               j++;
               o->num_names = j;
+              goto next_pair;
+            }
+          else if (strEQc (subclass, "AcDbDimensionObjectContextData")
+                   && (obj->fixedtype == DWG_TYPE_ALDIMOBJECTCONTEXTDATA
+                       || obj->fixedtype == DWG_TYPE_ANGDIMOBJECTCONTEXTDATA
+                       || obj->fixedtype == DWG_TYPE_DMDIMOBJECTCONTEXTDATA
+                       || obj->fixedtype == DWG_TYPE_ORDDIMOBJECTCONTEXTDATA
+                       || obj->fixedtype == DWG_TYPE_RADIMOBJECTCONTEXTDATA
+                       || obj->fixedtype == DWG_TYPE_RADIMLGOBJECTCONTEXTDATA))
+            {
+              // the Dwg_OCD_Dimension body is invisible to the generic
+              // dynapi search; its 70 (dimatfit) is not the class_version
+              if (dxf_set_ocd_dimension (obj, pair))
+                {
+                  LOG_TRACE ("%s.dimension.%d = %ld\n", obj->name, pair->code,
+                             pair->value.l);
+                  goto next_pair;
+                }
+              goto search_field;
+            }
+          else if (obj->fixedtype == DWG_TYPE_LEADEROBJECTCONTEXTDATA
+                   && strEQc (subclass, "AcDbAnnotScaleObjectContextData")
+                   && (pair->code == 70 || pair->code == 10 || pair->code == 20
+                       || pair->code == 30 || pair->code == 11
+                       || pair->code == 21 || pair->code == 31
+                       || pair->code == 12 || pair->code == 22
+                       || pair->code == 32 || pair->code == 13
+                       || pair->code == 23 || pair->code == 33
+                       || pair->code == 290))
+            {
+              // the body fields are invisible to the generic dynapi search;
+              // the body 70 (num_points) is not the class_version
+              if (dxf_set_leader_context (obj, pair, &leader_pt_idx))
+                {
+                  LOG_TRACE ("%s.%d\n", obj->name, pair->code);
+                  goto next_pair;
+                }
+              goto search_field;
+            }
+          else if (pair->code == 70
+                   && (obj->fixedtype == DWG_TYPE_MTEXTOBJECTCONTEXTDATA
+                       || obj->fixedtype == DWG_TYPE_TEXTOBJECTCONTEXTDATA
+                       || obj->fixedtype
+                              == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+                   && !strEQc (subclass, "AcDbObjectContextData"))
+            {
+              // the body 70 (attachment / horizontal_mode)
+              // is not the class_version of AcDbObjectContextData
+              if (dxf_set_context_70 (obj, pair))
+                {
+                  LOG_TRACE ("%s body 70 = %ld\n", obj->name, pair->value.l);
+                  goto next_pair;
+                }
+              goto search_field;
+            }
+          else if (pair->code == 46
+                   && obj->fixedtype == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+            {
+              // the 72 count precedes the 46 column heights
+              Dwg_Object_MTEXTOBJECTCONTEXTDATA *o
+                  = obj->tio.object->tio.MTEXTOBJECTCONTEXTDATA;
+              if (o->num_column_heights > 0 && !o->column_heights)
+                o->column_heights = (BITCODE_BD *)xcalloc (
+                    o->num_column_heights, sizeof (BITCODE_BD));
+              if (o->column_heights && column_idx < o->num_column_heights)
+                {
+                  o->column_heights[column_idx++] = pair->value.d;
+                  LOG_TRACE ("%s.column_heights[%ld] = %g [BD 46]\n",
+                             obj->name, (long)column_idx - 1, pair->value.d);
+                }
               goto next_pair;
             }
           else
