@@ -54,6 +54,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "encode.h"
+#include "hash.h"
 #include "decode.h"
 #include "classes.h"
 #include "dynapi.h"
@@ -3052,7 +3053,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
               if (obj)
                 {
-                  obj->handle.value = 0xB;
+                  // AutoCAD's handle of VX_CONTROL, if free. Unconditionally
+                  // it collided with objects of non-AutoCAD drawings (gh209_1:
+                  // its DICTIONARY is B): "Duplicate handle B".
+                  if (!dwg_resolve_handle_silent (dwg, 0xB))
+                    {
+                      obj->handle.value = 0xB;
+                      hash_set (dwg->object_map, 0xB, (uint64_t)obj->index);
+                    }
                   LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
                              obj->handle.value);
                   dwg->header_vars.VX_TABLE_RECORD
@@ -3506,7 +3514,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
             if (obj)
               {
-                obj->handle.value = 0xB;
+                // AutoCAD's handle of VX_CONTROL, if free. Unconditionally it
+                // collided with objects of non-AutoCAD drawings (gh209_1: its
+                // DICTIONARY is B): "Duplicate handle B".
+                if (!dwg_resolve_handle_silent (dwg, 0xB))
+                  {
+                    obj->handle.value = 0xB;
+                    hash_set (dwg->object_map, 0xB, (uint64_t)obj->index);
+                  }
                 LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
                            obj->handle.value);
                 dwg->header_vars.VX_TABLE_RECORD

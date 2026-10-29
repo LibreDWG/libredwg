@@ -1215,6 +1215,9 @@ test_names (void)
     fail ("!dwg_is_valid_tag(\"a\")");
   if (!dwg_is_valid_tag ("ABC"))
     fail ("dwg_is_valid_tag(\"ABC\")");
+  // AutoCAD allows any character but space and ! (aec_objects)
+  if (!dwg_is_valid_tag ("SPACEOBJECTS:NUMBER"))
+    fail ("dwg_is_valid_tag(\"SPACEOBJECTS:NUMBER\")");
 
   dwg = dwg_new_Document (R_2000, 0, tracelevel);
   dwg->header.codepage = CP_CP869; // DOS Greek
