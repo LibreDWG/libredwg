@@ -7163,6 +7163,7 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
     return pair;
   o->num_childval = pair->value.u;
   dxf_free_pair (pair);
+  pair = NULL;
   if (o->num_childval)
     {
       o->childval = (Dwg_FIELD_ChildValue *)xcalloc (
@@ -7302,7 +7303,7 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           FIELD_T (value_string, 301);
         }
     }
-  if (pair->code != 301)
+  if (!pair || pair->code != 301)
     {
       FIELD_T (value_string, 301); // TODO: and 9 for subsequent >255 chunks
     }
