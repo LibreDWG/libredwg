@@ -230,7 +230,16 @@
         break;
       case 4:
         DEBUG_HERE
-        DECODER { _obj->schdat.num_uprops = 1; } // FIXME
+        DECODER { // FIXME
+          _obj->schdat.num_uprops = 1;
+          // a second schdat segment would otherwise leak the first
+          // allocation: the REPEAT2 below calloc's unconditionally.
+          if (_obj->schdat.uprops)
+            {
+              free (_obj->schdat.uprops);
+              _obj->schdat.uprops = NULL;
+            }
+        }
         REPEAT2 (schdat.num_uprops, schdat.uprops, Dwg_AcDs_SchemaData_UProp)
         REPEAT_BLOCK
           SUB_FIELD_RL (schdat.uprops[rcount2], size, 0);
