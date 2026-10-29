@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <stdbool.h>
 #include <assert.h>
 #include <math.h>
@@ -1305,6 +1306,97 @@ dwg_next_entity (const Dwg_Object *restrict obj)
         }
       return (Dwg_Object *)obj;
     }
+}
+
+/** Strip MTEXT format codes to plain text.
+ *  Used when downconverting an R2018+ multi-line ATTRIB/ATTDEF (whose text
+ *  is in mtext.text) to an older version that only carries a single-line
+ *  text_value/default_value. \P (paragraph) becomes a space; { } nesting and
+ *  \X... format codes are dropped; \\U+/\\c/\\u unicode specs are dropped;
+ *  ~ (non-breaking space) becomes a space.
+ *  Returns a newly allocated NUL-terminated string (caller frees), or NULL
+ *  on OOM. An empty/NULL input yields a (possibly empty) string.
+ */
+EXPORT char *
+dwg_strip_mtext (const char *restrict mtext)
+{
+  char *out;
+  size_t len, o, i;
+
+  if (!mtext)
+    return NULL;
+  len = strlen (mtext);
+  out = (char *)malloc (len + 1);
+  if (!out)
+    return NULL;
+  o = 0;
+  i = 0;
+  while (i < len)
+    {
+      char c = mtext[i];
+      if (c == '{' || c == '}')
+        {
+          i++;
+        }
+      else if (c == '~') // non-breaking space
+        {
+          out[o++] = ' ';
+          i++;
+        }
+      else if (c == '\\')
+        {
+          i++;
+          if (i >= len)
+            break;
+          if (mtext[i] == '\\') // \\ literal, \\U+xxxx, \\c/\\u NNNN
+            {
+              i++;
+              if (i < len && (mtext[i] == 'U' || mtext[i] == 'u'
+                              || mtext[i] == 'c'))
+                {
+                  if (mtext[i] == 'U' && i + 1 < len && mtext[i + 1] == '+')
+                    i += 2;
+                  else
+                    i++;
+                  while (i < len && isxdigit ((unsigned char)mtext[i]))
+                    i++;
+                }
+            }
+          else if (mtext[i] == 'p' || mtext[i] == 'P') // paragraph
+            {
+              out[o++] = ' ';
+              i++;
+            }
+          else if (mtext[i] == 'c' && i + 1 < len && mtext[i + 1] == 'h')
+            { // \char NN; / \char 0xNN;
+              i += 2;
+              while (i < len && mtext[i] == ' ')
+                i++;
+              if (i + 1 < len && mtext[i] == '0' && mtext[i + 1] == 'x')
+                i += 2;
+              while (i < len && isxdigit ((unsigned char)mtext[i]))
+                i++;
+              if (i < len && mtext[i] == ';')
+                i++;
+            }
+          else // \A, \C, \f, \H, \W, \Q, \S, \L, \O, \T, ... format code
+            {
+              i++; // skip the code letter
+              while (i < len && mtext[i] != ' ' && mtext[i] != ';'
+                     && mtext[i] != '}')
+                i++;
+              if (i < len && mtext[i] == ';')
+                i++;
+            }
+        }
+      else
+        {
+          out[o++] = c;
+          i++;
+        }
+    }
+  out[o] = '\0';
+  return out;
 }
 
 /** Returns the next entity owned by the block hdr, or NULL.

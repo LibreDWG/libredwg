@@ -682,6 +682,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
 // dwg_##action##_MTEXT_private
 // clang-format off
 #define AcDbMTextObjectEmbedded_fields                       \
+  /* the common entity part (data stream) */                 \
   SUB_FIELD_BB (mtext, entmode, 0);                          \
   SUB_FIELD_BL (mtext, num_reactors, 0);                     \
   SUB_FIELD_B (mtext, is_xdic_missing, 0);                   \
@@ -689,77 +690,144 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   SUB_FIELD_BSx (mtext, color.raw, 0);                       \
   SUB_FIELD_BD (mtext, ltype_scale, 48);                     \
   SUB_FIELD_BB (mtext, ltype_flags, 0);                      \
-  SUB_FIELD_BB (mtext, plotstyle_flags, 0);                  \
   SUB_FIELD_BB (mtext, material_flags, 0);                   \
-  SUB_FIELD_RC (mtext, shadow_flags, 0);                     \
+  SUB_FIELD_RC (mtext, shadow_flags, 284);                   \
+  SUB_FIELD_BB (mtext, plotstyle_flags, 0);                  \
   SUB_FIELD_B (mtext, has_full_visualstyle, 0);              \
   SUB_FIELD_B (mtext, has_face_visualstyle, 0);              \
   SUB_FIELD_B (mtext, has_edge_visualstyle, 0);              \
   SUB_FIELD_BS (mtext, invisible, 60);                       \
   SUB_FIELD_RC (mtext, linewt, 370);                         \
+  /* the common entity handles (handle stream) */            \
+  if (SUB_FIELD_VALUE (mtext, entmode) == 0)                 \
+    {                                                        \
+      Dwg_Handle htmp;                                       \
+      bit_read_H (hdl_dat, &htmp); /* ownerhandle */         \
+    }                                                        \
+  if (SUB_FIELD_VALUE (mtext, num_reactors) > 0)             \
+    {                                                        \
+      Dwg_Handle htmp;                                       \
+      for (vcount = 0; vcount <                              \
+               (BITCODE_BL)SUB_FIELD_VALUE (mtext,          \
+                                           num_reactors);    \
+           vcount++)                                         \
+        bit_read_H (hdl_dat, &htmp); /* reactors */          \
+    }                                                        \
+  SINCE (R_2004a)                                            \
+    {                                                        \
+      if (!SUB_FIELD_VALUE (mtext, is_xdic_missing))         \
+        {                                                    \
+          Dwg_Handle htmp;                                   \
+          bit_read_H (hdl_dat, &htmp); /* xdic */            \
+        }                                                    \
+    }                                                        \
   SUB_FIELD_HANDLE (mtext, layer, 5, 8);                     \
-  \
+  if (SUB_FIELD_VALUE (mtext, ltype_flags) == 3)             \
+    {                                                        \
+      Dwg_Handle htmp;                                       \
+      bit_read_H (hdl_dat, &htmp); /* ltype */               \
+    }                                                        \
+  if (SUB_FIELD_VALUE (mtext, material_flags) == 3)          \
+    {                                                        \
+      Dwg_Handle htmp;                                       \
+      bit_read_H (hdl_dat, &htmp); /* material */            \
+    }                                                        \
+  if (SUB_FIELD_VALUE (mtext, shadow_flags) == 3)            \
+    {                                                        \
+      Dwg_Handle htmp;                                       \
+      bit_read_H (hdl_dat, &htmp); /* shadow */              \
+    }                                                        \
+  if (SUB_FIELD_VALUE (mtext, plotstyle_flags) == 3)         \
+    {                                                        \
+      Dwg_Handle htmp;                                       \
+      bit_read_H (hdl_dat, &htmp); /* plotstyle */           \
+    }                                                        \
+  SINCE (R_2010b)                                            \
+    {                                                        \
+      if (SUB_FIELD_VALUE (mtext, has_full_visualstyle))     \
+        {                                                    \
+          Dwg_Handle htmp;                                   \
+          bit_read_H (hdl_dat, &htmp);                       \
+        }                                                    \
+      if (SUB_FIELD_VALUE (mtext, has_face_visualstyle))     \
+        {                                                    \
+          Dwg_Handle htmp;                                   \
+          bit_read_H (hdl_dat, &htmp);                       \
+        }                                                    \
+      if (SUB_FIELD_VALUE (mtext, has_edge_visualstyle))     \
+        {                                                    \
+          Dwg_Handle htmp;                                   \
+          bit_read_H (hdl_dat, &htmp);                       \
+        }                                                    \
+    }                                                        \
+  /* the MTEXT fields (data stream), as in DWG_ENTITY (MTEXT) */ \
   DXF { VALUE_TFF ("Embedded Object", 101); }                \
   SUB_FIELD_3BD (mtext, ins_pt, 10);                         \
   SUB_FIELD_3BD (mtext, extrusion, 210);                     \
   SUB_FIELD_3BD (mtext, x_axis_dir, 11);                     \
-  DXF {                                                      \
-    SUB_FIELD_BD (mtext, text_height, 40);                   \
-    SUB_FIELD_BD (mtext, rect_width, 40);                    \
-    SUB_FIELD_BD (mtext, rect_height, 41);                   \
-  } else {                                                   \
-    SUB_FIELD_BD (mtext, rect_width, 40);                    \
-    SUB_FIELD_BD (mtext, rect_height, 41);                   \
-    SUB_FIELD_BD (mtext, text_height, 40);                   \
-  }                                                          \
+  SUB_FIELD_BD (mtext, rect_width, 41);                      \
+  SUB_FIELD_BD (mtext, rect_height, 46);                     \
+  SUB_FIELD_BD (mtext, text_height, 40);                     \
   SUB_FIELD_BS (mtext, attachment, 71);                      \
   SUB_FIELD_BS (mtext, flow_dir, 72);                        \
-  SUB_FIELD_BD (mtext, extents_width, 42);                   \
   SUB_FIELD_BD (mtext, extents_height, 43);                  \
+  SUB_FIELD_BD (mtext, extents_width, 42);                   \
   SUB_FIELD_T (mtext, text, 1);                              \
-  SUB_FIELD_HANDLE0 (mtext, style, 5, 7);                    \
+  SUB_FIELD_HANDLE (mtext, style, 5, 7);                    \
   SUB_FIELD_BS (mtext, linespace_style, 73);                 \
   SUB_FIELD_BD (mtext, linespace_factor, 44);                \
   SUB_FIELD_B (mtext, unknown_b0, 0);                        \
-  SUB_FIELD_BL0 (mtext, bg_fill_flag, 90);                   \
+  SUB_FIELD_BL (mtext, bg_fill_flag, 90);                    \
   if (SUB_FIELD_VALUE (mtext, bg_fill_flag) &                \
-      (dat->version <= R_2018 ? 1 : 16))                     \
+      (dat->version >= R_2018 ? 17 : 1))                     \
     {                                                        \
       SUB_FIELD_BD (mtext, bg_fill_scale, 45);               \
       SUB_FIELD_CMC (mtext, bg_fill_color, 63);              \
       SUB_FIELD_BL (mtext, bg_fill_trans, 441);              \
     }                                                        \
   SUB_FIELD_B (mtext, is_not_annotative, 0);                 \
-  /* What about the duplicate MTEXT AnnotScaleObject         \
-     fields here?  */                                        \
-  FIELD_B (is_really_locked, 0);                             \
-  DXF                                                        \
-  {                                                          \
-    SUB_FIELD_BL (mtext, column_type, 71);                   \
-    SUB_VALUEOUTOFBOUNDS (mtext, column_type, 2)             \
-    if (SUB_FIELD_VALUE (mtext, column_type))                \
-      {                                                      \
-        SUB_FIELD_BL (mtext, num_column_heights, 72);        \
-        SUB_FIELD_BD (mtext, column_width, 44);              \
-        SUB_FIELD_BD (mtext, gutter, 45);                    \
-        SUB_FIELD_B (mtext, auto_height, 73);                \
-        SUB_FIELD_B (mtext, flow_reversed, 74);              \
-        if (!SUB_FIELD_VALUE (mtext, auto_height)            \
-            && SUB_FIELD_VALUE (mtext, column_type) == 2)    \
-          {                                                  \
+  if (SUB_FIELD_VALUE (mtext, is_not_annotative))            \
+    {                                                        \
+      /* AnnotScaleObject */                                 \
+      SUB_FIELD_BS (mtext, class_version, 0);                \
+      SUB_VALUEOUTOFBOUNDS (mtext, class_version, 10)        \
+      SUB_FIELD_B (mtext, default_flag, 70);                 \
+      SUB_FIELD_HANDLE (mtext, appid, 5, 0);                 \
+      SUB_FIELD_BL (mtext, ignore_attachment, 0);            \
+      SUB_FIELD_3BD (mtext, x_axis_dir, 11);                 \
+      SUB_FIELD_3BD (mtext, ins_pt, 10);                     \
+      SUB_FIELD_BD (mtext, rect_width, 40);                  \
+      SUB_FIELD_BD (mtext, rect_height, 41);                 \
+      SUB_FIELD_BD (mtext, extents_width, 42);               \
+      SUB_FIELD_BD (mtext, extents_height, 43);              \
+      SUB_FIELD_BS (mtext, column_type, 71);                 \
+      if (SUB_FIELD_VALUE (mtext, column_type) > 2)          \
+        SUB_FIELD_VALUE (mtext, column_type) = 0;            \
+      if (SUB_FIELD_VALUE (mtext, column_type))              \
+        {                                                    \
+          if (SUB_FIELD_VALUE (mtext, column_type) == 1)     \
+            {                                                \
+              SUB_FIELD_VALUE (mtext, num_column_heights) = 0; \
+              SUB_FIELD_BL (mtext, numfragments, 72);        \
+            }                                                \
+          else                                               \
+            SUB_FIELD_BL (mtext, num_column_heights, 72);    \
+          SUB_FIELD_BD (mtext, column_width, 44);            \
+          SUB_FIELD_BD (mtext, gutter, 45);                  \
+          SUB_FIELD_B (mtext, auto_height, 73);              \
+          SUB_FIELD_B (mtext, flow_reversed, 74);            \
+          if (!SUB_FIELD_VALUE (mtext, auto_height)          \
+              && SUB_FIELD_VALUE (mtext, column_type) == 2)  \
             SUB_FIELD_VECTOR (mtext, column_heights, BD,     \
                               num_column_heights, 46);       \
-          }                                                  \
-      }                                                      \
-    }                                                        \
-  else                                                       \
-    {                                                        \
-      FIELD_BS (annotative_data_size, 70);                   \
-      if (FIELD_VALUE (annotative_data_size) > 0)            \
-        {                                                    \
-          FIELD_BINARY(annotative_data,                      \
-            FIELD_VALUE (annotative_data_size), 310);        \
         }                                                    \
+    }                                                        \
+  /* annotative data (data stream) */                        \
+  FIELD_BS (annotative_data_size, 70);                       \
+  if (FIELD_VALUE (annotative_data_size) > 0)                \
+    {                                                        \
+      FIELD_BINARY (annotative_data,                         \
+                    FIELD_VALUE (annotative_data_size), 310); \
     }
 
 // FIXME

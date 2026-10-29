@@ -11664,6 +11664,7 @@ dwg_get_entity_layer (const Dwg_Object_Entity *restrict);
 
 EXPORT Dwg_Object *dwg_next_object (const Dwg_Object *obj);
 EXPORT Dwg_Object *dwg_next_entity (const Dwg_Object *obj);
+EXPORT char *dwg_strip_mtext (const char *restrict mtext);
 // next available 0 ref + 1, when all refs are already filled
 EXPORT BITCODE_HV dwg_next_handle (const Dwg_Data *dwg);
 // next available handle, computed form the HANDSEED, which is bumped

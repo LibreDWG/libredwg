@@ -194,6 +194,17 @@ DWG_ENT_SUBCLASS_DECL (ATTDEF, AcDbMTextObjectEmbedded);
 DWG_ENTITY (ATTRIB)
 
   SUBCLASS (AcDbText);
+#ifdef IS_ENCODER
+  // R2018+ multi-line ATTRIB stores its text in mtext.text. When
+  // downconverting to an older version, substitute it into text_value.
+  if (dat->version < R_2018
+      && (!FIELD_VALUE (text_value) || !*FIELD_VALUE (text_value))
+      && FIELD_VALUE (mtext).text && *FIELD_VALUE (mtext).text)
+    {
+      free (FIELD_VALUE (text_value));
+      FIELD_VALUE (text_value) = dwg_strip_mtext (FIELD_VALUE (mtext).text);
+    }
+#endif
   PRE (R_13b1)
     {
       FIELD_2RD (ins_pt, 10);
@@ -361,6 +372,9 @@ DWG_ENTITY (ATTRIB)
       FIELD_RC (is_locked_in_block, 0);
       VALUEOUTOFBOUNDS (is_locked_in_block, 2)
     }
+  SINCE (R_13b1) {
+    FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
+  }
   SINCE (R_2018b)
     {
       FIELD_RC (mtext_type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
@@ -376,16 +390,8 @@ DWG_ENTITY (ATTRIB)
     SINCE (R_2007a) {
       FIELD_B (lock_position_flag, 0); // 70
     }
-    // XRECORD subclass
-    SINCE (R_2010b) {
-      FIELD_RC (keep_duplicate_records, 0);
-      VALUEOUTOFBOUNDS (keep_duplicate_records, 1)
-    }
   }
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13b1) {
-    FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
-  }
 
 DWG_ENTITY_END
 
@@ -393,6 +399,18 @@ DWG_ENTITY_END
 DWG_ENTITY (ATTDEF)
 
   SUBCLASS (AcDbText);
+#ifdef IS_ENCODER
+  // R2018+ multi-line ATTDEF stores its text in mtext.text. When
+  // downconverting to an older version, substitute it into default_value.
+  if (dat->version < R_2018
+      && (!FIELD_VALUE (default_value) || !*FIELD_VALUE (default_value))
+      && FIELD_VALUE (mtext).text && *FIELD_VALUE (mtext).text)
+    {
+      free (FIELD_VALUE (default_value));
+      FIELD_VALUE (default_value)
+          = dwg_strip_mtext (FIELD_VALUE (mtext).text);
+    }
+#endif
   PRE (R_13b1)
     {
       FIELD_2RD (ins_pt, 10);
@@ -575,6 +593,8 @@ DWG_ENTITY (ATTDEF)
       FIELD_RC (is_locked_in_block, 0);
       VALUEOUTOFBOUNDS (is_locked_in_block, 1)
     }
+  SINCE (R_13b1)
+    FIELD_HANDLE (style, 5, 0);
   IF_FREE_OR_SINCE (R_2018)
     {
       // 1=single line, 2=multi line attrib, 4=multi line attdef
@@ -598,8 +618,6 @@ DWG_ENTITY (ATTDEF)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13b1)
-    FIELD_HANDLE (style, 5, 0);
 
 DWG_ENTITY_END
 
