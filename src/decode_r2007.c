@@ -1664,6 +1664,10 @@ read_2007_section_header (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
         }
 
       dwg_decode_header_variables (&sec_dat, hdl_dat, &str_dat, dwg);
+      // hdl_dat is a shallow copy of sec_dat, which is freed below.
+      // Do not leave a dangling alias for the caller.
+      hdl_dat->chain = NULL;
+      hdl_dat->size = 0;
     }
   else
     {
