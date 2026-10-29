@@ -3679,27 +3679,48 @@ DWG_ENTITY_END
   FIELD_B (dimension.flip_arrow2, 296);                 \
   FIELD_B (dimension.flip_arrow1, 297)
 
-// (varies) UNSTABLE
+// (varies)
 // 1-6 references, see associativity bits 1-8.
 DWG_OBJECT (DIMASSOC)
 
   HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbDimAssoc);
+  // ODA writes the dimension 330 first. It lives in the handle stream,
+  // so the DWG bits do not change, and it still comes before the refs'
+  // handles.
+  FIELD_HANDLE (dimensionobj, 4, 330);
   FIELD_BLx (associativity, 90);
   FIELD_B (trans_space_flag, 70);
   FIELD_RC (rotated_type, 71);
-  FIELD_HANDLE (dimensionobj, 4, 330);
   REPEAT_CN (6, ref, Dwg_DIMASSOC_Ref) // i.e. AcDbOsnapPointRef
   REPEAT_BLOCK
-      // there could be more blocks, up to 5 or 6.
-      // 0 1 2 3 => 1 2 4 8. skip unset bits
-      if (!(FIELD_VALUE (associativity) & (1 << rcount1)) && !FIELD_VALUE(has_lastpt_ref))
-        {
+      // There could be up to 6 refs. They follow the set bits of
+      // associativity in sequence, not by bit position: each ref with a
+      // lastpt ref (75) is followed by its companion ref, which takes no
+      // bit of its own. The storage is filled from 0 without holes: a ref
+      // is due in slot rcount1 only if the previous slot's ref has a
+      // lastpt ref, or a set bit of associativity is still unconsumed.
+      {
+        BITCODE_BL nbits = 0, consumed = 0,
+            mask = FIELD_VALUE (associativity) & 0x3f;
+        while (mask)
+          {
+            nbits++;
+            mask &= mask - 1;
+          }
+        for (vcount = 0; vcount < rcount1; vcount++)
+          if (vcount == 0 || !FIELD_VALUE (ref[vcount - 1].has_lastpt_ref))
+            consumed++; // slot vcount consumed a bit ref
+        if ((rcount1 == 0
+             || !FIELD_VALUE (ref[rcount1 - 1].has_lastpt_ref))
+            && consumed >= nbits)
+          {
 #ifdef IS_JSON
-          ENDHASH;
+            ENDHASH;
 #endif
-          continue;
-        }
+            continue;
+          }
+      }
       LOG_HANDLE ("DIMASSOC_Ref.rcount1: %d\n", rcount1);
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
@@ -3724,7 +3745,7 @@ DWG_OBJECT (DIMASSOC)
       if (FIELD_VALUE (ref[rcount1].osnap_type) == 6
           || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
         {
-          SUB_FIELD_BL (ref[rcount1], num_intsectobj, 74);
+          SUB_FIELD_BL (ref[rcount1], num_intsectobj, 0); // no count in DXF
           SUB_HANDLE_VECTOR (ref[rcount1], intsectobj, num_intsectobj, 5, 332);
           SUB_FIELD_BL (ref[rcount1], intersec_subent_type, 74);
           SUB_FIELD_BL (ref[rcount1], intersec_gsmarker, 92);

@@ -6195,7 +6195,7 @@ typedef struct _dwg_object_DATALINK
 } Dwg_Object_DATALINK;
 
 /**
- Object DIMASSOC (varies) unstable
+ Object DIMASSOC (varies)
  */
 typedef struct _dwg_DIMASSOC_Ref
 {
@@ -6227,8 +6227,10 @@ typedef struct _dwg_object_DIMASSOC
   BITCODE_B trans_space_flag; /*!< DXF 70 boolean */
   BITCODE_RC rotated_type;    /*!< DXF 71 */
   BITCODE_B has_lastpt_ref;   // copy of last ref field
-  Dwg_DIMASSOC_Ref *ref;      /* 1-4x, with possible holes,
-                                 depends on associativity bitmask */
+  Dwg_DIMASSOC_Ref *ref;      /* 1-6x, filled in sequence without holes:
+                                 one ref per set bit of associativity, each
+                                 possibly followed by its lastpt companion
+                                 ref (75) */
 } Dwg_Object_DIMASSOC;
 
 typedef struct _dwg_ACTIONBODY
