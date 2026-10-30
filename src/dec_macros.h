@@ -138,19 +138,30 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type " %d]"),   \
-                         rcount1, rcount2, (BITCODE_##type)_obj->nam, dxfgroup);\
-              GCC46_DIAG_RESTORE                                              \
+              s2 = (char *)realloc (s2, strlen (s2)                           \
+                                    + sizeof (": " FORMAT_##type " [" #type " %d]")); \
+              if (s2)                                                         \
+                {                                                             \
+                  strcat (s2, ": " FORMAT_##type " [" #type " %d]");          \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s2, rcount1, rcount2,                            \
+                             (BITCODE_##type)_obj->nam, dxfgroup);            \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s2);                                                      \
               free (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type " %d]"),   \
-                         rcount1, (BITCODE_##type)_obj->nam, dxfgroup);       \
-              GCC46_DIAG_RESTORE                                              \
+              s1 = (char *)realloc (s1, strlen (s1)                           \
+                                    + sizeof (": " FORMAT_##type " [" #type " %d]")); \
+              if (s1)                                                         \
+                {                                                             \
+                  strcat (s1, ": " FORMAT_##type " [" #type " %d]");          \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s1, rcount1, (BITCODE_##type)_obj->nam, dxfgroup); \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
@@ -169,22 +180,31 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (                                                     \
-                  strcat (s2, ": " FORMAT_##type " [" #type " %d] %gº"),      \
-                  rcount1, rcount2, _obj->nam, dxfgroup,                      \
-                  rad2deg (_obj->nam));                                       \
-              GCC46_DIAG_RESTORE                                              \
+              s2 = (char *)realloc (s2, strlen (s2)                           \
+                                    + sizeof (": " FORMAT_##type " [" #type " %d] %gº")); \
+              if (s2)                                                         \
+                {                                                             \
+                  strcat (s2, ": " FORMAT_##type " [" #type " %d] %gº");      \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s2, rcount1, rcount2, _obj->nam, dxfgroup,       \
+                             rad2deg (_obj->nam));                            \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s2);                                                      \
               free (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (                                                     \
-                  strcat (s1, ": " FORMAT_##type " [" #type " %d] %gº"),      \
-                  rcount1, _obj->nam, dxfgroup, rad2deg (_obj->nam));         \
-              GCC46_DIAG_RESTORE                                              \
+              s1 = (char *)realloc (s1, strlen (s1)                           \
+                                    + sizeof (": " FORMAT_##type " [" #type " %d] %gº")); \
+              if (s1)                                                         \
+                {                                                             \
+                  strcat (s1, ": " FORMAT_##type " [" #type " %d] %gº");      \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s1, rcount1, _obj->nam, dxfgroup,                \
+                             rad2deg (_obj->nam));                            \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
@@ -203,19 +223,29 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s2, ": " FORMAT_##type " " #type "\n"),      \
-                         rcount1, rcount2, _obj->nam);                        \
-              GCC46_DIAG_RESTORE                                              \
+              s2 = (char *)realloc (s2, strlen (s2)                           \
+                                    + sizeof (": " FORMAT_##type " " #type "\n")); \
+              if (s2)                                                         \
+                {                                                             \
+                  strcat (s2, ": " FORMAT_##type " " #type "\n");             \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s2, rcount1, rcount2, _obj->nam);                \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s2);                                                      \
               free (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s1, ": " FORMAT_##type " " #type "\n"),      \
-                         rcount1, _obj->nam);                                 \
-              GCC46_DIAG_RESTORE                                              \
+              s1 = (char *)realloc (s1, strlen (s1)                           \
+                                    + sizeof (": " FORMAT_##type " " #type "\n")); \
+              if (s1)                                                         \
+                {                                                             \
+                  strcat (s1, ": " FORMAT_##type " " #type "\n");             \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s1, rcount1, _obj->nam);                         \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
@@ -260,21 +290,29 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (                                                     \
-                  strcat (s2, "[%ld]: " FORMAT_##type " [" #type " %d]"),     \
-                  rcount1, rcount2, vcount, value, dxf);                      \
-              GCC46_DIAG_RESTORE                                              \
+              s2 = (char *)realloc (s2, strlen (s2)                           \
+                                    + sizeof ("[%ld]: " FORMAT_##type " [" #type " %d]")); \
+              if (s2)                                                         \
+                {                                                             \
+                  strcat (s2, "[%ld]: " FORMAT_##type " [" #type " %d]");     \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s2, rcount1, rcount2, vcount, value, dxf);       \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s2);                                                      \
               free (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (                                                     \
-                  strcat (s1, "[%ld]: " FORMAT_##type " [" #type " %d]"),     \
-                  rcount1, vcount, value, dxf);                               \
-              GCC46_DIAG_RESTORE                                              \
+              s1 = (char *)realloc (s1, strlen (s1)                           \
+                                    + sizeof ("[%ld]: " FORMAT_##type " [" #type " %d]")); \
+              if (s1)                                                         \
+                {                                                             \
+                  strcat (s1, "[%ld]: " FORMAT_##type " [" #type " %d]");     \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s1, rcount1, vcount, value, dxf);                \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
@@ -294,21 +332,34 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
-                                     ") [" #type " %d]"),                     \
-                         rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf);    \
-              GCC46_DIAG_RESTORE                                              \
+              s2 = (char *)realloc (s2, strlen (s2)                           \
+                                    + sizeof (": (" FORMAT_BD ", " FORMAT_BD  \
+                                               ") [" #type " %d]"));          \
+              if (s2)                                                         \
+                {                                                             \
+                  strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD                  \
+                                    ") [" #type " %d]");                      \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s2, rcount1, rcount2, _obj->nam.x,               \
+                             _obj->nam.y, dxf);                               \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s2);                                                      \
               free (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
-                                     ") [" #type " %d]"),                     \
-                         rcount1, _obj->nam.x, _obj->nam.y, dxf);             \
-              GCC46_DIAG_RESTORE                                              \
+              s1 = (char *)realloc (s1, strlen (s1)                           \
+                                    + sizeof (": (" FORMAT_BD ", " FORMAT_BD  \
+                                               ") [" #type " %d]"));          \
+              if (s1)                                                         \
+                {                                                             \
+                  strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD                  \
+                                    ") [" #type " %d]");                      \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s1, rcount1, _obj->nam.x, _obj->nam.y, dxf);     \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
@@ -326,22 +377,35 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
-                                     ", " FORMAT_BD ") [" #type " %d]"),      \
-                         rcount1, rcount2, _obj->nam.x, _obj->nam.y,          \
-                         _obj->nam.z, dxf);                                   \
-              GCC46_DIAG_RESTORE                                              \
+              s2 = (char *)realloc (s2, strlen (s2)                           \
+                                    + sizeof (": (" FORMAT_BD ", " FORMAT_BD  \
+                                               ", " FORMAT_BD ") [" #type " %d]")); \
+              if (s2)                                                         \
+                {                                                             \
+                  strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD                  \
+                                     ", " FORMAT_BD ") [" #type " %d]");      \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s2, rcount1, rcount2, _obj->nam.x,               \
+                             _obj->nam.y, _obj->nam.z, dxf);                  \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s2);                                                      \
               free (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
-              LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
-                                     ", " FORMAT_BD ") [" #type " %d]"),      \
-                         rcount1, _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf);\
-              GCC46_DIAG_RESTORE                                              \
+              s1 = (char *)realloc (s1, strlen (s1)                           \
+                                    + sizeof (": (" FORMAT_BD ", " FORMAT_BD  \
+                                               ", " FORMAT_BD ") [" #type " %d]")); \
+              if (s1)                                                         \
+                {                                                             \
+                  strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD                  \
+                                     ", " FORMAT_BD ") [" #type " %d]");      \
+                  GCC46_DIAG_IGNORE (-Wformat-nonliteral)                     \
+                  LOG_TRACE (s1, rcount1, _obj->nam.x, _obj->nam.y,          \
+                             _obj->nam.z, dxf);                               \
+                  GCC46_DIAG_RESTORE                                          \
+                }                                                             \
               free (s1);                                                      \
             }                                                                 \
         }                                                                     \
