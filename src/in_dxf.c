@@ -12019,6 +12019,17 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
             {
               Dwg_Entity_OLE2FRAME *o = obj->tio.entity->tio.OLE2FRAME;
+              // The OLE payload is stored in the document, so it can never
+              // be larger than the document itself. An overlarge data_size
+              // (a crafted 3851730860) would otherwise xcalloc gigabytes
+              // (GHSA-37mv-q3xr-pjjc).
+              if ((size_t)pair->value.l > dat->size)
+                {
+                  LOG_ERROR ("OLE2FRAME.data_size " FORMAT_BL " > size "
+                             "%" PRIuSIZE ", invalid",
+                             (BITCODE_BL)pair->value.l, dat->size);
+                  goto invalid_dxf;
+                }
               o->data_size = pair->value.l;
               o->data = (BITCODE_RC *)xcalloc (pair->value.l, 1);
               if (!o->data)

@@ -2278,6 +2278,19 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               LOG_TRACE ("%s.%s: " FORMAT_BL " [%s]\n", name, key, num,
                          f->type);
+              // The OLE payload is stored in the document, so it can never
+              // be larger than the document itself. An overlarge data_size
+              // (a crafted 3851730860) is a decode error (GHSA-37mv-q3xr-pjjc).
+              if (strEQc (key, "data_size")
+                  && (obj->fixedtype == DWG_TYPE_OLE2FRAME
+                      || obj->fixedtype == DWG_TYPE_OLEFRAME)
+                  && num > dat->size)
+                {
+                  LOG_ERROR ("%s.data_size " FORMAT_BL " > size " "%" PRIuSIZE
+                             ", invalid",
+                             name, num, dat->size);
+                  num = 0;
+                }
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
               if (strEQc (name, "JUMP") && strEQc (key, "jump_address_raw"))
                 {

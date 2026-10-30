@@ -2928,6 +2928,20 @@ DWG_ENTITY (OLEFRAME)
 #ifndef IS_JSON
   FIELD_BL (data_size, 90);
 #endif
+  DECODER {
+    // The OLE payload (310) is stored in the object, so it can never be
+    // larger than the object's own byte size. An overlarge data_size (a
+    // crafted 3851730860) is a decode error; left alone it makes the DXF
+    // writer emit gigabytes of zeros (GHSA-37mv-q3xr-pjjc). Check it before
+    // the binary read so a bogus length can't drive the allocation.
+    if (FIELD_VALUE (data_size) > dat->size)
+      {
+        LOG_ERROR ("OLEFRAME.data_size " FORMAT_BL " > size " "%" PRIuSIZE
+                   ", invalid",
+                   FIELD_VALUE (data_size), dat->size);
+        FIELD_VALUE (data_size) = 0;
+      }
+  }
   FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -5634,6 +5648,20 @@ DWG_ENTITY (OLE2FRAME)
 #ifndef IS_JSON
   FIELD_BL (data_size, 90);
 #endif
+  DECODER {
+    // The OLE payload (310) is stored in the object, so it can never be
+    // larger than the object's own byte size. An overlarge data_size (a
+    // crafted 3851730860) is a decode error; left alone it makes the DXF
+    // writer emit gigabytes of zeros (GHSA-37mv-q3xr-pjjc). Check it before
+    // the binary read so a bogus length can't drive the allocation.
+    if (FIELD_VALUE (data_size) > dat->size)
+      {
+        LOG_ERROR ("OLE2FRAME.data_size " FORMAT_BL " > size " "%" PRIuSIZE
+                   ", invalid",
+                   FIELD_VALUE (data_size), dat->size);
+        FIELD_VALUE (data_size) = 0;
+      }
+  }
   FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 #ifdef IS_DECODER
   dwg_decode_ole2 (_obj);
