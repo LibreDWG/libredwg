@@ -1034,8 +1034,27 @@ dxf_read_pair (Bit_Chain *dat)
 static BITCODE_T
 dxf_pair_string (Dwg_Data *restrict dwg, const char *restrict s)
 {
-  return dwg->header.version < R_2007 ? (BITCODE_T)strdup (s)
-                                      : dwg_add_u8_input (dwg, s);
+  BITCODE_T str;
+  char *padded;
+  if (dwg->header.version >= R_2007)
+    return dwg_add_u8_input (dwg, s);
+  // pre-r2007 target: the value is already in the target encoding (TV), so a
+  // plain copy is correct. r12 and earlier TF names are fixed 32 bytes;
+  // bit_write_TF would heap-overflow on a shorter name, so pad like
+  // dwg_add_u8_input does for those versions.
+  str = (BITCODE_T)strdup (s);
+  if (str && dwg->header.version <= R_12 && strlen (str) < 32)
+    {
+      padded = (char *)malloc (33);
+      if (padded)
+        {
+          strncpy (padded, str, 32);
+          padded[32] = '\0';
+          free (str);
+          str = (BITCODE_T)padded;
+        }
+    }
+  return str;
 }
 
 #  define DXF_CHECK_EOF                                                       \
