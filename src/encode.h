@@ -60,6 +60,7 @@ int dwg_encode_xdata (Bit_Chain *restrict dat,
                       Dwg_Object_XRECORD *restrict _obj, unsigned xdata_size);
 bool dwg_encode_unknown_bits (Bit_Chain *restrict dat,
                               Dwg_Object *restrict obj);
+void downconvert_TABLE (Dwg_Object *restrict obj);
 void downconvert_TABLESTYLE (Dwg_Object *restrict obj);
 void upconvert_TABLESTYLE (Dwg_Object *restrict obj);
 

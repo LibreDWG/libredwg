@@ -8248,6 +8248,81 @@ downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
 }
 #endif
 
+// from >2010 to 2000: build the pre-R2010 ACAD_TABLE fields from the
+// R2010+ TABLECONTENT (LinkedTableData).  Cell text is extracted from the
+// first content of each cell; styling / merge info is lost.
+void
+downconvert_TABLE (Dwg_Object *restrict obj)
+{
+  Dwg_Entity_TABLE *_obj
+      = obj->tio.entity ? obj->tio.entity->tio.TABLE : NULL;
+  Dwg_LinkedTableData *tdata;
+  unsigned long idx;
+  if (!obj || obj->fixedtype != DWG_TYPE_TABLE)
+    {
+      LOG_ERROR ("Invalid type %u for downconvert_TABLE",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  tdata = &_obj->tdata;
+  if (!tdata->num_cols || !tdata->num_rows)
+    {
+      LOG_WARN ("downconvert_TABLE: no table content to downconvert");
+      return;
+    }
+  LOG_WARN ("Downconverting TABLE with losing information");
+  _obj->num_cols = tdata->num_cols;
+  _obj->num_rows = tdata->num_rows;
+  _obj->num_cells = (unsigned long)tdata->num_cols * tdata->num_rows;
+  // column widths (DXF 142)
+  if (!_obj->col_widths)
+    _obj->col_widths = calloc (tdata->num_cols, sizeof (BITCODE_BD));
+  for (BITCODE_BL c = 0; c < tdata->num_cols; c++)
+    _obj->col_widths[c] = tdata->cols[c].width;
+  // row heights (DXF 141)
+  if (!_obj->row_heights)
+    _obj->row_heights = calloc (tdata->num_rows, sizeof (BITCODE_BD));
+  for (BITCODE_BL r = 0; r < tdata->num_rows; r++)
+    _obj->row_heights[r] = tdata->rows[r].height;
+  // cells
+  if (!_obj->cells)
+    _obj->cells = calloc (_obj->num_cells, sizeof (Dwg_TABLE_Cell));
+  idx = 0;
+  for (BITCODE_BL r = 0; r < tdata->num_rows; r++)
+    {
+      Dwg_TableRow *row = &tdata->rows[r];
+      BITCODE_BL ncols
+          = row->num_cells ? row->num_cells : tdata->num_cols;
+      for (BITCODE_BL c = 0; c < ncols && idx < _obj->num_cells; c++)
+        {
+          Dwg_TableCell *tc = &row->cells[c];
+          Dwg_TABLE_Cell *cell = &_obj->cells[idx];
+          cell->parent = (struct _dwg_entity_TABLE *)_obj;
+          cell->type = 1; /* text cell */
+          if (tc->cell_contents && tc->num_cell_contents > 0)
+            {
+              Dwg_TableCellContent *cc = &tc->cell_contents[0];
+              char *s = NULL;
+              if (cc->value.data_string && *cc->value.data_string)
+                s = cc->value.data_string;
+              else if (cc->value.value_string && *cc->value.value_string)
+                s = cc->value.value_string;
+              if (s)
+                {
+                  cell->text_value
+                      = (BITCODE_T)calloc (strlen (s) + 1, 1);
+                  strcpy ((char *)cell->text_value, s);
+                }
+            }
+          idx++;
+        }
+    }
+  // flag_for_table_value: 0x06 (has block) is normally set; keep 0.
+  if (!_obj->flag_for_table_value)
+    _obj->flag_for_table_value = 0x06;
+  return;
+}
+
 // from >2007 to 2000
 void
 downconvert_TABLESTYLE (Dwg_Object *restrict obj)

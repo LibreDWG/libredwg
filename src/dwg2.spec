@@ -294,8 +294,6 @@ DWG_OBJECT_END
     }									\
   DXF { VALUE_TFF ("TABLEFORMAT_END", 309) }
 
-#if defined (DEBUG_CLASSES) || defined (IS_FREE)
-
 // clang-format off
 #define row tdata.rows[rcount1]
 #define cell row.cells[rcount2]
@@ -343,7 +341,7 @@ DWG_OBJECT_END
   REPEAT (tdata.num_rows, tdata.rows, Dwg_TableRow)		\
   REPEAT_BLOCK							\
       FIELD_BL (row.num_cells, 90);				\
-      REPEAT2 (row.num_cells, row.cells, Dwg_TableCell)		\
+      REPEAT2_C (row.num_cells, row.cells, Dwg_TableCell)		\
       REPEAT_BLOCK						\
           SUB_FIELD_BL (cell,flag, 90);				\
           SUB_FIELD_T (cell,tooltip, 300);			\
@@ -613,7 +611,7 @@ DWG_ENTITY (TABLE)
     FIELD_VECTOR (row_heights, BD, num_rows, 141);
     FIELD_VALUE (num_cells) = (unsigned long)FIELD_VALUE (num_rows) * FIELD_VALUE (num_cols);
     #define cell cells[rcount1]
-    REPEAT (num_cells, cells, Dwg_TABLE_Cell)
+    REPEAT_C (num_cells, cells, Dwg_TABLE_Cell)
     REPEAT_BLOCK
         //SUBCLASS (AcDbDataCell)
         SUB_FIELD_BS (cell,type, 171);
@@ -709,18 +707,20 @@ DWG_ENTITY (TABLE)
                 if (cell_flag & 0x02000)
                   SUB_FIELD_BS (cell,left_grid_linewt, 278);
                 if (cell_flag & 0x20000)
-                  SUB_FIELD_BS (cell,left_visibility, 288);
-
-                SUB_FIELD_BL (cell,unknown, 0);
-
-                // 20.4.99 Value, page 241
-                TABLE_value_fields (cell.value)
-                if (error & DWG_ERR_INVALIDTYPE)
-                  {
-                    JSON_END_REPEAT (cells);
-                    return error;
-                  }
+                SUB_FIELD_BL (cell,left_visibility, 288);
               }
+        SINCE (R_2007a)
+          {
+            SUB_FIELD_BL (cell,unknown, 0);
+
+            // 20.4.99 Value, page 241
+            TABLE_value_fields (cell.value)
+            if (error & DWG_ERR_INVALIDTYPE)
+              {
+                JSON_END_REPEAT (cells);
+                return error;
+              }
+          }
           }
         SET_PARENT_OBJ (cell);
     END_REPEAT_BLOCK
@@ -774,14 +774,14 @@ DWG_ENTITY (TABLE)
         if (table_flag & 0x10000)
           FIELD_BS (data_row_alignment, 170);
         if (table_flag & 0x20000)
-          FIELD_HANDLE (title_text_style, 5, 7);
+          FIELD_HANDLE (title_text_style, 5, 343);
         if (table_flag & 0x40000)
           {
-            FIELD_HANDLE (header_text_style, 5, 7);
+            FIELD_HANDLE (header_text_style, 5, 343);
             //FIELD_HANDLE (header_row_style_override, ANYCODE, 7); ??
           }
         if (table_flag & 0x80000)
-          FIELD_HANDLE (data_text_style, 5, 7);
+          FIELD_HANDLE (data_text_style, 5, 343);
         if (table_flag & 0x100000)
           FIELD_BD (title_row_height, 140);
         if (table_flag & 0x200000)
@@ -973,8 +973,6 @@ DWG_ENTITY_END
 #undef geom
 #undef attr
 #undef merged
-
-#endif /* DEBUG_CLASSES */
 
 // See TABLE and p20.4.101
 // Added with r2005. unstable for r2010+

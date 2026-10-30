@@ -637,15 +637,11 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
         case 256: /* kResBuf */                                               \
           LOG_ERROR ("Unknown data type in TABLE_value_fields: kResBuf");     \
           break;                                                              \
-        case 512: /* kGeneral since r2007*/                                   \
-          SINCE (R_2007a)                                                     \
-            { /* same inline UTF-16LE bytes as kString */                     \
-              FIELD_BL (value.data_size, 92);                                 \
-              FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size),   \
-                            310);                                             \
-            }                                                                 \
-          else                                                                \
-            LOG_ERROR ("Unknown data type in TABLE_value_fields: kGeneral <r2007"); \
+        case 512: /* kGeneral: BL byte count + UTF-16LE byte array. */        \
+          /* Occurs since R2007, but also before R2007 in AutoCAD 2008        \
+             round-trip data. */                                              \
+          FIELD_BL (value.data_size, 92);                                     \
+          FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size), 310); \
           break;                                                              \
         default:                                                              \
           LOG_ERROR ("Invalid data type in TABLE_value_fields");              \

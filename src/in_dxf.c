@@ -5116,6 +5116,155 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 // subclass for multiple objects.
 // Only handle conflicts?, codes with multiple keys.
 // 1, 309
+// read the repeated TABLE cells (pre-R2010 AcDbTable) into o->cells.
+// Triggered on the first cell type (171) within the AcDbTable subclass.
+// Consumes the whole cell run; returns the pair that ends it (93/94/95/96,
+// the next 100 subclass, or NULL if all cells were consumed).
+static Dxf_Pair *
+add_AcDbTableCells (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                    Dxf_Pair *restrict pair)
+{
+  Dwg_Entity_TABLE *o = obj->tio.entity->tio.TABLE;
+  Dwg_Data *dwg = obj->parent;
+  unsigned long i = 0;
+  unsigned long num_cells = 0;
+
+  if (o->num_rows && o->num_cols)
+    num_cells = (unsigned long)o->num_rows * o->num_cols;
+  if (num_cells > 0 && !o->cells)
+    {
+      o->cells = (Dwg_TABLE_Cell *)xcalloc (num_cells,
+                                            sizeof (Dwg_TABLE_Cell));
+      if (!o->cells)
+        return pair;
+      o->num_cells = num_cells;
+    }
+
+  while (pair && pair->code != 0)
+    {
+      // end of the cell run: only the next subclass or entity ends it.
+      // 93/94/95/96 are consumed by the generic loop as table-level
+      // override flags before the cells, and 93/94/95/90 also occur inside
+      // each cell's value block (301..304) and border data, so they must
+      // NOT terminate the run.
+      if (pair->code == 100)
+        break;
+      if (pair->code == 171)
+        {
+          if (i >= num_cells)
+            break;
+          o->cells[i].parent = o;
+          o->cells[i].type = pair->value.u;
+          LOG_TRACE ("%s.cells[%lu].type = %d [BS %d]\n", obj->name, i,
+                     o->cells[i].type, pair->code);
+          i++;
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+          continue;
+        }
+      if (i == 0)
+        break;
+      {
+        Dwg_TABLE_Cell *c = &o->cells[i - 1];
+        switch (pair->code)
+          {
+          case 172:
+            c->flags = pair->value.u;
+            break;
+          case 173:
+            c->is_merged_value = pair->value.u;
+            break;
+          case 174:
+            c->is_autofit_flag = pair->value.u;
+            break;
+          case 175:
+            c->merged_width_flag = pair->value.u;
+            break;
+          case 176:
+            c->merged_height_flag = pair->value.u;
+            break;
+          case 177:
+            c->cell_flag_override = pair->value.u;
+            break;
+          case 178:
+            c->virtual_edge_flag = pair->value.u;
+            break;
+          case 91:
+            c->additional_data_flag = pair->value.u;
+            break;
+          case 90:
+          case 92:
+          case 93:
+          case 94:
+          case 95:
+          case 62:
+          case 40:
+          case 300:
+          case 301:
+          case 302:
+          case 304:
+          case 309:
+            // cell value block (301..304) and border/grid data ride along;
+            // not modelled individually, but must be consumed to stay in sync
+            break;
+          case 145:
+            c->rotation = pair->value.d;
+            break;
+          case 140:
+            c->text_height = pair->value.d;
+            break;
+          case 170:
+            c->cell_alignment = pair->value.u;
+            break;
+          case 283:
+            c->bg_fill_none = pair->value.u;
+            break;
+          case 279:
+            c->top_grid_linewt = pair->value.u;
+            break;
+          case 289:
+            c->top_visibility = pair->value.u;
+            break;
+          case 275:
+            c->right_grid_linewt = pair->value.u;
+            break;
+          case 285:
+            c->right_visibility = pair->value.u;
+            break;
+          case 276:
+            c->bottom_grid_linewt = pair->value.u;
+            break;
+          case 286:
+            c->bottom_visibility = pair->value.u;
+            break;
+          case 278:
+            c->left_grid_linewt = pair->value.u;
+            break;
+          case 288:
+            c->left_visibility = pair->value.u;
+            break;
+          case 344:
+            c->text_style = dwg_add_handleref (dwg, 3, pair->value.u, NULL);
+            break;
+          case 340:
+            c->block_handle = dwg_add_handleref (dwg, 3, pair->value.u, NULL);
+            break;
+          case 144:
+            c->block_scale = pair->value.d;
+            break;
+          case 1:
+            c->text_value = strdup (pair->value.s.ptr);
+            break;
+          default:
+            return pair;
+          }
+      }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
 static Dxf_Pair *
 add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
                Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
@@ -12698,6 +12847,14 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 }
               goto next_pair;
             }
+          else if (pair->code == 171 && strEQc (subclass, "AcDbTable"))
+            {
+              pair = add_AcDbTableCells (obj, dat, pair);
+              if (pair && pair->code != 0)
+                goto search_field;
+              else
+                return pair;
+            }
           else
           search_field:
             { // search all specific fields and common fields for the DXF
@@ -14051,6 +14208,18 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   LOG_WARN ("Skipped embedded-MTEXT DXF code %d for %s",
                             pair->code, name);
                 }
+              /* TABLECONTENT is not imported from DXF (see dwg2.spec: the
+                 object is written as a placeholder). Its nested ldata/tdata/
+                 fdata fields (name 1, description 300, num_cols 90, ...) are
+                 sub-fields of the embedded structs, not top-level fields, so
+                 the search_field loop cannot match them. Treat those unknown
+                 codes as non-fatal and skip past them so one unmodelled
+                 TABLECONTENT does not abort the whole file. */
+              else if (obj->fixedtype == DWG_TYPE_TABLECONTENT)
+                {
+                  LOG_WARN ("Skipped TABLECONTENT DXF code %d (%s)",
+                            pair->code, subclass);
+                }
               // accept wrong colors
               else if (is_dxf_class_importable (obj->name)
                        && (pair->code < 60 || pair->code > 68))
@@ -14170,6 +14339,19 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
   return pair;
 
 invalid_dxf:
+  // The TABLE (UNSTABLE) import is only partially supported: some r2007
+  // fields (e.g. a 300 emitted before the cell run) are not modelled yet.
+  // Instead of aborting the whole file, keep the object partially-decoded,
+  // skip the rest of its data, and continue with the next object.
+  if (obj && obj->fixedtype == DWG_TYPE_TABLE && pair)
+    {
+      LOG_WARN ("TABLE: unhandled code %d, skipping rest of object",
+                pair->code);
+      dxf_free_pair (pair);
+      while ((pair = dxf_read_pair (dat)) && pair->code != 0)
+        dxf_free_pair (pair);
+      return pair;
+    }
   LOG_ERROR ("Invalid DXF code %d for %s", pair->code, name);
   dxf_free_pair (pair);
 fail:

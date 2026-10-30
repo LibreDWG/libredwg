@@ -944,18 +944,10 @@ dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
     }
 }
 
-#ifndef DEBUG_CLASSES
-static int
-dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat, const Dwg_Object *restrict obj)
-{
-  (void)dat;
-  (void)obj;
-  return 0;
-}
-#else
+// Defined by the spec (DWG_OBJECT TABLECONTENT), which is now always active;
+// forward-declare for the R2010+ TABLE path below.
 static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                                   const Dwg_Object *restrict obj);
-#endif
 
 #define DWG_ENTITY(token)                                                     \
   static int dwg_dxfb_##token##_private (Bit_Chain *dat, Bit_Chain *hdl_dat,  \

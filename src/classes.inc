@@ -363,13 +363,13 @@
   DEBUGGING_CLASS     (ACTION, LOFTEDSURFACE)     /* ent */
   DEBUGGING_CLASS     (ACTION, REVOLVEDSURFACE)   /* ent */
   DEBUGGING_CLASS     (ACTION, SWEPTSURFACE)      /* ent */
-  DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
+  UNSTABLE_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
   DEBUGGING_CLASS     (ACTION, ARCALIGNEDTEXT)    // ent expresstools
   DEBUGGING_CLASS     (ACTION, RTEXT)             // ent expresstools
   DEBUGGING_CLASS     (ACTION, MPOLYGON)          // hatch-like ent
   DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
                                                      dxfname COORDINATION_MODEL? */
-  DEBUGGING_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent) // dxfname: "TABLE"
+  UNSTABLE_CLASS_CPP (ACTION, TABLECONTENT, AcDbTableContent) // dxfname: "TABLE"
   DEBUGGING_CLASS     (ACTION, ACSH_EXTRUSION_CLASS)
   DEBUGGING_CLASS     (ACTION, ACSH_LOFT_CLASS)
   DEBUGGING_CLASS     (ACTION, ACSH_REVOLVE_CLASS)
