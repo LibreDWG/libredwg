@@ -945,6 +945,7 @@ dxf_read_pair (Bit_Chain *dat)
                   if (!tmp)
                     {
                       free (tv);
+                      tv = NULL;
                       break;
                     }
                   tv = tmp;
