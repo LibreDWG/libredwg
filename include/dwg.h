@@ -11559,7 +11559,7 @@ EXPORT unsigned char *dwg_bmp (const Dwg_Data *restrict dwg,
  *  -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT.
  */
 EXPORT int dxf_cvt_lweight (const BITCODE_BSd value);
-bool dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk);
+EXPORT bool dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk);
 
 /** Converts the 100th mm lineweight, with -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT,
     into the internal enum RC.

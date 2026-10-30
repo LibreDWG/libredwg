@@ -2123,6 +2123,45 @@ dxf_revcvt_lweight (const int lw)
   return 0;
 }
 
+/* Does this block belong to a layout, i.e. the model/paperspace
+   block or a named layout block? The owner of a VIEWPORT's DXF groups
+   68/69 is derived the same way as its group 330. Ordinary blocks
+   (e.g. the A$C... paste blocks) carry no sheet view and their
+   viewports are written off (0, 0). */
+EXPORT bool
+dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk)
+{
+  Dwg_Object_BLOCK_HEADER *blkhdr;
+  if (blk->fixedtype != DWG_TYPE_BLOCK_HEADER)
+    return false;
+  blkhdr = blk->tio.object->tio.BLOCK_HEADER;
+  if (dwg->header_vars.BLOCK_RECORD_PSPACE
+      && dwg->header_vars.BLOCK_RECORD_PSPACE->obj == blk)
+    return true;
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE
+      && dwg->header_vars.BLOCK_RECORD_MSPACE->obj == blk)
+    return true;
+  {
+    const BITCODE_T name = blkhdr->name;
+    // Model- and paperspace blocks are named *Model_Space /
+    // *Paper_Space; r13/r14 files may have no LAYOUT object. The
+    // leading '*' holds in TV and in UTF-16LE (first code unit in the
+    // low byte) and in every supported codepage.
+    if (name && name[0] == '*')
+      return true;
+    // A named layout references its block record
+    for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+      {
+        Dwg_Object *o = &dwg->object[i];
+        if (o && o->fixedtype == DWG_TYPE_LAYOUT
+            && o->tio.object->tio.LAYOUT->block_header
+            && o->tio.object->tio.LAYOUT->block_header->obj == blk)
+          return true;
+      }
+  }
+  return false;
+}
+
 void
 dwg_set_handle_size (Dwg_Handle *restrict hdl)
 {
