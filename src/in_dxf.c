@@ -1218,6 +1218,10 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
     strcpy (s, "num_segs_or_paths");
   else if (strEQc (key, "txt.col_sizes"))
     strcpy (s, "txt.num_col_sizes");
+  else if (strEQc (key, "row_heights"))
+    strcpy (s, "num_rows");
+  else if (strEQc (key, "col_widths"))
+    strcpy (s, "num_cols");
 search:
   for (f = &fields[0]; f->name; f++)
     {
@@ -13070,6 +13074,56 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           else if (j > size)
                             LOG_ERROR ("%s.%s overflow %d > %ld", name,
                                        num_f->name, j, size);
+                          goto next_pair;
+                        }
+                      // FIELD_VECTOR BITCODE_BD* (one value per code), e.g.
+                      // TABLE row_heights/col_widths (141/142); count via the
+                      // num field (num_rows/num_cols).
+                      else if (strEQc (f->type, "BD*")
+                               && (num_f = find_numfield (fields, f->name))
+                               && f->dxf == pair->code)
+                        {
+                          BITCODE_BD *vals;
+                          long size = get_numfield_value (_obj, num_f);
+                          if (!size)
+                            {
+                              LOG_TRACE ("Ignore empty %s.%s VECTOR [%s %d]",
+                                         name, f->name, f->type, pair->code);
+                              goto next_pair;
+                            }
+                          if (j == 0)
+                            {
+                              vals = (BITCODE_BD *)xcalloc (size,
+                                                            sizeof (BITCODE_BD));
+                              if (!vals)
+                                {
+                                  dxf_free_pair (pair);
+                                  goto fail;
+                                }
+                              vals[0] = pair->value.d;
+                              dwg_dynapi_entity_set_value (_obj, obj->name,
+                                                           f->name, &vals, 0);
+                              LOG_TRACE ("%s.%s[0] = %f [%s %d]\n", name,
+                                         f->name, pair->value.d, f->type,
+                                         pair->code);
+                              j++;
+                            }
+                          else if (j < size)
+                            {
+                              dwg_dynapi_entity_value (_obj, obj->name, f->name,
+                                                       &vals, NULL);
+                              vals[j] = pair->value.d;
+                              LOG_TRACE ("%s.%s[%d] = %f [%s %d]\n", name,
+                                         f->name, j, pair->value.d, f->type,
+                                         pair->code);
+                              j++;
+                              if (j == size)
+                                j = 0; // restart for the next BD* vector
+                            }
+                          else if (j > size)
+                            LOG_ERROR ("%s.%s overflow %d > %ld", name,
+                                       num_f->name, j, size);
+                          goto next_pair;
                         }
                       else if (f->dxf == pair->code)
                         {
