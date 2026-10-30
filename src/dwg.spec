@@ -193,6 +193,12 @@ DWG_ENT_SUBCLASS_DECL (ATTDEF, AcDbMTextObjectEmbedded);
 /* (2/16) */
 DWG_ENTITY (ATTRIB)
 
+#ifdef IS_ENCODER
+  // R2018+ multi-line to an earlier, single-line only version
+  if (dat->version < R_2018b && dat->from_version >= R_2018b
+      && FIELD_VALUE (mtext_type) > 1)
+    encode_attrib_mtext_text (dat, &_obj->text_value, _obj->mtext.text);
+#endif
   SUBCLASS (AcDbText);
   PRE (R_13b1)
     {
@@ -365,7 +371,16 @@ DWG_ENTITY (ATTRIB)
     {
       FIELD_RC (mtext_type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
       if (FIELD_VALUE (mtext_type) > 1)
-        CALL_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
+        {
+#if defined(IS_DECODER) || defined(IS_ENCODER)
+          // The handle stream has the STYLE of the ATTRIB first, then the
+          // handles of the embedded MTEXT (as ACadSharp, and AutoCAD's
+          // files: else the MTEXT layer is the STYLE).
+          FIELD_HANDLE (style, 5, 0);
+#endif
+          CALL_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
+          AcDbAttrib_annotative_fields;
+        }
     }
 
   SINCE (R_13b1) {
@@ -376,15 +391,22 @@ DWG_ENTITY (ATTRIB)
     SINCE (R_2007a) {
       FIELD_B (lock_position_flag, 0); // 70
     }
-    // XRECORD subclass
+    // Not in the DWG: in AutoCAD's R2010, R2013 and R2018 files the data
+    // stream ends after the lock_position_flag (ODA 20.4.4, ACadSharp).
+    // Only ATTDEF has the repeated version RC (here keep_duplicate_records).
+#if !defined(IS_DECODER) && !defined(IS_ENCODER)
     SINCE (R_2010b) {
       FIELD_RC (keep_duplicate_records, 0);
-      VALUEOUTOFBOUNDS (keep_duplicate_records, 1)
     }
+#endif
   }
   COMMON_ENTITY_HANDLE_DATA;
   SINCE (R_13b1) {
-    FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
+#if defined(IS_DECODER) || defined(IS_ENCODER)
+    // R2018+ multi-line: already before the embedded MTEXT
+    if (!(dat->version >= R_2018b && FIELD_VALUE (mtext_type) > 1))
+#endif
+      FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
   }
 
 DWG_ENTITY_END
@@ -392,6 +414,12 @@ DWG_ENTITY_END
 /* (3/15) */
 DWG_ENTITY (ATTDEF)
 
+#ifdef IS_ENCODER
+  // R2018+ multi-line to an earlier, single-line only version
+  if (dat->version < R_2018b && dat->from_version >= R_2018b
+      && FIELD_VALUE (mtext_type) > 1)
+    encode_attrib_mtext_text (dat, &_obj->default_value, _obj->mtext.text);
+#endif
   SUBCLASS (AcDbText);
   PRE (R_13b1)
     {
@@ -580,7 +608,14 @@ DWG_ENTITY (ATTDEF)
       // 1=single line, 2=multi line attrib, 4=multi line attdef
       FIELD_RC (mtext_type, 0); // 70
       if (FIELD_VALUE (mtext_type) > 1)
-        CALL_SUBCLASS (_obj, ATTDEF, AcDbMTextObjectEmbedded);
+        {
+#if defined(IS_DECODER) || defined(IS_ENCODER)
+          // The STYLE of the ATTDEF comes first, as with ATTRIB
+          FIELD_HANDLE (style, 5, 0);
+#endif
+          CALL_SUBCLASS (_obj, ATTDEF, AcDbMTextObjectEmbedded);
+          AcDbAttrib_annotative_fields;
+        }
     }
   SINCE (R_13b1) {
     FIELD_T (tag, 0);
@@ -598,8 +633,13 @@ DWG_ENTITY (ATTDEF)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13b1)
-    FIELD_HANDLE (style, 5, 0);
+  SINCE (R_13b1) {
+#if defined(IS_DECODER) || defined(IS_ENCODER)
+    // R2018+ multi-line: already before the embedded MTEXT
+    if (!(dat->version >= R_2018b && FIELD_VALUE (mtext_type) > 1))
+#endif
+      FIELD_HANDLE (style, 5, 0);
+  }
 
 DWG_ENTITY_END
 
