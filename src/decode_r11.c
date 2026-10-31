@@ -273,10 +273,30 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
   SINCE (R_11)
   {
+/* A missing table delimiter is not worth the drawing. The records are found
+   through tbl->address, which the header states independently of the
+   sentinel, and every pre-R13 table record carries its own CRC, checked
+   below -- so a wrong address is caught on its own merits rather than
+   guessed at from the delimiter. Rejecting the file instead threw away the
+   ENTITIES section that had already decoded: r11 writers exist that omit the
+   sentinels of the empty VIEW/UCS/VPORT tables (all three sharing one
+   address) and of the table that follows them (GH #767).
+   DWG_ERR_INVALIDDWG is left fatal on purpose: that one means the 16 bytes
+   could not even be read, so the position itself is nonsense. */
 #define DECODE_PRER13_SENTINEL(ID)                                            \
-  error |= decode_preR13_sentinel (ID, #ID, dat, dwg);                        \
-  if (error >= DWG_ERR_SECTIONNOTFOUND)                                       \
-  return error
+  {                                                                           \
+    int _sentinel_err = decode_preR13_sentinel (ID, #ID, dat, dwg);           \
+    if (_sentinel_err == DWG_ERR_SECTIONNOTFOUND)                             \
+      {                                                                       \
+        LOG_WARN ("%s missing, reading table %s at its header address "        \
+                  "0x%zx anyway",                                             \
+                  #ID, tbl->name, (size_t)tbl->address);                      \
+        _sentinel_err = DWG_ERR_WRONGCRC;                                     \
+      }                                                                       \
+    else if (_sentinel_err >= DWG_ERR_SECTIONNOTFOUND)                        \
+      return error | _sentinel_err;                                           \
+    error |= _sentinel_err;                                                   \
+  }
 
     switch (id)
       {
