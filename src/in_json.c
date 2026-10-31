@@ -1361,6 +1361,17 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 0;
 }
 
+/* A skipped class must not leave its fields to the next one. */
+static void
+json_clear_class (Dwg_Class *restrict klass)
+{
+  free (klass->dxfname);
+  free (klass->dxfname_u);
+  free (klass->cppname);
+  free (klass->appname);
+  memset (klass, 0, sizeof (Dwg_Class));
+}
+
 static int
 json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               jsmntokens_t *restrict tokens)
@@ -1402,6 +1413,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (!oldkl->number || !oldkl->dxfname || !oldkl->appname
               || !oldkl->cppname || !oldkl->item_class_id)
             {
+              json_clear_class (oldkl);
               klass = oldkl;
               i--;
               size--;
@@ -1510,11 +1522,20 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (!oldkl->number || !oldkl->dxfname || !oldkl->appname
           || !oldkl->cppname || !oldkl->item_class_id)
         {
+          json_clear_class (oldkl);
           dwg->num_classes--;
           LOG_ERROR ("Illegal CLASS [%d]. Mandatory field missing, skipped",
                      dwg->num_classes);
         }
     }
+  // objects index their class by type - 500, written as its number
+  for (int i = 0; i < (int)dwg->num_classes; i++)
+    if (dwg->dwg_class[i].number != i + 500)
+      {
+        LOG_WARN ("Changed class number %d => %d", dwg->dwg_class[i].number,
+                  i + 500);
+        dwg->dwg_class[i].number = (BITCODE_BS)(i + 500);
+      }
   LOG_TRACE ("End of %s\n", section);
   tokens->index--;
   return 0;
@@ -2205,6 +2226,94 @@ json_set_sizefield (void *restrict _obj,
 }
 #undef FIXUP_SIZE
 
+/* The unions are selected by a field of their struct, as the spec reads,
+   writes and frees them: MULTILEADER.ctx.content by has_content_txt or
+   has_content_blk, EvalExpr.value by value_code, EvalVariant.u by code.
+   Accept a member key only when its selector picks it, and a selector key
+   only while it picks no member yet, so a member already set never changes
+   its meaning. */
+static bool
+json_mleader_ctx_key_ok (const Dwg_MLEADER_AnnotContext *restrict ctx,
+                         const char *restrict key)
+{
+  if (strEQc (key, "has_content_txt") || strEQc (key, "has_content_blk"))
+    return !ctx->has_content_txt && !ctx->has_content_blk;
+  return true;
+}
+
+// MLEADER_Content_MText or _Block, only embedded in MULTILEADER.ctx.content
+static bool
+json_mleader_content_ok (const Dwg_Object *restrict obj,
+                         const char *restrict name)
+{
+  const Dwg_MLEADER_AnnotContext *ctx;
+  if (!obj->name || strNE (obj->name, "MULTILEADER"))
+    return false;
+  ctx = &obj->tio.entity->tio.MULTILEADER->ctx;
+  if (strEQc (name, "MLEADER_Content_MText"))
+    return ctx->has_content_txt && !ctx->has_content_blk;
+  return ctx->has_content_blk && !ctx->has_content_txt;
+}
+
+static bool
+json_evalexpr_key_ok (const Dwg_EvalExpr *restrict ee,
+                      const char *restrict key)
+{
+  static const struct
+  {
+    const char *key;
+    BITCODE_BSd value_code;
+  } members[] = {
+    { "value.num40", 40 },   { "value.pt2d", 10 },   { "value.pt3d", 11 },
+    { "value.text1", 1 },    { "value.long90", 90 }, { "value.handle91", 91 },
+    { "value.short70", 70 },
+  };
+  if (strEQc (key, "value_code"))
+    return !ee->value_code;
+  for (int i = 0; i < ARRAY_SIZE (members); i++)
+    if (strEQ (key, members[i].key))
+      return ee->value_code == members[i].value_code;
+  return true;
+}
+
+static bool
+json_evalvariant_key_ok (const Dwg_EvalVariant *restrict ev,
+                         const char *restrict key)
+{
+  static const struct
+  {
+    const char *key;
+    enum RESBUF_VALUE_TYPE type;
+  } members[] = {
+    { "u.bd", DWG_VT_REAL },     { "u.bl", DWG_VT_INT32 },
+    { "u.bs", DWG_VT_INT16 },    { "u.rc", DWG_VT_INT8 },
+    { "u.text", DWG_VT_STRING }, { "u.handle", DWG_VT_HANDLE },
+  };
+  if (strEQc (key, "code"))
+    return !ev->code;
+  for (int i = 0; i < ARRAY_SIZE (members); i++)
+    if (strEQ (key, members[i].key))
+      return ev->code && dwg_resbuf_value_type (ev->code) == members[i].type;
+  return true;
+}
+
+static bool
+json_union_key_ok (const Dwg_Object *restrict obj, const void *restrict _obj,
+                   const char *restrict name, const char *restrict key)
+{
+  if (strEQc (name, "MLEADER_AnnotContext"))
+    return json_mleader_ctx_key_ok ((const Dwg_MLEADER_AnnotContext *)_obj,
+                                    key);
+  if (strEQc (name, "MLEADER_Content_MText")
+      || strEQc (name, "MLEADER_Content_Block"))
+    return json_mleader_content_ok (obj, name);
+  if (strEQc (name, "EvalExpr"))
+    return json_evalexpr_key_ok ((const Dwg_EvalExpr *)_obj, key);
+  if (strEQc (name, "EvalVariant"))
+    return json_evalvariant_key_ok ((const Dwg_EvalVariant *)_obj, key);
+  return true;
+}
+
 // needs to be recursive, for search in subclasses
 static int
 _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
@@ -2219,6 +2328,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   LOG_INSANE ("-search %s key %s: %s %.*s\n", name, key, t_typename[t->type],
               t->end - t->start, &dat->chain[t->start]);
   JSON_TOKENS_CHECK_OVERFLOW_ERR;
+  if (!json_union_key_ok (obj, _obj, name, key))
+    {
+      LOG_ERROR ("%s.%s not selected by its union selector, ignored", name,
+                 key);
+      json_advance_unknown (dat, tokens, t->type, 0);
+      JSON_TOKENS_CHECK_OVERFLOW_ERR;
+      return 1; // found
+    }
   for (; f->name; f++)
     {
       if (strEQ (f->name, key))
@@ -2791,6 +2908,16 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           free (s);
         }
+      // the field decides, not the json: only a malloced field takes an
+      // array of structs, an embedded struct would get its pointer
+      else if (t->type == JSMN_ARRAY && memBEGINc (f->type, "Dwg_")
+               && !f->is_malloc)
+        {
+          LOG_ERROR ("%s.%s: Invalid %s for [%s], ignored", name, key,
+                     t_typename[t->type], f->type);
+          json_advance_unknown (dat, tokens, t->type, 0);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+        }
       // subclass arrays:
       else if (t->type == JSMN_ARRAY && memBEGINc (f->type, "Dwg_"))
         {
@@ -2878,7 +3005,17 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       *rest = '\0';
                       rest++;
                       f1 = dwg_dynapi_subclass_field (subclass, key1);
-                      if (f1 && *rest)
+                      // not an inline struct either, as in an embedded one
+                      if (f1 && f1->type[strlen (f1->type) - 1] == '*')
+                        {
+                          LOG_ERROR ("Cannot set pointer field %s.%s %s",
+                                     subclass, key1, f1->type);
+                          json_advance_unknown (
+                              dat, tokens, tokens->tokens[tokens->index].type,
+                              0);
+                          JSON_TOKENS_CHECK_OVERFLOW_ERR
+                        }
+                      else if (f1 && *rest)
                         {
                           char *sb1 = dwg_dynapi_subclass_name (f1->type);
                           const Dwg_DYNAPI_field *sfields1
@@ -2965,10 +3102,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   f1 = dwg_dynapi_subclass_field (subclass, key1);
                   if (f1 && f1->type[strlen (f1->type) - 1] == '*')
                     {
-                      // not an inline struct, see above
+                      // not an inline struct, see above. Skip all of the
+                      // value, an array or object has more tokens
                       LOG_ERROR ("Cannot set pointer field %s.%s %s", subclass,
                                  key1, f1->type);
-                      f1 = NULL; // skipped below
+                      json_advance_unknown (
+                          dat, tokens, tokens->tokens[tokens->index].type, 0);
+                      JSON_TOKENS_CHECK_OVERFLOW_ERR
                     }
                   else if (f1 && *rest)
                     {
@@ -3511,12 +3651,25 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "dxfname"))
             {
-              free (obj->dxfname);
+              char *dxfname = json_string (dat, tokens);
               saw_dxfname = true;
-              obj->dxfname = json_string (dat, tokens);
-              LOG_TRACE ("dxfname: %s\n", obj->dxfname);
-              if (!obj->dxfname)
-                obj->dxfname = strdup (name);
+              LOG_TRACE ("dxfname: %s\n", dxfname);
+              // after the type keep the dxfname of the name: the class of
+              // another dxfname would be another struct. UNKNOWN_* hold
+              // the dxfname of any class.
+              if (obj->fixedtype && dxfname && obj->dxfname
+                  && strNE (dxfname, obj->dxfname)
+                  && !memBEGINc (name, "UNKNOWN_"))
+                {
+                  LOG_WARN ("Ignore %s.dxfname %s, keep %s", name, dxfname,
+                            obj->dxfname);
+                  free (dxfname);
+                }
+              else
+                {
+                  free (obj->dxfname);
+                  obj->dxfname = dxfname ? dxfname : strdup (name);
+                }
 
               // Some objects have various subtypes under one name.
               // TODO OBJECTCONTEXTDATA, ...
@@ -3571,12 +3724,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
-                  // 498/499 select the PROXY free body in dwg_free_object
-                  // (GHSA-v9c2-69pf-gwr5), so they must match fixedtype too.
-                  if ((obj->type <= DWG_TYPE_LAYOUT
-                       || obj->type == DWG_TYPE_PROXY_ENTITY
-                       || obj->type == DWG_TYPE_PROXY_OBJECT)
-                      && obj->fixedtype != obj->type
+                  // a fixed type number below 500, as PROXY_OBJECT,
+                  // selects that type's struct, also 498/499 in
+                  // dwg_free_object (GHSA-v9c2-69pf-gwr5)
+                  if (obj->type < 500 && obj->fixedtype != obj->type
                       && dwg->header.from_version >= R_13b1)
                     {
                       LOG_WARN ("Changed wrong type %d => %d", obj->type,
@@ -3870,7 +4021,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         continue;
                     }
                 }
-              else if (t->type == JSMN_OBJECT && memBEGINc (name, "DICTIONARY")
+              // DICTIONARY or DICTIONARYWDFLT, but not DICTIONARYVAR
+              else if (t->type == JSMN_OBJECT
+                       && (strEQc (name, "DICTIONARY")
+                           || strEQc (name, "DICTIONARYWDFLT"))
                        && strEQc (key, "items"))
                 {
                   Dwg_Object_DICTIONARY *o = obj->tio.object->tio.DICTIONARY;
@@ -5387,6 +5541,74 @@ json_free_globals (jsmntokens_t *tokens)
   free (created_by);
 }
 
+/* Variable types, and fixed ones stored with a class (LWPOLYLINE, LAYOUT,
+   ...) */
+static int
+json_is_class_object (const Dwg_Object *obj)
+{
+  if (obj->fixedtype < DWG_TYPE_ACDSRECORD && obj->type < 500)
+    return 0;
+  return obj->fixedtype < DWG_TYPE_FREED && obj->type != DWG_TYPE_FREED
+         && obj->dxfname;
+}
+
+/* The class of the object's name (dwg_encode_get_class, which also types
+   the object by it), else the class of its type when that class is named
+   as the object, as classes.inc takes it (ASSOCDIMDEPENDENCYBODY). */
+static Dwg_Class *
+json_object_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
+{
+  Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
+  if (klass && klass->dxfname)
+    return klass;
+  if (obj->type < 500 || !obj->name
+      || (BITCODE_BL)(obj->type - 500) >= dwg->num_classes)
+    return NULL;
+  klass = &dwg->dwg_class[obj->type - 500];
+  if (klass->dxfname && strEQ (klass->dxfname, obj->name))
+    return klass;
+  return NULL;
+}
+
+/* The writers read a variable-type object by the struct of its class,
+   dwg_class[type - 500], but json_OBJECTS allocated it by the object's
+   name, and the CLASSES may come after the OBJECTS, in another order or
+   with an entry skipped. Type each object stored with a class by the
+   class of its name, as dwg_encode_get_class does for in_dxf, and give
+   that class the object's supertype.
+ */
+static void
+json_class_types (Dwg_Data *restrict dwg)
+{
+  if (dwg->header.from_version < R_13b1 || !dwg->num_classes)
+    return;
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      const BITCODE_BS type = obj->type;
+      const int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+      Dwg_Class *klass;
+
+      if (!json_is_class_object (obj))
+        continue;
+      klass = json_object_class (dwg, obj);
+      if (!klass)
+        {
+          LOG_WARN ("No class %s for %s [%u]", obj->dxfname, obj->name, i);
+          continue;
+        }
+      if (obj->type != type)
+        LOG_WARN ("Changed %s.type %u => %u", obj->name, type, obj->type);
+      if (dwg_class_is_entity (klass) != is_entity)
+        {
+          LOG_WARN ("Changed class %s item_class_id to %s for %s",
+                    klass->dxfname, is_entity ? "ENTITY" : "OBJECT",
+                    obj->name);
+          klass->item_class_id = is_entity ? 0x1f2 : 0x1f3;
+        }
+    }
+}
+
 EXPORT int
 dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -5585,6 +5807,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                      tokens.index, tokens.num_tokens, __FUNCTION__, __LINE__);
           LOG_TRACE ("\n");
           json_free_globals (&tokens);
+          json_class_types (dwg);
           return error | DWG_ERR_INVALIDTYPE;
         }
       if (error >= DWG_ERR_CRITICAL)
@@ -5596,6 +5819,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   LOG_TRACE ("\n");
+  json_class_types (dwg);
   if (dat->version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
 
