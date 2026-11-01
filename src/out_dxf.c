@@ -3947,13 +3947,15 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
             continue;
           // Directly owned by this block (POLYLINE, INSERT, etc.)
           error |= dwg_dxf_object (dat, o, &j);
-          // After a POLYLINE, also write trailing VERTEX/SEQEND that
-          // belong to the same block (their ownerhandle points to this
-          // POLYLINE, found by forward scan).
+          // After a POLYLINE or INSERT, also write trailing
+          // VERTEX/ATTRIB/SEQEND that belong to the same block (their
+          // ownerhandle points to this POLYLINE, found by forward scan).
           if (o->fixedtype == DWG_TYPE_POLYLINE_2D
               || o->fixedtype == DWG_TYPE_POLYLINE_3D
               || o->fixedtype == DWG_TYPE_POLYLINE_MESH
-              || o->fixedtype == DWG_TYPE_POLYLINE_PFACE)
+              || o->fixedtype == DWG_TYPE_POLYLINE_PFACE
+              || o->fixedtype == DWG_TYPE_INSERT
+              || o->fixedtype == DWG_TYPE_MINSERT)
             {
               int k = j + 1;
               while ((BITCODE_BL)k < dwg->num_objects)
@@ -3964,6 +3966,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
                       && child->fixedtype != DWG_TYPE_VERTEX_MESH
                       && child->fixedtype != DWG_TYPE_VERTEX_PFACE
                       && child->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE
+                      && child->fixedtype != DWG_TYPE_ATTRIB
                       && child->fixedtype != DWG_TYPE_SEQEND)
                     break;
                   error |= dwg_dxf_object (dat, child, &k);
