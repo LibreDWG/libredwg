@@ -1463,9 +1463,12 @@ dxf_fputs_escaped (Bit_Chain *restrict dat, const char *restrict s,
    Never cuts a chunk boundary through a trailing \U+XXXX escape: some
    readers (e.g. ezdxf) parse escapes per chunk rather than after
    reassembly, so a chunk ending in "...\U+" leaves them trying to parse
-   an empty hex number and crashing. Every chunk is routed through
-   dxf_fputs_escaped as the last line of defense against a raw control
-   byte reaching the file. */
+   an empty hex number and crashing. For r2007+ (UTF-8) output it also
+   never starts a chunk with a multi-byte sequence continuation byte
+   10xxxxxx, as readers decode each line on their own and a lone such
+   byte is invalid UTF-8. Every chunk is routed through dxf_fputs_escaped
+   as the last line of defense against a raw control byte reaching the
+   file. */
 static void
 dxf_write_chunked (Bit_Chain *restrict dat, const char *restrict str,
                    size_t len, const int dxf)
@@ -1483,7 +1486,21 @@ dxf_write_chunked (Bit_Chain *restrict dat, const char *restrict str,
       size_t chunk = len > 250 ? 250 : len;
       if (chunk < len) // more to come: don't split a trailing \U+XXXX
         {
-          const size_t min = chunk > 6 ? chunk - 6 : 0;
+          size_t min;
+          if (dat->version >= R_2007)
+            {
+              // r2007+ values are UTF-8: don't cut inside a multi-byte
+              // sequence, readers decode each chunk line on their own
+              // (e.g. ezdxf) and a lone 10xxxxxx byte is invalid UTF-8.
+              // Sequences are <= 4 bytes, so back up at most 3.
+              size_t c = chunk;
+              while (c > chunk - 4 && c > 0
+                     && ((unsigned char)str[c] & 0xC0) == 0x80)
+                c--;
+              if (c > 0)
+                chunk = c;
+            }
+          min = chunk > 6 ? chunk - 6 : 0;
           for (size_t i = min; i < chunk; i++)
             {
               if (str[i] == '\\')
