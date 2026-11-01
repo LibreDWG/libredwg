@@ -625,6 +625,87 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   return error;
 }
 
+/* Pre-R13 files store anonymous blocks (dimensions, hatches, ...) in the
+   block table with a bare one-letter name like "*D" or "*X", all identical,
+   while the BLOCK entity usually keeps the numbered name "*D16". Later
+   formats and DXF need unique names, so copy the numbered BLOCK name into the
+   header. If there is none, number it after the highest number used for the
+   same prefix letter. */
+static bool
+is_anon_numbered (const char *name)
+{
+  return name && name[0] == '*' && name[1] >= 'A' && name[1] <= 'Z'
+         && name[2] >= '0' && name[2] <= '9';
+}
+
+static Dwg_Entity_BLOCK *
+anon_block_entity (const Dwg_Object_BLOCK_HEADER *_hdr)
+{
+  const Dwg_Object *blk = _hdr->block_entity ? _hdr->block_entity->obj : NULL;
+  if (blk && blk->fixedtype == DWG_TYPE_BLOCK && blk->tio.entity)
+    return blk->tio.entity->tio.BLOCK;
+  return NULL;
+}
+
+static void
+number_anonymous_blocks (Dwg_Data *restrict dwg)
+{
+  BITCODE_BL max[26] = { 0 };
+  BITCODE_BL i;
+
+  for (i = 0; i < dwg->num_objects; i++)
+    {
+      const Dwg_Object *o = &dwg->object[i];
+      const Dwg_Object_BLOCK_HEADER *_hdr;
+      const Dwg_Entity_BLOCK *_blk;
+      const char *names[2];
+      if (o->fixedtype != DWG_TYPE_BLOCK_HEADER || !o->tio.object
+          || !o->tio.object->tio.BLOCK_HEADER)
+        continue;
+      _hdr = o->tio.object->tio.BLOCK_HEADER;
+      _blk = anon_block_entity (_hdr);
+      names[0] = _hdr->name;
+      names[1] = _blk ? _blk->name : NULL;
+      for (int k = 0; k < 2; k++)
+        if (is_anon_numbered (names[k]))
+          {
+            unsigned long n = strtoul (&names[k][2], NULL, 10);
+            if (n > max[names[k][1] - 'A'] && n < 0xFFFFFFFFUL)
+              max[names[k][1] - 'A'] = (BITCODE_BL)n;
+          }
+    }
+  for (i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *o = &dwg->object[i];
+      Dwg_Object_BLOCK_HEADER *_hdr;
+      Dwg_Entity_BLOCK *_blk;
+      char newname[16];
+      if (o->fixedtype != DWG_TYPE_BLOCK_HEADER || !o->tio.object
+          || !o->tio.object->tio.BLOCK_HEADER)
+        continue;
+      _hdr = o->tio.object->tio.BLOCK_HEADER;
+      if (!(_hdr->name && _hdr->name[0] == '*' && _hdr->name[1] >= 'A'
+            && _hdr->name[1] <= 'Z' && !_hdr->name[2]))
+        continue;
+      _blk = anon_block_entity (_hdr);
+      if (_blk && is_anon_numbered (_blk->name)
+          && _blk->name[1] == _hdr->name[1])
+        snprintf (newname, sizeof (newname), "%s", _blk->name);
+      else
+        snprintf (newname, sizeof (newname), "*%c%u", _hdr->name[1],
+                  (unsigned)++max[_hdr->name[1] - 'A']);
+      LOG_TRACE ("BLOCK_HEADER.name: \"%s\" => \"%s\"\n", _hdr->name,
+                 newname);
+      free (_hdr->name);
+      _hdr->name = strdup (newname);
+      if (_blk)
+        {
+          free (_blk->name);
+          _blk->name = strdup (newname);
+        }
+    }
+}
+
 AFL_GCC_TOOBIG
 EXPORT int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -831,6 +912,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
+  number_anonymous_blocks (dwg);
   return 0;
 }
 AFL_GCC_POP
