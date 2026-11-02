@@ -23434,6 +23434,7 @@ dwg_ent_get_layer_name (const dwg_obj_ent *restrict ent, int *restrict error)
   char *name = NULL;
   Dwg_Object *layer = ent->layer ? ent->layer->obj : NULL;
 
+  *error = 0;
   if (layer)
     name = dwg_obj_table_get_name (layer, error);
   if (!name)
@@ -23455,6 +23456,7 @@ dwg_ent_get_ltype_name (const dwg_obj_ent *restrict ent, int *restrict error)
   char *name = NULL;
   Dwg_Object *ltype = ent->ltype ? ent->ltype->obj : NULL;
 
+  *error = 0;
   if (ltype)
     name = dwg_obj_table_get_name (ltype, error);
   if (!name)
