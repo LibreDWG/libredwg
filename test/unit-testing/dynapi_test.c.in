@@ -80,6 +80,32 @@ test_sizes (void)
   return error;
 }
 
+/* ACTION_3DSOLID casts _obj to Dwg_Entity_3DSOLID, so all types with the
+   _3DSOLID_FIELDS need them at its offsets */
+static int
+test_3dsolid_fields (void)
+{
+  int error = 0, num_types = 0;
+  for (unsigned type = 0; type < DWG_TYPE_FREED; type++)
+    {
+      const char *name = dwg_type_name ((Dwg_Object_Type)type);
+      const Dwg_DYNAPI_field *f = dwg_dynapi_entity_fields ("3DSOLID"), *f1;
+      if (!name || !dwg_dynapi_entity_field (name, "acis_empty"))
+        continue;
+      num_types++;
+      for (f++; f->name; f++) /* after parent */
+        if (!(f1 = dwg_dynapi_entity_field (name, f->name))
+            || f1->offset != f->offset || f1->size != f->size)
+          {
+            fprintf (stderr, "%s.%s: not at the 3DSOLID offset %d\n", name,
+                     f->name, f->offset);
+            error++;
+          }
+    }
+  /* 3DSOLID REGION BODY, 6 *SURFACE, ACSH_BREP_CLASS ASSOCASMBODYACTIONPARAM */
+  return error + (num_types < 11);
+}
+
 static int
 test_dynapi (const char *filename)
 {
@@ -90,6 +116,7 @@ test_dynapi (const char *filename)
 
   dwg.opts = 0;
   error = test_sizes ();
+  error += test_3dsolid_fields ();
   if (dwg_read_file (filename, &dwg) >= DWG_ERR_CRITICAL)
     {
       dwg_free (&dwg);
