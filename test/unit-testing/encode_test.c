@@ -391,6 +391,75 @@ in_json_section_counts_test (void)
   ok ("in_json_section_counts: section counts stay within their buffers");
 }
 
+/* Regression test for GH #1487 (in_json object counts): object
+   count/size keys given after the buffer they count are ignored, the
+   buffer sets the count; arrays lower a count given before them.
+   LTYPE.numdashes follows dashes, DICTIONARY.numitems the items map,
+   BLOCK_HEADER.preview_size the preview buffer. On master the large
+   count survived and encode/free walked past the short buffers. */
+static void
+in_json_object_counts_test (void)
+{
+  const char *src =
+      "{\n"
+      " \"created_by\": \"libredwg test\",\n"
+      " \"OBJECTS\": [ { \"object\": \"LTYPE\", \"type\": 57,\n"
+      "   \"handle\": [0, 1, 1], \"name\": \"TestLTYPE\",\n"
+      "   \"dashes\": [ { \"length\": 1.0 } ], \"numdashes\": 200 },\n"
+      " { \"object\": \"DICTIONARY\", \"type\": 42,\n"
+      "   \"handle\": [0, 1, 2], \"name\": \"testdict\",\n"
+      "   \"items\": { \"A\": [2, 1, 1, 1], \"B\": [2, 1, 2, 2] },\n"
+      "   \"numitems\": 4096 },\n"
+      " { \"object\": \"BLOCK_HEADER\", \"type\": 49,\n"
+      "   \"handle\": [0, 1, 3], \"name\": \"*Model_Space\",\n"
+      "   \"preview\": \"4142\", \"preview_size\": 3000 } ] }";
+  char *json = (char *)malloc (strlen (src) + 1);
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  int error;
+
+  if (!json)
+    {
+      fail ("in_json_object_counts: malloc failed");
+      return;
+    }
+  strcpy (json, src);
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)json;
+  dat.size = strlen (json);
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("in_json_object_counts: dwg_read_json failed 0x%x", error);
+      free (json);
+      return;
+    }
+  if (dwg.num_objects != 3)
+    fail ("in_json_object_counts: num_objects %u != 3",
+          (unsigned)dwg.num_objects);
+  else
+    {
+      Dwg_Object_LTYPE *lt = dwg.object[0].tio.object->tio.LTYPE;
+      Dwg_Object_DICTIONARY *dict
+          = dwg.object[1].tio.object->tio.DICTIONARY;
+      Dwg_Object_BLOCK_HEADER *bh
+          = dwg.object[2].tio.object->tio.BLOCK_HEADER;
+      if (lt->numdashes != 1)
+        fail ("in_json_object_counts: LTYPE.numdashes %u != 1",
+              (unsigned)lt->numdashes);
+      if (dict->numitems != 2)
+        fail ("in_json_object_counts: DICTIONARY.numitems %u != 2",
+              (unsigned)dict->numitems);
+      if (bh->preview_size != 2)
+        fail ("in_json_object_counts: preview_size %u != 2",
+              (unsigned)bh->preview_size);
+    }
+  dwg_free (&dwg);
+  free (json);
+  ok ("in_json_object_counts: object counts stay within their buffers");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -408,5 +477,6 @@ main (int argc, char const *argv[])
   common_entity_handle_data_double_free_test ();
   remove_NOD_item_null_itemhandles_test ();
   in_json_section_counts_test ();
+  in_json_object_counts_test ();
   return failed;
 }
