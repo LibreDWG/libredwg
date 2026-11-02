@@ -460,6 +460,74 @@ in_json_object_counts_test (void)
   ok ("in_json_object_counts: object counts stay within their buffers");
 }
 
+/* Regression test for GH #1487 (in_json subclass fixed elems): subclass
+   arrays the specs walk a fixed number of times are allocated at least
+   that many elements, zero-filled: DIMASSOC.ref is walked 6 times
+   (REPEAT_CN), TABLESTYLE.rowstyles 3 (and free_TABLESTYLE_r2010), their
+   borders 6. On master a shorter JSON array left the walkers to read
+   past the buffer, and dwg_free freed the pointers found there. */
+static void
+in_json_subclass_fixed_elems_test (void)
+{
+  const char *src =
+      "{\n"
+      " \"created_by\": \"libredwg test\",\n"
+      " \"FILEHEADER\": { \"version\": \"AC1024\" },\n"
+      " \"OBJECTS\": [ { \"object\": \"DIMASSOC\", \"type\": 626,\n"
+      "   \"handle\": [0, 1, 1],\n"
+      "   \"associativity\": 63,\n"
+      "   \"ref\": [ {}, {}, {}, {} ] },\n"
+      " { \"object\": \"TABLESTYLE\", \"type\": 724,\n"
+      "   \"handle\": [0, 1, 2], \"name\": \"TestTable\",\n"
+      "   \"rowstyles\": [ {} ] } ] }";
+  char *json = (char *)malloc (strlen (src) + 1);
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  int error;
+
+  if (!json)
+    {
+      fail ("in_json_subclass_fixed_elems: malloc failed");
+      return;
+    }
+  strcpy (json, src);
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)json;
+  dat.size = strlen (json);
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("in_json_subclass_fixed_elems: dwg_read_json failed 0x%x",
+            error);
+      free (json);
+      return;
+    }
+  if (dwg.num_objects != 2)
+    fail ("in_json_subclass_fixed_elems: num_objects %u != 2",
+          (unsigned)dwg.num_objects);
+  else
+    {
+      Dwg_Object_DIMASSOC *da = dwg.object[0].tio.object->tio.DIMASSOC;
+      Dwg_Object_TABLESTYLE *ts
+          = dwg.object[1].tio.object->tio.TABLESTYLE;
+      // on master: ref[4]/ref[5] past the 4-element buffer,
+      // rowstyles[1]/rowstyles[2] past the 1-element buffer
+      if (!da->ref || !ts->rowstyles)
+        fail ("in_json_subclass_fixed_elems: ref or rowstyles missing");
+      else if (da->ref[4].osnap_type != 0 || da->ref[5].osnap_type != 0
+               || da->ref[5].classname != NULL
+               || ts->rowstyles[1].text_height != 0.0
+               || ts->rowstyles[2].borders != NULL)
+        fail ("in_json_subclass_fixed_elems: fixed elems not zero-filled");
+    }
+  // on master: dwg_free walks 6 DIMASSOC refs and 3 rowstyles x 6 borders
+  // past the shorter buffers, and frees the pointers found there
+  dwg_free (&dwg);
+  free (json);
+  ok ("in_json_subclass_fixed_elems: subclass arrays get the walked elems");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -478,5 +546,6 @@ main (int argc, char const *argv[])
   remove_NOD_item_null_itemhandles_test ();
   in_json_section_counts_test ();
   in_json_object_counts_test ();
+  in_json_subclass_fixed_elems_test ();
   return failed;
 }

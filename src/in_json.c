@@ -2228,6 +2228,20 @@ json_fixed_vector_size (const char *restrict name, const char *restrict key)
   return 0;
 }
 
+// subclass arrays the specs walk a fixed number of times:
+// allocate at least that many elements, zero-filled
+static int
+json_subclass_fixed_elems (const char *restrict name, const char *restrict key)
+{
+  if (strEQc (name, "DIMASSOC") && strEQc (key, "ref"))
+    return 6;
+  if (strEQc (name, "TABLESTYLE") && strEQc (key, "rowstyles"))
+    return 3;
+  if (strEQc (name, "TABLESTYLE_rowstyles") && strEQc (key, "borders"))
+    return 6;
+  return 0;
+}
+
 // BLOCKLOOKUPACTION: the encoder walks exprs and lut numrows * numcols
 // times; a product above them is reset to 0, with an error
 static void
@@ -3169,13 +3183,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               o->num_lines = num_elems;
               LOG_TRACE ("MLINE.num_lines = %d\n", num_elems);
             }
-          if (strEQc (subclass, "DIMASSOC_Ref") && num_elems != 4)
-            {
-              elems = (char *)calloc (MAX (4, num_elems), size_elem);
-              LOG_TRACE ("DIMASSOC num_refs = 4\n");
-            }
-          else
-            elems = num_elems ? (char *)calloc (num_elems, size_elem) : NULL;
+          // subclass arrays the specs walk a fixed number of times get
+          // at least that many elements, zero-filled; empty stays NULL
+          {
+            const int fixed = json_subclass_fixed_elems (name, key);
+            const int alloc1 = num_elems > fixed ? num_elems : fixed;
+            elems = num_elems ? (char *)calloc (alloc1, size_elem) : NULL;
+          }
           dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
           tokens->index++;
           // array of structs
