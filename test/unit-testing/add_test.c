@@ -2262,6 +2262,86 @@ test_clip_verts_rect (void)
     ok ("clip_verts_rect: a rect clip boundary counts its own verts");
   return numfailed ();
 }
+
+/* Regression test for GH #1487 (POINTCLOUD clippings): a box or rect
+   clipping (type != 3) has exactly 2 verts in the file; only the decoder
+   sets num_vertices to 2. The JSON importer allocates vertices at the
+   array length and takes num_vertices from it. The encoders write a
+   non-polygon clipping with any other count as a polygon with that count,
+   and out_json / free write and free the clipping vertices as an array.
+   A rect clipping with a single vertex:
+
+   { "type": 2, "vertices": [[-0.5, -0.5]] }
+
+   made the r2013+ encoder read vertices[1] past the 1-element array. */
+static int
+test_pointcloud_clippings (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  char *json;
+  int error;
+  int i;
+  Dwg_Entity_POINTCLOUD *o = NULL;
+
+  failed = 0;
+  json = strdup (
+      "{ \"FILEHEADER\": { \"version\": \"AC1032\" },\n"
+      " \"OBJECTS\": [ { \"entity\": \"POINTCLOUD\",\n"
+      "   \"type\": 684, \"handle\": [0, 1, 1],\n"
+      "   \"class_version\": 3,\n"
+      "   \"num_source_files\": 0,\n"
+      "   \"numpoints\": 100,\n"
+      "   \"show_clipping\": 1,\n"
+      "   \"clippings\": [ { \"type\": 2, \"vertices\": [[-0.5, -0.5]] } ]"
+      " } ] }");
+  if (!json)
+    {
+      fail ("pointcloud_clippings: malloc failed");
+      return numfailed ();
+    }
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)json;
+  dat.size = strlen (json);
+  dwg.opts = 3;
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("pointcloud_clippings: dwg_read_json failed 0x%x", error);
+      free (json);
+      return numfailed ();
+    }
+  for (i = 0; i < (int)dwg.num_objects; i++)
+    {
+      if (dwg.object[i].fixedtype != DWG_TYPE_POINTCLOUD)
+        continue;
+      o = dwg.object[i].tio.entity->tio.POINTCLOUD;
+    }
+  if (!o)
+    fail ("pointcloud_clippings: no POINTCLOUD read");
+  else if (o->num_clippings != 1 || !o->clippings)
+    fail ("pointcloud_clippings: num_clippings %u != 1",
+          (unsigned)o->num_clippings);
+  else
+    {
+      if (o->clippings[0].type != 2)
+        fail ("pointcloud_clippings: clipping type %u != 2",
+              (unsigned)o->clippings[0].type);
+      if (o->clippings[0].num_vertices != 1)
+        fail ("pointcloud_clippings: num_vertices %u != 1",
+              (unsigned)o->clippings[0].num_vertices);
+      if (!o->clippings[0].vertices
+          || o->clippings[0].vertices[0].x != -0.5
+          || o->clippings[0].vertices[0].y != -0.5)
+        fail ("pointcloud_clippings: clipping vertices not read");
+    }
+  dwg_free (&dwg);
+  free (json);
+  if (!numfailed ())
+    ok ("pointcloud_clippings: a rect clipping counts its own verts");
+  return numfailed ();
+}
 #endif
 
 int
@@ -2301,6 +2381,7 @@ main (int argc, char *argv[])
   error += test_json_dotted_pointer_keys_array ();
   error += test_json_class_types ();
   error += test_class_object_type ();
+  error += test_pointcloud_clippings ();
 #endif
   error += test_names ();
   error += test_api_version ();

@@ -767,6 +767,18 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
       ENDARRAY;                                                               \
     }
 
+#define SUB_FIELD_2RD_VECTOR(o, name, size, dxf)                              \
+  if (_obj->o.name)                                                            \
+    {                                                                          \
+      KEY (name);                                                              \
+      ARRAY;                                                                   \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                      \
+          FIRSTPREFIX VALUE_2RD (_obj->o.name[vcount], dxf);                   \
+        }                                                                      \
+      ENDARRAY;                                                                \
+    }
+
 #define FIELD_2DD_VECTOR(nam, size, dxf)                                      \
   if (_obj->nam)                                                              \
     {                                                                         \
@@ -789,6 +801,18 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
           FIRSTPREFIX VALUE_3BD (FIELD_VALUE (nam[vcount]), dxf);             \
         }                                                                     \
       ENDARRAY;                                                               \
+    }
+
+#define SUB_FIELD_3BD_VECTOR(o, name, size, dxf)                              \
+  if (_obj->o.name)                                                            \
+    {                                                                          \
+      KEY (name);                                                              \
+      ARRAY;                                                                   \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+        {                                                                      \
+          FIRSTPREFIX VALUE_3BD (_obj->o.name[vcount], dxf);                   \
+        }                                                                      \
+      ENDARRAY;                                                                \
     }
 
 #define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \
