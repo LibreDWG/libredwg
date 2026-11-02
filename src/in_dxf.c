@@ -10643,10 +10643,23 @@ dxf_set_leader_context (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   switch (pair->code)
     {
     case 70:
+      if (o->points || o->num_points)
+        {
+          // the count follows its array; the points are allocated at
+          // it, so ignore a later 70
+          LOG_ERROR ("%s.num_points already set to %u", obj->name,
+                     (unsigned)o->num_points);
+          return 1;
+        }
       o->num_points = pair->value.l;
       *pt_idx = 0;
-      if (o->num_points > 0 && !o->points)
-        o->points = xcalloc (o->num_points, sizeof (BITCODE_3DPOINT));
+      if (o->num_points > 0)
+        {
+          o->points = xcalloc (o->num_points, sizeof (BITCODE_3DPOINT));
+          if (!o->points)
+            // reset the count the points cannot be allocated for
+            o->num_points = 0;
+        }
       return 1;
     case 10:
       if (!o->points || *pt_idx >= o->num_points)

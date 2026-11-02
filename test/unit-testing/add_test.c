@@ -1993,7 +1993,8 @@ test_class_object_type (void)
 // every version, is ignored once the entity has a preview, and
 // add_ent_preview resets a size it rejects. The ASSOCACTION and
 // ASSOCNETWORK counts are set with their lists, to the elements
-// actually read.
+// actually read. LEADEROBJECTCONTEXTDATA.num_points (70) is ignored
+// once the points are allocated.
 static int
 test_dxf_count_resets (void)
 {
@@ -2048,7 +2049,18 @@ test_dxf_count_resets (void)
          " 90\n0\n 90\n0\n 90\n1\n360\n401\n 90\n0\n 90\n0\n 90\n0\n"
          " 90\n0\n100\nAcDbAssocAction\n 90\n2\n 90\n0\n330\n0\n360\n0\n"
          " 90\n0\n 90\n0\n 90\n100\n100\nAcDbAssocNetwork\n 90\n0\n"
-         " 90\n0\n 90\n1\n360\n401\n 90\n0\n  0\nENDSEC\n  0\nEOF\n");
+         " 90\n0\n 90\n1\n360\n401\n 90\n0\n");
+  // LEADEROBJECTCONTEXTDATA with 3 points, then a second 70 announcing
+  // 200; the 70 must be ignored once the points are allocated
+  p += sprintf (
+      p, "  0\nACDB_LEADEROBJECTCONTEXTDATA_CLASS\n  5\n500\n330\n0\n"
+         "100\nAcDbObjectContextData\n 70\n1\n290\n0\n"
+         "100\nAcDbAnnotScaleObjectContextData\n340\n0\n"
+         " 70\n3\n 10\n1.0\n 20\n1.0\n 30\n0.0\n 10\n2.0\n 20\n2.0\n"
+         " 30\n0.0\n 10\n3.0\n 20\n3.0\n 30\n0.0\n 70\n200\n 11\n0.0\n"
+         " 21\n0.0\n 31\n1.0\n290\n1\n"
+         " 12\n0.0\n 22\n0.0\n 32\n0.0\n 13\n0.0\n 23\n0.0\n 33\n0.0\n"
+         "  0\nENDSEC\n  0\nEOF\n");
 
   memset (&dwg, 0, sizeof (dwg));
   memset (&dat, 0, sizeof (dat));
@@ -2134,6 +2146,24 @@ test_dxf_count_resets (void)
                   fail ("dxf_count_resets: ASSOCNETWORK.num_owned_actions "
                         "%u != 0",
                         (unsigned)o->num_owned_actions);
+                break;
+              }
+            case DWG_TYPE_LEADEROBJECTCONTEXTDATA:
+              {
+                Dwg_Object_LEADEROBJECTCONTEXTDATA *o
+                    = dwg.object[i].tio.object->tio
+                          .LEADEROBJECTCONTEXTDATA;
+                // the second 70, after the points, is ignored
+                if (o->num_points != 3 || !o->points)
+                  fail ("dxf_count_resets: LEADEROBJECTCONTEXTDATA."
+                        "num_points %u != 3",
+                        (unsigned)o->num_points);
+                else if (o->points[0].x != 1.0 || o->points[2].x != 3.0)
+                  fail ("dxf_count_resets: LEADEROBJECTCONTEXTDATA."
+                        "points overwritten after the second 70");
+                if (o->x_direction.z != 1.0 || o->b290 != 1)
+                  fail ("dxf_count_resets: LEADEROBJECTCONTEXTDATA body "
+                        "misread after the second 70");
                 break;
               }
             default:
