@@ -13295,9 +13295,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                                    &num_clip_verts, NULL);
                           LOG_INSANE ("%s.num_clip_verts = %d, j = %d\n", name,
                                       num_clip_verts, j);
-                          if (!num_clip_verts
-                              && obj->fixedtype == DWG_TYPE_IMAGE)
-                            num_clip_verts = 2;
                           dwg_dynapi_entity_value (_obj, obj->name,
                                                    "clip_verts", &clip_verts,
                                                    NULL);

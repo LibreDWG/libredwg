@@ -2177,6 +2177,91 @@ test_dxf_count_resets (void)
     ok ("dxf_count_resets: the counts stay equal to the arrays");
   return numfailed ();
 }
+
+/* Regression test for GH #1487 (IMAGE clip verts): a rect clip
+   boundary has exactly 2 verts in the file, and the decoder reads
+   them without a count. The encoder and the dxf writer write a rect
+   with any other count as a polygon with that count, so the written
+   file reads back as imported. On master in_dxf defaulted the count
+   to 2 for an IMAGE without a 91, and dwg_encode_IMAGE and
+   dwg_dxf_IMAGE walked clip_verts to the forced 2. */
+static int
+test_clip_verts_rect (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  char *buf, *p;
+  const size_t cap = 4096;
+  int error;
+  int img = 0;
+  Dwg_Entity_IMAGE *o;
+  double x;
+
+  failed = 0;
+  buf = (char *)malloc (cap);
+  if (!buf)
+    {
+      fail ("clip_verts_rect: out of memory");
+      return numfailed ();
+    }
+  p = buf;
+  p += sprintf (p, "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1014\n"
+                   "  0\nENDSEC\n");
+  p += sprintf (p, "  0\nSECTION\n  2\nENTITIES\n");
+  // IMAGE with a rect clip boundary of 1 vert (the GH #1487 PoC)
+  p += sprintf (p, "  0\nIMAGE\n  5\n600\n  8\n0\n 10\n0.0\n 20\n0.0\n"
+                   " 30\n0.0\n 11\n1.0\n 21\n0.0\n 31\n0.0\n 12\n0.0\n"
+                   " 22\n1.0\n 32\n0.0\n 13\n2.0\n 23\n1.0\n 33\n2.0\n"
+                   "280\n0\n281\n100\n282\n100\n283\n0\n 71\n1\n 91\n1\n"
+                   " 14\n-0.5\n 24\n-0.5\n");
+  // the same rect without a 91: the count comes from the 14/24 pairs,
+  // not from a default of 2
+  p += sprintf (p, "  0\nIMAGE\n  5\n601\n  8\n0\n 10\n0.0\n 20\n0.0\n"
+                   " 30\n0.0\n 11\n1.0\n 21\n0.0\n 31\n0.0\n 12\n0.0\n"
+                   " 22\n1.0\n 32\n0.0\n 13\n2.0\n 23\n1.0\n 33\n2.0\n"
+                   "280\n0\n281\n100\n282\n100\n283\n0\n 71\n1\n"
+                   " 14\n-0.25\n 24\n-0.25\n");
+  p += sprintf (p, "  0\nENDSEC\n  0\nEOF\n");
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)buf;
+  dat.size = (size_t)(p - buf);
+
+  dwg.opts = 3; // keep loglevel 3 through the read
+  error = dwg_read_dxf (&dat, &dwg);
+  loglevel = 2; // dwg_read_dxf reset it to dwg->opts
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("clip_verts_rect: dwg_read_dxf failed 0x%x", error);
+      free (buf);
+      return numfailed ();
+    }
+  img = 0;
+  for (int i = 0; i < (int)dwg.num_objects; i++)
+    {
+      if (dwg.object[i].fixedtype != DWG_TYPE_IMAGE)
+        continue;
+      o = dwg.object[i].tio.entity->tio.IMAGE;
+      x = img == 0 ? -0.5 : -0.25;
+      if (o->clip_boundary_type != 1)
+        fail ("clip_verts_rect: %d clip_boundary_type %u != 1", img,
+              (unsigned)o->clip_boundary_type);
+      if (o->num_clip_verts != 1)
+        fail ("clip_verts_rect: %d num_clip_verts %u != 1", img,
+              (unsigned)o->num_clip_verts);
+      if (!o->clip_verts
+          || o->clip_verts[0].x != x || o->clip_verts[0].y != x)
+        fail ("clip_verts_rect: %d clip_verts not read", img);
+      img++;
+    }
+  if (img != 2)
+    fail ("clip_verts_rect: %d IMAGE entities != 2", img);
+  dwg_free (&dwg);
+  free (buf);
+  if (!numfailed ())
+    ok ("clip_verts_rect: a rect clip boundary counts its own verts");
+  return numfailed ();
+}
 #endif
 
 int
@@ -2342,6 +2427,7 @@ main (int argc, char *argv[])
 
 #ifndef DISABLE_DXF
   error += test_dxf_count_resets ();
+  error += test_clip_verts_rect ();
 #endif
 
   return error;

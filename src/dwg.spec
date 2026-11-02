@@ -5226,6 +5226,30 @@ DWG_ENTITY (IMAGE)
   SINCE (R_2010b) {
     FIELD_B (clip_mode, 0);
   }
+  // a rect clip boundary has exactly 2 verts in the file; the decoder
+  // reads them without a count. The encoder and the dxf writer write a
+  // rect with any other count as a polygon with that count, so the
+  // written file reads back as imported
+  ENCODER {
+    if (FIELD_VALUE (clip_boundary_type) == 1
+        && FIELD_VALUE (num_clip_verts) != 2)
+      {
+        LOG_WARN ("IMAGE: a rect clip boundary has " FORMAT_BL
+                  " verts, written as a polygon",
+                  FIELD_VALUE (num_clip_verts));
+        FIELD_VALUE (clip_boundary_type) = 2;
+      }
+  }
+  DXF {
+    if (FIELD_VALUE (clip_boundary_type) == 1
+        && FIELD_VALUE (num_clip_verts) != 2)
+      {
+        LOG_WARN ("IMAGE: a rect clip boundary has " FORMAT_BL
+                  " verts, written as a polygon",
+                  FIELD_VALUE (num_clip_verts));
+        FIELD_VALUE (clip_boundary_type) = 2;
+      }
+  }
   FIELD_BS (clip_boundary_type, 71); // 1 rect, 2 polygon
   if (FIELD_VALUE (clip_boundary_type) == 1)
     FIELD_VALUE (num_clip_verts) = 2;
