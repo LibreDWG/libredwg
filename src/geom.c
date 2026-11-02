@@ -16,7 +16,7 @@
  * For the properly exported variants see dwg_api instead, with the
  * dwg_geom_ prefix.
  * written by Reini Urban
- * v4_transform_3d by Garcia Leal
+ * v4_transform_3d, bulge_to_arc, bulge_split by Garcia Leal
  */
 
 #include "config.h"
@@ -130,7 +130,17 @@ transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
   return;
 }
 
-// TODO: bulge -> arc for svg and ps.
+// True if transform_OCS_2d maps the OCS of ext to the 2D plane with a
+// reflection, e.g. for the extrusion (0,0,-1).  That reverses the sense
+// of arcs and bulges.
+int
+transform_OCS_2d_is_mirrored (BITCODE_BE ext)
+{
+  BITCODE_2DPOINT ex = { 1.0, 0.0 }, ey = { 0.0, 1.0 }, tx, ty;
+  transform_OCS_2d (&tx, ex, ext);
+  transform_OCS_2d (&ty, ey, ext);
+  return tx.x * ty.y - tx.y * ty.x < 0.0;
+}
 
 // endpoint of the angular vector from ctr, to angle (radian), for radius len
 void
@@ -191,6 +201,65 @@ arc_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD ctr,
       pts[i].x = pt.x;
       pts[i].y = pt.y;
     }
+}
+
+/* The arc of the polyline segment p1 -> p2 with the given bulge, the
+   tangent of a quarter of its included angle.  A positive bulge runs
+   counter-clockwise, a bulge of 1 is a semicircle.
+   Returns 0 for a straight segment (zero or non-finite bulge, coincident
+   points).  Else returns 1 and sets the center, the radius, the angle of
+   p1 seen from the center and the signed sweep angle (4 * atan (bulge)),
+   so the arc ends at start_angle + sweep. */
+int
+bulge_to_arc (const BITCODE_2BD p1, const BITCODE_2BD p2, const double bulge,
+              BITCODE_2BD *center, double *radius, double *start_angle,
+              double *sweep)
+{
+  const double dx = p2.x - p1.x;
+  const double dy = p2.y - p1.y;
+  const double chord = hypot (dx, dy);
+  double h;
+
+  if (!isfinite (bulge) || fabs (bulge) < 1e-12 || !isfinite (chord)
+      || chord < 1e-12)
+    return 0;
+  // The center lies on the left normal (-dy, dx) / chord of the chord
+  // midpoint, at the distance chord * (1 - bulge^2) / (4 * bulge).
+  h = (1.0 - bulge * bulge) / (4.0 * bulge);
+  center->x = (p1.x + p2.x) / 2.0 - h * dy;
+  center->y = (p1.y + p2.y) / 2.0 + h * dx;
+  *radius = chord * (1.0 + bulge * bulge) / (4.0 * fabs (bulge));
+  *start_angle = atan2 (p1.y - center->y, p1.x - center->x);
+  *sweep = 4.0 * atan (bulge);
+  return 1;
+}
+
+/* Split the polyline segment p1 -> p2 with the given bulge into num_pts
+   points, from p1 up to but excluding p2, as arc_split does, so that
+   consecutive segments can be appended.  Returns the number of points
+   written: num_pts for an arc, 1 (just p1) for a straight segment, and 0
+   if num_pts < 1. */
+int
+bulge_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD p1,
+             const BITCODE_2BD p2, const double bulge)
+{
+  BITCODE_2BD ctr;
+  double radius, start_angle, sweep;
+  int i;
+#ifndef HAVE_NONNULL
+  if (!pts)
+    return 0;
+#endif
+  if (num_pts < 1)
+    return 0;
+  pts[0] = p1;
+  if (num_pts == 1
+      || !bulge_to_arc (p1, p2, bulge, &ctr, &radius, &start_angle, &sweep))
+    return 1;
+  for (i = 1; i < num_pts; i++)
+    angle_vector_2d (&pts[i], ctr, start_angle + (sweep * i) / num_pts,
+                     radius);
+  return num_pts;
 }
 
 /*----------------------------------------------------------------------

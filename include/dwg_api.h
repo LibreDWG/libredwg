@@ -9058,6 +9058,10 @@ extern "C"
   dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
                                      int *restrict error) __nonnull ((2));
 
+  EXPORT double *
+  dwg_object_polyline_2d_get_bulges (const dwg_object *restrict obj,
+                                     int *restrict error) __nonnull ((2));
+
   EXPORT BITCODE_BL dwg_object_polyline_3d_get_numpoints (
       const dwg_object *restrict obj, int *restrict error) __nonnull ((2));
 

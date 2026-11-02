@@ -67,5 +67,14 @@ api_process (dwg_object *obj)
         fail ("polyline_2d_get_numpoints: %u != %u vertices",
               (unsigned)numpoints, (unsigned)num_vertex);
     }
+  {
+    double *bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
+    if (!error)
+      for (BITCODE_BL i = 0; bulges && i < numpoints; i++)
+        ok ("POLYLINE_2D.bulges[%d]: %f", (int)i, bulges[i]);
+    else
+      fail ("POLYLINE_2D.bulges");
+    free (bulges);
+  }
   CHK_ENTITY_H (polyline_2d, POLYLINE_2D, seqend);
 }

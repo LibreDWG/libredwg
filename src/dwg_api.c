@@ -8534,7 +8534,7 @@ dwg_ent_vertex_2d_set_end_width (dwg_ent_vertex_2d *restrict vert,
     }
 }
 
-/** Returns the _dwg_entity_VERTEX_2D::bulge, DXF 42. (radians)
+/** Returns the _dwg_entity_VERTEX_2D::bulge, DXF 42, tan (angle / 4)
   \code Usage: double bulge = dwg_ent_vertex_2d_get_bulge(vert, &error);
   \endcode
   \param[in] vert dwg_ent_vertex_2d*
@@ -8558,7 +8558,7 @@ dwg_ent_vertex_2d_get_bulge (const dwg_ent_vertex_2d *restrict vert,
     }
 }
 
-/** Sets the _dwg_entity_VERTEX_2D::bulge, DXF 42. (radians)
+/** Sets the _dwg_entity_VERTEX_2D::bulge, DXF 42, tan (angle / 4)
   \code Usage: dwg_ent_vertex_2d_set_bulge(vert, 20, &error);
   \endcode
   \param[in] vert dwg_ent_vertex_2d*
@@ -22620,6 +22620,104 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
             }
         }
       return ptx;
+    }
+  else
+    {
+      LOG_ERROR ("%s: empty arg", __FUNCTION__);
+      *error = 1;
+      return NULL;
+    }
+}
+
+/** Returns a copy of the bulges, one per vertex, in the order of
+    dwg_object_polyline_2d_get_points.  The bulge of vertex i is the tangent
+    of a quarter of the included angle of the segment from vertex i to the
+    next one; 0 is straight.
+ */
+double *
+dwg_object_polyline_2d_get_bulges (const dwg_object *restrict obj,
+                                   int *restrict error)
+{
+  *error = 0;
+  if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_2D)
+    {
+      BITCODE_BL i;
+      Dwg_Data *dwg = obj->parent;
+      Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+      BITCODE_BL num_points
+          = dwg_object_polyline_2d_get_numpoints (obj, error);
+      Dwg_Entity_VERTEX_2D *vertex = NULL;
+      double *bulges;
+
+      if (!num_points || *error)
+        return NULL;
+      bulges = (double *)calloc (num_points, sizeof (double));
+      if (!bulges)
+        {
+          LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+          *error = 1;
+          return NULL;
+        }
+      if (dwg->header.version >= R_2004)
+        for (i = 0; i < num_points; i++)
+          {
+            Dwg_Object *vobj = dwg_ref_object (dwg, _obj->vertex[i]);
+            if (vobj && vobj->fixedtype == DWG_TYPE_VERTEX_2D
+                && (vertex = dwg_object_to_VERTEX_2D (vobj)))
+              bulges[i] = vertex->bulge;
+            else
+              *error = 1; // return not all vertices, but some
+          }
+      // iterate over first_vertex - last_vertex
+      else if (dwg->header.version >= R_13b1)
+        {
+          Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
+          Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
+          if (!vobj)
+            *error = 1;
+          else
+            {
+              i = 0;
+              do
+                {
+                  if (vobj->fixedtype == DWG_TYPE_VERTEX_2D
+                      && (vertex = dwg_object_to_VERTEX_2D (vobj)))
+                    {
+                      if (i >= num_points)
+                        {
+                          *error = 1;
+                          break;
+                        }
+                      bulges[i++] = vertex->bulge;
+                    }
+                  else
+                    *error = 1; // return not all vertices, but some
+                }
+              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
+            }
+        }
+      else // <r13: iterate over vertices until seqend
+        {
+          Dwg_Object *vobj = (Dwg_Object *)obj;
+          i = 0;
+          while ((vobj = dwg_next_object (vobj))
+                 && vobj->fixedtype != DWG_TYPE_SEQEND)
+            {
+              if (vobj->fixedtype == DWG_TYPE_VERTEX_2D
+                  && (vertex = dwg_object_to_VERTEX_2D (vobj)))
+                {
+                  if (i >= num_points)
+                    {
+                      *error = 1;
+                      break;
+                    }
+                  bulges[i++] = vertex->bulge;
+                }
+              else
+                *error = 1; // return not all vertices, but some
+            }
+        }
+      return bulges;
     }
   else
     {
