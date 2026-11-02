@@ -104,7 +104,8 @@ help (void)
 }
 
 // lsan/valgrind leaks still TODO. GH #151
-#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
+#if defined __SANITIZE_ADDRESS__ || defined HAVE_ASAN                         \
+    || __has_feature(address_sanitizer)
 const char *__asan_default_options (void);
 const char *
 __asan_default_options (void)
@@ -418,7 +419,8 @@ main (int argc, char *argv[])
       if (error)
         fprintf (stderr, "WRITE ERROR 0x%x %s\n", error, filename_out);
 
-#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
+#if defined __SANITIZE_ADDRESS__ || defined HAVE_ASAN                         \
+    || __has_feature(address_sanitizer)
       {
         char *asanenv = getenv ("ASAN_OPTIONS");
         if (!asanenv)

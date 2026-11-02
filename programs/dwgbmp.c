@@ -75,7 +75,8 @@ help (void)
 static void
 bmp_free_dwg (Dwg_Data *dwg)
 {
-#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
+#if defined __SANITIZE_ADDRESS__ || defined HAVE_ASAN                         \
+    || __has_feature(address_sanitizer)
   {
     char *asanenv = getenv ("ASAN_OPTIONS");
     if (!asanenv)
