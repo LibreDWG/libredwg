@@ -592,6 +592,145 @@ in_json_mline_lines_test (void)
   ok ("in_json_mline_lines: every MLINE vertex gets num_lines lines");
 }
 
+/* Regression test for GH #1487 (in_json dotted keys into unset arrays):
+   a dotted key into a subclass array that is not set (e.g.
+   "ref.classname" from example_2004.dwg, "rowstyles.text_height", or
+   "dashes.length" with the array removed) now does what an array of one
+   element does: the array gets the elements the specs walk,
+   zero-filled, and its count is set to 1 (within the other array when
+   shared, as in the LTYPE dashes.numdashes case). On master the specs
+   and dwg_free walked past the single element. */
+static void
+in_json_dotted_array_test (void)
+{
+  const char *src =
+      "{\n"
+      " \"created_by\": \"libredwg test\",\n"
+      " \"FILEHEADER\": { \"version\": \"AC1024\" },\n"
+      " \"OBJECTS\": ["
+      " { \"object\": \"DIMASSOC\", \"type\": 626,\n"
+      "   \"handle\": [0, 1, 1],\n"
+      "   \"associativity\": 63,\n"
+      "   \"ref.classname\": \"AcDbOsnapPointRef\" },\n"
+      " { \"object\": \"TABLESTYLE\", \"type\": 724,\n"
+      "   \"handle\": [0, 1, 2], \"name\": \"TestTable\",\n"
+      "   \"rowstyles.text_height\": 2.5 },\n"
+      " { \"entity\": \"MLINE\", \"type\": 47,\n"
+      "   \"handle\": [0, 1, 3], \"layer\": \"0\",\n"
+      "   \"verts.lines\": [ {}, {} ] },\n"
+      " { \"object\": \"LTYPE\", \"type\": 57,\n"
+      "   \"handle\": [0, 1, 4], \"name\": \"TestLTYPE\",\n"
+      "   \"numdashes\": 5, \"dashes.length\": 5.0 } ] }";
+  char *json = (char *)malloc (strlen (src) + 1);
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  int error;
+
+  if (!json)
+    {
+      fail ("in_json_dotted_array: malloc failed");
+      return;
+    }
+  strcpy (json, src);
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)json;
+  dat.size = strlen (json);
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("in_json_dotted_array: dwg_read_json failed 0x%x", error);
+      free (json);
+      return;
+    }
+  if (dwg.num_objects != 4)
+    fail ("in_json_dotted_array: num_objects %u != 4",
+          (unsigned)dwg.num_objects);
+  else
+    {
+      BITCODE_BL i;
+      for (i = 0; i < dwg.num_objects; i++)
+        {
+          switch (dwg.object[i].fixedtype)
+            {
+            case DWG_TYPE_DIMASSOC:
+              {
+                Dwg_Object_DIMASSOC *o
+                    = dwg.object[i].tio.object->tio.DIMASSOC;
+                // the specs walk ref 6 times; 1 element would OOB
+                if (!o->ref)
+                  fail ("in_json_dotted_array: ref not allocated");
+                else
+                  {
+                    if (!o->ref[0].classname
+                        || strcmp (o->ref[0].classname,
+                                   "AcDbOsnapPointRef") != 0)
+                      fail ("in_json_dotted_array: ref[0].classname not set");
+                    if (o->ref[5].classname || o->ref[5].osnap_type
+                        || o->ref[5].xrefs)
+                      fail ("in_json_dotted_array: ref[5] not zero-filled");
+                  }
+                break;
+              }
+            case DWG_TYPE_TABLESTYLE:
+              {
+                Dwg_Object_TABLESTYLE *o
+                    = dwg.object[i].tio.object->tio.TABLESTYLE;
+                // the specs walk rowstyles 3 times; 1 element would OOB
+                if (!o->rowstyles)
+                  fail ("in_json_dotted_array: rowstyles not allocated");
+                else
+                  {
+                    if (o->rowstyles[0].text_height != 2.5)
+                      fail ("in_json_dotted_array: rowstyles[0].text_height "
+                            "not set");
+                    if (o->rowstyles[2].text_height != 0.0
+                        || o->rowstyles[2].borders)
+                      fail ("in_json_dotted_array: rowstyles[2] not "
+                            "zero-filled");
+                  }
+                if (o->num_rowstyles != 1)
+                  fail ("in_json_dotted_array: num_rowstyles %u != 1",
+                        (unsigned)o->num_rowstyles);
+                break;
+              }
+            case DWG_TYPE_MLINE:
+              {
+                Dwg_Entity_MLINE *o
+                    = dwg.object[i].tio.entity->tio.MLINE;
+                if (o->num_verts != 1)
+                  fail ("in_json_dotted_array: num_verts %u != 1",
+                        (unsigned)o->num_verts);
+                else if (o->verts[0].num_lines != 2 || o->num_lines != 2)
+                  fail ("in_json_dotted_array: vertex lines %u != 2",
+                        (unsigned)o->verts[0].num_lines);
+                break;
+              }
+            case DWG_TYPE_LTYPE:
+              {
+                Dwg_Object_LTYPE *o = dwg.object[i].tio.object->tio.LTYPE;
+                // the count given before the buffer is lowered by the
+                // 1-element array it is now shared with
+                if (o->numdashes != 1)
+                  fail ("in_json_dotted_array: numdashes %u != 1",
+                        (unsigned)o->numdashes);
+                if (o->dashes && o->dashes[0].length != 5.0)
+                  fail ("in_json_dotted_array: dashes[0].length not set");
+                break;
+              }
+            default:
+              break;
+            }
+        }
+    }
+  // on master: dwg_free walks the fixed elems past the 1-element
+  // arrays
+  dwg_free (&dwg);
+  free (json);
+  ok ("in_json_dotted_array: dotted keys into unset arrays get the "
+      "spec-walked elements");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -612,5 +751,6 @@ main (int argc, char const *argv[])
   in_json_object_counts_test ();
   in_json_subclass_fixed_elems_test ();
   in_json_mline_lines_test ();
+  in_json_dotted_array_test ();
   return failed;
 }

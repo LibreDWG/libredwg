@@ -2242,6 +2242,18 @@ json_subclass_fixed_elems (const char *restrict name, const char *restrict key)
   return 0;
 }
 
+// number of elements a subclass array is allocated: at least the
+// array length (or 1), and at least the fixed number the specs walk
+static int
+json_subclass_num_alloc (int num_elems,
+                         const char *restrict name, const char *restrict key)
+{
+  const int fixed = json_subclass_fixed_elems (name, key);
+  if (num_elems < 1)
+    num_elems = 1;
+  return num_elems > fixed ? num_elems : fixed;
+}
+
 // MLINE.num_lines is the most lines of any vertex (RC, at most 255);
 // every vertex's lines are allocated at it. Grow the vertices read
 // so far, zero-filled, when a later vertex has more.
@@ -3214,11 +3226,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             json_mline_num_lines (obj, num_elems);
           // subclass arrays the specs walk a fixed number of times get
           // at least that many elements, zero-filled; empty stays NULL
-          {
-            const int fixed = json_subclass_fixed_elems (name, key);
-            const int alloc1 = num_elems > fixed ? num_elems : fixed;
-            elems = num_elems ? (char *)calloc (alloc1, size_elem) : NULL;
-          }
+          elems = num_elems
+                      ? (char *)calloc (
+                            json_subclass_num_alloc (num_elems, name, key),
+                            size_elem)
+                      : NULL;
           dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
           tokens->index++;
           // array of structs
@@ -3433,8 +3445,15 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       int subsize = dwg_dynapi_subclass_size (subclass1);
                       if (subsize > 0)
                         {
-                          off = calloc (1, subsize);
+                          // a dotted key into an unset array is an
+                          // array of one element: allocate the
+                          // elements the specs walk, zero-filled,
+                          // and set the count to 1
+                          off = (void *)calloc (
+                            json_subclass_num_alloc (1, name, key), subsize);
                           *(void **)((char *)_obj + f1->offset) = off;
+                          if (find_numfield (fields, key))
+                            json_set_numfield (_obj, fields, key, 1);
                         }
                     }
                 }
@@ -3465,8 +3484,15 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       int subsize = dwg_dynapi_subclass_size (subclass1);
                       if (subsize > 0)
                         {
-                          off = calloc (1, subsize);
+                          // a dotted key into an unset array is an
+                          // array of one element: allocate the
+                          // elements the specs walk, zero-filled,
+                          // and set the count to 1
+                          off = (void *)calloc (
+                            json_subclass_num_alloc (1, name, key), subsize);
                           *(void **)((char *)_obj + f1->offset) = off;
+                          if (find_numfield (fields, key))
+                            json_set_numfield (_obj, fields, key, 1);
                         }
                     }
                 }
