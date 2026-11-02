@@ -2563,8 +2563,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           size_t strings_size, needed;
           is_tu = obj->parent->header.version >= R_2007;
           CHK_dashes (j, dashes);
-          o->dashes[j].text
-              = dxf_pair_string (obj->parent, pair->value.s.ptr);
+          o->dashes[j].text = dxf_pair_string (obj->parent, pair->value.s.ptr);
           LOG_TRACE ("LTYPE.dashes[%d].text = %s [T 9]\n", j,
                      pair->value.s.ptr);
           // write into strings_area
@@ -5216,8 +5215,8 @@ add_AcDbTableCells (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     num_cells = (unsigned long)o->num_rows * o->num_cols;
   if (num_cells > 0 && !o->cells)
     {
-      o->cells = (Dwg_TABLE_Cell *)xcalloc (num_cells,
-                                            sizeof (Dwg_TABLE_Cell));
+      o->cells
+          = (Dwg_TABLE_Cell *)xcalloc (num_cells, sizeof (Dwg_TABLE_Cell));
       if (!o->cells)
         return pair;
       o->num_cells = num_cells;
@@ -6228,13 +6227,11 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             if (i < 0)
               break;
             n = o->ref[i].num_xrefpaths;
-            o->ref[i].xrefpaths
-                = (BITCODE_T *)realloc (o->ref[i].xrefpaths,
-                                        (n + 1) * sizeof (BITCODE_T));
+            o->ref[i].xrefpaths = (BITCODE_T *)realloc (
+                o->ref[i].xrefpaths, (n + 1) * sizeof (BITCODE_T));
             if (!o->ref[i].xrefpaths)
               return NULL;
-            o->ref[i].xrefpaths[n]
-                = dxf_pair_string (dwg, pair->value.s.ptr);
+            o->ref[i].xrefpaths[n] = dxf_pair_string (dwg, pair->value.s.ptr);
             LOG_TRACE ("%s.ref[%d].xrefpaths[%d] = %s [T %d]\n", obj->name, i,
                        n, pair->value.s.ptr, pair->code);
             o->ref[i].num_xrefpaths++;
@@ -6246,9 +6243,8 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             if (i < 0)
               break;
             n = o->ref[i].num_intsectobj;
-            o->ref[i].intsectobj
-                = (BITCODE_H *)realloc (o->ref[i].intsectobj,
-                                        (n + 1) * sizeof (BITCODE_H));
+            o->ref[i].intsectobj = (BITCODE_H *)realloc (
+                o->ref[i].intsectobj, (n + 1) * sizeof (BITCODE_H));
             if (!o->ref[i].intsectobj)
               return NULL;
             o->ref[i].intsectobj[n]
@@ -6279,9 +6275,8 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             if (i < 0)
               break;
             n = o->ref[i].num_intersec_xrefpaths;
-            o->ref[i].intersec_xrefpaths
-                = (BITCODE_T *)realloc (o->ref[i].intersec_xrefpaths,
-                                        (n + 1) * sizeof (BITCODE_T));
+            o->ref[i].intersec_xrefpaths = (BITCODE_T *)realloc (
+                o->ref[i].intersec_xrefpaths, (n + 1) * sizeof (BITCODE_T));
             if (!o->ref[i].intersec_xrefpaths)
               return NULL;
             o->ref[i].intersec_xrefpaths[n]
@@ -11451,8 +11446,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               // ODA writes the dimension 330 after the 100 subclass, not
               // as owner/reactor
               Dwg_Object_DIMASSOC *o = obj->tio.object->tio.DIMASSOC;
-              o->dimensionobj
-                  = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              o->dimensionobj = dwg_add_handleref (dwg, 4, pair->value.u, obj);
               LOG_TRACE ("DIMASSOC.dimensionobj = " FORMAT_REF " [H 330]\n",
                          ARGS_REF (o->dimensionobj));
             }
@@ -12577,8 +12571,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     }
                   if (tbl_sty && pair && pair->code == 300)
                     {
-                      tbl_sty->name
-                          = dxf_pair_string (dwg, pair->value.s.ptr);
+                      tbl_sty->name = dxf_pair_string (dwg, pair->value.s.ptr);
                       LOG_TRACE ("%s.%s.name = \"%s\" [BL %d]\n", obj->name,
                                  key, pair->value.s.ptr, pair->code);
                       dxf_free_pair (pair);
@@ -13222,8 +13215,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           if (j == 0)
                             {
-                              vals = (BITCODE_BD *)xcalloc (size,
-                                                            sizeof (BITCODE_BD));
+                              vals = (BITCODE_BD *)xcalloc (
+                                  size, sizeof (BITCODE_BD));
                               if (!vals)
                                 {
                                   dxf_free_pair (pair);
@@ -13239,8 +13232,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           else if (j < size)
                             {
-                              dwg_dynapi_entity_value (_obj, obj->name, f->name,
-                                                       &vals, NULL);
+                              dwg_dynapi_entity_value (_obj, obj->name,
+                                                       f->name, &vals, NULL);
                               vals[j] = pair->value.d;
                               LOG_TRACE ("%s.%s[%d] = %f [%s %d]\n", name,
                                          f->name, j, pair->value.d, f->type,
