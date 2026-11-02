@@ -231,15 +231,13 @@ create_postscript (Dwg_Data *dwg, char *output)
                   transform_OCS_2d (&pt, ptin, pline->extrusion);
                   ps_segment (ps, prev, pt, bulges ? bulges[j - 1] : 0.0,
                               mirrored);
-                  PS_stroke (ps);
                   prev = pt;
                 }
               if (pline->flag & 1) // closed
-                {
-                  ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0,
-                              mirrored);
-                  PS_stroke (ps);
-                }
+                ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0,
+                            mirrored);
+              // one path for the whole polyline: a stroke ends the path
+              PS_stroke (ps);
               free (bulges);
               free (pts);
             }
@@ -271,15 +269,13 @@ create_postscript (Dwg_Data *dwg, char *output)
                   transform_OCS_2d (&pt, ptin, pline->extrusion);
                   ps_segment (ps, prev, pt, bulges ? bulges[j - 1] : 0.0,
                               mirrored);
-                  PS_stroke (ps);
                   prev = pt;
                 }
               if (pline->flag & 512) // closed
-                {
-                  ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0,
-                              mirrored);
-                  PS_stroke (ps);
-                }
+                ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0,
+                            mirrored);
+              // one path for the whole polyline: a stroke ends the path
+              PS_stroke (ps);
 
               free (pts);
             }
