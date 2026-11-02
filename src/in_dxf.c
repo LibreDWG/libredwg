@@ -14716,7 +14716,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                         PUSH_HV (_ctrl, num_entries, entries, ref);
                       }
                     if (dwg->header.from_version > R_2004 && _obj->name
-                        && _obj->has_strings_area)
+                        && _obj->has_strings_area && !_obj->strings_area)
                       {
                         _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
                         if (!_obj->strings_area)
@@ -14725,7 +14725,8 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                             goto outofmem;
                           }
                       }
-                    if (dwg->header.from_version <= R_2004)
+                    if (dwg->header.from_version <= R_2004
+                        && !_obj->strings_area)
                       {
                         _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
                         if (!_obj->strings_area)
