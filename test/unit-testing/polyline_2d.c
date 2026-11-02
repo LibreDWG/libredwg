@@ -46,8 +46,26 @@ api_process (dwg_object *obj)
     }
   if (version >= R_13b1 && version <= R_2000)
     {
+      Dwg_Object *vobj, *vlast;
+      BITCODE_BL num_vertex = 0;
       CHK_ENTITY_H (polyline_2d, POLYLINE_2D, first_vertex);
       CHK_ENTITY_H (polyline_2d, POLYLINE_2D, last_vertex);
+      // count first_vertex .. last_vertex, both included
+      vobj = dwg_ref_object (obj->parent, first_vertex);
+      vlast = dwg_ref_object (obj->parent, last_vertex);
+      while (vobj)
+        {
+          if (vobj->fixedtype == DWG_TYPE_VERTEX_2D)
+            num_vertex++;
+          if (vobj == vlast)
+            break;
+          vobj = dwg_next_object (vobj);
+        }
+      if (numpoints == num_vertex)
+        ok ("polyline_2d_get_numpoints: %u", (unsigned)numpoints);
+      else
+        fail ("polyline_2d_get_numpoints: %u != %u vertices",
+              (unsigned)numpoints, (unsigned)num_vertex);
     }
   CHK_ENTITY_H (polyline_2d, POLYLINE_2D, seqend);
 }
