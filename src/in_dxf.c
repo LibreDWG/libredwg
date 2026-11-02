@@ -1275,6 +1275,16 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
     strcpy (s, "num_owned");
   else if (strEQc (key, "items"))
     strcpy (s, "numitems");
+  else if (strEQc (key, "texts"))
+    strcpy (s, "numitems");
+  else if (strEQc (key, "itemhandles"))
+    strcpy (s, "numitems");
+  else if (strEQc (key, "shorts"))
+    strcpy (s, "num_hdls");
+  else if (strEQc (key, "exprs"))
+    strcpy (s, "numelems");
+  else if (strEQc (key, "lut"))
+    strcpy (s, "numelems");
   else if (strEQc (key, "entities"))
     strcpy (s, "num_owned");
   else if (strEQc (key, "sort_ents"))
