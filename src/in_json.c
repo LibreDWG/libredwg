@@ -245,6 +245,15 @@ static Bit_Chain *g_dat;
 #define FIELD_HV(nam, dxf) _FIELD_LONGLONG (nam, HV)
 #define FIELD_MC(nam, dxf) _FIELD_LONG (nam, MC)
 #define FIELD_MS(nam, dxf) _FIELD_LONG (nam, MS)
+// count key: the count is calculated from the buffer or array it counts
+// (see FIELD_BINARY, FIELD_VECTOR), so the key is ignored.
+#define FIELD_NUM(nam, dxf)                                                   \
+  else if (strEQc (key, #nam))                                                \
+  {                                                                           \
+    json_long (dat, tokens);                                                  \
+    JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
+    LOG_TRACE (#nam ": ignored\n");                                           \
+  }
 
 #define FIELD_BD(nam, dxf) _FIELD_FLOAT (nam, BD)
 #define FIELD_RD(nam, dxf) _FIELD_FLOAT (nam, RD)
@@ -4861,7 +4870,7 @@ json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
       // clang-format off
       if (0) ;
-      FIELD_RL (size, 0)
+      FIELD_NUM (size, 0)
       FIELD_BINARY (unknown_bits, size, 0)
       FIELD_RL (class_version, 0)
       FIELD_T16 (appinfo_name, 0)
@@ -4918,7 +4927,7 @@ json_AppInfoHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       t = &tokens->tokens[tokens->index];
       // clang-format off
       if (0) ;
-      FIELD_RL (size, 0)
+      FIELD_NUM (size, 0)
       FIELD_BINARY (unknown_bits, size, 0)
       else
         {
@@ -5113,7 +5122,7 @@ json_Security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_T32 (crypto_name, 0)
       FIELD_RL (algo_id, 0)
       FIELD_RL (key_len, 0)
-      FIELD_RL (encr_size, 0)
+      FIELD_NUM (encr_size, 0)
       FIELD_BINARY (encr_buffer, encr_size, 0)
       else
         {
@@ -5158,7 +5167,7 @@ json_RevHistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (0) ;
       FIELD_RL (class_version, 0)
       FIELD_RL (class_minor, 0)
-      FIELD_RL (num_histories, 0)
+      FIELD_NUM (num_histories, 0)
       FIELD_VECTOR (histories, RL, num_histories, 0)
       else
         {
@@ -5433,6 +5442,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int error = 0;
   int size;
+  int seglen = 0;
   if (t->type != JSMN_OBJECT)
     {
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
@@ -5461,7 +5471,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RLd (ds_version, 0)
       FIELD_RLd (segidx_offset, 0)
       FIELD_RLd (segidx_unknown, 0)
-      FIELD_RLd (num_segidx, 0)
+      FIELD_NUM (num_segidx, 0)
       FIELD_RLd (schidx_segidx, 0)
       FIELD_RLd (datidx_segidx, 0)
       FIELD_RLd (search_segidx, 0)
@@ -5484,7 +5494,10 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         if (t->type != JSMN_ARRAY) // of OBJECTs
           json_advance_unknown (dat, tokens, t->type, 0);
         else if (t->size)
-          error |= json_AcDs_Segments (dat, dwg, tokens, _obj, t->size);
+          {
+            seglen = t->size;
+            error |= json_AcDs_Segments (dat, dwg, tokens, _obj, t->size);
+          }
         else
           tokens->index++; // empty array
         // if (error >= DWG_ERR_CRITICAL)
@@ -5496,6 +5509,11 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         json_advance_unknown (dat, tokens, t->type, 0);
       }
     }
+
+  // num_segidx counts both segidx and segments: never exceed the
+  // shorter array
+  if (seglen && _obj->num_segidx > seglen)
+    _obj->num_segidx = seglen;
 
   LOG_TRACE ("End of %s\n", section);
   tokens->index--;

@@ -22,6 +22,9 @@ extern unsigned int loglevel;
 #include "decode.h"
 #include "tests_common.h"
 
+// from in_json.h
+extern int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+
 BITCODE_RL size = SECTION_R13_SIZE;
 // Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
 
@@ -326,6 +329,68 @@ remove_NOD_item_null_itemhandles_test (void)
   ok ("remove_NOD_item: survives NULL itemhandles with numitems > 0");
 }
 
+/* Regression test for GH #1487 (in_json section counts): a count key
+   given apart from the buffer it counts must never exceed the buffer.
+   AppInfo.size, AppInfoHistory.size, Security.encr_size,
+   RevHistory.num_histories and AcDs.num_segidx are now calculated from
+   the buffer/array they count. On master, a large count after the
+   buffer made dwg_free_acds walk 4096 entries of the 2-element
+   segidx/segments arrays. */
+static void
+in_json_section_counts_test (void)
+{
+  const char *src =
+      "{\n"
+      " \"created_by\": \"libredwg test\",\n"
+      " \"AppInfo\": { \"unknown_bits\": \"4142\", \"size\": 4096 },\n"
+      " \"AppInfoHistory\": { \"unknown_bits\": \"4142\", \"size\": 4096 },\n"
+      " \"RevHistory\": { \"histories\": [100], \"num_histories\": 4096 },\n"
+      " \"AcDs\": { \"segidx\": [ { \"offset\": 0, \"size\": 0 },\n"
+      "                { \"offset\": 0, \"size\": 0 } ],\n"
+      "   \"segments\": [ { \"signature\": 0 },\n"
+      "                  { \"signature\": 0 } ],\n"
+      "   \"num_segidx\": 4096 } }";
+  char *json = (char *)malloc (strlen (src) + 1);
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  int error;
+
+  if (!json)
+    {
+      fail ("in_json_section_counts: malloc failed");
+      return;
+    }
+  strcpy (json, src);
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)json;
+  dat.size = strlen (json);
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("in_json_section_counts: dwg_read_json failed 0x%x", error);
+      free (json);
+      return;
+    }
+  if (dwg.appinfo.size != 2)
+    fail ("in_json_section_counts: AppInfo.size %u != 2",
+          (unsigned)dwg.appinfo.size);
+  if (dwg.appinfohistory.size != 2)
+    fail ("in_json_section_counts: AppInfoHistory.size %u != 2",
+          (unsigned)dwg.appinfohistory.size);
+  if (dwg.revhistory.num_histories != 1)
+    fail ("in_json_section_counts: RevHistory.num_histories %u != 1",
+          (unsigned)dwg.revhistory.num_histories);
+  if (dwg.acds.num_segidx != 2)
+    fail ("in_json_section_counts: AcDs.num_segidx %u != 2",
+          (unsigned)dwg.acds.num_segidx);
+  // on master: dwg_free_acds walks 4096 segidx/segments entries past the
+  // 2-element arrays
+  dwg_free (&dwg);
+  free (json);
+  ok ("in_json_section_counts: section counts stay within their buffers");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -342,5 +407,6 @@ main (int argc, char const *argv[])
   compress_R2004_section_tests ();
   common_entity_handle_data_double_free_test ();
   remove_NOD_item_null_itemhandles_test ();
+  in_json_section_counts_test ();
   return failed;
 }
