@@ -163,10 +163,21 @@ arc_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD ctr,
   if (!pts)
     return;
 #endif
-  start_angle = angle_normalize (start_angle);
-  end_angle = angle_normalize (end_angle);
-  if (end_angle < start_angle)
-    end_angle += 2 * M_PI;
+  // A span of a full turn or more (e.g. a CIRCLE as 0 .. 2*PI) is a full
+  // circle; normalizing both ends first would collapse it to zero.
+  if (isfinite (start_angle) && isfinite (end_angle)
+      && fabs (end_angle - start_angle) >= 2 * M_PI)
+    {
+      start_angle = angle_normalize (start_angle);
+      end_angle = start_angle + 2 * M_PI;
+    }
+  else
+    {
+      start_angle = angle_normalize (start_angle);
+      end_angle = angle_normalize (end_angle);
+      if (end_angle < start_angle)
+        end_angle += 2 * M_PI;
+    }
   // shoot vectors from ctr to ang
   ang = start_angle;
   angd = (end_angle - start_angle) / num_pts;
