@@ -632,21 +632,23 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   Dwg_Class *klass;
   int is_entity;
 
-  i = obj->fixedtype - 500;
+  i = obj->type - 500;
   if (i < 0 || i >= (int)dwg->num_classes)
     return 0;
+  // returns whether printed, not an error
   if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
       || obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
-    return DWG_ERR_UNHANDLEDCLASS;
+    return 0;
 
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname)
-    return DWG_ERR_INTERNALERROR;
+    return 0;
   dxfname = klass->dxfname;
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-  if (strEQc (dxfname, "LWPOLYLINE"))
+  // the class must name the object's own type
+  if (strEQc (dxfname, "LWPOLYLINE") && obj->fixedtype == DWG_TYPE_LWPOLYLINE)
     {
       return dwg_geojson_LWPOLYLINE (dat, obj, is_last);
     }
@@ -662,7 +664,8 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       return 0;
     }
   */
-  if (strEQc (dxfname, "GEOPOSITIONMARKER"))
+  if (strEQc (dxfname, "GEOPOSITIONMARKER")
+      && obj->fixedtype == DWG_TYPE_GEOPOSITIONMARKER)
     {
       Dwg_Entity_GEOPOSITIONMARKER *_obj
           = obj->tio.entity->tio.GEOPOSITIONMARKER;
