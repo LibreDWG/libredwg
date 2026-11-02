@@ -1985,6 +1985,135 @@ test_class_object_type (void)
   dwg_free (&dwg);
   return numfailed ();
 }
+
+// GH #1487: keep each imported count within its array (in_dxf):
+// LTYPE 73 is ignored, with an error, once the dashes are allocated;
+// MLINE allocates no lines for a num_lines of 0, and refuses a 73 once
+// the lines are allocated; an entity's 160 goes to add_ent_preview in
+// every version, is ignored once the entity has a preview, and
+// add_ent_preview resets a size it rejects.
+static int
+test_dxf_count_resets (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  char *buf, *p;
+  const size_t cap = 8192;
+  int error;
+
+  failed = 0;
+  buf = (char *)malloc (cap);
+  if (!buf)
+    {
+      fail ("dxf_count_resets: out of memory");
+      return numfailed ();
+    }
+  p = buf;
+  // LTYPE with 2 dashes, then a second 73 after the dashes allocated;
+  // the table entries follow the structure of
+  // test/test-data/sample_2010.dxf
+  p += sprintf (p, "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1014\n"
+                   "  0\nENDSEC\n");
+  p += sprintf (
+      p, "  0\nSECTION\n  2\nTABLES\n  0\nTABLE\n  2\nLTYPE\n  5\n5\n"
+         "330\n0\n100\nAcDbSymbolTable\n 70\n1\n"
+         "  0\nLTYPE\n  5\n14\n330\n5\n100\nAcDbSymbolTableRecord\n"
+         "100\nAcDbLinetypeTableRecord\n  2\nDASHED\n 70\n0\n 72\n65\n"
+         " 73\n2\n 40\n10.0\n"
+         " 49\n5.0\n 49\n-5.0\n 73\n200\n"
+         "  0\nENDTAB\n  0\nENDSEC\n"
+         "  0\nSECTION\n  2\nENTITIES\n");
+  // MLINE: no lines for a num_lines of 0, then a 73 with the real
+  // count, which must not reuse the missing lines
+  p += sprintf (p, "  0\nMLINE\n  5\n200\n  8\n0\n 100\nAcDbEntity\n"
+                   " 100\nAcDbMline\n 72\n1\n 73\n0\n"
+                   " 11\n0.0\n 21\n0.0\n 31\n0.0\n 12\n0.0\n 22\n1.0\n"
+                   " 32\n0.0\n 73\n2\n");
+  // entity preview: a 160 in every version, ignored once set, and a
+  // size it rejects is reset
+  p += sprintf (p, "  0\nPOINT\n  5\n300\n  8\n0\n 100\nAcDbEntity\n"
+                   " 160\n2\n 310\n4142\n 160\n2\n 310\n4546\n"
+                   " 100\nAcDbPoint\n");
+  p += sprintf (p, "  0\nPOINT\n  5\n301\n  8\n0\n 100\nAcDbEntity\n"
+                   " 160\n268435456\n 100\nAcDbPoint\n");
+  p += sprintf (p, "  0\nENDSEC\n  0\nEOF\n");
+
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)buf;
+  dat.size = (size_t)(p - buf);
+
+  dwg.opts = 3; // keep loglevel 3 through the read
+  error = dwg_read_dxf (&dat, &dwg);
+  loglevel = 2; // dwg_read_dxf reset it to dwg->opts
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("dxf_count_resets: dwg_read_dxf failed with 0x%x", error);
+  else
+    {
+      BITCODE_BL i;
+      for (i = 0; i < dwg.num_objects; i++)
+        {
+          switch (dwg.object[i].fixedtype)
+            {
+            case DWG_TYPE_LTYPE:
+              {
+                Dwg_Object_LTYPE *o = dwg.object[i].tio.object->tio.LTYPE;
+                if (strEQc (o->name, "DASHED"))
+                  {
+                    // the second 73 is ignored, with an error
+                    if (o->numdashes != 2)
+                      fail ("dxf_count_resets: LTYPE.numdashes %u != 2",
+                            (unsigned)o->numdashes);
+                    if (o->dashes && o->dashes[1].length != -5.0)
+                      fail ("dxf_count_resets: LTYPE.dashes[1] not read");
+                  }
+                break;
+              }
+            case DWG_TYPE_MLINE:
+              {
+                Dwg_Entity_MLINE *o
+                    = dwg.object[i].tio.entity->tio.MLINE;
+                // the 0 count allocates no lines; the later 73
+                // allocates them
+                if (o->num_lines != 2 || !o->verts[0].lines)
+                  fail ("dxf_count_resets: MLINE.num_lines %u, lines %p",
+                        (unsigned)o->num_lines, (void *)o->verts[0].lines);
+                break;
+              }
+            case DWG_TYPE_POINT:
+              {
+                Dwg_Object_Entity *ent = dwg.object[i].tio.entity;
+                if (dwg.object[i].handle.value == 0x300)
+                  {
+                    // the 160 goes to add_ent_preview in r2000, the
+                    // duplicate 160 is ignored
+                    if (ent->preview_size != 2 || !ent->preview
+                        || ent->preview[0] != 'A' || ent->preview[1] != 'B')
+                      fail ("dxf_count_resets: POINT.preview not read, "
+                            "size %u",
+                            (unsigned)ent->preview_size);
+                  }
+                else if (dwg.object[i].handle.value == 0x301)
+                  {
+                    // the rejected size is reset
+                    if (ent->preview_size != 0 || ent->preview)
+                      fail ("dxf_count_resets: POINT.preview_size %u not "
+                            "reset",
+                            (unsigned)ent->preview_size);
+                  }
+                break;
+              }
+            default:
+              break;
+            }
+        }
+    }
+  dwg_free (&dwg);
+  free (buf);
+  if (!numfailed ())
+    ok ("dxf_count_resets: the counts stay equal to the arrays");
+  return numfailed ();
+}
 #endif
 
 int
@@ -2147,6 +2276,10 @@ main (int argc, char *argv[])
       error
           += test_add (DWG_TYPE_WIPEOUTVARIABLES, "add_wipeoutvars_2000", dxf);
     }
+
+#ifndef DISABLE_DXF
+  error += test_dxf_count_resets ();
+#endif
 
   return error;
 }
