@@ -8823,11 +8823,16 @@ void
 dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
                                 Dwg_Object_LTYPE *restrict _obj)
 {
-  // DXF input reconstructs strings_area directly in the target in-memory
-  // layout (add_LTYPE_dashes), sized by header.version, not the from_version
-  // on-disk blob this 256<->512 converter expects. Running it on a DXF-built
-  // 256-byte buffer reads old[i*2] up to index 510, past the allocation.
-  if (dwg->opts & DWG_OPTS_INDXF)
+  // add_LTYPE_dashes builds strings_area for DXF input sized by the source
+  // (header.version during the read): exactly 256 for a <=r2004 source, 512
+  // for a >=r2007 source. The <=r2004 -> r2007 upconvert reads old[0..255] and
+  // writes new[i*2], safe on a 256-byte buffer, and is required so a <=r2004
+  // source is not written past its 256-byte allocation for a r2007+ target
+  // (GH #1486). The r2007 -> <=r2004 downconvert instead reads old[i*2] up to
+  // index 510, which would overread a 256-byte DXF buffer, so it stays skipped
+  // for DXF input.
+  if ((dwg->opts & DWG_OPTS_INDXF)
+      && !(dwg->header.from_version <= R_2004 && dwg->header.version > R_2004))
     return;
   if (dwg->header.from_version <= R_2004 && dwg->header.version > R_2004)
     {
