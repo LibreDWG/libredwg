@@ -1991,7 +1991,9 @@ test_class_object_type (void)
 // MLINE allocates no lines for a num_lines of 0, and refuses a 73 once
 // the lines are allocated; an entity's 160 goes to add_ent_preview in
 // every version, is ignored once the entity has a preview, and
-// add_ent_preview resets a size it rejects.
+// add_ent_preview resets a size it rejects. The ASSOCACTION and
+// ASSOCNETWORK counts are set with their lists, to the elements
+// actually read.
 static int
 test_dxf_count_resets (void)
 {
@@ -2036,7 +2038,17 @@ test_dxf_count_resets (void)
                    " 100\nAcDbPoint\n");
   p += sprintf (p, "  0\nPOINT\n  5\n301\n  8\n0\n 100\nAcDbEntity\n"
                    " 160\n268435456\n 100\nAcDbPoint\n");
-  p += sprintf (p, "  0\nENDSEC\n  0\nEOF\n");
+  p += sprintf (p, "  0\nENDSEC\n");
+  // ACDBASSOCNETWORK with one dep, then a second AcDbAssocAction
+  // announcing 100 deps and none following; the counts must follow
+  // the lists actually read
+  p += sprintf (
+      p, "  0\nSECTION\n  2\nOBJECTS\n  0\nACDBASSOCNETWORK\n  5\n400\n"
+         "330\n0\n100\nAcDbAssocAction\n 90\n2\n 90\n0\n330\n0\n360\n0\n"
+         " 90\n0\n 90\n0\n 90\n1\n360\n401\n 90\n0\n 90\n0\n 90\n0\n"
+         " 90\n0\n100\nAcDbAssocAction\n 90\n2\n 90\n0\n330\n0\n360\n0\n"
+         " 90\n0\n 90\n0\n 90\n100\n100\nAcDbAssocNetwork\n 90\n0\n"
+         " 90\n0\n 90\n1\n360\n401\n 90\n0\n  0\nENDSEC\n  0\nEOF\n");
 
   memset (&dwg, 0, sizeof (dwg));
   memset (&dat, 0, sizeof (dat));
@@ -2101,6 +2113,27 @@ test_dxf_count_resets (void)
                             "reset",
                             (unsigned)ent->preview_size);
                   }
+                break;
+              }
+            case DWG_TYPE_ASSOCNETWORK:
+              {
+                Dwg_Object_ASSOCNETWORK *o
+                    = dwg.object[i].tio.object->tio.ASSOCNETWORK;
+                // the second 100 AcDbAssocAction announced 100 deps and
+                // read none; the count follows the list
+                if (o->num_deps != 0)
+                  fail ("dxf_count_resets: ASSOCNETWORK.num_deps %u != 0",
+                        (unsigned)o->num_deps);
+                if (o->num_actions != 1 || !o->actions
+                    || !o->actions[0].dep
+                    || o->actions[0].dep->handleref.value != 0x401)
+                  fail ("dxf_count_resets: ASSOCNETWORK.actions not read, "
+                        "num_actions %u",
+                        (unsigned)o->num_actions);
+                if (o->num_owned_actions != 0)
+                  fail ("dxf_count_resets: ASSOCNETWORK.num_owned_actions "
+                        "%u != 0",
+                        (unsigned)o->num_owned_actions);
                 break;
               }
             default:
