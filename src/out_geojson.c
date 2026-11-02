@@ -14,7 +14,7 @@
  * out_geojson.c: write as GeoJSON
  * written by Reini Urban
  */
-/* FIXME: Arc, Circle, Ellipsis, Bulge (Curve) arc_split.
+/* FIXME: Ellipsis arc_split.
  * TODO: ocs/ucs transforms, explode of inserts?
  *       NOCOMMA:
  *         We really have to add the comma before, not after, and special case
@@ -575,6 +575,63 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   else                                                                        \
     ENDHASH
 
+static int calc_curve_segments (Dwg_Data *restrict dwg, BITCODE_BD radius,
+                                BITCODE_BD angle_span);
+
+/* The n vertices of a polyline with its bulged segments split into arc
+   points.  For a closed polyline the closing segment is included, but not
+   its end, the first vertex.  Returns a malloc'ed array of *num_p points,
+   or NULL if out of memory. */
+static dwg_point_2d *
+bulge_points (Dwg_Data *restrict dwg, const dwg_point_2d *restrict points,
+              const double *restrict bulges, const BITCODE_BL n,
+              const int closed, BITCODE_BL *restrict num_p)
+{
+  const BITCODE_BL num_segs = closed ? n : n - 1;
+  size_t total = closed ? 0 : 1; // an open one ends with its last vertex
+  size_t k = 0;
+  BITCODE_BL j;
+  BITCODE_2BD *pts;
+
+  // pass 1: count the points of each segment
+  for (j = 0; j < num_segs; j++)
+    {
+      BITCODE_2BD p1 = { points[j].x, points[j].y };
+      BITCODE_2BD p2 = { points[(j + 1) % n].x, points[(j + 1) % n].y };
+      BITCODE_2BD ctr;
+      double radius, start_angle, sweep;
+      if (bulge_to_arc (p1, p2, bulges[j], &ctr, &radius, &start_angle,
+                        &sweep))
+        total += calc_curve_segments (dwg, radius, fabs (sweep));
+      else
+        total++;
+    }
+  pts = (BITCODE_2BD *)malloc (total * sizeof (BITCODE_2BD));
+  if (!pts)
+    return NULL;
+  // pass 2: same segment counts as above
+  for (j = 0; j < num_segs; j++)
+    {
+      BITCODE_2BD p1 = { points[j].x, points[j].y };
+      BITCODE_2BD p2 = { points[(j + 1) % n].x, points[(j + 1) % n].y };
+      BITCODE_2BD ctr;
+      double radius, start_angle, sweep;
+      int num = 1;
+      if (bulge_to_arc (p1, p2, bulges[j], &ctr, &radius, &start_angle,
+                        &sweep))
+        num = calc_curve_segments (dwg, radius, fabs (sweep));
+      k += bulge_split (&pts[k], num, p1, p2, bulges[j]);
+    }
+  if (!closed)
+    {
+      pts[k].x = points[n - 1].x;
+      pts[k].y = points[n - 1].y;
+      k++;
+    }
+  *num_p = (BITCODE_BL)k;
+  return (dwg_point_2d *)pts;
+}
+
 static int
 dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                         int is_last)
@@ -582,22 +639,32 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   BITCODE_BL j, last_j;
   Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
   dwg_point_2d *pts = (dwg_point_2d *)_obj->points;
-  if (!_obj->points)
+  dwg_point_2d *bulge_pts = NULL;
+  BITCODE_BL num_pts = _obj->num_points;
+  if (!_obj->points || !num_pts)
     return 1;
+  if (_obj->bulges && _obj->num_bulges == num_pts)
+    {
+      bulge_pts = bulge_points (obj->parent, pts, _obj->bulges, num_pts,
+                                _obj->flag & 512 ? 1 : 0, &num_pts);
+      if (bulge_pts)
+        pts = bulge_pts;
+      else
+        num_pts = _obj->num_points;
+    }
 
   FEATURE (AcDbEntity : AcDbLwPolyline, obj);
-  // TODO bulges, splines, ...
+  // TODO splines, ...
 
   // if closed and num_points > 3 use a Polygon
-  if (_obj->flag & 512 && _obj->num_points > 3)
+  if (_obj->flag & 512 && num_pts > 3)
     {
-      int changed
-          = normalize_polygon_orient (_obj->num_points, &pts); // RFC7946
+      int changed = normalize_polygon_orient (num_pts, &pts); // RFC7946
       GEOMETRY (Polygon)
       KEY (coordinates);
       ARRAY;
       ARRAY;
-      for (j = 0; j < _obj->num_points; j++)
+      for (j = 0; j < num_pts; j++)
         VALUE_2DPOINT (pts[j].x, pts[j].y)
       LASTVALUE_2DPOINT (pts[0].x, pts[0].y);
       LASTENDARRAY;
@@ -610,7 +677,7 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       GEOMETRY (LineString)
       KEY (coordinates);
       ARRAY;
-      last_j = _obj->num_points - 1;
+      last_j = num_pts - 1;
       for (j = 0; j < last_j; j++)
         VALUE_2DPOINT (pts[j].x, pts[j].y);
       LASTVALUE_2DPOINT (pts[last_j].x, pts[last_j].y);
@@ -618,6 +685,7 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     }
   ENDGEOMETRY;
   ENDFEATURE;
+  free (bulge_pts);
   return 1;
 }
 
@@ -743,23 +811,38 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     case DWG_TYPE_POLYLINE_2D:
       {
         int error;
-        BITCODE_BL j, numpts;
+        BITCODE_BL j, numpts, num_bulge_pts;
         // bool is_polygon = false;
         int changed = 0;
         dwg_point_2d *pts, *orig;
+        double *bulges;
         Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
         numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
         if (error || !numpts)
           return 0;
         pts = dwg_object_polyline_2d_get_points (obj, &error);
         if (error || !pts)
-          return 0;
-        // TODO bulges needs explosion into lines. divided by polyline curve
-        // smoothness (default 8)
+          {
+            free (pts);
+            return 0;
+          }
+        bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
+        if (bulges)
+          {
+            dwg_point_2d *bulge_pts = bulge_points (
+                dwg, pts, bulges, numpts, _obj->flag & 1, &num_bulge_pts);
+            if (bulge_pts)
+              {
+                free (pts);
+                pts = bulge_pts;
+                numpts = num_bulge_pts;
+              }
+            free (bulges);
+          }
 
         // if closed and num_points > 3 use a Polygon
         FEATURE (AcDbEntity : AcDbPolyline, obj);
-        if (_obj->flag & 512 && numpts > 3)
+        if (_obj->flag & 1 && numpts > 3)
           {
             orig = pts; // pts is already a new copy
             changed = normalize_polygon_orient (numpts, &pts); // RFC7946
@@ -774,8 +857,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             LASTVALUE_2DPOINT (pts[0].x, pts[0].y);
             LASTENDARRAY;
             LASTENDARRAY;
-            if (changed)
-              free (pts);
+            free (pts);
           }
         else
           {

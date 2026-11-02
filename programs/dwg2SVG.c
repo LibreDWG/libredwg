@@ -575,6 +575,27 @@ output_3DFACE (Dwg_Object *obj)
   common_entity (obj->tio.entity);
 }
 
+// Append the path segment from prev to pt, both already OCS-transformed:
+// an arc for a bulged segment, else a line.
+static void
+path_segment (BITCODE_2DPOINT prev, BITCODE_2DPOINT pt, double bulge,
+              int mirrored)
+{
+  BITCODE_2BD ctr;
+  double radius, start_angle, sweep;
+
+  if (mirrored)
+    bulge = -bulge;
+  if (bulge_to_arc (prev, pt, bulge, &ctr, &radius, &start_angle, &sweep))
+    // The output flips Y, so a counter-clockwise (positive) bulge has
+    // sweep-flag 0, as in output_ARC.  |bulge| > 1 is over a semicircle.
+    printf (" A %f,%f 0 %d,%d %f,%f", radius, radius,
+            fabs (bulge) > 1.0 ? 1 : 0, bulge > 0.0 ? 0 : 1,
+            transform_X (pt.x), transform_Y (pt.y));
+  else
+    printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
+}
+
 static void
 output_POLYLINE_2D (Dwg_Object *obj)
 {
@@ -587,15 +608,24 @@ output_POLYLINE_2D (Dwg_Object *obj)
   numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
   if (numpts && !error)
     {
-      BITCODE_2DPOINT pt, ptin;
+      BITCODE_2DPOINT pt, ptin, first, prev;
       dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
-      BITCODE_RL j;
+      double *bulges;
+      BITCODE_RL j, prev_j = 0;
+      int mirrored;
 
       if (error || isnan_2pt (pts[0]) || isnan_3BD (pline->extrusion))
-        return;
+        {
+          free (pts);
+          return;
+        }
+      // without bulges, all segments are straight
+      bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
+      mirrored = transform_OCS_2d_is_mirrored (pline->extrusion);
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
       transform_OCS_2d (&pt, ptin, pline->extrusion);
+      first = prev = pt;
       printf ("\t<!-- polyline_2d-%d -->\n", obj->index);
       printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
               transform_X (pt.x), transform_Y (pt.y));
@@ -607,13 +637,21 @@ output_POLYLINE_2D (Dwg_Object *obj)
           if (isnan_2BD (ptin))
             continue;
           transform_OCS_2d (&pt, ptin, pline->extrusion);
-          // TODO bulge -> arc, widths
-          printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
+          // TODO widths
+          path_segment (prev, pt, bulges ? bulges[prev_j] : 0.0, mirrored);
+          prev = pt;
+          prev_j = j;
         }
       if (pline->flag & 1) // closed
-        printf (" Z");
+        {
+          // the closing segment has the bulge of the last vertex
+          if (bulges)
+            path_segment (prev, first, bulges[prev_j], mirrored);
+          printf (" Z");
+        }
       printf ("\"\n\t");
       common_entity (obj->tio.entity);
+      free (bulges);
       free (pts);
     }
 }
@@ -634,11 +672,18 @@ output_LWPOLYLINE (Dwg_Object *obj)
       dwg_point_2d *pts = dwg_ent_lwpline_get_points (pline, &error);
       BITCODE_RL j;
 
+      BITCODE_2DPOINT first, prev;
+      BITCODE_RL prev_j = 0;
+      const int has_bulges
+          = pline->bulges && pline->num_bulges == pline->num_points;
+      const int mirrored = transform_OCS_2d_is_mirrored (pline->extrusion);
+
       if (error || isnan_2pt (pts[0]) || isnan_3BD (pline->extrusion))
         return;
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
       transform_OCS_2d (&pt, ptin, pline->extrusion);
+      first = prev = pt;
       printf ("\t<!-- lwpolyline-%d -->\n", obj->index);
       printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
               transform_X (pt.x), transform_Y (pt.y));
@@ -650,11 +695,19 @@ output_LWPOLYLINE (Dwg_Object *obj)
           if (isnan_2BD (ptin))
             continue;
           transform_OCS_2d (&pt, ptin, pline->extrusion);
-          // TODO bulge -> arc, widths
-          printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
+          // TODO widths
+          path_segment (prev, pt, has_bulges ? pline->bulges[prev_j] : 0.0,
+                        mirrored);
+          prev = pt;
+          prev_j = j;
         }
       if (pline->flag & 512) // closed
-        printf (" Z");
+        {
+          // the closing segment has the bulge of the last vertex
+          if (has_bulges)
+            path_segment (prev, first, pline->bulges[prev_j], mirrored);
+          printf (" Z");
+        }
       printf ("\"\n\t");
       common_entity (obj->tio.entity);
       free (pts);

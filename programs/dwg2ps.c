@@ -98,6 +98,32 @@ set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
   return ret;
 }
 
+// Draw the segment from prev to pt, both already OCS-transformed: an arc
+// for a bulged segment, else a line.
+static void
+ps_segment (PSDoc *ps, BITCODE_2DPOINT prev, BITCODE_2DPOINT pt, double bulge,
+            int mirrored)
+{
+  BITCODE_2BD ctr;
+  double radius, start_angle, sweep;
+
+  if (mirrored)
+    bulge = -bulge;
+  if (bulge_to_arc (prev, pt, bulge, &ctr, &radius, &start_angle, &sweep))
+    {
+      const double a = start_angle * 180.0 / M_PI;
+      const double b = (start_angle + sweep) * 180.0 / M_PI;
+      if (sweep > 0.0)
+        PS_arc (ps, (float)ctr.x, (float)ctr.y, (float)radius, (float)a,
+                (float)b);
+      else
+        PS_arcn (ps, (float)ctr.x, (float)ctr.y, (float)radius, (float)a,
+                 (float)b);
+    }
+  else
+    PS_lineto (ps, (float)pt.x, (float)pt.y);
+}
+
 static void
 create_postscript (Dwg_Data *dwg, char *output)
 {
@@ -188,10 +214,14 @@ create_postscript (Dwg_Data *dwg, char *output)
           Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
           if (numpts && !error)
             {
-              BITCODE_2DPOINT pt0, ptin;
+              BITCODE_2DPOINT pt0, prev, ptin;
+              double *bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
+              const int mirrored
+                  = transform_OCS_2d_is_mirrored (pline->extrusion);
               ptin.x = pts[0].x;
               ptin.y = pts[0].y;
               transform_OCS_2d (&pt0, ptin, pline->extrusion);
+              prev = pt0;
               PS_moveto (ps, (float)pt0.x, (float)pt0.y);
               for (j = 1; j < numpts; j++)
                 {
@@ -199,14 +229,18 @@ create_postscript (Dwg_Data *dwg, char *output)
                   ptin.x = pts[j].x;
                   ptin.y = pts[j].y;
                   transform_OCS_2d (&pt, ptin, pline->extrusion);
-                  PS_lineto (ps, (float)pt.x, (float)pt.y);
+                  ps_segment (ps, prev, pt, bulges ? bulges[j - 1] : 0.0,
+                              mirrored);
                   PS_stroke (ps);
+                  prev = pt;
                 }
               if (pline->flag & 1) // closed
                 {
-                  PS_lineto (ps, (float)pt0.x, (float)pt0.y);
+                  ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0,
+                              mirrored);
                   PS_stroke (ps);
                 }
+              free (bulges);
               free (pts);
             }
         }
@@ -217,12 +251,17 @@ create_postscript (Dwg_Data *dwg, char *output)
           BITCODE_RL numpts = dwg_ent_lwpline_get_numpoints (pline, &error);
           if (numpts && !error)
             {
-              BITCODE_2DPOINT pt0, ptin;
+              BITCODE_2DPOINT pt0, prev, ptin;
               dwg_point_2d *pts = dwg_ent_lwpline_get_points (pline, &error);
               BITCODE_RL j;
+              const double *bulges
+                  = pline->num_bulges == numpts ? pline->bulges : NULL;
+              const int mirrored
+                  = transform_OCS_2d_is_mirrored (pline->extrusion);
               ptin.x = pts[0].x;
               ptin.y = pts[0].y;
               transform_OCS_2d (&pt0, ptin, pline->extrusion);
+              prev = pt0;
               PS_moveto (ps, (float)pt0.x, (float)pt0.y);
               for (j = 1; j < numpts; j++)
                 {
@@ -230,12 +269,15 @@ create_postscript (Dwg_Data *dwg, char *output)
                   ptin.x = pts[j].x;
                   ptin.y = pts[j].y;
                   transform_OCS_2d (&pt, ptin, pline->extrusion);
-                  PS_lineto (ps, (float)pt.x, (float)pt.y);
+                  ps_segment (ps, prev, pt, bulges ? bulges[j - 1] : 0.0,
+                              mirrored);
                   PS_stroke (ps);
+                  prev = pt;
                 }
               if (pline->flag & 512) // closed
                 {
-                  PS_lineto (ps, (float)pt0.x, (float)pt0.y);
+                  ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0,
+                              mirrored);
                   PS_stroke (ps);
                 }
 
