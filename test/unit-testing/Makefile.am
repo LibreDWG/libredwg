@@ -387,6 +387,7 @@ endif
 check_minimal = \
 	bits_test$(EXEEXT) \
 	common_test$(EXEEXT) \
+	geom_test$(EXEEXT) \
 	hash_test$(EXEEXT) \
 	dynapi_test$(EXEEXT) \
 	dxf_test$(EXEEXT)

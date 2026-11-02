@@ -46,6 +46,12 @@ if(WIN32)
   set_tests_properties(common_test PROPERTIES FIXTURES_SETUP ${redwg}.dll)
 endif()
 
+add_executable(geom_test
+  geom_test.c
+  ../../src/logging.c
+  tests_common.h)
+add_test(geom_test ${TARGET_SYSTEM_EMULATOR} geom_test${CMAKE_EXECUTABLE_SUFFIX})
+
 add_executable(decode_test
   decode_test.c
   ../../src/dwg.c

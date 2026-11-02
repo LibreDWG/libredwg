@@ -1,5 +1,6 @@
 /bits_test
 /common_test
+/geom_test
 /decode_test
 /hash_test
 /dynapi_test
