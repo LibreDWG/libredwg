@@ -22494,7 +22494,8 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
                   else
                     *error = 1; // return not all vertices, but some
                 }
-              while ((vobj = dwg_next_object (vobj)) && vobj != vlast);
+              // vlast is the last vertex, not one past it
+              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
             }
         }
       else // <r13: iterate over vertices until seqend
@@ -22589,7 +22590,8 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
                       *error = 1; // return not all vertices, but some
                     }
                 }
-              while ((vobj = dwg_next_object (vobj)) && vobj != vlast);
+              // vlast is the last vertex, not one past it
+              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
             }
         }
       else // <r13: iterate over vertices until seqend
@@ -22665,7 +22667,8 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
                       *error = 1; // return not all vertices, but some
                     }
                 }
-              while ((vobj = dwg_next_object (vobj)) && vobj != vlast);
+              // vlast is the last vertex, not one past it
+              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
             }
         }
       else // <r13: iterate over vertices until seqend
@@ -22765,7 +22768,8 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
                       *error = 1; // return not all vertices, but some
                     }
                 }
-              while ((vobj = dwg_next_object (vobj)) && vobj != vlast);
+              // vlast is the last vertex, not one past it
+              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
             }
         }
       else // <r13: iterate over vertices until seqend
