@@ -33,8 +33,9 @@ EXPORT void transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt,
 // transform a 3D point via its OCS (extrusion) to 2D
 EXPORT void transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt,
                            BITCODE_BE ext) __nonnull ((1));
+// true if transform_OCS_2d mirrors, which reverses the sense of arcs
+EXPORT int transform_OCS_2d_is_mirrored (BITCODE_BE ext);
 
-// TODO: bulge -> arc for svg and ps
 void angle_vector_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT ctr,
                       BITCODE_BD angle, BITCODE_BD len) __nonnull ((1));
 EXPORT void arc_split (BITCODE_2BD *pts, const int num_pts,
@@ -45,6 +46,18 @@ EXPORT void arc_split (BITCODE_2BD *pts, const int num_pts,
 // Normalize an angle to [0, 2*PI).  Handles inf, nan and denormals.
 double angle_normalize (double angle);
 
+// The arc of the polyline segment p1 -> p2 with bulge, tan(sweep / 4).
+// Returns 0 for a straight segment, else 1 with the center, radius,
+// start angle and signed sweep (positive is counter-clockwise).
+EXPORT int bulge_to_arc (const BITCODE_2BD p1, const BITCODE_2BD p2,
+                         const double bulge, BITCODE_2BD *center,
+                         double *radius, double *start_angle, double *sweep)
+    __nonnull ((4, 5, 6, 7));
+// Split a bulged polyline segment into num_pts points, from p1 up to but
+// excluding p2.  Returns the number of points written (1 if straight).
+EXPORT int bulge_split (BITCODE_2BD *pts, const int num_pts,
+                        const BITCODE_2BD p1, const BITCODE_2BD p2,
+                        const double bulge) __nonnull ((1));
 
 /* Fast V4 Spatial Geometry Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
  * Note: V4 refers to the Klein 4-group integer matrix over the S12 lattice,
