@@ -2242,6 +2242,38 @@ json_subclass_fixed_elems (const char *restrict name, const char *restrict key)
   return 0;
 }
 
+// MLINE.num_lines is the most lines of any vertex (RC, at most 255);
+// every vertex's lines are allocated at it. Grow the vertices read
+// so far, zero-filled, when a later vertex has more.
+static void
+json_mline_num_lines (const Dwg_Object *restrict obj, const int num_lines)
+{
+  Dwg_Entity_MLINE *o = obj->tio.entity->tio.MLINE;
+  const int new = num_lines > 255 ? 255 : num_lines;
+  int i;
+  if (!o || !num_lines || new <= o->num_lines)
+    return;
+  if (num_lines > 255)
+    LOG_WARN ("%s.num_lines %d > 255, truncated", obj->name, num_lines);
+  for (i = 0; i < o->num_verts; i++)
+    if (o->verts && o->verts[i].lines)
+      {
+        const int old = o->verts[i].num_lines;
+        Dwg_MLINE_line *nl;
+        if (old >= new)
+          continue;
+        nl = (Dwg_MLINE_line *)calloc (new, sizeof (Dwg_MLINE_line));
+        if (!nl)
+          continue;
+        memcpy (nl, o->verts[i].lines, old * sizeof (Dwg_MLINE_line));
+        free (o->verts[i].lines);
+        o->verts[i].lines = nl;
+        o->verts[i].num_lines = new;
+      }
+  o->num_lines = new;
+  LOG_TRACE ("MLINE.num_lines = %d\n", new);
+}
+
 // BLOCKLOOKUPACTION: the encoder walks exprs and lut numrows * numcols
 // times; a product above them is reset to 0, with an error
 static void
@@ -3178,11 +3210,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             json_blocklookupaction_check (fields, _obj, name, key, num_elems);
           json_set_numfield (_obj, fields, key, num_elems);
           if (strEQc (subclass, "MLINE_line") && num_elems)
-            {
-              Dwg_Entity_MLINE *o = obj->tio.entity->tio.MLINE;
-              o->num_lines = num_elems;
-              LOG_TRACE ("MLINE.num_lines = %d\n", num_elems);
-            }
+            json_mline_num_lines (obj, num_elems);
           // subclass arrays the specs walk a fixed number of times get
           // at least that many elements, zero-filled; empty stays NULL
           {

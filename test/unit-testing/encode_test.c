@@ -528,6 +528,70 @@ in_json_subclass_fixed_elems_test (void)
   ok ("in_json_subclass_fixed_elems: subclass arrays get the walked elems");
 }
 
+/* Regression test for GH #1487 (in_json MLINE lines): the spec sets
+   every vertex's num_lines to MLINE.num_lines and walks that many lines
+   on each vertex. in_json ended MLINE.num_lines at the last vertex's
+   count, while each vertex's lines were allocated at its own count, so
+   an earlier vertex with fewer lines left encode, out_dxf, out_json
+   and dwg_free to read past it. Now MLINE.num_lines is the most lines
+   of any vertex and the earlier vertices are grown, zero-filled. */
+static void
+in_json_mline_lines_test (void)
+{
+  const char *src =
+      "{\n"
+      " \"created_by\": \"libredwg test\",\n"
+      " \"OBJECTS\": [ { \"entity\": \"MLINE\", \"type\": 47,\n"
+      "   \"handle\": [0, 1, 1],\n"
+      "   \"verts\": [ { \"lines\": [ {}, {} ] },\n"
+      "                { \"lines\": [ {}, {}, {} ] } ] } ] }";
+  char *json = (char *)malloc (strlen (src) + 1);
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  int error;
+
+  if (!json)
+    {
+      fail ("in_json_mline_lines: malloc failed");
+      return;
+    }
+  strcpy (json, src);
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)json;
+  dat.size = strlen (json);
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("in_json_mline_lines: dwg_read_json failed 0x%x", error);
+      free (json);
+      return;
+    }
+  if (dwg.num_objects != 1)
+    fail ("in_json_mline_lines: num_objects %u != 1",
+          (unsigned)dwg.num_objects);
+  else
+    {
+      Dwg_Entity_MLINE *o = dwg.object[0].tio.entity->tio.MLINE;
+      // on master: MLINE.num_lines is the last vertex's count, and
+      // verts[0].lines has 2 elements only
+      if (o->num_lines != 3)
+        fail ("in_json_mline_lines: MLINE.num_lines %u != 3",
+              (unsigned)o->num_lines);
+      if (o->verts[0].num_lines != 3)
+        fail ("in_json_mline_lines: verts[0].num_lines %u != 3",
+              (unsigned)o->verts[0].num_lines);
+      if (o->verts[0].lines
+          && o->verts[0].lines[2].num_segparms != 0)
+        fail ("in_json_mline_lines: verts[0].lines[2] not zero-filled");
+    }
+  // on master: dwg_free walks 3 lines of the first vertex past its
+  // 2-element lines array
+  dwg_free (&dwg);
+  free (json);
+  ok ("in_json_mline_lines: every MLINE vertex gets num_lines lines");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -547,5 +611,6 @@ main (int argc, char const *argv[])
   in_json_section_counts_test ();
   in_json_object_counts_test ();
   in_json_subclass_fixed_elems_test ();
+  in_json_mline_lines_test ();
   return failed;
 }
