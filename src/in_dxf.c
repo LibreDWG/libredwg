@@ -8168,6 +8168,13 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       LOG_ERROR ("%s is no entity for a preview", obj->name);
       return pair;
     }
+  if (ent->preview_size)
+    {
+      // This would corrupt the previous preview chain, don't append
+      LOG_ERROR ("Skip duplicate %s.preview", obj->name);
+      dxf_free_pair (pair);
+      return dxf_read_pair (dat);
+    }
   ent->preview_size = pair->code == 160  ? pair->value.rll
                       : pair->code == 92 ? pair->value.u
                                          : 0;
@@ -8179,6 +8186,9 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (ent->preview_size >= MAX_SIZE_BUF || ent->preview_size > 0x1000000)
     {
       LOG_ERROR ("Invalid %s.preview_size", obj->name);
+      // reset the size it rejects, instead of keeping it with the old
+      // preview
+      ent->preview_size = 0;
       dxf_free_pair (pair);
       return NULL;
     }
@@ -8533,13 +8543,15 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   else if (pair->code == 73)
     {
-      if (o->num_lines)
+      // the count follows its array; the lines are allocated at it, so
+      // refuse a later 73
+      if (o->num_lines || (o->num_verts && o->verts[0].lines))
         {
           LOG_ERROR ("MLINE.num_lines already set");
           return 2;
         }
       o->num_lines = pair->value.i;
-      if (o->num_verts && !o->verts[0].lines)
+      if (o->num_lines && o->num_verts && !o->verts[0].lines)
         {
           for (int _j = 0; _j < o->num_verts; _j++)
             {
@@ -12357,6 +12369,21 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                          ARGS_REF (hdl));
               goto next_pair;
             }
+          else if (pair->code == 73 && obj->fixedtype == DWG_TYPE_LTYPE)
+            {
+              Dwg_Object_LTYPE *lt = obj->tio.object->tio.LTYPE;
+              // the count follows its array; the dashes are allocated
+              // at it, so ignore a later 73
+              if (lt->dashes || lt->numdashes)
+                {
+                  LOG_ERROR ("LTYPE.numdashes already set to %u",
+                             (unsigned)lt->numdashes);
+                  goto next_pair;
+                }
+              lt->numdashes = pair->value.i;
+              LOG_TRACE ("LTYPE.numdashes = %d [RC 73]\n", lt->numdashes);
+              goto next_pair;
+            }
           else if (pair->code == 49 && obj->fixedtype == DWG_TYPE_LTYPE)
             {
               pair = add_LTYPE_dashes (obj, dat, pair);
@@ -14030,6 +14057,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                         }
                       else
                         {
+                          if (is_entity && pair->code == 160)
+                            {
+                              // the size follows the preview; read the
+                              // size and the 310 data together
+                              pair = add_ent_preview (obj, dat, pair);
+                              goto start_loop; // already fresh pair
+                            }
                           // Don't write a ptr twice. This will fuckup the
                           // num_ counter. Just add to 310 preview, when
                           // prefixed by 92
@@ -14065,12 +14099,6 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           else
                             {
-                              if (is_entity && pair->code == 160
-                                  && dwg->header.from_version >= R_2010)
-                                {
-                                  pair = add_ent_preview (obj, dat, pair);
-                                  goto start_loop; // already fresh pair
-                                }
                               if (strchr (f->type, 'D'))
                                 LOG_TRACE ("COMMON.%s = %f [%s %d]\n", f->name,
                                            pair->value.d, f->type, pair->code);
