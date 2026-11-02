@@ -2312,7 +2312,8 @@ json_set_numfield (void *restrict _obj,
       char *p = (char *)_obj + f->offset;
       if (strEQc (f->name, "numdashes") || strEQc (f->name, "numitems")
           || strEQc (f->name, "data_numbits") || strEQc (f->name, "num_hdls")
-          || strEQc (f->name, "numelems"))
+          || strEQc (f->name, "numelems") || strEQc (f->name, "num_ents")
+          || strEQc (f->name, "num_segs_or_paths"))
         {
           switch (f->size)
             {
