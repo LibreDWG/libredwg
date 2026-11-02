@@ -5388,6 +5388,41 @@ DWG_ENTITY (POINTCLOUD)
         REPEAT (num_clippings, clippings, Dwg_POINTCLOUD_Clippings)
         REPEAT_BLOCK
           SUB_FIELD_B (clippings[rcount1], is_inverted, 0);
+          // a box or rect clipping has exactly 2 verts in the file; the
+          // decoder reads them without a count. The encoder, the dxf writer
+          // and the json writer write a non-polygon clipping with any other
+          // count as a polygon with that count, so the written file reads
+          // back as imported
+          ENCODER {
+            if (_obj->clippings[rcount1].type != 3
+                && _obj->clippings[rcount1].num_vertices != 2)
+              {
+                LOG_WARN ("POINTCLOUD: a clipping has " FORMAT_BL
+                          " verts, written as a polygon",
+                          _obj->clippings[rcount1].num_vertices);
+                _obj->clippings[rcount1].type = 3;
+              }
+          }
+          DXF {
+            if (_obj->clippings[rcount1].type != 3
+                && _obj->clippings[rcount1].num_vertices != 2)
+              {
+                LOG_WARN ("POINTCLOUD: a clipping has " FORMAT_BL
+                          " verts, written as a polygon",
+                          _obj->clippings[rcount1].num_vertices);
+                _obj->clippings[rcount1].type = 3;
+              }
+          }
+          JSON {
+            if (_obj->clippings[rcount1].type != 3
+                && _obj->clippings[rcount1].num_vertices != 2)
+              {
+                LOG_WARN ("POINTCLOUD: a clipping has " FORMAT_BL
+                          " verts, written as a polygon",
+                          _obj->clippings[rcount1].num_vertices);
+                _obj->clippings[rcount1].type = 3;
+              }
+          }
           SUB_FIELD_BS (clippings[rcount1], type, 0);
           if (_obj->clippings[rcount1].type == 3) // polygon
             {
