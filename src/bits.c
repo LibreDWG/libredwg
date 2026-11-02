@@ -2807,6 +2807,7 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
           char *u8 = bit_convert_TU ((BITCODE_TU)chain);
           bit_utf8_to_TV (dest, (unsigned char *)u8, 1024, strlen (u8), 0,
                           dat->codepage);
+          dest[1023] = '\0';
           length = strlen (dest);
           if (length)
             {
