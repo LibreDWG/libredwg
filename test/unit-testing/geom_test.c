@@ -44,8 +44,8 @@ bulge_to_arc_tests (void)
   // straight segments
   if (!bulge_to_arc (p1, p2, 0.0, &ctr, &r, &start, &sweep)
       && !bulge_to_arc (p1, p1, 1.0, &ctr, &r, &start, &sweep)
-      && !bulge_to_arc (p1, p2, NAN, &ctr, &r, &start, &sweep)
-      && !bulge_to_arc (p1, p2, INFINITY, &ctr, &r, &start, &sweep))
+      && !bulge_to_arc (p1, p2, (double)NAN, &ctr, &r, &start, &sweep)
+      && !bulge_to_arc (p1, p2, (double)INFINITY, &ctr, &r, &start, &sweep))
     ok ("bulge_to_arc straight segments");
   else
     fail ("straight segment taken as an arc");
