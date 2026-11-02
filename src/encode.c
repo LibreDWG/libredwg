@@ -3907,10 +3907,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               if (si + info->num_sections > dwg->header.num_sections)
                 {
                   Dwg_Section *oldsecs = dwg->header.section;
+                  const BITCODE_RL old_num = dwg->header.num_sections;
                   dwg->header.num_sections = si + info->num_sections;
                   dwg->header.section = (Dwg_Section *)realloc (
                       dwg->header.section,
                       dwg->header.num_sections * sizeof (Dwg_Section));
+                  // realloc leaves the new entries indeterminate, and
+                  // section_info_rebuild reads sec->type of every entry.
+                  memset (&dwg->header.section[old_num], 0,
+                          (dwg->header.num_sections - old_num)
+                              * sizeof (Dwg_Section));
                   if (dwg->header.section != oldsecs)
                     // need to rebuild all info->sections
                     section_info_rebuild (dwg, (Dwg_Section_Type)type);
@@ -3973,9 +3979,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if ((unsigned)si > dwg->header.num_sections) // needed?
         {
           Dwg_Section *oldsecs = dwg->header.section;
+          const BITCODE_RL old_num = dwg->header.num_sections;
           dwg->header.num_sections = si;
           dwg->header.section = (Dwg_Section *)realloc (
               dwg->header.section, si * sizeof (Dwg_Section));
+          memset (&dwg->header.section[old_num], 0,
+                  (si - old_num) * sizeof (Dwg_Section));
           if (dwg->header.section != oldsecs)
             section_info_rebuild (dwg, SECTION_SYSTEM_MAP);
         }
