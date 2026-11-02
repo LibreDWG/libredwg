@@ -2701,7 +2701,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               else if (strEQc (key, "data")
                        && (sf = find_field (fields, "data_numbits")))
                 {
-                  BITCODE_BL bits = blen * 8;
+                  BITCODE_BL bits = (BITCODE_BL)(blen * 8);
                   memcpy (&((char *)_obj)[sf->offset], &bits, sf->size);
                   LOG_TRACE ("%s = " FORMAT_BL "\n", sf->name, bits);
                 }
