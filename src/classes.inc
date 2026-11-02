@@ -42,6 +42,20 @@
 #  define WARN_UNHANDLED_CLASS
 #endif
 
+/* The class must name the object's own type: the action reads obj by
+   the struct of the class's type, while importers and the add API
+   allocate it by the object's name. decode sets the type right before. */
+#ifndef CLASS_NOT_OF_OBJECT
+#  define CLASS_NOT_OF_OBJECT return DWG_ERR_UNHANDLEDCLASS
+#endif
+#define CHECK_OBJECT_TYPE(_name) \
+  if (obj->fixedtype != DWG_TYPE_##_name) \
+    { \
+      LOG_ERROR ("Class %s is not of %s %u/" FORMAT_HV, #_name, \
+                 obj->name ? obj->name : "?", obj->index, obj->handle.value); \
+      CLASS_NOT_OF_OBJECT; \
+    }
+
 #define DISALLOW_DXF(action, _name) \
   (strEQc (_STR(action), "dxf")) ? DWG_ERR_NOTYETSUPPORTED :
 #define ALLOW_DXF(action, _name)
@@ -67,6 +81,7 @@
         obj->fixedtype = DWG_TYPE_##_name; \
         obj->klass = klass; \
       } \
+      CHECK_OBJECT_TYPE (_name) \
       return DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define STABLE_CLASS_DXF(action, _name, _dxfname) \
@@ -78,6 +93,7 @@
         obj->fixedtype = DWG_TYPE_##_name; \
         obj->klass = klass; \
       } \
+      CHECK_OBJECT_TYPE (_name) \
       return DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define STABLE_CLASS_CPP(action, _name, _cppname) \
@@ -89,6 +105,7 @@
         obj->fixedtype = DWG_TYPE_##_name; \
         obj->klass = klass; \
       } \
+      CHECK_OBJECT_TYPE (_name) \
       return DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define UNSTABLE_CLASS(action, _name) \
@@ -101,6 +118,7 @@
         obj->fixedtype = DWG_TYPE_##_name; \
         obj->klass = klass; \
       } \
+      CHECK_OBJECT_TYPE (_name) \
       return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define UNSTABLE_CLASS_DXF(action, _name, _dxfname) \
@@ -113,6 +131,7 @@
         obj->fixedtype = DWG_TYPE_##_name; \
         obj->klass = klass; \
       } \
+      CHECK_OBJECT_TYPE (_name) \
       return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define UNSTABLE_CLASS_CPP(action, _name, _cppname) \
@@ -125,6 +144,7 @@
         obj->fixedtype = DWG_TYPE_##_name; \
         obj->klass = klass; \
       } \
+      CHECK_OBJECT_TYPE (_name) \
       return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
 #define UNHANDLED_CLASS(action, _name) \
