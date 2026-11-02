@@ -2313,7 +2313,7 @@ json_blocklookupaction_check (const Dwg_DYNAPI_field *restrict fields,
 static void
 json_set_numfield (void *restrict _obj,
                    const Dwg_DYNAPI_field *restrict fields,
-                   const char *restrict key, const long size)
+                   const char *restrict key, long size)
 {
   const Dwg_DYNAPI_field *f = find_numfield (fields, key);
   if (f)
@@ -2703,7 +2703,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   BITCODE_BL bits = blen * 8;
                   memcpy (&((char *)_obj)[sf->offset], &bits, sf->size);
-                  LOG_TRACE ("%s.%s = " FORMAT_BL "\n", sf->name, bits);
+                  LOG_TRACE ("%s = " FORMAT_BL "\n", sf->name, bits);
                 }
               else
                 json_set_sizefield (_obj, fields, key, blen);
@@ -5708,7 +5708,7 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   int error = 0;
   int size;
-  int seglen = 0;
+  BITCODE_RL seglen = 0;
   if (t->type != JSMN_OBJECT)
     {
       LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
