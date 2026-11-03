@@ -1483,6 +1483,338 @@ test_mlinestyle_obj_realloc (void)
 }
 
 #ifndef DISABLE_DXF
+// A DXF import keeps its T strings as read (TV) in every version, as
+// dwg_add_u8_input, the dynapi getters and the readers (IS_FROM_TU with
+// DWG_OPTS_IN) take them. dynapi stored those set after the header of an
+// r2007+ DXF (table names, most entity strings) as UTF-16 by the target
+// version, so a lookup by name matched nothing and the writers, which read
+// an import's strings as TV, wrote each of them as its first character.
+// Import an r2018 DXF with non-ASCII strings, without and with an r2000
+// target hint (dxfwrite --as, dxf2dwg), check the strings, a table lookup
+// and the LTYPE strings area, and write it back as DXF and JSON through a
+// caller's own chain.
+#  define U8_USER "rurban" // the summary strings are stored as codepage TV
+#  define U8_LAYER "Ebene_\xc3\xa4"
+#  define U8_MTEXT1                                                           \
+    "Gr\xc3\xb6\xc3\x9f"                                                      \
+    "e und "
+#  define U8_MTEXT2 "Gewicht"
+#  define U8_EED                                                              \
+    "\xc3\x9c"                                                                \
+    "bermass"
+// an r2000 target holds them in its codepage, ANSI_1252
+#  define CP_LAYER "Ebene_\xe4"
+#  define CP_MTEXT                                                            \
+    "Gr\xf6\xdf"                                                              \
+    "e und " U8_MTEXT2
+static const char r2007_strings_header[]
+    = "  0\nSECTION\n  2\nHEADER\n"
+      "  9\n$ACADVER\n  1\nAC1032\n"
+      "  9\n$DWGCODEPAGE\n  3\nANSI_1252\n"
+      "  9\n$LASTSAVEDBY\n  1\n" U8_USER "\n"
+      "  9\n$DIMPOST\n  1\n<> mm\n"
+      "  0\nENDSEC\n"
+      "  0\nSECTION\n  2\nTABLES\n"
+      "  0\nTABLE\n  2\nAPPID\n  5\n9\n 70\n1\n"
+      "  0\nAPPID\n  5\n12\n100\nAcDbSymbolTableRecord\n"
+      "100\nAcDbRegAppTableRecord\n  2\nACAD\n 70\n0\n"
+      "  0\nENDTAB\n";
+// a text dash: only for the import without hint, see below
+static const char r2007_strings_ltype[]
+    = "  0\nTABLE\n  2\nLTYPE\n  5\n5\n 70\n1\n"
+      "  0\nLTYPE\n  5\n14\n100\nAcDbSymbolTableRecord\n"
+      "100\nAcDbLinetypeTableRecord\n  2\nGAS\n 70\n0\n  3\nGas -GAS-\n"
+      " 72\n65\n 73\n2\n 40\n1.0\n"
+      " 49\n0.5\n 74\n2\n 75\n0\n 46\n0.1\n 50\n0.0\n 44\n0.0\n 45\n0.0\n"
+      "  9\nGAS\n"
+      " 49\n-0.5\n 74\n0\n"
+      "  0\nENDTAB\n";
+static const char r2007_strings_rest[]
+    = "  0\nTABLE\n  2\nLAYER\n  5\n2\n 70\n2\n"
+      "  0\nLAYER\n  5\n10\n100\nAcDbSymbolTableRecord\n"
+      "100\nAcDbLayerTableRecord\n  2\n0\n 70\n0\n 62\n7\n"
+      "  0\nLAYER\n  5\n11\n100\nAcDbSymbolTableRecord\n"
+      "100\nAcDbLayerTableRecord\n  2\n" U8_LAYER "\n 70\n0\n 62\n1\n"
+      "1001\nACAD\n1000\n" U8_EED "\n"
+      "  0\nENDTAB\n  0\nENDSEC\n"
+      "  0\nSECTION\n  2\nENTITIES\n"
+      "  0\nMTEXT\n  5\n100\n100\nAcDbEntity\n  8\n" U8_LAYER "\n"
+      "100\nAcDbMText\n 10\n0.0\n 20\n0.0\n 30\n0.0\n 40\n1.0\n"
+      "  3\n" U8_MTEXT1 "\n  1\n" U8_MTEXT2 "\n"
+      "  0\nENDSEC\n  0\nEOF\n";
+
+// the whole file, NUL-terminated, or NULL
+static char *
+read_whole_file (const char *file)
+{
+  char *buf = NULL;
+  long size = 0;
+  FILE *fp = fopen (file, "rb");
+  if (!fp)
+    return NULL;
+  if (!fseek (fp, 0, SEEK_END))
+    size = ftell (fp);
+  if (size > 0 && !fseek (fp, 0, SEEK_SET))
+    buf = (char *)calloc ((size_t)size + 1, 1);
+  if (buf && fread (buf, 1, (size_t)size, fp) != (size_t)size)
+    *buf = '\0';
+  fclose (fp);
+  return buf;
+}
+
+// dwg_read_dxf of the test DXF into dwg; the input to free after dwg_free
+static char *
+read_r2007_strings (Dwg_Data *dwg, Dwg_Version_Type hint, int with_ltype)
+{
+  const unsigned int lvl = loglevel;
+  Bit_Chain dat = { 0 };
+  int error;
+  char *buf = (char *)malloc (sizeof (r2007_strings_header)
+                              + sizeof (r2007_strings_ltype)
+                              + sizeof (r2007_strings_rest));
+  if (!buf)
+    return NULL;
+  strcpy (buf, r2007_strings_header);
+  if (with_ltype)
+    strcat (buf, r2007_strings_ltype);
+  strcat (buf, r2007_strings_rest);
+  memset (dwg, 0, sizeof (Dwg_Data));
+  dwg->header.version = hint;
+  dat.chain = (unsigned char *)buf;
+  dat.size = strlen (buf);
+  error = dwg_read_dxf (&dat, dwg);
+  loglevel = lvl; // dwg_read_dxf set it from dwg->opts
+  if (error < DWG_ERR_CRITICAL)
+    return buf;
+  fail ("dxf_r2007_strings: dwg_read_dxf failed with 0x%x", error);
+  dwg_free (dwg);
+  free (buf);
+  return NULL;
+}
+
+static Dwg_Entity_MTEXT *
+first_mtext (const Dwg_Data *dwg)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    if (dwg->object[i].fixedtype == DWG_TYPE_MTEXT)
+      return dwg->object[i].tio.entity->tio.MTEXT;
+  return NULL;
+}
+
+static void
+check_r2007_header_strings (const Dwg_Data *dwg, const char *hint)
+{
+  const char *dimpost = dwg->header_vars.DIMPOST;
+  const char *user = dwg->summaryinfo.LASTSAVEDBY;
+  if (dimpost && !strcmp (dimpost, "<> mm"))
+    ok ("dxf_r2007_strings (%s): HEADER.DIMPOST kept as read", hint);
+  else
+    fail ("dxf_r2007_strings (%s): HEADER.DIMPOST not kept as read", hint);
+  if (user && !strcmp (user, U8_USER))
+    ok ("dxf_r2007_strings (%s): SUMMARY.LASTSAVEDBY TV", hint);
+  else
+    fail ("dxf_r2007_strings (%s): SUMMARY.LASTSAVEDBY not TV", hint);
+}
+
+static void
+check_r2007_strings_read (Dwg_Data *dwg, const char *hint)
+{
+  const unsigned int lvl = loglevel;
+  const Dwg_Entity_MTEXT *mtext = first_mtext (dwg);
+  const char *text = mtext ? mtext->text : NULL;
+  const int cp = dwg->header.version < R_2007;
+  // dwg_find_tablehandle sets loglevel from dwg->opts
+  const int found
+      = dwg_find_tablehandle (dwg, cp ? CP_LAYER : U8_LAYER, "LAYER") != NULL;
+  loglevel = lvl;
+
+  check_r2007_header_strings (dwg, hint);
+  if (text && !strcmp (text, cp ? CP_MTEXT : U8_MTEXT1 U8_MTEXT2))
+    ok ("dxf_r2007_strings (%s): MTEXT.text kept", hint);
+  else
+    fail ("dxf_r2007_strings (%s): MTEXT.text %s", hint, text ? text : "NULL");
+  if (found)
+    ok ("dxf_r2007_strings (%s): LAYER found by name", hint);
+  else
+    fail ("dxf_r2007_strings (%s): LAYER not found by name", hint);
+}
+
+static Dwg_Object_LTYPE *
+ltype_named (const Dwg_Data *dwg, const char *name)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      const Dwg_Object *obj = &dwg->object[i];
+      if (obj->fixedtype == DWG_TYPE_LTYPE && obj->tio.object->tio.LTYPE->name
+          && !strcmp (obj->tio.object->tio.LTYPE->name, name))
+        return obj->tio.object->tio.LTYPE;
+    }
+  return NULL;
+}
+
+// the r2018 strings area holds the dash text in UTF-16
+static int
+strings_area_is_gas (const Dwg_Object_LTYPE *ltype)
+{
+  uint16_t area[4] = { 0 };
+  if (!ltype || !ltype->strings_area)
+    return 0;
+  memcpy (area, ltype->strings_area, sizeof (area));
+  return area[0] == 'G' && area[1] == 'A' && area[2] == 'S' && area[3] == 0;
+}
+
+// the text as read, the strings area in UTF-16
+static void
+check_r2007_ltype (const Dwg_Data *dwg, const char *hint)
+{
+  const Dwg_Object_LTYPE *ltype = ltype_named (dwg, "GAS");
+  const char *text = ltype && ltype->numdashes == 2 && ltype->dashes
+                         ? ltype->dashes[0].text
+                         : NULL;
+  const int area_ok = strings_area_is_gas (ltype);
+  if (text && !strcmp (text, "GAS") && area_ok)
+    ok ("dxf_r2007_strings (%s): LTYPE text and strings_area", hint);
+  else
+    fail ("dxf_r2007_strings (%s): LTYPE GAS %s, text %s, strings_area %s",
+          hint, ltype ? "found" : "missing", text ? text : "NULL",
+          area_ok ? "GAS" : "not GAS");
+}
+
+static const char *
+r2007_strings_file (const Dwg_Data *dwg, int json)
+{
+  if (dwg->header.version < R_2007)
+    return json ? "dxf_r2007_strings_r2000.json"
+                : "dxf_r2007_strings_r2000.dxf";
+  return json ? "dxf_r2007_strings.json" : "dxf_r2007_strings.dxf";
+}
+
+// write it as the caller's chain says, and read it back
+static char *
+write_r2007_strings (Dwg_Data *dwg, Bit_Chain *out, const char *file, int json)
+{
+  const unsigned int lvl = loglevel;
+  int error;
+  out->fh = fopen (file, "wb");
+  if (!out->fh)
+    return NULL;
+#  ifndef DISABLE_JSON
+  if (json)
+    error = dwg_write_json (out, dwg);
+  else
+#  endif
+    error = dwg_write_dxf (out, dwg);
+  loglevel = lvl; // the writers set it from dwg->opts
+  fclose (out->fh);
+  free (out->chain);
+  out->chain = NULL;
+  if (error >= DWG_ERR_CRITICAL)
+    return NULL;
+  return read_whole_file (file);
+}
+
+// the expected strings found in what was written
+static void
+check_r2007_written (const char *what, const char *hint, const char *written,
+                     const char *const *expect, int n)
+{
+  int k = 0;
+  if (written)
+    for (; k < n; k++)
+      if (!strstr (written, expect[k]))
+        break;
+  if (written && k == n)
+    ok ("dxf_r2007_strings (%s): %s wrote them back", hint, what);
+  else if (written)
+    fail ("dxf_r2007_strings (%s): %s did not write back %s", hint, what,
+          expect[k]);
+  else
+    fail ("dxf_r2007_strings (%s): %s failed", hint, what);
+}
+
+// dwg_write_dxf through a fresh chain, as dxfwrite calls it
+static void
+check_r2007_dxf_out (Dwg_Data *dwg, const char *hint)
+{
+  // not the MTEXT: without a block record it is not written
+  const char *const expect[] = { "\n<> mm\r\n", "\n" U8_USER "\r\n",
+                                 "\n" U8_LAYER "\r\n", "\n" U8_EED "\r\n" };
+  // an r2000 DXF holds the codepage, not UTF-8: only its ASCII string
+  const int n = dwg->header.version < R_2007 ? 1 : 4;
+  Bit_Chain out = { 0 };
+  char *written;
+  out.version = dwg->header.version;
+  written = write_r2007_strings (dwg, &out, r2007_strings_file (dwg, 0), 0);
+  check_r2007_written ("dwg_write_dxf", hint, written, expect, n);
+  free (written);
+}
+
+#  ifndef DISABLE_JSON
+// dwg_write_json through a chain that names the source version
+static void
+check_r2007_json_out (Dwg_Data *dwg, const char *hint)
+{
+  // ASCII only: out_json takes TV as codepage, an r2007+ DXF's is UTF-8
+  const char *const expect[] = { "\"<> mm\"", "\"name\": \"ACAD\"" };
+  const int n = 2;
+  Bit_Chain out = { 0 };
+  char *written;
+  out.version = dwg->header.version;
+  out.from_version = dwg->header.from_version;
+  written = write_r2007_strings (dwg, &out, r2007_strings_file (dwg, 1), 1);
+  check_r2007_written ("dwg_write_json", hint, written, expect, n);
+  free (written);
+}
+#  endif
+
+static int
+test_dxf_r2007_strings (void)
+{
+  const Dwg_Version_Type hints[] = { R_INVALID, R_2000 };
+  const unsigned int lvl = loglevel;
+
+  failed = 0;
+  for (size_t h = 0; h < ARRAY_SIZE (hints); h++)
+    {
+      Dwg_Data dwg;
+      // An r2000 target converts an r2007+ strings area on every write and
+      // free (dwg_convert_LTYPE_strings_area), so leave the text dash to
+      // the import without hint, which keeps the r2018 layout.
+      const int with_ltype = hints[h] == R_INVALID;
+      const char *hint = h ? "r2000 hint" : "no hint";
+      char *buf = read_r2007_strings (&dwg, hints[h], with_ltype);
+      if (!buf)
+        continue;
+      check_r2007_strings_read (&dwg, hint);
+      if (with_ltype)
+        check_r2007_ltype (&dwg, hint);
+      check_r2007_dxf_out (&dwg, hint);
+#  ifndef DISABLE_JSON
+      check_r2007_json_out (&dwg, hint);
+#  endif
+      dwg_free (&dwg);
+      loglevel = lvl; // dwg_free set it from dwg.opts
+      free (buf);
+    }
+  if (!numfailed () && (!debug || debug != -1))
+    {
+      unlink ("dxf_r2007_strings.dxf");
+      unlink ("dxf_r2007_strings.json");
+      unlink ("dxf_r2007_strings_r2000.dxf");
+      unlink ("dxf_r2007_strings_r2000.json");
+    }
+  return numfailed ();
+}
+#  undef U8_USER
+#  undef U8_LAYER
+#  undef U8_MTEXT1
+#  undef U8_MTEXT2
+#  undef U8_EED
+#  undef CP_LAYER
+#  undef CP_MTEXT
+#endif
+
+#ifndef DISABLE_DXF
 // GHSA-qcxp-m6vj-h5h8: importing a pre-R2004 DXF VIEWPORT entity makes
 // new_object() call dwg_add_VX() to create its VX_TABLE_RECORD. That may
 // grow and realloc dwg->object[], but new_object() kept dereferencing (and
@@ -2385,6 +2717,9 @@ main (int argc, char *argv[])
 #endif
   error += test_names ();
   error += test_api_version ();
+#ifndef DISABLE_DXF
+  error += test_dxf_r2007_strings ();
+#endif
 
 #ifndef DISABLE_DXF
   for (; dxf < 2; dxf++)
