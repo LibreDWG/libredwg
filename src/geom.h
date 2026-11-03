@@ -25,6 +25,12 @@
 #  define M_PI 3.14159265358979323846264338327950288
 #endif
 
+// avoid double linkage on windows with unit-testing
+#ifdef GEOM_TEST_C
+#  undef EXPORT
+#  define EXPORT
+#endif
+
 // void normalize (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt);
 // void cross (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt1, BITCODE_3DPOINT pt2);
 //  transform a 2D point via its OCS (extrusion) to 2D
