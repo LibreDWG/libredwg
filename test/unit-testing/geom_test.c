@@ -131,6 +131,90 @@ ocs_mirrored_tests (void)
     fail ("transform_OCS_2d_is_mirrored");
 }
 
+// spline_eval of spline at t must give (x,y)
+static void
+check_spline_point (const char *name, const Dwg_Entity_SPLINE *spline,
+                    const double t, const double x, const double y)
+{
+  BITCODE_3DPOINT pt = { 0.0, 0.0, 0.0 };
+  if (spline_eval (&pt, spline, t) && NEAR (pt.x, x) && NEAR (pt.y, y)
+      && NEAR (pt.z, 0.0))
+    ok ("spline_eval %s", name);
+  else
+    fail ("spline_eval %s: (%g,%g,%g), expected (%g,%g)", name, pt.x, pt.y,
+          pt.z, x, y);
+}
+
+static void
+spline_eval_tests (void)
+{
+  // the DWG stores w = 0 for a non-rational spline
+  Dwg_SPLINE_control_point bez[4] = { { NULL, 0.0, 0.0, 0.0, 0.0 },
+                                      { NULL, 0.0, 4.0, 0.0, 0.0 },
+                                      { NULL, 4.0, 4.0, 0.0, 0.0 },
+                                      { NULL, 4.0, 0.0, 0.0, 0.0 } };
+  double bez_knots[8] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+  Dwg_SPLINE_control_point five[5] = { { NULL, 0.0, 0.0, 0.0, 0.0 },
+                                       { NULL, 0.0, 4.0, 0.0, 0.0 },
+                                       { NULL, 4.0, 4.0, 0.0, 0.0 },
+                                       { NULL, 8.0, 4.0, 0.0, 0.0 },
+                                       { NULL, 8.0, 0.0, 0.0, 0.0 } };
+  double five_knots[9] = { 0, 0, 0, 0, 1, 2, 2, 2, 2 };
+  // a quadratic NURBS quarter of the unit circle
+  Dwg_SPLINE_control_point arc[3] = { { NULL, 1.0, 0.0, 0.0, 1.0 },
+                                      { NULL, 1.0, 1.0, 0.0, M_SQRT1_2 },
+                                      { NULL, 0.0, 1.0, 0.0, 1.0 } };
+  double arc_knots[6] = { 0, 0, 0, 1, 1, 1 };
+  double bad_knots[9] = { 0, 0, 0, 0, 2, 1, 2, 2, 2 };
+  Dwg_Entity_SPLINE spline;
+  BITCODE_3DPOINT pt;
+
+  memset (&spline, 0, sizeof (spline));
+  spline.degree = 3;
+  spline.num_ctrl_pts = 4;
+  spline.ctrl_pts = bez;
+  spline.num_knots = 8;
+  spline.knots = bez_knots;
+  // a clamped cubic with 4 control points is one Bezier: de Casteljau
+  check_spline_point ("bezier t=1/2", &spline, 0.5, 2.0, 3.0);
+  check_spline_point ("bezier start", &spline, 0.0, 0.0, 0.0);
+  check_spline_point ("bezier end", &spline, 1.0, 4.0, 0.0);
+  check_spline_point ("bezier t clamped", &spline, 7.0, 4.0, 0.0);
+
+  spline.num_ctrl_pts = 5;
+  spline.ctrl_pts = five;
+  spline.num_knots = 9;
+  spline.knots = five_knots;
+  check_spline_point ("5 points t=1/2", &spline, 0.5, 1.25, 3.5);
+  check_spline_point ("5 points end", &spline, 2.0, 8.0, 0.0);
+
+  spline.degree = 2;
+  spline.rational = 1;
+  spline.num_ctrl_pts = 3;
+  spline.ctrl_pts = arc;
+  spline.num_knots = 6;
+  spline.knots = arc_knots;
+  check_spline_point ("rational quarter circle", &spline, 0.5, M_SQRT1_2,
+                      M_SQRT1_2);
+
+  spline.degree = 3;
+  spline.rational = 0;
+  spline.num_ctrl_pts = 5;
+  spline.ctrl_pts = five;
+  spline.num_knots = 8; // must be 5 + 3 + 1
+  spline.knots = five_knots;
+  if (!spline_eval (&pt, &spline, 0.5))
+    ok ("spline_eval rejects a wrong num_knots");
+  else
+    fail ("spline_eval accepted a wrong num_knots");
+  spline.num_knots = 9;
+  spline.knots = bad_knots;
+  if (!spline_eval (&pt, &spline, 0.5))
+    ok ("spline_eval rejects decreasing knots");
+  else
+    fail ("spline_eval accepted decreasing knots");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -139,5 +223,6 @@ main (int argc, char const *argv[])
   bulge_split_tests ();
   arc_split_tests ();
   ocs_mirrored_tests ();
+  spline_eval_tests ();
   return failed;
 }

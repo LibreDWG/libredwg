@@ -65,6 +65,15 @@ EXPORT int bulge_split (BITCODE_2BD *pts, const int num_pts,
                         const BITCODE_2BD p1, const BITCODE_2BD p2,
                         const double bulge) __nonnull ((1));
 
+// The highest SPLINE degree the spline functions handle.
+#define SPLINE_MAX_DEGREE 15
+// True if the SPLINE has usable control points and knots.
+EXPORT int spline_is_valid (const Dwg_Entity_SPLINE *spline);
+// De Boor: the point of the SPLINE at parameter t, clamped to its range.
+// Returns 0 if the SPLINE is not valid.
+EXPORT int spline_eval (BITCODE_3DPOINT *out, const Dwg_Entity_SPLINE *spline,
+                        double t) __nonnull ((1, 2));
+
 /* Fast V4 Spatial Geometry Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
  * Note: V4 refers to the Klein 4-group integer matrix over the S12 lattice,
  * not some Version 4 or 4D vectors.
