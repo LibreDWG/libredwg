@@ -1,6 +1,42 @@
 #define DWG_TYPE DWG_TYPE_POLYLINE_2D
 #include "tests_common.c"
 
+// numpoints must count first_vertex .. last_vertex, both included
+static void
+check_vertex_chain (dwg_object *obj, BITCODE_H first_vertex,
+                    BITCODE_H last_vertex, BITCODE_BL numpoints)
+{
+  BITCODE_BL num_vertex = 0;
+  Dwg_Object *vobj = dwg_ref_object (obj->parent, first_vertex);
+  Dwg_Object *vlast = dwg_ref_object (obj->parent, last_vertex);
+  while (vobj)
+    {
+      if (vobj->fixedtype == DWG_TYPE_VERTEX_2D)
+        num_vertex++;
+      if (vobj == vlast)
+        break;
+      vobj = dwg_next_object (vobj);
+    }
+  if (numpoints == num_vertex)
+    ok ("polyline_2d_get_numpoints: %u", (unsigned)numpoints);
+  else
+    fail ("polyline_2d_get_numpoints: %u != %u vertices", (unsigned)numpoints,
+          (unsigned)num_vertex);
+}
+
+static void
+check_bulges (dwg_object *obj, BITCODE_BL numpoints)
+{
+  int error;
+  double *bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
+  if (!error)
+    for (BITCODE_BL i = 0; bulges && i < numpoints; i++)
+      ok ("POLYLINE_2D.bulges[%d]: %f", (int)i, bulges[i]);
+  else
+    fail ("POLYLINE_2D.bulges");
+  free (bulges);
+}
+
 void
 api_process (dwg_object *obj)
 {
@@ -46,35 +82,10 @@ api_process (dwg_object *obj)
     }
   if (version >= R_13b1 && version <= R_2000)
     {
-      Dwg_Object *vobj, *vlast;
-      BITCODE_BL num_vertex = 0;
       CHK_ENTITY_H (polyline_2d, POLYLINE_2D, first_vertex);
       CHK_ENTITY_H (polyline_2d, POLYLINE_2D, last_vertex);
-      // count first_vertex .. last_vertex, both included
-      vobj = dwg_ref_object (obj->parent, first_vertex);
-      vlast = dwg_ref_object (obj->parent, last_vertex);
-      while (vobj)
-        {
-          if (vobj->fixedtype == DWG_TYPE_VERTEX_2D)
-            num_vertex++;
-          if (vobj == vlast)
-            break;
-          vobj = dwg_next_object (vobj);
-        }
-      if (numpoints == num_vertex)
-        ok ("polyline_2d_get_numpoints: %u", (unsigned)numpoints);
-      else
-        fail ("polyline_2d_get_numpoints: %u != %u vertices",
-              (unsigned)numpoints, (unsigned)num_vertex);
+      check_vertex_chain (obj, first_vertex, last_vertex, numpoints);
     }
-  {
-    double *bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
-    if (!error)
-      for (BITCODE_BL i = 0; bulges && i < numpoints; i++)
-        ok ("POLYLINE_2D.bulges[%d]: %f", (int)i, bulges[i]);
-    else
-      fail ("POLYLINE_2D.bulges");
-    free (bulges);
-  }
+  check_bulges (obj, numpoints);
   CHK_ENTITY_H (polyline_2d, POLYLINE_2D, seqend);
 }
