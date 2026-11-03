@@ -22520,113 +22520,142 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
     }
 }
 
+// Add vobj to the POLYLINE_2D vertices, if it is a VERTEX_2D.  Returns 0
+// when the array is full.
+static int
+polyline_2d_add_vertex (Dwg_Entity_VERTEX_2D **restrict verts,
+                        BITCODE_BL *restrict i, const BITCODE_BL num_points,
+                        Dwg_Object *restrict vobj, int *restrict error)
+{
+  Dwg_Entity_VERTEX_2D *vertex = vobj->fixedtype == DWG_TYPE_VERTEX_2D
+                                     ? dwg_object_to_VERTEX_2D (vobj)
+                                     : NULL;
+  if (!vertex)
+    *error = 1; // return not all vertices, but some
+  else if (*i < num_points)
+    verts[(*i)++] = vertex;
+  else
+    {
+      *error = 1;
+      return 0;
+    }
+  return 1;
+}
+
+// R2004+: the vertex handles; a missing vertex stays NULL at its index
+static void
+polyline_2d_vertices_r2004 (Dwg_Data *restrict dwg,
+                            const Dwg_Entity_POLYLINE_2D *restrict _obj,
+                            Dwg_Entity_VERTEX_2D **restrict verts,
+                            const BITCODE_BL num_points, int *restrict error)
+{
+  BITCODE_BL i;
+  for (i = 0; i < num_points; i++)
+    {
+      Dwg_Object *vobj = dwg_ref_object (dwg, _obj->vertex[i]);
+      if (vobj && vobj->fixedtype == DWG_TYPE_VERTEX_2D)
+        verts[i] = dwg_object_to_VERTEX_2D (vobj);
+      if (!verts[i])
+        *error = 1; // return not all vertices, but some
+    }
+}
+
+// R13-R2000: iterate over first_vertex .. last_vertex, both included
+static void
+polyline_2d_vertices_r13 (Dwg_Data *restrict dwg,
+                          const Dwg_Entity_POLYLINE_2D *restrict _obj,
+                          Dwg_Entity_VERTEX_2D **restrict verts,
+                          const BITCODE_BL num_points, int *restrict error)
+{
+  BITCODE_BL i = 0;
+  Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
+  Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
+  if (!vobj)
+    *error = 1;
+  while (vobj && polyline_2d_add_vertex (verts, &i, num_points, vobj, error)
+         && vobj != vlast)
+    vobj = dwg_next_object (vobj);
+}
+
+// <R13: iterate over the vertices until the SEQEND
+static void
+polyline_2d_vertices_preR13 (const dwg_object *restrict obj,
+                             Dwg_Entity_VERTEX_2D **restrict verts,
+                             const BITCODE_BL num_points, int *restrict error)
+{
+  BITCODE_BL i = 0;
+  Dwg_Object *vobj = (Dwg_Object *)obj;
+  while ((vobj = dwg_next_object (vobj)) && vobj->fixedtype != DWG_TYPE_SEQEND)
+    if (!polyline_2d_add_vertex (verts, &i, num_points, vobj, error))
+      break;
+}
+
+// The VERTEX_2D entities of a POLYLINE_2D in order, as a malloc'ed array
+// of *num_p pointers.  Missing vertices are NULL, and set *error.
+static Dwg_Entity_VERTEX_2D **
+polyline_2d_vertices (const dwg_object *restrict obj,
+                      BITCODE_BL *restrict num_p, int *restrict error)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
+  Dwg_Entity_VERTEX_2D **verts;
+  const BITCODE_BL num_points
+      = dwg_object_polyline_2d_get_numpoints (obj, error);
+
+  *num_p = 0;
+  if (!num_points || *error)
+    return NULL;
+  verts = (Dwg_Entity_VERTEX_2D **)calloc (num_points,
+                                           sizeof (Dwg_Entity_VERTEX_2D *));
+  if (!verts)
+    {
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+      *error = 1;
+      return NULL;
+    }
+  if (dwg->header.version >= R_2004)
+    polyline_2d_vertices_r2004 (dwg, _obj, verts, num_points, error);
+  else if (dwg->header.version >= R_13b1)
+    polyline_2d_vertices_r13 (dwg, _obj, verts, num_points, error);
+  else
+    polyline_2d_vertices_preR13 (obj, verts, num_points, error);
+  *num_p = num_points;
+  return verts;
+}
+
 /** Returns a copy of the points
  */
 dwg_point_2d *
 dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
                                    int *restrict error)
 {
-  *error = 0;
-  if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_2D)
-    {
-      BITCODE_BL i;
-      Dwg_Data *dwg = obj->parent;
-      Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
-      BITCODE_BL num_points
-          = dwg_object_polyline_2d_get_numpoints (obj, error);
-      Dwg_Entity_VERTEX_2D *vertex = NULL;
-      dwg_point_2d *ptx;
+  BITCODE_BL i, num_points;
+  Dwg_Entity_VERTEX_2D **verts;
+  dwg_point_2d *ptx;
 
-      if (!num_points || *error)
-        return NULL;
-      ptx = (dwg_point_2d *)calloc (num_points, sizeof (dwg_point_2d));
-      if (!ptx)
-        {
-          LOG_ERROR ("%s: Out of memory", __FUNCTION__);
-          *error = 1;
-          return NULL;
-        }
-      if (dwg->header.version >= R_2004)
-        for (i = 0; i < num_points; i++)
-          {
-            Dwg_Object *vobj = dwg_ref_object (dwg, _obj->vertex[i]);
-            if (vobj && vobj->fixedtype == DWG_TYPE_VERTEX_2D
-                && (vertex = dwg_object_to_VERTEX_2D (vobj)))
-              {
-                ptx[i].x = vertex->point.x;
-                ptx[i].y = vertex->point.y;
-              }
-            else
-              {
-                *error = 1; // return not all vertices, but some
-              }
-          }
-      // iterate over first_vertex - last_vertex
-      else if (dwg->header.version >= R_13b1)
-        {
-          Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
-          Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
-          if (!vobj)
-            *error = 1;
-          else
-            {
-              i = 0;
-              do
-                {
-                  if (vobj->fixedtype == DWG_TYPE_VERTEX_2D
-                      && (vertex = dwg_object_to_VERTEX_2D (vobj)))
-                    {
-                      ptx[i].x = vertex->point.x;
-                      ptx[i].y = vertex->point.y;
-                      i++;
-                      if (i > num_points)
-                        {
-                          *error = 1;
-                          break;
-                        }
-                    }
-                  else
-                    {
-                      *error = 1; // return not all vertices, but some
-                    }
-                }
-              // vlast is the last vertex, not one past it
-              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
-            }
-        }
-      else // <r13: iterate over vertices until seqend
-        {
-          Dwg_Object *vobj = (Dwg_Object *)obj;
-          i = 0;
-          while ((vobj = dwg_next_object (vobj))
-                 && vobj->fixedtype != DWG_TYPE_SEQEND)
-            {
-              if (vobj->fixedtype == DWG_TYPE_VERTEX_2D
-                  && (vertex = dwg_object_to_VERTEX_2D (vobj)))
-                {
-                  ptx[i].x = vertex->point.x;
-                  ptx[i].y = vertex->point.y;
-                  i++;
-                  if (i > num_points)
-                    {
-                      *error = 1;
-                      break;
-                    }
-                }
-              else
-                {
-                  *error = 1; // return not all vertices, but some
-                }
-            }
-        }
-      return ptx;
-    }
-  else
+  *error = 0;
+  if (!obj || obj->fixedtype != DWG_TYPE_POLYLINE_2D)
     {
       LOG_ERROR ("%s: empty arg", __FUNCTION__);
       *error = 1;
       return NULL;
     }
+  verts = polyline_2d_vertices (obj, &num_points, error);
+  if (!verts)
+    return NULL;
+  ptx = (dwg_point_2d *)calloc (num_points, sizeof (dwg_point_2d));
+  if (!ptx)
+    LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+  for (i = 0; ptx && i < num_points; i++)
+    if (verts[i])
+      {
+        ptx[i].x = verts[i]->point.x;
+        ptx[i].y = verts[i]->point.y;
+      }
+  if (!ptx)
+    *error = 1;
+  free (verts);
+  return ptx;
 }
 
 /** Returns a copy of the bulges, one per vertex, in the order of
@@ -22638,93 +22667,30 @@ double *
 dwg_object_polyline_2d_get_bulges (const dwg_object *restrict obj,
                                    int *restrict error)
 {
-  *error = 0;
-  if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_2D)
-    {
-      BITCODE_BL i;
-      Dwg_Data *dwg = obj->parent;
-      Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
-      BITCODE_BL num_points
-          = dwg_object_polyline_2d_get_numpoints (obj, error);
-      Dwg_Entity_VERTEX_2D *vertex = NULL;
-      double *bulges;
+  BITCODE_BL i, num_points;
+  Dwg_Entity_VERTEX_2D **verts;
+  double *bulges;
 
-      if (!num_points || *error)
-        return NULL;
-      bulges = (double *)calloc (num_points, sizeof (double));
-      if (!bulges)
-        {
-          LOG_ERROR ("%s: Out of memory", __FUNCTION__);
-          *error = 1;
-          return NULL;
-        }
-      if (dwg->header.version >= R_2004)
-        for (i = 0; i < num_points; i++)
-          {
-            Dwg_Object *vobj = dwg_ref_object (dwg, _obj->vertex[i]);
-            if (vobj && vobj->fixedtype == DWG_TYPE_VERTEX_2D
-                && (vertex = dwg_object_to_VERTEX_2D (vobj)))
-              bulges[i] = vertex->bulge;
-            else
-              *error = 1; // return not all vertices, but some
-          }
-      // iterate over first_vertex - last_vertex
-      else if (dwg->header.version >= R_13b1)
-        {
-          Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
-          Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
-          if (!vobj)
-            *error = 1;
-          else
-            {
-              i = 0;
-              do
-                {
-                  if (vobj->fixedtype == DWG_TYPE_VERTEX_2D
-                      && (vertex = dwg_object_to_VERTEX_2D (vobj)))
-                    {
-                      if (i >= num_points)
-                        {
-                          *error = 1;
-                          break;
-                        }
-                      bulges[i++] = vertex->bulge;
-                    }
-                  else
-                    *error = 1; // return not all vertices, but some
-                }
-              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
-            }
-        }
-      else // <r13: iterate over vertices until seqend
-        {
-          Dwg_Object *vobj = (Dwg_Object *)obj;
-          i = 0;
-          while ((vobj = dwg_next_object (vobj))
-                 && vobj->fixedtype != DWG_TYPE_SEQEND)
-            {
-              if (vobj->fixedtype == DWG_TYPE_VERTEX_2D
-                  && (vertex = dwg_object_to_VERTEX_2D (vobj)))
-                {
-                  if (i >= num_points)
-                    {
-                      *error = 1;
-                      break;
-                    }
-                  bulges[i++] = vertex->bulge;
-                }
-              else
-                *error = 1; // return not all vertices, but some
-            }
-        }
-      return bulges;
-    }
-  else
+  *error = 0;
+  if (!obj || obj->fixedtype != DWG_TYPE_POLYLINE_2D)
     {
       LOG_ERROR ("%s: empty arg", __FUNCTION__);
       *error = 1;
       return NULL;
     }
+  verts = polyline_2d_vertices (obj, &num_points, error);
+  if (!verts)
+    return NULL;
+  bulges = (double *)calloc (num_points, sizeof (double));
+  if (!bulges)
+    LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+  for (i = 0; bulges && i < num_points; i++)
+    if (verts[i])
+      bulges[i] = verts[i]->bulge;
+  if (!bulges)
+    *error = 1;
+  free (verts);
+  return bulges;
 }
 
 /** Returns the number of _dwg_object:: POLYLINE_3D vertices,
