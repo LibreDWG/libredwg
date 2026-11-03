@@ -1284,6 +1284,24 @@ bit_write_TV_tests (void)
   bitfree (&bitchain);
 }
 
+// a TU source (an r2007+ DWG) for an r2007+ target, by its characters
+static void
+bit_write_T16_TU_tests (void)
+{
+  BITCODE_RS ab[3] = { 'A', 'B', 0 };
+  Bit_Chain bitchain;
+  bitprepare (&bitchain, 16);
+  bitchain.from_version = R_2010;
+  bitchain.version = R_2010; // TU "AB" as T16: RS 2, 2 * RS
+  bit_write_T16 (&bitchain, (char *)ab);
+  if (bitchain.byte == 6 && bitchain.chain[0] == 2 && bitchain.chain[2] == 'A'
+      && bitchain.chain[3] == 0 && bitchain.chain[4] == 'B')
+    ok ("bit_write_T16 TU for R_2010");
+  else
+    fail ("bit_write_T16 TU for R_2010 @%" PRIuSIZE, bitchain.byte);
+  bitfree (&bitchain);
+}
+
 static void
 bit_read_TF_tests (void)
 {
@@ -1735,6 +1753,7 @@ main (int argc, char const *argv[])
   bit_UMC_bug_tests ();
   bit_read_TV_tests ();
   bit_write_TV_tests ();
+  bit_write_T16_TU_tests ();
   bit_read_TF_tests ();
   bit_write_TF_tests ();
   bit_read_BE_tests ();
