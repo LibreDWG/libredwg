@@ -124,6 +124,36 @@ ps_segment (PSDoc *ps, BITCODE_2DPOINT prev, BITCODE_2DPOINT pt, double bulge,
     PS_lineto (ps, (float)pt.x, (float)pt.y);
 }
 
+// Draw the numpts OCS points of a polyline, with optional bulges, as one
+// path.  A stroke ends the path, so stroke only once at the end.
+static void
+ps_polyline (PSDoc *ps, const dwg_point_2d *pts, const double *bulges,
+             const BITCODE_RL numpts, const BITCODE_BE extrusion,
+             const int closed)
+{
+  BITCODE_2DPOINT pt0, prev, ptin;
+  BITCODE_RL j;
+  const int mirrored = transform_OCS_2d_is_mirrored (extrusion);
+
+  ptin.x = pts[0].x;
+  ptin.y = pts[0].y;
+  transform_OCS_2d (&pt0, ptin, extrusion);
+  prev = pt0;
+  PS_moveto (ps, (float)pt0.x, (float)pt0.y);
+  for (j = 1; j < numpts; j++)
+    {
+      BITCODE_2DPOINT pt;
+      ptin.x = pts[j].x;
+      ptin.y = pts[j].y;
+      transform_OCS_2d (&pt, ptin, extrusion);
+      ps_segment (ps, prev, pt, bulges ? bulges[j - 1] : 0.0, mirrored);
+      prev = pt;
+    }
+  if (closed)
+    ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0, mirrored);
+  PS_stroke (ps);
+}
+
 static void
 create_postscript (Dwg_Data *dwg, char *output)
 {
@@ -208,39 +238,18 @@ create_postscript (Dwg_Data *dwg, char *output)
       else if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
         {
           int error;
-          BITCODE_RL j,
-              numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
+          BITCODE_RL numpts
+              = dwg_object_polyline_2d_get_numpoints (obj, &error);
           dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
           Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
-          if (numpts && !error)
+          if (numpts && pts && !error)
             {
-              BITCODE_2DPOINT pt0, prev, ptin;
               double *bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
-              const int mirrored
-                  = transform_OCS_2d_is_mirrored (pline->extrusion);
-              ptin.x = pts[0].x;
-              ptin.y = pts[0].y;
-              transform_OCS_2d (&pt0, ptin, pline->extrusion);
-              prev = pt0;
-              PS_moveto (ps, (float)pt0.x, (float)pt0.y);
-              for (j = 1; j < numpts; j++)
-                {
-                  BITCODE_2DPOINT pt;
-                  ptin.x = pts[j].x;
-                  ptin.y = pts[j].y;
-                  transform_OCS_2d (&pt, ptin, pline->extrusion);
-                  ps_segment (ps, prev, pt, bulges ? bulges[j - 1] : 0.0,
-                              mirrored);
-                  prev = pt;
-                }
-              if (pline->flag & 1) // closed
-                ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0,
-                            mirrored);
-              // one path for the whole polyline: a stroke ends the path
-              PS_stroke (ps);
+              ps_polyline (ps, pts, bulges, numpts, pline->extrusion,
+                           pline->flag & 1);
               free (bulges);
-              free (pts);
             }
+          free (pts);
         }
       else if (obj->fixedtype == DWG_TYPE_LWPOLYLINE)
         {
@@ -249,34 +258,12 @@ create_postscript (Dwg_Data *dwg, char *output)
           BITCODE_RL numpts = dwg_ent_lwpline_get_numpoints (pline, &error);
           if (numpts && !error)
             {
-              BITCODE_2DPOINT pt0, prev, ptin;
               dwg_point_2d *pts = dwg_ent_lwpline_get_points (pline, &error);
-              BITCODE_RL j;
-              const double *bulges
-                  = pline->num_bulges == numpts ? pline->bulges : NULL;
-              const int mirrored
-                  = transform_OCS_2d_is_mirrored (pline->extrusion);
-              ptin.x = pts[0].x;
-              ptin.y = pts[0].y;
-              transform_OCS_2d (&pt0, ptin, pline->extrusion);
-              prev = pt0;
-              PS_moveto (ps, (float)pt0.x, (float)pt0.y);
-              for (j = 1; j < numpts; j++)
-                {
-                  BITCODE_2DPOINT pt;
-                  ptin.x = pts[j].x;
-                  ptin.y = pts[j].y;
-                  transform_OCS_2d (&pt, ptin, pline->extrusion);
-                  ps_segment (ps, prev, pt, bulges ? bulges[j - 1] : 0.0,
-                              mirrored);
-                  prev = pt;
-                }
-              if (pline->flag & 512) // closed
-                ps_segment (ps, prev, pt0, bulges ? bulges[numpts - 1] : 0.0,
-                            mirrored);
-              // one path for the whole polyline: a stroke ends the path
-              PS_stroke (ps);
-
+              if (pts && !error)
+                ps_polyline (ps, pts,
+                             pline->num_bulges == numpts ? pline->bulges
+                                                         : NULL,
+                             numpts, pline->extrusion, pline->flag & 512);
               free (pts);
             }
         }

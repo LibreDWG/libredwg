@@ -7,48 +7,74 @@
 
 #define NEAR(a, b) (fabs ((a) - (b)) < 1e-9)
 
+// bulge_to_arc must give an arc with this center, radius, start and sweep
+static void
+check_arc (const char *name, const BITCODE_2BD p1, const BITCODE_2BD p2,
+           const double bulge, const double cx, const double cy,
+           const double radius, const double start, const double sweep)
+{
+  BITCODE_2BD ctr = { 0.0, 0.0 };
+  double r = 0.0, a = 0.0, s = 0.0;
+  const int is_arc = bulge_to_arc (p1, p2, bulge, &ctr, &r, &a, &s);
+  if (is_arc && NEAR (ctr.x, cx) && NEAR (ctr.y, cy) && NEAR (r, radius)
+      && NEAR (a, start) && NEAR (s, sweep))
+    ok ("bulge_to_arc %s", name);
+  else
+    fail ("bulge_to_arc %s: ctr (%g,%g) r %g start %g sweep %g", name, ctr.x,
+          ctr.y, r, a, s);
+}
+
+// bulge_to_arc must take the segment as straight
+static void
+check_straight (const char *name, const BITCODE_2BD p1, const BITCODE_2BD p2,
+                const double bulge)
+{
+  BITCODE_2BD ctr;
+  double r, a, s;
+  if (!bulge_to_arc (p1, p2, bulge, &ctr, &r, &a, &s))
+    ok ("bulge_to_arc straight %s", name);
+  else
+    fail ("bulge_to_arc straight %s taken as an arc", name);
+}
+
 static void
 bulge_to_arc_tests (void)
 {
   const BITCODE_2BD p1 = { 0.0, 0.0 }, p2 = { 2.0, 0.0 };
   const BITCODE_2BD q1 = { 1.0, 0.0 }, q2 = { 0.0, 1.0 };
-  BITCODE_2BD ctr;
-  double r, start, sweep;
 
   // bulge 1: counter-clockwise semicircle below the chord
-  if (bulge_to_arc (p1, p2, 1.0, &ctr, &r, &start, &sweep) && NEAR (ctr.x, 1.0)
-      && NEAR (ctr.y, 0.0) && NEAR (r, 1.0) && NEAR (start, M_PI)
-      && NEAR (sweep, M_PI))
-    ok ("bulge_to_arc 1 semicircle");
-  else
-    fail ("bulge 1: ctr (%g,%g) r %g start %g sweep %g", ctr.x, ctr.y, r,
-          start, sweep);
-
+  check_arc ("1 semicircle", p1, p2, 1.0, 1.0, 0.0, 1.0, M_PI, M_PI);
   // bulge -1: the same circle, clockwise
-  if (bulge_to_arc (p1, p2, -1.0, &ctr, &r, &start, &sweep)
-      && NEAR (ctr.x, 1.0) && NEAR (ctr.y, 0.0) && NEAR (r, 1.0)
-      && NEAR (sweep, -M_PI))
-    ok ("bulge_to_arc -1 clockwise");
-  else
-    fail ("bulge -1: ctr (%g,%g) r %g sweep %g", ctr.x, ctr.y, r, sweep);
-
+  check_arc ("-1 clockwise", p1, p2, -1.0, 1.0, 0.0, 1.0, M_PI, -M_PI);
   // tan(PI/8): a counter-clockwise quarter of the unit circle
-  if (bulge_to_arc (q1, q2, tan (M_PI / 8.0), &ctr, &r, &start, &sweep)
-      && NEAR (ctr.x, 0.0) && NEAR (ctr.y, 0.0) && NEAR (r, 1.0)
-      && NEAR (start, 0.0) && NEAR (sweep, M_PI / 2.0))
-    ok ("bulge_to_arc quarter circle");
-  else
-    fail ("quarter: ctr (%g,%g) r %g start %g sweep %g", ctr.x, ctr.y, r,
-          start, sweep);
+  check_arc ("quarter circle", q1, q2, tan (M_PI / 8.0), 0.0, 0.0, 1.0, 0.0,
+             M_PI / 2.0);
+  check_straight ("bulge 0", p1, p2, 0.0);
+  check_straight ("coincident points", p1, p1, 1.0);
+  check_straight ("NAN", p1, p2, (double)NAN);
+  check_straight ("INFINITY", p1, p2, (double)INFINITY);
+}
 
-  // straight segments
-  if (!bulge_to_arc (p1, p2, 0.0, &ctr, &r, &start, &sweep)
-      && !bulge_to_arc (p1, p1, 1.0, &ctr, &r, &start, &sweep)
-      && !bulge_to_arc (p1, p2, (double)NAN, &ctr, &r, &start, &sweep)
-      && !bulge_to_arc (p1, p2, (double)INFINITY, &ctr, &r, &start, &sweep))
-    ok ("bulge_to_arc straight segments");
+// bulge_split of (0,0) -> (2,0) into 4 points must give n points, starting
+// at (0,0), on the unit circle around (1,0), with pts[2] at (x2,y2)
+static void
+check_split (const char *name, const double bulge, const int expect_n,
+             const double x2, const double y2)
+{
+  const BITCODE_2BD p1 = { 0.0, 0.0 }, p2 = { 2.0, 0.0 };
+  BITCODE_2BD pts[4] = { { 0.0, 0.0 } };
+  const int n = bulge_split (pts, 4, p1, p2, bulge);
+  int good = n == expect_n && pts[0].x == 0.0 && pts[0].y == 0.0;
+  int i;
+  for (i = 0; good && n > 1 && i < n; i++)
+    good = NEAR (hypot (pts[i].x - 1.0, pts[i].y), 1.0);
+  if (good && n > 2)
+    good = NEAR (pts[2].x, x2) && NEAR (pts[2].y, y2);
+  if (good)
+    ok ("bulge_split %s", name);
   else
-    fail ("straight segment taken as an arc");
+    fail ("bulge_split %s: n %d pts[2] (%g,%g)", name, n, pts[2].x, pts[2].y);
 }
 
 static void
@@ -56,34 +82,13 @@ bulge_split_tests (void)
 {
   const BITCODE_2BD p1 = { 0.0, 0.0 }, p2 = { 2.0, 0.0 };
   BITCODE_2BD pts[4];
-  int n, i, on_circle = 1;
 
-  // 4 points of the semicircle, p2 excluded: angles PI, 5PI/4, 3PI/2, 7PI/4
-  n = bulge_split (pts, 4, p1, p2, 1.0);
-  for (i = 0; i < n; i++)
-    if (!NEAR (hypot (pts[i].x - 1.0, pts[i].y), 1.0))
-      on_circle = 0;
-  if (n == 4 && pts[0].x == 0.0 && pts[0].y == 0.0 && NEAR (pts[2].x, 1.0)
-      && NEAR (pts[2].y, -1.0) && on_circle)
-    ok ("bulge_split semicircle");
-  else
-    fail ("bulge_split semicircle: n %d pts[2] (%g,%g)", n, pts[2].x,
-          pts[2].y);
-
+  // p2 excluded: angles PI, 5PI/4, 3PI/2, 7PI/4, below the chord
+  check_split ("semicircle", 1.0, 4, 1.0, -1.0);
   // clockwise passes above the chord
-  n = bulge_split (pts, 4, p1, p2, -1.0);
-  if (n == 4 && NEAR (pts[2].x, 1.0) && NEAR (pts[2].y, 1.0))
-    ok ("bulge_split clockwise");
-  else
-    fail ("bulge_split clockwise: n %d pts[2] (%g,%g)", n, pts[2].x, pts[2].y);
-
+  check_split ("clockwise", -1.0, 4, 1.0, 1.0);
   // a straight segment gives just its start point
-  n = bulge_split (pts, 4, p1, p2, 0.0);
-  if (n == 1 && pts[0].x == 0.0 && pts[0].y == 0.0)
-    ok ("bulge_split straight");
-  else
-    fail ("bulge_split straight: n %d", n);
-
+  check_split ("straight", 0.0, 1, 0.0, 0.0);
   if (bulge_split (pts, 0, p1, p2, 1.0) == 0)
     ok ("bulge_split 0 points");
   else
