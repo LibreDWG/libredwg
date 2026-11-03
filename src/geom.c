@@ -20,6 +20,7 @@
  */
 
 #include "config.h"
+#include <stdlib.h>
 #include <string.h>
 // #include <stdio.h>
 #include <math.h>
@@ -655,4 +656,105 @@ spline_eval (BITCODE_3DPOINT *out, const Dwg_Entity_SPLINE *spline, double t)
   out->y = d[p][1] / d[p][3];
   out->z = d[p][2] / d[p][3];
   return 1;
+}
+
+// True if the first and the last degree+1 knots are equal, so that the
+// curve starts at the first and ends at the last control point.
+static int
+spline_is_clamped (const Dwg_Entity_SPLINE *spline)
+{
+  const BITCODE_BL p = spline->degree, n = spline->num_ctrl_pts;
+  const double *u = spline->knots;
+  BITCODE_BL i;
+  for (i = 0; i < p; i++)
+    if (u[i] != u[p] || u[n + 1 + i] != u[n])
+      return 0;
+  return 1;
+}
+
+/* Boehm's algorithm: insert the knot t once into the B-spline of degree p
+   with *n control points P and *n + p + 1 knots U, both with room for one
+   more.  The curve does not change. */
+static void
+spline_insert_knot (BITCODE_3DPOINT *P, BITCODE_BL *n, double *U,
+                    const BITCODE_BL p, const double t)
+{
+  BITCODE_BL k = *n - 1, i;
+  // the knot span: the largest k in [p, n-1] with U[k] <= t
+  while (k > p && U[k] > t)
+    k--;
+  // the points after k move one place up
+  for (i = *n; i > k; i--)
+    P[i] = P[i - 1];
+  // p new points on the old control polygon, from the end so that
+  // P[i-1] is still the old point
+  for (i = k; i > k - p; i--)
+    {
+      const double a = (t - U[i]) / (U[i + p] - U[i]);
+      P[i].x = P[i - 1].x + a * (P[i].x - P[i - 1].x);
+      P[i].y = P[i - 1].y + a * (P[i].y - P[i - 1].y);
+      P[i].z = P[i - 1].z + a * (P[i].z - P[i - 1].z);
+    }
+  for (i = *n + p + 1; i > k + 1; i--)
+    U[i] = U[i - 1];
+  U[k + 1] = t;
+  (*n)++;
+}
+
+/* The SPLINE as a chain of Bezier curves of its degree, by inserting every
+   interior knot until it is repeated degree times.  Returns the number of
+   Bezier curves k and sets *pts to a malloc'ed array of k * degree + 1
+   points: curve j has the points j * degree .. (j + 1) * degree, each curve
+   starting at the end of the one before.  Only for valid, clamped and
+   non-rational SPLINEs, else returns 0. */
+int
+spline_to_bezier (const Dwg_Entity_SPLINE *spline, BITCODE_3DPOINT **pts)
+{
+  BITCODE_BL p, n, i, cap;
+  BITCODE_3DPOINT *P;
+  double *U;
+
+  *pts = NULL;
+  if (!spline_is_valid (spline) || spline->rational
+      || !spline_is_clamped (spline))
+    return 0;
+  p = spline->degree;
+  n = spline->num_ctrl_pts;
+  // each of the n - p - 1 interior knots needs at most p - 1 insertions
+  cap = n + (n - p - 1) * (p - 1);
+  P = (BITCODE_3DPOINT *)malloc (cap * sizeof (BITCODE_3DPOINT));
+  U = (double *)malloc ((cap + p + 1) * sizeof (double));
+  if (!P || !U)
+    {
+      free (P);
+      free (U);
+      return 0;
+    }
+  for (i = 0; i < n; i++)
+    {
+      P[i].x = spline->ctrl_pts[i].x;
+      P[i].y = spline->ctrl_pts[i].y;
+      P[i].z = spline->ctrl_pts[i].z;
+    }
+  memcpy (U, spline->knots, spline->num_knots * sizeof (double));
+  // the interior knots are U[p+1] .. U[n-1], n growing with the insertions
+  for (i = p + 1; i < n;)
+    {
+      const double t = U[i];
+      BITCODE_BL s = 1;
+      while (i + s < n && U[i + s] == t)
+        s++;
+      if (s > p) // a break in the curve: not one chain of Bezier curves
+        {
+          free (P);
+          free (U);
+          return 0;
+        }
+      for (; s < p; s++)
+        spline_insert_knot (P, &n, U, p, t);
+      i += p;
+    }
+  free (U);
+  *pts = P;
+  return (int)((n - 1) / p);
 }

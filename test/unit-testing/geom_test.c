@@ -215,6 +215,60 @@ spline_eval_tests (void)
     fail ("spline_eval accepted decreasing knots");
 }
 
+// spline_to_bezier of spline must give expect_k curves with these points
+static void
+check_bezier (const char *name, const Dwg_Entity_SPLINE *spline,
+              const int expect_k, const double *xy)
+{
+  BITCODE_3DPOINT *pts = NULL;
+  const int k = spline_to_bezier (spline, &pts);
+  int i, good = k == expect_k;
+  for (i = 0; good && i < k * spline->degree + 1; i++)
+    good = NEAR (pts[i].x, xy[2 * i]) && NEAR (pts[i].y, xy[2 * i + 1]);
+  if (good)
+    ok ("spline_to_bezier %s", name);
+  else
+    fail ("spline_to_bezier %s: %d curves, expected %d", name, k, expect_k);
+  free (pts);
+}
+
+static void
+spline_to_bezier_tests (void)
+{
+  Dwg_SPLINE_control_point five[5] = { { NULL, 0.0, 0.0, 0.0, 0.0 },
+                                       { NULL, 0.0, 4.0, 0.0, 0.0 },
+                                       { NULL, 4.0, 4.0, 0.0, 0.0 },
+                                       { NULL, 8.0, 4.0, 0.0, 0.0 },
+                                       { NULL, 8.0, 0.0, 0.0, 0.0 } };
+  double five_knots[9] = { 0, 0, 0, 0, 1, 2, 2, 2, 2 };
+  double bez_knots[8] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+  // the knot 1 inserted twice: two Bezier curves sharing (4,4)
+  const double two[14] = { 0, 0, 0, 4, 2, 4, 4, 4, 6, 4, 8, 4, 8, 0 };
+  const double one[8] = { 0, 0, 0, 4, 4, 4, 8, 4 };
+  Dwg_Entity_SPLINE spline;
+  BITCODE_3DPOINT *pts = NULL;
+
+  memset (&spline, 0, sizeof (spline));
+  spline.degree = 3;
+  spline.num_ctrl_pts = 5;
+  spline.ctrl_pts = five;
+  spline.num_knots = 9;
+  spline.knots = five_knots;
+  check_bezier ("5 points", &spline, 2, two);
+  // a single Bezier needs no insertion
+  spline.num_ctrl_pts = 4;
+  spline.num_knots = 8;
+  spline.knots = bez_knots;
+  check_bezier ("single bezier", &spline, 1, one);
+  // a rational spline has no polynomial Bezier curves
+  spline.rational = 1;
+  if (!spline_to_bezier (&spline, &pts) && !pts)
+    ok ("spline_to_bezier rejects a rational spline");
+  else
+    fail ("spline_to_bezier accepted a rational spline");
+  free (pts);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -224,5 +278,6 @@ main (int argc, char const *argv[])
   arc_split_tests ();
   ocs_mirrored_tests ();
   spline_eval_tests ();
+  spline_to_bezier_tests ();
   return failed;
 }

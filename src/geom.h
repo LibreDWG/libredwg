@@ -73,6 +73,11 @@ EXPORT int spline_is_valid (const Dwg_Entity_SPLINE *spline);
 // Returns 0 if the SPLINE is not valid.
 EXPORT int spline_eval (BITCODE_3DPOINT *out, const Dwg_Entity_SPLINE *spline,
                         double t) __nonnull ((1, 2));
+// The SPLINE as a chain of Bezier curves of its degree, by knot insertion.
+// Returns the number k of curves and a malloc'ed array of k*degree+1 points,
+// or 0 if the SPLINE is not valid, clamped and non-rational.
+EXPORT int spline_to_bezier (const Dwg_Entity_SPLINE *spline,
+                             BITCODE_3DPOINT **pts) __nonnull ((1, 2));
 
 /* Fast V4 Spatial Geometry Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
  * Note: V4 refers to the Klein 4-group integer matrix over the S12 lattice,
