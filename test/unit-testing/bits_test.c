@@ -1263,6 +1263,7 @@ static void
 bit_write_TV_tests (void)
 {
   Bit_Chain bitchain;
+  BITCODE_TU wstr = (BITCODE_TU)calloc (1100, 2);
   bitprepare (&bitchain, 6);
   bitchain.from_version = R_11;
   bit_write_TV (&bitchain, (char *)"GNU");
@@ -1281,6 +1282,18 @@ bit_write_TV_tests (void)
   else
     fail ("bit_write_TV @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
 
+  // TU source, pre-r2007 target: cut at the 1024 byte codepage buffer
+  for (int i = 0; i < 1099; i++)
+    wstr[i] = 'x';
+  bit_set_position (&bitchain, 0);
+  bitchain.from_version = R_2018;
+  bit_write_T16 (&bitchain, (BITCODE_T16)wstr);
+  bit_set_position (&bitchain, 0);
+  if (bit_read_RS (&bitchain) == 1024)
+    ok ("bit_write_T16 (TU to <R_2007)");
+  else
+    fail ("bit_write_T16 (TU to <R_2007)");
+  free (wstr);
   bitfree (&bitchain);
 }
 
