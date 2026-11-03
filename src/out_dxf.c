@@ -143,22 +143,26 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   {                                                                           \
     if (dxf)                                                                  \
       {                                                                       \
-        if (!size)                                                            \
-          GROUP (dxf);                                                        \
-        for (size_t j = 0; j < (size_t)(size); j++)                           \
+        /* NULL payload -> empty chunk, not `size` zeros (GHSA-fxmw-mp89-7g88) */ \
+        if (!value || !size)                                                  \
           {                                                                   \
-            if ((j % 127) == 0)                                               \
-              {                                                               \
-                if (j)                                                        \
-                  fprintf (dat->fh, "\r\n");                                  \
-                GROUP (dxf);                                                  \
-              }                                                               \
-            if (value)                                                        \
-              fprintf (dat->fh, "%02X", ((unsigned char *)value)[j]);         \
-            else                                                              \
-              fprintf (dat->fh, "%02X", 0);                                   \
+            GROUP (dxf);                                                      \
+            fprintf (dat->fh, "\r\n");                                        \
           }                                                                   \
-        fprintf (dat->fh, "\r\n");                                            \
+        else                                                                  \
+          {                                                                   \
+            for (size_t j = 0; j < (size_t)(size); j++)                       \
+              {                                                               \
+                if ((j % 127) == 0)                                           \
+                  {                                                           \
+                    if (j)                                                    \
+                      fprintf (dat->fh, "\r\n");                              \
+                    GROUP (dxf);                                              \
+                  }                                                           \
+                fprintf (dat->fh, "%02X", ((unsigned char *)value)[j]);       \
+              }                                                               \
+            fprintf (dat->fh, "\r\n");                                        \
+          }                                                                   \
       }                                                                       \
   }
 #define FIELD_BINARY(name, size, dxf)                                         \
