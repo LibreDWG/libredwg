@@ -554,3 +554,105 @@ dwg_transform_v4 (Dwg_Data *dwg)
 
   return count;
 }
+
+// finite and non-decreasing knots
+static int
+spline_knots_valid (const double *knots, const BITCODE_BL num_knots)
+{
+  BITCODE_BL i;
+  for (i = 0; i < num_knots; i++)
+    if (!isfinite (knots[i]) || (i > 0 && knots[i] < knots[i - 1]))
+      return 0;
+  return 1;
+}
+
+// finite control points, and positive weights if rational
+static int
+spline_ctrl_pts_valid (const Dwg_Entity_SPLINE *spline)
+{
+  BITCODE_BL i;
+  for (i = 0; i < spline->num_ctrl_pts; i++)
+    {
+      const Dwg_SPLINE_control_point *c = &spline->ctrl_pts[i];
+      if (!isfinite (c->x) || !isfinite (c->y) || !isfinite (c->z))
+        return 0;
+      if (spline->rational && !(c->w > 0.0 && isfinite (c->w)))
+        return 0;
+    }
+  return 1;
+}
+
+/* True if the SPLINE has usable control points and knots: degree 1 to
+   SPLINE_MAX_DEGREE, num_knots = num_ctrl_pts + degree + 1, finite
+   non-decreasing knots with a non-empty parameter range, finite control
+   points, and positive weights if rational.  SPLINEs with only fit points
+   are not usable. */
+int
+spline_is_valid (const Dwg_Entity_SPLINE *spline)
+{
+  BITCODE_BL p, n;
+
+  if (!spline || !spline->ctrl_pts || !spline->knots)
+    return 0;
+  p = spline->degree;
+  n = spline->num_ctrl_pts;
+  if (p < 1 || p > SPLINE_MAX_DEGREE || n <= p
+      || spline->num_knots != n + p + 1)
+    return 0;
+  return spline_knots_valid (spline->knots, spline->num_knots)
+         && spline_ctrl_pts_valid (spline)
+         && spline->knots[n] > spline->knots[p];
+}
+
+/* De Boor: the point at parameter t of a SPLINE with control points.
+   Rational splines use the weights, else all weights are 1 (the DWG
+   stores w = 0 then).  t is clamped to the valid range [u_p, u_n].
+   Returns 0 if the control points or knots are invalid. */
+int
+spline_eval (BITCODE_3DPOINT *out, const Dwg_Entity_SPLINE *spline, double t)
+{
+  double d[SPLINE_MAX_DEGREE + 1][4]; // x*w, y*w, z*w, w
+  BITCODE_BL p, n, k, i, r;
+  const double *u;
+
+  if (!spline_is_valid (spline))
+    return 0;
+  p = spline->degree;
+  n = spline->num_ctrl_pts;
+  u = spline->knots;
+  if (t < u[p])
+    t = u[p];
+  if (t > u[n])
+    t = u[n];
+  // the knot span: the largest k in [p, n-1] with u[k] <= t
+  k = n - 1;
+  while (k > p && u[k] > t)
+    k--;
+  // the p+1 control points of that span, in homogeneous coordinates
+  for (i = 0; i <= p; i++)
+    {
+      const Dwg_SPLINE_control_point *c = &spline->ctrl_pts[k - p + i];
+      const double w = spline->rational ? c->w : 1.0;
+      d[i][0] = c->x * w;
+      d[i][1] = c->y * w;
+      d[i][2] = c->z * w;
+      d[i][3] = w;
+    }
+  // p rounds of interpolation, each fraction a given by the knots
+  for (r = 1; r <= p; r++)
+    for (i = p; i >= r; i--)
+      {
+        const BITCODE_BL j = k - p + i;
+        const double den = u[j + p + 1 - r] - u[j];
+        const double a = den > 0.0 ? (t - u[j]) / den : 0.0;
+        int c;
+        for (c = 0; c < 4; c++)
+          d[i][c] = (1.0 - a) * d[i - 1][c] + a * d[i][c];
+      }
+  if (d[p][3] == 0.0)
+    return 0;
+  out->x = d[p][0] / d[p][3];
+  out->y = d[p][1] / d[p][3];
+  out->z = d[p][2] / d[p][3];
+  return 1;
+}
