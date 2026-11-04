@@ -3146,8 +3146,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               {
                 const char *bname
                     = owner_obj->tio.object->tio.BLOCK_HEADER->name;
-                if (bname && strcmp (bname, "*MODEL_SPACE") != 0
-                    && strcmp (bname, "*PAPER_SPACE") != 0)
+                // r13+ sources spell them *Model_Space / *Paper_Space,
+                // so the comparison must be case-insensitive.
+                if (bname && strcasecmp (bname, "*MODEL_SPACE") != 0
+                    && strcasecmp (bname, "*PAPER_SPACE") != 0)
                   {
                     ent->tio.entity->entmode = 3;
                   }
@@ -3168,20 +3170,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
     encode_check_num_sections ((Dwg_Section_Type_r11)dwg->header.num_sections,
                                dwg);
-    if (dwg->header.from_version >= R_13b1)
-      {
-        /* r2000 has e.g.
-         * section 0: header vars
-         *         1: class section
-         *         2: object map
-         *         3: optional: ObjFreeSpace
-         *            optional: SecondHeader
-         *         4: and Template
-         *         5: optional: AuxHeader (no sentinels, since R13c3)
-         */
-        LOG_ERROR ("FIXME convert sections from CONTROL objects to tables");
-      }
-    if (dwg->header.from_version < R_13b1 && dwg->header.section)
+    /* r2000 has e.g.
+     * section 0: header vars
+     *         1: class section
+     *         2: object map
+     *         3: optional: ObjFreeSpace
+     *            optional: SecondHeader
+     *         4: and Template
+     *         5: optional: AuxHeader (no sentinels, since R13c3)
+     */
+    // The section tables are filled from the CONTROL objects while writing
+    // them (ENCODE_CTRL_TO_TABLE), whatever the source version, so the
+    // address patch loop below works for all sources.
+    if (dwg->header.section)
       {
         Dwg_Section_Type_r11 max_id
             = dwg->header.num_sections <= SECTION_VX
