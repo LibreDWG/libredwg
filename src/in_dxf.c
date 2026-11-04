@@ -14727,6 +14727,25 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
       o->has_no_flags = 1;
       LOG_TRACE ("_3DFACE.has_no_flags = 1 [B]\n");
     }
+  else if (obj->fixedtype == DWG_TYPE_MINSERT)
+    {
+      // DXF omits INSERT groups 70/71 (column/row count) when the count is
+      // 1 (ezdxf and AutoCAD both do), and importing the missing group as 0
+      // gave such an MINSERT a grid of 0, which dwg2dxf writes back as an
+      // explicit 0. 0 is not a valid grid count, so this can never override
+      // a real value.
+      Dwg_Entity_MINSERT *o = obj->tio.entity->tio.MINSERT;
+      if (!o->num_cols)
+        {
+          o->num_cols = 1;
+          LOG_TRACE ("MINSERT.num_cols = 1 (default) [BS 70]\n");
+        }
+      if (!o->num_rows)
+        {
+          o->num_rows = 1;
+          LOG_TRACE ("MINSERT.num_rows = 1 (default) [BS 71]\n");
+        }
+    }
   else if (obj->fixedtype == DWG_TYPE_MTEXT)
     {
       // DXF omits the optional groups 72/73/44 when they hold their default
