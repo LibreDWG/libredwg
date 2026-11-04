@@ -1237,6 +1237,8 @@ dwg_write_geojson (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (!dwg->num_objects || !dat->fh)
     goto fail;
+  // DXF/JSON input keeps T strings as TV, as in dwg_write_dxf
+  dat->opts |= dwg->opts & DWG_OPTS_IN;
 
   HASH;
   PAIR_Sc (type, "FeatureCollection");
