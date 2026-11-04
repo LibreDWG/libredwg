@@ -229,28 +229,12 @@ common_entity (Dwg_Object_Entity *ent)
     free (color);
 }
 
-// TODO: MTEXT
-static void
-output_TEXT (Dwg_Object *obj)
+// font-family for a TEXT/MTEXT entity, from its STYLE (null-safe).
+static const char *
+text_fontfamily (Dwg_Data *dwg, BITCODE_H style_ref)
 {
-  Dwg_Data *dwg = obj->parent;
-  Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
-  char *escaped;
-  const char *fontfamily;
-  BITCODE_H style_ref = text->style;
   Dwg_Object *o = style_ref ? dwg_ref_object_silent (dwg, style_ref) : NULL;
   Dwg_Object_STYLE *style = o ? o->tio.object->tio.STYLE : NULL;
-  BITCODE_2DPOINT pt;
-
-  if (!text->text_value || entity_invisible (obj))
-    return;
-  if (isnan_2BD (text->ins_pt) || isnan_3BD (text->extrusion))
-    return;
-  if (dwg->header.version >= R_2007)
-    escaped = htmlwescape ((BITCODE_TU)text->text_value);
-  else
-    escaped = htmlescape (text->text_value, dwg->header.codepage);
-
   if (style && o->fixedtype == DWG_TYPE_STYLE && style->font_file
       && *style->font_file
 #ifdef HAVE_STRCASESTR
@@ -268,13 +252,30 @@ output_TEXT (Dwg_Object *obj)
           || strstr (style->font_file, "Arial"))
 #endif
         {
-          fontfamily = "Arial";
+          return "Arial";
         }
-      else
-        fontfamily = "Verdana";
+      return "Verdana";
     }
+  return "Courier";
+}
+
+static void
+output_TEXT (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
+  char *escaped;
+  const char *fontfamily = text_fontfamily (dwg, text->style);
+  BITCODE_2DPOINT pt;
+
+  if (!text->text_value || entity_invisible (obj))
+    return;
+  if (isnan_2BD (text->ins_pt) || isnan_3BD (text->extrusion))
+    return;
+  if (dwg->header.version >= R_2007)
+    escaped = htmlwescape ((BITCODE_TU)text->text_value);
   else
-    fontfamily = "Courier";
+    escaped = htmlescape (text->text_value, dwg->header.codepage);
 
   transform_OCS_2d (&pt, text->ins_pt, text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
@@ -284,6 +285,86 @@ output_TEXT (Dwg_Object *obj)
           escaped ? escaped : "");
   if (escaped)
     free (escaped);
+}
+
+static void
+output_MTEXT (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Entity_MTEXT *mtext = obj->tio.entity->tio.MTEXT;
+  char *plaintext, *wrapped, *line;
+  const char *fontfamily, *anchor;
+  BITCODE_2DPOINT pt;
+  double angle, line_height, first_offset, num_lines;
+  int idx;
+
+  if (!mtext->text || entity_invisible (obj))
+    return;
+  if (isnan_3BD (mtext->ins_pt) || isnan_3BD (mtext->extrusion))
+    return;
+  if (dwg->header.version >= R_2007)
+    {
+      char *utf8 = bit_convert_TU ((BITCODE_TU)mtext->text);
+      if (!utf8)
+        return;
+      plaintext = mtext_plaintext (utf8);
+      free (utf8);
+    }
+  else
+    plaintext = mtext_plaintext ((const char *)mtext->text);
+  if (!plaintext)
+    return;
+
+  fontfamily = text_fontfamily (dwg, mtext->style);
+  angle = mtext_svg_angle (mtext->x_axis_dir);
+  line_height = mtext_line_height (mtext->text_height, mtext->linespace_style,
+                                   mtext->linespace_factor);
+  num_lines = 0;
+  wrapped = mtext_wrap_text (plaintext, mtext->rect_width, mtext->text_height,
+                             &num_lines);
+  free (plaintext);
+  if (!wrapped)
+    return;
+
+  first_offset = mtext_attachment_first_offset (mtext->attachment, line_height,
+                                                num_lines);
+  anchor = mtext_attachment_anchor (mtext->attachment);
+  { BITCODE_2DPOINT ins2d;
+    ins2d.x = mtext->ins_pt.x;
+    ins2d.y = mtext->ins_pt.y;
+    transform_OCS_2d (&pt, ins2d, mtext->extrusion);
+  }
+
+  printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" font-family=\"%s\" "
+          "font-size=\"%f\" fill=\"%s\" text-anchor=\"%s\"",
+          obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,
+          mtext->text_height, entity_color (obj->tio.entity), anchor);
+  if (angle != 0.0)
+    printf (" transform=\"rotate(%.1f %f %f)\"", angle, transform_X (pt.x),
+            transform_Y (pt.y));
+  printf (">\n");
+  line = wrapped;
+  idx = 0;
+  while (line)
+    {
+      char *nl = strchr (line, '\n');
+      char *escaped_line;
+      double y;
+      if (nl)
+        *nl = '\0';
+      escaped_line = mtext_escape_line (line);
+      y = transform_Y (pt.y) + first_offset + idx * line_height;
+      printf ("\t  <tspan x=\"%f\" y=\"%f\">%s</tspan>\n", transform_X (pt.x),
+              y, escaped_line ? escaped_line : "");
+      if (escaped_line)
+        free (escaped_line);
+      if (!nl)
+        break;
+      line = nl + 1;
+      idx++;
+    }
+  printf ("\t</text>\n");
+  free (wrapped);
 }
 
 static void
@@ -776,6 +857,9 @@ output_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_TEXT:
       output_TEXT (obj);
+      break;
+    case DWG_TYPE_MTEXT:
+      output_MTEXT (obj);
       break;
     case DWG_TYPE_ARC:
       output_ARC (obj);
