@@ -10069,6 +10069,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
       return;
     }
   obj->tio.entity->ownerhandle->obj = NULL;
+  obj->tio.entity->entmode = 0;
   owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attribs";
   ow = owner->tio.entity->tio.POLYLINE_2D;
 
@@ -10082,6 +10083,21 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
     {
       Dwg_Object *_o = &dwg->object[i];
       num_owned = j + 1;
+      // set each child's ownerhandle to the parent entity and entmode 0,
+      // whatever their 330 pointed to (which may be the block record).
+      if (_o->supertype == DWG_SUPERTYPE_ENTITY && _o->tio.entity)
+        {
+          _o->tio.entity->entmode = 0;
+          if (_o->tio.entity->ownerhandle)
+            {
+              _o->tio.entity->ownerhandle->obj = NULL;
+              _o->tio.entity->ownerhandle->absolute_ref = owner->handle.value;
+              _o->tio.entity->ownerhandle->handleref.value = owner->handle.value;
+            }
+          else
+            _o->tio.entity->ownerhandle
+                = dwg_add_handleref (dwg, 3, owner->handle.value, _o);
+        }
       if (dwg->header.from_version >= R_13b1)
         {
           // Match the encoder's expected handle relation-code for the owned
@@ -15564,27 +15580,38 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   obj = &dwg->object[last_ent];
                   ent = obj->tio.entity;
                 }
-              if (ent->ownerhandle)
+              // never file ATTRIB/VERTEX*/SEQEND under a block header:
+              // they belong to their parent INSERT/POLYLINE, not the block.
+              if (obj->fixedtype != DWG_TYPE_ATTRIB
+                  && obj->fixedtype != DWG_TYPE_VERTEX_2D
+                  && obj->fixedtype != DWG_TYPE_VERTEX_3D
+                  && obj->fixedtype != DWG_TYPE_VERTEX_MESH
+                  && obj->fixedtype != DWG_TYPE_VERTEX_PFACE
+                  && obj->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE
+                  && obj->fixedtype != DWG_TYPE_SEQEND)
                 {
-                  if (ent->ownerhandle->absolute_ref == mspace)
-                    ent->entmode = 2;
-                  else if (pspace && ent->ownerhandle->absolute_ref == pspace)
-                    ent->entmode = 1;
-                  else if (dwg->header.from_version < R_13b1)
+                  if (ent->ownerhandle)
                     {
-                      // SEQEND/VERTEX: owner is INSERT/POLYLINE, not mspace.
-                      // Inherit entmode from the parent entity.
-                      Dwg_Object *owner_obj = dwg_resolve_handle (
-                          dwg, ent->ownerhandle->absolute_ref);
-                      if (owner_obj && owner_obj->tio.entity)
-                        ent->entmode = owner_obj->tio.entity->entmode;
+                      if (ent->ownerhandle->absolute_ref == mspace)
+                        ent->entmode = 2;
+                      else if (pspace && ent->ownerhandle->absolute_ref == pspace)
+                        ent->entmode = 1;
+                      else if (dwg->header.from_version < R_13b1)
+                        {
+                          // SEQEND/VERTEX: owner is INSERT/POLYLINE, not mspace.
+                          // Inherit entmode from the parent entity.
+                          Dwg_Object *owner_obj = dwg_resolve_handle (
+                              dwg, ent->ownerhandle->absolute_ref);
+                          if (owner_obj && owner_obj->tio.entity)
+                            ent->entmode = owner_obj->tio.entity->entmode;
+                        }
+                      add_to_BLOCK_HEADER (obj, ent->ownerhandle);
                     }
-                  add_to_BLOCK_HEADER (obj, ent->ownerhandle);
-                }
-              else
-                {
-                  ent->entmode = 2;
-                  add_to_BLOCK_HEADER (obj, mspace_ref);
+                  else
+                    {
+                      ent->entmode = 2;
+                      add_to_BLOCK_HEADER (obj, mspace_ref);
+                    }
                 }
 
               in_postprocess_handles (obj);
