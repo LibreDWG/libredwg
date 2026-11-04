@@ -7476,7 +7476,11 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
               {
                 BITCODE_TV news = bit_embed_TU_size (rbuf->value.str.u.wdata,
                                                      rbuf->value.str.size);
-                unsigned len = (unsigned)strlen (news);
+                // corrupted input may claim a size without a payload
+                unsigned len = news ? (unsigned)strlen (news) : 0;
+                if (!news && rbuf->value.str.size)
+                  LOG_ERROR ("Empty xdata string of size %u",
+                             (unsigned)rbuf->value.str.size);
                 bit_write_RS (dat, len & 0xFFFF);
                 bit_write_RC (dat, rbuf->value.str.codepage);
                 if (rbuf->value.str.u.data)
@@ -7490,7 +7494,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
             else
               {
                 // do we need to convert UTF-8 to codepage?
-                if (rbuf->value.str.size > 0 && dat->opts & DWG_OPTS_INJSON)
+                if (rbuf->value.str.size > 0 && rbuf->value.str.u.data
+                    && dat->opts & DWG_OPTS_INJSON)
                   {
                     BITCODE_RS destlen = rbuf->value.str.size * 2;
                     char *dest = (char *)malloc (destlen);
@@ -7533,14 +7538,23 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
             if (rbuf->value.str.size && !rbuf->value.str.is_tu)
               {
                 // TODO: same len when converted to TU? normally yes
-                BITCODE_TU news = bit_utf8_to_TU (rbuf->value.str.u.data, 0);
                 BITCODE_RS size = rbuf->value.str.size;
+                // corrupted/fuzzed input may claim a size without a payload
+                if (!rbuf->value.str.u.data)
+                  {
+                    LOG_ERROR ("Empty xdata string of size %u",
+                               (unsigned)size);
+                    size = 0;
+                  }
+                BITCODE_TU news
+                    = size ? bit_utf8_to_TU (rbuf->value.str.u.data, 0) : NULL;
                 // Guard against fuzzer input with embedded NULs
-                {
-                  size_t tu_len = strlen (rbuf->value.str.u.data);
-                  if (size > tu_len)
-                    size = (BITCODE_RS)tu_len;
-                }
+                if (rbuf->value.str.u.data)
+                  {
+                    size_t tu_len = strlen (rbuf->value.str.u.data);
+                    if (size > tu_len)
+                      size = (BITCODE_RS)tu_len;
+                  }
                 bit_write_RS (dat, size);
                 for (i = 0; i < size; i++)
                   bit_write_RS (dat, news[i]);
@@ -7549,9 +7563,19 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
               }
             else
               {
-                bit_write_RS (dat, rbuf->value.str.size);
-                for (i = 0; i < rbuf->value.str.size; i++)
-                  bit_write_RS (dat, rbuf->value.str.u.wdata[i]);
+                // corrupted/fuzzed input may claim a size without a payload
+                if (!rbuf->value.str.u.wdata && rbuf->value.str.size)
+                  {
+                    LOG_ERROR ("Empty xdata string of size %u",
+                               (unsigned)rbuf->value.str.size);
+                    bit_write_RS (dat, 0);
+                  }
+                else
+                  {
+                    bit_write_RS (dat, rbuf->value.str.size);
+                    for (i = 0; i < rbuf->value.str.size; i++)
+                      bit_write_RS (dat, rbuf->value.str.u.wdata[i]);
+                  }
                 LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
               }
             LOG_POS;
