@@ -1000,3 +1000,198 @@ spline_from_fit_points (const Dwg_Entity_SPLINE *spline,
   free (x);
   return ok;
 }
+
+// A growing array of points.  ok is 0 after a failed allocation.
+typedef struct _point_list
+{
+  BITCODE_3DPOINT *pts;
+  BITCODE_BL num, cap;
+  int ok;
+} point_list;
+
+static void
+point_list_add (point_list *l, const BITCODE_3DPOINT *p)
+{
+  if (!l->ok)
+    return;
+  if (l->num == l->cap)
+    {
+      const BITCODE_BL cap = l->cap ? 2 * l->cap : 64;
+      BITCODE_3DPOINT *pts
+          = (BITCODE_3DPOINT *)realloc (l->pts, cap * sizeof (*pts));
+      if (!pts || cap > SPLINE_MAX_POINTS)
+        {
+          free (pts ? pts : l->pts);
+          l->pts = NULL;
+          l->ok = 0;
+          return;
+        }
+      l->pts = pts;
+      l->cap = cap;
+    }
+  l->pts[l->num++] = *p;
+}
+
+// The distance from p to the segment a-b.
+static double
+segment_distance (const BITCODE_3DPOINT *p, const BITCODE_3DPOINT *a,
+                  const BITCODE_3DPOINT *b)
+{
+  const double dx = b->x - a->x, dy = b->y - a->y, dz = b->z - a->z;
+  const double l2 = dx * dx + dy * dy + dz * dz;
+  double s = 0.0, ex, ey, ez;
+  if (l2 > 0.0)
+    {
+      s = ((p->x - a->x) * dx + (p->y - a->y) * dy + (p->z - a->z) * dz) / l2;
+      s = s < 0.0 ? 0.0 : (s > 1.0 ? 1.0 : s);
+    }
+  ex = p->x - a->x - s * dx;
+  ey = p->y - a->y - s * dy;
+  ez = p->z - a->z - s * dz;
+  return sqrt (ex * ex + ey * ey + ez * ez);
+}
+
+// A Bezier curve lies in the convex hull of its control points, so if all
+// of them are within tol of the chord b[0]-b[p], so is the curve.
+static int
+bezier_is_flat (const BITCODE_3DPOINT *b, const int p, const double tol)
+{
+  int i;
+  for (i = 1; i < p; i++)
+    if (segment_distance (&b[i], &b[0], &b[p]) > tol)
+      return 0;
+  return 1;
+}
+
+// De Casteljau at t = 1/2: only midpoints.  The left half has the first
+// point of each round, the right half the last one.
+static void
+bezier_halves (const BITCODE_3DPOINT *b, const int p, BITCODE_3DPOINT *left,
+               BITCODE_3DPOINT *right)
+{
+  BITCODE_3DPOINT w[SPLINE_MAX_DEGREE + 1];
+  int r, i;
+  for (i = 0; i <= p; i++)
+    w[i] = b[i];
+  left[0] = w[0];
+  right[p] = w[p];
+  for (r = 1; r <= p; r++)
+    {
+      for (i = 0; i <= p - r; i++)
+        {
+          w[i].x = (w[i].x + w[i + 1].x) / 2.0;
+          w[i].y = (w[i].y + w[i + 1].y) / 2.0;
+          w[i].z = (w[i].z + w[i + 1].z) / 2.0;
+        }
+      left[r] = w[0];
+      right[p - r] = w[p - r];
+    }
+}
+
+// Adds the points of the Bezier curve b of degree p, after its first one,
+// halving it until each piece is flat within tol.
+static void
+bezier_flatten (point_list *l, const BITCODE_3DPOINT *b, const int p,
+                const double tol, const int depth)
+{
+  BITCODE_3DPOINT left[SPLINE_MAX_DEGREE + 1], right[SPLINE_MAX_DEGREE + 1];
+  if (depth >= BEZIER_MAX_DEPTH || bezier_is_flat (b, p, tol))
+    {
+      point_list_add (l, &b[p]);
+      return;
+    }
+  bezier_halves (b, p, left, right);
+  bezier_flatten (l, left, p, tol, depth + 1);
+  bezier_flatten (l, right, p, tol, depth + 1);
+}
+
+// The size of a SPLINE: the diagonal of the box of its points.
+static double
+points_size (const BITCODE_3DPOINT *pts, const BITCODE_BL num)
+{
+  BITCODE_3DPOINT lo = pts[0], hi = pts[0];
+  BITCODE_BL i;
+  for (i = 1; i < num; i++)
+    {
+      lo.x = fmin (lo.x, pts[i].x);
+      lo.y = fmin (lo.y, pts[i].y);
+      lo.z = fmin (lo.z, pts[i].z);
+      hi.x = fmax (hi.x, pts[i].x);
+      hi.y = fmax (hi.y, pts[i].y);
+      hi.z = fmax (hi.z, pts[i].z);
+    }
+  return sqrt ((hi.x - lo.x) * (hi.x - lo.x) + (hi.y - lo.y) * (hi.y - lo.y)
+               + (hi.z - lo.z) * (hi.z - lo.z));
+}
+
+// For SPLINEs without Bezier curves (rational, not clamped):
+// SPLINE_EVAL_STEPS evaluated points per knot span.
+static void
+spline_eval_points (point_list *l, const Dwg_Entity_SPLINE *spline)
+{
+  BITCODE_BL m;
+  int first = 1;
+  for (m = spline->degree; m < spline->num_ctrl_pts; m++)
+    {
+      const double u0 = spline->knots[m], u1 = spline->knots[m + 1];
+      int i;
+      if (u1 <= u0)
+        continue;
+      for (i = first ? 0 : 1; i <= SPLINE_EVAL_STEPS; i++)
+        {
+          BITCODE_3DPOINT pt;
+          if (spline_eval (&pt, spline,
+                           u0 + (u1 - u0) * i / SPLINE_EVAL_STEPS))
+            point_list_add (l, &pt);
+          first = 0;
+        }
+    }
+}
+
+/* Points on the curve of a SPLINE, as a malloc'ed array, for outputs
+   without curves.  Bezier curves are halved by de Casteljau until the
+   polyline is within rel_tol times the size of the SPLINE of the curve.
+   A SPLINE with only fit points is interpolated first.  Returns the number
+   of points, or 0. */
+int
+spline_flatten (const Dwg_Entity_SPLINE *spline, const double rel_tol,
+                BITCODE_3DPOINT **pts)
+{
+  Dwg_Entity_SPLINE fit;
+  const Dwg_Entity_SPLINE *s = spline;
+  BITCODE_3DPOINT *bez = NULL;
+  point_list l = { NULL, 0, 0, 1 };
+  int k, j;
+
+  *pts = NULL;
+  if (!spline_is_valid (spline))
+    {
+      if (!spline_from_fit_points (spline, &fit))
+        return 0;
+      s = &fit;
+    }
+  k = spline_to_bezier (s, &bez);
+  if (k)
+    {
+      const int p = s->degree;
+      const double tol = rel_tol * points_size (bez, k * p + 1);
+      point_list_add (&l, &bez[0]);
+      for (j = 0; j < k; j++)
+        bezier_flatten (&l, &bez[j * p], p, tol, 0);
+      free (bez);
+    }
+  else
+    spline_eval_points (&l, s);
+  if (s == &fit)
+    {
+      free (fit.ctrl_pts);
+      free (fit.knots);
+    }
+  if (!l.ok || l.num < 2)
+    {
+      free (l.pts);
+      return 0;
+    }
+  *pts = l.pts;
+  return (int)l.num;
+}

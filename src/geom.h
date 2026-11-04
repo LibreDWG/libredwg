@@ -83,6 +83,16 @@ EXPORT int spline_to_bezier (const Dwg_Entity_SPLINE *spline,
 // caller.  Returns 0 if the fit points cannot be interpolated.
 EXPORT int spline_from_fit_points (const Dwg_Entity_SPLINE *spline,
                                    Dwg_Entity_SPLINE *out) __nonnull ((1, 2));
+// The limits of spline_flatten: halvings per Bezier curve, points, and
+// evaluated points per knot span when there are no Bezier curves.
+#define BEZIER_MAX_DEPTH 16
+#define SPLINE_MAX_POINTS 1000000
+#define SPLINE_EVAL_STEPS 16
+// Points on the curve of a SPLINE, within rel_tol times its size, as a
+// malloc'ed array.  Returns their number, or 0.
+EXPORT int spline_flatten (const Dwg_Entity_SPLINE *spline,
+                           const double rel_tol, BITCODE_3DPOINT **pts)
+    __nonnull ((1, 3));
 
 /* Fast V4 Spatial Geometry Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
  * Note: V4 refers to the Klein 4-group integer matrix over the S12 lattice,
