@@ -374,6 +374,12 @@
 
   VERSIONS (R_13b1, R_14) //ODA bug
     {
+#ifdef IS_ENCODER
+      // derive isbylayerlt from ltype_flags before writing the bit: the
+      // encoder fixup used to run in common_entity_handle_data.spec, which is
+      // too late (the bit is already emitted).
+      FIELD_VALUE (isbylayerlt) = FIELD_VALUE (ltype_flags) < 3 ? 1 : 0;
+#endif
       FIELD_B (isbylayerlt, 0);
 #ifdef IS_DECODER
       // 11 = own ltype handle, 00 = ByLayer

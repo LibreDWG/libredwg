@@ -64,10 +64,8 @@
   VERSIONS (R_13b1, R_14)
     {
       FIELD_HANDLE (layer, 5, 8);
-#ifdef IS_ENCODER
-      if (dat->from_version == R_2000)
-        FIELD_VALUE (isbylayerlt) = FIELD_VALUE (ltype_flags) < 3 ? 1 : 0;
-#endif
+      // isbylayerlt is derived from ltype_flags in common_entity_data.spec
+      // (before the bit is written).
 #ifdef IS_DXF
       PRE (R_2000) {
         switch (FIELD_VALUE (ltype_flags)) {
@@ -84,6 +82,23 @@
         default: break;
         }
       }
+      // per-entity ltype_scale exists since R13, not just R2000b
+      FIELD_BD1 (ltype_scale, 48);
+#endif
+#ifdef IS_ENCODER
+      // r13/r14: ByBlock/Continuous have no handle to write; materialize it
+      // from the LTYPE table so the record is not left dangling.
+      if (!FIELD_VALUE (isbylayerlt) && !FIELD_VALUE (ltype)
+          && (FIELD_VALUE (ltype_flags) == 1 || FIELD_VALUE (ltype_flags) == 2))
+        {
+          const char *lname
+              = FIELD_VALUE (ltype_flags) == 1 ? "BYBLOCK" : "CONTINUOUS";
+          BITCODE_H hdl = dwg_find_tablehandle ((Dwg_Data *)obj->parent, lname,
+                                                "LTYPE");
+          if (hdl)
+            FIELD_VALUE (ltype) = dwg_add_handleref ((Dwg_Data *)obj->parent, 5,
+                                                     hdl->absolute_ref, NULL);
+        }
 #endif
       if (!FIELD_VALUE (isbylayerlt))
         FIELD_HANDLE (ltype, 5, 6);
