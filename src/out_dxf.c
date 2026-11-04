@@ -1861,7 +1861,7 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       switch (type)
         {
         case DWG_VT_STRING:
-          if (IS_FROM_TU (dat))
+          if (rbuf->value.str.is_tu) // in the width it is stored in
             {
               VALUE_TU (rbuf->value.str.u.wdata, dxftype);
             }
