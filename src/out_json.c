@@ -2623,6 +2623,8 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dat->version = dat->from_version;
   if (!dat->codepage)
     dat->codepage = dwg->header.codepage;
+  // DXF/JSON input keeps T strings as TV, as in dwg_write_dxf
+  dat->opts |= dwg->opts & DWG_OPTS_IN;
   if (!dat->fh)
     goto fail;
   fprintf (dat->fh, "{%s%s%s\"created_by\":%s\"%s\"", JSON_NL, JSON_SPC,
