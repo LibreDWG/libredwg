@@ -3980,16 +3980,19 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
     {
       SINCE (R_2004a)
       {
-        // first_owned_block
+        // first_owned_block: skip just the broken header (warn): one damaged
+        // table entry must not throw away the model space. Same rationale as
+        // the get_*_owned_entity skip (PR #1359).
         if (IS_FROM_TU (dat))
           {
             char *s = bit_convert_TU ((BITCODE_TU)_hdr->name);
-            LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", s);
+            LOG_WARN ("BLOCK_HEADER %s first_owned_entity missing, skipping",
+                      s);
             free (s);
           }
         else
-          LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", _hdr->name);
-        return DWG_ERR_INVALIDDWG;
+          LOG_WARN ("BLOCK_HEADER %s first_owned_entity missing, skipping",
+                    _hdr->name);
       }
     }
 
