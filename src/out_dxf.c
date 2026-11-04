@@ -1360,32 +1360,29 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
       // 5: 936 Simplified Chinese
       // See
       // https://docs.intellicad.org/files/oda/2021_11/oda_drawings_docs/frames.html?frmname=topic&frmfile=FontHandling.html
+      // s is past the backslash: s[2] is n, s[3..6] the hex code.
       else if (c == '\\' && dest + 7 < dend && s + 6 < send
-               && memBEGINc (s, "M+") && s[3] >= '1' && s[3] <= '5')
+               && memBEGINc (s, "M+") && s[2] >= '1' && s[2] <= '5'
+               && isxdigit ((unsigned char)s[3])
+               && isxdigit ((unsigned char)s[4])
+               && isxdigit ((unsigned char)s[5])
+               && isxdigit ((unsigned char)s[6]))
         {
           const Dwg_Codepage mif_tbl[]
               = { CP_UNDEFINED, CP_ANSI_932,  CP_ANSI_950,
                   CP_ANSI_949,  CP_ANSI_1361, CP_ANSI_936 };
-          int i;
-          uint16_t x;
+          unsigned int x = 0;
           uint32_t uc;
-          Dwg_Codepage cp;
-          sscanf (s, "M+%d", &i);
-          if (i >= 1 && i <= 5)
+          sscanf (&s[3], "%4X", &x);
+          uc = (uint32_t)dwg_codepage_uwc (mif_tbl[s[2] - '0'], (uint16_t)x);
+          if (uc)
             {
-              cp = mif_tbl[i];
-              sscanf (&s[3], "%4X", &uc);
-              x = uc & 0xFFFF;
-              uc = dwg_codepage_uwc (cp, x);
               snprintf (dest, dend - dest, "\\U+%04X", uc);
               dest += 7;
               s += 7;
             }
-          else
-            {
-              LOG_ERROR ("Invalid MIF index in %s", s - 1);
-              s += 3;
-            }
+          else // not in that codepage: keep the MIF code as it is
+            *dest++ = c;
         }
       else
         *dest++ = c;
