@@ -358,6 +358,67 @@ spline_from_fit_points_tests (void)
     }
 }
 
+static void
+spline_flatten_tests (void)
+{
+  Dwg_SPLINE_control_point bez[4] = { { NULL, 0.0, 0.0, 0.0, 0.0 },
+                                      { NULL, 0.0, 4.0, 0.0, 0.0 },
+                                      { NULL, 4.0, 4.0, 0.0, 0.0 },
+                                      { NULL, 4.0, 0.0, 0.0, 0.0 } };
+  Dwg_SPLINE_control_point line[4] = { { NULL, 0.0, 0.0, 0.0, 0.0 },
+                                       { NULL, 1.0, 1.0, 0.0, 0.0 },
+                                       { NULL, 2.0, 2.0, 0.0, 0.0 },
+                                       { NULL, 3.0, 3.0, 0.0, 0.0 } };
+  double knots[8] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+  BITCODE_3DPOINT fit[3]
+      = { { 0.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } };
+  Dwg_Entity_SPLINE spline;
+  BITCODE_3DPOINT *pts = NULL;
+  int n, n4;
+
+  memset (&spline, 0, sizeof (spline));
+  spline.degree = 3;
+  spline.num_ctrl_pts = 4;
+  spline.ctrl_pts = line;
+  spline.num_knots = 8;
+  spline.knots = knots;
+  // aligned control points: a straight line needs no inner point
+  n = spline_flatten (&spline, 1e-3, &pts);
+  if (n == 2 && NEAR (pts[1].x, 3.0) && NEAR (pts[1].y, 3.0))
+    ok ("spline_flatten straight line");
+  else
+    fail ("spline_flatten straight line: %d points", n);
+  free (pts);
+
+  spline.ctrl_pts = bez;
+  n = spline_flatten (&spline, 1e-3, &pts);
+  if (n > 2 && NEAR (pts[0].x, 0.0) && NEAR (pts[0].y, 0.0)
+      && NEAR (pts[n - 1].x, 4.0) && NEAR (pts[n - 1].y, 0.0))
+    ok ("spline_flatten bezier ends");
+  else
+    fail ("spline_flatten bezier ends: %d points", n);
+  free (pts);
+  // a finer tolerance needs more points
+  n4 = spline_flatten (&spline, 1e-4, &pts);
+  if (n4 > n)
+    ok ("spline_flatten finer tolerance: %d > %d points", n4, n);
+  else
+    fail ("spline_flatten finer tolerance: %d <= %d points", n4, n);
+  free (pts);
+
+  // only fit points: interpolated first
+  memset (&spline, 0, sizeof (spline));
+  spline.degree = 3;
+  spline.num_fit_pts = 3;
+  spline.fit_pts = fit;
+  n = spline_flatten (&spline, 1e-3, &pts);
+  if (n > 2 && NEAR (pts[n - 1].x, 2.0) && NEAR (pts[n - 1].y, 0.0))
+    ok ("spline_flatten fit points");
+  else
+    fail ("spline_flatten fit points: %d points", n);
+  free (pts);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -369,5 +430,6 @@ main (int argc, char const *argv[])
   spline_eval_tests ();
   spline_to_bezier_tests ();
   spline_from_fit_points_tests ();
+  spline_flatten_tests ();
   return failed;
 }
