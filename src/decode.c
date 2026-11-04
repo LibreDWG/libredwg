@@ -6863,9 +6863,13 @@ decode_preR13_sentinel (const Dwg_Sentinel sentinel,
       char *found = (char *)memmem (&dat->chain[pos], len, wanted, 16);
       if (!found)
         {
-          LOG_ERROR ("%s not found at %" PRIuSIZE, sentinel_name,
-                     dat->byte - 16);
-          error = DWG_ERR_SECTIONNOTFOUND;
+          // The sentinel is a delimiter, not the locator: records are read
+          // from tbl->address (which the header states independently) and
+          // each carries its own CRC. A missing sentinel (e.g. on an empty
+          // table) is the writer being irregular, not a reason to reject the
+          // file.
+          LOG_WARN ("%s not found at %" PRIuSIZE ", reading on", sentinel_name,
+                    dat->byte - 16);
         }
       else
         {
