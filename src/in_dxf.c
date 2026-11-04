@@ -14851,14 +14851,20 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   free (dxfname);
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
-                  return DWG_ERR_INVALIDDWG;
+                  LOG_WARN ("Skipping failed table entry \"%s\", "
+                           "continuing\n",
+                           table);
+                  while ((pair = dxf_read_pair (dat)) && pair->code != 0)
+                    dxf_free_pair (pair);
+                  if (!pair)
+                    return DWG_ERR_INVALIDDWG;
                 }
               // new_object may have reused an existing object (e.g.,
               // *Paper_Space via "Reuse existing BLOCK_HEADER"), decrementing
               // num_objects. In that case idx >= num_objects and obj points to
               // a stale/partial object — skip the fixup to avoid a phantom
               // handle/entry.
-              if (idx >= dwg->num_objects)
+              if (!pair || idx >= dwg->num_objects)
                 goto next_table_entry;
               // A minimal DXF will have no handle values
               if (!obj->handle.value)
@@ -15172,7 +15178,13 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   free (dxfname);
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
-                  return DWG_ERR_INVALIDDWG;
+                  LOG_WARN ("Skipping failed object \"%s\", continuing\n",
+                           name);
+                  while ((pair = dxf_read_pair (dat)) && pair->code != 0)
+                    dxf_free_pair (pair);
+                  if (!pair)
+                    return DWG_ERR_INVALIDDWG;
+                  continue;
                 }
               if (obj->type == DWG_TYPE_BLOCK)
                 {
@@ -15527,7 +15539,13 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               free (dxfname);
               if (idx != dwg->num_objects)
                 obj->dxfname = NULL;
-              return DWG_ERR_INVALIDDWG;
+              LOG_WARN ("Skipping failed entity \"%s\", continuing\n", name);
+              // skip the rest of the object: read pairs until the next 0 code
+              while ((pair = dxf_read_pair (dat)) && pair->code != 0)
+                dxf_free_pair (pair);
+              if (!pair)
+                return DWG_ERR_INVALIDDWG; // EOF
+              continue; // re-check the while condition with the new 0 code
             }
           if (pair->code == 0 && pair->value.s.ptr)
             {
@@ -15623,7 +15641,13 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   free (dxfname);
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
-                  return DWG_ERR_INVALIDDWG;
+                  LOG_WARN ("Skipping failed object \"%s\", continuing\n",
+                           name);
+                  while ((pair = dxf_read_pair (dat)) && pair->code != 0)
+                    dxf_free_pair (pair);
+                  if (!pair)
+                    return DWG_ERR_INVALIDDWG;
+                  continue;
                 }
             }
           else
