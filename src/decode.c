@@ -4074,7 +4074,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
         }
 
       LOG_RPOS
-      if (size > _obj->size || dat->byte == sav_byte)
+      if (size > _obj->size
+          || (dat->from_version < R_13b1 && dat->byte == sav_byte))
         {
           LOG_ERROR ("Invalid EED size " FORMAT_BS " > %u", size, _obj->size);
           obj->num_eed = idx;
