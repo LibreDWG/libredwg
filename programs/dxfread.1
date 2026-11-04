@@ -1,0 +1,43 @@
+.TH DXFREAD "1" "November 2026" "dxfread 0.14" "User Commands"
+.SH NAME
+dxfread \- read a DXF or JSON file, write it in the other format
+.SH SYNOPSIS
+.B dxfread
+[\fI\,OPTION\/\fR]... \fI\,INFILE\/\fR|\-
+.SH DESCRIPTION
+Reads a DXF or JSON file and writes it in the other format.
+The input format is auto-detected: JSON starts with '{', DXF starts with
+a group code line.
+.PP
+By default, the output is JSON on stdout.
+Use \fB\-d\fR to write DXF instead.
+.SH OPTIONS
+.TP
+\fB\-j\fR
+write JSON (default)
+.TP
+\fB\-d\fR
+write DXF
+.TP
+\fB\-o\fR outfile
+output file (default: stdout)
+.TP
+\fB\-\-help\fR
+display this help and exit
+.TP
+\fB\-\-version\fR
+output version information and exit
+.PP
+GNU LibreDWG online manual: <https://www.gnu.org/software/libredwg/>
+.SH "SEE ALSO"
+The full documentation for
+.B dxfread
+is maintained as a Texinfo manual.  If the
+.B info
+and
+.B dxfread
+programs are properly installed at your site, the command
+.IP
+.B info LibreDWG
+.PP
+should give you access to the complete manual.

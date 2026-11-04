@@ -61,6 +61,16 @@ libredwg_la_SOURCES += \
 	out_json.c \
 	out_geojson.c
 endif
+# the read (in_*) sources are independent of write support, so they are
+# built even with --disable-write (dxfread needs dwg_read_dxf/dwg_read_json)
+if !DISABLE_DXF
+libredwg_la_SOURCES += \
+	in_dxf.c
+endif
+if !DISABLE_JSON
+libredwg_la_SOURCES += \
+	in_json.c
+endif
 endif
 if USE_WRITE
 libredwg_la_SOURCES += \
@@ -70,14 +80,6 @@ libredwg_la_SOURCES += \
 #       encode_r2007.c
 #       in_xml.c
 #       in_yaml.c
-if !DISABLE_DXF
-libredwg_la_SOURCES += \
-	in_dxf.c
-endif
-if !DISABLE_JSON
-libredwg_la_SOURCES += \
-	in_json.c
-endif
 endif
 
 EXTRA_HEADERS = \

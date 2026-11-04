@@ -31,6 +31,11 @@ dist_bin_SCRIPTS = dwgfilter
 dist_man1_MANS += $(srcdir)/dwgbmp.1 $(srcdir)/dwg2dxf.1 \
 	          $(srcdir)/dwg2SVG.1 $(srcdir)/dwglayers.1 \
 		  $(srcdir)/dwggrep.1 $(srcdir)/dwgfilter.1
+if !DISABLE_JSON
+bin_PROGRAMS   += dxfread
+dist_man1_MANS += $(srcdir)/dxfread.1
+dxfread_SOURCES = dxfread.c
+endif
 endif
 
 if !DISABLE_DXF
@@ -90,6 +95,7 @@ TESTS = alive.test
 if !DISABLE_DXF
 TESTS += dxf.test dxfb.test
 if !DISABLE_JSON
+TESTS += dxfread.test
 if HAVE_JQ
 TESTS += json.test dwgfilter.test
 endif
@@ -116,7 +122,7 @@ CLEANFILES += {example_,sample_,entities,ACEB10}*.dwg
 CLEANFILES += example_*.{log1,log2}
 endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i *.ii *.log
-DISTCLEANFILES       = core alive.test dxf.test dxfb.test json.test svg.test dwgfilter.test
+DISTCLEANFILES       = core alive.test dxf.test dxfb.test dxfread.test json.test svg.test dwgfilter.test
 
 .PHONY: man dsymutil clean-dsymutil check-syntax check-cppcheck check-minimal
 

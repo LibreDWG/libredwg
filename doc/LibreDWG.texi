@@ -1407,6 +1407,33 @@ Create a DXF from a given input file (@code{DWG}, @pxref{DXF}, @pxref{DXFB, Bina
 optionally via @code{--as=rNNNN} as another version.
 Supports the same options as @code{dwg2dxf}.
 
+@item @file{dxfread}
+@cindex dxfread
+@anchor{dxfread}
+
+Converts a DXF or JSON file to the other format. The input format
+is auto-detected (JSON vs DXF).
+By default the output is JSON on stdout.
+
+@code{dxfread [OPTION]... INFILE|@samp{-}}
+
+Options:
+
+       -j
+              write JSON (default)
+
+       -d
+              write DXF
+
+       -o outfile
+              output file (default: stdout)
+
+       --help
+              display this help and exit
+
+       --version
+              output version information and exit
+
 @item @file{dwg2dxf}
 @cindex dwg2dxf
 @anchor{dwg2dxf}

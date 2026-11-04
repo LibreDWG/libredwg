@@ -77,6 +77,7 @@ run ()
                     *)     arg="-i tekst $arg"      ;;
                 esac
                 ;;
+    dxfread)    return ;; # has its own dxfread.test
     dwg2dxf)    if [ -n "$addarg" ]; then
                     arg="-y $addarg -o $bdwg-$out.dxf $arg"
                 else
