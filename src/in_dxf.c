@@ -1823,18 +1823,9 @@ dxf_set_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
 
   if (!vars->DWGCODEPAGE)
     return;
-  // r2007+ stores header TV strings as TU (UTF-16); decode to UTF-8 for the
-  // textual codepage-name lookup, otherwise only the first byte is seen (e.g.
-  // "ANSI_1252" reads as "A") and the codepage is wrongly UNDEFINED. Detect TU
-  // by the embedded NUL — codepage names are pure ASCII, so a UTF-16LE copy
-  // has a 0 second byte, whereas a plain UTF-8 name does not. (Keyed on the
-  // actual bytes, not from_version, since a down-convert may already have
-  // re-encoded the header strings to UTF-8.)
-  // Only r2007+ header strings are TU (dynapi_set_helper), with at least 2
-  // wide chars incl. the terminator. A 1-char ASCII name in an older file is
-  // a 2 byte buffer, which the unbounded TU scan would overread.
-  if (hdr->version >= R_2007 && vars->DWGCODEPAGE[0]
-      && vars->DWGCODEPAGE[1] == 0)
+  // dynapi_set_helper stores the header strings as TU only if
+  // IS_FROM_TU_DWG, never for a DXF import. A 1-char name is a 2-byte TV.
+  if (IS_FROM_TU_DWG (dwg))
     cp_str = cp_tmp = bit_convert_TU ((BITCODE_TU)vars->DWGCODEPAGE);
   else
     cp_str = vars->DWGCODEPAGE;
