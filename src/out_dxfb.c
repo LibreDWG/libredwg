@@ -28,6 +28,7 @@
 #include "decode.h"
 // #include "decode_r11.h"
 #include "out_dxf.h"
+#include "geom.h"
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"

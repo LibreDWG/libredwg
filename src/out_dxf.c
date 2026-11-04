@@ -40,6 +40,7 @@
 #include "decode.h"
 #include "encode.h"
 #include "out_dxf.h"
+#include "geom.h"
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"

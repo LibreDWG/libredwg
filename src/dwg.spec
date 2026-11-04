@@ -2711,9 +2711,21 @@ DWG_ENTITY (SPLINE)
       FIELD_VALUE (ctrl_tol) = 0.0000001;
     }
     DXF {
-      FIELD_BL (num_knots, 72);
-      //FIXME: calculate knots and ctrl_pts from fit_pts for DXF
-      FIELD_BL (num_ctrl_pts, 73);
+      // AutoCAD also writes the knots and control points, which
+      // spline_from_fit_points computes from the fit points
+      BITCODE_BL num_knots = 0, num_ctrl_pts = 0;
+#ifdef IS_DXF
+      Dwg_Entity_SPLINE fit;
+      if (spline_from_fit_points (_obj, &fit))
+        {
+          num_knots = fit.num_knots;
+          num_ctrl_pts = fit.num_ctrl_pts;
+          free (fit.ctrl_pts);
+          free (fit.knots);
+        }
+#endif
+      VALUE_BL (num_knots, 72);
+      VALUE_BL (num_ctrl_pts, 73);
       FIELD_BL (num_fit_pts, 74);
       FIELD_BD (knot_tol, 42);
       FIELD_BD (ctrl_tol, 43);
@@ -2721,6 +2733,21 @@ DWG_ENTITY (SPLINE)
     FIELD_BD (fit_tol, 44); // def: 0.0000001
     FIELD_3BD (beg_tan_vec, 12);
     FIELD_3BD (end_tan_vec, 13);
+#ifdef IS_DXF
+    DXF {
+      Dwg_Entity_SPLINE fit;
+      if (spline_from_fit_points (_obj, &fit))
+        {
+          BITCODE_BL i;
+          for (i = 0; i < fit.num_knots; i++)
+            VALUE_RD (fit.knots[i], 40);
+          for (i = 0; i < fit.num_ctrl_pts; i++)
+            VALUE_3BD (fit.ctrl_pts[i], 10);
+          free (fit.ctrl_pts);
+          free (fit.knots);
+        }
+    }
+#endif
     FIELD_BL (num_fit_pts, 0);
     FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11);
   }
