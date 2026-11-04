@@ -4170,12 +4170,14 @@ Ref_cmp (const void *key, const void *elem)
 {
   const Dwg_Object_Ref *pKey = (const Dwg_Object_Ref *)key;
   const Dwg_Object_Ref *pR = *(const Dwg_Object_Ref **)elem;
-  int retVal = (int)pKey->handleref.code - (int)pR->handleref.code;
+  // absolute_ref as the primary key: a new ref (highest handle so far)
+  // lands at the end, so ordered_ref_add's memmove copies nothing.
+  int retVal = pKey->absolute_ref > pR->absolute_ref    ? 1
+               : pKey->absolute_ref == pR->absolute_ref ? 0
+                                                        : -1;
   if (0 != retVal)
     return retVal;
-  return pKey->absolute_ref > pR->absolute_ref    ? 1
-         : pKey->absolute_ref == pR->absolute_ref ? 0
-                                                  : -1;
+  return (int)pKey->handleref.code - (int)pR->handleref.code;
 }
 
 void

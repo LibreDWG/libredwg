@@ -4703,7 +4703,8 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
                                * sizeof (Dwg_Object_Ref *));
       memset (&dwg->object_ref[dwg->num_object_refs], 0,
               REFS_PER_REALLOC * sizeof (Dwg_Object_Ref *));
-      dwg->dirty_refs = 1;
+      // The realloc moves only the array of pointers; the refs and their
+      // cached ref->obj are untouched, so dirty_refs is not set here.
       LOG_TRACE ("REALLOC dwg->object_ref vector to %u\n",
                  dwg->num_object_refs + REFS_PER_REALLOC);
     }

@@ -634,8 +634,12 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
 #define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
   if (_obj->numfield <= 0 || _obj->hvfield[_obj->numfield - 1] != ref)        \
     {                                                                         \
+      BITCODE_BL _hv_new = (_obj->numfield + 1);                              \
+      BITCODE_BL _hv_cap = 1;                                                 \
+      while (_hv_cap < _hv_new)                                               \
+        _hv_cap <<= 1;                                                        \
       _obj->hvfield = (BITCODE_H *)realloc (                                  \
-          _obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H));          \
+          _obj->hvfield, _hv_cap * sizeof (BITCODE_H));                        \
       _obj->hvfield[_obj->numfield] = ref;                                    \
       LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,   \
                  ARGS_REF (_obj->hvfield[_obj->numfield]));                   \
@@ -648,8 +652,12 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
   if (_obj->numfield <= 0                                                     \
       || find_hv (_obj->hvfield, _obj->numfield, ref->absolute_ref) < 0)      \
     {                                                                         \
+      BITCODE_BL _hv_new = (_obj->numfield + 1);                              \
+      BITCODE_BL _hv_cap = 1;                                                 \
+      while (_hv_cap < _hv_new)                                               \
+        _hv_cap <<= 1;                                                        \
       _obj->hvfield = (BITCODE_H *)realloc (                                  \
-          _obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H));          \
+          _obj->hvfield, _hv_cap * sizeof (BITCODE_H));                        \
       _obj->hvfield[_obj->numfield] = ref;                                    \
       LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,   \
                  ARGS_REF (_obj->hvfield[_obj->numfield]));                   \
