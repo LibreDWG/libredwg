@@ -5123,6 +5123,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
               }
             else
               {
+                rbuf->value.str.is_tu = 1;
                 rbuf->value.str.size = 0;
               }
           }
