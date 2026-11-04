@@ -1436,7 +1436,23 @@ dxf_fixup_zero_handle (const Dwg_Object *restrict obj)
 {
   static BITCODE_RLL last = 0;
   Dwg_Object *o = (Dwg_Object *)obj;
-  BITCODE_RLL next = dwg_next_handle (obj->parent);
+  Dwg_Data *dwg = obj->parent;
+  BITCODE_RLL next = dwg_next_handle (dwg);
+  // dwg_next_handle returns the last non-zero object handle + 1, which is
+  // not the highest handle. A handle-0 object landing on an existing handle
+  // corrupts the DXF (GH #1356), so start from the real highest handle.
+  BITCODE_RLL max_hdl = 0;
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    if (dwg->object[i].handle.value > max_hdl)
+      max_hdl = dwg->object[i].handle.value;
+  for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+    {
+      const Dwg_Object_Ref *ref = dwg->object_ref[i];
+      if (ref && ref->absolute_ref > max_hdl)
+        max_hdl = ref->absolute_ref;
+    }
+  if (next <= max_hdl)
+    next = max_hdl + 1;
   if (next <= last)
     next = last + 1;
   last = next;
