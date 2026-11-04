@@ -2273,22 +2273,61 @@ test_clip_verts_rect (void)
 
    { "type": 2, "vertices": [[-0.5, -0.5]] }
 
-   made the r2013+ encoder read vertices[1] past the 1-element array. */
+   made the r2013+ encoder read vertices[1] past the 1-element array.
+   The DWG written from it has a polygon clipping with that vertex, and
+   so has its JSON, read back. */
+static void
+pointcloud_clippings_check (Dwg_Data *dwg, const char *from,
+                            const BITCODE_BS type)
+{
+  Dwg_Entity_POINTCLOUD *o = NULL;
+  int i;
+
+  for (i = 0; i < (int)dwg->num_objects; i++)
+    {
+      if (dwg->object[i].fixedtype != DWG_TYPE_POINTCLOUD)
+        continue;
+      o = dwg->object[i].tio.entity->tio.POINTCLOUD;
+    }
+  if (!o)
+    fail ("pointcloud_clippings: no POINTCLOUD read from %s", from);
+  else if (o->num_clippings != 1 || !o->clippings)
+    fail ("pointcloud_clippings: %s num_clippings %u != 1", from,
+          (unsigned)o->num_clippings);
+  else
+    {
+      if (o->clippings[0].type != type)
+        fail ("pointcloud_clippings: %s clipping type %u != %u", from,
+              (unsigned)o->clippings[0].type, (unsigned)type);
+      if (o->clippings[0].num_vertices != 1)
+        fail ("pointcloud_clippings: %s num_vertices %u != 1", from,
+              (unsigned)o->clippings[0].num_vertices);
+      if (!o->clippings[0].vertices
+          || o->clippings[0].vertices[0].x != -0.5
+          || o->clippings[0].vertices[0].y != -0.5)
+        fail ("pointcloud_clippings: %s clipping vertices not read", from);
+    }
+}
+
 static int
 test_pointcloud_clippings (void)
 {
-  Dwg_Data dwg;
+  Dwg_Data dwg, dwg2, dwg3;
   Bit_Chain dat;
   char *json;
+  char *out;
+  const char *dwgfile = "pointcloud_clippings.dwg";
   int error;
-  int i;
-  Dwg_Entity_POINTCLOUD *o = NULL;
 
   failed = 0;
   json = strdup (
       "{ \"FILEHEADER\": { \"version\": \"AC1032\" },\n"
+      " \"CLASSES\": [ { \"number\": 500,\n"
+      "   \"dxfname\": \"ACDBPOINTCLOUD\", \"cppname\": \"AcDbPointCloud\",\n"
+      "   \"appname\": \"AcDbPointCloud\", \"proxyflag\": 1025,\n"
+      "   \"num_instances\": 1, \"item_class_id\": 498 } ],\n"
       " \"OBJECTS\": [ { \"entity\": \"POINTCLOUD\",\n"
-      "   \"type\": 684, \"handle\": [0, 1, 1],\n"
+      "   \"type\": 500, \"handle\": [0, 1, 1],\n"
       "   \"class_version\": 3,\n"
       "   \"num_source_files\": 0,\n"
       "   \"numpoints\": 100,\n"
@@ -2312,30 +2351,39 @@ test_pointcloud_clippings (void)
       free (json);
       return numfailed ();
     }
-  for (i = 0; i < (int)dwg.num_objects; i++)
-    {
-      if (dwg.object[i].fixedtype != DWG_TYPE_POINTCLOUD)
-        continue;
-      o = dwg.object[i].tio.entity->tio.POINTCLOUD;
-    }
-  if (!o)
-    fail ("pointcloud_clippings: no POINTCLOUD read");
-  else if (o->num_clippings != 1 || !o->clippings)
-    fail ("pointcloud_clippings: num_clippings %u != 1",
-          (unsigned)o->num_clippings);
+  pointcloud_clippings_check (&dwg, "JSON", 2);
+
+  // As dwgwrite, then dwgread -O JSON of its DWG and dwgwrite again.
+  memset (&dwg2, 0, sizeof (dwg2));
+  dwg2.opts = dwg.opts;
+  dwg.header.version = dwg.header.from_version;
+  unlink (dwgfile); // dwg_write_file won't overwrite it
+  error = dwg_write_file (dwgfile, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("pointcloud_clippings: dwg_write_file failed 0x%x", error);
+  else if ((error = dwg_read_file (dwgfile, &dwg2)) >= DWG_ERR_CRITICAL)
+    fail ("pointcloud_clippings: dwg_read_file failed 0x%x", error);
   else
     {
-      if (o->clippings[0].type != 2)
-        fail ("pointcloud_clippings: clipping type %u != 2",
-              (unsigned)o->clippings[0].type);
-      if (o->clippings[0].num_vertices != 1)
-        fail ("pointcloud_clippings: num_vertices %u != 1",
-              (unsigned)o->clippings[0].num_vertices);
-      if (!o->clippings[0].vertices
-          || o->clippings[0].vertices[0].x != -0.5
-          || o->clippings[0].vertices[0].y != -0.5)
-        fail ("pointcloud_clippings: clipping vertices not read");
+      pointcloud_clippings_check (&dwg2, dwgfile, 3);
+      out = write_json_string (&dwg2, "pointcloud_clippings.json");
+      if (!out)
+        fail ("pointcloud_clippings: no JSON written");
+      else
+        {
+          error = read_json_string (&dwg3, out, strlen (out));
+          if (error >= DWG_ERR_CRITICAL)
+            fail ("pointcloud_clippings: its JSON read back with 0x%x",
+                  error);
+          else
+            pointcloud_clippings_check (&dwg3, "its JSON", 3);
+          dwg_free (&dwg3);
+          free (out);
+        }
     }
+  if (!debug)
+    unlink (dwgfile);
+  dwg_free (&dwg2);
   dwg_free (&dwg);
   free (json);
   if (!numfailed ())
