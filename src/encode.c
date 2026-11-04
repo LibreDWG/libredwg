@@ -610,6 +610,7 @@ add_DUMMY_eed (Dwg_Object *obj)
       data->u.eed_0_r2007.is_tu = 1;
       data->u.eed_0_r2007.length = len & 0xFFFF; // RS
       memcpy (data->u.eed_0_r2007.string, wstr, len * 2);
+      free (wstr);
     }
   else
     {
