@@ -1404,6 +1404,8 @@ cquote (char *restrict dest, const size_t len, const char *restrict src)
 static bool
 dxf_needs_cquote (const char *restrict str)
 {
+  if (!str)
+    return false;
   for (const unsigned char *s = (const unsigned char *)str; *s; s++)
     {
       if (*s < 0x20 && *s != '\t')
