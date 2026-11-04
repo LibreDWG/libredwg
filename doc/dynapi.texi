@@ -4382,11 +4382,11 @@ BS,	DXF 170
 @item data_row_alignment
 BS,	DXF 170
 @item title_text_style
-H,	DXF 7
+H,	DXF 343
 @item header_text_style
-H,	DXF 7
+H,	DXF 343
 @item data_text_style
-H,	DXF 7
+H,	DXF 343
 @item title_row_height
 BD,	DXF 140
 @item header_row_height
@@ -5977,18 +5977,6 @@ Dwg_ARRAYITEMLOCATOR*
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS,	DXF 90
-@item aap_version
-BL,	DXF 90
-@item name
-T,	DXF 1
-@item asdap_class_version
-BL,	DXF 90
-@item dep
-H,	DXF 330
-@item class_version
-BL,	DXF 90
 @item acis_empty
 B
 @item unknown
@@ -6051,6 +6039,18 @@ H
 B
 @item acis_empty_bit
 B
+@item is_r2013
+BS,	DXF 90
+@item aap_version
+BL,	DXF 90
+@item name
+T,	DXF 1
+@item asdap_class_version
+BL,	DXF 90
+@item dep
+H,	DXF 330
+@item class_version
+BL,	DXF 90
 
 @end vtable
 @end indentedblock
@@ -14203,7 +14203,7 @@ BS,	DXF 74
 @item intersec_gsmarker
 BL,	DXF 92
 @item num_intsectobj
-BL,	DXF 74
+BL
 @item intsectobj
 H*,	DXF 332
 

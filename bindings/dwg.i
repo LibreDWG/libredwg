@@ -238,6 +238,7 @@ EXPORT Dwg_Entity_LAYOUTPRINTCONFIG** dwg_getall_LAYOUTPRINTCONFIG (Dwg_Object_R
 EXPORT Dwg_Entity_PLANESURFACE** dwg_getall_PLANESURFACE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_POINTCLOUD** dwg_getall_POINTCLOUD (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_POINTCLOUDEX** dwg_getall_POINTCLOUDEX (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_TABLE** dwg_getall_TABLE (Dwg_Object_Ref* hdr);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ALIGNMENTPARAMETERENTITY** dwg_getall_ALIGNMENTPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_ARCALIGNEDTEXT** dwg_getall_ARCALIGNEDTEXT (Dwg_Object_Ref* hdr);
@@ -259,7 +260,6 @@ EXPORT Dwg_Entity_POINTCLOUDEX** dwg_getall_POINTCLOUDEX (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_ROTATIONPARAMETERENTITY** dwg_getall_ROTATIONPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_RTEXT** dwg_getall_RTEXT (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_SWEPTSURFACE** dwg_getall_SWEPTSURFACE (Dwg_Object_Ref* hdr);
-  EXPORT Dwg_Entity_TABLE** dwg_getall_TABLE (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_VISIBILITYGRIPENTITY** dwg_getall_VISIBILITYGRIPENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_VISIBILITYPARAMETERENTITY** dwg_getall_VISIBILITYPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_XYGRIPENTITY** dwg_getall_XYGRIPENTITY (Dwg_Object_Ref* hdr);
@@ -302,6 +302,7 @@ EXPORT Dwg_Object_DETAILVIEWSTYLE** dwg_getall_DETAILVIEWSTYLE (Dwg_Data* dwg);
 EXPORT Dwg_Object_DICTIONARY** dwg_getall_DICTIONARY (Dwg_Data* dwg);
 EXPORT Dwg_Object_DICTIONARYVAR** dwg_getall_DICTIONARYVAR (Dwg_Data* dwg);
 EXPORT Dwg_Object_DICTIONARYWDFLT** dwg_getall_DICTIONARYWDFLT (Dwg_Data* dwg);
+EXPORT Dwg_Object_DIMASSOC** dwg_getall_DIMASSOC (Dwg_Data* dwg);
 EXPORT Dwg_Object_DIMSTYLE** dwg_getall_DIMSTYLE (Dwg_Data* dwg);
 EXPORT Dwg_Object_DIMSTYLE_CONTROL** dwg_getall_DIMSTYLE_CONTROL (Dwg_Data* dwg);
 EXPORT Dwg_Object_DUMMY** dwg_getall_DUMMY (Dwg_Data* dwg);
@@ -412,7 +413,6 @@ EXPORT Dwg_Object_BLOCKXYGRIP** dwg_getall_BLOCKXYGRIP (Dwg_Data* dwg);
 EXPORT Dwg_Object_BLOCKXYPARAMETER** dwg_getall_BLOCKXYPARAMETER (Dwg_Data* dwg);
 EXPORT Dwg_Object_DATALINK** dwg_getall_DATALINK (Dwg_Data* dwg);
 EXPORT Dwg_Object_DBCOLOR** dwg_getall_DBCOLOR (Dwg_Data* dwg);
-EXPORT Dwg_Object_DIMASSOC** dwg_getall_DIMASSOC (Dwg_Data* dwg);
 EXPORT Dwg_Object_EVALUATION_GRAPH** dwg_getall_EVALUATION_GRAPH (Dwg_Data* dwg);
 EXPORT Dwg_Object_FCFOBJECTCONTEXTDATA** dwg_getall_FCFOBJECTCONTEXTDATA (Dwg_Data* dwg);
 EXPORT Dwg_Object_GRADIENT_BACKGROUND** dwg_getall_GRADIENT_BACKGROUND (Dwg_Data* dwg);
@@ -438,6 +438,7 @@ EXPORT Dwg_Object_SECTION_SETTINGS** dwg_getall_SECTION_SETTINGS (Dwg_Data* dwg)
 EXPORT Dwg_Object_SKYLIGHT_BACKGROUND** dwg_getall_SKYLIGHT_BACKGROUND (Dwg_Data* dwg);
 EXPORT Dwg_Object_SOLID_BACKGROUND** dwg_getall_SOLID_BACKGROUND (Dwg_Data* dwg);
 EXPORT Dwg_Object_SPATIAL_INDEX** dwg_getall_SPATIAL_INDEX (Dwg_Data* dwg);
+EXPORT Dwg_Object_TABLECONTENT** dwg_getall_TABLECONTENT (Dwg_Data* dwg);
 EXPORT Dwg_Object_TABLESTYLE** dwg_getall_TABLESTYLE (Dwg_Data* dwg);
 EXPORT Dwg_Object_ASSOCARRAYMODIFYPARAMETERS** dwg_getall_ASSOCARRAYMODIFYPARAMETERS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ASSOCARRAYPATHPARAMETERS** dwg_getall_ASSOCARRAYPATHPARAMETERS (Dwg_Data* dwg);
@@ -486,7 +487,6 @@ EXPORT Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS** dwg_getall_ASSOCARRAYRECTANG
   EXPORT Dwg_Object_RADIMLGOBJECTCONTEXTDATA** dwg_getall_RADIMLGOBJECTCONTEXTDATA (Dwg_Data* dwg);
   EXPORT Dwg_Object_RADIMOBJECTCONTEXTDATA** dwg_getall_RADIMOBJECTCONTEXTDATA (Dwg_Data* dwg);
   EXPORT Dwg_Object_SUNSTUDY** dwg_getall_SUNSTUDY (Dwg_Data* dwg);
-  EXPORT Dwg_Object_TABLECONTENT** dwg_getall_TABLECONTENT (Dwg_Data* dwg);
   EXPORT Dwg_Object_TVDEVICEPROPERTIES** dwg_getall_TVDEVICEPROPERTIES (Dwg_Data* dwg);
   //EXPORT Dwg_Object_ABSHDRAWINGSETTINGS** dwg_getall_ABSHDRAWINGSETTINGS (Dwg_Data* dwg);
   //EXPORT Dwg_Object_ACAECUSTOBJ** dwg_getall_ACAECUSTOBJ (Dwg_Data* dwg);
@@ -1367,6 +1367,7 @@ EXPORT Dwg_Entity_LAYOUTPRINTCONFIG* dwg_object_to_LAYOUTPRINTCONFIG (Dwg_Object
 EXPORT Dwg_Entity_PLANESURFACE* dwg_object_to_PLANESURFACE (Dwg_Object* obj);
 EXPORT Dwg_Entity_POINTCLOUD* dwg_object_to_POINTCLOUD (Dwg_Object* obj);
 EXPORT Dwg_Entity_POINTCLOUDEX* dwg_object_to_POINTCLOUDEX (Dwg_Object* obj);
+EXPORT Dwg_Entity_TABLE* dwg_object_to_TABLE (Dwg_Object* obj);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ALIGNMENTPARAMETERENTITY* dwg_object_to_ALIGNMENTPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_ARCALIGNEDTEXT* dwg_object_to_ARCALIGNEDTEXT (Dwg_Object* obj);
@@ -1388,7 +1389,6 @@ EXPORT Dwg_Entity_POINTCLOUDEX* dwg_object_to_POINTCLOUDEX (Dwg_Object* obj);
   EXPORT Dwg_Entity_ROTATIONPARAMETERENTITY* dwg_object_to_ROTATIONPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_RTEXT* dwg_object_to_RTEXT (Dwg_Object* obj);
   EXPORT Dwg_Entity_SWEPTSURFACE* dwg_object_to_SWEPTSURFACE (Dwg_Object* obj);
-  EXPORT Dwg_Entity_TABLE* dwg_object_to_TABLE (Dwg_Object* obj);
   EXPORT Dwg_Entity_VISIBILITYGRIPENTITY* dwg_object_to_VISIBILITYGRIPENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_VISIBILITYPARAMETERENTITY* dwg_object_to_VISIBILITYPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_XYGRIPENTITY* dwg_object_to_XYGRIPENTITY (Dwg_Object* obj);
@@ -1430,6 +1430,7 @@ EXPORT Dwg_Object_DETAILVIEWSTYLE* dwg_object_to_DETAILVIEWSTYLE (Dwg_Object* ob
 EXPORT Dwg_Object_DICTIONARY* dwg_object_to_DICTIONARY (Dwg_Object* obj);
 EXPORT Dwg_Object_DICTIONARYVAR* dwg_object_to_DICTIONARYVAR (Dwg_Object* obj);
 EXPORT Dwg_Object_DICTIONARYWDFLT* dwg_object_to_DICTIONARYWDFLT (Dwg_Object* obj);
+EXPORT Dwg_Object_DIMASSOC* dwg_object_to_DIMASSOC (Dwg_Object* obj);
 EXPORT Dwg_Object_DIMSTYLE* dwg_object_to_DIMSTYLE (Dwg_Object* obj);
 EXPORT Dwg_Object_DIMSTYLE_CONTROL* dwg_object_to_DIMSTYLE_CONTROL (Dwg_Object* obj);
 EXPORT Dwg_Object_DUMMY* dwg_object_to_DUMMY (Dwg_Object* obj);
@@ -1540,7 +1541,6 @@ EXPORT Dwg_Object_BLOCKXYGRIP* dwg_object_to_BLOCKXYGRIP (Dwg_Object* obj);
 EXPORT Dwg_Object_BLOCKXYPARAMETER* dwg_object_to_BLOCKXYPARAMETER (Dwg_Object* obj);
 EXPORT Dwg_Object_DATALINK* dwg_object_to_DATALINK (Dwg_Object* obj);
 EXPORT Dwg_Object_DBCOLOR* dwg_object_to_DBCOLOR (Dwg_Object* obj);
-EXPORT Dwg_Object_DIMASSOC* dwg_object_to_DIMASSOC (Dwg_Object* obj);
 EXPORT Dwg_Object_EVALUATION_GRAPH* dwg_object_to_EVALUATION_GRAPH (Dwg_Object* obj);
 EXPORT Dwg_Object_FCFOBJECTCONTEXTDATA* dwg_object_to_FCFOBJECTCONTEXTDATA (Dwg_Object* obj);
 EXPORT Dwg_Object_GRADIENT_BACKGROUND* dwg_object_to_GRADIENT_BACKGROUND (Dwg_Object* obj);
@@ -1566,6 +1566,7 @@ EXPORT Dwg_Object_SECTION_SETTINGS* dwg_object_to_SECTION_SETTINGS (Dwg_Object* 
 EXPORT Dwg_Object_SKYLIGHT_BACKGROUND* dwg_object_to_SKYLIGHT_BACKGROUND (Dwg_Object* obj);
 EXPORT Dwg_Object_SOLID_BACKGROUND* dwg_object_to_SOLID_BACKGROUND (Dwg_Object* obj);
 EXPORT Dwg_Object_SPATIAL_INDEX* dwg_object_to_SPATIAL_INDEX (Dwg_Object* obj);
+EXPORT Dwg_Object_TABLECONTENT* dwg_object_to_TABLECONTENT (Dwg_Object* obj);
 EXPORT Dwg_Object_TABLESTYLE* dwg_object_to_TABLESTYLE (Dwg_Object* obj);
 EXPORT Dwg_Object_ASSOCARRAYMODIFYPARAMETERS* dwg_object_to_ASSOCARRAYMODIFYPARAMETERS (Dwg_Object* obj);
 EXPORT Dwg_Object_ASSOCARRAYPATHPARAMETERS* dwg_object_to_ASSOCARRAYPATHPARAMETERS (Dwg_Object* obj);
@@ -1614,7 +1615,6 @@ EXPORT Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS* dwg_object_to_ASSOCARRAYRECTA
   EXPORT Dwg_Object_RADIMLGOBJECTCONTEXTDATA* dwg_object_to_RADIMLGOBJECTCONTEXTDATA (Dwg_Object* obj);
   EXPORT Dwg_Object_RADIMOBJECTCONTEXTDATA* dwg_object_to_RADIMOBJECTCONTEXTDATA (Dwg_Object* obj);
   EXPORT Dwg_Object_SUNSTUDY* dwg_object_to_SUNSTUDY (Dwg_Object* obj);
-  EXPORT Dwg_Object_TABLECONTENT* dwg_object_to_TABLECONTENT (Dwg_Object* obj);
   EXPORT Dwg_Object_TVDEVICEPROPERTIES* dwg_object_to_TVDEVICEPROPERTIES (Dwg_Object* obj);
   //EXPORT Dwg_Object_ABSHDRAWINGSETTINGS* dwg_object_to_ABSHDRAWINGSETTINGS (Dwg_Object* obj);
   //EXPORT Dwg_Object_ACAECUSTOBJ* dwg_object_to_ACAECUSTOBJ (Dwg_Object* obj);

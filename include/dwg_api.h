@@ -616,6 +616,7 @@ extern "C"
   typedef struct _dwg_entity_PLANESURFACE		dwg_ent_planesurface;
   typedef struct _dwg_entity_POINTCLOUD		dwg_ent_pointcloud;
   typedef struct _dwg_entity_POINTCLOUDEX		dwg_ent_pointcloudex;
+  typedef struct _dwg_entity_TABLE		dwg_ent_table;
   /* debugging */
   typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY		dwg_ent_alignmentparameterentity;
   typedef struct _dwg_entity_ARCALIGNEDTEXT		dwg_ent_arcalignedtext;
@@ -637,7 +638,6 @@ extern "C"
   typedef struct _dwg_entity_ROTATIONPARAMETERENTITY		dwg_ent_rotationparameterentity;
   typedef struct _dwg_entity_RTEXT		dwg_ent_rtext;
   typedef struct _dwg_entity_SWEPTSURFACE		dwg_ent_sweptsurface;
-  typedef struct _dwg_entity_TABLE		dwg_ent_table;
   typedef struct _dwg_entity_VISIBILITYGRIPENTITY		dwg_ent_visibilitygripentity;
   typedef struct _dwg_entity_VISIBILITYPARAMETERENTITY		dwg_ent_visibilityparameterentity;
   typedef struct _dwg_entity_XYGRIPENTITY		dwg_ent_xygripentity;
@@ -699,6 +699,7 @@ extern "C"
   typedef struct _dwg_object_DETAILVIEWSTYLE		dwg_obj_detailviewstyle;
   typedef struct _dwg_object_DICTIONARYVAR		dwg_obj_dictionaryvar;
   typedef struct _dwg_object_DICTIONARYWDFLT		dwg_obj_dictionarywdflt;
+  typedef struct _dwg_object_DIMASSOC		dwg_obj_dimassoc;
   typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER		dwg_obj_dynamicblockpurgepreventer;
   typedef struct _dwg_object_FIELD		dwg_obj_field;
   typedef struct _dwg_object_FIELDLIST		dwg_obj_fieldlist;
@@ -789,7 +790,6 @@ extern "C"
   typedef struct _dwg_object_BLOCKXYPARAMETER		dwg_obj_blockxyparameter;
   typedef struct _dwg_object_DATALINK		dwg_obj_datalink;
   typedef struct _dwg_object_DBCOLOR		dwg_obj_dbcolor;
-  typedef struct _dwg_object_DIMASSOC		dwg_obj_dimassoc;
   typedef struct _dwg_object_EVALUATION_GRAPH		dwg_obj_evaluation_graph;
   typedef struct _dwg_object_FCFOBJECTCONTEXTDATA		dwg_obj_fcfobjectcontextdata;
   typedef struct _dwg_object_GRADIENT_BACKGROUND		dwg_obj_gradient_background;
@@ -815,6 +815,7 @@ extern "C"
   typedef struct _dwg_object_SKYLIGHT_BACKGROUND		dwg_obj_skylight_background;
   typedef struct _dwg_object_SOLID_BACKGROUND		dwg_obj_solid_background;
   typedef struct _dwg_object_SPATIAL_INDEX		dwg_obj_spatial_index;
+  typedef struct _dwg_object_TABLECONTENT		dwg_obj_tablecontent;
   typedef struct _dwg_object_TABLESTYLE		dwg_obj_tablestyle;
   typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS		dwg_obj_assocarraymodifyparameters;
   typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS		dwg_obj_assocarraypathparameters;
@@ -863,7 +864,6 @@ extern "C"
   typedef struct _dwg_object_RADIMLGOBJECTCONTEXTDATA		dwg_obj_radimlgobjectcontextdata;
   typedef struct _dwg_object_RADIMOBJECTCONTEXTDATA		dwg_obj_radimobjectcontextdata;
   typedef struct _dwg_object_SUNSTUDY		dwg_obj_sunstudy;
-  typedef struct _dwg_object_TABLECONTENT		dwg_obj_tablecontent;
   typedef struct _dwg_object_TVDEVICEPROPERTIES		dwg_obj_tvdeviceproperties;
 //  typedef struct _dwg_object_ABSHDRAWINGSETTINGS		dwg_obj_abshdrawingsettings;
 //  typedef struct _dwg_object_ACAECUSTOBJ		dwg_obj_acaecustobj;
@@ -1739,6 +1739,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_planesurface, PLANESURFACE);
   dwg_get_OBJECT_DECL (ent_pointcloud, POINTCLOUD);
   dwg_get_OBJECT_DECL (ent_pointcloudex, POINTCLOUDEX);
+  dwg_get_OBJECT_DECL (ent_table, TABLE);
 #ifdef DEBUG_CLASSES
     dwg_get_OBJECT_DECL (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_arcalignedtext, ARCALIGNEDTEXT);
@@ -1760,7 +1761,6 @@ extern "C"
     dwg_get_OBJECT_DECL (ent_rotationparameterentity, ROTATIONPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_rtext, RTEXT);
     dwg_get_OBJECT_DECL (ent_sweptsurface, SWEPTSURFACE);
-    dwg_get_OBJECT_DECL (ent_table, TABLE);
     dwg_get_OBJECT_DECL (ent_visibilitygripentity, VISIBILITYGRIPENTITY);
     dwg_get_OBJECT_DECL (ent_visibilityparameterentity, VISIBILITYPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_xygripentity, XYGRIPENTITY);
@@ -1824,6 +1824,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_detailviewstyle, DETAILVIEWSTYLE);
   dwg_get_OBJECT_DECL (obj_dictionaryvar, DICTIONARYVAR);
   dwg_get_OBJECT_DECL (obj_dictionarywdflt, DICTIONARYWDFLT);
+  dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
   dwg_get_OBJECT_DECL (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER);
   dwg_get_OBJECT_DECL (obj_field, FIELD);
   dwg_get_OBJECT_DECL (obj_fieldlist, FIELDLIST);
@@ -1914,7 +1915,6 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_blockxyparameter, BLOCKXYPARAMETER);
   dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
   dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
-  dwg_get_OBJECT_DECL (obj_dimassoc, DIMASSOC);
   dwg_get_OBJECT_DECL (obj_evaluation_graph, EVALUATION_GRAPH);
   dwg_get_OBJECT_DECL (obj_fcfobjectcontextdata, FCFOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_gradient_background, GRADIENT_BACKGROUND);
@@ -1940,6 +1940,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_skylight_background, SKYLIGHT_BACKGROUND);
   dwg_get_OBJECT_DECL (obj_solid_background, SOLID_BACKGROUND);
   dwg_get_OBJECT_DECL (obj_spatial_index, SPATIAL_INDEX);
+  dwg_get_OBJECT_DECL (obj_tablecontent, TABLECONTENT);
   dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
   dwg_get_OBJECT_DECL (obj_assocarraymodifyparameters, ASSOCARRAYMODIFYPARAMETERS);
   dwg_get_OBJECT_DECL (obj_assocarraypathparameters, ASSOCARRAYPATHPARAMETERS);
@@ -1988,7 +1989,6 @@ extern "C"
     dwg_get_OBJECT_DECL (obj_radimlgobjectcontextdata, RADIMLGOBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_radimobjectcontextdata, RADIMOBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_sunstudy, SUNSTUDY);
-    dwg_get_OBJECT_DECL (obj_tablecontent, TABLECONTENT);
     dwg_get_OBJECT_DECL (obj_tvdeviceproperties, TVDEVICEPROPERTIES);
 //     dwg_get_OBJECT_DECL (obj_abshdrawingsettings, ABSHDRAWINGSETTINGS);
 //     dwg_get_OBJECT_DECL (obj_acaecustobj, ACAECUSTOBJ);
@@ -2874,6 +2874,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (PLANESURFACE);
   DWG_GETALL_ENTITY_DECL (POINTCLOUD);
   DWG_GETALL_ENTITY_DECL (POINTCLOUDEX);
+  DWG_GETALL_ENTITY_DECL (TABLE);
   /* debugging */
   DWG_GETALL_ENTITY_DECL (ALIGNMENTPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (ARCALIGNEDTEXT);
@@ -2895,7 +2896,6 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (ROTATIONPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (RTEXT);
   DWG_GETALL_ENTITY_DECL (SWEPTSURFACE);
-  DWG_GETALL_ENTITY_DECL (TABLE);
   DWG_GETALL_ENTITY_DECL (VISIBILITYGRIPENTITY);
   DWG_GETALL_ENTITY_DECL (VISIBILITYPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (XYGRIPENTITY);
@@ -2968,6 +2968,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (DETAILVIEWSTYLE);
   DWG_GETALL_OBJECT_DECL (DICTIONARYVAR);
   DWG_GETALL_OBJECT_DECL (DICTIONARYWDFLT);
+  DWG_GETALL_OBJECT_DECL (DIMASSOC);
   DWG_GETALL_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER);
   DWG_GETALL_OBJECT_DECL (FIELD);
   DWG_GETALL_OBJECT_DECL (FIELDLIST);
@@ -3058,7 +3059,6 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (BLOCKXYPARAMETER);
   DWG_GETALL_OBJECT_DECL (DATALINK);
   DWG_GETALL_OBJECT_DECL (DBCOLOR);
-  DWG_GETALL_OBJECT_DECL (DIMASSOC);
   DWG_GETALL_OBJECT_DECL (EVALUATION_GRAPH);
   DWG_GETALL_OBJECT_DECL (FCFOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (GRADIENT_BACKGROUND);
@@ -3084,6 +3084,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (SKYLIGHT_BACKGROUND);
   DWG_GETALL_OBJECT_DECL (SOLID_BACKGROUND);
   DWG_GETALL_OBJECT_DECL (SPATIAL_INDEX);
+  DWG_GETALL_OBJECT_DECL (TABLECONTENT);
   DWG_GETALL_OBJECT_DECL (TABLESTYLE);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYMODIFYPARAMETERS);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYPATHPARAMETERS);
@@ -3132,7 +3133,6 @@ extern "C"
     DWG_GETALL_OBJECT_DECL (RADIMLGOBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (RADIMOBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (SUNSTUDY);
-    DWG_GETALL_OBJECT_DECL (TABLECONTENT);
     DWG_GETALL_OBJECT_DECL (TVDEVICEPROPERTIES);
 //  DWG_GETALL_OBJECT_DECL (ABSHDRAWINGSETTINGS);
 //  DWG_GETALL_OBJECT_DECL (ACAECUSTOBJ);
@@ -4024,6 +4024,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (PLANESURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUD);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUDEX);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (TABLE);
 #  ifdef DEBUG_CLASSES
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ALIGNMENTPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARCALIGNEDTEXT);
@@ -4045,7 +4046,6 @@ extern "C"
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ROTATIONPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (RTEXT);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SWEPTSURFACE);
-    CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (TABLE);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (VISIBILITYGRIPENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (VISIBILITYPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (XYGRIPENTITY);
@@ -4118,6 +4118,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (DETAILVIEWSTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (DICTIONARYVAR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (DICTIONARYWDFLT);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (DIMASSOC);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (DYNAMICBLOCKPURGEPREVENTER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (FIELD);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (FIELDLIST);
@@ -4208,7 +4209,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKXYPARAMETER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (DBCOLOR);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (DIMASSOC);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (EVALUATION_GRAPH);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (FCFOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (GRADIENT_BACKGROUND);
@@ -4234,6 +4234,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (SKYLIGHT_BACKGROUND);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (SOLID_BACKGROUND);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_INDEX);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLECONTENT);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYMODIFYPARAMETERS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYPATHPARAMETERS);
@@ -4282,7 +4283,6 @@ extern "C"
     CAST_DWG_OBJECT_TO_OBJECT_DECL (RADIMLGOBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (RADIMOBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (SUNSTUDY);
-    CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLECONTENT);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (TVDEVICEPROPERTIES);
   //  CAST_DWG_OBJECT_TO_OBJECT_DECL (ABSHDRAWINGSETTINGS);
   //  CAST_DWG_OBJECT_TO_OBJECT_DECL (ACAECUSTOBJ);

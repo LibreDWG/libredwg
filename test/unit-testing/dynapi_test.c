@@ -12271,7 +12271,7 @@ static int test_HATCH (const Dwg_Object *obj)
   }
   {
     Dwg_HATCH_DefLine* deflines;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "num_deflines", &count, NULL)
         && dwg_dynapi_entity_value (hatch, "HATCH", "deflines", &deflines, NULL)
         && deflines == hatch->deflines)
@@ -12742,7 +12742,7 @@ static int test_HELIX (const Dwg_Object *obj)
   }
   {
     BITCODE_3DPOINT* fit_pts;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (helix, "HELIX", "num_fit_pts", &count, NULL)
         && dwg_dynapi_entity_value (helix, "HELIX", "fit_pts", &fit_pts, NULL)
         && fit_pts == helix->fit_pts)
@@ -15291,7 +15291,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_H* cross_sections;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "num_cross_sections", &count, NULL)
         && dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "cross_sections", &cross_sections, NULL)
         && cross_sections == loftedsurface->cross_sections)
@@ -15362,7 +15362,7 @@ static int test_LOFTEDSURFACE (const Dwg_Object *obj)
   }
   {
     BITCODE_H* guide_curves;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "num_guide_curves", &count, NULL)
         && dwg_dynapi_entity_value (loftedsurface, "LOFTEDSURFACE", "guide_curves", &guide_curves, NULL)
         && guide_curves == loftedsurface->guide_curves)
@@ -16620,7 +16620,7 @@ static int test_MLINE (const Dwg_Object *obj)
   }
   {
     Dwg_MLINE_vertex* verts;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (mline, "MLINE", "num_verts", &count, NULL)
         && dwg_dynapi_entity_value (mline, "MLINE", "verts", &verts, NULL)
         && verts == mline->verts)
@@ -16673,7 +16673,7 @@ static int test_MPOLYGON (const Dwg_Object *obj)
   }
   {
     Dwg_HATCH_DefLine* deflines;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_deflines", &count, NULL)
         && dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "deflines", &deflines, NULL)
         && deflines == mpolygon->deflines)
@@ -22441,7 +22441,7 @@ static int test_SPLINE (const Dwg_Object *obj)
   }
   {
     BITCODE_3DPOINT* fit_pts;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (spline, "SPLINE", "num_fit_pts", &count, NULL)
         && dwg_dynapi_entity_value (spline, "SPLINE", "fit_pts", &fit_pts, NULL)
         && fit_pts == spline->fit_pts)
@@ -30137,7 +30137,7 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "entries", &entries, NULL)
         && entries == appid_control->entries)
@@ -44166,7 +44166,7 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "entries", &entries, NULL)
         && entries == block_control->entries)
@@ -44450,7 +44450,7 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   }
   {
     BITCODE_H* inserts;
-    BITCODE_BL count = 0;
+    BITCODE_RL count = 0;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "num_inserts", &count, NULL)
         && dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "inserts", &inserts, NULL)
         && inserts == block_header->inserts)
@@ -47417,7 +47417,7 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "entries", &entries, NULL)
         && entries == dimstyle_control->entries)
@@ -47442,7 +47442,7 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
   }
   {
     BITCODE_H* morehandles;
-    BITCODE_BL count = 0;
+    BITCODE_RC count = 0;
     if (dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "num_morehandles", &count, NULL)
         && dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "morehandles", &morehandles, NULL)
         && morehandles == dimstyle_control->morehandles)
@@ -50166,7 +50166,7 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "entries", &entries, NULL)
         && entries == layer_control->entries)
@@ -50802,7 +50802,7 @@ static int test_LTYPE (const Dwg_Object *obj)
   }
   {
     Dwg_LTYPE_dash* dashes;
-    BITCODE_BL count = 0;
+    BITCODE_RC count = 0;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "numdashes", &count, NULL)
         && dwg_dynapi_entity_value (ltype, "LTYPE", "dashes", &dashes, NULL)
         && dashes == ltype->dashes)
@@ -51033,7 +51033,7 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
   }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "entries", &entries, NULL)
         && entries == ltype_control->entries)
@@ -51274,7 +51274,7 @@ static int test_MATERIAL (const Dwg_Object *obj)
   }
   {
     Dwg_MATERIAL_gentexture* gentextures;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (material, "MATERIAL", "num_gentextures", &count, NULL)
         && dwg_dynapi_entity_value (material, "MATERIAL", "gentextures", &gentextures, NULL)
         && gentextures == material->gentextures)
@@ -53117,7 +53117,7 @@ static int test_MLINESTYLE (const Dwg_Object *obj)
   }
   {
     Dwg_MLINESTYLE_line* lines;
-    BITCODE_BL count = 0;
+    BITCODE_RC count = 0;
     if (dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "num_lines", &count, NULL)
         && dwg_dynapi_entity_value (mlinestyle, "MLINESTYLE", "lines", &lines, NULL)
         && lines == mlinestyle->lines)
@@ -57297,7 +57297,7 @@ static int test_SECTION_MANAGER (const Dwg_Object *obj)
   }
   {
     BITCODE_H* sections;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "num_sections", &count, NULL)
         && dwg_dynapi_entity_value (section_manager, "SECTION_MANAGER", "sections", &sections, NULL)
         && sections == section_manager->sections)
@@ -57594,7 +57594,7 @@ static int test_SPATIAL_FILTER (const Dwg_Object *obj)
   }
   {
     BITCODE_2RD* clip_verts;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "num_clip_verts", &count, NULL)
         && dwg_dynapi_entity_value (spatial_filter, "SPATIAL_FILTER", "clip_verts", &clip_verts, NULL)
         && clip_verts == spatial_filter->clip_verts)
@@ -58065,7 +58065,7 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "entries", &entries, NULL)
         && entries == style_control->entries)
@@ -59476,7 +59476,7 @@ static int test_UCS (const Dwg_Object *obj)
   }
   {
     Dwg_UCS_orthopts* orthopts;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (ucs, "UCS", "num_orthopts", &count, NULL)
         && dwg_dynapi_entity_value (ucs, "UCS", "orthopts", &orthopts, NULL)
         && orthopts == ucs->orthopts)
@@ -59574,7 +59574,7 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "entries", &entries, NULL)
         && entries == ucs_control->entries)
@@ -60226,7 +60226,7 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "entries", &entries, NULL)
         && entries == view_control->entries)
@@ -62800,7 +62800,7 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "entries", &entries, NULL)
         && entries == vport_control->entries)
@@ -62866,7 +62866,7 @@ static int test_VX_CONTROL (const Dwg_Object *obj)
     }
   {
     BITCODE_H* entries;
-    BITCODE_BL count = 0;
+    BITCODE_BS count = 0;
     if (dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "num_entries", &count, NULL)
         && dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "entries", &entries, NULL)
         && entries == vx_control->entries)

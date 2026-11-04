@@ -1362,8 +1362,8 @@ dwg_strip_mtext (const char *restrict mtext)
           if (mtext[i] == '\\') // \\ literal, \\U+xxxx, \\c/\\u NNNN
             {
               i++;
-              if (i < len && (mtext[i] == 'U' || mtext[i] == 'u'
-                              || mtext[i] == 'c'))
+              if (i < len
+                  && (mtext[i] == 'U' || mtext[i] == 'u' || mtext[i] == 'c'))
                 {
                   if (mtext[i] == 'U' && i + 1 < len && mtext[i + 1] == '+')
                     i += 2;
@@ -2255,19 +2255,19 @@ dxf_revcvt_lweight (const int lw)
    68/69 is derived the same way as its group 330. Ordinary blocks
    (e.g. the A$C... paste blocks) carry no sheet view and their
    viewports are written off (0, 0). */
-EXPORT bool
+EXPORT int
 dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk)
 {
   Dwg_Object_BLOCK_HEADER *blkhdr;
   if (blk->fixedtype != DWG_TYPE_BLOCK_HEADER)
-    return false;
+    return 0;
   blkhdr = blk->tio.object->tio.BLOCK_HEADER;
   if (dwg->header_vars.BLOCK_RECORD_PSPACE
       && dwg->header_vars.BLOCK_RECORD_PSPACE->obj == blk)
-    return true;
+    return 1;
   if (dwg->header_vars.BLOCK_RECORD_MSPACE
       && dwg->header_vars.BLOCK_RECORD_MSPACE->obj == blk)
-    return true;
+    return 1;
   {
     const BITCODE_T name = blkhdr->name;
     // Model- and paperspace blocks are named *Model_Space /
@@ -2275,7 +2275,7 @@ dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk)
     // leading '*' holds in TV and in UTF-16LE (first code unit in the
     // low byte) and in every supported codepage.
     if (name && name[0] == '*')
-      return true;
+      return 1;
     // A named layout references its block record
     for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
       {
@@ -2283,10 +2283,10 @@ dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk)
         if (o && o->fixedtype == DWG_TYPE_LAYOUT
             && o->tio.object->tio.LAYOUT->block_header
             && o->tio.object->tio.LAYOUT->block_header->obj == blk)
-          return true;
+          return 1;
       }
   }
-  return false;
+  return 0;
 }
 
 void

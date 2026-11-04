@@ -9578,6 +9578,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_POINTCLOUD *POINTCLOUD;
     Dwg_Entity_POINTCLOUDEX *POINTCLOUDEX;
+    Dwg_Entity_TABLE *TABLE;
     /* debugging */
       Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
       Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
@@ -9599,7 +9600,6 @@ typedef struct _dwg_object_entity
       Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
       Dwg_Entity_RTEXT *RTEXT;
       Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
-      Dwg_Entity_TABLE *TABLE;
       Dwg_Entity_VISIBILITYGRIPENTITY *VISIBILITYGRIPENTITY;
       Dwg_Entity_VISIBILITYPARAMETERENTITY *VISIBILITYPARAMETERENTITY;
       Dwg_Entity_XYGRIPENTITY *XYGRIPENTITY;
@@ -9735,6 +9735,7 @@ typedef struct _dwg_object_object
     Dwg_Object_DETAILVIEWSTYLE *DETAILVIEWSTYLE;
     Dwg_Object_DICTIONARYVAR *DICTIONARYVAR;
     Dwg_Object_DICTIONARYWDFLT *DICTIONARYWDFLT;
+    Dwg_Object_DIMASSOC *DIMASSOC;
     Dwg_Object_DYNAMICBLOCKPURGEPREVENTER *DYNAMICBLOCKPURGEPREVENTER;
     Dwg_Object_FIELD *FIELD;
     Dwg_Object_FIELDLIST *FIELDLIST;
@@ -9825,7 +9826,6 @@ typedef struct _dwg_object_object
     Dwg_Object_BLOCKXYPARAMETER *BLOCKXYPARAMETER;
     Dwg_Object_DATALINK *DATALINK;
     Dwg_Object_DBCOLOR *DBCOLOR;
-    Dwg_Object_DIMASSOC *DIMASSOC;
     Dwg_Object_EVALUATION_GRAPH *EVALUATION_GRAPH;
     Dwg_Object_FCFOBJECTCONTEXTDATA *FCFOBJECTCONTEXTDATA;
     Dwg_Object_GRADIENT_BACKGROUND *GRADIENT_BACKGROUND;
@@ -9851,6 +9851,7 @@ typedef struct _dwg_object_object
     Dwg_Object_SKYLIGHT_BACKGROUND *SKYLIGHT_BACKGROUND;
     Dwg_Object_SOLID_BACKGROUND *SOLID_BACKGROUND;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
+    Dwg_Object_TABLECONTENT *TABLECONTENT;
     Dwg_Object_TABLESTYLE *TABLESTYLE;
     Dwg_Object_ASSOCARRAYMODIFYPARAMETERS *ASSOCARRAYMODIFYPARAMETERS;
     Dwg_Object_ASSOCARRAYPATHPARAMETERS *ASSOCARRAYPATHPARAMETERS;
@@ -9899,7 +9900,6 @@ typedef struct _dwg_object_object
     Dwg_Object_RADIMLGOBJECTCONTEXTDATA *RADIMLGOBJECTCONTEXTDATA;
     Dwg_Object_RADIMOBJECTCONTEXTDATA *RADIMOBJECTCONTEXTDATA;
     Dwg_Object_SUNSTUDY *SUNSTUDY;
-    Dwg_Object_TABLECONTENT *TABLECONTENT;
     Dwg_Object_TVDEVICEPROPERTIES *TVDEVICEPROPERTIES;
 //    Dwg_Object_ABSHDRAWINGSETTINGS *ABSHDRAWINGSETTINGS;
 //    Dwg_Object_ACAECUSTOBJ *ACAECUSTOBJ;
@@ -11562,7 +11562,7 @@ EXPORT unsigned char *dwg_bmp (const Dwg_Data *restrict dwg,
  *  -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT.
  */
 EXPORT int dxf_cvt_lweight (const BITCODE_BSd value);
-EXPORT bool dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk);
+EXPORT int dxf_block_is_layout (Dwg_Data *dwg, Dwg_Object *blk);
 
 /** Converts the 100th mm lineweight, with -1 BYLAYER, -2 BYBLOCK, -3 BYLWDEFAULT,
     into the internal enum RC.
@@ -11926,6 +11926,7 @@ EXPORT int dwg_setup_CELLSTYLEMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_DETAILVIEWSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_DICTIONARYVAR (Dwg_Object *obj);
 EXPORT int dwg_setup_DICTIONARYWDFLT (Dwg_Object *obj);
+EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_setup_DYNAMICBLOCKPURGEPREVENTER (Dwg_Object *obj);
 EXPORT int dwg_setup_FIELD (Dwg_Object *obj);
 EXPORT int dwg_setup_FIELDLIST (Dwg_Object *obj);
@@ -11967,6 +11968,7 @@ EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDEX (Dwg_Object *obj);
+EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
@@ -12022,7 +12024,6 @@ EXPORT int dwg_setup_BLOCKXYGRIP (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKXYPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_DATALINK (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
-EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
 EXPORT int dwg_setup_EVALUATION_GRAPH (Dwg_Object *obj);
 EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_GRADIENT_BACKGROUND (Dwg_Object *obj);
@@ -12048,13 +12049,12 @@ EXPORT int dwg_setup_SECTION_SETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SKYLIGHT_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_SOLID_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_INDEX (Dwg_Object *obj);
+EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYMODIFYPARAMETERS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYPATHPARAMETERS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYPOLARPARAMETERS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
-EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
-EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
   EXPORT int dwg_setup_ALIGNMENTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_ARCALIGNEDTEXT (Dwg_Object *obj);
