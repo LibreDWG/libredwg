@@ -846,9 +846,8 @@ spline_path_points (const Dwg_Entity_SPLINE *spline)
     }
 }
 
-// A SPLINE with only fit points: the curve passes through them, so a
-// polyline through them is a fair approximation.
-// TODO: compute the control points from the fit points.
+// A SPLINE whose fit points cannot be interpolated: the curve passes
+// through them, so a polyline through them is a fair approximation.
 static int
 spline_fit_points_usable (const Dwg_Entity_SPLINE *spline)
 {
@@ -870,6 +869,22 @@ spline_path_fit_points (const Dwg_Entity_SPLINE *spline)
             transform_Y (spline->fit_pts[i].y));
 }
 
+// The Bezier curves of a SPLINE, from its control points, or else from its
+// fit points by AutoCAD's interpolation.  Returns their number, 0 if none.
+static int
+spline_bezier (const Dwg_Entity_SPLINE *spline, BITCODE_3DPOINT **pts)
+{
+  Dwg_Entity_SPLINE fit;
+  int num_curves = spline_to_bezier (spline, pts);
+  if (num_curves || spline_is_valid (spline)
+      || !spline_from_fit_points (spline, &fit))
+    return num_curves;
+  num_curves = spline_to_bezier (&fit, pts);
+  free (fit.ctrl_pts);
+  free (fit.knots);
+  return num_curves;
+}
+
 // A SPLINE has no OCS: its points are in WCS, drawn in the XY plane.
 static void
 output_SPLINE (Dwg_Object *obj)
@@ -880,7 +895,7 @@ output_SPLINE (Dwg_Object *obj)
 
   if (entity_invisible (obj))
     return;
-  num_curves = spline_to_bezier (spline, &pts);
+  num_curves = spline_bezier (spline, &pts);
   if (num_curves && spline->degree != 2 && spline->degree != 3)
     {
       free (pts); // SVG has no Bezier curves of other degrees
