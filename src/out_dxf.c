@@ -2871,6 +2871,45 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
+/* Emit an ACAD_PROXY_ENTITY for a class we cannot parse: the record name,
+ * the common entity data (including the proxy graphics in the preview,
+ * groups 92/310), and the proxy class markers. ODA-based converters do the
+ * same, so viewers draw the geometry even without the object enabler. */
+static int
+dxf_write_unknown_entity (Bit_Chain *restrict dat,
+                          const Dwg_Object *restrict obj)
+{
+  const Dwg_Data *dwg = obj->parent;
+  Dwg_Class *klass = NULL;
+  int j = (int)obj->type - 500;
+  int error = 0;
+
+  if (j >= 0 && j < (int)dwg->num_classes)
+    klass = &dwg->dwg_class[j];
+
+  fprintf (dat->fh, "%3i\r\n%s\r\n", 0, "ACAD_PROXY_ENTITY");
+  if (dat->version > R_11 || dwg->header_vars.HANDLING)
+    {
+      if (!obj->handle.value)
+        dxf_fixup_zero_handle (obj);
+      fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", 5, obj->handle.value);
+    }
+  error |= dxf_common_entity_handle_data (dat, obj);
+  // Proxy class markers: 90=498, 91=class id, 95=version, 70=0.
+  fprintf (dat->fh, "%3i\r\n%9li\r\n", 90, 498L);
+  fprintf (dat->fh, "%3i\r\n%9li\r\n", 91,
+           klass ? (long)klass->item_class_id : 0L);
+  // Group 95 must be decimal: dxf_read_rl parses it decimal, a hex value
+  // desyncs the reader.
+  fprintf (dat->fh, "%3i\r\n%9li\r\n", 95,
+           klass ? (long)((BITCODE_BL)klass->maint_version << 8
+                          | (BITCODE_BL)klass->dwg_version)
+                 : 0L);
+  fprintf (dat->fh, "%3i\r\n%6i\r\n", 70, 0);
+  error |= dxf_write_eed (dat, obj->tio.object);
+  return error;
+}
+
 /* returns 0 on success
  */
 static int
@@ -2884,8 +2923,13 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   i = obj->type - 500;
   if (i < 0 || i >= dwg->num_classes)
     return DWG_ERR_INVALIDTYPE;
-  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
-      || obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+    {
+      // Emit an ACAD_PROXY_ENTITY: the common entity data (including the
+      // proxy graphics) and the proxy class markers.
+      return dxf_write_unknown_entity (dat, obj);
+    }
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
     return DWG_ERR_UNHANDLEDCLASS;
 
   klass = &dwg->dwg_class[i];
