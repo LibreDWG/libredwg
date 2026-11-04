@@ -70,6 +70,7 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
                         Dwg_Entity_3DSOLID *restrict _obj);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
                               const int opts, const int dxf);
+static bool dxf_needs_cquote (const char *restrict str);
 static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                      const int dxf, const int opt);
 
@@ -89,7 +90,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 
 #define VALUE_TV(value, dxf)                                                  \
   {                                                                           \
-    if (dxf && dat->version >= R_2007)                                        \
+    if (dxf && (dat->version >= R_2007 || dxf_needs_cquote ((char *)value)))  \
       {                                                                       \
         char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);             \
         dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);              \
@@ -108,7 +109,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define VALUE_TV0(value, dxf)                                                 \
   if (dxf && value && *value)                                                 \
     {                                                                         \
-      if (dat->version >= R_2007)                                             \
+      if (dat->version >= R_2007 || dxf_needs_cquote ((char *)value))         \
       {                                                                       \
         char *u8 = bit_TV_to_utf8 ((char *)value, dat->codepage);             \
         dxf_fixup_string (dat, u8 ? u8 : (char *)value, 1, dxf);              \
@@ -1537,6 +1538,33 @@ dxf_write_chunked (Bit_Chain *restrict dat, const char *restrict str,
     }
 }
 
+/* Like bit_embed_TU, but writes U+0080-U+00FF as \U+XXXX too, not as one
+   raw byte: that byte is invalid UTF-8 in a r2007+ DXF, and another
+   character (or half of one) in a r2000-r2004 DXF in an Asian codepage.
+   (GH #1497) */
+static char *
+dxf_embed_TU (const BITCODE_TU restrict wstr)
+{
+  size_t len = 0, i;
+  char *str, *d;
+  if (!wstr)
+    return NULL;
+  while (wstr[len])
+    len++;
+  d = str = (char *)malloc ((7 * len) + 1);
+  if (!str)
+    return NULL;
+  for (i = 0; i < len; i++)
+    {
+      if (wstr[i] < 0x80)
+        *d++ = (char)wstr[i];
+      else
+        d += sprintf (d, "\\U+%04X", (unsigned)wstr[i]);
+    }
+  *d = '\0';
+  return str;
+}
+
 static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
                   const int dxf)
@@ -1560,7 +1588,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
           // -- as a single raw byte, silently undoing any quoting done
           // beforehand.
           wstr = bit_utf8_to_TU (str, 0);
-          ubuf = bit_embed_TU (wstr);
+          ubuf = dxf_embed_TU (wstr);
           free (wstr);
           if (!ubuf)
             {
@@ -4277,6 +4305,11 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
     dat->from_version = dwg->header.from_version;
+  // Pre-R2007 TV strings are stored in the source codepage; set dat->codepage
+  // so the cquote path (VALUE_TV/TV0) can convert them to UTF-8 before
+  // caret-quoting.  (GH #1496)
+  if (dat->from_version < R_2007)
+    dat->codepage = dwg->header.codepage;
   // Propagate the input-format flags, so IS_FROM_TU (dat) reflects the actual
   // source encoding.  DXF/JSON input stores T strings as single-byte TV even
   // for an r2007+ target, so without this the writer would scan them as wide
