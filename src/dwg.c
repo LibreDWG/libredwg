@@ -1250,18 +1250,29 @@ get_first_owned_entity (const Dwg_Object *hdr)
     }
   else if (version >= R_2004 || version < R_13b1)
     {
+      Dwg_Data *dwg = hdr->parent;
+      Dwg_Object_Ref *ref;
+      Dwg_Object *obj;
       _hdr->__iterator = 0;
-      if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
+      // skip entries that do not resolve: one dangling reference must not
+      // make the layout look empty from the start.
+      while (_hdr->entities && _hdr->__iterator < _hdr->num_owned)
         {
-          Dwg_Data *dwg = hdr->parent;
-          Dwg_Object *obj = dwg_ref_object (dwg, _hdr->entities[0]);
-          if (version < R_13b1 && obj && obj->fixedtype == DWG_TYPE_JUMP)
-            return dwg_resolve_jump (obj);
-          else
-            return obj;
+          ref = _hdr->entities[_hdr->__iterator];
+          obj = ref ? dwg_ref_object (dwg, ref) : NULL;
+          if (obj)
+            {
+              if (version < R_13b1 && obj->fixedtype == DWG_TYPE_JUMP)
+                return dwg_resolve_jump (obj);
+              else
+                return obj;
+            }
+          LOG_WARN ("BLOCK_HEADER " FORMAT_HV " entities[%lu] does not"
+                    " resolve, skipping\n",
+                    hdr->handle.value, (unsigned long)_hdr->__iterator);
+          _hdr->__iterator++;
         }
-      else
-        return NULL;
+      return NULL;
     }
 
   // TODO: preR13 block table
@@ -1461,14 +1472,26 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
       Dwg_Object *obj;
       Dwg_Object_Ref *ref;
       _hdr->__iterator++;
-      if (_hdr->__iterator == _hdr->num_owned)
-        return NULL;
-      ref = _hdr->entities ? _hdr->entities[_hdr->__iterator] : NULL;
-      obj = ref ? dwg_ref_object (dwg, ref) : NULL;
-      if (version < R_13b1 && obj && obj->fixedtype == DWG_TYPE_JUMP)
-        return dwg_resolve_jump (obj);
-      else
-        return obj;
+      // skip entries that do not resolve: one dangling reference must not
+      // end the whole layout. < (not ==) so an iterator bumped past the
+      // count cannot walk off the end of entities[].
+      while (_hdr->entities && _hdr->__iterator < _hdr->num_owned)
+        {
+          ref = _hdr->entities[_hdr->__iterator];
+          obj = ref ? dwg_ref_object (dwg, ref) : NULL;
+          if (obj)
+            {
+              if (version < R_13b1 && obj->fixedtype == DWG_TYPE_JUMP)
+                return dwg_resolve_jump (obj);
+              else
+                return obj;
+            }
+          LOG_WARN ("BLOCK_HEADER " FORMAT_HV " entities[%lu] does not"
+                    " resolve, skipping\n",
+                    hdr->handle.value, (unsigned long)_hdr->__iterator);
+          _hdr->__iterator++;
+        }
+      return NULL;
     }
 
   LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
@@ -1721,14 +1744,26 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
       Dwg_Object *obj;
       Dwg_Object_Ref *ref;
       _hdr->__iterator++;
-      if (_hdr->__iterator == _hdr->num_owned)
-        return NULL;
-      ref = _hdr->entities ? _hdr->entities[_hdr->__iterator] : NULL;
-      obj = ref ? dwg_ref_object (dwg, ref) : NULL;
-      if (version < R_13b1 && obj && obj->fixedtype == DWG_TYPE_JUMP)
-        return dwg_resolve_jump (obj);
-      else
-        return obj;
+      // skip entries that do not resolve: one dangling reference must not
+      // end the whole layout. < (not ==) so an iterator bumped past the
+      // count cannot walk off the end of entities[].
+      while (_hdr->entities && _hdr->__iterator < _hdr->num_owned)
+        {
+          ref = _hdr->entities[_hdr->__iterator];
+          obj = ref ? dwg_ref_object (dwg, ref) : NULL;
+          if (obj)
+            {
+              if (version < R_13b1 && obj->fixedtype == DWG_TYPE_JUMP)
+                return dwg_resolve_jump (obj);
+              else
+                return obj;
+            }
+          LOG_WARN ("BLOCK_HEADER " FORMAT_HV " entities[%lu] does not"
+                    " resolve, skipping\n",
+                    hdr->handle.value, (unsigned long)_hdr->__iterator);
+          _hdr->__iterator++;
+        }
+      return NULL;
     }
 
   LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
