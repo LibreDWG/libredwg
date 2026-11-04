@@ -14814,7 +14814,8 @@ invalid_dxf:
 fail:
   if (obj)
     {
-      obj->dxfname = NULL; // prevent double-free by caller
+      // obj->dxfname is freed by dwg_free_object (IN/INDXF/INJSON); the
+      // caller's dxfname copy was consumed (or freed) by new_object already.
       dwg_free_object (obj);
       dwg->num_objects--;
     }
