@@ -2620,6 +2620,16 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           oldpos = hdl_dat.byte;
           // the offset from the previous handle. default: 1, unsigned
           handleoff = bit_read_UMC (&hdl_dat);
+          // A failed modular char read (nine or more high-bit bytes in a row)
+          // derails the stream; resync one byte later instead of trusting the
+          // garbage. Only on !handleoff: the other conditions below also fire
+          // on entries that parsed fine, and resyncing on them costs good
+          // entries (Leader.dwg would lose all its modelspace entities).
+          if (!handleoff)
+            {
+              hdl_dat.byte = oldpos + 1;
+              handleoff = bit_read_UMC (&hdl_dat);
+            }
           // the offset from the previous address. default: obj->size
           offset = bit_read_MC (&hdl_dat);
           if (!handleoff || handleoff > max_handles - last_handle
