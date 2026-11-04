@@ -164,9 +164,13 @@ static double
 entity_lweight (Dwg_Object_Entity *ent)
 {
   // TODO: resolve BYLAYER 256, see above.
-  // stroke-width:%0.1fpx. 100th of a mm
+  // dxf_cvt_lweight gives 100ths of a mm; mm is lw/100, not lw/1000.
   int lw = dxf_cvt_lweight (ent->linewt);
-  return lw < 0 ? 0.1 : (double)(lw * 0.001);
+  if (lw < 0)
+    return 0.25; // BYLAYER/BYBLOCK: reasonable default
+  if (lw == 0)
+    return 0.13; // thinnest line
+  return (double)lw * 0.01;
 }
 
 static char *
@@ -218,7 +222,8 @@ common_entity (Dwg_Object_Entity *ent)
   char *color;
   lweight = entity_lweight (ent);
   color = entity_color (ent);
-  printf ("      style=\"fill:none;stroke:%s;stroke-width:%.1fpx\" />\n",
+  printf ("      style=\"fill:none;stroke:%s;stroke-width:%f;"
+          "vector-effect:non-scaling-stroke\" />\n",
           color, lweight);
   if (*color == '#')
     free (color);
@@ -754,6 +759,9 @@ output_object (Dwg_Object *obj)
       fprintf (stderr, "object is NULL\n");
       return 0;
     }
+  // count only entities that actually put coordinates on the page
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY && entity_invisible (obj))
+    return 0;
 
   switch (obj->fixedtype)
     {
@@ -798,6 +806,7 @@ output_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_SEQEND:
     case DWG_TYPE_VIEWPORT:
+      num = 0;
       break;
     default:
       num = 0;
@@ -923,7 +932,7 @@ output_SVG (Dwg_Data *dwg)
           "   version=\"1.1\" baseProfile=\"basic\"\n"
           "   width=\"100%%\" height=\"100%%\"\n"
           "   viewBox=\"%f %f %f %f\">\n",
-          model_xmin, model_ymin, page_width, page_height);
+          0.0, 0.0, page_width, page_height);
 
   if (!mspace && (ref = dwg_paper_space_ref (dwg)))
     num = output_BLOCK_HEADER (
