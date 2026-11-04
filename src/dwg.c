@@ -3598,14 +3598,11 @@ dwg_next_handle (const Dwg_Data *dwg)
   long j;
   BITCODE_RLL seed = 0;
   // check the objects for the highest handle
-  for (j = dwg->num_objects; !seed && j > 0; j--)
+  for (j = dwg->num_objects; j > 0; j--)
     {
-      Dwg_Object *o = j > 0 ? &dwg->object[j - 1] : NULL;
-      if (o && o->handle.value)
-        {
-          seed = o->handle.value;
-          break;
-        }
+      Dwg_Object *o = &dwg->object[j - 1];
+      if (o && o->handle.value > seed)
+        seed = o->handle.value;
     }
   // compare against relative handles (deleted and purged?)
   LOG_INSANE ("compute HANDSEED " FORMAT_HV, seed);
