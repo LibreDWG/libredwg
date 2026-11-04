@@ -6,6 +6,10 @@
 #include "tests_common.h"
 
 #define NEAR(a, b) (fabs ((a) - (b)) < 1e-9)
+// MSVC math.h defines the M_ constants only with _USE_MATH_DEFINES
+#ifndef M_SQRT1_2
+#  define M_SQRT1_2 0.70710678118654752440
+#endif
 
 // bulge_to_arc must give an arc with this center, radius, start and sweep
 static void
@@ -358,6 +362,24 @@ spline_from_fit_points_tests (void)
     }
 }
 
+// spline_flatten of spline with tol must give min_pts to max_pts points,
+// ending at (x,y).  Returns the number of points.
+static int
+check_flatten (const char *name, const Dwg_Entity_SPLINE *spline,
+               const double tol, const int min_pts, const int max_pts,
+               const double x, const double y)
+{
+  BITCODE_3DPOINT *pts = NULL;
+  const int n = spline_flatten (spline, tol, &pts);
+  if (n >= min_pts && n <= max_pts && NEAR (pts[n - 1].x, x)
+      && NEAR (pts[n - 1].y, y))
+    ok ("spline_flatten %s: %d points", name, n);
+  else
+    fail ("spline_flatten %s: %d points", name, n);
+  free (pts);
+  return n;
+}
+
 static void
 spline_flatten_tests (void)
 {
@@ -373,8 +395,7 @@ spline_flatten_tests (void)
   BITCODE_3DPOINT fit[3]
       = { { 0.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 }, { 2.0, 0.0, 0.0 } };
   Dwg_Entity_SPLINE spline;
-  BITCODE_3DPOINT *pts = NULL;
-  int n, n4;
+  int n;
 
   memset (&spline, 0, sizeof (spline));
   spline.degree = 3;
@@ -383,40 +404,18 @@ spline_flatten_tests (void)
   spline.num_knots = 8;
   spline.knots = knots;
   // aligned control points: a straight line needs no inner point
-  n = spline_flatten (&spline, 1e-3, &pts);
-  if (n == 2 && NEAR (pts[1].x, 3.0) && NEAR (pts[1].y, 3.0))
-    ok ("spline_flatten straight line");
-  else
-    fail ("spline_flatten straight line: %d points", n);
-  free (pts);
-
+  check_flatten ("straight line", &spline, 1e-3, 2, 2, 3.0, 3.0);
   spline.ctrl_pts = bez;
-  n = spline_flatten (&spline, 1e-3, &pts);
-  if (n > 2 && NEAR (pts[0].x, 0.0) && NEAR (pts[0].y, 0.0)
-      && NEAR (pts[n - 1].x, 4.0) && NEAR (pts[n - 1].y, 0.0))
-    ok ("spline_flatten bezier ends");
-  else
-    fail ("spline_flatten bezier ends: %d points", n);
-  free (pts);
+  n = check_flatten ("bezier", &spline, 1e-3, 3, SPLINE_MAX_POINTS, 4.0, 0.0);
   // a finer tolerance needs more points
-  n4 = spline_flatten (&spline, 1e-4, &pts);
-  if (n4 > n)
-    ok ("spline_flatten finer tolerance: %d > %d points", n4, n);
-  else
-    fail ("spline_flatten finer tolerance: %d <= %d points", n4, n);
-  free (pts);
-
+  check_flatten ("bezier finer", &spline, 1e-4, n + 1, SPLINE_MAX_POINTS, 4.0,
+                 0.0);
   // only fit points: interpolated first
   memset (&spline, 0, sizeof (spline));
   spline.degree = 3;
   spline.num_fit_pts = 3;
   spline.fit_pts = fit;
-  n = spline_flatten (&spline, 1e-3, &pts);
-  if (n > 2 && NEAR (pts[n - 1].x, 2.0) && NEAR (pts[n - 1].y, 0.0))
-    ok ("spline_flatten fit points");
-  else
-    fail ("spline_flatten fit points: %d points", n);
-  free (pts);
+  check_flatten ("fit points", &spline, 1e-3, 3, SPLINE_MAX_POINTS, 2.0, 0.0);
 }
 
 int
