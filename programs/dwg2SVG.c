@@ -22,7 +22,7 @@
  *         *SURFACE, GEOPOSITIONMARKER/CAMERA/LIGHT, HATCH, HELIX,
  *         IMAGE/WIPEOUT/UNDERLAY, LEADER, MESH, MINSERT, MLINE, MTEXT,
  * MULTILEADER, OLE2FRAME, OLEFRAME, POLYLINE_3D, POLYLINE_MESH,
- * POLYLINE_PFACE, RAY, XLINE, SPLINE, TABLE, TOLERANCE, VIEWPORT?
+ * POLYLINE_PFACE, RAY, XLINE, TABLE, TOLERANCE, VIEWPORT?
  *       common_entity_data: ltype, ltype_scale.
  *       PLINE: widths, bulges.
  */
@@ -801,6 +801,110 @@ output_LWPOLYLINE (Dwg_Object *obj)
 }
 
 // TODO: MINSERT
+// The chain of Bezier curves of degree 2 or 3 of a SPLINE: exact with Q or C.
+// Bezier curves are affine invariant, so transforming the control points
+// transforms the curve.
+static void
+spline_path_bezier (const BITCODE_3DPOINT *pts, const int num_curves,
+                    const int degree)
+{
+  int j, i;
+  printf ("M %f,%f", transform_X (pts[0].x), transform_Y (pts[0].y));
+  for (j = 0; j < num_curves; j++)
+    {
+      printf (" %c", degree == 3 ? 'C' : 'Q');
+      for (i = 1; i <= degree; i++)
+        printf (" %f,%f", transform_X (pts[j * degree + i].x),
+                transform_Y (pts[j * degree + i].y));
+    }
+}
+
+// Other SPLINEs through evaluated points, SPLINE_SVG_STEPS per knot span.
+#define SPLINE_SVG_STEPS 16
+static void
+spline_path_points (const Dwg_Entity_SPLINE *spline)
+{
+  BITCODE_BL m;
+  int first = 1;
+  for (m = spline->degree; m < spline->num_ctrl_pts; m++)
+    {
+      const double u0 = spline->knots[m], u1 = spline->knots[m + 1];
+      int i;
+      if (u1 <= u0)
+        continue;
+      // the first point of a span is the last one of the span before
+      for (i = first ? 0 : 1; i <= SPLINE_SVG_STEPS; i++)
+        {
+          BITCODE_3DPOINT pt;
+          spline_eval (&pt, spline, u0 + (u1 - u0) * i / SPLINE_SVG_STEPS);
+          if (first)
+            printf ("M %f,%f", transform_X (pt.x), transform_Y (pt.y));
+          else
+            printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
+          first = 0;
+        }
+    }
+}
+
+// A SPLINE with only fit points: the curve passes through them, so a
+// polyline through them is a fair approximation.
+// TODO: compute the control points from the fit points.
+static int
+spline_fit_points_usable (const Dwg_Entity_SPLINE *spline)
+{
+  BITCODE_BL i;
+  if (!spline->fit_pts || spline->num_fit_pts < 2)
+    return 0;
+  for (i = 0; i < spline->num_fit_pts; i++)
+    if (isnan_3BD (spline->fit_pts[i]))
+      return 0;
+  return 1;
+}
+
+static void
+spline_path_fit_points (const Dwg_Entity_SPLINE *spline)
+{
+  BITCODE_BL i;
+  for (i = 0; i < spline->num_fit_pts; i++)
+    printf ("%s %f,%f", i ? " L" : "M", transform_X (spline->fit_pts[i].x),
+            transform_Y (spline->fit_pts[i].y));
+}
+
+// A SPLINE has no OCS: its points are in WCS, drawn in the XY plane.
+static void
+output_SPLINE (Dwg_Object *obj)
+{
+  Dwg_Entity_SPLINE *spline = obj->tio.entity->tio.SPLINE;
+  BITCODE_3DPOINT *pts = NULL;
+  int num_curves;
+
+  if (entity_invisible (obj))
+    return;
+  num_curves = spline_to_bezier (spline, &pts);
+  if (num_curves && spline->degree != 2 && spline->degree != 3)
+    {
+      free (pts); // SVG has no Bezier curves of other degrees
+      num_curves = 0;
+    }
+  if (!num_curves && !spline_is_valid (spline)
+      && !spline_fit_points_usable (spline))
+    return; // nothing usable to draw
+  printf ("\t<!-- spline-%d -->\n", obj->index);
+  printf ("\t<path id=\"dwg-object-%d\" d=\"", obj->index);
+  if (num_curves)
+    spline_path_bezier (pts, num_curves, spline->degree);
+  else if (spline_is_valid (spline))
+    spline_path_points (spline);
+  else
+    spline_path_fit_points (spline);
+  if (num_curves)
+    free (pts);
+  if (spline->closed_b)
+    printf (" Z");
+  printf ("\"\n\t");
+  common_entity (obj->tio.entity);
+}
+
 static void
 output_INSERT (Dwg_Object *obj)
 {
@@ -887,6 +991,9 @@ output_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_XLINE:
       output_XLINE (obj);
+      break;
+    case DWG_TYPE_SPLINE:
+      output_SPLINE (obj);
       break;
     case DWG_TYPE_SEQEND:
     case DWG_TYPE_VIEWPORT:
