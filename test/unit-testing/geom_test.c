@@ -269,6 +269,95 @@ spline_to_bezier_tests (void)
   free (pts);
 }
 
+// spline_from_fit_points must give the control points AutoCAD wrote to DXF
+static void
+check_fit (const char *name, Dwg_Entity_SPLINE *spline, const double *ctrl,
+           const BITCODE_BL num_ctrl)
+{
+  Dwg_Entity_SPLINE out;
+  BITCODE_BL i;
+  int good;
+  memset (&out, 0, sizeof (out));
+  good = spline_from_fit_points (spline, &out) && out.num_ctrl_pts == num_ctrl
+         && spline_is_valid (&out);
+  for (i = 0; good && i < num_ctrl; i++)
+    good = fabs (out.ctrl_pts[i].x - ctrl[2 * i]) < 1e-9
+           && fabs (out.ctrl_pts[i].y - ctrl[2 * i + 1]) < 1e-9;
+  if (good)
+    ok ("spline_from_fit_points %s", name);
+  else
+    fail ("spline_from_fit_points %s", name);
+  free (out.ctrl_pts);
+  free (out.knots);
+}
+
+static void
+spline_from_fit_points_tests (void)
+{
+  // example_2000.dxf SPLINE 16E, with both end tangents
+  BITCODE_3DPOINT fit16e[6]
+      = { { -1160.70828949499, 1466.29959801825, 0.0 },
+          { -803.2584206390579, 1216.773557430618, 0.0 },
+          { -1263.536333621469, 1021.066859620477, 0.0 },
+          { -1297.812348330295, 1896.854333640411, 0.0 },
+          { -1493.675290112675, 1867.498328089189, 0.0 },
+          { -1449.606128933269, 1436.943592467027, 0.0 } };
+  const double ctrl16e[16]
+      = { -1160.70828949499,  1466.29959801825,   -1278.733898858219,
+          1381.536363400083,  -393.9544459252916, 1231.131526494542,
+          -1793.156271927829, 719.5692228288901,  -936.5505143705686,
+          1967.430418368798,  -1656.363244849998, 1879.620298503901,
+          -1444.406509911975, 1581.117926364117,  -1449.606128933269,
+          1436.943592467027 };
+  // 2018/Dynblocks.dxf SPLINE BD31, no tangents: the natural end condition
+  BITCODE_3DPOINT fitbd31[3]
+      = { { -0.8132274188101291, 0.2112191587584675, 0.0 },
+          { -0.9233206883072853, 0.3861872703200788, 0.0 },
+          { -0.9747296262066811, 0.6974653476281674, 0.0 } };
+  const double ctrlbd31[10]
+      = { -0.8132274188101291, 0.2112191587584675,  -0.8549662927869439,
+          0.2676290920387539,  -0.9604058639024939, 0.4101302810989598,
+          -0.9693350879702009, 0.5892507619518695,  -0.9747296262066811,
+          0.6974653476281674 };
+  // 2 points without tangents: a straight line, control points at thirds
+  BITCODE_3DPOINT fit2[2] = { { 0.0, 0.0, 0.0 }, { 3.0, 6.0, 0.0 } };
+  const double ctrl2[8] = { 0, 0, 1, 2, 2, 4, 3, 6 };
+  BITCODE_3DPOINT fitrep[3]
+      = { { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 1.0, 1.0, 0.0 } };
+  Dwg_Entity_SPLINE spline, out;
+
+  memset (&spline, 0, sizeof (spline));
+  spline.degree = 3;
+  spline.num_fit_pts = 6;
+  spline.fit_pts = fit16e;
+  spline.beg_tan_vec.x = -0.8122360233169471;
+  spline.beg_tan_vec.y = -0.5833289315868635;
+  spline.end_tan_vec.x = -0.0360413721468526;
+  spline.end_tan_vec.y = -0.9993502986909906;
+  check_fit ("16E with tangents", &spline, ctrl16e, 8);
+
+  memset (&spline, 0, sizeof (spline));
+  spline.degree = 3;
+  spline.num_fit_pts = 3;
+  spline.fit_pts = fitbd31;
+  check_fit ("BD31 natural", &spline, ctrlbd31, 5);
+
+  spline.num_fit_pts = 2;
+  spline.fit_pts = fit2;
+  check_fit ("2 points", &spline, ctrl2, 4);
+
+  spline.num_fit_pts = 3;
+  spline.fit_pts = fitrep;
+  if (!spline_from_fit_points (&spline, &out))
+    ok ("spline_from_fit_points rejects a repeated point");
+  else
+    {
+      fail ("spline_from_fit_points accepted a repeated point");
+      free (out.ctrl_pts);
+      free (out.knots);
+    }
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -279,5 +368,6 @@ main (int argc, char const *argv[])
   ocs_mirrored_tests ();
   spline_eval_tests ();
   spline_to_bezier_tests ();
+  spline_from_fit_points_tests ();
   return failed;
 }

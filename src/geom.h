@@ -78,6 +78,11 @@ EXPORT int spline_eval (BITCODE_3DPOINT *out, const Dwg_Entity_SPLINE *spline,
 // or 0 if the SPLINE is not valid, clamped and non-rational.
 EXPORT int spline_to_bezier (const Dwg_Entity_SPLINE *spline,
                              BITCODE_3DPOINT **pts) __nonnull ((1, 2));
+// AutoCAD's cubic interpolation of the fit points of a SPLINE.  Sets *out
+// to a copy with the computed control points and knots, to be freed by the
+// caller.  Returns 0 if the fit points cannot be interpolated.
+EXPORT int spline_from_fit_points (const Dwg_Entity_SPLINE *spline,
+                                   Dwg_Entity_SPLINE *out) __nonnull ((1, 2));
 
 /* Fast V4 Spatial Geometry Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
  * Note: V4 refers to the Klein 4-group integer matrix over the S12 lattice,
