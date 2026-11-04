@@ -689,6 +689,58 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   return 1;
 }
 
+// The tolerance of the points on a SPLINE curve, relative to its size.
+#define SPLINE_GEOJSON_TOL 1e-3
+
+/* A SPLINE as a LineString of points on its curve, within SPLINE_GEOJSON_TOL
+   of it.  If the SPLINE cannot be evaluated, its fit points or else its
+   control points.  Returns 0 if there is nothing to write. */
+static int
+dwg_geojson_SPLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                    int is_last)
+{
+  Dwg_Entity_SPLINE *_obj = obj->tio.entity->tio.SPLINE;
+  BITCODE_3DPOINT *curve = NULL;
+  const BITCODE_3DPOINT *pts;
+  int j, num_pts = spline_flatten (_obj, SPLINE_GEOJSON_TOL, &curve);
+
+  if (num_pts >= 2)
+    pts = curve;
+  else if (_obj->num_fit_pts > 0 && _obj->fit_pts)
+    {
+      num_pts = _obj->num_fit_pts;
+      pts = _obj->fit_pts;
+    }
+  else if (_obj->num_ctrl_pts > 0 && _obj->ctrl_pts
+           && (curve = (BITCODE_3DPOINT *)malloc (_obj->num_ctrl_pts
+                                                  * sizeof (*curve))))
+    {
+      // the control points have a parent pointer: copy x, y, z
+      for (j = 0; j < (int)_obj->num_ctrl_pts; j++)
+        {
+          curve[j].x = _obj->ctrl_pts[j].x;
+          curve[j].y = _obj->ctrl_pts[j].y;
+          curve[j].z = _obj->ctrl_pts[j].z;
+        }
+      num_pts = (int)_obj->num_ctrl_pts;
+      pts = curve;
+    }
+  else
+    return 0;
+  FEATURE (AcDbEntity : AcDbSpline, obj);
+  GEOMETRY (LineString);
+  KEY (coordinates);
+  ARRAY;
+  for (j = 0; j < num_pts - 1; j++)
+    VALUE_2DPOINT (pts[j].x, pts[j].y)
+  LASTVALUE_2DPOINT (pts[num_pts - 1].x, pts[num_pts - 1].y)
+  LASTENDARRAY;
+  ENDGEOMETRY;
+  ENDFEATURE;
+  free (curve);
+  return 1;
+}
+
 /* returns 0 if object could be printed
  */
 static int
@@ -1093,51 +1145,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         return 1;
       }
     case DWG_TYPE_SPLINE:
-      {
-        Dwg_Entity_SPLINE *_obj = obj->tio.entity->tio.SPLINE;
-        BITCODE_BL num_pts;
-        int use_fit_pts;
-        // Use fit points if available, otherwise control points
-        if (_obj->num_fit_pts > 0 && _obj->fit_pts)
-          {
-            num_pts = _obj->num_fit_pts;
-            use_fit_pts = 1;
-          }
-        else if (_obj->num_ctrl_pts > 0 && _obj->ctrl_pts)
-          {
-            num_pts = _obj->num_ctrl_pts;
-            use_fit_pts = 0;
-          }
-        else
-          break;
-        FEATURE (AcDbEntity : AcDbSpline, obj);
-        GEOMETRY (LineString);
-        KEY (coordinates);
-        ARRAY;
-        for (BITCODE_BL j = 0; j < num_pts; j++)
-          {
-            double px, py;
-            if (use_fit_pts)
-              {
-                px = _obj->fit_pts[j].x;
-                py = _obj->fit_pts[j].y;
-              }
-            else
-              {
-                px = _obj->ctrl_pts[j].x;
-                py = _obj->ctrl_pts[j].y;
-              }
-            if (j == num_pts - 1)
-              LASTVALUE_2DPOINT (px, py)
-            else
-              VALUE_2DPOINT (px, py)
-          }
-        LASTENDARRAY;
-        ENDGEOMETRY;
-        ENDFEATURE;
-        return 1;
-      }
-      break;
+      return dwg_geojson_SPLINE (dat, obj, is_last);
     case DWG_TYPE_HATCH:
       // dwg_geojson_HATCH(dat, obj);
       break;
