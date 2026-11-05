@@ -220,14 +220,16 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
         return error;                                                         \
       }                                                                       \
     error = dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);        \
-    if (error & DWG_ERR_VALUEOUTOFBOUNDS && hdl_dat != dat                    \
+    if (hdl_dat != dat && hdl_dat->chain                                      \
         && hdl_dat->chain != dat->chain)                                      \
       {                                                                       \
-        LOG_HANDLE ("VALUEOUTOFBOUNDS bypassed DWG_ENTITY_END\n");            \
+        /* _private returned early (VALUEOUTOFBOUNDS, aborted repeat)        \
+           before DWG_ENTITY_END could free the per-object streams */        \
+        LOG_HANDLE ("Early exit bypassed DWG_ENTITY_END\n");                  \
         bit_chain_free (hdl_dat);                                             \
-        if (str_dat != dat && str_dat->chain)                                 \
-          bit_chain_free (str_dat);                                           \
       }                                                                       \
+    if (str_dat != dat && str_dat->chain)                                     \
+      bit_chain_free (str_dat);                                               \
     dwg_encode_unknown_rest (dat, obj);                                       \
     return error;                                                             \
   }                                                                           \
@@ -289,9 +291,12 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
         return error;                                                         \
       }                                                                       \
     error = dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);        \
-    if (error & DWG_ERR_VALUEOUTOFBOUNDS && hdl_dat != dat                    \
+    if (hdl_dat != dat && hdl_dat->chain                                      \
         && hdl_dat->chain != dat->chain)                                      \
       {                                                                       \
+        /* _private returned early (VALUEOUTOFBOUNDS, aborted repeat)        \
+           before DWG_OBJECT_END could free the per-object streams */        \
+        LOG_HANDLE ("Early exit bypassed DWG_OBJECT_END\n");                  \
         bit_chain_free (hdl_dat);                                             \
       }                                                                       \
     if (str_dat != dat && str_dat->chain)                                     \
