@@ -538,6 +538,46 @@ hatch_path_tests (void)
   path.num_segs_or_paths = 2;
   check_ring ("spline and line", &path, -9.6, 1e-2);
 
+  // the size of a path counts all SPLINE control points: a tall SPLINE
+  // closed by a half circle of radius 1 needs few points for that arc, as
+  // the tolerance is relative to the path size of about 100, not 2.8
+  {
+    Dwg_HATCH_ControlPoint tall[4];
+    Dwg_HATCH_PathSeg two[2];
+    BITCODE_2BD *pl = NULL, *pa = NULL;
+    int nl, na;
+    memset (tall, 0, sizeof (tall));
+    memset (two, 0, sizeof (two));
+    tall[1].point.y = 100.0;
+    tall[2].point.x = 2.0;
+    tall[2].point.y = 100.0;
+    tall[3].point.x = 2.0;
+    two[0].curve_type = 4;
+    two[0].degree = 3;
+    two[0].num_knots = 8;
+    two[0].knots = knots;
+    two[0].num_control_points = 4;
+    two[0].control_points = tall;
+    two[1].curve_type = 1; // closed by a line
+    two[1].first_endpoint.x = 2.0;
+    path.num_segs_or_paths = 2;
+    path.segs = two;
+    nl = hatch_path_points (&path, 1e-3, &pl);
+    two[1].curve_type = 2; // closed by a half circle below
+    two[1].center.x = 1.0;
+    two[1].radius = 1.0;
+    two[1].start_angle = M_PI;
+    two[1].end_angle = 2.0 * M_PI;
+    two[1].is_ccw = 1;
+    na = hatch_path_points (&path, 1e-3, &pa);
+    if (nl > 4 && na > nl && na - nl <= 6)
+      ok ("hatch_path_points size with a SPLINE: arc adds %d points", na - nl);
+    else
+      fail ("hatch_path_points size with a SPLINE: %d and %d points", nl, na);
+    free (pl);
+    free (pa);
+  }
+
   // a clockwise arc as stored in DXF and DWG (from ezdxf: angles 450 and
   // 270 degrees), defined in a mirrored system: a 10 x 10 square without
   // the half circle of radius 5, clockwise
