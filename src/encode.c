@@ -4611,9 +4611,9 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
   if (!tag)
     return NULL;
   if (IS_FROM_TU (dat))
-    wstr = (BITCODE_TU)tag;
+    wstr = (BITCODE_TU)tag; // caller's storage, no allocation
   else
-    wstr = bit_utf8_to_TU ((char*)tag, 0);
+    wstr = bit_utf8_to_TU ((char*)tag, 0); // temporary copy
   len = bit_wcs2len (wstr);
   for (size_t i = 0; i < len; i++)
     {
@@ -4638,12 +4638,24 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
     }
   if (changed && dat->version < R_2007)
     {
+      // a replacement string is returned; the caller stores it in place of
+      // the old tag, so we have to free the original here
       newtag = bit_convert_TU (wstr);
-      free (wstr);
+      if (IS_FROM_TU (dat))
+        free (wstr); // original TU tag is replaced
+      else
+        {
+          free (wstr); // temporary copy
+          free (tag); // original utf8 tag is replaced
+        }
       return newtag;
     }
   else
-    return (BITCODE_T)tag;
+    {
+      if (!IS_FROM_TU (dat))
+        free (wstr); // temporary copy, original returned unchanged
+      return (BITCODE_T)tag;
+    }
 }
 
 #define HANDLE_STREAM_ERROR_CLEANUP
