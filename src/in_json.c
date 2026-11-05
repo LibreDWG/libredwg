@@ -165,10 +165,12 @@ static Bit_Chain *g_dat;
           _obj->nam = (BITCODE_T)json_wstring (dat, tokens);                  \
         else                                                                  \
         */                                                                    \
+        free (_obj->nam);                                                     \
         _obj->nam = json_string (dat, tokens);                                \
       }                                                                       \
     else                                                                      \
       {                                                                       \
+        free (_obj->nam);                                                     \
         _obj->nam = NULL;                                                     \
         json_advance_unknown (dat, tokens, t->type, 0);                       \
       }                                                                       \
@@ -181,9 +183,13 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      _obj->nam = (BITCODE_T32)json_string (dat, tokens);                     \
+      {                                                                       \
+        free (_obj->nam);                                                     \
+        _obj->nam = (BITCODE_T32)json_string (dat, tokens);                   \
+      }                                                                       \
     else                                                                      \
       {                                                                       \
+        free (_obj->nam);                                                     \
         _obj->nam = NULL;                                                     \
         json_advance_unknown (dat, tokens, t->type, 0);                       \
       }                                                                       \
@@ -196,10 +202,12 @@ static Bit_Chain *g_dat;
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
       {                                                                       \
+        free (_obj->nam);                                                     \
         _obj->nam = json_string (dat, tokens);                                \
       }                                                                       \
     else                                                                      \
       {                                                                       \
+        free (_obj->nam);                                                     \
         _obj->nam = NULL;                                                     \
         json_advance_unknown (dat, tokens, t->type, 0);                       \
       }                                                                       \
@@ -211,9 +219,13 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      _obj->nam = json_wstring (dat, tokens);                                 \
+      {                                                                       \
+        free (_obj->nam);                                                     \
+        _obj->nam = json_wstring (dat, tokens);                               \
+      }                                                                       \
     else                                                                      \
       {                                                                       \
+        free (_obj->nam);                                                     \
         _obj->nam = NULL;                                                     \
         json_advance_unknown (dat, tokens, t->type, 0);                       \
       }                                                                       \
