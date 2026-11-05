@@ -741,6 +741,173 @@ dwg_geojson_SPLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   return 1;
 }
 
+// The tolerance of the curves of a HATCH boundary, relative to its size.
+#define HATCH_GEOJSON_TOL 1e-3
+
+// A HATCH boundary path as a closed ring of points.
+typedef struct _hatch_ring
+{
+  BITCODE_2BD *pts;
+  int num;
+  int depth; // the number of rings it lies in
+  int role;  // 1: an area, 0: a hole, -1: not filled
+  int outer; // for a hole: the index of its area
+} hatch_ring;
+
+// True if ring i lies in ring j: if its first point does.
+static int
+ring_in_ring (const hatch_ring *r, const int i, const int j)
+{
+  return j != i
+         && point_in_polygon (r[i].pts[0].x, r[i].pts[0].y, r[j].pts,
+                              r[j].num);
+}
+
+/* The role of a ring by its nesting depth and the HATCH style: Normal (0)
+   fills by parity, an island in a hole is an area again; Outer (1) fills
+   the outermost area only, with its holes; Ignore (2) fills the outermost
+   area, ignoring all islands. */
+static int
+hatch_ring_role (const int depth, const int style)
+{
+  if (style == 2)
+    return depth == 0 ? 1 : -1;
+  if (style == 1)
+    return depth == 0 ? 1 : (depth == 1 ? 0 : -1);
+  return depth % 2 == 0;
+}
+
+// The depth and role of each ring, and the area of each hole: the area
+// one level up which contains it.
+static void
+hatch_ring_roles (hatch_ring *r, const int n, const int style)
+{
+  int i, j;
+  for (i = 0; i < n; i++)
+    {
+      for (j = 0, r[i].depth = 0; j < n; j++)
+        r[i].depth += ring_in_ring (r, i, j);
+      r[i].role = hatch_ring_role (r[i].depth, style);
+    }
+  for (i = 0; i < n; i++)
+    for (j = 0, r[i].outer = -1; r[i].role == 0 && j < n; j++)
+      if (r[j].role == 1 && r[j].depth == r[i].depth - 1
+          && ring_in_ring (r, i, j))
+        r[i].outer = j;
+}
+
+// Writes a ring, counter-clockwise if ccw, else clockwise (RFC 7946).
+static void
+geojson_ring (Bit_Chain *restrict dat, const hatch_ring *r, const int ccw,
+              const int is_last)
+{
+  const int reverse = (polygon_area (r->pts, r->num) > 0.0) != ccw;
+  int i;
+  ARRAY;
+  for (i = 0; i < r->num; i++)
+    {
+      const BITCODE_2BD *p = &r->pts[reverse ? r->num - 1 - i : i];
+      if (i < r->num - 1)
+        VALUE_2DPOINT (p->x, p->y)
+      else
+        LASTVALUE_2DPOINT (p->x, p->y)
+    }
+  if (is_last)
+    LASTENDARRAY
+  else
+    ENDARRAY
+}
+
+// Writes the polygon of the area ring a with its holes.
+static void
+geojson_polygon (Bit_Chain *restrict dat, const hatch_ring *r, const int n,
+                 const int a, const int is_last)
+{
+  int i, last = a;
+  for (i = 0; i < n; i++)
+    if (r[i].role == 0 && r[i].outer == a)
+      last = i;
+  ARRAY;
+  geojson_ring (dat, &r[a], 1, last == a);
+  for (i = 0; i < n; i++)
+    if (r[i].role == 0 && r[i].outer == a)
+      geojson_ring (dat, &r[i], 0, i == last);
+  if (is_last)
+    LASTENDARRAY
+  else
+    ENDARRAY
+}
+
+// The rings of the boundary paths of a HATCH, skipping the boundaries
+// around texts (flag 8), which are no geometry.  Returns their number.
+static int
+hatch_rings (const Dwg_Entity_HATCH *_obj, hatch_ring *r)
+{
+  BITCODE_BL j;
+  int n = 0;
+  for (j = 0; j < _obj->num_paths; j++)
+    if (!(_obj->paths[j].flag & 8)
+        && (r[n].num = hatch_path_points (&_obj->paths[j], HATCH_GEOJSON_TOL,
+                                          &r[n].pts)))
+      n++;
+  return n;
+}
+
+// Writes the coordinates: a Polygon for one area, else a MultiPolygon.
+static void
+geojson_hatch_coordinates (Bit_Chain *restrict dat, const hatch_ring *r,
+                           const int n, const int num_areas)
+{
+  int i, k = 0;
+  if (num_areas == 1)
+    {
+      for (i = 0; r[i].role != 1; i++)
+        ;
+      geojson_polygon (dat, r, n, i, 1);
+      return;
+    }
+  ARRAY;
+  for (i = 0; i < n; i++)
+    if (r[i].role == 1)
+      geojson_polygon (dat, r, n, i, ++k == num_areas);
+  LASTENDARRAY;
+}
+
+/* A HATCH as a Polygon, or a MultiPolygon for several areas, with holes
+   by its style.  Returns 0 if there is nothing to write. */
+static int
+dwg_geojson_HATCH (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                   int is_last)
+{
+  Dwg_Entity_HATCH *_obj = obj->tio.entity->tio.HATCH;
+  hatch_ring *r;
+  int n, num_areas = 0, i;
+
+  if (!_obj->paths || !_obj->num_paths
+      || !(r = (hatch_ring *)calloc (_obj->num_paths, sizeof (hatch_ring))))
+    return 0;
+  n = hatch_rings (_obj, r);
+  hatch_ring_roles (r, n, _obj->style);
+  for (i = 0; i < n; i++)
+    num_areas += r[i].role == 1;
+  if (num_areas)
+    {
+      FEATURE (AcDbEntity : AcDbHatch, obj);
+      if (num_areas == 1)
+        GEOMETRY (Polygon)
+      else
+        GEOMETRY (MultiPolygon)
+      KEY (coordinates);
+      geojson_hatch_coordinates (dat, r, n, num_areas);
+      ENDGEOMETRY;
+      ENDFEATURE;
+    }
+  for (i = 0; i < n; i++)
+    free (r[i].pts);
+  free (r);
+  return num_areas ? 1 : 0;
+}
+
 /* returns 0 if object could be printed
  */
 static int
@@ -1147,8 +1314,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     case DWG_TYPE_SPLINE:
       return dwg_geojson_SPLINE (dat, obj, is_last);
     case DWG_TYPE_HATCH:
-      // dwg_geojson_HATCH(dat, obj);
-      break;
+      return dwg_geojson_HATCH (dat, obj, is_last);
     case DWG_TYPE__3DSOLID:
       // dwg_geojson__3DSOLID(dat, obj);
       break;
