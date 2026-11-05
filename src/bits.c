@@ -3397,8 +3397,13 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
         }
       else if ((c & 0xf0) == 0xe0)
         {
+          // an incomplete sequence at the end of the input would make all
+          // sub-branches below fail and loop callers double the buffer
+          // forever; drop the stray lead byte instead
+          if (s + 1 > ends)
+            break;
           /* warn on invalid utf8 */
-          if (dest + 2 < endp && s + 1 <= ends
+          if (dest + 2 < endp
               && (*s < 0x80 || *s > 0xBF || *(s + 1) < 0x80
                   || *(s + 1) > 0xBF))
             {
@@ -3410,7 +3415,7 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
               loglevel |= 1;
               LOG_WARN ("utf-8: NON_SHORTEST %s", s);
             }
-          else if (dest + 7 < endp && s + 1 <= ends)
+          else if (dest + 7 < endp)
             {
               unsigned char c1;
               wchar_t wc1;
