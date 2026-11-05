@@ -754,13 +754,11 @@ typedef struct _hatch_ring
   int outer; // for a hole: the index of its area
 } hatch_ring;
 
-// True if ring i lies in ring j: if its first point does.
+// True if ring i lies in ring j, also where it touches it.
 static int
 ring_in_ring (const hatch_ring *r, const int i, const int j)
 {
-  return j != i
-         && point_in_polygon (r[i].pts[0].x, r[i].pts[0].y, r[j].pts,
-                              r[j].num);
+  return j != i && polygon_in_polygon (r[i].pts, r[i].num, r[j].pts, r[j].num);
 }
 
 /* The role of a ring by its nesting depth and the HATCH style: Normal (0)

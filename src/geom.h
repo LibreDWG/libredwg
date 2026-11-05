@@ -100,6 +100,11 @@ EXPORT double polygon_area (const BITCODE_2BD *pts, const BITCODE_BL num)
 EXPORT int point_in_polygon (const double x, const double y,
                              const BITCODE_2BD *pts, const BITCODE_BL num)
     __nonnull ((3));
+// True if polygon a lies inside polygon b, for polygons that do not cross,
+// also where a touches b.
+EXPORT int polygon_in_polygon (const BITCODE_2BD *a, const BITCODE_BL na,
+                               const BITCODE_2BD *b, const BITCODE_BL nb)
+    __nonnull ((1, 3));
 // The boundary of a HATCH path as a closed ring of points, curves within
 // rel_tol times its size.  Returns the number of points, or 0.
 EXPORT int hatch_path_points (const Dwg_HATCH_Path *path, const double rel_tol,
