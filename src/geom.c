@@ -1398,8 +1398,19 @@ box_add (point_list *l, const double x, const double y)
   point_list_add (l, &p);
 }
 
-// Adds the defining points of the edge s: its endpoints, or the box of its
-// circle or ellipse, or its first control point.
+// Adds the control points and the fit points of a SPLINE edge.
+static void
+box_add_spline (point_list *l, const Dwg_HATCH_PathSeg *s)
+{
+  BITCODE_BL i;
+  for (i = 0; s->control_points && i < s->num_control_points; i++)
+    box_add (l, s->control_points[i].point.x, s->control_points[i].point.y);
+  for (i = 0; s->fitpts && i < s->num_fitpts; i++)
+    box_add (l, s->fitpts[i].x, s->fitpts[i].y);
+}
+
+// Adds the defining points of the edge s: its endpoints, the box of its
+// circle or ellipse, or the points of its SPLINE.
 static void
 box_add_edge (point_list *l, const Dwg_HATCH_PathSeg *s)
 {
@@ -1416,8 +1427,8 @@ box_add_edge (point_list *l, const Dwg_HATCH_PathSeg *s)
       box_add (l, s->center.x - r, s->center.y - r);
       box_add (l, s->center.x + r, s->center.y + r);
     }
-  else if (s->curve_type == 4 && s->control_points && s->num_control_points)
-    box_add (l, s->control_points[0].point.x, s->control_points[0].point.y);
+  else if (s->curve_type == 4)
+    box_add_spline (l, s);
 }
 
 // The size of a HATCH path: the diagonal of the box of its defining points.
