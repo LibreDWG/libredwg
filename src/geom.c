@@ -1255,8 +1255,16 @@ ring_add_ellipse_sweep (point_list *l, const BITCODE_2RD c,
 {
   const double a = hypot (major.x, major.y);
   const double step = tol < a ? 2.0 * acos (1.0 - tol / a) : M_PI;
-  int n = (int)ceil (fabs (sweep) / step), i;
-  n = n < 1 ? 1 : (n > 4096 ? 4096 : n);
+  double steps;
+  int n, i;
+  // corrupt data: no ring rather than a ring without this arc
+  if (!isfinite (t0) || !isfinite (sweep) || !isfinite (step) || step <= 0.0)
+    {
+      l->ok = 0;
+      return;
+    }
+  steps = ceil (fabs (sweep) / step);
+  n = steps < 1.0 ? 1 : (steps > 4096.0 ? 4096 : (int)steps);
   for (i = 0; i <= n; i++)
     {
       const double t = t0 + sweep * i / n;
@@ -1446,8 +1454,26 @@ ring_add_polyline (point_list *l, const Dwg_HATCH_Path *path, const double tol)
     }
 }
 
+// A closed ring is usable with at least 3 distinct points, finite
+// coordinates, and an area that is not zero relative to its size.
+static int
+ring_is_usable (const point_list *l)
+{
+  double area = 0.0, size;
+  BITCODE_BL i;
+  if (!l->ok || l->num < 4)
+    return 0;
+  for (i = 0; i < l->num; i++)
+    if (!isfinite (l->pts[i].x) || !isfinite (l->pts[i].y))
+      return 0;
+  for (i = 0; i + 1 < l->num; i++)
+    area += l->pts[i].x * l->pts[i + 1].y - l->pts[i + 1].x * l->pts[i].y;
+  size = points_size (l->pts, l->num);
+  return fabs (area) / 2.0 > 1e-12 * size * size;
+}
+
 // Closes the ring and copies it to a malloc'ed 2D array.  Returns the
-// number of points, or 0 for fewer than 3 distinct points.
+// number of points, or 0 if the ring is not usable.
 static int
 ring_finish (point_list *l, BITCODE_2BD **pts)
 {
@@ -1459,7 +1485,7 @@ ring_finish (point_list *l, BITCODE_2BD **pts)
       const BITCODE_3DPOINT first = l->pts[0];
       point_list_add (l, &first);
     }
-  if (!l->ok || l->num < 4
+  if (!ring_is_usable (l)
       || !(*pts = (BITCODE_2BD *)malloc (l->num * sizeof (BITCODE_2BD))))
     return 0;
   for (i = 0; i < l->num; i++)
@@ -1474,7 +1500,8 @@ ring_finish (point_list *l, BITCODE_2BD **pts)
    their bulges, and edges of lines, circular and elliptical arcs and
    SPLINEs.  Curves are within rel_tol times the size of the path.  Returns
    the number of points, the last one repeating the first, as a malloc'ed
-   array in *pts; or 0 for fewer than 3 distinct points. */
+   array in *pts; or 0 for fewer than 3 distinct points, non-finite
+   coordinates or a zero area. */
 int
 hatch_path_points (const Dwg_HATCH_Path *path, const double rel_tol,
                    BITCODE_2BD **pts)
