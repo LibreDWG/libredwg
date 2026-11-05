@@ -188,5 +188,36 @@ if [ -f "$abs_builddir"/../json ]; then
     fi
 fi
 
+# GH #1499: UTF-8 TEXT must survive fresh creation and a readdwg append
+# without double conversion (no \U+ escapes, no raw UTF-8 bytes).
+# UTF-8 octal: Ø=\303\230 Æ=\303\206 Å=\303\205
+tmpadd=dwgadd.tmp.add
+printf 'text "TEST \303\230ST" (0 0 0) 350\n' >$tmpadd
+cat $tmpadd
+dwgaddtest AC1015 r2000 $tmpadd
+
+printf 'readdwg "dwgadd_test.dwg"\n' >$tmpadd
+printf 'text "NY D\303\230R \303\206\303\230\303\205" (1000 1000 0) 350\n' >>$tmpadd
+cat $tmpadd
+dwgaddtest AC1015 r2000 $tmpadd
+
+EXP1499_1="$(printf 'TEST \303\230ST')"
+EXP1499_2="$(printf 'NY D\303\230R \303\206\303\230\303\205')"
+if [ -f "$abs_builddir"/../json ]; then
+    cd "$abs_builddir"/.. || exit 1
+    cp examples/dwgadd_test.dwg .
+    ./json dwgadd_test.dwg
+    mv dwgadd_test.json examples/
+    rm -f dwgadd_test.dwg dwgadd_test.log
+    cd "$abs_builddir" || exit 1
+    if [ -f dwgadd_test.json ]; then
+        LC_ALL=C grep -F "$EXP1499_1" dwgadd_test.json >/dev/null \
+            || { echo "FAIL #1499 fresh TEXT"; exit 1; }
+        LC_ALL=C grep -F "$EXP1499_2" dwgadd_test.json >/dev/null \
+            || { echo "FAIL #1499 appended TEXT"; exit 1; }
+        rm -f dwgadd_test.json
+    fi
+fi
+
 # cleanup
-rm -f -- dwgadd_test.dwg dwgadd_test.dxf dwgadd_test.json $tmp
+rm -f -- dwgadd_test.dwg dwgadd_test.dxf dwgadd_test.json $tmp $tmpadd

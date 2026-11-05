@@ -24963,9 +24963,13 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   Dwg_Version_Type version = dwg->header.version;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
-  /* Set the import flag, so we don't encode to TU, just TV */
+  // Set the import flag, so we don't encode to TU, just TV.
+  // Only INDXF, not INJSON: the add API already converts the UTF-8 input
+  // to codepage (TV) strings in dwg_add_u8_input, so the write path must
+  // not convert them again. INJSON would make bit_write_TV treat the
+  // already-converted TV bytes as UTF-8 (double conversion, GH #1499).
   if (version >= R_13b1)
-    dwg->opts |= DWG_OPTS_IN;
+    dwg->opts |= DWG_OPTS_INDXF;
   dwg->dirty_refs = 0;
 
   if (!dwg->object_map)
