@@ -8329,6 +8329,9 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       return dxf_read_pair (dat);
     }
+  free (ent->preview);
+  ent->preview = NULL;
+  ent->preview_exists = 0;
   ent->preview_size = pair->code == 160  ? pair->value.rll
                       : pair->code == 92 ? pair->value.u
                                          : 0;
@@ -8368,7 +8371,16 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       BITCODE_TF s;
 
       if (!ent->preview_size)
-        ent->preview = (BITCODE_TF)realloc (ent->preview, written + blen);
+        {
+          BITCODE_TF preview;
+          preview = (BITCODE_TF)realloc (ent->preview, written + blen);
+          if (!preview)
+            {
+              LOG_ERROR ("Out of memory");
+              return NULL;
+            }
+          ent->preview = preview;
+        }
       else if (blen + written > ent->preview_size)
         {
           LOG_ERROR ("%s.preview overflow: %" PRIuSIZE " + written %" PRIuSIZE
@@ -8412,6 +8424,9 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                  pair->code);
       return pair;
     }
+  free (_obj->preview);
+  _obj->preview = NULL;
+  _obj->preview_size = 0;
   while (pair != NULL && pair->code == 310)
     {
       const char *pos = pair->value.s.ptr;
@@ -8420,8 +8435,14 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         const size_t blen = pair->value.s.len;
         if (blen)
           {
-            _obj->preview
-                = (BITCODE_TF)realloc (_obj->preview, written + blen);
+            BITCODE_TF preview;
+            preview = (BITCODE_TF)realloc (_obj->preview, written + blen);
+            if (!preview)
+              {
+                LOG_ERROR ("Out of memory");
+                return NULL;
+              }
+            _obj->preview = preview;
             memcpy (&_obj->preview[written], pos, blen);
             written += blen;
             LOG_TRACE ("BLOCK_HEADER.preview += %" PRIuSIZE " (%" PRIuSIZE
