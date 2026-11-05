@@ -7566,6 +7566,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
               {
                 // TODO: same len when converted to TU? normally yes
                 BITCODE_RS size = rbuf->value.str.size;
+                BITCODE_TU news;
                 // corrupted/fuzzed input may claim a size without a payload
                 if (!rbuf->value.str.u.data)
                   {
@@ -7573,8 +7574,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                                (unsigned)size);
                     size = 0;
                   }
-                BITCODE_TU news
-                    = size ? bit_utf8_to_TU (rbuf->value.str.u.data, 0) : NULL;
+                news = size ? bit_utf8_to_TU (rbuf->value.str.u.data, 0)
+                            : NULL;
                 // Guard against fuzzer input with embedded NULs
                 if (rbuf->value.str.u.data)
                   {
@@ -7960,6 +7961,15 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
               = _obj->sty.cellstyle.borders[i].visible;
           _obj->rowstyles[0].borders[i].color
               = _obj->sty.cellstyle.borders[i].color;
+        }
+      // The pre-R2007 rowstyle borders have no ltype, so the cellstyle
+      // border ltype handle refs are dropped here; free the object-owned
+      // (non-global) ones before freeing the borders array.
+      for (unsigned i = 0; i < _obj->sty.cellstyle.num_borders && i < 6; i++)
+        {
+          if (_obj->sty.cellstyle.borders[i].ltype
+              && !_obj->sty.cellstyle.borders[i].ltype->handleref.is_global)
+            free (_obj->sty.cellstyle.borders[i].ltype);
         }
       free (_obj->sty.cellstyle.borders);
       _obj->sty.cellstyle.borders = NULL;
