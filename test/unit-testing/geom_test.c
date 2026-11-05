@@ -473,6 +473,17 @@ hatch_path_tests (void)
   path.num_segs_or_paths = 4;
   path.polyline_paths = square;
   check_ring ("polyline square", &path, 1.0, 1e-12);
+  // three points on a line enclose no area
+  square[1].point.y = 0.0;
+  square[2].point.x = 2.0;
+  square[2].point.y = 0.0;
+  path.num_segs_or_paths = 3;
+  if (!hatch_path_points (&path, 1e-3, &pts) && !pts)
+    ok ("hatch_path_points rejects a zero area");
+  else
+    fail ("hatch_path_points accepted a zero area");
+  free (pts);
+  pts = NULL;
   path.num_segs_or_paths = 2;
   path.polyline_paths = circle;
   path.bulges_present = 1;
@@ -543,6 +554,30 @@ hatch_path_tests (void)
   path.num_segs_or_paths = 4;
   path.segs = edges;
   check_ring ("clockwise arc", &path, -(100.0 - 12.5 * M_PI), 1e-2);
+
+  // corrupt data gives no ring: a NaN angle, an infinite radius
+  memset (seg, 0, sizeof (seg));
+  seg[0].curve_type = 2;
+  seg[0].radius = 1.0;
+  seg[0].start_angle = (double)NAN;
+  seg[0].end_angle = 1.0;
+  seg[0].is_ccw = 1;
+  path.num_segs_or_paths = 1;
+  path.segs = seg;
+  if (!hatch_path_points (&path, 1e-3, &pts) && !pts)
+    ok ("hatch_path_points rejects a NaN angle");
+  else
+    fail ("hatch_path_points accepted a NaN angle");
+  free (pts);
+  pts = NULL;
+  seg[0].start_angle = 0.0;
+  seg[0].radius = (double)INFINITY;
+  if (!hatch_path_points (&path, 1e-3, &pts) && !pts)
+    ok ("hatch_path_points rejects an infinite radius");
+  else
+    fail ("hatch_path_points accepted an infinite radius");
+  free (pts);
+  pts = NULL;
 
   // a single line encloses nothing
   memset (seg, 0, sizeof (seg));
