@@ -4095,6 +4095,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         if (!info || !info->sections)
           {
             LOG_ERROR ("SECTION_SYSTEM_MAP not found");
+            for (type = SECTION_HEADER; type <= SECTION_SYSTEM_MAP; type++)
+              bit_chain_free (&sec_dat[type]);
             return DWG_ERR_SECTIONNOTFOUND;
           }
 
@@ -4142,6 +4144,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           if (dat->size < 4 || dat->chain[0] != 'A' || dat->chain[1] != 'C')
             {
               LOG_ERROR ("Encode overwrite pos 0");
+              for (type = SECTION_HEADER; type <= SECTION_SYSTEM_MAP; type++)
+                bit_chain_free (&sec_dat[type]);
               return DWG_ERR_INVALIDDWG;
             }
           assert (dat->chain[0] == 'A');
@@ -4167,7 +4171,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           type = stream_order[i];
           info = find_section_info_type (dwg, (Dwg_Section_Type)type);
           if (!info)
-            continue;
+            {
+              // section without an info entry is not written; still drop
+              // its (possibly pre-allocated) chain
+              bit_chain_free (&sec_dat[type]);
+              continue;
+            }
           max_decomp_size
               = section_max_decomp_size (dwg, (Dwg_Section_Type)type);
 
