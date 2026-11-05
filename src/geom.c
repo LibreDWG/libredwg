@@ -1228,6 +1228,53 @@ point_in_polygon (const double x, const double y, const BITCODE_2BD *pts,
   return inside;
 }
 
+// True if (x,y) is within eps of an edge of the polygon pts[0..num-1].
+static int
+point_on_polygon (const double x, const double y, const BITCODE_2BD *pts,
+                  const BITCODE_BL num, const double eps)
+{
+  BITCODE_BL i;
+  for (i = 0; i < num; i++)
+    {
+      const BITCODE_2BD *a = &pts[i], *b = &pts[(i + 1) % num];
+      const double dx = b->x - a->x, dy = b->y - a->y;
+      const double l2 = dx * dx + dy * dy;
+      double s = 0.0;
+      if (l2 > 0.0)
+        {
+          s = ((x - a->x) * dx + (y - a->y) * dy) / l2;
+          s = s < 0.0 ? 0.0 : (s > 1.0 ? 1.0 : s);
+        }
+      if (hypot (x - a->x - s * dx, y - a->y - s * dy) <= eps)
+        return 1;
+    }
+  return 0;
+}
+
+/* True if polygon a lies inside polygon b, for polygons that do not cross:
+   the first vertex of a that is not on the boundary of b decides, as a
+   vertex where a touches b says nothing.  If all of them are on it, as for
+   equal polygons, a is not inside. */
+int
+polygon_in_polygon (const BITCODE_2BD *a, const BITCODE_BL na,
+                    const BITCODE_2BD *b, const BITCODE_BL nb)
+{
+  double xmin = b[0].x, xmax = b[0].x, ymin = b[0].y, ymax = b[0].y, eps;
+  BITCODE_BL i;
+  for (i = 1; i < nb; i++)
+    {
+      xmin = fmin (xmin, b[i].x);
+      xmax = fmax (xmax, b[i].x);
+      ymin = fmin (ymin, b[i].y);
+      ymax = fmax (ymax, b[i].y);
+    }
+  eps = 1e-9 * hypot (xmax - xmin, ymax - ymin);
+  for (i = 0; i < na; i++)
+    if (!point_on_polygon (a[i].x, a[i].y, b, nb, eps))
+      return point_in_polygon (a[i].x, a[i].y, b, nb);
+  return 0;
+}
+
 // Adds (x,y) unless it repeats the last point within eps.
 static void
 ring_add (point_list *l, const double x, const double y, const double eps)

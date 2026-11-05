@@ -441,6 +441,10 @@ polygon_tests (void)
 {
   const BITCODE_2BD sq[4] = { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } };
   const BITCODE_2BD cw[4] = { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
+  const BITCODE_2BD big[5]
+      = { { 0, 0 }, { 10, 0 }, { 10, 10 }, { 0, 10 }, { 0, 0 } };
+  const BITCODE_2BD touching[5]
+      = { { 10, 5 }, { 5, 8 }, { 2, 5 }, { 5, 2 }, { 10, 5 } };
   if (NEAR (polygon_area (sq, 4), 1.0) && NEAR (polygon_area (cw, 4), -1.0))
     ok ("polygon_area orientation");
   else
@@ -450,6 +454,16 @@ polygon_tests (void)
     ok ("point_in_polygon");
   else
     fail ("point_in_polygon");
+  // a hole touching the right edge of a square at its first vertex: the
+  // ray to the right from (10,5) crosses no edge, so point_in_polygon
+  // says outside, but the hole is inside
+  if (!point_in_polygon (10.0, 5.0, big, 5)
+      && polygon_in_polygon (touching, 5, big, 5)
+      && !polygon_in_polygon (big, 5, touching, 5)
+      && !polygon_in_polygon (big, 5, big, 5))
+    ok ("polygon_in_polygon touching");
+  else
+    fail ("polygon_in_polygon touching");
 }
 
 static void
