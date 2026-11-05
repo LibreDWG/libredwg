@@ -418,6 +418,145 @@ spline_flatten_tests (void)
   check_flatten ("fit points", &spline, 1e-3, 3, SPLINE_MAX_POINTS, 2.0, 0.0);
 }
 
+// hatch_path_points of path must give a closed ring of this signed area,
+// within rel of it
+static void
+check_ring (const char *name, const Dwg_HATCH_Path *path, const double area,
+            const double rel)
+{
+  BITCODE_2BD *pts = NULL;
+  const int n = hatch_path_points (path, 1e-3, &pts);
+  const double a = n ? polygon_area (pts, n) : 0.0;
+  if (n >= 4 && pts[0].x == pts[n - 1].x && pts[0].y == pts[n - 1].y
+      && fabs (a - area) <= rel * fabs (area))
+    ok ("hatch_path_points %s: %d points, area %g", name, n, a);
+  else
+    fail ("hatch_path_points %s: %d points, area %g, expected %g", name, n, a,
+          area);
+  free (pts);
+}
+
+static void
+polygon_tests (void)
+{
+  const BITCODE_2BD sq[4] = { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } };
+  const BITCODE_2BD cw[4] = { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 } };
+  if (NEAR (polygon_area (sq, 4), 1.0) && NEAR (polygon_area (cw, 4), -1.0))
+    ok ("polygon_area orientation");
+  else
+    fail ("polygon_area orientation");
+  if (point_in_polygon (0.5, 0.5, sq, 4) && !point_in_polygon (1.5, 0.5, sq, 4)
+      && !point_in_polygon (0.5, -0.1, sq, 4))
+    ok ("point_in_polygon");
+  else
+    fail ("point_in_polygon");
+}
+
+static void
+hatch_path_tests (void)
+{
+  Dwg_HATCH_PolylinePath square[4] = { { NULL, { 0, 0 }, 0 },
+                                       { NULL, { 1, 0 }, 0 },
+                                       { NULL, { 1, 1 }, 0 },
+                                       { NULL, { 0, 1 }, 0 } };
+  // a circle of radius 1 as two half circles
+  Dwg_HATCH_PolylinePath circle[2]
+      = { { NULL, { -1, 0 }, 1.0 }, { NULL, { 1, 0 }, 1.0 } };
+  Dwg_HATCH_PathSeg seg[2], arc[2], edges[4];
+  Dwg_HATCH_ControlPoint cp[4];
+  double knots[8] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+  Dwg_HATCH_Path path;
+  BITCODE_2BD *pts = NULL;
+
+  memset (&path, 0, sizeof (path));
+  path.flag = 2; // polyline
+  path.num_segs_or_paths = 4;
+  path.polyline_paths = square;
+  check_ring ("polyline square", &path, 1.0, 1e-12);
+  path.num_segs_or_paths = 2;
+  path.polyline_paths = circle;
+  path.bulges_present = 1;
+  check_ring ("polyline circle", &path, M_PI, 1e-2);
+
+  memset (&path, 0, sizeof (path));
+  memset (seg, 0, sizeof (seg));
+  path.flag = 1; // edges
+  path.num_segs_or_paths = 1;
+  path.segs = seg;
+  seg[0].curve_type = 2; // full circle
+  seg[0].radius = 1.0;
+  seg[0].end_angle = 2.0 * M_PI;
+  seg[0].is_ccw = 1;
+  check_ring ("arc circle", &path, M_PI, 1e-2);
+  seg[0].curve_type = 3; // full ellipse, semi-axes 2 and 1
+  seg[0].endpoint.x = 2.0;
+  seg[0].minor_major_ratio = 0.5;
+  seg[0].is_ccw = 1;
+  check_ring ("ellipse", &path, 2.0 * M_PI, 1e-2);
+
+  // a cubic Bezier from (0,0) over (0,4) (4,4) to (4,0), back by a line:
+  // clockwise, area 288 * integral of t^2 (1-t)^2 = 9.6
+  memset (seg, 0, sizeof (seg));
+  memset (cp, 0, sizeof (cp));
+  cp[1].point.y = 4.0;
+  cp[2].point.x = 4.0;
+  cp[2].point.y = 4.0;
+  cp[3].point.x = 4.0;
+  seg[0].curve_type = 4;
+  seg[0].degree = 3;
+  seg[0].num_knots = 8;
+  seg[0].knots = knots;
+  seg[0].num_control_points = 4;
+  seg[0].control_points = cp;
+  seg[1].curve_type = 1;
+  seg[1].first_endpoint.x = 4.0;
+  path.num_segs_or_paths = 2;
+  check_ring ("spline and line", &path, -9.6, 1e-2);
+
+  // a clockwise arc as stored in DXF and DWG (from ezdxf: angles 450 and
+  // 270 degrees), defined in a mirrored system: a 10 x 10 square without
+  // the half circle of radius 5, clockwise
+  memset (seg, 0, sizeof (seg));
+  memset (arc, 0, sizeof (arc));
+  seg[0].curve_type = 1;
+  seg[0].first_endpoint.x = 20.0;
+  seg[0].second_endpoint.x = 20.0;
+  seg[0].second_endpoint.y = 10.0;
+  seg[1].curve_type = 1;
+  seg[1].first_endpoint.x = 20.0;
+  seg[1].first_endpoint.y = 10.0;
+  seg[1].second_endpoint.x = 30.0;
+  seg[1].second_endpoint.y = 10.0;
+  arc[0].curve_type = 2;
+  arc[0].center.x = 30.0;
+  arc[0].center.y = 5.0;
+  arc[0].radius = 5.0;
+  arc[0].start_angle = 2.5 * M_PI;
+  arc[0].end_angle = 1.5 * M_PI;
+  arc[1].curve_type = 1;
+  arc[1].first_endpoint.x = 30.0;
+  arc[1].second_endpoint.x = 20.0;
+  edges[0] = seg[0];
+  edges[1] = seg[1];
+  edges[2] = arc[0];
+  edges[3] = arc[1];
+  path.num_segs_or_paths = 4;
+  path.segs = edges;
+  check_ring ("clockwise arc", &path, -(100.0 - 12.5 * M_PI), 1e-2);
+
+  // a single line encloses nothing
+  memset (seg, 0, sizeof (seg));
+  seg[1].curve_type = 1;
+  seg[1].first_endpoint.x = 4.0;
+  path.num_segs_or_paths = 1;
+  path.segs = &seg[1];
+  if (!hatch_path_points (&path, 1e-3, &pts) && !pts)
+    ok ("hatch_path_points rejects a single line");
+  else
+    fail ("hatch_path_points accepted a single line");
+  free (pts);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -430,5 +569,7 @@ main (int argc, char const *argv[])
   spline_to_bezier_tests ();
   spline_from_fit_points_tests ();
   spline_flatten_tests ();
+  polygon_tests ();
+  hatch_path_tests ();
   return failed;
 }
