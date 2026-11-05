@@ -466,8 +466,20 @@ polygon_tests (void)
     fail ("polygon_in_polygon touching");
 }
 
+// corrupt or degenerate data gives no ring
 static void
-hatch_path_tests (void)
+check_rejected (const char *name, const Dwg_HATCH_Path *path)
+{
+  BITCODE_2BD *pts = NULL;
+  if (!hatch_path_points (path, 1e-3, &pts) && !pts)
+    ok ("hatch_path_points rejects %s", name);
+  else
+    fail ("hatch_path_points accepted %s", name);
+  free (pts);
+}
+
+static void
+hatch_polyline_tests (void)
 {
   Dwg_HATCH_PolylinePath square[4] = { { NULL, { 0, 0 }, 0 },
                                        { NULL, { 1, 0 }, 0 },
@@ -476,11 +488,7 @@ hatch_path_tests (void)
   // a circle of radius 1 as two half circles
   Dwg_HATCH_PolylinePath circle[2]
       = { { NULL, { -1, 0 }, 1.0 }, { NULL, { 1, 0 }, 1.0 } };
-  Dwg_HATCH_PathSeg seg[2], arc[2], edges[4];
-  Dwg_HATCH_ControlPoint cp[4];
-  double knots[8] = { 0, 0, 0, 0, 1, 1, 1, 1 };
   Dwg_HATCH_Path path;
-  BITCODE_2BD *pts = NULL;
 
   memset (&path, 0, sizeof (path));
   path.flag = 2; // polyline
@@ -492,16 +500,20 @@ hatch_path_tests (void)
   square[2].point.x = 2.0;
   square[2].point.y = 0.0;
   path.num_segs_or_paths = 3;
-  if (!hatch_path_points (&path, 1e-3, &pts) && !pts)
-    ok ("hatch_path_points rejects a zero area");
-  else
-    fail ("hatch_path_points accepted a zero area");
-  free (pts);
-  pts = NULL;
+  check_rejected ("a zero area", &path);
   path.num_segs_or_paths = 2;
   path.polyline_paths = circle;
   path.bulges_present = 1;
   check_ring ("polyline circle", &path, M_PI, 1e-2);
+}
+
+static void
+hatch_edge_tests (void)
+{
+  Dwg_HATCH_PathSeg seg[2];
+  Dwg_HATCH_ControlPoint cp[4];
+  double knots[8] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+  Dwg_HATCH_Path path;
 
   memset (&path, 0, sizeof (path));
   memset (seg, 0, sizeof (seg));
@@ -537,113 +549,116 @@ hatch_path_tests (void)
   seg[1].first_endpoint.x = 4.0;
   path.num_segs_or_paths = 2;
   check_ring ("spline and line", &path, -9.6, 1e-2);
+}
 
-  // the size of a path counts all SPLINE control points: a tall SPLINE
-  // closed by a half circle of radius 1 needs few points for that arc, as
-  // the tolerance is relative to the path size of about 100, not 2.8
-  {
-    Dwg_HATCH_ControlPoint tall[4];
-    Dwg_HATCH_PathSeg two[2];
-    BITCODE_2BD *pl = NULL, *pa = NULL;
-    int nl, na;
-    memset (tall, 0, sizeof (tall));
-    memset (two, 0, sizeof (two));
-    tall[1].point.y = 100.0;
-    tall[2].point.x = 2.0;
-    tall[2].point.y = 100.0;
-    tall[3].point.x = 2.0;
-    two[0].curve_type = 4;
-    two[0].degree = 3;
-    two[0].num_knots = 8;
-    two[0].knots = knots;
-    two[0].num_control_points = 4;
-    two[0].control_points = tall;
-    two[1].curve_type = 1; // closed by a line
-    two[1].first_endpoint.x = 2.0;
-    path.num_segs_or_paths = 2;
-    path.segs = two;
-    nl = hatch_path_points (&path, 1e-3, &pl);
-    two[1].curve_type = 2; // closed by a half circle below
-    two[1].center.x = 1.0;
-    two[1].radius = 1.0;
-    two[1].start_angle = M_PI;
-    two[1].end_angle = 2.0 * M_PI;
-    two[1].is_ccw = 1;
-    na = hatch_path_points (&path, 1e-3, &pa);
-    if (nl > 4 && na > nl && na - nl <= 6)
-      ok ("hatch_path_points size with a SPLINE: arc adds %d points", na - nl);
-    else
-      fail ("hatch_path_points size with a SPLINE: %d and %d points", nl, na);
-    free (pl);
-    free (pa);
-  }
+// the size of a path counts all SPLINE control points: a tall SPLINE
+// closed by a half circle of radius 1 needs few points for that arc, as
+// the tolerance is relative to the path size of about 100, not 2.8
+static void
+hatch_size_test (void)
+{
+  Dwg_HATCH_ControlPoint tall[4];
+  Dwg_HATCH_PathSeg two[2];
+  double knots[8] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+  Dwg_HATCH_Path path;
+  BITCODE_2BD *pl = NULL, *pa = NULL;
+  int nl, na;
 
-  // a clockwise arc as stored in DXF and DWG (from ezdxf: angles 450 and
-  // 270 degrees), defined in a mirrored system: a 10 x 10 square without
-  // the half circle of radius 5, clockwise
-  memset (seg, 0, sizeof (seg));
-  memset (arc, 0, sizeof (arc));
-  seg[0].curve_type = 1;
-  seg[0].first_endpoint.x = 20.0;
-  seg[0].second_endpoint.x = 20.0;
-  seg[0].second_endpoint.y = 10.0;
-  seg[1].curve_type = 1;
-  seg[1].first_endpoint.x = 20.0;
-  seg[1].first_endpoint.y = 10.0;
-  seg[1].second_endpoint.x = 30.0;
-  seg[1].second_endpoint.y = 10.0;
-  arc[0].curve_type = 2;
-  arc[0].center.x = 30.0;
-  arc[0].center.y = 5.0;
-  arc[0].radius = 5.0;
-  arc[0].start_angle = 2.5 * M_PI;
-  arc[0].end_angle = 1.5 * M_PI;
-  arc[1].curve_type = 1;
-  arc[1].first_endpoint.x = 30.0;
-  arc[1].second_endpoint.x = 20.0;
-  edges[0] = seg[0];
-  edges[1] = seg[1];
-  edges[2] = arc[0];
-  edges[3] = arc[1];
+  memset (&path, 0, sizeof (path));
+  memset (tall, 0, sizeof (tall));
+  memset (two, 0, sizeof (two));
+  tall[1].point.y = 100.0;
+  tall[2].point.x = 2.0;
+  tall[2].point.y = 100.0;
+  tall[3].point.x = 2.0;
+  two[0].curve_type = 4;
+  two[0].degree = 3;
+  two[0].num_knots = 8;
+  two[0].knots = knots;
+  two[0].num_control_points = 4;
+  two[0].control_points = tall;
+  two[1].curve_type = 1; // closed by a line
+  two[1].first_endpoint.x = 2.0;
+  path.flag = 1; // edges
+  path.num_segs_or_paths = 2;
+  path.segs = two;
+  nl = hatch_path_points (&path, 1e-3, &pl);
+  two[1].curve_type = 2; // closed by a half circle below
+  two[1].center.x = 1.0;
+  two[1].radius = 1.0;
+  two[1].start_angle = M_PI;
+  two[1].end_angle = 2.0 * M_PI;
+  two[1].is_ccw = 1;
+  na = hatch_path_points (&path, 1e-3, &pa);
+  if (nl > 4 && na > nl && na - nl <= 6)
+    ok ("hatch_path_points size with a SPLINE: arc adds %d points", na - nl);
+  else
+    fail ("hatch_path_points size with a SPLINE: %d and %d points", nl, na);
+  free (pl);
+  free (pa);
+}
+
+// a clockwise arc as stored in DXF and DWG (from ezdxf: angles 450 and
+// 270 degrees), defined in a mirrored system: a 10 x 10 square without
+// the half circle of radius 5, clockwise
+static void
+hatch_cw_arc_test (void)
+{
+  Dwg_HATCH_PathSeg edges[4];
+  Dwg_HATCH_Path path;
+
+  memset (&path, 0, sizeof (path));
+  memset (edges, 0, sizeof (edges));
+  edges[0].curve_type = 1;
+  edges[0].first_endpoint.x = 20.0;
+  edges[0].second_endpoint.x = 20.0;
+  edges[0].second_endpoint.y = 10.0;
+  edges[1].curve_type = 1;
+  edges[1].first_endpoint.x = 20.0;
+  edges[1].first_endpoint.y = 10.0;
+  edges[1].second_endpoint.x = 30.0;
+  edges[1].second_endpoint.y = 10.0;
+  edges[2].curve_type = 2;
+  edges[2].center.x = 30.0;
+  edges[2].center.y = 5.0;
+  edges[2].radius = 5.0;
+  edges[2].start_angle = 2.5 * M_PI;
+  edges[2].end_angle = 1.5 * M_PI;
+  edges[3].curve_type = 1;
+  edges[3].first_endpoint.x = 30.0;
+  edges[3].second_endpoint.x = 20.0;
+  path.flag = 1; // edges
   path.num_segs_or_paths = 4;
   path.segs = edges;
   check_ring ("clockwise arc", &path, -(100.0 - 12.5 * M_PI), 1e-2);
+}
 
-  // corrupt data gives no ring: a NaN angle, an infinite radius
-  memset (seg, 0, sizeof (seg));
-  seg[0].curve_type = 2;
-  seg[0].radius = 1.0;
-  seg[0].start_angle = (double)NAN;
-  seg[0].end_angle = 1.0;
-  seg[0].is_ccw = 1;
-  path.num_segs_or_paths = 1;
-  path.segs = seg;
-  if (!hatch_path_points (&path, 1e-3, &pts) && !pts)
-    ok ("hatch_path_points rejects a NaN angle");
-  else
-    fail ("hatch_path_points accepted a NaN angle");
-  free (pts);
-  pts = NULL;
-  seg[0].start_angle = 0.0;
-  seg[0].radius = (double)INFINITY;
-  if (!hatch_path_points (&path, 1e-3, &pts) && !pts)
-    ok ("hatch_path_points rejects an infinite radius");
-  else
-    fail ("hatch_path_points accepted an infinite radius");
-  free (pts);
-  pts = NULL;
+// corrupt data gives no ring: a NaN angle, an infinite radius, and a
+// single line encloses nothing
+static void
+hatch_reject_tests (void)
+{
+  Dwg_HATCH_PathSeg seg;
+  Dwg_HATCH_Path path;
 
-  // a single line encloses nothing
-  memset (seg, 0, sizeof (seg));
-  seg[1].curve_type = 1;
-  seg[1].first_endpoint.x = 4.0;
+  memset (&path, 0, sizeof (path));
+  memset (&seg, 0, sizeof (seg));
+  path.flag = 1; // edges
   path.num_segs_or_paths = 1;
-  path.segs = &seg[1];
-  if (!hatch_path_points (&path, 1e-3, &pts) && !pts)
-    ok ("hatch_path_points rejects a single line");
-  else
-    fail ("hatch_path_points accepted a single line");
-  free (pts);
+  path.segs = &seg;
+  seg.curve_type = 2;
+  seg.radius = 1.0;
+  seg.start_angle = (double)NAN;
+  seg.end_angle = 1.0;
+  seg.is_ccw = 1;
+  check_rejected ("a NaN angle", &path);
+  seg.start_angle = 0.0;
+  seg.radius = (double)INFINITY;
+  check_rejected ("an infinite radius", &path);
+  memset (&seg, 0, sizeof (seg));
+  seg.curve_type = 1;
+  seg.first_endpoint.x = 4.0;
+  check_rejected ("a single line", &path);
 }
 
 int
@@ -659,6 +674,10 @@ main (int argc, char const *argv[])
   spline_from_fit_points_tests ();
   spline_flatten_tests ();
   polygon_tests ();
-  hatch_path_tests ();
+  hatch_polyline_tests ();
+  hatch_edge_tests ();
+  hatch_size_test ();
+  hatch_cw_arc_test ();
+  hatch_reject_tests ();
   return failed;
 }
