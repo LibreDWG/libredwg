@@ -93,6 +93,17 @@ EXPORT int spline_from_fit_points (const Dwg_Entity_SPLINE *spline,
 EXPORT int spline_flatten (const Dwg_Entity_SPLINE *spline,
                            const double rel_tol, BITCODE_3DPOINT **pts)
     __nonnull ((1, 3));
+// The signed area of a polygon: positive if counter-clockwise.
+EXPORT double polygon_area (const BITCODE_2BD *pts, const BITCODE_BL num)
+    __nonnull ((1));
+// True if (x,y) is inside the polygon, by the even-odd rule.
+EXPORT int point_in_polygon (const double x, const double y,
+                             const BITCODE_2BD *pts, const BITCODE_BL num)
+    __nonnull ((3));
+// The boundary of a HATCH path as a closed ring of points, curves within
+// rel_tol times its size.  Returns the number of points, or 0.
+EXPORT int hatch_path_points (const Dwg_HATCH_Path *path, const double rel_tol,
+                              BITCODE_2BD **pts) __nonnull ((1, 3));
 
 /* Fast V4 Spatial Geometry Transformations (Klein Four-Group V4 ≅ Z2 x Z2)
  * Note: V4 refers to the Klein 4-group integer matrix over the S12 lattice,

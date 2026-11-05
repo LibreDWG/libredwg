@@ -1195,3 +1195,305 @@ spline_flatten (const Dwg_Entity_SPLINE *spline, const double rel_tol,
   *pts = l.pts;
   return (int)l.num;
 }
+
+/* The signed area of the polygon pts[0..num-1], closed or not, by the
+   shoelace formula: positive if counter-clockwise. */
+double
+polygon_area (const BITCODE_2BD *pts, const BITCODE_BL num)
+{
+  double a = 0.0;
+  BITCODE_BL i;
+  for (i = 0; i < num; i++)
+    {
+      const BITCODE_2BD *p = &pts[i], *q = &pts[(i + 1) % num];
+      a += p->x * q->y - q->x * p->y;
+    }
+  return a / 2.0;
+}
+
+/* True if (x,y) is inside the polygon pts[0..num-1], by the even-odd rule:
+   a ray to the right crosses its edges an odd number of times. */
+int
+point_in_polygon (const double x, const double y, const BITCODE_2BD *pts,
+                  const BITCODE_BL num)
+{
+  int inside = 0;
+  BITCODE_BL i, j;
+  for (i = 0, j = num - 1; i < num; j = i++)
+    if ((pts[i].y > y) != (pts[j].y > y)
+        && x < pts[j].x
+                   + (pts[i].x - pts[j].x) * (y - pts[j].y)
+                         / (pts[i].y - pts[j].y))
+      inside = !inside;
+  return inside;
+}
+
+// Adds (x,y) unless it repeats the last point within eps.
+static void
+ring_add (point_list *l, const double x, const double y, const double eps)
+{
+  BITCODE_3DPOINT p;
+  if (l->num && fabs (l->pts[l->num - 1].x - x) <= eps
+      && fabs (l->pts[l->num - 1].y - y) <= eps)
+    return;
+  p.x = x;
+  p.y = y;
+  p.z = 0.0;
+  point_list_add (l, &p);
+}
+
+/* Adds the points of an elliptical arc, start and end included: center c,
+   major axis vector major, minor = ratio * major turned by 90 degrees,
+   from parameter t0 by the signed sweep.  A circular arc is an ellipse
+   with ratio 1.  Enough points so that the chords are within tol of the
+   curve: a step dt of the parameter has its largest sagitta a * dt^2 / 8
+   at the end of the major axis, as for a circle of radius a. */
+static void
+ring_add_ellipse_sweep (point_list *l, const BITCODE_2RD c,
+                        const BITCODE_2RD major, const double ratio,
+                        const double t0, const double sweep, const double tol)
+{
+  const double a = hypot (major.x, major.y);
+  const double step = tol < a ? 2.0 * acos (1.0 - tol / a) : M_PI;
+  int n = (int)ceil (fabs (sweep) / step), i;
+  n = n < 1 ? 1 : (n > 4096 ? 4096 : n);
+  for (i = 0; i <= n; i++)
+    {
+      const double t = t0 + sweep * i / n;
+      ring_add (l, c.x + major.x * cos (t) - ratio * major.y * sin (t),
+                c.y + major.y * cos (t) + ratio * major.x * sin (t),
+                tol * 1e-6);
+    }
+}
+
+/* Adds the points of an elliptical or circular arc edge of a HATCH, from
+   parameter start to end.  As in DXF, a clockwise arc is defined in a
+   mirrored system, which turns it into the counter-clockwise arc from
+   -end to -start.  Equal parameters give a full ellipse. */
+static void
+ring_add_ellipse_arc (point_list *l, const BITCODE_2RD c,
+                      const BITCODE_2RD major, const double ratio,
+                      const double start, const double end, const int ccw,
+                      const double tol)
+{
+  double sweep = fmod (end - start, 2.0 * M_PI);
+  if (sweep < 0.0)
+    sweep += 2.0 * M_PI;
+  if (sweep < 1e-12)
+    sweep = 2.0 * M_PI;
+  ring_add_ellipse_sweep (l, c, major, ratio, ccw ? start : -end, sweep, tol);
+}
+
+// Adds the points of a SPLINE edge, by spline_flatten.
+static void
+ring_add_spline (point_list *l, const Dwg_HATCH_PathSeg *seg,
+                 const double rel_tol)
+{
+  Dwg_Entity_SPLINE s;
+  Dwg_SPLINE_control_point *cp = NULL;
+  BITCODE_3DPOINT *fit = NULL, *pts = NULL;
+  BITCODE_BL i;
+  int n;
+  memset (&s, 0, sizeof (s));
+  s.degree = seg->degree;
+  s.rational = seg->is_rational;
+  s.periodic = seg->is_periodic;
+  s.num_knots = seg->num_knots;
+  s.knots = seg->knots;
+  if (seg->num_control_points && seg->control_points
+      && (cp = (Dwg_SPLINE_control_point *)calloc (seg->num_control_points,
+                                                   sizeof (*cp))))
+    for (i = 0; i < seg->num_control_points; i++)
+      {
+        cp[i].x = seg->control_points[i].point.x;
+        cp[i].y = seg->control_points[i].point.y;
+        cp[i].w = seg->is_rational ? seg->control_points[i].weight : 1.0;
+      }
+  s.num_ctrl_pts = cp ? seg->num_control_points : 0;
+  s.ctrl_pts = cp;
+  if (seg->num_fitpts && seg->fitpts
+      && (fit = (BITCODE_3DPOINT *)calloc (seg->num_fitpts, sizeof (*fit))))
+    for (i = 0; i < seg->num_fitpts; i++)
+      {
+        fit[i].x = seg->fitpts[i].x;
+        fit[i].y = seg->fitpts[i].y;
+      }
+  s.num_fit_pts = fit ? seg->num_fitpts : 0;
+  s.fit_pts = fit;
+  s.beg_tan_vec.x = seg->start_tangent.x;
+  s.beg_tan_vec.y = seg->start_tangent.y;
+  s.end_tan_vec.x = seg->end_tangent.x;
+  s.end_tan_vec.y = seg->end_tangent.y;
+  n = spline_flatten (&s, rel_tol, &pts);
+  for (i = 0; i < (BITCODE_BL)n; i++)
+    ring_add (l, pts[i].x, pts[i].y, 0.0);
+  free (pts);
+  free (cp);
+  free (fit);
+}
+
+// Adds (x,y) to a list of defining points.
+static void
+box_add (point_list *l, const double x, const double y)
+{
+  BITCODE_3DPOINT p;
+  p.x = x;
+  p.y = y;
+  p.z = 0.0;
+  point_list_add (l, &p);
+}
+
+// Adds the defining points of the edge s: its endpoints, or the box of its
+// circle or ellipse, or its first control point.
+static void
+box_add_edge (point_list *l, const Dwg_HATCH_PathSeg *s)
+{
+  const double r = s->curve_type == 2   ? s->radius
+                   : s->curve_type == 3 ? hypot (s->endpoint.x, s->endpoint.y)
+                                        : 0.0;
+  if (s->curve_type == 1)
+    {
+      box_add (l, s->first_endpoint.x, s->first_endpoint.y);
+      box_add (l, s->second_endpoint.x, s->second_endpoint.y);
+    }
+  else if (s->curve_type == 2 || s->curve_type == 3)
+    {
+      box_add (l, s->center.x - r, s->center.y - r);
+      box_add (l, s->center.x + r, s->center.y + r);
+    }
+  else if (s->curve_type == 4 && s->control_points && s->num_control_points)
+    box_add (l, s->control_points[0].point.x, s->control_points[0].point.y);
+}
+
+// The size of a HATCH path: the diagonal of the box of its defining points.
+static double
+hatch_path_size (const Dwg_HATCH_Path *path)
+{
+  point_list l = { NULL, 0, 0, 1 };
+  BITCODE_BL i;
+  double size;
+  if (path->flag & 2)
+    for (i = 0; path->polyline_paths && i < path->num_segs_or_paths; i++)
+      box_add (&l, path->polyline_paths[i].point.x,
+               path->polyline_paths[i].point.y);
+  else
+    for (i = 0; path->segs && i < path->num_segs_or_paths; i++)
+      box_add_edge (&l, &path->segs[i]);
+  size = l.ok && l.num ? points_size (l.pts, l.num) : 0.0;
+  free (l.pts);
+  return size;
+}
+
+// Adds the points of the edge seg of a HATCH path.
+static void
+ring_add_edge (point_list *l, const Dwg_HATCH_PathSeg *seg,
+               const double rel_tol, const double tol)
+{
+  BITCODE_2RD x_axis;
+  switch (seg->curve_type)
+    {
+    case 1: // line
+      ring_add (l, seg->first_endpoint.x, seg->first_endpoint.y, 0.0);
+      ring_add (l, seg->second_endpoint.x, seg->second_endpoint.y, 0.0);
+      break;
+    case 2: // circular arc: an ellipse with ratio 1
+      x_axis.x = seg->radius;
+      x_axis.y = 0.0;
+      ring_add_ellipse_arc (l, seg->center, x_axis, 1.0, seg->start_angle,
+                            seg->end_angle, seg->is_ccw, tol);
+      break;
+    case 3:
+      ring_add_ellipse_arc (l, seg->center, seg->endpoint,
+                            seg->minor_major_ratio, seg->start_angle,
+                            seg->end_angle, seg->is_ccw, tol);
+      break;
+    case 4:
+      ring_add_spline (l, seg, rel_tol);
+      break;
+    default:
+      break;
+    }
+}
+
+// Adds the points of a polyline path, with its bulges.
+static void
+ring_add_polyline (point_list *l, const Dwg_HATCH_Path *path, const double tol)
+{
+  const BITCODE_BL n = path->num_segs_or_paths;
+  BITCODE_BL i;
+  for (i = 0; i < n; i++)
+    {
+      const Dwg_HATCH_PolylinePath *v = &path->polyline_paths[i],
+                                   *w = &path->polyline_paths[(i + 1) % n];
+      BITCODE_2BD p1, p2, ctr;
+      double radius, start, sweep;
+      p1.x = v->point.x;
+      p1.y = v->point.y;
+      p2.x = w->point.x;
+      p2.y = w->point.y;
+      if (path->bulges_present
+          && bulge_to_arc (p1, p2, v->bulge, &ctr, &radius, &start, &sweep))
+        {
+          BITCODE_2RD c, x_axis;
+          c.x = ctr.x;
+          c.y = ctr.y;
+          x_axis.x = radius;
+          x_axis.y = 0.0;
+          ring_add_ellipse_sweep (l, c, x_axis, 1.0, start, sweep, tol);
+        }
+      else
+        ring_add (l, p1.x, p1.y, 0.0);
+    }
+}
+
+// Closes the ring and copies it to a malloc'ed 2D array.  Returns the
+// number of points, or 0 for fewer than 3 distinct points.
+static int
+ring_finish (point_list *l, BITCODE_2BD **pts)
+{
+  BITCODE_BL i;
+  if (l->ok && l->num
+      && (l->pts[l->num - 1].x != l->pts[0].x
+          || l->pts[l->num - 1].y != l->pts[0].y))
+    {
+      const BITCODE_3DPOINT first = l->pts[0];
+      point_list_add (l, &first);
+    }
+  if (!l->ok || l->num < 4
+      || !(*pts = (BITCODE_2BD *)malloc (l->num * sizeof (BITCODE_2BD))))
+    return 0;
+  for (i = 0; i < l->num; i++)
+    {
+      (*pts)[i].x = l->pts[i].x;
+      (*pts)[i].y = l->pts[i].y;
+    }
+  return (int)l->num;
+}
+
+/* The boundary of a HATCH path as a closed ring of points: polylines with
+   their bulges, and edges of lines, circular and elliptical arcs and
+   SPLINEs.  Curves are within rel_tol times the size of the path.  Returns
+   the number of points, the last one repeating the first, as a malloc'ed
+   array in *pts; or 0 for fewer than 3 distinct points. */
+int
+hatch_path_points (const Dwg_HATCH_Path *path, const double rel_tol,
+                   BITCODE_2BD **pts)
+{
+  point_list l = { NULL, 0, 0, 1 };
+  const double tol = rel_tol * hatch_path_size (path);
+  BITCODE_BL i;
+  int num;
+
+  *pts = NULL;
+  if (path->flag & 2)
+    {
+      if (path->polyline_paths && path->num_segs_or_paths)
+        ring_add_polyline (&l, path, tol);
+    }
+  else
+    for (i = 0; path->segs && i < path->num_segs_or_paths; i++)
+      ring_add_edge (&l, &path->segs[i], rel_tol, tol);
+  num = ring_finish (&l, pts);
+  free (l.pts);
+  return num;
+}
