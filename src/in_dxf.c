@@ -14814,11 +14814,16 @@ invalid_dxf:
 fail:
   if (obj)
     {
-      // obj->dxfname is freed by dwg_free_object (IN/INDXF/INJSON); the
-      // caller's dxfname copy was consumed (or freed) by new_object already.
+      // dxfname was consumed by ADD_OBJECT/ADD_ENTITY into obj->dxfname
+      // (freed by dwg_free_object below); free it here if the object was
+      // dropped before that. The caller's copy is consumed either way.
+      if (dxfname && dxfname != obj->dxfname)
+        free (dxfname);
       dwg_free_object (obj);
       dwg->num_objects--;
     }
+  else if (dxfname)
+    free (dxfname);
   return NULL;
 }
 
@@ -14880,6 +14885,9 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               // until 0 table or 0 ENDTAB
               pair = new_object (table, dxfname, dat, dwg, ctrl_id,
                                  (BITCODE_BL *)&i);
+              dxfname
+                  = NULL; /* new_object consumed dxfname (obj->dxfname), or
+                             freed it via UPGRADE_ENTITY / dwg_free_object */
               obj = &dwg->object[idx];
               ctrl = &dwg->object[ctrl_id];
               if (!pair)
