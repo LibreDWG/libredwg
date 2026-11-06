@@ -3063,7 +3063,10 @@ decl_dxf_process_VERTEX (PFACE)
             = _obj->last_attrib ? _obj->last_attrib->obj : NULL;              \
         Dwg_Object *o = _obj->first_attrib ? _obj->first_attrib->obj : NULL;  \
         if (!o || !last_attrib)                                               \
-          return DWG_ERR_INVALIDHANDLE;                                       \
+          {                                                                   \
+            error |= DWG_ERR_INVALIDHANDLE;                                   \
+            goto attribs_seqend;                                              \
+          }                                                                   \
         if (o->fixedtype == DWG_TYPE_ATTRIB)                                  \
           error |= dwg_dxf_ATTRIB (dat, o);                                   \
         *i = *i + 1;                                                          \
@@ -3071,12 +3074,16 @@ decl_dxf_process_VERTEX (PFACE)
           {                                                                   \
             o = dwg_next_object (o);                                          \
             if (!o)                                                           \
-              return DWG_ERR_INVALIDHANDLE;                                   \
+              {                                                               \
+                error |= DWG_ERR_INVALIDHANDLE;                               \
+                goto attribs_seqend;                                          \
+              }                                                               \
             if (o->fixedtype == DWG_TYPE_ATTRIB)                              \
               error |= dwg_dxf_ATTRIB (dat, o);                               \
             *i = *i + 1;                                                      \
           }                                                                   \
         while (o->fixedtype == DWG_TYPE_ATTRIB && o != last_attrib);          \
+      attribs_seqend:                                                         \
         o = _obj->seqend ? _obj->seqend->obj : NULL;                          \
         if (o && o->fixedtype == DWG_TYPE_SEQEND)                             \
           error |= dwg_dxf_SEQEND (dat, o);                                   \
