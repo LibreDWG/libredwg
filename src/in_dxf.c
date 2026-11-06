@@ -13911,7 +13911,21 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                       // can ignore z or 0.0? e.g. no VPORT.view_target
                       if (strNE (name, "_3DFACE") && strNE (f->name, "scale")
                           && *f->type == '2')
-                        goto next_pair;
+                        {
+                          // The z (31) of a DIMENSION's 2D text_midpt (11) is
+                          // its elevation, a field with the same DXF code.
+                          if (strEQc (f->name, "text_midpt")
+                              && dwg_dynapi_entity_field (obj->name,
+                                                          "elevation"))
+                            {
+                              BITCODE_BD elevation = pair->value.d;
+                              dwg_dynapi_entity_set_value (
+                                  _obj, obj->name, "elevation", &elevation, 0);
+                              LOG_TRACE ("%s.elevation = %f [BD %d]\n", name,
+                                         elevation, pair->code);
+                            }
+                          goto next_pair;
+                        }
                       dwg_dynapi_entity_value (_obj, obj->name, f->name, &pt,
                                                NULL);
                       pt.z = pair->value.d;
