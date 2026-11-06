@@ -377,7 +377,11 @@ DWG_ENTITY (ATTRIB)
   }
   SINCE (R_2018b)
     {
-      FIELD_RC (mtext_type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
+#ifdef IS_ENCODER
+      if (!FIELD_VALUE (mtext_type)) // not set by an import: single line
+        FIELD_VALUE (mtext_type) = 1;
+#endif
+      FIELD_RC (mtext_type, 71); // 1=single line, 2=multi line attrib, 4=multi line attdef
       if (FIELD_VALUE (mtext_type) > 1)
         CALL_SUBCLASS (_obj, ATTRIB, AcDbMTextObjectEmbedded);
     }
@@ -577,7 +581,7 @@ DWG_ENTITY (ATTDEF)
     VALUE_RC (0, 280); // 0 = 2010+ (class_version)
     FIELD_T (prompt, 3);
     FIELD_T (tag, 2);
-    FIELD_RC (mtext_type, 70);
+    FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
     SINCE (R_13b1) {
       FIELD_BS0 (field_length, 73); // unused
       FIELD_BS0 (vert_alignment, 74);
@@ -586,6 +590,9 @@ DWG_ENTITY (ATTDEF)
       FIELD_RC (is_locked_in_block, 280);
       // SUBCLASS (AcDbXrecord);
       // FIELD_RC (keep_duplicate_records, 280);
+    }
+    SINCE (R_2018b) {
+      FIELD_RC (mtext_type, 71); // 1=single line, 2=multi line attrib, 4=multi line attdef
     }
   }
   SINCE (R_2010b)
@@ -598,7 +605,11 @@ DWG_ENTITY (ATTDEF)
   IF_FREE_OR_SINCE (R_2018)
     {
       // 1=single line, 2=multi line attrib, 4=multi line attdef
-      FIELD_RC (mtext_type, 0); // 70
+#ifdef IS_ENCODER
+      if (!FIELD_VALUE (mtext_type)) // not set by an import: single line
+        FIELD_VALUE (mtext_type) = 1;
+#endif
+      FIELD_RC (mtext_type, 0); // 71
       if (FIELD_VALUE (mtext_type) > 1)
         CALL_SUBCLASS (_obj, ATTDEF, AcDbMTextObjectEmbedded);
     }

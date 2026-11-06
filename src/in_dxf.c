@@ -1408,8 +1408,23 @@ dxf_set_CMC_index (BITCODE_CMC *restrict color, const int index)
   else
     {
       color->method = 0xc3;
-      color->rgb = 0xc3000000 | dwg_rgb_palette_index ((BITCODE_BS)index);
+      color->rgb = 0xc3000000 | (index & 0xff);
     }
+}
+
+// A DXF color value is either an index (<= 257) or a full CMC rgb with the
+// method in the high byte (e.g. 0xc0000000 ByLayer), written as signed int.
+static void
+dxf_set_CMC_value (BITCODE_CMC *restrict color, const BITCODE_BL value)
+{
+  if (value > 257)
+    {
+      color->index = 256;
+      color->rgb = value;
+      color->method = (BITCODE_RC)(value >> 24);
+    }
+  else
+    dxf_set_CMC_index (color, (int)value);
 }
 
 // FIXME: support 430 (name), 440 (alpha)
@@ -1461,7 +1476,7 @@ dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
             }
           color->rgb = ((BITCODE_BL)color->method << 24);
           if (color->method == 0xc3)
-            color->rgb |= dwg_rgb_palette_index (color->index);
+            color->rgb |= (color->index & 0xff);
         }
     }
   else if (pair->code < 430 && pair->code == (dxf + 420 - 62)) // truecolor
@@ -4129,11 +4144,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           assert (j >= 0);
           assert (j < (int)o->num_colors);
-          if (dat->version >= R_2007)
-            o->colors[j].color.name
-                = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
-          else
-            o->colors[j].color.name = strdup (pair->value.s.ptr);
+          // imports keep TV strings, the encoder converts to TU
+          o->colors[j].color.name
+              = dxf_pair_string (obj->parent, pair->value.s.ptr);
           LOG_TRACE ("HATCH.colors[%d].color.name = %s [CMC 431]\n", j,
                      pair->value.s.ptr);
         }
@@ -4370,7 +4383,8 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               break;
             case 171:
-              lline->linewt = dxf_find_lweight ((int16_t)pair->value.i);
+              // the raw value, as written by out_dxf (e.g. -2 byblock)
+              lline->linewt = (BITCODE_BLd)(int16_t)pair->value.i;
               LOG_TRACE ("%s.leaders[].lines[%d].linewt = %d [BL %d]\n",
                          obj->name, i, lline->linewt, pair->code);
               break;
@@ -4689,11 +4703,8 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 {
                   if (ctx->has_content_blk)
                     goto unknown_mleader;
-                  if (dat->version >= R_2007)
-                    ctx->content.txt.default_text
-                        = (char *)bit_utf8_to_TU (pair->value.s.ptr, 0);
-                  else
-                    ctx->content.txt.default_text = strdup (pair->value.s.ptr);
+                  ctx->content.txt.default_text
+                      = dxf_pair_string (obj->parent, pair->value.s.ptr);
                   LOG_TRACE ("%s.ctx.content.txt.default_text = %s [%d T]\n",
                              obj->name, pair->value.s.ptr, pair->code);
                 }
@@ -4821,16 +4832,16 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 90:
               if (!ctx->has_content_txt)
                 goto unknown_mleader;
-              dxf_set_CMC_index (&ctx->content.txt.color, pair->value.i);
-              LOG_TRACE ("%s.ctx.content.txt.color.index = %d [BS %d]\n",
-                         obj->name, pair->value.i, pair->code);
+              dxf_set_CMC_value (&ctx->content.txt.color, pair->value.u);
+              LOG_TRACE ("%s.ctx.content.txt.color.rgb = 0x%08x [CMC %d]\n",
+                         obj->name, pair->value.u, pair->code);
               break;
             case 91:
               if (!ctx->has_content_txt)
                 goto unknown_mleader;
-              dxf_set_CMC_index (&ctx->content.txt.bg_color, pair->value.i);
-              LOG_TRACE ("%s.ctx.content.txt.bg_color.index = %d [BS %d]\n",
-                         obj->name, pair->value.i, pair->code);
+              dxf_set_CMC_value (&ctx->content.txt.bg_color, pair->value.u);
+              LOG_TRACE ("%s.ctx.content.txt.bg_color.rgb = 0x%08x [CMC %d]\n",
+                         obj->name, pair->value.u, pair->code);
               break;
             case 141:
               if (!ctx->has_content_txt)
@@ -5407,12 +5418,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
         case 300:
           if (mode == CONTENTFORMAT)
             {
-              if (obj->parent->header.version >= R_2007)
-                o->content_format.value_format_string
-                    = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
-              else
-                o->content_format.value_format_string
-                    = strdup (pair->value.s.ptr);
+              o->content_format.value_format_string
+                  = dxf_pair_string (obj->parent, pair->value.s.ptr);
               LOG_TRACE (
                   "%s.%s.content_format.value_format_string = \"%s\" [T %d]\n",
                   obj->name, key, pair->value.s.ptr, pair->code);
@@ -5760,8 +5767,9 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           break;
         case 1:
           CHK_array (i, rowstyles);
-          o->rowstyles[i].format_string = bit_utf8_to_TU (pair->value.s.ptr,
-        0); LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
+          o->rowstyles[i].format_string
+              = dxf_pair_string (obj->parent, pair->value.s.ptr);
+          LOG_TRACE ("%s.rowstyles[%d].format_string = %s [T %d]\n",
                      obj->name, i, pair->value.s.ptr, pair->code);
           break;
         */
@@ -12685,6 +12693,21 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   dwg_dynapi_entity_set_value (_obj, obj->name, "dataflags",
                                                &dataflags, 0);
                 }
+              else if (pair->code == 71
+                       && (obj->fixedtype == DWG_TYPE_ATTRIB
+                           || obj->fixedtype == DWG_TYPE_ATTDEF)
+                       && (strEQc (subclass, "AcDbAttributeDefinition")
+                           || strEQc (subclass, "AcDbAttribute")))
+                {
+                  // 1=single line, 2=multi line attrib, 4=multi line attdef.
+                  // Else 71 is the text generation of the AcDbText subclass.
+                  BITCODE_RC mtext_type = (BITCODE_RC)pair->value.i;
+                  LOG_TRACE ("%s.mtext_type = %d [RC 71]\n", obj->name,
+                             mtext_type);
+                  dwg_dynapi_entity_set_value (_obj, obj->name, "mtext_type",
+                                               &mtext_type, 0);
+                  goto next_pair;
+                }
               else
                 goto search_field;
             }
@@ -13756,8 +13779,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                               // Some objects (e.g. MULTILEADER codes 91/92/93)
                               // store a color index in a code >= 90 range.
                               // Detect by value: real RGB values are always
-                              // > 257 (high byte set, e.g. 0xc3rrggbb).
-                              if (pair->value.l <= 257)
+                              // > 257 (high byte set, e.g. 0xc3rrggbb), and
+                              // written as signed int: 0xc0000000 is negative.
+                              if ((BITCODE_BL)pair->value.l <= 257)
                                 {
                                   dxf_set_CMC_index (&color,
                                                      (int)pair->value.l);
@@ -13827,8 +13851,17 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 _obj, obj->name, f->name, &pair->value, 1);
                         }
                       else
-                        dwg_dynapi_entity_set_value (_obj, obj->name, f->name,
-                                                     &pair->value, 1);
+                        {
+                          // 16-bit DXF ints are read unsigned. Sign-extend
+                          // them for the signed fields (e.g. linewt -2).
+                          if (pair->type == DWG_VT_INT16 && f->size == 4
+                              && strEQc (f->type, "BLd")
+                              && pair->value.i > 32767)
+                            pair->value.i -= 65536;
+                          dwg_dynapi_entity_set_value (_obj, obj->name,
+                                                       f->name, &pair->value,
+                                                       1);
+                        }
                       if (f->is_string)
                         {
                           LOG_TRACE ("%s.%s = %s [%s %d]\n", name, f->name,
@@ -14555,30 +14588,26 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           o->color.book_name = NULL;
                           LOG_TRACE ("%s.color.name = %s [%s %d]\n", name,
                                      pair->value.s.ptr, "CMC", pair->code);
-                          if (dwg->header.version >= R_2007)
-                            {
-                              char *tmp = o->color.name;
-                              o->color.name = (BITCODE_T)bit_utf8_to_TU (
-                                  o->color.name, 0);
-                              free (tmp);
-                            }
+                          {
+                            // imports keep TV strings
+                            char *tmp = o->color.name;
+                            o->color.name = dxf_pair_string (dwg, tmp);
+                            free (tmp);
+                          }
                         }
                       else
                         { // book with name
                           o->color.flag = 3;
                           o->color.name = strdup (x + 1);
                           x[0] = '\0';
-                          if (dwg->header.version >= R_2007)
-                            {
-                              char *tmp = o->color.book_name;
-                              o->color.book_name = (BITCODE_T)bit_utf8_to_TU (
-                                  o->color.book_name, 0);
-                              free (tmp);
-                              tmp = o->color.name;
-                              o->color.name = (BITCODE_T)bit_utf8_to_TU (
-                                  o->color.name, 0);
-                              free (tmp);
-                            }
+                          {
+                            char *tmp = o->color.book_name;
+                            o->color.book_name = dxf_pair_string (dwg, tmp);
+                            free (tmp);
+                            tmp = o->color.name;
+                            o->color.name = dxf_pair_string (dwg, tmp);
+                            free (tmp);
+                          }
                           LOG_TRACE ("%s.color.book+name = %s [%s %d]\n", name,
                                      pair->value.s.ptr, "CMC", pair->code);
                         }

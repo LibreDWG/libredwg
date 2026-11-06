@@ -3528,8 +3528,8 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
 // create a fresh string
 static void
 dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
-                   const Dwg_Version_Type dwg_version,
-                   const void *restrict value, const bool is_utf8)
+                   const Dwg_Data *dwg, const void *restrict value,
+                   const bool is_utf8)
 {
   // TODO: sanity checks. is_malloc (TF), copy zero's (TFv)
   // if text strcpy or wcscpy, or do utf8 conversion.
@@ -3549,8 +3549,8 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           free (*(char **)old);
           memcpy (old, &str, sizeof (char*)); // size of ptr
         }
-      // ascii
-      else if (f->is_string && dwg_version < R_2007)
+      // ascii (TV): imports and pre-r2007 decoded drawings
+      else if (f->is_string && !(dwg && IS_FROM_TU_DWG (dwg)))
         {
           // FIXME: TF size calc is probably wrong
           size_t len = strlen (*(char**)value);
@@ -3560,8 +3560,9 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           free (*(char **)old);
           memcpy (old, &str, sizeof (char*)); // size of ptr
         }
-      // or wide
-      else if (strNE (f->type, "TF") && (f->is_string && dwg_version >= R_2007))
+      // or wide (TU): decoded r2007+ drawings only
+      else if (strNE (f->type, "TF") && (f->is_string && dwg
+                                         && IS_FROM_TU_DWG (dwg)))
         {
           BITCODE_TU wstr;
           if (is_utf8)
@@ -3622,7 +3623,6 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
       const Dwg_Data *dwg
         = obj ? obj->parent
               : ((Dwg_Object_UNKNOWN_OBJ *)_obj)->parent->dwg;
-      const Dwg_Version_Type dwg_version = dwg ? dwg->header.version : R_INVALID;
       // but there are some fixed-length malloced strings preR13
       static const Dwg_DYNAPI_field r11_fixed_strings[] = {
           { "font_file", "TFv", 64, OFF (struct _dwg_object_STYLE, font_file), 1,1,1, 3 },
@@ -3652,7 +3652,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
             }
         }
       old = &((char*)_obj)[f->offset];
-      dynapi_set_helper (old, f, dwg_version, value, is_utf8);
+      dynapi_set_helper (old, f, dwg, value, is_utf8);
       return true;
     }
   }
@@ -3705,7 +3705,7 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
               }
           }
         old = &((char*)_obj)[f->offset];
-        dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
+        dynapi_set_helper (old, f, dwg, value, is_utf8);
 
         // Set also FLAGS
         if (strEQc (fieldname, "CELWEIGHT"))
@@ -3805,7 +3805,7 @@ dwg_dynapi_common_set_value (void *restrict _obj,
         memcpy (old, value, size);
       }
     else
-      dynapi_set_helper (old, f, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
+      dynapi_set_helper (old, f, dwg, value, is_utf8);
 
     if (dwg && obj->supertype == DWG_SUPERTYPE_ENTITY && strEQc (fieldname, "ltype"))
       { // set also isbylayerlt and ltype_flags
@@ -3891,7 +3891,7 @@ dwg_dynapi_subclass_set_value (Dwg_Data *restrict dwg,
     }
   old = &((char*)ptr)[f->offset];
   if (f->is_string)
-    dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
+    dynapi_set_helper (old, f, dwg, value, is_utf8);
   else
     memcpy (old, value, f->size);
   return true;
@@ -3925,7 +3925,7 @@ dwg_dynapi_field_set_value (const Dwg_Data *restrict dwg, /* only needed if unic
     return false;
 #endif
   off = &((char*)ptr)[field->offset];
-  dynapi_set_helper (off, field, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
+  dynapi_set_helper (off, field, dwg, value, is_utf8);
   return true;
 }
 

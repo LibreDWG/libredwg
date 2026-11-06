@@ -358,6 +358,16 @@ encode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
   int acis_data_idx = 0;
   int error = 0;
 
+  // no leading ACIS empty bit since R2013 (see decode_3dsolid): the SAB body
+  // is an AcDs blob (has_ds_data), which we cannot write yet. Write the solid
+  // without its body, but keep the stream in sync.
+  if (dat->version >= R_2013b)
+    {
+      if (!FIELD_VALUE (acis_empty) || FIELD_VALUE (acis_data))
+        LOG_WARN ("%s.acis_data not written, AcDs is not supported yet",
+                  obj->name);
+      return error;
+    }
   FIELD_B (acis_empty, 290);
   if (!FIELD_VALUE (acis_empty))
     {
@@ -479,6 +489,17 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
 #  define FREE_3DSOLID {}
 #endif
 
+/* The decoder sets version 2 (SAB) for every r2013+ solid, as its body is in
+   AcDs. The encoder writes no body then, but must write the matching
+   trailer fields. */
+#undef SOLID_VERSION2
+#ifdef IS_ENCODER
+#  define SOLID_VERSION2                                                      \
+    (FIELD_VALUE (version) > 1 || dat->version >= R_2013b)
+#else
+#  define SOLID_VERSION2 (FIELD_VALUE (version) > 1)
+#endif
+
 #define COMMON_3DSOLID                                                        \
   FIELD_B (wireframe_data_present, 0);                                        \
   if (FIELD_VALUE (wireframe_data_present))                                   \
@@ -532,7 +553,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
         }                                                                     \
     }                                                                         \
   FIELD_B (acis_empty_bit, 0); /* ?? */                                       \
-  if (FIELD_VALUE (version) > 1)                                              \
+  if (SOLID_VERSION2)                                                         \
     {                                                                         \
       SINCE (R_2007a)                                                         \
       {                                                                       \
@@ -576,7 +597,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
       SUBCLASS (AcDb3dSolid);                                                 \
       FIELD_HANDLE (history_id, 4, 350);                                      \
     }                                                                         \
-  } else if (FIELD_VALUE (version) > 1                                        \
+  } else if (SOLID_VERSION2                                                   \
              && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \
       FIELD_HANDLE (history_id, 4, 350);                                      \
   }                                                                           \

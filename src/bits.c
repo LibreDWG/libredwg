@@ -4061,8 +4061,8 @@ bit_upconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
             color->method = 0xc1;
         }
       color->rgb = color->method << 0x18;
-      if (color->method == 0xc3)
-        color->rgb |= dwg_rgb_palette_index (color->index);
+      if (color->method == 0xc3) // ACI: the index is in the low byte, as ODA
+        color->rgb |= (color->index & 0xff);
       else if (color->method == 0xc2)
         color->rgb |= 0x00ffffff;
     }
@@ -4086,8 +4086,10 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
         case 0xc1:
           color->index = 0;
           break;   // ByBlock
-        case 0xc2: // Entity
-        case 0xc3: // TrueColor
+        case 0xc3: // ACI: the index is in the low byte
+          color->index = color->rgb & 0xff;
+          break;
+        case 0xc2: // Entity truecolor
           // Keep an existing palette index whose rgb round-trips: several
           // palette entries share one rgb (e.g. 1 and 10, 5 and 170), and
           // dwg_find_color_index returns the first match, silently
