@@ -276,6 +276,36 @@ then
     else
         i=$((i+1))
     fi
+
+    # an ellipse arc is a LineString up to its end point
+    echo "dwgread -O geojson $DATADIR/2013/gh109_1.dwg | jq ellipse arc"
+    if $TESTPROG "./dwgread${EXEEXT}" -O geojson "$DATADIR/2013/gh109_1.dwg" |
+        $JQ -e '[.features[] | select(.properties.EntityHandle == "4DF")
+                 | .geometry | .type == "LineString"
+                   and (.coordinates[-1][0] - 345 | fabs) < 1e-3
+                   and (.coordinates[-1][1] + 82.485 | fabs) < 1e-3]
+                == [true]' >/dev/null 2>&1
+    then
+        echo geojson ellipse arc ok
+    else
+        i=$((i+1))
+    fi
+
+    # a full ellipse is a Polygon, not one point; arcs are LineStrings
+    echo "dwgread -O geojson $DATADIR/example_2000.dwg | jq ellipse, arcs"
+    if $TESTPROG "./dwgread${EXEEXT}" -O geojson "$DATADIR/example_2000.dwg" |
+        $JQ -e '[.features[]
+                 | select(.properties.SubClasses // "" | test("AcDbEllipse|AcDbArc"))
+                 | .geometry
+                 | if .type == "Polygon"
+                   then .coordinates[0] | unique | length > 3
+                   else .type == "LineString" end]
+                | length > 0 and all' >/dev/null 2>&1
+    then
+        echo geojson ellipse and arcs ok
+    else
+        i=$((i+1))
+    fi
 else
     echo no jq, cannot check pipe
 fi
