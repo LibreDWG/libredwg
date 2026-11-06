@@ -414,6 +414,172 @@ normalize_polygon_orient (BITCODE_BL numpts, dwg_point_2d **const pts_p)
     }
 }
 
+// The attributes of an INSERT or MINSERT, as in their structs
+typedef struct _geojson_attribs
+{
+  BITCODE_B has_attribs;
+  BITCODE_BL num_owned;
+  BITCODE_H first_attrib;
+  BITCODE_H last_attrib;
+  BITCODE_H *attribs;
+} geojson_attribs;
+
+static void
+geojson_attribs_of (const Dwg_Object *restrict obj,
+                    geojson_attribs *restrict a)
+{
+  memset (a, 0, sizeof (*a));
+  if (obj->fixedtype == DWG_TYPE_INSERT)
+    {
+      const Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+      a->has_attribs = _obj->has_attribs;
+      a->num_owned = _obj->num_owned;
+      a->first_attrib = _obj->first_attrib;
+      a->last_attrib = _obj->last_attrib;
+      a->attribs = _obj->attribs;
+    }
+  else if (obj->fixedtype == DWG_TYPE_MINSERT)
+    {
+      const Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+      a->has_attribs = _obj->has_attribs;
+      a->num_owned = _obj->num_owned;
+      a->first_attrib = _obj->first_attrib;
+      a->last_attrib = _obj->last_attrib;
+      a->attribs = _obj->attribs;
+    }
+}
+
+// until R2000 the ATTRIBs are linked from first_attrib to last_attrib
+static Dwg_Object *
+geojson_linked_attrib (const geojson_attribs *restrict a,
+                       const Dwg_Object *restrict prev)
+{
+  if (!prev)
+    return a->first_attrib ? a->first_attrib->obj : NULL;
+  if (a->last_attrib && prev != a->last_attrib->obj)
+    return dwg_next_object (prev);
+  return NULL;
+}
+
+// since R2004 the ATTRIBs are in a vector
+static Dwg_Object *
+geojson_vector_attrib (const geojson_attribs *restrict a, const BITCODE_BL i)
+{
+  return i < a->num_owned && a->attribs && a->attribs[i] ? a->attribs[i]->obj
+                                                         : NULL;
+}
+
+/* The attribute number i after prev, NULL after the last one, as in
+   out_dxf.c. Before R13 the ATTRIBs follow the INSERT up to its SEQEND. */
+static Dwg_Object *
+geojson_next_attrib (const Dwg_Object *restrict obj,
+                     const geojson_attribs *restrict a,
+                     const Dwg_Object *restrict prev, const BITCODE_BL i)
+{
+  const Dwg_Version_Type version = obj->parent->header.version;
+  Dwg_Object *o;
+  if (!a->has_attribs)
+    return NULL;
+  if (version >= R_2004a)
+    o = geojson_vector_attrib (a, i);
+  else if (version < R_13b1)
+    o = dwg_next_object (prev ? prev : obj);
+  else
+    o = geojson_linked_attrib (a, prev);
+  return o && o->fixedtype == DWG_TYPE_ATTRIB ? o : NULL;
+}
+
+// a copy of a text as UTF-8 for TU, else as is
+static char *
+geojson_text (Bit_Chain *restrict dat, const BITCODE_T text)
+{
+  char *s;
+  size_t len;
+  if (!text)
+    return NULL;
+  if (IS_FROM_TU (dat))
+    return bit_convert_TU ((BITCODE_TU)text);
+  len = strlen (text);
+  s = (char *)malloc (len + 1);
+  if (s)
+    memcpy (s, text, len + 1);
+  return s;
+}
+
+// a tag must not repeat a key of the feature or an earlier tag
+static int
+geojson_key_used (const char *restrict key, char *const *restrict tags,
+                  const BITCODE_BL num_tags)
+{
+  static const char *const keys[]
+      = { "SubClasses", "Layer", "Color",       "Linetype",
+          "Text",       "name",  "EntityHandle" };
+  BITCODE_BL i;
+  for (i = 0; i < sizeof (keys) / sizeof (keys[0]); i++)
+    if (strcmp (key, keys[i]) == 0)
+      return 1;
+  for (i = 0; i < num_tags; i++)
+    if (strcmp (key, tags[i]) == 0)
+      return 1;
+  return 0;
+}
+
+// "key": "value", both quoted
+static void
+geojson_pair (Bit_Chain *restrict dat, const char *restrict key,
+              const char *restrict value)
+{
+  const size_t klen = 6 * strlen (key) + 1;
+  const size_t vlen = 6 * strlen (value) + 1;
+  char *k = (char *)malloc (klen);
+  char *v = (char *)malloc (vlen);
+  if (k && v)
+    {
+      PREFIX fprintf (dat->fh, "\"%s\": \"%s\",\n",
+                      json_cquote (k, key, klen, dat->codepage),
+                      json_cquote (v, value, vlen, dat->codepage));
+    }
+  free (k);
+  free (v);
+}
+
+/* The attributes of an INSERT or MINSERT as "TAG": "value" properties, as
+   asked in GH #849. An empty value is written as "", a repeated tag is
+   skipped. */
+static void
+geojson_insert_attribs (Bit_Chain *restrict dat,
+                        const Dwg_Object *restrict obj)
+{
+  geojson_attribs a;
+  const Dwg_Object *o = NULL;
+  char **tags = NULL;
+  BITCODE_BL i, num_tags = 0;
+
+  geojson_attribs_of (obj, &a);
+  for (i = 0; (o = geojson_next_attrib (obj, &a, o, i)) != NULL; i++)
+    {
+      const Dwg_Entity_ATTRIB *_obj = o->tio.entity->tio.ATTRIB;
+      char *tag = geojson_text (dat, _obj->tag);
+      char *value;
+      char **more;
+      if (!tag || !*tag || geojson_key_used (tag, tags, num_tags)
+          || !(more
+               = (char **)realloc (tags, (num_tags + 1) * sizeof (char *))))
+        {
+          free (tag);
+          continue;
+        }
+      tags = more;
+      tags[num_tags++] = tag;
+      value = geojson_text (dat, _obj->text_value);
+      geojson_pair (dat, tag, value ? value : "");
+      free (value);
+    }
+  for (i = 0; i < num_tags; i++)
+    free (tags[i]);
+  free (tags);
+}
+
 // common properties
 static void
 dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
@@ -539,6 +705,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                 free (text);
             }
         }
+      geojson_insert_attribs (dat, obj);
     }
   else if (obj->fixedtype == DWG_TYPE_MINSERT)
     {
@@ -559,6 +726,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                 free (text);
             }
         }
+      geojson_insert_attribs (dat, obj);
     }
   // PAIR_NULL(ExtendedEntity);
   snprintf (tmp, sizeof (tmp), FORMAT_HV, obj->handle.value);

@@ -265,6 +265,17 @@ then
         cat "$json.log"
         i=$((i+1))
     fi
+
+    # block attributes as properties, GH #849
+    echo "dwgread -O geojson $DATADIR/example_2000.dwg | jq attribs"
+    if $TESTPROG "./dwgread${EXEEXT}" -O geojson "$DATADIR/example_2000.dwg" |
+        $JQ -e '[.features[].properties.ETIKEDO // empty] | sort
+                == ["valoro", "valoro de la teksto en bloko"]' >/dev/null 2>&1
+    then
+        echo geojson attribs ok
+    else
+        i=$((i+1))
+    fi
 else
     echo no jq, cannot check pipe
 fi
