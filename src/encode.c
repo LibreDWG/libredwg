@@ -6678,11 +6678,13 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_INFO (
               "overlarge MS size %lu > 0x7fff (was %lu) @%" PRIuSIZE "\n",
               (unsigned long)obj->size, (unsigned long)old_size, dat->byte);
-          if (dat->byte + obj->size + 5 > dat->size)
-            bit_chain_alloc_size (dat,
-                                  (dat->byte + obj->size + 5) - dat->size);
-          memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte],
-                   obj->size + 3);
+          // MS size, handlestream size, type, then obj->size data bytes
+          {
+            const size_t len = (obj->address - dat->byte) + obj->size;
+            if (dat->byte + len + 5 > dat->size)
+              bit_chain_alloc_size (dat, (dat->byte + len + 5) - dat->size);
+            memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte], len);
+          }
           // obj->size += 2;
           // obj->bitsize += 16;
           obj->address += 2;
@@ -6696,11 +6698,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_INFO ("was overlarge MS size %lu => %lu @%" PRIuSIZE "\n",
                     (unsigned long)old_size, (unsigned long)obj->size,
                     dat->byte);
-          if (dat->byte + obj->size + 5 > dat->size)
-            bit_chain_alloc_size (dat,
-                                  (dat->byte + obj->size + 5) - dat->size);
-          memmove (&dat->chain[dat->byte], &dat->chain[dat->byte + 2],
-                   obj->size + 3);
+          {
+            const size_t len = (obj->address - dat->byte) + obj->size - 2;
+            if (dat->byte + len + 7 > dat->size)
+              bit_chain_alloc_size (dat, (dat->byte + len + 7) - dat->size);
+            memmove (&dat->chain[dat->byte], &dat->chain[dat->byte + 2], len);
+          }
           // obj->size -= 2;
           // obj->bitsize -= 16;
           obj->address -= 2;
