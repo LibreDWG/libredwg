@@ -285,6 +285,33 @@ escape_htmlwescape_tests (void)
   free (s);
 }
 
+static void
+escape_mtext_plaintext_tests (void)
+{
+  // a format code with no terminating ';' must stop at the end of the
+  // string, not read past it (heap-buffer-overflow)
+  char *s = mtext_plaintext ("abc\\H2.5x");
+  if (strEQc (s, "abc"))
+    pass ();
+  else
+    fail ("mtext_plaintext unterminated => %s", s);
+  free (s);
+
+  s = mtext_plaintext ("a\\H1;b"); // terminated code still skipped
+  if (strEQc (s, "ab"))
+    pass ();
+  else
+    fail ("mtext_plaintext terminated => %s", s);
+  free (s);
+
+  s = mtext_plaintext ("x\\Py"); // \P => newline
+  if (strEQc (s, "x\ny"))
+    pass ();
+  else
+    fail ("mtext_plaintext paragraph => %s", s);
+  free (s);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -296,5 +323,6 @@ main (int argc, char const *argv[])
   common_strcasecmp_tests ();
   escape_htmlescape_tests ();
   escape_htmlwescape_tests ();
+  escape_mtext_plaintext_tests ();
   return failed;
 }
