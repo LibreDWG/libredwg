@@ -2515,6 +2515,42 @@ dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
   return NULL;
 }
 
+/** Finds the NOD (Named Object Dictionary), the root DICTIONARY.
+    Not necessarily the first DICTIONARY object, nor the one with the lowest
+    handle: an extension dictionary may precede it.
+    Uses HEADER.DICTIONARY_NAMED_OBJECT. Else the only DICTIONARY without an
+    owner. Else, if ambiguous, the first DICTIONARY.
+ */
+EXPORT Dwg_Object *
+dwg_find_nod (Dwg_Data *restrict dwg)
+{
+  Dwg_Object *unowned = NULL;
+  unsigned num_unowned = 0;
+
+  if (dwg->header_vars.DICTIONARY_NAMED_OBJECT)
+    {
+      Dwg_Object *obj = dwg_ref_object_silent (
+          dwg, dwg->header_vars.DICTIONARY_NAMED_OBJECT);
+      if (obj && obj->tio.object && obj->fixedtype == DWG_TYPE_DICTIONARY)
+        return obj;
+    }
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *const o = &dwg->object[i];
+      if (o->fixedtype != DWG_TYPE_DICTIONARY || !o->tio.object)
+        continue;
+      if (!o->tio.object->ownerhandle
+          || !o->tio.object->ownerhandle->absolute_ref)
+        {
+          unowned = o;
+          num_unowned++;
+        }
+    }
+  if (num_unowned == 1)
+    return unowned;
+  return dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+}
+
 // Searching for a named dictionary entry, name is utf8.
 // Returning a hardpointer ref (5) to it, as stored in header_vars.
 // Usually another dictionary.

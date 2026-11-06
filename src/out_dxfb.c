@@ -2497,8 +2497,9 @@ dxfb_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   SECTION (OBJECTS);
   // The NOD (Named Object Dict) must be always the very first OBJECT,
-  // not just DICTIONARY.
-  nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+  // not just DICTIONARY. And not the first DICTIONARY, which may be an
+  // extension dictionary.
+  nod = dwg_find_nod (dwg);
   if (nod)
     error |= dwg_dxfb_object (dat, nod, &i);
   for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
