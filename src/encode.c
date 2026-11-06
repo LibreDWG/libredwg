@@ -22,7 +22,6 @@
  * modified and rewritten by Reini Urban
  */
 
-#define HAVE_COMPRESS_R2004_SECTION
 #define ENCODE_PATCH_RSSIZE
 
 #include "config.h"
@@ -923,7 +922,8 @@ copy_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   return 0;
 }
 
-/* 1 for yes, 0 for no */
+/* ODA and AutoCAD never flag a section as encrypted (0). We do not encrypt
+   any section data either. */
 static int
 section_encrypted (const Dwg_Data *dwg, const Dwg_Section_Type id)
 {
@@ -932,7 +932,7 @@ section_encrypted (const Dwg_Data *dwg, const Dwg_Section_Type id)
     case SECTION_SECURITY: //??
     case SECTION_FILEDEPLIST:
     case SECTION_APPINFO:
-      return 1;
+      return 0;
     case SECTION_UNKNOWN:
     case SECTION_HEADER:
     case SECTION_REVHISTORY:
@@ -955,8 +955,7 @@ section_encrypted (const Dwg_Data *dwg, const Dwg_Section_Type id)
     }
 }
 
-#if 0  /* unused, LZ compressor not yet ODA-compatible */
-/* 1 for yes, 0 for no */
+/* 1 for compressed sections (LZ), 0 for raw. */
 static int
 section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
 {
@@ -987,7 +986,7 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
       return 0;
     }
 }
-#endif /* unused */
+
 
 static int
 filedeplist_is_empty (const Dwg_FileDepList *obj)
@@ -1056,6 +1055,16 @@ write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
 #endif
 }
 
+/* An LZ stream is terminated by opcode 0x11 and two zero bytes, as ODA does. */
+#define LZ_END(dat)                                                           \
+  do                                                                          \
+    {                                                                         \
+      bit_write_RC (dat, 0x11);                                               \
+      bit_write_RC (dat, 0);                                                  \
+      bit_write_RC (dat, 0);                                                  \
+    }                                                                         \
+  while (0)
+
 /* Write raw data wrapped in valid LZ "store" framing so that
    decompress_R2004_section can decode it: literal_length + data + 0x11.
    Used for system sections (SECTION_INFO, SECTION_SYSTEM_MAP). */
@@ -1070,7 +1079,7 @@ store_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
     bit_chain_alloc_size (dat, decomp_data_size + 20);
   assert (!dat->bit);
   write_literal_length (dat, decomp, decomp_data_size);
-  bit_write_RC (dat, 0x11); // end of stream
+  LZ_END (dat); // end of stream
   *comp_data_size = (uint32_t)(dat->byte - start);
   return 0;
 }
@@ -1080,7 +1089,7 @@ store_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
 static uint32_t
 stored_R2004_section_size (uint32_t decomp_data_size)
 {
-  uint32_t hdr_size = 1; // terminator 0x11
+  uint32_t hdr_size = 3; // terminator 0x11 0x00 0x00
 
   if (decomp_data_size > 3)
     {
@@ -1097,6 +1106,27 @@ stored_R2004_section_size (uint32_t decomp_data_size)
         }
     }
   return decomp_data_size + hdr_size;
+}
+
+/* ODA pads each r2004+ page to a multiple of 32 bytes with the leading bytes
+   of the magic sequence (the same LCG that encrypts the file header). dat is
+   positioned after the page content; size is the page size so far (header +
+   content). Returns the padded page size. */
+static uint32_t
+pad_R2004_page (Bit_Chain *restrict dat, uint32_t size)
+{
+  uint32_t pad = (32 - (size % 32)) % 32;
+  uint32_t rseed = 1;
+  if (!pad)
+    return size;
+  if (dat->size < dat->byte + pad)
+    bit_chain_alloc_size (dat, pad);
+  for (uint32_t i = 0; i < pad; i++)
+    {
+      rseed = rseed * 0x343fd + 0x269ec3;
+      dat->chain[dat->byte++] = (BITCODE_RC)(rseed >> 16);
+    }
+  return size + pad;
 }
 
 /* R2004 Long Compression Offset
@@ -1269,9 +1299,6 @@ static int
 compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                         uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
-#ifndef HAVE_COMPRESS_R2004_SECTION
-  return store_R2004_section (dat, decomp, decomp_data_size, comp_data_size);
-#else
   size_t start = dat->byte;
   int32_t *hash_table;
   uint32_t curr_offset = 0;    /* start of pending literal run */
@@ -1287,7 +1314,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
       if (dat->size < dat->byte + decomp_data_size + 20)
         bit_chain_alloc_size (dat, decomp_data_size + 20);
       write_literal_length (dat, decomp, decomp_data_size);
-      bit_write_RC (dat, 0x11); /* end of stream */
+      LZ_END (dat); /* end of stream */
       *comp_data_size = (uint32_t)(dat->byte - start);
       return 0;
     }
@@ -1301,7 +1328,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
     {
       /* Valid LZ stream fallback if memory is tight. */
       write_literal_length (dat, decomp, decomp_data_size);
-      bit_write_RC (dat, 0x11); /* end of stream */
+      LZ_END (dat); /* end of stream */
       *comp_data_size = (uint32_t)(dat->byte - start);
       return 0;
     }
@@ -1339,12 +1366,11 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
     compress_write_match (dat, prev_match_dist, prev_match_len, lits);
   write_literal_length (dat, &decomp[curr_offset], lits);
 
-  bit_write_RC (dat, 0x11); /* end of stream */
+  LZ_END (dat); /* end of stream */
   *comp_data_size = (uint32_t)(dat->byte - start);
 
   free (hash_table);
   return 0;
-#endif
 }
 
 static Dwg_Section_Info *
@@ -2186,6 +2212,19 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   }
 
   encode_patch_RLsize (dat, size_adr);
+  // R2010 (maint > 3) and R2018+: the size excludes the 4 byte bitsize_hi
+  // word after it, as ODA does. Else ODA computes a CRC over 4 bytes too
+  // many and rejects the file with "CRC does not match".
+  SINCE (R_2007a)
+  {
+    if (dwg->header.maint_version > 3 || dat->version >= R_2018)
+      {
+        BITCODE_RL hsize;
+        memcpy (&hsize, &dat->chain[size_adr], 4);
+        hsize = htole32 (le32toh (hsize) - 4);
+        memcpy (&dat->chain[size_adr], &hsize, 4);
+      }
+  }
   bit_write_CRC (dat, size_adr, 0xC0C1);
   write_sentinel (dat, DWG_SENTINEL_VARIABLE_END);
   address = dwg->header.section[0].address;
@@ -3859,7 +3898,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           type = stream_order[i];
           if (sec_dat[type].byte)
             {
-              const unsigned int max_decomp_size
+              unsigned int max_decomp_size
                   = section_max_decomp_size (dwg, (Dwg_Section_Type)type);
               const char *name = dwg_section_name (dwg, type);
               Dwg_Section_Info *info;
@@ -3870,6 +3909,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 }
               ssize = (int)sec_dat[type].byte;
               sec_dat[type].size = ssize;
+              // Raw (uncompressed) sections get a page of the content size,
+              // rounded up to 32, as ODA does. Compressed pages are always
+              // max_decomp_size when decompressed.
+              if (type < SECTION_INFO && ssize > 0
+                  && !section_compressed (dwg, (Dwg_Section_Type)type))
+                {
+                  const unsigned int rounded = ((unsigned)ssize + 31) & ~31u;
+                  if (rounded < max_decomp_size)
+                    max_decomp_size = rounded;
+                }
               if (info_id >= (int)dwg->header.section_infohdr.num_desc)
                 {
                   dwg->header.section_infohdr.num_desc = info_id + 1;
@@ -3893,9 +3942,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               info->max_decomp_size = max_decomp_size;
               info->encrypted
                   = section_encrypted (dwg, (Dwg_Section_Type)type);
-              // always uncompressed for now, LZ compressor not yet
-              // ODA-compatible. TODO: re-enable when fixed.
-              info->compressed = 1;
+              // 1 = no, 2 = LZ compressed
+              info->compressed
+                  = section_compressed (dwg, (Dwg_Section_Type)type) ? 2 : 1;
               // pre-calc numsections for both
               if ((unsigned)ssize <= max_decomp_size)
                 info->num_sections = 1;
@@ -4037,20 +4086,32 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         _obj->compressed = 2;
         _obj->max_size = 0x7400;
         _obj->encrypted = 0;
-        _obj->num_desc2 = _obj->num_desc;
-        LOG_HANDLE ("InfoHdr @%" PRIuSIZE ".0\n", dat->byte);
-        FIELD_RL (num_desc, 0);
-        FIELD_RL (compressed, 0);
-        FIELD_RL (max_size, 0);
-        FIELD_RL (encrypted, 0);
-        FIELD_RL (num_desc2, 0);
+        {
+          // The system sections (Section Info, Page Map) are no descriptors.
+          // ODA would read them as data sections and fail their CRC.
+          unsigned ndesc = 0;
+          for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
+            if (section_map_order[i] < SECTION_INFO
+                && find_section_info_type (
+                       dwg, (Dwg_Section_Type)section_map_order[i]))
+              ndesc++;
+          _obj->num_desc2 = ndesc;
+          LOG_HANDLE ("InfoHdr @%" PRIuSIZE ".0\n", dat->byte);
+          bit_write_RL (dat, ndesc);
+          LOG_TRACE ("num_desc: %u [RL 0]\n", ndesc);
+          FIELD_RL (compressed, 0);
+          FIELD_RL (max_size, 0);
+          FIELD_RL (encrypted, 0);
+          bit_write_RL (dat, ndesc);
+          LOG_TRACE ("num_desc2: %u [RL 0]\n", ndesc);
+        }
       }
       for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
         {
           Dwg_Section_Info *_obj;
           type = section_map_order[i];
           _obj = find_section_info_type (dwg, (Dwg_Section_Type)type);
-          if (_obj)
+          if (_obj && type < SECTION_INFO)
             {
               assert (type == _obj->fixedtype);
               LOG_TRACE ("\nSection_Info %s [%d]\n",
@@ -4177,8 +4238,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               bit_chain_free (&sec_dat[type]);
               continue;
             }
-          max_decomp_size
-              = section_max_decomp_size (dwg, (Dwg_Section_Type)type);
+          max_decomp_size = info->max_decomp_size;
 
           // Before SECTION_SYSTEM_MAP: rebuild the section map in stream order
           // with correct addresses (accumulating from actual stream
@@ -4287,8 +4347,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   content_size = (uint32_t)sec_dat[type].byte;
                   sec->decomp_data_size = content_size;
 
-                  if (dat->byte + 20 + content_size + 20 > dat->size)
-                    bit_chain_alloc_size (dat, 20 + content_size + 20);
+                  if (dat->byte + 20 + content_size + content_size / 100 + 128
+                      > dat->size)
+                    bit_chain_alloc_size (
+                        dat, 20 + content_size + content_size / 100 + 128);
 
                   bit_write_RL (dat, section_magic);
                   bit_write_RL (dat, content_size); // decomp_data_size
@@ -4297,6 +4359,37 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   bit_write_RL (dat, 2); // compression_type = 2 (LZ)
                   checksum_pos = dat->byte;
                   bit_write_RL (dat, 0); // checksum placeholder
+
+                  if (type == SECTION_INFO)
+                    {
+                      // The page entries carry the compressed page sizes,
+                      // only known now after the data pages were written.
+                      // Layout: 20 byte header, per descriptor 96 bytes +
+                      // 16 bytes per page (number, size, offset).
+                      size_t pos = 20;
+                      for (int io = 0; io < (int)ARRAY_SIZE (section_map_order);
+                           io++)
+                        {
+                          Dwg_Section_Info *inf = find_section_info_type (
+                              dwg, (Dwg_Section_Type)section_map_order[io]);
+                          if (!inf || section_map_order[io] >= SECTION_INFO)
+                            continue;
+                          pos += 96;
+                          for (unsigned jo = 0; jo < inf->num_sections; jo++)
+                            {
+                              if (!inf->sections[jo])
+                                continue;
+                              if (pos + 16 <= content_size)
+                                {
+                                  uint32_t cs = htole32 (
+                                      inf->sections[jo]->comp_data_size);
+                                  memcpy (&sec_dat[type].chain[pos + 4], &cs,
+                                          4);
+                                }
+                              pos += 16;
+                            }
+                        }
+                    }
 
                   // write section content as compressed stream.
                   // For SYSTEM_MAP use store (not compress) so the size
@@ -4310,19 +4403,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                             &sec->comp_data_size);
                   sec->size = 20 + sec->comp_data_size;
 
-                  // keep the following SYSTEM_MAP address 16-byte aligned
-                  // (r2004+ section map offsets are 16-byte granular)
+                  // ODA pads the Section Info page to a multiple of 32 with
+                  // the magic sequence, so the Page Map address stays
+                  // aligned. The Page Map is the last page and not padded.
                   if (type == SECTION_INFO)
-                    {
-                      size_t pad = (16 - (sec->size % 16)) % 16;
-                      if (pad)
-                        {
-                          memset (&dat->chain[dat->byte], 0, pad);
-                          dat->byte += pad;
-                          sec->comp_data_size += pad;
-                          sec->size += pad;
-                        }
-                    }
+                    sec->size = pad_R2004_page (dat, sec->size);
 
                   // patch comp_data_size in the header
                   dat->chain[comp_data_pos] = sec->comp_data_size & 0xFF;
@@ -4373,42 +4458,37 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   content_size = sec->decomp_data_size; // = max_decomp_size
                   chain_page
                       = sec_dat[type].chain + (size_t)k * max_decomp_size;
-                  if (dat->byte + 32 + content_size + 32 > dat->size)
-                    bit_chain_alloc_size (dat, 32 + content_size + 32);
+                  // worst case LZ output is all literals plus opcodes
+                  if (dat->byte + 32 + content_size + content_size / 100 + 128
+                      > dat->size)
+                    bit_chain_alloc_size (
+                        dat, 32 + content_size + content_size / 100 + 128);
 
                   // reserve encrypted page header, write payload, then patch
                   // header with actual compressed data size.
                   page_hdr_pos = dat->byte;
                   dat->byte += 32;
 
-                  // always use raw copy for data section pages,
-                  // as the LZ compressor output is not yet ODA-compatible
-                  copy_R2004_section (dat, chain_page, content_size,
-                                      &sec->comp_data_size);
+                  if (info->compressed == 2)
+                    compress_R2004_section (dat, chain_page, content_size,
+                                            &sec->comp_data_size);
+                  else
+                    copy_R2004_section (dat, chain_page, content_size,
+                                        &sec->comp_data_size);
 
                   sec->size = 32 + sec->comp_data_size;
 
-                  // r2004+ section map offsets are 16-byte granular: the
-                  // reader accumulates section addresses from the sizes, so
-                  // every size but the last must be a multiple of 16 or ODA
-                  // rejects the file ("CRC does not match"). Zero-pad raw
-                  // page copies to keep the next address aligned.
-                  {
-                    size_t pad = (16 - (sec->size % 16)) % 16;
-                    if (pad)
-                      {
-                        memset (&dat->chain[dat->byte], 0, pad);
-                        dat->byte += pad;
-                        sec->comp_data_size += pad;
-                        sec->size += pad;
-                      }
-                  }
+                  // ODA pads every page to a multiple of 32 with the
+                  // leading bytes of the magic sequence. The section map
+                  // accumulates addresses from these padded page sizes. The
+                  // page header size field is this padded on-disk size.
+                  sec->size = pad_R2004_page (dat, sec->size);
 
                   // build unencrypted page header
                   page_hdr[0] = 0x4163043b;          // page_type
                   page_hdr[1] = info->type;          // section_type
                   page_hdr[2] = sec->comp_data_size; // compressed bytes
-                  page_hdr[3] = content_size;        // decompressed bytes
+                  page_hdr[3] = sec->size;           // padded page size
                   page_hdr[4] = k * max_decomp_size; // start offset in decomp
                   page_hdr[5] = 0;                   // unknown
                   page_hdr[6] = 0;                   // page_header_crc
