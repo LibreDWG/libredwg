@@ -14,8 +14,7 @@
  * out_geojson.c: write as GeoJSON
  * written by Reini Urban
  */
-/* FIXME: Ellipsis arc_split.
- * TODO: ocs/ucs transforms, explode of inserts?
+/* TODO: ocs/ucs transforms, explode of inserts?
  *       NOCOMMA:
  *         We really have to add the comma before, not after, and special case
  *         the first field, not the last to omit the comma.
@@ -1076,6 +1075,74 @@ dwg_geojson_HATCH (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   return num_areas ? 1 : 0;
 }
 
+/* An ELLIPSE as a Polygon if it is closed, else as a LineString of its arc.
+   The center and the major axis are in WCS, the minor axis is
+   axis_ratio * (extrusion x major axis).  The angles are the parameter u
+   of center + major cos u + minor sin u, not polar angles.  */
+static int
+dwg_geojson_ELLIPSE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                     int is_last)
+{
+  Dwg_Entity_ELLIPSE *_obj = obj->tio.entity->tio.ELLIPSE;
+  const BITCODE_3BD a = _obj->sm_axis;
+  const BITCODE_3BD n = _obj->extrusion;
+  const double bx = _obj->axis_ratio * (n.y * a.z - n.z * a.y);
+  const double by = _obj->axis_ratio * (n.z * a.x - n.x * a.z);
+  double span = _obj->end_angle - _obj->start_angle;
+  BITCODE_2BD *pts;
+  int j, num_pts, closed;
+
+  if (!isfinite (span))
+    {
+      LOG_ERROR ("Invalid angles");
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  // the span is in (0, 2 pi]: 0 to 0 and 0 to 2 pi are both closed
+  span = fmod (span, 2 * M_PI);
+  if (span <= 0.0)
+    span += 2 * M_PI;
+  closed = span > 2 * M_PI - 1e-9;
+  num_pts = calc_curve_segments (obj->parent, hypot (a.x, a.y), span);
+  pts = (BITCODE_2BD *)malloc ((num_pts + 1) * sizeof (BITCODE_2BD));
+  if (!pts)
+    {
+      LOG_ERROR ("Out of memory");
+      return DWG_ERR_OUTOFMEM;
+    }
+  // each u from the start, so that the last point is the end point
+  for (j = 0; j <= num_pts; j++)
+    {
+      const double u = _obj->start_angle + span * j / num_pts;
+      pts[j].x = _obj->center.x + a.x * cos (u) + bx * sin (u);
+      pts[j].y = _obj->center.y + a.y * cos (u) + by * sin (u);
+    }
+  if (closed)
+    pts[num_pts] = pts[0];
+  FEATURE (AcDbEntity : AcDbEllipse, obj);
+  if (closed)
+    {
+      GEOMETRY (Polygon);
+      KEY (coordinates);
+      ARRAY;
+    }
+  else
+    {
+      GEOMETRY (LineString);
+      KEY (coordinates);
+    }
+  ARRAY;
+  for (j = 0; j < num_pts; j++)
+    VALUE_2DPOINT (pts[j].x, pts[j].y)
+  LASTVALUE_2DPOINT (pts[num_pts].x, pts[num_pts].y)
+  LASTENDARRAY;
+  if (closed)
+    LASTENDARRAY;
+  ENDGEOMETRY;
+  ENDFEATURE;
+  free (pts);
+  return 1;
+}
+
 /* returns 0 if object could be printed
  */
 static int
@@ -1315,7 +1382,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             LOG_ERROR ("Invalid angles");
             return DWG_ERR_VALUEOUTOFBOUNDS;
           }
-        pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+        pts = (BITCODE_2BD *)malloc ((num_pts + 1) * sizeof (BITCODE_2BD));
         if (!pts)
           {
             LOG_ERROR ("Out of memory");
@@ -1323,17 +1390,18 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           }
         arc_split (pts, num_pts, ctr, _obj->start_angle, _obj->end_angle,
                    _obj->radius);
+        // arc_split stops one step before the end point
+        pts[num_pts].x = ctr.x + _obj->radius * cos (_obj->end_angle);
+        pts[num_pts].y = ctr.y + _obj->radius * sin (_obj->end_angle);
         FEATURE (AcDbEntity : AcDbArc, obj);
-        GEOMETRY (Polygon)
+        GEOMETRY (LineString)
         KEY (coordinates);
-        ARRAY;
         ARRAY;
         for (int j = 0; j < num_pts; j++)
           {
             VALUE_2DPOINT (pts[j].x, pts[j].y)
           }
-        LASTVALUE_2DPOINT (pts[0].x, pts[0].y);
-        LASTENDARRAY;
+        LASTVALUE_2DPOINT (pts[num_pts].x, pts[num_pts].y);
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
@@ -1424,62 +1492,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_TRACE ("TRACE not yet supported");
       break;
     case DWG_TYPE_ELLIPSE:
-      {
-        Dwg_Entity_ELLIPSE *_obj = obj->tio.entity->tio.ELLIPSE;
-        double major_r = hypot (_obj->sm_axis.x, _obj->sm_axis.y);
-        double minor_r = major_r * _obj->axis_ratio;
-        double axis_angle = atan2 (_obj->sm_axis.y, _obj->sm_axis.x);
-        double ang_step, ang;
-        double start_angle = _obj->start_angle;
-        double end_angle = _obj->end_angle;
-        double angle_span;
-        BITCODE_2BD *pts;
-        int num_pts;
-        // Default to full ellipse if angles are 0 and 2*PI
-        if (start_angle == 0.0 && end_angle == 0.0)
-          end_angle = 2 * M_PI;
-        start_angle = angle_normalize (start_angle);
-        end_angle = angle_normalize (end_angle);
-        if (end_angle < start_angle)
-          end_angle += 2 * M_PI;
-        angle_span = end_angle - start_angle;
-        num_pts = calc_curve_segments (dwg, major_r, angle_span);
-        pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
-        if (!pts)
-          {
-            LOG_ERROR ("Out of memory");
-            return DWG_ERR_OUTOFMEM;
-          }
-        ang_step = angle_span / num_pts;
-        ang = start_angle;
-        for (int j = 0; j < num_pts; j++, ang += ang_step)
-          {
-            double cos_a = cos (ang);
-            double sin_a = sin (ang);
-            pts[j].x = _obj->center.x
-                       + major_r * cos_a * cos (axis_angle)
-                       - minor_r * sin_a * sin (axis_angle);
-            pts[j].y = _obj->center.y
-                       + major_r * cos_a * sin (axis_angle)
-                       + minor_r * sin_a * cos (axis_angle);
-          }
-        FEATURE (AcDbEntity : AcDbEllipse, obj);
-        GEOMETRY (Polygon)
-        KEY (coordinates);
-        ARRAY;
-        ARRAY;
-        for (int j = 0; j < num_pts; j++)
-          {
-            VALUE_2DPOINT (pts[j].x, pts[j].y)
-          }
-        LASTVALUE_2DPOINT (pts[0].x, pts[0].y);
-        LASTENDARRAY;
-        LASTENDARRAY;
-        ENDGEOMETRY;
-        ENDFEATURE;
-        free (pts);
-        return 1;
-      }
+      return dwg_geojson_ELLIPSE (dat, obj, is_last);
     case DWG_TYPE_SPLINE:
       return dwg_geojson_SPLINE (dat, obj, is_last);
     case DWG_TYPE_HATCH:
