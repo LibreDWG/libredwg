@@ -4310,6 +4310,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                             &sec->comp_data_size);
                   sec->size = 20 + sec->comp_data_size;
 
+                  // keep the following SYSTEM_MAP address 16-byte aligned
+                  // (r2004+ section map offsets are 16-byte granular)
+                  if (type == SECTION_INFO)
+                    {
+                      size_t pad = (16 - (sec->size % 16)) % 16;
+                      if (pad)
+                        {
+                          memset (&dat->chain[dat->byte], 0, pad);
+                          dat->byte += pad;
+                          sec->comp_data_size += pad;
+                          sec->size += pad;
+                        }
+                    }
+
                   // patch comp_data_size in the header
                   dat->chain[comp_data_pos] = sec->comp_data_size & 0xFF;
                   dat->chain[comp_data_pos + 1]
@@ -4373,6 +4387,22 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                                       &sec->comp_data_size);
 
                   sec->size = 32 + sec->comp_data_size;
+
+                  // r2004+ section map offsets are 16-byte granular: the
+                  // reader accumulates section addresses from the sizes, so
+                  // every size but the last must be a multiple of 16 or ODA
+                  // rejects the file ("CRC does not match"). Zero-pad raw
+                  // page copies to keep the next address aligned.
+                  {
+                    size_t pad = (16 - (sec->size % 16)) % 16;
+                    if (pad)
+                      {
+                        memset (&dat->chain[dat->byte], 0, pad);
+                        dat->byte += pad;
+                        sec->comp_data_size += pad;
+                        sec->size += pad;
+                      }
+                  }
 
                   // build unencrypted page header
                   page_hdr[0] = 0x4163043b;          // page_type
