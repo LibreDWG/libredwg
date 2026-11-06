@@ -328,11 +328,11 @@ main (int argc, char *argv[])
           // else keep from_version
           dwg.header.version = dwg_version;
         }
-      else if (dwg.header.version > R_2004)
+      else if (dwg.header.version >= R_2007a && dwg.header.version <= R_2007)
         {
-          // we cannot yet write 2007+
-          printf (" as r2004\n");
-          dwg.header.version = R_2004;
+          // we cannot write r2007, the encoder falls back to r2010
+          printf (" as r2010\n");
+          dwg.header.version = R_2010;
         }
       else
         {
