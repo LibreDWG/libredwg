@@ -468,6 +468,7 @@ typedef enum DWG_OBJECT_TYPE
 
   DWG_TYPE_ACDSRECORD = 500,
   DWG_TYPE_ACDSSCHEMA,
+  DWG_TYPE_ACIDBLOCKREFERENCE,
   DWG_TYPE_ACMECOMMANDHISTORY,
   DWG_TYPE_ACMESCOPE,
   DWG_TYPE_ACMESTATEMGR,
@@ -2365,6 +2366,8 @@ typedef struct _dwg_entity_INSERT
   BITCODE_RD  row_spacing;
   BITCODE_TV  block_name; /* pre-R2.0 */
 } Dwg_Entity_INSERT;
+/* Inventor's AcIdBlockReference. Same layout as INSERT */
+typedef struct _dwg_entity_INSERT Dwg_Entity_ACIDBLOCKREFERENCE;
 
 /**
  MINSERT (8) entity
@@ -9554,6 +9557,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_VIEWPORT *VIEWPORT;
     Dwg_Entity_XLINE *XLINE;
     /* untyped > 500 */
+    Dwg_Entity_ACIDBLOCKREFERENCE *ACIDBLOCKREFERENCE;
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_CAMERA *CAMERA;
     Dwg_Entity_DGNUNDERLAY *DGNUNDERLAY;
@@ -11879,6 +11883,7 @@ EXPORT int dwg_setup_VPORT_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_VX_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_VX_TABLE_RECORD (Dwg_Object *obj);
 /* untyped > 500 */
+EXPORT int dwg_setup_ACIDBLOCKREFERENCE (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_CAMERA (Dwg_Object *obj);
 EXPORT int dwg_setup_DGNUNDERLAY (Dwg_Object *obj);

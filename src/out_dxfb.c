@@ -1669,6 +1669,7 @@ decl_dxfb_process_VERTEX (PFACE)
     // clang-format off
 decl_dxfb_process_INSERT (INSERT)
 decl_dxfb_process_INSERT (MINSERT)
+decl_dxfb_process_INSERT (ACIDBLOCKREFERENCE)
 
     // clang-format on
     static int dwg_dxfb_object (Bit_Chain *restrict dat,
@@ -1883,6 +1884,12 @@ decl_dxfb_process_INSERT (MINSERT)
       if (obj->type == obj->parent->layout_type)
         {
           return minimal ? 0 : dwg_dxfb_LAYOUT (dat, obj);
+        }
+      else if (obj->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE)
+        {
+          // an INSERT with its attribs, but its own class name
+          error = dwg_dxfb_ACIDBLOCKREFERENCE (dat, obj);
+          return error | dxfb_process_ACIDBLOCKREFERENCE (dat, obj, i);
         }
       /* > 500 */
       else if (DWG_ERR_UNHANDLEDCLASS

@@ -10032,6 +10032,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   if (owner)
     {
       if (owner->fixedtype != DWG_TYPE_INSERT
+          && owner->fixedtype != DWG_TYPE_ACIDBLOCKREFERENCE
           && owner->fixedtype != DWG_TYPE_MINSERT
           && owner->fixedtype != DWG_TYPE_POLYLINE_2D
           && owner->fixedtype != DWG_TYPE_POLYLINE_3D
@@ -10052,6 +10053,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
         {
           Dwg_Object *_o = &dwg->object[i];
           if (_o->fixedtype == DWG_TYPE_INSERT
+              || _o->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
               || _o->fixedtype == DWG_TYPE_MINSERT
               || _o->fixedtype == DWG_TYPE_POLYLINE_2D
               || _o->fixedtype == DWG_TYPE_POLYLINE_3D

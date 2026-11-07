@@ -290,7 +290,8 @@ output_object (dwg_object *obj)
       return 0;
     }
 
-  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_INSERT)
+  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_INSERT
+      || dwg_object_get_fixedtype (obj) == DWG_TYPE_ACIDBLOCKREFERENCE)
     {
       i++;
       output_INSERT (obj);

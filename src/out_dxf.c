@@ -3110,6 +3110,7 @@ decl_dxf_process_VERTEX (PFACE)
     // clang-format off
 decl_dxf_process_INSERT (INSERT)
 decl_dxf_process_INSERT (MINSERT)
+decl_dxf_process_INSERT (ACIDBLOCKREFERENCE)
     // clang-format on
 
     static int dwg_dxf_object (Bit_Chain *restrict dat,
@@ -3374,6 +3375,12 @@ decl_dxf_process_INSERT (MINSERT)
               return DWG_ERR_UNHANDLEDCLASS;
             }
 #  endif
+        }
+      else if (obj->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE)
+        {
+          // an INSERT with its attribs, but its own class name
+          error = dwg_dxf_ACIDBLOCKREFERENCE (dat, obj);
+          return error | dxf_process_ACIDBLOCKREFERENCE (dat, obj, i);
         }
       /* > 500 */
       else if ((error
@@ -4092,6 +4099,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
               || o->fixedtype == DWG_TYPE_POLYLINE_MESH
               || o->fixedtype == DWG_TYPE_POLYLINE_PFACE
               || o->fixedtype == DWG_TYPE_INSERT
+              || o->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
               || o->fixedtype == DWG_TYPE_MINSERT)
             {
               int k = j + 1;

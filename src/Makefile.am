@@ -88,6 +88,7 @@ EXTRA_HEADERS = \
 	dwg_spec_shared.h \
 	enc_macros.h \
 	header_variables.spec \
+	insert.spec \
 	header_variables_r11.spec \
 	header_variables_dxf.spec \
 	common_entity_data.spec \

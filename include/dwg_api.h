@@ -592,6 +592,7 @@ extern "C"
   typedef struct _dwg_entity_VERTEX_PFACE_FACE		dwg_ent_vert_pface_face;
   typedef struct _dwg_entity_VIEWPORT		dwg_ent_viewport;
   /* untyped > 500 */
+  typedef struct _dwg_entity_ACIDBLOCKREFERENCE		dwg_ent_acidblockreference;
   typedef struct _dwg_entity_ARC_DIMENSION		dwg_ent_arc_dimension;
   typedef struct _dwg_entity_CAMERA		dwg_ent_camera;
   typedef struct _dwg_entity_DGNUNDERLAY		dwg_ent_dgnunderlay;
@@ -1715,6 +1716,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_vert_pface_face, VERTEX_PFACE_FACE);
   dwg_get_OBJECT_DECL (ent_viewport, VIEWPORT);
   /* untyped > 500 */
+  dwg_get_OBJECT_DECL (ent_acidblockreference, ACIDBLOCKREFERENCE);
   dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
   dwg_get_OBJECT_DECL (ent_camera, CAMERA);
   dwg_get_OBJECT_DECL (ent_dgnunderlay, DGNUNDERLAY);
@@ -2850,6 +2852,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (VIEWPORT);
   DWG_GETALL_ENTITY_DECL (XLINE);
   /* untyped > 500 */
+  DWG_GETALL_ENTITY_DECL (ACIDBLOCKREFERENCE);
   DWG_GETALL_ENTITY_DECL (ARC_DIMENSION);
   DWG_GETALL_ENTITY_DECL (CAMERA);
   DWG_GETALL_ENTITY_DECL (DGNUNDERLAY);
@@ -4000,6 +4003,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_DECL (VIEWPORT);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (XLINE);
   /* untyped > 500 */
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ACIDBLOCKREFERENCE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARC_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (CAMERA);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (DGNUNDERLAY);

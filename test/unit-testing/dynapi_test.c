@@ -6695,6 +6695,24 @@ static int test__3DSOLID (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ACIDBLOCKREFERENCE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_ACIDBLOCKREFERENCE *restrict acidblockreference = obj->tio.entity->tio.ACIDBLOCKREFERENCE;
+  failed = 0;
+  if (!obj_obj || !acidblockreference)
+    {
+      fail ("NULL ACIDBLOCKREFERENCE");
+      return 1;
+    }
+  if (failed && (is_class_unstable ("ACIDBLOCKREFERENCE") || is_class_debugging ("ACIDBLOCKREFERENCE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ACIDBLOCKREFERENCE", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ALIGNMENTPARAMETERENTITY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -63501,6 +63519,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test__3DLINE(obj);
   else  if (obj->fixedtype == DWG_TYPE__3DSOLID)
     error += test__3DSOLID(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE)
+    error += test_ACIDBLOCKREFERENCE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ALIGNMENTPARAMETERENTITY)
     error += test_ALIGNMENTPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ARC)
@@ -64131,6 +64151,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test__3DLINE (obj);
   else  if (obj->fixedtype == DWG_TYPE__3DSOLID)
     error += test__3DSOLID (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE)
+    error += test_ACIDBLOCKREFERENCE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ALIGNMENTPARAMETERENTITY)
     error += test_ALIGNMENTPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ARC)
@@ -64794,6 +64816,16 @@ test_sizes (void)
       fprintf (stderr,
                "sizeof(Dwg_Entity__3DSOLID): %d != "
                "dwg_dynapi_fields_size (\"3DSOLID\"): %d\n",
+               size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_ACIDBLOCKREFERENCE);
+  size2 = dwg_dynapi_fields_size ("ACIDBLOCKREFERENCE");
+  if (size1 != size2)
+    {
+      fprintf (stderr,
+               "sizeof(Dwg_Entity_ACIDBLOCKREFERENCE): %d != "
+               "dwg_dynapi_fields_size (\"ACIDBLOCKREFERENCE\"): %d\n",
                size1, size2);
       error++;
     }

@@ -429,7 +429,8 @@ geojson_attribs_of (const Dwg_Object *restrict obj,
                     geojson_attribs *restrict a)
 {
   memset (a, 0, sizeof (*a));
-  if (obj->fixedtype == DWG_TYPE_INSERT)
+  if (obj->fixedtype == DWG_TYPE_INSERT
+      || obj->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE)
     {
       const Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
       a->has_attribs = _obj->has_attribs;
@@ -686,7 +687,8 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           PAIR_S (Text, _obj->text)
         }
     }
-  else if (obj->fixedtype == DWG_TYPE_INSERT)
+  else if (obj->fixedtype == DWG_TYPE_INSERT
+           || obj->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE)
     {
       Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
       Dwg_Object *hdr = dwg_ref_get_object (_obj->block_header, &error);
@@ -1177,6 +1179,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   switch (obj->fixedtype)
     {
     case DWG_TYPE_INSERT: // Just the insertion point yet
+    case DWG_TYPE_ACIDBLOCKREFERENCE:
       {
         Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
         FEATURE (AcDbEntity : AcDbBlockReference, obj);

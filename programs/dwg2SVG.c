@@ -966,6 +966,7 @@ output_object (Dwg_Object *obj)
   switch (obj->fixedtype)
     {
     case DWG_TYPE_INSERT:
+    case DWG_TYPE_ACIDBLOCKREFERENCE:
       output_INSERT (obj);
       break;
     case DWG_TYPE_LINE:

@@ -1741,7 +1741,8 @@ match_BLOCK_HEADER (const char *restrict filename,
       ELSEMATCH (ATTDEF)
       ELSEMATCH (MTEXT)
       ELSEMATCH (ARCALIGNEDTEXT)
-      else if (obj->fixedtype == DWG_TYPE_INSERT)
+      else if (obj->fixedtype == DWG_TYPE_INSERT
+               || obj->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE)
       {
 #ifndef WITH_SUBENTS
         const Dwg_Data *dwg = obj->parent;

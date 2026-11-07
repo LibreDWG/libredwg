@@ -168,6 +168,7 @@ struct dwg_entity_DIMENSION_common *dwg_object_to_DIMENSION (Dwg_Object *obj);
 EXPORT Dwg_Entity__3DFACE** dwg_getall__3DFACE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity__3DLINE** dwg_getall__3DLINE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity__3DSOLID** dwg_getall__3DSOLID (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_ACIDBLOCKREFERENCE** dwg_getall_ACIDBLOCKREFERENCE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ARC** dwg_getall_ARC (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ARC_DIMENSION** dwg_getall_ARC_DIMENSION (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ATTDEF** dwg_getall_ATTDEF (Dwg_Object_Ref* hdr);
@@ -1297,6 +1298,7 @@ EXPORT Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS** dwg_getall_ASSOCARRAYRECTANG
 EXPORT Dwg_Entity__3DFACE* dwg_object_to__3DFACE (Dwg_Object* obj);
 EXPORT Dwg_Entity__3DLINE* dwg_object_to__3DLINE (Dwg_Object* obj);
 EXPORT Dwg_Entity__3DSOLID* dwg_object_to__3DSOLID (Dwg_Object* obj);
+EXPORT Dwg_Entity_ACIDBLOCKREFERENCE* dwg_object_to_ACIDBLOCKREFERENCE (Dwg_Object* obj);
 EXPORT Dwg_Entity_ARC* dwg_object_to_ARC (Dwg_Object* obj);
 EXPORT Dwg_Entity_ARC_DIMENSION* dwg_object_to_ARC_DIMENSION (Dwg_Object* obj);
 EXPORT Dwg_Entity_ATTDEF* dwg_object_to_ATTDEF (Dwg_Object* obj);

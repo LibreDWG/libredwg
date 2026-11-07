@@ -169,6 +169,7 @@ testobjects = \
 	imagedef_reactor \
 	index \
 	insert \
+	acidblockreference \
 	large_radial_dimension \
 	layer \
 	layer_control \

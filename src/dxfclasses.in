@@ -84,6 +84,7 @@ ACAD_TABLE,	"AcDbTable",		ODBX,	1
 PDFUNDERLAY, 	"AcDbPdfReference",   	ODBX,	1
 DGNUNDERLAY, 	"AcDbDgnReference",   	ODBX,	1
 DWFUNDERLAY, 	"AcDbDwfReference",   	ODBX,	1
+ACIDBLOCKREFERENCE,	"AcIdBlockReference",	ODBX,	1
 #
 ACDBDICTIONARYWDFLT,		"AcDbDictionaryWithDefault",	ODBX_OR_A2000CLASS,	0
 ACDBPLACEHOLDER,		"AcDbPlaceHolder",		ODBX_OR_A2000CLASS,	0

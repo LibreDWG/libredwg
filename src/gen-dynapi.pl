@@ -150,6 +150,7 @@ for ( sort $c->union_names ) {
 push @entity_names, qw(XLINE);                       # RAY
 push @entity_names, qw(VERTEX_MESH VERTEX_PFACE);    # VERTEX_3D
 push @entity_names, qw(REGION BODY);                 # 3DSOLID
+push @entity_names, qw(ACIDBLOCKREFERENCE);          # INSERT
 $structs{abstractobject_UNDERLAYDEFINITION}++;
 $structs{abstractentity_UNDERLAY}++;
 push @entity_names, qw(PDFUNDERLAY DGNUNDERLAY DWFUNDERLAY);
@@ -640,11 +641,23 @@ sub dxfin_spec {
 }
 dxfin_spec "$srcdir/dwg_spec_shared.h";
 dxfin_spec "$srcdir/dwg.spec";
+
+# The fields of INSERT and ACIDBLOCKREFERENCE are in insert.spec
+{
+    open my $ins, "<", "$srcdir/insert.spec" or die "insert.spec: $!";
+    my $body = join( "", <$ins> );
+    close $ins;
+    open my $in, "<", \( "DWG_ENTITY (INSERT)\n" . $body . "DWG_ENTITY_END\n" );
+    dxf_in($in);
+    close $in;
+}
+$DXF{'ACIDBLOCKREFERENCE'} = { %{ $DXF{'INSERT'} } };
 dxfin_spec "$srcdir/dwg2.spec";
 $DXF{'BLOCK'}->{'name'}                           = 2;     # and 3
 $DXF{'BLOCK'}->{'filename'}                       = 4;
 $DXF{'3DLINE'}->{'thickness'}                     = 39;
 $DXF{'INSERT'}->{'block_header'}                  = 2;
+$DXF{'ACIDBLOCKREFERENCE'}->{'block_header'}          = 2;
 $DXF{'MINSERT'}->{'block_header'}                 = 2;
 $DXF{'POLYLINE_3D'}->{'flag'}                     = 70;
 $DXF{'POLYLINE_MESH'}->{'flag'}                   = 70;
@@ -681,7 +694,7 @@ $DXF{'MLINESTYLE_line'}->{'lt_ltype'}      = 6;
 # $DXF{'DIMENSION_ORDINATE'}->{'block'} = 2;
 $DXF{$_}->{'class_version'} = 280 for qw(ATTRIB ATTDEF);         #r2010 only
 $DXF{$_}->{'elevation'}     = 30  for qw(TEXT ATTRIB ATTDEF);    # not 31
-$DXF{$_}->{'has_attribs'}   = 66  for qw(INSERT MINSERT);
+$DXF{$_}->{'has_attribs'}   = 66  for qw(INSERT MINSERT ACIDBLOCKREFERENCE);
 
 #$DXF{$_}->{'has_vertex'} = 66 for qw(POLYLINE_2D POLYLINE_3D POLYLINE_PFACE);
 $DXF{UNDERLAYDEFINITION}->{'filename'} = 1;
@@ -1190,6 +1203,7 @@ for ( keys %SUBCLASSES ) {
         # delete $SUBCLASSES{$_};
     }
 }
+$SUBCLASSES{ACIDBLOCKREFERENCE} = [ @{ $SUBCLASSES{INSERT} } ];
 for ( sort @entity_names ) {
 
     # FIXME: fixup duplicates in TEXT
@@ -1302,6 +1316,10 @@ for (<DATA>) {
                     if ( $k =~ /^(BODY|REGION)$/ ) {
                         $fields = "_dwg_3DSOLID_fields";
                         $size   = "sizeof (struct _dwg_entity_3DSOLID)";
+                    }
+                    elsif ( $k eq 'ACIDBLOCKREFERENCE' ) {
+                        $fields = "_dwg_INSERT_fields";
+                        $size   = "sizeof (struct _dwg_entity_INSERT)";
                     }
                     elsif ( $k eq 'XLINE' ) {
                         $fields = "_dwg_RAY_fields";

@@ -510,6 +510,7 @@ dwg_transform_v4 (Dwg_Data *dwg)
             break;
           }
         case DWG_TYPE_INSERT:
+        case DWG_TYPE_ACIDBLOCKREFERENCE:
           {
             Dwg_Entity_INSERT *e = obj->tio.entity->tio.INSERT;
             if (!e)

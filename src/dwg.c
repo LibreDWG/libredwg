@@ -1506,7 +1506,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
   Dwg_Data *dwg = owner->parent;
   const Dwg_Version_Type version = dwg->header.version;
   const unsigned int type = owner->fixedtype;
-  if (type == DWG_TYPE_INSERT)
+  if (type == DWG_TYPE_INSERT || type == DWG_TYPE_ACIDBLOCKREFERENCE)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
       if (version >= R_13b1 && version <= R_2000)
@@ -1560,7 +1560,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
   Dwg_Object_Entity *ent = owner->tio.entity;
   Dwg_Object *obj = dwg_next_object (current);
 
-  if (type == DWG_TYPE_INSERT)
+  if (type == DWG_TYPE_INSERT || type == DWG_TYPE_ACIDBLOCKREFERENCE)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
       if (version >= R_13b1 && version <= R_2000)
@@ -1895,6 +1895,7 @@ dwg_obj_has_subentity (const Dwg_Object *obj)
   const unsigned int type = obj->fixedtype;
   return (obj->supertype == DWG_SUPERTYPE_ENTITY)
          && (type == DWG_TYPE_INSERT || type == DWG_TYPE_MINSERT
+             || type == DWG_TYPE_ACIDBLOCKREFERENCE
              || type == DWG_TYPE_POLYLINE_2D || type == DWG_TYPE_POLYLINE_3D
              || type == DWG_TYPE_POLYLINE_PFACE
              || type == DWG_TYPE_POLYLINE_MESH);

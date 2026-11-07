@@ -945,6 +945,53 @@ B
 @end vtable
 @end indentedblock
 
+@strong{ACIDBLOCKREFERENCE} @anchor{ACIDBLOCKREFERENCE}
+@cindex entity, ACIDBLOCKREFERENCE
+@vindex ACIDBLOCKREFERENCE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item ins_pt
+3DPOINT,	DXF 10
+@item scale_flag
+BB
+@item scale
+3BD_1,	DXF 41
+@item rotation
+BD,	DXF 50
+@item extrusion
+BE,	DXF 210
+@item has_attribs
+B,	DXF 66
+@item num_owned
+BL
+@item block_header
+H,	DXF 2
+@item first_attrib
+H
+@item last_attrib
+H
+@item attribs
+H*
+@item seqend
+H
+@item num_cols
+RS,	DXF 70
+@item num_rows
+RS,	DXF 71
+@item col_spacing
+RD,	DXF 44
+@item row_spacing
+RD,	DXF 45
+@item block_name
+TV,	DXF 2
+
+@end vtable
+@end indentedblock
+
 @strong{ALIGNMENTPARAMETERENTITY} @anchor{ALIGNMENTPARAMETERENTITY}
 @cindex entity, ALIGNMENTPARAMETERENTITY
 @vindex ALIGNMENTPARAMETERENTITY
@@ -1179,7 +1226,7 @@ B
 @item style
 H,	DXF 7
 @item mtext_type
-RC,	DXF 70
+RC,	DXF 71
 @item mtext
 Dwg_AcDbMTextObjectEmbedded
 @item is_really_locked
@@ -1250,7 +1297,7 @@ B
 @item style
 H,	DXF 7
 @item mtext_type
-RC,	DXF 70
+RC,	DXF 71
 @item mtext
 Dwg_AcDbMTextObjectEmbedded
 @item is_really_locked
@@ -2282,46 +2329,7 @@ H,	DXF 360
 @vindex INSERT
 
 @indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item ins_pt
-3DPOINT,	DXF 10
-@item scale_flag
-BB
-@item scale
-3BD_1,	DXF 41
-@item rotation
-BD,	DXF 50
-@item extrusion
-BE,	DXF 210
-@item has_attribs
-B,	DXF 66
-@item num_owned
-BL
-@item block_header
-H,	DXF 2
-@item first_attrib
-H
-@item last_attrib
-H
-@item attribs
-H*
-@item seqend
-H
-@item num_cols
-RS,	DXF 70
-@item num_rows
-RS,	DXF 71
-@item col_spacing
-RD,	DXF 44
-@item row_spacing
-RD,	DXF 45
-@item block_name
-TV,	DXF 2
-
-@end vtable
+@xref{INSERT}
 @end indentedblock
 
 @strong{JUMP} @anchor{JUMP}

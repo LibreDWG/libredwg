@@ -5616,6 +5616,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
               LOG_WARN ("no SEQEND.ownerhandle");
             }
           else if (owner->fixedtype == DWG_TYPE_INSERT
+                   || owner->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
                    || owner->fixedtype == DWG_TYPE_MINSERT)
             {
               /* SEQEND handle for the owner needed in validate_INSERT */
@@ -6098,7 +6099,8 @@ dwg_validate_INSERT (Dwg_Object *restrict obj)
 {
   Dwg_Object *restrict next = dwg_next_object (obj);
 
-  if (obj->fixedtype == DWG_TYPE_INSERT)
+  if (obj->fixedtype == DWG_TYPE_INSERT
+      || obj->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE)
     {
       Dwg_Entity_INSERT *restrict _obj = obj->tio.entity->tio.INSERT;
       Dwg_Object_Ref *restrict seqend = _obj->seqend;
@@ -6561,6 +6563,7 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
         {
           Dwg_Object *owner = &dwg->object[j - 1];
           if (owner->fixedtype == DWG_TYPE_INSERT
+              || owner->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
               || owner->fixedtype == DWG_TYPE_MINSERT
               || owner->fixedtype == DWG_TYPE_POLYLINE_2D
               || owner->fixedtype == DWG_TYPE_POLYLINE_3D

@@ -5296,6 +5296,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                 {
                   Dwg_Object *_o = &dwg->object[k - 1];
                   if (_o->fixedtype == DWG_TYPE_INSERT
+                      || _o->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
                       || _o->fixedtype == DWG_TYPE_MINSERT
                       || _o->fixedtype == DWG_TYPE_POLYLINE_2D
                       || _o->fixedtype == DWG_TYPE_POLYLINE_3D
@@ -5455,6 +5456,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                     {
                       Dwg_Object *_o = &dwg->object[k - 1];
                       if (_o->fixedtype == DWG_TYPE_INSERT
+                          || _o->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
                           || _o->fixedtype == DWG_TYPE_MINSERT
                           || _o->fixedtype == DWG_TYPE_POLYLINE_2D
                           || _o->fixedtype == DWG_TYPE_POLYLINE_3D
