@@ -398,6 +398,19 @@ json_fixed_key (char *key, Bit_Chain *restrict dat,
   return;
 }
 
+/* A JSON string needs conversion to the codepage if it has an escape
+   or non-ASCII UTF-8 bytes. Else it is the same in all encodings. */
+static int
+json_str_needs_conv (const unsigned char *restrict p, const int len)
+{
+  if (memchr (p, '\\', len))
+    return 1;
+  for (int i = 0; i < len; i++)
+    if (p[i] >= 0x80)
+      return 1;
+  return 0;
+}
+
 ATTRIBUTE_MALLOC
 static char *
 json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
@@ -416,7 +429,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
     }
   // Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
   // unquote \\ to \.
-  if (memchr (&dat->chain[t->start], '\\', len))
+  if (json_str_needs_conv (&dat->chain[t->start], len))
     {
       len += 8;
       key = (char *)calloc (1, len);
@@ -479,7 +492,7 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
     }
   // Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
   // unquote \\ to \.
-  if (memchr (&dat->chain[t->start], '\\', l))
+  if (json_str_needs_conv (&dat->chain[t->start], l))
     {
       int dlen = len;
       dat->chain[t->end] = '\0';
