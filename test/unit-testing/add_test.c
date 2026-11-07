@@ -1215,8 +1215,8 @@ test_names (void)
     fail ("!dwg_is_valid_tag(\"A!\")");
   if (dwg_is_valid_tag ("A B"))
     fail ("!dwg_is_valid_tag(\"A B\")");
-  if (dwg_is_valid_tag ("a"))
-    fail ("!dwg_is_valid_tag(\"a\")");
+  if (!dwg_is_valid_tag ("a"))
+    fail ("dwg_is_valid_tag(\"a\")"); // any char but space and !
   if (!dwg_is_valid_tag ("ABC"))
     fail ("dwg_is_valid_tag(\"ABC\")");
 

@@ -1279,7 +1279,8 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
         }
       if (color->method != 0xc2)
         return;
-      VALUE_RL (color->rgb, dxf + 420 - 62);
+      // 420 is a 24bit RGB. AutoCAD writes the method-less value.
+      VALUE_RL ((BITCODE_RL)(color->rgb & 0x00FFFFFF), dxf + 420 - 62);
       if (color->flag & 2 && color->book_name)
         {
           char name[256];

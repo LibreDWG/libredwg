@@ -24665,9 +24665,8 @@ dwg_is_valid_tag (const char *tag)
     for (size_t i = 0; i < len; i++)
       {
         uint16_t c = wstr[i];
-        if (iswlower (c)
-            || !(c == '$' || c == '_' || c == '-' || c == '#'
-                 || iswalnum (c)))
+        // any character but space and !, as AutoCAD
+        if (c == ' ' || c == '!')
           goto fail1;
       }
     free (wstr);
@@ -24678,13 +24677,14 @@ dwg_is_valid_tag (const char *tag)
   }
 #else
   // only ascii support, no wctype nor maxlen checks
+  // any character but space and !, as AutoCAD. Reject the empty tag.
   {
     uint8_t c;
-    while (c = *tag++)
+    if (!*tag)
+      return false;
+    while ((c = *tag++))
       {
-        if (islower (c)
-            || !(c == '$' || c == '_' || c == '-' || c == '#'
-                 || isalnum (c)))
+        if (c == ' ' || c == '!')
           return false;
       }
   }

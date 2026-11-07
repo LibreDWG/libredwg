@@ -1245,10 +1245,13 @@ get_first_owned_entity (const Dwg_Object *hdr)
       if (dwg->dirty_refs)
         dwg_resolve_objectrefs_silent (dwg);
       _hdr->__iterator = 0; /* reset step counter for cycle detection */
-      /* With r2000 we rather follow the next_entity chain */
-      return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
+      /* With r2000 we rather follow the next_entity chain. An r2004+ source
+         has no first_entity: fall through to the entities[] list. */
+      if (_hdr->first_entity && _hdr->first_entity->obj)
+        return _hdr->first_entity->obj;
     }
-  else if (version >= R_2004 || version < R_13b1)
+  if (version >= R_2004 || version < R_13b1
+      || (R_13b1 <= version && version <= R_2000))
     {
       Dwg_Data *dwg = hdr->parent;
       Dwg_Object_Ref *ref;
@@ -1713,7 +1716,8 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
   version = dwg->header.version;
   _hdr = hdr->tio.object->tio.BLOCK_HEADER;
 
-  if (R_13b1 <= version && version <= R_2000)
+  if (R_13b1 <= version && version <= R_2000 && _hdr->first_entity
+      && _hdr->first_entity->obj)
     {
       Dwg_Object *obj;
       BITCODE_BL max_steps;
@@ -1739,7 +1743,8 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
         return NULL;
       return obj;
     }
-  if (version > R_2000 || version < R_13b1)
+  if (version > R_2000 || version < R_13b1
+      || (R_13b1 <= version && version <= R_2000))
     {
       Dwg_Object *obj;
       Dwg_Object_Ref *ref;
@@ -3005,10 +3010,10 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                                        &isnew, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
-      if (ok && hdlname
-          && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
+      // exact match first: gh109_1 has STANDARD and Standard
+      if (ok && hdlname && strEQ (name, hdlname))
         {
-          LOG_INSANE ("Found %s\n", name);
+          LOG_INSANE ("Found exact %s\n", name);
           if (isnew)
             free (hdlname);
 
@@ -3031,6 +3036,33 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                     vars->LTYPE_CONTINUOUS = hdlv[i];
                 }
             }
+          return hdlv[i];
+        }
+      if (ok && isnew && hdlname)
+        free (hdlname);
+    }
+
+  // then the first ignoring case
+  for (i = 0; i < num_entries; i++)
+    {
+      char *hdlname;
+      Dwg_Object *hobj;
+      Dwg_Object_APPID *_o;
+      int isnew = 0;
+      bool ok;
+      if (!hdlv[i])
+        continue;
+      hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
+      if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID)
+        continue;
+      _o = hobj->tio.object->tio.APPID;
+      ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname,
+                                       &isnew, NULL);
+      if (ok && hdlname && !strcasecmp (name, hdlname))
+        {
+          LOG_INSANE ("Found %s\n", name);
+          if (isnew)
+            free (hdlname);
           return hdlv[i];
         }
       if (ok && isnew && hdlname)
