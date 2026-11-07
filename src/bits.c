@@ -4068,6 +4068,29 @@ bit_upconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
     }
 }
 
+// The nearest ACI palette index 1-255 for a 24bit rgb
+static BITCODE_BS
+nearest_aci (const BITCODE_BL rgb)
+{
+  const int r = (rgb >> 16) & 0xff, g = (rgb >> 8) & 0xff, b = rgb & 0xff;
+  long best = -1;
+  BITCODE_BS idx = 7;
+  for (BITCODE_BS i = 1; i < 256; i++)
+    {
+      const BITCODE_BL p = dwg_rgb_palette_index (i);
+      const int dr = r - (int)((p >> 16) & 0xff);
+      const int dg = g - (int)((p >> 8) & 0xff);
+      const int db = b - (int)(p & 0xff);
+      const long d = (long)dr * dr + (long)dg * dg + (long)db * db;
+      if (best < 0 || d < best)
+        {
+          best = d;
+          idx = i;
+        }
+    }
+  return idx;
+}
+
 // from r2004+ truecolor to old palette index
 void
 bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
@@ -4080,6 +4103,11 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
       switch (color->method)
         {
         case 0x0:
+          // The r2004+ entity color (ENC) has no method byte. The index is
+          // the color, 0 is ByBlock. Do not make it ByLayer.
+          if (color->index > 256)
+            color->index = 256;
+          break;
         case 0xc0:
           color->index = 256;
           break; // ByLayer
@@ -4090,17 +4118,15 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
           color->index = color->rgb & 0xff;
           break;
         case 0xc2: // Entity truecolor
-          // Keep an existing palette index whose rgb round-trips: several
-          // palette entries share one rgb (e.g. 1 and 10, 5 and 170), and
-          // dwg_find_color_index returns the first match, silently
-          // recoloring the entity.
-          if (color->index > 0 && color->index < 256
-              && dwg_rgb_palette_index (color->index)
-                     == (color->rgb & 0x00FFFFFF))
+          // Keep the ACI index which is stored with a true color, as
+          // AutoCAD does. Several palette entries share one rgb (e.g. 1 and
+          // 10), and a search returns the first match, silently recoloring
+          // the entity. Else take the nearest palette color.
+          if (color->index > 0 && color->index < 256)
             break;
           color->index = dwg_find_color_index (color->rgb);
           if (color->index == 256)
-            color->index = color->rgb & 0xff;
+            color->index = nearest_aci (color->rgb);
           break;
         case 0xc8:
           color->index = 0;

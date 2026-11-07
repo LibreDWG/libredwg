@@ -395,6 +395,9 @@ static BITCODE_RLL add_LibreDWG_APPID (Dwg_Data *dwg);
 static BITCODE_BL add_DUMMY_eed (Dwg_Object *obj);
 static void fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 static void downconvert_MLEADERSTYLE (Dwg_Object *restrict obj);
+static void upconvert_standard_names (Dwg_Data *restrict dwg);
+static void link_owned_entities (Dwg_Data *restrict dwg);
+static void fix_mtext_hatch (Dwg_Data *restrict dwg);
 static void downconvert_DIMSTYLE (Bit_Chain *restrict dat,
                                   Dwg_Object *restrict obj);
 
@@ -2971,6 +2974,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
 #endif
+  if (dwg->header.from_version && dwg->header.from_version < R_2000
+      && dwg->header.version >= R_2000 && !(dwg->opts & DWG_OPTS_IN))
+    upconvert_standard_names (dwg);
+  if (dwg->header.from_version >= R_2004a && dwg->header.version <= R_2000
+      && dwg->header.version >= R_13b1 && !(dwg->opts & DWG_OPTS_IN))
+    link_owned_entities (dwg);
+  if (dwg->header.from_version >= R_2004a && dwg->header.version <= R_2000
+      && !(dwg->opts & DWG_OPTS_IN))
+    fix_mtext_hatch (dwg);
   if (dwg_supports_eed (dwg) && dwg->header.version < R_2010
       && dwg->header.from_version >= R_2010)
     {
@@ -6870,20 +6882,26 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
               char *dest;
-              if (length + 5 + dat->byte < dat->size)
-                bit_chain_alloc_size (dat,
-                                      (length + 5 + dat->byte) - dat->size);
               if (length > 255)
                 {
                   LOG_ERROR ("eed: overlong string %d stripped", (int)length);
                   length = 255;
                 }
               dest = bit_embed_TU_size (s, length);
+              if (!dest)
+                return DWG_ERR_OUTOFMEM;
+              // the length of the converted string, not of the UTF-16
+              length = (BITCODE_RS)strlen (dest);
+              if (length > 255)
+                length = 255;
+              if (length + 5 + dat->byte >= dat->size)
+                bit_chain_alloc_size (dat,
+                                      (length + 5 + dat->byte) - dat->size + 1);
               bit_write_RC (dat, length);
-              bit_write_RS (dat, dat->codepage);
+              bit_write_RS_BE (dat, dat->codepage);
               bit_write_TF (dat, (unsigned char *)dest, length);
               LOG_TRACE ("string: len=" FORMAT_RS " [RC] cp=" FORMAT_RS
-                         " [RS] \"%s\" [TF]",
+                         " [RS_BE] \"%s\" [TF]",
                          length, dat->codepage, dest);
               free (dest);
             }
@@ -6891,7 +6909,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
             {
               if (!*data->u.eed_0.string)
                 data->u.eed_0.length = 0;
-              if (data->u.eed_0.length + 5 + dat->byte < dat->size)
+              if (data->u.eed_0.length + 5 + dat->byte >= dat->size)
                 bit_chain_alloc_size (dat, data->u.eed_0.length + 5);
               bit_write_RC (dat, data->u.eed_0.length);
               bit_write_RS_BE (dat, data->u.eed_0.codepage);
@@ -8314,6 +8332,227 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
   oo->eed[idx].size = 0;
   oo->eed[idx].raw = NULL;
   oo->eed[idx].data = NULL;
+}
+
+/* R13/R14 have the standard names upper case: BYBLOCK, BYLAYER, CONTINUOUS,
+   STANDARD, *ACTIVE. AutoCAD writes them as ByBlock, ByLayer, Continuous,
+   Standard and *Active since R2000, also as dictionary keys. */
+static const char *
+standard_name_r2000 (const char *name)
+{
+  if (!name)
+    return NULL;
+  if (strEQc (name, "BYBLOCK"))
+    return "ByBlock";
+  if (strEQc (name, "BYLAYER"))
+    return "ByLayer";
+  if (strEQc (name, "CONTINUOUS"))
+    return "Continuous";
+  if (strEQc (name, "STANDARD"))
+    return "Standard";
+  if (strEQc (name, "*ACTIVE"))
+    return "*Active";
+  return NULL;
+}
+
+/* R2004+ keep the owned VERTEXes and ATTRIBs of a POLYLINE or INSERT in a
+   handle list, R13-R2000 in a chain with the first and last handle. Without
+   this the VERTEXes and ATTRIBs are lost in the older versions. */
+// Write R2000 as AutoCAD does: MTEXT line breaks as \P, gradients as a
+// solid fill in the first gradient color. R2000 has no gradients.
+static void
+fix_mtext_hatch (Dwg_Data *restrict dwg)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      Dwg_Object_Entity *_ent;
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
+        continue;
+      _ent = obj->tio.entity;
+      if (obj->fixedtype == DWG_TYPE_MTEXT)
+        {
+          if (IS_FROM_TU_DWG (dwg))
+            {
+              Dwg_Entity_MTEXT *mt = _ent->tio.MTEXT;
+              uint16_t *old = (BITCODE_TU)mt->text;
+              if (old
+                  && memchr (old, 0x0A, 2 * bit_wcs2len ((BITCODE_TU)old)))
+                {
+                  uint16_t *nw
+                      = calloc (2 * bit_wcs2len ((BITCODE_TU)old) + 1, 2);
+                  uint16_t *d = nw;
+                  for (const uint16_t *q = old; *q; q++)
+                    {
+                      if (*q == 0x0A)
+                        {
+                          *d++ = '\\';
+                          *d++ = 'P';
+                        }
+                      else
+                        *d++ = *q;
+                    }
+                  *d = 0;
+                  LOG_TRACE ("MTEXT.text: converted LF to \\P\n");
+                  free (mt->text);
+                  mt->text = (BITCODE_T)nw;
+                }
+            }
+          else
+            {
+              Dwg_Entity_MTEXT *mt = _ent->tio.MTEXT;
+              if (mt->text && strchr (mt->text, '\n'))
+                {
+                  char *old = (char *)mt->text;
+                  char *nw = calloc (2 * strlen (old) + 1, 1);
+                  char *d = nw;
+                  for (const char *q = old; *q; q++)
+                    {
+                      if (*q == '\n')
+                        {
+                          *d++ = '\\';
+                          *d++ = 'P';
+                        }
+                      else
+                        *d++ = *q;
+                    }
+                  *d = 0;
+                  LOG_TRACE ("MTEXT.text: converted LF to \\P\n");
+                  free (old);
+                  mt->text = nw;
+                }
+            }
+        }
+      else if (obj->fixedtype == DWG_TYPE_HATCH)
+        {
+          Dwg_Entity_HATCH *h = _ent->tio.HATCH;
+          if (h->is_gradient_fill)
+            {
+              // R2000 has no gradients. A solid fill in the first gradient
+              // color, as AutoCAD's own R2000 save.
+              if (h->num_colors && h->colors)
+                {
+                  h->colors[0].color = h->colors[0].color;
+                  // put the color into the gradient colors[0] slot, which the
+                  // R2000 layout reads as the solid fill color.
+                  h->is_gradient_fill = 0;
+                  h->is_solid_fill = 1;
+                  LOG_TRACE ("HATCH: gradient written as solid fill\n");
+                }
+              else
+                h->is_gradient_fill = 0;
+            }
+        }
+    }
+}
+
+static void
+link_owned_entities (Dwg_Data *restrict dwg)
+{
+  static const struct
+  {
+    Dwg_Object_Type type;
+    const char *list, *first, *last;
+  } map[] = {
+    { DWG_TYPE_POLYLINE_2D, "vertex", "first_vertex", "last_vertex" },
+    { DWG_TYPE_POLYLINE_3D, "vertex", "first_vertex", "last_vertex" },
+    { DWG_TYPE_POLYLINE_MESH, "vertex", "first_vertex", "last_vertex" },
+    { DWG_TYPE_POLYLINE_PFACE, "vertex", "first_vertex", "last_vertex" },
+    { DWG_TYPE_INSERT, "attribs", "first_attrib", "last_attrib" },
+    { DWG_TYPE_MINSERT, "attribs", "first_attrib", "last_attrib" },
+  };
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
+        continue;
+      for (unsigned m = 0; m < ARRAY_SIZE (map); m++)
+        {
+          BITCODE_BL num_owned = 0;
+          BITCODE_H *list = NULL;
+          BITCODE_H first = NULL, last = NULL;
+          Dwg_Object_Entity *_ent = obj->tio.entity;
+          if (obj->fixedtype != map[m].type)
+            continue;
+          if (!dwg_dynapi_entity_value (_ent->tio.INSERT, obj->name,
+                                        "num_owned", &num_owned, NULL)
+              || !num_owned
+              || !dwg_dynapi_entity_value (_ent->tio.INSERT, obj->name,
+                                           map[m].list, &list, NULL)
+              || !list)
+            break;
+          dwg_dynapi_entity_value (_ent->tio.INSERT, obj->name, map[m].first,
+                                   &first, NULL);
+          if (first && first->absolute_ref)
+            break; // already linked
+          if (list[0] && list[num_owned - 1])
+            {
+              // absolute (code 4), not relative to the entity as with obj
+              BITCODE_H lo
+                  = dwg_add_handleref (dwg, 4, list[0]->absolute_ref, NULL);
+              BITCODE_H hi = dwg_add_handleref (
+                  dwg, 4, list[num_owned - 1]->absolute_ref, NULL);
+              if (!lo || !hi)
+                return;
+              first = lo;
+              last = hi;
+              dwg_dynapi_entity_set_value (_ent->tio.INSERT, obj->name,
+                                           map[m].first, &first, 0);
+              dwg_dynapi_entity_set_value (_ent->tio.INSERT, obj->name,
+                                           map[m].last, &last, 0);
+              LOG_TRACE ("%s.%s = " FORMAT_REF ", %s = " FORMAT_REF "\n",
+                         obj->name, map[m].first, ARGS_REF (first),
+                         map[m].last, ARGS_REF (last));
+            }
+          break;
+        }
+    }
+}
+
+static void
+upconvert_standard_names (Dwg_Data *restrict dwg)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (!obj->tio.object || obj->supertype != DWG_SUPERTYPE_OBJECT)
+        continue;
+      if (obj->fixedtype == DWG_TYPE_LTYPE || obj->fixedtype == DWG_TYPE_STYLE
+          || obj->fixedtype == DWG_TYPE_DIMSTYLE
+          || obj->fixedtype == DWG_TYPE_VPORT
+          || obj->fixedtype == DWG_TYPE_MLINESTYLE)
+        {
+          BITCODE_T name = NULL;
+          const char *newname;
+          if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, obj->name,
+                                       "name", &name, NULL)
+              && (newname = standard_name_r2000 (name)))
+            {
+              LOG_TRACE ("%s.name %s => %s\n", obj->name, name, newname);
+              dwg_dynapi_entity_set_value (obj->tio.object->tio.APPID,
+                                           obj->name, "name", &newname, 0);
+            }
+        }
+      else if (obj->fixedtype == DWG_TYPE_DICTIONARY
+               && obj->tio.object->tio.DICTIONARY)
+        {
+          Dwg_Object_DICTIONARY *_dict = obj->tio.object->tio.DICTIONARY;
+          for (BITCODE_BL j = 0; _dict->texts && j < _dict->numitems; j++)
+            {
+              const char *newname = standard_name_r2000 (_dict->texts[j]);
+              if (newname)
+                {
+                  char *dup = strdup (newname);
+                  if (!dup)
+                    return;
+                  LOG_TRACE ("DICTIONARY.texts[%u] %s => %s\n", j,
+                             _dict->texts[j], newname);
+                  free (_dict->texts[j]);
+                  _dict->texts[j] = dup;
+                }
+            }
+        }
+    }
 }
 
 static void

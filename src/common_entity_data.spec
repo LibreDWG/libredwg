@@ -551,6 +551,14 @@
   }
 
   SINCE (R_2000b) {
+    // R13/R14 have no lineweight. 0 would be 0.00 mm, AutoCAD writes ByLayer.
+#ifdef IS_ENCODER
+    IF_ENCODE_FROM_PRE_2000
+    {
+      if (!_ent->linewt)
+        _ent->linewt = 29; // ByLayer
+    }
+#endif
     // DXF later after 6, see common_entity_handle_data.spec
     // Ideally CMC 60 should be deferred after layer 8, before linewt 370 also
 #ifndef IS_DXF

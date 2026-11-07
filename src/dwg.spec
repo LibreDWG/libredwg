@@ -2844,6 +2844,14 @@ DWG_ENTITY (MTEXT)
 
   SINCE (R_2000b)
     {
+      // R13/R14 have no line spacing. 0 collapses the lines in R2000+.
+      IF_ENCODE_FROM_PRE_2000
+      {
+        if (!FIELD_VALUE (linespace_style))
+          FIELD_VALUE (linespace_style) = 1; // at least
+        if (FIELD_VALUE (linespace_factor) == 0.0)
+          FIELD_VALUE (linespace_factor) = 1.0;
+      }
       FIELD_BS (linespace_style, 73);
       FIELD_BD (linespace_factor, 44);
       FIELD_B (unknown_b0, 0);
@@ -3265,6 +3273,16 @@ DWG_TABLE (LAYER)
         FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;
         FIELD_VALUE (is_xref_ref)   = FIELD_VALUE (flag) & 64;
         FIELD_VALUE (plotflag) = 1;
+      }
+      // R13/R14 have no plot flag and lineweight: plot, with DEFAULT
+      IF_ENCODE_FROM_PRE_2000
+      {
+        if (!(dwg->opts & DWG_OPTS_INJSON))
+          {
+            FIELD_VALUE (plotflag) = 1;
+            if (!FIELD_VALUE (linewt))
+              FIELD_VALUE (linewt) = 0x1f; // DEFAULT
+          }
       }
       if (!(dwg->opts & DWG_OPTS_INJSON))
         FIELD_VALUE (flag0) = (FIELD_VALUE (frozen) ? 1 : 0) +
@@ -4498,6 +4516,36 @@ DWG_OBJECT (MLINESTYLE)
   REPEAT_BLOCK
       SUB_FIELD_BD (lines[rcount1], offset, 49);
       SUB_FIELD_CMC (lines[rcount1], color, 62); /*!< default: 0 */
+#ifdef IS_ENCODER
+      // R2018+ keeps the linetype as handle, earlier as index
+      if (dat->version < R_2018 && dat->from_version >= R_2018
+          && FIELD_VALUE (lines[rcount1].lt_ltype))
+        {
+          BITCODE_H lt = FIELD_VALUE (lines[rcount1].lt_ltype);
+          BITCODE_BSd idx = 0;
+          if (lt->absolute_ref == dwg->header_vars.LTYPE_BYBLOCK->absolute_ref)
+            idx = 32766; // BYBLOCK
+          else if (lt->absolute_ref
+                   == dwg->header_vars.LTYPE_BYLAYER->absolute_ref)
+            idx = 32767; // BYLAYER
+          else if (lt->absolute_ref == dwg->header_vars.LTYPE_CONTINUOUS
+                                      ->absolute_ref)
+            idx = 0; // CONTINUOUS
+          else
+            {
+              Dwg_Object *lctrl
+                  = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
+              Dwg_Object_LTYPE_CONTROL *_lctrl
+                  = lctrl ? lctrl->tio.object->tio.LTYPE_CONTROL : NULL;
+              if (_lctrl
+                  && (idx = find_hv (_lctrl->entries, _lctrl->num_entries,
+                                     lt->absolute_ref))
+                         < 0)
+                idx = 32767; // ByLayer, as AutoCAD
+            }
+          FIELD_VALUE (lines[rcount1].lt_index) = idx;
+        }
+#endif
       PRE (R_2018)
       {
 #if defined (IS_DXF) && !defined (IS_ENCODER)
