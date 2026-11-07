@@ -1701,7 +1701,8 @@
   LOG_INSANE ("REPEAT_CHKCOUNT %s." #name " x %lu: %lu > %" PRId64 "?\n",     \
               SAFEDXFNAME, (unsigned long)times,                              \
               (unsigned long)((times) * sizeof (type)), AVAIL_BITS (dat));    \
-  if ((int64_t)((times) * sizeof (type)) > AVAIL_BITS (dat))                  \
+  if ((int64_t)((times) * (sizeof (type) > 32 ? 32 : sizeof (type)))          \
+      > AVAIL_BITS (dat))                                                     \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %lu\n", SAFEDXFNAME,                 \
                  (unsigned long)times);                                       \
@@ -1728,7 +1729,8 @@
               "?\n",                                                          \
               SAFEDXFNAME, (unsigned long)times,                              \
               (unsigned long)((times) * sizeof (type)), AVAIL_BITS (dat));    \
-  if ((int64_t)((times) * sizeof (type)) > AVAIL_BITS (dat)                   \
+  if ((int64_t)((times) * (sizeof (type) > 32 ? 32 : sizeof (type)))          \
+      > AVAIL_BITS (dat)                                                      \
       || (sizeof (times) > 4 && times > 0xc0000000 / sizeof (type)))          \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %ld\n", SAFEDXFNAME, (long)times);   \
