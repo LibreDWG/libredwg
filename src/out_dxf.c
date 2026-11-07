@@ -38,6 +38,7 @@
 #include "codepages.h"
 #include "dwg.h"
 #include "decode.h"
+#include "dynapi.h"
 #include "encode.h"
 #include "out_dxf.h"
 #include "geom.h"
@@ -1657,10 +1658,32 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
                 VALUE_TFF ("{", 1002)
               break;
             case 3:
-              GROUP (dxf);
-              fprintf (dat->fh, "%9" PRIu64 "\r\n", data->u.eed_3.layer);
-              // VALUE_RLL (data->u.eed_3.layer, dxf);
-              break;
+              {
+                // 1003 is the layer NAME
+                Dwg_Object *layer
+                    = dwg_resolve_handle (dwg, data->u.eed_3.layer);
+                char *lname = NULL;
+                int isnew = 0;
+                if (layer && layer->tio.object
+                    && layer->fixedtype == DWG_TYPE_LAYER)
+                  dwg_dynapi_entity_utf8text (layer->tio.object->tio.LAYER,
+                                              layer->name, "name", &lname,
+                                              &isnew, NULL);
+                if (lname && *lname)
+                  {
+                    VALUE_TV (lname, dxf);
+                    if (isnew)
+                      free (lname);
+                  }
+                else
+                  {
+                    if (isnew)
+                      free (lname);
+                    GROUP (dxf);
+                    fprintf (dat->fh, "\r\n");
+                  }
+                break;
+              }
             case 4:
               VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf);
               break;
@@ -1905,14 +1928,19 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);
         }
       else
-        { // downcase some standard names
-          if (dat->version >= R_2000 && strEQc (value, "STANDARD"))
+        { // downcase some standard names, only when converting from
+          // pre-R2000. A newer drawing may really have "STANDARD".
+          if (dat->from_version && dat->from_version < R_2000
+              && dat->version >= R_2000 && strEQc (value, "STANDARD"))
             fprintf (dat->fh, "%3i\r\nStandard\r\n", dxf);
-          else if (dat->version >= R_2000 && strEQc (value, "BYLAYER"))
+          else if (dat->from_version && dat->from_version < R_2000
+                   && dat->version >= R_2000 && strEQc (value, "BYLAYER"))
             fprintf (dat->fh, "%3i\r\nByLayer\r\n", dxf);
-          else if (dat->version >= R_2000 && strEQc (value, "BYBLOCK"))
+          else if (dat->from_version && dat->from_version < R_2000
+                   && dat->version >= R_2000 && strEQc (value, "BYBLOCK"))
             fprintf (dat->fh, "%3i\r\nByBlock\r\n", dxf);
-          else if (dat->version >= R_2000 && strEQc (value, "*ACTIVE"))
+          else if (dat->from_version && dat->from_version < R_2000
+                   && dat->version >= R_2000 && strEQc (value, "*ACTIVE"))
             fprintf (dat->fh, "%3i\r\n*Active\r\n", dxf);
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, value);

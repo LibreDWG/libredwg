@@ -2430,6 +2430,34 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       LOG_TRACE ("long: %ld\n", pair->value.l);
       eed[i].size += size;
       break;
+    case 3:
+      {
+        // LAYER NAME (1003). Stored as the layer handle (RLL).
+        BITCODE_H hdl;
+        /* code [RC] + RLL */
+        size = 1 + 8;
+        eed[i].data
+            = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+        if (!eed[i].data)
+          {
+            LOG_ERROR ("Out of memory");
+            dwg_free_eed (obj);
+            return;
+          }
+        eed[i].data->code = code; // 1003
+        hdl = dwg_find_tablehandle_silent (dwg, pair->value.s.ptr, "LAYER");
+        if (hdl)
+          eed[i].data->u.eed_3.layer = hdl->absolute_ref;
+        else
+          {
+            LOG_WARN ("EED 1003: layer %s not found", pair->value.s.ptr);
+            eed[i].data->u.eed_3.layer = 0;
+          }
+        LOG_TRACE ("layer: " FORMAT_HV " [RLL] for %s\n",
+                   eed[i].data->u.eed_3.layer, pair->value.s.ptr);
+        eed[i].size += size;
+        break;
+      }
     case 5:
       {
         // HANDLE (absref)

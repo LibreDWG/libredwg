@@ -3268,6 +3268,9 @@ DWG_TABLE (LAYER)
       // with json we only use flag0, with DXF we use flag
       if (dwg->opts & DWG_OPTS_INDXF) {
         FIELD_VALUE (off)           = FIELD_VALUE (color.index) < 0;
+        // the off bit says off, the color stays positive, as AutoCAD
+        if (FIELD_VALUE (off) && FIELD_VALUE (color.index) < 0)
+          FIELD_VALUE (color.index) = -FIELD_VALUE (color.index);
         FIELD_VALUE (frozen)        = FIELD_VALUE (flag) & 1;
         FIELD_VALUE (frozen_in_new) = FIELD_VALUE (flag) & 2;
         FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;
@@ -4644,15 +4647,18 @@ DWG_ENTITY (HATCH)
   ENCODER { normalize_BE (FIELD_VALUE (extrusion)); }
   FIELD_3BD (extrusion, 210);
   DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
-  DXF {
-    if (FIELD_VALUE (is_solid_fill)) {
-      VALUE_TFF ("SOLID", 2); // not "SOLID,_I"
-    } else {
-      FIELD_T (name, 2);
-    }
+#ifdef IS_DXF
+  // keep the stored name with its island suffix ("SOLID,_O"), as AutoCAD
+  if (FIELD_VALUE (name) && *FIELD_VALUE (name)) {
+    FIELD_T (name, 2);
+  } else if (FIELD_VALUE (is_solid_fill)) {
+    VALUE_TFF ("SOLID", 2);
   } else {
-    FIELD_T (name, 2); //default: SOLID
-   }
+    VALUE_TFF ("", 2);
+  }
+#else
+  FIELD_T (name, 2); //default: SOLID
+#endif
   FIELD_B (is_solid_fill, 70); //default: 1, pattern_fill: 0
   FIELD_B (is_associative, 71);
   FIELD_BL (num_paths, 91);
@@ -4915,10 +4921,11 @@ DWG_ENTITY (MPOLYGON)
   FIELD_3BD (extrusion, 210);
   DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
   DXF {
-    if (FIELD_VALUE (is_solid_fill)) {
-      VALUE_TFF ("SOLID", 2); // not "SOLID,_I"
-    } else {
+    // keep the stored name with its island suffix ("SOLID,_O"), as AutoCAD
+    if (FIELD_VALUE (name) && *FIELD_VALUE (name)) {
       FIELD_T (name, 2);
+    } else {
+      VALUE_TFF ((FIELD_VALUE (is_solid_fill) ? "SOLID" : ""), 2);
     }
   } else {
     FIELD_T (name, 2); //default: SOLID
