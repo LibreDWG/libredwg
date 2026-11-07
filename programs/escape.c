@@ -356,7 +356,10 @@ mtext_plaintext (const char *restrict src)
               *d++ = *s;
               break;
             }
-          s++;
+          // a format code run to the end of the string (no ';') leaves s on
+          // the terminator; do not step past it
+          if (*s)
+            s++;
           *d = 0;
           continue;
         }
