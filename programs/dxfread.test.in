@@ -67,7 +67,8 @@ check_dxf_to_json() {
 # Count group 0 entity records in the ENTITIES section.
 # Well-formed DXF: group codes on odd lines, values on even lines.
 count_entities() {
-    tr -d '\r' < "$1" | awk '
+    # LC_ALL=C: BSD tr rejects non-ASCII bytes in a UTF-8 locale
+    LC_ALL=C tr -d '\r' < "$1" | LC_ALL=C awk '
         { line[NR] = $0 }
         END {
             sec = ""; wantname = 0; n = 0
@@ -153,7 +154,7 @@ if [ -f "$dxf" ] && [ -x ./dxfread${EXEEXT} ]; then
     # DXF -> JSON (stdout) -> DXF (stdin)
     if $DXFREAD -j "$dxf" 2>/dev/null | \
        $DXFREAD -d - 2>"$log" | \
-       tr -d '\r' | \
+       LC_ALL=C tr -d '\r' | \
        grep -qE '^ *0$'
     then
         echo "pipe roundtrip ok"
