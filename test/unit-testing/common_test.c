@@ -285,6 +285,39 @@ escape_htmlwescape_tests (void)
   free (s);
 }
 
+static void
+escape_mtext_plaintext_tests (void)
+{
+  static const struct
+  {
+    const char *in;
+    const char *out;
+  } cases[] = {
+    { "a\\Pb", "a\nb" },
+    { "a\\~b", "a b" },
+    { "\\H2.5;x", "x" },
+    { "\\U+00E4", "\\U+00E4" },
+    /* unterminated codes end at the NUL. They must not read past it */
+    { "a\\H2.5", "a" },
+    { "a\\Fsimplex", "a" },
+    { "a\\S1^2", "a" },
+    { "x\\p", "x" },
+  };
+  for (unsigned i = 0; i < ARRAY_SIZE (cases); i++)
+    {
+      // exactly sized, so that ASan sees a read past the terminator
+      char *in = strdup (cases[i].in);
+      char *out = mtext_plaintext (in);
+      if (out && strEQ (out, cases[i].out))
+        pass ();
+      else
+        fail ("mtext_plaintext (\"%s\") => \"%s\", expected \"%s\"",
+              cases[i].in, out ? out : "(null)", cases[i].out);
+      free (out);
+      free (in);
+    }
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -296,5 +329,6 @@ main (int argc, char const *argv[])
   common_strcasecmp_tests ();
   escape_htmlescape_tests ();
   escape_htmlwescape_tests ();
+  escape_mtext_plaintext_tests ();
   return failed;
 }

@@ -356,7 +356,9 @@ mtext_plaintext (const char *restrict src)
               *d++ = *s;
               break;
             }
-          s++;
+          // an unterminated code stops at the NUL: do not step past it
+          if (*s)
+            s++;
           *d = 0;
           continue;
         }
