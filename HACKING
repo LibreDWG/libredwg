@@ -18,8 +18,9 @@ someone should probably think about and resolve them!
   for another Mingw recipe.
   The compiler needs to support C99, but even MSVC can also be used
   since 0.12.5
-  The recommended development compiler is tinycc, as compilation times are
-  10x faster than with gcc or clang.
+  The recommended development compiler is rurban's rcc, then tinycc.
+  compilation times are 10x faster than with gcc or clang. Esp. for
+  asan debugging use rcc.
 
 * coding standards
 
