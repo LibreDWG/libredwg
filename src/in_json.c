@@ -5724,6 +5724,87 @@ json_AcDs_Segments (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 0;
 }
 
+// the data records which do not belong to an ACIS entity, i.e. the thumbnail
+static int
+json_AcDs_Records (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                   jsmntokens_t *restrict tokens, Dwg_AcDs *o, int size)
+{
+  const char *section = "AcDs_Record";
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  if (t->type != JSMN_ARRAY)
+    {
+      LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s ARRAY",
+                 t_typename[t->type], tokens->index, tokens->num_tokens,
+                 section);
+      json_advance_unknown (dat, tokens, t->type, 0);
+      return DWG_ERR_INVALIDTYPE;
+    }
+  o->records = (Dwg_AcDs_Record *)calloc (size, sizeof (Dwg_AcDs_Record));
+  if (!o->records)
+    {
+      LOG_ERROR ("Out of memory");
+      return DWG_ERR_OUTOFMEM;
+    }
+  o->num_records = size;
+  for (int j = 0; j < size; j++)
+    {
+      int keys;
+      Dwg_AcDs_Record *_obj = &o->records[j];
+      tokens->index++;
+      JSON_TOKENS_CHECK_OVERFLOW_ERR
+      t = &tokens->tokens[tokens->index];
+      keys = t->size;
+      if (t->type != JSMN_OBJECT)
+        {
+          LOG_ERROR ("Unexpected %s at %u of %ld tokens, expected %s OBJECT",
+                     t_typename[t->type], tokens->index, tokens->num_tokens,
+                     section);
+          json_advance_unknown (dat, tokens, t->type, 0);
+          return DWG_ERR_INVALIDTYPE;
+        }
+      tokens->index++;
+      LOG_TRACE ("records[%d]:\n", j);
+      for (int k = 0; k < keys; k++)
+        {
+          char key[80];
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          json_fixed_key (key, dat, tokens);
+          t = &tokens->tokens[tokens->index];
+          // clang-format off
+          if (strEQc (key, "index"))
+            tokens->index++; // ignore
+          FIELD_RLL (handle, 0)
+          FIELD_RL (schidx, 0)
+          FIELD_RL (size, 0)
+          else if (strEQc (key, "data"))
+            {
+              size_t len;
+              _obj->data = json_binary (dat, tokens, key, &len);
+              JSON_TOKENS_CHECK_OVERFLOW_ERR
+              if (len > 0xffffffffUL)
+                len = 0xffffffffUL;
+              if (_obj->size != len)
+                {
+                  if (_obj->size)
+                    LOG_WARN ("%s.size %u != data length %" PRIuSIZE, section,
+                              _obj->size, len);
+                  _obj->size = len & 0xffffffff;
+                }
+              LOG_TRACE ("data: %" PRIuSIZE " bytes\n", len);
+            }
+          else
+            {
+              LOG_ERROR ("Unknown %s.%s ignored", section, key);
+              json_advance_unknown (dat, tokens, t->type, 0);
+            }
+          // clang-format on
+        }
+      tokens->index--;
+    }
+  tokens->index++;
+  return 0;
+}
+
 static int
 json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
            jsmntokens_t *restrict tokens)
@@ -5793,6 +5874,15 @@ json_AcDs (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           tokens->index++; // empty array
         // if (error >= DWG_ERR_CRITICAL)
         //   return error;
+      }
+      else if (strEQc (key, "records"))
+      {
+        if (t->type != JSMN_ARRAY) // of OBJECTs
+          json_advance_unknown (dat, tokens, t->type, 0);
+        else if (t->size)
+          error |= json_AcDs_Records (dat, dwg, tokens, _obj, t->size);
+        else
+          tokens->index++; // empty array
       }
       else
       {

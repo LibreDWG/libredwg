@@ -337,4 +337,25 @@
   END_REPEAT (segidx)
 #endif
 
-
+#ifdef IS_JSON
+  // The data records which do not belong to an ACIS entity, i.e. the
+  // thumbnail. They are not in the segment structure above, which is only
+  // the layout, and written from them and from the entities.
+  if (_obj->num_records)
+    {
+      REPEAT (num_records, records, Dwg_AcDs_Record)
+      REPEAT_BLOCK
+          SUB_FIELD_RLL (records[rcount1], handle, 0);
+          SUB_FIELD_RL (records[rcount1], schidx, 0);
+          SUB_FIELD_RL (records[rcount1], size, 0);
+          KEY (data);
+          fprintf (dat->fh, "\"");
+          for (vcount = 0; _obj->records[rcount1].data
+                           && vcount < _obj->records[rcount1].size;
+               vcount++)
+            fprintf (dat->fh, "%02X", _obj->records[rcount1].data[vcount]);
+          fprintf (dat->fh, "\"");
+      END_REPEAT_BLOCK
+      END_REPEAT (records)
+    }
+#endif

@@ -24,6 +24,8 @@ extern unsigned int loglevel;
 
 // from in_json.h
 extern int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+// from out_json.h
+extern int dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 // from dwg_api.h
 extern int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);
 extern Dwg_Entity_REGION *
@@ -1097,6 +1099,112 @@ acds_sab_test (void)
     ok ("acds_sab: SAB of 3 REGIONs, one in a blob, roundtripped via AcDs");
 }
 
+/* The AcDs data records which do not belong to an ACIS entity, i.e. the
+   thumbnail PNG, are in the JSON AcDs.records, so that a JSON roundtrip
+   keeps them. */
+static void
+acds_records_json_test (void)
+{
+  const char *src
+      = "{\n"
+        " \"created_by\": \"libredwg test\",\n"
+        " \"FILEHEADER\": { \"version\": \"AC1032\" },\n"
+        " \"AcDs\": { \"records\": [\n"
+        "   { \"handle\": 34, \"schidx\": 0, \"size\": 8,\n"
+        "     \"data\": \"89504E470D0A1A0A\" },\n"
+        "   { \"handle\": 1000, \"schidx\": 1, \"size\": 3,\n"
+        "     \"data\": \"414243\" } ] },\n"
+        " \"OBJECTS\": [] }";
+  const unsigned saved_loglevel = loglevel;
+  char msg[160] = "";
+  char *json = (char *)malloc (strlen (src) + 1);
+  char *json2 = NULL;
+  Dwg_Data dwg, dwg2;
+  Bit_Chain dat, dat2;
+  long len = 0;
+  int error;
+
+  memset (&dwg, 0, sizeof dwg);
+  memset (&dwg2, 0, sizeof dwg2);
+  memset (&dat, 0, sizeof dat);
+  memset (&dat2, 0, sizeof dat2);
+  if (!json)
+    {
+      fail ("acds_records_json: malloc failed");
+      return;
+    }
+  strcpy (json, src);
+  dat.chain = (unsigned char *)json;
+  dat.size = strlen (json);
+  error = dwg_read_json (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    snprintf (msg, sizeof msg, "dwg_read_json error 0x%x", error);
+  else if (dwg.acds.num_records != 2 || !dwg.acds.records
+           || dwg.acds.records[0].handle != 34
+           || dwg.acds.records[0].schidx != 0
+           || dwg.acds.records[0].size != 8
+           || !dwg.acds.records[0].data
+           || memcmp (dwg.acds.records[0].data, "\x89PNG\r\n\x1a\n", 8)
+           || dwg.acds.records[1].handle != 1000
+           || dwg.acds.records[1].size != 3
+           || !dwg.acds.records[1].data
+           || memcmp (dwg.acds.records[1].data, "ABC", 3))
+    snprintf (msg, sizeof msg, "records not read, %u",
+              (unsigned)dwg.acds.num_records);
+  if (!*msg)
+    {
+      dat2.fh = tmpfile ();
+      dwg.header.version = dwg.header.from_version;
+      dat2.version = dwg.header.version;
+      dat2.from_version = dwg.header.from_version;
+      if (!dat2.fh)
+        snprintf (msg, sizeof msg, "no tmpfile");
+      else
+        {
+          error = dwg_write_json (&dat2, &dwg);
+          if (error >= DWG_ERR_CRITICAL)
+            snprintf (msg, sizeof msg, "dwg_write_json error 0x%x", error);
+          else
+            {
+              len = ftell (dat2.fh);
+              rewind (dat2.fh);
+              json2 = (char *)malloc (len + 1);
+              if (!json2 || fread (json2, 1, len, dat2.fh) != (size_t)len)
+                snprintf (msg, sizeof msg, "cannot read the JSON back");
+              else
+                json2[len] = '\0';
+            }
+          fclose (dat2.fh);
+        }
+    }
+  if (!*msg)
+    {
+      memset (&dat, 0, sizeof dat);
+      dat.chain = (unsigned char *)json2;
+      dat.size = len;
+      error = dwg_read_json (&dat, &dwg2);
+      if (error >= DWG_ERR_CRITICAL)
+        snprintf (msg, sizeof msg, "second dwg_read_json error 0x%x", error);
+      else if (dwg2.acds.num_records != 2
+               || dwg2.acds.records[0].handle != 34
+               || dwg2.acds.records[0].size != 8
+               || memcmp (dwg2.acds.records[0].data, "\x89PNG\r\n\x1a\n", 8)
+               || dwg2.acds.records[1].handle != 1000
+               || dwg2.acds.records[1].schidx != 1
+               || memcmp (dwg2.acds.records[1].data, "ABC", 3))
+        snprintf (msg, sizeof msg, "records differ after the roundtrip");
+    }
+  dwg_free (&dwg);
+  dwg_free (&dwg2);
+  free (json);
+  free (json2);
+  loglevel = saved_loglevel;
+  if (*msg)
+    fail ("acds_records_json: %s", msg);
+  else
+    ok ("acds_records_json: the AcDs thumbnail records roundtrip via JSON");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -1121,5 +1229,6 @@ main (int argc, char const *argv[])
   downconvert_TABLE_test ();
   downconvert_TABLESTYLE_test ();
   acds_sab_test ();
+  acds_records_json_test ();
   return failed;
 }
