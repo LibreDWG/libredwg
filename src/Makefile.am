@@ -44,6 +44,7 @@ libredwg_la_SOURCES = \
 	reedsolomon.c \
 	print.c \
 	free.c \
+	acds.c \
 	hash.c \
 	dynapi.c \
 	classes.c \
@@ -77,6 +78,7 @@ if USE_WRITE
 libredwg_la_SOURCES += \
 	encode.c \
 	encode2.c \
+	encode_acds.c \
 	dxfclasses.c
 #       encode_r2007.c
 #       in_xml.c
@@ -117,6 +119,7 @@ EXTRA_HEADERS = \
 	codepages.h \
 	bits.h \
 	myalloca.h \
+	acds.h \
 	decode.h \
 	decode_r11.h \
 	dec_macros.h \

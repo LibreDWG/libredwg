@@ -32,6 +32,7 @@
 #include "common.h"
 #include "bits.h"
 #include "decode.h"
+#include "acds.h"
 #include "dynapi.h"
 
 /* The logging level for the read (decode) path.  */
@@ -2310,6 +2311,8 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   bit_chain_set_version (&old_dat, dat);
 
   error |= acds_private (dat, dwg);
+  // also with a damaged segment, after the data index
+  acds_assign_sab (dwg, dat, &dwg->acds);
   error &= ~DWG_ERR_SECTIONNOTFOUND;
 
   LOG_TRACE ("\n");

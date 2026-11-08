@@ -16345,15 +16345,127 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
-// read to AcDs, TODO
-// SECTION ACDSDATA: 0 ACDSSCHEMA, 0 ACDSRECORD
+// Assign the SAB data of an ACDSRECORD to its ACIS entity, by the handle.
+// Other records, i.e. the thumbnail, are kept for writing. Takes ownership
+// of data.
+static void
+dxf_acds_record (Dwg_Data *restrict dwg, const BITCODE_RLL handle,
+                 const BITCODE_RL schidx, unsigned char *restrict data,
+                 const size_t size)
+{
+  Dwg_Object *o = dwg_resolve_handle_silent (dwg, handle);
+  Dwg_AcDs_Record *rec;
+
+  if (o && o->supertype == DWG_SUPERTYPE_ENTITY && dwg_obj_is_3dsolid (o)
+      && !dwg_obj_set_sab (o, data, size & 0xFFFFFFFF))
+    {
+      LOG_TRACE ("%s.acis_data = %" PRIuSIZE " [" FORMAT_RLL "]\n", o->name,
+                 size, handle);
+      return;
+    }
+  LOG_TRACE ("AcDs data record " FORMAT_RLL ": %" PRIuSIZE
+             " bytes, no ACIS entity\n",
+             handle, size);
+  rec = (Dwg_AcDs_Record *)realloc (
+      dwg->acds.records, (dwg->acds.num_records + 1) * sizeof (*rec));
+  if (!rec)
+    {
+      free (data);
+      return;
+    }
+  dwg->acds.records = rec;
+  rec = &dwg->acds.records[dwg->acds.num_records++];
+  rec->handle = handle;
+  rec->schidx = schidx;
+  rec->size = size & 0xFFFFFFFF;
+  rec->data = data;
+}
+
+// SECTION ACDSDATA: 0 ACDSSCHEMA, 0 ACDSRECORD. The constant schemas are
+// not read, as we write the same. A record has the schema index 90, the
+// handle of the entity 320 and the data size 94, with the SAB data in chunks
+// of 310.
 static int
 dxf_acds_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  // Dxf_Pair *pair = dxf_read_pair (dat);
-  // unsigned written = 0;
-  LOG_WARN ("SECTION %s ignored for now", "ACDSDATA");
-  dxf_unknownsection_read (dat, dwg);
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  int in_record = 0;
+  BITCODE_RL schidx = 0;
+  BITCODE_RLL handle = 0;
+  size_t size = 0, written = 0;
+  unsigned char *data = NULL;
+
+  while (pair)
+    {
+      if (pair->code == 0)
+        {
+          if (in_record && data)
+            {
+              dxf_acds_record (dwg, handle, schidx, data, written);
+              data = NULL;
+            }
+          in_record = pair->value.s.ptr
+                      && strEQc (pair->value.s.ptr, "ACDSRECORD");
+          schidx = 0;
+          handle = 0;
+          size = written = 0;
+          if (pair->value.s.ptr && strEQc (pair->value.s.ptr, "ENDSEC"))
+            {
+              dxf_free_pair (pair);
+              return 0;
+            }
+        }
+      else if (in_record)
+        {
+          switch (pair->code)
+            {
+            case 90:
+              schidx = pair->value.l;
+              break;
+            case 320:
+              handle = pair->value.u;
+              break;
+            case 94:
+              free (data);
+              size = pair->value.l > 0 ? (size_t)pair->value.l : 0;
+              data = (unsigned char *)malloc (size ? size : 1);
+              written = 0;
+              if (!data)
+                {
+                  dxf_free_pair (pair);
+                  LOG_ERROR ("Out of memory");
+                  return DWG_ERR_OUTOFMEM;
+                }
+              break;
+            case 310:
+              if (pair->value.s.ptr && data)
+                {
+                  const size_t blen = pair->value.s.len;
+                  if (written + blen > size)
+                    {
+                      LOG_ERROR ("ACDSRECORD data overflow: %" PRIuSIZE
+                                 " + written %" PRIuSIZE " > size: %" PRIuSIZE,
+                                 blen, written, size);
+                      free (data);
+                      data = NULL;
+                      in_record = 0;
+                    }
+                  else
+                    {
+                      memcpy (&data[written], pair->value.s.ptr, blen);
+                      written += blen;
+                    }
+                }
+              break;
+            default: // the constant 2 name, 280
+              break;
+            }
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+      DXF_CHECK_EOF;
+    }
+  free (data);
   return 0;
 }
 

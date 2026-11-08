@@ -11137,6 +11137,17 @@ typedef struct _dwg_AcDs_Segment
   BITCODE_RC padding[9]; // always 8x 0x55
 } Dwg_AcDs_Segment;
 
+/* A data record, with the SAB data of an ACIS entity or other data like the
+   thumbnail PNG. The records of ACIS entities are in the entity (acis_data),
+   so only the other records are kept here. */
+typedef struct _dwg_AcDs_Record
+{
+  BITCODE_RLL handle;
+  BITCODE_RL schidx; // the index of the schema
+  BITCODE_RL size;
+  BITCODE_RC *data;
+} Dwg_AcDs_Record;
+
 typedef struct _dwg_AcDs
 {
   // header
@@ -11163,6 +11174,8 @@ typedef struct _dwg_AcDs
   Dwg_AcDs_SchemaData schdat;
   Dwg_AcDs_Search search;
   Dwg_AcDs_Segment *segments;
+  BITCODE_BL num_records; // not in the section, see Dwg_AcDs_Record
+  Dwg_AcDs_Record *records;
 } Dwg_AcDs;
 
 typedef struct _dwg_header
@@ -11505,8 +11518,6 @@ typedef struct _dwg_struct
   Dwg_AcDs acds;
 
   unsigned int layout_type;
-  unsigned int num_acis_sab_hdl;  // temporary, until we can parse acds for SAB data, r2013+
-  BITCODE_H *acis_sab_hdl;
   BITCODE_RLL next_hdl; // for add_document handle holes
 
   BITCODE_BL prev_entity_index; // for speedup find_prev_entity
@@ -11657,6 +11668,12 @@ EXPORT int dwg_obj_is_table (const Dwg_Object *restrict obj);
 EXPORT int dwg_obj_is_subentity (const Dwg_Object *restrict obj);
 EXPORT int dwg_obj_has_subentity (const Dwg_Object *restrict obj);
 EXPORT int dwg_obj_is_3dsolid (const Dwg_Object *restrict obj);
+EXPORT int dwg_obj_get_sab (const Dwg_Object *restrict obj,
+                            const unsigned char **restrict data,
+                            BITCODE_BL *restrict size);
+EXPORT int dwg_obj_set_sab (Dwg_Object *restrict obj,
+                            unsigned char *restrict data,
+                            const BITCODE_BL size);
 EXPORT int dwg_obj_is_acsh (const Dwg_Object *restrict obj);
 
 EXPORT BITCODE_BL dwg_get_num_entities (const Dwg_Data *restrict);

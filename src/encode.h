@@ -63,5 +63,8 @@ bool dwg_encode_unknown_bits (Bit_Chain *restrict dat,
 void downconvert_TABLE (Dwg_Object *restrict obj);
 void downconvert_TABLESTYLE (Dwg_Object *restrict obj);
 void upconvert_TABLESTYLE (Dwg_Object *restrict obj);
+/* encode_acds.c: the r2013+ AcDs section, with the SAB data of the ACIS
+   entities. No section if dat->byte stays 0. */
+int encode_acds (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 
 #endif

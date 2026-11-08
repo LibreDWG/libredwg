@@ -333,8 +333,6 @@ decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                 LOG_TRACE ("No End-of-ACIS or ASM data marker found\n");
               _obj->block_size[0] = _obj->sab_size = size & 0xFFFFFFFF;
             }
-          else
-            LOG_WARN ("SAB from AcDs blob not yet implemented");
           // total_size = FIELD_VALUE (_obj->block_size[0]);
         }
     }
@@ -359,14 +357,84 @@ encode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
   int error = 0;
 
   // no leading ACIS empty bit since R2013 (see decode_3dsolid): the SAB body
-  // is an AcDs blob (has_ds_data), which we cannot write yet. Write the solid
-  // without its body, but keep the stream in sync.
+  // is in the AcDs section (has_ds_data), written by encode_acds from the
+  // entity. SAT v1 data cannot be converted to SAB.
   if (dat->version >= R_2013b)
     {
-      if (!FIELD_VALUE (acis_empty) || FIELD_VALUE (acis_data))
-        LOG_WARN ("%s.acis_data not written, AcDs is not supported yet",
+      if (dwg_obj_get_sab (obj, NULL, NULL))
+        FIELD_VALUE (acis_empty_bit) = 1; // no inline data, as AutoCAD
+      else if (FIELD_VALUE (acis_data))
+        LOG_WARN ("%s.acis_data not written, a SAT v1 cannot be converted "
+                  "to SAB",
                   obj->name);
       return error;
+    }
+  // The SAB is not readable before r2004. Convert the ACIS SAB to the SAT v1,
+  // as the DXF export does. The ASM SAB of r2013+ cannot be converted, and is
+  // not readable by the older versions.
+  if (!FIELD_VALUE (acis_empty) && FIELD_VALUE (version) > 1
+      && FIELD_VALUE (acis_data) && FIELD_VALUE (sab_size) >= 15
+      && (dat->version < R_2004
+          || !memcmp (FIELD_VALUE (acis_data), "ASM ", 4)))
+    {
+#  ifndef DISABLE_DXF
+      if (dat->version < R_2004
+          && !memcmp (FIELD_VALUE (acis_data), "ACIS BinaryFile", 15)
+          && !dwg_convert_SAB_to_SAT1 ((Dwg_Entity_3DSOLID *)_obj)
+          && FIELD_VALUE (num_blocks) && FIELD_VALUE (encr_sat_data)
+          && FIELD_VALUE (block_size))
+        {
+          // the SAT text, in new blocks of 4096 bytes, encrypted
+          BITCODE_BL total = 0, nb;
+          char **blocks;
+          BITCODE_BL *sizes;
+          unsigned char *sat;
+          int idx = 0;
+          BITCODE_BL off = 0;
+          for (i = 0; i < FIELD_VALUE (num_blocks); i++)
+            total += FIELD_VALUE (block_size[i]);
+          nb = (total + 4095) / 4096;
+          sat = (unsigned char *)calloc (total + 1, 1);
+          blocks = (char **)calloc (nb + 1, sizeof (char *));
+          sizes = (BITCODE_BL *)calloc (nb + 1, sizeof (BITCODE_BL));
+          if (!sat || !blocks || !sizes)
+            {
+              free (sat);
+              free (blocks);
+              free (sizes);
+              return DWG_ERR_OUTOFMEM;
+            }
+          total = 0;
+          for (i = 0; i < FIELD_VALUE (num_blocks); i++)
+            {
+              memcpy (&sat[total], FIELD_VALUE (encr_sat_data[i]),
+                      FIELD_VALUE (block_size[i]));
+              total += FIELD_VALUE (block_size[i]);
+              free (FIELD_VALUE (encr_sat_data[i]));
+            }
+          free (FIELD_VALUE (encr_sat_data));
+          free (FIELD_VALUE (block_size));
+          free (FIELD_VALUE (acis_data));
+          for (i = 0; i < nb; i++)
+            {
+              sizes[i] = total - off > 4096 ? 4096 : total - off;
+              blocks[i] = dwg_encrypt_SAT1 (sizes[i], &sat[off], &idx);
+              off += sizes[i];
+            }
+          FIELD_VALUE (encr_sat_data) = blocks;
+          FIELD_VALUE (block_size) = sizes;
+          FIELD_VALUE (num_blocks) = num_blocks = nb;
+          FIELD_VALUE (acis_data) = sat;
+          FIELD_VALUE (version) = 1;
+        }
+      else
+#  endif
+        {
+          LOG_WARN ("%s.acis_data not written, this SAB cannot be converted "
+                    "to SAT",
+                    obj->name);
+          FIELD_VALUE (acis_empty) = 1;
+        }
     }
   FIELD_B (acis_empty, 290);
   if (!FIELD_VALUE (acis_empty))
@@ -442,11 +510,6 @@ encode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                          (unsigned)FIELD_VALUE (sab_size), 15,
                          FIELD_VALUE (acis_data));
               // Binary SAB, unencrypted
-              if (obj->tio.entity->has_ds_data)
-                {
-                  LOG_WARN ("Disable SAB from AcDs blob"); // TODO AcDs support
-                  obj->tio.entity->has_ds_data = 0;
-                }
               bit_write_TF (dat, _obj->acis_data, _obj->sab_size);
               LOG_TRACE_TF (&_obj->acis_data[15], (int)(_obj->sab_size - 15));
             }
@@ -468,20 +531,19 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   int error = 0;
   Bit_Chain *dat = &pdat;
 
-  if (!FIELD_VALUE (acis_empty))
+  // also if acis_empty, which the encoder sets for data it cannot write, or the
+  // importers allocate block_size
+  if (FIELD_VALUE (encr_sat_data))
     {
-      if (FIELD_VALUE (encr_sat_data))
+      LOG_HANDLE ("Free %s.num_blocks %u\n", obj->name, _obj->num_blocks);
+      for (BITCODE_BL i = 0; i <= FIELD_VALUE (num_blocks); i++)
         {
-          LOG_HANDLE ("Free %s.num_blocks %u\n", obj->name, _obj->num_blocks);
-          for (BITCODE_BL i = 0; i <= FIELD_VALUE (num_blocks); i++)
-            {
-              if (FIELD_VALUE (encr_sat_data[i]) != NULL)
-                FIELD_TF (encr_sat_data[i], block_size[i], 0);
-            }
+          if (FIELD_VALUE (encr_sat_data[i]) != NULL)
+            FIELD_TF (encr_sat_data[i], block_size[i], 0);
         }
-      FREE_IF (FIELD_VALUE (encr_sat_data));
-      FREE_IF (FIELD_VALUE (block_size));
     }
+  FREE_IF (FIELD_VALUE (encr_sat_data));
+  FREE_IF (FIELD_VALUE (block_size));
   FREE_IF (FIELD_VALUE (acis_data));
   return error;
 }

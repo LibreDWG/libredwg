@@ -1713,6 +1713,10 @@ dwg_free_acds (Dwg_Data *dwg)
 
 #include "acds.spec"
   // clang-format on
+  for (BITCODE_BL i = 0; i < _obj->num_records; i++)
+    FREE_IF (_obj->records[i].data);
+  FREE_IF (_obj->records);
+  _obj->num_records = 0;
   return 0;
 }
 
@@ -1796,11 +1800,6 @@ dwg_free (Dwg_Data *dwg)
             }
         }
       FREE_IF (dwg->object_ref);
-      for (i = 0; i < dwg->num_acis_sab_hdl; ++i)
-        {
-          FREE_IF (dwg->acis_sab_hdl[i]);
-        }
-      FREE_IF (dwg->acis_sab_hdl);
       FREE_IF (dwg->object);
       if (dwg->object_map)
         {

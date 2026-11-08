@@ -1924,6 +1924,50 @@ dwg_obj_is_3dsolid (const Dwg_Object *obj)
                  || type == DWG_TYPE_SWEPTSURFACE));
 }
 
+/** Returns 1 if the ACIS entity (3DSOLID, REGION, BODY, surfaces) has SAB
+    data (version 2), the binary ACIS stream. r2013+ keeps it in the AcDs
+    section, older versions inline. Optionally returns the data and its size,
+    without a copy. */
+EXPORT int
+dwg_obj_get_sab (const Dwg_Object *restrict obj,
+                 const unsigned char **restrict data,
+                 BITCODE_BL *restrict size)
+{
+  const Dwg_Entity__3DSOLID *sol;
+  if (!obj || obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity
+      || !dwg_obj_is_3dsolid (obj))
+    return 0;
+  sol = obj->tio.entity->tio._3DSOLID;
+  if (!sol || !sol->acis_data || !sol->sab_size || sol->version < 2)
+    return 0;
+  if (data)
+    *data = sol->acis_data;
+  if (size)
+    *size = sol->sab_size;
+  return 1;
+}
+
+/** Sets the SAB data (version 2) of the ACIS entity, replacing any other ACIS
+    data. Takes ownership of the malloc'ed data. Returns 0 on success. */
+EXPORT int
+dwg_obj_set_sab (Dwg_Object *restrict obj, unsigned char *restrict data,
+                 const BITCODE_BL size)
+{
+  Dwg_Entity__3DSOLID *sol;
+  if (!obj || obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity
+      || !dwg_obj_is_3dsolid (obj))
+    return DWG_ERR_INVALIDTYPE;
+  sol = obj->tio.entity->tio._3DSOLID;
+  if (!sol)
+    return DWG_ERR_INVALIDTYPE;
+  free (sol->acis_data);
+  sol->acis_data = data;
+  sol->sab_size = size;
+  sol->version = 2;
+  sol->acis_empty = 0;
+  return 0;
+}
+
 EXPORT int
 dwg_obj_is_acsh (const Dwg_Object *obj)
 {

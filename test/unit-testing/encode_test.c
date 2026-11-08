@@ -24,6 +24,11 @@ extern unsigned int loglevel;
 
 // from in_json.h
 extern int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+// from dwg_api.h
+extern int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);
+extern Dwg_Entity_REGION *
+dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                const char *acis_data);
 
 BITCODE_RL size = SECTION_R13_SIZE;
 // Dwg_Section_Type_r13 section_order[SECTION_R13_SIZE] = { 0 };
@@ -997,6 +1002,101 @@ downconvert_TABLESTYLE_test (void)
   ok ("downconvert_TABLESTYLE: rowstyles and back");
 }
 
+/* The SAB data of ACIS entities is in the AcDs section since r2013. It is
+   written from the entities, and read back by the handle, for small data
+   directly in the _data_ segment, for large data (> 0x40000) in a blob01
+   segment. */
+static void
+acds_sab_test (void)
+{
+  const BITCODE_BL sizes[3] = { 5000, 0x40001, 0x90000 };
+  const unsigned saved_loglevel = loglevel;
+  char msg[160] = "";
+  Dwg_Data dwg, dwg2;
+  Bit_Chain dat;
+  Dwg_Object *mspace;
+  unsigned num_regions = 0, found = 0;
+  int error;
+
+  memset (&dwg, 0, sizeof dwg);
+  memset (&dwg2, 0, sizeof dwg2);
+  memset (&dat, 0, sizeof dat);
+  dwg.header.version = dwg.header.from_version = R_2018;
+  error = dwg_add_Document (&dwg, 0);
+  mspace = error ? NULL : dwg_model_space_object (&dwg);
+  if (!mspace)
+    snprintf (msg, sizeof msg, "no document");
+  for (unsigned i = 0; !*msg && i < 3; i++)
+    {
+      unsigned char *sab = (unsigned char *)malloc (sizes[i]);
+      Dwg_Entity_REGION *reg
+          = dwg_add_REGION (mspace->tio.object->tio.BLOCK_HEADER, "dummy");
+      Dwg_Object *obj = &dwg.object[dwg.num_objects - 1];
+      if (!sab || !reg || obj->fixedtype != DWG_TYPE_REGION)
+        {
+          free (sab);
+          snprintf (msg, sizeof msg, "no REGION %u", i);
+          break;
+        }
+      memcpy (sab, "ACIS BinaryFile", 15);
+      for (BITCODE_BL j = 15; j < sizes[i]; j++)
+        sab[j] = (unsigned char)((j * 131 + i * 7) & 0xff);
+      if (dwg_obj_set_sab (obj, sab, sizes[i]))
+        {
+          free (sab);
+          snprintf (msg, sizeof msg, "cannot set the SAB of REGION %u", i);
+        }
+    }
+  if (!*msg)
+    {
+      dat.version = dat.from_version = R_2018;
+      error = dwg_encode (&dwg, &dat);
+      if (error >= DWG_ERR_CRITICAL || !dat.chain)
+        snprintf (msg, sizeof msg, "dwg_encode error 0x%x", error);
+    }
+  if (!*msg)
+    {
+      dat.size = dat.byte;
+      dat.byte = 0;
+      dat.bit = 0;
+      error = dwg_decode (&dat, &dwg2);
+      if (error >= DWG_ERR_CRITICAL)
+        snprintf (msg, sizeof msg, "dwg_decode error 0x%x", error);
+    }
+  for (unsigned i = 0; !*msg && i < dwg.num_objects; i++)
+    {
+      const Dwg_Object *obj = &dwg.object[i];
+      const Dwg_Object *o2;
+      const unsigned char *d1, *d2;
+      BITCODE_BL s1, s2;
+      if (obj->fixedtype != DWG_TYPE_REGION
+          || !dwg_obj_get_sab (obj, &d1, &s1))
+        continue;
+      num_regions++;
+      o2 = dwg_resolve_handle (&dwg2, obj->handle.value);
+      if (!o2 || !dwg_obj_get_sab (o2, &d2, &s2))
+        snprintf (msg, sizeof msg, "REGION %lX has no SAB after the roundtrip",
+                  (unsigned long)obj->handle.value);
+      else if (s1 != s2 || memcmp (d1, d2, s1))
+        snprintf (msg, sizeof msg, "REGION %lX SAB %u differs from %u",
+                  (unsigned long)obj->handle.value, (unsigned)s2,
+                  (unsigned)s1);
+      else
+        found++;
+    }
+  if (!*msg && (num_regions != 3 || found != 3))
+    snprintf (msg, sizeof msg, "%u of 3 REGIONs, %u found", num_regions, found);
+  dwg_free (&dwg);
+  dwg_free (&dwg2);
+  free (dat.chain);
+  // dwg_free reset the loglevel
+  loglevel = saved_loglevel;
+  if (*msg)
+    fail ("acds_sab: %s", msg);
+  else
+    ok ("acds_sab: SAB of 3 REGIONs, one in a blob, roundtripped via AcDs");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -1020,5 +1120,6 @@ main (int argc, char const *argv[])
   in_json_dotted_array_test ();
   downconvert_TABLE_test ();
   downconvert_TABLESTYLE_test ();
+  acds_sab_test ();
   return failed;
 }

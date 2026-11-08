@@ -43,6 +43,7 @@
 #include "dwg.h"
 #include "hash.h"
 #include "decode.h"
+#include "acds.h"
 #include "print.h"
 #include "free.h"
 #include "dynapi.h"
@@ -3436,6 +3437,8 @@ read_2004_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   bit_chain_set_version (&old_dat, dat);
 
   error |= acds_private (dat, dwg);
+  // also with a damaged segment, after the data index
+  acds_assign_sab (dwg, dat, &dwg->acds);
   error &= ~DWG_ERR_SECTIONNOTFOUND;
 
   LOG_TRACE ("\n");

@@ -396,15 +396,13 @@
     }
   SINCE (R_2013)
     {
-      FIELD_B (has_ds_data, 0);
-#ifdef IS_DECODER
-      if (_obj->has_ds_data && dwg_obj_is_3dsolid (obj))
-        {
-          // not global, needs to be freed individually. (SHIFT_HV)
-          BITCODE_H ref = dwg_add_handleref_free (5, obj->handle.value);
-          PUSH_HV (obj->parent, num_acis_sab_hdl, acis_sab_hdl, ref);
-        }
+#ifdef IS_ENCODER
+      // the SAB data of ACIS entities is in the AcDs section, written from
+      // the entities, see encode_acds
+      if (dwg_obj_is_3dsolid (obj))
+        _obj->has_ds_data = dwg_obj_get_sab (obj, NULL, NULL);
 #endif
+      FIELD_B (has_ds_data, 0);
     }
 
   // no ENC type as it's only used once, here, and we would need to write

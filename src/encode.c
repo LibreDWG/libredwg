@@ -973,6 +973,7 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
     case SECTION_HANDLES:
     case SECTION_CLASSES:
     case SECTION_AUXHEADER:
+    case SECTION_ACDS:
     case SECTION_SYSTEM_MAP:
     case SECTION_INFO:
       return 1;
@@ -984,7 +985,6 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
     case SECTION_SECURITY:
     case SECTION_VBAPROJECT:
     case SECTION_SIGNATURE:
-    case SECTION_ACDS:
     default:
       return 0;
     }
@@ -3835,18 +3835,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             }
             break;
           case SECTION_ACDS:
-            {
-#if 0
-              Dwg_AcDs *_obj = &dwg->acds;
-              bit_chain_alloc (&sec_dat[type]);
-              str_dat = hdl_dat = dat = &sec_dat[type];
-              bit_chain_set_version (dat, old_dat);
+            // since r2013 the SAB data of the ACIS entities
+            if (old_dat->version >= R_2013b)
               {
-#  include "acds.spec"
+                bit_chain_alloc (&sec_dat[type]);
+                str_dat = hdl_dat = dat = &sec_dat[type];
+                bit_chain_set_version (dat, old_dat);
+                dat->byte = 0;
+                error |= encode_acds (dwg, dat);
+                LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
               }
-              LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
-#endif
-            }
             break;
           case SECTION_VBAPROJECT: // nyi
           default:

@@ -27,6 +27,7 @@
 #include "dwg.h"
 #include "decode.h"
 #include "encode.h"
+#include "acds.h"
 // #include "decode_r11.h"
 #include "out_dxf.h"
 #include "geom.h"
@@ -1440,6 +1441,20 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   BITCODE_BL i;
   int error = 0;
 
+  if (dwg_obj_get_sab (obj, NULL, NULL))
+    {
+      // since r2013 the SAB data is in the ACDSDATA section, with this handle
+      if (dat->version >= R_2013)
+        return error;
+      // the ASM SAB cannot be converted to the SAT of the older versions
+      if (!memcmp (_obj->acis_data, "ASM ", 4))
+        {
+          LOG_WARN ("%s.acis_data not written, the ASM SAB cannot be "
+                    "converted to SAT",
+                    obj->name);
+          return error;
+        }
+    }
   FIELD_B (acis_empty, 0);
   if (!FIELD_VALUE (acis_empty))
     {
@@ -2523,6 +2538,160 @@ dxfb_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
+// The constant part of the ACDSDATA section, as AutoCAD writes it: the
+// versions and the 6 schemas, with the schema indices 0 AcDb_Thumbnail_Schema,
+// 1 AcDb3DSolid_ASM_Data and 4 built-in. Pairs of group code and value.
+// same as in out_dxf.c
+static const struct { int code; const char *value; } acds_schema_dxf[] = {
+  { 70, "2" },
+  { 71, "2" },
+  { 0, "ACDSSCHEMA" },
+  { 90, "0" },
+  { 1, "AcDb_Thumbnail_Schema" },
+  { 2, "AcDbDs::ID" },
+  { 280, "10" },
+  { 91, "8" },
+  { 2, "Thumbnail_Data" },
+  { 280, "15" },
+  { 91, "0" },
+  { 101, "ACDSRECORD" },
+  { 95, "0" },
+  { 90, "2" },
+  { 2, "AcDbDs::TreatedAsObjectData" },
+  { 280, "1" },
+  { 291, "1" },
+  { 101, "ACDSRECORD" },
+  { 95, "0" },
+  { 90, "3" },
+  { 2, "AcDbDs::Legacy" },
+  { 280, "1" },
+  { 291, "1" },
+  { 101, "ACDSRECORD" },
+  { 1, "AcDbDs::ID" },
+  { 90, "4" },
+  { 2, "AcDs:Indexable" },
+  { 280, "1" },
+  { 291, "1" },
+  { 101, "ACDSRECORD" },
+  { 1, "AcDbDs::ID" },
+  { 90, "5" },
+  { 2, "AcDbDs::HandleAttribute" },
+  { 280, "7" },
+  { 282, "1" },
+  { 0, "ACDSSCHEMA" },
+  { 90, "1" },
+  { 1, "AcDb3DSolid_ASM_Data" },
+  { 2, "AcDbDs::ID" },
+  { 280, "10" },
+  { 91, "8" },
+  { 2, "ASM_Data" },
+  { 280, "15" },
+  { 91, "0" },
+  { 101, "ACDSRECORD" },
+  { 95, "1" },
+  { 90, "2" },
+  { 2, "AcDbDs::TreatedAsObjectData" },
+  { 280, "1" },
+  { 291, "1" },
+  { 101, "ACDSRECORD" },
+  { 95, "1" },
+  { 90, "3" },
+  { 2, "AcDbDs::Legacy" },
+  { 280, "1" },
+  { 291, "1" },
+  { 101, "ACDSRECORD" },
+  { 1, "AcDbDs::ID" },
+  { 90, "4" },
+  { 2, "AcDs:Indexable" },
+  { 280, "1" },
+  { 291, "1" },
+  { 101, "ACDSRECORD" },
+  { 1, "AcDbDs::ID" },
+  { 90, "5" },
+  { 2, "AcDbDs::HandleAttribute" },
+  { 280, "7" },
+  { 282, "1" },
+  { 0, "ACDSSCHEMA" },
+  { 90, "2" },
+  { 1, "AcDbDs::TreatedAsObjectDataSchema" },
+  { 2, "AcDbDs::TreatedAsObjectData" },
+  { 280, "1" },
+  { 91, "0" },
+  { 0, "ACDSSCHEMA" },
+  { 90, "3" },
+  { 1, "AcDbDs::LegacySchema" },
+  { 2, "AcDbDs::Legacy" },
+  { 280, "1" },
+  { 91, "0" },
+  { 0, "ACDSSCHEMA" },
+  { 90, "4" },
+  { 1, "AcDbDs::IndexedPropertySchema" },
+  { 2, "AcDs:Indexable" },
+  { 280, "1" },
+  { 91, "0" },
+  { 0, "ACDSSCHEMA" },
+  { 90, "5" },
+  { 1, "AcDbDs::HandleAttributeSchema" },
+  { 2, "AcDbDs::HandleAttribute" },
+  { 280, "7" },
+  { 91, "1" },
+  { 284, "1" },
+};
+
+// one value of the constant schema, by the binary type of the group code
+static void
+dxfb_acds_value (Bit_Chain *restrict dat, const int code,
+                 const char *restrict value)
+{
+  switch (dwg_resbuf_value_type (code))
+    {
+    case DWG_VT_STRING:
+      VALUE_TV (value, code);
+      break;
+    case DWG_VT_INT32:
+      VALUE_RL (atol (value), code);
+      break;
+    case DWG_VT_INT16:
+      VALUE_RS (atoi (value), code);
+      break;
+    default: // 280-289 and bool
+      VALUE_RC (atoi (value), code);
+      break;
+    }
+}
+
+// the ACDSDATA r2013+ section, as in out_dxf.c
+static int
+dxfb_acds_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  unsigned num, i;
+  AcDs_Rec *rec = acds_collect_records (dwg, &num);
+  if (!rec)
+    return 0;
+  SECTION (ACDSDATA);
+  for (i = 0; i < sizeof (acds_schema_dxf) / sizeof (acds_schema_dxf[0]); i++)
+    dxfb_acds_value (dat, acds_schema_dxf[i].code, acds_schema_dxf[i].value);
+  for (i = 0; i < num; i++)
+    {
+      char hdl[20];
+      RECORD (ACDSRECORD);
+      VALUE_RL (rec[i].schidx, 90);
+      VALUE_TV ("AcDbDs::ID", 2);
+      VALUE_RC (10, 280);
+      snprintf (hdl, sizeof (hdl), "%llX", (unsigned long long)rec[i].handle);
+      VALUE_TV (hdl, 320);
+      VALUE_TV (rec[i].schidx == ACDS_SCHEMA_THUMBNAIL ? "Thumbnail_Data"
+                                                       : "ASM_Data",
+                2);
+      VALUE_RC (15, 280);
+      VALUE_RL (rec[i].size, 94);
+      VALUE_BINARY (rec[i].data, rec[i].size, 310);
+    }
+  ENDSEC ();
+  free (rec);
+  return 0;
+}
+
 static int
 dxfb_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -2586,6 +2755,11 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       SINCE (R_13b1)
       {
         if (dxfb_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
+          goto fail;
+      }
+      SINCE (R_2013)
+      {
+        if (dxfb_acds_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;
       }
       SINCE (R_2000b)
