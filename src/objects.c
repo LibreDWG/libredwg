@@ -908,7 +908,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str97,                   "3DSOLID",                    DWG_TYPE__3DSOLID,	1,	STABLE},
       {-1}, {-1},
 #line 134 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str100,                     "ACAD_TABLE",                 DWG_TYPE_TABLE,	1,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str100,                     "ACAD_TABLE",                 DWG_TYPE_TABLE,	1,	STABLE},
 #line 91 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str101,                    "LEADER",                     DWG_TYPE_LEADER,	1,	STABLE},
       {-1}, {-1}, {-1},

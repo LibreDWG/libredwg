@@ -3961,7 +3961,7 @@ static const Dwg_DYNAPI_field _dwg_TABLE_fields[] = {
   { "data_vert_right_visibility",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_TABLE, data_vert_right_visibility),
     0,0,0, 0 },
   { "block_header",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, block_header),
-    1,0,0, 2 },
+    1,0,0, 343 },
   { "first_attrib",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, first_attrib),
     1,0,0, 0 },
   { "last_attrib",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_TABLE, last_attrib),

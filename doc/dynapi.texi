@@ -4522,7 +4522,7 @@ BS
 @item data_vert_right_visibility
 BS
 @item block_header
-H,	DXF 2
+H,	DXF 343
 @item first_attrib
 H
 @item last_attrib
