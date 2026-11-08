@@ -191,7 +191,7 @@ DWG_OBJECT (SPATIAL_FILTER)
 
   FIELD_BS (back_clip_on, 73);
   if (FIELD_VALUE (back_clip_on))
-    FIELD_BD (back_clip_z, 41);
+    FIELD_BD (back_clip_z, 40);
 
   FIELD_VECTOR_N (inverse_transform, BD, 12, 40);
   FIELD_VECTOR_N (transform, BD, 12, 40);

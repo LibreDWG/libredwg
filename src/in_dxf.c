@@ -1772,6 +1772,23 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (pair)
     dxf_free_pair (pair);
 
+  // Variables where 0 is invalid. Other DXF writers omit them (FreeCAD omits
+  // $TEXTSIZE and $DIMTXT), and 0 gives texts with height 0.
+  if (_obj->TEXTSIZE == 0.0)
+    _obj->TEXTSIZE = 0.2;
+  if (_obj->DIMTXT == 0.0)
+    _obj->DIMTXT = 0.18;
+  if (_obj->LTSCALE == 0.0)
+    _obj->LTSCALE = 1.0;
+  if (_obj->CELTSCALE == 0.0)
+    _obj->CELTSCALE = 1.0;
+  if (_obj->DIMLFAC == 0.0)
+    _obj->DIMLFAC = 1.0;
+  if (_obj->DIMTFAC == 0.0)
+    _obj->DIMTFAC = 1.0;
+  if (_obj->DIMALTF == 0.0)
+    _obj->DIMALTF = 25.4;
+
   VERSIONS (R_13, R_14)
   {
     _obj->unit1_ratio = 412148564080.0; // m to ??
@@ -1802,6 +1819,62 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                (int)_obj->MEASUREMENT);
   }
 
+  return 0;
+}
+
+/* The handle of the BLOCK_RECORD *Model_Space of an ASCII DXF, a quick scan
+   without reading the file. 0 if not found. The generated *Model_Space
+   starts with this handle, and not with 0x1F which another table record,
+   such as the LAYER table, may have in the DXF. */
+static BITCODE_RLL
+dxf_scan_modelspace_handle (const Bit_Chain *restrict dat)
+{
+  const unsigned char *p = dat->chain;
+  const unsigned char *end = dat->chain + dat->size;
+  BITCODE_RLL hdl = 0;
+  int is_block_record = 0;
+  int is_ms = 0;
+
+  if (!p || dat->size < 32 || !memcmp (p, "AutoCAD Binary DXF", 18))
+    return 0;
+  while (p < end)
+    {
+      char code[8];
+      char value[80];
+      size_t n = 0, m = 0;
+      // the group code line
+      while (p < end && (*p == ' ' || *p == '\t'))
+        p++;
+      while (p < end && *p != '\n' && *p != '\r' && n < sizeof (code) - 1)
+        code[n++] = (char)*p++;
+      code[n] = '\0';
+      while (p < end && *p != '\n')
+        p++;
+      p++; // the \n
+      // the value line
+      while (p < end && *p != '\n' && *p != '\r' && m < sizeof (value) - 1)
+        value[m++] = (char)*p++;
+      value[m] = '\0';
+      while (p < end && *p != '\n')
+        p++;
+      p++;
+      if (!strcmp (code, "0"))
+        {
+          if (is_block_record && is_ms && hdl)
+            return hdl;
+          // a new record
+          is_block_record = !strcmp (value, "BLOCK_RECORD");
+          is_ms = 0;
+          hdl = 0;
+        }
+      else if (is_block_record && !strcmp (code, "5") && !hdl)
+        hdl = strtoull (value, NULL, 16);
+      else if (is_block_record && !strcmp (code, "2")
+               && !strcasecmp (value, "*Model_Space"))
+        is_ms = 1;
+      else if (!strcmp (code, "2") && !strcmp (value, "ENTITIES"))
+        break;
+    }
   return 0;
 }
 
@@ -2856,11 +2929,10 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 70)
         {
-          o->flag = pair->value.i;
-          if (pair->value.i & 1) /* only if closed or not */
-            o->flag = (o->flag - 1) + 512;
-          else if (pair->value.i & 128) /* plinegen? */
-            o->flag = (o->flag - 128) + 256;
+          // Only the closed (1 => 512) and plinegen (128 => 256) bits. The
+          // other flag bits are set by the other groups, in any order.
+          o->flag = (o->flag & ~(512 | 256)) | ((pair->value.i & 1) ? 512 : 0)
+                    | ((pair->value.i & 128) ? 256 : 0);
           LOG_TRACE ("LWPOLYLINE.flag = %d [BS 70]\n", o->flag);
         }
       else if (pair->code == 38)
@@ -2947,15 +3019,16 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   return NULL;
                 }
               o->num_vertexids = num_points;
+              o->flag |= 1024; // has vertex ids
             }
           CHK_array (j, vertexids);
           o->vertexids[j] = pair->value.i;
           LOG_TRACE ("LWPOLYLINE.vertexids[%d] = %d [BL 91]\n", j,
                      pair->value.i);
         }
-      else if (pair->code == 40) // not const_width
+      else if (pair->code == 40 || pair->code == 41) // not const_width
         {
-          // the first 40 allocates: a vertex with no width writes none
+          // the first 40 or 41 allocates: a vertex with no width writes none
           if (!o->num_widths)
             {
               o->widths = (Dwg_LWPOLYLINE_width *)xcalloc (
@@ -2969,16 +3042,13 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               o->num_widths = num_points;
             }
           CHK_array (j, widths);
-          o->widths[j].start = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.widths[%d].start = %f [BD 40]\n", j,
-                     pair->value.d);
-        }
-      else if (pair->code == 41 && (o->flag & 32)) // not const_width
-        {
-          CHK_array (j, widths);
-          o->widths[j].end = pair->value.d;
-          LOG_TRACE ("LWPOLYLINE.widths[%d].end = %f [BD 41]\n", j,
-                     pair->value.d);
+          if (pair->code == 40)
+            o->widths[j].start = pair->value.d;
+          else
+            o->widths[j].end = pair->value.d;
+          LOG_TRACE ("LWPOLYLINE.widths[%d].%s = %f [BD %d]\n", j,
+                     pair->code == 40 ? "start" : "end", pair->value.d,
+                     pair->code);
         }
       else if (pair->code >= 1000 && pair->code < 1999)
         {
@@ -8390,6 +8460,107 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   _obj->numitems = num + 1;
 }
 
+/* The embedded MTEXT of a multi-line ATTDEF/ATTRIB (r2018), after the 101
+   "Embedded Object" marker. The MTEXT fields come first, up to the background
+   fill flag 90; the rest (annotative scale and columns) is not read, but it
+   must not overwrite the fields of the attribute itself. */
+static void
+add_embedded_MTEXT (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
+                    int *restrict phase)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_AcDbMTextObjectEmbedded *m
+      = obj->fixedtype == DWG_TYPE_ATTRIB
+            ? &obj->tio.entity->tio.ATTRIB->mtext
+            : &obj->tio.entity->tio.ATTDEF->mtext;
+  if (*phase)
+    {
+      if (pair->code == 45)
+        m->bg_fill_scale = pair->value.d;
+      return;
+    }
+  switch (pair->code)
+    {
+    case 10:
+      m->ins_pt.x = pair->value.d;
+      break;
+    case 20:
+      m->ins_pt.y = pair->value.d;
+      break;
+    case 30:
+      m->ins_pt.z = pair->value.d;
+      break;
+    case 210:
+      m->extrusion.x = pair->value.d;
+      break;
+    case 220:
+      m->extrusion.y = pair->value.d;
+      break;
+    case 230:
+      m->extrusion.z = pair->value.d;
+      break;
+    case 11:
+      m->x_axis_dir.x = pair->value.d;
+      break;
+    case 21:
+      m->x_axis_dir.y = pair->value.d;
+      break;
+    case 31:
+      m->x_axis_dir.z = pair->value.d;
+      break;
+    case 41:
+      m->rect_width = pair->value.d;
+      break;
+    case 46:
+      m->rect_height = pair->value.d;
+      break;
+    case 40:
+      m->text_height = pair->value.d;
+      break;
+    case 71:
+      m->attachment = pair->value.i;
+      break;
+    case 72:
+      m->flow_dir = pair->value.i;
+      break;
+    case 43:
+      m->extents_height = pair->value.d;
+      break;
+    case 42:
+      m->extents_width = pair->value.d;
+      break;
+    case 1:
+      m->text = dwg_add_u8_input (dwg, pair->value.s.ptr);
+      LOG_TRACE ("%s.mtext.text = %s [T 1]\n", obj->name,
+                 pair->value.s.ptr ? pair->value.s.ptr : "");
+      break;
+    case 7:
+      {
+        BITCODE_H style
+            = dwg_find_tablehandle_silent (dwg, pair->value.s.ptr, "STYLE");
+        if (style)
+          {
+            if (style->handleref.code != 5)
+              style = dwg_add_handleref (dwg, 5, style->absolute_ref, NULL);
+            m->style = style;
+          }
+      }
+      break;
+    case 73:
+      m->linespace_style = pair->value.i;
+      break;
+    case 44:
+      m->linespace_factor = pair->value.d;
+      break;
+    case 90:
+      m->bg_fill_flag = pair->value.u;
+      *phase = 1;
+      break;
+    default:
+      break;
+    }
+}
+
 /* read to ent->preview, r2010+ code 160, earlier code 92.
    like WIPEOUT, LIGHT, MULTILEADER, ARC_DIMENSION or PROXY GRAPHICS vector
    data.
@@ -10947,6 +11118,10 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
   int j = 0, k = 0, l = 0, error = 0;
   BITCODE_BL column_idx = 0;    // MTEXTOBJECTCONTEXTDATA.column_heights[46]
   BITCODE_BL leader_pt_idx = 0; // LEADEROBJECTCONTEXTDATA.points[10,20,30]
+  BITCODE_BL sf_idx = 0;        // SPATIAL_FILTER matrix values (40)
+  BITCODE_BS sf_nv = 0;         // SPATIAL_FILTER clip vertices
+  int emb_phase = 0;            // embedded MTEXT: 0 fields, 1 the rest
+  int sf_front_done = 0, sf_back_done = 0;
   BITCODE_BL i = i_p ? *i_p : 0;
   int cur_cell = -1;
   size_t written = 0;
@@ -11253,6 +11428,104 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                pair->value.l == 0L)
         goto next_pair;
 #  endif
+      // The ATTRIB attribute type (1 single, 2 multi-line, 4 constant) is 71
+      // in the AcDbXrecord subclass, not the text generation.
+      if (pair->code == 71 && obj->fixedtype == DWG_TYPE_ATTRIB && !in_embedobj
+          && strEQc (subclass, "AcDbXrecord"))
+        {
+          obj->tio.entity->tio.ATTRIB->mtext_type = pair->value.i;
+          LOG_TRACE ("ATTRIB.mtext_type = %d [RC 71]\n", pair->value.i);
+          goto next_pair;
+        }
+      // The embedded MTEXT of a multi-line ATTDEF/ATTRIB. Not the generic fields.
+      if (in_embedobj
+          && (obj->fixedtype == DWG_TYPE_ATTRIB
+              || obj->fixedtype == DWG_TYPE_ATTDEF)
+          && pair->code != 0 && pair->code != 101
+          && pair->code != 102 && pair->code != 330 && pair->code != 360
+          && pair->code < 1000)
+        {
+          add_embedded_MTEXT (obj, pair, &emb_phase);
+          goto next_pair;
+        }
+      // A SPATIAL_FILTER has its own groups: the clip vertices 10, 20, the
+      // origin 11, 21, 31, and all doubles are 40: the front clip z, the
+      // back clip z (if clipped), then the 12 inverse and the 12 transform
+      // matrix values.
+      if (obj->fixedtype == DWG_TYPE_SPATIAL_FILTER
+          && (pair->code == 10 || pair->code == 20 || pair->code == 11
+              || pair->code == 21 || pair->code == 31 || pair->code == 40))
+        {
+          Dwg_Object_SPATIAL_FILTER *o = obj->tio.object->tio.SPATIAL_FILTER;
+          if ((pair->code == 10 || pair->code == 20) && !o->num_clip_verts)
+            goto next_pair;
+          if ((pair->code == 10 || pair->code == 20) && !o->clip_verts)
+            {
+              o->clip_verts = (BITCODE_2RD *)xcalloc (o->num_clip_verts,
+                                                      sizeof (BITCODE_2RD));
+              if (!o->clip_verts)
+                goto invalid_dxf;
+            }
+          switch (pair->code)
+            {
+            case 10:
+              sf_nv++;
+              if (sf_nv > o->num_clip_verts)
+                goto next_pair;
+              o->clip_verts[sf_nv - 1].x = pair->value.d;
+              break;
+            case 20:
+              if (sf_nv < 1 || sf_nv > o->num_clip_verts)
+                goto next_pair;
+              o->clip_verts[sf_nv - 1].y = pair->value.d;
+              LOG_TRACE ("SPATIAL_FILTER.clip_verts[%u] = (%f, %f) [2RD 10]\n",
+                         (unsigned)(sf_nv - 1), o->clip_verts[sf_nv - 1].x,
+                         pair->value.d);
+              break;
+            case 11:
+              o->origin.x = pair->value.d;
+              break;
+            case 21:
+              o->origin.y = pair->value.d;
+              break;
+            case 31:
+              o->origin.z = pair->value.d;
+              LOG_TRACE ("SPATIAL_FILTER.origin = (%f, %f, %f) [3BD 11]\n",
+                         o->origin.x, o->origin.y, o->origin.z);
+              break;
+            default: // 40
+              if (o->front_clip_on && !sf_front_done)
+                {
+                  o->front_clip_z = pair->value.d;
+                  sf_front_done = 1;
+                  LOG_TRACE ("SPATIAL_FILTER.front_clip_z = %f [BD 40]\n",
+                             pair->value.d);
+                }
+              else if (o->back_clip_on && !sf_back_done)
+                {
+                  o->back_clip_z = pair->value.d;
+                  sf_back_done = 1;
+                  LOG_TRACE ("SPATIAL_FILTER.back_clip_z = %f [BD 40]\n",
+                             pair->value.d);
+                }
+              else if (sf_idx < 24)
+                {
+                  BITCODE_BD **mat = sf_idx < 12 ? &o->inverse_transform
+                                                 : &o->transform;
+                  if (!*mat)
+                    *mat = (BITCODE_BD *)xcalloc (12, sizeof (BITCODE_BD));
+                  if (!*mat)
+                    goto invalid_dxf;
+                  (*mat)[sf_idx % 12] = pair->value.d;
+                  LOG_TRACE ("SPATIAL_FILTER.%s[%d] = %f [BD 40]\n",
+                             sf_idx < 12 ? "inverse_transform" : "transform",
+                             (int)(sf_idx % 12), pair->value.d);
+                  sf_idx++;
+                }
+              break;
+            }
+          goto next_pair;
+        }
       // start_switch:
       switch (pair->code)
         {       // common flags: name, xref
@@ -12215,11 +12488,10 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           else if (pair->code == 70 && obj->fixedtype == DWG_TYPE_LWPOLYLINE)
             {
               Dwg_Entity_LWPOLYLINE *o = obj->tio.entity->tio.LWPOLYLINE;
-              o->flag = pair->value.i;
-              // 1 => 512 closed
-              // 128: plinegen
-              if (o->flag & 1)
-                o->flag = (o->flag - 1) + 512;
+              // 1 => 512 closed, 128 => 256 plinegen
+              o->flag = (o->flag & ~(512 | 256))
+                        | ((pair->value.i & 1) ? 512 : 0)
+                        | ((pair->value.i & 128) ? 256 : 0);
               LOG_TRACE ("LWPOLYLINE.flag => %d [BS 70]\n", o->flag);
               break;
             }
@@ -16410,7 +16682,11 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("%s.name = %s [TV 2]\n", dxfname, _obj->name);
       _obj->is_xref_ref = 1;
       obj->tio.object->is_xdic_missing = 1;
-      dwg_add_handle (&obj->handle, 0, 0x1F, obj);
+      {
+        // a quick scan of the ASCII DXF for the real *Model_Space handle
+        BITCODE_RLL ms_hdl = dxf_scan_modelspace_handle (dat);
+        dwg_add_handle (&obj->handle, 0, ms_hdl ? ms_hdl : 0x1F, obj);
+      }
       LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
                  obj->handle.size, obj->handle.value);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 1, NULL);

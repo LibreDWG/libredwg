@@ -2966,7 +2966,9 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (!klass || !klass->dxfname)
     return DWG_ERR_INTERNALERROR;
   is_entity = dwg_class_is_entity (klass);
-  if (dat->version < R_2000)
+  // Only when converting a newer drawing. A R13/R14 drawing may have classes
+  // of newer AutoCAD, which are kept.
+  if (dat->version < R_2000 && dwg->header.from_version > dat->version)
     {
       // keep only: IMAGE, LWPOLYLINE, HATCH
       if (is_entity && strNE (klass->dxfname, "IMAGE")
@@ -3021,11 +3023,23 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         if (o->fixedtype == DWG_TYPE_VERTEX_##token)                          \
           error |= dwg_dxf_VERTEX_##token (dat, o);                           \
         *i = *i + 1;                                                          \
-        do                                                                    \
+        /* Follow the entity links to the last vertex. */                   \
+        for (BITCODE_BL n = 0; o != last_vertex && n < obj->parent->num_objects; \
+             n++)                                                             \
           {                                                                   \
-            o = dwg_next_object (o);                                          \
+            const Dwg_Object_Entity *ent = o->tio.entity;                     \
+            Dwg_Object *next = NULL;                                          \
+            if (ent && !ent->nolinks && ent->next_entity                      \
+                && ent->next_entity->absolute_ref)                            \
+              next = dwg_resolve_handle (obj->parent,                         \
+                                         ent->next_entity->absolute_ref);     \
+            if (!next)                                                        \
+              next = dwg_next_object (o);                                     \
+            o = next;                                                         \
             if (!o)                                                           \
               return DWG_ERR_INVALIDHANDLE;                                   \
+            if (o->fixedtype == DWG_TYPE_SEQEND)                              \
+              break;                                                          \
             if (strEQc (#token, "PFACE")                                      \
                 && o->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE)                \
               {                                                               \
@@ -3037,7 +3051,6 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
               }                                                               \
             *i = *i + 1;                                                      \
           }                                                                   \
-        while (o->fixedtype != DWG_TYPE_SEQEND && o != last_vertex);          \
         o = _obj->seqend ? _obj->seqend->obj : NULL;                          \
         if (o && o->fixedtype == DWG_TYPE_SEQEND)                             \
           error |= dwg_dxf_SEQEND (dat, o);                                   \
@@ -3099,19 +3112,29 @@ decl_dxf_process_VERTEX (PFACE)
         if (o->fixedtype == DWG_TYPE_ATTRIB)                                  \
           error |= dwg_dxf_ATTRIB (dat, o);                                   \
         *i = *i + 1;                                                          \
-        do                                                                    \
+        /* Follow the entity links to the last attrib. The SEQEND may lie  \
+           between the attribs. Without links the next object is next. */   \
+        for (BITCODE_BL n = 0; o != last_attrib && n < obj->parent->num_objects; \
+             n++)                                                             \
           {                                                                   \
-            o = dwg_next_object (o);                                          \
-            if (!o)                                                           \
+            const Dwg_Object_Entity *ent = o->tio.entity;                     \
+            Dwg_Object *next = NULL;                                          \
+            if (ent && !ent->nolinks && ent->next_entity                      \
+                && ent->next_entity->absolute_ref)                            \
+              next = dwg_resolve_handle (obj->parent,                         \
+                                         ent->next_entity->absolute_ref);     \
+            if (!next)                                                        \
+              next = dwg_next_object (o);                                     \
+            if (!next)                                                        \
               {                                                               \
                 error |= DWG_ERR_INVALIDHANDLE;                               \
                 goto attribs_seqend;                                          \
               }                                                               \
+            o = next;                                                         \
             if (o->fixedtype == DWG_TYPE_ATTRIB)                              \
               error |= dwg_dxf_ATTRIB (dat, o);                               \
             *i = *i + 1;                                                      \
           }                                                                   \
-        while (o->fixedtype == DWG_TYPE_ATTRIB && o != last_attrib);          \
       attribs_seqend:                                                         \
         o = _obj->seqend ? _obj->seqend->obj : NULL;                          \
         if (o && o->fixedtype == DWG_TYPE_SEQEND)                             \

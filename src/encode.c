@@ -3105,11 +3105,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           Dwg_Object *obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
           if (!obj)
             {
+              // 0xB only if free
+              const int hdl_b_free = !dwg_resolve_handle_silent (dwg, 0xB);
               dwg_add_VX (dwg, NULL);
               obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
               if (obj)
                 {
-                  obj->handle.value = 0xB;
+                  if (hdl_b_free)
+                    obj->handle.value = 0xB;
                   LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
                              obj->handle.value);
                   dwg->header_vars.VX_TABLE_RECORD
@@ -3560,11 +3563,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         Dwg_Object *obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
         if (!obj)
           {
+            // 0xB only if free
+            const int hdl_b_free = !dwg_resolve_handle_silent (dwg, 0xB);
             dwg_add_VX (dwg, NULL);
             obj = dwg_find_first_type (dwg, DWG_TYPE_VX_CONTROL);
             if (obj)
               {
-                obj->handle.value = 0xB;
+                if (hdl_b_free)
+                  obj->handle.value = 0xB;
                 LOG_TRACE ("adding VX_CONTROL object " FORMAT_RLL "\n",
                            obj->handle.value);
                 dwg->header_vars.VX_TABLE_RECORD
