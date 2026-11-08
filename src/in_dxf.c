@@ -1837,32 +1837,32 @@ static BITCODE_RLL
 dxf_scan_modelspace_handle (const Bit_Chain *restrict dat)
 {
   const unsigned char *p = dat->chain;
-  const unsigned char *end = dat->chain + dat->size;
+  const unsigned char *chain_end = dat->chain + dat->size;
   BITCODE_RLL hdl = 0;
   int is_block_record = 0;
   int is_ms = 0;
 
   if (!p || dat->size < 32 || !memcmp (p, "AutoCAD Binary DXF", 18))
     return 0;
-  while (p < end)
+  while (p < chain_end)
     {
       char code[8];
       char value[80];
       size_t n = 0, m = 0;
       // the group code line
-      while (p < end && (*p == ' ' || *p == '\t'))
+      while (p < chain_end && (*p == ' ' || *p == '\t'))
         p++;
-      while (p < end && *p != '\n' && *p != '\r' && n < sizeof (code) - 1)
+      while (p < chain_end && *p != '\n' && *p != '\r' && n < sizeof (code) - 1)
         code[n++] = (char)*p++;
       code[n] = '\0';
-      while (p < end && *p != '\n')
+      while (p < chain_end && *p != '\n')
         p++;
       p++; // the \n
       // the value line
-      while (p < end && *p != '\n' && *p != '\r' && m < sizeof (value) - 1)
+      while (p < chain_end && *p != '\n' && *p != '\r' && m < sizeof (value) - 1)
         value[m++] = (char)*p++;
       value[m] = '\0';
-      while (p < end && *p != '\n')
+      while (p < chain_end && *p != '\n')
         p++;
       p++;
       if (!strcmp (code, "0"))
