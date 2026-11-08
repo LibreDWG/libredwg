@@ -220,6 +220,7 @@ EXPORT Dwg_Entity_SEQEND** dwg_getall_SEQEND (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_SHAPE** dwg_getall_SHAPE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_SOLID** dwg_getall_SOLID (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_SPLINE** dwg_getall_SPLINE (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_TABLE** dwg_getall_TABLE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_TEXT** dwg_getall_TEXT (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_TOLERANCE** dwg_getall_TOLERANCE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_TRACE** dwg_getall_TRACE (Dwg_Object_Ref* hdr);
@@ -239,7 +240,6 @@ EXPORT Dwg_Entity_LAYOUTPRINTCONFIG** dwg_getall_LAYOUTPRINTCONFIG (Dwg_Object_R
 EXPORT Dwg_Entity_PLANESURFACE** dwg_getall_PLANESURFACE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_POINTCLOUD** dwg_getall_POINTCLOUD (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_POINTCLOUDEX** dwg_getall_POINTCLOUDEX (Dwg_Object_Ref* hdr);
-EXPORT Dwg_Entity_TABLE** dwg_getall_TABLE (Dwg_Object_Ref* hdr);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ALIGNMENTPARAMETERENTITY** dwg_getall_ALIGNMENTPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_ARCALIGNEDTEXT** dwg_getall_ARCALIGNEDTEXT (Dwg_Object_Ref* hdr);
@@ -1350,6 +1350,7 @@ EXPORT Dwg_Entity_SEQEND* dwg_object_to_SEQEND (Dwg_Object* obj);
 EXPORT Dwg_Entity_SHAPE* dwg_object_to_SHAPE (Dwg_Object* obj);
 EXPORT Dwg_Entity_SOLID* dwg_object_to_SOLID (Dwg_Object* obj);
 EXPORT Dwg_Entity_SPLINE* dwg_object_to_SPLINE (Dwg_Object* obj);
+EXPORT Dwg_Entity_TABLE* dwg_object_to_TABLE (Dwg_Object* obj);
 EXPORT Dwg_Entity_TEXT* dwg_object_to_TEXT (Dwg_Object* obj);
 EXPORT Dwg_Entity_TOLERANCE* dwg_object_to_TOLERANCE (Dwg_Object* obj);
 EXPORT Dwg_Entity_TRACE* dwg_object_to_TRACE (Dwg_Object* obj);
@@ -1369,7 +1370,6 @@ EXPORT Dwg_Entity_LAYOUTPRINTCONFIG* dwg_object_to_LAYOUTPRINTCONFIG (Dwg_Object
 EXPORT Dwg_Entity_PLANESURFACE* dwg_object_to_PLANESURFACE (Dwg_Object* obj);
 EXPORT Dwg_Entity_POINTCLOUD* dwg_object_to_POINTCLOUD (Dwg_Object* obj);
 EXPORT Dwg_Entity_POINTCLOUDEX* dwg_object_to_POINTCLOUDEX (Dwg_Object* obj);
-EXPORT Dwg_Entity_TABLE* dwg_object_to_TABLE (Dwg_Object* obj);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ALIGNMENTPARAMETERENTITY* dwg_object_to_ALIGNMENTPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_ARCALIGNEDTEXT* dwg_object_to_ARCALIGNEDTEXT (Dwg_Object* obj);

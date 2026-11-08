@@ -609,6 +609,7 @@ extern "C"
   typedef struct _dwg_entity_PDFUNDERLAY		dwg_ent_pdfunderlay;
   typedef struct _dwg_entity_REPEAT		dwg_ent_repeat;
   typedef struct _dwg_entity_SECTIONOBJECT		dwg_ent_sectionobject;
+  typedef struct _dwg_entity_TABLE		dwg_ent_table;
   typedef struct _dwg_entity_WIPEOUT		dwg_ent_wipeout;
   /* unstable */
   typedef struct _dwg_entity_HELIX		dwg_ent_helix;
@@ -617,7 +618,6 @@ extern "C"
   typedef struct _dwg_entity_PLANESURFACE		dwg_ent_planesurface;
   typedef struct _dwg_entity_POINTCLOUD		dwg_ent_pointcloud;
   typedef struct _dwg_entity_POINTCLOUDEX		dwg_ent_pointcloudex;
-  typedef struct _dwg_entity_TABLE		dwg_ent_table;
   /* debugging */
   typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY		dwg_ent_alignmentparameterentity;
   typedef struct _dwg_entity_ARCALIGNEDTEXT		dwg_ent_arcalignedtext;
@@ -1733,6 +1733,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_pdfunderlay, PDFUNDERLAY);
   dwg_get_OBJECT_DECL (ent_repeat, REPEAT);
   dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
+  dwg_get_OBJECT_DECL (ent_table, TABLE);
   dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
   /* unstable */
   dwg_get_OBJECT_DECL (ent_helix, HELIX);
@@ -1741,7 +1742,6 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_planesurface, PLANESURFACE);
   dwg_get_OBJECT_DECL (ent_pointcloud, POINTCLOUD);
   dwg_get_OBJECT_DECL (ent_pointcloudex, POINTCLOUDEX);
-  dwg_get_OBJECT_DECL (ent_table, TABLE);
 #ifdef DEBUG_CLASSES
     dwg_get_OBJECT_DECL (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_arcalignedtext, ARCALIGNEDTEXT);
@@ -2869,6 +2869,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (PDFUNDERLAY);
   DWG_GETALL_ENTITY_DECL (REPEAT);
   DWG_GETALL_ENTITY_DECL (SECTIONOBJECT);
+  DWG_GETALL_ENTITY_DECL (TABLE);
   DWG_GETALL_ENTITY_DECL (WIPEOUT);
   /* unstable */
   DWG_GETALL_ENTITY_DECL (HELIX);
@@ -2877,7 +2878,6 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (PLANESURFACE);
   DWG_GETALL_ENTITY_DECL (POINTCLOUD);
   DWG_GETALL_ENTITY_DECL (POINTCLOUDEX);
-  DWG_GETALL_ENTITY_DECL (TABLE);
   /* debugging */
   DWG_GETALL_ENTITY_DECL (ALIGNMENTPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (ARCALIGNEDTEXT);
@@ -4020,6 +4020,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (PDFUNDERLAY);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (REPEAT);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SECTIONOBJECT);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (TABLE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT);
   /* unstable */
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HELIX);
@@ -4028,7 +4029,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (PLANESURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUD);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUDEX);
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (TABLE);
 #  ifdef DEBUG_CLASSES
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ALIGNMENTPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARCALIGNEDTEXT);

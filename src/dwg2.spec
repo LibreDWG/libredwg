@@ -682,7 +682,7 @@ DWG_ENTITY (TABLE)
                 SUB_FIELD_RC (cell,virtual_edge_flag, 0);
 
                 if (cell_flag & 0x01)
-                  SUB_FIELD_RS (cell,cell_alignment, 170);
+                  SUB_FIELD_BS (cell,cell_alignment, 170);
                 if (cell_flag & 0x02)
                   SUB_FIELD_B (cell,bg_fill_none, 283);
                 if (cell_flag & 0x04)

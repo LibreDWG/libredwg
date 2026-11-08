@@ -11700,7 +11700,7 @@ BD,	DXF 40
 @item back_clip_on
 BS,	DXF 73
 @item back_clip_z
-BD,	DXF 41
+BD,	DXF 40
 @item inverse_transform
 BD*,	DXF 40
 @item transform
@@ -15689,11 +15689,11 @@ BL
 @item borders
 Dwg_TABLESTYLE_border*
 @item data_type
-BL
+BL,	DXF 90
 @item unit_type
-BL
+BL,	DXF 91
 @item format_string
-TU
+TU,	DXF 1
 
 @end vtable
 @end indentedblock
@@ -15775,7 +15775,7 @@ BL,	DXF 176
 @item rotation
 BD,	DXF 145
 @item text_value
-T,	DXF 1
+T
 @item text_style
 H,	DXF 7
 @item block_handle
@@ -15789,7 +15789,7 @@ BL,	DXF 177
 @item virtual_edge_flag
 RC,	DXF 178
 @item cell_alignment
-RS,	DXF 170
+BS,	DXF 170
 @item bg_fill_none
 B,	DXF 283
 @item bg_color
@@ -15823,7 +15823,7 @@ BS,	DXF 278
 @item left_visibility
 BS,	DXF 288
 @item unknown
-BL
+BL,	DXF 92
 @item value
 Dwg_TABLE_value
 @item num_attr_defs
