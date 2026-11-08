@@ -994,6 +994,11 @@ DWG_OBJECT (TABLESTYLE)
   HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbTableStyle)
   UNTIL (R_2007) {
+#ifdef IS_ENCODER
+    // first, it sets the margins
+    if (dwg->header.from_version > R_2007)
+      downconvert_TABLESTYLE (obj);
+#endif
     FIELD_T (name, 3);
     FIELD_BS (flow_direction, 70);
     FIELD_BS (flags, 71);
@@ -1001,10 +1006,6 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_BD (vert_cell_margin, 41);
     FIELD_B (is_title_suppressed, 280);
     FIELD_B (is_header_suppressed, 281);
-#ifdef IS_ENCODER
-    if (dwg->header.from_version > R_2007)
-      downconvert_TABLESTYLE (obj);
-#endif
   }
   LATER_VERSIONS { // r2010+
 #ifdef IS_ENCODER
@@ -1024,21 +1025,28 @@ DWG_OBJECT (TABLESTYLE)
     DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
 
     DECODER {
-      FIELD_VALUE (flow_direction) =
-        _obj->sty.cellstyle.property_override_flags & 0x10000;
+      FIELD_VALUE (flow_direction)
+          = (_obj->sty.cellstyle.property_override_flags & 0x10000) ? 1 : 0;
     }
-    FIELD_BL (numoverrides, 0);
-    // style overrides for 0-5 (data=0, title=1, header=2, custom=3-5)
-    if (FIELD_VALUE (numoverrides))
-      {
-        FIELD_BL (unknown_bl3, 0);
-        CellStyle_fields (ovr.cellstyle); // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
-        DXF { VALUE_TFF ("CELLSTYLE_BEGIN", 1) }
-        FIELD_BL0 (ovr.id, 90);
-        FIELD_BL0 (ovr.type, 91);
-        FIELD_T0 (ovr.name, 300);
-        DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
-      }
+    // The non-custom cell styles: title (1), header (2), data (3).
+    // In the DXF they only exist in the CELLSTYLEMAP.
+    FIELD_BL (num_cellstyles, 0);
+    VALUEOUTOFBOUNDS (num_cellstyles, 100)
+#ifndef IS_DXF
+    REPEAT (num_cellstyles, cellstyles, Dwg_TABLESTYLE_CellStyle)
+    REPEAT_BLOCK
+        // the id before the cell style repeats the id after it
+        DECODER_OR_ENCODER {
+          SUB_FIELD_BL (cellstyles[rcount1], id, 0);
+        }
+        CellStyle_fields (cellstyles[rcount1].cellstyle);
+        SUB_FIELD_BL (cellstyles[rcount1], id, 90);
+        SUB_FIELD_BL (cellstyles[rcount1], type, 91);
+        SUB_FIELD_T (cellstyles[rcount1], name, 300);
+        SET_PARENT (cellstyles[rcount1], (Dwg_Object_TABLESTYLE*)_obj);
+    END_REPEAT_BLOCK
+    END_REPEAT (cellstyles);
+#endif
   }
 
   UNTIL (R_2007) {

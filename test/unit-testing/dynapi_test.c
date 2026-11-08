@@ -58852,6 +58852,16 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
         fail ("TABLESTYLE.cellstyle [H]");
   }
   {
+    Dwg_TABLESTYLE_CellStyle* cellstyles;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_cellstyles", &count, NULL)
+        && dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "cellstyles", &cellstyles, NULL)
+        && cellstyles == tablestyle->cellstyles)
+      pass ();
+    else
+      fail ("TABLESTYLE.cellstyles [Dwg_TABLESTYLE_CellStyle*] * %u num_cellstyles", count);
+  }
+  {
     BITCODE_BS class_version;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "class_version", &class_version, NULL)
         && class_version == tablestyle->class_version)
@@ -58952,6 +58962,21 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
       fail ("TABLESTYLE.name [T] '%s' <> '%s'", name, tablestyle->name);
   }
   {
+    BITCODE_BL num_cellstyles;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_cellstyles", &num_cellstyles, NULL)
+        && num_cellstyles == tablestyle->num_cellstyles)
+      pass ();
+    else
+      fail ("TABLESTYLE.num_cellstyles [BL] %u != %u", tablestyle->num_cellstyles, num_cellstyles);
+    num_cellstyles++;
+    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "num_cellstyles", &num_cellstyles, 0)
+        && num_cellstyles == tablestyle->num_cellstyles)
+      pass ();
+    else
+      fail ("TABLESTYLE.num_cellstyles [BL] set+1 %u != %u", tablestyle->num_cellstyles, num_cellstyles);
+    tablestyle->num_cellstyles--;
+  }
+  {
     BITCODE_BL num_rowstyles;
     if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "num_rowstyles", &num_rowstyles, NULL)
         && num_rowstyles == tablestyle->num_rowstyles)
@@ -58965,29 +58990,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.num_rowstyles [BL] set+1 %u != %u", tablestyle->num_rowstyles, num_rowstyles);
     tablestyle->num_rowstyles--;
-  }
-  {
-    BITCODE_BL numoverrides;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "numoverrides", &numoverrides, NULL)
-        && numoverrides == tablestyle->numoverrides)
-      pass ();
-    else
-      fail ("TABLESTYLE.numoverrides [BL] %u != %u", tablestyle->numoverrides, numoverrides);
-    numoverrides++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "numoverrides", &numoverrides, 0)
-        && numoverrides == tablestyle->numoverrides)
-      pass ();
-    else
-      fail ("TABLESTYLE.numoverrides [BL] set+1 %u != %u", tablestyle->numoverrides, numoverrides);
-    tablestyle->numoverrides--;
-  }
-  {
-    Dwg_TABLESTYLE_CellStyle ovr;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "ovr", &ovr, NULL)
-        && !memcmp (&ovr, &tablestyle->ovr, sizeof (Dwg_TABLESTYLE_CellStyle)))
-        pass ();
-    else
-        fail ("TABLESTYLE.ovr [Dwg_TABLESTYLE_CellStyle]");
   }
   {
     struct _dwg_object_object* parent;
@@ -59044,21 +59046,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.unknown_bl2 [BL] set+1 %u != %u", tablestyle->unknown_bl2, unknown_bl2);
     tablestyle->unknown_bl2--;
-  }
-  {
-    BITCODE_BL unknown_bl3;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "unknown_bl3", &unknown_bl3, NULL)
-        && unknown_bl3 == tablestyle->unknown_bl3)
-      pass ();
-    else
-      fail ("TABLESTYLE.unknown_bl3 [BL] %u != %u", tablestyle->unknown_bl3, unknown_bl3);
-    unknown_bl3++;
-    if (dwg_dynapi_entity_set_value (tablestyle, "TABLESTYLE", "unknown_bl3", &unknown_bl3, 0)
-        && unknown_bl3 == tablestyle->unknown_bl3)
-      pass ();
-    else
-      fail ("TABLESTYLE.unknown_bl3 [BL] set+1 %u != %u", tablestyle->unknown_bl3, unknown_bl3);
-    tablestyle->unknown_bl3--;
   }
   {
     BITCODE_RC unknown_rc;

@@ -625,7 +625,7 @@ dwg_free_variable_type_private (Dwg_Object *restrict obj)
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
-// after downconvert_TABLESTYLE()
+// after downconvert_TABLESTYLE() and upconvert_TABLESTYLE()
 // we need to pass through the old code, as the new code is handled in the spec
 // free() following from_version, not version.
 static void
@@ -640,40 +640,13 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return;
     }
   LOG_HANDLE ("free_TABLESTYLE_r2010\n");
-  // downconvert_TABLESTYLE shallow-copies ovr.cellstyle.borders[].color into
-  // rowstyles[0] and [2]. The ovr copy is freed below, so drop the aliases.
-  if (_obj->rowstyles && _obj->numoverrides && _obj->ovr.cellstyle.borders)
-    for (unsigned i = 0; i < 3; i++)
-      if (_obj->rowstyles[i].borders)
-        for (unsigned j = 0; j < 6 && j < _obj->ovr.cellstyle.num_borders; j++)
-          {
-            Dwg_TABLESTYLE_border *b = &_obj->rowstyles[i].borders[j];
-            const Dwg_GridFormat *o = &_obj->ovr.cellstyle.borders[j];
-            if (b->color.name && b->color.name == o->color.name)
-              b->color.name = NULL;
-            if (b->color.book_name && b->color.book_name == o->color.book_name)
-              b->color.book_name = NULL;
-          }
+  // The rowstyles made by downconvert_TABLESTYLE own their handle copies
+  // and colors without strings.
   if (_obj->rowstyles)
     for (unsigned i = 0; i < 3; i++)
       {
-        if (_obj->rowstyles[i].borders)
-          for (unsigned j = 0; j < 6; j++)
-            {
-              SUB_FIELD_CMTC (rowstyles[i].borders[j], color, 0);
-            }
         FREE_IF (_obj->rowstyles[i].borders);
-        // rowstyles[0].text_style, text_color and fill_color are shallow
-        // copies of the sty.cellstyle (or ovr.cellstyle if ovr.type == 1)
-        // content_format/bg_color made by downconvert_TABLESTYLE. They are
-        // owned and freed via the spec free below, so freeing them here
-        // would double-free them.
-        if (i > 0)
-          {
-            SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
-            SUB_FIELD_CMTC (rowstyles[i], text_color, 0);
-            SUB_FIELD_CMTC (rowstyles[i], fill_color, 0);
-          }
+        SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
       }
   FREE_IF (_obj->rowstyles);
   _obj->num_rowstyles = 0;
@@ -684,19 +657,34 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
   FIELD_CMTC (sty.cellstyle.bg_color, 62);
   FIELD_T (sty.cellstyle.content_format.value_format_string, 300);
-  if (_obj->numoverrides)
-    {
-      for (unsigned j = 0; j < _obj->ovr.cellstyle.num_borders; j++)
-        {
-          SUB_FIELD_HANDLE (ovr.cellstyle.borders[j], ltype, 3, 340);
-          SUB_FIELD_CMTC (ovr.cellstyle.borders[j], color, 0);
-        }
-      FIELD_CMTC (ovr.cellstyle.bg_color, 62);
-      FIELD_T (ovr.cellstyle.content_format.value_format_string, 300);
-    }
   FIELD_TV (name, 3);
   FIELD_TV (sty.name, 300);
-  FIELD_TV (ovr.name, 300);
+}
+
+// after upconvert_TABLESTYLE(), from <=R2007: the spec free does not know the
+// r2010 cell styles. Their names are static, the colors have no strings and
+// the text styles are shared with the rowstyles.
+static void
+free_TABLESTYLE_upconverted (Dwg_Object *restrict obj)
+{
+  Dwg_Object_TABLESTYLE *_obj
+      = obj->tio.object ? obj->tio.object->tio.TABLESTYLE : NULL;
+  if (!_obj || !_obj->cellstyles)
+    return;
+  SUB_FIELD_HANDLE (sty.cellstyle.content_format, text_style, 5, 340);
+  for (BITCODE_BL i = 0; i < _obj->num_cellstyles; i++)
+    {
+      Dwg_CellStyle *cs = &_obj->cellstyles[i].cellstyle;
+      for (BITCODE_BL j = 0; cs->borders && j < cs->num_borders; j++)
+        {
+          Dwg_Object_Ref *ref = cs->borders[j].ltype;
+          if (ref && !ref->handleref.is_global)
+            free (ref);
+        }
+      FREE_IF (cs->borders);
+    }
+  FREE_IF (_obj->cellstyles);
+  _obj->num_cellstyles = 0;
 }
 
 // after downconvert_TABLE(): free the pre-R2010 cells, which the R2010+
@@ -1065,6 +1053,8 @@ dwg_free_object (Dwg_Object *obj)
     {
       free_TABLESTYLE_r2010 (dat, obj);
     }
+  else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
+    free_TABLESTYLE_upconverted (obj);
   if (obj->fixedtype == DWG_TYPE_TABLE
       && dwg->header.from_version >= R_2010b)
     free_TABLE_r2010 (obj);

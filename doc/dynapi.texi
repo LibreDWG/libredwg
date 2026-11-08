@@ -11985,12 +11985,10 @@ BL
 H
 @item sty
 Dwg_TABLESTYLE_CellStyle
-@item numoverrides
+@item num_cellstyles
 BL
-@item unknown_bl3
-BL
-@item ovr
-Dwg_TABLESTYLE_CellStyle
+@item cellstyles
+Dwg_TABLESTYLE_CellStyle*
 @item num_rowstyles
 BL
 @item rowstyles

@@ -842,6 +842,161 @@ downconvert_TABLE_test (void)
   ok ("downconvert_TABLE: text, merged cells and extents");
 }
 
+// R2010+ TABLESTYLE cell styles (title 1, header 2, data 3) to the pre-R2010
+// rowstyles (0: data, 1: title, 2: header) and back.
+static void
+downconvert_TABLESTYLE_test (void)
+{
+  Dwg_Data dwg;
+  Dwg_Object obj;
+  Dwg_Object_Object oo;
+  Dwg_Object_TABLESTYLE ts, back;
+  Dwg_TABLESTYLE_CellStyle cs[3];
+  Dwg_GridFormat data_borders[2];
+  Dwg_GridFormat title_borders[1];
+  Dwg_Object_Object oo2;
+  Dwg_Object obj2;
+
+  memset (&dwg, 0, sizeof dwg);
+  memset (&obj, 0, sizeof obj);
+  memset (&oo, 0, sizeof oo);
+  memset (&ts, 0, sizeof ts);
+  memset (&back, 0, sizeof back);
+  memset (cs, 0, sizeof cs);
+  memset (data_borders, 0, sizeof data_borders);
+  memset (title_borders, 0, sizeof title_borders);
+  memset (&oo2, 0, sizeof oo2);
+  memset (&obj2, 0, sizeof obj2);
+  dwg.header.from_version = R_2018;
+  dwg.header.version = R_2018;
+  obj.parent = &dwg;
+  obj.fixedtype = DWG_TYPE_TABLESTYLE;
+  obj.tio.object = &oo;
+  oo.tio.TABLESTYLE = &ts;
+  ts.sty.cellstyle.margin_override_flags = 1;
+  ts.sty.cellstyle.horiz_margin = 1.5;
+  ts.sty.cellstyle.vert_margin = 2.0;
+  // title: with a background color
+  cs[0].id = 1;
+  cs[0].cellstyle.content_format.text_height = 6.0;
+  cs[0].cellstyle.content_format.cell_alignment = 5;
+  cs[0].cellstyle.bg_color.rgb = 0xc2123456;
+  cs[0].cellstyle.num_borders = 1;
+  cs[0].cellstyle.borders = title_borders;
+  title_borders[0].index_mask = 0x20; // inside horizontal
+  title_borders[0].linewt = 50;
+  // header
+  cs[1].id = 2;
+  cs[1].cellstyle.content_format.text_height = 4.5;
+  cs[1].cellstyle.content_format.cell_alignment = 5;
+  cs[1].cellstyle.bg_color.rgb = 0xc8000000; // none
+  // data: the top border is invisible, the right border is visible
+  cs[2].id = 3;
+  cs[2].cellstyle.content_format.text_height = 4.5;
+  cs[2].cellstyle.content_format.cell_alignment = 2;
+  cs[2].cellstyle.bg_color.rgb = 0xc8000000;
+  cs[2].cellstyle.num_borders = 2;
+  cs[2].cellstyle.borders = data_borders;
+  data_borders[0].index_mask = 1;
+  data_borders[0].linewt = 25;
+  data_borders[0].visible = 1; // BL 93: invisible
+  data_borders[1].index_mask = 2;
+  data_borders[1].linewt = 35;
+  data_borders[1].visible = 0;
+  ts.num_cellstyles = 3;
+  ts.cellstyles = cs;
+
+  downconvert_TABLESTYLE (&obj);
+
+  if (ts.num_rowstyles != 3 || !ts.rowstyles)
+    {
+      fail ("downconvert_TABLESTYLE: no rowstyles");
+      return;
+    }
+  if (ts.rowstyles[0].text_height != 4.5 || ts.rowstyles[1].text_height != 6.0
+      || ts.rowstyles[2].text_height != 4.5)
+    fail ("downconvert_TABLESTYLE: order data, title, header");
+  if (ts.rowstyles[0].text_alignment != 2 || ts.rowstyles[1].text_alignment != 5)
+    fail ("downconvert_TABLESTYLE: alignment");
+  if (ts.rowstyles[0].has_bgcolor || ts.rowstyles[0].fill_color.index != 256
+      || !ts.rowstyles[1].has_bgcolor
+      || ts.rowstyles[1].fill_color.rgb != 0xc2123456)
+    fail ("downconvert_TABLESTYLE: fill color");
+  // pre-R2010 border order: top, horizontal inside, bottom, left,
+  // vertical inside, right
+  if (ts.rowstyles[0].borders[0].linewt != 25
+      || ts.rowstyles[0].borders[0].visible != 0
+      || ts.rowstyles[0].borders[5].linewt != 35
+      || ts.rowstyles[0].borders[5].visible != 1
+      || ts.rowstyles[0].borders[2].linewt != -2
+      || ts.rowstyles[0].borders[2].visible != 1)
+    fail ("downconvert_TABLESTYLE: data borders");
+  if (ts.rowstyles[1].borders[1].linewt != 50)
+    fail ("downconvert_TABLESTYLE: title horizontal inside border");
+  if (ts.horiz_cell_margin != 1.5 || ts.vert_cell_margin != 2.0)
+    fail ("downconvert_TABLESTYLE: margins");
+
+  // and back
+  dwg.header.from_version = R_2000;
+  dwg.header.version = R_2000;
+  obj2.parent = &dwg;
+  obj2.fixedtype = DWG_TYPE_TABLESTYLE;
+  obj2.tio.object = &oo2;
+  oo2.tio.TABLESTYLE = &back;
+  back.num_rowstyles = 3;
+  back.rowstyles = ts.rowstyles;
+  back.horiz_cell_margin = 1.5;
+  back.vert_cell_margin = 2.0;
+  upconvert_TABLESTYLE (&obj2);
+  if (back.num_cellstyles != 3 || !back.cellstyles)
+    fail ("upconvert_TABLESTYLE: no cellstyles");
+  else
+    {
+      Dwg_TABLESTYLE_CellStyle *t = &back.cellstyles[0];
+      Dwg_TABLESTYLE_CellStyle *h = &back.cellstyles[1];
+      Dwg_TABLESTYLE_CellStyle *d = &back.cellstyles[2];
+      if (t->id != 1 || h->id != 2 || d->id != 3 || t->type != 1
+          || d->type != 2)
+        fail ("upconvert_TABLESTYLE: ids %u %u %u", (unsigned)t->id,
+              (unsigned)h->id, (unsigned)d->id);
+      if (t->cellstyle.merge_flags != 0x8000 || h->cellstyle.merge_flags)
+        fail ("upconvert_TABLESTYLE: merge flags");
+      if (t->cellstyle.content_format.text_height != 6.0
+          || d->cellstyle.content_format.cell_alignment != 2)
+        fail ("upconvert_TABLESTYLE: content formats");
+      if (t->cellstyle.bg_color.rgb != 0xc2123456
+          || d->cellstyle.bg_color.rgb != 0xc8000000)
+        fail ("upconvert_TABLESTYLE: background colors");
+      // the borders are in the cell style edge flag order 1, 2, 4, 8, ..
+      if (d->cellstyle.num_borders != 6
+          || d->cellstyle.borders[0].index_mask != 1
+          || d->cellstyle.borders[0].linewt != 25
+          || d->cellstyle.borders[0].visible != 1 // invisible
+          || d->cellstyle.borders[1].index_mask != 2
+          || d->cellstyle.borders[1].visible != 0
+          || t->cellstyle.borders[5].index_mask != 0x20
+          || t->cellstyle.borders[5].linewt != 50)
+        fail ("upconvert_TABLESTYLE: borders");
+      if (back.sty.cellstyle.vert_margin != 2.0
+          || back.sty.cellstyle.horiz_margin != 1.5)
+        fail ("upconvert_TABLESTYLE: margins");
+    }
+
+  for (unsigned i = 0; i < back.num_cellstyles; i++)
+    {
+      Dwg_CellStyle *c = &back.cellstyles[i].cellstyle;
+      for (unsigned j = 0; j < c->num_borders; j++)
+        free (c->borders[j].ltype);
+      free (c->borders);
+    }
+  free (back.sty.cellstyle.content_format.text_style);
+  free (back.cellstyles);
+  for (unsigned i = 0; i < 3; i++)
+    free (ts.rowstyles[i].borders);
+  free (ts.rowstyles);
+  ok ("downconvert_TABLESTYLE: rowstyles and back");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -864,5 +1019,6 @@ main (int argc, char const *argv[])
   in_json_mline_lines_test ();
   in_json_dotted_array_test ();
   downconvert_TABLE_test ();
+  downconvert_TABLESTYLE_test ();
   return failed;
 }
