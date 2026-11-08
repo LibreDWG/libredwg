@@ -23662,12 +23662,12 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_BD* col_widths;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (table, "TABLE", "num_col_widths", &count, NULL)
+    if (dwg_dynapi_entity_value (table, "TABLE", "num_cols", &count, NULL)
         && dwg_dynapi_entity_value (table, "TABLE", "col_widths", &col_widths, NULL)
         && col_widths == table->col_widths)
       pass ();
     else
-      fail ("TABLE.col_widths [BD*] * %u num_col_widths", count);
+      fail ("TABLE.col_widths [BD*] * %u num_cols", count);
   }
   {
     BITCODE_CMC data_horiz_bottom_color;
@@ -24609,12 +24609,12 @@ static int test_TABLE (const Dwg_Object *obj)
   {
     BITCODE_BD* row_heights;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (table, "TABLE", "num_row_heights", &count, NULL)
+    if (dwg_dynapi_entity_value (table, "TABLE", "num_rows", &count, NULL)
         && dwg_dynapi_entity_value (table, "TABLE", "row_heights", &row_heights, NULL)
         && row_heights == table->row_heights)
       pass ();
     else
-      fail ("TABLE.row_heights [BD*] * %u num_row_heights", count);
+      fail ("TABLE.row_heights [BD*] * %u num_rows", count);
   }
   {
     BITCODE_3BD scale;

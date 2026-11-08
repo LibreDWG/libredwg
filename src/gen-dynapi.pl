@@ -1893,6 +1893,8 @@ EOF
                         dashes_r11    => 'numdashes',
                         texts         => 'numitems',
                         encr_sat_data => 'num_blocks',
+                        col_widths    => 'num_cols',     # TABLE
+                        row_heights   => 'num_rows',
                     );
                     my $countfield
                         = exists $countfield{$var}
