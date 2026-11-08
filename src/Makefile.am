@@ -40,6 +40,7 @@ libredwg_la_SOURCES = \
 	decode2.c \
 	decode_r11.c \
 	decode_r2007.c \
+	downconvert.c \
 	reedsolomon.c \
 	print.c \
 	free.c \

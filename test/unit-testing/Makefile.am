@@ -44,6 +44,7 @@ encode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/decode.lo \
 	$(top_builddir)/src/decode2.lo \
 	$(top_builddir)/src/decode_r2007.lo \
+	$(top_builddir)/src/downconvert.lo \
 	$(top_builddir)/src/dwg.lo \
 	$(top_builddir)/src/encode2.lo \
 	$(top_builddir)/src/hash.lo

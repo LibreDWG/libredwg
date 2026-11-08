@@ -267,6 +267,7 @@ set(libredwg_SOURCES
     src/decode2.c
     src/decode_r11.c
     src/decode_r2007.c
+    src/downconvert.c
     src/dwg.c
     src/hash.c
     src/dwg_api.c
