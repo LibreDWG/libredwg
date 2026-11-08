@@ -731,6 +731,117 @@ in_json_dotted_array_test (void)
       "spec-walked elements");
 }
 
+// R2010+ TABLE -> pre-R2010 cells: text from the UTF-16LE value, merged cells
+// as in AutoCAD's own pre-R2010 tables (top left holds the extent, the
+// covered cells are marked merged), column widths and row heights.
+static void
+downconvert_TABLE_test (void)
+{
+  Dwg_Data dwg;
+  Dwg_Object obj;
+  Dwg_Object_Entity ent;
+  Dwg_Entity_TABLE table;
+  Dwg_TableDataColumn cols[3];
+  Dwg_TableRow rows[2];
+  Dwg_TableCell row0[3], row1[3];
+  Dwg_TableCellContent c00, c11;
+  Dwg_FormattedTableMerged merged;
+  // "ab" with the terminating NUL
+  unsigned char ab[6] = { 'a', 0, 'b', 0, 0, 0 };
+  BITCODE_RS *tu;
+
+  memset (&dwg, 0, sizeof dwg);
+  memset (&obj, 0, sizeof obj);
+  memset (&ent, 0, sizeof ent);
+  memset (&table, 0, sizeof table);
+  memset (cols, 0, sizeof cols);
+  memset (rows, 0, sizeof rows);
+  memset (row0, 0, sizeof row0);
+  memset (row1, 0, sizeof row1);
+  memset (&c00, 0, sizeof c00);
+  memset (&c11, 0, sizeof c11);
+  dwg.header.from_version = R_2013;
+  dwg.header.version = R_2013;
+  obj.parent = &dwg;
+  obj.fixedtype = DWG_TYPE_TABLE;
+  obj.tio.entity = &ent;
+  ent.tio.TABLE = &table;
+  table.rotation = 0.0;
+  table.tdata.num_cols = 3;
+  table.tdata.cols = cols;
+  table.tdata.num_rows = 2;
+  table.tdata.rows = rows;
+  cols[0].width = 10.0;
+  cols[1].width = 20.0;
+  cols[2].width = 30.0;
+  rows[0].height = 4.0;
+  rows[1].height = 5.0;
+  rows[0].num_cells = rows[1].num_cells = 3;
+  rows[0].cells = row0;
+  rows[1].cells = row1;
+  c00.type = 1;
+  c00.value.data_type = 4;
+  c00.value.data_size = sizeof ab;
+  c00.value.data_date = (BITCODE_TF)ab;
+  row0[0].num_cell_contents = 1;
+  row0[0].cell_contents = &c00;
+  c11.type = 1;
+  c11.value.data_type = 1;
+  c11.value.data_long = 42;
+  row1[1].num_cell_contents = 1;
+  row1[1].cell_contents = &c11;
+  // merge the first row
+  merged.top_row = 0;
+  merged.left_col = 0;
+  merged.bottom_row = 0;
+  merged.right_col = 2;
+  table.fdata.num_merged_cells = 1;
+  table.fdata.merged_cells = &merged;
+
+  downconvert_TABLE (&obj);
+
+  if (table.num_cols != 3 || table.num_rows != 2 || table.num_cells != 6
+      || !table.cells || !table.col_widths || !table.row_heights)
+    {
+      fail ("downconvert_TABLE: no cells");
+      return;
+    }
+  if (table.col_widths[1] != 20.0 || table.row_heights[1] != 5.0)
+    fail ("downconvert_TABLE: widths/heights");
+  tu = (BITCODE_RS *)table.cells[0].text_value;
+  if (!tu || tu[0] != 'a' || tu[1] != 'b' || tu[2] != 0)
+    fail ("downconvert_TABLE: cell 0 text is not the UTF-16 \"ab\"");
+  tu = (BITCODE_RS *)table.cells[4].text_value;
+  if (!tu || tu[0] != '4' || tu[1] != '2' || tu[2] != 0)
+    fail ("downconvert_TABLE: number cell text");
+  if (table.cells[0].merged_width_flag != 3
+      || table.cells[0].merged_height_flag != 1
+      || table.cells[0].is_merged_value)
+    fail ("downconvert_TABLE: merge master %u x %u merged %d",
+          (unsigned)table.cells[0].merged_width_flag,
+          (unsigned)table.cells[0].merged_height_flag,
+          (int)table.cells[0].is_merged_value);
+  if (!table.cells[1].is_merged_value || !table.cells[2].is_merged_value
+      || table.cells[3].is_merged_value)
+    fail ("downconvert_TABLE: covered cells");
+  if (table.cells[5].merged_width_flag != 1
+      || table.cells[5].merged_height_flag != 1)
+    fail ("downconvert_TABLE: plain cell extent");
+  if (table.horiz_direction.x != 1.0 || table.horiz_direction.y != 0.0)
+    fail ("downconvert_TABLE: horiz_direction");
+  if (table.flag_for_table_value != 0x16)
+    fail ("downconvert_TABLE: flag_for_table_value 0x%x",
+          (unsigned)table.flag_for_table_value);
+  // not twice, and free what was made
+  downconvert_TABLE (&obj);
+  for (unsigned i = 0; i < table.num_cells; i++)
+    free (table.cells[i].text_value);
+  free (table.cells);
+  free (table.col_widths);
+  free (table.row_heights);
+  ok ("downconvert_TABLE: text, merged cells and extents");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -752,5 +863,6 @@ main (int argc, char const *argv[])
   in_json_subclass_fixed_elems_test ();
   in_json_mline_lines_test ();
   in_json_dotted_array_test ();
+  downconvert_TABLE_test ();
   return failed;
 }

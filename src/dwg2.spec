@@ -599,6 +599,10 @@ DWG_ENTITY (TABLE)
     }
   else {
 
+#ifdef IS_ENCODER
+    if (dwg->header.from_version >= R_2010b)
+      downconvert_TABLE (obj);
+#endif
     SUBCLASS (AcDbTable)
     FIELD_HANDLE (tablestyle, 5, 342);
     FIELD_BS (flag_for_table_value, 90);

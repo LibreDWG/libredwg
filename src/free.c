@@ -699,6 +699,34 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   FIELD_TV (ovr.name, 300);
 }
 
+// after downconvert_TABLE(): free the pre-R2010 cells, which the R2010+
+// spec does not know about (free() follows from_version, not version).
+// The handles are shared with the R2010+ content, not owned.
+static void
+free_TABLE_r2010 (Dwg_Object *restrict obj)
+{
+  Dwg_Entity_TABLE *_obj
+      = obj->tio.entity ? obj->tio.entity->tio.TABLE : NULL;
+  if (!_obj)
+    return;
+  if (_obj->cells)
+    {
+      for (unsigned long i = 0; i < _obj->num_cells; i++)
+        {
+          Dwg_TABLE_Cell *cell = &_obj->cells[i];
+          for (BITCODE_BL j = 0; cell->attr_defs && j < cell->num_attr_defs;
+               j++)
+            FREE_IF (cell->attr_defs[j].text);
+          FREE_IF (cell->attr_defs);
+          FREE_IF (cell->text_value);
+        }
+      FREE_IF (_obj->cells);
+    }
+  FREE_IF (_obj->col_widths);
+  FREE_IF (_obj->row_heights);
+  _obj->num_cells = 0;
+}
+
 static void
 free_preR13_object (Dwg_Object *obj)
 {
@@ -1037,6 +1065,9 @@ dwg_free_object (Dwg_Object *obj)
     {
       free_TABLESTYLE_r2010 (dat, obj);
     }
+  if (obj->fixedtype == DWG_TYPE_TABLE
+      && dwg->header.from_version >= R_2010b)
+    free_TABLE_r2010 (obj);
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:
