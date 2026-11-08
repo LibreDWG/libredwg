@@ -612,6 +612,9 @@ DWG_ENTITY (TABLE)
 #endif
     SUBCLASS (AcDbTable)
     FIELD_HANDLE (tablestyle, 5, 342);
+    // DXF 2 is the block name (above), as AutoCAD and ODA also write the
+    // handle of the BLOCK_RECORD as 343
+    DXF { FIELD_HANDLE (block_header, 5, 343); }
     FIELD_BS (flag_for_table_value, 90);
     FIELD_3BD (horiz_direction, 11);
     FIELD_BL (num_cols, 92);
