@@ -707,6 +707,8 @@ free_TABLE_r2010 (Dwg_Object *restrict obj)
             FREE_IF (cell->attr_defs[j].text);
           FREE_IF (cell->attr_defs);
           FREE_IF (cell->text_value);
+          FREE_IF (cell->value.data_date);
+          FREE_IF (cell->value.value_string);
         }
       FREE_IF (_obj->cells);
     }

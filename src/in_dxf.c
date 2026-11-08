@@ -5445,14 +5445,18 @@ add_AcDbTableCells (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           case 176:
             c->merged_height_flag = pair->value.u;
             break;
-          case 177:
-            c->cell_flag_override = pair->value.u;
+          case 177: // pre-R2007: 16 bit signed
+            c->cell_flag_override = pair->value.u & 0xffff;
+            if (c->cell_flag_override)
+              c->additional_data_flag = 1;
             break;
           case 178:
             c->virtual_edge_flag = pair->value.u;
             break;
-          case 91:
-            c->additional_data_flag = pair->value.u;
+          case 91: // R2007+: 32 bit
+            c->cell_flag_override = pair->value.u;
+            if (c->cell_flag_override)
+              c->additional_data_flag = 1;
             break;
           case 90:
           case 92:

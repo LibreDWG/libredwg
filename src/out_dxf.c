@@ -171,6 +171,25 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define FIELD_BINARY(name, size, dxf)                                         \
   if (dxf)                                                                    \
     VALUE_BINARY (_obj->name, size, dxf)
+// R2007+ TABLE cell string values: UTF-16LE bytes, written as DXF 1
+#define TABLE_VALUE_SIZE_DXF 0
+#define FIELD_TABLE_STRING(nam, size, dxf)                                    \
+  if (dxf)                                                                    \
+    {                                                                         \
+      const BITCODE_BL _tn = (size) / 2;                                      \
+      const unsigned char *_tb = (const unsigned char *)_obj->nam;            \
+      BITCODE_RS *_tu = (BITCODE_RS *)calloc (_tn + 1, sizeof (BITCODE_RS));  \
+      if (_tu)                                                                \
+        {                                                                     \
+          char *_u8;                                                          \
+          for (BITCODE_BL _ti = 0; _tb && _ti < _tn; _ti++)                   \
+            _tu[_ti] = (BITCODE_RS)(_tb[2 * _ti] | (_tb[2 * _ti + 1] << 8));  \
+          _u8 = bit_convert_TU ((BITCODE_TU)_tu);                             \
+          dxf_fixup_string (dat, _u8, 1, 1);                                  \
+          free (_u8);                                                         \
+          free (_tu);                                                         \
+        }                                                                     \
+    }
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
@@ -1075,11 +1094,6 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
-// Defined by the spec (DWG_OBJECT TABLECONTENT), which is now always active;
-// forward-declare for the R2010+ TABLE path below.
-static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
-                                 const Dwg_Object *restrict obj);
-
 // The strcmp is being optimized away at compile-time!
 // https://godbolt.org/g/AqkhwL
 #define DWG_ENTITY(token)                                                     \
@@ -1112,11 +1126,6 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
       RECORD (VERTEX);                                                        \
     else if (strEQc (#token, "MINSERT"))                                      \
       RECORD (INSERT);                                                        \
-    else if (dat->version >= R_2010 && strEQc (#token, "TABLE"))              \
-      {                                                                       \
-        RECORD (ACAD_TABLE);                                                  \
-        return dwg_dxf_TABLECONTENT (dat, obj);                               \
-      }                                                                       \
     else if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))               \
       record (obj->dxfname);                                                  \
     else if (obj->type >= 498 && obj->dxfname)                                \

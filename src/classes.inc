@@ -384,7 +384,7 @@
   DEBUGGING_CLASS     (ACTION, LOFTEDSURFACE)     /* ent */
   DEBUGGING_CLASS     (ACTION, REVOLVEDSURFACE)   /* ent */
   DEBUGGING_CLASS     (ACTION, SWEPTSURFACE)      /* ent */
-  UNSTABLE_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
+  STABLE_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
   DEBUGGING_CLASS     (ACTION, ARCALIGNEDTEXT)    // ent expresstools
   DEBUGGING_CLASS     (ACTION, RTEXT)             // ent expresstools
   DEBUGGING_CLASS     (ACTION, MPOLYGON)          // hatch-like ent

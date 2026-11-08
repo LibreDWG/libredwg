@@ -8024,6 +8024,49 @@ table_value_text (const Dwg_Data *restrict dwg,
   return NULL;
 }
 
+// R2007+ also needs the text as value, as AutoCAD writes it: format flags 6,
+// type string with UTF-16LE data, and the same string as value string.
+static void
+table_cell_string_value (const Dwg_Data *restrict dwg,
+                         Dwg_TABLE_Cell *restrict cell)
+{
+  BITCODE_TU tmp = NULL;
+  const BITCODE_RS *tu;
+  unsigned char *b;
+  size_t n = 0;
+  if (!cell->text_value)
+    return;
+  if (IS_FROM_TU_DWG (dwg))
+    tu = (const BITCODE_RS *)cell->text_value;
+  else
+    {
+      tmp = bit_utf8_to_TU ((char *)cell->text_value, 0);
+      tu = (const BITCODE_RS *)tmp;
+    }
+  while (tu && tu[n])
+    n++;
+  if (!n)
+    {
+      free (tmp);
+      return;
+    }
+  b = (unsigned char *)calloc (n * 2 + 2, 1);
+  if (b)
+    {
+      for (size_t i = 0; i < n; i++)
+        {
+          b[2 * i] = tu[i] & 0xff;
+          b[2 * i + 1] = tu[i] >> 8;
+        }
+      cell->value.data_date = (BITCODE_TF)b;
+      cell->value.data_size = (BITCODE_BL)(n * 2 + 2);
+      cell->value.format_flags = 6;
+      cell->value.data_type = 4;
+      cell->value.value_string = table_dup_T (dwg, cell->text_value);
+    }
+  free (tmp);
+}
+
 // from >2010 to 2000: build the pre-R2010 ACAD_TABLE fields from the
 // R2010+ TABLECONTENT (LinkedTableData).  Column widths, row heights, the
 // cell text (or block, with its attribute texts) of the first content of
@@ -8134,7 +8177,10 @@ downconvert_TABLE (Dwg_Object *restrict obj)
                 }
             }
           else
-            cell->text_value = table_value_text (dwg, &cc->value);
+            {
+              cell->text_value = table_value_text (dwg, &cc->value);
+              table_cell_string_value (dwg, cell);
+            }
         }
     }
   // Merged regions: the top left cell has the extent, covered cells are

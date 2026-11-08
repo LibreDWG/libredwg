@@ -490,6 +490,13 @@ DWG_OBJECT_END
 // pg.229 20.4.96, as ACAD_TABLE (varies)
 // works ok for the pre-2010 variant, deriving from INSERT
 // r2010+ it is TABLECONTENT
+// The DXF has only the pre-R2010 cells, also for R2010+. They are downconverted.
+#ifdef IS_DXF
+#  define TABLE_R2010 if (0)
+#else
+#  define TABLE_R2010 SINCE (R_2010b)
+#endif
+
 DWG_ENTITY (TABLE)
 
   HANDLE_UNKNOWN_BITS;
@@ -576,7 +583,7 @@ DWG_ENTITY (TABLE)
     if (FIELD_VALUE (has_attribs)) {
       FIELD_HANDLE (seqend, 3, 0);
     }
-  SINCE (R_2010b) //AC1024
+  TABLE_R2010 //AC1024
     {
       FIELD_RC (unknown_rc, 0);
       FIELD_HANDLE (unknown_h, 5, 0);
@@ -599,9 +606,9 @@ DWG_ENTITY (TABLE)
     }
   else {
 
-#ifdef IS_ENCODER
+#if defined IS_ENCODER || defined IS_DXF
     if (dwg->header.from_version >= R_2010b)
-      downconvert_TABLE (obj);
+      downconvert_TABLE ((Dwg_Object *)obj);
 #endif
     SUBCLASS (AcDbTable)
     FIELD_HANDLE (tablestyle, 5, 342);
@@ -626,7 +633,8 @@ DWG_ENTITY (TABLE)
         SUB_FIELD_BL (cell,merged_height_flag, 176);
         DXF {
           PRE (R_2007a) {
-            SUB_FIELD_CAST (cell,cell_flag_override, BS, BL, 177);
+            // 16 bit signed
+            VALUE_BSd ((BITCODE_BSd)_obj->cell.cell_flag_override, 177);
           } LATER_VERSIONS {
             SUB_FIELD_BL (cell,cell_flag_override, 91);
           }
@@ -639,7 +647,8 @@ DWG_ENTITY (TABLE)
             SUB_FIELD_HANDLE0 (cell,text_style, 3, 344);
             // TODO: <r2007 and empty style and shorter than 250, single dxf 1 line
             // else split into mult. text lines
-            SUB_FIELD_T (cell,text_value, 1);
+            // R2007+ DXF has the text only in the CELL_VALUE
+            SUB_FIELD_T (cell,text_value, (dat->version < R_2007 ? 1 : 0));
             SUB_FIELD_B (cell,additional_data_flag, 0);
           }
         if (FIELD_VALUE (cell.type) == 2)
@@ -715,10 +724,12 @@ DWG_ENTITY (TABLE)
               }
         SINCE (R_2007a)
           {
-            SUB_FIELD_BL (cell,unknown, 0);
+            SUB_FIELD_BL (cell,unknown, 92);
 
             // 20.4.99 Value, page 241
+            DXF { VALUE_TFF ("CELL_VALUE", 301) }
             TABLE_value_fields (cell.value)
+            DXF { VALUE_TFF ("ACVALUE_END", 304) }
             if (error & DWG_ERR_INVALIDTYPE)
               {
                 JSON_END_REPEAT (cells);
@@ -994,10 +1005,10 @@ DWG_OBJECT (TABLESTYLE)
   HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbTableStyle)
   UNTIL (R_2007) {
-#ifdef IS_ENCODER
+#if defined IS_ENCODER || defined IS_DXF
     // first, it sets the margins
     if (dwg->header.from_version > R_2007)
-      downconvert_TABLESTYLE (obj);
+      downconvert_TABLESTYLE ((Dwg_Object *)obj);
 #endif
     FIELD_T (name, 3);
     FIELD_BS (flow_direction, 70);
@@ -1074,11 +1085,11 @@ DWG_OBJECT (TABLESTYLE)
         END_REPEAT_BLOCK
         END_REPEAT (rowstyle.borders)
 
-        //SINCE (R_2007a) {
-        //  SUB_FIELD_BL (rowstyle,data_type, 90);
-        //  SUB_FIELD_BL (rowstyle,unit_type, 91);
-        //  SUB_FIELD_TU (rowstyle,format_string, 1);
-        //}
+        SINCE (R_2007a) {
+          SUB_FIELD_BL (rowstyle,data_type, 90);
+          SUB_FIELD_BL (rowstyle,unit_type, 91);
+          SUB_FIELD_TU (rowstyle,format_string, 1);
+        }
         #undef border
     END_REPEAT_BLOCK
     END_REPEAT (rowstyles)

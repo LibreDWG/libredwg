@@ -620,6 +620,14 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   FREE_3DSOLID \
   COMMON_3DSOLID
 
+// The DXF writes R2007+ string values as UTF-8 and has no data size.
+#ifndef TABLE_VALUE_SIZE_DXF
+#  define TABLE_VALUE_SIZE_DXF 92
+#endif
+#ifndef FIELD_TABLE_STRING
+#  define FIELD_TABLE_STRING(name, size, dxf) FIELD_BINARY (name, size, dxf)
+#endif
+
 // clang-format off
 #define TABLE_value_fields(value)                                             \
   {                                                                           \
@@ -665,9 +673,9 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
         case 4: /* kString */                                                 \
           SINCE (R_2007a)                                                     \
             {                                                                   \
-              FIELD_BL (value.data_size, 92);                                 \
-              FIELD_BINARY (value.data_date, FIELD_VALUE (value.data_size),   \
-                            310);                                             \
+              FIELD_BL (value.data_size, TABLE_VALUE_SIZE_DXF);               \
+              FIELD_TABLE_STRING (value.data_date,                            \
+                                  FIELD_VALUE (value.data_size), 310);        \
             }                                                                 \
           else                                                                \
             FIELD_T (value.data_string, 1);                                       \

@@ -26,6 +26,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "decode.h"
+#include "encode.h"
 // #include "decode_r11.h"
 #include "out_dxf.h"
 #include "geom.h"
