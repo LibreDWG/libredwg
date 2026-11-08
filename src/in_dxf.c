@@ -852,6 +852,12 @@ dxf_free_pair (Dxf_Pair *pair)
   pair = NULL;
 }
 
+/* Set while reading an MTEXT entity: its text codes 1 and 3 are chunks that
+   are joined before the UTF-8 -> codepage conversion, so dxf_read_pair must
+   not convert them one by one (a multi-byte sequence would split at a chunk
+   boundary). The joined text is converted in new_object. */
+static int dxf_mtext_text = 0;
+
 static Dxf_Pair *ATTRIBUTE_MALLOC
 dxf_read_pair (Bit_Chain *dat)
 {
@@ -925,6 +931,7 @@ dxf_read_pair (Bit_Chain *dat)
       // sites, EED) behaves identically to the already-working pre-r2007
       // path. Unrepresentable chars degrade to \U+XXXX as AutoCAD does.
       if (pair->value.s.ptr && pair->value.s.ptr[0]
+          && !(dxf_mtext_text && (pair->code == 1 || pair->code == 3))
           && dat->from_version >= R_2007 && dat->version >= R_11
           && dat->version < R_2007 && dat->codepage
           && !(dat->opts & DWG_OPTS_DXFB))
@@ -11133,6 +11140,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
   const Dwg_DYNAPI_field *prev_vstyle = NULL;
   subclass[0] = '\0';
 
+  dxf_mtext_text = 0; // reset for this object
+
   if (ctrl_id || i)
     {
       LOG_TRACE ("add %s [%d]\n", name, i);
@@ -11405,6 +11414,12 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
       // TODO better the layer of its owner
       obj->tio.entity->layer = dwg->header_vars.CLAYER; // default
     }
+
+  // An MTEXT's text codes 1 and 3 are chunks joined in the pair loop; keep
+  // them raw UTF-8 here so dxf_read_pair does not convert each chunk on its
+  // own (the conversion happens on the joined text below).
+  if (obj->fixedtype == DWG_TYPE_MTEXT)
+    dxf_mtext_text = 1;
   // Some objects have various subtypes under one name, like DIMENSION.
   // TODO OBJECTCONTEXTDATA, ...
 
@@ -15270,6 +15285,19 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
         {
           o->linespace_factor = 1.0;
           LOG_TRACE ("MTEXT.linespace_factor = 1.0 (default) [BD 44]\n");
+        }
+      // The text chunks were kept as raw UTF-8 while reading (dxf_mtext_text).
+      // For a pre-r2007 target convert the joined text to the drawing
+      // codepage, as dxf_read_pair does for the other text fields; a r2007+
+      // target keeps the UTF-8 (bit_write_T converts it to TU).
+      if (o->text && dat->from_version >= R_2007 && dat->version < R_2007)
+        {
+          BITCODE_T conv = dwg_add_u8_input (dwg, o->text);
+          if (conv)
+            {
+              free (o->text);
+              o->text = conv;
+            }
         }
     }
   else if (is_textlike (obj))
