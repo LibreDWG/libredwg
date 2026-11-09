@@ -135,6 +135,33 @@ ocs_mirrored_tests (void)
     fail ("transform_OCS_2d_is_mirrored");
 }
 
+// OCS to WCS: with the extrusion (0.6,0,0.8) the OCS axes are (0,1,0),
+// (-0.8,0,0.6) and (0.6,0,0.8), as ezdxf has them
+static void
+ocs_transform_tests (void)
+{
+  const BITCODE_BE tilt = { 0.6, 0.0, 0.8 }, down = { 0.0, 0.0, -1.0 };
+  const BITCODE_3DPOINT p = { 1.0, 2.0, 3.0 };
+  const BITCODE_2DPOINT p2 = { 1.0, 2.0 };
+  BITCODE_3DPOINT w;
+  BITCODE_2DPOINT w2;
+  transform_OCS (&w, p, tilt);
+  if (NEAR (w.x, 0.2) && NEAR (w.y, 1.0) && NEAR (w.z, 3.6))
+    ok ("transform_OCS tilted");
+  else
+    fail ("transform_OCS tilted: (%g,%g,%g)", w.x, w.y, w.z);
+  transform_OCS (&w, p, down);
+  if (NEAR (w.x, -1.0) && NEAR (w.y, 2.0) && NEAR (w.z, -3.0))
+    ok ("transform_OCS (0,0,-1)");
+  else
+    fail ("transform_OCS (0,0,-1): (%g,%g,%g)", w.x, w.y, w.z);
+  transform_OCS_2d (&w2, p2, tilt);
+  if (NEAR (w2.x, -1.6) && NEAR (w2.y, 1.0))
+    ok ("transform_OCS_2d tilted");
+  else
+    fail ("transform_OCS_2d tilted: (%g,%g)", w2.x, w2.y);
+}
+
 // spline_eval of spline at t must give (x,y)
 static void
 check_spline_point (const char *name, const Dwg_Entity_SPLINE *spline,
@@ -669,6 +696,7 @@ main (int argc, char const *argv[])
   bulge_split_tests ();
   arc_split_tests ();
   ocs_mirrored_tests ();
+  ocs_transform_tests ();
   spline_eval_tests ();
   spline_to_bezier_tests ();
   spline_from_fit_points_tests ();
