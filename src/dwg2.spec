@@ -693,7 +693,6 @@ DWG_ENTITY (TABLE)
                 if (cell_flag & 0x08)
                   {
                     SUB_FIELD_CMTC (cell,content_color, 64);
-                    SUB_FIELD_HANDLE (cell,text_style, 3, 7); //?
                   }
                 if (cell_flag & 0x10) {
                   SUB_FIELD_HANDLE (cell,text_style, 3, 7);
