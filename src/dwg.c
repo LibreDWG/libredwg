@@ -37,9 +37,9 @@
 #else
 char *basename (char *);
 #endif
-#ifdef HAVE_SYS_MMAN_H
-#  include <unistd.h>   // ftruncate
-#  include <sys/mman.h> // mmap
+#include "mman.h"
+#ifdef DWG_HAVE_MMAP
+#  include <unistd.h>   // ftruncate, fileno
 #endif
 #include <errno.h>
 
@@ -118,7 +118,7 @@ dat_mmap_file (Bit_Chain *restrict dat, int prot)
       if (!fstat (fd, &attrib))
         dat->size = attrib.st_size;
     }
-#ifdef HAVE_SYS_MMAN_H
+#ifdef DWG_HAVE_MMAP
   flags = (prot & PROT_WRITE) ? MAP_SHARED : MAP_PRIVATE;
   if ((prot & PROT_WRITE) && !dat->size)
     dat->size = 4096;
@@ -142,10 +142,54 @@ dat_mmap_file (Bit_Chain *restrict dat, int prot)
       dat->chain = NULL;
       return DWG_ERR_IOERROR;
     }
-#ifdef HAVE_SYS_MMAN_H
+#ifdef DWG_HAVE_MMAP
   dat->chain = (unsigned char *)chain;
+  dat->mapped = dat->size;
   dat->opts |= DWG_OPTS_MMAP;
 #endif
+  return 0;
+}
+
+/* Map an input file read-only into the process address space (no heap copy,
+   the page cache is the file buffer).
+   The mapping is private (COW) and extends past the file size by one extra
+   page (64 KiB covers all page sizes <= 64K), so callers may NUL-terminate
+   or append a trailing newline at dat->chain[dat->size] without touching the
+   input file or hitting an unmapped address.
+   The mapped length is kept in dat->mapped; dat->size stays the file size. */
+static int
+dat_mmap_read (Bit_Chain *restrict dat)
+{
+  int fd;
+  void *chain;
+  size_t map_size;
+  if (!dat->fh)
+    {
+      LOG_ERROR ("%s empty filehandle", __FUNCTION__);
+      return DWG_ERR_IOERROR;
+    }
+  fd = fileno (dat->fh);
+  if (fd < 0)
+    {
+      LOG_ERROR ("fileno failed with %s", strerror (errno));
+      return DWG_ERR_IOERROR;
+    }
+  if (!dat->size)
+    {
+      struct_stat_t attrib;
+      if (!fstat (fd, &attrib))
+        dat->size = attrib.st_size;
+    }
+  map_size = dat->size + 0x10000;
+  chain = mmap (NULL, map_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0L);
+  if (!chain || chain == MAP_FAILED)
+    {
+      LOG_ERROR ("mmap failed with %s", strerror (errno));
+      return DWG_ERR_IOERROR;
+    }
+  dat->chain = (unsigned char *)chain;
+  dat->mapped = map_size;
+  dat->opts |= DWG_OPTS_MMAP;
   return 0;
 }
 
@@ -163,9 +207,9 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
     }
   if (!dat->fh)
     dat->fh = fp;
-#ifdef HAVE_SYS_MMAN_H
+#ifdef DWG_HAVE_MMAP
   if (dat->opts & DWG_OPTS_MMAP)
-    return dat_mmap_file (dat, PROT_READ);
+    return dat_mmap_read (dat);
 #endif
   dat->chain = (unsigned char *)calloc (1, dat->size + 1);
   if (!dat->chain)
@@ -200,6 +244,11 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
 EXPORT int
 dat_read_size (Bit_Chain *restrict dat)
 {
+#ifdef DWG_HAVE_MMAP
+  if ((dat->opts & DWG_OPTS_MMAP)
+      && dat_mmap_read (dat) == 0)
+    return 0;
+#endif
   if (!dat->chain)
     dat->chain = (unsigned char *)calloc (1, dat->size + 2);
   else
@@ -230,9 +279,9 @@ dat_close_file (Bit_Chain *restrict dat)
   int error = 0;
   if (!dat->fh) // already closed
     return 0;
-#ifdef HAVE_SYS_MMAN_H
-  // msync only needed for mmaped buffers.
-  if ((dat->opts & DWG_OPTS_MMAP) && dat->chain && dat->size
+#ifdef DWG_HAVE_MMAP
+  // msync only needed for mmaped buffers. (private/COW maps: a no-op)
+  if (dat->mapped && dat->chain
       && msync (dat->chain, dat->size, MS_SYNC))
     {
       LOG_ERROR ("msync failed with %s", strerror (errno));
@@ -249,21 +298,25 @@ EXPORT int
 dat_unmap_file (Bit_Chain *restrict dat)
 {
   int error = dat_close_file (dat);
-#ifdef HAVE_SYS_MMAN_H
-  if ((dat->opts & DWG_OPTS_MMAP) && dat->chain)
+  if (dat->chain)
     {
-      if (munmap (dat->chain, dat->size))
+#ifdef DWG_HAVE_MMAP
+      if (dat->mapped)
         {
-          LOG_ERROR ("unmap failed with %s", strerror (errno));
-          error |= DWG_ERR_IOERROR;
+          if (munmap (dat->chain, dat->mapped))
+            {
+              LOG_ERROR ("unmap failed with %s", strerror (errno));
+              error |= DWG_ERR_IOERROR;
+            }
+          dat->mapped = 0;
         }
+      else
+#endif
+        bit_chain_free (dat);
       dat->chain = NULL;
       dat->size = 0;
       dat->opts &= ~DWG_OPTS_MMAP;
-      return error;
     }
-#endif
-  bit_chain_free (dat);
   return error;
 }
 
@@ -405,6 +458,8 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 #ifdef HAVE_SYS_STAT_H
       bit_chain.size = attrib.st_size;
 #endif
+      // map the file into memory instead of copying it into a heap buffer
+      bit_chain.opts |= DWG_OPTS_MMAP;
       error = dat_read_file (&bit_chain, fp, filename);
       if (error >= DWG_ERR_CRITICAL)
         return error;
@@ -487,6 +542,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 
   memset (&dat, 0, sizeof (Bit_Chain));
   dat.fh = fp;
+  // map the file into memory instead of copying it into a heap buffer.
+  // the private mapping has room to append the trailing newline/NUL.
+  dat.opts = dwg->opts | DWG_OPTS_MMAP;
 #  ifdef HAVE_SYS_STAT_H
   dat.size = attrib.st_size;
 #  endif
@@ -592,7 +650,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 
   dat.size = 0;
 
-#  ifdef HAVE_SYS_MMAN_H
+#  ifdef DWG_HAVE_MMAP
   // try opening the output file in write mode
   if (!stat (filename, &attrib)
 #    ifdef _WIN32
@@ -629,7 +687,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 #  endif
     }
 
-#  ifndef HAVE_SYS_MMAN_H
+#  ifndef DWG_HAVE_MMAP
   // try opening the output file in write mode
   if (!stat (filename, &attrib)
 #    ifdef _WIN32
@@ -644,7 +702,12 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
     }
 #  endif
 
-#  ifdef HAVE_SYS_MMAN_H
+#  ifdef DWG_HAVE_MMAP
+  // shrink the file to the final size, like the heap fwrite() did: the
+  // mapping (and the file) may have grown beyond the content.
+  if (dat.fh && dat.mapped && dat.size < dat.mapped
+      && ftruncate (fileno (dat.fh), dat.size))
+    LOG_ERROR ("ftruncate failed with %s", strerror (errno));
   dat_unmap_file (&dat);
 #  else
   fh = fopen (filename, "wb");

@@ -70,6 +70,9 @@ typedef struct _bit_chain
 {
   unsigned char *chain;
   size_t size;
+  size_t mapped; /* actual mmap'ed length (>= size); 0 = heap buffer.
+                    nonzero: chain is the mapping base pointer and owns it.
+                    Views (chain != base) must keep mapped = 0. */
   size_t byte;
   unsigned char bit;
   unsigned short opts; // from dwg->opts, see DWG_OPTS_*
@@ -81,7 +84,7 @@ typedef struct _bit_chain
 
 #define EMPTY_CHAIN(size)                                                     \
   {                                                                           \
-    NULL, size, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, 0                      \
+    NULL, size, 0UL, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, 0                 \
   }
 
 // only if from r2007+ DWG. not JSON, DXF (FIXME TABLE.name).
@@ -351,8 +354,11 @@ void bit_chain_alloc (Bit_Chain *dat);
 void bit_chain_alloc_size (Bit_Chain *dat, const size_t size);
 void bit_chain_free (Bit_Chain *dat);
 // after bit_chain_init
+// The DWG_OPTS_MMAP bit is never inherited: only the top-level chain created
+// by dat_mmap_file() / the read path owns its mapping.  Sub-chains and
+// copies always use their own heap buffers.
 #define bit_chain_set_version(to, from)                                       \
-  (to)->opts = (from)->opts;                                                  \
+  (to)->opts = (from)->opts & ~DWG_OPTS_MMAP;                                 \
   (to)->version = (from)->version;                                            \
   (to)->from_version = (from)->from_version;                                  \
   (to)->fh = (from)->fh;                                                      \
