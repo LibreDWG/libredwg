@@ -77,9 +77,6 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
 BITCODE_RLL dwg_new_handseed (Dwg_Data *restrict dwg);
 // used in encode.c
 void dwg_set_handle_size (Dwg_Handle *restrict hdl);
-void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
-void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
-                             Dwg_Object_MLINESTYLE *restrict o);
 
 void ordered_ref_add (Dwg_Data *dwg, Dwg_Object_Ref *ref);
 const Dwg_Object_Ref *ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
@@ -4302,53 +4299,6 @@ dwg_supports_obj (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
   return 1;
 }
 
-/* from 2018 to earlier */
-void
-dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o)
-{
-  BITCODE_BSd lt_index
-      = strEQc (o->name, "CONTINUOUS") || strEQc (o->name, "Continuous")
-            ? 0
-            : 32767; // or 32766 for BYBLOCK
-  for (BITCODE_RC j = 0; j < o->num_lines; j++)
-    {
-      // TODO lookup lt_ltype
-      o->lines[j].lt_index = lt_index;
-    }
-}
-
-/* to 2018 */
-void
-dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
-                        Dwg_Object_MLINESTYLE *restrict o)
-{
-  // lookup on LTYPE_CONTROL list
-  for (BITCODE_RC j = 0; j < o->num_lines; j++)
-    {
-      BITCODE_BSd lt_index = o->lines[j].lt_index;
-      LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = %d [BSd 6]\n", j,
-                 (int)lt_index);
-      if (lt_index == 0)
-        o->lines[j].lt_ltype = dwg->header_vars.LTYPE_CONTINUOUS;
-      else if (lt_index == 32767)
-        o->lines[j].lt_ltype = dwg->header_vars.LTYPE_BYLAYER;
-      else if (lt_index == 32766)
-        o->lines[j].lt_ltype = dwg->header_vars.LTYPE_BYBLOCK;
-      else if (lt_index > 0)
-        {
-          BITCODE_H hdl
-              = dwg_find_tablehandle_index (dwg, (int)lt_index, "LTYPE");
-          o->lines[j].lt_ltype
-              = dwg_add_handleref (dwg, 5, hdl ? hdl->absolute_ref : 0, NULL);
-          if (hdl)
-            LOG_TRACE ("MLINESTYLE.lines[%d].lt_ltype %s => " FORMAT_REF
-                       " [H]\n",
-                       j, o->name, ARGS_REF (hdl));
-        }
-      else
-        o->lines[j].lt_ltype = dwg_add_handleref (dwg, 5, 0, NULL);
-    }
-}
 
 static const void *
 bsearch_ex (const void *pKey, const void *pBase, size_t numBase,

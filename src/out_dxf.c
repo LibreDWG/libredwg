@@ -59,9 +59,6 @@ char *dwg_obj_table_get_name (const Dwg_Object *restrict obj,
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
-void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
-void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
-                             Dwg_Object_MLINESTYLE *restrict o);
 
 // private
 static int dxf_common_entity_handle_data (Bit_Chain *restrict dat,

@@ -63,6 +63,15 @@ bool dwg_encode_unknown_bits (Bit_Chain *restrict dat,
 void downconvert_TABLE (Dwg_Object *restrict obj);
 void downconvert_TABLESTYLE (Dwg_Object *restrict obj);
 void upconvert_TABLESTYLE (Dwg_Object *restrict obj);
+void downconvert_MLEADERSTYLE (Dwg_Object *restrict obj);
+void downconvert_DIMSTYLE (Bit_Chain *restrict dat,
+                           Dwg_Object *restrict obj);
+void fix_mtext_hatch (Dwg_Data *restrict dwg);
+void link_owned_entities (Dwg_Data *restrict dwg);
+void upconvert_standard_names (Dwg_Data *restrict dwg);
+void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
+void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
+                             Dwg_Object_MLINESTYLE *restrict o);
 /* encode_acds.c: the r2013+ AcDs section, with the SAB data of the ACIS
    entities. No section if dat->byte stays 0. */
 int encode_acds (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
