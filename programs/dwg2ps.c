@@ -154,6 +154,40 @@ ps_polyline (PSDoc *ps, const dwg_point_2d *pts, const double *bulges,
   PS_stroke (ps);
 }
 
+// The angle in degrees of the point of an ARC at angle, from its OCS to WCS
+static double
+ps_arc_angle (const Dwg_Entity_ARC *arc, const BITCODE_3DPOINT center,
+              const double angle)
+{
+  BITCODE_3DPOINT p, w;
+  p.x = arc->center.x + arc->radius * cos (angle);
+  p.y = arc->center.y + arc->radius * sin (angle);
+  p.z = arc->center.z;
+  transform_OCS (&w, p, arc->extrusion);
+  return atan2 (w.y - center.y, w.x - center.x) * 180.0 / M_PI;
+}
+
+// Draw an ARC.  PS_arc takes degrees and turns counterclockwise, so a
+// mirrored OCS, e.g. the extrusion (0,0,-1), swaps the ends.
+static void
+ps_arc (PSDoc *ps, const Dwg_Entity_ARC *arc)
+{
+  BITCODE_3DPOINT center;
+  double a, b;
+  transform_OCS (&center, arc->center, arc->extrusion);
+  a = ps_arc_angle (arc, center, arc->start_angle);
+  b = ps_arc_angle (arc, center, arc->end_angle);
+  if (transform_OCS_2d_is_mirrored (arc->extrusion))
+    {
+      const double t = a;
+      a = b;
+      b = t;
+    }
+  PS_arc (ps, (float)center.x, (float)center.y, (float)arc->radius, (float)a,
+          (float)b);
+  PS_stroke (ps);
+}
+
 static void
 create_postscript (Dwg_Data *dwg, char *output)
 {
@@ -227,12 +261,10 @@ create_postscript (Dwg_Data *dwg, char *output)
       if (obj->fixedtype == DWG_TYPE_LINE)
         {
           Dwg_Entity_LINE *line = obj->tio.entity->tio.LINE;
-          BITCODE_3DPOINT start, end;
 
-          transform_OCS (&start, line->start, line->extrusion);
-          transform_OCS (&end, line->end, line->extrusion);
-          PS_moveto (ps, (float)start.x, (float)start.y);
-          PS_lineto (ps, (float)end.x, (float)end.y);
+          // the points of a LINE are WCS
+          PS_moveto (ps, (float)line->start.x, (float)line->start.y);
+          PS_lineto (ps, (float)line->end.x, (float)line->end.y);
           PS_stroke (ps);
         }
       else if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
@@ -269,11 +301,7 @@ create_postscript (Dwg_Data *dwg, char *output)
         }
       else if (obj->fixedtype == DWG_TYPE_ARC)
         {
-          Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
-          BITCODE_3DPOINT center;
-          transform_OCS (&center, arc->center, arc->extrusion);
-          PS_arc (ps, (float)center.x, (float)center.y, (float)arc->radius,
-                  (float)arc->start_angle, (float)arc->end_angle);
+          ps_arc (ps, obj->tio.entity->tio.ARC);
         }
       else if (obj->fixedtype == DWG_TYPE_CIRCLE)
         {
@@ -282,6 +310,7 @@ create_postscript (Dwg_Data *dwg, char *output)
           transform_OCS (&center, circle->center, circle->extrusion);
           PS_circle (ps, (float)center.x, (float)center.y,
                      (float)circle->radius);
+          PS_stroke (ps);
         }
     }
 

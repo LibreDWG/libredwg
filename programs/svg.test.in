@@ -66,6 +66,36 @@ else
     i=$((i+1))
 fi
 
+# OCS: the WCS points of LINE, POINT and MTEXT, also before R13 without an
+# extrusion, a mirrored ARC and a tilted CIRCLE
+echo "dwg2SVG OCS"
+if $TESTPROG "./dwg2SVG${EXEEXT}" "$DATADIR/r11/entities-2d.dwg" 2>/dev/null |
+       grep -q 'id="dwg-object-24" d="M 1.139872,6.127279 L 2.139872,5.127279"' &&
+   $TESTPROG "./dwg2SVG${EXEEXT}" "$DATADIR/2007/ATMOS-DC22S.dwg" 2>/dev/null |
+       grep -q 'id="dwg-object-274" x="1043.513614"'
+then
+    echo svg ocs ok
+else
+    i=$((i+1))
+fi
+# 2000/OcsEntities.dxf is made with ezdxf
+if [ -x "./dxf2dwg${EXEEXT}" ] &&
+   $TESTPROG "./dxf2dwg${EXEEXT}" -y -o OcsEntities.dwg \
+       "$DATADIR/2000/OcsEntities.dxf" >/dev/null 2>&1
+then
+    $TESTPROG "./dwg2SVG${EXEEXT}" OcsEntities.dwg >OcsEntities.svg 2>/dev/null
+    if grep -q 'd="M 8.401924,7.500000 A 3.000000,3.000000 0 0,1 12.500000,6.401924"' OcsEntities.svg &&
+       grep -q 'd="M 3.000000,14.000000 L 6.000000,12.000000"' OcsEntities.svg &&
+       grep -q 'cx="5.000000" cy="10.000000" r="0.1"' OcsEntities.svg &&
+       grep -q 'cx="1.200000" cy="13.000000" r="1.000000"' OcsEntities.svg
+    then
+        echo svg OcsEntities ok
+    else
+        i=$((i+1))
+    fi
+    rm -f ./OcsEntities.dwg ./OcsEntities.svg
+fi
+
 if test "0" = "$i" ; then
     exit 0
 else

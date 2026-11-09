@@ -329,11 +329,9 @@ output_MTEXT (Dwg_Object *obj)
   first_offset = mtext_attachment_first_offset (mtext->attachment, line_height,
                                                 num_lines);
   anchor = mtext_attachment_anchor (mtext->attachment);
-  { BITCODE_2DPOINT ins2d;
-    ins2d.x = mtext->ins_pt.x;
-    ins2d.y = mtext->ins_pt.y;
-    transform_OCS_2d (&pt, ins2d, mtext->extrusion);
-  }
+  // the insertion point of an MTEXT is WCS, unlike that of a TEXT
+  pt.x = mtext->ins_pt.x;
+  pt.y = mtext->ins_pt.y;
 
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" font-family=\"%s\" "
           "font-size=\"%f\" fill=\"%s\" text-anchor=\"%s\"",
@@ -371,17 +369,15 @@ static void
 output_LINE (Dwg_Object *obj)
 {
   Dwg_Entity_LINE *line = obj->tio.entity->tio.LINE;
-  BITCODE_3DPOINT start, end;
 
   if (isnan_3BD (line->start) || isnan_3BD (line->end)
       || isnan_3BD (line->extrusion) || entity_invisible (obj))
     return;
-  transform_OCS (&start, line->start, line->extrusion);
-  transform_OCS (&end, line->end, line->extrusion);
+  // the points of a LINE are WCS, its extrusion is only for the thickness
   printf ("\t<!-- line-%d -->\n", obj->index);
   printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t", obj->index,
-          transform_X (start.x), transform_Y (start.y), transform_X (end.x),
-          transform_Y (end.y));
+          transform_X (line->start.x), transform_Y (line->start.y),
+          transform_X (line->end.x), transform_Y (line->end.y));
   common_entity (obj->tio.entity);
 }
 
@@ -509,50 +505,59 @@ static void
 output_POINT (Dwg_Object *obj)
 {
   Dwg_Entity_POINT *point = obj->tio.entity->tio.POINT;
-  BITCODE_3DPOINT pt, pt1;
+  BITCODE_3DPOINT pt;
 
   pt.x = point->x;
   pt.y = point->y;
   pt.z = point->z;
   if (isnan_3BD (pt) || isnan_3BD (point->extrusion) || entity_invisible (obj))
     return;
-  transform_OCS (&pt1, pt, point->extrusion);
+  // the point is WCS, as in a LINE
   printf ("\t<!-- point-%d -->\n", obj->index);
   printf ("\t<circle id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" r=\"0.1\"\n\t",
-          obj->index, transform_X (pt1.x), transform_Y (pt1.y));
+          obj->index, transform_X (pt.x), transform_Y (pt.y));
   common_entity (obj->tio.entity);
+}
+
+// A point of an ARC at angle, from its OCS to WCS
+static void
+arc_point (BITCODE_3DPOINT *out, const Dwg_Entity_ARC *arc, const double angle)
+{
+  BITCODE_3DPOINT p;
+  p.x = arc->center.x + arc->radius * cos (angle);
+  p.y = arc->center.y + arc->radius * sin (angle);
+  p.z = arc->center.z;
+  transform_OCS (out, p, arc->extrusion);
 }
 
 static void
 output_ARC (Dwg_Object *obj)
 {
   Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
-  BITCODE_3DPOINT center;
-  double x_start, y_start, x_end, y_end, span;
-  int large_arc;
+  BITCODE_3DPOINT start, end;
+  double span;
+  int large_arc, sweep;
 
   if (isnan_3BD (arc->center) || isnan_3BD (arc->extrusion)
       || isnan (arc->radius) || isnan (arc->start_angle)
       || isnan (arc->end_angle) || entity_invisible (obj))
     return;
-  transform_OCS (&center, arc->center, arc->extrusion);
-
-  x_start = center.x + arc->radius * cos (arc->start_angle);
-  y_start = center.y + arc->radius * sin (arc->start_angle);
-  x_end = center.x + arc->radius * cos (arc->end_angle);
-  y_end = center.y + arc->radius * sin (arc->end_angle);
-  // counterclockwise in the DWG, so a negative sweep (0) in SVG, as y is
-  // flipped; the span is in (0, 2 pi], also for an arc across angle 0
+  arc_point (&start, arc, arc->start_angle);
+  arc_point (&end, arc, arc->end_angle);
+  // the span is in (0, 2 pi], also for an arc across angle 0
   span = fmod (arc->end_angle - arc->start_angle, 2 * M_PI);
   if (span <= 0.0)
     span += 2 * M_PI;
   large_arc = span > M_PI;
+  // counterclockwise in the OCS, so a negative sweep (0) in SVG, as y is
+  // flipped; a mirrored OCS, e.g. the extrusion (0,0,-1), reverses it
+  sweep = transform_OCS_2d_is_mirrored (arc->extrusion);
 
   printf ("\t<!-- arc-%d -->\n", obj->index);
   printf (
-      "\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d,0 %f,%f\"\n\t",
-      obj->index, transform_X (x_start), transform_Y (y_start), arc->radius,
-      arc->radius, large_arc, transform_X (x_end), transform_Y (y_end));
+      "\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d,%d %f,%f\"\n\t",
+      obj->index, transform_X (start.x), transform_Y (start.y), arc->radius,
+      arc->radius, large_arc, sweep, transform_X (end.x), transform_Y (end.y));
   common_entity (obj->tio.entity);
 }
 
