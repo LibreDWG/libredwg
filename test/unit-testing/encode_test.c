@@ -1052,6 +1052,7 @@ acds_sab_test (void)
   if (!*msg)
     {
       dat.version = dat.from_version = R_2018;
+      dat.opts = dwg.opts; // INDXF: header strings are TV, not TU
       error = dwg_encode (&dwg, &dat);
       if (error >= DWG_ERR_CRITICAL || !dat.chain)
         snprintf (msg, sizeof msg, "dwg_encode error 0x%x", error);
@@ -1061,6 +1062,7 @@ acds_sab_test (void)
       dat.size = dat.byte;
       dat.byte = 0;
       dat.bit = 0;
+      dat.opts = 0; // binary DWG: strings are TU again
       error = dwg_decode (&dat, &dwg2);
       if (error >= DWG_ERR_CRITICAL)
         snprintf (msg, sizeof msg, "dwg_decode error 0x%x", error);
