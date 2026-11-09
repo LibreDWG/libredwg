@@ -84,8 +84,9 @@ transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
         }
       cross (&ay, az, ax);
       normalize (&ay, ay);
-      out->x = pt.x * ax.x + pt.y * ax.y;
-      out->y = pt.x * ay.x + pt.y * ay.y;
+      // OCS to WCS: the point in the OCS axes ax, ay
+      out->x = pt.x * ax.x + pt.y * ay.x;
+      out->y = pt.x * ax.y + pt.y * ay.y;
     }
   return;
 }
@@ -94,14 +95,17 @@ transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
 void
 transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
 {
-  if (ext.x == 0.0 && ext.y == 0.0 && ext.z == 1.0)
+  // [0,0,0] with preR13, as in transform_OCS_2d
+  if (ext.x == 0.0 && ext.y == 0.0 && (ext.z == 1.0 || ext.z == 0.0))
     {
       *out = pt;
     }
   else if (ext.x == 0.0 && ext.y == 0.0 && ext.z == -1.0)
     {
+      // the OCS axes are (-1,0,0), (0,1,0), (0,0,-1)
       *out = pt;
       out->x = -out->x;
+      out->z = -out->z;
     }
   else
     {
@@ -124,9 +128,10 @@ transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
         }
       cross (&ay, az, ax);
       normalize (&ay, ay);
-      out->x = pt.x * ax.x + pt.y * ax.y + pt.z * ax.z;
-      out->y = pt.x * ay.x + pt.y * ay.y + pt.z * ay.z;
-      out->z = pt.x * az.x + pt.y * az.y + pt.z * az.z;
+      // OCS to WCS: the point in the OCS axes ax, ay, az
+      out->x = pt.x * ax.x + pt.y * ay.x + pt.z * az.x;
+      out->y = pt.x * ax.y + pt.y * ay.y + pt.z * az.y;
+      out->z = pt.x * ax.z + pt.y * ay.z + pt.z * az.z;
     }
   return;
 }
