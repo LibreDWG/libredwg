@@ -291,6 +291,19 @@ then
         i=$((i+1))
     fi
 
+    # a full ellipse from pi to 3 pi + 4e-15 is closed, not a tiny arc
+    echo "dwgread -O geojson $DATADIR/2013/gh109_1.dwg | jq full ellipse"
+    if $TESTPROG "./dwgread${EXEEXT}" -O geojson "$DATADIR/2013/gh109_1.dwg" |
+        $JQ -e '[.features[] | select(.properties.EntityHandle == "4F1")
+                 | .geometry | .type == "Polygon"
+                   and (.coordinates[0] | unique | length > 3)]
+                == [true]' >/dev/null 2>&1
+    then
+        echo geojson full ellipse ok
+    else
+        i=$((i+1))
+    fi
+
     # a full ellipse is a Polygon, not one point; arcs are LineStrings
     echo "dwgread -O geojson $DATADIR/example_2000.dwg | jq ellipse, arcs"
     if $TESTPROG "./dwgread${EXEEXT}" -O geojson "$DATADIR/example_2000.dwg" |

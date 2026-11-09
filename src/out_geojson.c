@@ -1101,7 +1101,11 @@ dwg_geojson_ELLIPSE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   span = fmod (span, 2 * M_PI);
   if (span <= 0.0)
     span += 2 * M_PI;
-  closed = span > 2 * M_PI - 1e-9;
+  // also closed if the angles are a few ulp off a full turn, e.g. from
+  // pi to 3 pi + 4e-15, which leaves a span of 4e-15
+  closed = span < 1e-9 || span > 2 * M_PI - 1e-9;
+  if (closed)
+    span = 2 * M_PI;
   num_pts = calc_curve_segments (obj->parent, hypot (a.x, a.y), span);
   pts = (BITCODE_2BD *)malloc ((num_pts + 1) * sizeof (BITCODE_2BD));
   if (!pts)
