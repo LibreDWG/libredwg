@@ -54,6 +54,18 @@ for dwg in $DATA; do
     fi
 done
 
+# a large arc across angle 0, and an ellipse arc as a path
+echo "dwg2SVG arcs"
+if $TESTPROG "./dwg2SVG${EXEEXT}" "$DATADIR/example_2000.dwg" 2>/dev/null |
+       grep -q '<path id="dwg-object-50" d="M [^"]* A [^"]* 0 1,0 ' &&
+   $TESTPROG "./dwg2SVG${EXEEXT}" "$DATADIR/2013/gh109_1.dwg" 2>/dev/null |
+       grep -q '<path id="dwg-object-408" d="M [^"]* A '
+then
+    echo svg arcs ok
+else
+    i=$((i+1))
+fi
+
 if test "0" = "$i" ; then
     exit 0
 else

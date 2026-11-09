@@ -528,7 +528,7 @@ output_ARC (Dwg_Object *obj)
 {
   Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
   BITCODE_3DPOINT center;
-  double x_start, y_start, x_end, y_end;
+  double x_start, y_start, x_end, y_end, span;
   int large_arc;
 
   if (isnan_3BD (arc->center) || isnan_3BD (arc->extrusion)
@@ -541,8 +541,12 @@ output_ARC (Dwg_Object *obj)
   y_start = center.y + arc->radius * sin (arc->start_angle);
   x_end = center.x + arc->radius * cos (arc->end_angle);
   y_end = center.y + arc->radius * sin (arc->end_angle);
-  // Assuming clockwise arcs.
-  large_arc = (arc->end_angle - arc->start_angle < M_PI) ? 0 : 1;
+  // counterclockwise in the DWG, so a negative sweep (0) in SVG, as y is
+  // flipped; the span is in (0, 2 pi], also for an arc across angle 0
+  span = fmod (arc->end_angle - arc->start_angle, 2 * M_PI);
+  if (span <= 0.0)
+    span += 2 * M_PI;
+  large_arc = span > M_PI;
 
   printf ("\t<!-- arc-%d -->\n", obj->index);
   printf (
@@ -552,49 +556,68 @@ output_ARC (Dwg_Object *obj)
   common_entity (obj->tio.entity);
 }
 
-// FIXME
+// The point at parameter u of an ELLIPSE: center + major cos u + minor sin u
+static void
+ellipse_point (BITCODE_2DPOINT *p, const Dwg_Entity_ELLIPSE *ell,
+               const BITCODE_2DPOINT minor, const double u)
+{
+  p->x = ell->center.x + ell->sm_axis.x * cos (u) + minor.x * sin (u);
+  p->y = ell->center.y + ell->sm_axis.y * cos (u) + minor.y * sin (u);
+}
+
 static void
 output_ELLIPSE (Dwg_Object *obj)
 {
   Dwg_Entity_ELLIPSE *ell = obj->tio.entity->tio.ELLIPSE;
-  BITCODE_2DPOINT radius;
-  double angle_rad, angle_dec;
-  // BITCODE_3DPOINT center, sm_axis;
-  // double x_start, y_start, x_end, y_end;
+  const BITCODE_3BD a = ell->sm_axis;
+  const BITCODE_3BD n = ell->extrusion;
+  BITCODE_2DPOINT radius, minor, p1, p2;
+  double angle_dec, span;
 
   if (isnan_3BD (ell->center) || isnan_3BD (ell->extrusion)
       || isnan_3BD (ell->sm_axis) || isnan (ell->axis_ratio)
       || isnan (ell->start_angle) || isnan (ell->end_angle)
       || entity_invisible (obj))
     return;
-  /* The 2 points are already WCS */
-  // transform_OCS (&center, ell->center, ell->extrusion);
-  // transform_OCS (&sm_axis, ell->sm_axis, ell->extrusion);
-  radius.x = sqrt (ell->sm_axis.x * ell->sm_axis.x
-                   + ell->sm_axis.y * ell->sm_axis.y);
+  /* The center and the major axis are already WCS, the minor axis is
+     axis_ratio * (extrusion x major axis) */
+  radius.x = sqrt (a.x * a.x + a.y * a.y);
   radius.y = radius.x * ell->axis_ratio;
+  angle_dec = atan2 (a.y, a.x) * 180.0 / M_PI;
+  // the span is in (0, 2 pi]: 0 to 0 and 0 to 2 pi are full ellipses
+  span = fmod (ell->end_angle - ell->start_angle, 2 * M_PI);
+  if (span <= 0.0)
+    span += 2 * M_PI;
 
-  /*
-  x_start = ell->center.x + radius.x * cos (ell->start_angle);
-  y_start = ell->center.y + radius.y * sin (ell->start_angle);
-  x_end = ell->center.x + radius.x * cos (ell->end_angle);
-  y_end = ell->center.y + radius.y * sin (ell->end_angle);
-  */
-
-  angle_rad = atan2 (ell->sm_axis.y, ell->sm_axis.x);
-  angle_dec = angle_rad * 180.0 / M_PI;
-
-  // TODO: start,end_angle => pathLength
   printf ("\t<!-- ellipse-%d -->\n", obj->index);
   printf ("\t<!-- sm_axis=(%f,%f,%f) axis_ratio=%f start_angle=%f "
           "end_angle=%f-->\n",
           ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z, ell->axis_ratio,
           ell->start_angle, ell->end_angle);
-  printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
-          "ry=\"%f\" transform=\"rotate(%f %f %f)\"\n\t",
-          obj->index, transform_X (ell->center.x), transform_Y (ell->center.y),
-          radius.x, radius.y, transform_ANGLE (angle_dec),
-          transform_X (ell->center.x), transform_Y (ell->center.y));
+  // also full if the angles are a few ulp off a full turn
+  if (span < 1e-9 || span > 2 * M_PI - 1e-9)
+    {
+      printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
+              "ry=\"%f\" transform=\"rotate(%f %f %f)\"\n\t",
+              obj->index, transform_X (ell->center.x),
+              transform_Y (ell->center.y), radius.x, radius.y,
+              transform_ANGLE (angle_dec), transform_X (ell->center.x),
+              transform_Y (ell->center.y));
+      common_entity (obj->tio.entity);
+      return;
+    }
+  minor.x = ell->axis_ratio * (n.y * a.z - n.z * a.y);
+  minor.y = ell->axis_ratio * (n.z * a.x - n.x * a.z);
+  ellipse_point (&p1, ell, minor, ell->start_angle);
+  ellipse_point (&p2, ell, minor, ell->start_angle + span);
+  // y is flipped in SVG: the rotation changes sign, and so does the sweep,
+  // which is positive (1) for a clockwise arc, det (major, minor) < 0
+  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f %f %d,%d "
+          "%f,%f\"\n\t",
+          obj->index, transform_X (p1.x), transform_Y (p1.y), radius.x,
+          radius.y, -angle_dec, span > M_PI,
+          a.x * minor.y - a.y * minor.x < 0.0, transform_X (p2.x),
+          transform_Y (p2.y));
   common_entity (obj->tio.entity);
 }
 
