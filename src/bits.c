@@ -27,9 +27,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <unistd.h> // ftruncate
-#ifdef HAVE_SYS_MMAN_H
-#  include <sys/mman.h>
-#endif
+#include "mman.h"
 #include <math.h>
 #include <assert.h>
 #include <errno.h>
@@ -4253,22 +4251,16 @@ bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 void
 bit_chain_init (Bit_Chain *dat, const size_t size)
 {
-  if (dat->opts & DWG_OPTS_MMAP)
+#ifdef DWG_HAVE_MMAP
+  // A chain that owns a mapping is never re-allocated (that would orphan the
+  // mapped file region); we only grow it if it is too small.
+  if ((dat->opts & DWG_OPTS_MMAP) && dat->mapped)
     {
-      int fd = fileno (dat->fh);
-      dat->size = size;
-      if (fd < 0 || ftruncate (fd, dat->size))
-        {
-          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("ftruncate failed with %s", strerror (errno));
-#ifdef DWG_ABORT
-          abort ();
-#else
-          return;
-#endif
-        }
+      if (size > dat->size)
+        bit_chain_alloc_size (dat, size - dat->size);
       return;
     }
+#endif
   GCC14_DIAG_IGNORE (-Wanalyzer-malloc-leak)
   if (size > MAX_MEM_ALLOC)
     {
@@ -4312,8 +4304,8 @@ bit_chain_init_dat (Bit_Chain *restrict dat, const size_t size,
 void
 bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
 {
-#ifdef HAVE_SYS_MMAN_H
-  if (dat->opts & DWG_OPTS_MMAP)
+#ifdef DWG_HAVE_MMAP
+  if ((dat->opts & DWG_OPTS_MMAP) && dat->mapped)
     {
       unsigned char *chain;
       size_t old_size;
@@ -4331,7 +4323,34 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
           return;
 #  endif
         }
+      // callers rely on dat->size being increased by at least size, so never
+      // grow less than that (bit_write_* compute the exact shortfall here).
       new_size = old_size + size;
+      // additionally double like glibc's realloc(), to keep the number of
+      // remaps (and re-faulted pages) O(log n) for big files. but cap it at
+      // ~2x the content written so far: reservation-style callers keep
+      // calling this with small sizes while the content catches up, and an
+      // uncapped doubling would bloat the file to MAX_MEM_ALLOC.
+      if (old_size)
+        {
+          size_t max_headroom
+              = (dat->byte > (MAX_MEM_ALLOC - 4096) / 2)
+                    ? MAX_MEM_ALLOC
+                    : dat->byte * 2 + 4096;
+          if (new_size < old_size * 2 && old_size * 2 <= max_headroom
+              && old_size * 2 <= MAX_MEM_ALLOC)
+            new_size = old_size * 2;
+        }
+      if (new_size <= dat->mapped)
+        {
+          // fits the existing mapping (and file), e.g. after the r2000
+          // dat->size = dat->byte trim: just extend the visible size, no
+          // remap. also keeps ftruncate() from ever shrinking the file.
+          dat->size = new_size;
+          return;
+        }
+      // the file content is preserved: the mapping stays on the same fd and
+      // ftruncate() only extends it.
       fd = fileno (dat->fh);
       if (fd < 0 || ftruncate (fd, new_size))
         {
@@ -4343,9 +4362,9 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
           return;
 #  endif
         }
-      if (dat->chain && old_size)
+      if (dat->chain && dat->mapped)
         {
-          if (munmap (dat->chain, old_size))
+          if (munmap (dat->chain, dat->mapped))
             {
               loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
               LOG_ERROR ("unmap failed with %s", strerror (errno));
@@ -4357,6 +4376,7 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
             }
           dat->chain = NULL;
           dat->size = 0;
+          dat->mapped = 0;
         }
       chain = (unsigned char *)mmap (NULL, new_size, PROT_READ | PROT_WRITE,
                                     MAP_SHARED, fd, 0L);
@@ -4372,6 +4392,7 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
         }
       dat->chain = chain;
       dat->size = new_size;
+      dat->mapped = new_size;
       return;
     }
 #endif
@@ -4422,7 +4443,16 @@ bit_chain_free (Bit_Chain *dat)
 {
   if (dat->chain)
     {
-      free (dat->chain);
+#ifdef DWG_HAVE_MMAP
+      // chain owns a mapping (base pointer): unmap, never free
+      if (dat->mapped)
+        {
+          munmap (dat->chain, dat->mapped);
+          dat->mapped = 0;
+        }
+      else
+#endif
+        free (dat->chain);
       dat->chain = NULL;
     }
   dat->size = 0;

@@ -35,6 +35,7 @@ libredwg_la_SOURCES = \
 	common.c \
 	codepages.c \
 	bits.c \
+	mman.c \
 	logging.c \
 	decode.c \
 	decode2.c \
@@ -89,6 +90,7 @@ EXTRA_HEADERS = \
 	dwg.spec \
 	dwg2.spec \
 	dwg_spec_shared.h \
+	mman.h \
 	enc_macros.h \
 	header_variables.spec \
 	insert.spec \

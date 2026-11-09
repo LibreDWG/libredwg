@@ -83,7 +83,7 @@ main (int argc, char *argv[])
 {
   int c, err, out_json = 1;
   Dwg_Data dwg;
-  Bit_Chain dat = { NULL, 0, 0, 0, 0, 0, 0, NULL, 0 };
+  Bit_Chain dat = EMPTY_CHAIN (0);
   int copied = 0;
   unsigned char *orig_buf = NULL;
   FILE *outf = stdout;

@@ -294,7 +294,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
            before DWG_OBJECT_END could free the per-object streams */         \
         LOG_HANDLE ("Early exit bypassed DWG_OBJECT_END\n");                  \
         bit_chain_free (hdl_dat);                                             \
-      } /* clang-format on */                                                     \
+      } /* clang-format on */                                                 \
     if (str_dat != dat && str_dat->chain)                                     \
       bit_chain_free (str_dat);                                               \
     dwg_encode_unknown_rest (dat, obj);                                       \
@@ -2802,7 +2802,7 @@ encode_objfreespace_2ndheader (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {                                                                         \
       unsigned char chain[8];                                                 \
       Bit_Chain hdat                                                          \
-          = { chain, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 };          \
+        = { chain, 8L, 8L, 0L, 0, 0, R_INVALID, R_INVALID, NULL, 30 };        \
       bit_H_to_dat (&hdat, &dwg->header_vars.NAM->handleref);                 \
       _obj->handles[i].name = #NAM;                                           \
       for (int k = 0; k < MIN ((int)_obj->handles[i].num_hdl, 8); k++)        \
@@ -4591,20 +4591,18 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     {
       Dwg_R2004_Header *_obj = &dwg->fhdr.r2004_header;
-      Bit_Chain file_dat = { NULL,
-                             sizeof (Dwg_R2004_Header),
-                             0UL,
-                             0,
-                             dat->opts,
-                             dat->version,
-                             dat->from_version,
-                             dat->fh,
-                             dat->codepage };
       BITCODE_RC overlap_hdr[sizeof (Dwg_R2004_Header)];
       Bit_Chain *orig_dat = dat;
       /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
       const char enc_file_ID_string[]
           = "\x68\x40\xF8\xF7\x92\x2A\xB5\xEF\x18\xDD\x0B\xF1";
+      Bit_Chain file_dat = { 0 };
+      file_dat.size = sizeof (Dwg_R2004_Header);
+      file_dat.opts = dat->opts & ~DWG_OPTS_MMAP;
+      file_dat.version = dat->version;
+      file_dat.from_version = dat->from_version;
+      file_dat.fh = dat->fh;
+      file_dat.codepage = dat->codepage;
 
       file_dat.chain = (unsigned char *)calloc (1, sizeof (Dwg_R2004_Header));
       dat = &file_dat;

@@ -87,6 +87,7 @@ endif()
 CHECK_INCLUDE_FILE("iconv.h" HAVE_ICONV_H)
 CHECK_INCLUDE_FILE("pcre2.h" HAVE_PCRE2_H)
 CHECK_INCLUDE_FILE("sys/stat.h" HAVE_SYS_STAT_H)
+CHECK_INCLUDE_FILE("sys/mman.h" HAVE_SYS_MMAN_H)
 CHECK_INCLUDE_FILE("direct.h" HAVE_DIRECT_H)
 CHECK_INCLUDE_FILE("sys/param.h" HAVE_SYS_PARAM_H)
 CHECK_INCLUDE_FILE("sys/time.h" HAVE_SYS_TIME_H)
@@ -259,6 +260,7 @@ endif()
 
 set(libredwg_SOURCES
     src/bits.c
+    src/mman.c
     src/codepages.c
     src/common.c
     src/logging.c
