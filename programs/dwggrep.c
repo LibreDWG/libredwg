@@ -323,8 +323,7 @@ do_match (const int is16, const char *restrict filename,
       {                                                                       \
         if (obj->parent->header.version >= R_2007)                            \
           text = bit_convert_TU ((BITCODE_TU)text);                           \
-        found += do_match (obj->parent->header.version >= R_2007, filename,   \
-                           #ENTITY, dxfgroup, text);                          \
+        found += do_match (0, filename, #ENTITY, dxfgroup, text);             \
         if (obj->parent->header.version >= R_2007)                            \
           free (text);                                                        \
       }
@@ -534,7 +533,7 @@ match_LTYPE (const char *restrict filename, const Dwg_Object *restrict obj)
                                            max_wchars);
                 if (text)
                   {
-                    found += do_match (1, filename, "LTYPE", 9, text);
+                    found += do_match (0, filename, "LTYPE", 9, text);
                     free (text);
                   }
               }
