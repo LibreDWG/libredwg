@@ -655,6 +655,11 @@ DWG_ENTITY (BLOCK)
       FIELD_TV (name, 2);
     }
   }
+  SINCE (R_13b1) {
+    FREE { // set by the DXF importer from the DXF 1, if not used for an xref
+      FIELD_TV (xref_pname, 1);
+    }
+  }
 #endif
 #ifdef IS_DXF
   VERSIONS (R_2_0b, R_11)
@@ -2919,6 +2924,9 @@ DWG_ENTITY (MTEXT)
               }
           }
       }
+  }
+  FREE { // the DXF importer reads the 46 also for other column types
+    FIELD_VECTOR (column_heights, BD, num_column_heights, 46);
   }
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END

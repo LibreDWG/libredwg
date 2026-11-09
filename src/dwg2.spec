@@ -3231,6 +3231,7 @@ DWG_OBJECT_END
       FIELD_VECTOR (values, BL, num_values, 0);                       \
     }                                                                 \
   }                                                                   \
+  FREE { FIELD_TV (classname, 1); } /* set by the DXF importer */      \
   FIELD_B (dependent_on_compound_object, 290)
 
 #define AcDbAssocEdgePersSubentId_fields \
