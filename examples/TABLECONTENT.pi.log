@@ -72,7 +72,7 @@ BL90 3: 0100000011 8 positions
 BD40 5.0: 000000000000000000000000000000000000000000000000000001010001000000 3 positions
 BL90 1: 0100000001 26 positions
 BL90 69: 0101000101 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL91 0: 10 713 positions
 BL90 1: 0100000001 26 positions
 BL93 2: 0100000010 13 positions
@@ -101,7 +101,7 @@ BL90 2: 0100000010 13 positions
 BS170 0: 10 713 positions
 BL90 3: 0100000011 8 positions
 BD40 5.0: 000000000000000000000000000000000000000000000000000001010001000000 3 positions
-distribute positions: BD40 BD40 BD40 
+distribute positions: BD40 BD40 BD40
 BL92 0: 10 713 positions
 BL90 4: 0100000100 12 positions
 BS170 0: 10 713 positions
@@ -700,7 +700,7 @@ BL90 3: 0100000011 21 positions
 BD40 4.0: 000000000000000000000000000000000000000000000000000001000001000000 9 positions
 BL90 1: 0100000001 74 positions
 BL90 69: 0101000101 9 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90
 BL91 0: 10 4043 positions
 BL90 1: 0100000001 74 positions
 BL93 2: 0100000010 33 positions
@@ -729,7 +729,7 @@ BL90 2: 0100000010 33 positions
 BS170 0: 10 4043 positions
 BL90 3: 0100000011 21 positions
 BD40 4.0: 000000000000000000000000000000000000000000000000000001000001000000 9 positions
-distribute positions: BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 
+distribute positions: BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40
 BL92 0: 10 4043 positions
 BL90 4: 0100000100 108 positions
 BS170 0: 10 4043 positions
@@ -1221,7 +1221,7 @@ BL94 0: 10 98 positions
 BL91 0: 10 98 positions
 BS170 1: 0100000001 8 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 98 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 98 positions
@@ -1232,14 +1232,14 @@ CMC62 0: 101000000000 fixed = [194,205]
 H340 4.0.0: 01000000 17 positions
 BD144 0.18: 000000101011010111101000110111000000111101000010101100011100111111 fixed = [317,382]
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90 
+distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90
 BS170 0: 10 98 positions
 BL90 0: 10 98 positions
 BL91 0: 10 98 positions
 BL91 0: 10 98 positions
 BL90 0: 10 98 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 98 positions
 BL90 0: 10 98 positions
 BD40 0.0: 10 98 positions
@@ -1340,7 +1340,7 @@ BL94 0: 10 98 positions
 BL91 0: 10 98 positions
 BS170 1: 0100000001 8 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 98 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 98 positions
@@ -1351,14 +1351,14 @@ CMC62 0: 101000000000 fixed = [194,205]
 H340 4.0.0: 01000000 17 positions
 BD144 0.18: 000000101011010111101000110111000000111101000010101100011100111111 fixed = [317,382]
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90 
+distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90
 BS170 0: 10 98 positions
 BL90 0: 10 98 positions
 BL91 0: 10 98 positions
 BL91 0: 10 98 positions
 BL90 0: 10 98 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 98 positions
 BL90 0: 10 98 positions
 BD40 0.0: 10 98 positions
@@ -1459,7 +1459,7 @@ BL94 0: 10 99 positions
 BL91 0: 10 99 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 99 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 99 positions
@@ -1476,13 +1476,13 @@ BL91 0: 10 99 positions
 BL91 0: 10 99 positions
 BL90 0: 10 99 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 99 positions
 BL90 0: 10 99 positions
 BD40 0.0: 10 99 positions
 BL92 0: 10 99 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 99 positions
 BL90 0: 10 99 positions
 H340 4.0.0: 01000000 17 positions
@@ -1577,7 +1577,7 @@ BL94 0: 10 112 positions
 BL91 0: 10 112 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 112 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 112 positions
@@ -1594,7 +1594,7 @@ BL91 0: 10 112 positions
 BL91 0: 10 112 positions
 BL90 0: 10 112 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 112 positions
 BL90 0: 10 112 positions
 BD40 0.0: 10 112 positions
@@ -1693,7 +1693,7 @@ BL94 0: 10 115 positions
 BL91 0: 10 115 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 115 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 115 positions
@@ -1710,13 +1710,13 @@ BL91 0: 10 115 positions
 BL91 0: 10 115 positions
 BL90 0: 10 115 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 BD40 0.0: 10 115 positions
 BL92 0: 10 115 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 H340 4.0.0: 01000000 21 positions
@@ -1811,7 +1811,7 @@ BL94 0: 10 115 positions
 BL91 0: 10 115 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 115 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 115 positions
@@ -1828,7 +1828,7 @@ BL91 0: 10 115 positions
 BL91 0: 10 115 positions
 BL90 0: 10 115 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 BD40 0.0: 10 115 positions
@@ -1926,7 +1926,7 @@ BL94 0: 10 121 positions
 BL91 0: 10 121 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 121 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 121 positions
@@ -2038,7 +2038,7 @@ BL94 0: 10 113 positions
 BL91 0: 10 113 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 113 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 113 positions
@@ -2055,7 +2055,7 @@ BL91 0: 10 113 positions
 BL91 0: 10 113 positions
 BL90 0: 10 113 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 113 positions
 BL90 0: 10 113 positions
 BD40 0.0: 10 113 positions
@@ -2153,7 +2153,7 @@ BL94 0: 10 126 positions
 BL91 0: 10 126 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 126 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 126 positions
@@ -2170,13 +2170,13 @@ BL91 0: 10 126 positions
 BL91 0: 10 126 positions
 BL90 0: 10 126 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 126 positions
 BL90 0: 10 126 positions
 BD40 0.0: 10 126 positions
 BL92 0: 10 126 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 126 positions
 BL90 0: 10 126 positions
 H340 4.0.0: 01000000 26 positions
@@ -2271,7 +2271,7 @@ BL94 0: 10 132 positions
 BL91 0: 10 132 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 132 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 132 positions
@@ -2288,13 +2288,13 @@ BL91 0: 10 132 positions
 BL91 0: 10 132 positions
 BL90 0: 10 132 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 132 positions
 BL90 0: 10 132 positions
 BD40 0.0: 10 132 positions
 BL92 0: 10 132 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 132 positions
 BL90 0: 10 132 positions
 H340 4.0.0: 01000000 21 positions
@@ -2389,7 +2389,7 @@ BL94 0: 10 133 positions
 BL91 0: 10 133 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 133 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 133 positions
@@ -2406,13 +2406,13 @@ BL91 0: 10 133 positions
 BL91 0: 10 133 positions
 BL90 0: 10 133 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 133 positions
 BL90 0: 10 133 positions
 BD40 0.0: 10 133 positions
 BL92 0: 10 133 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 133 positions
 BL90 0: 10 133 positions
 H340 4.0.0: 01000000 32 positions
@@ -2507,7 +2507,7 @@ BL94 0: 10 130 positions
 BL91 0: 10 130 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 130 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 130 positions
@@ -2524,13 +2524,13 @@ BL91 0: 10 130 positions
 BL91 0: 10 130 positions
 BL90 0: 10 130 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 130 positions
 BL90 0: 10 130 positions
 BD40 0.0: 10 130 positions
 BL92 0: 10 130 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 130 positions
 BL90 0: 10 130 positions
 H340 4.0.0: 01000000 25 positions
@@ -2625,7 +2625,7 @@ BL94 0: 10 137 positions
 BL91 0: 10 137 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 137 positions
 BL92 4: 0100000100 5 positions
 BL93 0: 10 137 positions
@@ -2642,7 +2642,7 @@ BL91 0: 10 137 positions
 BL91 0: 10 137 positions
 BL90 0: 10 137 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 137 positions
 BL90 0: 10 137 positions
 BD40 0.0: 10 137 positions
@@ -2740,7 +2740,7 @@ BL94 0: 10 214 positions
 BL91 0: 10 214 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 214 positions
 BL92 4: 0100000100 7 positions
 BL93 0: 10 214 positions
@@ -2757,7 +2757,7 @@ BL91 0: 10 214 positions
 BL91 0: 10 214 positions
 BL90 0: 10 214 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 214 positions
 BL90 0: 10 214 positions
 BD40 0.0: 10 214 positions
@@ -2855,7 +2855,7 @@ BL94 0: 10 260 positions
 BL91 0: 10 260 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 260 positions
 BL92 4: 0100000100 6 positions
 BL93 0: 10 260 positions
@@ -2872,7 +2872,7 @@ BL91 0: 10 260 positions
 BL91 0: 10 260 positions
 BL90 0: 10 260 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 260 positions
 BL90 0: 10 260 positions
 BD40 0.0: 10 260 positions
@@ -2970,7 +2970,7 @@ BL94 0: 10 274 positions
 BL91 0: 10 274 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 274 positions
 BL92 4: 0100000100 10 positions
 BL93 0: 10 274 positions
@@ -2987,7 +2987,7 @@ BL91 0: 10 274 positions
 BL91 0: 10 274 positions
 BL90 0: 10 274 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 274 positions
 BL90 0: 10 274 positions
 BD40 0.0: 10 274 positions
@@ -3085,7 +3085,7 @@ BL94 0: 10 302 positions
 BL91 0: 10 302 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 302 positions
 BL92 4: 0100000100 9 positions
 BL93 0: 10 302 positions
@@ -3102,7 +3102,7 @@ BL91 0: 10 302 positions
 BL91 0: 10 302 positions
 BL90 0: 10 302 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 302 positions
 BL90 0: 10 302 positions
 BD40 0.0: 10 302 positions
@@ -3200,7 +3200,7 @@ BL94 0: 10 344 positions
 BL91 0: 10 344 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 344 positions
 BL92 4: 0100000100 9 positions
 BL93 0: 10 344 positions
@@ -3217,7 +3217,7 @@ BL91 0: 10 344 positions
 BL91 0: 10 344 positions
 BL90 0: 10 344 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 344 positions
 BL90 0: 10 344 positions
 BD40 0.0: 10 344 positions
@@ -3315,7 +3315,7 @@ BL94 0: 10 343 positions
 BL91 0: 10 343 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 343 positions
 BL92 4: 0100000100 10 positions
 BL93 0: 10 343 positions
@@ -3332,7 +3332,7 @@ BL91 0: 10 343 positions
 BL91 0: 10 343 positions
 BL90 0: 10 343 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 343 positions
 BL90 0: 10 343 positions
 BD40 0.0: 10 343 positions
@@ -3478,7 +3478,7 @@ BL90 3: 0100000011 8 positions
 BD40 5.0: 000000000000000000000000000000000000000000000000000001010001000000 3 positions
 BL90 1: 0100000001 26 positions
 BL90 69: 0101000101 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL91 0: 10 722 positions
 BL90 1: 0100000001 26 positions
 BL93 2: 0100000010 13 positions
@@ -3507,7 +3507,7 @@ BL90 2: 0100000010 13 positions
 BS170 0: 10 722 positions
 BL90 3: 0100000011 8 positions
 BD40 5.0: 000000000000000000000000000000000000000000000000000001010001000000 3 positions
-distribute positions: BD40 BD40 BD40 
+distribute positions: BD40 BD40 BD40
 BL92 0: 10 722 positions
 BL90 4: 0100000100 12 positions
 BS170 0: 10 722 positions
@@ -4106,7 +4106,7 @@ BL90 3: 0100000011 21 positions
 BD40 4.0: 000000000000000000000000000000000000000000000000000001000001000000 9 positions
 BL90 1: 0100000001 74 positions
 BL90 69: 0101000101 9 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90
 BL91 0: 10 4052 positions
 BL90 1: 0100000001 74 positions
 BL93 2: 0100000010 33 positions
@@ -4135,7 +4135,7 @@ BL90 2: 0100000010 33 positions
 BS170 0: 10 4052 positions
 BL90 3: 0100000011 21 positions
 BD40 4.0: 000000000000000000000000000000000000000000000000000001000001000000 9 positions
-distribute positions: BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 
+distribute positions: BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40
 BL92 0: 10 4052 positions
 BL90 4: 0100000100 108 positions
 BS170 0: 10 4052 positions
@@ -4501,7 +4501,7 @@ BS170 1: 0100000001 12 positions
 BL91 0: 10 252 positions
 BL92 0: 10 252 positions
 BL93 1: 0100000001 12 positions
-distribute positions: BL90 BL91 BL90 BL90 BL92 BL93 BL94 BL95 BL90 BL90 BS170 BL93 
+distribute positions: BL90 BL91 BL90 BL90 BL92 BL93 BL94 BL95 BL90 BL90 BS170 BL93
 BL90 0: 10 252 positions
 BL91 0: 10 252 positions
 BL92 512: 0000000000000000100000000000000000 fixed = [491,524]
@@ -4634,7 +4634,7 @@ BL94 0: 10 95 positions
 BL91 0: 10 95 positions
 BS170 1: 0100000001 8 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 95 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 95 positions
@@ -4644,14 +4644,14 @@ BL94 1: 0100000001 8 positions
 H340 4.0.0: 01000000 17 positions
 BD144 0.18: 000000101011010111101000110111000000111101000010101100011100111111 fixed = [301,366]
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90 
+distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90
 BS170 0: 10 95 positions
 BL90 0: 10 95 positions
 BL91 0: 10 95 positions
 BL91 0: 10 95 positions
 BL90 0: 10 95 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 95 positions
 BL90 0: 10 95 positions
 BD40 0.0: 10 95 positions
@@ -4750,7 +4750,7 @@ BL94 0: 10 95 positions
 BL91 0: 10 95 positions
 BS170 1: 0100000001 8 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 95 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 95 positions
@@ -4760,14 +4760,14 @@ BL94 1: 0100000001 8 positions
 H340 4.0.0: 01000000 17 positions
 BD144 0.18: 000000101011010111101000110111000000111101000010101100011100111111 fixed = [301,366]
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90 
+distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90
 BS170 0: 10 95 positions
 BL90 0: 10 95 positions
 BL91 0: 10 95 positions
 BL91 0: 10 95 positions
 BL90 0: 10 95 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 95 positions
 BL90 0: 10 95 positions
 BD40 0.0: 10 95 positions
@@ -4866,7 +4866,7 @@ BL94 0: 10 99 positions
 BL91 0: 10 99 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 99 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 99 positions
@@ -4883,13 +4883,13 @@ BL91 0: 10 99 positions
 BL91 0: 10 99 positions
 BL90 0: 10 99 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 99 positions
 BL90 0: 10 99 positions
 BD40 0.0: 10 99 positions
 BL92 0: 10 99 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 99 positions
 BL90 0: 10 99 positions
 H340 4.0.0: 01000000 17 positions
@@ -4984,7 +4984,7 @@ BL94 0: 10 112 positions
 BL91 0: 10 112 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 112 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 112 positions
@@ -5001,7 +5001,7 @@ BL91 0: 10 112 positions
 BL91 0: 10 112 positions
 BL90 0: 10 112 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 112 positions
 BL90 0: 10 112 positions
 BD40 0.0: 10 112 positions
@@ -5100,7 +5100,7 @@ BL94 0: 10 115 positions
 BL91 0: 10 115 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 115 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 115 positions
@@ -5117,13 +5117,13 @@ BL91 0: 10 115 positions
 BL91 0: 10 115 positions
 BL90 0: 10 115 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 BD40 0.0: 10 115 positions
 BL92 0: 10 115 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 H340 4.0.0: 01000000 21 positions
@@ -5218,7 +5218,7 @@ BL94 0: 10 115 positions
 BL91 0: 10 115 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 115 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 115 positions
@@ -5235,7 +5235,7 @@ BL91 0: 10 115 positions
 BL91 0: 10 115 positions
 BL90 0: 10 115 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 BD40 0.0: 10 115 positions
@@ -5333,7 +5333,7 @@ BL94 0: 10 121 positions
 BL91 0: 10 121 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 121 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 121 positions
@@ -5445,7 +5445,7 @@ BL94 0: 10 113 positions
 BL91 0: 10 113 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 113 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 113 positions
@@ -5462,7 +5462,7 @@ BL91 0: 10 113 positions
 BL91 0: 10 113 positions
 BL90 0: 10 113 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 113 positions
 BL90 0: 10 113 positions
 BD40 0.0: 10 113 positions
@@ -5560,7 +5560,7 @@ BL94 0: 10 126 positions
 BL91 0: 10 126 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 126 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 126 positions
@@ -5577,13 +5577,13 @@ BL91 0: 10 126 positions
 BL91 0: 10 126 positions
 BL90 0: 10 126 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 126 positions
 BL90 0: 10 126 positions
 BD40 0.0: 10 126 positions
 BL92 0: 10 126 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 126 positions
 BL90 0: 10 126 positions
 H340 4.0.0: 01000000 26 positions
@@ -5678,7 +5678,7 @@ BL94 0: 10 132 positions
 BL91 0: 10 132 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 132 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 132 positions
@@ -5695,13 +5695,13 @@ BL91 0: 10 132 positions
 BL91 0: 10 132 positions
 BL90 0: 10 132 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 132 positions
 BL90 0: 10 132 positions
 BD40 0.0: 10 132 positions
 BL92 0: 10 132 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 132 positions
 BL90 0: 10 132 positions
 H340 4.0.0: 01000000 21 positions
@@ -5796,7 +5796,7 @@ BL94 0: 10 133 positions
 BL91 0: 10 133 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 133 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 133 positions
@@ -5813,13 +5813,13 @@ BL91 0: 10 133 positions
 BL91 0: 10 133 positions
 BL90 0: 10 133 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 133 positions
 BL90 0: 10 133 positions
 BD40 0.0: 10 133 positions
 BL92 0: 10 133 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 133 positions
 BL90 0: 10 133 positions
 H340 4.0.0: 01000000 32 positions
@@ -5914,7 +5914,7 @@ BL94 0: 10 130 positions
 BL91 0: 10 130 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 130 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 130 positions
@@ -5931,13 +5931,13 @@ BL91 0: 10 130 positions
 BL91 0: 10 130 positions
 BL90 0: 10 130 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 130 positions
 BL90 0: 10 130 positions
 BD40 0.0: 10 130 positions
 BL92 0: 10 130 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 130 positions
 BL90 0: 10 130 positions
 H340 4.0.0: 01000000 25 positions
@@ -6032,7 +6032,7 @@ BL94 0: 10 137 positions
 BL91 0: 10 137 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 137 positions
 BL92 4: 0100000100 5 positions
 BL93 0: 10 137 positions
@@ -6049,7 +6049,7 @@ BL91 0: 10 137 positions
 BL91 0: 10 137 positions
 BL90 0: 10 137 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 137 positions
 BL90 0: 10 137 positions
 BD40 0.0: 10 137 positions
@@ -6147,7 +6147,7 @@ BL94 0: 10 214 positions
 BL91 0: 10 214 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 214 positions
 BL92 4: 0100000100 7 positions
 BL93 0: 10 214 positions
@@ -6164,7 +6164,7 @@ BL91 0: 10 214 positions
 BL91 0: 10 214 positions
 BL90 0: 10 214 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 214 positions
 BL90 0: 10 214 positions
 BD40 0.0: 10 214 positions
@@ -6262,7 +6262,7 @@ BL94 0: 10 260 positions
 BL91 0: 10 260 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 260 positions
 BL92 4: 0100000100 6 positions
 BL93 0: 10 260 positions
@@ -6279,7 +6279,7 @@ BL91 0: 10 260 positions
 BL91 0: 10 260 positions
 BL90 0: 10 260 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 260 positions
 BL90 0: 10 260 positions
 BD40 0.0: 10 260 positions
@@ -6377,7 +6377,7 @@ BL94 0: 10 274 positions
 BL91 0: 10 274 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 274 positions
 BL92 4: 0100000100 10 positions
 BL93 0: 10 274 positions
@@ -6394,7 +6394,7 @@ BL91 0: 10 274 positions
 BL91 0: 10 274 positions
 BL90 0: 10 274 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 274 positions
 BL90 0: 10 274 positions
 BD40 0.0: 10 274 positions
@@ -6492,7 +6492,7 @@ BL94 0: 10 302 positions
 BL91 0: 10 302 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 302 positions
 BL92 4: 0100000100 9 positions
 BL93 0: 10 302 positions
@@ -6509,7 +6509,7 @@ BL91 0: 10 302 positions
 BL91 0: 10 302 positions
 BL90 0: 10 302 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 302 positions
 BL90 0: 10 302 positions
 BD40 0.0: 10 302 positions
@@ -6607,7 +6607,7 @@ BL94 0: 10 344 positions
 BL91 0: 10 344 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 344 positions
 BL92 4: 0100000100 9 positions
 BL93 0: 10 344 positions
@@ -6624,7 +6624,7 @@ BL91 0: 10 344 positions
 BL91 0: 10 344 positions
 BL90 0: 10 344 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 344 positions
 BL90 0: 10 344 positions
 BD40 0.0: 10 344 positions
@@ -6722,7 +6722,7 @@ BL94 0: 10 343 positions
 BL91 0: 10 343 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 343 positions
 BL92 4: 0100000100 10 positions
 BL93 0: 10 343 positions
@@ -6739,7 +6739,7 @@ BL91 0: 10 343 positions
 BL91 0: 10 343 positions
 BL90 0: 10 343 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 343 positions
 BL90 0: 10 343 positions
 BD40 0.0: 10 343 positions
@@ -6885,7 +6885,7 @@ BL90 3: 0100000011 8 positions
 BD40 5.0: 000000000000000000000000000000000000000000000000000001010001000000 3 positions
 BL90 1: 0100000001 26 positions
 BL90 69: 0101000101 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL91 0: 10 722 positions
 BL90 1: 0100000001 26 positions
 BL93 2: 0100000010 13 positions
@@ -6914,7 +6914,7 @@ BL90 2: 0100000010 13 positions
 BS170 0: 10 722 positions
 BL90 3: 0100000011 8 positions
 BD40 5.0: 000000000000000000000000000000000000000000000000000001010001000000 3 positions
-distribute positions: BD40 BD40 BD40 
+distribute positions: BD40 BD40 BD40
 BL92 0: 10 722 positions
 BL90 4: 0100000100 12 positions
 BS170 0: 10 722 positions
@@ -7514,7 +7514,7 @@ BL90 3: 0100000011 21 positions
 BD40 4.0: 000000000000000000000000000000000000000000000000000001000001000000 9 positions
 BL90 1: 0100000001 74 positions
 BL90 69: 0101000101 9 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90
 BL91 0: 10 4060 positions
 BL90 1: 0100000001 74 positions
 BL93 2: 0100000010 33 positions
@@ -7543,7 +7543,7 @@ BL90 2: 0100000010 33 positions
 BS170 0: 10 4060 positions
 BL90 3: 0100000011 21 positions
 BD40 4.0: 000000000000000000000000000000000000000000000000000001000001000000 9 positions
-distribute positions: BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 
+distribute positions: BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40
 BL92 0: 10 4060 positions
 BL90 4: 0100000100 108 positions
 BS170 0: 10 4060 positions
@@ -7909,7 +7909,7 @@ BS170 1: 0100000001 12 positions
 BL91 0: 10 278 positions
 BL92 0: 10 278 positions
 BL93 1: 0100000001 12 positions
-distribute positions: BL90 BL91 BL90 BL90 BL92 BL93 BL94 BL95 BL90 BL90 BS170 BL93 
+distribute positions: BL90 BL91 BL90 BL90 BL92 BL93 BL94 BL95 BL90 BL90 BS170 BL93
 BL90 0: 10 278 positions
 BL91 0: 10 278 positions
 BL92 512: 0000000000000000100000000000000000 fixed = [571,604]
@@ -8042,7 +8042,7 @@ BL94 0: 10 99 positions
 BL91 0: 10 99 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 99 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 99 positions
@@ -8059,13 +8059,13 @@ BL91 0: 10 99 positions
 BL91 0: 10 99 positions
 BL90 0: 10 99 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 99 positions
 BL90 0: 10 99 positions
 BD40 0.0: 10 99 positions
 BL92 0: 10 99 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 99 positions
 BL90 0: 10 99 positions
 H340 4.0.0: 01000000 17 positions
@@ -8160,7 +8160,7 @@ BL94 0: 10 108 positions
 BL91 0: 10 108 positions
 BS170 1: 0100000001 8 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 108 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 108 positions
@@ -8171,14 +8171,14 @@ CMC62 0: 101000000000 3 positions
 H340 4.0.0: 01000000 21 positions
 BD144 0.18: 000000101011010111101000110111000000111101000010101100011100111111 fixed = [381,446]
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90 
+distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90
 BS170 0: 10 108 positions
 BL90 0: 10 108 positions
 BL91 0: 10 108 positions
 BL91 0: 10 108 positions
 BL90 0: 10 108 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 108 positions
 BL90 0: 10 108 positions
 BD40 0.0: 10 108 positions
@@ -8278,7 +8278,7 @@ BL94 0: 10 108 positions
 BL91 0: 10 108 positions
 BS170 1: 0100000001 8 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 108 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 108 positions
@@ -8289,14 +8289,14 @@ CMC62 0: 101000000000 3 positions
 H340 4.0.0: 01000000 21 positions
 BD144 0.18: 000000101011010111101000110111000000111101000010101100011100111111 fixed = [381,446]
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90 
+distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90
 BS170 0: 10 108 positions
 BL90 0: 10 108 positions
 BL91 0: 10 108 positions
 BL91 0: 10 108 positions
 BL90 0: 10 108 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 108 positions
 BL90 0: 10 108 positions
 BD40 0.0: 10 108 positions
@@ -8396,7 +8396,7 @@ BL94 0: 10 112 positions
 BL91 0: 10 112 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 112 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 112 positions
@@ -8413,7 +8413,7 @@ BL91 0: 10 112 positions
 BL91 0: 10 112 positions
 BL90 0: 10 112 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 112 positions
 BL90 0: 10 112 positions
 BD40 0.0: 10 112 positions
@@ -8512,7 +8512,7 @@ BL94 0: 10 115 positions
 BL91 0: 10 115 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 115 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 115 positions
@@ -8529,13 +8529,13 @@ BL91 0: 10 115 positions
 BL91 0: 10 115 positions
 BL90 0: 10 115 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 BD40 0.0: 10 115 positions
 BL92 0: 10 115 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 H340 4.0.0: 01000000 21 positions
@@ -8630,7 +8630,7 @@ BL94 0: 10 115 positions
 BL91 0: 10 115 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 115 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 115 positions
@@ -8647,7 +8647,7 @@ BL91 0: 10 115 positions
 BL91 0: 10 115 positions
 BL90 0: 10 115 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 BD40 0.0: 10 115 positions
@@ -8745,7 +8745,7 @@ BL94 0: 10 121 positions
 BL91 0: 10 121 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 121 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 121 positions
@@ -8857,7 +8857,7 @@ BL94 0: 10 113 positions
 BL91 0: 10 113 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 113 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 113 positions
@@ -8874,7 +8874,7 @@ BL91 0: 10 113 positions
 BL91 0: 10 113 positions
 BL90 0: 10 113 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 113 positions
 BL90 0: 10 113 positions
 BD40 0.0: 10 113 positions
@@ -8972,7 +8972,7 @@ BL94 0: 10 126 positions
 BL91 0: 10 126 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 126 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 126 positions
@@ -8989,13 +8989,13 @@ BL91 0: 10 126 positions
 BL91 0: 10 126 positions
 BL90 0: 10 126 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 126 positions
 BL90 0: 10 126 positions
 BD40 0.0: 10 126 positions
 BL92 0: 10 126 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 126 positions
 BL90 0: 10 126 positions
 H340 4.0.0: 01000000 26 positions
@@ -9090,7 +9090,7 @@ BL94 0: 10 132 positions
 BL91 0: 10 132 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 132 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 132 positions
@@ -9107,13 +9107,13 @@ BL91 0: 10 132 positions
 BL91 0: 10 132 positions
 BL90 0: 10 132 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 132 positions
 BL90 0: 10 132 positions
 BD40 0.0: 10 132 positions
 BL92 0: 10 132 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 132 positions
 BL90 0: 10 132 positions
 H340 4.0.0: 01000000 21 positions
@@ -9208,7 +9208,7 @@ BL94 0: 10 133 positions
 BL91 0: 10 133 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 133 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 133 positions
@@ -9225,13 +9225,13 @@ BL91 0: 10 133 positions
 BL91 0: 10 133 positions
 BL90 0: 10 133 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 133 positions
 BL90 0: 10 133 positions
 BD40 0.0: 10 133 positions
 BL92 0: 10 133 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 133 positions
 BL90 0: 10 133 positions
 H340 4.0.0: 01000000 32 positions
@@ -9326,7 +9326,7 @@ BL94 0: 10 130 positions
 BL91 0: 10 130 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 130 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 130 positions
@@ -9343,13 +9343,13 @@ BL91 0: 10 130 positions
 BL91 0: 10 130 positions
 BL90 0: 10 130 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 130 positions
 BL90 0: 10 130 positions
 BD40 0.0: 10 130 positions
 BL92 0: 10 130 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 130 positions
 BL90 0: 10 130 positions
 H340 4.0.0: 01000000 25 positions
@@ -9444,7 +9444,7 @@ BL94 0: 10 137 positions
 BL91 0: 10 137 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 137 positions
 BL92 4: 0100000100 5 positions
 BL93 0: 10 137 positions
@@ -9461,7 +9461,7 @@ BL91 0: 10 137 positions
 BL91 0: 10 137 positions
 BL90 0: 10 137 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 137 positions
 BL90 0: 10 137 positions
 BD40 0.0: 10 137 positions
@@ -9559,7 +9559,7 @@ BL94 0: 10 214 positions
 BL91 0: 10 214 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 214 positions
 BL92 4: 0100000100 7 positions
 BL93 0: 10 214 positions
@@ -9576,7 +9576,7 @@ BL91 0: 10 214 positions
 BL91 0: 10 214 positions
 BL90 0: 10 214 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 214 positions
 BL90 0: 10 214 positions
 BD40 0.0: 10 214 positions
@@ -9674,7 +9674,7 @@ BL94 0: 10 260 positions
 BL91 0: 10 260 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 260 positions
 BL92 4: 0100000100 6 positions
 BL93 0: 10 260 positions
@@ -9691,7 +9691,7 @@ BL91 0: 10 260 positions
 BL91 0: 10 260 positions
 BL90 0: 10 260 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 260 positions
 BL90 0: 10 260 positions
 BD40 0.0: 10 260 positions
@@ -9789,7 +9789,7 @@ BL94 0: 10 274 positions
 BL91 0: 10 274 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 274 positions
 BL92 4: 0100000100 10 positions
 BL93 0: 10 274 positions
@@ -9806,7 +9806,7 @@ BL91 0: 10 274 positions
 BL91 0: 10 274 positions
 BL90 0: 10 274 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 274 positions
 BL90 0: 10 274 positions
 BD40 0.0: 10 274 positions
@@ -9904,7 +9904,7 @@ BL94 0: 10 302 positions
 BL91 0: 10 302 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 302 positions
 BL92 4: 0100000100 9 positions
 BL93 0: 10 302 positions
@@ -9921,7 +9921,7 @@ BL91 0: 10 302 positions
 BL91 0: 10 302 positions
 BL90 0: 10 302 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 302 positions
 BL90 0: 10 302 positions
 BD40 0.0: 10 302 positions
@@ -10019,7 +10019,7 @@ BL94 0: 10 344 positions
 BL91 0: 10 344 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 344 positions
 BL92 4: 0100000100 9 positions
 BL93 0: 10 344 positions
@@ -10036,7 +10036,7 @@ BL91 0: 10 344 positions
 BL91 0: 10 344 positions
 BL90 0: 10 344 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 344 positions
 BL90 0: 10 344 positions
 BD40 0.0: 10 344 positions
@@ -10134,7 +10134,7 @@ BL94 0: 10 343 positions
 BL91 0: 10 343 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 343 positions
 BL92 4: 0100000100 10 positions
 BL93 0: 10 343 positions
@@ -10151,7 +10151,7 @@ BL91 0: 10 343 positions
 BL91 0: 10 343 positions
 BL90 0: 10 343 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 343 positions
 BL90 0: 10 343 positions
 BD40 0.0: 10 343 positions
@@ -10325,7 +10325,7 @@ BL90 2: 0100000010 13 positions
 BS170 0: 10 720 positions
 BL90 3: 0100000011 8 positions
 BD40 5.0: 000000000000000000000000000000000000000000000000000001010001000000 3 positions
-distribute positions: BD40 BD40 BD40 
+distribute positions: BD40 BD40 BD40
 BL92 0: 10 720 positions
 BL90 4: 0100000100 12 positions
 BS170 0: 10 720 positions
@@ -10922,7 +10922,7 @@ BL90 3: 0100000011 21 positions
 BD40 4.0: 000000000000000000000000000000000000000000000000000001000001000000 9 positions
 BL90 1: 0100000001 74 positions
 BL90 69: 0101000101 9 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90
 BL91 0: 10 4052 positions
 BL90 1: 0100000001 74 positions
 BL93 2: 0100000010 33 positions
@@ -10951,7 +10951,7 @@ BL90 2: 0100000010 33 positions
 BS170 0: 10 4052 positions
 BL90 3: 0100000011 21 positions
 BD40 4.0: 000000000000000000000000000000000000000000000000000001000001000000 9 positions
-distribute positions: BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 
+distribute positions: BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40 BD40
 BL92 0: 10 4052 positions
 BL90 4: 0100000100 108 positions
 BS170 0: 10 4052 positions
@@ -11317,7 +11317,7 @@ BS170 1: 0100000001 12 positions
 BL91 0: 10 309 positions
 BL92 0: 10 309 positions
 BL93 1: 0100000001 12 positions
-distribute positions: BL90 BL91 BL90 BL90 BL92 BL93 BL94 BL95 BL90 BL90 BS170 BL93 
+distribute positions: BL90 BL91 BL90 BL90 BL92 BL93 BL94 BL95 BL90 BL90 BS170 BL93
 BL90 0: 10 309 positions
 BL91 0: 10 309 positions
 BL92 512: 0000000000000000100000000000000000 fixed = [699,732]
@@ -11450,7 +11450,7 @@ BL94 0: 10 99 positions
 BL91 0: 10 99 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 99 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 99 positions
@@ -11467,13 +11467,13 @@ BL91 0: 10 99 positions
 BL91 0: 10 99 positions
 BL90 0: 10 99 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 99 positions
 BL90 0: 10 99 positions
 BD40 0.0: 10 99 positions
 BL92 0: 10 99 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 99 positions
 BL90 0: 10 99 positions
 H340 4.0.0: 01000000 17 positions
@@ -11568,7 +11568,7 @@ BL94 0: 10 112 positions
 BL91 0: 10 112 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 112 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 112 positions
@@ -11585,7 +11585,7 @@ BL91 0: 10 112 positions
 BL91 0: 10 112 positions
 BL90 0: 10 112 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 112 positions
 BL90 0: 10 112 positions
 BD40 0.0: 10 112 positions
@@ -11684,7 +11684,7 @@ BL94 0: 10 115 positions
 BL91 0: 10 115 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 115 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 115 positions
@@ -11701,13 +11701,13 @@ BL91 0: 10 115 positions
 BL91 0: 10 115 positions
 BL90 0: 10 115 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 BD40 0.0: 10 115 positions
 BL92 0: 10 115 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 H340 4.0.0: 01000000 21 positions
@@ -11802,7 +11802,7 @@ BL94 0: 10 115 positions
 BL91 0: 10 115 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 115 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 115 positions
@@ -11819,7 +11819,7 @@ BL91 0: 10 115 positions
 BL91 0: 10 115 positions
 BL90 0: 10 115 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 115 positions
 BL90 0: 10 115 positions
 BD40 0.0: 10 115 positions
@@ -11917,7 +11917,7 @@ BL94 0: 10 121 positions
 BL91 0: 10 121 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 121 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 121 positions
@@ -12029,7 +12029,7 @@ BL94 0: 10 125 positions
 BL91 0: 10 125 positions
 BS170 1: 0100000001 8 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 125 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 125 positions
@@ -12040,14 +12040,14 @@ CMC62 0: 101000000000 4 positions
 H340 4.0.0: 01000000 27 positions
 BD144 0.18: 000000101011010111101000110111000000111101000010101100011100111111 fixed = [509,574]
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90 
+distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90
 BS170 0: 10 125 positions
 BL90 0: 10 125 positions
 BL91 0: 10 125 positions
 BL91 0: 10 125 positions
 BL90 0: 10 125 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 125 positions
 BL90 0: 10 125 positions
 BD40 0.0: 10 125 positions
@@ -12147,7 +12147,7 @@ BL94 0: 10 125 positions
 BL91 0: 10 125 positions
 BS170 1: 0100000001 8 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 125 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 125 positions
@@ -12158,14 +12158,14 @@ CMC62 0: 101000000000 4 positions
 H340 4.0.0: 01000000 27 positions
 BD144 0.18: 000000101011010111101000110111000000111101000010101100011100111111 fixed = [509,574]
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90 
+distribute positions: BL90 BL91 BL90 BL95 BL90 BS170 BL94 BL90
 BS170 0: 10 125 positions
 BL90 0: 10 125 positions
 BL91 0: 10 125 positions
 BL91 0: 10 125 positions
 BL90 0: 10 125 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 125 positions
 BL90 0: 10 125 positions
 BD40 0.0: 10 125 positions
@@ -12265,7 +12265,7 @@ BL94 0: 10 113 positions
 BL91 0: 10 113 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 113 positions
 BL92 4: 0100000100 4 positions
 BL93 0: 10 113 positions
@@ -12282,7 +12282,7 @@ BL91 0: 10 113 positions
 BL91 0: 10 113 positions
 BL90 0: 10 113 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 113 positions
 BL90 0: 10 113 positions
 BD40 0.0: 10 113 positions
@@ -12380,7 +12380,7 @@ BL94 0: 10 126 positions
 BL91 0: 10 126 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 126 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 126 positions
@@ -12397,13 +12397,13 @@ BL91 0: 10 126 positions
 BL91 0: 10 126 positions
 BL90 0: 10 126 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 126 positions
 BL90 0: 10 126 positions
 BD40 0.0: 10 126 positions
 BL92 0: 10 126 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 126 positions
 BL90 0: 10 126 positions
 H340 4.0.0: 01000000 26 positions
@@ -12498,7 +12498,7 @@ BL94 0: 10 132 positions
 BL91 0: 10 132 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 132 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 132 positions
@@ -12515,13 +12515,13 @@ BL91 0: 10 132 positions
 BL91 0: 10 132 positions
 BL90 0: 10 132 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 132 positions
 BL90 0: 10 132 positions
 BD40 0.0: 10 132 positions
 BL92 0: 10 132 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 132 positions
 BL90 0: 10 132 positions
 H340 4.0.0: 01000000 21 positions
@@ -12616,7 +12616,7 @@ BL94 0: 10 133 positions
 BL91 0: 10 133 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 133 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 133 positions
@@ -12633,13 +12633,13 @@ BL91 0: 10 133 positions
 BL91 0: 10 133 positions
 BL90 0: 10 133 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 133 positions
 BL90 0: 10 133 positions
 BD40 0.0: 10 133 positions
 BL92 0: 10 133 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 133 positions
 BL90 0: 10 133 positions
 H340 4.0.0: 01000000 32 positions
@@ -12734,7 +12734,7 @@ BL94 0: 10 130 positions
 BL91 0: 10 130 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 130 positions
 BL92 4: 0100000100 3 positions
 BL93 0: 10 130 positions
@@ -12751,13 +12751,13 @@ BL91 0: 10 130 positions
 BL91 0: 10 130 positions
 BL90 0: 10 130 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 130 positions
 BL90 0: 10 130 positions
 BD40 0.0: 10 130 positions
 BL92 0: 10 130 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL92 BL90 
+distribute positions: BL90 BL92 BL90
 BS170 0: 10 130 positions
 BL90 0: 10 130 positions
 H340 4.0.0: 01000000 25 positions
@@ -12852,7 +12852,7 @@ BL94 0: 10 137 positions
 BL91 0: 10 137 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 137 positions
 BL92 4: 0100000100 5 positions
 BL93 0: 10 137 positions
@@ -12869,7 +12869,7 @@ BL91 0: 10 137 positions
 BL91 0: 10 137 positions
 BL90 0: 10 137 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 137 positions
 BL90 0: 10 137 positions
 BD40 0.0: 10 137 positions
@@ -12967,7 +12967,7 @@ BL94 0: 10 214 positions
 BL91 0: 10 214 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 214 positions
 BL92 4: 0100000100 7 positions
 BL93 0: 10 214 positions
@@ -12984,7 +12984,7 @@ BL91 0: 10 214 positions
 BL91 0: 10 214 positions
 BL90 0: 10 214 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 214 positions
 BL90 0: 10 214 positions
 BD40 0.0: 10 214 positions
@@ -13082,7 +13082,7 @@ BL94 0: 10 260 positions
 BL91 0: 10 260 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 260 positions
 BL92 4: 0100000100 6 positions
 BL93 0: 10 260 positions
@@ -13099,7 +13099,7 @@ BL91 0: 10 260 positions
 BL91 0: 10 260 positions
 BL90 0: 10 260 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 260 positions
 BL90 0: 10 260 positions
 BD40 0.0: 10 260 positions
@@ -13197,7 +13197,7 @@ BL94 0: 10 274 positions
 BL91 0: 10 274 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 274 positions
 BL92 4: 0100000100 10 positions
 BL93 0: 10 274 positions
@@ -13214,7 +13214,7 @@ BL91 0: 10 274 positions
 BL91 0: 10 274 positions
 BL90 0: 10 274 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 274 positions
 BL90 0: 10 274 positions
 BD40 0.0: 10 274 positions
@@ -13312,7 +13312,7 @@ BL94 0: 10 302 positions
 BL91 0: 10 302 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 302 positions
 BL92 4: 0100000100 9 positions
 BL93 0: 10 302 positions
@@ -13329,7 +13329,7 @@ BL91 0: 10 302 positions
 BL91 0: 10 302 positions
 BL90 0: 10 302 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 302 positions
 BL90 0: 10 302 positions
 BD40 0.0: 10 302 positions
@@ -13427,7 +13427,7 @@ BL94 0: 10 344 positions
 BL91 0: 10 344 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 344 positions
 BL92 4: 0100000100 9 positions
 BL93 0: 10 344 positions
@@ -13444,7 +13444,7 @@ BL91 0: 10 344 positions
 BL91 0: 10 344 positions
 BL90 0: 10 344 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 344 positions
 BL90 0: 10 344 positions
 BD40 0.0: 10 344 positions
@@ -13542,7 +13542,7 @@ BL94 0: 10 343 positions
 BL91 0: 10 343 positions
 BS170 1: 0100000001 9 positions
 BL90 3: 0100000011 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL91 0: 10 343 positions
 BL92 4: 0100000100 10 positions
 BL93 0: 10 343 positions
@@ -13559,7 +13559,7 @@ BL91 0: 10 343 positions
 BL91 0: 10 343 positions
 BL90 0: 10 343 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL93 BL90 
+distribute positions: BL93 BL90
 BS170 0: 10 343 positions
 BL90 0: 10 343 positions
 BD40 0.0: 10 343 positions
@@ -13630,4 +13630,3 @@ FIELD_BL ([], 90);	// 0 10 [[2,3],[11,12],[13,14],[25,26],[27,28],[30,31],[32,33
 FIELD_H (content.handle, 340);	// 4.0.0 01000000 [[1,8],[31,38],[41,48],[59,66],[69,76],[113,120],[142,149],[158,165],[174,181],[195,202]]...)
 
 Most probable result: (TODO)
-

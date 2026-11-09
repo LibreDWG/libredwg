@@ -4,7 +4,7 @@ LAYOUTPRINTCONFIG: 0x359 (276) test/test-data/2000/2.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[200,0,186,38,0]
 H330 4.2.358: 010000100000001101011000 2 positions
 H330 4.2.358: 010000100000001101011000 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL93 0: 10 24 positions
 
 fixed = [[183,206],[207,230]]
@@ -21,4 +21,3 @@ Todo: 2 + 48 = 50, Missing: 226
 FIELD_BL ([], 93);	// 0 10 [[2,3],[9,10],[11,12],[14,15],[18,19],[20,21],[93,94],[234,235],[240,241],[248,249]]...)
 
 Most probable result: (TODO)
-

@@ -10,7 +10,7 @@ TV1 : 010000000100000000 4 positions
 TV1 : 010000000100000000 4 positions
 TV1 : 010000000100000000 4 positions
 TV1 : 010000000100000000 4 positions
-distribute positions: TV1 TV1 TV1 TV1 
+distribute positions: TV1 TV1 TV1 TV1
 BS71 6: 0100000110 319 positions
 BS72 6: 0100000110 319 positions
 BD40 1.0: 01 30531 positions
@@ -206,4 +206,3 @@ FIELD_B (ruled_surface, 296);	// 0 0 [[3,3],[4,4],[5,5],[9,9],[10,10],[12,12],[1
 FIELD_B (virtual_guide, 297);	// 1 0 [[3,3],[4,4],[5,5],[9,9],[10,10],[12,12],[13,13],[14,14],[16,16],[17,17]]...)
 
 Most probable result: (TODO)
-

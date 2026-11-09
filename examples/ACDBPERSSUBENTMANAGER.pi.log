@@ -4,12 +4,12 @@ ACDBPERSSUBENTMANAGER: 0x27C (73) test/test-data/2004/BoxUnion.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[54,0,69,12,0]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 2: 0100000010 3 positions
 BL90 0: 10 15 positions
 BL90 2: 0100000010 3 positions
 BL90 2: 0100000010 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 0: 10 15 positions
 BL90 0: 10 15 positions
 
@@ -40,16 +40,16 @@ ACDBPERSSUBENTMANAGER: 0x2E0 (98) test/test-data/example_2000.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,68,14,0]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 2: 0100000010 2 positions
 BL90 0: 10 18 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 3: 0100000011 fixed = [23,32]
 BL90 0: 10 18 positions
 BL90 1: 0100000001 2 positions
 BL90 1: 0100000001 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 
 fixed = [[1,10],[13,22],[23,32],[35,44],[45,54],[55,70],[71,86]]
 sortd = [[1,10],[13,22],[23,32],[35,44],[45,54],[55,70],[71,86]]
@@ -79,16 +79,16 @@ ACDBPERSSUBENTMANAGER: 0x2E0 (89) test/test-data/example_2004.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[72,0,69,14,0]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 2: 0100000010 2 positions
 BL90 0: 10 17 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 3: 0100000011 fixed = [23,32]
 BL90 0: 10 17 positions
 BL90 1: 0100000001 2 positions
 BL90 1: 0100000001 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 
 fixed = [[1,10],[13,22],[23,32],[35,44],[45,54],[55,70],[71,86]]
 sortd = [[1,10],[13,22],[23,32],[35,44],[45,54],[55,70],[71,86]]
@@ -118,16 +118,16 @@ ACDBPERSSUBENTMANAGER: 0x2E0 (89) test/test-data/example_2007.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[73,0,69,14,34]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 2: 0100000010 2 positions
 BL90 0: 10 17 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 3: 0100000011 fixed = [23,32]
 BL90 0: 10 17 positions
 BL90 1: 0100000001 2 positions
 BL90 1: 0100000001 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 
 fixed = [[1,10],[13,22],[23,32],[35,44],[45,54],[56,71],[72,87]]
 sortd = [[1,10],[13,22],[23,32],[35,44],[45,54],[56,71],[72,87]]
@@ -158,16 +158,16 @@ ACDBPERSSUBENTMANAGER: 0x2E0 (89) test/test-data/example_2010.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[65,0,37,10,34]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 2: 0100000010 2 positions
 BL90 0: 10 17 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 3: 0100000011 fixed = [23,32]
 BL90 0: 10 17 positions
 BL90 1: 0100000001 2 positions
 BL90 1: 0100000001 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 
 fixed = [[1,10],[13,22],[23,32],[35,44],[45,54],[56,71],[72,87]]
 sortd = [[1,10],[13,22],[23,32],[35,44],[45,54],[56,71],[72,87]]
@@ -198,11 +198,11 @@ ACDBPERSSUBENTMANAGER: 0x2E0 (64) test/test-data/example_2013.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[39,0,38,7,35]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 2: 0100000010 2 positions
 BL90 0: 10 14 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 0: 10 14 positions
 BL90 0: 10 14 positions
 BL90 0: 10 14 positions
@@ -227,4 +227,3 @@ FIELD_BL ([], 90);	// 0 10 [[11,12],[23,24],[25,26],[27,28]]
 FIELD_BL ([], 90);	// 0 10 [[11,12],[23,24],[25,26],[27,28]]
 
 Most probable result: (TODO)
-

@@ -198,4 +198,3 @@
       FIELD_HANDLE (seqend, 3, 0);
     }
   }
-

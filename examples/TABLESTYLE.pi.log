@@ -4,13 +4,13 @@ TABLESTYLE: 0x7F (1946) test/test-data/2000/2.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1859,0,60,191,0]
 H330 4.1.7E: 0100000101111110 2 positions
 H330 4.1.7E: 0100000101111110 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF3 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BS70 0: 10 155 positions
 BS71 0: 10 155 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 155 positions
 BS281 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -29,7 +29,7 @@ BS286 1: 0100000001 4 positions
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 BS287 
+distribute positions: BS284  Ignored overlap BS285 BS286 BS287
 CMC67 0: 10 155 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
@@ -47,7 +47,7 @@ BS284 1: 0100000001 4 positions
 CMC64 0: 10 155 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
@@ -60,11 +60,11 @@ BS288 1: 0100000001 4 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 4 positions
 CMC62 0: 10 155 positions
 BS283 0: 10 155 positions
@@ -79,13 +79,13 @@ BS286 1: 0100000001 4 positions
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 CMC67 0: 10 155 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 4 positions
 CMC69 0: 10 155 positions
 
@@ -200,13 +200,13 @@ TABLESTYLE: 0x7F (1946) test/test-data/2000/3.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1859,0,60,191,0]
 H330 4.1.7E: 0100000101111110 2 positions
 H330 4.1.7E: 0100000101111110 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF3 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BS70 0: 10 155 positions
 BS71 0: 10 155 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 155 positions
 BS281 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -222,7 +222,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284 BS285 BS286 
+distribute positions: BS284 BS285 BS286
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -232,7 +232,7 @@ BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [756,821]
@@ -247,7 +247,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -257,11 +257,11 @@ BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140  Ignored overlap BD140  Ignored overlap 
+distribute positions: BD140  Ignored overlap BD140  Ignored overlap
 BS170 5: 0100000101 4 positions
 CMC62 0: 10 155 positions
 BS283 0: 10 155 positions
@@ -273,7 +273,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -282,9 +282,9 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 
 fixed = [[79,144],[145,210],[271,280],[378,395],[441,458],[504,521],[567,584],[630,647],[693,710],[814,823],[921,938],[984,1001],[1047,1064],[1110,1127],[1173,1190],[1236,1253],[1357,1366],[1464,1481],[1527,1544],[1590,1607],[1653,1670],[1716,1733],[1779,1796],[1842,1857],[1858,1873]]
@@ -405,7 +405,7 @@ BS70 1: 0100000001 4 positions
 BS71 0: 10 169 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 169 positions
 BS281 0: 10 169 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
@@ -417,84 +417,84 @@ BL91 0: 10 169 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62 CMC64 
+distribute positions: CMC62 CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
-distribute positions: BS70 BS284  Ignored overlap BS285 BS286 
+distribute positions: BS70 BS284  Ignored overlap BS285 BS286
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 2 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [702,767]
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 169 positions
 BL90 4: 0100000100 3 positions
 BL91 0: 10 169 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap
 CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 169 positions
 BL90 4: 0100000100 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL91 0: 10 169 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 2 positions
 
@@ -617,13 +617,13 @@ TABLESTYLE: 0x7F (1946) test/test-data/2000/4.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1859,0,60,191,0]
 H330 4.1.7E: 0100000101111110 2 positions
 H330 4.1.7E: 0100000101111110 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF3 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BS70 0: 10 155 positions
 BS71 0: 10 155 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 155 positions
 BS281 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -639,7 +639,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284 BS285 BS286 
+distribute positions: BS284 BS285 BS286
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -649,7 +649,7 @@ BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [756,821]
@@ -664,7 +664,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -674,11 +674,11 @@ BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140  Ignored overlap BD140  Ignored overlap 
+distribute positions: BD140  Ignored overlap BD140  Ignored overlap
 BS170 5: 0100000101 4 positions
 CMC62 0: 10 155 positions
 BS283 0: 10 155 positions
@@ -690,7 +690,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -699,9 +699,9 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 
 fixed = [[79,144],[145,210],[271,280],[378,395],[441,458],[504,521],[567,584],[630,647],[693,710],[814,823],[921,938],[984,1001],[1047,1064],[1110,1127],[1173,1190],[1236,1253],[1357,1366],[1464,1481],[1527,1544],[1590,1607],[1653,1670],[1716,1733],[1779,1796],[1842,1857],[1858,1873]]
@@ -876,7 +876,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 11 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 381 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 381 positions
@@ -888,7 +888,7 @@ BS285 1: 0100000001 15 positions
 CMC65 0: 101000000000 15 positions
 RC276 -2: 00000000 442 positions
 BS286 1: 0100000001 15 positions
-distribute positions: BS284 BS285 BS286 BS287 BS288 BS289 BS284 BS285 BS286 BS287 BS288 BS289 BS284 BS285 BS286 
+distribute positions: BS284 BS285 BS286 BS287 BS288 BS289 BS284 BS285 BS286 BS287 BS288 BS289 BS284 BS285 BS286
 CMC66 0: 101000000000 15 positions
 RC277 -2: 00000000 442 positions
 BS287 1: 0100000001 15 positions
@@ -1019,7 +1019,7 @@ H330 4.3.3824E: 01000011000000111000001001001110 fixed = [3220,3251]
 H330 4.3.38241: 01000011000000111000001001000001 fixed = [3252,3283]
 H330 4.2.F4AF: 010000101111010010101111 2 positions
 H330 4.2.F4AF: 010000101111010010101111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 575 positions
 BS70 0: 10 575 positions
 BS71 0: 10 575 positions
@@ -1049,7 +1049,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 575 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 575 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -1074,13 +1074,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 15 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 575 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 575 positions
@@ -1100,7 +1100,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -1250,7 +1250,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 562 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 562 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -1275,13 +1275,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 16 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 562 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 562 positions
@@ -1301,7 +1301,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -1450,7 +1450,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 561 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 561 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -1475,13 +1475,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 16 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 561 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 561 positions
@@ -1501,7 +1501,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -1621,7 +1621,7 @@ TABLESTYLE: 0x3823E (3441) test/test-data/2010/5151-019.dxf:
 H330 4.3.38229: 01000011000000111000001000101001 fixed = [3220,3251]
 H330 4.2.F4AF: 010000101111010010101111 2 positions
 H330 4.2.F4AF: 010000101111010010101111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 568 positions
 BS70 0: 10 568 positions
 BS71 0: 10 568 positions
@@ -1651,7 +1651,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 568 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 568 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -1676,13 +1676,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 29 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 29 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 15 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 568 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 568 positions
@@ -1702,7 +1702,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 29 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 29 positions
 CMC69 0: 101000000000 14 positions
 
@@ -1823,7 +1823,7 @@ H330 4.3.3CEBB: 01000011000000111100111010111011 fixed = [3220,3251]
 H330 4.3.3CEAE: 01000011000000111100111010101110 fixed = [3252,3283]
 H330 4.2.F4AF: 010000101111010010101111 2 positions
 H330 4.2.F4AF: 010000101111010010101111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 581 positions
 BS70 0: 10 581 positions
 BS71 0: 10 581 positions
@@ -1853,7 +1853,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 581 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 581 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -1878,13 +1878,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 14 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 581 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 581 positions
@@ -1904,7 +1904,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -2025,7 +2025,7 @@ TABLESTYLE: 0x3CEAB (3441) test/test-data/2010/5151-022.dxf:
 H330 4.3.3CE96: 01000011000000111100111010010110 fixed = [3220,3251]
 H330 4.2.F4AF: 010000101111010010101111 2 positions
 H330 4.2.F4AF: 010000101111010010101111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 575 positions
 BS70 0: 10 575 positions
 BS71 0: 10 575 positions
@@ -2055,7 +2055,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 575 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 575 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -2080,13 +2080,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 15 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 575 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 575 positions
@@ -2106,7 +2106,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -2227,7 +2227,7 @@ H330 4.3.425A3: 01000011000001000010010110100011 fixed = [3220,3251]
 H330 4.3.42596: 01000011000001000010010110010110 fixed = [3252,3283]
 H330 4.2.F4AF: 010000101111010010101111 2 positions
 H330 4.2.F4AF: 010000101111010010101111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 585 positions
 BS70 0: 10 585 positions
 BS71 0: 10 585 positions
@@ -2257,7 +2257,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 585 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 585 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -2282,13 +2282,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 14 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 585 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 585 positions
@@ -2308,7 +2308,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -2429,7 +2429,7 @@ TABLESTYLE: 0x42593 (3441) test/test-data/2010/5151-023.dxf:
 H330 4.3.4257E: 01000011000001000010010101111110 fixed = [3220,3251]
 H330 4.2.F4AF: 010000101111010010101111 2 positions
 H330 4.2.F4AF: 010000101111010010101111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 578 positions
 BS70 0: 10 578 positions
 BS71 0: 10 578 positions
@@ -2459,7 +2459,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 578 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 578 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -2484,13 +2484,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 15 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 578 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 578 positions
@@ -2510,7 +2510,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -2631,7 +2631,7 @@ H330 4.3.428D0: 01000011000001000010100011010000 fixed = [3220,3251]
 H330 4.3.428C3: 01000011000001000010100011000011 fixed = [3252,3283]
 H330 4.2.F4AF: 010000101111010010101111 2 positions
 H330 4.2.F4AF: 010000101111010010101111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 582 positions
 BS70 0: 10 582 positions
 BS71 0: 10 582 positions
@@ -2661,7 +2661,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 582 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 582 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -2686,13 +2686,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 14 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 582 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 582 positions
@@ -2712,7 +2712,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -2833,7 +2833,7 @@ TABLESTYLE: 0x428C0 (3441) test/test-data/2010/5151-024.dxf:
 H330 4.3.428AB: 01000011000001000010100010101011 fixed = [3220,3251]
 H330 4.2.F4AF: 010000101111010010101111 2 positions
 H330 4.2.F4AF: 010000101111010010101111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 576 positions
 BS70 0: 10 576 positions
 BS71 0: 10 576 positions
@@ -2863,7 +2863,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 0: 10 576 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279
 BS289 0: 10 576 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [919,984]
@@ -2888,13 +2888,13 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 15 positions
 CMC62 0: 101000000000 14 positions
-distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 576 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 576 positions
@@ -2914,7 +2914,7 @@ BS278 -2: 001111111011111111 6 positions
 BS288 1: 0100000001 28 positions
 CMC68 0: 101000000000 14 positions
 BS279 -2: 001111111011111111 6 positions
-distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap 
+distribute positions: BS274  Ignored overlap BS275  Ignored overlap BS276  Ignored overlap BS277  Ignored overlap BS278  Ignored overlap BS279  Ignored overlap
 BS289 1: 0100000001 28 positions
 CMC69 0: 101000000000 14 positions
 
@@ -3033,13 +3033,13 @@ TABLESTYLE: 0x7F (1946) test/test-data/2000/5.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1859,0,60,191,0]
 H330 4.1.7E: 0100000101111110 2 positions
 H330 4.1.7E: 0100000101111110 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF3 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BS70 0: 10 155 positions
 BS71 0: 10 155 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 155 positions
 BS281 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -3055,7 +3055,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284 BS285 BS286 
+distribute positions: BS284 BS285 BS286
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -3065,7 +3065,7 @@ BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [756,821]
@@ -3080,7 +3080,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -3090,11 +3090,11 @@ BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140  Ignored overlap BD140  Ignored overlap 
+distribute positions: BD140  Ignored overlap BD140  Ignored overlap
 BS170 5: 0100000101 4 positions
 CMC62 0: 10 155 positions
 BS283 0: 10 155 positions
@@ -3106,7 +3106,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 155 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 10 155 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -3115,9 +3115,9 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 10 155 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 155 positions
 
 fixed = [[79,144],[145,210],[271,280],[378,395],[441,458],[504,521],[567,584],[630,647],[693,710],[814,823],[921,938],[984,1001],[1047,1064],[1110,1127],[1173,1190],[1236,1253],[1357,1366],[1464,1481],[1527,1544],[1590,1607],[1653,1670],[1716,1733],[1779,1796],[1842,1857],[1858,1873]]
@@ -3298,7 +3298,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 11 positions
 BS170 5: 0100000101 26 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1197 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 1197 positions
@@ -3318,7 +3318,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 39 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 39 positions
 CMC69 0: 101000000000 15 positions
 
@@ -3521,7 +3521,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 11 positions
 BS170 5: 0100000101 26 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1197 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 1197 positions
@@ -3541,7 +3541,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 39 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 39 positions
 CMC69 0: 101000000000 15 positions
 
@@ -3684,7 +3684,7 @@ BS70 0: 10 218 positions
 BS71 0: 10 218 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 218 positions
 BS281 0: 10 218 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 2 positions
@@ -3696,28 +3696,28 @@ BL91 0: 10 218 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 fixed = [1294,1303]
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62 CMC64 
+distribute positions: CMC62 CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC69 0: 101000000000 2 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [718,783]
 BS170 5: 0100000101 2 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 218 positions
 BL90 512: 0000000000000000100000000000000000 4 positions
 BL91 0: 10 218 positions
@@ -3727,24 +3727,24 @@ CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 2 positions
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 218 positions
 BL90 512: 0000000000000000100000000000000000 4 positions
@@ -3752,23 +3752,23 @@ BL91 0: 10 218 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC69 0: 101000000000 2 positions
 
@@ -3893,7 +3893,7 @@ TABLESTYLE: 0x87 (7704) test/test-data/2018/Arc.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[7425,554,30,745,289]
 H330 4.1.86: 0100000110000110 2 positions
 H330 4.1.86: 0100000110000110 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS70 0: 10 1315 positions
 BS71 0: 10 1315 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 16 positions
@@ -3951,7 +3951,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 11 positions
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1315 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 1315 positions
@@ -4088,7 +4088,7 @@ BS70 0: 10 156 positions
 BS71 0: 10 156 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 156 positions
 BS281 0: 10 156 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -4100,32 +4100,32 @@ BS283 0: 10 156 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64 
+distribute positions: CMC62  Ignored overlap CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 
+distribute positions: BS284  Ignored overlap BS285 BS286
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [764,829]
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 156 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
@@ -4133,53 +4133,53 @@ CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 156 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[295,306],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[822,831],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1365,1374],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1858,1873],[1874,1897]]
@@ -4303,7 +4303,7 @@ BS70 0: 10 159 positions
 BS71 0: 10 159 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 159 positions
 BS281 0: 10 159 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
@@ -4313,30 +4313,30 @@ BS283 0: 10 159 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64 
+distribute positions: CMC62  Ignored overlap CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 
+distribute positions: BS284  Ignored overlap BS285 BS286
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [764,829]
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 159 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
@@ -4344,51 +4344,51 @@ CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 159 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[295,306],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[822,831],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1365,1374],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1858,1889],[1890,1921]]
@@ -4509,7 +4509,7 @@ BS70 0: 10 208 positions
 BS71 0: 10 208 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 208 positions
 BS281 0: 10 208 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -4563,9 +4563,9 @@ CMC69 0: 10 208 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 2 positions
-distribute positions: BD140 BD140 
+distribute positions: BD140 BD140
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 10 208 positions
 BS283 0: 10 208 positions
 BS274 -2: 001111111011111111 18 positions
@@ -4584,7 +4584,7 @@ BS278 -2: 001111111011111111 18 positions
 RC288 1: 00000000 575 positions
 CMC68 0: 10 208 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 RC289 1: 00000000 575 positions
 CMC69 0: 10 208 positions
 
@@ -4713,7 +4713,7 @@ BS70 0: 10 208 positions
 BS71 0: 10 208 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 208 positions
 BS281 0: 10 208 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -4767,9 +4767,9 @@ CMC69 0: 101000000000 Ignored overlap  fixed = [295,306]
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 2 positions
-distribute positions: BD140 BD140 
+distribute positions: BD140 BD140
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 101000000000 Ignored overlap  fixed = [295,306]
 BS283 0: 10 208 positions
 BS274 -2: 001111111011111111 18 positions
@@ -4788,7 +4788,7 @@ BS278 -2: 001111111011111111 18 positions
 RC288 1: 00000000 575 positions
 CMC68 0: 101000000000 Ignored overlap  fixed = [295,306]
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 RC289 1: 00000000 575 positions
 CMC69 0: 101000000000 Ignored overlap  fixed = [295,306]
 
@@ -4970,7 +4970,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 11 positions
 BS170 5: 0100000101 26 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1152 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 1152 positions
@@ -4990,7 +4990,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 39 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 39 positions
 CMC69 0: 101000000000 15 positions
 
@@ -5181,7 +5181,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 11 positions
 BS170 5: 0100000101 26 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1152 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 1152 positions
@@ -5201,7 +5201,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 39 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 39 positions
 CMC69 0: 101000000000 15 positions
 
@@ -5333,7 +5333,7 @@ TABLESTYLE: 0x87 (7280) test/test-data/2018/Constraints.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[6997,554,30,702,293]
 H330 4.1.86: 0100000110000110 2 positions
 H330 4.1.86: 0100000110000110 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS70 0: 10 1220 positions
 BS71 0: 10 1220 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 12 positions
@@ -5391,7 +5391,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 9 positions
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1220 positions
 BL90 512: 0000000000000000100000000000000000 4 positions
 BL91 0: 10 1220 positions
@@ -5526,7 +5526,7 @@ BS70 0: 10 217 positions
 BS71 0: 10 217 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 217 positions
 BS281 0: 10 217 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 2 positions
@@ -5538,28 +5538,28 @@ BL91 0: 10 217 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 fixed = [1294,1303]
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62 CMC64 
+distribute positions: CMC62 CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC69 0: 101000000000 2 positions
 BD140 0.25: 000000000000000000000000000000000000000000000000001101000000111111 fixed = [718,783]
 BS170 5: 0100000101 2 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 217 positions
 BL90 512: 0000000000000000100000000000000000 4 positions
 BL91 0: 10 217 positions
@@ -5569,24 +5569,24 @@ CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 2 positions
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 217 positions
 BL90 512: 0000000000000000100000000000000000 4 positions
@@ -5594,23 +5594,23 @@ BL91 0: 10 217 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 Ignored overlap  fixed = [1294,1303]
 CMC69 0: 101000000000 2 positions
 
@@ -5794,7 +5794,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 11 positions
 BS170 5: 0100000101 26 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1152 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 1152 positions
@@ -5814,7 +5814,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 39 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 39 positions
 CMC69 0: 101000000000 15 positions
 
@@ -5946,7 +5946,7 @@ TABLESTYLE: 0xA7 (7704) test/test-data/2018/ConstructionLine.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[7425,554,30,745,289]
 H330 4.1.A6: 0100000110100110 2 positions
 H330 4.1.A6: 0100000110100110 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS70 0: 10 1317 positions
 BS71 0: 10 1317 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 16 positions
@@ -6004,7 +6004,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 11 positions
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1317 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 1317 positions
@@ -6194,7 +6194,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 11 positions
 BS170 5: 0100000101 26 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1153 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 1153 positions
@@ -6214,7 +6214,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 39 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 39 positions
 CMC69 0: 101000000000 15 positions
 
@@ -6351,7 +6351,7 @@ BS70 0: 10 158 positions
 BS71 0: 10 158 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 158 positions
 BS281 0: 10 158 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -6371,7 +6371,7 @@ BS286 1: 0100000001 4 positions
 CMC66 0: 10 158 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 BS287 
+distribute positions: BS284  Ignored overlap BS285 BS286 BS287
 CMC67 0: 10 158 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
@@ -6390,7 +6390,7 @@ BS284 1: 0100000001 4 positions
 CMC64 0: 10 158 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 CMC65 0: 10 158 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
@@ -6403,14 +6403,14 @@ BS288 1: 0100000001 4 positions
 CMC68 0: 10 158 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 158 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 10 158 positions
 BS283 0: 10 158 positions
 BS274 -2: 001111111011111111 18 positions
@@ -6424,13 +6424,13 @@ BS286 1: 0100000001 4 positions
 CMC66 0: 10 158 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 CMC67 0: 10 158 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 10 158 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 4 positions
 CMC69 0: 10 158 positions
 
@@ -6551,7 +6551,7 @@ TABLESTYLE: 0x3C (7280) test/test-data/DS_line_R2013.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[6997,554,30,702,293]
 H330 4.1.3B: 0100000100111011 2 positions
 H330 4.1.3B: 0100000100111011 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 1029 positions
 BS70 0: 10 1029 positions
 BS71 0: 10 1029 positions
@@ -6608,10 +6608,10 @@ BS279 -2: 001111111011111111 24 positions
 BS289 1: 0100000001 48 positions
 CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140 
+distribute positions: BD140 BD140
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 1029 positions
 BL90 512: 0000000000000000100000000000000000 4 positions
 BL91 0: 10 1029 positions
@@ -6750,7 +6750,7 @@ BS70 0: 10 165 positions
 BS71 0: 10 165 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 165 positions
 BS281 0: 10 165 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -6770,7 +6770,7 @@ BS286 1: 0100000001 4 positions
 CMC66 0: 10 165 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284 BS285 BS286 BS287 
+distribute positions: BS284 BS285 BS286 BS287
 CMC67 0: 10 165 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
@@ -6789,7 +6789,7 @@ BS284 1: 0100000001 4 positions
 CMC64 0: 10 165 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 CMC65 0: 10 165 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
@@ -6802,14 +6802,14 @@ BS288 1: 0100000001 4 positions
 CMC68 0: 10 165 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 165 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140  Ignored overlap BD140  Ignored overlap 
+distribute positions: BD140  Ignored overlap BD140  Ignored overlap
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 10 165 positions
 BS283 0: 10 165 positions
 BS274 -2: 001111111011111111 18 positions
@@ -6823,13 +6823,13 @@ BS286 1: 0100000001 4 positions
 CMC66 0: 10 165 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 CMC67 0: 10 165 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 10 165 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 4 positions
 CMC69 0: 10 165 positions
 
@@ -6957,7 +6957,7 @@ BS70 0: 10 166 positions
 BS71 0: 10 166 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 166 positions
 BS281 0: 10 166 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -6969,22 +6969,22 @@ BS283 0: 10 166 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64 
+distribute positions: CMC62  Ignored overlap CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284 BS285 BS286 BS287 
+distribute positions: BS284 BS285 BS286 BS287
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 2 positions
@@ -6993,59 +6993,59 @@ TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [764,829]
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 166 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140  Ignored overlap BD140  Ignored overlap 
+distribute positions: BD140  Ignored overlap BD140  Ignored overlap
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 166 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 2 positions
 
@@ -7169,7 +7169,7 @@ BS70 0: 10 173 positions
 BS71 0: 10 173 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 173 positions
 BS281 0: 10 173 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
@@ -7184,18 +7184,18 @@ CMC64 0: 101000000000 3 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 CMC65 0: 101000000000 3 positions
-distribute positions: CMC62  Ignored overlap CMC64 CMC65 
+distribute positions: CMC62  Ignored overlap CMC64 CMC65
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284 BS285 BS286 BS287 
+distribute positions: BS284 BS285 BS286 BS287
 CMC67 0: 101000000000 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 3 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 3 positions
@@ -7208,10 +7208,10 @@ BL91 0: 10 173 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 3 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 CMC65 0: 101000000000 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
@@ -7219,19 +7219,19 @@ CMC66 0: 101000000000 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
 CMC67 0: 101000000000 3 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 3 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 3 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140  Ignored overlap BD140  Ignored overlap 
+distribute positions: BD140  Ignored overlap BD140  Ignored overlap
 BS170 5: 0100000101 3 positions
 CMC62 0: 101000000000 3 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 173 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 173 positions
@@ -7244,19 +7244,19 @@ CMC65 0: 101000000000 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 3 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 CMC67 0: 101000000000 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 3 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 3 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap CMC69  Ignored overlap
 
 fixed = [[5,70],[71,136],[197,206],[213,224],[304,321],[367,384],[430,447],[493,510],[556,573],[619,636],[776,785],[883,900],[946,963],[1009,1026],[1072,1089],[1135,1152],[1198,1215],[1355,1364],[1462,1479],[1525,1542],[1588,1605],[1651,1668],[1714,1731],[1777,1794],[1905,1916],[2045,2068],[2050,2059],[2069,2092]]
 sortd = [[1,12],[1,12],[1,12],[1,12],[1,12],[1,12],[1,12],[5,70],[71,136],[139,204],[197,206],[197,206],[197,206],[197,206],[213,224],[213,224],[213,224],[213,224],[213,224],[213,224],[213,224],[304,321],[367,384],[430,447],[493,510],[556,573],[619,636],[718,783],[776,785],[776,785],[776,785],[776,785],[883,900],[946,963],[1009,1026],[1072,1089],[1135,1152],[1198,1215],[1297,1362],[1355,1364],[1355,1364],[1355,1364],[1355,1364],[1462,1479],[1525,1542],[1588,1605],[1651,1668],[1714,1731],[1777,1794],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[2045,2068],[2045,2068],[2050,2059],[2050,2059],[2050,2059],[2050,2059],[2069,2092],[2074,2083]]
@@ -7436,7 +7436,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 11 positions
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 650 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 650 positions
@@ -7628,7 +7628,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 11 positions
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 650 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 650 positions
@@ -7768,7 +7768,7 @@ BS70 0: 10 164 positions
 BS71 0: 10 164 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 164 positions
 BS281 0: 10 164 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -7781,22 +7781,22 @@ BL91 0: 10 164 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64 
+distribute positions: CMC62  Ignored overlap CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284 BS285 BS286 BS287 
+distribute positions: BS284 BS285 BS286 BS287
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 2 positions
@@ -7804,7 +7804,7 @@ TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [764,829]
 BS170 5: 0100000101 2 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 164 positions
 BS90 512: 000000000000000000 403 positions
 BL91 0: 10 164 positions
@@ -7813,29 +7813,29 @@ BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140  Ignored overlap BD140  Ignored overlap 
+distribute positions: BD140  Ignored overlap BD140  Ignored overlap
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 164 positions
 BS90 512: 000000000000000000 403 positions
@@ -7843,24 +7843,24 @@ BL91 0: 10 164 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 4 positions
 CMC69 0: 101000000000 2 positions
 
@@ -7991,12 +7991,12 @@ BS70 0: 10 222 positions
 BS71 0: 10 222 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 1: 0100000001 3 positions
 BS281 1: 0100000001 3 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 3 positions
-distribute positions: BS280 BS281 BS170 
+distribute positions: BS280 BS281 BS170
 BS283 0: 10 222 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
@@ -8004,14 +8004,14 @@ BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 3 positions
 BS283 0: 10 222 positions
@@ -8019,34 +8019,34 @@ BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
-distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
-distribute positions: BD140 BD140 BD140 
+distribute positions: BD140 BD140 BD140
 BS170 1: 0100000001 3 positions
 BS283 0: 10 222 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
-distribute positions: BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap 
+distribute positions: BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[764,829],[830,839],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1307,1372],[1373,1382],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1866,1889],[1890,1913]]
@@ -8149,7 +8149,7 @@ BS70 1: 0100000001 5 positions
 BS71 0: 10 228 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 1: 0100000001 5 positions
 BS281 1: 0100000001 5 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
@@ -8157,7 +8157,7 @@ BS170 1: 0100000001 5 positions
 BS283 0: 10 228 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 5 positions
-distribute positions: BS70 BS280 BS281 BS170 BS284 
+distribute positions: BS70 BS280 BS281 BS170 BS284
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 5 positions
 BS276 -2: 001111111011111111 18 positions
@@ -8168,7 +8168,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 5 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 5 positions
 BS283 0: 10 228 positions
@@ -8180,20 +8180,20 @@ BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 5 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 5 positions
-distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 5 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
-distribute positions: BD140 BD140 BD140 
+distribute positions: BD140 BD140 BD140
 BS170 1: 0100000001 5 positions
 BS283 0: 10 228 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 5 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 5 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 5 positions
 BS277 -2: 001111111011111111 18 positions
@@ -8201,7 +8201,7 @@ BS287 1: 0100000001 5 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 5 positions
 
 fixed = [[1,90],[91,100],[103,168],[169,234],[237,302],[303,312],[402,419],[465,482],[528,545],[591,608],[654,671],[717,734],[780,845],[846,855],[945,962],[1008,1025],[1071,1088],[1134,1151],[1197,1214],[1260,1277],[1323,1388],[1389,1398],[1488,1505],[1551,1568],[1614,1631],[1677,1694],[1740,1757],[1803,1820],[1882,1905],[1906,1929],[1911,1920],[1930,1953]]
@@ -8303,12 +8303,12 @@ BS70 0: 10 222 positions
 BS71 0: 10 222 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 1: 0100000001 3 positions
 BS281 1: 0100000001 3 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 3 positions
-distribute positions: BS280 BS281 BS170 
+distribute positions: BS280 BS281 BS170
 BS283 0: 10 222 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
@@ -8316,14 +8316,14 @@ BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 3 positions
 BS283 0: 10 222 positions
@@ -8331,34 +8331,34 @@ BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
-distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
-distribute positions: BD140 BD140 BD140 
+distribute positions: BD140 BD140 BD140
 BS170 1: 0100000001 3 positions
 BS283 0: 10 222 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
-distribute positions: BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap 
+distribute positions: BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[764,829],[830,839],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1307,1372],[1373,1382],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1866,1889],[1890,1913]]
@@ -8461,7 +8461,7 @@ BS70 1: 0100000001 5 positions
 BS71 0: 10 229 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 1: 0100000001 5 positions
 BS281 1: 0100000001 5 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
@@ -8469,7 +8469,7 @@ BS170 1: 0100000001 5 positions
 BS283 0: 10 229 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 5 positions
-distribute positions: BS70 BS280 BS281 BS170 BS284 
+distribute positions: BS70 BS280 BS281 BS170 BS284
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 5 positions
 BS276 -2: 001111111011111111 18 positions
@@ -8480,7 +8480,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 5 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 5 positions
 BS283 0: 10 229 positions
@@ -8492,20 +8492,20 @@ BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 5 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 5 positions
-distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 5 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
-distribute positions: BD140 BD140 BD140 
+distribute positions: BD140 BD140 BD140
 BS170 1: 0100000001 5 positions
 BS283 0: 10 229 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 5 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 5 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 5 positions
 BS277 -2: 001111111011111111 18 positions
@@ -8513,7 +8513,7 @@ BS287 1: 0100000001 5 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 5 positions
 
 fixed = [[1,90],[91,100],[103,168],[169,234],[237,302],[303,312],[402,419],[465,482],[528,545],[591,608],[654,671],[717,734],[780,845],[846,855],[945,962],[1008,1025],[1071,1088],[1134,1151],[1197,1214],[1260,1277],[1323,1388],[1389,1398],[1488,1505],[1551,1568],[1614,1631],[1677,1694],[1740,1757],[1803,1820],[1882,1905],[1906,1929],[1911,1920],[1930,1953]]
@@ -8615,12 +8615,12 @@ BS70 0: 10 224 positions
 BS71 0: 10 224 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 1: 0100000001 3 positions
 BS281 1: 0100000001 3 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 3 positions
-distribute positions: BS280 BS281 BS170 
+distribute positions: BS280 BS281 BS170
 BS283 0: 10 224 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
@@ -8628,14 +8628,14 @@ BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 3 positions
 BS283 0: 10 224 positions
@@ -8643,34 +8643,34 @@ BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
-distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
-distribute positions: BD140 BD140 BD140 
+distribute positions: BD140 BD140 BD140
 BS170 1: 0100000001 3 positions
 BS283 0: 10 224 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
-distribute positions: BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap 
+distribute positions: BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[764,829],[830,839],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1307,1372],[1373,1382],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1866,1889],[1890,1913]]
@@ -8773,7 +8773,7 @@ BS70 1: 0100000001 5 positions
 BS71 0: 10 230 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 1: 0100000001 5 positions
 BS281 1: 0100000001 5 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
@@ -8781,7 +8781,7 @@ BS170 1: 0100000001 5 positions
 BS283 0: 10 230 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 5 positions
-distribute positions: BS70 BS280 BS281 BS170 BS284 
+distribute positions: BS70 BS280 BS281 BS170 BS284
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 5 positions
 BS276 -2: 001111111011111111 18 positions
@@ -8792,7 +8792,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 5 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
 BS170 1: 0100000001 5 positions
 BS283 0: 10 230 positions
@@ -8804,20 +8804,20 @@ BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 5 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 5 positions
-distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap 
+distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 5 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
-distribute positions: BD140 BD140 BD140 
+distribute positions: BD140 BD140 BD140
 BS170 1: 0100000001 5 positions
 BS283 0: 10 230 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 5 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 5 positions
-distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 5 positions
 BS277 -2: 001111111011111111 18 positions
@@ -8825,7 +8825,7 @@ BS287 1: 0100000001 5 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 5 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 5 positions
 
 fixed = [[1,90],[91,100],[103,168],[169,234],[237,302],[303,312],[402,419],[465,482],[528,545],[591,608],[654,671],[717,734],[780,845],[846,855],[945,962],[1008,1025],[1071,1088],[1134,1151],[1197,1214],[1260,1277],[1323,1388],[1389,1398],[1488,1505],[1551,1568],[1614,1631],[1677,1694],[1740,1757],[1803,1820],[1882,1905],[1906,1929],[1911,1920],[1930,1953]]
@@ -8927,7 +8927,7 @@ BS70 0: 10 223 positions
 BS71 0: 10 223 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 1: 0100000001 4 positions
 BS281 1: 0100000001 4 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
@@ -8935,7 +8935,7 @@ BS170 1: 0100000001 4 positions
 BS283 0: 10 223 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
-distribute positions: BS280 BS281 BS170 BS284 
+distribute positions: BS280 BS281 BS170 BS284
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 BS276 -2: 001111111011111111 18 positions
@@ -8944,7 +8944,7 @@ BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
@@ -8954,7 +8954,7 @@ BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 4 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
-distribute positions: BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap 
+distribute positions: BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
 BS277 -2: 001111111011111111 18 positions
@@ -8963,9 +8963,9 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 4 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
-distribute positions: BD140 BD140 BD140 
+distribute positions: BD140 BD140 BD140
 BS170 1: 0100000001 4 positions
 BS283 0: 10 223 positions
 BS274 -2: 001111111011111111 18 positions
@@ -8974,13 +8974,13 @@ BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 4 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 4 positions
-distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS170  Ignored overlap BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 4 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 4 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 4 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[764,829],[830,839],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1307,1372],[1373,1382],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1866,1889],[1871,1880],[1890,1913]]
@@ -9083,7 +9083,7 @@ BS70 1: 0100000001 6 positions
 BS71 0: 10 229 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 1: 0100000001 6 positions
 BS281 1: 0100000001 6 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
@@ -9093,7 +9093,7 @@ BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 6 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 6 positions
-distribute positions: BS70 BS280 BS281 BS170 BS284 BS285 
+distribute positions: BS70 BS280 BS281 BS170 BS284 BS285
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 6 positions
 BS277 -2: 001111111011111111 18 positions
@@ -9107,7 +9107,7 @@ BS170 1: 0100000001 6 positions
 BS283 0: 10 229 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 6 positions
-distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap 
+distribute positions: BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap BS284  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 6 positions
 BS276 -2: 001111111011111111 18 positions
@@ -9119,9 +9119,9 @@ BS288 1: 0100000001 6 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 6 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 3 positions
-distribute positions: BD140 BD140 BD140 
+distribute positions: BD140 BD140 BD140
 BS170 1: 0100000001 6 positions
-distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap 
+distribute positions: BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap BS170  Ignored overlap
 BS283 0: 10 229 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 6 positions
@@ -9134,9 +9134,9 @@ BS287 1: 0100000001 6 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 6 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 6 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 
 fixed = [[1,90],[91,100],[103,168],[169,234],[237,302],[303,312],[402,419],[465,482],[528,545],[591,608],[654,671],[717,734],[780,845],[846,855],[945,962],[1008,1025],[1071,1088],[1134,1151],[1197,1214],[1260,1277],[1323,1388],[1389,1398],[1488,1505],[1551,1568],[1614,1631],[1677,1694],[1740,1757],[1803,1820],[1882,1905],[1887,1896],[1906,1929],[1911,1920],[1930,1953]]
 sortd = [[1,90],[91,100],[91,100],[91,100],[91,100],[103,168],[169,234],[237,302],[303,312],[303,312],[303,312],[303,312],[402,419],[465,482],[528,545],[591,608],[654,671],[717,734],[780,845],[846,855],[846,855],[846,855],[846,855],[945,962],[1008,1025],[1071,1088],[1134,1151],[1197,1214],[1260,1277],[1323,1388],[1389,1398],[1389,1398],[1389,1398],[1389,1398],[1488,1505],[1551,1568],[1614,1631],[1677,1694],[1740,1757],[1803,1820],[1882,1905],[1882,1905],[1887,1896],[1887,1896],[1887,1896],[1887,1896],[1906,1929],[1911,1920],[1911,1920],[1911,1920],[1911,1920],[1930,1953]]
@@ -9295,7 +9295,7 @@ CMC69 0: 101000000000 15 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 5 positions
 BS170 5: 0100000101 26 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 866 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 866 positions
@@ -9315,7 +9315,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 37 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 37 positions
 CMC69 0: 101000000000 15 positions
 
@@ -9506,7 +9506,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 8 positions
 BS170 5: 0100000101 10 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 653 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 653 positions
@@ -9526,7 +9526,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 45 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 45 positions
 CMC69 0: 101000000000 15 positions
 
@@ -9664,7 +9664,7 @@ BS70 0: 10 156 positions
 BS71 0: 10 156 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 156 positions
 BS281 0: 10 156 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -9681,7 +9681,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 156 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 
+distribute positions: BS284  Ignored overlap BS285 BS286
 CMC66 0: 10 156 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -9691,7 +9691,7 @@ BS288 1: 0100000001 3 positions
 CMC68 0: 10 156 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 156 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -9707,7 +9707,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 156 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 10 156 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -9717,12 +9717,12 @@ BS288 1: 0100000001 3 positions
 CMC68 0: 10 156 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 156 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 3 positions
 CMC62 0: 10 156 positions
 BS283 0: 10 156 positions
@@ -9734,7 +9734,7 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 10 156 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 10 156 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -9743,9 +9743,9 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 10 156 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 10 156 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[822,831],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1365,1374],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1858,1873],[1874,1897]]
@@ -9924,7 +9924,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 8 positions
 BS170 5: 0100000101 10 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 652 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 652 positions
@@ -9944,7 +9944,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 45 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 45 positions
 CMC69 0: 101000000000 15 positions
 
@@ -10081,7 +10081,7 @@ BS70 0: 10 168 positions
 BS71 0: 10 168 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 168 positions
 BS281 0: 10 168 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
@@ -10096,10 +10096,10 @@ CMC64 0: 101000000000 3 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 3 positions
-distribute positions: CMC62  Ignored overlap CMC64 CMC65 
+distribute positions: CMC62  Ignored overlap CMC64 CMC65
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 
+distribute positions: BS284  Ignored overlap BS285 BS286
 CMC66 0: 101000000000 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -10107,10 +10107,10 @@ CMC67 0: 101000000000 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 3 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 3 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [718,783]
 BS170 5: 0100000101 2 positions
@@ -10121,31 +10121,31 @@ BL91 0: 10 168 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 3 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 3 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 3 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 3 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 101000000000 3 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 168 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 168 positions
@@ -10157,9 +10157,9 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 3 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 3 positions
@@ -10167,11 +10167,11 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 3 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 3 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap CMC69  Ignored overlap
 
 fixed = [[5,70],[71,136],[139,204],[205,214],[213,224],[304,321],[367,384],[430,447],[493,510],[556,573],[619,636],[776,785],[784,793],[883,900],[946,963],[1009,1026],[1072,1089],[1135,1152],[1198,1215],[1355,1364],[1363,1372],[1462,1479],[1525,1542],[1588,1605],[1651,1668],[1714,1731],[1777,1794],[1905,1916],[2045,2068],[2069,2092]]
 sortd = [[1,12],[1,12],[1,12],[1,12],[1,12],[1,12],[1,12],[5,70],[71,136],[139,204],[197,206],[197,206],[197,206],[197,206],[197,206],[197,206],[205,214],[213,224],[213,224],[213,224],[213,224],[213,224],[213,224],[213,224],[304,321],[367,384],[430,447],[493,510],[556,573],[619,636],[718,783],[776,785],[776,785],[776,785],[776,785],[776,785],[776,785],[784,793],[883,900],[946,963],[1009,1026],[1072,1089],[1135,1152],[1198,1215],[1297,1362],[1355,1364],[1355,1364],[1355,1364],[1355,1364],[1355,1364],[1355,1364],[1363,1372],[1462,1479],[1525,1542],[1588,1605],[1651,1668],[1714,1731],[1777,1794],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[2045,2068],[2045,2068],[2069,2092]]
@@ -10299,7 +10299,7 @@ BS70 0: 10 156 positions
 BS71 0: 10 156 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 156 positions
 BS281 0: 10 156 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -10311,32 +10311,32 @@ BS283 0: 10 156 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64 
+distribute positions: CMC62  Ignored overlap CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 
+distribute positions: BS284  Ignored overlap BS285 BS286
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [764,829]
 BS170 5: 0100000101 2 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 156 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
@@ -10344,54 +10344,54 @@ CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 156 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[295,306],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[822,831],[830,839],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1365,1374],[1373,1382],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1858,1873]]
@@ -10514,7 +10514,7 @@ BS70 0: 10 165 positions
 BS71 0: 10 165 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 165 positions
 BS281 0: 10 165 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
@@ -10529,10 +10529,10 @@ CMC64 0: 101000000000 3 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 3 positions
-distribute positions: CMC62  Ignored overlap CMC64 CMC65 
+distribute positions: CMC62  Ignored overlap CMC64 CMC65
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 
+distribute positions: BS284  Ignored overlap BS285 BS286
 CMC66 0: 101000000000 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
@@ -10540,10 +10540,10 @@ CMC67 0: 101000000000 3 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 3 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 3 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [718,783]
 BS170 5: 0100000101 2 positions
@@ -10554,31 +10554,31 @@ BL91 0: 10 165 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 3 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 3 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 3 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 3 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 3 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 101000000000 3 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 165 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 165 positions
@@ -10590,9 +10590,9 @@ BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 3 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 3 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 3 positions
@@ -10600,11 +10600,11 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 3 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 3 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap CMC69  Ignored overlap
 
 fixed = [[5,70],[71,136],[139,204],[205,214],[213,224],[304,321],[367,384],[430,447],[493,510],[556,573],[619,636],[776,785],[784,793],[883,900],[946,963],[1009,1026],[1072,1089],[1135,1152],[1198,1215],[1355,1364],[1363,1372],[1462,1479],[1525,1542],[1588,1605],[1651,1668],[1714,1731],[1777,1794],[1905,1916],[2045,2060]]
 sortd = [[1,12],[1,12],[1,12],[1,12],[1,12],[1,12],[1,12],[5,70],[71,136],[139,204],[197,206],[197,206],[197,206],[197,206],[197,206],[197,206],[205,214],[213,224],[213,224],[213,224],[213,224],[213,224],[213,224],[213,224],[304,321],[367,384],[430,447],[493,510],[556,573],[619,636],[718,783],[776,785],[776,785],[776,785],[776,785],[776,785],[776,785],[784,793],[883,900],[946,963],[1009,1026],[1072,1089],[1135,1152],[1198,1215],[1297,1362],[1355,1364],[1355,1364],[1355,1364],[1355,1364],[1355,1364],[1355,1364],[1363,1372],[1462,1479],[1525,1542],[1588,1605],[1651,1668],[1714,1731],[1777,1794],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[1905,1916],[2045,2060],[2045,2060]]
@@ -10784,7 +10784,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 11 positions
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 642 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 642 positions
@@ -10974,7 +10974,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 11 positions
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 642 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 642 positions
@@ -11164,7 +11164,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 11 positions
 BS170 5: 0100000101 32 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 643 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 643 positions
@@ -11355,7 +11355,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 8 positions
 BS170 5: 0100000101 10 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 652 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 652 positions
@@ -11375,7 +11375,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 45 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 45 positions
 CMC69 0: 101000000000 15 positions
 
@@ -11513,7 +11513,7 @@ BS70 0: 10 158 positions
 BS71 0: 10 158 positions
 BD40 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
 BD41 1.5: 000000000000000000000000000000000000000000000000001111100000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 158 positions
 BS281 0: 10 158 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
@@ -11525,32 +11525,32 @@ BS283 0: 10 158 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64 
+distribute positions: CMC62  Ignored overlap CMC64
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285 BS286 
+distribute positions: BS284  Ignored overlap BS285 BS286
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 6.0: 000000000000000000000000000000000000000000000000000001100001000000 Ignored overlap  fixed = [764,829]
 BS170 5: 0100000101 2 positions
 CMC62 0: 101000000000 2 positions
-distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap 
+distribute positions: CMC69  Ignored overlap CMC62  Ignored overlap
 BS283 0: 10 158 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
@@ -11558,54 +11558,54 @@ CMC64 0: 101000000000 2 positions
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
-distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap 
+distribute positions: CMC64  Ignored overlap CMC65  Ignored overlap
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 2 positions
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
-distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap 
+distribute positions: CMC66  Ignored overlap CMC67  Ignored overlap
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
 BS279 -2: 001111111011111111 18 positions
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
-distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap 
+distribute positions: CMC68  Ignored overlap CMC69  Ignored overlap
 TV7 Standard: 0100001001010100110111010001100001011011100110010001100001011100100110010000000000 Ignored overlap  fixed = [1,82]
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 2 positions
-distribute positions: BD140 BD140  Ignored overlap 
+distribute positions: BD140 BD140  Ignored overlap
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 101000000000 2 positions
 BS283 0: 10 158 positions
 BS274 -2: 001111111011111111 18 positions
 BS284 1: 0100000001 3 positions
 CMC64 0: 101000000000 2 positions
-distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap 
+distribute positions: CMC62  Ignored overlap CMC64  Ignored overlap
 BS275 -2: 001111111011111111 18 positions
 BS285 1: 0100000001 3 positions
 CMC65 0: 101000000000 2 positions
 BS276 -2: 001111111011111111 18 positions
 BS286 1: 0100000001 3 positions
-distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap 
+distribute positions: BS284  Ignored overlap BS285  Ignored overlap BS286  Ignored overlap
 CMC66 0: 101000000000 2 positions
-distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap 
+distribute positions: CMC65  Ignored overlap CMC66  Ignored overlap
 BS277 -2: 001111111011111111 18 positions
 BS287 1: 0100000001 3 positions
 CMC67 0: 101000000000 2 positions
 BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 3 positions
 CMC68 0: 101000000000 2 positions
-distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap 
+distribute positions: CMC67  Ignored overlap CMC68  Ignored overlap
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 3 positions
-distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap 
+distribute positions: BS287  Ignored overlap BS288  Ignored overlap BS289  Ignored overlap
 CMC69 0: 101000000000 2 positions
 
 fixed = [[1,82],[87,152],[153,218],[221,286],[287,296],[295,306],[386,403],[449,466],[512,529],[575,592],[638,655],[701,718],[822,831],[830,839],[929,946],[992,1009],[1055,1072],[1118,1135],[1181,1198],[1244,1261],[1365,1374],[1373,1382],[1472,1489],[1535,1552],[1598,1615],[1661,1678],[1724,1741],[1787,1804],[1858,1873],[1874,1897]]
@@ -11726,7 +11726,7 @@ TABLESTYLE: 0x98 (6792) test/test-data/2018/Visualstyle.dxf:
 H360 3.2.159: 001100100000000101011001 fixed = [6416,6439]
 H330 4.1.97: 0100000110010111 2 positions
 H330 4.1.97: 0100000110010111 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS280 0: 10 654 positions
 BS70 0: 10 654 positions
 BS71 0: 10 654 positions
@@ -11785,7 +11785,7 @@ CMC69 0: 101000000000 15 positions
 BD140 4.5: 000000000000000000000000000000000000000000000000000001001001000000 8 positions
 BS170 5: 0100000101 9 positions
 CMC62 0: 101000000000 15 positions
-distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 
+distribute positions: CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62 CMC64 CMC65 CMC66 CMC67 CMC68 CMC69 CMC62
 BS283 0: 10 654 positions
 BL90 512: 0000000000000000100000000000000000 5 positions
 BL91 0: 10 654 positions
@@ -11805,7 +11805,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 45 positions
 CMC68 0: 101000000000 15 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 45 positions
 CMC69 0: 101000000000 15 positions
 
@@ -11938,13 +11938,13 @@ TABLESTYLE: 0x87 (1946) test/test-data/2000/work.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1859,0,60,191,0]
 H330 4.1.86: 0100000110000110 2 positions
 H330 4.1.86: 0100000110000110 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF3 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BS70 0: 10 207 positions
 BS71 0: 10 207 positions
 BD40 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
 BD41 0.06: 001011100000011110100001011110101101010001101110001010111000111111 2 positions
-distribute positions: BD40 BD41 
+distribute positions: BD40 BD41
 BS280 0: 10 207 positions
 BS281 0: 10 207 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -11995,9 +11995,9 @@ BS289 1: 0100000001 Ignored overlap  fixed = [1879,1888]
 CMC69 0: 10 207 positions
 TF7 Standard: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD140 0.18: 000000101011010111101000110111000000111101000010101100011100111111 2 positions
-distribute positions: BD140 BD140 
+distribute positions: BD140 BD140
 BS170 5: 0100000101 2 positions
-distribute positions: BS170 BS170 
+distribute positions: BS170 BS170
 CMC62 0: 10 207 positions
 BS283 0: 10 207 positions
 BS274 -2: 001111111011111111 18 positions
@@ -12016,7 +12016,7 @@ BS278 -2: 001111111011111111 18 positions
 BS288 1: 0100000001 Ignored overlap  fixed = [1879,1888]
 CMC68 0: 10 207 positions
 BS279 -2: 001111111011111111 18 positions
-distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 
+distribute positions: BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279 BS274 BS275 BS276 BS277 BS278 BS279
 BS289 1: 0100000001 Ignored overlap  fixed = [1879,1888]
 CMC69 0: 10 207 positions
 
@@ -12128,4 +12128,3 @@ FIELD_CMC ([], 68);	// 0 10 [[2,3],[7,8],[12,13],[14,15],[18,19],[22,23],[24,25]
 FIELD_CMC ([], 69);	// 0 10 [[2,3],[7,8],[12,13],[14,15],[18,19],[22,23],[24,25],[29,30],[34,35],[37,38]]...)
 
 Most probable result: (TODO)
-

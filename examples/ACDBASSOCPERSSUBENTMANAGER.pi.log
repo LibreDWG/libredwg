@@ -4,13 +4,13 @@ ACDBASSOCPERSSUBENTMANAGER: 0x27B (81) test/test-data/2004/BoxUnion.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[67,0,69,13,0]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 1: 0100000001 fixed = [1,10]
 BL90 3: 0100000011 fixed = [11,20]
 BL90 0: 10 17 positions
 BL90 2: 0100000010 2 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 0: 10 17 positions
 BL90 0: 10 17 positions
 BL90 0: 10 17 positions
@@ -45,7 +45,7 @@ ACDBASSOCPERSSUBENTMANAGER: 0x2DF (538) test/test-data/example_2000.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[515,0,68,58,0]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 1: 0100000001 6 positions
 BL90 3: 0100000011 6 positions
 BL90 0: 10 102 positions
@@ -73,9 +73,9 @@ BL90 1: 0100000001 6 positions
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
 BL90 51001: 0000111001110001110000000000000000 fixed = [275,308]
 BL90 1: 0100000001 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 351001: 0000011001010110110000010100000000 fixed = [353,386]
 BL90 0: 10 102 positions
 BL90 0: 10 102 positions
@@ -83,11 +83,11 @@ BL90 0: 10 102 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
 BL90 0: 10 102 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 0: 10 102 positions
 BL90 2: 0100000010 6 positions
 BL90 2: 0100000010 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 3: 0100000011 6 positions
 BL90 0: 10 102 positions
 B290 0: 0 394 positions
@@ -160,7 +160,7 @@ ACDBASSOCPERSSUBENTMANAGER: 0x2DF (529) test/test-data/example_2004.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[515,0,69,58,0]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 1: 0100000001 6 positions
 BL90 3: 0100000011 6 positions
 BL90 0: 10 101 positions
@@ -188,9 +188,9 @@ BL90 1: 0100000001 6 positions
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
 BL90 51001: 0000111001110001110000000000000000 fixed = [275,308]
 BL90 1: 0100000001 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 351001: 0000011001010110110000010100000000 fixed = [353,386]
 BL90 0: 10 101 positions
 BL90 0: 10 101 positions
@@ -198,11 +198,11 @@ BL90 0: 10 101 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
 BL90 0: 10 101 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 0: 10 101 positions
 BL90 2: 0100000010 6 positions
 BL90 2: 0100000010 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 3: 0100000011 6 positions
 BL90 0: 10 101 positions
 B290 0: 0 388 positions
@@ -274,7 +274,7 @@ ACDBASSOCPERSSUBENTMANAGER: 0x2DF (537) test/test-data/example_2007.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[516,0,69,58,39]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 1: 0100000001 6 positions
 BL90 3: 0100000011 6 positions
 BL90 0: 10 101 positions
@@ -302,9 +302,9 @@ BL90 1: 0100000001 6 positions
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
 BL90 51001: 0000111001110001110000000000000000 fixed = [275,308]
 BL90 1: 0100000001 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 351001: 0000011001010110110000010100000000 fixed = [353,386]
 BL90 0: 10 101 positions
 BL90 0: 10 101 positions
@@ -312,11 +312,11 @@ BL90 0: 10 101 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
 BL90 0: 10 101 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 0: 10 101 positions
 BL90 2: 0100000010 6 positions
 BL90 2: 0100000010 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 3: 0100000011 6 positions
 BL90 0: 10 101 positions
 B290 0: 0 389 positions
@@ -389,7 +389,7 @@ ACDBASSOCPERSSUBENTMANAGER: 0x2DF (537) test/test-data/example_2010.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[508,0,37,54,39]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 1: 0100000001 6 positions
 BL90 3: 0100000011 6 positions
 BL90 0: 10 101 positions
@@ -417,9 +417,9 @@ BL90 1: 0100000001 6 positions
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
 BL90 51001: 0000111001110001110000000000000000 fixed = [275,308]
 BL90 1: 0100000001 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 351001: 0000011001010110110000010100000000 fixed = [353,386]
 BL90 0: 10 101 positions
 BL90 0: 10 101 positions
@@ -427,11 +427,11 @@ BL90 0: 10 101 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
 BL90 0: 10 101 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 0: 10 101 positions
 BL90 2: 0100000010 6 positions
 BL90 2: 0100000010 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 3: 0100000011 6 positions
 BL90 0: 10 101 positions
 B290 0: 0 389 positions
@@ -504,7 +504,7 @@ ACDBASSOCPERSSUBENTMANAGER: 0x2DF (560) test/test-data/example_2013.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[538,0,38,57,32]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 2: 0100000010 6 positions
 BL90 3: 0100000011 7 positions
 BL90 0: 10 107 positions
@@ -533,7 +533,7 @@ BL90 1000000000: 0000000000110010101001101000111011 3 positions
 BL90 51001: 0000111001110001110000000000000000 fixed = [275,308]
 BL90 1: 0100000001 8 positions
 BL90 1000000000: 0000000000110010101001101000111011 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 351001: 0000011001010110110000010100000000 fixed = [353,386]
 BL90 0: 10 107 positions
 BL90 0: 10 107 positions
@@ -541,16 +541,16 @@ BL90 0: 10 107 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
 BL90 0: 10 107 positions
 BL90 900: 0010000100000000110000000000000000 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 0: 10 107 positions
 BL90 3: 0100000011 7 positions
 BL90 1: 0100000001 8 positions
 BL90 2: 0100000010 6 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90
 BL90 3: 0100000011 7 positions
 BL90 1: 0100000001 8 positions
 BL90 1: 0100000001 8 positions
-distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90 BL90 BL90 BL90 BL90
 BL90 0: 10 107 positions
 B290 0: 0 412 positions
 
@@ -625,7 +625,7 @@ ACDBASSOCPERSSUBENTMANAGER: 0x2D9 (217) test/test-data/2004/Surface.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[199,0,69,26,0]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 1: 0100000001 4 positions
 BL90 3: 0100000011 3 positions
 BL90 0: 10 46 positions
@@ -646,15 +646,15 @@ BL90 0: 10 46 positions
 BL90 0: 10 46 positions
 BL90 6: 0100000110 3 positions
 BL90 1: 0100000001 4 positions
-distribute positions: BL90 BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90 BL90
 BL90 3: 0100000011 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 4: 0100000100 3 positions
 BL90 5: 0100000101 fixed = [149,158]
 BL90 6: 0100000110 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 7: 0100000111 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 0: 10 46 positions
 B290 0: 0 150 positions
 
@@ -708,12 +708,12 @@ ACDBASSOCPERSSUBENTMANAGER: 0x2D9 (200) test/test-data/2018/Surface.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[174,0,38,21,36]
 H330 4.1.C: 0100000100001100 2 positions
 H330 4.1.C: 0100000100001100 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL90 2: 0100000010 2 positions
 BL90 3: 0100000011 3 positions
 BL90 0: 10 44 positions
 BL90 2: 0100000010 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 5: 0100000101 2 positions
 BL90 1: 0100000001 3 positions
 BL90 7: 0100000111 fixed = [53,62]
@@ -730,12 +730,12 @@ BL90 0: 10 44 positions
 BL90 0: 10 44 positions
 BL90 4: 0100000100 4 positions
 BL90 1: 0100000001 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 3: 0100000011 3 positions
-distribute positions: BL90 BL90 BL90 
+distribute positions: BL90 BL90 BL90
 BL90 4: 0100000100 4 positions
 BL90 5: 0100000101 2 positions
-distribute positions: BL90 BL90 
+distribute positions: BL90 BL90
 BL90 0: 10 44 positions
 BL90 0: 10 44 positions
 B290 0: 0 141 positions
@@ -783,4 +783,3 @@ FIELD_BL ([], 90);	// 0 10 [[21,22],[63,64],[95,96],[97,98],[99,100],[101,102],[
 FIELD_B ([], 290);	// 0 0 [[22,22],[64,64],[96,96],[98,98],[100,100],[102,102],[104,104],[106,106],[108,108],[109,109]]...)
 
 Most probable result: (TODO)
-

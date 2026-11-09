@@ -4,7 +4,7 @@ MATERIAL: 0xEE (1136) test/test-data/2000/2.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1096,0,254,135,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 Global: 000000000000000000000000000000000000000000000000 4 positions
 BS73 2: 0100000010 6 positions
 BD43 0.0008: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -76,7 +76,7 @@ BD144 0.0: 10 208 positions
 BD144 0.0: 10 208 positions
 BD144 1.0: 01 208 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[81,90],[287,296],[421,430],[619,628],[815,824],[1013,1022],[1079,1094],[1095,1110]]
 sortd = [[81,90],[287,296],[421,430],[619,628],[815,824],[1013,1022],[1079,1094],[1095,1110]]
@@ -167,7 +167,7 @@ MATERIAL: 0xED (634) test/test-data/2000/2.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[592,0,60,65,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByBlock: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 6 positions
 BS78 2: 0100000010 6 positions
@@ -175,7 +175,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[89,98],[167,176],[301,310],[371,380],[439,448],[509,518],[575,590],[591,606]]
 sortd = [[89,98],[167,176],[301,310],[371,380],[439,448],[509,518],[575,590],[591,606]]
@@ -209,7 +209,7 @@ MATERIAL: 0xEC (634) test/test-data/2000/2.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[592,0,60,65,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByLayer: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 6 positions
 BS78 2: 0100000010 6 positions
@@ -217,7 +217,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[89,98],[167,176],[301,310],[371,380],[439,448],[509,518],[575,590],[591,606]]
 sortd = [[89,98],[167,176],[301,310],[371,380],[439,448],[509,518],[575,590],[591,606]]
@@ -251,7 +251,7 @@ MATERIAL: 0xEE (1136) test/test-data/2000/3.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1096,0,254,135,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 Global: 000000000000000000000000000000000000000000000000 4 positions
 BS73 2: 0100000010 7 positions
 BD43 0.0008: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -407,7 +407,7 @@ MATERIAL: 0xED (634) test/test-data/2000/3.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[592,0,60,65,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByBlock: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 7 positions
 BS78 2: 0100000010 7 positions
@@ -442,7 +442,7 @@ MATERIAL: 0xEC (634) test/test-data/2000/3.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[592,0,60,65,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByLayer: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 7 positions
 BS78 2: 0100000010 7 positions
@@ -477,7 +477,7 @@ MATERIAL: 0xEF (689) test/test-data/2007/400306127-Red_silicone_wire.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[669,0,61,73,38]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS73 1: 0100000001 23 positions
 BS78 1: 0100000001 23 positions
 BS172 1: 0100000001 23 positions
@@ -514,7 +514,7 @@ MATERIAL: 0xEE (705) test/test-data/2007/400306127-Red_silicone_wire.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[685,0,61,74,38]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS73 1: 0100000001 23 positions
 BS78 1: 0100000001 23 positions
 BS172 1: 0100000001 23 positions
@@ -551,7 +551,7 @@ MATERIAL: 0xED (705) test/test-data/2007/400306127-Red_silicone_wire.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[685,0,61,74,38]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS73 1: 0100000001 23 positions
 BS78 1: 0100000001 23 positions
 BS172 1: 0100000001 23 positions
@@ -588,7 +588,7 @@ MATERIAL: 0xEE (1136) test/test-data/2000/4.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1096,0,254,135,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 Global: 000000000000000000000000000000000000000000000000 4 positions
 BS73 2: 0100000010 7 positions
 BD43 0.0008: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -744,7 +744,7 @@ MATERIAL: 0xED (634) test/test-data/2000/4.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[592,0,60,65,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByBlock: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 7 positions
 BS78 2: 0100000010 7 positions
@@ -779,7 +779,7 @@ MATERIAL: 0xEC (634) test/test-data/2000/4.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[592,0,60,65,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByLayer: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 7 positions
 BS78 2: 0100000010 7 positions
@@ -887,7 +887,7 @@ BD47 0.0: 10 474 positions
 BD47 1.0: 01 475 positions
 BS171 0: 10 474 positions
 BD49 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 474 positions
 BD49 0.0: 10 474 positions
 BD49 0.0: 10 474 positions
@@ -927,7 +927,7 @@ BD144 0.0: 10 474 positions
 BD144 0.0: 10 474 positions
 BD144 0.0: 10 474 positions
 BD144 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 474 positions
 BD144 0.0: 10 474 positions
 BD144 0.0: 10 474 positions
@@ -1113,7 +1113,7 @@ BD47 0.0: 10 474 positions
 BD47 1.0: 01 475 positions
 BS171 0: 10 474 positions
 BD49 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 474 positions
 BD49 0.0: 10 474 positions
 BD49 0.0: 10 474 positions
@@ -1153,7 +1153,7 @@ BD144 0.0: 10 474 positions
 BD144 0.0: 10 474 positions
 BD144 0.0: 10 474 positions
 BD144 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 474 positions
 BD144 0.0: 10 474 positions
 BD144 0.0: 10 474 positions
@@ -1303,7 +1303,7 @@ MATERIAL: 0xEE (1136) test/test-data/2000/5.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1096,0,254,135,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 Global: 000000000000000000000000000000000000000000000000 4 positions
 BS73 2: 0100000010 7 positions
 BD43 0.0008: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -1459,7 +1459,7 @@ MATERIAL: 0xED (634) test/test-data/2000/5.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[592,0,60,65,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByBlock: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 7 positions
 BS78 2: 0100000010 7 positions
@@ -1494,7 +1494,7 @@ MATERIAL: 0xEC (634) test/test-data/2000/5.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[592,0,60,65,0]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByLayer: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 7 positions
 BS78 2: 0100000010 7 positions
@@ -2121,7 +2121,7 @@ MATERIAL: 0x98 (1222) test/test-data/2018/Arc.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.110: 001100100000000100010000 fixed = [1196,1219]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 11 positions
 BS73 2: 0100000010 6 positions
 BD43 0.0208000000566244: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -2193,7 +2193,7 @@ BD144 0.0: 10 227 positions
 BD144 0.0: 10 227 positions
 BD144 1.0: 01 227 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 BL94 63: 0100111111 9 positions
 
 fixed = [[21,30],[225,234],[357,366],[553,562],[747,756],[943,952],[1164,1179],[1180,1195],[1196,1219]]
@@ -2288,7 +2288,7 @@ MATERIAL: 0x97 (728) test/test-data/2018/Arc.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.188: 001100100000000110001000 fixed = [700,723]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 11 positions
 BS73 2: 0100000010 6 positions
 BS78 2: 0100000010 6 positions
@@ -2296,7 +2296,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 BL94 63: 0100111111 fixed = [505,514]
 
 fixed = [[21,30],[97,106],[229,238],[297,306],[363,372],[431,440],[505,514],[668,683],[684,699],[700,723]]
@@ -2336,7 +2336,7 @@ MATERIAL: 0x96 (728) test/test-data/2018/Arc.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.186: 001100100000000110000110 fixed = [700,723]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 11 positions
 BS73 2: 0100000010 6 positions
 BS78 2: 0100000010 6 positions
@@ -2344,7 +2344,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 BL94 63: 0100111111 fixed = [505,514]
 
 fixed = [[21,30],[97,106],[229,238],[297,306],[363,372],[431,440],[505,514],[668,683],[684,699],[700,723]]
@@ -2384,7 +2384,7 @@ MATERIAL: 0xEE (1143) test/test-data/2004/BoxUnion.dxf:
 H360 3.2.173: 001100100000000101110011 fixed = [1119,1142]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 Global: 010000011101000111011011000110111101100010011000010110110000000000 fixed = [1,66]
 BD43 0.0007999999797903: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD43 0.0: 10 207 positions
@@ -2530,7 +2530,7 @@ MATERIAL: 0xED (641) test/test-data/2004/BoxUnion.dxf:
 H360 3.2.1F9: 001100100000000111111001 fixed = [615,638]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 ByBlock: 01000010000100001001111001010000100110110001101111011000110110101100000000 fixed = [1,74]
 
 fixed = [[1,74],[583,598],[599,614],[615,638]]
@@ -2556,7 +2556,7 @@ MATERIAL: 0xEC (641) test/test-data/2004/BoxUnion.dxf:
 H360 3.2.1F7: 001100100000000111110111 fixed = [615,638]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 ByLayer: 01000010000100001001111001010011000110000101111001011001010111001000000000 fixed = [1,74]
 
 fixed = [[1,74],[583,598],[599,614],[615,638]]
@@ -2973,7 +2973,7 @@ MATERIAL: 0x98 (1222) test/test-data/2018/Constraints.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.110: 001100100000000100010000 fixed = [1196,1219]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 23 positions
 RD43 0.0208000000566244: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD43 0.0: 10 243 positions
@@ -3121,7 +3121,7 @@ MATERIAL: 0x97 (728) test/test-data/2018/Constraints.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.188: 001100100000000110001000 fixed = [700,723]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 23 positions
 BL94 63: 0100111111 fixed = [505,514]
 
@@ -3150,7 +3150,7 @@ MATERIAL: 0x96 (728) test/test-data/2018/Constraints.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.186: 001100100000000110000110 fixed = [700,723]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 23 positions
 BL94 63: 0100111111 fixed = [505,514]
 
@@ -3573,7 +3573,7 @@ MATERIAL: 0x94 (1222) test/test-data/2018/ConstructionLine.dxf:
 H330 4.1.6B: 0100000101101011 2 positions
 H360 3.2.10B: 001100100000000100001011 fixed = [1196,1219]
 H330 4.1.6B: 0100000101101011 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 11 positions
 BS73 2: 0100000010 6 positions
 BD43 0.0208000000566244: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -3645,7 +3645,7 @@ BD144 0.0: 10 230 positions
 BD144 0.0: 10 230 positions
 BD144 1.0: 01 230 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 BL94 63: 0100111111 9 positions
 
 fixed = [[21,30],[225,234],[357,366],[553,562],[747,756],[943,952],[1164,1179],[1180,1195],[1196,1219]]
@@ -3740,7 +3740,7 @@ MATERIAL: 0x93 (728) test/test-data/2018/ConstructionLine.dxf:
 H330 4.1.6B: 0100000101101011 2 positions
 H360 3.2.185: 001100100000000110000101 fixed = [700,723]
 H330 4.1.6B: 0100000101101011 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 11 positions
 BS73 2: 0100000010 6 positions
 BS78 2: 0100000010 6 positions
@@ -3748,7 +3748,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 BL94 63: 0100111111 fixed = [505,514]
 
 fixed = [[21,30],[97,106],[229,238],[297,306],[363,372],[431,440],[505,514],[668,683],[684,699],[700,723]]
@@ -3788,7 +3788,7 @@ MATERIAL: 0x92 (728) test/test-data/2018/ConstructionLine.dxf:
 H330 4.1.6B: 0100000101101011 2 positions
 H360 3.2.183: 001100100000000110000011 fixed = [700,723]
 H330 4.1.6B: 0100000101101011 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 1: 0100000001 11 positions
 BS73 2: 0100000010 6 positions
 BS78 2: 0100000010 6 positions
@@ -3796,7 +3796,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 BL94 63: 0100111111 fixed = [505,514]
 
 fixed = [[21,30],[97,106],[229,238],[297,306],[363,372],[431,440],[505,514],[668,683],[684,699],[700,723]]
@@ -3873,7 +3873,7 @@ BD47 0.0: 10 314 positions
 BD47 1.0: 01 315 positions
 BS171 0: 10 314 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 314 positions
 BD49 0.0: 10 314 positions
 BD49 0.0: 10 314 positions
@@ -3913,7 +3913,7 @@ BD144 0.0: 10 314 positions
 BD144 0.0: 10 314 positions
 BD144 0.0: 10 314 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 314 positions
 BD144 0.0: 10 314 positions
 BD144 0.0: 10 314 positions
@@ -4101,7 +4101,7 @@ BD47 0.0: 10 316 positions
 BD47 1.0: 01 317 positions
 BS171 0: 10 316 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 316 positions
 BD49 0.0: 10 316 positions
 BD49 0.0: 10 316 positions
@@ -4141,7 +4141,7 @@ BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
@@ -4329,7 +4329,7 @@ BD47 0.0: 10 313 positions
 BD47 1.0: 01 314 positions
 BS171 0: 10 313 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 313 positions
 BD49 0.0: 10 313 positions
 BD49 0.0: 10 313 positions
@@ -4369,7 +4369,7 @@ BD144 0.0: 10 313 positions
 BD144 0.0: 10 313 positions
 BD144 0.0: 10 313 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 313 positions
 BD144 0.0: 10 313 positions
 BD144 0.0: 10 313 positions
@@ -4519,7 +4519,7 @@ MATERIAL: 0x75 (688) test/test-data/DS_line_R2013.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[661,118,30,69,37]
 H330 4.1.72: 0100000101110010 2 positions
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS73 1: 0100000001 23 positions
 BS78 1: 0100000001 23 positions
 BS172 1: 0100000001 23 positions
@@ -4553,7 +4553,7 @@ MATERIAL: 0x74 (704) test/test-data/DS_line_R2013.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[677,134,30,70,37]
 H330 4.1.72: 0100000101110010 2 positions
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS73 1: 0100000001 23 positions
 BS78 1: 0100000001 23 positions
 BS172 1: 0100000001 23 positions
@@ -4587,7 +4587,7 @@ MATERIAL: 0x73 (704) test/test-data/DS_line_R2013.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[677,134,30,70,37]
 H330 4.1.72: 0100000101110010 2 positions
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS73 1: 0100000001 23 positions
 BS78 1: 0100000001 23 positions
 BS172 1: 0100000001 23 positions
@@ -4622,7 +4622,7 @@ MATERIAL: 0x279 (1394) test/test-data/example_2000.dxf:
 H360 3.2.27A: 001100100000001001111010 fixed = [1365,1388]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 Global: 010000011101000111011011000110111101100010011000010110110000000000 fixed = [1,66]
 BS72 0: 10 319 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
@@ -4660,7 +4660,7 @@ BD47 0.0: 10 319 positions
 BD47 1.0: 01 320 positions
 BS171 0: 10 319 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 319 positions
 BD49 0.0: 10 319 positions
 BD49 0.0: 10 319 positions
@@ -4700,7 +4700,7 @@ BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
@@ -4851,7 +4851,7 @@ MATERIAL: 0x271 (1402) test/test-data/example_2000.dxf:
 H360 3.2.272: 001100100000001001110010 fixed = [1373,1396]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 ByBlock: 01000010000100001001111001010000100110110001101111011000110110101100000000 fixed = [1,74]
 BS72 0: 10 322 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
@@ -4889,7 +4889,7 @@ BD47 0.0: 10 322 positions
 BD47 1.0: 01 323 positions
 BS171 0: 10 322 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 322 positions
 BD49 0.0: 10 322 positions
 BD49 0.0: 10 322 positions
@@ -4929,7 +4929,7 @@ BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
@@ -5080,7 +5080,7 @@ MATERIAL: 0x269 (1402) test/test-data/example_2000.dxf:
 H360 3.2.26A: 001100100000001001101010 fixed = [1373,1396]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 ByLayer: 01000010000100001001111001010011000110000101111001011001010111001000000000 fixed = [1,74]
 BS72 0: 10 323 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
@@ -5118,7 +5118,7 @@ BD47 0.0: 10 323 positions
 BD47 1.0: 01 324 positions
 BS171 0: 10 323 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 323 positions
 BD49 0.0: 10 323 positions
 BD49 0.0: 10 323 positions
@@ -5158,7 +5158,7 @@ BD144 0.0: 10 323 positions
 BD144 0.0: 10 323 positions
 BD144 0.0: 10 323 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 323 positions
 BD144 0.0: 10 323 positions
 BD144 0.0: 10 323 positions
@@ -5309,7 +5309,7 @@ MATERIAL: 0x765 (1040) test/test-data/example_2000.dxf:
 H360 3.2.766: 001100100000011101100110 fixed = [1011,1034]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 Golden Sand: 0100001100010001110110111101101100011001000110010101101110001000000101001101100001011011100110010000000000 fixed = [1,106]
 TV2 Has a beige tint: 01000100010100100001100001011100110010000001100001001000000110001001100101011010010110011101100101001000000111010001101001011011100111010000000000 fixed = [107,252]
 BS70 1: 0100000001 6 positions
@@ -5320,7 +5320,7 @@ BS72 0: 10 231 positions
 BD44 0.899999976158142: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BS76 1: 0100000001 6 positions
 BL92 -1027297396: 0010001100101011111100010011000010 3 positions
-distribute positions: BL90 BL91 BL92 
+distribute positions: BL90 BL91 BL92
 BS77 0: 10 231 positions
 BS171 0: 10 231 positions
 BS175 0: 10 231 positions
@@ -5370,7 +5370,7 @@ MATERIAL: 0x279 (1393) test/test-data/example_2004.dxf:
 H360 3.2.27A: 001100100000001001111010 fixed = [1365,1388]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 Global: 010000011101000111011011000110111101100010011000010110110000000000 fixed = [1,66]
 BS72 0: 10 319 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
@@ -5408,7 +5408,7 @@ BD47 0.0: 10 319 positions
 BD47 1.0: 01 320 positions
 BS171 0: 10 319 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 319 positions
 BD49 0.0: 10 319 positions
 BD49 0.0: 10 319 positions
@@ -5448,7 +5448,7 @@ BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
@@ -5599,7 +5599,7 @@ MATERIAL: 0x271 (1401) test/test-data/example_2004.dxf:
 H360 3.2.272: 001100100000001001110010 fixed = [1373,1396]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 ByBlock: 01000010000100001001111001010000100110110001101111011000110110101100000000 fixed = [1,74]
 BS72 0: 10 322 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
@@ -5637,7 +5637,7 @@ BD47 0.0: 10 322 positions
 BD47 1.0: 01 323 positions
 BS171 0: 10 322 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 322 positions
 BD49 0.0: 10 322 positions
 BD49 0.0: 10 322 positions
@@ -5677,7 +5677,7 @@ BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
@@ -5828,7 +5828,7 @@ MATERIAL: 0x269 (1401) test/test-data/example_2004.dxf:
 H360 3.2.26A: 001100100000001001101010 fixed = [1373,1396]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 ByLayer: 01000010000100001001111001010011000110000101111001011001010111001000000000 fixed = [1,74]
 BS72 0: 10 323 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
@@ -5866,7 +5866,7 @@ BD47 0.0: 10 323 positions
 BD47 1.0: 01 324 positions
 BS171 0: 10 323 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 323 positions
 BD49 0.0: 10 323 positions
 BD49 0.0: 10 323 positions
@@ -5906,7 +5906,7 @@ BD144 0.0: 10 323 positions
 BD144 0.0: 10 323 positions
 BD144 0.0: 10 323 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 323 positions
 BD144 0.0: 10 323 positions
 BD144 0.0: 10 323 positions
@@ -6057,7 +6057,7 @@ MATERIAL: 0x279 (1465) test/test-data/example_2007.dxf:
 H360 6.0.0: 01100000 3 positions
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 328 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 328 positions
@@ -6094,7 +6094,7 @@ BD47 0.0: 10 328 positions
 BD47 1.0: 01 328 positions
 BS171 0: 10 328 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 328 positions
 BD49 0.0: 10 328 positions
 BD49 0.0: 10 328 positions
@@ -6134,7 +6134,7 @@ BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
@@ -6284,7 +6284,7 @@ MATERIAL: 0x271 (1481) test/test-data/example_2007.dxf:
 H360 6.0.0: 01100000 3 positions
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 330 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 330 positions
@@ -6321,7 +6321,7 @@ BD47 0.0: 10 330 positions
 BD47 1.0: 01 330 positions
 BS171 0: 10 330 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 330 positions
 BD49 0.0: 10 330 positions
 BD49 0.0: 10 330 positions
@@ -6361,7 +6361,7 @@ BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
@@ -6511,7 +6511,7 @@ MATERIAL: 0x269 (1481) test/test-data/example_2007.dxf:
 H360 6.0.0: 01100000 fixed = [1330,1337]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 331 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 331 positions
@@ -6548,7 +6548,7 @@ BD47 0.0: 10 331 positions
 BD47 1.0: 01 331 positions
 BS171 0: 10 331 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 331 positions
 BD49 0.0: 10 331 positions
 BD49 0.0: 10 331 positions
@@ -6588,7 +6588,7 @@ BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
@@ -6739,7 +6739,7 @@ MATERIAL: 0x765 (1391) test/test-data/example_2007.dxf:
 H360 6.0.0: 01100000 5 positions
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS70 1: 0100000001 6 positions
 BL90 -1027297396: 0010001100101011111100010011000010 3 positions
 BS71 1: 0100000001 6 positions
@@ -6748,7 +6748,7 @@ BS72 0: 10 246 positions
 BD44 0.899999976158142: 000000000000000000000000000000000000000000000000000000 5 positions
 BS76 1: 0100000001 6 positions
 BL92 -1027297396: 0010001100101011111100010011000010 3 positions
-distribute positions: BL90 BL91 BL92 
+distribute positions: BL90 BL91 BL92
 BS77 0: 10 246 positions
 BS171 0: 10 246 positions
 BS175 0: 10 246 positions
@@ -6804,7 +6804,7 @@ MATERIAL: 0x279 (1465) test/test-data/example_2010.dxf:
 H360 6.0.0: 01100000 3 positions
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 328 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 328 positions
@@ -6841,7 +6841,7 @@ BD47 0.0: 10 328 positions
 BD47 1.0: 01 328 positions
 BS171 0: 10 328 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 328 positions
 BD49 0.0: 10 328 positions
 BD49 0.0: 10 328 positions
@@ -6881,7 +6881,7 @@ BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
@@ -7031,7 +7031,7 @@ MATERIAL: 0x271 (1481) test/test-data/example_2010.dxf:
 H360 6.0.0: 01100000 3 positions
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 330 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 330 positions
@@ -7068,7 +7068,7 @@ BD47 0.0: 10 330 positions
 BD47 1.0: 01 330 positions
 BS171 0: 10 330 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 330 positions
 BD49 0.0: 10 330 positions
 BD49 0.0: 10 330 positions
@@ -7108,7 +7108,7 @@ BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
@@ -7258,7 +7258,7 @@ MATERIAL: 0x269 (1481) test/test-data/example_2010.dxf:
 H360 6.0.0: 01100000 fixed = [1330,1337]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 331 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 331 positions
@@ -7295,7 +7295,7 @@ BD47 0.0: 10 331 positions
 BD47 1.0: 01 331 positions
 BS171 0: 10 331 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 331 positions
 BD49 0.0: 10 331 positions
 BD49 0.0: 10 331 positions
@@ -7335,7 +7335,7 @@ BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
@@ -7486,7 +7486,7 @@ MATERIAL: 0x765 (1391) test/test-data/example_2010.dxf:
 H360 6.0.0: 01100000 5 positions
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS70 1: 0100000001 6 positions
 BL90 -1027297396: 0010001100101011111100010011000010 3 positions
 BS71 1: 0100000001 6 positions
@@ -7495,7 +7495,7 @@ BS72 0: 10 246 positions
 BD44 0.899999976158142: 000000000000000000000000000000000000000000000000000000 5 positions
 BS76 1: 0100000001 6 positions
 BL92 -1027297396: 0010001100101011111100010011000010 3 positions
-distribute positions: BL90 BL91 BL92 
+distribute positions: BL90 BL91 BL92
 BS77 0: 10 246 positions
 BS171 0: 10 246 positions
 BS175 0: 10 246 positions
@@ -7551,7 +7551,7 @@ MATERIAL: 0x279 (1472) test/test-data/example_2013.dxf:
 H360 3.2.27A: 001100100000001001111010 fixed = [1442,1465]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 328 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 328 positions
@@ -7588,7 +7588,7 @@ BD47 0.0: 10 328 positions
 BD47 1.0: 01 329 positions
 BS171 0: 10 328 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 328 positions
 BD49 0.0: 10 328 positions
 BD49 0.0: 10 328 positions
@@ -7628,7 +7628,7 @@ BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
 BD144 0.0: 10 328 positions
@@ -7778,7 +7778,7 @@ MATERIAL: 0x271 (1488) test/test-data/example_2013.dxf:
 H360 3.2.272: 001100100000001001110010 fixed = [1458,1481]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 330 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 330 positions
@@ -7815,7 +7815,7 @@ BD47 0.0: 10 330 positions
 BD47 1.0: 01 331 positions
 BS171 0: 10 330 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 330 positions
 BD49 0.0: 10 330 positions
 BD49 0.0: 10 330 positions
@@ -7855,7 +7855,7 @@ BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
 BD144 0.0: 10 330 positions
@@ -8005,7 +8005,7 @@ MATERIAL: 0x269 (1488) test/test-data/example_2013.dxf:
 H360 3.2.26A: 001100100000001001101010 fixed = [1458,1481]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS72 0: 10 331 positions
 BD43 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
 BD43 0.0: 10 331 positions
@@ -8042,7 +8042,7 @@ BD47 0.0: 10 331 positions
 BD47 1.0: 01 332 positions
 BS171 0: 10 331 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 331 positions
 BD49 0.0: 10 331 positions
 BD49 0.0: 10 331 positions
@@ -8082,7 +8082,7 @@ BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
 BD144 0.0: 10 331 positions
@@ -8232,7 +8232,7 @@ MATERIAL: 0x765 (1398) test/test-data/example_2013.dxf:
 H360 3.2.766: 001100100000011101100110 fixed = [1368,1391]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS70 1: 0100000001 6 positions
 BL90 -1027297396: 0010001100101011111100010011000010 3 positions
 BS71 1: 0100000001 6 positions
@@ -8241,7 +8241,7 @@ BS72 0: 10 246 positions
 BD44 0.899999976158142: 000000000000000000000000000000000000000000000000000000 5 positions
 BS76 1: 0100000001 6 positions
 BL92 -1027297396: 0010001100101011111100010011000010 3 positions
-distribute positions: BL90 BL91 BL92 
+distribute positions: BL90 BL91 BL92
 BS77 0: 10 246 positions
 BS171 0: 10 246 positions
 BS175 0: 10 246 positions
@@ -8334,7 +8334,7 @@ BD47 0.0: 10 318 positions
 BD47 1.0: 01 319 positions
 BS171 0: 10 318 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 318 positions
 BD49 0.0: 10 318 positions
 BD49 0.0: 10 318 positions
@@ -8374,7 +8374,7 @@ BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
@@ -8562,7 +8562,7 @@ BD47 0.0: 10 322 positions
 BD47 1.0: 01 323 positions
 BS171 0: 10 322 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 322 positions
 BD49 0.0: 10 322 positions
 BD49 0.0: 10 322 positions
@@ -8602,7 +8602,7 @@ BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
 BD144 0.0: 10 322 positions
@@ -8790,7 +8790,7 @@ BD47 0.0: 10 319 positions
 BD47 1.0: 01 320 positions
 BS171 0: 10 319 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 319 positions
 BD49 0.0: 10 319 positions
 BD49 0.0: 10 319 positions
@@ -8830,7 +8830,7 @@ BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
@@ -9018,7 +9018,7 @@ BD47 0.0: 10 318 positions
 BD47 1.0: 01 319 positions
 BS171 0: 10 318 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 318 positions
 BD49 0.0: 10 318 positions
 BD49 0.0: 10 318 positions
@@ -9058,7 +9058,7 @@ BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
@@ -9246,7 +9246,7 @@ BD47 0.0: 10 321 positions
 BD47 1.0: 01 322 positions
 BS171 0: 10 321 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 321 positions
 BD49 0.0: 10 321 positions
 BD49 0.0: 10 321 positions
@@ -9286,7 +9286,7 @@ BD144 0.0: 10 321 positions
 BD144 0.0: 10 321 positions
 BD144 0.0: 10 321 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 321 positions
 BD144 0.0: 10 321 positions
 BD144 0.0: 10 321 positions
@@ -9474,7 +9474,7 @@ BD47 0.0: 10 318 positions
 BD47 1.0: 01 319 positions
 BS171 0: 10 318 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 318 positions
 BD49 0.0: 10 318 positions
 BD49 0.0: 10 318 positions
@@ -9514,7 +9514,7 @@ BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
@@ -9702,7 +9702,7 @@ BD47 0.0: 10 318 positions
 BD47 1.0: 01 319 positions
 BS171 0: 10 318 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 318 positions
 BD49 0.0: 10 318 positions
 BD49 0.0: 10 318 positions
@@ -9742,7 +9742,7 @@ BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
 BD144 0.0: 10 318 positions
@@ -9930,7 +9930,7 @@ BD47 0.0: 10 321 positions
 BD47 1.0: 01 322 positions
 BS171 0: 10 321 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 321 positions
 BD49 0.0: 10 321 positions
 BD49 0.0: 10 321 positions
@@ -9970,7 +9970,7 @@ BD144 0.0: 10 321 positions
 BD144 0.0: 10 321 positions
 BD144 0.0: 10 321 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 321 positions
 BD144 0.0: 10 321 positions
 BD144 0.0: 10 321 positions
@@ -10158,7 +10158,7 @@ BD47 0.0: 10 317 positions
 BD47 1.0: 01 318 positions
 BS171 0: 10 317 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 317 positions
 BD49 0.0: 10 317 positions
 BD49 0.0: 10 317 positions
@@ -10198,7 +10198,7 @@ BD144 0.0: 10 317 positions
 BD144 0.0: 10 317 positions
 BD144 0.0: 10 317 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 317 positions
 BD144 0.0: 10 317 positions
 BD144 0.0: 10 317 positions
@@ -10386,7 +10386,7 @@ BD47 0.0: 10 316 positions
 BD47 1.0: 01 317 positions
 BS171 0: 10 316 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 316 positions
 BD49 0.0: 10 316 positions
 BD49 0.0: 10 316 positions
@@ -10426,7 +10426,7 @@ BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
@@ -10614,7 +10614,7 @@ BD47 0.0: 10 319 positions
 BD47 1.0: 01 320 positions
 BS171 0: 10 319 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 319 positions
 BD49 0.0: 10 319 positions
 BD49 0.0: 10 319 positions
@@ -10654,7 +10654,7 @@ BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
 BD144 0.0: 10 319 positions
@@ -10842,7 +10842,7 @@ BD47 0.0: 10 316 positions
 BD47 1.0: 01 317 positions
 BS171 0: 10 316 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 316 positions
 BD49 0.0: 10 316 positions
 BD49 0.0: 10 316 positions
@@ -10882,7 +10882,7 @@ BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
 BD144 0.0: 10 316 positions
@@ -11143,7 +11143,7 @@ MATERIAL: 0xEE (1222) test/test-data/2013/gh55-ltype.dxf:
 H360 3.2.173: 001100100000000101110011 fixed = [1196,1219]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BD43 0.0007999999797903: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD43 0.0: 10 221 positions
 BD43 0.0: 10 221 positions
@@ -11290,7 +11290,7 @@ MATERIAL: 0xED (728) test/test-data/2013/gh55-ltype.dxf:
 H360 3.2.1F9: 001100100000000111111001 fixed = [700,723]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL94 63: 0100111111 fixed = [505,514]
 
 fixed = [[505,514],[668,683],[684,699],[700,723]]
@@ -11317,7 +11317,7 @@ MATERIAL: 0xEC (728) test/test-data/2013/gh55-ltype.dxf:
 H360 3.2.1F7: 001100100000000111110111 fixed = [700,723]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL94 63: 0100111111 fixed = [505,514]
 
 fixed = [[505,514],[668,683],[684,699],[700,723]]
@@ -11524,7 +11524,7 @@ BD144 0.0: 10 213 positions
 BD144 0.0: 10 213 positions
 BD144 1.0: 01 214 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[1,66],[89,98],[295,304],[429,438],[627,636],[823,832],[1021,1030],[1103,1118],[1119,1142]]
 sortd = [[1,66],[89,98],[295,304],[429,438],[627,636],[823,832],[1021,1030],[1103,1118],[1103,1118],[1119,1142]]
@@ -11624,7 +11624,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[1,74],[97,106],[175,184],[309,318],[379,388],[447,456],[517,526],[599,614],[615,638]]
 sortd = [[1,74],[97,106],[175,184],[309,318],[379,388],[447,456],[517,526],[599,614],[599,614],[615,638]]
@@ -11668,7 +11668,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[1,74],[97,106],[175,184],[309,318],[379,388],[447,456],[517,526],[599,614],[615,638]]
 sortd = [[1,74],[97,106],[175,184],[309,318],[379,388],[447,456],[517,526],[599,614],[599,614],[615,638]]
@@ -11705,7 +11705,7 @@ MATERIAL: 0x205 (3927) test/test-data/2004/material.dxf:
 H360 3.2.206: 001100100000001000000110 fixed = [3903,3926]
 H330 4.1.72: 0100000101110010 2 positions
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 1.5in Square - Brown: 0100010101001100010010111000110101011010010110111000100000010100110111000101110101011000010111001001100101001000000010110100100000010000100111001001101111011101110110111000000000 fixed = [1,178]
 TV2 1.5-inch brown square tiles: 010001110000110001001011100011010100101101011010010110111001100011011010000010000001100010011100100110111101110111011011100010000001110011011100010111010101100001011100100110010100100000011101000110100101101100011001010111001100000000 fixed = [179,412]
 BS70 1: 0100000001 14 positions
@@ -11732,7 +11732,7 @@ BD43 1.0: 01 959 positions
 BD44 0.8500000238418579: 000000000000000000000000000100000000110011001100111110101100111111 fixed = [2023,2088]
 BS76 1: 0100000001 14 positions
 BL92 -1023410177: 0011111111111111111111111111000010 3 positions
-distribute positions: BL90 BL91 BL92 
+distribute positions: BL90 BL91 BL92
 BS77 0: 10 958 positions
 BS171 0: 10 958 positions
 BS175 0: 10 958 positions
@@ -11744,7 +11744,7 @@ BD144 0.0: 10 958 positions
 BD144 0.0: 10 958 positions
 BD144 0.0: 10 958 positions
 BD144 0.1666666716337204: 000000000000000000000000000110000001010101010101011100010100111111 4 positions
-distribute positions: BD43 BD43 BD144 BD144 
+distribute positions: BD43 BD43 BD144 BD144
 BD144 0.0: 10 958 positions
 BD144 0.0: 10 958 positions
 BD144 0.0: 10 958 positions
@@ -11838,7 +11838,7 @@ MATERIAL: 0x210 (3951) test/test-data/2004/material.dxf:
 H360 3.2.211: 001100100000001000010001 fixed = [3927,3950]
 H330 4.1.72: 0100000101110010 2 positions
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 1.5in Square - Brown(1): 0100011000001100010010111000110101011010010110111000100000010100110111000101110101011000010111001001100101001000000010110100100000010000100111001001101111011101110110111000101000001100010010100100000000 fixed = [1,202]
 TV2 1.5-inch brown square tiles: 010001110000110001001011100011010100101101011010010110111001100011011010000010000001100010011100100110111101110111011011100010000001110011011100010111010101100001011100100110010100100000011101000110100101101100011001010111001100000000 fixed = [203,436]
 BS70 1: 0100000001 14 positions
@@ -11865,7 +11865,7 @@ BD43 1.0: 01 964 positions
 BD44 0.8500000238418579: 000000000000000000000000000100000000110011001100111110101100111111 fixed = [2047,2112]
 BS76 1: 0100000001 14 positions
 BL92 -1023410177: 0011111111111111111111111111000010 3 positions
-distribute positions: BL90 BL91 BL92 
+distribute positions: BL90 BL91 BL92
 BS77 0: 10 963 positions
 BS171 0: 10 963 positions
 BS175 0: 10 963 positions
@@ -11877,7 +11877,7 @@ BD144 0.0: 10 963 positions
 BD144 0.0: 10 963 positions
 BD144 0.0: 10 963 positions
 BD144 0.1666666716337204: 000000000000000000000000000110000001010101010101011100010100111111 4 positions
-distribute positions: BD43 BD43 BD144 BD144 
+distribute positions: BD43 BD43 BD144 BD144
 BD144 0.0: 10 963 positions
 BD144 0.0: 10 963 positions
 BD144 0.0: 10 963 positions
@@ -11971,7 +11971,7 @@ MATERIAL: 0xED (642) test/test-data/2000/MLeader.dxf:
 H360 3.2.1F9: 001100100000000111111001 fixed = [615,638]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 ByBlock: 01000010000100001001111001010000100110110001101111011000110110101100000000 fixed = [1,74]
 
 fixed = [[1,74],[583,598],[599,614],[615,638]]
@@ -11997,7 +11997,7 @@ MATERIAL: 0xEC (642) test/test-data/2000/MLeader.dxf:
 H360 3.2.1F7: 001100100000000111110111 fixed = [615,638]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 ByLayer: 01000010000100001001111001010011000110000101111001011001010111001000000000 fixed = [1,74]
 
 fixed = [[1,74],[583,598],[599,614],[615,638]]
@@ -12023,7 +12023,7 @@ MATERIAL: 0xEE (1223) test/test-data/2010/MLeader.dxf:
 H360 3.2.173: 001100100000000101110011 fixed = [1196,1219]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BD43 0.0007999999797903: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
 BD43 0.0: 10 221 positions
 BD43 0.0: 10 221 positions
@@ -12170,7 +12170,7 @@ MATERIAL: 0xED (729) test/test-data/2010/MLeader.dxf:
 H360 3.2.1F9: 001100100000000111111001 fixed = [700,723]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL94 63: 0100111111 fixed = [505,514]
 
 fixed = [[505,514],[668,683],[684,699],[700,723]]
@@ -12197,7 +12197,7 @@ MATERIAL: 0xEC (729) test/test-data/2010/MLeader.dxf:
 H360 3.2.1F7: 001100100000000111110111 fixed = [700,723]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BL94 63: 0100111111 fixed = [505,514]
 
 fixed = [[505,514],[668,683],[684,699],[700,723]]
@@ -12260,7 +12260,7 @@ BD47 0.0: 10 470 positions
 BD47 1.0: 01 470 positions
 BS171 0: 10 470 positions
 BD49 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 470 positions
 BD49 0.0: 10 470 positions
 BD49 0.0: 10 470 positions
@@ -12300,7 +12300,7 @@ BD144 0.0: 10 470 positions
 BD144 0.0: 10 470 positions
 BD144 0.0: 10 470 positions
 BD144 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 470 positions
 BD144 0.0: 10 470 positions
 BD144 0.0: 10 470 positions
@@ -12486,7 +12486,7 @@ BD47 0.0: 10 473 positions
 BD47 1.0: 01 473 positions
 BS171 0: 10 473 positions
 BD49 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 473 positions
 BD49 0.0: 10 473 positions
 BD49 0.0: 10 473 positions
@@ -12526,7 +12526,7 @@ BD144 0.0: 10 473 positions
 BD144 0.0: 10 473 positions
 BD144 0.0: 10 473 positions
 BD144 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 473 positions
 BD144 0.0: 10 473 positions
 BD144 0.0: 10 473 positions
@@ -12712,7 +12712,7 @@ BD47 0.0: 10 469 positions
 BD47 1.0: 01 469 positions
 BS171 0: 10 469 positions
 BD49 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 469 positions
 BD49 0.0: 10 469 positions
 BD49 0.0: 10 469 positions
@@ -12752,7 +12752,7 @@ BD144 0.0: 10 469 positions
 BD144 0.0: 10 469 positions
 BD144 0.0: 10 469 positions
 BD144 0.0208333333333333: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 469 positions
 BD144 0.0: 10 469 positions
 BD144 0.0: 10 469 positions
@@ -12939,7 +12939,7 @@ BD47 0.0: 10 317 positions
 BD47 1.0: 01 318 positions
 BS171 0: 10 317 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 317 positions
 BD49 0.0: 10 317 positions
 BD49 0.0: 10 317 positions
@@ -12979,7 +12979,7 @@ BD144 0.0: 10 317 positions
 BD144 0.0: 10 317 positions
 BD144 0.0: 10 317 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 317 positions
 BD144 0.0: 10 317 positions
 BD144 0.0: 10 317 positions
@@ -13167,7 +13167,7 @@ BD47 0.0: 10 320 positions
 BD47 1.0: 01 321 positions
 BS171 0: 10 320 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 320 positions
 BD49 0.0: 10 320 positions
 BD49 0.0: 10 320 positions
@@ -13207,7 +13207,7 @@ BD144 0.0: 10 320 positions
 BD144 0.0: 10 320 positions
 BD144 0.0: 10 320 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 320 positions
 BD144 0.0: 10 320 positions
 BD144 0.0: 10 320 positions
@@ -13395,7 +13395,7 @@ BD47 0.0: 10 320 positions
 BD47 1.0: 01 321 positions
 BS171 0: 10 320 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 320 positions
 BD49 0.0: 10 320 positions
 BD49 0.0: 10 320 positions
@@ -13435,7 +13435,7 @@ BD144 0.0: 10 320 positions
 BD144 0.0: 10 320 positions
 BD144 0.0: 10 320 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 320 positions
 BD144 0.0: 10 320 positions
 BD144 0.0: 10 320 positions
@@ -13622,7 +13622,7 @@ BD47 0.0: 10 325 positions
 BD47 1.0: 01 325 positions
 BS171 0: 10 325 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 325 positions
 BD49 0.0: 10 325 positions
 BD49 0.0: 10 325 positions
@@ -13662,7 +13662,7 @@ BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
@@ -13848,7 +13848,7 @@ BD47 0.0: 10 327 positions
 BD47 1.0: 01 327 positions
 BS171 0: 10 327 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
@@ -13888,7 +13888,7 @@ BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
@@ -14074,7 +14074,7 @@ BD47 0.0: 10 327 positions
 BD47 1.0: 01 327 positions
 BS171 0: 10 327 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
@@ -14114,7 +14114,7 @@ BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
@@ -14301,7 +14301,7 @@ BD47 0.0: 10 325 positions
 BD47 1.0: 01 325 positions
 BS171 0: 10 325 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 325 positions
 BD49 0.0: 10 325 positions
 BD49 0.0: 10 325 positions
@@ -14341,7 +14341,7 @@ BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
@@ -14527,7 +14527,7 @@ BD47 0.0: 10 327 positions
 BD47 1.0: 01 327 positions
 BS171 0: 10 327 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
@@ -14567,7 +14567,7 @@ BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
@@ -14753,7 +14753,7 @@ BD47 0.0: 10 327 positions
 BD47 1.0: 01 327 positions
 BS171 0: 10 327 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
@@ -14793,7 +14793,7 @@ BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
@@ -14980,7 +14980,7 @@ BD47 0.0: 10 325 positions
 BD47 1.0: 01 326 positions
 BS171 0: 10 325 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 325 positions
 BD49 0.0: 10 325 positions
 BD49 0.0: 10 325 positions
@@ -15020,7 +15020,7 @@ BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
 BD144 0.0: 10 325 positions
@@ -15206,7 +15206,7 @@ BD47 0.0: 10 327 positions
 BD47 1.0: 01 328 positions
 BS171 0: 10 327 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
@@ -15246,7 +15246,7 @@ BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
@@ -15432,7 +15432,7 @@ BD47 0.0: 10 327 positions
 BD47 1.0: 01 328 positions
 BS171 0: 10 327 positions
 BD49 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43 BD43 BD47 BD47 BD49 
+distribute positions: BD43 BD43 BD47 BD47 BD49
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
 BD49 0.0: 10 327 positions
@@ -15472,7 +15472,7 @@ BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0008202099737533: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap 
+distribute positions: BD49  Ignored overlap BD142  Ignored overlap BD142  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
 BD144 0.0: 10 327 positions
@@ -15622,7 +15622,7 @@ MATERIAL: 0x35A (4119) test/test-data/2004/Surface.dxf:
 H360 3.2.35B: 001100100000001101011011 fixed = [4095,4118]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TV1 1.5in Square - Medium Blue: 0100011011001100010010111000110101011010010110111000100000010100110111000101110101011000010111001001100101001000000010110100100000010011010110010101100100011010010111010101101101001000000100001001101100011101010110010100000000 fixed = [1,226]
 TV2 1.5-inch medium blue square tiles: 010010001000110001001011100011010100101101011010010110111001100011011010000010000001101101011001010110010001101001011101010110110100100000011000100110110001110101011001010010000001110011011100010111010101100001011100100110010100100000011101000110100101101100011001010111001100000000 fixed = [227,508]
 BS70 1: 0100000001 14 positions
@@ -15649,7 +15649,7 @@ BD43 1.0: 01 1019 positions
 BD44 0.8500000238418579: 000000000000000000000000000100000000110011001100111110101100111111 fixed = [2167,2232]
 BS76 1: 0100000001 14 positions
 BL92 -1023410177: 0011111111111111111111111111000010 3 positions
-distribute positions: BL90 BL91 BL92 
+distribute positions: BL90 BL91 BL92
 BS77 0: 10 1018 positions
 BS171 0: 10 1018 positions
 BS175 0: 10 1018 positions
@@ -15746,7 +15746,7 @@ MATERIAL: 0x35A (7262) test/test-data/2018/Surface.dxf:
 H360 3.2.35B: 001100100000001101011011 fixed = [7236,7259]
 H330 4.1.6A: 0100000101101010 2 positions
 H330 4.1.6A: 0100000101101010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 BS70 1: 0100000001 10 positions
 BL90 -1023410177: 0011111111111111111111111111000010 3 positions
 BS71 1: 0100000001 10 positions
@@ -15770,7 +15770,7 @@ BD43 1.0: 01 1037 positions
 BD44 0.8500000238418579: 000000000000000000000000000100000000110011001100111110101100111111 fixed = [393,458]
 BS76 1: 0100000001 10 positions
 BL92 -1023410177: 0011111111111111111111111111000010 3 positions
-distribute positions: BL90 BL91 BL92 
+distribute positions: BL90 BL91 BL92
 BS77 0: 10 1036 positions
 BS171 0: 10 1036 positions
 BS175 0: 10 1036 positions
@@ -15794,7 +15794,7 @@ BD144 1.0: 01 1037 positions
 BD145 1.399999976158142: 000000000000000000000000000110000001100110011001101111011000111111 fixed = [851,916]
 BD148 0.5: 000000000000000000000000000000000000000000000000001110000000111111 fixed = [983,1048]
 BD468 0.0900000035762787: 000000000000000000000000000000000000000000000000000000 5 positions
-distribute positions: BD43  Ignored overlap BD43  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap BD468  Ignored overlap 
+distribute positions: BD43  Ignored overlap BD43  Ignored overlap BD144  Ignored overlap BD144  Ignored overlap BD468  Ignored overlap
 BL94 17: 0100010001 fixed = [1119,1128]
 
 fixed = [[11,44],[55,88],[293,326],[393,458],[593,658],[851,916],[983,1048],[1119,1128],[7204,7219],[7220,7235],[7236,7259]]
@@ -16267,7 +16267,7 @@ MATERIAL: 0x98 (1136) test/test-data/2000/work.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.110: 001100100000000100010000 fixed = [1111,1134]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 Global: 000000000000000000000000000000000000000000000000 4 positions
 BS73 2: 0100000010 6 positions
 RD43 0.0208000000566244: 0000000000000000000000000000000000000000000000000000000000000000 0 positions
@@ -16339,7 +16339,7 @@ BD144 0.0: 10 229 positions
 BD144 0.0: 10 229 positions
 BD144 1.0: 01 229 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[81,90],[287,296],[421,430],[619,628],[815,824],[1013,1022],[1079,1094],[1095,1110],[1111,1134]]
 sortd = [[81,90],[287,296],[421,430],[619,628],[815,824],[1013,1022],[1079,1094],[1095,1110],[1111,1134]]
@@ -16432,7 +16432,7 @@ MATERIAL: 0x97 (634) test/test-data/2000/work.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.188: 001100100000000110001000 fixed = [607,630]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByBlock: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 6 positions
 BS78 2: 0100000010 6 positions
@@ -16440,7 +16440,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[89,98],[167,176],[301,310],[371,380],[439,448],[509,518],[575,590],[591,606],[607,630]]
 sortd = [[89,98],[167,176],[301,310],[371,380],[439,448],[509,518],[575,590],[591,606],[607,630]]
@@ -16476,7 +16476,7 @@ MATERIAL: 0x96 (634) test/test-data/2000/work.dxf:
 H330 4.1.72: 0100000101110010 2 positions
 H360 3.2.186: 001100100000000110000110 fixed = [607,630]
 H330 4.1.72: 0100000101110010 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 TF1 ByLayer: 00000000000000000000000000000000000000000000000000000000 0 positions
 BS73 2: 0100000010 6 positions
 BS78 2: 0100000010 6 positions
@@ -16484,7 +16484,7 @@ BS172 2: 0100000010 6 positions
 BS176 2: 0100000010 6 positions
 BS270 2: 0100000010 6 positions
 BS274 2: 0100000010 6 positions
-distribute positions: BS73 BS78 BS172 BS176 BS270 BS274 
+distribute positions: BS73 BS78 BS172 BS176 BS270 BS274
 
 fixed = [[89,98],[167,176],[301,310],[371,380],[439,448],[509,518],[575,590],[591,606],[607,630]]
 sortd = [[89,98],[167,176],[301,310],[371,380],[439,448],[509,518],[575,590],[591,606],[607,630]]
@@ -16512,4 +16512,3 @@ HOLE([631,634],0000) len = 4
 Todo: 0 + 116 = 116, Missing: 518
 
 Most probable result: (TODO)
-

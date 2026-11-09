@@ -14,6 +14,8 @@
 
 [ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
+# artefact for "shellcheck"
+[ -z "$top_builddir" ] && echo "$top_builddir"
 EXEEXT="@EXEEXT@"
 JQ="@JQ@"
 

@@ -277,7 +277,7 @@ BD47 0.0: 10 4529 positions
 BD47 0.0: 10 4529 positions
 BD47 1.0: 01 4529 positions
 BD47 175.2425754417727: 000000000000000000000000000000000000000000000000000000 3 positions
-distribute positions: BD46 BD47 BD47 
+distribute positions: BD46 BD47 BD47
 BD47 0.0: 10 4529 positions
 BD47 0.0: 10 4529 positions
 BD47 0.0: 10 4529 positions
@@ -398,4 +398,3 @@ FIELD_BD ([], 21);	// 0.0 10 [[2,3],[5,6],[10,11],[13,14],[19,20],[24,25],[30,31
 FIELD_BD ([], 31);	// 0.0 10 [[2,3],[5,6],[10,11],[13,14],[19,20],[24,25],[30,31],[33,34],[38,39],[40,41]]...)
 
 Most probable result: (TODO)
-

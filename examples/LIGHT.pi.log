@@ -91,7 +91,7 @@ B293 1: 0 479 positions
 BS73 0: 10 173 positions
 BS91 256: 00 305 positions
 BS280 1: 0100000001 2 positions
-distribute positions: BL90 BS280 
+distribute positions: BL90 BS280
 
 fixed = [[1,10],[11,108],[131,196],[334,343],[470,535],[681,704]]
 sortd = [[1,10],[11,108],[131,196],[334,343],[470,535],[681,704]]
@@ -153,7 +153,7 @@ B293 1: 0 481 positions
 BS73 0: 10 166 positions
 BS91 256: 00 314 positions
 BS280 1: 0100000001 2 positions
-distribute positions: BL90 BS280 
+distribute positions: BL90 BS280
 
 fixed = [[1,10],[11,108],[165,230],[368,377],[474,483],[504,569],[715,738]]
 sortd = [[1,10],[11,108],[165,230],[368,377],[474,483],[504,569],[715,738]]
@@ -216,7 +216,7 @@ B293 1: 0 566 positions
 BS73 0: 10 171 positions
 BS91 256: 00 394 positions
 BS280 1: 0100000001 2 positions
-distribute positions: BL90 BS280 
+distribute positions: BL90 BS280
 
 fixed = [[1,10],[67,132],[270,279],[376,385],[406,471],[804,827]]
 sortd = [[1,10],[67,132],[270,279],[376,385],[406,471],[804,827]]
@@ -278,7 +278,7 @@ B293 1: 0 566 positions
 BS73 0: 10 171 positions
 BS91 256: 00 394 positions
 BS280 1: 0100000001 2 positions
-distribute positions: BL90 BS280 
+distribute positions: BL90 BS280
 
 fixed = [[1,10],[67,132],[270,279],[376,385],[406,471],[804,827]]
 sortd = [[1,10],[67,132],[270,279],[376,385],[406,471],[804,827]]
@@ -340,7 +340,7 @@ B293 1: 0 566 positions
 BS73 0: 10 171 positions
 BS91 256: 00 394 positions
 BS280 1: 0100000001 2 positions
-distribute positions: BL90 BS280 
+distribute positions: BL90 BS280
 
 fixed = [[1,10],[67,132],[270,279],[376,385],[406,471],[804,827]]
 sortd = [[1,10],[67,132],[270,279],[376,385],[406,471],[804,827]]
@@ -402,7 +402,7 @@ B293 1: 0 594 positions
 BS73 1: 0100000001 5 positions
 BL91 256: 0000000000000000010000000000000000 Ignored overlap  fixed = [624,657]
 BS280 2: 0100000010 2 positions
-distribute positions: BS70 BS280 
+distribute positions: BS70 BS280
 
 fixed = [[11,116],[117,126],[173,238],[363,372],[505,570],[582,647],[648,713],[867,890]]
 sortd = [[11,116],[117,126],[173,238],[363,372],[505,570],[582,647],[624,657],[648,713],[867,890]]
@@ -468,7 +468,7 @@ B293 1: 0 684 positions
 BS73 1: 0100000001 5 positions
 BL91 256: 0000000000000000010000000000000000 Ignored overlap  fixed = [518,551]
 BS280 2: 0100000010 2 positions
-distribute positions: BS70 BS280 
+distribute positions: BS70 BS280
 
 fixed = [[11,20],[67,132],[257,266],[399,464],[476,541],[542,607],[964,987]]
 sortd = [[11,20],[67,132],[257,266],[399,464],[476,541],[518,551],[542,607],[964,987]]
@@ -506,4 +506,3 @@ FIELD_B (cast_shadows, 293);	// 1 0 [[1,1],[3,3],[4,4],[5,5],[6,6],[7,7],[8,8],[
 FIELD_BS (shadow_type, 73);	// 1 0100000001 [[1,10],[465,474],[741,750],[993,1002]]
 
 Most probable result: (TODO)
-

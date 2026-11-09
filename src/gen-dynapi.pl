@@ -647,7 +647,8 @@ dxfin_spec "$srcdir/dwg.spec";
     open my $ins, "<", "$srcdir/insert.spec" or die "insert.spec: $!";
     my $body = join( "", <$ins> );
     close $ins;
-    open my $in, "<", \( "DWG_ENTITY (INSERT)\n" . $body . "DWG_ENTITY_END\n" );
+    open my $in, "<",
+        \( "DWG_ENTITY (INSERT)\n" . $body . "DWG_ENTITY_END\n" );
     dxf_in($in);
     close $in;
 }
@@ -657,7 +658,7 @@ $DXF{'BLOCK'}->{'name'}                           = 2;     # and 3
 $DXF{'BLOCK'}->{'filename'}                       = 4;
 $DXF{'3DLINE'}->{'thickness'}                     = 39;
 $DXF{'INSERT'}->{'block_header'}                  = 2;
-$DXF{'ACIDBLOCKREFERENCE'}->{'block_header'}          = 2;
+$DXF{'ACIDBLOCKREFERENCE'}->{'block_header'}      = 2;
 $DXF{'MINSERT'}->{'block_header'}                 = 2;
 $DXF{'POLYLINE_3D'}->{'flag'}                     = 70;
 $DXF{'POLYLINE_MESH'}->{'flag'}                   = 70;
@@ -1893,7 +1894,7 @@ EOF
                         dashes_r11    => 'numdashes',
                         texts         => 'numitems',
                         encr_sat_data => 'num_blocks',
-                        col_widths    => 'num_cols',     # TABLE
+                        col_widths    => 'num_cols',        # TABLE
                         row_heights   => 'num_rows',
                     );
                     my $countfield

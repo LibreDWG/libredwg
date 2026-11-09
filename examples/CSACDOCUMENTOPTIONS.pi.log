@@ -4,7 +4,7 @@ CSACDOCUMENTOPTIONS: 0x366 (1202) test/test-data/2000/2.dxf:
 [hdloff, strsize, commonsize, bitsize, hdlsize]=[1164,0,68,123,0]
 H330 4.2.365: 010000100000001101100101 2 positions
 H330 4.2.365: 010000100000001101100101 2 positions
-distribute positions: H330 H330 
+distribute positions: H330 H330
 
 fixed = [[1147,1170],[1171,1194]]
 sortd = [[1147,1170],[1171,1194]]
@@ -19,4 +19,3 @@ HOLE([1195,1202],00110000) len = 8
 Todo: 0 + 48 = 48, Missing: 1154
 
 Most probable result: (TODO)
-
