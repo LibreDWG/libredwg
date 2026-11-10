@@ -1523,7 +1523,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
-  int is_tu = 1;
   int i = 0;
   Dxf_Pair *pair;
 
@@ -1562,7 +1561,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           const char *version = pair->value.s.ptr;
           dat->from_version = dwg->header.from_version
               = dwg_version_hdr_type (version);
-          is_tu = dat->from_version >= R_2007;
           LOG_TRACE ("HEADER.from_version = %s,\tdat->from_version = %s\n",
                      dwg_version_codes (dwg->header.from_version),
                      dwg_version_codes (dat->from_version));
@@ -1571,14 +1569,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version);
               dxf_free_pair (pair);
               return DWG_ERR_INVALIDDWG;
-            }
-          if (is_tu && dwg->num_objects
-              && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
-            {
-              Dwg_Object_BLOCK_HEADER *o
-                  = dwg->object[0].tio.object->tio.BLOCK_HEADER;
-              free (o->name);
-              o->name = (char *)bit_utf8_to_TU ((char *)"*Model_Space", 0);
             }
           // currently we can only encode DWGs to r13-r2000, but DXF's to
           // almost everything.
@@ -2004,22 +1994,12 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
     hdr->app_dwg_version = hdr->dwg_version;
 
   if (!vars->FINGERPRINTGUID)
-    {
-      vars->FINGERPRINTGUID
-          = dwg->header.from_version >= R_2007
-                ? (BITCODE_TV)bit_utf8_to_TU (
-                      (char *)"{00000000-0000-0000-0000-000000000000}", 0)
-                : strdup ("{00000000-0000-0000-0000-000000000000}");
-    }
+    vars->FINGERPRINTGUID = strdup ("{00000000-0000-0000-0000-000000000000}");
   if (!vars->VERSIONGUID)
-    {
-      vars->VERSIONGUID
-          = dwg->header.from_version >= R_2007
-                ? (BITCODE_TV)bit_utf8_to_TU (
-                      (char *)"{A6BF05D3-02A0-4EB8-9AEE-9443625E66B6}", 0)
-                : (BITCODE_TV)strdup (
-                      "{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
-    }
+    vars->VERSIONGUID
+        = strdup (dwg->header.from_version >= R_2007
+                      ? "{A6BF05D3-02A0-4EB8-9AEE-9443625E66B6}"
+                      : "{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
 }
 
 static int
