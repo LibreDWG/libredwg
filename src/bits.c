@@ -3787,9 +3787,27 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
   size_t i = 0;
   size_t len;
   unsigned char c;
+  char *tstr = NULL;
 
   if (!str)
     return NULL;
+  // Expand \U+XXXX / \M+xxxxx escape sequences to real UTF-8 characters, the
+  // same way AutoCAD decodes them, so the stored UCS-2 text carries the actual
+  // glyph instead of the literal escape. bit_u_expand shrinks in place, so run
+  // it on a copy (str is the caller's restrict buffer). No-op unless the
+  // string really contains a \U+ / \M+ sequence.
+  if (bit_is_U_expand (str) || bit_is_M_expand (str))
+    {
+      tstr = (char *)malloc (strlen (str) + 1);
+      if (!tstr)
+        {
+          loglevel |= 1;
+          LOG_ERROR ("Out of memory");
+          return NULL;
+        }
+      strcpy (tstr, str);
+      str = (char *)bit_u_expand (tstr);
+    }
   len = strlen (str);
 
   if (len > MAX_SIZE_T)
@@ -3872,6 +3890,8 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
         }
       /* everything above 0xf0 exceeds ucs-2, 4-6 byte seqs */
     }
+  if (tstr)
+    free (tstr);
   return wstr;
 }
 
