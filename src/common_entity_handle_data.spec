@@ -113,6 +113,16 @@
         }
     }
 
+#if defined(IS_DECODER) || defined(IS_ENCODER)
+  // the color book handle follows the owner, reactors and xdic handles and
+  // precedes the layer (ODA 20.4.2)
+  SINCE (R_2004a)
+    {
+      if (_ent->color.flag & 0x40)
+        FIELD_HANDLE (color.handle, 0, 430);
+    }
+#endif
+
   SINCE (R_2000b)
     {
       FIELD_HANDLE (layer, 5, 8);

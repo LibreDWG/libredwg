@@ -436,7 +436,9 @@
       flags = _ent->color.flag;
       if (flags & 0x40)
         {
-#ifndef IS_ENCODER
+          // in the DWG it follows the xdic handle, see
+          // common_entity_handle_data.spec
+#if !defined(IS_ENCODER) && !defined(IS_DECODER)
           FIELD_HANDLE (color.handle, 0, 430); // DBCOLOR 1E9F74 => 1F05B9 lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
 #endif
         }
