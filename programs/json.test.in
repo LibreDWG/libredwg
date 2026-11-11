@@ -319,6 +319,42 @@ then
     else
         i=$((i+1))
     fi
+
+    # OCS: entities with an extrusion other than (0,0,1), made with ezdxf.
+    # By layer, in 1/1000: the first point of a LineString, a Point, and the
+    # center of the box of a Polygon.
+    ocs='[.features[] | select(.properties.Layer // "" | test("NEG|TILT"))
+          | {(.properties.Layer): (.geometry
+              | if .type == "Point" then .coordinates[0:2]
+                elif .type == "Polygon"
+                then .coordinates[0] | [(map(.[0]) | (min + max) / 2),
+                                        (map(.[1]) | (min + max) / 2)]
+                else .coordinates[0] end
+              | map(. * 1000 | round))}] | add'
+    if [ -x "./dxf2dwg${EXEEXT}" ] &&
+       $TESTPROG "./dxf2dwg${EXEEXT}" -y -o OcsEntities.dwg \
+           "$DATADIR/2000/OcsEntities.dxf" >/dev/null 2>&1 &&
+       $TESTPROG "./dxf2dwg${EXEEXT}" -y -o OcsEntities2.dwg \
+           "$DATADIR/2000/OcsEntities2.dxf" >/dev/null 2>&1
+    then
+        echo "dwgread -O geojson OcsEntities.dwg OcsEntities2.dwg | jq OCS"
+        if $TESTPROG "./dwgread${EXEEXT}" -O geojson OcsEntities.dwg 2>/dev/null |
+               $JQ -e "$ocs == {ARC_NEG: [7402, 6500], LINE_NEG: [2000, 0],
+                                POINT_NEG: [4000, 4000],
+                                CIRCLE_TILT: [200, 1000]}" >/dev/null 2>&1 &&
+           $TESTPROG "./dwgread${EXEEXT}" -O geojson OcsEntities2.dwg 2>/dev/null |
+               $JQ -e "$ocs == {LWPL_NEG: [2000, 1000], LWPL_TILT: [400, 1000],
+                                PL2D_NEG: [6000, 6000], TEXT_NEG: [3000, 9000],
+                                INSERT_NEG: [4000, 11000],
+                                CIRCLE_NEG: [3000, 5000],
+                                HATCH_NEG: [10500, 2000]}" >/dev/null 2>&1
+        then
+            echo geojson ocs ok
+        else
+            i=$((i+1))
+        fi
+        rm -f ./OcsEntities.dwg ./OcsEntities2.dwg
+    fi
 else
     echo no jq, cannot check pipe
 fi

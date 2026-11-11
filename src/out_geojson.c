@@ -14,7 +14,7 @@
  * out_geojson.c: write as GeoJSON
  * written by Reini Urban
  */
-/* TODO: ocs/ucs transforms, explode of inserts?
+/* TODO: explode of inserts?
  *       NOCOMMA:
  *         We really have to add the comma before, not after, and special case
  *         the first field, not the last to omit the comma.
@@ -801,6 +801,68 @@ bulge_points (Dwg_Data *restrict dwg, const dwg_point_2d *restrict points,
   return (dwg_point_2d *)pts;
 }
 
+// True if the OCS of ext is the WCS: (0,0,1), or (0,0,0) before R13
+static int
+geojson_is_wcs (const BITCODE_BE ext)
+{
+  return ext.x == 0.0 && ext.y == 0.0 && (ext.z == 1.0 || ext.z == 0.0);
+}
+
+// The n OCS points of an entity at elevation, in place to WCS
+static void
+geojson_ocs_points (dwg_point_2d *pts, const BITCODE_BL n,
+                    const BITCODE_BE ext, const double elevation)
+{
+  BITCODE_BL j;
+  if (geojson_is_wcs (ext))
+    return;
+  for (j = 0; j < n; j++)
+    {
+      BITCODE_3DPOINT p, w;
+      p.x = pts[j].x;
+      p.y = pts[j].y;
+      p.z = elevation;
+      transform_OCS (&w, p, ext);
+      pts[j].x = w.x;
+      pts[j].y = w.y;
+    }
+}
+
+// The n points in WCS: in place in *own if set, else in a new copy *own,
+// not in the points of the drawing.  pts if out of memory.
+static dwg_point_2d *
+geojson_wcs_points (dwg_point_2d *pts, dwg_point_2d **own, const BITCODE_BL n,
+                    const BITCODE_BE ext, const double elevation)
+{
+  if (geojson_is_wcs (ext))
+    return pts;
+  if (!*own && (*own = (dwg_point_2d *)malloc (n * sizeof (*pts))))
+    memcpy (*own, pts, n * sizeof (*pts));
+  if (!*own)
+    return pts;
+  geojson_ocs_points (*own, n, ext, elevation);
+  return *own;
+}
+
+// The n points of a CIRCLE in WCS, counterclockwise as RFC 7946 asks: a
+// mirrored OCS turns them clockwise, so reverse them
+static void
+geojson_circle_wcs (BITCODE_2BD *pts, const int n,
+                    const Dwg_Entity_CIRCLE *_obj)
+{
+  int j;
+  geojson_ocs_points ((dwg_point_2d *)pts, (BITCODE_BL)n, _obj->extrusion,
+                      _obj->center.z);
+  if (!transform_OCS_2d_is_mirrored (_obj->extrusion))
+    return;
+  for (j = 0; j < n / 2; j++)
+    {
+      const BITCODE_2BD t = pts[j];
+      pts[j] = pts[n - 1 - j];
+      pts[n - 1 - j] = t;
+    }
+}
+
 static int
 dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                         int is_last)
@@ -821,6 +883,8 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       else
         num_pts = _obj->num_points;
     }
+  pts = geojson_wcs_points (pts, &bulge_pts, num_pts, _obj->extrusion,
+                            _obj->elevation);
 
   FEATURE (AcDbEntity : AcDbLwPolyline, obj);
   // TODO splines, ...
@@ -1005,8 +1069,9 @@ geojson_polygon (Bit_Chain *restrict dat, const hatch_ring *r, const int n,
     ENDARRAY
 }
 
-// The rings of the boundary paths of a HATCH, skipping the boundaries
-// around texts (flag 8), which are no geometry.  Returns their number.
+// The rings of the boundary paths of a HATCH in WCS, skipping the
+// boundaries around texts (flag 8), which are no geometry.  Returns their
+// number.
 static int
 hatch_rings (const Dwg_Entity_HATCH *_obj, hatch_ring *r)
 {
@@ -1016,7 +1081,11 @@ hatch_rings (const Dwg_Entity_HATCH *_obj, hatch_ring *r)
     if (!(_obj->paths[j].flag & 8)
         && (r[n].num = hatch_path_points (&_obj->paths[j], HATCH_GEOJSON_TOL,
                                           &r[n].pts)))
-      n++;
+      {
+        geojson_ocs_points ((dwg_point_2d *)r[n].pts, (BITCODE_BL)r[n].num,
+                            _obj->extrusion, _obj->elevation);
+        n++;
+      }
   return n;
 }
 
@@ -1253,11 +1322,13 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     case DWG_TYPE_ACIDBLOCKREFERENCE:
       {
         Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+        BITCODE_3DPOINT pt;
+        transform_OCS (&pt, _obj->ins_pt, _obj->extrusion);
         FEATURE (AcDbEntity : AcDbBlockReference, obj);
         // TODO: explode insert into a GeometryCollection
         GEOMETRY (Point);
         KEY (coordinates);
-        LASTFIELD_3DPOINT (ins_pt);
+        LASTVALUE_3DPOINT (pt.x, pt.y, pt.z);
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;
@@ -1298,6 +1369,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               }
             free (bulges);
           }
+        geojson_ocs_points (pts, numpts, _obj->extrusion, _obj->elevation);
 
         // if closed and num_points > 3 use a Polygon
         FEATURE (AcDbEntity : AcDbPolyline, obj);
@@ -1397,6 +1469,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         // arc_split stops one step before the end point
         pts[num_pts].x = ctr.x + _obj->radius * cos (_obj->end_angle);
         pts[num_pts].y = ctr.y + _obj->radius * sin (_obj->end_angle);
+        geojson_ocs_points ((dwg_point_2d *)pts, num_pts + 1, _obj->extrusion,
+                            _obj->center.z);
         FEATURE (AcDbEntity : AcDbArc, obj);
         GEOMETRY (LineString)
         KEY (coordinates);
@@ -1425,6 +1499,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             return DWG_ERR_OUTOFMEM;
           }
         arc_split (pts, num_pts, ctr, 0, M_PI * 2.0, _obj->radius);
+        geojson_circle_wcs (pts, num_pts, _obj);
         FEATURE (AcDbEntity : AcDbCircle, obj);
         GEOMETRY (Polygon)
         KEY (coordinates);
@@ -1522,10 +1597,14 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       {
         // add Text property to a point
         Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
+        dwg_point_2d pt;
+        pt.x = _obj->ins_pt.x;
+        pt.y = _obj->ins_pt.y;
+        geojson_ocs_points (&pt, 1, _obj->extrusion, _obj->elevation);
         FEATURE (AcDbEntity : AcDbText, obj);
         GEOMETRY (Point);
         KEY (coordinates);
-        LASTFIELD_2DPOINT (ins_pt);
+        LASTVALUE_2DPOINT (pt.x, pt.y);
         ENDGEOMETRY;
         ENDFEATURE;
         return 1;
