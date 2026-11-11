@@ -1901,7 +1901,9 @@
       return error;                                                           \
     SINCE (R_2007a)                                                           \
     {                                                                         \
-      Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
+      /* Keep these separate: TCC aliases combined struct declarations. */     \
+      Bit_Chain obj_dat = *dat;                                               \
+      Bit_Chain str_dat = *dat;                                               \
       error                                                                   \
           = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
     }                                                                         \
@@ -2023,7 +2025,9 @@
       return error;                                                           \
     SINCE (R_2007a)                                                           \
     {                                                                         \
-      Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
+      /* Keep these separate: TCC aliases combined struct declarations. */     \
+      Bit_Chain obj_dat = *dat;                                               \
+      Bit_Chain str_dat = *dat;                                               \
       error                                                                   \
           = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj);\
     }                                                                         \
@@ -2108,7 +2112,9 @@
       return error;                                                           \
     SINCE (R_2007a)                                                           \
     {                                                                         \
-      Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
+      /* Keep these separate: TCC aliases combined struct declarations. */     \
+      Bit_Chain obj_dat = *dat;                                               \
+      Bit_Chain str_dat = *dat;                                               \
       error                                                                   \
           = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
     }                                                                         \

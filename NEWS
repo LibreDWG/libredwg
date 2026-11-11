@@ -56,6 +56,8 @@ Security fixes:
     first entity.  GH #1131.  Reported by batam111.
 
 Minor bugfixes / fuzzing fixes:
+  * Fixed R2007+ class-object decoding when built with TCC: separate data and
+    string stream cursors prevent invalid handles and missing object data.
   * Fixed several more heap-buffer-overflow and double-free bugs found by
     continued oss-fuzz/ASan runs: preR13 section header encoding, eed/xdata
     TU conversion, TRACE_DD (oss-fuzz #42531271), out_json

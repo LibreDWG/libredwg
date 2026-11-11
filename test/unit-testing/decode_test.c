@@ -421,6 +421,40 @@ decode_3dsolid_tests (void)
   bitfree (&dat);
 }
 
+/* Class objects have separate data and string streams in R2007+. */
+static void
+class_object_stream_tests (void)
+{
+  const char *srcdir = getenv ("top_srcdir");
+  char path[1024];
+  Dwg_Data dwg = { 0 };
+  BITCODE_BL i;
+  int found = 0;
+  int error;
+
+  if (!srcdir)
+    srcdir = "../..";
+  if (snprintf (path, sizeof (path), "%s/test/test-data/2018/Dynblocks.dwg",
+                srcdir) >= (int)sizeof (path))
+    {
+      fail ("class object streams: fixture path too long");
+      return;
+    }
+  error = dwg_read_file (path, &dwg);
+  for (i = 0; i < dwg.num_objects; i++)
+    if (dwg.object[i].handle.value == 0x96
+        && dwg.object[i].fixedtype == DWG_TYPE_MATERIAL)
+      {
+        found = 1;
+        break;
+      }
+  if (error < DWG_ERR_CRITICAL && found)
+    ok ("class object streams: MATERIAL handle 96");
+  else
+    fail ("class object streams: MATERIAL handle 96 missing (error %d)", error);
+  dwg_free (&dwg);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -434,6 +468,7 @@ main (int argc, char const *argv[])
   read_data_section_tests ();
   read_2004_compressed_section_tests ();
   decode_3dsolid_tests ();
+  class_object_stream_tests ();
 
   return numfailed () ? 1 : 0;
 }
