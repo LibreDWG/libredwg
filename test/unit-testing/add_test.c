@@ -1609,6 +1609,161 @@ test_dxf_union_selectors (void)
   free (dat.chain);
   return numfailed ();
 }
+/* DXF 1004 is decoded once, including embedded zero bytes. */
+static int
+test_dxf_eed_binary (void)
+{
+  static const char dxf[]
+      = "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1032\n"
+        "999\nPadding to satisfy the minimum DXF input size for this binary"
+        " extended-data regression fixture.\n"
+        "  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n"
+        "  0\nPOINT\n  5\n100\n100\nAcDbEntity\n  8\n0\n"
+        "100\nAcDbPoint\n 10\n0\n 20\n0\n 30\n0\n"
+        "1001\nTEST_APP\n1004\n00010280FF\n"
+        "  0\nENDSEC\n  0\nEOF\n";
+  static const unsigned char expected[] = { 0, 1, 2, 0x80, 0xff };
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  Dwg_Object *obj;
+  unsigned i;
+  int error, found = 0;
+
+  failed = 0;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("dxf_eed_binary: allocation failed");
+      return numfailed ();
+    }
+  dat.size = sizeof (dxf) - 1;
+  error = dwg_read_dxf (&dat, &dwg);
+  obj = first_object (&dwg, DWG_TYPE_POINT);
+  if (error < DWG_ERR_CRITICAL && obj)
+    for (i = 0; i < obj->tio.entity->num_eed; i++)
+      {
+        Dwg_Eed_Data *eed = obj->tio.entity->eed[i].data;
+        if (eed && eed->code == 4 && eed->u.eed_4.length == sizeof expected
+            && !memcmp (eed->u.eed_4.data, expected, sizeof expected))
+          found = 1;
+      }
+  if (found)
+    ok ("dxf_eed_binary: decoded bytes preserved");
+  else
+    fail ("dxf_eed_binary: binary bytes lost (error 0x%x)", error);
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
+/* Repeated vertices in one leader line must not create new lines. */
+static int
+test_multileader_vertices (void)
+{
+  static const char dxf[]
+      = "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1032\n"
+        "  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n"
+        "  0\nMULTILEADER\n  5\n100\n100\nAcDbEntity\n  8\n0\n"
+        "100\nAcDbMLeader\n270\n2\n300\nCONTEXT_DATA{\n"
+        "302\nLEADER{\n290\n1\n291\n0\n"
+        "304\nLEADER_LINE{\n"
+        " 10\n1\n 20\n2\n 30\n3\n 10\n4\n 20\n5\n 30\n6\n"
+        " 91\n7\n305\n}\n303\n}\n301\n}\n"
+        "  0\nENDSEC\n  0\nEOF\n";
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  Dwg_Object *obj;
+  int error;
+
+  failed = 0;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("multileader_vertices: allocation failed");
+      return numfailed ();
+    }
+  dat.size = sizeof (dxf) - 1;
+  error = dwg_read_dxf (&dat, &dwg);
+  obj = first_object (&dwg, DWG_TYPE_MULTILEADER);
+  if (error >= DWG_ERR_CRITICAL || !obj)
+    fail ("multileader_vertices: DXF read failed 0x%x", error);
+  else
+    {
+      Dwg_MLEADER_AnnotContext *ctx = &obj->tio.entity->tio.MULTILEADER->ctx;
+      if (ctx->num_leaders != 1 || !ctx->leaders
+          || ctx->leaders[0].num_lines != 1 || !ctx->leaders[0].lines
+          || ctx->leaders[0].lines[0].num_points != 2
+          || !ctx->leaders[0].lines[0].points
+          || ctx->leaders[0].lines[0].points[1].z != 6.0
+          || ctx->leaders[0].lines[0].line_index != 7)
+        fail ("multileader_vertices: line vertices were not preserved");
+      else
+        ok ("multileader_vertices: two vertices in one line");
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
+/* Both codes belong to AcDbAttribute, on opposite sides of the tag. */
+static int
+test_attrib_lock_flags (void)
+{
+  static const char dxf[]
+      = "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1032\n"
+        "  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n"
+        "  0\nATTRIB\n  5\n100\n100\nAcDbEntity\n  8\n0\n"
+        "100\nAcDbText\n 10\n0.0\n 20\n0.0\n 40\n1.0\n  1\nA\n"
+        "100\nAcDbAttribute\n280\n0\n  2\nTAG1\n 70\n0\n280\n1\n"
+        "  0\nATTRIB\n  5\n101\n100\nAcDbEntity\n  8\n0\n"
+        "100\nAcDbText\n 10\n0.0\n 20\n0.0\n 40\n1.0\n  1\nB\n"
+        "100\nAcDbAttribute\n280\n1\n  2\nTAG2\n 70\n0\n280\n0\n"
+        "  0\nENDSEC\n  0\nEOF\n";
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  BITCODE_BL i;
+  unsigned found = 0;
+  int error;
+
+  failed = 0;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("attrib_lock_flags: allocation failed");
+      return numfailed ();
+    }
+  dat.size = sizeof (dxf) - 1;
+  error = dwg_read_dxf (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("attrib_lock_flags: DXF read failed 0x%x", error);
+  for (i = 0; i < dwg.num_objects; i++)
+    if (dwg.object[i].fixedtype == DWG_TYPE_ATTRIB)
+      {
+        Dwg_Entity_ATTRIB *attrib = dwg.object[i].tio.entity->tio.ATTRIB;
+        if (dwg.object[i].handle.value == 0x100)
+          {
+            found++;
+            if (attrib->is_locked_in_block != 0
+                || attrib->lock_position_flag != 1)
+              fail ("attrib_lock_flags: TAG1 flags were not preserved");
+          }
+        else if (dwg.object[i].handle.value == 0x101)
+          {
+            found++;
+            if (attrib->is_locked_in_block != 1
+                || attrib->lock_position_flag != 0)
+              fail ("attrib_lock_flags: TAG2 flags were not preserved");
+          }
+      }
+  if (found != 2)
+    fail ("attrib_lock_flags: expected two attributes, got %u", found);
+  else if (!numfailed ())
+    ok ("attrib_lock_flags: version and lock flags remain independent");
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
 #endif
 
 #ifndef DISABLE_JSON
@@ -2374,6 +2529,9 @@ main (int argc, char *argv[])
 #endif
 #ifndef DISABLE_DXF
   error += test_dxf_union_selectors ();
+  error += test_attrib_lock_flags ();
+  error += test_multileader_vertices ();
+  error += test_dxf_eed_binary ();
 #endif
 #ifndef DISABLE_JSON
   error += test_json_union_selectors ();

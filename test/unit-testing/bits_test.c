@@ -365,6 +365,28 @@ bit_BS_tests (void)
 }
 
 static void
+bit_BOT_tests (void)
+{
+  const BITCODE_BS values[] = { 0, 255, 256, 495, 496, 751, 752, 32767,
+                                32768, 65535 };
+  Bit_Chain dat;
+  unsigned i;
+
+  bitprepare (&dat, 8);
+  for (i = 0; i < ARRAY_SIZE (values); i++)
+    {
+      bit_set_position (&dat, 1);
+      bit_write_BOT (&dat, values[i]);
+      bit_set_position (&dat, 1);
+      if (bit_read_BOT (&dat) != values[i])
+        fail ("BOT roundtrip for %u", (unsigned)values[i]);
+      else
+        pass ();
+    }
+  bitfree (&dat);
+}
+
+static void
 bit_RL_tests (void)
 { /* 7f         f7         bf        7d */
   Bit_Chain bitchain = strtobt ("01111111"
@@ -1733,6 +1755,7 @@ main (int argc, char const *argv[])
   bit_RS_tests ();
   bit_RS_BE_tests ();
   bit_BS_tests ();
+  bit_BOT_tests ();
   bit_RL_tests ();
   bit_BL_tests ();
   bit_RD_tests ();

@@ -355,16 +355,17 @@ DWG_ENTITY (ATTRIB)
 
   SUBCLASS (AcDbAttribute);
   DXF {
+    SINCE (R_2010b) {
+      FIELD_RC (is_locked_in_block, 280);
+    }
     FIELD_T (tag, 2);
     FIELD_RC (flags, 70);
     LOG_FLAG_ATTDEF
     FIELD_BS0 (field_length, 73);
     FIELD_BS0 (vert_alignment, 74);
     LOG_VERT_ALIGNMENT
-    SINCE (R_2004a) {
-      FIELD_RC (is_locked_in_block, 280);
-      SUBCLASS (AcDbXrecord);
-      FIELD_RC (keep_duplicate_records, 280);
+    SINCE (R_2007a) {
+      FIELD_B (lock_position_flag, 280);
     }
   }
   SINCE (R_2010b)
@@ -2992,6 +2993,7 @@ DWG_ENTITY (LEADER)
 
   SINCE (R_2000b)
     {
+      FIELD_BS (unknown_short_1, 0);
       FIELD_B (unknown_bit_4, 0);
       FIELD_B (unknown_bit_5, 0);
     }
@@ -4107,7 +4109,7 @@ DWG_OBJECT (APPID_CONTROL)
     JSON { KEY (address); }
     VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
-    FIELD_BS (num_entries, 70); //BS or BL?
+    FIELD_BL (num_entries, 70);
   }
   CONTROL_HANDLE_STREAM; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
   HANDLE_VECTOR (entries, num_entries, 2, 0);

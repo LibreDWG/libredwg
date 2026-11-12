@@ -56,6 +56,14 @@ Security fixes:
     first entity.  GH #1131.  Reported by batam111.
 
 Minor bugfixes / fuzzing fixes:
+  * Fixed ATTRIB DXF version and position-lock flags being conflated with
+    an unrelated AcDbXrecord field.  GH #1399.
+  * Fixed large R2007+ string streams, APPID table counts above 255, and
+    R2000+ LEADER and MULTILEADER binary fields.
+  * Fixed extended object type encoding and opaque object sizes in JSON
+    roundtrips, and retained long XRECORD data.
+  * Fixed DXF true-color, binary extended data, and MULTILEADER line vertex
+    imports, and escaped invalid UTF-16 code units in JSON strings.
   * Fixed R2007+ class-object decoding when built with TCC: separate data and
     string stream cursors prevent invalid handles and missing object data.
   * Fixed several more heap-buffer-overflow and double-free bugs found by

@@ -1357,9 +1357,9 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
           fprintf (dat->fh, "\\r");
         }
       // convert to utf-8
-      else if (c < 0x1f || c > 0x7f)
+      else if (c < 0x20 || c > 0x7f)
         {
-          if (c < 0x80)
+          if (c < 0x20 || (c >= 0xd800 && c <= 0xdfff))
             {
               fprintf (dat->fh, "\\u%04x", c);
             }
@@ -1372,17 +1372,6 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
               fprintf (dat->fh, "%c%c%c", (c >> 12) | 0xE0,
                        ((c >> 6) & 0x3F) | 0x80, (c & 0x3F) | 0x80);
             }
-#if 0
-          // FIXME: handle surrogate pairs properly
-          if (c >= 0xd800 && c < 0xdc00)
-            {
-              fprintf (dat->fh, "\\u%04x", c - 0x1000);
-            }
-          else if (c >= 0xdc00 && c < 0xe000)
-            ;
-          else
-            fprintf (dat->fh, "\\u%04x", c);
-#endif
         }
       else
         fprintf (dat->fh, "%c", (char)c);

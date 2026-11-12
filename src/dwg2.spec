@@ -1476,6 +1476,10 @@ DWG_ENTITY (MULTILEADER)
           SET_PARENT_OBJ (arrowheads[rcount1]);
       END_REPEAT_BLOCK
       END_REPEAT (arrowheads);
+    }
+
+  SINCE (R_14)
+    {
 
       FIELD_BL (num_blocklabels, 0);
       VALUEOUTOFBOUNDS (num_blocklabels, 5000)

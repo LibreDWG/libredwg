@@ -28,6 +28,11 @@ extern int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 extern int dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 // from dwg_api.h
 extern int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);
+extern int dwg_add_class (Dwg_Data *restrict dwg,
+                          const char *const restrict dxfname,
+                          const char *const restrict cppname,
+                          const char *const restrict appname,
+                          const bool is_entity);
 extern Dwg_Entity_REGION *
 dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const char *acis_data);
@@ -1207,6 +1212,56 @@ acds_records_json_test (void)
     ok ("acds_records_json: the AcDs thumbnail records roundtrip via JSON");
 }
 
+/* Class strings can exceed the 16-bit short footer. */
+static void
+large_class_strings_test (void)
+{
+  Dwg_Data dwg = { 0 }, back = { 0 };
+  Bit_Chain dat = { 0 };
+  char name[80];
+  char msg[128] = "";
+  unsigned i;
+  int error;
+
+  dwg.header.version = dwg.header.from_version = R_2018;
+  error = dwg_add_Document (&dwg, 0);
+  for (i = 0; !error && i < 140; i++)
+    {
+      snprintf (name, sizeof name, "ROUNDTRIP_CLASS_%03u_01234567890123456789",
+                i);
+      if (dwg_add_class (&dwg, name, name, name, false) < 0)
+        error = 1;
+    }
+  if (error)
+    snprintf (msg, sizeof msg, "cannot construct classes");
+  else
+    {
+      dat.version = dat.from_version = R_2018;
+      dat.opts = dwg.opts;
+      error = dwg_encode (&dwg, &dat);
+      if (error >= DWG_ERR_CRITICAL || !dat.chain)
+        snprintf (msg, sizeof msg, "encode error 0x%x", error);
+    }
+  if (!*msg)
+    {
+      dat.size = dat.byte;
+      dat.byte = dat.bit = 0;
+      dat.opts = 0;
+      error = dwg_decode (&dat, &back);
+      if (error >= DWG_ERR_CRITICAL || back.num_classes != dwg.num_classes
+          || !back.dwg_class || !back.dwg_class[back.num_classes - 1].dxfname
+          || strcmp (back.dwg_class[back.num_classes - 1].dxfname, name))
+        snprintf (msg, sizeof msg, "class strings lost (error 0x%x)", error);
+    }
+  dwg_free (&dwg);
+  dwg_free (&back);
+  free (dat.chain);
+  if (*msg)
+    fail ("large_class_strings: %s", msg);
+  else
+    ok ("large_class_strings: extended class stream roundtrip");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -1232,5 +1287,6 @@ main (int argc, char const *argv[])
   downconvert_TABLESTYLE_test ();
   acds_sab_test ();
   acds_records_json_test ();
+  large_class_strings_test ();
   return failed;
 }

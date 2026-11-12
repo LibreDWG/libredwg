@@ -288,13 +288,13 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
       }                                                                       \
     error = dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);        \
     if (hdl_dat != dat && hdl_dat->chain                                      \
-        && hdl_dat->chain != dat->chain)                                      \
+        && hdl_dat->chain != dat->chain) /* clang-format off */               \
       {                                                                       \
-        /* _private returned early (VALUEOUTOFBOUNDS, aborted repeat)        \
-           before DWG_OBJECT_END could free the per-object streams */        \
+        /* _private returned early (VALUEOUTOFBOUNDS, aborted repeat)         \
+           before DWG_OBJECT_END could free the per-object streams */         \
         LOG_HANDLE ("Early exit bypassed DWG_OBJECT_END\n");                  \
         bit_chain_free (hdl_dat);                                             \
-      }                                                                       \
+      } /* clang-format on */                                                     \
     if (str_dat != dat && str_dat->chain)                                     \
       bit_chain_free (str_dat);                                               \
     dwg_encode_unknown_rest (dat, obj);                                       \
@@ -981,7 +981,6 @@ section_compressed (const Dwg_Data *dwg, const Dwg_Section_Type id)
     }
 }
 
-
 static int
 filedeplist_is_empty (const Dwg_FileDepList *obj)
 {
@@ -1049,7 +1048,8 @@ write_literal_length (Bit_Chain *restrict dat, BITCODE_RC *restrict buf,
 #endif
 }
 
-/* An LZ stream is terminated by opcode 0x11 and two zero bytes, as ODA does. */
+/* An LZ stream is terminated by opcode 0x11 and two zero bytes, as ODA does.
+ */
 #define LZ_END(dat)                                                           \
   do                                                                          \
     {                                                                         \
@@ -2147,19 +2147,19 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       size_t main_end = bit_position (dat);
       size_t str_bits = bit_position (&str_dat);
       size_t hdl_bits = bit_position (&hdl_dat);
-      BITCODE_RS data_size = (BITCODE_RS)str_bits;
+      size_t data_size = str_bits;
 
       // Append string stream data
       if (str_bits)
         bit_copy_chain (dat, &str_dat);
       // String footer: data_size(RS) + endbit(B)
-      if (data_size & 0x8000)
+      if (data_size >= 0x8000)
         {
-          bit_write_RS (dat, (data_size >> 15) & 0x7FFF);
+          bit_write_RS (dat, (data_size >> 15) & 0xFFFF);
           bit_write_RS (dat, (data_size & 0x7FFF) | 0x8000);
         }
       else
-        bit_write_RS (dat, data_size);
+        bit_write_RS (dat, (BITCODE_RS)data_size & 0xFFFF);
       bit_write_B (dat, str_bits ? 1 : 0); // endbit
       LOG_TRACE ("header string stream data_size: %u endbit: %d\n",
                  (unsigned)data_size, str_bits ? 1 : 0);
@@ -2326,7 +2326,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     // Phase 2: write string data
     {
       size_t str_start = bit_position (dat);
-      BITCODE_RS data_size;
+      size_t data_size;
       for (j = 0; j < dwg->num_classes; j++)
         {
           Dwg_Class *klass = &dwg->dwg_class[j];
@@ -2338,14 +2338,14 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             bit_write_T (dat, klass->dxfname);
         }
       // Phase 3: string stream footer
-      data_size = (BITCODE_RS)(bit_position (dat) - str_start);
-      if (data_size & 0x8000)
+      data_size = bit_position (dat) - str_start;
+      if (data_size >= 0x8000)
         {
-          bit_write_RS (dat, (data_size >> 15) & 0x7FFF);
+          bit_write_RS (dat, (data_size >> 15) & 0xFFFF);
           bit_write_RS (dat, (data_size & 0x7FFF) | 0x8000);
         }
       else
-        bit_write_RS (dat, data_size);
+        bit_write_RS (dat, (BITCODE_RS)data_size & 0xFFFF);
       bit_write_B (dat, 1); // endbit: has strings
       LOG_TRACE ("string stream data_size: %u endbit: 1\n",
                  (unsigned)data_size);
@@ -4100,7 +4100,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
             if (section_map_order[i] < SECTION_INFO
                 && find_section_info_type (
-                       dwg, (Dwg_Section_Type)section_map_order[i]))
+                    dwg, (Dwg_Section_Type)section_map_order[i]))
               ndesc++;
           _obj->num_desc2 = ndesc;
           LOG_HANDLE ("InfoHdr @%" PRIuSIZE ".0\n", dat->byte);
@@ -4356,8 +4356,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
                   if (dat->byte + 20 + content_size + content_size / 100 + 128
                       > dat->size)
-                    bit_chain_alloc_size (
-                        dat, 20 + content_size + content_size / 100 + 128);
+                    bit_chain_alloc_size (dat, 20 + content_size
+                                                   + content_size / 100 + 128);
 
                   bit_write_RL (dat, section_magic);
                   bit_write_RL (dat, content_size); // decomp_data_size
@@ -4374,8 +4374,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       // Layout: 20 byte header, per descriptor 96 bytes +
                       // 16 bytes per page (number, size, offset).
                       size_t pos = 20;
-                      for (int io = 0; io < (int)ARRAY_SIZE (section_map_order);
-                           io++)
+                      for (int io = 0;
+                           io < (int)ARRAY_SIZE (section_map_order); io++)
                         {
                           Dwg_Section_Info *inf = find_section_info_type (
                               dwg, (Dwg_Section_Type)section_map_order[io]);
@@ -4468,8 +4468,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   // worst case LZ output is all literals plus opcodes
                   if (dat->byte + 32 + content_size + content_size / 100 + 128
                       > dat->size)
-                    bit_chain_alloc_size (
-                        dat, 32 + content_size + content_size / 100 + 128);
+                    bit_chain_alloc_size (dat, 32 + content_size
+                                                   + content_size / 100 + 128);
 
                   // reserve encrypted page header, write payload, then patch
                   // header with actual compressed data size.
@@ -6234,6 +6234,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   size_t end_address = address + obj->size;
   size_t old_handlestream_size_bytes = 0;
   Dwg_Data *dwg = obj->parent;
+  const bool raw_unknown = (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
+                            || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+                           && can_emit_raw_unknown (dwg, obj);
+  BITCODE_BL raw_handlestream_size = 0;
 
   PRE (R_2004a)
   {
@@ -6285,6 +6289,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   {
     if (!obj->handlestream_size && obj->bitsize)
       obj->handlestream_size = obj->size * 8 - obj->bitsize;
+    if (raw_unknown)
+      raw_handlestream_size = obj->handlestream_size;
     old_handlestream_size_bytes = bit_umc_size (obj->handlestream_size);
     bit_write_UMC (dat, obj->handlestream_size);
     obj->address = dat->byte;
@@ -6643,6 +6649,13 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
         }
     }
+  /* The raw tail contains its original handle stream, but the rewritten
+     common data can change the object size. */
+  if (raw_unknown && dat->version >= R_2010)
+    {
+      obj->handlestream_size = raw_handlestream_size;
+      obj->was_bitsize_set = 1;
+    }
 
   /* ADD/DXF/JSON/RW across versions: patchup size and bitsize */
   /* Across versions size+bitsize must be recalculated.
@@ -6665,6 +6678,9 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (dat->bit)
             obj->size++;
         }
+      if (raw_unknown && dat->version >= R_2010
+          && raw_handlestream_size <= obj->size * 8)
+        obj->bitsize = obj->size * 8 - raw_handlestream_size;
       while (dat->byte >= dat->size)
         bit_chain_alloc (dat);
       // assert (obj->bitsize); // on errors
@@ -6890,8 +6906,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               if (length > 255)
                 length = 255;
               if (length + 5 + dat->byte >= dat->size)
-                bit_chain_alloc_size (dat,
-                                      (length + 5 + dat->byte) - dat->size + 1);
+                bit_chain_alloc_size (dat, (length + 5 + dat->byte) - dat->size
+                                               + 1);
               bit_write_RC (dat, length);
               bit_write_RS_BE (dat, dat->codepage);
               bit_write_TF (dat, (unsigned char *)dest, length);
@@ -7313,7 +7329,7 @@ dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   _ent = obj->tio.entity;
   _obj = _ent;
 
-    // clang-format off
+  // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 
@@ -7598,13 +7614,6 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
   Dwg_Object *obj = &dwg->object[_obj->parent->objid];
 
   // BITCODE_BL num_xdata = _obj->num_xdata;
-  if ((dat->opts & DWG_OPTS_INJSON) && xdata_size > 0x7FFF)
-    {
-      LOG_WARN ("xdata_size %u too large, truncating to 0x7FFF", xdata_size);
-      xdata_size = 0x7FFF;
-      _obj->xdata_size = xdata_size;
-    }
-
   if (dat->opts
       & DWG_OPTS_IN) // loosen the overflow checks on dxf/json imports
     end += xdata_size;
@@ -7698,8 +7707,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                                (unsigned)size);
                     size = 0;
                   }
-                news = size ? bit_utf8_to_TU (rbuf->value.str.u.data, 0)
-                            : NULL;
+                news
+                    = size ? bit_utf8_to_TU (rbuf->value.str.u.data, 0) : NULL;
                 // Guard against fuzzer input with embedded NULs
                 if (rbuf->value.str.u.data)
                   {
@@ -7941,7 +7950,6 @@ downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
     }
 }
 #endif
-
 
 // up or downconvert from/to 256/512 bytes
 void

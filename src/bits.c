@@ -702,14 +702,14 @@ bit_write_BOT (Bit_Chain *dat, BITCODE_BS value)
       bit_write_BB (dat, 0);
       bit_write_RC (dat, value);
     }
-  else if (value < 0x7fff)
+  else if (value >= 0x1f0 && value <= 0x2ef)
     {
       bit_write_BB (dat, 1);
       bit_write_RC (dat, value - 0x1f0);
     }
   else
     {
-      bit_write_BB (dat, 1);
+      bit_write_BB (dat, 2);
       bit_write_RS (dat, value);
     }
 }

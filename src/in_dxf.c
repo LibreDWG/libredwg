@@ -2342,9 +2342,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     case 4:
       {
         // BINARY
-        const size_t blen = (dwg->opts & DWG_OPTS_DXFB)
-                                ? pair->value.s.len
-                                : strlen (pair->value.s.ptr) >> 1;
+        const size_t blen = pair->value.s.len;
         const size_t cblen = blen > 0xff ? 0xff : blen;
         if (blen > 0xff)
           LOG_WARN ("EED binary data too long: %" PRIuSIZE " > 255, "
@@ -2363,17 +2361,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].data->code = code; // 1004
         eed[i].data->u.eed_4.length = cblen & 0xFF;
         LOG_TRACE ("binary[%" PRIuSIZE "]: ", cblen);
-        if (dwg->opts & DWG_OPTS_DXFB)
-          memcpy (eed[i].data->u.eed_4.data, pair->value.s.ptr, cblen);
-        else
-          {
-            size_t read;
-            if ((read = in_hex2bin (eed[i].data->u.eed_4.data,
-                                    pair->value.s.ptr, cblen)
-                        != cblen))
-              LOG_ERROR ("in_hex2bin read only %" PRIuSIZE " of %" PRIuSIZE,
-                         read, cblen);
-          }
+        memcpy (eed[i].data->u.eed_4.data, pair->value.s.ptr, cblen);
         eed[i].size += size;
       }
       break;
@@ -4340,24 +4328,26 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       return NULL;
     }
-  lnode->num_lines = 0;
   if (pair->code == 304 && strEQc (pair->value.s.ptr, "LEADER_LINE{"))
     {
-      int i = -1, j = -1, k = -1;
-      Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
-      lnode->lines = (Dwg_LEADER_Line *)xcalloc (1, sizeof (Dwg_LEADER_Line));
-      if (!lnode->lines)
+      int i = (int)lnode->num_lines, j = -1, k = -1, line_finished = 0;
+      Dwg_LEADER_Line *lines
+          = (Dwg_LEADER_Line *)realloc (
+              lnode->lines, (lnode->num_lines + 1) * sizeof (Dwg_LEADER_Line));
+      if (!lines)
         {
-          lnode->num_lines = 0;
           LOG_ERROR ("MULTILEADER.node.lines");
           dxf_free_pair (pair);
           return NULL;
         }
+      lnode->lines = lines;
+      memset (&lines[i], 0, sizeof (Dwg_LEADER_Line));
+      lnode->num_lines++;
 
       // lines and breaks
       while (pair->code != 305 && pair->code != 0)
         {
-          Dwg_LEADER_Line *lline = &lnode->lines[0];
+          Dwg_LEADER_Line *lline = &lnode->lines[i];
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
           if (!pair)
@@ -4365,30 +4355,38 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           switch (pair->code)
             {
             case 10:
-              i++;
-              lnode->num_lines = i + 1;
-              LOG_TRACE ("%s.leaders[].num_lines = %d\n", obj->name, i + 1);
-              if (i > 0)
+              if (line_finished)
                 {
-                  lnode->lines = (Dwg_LEADER_Line *)realloc (
+                  Dwg_LEADER_Line *more = (Dwg_LEADER_Line *)realloc (
                       lnode->lines,
-                      lnode->num_lines * sizeof (Dwg_LEADER_Line));
-                  if (!lnode->lines)
+                      (lnode->num_lines + 1) * sizeof (Dwg_LEADER_Line));
+                  if (!more)
                     {
-                      lnode->num_lines = 0;
-                      LOG_ERROR ("Out of memory");
+                      LOG_ERROR ("MULTILEADER.node.lines");
                       dxf_free_pair (pair);
                       return NULL;
                     }
+                  lnode->lines = more;
+                  i = (int)lnode->num_lines++;
+                  lline = &more[i];
+                  memset (lline, 0, sizeof (*lline));
+                  j = k = -1;
+                  line_finished = 0;
                 }
-              lline = &lnode->lines[i];
-              memset (lline, 0, sizeof (Dwg_LEADER_Line));
-              lline->num_breaks = 0;
-              j++;
-              lline->num_points = j + 1;
-              lline->points = (BITCODE_3BD *)realloc (
-                  lline->points, lline->num_points * sizeof (BITCODE_3BD));
-              memset (&lline->points[j], 0, sizeof (BITCODE_3BD));
+              {
+                BITCODE_3BD *points = (BITCODE_3BD *)realloc (
+                    lline->points, (lline->num_points + 1) * sizeof (*points));
+                if (!points)
+                  {
+                    LOG_ERROR ("MULTILEADER.leaders[].lines[].points");
+                    dxf_free_pair (pair);
+                    return NULL;
+                  }
+                lline->points = points;
+                j++;
+                lline->num_points++;
+                memset (&lline->points[j], 0, sizeof (BITCODE_3BD));
+              }
               lline->points[j].x = pair->value.d;
               LOG_TRACE ("%s.leaders[].lines[%d].points[%d].x = %f [BD %d]\n",
                          obj->name, i, j, pair->value.d, pair->code);
@@ -4481,6 +4479,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               break;
             case 91:
               lline->line_index = pair->value.u;
+              line_finished = 1;
               LOG_TRACE ("%s.leaders[].lines[%d].line_index = %u [BL %d]\n",
                          obj->name, i, pair->value.u, pair->code);
               break;
@@ -4572,9 +4571,9 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (pair != NULL && pair->code == 302
       && strEQc (pair->value.s.ptr, "LEADER{"))
     {
-      int i = -1, j = -1;
+      int i, j = -1;
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
-      ctx->num_leaders = 0;
+      i = (int)ctx->num_leaders - 1;
       while (pair != NULL && pair->code != 303 && pair->code != 0)
         {
           Dwg_LEADER_Node *lnode = i >= 0 ? &ctx->leaders[i] : NULL;
@@ -4588,8 +4587,6 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_ERROR ("Missing MULTILEADER.LEADER{ 290 start");
               return pair;
             }
-          if (lnode)
-            lnode->num_breaks = 0;
           switch (pair->code)
             {
             case 290:
@@ -12713,10 +12710,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           // fall through
         default:
         object_default:
-          if (pair->code >= 1000 && pair->code < 1999)
-            add_eed (obj, obj->name, pair);
-          else if (pair->code != 280 && strEQc (name, "XRECORD"))
+          if (pair->code != 280 && strEQc (name, "XRECORD")
+              && strEQc (subclass, "AcDbXrecord"))
             pair = add_xdata (dat, obj, pair);
+          else if (pair->code >= 1000 && pair->code < 1999)
+            add_eed (obj, obj->name, pair);
           else if (pair->code == 310 && strEQc (obj->name, "BLOCK_HEADER"))
             {
               pair = add_block_preview (obj, dat, pair);
@@ -13147,6 +13145,18 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                              obj->name, dataflags);
                   dwg_dynapi_entity_set_value (_obj, obj->name, "dataflags",
                                                &dataflags, 0);
+                }
+              else if (pair->code == 280
+                       && obj->fixedtype == DWG_TYPE_ATTRIB
+                       && strEQc (subclass, "AcDbAttribute"))
+                {
+                  Dwg_Entity_ATTRIB *attrib = (Dwg_Entity_ATTRIB *)_obj;
+                  /* The version precedes the tag; the lock flag follows it. */
+                  if (attrib->tag)
+                    attrib->lock_position_flag = (BITCODE_B)pair->value.i;
+                  else
+                    attrib->is_locked_in_block = (BITCODE_RC)pair->value.i;
+                  goto next_pair;
                 }
               else if (pair->code == 71
                        && (obj->fixedtype == DWG_TYPE_ATTRIB
@@ -14589,9 +14599,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             {
                               // a plain 420 RGB has an empty top byte; 0 is
                               // an invalid CMC method the encoder discards,
-                              // losing the true color. It is method 0xc3.
-                              color.method = 0xc3;
-                              color.rgb |= 0xc3000000;
+                              // losing the true color. It is method 0xc2.
+                              color.method = 0xc2;
+                              color.rgb |= 0xc2000000;
                             }
                           // the r2004+ entity color encoding writes the rgb
                           // only when the 0x80 rgb-present flag is set, as
