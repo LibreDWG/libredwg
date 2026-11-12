@@ -30,14 +30,30 @@
  */
 
 #include "config.h"
+#include "mman.h"
 
+
+/* File size via the fd, or -1 on error. Avoids struct stat differences. */
+long long
+dwg_fstat_size (int fd)
+{
+#ifdef _MSC_VER
+  struct _stat st;
+  if (_fstat (fd, &st))
+    return -1;
+#else
+  struct stat st;
+  if (fstat (fd, &st))
+    return -1;
+#endif
+  return (long long)st.st_size;
+}
 #if defined(_WIN32) && !defined(HAVE_SYS_MMAN_H)
 
 #  include <windows.h>
 #  include <stdio.h>
 #  include <io.h> // _get_osfhandle
 #  include <errno.h>
-#  include "mman.h"
 
 struct dwg_mman_entry
 {
