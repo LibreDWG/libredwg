@@ -123,6 +123,7 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
                             maxsize.LowPart, NULL);
   if (!hmap)
     {
+      fprintf (stderr, "CreateFileMapping failed: %lu\n", GetLastError ());
       errno = win32_to_errno (GetLastError ());
       CloseHandle (hfile2);
       return MAP_FAILED;
@@ -147,6 +148,7 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
   if (!view)
     {
       DWORD err = GetLastError ();
+      fprintf (stderr, "MapViewOfFileEx failed: %lu\n", err);
       VirtualFree (base, 0, MEM_RELEASE);
       errno = win32_to_errno (err);
       CloseHandle (hmap);
