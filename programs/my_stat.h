@@ -32,13 +32,7 @@ typedef struct stat struct_stat_t;
 #endif
 
 #if defined _MSC_VER
-#  ifdef __cplusplus
-extern "C" {
-#  endif
-int _access (const char *path, int mode);
-#  ifdef __cplusplus
-}
-#  endif
+#  include <io.h> // _access
 #  define access(fn, m) _access (fn, m)
 #  ifndef S_ISREG
 #    define S_ISREG(m) ((m & 0170000) == _S_IFREG)
