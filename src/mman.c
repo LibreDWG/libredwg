@@ -61,10 +61,8 @@ struct dwg_mman_entry
   HANDLE hmap;
   HANDLE hfile;
   int private_map; // MAP_PRIVATE: writes and msync() do not reach the file
-  void *reserved;  // VirtualAlloc base (MEM_RELEASE after UnmapViewOfFile)
-  size_t reserved_len;
+  int heap;        // malloc+read fallback (view not file-backed)
 };
-
 /* We map at most a few views at any time (input + output). */
 #  define DWG_MMAN_MAX 32
 static struct dwg_mman_entry dwg_mman_entries[DWG_MMAN_MAX];
@@ -93,10 +91,12 @@ void *
 mmap (void *addr, size_t len, int prot, int flags, int fd,
       dwg_mmap_off_t offset)
 {
-  HANDLE hfile, hfile2, hmap;
+  HANDLE hfile, hfile2 = NULL, hmap = NULL;
   DWORD protect, access;
   ULARGE_INTEGER maxsize;
-  void *base, *view;
+  LARGE_INTEGER fsize;
+  void *view;
+  int heap = 0;
   (void)addr;
   if (!len || len > 0xFFFFFFFF)
     {
@@ -109,6 +109,44 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
       errno = EBADF;
       return MAP_FAILED;
     }
+  if (!GetFileSizeEx (hfile, &fsize))
+    {
+      errno = win32_to_errno (GetLastError ());
+      return MAP_FAILED;
+    }
+  /* Windows file views cannot extend past EOF: CreateFileMapping rejects a
+     section larger than the file, and MapViewOfFile rejects a view larger
+     than the section.  When len exceeds the file size (the DXF append
+     overshoot), fall back to a private heap copy:
+     calloc gives zeroed tail bytes, reads fill the file part, and writes
+     stay private - identical semantics to POSIX MAP_PRIVATE. */
+  if ((flags & MAP_PRIVATE) && (LONGLONG)len > fsize.QuadPart)
+    {
+      view = calloc (1, len);
+      if (!view)
+        {
+          errno = ENOMEM;
+          return MAP_FAILED;
+        }
+      heap = 1;
+      { LARGE_INTEGER off; off.QuadPart = offset;
+        SetFilePointerEx (hfile, off, NULL, FILE_BEGIN); }
+      {
+        DWORD rd = 0;
+        LONGLONG avail = fsize.QuadPart - (LONGLONG)offset;
+        DWORD to_read = avail > (LONGLONG)len ? (DWORD)len
+                            : avail > 0 ? (DWORD)avail
+                                        : 0;
+        if (to_read && !ReadFile (hfile, view, to_read, &rd, NULL))
+          {
+            DWORD err = GetLastError ();
+            free (view);
+            errno = win32_to_errno (err);
+            return MAP_FAILED;
+          }
+      }
+      goto track;
+    }
   if (!DuplicateHandle (GetCurrentProcess (), hfile, GetCurrentProcess (),
                         &hfile2, 0, FALSE, DUPLICATE_SAME_ACCESS))
     {
@@ -118,23 +156,11 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
   protect = (prot & PROT_WRITE)
                 ? ((flags & MAP_PRIVATE) ? PAGE_WRITECOPY : PAGE_READWRITE)
                 : PAGE_READONLY;
-  /* CreateFileMapping fails with ERROR_NOT_ENOUGH_MEMORY when the section
-     size exceeds the file size for PAGE_WRITECOPY/PAGE_READWRITE.  Cap the
-     section at the file size; the view may still be larger via
-     MapViewOfFileEx into reserved address space. */
-  {
-    LARGE_INTEGER fsize;
-    if (GetFileSizeEx (hfile2, &fsize) && fsize.QuadPart > 0
-        && (ULONGLONG)fsize.QuadPart < (ULONGLONG)len)
-      maxsize.QuadPart = (ULONGLONG)fsize.QuadPart;
-    else
-      maxsize.QuadPart = len;
-  }
+  maxsize.QuadPart = len;
   hmap = CreateFileMapping (hfile2, NULL, protect, maxsize.HighPart,
                             maxsize.LowPart, NULL);
   if (!hmap)
     {
-      fprintf (stderr, "CreateFileMapping failed: %lu\n", GetLastError ());
       errno = win32_to_errno (GetLastError ());
       CloseHandle (hfile2);
       return MAP_FAILED;
@@ -142,36 +168,32 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
   access = (prot & PROT_WRITE)
                ? ((flags & MAP_PRIVATE) ? FILE_MAP_COPY : FILE_MAP_WRITE)
                : FILE_MAP_READ;
-  /* A file view cannot extend past EOF, but callers may legally touch the
-     bytes beyond it (the read path maps size+64KiB for its append overshoot,
-     and the writer grows the chain).  Reserve the full range first and map
-     into it; pages past EOF fault in as zero and COW writes stay private. */
-  base = VirtualAlloc (NULL, len, MEM_RESERVE, PAGE_READWRITE);
-  if (!base)
-    {
-      errno = ENOMEM;
-      CloseHandle (hmap);
-      CloseHandle (hfile2);
-      return MAP_FAILED;
-    }
-  view = MapViewOfFileEx (hmap, access, (DWORD)((UINT64)offset >> 32),
-                          (DWORD)offset, (DWORD)len, base);
+  /* MapViewOfFileEx requires the base to be aligned to the allocation
+     granularity (64KiB); VirtualAlloc does not guarantee that for an
+     arbitrary size.  MapViewOfFile lets Windows pick the address. */
+  view = MapViewOfFile (hmap, access, (DWORD)((UINT64)offset >> 32),
+                        (DWORD)offset, (DWORD)len);
   if (!view)
     {
       DWORD err = GetLastError ();
-      fprintf (stderr, "MapViewOfFileEx failed: %lu\n", err);
-      VirtualFree (base, 0, MEM_RELEASE);
       errno = win32_to_errno (err);
       CloseHandle (hmap);
       CloseHandle (hfile2);
       return MAP_FAILED;
     }
+track:
   if (dwg_mman_count >= DWG_MMAN_MAX)
     {
-      UnmapViewOfFile (view);
-      VirtualFree (base, 0, MEM_RELEASE);
-      CloseHandle (hmap);
-      CloseHandle (hfile2);
+      if (heap)
+        free (view);
+      else
+        {
+          UnmapViewOfFile (view);
+        }
+      if (hmap)
+        CloseHandle (hmap);
+      if (hfile2)
+        CloseHandle (hfile2);
       errno = ENOMEM;
       return MAP_FAILED;
     }
@@ -179,8 +201,7 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
   dwg_mman_entries[dwg_mman_count].hmap = hmap;
   dwg_mman_entries[dwg_mman_count].hfile = hfile2;
   dwg_mman_entries[dwg_mman_count].private_map = (flags & MAP_PRIVATE) ? 1 : 0;
-  dwg_mman_entries[dwg_mman_count].reserved = base;
-  dwg_mman_entries[dwg_mman_count].reserved_len = len;
+  dwg_mman_entries[dwg_mman_count].heap = heap;
   dwg_mman_count++;
   return view;
 }
@@ -194,18 +215,20 @@ munmap (void *addr, size_t len)
     {
       if (dwg_mman_entries[i].view == addr)
         {
-          if (!UnmapViewOfFile (addr))
+          if (dwg_mman_entries[i].heap)
+            free (addr);
+          else
             {
-              errno = win32_to_errno (GetLastError ());
-              return -1;
+              if (!UnmapViewOfFile (addr))
+                {
+                  errno = win32_to_errno (GetLastError ());
+                  return -1;
+                }
             }
-          if (dwg_mman_entries[i].reserved)
-            {
-              VirtualFree (dwg_mman_entries[i].reserved,
-                           dwg_mman_entries[i].reserved_len, MEM_DECOMMIT);
-              VirtualFree (dwg_mman_entries[i].reserved, 0, MEM_RELEASE);
-            }
-          CloseHandle (dwg_mman_entries[i].hmap);
+          if (dwg_mman_entries[i].hmap)
+            CloseHandle (dwg_mman_entries[i].hmap);
+          if (dwg_mman_entries[i].hfile)
+            CloseHandle (dwg_mman_entries[i].hfile);
           dwg_mman_entries[i] = dwg_mman_entries[--dwg_mman_count];
           return 0;
         }
