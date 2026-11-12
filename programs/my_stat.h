@@ -32,8 +32,6 @@ typedef struct stat struct_stat_t;
 #endif
 
 #if defined _MSC_VER
-int _access (const char *path, int mode);
-#  define access(fn, m) _access (fn, m)
 #  ifndef S_ISREG
 #    define S_ISREG(m) ((m & 0170000) == _S_IFREG)
 #  endif
