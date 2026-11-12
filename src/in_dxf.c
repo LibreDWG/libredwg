@@ -940,7 +940,8 @@ dxf_read_pair (Bit_Chain *dat)
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (!pair)
     return NULL;
-  if (dat->size - dat->byte < 6) // at least 0\nEOF\n
+  /* Pre-R14 binary EOF uses a one-byte code followed by "EOF\0". */
+  if (dat->size - dat->byte < (is_binary && dat->version < R_14 ? 5u : 6u))
     {
     err:
       LOG_ERROR ("Unexpected DXF end-of-file");
