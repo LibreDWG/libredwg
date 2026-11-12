@@ -157,13 +157,9 @@ dat_mmap_file (Bit_Chain *restrict dat, int prot)
   return 0;
 }
 
-/* Map an input file read-only into the process address space (no heap copy,
-   the page cache is the file buffer).
-   The mapping is private (COW) and extends past the file size by one extra
-   page (64 KiB covers all page sizes <= 64K), so callers may NUL-terminate
-   or append a trailing newline at dat->chain[dat->size] without touching the
-   input file or hitting an unmapped address.
-   The mapped length is kept in dat->mapped; dat->size stays the file size. */
+/* Map an input file privately.  An overshoot is useful only when the
+   caller has checked that the extra bytes are backed by the file's last
+   page.  The mapped length is kept in dat->mapped. */
 static int
 dat_mmap_read (Bit_Chain *restrict dat, int overshoot)
 {
@@ -527,6 +523,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   size_t size;
   Bit_Chain dat = { 0 };
   Dwg_Version_Type version;
+  unsigned char signature[sizeof ("AutoCAD Binary DXF") - 1];
+  int last, previous;
+  bool is_binary, needs_newline;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 
@@ -560,13 +559,41 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 
   memset (&dat, 0, sizeof (Bit_Chain));
   dat.fh = fp;
-  // map the file into memory instead of copying it into a heap buffer.
-  // the private mapping has room to append the trailing newline/NUL.
-  dat.opts = dwg->opts | DWG_OPTS_MMAP;
+  dat.opts = dwg->opts;
 #  ifdef HAVE_SYS_STAT_H
   dat.size = attrib.st_size;
 #  endif
-  error = dat_read_size (&dat);
+  /* Inspect the file before mapping: Windows file views cannot be extended
+     past EOF, and POSIX mappings cannot write into a page wholly past EOF. */
+  if (fread (signature, 1, sizeof (signature), fp) != sizeof (signature)
+      || fseek (fp, -2, SEEK_END) || (previous = fgetc (fp)) == EOF
+      || (last = fgetc (fp)) == EOF
+      || fseek (fp, 0, SEEK_SET))
+    {
+      LOG_ERROR ("Cannot inspect DXF file: %s", filename);
+      fclose (fp);
+      return DWG_ERR_IOERROR;
+    }
+  is_binary = !memcmp (signature, "AutoCAD Binary DXF", sizeof (signature));
+  needs_newline = !is_binary && last != '\n'
+                  && !(last == '\0' && previous == '\n');
+  error = DWG_ERR_IOERROR;
+#  ifdef DWG_HAVE_MMAP
+  if (!needs_newline)
+    error = dat_mmap_read (&dat, 0);
+#    ifndef _WIN32
+  else
+    {
+      long pagesize = sysconf (_SC_PAGESIZE);
+      size_t remainder = pagesize > 0 ? dat.size % (size_t)pagesize : 0;
+      if (remainder
+          && remainder + (last == '\0' ? 1 : 2) <= (size_t)pagesize)
+        error = dat_mmap_read (&dat, 1);
+    }
+#    endif
+#  endif
+  if (error)
+    error = dat_read_size (&dat);
   if (error > DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("dat_read_size failed\n");
@@ -594,18 +621,19 @@ ENDSEC
       dat_unmap_file (&dat);
       return DWG_ERR_IOERROR;
     }
-  /* properly end the buffer for strtol()/... readers. The NUL has to go after
-     the newline we just appended, not on top of it: the chain is calloc'd with
-     two spare bytes for exactly this. Overwriting it left the buffer ending in
-     "...\n0\0" for a DXF without a trailing newline, and dxf_read_string
-     bails out when it finds no '\n' in what is left -- so the file's last
-     group pair was lost and the whole import failed. */
-  if (dat.chain[size - 1] != '\n')
+  /* ASCII readers require a newline after the last value.  Existing
+     newlines and binary DXF files need no writes beyond the input. */
+  if (needs_newline)
     {
+      if (last == '\0')
+        {
+          size--;
+          dat.size--;
+        }
       dat.chain[size++] = '\n';
+      dat.chain[size] = '\0';
       dat.size++;
     }
-  dat.chain[size] = '\0';
 
   /* Fail on DWG */
   if (!memcmp (dat.chain, "AC10", 4) || !memcmp (dat.chain, "AC1.", 4)
@@ -616,8 +644,7 @@ ENDSEC
       return DWG_ERR_INVALIDDWG;
     }
   /* See if binary or ascii */
-  if (!memcmp (dat.chain, "AutoCAD Binary DXF",
-               sizeof ("AutoCAD Binary DXF") - 1))
+  if (is_binary)
     {
       dat.byte = 22;
       error = dwg_read_dxfb (&dat, dwg);
