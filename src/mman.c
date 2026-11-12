@@ -118,7 +118,18 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
   protect = (prot & PROT_WRITE)
                 ? ((flags & MAP_PRIVATE) ? PAGE_WRITECOPY : PAGE_READWRITE)
                 : PAGE_READONLY;
-  maxsize.QuadPart = len;
+  /* CreateFileMapping fails with ERROR_NOT_ENOUGH_MEMORY when the section
+     size exceeds the file size for PAGE_WRITECOPY/PAGE_READWRITE.  Cap the
+     section at the file size; the view may still be larger via
+     MapViewOfFileEx into reserved address space. */
+  {
+    LARGE_INTEGER fsize;
+    if (GetFileSizeEx (hfile2, &fsize) && fsize.QuadPart > 0
+        && (ULONGLONG)fsize.QuadPart < (ULONGLONG)len)
+      maxsize.QuadPart = (ULONGLONG)fsize.QuadPart;
+    else
+      maxsize.QuadPart = len;
+  }
   hmap = CreateFileMapping (hfile2, NULL, protect, maxsize.HighPart,
                             maxsize.LowPart, NULL);
   if (!hmap)
