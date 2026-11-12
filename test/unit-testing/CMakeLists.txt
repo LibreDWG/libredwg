@@ -13,6 +13,7 @@ endif(WIN32)
 add_executable(bits_test
   bits_test.c
   ../../src/bits.c
+  ../../src/mman.c
   ../../src/logging.c
   ../../src/codepages.c
   ../../src/classes.c
@@ -27,6 +28,7 @@ endif()
 add_executable(hash_test
   hash_test.c
   ../../src/bits.c
+  ../../src/mman.c
   ../../src/logging.c
   ../../src/codepages.c
   ../../src/hash.c
@@ -56,6 +58,7 @@ add_executable(decode_test
   decode_test.c
   ../../src/dwg.c
   ../../src/bits.c
+  ../../src/mman.c
   ../../src/logging.c
   ../../src/codepages.c
   ../../src/hash.c
@@ -86,6 +89,7 @@ add_test(dxf_test ${TARGET_SYSTEM_EMULATOR} dxf_test${CMAKE_EXECUTABLE_SUFFIX})
 add_executable(dynapi_test
   dynapi_test.c
   ../../src/bits.c
+  ../../src/mman.c
   ../../src/logging.c
   ../../src/codepages.c
   ../../src/objects.c
@@ -99,6 +103,7 @@ if(NOT LIBREDWG_DISABLE_WRITE)
   add_executable(add_test
     add_test.c
     ../../src/bits.c
+    ../../src/mman.c
     ../../src/codepages.c
     ../../src/logging.c
     ../../src/classes.c

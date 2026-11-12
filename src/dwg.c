@@ -39,7 +39,9 @@ char *basename (char *);
 #endif
 #include "mman.h"
 #ifdef DWG_HAVE_MMAP
-#  include <unistd.h>   // ftruncate, fileno
+#  ifndef _WIN32
+#    include <unistd.h> // ftruncate, fileno
+#  endif
 #endif
 #include <errno.h>
 
@@ -96,9 +98,14 @@ static void dwg_init_handseed (Dwg_Data *dwg);
 EXPORT int
 dat_mmap_file (Bit_Chain *restrict dat, int prot)
 {
+#ifdef DWG_HAVE_MMAP
   int flags;
   int fd;
   void *chain;
+#else
+  int fd;
+  (void)prot;
+#endif
   if (!dat->fh)
     {
       LOG_ERROR ("%s empty filehandle", __FUNCTION__);
@@ -114,9 +121,9 @@ dat_mmap_file (Bit_Chain *restrict dat, int prot)
     }
   if (!dat->size)
     {
-      struct stat attrib;
-      if (!fstat (fd, &attrib))
-        dat->size = attrib.st_size;
+      long long fsize = dwg_fstat_size (fd);
+      if (fsize >= 0)
+        dat->size = (size_t)fsize;
     }
 #ifdef DWG_HAVE_MMAP
   flags = (prot & PROT_WRITE) ? MAP_SHARED : MAP_PRIVATE;
@@ -160,6 +167,7 @@ dat_mmap_file (Bit_Chain *restrict dat, int prot)
 static int
 dat_mmap_read (Bit_Chain *restrict dat)
 {
+#ifdef DWG_HAVE_MMAP
   int fd;
   void *chain;
   size_t map_size;
@@ -176,9 +184,9 @@ dat_mmap_read (Bit_Chain *restrict dat)
     }
   if (!dat->size)
     {
-      struct_stat_t attrib;
-      if (!fstat (fd, &attrib))
-        dat->size = attrib.st_size;
+      long long fsize = dwg_fstat_size (fd);
+      if (fsize >= 0)
+        dat->size = (size_t)fsize;
     }
   map_size = dat->size + 0x10000;
   chain = mmap (NULL, map_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0L);
@@ -191,6 +199,10 @@ dat_mmap_read (Bit_Chain *restrict dat)
   dat->mapped = map_size;
   dat->opts |= DWG_OPTS_MMAP;
   return 0;
+#else
+  (void)dat;
+  return DWG_ERR_IOERROR;
+#endif
 }
 
 EXPORT int
@@ -200,10 +212,13 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   size_t size;
   if (!dat->size && fp)
     {
-      struct_stat_t attrib;
       int fd = fileno (fp);
-      if (fd >= 0 && !fstat (fd, &attrib))
-        dat->size = attrib.st_size;
+      if (fd >= 0)
+        {
+          long long fsize = dwg_fstat_size (fd);
+          if (fsize >= 0)
+            dat->size = (size_t)fsize;
+        }
     }
   if (!dat->fh)
     dat->fh = fp;

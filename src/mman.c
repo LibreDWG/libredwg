@@ -45,6 +45,8 @@ struct dwg_mman_entry
   HANDLE hmap;
   HANDLE hfile;
   int private_map; // MAP_PRIVATE: writes and msync() do not reach the file
+  void *reserved;  // VirtualAlloc base (MEM_RELEASE after UnmapViewOfFile)
+  size_t reserved_len;
 };
 
 /* We map at most a few views at any time (input + output). */
@@ -72,12 +74,13 @@ win32_to_errno (DWORD err)
 }
 
 void *
-mmap (void *addr, size_t len, int prot, int flags, int fd, off_t offset)
+mmap (void *addr, size_t len, int prot, int flags, int fd,
+      dwg_mmap_off_t offset)
 {
   HANDLE hfile, hfile2, hmap;
   DWORD protect, access;
   ULARGE_INTEGER maxsize;
-  void *view;
+  void *base, *view;
   (void)addr;
   if (!len || len > 0xFFFFFFFF)
     {
@@ -111,11 +114,25 @@ mmap (void *addr, size_t len, int prot, int flags, int fd, off_t offset)
   access = (prot & PROT_WRITE)
                ? ((flags & MAP_PRIVATE) ? FILE_MAP_COPY : FILE_MAP_WRITE)
                : FILE_MAP_READ;
-  view = MapViewOfFile (hmap, access, (DWORD)((UINT64)offset >> 32),
-                        (DWORD)offset, (DWORD)len);
+  /* A file view cannot extend past EOF, but callers may legally touch the
+     bytes beyond it (the read path maps size+64KiB for its append overshoot,
+     and the writer grows the chain).  Reserve the full range first and map
+     into it; pages past EOF fault in as zero and COW writes stay private. */
+  base = VirtualAlloc (NULL, len, MEM_RESERVE, PAGE_READWRITE);
+  if (!base)
+    {
+      errno = ENOMEM;
+      CloseHandle (hmap);
+      CloseHandle (hfile2);
+      return MAP_FAILED;
+    }
+  view = MapViewOfFileEx (hmap, access, (DWORD)((UINT64)offset >> 32),
+                          (DWORD)offset, (DWORD)len, base);
   if (!view)
     {
-      errno = win32_to_errno (GetLastError ());
+      DWORD err = GetLastError ();
+      VirtualFree (base, 0, MEM_RELEASE);
+      errno = win32_to_errno (err);
       CloseHandle (hmap);
       CloseHandle (hfile2);
       return MAP_FAILED;
@@ -123,6 +140,7 @@ mmap (void *addr, size_t len, int prot, int flags, int fd, off_t offset)
   if (dwg_mman_count >= DWG_MMAN_MAX)
     {
       UnmapViewOfFile (view);
+      VirtualFree (base, 0, MEM_RELEASE);
       CloseHandle (hmap);
       CloseHandle (hfile2);
       errno = ENOMEM;
@@ -132,6 +150,8 @@ mmap (void *addr, size_t len, int prot, int flags, int fd, off_t offset)
   dwg_mman_entries[dwg_mman_count].hmap = hmap;
   dwg_mman_entries[dwg_mman_count].hfile = hfile2;
   dwg_mman_entries[dwg_mman_count].private_map = (flags & MAP_PRIVATE) ? 1 : 0;
+  dwg_mman_entries[dwg_mman_count].reserved = base;
+  dwg_mman_entries[dwg_mman_count].reserved_len = len;
   dwg_mman_count++;
   return view;
 }
@@ -150,8 +170,13 @@ munmap (void *addr, size_t len)
               errno = win32_to_errno (GetLastError ());
               return -1;
             }
+          if (dwg_mman_entries[i].reserved)
+            {
+              VirtualFree (dwg_mman_entries[i].reserved,
+                           dwg_mman_entries[i].reserved_len, MEM_DECOMMIT);
+              VirtualFree (dwg_mman_entries[i].reserved, 0, MEM_RELEASE);
+            }
           CloseHandle (dwg_mman_entries[i].hmap);
-          CloseHandle (dwg_mman_entries[i].hfile);
           dwg_mman_entries[i] = dwg_mman_entries[--dwg_mman_count];
           return 0;
         }
