@@ -18,10 +18,8 @@
  *   msync()  FlushViewOfFile(), a no-op for private (write-copy) views
  *
  * A regular file may be mapped PROT_WRITE | MAP_PRIVATE (read with a private
- * copy).  Reads are served from the page cache without a heap copy, and the
- * few bytes the DXF reader appends at the end of the buffer (a trailing
- * newline / NUL) or that the writer writes into the overshoot stay in the
- * private copy and never touch the input file.
+ * copy).  Reads are served from the page cache without a heap copy, and
+ * writes to the private view never touch the input file.
  *
  * The caller may close the FILE* (hence the underlying handle) while the
  * mapping is still alive (dat_unmap_file() does exactly that), so we keep
@@ -116,10 +114,7 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
     }
   /* Windows file views cannot extend past EOF: CreateFileMapping rejects a
      section larger than the file, and MapViewOfFile rejects a view larger
-     than the section.  When len exceeds the file size (the DXF append
-     overshoot), fall back to a private heap copy:
-     calloc gives zeroed tail bytes, reads fill the file part, and writes
-     stay private - identical semantics to POSIX MAP_PRIVATE. */
+     than the section.  Oversized private mappings use a private heap copy. */
   if ((flags & MAP_PRIVATE) && (LONGLONG)len > fsize.QuadPart)
     {
       view = calloc (1, len);

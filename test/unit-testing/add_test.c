@@ -1520,6 +1520,86 @@ test_material_dxf (void)
 #endif
 
 #if !defined(_WIN32) && !defined(DISABLE_DXF)
+/* The last value may end on either side of a mapping page boundary. */
+static int
+test_dxf_file_termination (void)
+{
+  static const char prefix[]
+      = "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1018\n999\n";
+  static const char suffix[]
+      = "\n  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n"
+        "  0\nPOINT\n  5\n100\n100\nAcDbEntity\n  8\n0\n"
+        "100\nAcDbPoint\n 10\n1\n 20\n2\n 30\n3\n"
+        "  0\nENDSEC\n  0\nEOF";
+  long pagesize = sysconf (_SC_PAGESIZE);
+  int failures = 0, offset, ending;
+
+  if (pagesize < 512)
+    return 0;
+  for (offset = -1; offset <= 1; offset++)
+    for (ending = 0; ending < 4; ending++)
+      {
+        char filename[] = "dxf_tail_XXXXXX";
+        size_t target = (size_t)(pagesize + offset);
+        size_t pad = target - (sizeof prefix - 1) - (sizeof suffix - 1)
+                     - (size_t)(ending == 2 ? 2 : ending != 0);
+        Dwg_Data dwg = { 0 };
+        struct stat st;
+        FILE *fp;
+        int fd = mkstemp (filename), error, found = 0;
+        BITCODE_BL i;
+
+        if (fd < 0 || !(fp = fdopen (fd, "wb")))
+          {
+            if (fd >= 0)
+              {
+                close (fd);
+                unlink (filename);
+              }
+            fail ("dxf_file_termination: cannot create input");
+            return 1;
+          }
+        fwrite (prefix, 1, sizeof prefix - 1, fp);
+        /* The DXF reader truncates values at 4096 chars, and the page size
+           can be 16K or more: pad with several short 999 comments. */
+        while (pad > 2000)
+          {
+            for (i = 0; i < 1000; i++)
+              fputc ('x', fp);
+            fputs ("\n999\n", fp);
+            pad -= 1005;
+          }
+        while (pad--)
+          fputc ('x', fp);
+        fwrite (suffix, 1, sizeof suffix - 1, fp);
+        if (ending == 1 || ending == 2)
+          fputc ('\n', fp);
+        if (ending == 2 || ending == 3)
+          fputc ('\0', fp);
+        if (fclose (fp))
+          {
+            unlink (filename);
+            fail ("dxf_file_termination: cannot write input");
+            return 1;
+          }
+        error = dxf_read_file (filename, &dwg);
+        for (i = 0; i < dwg.num_objects; i++)
+          if (dwg.object[i].fixedtype == DWG_TYPE_POINT)
+            found = 1;
+        if (error >= DWG_ERR_CRITICAL || !found || stat (filename, &st)
+            || (size_t)st.st_size != target)
+          failures++;
+        dwg_free (&dwg);
+        unlink (filename);
+      }
+  loglevel = is_make_silent () ? 0 : 2;
+  if (failures)
+    fail ("dxf_file_termination: %d page-boundary inputs failed", failures);
+  else
+    ok ("dxf_file_termination: page-boundary ASCII DXF inputs");
+  return failures;
+}
+
 static sigjmp_buf mlinestyle_angle_timeout_jmp;
 
 ATTRIBUTE_NORETURN static void
@@ -3237,6 +3317,7 @@ main (int argc, char *argv[])
   error = test_viewport_vx_realloc ();
   error += test_mlinestyle_obj_realloc ();
   error += test_mlinestyle_nonfinite_angle ();
+  error += test_dxf_file_termination ();
 #elif !defined(DISABLE_DXF)
   error = test_viewport_vx_realloc ();
   error += test_mlinestyle_obj_realloc ();
