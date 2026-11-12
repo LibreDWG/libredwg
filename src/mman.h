@@ -90,7 +90,7 @@ int msync (void *addr, size_t len, int flags);
 #  include <unistd.h>
 #endif
 /* File size via the fd, or -1 on error. Avoids struct stat differences. */
-static inline long long
+static long long
 dwg_fstat_size (int fd)
 {
 #ifdef _MSC_VER
