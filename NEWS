@@ -68,6 +68,7 @@ Minor bugfixes / fuzzing fixes:
   * Fixed DXF input termination at mmap page boundaries, avoiding writes
     for binary and newline-terminated input and buffering Windows input
     that needs a trailing newline.
+  * Fixed pre-R14 binary DXF imports ending at the EOF group.
   * Fixed ATTRIB DXF version and position-lock flags being conflated with
     an unrelated AcDbXrecord field.  GH #1399.
   * dwg2dxf: pre-R13 REPEAT/ENDREP spans are now written as arrayed
