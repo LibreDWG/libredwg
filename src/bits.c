@@ -26,7 +26,9 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <inttypes.h>
-#include <unistd.h> // ftruncate
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h> // ftruncate, fileno
+#endif
 #include "mman.h"
 #include <math.h>
 #include <assert.h>

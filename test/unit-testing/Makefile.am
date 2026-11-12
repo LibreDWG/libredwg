@@ -25,10 +25,12 @@ LDADD = $(top_builddir)/src/libredwg.la \
 
 add_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
-	$(top_builddir)/src/bits.lo
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/mman.lo
 bits_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
-	$(top_builddir)/src/bits.lo
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/mman.lo
 common_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo
 decode_test_LDADD = $(LDADD) \
@@ -38,7 +40,8 @@ decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/decode2.lo \
 	$(top_builddir)/src/decode_r2007.lo \
 	$(top_builddir)/src/dwg.lo \
-	$(top_builddir)/src/hash.lo
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/mman.lo
 encode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/acds.lo \
 	$(top_builddir)/src/bits.lo \
@@ -50,14 +53,17 @@ encode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/dwg.lo \
 	$(top_builddir)/src/encode2.lo \
 	$(top_builddir)/src/encode_acds.lo \
-	$(top_builddir)/src/hash.lo
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/mman.lo
 hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
 	$(top_builddir)/src/bits.lo \
-	$(top_builddir)/src/hash.lo
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/mman.lo
 dynapi_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
-	$(top_builddir)/src/bits.lo
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/mman.lo
 dxf_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/dynapi.lo
 
