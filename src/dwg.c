@@ -165,7 +165,7 @@ dat_mmap_file (Bit_Chain *restrict dat, int prot)
    input file or hitting an unmapped address.
    The mapped length is kept in dat->mapped; dat->size stays the file size. */
 static int
-dat_mmap_read (Bit_Chain *restrict dat)
+dat_mmap_read (Bit_Chain *restrict dat, int overshoot)
 {
 #ifdef DWG_HAVE_MMAP
   int fd;
@@ -188,7 +188,10 @@ dat_mmap_read (Bit_Chain *restrict dat)
       if (fsize >= 0)
         dat->size = (size_t)fsize;
     }
-  map_size = dat->size + 0x10000;
+  /* Overshoot is only needed when the caller may append at chain[size]
+     (DXF read of a file not ending in \n\0, or the write path).  DWG reads
+     pass 0 so len == fsize and Windows can use a real file view. */
+  map_size = dat->size + (overshoot ? 2 : 0);
   chain = mmap (NULL, map_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0L);
   if (!chain || chain == MAP_FAILED)
     {
@@ -224,7 +227,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
     dat->fh = fp;
 #ifdef DWG_HAVE_MMAP
   if (dat->opts & DWG_OPTS_MMAP)
-    return dat_mmap_read (dat);
+    return dat_mmap_read (dat, 0);
 #endif
   dat->chain = (unsigned char *)calloc (1, dat->size + 1);
   if (!dat->chain)
@@ -261,7 +264,7 @@ dat_read_size (Bit_Chain *restrict dat)
 {
 #ifdef DWG_HAVE_MMAP
   if ((dat->opts & DWG_OPTS_MMAP)
-      && dat_mmap_read (dat) == 0)
+      && dat_mmap_read (dat, 1) == 0)
     return 0;
 #endif
   if (!dat->chain)
