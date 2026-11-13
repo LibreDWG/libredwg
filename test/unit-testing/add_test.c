@@ -1764,6 +1764,142 @@ test_attrib_lock_flags (void)
   return numfailed ();
 }
 
+/* GHSA-67c2-h2w2-32g4: rejecting a reused BLOCK_RECORD must not free
+   the model-space object which remains owned by the drawing. */
+static int
+test_dxf_reused_modelspace_error (void)
+{
+  static const char dxf[]
+      = "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1015\n"
+        "999\nPadding for a valid minimal DXF security regression fixture.\n"
+        "0\nENDSEC\n"
+        "0\nSECTION\n2\nTABLES\n0\nTABLE\n2\nBLOCK_RECORD\n"
+        "5\n1\n330\n0\n100\nAcDbSymbolTable\n70\n1\n"
+        "0\nBLOCK_RECORD\n5\n1F\n330\n1\n100\nAcDbSymbolTableRecord\n"
+        "100\nAcDbBlockTableRecord\n140\n1.0\n2\nBBPOC\n"
+        "0\nENDTAB\n0\nENDSEC\n0\nEOF\n";
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  const int lvl = loglevel;
+
+  failed = 0;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("dxf_reused_modelspace_error: allocation failed");
+      return numfailed ();
+    }
+  dat.size = sizeof (dxf) - 1;
+  dwg_read_dxf (&dat, &dwg);
+  loglevel = lvl;
+  if (!dwg.num_objects || !dwg.object
+      || dwg.object[0].fixedtype != DWG_TYPE_BLOCK_HEADER
+      || !dwg.object[0].tio.object
+      || !dwg.object[0].tio.object->tio.BLOCK_HEADER
+      || dwg.object[0].handle.value != 0x1f)
+    fail ("dxf_reused_modelspace_error: model space lost (%u objects, "
+          "type %u, handle %lu)", (unsigned)dwg.num_objects,
+          dwg.num_objects && dwg.object ? dwg.object[0].fixedtype : 0,
+          dwg.num_objects && dwg.object
+              ? (unsigned long)dwg.object[0].handle.value : 0ul);
+  else
+    ok ("dxf_reused_modelspace_error: model space remains owned");
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
+/* GHSA-mqv8-h4fm-qv53: omitted node handles remain NULL after growth. */
+static int
+test_dxf_eval_node_missing_handle (void)
+{
+  static const char dxf[]
+      = "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1018\n0\nENDSEC\n"
+        "0\nSECTION\n2\nCLASSES\n0\nCLASS\n1\nACAD_EVALUATION_GRAPH\n"
+        "2\nAcDbEvalGraph\n3\nObjectDBX Classes\n90\n1152\n91\n1\n"
+        "280\n0\n281\n0\n0\nENDSEC\n0\nSECTION\n2\nOBJECTS\n"
+        "0\nACAD_EVALUATION_GRAPH\n5\n1\n100\nAcDbEvalGraph\n"
+        "91\n0\n93\n32\n95\n1\n91\n1\n93\n32\n95\n1\n"
+        "0\nENDSEC\n0\nEOF\n";
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  Dwg_Object *obj;
+  int error;
+  const int lvl = loglevel;
+
+  failed = 0;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("dxf_eval_node_missing_handle: allocation failed");
+      return numfailed ();
+    }
+  dat.size = sizeof (dxf) - 1;
+  error = dwg_read_dxf (&dat, &dwg);
+  loglevel = lvl;
+  obj = first_object (&dwg, DWG_TYPE_EVALUATION_GRAPH);
+  if (error >= DWG_ERR_CRITICAL || !obj || !obj->tio.object
+      || !obj->tio.object->tio.EVALUATION_GRAPH)
+    fail ("dxf_eval_node_missing_handle: graph import failed 0x%x", error);
+  else
+    {
+      Dwg_Object_EVALUATION_GRAPH *graph
+          = obj->tio.object->tio.EVALUATION_GRAPH;
+      if (graph->num_nodes != 2 || !graph->nodes
+          || graph->nodes[0].evalexpr || graph->nodes[1].evalexpr)
+        fail ("dxf_eval_node_missing_handle: missing handles not NULL");
+      else
+        ok ("dxf_eval_node_missing_handle: missing handles remain NULL");
+    }
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
+/* GHSA-c6r9-crw2-jcq3: group 3 belongs to the imported OLE2FRAME, not
+   the temporary pair which is freed while parsing. */
+static int
+test_dxf_oleclient_ownership (void)
+{
+  static const char dxf[]
+      = "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1015\n"
+        "999\nPadding for a valid minimal DXF security regression fixture.\n"
+        "0\nENDSEC\n"
+        "0\nSECTION\n2\nENTITIES\n0\nOLE2FRAME\n5\n255\n"
+        "100\nAcDbEntity\n8\n0\n100\nAcDbOle2Frame\n70\n2\n"
+        "3\nFIRST\n3\nFINAL\n10\n0\n20\n0\n30\n0\n"
+        "11\n1\n21\n1\n31\n0\n71\n2\n72\n0\n73\n1\n90\n0\n"
+        "0\nENDSEC\n0\nEOF\n";
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  Dwg_Object *obj;
+  int error;
+  const int lvl = loglevel;
+
+  failed = 0;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("dxf_oleclient_ownership: allocation failed");
+      return numfailed ();
+    }
+  dat.size = sizeof (dxf) - 1;
+  error = dwg_read_dxf (&dat, &dwg);
+  loglevel = lvl;
+  obj = first_object (&dwg, DWG_TYPE_OLE2FRAME);
+  if (error >= DWG_ERR_CRITICAL || !obj || !obj->tio.entity
+      || !obj->tio.entity->tio.OLE2FRAME
+      || !obj->tio.entity->tio.OLE2FRAME->oleclient
+      || strcmp ((char *)obj->tio.entity->tio.OLE2FRAME->oleclient, "FINAL"))
+    fail ("dxf_oleclient_ownership: client not retained (error 0x%x, "
+          "object %p)", error, (void *)obj);
+  else
+    ok ("dxf_oleclient_ownership: final client string remains valid");
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
 #endif
 
 #ifndef DISABLE_JSON
@@ -1966,6 +2102,60 @@ read_json_string (Dwg_Data *dwg, const char *json, const size_t size)
   free (dat.chain);
   return error;
 }
+
+/* GHSA-qg3h-pm38-w4rr: JSON size fields cannot exceed the SAB buffer,
+   regardless of key order or a repeated data array. */
+static int
+test_json_sab_size (void)
+{
+  static const char *fields[] = {
+    "\"version\":2,\"acis_data\":[\"ACIS BinaryFile\",\"4142434445464748\"],"
+    "\"sab_size\":4096",
+    "\"sab_size\":4096,\"version\":2,"
+    "\"acis_data\":[\"ACIS BinaryFile\",\"4142434445464748\"]",
+    "\"version\":2,\"acis_data\":[\"ACIS BinaryFile\",\"41\"],"
+    "\"acis_data\":[\"ACIS BinaryFile\",\"4142434445464748\"],"
+    "\"sab_size\":4096",
+    "\"version\":2,\"sab_size\":4096",
+    "\"version\":2,\"acis_data\":[\"ACIS BinaryFile\",\"4142434445464748\"],"
+    "\"sab_size\":23",
+    "\"sab_size\":4096,\"acis_data\":[\"ACIS BinaryFile\","
+    "\"4142434445464748\"],\"version\":2"
+  };
+  unsigned i;
+
+  failed = 0;
+  for (i = 0; i < sizeof (fields) / sizeof (fields[0]); i++)
+    {
+      char json[512];
+      Dwg_Data dwg;
+      Dwg_Object *obj;
+      int error;
+      snprintf (json, sizeof (json),
+                "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
+                "{\"entity\":\"3DSOLID\",\"type\":38,"
+                "\"handle\":[0,1,42],%s}]}", fields[i]);
+      error = read_json_string (&dwg, json, strlen (json));
+      obj = first_object (&dwg, DWG_TYPE__3DSOLID);
+      if (error >= DWG_ERR_CRITICAL || !obj || !obj->tio.entity
+          || !obj->tio.entity->tio._3DSOLID)
+        fail ("json_sab_size: case %u import failed 0x%x", i, error);
+      else
+        {
+          Dwg_Entity__3DSOLID *solid = obj->tio.entity->tio._3DSOLID;
+          if (i == 3 ? (solid->sab_size != 0 || solid->acis_data)
+                     : (solid->sab_size != 23 || !solid->acis_data
+                        || memcmp (solid->acis_data,
+                                   "ACIS BinaryFileABCDEFGH", 23)))
+            fail ("json_sab_size: case %u has inconsistent data", i);
+        }
+      dwg_free (&dwg);
+    }
+  if (!numfailed ())
+    ok ("json_sab_size: data length wins over supplied size");
+  return numfailed ();
+}
+
 
 static void
 check_json_class_types_classes (const Dwg_Data *dwg)
@@ -2532,8 +2722,12 @@ main (int argc, char *argv[])
   error += test_attrib_lock_flags ();
   error += test_multileader_vertices ();
   error += test_dxf_eed_binary ();
+  error += test_dxf_reused_modelspace_error ();
+  error += test_dxf_eval_node_missing_handle ();
+  error += test_dxf_oleclient_ownership ();
 #endif
 #ifndef DISABLE_JSON
+  error += test_json_sab_size ();
   error += test_json_union_selectors ();
   error += test_json_dotted_pointer_keys_struct ();
   error += test_json_dotted_pointer_keys_array ();

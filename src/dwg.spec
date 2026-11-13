@@ -5592,6 +5592,9 @@ DWG_ENTITY (OLE2FRAME)
   FIELD_3BD (pt1, 10);  // upper left
   FIELD_3BD (pt2, 11);  // lower right
 #endif
+#ifdef IS_FREE
+  FIELD_TF (oleclient, 0, 3);
+#endif
   FIELD_BS (type, 71); // 1: Link, 2: Embedded, 3: Static
   SINCE (R_2000b) {
     FIELD_BS (mode, 72); // tile_mode, 0: mspace, 1: pspace

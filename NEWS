@@ -5,6 +5,15 @@ See the end for copying conditions.
 LibreDWG version 0.14.1 - 2026-07-25 - beta:
 
 Security fixes:
+  * Fixed GHSA-67c2-h2w2-32g4: double-free and loss of the model-space
+    object when an invalid DXF BLOCK_RECORD reuses its handle.
+    Reported by hgrgr.
+  * Fixed GHSA-mqv8-h4fm-qv53: uninitialized EVALUATION_GRAPH node handles
+    on DXF import.  Reported by SecBuddyF and HY-CyberTeam.
+  * Fixed GHSA-qg3h-pm38-w4rr: JSON 3DSOLID SAB lengths could exceed the
+    imported buffer.  Reported by SecBuddyF and HY-CyberTeam.
+  * Fixed GHSA-c6r9-crw2-jcq3: use-after-free of OLE2FRAME client names
+    imported from DXF.  Reported by SpyroK05.
   * Fixed CVE-2026-63474 (GHSA-qg2f-8389-w95j, Moderate): heap-buffer-overflow
     WRITE in decompress_R2004_section, bypassing an earlier fix.
     read_2004_compressed_section reset dec.size to a smaller per-section

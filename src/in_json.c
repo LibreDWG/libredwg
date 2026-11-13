@@ -2103,28 +2103,49 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       tokens->index++;
     }
   LOG_TRACE ("%s.acis_data: %s\n", obj->name, s);
+  {
+    BITCODE_RC *old = NULL;
+    dwg_dynapi_entity_value (_obj, obj->name, "acis_data", &old, NULL);
+    if (!dwg_dynapi_entity_set_value (_obj, obj->name, "acis_data", &s,
+                                      false))
+      {
+        free (s);
+        return DWG_ERR_INVALIDTYPE;
+      }
+    free (old);
+  }
+  {
+    BITCODE_BL sab_size = len;
+    // The buffer length, not an independently supplied JSON field, owns
+    // sab_size, even if the version key occurs later.
+    dwg_dynapi_entity_set_value (_obj, obj->name, "sab_size", &sab_size,
+                                 true);
+  }
   if (acis_version > 1)
     {
       BITCODE_BL num_blocks = 1;
-      BITCODE_BL sab_size = len;
       BITCODE_BL *block_size = (BITCODE_BL *)calloc (2, sizeof (BITCODE_BL));
+      BITCODE_BL *old_block_size = NULL;
+      if (!block_size)
+        return DWG_ERR_OUTOFMEM;
       block_size[0] = len;
       block_size[1] = 0;
       LOG_TRACE (" num_blocks: " FORMAT_BL " [BL]\n", num_blocks);
-      LOG_TRACE (" sab_size: " FORMAT_BL " [BL]\n", sab_size);
+      LOG_TRACE (" sab_size: %d [BL]\n", len);
       LOG_TRACE (" block_size[0]: %d [BL]\n", block_size[0]);
+      dwg_dynapi_entity_value (_obj, obj->name, "block_size", &old_block_size,
+                               NULL);
+      if (!dwg_dynapi_entity_set_value (_obj, obj->name, "block_size",
+                                        &block_size, true))
+        {
+          free (block_size);
+          return DWG_ERR_INVALIDTYPE;
+        }
+      free (old_block_size);
       dwg_dynapi_entity_set_value (_obj, obj->name, "num_blocks", &num_blocks,
                                    true);
-      dwg_dynapi_entity_set_value (_obj, obj->name, "block_size", &block_size,
-                                   true);
-      dwg_dynapi_entity_set_value (_obj, obj->name, "sab_size", &sab_size,
-                                   true);
     }
-  // just keep this s ptr, no utf8
-  return dwg_dynapi_entity_set_value (obj->tio.entity->tio._3DSOLID, obj->name,
-                                      "acis_data", &s, false)
-             ? 0
-             : DWG_ERR_INVALIDTYPE;
+  return 0;
 }
 
 static const Dwg_DYNAPI_field *
@@ -2611,7 +2632,10 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       // all numfields are calculated from actual array sizes
       // for easier adding or deleting entries.
-      else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "num_"))
+      else if (t->type == JSMN_PRIMITIVE
+               && (memBEGINc (key, "num_")
+                   || (strEQc (key, "sab_size")
+                       && find_field (fields, "acis_data"))))
         {
           tokens->index++;
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
@@ -3666,6 +3690,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       Dwg_Object_APPID *_obj = NULL;
       const Dwg_DYNAPI_field *fields = NULL, *cfields;
       const Dwg_DYNAPI_field *f;
+      uint32_t sab_min = 0, sab_max = 0;
+      int saw_sab_size = 0;
 
       memset (name, 0, sizeof (name));
       JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
@@ -4258,6 +4284,24 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               json_eed (dat, dwg, tokens, obj->tio.object);
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
             }
+          else if (is_entity && strEQc (key, "sab_size")
+                   && t->type == JSMN_PRIMITIVE
+                   && find_field (fields, "acis_data")
+                   && find_field (fields, "sab_size"))
+            {
+              uint32_t declared = json_long (dat, tokens);
+              JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
+              if (!saw_sab_size)
+                sab_min = sab_max = declared;
+              else
+                {
+                  if (declared < sab_min)
+                    sab_min = declared;
+                  if (declared > sab_max)
+                    sab_max = declared;
+                }
+              saw_sab_size = 1;
+            }
           else
             // search_field:
             {
@@ -4373,6 +4417,16 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               json_advance_unknown (dat, tokens, t->type, 0);
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
             }
+        }
+      if (saw_sab_size && _obj && fields
+          && find_field (fields, "acis_data"))
+        {
+          BITCODE_BL actual = 0;
+          dwg_dynapi_entity_value (_obj, name, "sab_size", &actual, NULL);
+          if (sab_min != actual || sab_max != actual)
+            LOG_WARN ("%s.sab_size declared %u..%u differs from acis_data "
+                      "length %u; using actual length",
+                      name, sab_min, sab_max, (unsigned)actual);
         }
     }
   LOG_TRACE ("End of %s\n", section);

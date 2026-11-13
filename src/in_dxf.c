@@ -6808,29 +6808,38 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Object_EVALUATION_GRAPH *o = obj->tio.object->tio.EVALUATION_GRAPH;
   Dwg_Data *dwg = obj->parent;
   int i = -1, j = 0;
-  o->nodes = (Dwg_EVAL_Node *)xcalloc (1, sizeof (Dwg_EVAL_Node));
-  o->num_nodes = 1;
-  if (!o->nodes)
-    {
-      o->num_nodes = 0;
-      return NULL;
-    }
+  o->nodes = NULL;
+  o->num_nodes = 0;
   while (pair != NULL && pair->code != 0)
     {
       switch (pair->code)
         {
         case 91:
-          i++;
-          o->nodes = (Dwg_EVAL_Node *)realloc (
-              o->nodes, (i + 1) * sizeof (Dwg_EVAL_Node));
-          if (!o->nodes)
+          {
+            Dwg_EVAL_Node *nodes;
+            if (i == INT_MAX - 1
+                || (size_t)(i + 2) > (size_t)-1 / sizeof (Dwg_EVAL_Node))
+              {
+                dxf_free_pair (pair);
+                return NULL;
+              }
+            nodes = (Dwg_EVAL_Node *)realloc (
+                o->nodes, (size_t)(i + 2) * sizeof (Dwg_EVAL_Node));
+            if (!nodes)
+              {
+                dxf_free_pair (pair);
+                return NULL;
+              }
+            o->nodes = nodes;
+            i++;
+            memset (&o->nodes[i], 0, sizeof (Dwg_EVAL_Node));
+            o->num_nodes = i + 1;
+            o->nodes[i].id = pair->value.i;
+            LOG_TRACE ("%s.nodes[%d].id = %d [BL %d]\n", obj->name, i,
+                       pair->value.i, pair->code);
+            j = 0;
             break;
-          o->num_nodes = i + 1;
-          o->nodes[i].id = pair->value.i;
-          LOG_TRACE ("%s.nodes[%d].id = %d [BL %d]\n", obj->name, i,
-                     pair->value.i, pair->code);
-          j = 0;
-          break;
+          }
         case 93:
           o->nodes[i].edge_flags = pair->value.i;
           LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,
@@ -6864,6 +6873,7 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         default:
           LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
+          dxf_free_pair (pair);
           return NULL;
         }
       dxf_free_pair (pair);
@@ -11091,6 +11101,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
   int in_reactors = 0;
   int in_blkrefs = 0;
   int in_embedobj = 0;
+  int reused = 0;
   int is_entity = is_dwg_entity (name) || strEQc (name, "DIMENSION");
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
@@ -11539,9 +11550,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                        != dwg->object[0].tio.object->tio.BLOCK_HEADER
                 && dwg->num_objects)
               {
+                if (dxfname && dxfname != obj->dxfname)
+                  free (dxfname);
                 dwg_free_object (obj);
+                dxfname = NULL;
                 dwg->num_objects--;
                 obj = &dwg->object[0];
+                reused = 1;
                 _obj = obj->tio.object->tio.APPID;
                 LOG_TRACE ("Reuse existing BLOCK_HEADER.*Model_Space %X [0]\n",
                            pair->value.u);
@@ -12804,11 +12819,21 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                    && obj->fixedtype == DWG_TYPE_EVALUATION_GRAPH)
             {
               pair = add_EVAL_Node (obj, dat, pair);
+              if (!pair)
+                goto fail;
               // returns with 0
-              if (pair != NULL && pair->code == 0)
+              if (pair->code == 0)
                 goto start_loop;
               else
                 goto search_field;
+            }
+          else if (pair->code == 3 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
+            {
+              Dwg_Entity_OLE2FRAME *o = obj->tio.entity->tio.OLE2FRAME;
+              free (o->oleclient);
+              o->oleclient = (BITCODE_TF)pair->value.s.ptr;
+              pair->value.s.ptr = NULL;
+              goto next_pair;
             }
           else if (pair->code == 310 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
             {
@@ -15337,6 +15362,8 @@ invalid_dxf:
   LOG_ERROR ("Invalid DXF code %d for %s", pair->code, name);
   dxf_free_pair (pair);
 fail:
+  if (reused)
+    return NULL;
   if (obj)
     {
       // dxfname was consumed by ADD_OBJECT/ADD_ENTITY into obj->dxfname

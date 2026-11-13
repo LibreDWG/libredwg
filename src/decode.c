@@ -4308,7 +4308,7 @@ pt2        (35.27188116753285, -22.39344715050545, 0.0) [11]
   // FIELD_2BD (pt1, 10);
   // FIELD_2BD (pt2, 11);
   _obj->oleversion = 2;
-  _obj->oleclient = (BITCODE_TF) "OLE";
+  _obj->oleclient = (BITCODE_TF)strdup ("OLE");
   _obj->pt1.x = 30.13602472538446;
   _obj->pt1.y = -18.98882829402869;
   _obj->pt2.x = 35.27188116753285;
