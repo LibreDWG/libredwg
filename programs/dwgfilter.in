@@ -52,11 +52,11 @@ if [ -z "$debug" ]; then
 fi
 selfpath="$(realpath "$0")"
 if [ "$selfpath" = "@bindir@/dwgfilter" ]; then
-    dwgread="@bindir@/dwgread"
-    dwgwrite="@bindir@/dwgwrite"
+    dwgread="@bindir@/dwgread@EXEEXT@"
+    dwgwrite="@bindir@/dwgwrite@EXEEXT@"
 else
-    dwgread="$(dirname "$selfpath")/dwgread"
-    dwgwrite="$(dirname "$selfpath")/dwgwrite"
+    dwgread="$(dirname "$selfpath")/dwgread@EXEEXT@"
+    dwgwrite="$(dirname "$selfpath")/dwgwrite@EXEEXT@"
 fi
 
 if [ -n "$debug" ]; then
