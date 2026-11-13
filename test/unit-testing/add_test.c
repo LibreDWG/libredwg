@@ -77,6 +77,22 @@ num_objects (void *vents)
   return i;
 }
 
+/* DXF has no REPEAT/ENDREP. They are written as one arrayed INSERT. */
+static void
+test_repeat_array (Dwg_Object_Ref *restrict mspace_ref)
+{
+  Dwg_Entity_INSERT **ins = dwg_getall_INSERT (mspace_ref);
+  if (!ins || !ins[0] || ins[1])
+    fail ("found no single arrayed INSERT for REPEAT");
+  else if (ins[0]->num_cols == 2 && ins[0]->num_rows == 3
+           && ins[0]->col_spacing == 1.25 && ins[0]->row_spacing == 2.5)
+    ok ("REPEAT written as arrayed INSERT");
+  else
+    fail ("REPEAT array changed to %d,%d %.9g,%.9g", ins[0]->num_cols,
+          ins[0]->num_rows, ins[0]->col_spacing, ins[0]->row_spacing);
+  free (ins);
+}
+
 static int
 test_add (const Dwg_Object_Type type, const char *restrict file,
           const int as_dxf)
@@ -136,13 +152,12 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       ok ("LIBREDWG_DEBUG cnt %d %s", cnt, name);
     }
 
-  dwg = dwg_new_Document (
-      type == DWG_TYPE__3DLINE                   ? R_9
-      : type == DWG_TYPE_REPEAT || type == DWG_TYPE_ENDREP
-                                                ? R_2_10
-      : as_dxf                                 ? R_2018
-                                               : R_2000,
-      0 /*metric/iso */, tracelevel);
+  dwg = dwg_new_Document (type == DWG_TYPE__3DLINE ? R_9
+                          : type == DWG_TYPE_REPEAT || type == DWG_TYPE_ENDREP
+                              ? R_2_10
+                          : as_dxf ? R_2018
+                                   : R_2000,
+                          0 /*metric/iso */, tracelevel);
   mspace = dwg_model_space_object (dwg);
   mspace_ref = dwg_model_space_ref (dwg);
   if (!mspace)
@@ -925,6 +940,11 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       TEST_ENTITY (SPLINE);
       TEST_ENTITY (INSERT);
     case DWG_TYPE_REPEAT:
+      if (as_dxf)
+        {
+          test_repeat_array (mspace_ref);
+          break;
+        }
       {
         Dwg_Entity_REPEAT **reps = dwg_getall_REPEAT (mspace_ref);
         Dwg_Entity_ENDREP **ends = dwg_getall_ENDREP (mspace_ref);
@@ -949,6 +969,11 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       }
       break;
     case DWG_TYPE_ENDREP:
+      if (as_dxf)
+        {
+          test_repeat_array (mspace_ref);
+          break;
+        }
       {
         Dwg_Entity_REPEAT **reps = dwg_getall_REPEAT (mspace_ref);
         Dwg_Entity_ENDREP **ends = dwg_getall_ENDREP (mspace_ref);
@@ -1272,6 +1297,7 @@ test_names (void)
   if (!dwg_is_valid_name (dwg, "\xa3\xc1"))
     fail ("dwg_is_valid_name(A3C1) U+FF21 LETTER CP949/r2000");
   dwg_free (dwg);
+  free (dwg);
 
   dwg = dwg_new_Document (R_2007, 0, tracelevel);
   dwg->header.codepage = CP_ANSI_1253; // ANSI Greek
@@ -1310,6 +1336,7 @@ test_names (void)
     fail ("dwg_is_valid_name (\"0\") ANSI_949/r2007");
 
   dwg_free (dwg);
+  free (dwg);
   if (!numfailed ())
     ok ("names");
   return numfailed ();
@@ -1798,10 +1825,12 @@ test_dxf_reused_modelspace_error (void)
       || !dwg.object[0].tio.object->tio.BLOCK_HEADER
       || dwg.object[0].handle.value != 0x1f)
     fail ("dxf_reused_modelspace_error: model space lost (%u objects, "
-          "type %u, handle %lu)", (unsigned)dwg.num_objects,
+          "type %u, handle %lu)",
+          (unsigned)dwg.num_objects,
           dwg.num_objects && dwg.object ? dwg.object[0].fixedtype : 0,
           dwg.num_objects && dwg.object
-              ? (unsigned long)dwg.object[0].handle.value : 0ul);
+              ? (unsigned long)dwg.object[0].handle.value
+              : 0ul);
   else
     ok ("dxf_reused_modelspace_error: model space remains owned");
   dwg_free (&dwg);
@@ -1845,8 +1874,8 @@ test_dxf_eval_node_missing_handle (void)
     {
       Dwg_Object_EVALUATION_GRAPH *graph
           = obj->tio.object->tio.EVALUATION_GRAPH;
-      if (graph->num_nodes != 2 || !graph->nodes
-          || graph->nodes[0].evalexpr || graph->nodes[1].evalexpr)
+      if (graph->num_nodes != 2 || !graph->nodes || graph->nodes[0].evalexpr
+          || graph->nodes[1].evalexpr)
         fail ("dxf_eval_node_missing_handle: missing handles not NULL");
       else
         ok ("dxf_eval_node_missing_handle: missing handles remain NULL");
@@ -1892,7 +1921,8 @@ test_dxf_oleclient_ownership (void)
       || !obj->tio.entity->tio.OLE2FRAME->oleclient
       || strcmp ((char *)obj->tio.entity->tio.OLE2FRAME->oleclient, "FINAL"))
     fail ("dxf_oleclient_ownership: client not retained (error 0x%x, "
-          "object %p)", error, (void *)obj);
+          "object %p)",
+          error, (void *)obj);
   else
     ok ("dxf_oleclient_ownership: final client string remains valid");
   dwg_free (&dwg);
@@ -2134,7 +2164,8 @@ test_json_sab_size (void)
       snprintf (json, sizeof (json),
                 "{\"FILEHEADER\":{\"version\":\"AC1018\"},\"OBJECTS\":["
                 "{\"entity\":\"3DSOLID\",\"type\":38,"
-                "\"handle\":[0,1,42],%s}]}", fields[i]);
+                "\"handle\":[0,1,42],%s}]}",
+                fields[i]);
       error = read_json_string (&dwg, json, strlen (json));
       obj = first_object (&dwg, DWG_TYPE__3DSOLID);
       if (error >= DWG_ERR_CRITICAL || !obj || !obj->tio.entity
@@ -2145,8 +2176,8 @@ test_json_sab_size (void)
           Dwg_Entity__3DSOLID *solid = obj->tio.entity->tio._3DSOLID;
           if (i == 3 ? (solid->sab_size != 0 || solid->acis_data)
                      : (solid->sab_size != 23 || !solid->acis_data
-                        || memcmp (solid->acis_data,
-                                   "ACIS BinaryFileABCDEFGH", 23)))
+                        || memcmp (solid->acis_data, "ACIS BinaryFileABCDEFGH",
+                                   23)))
             fail ("json_sab_size: case %u has inconsistent data", i);
         }
       dwg_free (&dwg);
@@ -2155,7 +2186,6 @@ test_json_sab_size (void)
     ok ("json_sab_size: data length wins over supplied size");
   return numfailed ();
 }
-
 
 static void
 check_json_class_types_classes (const Dwg_Data *dwg)
@@ -2362,15 +2392,15 @@ test_dxf_count_resets (void)
   // test/test-data/sample_2010.dxf
   p += sprintf (p, "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1014\n"
                    "  0\nENDSEC\n");
-  p += sprintf (
-      p, "  0\nSECTION\n  2\nTABLES\n  0\nTABLE\n  2\nLTYPE\n  5\n5\n"
-         "330\n0\n100\nAcDbSymbolTable\n 70\n1\n"
-         "  0\nLTYPE\n  5\n14\n330\n5\n100\nAcDbSymbolTableRecord\n"
-         "100\nAcDbLinetypeTableRecord\n  2\nDASHED\n 70\n0\n 72\n65\n"
-         " 73\n2\n 40\n10.0\n"
-         " 49\n5.0\n 49\n-5.0\n 73\n200\n"
-         "  0\nENDTAB\n  0\nENDSEC\n"
-         "  0\nSECTION\n  2\nENTITIES\n");
+  p += sprintf (p,
+                "  0\nSECTION\n  2\nTABLES\n  0\nTABLE\n  2\nLTYPE\n  5\n5\n"
+                "330\n0\n100\nAcDbSymbolTable\n 70\n1\n"
+                "  0\nLTYPE\n  5\n14\n330\n5\n100\nAcDbSymbolTableRecord\n"
+                "100\nAcDbLinetypeTableRecord\n  2\nDASHED\n 70\n0\n 72\n65\n"
+                " 73\n2\n 40\n10.0\n"
+                " 49\n5.0\n 49\n-5.0\n 73\n200\n"
+                "  0\nENDTAB\n  0\nENDSEC\n"
+                "  0\nSECTION\n  2\nENTITIES\n");
   // MLINE: no lines for a num_lines of 0, then a 73 with the real
   // count, which must not reuse the missing lines
   p += sprintf (p, "  0\nMLINE\n  5\n200\n  8\n0\n 100\nAcDbEntity\n"
@@ -2397,15 +2427,15 @@ test_dxf_count_resets (void)
          " 90\n0\n 90\n1\n360\n401\n 90\n0\n");
   // LEADEROBJECTCONTEXTDATA with 3 points, then a second 70 announcing
   // 200; the 70 must be ignored once the points are allocated
-  p += sprintf (
-      p, "  0\nACDB_LEADEROBJECTCONTEXTDATA_CLASS\n  5\n500\n330\n0\n"
-         "100\nAcDbObjectContextData\n 70\n1\n290\n0\n"
-         "100\nAcDbAnnotScaleObjectContextData\n340\n0\n"
-         " 70\n3\n 10\n1.0\n 20\n1.0\n 30\n0.0\n 10\n2.0\n 20\n2.0\n"
-         " 30\n0.0\n 10\n3.0\n 20\n3.0\n 30\n0.0\n 70\n200\n 11\n0.0\n"
-         " 21\n0.0\n 31\n1.0\n290\n1\n"
-         " 12\n0.0\n 22\n0.0\n 32\n0.0\n 13\n0.0\n 23\n0.0\n 33\n0.0\n"
-         "  0\nENDSEC\n  0\nEOF\n");
+  p += sprintf (p,
+                "  0\nACDB_LEADEROBJECTCONTEXTDATA_CLASS\n  5\n500\n330\n0\n"
+                "100\nAcDbObjectContextData\n 70\n1\n290\n0\n"
+                "100\nAcDbAnnotScaleObjectContextData\n340\n0\n"
+                " 70\n3\n 10\n1.0\n 20\n1.0\n 30\n0.0\n 10\n2.0\n 20\n2.0\n"
+                " 30\n0.0\n 10\n3.0\n 20\n3.0\n 30\n0.0\n 70\n200\n 11\n0.0\n"
+                " 21\n0.0\n 31\n1.0\n290\n1\n"
+                " 12\n0.0\n 22\n0.0\n 32\n0.0\n 13\n0.0\n 23\n0.0\n 33\n0.0\n"
+                "  0\nENDSEC\n  0\nEOF\n");
 
   memset (&dwg, 0, sizeof (dwg));
   memset (&dat, 0, sizeof (dat));
@@ -2440,8 +2470,7 @@ test_dxf_count_resets (void)
               }
             case DWG_TYPE_MLINE:
               {
-                Dwg_Entity_MLINE *o
-                    = dwg.object[i].tio.entity->tio.MLINE;
+                Dwg_Entity_MLINE *o = dwg.object[i].tio.entity->tio.MLINE;
                 // the 0 count allocates no lines; the later 73
                 // allocates them
                 if (o->num_lines != 2 || !o->verts[0].lines)
@@ -2481,8 +2510,7 @@ test_dxf_count_resets (void)
                 if (o->num_deps != 0)
                   fail ("dxf_count_resets: ASSOCNETWORK.num_deps %u != 0",
                         (unsigned)o->num_deps);
-                if (o->num_actions != 1 || !o->actions
-                    || !o->actions[0].dep
+                if (o->num_actions != 1 || !o->actions || !o->actions[0].dep
                     || o->actions[0].dep->handleref.value != 0x401)
                   fail ("dxf_count_resets: ASSOCNETWORK.actions not read, "
                         "num_actions %u",
@@ -2496,8 +2524,7 @@ test_dxf_count_resets (void)
             case DWG_TYPE_LEADEROBJECTCONTEXTDATA:
               {
                 Dwg_Object_LEADEROBJECTCONTEXTDATA *o
-                    = dwg.object[i].tio.object->tio
-                          .LEADEROBJECTCONTEXTDATA;
+                    = dwg.object[i].tio.object->tio.LEADEROBJECTCONTEXTDATA;
                 // the second 70, after the points, is ignored
                 if (o->num_points != 3 || !o->points)
                   fail ("dxf_count_resets: LEADEROBJECTCONTEXTDATA."
@@ -2594,8 +2621,7 @@ test_clip_verts_rect (void)
       if (o->num_clip_verts != 1)
         fail ("clip_verts_rect: %d num_clip_verts %u != 1", img,
               (unsigned)o->num_clip_verts);
-      if (!o->clip_verts
-          || o->clip_verts[0].x != x || o->clip_verts[0].y != x)
+      if (!o->clip_verts || o->clip_verts[0].x != x || o->clip_verts[0].y != x)
         fail ("clip_verts_rect: %d clip_verts not read", img);
       img++;
     }
@@ -2676,8 +2702,7 @@ test_pointcloud_clippings (void)
       if (o->clippings[0].num_vertices != 1)
         fail ("pointcloud_clippings: num_vertices %u != 1",
               (unsigned)o->clippings[0].num_vertices);
-      if (!o->clippings[0].vertices
-          || o->clippings[0].vertices[0].x != -0.5
+      if (!o->clippings[0].vertices || o->clippings[0].vertices[0].x != -0.5
           || o->clippings[0].vertices[0].y != -0.5)
         fail ("pointcloud_clippings: clipping vertices not read");
     }
@@ -2685,6 +2710,119 @@ test_pointcloud_clippings (void)
   free (json);
   if (!numfailed ())
     ok ("pointcloud_clippings: a rect clipping counts its own verts");
+  return numfailed ();
+}
+#endif
+
+#ifndef DISABLE_DXF
+/* REPEAT bodies must remain reachable as arrayed INSERTs in exported DXF. */
+static int
+test_repeat_dxf (Dwg_Version_Type version, int minimal)
+{
+  Dwg_Data *dwg;
+  Dwg_Object_BLOCK_HEADER *hdr;
+  Bit_Chain dat;
+  dwg_point_3d a = { 1.0, 1.0, 0.0 }, b = { 2.0, 2.0, 0.0 };
+  char codebuf[80], value[256], section[32] = "", entity[32] = "";
+  char block[80] = "", blockname[80] = "", insertname[80] = "";
+  int code, error, cols = 0, rows = 0, lines = 0, inserts = 0;
+  double dx = 0, dy = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+  FILE *fh;
+
+  failed = 0;
+  dwg = dwg_new_Document (R_2_10, 0, 0);
+  if (!dwg)
+    {
+      fail ("repeat_dxf: cannot create drawing");
+      return numfailed ();
+    }
+  hdr = dwg_model_space_object (dwg)->tio.object->tio.BLOCK_HEADER;
+  dwg_add_REPEAT (hdr);
+  dwg_add_LINE (hdr, &a, &b);
+  dwg_add_ENDREP (hdr, 2, 3, 2.0, 3.0);
+  fh = tmpfile ();
+  if (!fh)
+    {
+      fail ("repeat_dxf: cannot create temporary file");
+      dwg_free (dwg);
+      free (dwg);
+      return numfailed ();
+    }
+  memset (&dat, 0, sizeof (dat));
+  dat.fh = fh;
+  dat.from_version = R_2_10;
+  dat.version = version;
+  dwg->opts |= minimal ? DWG_OPTS_MINIMAL : 0;
+  dwg->header.from_version = R_2_10;
+  dwg->header.version = version;
+  error = dwg_write_dxf (&dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("repeat_dxf: write failed: 0x%x", error);
+  rewind (fh);
+  while (fgets (codebuf, sizeof (codebuf), fh)
+         && fgets (value, sizeof (value), fh))
+    {
+      code = atoi (codebuf);
+      value[strcspn (value, "\r\n")] = '\0';
+      if (code == 0)
+        {
+          strncpy (entity, value, sizeof (entity) - 1);
+          entity[sizeof (entity) - 1] = '\0';
+          if (!strcmp (entity, "LINE") && !strcmp (section, "BLOCKS"))
+            lines++;
+          if (!strcmp (entity, "INSERT") && !strcmp (section, "ENTITIES"))
+            inserts++;
+        }
+      else if (code == 2 && !strcmp (entity, "SECTION"))
+        {
+          strncpy (section, value, sizeof (section) - 1);
+          section[sizeof (section) - 1] = '\0';
+        }
+      else if (code == 2 && !strcmp (entity, "BLOCK"))
+        {
+          strncpy (block, value, sizeof (block) - 1);
+          block[sizeof (block) - 1] = '\0';
+        }
+      else if (!strcmp (entity, "LINE") && !strcmp (section, "BLOCKS"))
+        {
+          if (code == 10)
+            x1 = atof (value);
+          if (code == 20)
+            y1 = atof (value);
+          if (code == 11)
+            x2 = atof (value);
+          if (code == 21)
+            y2 = atof (value);
+          strncpy (blockname, block, sizeof (blockname) - 1);
+          blockname[sizeof (blockname) - 1] = '\0';
+        }
+      else if (!strcmp (entity, "INSERT") && !strcmp (section, "ENTITIES"))
+        {
+          if (code == 2)
+            {
+              strncpy (insertname, value, sizeof (insertname) - 1);
+              insertname[sizeof (insertname) - 1] = '\0';
+            }
+          if (code == 70)
+            cols = atoi (value);
+          if (code == 71)
+            rows = atoi (value);
+          if (code == 44)
+            dx = atof (value);
+          if (code == 45)
+            dy = atof (value);
+        }
+    }
+  if (lines != 1 || inserts != 1 || !*blockname
+      || strcmp (blockname, insertname) || x1 != 1.0 || y1 != 1.0 || x2 != 2.0
+      || y2 != 2.0 || cols != 2 || rows != 3 || dx != 2.0 || dy != 3.0)
+    fail ("repeat_dxf: array geometry or block reference changed");
+  fclose (fh);
+  dwg_free (dwg);
+  free (dwg);
+  if (!numfailed ())
+    ok ("repeat_dxf: version %d minimal %d preserves the array", version,
+        minimal);
   return numfailed ();
 }
 #endif
@@ -2721,6 +2859,9 @@ main (int argc, char *argv[])
   error += test_dxf_union_selectors ();
   error += test_attrib_lock_flags ();
   error += test_multileader_vertices ();
+  error += test_repeat_dxf (R_2_10, 0);
+  error += test_repeat_dxf (R_2000, 0);
+  error += test_repeat_dxf (R_2000, 1);
   error += test_dxf_eed_binary ();
   error += test_dxf_reused_modelspace_error ();
   error += test_dxf_eval_node_missing_handle ();

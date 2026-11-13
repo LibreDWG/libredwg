@@ -30946,7 +30946,7 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   Dwg_Object *und, *dict = NULL, *def = NULL;
   Dwg_Object_DICTIONARY *_dict;
   Dwg_Data *_dwg;
-  char name[80], *base, *ext;
+  char name[80], basebuf[64], *base, *ext;
   unsigned int i;
   {
     int err;
@@ -30965,6 +30965,9 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     // name = "dxf - 1";
     // search/register in NOD
     base = split_filepath (filename, &ext);
+    snprintf (basebuf, sizeof (basebuf), "%s", base);
+    free (base);
+    base = basebuf;
     snprintf (name, 80, "%d", i);
     snprintf (base_1, 80, "%s - %d", base, i);
     defsref = dwg_find_dictionary (dwg, "ACAD_PDFDEFINITIONS");

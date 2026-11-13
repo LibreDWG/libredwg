@@ -3681,6 +3681,9 @@ DWG_TABLE (LTYPE)
       }
     } // r2007
   } // r13
+  FREE { // allocated by the DXF importer for all versions
+    FIELD_TF (strings_area, 256, 0);
+  }
 
   SINCE (R_13b1) {
     START_OBJECT_HANDLE_STREAM;

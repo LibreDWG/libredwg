@@ -67,6 +67,9 @@ Security fixes:
 Minor bugfixes / fuzzing fixes:
   * Fixed ATTRIB DXF version and position-lock flags being conflated with
     an unrelated AcDbXrecord field.  GH #1399.
+  * dwg2dxf: pre-R13 REPEAT/ENDREP spans are now written as arrayed
+    INSERTs of an anonymous block instead of unknown DXF entities, so the
+    array is no longer lost.  LOAD is dropped with a warning.  GH #1354.
   * Fixed large R2007+ string streams, APPID table counts above 255, and
     R2000+ LEADER and MULTILEADER binary fields.
   * Fixed extended object type encoding and opaque object sizes in JSON

@@ -4014,6 +4014,13 @@ split_filepath (const char *filepath, char **extp)
 #endif
   if (!base)
     base = copy;
+  else if (base != copy) // skip the directory, so that the copy is free'able
+    {
+      if (*base == '/')
+        base++;
+      memmove (copy, base, strlen (base) + 1);
+      base = copy;
+    }
   // len = strlen (base);
   if ((dot = strrchr (base, '.')) && *dot)
     {

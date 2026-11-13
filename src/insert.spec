@@ -21,7 +21,9 @@
   SUBCLASS (AcDbBlockReference);
 #ifdef IS_DXF
     FIELD_RS0 (has_attribs, 66);
-    FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
+    SINCE (R_13b1) {
+      FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
+    }
 #endif
   PRE (R_2_0b) {
     FIELD_TV (block_name, 2);

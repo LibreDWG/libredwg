@@ -612,7 +612,7 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
         && ref->obj->fixedtype == DWG_TYPE_##table)                           \
       VALUE_TV (ref->obj->tio.object->tio.table->name, dxf)                   \
     else                                                                      \
-      VALUE_TV ("", dxf)                                                      \
+      VALUE_TV (dxf == 8 ? "0" : "", dxf)                                   \
   }
 #define FIELD_HANDLE_NAME(nam, dxf, table)                                    \
   VALUE_HANDLE_NAME (_obj->nam, dxf, table)
@@ -1699,7 +1699,9 @@ decl_dxfb_process_INSERT (ACIDBLOCKREFERENCE)
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
   minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
-  if (dat->version < R_13b1)
+  if (dat->version < R_13b1
+      || (dat->from_version < R_13b1
+          && obj->supertype == DWG_SUPERTYPE_ENTITY))
     type = (unsigned int)obj->fixedtype;
   else
     {
@@ -1860,7 +1862,10 @@ decl_dxfb_process_INSERT (ACIDBLOCKREFERENCE)
     case DWG_TYPE__3DLINE:
       return dwg_dxfb__3DLINE (dat, obj);
     case DWG_TYPE_LOAD:
-      return dwg_dxfb_LOAD (dat, obj);
+      (void)dwg_dxfb_LOAD;
+      LOG_WARN ("LOAD cannot be represented in DXF; external SHX shape names "
+                "may be missing");
+      return 0;
     case DWG_TYPE_JUMP:
       return dwg_dxfb_JUMP (dat, obj);
 
@@ -2711,10 +2716,14 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
+  bool repeat_blocks;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
-    dat->from_version = dat->version;
+    dat->from_version = dwg->header.from_version;
+  error = upgrade_REPEAT (dwg, dat, &repeat_blocks);
+  if (error)
+    return error;
   // Propagate the input-format flags, so IS_FROM_TU (dat) reflects the actual
   // source encoding (DXF/JSON input keeps T strings as single-byte TV).
   dat->opts |= dwg->opts & DWG_OPTS_IN;
@@ -2729,7 +2738,7 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
   dxfb_header_write (dat, dwg);
 
-  if (!minimal)
+  if (!minimal || repeat_blocks)
     {
       // if downgraded to r13, but we still have classes, keep the
       // classes

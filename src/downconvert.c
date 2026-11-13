@@ -28,20 +28,325 @@
 #include "encode.h"
 #include "dynapi.h"
 #include "free.h"
+#include "decode.h"
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 
 // Internal table lookup from dwg.c.
 BITCODE_H
-dwg_find_tablehandle_silent (Dwg_Data *restrict dwg,
-                             const char *restrict name,
+dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
 
 // Internal add API used while constructing conversion metadata.
 Dwg_Object_APPID *dwg_add_APPID (Dwg_Data *restrict dwg,
                                  const char *restrict name);
 BITCODE_RLL dwg_obj_generic_handlevalue (void *_obj);
+Dwg_Object_BLOCK_HEADER *dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg,
+                                               const char *restrict name);
+Dwg_Entity_BLOCK *dwg_add_BLOCK (Dwg_Object_BLOCK_HEADER *restrict hdr,
+                                 const char *restrict name);
+Dwg_Entity_ENDBLK *dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict hdr);
+int dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
+                       Dwg_Object *restrict obj);
+
+/* Restore the linked list used by R13-R2000 after moving owned entities. */
+static int
+repeat_relink_block (Dwg_Data *restrict dwg,
+                     Dwg_Object_BLOCK_HEADER *restrict hdr)
+{
+  BITCODE_BL i;
+  hdr->first_entity = hdr->last_entity = NULL;
+  for (i = 0; i < hdr->num_owned; i++)
+    {
+      Dwg_Object_Ref *ref = hdr->entities[i];
+      Dwg_Object *obj = ref ? dwg_ref_object (dwg, ref) : NULL;
+      BITCODE_RLL prev
+          = i && hdr->entities[i - 1] ? hdr->entities[i - 1]->absolute_ref : 0;
+      BITCODE_RLL next = i + 1 < hdr->num_owned && hdr->entities[i + 1]
+                             ? hdr->entities[i + 1]->absolute_ref
+                             : 0;
+      if (!obj || obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
+        return DWG_ERR_INVALIDHANDLE;
+      if (!i)
+        hdr->first_entity
+            = dwg_add_handleref (dwg, 4, ref->absolute_ref, NULL);
+      if (i + 1 == hdr->num_owned)
+        hdr->last_entity = dwg_add_handleref (dwg, 4, ref->absolute_ref, NULL);
+      obj->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, prev, obj);
+      obj->tio.entity->next_entity = dwg_add_handleref (dwg, 4, next, obj);
+      obj->tio.entity->nolinks = 0;
+    }
+  return 0;
+}
+
+/* Turn legacy REPEAT spans into arrayed block inserts.  Nested spans are
+   converted inside out; their inserts then become members of the outer block.
+ */
+int
+upgrade_REPEAT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                bool *restrict converted)
+{
+  typedef struct
+  {
+    BITCODE_BL first, last;
+  } Repeat_Span;
+  Repeat_Span *spans;
+  BITCODE_BL *stack, depth = 0, count = 0, repeats = 0, i, n;
+  int error = 0;
+  *converted = false;
+
+  if (dat->from_version >= R_13b1)
+    return 0;
+  n = dwg->num_objects;
+  for (i = 0; i < n; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
+        continue;
+      if (obj->fixedtype == DWG_TYPE_REPEAT)
+        repeats++;
+      else if (obj->fixedtype == DWG_TYPE_INSERT
+               || obj->fixedtype == DWG_TYPE_MINSERT)
+        *converted = true;
+    }
+  if (!repeats)
+    return 0;
+  *converted = true;
+  spans = (Repeat_Span *)calloc (repeats, sizeof (*spans));
+  stack = (BITCODE_BL *)calloc (repeats, sizeof (*stack));
+  if (!spans || !stack)
+    {
+      free (spans);
+      free (stack);
+      return DWG_ERR_OUTOFMEM;
+    }
+  for (i = 0; i < n; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
+        continue;
+      /* JSON/DXF imports of pre-R13 files carry no entity handles, but the
+         block ownership lists below are keyed by handle. */
+      if (!obj->handle.value)
+        {
+          obj->handle.value = dwg_next_handseed (dwg);
+          dwg_add_handle (&obj->handle, 0, obj->handle.value, obj);
+        }
+      if (obj->fixedtype == DWG_TYPE_REPEAT)
+        stack[depth++] = i;
+      else if (obj->fixedtype == DWG_TYPE_ENDREP)
+        {
+          if (!depth)
+            {
+              LOG_ERROR ("ENDREP without REPEAT");
+              error = DWG_ERR_INVALIDDWG;
+              goto done;
+            }
+          spans[count].first = stack[--depth];
+          spans[count++].last = i;
+        }
+    }
+  if (depth)
+    {
+      LOG_ERROR ("REPEAT without ENDREP");
+      error = DWG_ERR_INVALIDDWG;
+      goto done;
+    }
+  /* R1.x DXF output has no BLOCKS section. R2.10 supports arrayed INSERT. */
+  if (dat->version < R_2_0b)
+    {
+      LOG_WARN ("Upgrading DXF to R2.10 to preserve REPEAT arrays");
+      dat->version = dwg->header.version = R_2_10;
+    }
+  for (i = 0; i < count; i++)
+    {
+      BITCODE_BL first = spans[i].first, last = spans[i].last, j, out;
+      Dwg_Object *repeat = &dwg->object[first];
+      Dwg_Object *end = &dwg->object[last];
+      Dwg_Entity_ENDREP values;
+      Dwg_Object *owner;
+      Dwg_Object_BLOCK_HEADER *oldhdr, *newhdr;
+      Dwg_Object_Entity *ent;
+      BITCODE_RLL owner_handle, block_handle;
+      char name[32];
+      unsigned serial = first;
+      int err;
+      void *insert;
+      char *insert_name, *insert_dxfname;
+      BITCODE_H blockref;
+
+      if (!repeat->tio.entity || !end->tio.entity
+          || !end->tio.entity->tio.ENDREP)
+        {
+          error = DWG_ERR_INVALIDDWG;
+          goto done;
+        }
+      values = *end->tio.entity->tio.ENDREP;
+      ent = repeat->tio.entity;
+      owner_handle = ent->ownerhandle ? ent->ownerhandle->absolute_ref : 0;
+      owner = owner_handle ? dwg_resolve_handle (dwg, owner_handle)
+                           : dwg_model_space_object (dwg);
+      if (!owner || owner->fixedtype != DWG_TYPE_BLOCK_HEADER
+          || !owner->tio.object || !owner->tio.object->tio.BLOCK_HEADER)
+        {
+          error = DWG_ERR_INVALIDDWG;
+          goto done;
+        }
+      oldhdr = owner->tio.object->tio.BLOCK_HEADER;
+      owner_handle = owner->handle.value;
+      if (end->tio.entity->ownerhandle
+          && end->tio.entity->ownerhandle->absolute_ref
+          && end->tio.entity->ownerhandle->absolute_ref != owner_handle)
+        {
+          error = DWG_ERR_INVALIDDWG;
+          goto done;
+        }
+      do
+        snprintf (name, sizeof (name), "*U%u", serial++);
+      while (dwg_find_tablehandle_silent (dwg, name, "BLOCK"));
+      newhdr = dwg_add_BLOCK_HEADER (dwg, name);
+      if (!newhdr)
+        {
+          error = DWG_ERR_OUTOFMEM;
+          goto done;
+        }
+      newhdr->anonymous = 1;
+      newhdr->flag |= 1;
+      {
+        Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
+        if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.BLOCK_CONTROL)
+          dwg->block_control = *ctrl->tio.object->tio.BLOCK_CONTROL;
+      }
+      block_handle = dwg_obj_generic_handlevalue (newhdr);
+      if (!block_handle || !dwg_add_BLOCK (newhdr, name))
+        {
+          error = DWG_ERR_OUTOFMEM;
+          goto done;
+        }
+      /* dwg_add_BLOCK may have moved dwg->object. */
+      for (j = first + 1; j < last; j++)
+        {
+          Dwg_Object *child = &dwg->object[j];
+          Dwg_Object_Ref *ref;
+          if (child->supertype != DWG_SUPERTYPE_ENTITY || !child->tio.entity
+              || child->type == DWG_TYPE_FREED
+              || child->fixedtype == DWG_TYPE_JUMP
+              || dwg_obj_is_subentity (child))
+            continue;
+          ref = child->tio.entity->ownerhandle;
+          if (ref && ref->absolute_ref && ref->absolute_ref != owner_handle)
+            continue;
+          child->tio.entity->entmode = 0;
+          if (dwg_insert_entity (newhdr, child))
+            {
+              error = DWG_ERR_INVALIDDWG;
+              goto done;
+            }
+        }
+      if (!dwg_add_ENDBLK (newhdr))
+        {
+          error = DWG_ERR_OUTOFMEM;
+          goto done;
+        }
+      /* INSERT and MINSERT may have the same size, so allocate the larger. */
+      insert
+          = calloc (1, sizeof (Dwg_Entity_MINSERT) > sizeof (Dwg_Entity_INSERT)
+                           ? sizeof (Dwg_Entity_MINSERT)
+                           : sizeof (Dwg_Entity_INSERT));
+      insert_name
+          = dat->version < R_13b1 ? (char *)"INSERT" : (char *)"MINSERT";
+      if (dwg->opts & DWG_OPTS_INJSON)
+        insert_name = strdup (insert_name);
+      insert_dxfname
+          = (dwg->opts & DWG_OPTS_IN) ? strdup ("INSERT") : (char *)"INSERT";
+      blockref = dwg_add_handleref (dwg, 5, block_handle, NULL);
+      if (!insert || !insert_name || !insert_dxfname || !blockref)
+        {
+          free (insert);
+          if (dwg->opts & DWG_OPTS_INJSON)
+            free (insert_name);
+          if (dwg->opts & DWG_OPTS_IN)
+            free (insert_dxfname);
+          error = DWG_ERR_OUTOFMEM;
+          goto done;
+        }
+      repeat = &dwg->object[first];
+      ent = repeat->tio.entity;
+      if (dwg->opts & DWG_OPTS_IN)
+        free (repeat->dxfname);
+      if (dwg->opts & DWG_OPTS_INJSON)
+        free (repeat->name);
+      free (ent->tio.REPEAT);
+      repeat->name = insert_name;
+      repeat->dxfname = insert_dxfname;
+      if (dat->version < R_13b1)
+        {
+          Dwg_Entity_INSERT *ins = (Dwg_Entity_INSERT *)insert;
+          ent->tio.INSERT = ins;
+          ins->parent = ent;
+          ins->scale.x = ins->scale.y = ins->scale.z = 1.0;
+          ins->extrusion.z = 1.0;
+          ins->num_cols = values.numcols;
+          ins->num_rows = values.numrows;
+          ins->col_spacing = values.colspacing;
+          ins->row_spacing = values.rowspacing;
+          ins->block_header = blockref;
+          ent->opts_r11 = 16 | 32 | 64 | 128;
+          repeat->type = DWG_TYPE_INSERT_r11;
+          repeat->fixedtype = DWG_TYPE_INSERT;
+        }
+      else
+        {
+          Dwg_Entity_MINSERT *ins = (Dwg_Entity_MINSERT *)insert;
+          ent->tio.MINSERT = ins;
+          ins->parent = ent;
+          ins->scale.x = ins->scale.y = ins->scale.z = 1.0;
+          ins->extrusion.z = 1.0;
+          ins->num_cols = values.numcols;
+          ins->num_rows = values.numrows;
+          ins->col_spacing = values.colspacing;
+          ins->row_spacing = values.rowspacing;
+          ins->block_header = blockref;
+          repeat->type = repeat->fixedtype = DWG_TYPE_MINSERT;
+        }
+      /* Keep the INSERT in the original owner but remove its body and ENDREP.
+       */
+      for (j = out = 0; j < oldhdr->num_owned; j++)
+        {
+          Dwg_Object_Ref *ref = oldhdr->entities[j];
+          Dwg_Object *o = ref ? dwg_ref_object (dwg, ref) : NULL;
+          if (o
+              && (o->index == last
+                  || (o->index > first && o->index < last && o->tio.entity
+                      && o->tio.entity->ownerhandle
+                      && o->tio.entity->ownerhandle->absolute_ref
+                             == block_handle)))
+            continue;
+          oldhdr->entities[out++] = ref;
+        }
+      oldhdr->num_owned = out;
+      err = repeat_relink_block (dwg, oldhdr);
+      err |= repeat_relink_block (dwg, newhdr);
+      if (err)
+        {
+          error = DWG_ERR_INVALIDDWG;
+          goto done;
+        }
+      end = &dwg->object[last];
+      {
+        Dwg_Version_Type version = dwg->header.version;
+        dwg->header.version = dat->from_version;
+        dwg_free_object (end);
+        dwg->header.version = version;
+      }
+      dwg_resolve_objectrefs_silent (dwg);
+    }
+done:
+  free (spans);
+  free (stack);
+  return error;
+}
 
 // Duplicate a string for the TABLE cell text in the string flavour of the
 // source: TU (UCS-2) for r2007+ DWGs, else TV.
@@ -419,7 +724,7 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
     return;
   _obj->num_rowstyles = 3;
   data = (cs = tablestyle_find_cellstyle (_obj, 3)) ? &cs->cellstyle
-                                                     : &_obj->sty.cellstyle;
+                                                    : &_obj->sty.cellstyle;
   title = (cs = tablestyle_find_cellstyle (_obj, 1)) ? &cs->cellstyle : data;
   header = (cs = tablestyle_find_cellstyle (_obj, 2)) ? &cs->cellstyle : data;
   for (unsigned i = 0; i < 3; i++)
@@ -677,8 +982,7 @@ fix_mtext_hatch (Dwg_Data *restrict dwg)
             {
               Dwg_Entity_MTEXT *mt = _ent->tio.MTEXT;
               uint16_t *old = (BITCODE_TU)mt->text;
-              if (old
-                  && memchr (old, 0x0A, 2 * bit_wcs2len ((BITCODE_TU)old)))
+              if (old && memchr (old, 0x0A, 2 * bit_wcs2len ((BITCODE_TU)old)))
                 {
                   uint16_t *nw
                       = calloc (2 * bit_wcs2len ((BITCODE_TU)old) + 1, 2);

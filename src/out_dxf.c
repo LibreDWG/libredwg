@@ -479,8 +479,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     if (o && o->dxfname && strEQc (o->dxfname, #table))                           \
       {                                                                       \
         char *_name = o->tio.object->tio.table->name;                         \
-        if (!_name)                                                           \
-          fprintf (dat->fh, "%3i\r\n\r\n", dxf);                              \
+        if (!_name || !*_name)                                                \
+          fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, dxf == 8 ? "0" : "");       \
         else                                                                  \
           {                                                                   \
             if (strEQc (#table, "BLOCK_HEADER") && _name[0] == '*')           \
@@ -498,19 +498,19 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     else if (dat->from_version <= R_12)                                       \
       {                                                                       \
         char *name = dwg_handle_name ((Dwg_Data *)dwg, #table, ref);          \
-        if (name)                                                             \
-          {                                                                   \
-            fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);                    \
-            free (name);                                                      \
-          }                                                                   \
+        if (name && *name)                                                    \
+          fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);                      \
+        else if (dxf == 8)                                                    \
+          fprintf (dat->fh, "%3i\r\n0\r\n", dxf);                             \
         else if (dxf == 2 && strEQc (#nam, "DIMSTYLE"))                       \
           fprintf (dat->fh, "%3i\r\n*UNNAMED\r\n", dxf);                      \
         else                                                                  \
           fprintf (dat->fh, "%3i\r\n\r\n", dxf);                              \
+        free (name);                                                          \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        VALUE_TFF ("", dxf)                                                   \
+        VALUE_TFF ((dxf == 8 ? "0" : ""), dxf)                               \
       }                                                                       \
   }
 #define SUB_FIELD_HANDLE_NAME(ob, nam, dxf, table)                            \
@@ -3196,7 +3196,9 @@ decl_dxf_process_INSERT (ACIDBLOCKREFERENCE)
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
   minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
-  if (dat->version < R_13b1)
+  if (dat->version < R_13b1
+      || (dat->from_version < R_13b1
+          && obj->supertype == DWG_SUPERTYPE_ENTITY))
     {
       type = (unsigned int)obj->fixedtype;
       if (obj->type > 127)
@@ -3425,7 +3427,10 @@ decl_dxf_process_INSERT (ACIDBLOCKREFERENCE)
     case DWG_TYPE__3DLINE:
       return dwg_dxf__3DLINE (dat, obj);
     case DWG_TYPE_LOAD:
-      return dwg_dxf_LOAD (dat, obj);
+      (void)dwg_dxf_LOAD;
+      LOG_WARN ("LOAD cannot be represented in DXF; external SHX shape names "
+                "may be missing");
+      return 0;
     case DWG_TYPE_JUMP:
       return dwg_dxf_JUMP (dat, obj);
 
@@ -4289,7 +4294,7 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return DWG_ERR_INVALIDDWG;
 
   SECTION (ENTITIES);
-  if (dat->version < R_13b1)
+  if (dat->from_version < R_13b1)
     {
       // Pre-R13: iterate all objects in file order. SEQEND and VERTEX are
       // not in _hdr->entities[] but their owner is INSERT/POLYLINE, not ms/ps.
@@ -4577,11 +4582,16 @@ EXPORT int
 dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
+  int error;
+  bool repeat_blocks;
   // struct Dwg_Header *obj = &dwg->header;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
     dat->from_version = dwg->header.from_version;
+  error = upgrade_REPEAT (dwg, dat, &repeat_blocks);
+  if (error)
+    return error;
   // Pre-R2007 TV strings are stored in the source codepage; set dat->codepage
   // so the cquote path (VALUE_TV/TV0) can convert them to UTF-8 before
   // caret-quoting.  (GH #1496)
@@ -4603,7 +4613,7 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
   dxf_header_write (dat, dwg);
 
-  if (!minimal)
+  if (!minimal || repeat_blocks)
     {
       // if downgraded to r13, but we still have classes, keep the
       // classes

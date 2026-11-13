@@ -850,6 +850,9 @@ free_preR13_object (Dwg_Object *obj)
     case DWG_TYPE_INSERT:
       dwg_free_INSERT (dat, obj);
       break;
+    case DWG_TYPE_MINSERT:
+      dwg_free_MINSERT (dat, obj);
+      break;
     case DWG_TYPE_VERTEX_2D:
       dwg_free_VERTEX_2D (dat, obj);
       break;
