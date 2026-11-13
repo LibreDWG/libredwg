@@ -1842,14 +1842,16 @@ dxf_scan_modelspace_handle (const Bit_Chain *restrict dat)
       // the group code line
       while (p < chain_end && (*p == ' ' || *p == '\t'))
         p++;
-      while (p < chain_end && *p != '\n' && *p != '\r' && n < sizeof (code) - 1)
+      while (p < chain_end && *p != '\n' && *p != '\r'
+             && n < sizeof (code) - 1)
         code[n++] = (char)*p++;
       code[n] = '\0';
       while (p < chain_end && *p != '\n')
         p++;
       p++; // the \n
       // the value line
-      while (p < chain_end && *p != '\n' && *p != '\r' && m < sizeof (value) - 1)
+      while (p < chain_end && *p != '\n' && *p != '\r'
+             && m < sizeof (value) - 1)
         value[m++] = (char)*p++;
       value[m] = '\0';
       while (p < chain_end && *p != '\n')
@@ -4331,9 +4333,8 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (pair->code == 304 && strEQc (pair->value.s.ptr, "LEADER_LINE{"))
     {
       int i = (int)lnode->num_lines, j = -1, k = -1, line_finished = 0;
-      Dwg_LEADER_Line *lines
-          = (Dwg_LEADER_Line *)realloc (
-              lnode->lines, (lnode->num_lines + 1) * sizeof (Dwg_LEADER_Line));
+      Dwg_LEADER_Line *lines = (Dwg_LEADER_Line *)realloc (
+          lnode->lines, (lnode->num_lines + 1) * sizeof (Dwg_LEADER_Line));
       if (!lines)
         {
           LOG_ERROR ("MULTILEADER.node.lines");
@@ -8458,10 +8459,9 @@ add_embedded_MTEXT (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
                     int *restrict phase)
 {
   Dwg_Data *dwg = obj->parent;
-  Dwg_AcDbMTextObjectEmbedded *m
-      = obj->fixedtype == DWG_TYPE_ATTRIB
-            ? &obj->tio.entity->tio.ATTRIB->mtext
-            : &obj->tio.entity->tio.ATTDEF->mtext;
+  Dwg_AcDbMTextObjectEmbedded *m = obj->fixedtype == DWG_TYPE_ATTRIB
+                                       ? &obj->tio.entity->tio.ATTRIB->mtext
+                                       : &obj->tio.entity->tio.ATTDEF->mtext;
   if (*phase)
     {
       if (pair->code == 45)
@@ -10446,7 +10446,8 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
             {
               _o->tio.entity->ownerhandle->obj = NULL;
               _o->tio.entity->ownerhandle->absolute_ref = owner->handle.value;
-              _o->tio.entity->ownerhandle->handleref.value = owner->handle.value;
+              _o->tio.entity->ownerhandle->handleref.value
+                  = owner->handle.value;
             }
           else
             _o->tio.entity->ownerhandle
@@ -11085,7 +11086,7 @@ dxf_set_leader_context (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
 
 /* For tables, entities and objects.
  */
-static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
+static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
     char *restrict name, char *restrict dxfname, Bit_Chain *restrict dat,
     Dwg_Data *restrict dwg, BITCODE_BL ctrl_id, BITCODE_BL *i_p)
 {
@@ -11435,13 +11436,13 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
           LOG_TRACE ("ATTRIB.mtext_type = %d [RC 71]\n", pair->value.i);
           goto next_pair;
         }
-      // The embedded MTEXT of a multi-line ATTDEF/ATTRIB. Not the generic fields.
+      // The embedded MTEXT of a multi-line ATTDEF/ATTRIB. Not the generic
+      // fields.
       if (in_embedobj
           && (obj->fixedtype == DWG_TYPE_ATTRIB
               || obj->fixedtype == DWG_TYPE_ATTDEF)
-          && pair->code != 0 && pair->code != 101
-          && pair->code != 102 && pair->code != 330 && pair->code != 360
-          && pair->code < 1000)
+          && pair->code != 0 && pair->code != 101 && pair->code != 102
+          && pair->code != 330 && pair->code != 360 && pair->code < 1000)
         {
           add_embedded_MTEXT (obj, pair, &emb_phase);
           goto next_pair;
@@ -11508,8 +11509,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 }
               else if (sf_idx < 24)
                 {
-                  BITCODE_BD **mat = sf_idx < 12 ? &o->inverse_transform
-                                                 : &o->transform;
+                  BITCODE_BD **mat
+                      = sf_idx < 12 ? &o->inverse_transform : &o->transform;
                   if (!*mat)
                     *mat = (BITCODE_BD *)xcalloc (12, sizeof (BITCODE_BD));
                   if (!*mat)
@@ -13171,8 +13172,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   dwg_dynapi_entity_set_value (_obj, obj->name, "dataflags",
                                                &dataflags, 0);
                 }
-              else if (pair->code == 280
-                       && obj->fixedtype == DWG_TYPE_ATTRIB
+              else if (pair->code == 280 && obj->fixedtype == DWG_TYPE_ATTRIB
                        && strEQc (subclass, "AcDbAttribute"))
                 {
                   Dwg_Entity_ATTRIB *attrib = (Dwg_Entity_ATTRIB *)_obj;
@@ -14352,9 +14352,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                               && strEQc (f->type, "BLd")
                               && pair->value.i > 32767)
                             pair->value.i -= 65536;
-                          dwg_dynapi_entity_set_value (_obj, obj->name,
-                                                       f->name, &pair->value,
-                                                       1);
+                          dwg_dynapi_entity_set_value (
+                              _obj, obj->name, f->name, &pair->value, 1);
                         }
                       if (f->is_string)
                         {
@@ -15448,8 +15447,8 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
                   LOG_WARN ("Skipping failed table entry \"%s\", "
-                           "continuing\n",
-                           table);
+                            "continuing\n",
+                            table);
                   while ((pair = dxf_read_pair (dat)) && pair->code != 0)
                     dxf_free_pair (pair);
                   if (!pair)
@@ -15775,7 +15774,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
                   LOG_WARN ("Skipping failed object \"%s\", continuing\n",
-                           name);
+                            name);
                   while ((pair = dxf_read_pair (dat)) && pair->code != 0)
                     dxf_free_pair (pair);
                   if (!pair)
@@ -16174,12 +16173,13 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     {
                       if (ent->ownerhandle->absolute_ref == mspace)
                         ent->entmode = 2;
-                      else if (pspace && ent->ownerhandle->absolute_ref == pspace)
+                      else if (pspace
+                               && ent->ownerhandle->absolute_ref == pspace)
                         ent->entmode = 1;
                       else if (dwg->header.from_version < R_13b1)
                         {
-                          // SEQEND/VERTEX: owner is INSERT/POLYLINE, not mspace.
-                          // Inherit entmode from the parent entity.
+                          // SEQEND/VERTEX: owner is INSERT/POLYLINE, not
+                          // mspace. Inherit entmode from the parent entity.
                           Dwg_Object *owner_obj = dwg_resolve_handle (
                               dwg, ent->ownerhandle->absolute_ref);
                           if (owner_obj && owner_obj->tio.entity)
@@ -16423,8 +16423,8 @@ dxf_acds_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_acds_record (dwg, handle, schidx, data, written);
               data = NULL;
             }
-          in_record = pair->value.s.ptr
-                      && strEQc (pair->value.s.ptr, "ACDSRECORD");
+          in_record
+              = pair->value.s.ptr && strEQc (pair->value.s.ptr, "ACDSRECORD");
           schidx = 0;
           handle = 0;
           size = written = 0;
