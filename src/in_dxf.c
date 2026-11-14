@@ -92,6 +92,75 @@ static array_hdls *obj_hdls = NULL;
 // static long size_dxf_objs; // how many elements are allocated
 // static Dxf_Objs *dxf_objs;
 
+/* The dynapi setters copy f->size bytes from the value. The DXF integers are
+   stored in the pair as int, long or 64bit, so on a big-endian host the
+   first bytes are the wrong ones for a 1 or 2 byte field. Narrow it. */
+#ifdef WORDS_BIGENDIAN
+static const void *
+dxf_val (Dxf_Pair *restrict pair, const size_t size)
+{
+  static union
+  {
+    uint8_t c;
+    uint16_t s;
+    uint32_t l;
+    uint64_t ll;
+  } u;
+  uint64_t v;
+  if (!size)
+    return &pair->value;
+  switch (pair->type)
+    {
+    case DWG_VT_INT64:
+      v = pair->value.rll;
+      break;
+    case DWG_VT_INT32:
+      v = (uint64_t)(int64_t)pair->value.l;
+      break;
+    case DWG_VT_BOOL:
+    case DWG_VT_INT8:
+    case DWG_VT_INT16:
+      v = (uint64_t)(int64_t)pair->value.i;
+      break;
+    default:
+      return &pair->value;
+    }
+  if (size == 1)
+    {
+      u.c = (uint8_t)v;
+      return &u.c;
+    }
+  if (size == 2)
+    {
+      u.s = (uint16_t)v;
+      return &u.s;
+    }
+  if (size == 4)
+    {
+      u.l = (uint32_t)v;
+      return &u.l;
+    }
+  u.ll = v;
+  return &u.ll;
+}
+static size_t
+dxf_fsize (const char *name, const char *field)
+{
+  const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (name, field);
+  return f && !f->is_malloc ? f->size : 0;
+}
+static size_t
+dxf_subsize (const char *subclass, const char *field)
+{
+  const Dwg_DYNAPI_field *f = dwg_dynapi_subclass_field (subclass, field);
+  return f && !f->is_malloc ? f->size : 0;
+}
+#else
+#  define dxf_val(pair, size) ((const void *)&(pair)->value)
+#  define dxf_fsize(name, field) 0
+#  define dxf_subsize(subclass, field) 0
+#endif
+
 #define EXPECT_DXF(nam, field, dxf)                                           \
   if (pair == NULL || pair->code != dxf)                                      \
     {                                                                         \
@@ -101,7 +170,9 @@ static array_hdls *obj_hdls = NULL;
     }
 #define EXPECT_INT_DXF(field, dxf, _type)                                     \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
-  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
+  dwg_dynapi_entity_set_value (o, obj->name, field,                           \
+                               dxf_val (pair, dxf_fsize (obj->name, field)),  \
+                               1);                                            \
   LOG_TRACE ("%s.%s = %d [" #_type " %d]\n", obj->name, field, pair->value.i, \
              pair->code);                                                     \
   dxf_free_pair (pair);                                                       \
@@ -114,7 +185,9 @@ static array_hdls *obj_hdls = NULL;
                  pair ? pair->value.l : 0, #field, dxf);                      \
       return pair;                                                            \
     }                                                                         \
-  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
+  dwg_dynapi_entity_set_value (o, obj->name, field,                           \
+                               dxf_val (pair, dxf_fsize (obj->name, field)),  \
+                               1);                                            \
   LOG_TRACE ("%s.%s = %d [" #_type " %d]\n", obj->name, field, pair->value.i, \
              pair->code);                                                     \
   dxf_free_pair (pair);                                                       \
@@ -151,7 +224,9 @@ static array_hdls *obj_hdls = NULL;
 #define SUB_FIELD_VALUE(sub, nam) o->sub.nam
 #define EXPECT_SUB_INT_DXF(sub, field, dxf, _type)                            \
   EXPECT_DXF (obj->name, field, dxf);                                         \
-  dwg_dynapi_subclass_set_value (dwg, o, f->type, field, &pair->value, 1);    \
+  dwg_dynapi_subclass_set_value (dwg, o, f->type, field,                      \
+                                 dxf_val (pair, dxf_subsize (f->type, field)),\
+                                 1);                                          \
   LOG_TRACE ("%s.%s.%s = %d [" #_type " %d]\n", obj->name, sub, field,        \
              pair->value.i, pair->code);                                      \
   dxf_free_pair (pair);                                                       \
@@ -1746,7 +1821,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], f->type,
                          pair->code);
-              dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, 1);
+              dwg_dynapi_header_set_value (
+                  dwg, &field[1], dxf_val (pair, f->is_malloc ? 0 : f->size),
+                  1);
             }
         }
       else
@@ -11615,7 +11692,7 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                     Dwg_Object_BLOCK_CONTROL *_ctrl
                         = dwg->object[ctrl_id].tio.object->tio.BLOCK_CONTROL;
                     BITCODE_H *hdls = NULL;
-                    BITCODE_BL num_entries = 0;
+                    BITCODE_BS num_entries = 0; /* dynapi, the field type */
 
                     if ((int)i < 0)
                       i = 0;
@@ -13447,7 +13524,9 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                   = dwg_dynapi_entity_field (obj->name, _key);
               if (!f1)
                 goto search_field;
-              dwg_dynapi_field_set_value (dwg, _obj, f1, &pair->value, 0);
+              dwg_dynapi_field_set_value (
+                  dwg, _obj, f1, dxf_val (pair, f1->is_malloc ? 0 : f1->size),
+                  0);
               LOG_TRACE ("%s.%s = %u [BL %d]\n", name, _key, pair->value.u,
                          pair->code);
             }
@@ -14342,7 +14421,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                             }
                           else
                             dwg_dynapi_entity_set_value (
-                                _obj, obj->name, f->name, &pair->value, 1);
+                                _obj, obj->name, f->name,
+                                dxf_val (pair, f->is_malloc ? 0 : f->size), 1);
                         }
                       else
                         {
@@ -14353,7 +14433,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                               && pair->value.i > 32767)
                             pair->value.i -= 65536;
                           dwg_dynapi_entity_set_value (
-                              _obj, obj->name, f->name, &pair->value, 1);
+                              _obj, obj->name, f->name,
+                              dxf_val (pair, f->is_malloc ? 0 : f->size), 1);
                         }
                       if (f->is_string)
                         {
@@ -14801,7 +14882,7 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                           else
                             {
                               dwg_dynapi_common_set_value (_obj, f->name,
-                                                           &pair->value, 1);
+                                                           dxf_val (pair, f->is_malloc ? 0 : f->size), 1);
                             }
                           if (f->is_string || f->type[0] == 'T')
                             {
@@ -16547,7 +16628,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
   for (i = 0; i < header_hdls->nitems; i++)
     {
       char *field = header_hdls->items[i].field;
-      Dxf_Pair p = { 0, DWG_VT_STRING, { 0 } };
+      Dxf_Pair p = { .code = 0, .type = DWG_VT_STRING };
       BITCODE_H hdl = NULL;
       p.value.s.ptr = header_hdls->items[i].name;
       if (!p.value.s.ptr || !*p.value.s.ptr)
@@ -16600,7 +16681,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
   for (i = 0; i < obj_hdls->nitems; i++)
     {
       char *field = obj_hdls->items[i].field;
-      Dxf_Pair p = { 0, DWG_VT_STRING, { 0 } };
+      Dxf_Pair p = { .code = 0, .type = DWG_VT_STRING };
       BITCODE_H hdl = NULL;
       int objid = obj_hdls->items[i].code;
       Dwg_Object *obj = &dwg->object[objid];

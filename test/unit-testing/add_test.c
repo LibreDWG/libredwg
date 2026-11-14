@@ -1569,13 +1569,29 @@ test_names (void)
           "QUOTATION MARK");
   if (!dwg_is_valid_name_u8 (dwg, "δ")) // 0xe4
     fail ("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA ANSI_1253/r2007");
+  /* The TU strings are UTF-16 in the byte order of the host. */
+#ifdef WORDS_BIGENDIAN
+#  define TU_BB "\x00\xbb\x00\x00"
+#  define TU_DD "\x00\xdd\x00\x00"
+#  define TU_0 "\x00" "0\x00\x00"
+#  define TU_B "\x00" "B\x00\x00"
+#  define TU_8141 "\x81\x41\x00\x00"
+#  define TU_A3C1 "\xa3\xc1\x00\x00"
+#else
+#  define TU_BB "\xbb\x00\x00"
+#  define TU_DD "\xdd\x00\x00"
+#  define TU_0 "0\x00\x00"
+#  define TU_B "B\x00\x00"
+#  define TU_8141 "\x41\x81\x00"
+#  define TU_A3C1 "\xc1\xa3\x00"
+#endif
   // asis as in the CP949 codepage
-  if (dwg_is_valid_name (dwg, "\xbb\x00\x00"))
+  if (dwg_is_valid_name (dwg, TU_BB))
     fail ("!dwg_is_valid_name(BB) U+00BB RIGHT-POINTING DOUBLE ANGLE "
           "QUOTATION MARK");
-  if (!dwg_is_valid_name (dwg, "\xdd\x00\x00"))
+  if (!dwg_is_valid_name (dwg, TU_DD))
     fail ("dwg_is_valid_name(E4) U+03B4 SMALL LETTER DELTA ANSI_1253/r2007");
-  if (!dwg_is_valid_name (dwg, "0\x00\x00"))
+  if (!dwg_is_valid_name (dwg, TU_0))
     fail ("dwg_is_valid_name (L\"0\") ANSI_1253/r2007");
 
   dwg->header.codepage = CP_ANSI_949; // multibyte korean
@@ -1586,14 +1602,14 @@ test_names (void)
   if (!dwg_is_valid_name_u8 (dwg, "Ａ"))
     fail ("dwg_is_valid_name_u8(Ａ) U+FF21 LETTER at A3C1");
   // asis as in the CP949 codepage
-  if (!dwg_is_valid_name (dwg, "B\x00\x00")) // LATIN CAPITAL LETTER A
+  if (!dwg_is_valid_name (dwg, TU_B)) // LATIN CAPITAL LETTER A
     fail ("dwg_is_valid_name(42) LETTER B ANSI_949/r2007");
   if (dwg_is_valid_name (
-          dwg, "\x41\x81\x00")) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
+          dwg, TU_8141)) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
     fail ("!dwg_is_valid_name(8141) U+AC02 SYLLABLE");
-  if (!dwg_is_valid_name (dwg, "\xc1\xa3\x00"))
+  if (!dwg_is_valid_name (dwg, TU_A3C1))
     fail ("dwg_is_valid_name(A3C1) U+FF21 LETTER ANSI_949/r2007");
-  if (!dwg_is_valid_name (dwg, "0\x00\x00"))
+  if (!dwg_is_valid_name (dwg, TU_0))
     fail ("dwg_is_valid_name (\"0\") ANSI_949/r2007");
 
   dwg_free (dwg);

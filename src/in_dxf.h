@@ -59,8 +59,24 @@ typedef struct _dxf_pair
   enum RESBUF_VALUE_TYPE type;
   union // must be big enough for setting BD
   {
+    /* The int, unsigned and long views must be the same number. On a
+       big-endian host with a 64bit long the low 32bit of the long are the
+       last 4 bytes, so put the int views there too. */
+#if defined WORDS_BIGENDIAN && defined __SIZEOF_LONG__ && __SIZEOF_LONG__ == 8
+    struct
+    {
+      int _pad_u;
+      unsigned int u;
+    };
+    struct
+    {
+      int _pad_i;
+      int i;
+    };
+#else
     unsigned int u;
     int i;
+#endif
     struct
     {
       char *ptr;

@@ -1924,11 +1924,8 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_BT %f", dbl);
 
-#ifndef WORDS_BIGENDIAN
-#  define _CRC 0x141C
-#else
-#  define _CRC 0xDC89
-#endif
+/* the bits written before are independent of the host byte order */
+#define _CRC 0x141C
 
   bit_advance_position (&bitchain, -2L);
   {

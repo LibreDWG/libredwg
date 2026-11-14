@@ -60,6 +60,33 @@ typedef struct jsmntokens
   long num_tokens;
 } jsmntokens_t;
 
+/* The dynapi setters copy f->size bytes from the value. Give them an integer
+   of the size of the field, else a big-endian host copies the wrong bytes of
+   a uint32_t. */
+typedef union
+{
+  uint8_t c;
+  uint16_t s;
+  uint32_t l;
+} json_uint_t;
+
+static const void *
+json_uint_ptr (json_uint_t *restrict u, const uint32_t num, const size_t size)
+{
+  if (size == 1)
+    {
+      u->c = (uint8_t)num;
+      return &u->c;
+    }
+  if (size == 2)
+    {
+      u->s = (uint16_t)num;
+      return &u->s;
+    }
+  u->l = num;
+  return &u->l;
+}
+
 // synced with enum jsmntype_t
 static const char *const t_typename[]
     = { "UNDEFINED", "OBJECT", "ARRAY", "STRING", "PRIMITIVE" };
@@ -1268,7 +1295,11 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         {
           uint32_t num = json_long (dat, tokens);
           LOG_TRACE ("%s: " FORMAT_BL " [%s]\n", key, num, f->type);
-          dwg_dynapi_header_set_value (dwg, key, &num, 0);
+          {
+            json_uint_t u;
+            dwg_dynapi_header_set_value (dwg, key,
+                                         json_uint_ptr (&u, num, f->size), 0);
+          }
         }
       else if (t->type == JSMN_PRIMITIVE && f->size == 8 // not a RLL[]
                && (strEQc (f->type, "RLL") || strEQc (f->type, "BLL")))
@@ -2685,7 +2716,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                                  name, num, dat->size);
                       num = 0;
                     }
-                  dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+                  {
+                    json_uint_t u;
+                    dwg_dynapi_field_set_value (
+                        dwg, _obj, f, json_uint_ptr (&u, num, f->size), 0);
+                  }
                   if (strEQc (name, "JUMP") && strEQc (key, "jump_address_raw"))
                     {
                       json_fixup_JUMP ((Dwg_Entity_JUMP *)_obj);

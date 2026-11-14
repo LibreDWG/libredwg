@@ -739,19 +739,9 @@ bit_read_BLL (Bit_Chain *dat)
     default:
       CHK_OVERFLOW_PLUS (len, __FUNCTION__, 0)
       // least significant byte first
-#if 1
-      for (i = 0; i < 8; i++)
-        {
-          result <<= 8; // fill all 8 bytes for the swap
-          if (i < len)
-            result |= bit_read_RC (dat); // but read only len
-        }
-      return be64toh (result);
-#else
-      for (i = 0; i < len; i++)
-        result += bit_read_RC (dat) << i * 8;
+      for (i = 0; i < len && i < 8; i++)
+        result |= (BITCODE_BLL)bit_read_RC (dat) << (8 * i);
       return result;
-#endif
     }
 }
 
@@ -1227,7 +1217,7 @@ BITCODE_DD
 bit_read_DD (Bit_Chain *dat, double default_value)
 {
   unsigned char two_bit_code;
-  unsigned char *uchar_result;
+  uint64_t u;
 
   two_bit_code = bit_read_BB (dat);
   if (two_bit_code == 0)
@@ -1236,48 +1226,36 @@ bit_read_DD (Bit_Chain *dat, double default_value)
     }
   if (two_bit_code == 3)
     return bit_read_RD (dat);
+  /* Work on the numeric value of the IEEE double, so that the result is the
+     same on little- and big-endian hosts. byte 0 is the least significant
+     one. */
+  memcpy (&u, &default_value, 8);
   if (two_bit_code == 2)
     {
-      // dbl: 7654 3210
-      uchar_result = (unsigned char *)&default_value;
+      // first 2 bytes (6-7) eq, the rest not: 4,5, then 0-3
+      static const int order[6] = { 4, 5, 0, 1, 2, 3 };
       CHK_OVERFLOW_PLUS (6, __FUNCTION__, bit_nan ())
-#ifdef WORDS_BIGENDIAN
-      uchar_result[7] = bit_read_RC (dat);
-      uchar_result[6] = bit_read_RC (dat);
-      uchar_result[5] = bit_read_RC (dat);
-      uchar_result[4] = bit_read_RC (dat);
-      uchar_result[3] = bit_read_RC (dat);
-      uchar_result[2] = bit_read_RC (dat);
-      // keep the first 2 bytes
-#else
-      // first 2 bytes eq (6-7), the rest not (0-5)
-      uchar_result[4] = bit_read_RC (dat);
-      uchar_result[5] = bit_read_RC (dat);
-      uchar_result[0] = bit_read_RC (dat);
-      uchar_result[1] = bit_read_RC (dat);
-      uchar_result[2] = bit_read_RC (dat);
-      uchar_result[3] = bit_read_RC (dat);
-#endif
-      return default_value;
+      for (int i = 0; i < 6; i++)
+        {
+          const int shift = 8 * order[i];
+          u = (u & ~(UINT64_C (0xFF) << shift))
+              | ((uint64_t)bit_read_RC (dat) << shift);
+        }
     }
   else /* if (two_bit_code == 1) */
     {
-      // first 4bits eq, only last 4
-#ifdef WORDS_BIGENDIAN
-      uint32_t *result = (uint32_t *)&default_value;
+      // first 4 bytes eq, only the last 4
       CHK_OVERFLOW_PLUS (4, __FUNCTION__, bit_nan ())
-      *result = bit_read_RL (dat);
-#else
-      uchar_result = (unsigned char *)&default_value;
-      CHK_OVERFLOW_PLUS (4, __FUNCTION__, bit_nan ())
-      uchar_result[0] = bit_read_RC (dat);
-      uchar_result[1] = bit_read_RC (dat);
-      uchar_result[2] = bit_read_RC (dat);
-      uchar_result[3] = bit_read_RC (dat);
-#endif
+      for (int i = 0; i < 4; i++)
+        {
+          const int shift = 8 * i;
+          u = (u & ~(UINT64_C (0xFF) << shift))
+              | ((uint64_t)bit_read_RC (dat) << shift);
+        }
       CHK_OVERFLOW (__FUNCTION__, bit_nan ())
-      return default_value;
     }
+  memcpy (&default_value, &u, 8);
+  return default_value;
 }
 
 int
@@ -1297,55 +1275,30 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
     bit_write_BB (dat, 0);
   else
     {
-      const unsigned char *uchar_value = (const unsigned char *)&value;
-      const unsigned char *uchar_default
-          = (const unsigned char *)&default_value;
-      // reinterpret the double's own storage as 16-bit words, not the
-      // address of the local uchar_value/uchar_default pointer variables
-      const uint16_t *uint_value = (const uint16_t *)uchar_value;
-      const uint16_t *uint_default = (const uint16_t *)uchar_default;
-      // dbl: 7654 3210, little-endian only
-      // bit_read_DD keeps the HIGH-order word(s) of the default_value,
-      // so mode selection must compare those, highest word first
-      if (le16toh (uint_value[3]) == le16toh (uint_default[3]))
+      /* Work on the numeric value of the IEEE double, so that the result is
+         the same on little- and big-endian hosts. byte 0 is the least
+         significant one. */
+      uint64_t uv, ud;
+      memcpy (&uv, &value, 8);
+      memcpy (&ud, &default_value, 8);
+      /* bit_read_DD keeps the HIGH-order bytes of the default_value, so the
+         mode selection compares those, the highest first */
+      if ((uv >> 48) == (ud >> 48))
         {
-          // top word also eq at the next-highest word: high 4 bytes eq
-          // cppcheck-suppress objectIndex
-          if (le16toh (uint_value[2]) == le16toh (uint_default[2]))
+          if (((uv >> 32) & 0xFFFF) == ((ud >> 32) & 0xFFFF))
             {
               bits = 1;
               bit_write_BB (dat, 1);
-#ifdef WORDS_BIGENDIAN
-              bit_write_RC (dat, uchar_value[3]);
-              bit_write_RC (dat, uchar_value[2]);
-              bit_write_RC (dat, uchar_value[1]);
-              bit_write_RC (dat, uchar_value[0]);
-#else
-              bit_write_RC (dat, uchar_value[0]);
-              bit_write_RC (dat, uchar_value[1]);
-              bit_write_RC (dat, uchar_value[2]);
-              bit_write_RC (dat, uchar_value[3]);
-#endif
+              for (int i = 0; i < 4; i++)
+                bit_write_RC (dat, (BITCODE_RC) (uv >> (8 * i)));
             }
           else
             {
+              static const int order[6] = { 4, 5, 0, 1, 2, 3 };
               bits = 2;
               bit_write_BB (dat, 2);
-#ifdef WORDS_BIGENDIAN
-              bit_write_RC (dat, uchar_value[5]);
-              bit_write_RC (dat, uchar_value[4]);
-              bit_write_RC (dat, uchar_value[3]);
-              bit_write_RC (dat, uchar_value[2]);
-              bit_write_RC (dat, uchar_value[1]);
-              bit_write_RC (dat, uchar_value[0]);
-#else
-              bit_write_RC (dat, uchar_value[4]);
-              bit_write_RC (dat, uchar_value[5]);
-              bit_write_RC (dat, uchar_value[0]);
-              bit_write_RC (dat, uchar_value[1]);
-              bit_write_RC (dat, uchar_value[2]);
-              bit_write_RC (dat, uchar_value[3]);
-#endif
+              for (int i = 0; i < 6; i++)
+                bit_write_RC (dat, (BITCODE_RC) (uv >> (8 * order[i])));
             }
         }
       else
@@ -1441,7 +1394,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   */
   for (int i = 0; i < handle->size; i++)
     u.v = (u.v << 8) | bit_read_RC (dat);
-  handle->value = htole64 (u.v);
+  handle->value = u.v; /* already the numeric value, no swap */
   return 0;
 }
 
@@ -1508,10 +1461,8 @@ bit_H_to_dat (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     bit_write_RLL_BE (dat, handle->value);
   else if (handle->size < 8)
     {
-      BITCODE_RC *restrict str;
-      str = (BITCODE_RC *)&(handle->value);
       for (int i = handle->size - 1; i >= 0; i--)
-        bit_write_RC (dat, str[i]);
+        bit_write_RC (dat, (BITCODE_RC) (handle->value >> (8 * i)));
     }
   else
     {

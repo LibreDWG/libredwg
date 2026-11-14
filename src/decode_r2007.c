@@ -1001,6 +1001,18 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
         section->name
             = (DWGCHAR *)calloc (1, section->name_length > 0 ? sz + 2 : 2);
         bit_read_fixed (&page, (BITCODE_RC *)section->name, sz);
+#ifdef WORDS_BIGENDIAN
+        /* the name is UTF-16LE, swap each 16-bit unit to the native order */
+        {
+          BITCODE_RC *b = (BITCODE_RC *)section->name;
+          for (size_t k = 0; k + 1 < sz; k += 2)
+            {
+              const BITCODE_RC t = b[k];
+              b[k] = b[k + 1];
+              b[k + 1] = t;
+            }
+        }
+#endif
       }
 #ifdef HAVE_NATIVE_WCHAR2
       LOG_TRACE ("  name:          " FORMAT_TU, (BITCODE_TU)section->name);

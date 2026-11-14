@@ -78,6 +78,11 @@ Minor bugfixes / fuzzing fixes:
     bulges, widths and closed flag, MTEXT, ELLIPSE, SPLINE, ... are skipped
     with a warning.  Strings written to r2000 from a pre-R13 source used
     the 16-bit r11 length.  GH #1386.
+  * Fixed big-endian hosts (s390x, ppc64).  Handles, bit-doubles with
+    default (DD), bit-longlongs, the r2007 section names, the size of
+    handles and the integers set via dynapi from DXF and JSON were read
+    and written with the wrong byte order, so most r2007+ DWGs, DXFs and
+    JSONs were not readable.  All tests pass on s390x now.
   * Fixed large R2007+ string streams, APPID table counts above 255, and
     R2000+ LEADER and MULTILEADER binary fields.
   * Fixed extended object type encoding and opaque object sizes in JSON

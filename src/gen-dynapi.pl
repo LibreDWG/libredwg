@@ -3447,12 +3447,16 @@ dwg_dynapi_common_value(void *restrict _obj, const char *restrict fieldname,
     if (f)
       {
         int size = f->size;
+        size_t off = f->offset;
         if (fp)
           memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
         if (f->dxf == 160 && strEQc (fieldname, "preview_size")
             && obj->parent->header.version < R_2010)
           size = 4;
-        memcpy (out, &((char *)_obj)[f->offset], size);
+#ifdef WORDS_BIGENDIAN
+        off += f->size - size; /* the low bytes of the BLL are the last */
+#endif
+        memcpy (out, &((char *)_obj)[off], size);
         return true;
       }
     else
@@ -3820,9 +3824,13 @@ dwg_dynapi_common_set_value (void *restrict _obj,
     if (f->dxf == 160 && strEQc (fieldname, "preview_size"))
       {
         int size = f->size;
+        size_t off = 0;
         if (dwg && dwg->header.version < R_2010)
           size = 4;
-        memcpy (old, value, size);
+#ifdef WORDS_BIGENDIAN
+        off = f->size - size; /* the low bytes of the BLL are the last */
+#endif
+        memcpy ((char *)old + off, value, size);
       }
     else
       dynapi_set_helper (old, f, dwg, value, is_utf8);

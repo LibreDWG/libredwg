@@ -2358,20 +2358,11 @@ dwg_set_handle_size (Dwg_Handle *restrict hdl)
   if (hdl->value)
     {
       int i;
-      unsigned char *val;
-      memset (&val, 0, sizeof (val));
-      val = (unsigned char *)&hdl->value;
-#ifdef WORDS_BIGENDIAN
-      // the first NULL
-      for (i = 0; i < (int)sizeof (hdl->value); i++)
-        if (!val[i])
+      /* the number of bytes of the numeric value, independent of the host
+         byte order: up to the last non-null (most significant) byte */
+      for (i = (int)sizeof (hdl->value) - 1; i >= 0; i--)
+        if ((hdl->value >> (8 * i)) & 0xFF)
           break;
-#else
-      // vs. the last non-null
-      for (i = sizeof (hdl->value) - 1; i >= 0; i--)
-        if (val[i])
-          break;
-#endif
       hdl->size = i + 1;
       // printf("handle_size %lu => %u\n", hdl->value, hdl->size);
     }
@@ -2978,7 +2969,8 @@ EXPORT BITCODE_H
 dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                       const char *restrict table)
 {
-  BITCODE_BL i, num_entries = 0;
+  BITCODE_BL i;
+  BITCODE_BS num_entries = 0; /* read via dynapi, must have the field type */
   BITCODE_H ctrl = NULL, *hdlv = NULL;
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
@@ -3136,7 +3128,7 @@ EXPORT BITCODE_H
 dwg_find_tablehandle_index (Dwg_Data *restrict dwg, const int index,
                             const char *restrict table)
 {
-  BITCODE_BL num_entries = 0;
+  BITCODE_BS num_entries = 0; /* read via dynapi, must have the field type */
   BITCODE_H ctrl = NULL, *hdlv = NULL;
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
@@ -3223,7 +3215,8 @@ EXPORT char *
 dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
                  const BITCODE_H restrict handle)
 {
-  BITCODE_BL i, num_entries = 0;
+  BITCODE_BL i;
+  BITCODE_BS num_entries = 0; /* read via dynapi, must have the field type */
   BITCODE_H ctrl = NULL, *hdlv = NULL;
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
