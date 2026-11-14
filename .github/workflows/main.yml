@@ -144,7 +144,6 @@ jobs:
     - run: make -j
     - run: cd /lib64 && sudo ln -s /usr/powerpc64-linux-gnu/lib/ld64.so.1
     - run: make -j check-minimal
-      continue-on-error: true
   s390x-big-endian:
     runs-on: ubuntu-latest
     timeout-minutes: 30
