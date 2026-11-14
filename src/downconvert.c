@@ -1576,3 +1576,43 @@ downconvert_LWPOLYLINE (Dwg_Data *restrict dwg)
     }
   return error;
 }
+
+/* R13-R2000 DWGs only have the entity chain, not the BLOCK_HEADER.entities
+   list which the pre-R13 DXF output walks. Build it from the chain, without
+   the sub-entities (VERTEX, ATTRIB) and SEQEND. */
+int
+fill_owned_entities (Dwg_Data *restrict dwg)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      Dwg_Object_BLOCK_HEADER *hdr;
+      Dwg_Object *o;
+      BITCODE_BL steps = 0;
+      if (obj->fixedtype != DWG_TYPE_BLOCK_HEADER || !obj->tio.object
+          || !(hdr = obj->tio.object->tio.BLOCK_HEADER) || hdr->num_owned
+          || hdr->entities || !hdr->first_entity || !hdr->last_entity
+          || !hdr->last_entity->absolute_ref)
+        continue;
+      o = dwg_ref_object (dwg, hdr->first_entity);
+      while (o && o->supertype == DWG_SUPERTYPE_ENTITY && o->tio.entity
+             && steps++ <= dwg->num_objects)
+        {
+          if (!is_attrib_vertex (o->fixedtype)
+              && o->fixedtype != DWG_TYPE_SEQEND)
+            {
+              BITCODE_H *tmp = (BITCODE_H *)realloc (
+                  hdr->entities, (hdr->num_owned + 1) * sizeof (BITCODE_H));
+              if (!tmp)
+                return DWG_ERR_OUTOFMEM;
+              hdr->entities = tmp;
+              hdr->entities[hdr->num_owned++]
+                  = dwg_add_handleref (dwg, 4, o->handle.value, NULL);
+            }
+          if (o->handle.value == hdr->last_entity->absolute_ref)
+            break;
+          o = dwg_next_entity (o);
+        }
+    }
+  return 0;
+}

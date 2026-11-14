@@ -1338,6 +1338,73 @@ test_lwpolyline_to_preR13 (void)
     ok ("lwpolyline_preR13: LWPOLYLINE written as POLYLINE");
   return numfailed ();
 }
+
+/* The same for the R12 DXF output: a POLYLINE with VERTEXes and SEQEND at the
+   position of the LWPOLYLINE, followed by the LINE. */
+static int
+test_lwpolyline_to_preR13_dxf (void)
+{
+  const dwg_point_2d pts[] = { { 0.0, 0.0 }, { 1.0, 2.0 }, { 3.0, 1.0 } };
+  const dwg_point_3d a = { 5.0, 5.0, 0.0 }, b = { 6.0, 6.0, 0.0 };
+  Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+  Bit_Chain dat = { 0 };
+  Dwg_Object *mspace;
+  char code[128], line[128], entity[32] = "", order[64] = "";
+  int error, polylines = 0, vertices = 0, seqends = 0, lw = 0;
+  FILE *fh = tmpfile ();
+
+  failed = 0;
+  if (!dwg || !fh)
+    {
+      fail ("lwpolyline_preR13_dxf: cannot create drawing or file");
+      return 1;
+    }
+  mspace = dwg_model_space_object (dwg);
+  dwg_add_LWPOLYLINE (mspace->tio.object->tio.BLOCK_HEADER, 3, pts);
+  dwg_add_LINE (mspace->tio.object->tio.BLOCK_HEADER, &a, &b);
+  dwg->header.from_version = R_2000;
+  dwg->header.version = R_12;
+  dat.fh = fh;
+  dat.from_version = R_2000;
+  dat.version = R_12;
+  dat.opts = dwg->opts;
+  error = dwg_write_dxf (&dat, dwg);
+  dwg->header.version = R_2000;
+  dwg_free (dwg);
+  free (dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("lwpolyline_preR13_dxf: dwg_write_dxf 0x%x", error);
+  rewind (fh);
+  while (fgets (code, sizeof (code), fh) && fgets (line, sizeof (line), fh))
+    {
+      /* pairs of the group code line and the value line */
+      if (atoi (code) == 0)
+        {
+          line[strcspn (line, "\r\n")] = '\0';
+          strncpy (entity, line, sizeof (entity) - 1);
+          if (!strcmp (entity, "LWPOLYLINE"))
+            lw++;
+          else if (!strcmp (entity, "POLYLINE"))
+            polylines++;
+          else if (!strcmp (entity, "VERTEX"))
+            vertices++;
+          else if (!strcmp (entity, "SEQEND"))
+            seqends++;
+          if (strlen (order) < sizeof (order) - 2
+              && (!strcmp (entity, "POLYLINE") || !strcmp (entity, "LINE")))
+            strcat (order, !strcmp (entity, "LINE") ? "L" : "P");
+        }
+    }
+  fclose (fh);
+  if (lw || polylines != 1 || vertices != 3 || seqends != 1
+      || strcmp (order, "PL"))
+    fail ("lwpolyline_preR13_dxf: %d LWPOLYLINE, %d POLYLINE, %d VERTEX, "
+          "%d SEQEND, order %s, expected 0, 1, 3, 1, PL",
+          lw, polylines, vertices, seqends, order);
+  if (!numfailed ())
+    ok ("lwpolyline_preR13_dxf: LWPOLYLINE written as POLYLINE");
+  return numfailed ();
+}
 #endif
 
 #if !defined(_WIN32) && !defined(DISABLE_DXF)
@@ -3053,6 +3120,7 @@ main (int argc, char *argv[])
   error += test_attrib_lock_flags ();
   error += test_preR13_dxf_blocks_to_r2000 ();
   error += test_lwpolyline_to_preR13 ();
+  error += test_lwpolyline_to_preR13_dxf ();
   error += test_multileader_vertices ();
   error += test_repeat_dxf (R_2_10, 0);
   error += test_repeat_dxf (R_2000, 0);

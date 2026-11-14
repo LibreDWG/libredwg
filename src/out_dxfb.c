@@ -2724,6 +2724,15 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error = upgrade_REPEAT (dwg, dat, &repeat_blocks);
   if (error)
     return error;
+  // the pre-R13 output walks BLOCK_HEADER.entities, and has no LWPOLYLINE
+  if (dat->from_version >= R_13b1 && dat->version < R_13b1)
+    {
+      error = fill_owned_entities (dwg);
+      if (error < DWG_ERR_CRITICAL)
+        error = downconvert_LWPOLYLINE (dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
+    }
   // Propagate the input-format flags, so IS_FROM_TU (dat) reflects the actual
   // source encoding (DXF/JSON input keeps T strings as single-byte TV).
   dat->opts |= dwg->opts & DWG_OPTS_IN;

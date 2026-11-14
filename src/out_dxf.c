@@ -3033,8 +3033,12 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       int error = 0;                                                          \
       Dwg_Entity_POLYLINE_##token *_obj                                       \
           = obj->tio.entity->tio.POLYLINE_##token; \
-                                                                                \
-      VERSIONS (R_13b1, R_2000)                                               \
+      /* A pre-R13 target uses the vertex list if there is one, else the     \
+         links. */                                                          \
+      const int chain = dat->version < R_13b1                                 \
+                            ? !(_obj->num_owned && _obj->vertex)              \
+                            : dat->version <= R_2000;                         \
+      if (chain)                                                              \
       {                                                                       \
         Dwg_Object *last_vertex                                               \
             = _obj->last_vertex ? _obj->last_vertex->obj : NULL;              \
@@ -3077,7 +3081,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           error |= dwg_dxf_SEQEND (dat, o);                                   \
         *i = *i + 1;                                                          \
       }                                                                       \
-      SINCE (R_2004a)                                                         \
+      else                                                                    \
       {                                                                       \
         Dwg_Object *o;                                                        \
         for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                      \
@@ -3120,7 +3124,9 @@ decl_dxf_process_VERTEX (PFACE)
                                                                               \
       if (!_obj->has_attribs)                                                 \
         return 0;                                                             \
-      VERSIONS (R_13b1, R_2000)                                               \
+      /* A pre-R13 target uses the attribs list if there is one. */          \
+      if (dat->version < R_13b1 ? !(_obj->num_owned && _obj->attribs)         \
+                                : dat->version <= R_2000)                     \
       {                                                                       \
         Dwg_Object *last_attrib                                               \
             = _obj->last_attrib ? _obj->last_attrib->obj : NULL;              \
@@ -3162,7 +3168,7 @@ decl_dxf_process_VERTEX (PFACE)
           error |= dwg_dxf_SEQEND (dat, o);                                   \
         *i = *i + 1;                                                          \
       }                                                                       \
-      SINCE (R_2004a)                                                         \
+      else                                                                    \
       {                                                                       \
         Dwg_Object *o;                                                        \
         for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                      \
@@ -4625,6 +4631,15 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error = upgrade_REPEAT (dwg, dat, &repeat_blocks);
   if (error)
     return error;
+  // the pre-R13 output walks BLOCK_HEADER.entities, and has no LWPOLYLINE
+  if (dat->from_version >= R_13b1 && dat->version < R_13b1)
+    {
+      error = fill_owned_entities (dwg);
+      if (error < DWG_ERR_CRITICAL)
+        error = downconvert_LWPOLYLINE (dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
+    }
   // Pre-R2007 TV strings are stored in the source codepage; set dat->codepage
   // so the cquote path (VALUE_TV/TV0) can convert them to UTF-8 before
   // caret-quoting.  (GH #1496)

@@ -25854,6 +25854,11 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
                 }
               else
                 {
+                  /* a decoded, not shared ref (the NULL handle) belongs to
+                     the entity */
+                  if (prev->tio.entity->next_entity
+                      && !prev->tio.entity->next_entity->handleref.is_global)
+                    free (prev->tio.entity->next_entity);
                   prev->tio.entity->next_entity
                       = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
                   LOG_TRACE ("prev.next_entity = " FORMAT_REF "\n",
