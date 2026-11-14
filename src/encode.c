@@ -6953,10 +6953,11 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]", (int)length,
                          data->u.eed_0.string);
               // Guard against fuzzer input with embedded NULs where
-              // strlen(string) < length but bit_utf8_to_TU allocated
-              // based on strlen().  Clamp to the actual converted length.
+              // strlen(string) < length, and \U+ escapes which
+              // bit_utf8_to_TU expands to fewer chars.  Clamp to the
+              // actual converted length.
               {
-                size_t tu_len = strlen (data->u.eed_0.string);
+                size_t tu_len = bit_wcs2len (dest);
                 if (length > tu_len)
                   length = (BITCODE_RS)tu_len;
               }
@@ -7720,10 +7721,11 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                   }
                 news
                     = size ? bit_utf8_to_TU (rbuf->value.str.u.data, 0) : NULL;
-                // Guard against fuzzer input with embedded NULs
+                // Guard against fuzzer input with embedded NULs, and
+                // \U+ escapes expanded to fewer chars
                 if (rbuf->value.str.u.data)
                   {
-                    size_t tu_len = strlen (rbuf->value.str.u.data);
+                    size_t tu_len = bit_wcs2len (news);
                     if (size > tu_len)
                       size = (BITCODE_RS)tu_len;
                   }
