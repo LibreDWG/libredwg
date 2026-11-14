@@ -5227,6 +5227,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
     {
       Dwg_Object *obj = &dwg->object[index];
       size_t size_pos = 0UL;
+      BITCODE_RC entmode = 0;
       // skip table objects or uninitialized entities
       if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
         {
@@ -5287,6 +5288,9 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                          dat->byte);
               continue;
             }
+          // VERTEX/SEQEND children of R13+ polylines have no entmode of
+          // their own (0), so they follow the entmode of their owner.
+          entmode = obj->tio.entity->entmode;
           // DXF roundtrip may leave VERTEX/SEQEND children of block
           // polylines with entmode=2 (model space).  Scan backwards
           // for the owner POLYLINE/INSERT (like dxf_postprocess_SEQEND)
@@ -5314,6 +5318,8 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                       break;
                     }
                 }
+              if (owner && owner->tio.entity)
+                entmode = owner->tio.entity->entmode;
               if (owner && owner->tio.entity
                   && owner->tio.entity->entmode == 3)
                 {
@@ -5326,7 +5332,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
           // extras entities come after all block entities,
           // but mspace entities (entmode==2) may follow blocks in DXF
           // roundtrip
-          if (past_blocks && obj->tio.entity->entmode != 2)
+          if (past_blocks && entmode != 2)
             {
               LOG_TRACE ("Skip extras %s in entities section, "
                          "number: %d, type: %d, Addr: %zx (0x%zx)\n",
@@ -5391,7 +5397,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                     {
                       Dwg_Object *_hdr_obj
                           = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
-                      if (_hdr_obj
+                          if (_hdr_obj
                           && _hdr_obj->fixedtype == DWG_TYPE_BLOCK_HEADER
                           && _hdr_obj->address)
                         {
@@ -5517,6 +5523,16 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
               LOG_TRACE ("SEQEND.begin_addr_r11 = 0x%x (owner %s)\n",
                          (BITCODE_RL)owner->address, owner->name);
             }
+        }
+      // Entities from R13+ sources which have no pre-R13 equivalent
+      // (LWPOLYLINE, MTEXT, ELLIPSE, SPLINE, RAY, ...) would be written with
+      // a bogus type and corrupt the file. Drop them.
+      if (dwg->header.from_version >= R_13b1
+          && fixedtype_to_r11_type (obj->fixedtype) == DWG_TYPE_UNKNOWN_r11)
+        {
+          LOG_WARN ("Skip %s, number: %d, not representable in pre-R13",
+                    obj->name, obj->index);
+          continue;
         }
       LOG_INFO ("===========================\n"
                 "Entity %s, number: %d, Addr: %" PRIuSIZE " (0x%zx)\n",

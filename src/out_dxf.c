@@ -4321,7 +4321,11 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           ohdl = o->tio.entity->ownerhandle;
           if (!ohdl || !ohdl->absolute_ref)
             {
-              error |= dwg_dxf_object (dat, o, &i); // assume ms
+              // VERTEX/SEQEND/ATTRIB of block polylines and inserts have no
+              // owner either. Only mspace (2) and pspace (1) entities belong
+              // into this section, block entities have entmode 3 or 0.
+              if (o->tio.entity->entmode == 1 || o->tio.entity->entmode == 2)
+                error |= dwg_dxf_object (dat, o, &i); // assume ms
               continue;
             }
           if (ohdl->absolute_ref == ms_ref || ohdl->absolute_ref == ps_ref)

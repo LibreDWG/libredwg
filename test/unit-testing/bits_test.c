@@ -1288,6 +1288,7 @@ bit_write_TV_tests (void)
   BITCODE_TU wstr = (BITCODE_TU)calloc (1100, 2);
   bitprepare (&bitchain, 6);
   bitchain.from_version = R_11;
+  bitchain.version = R_11;
   bit_write_TV (&bitchain, (char *)"GNU");
   if (bitchain.byte == 5 && bitchain.bit == 0)
     ok ("bit_write_TV (<R_13)");
@@ -1296,6 +1297,7 @@ bit_write_TV_tests (void)
 
   bit_set_position (&bitchain, 0);
   bitchain.from_version = R_13;
+  bitchain.version = R_2000;
   bit_write_TV (&bitchain, (char *)"GNU");
   // bitprepare sets version to R_2000; pre-R_2004 lengths equal
   // strlen (no trailing NUL counted)
@@ -1303,6 +1305,17 @@ bit_write_TV_tests (void)
     ok ("bit_write_TV (>R_13)");
   else
     fail ("bit_write_TV @%" PRIuSIZE ".%u", bitchain.byte, bitchain.bit);
+
+  // the length format follows the target, not the source version
+  bit_set_position (&bitchain, 0);
+  bitchain.from_version = R_11;
+  bitchain.version = R_2000;
+  bit_write_TV (&bitchain, (char *)"GNU");
+  if (bitchain.byte == 4 && bitchain.bit == 2)
+    ok ("bit_write_TV (R_11 source, R_2000 target)");
+  else
+    fail ("bit_write_TV R_11 -> R_2000 @%" PRIuSIZE ".%u", bitchain.byte,
+          bitchain.bit);
 
   // TU source, pre-r2007 target: cut at the 1024 byte codepage buffer
   for (int i = 0; i < 1099; i++)

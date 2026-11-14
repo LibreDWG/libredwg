@@ -1147,6 +1147,113 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   return n_failed;
 }
 
+#ifndef DISABLE_DXF
+/* A handle-less R12 DXF with a block holding a LINE and a POLYLINE, written
+   as R2000 and read back. The block must keep its entities and the POLYLINE
+   its vertices, and the DWG must be readable. */
+static int
+test_preR13_dxf_blocks_to_r2000 (void)
+{
+  static const char dxf[]
+      = "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1009\n  0\nENDSEC\n"
+        "  0\nSECTION\n  2\nBLOCKS\n"
+        "  0\nBLOCK\n  8\n0\n  2\nBLK\n 70\n     0\n 10\n0.0\n 20\n0.0\n"
+        " 30\n0.0\n  3\nBLK\n"
+        "  0\nLINE\n  8\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n 11\n1.0\n 21\n1.0\n"
+        " 31\n0.0\n"
+        "  0\nPOLYLINE\n  8\n0\n 66\n     1\n 70\n     0\n"
+        "  0\nVERTEX\n  8\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n"
+        "  0\nVERTEX\n  8\n0\n 10\n1.0\n 20\n2.0\n 30\n0.0\n"
+        "  0\nSEQEND\n  8\n0\n"
+        "  0\nENDBLK\n  8\n0\n  0\nENDSEC\n"
+        "  0\nSECTION\n  2\nENTITIES\n"
+        "  0\nINSERT\n  8\n0\n  2\nBLK\n 10\n5.0\n 20\n5.0\n 30\n0.0\n"
+        "  0\nENDSEC\n  0\nEOF\n";
+  const char *dxffile = "preR13_blocks.dxf";
+  const char *dwgfile = "preR13_blocks.dwg";
+  Dwg_Data dwg = { 0 };
+  Dwg_Data dwg2 = { 0 };
+  FILE *fp = fopen (dxffile, "wb");
+  int error, lines = 0, polylines = 0, vertices = 0, inserts = 0;
+  BITCODE_BL i;
+
+  failed = 0;
+  if (!fp)
+    {
+      fail ("preR13_blocks: cannot create input");
+      return 1;
+    }
+  fwrite (dxf, 1, sizeof dxf - 1, fp);
+  fclose (fp);
+  dwg.header.version = R_2000;
+  error = dxf_read_file (dxffile, &dwg);
+  unlink (dxffile);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("preR13_blocks: dxf_read_file 0x%x", error);
+      dwg_free (&dwg);
+      return 1;
+    }
+  dwg.header.version = R_2000;
+  error = dwg_write_file (dwgfile, &dwg);
+  dwg_free (&dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("preR13_blocks: dwg_write_file 0x%x", error);
+      unlink (dwgfile);
+      return 1;
+    }
+  error = dwg_read_file (dwgfile, &dwg2);
+  unlink (dwgfile);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("preR13_blocks: dwg_read_file 0x%x", error);
+      dwg_free (&dwg2);
+      return 1;
+    }
+  for (i = 0; i < dwg2.num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg2.object[i];
+      if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER && obj->tio.object
+          && obj->tio.object->tio.BLOCK_HEADER
+          && obj->tio.object->tio.BLOCK_HEADER->name
+          && !strcmp (obj->tio.object->tio.BLOCK_HEADER->name, "BLK"))
+        {
+          Dwg_Object *o;
+          for (o = get_first_owned_entity (obj); o;
+               o = get_next_owned_entity (obj, o))
+            {
+              if (o->fixedtype == DWG_TYPE_LINE)
+                lines++;
+              else if (o->fixedtype == DWG_TYPE_POLYLINE_2D)
+                {
+                  Dwg_Object *v;
+                  polylines++;
+                  for (v = get_first_owned_subentity (o); v;
+                       v = get_next_owned_subentity (o, v))
+                    if (v->fixedtype == DWG_TYPE_VERTEX_2D)
+                      vertices++;
+                }
+            }
+        }
+      else if (obj->fixedtype == DWG_TYPE_INSERT)
+        inserts++;
+    }
+  dwg_free (&dwg2);
+  if (lines != 1 || polylines != 1)
+    fail ("preR13_blocks: block BLK has %d LINEs and %d POLYLINEs, "
+          "expected 1 and 1",
+          lines, polylines);
+  if (vertices != 2)
+    fail ("preR13_blocks: POLYLINE has %d vertices, expected 2", vertices);
+  if (inserts != 1)
+    fail ("preR13_blocks: %d INSERTs, expected 1", inserts);
+  if (!numfailed ())
+    ok ("preR13_blocks: R12 DXF blocks written as R2000");
+  return numfailed ();
+}
+#endif
+
 #if !defined(_WIN32) && !defined(DISABLE_DXF)
 static sigjmp_buf mlinestyle_angle_timeout_jmp;
 
@@ -2858,6 +2965,7 @@ main (int argc, char *argv[])
 #ifndef DISABLE_DXF
   error += test_dxf_union_selectors ();
   error += test_attrib_lock_flags ();
+  error += test_preR13_dxf_blocks_to_r2000 ();
   error += test_multileader_vertices ();
   error += test_repeat_dxf (R_2_10, 0);
   error += test_repeat_dxf (R_2000, 0);

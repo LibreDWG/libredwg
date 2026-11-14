@@ -10370,6 +10370,14 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   LOG_TRACE ("dxf_postprocess_SEQEND:\n");
+  // pre-R13 DXF has no handles. The owner's seqend ref needs one.
+  if (!obj->handle.value)
+    {
+      BITCODE_RLL next_handle = dwg_next_handle (dwg);
+      dwg_add_handle (&obj->handle, 0, next_handle, obj);
+      LOG_TRACE ("SEQEND.handle = (0.%d." FORMAT_HV ")\n", obj->handle.size,
+                 obj->handle.value);
+    }
   // Validate that the 330 owner is a real SEQEND parent entity.
   // Both ezdxf and AutoCAD DXF may point the 330 at the owning
   // BLOCK_RECORD instead of the INSERT/POLYLINE parent entity.
@@ -10442,32 +10450,30 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
       if (_o->supertype == DWG_SUPERTYPE_ENTITY && _o->tio.entity)
         {
           _o->tio.entity->entmode = 0;
-          if (_o->tio.entity->ownerhandle)
-            {
-              _o->tio.entity->ownerhandle->obj = NULL;
-              _o->tio.entity->ownerhandle->absolute_ref = owner->handle.value;
-              _o->tio.entity->ownerhandle->handleref.value
-                  = owner->handle.value;
-            }
-          else
-            _o->tio.entity->ownerhandle
-                = dwg_add_handleref (dwg, 3, owner->handle.value, _o);
+          // Do not modify the existing ref in place. Refs are shared by
+          // code and value, e.g. with the BLOCK entity's owner.
+          _o->tio.entity->ownerhandle = dwg_add_handleref (
+              dwg,
+              _o->tio.entity->ownerhandle
+                  ? _o->tio.entity->ownerhandle->handleref.code
+                  : 3,
+              owner->handle.value, _o);
         }
-      if (dwg->header.from_version >= R_13b1)
-        {
-          // Match the encoder's expected handle relation-code for the owned
-          // list, else it warns "Expected a CODE 4 handle, got a 3":
-          // INSERT/MINSERT.attribs[] and POLYLINE_PFACE/MESH.vertex[] are
-          // soft pointers (code 4); only POLYLINE_2D/3D.vertex[] is code 3.
-          BITCODE_RC hdlcode = (owner->fixedtype == DWG_TYPE_POLYLINE_2D
-                                || owner->fixedtype == DWG_TYPE_POLYLINE_3D)
-                                   ? 3
-                                   : 4;
-          owned = (BITCODE_H *)realloc (owned, num_owned * sizeof (BITCODE_H));
-          owned[j] = dwg_add_handleref (dwg, hdlcode, _o->handle.value, owner);
-          LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", owner->name,
-                     owhdls, j, ARGS_REF (owned[j]));
-        }
+      {
+        // Also for pre-R13 sources, which may be written as R13+.
+        // Match the encoder's expected handle relation-code for the owned
+        // list, else it warns "Expected a CODE 4 handle, got a 3":
+        // INSERT/MINSERT.attribs[] and POLYLINE_PFACE/MESH.vertex[] are
+        // soft pointers (code 4); only POLYLINE_2D/3D.vertex[] is code 3.
+        BITCODE_RC hdlcode = (owner->fixedtype == DWG_TYPE_POLYLINE_2D
+                              || owner->fixedtype == DWG_TYPE_POLYLINE_3D)
+                                 ? 3
+                                 : 4;
+        owned = (BITCODE_H *)realloc (owned, num_owned * sizeof (BITCODE_H));
+        owned[j] = dwg_add_handleref (dwg, hdlcode, _o->handle.value, owner);
+        LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", owner->name, owhdls,
+                   j, ARGS_REF (owned[j]));
+      }
     }
   if (!num_owned)
     return;
@@ -15708,6 +15714,7 @@ static int
 dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   char name[80];
+  BITCODE_RLL cur_blk = 0; // handle of the open BLOCK_HEADER, pre-R13 only
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Object *obj;
 
@@ -15763,6 +15770,23 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           _hdr->base_pt.y = _blkent->base_pt.y;
                         }
                     }
+                  // R11: same for BLOCK_HEADER.endblk_entity
+                  if (dat->from_version <= R_12 && obj->type == DWG_TYPE_ENDBLK
+                      && obj->tio.entity->ownerhandle)
+                    {
+                      Dwg_Object *_blkhdr
+                          = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
+                      if (_blkhdr
+                          && _blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
+                        {
+                          Dwg_Object_BLOCK_HEADER *_hdr
+                              = _blkhdr->tio.object->tio.BLOCK_HEADER;
+                          if (!_hdr->endblk_entity
+                              || !_hdr->endblk_entity->absolute_ref)
+                            _hdr->endblk_entity = dwg_add_handleref (
+                                dwg, 3, obj->handle.value, _blkhdr);
+                        }
+                    }
                 }
               pair = new_object (name, dxfname, dat, dwg, 0, &i);
               dxfname = NULL; /* new_object may have freed dxfname via
@@ -15780,6 +15804,17 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   if (!pair)
                     return DWG_ERR_INVALIDDWG;
                   continue;
+                }
+              // pre-R13 DXF has no handles. The BLOCK_HEADER entity lists,
+              // block_entity, endblk_entity and the entity links need them
+              // right now, not when the next object is read.
+              if (!obj->handle.value && dat->from_version < R_13b1
+                  && obj->supertype == DWG_SUPERTYPE_ENTITY)
+                {
+                  BITCODE_RLL next_handle = dwg_next_handle (dwg);
+                  dwg_add_handle (&obj->handle, 0, next_handle, obj);
+                  LOG_TRACE ("%s.handle = (0.%d." FORMAT_HV ")\n", obj->name,
+                             obj->handle.size, obj->handle.value);
                 }
               if (obj->type == DWG_TYPE_BLOCK)
                 {
@@ -15908,6 +15943,13 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                               = blkhdr->tio.object->tio.BLOCK_HEADER;
                           ent->ownerhandle = dwg_add_handleref (
                               dwg, 4, blkhdr->handle.value, NULL);
+                          cur_blk = blkhdr->handle.value;
+                          // with a DXF handle, block_entity is known already
+                          if (obj->handle.value
+                              && (!_hdr->block_entity
+                                  || !_hdr->block_entity->absolute_ref))
+                            _hdr->block_entity = dwg_add_handleref (
+                                dwg, 3, obj->handle.value, blkhdr);
                           // block_entity deferred: handle not yet assigned
                           // (set in next iteration's "complete old obj")
                           _hdr->base_pt.x = _obj->base_pt.x;
@@ -15939,6 +15981,11 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
                              entmode);
                   entmode = 0;
+                  if (!ent->ownerhandle && cur_blk
+                      && dat->from_version < R_13b1)
+                    ent->ownerhandle
+                        = dwg_add_handleref (dwg, 4, cur_blk, NULL);
+                  cur_blk = 0;
                   // set BLOCK_HEADER.endblk_entity handle
                   if ((blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
                       && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
@@ -15971,6 +16018,20 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                              entmode);
                   if (!ent->isbylayerlt && !ent->ltype_flags && !ent->ltype)
                     ent->isbylayerlt = 1;
+                  // pre-R13 entities have no owner handle. They belong to
+                  // the open block, except for the sub-entities of an
+                  // INSERT/POLYLINE.
+                  if (!ent->ownerhandle && cur_blk
+                      && dat->from_version < R_13b1
+                      && obj->fixedtype != DWG_TYPE_ATTRIB
+                      && obj->fixedtype != DWG_TYPE_VERTEX_2D
+                      && obj->fixedtype != DWG_TYPE_VERTEX_3D
+                      && obj->fixedtype != DWG_TYPE_VERTEX_MESH
+                      && obj->fixedtype != DWG_TYPE_VERTEX_PFACE
+                      && obj->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE
+                      && obj->fixedtype != DWG_TYPE_SEQEND)
+                    ent->ownerhandle
+                        = dwg_add_handleref (dwg, 4, cur_blk, NULL);
                   // add to entities
                   if (ent->ownerhandle
                       && (blkhdr = dwg_ref_object (dwg, ent->ownerhandle))

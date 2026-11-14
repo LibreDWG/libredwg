@@ -70,6 +70,13 @@ Minor bugfixes / fuzzing fixes:
   * dwg2dxf: pre-R13 REPEAT/ENDREP spans are now written as arrayed
     INSERTs of an anonymous block instead of unknown DXF entities, so the
     array is no longer lost.  LOAD is dropped with a warning.  GH #1354.
+  * Fixed the pre-R13 writer and the pre-R13 DXF import.  Converting an
+    R12 DXF to r2000 kept no block entities and left POLYLINEs without
+    vertices, converting an R2000 DXF to r11/r12 lost the vertices of
+    POLYLINEs and wrote entities without a pre-R13 type (LWPOLYLINE, MTEXT,
+    ELLIPSE, SPLINE, ...) as corrupt records, which are now skipped with a
+    warning.  Strings written to r2000 from a pre-R13 source used the
+    16-bit r11 length.  GH #1386.
   * Fixed large R2007+ string streams, APPID table counts above 255, and
     R2000+ LEADER and MULTILEADER binary fields.
   * Fixed extended object type encoding and opaque object sizes in JSON

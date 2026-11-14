@@ -2246,7 +2246,8 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
             }
         }
     }
-  if (dat->from_version < R_13b1)
+  // the length format follows the target version, not the source
+  if (dat->version < R_13b1)
     bit_write_RS (dat, (BITCODE_RS)length);
   else
     {
