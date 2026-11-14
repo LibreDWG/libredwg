@@ -96,6 +96,34 @@ then
     rm -f ./OcsEntities.dwg ./OcsEntities.svg
 fi
 
+# INSERT: a block in its own coordinates from its base point, a rotated
+# INSERT turns the other way as y is flipped, a mirrored OCS mirrors x
+echo "dwg2SVG INSERT"
+if $TESTPROG "./dwg2SVG${EXEEXT}" "$DATADIR/2000/entities-2d.dwg" 2>/dev/null |
+       grep -q 'id="dwg-object-47" transform="translate(5.071106 8.127304) scale(1 1) rotate(-30.000000) scale(0.500000 0.500000)"'
+then
+    echo svg insert ok
+else
+    i=$((i+1))
+fi
+# 2000/Inserts.dxf is made with ezdxf
+if [ -x "./dxf2dwg${EXEEXT}" ] &&
+   $TESTPROG "./dxf2dwg${EXEEXT}" -y -o Inserts.dwg \
+       "$DATADIR/2000/Inserts.dxf" >/dev/null 2>&1
+then
+    $TESTPROG "./dwg2SVG${EXEEXT}" Inserts.dwg >Inserts.svg 2>/dev/null
+    if grep -q 'transform="translate(7.000000 12.000000) scale(1 1) rotate(-90.000000)' Inserts.svg &&
+       grep -q 'transform="translate(11.000000 4.000000) scale(-1 1) rotate(0.000000)' Inserts.svg &&
+       grep -q 'transform="translate(13.000000 3.000000) scale(1 1) rotate(-30.000000) scale(1.500000 0.500000)"' Inserts.svg &&
+       grep -q 'd="M 0.000000,0.000000 L 3.000000,0.000000"' Inserts.svg
+    then
+        echo svg Inserts ok
+    else
+        i=$((i+1))
+    fi
+    rm -f ./Inserts.dwg ./Inserts.svg
+fi
+
 if test "0" = "$i" ; then
     exit 0
 else
