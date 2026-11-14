@@ -1328,6 +1328,17 @@ bit_write_TV_tests (void)
     ok ("bit_write_T16 (TU to <R_2007)");
   else
     fail ("bit_write_T16 (TU to <R_2007)");
+
+  // TV source, r2007+ target: \U+ expands to fewer chars
+  bit_set_position (&bitchain, 0);
+  bitchain.from_version = R_2000;
+  bitchain.version = R_2007;
+  bit_write_T16 (&bitchain, (BITCODE_T16) "\\U+0041\\U+0042");
+  bit_set_position (&bitchain, 0);
+  if (bit_read_RS (&bitchain) == 2 && bit_read_RS (&bitchain) == 'A')
+    ok ("bit_write_T16 (\\U+ TV to R_2007)");
+  else
+    fail ("bit_write_T16 (\\U+ TV to R_2007)");
   free (wstr);
   bitfree (&bitchain);
 }

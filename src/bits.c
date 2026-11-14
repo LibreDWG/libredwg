@@ -2738,6 +2738,8 @@ bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict chain)
       if (!IS_FROM_TU (dat))
         { // convert to unicode, expand \\U+
           BITCODE_TU wstr = bit_utf8_to_TU (chain, 0);
+          // \U+ expanded, shorter than chain
+          length = bit_wcs2len (wstr);
           bit_write_RS (dat, (BITCODE_RS)length);
           for (size_t i = 0; i < length; i++)
             bit_write_RS (dat, wstr[i]);
