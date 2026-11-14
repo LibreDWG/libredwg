@@ -145,6 +145,25 @@ jobs:
     - run: cd /lib64 && sudo ln -s /usr/powerpc64-linux-gnu/lib/ld64.so.1
     - run: make -j check-minimal
       continue-on-error: true
+  s390x-big-endian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # qemu-user finds the s390x loader and libc here
+      QEMU_LD_PREFIX: /usr/s390x-linux-gnu
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - run: sudo apt-get -y update && sudo apt-get -y install gcc-s390x-linux-gnu libc6-s390x-cross qemu-user binfmt-support qemu-user-binfmt
+    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+      with:
+        key: ${{ github.job }}
+    - run: sh autogen.sh
+    - run: CC="ccache s390x-linux-gnu-gcc" ./configure --host=s390x-linux-gnu --disable-bindings --disable-python --disable-docs
+    - run: make -j
+    - run: make -j check-minimal
   linux-cmake:
     runs-on: ubuntu-latest
     timeout-minutes: 20
