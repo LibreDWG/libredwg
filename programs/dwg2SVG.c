@@ -65,6 +65,10 @@ static int mspace = 0; // only mspace, even when pspace is defined
 Dwg_Data g_dwg;
 double model_xmin, model_ymin, model_xmax, model_ymax;
 double page_width, page_height, scale;
+// The origin of the coordinates being written: the page for model and
+// paper space, the base point inside a block definition, with y flipped
+// from the height origin_h, 0 in a block.
+static double origin_x, origin_y, origin_h;
 
 static void output_SVG (Dwg_Data *dwg);
 
@@ -114,13 +118,13 @@ transform_ANGLE (double angle)
 static double
 transform_X (double x)
 {
-  return x - model_xmin;
+  return x - origin_x;
 }
 
 static double
 transform_Y (double y)
 {
-  return page_height - (y - model_ymin);
+  return origin_h - (y - origin_y);
 }
 
 static bool
@@ -962,12 +966,16 @@ output_INSERT (Dwg_Object *obj)
         return;
       transform_OCS (&ins_pt, insert->ins_pt, insert->extrusion);
       printf ("\t<!-- insert-%d -->\n", obj->index);
+      // the block is in its own coordinates from its base point, y flipped
+      // as on the page: so its rotation turns the other way, and a mirrored
+      // OCS, e.g. the extrusion (0,0,-1), mirrors its x
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
-              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-" FORMAT_HV
-              "\" />"
+              "scale(%d 1) rotate(%f) scale(%f %f)\" "
+              "xlink:href=\"#symbol-" FORMAT_HV "\" />"
               "<!-- block_header->handleref: " FORMAT_H " -->\n",
               obj->index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
-              (180.0 / M_PI) * insert->rotation, insert->scale.x,
+              1 - 2 * transform_OCS_2d_is_mirrored (insert->extrusion),
+              0.0 - (180.0 / M_PI) * insert->rotation, insert->scale.x,
               insert->scale.y, insert->block_header->absolute_ref,
               ARGS_H (insert->block_header->handleref));
     }
@@ -1051,6 +1059,21 @@ output_object (Dwg_Object *obj)
       break;
     }
   return num;
+}
+
+// A block definition in <defs> is in its own coordinates, from its base
+// point, with y flipped as on the page
+static void
+block_origin (const Dwg_Object_Ref *ref)
+{
+  const Dwg_Object *obj = ref ? ref->obj : NULL;
+  origin_x = origin_y = origin_h = 0.0;
+  if (obj && obj->type == DWG_TYPE_BLOCK_HEADER && obj->tio.object
+      && obj->tio.object->tio.BLOCK_HEADER)
+    {
+      origin_x = obj->tio.object->tio.BLOCK_HEADER->base_pt.x;
+      origin_y = obj->tio.object->tio.BLOCK_HEADER->base_pt.y;
+    }
 }
 
 static int
@@ -1152,6 +1175,9 @@ output_SVG (Dwg_Data *dwg)
     dy = 100.0;
   page_width = dx;
   page_height = dy;
+  origin_x = model_xmin;
+  origin_y = model_ymin;
+  origin_h = page_height;
   // scale *= (scale_x > scale_y ? scale_x : scale_y);
 
   // optional, for xmllint
@@ -1178,7 +1204,10 @@ output_SVG (Dwg_Data *dwg)
   for (i = 0; i < dwg->block_control.num_entries; i++)
     {
       if (dwg->block_control.entries && (ref = dwg->block_control.entries[i]))
-        output_BLOCK_HEADER (ref);
+        {
+          block_origin (ref);
+          output_BLOCK_HEADER (ref);
+        }
     }
   printf ("\t</defs>\n");
   printf ("</svg>\n");
