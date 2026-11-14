@@ -4603,7 +4603,8 @@ static int
 dxf_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain *pic = (Bit_Chain *)&dwg->thumbnail;
-  if (pic->chain && pic->size && pic->size > 10)
+  // a r2007 section may be smaller than the offset (GHSA-63vm-xrm5-37jj)
+  if (pic->chain && pic->size && pic->size > 10 && pic->size > pic->byte)
     {
       // R2004+ chain starts with 16-byte sentinel at byte 0, skip it
       const size_t off = pic->byte;
