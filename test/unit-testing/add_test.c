@@ -1349,7 +1349,8 @@ test_lwpolyline_to_preR13_dxf (void)
   Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
   Bit_Chain dat = { 0 };
   Dwg_Object *mspace;
-  char code[128], line[128], entity[32] = "", order[64] = "";
+  char code[128], line[128], order[64] = "";
+  const char *entity = line;
   int error, polylines = 0, vertices = 0, seqends = 0, lw = 0;
   FILE *fh = tmpfile ();
 
@@ -1381,7 +1382,7 @@ test_lwpolyline_to_preR13_dxf (void)
       if (atoi (code) == 0)
         {
           line[strcspn (line, "\r\n")] = '\0';
-          strncpy (entity, line, sizeof (entity) - 1);
+          /* entity is the value line */
           if (!strcmp (entity, "LWPOLYLINE"))
             lw++;
           else if (!strcmp (entity, "POLYLINE"))
