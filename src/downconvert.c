@@ -29,6 +29,7 @@
 #include "dynapi.h"
 #include "free.h"
 #include "decode.h"
+#include "hash.h"
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -1395,4 +1396,181 @@ dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
       else
         o->lines[j].lt_ltype = dwg_add_handleref (dwg, 5, 0, NULL);
     }
+}
+
+/* Public add API, see dwg_add_POLYLINE_2D() in dwg_api.h. The layout of
+   dwg_point_2d is that of BITCODE_2RD. */
+Dwg_Entity_POLYLINE_2D *
+dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                     const int num_pts, const BITCODE_2RD *restrict pts);
+
+/* Copy the common entity properties which the pre-R13 formats know. */
+static void
+copy_entity_props (Dwg_Object_Entity *restrict dst,
+                   const Dwg_Object_Entity *restrict src)
+{
+  dst->layer = src->layer;
+  dst->ltype = src->ltype;
+  dst->color = src->color;
+  dst->ltype_scale = src->ltype_scale;
+  dst->ltype_flags = src->ltype_flags;
+  dst->isbylayerlt = src->isbylayerlt;
+  dst->linewt = src->linewt;
+  dst->invisible = src->invisible;
+}
+
+/* Convert the LWPOLYLINE at dwg->object[idx] to a POLYLINE_2D with its
+   VERTEX_2Ds and SEQEND, at the same position. */
+static int
+lwpolyline_to_polyline (Dwg_Data *restrict dwg, const BITCODE_BL idx)
+{
+  Dwg_Object *lw = &dwg->object[idx];
+  Dwg_Object_Entity *ent = lw->tio.entity;
+  Dwg_Entity_LWPOLYLINE *_lw = ent->tio.LWPOLYLINE;
+  Dwg_Object *owner = ent->ownerhandle ? dwg_ref_object (dwg, ent->ownerhandle)
+                                       : NULL;
+  Dwg_Object_BLOCK_HEADER *hdr;
+  Dwg_Entity_POLYLINE_2D *pl;
+  const BITCODE_RLL lw_handle = lw->handle.value;
+  BITCODE_BL first_new, m, c, j, i, n = _lw->num_points;
+  BITCODE_BL num_objects = dwg->num_objects;
+  Dwg_Object *tmp;
+
+  if (!owner || owner->fixedtype != DWG_TYPE_BLOCK_HEADER)
+    owner = dwg_model_space_object (dwg);
+  if (!owner || !owner->tio.object || !owner->tio.object->tio.BLOCK_HEADER)
+    return DWG_ERR_INVALIDDWG;
+  hdr = owner->tio.object->tio.BLOCK_HEADER;
+  if (n && !_lw->points)
+    n = 0;
+
+  first_new = dwg->num_objects;
+  /* With the pre-R13 target version the API would set the r11 types, which
+     the free functions and the encoder do not expect for an R13+ source. */
+  {
+    Dwg_Version_Type version = dwg->header.version;
+    dwg->header.version = dwg->header.from_version;
+    pl = n ? dwg_add_POLYLINE_2D (hdr, (int)n, _lw->points) : NULL;
+    dwg->header.version = version;
+  }
+  /* The add API may have moved dwg->object. */
+  lw = &dwg->object[idx];
+  ent = lw->tio.entity;
+  _lw = ent->tio.LWPOLYLINE;
+  if (n && !pl)
+    return DWG_ERR_OUTOFMEM;
+
+  if (pl)
+    {
+      Dwg_Object *pobj = &dwg->object[first_new];
+      m = dwg->num_objects - first_new; /* POLYLINE, n VERTEX, SEQEND */
+      if (m != n + 2)
+        return DWG_ERR_INVALIDDWG;
+      copy_entity_props (pobj->tio.entity, ent);
+      pobj->tio.entity->entmode = ent->entmode;
+      pl->flag &= ~1;
+      if (_lw->flag & 512)
+        pl->flag |= 1; /* closed */
+      if (_lw->flag & 4)
+        pl->start_width = pl->end_width = _lw->const_width;
+      pl->thickness = _lw->thickness;
+      pl->elevation = _lw->elevation;
+      pl->extrusion = _lw->extrusion;
+      for (j = 0; j < m; j++)
+        {
+          Dwg_Object *o = &dwg->object[first_new + j];
+          if (j)
+            {
+              copy_entity_props (o->tio.entity, ent);
+              o->tio.entity->entmode = 0; /* owned by the POLYLINE */
+            }
+          if (j >= 1 && j <= n)
+            {
+              Dwg_Entity_VERTEX_2D *v = o->tio.entity->tio.VERTEX_2D;
+              v->point.z = _lw->elevation;
+              if (j - 1 < _lw->num_bulges && _lw->bulges)
+                v->bulge = _lw->bulges[j - 1];
+              if (j - 1 < _lw->num_widths && _lw->widths)
+                {
+                  v->start_width = _lw->widths[j - 1].start;
+                  v->end_width = _lw->widths[j - 1].end;
+                }
+            }
+        }
+      /* keep the order in the owner */
+      for (j = 0; j < hdr->num_owned; j++)
+        if (hdr->entities && hdr->entities[j]
+            && hdr->entities[j]->absolute_ref == lw_handle)
+          {
+            if (hdr->num_owned > 1 && hdr->entities[hdr->num_owned - 1])
+              {
+                hdr->entities[j] = hdr->entities[hdr->num_owned - 1];
+                hdr->num_owned--;
+              }
+            break;
+          }
+    }
+  else
+    m = 0; /* no points, just drop it */
+
+  /* Free the LWPOLYLINE. The free functions depend on the source version. */
+  {
+    Dwg_Version_Type version = dwg->header.version;
+    dwg->header.version = dwg->header.from_version;
+    dwg_free_object (lw);
+    dwg->header.version = version;
+  }
+  /* New order: [0, idx), the new objects, (idx, first_new) */
+  c = first_new - idx - 1;
+  if (m)
+    {
+      tmp = (Dwg_Object *)malloc (m * sizeof (Dwg_Object));
+      if (!tmp)
+        return DWG_ERR_OUTOFMEM;
+      memcpy (tmp, &dwg->object[first_new], m * sizeof (Dwg_Object));
+      memmove (&dwg->object[idx + m], &dwg->object[idx + 1],
+               c * sizeof (Dwg_Object));
+      memcpy (&dwg->object[idx], tmp, m * sizeof (Dwg_Object));
+      free (tmp);
+    }
+  else
+    memmove (&dwg->object[idx], &dwg->object[idx + 1],
+             c * sizeof (Dwg_Object));
+  dwg->num_objects = num_objects - 1 + m;
+  /* Both the objects and the handle map need the new indices. */
+  for (i = idx; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *o = &dwg->object[i];
+      o->index = i;
+      if (o->supertype == DWG_SUPERTYPE_ENTITY && o->tio.entity)
+        o->tio.entity->objid = i;
+      else if (o->supertype == DWG_SUPERTYPE_OBJECT && o->tio.object)
+        o->tio.object->objid = i;
+      if (o->handle.value && dwg->object_map)
+        hash_set (dwg->object_map, o->handle.value, i);
+    }
+  /* The refs point to the old positions. */
+  dwg_resolve_objectrefs_silent (dwg);
+  return 0;
+}
+
+/* Pre-R13 has no LWPOLYLINE. Convert them to POLYLINE_2D, instead of writing
+   them as invalid objects. */
+int
+downconvert_LWPOLYLINE (Dwg_Data *restrict dwg)
+{
+  int error = 0;
+  for (BITCODE_BL k = dwg->num_objects; k > 0; k--)
+    {
+      Dwg_Object *obj = &dwg->object[k - 1];
+      if (obj->fixedtype == DWG_TYPE_LWPOLYLINE
+          && obj->supertype == DWG_SUPERTYPE_ENTITY && obj->tio.entity
+          && obj->tio.entity->tio.LWPOLYLINE)
+        {
+          error |= lwpolyline_to_polyline (dwg, k - 1);
+          if (error >= DWG_ERR_CRITICAL)
+            break;
+        }
+    }
+  return error;
 }

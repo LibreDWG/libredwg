@@ -71,6 +71,7 @@ void link_owned_entities (Dwg_Data *restrict dwg);
 void upconvert_standard_names (Dwg_Data *restrict dwg);
 int upgrade_REPEAT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                     bool *restrict converted);
+int downconvert_LWPOLYLINE (Dwg_Data *restrict dwg);
 void dwg_downgrade_MLINESTYLE (Dwg_Object_MLINESTYLE *o);
 void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
                              Dwg_Object_MLINESTYLE *restrict o);

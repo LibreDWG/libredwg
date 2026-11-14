@@ -1265,6 +1265,79 @@ test_preR13_dxf_blocks_to_r2000 (void)
     ok ("preR13_blocks: R12 DXF blocks written as R2000");
   return numfailed ();
 }
+
+/* Pre-R13 has no LWPOLYLINE. It is written as POLYLINE with VERTEXes, at
+   its position. */
+static int
+test_lwpolyline_to_preR13 (void)
+{
+  const char *dwgfile = "lwpolyline_r12.dwg";
+  const dwg_point_2d pts[] = { { 0.0, 0.0 }, { 1.0, 2.0 }, { 3.0, 1.0 } };
+  const dwg_point_3d a = { 5.0, 5.0, 0.0 }, b = { 6.0, 6.0, 0.0 };
+  Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+  Dwg_Data dwg2 = { 0 };
+  Dwg_Object *mspace;
+  int error, lwpolylines = 0, polylines = 0, vertices = 0, lines = 0;
+  BITCODE_BL i;
+
+  failed = 0;
+  if (!dwg)
+    {
+      fail ("lwpolyline_preR13: cannot create drawing");
+      return 1;
+    }
+  mspace = dwg_model_space_object (dwg);
+  dwg_add_LWPOLYLINE (mspace->tio.object->tio.BLOCK_HEADER, 3, pts);
+  dwg_add_LINE (mspace->tio.object->tio.BLOCK_HEADER, &a, &b);
+  dwg->header.from_version = R_2000;
+  dwg->header.version = R_12;
+  error = dwg_write_file (dwgfile, dwg);
+  dwg->header.version = R_2000;
+  dwg_free (dwg);
+  free (dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("lwpolyline_preR13: dwg_write_file 0x%x", error);
+      unlink (dwgfile);
+      return 1;
+    }
+  error = dwg_read_file (dwgfile, &dwg2);
+  unlink (dwgfile);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("lwpolyline_preR13: dwg_read_file 0x%x", error);
+      dwg_free (&dwg2);
+      return 1;
+    }
+  for (i = 0; i < dwg2.num_objects; i++)
+    {
+      switch (dwg2.object[i].fixedtype)
+        {
+        case DWG_TYPE_LWPOLYLINE:
+          lwpolylines++;
+          break;
+        case DWG_TYPE_POLYLINE_2D:
+          polylines++;
+          break;
+        case DWG_TYPE_VERTEX_2D:
+          vertices++;
+          break;
+        case DWG_TYPE_LINE:
+          lines++;
+          break;
+        default:
+          break;
+        }
+    }
+  dwg_free (&dwg2);
+  if (lwpolylines || polylines != 1 || vertices != 3 || lines != 1)
+    fail ("lwpolyline_preR13: %d LWPOLYLINE, %d POLYLINE, %d VERTEX, %d LINE, "
+          "expected 0, 1, 3, 1",
+          lwpolylines, polylines, vertices, lines);
+  if (!numfailed ())
+    ok ("lwpolyline_preR13: LWPOLYLINE written as POLYLINE");
+  return numfailed ();
+}
 #endif
 
 #if !defined(_WIN32) && !defined(DISABLE_DXF)
@@ -2979,6 +3052,7 @@ main (int argc, char *argv[])
   error += test_dxf_union_selectors ();
   error += test_attrib_lock_flags ();
   error += test_preR13_dxf_blocks_to_r2000 ();
+  error += test_lwpolyline_to_preR13 ();
   error += test_multileader_vertices ();
   error += test_repeat_dxf (R_2_10, 0);
   error += test_repeat_dxf (R_2000, 0);

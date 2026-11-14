@@ -2989,6 +2989,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
 
+  // pre-R13 has no LWPOLYLINE
+  if (dwg->header.from_version >= R_13b1 && dwg->header.version < R_13b1)
+    {
+      error |= downconvert_LWPOLYLINE (dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
+    }
   bit_chain_alloc (dat);
   hdl_dat = dat; // split later in objects/entities
   if (!dat->version)
