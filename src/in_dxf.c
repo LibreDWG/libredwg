@@ -10404,13 +10404,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
       for (i = obj->index - 1; i > 0; i--)
         {
           Dwg_Object *_o = &dwg->object[i];
-          if (_o->fixedtype == DWG_TYPE_INSERT
-              || _o->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
-              || _o->fixedtype == DWG_TYPE_MINSERT
-              || _o->fixedtype == DWG_TYPE_POLYLINE_2D
-              || _o->fixedtype == DWG_TYPE_POLYLINE_3D
-              || _o->fixedtype == DWG_TYPE_POLYLINE_PFACE
-              || _o->fixedtype == DWG_TYPE_POLYLINE_MESH)
+          if (is_insert_polyline (_o->fixedtype))
             {
               owner = _o;
               obj->tio.entity->ownerhandle
@@ -16023,12 +16017,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   // INSERT/POLYLINE.
                   if (!ent->ownerhandle && cur_blk
                       && dat->from_version < R_13b1
-                      && obj->fixedtype != DWG_TYPE_ATTRIB
-                      && obj->fixedtype != DWG_TYPE_VERTEX_2D
-                      && obj->fixedtype != DWG_TYPE_VERTEX_3D
-                      && obj->fixedtype != DWG_TYPE_VERTEX_MESH
-                      && obj->fixedtype != DWG_TYPE_VERTEX_PFACE
-                      && obj->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE
+                      && !is_attrib_vertex (obj->fixedtype)
                       && obj->fixedtype != DWG_TYPE_SEQEND)
                     ent->ownerhandle
                         = dwg_add_handleref (dwg, 4, cur_blk, NULL);

@@ -2789,13 +2789,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       for (BITCODE_BL i = obj->index - 1; i > 0; i--)
         {
           Dwg_Object *_o = &dwg->object[i];
-          if (_o->fixedtype == DWG_TYPE_INSERT
-              || _o->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
-              || _o->fixedtype == DWG_TYPE_MINSERT
-              || _o->fixedtype == DWG_TYPE_POLYLINE_2D
-              || _o->fixedtype == DWG_TYPE_POLYLINE_3D
-              || _o->fixedtype == DWG_TYPE_POLYLINE_PFACE
-              || _o->fixedtype == DWG_TYPE_POLYLINE_MESH)
+          if (is_insert_polyline (_o->fixedtype))
             {
               owner = _o;
               obj->tio.entity->ownerhandle

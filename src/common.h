@@ -693,6 +693,31 @@ dwg_find_first_type_handle (const Dwg_Data *restrict dwg,
 // from dwg.c
 void dwg_calc_hookline_on (Dwg_Entity_LEADER *_obj);
 
+/* True for the sub-entity types owned by an INSERT or POLYLINE: ATTRIB and
+   all VERTEX types. The SEQEND closing them is not included. */
+static inline int
+is_attrib_vertex (const enum DWG_OBJECT_TYPE fixedtype)
+{
+  return fixedtype == DWG_TYPE_ATTRIB || fixedtype == DWG_TYPE_VERTEX_2D
+         || fixedtype == DWG_TYPE_VERTEX_3D
+         || fixedtype == DWG_TYPE_VERTEX_MESH
+         || fixedtype == DWG_TYPE_VERTEX_PFACE
+         || fixedtype == DWG_TYPE_VERTEX_PFACE_FACE;
+}
+
+/* True for the entity types which may own sub-entities (ATTRIB, VERTEX)
+   closed by a SEQEND: INSERT, MINSERT and all POLYLINE types. */
+static inline int
+is_insert_polyline (const enum DWG_OBJECT_TYPE fixedtype)
+{
+  return fixedtype == DWG_TYPE_INSERT || fixedtype == DWG_TYPE_MINSERT
+         || fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
+         || fixedtype == DWG_TYPE_POLYLINE_2D
+         || fixedtype == DWG_TYPE_POLYLINE_3D
+         || fixedtype == DWG_TYPE_POLYLINE_PFACE
+         || fixedtype == DWG_TYPE_POLYLINE_MESH;
+}
+
 // <path-to>/dxf.ext => copy of "dxf", "ext"
 // Returns a malloc'ed copy of basename, and
 // sets ext to the char behind the last "." of filepath

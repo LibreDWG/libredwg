@@ -1165,6 +1165,7 @@ test_preR13_dxf_blocks_to_r2000 (void)
         "  0\nVERTEX\n  8\n0\n 10\n0.0\n 20\n0.0\n 30\n0.0\n"
         "  0\nVERTEX\n  8\n0\n 10\n1.0\n 20\n2.0\n 30\n0.0\n"
         "  0\nSEQEND\n  8\n0\n"
+        "  0\nPOINT\n  8\n0\n 10\n2.0\n 20\n2.0\n 30\n0.0\n"
         "  0\nENDBLK\n  8\n0\n  0\nENDSEC\n"
         "  0\nSECTION\n  2\nENTITIES\n"
         "  0\nINSERT\n  8\n0\n  2\nBLK\n 10\n5.0\n 20\n5.0\n 30\n0.0\n"
@@ -1175,6 +1176,7 @@ test_preR13_dxf_blocks_to_r2000 (void)
   Dwg_Data dwg2 = { 0 };
   FILE *fp = fopen (dxffile, "wb");
   int error, lines = 0, polylines = 0, vertices = 0, inserts = 0;
+  int points = 0, block_walk = 0;
   BITCODE_BL i;
 
   failed = 0;
@@ -1225,6 +1227,8 @@ test_preR13_dxf_blocks_to_r2000 (void)
             {
               if (o->fixedtype == DWG_TYPE_LINE)
                 lines++;
+              else if (o->fixedtype == DWG_TYPE_POINT)
+                points++;
               else if (o->fixedtype == DWG_TYPE_POLYLINE_2D)
                 {
                   Dwg_Object *v;
@@ -1235,6 +1239,11 @@ test_preR13_dxf_blocks_to_r2000 (void)
                       vertices++;
                 }
             }
+          /* the walk used by the DXF writer must not stop at the POLYLINE */
+          for (o = get_first_owned_entity (obj); o;
+               o = get_next_owned_block_entity (obj, o))
+            if (o->fixedtype == DWG_TYPE_POINT)
+              block_walk++;
         }
       else if (obj->fixedtype == DWG_TYPE_INSERT)
         inserts++;
@@ -1246,6 +1255,10 @@ test_preR13_dxf_blocks_to_r2000 (void)
           lines, polylines);
   if (vertices != 2)
     fail ("preR13_blocks: POLYLINE has %d vertices, expected 2", vertices);
+  if (points != 1 || block_walk != 1)
+    fail ("preR13_blocks: block BLK has %d POINTs (%d via the block walk), "
+          "expected 1",
+          points, block_walk);
   if (inserts != 1)
     fail ("preR13_blocks: %d INSERTs, expected 1", inserts);
   if (!numfailed ())

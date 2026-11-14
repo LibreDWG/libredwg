@@ -4321,11 +4321,40 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           ohdl = o->tio.entity->ownerhandle;
           if (!ohdl || !ohdl->absolute_ref)
             {
-              // VERTEX/SEQEND/ATTRIB of block polylines and inserts have no
-              // owner either. Only mspace (2) and pspace (1) entities belong
-              // into this section, block entities have entmode 3 or 0.
-              if (o->tio.entity->entmode == 1 || o->tio.entity->entmode == 2)
-                error |= dwg_dxf_object (dat, o, &i); // assume ms
+              // VERTEX/SEQEND/ATTRIB of polylines and inserts have no owner
+              // in pre-R13 files. Find it by searching backwards, then they
+              // go where their owner goes: not into ENTITIES for block
+              // entities.
+              if (is_attrib_vertex (o->fixedtype)
+                  || o->fixedtype == DWG_TYPE_SEQEND)
+                {
+                  Dwg_Object *parent = NULL;
+                  for (int k = i - 1; k >= 0; k--)
+                    {
+                      Dwg_Object *_o = &dwg->object[k];
+                      if (is_insert_polyline (_o->fixedtype))
+                        {
+                          parent = _o;
+                          break;
+                        }
+                    }
+                  if (parent && parent->tio.entity)
+                    {
+                      Dwg_Object_Ref *phdl = parent->tio.entity->ownerhandle;
+                      if (phdl && phdl->absolute_ref
+                          && phdl->absolute_ref != ms_ref
+                          && phdl->absolute_ref != ps_ref)
+                        continue; // owned by a block
+                      if (!phdl || !phdl->absolute_ref)
+                        {
+                          // ownerless parent: mspace/pspace only
+                          const BITCODE_RC em = parent->tio.entity->entmode;
+                          if (em != 1 && em != 2)
+                            continue;
+                        }
+                    }
+                }
+              error |= dwg_dxf_object (dat, o, &i); // assume ms
               continue;
             }
           if (ohdl->absolute_ref == ms_ref || ohdl->absolute_ref == ps_ref)

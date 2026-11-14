@@ -5306,13 +5306,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
               for (BITCODE_BL k = obj->index; k > 0; k--)
                 {
                   Dwg_Object *_o = &dwg->object[k - 1];
-                  if (_o->fixedtype == DWG_TYPE_INSERT
-                      || _o->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
-                      || _o->fixedtype == DWG_TYPE_MINSERT
-                      || _o->fixedtype == DWG_TYPE_POLYLINE_2D
-                      || _o->fixedtype == DWG_TYPE_POLYLINE_3D
-                      || _o->fixedtype == DWG_TYPE_POLYLINE_PFACE
-                      || _o->fixedtype == DWG_TYPE_POLYLINE_MESH)
+                  if (is_insert_polyline (_o->fixedtype))
                     {
                       owner = _o;
                       break;
@@ -5468,13 +5462,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                   for (BITCODE_BL k = obj->index; k > 0; k--)
                     {
                       Dwg_Object *_o = &dwg->object[k - 1];
-                      if (_o->fixedtype == DWG_TYPE_INSERT
-                          || _o->fixedtype == DWG_TYPE_ACIDBLOCKREFERENCE
-                          || _o->fixedtype == DWG_TYPE_MINSERT
-                          || _o->fixedtype == DWG_TYPE_POLYLINE_2D
-                          || _o->fixedtype == DWG_TYPE_POLYLINE_3D
-                          || _o->fixedtype == DWG_TYPE_POLYLINE_PFACE
-                          || _o->fixedtype == DWG_TYPE_POLYLINE_MESH)
+                      if (is_insert_polyline (_o->fixedtype))
                         {
                           owner = _o;
                           break;

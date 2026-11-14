@@ -1456,8 +1456,11 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
               == _hdr->last_entity->obj) // stop before skipping last_entity
             return obj;
           obj = dwg_next_entity (obj);
-          // this may happen with r2000 attribs
+          // this may happen with r2000 attribs. But the vertices are owned by
+          // their POLYLINE, not by the block, and are skipped anyway.
           if (obj && obj->tio.entity != NULL
+              && (obj->fixedtype == DWG_TYPE_ATTRIB
+                  || !is_attrib_vertex (obj->fixedtype))
               && obj->tio.entity->ownerhandle != NULL
               && obj->tio.entity->ownerhandle->absolute_ref
                      != hdr->handle.value)
@@ -1733,6 +1736,19 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
           return NULL;
         }
       obj = dwg_next_entity (current);
+      /* The chain continues through the sub-entities of a POLYLINE or
+         INSERT, which are owned by it and written by it. Skip them, and only
+         then check the owner. */
+      for (BITCODE_BL steps = 0;
+           obj && obj->supertype == DWG_SUPERTYPE_ENTITY
+           && (is_attrib_vertex (obj->fixedtype)
+               || obj->fixedtype == DWG_TYPE_SEQEND);
+           steps++)
+        {
+          if (_hdr->last_entity->obj == obj || steps > dwg->num_objects)
+            return NULL;
+          obj = dwg_next_entity (obj);
+        }
       /* Detect cycle: if the next entity's ownerhandle points to a different
          block, the next_entity chain has crossed a block boundary. */
       if (obj && obj->tio.entity && obj->tio.entity->ownerhandle
