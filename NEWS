@@ -83,6 +83,12 @@ Minor bugfixes / fuzzing fixes:
     handles and the integers set via dynapi from DXF and JSON were read
     and written with the wrong byte order, so most r2007+ DWGs, DXFs and
     JSONs were not readable.  All tests pass on s390x now.
+  * MATERIAL is stable now. DXF import takes the defaults of ODA's DXF, which
+    omits the fields with their default value, and ByLayer and ByBlock
+    without fields. Converting r2007+ to r2000 adds the ACAD EED to the
+    materials, and the ACAD_MATERIAL_MAPPER EEDs to the entities with a
+    material, and always writes the matrix of the maps (identity by default),
+    which fixed invalid MATERIALs after a DXF import.
   * Fixed large R2007+ string streams, APPID table counts above 255, and
     R2000+ LEADER and MULTILEADER binary fields.
   * Fixed extended object type encoding and opaque object sizes in JSON

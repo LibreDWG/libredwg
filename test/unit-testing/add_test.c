@@ -1406,6 +1406,108 @@ test_lwpolyline_to_preR13_dxf (void)
     ok ("lwpolyline_preR13_dxf: LWPOLYLINE written as POLYLINE");
   return numfailed ();
 }
+
+/* ODA's DXF omits the MATERIAL fields with their default value, and has only
+   a name for ByLayer and ByBlock. The defaults must be those of ODA's DWG,
+   and writing it to r2000 must write a matrix for every map, as the decoder
+   always reads one. */
+static int
+test_material_dxf (void)
+{
+  static const char dxf[]
+      = "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1024\n  0\nENDSEC\n"
+        "  0\nSECTION\n  2\nCLASSES\n  0\nCLASS\n  1\nMATERIAL\n  2\n"
+        "AcDbMaterial\n  3\nObjectDBX Classes\n 90\n  1153\n 91\n  1\n280\n"
+        "     0\n281\n     0\n  0\nENDSEC\n"
+        "  0\nSECTION\n  2\nOBJECTS\n"
+        "  0\nMATERIAL\n  5\nA0\n330\n0\n100\nAcDbMaterial\n  1\nByBlock\n"
+        " 72\n     0\n"
+        "  0\nMATERIAL\n  5\nA1\n330\n0\n100\nAcDbMaterial\n  1\nGlobal\n"
+        "  0\nENDSEC\n  0\nEOF\n";
+  const char *dxffile = "material.dxf";
+  const char *dwgfile = "material.dwg";
+  Dwg_Data dwg = { 0 };
+  Dwg_Data dwg2 = { 0 };
+  FILE *fp = fopen (dxffile, "wb");
+  int error, found = 0;
+  BITCODE_BL i;
+
+  failed = 0;
+  if (!fp)
+    {
+      fail ("material_dxf: cannot create input");
+      return 1;
+    }
+  fwrite (dxf, 1, sizeof dxf - 1, fp);
+  fclose (fp);
+  dwg.header.version = R_2010;
+  error = dxf_read_file (dxffile, &dwg);
+  unlink (dxffile);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("material_dxf: dxf_read_file 0x%x", error);
+      dwg_free (&dwg);
+      return 1;
+    }
+  for (i = 0; i < dwg.num_objects; i++)
+    {
+      const Dwg_Object *obj = &dwg.object[i];
+      const Dwg_Object_MATERIAL *m;
+      if (obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object)
+        continue;
+      m = obj->tio.object->tio.MATERIAL;
+      found++;
+      if (m->refraction_index != 1.0 || m->channel_flags != 127
+          || m->specular_gloss_factor != 0.5 || m->opacity_percent != 1.0
+          || m->diffusemap.blendfactor != 1.0 || m->diffusemap.projection != 2
+          || m->bumpmap.tiling != 1)
+        fail ("material_dxf: MATERIAL %d has no ODA defaults", (int)i);
+    }
+  if (found != 2)
+    fail ("material_dxf: %d MATERIAL objects, expected 2", found);
+  dwg.header.version = R_2000;
+  error = dwg_write_file (dwgfile, &dwg);
+  dwg_free (&dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("material_dxf: dwg_write_file 0x%x", error);
+      unlink (dwgfile);
+      return numfailed ();
+    }
+  error = dwg_read_file (dwgfile, &dwg2);
+  unlink (dwgfile);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("material_dxf: dwg_read_file 0x%x", error);
+      dwg_free (&dwg2);
+      return numfailed ();
+    }
+  found = 0;
+  for (i = 0; i < dwg2.num_objects; i++)
+    {
+      const Dwg_Object *obj = &dwg2.object[i];
+      const Dwg_Object_MATERIAL *m;
+      if (obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object)
+        continue;
+      m = obj->tio.object->tio.MATERIAL;
+      found++;
+      if (!m->diffusemap.transmatrix || m->diffusemap.transmatrix[0] != 1.0
+          || m->diffusemap.transmatrix[5] != 1.0
+          || m->diffusemap.transmatrix[1] != 0.0
+          || !m->bumpmap.transmatrix || m->bumpmap.transmatrix[15] != 1.0)
+        fail ("material_dxf: MATERIAL %d has no identity matrix after r2000",
+              (int)i);
+      if (m->refraction_index != 1.0)
+        fail ("material_dxf: MATERIAL %d refraction_index %f after r2000",
+              (int)i, m->refraction_index);
+    }
+  if (found != 2)
+    fail ("material_dxf: %d MATERIAL objects after r2000, expected 2", found);
+  dwg_free (&dwg2);
+  if (!numfailed ())
+    ok ("material_dxf: ODA defaults and r2000 matrices");
+  return numfailed ();
+}
 #endif
 
 #if !defined(_WIN32) && !defined(DISABLE_DXF)
@@ -3138,6 +3240,7 @@ main (int argc, char *argv[])
   error += test_preR13_dxf_blocks_to_r2000 ();
   error += test_lwpolyline_to_preR13 ();
   error += test_lwpolyline_to_preR13_dxf ();
+  error += test_material_dxf ();
   error += test_multileader_vertices ();
   error += test_repeat_dxf (R_2_10, 0);
   error += test_repeat_dxf (R_2000, 0);

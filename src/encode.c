@@ -2988,6 +2988,21 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             downconvert_DIMSTYLE (dat, obj); // so far Annotative only
         }
     }
+  // r2000 has no MATERIAL fields, only EED. Add the APPIDs and EEDs before
+  // the tables are written.
+  if (dwg_supports_eed (dwg) && dwg->header.version <= R_2000
+      && dwg->header.from_version >= R_2007)
+    {
+      LOG_TRACE ("Scan for downconverting MATERIALs to EED\n");
+      for (i = 0; i < dwg->num_objects; i++)
+        {
+          // may add APPIDs and move the objects
+          if (dwg->object[i].fixedtype == DWG_TYPE_MATERIAL)
+            dwg_downgrade_MATERIAL (&dwg->object[i]);
+          else if (dwg->object[i].supertype == DWG_SUPERTYPE_ENTITY)
+            dwg_downgrade_entity_material (dwg, i);
+        }
+    }
 
   // pre-R13 has no LWPOLYLINE
   if (dwg->header.from_version >= R_13b1 && dwg->header.version < R_13b1)
@@ -6526,8 +6541,6 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       error = dwg_encode_GROUP (dat, obj);
       break;
     case DWG_TYPE_MATERIAL:
-      if (dat->version <= R_2000 && dat->from_version >= R_2007)
-        dwg_downgrade_MATERIAL (obj);
       error = dwg_encode_MATERIAL (dat, obj);
       (void)dwg_encode_get_class (dwg, obj);
       break;

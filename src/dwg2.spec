@@ -2825,6 +2825,18 @@ DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
     FIELD_RC (map.tiling, dxf5);                                              \
     /* 1 no, 2: scale to curr ent, 4: w/ current block transform */           \
     FIELD_RC (map.autotransform, dxf6);                                       \
+    /* the decoder always reads 16 BD. A DXF without the 43.. matrix groups or  \
+       an API user leaves it NULL: default to the identity */                   \
+    ENCODER {                                                                 \
+      if (!_obj->map.transmatrix)                                             \
+        {                                                                     \
+          _obj->map.transmatrix                                               \
+              = (BITCODE_BD *)calloc (16, sizeof (BITCODE_BD));               \
+          if (_obj->map.transmatrix)                                          \
+            _obj->map.transmatrix[0] = _obj->map.transmatrix[5]               \
+                = _obj->map.transmatrix[10] = _obj->map.transmatrix[15] = 1.0; \
+        }                                                                     \
+    }                                                                         \
     FIELD_VECTOR_N (map.transmatrix, BD, 16, dxf7);                           \
   }
 

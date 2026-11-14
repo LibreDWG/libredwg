@@ -10805,6 +10805,54 @@ get_numfield_value (void *restrict _obj, const Dwg_DYNAPI_field *restrict f)
 }
 #  undef GET_NUMFIELD
 
+// The group codes which add_MATERIAL consumes.
+static bool
+is_material_code (const int code)
+{
+  switch (code)
+    {
+    case 3: case 4: case 6: case 7: case 8: case 9:
+    case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 47:
+    case 48: case 49:
+    case 70: case 71: case 72: case 73: case 74: case 75: case 76: case 77:
+    case 78: case 79:
+    case 90: case 91: case 92: case 93: case 94:
+    case 140: case 141: case 142: case 143: case 144: case 145: case 146:
+    case 147: case 148: case 149:
+    case 170: case 171: case 172: case 173: case 174: case 175: case 176:
+    case 177: case 178: case 179:
+    case 270: case 271: case 272: case 273: case 274: case 275: case 276:
+    case 282: case 468:
+      return true;
+    default:
+      return false;
+    }
+}
+
+/* ODA's DXF omits the MATERIAL fields with their default value. The defaults
+   are those of ODA's DWG */
+static void
+dxf_material_defaults (Dwg_Object_MATERIAL *restrict o)
+{
+  Dwg_MATERIAL_mapper *maps[6]
+      = { &o->diffusemap,    &o->specularmap,   &o->reflectionmap,
+          &o->opacitymap,    &o->bumpmap,       &o->refractionmap };
+  o->ambient_color.factor = 1.0;
+  o->diffuse_color.factor = 1.0;
+  o->specular_color.factor = 1.0;
+  o->opacity_percent = 1.0;
+  o->specular_gloss_factor = 0.5;
+  o->refraction_index = 1.0;
+  o->channel_flags = 127;
+  for (int i = 0; i < 6; i++)
+    {
+      maps[i]->blendfactor = 1.0;
+      maps[i]->projection = 2;
+      maps[i]->tiling = 1;
+      maps[i]->autotransform = 1;
+    }
+}
+
 /* MATERIAL has nested color and mapper subclasses whose DXF group codes are
    position-dependent and partly collide with the trailing scalars (e.g. 270
    is bumpmap.projection here, but luminance_mode in the tail). The generic
@@ -11301,6 +11349,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
 
         found_obj:
           ;
+          if (obj->fixedtype == DWG_TYPE_MATERIAL)
+            dxf_material_defaults (obj->tio.object->tio.MATERIAL);
           // clang-format on
         }
       else // a table
@@ -13292,10 +13342,11 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
             }
           else if (obj->fixedtype == DWG_TYPE_MATERIAL)
             {
-              // colors/mappers start at the ambient_color.flag (70) or
-              // .factor (40); name/description (1/2) fall through to the
-              // generic field search.
-              if (pair->code == 70 || pair->code == 40)
+              // The colors, mappers and scalars start at any of their
+              // codes, ODA omits the unused ones (ByBlock has only the 72).
+              // name/description (1/2) fall through to the generic field
+              // search.
+              if (is_material_code (pair->code))
                 {
                   pair = add_MATERIAL (obj, dat, pair);
                   if (!pair || pair->code == 0) // end or unknown

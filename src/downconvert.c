@@ -1676,109 +1676,207 @@ downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
 #endif
 
 
+// Add n empty EED items and the terminating one. Returns the first new item,
+// or NULL on out of memory.
+static Dwg_Eed *
+eed_extend (Dwg_Eed *restrict *restrict eedp, BITCODE_BL *restrict num_eed,
+            BITCODE_BL n)
+{
+  BITCODE_BL idx = *num_eed;
+  Dwg_Eed *eed = (Dwg_Eed *)realloc (*eedp, (idx + n + 1) * sizeof (Dwg_Eed));
+  if (!eed)
+    return NULL;
+  memset (&eed[idx], 0, (n + 1) * sizeof (Dwg_Eed));
+  *eedp = eed;
+  *num_eed = idx + n;
+  return &eed[idx];
+}
+
+static bool
+eed_item (Dwg_Eed *restrict eed, const BITCODE_RC code, const size_t size)
+{
+  eed->data = (Dwg_Eed_Data *)calloc (1, size);
+  if (!eed->data)
+    return false;
+  eed->data->code = code;
+  return true;
+}
+
+static bool
+eed_item_70 (Dwg_Eed *restrict eed, const BITCODE_RS value)
+{
+  if (!eed_item (eed, 70, 3))
+    return false;
+  eed->data->u.eed_70.rs = value;
+  return true;
+}
+
+static bool
+eed_item_11 (Dwg_Eed *restrict eed, const double x, const double y,
+             const double z)
+{
+  if (!eed_item (eed, 11, 1 + 3 * sizeof (double)))
+    return false;
+  eed->data->u.eed_10.point.x = x;
+  eed->data->u.eed_10.point.y = y;
+  eed->data->u.eed_10.point.z = z;
+  return true;
+}
+
+// The handle of the APPID, added when missing. This may move the objects.
+static BITCODE_RLL
+eed_appid_handle (Dwg_Data *restrict dwg, const char *restrict name)
+{
+  BITCODE_H hdl = dwg_find_tablehandle_silent (dwg, name, "APPID");
+  if (hdl)
+    {
+      LOG_TRACE ("Use APPID.%s (" FORMAT_RLLx ")\n", name,
+                 (BITCODE_RLL)hdl->handleref.value);
+      return hdl->handleref.value;
+    }
+  else
+    {
+      Dwg_Object_APPID *appid = dwg_add_APPID (dwg, name);
+      BITCODE_RLL value = dwg_obj_generic_handlevalue (appid);
+      LOG_TRACE ("Added APPID.%s (" FORMAT_RLLx ")\n", name, value);
+      return value;
+    }
+}
+
+// Compare a name of the source, TU for r2007+ DWGs, else TV, with an ASCII one.
+static bool
+material_name_is (const Dwg_Data *restrict dwg, const BITCODE_T name,
+                  const char *restrict ascii)
+{
+  if (!name)
+    return false;
+  if (IS_FROM_TU_DWG (dwg))
+    {
+      const BITCODE_RS *tu = (const BITCODE_RS *)name;
+      size_t i;
+      for (i = 0; ascii[i]; i++)
+        if (tu[i] != (unsigned char)ascii[i])
+          return false;
+      return tu[i] == 0;
+    }
+  return strEQ ((const char *)name, ascii);
+}
+
+static bool
+is_default_material (const Dwg_Data *restrict dwg, const BITCODE_T name)
+{
+  return material_name_is (dwg, name, "ByLayer")
+         || material_name_is (dwg, name, "ByBlock");
+}
+
 // from >2007 to 2000, no Texture_diffusemap, translucence, ...
-// APPID.ACAD: 3x 70, 0, 71, 70 (2018->2004)
-// TODO: add APPID.ACAD_MATERIAL_MAPPER: 3x 70, 4x 11 to entities
-//           APPID.ACAD_MATERIAL_MAPPER_2: 2x 07 to entities
-// TODO: APPID.ACAD: 0 "RTMaterial", 5: MATERIAL HANDLE
+// The ACAD EED of ODA's r2000 MATERIALs is: 70 -1, 70 3, 70 x, 0 "", 71 y, 70 0
+// ByLayer and ByBlock have none, "Global" has x=0, y=0. Other materials have
+// x in {0, 1, 4} and y in {0, 8, 64, 72}, but what they mean is not known.
+// We use the most common for user materials: x=1, y=0.
 void
 dwg_downgrade_MATERIAL (Dwg_Object *obj)
 {
   Dwg_Data *dwg = obj->parent;
-  Dwg_Object_MATERIAL *_obj;
   Dwg_Object_Object *oo;
-  Dwg_Object_APPID *appid;
-  BITCODE_H hdl;
+  Dwg_Eed *eed;
   BITCODE_RLL eedhdl;
   BITCODE_BL oindex;
-  unsigned int idx;
+  BITCODE_T name;
 
-  if (!obj || obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object)
+  if (!obj || obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object
+      || !obj->tio.object->tio.MATERIAL)
     {
       LOG_ERROR ("Invalid type %s (%u) for dwg_downgrade_MATERIAL",
                  obj ? dwg_type_name (obj->fixedtype) : "",
                  obj ? obj->fixedtype : 0);
       return;
     }
+  name = obj->tio.object->tio.MATERIAL->name;
+  if (is_default_material (dwg, name))
+    return;
   oindex = obj->index;
-  hdl = dwg_find_tablehandle_silent (dwg, "ACAD", "APPID");
-  if (hdl)
-    {
-      eedhdl = hdl->handleref.value;
-      LOG_TRACE ("Use APPID.ACAD (" FORMAT_RLLx ")\n", eedhdl);
-    }
-  else
-    {
-      appid = dwg_add_APPID (dwg, "ACAD");
-      eedhdl = dwg_obj_generic_handlevalue (appid);
-      LOG_TRACE ("Added APPID.ACAD (" FORMAT_RLLx ")\n", eedhdl);
-    }
+  eedhdl = eed_appid_handle (dwg, "ACAD");
   // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
   obj = &dwg->object[oindex];
   if (obj->fixedtype != DWG_TYPE_MATERIAL || !obj->tio.object)
     {
       LOG_ERROR ("Invalid type %s (%u) for dwg_downgrade_MATERIAL",
-                 obj ? dwg_type_name (obj->fixedtype) : "",
-                 obj ? obj->fixedtype : 0);
+                 dwg_type_name (obj->fixedtype), obj->fixedtype);
       return;
     }
   oo = obj->tio.object;
-  idx = oo->num_eed;
   if (dwg_has_eed_appid (oo, eedhdl))
     return;
   LOG_TRACE ("Downgrade MATERIAL " FORMAT_RLLx
              ". Add ACAD EED from %d to %d values\n",
              obj->handle.value, oo->num_eed, oo->num_eed + 6);
-  oo->num_eed += 6;
-  if (idx)
-    oo->eed
-        = (Dwg_Eed *)realloc (oo->eed, (oo->num_eed + 1) * sizeof (Dwg_Eed));
-  else
-    oo->eed = (Dwg_Eed *)calloc (6 + 1, sizeof (Dwg_Eed));
-  dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
-  oo->eed[idx].raw = NULL;
-  oo->eed[idx].size = 21;
-  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
-  oo->eed[idx].data->code = 70;
-  oo->eed[idx].data->u.eed_70.rs = 65535; // -1
-  idx++;
-  oo->eed[idx].raw = NULL;
-  oo->eed[idx].size = 0;
-  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
-  oo->eed[idx].data->code = 70;
-  oo->eed[idx].data->u.eed_70.rs = 3;
-  idx++;
-  oo->eed[idx].raw = NULL;
-  oo->eed[idx].size = 0;
-  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
-  oo->eed[idx].data->code = 70;
-  oo->eed[idx].data->u.eed_70.rs = 1;
-  idx++;
-  oo->eed[idx].raw = NULL;
-  oo->eed[idx].size = 0;
-  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (6, 1);
-  oo->eed[idx].data->code = 0;
-  // implicitly set by calloc
-  // oo->eed[idx].data->u.eed_0.string[0] = '\0';
-  // oo->eed[idx].data->u.eed_0.length = 0;
-  // oo->eed[idx].data->u.eed_0.codepage = dwg->header.codepage;
-  idx++;
-  oo->eed[idx].raw = NULL;
-  oo->eed[idx].size = 0;
-  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (5, 1);
-  oo->eed[idx].data->code = 71;
-  oo->eed[idx].data->u.eed_71.rl = 72;
-  idx++;
-  oo->eed[idx].raw = NULL;
-  oo->eed[idx].size = 0;
-  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
-  oo->eed[idx].data->code = 70;
-  oo->eed[idx].data->u.eed_70.rs = 0;
-  idx++;
-  oo->eed[idx].size = 0;
-  oo->eed[idx].raw = NULL;
-  oo->eed[idx].data = NULL;
-  assert (oo->num_eed == idx);
+  eed = eed_extend (&oo->eed, &oo->num_eed, 6);
+  if (!eed)
+    return;
+  dwg_add_handle (&eed[0].handle, 5, eedhdl, NULL);
+  eed[0].size = 21;
+  eed_item_70 (&eed[0], 65535); // -1
+  eed_item_70 (&eed[1], 3);
+  eed_item_70 (&eed[2], material_name_is (dwg, name, "Global") ? 0 : 1);
+  // an empty string: length and codepage 0
+  eed_item (&eed[3], 0, 6);
+  if (eed_item (&eed[4], 71, 5))
+    eed[4].data->u.eed_71.rl = 0;
+  eed_item_70 (&eed[5], 0);
+}
+
+// from >2007 to 2000: an entity with a material (not ByLayer) gets the
+// default mapper EEDs, as ODA does:
+// ACAD_MATERIAL_MAPPER: 70 2, 70 0, 70 0, 4x 11 (an identity matrix 4x3)
+// ACAD_MATERIAL_MAPPER_2: 70 0, 70 0
+// There is no "RTMaterial" EED in any ODA sample, the link to the material
+// is lost in r2000.
+void
+dwg_downgrade_entity_material (Dwg_Data *restrict dwg, const BITCODE_BL oindex)
+{
+  Dwg_Object *obj = &dwg->object[oindex];
+  Dwg_Object_Entity *ent;
+  Dwg_Object *mat;
+  Dwg_Eed *eed;
+  BITCODE_RLL hdl1, hdl2;
+
+  if (obj->supertype != DWG_SUPERTYPE_ENTITY || !(ent = obj->tio.entity)
+      || !ent->material || !ent->material->absolute_ref)
+    return;
+  mat = dwg_ref_object_silent (dwg, ent->material);
+  if (!mat || mat->fixedtype != DWG_TYPE_MATERIAL || !mat->tio.object
+      || !mat->tio.object->tio.MATERIAL
+      || is_default_material (dwg, mat->tio.object->tio.MATERIAL->name))
+    return;
+  hdl1 = eed_appid_handle (dwg, "ACAD_MATERIAL_MAPPER");
+  hdl2 = eed_appid_handle (dwg, "ACAD_MATERIAL_MAPPER_2");
+  // the objects may have moved
+  obj = &dwg->object[oindex];
+  ent = obj->tio.entity;
+  if (!ent)
+    return;
+  for (BITCODE_BL i = 0; i < ent->num_eed; i++)
+    if (ent->eed[i].handle.value == hdl1)
+      return;
+  LOG_TRACE ("Add MATERIAL_MAPPER EED to %s " FORMAT_RLLx "\n", obj->name,
+             obj->handle.value);
+  eed = eed_extend (&ent->eed, &ent->num_eed, 7 + 2);
+  if (!eed)
+    return;
+  dwg_add_handle (&eed[0].handle, 5, hdl1, NULL);
+  eed[0].size = 3 * 3 + 4 * (1 + 3 * sizeof (double));
+  eed_item_70 (&eed[0], 2);
+  eed_item_70 (&eed[1], 0);
+  eed_item_70 (&eed[2], 0);
+  eed_item_11 (&eed[3], 0.0, 0.0, 0.0);
+  eed_item_11 (&eed[4], 1.0, 0.0, 0.0);
+  eed_item_11 (&eed[5], 0.0, 1.0, 0.0);
+  eed_item_11 (&eed[6], 0.0, 0.0, 1.0);
+  dwg_add_handle (&eed[7].handle, 5, hdl2, NULL);
+  eed[7].size = 2 * 3;
+  eed_item_70 (&eed[7], 0);
+  eed_item_70 (&eed[8], 0);
 }
 
 // up or downconvert from/to 256/512 bytes
