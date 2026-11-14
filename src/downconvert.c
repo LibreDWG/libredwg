@@ -1695,7 +1695,9 @@ eed_extend (Dwg_Eed *restrict *restrict eedp, BITCODE_BL *restrict num_eed,
 static bool
 eed_item (Dwg_Eed *restrict eed, const BITCODE_RC code, const size_t size)
 {
-  eed->data = (Dwg_Eed_Data *)calloc (1, size);
+  // at least the whole union, the compiler knows the type of the pointer
+  eed->data = (Dwg_Eed_Data *)calloc (
+      1, size < sizeof (Dwg_Eed_Data) ? sizeof (Dwg_Eed_Data) : size);
   if (!eed->data)
     return false;
   eed->data->code = code;

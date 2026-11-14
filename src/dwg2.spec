@@ -2840,9 +2840,29 @@ DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
     FIELD_VECTOR_N (map.transmatrix, BD, 16, dxf7);                           \
   }
 
+/* The procedural textures (source 2) are only supported with DEBUG_CLASSES.
+   DXF import does not read them, and the nested textures are recursive.
+   Write them as a map without a file, i.e. no map. */
+#ifdef DEBUG_CLASSES
+#  define MAT_NO_PROCEDURAL(map)
+#else
+#  define MAT_UNPROCEDURAL(map)                                               \
+  if (_obj->map.source == 2)                                                  \
+    {                                                                         \
+      LOG_WARN ("MATERIAL " FORMAT_RLLx ".%s: procedural texture dropped",   \
+                obj->handle.value, #map);                                     \
+      _obj->map.source = 1;                                                   \
+      _obj->map.filename = NULL;                                              \
+    }
+#  define MAT_NO_PROCEDURAL(map)                                              \
+  ENCODER { MAT_UNPROCEDURAL (map) }                                          \
+  DXF { MAT_UNPROCEDURAL (map) }
+#endif
+
 #define MAT_MAP(map, dxf1, dxf2, dxf3, dxf4, dxf5, dxf6, dxf7)                \
   FIELD_BD (map.blendfactor, dxf1);                                           \
   MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7);                                   \
+  MAT_NO_PROCEDURAL (map);                                                    \
   FIELD_RC (map.source, dxf2); /* 0 scene, 1 file (def), 2 procedural */      \
   if (FIELD_VALUE (map.source) == 1)                                          \
     {                                                                         \

@@ -1462,6 +1462,10 @@ test_material_dxf (void)
           || m->diffusemap.blendfactor != 1.0 || m->diffusemap.projection != 2
           || m->bumpmap.tiling != 1)
         fail ("material_dxf: MATERIAL %d has no ODA defaults", (int)i);
+#ifndef DEBUG_CLASSES
+      // procedural textures are written as no map
+      ((Dwg_Object_MATERIAL *)m)->diffusemap.source = 2;
+#endif
     }
   if (found != 2)
     fail ("material_dxf: %d MATERIAL objects, expected 2", found);
@@ -1500,6 +1504,11 @@ test_material_dxf (void)
       if (m->refraction_index != 1.0)
         fail ("material_dxf: MATERIAL %d refraction_index %f after r2000",
               (int)i, m->refraction_index);
+#ifndef DEBUG_CLASSES
+      if (m->diffusemap.source != 1)
+        fail ("material_dxf: MATERIAL %d procedural map %d after r2000",
+              (int)i, (int)m->diffusemap.source);
+#endif
     }
   if (found != 2)
     fail ("material_dxf: %d MATERIAL objects after r2000, expected 2", found);
