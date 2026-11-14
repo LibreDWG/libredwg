@@ -69,8 +69,10 @@ jobs:
         sudo apt-get -y install texlive help2man libconvert-binary-c-perl shellcheck \
           swig python3-dev python3-lxml libxml2-dev libpcre2-dev libpcre2-32-0 jq \
           pkg-config shellcheck parallel rpmlint shfmt doxygen jing valgrind cppcheck \
-          gperf intltool latexml
-        build-aux/install-libxslt
+          gperf intltool latexml xsltproc
+        # libxslt 1.1.39 does not build with the libxml2 of newer runners.
+        # Use the system xsltproc then.
+        build-aux/install-libxslt || echo "libxslt not built, using the system xsltproc"
         build-aux/install-pslib
         build-aux/install-relaxng-svg11
         sudo npm i -g geojson-validation
@@ -145,6 +147,8 @@ jobs:
       continue-on-error: true
   mips32-big-endian:
     runs-on: ubuntu-latest
+    # gcc-mips-linux-gnu is gone from newer Ubuntu releases
+    continue-on-error: true
     timeout-minutes: 35
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
