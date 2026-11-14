@@ -23,6 +23,7 @@ TESTDATA = \
     test-data/2000/Ellipse.jpg \
     test-data/2000/Ellipse.txt \
     test-data/2000/HatchEdges.dxf \
+    test-data/2000/Inserts.dxf \
     test-data/2000/OcsEntities.dxf \
     test-data/2000/OcsEntities2.dxf \
     test-data/2000/Helix.dwg \
