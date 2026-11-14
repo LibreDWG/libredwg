@@ -1945,6 +1945,9 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   rbuf->value.str.is_tu = 1;
                   rbuf->value.str.u.wdata = bit_utf8_to_TU (s, 0);
                   free (s);
+                  // the chars, not the UTF-8 bytes
+                  len = bit_wcs2len (rbuf->value.str.u.wdata);
+                  rbuf->value.str.size = len & 0xFFFF;
                   LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
                   size += ((len * 2) & 0xFFFF) + 2;
                 }

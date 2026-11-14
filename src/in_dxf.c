@@ -8382,9 +8382,11 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       LATER_VERSIONS
       {
         size_t length = strlen (pair->value.s.ptr);
-        rbuf->value.str.size = length & 0xFFFF;
         if (length > 0)
           rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s.ptr, 0);
+        // the chars, not the UTF-8 bytes
+        length = bit_wcs2len (rbuf->value.str.u.wdata);
+        rbuf->value.str.size = length & 0xFFFF;
         rbuf->value.str.is_tu = 1;
         LOG_TRACE ("xdata[%d]: \"%s\" [TU %d]\n", num_xdata, pair->value.s.ptr,
                    rbuf->type);
