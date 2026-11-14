@@ -121,6 +121,20 @@
       CHECK_OBJECT_TYPE (_name) \
       return DEBUGGING_DXF(action, name) DWG_FUNC_N(action,_name) (dat, obj); \
     }
+/* Unstable for DWG, but its DXF output is supported. */
+#define UNSTABLE_CLASS_ALLOW_DXF(action, _name) \
+  if (klass->dxfname && strEQc (klass->dxfname, #_name)) \
+    { \
+      WARN_UNSTABLE_CLASS; \
+      if (strEQc (_STR(action), "decode") || !memcmp (_STR(action), "in", 2)) { \
+        obj->name = (char*) #_name; \
+        obj->dxfname = (char*) #_name; \
+        obj->fixedtype = DWG_TYPE_##_name; \
+        obj->klass = klass; \
+      } \
+      CHECK_OBJECT_TYPE (_name) \
+      return DWG_FUNC_N(action,_name) (dat, obj); \
+    }
 #define UNSTABLE_CLASS_DXF(action, _name, _dxfname) \
   if (klass->dxfname && strEQc (klass->dxfname, #_dxfname)) \
     { \
@@ -297,7 +311,7 @@
   UNSTABLE_CLASS     (ACTION, LARGE_RADIAL_DIMENSION) /* ent */
   UNSTABLE_CLASS     (ACTION, LAYOUTPRINTCONFIG) /* ent. CSD_APP, probably a mistake as ent */
   UNSTABLE_CLASS     (ACTION, LIGHTLIST)
-  UNSTABLE_CLASS     (ACTION, MATERIAL) // encode fails ODA, fields missing
+  UNSTABLE_CLASS_ALLOW_DXF (ACTION, MATERIAL) // encode fails ODA, fields missing
   UNSTABLE_CLASS     (ACTION, MENTALRAYRENDERSETTINGS) // not exported by Teigha
   UNSTABLE_CLASS     (ACTION, OBJECT_PTR)
   UNSTABLE_CLASS_CPP (ACTION, OBJECT_PTR, CAseDLPNTableRecord)

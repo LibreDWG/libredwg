@@ -74,7 +74,6 @@ static int encode_preR13_section (const Dwg_Section_Type_r11 id,
                                   Dwg_Data *restrict dwg);
 // static void downconvert_relative_handle (BITCODE_H handle,
 //                                          Dwg_Object *restrict obj);
-void dwg_downgrade_MATERIAL (Dwg_Object *obj);
 
 /* the current version per spec block */
 static Dwg_Version_Type cur_ver = R_INVALID;
@@ -5079,7 +5078,7 @@ if (num + tblnum >= dwg->num_objects)                                          \
   return error;
 }
 
-#ifndef DEBUG_CLASSES
+#if 0 // unused since MATERIAL is encoded again
 static void
 disable_3DSOLID_materials (Dwg_Object *obj)
 {

@@ -1619,7 +1619,7 @@ fill_owned_entities (Dwg_Data *restrict dwg)
   return 0;
 }
 
-#if 1
+#if 0
 // from >2000 to 2000-r13, no relative refs,. FIXME: except prev,next links.
 // only with older objects, not class objects.
 static void
