@@ -930,7 +930,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str116,                 "SECTION_SETTINGS",                  DWG_TYPE_SECTION_SETTINGS,	0,	UNSTABLE},
       {-1},
 #line 310 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str118,                         "MATERIAL",                          DWG_TYPE_MATERIAL,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str118,                         "MATERIAL",                          DWG_TYPE_MATERIAL,	0,	STABLE},
       {-1},
 #line 336 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str120,                  "RASTERVARIABLES",                   DWG_TYPE_RASTERVARIABLES,	0,	STABLE},
