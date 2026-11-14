@@ -145,23 +145,6 @@ jobs:
     - run: cd /lib64 && sudo ln -s /usr/powerpc64-linux-gnu/lib/ld64.so.1
     - run: make -j check-minimal
       continue-on-error: true
-  mips32-big-endian:
-    runs-on: ubuntu-latest
-    # gcc-mips-linux-gnu is gone from newer Ubuntu releases
-    continue-on-error: true
-    timeout-minutes: 35
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        fetch-depth: 1
-        submodules: recursive
-    - run: sudo apt-get -y update && sudo apt-get -y install gcc-mips-linux-gnu gcc-multilib-mips-linux-gnu
-    - uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
-      with:
-        key: ${{ github.job }}
-    - run: sh autogen.sh
-    - run: CC="ccache mips-linux-gnu-gcc" CFLAGS=-Os ./configure --host=mips-linux-gnu --disable-bindings --disable-python
-    - run: make -j
   linux-cmake:
     runs-on: ubuntu-latest
     timeout-minutes: 20
