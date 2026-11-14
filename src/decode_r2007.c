@@ -2376,7 +2376,9 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   assert (sec_dat.size >= 32);
   assert (sec_dat.chain);
-  dwg->thumbnail.size = sec_dat.size - 32; // 2x sentinel
+  // Like r2004: the size is from the offset, and keeps the END sentinel.
+  // The DXF writer and the encoder expect this.
+  dwg->thumbnail.size = sec_dat.size - 16;
   dwg->thumbnail.chain = sec_dat.chain;
   dwg->thumbnail.byte = 16; // sentinel
 
