@@ -1438,7 +1438,9 @@ lwpolyline_to_polyline (Dwg_Data *restrict dwg, const BITCODE_BL idx)
 
   if (!owner || owner->fixedtype != DWG_TYPE_BLOCK_HEADER)
     owner = dwg_model_space_object (dwg);
-  if (!owner || !owner->tio.object || !owner->tio.object->tio.BLOCK_HEADER)
+  /* dwg_insert_entity() requires the model space. A fuzzed DWG may have none. */
+  if (!owner || !owner->tio.object || !owner->tio.object->tio.BLOCK_HEADER
+      || !dwg_model_space_ref (dwg) || !dwg_paper_space_ref (dwg))
     return DWG_ERR_INVALIDDWG;
   hdr = owner->tio.object->tio.BLOCK_HEADER;
   if (n && !_lw->points)
