@@ -2,7 +2,7 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2026 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.14.1 - 2026-07-25 - beta:
+LibreDWG version 0.14.1 - 2026-11-28 - beta:
 
 Security fixes:
   * Fixed GHSA-67c2-h2w2-32g4: double-free and loss of the model-space
@@ -64,6 +64,9 @@ Security fixes:
     size > end - start, and its no-advance guard only worked for the
     first entity.  GH #1131.  Reported by batam111.
 
+Major features:
+  * use mmap for input files.
+
 Minor bugfixes / fuzzing fixes:
   * Fixed DXF input termination at mmap page boundaries, avoiding writes
     for binary and newline-terminated input and buffering Windows input
@@ -71,7 +74,7 @@ Minor bugfixes / fuzzing fixes:
   * Fixed pre-R14 binary DXF imports ending at the EOF group.
   * Fixed ATTRIB DXF version and position-lock flags being conflated with
     an unrelated AcDbXrecord field.  GH #1399.
-  * dwg2dxf: pre-R13 REPEAT/ENDREP spans are now written as arrayed
+  * dwg2dxf: pre-R13 REPEAT/ENDREP spans are now upgraded to arrayed
     INSERTs of an anonymous block instead of unknown DXF entities, so the
     array is no longer lost.  LOAD is dropped with a warning.  GH #1354.
   * Fixed the pre-R13 writer and the pre-R13 DXF import.  Converting an
@@ -86,7 +89,12 @@ Minor bugfixes / fuzzing fixes:
     default (DD), bit-longlongs, the r2007 section names, the size of
     handles and the integers set via dynapi from DXF and JSON were read
     and written with the wrong byte order, so most r2007+ DWGs, DXFs and
-    JSONs were not readable.  All tests pass on s390x now.
+    JSONs were not readable.  All tests pass on s390x and ppc64 in CI now.
+  * Replaced the unused Reed-Solomon (255,239) code src/reedsolomon.c, by a new
+    implementation of the textbook algorithms (Berlekamp-Massey, Chien
+    search and Forney), without third-party code and the need of a copyright
+    assignment.  It produces the same parity as the old one, and corrects up
+    to 8 errors per block (the old one failed at 8).
   * MATERIAL is stable now. DXF import takes the defaults of ODA's DXF, which
     omits the fields with their default value, and ByLayer and ByBlock
     without fields. Converting r2007+ to r2000 adds the ACAD EED to the

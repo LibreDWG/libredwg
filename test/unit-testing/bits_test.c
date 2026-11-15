@@ -4,6 +4,7 @@
 #include "common.h"
 #include "codepages.h"
 #include "decode_r11.h"
+#include "reedsolomon.h"
 #include <string.h>
 #include <stdlib.h>
 #include "tests_common.h"
@@ -2179,6 +2180,60 @@ main (int argc, char const *argv[])
     if (!fails)
       pass ();
     free (s);
+  }
+
+  /* Reed-Solomon (255,239) of the r2007+ system pages: up to 8 errors are
+     corrected, parity of a short block is that of the zero-padded one */
+  {
+    unsigned char data[239], blk[255], good[255], padded[239], par1[16],
+        par2[16];
+    unsigned seed = 12345;
+    int round, i, k, err;
+    for (round = 0; round < 40; round++)
+      {
+        const int nerr = round % 9; // 0..8
+        for (i = 0; i < 239; i++)
+          {
+            seed = seed * 1103515245u + 12345u;
+            data[i] = (unsigned char)(seed >> 16);
+          }
+        memcpy (good, data, 239);
+        rs_encode_block (good + 239, data, 239);
+        memcpy (blk, good, 255);
+        for (k = 0; k < nerr; k++)
+          {
+            seed = seed * 1103515245u + 12345u;
+            i = (int)((seed >> 8) % 255);
+            while (blk[i] != good[i]) // a position of its own
+              i = (i + 1) % 255;
+            blk[i] ^= (unsigned char)(1 + (seed >> 24) % 255);
+          }
+        err = rs_decode_block (blk, 0);
+        if ((nerr && err != -1) || (!nerr && err != 0))
+          fail ("rs_decode_block fix=0 %d errors: %d", nerr, err);
+        err = rs_decode_block (blk, 1);
+        if (err != nerr || memcmp (blk, good, 255))
+          fail ("rs_decode_block fix=1 %d errors: %d", nerr, err);
+        else
+          pass ();
+      }
+    // a block with 9 errors in the same codeword cannot be corrected
+    memcpy (blk, good, 255);
+    for (i = 0; i < 9; i++)
+      blk[i * 27] ^= (unsigned char)(i + 1);
+    if (rs_decode_block (blk, 1) == 9)
+      fail ("rs_decode_block claims to fix 9 errors");
+    else
+      pass ();
+    // the parity of 100 bytes is the one of the zero-padded 239 bytes
+    memset (padded, 0, sizeof padded);
+    memcpy (padded, data, 100);
+    rs_encode_block (par1, data, 100);
+    rs_encode_block (par2, padded, 239);
+    if (memcmp (par1, par2, 16))
+      fail ("rs_encode_block short block != zero-padded");
+    else
+      pass ();
   }
 
   free (bitchain.chain);
