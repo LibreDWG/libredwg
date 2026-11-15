@@ -974,7 +974,18 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object_Ref *ref = dwg->object_ref[i];
       LOG_HANDLE ("-objref[%3ld]: HANDLE" FORMAT_REF "\n", (long)i,
                   ARGS_REF (ref));
-      assert (ref->handleref.is_global == 1);
+      if (!ref)
+        {
+          LOG_ERROR ("object_ref[%ld]: NULL ref\n", (long)i);
+          continue;
+        }
+      if (!ref->handleref.is_global)
+        {
+          LOG_WARN ("object_ref[%ld]: fixing non-global handle ref "
+                    FORMAT_REF "\n",
+                    (long)i, ARGS_REF (ref));
+          ref->handleref.is_global = 1;
+        }
       // skip code 0 refs (e.g. HANDSEED), they are handle values, not obj refs
       if (ref->handleref.code == 0)
         continue;
@@ -6161,6 +6172,7 @@ dwg_validate_POLYLINE (Dwg_Object *restrict obj)
                       = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
                   seqend->obj = next;
                   seqend->handleref = next->handle;
+                  seqend->handleref.is_global = 1;
                   seqend->absolute_ref = next->handle.value;
                   dwg_decode_add_object_ref (dwg, seqend);
                 }
@@ -6182,6 +6194,7 @@ dwg_validate_POLYLINE (Dwg_Object *restrict obj)
                               1, sizeof (Dwg_Object_Ref));
                           seqend->obj = next;
                           seqend->handleref = next->handle;
+                          seqend->handleref.is_global = 1;
                           seqend->absolute_ref = next->handle.value;
                           dwg_decode_add_object_ref (dwg, seqend);
                         }
