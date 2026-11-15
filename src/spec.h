@@ -461,9 +461,9 @@
 #  define FIELD_2RD_1(nam, dxf) FIELD_2RD (nam, dxf)
 #endif
 
-// double to text
+// double stored as a string, in the same stream as FIELD_T (r2007+ text stream).
 #ifndef FIELD_D2T
-#  define FIELD_D2T(name, dxf) FIELD_TV (name, dxf)
+#  define FIELD_D2T(name, dxf) FIELD_T (name, dxf)
 #endif
 #ifndef LOG_TRACE_TF
 #  define LOG_TRACE_TF(var, len)
