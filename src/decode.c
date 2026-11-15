@@ -115,6 +115,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   char magic[11];
 
   dwg->num_object_refs = 0;
+  dwg->num_alloced_object_refs = 0;
   // dwg->num_layers = 0; // see now dwg->layer_control->num_entries
   dwg->num_entities = 0;
   dwg->num_objects = 0;
@@ -4696,20 +4697,29 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
                                  : REFS_PER_REALLOC;
       if (max_refs < REFS_PER_REALLOC)
         max_refs = REFS_PER_REALLOC;
+      dwg->num_alloced_object_refs = (BITCODE_BL)max_refs;
       dwg->object_ref
           = (Dwg_Object_Ref **)calloc (max_refs, sizeof (Dwg_Object_Ref *));
     }
-  else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
+  else if (dwg->num_object_refs >= dwg->num_alloced_object_refs)
     {
+      BITCODE_BL old_num = dwg->num_alloced_object_refs;
+      if (!dwg->num_alloced_object_refs)
+        dwg->num_alloced_object_refs = REFS_PER_REALLOC;
+      while (dwg->num_object_refs >= dwg->num_alloced_object_refs)
+        dwg->num_alloced_object_refs += REFS_PER_REALLOC;
       dwg->object_ref = (Dwg_Object_Ref **)realloc (
-          dwg->object_ref, (dwg->num_object_refs + REFS_PER_REALLOC)
-                               * sizeof (Dwg_Object_Ref *));
-      memset (&dwg->object_ref[dwg->num_object_refs], 0,
-              REFS_PER_REALLOC * sizeof (Dwg_Object_Ref *));
+          dwg->object_ref,
+          dwg->num_alloced_object_refs * sizeof (Dwg_Object_Ref *));
+      if (dwg->object_ref)
+        memset (&dwg->object_ref[old_num], 0,
+                (dwg->num_alloced_object_refs - old_num)
+                    * sizeof (Dwg_Object_Ref *));
       // The realloc moves only the array of pointers; the refs and their
       // cached ref->obj are untouched, so dirty_refs is not set here.
-      LOG_TRACE ("REALLOC dwg->object_ref vector to %u\n",
-                 dwg->num_object_refs + REFS_PER_REALLOC);
+      LOG_TRACE ("REALLOC dwg->object_ref vector to %u
+",
+                 dwg->num_alloced_object_refs);
     }
   if (!dwg->object_ref)
     {

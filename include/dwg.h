@@ -11476,6 +11476,7 @@ typedef struct _dwg_struct
   Dwg_Object * object;           /*!< list of all objects and entities */
   BITCODE_BL num_entities;       /*!< number of entities in object */
   BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
+  BITCODE_BL num_alloced_object_refs; /*!< room for object_ref pointers */
   BITCODE_BL cur_index;          /*!< how many we have written currently */
   BITCODE_RS last_viewport_id;   /*!< auto-incremented VIEWPORT id for DXF */
   Dwg_Object *last_viewport_block; /*< owning block of the last numbered
