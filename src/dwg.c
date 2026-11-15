@@ -577,7 +577,13 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   error = DWG_ERR_IOERROR;
 #  ifdef DWG_HAVE_MMAP
   if (!needs_newline)
-    error = dat_mmap_read (&dat, 0);
+    {
+      /* The readers (strlen, sscanf, strtol) still need a NUL after the
+         input.  Without overshoot that is only the zero-filled tail of a
+         partial last page.  Page sizes are multiples of 4K. */
+      if (last == '\0' || dat.size % 4096)
+        error = dat_mmap_read (&dat, 0);
+    }
 #    ifndef _WIN32
   else
     {
