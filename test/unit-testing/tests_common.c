@@ -123,8 +123,21 @@ test_2018_dxf (const char *prefix, const char *lower, const int cov)
   // the converter needs a display
   if (!getenv ("DISPLAY") && !system ("command -v xvfb-run >/dev/null 2>&1"))
     xvfb = "xvfb-run -a ";
-  if (!realpath (dxf, indir))
-    return 0;
+  // An absolute path is enough for the converter. Not realpath(): with
+  // glibc's fortify wrapper and some compilers it recurses endlessly.
+  if (dxf[0] == '/')
+    {
+      if (snprintf (indir, sizeof (indir), "%s", dxf) >= (int)sizeof (indir))
+        return 0;
+    }
+  else
+    {
+      char cwd[PATH_MAX];
+      if (!getcwd (cwd, sizeof (cwd))
+          || snprintf (indir, sizeof (indir), "%s/%s", cwd, dxf)
+                 >= (int)sizeof (indir))
+        return 0;
+    }
   p = strrchr (indir, '/');
   *p = '\0'; // the input folder, test-data/2018
   if (snprintf (sub, sizeof (sub), "%s/oda-tmp-XXXXXX", indir)

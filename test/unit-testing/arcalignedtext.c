@@ -1,4 +1,4 @@
-// DEBUGGING,no coverage yet
+// UNSTABLE, coverage: 2018/arcalignedtext.dxf only
 #define DWG_TYPE DWG_TYPE_ARCALIGNEDTEXT
 #include "tests_common.c"
 
@@ -46,18 +46,17 @@ api_process (dwg_object *obj)
   BITCODE_H arc_handle;        /*!< DXF 330 */
 
   Dwg_Version_Type version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_ent_arcalignedtext *atext = dwg_object_to_ARCALIGNEDTEXT (obj);
 
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, text_value);
-  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, text_size); // D2T double as TV
-  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, xscale);    // -"-
+  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, text_size);    // D2T double as T
+  CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, xscale);       // -"-
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, char_spacing); // -"-
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, style);
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, font_name);
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, bigfont_name);
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT,
-                       offset_from_arc); // D2T double as TV
+                       offset_from_arc);                     // D2T double as T
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, right_offset); // -"-
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, left_offset);  // -"-
 
@@ -87,5 +86,4 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (atext, ARCALIGNEDTEXT, alignment, BS);
   CHK_ENTITY_UTF8TEXT (atext, ARCALIGNEDTEXT, style);
-#endif
 }
