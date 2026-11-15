@@ -4286,33 +4286,45 @@ dwg_decode_ole2 (Dwg_Entity_OLE2FRAME *restrict _obj)
   dat->version = _obj->parent->dwg->header.version;
   dat->from_version = _obj->parent->dwg->header.from_version;
 
-  // TODO decode the unknowns
-  /* Sample data from TS1.dwg:
-00000000: 8055 40f9 3284 d222 3e40 7436 e0d9 23fd  .U@.2..">@t6..#.
-00000010: 32c0 0000 0000 0000 0000 d879 8900 cda2  2..........y....
-00000020: 4140 7436 e0d9 23fd 32c0 0000 0000 0000  A@t6..#.2.......
-00000030: 0000 d879 8900 cda2 4140 1420 d4f3 b864  ...y....A@. ...d
-00000040: 36c0 0000 0000 0000 0000 40f9 3284 d222  6.........@.2.."
-00000050: 3e40 1420 d4f3 b864 36c0 0000 0000 0000  >@. ...d6.......
-00000060: 0000 021f 9114 0100 0000 0001 0000 0100  ................
-00000070: 0000 0100 0000 0000 0100 0000 0090 0500  ................
-=> from the DXF
+  /* Autodesk OLE2FRAME data starts with a 0x80-byte header, then MS-CFB.
+     After a 2-byte unknown prefix (commonly 0x80 0x55), the header stores
+     four WCS corners as LE 3D doubles: upper-left, upper-right, lower-right,
+     lower-left. DXF group codes 10/11 are the first and third corners.
+     Sample from TS1.dwg (prefix 8055, then corners for pt1/pt2 below):
 oleversion 2 [70]
 oleclient  "OLE" [3] (but the cfb contains PBrush.9)
 pt1        (30.13602472538446, -18.98882829402869, 0.0) [10]
 pt2        (35.27188116753285, -22.39344715050545, 0.0) [11]
    */
-  // FIXME decode the fields
-  // FIELD_BS (oleversion, 70);
-  // FIELD_TV (oleclient, 3);
-  // FIELD_2BD (pt1, 10);
-  // FIELD_2BD (pt2, 11);
   _obj->oleversion = 2;
   _obj->oleclient = (BITCODE_TF)strdup ("OLE");
-  _obj->pt1.x = 30.13602472538446;
-  _obj->pt1.y = -18.98882829402869;
-  _obj->pt2.x = 35.27188116753285;
-  _obj->pt2.y = -22.39344715050545;
+  if (_obj->data && _obj->data_size >= 98)
+    {
+      Bit_Chain hdat;
+      hdat.bit = 0;
+      hdat.byte = 2; /* skip unknown 2-byte prefix */
+      hdat.size = 0x80;
+      hdat.chain = (unsigned char *)&_obj->data[0];
+      hdat.version = dat->version;
+      hdat.from_version = dat->from_version;
+      // upper-left
+      _obj->pt1.x = bit_read_RD (&hdat);
+      _obj->pt1.y = bit_read_RD (&hdat);
+      _obj->pt1.z = bit_read_RD (&hdat);
+      // upper-right (skip)
+      (void)bit_read_RD (&hdat);
+      (void)bit_read_RD (&hdat);
+      (void)bit_read_RD (&hdat);
+      // lower-right
+      _obj->pt2.x = bit_read_RD (&hdat);
+      _obj->pt2.y = bit_read_RD (&hdat);
+      _obj->pt2.z = bit_read_RD (&hdat);
+    }
+  else
+    {
+      _obj->pt1.x = _obj->pt1.y = _obj->pt1.z = 0.0;
+      _obj->pt2.x = _obj->pt2.y = _obj->pt2.z = 0.0;
+    }
 
   // next, see the MS-CFB format
   dat->bit = 0;
