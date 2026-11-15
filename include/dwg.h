@@ -1574,7 +1574,6 @@ typedef enum DWG_ERROR
   DWG_ERR_INVALIDDWG       = 1 << 11,/* 2048 */
   DWG_ERR_IOERROR          = 1 << 12,/* 4096 */
   DWG_ERR_OUTOFMEM         = 1 << 13,/* 8192 */
-
 } Dwg_Error;
 #define DWG_ERR_CRITICAL DWG_ERR_CLASSESNOTFOUND
 
@@ -4063,7 +4062,6 @@ typedef struct _dwg_entity_MPOLYGON
   BITCODE_2RD x_dir;  /* DXF 11 (ocs) */
   BITCODE_BL num_boundary_handles; /* DXF 99 */
   //BITCODE_H* boundary_handles;
-
 } Dwg_Entity_MPOLYGON;
 
 /**
@@ -4245,7 +4243,6 @@ typedef struct _dwg_MLEADER_AnnotContext
 
   BITCODE_BS text_top;
   BITCODE_BS text_bottom;
-
 } Dwg_MLEADER_AnnotContext;
 
 // dbmleader.h
@@ -4911,7 +4908,6 @@ typedef struct _dwg_entity_TABLE
   Dwg_TABLE_BreakHeight *break_heights;
   BITCODE_BL num_break_rows;
   Dwg_TABLE_BreakRow *break_rows;
-
 } Dwg_Entity_TABLE;
 
 #undef TABLECONTENT_fields
@@ -5446,7 +5442,6 @@ typedef struct _dwg_entity_SECTIONOBJECT
   BITCODE_BL num_blverts;	/*!< DXF 93 */
   BITCODE_3BD *blverts;		/*!< DXF 12 */
   BITCODE_H section_settings;	/*!< DXF 360 */
-
 } Dwg_Entity_SECTIONOBJECT;
 
 /**
@@ -5563,7 +5558,6 @@ typedef struct _dwg_object_VISUALSTYLE
   BITCODE_B b_prop37;   BITCODE_BS b_prop37_int;
   BITCODE_BD bd_prop38; BITCODE_BS bd_prop38_int;
   BITCODE_BD bd_prop39; BITCODE_BS bd_prop39_int;
-
 } Dwg_Object_VISUALSTYLE;
 
 /**
@@ -5873,7 +5867,6 @@ typedef struct _dwg_entity_HELIX
   BITCODE_BD turn_height;   /*!< DXF 42 */
   BITCODE_B handedness;       /*!< DXF 290: 0: left, 1: right (twist) */
   BITCODE_RC constraint_type; /*!< DXF 280: 0: turn_height, 1: turns, 2: height */
-
 } Dwg_Entity_HELIX;
 
 // TODO ACSH_SWEEP_CLASS has different names,
@@ -6007,7 +6000,6 @@ typedef struct _dwg_entity_PLANESURFACE
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version;      /*!< DXF 90 */
-
 } Dwg_Entity_PLANESURFACE;
 
 /**
@@ -6034,7 +6026,6 @@ typedef struct _dwg_entity_REVOLVEDSURFACE
   BITCODE_BD twist_angle; // 46
   BITCODE_B solid; // 290
   BITCODE_B close_to_axis; // 291
-
 } Dwg_Entity_REVOLVEDSURFACE;
 
 /**
@@ -7125,7 +7116,6 @@ typedef struct _dwg_object_ACSH_BOX_CLASS
   BITCODE_BD length;     /*!< DXF 40 1300.0 (length?) */
   BITCODE_BD width;      /*!< DXF 41 20.0 (width?) */
   BITCODE_BD height;     /*!< DXF 42 420.0 (height?) */
-
 } Dwg_Object_ACSH_BOX_CLASS;
 
 typedef struct _dwg_object_ACSH_WEDGE_CLASS
@@ -7140,7 +7130,6 @@ typedef struct _dwg_object_ACSH_WEDGE_CLASS
   BITCODE_BD length;     /*!< DXF 40 1300.0 (length?) */
   BITCODE_BD width;      /*!< DXF 41 20.0 (width?) */
   BITCODE_BD height;     /*!< DXF 42 420.0 (height?) */
-
 } Dwg_Object_ACSH_WEDGE_CLASS;
 
 typedef struct _dwg_object_ACSH_BOOLEAN_CLASS
@@ -7167,7 +7156,6 @@ typedef struct _dwg_object_ACSH_BREP_CLASS
   // AcDbShBrep
   BITCODE_BL major;            /*!< DXF 90 */
   BITCODE_BL minor;            /*!< DXF 91 */
-
 } Dwg_Object_ACSH_BREP_CLASS;
 
 typedef struct _dwg_object_ACSH_SWEEP_CLASS
@@ -7206,7 +7194,6 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   BITCODE_3BD pt2;      /*!< DXF 11 0,0,0 */
 
   // AcDbShSweep
-
 } Dwg_Object_ACSH_SWEEP_CLASS;
 
 typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
@@ -7280,7 +7267,6 @@ typedef struct _dwg_object_ACSH_FILLET_CLASS
   BITCODE_BD *radiuses;	        /*!< DXF 41 */
   BITCODE_BD *startsetbacks;	/*!< DXF 42 */
   BITCODE_BD *endsetbacks;	/*!< DXF 43 */
-
 } Dwg_Object_ACSH_FILLET_CLASS;
 
 typedef struct _dwg_object_ACSH_CHAMFER_CLASS
@@ -7355,7 +7341,6 @@ typedef struct _dwg_object_ACSH_SPHERE_CLASS
   BITCODE_BL major;       /*!< DXF 90 */
   BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BD radius;	/*!< DXF 40 */
-
 } Dwg_Object_ACSH_SPHERE_CLASS;
 
 typedef struct _dwg_object_ACSH_TORUS_CLASS
@@ -7369,7 +7354,6 @@ typedef struct _dwg_object_ACSH_TORUS_CLASS
   BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BD major_radius;	/*!< DXF 40 */
   BITCODE_BD minor_radius;	/*!< DXF 41 */
-
 } Dwg_Object_ACSH_TORUS_CLASS;
 
 typedef struct _dwg_object_ACSH_REVOLVE_CLASS
@@ -7392,7 +7376,6 @@ typedef struct _dwg_object_ACSH_REVOLVE_CLASS
   BITCODE_B b290;		/*!< DXF 290 */
   BITCODE_B is_close_to_axis;	/*!< DXF 291 */
   BITCODE_H sweep_entity;
-
 } Dwg_Object_ACSH_REVOLVE_CLASS;
 
 // called COORDINATION_MODEL in the DXF docs
@@ -10798,7 +10781,6 @@ typedef struct _dwg_object
   BITCODE_TF unknown_bits; // replacing the full object
   BITCODE_RL num_unknown_rest;
   BITCODE_TF unknown_rest; // just the rest
-
 } Dwg_Object;
 
 /**
