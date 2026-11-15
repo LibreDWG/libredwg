@@ -4717,8 +4717,7 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
                     * sizeof (Dwg_Object_Ref *));
       // The realloc moves only the array of pointers; the refs and their
       // cached ref->obj are untouched, so dirty_refs is not set here.
-      LOG_TRACE ("REALLOC dwg->object_ref vector to %u
-",
+      LOG_TRACE ("REALLOC dwg->object_ref vector to %u\n",
                  dwg->num_alloced_object_refs);
     }
   if (!dwg->object_ref)
