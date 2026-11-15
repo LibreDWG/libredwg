@@ -66,6 +66,8 @@ Security fixes:
 
 Major features:
   * use mmap for input files.
+  * GeoJSON: added MLINE, MINSERT (MultiPoint), SOLID, TRACE, 3DFACE, RAY,
+    XLINE, POLYLINE_PFACE (MultiPolygon) and POLYLINE_MESH (MultiLineString).
   * Added the r2007 DWG writer (new src/encode_r2007.c): r2007 (AC1021) DWGs
     are now written in the r2007 format instead of falling back to r2010,
     with Reed-Solomon coded pages, a new LZ77 compressor (the inverse of

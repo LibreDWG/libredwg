@@ -59,9 +59,8 @@
   Todo: large DWGs written as r2007 or r2010 still need recovery in ODA,
   and downconverting r2010+ objects to r2007 loses data (TABLESTYLE custom
   cell styles).
-* finish GeoJSON http://geojson.org/geojson-spec.html
-  Done: SPLINE. Missing: MLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?),
-  3DFACE, POLYLINE_PFACE, POLYLINE_MESH
+* GeoJSON: all graphical entities are supported now. Todo: explode INSERT
+  into a GeometryCollection, RAY and XLINE are only a unit segment.
 * more dwgfilter examples, as from the osmctools, with keep and drop rules.
 * check osm tools https://gitlab.com/osm-c-tools/osmctools how
   they could import GIS data easier.

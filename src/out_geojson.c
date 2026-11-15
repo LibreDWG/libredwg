@@ -1216,6 +1216,272 @@ dwg_geojson_ELLIPSE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   return 1;
 }
 
+#define SET_PT(dst, src)                                                      \
+  do                                                                          \
+    {                                                                         \
+      (dst).x = (src).x;                                                      \
+      (dst).y = (src).y;                                                      \
+      (dst).z = (src).z;                                                      \
+    }                                                                         \
+  while (0)
+
+enum
+{
+  GJ_LINESTRING,
+  GJ_POLYGON,
+  GJ_MULTIPOINT
+};
+
+static void
+geojson_point (Bit_Chain *restrict dat, const dwg_point_3d *restrict p,
+               const int has_z, const int last)
+{
+  if (has_z)
+    {
+      if (last)
+        LASTVALUE_3DPOINT (p->x, p->y, p->z)
+      else
+        VALUE_3DPOINT (p->x, p->y, p->z)
+    }
+  else
+    {
+      if (last)
+        LASTVALUE_2DPOINT (p->x, p->y)
+      else
+        VALUE_2DPOINT (p->x, p->y)
+    }
+}
+
+static int
+points_have_z (const dwg_point_3d *restrict pts, const BITCODE_BL n)
+{
+  for (BITCODE_BL j = 0; j < n; j++)
+    if (fabs (pts[j].z) > 0.000001)
+      return 1;
+  return 0;
+}
+
+/* A feature with a LineString, a Polygon (a closed ring) or a MultiPoint of
+   n points. */
+static int
+geojson_points (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                const char *restrict subclass, const int is_last,
+                const int type, const dwg_point_3d *restrict pts,
+                const BITCODE_BL n)
+{
+  const int has_z = points_have_z (pts, n);
+  BITCODE_BL j;
+  HASH;
+  dwg_geojson_feature (dat, obj, subclass);
+  if (type == GJ_POLYGON)
+    GEOMETRY (Polygon)
+  else if (type == GJ_MULTIPOINT)
+    GEOMETRY (MultiPoint)
+  else
+    GEOMETRY (LineString)
+  KEY (coordinates);
+  ARRAY;
+  if (type == GJ_POLYGON)
+    ARRAY;
+  for (j = 0; j < n; j++)
+    geojson_point (dat, &pts[j], has_z, j == n - 1);
+  LASTENDARRAY;
+  if (type == GJ_POLYGON)
+    LASTENDARRAY;
+  ENDGEOMETRY;
+  ENDFEATURE;
+  return 1;
+}
+
+/* A feature with a MultiLineString or a MultiPolygon of nrings rings. */
+static int
+geojson_rings (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+               const char *restrict subclass, const int is_last,
+               const int polygons, const dwg_point_3d *const *restrict rings,
+               const BITCODE_BL *restrict counts, const BITCODE_BL nrings)
+{
+  BITCODE_BL i, j;
+  int has_z = 0;
+  for (i = 0; i < nrings; i++)
+    has_z |= points_have_z (rings[i], counts[i]);
+  HASH;
+  dwg_geojson_feature (dat, obj, subclass);
+  if (polygons)
+    GEOMETRY (MultiPolygon)
+  else
+    GEOMETRY (MultiLineString)
+  KEY (coordinates);
+  ARRAY;
+  for (i = 0; i < nrings; i++)
+    {
+      if (polygons)
+        ARRAY;
+      ARRAY;
+      for (j = 0; j < counts[i]; j++)
+        geojson_point (dat, &rings[i][j], has_z, j == counts[i] - 1);
+      if (i == nrings - 1)
+        LASTENDARRAY
+      else
+        ENDARRAY
+      if (polygons)
+        {
+          if (i == nrings - 1)
+            LASTENDARRAY
+          else
+            ENDARRAY
+        }
+    }
+  LASTENDARRAY;
+  ENDGEOMETRY;
+  ENDFEATURE;
+  return 1;
+}
+
+/* SOLID and TRACE: the corners are 1, 2, 4, 3 around, in the OCS */
+static int
+geojson_solid (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+               const char *restrict subclass, const int is_last,
+               const BITCODE_2RD c1, const BITCODE_2RD c2,
+               const BITCODE_2RD c3, const BITCODE_2RD c4,
+               const BITCODE_BD elevation, const BITCODE_3BD extrusion)
+{
+  const BITCODE_2RD c[4] = { c1, c2, c4, c3 };
+  dwg_point_3d pts[5];
+  int j;
+  for (j = 0; j < 4; j++)
+    {
+      BITCODE_3DPOINT p = { c[j].x, c[j].y, elevation }, q;
+      transform_OCS (&q, p, extrusion);
+      pts[j].x = q.x;
+      pts[j].y = q.y;
+      pts[j].z = q.z;
+    }
+  pts[4] = pts[0];
+  return geojson_points (dat, obj, subclass, is_last, GJ_POLYGON, pts, 5);
+}
+
+/* The faces of a polyface mesh: a MultiPolygon. The vertices are the
+   VERTEX_PFACE, the faces the VERTEX_PFACE_FACE with 1-based vertex
+   indices, negative if invisible. */
+static int
+geojson_polyline_pface (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                        Dwg_Object *restrict obj, const int is_last)
+{
+  Dwg_Entity_POLYLINE_PFACE *_obj = obj->tio.entity->tio.POLYLINE_PFACE;
+  dwg_point_3d *verts = NULL, *ring_pts = NULL;
+  const dwg_point_3d **rings = NULL;
+  BITCODE_BL *counts = NULL;
+  BITCODE_BL i, nv = 0, nf = 0;
+  int ret = 0;
+  if (!_obj->vertex || !_obj->num_owned)
+    return 0;
+  verts = (dwg_point_3d *)calloc (_obj->num_owned, sizeof (dwg_point_3d));
+  ring_pts = (dwg_point_3d *)calloc (5 * (size_t)_obj->num_owned,
+                                     sizeof (dwg_point_3d));
+  rings = (const dwg_point_3d **)calloc (_obj->num_owned, sizeof (void *));
+  counts = (BITCODE_BL *)calloc (_obj->num_owned, sizeof (BITCODE_BL));
+  if (!verts || !ring_pts || !rings || !counts)
+    goto done;
+  for (i = 0; i < _obj->num_owned; i++)
+    {
+      Dwg_Object *vobj = dwg_ref_object (dwg, _obj->vertex[i]);
+      if (!vobj)
+        continue;
+      if (vobj->fixedtype == DWG_TYPE_VERTEX_PFACE)
+        {
+          Dwg_Entity_VERTEX_PFACE *v = vobj->tio.entity->tio.VERTEX_PFACE;
+          SET_PT (verts[nv], v->point);
+          nv++;
+        }
+      else if (vobj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE)
+        {
+          Dwg_Entity_VERTEX_PFACE_FACE *f
+              = vobj->tio.entity->tio.VERTEX_PFACE_FACE;
+          dwg_point_3d *r = &ring_pts[5 * (size_t)nf];
+          BITCODE_BL n = 0;
+          for (int k = 0; k < 4; k++)
+            {
+              const int idx = abs (f->vertind[k]);
+              if (idx >= 1 && (BITCODE_BL)idx <= nv)
+                r[n++] = verts[idx - 1];
+            }
+          if (n >= 3)
+            {
+              r[n++] = r[0];
+              rings[nf] = r;
+              counts[nf++] = n;
+            }
+        }
+    }
+  if (nf)
+    ret = geojson_rings (dat, obj, "AcDbEntity : AcDbPolyFaceMesh", is_last, 1,
+                         rings, counts, nf);
+done:
+  free (verts);
+  free (ring_pts);
+  free (rings);
+  free (counts);
+  return ret;
+}
+
+/* A polygon mesh of m x n vertices: a MultiLineString of the m rows and
+   n columns. */
+static int
+geojson_polyline_mesh (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                       Dwg_Object *restrict obj, const int is_last)
+{
+  Dwg_Entity_POLYLINE_MESH *_obj = obj->tio.entity->tio.POLYLINE_MESH;
+  const BITCODE_BL m = _obj->num_m_verts, n = _obj->num_n_verts;
+  dwg_point_3d *verts = NULL, *lines = NULL;
+  const dwg_point_3d **rings = NULL;
+  BITCODE_BL *counts = NULL;
+  BITCODE_BL i, j, nv = 0;
+  int ret = 0;
+  if (!_obj->vertex || !m || !n || m * n > _obj->num_owned)
+    return 0;
+  verts = (dwg_point_3d *)calloc ((size_t)m * n, sizeof (dwg_point_3d));
+  lines = (dwg_point_3d *)calloc (2 * (size_t)m * n, sizeof (dwg_point_3d));
+  rings = (const dwg_point_3d **)calloc (m + n, sizeof (void *));
+  counts = (BITCODE_BL *)calloc (m + n, sizeof (BITCODE_BL));
+  if (!verts || !lines || !rings || !counts)
+    goto done;
+  for (i = 0; i < _obj->num_owned && nv < m * n; i++)
+    {
+      Dwg_Object *vobj = dwg_ref_object (dwg, _obj->vertex[i]);
+      if (vobj && vobj->fixedtype == DWG_TYPE_VERTEX_MESH)
+        {
+          SET_PT (verts[nv], vobj->tio.entity->tio.VERTEX_MESH->point);
+          nv++;
+        }
+    }
+  if (nv < m * n)
+    goto done;
+  for (i = 0; i < m; i++) // the rows
+    {
+      dwg_point_3d *r = &lines[(size_t)i * n];
+      for (j = 0; j < n; j++)
+        r[j] = verts[i * n + j];
+      rings[i] = r;
+      counts[i] = n;
+    }
+  for (j = 0; j < n; j++) // the columns
+    {
+      dwg_point_3d *r = &lines[(size_t)m * n + (size_t)j * m];
+      for (i = 0; i < m; i++)
+        r[i] = verts[i * n + j];
+      rings[m + j] = r;
+      counts[m + j] = m;
+    }
+  ret = geojson_rings (dat, obj, "AcDbEntity : AcDbPolygonMesh", is_last, 0,
+                       rings, counts, m + n);
+done:
+  free (verts);
+  free (lines);
+  free (rings);
+  free (counts);
+  return ret;
+}
+
 /* returns 0 if object could be printed
  */
 static int
@@ -1281,7 +1547,6 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return 0;
 }
 
-
 /*
  * Calculate number of polygon segments for a curve (arc/circle/ellipse)
  * based on the drawing extent (zoom-level) and radius.
@@ -1294,10 +1559,8 @@ calc_curve_segments (Dwg_Data *restrict dwg, BITCODE_BD radius,
 {
   double extent, scale;
   int num_pts;
-  extent = fmax (fabs (dwg->header_vars.LIMMAX.x
-                       - dwg->header_vars.LIMMIN.x),
-                 fabs (dwg->header_vars.LIMMAX.y
-                       - dwg->header_vars.LIMMIN.y));
+  extent = fmax (fabs (dwg->header_vars.LIMMAX.x - dwg->header_vars.LIMMIN.x),
+                 fabs (dwg->header_vars.LIMMAX.y - dwg->header_vars.LIMMIN.y));
   if (extent < 1e-12)
     extent = 1.0;
   // Scale: more segments for larger radius relative to extent.
@@ -1334,10 +1597,38 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         return 1;
       }
     case DWG_TYPE_MINSERT:
-      // a grid of INSERT's (named points)
-      // dwg_geojson_MINSERT(dat, obj);
-      LOG_TRACE ("MINSERT not yet supported");
-      break;
+      {
+        // a grid of INSERT's: a MultiPoint
+        Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+        const double c = cos (_obj->rotation), s = sin (_obj->rotation);
+        const size_t n = (size_t)_obj->num_cols * _obj->num_rows;
+        dwg_point_3d *pts;
+        BITCODE_BS r, col;
+        size_t k = 0;
+        int ret;
+        if (!n || n > 1000000)
+          return 0;
+        pts = (dwg_point_3d *)malloc (n * sizeof (dwg_point_3d));
+        if (!pts)
+          return 0;
+        for (r = 0; r < _obj->num_rows; r++)
+          for (col = 0; col < _obj->num_cols; col++)
+            {
+              BITCODE_3DPOINT p = _obj->ins_pt, q;
+              const double dx = col * _obj->col_spacing;
+              const double dy = r * _obj->row_spacing;
+              p.x += dx * c - dy * s;
+              p.y += dx * s + dy * c;
+              transform_OCS (&q, p, _obj->extrusion);
+              pts[k].x = q.x;
+              pts[k].y = q.y;
+              pts[k++].z = q.z;
+            }
+        ret = geojson_points (dat, obj, "AcDbEntity : AcDbMInsertBlock",
+                              is_last, GJ_MULTIPOINT, pts, (BITCODE_BL)n);
+        free (pts);
+        return ret;
+      }
     case DWG_TYPE_POLYLINE_2D:
       {
         int error;
@@ -1550,26 +1841,43 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         return 1;
       }
     case DWG_TYPE__3DFACE:
-      // really a Polygon
-      // dwg_geojson__3DFACE(dat, obj);
-      LOG_TRACE ("3DFACE not yet supported");
-      break;
+      {
+        // really a Polygon, the 4th corner is the 3rd for triangles
+        Dwg_Entity__3DFACE *_obj = obj->tio.entity->tio._3DFACE;
+        dwg_point_3d pts[5];
+        BITCODE_BL n = 3;
+        SET_PT (pts[0], _obj->corner1);
+        SET_PT (pts[1], _obj->corner2);
+        SET_PT (pts[2], _obj->corner3);
+        if (_obj->corner4.x != _obj->corner3.x
+            || _obj->corner4.y != _obj->corner3.y
+            || _obj->corner4.z != _obj->corner3.z)
+          {
+            SET_PT (pts[n], _obj->corner4);
+            n++;
+          }
+        pts[n++] = pts[0];
+        return geojson_points (dat, obj, "AcDbEntity : AcDbFace", is_last,
+                               GJ_POLYGON, pts, n);
+      }
     case DWG_TYPE_POLYLINE_PFACE:
-      // dwg_geojson_POLYLINE_PFACE(dat, obj);
-      LOG_TRACE ("POLYLINE_PFACE not yet supported");
-      break;
+      return geojson_polyline_pface (dat, dwg, obj, is_last);
     case DWG_TYPE_POLYLINE_MESH:
-      // dwg_geojson_POLYLINE_MESH(dat, obj);
-      LOG_TRACE ("POLYLINE_MESH not yet supported");
-      break;
+      return geojson_polyline_mesh (dat, dwg, obj, is_last);
     case DWG_TYPE_SOLID:
-      // dwg_geojson_SOLID(dat, obj);
-      LOG_TRACE ("SOLID not yet supported");
-      break;
+      {
+        Dwg_Entity_SOLID *_obj = obj->tio.entity->tio.SOLID;
+        return geojson_solid (dat, obj, "AcDbEntity : AcDbSolid", is_last,
+                              _obj->corner1, _obj->corner2, _obj->corner3,
+                              _obj->corner4, _obj->elevation, _obj->extrusion);
+      }
     case DWG_TYPE_TRACE:
-      // dwg_geojson_TRACE(dat, obj);
-      LOG_TRACE ("TRACE not yet supported");
-      break;
+      {
+        Dwg_Entity_TRACE *_obj = obj->tio.entity->tio.TRACE;
+        return geojson_solid (dat, obj, "AcDbEntity : AcDbTrace", is_last,
+                              _obj->corner1, _obj->corner2, _obj->corner3,
+                              _obj->corner4, _obj->elevation, _obj->extrusion);
+      }
     case DWG_TYPE_ELLIPSE:
       return dwg_geojson_ELLIPSE (dat, obj, is_last);
     case DWG_TYPE_SPLINE:
@@ -1586,13 +1894,21 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // dwg_geojson_BODY(dat, obj);
       break;
     case DWG_TYPE_RAY:
-      // dwg_geojson_RAY(dat, obj);
-      LOG_TRACE ("RAY not yet supported");
-      break;
     case DWG_TYPE_XLINE:
-      // dwg_geojson_XLINE(dat, obj);
-      LOG_TRACE ("XLINE not yet supported");
-      break;
+      {
+        // infinite lines: the point and the unit direction
+        Dwg_Entity_RAY *_obj = obj->tio.entity->tio.RAY;
+        dwg_point_3d pts[2];
+        SET_PT (pts[0], _obj->point);
+        pts[1].x = _obj->point.x + _obj->vector.x;
+        pts[1].y = _obj->point.y + _obj->vector.y;
+        pts[1].z = _obj->point.z + _obj->vector.z;
+        return geojson_points (dat, obj,
+                               obj->fixedtype == DWG_TYPE_RAY
+                                   ? "AcDbEntity : AcDbRay"
+                                   : "AcDbEntity : AcDbXline",
+                               is_last, GJ_LINESTRING, pts, 2);
+      }
     case DWG_TYPE_TEXT:
       {
         // add Text property to a point
@@ -1622,9 +1938,32 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         return 1;
       }
     case DWG_TYPE_MLINE:
-      // dwg_geojson_MLINE(dat, obj);
-      LOG_TRACE ("MLINE not yet supported");
-      break;
+      {
+        Dwg_Entity_MLINE *_obj = obj->tio.entity->tio.MLINE;
+        const int closed = _obj->flags & 2;
+        dwg_point_3d *pts;
+        BITCODE_BL j, n = _obj->num_verts;
+        int ret;
+        if (!_obj->verts || n < 2)
+          return 0;
+        pts = (dwg_point_3d *)malloc ((n + 1) * sizeof (dwg_point_3d));
+        if (!pts)
+          return 0;
+        for (j = 0; j < n; j++)
+          {
+            BITCODE_3DPOINT q;
+            transform_OCS (&q, _obj->verts[j].vertex, _obj->extrusion);
+            pts[j].x = q.x;
+            pts[j].y = q.y;
+            pts[j].z = q.z;
+          }
+        if (closed)
+          pts[n++] = pts[0];
+        ret = geojson_points (dat, obj, "AcDbEntity : AcDbMline", is_last,
+                              GJ_LINESTRING, pts, n);
+        free (pts);
+        return ret;
+      }
     case DWG_TYPE_LWPOLYLINE:
       return dwg_geojson_LWPOLYLINE (dat, obj, is_last);
     default:
