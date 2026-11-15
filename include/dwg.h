@@ -10903,7 +10903,7 @@ typedef struct _dwg_section
   int64_t  hashcode;
   int64_t  name_length;  // 0x22
   int64_t  unknown;      // 0x00
-  int64_t  encoded;
+  int64_t  encoded;      // 4 for reed-solomon
   int64_t  num_pages;
   DWGCHAR *name;
   r2007_section_page **pages;

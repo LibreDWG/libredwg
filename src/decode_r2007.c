@@ -707,8 +707,9 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
    bytes: RS works on 0xFB-byte blocks expanded to 0xFF, and the page is then
    padded to a multiple of 32.  A page whose size matches this exactly is RS
    coded; a page stored verbatim is only padded to 32 and comes out smaller.
-   The section page record has no flag for it (unlike r2004+), so the size is
-   the only thing to go by.  */
+   There is no flag per page, but the section header has an Encoding field
+   (section->encoded: 4 RS coded, 1 raw), which we read but do not use yet.
+   So the size is what we go by.  */
 static int64_t
 page_size_if_rs_coded (const int64_t size_comp)
 {
@@ -869,9 +870,11 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
          undoes the RS coding first and only then decompresses, when
          comp_size < uncomp_size.  An uncompressed page can therefore still be
          RS coded, and copying it straight out of dat->chain hands the caller
-         the RS codewords -- payload interleaved with parity.  Take the RS path
-         whenever the page on disk is exactly as large as the RS coded form of
-         its payload; page->size is the only evidence available. */
+         the RS codewords -- payload interleaved with parity.  The section
+         header has an Encoding field (section->encoded: 4 RS coded, 1 raw),
+         which ACadSharp uses.  We read it, but do not use it yet, and take
+         the RS path whenever the page on disk is exactly as large as the RS
+         coded form of its payload. */
       if (section_page->comp_size != section_page->uncomp_size
           || (int64_t)page->size
                  == page_size_if_rs_coded (section_page->comp_size))
