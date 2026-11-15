@@ -3685,6 +3685,10 @@ DWG_TABLE (LTYPE)
         FIELD_BINARY (strings_area, 512, 0);
         DECODER {
           BITCODE_RS dash_i = 0;
+          // The texts are UCS-2, but strings_area has just one 0 byte
+          // appended. Terminate the last text in it.
+          if (_obj->strings_area)
+            _obj->strings_area[510] = _obj->strings_area[511] = 0;
           for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->numdashes; rcount1++)
             {
               if (_obj->dashes[rcount1].shape_flag & 2)
