@@ -30,9 +30,9 @@
 #endif
 
 #include "config.h"
-#if defined HAVE_CTYPE_H || defined _MSC_VER
-#  include <ctype.h>
-#endif
+/* ctype.h is ISO C. config.h often leaves HAVE_CTYPE_H unset, and C99
+   rejects the implicit isprint() declaration inside FIELD_TFF. */
+#include <ctype.h>
 
 #ifdef IN_DXF_H
 #  error in_dxf.h must be included after dec_macros.h because of FORMAT_BD
