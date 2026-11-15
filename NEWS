@@ -93,6 +93,14 @@ Minor bugfixes / fuzzing fixes:
     materials, and the ACAD_MATERIAL_MAPPER EEDs to the entities with a
     material, and always writes the matrix of the maps (identity by default),
     which fixed invalid MATERIALs after a DXF import.
+  * Changed the stability of classes since 0.14. Now stable: MATERIAL, TABLE,
+    MLEADERSTYLE, DIMASSOC, ARC_DIMENSION, ACIDBLOCKREFERENCE, LAYER_FILTER
+    (was LAYERFILTER), and the ALDIM, BLKREF, LEADER, MTEXT and TEXT
+    OBJECTCONTEXTDATA classes. Now unstable, not only with --enable-debug:
+    ARCALIGNEDTEXT (its numeric fields are text-stream strings on r2007+) and
+    TABLECONTENT. Procedural textures of a MATERIAL are written as no map
+    without --enable-debug. See doc/LibreDWG.texi, the lists of unstable
+    and debugging classes are regenerated from src/objects.in.
   * Fixed large R2007+ string streams, APPID table counts above 255, and
     R2000+ LEADER and MULTILEADER binary fields.
   * Fixed extended object type encoding and opaque object sizes in JSON
