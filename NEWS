@@ -101,6 +101,13 @@ Minor bugfixes / fuzzing fixes:
     TABLECONTENT. Procedural textures of a MATERIAL are written as no map
     without --enable-debug. See doc/LibreDWG.texi, the lists of unstable
     and debugging classes are regenerated from src/objects.in.
+  * Added DXF testcases in test/test-data/2018/ for the entities and objects
+    which had no coverage yet (48 new files since 0.14, e.g. arcalignedtext,
+    the ASSOC*ACTIONBODY and *ACTIONPARAM classes, the BLOCK*PARAMETER classes,
+    the POINTCLOUD* classes, the *_BACKGROUND classes, dgnunderlay and
+    dwfunderlay).  Most of them cannot be converted to a proper DWG by the
+    ODAFileConverter, as ODA writes them as proxies, so the unit tests only
+    check what libredwg reads from the DXF, not the ODA DWG.
   * Fixed large R2007+ string streams, APPID table counts above 255, and
     R2000+ LEADER and MULTILEADER binary fields.
   * Fixed extended object type encoding and opaque object sizes in JSON
