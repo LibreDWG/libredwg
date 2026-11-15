@@ -14,6 +14,7 @@ extern unsigned int loglevel;
 
 #define IS_DECODER
 #include <stdlib.h>
+#include <unistd.h> // unlink
 // #include "common.h"
 // CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "decode.c"
@@ -455,6 +456,79 @@ class_object_stream_tests (void)
   dwg_free (&dwg);
 }
 
+/* The data pages of r2007 DWGs are Reed-Solomon coded. A flipped byte in
+   such a page is corrected, the objects are the same as of the clean file. */
+static void
+r2007_rs_correction_tests (void)
+{
+  const char *srcdir = getenv ("top_srcdir");
+  const char *bad = "decode_test_rs_bad.dwg";
+  const long off = 327731; // inside a RS coded data page of example_2007.dwg
+  char path[1024];
+  Dwg_Data clean = { 0 }, dwg = { 0 };
+  FILE *fp;
+  unsigned char *buf;
+  long size;
+  BITCODE_BL i;
+  int error1, error2, same = 1;
+
+  if (!srcdir)
+    srcdir = "../..";
+  if (snprintf (path, sizeof (path), "%s/test/test-data/example_2007.dwg",
+                srcdir) >= (int)sizeof (path))
+    {
+      fail ("r2007 RS: fixture path too long");
+      return;
+    }
+  fp = fopen (path, "rb");
+  if (!fp)
+    {
+      fail ("r2007 RS: cannot open %s", path);
+      return;
+    }
+  fseek (fp, 0, SEEK_END);
+  size = ftell (fp);
+  fseek (fp, 0, SEEK_SET);
+  buf = (unsigned char *)malloc (size > 0 ? size : 1);
+  if (!buf || size <= off || fread (buf, 1, size, fp) != (size_t)size)
+    {
+      fail ("r2007 RS: cannot read %s", path);
+      fclose (fp);
+      free (buf);
+      return;
+    }
+  fclose (fp);
+  buf[off] ^= 0x5a;
+  fp = fopen (bad, "wb");
+  if (!fp || fwrite (buf, 1, size, fp) != (size_t)size)
+    {
+      fail ("r2007 RS: cannot write %s", bad);
+      if (fp)
+        fclose (fp);
+      free (buf);
+      return;
+    }
+  fclose (fp);
+  free (buf);
+  error1 = dwg_read_file (path, &clean);
+  error2 = dwg_read_file (bad, &dwg);
+  unlink (bad);
+  if (error1 >= DWG_ERR_CRITICAL || error2 >= DWG_ERR_CRITICAL
+      || clean.num_objects != dwg.num_objects)
+    same = 0;
+  for (i = 0; same && i < clean.num_objects; i++)
+    if (clean.object[i].handle.value != dwg.object[i].handle.value
+        || clean.object[i].fixedtype != dwg.object[i].fixedtype)
+      same = 0;
+  if (same)
+    ok ("r2007 RS: a flipped byte in a data page is corrected");
+  else
+    fail ("r2007 RS: objects differ after a flipped byte (errors 0x%x 0x%x)",
+          error1, error2);
+  dwg_free (&clean);
+  dwg_free (&dwg);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -469,6 +543,7 @@ main (int argc, char const *argv[])
   read_2004_compressed_section_tests ();
   decode_3dsolid_tests ();
   class_object_stream_tests ();
+  r2007_rs_correction_tests ();
 
   return numfailed () ? 1 : 0;
 }

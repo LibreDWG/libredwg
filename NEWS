@@ -90,11 +90,17 @@ Minor bugfixes / fuzzing fixes:
     handles and the integers set via dynapi from DXF and JSON were read
     and written with the wrong byte order, so most r2007+ DWGs, DXFs and
     JSONs were not readable.  All tests pass on s390x and ppc64 in CI now.
-  * Replaced the unused Reed-Solomon (255,239) code src/reedsolomon.c, by a new
+  * Replaced the Reed-Solomon code src/reedsolomon.c, by a new
     implementation of the textbook algorithms (Berlekamp-Massey, Chien
     search and Forney), without third-party code and the need of a copyright
     assignment.  It produces the same parity as the old one, and corrects up
-    to 8 errors per block (the old one failed at 8).
+    to 8 errors per block (the old one failed at 8).  New is the (255,251)
+    code of the data pages.
+  * Decoding r2007 DWGs corrects the Reed-Solomon errors of the system and
+    the data pages now (up to 8 errors in a 239 byte block, and 2 in a 251
+    byte block), and warns about the uncorrectable blocks. It was disabled
+    before, only the parity was dropped. All 33 r2007 test DWGs have valid
+    parity.
   * MATERIAL is stable now. DXF import takes the defaults of ODA's DXF, which
     omits the fields with their default value, and ByLayer and ByBlock
     without fields. Converting r2007+ to r2000 adds the ACAD EED to the

@@ -2236,6 +2236,38 @@ main (int argc, char const *argv[])
       pass ();
   }
 
+  /* The same for the data pages: (255,251), up to 2 errors are corrected */
+  {
+    unsigned char data[251], good[255], blk[255];
+    unsigned seed = 777;
+    int round, i, k, err;
+    for (round = 0; round < 30; round++)
+      {
+        const int nerr = round % 3; // 0..2
+        for (i = 0; i < 251; i++)
+          {
+            seed = seed * 1103515245u + 12345u;
+            data[i] = (unsigned char)(seed >> 16);
+          }
+        memcpy (good, data, 251);
+        rs_encode_data_block (good + 251, data, 251);
+        memcpy (blk, good, 255);
+        for (k = 0; k < nerr; k++)
+          {
+            seed = seed * 1103515245u + 12345u;
+            i = (int)((seed >> 8) % 255);
+            while (blk[i] != good[i])
+              i = (i + 1) % 255;
+            blk[i] ^= (unsigned char)(1 + (seed >> 24) % 255);
+          }
+        err = rs_decode_data_block (blk, 1);
+        if (err != nerr || memcmp (blk, good, 255))
+          fail ("rs_decode_data_block %d errors: %d", nerr, err);
+        else
+          pass ();
+      }
+  }
+
   free (bitchain.chain);
   return failed;
 }

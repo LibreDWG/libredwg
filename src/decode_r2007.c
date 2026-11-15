@@ -51,7 +51,7 @@ static unsigned int cur_ver = 0;
 #define DBG_MAX_SIZE 0xff0000 /* should be dat->size */
 
 /* imported */
-int rs_decode_block (BITCODE_RC *blk, int fix);
+#include "reedsolomon.h"
 
 /* private */
 static r2007_section *get_section (r2007_section *sections_map,
@@ -547,17 +547,18 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
   return 0;
 }
 
-// reed-solomon (255, 239) encoding with factor 3
-// TODO: for now disabled, until we get proper data
+// reed-solomon (255, 239) system pages, or (255, 251) data pages, with the
+// block_count blocks interleaved. Returns the data_size bytes of each block.
 ATTRIBUTE_MALLOC
 static BITCODE_RC *
 decode_rs (const BITCODE_RC *src, int block_count, int data_size,
            const unsigned src_size)
 {
   int i, j;
-  const BITCODE_RC *src_base = src;
   BITCODE_RC *dst_base, *dst;
-  // TODO: round up data_size from 239 to 255
+  // the parity bytes are only there when the page has all 255 bytes
+  const bool has_parity = (size_t)block_count * 255 <= src_size;
+  int corrected = 0, failed = 0;
 
   if ((size_t)block_count * data_size > src_size)
     {
@@ -574,15 +575,34 @@ decode_rs (const BITCODE_RC *src, int block_count, int data_size,
 
   for (i = 0; i < block_count; ++i)
     {
-      for (j = 0; j < data_size; ++j)
+      if (has_parity && (data_size == 239 || data_size == 251))
         {
-          *dst++ = *src;
-          src += block_count;
+          unsigned char blk[255];
+          int err;
+          for (j = 0; j < 255; ++j)
+            blk[j] = src[i + (size_t)j * block_count];
+          err = data_size == 239 ? rs_decode_block (blk, 1)
+                                 : rs_decode_data_block (blk, 1);
+          if (err > 0)
+            {
+              corrected += err;
+              LOG_TRACE ("RS block %d: corrected %d errors\n", i, err);
+            }
+          else if (err < 0)
+            {
+              failed++;
+              LOG_WARN ("RS block %d: uncorrectable errors", i);
+            }
+          memcpy (dst, blk, data_size);
+          dst += data_size;
         }
-
-      // rs_decode_block((unsigned char*)(dst_base + 239*i), 1);
-      src = ++src_base;
+      else
+        for (j = 0; j < data_size; ++j)
+          *dst++ = src[i + (size_t)j * block_count];
     }
+  if (corrected || failed)
+    LOG_HANDLE ("decode_rs: %d errors corrected, %d blocks uncorrectable\n",
+                corrected, failed);
 
   return dst_base;
 }
