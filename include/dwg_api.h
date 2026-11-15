@@ -612,6 +612,7 @@ extern "C"
   typedef struct _dwg_entity_TABLE		dwg_ent_table;
   typedef struct _dwg_entity_WIPEOUT		dwg_ent_wipeout;
   /* unstable */
+  typedef struct _dwg_entity_ARCALIGNEDTEXT		dwg_ent_arcalignedtext;
   typedef struct _dwg_entity_HELIX		dwg_ent_helix;
   typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION		dwg_ent_large_radial_dimension;
   typedef struct _dwg_entity_LAYOUTPRINTCONFIG		dwg_ent_layoutprintconfig;
@@ -620,7 +621,6 @@ extern "C"
   typedef struct _dwg_entity_POINTCLOUDEX		dwg_ent_pointcloudex;
   /* debugging */
   typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY		dwg_ent_alignmentparameterentity;
-  typedef struct _dwg_entity_ARCALIGNEDTEXT		dwg_ent_arcalignedtext;
   typedef struct _dwg_entity_BASEPOINTPARAMETERENTITY		dwg_ent_basepointparameterentity;
   typedef struct _dwg_entity_EXTRUDEDSURFACE		dwg_ent_extrudedsurface;
   typedef struct _dwg_entity_FLIPGRIPENTITY		dwg_ent_flipgripentity;
@@ -714,6 +714,7 @@ extern "C"
   typedef struct _dwg_object_LAYER_INDEX		dwg_obj_layer_index;
   typedef struct _dwg_object_LAYOUT		dwg_obj_layout;
   typedef struct _dwg_object_LEADEROBJECTCONTEXTDATA		dwg_obj_leaderobjectcontextdata;
+  typedef struct _dwg_object_MATERIAL		dwg_obj_material;
   typedef struct _dwg_object_MLEADERSTYLE		dwg_obj_mleaderstyle;
   typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA		dwg_obj_mtextobjectcontextdata;
   typedef struct _dwg_object_PLACEHOLDER		dwg_obj_placeholder;
@@ -798,7 +799,6 @@ extern "C"
   typedef struct _dwg_object_IBL_BACKGROUND		dwg_obj_ibl_background;
   typedef struct _dwg_object_IMAGE_BACKGROUND		dwg_obj_image_background;
   typedef struct _dwg_object_LIGHTLIST		dwg_obj_lightlist;
-  typedef struct _dwg_object_MATERIAL		dwg_obj_material;
   typedef struct _dwg_object_MENTALRAYRENDERSETTINGS		dwg_obj_mentalrayrendersettings;
   typedef struct _dwg_object_OBJECT_PTR		dwg_obj_object_ptr;
   typedef struct _dwg_object_PARTIAL_VIEWING_INDEX		dwg_obj_partial_viewing_index;
@@ -1736,6 +1736,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_table, TABLE);
   dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
   /* unstable */
+  dwg_get_OBJECT_DECL (ent_arcalignedtext, ARCALIGNEDTEXT);
   dwg_get_OBJECT_DECL (ent_helix, HELIX);
   dwg_get_OBJECT_DECL (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION);
   dwg_get_OBJECT_DECL (ent_layoutprintconfig, LAYOUTPRINTCONFIG);
@@ -1744,7 +1745,6 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_pointcloudex, POINTCLOUDEX);
 #ifdef DEBUG_CLASSES
     dwg_get_OBJECT_DECL (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY);
-    dwg_get_OBJECT_DECL (ent_arcalignedtext, ARCALIGNEDTEXT);
     dwg_get_OBJECT_DECL (ent_basepointparameterentity, BASEPOINTPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_extrudedsurface, EXTRUDEDSURFACE);
     dwg_get_OBJECT_DECL (ent_flipgripentity, FLIPGRIPENTITY);
@@ -1840,6 +1840,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_layer_index, LAYER_INDEX);
   dwg_get_OBJECT_DECL (obj_layout, LAYOUT);
   dwg_get_OBJECT_DECL (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA);
+  dwg_get_OBJECT_DECL (obj_material, MATERIAL);
   dwg_get_OBJECT_DECL (obj_mleaderstyle, MLEADERSTYLE);
   dwg_get_OBJECT_DECL (obj_mtextobjectcontextdata, MTEXTOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_placeholder, PLACEHOLDER);
@@ -1924,7 +1925,6 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_ibl_background, IBL_BACKGROUND);
   dwg_get_OBJECT_DECL (obj_image_background, IMAGE_BACKGROUND);
   dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
-  dwg_get_OBJECT_DECL (obj_material, MATERIAL);
   dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS);
   dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
   dwg_get_OBJECT_DECL (obj_partial_viewing_index, PARTIAL_VIEWING_INDEX);
@@ -2872,6 +2872,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (TABLE);
   DWG_GETALL_ENTITY_DECL (WIPEOUT);
   /* unstable */
+  DWG_GETALL_ENTITY_DECL (ARCALIGNEDTEXT);
   DWG_GETALL_ENTITY_DECL (HELIX);
   DWG_GETALL_ENTITY_DECL (LARGE_RADIAL_DIMENSION);
   DWG_GETALL_ENTITY_DECL (LAYOUTPRINTCONFIG);
@@ -2880,7 +2881,6 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (POINTCLOUDEX);
   /* debugging */
   DWG_GETALL_ENTITY_DECL (ALIGNMENTPARAMETERENTITY);
-  DWG_GETALL_ENTITY_DECL (ARCALIGNEDTEXT);
   DWG_GETALL_ENTITY_DECL (BASEPOINTPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (EXTRUDEDSURFACE);
   DWG_GETALL_ENTITY_DECL (FLIPGRIPENTITY);
@@ -2985,6 +2985,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (LAYER_INDEX);
   DWG_GETALL_OBJECT_DECL (LAYOUT);
   DWG_GETALL_OBJECT_DECL (LEADEROBJECTCONTEXTDATA);
+  DWG_GETALL_OBJECT_DECL (MATERIAL);
   DWG_GETALL_OBJECT_DECL (MLEADERSTYLE);
   DWG_GETALL_OBJECT_DECL (MTEXTOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (PLACEHOLDER);
@@ -3069,7 +3070,6 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (IBL_BACKGROUND);
   DWG_GETALL_OBJECT_DECL (IMAGE_BACKGROUND);
   DWG_GETALL_OBJECT_DECL (LIGHTLIST);
-  DWG_GETALL_OBJECT_DECL (MATERIAL);
   DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
   DWG_GETALL_OBJECT_DECL (OBJECT_PTR);
   DWG_GETALL_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
@@ -4023,6 +4023,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (TABLE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT);
   /* unstable */
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARCALIGNEDTEXT);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HELIX);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LARGE_RADIAL_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LAYOUTPRINTCONFIG);
@@ -4031,7 +4032,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUDEX);
 #  ifdef DEBUG_CLASSES
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ALIGNMENTPARAMETERENTITY);
-    CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARCALIGNEDTEXT);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (BASEPOINTPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (EXTRUDEDSURFACE);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (FLIPGRIPENTITY);
@@ -4136,6 +4136,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYER_INDEX);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LAYOUT);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LEADEROBJECTCONTEXTDATA);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (MATERIAL);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MLEADERSTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PLACEHOLDER);
@@ -4220,7 +4221,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (IBL_BACKGROUND);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGE_BACKGROUND);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (MATERIAL);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PARTIAL_VIEWING_INDEX);

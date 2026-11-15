@@ -9576,6 +9576,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_TABLE *TABLE;
     Dwg_Entity_WIPEOUT *WIPEOUT;
     /* unstable */
+    Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
     Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
     Dwg_Entity_LAYOUTPRINTCONFIG *LAYOUTPRINTCONFIG;
@@ -9584,7 +9585,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_POINTCLOUDEX *POINTCLOUDEX;
     /* debugging */
       Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
-      Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
       Dwg_Entity_BASEPOINTPARAMETERENTITY *BASEPOINTPARAMETERENTITY;
       Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
       Dwg_Entity_FLIPGRIPENTITY *FLIPGRIPENTITY;
@@ -9752,6 +9752,7 @@ typedef struct _dwg_object_object
     Dwg_Object_LAYER_INDEX *LAYER_INDEX;
     Dwg_Object_LAYOUT *LAYOUT;
     Dwg_Object_LEADEROBJECTCONTEXTDATA *LEADEROBJECTCONTEXTDATA;
+    Dwg_Object_MATERIAL *MATERIAL;
     Dwg_Object_MLEADERSTYLE *MLEADERSTYLE;
     Dwg_Object_MTEXTOBJECTCONTEXTDATA *MTEXTOBJECTCONTEXTDATA;
     Dwg_Object_PLACEHOLDER *PLACEHOLDER;
@@ -9836,7 +9837,6 @@ typedef struct _dwg_object_object
     Dwg_Object_IBL_BACKGROUND *IBL_BACKGROUND;
     Dwg_Object_IMAGE_BACKGROUND *IMAGE_BACKGROUND;
     Dwg_Object_LIGHTLIST *LIGHTLIST;
-    Dwg_Object_MATERIAL *MATERIAL;
     Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
     Dwg_Object_OBJECT_PTR *OBJECT_PTR;
     Dwg_Object_PARTIAL_VIEWING_INDEX *PARTIAL_VIEWING_INDEX;
@@ -11964,6 +11964,7 @@ EXPORT int dwg_setup_LAYER_FILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYER_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUT (Dwg_Object *obj);
 EXPORT int dwg_setup_LEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
+EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_setup_MLEADERSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_MTEXTOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_PLACEHOLDER (Dwg_Object *obj);
@@ -11986,6 +11987,7 @@ EXPORT int dwg_setup_PDFDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup_DGNDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup_DWFDEFINITION (Dwg_Object *obj);
 /* unstable */
+EXPORT int dwg_setup_ARCALIGNEDTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
@@ -12054,7 +12056,6 @@ EXPORT int dwg_setup_GROUND_PLANE_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_IBL_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_IMAGE_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
-EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_setup_PARTIAL_VIEWING_INDEX (Dwg_Object *obj);
@@ -12080,7 +12081,6 @@ EXPORT int dwg_setup_ASSOCARRAYPOLARPARAMETERS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
   EXPORT int dwg_setup_ALIGNMENTPARAMETERENTITY (Dwg_Object *obj);
-  EXPORT int dwg_setup_ARCALIGNEDTEXT (Dwg_Object *obj);
   EXPORT int dwg_setup_BASEPOINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_FLIPGRIPENTITY (Dwg_Object *obj);

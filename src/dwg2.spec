@@ -5097,6 +5097,72 @@ DWG_ENTITY (LAYOUTPRINTCONFIG)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+// r2000+ expresstools. command ATEXT
+DWG_ENTITY (ARCALIGNEDTEXT)
+  HANDLE_UNKNOWN_BITS;
+  SUBCLASS (AcDbArcAlignedText);
+  DXF {
+    FIELD_T (text_value, 1);
+    FIELD_T (font_name, 2);
+    FIELD_T (bigfont_name, 3);
+    FIELD_T (style, 7); // as name
+    FIELD_3BD (center, 10);
+    FIELD_BD (radius, 40);
+    FIELD_D2T (xscale, 41);
+    FIELD_D2T (text_size, 42);
+    FIELD_D2T (char_spacing, 43);
+    FIELD_D2T (offset_from_arc, 44);
+    FIELD_D2T (right_offset, 45);
+    FIELD_D2T (left_offset, 46);
+    FIELD_BD (start_angle, 50);
+    FIELD_BD (end_angle, 51);
+    FIELD_BS (is_reverse, 70);
+    FIELD_BS (text_direction, 71); // OutwardFromCenter=1, InwardToCenter=2
+    FIELD_BS (alignment, 72);
+    FIELD_BS (text_position, 73); // side_flag. OnConvexSide=1, OnConcaveSide=2
+    FIELD_BS (is_bold, 74);
+    FIELD_BS (is_italic, 75);
+    FIELD_BS (is_underlined, 76);
+    FIELD_BS (character_set, 77);
+    FIELD_BS (pitch_and_family, 78);
+    FIELD_BS (is_shx, 79);
+    FIELD_BL (color, 90);
+    FIELD_3BD (extrusion, 210);
+    FIELD_B (wizard_flag, 280);
+    FIELD_HANDLE (arc_handle, 5, 330);
+  } else { // DWG
+    FIELD_D2T (text_size, 42);
+    FIELD_D2T (xscale, 41);
+    FIELD_D2T (char_spacing, 43);
+    FIELD_T (style, 7);
+    FIELD_T (font_name, 2);
+    FIELD_T (bigfont_name, 3);
+    FIELD_T (text_value, 1);
+    FIELD_D2T (offset_from_arc, 44);
+    FIELD_D2T (right_offset, 45);
+    FIELD_D2T (left_offset, 46);
+    FIELD_3BD (center, 10);
+    FIELD_BD (radius, 40);
+    FIELD_BD (start_angle, 50);
+    FIELD_BD (end_angle, 51);
+    FIELD_3BD (extrusion, 210);
+    FIELD_BL (color, 90);
+    FIELD_BS (character_set, 77);
+    FIELD_BS (pitch_and_family, 78);
+    FIELD_BS (is_shx, 79);
+    FIELD_BS (is_bold, 74);
+    FIELD_BS (is_italic, 75);
+    FIELD_BS (is_underlined, 76);
+    FIELD_BS (alignment, 72);
+    FIELD_BS (is_reverse, 70);
+    FIELD_BS (wizard_flag, 280);
+    FIELD_BS (text_position, 73);
+    FIELD_BS (text_direction, 71);
+    FIELD_HANDLE (arc_handle, 5, 330);
+  }
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
+
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
 // AutoCAD Mechanical
@@ -5168,72 +5234,6 @@ DWG_OBJECT (TVDEVICEPROPERTIES)
   FIELD_BD (reserved_double, 0);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
-
-// r2000+ expresstools. command ATEXT
-DWG_ENTITY (ARCALIGNEDTEXT)
-  HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbArcAlignedText);
-  DXF {
-    FIELD_T (text_value, 1);
-    FIELD_T (font_name, 2);
-    FIELD_T (bigfont_name, 3);
-    FIELD_T (style, 7); // as name
-    FIELD_3BD (center, 10);
-    FIELD_BD (radius, 40);
-    FIELD_D2T (xscale, 41);
-    FIELD_D2T (text_size, 42);
-    FIELD_D2T (char_spacing, 43);
-    FIELD_D2T (offset_from_arc, 44);
-    FIELD_D2T (right_offset, 45);
-    FIELD_D2T (left_offset, 46);
-    FIELD_BD (start_angle, 50);
-    FIELD_BD (end_angle, 51);
-    FIELD_BS (is_reverse, 70);
-    FIELD_BS (text_direction, 71); // OutwardFromCenter=1, InwardToCenter=2
-    FIELD_BS (alignment, 72);
-    FIELD_BS (text_position, 73); // side_flag. OnConvexSide=1, OnConcaveSide=2
-    FIELD_BS (is_bold, 74);
-    FIELD_BS (is_italic, 75);
-    FIELD_BS (is_underlined, 76);
-    FIELD_BS (character_set, 77);
-    FIELD_BS (pitch_and_family, 78);
-    FIELD_BS (is_shx, 79);
-    FIELD_BL (color, 90);
-    FIELD_3BD (extrusion, 210);
-    FIELD_B (wizard_flag, 280);
-    FIELD_HANDLE (arc_handle, 5, 330);
-  } else { // DWG
-    FIELD_D2T (text_size, 42);
-    FIELD_D2T (xscale, 41);
-    FIELD_D2T (char_spacing, 43);
-    FIELD_T (style, 7);
-    FIELD_T (font_name, 2);
-    FIELD_T (bigfont_name, 3);
-    FIELD_T (text_value, 1);
-    FIELD_D2T (offset_from_arc, 44);
-    FIELD_D2T (right_offset, 45);
-    FIELD_D2T (left_offset, 46);
-    FIELD_3BD (center, 10);
-    FIELD_BD (radius, 40);
-    FIELD_BD (start_angle, 50);
-    FIELD_BD (end_angle, 51);
-    FIELD_3BD (extrusion, 210);
-    FIELD_BL (color, 90);
-    FIELD_BS (character_set, 77);
-    FIELD_BS (pitch_and_family, 78);
-    FIELD_BS (is_shx, 79);
-    FIELD_BS (is_bold, 74);
-    FIELD_BS (is_italic, 75);
-    FIELD_BS (is_underlined, 76);
-    FIELD_BS (alignment, 72);
-    FIELD_BS (is_reverse, 70);
-    FIELD_BS (wizard_flag, 280);
-    FIELD_BS (text_position, 73);
-    FIELD_BS (text_direction, 71);
-    FIELD_HANDLE (arc_handle, 5, 330);
-  }
-  COMMON_ENTITY_HANDLE_DATA;
-DWG_ENTITY_END
 
 // r2000+ expresstools. Remote Text
 DWG_ENTITY (RTEXT)

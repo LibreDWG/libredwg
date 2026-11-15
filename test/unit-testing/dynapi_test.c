@@ -68206,6 +68206,16 @@ test_sizes (void)
                size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_AcDs_Record);
+  size2 = dwg_dynapi_fields_size ("AcDs_Record");
+  if (size1 != size2)
+    {
+      fprintf (stderr,
+               "sizeof(struct _dwg_AcDs_Record): %d != "
+               "dwg_dynapi_fields_size (\"AcDs_Record\"): %d\n",
+               size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_AcDs_Schema);
   size2 = dwg_dynapi_fields_size ("AcDs_Schema");
   if (size1 != size2)
