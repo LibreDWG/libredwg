@@ -82,5 +82,14 @@ void dwg_upgrade_MLINESTYLE (Dwg_Data *restrict dwg,
 /* encode_acds.c: the r2013+ AcDs section, with the SAB data of the ACIS
    entities. No section if dat->byte stays 0. */
 int encode_acds (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
+/* encode_r2007.c: the container of a r2007 DWG, from the section buffers of
+   dwg_encode. */
+int encode_r2007 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                  Bit_Chain *restrict sec_dat);
+/* encode.c: the LZ77 compression of r2004+ sections */
+int compress_R2004_section (Bit_Chain *restrict dat,
+                            BITCODE_RC *restrict decomp,
+                            uint32_t decomp_data_size,
+                            uint32_t *comp_data_size);
 
 #endif

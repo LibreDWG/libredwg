@@ -1289,7 +1289,7 @@ compress_write_match (Bit_Chain *restrict dat, uint32_t match_dist,
    Based on ACadSharp DwgLZ77AC18Compressor.
    Format: [literal_length + data]* [match [literal_length + data]]* 0x11
 */
-static int
+int
 compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                         uint32_t decomp_data_size, uint32_t *comp_data_size)
 {
@@ -2118,7 +2118,8 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     BITCODE_RL bitsize;
     Bit_Chain hdl_dat = { 0 }, str_dat = { 0 };
 
-    if (dwg->header.maint_version > 3 || dat->version >= R_2018)
+    if ((dat->version >= R_2010 && dwg->header.maint_version > 3)
+        || dat->version >= R_2018)
       {
         bitsize_hi_adr = dat->byte;
         bit_write_RL (dat, 0); // bitsize_hi placeholder
@@ -2211,7 +2212,8 @@ encode_header_vars (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // many and rejects the file with "CRC does not match".
   SINCE (R_2007a)
   {
-    if (dwg->header.maint_version > 3 || dat->version >= R_2018)
+    if ((dat->version >= R_2010 && dwg->header.maint_version > 3)
+        || dat->version >= R_2018)
       {
         BITCODE_RL hsize;
         memcpy (&hsize, &dat->chain[size_adr], 4);
@@ -3029,13 +3031,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #define WE_CAN                                                          \
   "This version of LibreDWG is not capable of encoding "                \
   "versions r2007 DWG files.\n"
-
-  /* r2007 encoding is not supported. fall back to r2010 */
-  if (dwg->header.version >= R_2007a && dwg->header.version <= R_2007)
-    {
-      LOG_ERROR (WE_CAN);
-      dwg->header.version = dat->version = R_2010;
-    }
 
   /*------------------------------------------------------------
    * Header
@@ -3866,6 +3861,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     // and write system and data section maps.
     dat = old_dat;
+    if (dwg->header.version == R_2007)
+      {
+        // the container of r2007 differs from r2004+: no r2004 file header
+        error |= encode_r2007 (dwg, dat, sec_dat);
+        goto r2007_written;
+      }
 
     /*-------------------------------------------------------------------------
      * Section map and info
@@ -4697,7 +4698,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     } // R2004_Header
   } // R_2004
-
+r2007_written:
   assert (!dat->bit);
   dat->size = dat->byte;
   LOG_INFO ("\nFinal DWG size: %u\n", (unsigned)dat->size);
@@ -6913,7 +6914,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           if (data->u.eed_0.is_tu)
             free (s);
         }
-        VERSIONS (R_13b1, R_2007)
+        VERSIONS (R_13b1, R_2004)
         {
           // only if from r2007+ DWG, not JSON, DXF
           if (data->u.eed_0.is_tu)

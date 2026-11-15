@@ -80,8 +80,8 @@ libredwg_la_SOURCES += \
 	encode.c \
 	encode2.c \
 	encode_acds.c \
+	encode_r2007.c \
 	dxfclasses.c
-#       encode_r2007.c
 #       in_xml.c
 #       in_yaml.c
 endif

@@ -253,6 +253,7 @@ if(NOT LIBREDWG_DISABLE_WRITE)
     src/encode.c
     src/encode2.c
     src/encode_acds.c
+    src/encode_r2007.c
     src/in_dxf.c
     ${injson_SOURCES}
     src/reedsolomon.c)
