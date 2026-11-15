@@ -351,17 +351,18 @@ remove_NOD_item_null_itemhandles_test (void)
 static void
 in_json_section_counts_test (void)
 {
-  const char *src =
-      "{\n"
-      " \"created_by\": \"libredwg test\",\n"
-      " \"AppInfo\": { \"unknown_bits\": \"4142\", \"size\": 4096 },\n"
-      " \"AppInfoHistory\": { \"unknown_bits\": \"4142\", \"size\": 4096 },\n"
-      " \"RevHistory\": { \"histories\": [100], \"num_histories\": 4096 },\n"
-      " \"AcDs\": { \"segidx\": [ { \"offset\": 0, \"size\": 0 },\n"
-      "                { \"offset\": 0, \"size\": 0 } ],\n"
-      "   \"segments\": [ { \"signature\": 0 },\n"
-      "                  { \"signature\": 0 } ],\n"
-      "   \"num_segidx\": 4096 } }";
+  const char *src
+      = "{\n"
+        " \"created_by\": \"libredwg test\",\n"
+        " \"AppInfo\": { \"unknown_bits\": \"4142\", \"size\": 4096 },\n"
+        " \"AppInfoHistory\": { \"unknown_bits\": \"4142\", \"size\": 4096 "
+        "},\n"
+        " \"RevHistory\": { \"histories\": [100], \"num_histories\": 4096 },\n"
+        " \"AcDs\": { \"segidx\": [ { \"offset\": 0, \"size\": 0 },\n"
+        "                { \"offset\": 0, \"size\": 0 } ],\n"
+        "   \"segments\": [ { \"signature\": 0 },\n"
+        "                  { \"signature\": 0 } ],\n"
+        "   \"num_segidx\": 4096 } }";
   char *json = (char *)malloc (strlen (src) + 1);
   Dwg_Data dwg;
   Bit_Chain dat;
@@ -412,19 +413,19 @@ in_json_section_counts_test (void)
 static void
 in_json_object_counts_test (void)
 {
-  const char *src =
-      "{\n"
-      " \"created_by\": \"libredwg test\",\n"
-      " \"OBJECTS\": [ { \"object\": \"LTYPE\", \"type\": 57,\n"
-      "   \"handle\": [0, 1, 1], \"name\": \"TestLTYPE\",\n"
-      "   \"dashes\": [ { \"length\": 1.0 } ], \"numdashes\": 200 },\n"
-      " { \"object\": \"DICTIONARY\", \"type\": 42,\n"
-      "   \"handle\": [0, 1, 2], \"name\": \"testdict\",\n"
-      "   \"items\": { \"A\": [2, 1, 1, 1], \"B\": [2, 1, 2, 2] },\n"
-      "   \"numitems\": 4096 },\n"
-      " { \"object\": \"BLOCK_HEADER\", \"type\": 49,\n"
-      "   \"handle\": [0, 1, 3], \"name\": \"*Model_Space\",\n"
-      "   \"preview\": \"4142\", \"preview_size\": 3000 } ] }";
+  const char *src
+      = "{\n"
+        " \"created_by\": \"libredwg test\",\n"
+        " \"OBJECTS\": [ { \"object\": \"LTYPE\", \"type\": 57,\n"
+        "   \"handle\": [0, 1, 1], \"name\": \"TestLTYPE\",\n"
+        "   \"dashes\": [ { \"length\": 1.0 } ], \"numdashes\": 200 },\n"
+        " { \"object\": \"DICTIONARY\", \"type\": 42,\n"
+        "   \"handle\": [0, 1, 2], \"name\": \"testdict\",\n"
+        "   \"items\": { \"A\": [2, 1, 1, 1], \"B\": [2, 1, 2, 2] },\n"
+        "   \"numitems\": 4096 },\n"
+        " { \"object\": \"BLOCK_HEADER\", \"type\": 49,\n"
+        "   \"handle\": [0, 1, 3], \"name\": \"*Model_Space\",\n"
+        "   \"preview\": \"4142\", \"preview_size\": 3000 } ] }";
   char *json = (char *)malloc (strlen (src) + 1);
   Dwg_Data dwg;
   Bit_Chain dat;
@@ -453,10 +454,8 @@ in_json_object_counts_test (void)
   else
     {
       Dwg_Object_LTYPE *lt = dwg.object[0].tio.object->tio.LTYPE;
-      Dwg_Object_DICTIONARY *dict
-          = dwg.object[1].tio.object->tio.DICTIONARY;
-      Dwg_Object_BLOCK_HEADER *bh
-          = dwg.object[2].tio.object->tio.BLOCK_HEADER;
+      Dwg_Object_DICTIONARY *dict = dwg.object[1].tio.object->tio.DICTIONARY;
+      Dwg_Object_BLOCK_HEADER *bh = dwg.object[2].tio.object->tio.BLOCK_HEADER;
       if (lt->numdashes != 1)
         fail ("in_json_object_counts: LTYPE.numdashes %u != 1",
               (unsigned)lt->numdashes);
@@ -481,17 +480,17 @@ in_json_object_counts_test (void)
 static void
 in_json_subclass_fixed_elems_test (void)
 {
-  const char *src =
-      "{\n"
-      " \"created_by\": \"libredwg test\",\n"
-      " \"FILEHEADER\": { \"version\": \"AC1024\" },\n"
-      " \"OBJECTS\": [ { \"object\": \"DIMASSOC\", \"type\": 626,\n"
-      "   \"handle\": [0, 1, 1],\n"
-      "   \"associativity\": 63,\n"
-      "   \"ref\": [ {}, {}, {}, {} ] },\n"
-      " { \"object\": \"TABLESTYLE\", \"type\": 724,\n"
-      "   \"handle\": [0, 1, 2], \"name\": \"TestTable\",\n"
-      "   \"rowstyles\": [ {} ] } ] }";
+  const char *src
+      = "{\n"
+        " \"created_by\": \"libredwg test\",\n"
+        " \"FILEHEADER\": { \"version\": \"AC1024\" },\n"
+        " \"OBJECTS\": [ { \"object\": \"DIMASSOC\", \"type\": 626,\n"
+        "   \"handle\": [0, 1, 1],\n"
+        "   \"associativity\": 63,\n"
+        "   \"ref\": [ {}, {}, {}, {} ] },\n"
+        " { \"object\": \"TABLESTYLE\", \"type\": 724,\n"
+        "   \"handle\": [0, 1, 2], \"name\": \"TestTable\",\n"
+        "   \"rowstyles\": [ {} ] } ] }";
   char *json = (char *)malloc (strlen (src) + 1);
   Dwg_Data dwg;
   Bit_Chain dat;
@@ -510,8 +509,7 @@ in_json_subclass_fixed_elems_test (void)
   error = dwg_read_json (&dat, &dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      fail ("in_json_subclass_fixed_elems: dwg_read_json failed 0x%x",
-            error);
+      fail ("in_json_subclass_fixed_elems: dwg_read_json failed 0x%x", error);
       free (json);
       return;
     }
@@ -521,8 +519,7 @@ in_json_subclass_fixed_elems_test (void)
   else
     {
       Dwg_Object_DIMASSOC *da = dwg.object[0].tio.object->tio.DIMASSOC;
-      Dwg_Object_TABLESTYLE *ts
-          = dwg.object[1].tio.object->tio.TABLESTYLE;
+      Dwg_Object_TABLESTYLE *ts = dwg.object[1].tio.object->tio.TABLESTYLE;
       // on master: ref[4]/ref[5] past the 4-element buffer,
       // rowstyles[1]/rowstyles[2] past the 1-element buffer
       if (!da->ref || !ts->rowstyles)
@@ -550,13 +547,12 @@ in_json_subclass_fixed_elems_test (void)
 static void
 in_json_mline_lines_test (void)
 {
-  const char *src =
-      "{\n"
-      " \"created_by\": \"libredwg test\",\n"
-      " \"OBJECTS\": [ { \"entity\": \"MLINE\", \"type\": 47,\n"
-      "   \"handle\": [0, 1, 1],\n"
-      "   \"verts\": [ { \"lines\": [ {}, {} ] },\n"
-      "                { \"lines\": [ {}, {}, {} ] } ] } ] }";
+  const char *src = "{\n"
+                    " \"created_by\": \"libredwg test\",\n"
+                    " \"OBJECTS\": [ { \"entity\": \"MLINE\", \"type\": 47,\n"
+                    "   \"handle\": [0, 1, 1],\n"
+                    "   \"verts\": [ { \"lines\": [ {}, {} ] },\n"
+                    "                { \"lines\": [ {}, {}, {} ] } ] } ] }";
   char *json = (char *)malloc (strlen (src) + 1);
   Dwg_Data dwg;
   Bit_Chain dat;
@@ -593,8 +589,7 @@ in_json_mline_lines_test (void)
       if (o->verts[0].num_lines != 3)
         fail ("in_json_mline_lines: verts[0].num_lines %u != 3",
               (unsigned)o->verts[0].num_lines);
-      if (o->verts[0].lines
-          && o->verts[0].lines[2].num_segparms != 0)
+      if (o->verts[0].lines && o->verts[0].lines[2].num_segparms != 0)
         fail ("in_json_mline_lines: verts[0].lines[2] not zero-filled");
     }
   // on master: dwg_free walks 3 lines of the first vertex past its
@@ -615,24 +610,23 @@ in_json_mline_lines_test (void)
 static void
 in_json_dotted_array_test (void)
 {
-  const char *src =
-      "{\n"
-      " \"created_by\": \"libredwg test\",\n"
-      " \"FILEHEADER\": { \"version\": \"AC1024\" },\n"
-      " \"OBJECTS\": ["
-      " { \"object\": \"DIMASSOC\", \"type\": 626,\n"
-      "   \"handle\": [0, 1, 1],\n"
-      "   \"associativity\": 63,\n"
-      "   \"ref.classname\": \"AcDbOsnapPointRef\" },\n"
-      " { \"object\": \"TABLESTYLE\", \"type\": 724,\n"
-      "   \"handle\": [0, 1, 2], \"name\": \"TestTable\",\n"
-      "   \"rowstyles.text_height\": 2.5 },\n"
-      " { \"entity\": \"MLINE\", \"type\": 47,\n"
-      "   \"handle\": [0, 1, 3], \"layer\": \"0\",\n"
-      "   \"verts.lines\": [ {}, {} ] },\n"
-      " { \"object\": \"LTYPE\", \"type\": 57,\n"
-      "   \"handle\": [0, 1, 4], \"name\": \"TestLTYPE\",\n"
-      "   \"numdashes\": 5, \"dashes.length\": 5.0 } ] }";
+  const char *src = "{\n"
+                    " \"created_by\": \"libredwg test\",\n"
+                    " \"FILEHEADER\": { \"version\": \"AC1024\" },\n"
+                    " \"OBJECTS\": ["
+                    " { \"object\": \"DIMASSOC\", \"type\": 626,\n"
+                    "   \"handle\": [0, 1, 1],\n"
+                    "   \"associativity\": 63,\n"
+                    "   \"ref.classname\": \"AcDbOsnapPointRef\" },\n"
+                    " { \"object\": \"TABLESTYLE\", \"type\": 724,\n"
+                    "   \"handle\": [0, 1, 2], \"name\": \"TestTable\",\n"
+                    "   \"rowstyles.text_height\": 2.5 },\n"
+                    " { \"entity\": \"MLINE\", \"type\": 47,\n"
+                    "   \"handle\": [0, 1, 3], \"layer\": \"0\",\n"
+                    "   \"verts.lines\": [ {}, {} ] },\n"
+                    " { \"object\": \"LTYPE\", \"type\": 57,\n"
+                    "   \"handle\": [0, 1, 4], \"name\": \"TestLTYPE\",\n"
+                    "   \"numdashes\": 5, \"dashes.length\": 5.0 } ] }";
   char *json = (char *)malloc (strlen (src) + 1);
   Dwg_Data dwg;
   Bit_Chain dat;
@@ -675,8 +669,8 @@ in_json_dotted_array_test (void)
                 else
                   {
                     if (!o->ref[0].classname
-                        || strcmp (o->ref[0].classname,
-                                   "AcDbOsnapPointRef") != 0)
+                        || strcmp (o->ref[0].classname, "AcDbOsnapPointRef")
+                               != 0)
                       fail ("in_json_dotted_array: ref[0].classname not set");
                     if (o->ref[5].classname || o->ref[5].osnap_type
                         || o->ref[5].xrefs)
@@ -708,8 +702,7 @@ in_json_dotted_array_test (void)
               }
             case DWG_TYPE_MLINE:
               {
-                Dwg_Entity_MLINE *o
-                    = dwg.object[i].tio.entity->tio.MLINE;
+                Dwg_Entity_MLINE *o = dwg.object[i].tio.entity->tio.MLINE;
                 if (o->num_verts != 1)
                   fail ("in_json_dotted_array: num_verts %u != 1",
                         (unsigned)o->num_verts);
@@ -928,7 +921,8 @@ downconvert_TABLESTYLE_test (void)
   if (ts.rowstyles[0].text_height != 4.5 || ts.rowstyles[1].text_height != 6.0
       || ts.rowstyles[2].text_height != 4.5)
     fail ("downconvert_TABLESTYLE: order data, title, header");
-  if (ts.rowstyles[0].text_alignment != 2 || ts.rowstyles[1].text_alignment != 5)
+  if (ts.rowstyles[0].text_alignment != 2
+      || ts.rowstyles[1].text_alignment != 5)
     fail ("downconvert_TABLESTYLE: alignment");
   if (ts.rowstyles[0].has_bgcolor || ts.rowstyles[0].fill_color.index != 256
       || !ts.rowstyles[1].has_bgcolor
@@ -1094,7 +1088,8 @@ acds_sab_test (void)
         found++;
     }
   if (!*msg && (num_regions != 3 || found != 3))
-    snprintf (msg, sizeof msg, "%u of 3 REGIONs, %u found", num_regions, found);
+    snprintf (msg, sizeof msg, "%u of 3 REGIONs, %u found", num_regions,
+              found);
   dwg_free (&dwg);
   dwg_free (&dwg2);
   free (dat.chain);
@@ -1112,16 +1107,15 @@ acds_sab_test (void)
 static void
 acds_records_json_test (void)
 {
-  const char *src
-      = "{\n"
-        " \"created_by\": \"libredwg test\",\n"
-        " \"FILEHEADER\": { \"version\": \"AC1032\" },\n"
-        " \"AcDs\": { \"records\": [\n"
-        "   { \"handle\": 34, \"schidx\": 0, \"size\": 8,\n"
-        "     \"data\": \"89504E470D0A1A0A\" },\n"
-        "   { \"handle\": 1000, \"schidx\": 1, \"size\": 3,\n"
-        "     \"data\": \"414243\" } ] },\n"
-        " \"OBJECTS\": [] }";
+  const char *src = "{\n"
+                    " \"created_by\": \"libredwg test\",\n"
+                    " \"FILEHEADER\": { \"version\": \"AC1032\" },\n"
+                    " \"AcDs\": { \"records\": [\n"
+                    "   { \"handle\": 34, \"schidx\": 0, \"size\": 8,\n"
+                    "     \"data\": \"89504E470D0A1A0A\" },\n"
+                    "   { \"handle\": 1000, \"schidx\": 1, \"size\": 3,\n"
+                    "     \"data\": \"414243\" } ] },\n"
+                    " \"OBJECTS\": [] }";
   const unsigned saved_loglevel = loglevel;
   char msg[160] = "";
   char *json = (char *)malloc (strlen (src) + 1);
@@ -1148,13 +1142,11 @@ acds_records_json_test (void)
     snprintf (msg, sizeof msg, "dwg_read_json error 0x%x", error);
   else if (dwg.acds.num_records != 2 || !dwg.acds.records
            || dwg.acds.records[0].handle != 34
-           || dwg.acds.records[0].schidx != 0
-           || dwg.acds.records[0].size != 8
+           || dwg.acds.records[0].schidx != 0 || dwg.acds.records[0].size != 8
            || !dwg.acds.records[0].data
            || memcmp (dwg.acds.records[0].data, "\x89PNG\r\n\x1a\n", 8)
            || dwg.acds.records[1].handle != 1000
-           || dwg.acds.records[1].size != 3
-           || !dwg.acds.records[1].data
+           || dwg.acds.records[1].size != 3 || !dwg.acds.records[1].data
            || memcmp (dwg.acds.records[1].data, "ABC", 3))
     snprintf (msg, sizeof msg, "records not read, %u",
               (unsigned)dwg.acds.num_records);
@@ -1192,8 +1184,7 @@ acds_records_json_test (void)
       error = dwg_read_json (&dat, &dwg2);
       if (error >= DWG_ERR_CRITICAL)
         snprintf (msg, sizeof msg, "second dwg_read_json error 0x%x", error);
-      else if (dwg2.acds.num_records != 2
-               || dwg2.acds.records[0].handle != 34
+      else if (dwg2.acds.num_records != 2 || dwg2.acds.records[0].handle != 34
                || dwg2.acds.records[0].size != 8
                || memcmp (dwg2.acds.records[0].data, "\x89PNG\r\n\x1a\n", 8)
                || dwg2.acds.records[1].handle != 1000
@@ -1261,12 +1252,6 @@ large_class_strings_test (void)
   else
     ok ("large_class_strings: extended class stream roundtrip");
 }
-
-extern int decompress_r2007 (unsigned char *restrict dst,
-                             const unsigned dst_size,
-                             unsigned char *restrict src,
-                             const unsigned src_size,
-                             const unsigned char *restrict dst_end);
 
 /* The r2007 compression is the inverse of decompress_r2007, for data with
    long matches, short matches and only literals. */

@@ -3865,6 +3865,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         // the container of r2007 differs from r2004+: no r2004 file header
         error |= encode_r2007 (dwg, dat, sec_dat);
+        for (type = SECTION_UNKNOWN; type < SECTION_SYSTEM_MAP; type++)
+          if (sec_dat[type].chain)
+            bit_chain_free (&sec_dat[type]);
         goto r2007_written;
       }
 
