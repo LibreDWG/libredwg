@@ -13,6 +13,7 @@ endif(WIN32)
 add_executable(bits_test
   bits_test.c
   ../../src/bits.c
+  ../../src/reedsolomon.c
   ../../src/mman.c
   ../../src/logging.c
   ../../src/codepages.c
@@ -63,6 +64,7 @@ add_executable(decode_test
   ../../src/codepages.c
   ../../src/hash.c
   ../../src/decode_r2007.c
+  ../../src/reedsolomon.c
   ../../src/objects.c
   ../../src/classes.c
   ../../src/print.c

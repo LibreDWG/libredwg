@@ -46,22 +46,20 @@
 #define R2007_PAGE_MAX 0xF800 /* the uncompressed size of a data page */
 #define R2007_FIRST_ID 3
 
-
 /* The order of the sections in the file, as ODA writes them. */
-static const Dwg_Section_Type section_order[] = {
-  SECTION_SUMMARYINFO,    SECTION_PREVIEW,   SECTION_APPINFO,
-  SECTION_APPINFOHISTORY, SECTION_REVHISTORY, SECTION_OBJECTS,
-  SECTION_OBJFREESPACE,   SECTION_TEMPLATE,  SECTION_HANDLES,
-  SECTION_CLASSES,        SECTION_AUXHEADER, SECTION_HEADER,
-  SECTION_FILEDEPLIST,    SECTION_SECURITY,  SECTION_VBAPROJECT
-};
+static const Dwg_Section_Type section_order[]
+    = { SECTION_SUMMARYINFO,    SECTION_PREVIEW,    SECTION_APPINFO,
+        SECTION_APPINFOHISTORY, SECTION_REVHISTORY, SECTION_OBJECTS,
+        SECTION_OBJFREESPACE,   SECTION_TEMPLATE,   SECTION_HANDLES,
+        SECTION_CLASSES,        SECTION_AUXHEADER,  SECTION_HEADER,
+        SECTION_FILEDEPLIST,    SECTION_SECURITY,   SECTION_VBAPROJECT };
 #define R2007_NUM_ORDER ((int)(sizeof (section_order) / sizeof (section_order[0])))
 typedef struct
 {
   int64_t id;
-  size_t size;           /* the size on disk */
-  unsigned char *data;   /* the size bytes on disk, malloced */
-  int repeat;            /* system pages: how often the data is repeated */
+  size_t size;         /* the size on disk */
+  unsigned char *data; /* the size bytes on disk, malloced */
+  int repeat;          /* system pages: how often the data is repeated */
   uint64_t size_comp, size_uncomp; /* system pages: the data sizes */
   uint64_t crc_comp, crc_uncomp;   /* system pages: the crcs of the data */
 } Page;
@@ -148,7 +146,8 @@ section_info (const char *restrict name, int *restrict encoding,
 }
 
 /* The 64-bit CRCs, p 5.12. The normal one is the ECMA-182 CRC, the mirrored
-   one the same with the bits reflected, with the polynom 0x95ac9329ac4bc9b5. */
+   one the same with the bits reflected, with the polynom 0x95ac9329ac4bc9b5.
+ */
 typedef struct
 {
   uint64_t normal[256];
@@ -322,16 +321,26 @@ rng_encode (Crc_Rng *r, const uint32_t value)
   const uint64_t random = rng_next (r);
   uint32_t lo = (uint32_t)(random & 0x0df7df7dfU);
   uint32_t hi = (uint32_t)((random >> 32) & 0x0f7df7df7U);
-  if (value & 0x200) lo |= 0x20;
-  if (value & 0x100) lo |= 0x800;
-  if (value & 0x80) lo |= 0x20000;
-  if (value & 0x40) lo |= 0x800000;
-  if (value & 0x20) lo |= 0x20000000;
-  if (value & 0x10) hi |= 0x08;
-  if (value & 0x8) hi |= 0x200;
-  if (value & 0x4) hi |= 0x8000;
-  if (value & 0x2) hi |= 0x200000;
-  if (value & 0x1) hi |= 0x8000000;
+  if (value & 0x200)
+    lo |= 0x20;
+  if (value & 0x100)
+    lo |= 0x800;
+  if (value & 0x80)
+    lo |= 0x20000;
+  if (value & 0x40)
+    lo |= 0x800000;
+  if (value & 0x20)
+    lo |= 0x20000000;
+  if (value & 0x10)
+    hi |= 0x08;
+  if (value & 0x8)
+    hi |= 0x200;
+  if (value & 0x4)
+    hi |= 0x8000;
+  if (value & 0x2)
+    hi |= 0x200000;
+  if (value & 0x1)
+    hi |= 0x8000000;
   return lo | ((uint64_t)hi << 32);
 }
 
@@ -350,7 +359,8 @@ rs_blocks (const size_t size_comp, const int repeat, const int data_size)
    malloced buffer of block_count * 255 bytes, or NULL. */
 static unsigned char *
 rs_encode_page (const unsigned char *src, const size_t size_comp,
-                const int repeat, const int data_size, size_t *restrict nblocks)
+                const int repeat, const int data_size,
+                size_t *restrict nblocks)
 {
   const size_t block_count = rs_blocks (size_comp, repeat, data_size);
   const size_t unit = ROUND8 (size_comp);
@@ -543,7 +553,7 @@ put_match (unsigned char *out, const size_t l, const size_t d,
 #define LZ_HASH(p) ((((p)[0] << 8) ^ ((p)[1] << 4) ^ (p)[2]) & 0x7fff)
 
 /* Compresses n bytes of src into out, which has room for n + n/8 + 64 bytes.
-   *outlen is 0 if the result is not smaller than the input. */
+ *outlen is 0 if the result is not smaller than the input. */
 int
 compress_r2007 (unsigned char *restrict out, const unsigned char *restrict src,
                 const size_t n, size_t *restrict outlen)
@@ -600,7 +610,8 @@ compress_r2007 (unsigned char *restrict out, const unsigned char *restrict src,
               cand = prev[cand];
             }
         }
-      if (best >= 3 && match_cost (best, bestd) && match_cost (best, bestd) < best)
+      if (best >= 3 && match_cost (best, bestd)
+          && match_cost (best, bestd) < best)
         {
           tok[ntok].lit = (uint32_t)(i - lit_start);
           tok[ntok].len = (uint32_t)best;
@@ -672,7 +683,8 @@ make_data_page (Page *restrict page, const Crc64 *restrict crc,
   if (encoding == 1)
     {
       *size_comp = size_uncomp;
-      *crc64 = crc64_calc (crc, 0, crc_seed1 (0, size_uncomp), src, size_uncomp);
+      *crc64
+          = crc64_calc (crc, 0, crc_seed1 (0, size_uncomp), src, size_uncomp);
       page->size = ROUND32 (size_uncomp ? size_uncomp : 1);
       page->data = (unsigned char *)calloc (1, page->size);
       if (!page->data)
@@ -729,8 +741,10 @@ make_system_page (Page *restrict page, const Crc64 *restrict crc,
     }
   page->size_comp = plen;
   page->size_uncomp = size;
-  page->crc_uncomp = crc64_calc (crc, 0, crc_seed1 (0, (uint32_t)size), src, size);
-  page->crc_comp = crc64_calc (crc, 0, crc_seed1 (0, (uint32_t)plen), payload, plen);
+  page->crc_uncomp
+      = crc64_calc (crc, 0, crc_seed1 (0, (uint32_t)size), src, size);
+  page->crc_comp
+      = crc64_calc (crc, 0, crc_seed1 (0, (uint32_t)plen), payload, plen);
   pagesize = pagesize < 0x400 ? 0x400 : ROUND32 (pagesize);
   aligned = ROUND8 (plen);
   page->repeat = (int)((pagesize / 255 * 239) / aligned);
@@ -755,13 +769,15 @@ make_system_page (Page *restrict page, const Crc64 *restrict crc,
    check data. p 5.2.1.4 - 5.2.1.7 */
 static int
 make_file_header (unsigned char *restrict out,
-                  const unsigned char *restrict hbuf, const Crc64 *restrict crc,
-                  const uint64_t key, const uint64_t r1, const uint64_t r2,
+                  const unsigned char *restrict hbuf,
+                  const Crc64 *restrict crc, const uint64_t key,
+                  const uint64_t r1, const uint64_t r2,
                   const uint64_t chk_seed)
 {
   unsigned char pe[3 * 239];
   unsigned char seq[16], buf[64];
-  unsigned char cbuf[sizeof (Dwg_R2007_Header) + 64 + sizeof (Dwg_R2007_Header) / 8];
+  unsigned char
+      cbuf[sizeof (Dwg_R2007_Header) + 64 + sizeof (Dwg_R2007_Header) / 8];
   const unsigned char *data = hbuf;
   int32_t len = (int32_t)sizeof (Dwg_R2007_Header);
   size_t clen = 0, unit;
@@ -782,9 +798,8 @@ make_file_header (unsigned char *restrict out,
   put_le64 (&seq[8], crc_shift (key, key));
   put_le64 (&pe[0], crc64_calc (crc, 1, crc_seed1 (0, 16), seq, 16));
   put_le64 (&pe[8], key);
-  put_le64 (&pe[16],
-            crc64_calc (crc, 1, crc_seed2 (0, (uint32_t)abs (len)), data,
-                        (size_t)abs (len)));
+  put_le64 (&pe[16], crc64_calc (crc, 1, crc_seed2 (0, (uint32_t)abs (len)),
+                                 data, (size_t)abs (len)));
   put_le32 (&pe[24], (uint32_t)len);
   put_le32 (&pe[28], 0);
   memcpy (&pe[32], data, (size_t)abs (len));
@@ -923,8 +938,8 @@ encode_r2007 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   int64_t next_id = R2007_FIRST_ID;
   unsigned char *map = NULL, *secmap = NULL;
   size_t map_size = 0, secmap_size = 0, total = 0, off;
-  Page pm[2] = { { 0, 0, NULL }, { 0, 0, NULL } };
-  Page sm[2] = { { 0, 0, NULL }, { 0, 0, NULL } };
+  Page pm[2] = { { 0 }, { 0 } };
+  Page sm[2] = { { 0 }, { 0 } };
   Bit_Chain tmp = { 0 };
   unsigned char fhdr[R2007_HEADER_SIZE];
   unsigned char hbuf[sizeof (Dwg_R2007_Header)];
@@ -972,7 +987,8 @@ encode_r2007 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       sec->first_page = npages;
       section_info (dwg_section_name (dwg, type), &sec->encoding,
                     &sec->hashcode, &sec->max_size);
-      sec->uncomp_size = (uint64_t *)calloc (sec->num_pages, sizeof (uint64_t));
+      sec->uncomp_size
+          = (uint64_t *)calloc (sec->num_pages, sizeof (uint64_t));
       sec->comp_size = (uint64_t *)calloc (sec->num_pages, sizeof (uint64_t));
       sec->offset = (uint64_t *)calloc (sec->num_pages, sizeof (uint64_t));
       sec->size = (size_t *)calloc (sec->num_pages, sizeof (size_t));
@@ -988,9 +1004,9 @@ encode_r2007 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       for (k = 0; k < sec->num_pages; k++)
         {
           const size_t pos = (size_t)k * R2007_PAGE_MAX;
-          const uint32_t n = (uint32_t)(size - pos < R2007_PAGE_MAX
-                                            ? size - pos
-                                            : R2007_PAGE_MAX);
+          const uint32_t n
+              = (uint32_t)(size - pos < R2007_PAGE_MAX ? size - pos
+                                                       : R2007_PAGE_MAX);
           Page *page = &pages[npages++];
           error |= make_data_page (page, &crc, &sec_dat[type].chain[pos], n,
                                    sec->encoding, &sec->comp_size[k],
@@ -1005,8 +1021,9 @@ encode_r2007 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           if (ROUND8 (n) > sec->max_size)
             sec->max_size = ROUND8 (n);
           LOG_TRACE ("section %s page %d: id %d, %u => %u bytes, %u on disk\n",
-                     dwg_section_name (dwg, type), k, (int)page->id, (unsigned)n,
-                     (unsigned)sec->comp_size[k], (unsigned)page->size);
+                     dwg_section_name (dwg, type), k, (int)page->id,
+                     (unsigned)n, (unsigned)sec->comp_size[k],
+                     (unsigned)page->size);
         }
     }
 
@@ -1132,9 +1149,8 @@ encode_r2007 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 #endif
   /* the CRC of the header with the CRC field being 0 */
   put_le64 (&hbuf[0x108], 0);
-  put_le64 (&hbuf[0x108],
-            crc64_calc (&crc, 1, crc_seed2 (0, sizeof (hdr)), hbuf,
-                        sizeof (hdr)));
+  put_le64 (&hbuf[0x108], crc64_calc (&crc, 1, crc_seed2 (0, sizeof (hdr)),
+                                      hbuf, sizeof (hdr)));
   error |= make_file_header (fhdr, hbuf, &crc, key, r1, r2, chk_seed);
   if (error >= DWG_ERR_CRITICAL)
     goto done;

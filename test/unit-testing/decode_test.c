@@ -14,7 +14,7 @@ extern unsigned int loglevel;
 
 #define IS_DECODER
 #include <stdlib.h>
-#include <unistd.h> // unlink
+#include <stdio.h> // remove
 // #include "common.h"
 // CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "decode.c"
@@ -436,7 +436,8 @@ class_object_stream_tests (void)
   if (!srcdir)
     srcdir = "../..";
   if (snprintf (path, sizeof (path), "%s/test/test-data/2018/Dynblocks.dwg",
-                srcdir) >= (int)sizeof (path))
+                srcdir)
+      >= (int)sizeof (path))
     {
       fail ("class object streams: fixture path too long");
       return;
@@ -452,7 +453,8 @@ class_object_stream_tests (void)
   if (error < DWG_ERR_CRITICAL && found)
     ok ("class object streams: MATERIAL handle 96");
   else
-    fail ("class object streams: MATERIAL handle 96 missing (error %d)", error);
+    fail ("class object streams: MATERIAL handle 96 missing (error %d)",
+          error);
   dwg_free (&dwg);
 }
 
@@ -475,7 +477,8 @@ r2007_rs_correction_tests (void)
   if (!srcdir)
     srcdir = "../..";
   if (snprintf (path, sizeof (path), "%s/test/test-data/example_2007.dwg",
-                srcdir) >= (int)sizeof (path))
+                srcdir)
+      >= (int)sizeof (path))
     {
       fail ("r2007 RS: fixture path too long");
       return;
@@ -512,7 +515,7 @@ r2007_rs_correction_tests (void)
   free (buf);
   error1 = dwg_read_file (path, &clean);
   error2 = dwg_read_file (bad, &dwg);
-  unlink (bad);
+  remove (bad);
   if (error1 >= DWG_ERR_CRITICAL || error2 >= DWG_ERR_CRITICAL
       || clean.num_objects != dwg.num_objects)
     same = 0;
