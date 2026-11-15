@@ -5033,14 +5033,23 @@ DWG_ENTITY (MPOLYGON)
                         {
 #define seg segx[rcount2]
                           SUB_FIELD_BL (seg, num_fitpts, 97);
-                          FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
+                          /* Same as HATCH: fitpts/tangents only when
+                             num_fitpts > 0. FIELD_2RD_VECTOR aborts with
+                             VALUEOUTOFBOUNDS on size 0; reading tangents
+                             unconditionally overruns the remaining edges. */
+                          if (FIELD_VALUE (seg.num_fitpts))
+                            {
+                              FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
+                              SUB_FIELD_2RD (seg, start_tangent, 12);
+                              SUB_FIELD_2RD (seg, end_tangent, 13);
+                            }
                         }
                       break;
                     default:
                       LOG_WARN ("Invalid HATCH.curve_type %d\n",
                                 FIELD_VALUE (segx[rcount2].curve_type));
                       DEBUG_HERE_OBJ
-                      FIELD_VALUE (seg.curve_type) = 0;
+                      FIELD_VALUE (segx[rcount2].curve_type) = 0;
                       JSON_END_REPEAT (segx);
                       JSON_END_REPEAT (paths);
                       return 0;
