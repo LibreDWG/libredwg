@@ -133,7 +133,7 @@ Here is a list of features that are still missing:
 Writing to the r2007 format is supported since 0.14.1, with Reed-Solomon
 coded and compressed pages, and the 64-bit CRCs. ODA reads them.
 Objects from r2010+ are downconverted, e.g. TABLESTYLE.
-We write as default in the r2004 or older formats.
+We write as default in the r2000 format.
 
 @item Reading and writing pre-R13 DXF
 Reading and writing pre-R13 DXF's is work in progress.
@@ -1002,8 +1002,7 @@ Those entities do have a type > 127. You need to filter them out by yourself, wh
 @cindex functions, write path
 
 Encoding DWG files, i.e. DWG write support, can be disabled via
-@code{./configure --disable-write}. We support writing all formats, r2007 with some limits.
-r2010-r2018 formats still fail CRC and audit checks though.
+@code{./configure --disable-write}. We support writing all DWG versions.
 The pre-r13 formats are much simpler and can be written, but need some
 hand-holding and manual conversions when converting from newer formats still.
 
@@ -1077,7 +1076,7 @@ Creates an initial template dwg structure in memory, suitable to be written to a
 without any additional table records or entities. Creates ModelSpace, PaperSpace and most Tables
 and basic Dictionaries.
 
-When writing DWG, a @var{version} of R_2000 is recommended. R_2007 is written natively (@file{src/encode_r2007.c}), objects from r2010+ are downconverted, e.g. TABLESTYLE loses its custom cell styles. When writing R_2010 - R_2018 we still do fail CRC and audit checks in Teigha and other CAD applications. For DXF you can try all versions R_13 - R_2018.
+When writing DWG, a @var{version} of R_2000 is recommended, but all versions can be written. R_2007 is written natively (@file{src/encode_r2007.c}), objects from newer versions are downconverted, e.g. TABLESTYLE loses its custom cell styles. For DXF you can try all versions R_13 - R_2018.
 @end deftypefn
 
 
@@ -1478,7 +1477,7 @@ r2007 DWG's are written natively, with RS-coded compressed pages and the 64-bit 
 
 Read and write the DWG, optionally via @code{--as=rNNNN} as another
 version, an earlier or later version.
-For now r2007 DWG's are written in r2010 format, since rewriting r2007 to r2007 keeps stale object sizes.
+r2007 DWG's are rewritten as r2007.
 
 @item @file{dwglayers}
 @cindex dwglayers

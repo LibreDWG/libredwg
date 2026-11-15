@@ -72,9 +72,10 @@ Major features:
     decompress_r2007), the 64-bit CRCs, page checksums, hashcodes and
     check data of the ODA spec.  ODAFileConverter reads them.  Objects from
     r2010+ are downconverted, e.g. TABLESTYLE.  Used by dwgwrite, dxf2dwg
-    and --as r2007.  Known: an r2007 to r2007 rewrite keeps stale object
-    sizes of the source (dwgrewrite still writes r2010 for those), and some
-    large r2010+ DWGs written as r2007 still need recovery in ODA.
+    and --as r2007, and dwgrewrite keeps r2007.  Fixed the encoding of
+    r2007 objects with a string stream and raw unknown objects, which
+    overwrote the start of the object section.  Known: large DWGs still
+    need recovery in ODA, also when written as r2010.
 
 Minor bugfixes / fuzzing fixes:
   * Fixed DXF input termination at mmap page boundaries, avoiding writes

@@ -65,9 +65,7 @@ help (void)
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
   printf ("             r1.4, r2.6, r2.10, r9, r10, r11, r13, r14, r2000 "
-          "(default), r2004\n");
-  printf ("           Planned versions:\n");
-  printf ("             r2007, r2010, r2013, r2018\n");
+          "(default), r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o dwgfile, --file        \n");
   printf ("           --help           display this help and exit\n");
   printf ("           --version        output version information and exit\n"
@@ -76,9 +74,8 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r1.4-r11, r13, r14, r2000 (default), r2004\n");
-  printf ("              Planned versions:\n");
-  printf ("                r2007-r2018\n");
+  printf ("                r1.4-r11, r13, r14, r2000 (default), r2004, "
+          "r2007-r2018\n");
   printf ("  -o dwgfile\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
@@ -327,13 +324,6 @@ main (int argc, char *argv[])
             dwg.header.from_version = dwg.header.version;
           // else keep from_version
           dwg.header.version = dwg_version;
-        }
-      else if (dwg.header.version >= R_2007a && dwg.header.version <= R_2007)
-        {
-          // r2007 to r2007 keeps stale object sizes of the source, so we
-          // rewrite as r2010. --as r2007 writes r2007.
-          printf (" as r2010\n");
-          dwg.header.version = R_2010;
         }
       else
         {

@@ -77,9 +77,8 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r12, r14, r2000 (default), r2004\n");
-  printf ("           Planned versions:\n");
-  printf ("             r9, r10, r11, r2007, r2010, r2013, r2018\n");
+  printf ("             r9, r10, r11, r12, r14, r2000 (default), r2004, "
+          "r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile, --file        optional, only valid with one single "
           "DXFFILE\n");
   printf ("       --help               display this help and exit\n");
@@ -89,9 +88,8 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r12, r14, r2000 (default), r2004\n");
-  printf ("              Planned versions:\n");
-  printf ("                r9, r10, r11, r2007, r2010, r2013, r2018\n");
+  printf ("                r9, r10, r11, r12, r14, r2000 (default), r2004, "
+          "r2007, r2010, r2013, r2018\n");
   printf ("  -o dwgfile  optional, only valid with one single DXFFILE\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
@@ -350,8 +348,7 @@ main (int argc, char *argv[])
       else
         {
           // FIXME: for now only R_13b1 - R_2000. later remove this line.
-          if (dwg.header.from_version < R_13b1
-              || dwg.header.from_version == R_2007)
+          if (dwg.header.from_version < R_13b1)
             dwg.header.version = dwg_version;
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;

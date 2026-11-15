@@ -5412,7 +5412,7 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
                     {
                       Dwg_Object *_hdr_obj
                           = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
-                          if (_hdr_obj
+                      if (_hdr_obj
                           && _hdr_obj->fixedtype == DWG_TYPE_BLOCK_HEADER
                           && _hdr_obj->address)
                         {
@@ -6309,6 +6309,13 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     LOG_INFO (", Size: " FORMAT_MS " [MS], Type: " FORMAT_BS
               " [BS], Address: %" PRIuSIZE "\n",
               obj->size, obj->type, obj->address);
+    // r2007 has the bitsize in the object. Do not trust the one of the
+    // source, it is recalculated in START_HANDLE_STREAM and patched.
+    if (dat->version >= R_2007 && !raw_unknown)
+      {
+        obj->bitsize = 0;
+        obj->hdlpos = 0;
+      }
   }
   LATER_VERSIONS
   {
@@ -7323,7 +7330,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
     }
     // and set the string stream (restricted to size).
     // skip during encode when bitsize is not yet known.
-    if (obj->bitsize && str_dat->chain == dat->chain)
+    if (obj->bitsize && str_dat != dat && str_dat->chain == dat->chain)
       error |= obj_string_stream (dat, obj, str_dat);
   }
 
@@ -7535,10 +7542,10 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
     obj->was_bitsize_set = 0;
     if (obj->bitsize)
       // the handle stream offset
-      obj->hdlpos = bit_position (dat) + obj->bitsize;
+      obj->hdlpos = (obj->address * 8) + obj->bitsize;
     SINCE (R_2007a)
     {
-      if (obj->bitsize && str_dat->chain == dat->chain)
+      if (obj->bitsize && str_dat != dat && str_dat->chain == dat->chain)
         obj_string_stream (dat, obj, str_dat);
     }
     if (!_obj || !obj->tio.object)

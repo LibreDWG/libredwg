@@ -14,8 +14,7 @@ think is not the best strategy for a free software project which aims
 to get lots of contributors. LibreDWG is written in English. At the
 moment our decoder (i.e. reader) is done, it can read all DWG
 versions, just some very advanced R2010+ objects fail to read and are
-skipped over. The writer is good enough for everything but R2010+.
-R2010-R2018 writing leads to CRC errors still. Among the
+skipped over. The writer can write all DWG versions, too. Among the
 example applications we wrote using LibreDWG is a reader, a writer, a
 rewriter (i.e. saveas), an initial SVG and Postscript conversion, dxf
 and json converters, dwggrep to search for text, and dwglayer to print
@@ -133,8 +132,7 @@ customize the installation dirs.  Other options recognized by configure are:
   --disable-write
 
     Disable DWG write support (default: no).
-    Write support works for all versions, r2007 with some limits.
-    Rewriting most DWG's <= r2004 usually works fine.
+    Write support works for all versions.
 
   --disable-bindings
 
