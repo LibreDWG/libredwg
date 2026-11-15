@@ -1407,6 +1407,48 @@ test_lwpolyline_to_preR13_dxf (void)
   return numfailed ();
 }
 
+/* The object_ref vector is reserved from HANDSEED, and grows by whole
+   REFS_PER_REALLOC chunks. A HANDSEED which is no multiple of it left no room
+   for the refs after it (GH #1526, found with ASAN). */
+static int
+test_object_ref_chunks (void)
+{
+  Dwg_Data dwg = { 0 };
+  Dwg_Object_Ref seed = { 0 };
+  BITCODE_BL i;
+  const BITCODE_BL n = 40000; // more than 2x16384, HANDSEED is 20480
+
+  failed = 0;
+  seed.absolute_ref = 20480;
+  dwg.header_vars.HANDSEED = &seed;
+  for (i = 0; i < n; i++)
+    {
+      Dwg_Object_Ref *ref = dwg_new_ref (&dwg);
+      if (!ref)
+        {
+          fail ("object_ref_chunks: dwg_new_ref %u failed", (unsigned)i);
+          break;
+        }
+      ref->absolute_ref = i + 1;
+    }
+  if (dwg.num_object_refs != i)
+    fail ("object_ref_chunks: %u refs, expected %u",
+          (unsigned)dwg.num_object_refs, (unsigned)i);
+  for (i = 0; i < dwg.num_object_refs; i++)
+    {
+      if (!dwg.object_ref[i] || dwg.object_ref[i]->absolute_ref != i + 1)
+        {
+          fail ("object_ref_chunks: wrong ref %u", (unsigned)i);
+          break;
+        }
+      free (dwg.object_ref[i]);
+    }
+  free (dwg.object_ref);
+  if (!numfailed ())
+    ok ("object_ref_chunks: HANDSEED is no multiple of the chunk size");
+  return numfailed ();
+}
+
 /* ODA's DXF omits the MATERIAL fields with their default value, and has only
    a name for ByLayer and ByBlock. The defaults must be those of ODA's DWG,
    and writing it to r2000 must write a matrix for every map, as the decoder
@@ -3250,6 +3292,7 @@ main (int argc, char *argv[])
   error += test_lwpolyline_to_preR13 ();
   error += test_lwpolyline_to_preR13_dxf ();
   error += test_material_dxf ();
+  error += test_object_ref_chunks ();
   error += test_multileader_vertices ();
   error += test_repeat_dxf (R_2_10, 0);
   error += test_repeat_dxf (R_2000, 0);

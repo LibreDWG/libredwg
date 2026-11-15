@@ -4694,8 +4694,16 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
       BITCODE_RLL max_refs = dwg->header_vars.HANDSEED
                                  ? dwg->header_vars.HANDSEED->absolute_ref
                                  : REFS_PER_REALLOC;
+      // The vector grows by whole REFS_PER_REALLOC chunks, when the count
+      // reaches a multiple of it. So reserve a multiple, else the writes
+      // after HANDSEED would overflow (GH #1526). HANDSEED comes from the
+      // file, cap the first reservation, the vector grows in chunks anyway.
       if (max_refs < REFS_PER_REALLOC)
         max_refs = REFS_PER_REALLOC;
+      else if (max_refs > 64 * REFS_PER_REALLOC)
+        max_refs = 64 * REFS_PER_REALLOC;
+      else if (max_refs % REFS_PER_REALLOC)
+        max_refs += REFS_PER_REALLOC - (max_refs % REFS_PER_REALLOC);
       dwg->object_ref
           = (Dwg_Object_Ref **)calloc (max_refs, sizeof (Dwg_Object_Ref *));
     }
