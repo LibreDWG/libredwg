@@ -55,7 +55,9 @@
 * merge decode_r2007 with the 2004 decoder. It is almost the same, just
   the sections have multiple pages. Only for this version. 2010+ uses
   the 2004 format.
-* encode for 2007. extra file probably. merge decode_r2007 first.
+* encode for 2007: done (src/encode_r2007.c). Todo: the TABLESTYLE of r2010+
+  converted to r2007 is rejected by ODA, and an r2007 to r2007 rewrite keeps
+  stale object sizes and bitsizes from the source (see in_json sizes).
 * finish GeoJSON http://geojson.org/geojson-spec.html
   Done: SPLINE. Missing: MLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?),
   3DFACE, POLYLINE_PFACE, POLYLINE_MESH

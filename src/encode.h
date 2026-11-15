@@ -86,10 +86,11 @@ int encode_acds (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
    dwg_encode. */
 int encode_r2007 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                   Bit_Chain *restrict sec_dat);
-/* encode.c: the LZ77 compression of r2004+ sections */
-int compress_R2004_section (Bit_Chain *restrict dat,
-                            BITCODE_RC *restrict decomp,
-                            uint32_t decomp_data_size,
-                            uint32_t *comp_data_size);
+/* encode_r2007.c: the LZ77 compression of r2007 sections, the inverse of
+   decompress_r2007. out needs n + n/8 + 64 bytes. *outlen is 0 if it did not
+   get smaller. */
+int compress_r2007 (unsigned char *restrict out,
+                    const unsigned char *restrict src, const size_t n,
+                    size_t *restrict outlen);
 
 #endif

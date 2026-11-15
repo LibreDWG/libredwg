@@ -184,8 +184,12 @@ API/ABI changes (source-incompatible):
   * Bumped SO_VERSION to 0:14:0.
 
 Minor bugfixes:
-  * encode: r2007 DWG files are encoded by falling back to r2010.  Direct
-    r2007 encoding is not yet supported.
+  * encode: r2007 DWG files are now written in the r2007 format, with
+    Reed-Solomon coded pages, LZ77 compression and the 64-bit CRCs (new
+    src/encode_r2007.c), no longer as r2010. ODA reads them, if the objects
+    are converted properly. Known: TABLESTYLE converted from r2010+ is
+    rejected by ODA, and the stale object sizes of an r2007 source corrupt
+    an r2007 to r2007 rewrite, so dwgrewrite still writes r2010 for those.
   * encode: fixed many r2004 section, page, object layout, and CRC bugs.
   * encode: fixed r2004 file header CRC32 and section page CRC handling.
   * encode: fixed MS overlarge object size calculation and CRC start address

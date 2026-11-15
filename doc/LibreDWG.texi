@@ -130,8 +130,10 @@ Here is a list of features that are still missing:
 @table @asis
 
 @item Writing r2007 DWG
-Writing to the specific r2007 format is not implemented.
-We write as default in the r2004 or older formats only.
+Writing to the r2007 format is supported since 0.14.1, with Reed-Solomon
+coded and compressed pages. ODA reads them, but not yet all objects
+converted from r2010+ (TABLESTYLE).
+We write as default in the r2004 or older formats.
 
 @item Reading and writing pre-R13 DXF
 Reading and writing pre-R13 DXF's is work in progress.
@@ -1000,7 +1002,7 @@ Those entities do have a type > 127. You need to filter them out by yourself, wh
 @cindex functions, write path
 
 Encoding DWG files, i.e. DWG write support, can be disabled via
-@code{./configure --disable-write}. We support writing all formats but r2007.
+@code{./configure --disable-write}. We support writing all formats, r2007 with some limits.
 r2010-r2018 formats still fail CRC and audit checks though.
 The pre-r13 formats are much simpler and can be written, but need some
 hand-holding and manual conversions when converting from newer formats still.
@@ -1075,7 +1077,7 @@ Creates an initial template dwg structure in memory, suitable to be written to a
 without any additional table records or entities. Creates ModelSpace, PaperSpace and most Tables
 and basic Dictionaries.
 
-When writing DWG, a @var{version} of R_2000 is recommended, R_2007 is not yet supported. When writing R_2010 - R_2018 we still do fail CRC and audit checks in Teigha and other CAD applications. For DXF you can try all versions R_13 - R_2018.
+When writing DWG, a @var{version} of R_2000 is recommended. R_2007 is written natively, but TABLESTYLE objects converted from r2010+ are rejected by ODA. When writing R_2010 - R_2018 we still do fail CRC and audit checks in Teigha and other CAD applications. For DXF you can try all versions R_13 - R_2018.
 @end deftypefn
 
 
@@ -1404,7 +1406,7 @@ minJSON is minimized JSON, without whitespace.
 
 Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
 optionally via @code{--as=rNNNN} as another version.
-For now we can not create r2007 DWG files.
+r2007 DWG files are written natively, with RS-coded compressed pages.
 
 @item @file{dxfwrite}
 @cindex dxfwrite
@@ -1468,7 +1470,7 @@ and not overwritten, unless the option @code{--overwrite} or @code{-y}
 is given.
 
 AutoCAD @registeredsymbol{} may fail to import it or comes up with a RECOVERY dialog.
-For now we cannot write r2007 DWG's.
+r2007 DWG's are written natively, but the objects converted from r2010+ may still be rejected (TABLESTYLE).
 
 @item @file{dwgrewrite}
 @cindex dwgrewrite
@@ -1476,7 +1478,7 @@ For now we cannot write r2007 DWG's.
 
 Read and write the DWG, optionally via @code{--as=rNNNN} as another
 version, an earlier or later version.
-For now cannot write r2007 DWG's.
+For now r2007 DWG's are written in r2010 format, since rewriting r2007 to r2007 keeps stale object sizes.
 
 @item @file{dwglayers}
 @cindex dwglayers

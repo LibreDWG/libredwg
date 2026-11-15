@@ -1289,7 +1289,7 @@ compress_write_match (Bit_Chain *restrict dat, uint32_t match_dist,
    Based on ACadSharp DwgLZ77AC18Compressor.
    Format: [literal_length + data]* [match [literal_length + data]]* 0x11
 */
-int
+static int
 compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
                         uint32_t decomp_data_size, uint32_t *comp_data_size)
 {

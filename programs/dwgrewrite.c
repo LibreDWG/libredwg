@@ -330,7 +330,8 @@ main (int argc, char *argv[])
         }
       else if (dwg.header.version >= R_2007a && dwg.header.version <= R_2007)
         {
-          // we cannot write r2007, the encoder falls back to r2010
+          // r2007 to r2007 keeps stale object sizes of the source, so we
+          // rewrite as r2010. --as r2007 writes r2007.
           printf (" as r2010\n");
           dwg.header.version = R_2010;
         }

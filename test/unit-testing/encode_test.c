@@ -1262,6 +1262,126 @@ large_class_strings_test (void)
     ok ("large_class_strings: extended class stream roundtrip");
 }
 
+extern int decompress_r2007 (unsigned char *restrict dst,
+                             const unsigned dst_size,
+                             unsigned char *restrict src,
+                             const unsigned src_size,
+                             const unsigned char *restrict dst_end);
+
+/* The r2007 compression is the inverse of decompress_r2007, for data with
+   long matches, short matches and only literals. */
+static void
+compress_r2007_tests (void)
+{
+  unsigned seed = 12345;
+  int t, bad = 0, compressed = 0;
+
+  for (t = 0; t < 120; t++)
+    {
+      const size_t n = 16 + (size_t)(t * 797) % 70000;
+      unsigned char *src = (unsigned char *)malloc (n);
+      unsigned char *dst = (unsigned char *)calloc (1, n + 16);
+      unsigned char *out = (unsigned char *)malloc (n + n / 8 + 64);
+      size_t i, clen = 0;
+
+      for (i = 0; src && i < n; i++)
+        {
+          seed = seed * 1103515245U + 12345U;
+          switch (t % 4)
+            {
+            case 0: // random
+              src[i] = (unsigned char)(seed >> 16);
+              break;
+            case 1: // sparse
+              src[i] = (i % 7 == 0) ? (unsigned char)(seed >> 16) : 0;
+              break;
+            case 2: // periodic
+              src[i] = (unsigned char)"abcabcabcd"[i % 10];
+              break;
+            default: // some noise, else a copy of the byte 8 before
+              src[i] = ((seed >> 16) % 5 == 0 || i < 8)
+                           ? (unsigned char)(seed >> 8)
+                           : src[i - 8];
+              break;
+            }
+        }
+      if (!src || !dst || !out
+          || compress_r2007 (out, src, n, &clen) >= DWG_ERR_CRITICAL)
+        bad++;
+      else if (clen)
+        {
+          compressed++;
+          if (clen >= n
+              || decompress_r2007 (dst, (unsigned)n, out, (unsigned)clen, NULL)
+              || memcmp (src, dst, n))
+            bad++;
+        }
+      free (src);
+      free (dst);
+      free (out);
+    }
+  if (bad || !compressed)
+    fail ("compress_r2007: %d of %d buffers do not roundtrip", bad,
+          compressed);
+  else
+    ok ("compress_r2007: %d buffers roundtrip", compressed);
+}
+
+/* A r2007 DWG is written as such, with the RS coded pages, and read again. */
+static void
+encode_r2007_test (void)
+{
+  Dwg_Data dwg = { 0 }, back = { 0 };
+  Bit_Chain dat = { 0 };
+  char name[80];
+  char msg[128] = "";
+  unsigned i;
+  int error;
+
+  dwg.header.version = dwg.header.from_version = R_2007;
+  error = dwg_add_Document (&dwg, 0);
+  for (i = 0; !error && i < 40; i++)
+    {
+      snprintf (name, sizeof name, "ROUNDTRIP_R2007_CLASS_%03u", i);
+      if (dwg_add_class (&dwg, name, name, name, false) < 0)
+        error = 1;
+    }
+  if (error)
+    snprintf (msg, sizeof msg, "cannot construct the document");
+  else
+    {
+      dat.version = dat.from_version = R_2007;
+      dat.opts = dwg.opts;
+      error = dwg_encode (&dwg, &dat);
+      if (error >= DWG_ERR_CRITICAL || !dat.chain)
+        snprintf (msg, sizeof msg, "encode error 0x%x", error);
+      else if (memcmp (dat.chain, "AC1021", 6))
+        snprintf (msg, sizeof msg, "no AC1021 magic");
+    }
+  if (!*msg)
+    {
+      dat.size = dat.byte;
+      dat.byte = dat.bit = 0;
+      dat.opts = 0;
+      error = dwg_decode (&dat, &back);
+      if (error >= DWG_ERR_CRITICAL || back.header.version != R_2007
+          || back.num_classes != dwg.num_classes
+          || back.num_objects != dwg.num_objects || !back.dwg_class
+          || !back.dwg_class[back.num_classes - 1].dxfname
+          || strcmp (back.dwg_class[back.num_classes - 1].dxfname, name))
+        snprintf (msg, sizeof msg,
+                  "not read back: error 0x%x, %u classes, %u objects", error,
+                  (unsigned)back.num_classes, (unsigned)back.num_objects);
+    }
+  dwg_free (&dwg);
+  dwg_free (&back);
+  free (dat.chain);
+  if (*msg)
+    fail ("encode_r2007: %s", msg);
+  else
+    ok ("encode_r2007: the r2007 container is read back");
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -1288,5 +1408,7 @@ main (int argc, char const *argv[])
   acds_sab_test ();
   acds_records_json_test ();
   large_class_strings_test ();
+  compress_r2007_tests ();
+  encode_r2007_test ();
   return failed;
 }

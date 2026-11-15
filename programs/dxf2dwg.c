@@ -72,7 +72,6 @@ help (void)
   printf ("Default DWGFILE: DXFFILE with .dwg extension in the current "
           "directory.\n"
           "Existing files are not overwritten, unless -y is given.\n"
-          "Encoding currently does not work for r2007.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -345,11 +344,6 @@ main (int argc, char *argv[])
         {
           printf (" as %s\n", version);
           dwg.header.version = dwg_version;
-          if (dwg_version >= R_2007a && dwg_version <= R_2007)
-            {
-              printf ("ERROR: encode does not work for R2007.\n");
-              exit (1);
-            }
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
         }
