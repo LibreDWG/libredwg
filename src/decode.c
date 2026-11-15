@@ -6169,6 +6169,7 @@ dwg_validate_POLYLINE (Dwg_Object *restrict obj)
                       = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
                   seqend->obj = next;
                   seqend->handleref = next->handle;
+                  seqend->handleref.is_global = 1; // the copy has 0
                   seqend->absolute_ref = next->handle.value;
                   dwg_decode_add_object_ref (dwg, seqend);
                 }
@@ -6190,6 +6191,7 @@ dwg_validate_POLYLINE (Dwg_Object *restrict obj)
                               1, sizeof (Dwg_Object_Ref));
                           seqend->obj = next;
                           seqend->handleref = next->handle;
+                          seqend->handleref.is_global = 1; // the copy has 0
                           seqend->absolute_ref = next->handle.value;
                           dwg_decode_add_object_ref (dwg, seqend);
                         }
