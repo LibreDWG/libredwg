@@ -852,7 +852,7 @@ in_word_set (const char *str, size_t len)
 #line 126 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str63,   "ROTATIONPARAMETERENTITY",    DWG_TYPE_ROTATIONPARAMETERENTITY,	1,	DEBUGGING},
 #line 59 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str64,            "ARCALIGNEDTEXT",             DWG_TYPE_ARCALIGNEDTEXT,	1,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str64,            "ARCALIGNEDTEXT",             DWG_TYPE_ARCALIGNEDTEXT,	1,	UNSTABLE},
       {-1},
 #line 182 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str66,       "ACDBASSOCARRAYMODIFYACTIONBODY",    DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY,	0,	DEBUGGING},
