@@ -9,7 +9,7 @@ dxf2dwg \- manual page for dxf2dwg 0.14
 Converts the DXF to a DWG. Accepts ascii and binary DXF.
 Default DWGFILE: DXFFILE with .dwg extension in the current directory.
 Existing files are not overwritten, unless \fB\-y\fR is given.
-Encoding currently does not work for r2007.
+r2007 DWG files are written in the r2007 format.
 .TP
 \fB\-v[0\-9]\fR, \fB\-\-verbose\fR [0\-9]
 verbosity
@@ -19,11 +19,11 @@ save as version
 .IP
 Valid versions:
 .IP
-r12, r14, r2000 (default), r2004
+r12, r14, r2000 (default), r2004, r2007
 .IP
 Planned versions:
 .IP
-r9, r10, r11, r2007, r2010, r2013, r2018
+r9, r10, r11, r2010, r2013, r2018
 .TP
 \fB\-o\fR outfile, \fB\-\-file\fR
 optional, only valid with one single DXFFILE

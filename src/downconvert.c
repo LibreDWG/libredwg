@@ -677,6 +677,8 @@ rowstyle_from_cellstyle (Dwg_TABLESTYLE_rowstyles *restrict rs,
     tablestyle_set_color (&rs->fill_color, 256, 0xc3000007);
   rs->data_type = cf->value_data_type;
   rs->unit_type = cf->value_unit_type;
+  // the r2007 spec writes the format string TU, an empty one when missing
+  rs->format_string = (BITCODE_TU)calloc (1, sizeof (DWGCHAR));
   rs->num_borders = 6;
   rs->borders = (Dwg_TABLESTYLE_border *)calloc (6, sizeof (*rs->borders));
   if (!rs->borders)

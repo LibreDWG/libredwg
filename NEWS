@@ -66,6 +66,15 @@ Security fixes:
 
 Major features:
   * use mmap for input files.
+  * Added the r2007 DWG writer (new src/encode_r2007.c): r2007 (AC1021) DWGs
+    are now written in the r2007 format instead of falling back to r2010,
+    with Reed-Solomon coded pages, a new LZ77 compressor (the inverse of
+    decompress_r2007), the 64-bit CRCs, page checksums, hashcodes and
+    check data of the ODA spec.  ODAFileConverter reads them.  Objects from
+    r2010+ are downconverted, e.g. TABLESTYLE.  Used by dwgwrite, dxf2dwg
+    and --as r2007.  Known: an r2007 to r2007 rewrite keeps stale object
+    sizes of the source (dwgrewrite still writes r2010 for those), and some
+    large r2010+ DWGs written as r2007 still need recovery in ODA.
 
 Minor bugfixes / fuzzing fixes:
   * Fixed DXF input termination at mmap page boundaries, avoiding writes
@@ -184,12 +193,6 @@ API/ABI changes (source-incompatible):
   * Bumped SO_VERSION to 0:14:0.
 
 Minor bugfixes:
-  * encode: r2007 DWG files are now written in the r2007 format, with
-    Reed-Solomon coded pages, LZ77 compression and the 64-bit CRCs (new
-    src/encode_r2007.c), no longer as r2010. ODA reads them, if the objects
-    are converted properly. Known: TABLESTYLE converted from r2010+ is
-    rejected by ODA, and the stale object sizes of an r2007 source corrupt
-    an r2007 to r2007 rewrite, so dwgrewrite still writes r2010 for those.
   * encode: fixed many r2004 section, page, object layout, and CRC bugs.
   * encode: fixed r2004 file header CRC32 and section page CRC handling.
   * encode: fixed MS overlarge object size calculation and CRC start address

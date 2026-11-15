@@ -646,6 +646,7 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     for (unsigned i = 0; i < 3; i++)
       {
         FREE_IF (_obj->rowstyles[i].borders);
+        FREE_IF (_obj->rowstyles[i].format_string);
         SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
       }
   FREE_IF (_obj->rowstyles);
