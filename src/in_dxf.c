@@ -6109,7 +6109,8 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_rowstyles;
           j = pair->code - 274;
           border = tablestyle_rowstyle_border (rowstyles[i], j);
-          border->linewt = dxf_find_lweight ((int16_t)pair->value.i);
+          border->linewt
+              = (int16_t)pair->value.i; // raw: -2 ByBlock, -3 ByLayer
           LOG_TRACE ("%s.rowstyles[%d].borders[%d].linewt = " FORMAT_RSd
                      " [BSd %d]\n",
                      obj->name, i, j, border->linewt, pair->code);
@@ -10821,18 +10822,66 @@ is_material_code (const int code)
 {
   switch (code)
     {
-    case 3: case 4: case 6: case 7: case 8: case 9:
-    case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 47:
-    case 48: case 49:
-    case 70: case 71: case 72: case 73: case 74: case 75: case 76: case 77:
-    case 78: case 79:
-    case 90: case 91: case 92: case 93: case 94:
-    case 140: case 141: case 142: case 143: case 144: case 145: case 146:
-    case 147: case 148: case 149:
-    case 170: case 171: case 172: case 173: case 174: case 175: case 176:
-    case 177: case 178: case 179:
-    case 270: case 271: case 272: case 273: case 274: case 275: case 276:
-    case 282: case 468:
+    case 3:
+    case 4:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 40:
+    case 41:
+    case 42:
+    case 43:
+    case 44:
+    case 45:
+    case 46:
+    case 47:
+    case 48:
+    case 49:
+    case 70:
+    case 71:
+    case 72:
+    case 73:
+    case 74:
+    case 75:
+    case 76:
+    case 77:
+    case 78:
+    case 79:
+    case 90:
+    case 91:
+    case 92:
+    case 93:
+    case 94:
+    case 140:
+    case 141:
+    case 142:
+    case 143:
+    case 144:
+    case 145:
+    case 146:
+    case 147:
+    case 148:
+    case 149:
+    case 170:
+    case 171:
+    case 172:
+    case 173:
+    case 174:
+    case 175:
+    case 176:
+    case 177:
+    case 178:
+    case 179:
+    case 270:
+    case 271:
+    case 272:
+    case 273:
+    case 274:
+    case 275:
+    case 276:
+    case 282:
+    case 468:
       return true;
     default:
       return false;
@@ -10845,8 +10894,8 @@ static void
 dxf_material_defaults (Dwg_Object_MATERIAL *restrict o)
 {
   Dwg_MATERIAL_mapper *maps[6]
-      = { &o->diffusemap,    &o->specularmap,   &o->reflectionmap,
-          &o->opacitymap,    &o->bumpmap,       &o->refractionmap };
+      = { &o->diffusemap, &o->specularmap, &o->reflectionmap,
+          &o->opacitymap, &o->bumpmap,     &o->refractionmap };
   o->ambient_color.factor = 1.0;
   o->diffuse_color.factor = 1.0;
   o->specular_color.factor = 1.0;
@@ -14941,8 +14990,10 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                             }
                           else
                             {
-                              dwg_dynapi_common_set_value (_obj, f->name,
-                                                           dxf_val (pair, f->is_malloc ? 0 : f->size), 1);
+                              dwg_dynapi_common_set_value (
+                                  _obj, f->name,
+                                  dxf_val (pair, f->is_malloc ? 0 : f->size),
+                                  1);
                             }
                           if (f->is_string || f->type[0] == 'T')
                             {
