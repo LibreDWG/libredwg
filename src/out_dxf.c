@@ -2296,9 +2296,8 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
     _obj->sab_size = _obj->block_size[0];
   // end = &p[_obj->sab_size];
 
-  if (!_obj->acis_data
-      || strlen ((char *)_obj->acis_data) < sizeof ("ACIS BinaryFile") - 1
-      || !memBEGINc ((char *)_obj->acis_data, "ACIS BinaryFile"))
+  if (!_obj->acis_data || _obj->sab_size < sizeof ("ACIS BinaryFile") - 1
+      || memcmp (_obj->acis_data, "ACIS BinaryFile", 15))
     {
       LOG_ERROR ("acis_data is not a SAB 2 'ACIS BinaryFile'");
       _obj->num_blocks = 0;
@@ -2829,7 +2828,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       if (dat->version >= R_2013)
         return error;
       // the ASM SAB cannot be converted to the SAT of the older versions
-      if (!memcmp (_obj->acis_data, "ASM ", 4))
+      if (_obj->sab_size >= 4 && !memcmp (_obj->acis_data, "ASM ", 4))
         {
           LOG_WARN ("%s.acis_data not written, the ASM SAB cannot be "
                     "converted to SAT",
