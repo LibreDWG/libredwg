@@ -83,6 +83,10 @@ static int decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static int decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 static int dwg_decode_ole2 (Dwg_Entity_OLE2FRAME *restrict _obj);
+#ifndef _DWG_API_H_
+BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
+                            const char *restrict u8str) __nonnull_all;
+#endif
 
 static int dwg_decode_common_entity_handle_data (Bit_Chain *dat,
                                                  Bit_Chain *hdl_dat,
@@ -4347,16 +4351,202 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
 static const unsigned char cfb_magic[8]
     = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
 
+#define CFB_MAXREGSECT 0xFFFFFFFAU
+#define CFB_ENDOFCHAIN 0xFFFFFFFEU
+
+typedef struct
+{
+  const unsigned char *d;
+  size_t len;
+  unsigned ss;           // sector size
+  uint32_t *fat;         // the sector ids of the FAT sectors
+  size_t n_fat;
+} Cfb;
+
+static uint32_t
+cfb_u32 (const unsigned char *p)
+{
+  return (uint32_t)p[0] | ((uint32_t)p[1] << 8) | ((uint32_t)p[2] << 16)
+         | ((uint32_t)p[3] << 24);
+}
+
+static const unsigned char *
+cfb_sector (const Cfb *c, uint32_t id)
+{
+  const size_t off = ((size_t)id + 1) * c->ss;
+  if (id > CFB_MAXREGSECT || off > c->len || c->len - off < c->ss)
+    return NULL;
+  return &c->d[off];
+}
+
+static uint32_t
+cfb_next (const Cfb *c, uint32_t id)
+{
+  const size_t per = c->ss / 4;
+  const size_t idx = id / per;
+  const unsigned char *s;
+  if (idx >= c->n_fat)
+    return CFB_ENDOFCHAIN;
+  s = cfb_sector (c, c->fat[idx]);
+  return s ? cfb_u32 (&s[(id % per) * 4]) : CFB_ENDOFCHAIN;
+}
+
+/* Concatenates all sectors of the chain starting at id. Returns NULL if empty
+   or invalid. Cycles are cut by limiting the steps to the number of sectors */
+static unsigned char *
+cfb_chain (const Cfb *c, uint32_t id, size_t *restrict outlen)
+{
+  const size_t max = c->len / c->ss;
+  size_t n = 0;
+  unsigned char *buf;
+  uint32_t i;
+
+  *outlen = 0;
+  for (i = id; i <= CFB_MAXREGSECT && n < max && cfb_sector (c, i); n++)
+    i = cfb_next (c, i);
+  if (!n)
+    return NULL;
+  buf = (unsigned char *)malloc (n * c->ss);
+  if (!buf)
+    return NULL;
+  for (i = id, *outlen = 0; *outlen / c->ss < n; *outlen += c->ss)
+    {
+      memcpy (&buf[*outlen], cfb_sector (c, i), c->ss);
+      i = cfb_next (c, i);
+    }
+  return buf;
+}
+
+/* Reads the ANSI user type name (e.g. "Paintbrush Picture") from the
+   "\1CompObj" stream of the MS-CFB. Returns an allocated string or NULL. */
+static char *
+cfb_compobj_usertype (const unsigned char *restrict d, const size_t len)
+{
+  // "\1CompObj" in UTF-16LE with the terminating zero
+  static const unsigned char want[18]
+      = { 1, 0, 'C', 0, 'o', 0, 'm', 0, 'p', 0, 'O', 0, 'b', 0, 'j', 0, 0, 0 };
+  Cfb c = { d, len, 0, NULL, 0 };
+  unsigned char *dir = NULL, *stream = NULL, *cont = NULL, *minifat = NULL;
+  size_t dirlen = 0, i, sz = 0, n_fat, nfound = 0;
+  uint32_t mini_cutoff, start = 0;
+  char *name = NULL;
+  unsigned shift;
+
+  if (len < 512 || memcmp (d, cfb_magic, sizeof (cfb_magic)))
+    return NULL;
+  shift = d[0x1E] | (d[0x1F] << 8);
+  if ((shift != 9 && shift != 12) || (d[0x20] | (d[0x21] << 8)) != 6)
+    return NULL;
+  c.ss = 1U << shift;
+  if (len < c.ss)
+    return NULL;
+  n_fat = cfb_u32 (&d[0x2C]);
+  if (!n_fat || n_fat > len / c.ss)
+    return NULL;
+  c.fat = (uint32_t *)calloc (n_fat, sizeof (uint32_t));
+  if (!c.fat)
+    return NULL;
+  // the FAT sector ids: 109 in the header, then the DIFAT chain
+  for (i = 0; i < 109 && c.n_fat < n_fat; i++)
+    {
+      const uint32_t id = cfb_u32 (&d[0x4C + i * 4]);
+      if (id > CFB_MAXREGSECT)
+        break;
+      c.fat[c.n_fat++] = id;
+    }
+  {
+    uint32_t difat = cfb_u32 (&d[0x44]);
+    size_t steps = cfb_u32 (&d[0x48]);
+    for (; steps && c.n_fat < n_fat && difat <= CFB_MAXREGSECT; steps--)
+      {
+        const unsigned char *s = cfb_sector (&c, difat);
+        if (!s)
+          break;
+        for (i = 0; i < c.ss / 4 - 1 && c.n_fat < n_fat; i++)
+          {
+            const uint32_t id = cfb_u32 (&s[i * 4]);
+            if (id > CFB_MAXREGSECT)
+              break;
+            c.fat[c.n_fat++] = id;
+          }
+        difat = cfb_u32 (&s[c.ss - 4]);
+      }
+  }
+  mini_cutoff = cfb_u32 (&d[0x38]);
+  dir = cfb_chain (&c, cfb_u32 (&d[0x30]), &dirlen);
+  if (!dir)
+    goto done;
+  for (i = 0; i + 128 <= dirlen; i += 128)
+    {
+      const unsigned char *e = &dir[i];
+      if (e[66] == 2 && (e[64] | (e[65] << 8)) == (int)sizeof (want)
+          && !memcmp (e, want, sizeof (want)) && !cfb_u32 (&e[0x7C]))
+        {
+          start = cfb_u32 (&e[0x74]);
+          sz = cfb_u32 (&e[0x78]);
+          nfound = 1;
+          break;
+        }
+    }
+  if (!nfound || sz < 32 || sz > len)
+    goto done;
+  if (sz < mini_cutoff)
+    {
+      // in the mini stream, which is the stream of the root entry
+      size_t contlen, minilen, copied = 0, steps = sz / 64 + 2;
+      cont = cfb_chain (&c, cfb_u32 (&dir[0x74]), &contlen);
+      minifat = cfb_chain (&c, cfb_u32 (&d[0x3C]), &minilen);
+      stream = (unsigned char *)malloc (sz);
+      if (!cont || !minifat || !stream)
+        goto done;
+      while (copied < sz && steps-- && start <= CFB_MAXREGSECT)
+        {
+          const size_t off = (size_t)start * 64;
+          const size_t n = sz - copied < 64 ? sz - copied : 64;
+          if (off + 64 > contlen || (size_t)start * 4 + 4 > minilen)
+            goto done;
+          memcpy (&stream[copied], &cont[off], n);
+          copied += n;
+          start = cfb_u32 (&minifat[(size_t)start * 4]);
+        }
+      if (copied < sz)
+        goto done;
+    }
+  else
+    {
+      size_t slen;
+      stream = cfb_chain (&c, start, &slen);
+      if (!stream || slen < sz)
+        goto done;
+    }
+  // CompObj: 28 byte header, then the length prefixed AnsiUserType
+  {
+    const uint32_t ulen = cfb_u32 (&stream[28]);
+    if (ulen > 1 && ulen <= sz - 32 && !stream[32 + ulen - 1])
+      name = strdup ((const char *)&stream[32]);
+  }
+done:
+  free (dir);
+  free (cont);
+  free (minifat);
+  free (stream);
+  free (c.fat);
+  return name;
+}
+
 static int
 dwg_decode_ole2 (Dwg_Entity_OLE2FRAME *restrict _obj)
 {
   const unsigned char *d = _obj->data;
   // data_size includes the 128-byte header
   const size_t len = _obj->data_size > 128 ? _obj->data_size - 128 : 0;
+  char *client;
+
+  Dwg_Data *dwg = _obj->parent->dwg;
 
   _obj->oleversion = 2;
   free (_obj->oleclient);
-  _obj->oleclient = (BITCODE_TF)strdup ("OLE");
+  _obj->oleclient = dwg_add_u8_input (dwg, "OLE");
   if (!d)
     return 0;
   if (_obj->cfb_size != len)
@@ -4370,6 +4560,15 @@ dwg_decode_ole2 (Dwg_Entity_OLE2FRAME *restrict _obj)
       && memcmp (&d[0], cfb_magic, sizeof (cfb_magic)))
     {
       LOG_WARN ("OLE2FRAME.data: no MS-CFB signature");
+      return 0;
+    }
+  client = cfb_compobj_usertype (d, len);
+  if (client)
+    {
+      free (_obj->oleclient);
+      _obj->oleclient = dwg_add_u8_input (dwg, client);
+      LOG_TRACE ("oleclient: \"%s\" [T 3]\n", client);
+      free (client);
     }
   return 0;
 }

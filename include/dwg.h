@@ -3798,7 +3798,7 @@ typedef struct _dwg_entity_OLE2FRAME
   BITCODE_BS mode;         /*!< r2000+ DXF 72, tile_mode, 0: mspace, 1: pspace */
   BITCODE_RC lock_aspect;  /*!< r2000+ DXF 73, 0 or 1 (locked) */
   BITCODE_BS oleversion;   /*!< DXF 70, always 2 */
-  BITCODE_TF oleclient;    /*!< DXF 3, e.g. OLE or Paintbrush Picture */
+  BITCODE_T oleclient;     /*!< DXF 3, parsed from the data stream. e.g. OLE or Paintbrush Picture */
   BITCODE_BL data_size;    /*!< DXF 90 (size includes the header + MS-CFB stream) */
   // the 128-byte data header
   BITCODE_RS unknown_rs;   /*!< always 0x80 0x55 */
@@ -3814,8 +3814,7 @@ typedef struct _dwg_entity_OLE2FRAME
   BITCODE_RL unknown_rl6;  /*!< always 0x10000 */
   BITCODE_RS unknown_rs2;  /*!< always 0 */
   BITCODE_RL cfb_size;     /*!< size of the MS-CFB at data[30] */
-  BITCODE_TF data;         /*!< DXF 310, the binary object data, without the header */
-  // the MS-CFB (ole2 stream) starts at data[0]
+  BITCODE_TF data;         /*!< DXF 310, the MS-CFB (ole2 stream), without the header */
 } Dwg_Entity_OLE2FRAME;
 
 /**

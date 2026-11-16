@@ -12977,6 +12977,12 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                              (BITCODE_BL)pair->value.l, dat->size);
                   goto invalid_dxf;
                 }
+              if (pair->value.l && pair->value.l < 128)
+                {
+                  LOG_ERROR ("OLE2FRAME.data_size %ld < 128, invalid",
+                             pair->value.l);
+                  goto invalid_dxf;
+                }
               o->data_size = pair->value.l;
               o->data = (BITCODE_RC *)xcalloc (pair->value.l, 1);
               if (!o->data)
@@ -13059,8 +13065,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
             {
               Dwg_Entity_OLE2FRAME *o = obj->tio.entity->tio.OLE2FRAME;
               free (o->oleclient);
-              o->oleclient = (BITCODE_TF)pair->value.s.ptr;
-              pair->value.s.ptr = NULL;
+              o->oleclient = NULL;
+              STRADD_T (o->oleclient, pair->value.s.ptr);
               goto next_pair;
             }
           else if (pair->code == 310 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
@@ -13089,6 +13095,32 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               LOG_TRACE ("OLE2FRAME.data += %" PRIuSIZE " (%" PRIuSIZE
                          "/%u) [TF 310]\n",
                          blen, written, o->data_size);
+              if (written == o->data_size)
+                {
+                  // the 310 stream is the 128 byte header + the MS-CFB
+                  const unsigned char *h = o->data;
+                  memcpy (&o->unknown_rs, h, 2);
+                  memcpy (&o->pt1, h + 2, 24);
+                  memcpy (&o->pt_ur, h + 26, 24);
+                  memcpy (&o->pt2, h + 50, 24);
+                  memcpy (&o->pt_ll, h + 74, 24);
+                  memcpy (&o->unknown_rl1, h + 98, 4);
+                  memcpy (&o->unknown_rl2, h + 102, 4);
+                  memcpy (&o->unknown_rl3, h + 106, 4);
+                  memcpy (&o->unknown_rl4, h + 110, 4);
+                  memcpy (&o->unknown_rl5, h + 114, 4);
+                  memcpy (&o->unknown_rl6, h + 118, 4);
+                  memcpy (&o->unknown_rs2, h + 122, 2);
+                  memcpy (&o->cfb_size, h + 124, 4);
+                  if (o->cfb_size != o->data_size - 128)
+                    {
+                      LOG_ERROR ("OLE2FRAME.cfb_size %u != data_size %u - 128",
+                                 o->cfb_size, o->data_size);
+                      goto invalid_dxf;
+                    }
+                  memmove (o->data, &o->data[128], o->cfb_size);
+                  LOG_TRACE ("OLE2FRAME.cfb_size = %u [RL]\n", o->cfb_size);
+                }
             }
           else if (pair->code == 1
                    && ((strEQc (name, "_3DSOLID") || strEQc (name, "BODY")

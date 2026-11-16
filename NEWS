@@ -76,6 +76,13 @@ Major features:
     version has the empty format string.  dxf-check roundtrips of
     example_2000 .. 2018 are readable by ODAFileConverter now.  r2013+ solids
     are still written without body, as SAT v1 cannot be converted to SAB.
+  * OLE2FRAME: the 128 byte header of the data is now decoded into
+    unknown_rs, the four corner points pt1, pt_ur, pt2, pt_ll, unknown_rl1-6,
+    unknown_rs2 and cfb_size.  data contains only the MS-CFB (starting with
+    D0CF11E0A1B11AE1), and oleclient is read from the \1CompObj stream of
+    the CFB.  The DXF 310 stream is still the header plus the CFB, as in
+    ACAD, and DXF 90 is 128 + cfb_size.  Fixed the DXF writer, which wrote
+    the pt1 and pt2 twice.
   * TABLESTYLE is stable: the pre-r2010 row styles are now the embedded
     structs data_rowstyle, title_rowstyle and header_rowstyle (with named
     borders top_border .. right_border) instead of rowstyles[], the

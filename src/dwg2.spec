@@ -5107,7 +5107,6 @@ DWG_ENTITY_END
 
 // r2000+ expresstools. command ATEXT
 DWG_ENTITY (ARCALIGNEDTEXT)
-  HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbArcAlignedText);
   DXF {
     FIELD_T (text_value, 1);

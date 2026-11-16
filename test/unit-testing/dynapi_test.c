@@ -18675,12 +18675,14 @@ static int test_OLE2FRAME (const Dwg_Object *obj)
     ole2frame->mode--;
   }
   {
-    BITCODE_TF oleclient;
+    BITCODE_T oleclient;
     if (dwg_dynapi_entity_value (ole2frame, "OLE2FRAME", "oleclient", &oleclient, NULL)
-        && !memcmp (&oleclient, &ole2frame->oleclient, sizeof (BITCODE_TF)))
-        pass ();
+        && oleclient
+           ? strEQ ((char *)oleclient, (char *)ole2frame->oleclient)
+           : !ole2frame->oleclient)
+      pass ();
     else
-        fail ("OLE2FRAME.oleclient [TF]");
+      fail ("OLE2FRAME.oleclient [T] '%s' <> '%s'", oleclient, ole2frame->oleclient);
   }
   {
     BITCODE_BS oleversion;

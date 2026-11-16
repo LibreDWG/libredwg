@@ -3305,7 +3305,7 @@ RC,	DXF 73
 @item oleversion
 BS,	DXF 70
 @item oleclient
-TF,	DXF 3
+T,	DXF 3
 @item data_size
 BL,	DXF 90
 @item unknown_rs

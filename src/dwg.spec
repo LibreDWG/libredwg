@@ -5606,22 +5606,30 @@ DWG_ENTITY (OLE2FRAME)
 #ifdef IS_DXF
   // via dwg_decode_ole2() from the first 0x80 bytes in data
   FIELD_BS (oleversion, 70); //  always 2
-  FIELD_TF (oleclient, strlen ((char *)_obj->oleclient), 3);
+  FIELD_T (oleclient, 3);
   FIELD_3BD (pt1, 10);  // upper left
   FIELD_3BD (pt2, 11);  // lower right
 #endif
 #ifdef IS_FREE
-  FIELD_TF (oleclient, 0, 3);
+  FIELD_T (oleclient, 3);
 #endif
   FIELD_BS (type, 71); // 1: Link, 2: Embedded, 3: Static
   SINCE (R_2000b) {
     FIELD_BS (mode, 72); // tile_mode, 0: mspace, 1: pspace
     DXF { FIELD_RC (lock_aspect, 73); }
   }
-  ENCODER {
-    if (FIELD_VALUE (data_size) && !FIELD_VALUE (data))
-      FIELD_VALUE (data_size) = 0;
+#if defined IS_ENCODER || defined IS_DXF
+  {
+    // data_size includes the 128 byte header
+    if (!FIELD_VALUE (data))
+      {
+        FIELD_VALUE (data_size) = 0;
+        FIELD_VALUE (cfb_size) = 0;
+      }
+    else
+      FIELD_VALUE (data_size) = 128 + FIELD_VALUE (cfb_size);
   }
+#endif
 #ifndef IS_JSON
   FIELD_BL (data_size, 90);
 #endif
@@ -5646,6 +5654,35 @@ DWG_ENTITY (OLE2FRAME)
         FIELD_VALUE (data_size) = 0;
       }
   }
+#ifdef IS_DXF
+  // DXF 310 is the 128 byte header + the MS-CFB, as one binary stream
+  if (FIELD_VALUE (data))
+  {
+    const size_t _cs = FIELD_VALUE (cfb_size);
+    unsigned char *_buf = (unsigned char *)calloc (128 + _cs, 1);
+    if (_buf)
+      {
+        unsigned char *_p = _buf;
+        memcpy (_p, &_obj->unknown_rs, 2); _p += 2;
+        memcpy (_p, &_obj->pt1, 24); _p += 24;
+        memcpy (_p, &_obj->pt_ur, 24); _p += 24;
+        memcpy (_p, &_obj->pt2, 24); _p += 24;
+        memcpy (_p, &_obj->pt_ll, 24); _p += 24;
+        memcpy (_p, &_obj->unknown_rl1, 4); _p += 4;
+        memcpy (_p, &_obj->unknown_rl2, 4); _p += 4;
+        memcpy (_p, &_obj->unknown_rl3, 4); _p += 4;
+        memcpy (_p, &_obj->unknown_rl4, 4); _p += 4;
+        memcpy (_p, &_obj->unknown_rl5, 4); _p += 4;
+        memcpy (_p, &_obj->unknown_rl6, 4); _p += 4;
+        memcpy (_p, &_obj->unknown_rs2, 2); _p += 2;
+        memcpy (_p, &_obj->cfb_size, 4);
+        if (_cs)
+          memcpy (&_buf[128], _obj->data, _cs);
+        VALUE_BINARY (_buf, (128 + _cs), 310);
+        free (_buf);
+      }
+  }
+#else
   FIELD_RS (unknown_rs, 0); // 0x80 0x55
   FIELD_3RD (pt1, 10); // upper-left
   FIELD_3RD (pt_ur, 0);
@@ -5670,6 +5707,7 @@ DWG_ENTITY (OLE2FRAME)
       }
   }
   FIELD_BINARY (data, FIELD_VALUE (cfb_size), 310);
+#endif
 #ifdef IS_DECODER
   error |= dwg_decode_ole2 (_obj);
 #endif
