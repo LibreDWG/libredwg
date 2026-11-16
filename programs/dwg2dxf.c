@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -115,7 +115,7 @@ main (int argc, char *argv[])
   char *filename_in;
   const char *version = NULL;
   char *filename_out = NULL;
-  Dwg_Version_Type dwg_version = R_2000;
+  Dwg_Version_Type dwg_version = R_2018;
   Bit_Chain dat = { 0 };
   int do_free = 0;
   int need_free = 0;

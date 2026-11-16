@@ -37,7 +37,7 @@ WriteMakefile (
   clean => { FILES => 'MYMETA.json MYMETA.yml' },
   ($] >= 5.005
    ? (ABSTRACT	=> 'LibreDWG perl5 bindings',
-      AUTHOR  	=> 'Reini Urban <rurban@cpan.org>')
+      AUTHOR  	=> 'Reini Urban <reini.urban@gmail.com>')
    : ()),
   ((ExtUtils::MakeMaker->VERSION() gt '6.30') ?
    (LICENSE  => 'GPL', SIGN => 1)  : ()), # GPLv3+

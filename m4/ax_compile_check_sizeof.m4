@@ -57,7 +57,7 @@
 # LICENSE
 #
 #   Copyright (c) 2008 Kaveh Ghazi <ghazi@caip.rutgers.edu>
-#   Copyright (c) 2017 Reini Urban <rurban@cpan.org>
+#   Copyright (c) 2017 Reini Urban <reini.urban@gmail.com>
 #
 #   This program is free software: you can redistribute it and/or modify it
 #   under the terms of the GNU General Public License as published by the

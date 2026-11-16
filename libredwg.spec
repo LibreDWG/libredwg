@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.14
+Version:        0.15
 Release:        0%{?dist}
 Summary:        GNU C library and programs to read and write DWG/DXF files
 
@@ -172,6 +172,9 @@ fi
 
 
 %changelog
+* Mon Nov 28 2026 Reini Urban <reini.urban@gmail.com> 0.15-1
+- upstream release. r2007 encoder, many new features, many security fixes.
+
 * Mon Jun 27 2026 Reini Urban <reini.urban@gmail.com> 0.14-1
 - upstream release. r2004 encoder, DXFB support, decompression security fixes.
 

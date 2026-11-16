@@ -10,6 +10,9 @@ someone should probably think about and resolve them!
   Make sure you have recent Autoconf, Automake, Libtool installed.
   (See comments in autogen.sh for specific versions tested.)
 
+  To regen the generated dynapi, run "make regen-dynapi"
+  To regen the generated objects.c, run "make regen-gperf"
+
 * other tools
 
   Aside from the the autotools (see "regen", above),
@@ -20,7 +23,7 @@ someone should probably think about and resolve them!
   since 0.12.5
   The recommended development compiler is rurban's rcc, then tinycc.
   compilation times are 10x faster than with gcc or clang. Esp. for
-  asan debugging use rcc.
+  asan debugging use rcc. (20m => 2m)
 
 * coding standards
 

@@ -231,7 +231,8 @@ with the following entities, which are in no test DWG:
   DGNUNDERLAY DWFUNDERLAY GEOPOSITIONMARKER LONG_TRANSACTION
   PROXY_ENTITY PROXY_LWPOLYLINE
 
-(CAMERA, DGNUNDERLAY, DWFUNDERLAY and LONG_TRANSACTION have a test DXF).
+(DGNUNDERLAY, DWFUNDERLAY and LONG_TRANSACTION have a test DXF.
+CAMERA is DXF only, there is never a DWG with it).
 
 and objects:
 

@@ -2,7 +2,7 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2026 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.14.1 - 2026-11-28 - beta:
+LibreDWG version 0.15 - 2026-11-28 - beta:
 
 Security fixes:
   * Fixed GHSA-67c2-h2w2-32g4: double-free and loss of the model-space
@@ -66,6 +66,14 @@ Security fixes:
 
 Major features:
   * use mmap for input files.
+  * new stable entity: ACIDBLOCKREFERENCE
+  * unstable -> stable: MATERIAL, TABLE, TABLESTYLE, DIMASSOC,
+    ALDIMOBJECTCONTEXTDATA, MTEXTOBJECTCONTEXTDATA, BLKREFOBJECTCONTEXTDATA,
+    LEADEROBJECTCONTEXTDATA, TEXTOBJECTCONTEXTDATA, MLEADERSTYLE, ARC_DIMENSION,
+    WIPEOUT, SUN
+  * debugging -> unstable: ARCALIGNEDTEXT, TABLECONTENT
+  * renamed: LAYERFILTER => LAYER_FILTER
+  * RAPIDRTRENDERENVIRONMENT is now IBL_BACKGROUND
   * Fixed the DXF import of ACIS solids (REGION, 3DSOLID, BODY): the SAT v1
     text was kept in the DXF encryption ("^ " for 'A') with the SAT version
     of the source (ASM 20800), and not as ACIS 400 in the DWG encryption.

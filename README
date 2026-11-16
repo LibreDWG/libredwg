@@ -1,25 +1,25 @@
 LibreDWG - free implementation of the DWG file format
 
-LibreDWG is a free C library to read and write DWG files.  This program is
-part of the GNU project, released under the aegis of GNU.  It is licensed
-under the terms of the GNU General Public License version 3 (or at you option
-any later version).
+LibreDWG is a free C library to read and write DWG (and DXF) files.
+This program is part of the GNU project, released under the aegis of
+GNU. It is licensed under the terms of the GNU General Public License
+version 3 (or at you option any later version).
 
 DWG is a file format created in the 70's for the emerging CAD applications.
 Currently it is the native file format of AutoCAD, a proprietary CAD program
 developed by AutoDesk.
 
-LibreDWG is a fork from LibDWG due to its usage of Esperanto, which we
-think is not the best strategy for a free software project which aims
-to get lots of contributors. LibreDWG is written in English. At the
-moment our decoder (i.e. reader) is done, it can read all DWG
-versions, just some very advanced R2010+ objects fail to read and are
-skipped over. The writer can write all DWG versions, too. Among the
-example applications we wrote using LibreDWG is a reader, a writer, a
-rewriter (i.e. saveas), an initial SVG and Postscript conversion, dxf
-and json converters, dwggrep to search for text, and dwglayer to print
-the list of layers. More are in the pipeline. Please contact us if you
-want to help.
+LibreDWG was a fork from LibDWG due to its usage of Esperanto, which
+we think is not the best strategy for a free software project which
+aims to get lots of contributors. LibreDWG is written in English. At
+the moment our decoder (i.e. reader) is done, it can read all DWG
+versions, just some very advanced R2010+ objects with missing plugins
+fail to read and are skipped over. The writer can write all DWG
+versions, too. Among the example applications we wrote using LibreDWG
+is a reader, a writer, a rewriter (i.e. saveas), an initial SVG and
+Postscript conversion, dxf and json converters, dwggrep to search for
+text, and dwglayer to print the list of layers. Please contact us if
+you want to help.
 
 The strings API is UTF-8 (WTF8 really, Windows UCS-2 has no surrogate
 pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
@@ -29,9 +29,9 @@ convert to unicode/UTF-8.
 We also maintain a diff document for our internal fixed ODA-5.4.1 spec
 at doc/ODA-5.4.2-libredwg-diff.pdf
 
-For security contact file a ticket or email the package maintainers:
+For security contact file a GHSA ticket or email the package maintainers:
 
-Reini Urban <rurban AT cpan.org>
+Reini Urban <reini.urban AT gmail.com>
 
 The now inactive founders and previous maintainers were:
 
@@ -50,19 +50,22 @@ You need the following dependencies:
 
 Optionally:
 
+- rcc: a faster and more correct C compiler, esp. for huge and slow asan builds.
+  This is 10x faster. tinycc is also good, but has no asan support.
 - libiconv: optional codepage conversion. without it's just a bit slower.
 - libmimalloc: faster memory allocation, but usually not worth the hassle.
 - pslib for dwg2ps: http://pslib.sourceforge.net/doc/pslib.html
 - pcre2 with 8bit and 16bit libraries for dwggrep regexp support.
 - gperf to update static hashes for several API's
-  Only needed when you added objects or changed the dwg.spec significantly
+  Only needed when you added objects or changed the dwg.spec significantly.
+  Then also the cpan package Convert::Binary::C is required.
 - cmake, ninja
 - ODAFileConverter from https://www.opendesign.com/guestfiles/oda_file_converter
   for doing cross-checks.
 - xvfb-run from xvfb/xorg-x11-server-Xvfb for silencing ODAFileConverter popups.
 - TeXinfo for building the docs
 - SWIG 1.7+
-- Python 2.7 or 3.x development headers (debian: python-dev; yum: python-devel)
+- Python 3.x development headers (debian: python-dev; yum: python-devel)
   and the libxml2 python bindings.
 - Perl 5 for the perl bindings
 - doxygen to generate the reference manual
@@ -149,7 +152,7 @@ customize the installation dirs.  Other options recognized by configure are:
   --disable-python
 
     Disable python bindings and tests.
-    Related: --enable-python=python3.6
+    Related: --enable-python=python3.10
     to enforce a specific version.
 
   --enable-debug
@@ -193,8 +196,8 @@ that uses our lib:
 * dwg2dxf -- Converts a DWG to a DXF (ascii or binary, minimal or full), optionally
   under a different version. About 90% coverage.
 
-* dxf2dwg -- Converts a ascii or binary DXF to a DWG (r2000 only so far).
-  About 80% coverage.
+* dxf2dwg -- Converts a ascii or binary DXF to a DWG, optionally
+  under a different version. About 90% coverage.
 
 * dwglayers -- Prints the list of layers in a DWG. Optionally with --extnames
 

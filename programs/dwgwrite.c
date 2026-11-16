@@ -66,7 +66,7 @@ static int
 help (void)
 {
   printf ("\nUsage: dwgwrite [OPTION]... [-o DWGFILE] INFILE\n");
-  printf ("Writes a DWG file from various input formats. Only r2000 for now.\n"
+  printf ("Writes a DWG file from various input formats.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -81,7 +81,6 @@ help (void)
 #  else
   printf ("  -I fmt,  --format fmt     DXF, DXFB\n");
 #  endif
-  printf ("           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile, --file        \n");
   printf ("  -y, --overwrite           overwrite existing files\n");
   printf ("           --help           display this help and exit\n");
@@ -323,7 +322,7 @@ main (int argc, char *argv[])
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dat.opts = dwg.opts = opts;
-  dat.version = R_2000; // initial target for the importer
+  dat.version = R_2018; // initial target for the importer
 
   if (infile)
     {

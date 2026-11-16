@@ -36,7 +36,7 @@
 #   Copyright (c) 2008 Rafael Laboissiere <rafael@laboissiere.net>
 #   Copyright (c) 2008 Andrew Collier
 #   Copyright (c) 2011 Murray Cumming <murrayc@openismus.com>
-#   Copyright (c) 2018 Reini Urban <rurban@cpan.org>
+#   Copyright (c) 2018 Reini Urban <reini.urban@gmail.com>
 #   Copyright (c) 2021 Vincent Danjean <Vincent.Danjean@ens-lyon.org>
 #
 #   This program is free software; you can redistribute it and/or modify it

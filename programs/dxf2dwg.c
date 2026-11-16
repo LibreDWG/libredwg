@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2026 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -12,7 +12,7 @@
 
 /*
  * dxf2dwg.c: save a DXF as DWG. Detect ascii/binary. No minimal, only full.
- * Optionally as a different version. Only r2000 encode-support so far.
+ * Optionally as a different version.
  *
  * written by Reini Urban
  */
@@ -77,8 +77,8 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r9, r10, r11, r12, r14, r2000 (default), r2004, "
-          "r2007, r2010, r2013, r2018\n");
+  printf ("             r9, r10, r11, r12, r14, r2000, r2004, "
+          "r2007, r2010, r2013, r2018 (default)\n");
   printf ("  -o outfile, --file        optional, only valid with one single "
           "DXFFILE\n");
   printf ("       --help               display this help and exit\n");
@@ -88,8 +88,8 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r9, r10, r11, r12, r14, r2000 (default), r2004, "
-          "r2007, r2010, r2013, r2018\n");
+  printf ("                r9, r10, r11, r12, r14, r2000, r2004, "
+          "r2007, r2010, r2013, r2018 (default)\n");
   printf ("  -o dwgfile  optional, only valid with one single DXFFILE\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
@@ -160,7 +160,7 @@ main (int argc, char *argv[])
           memset (&out_dat, 0, sizeof (out_dat));
           bit_chain_set_version (&out_dat, &dat);
           dat.codepage = dwg.header.codepage;
-          out_dat.version = R_2000;
+          out_dat.version = R_2018;
           dwg_encode (&dwg, &out_dat);
           free (out_dat.chain);
           dwg_free (&dwg);
@@ -181,7 +181,7 @@ main (int argc, char *argv[])
   char *filename_in;
   const char *version = NULL;
   char *filename_out = NULL;
-  Dwg_Version_Type dwg_version = R_2000;
+  Dwg_Version_Type dwg_version = R_2018;
   int do_free = 0;
   int need_free = 0;
   int c;
@@ -347,9 +347,6 @@ main (int argc, char *argv[])
         }
       else
         {
-          // FIXME: for now only R_13b1 - R_2000. later remove this line.
-          if (dwg.header.from_version < R_13b1)
-            dwg.header.version = dwg_version;
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
           if (dwg.header.version == R_INVALID)

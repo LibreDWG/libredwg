@@ -109,7 +109,8 @@ dwgaddtest() {
     fi
 }
 
-dwgaddtest AC1015
+# the default is r2018
+dwgaddtest AC1032
 dwgaddtest AC1015 r2000
 # skip. XRECORD.objid_handles double-free #530
 #if [ @DEBUG_CLASSES@ -gt 0 ]; then

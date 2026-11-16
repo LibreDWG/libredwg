@@ -1,6 +1,6 @@
 dnl configure.ac
 
-dnl Copyright (C) 2010, 2014-2015, 2018-2025 Free Software Foundation, Inc.
+dnl Copyright (C) 2010, 2014-2015, 2018-2026 Free Software Foundation, Inc.
 dnl
 dnl This program is free software, licensed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation,
@@ -37,7 +37,7 @@ dnl- If any interfaces have been added since the last public release,
 dnl  then increment age.
 dnl- If any interfaces have been removed or changed since the last public release,
 dnl  then set age to 0.
-LIBREDWG_SO_VERSION=0:14:0
+LIBREDWG_SO_VERSION=0:15:0
 AC_DEFINE_UNQUOTED([LIBREDWG_SO_VERSION], ["${LIBREDWG_SO_VERSION}"],
           [Defined in configure.ac to the libtool version-info of the shared lib.])
 AC_SUBST([LIBREDWG_SO_VERSION])
@@ -629,7 +629,7 @@ AM_CONDITIONAL(HAVE_GPERF, test -n "$GPERF")
 
 AC_MSG_CHECKING([for latest clang-format])
 CLANG_FORMAT=
-for clangfmt in clang-format{,-mp}{,-devel,-{17,16,15,14,13,12,11,10,9,8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0}}
+for clangfmt in clang-format{,-mp}{,-devel,-{22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0}}
 do
     if which "$clangfmt" &>/dev/null; then
         CLANG_FORMAT="$clangfmt"
@@ -648,7 +648,7 @@ AC_SUBST(CLANG_FORMAT)
 
 AC_MSG_CHECKING([for latest clang-tidy])
 CLANG_TIDY=
-for clangtidy in clang-format{,-mp}{,-devel,-{17,16,15,14,13,12,11,10,9,8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0}}
+for clangtidy in clang-format{,-mp}{,-devel,-{22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0}}
 do
     if which "$clangtidy" &>/dev/null; then
         CLANG_TIDY="$clangtidy"

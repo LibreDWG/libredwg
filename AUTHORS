@@ -1,3 +1,9 @@
+Sam Coleman <namelocmas@gmail.com>
+        Misc. PR's, esp. for dxf-import memory leaks.
+
+Antonio García Leal <garcialeal2@gmail.com>
+        Advanced linear algebra in geom.c
+
 Gong Xiangyang <83904580@qq.com>
         Massive performance improvements changing the refs
         list to a tree.
@@ -11,7 +17,7 @@ Michal Josef Špaček <michal.josef.spacek@gmail.com>
 Denis Pruchkovsky <denis.chausy@gmail.com>
 	Many memory leak and spec fixes.
 
-Reini Urban <rurban@cpan.org>
+Reini Urban <reini.urban@gmail.com>
 	Many fixes and enhancements everywhere. Start with support for all
         DWG versions, and adding the missing bits. The current maintainer.
 

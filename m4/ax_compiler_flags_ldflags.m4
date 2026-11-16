@@ -19,7 +19,7 @@
 # LICENSE
 #
 #   Copyright (c) 2014, 2015 Philip Withnall <philip@tecnocode.co.uk>
-#   Copyright (c) 2017, 2018 Reini Urban <rurban@cpan.org>
+#   Copyright (c) 2017, 2018 Reini Urban <reini.urban@gmail.com>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice

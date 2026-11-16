@@ -28,10 +28,11 @@
   ACDSRECORD ACDSSCHEMA NPOCOLLECTION RAPIDRTRENDERENVIRONMENT
   XREFPANELOBJECT
 * add test coverage - i.e. an extended example_2018.dwg with all types,
-  for the following entities, which are in no test DWG (CAMERA DGNUNDERLAY
+  for the following entities, which are in no test DWG (DGNUNDERLAY
   DWFUNDERLAY LONG_TRANSACTION have a 2018/*.dxf or *.dxf now, but ODA writes
-  proxies): CAMERA DGNUNDERLAY DWFUNDERLAY GEOPOSITIONMARKER
-  LONG_TRANSACTION PROXY_ENTITY PROXY_LWPOLYLINE DUMMY BACKGROUND
+  proxies): DGNUNDERLAY DWFUNDERLAY GEOPOSITIONMARKER LONG_TRANSACTION
+  PROXY_ENTITY PROXY_LWPOLYLINE DUMMY BACKGROUND
+  (CAMERA is DXF only, there is never a DWG with it)
 * likewise for the following missing objects (DWFDEFINITION LIGHTLIST
   VBA_PROJECT have a 2018/*.dxf now):
   CSACDOCUMENTOPTIONS
