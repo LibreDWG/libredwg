@@ -3225,8 +3225,50 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             o->acis_data[idx++] = 159 - o->encr_sat_data[0][i];
         }
       o->acis_data[idx] = '\0';
-      o->block_size[0] = idx;
       LOG_TRACE ("%s.acis_data:\n%s\n", obj->name, o->acis_data);
+      // The DXF has the SAT version of the source DWG (ASM 20800, ..), but
+      // inline SAT v1 in a DWG is ACIS 4.0 (400), as AutoCAD and ODA read it.
+      {
+        char *sp = strchr ((char *)o->acis_data, ' ');
+        long sat_version = strtol ((char *)o->acis_data, NULL, 10);
+        if (sat_version > 400 && sp && sp - (char *)o->acis_data <= 6)
+          {
+            memmove (o->acis_data + 3, sp, strlen (sp) + 1);
+            memcpy (o->acis_data, "400", 3);
+            idx = (int)strlen ((char *)o->acis_data);
+            LOG_TRACE ("%s.acis_data version %ld => 400\n", obj->name,
+                       sat_version);
+          }
+      }
+      // The DXF text is encrypted differently ("^ " for 'A', lines <= 255).
+      // The DWG has the encrypted SAT v1 in blocks of 4096 bytes.
+      {
+        BITCODE_BL nb = (BITCODE_BL)((idx + 4095) / 4096);
+        BITCODE_BL off = 0;
+        int eidx = 0;
+        char **blocks = (char **)xcalloc (nb + 1, sizeof (char *));
+        BITCODE_BL *sizes
+            = (BITCODE_BL *)xcalloc (nb + 1, sizeof (BITCODE_BL));
+        if (!blocks || !sizes)
+          {
+            free (blocks);
+            free (sizes);
+            return NULL;
+          }
+        for (BITCODE_BL b = 0; b < nb; b++)
+          {
+            sizes[b]
+                = (BITCODE_BL)idx - off > 4096 ? 4096 : (BITCODE_BL)idx - off;
+            blocks[b] = dwg_encrypt_SAT1 (sizes[b], &o->acis_data[off], &eidx);
+            off += sizes[b];
+          }
+        free (o->encr_sat_data[0]);
+        free (o->encr_sat_data);
+        free (o->block_size);
+        o->encr_sat_data = blocks;
+        o->block_size = sizes;
+        o->num_blocks = nb;
+      }
     }
 
   return pair;
