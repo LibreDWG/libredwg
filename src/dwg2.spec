@@ -1023,6 +1023,12 @@ DWG_ENTITY_END
   {                                                                           \
     FIELD_BL (rs.data_type, 90);                                              \
     FIELD_BL (rs.unit_type, 91);                                              \
+    /* a NULL string would be skipped, and desync the string stream */         \
+    ENCODER {                                                                 \
+      if (!FIELD_VALUE (rs.format_string))                                    \
+        FIELD_VALUE (rs.format_string)                                        \
+            = (BITCODE_TU)calloc (1, sizeof (DWGCHAR));                       \
+    }                                                                         \
     FIELD_TU (rs.format_string, 1);                                           \
   }
 

@@ -390,6 +390,9 @@ int dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 static BITCODE_RLL add_LibreDWG_APPID (Dwg_Data *dwg);
 static BITCODE_BL add_DUMMY_eed (Dwg_Object *obj);
+EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
+                              const char *const restrict dxfname,
+                              const size_t len);
 static void fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 
 /* Imported */
@@ -2930,7 +2933,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               fixup = 0;
               // if not found leaves placeholder_type at 0 to use DUMMY
               LOG_HANDLE ("find_class ACDBPLACEHOLDER\n");
-              dwg_find_class (dwg, "ACDBPLACEHOLDER", &placeholder_type);
+              if (!dwg_find_class (dwg, "ACDBPLACEHOLDER", &placeholder_type))
+                {
+                  // DXF has no class list for it. A DUMMY object (type 75)
+                  // is not readable by ODA.
+                  int id = dwg_require_class (dwg, "ACDBPLACEHOLDER", 15);
+                  placeholder_type = id >= 500 ? (BITCODE_BS)id : 0;
+                }
               if (placeholder_type < 500)
                 {
                   LOG_ERROR ("Invalid class_id %d for ACDBPLACEHOLDER",

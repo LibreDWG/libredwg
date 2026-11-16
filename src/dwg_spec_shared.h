@@ -531,8 +531,8 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   int error = 0;
   Bit_Chain *dat = &pdat;
 
-  // also if acis_empty, which the encoder sets for data it cannot write, or the
-  // importers allocate block_size
+  // also if acis_empty, which the encoder sets for data it cannot write, or
+  // the importers allocate block_size
   if (FIELD_VALUE (encr_sat_data))
     {
       LOG_HANDLE ("Free %s.num_blocks %u\n", obj->name, _obj->num_blocks);
@@ -561,6 +561,13 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
 #else
 #  define SOLID_VERSION2 (FIELD_VALUE (version) > 1)
 #endif
+/* ODA spec 20.4.41: the R2007+ BL and the history handle are also there for
+   SAT v1. The other ACIS-like objects (ACSH_*, surfaces) do not have them. */
+#define SOLID_SAT1_R2007                                                      \
+  (dat->version >= R_2007a                                                    \
+   && (obj->fixedtype == DWG_TYPE_REGION                                      \
+       || obj->fixedtype == DWG_TYPE__3DSOLID                                 \
+       || obj->fixedtype == DWG_TYPE_BODY))
 
 #define COMMON_3DSOLID                                                        \
   FIELD_B (wireframe_data_present, 0);                                        \
@@ -614,8 +621,10 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           END_REPEAT (silhouettes);                                           \
         }                                                                     \
     }                                                                         \
-  FIELD_B (acis_empty_bit, 0); /* ?? */                                       \
-  if (SOLID_VERSION2)                                                         \
+  FIELD_B (acis_empty_bit, 0);      \
+      /* ?? */ /* The R2007+ unknown BL (num_materials) is there for          \
+  SAT v1 also */        \
+  if (SOLID_VERSION2 || SOLID_SAT1_R2007)                                     \
     {                                                                         \
       SINCE (R_2007a)                                                         \
       {                                                                       \
@@ -659,7 +668,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
       SUBCLASS (AcDb3dSolid);                                                 \
       FIELD_HANDLE (history_id, 4, 350);                                      \
     }                                                                         \
-  } else if (SOLID_VERSION2                                                   \
+  } else if ((SOLID_VERSION2 || SOLID_SAT1_R2007)                             \
              && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \
       FIELD_HANDLE (history_id, 4, 350);                                      \
   }                                                                           \

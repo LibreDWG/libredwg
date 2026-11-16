@@ -66,6 +66,16 @@ Security fixes:
 
 Major features:
   * use mmap for input files.
+  * Fixed the DXF import of ACIS solids (REGION, 3DSOLID, BODY): the SAT v1
+    text was kept in the DXF encryption ("^ " for 'A') with the SAT version
+    of the source (ASM 20800), and not as ACIS 400 in the DWG encryption.
+    r2007+ SAT v1 solids now write the unknown BL and the history handle.
+    Unsupported objects (TABLEGEOMETRY) are written as PLACEHOLDER with a
+    created ACDBPLACEHOLDER class, not as the DUMMY (type 75) which ODA
+    rejects with "needs recovery".  The r2007 TABLESTYLE from an older
+    version has the empty format string.  dxf-check roundtrips of
+    example_2000 .. 2018 are readable by ODAFileConverter now.  r2013+ solids
+    are still written without body, as SAT v1 cannot be converted to SAB.
   * TABLESTYLE is stable: the pre-r2010 row styles are now the embedded
     structs data_rowstyle, title_rowstyle and header_rowstyle (with named
     borders top_border .. right_border) instead of rowstyles[], the

@@ -1504,10 +1504,10 @@ test_material_dxf (void)
           || m->diffusemap.blendfactor != 1.0 || m->diffusemap.projection != 2
           || m->bumpmap.tiling != 1)
         fail ("material_dxf: MATERIAL %d has no ODA defaults", (int)i);
-#ifndef DEBUG_CLASSES
+#  ifndef DEBUG_CLASSES
       // procedural textures are written as no map
       ((Dwg_Object_MATERIAL *)m)->diffusemap.source = 2;
-#endif
+#  endif
     }
   if (found != 2)
     fail ("material_dxf: %d MATERIAL objects, expected 2", found);
@@ -1539,18 +1539,18 @@ test_material_dxf (void)
       found++;
       if (!m->diffusemap.transmatrix || m->diffusemap.transmatrix[0] != 1.0
           || m->diffusemap.transmatrix[5] != 1.0
-          || m->diffusemap.transmatrix[1] != 0.0
-          || !m->bumpmap.transmatrix || m->bumpmap.transmatrix[15] != 1.0)
+          || m->diffusemap.transmatrix[1] != 0.0 || !m->bumpmap.transmatrix
+          || m->bumpmap.transmatrix[15] != 1.0)
         fail ("material_dxf: MATERIAL %d has no identity matrix after r2000",
               (int)i);
       if (m->refraction_index != 1.0)
         fail ("material_dxf: MATERIAL %d refraction_index %f after r2000",
               (int)i, m->refraction_index);
-#ifndef DEBUG_CLASSES
+#  ifndef DEBUG_CLASSES
       if (m->diffusemap.source != 1)
         fail ("material_dxf: MATERIAL %d procedural map %d after r2000",
               (int)i, (int)m->diffusemap.source);
-#endif
+#  endif
     }
   if (found != 2)
     fail ("material_dxf: %d MATERIAL objects after r2000, expected 2", found);
@@ -1802,7 +1802,7 @@ test_names (void)
           "QUOTATION MARK");
   if (!dwg_is_valid_name_u8 (dwg, "δ")) // 0xe4
     fail ("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA ANSI_1253/r2007");
-  /* The TU strings are UTF-16 in the byte order of the host. */
+    /* The TU strings are UTF-16 in the byte order of the host. */
 #ifdef WORDS_BIGENDIAN
 #  define TU_BB "\x00\xbb\x00\x00"
 #  define TU_DD "\x00\xdd\x00\x00"
@@ -1837,8 +1837,7 @@ test_names (void)
   // asis as in the CP949 codepage
   if (!dwg_is_valid_name (dwg, TU_B)) // LATIN CAPITAL LETTER A
     fail ("dwg_is_valid_name(42) LETTER B ANSI_949/r2007");
-  if (dwg_is_valid_name (
-          dwg, TU_8141)) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
+  if (dwg_is_valid_name (dwg, TU_8141)) // HANGUL SYLLABLE KIYEOK A SSANGKIYEOK
     fail ("!dwg_is_valid_name(8141) U+AC02 SYLLABLE");
   if (!dwg_is_valid_name (dwg, TU_A3C1))
     fail ("dwg_is_valid_name(A3C1) U+FF21 LETTER ANSI_949/r2007");
@@ -2144,6 +2143,88 @@ test_dxf_union_selectors (void)
     }
   dwg_free (&dwg);
   free (dat.chain);
+  return numfailed ();
+}
+// The DXF encrypts the SAT v1 text differently ("^ " for 'A', lines <= 255)
+// than the DWG. The importer must produce the DWG form: ACIS 4.0 header,
+// the text encrypted by 159 - c in blocks of 4096.
+static int
+test_dxf_sat_v1 (void)
+{
+  Dwg_Data dwg;
+  Bit_Chain dat;
+  Dwg_Object *obj;
+  const char *sat[] = { "20800 0 2 0 ", "1 1e-06 1e-10 ", "Autodesk AutoCAD #",
+                        "End-of-ACIS-data " };
+  char buf[1024];
+  char *p = buf;
+  int error;
+
+  failed = 0;
+  // the DXF reader wants at least 256 bytes
+  p += sprintf (p, "999\n%0200d\n", 0);
+  p += sprintf (p, "  0\nSECTION\n  2\nHEADER\n  9\n$ACADVER\n  1\nAC1014\n"
+                   "  0\nENDSEC\n  0\nSECTION\n  2\nENTITIES\n"
+                   "  0\nREGION\n  5\n1A\n  8\n0\n100\nAcDbModelerGeometry\n"
+                   " 70\n     1\n");
+  for (unsigned l = 0; l < sizeof (sat) / sizeof (sat[0]); l++)
+    {
+      p += sprintf (p, "  1\n");
+      for (const char *s = sat[l]; *s; s++)
+        {
+          if (*s <= 32)
+            *p++ = *s;
+          else if (*s == 'A') // 159 - 'A' is '^'
+            {
+              *p++ = '^';
+              *p++ = ' ';
+            }
+          else
+            *p++ = (char)(159 - *s);
+        }
+      *p++ = '\n';
+    }
+  p += sprintf (p, "  0\nENDSEC\n  0\nEOF\n");
+
+  memset (&dwg, 0, sizeof (dwg));
+  memset (&dat, 0, sizeof (dat));
+  dat.chain = (unsigned char *)buf;
+  dat.size = (size_t)(p - buf);
+  error = dwg_read_dxf (&dat, &dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("dxf_sat_v1: dwg_read_dxf failed with 0x%x", error);
+      dwg_free (&dwg);
+      return numfailed ();
+    }
+  obj = first_object (&dwg, DWG_TYPE_REGION);
+  if (!obj)
+    fail ("dxf_sat_v1: no REGION");
+  else
+    {
+      Dwg_Entity_REGION *r = obj->tio.entity->tio.REGION;
+      if (!r->acis_data || strncmp ((char *)r->acis_data, "400 0 2 0 ", 10))
+        fail ("dxf_sat_v1: SAT version not 400: %.12s",
+              r->acis_data ? (char *)r->acis_data : "(null)");
+      else if (!strstr ((char *)r->acis_data, "Autodesk AutoCAD #"))
+        fail ("dxf_sat_v1: 'A' not decoded from \"^ \"");
+      else if (r->num_blocks != 1 || !r->encr_sat_data || !r->block_size
+               || r->block_size[0] != strlen ((char *)r->acis_data)
+               || r->block_size[1] != 0)
+        fail ("dxf_sat_v1: blocks %u size %u", (unsigned)r->num_blocks,
+              r->block_size ? (unsigned)r->block_size[0] : 0);
+      else
+        {
+          int idx = 0;
+          char *enc = dwg_encrypt_SAT1 (r->block_size[0], r->acis_data, &idx);
+          if (memcmp (enc, r->encr_sat_data[0], r->block_size[0]))
+            fail ("dxf_sat_v1: encr_sat_data is not the DWG encryption");
+          else
+            ok ("dxf_sat_v1: SAT v1 in the DWG form, ACIS 4.0");
+          free (enc);
+        }
+    }
+  dwg_free (&dwg);
   return numfailed ();
 }
 /* DXF 1004 is decoded once, including embedded zero bytes. */
@@ -3368,6 +3449,7 @@ main (int argc, char *argv[])
 #endif
 #ifndef DISABLE_DXF
   error += test_dxf_union_selectors ();
+  error += test_dxf_sat_v1 ();
   error += test_attrib_lock_flags ();
   error += test_preR13_dxf_blocks_to_r2000 ();
   error += test_lwpolyline_to_preR13 ();
