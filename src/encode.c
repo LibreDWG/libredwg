@@ -6611,6 +6611,24 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       (void)dwg_encode_get_class (dwg, obj);
       break;
     case DWG_TYPE_PROXY_ENTITY:
+      {
+        // the graphics are written as the common preview: set it from the
+        // proxy_graphics, e.g. from JSON
+        Dwg_Object_Entity *ent = obj->tio.entity;
+        Dwg_Entity_PROXY_ENTITY *proxy = ent->tio.PROXY_ENTITY;
+        if (proxy && proxy->proxy_graphics && proxy->proxy_graphics_size
+            && !ent->preview_size)
+          {
+            ent->preview = (BITCODE_TF)malloc (proxy->proxy_graphics_size);
+            if (ent->preview)
+              {
+                memcpy (ent->preview, proxy->proxy_graphics,
+                        proxy->proxy_graphics_size);
+                ent->preview_size = proxy->proxy_graphics_size;
+                ent->preview_exists = 1;
+              }
+          }
+      }
       error = dwg_encode_PROXY_ENTITY (dat, obj);
       break;
     case DWG_TYPE_PROXY_OBJECT:

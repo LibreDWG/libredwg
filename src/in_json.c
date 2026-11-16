@@ -2235,8 +2235,8 @@ json_count_key_buffered (const Dwg_DYNAPI_field *restrict fields,
   const Dwg_DYNAPI_field *b;
   if (strEQc (key, "preview_size"))
     b1 = "preview";
-  else if (strEQc (key, "proxy_data_size"))
-    b1 = "proxy_data";
+  else if (strEQc (key, "proxy_graphics_size"))
+    b1 = "proxy_graphics";
   else if (strEQc (key, "bindata_size"))
     b1 = "bindata";
   else if (strEQc (key, "sweepdata_size"))

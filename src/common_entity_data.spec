@@ -309,6 +309,11 @@
         if (obj->klass && obj->klass->is_zombie)
           _ent->preview_is_proxy = 1;
 #endif
+#ifdef IS_DXF
+        // the PROXY_ENTITY writes its graphics (92/310) in its own subclass
+        if (obj->fixedtype != DWG_TYPE_PROXY_ENTITY)
+          {
+#endif
 #if defined(IS_JSON)
         FIELD_B (preview_is_proxy, 0);
         FIELD_BLL (preview_size, 0);
@@ -334,6 +339,9 @@
                        _ent->preview_size,
                        (unsigned long)(obj->size ? obj->size : dat->size));
             error |= DWG_ERR_VALUEOUTOFBOUNDS;
+          }
+#endif
+#ifdef IS_DXF
           }
 #endif
       }

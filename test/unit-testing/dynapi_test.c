@@ -21124,27 +21124,27 @@ static int test_PROXY_ENTITY (const Dwg_Object *obj)
         fail ("PROXY_ENTITY.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_TF proxy_data;
-    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "proxy_data", &proxy_data, NULL)
-        && !memcmp (&proxy_data, &proxy_entity->proxy_data, sizeof (BITCODE_TF)))
+    BITCODE_TF proxy_graphics;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "proxy_graphics", &proxy_graphics, NULL)
+        && !memcmp (&proxy_graphics, &proxy_entity->proxy_graphics, sizeof (BITCODE_TF)))
         pass ();
     else
-        fail ("PROXY_ENTITY.proxy_data [TF]");
+        fail ("PROXY_ENTITY.proxy_graphics [TF]");
   }
   {
-    BITCODE_BL proxy_data_size;
-    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "proxy_data_size", &proxy_data_size, NULL)
-        && proxy_data_size == proxy_entity->proxy_data_size)
+    BITCODE_BL proxy_graphics_size;
+    if (dwg_dynapi_entity_value (proxy_entity, "PROXY_ENTITY", "proxy_graphics_size", &proxy_graphics_size, NULL)
+        && proxy_graphics_size == proxy_entity->proxy_graphics_size)
       pass ();
     else
-      fail ("PROXY_ENTITY.proxy_data_size [BL] %u != %u", proxy_entity->proxy_data_size, proxy_data_size);
-    proxy_data_size++;
-    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "proxy_data_size", &proxy_data_size, 0)
-        && proxy_data_size == proxy_entity->proxy_data_size)
+      fail ("PROXY_ENTITY.proxy_graphics_size [BL] %u != %u", proxy_entity->proxy_graphics_size, proxy_graphics_size);
+    proxy_graphics_size++;
+    if (dwg_dynapi_entity_set_value (proxy_entity, "PROXY_ENTITY", "proxy_graphics_size", &proxy_graphics_size, 0)
+        && proxy_graphics_size == proxy_entity->proxy_graphics_size)
       pass ();
     else
-      fail ("PROXY_ENTITY.proxy_data_size [BL] set+1 %u != %u", proxy_entity->proxy_data_size, proxy_data_size);
-    proxy_entity->proxy_data_size--;
+      fail ("PROXY_ENTITY.proxy_graphics_size [BL] set+1 %u != %u", proxy_entity->proxy_graphics_size, proxy_graphics_size);
+    proxy_entity->proxy_graphics_size--;
   }
   {
     BITCODE_BL proxy_id;

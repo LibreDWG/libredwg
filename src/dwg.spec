@@ -5808,14 +5808,27 @@ DWG_ENTITY (PROXY_ENTITY)
     FIELD_B (from_dxf, 70); // Original Data Format: 0 dwg, 1 dxf
   }
 
-  // proxy_data_size is _ent->preview_size. see par 29
-  DXF_OR_PRINT {
-    // preview 92/310 is also proxy data
-    FIELD_BL (proxy_data_size, 92)
-  } else {
-    FIELD_VALUE (proxy_data_size) = _ent->preview_size;
+  // The proxy graphics (par 29) are not in the entity data, but in the preview
+  // of the common entity data. proxy_graphics is a copy of it, for DXF 92/310.
+  DECODER {
+    FIELD_VALUE (proxy_graphics_size) = 0;
+    if (_ent->preview_exists && _ent->preview && _ent->preview_size
+        && _ent->preview_size <= 0xffffffffUL)
+      {
+        _obj->proxy_graphics = (BITCODE_RC *)malloc (_ent->preview_size);
+        if (_obj->proxy_graphics)
+          {
+            memcpy (_obj->proxy_graphics, _ent->preview, _ent->preview_size);
+            FIELD_VALUE (proxy_graphics_size) = (BITCODE_BL)_ent->preview_size;
+          }
+      }
   }
-  FIELD_TF (proxy_data, _obj->proxy_data_size, 310);
+  DXF_OR_PRINT {
+    FIELD_BL (proxy_graphics_size, 92)
+  }
+#if !defined IS_DECODER && !defined IS_ENCODER
+  FIELD_TF (proxy_graphics, _obj->proxy_graphics_size, 310);
+#endif
 
   DECODER {
     _obj->data_numbits = (obj->hdlpos - bit_position (dat)) & 0xFFFFFFFF;
@@ -5829,6 +5842,15 @@ DWG_ENTITY (PROXY_ENTITY)
               & 0xFFFFFFFF;
       }
     _obj->data = bit_read_bits (dat, _obj->data_numbits);
+    if (_obj->data && (_obj->data_numbits % 8))
+      {
+        // bit_read_bits packs the last bits LSB-first, but bit_write_bits and
+        // the DXF have them MSB-first
+        unsigned char _b = _obj->data[_obj->data_numbits / 8], _r = 0;
+        for (int _i = 0; _i < 8; _i++)
+          _r |= ((_b >> _i) & 1) << (7 - _i);
+        _obj->data[_obj->data_numbits / 8] = _r;
+      }
     LOG_TRACE ("> data_numbits: " FORMAT_BL " [ 93]\n", _obj->data_numbits);
     LOG_TRACE_TF (_obj->data, (_obj->data_numbits / 8) + (_obj->data_numbits % 8 ? 1 : 0));
   }

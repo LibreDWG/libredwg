@@ -84,6 +84,13 @@ Major features:
     kept raw.  The graphics are in the preview data of a PROXY_ENTITY, but
     also of other entities, like LEADER.  dwg2SVG renders them for
     PROXY_ENTITY and as fallback for entities it does not handle yet.
+  * PROXY_ENTITY: renamed proxy_data and proxy_data_size to proxy_graphics
+    and proxy_graphics_size.  They are a copy of the graphics in the preview
+    of the common entity data, no longer read as separate bytes after it from
+    the DWG.  The DXF import reads the 92/310 graphics and the 93/310 entity
+    data, in any chunking, and the DXF export writes them in the
+    AcDbProxyEntity subclass only, so that DXF roundtrips of
+    ACAD_PROXY_ENTITY are byte identical.
   * OLE2FRAME: the 128 byte header of the data is now decoded into
     unknown_rs, the four corner points pt1, pt_ur, pt2, pt_ll, unknown_rl1-6,
     unknown_rs2 and cfb_size.  data contains only the MS-CFB (starting with

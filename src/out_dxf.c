@@ -705,7 +705,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 /* Group codes 310-319 hold binary chunks: hex-encode them. Writing them
    through the string path (VALUE_TV) emits the raw bytes (and applies the
    r2007+ codepage conversion to them), producing invalid DXF that readers
-   reject, e.g. PROXY_ENTITY.proxy_data. */
+   reject, e.g. PROXY_ENTITY.proxy_graphics. */
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
     if ((dxf) >= 310 && (dxf) <= 319)                                         \

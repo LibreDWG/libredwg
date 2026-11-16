@@ -3879,8 +3879,8 @@ typedef struct _dwg_entity_PROXY_ENTITY
   BITCODE_BL maint_version; /*!< DXF hiword of 95 */
   BITCODE_BL dwg_version;   /*!< DXF loword of 95 */
   BITCODE_B from_dxf;       /*!< DXF 70 */
-  BITCODE_BL proxy_data_size;  /*!< DXF 92, graphics data bytes */
-  BITCODE_RC *proxy_data;   /*!< DXF 310, graphics data */
+  BITCODE_BL proxy_graphics_size;  /*!< DXF 92, graphics data bytes, see dwg_proxy_graphics() */
+  BITCODE_RC *proxy_graphics;   /*!< DXF 310, copy of the entity preview (par 29) */
   BITCODE_BL data_numbits;  /*!< DXF 93, entity data bits */
   BITCODE_BL data_size;     /*!< bytes calculated */
   BITCODE_RC *data;         /*!< DXF 310, entity data */

@@ -8780,6 +8780,122 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+/* PROXY_ENTITY: the 92 size of the proxy graphics, followed by the binary 310
+   stream of the graphics and then the entity data (of 93 bits), in any
+   chunking. The graphics are also the preview (par 29) of the common entity
+   data, which is written by the encoder. */
+static Dxf_Pair *
+add_proxy_entity_data (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                       Dxf_Pair *restrict pair)
+{
+  Dwg_Object_Entity *ent = obj->tio.entity;
+  Dwg_Entity_PROXY_ENTITY *o = ent->tio.PROXY_ENTITY;
+  const size_t gsize = pair->value.u;
+  unsigned char *stream = NULL;
+  size_t len = 0, cap = 0;
+  BITCODE_BL numbits = 0;
+  bool has_numbits = false;
+
+  if (!gsize || gsize >= MAX_SIZE_BUF || gsize > 0x1000000)
+    {
+      LOG_ERROR ("Invalid %s.proxy_graphics_size %" PRIuSIZE, obj->name, gsize);
+      dxf_free_pair (pair);
+      return dxf_read_pair (dat);
+    }
+  if (ent->preview_size || o->proxy_graphics)
+    {
+      LOG_ERROR ("Skip duplicate %s.proxy_graphics", obj->name);
+      dxf_free_pair (pair);
+      return dxf_read_pair (dat);
+    }
+  LOG_TRACE ("%s.proxy_graphics_size = %" PRIuSIZE " [BL 92]\n", obj->name, gsize);
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  while (pair != NULL && (pair->code == 310 || pair->code == 93))
+    {
+      if (pair->code == 93)
+        {
+          numbits = pair->value.u;
+          has_numbits = true;
+          LOG_TRACE ("%s.data_numbits = %u [BL 93]\n", obj->name, numbits);
+        }
+      else if (pair->value.s.ptr)
+        {
+          // dxf_read_binary already decoded hex to binary for text DXF
+          const size_t blen = pair->value.s.len;
+          if (blen + len > 0x2000000)
+            {
+              LOG_ERROR ("%s.proxy_graphics overflow", obj->name);
+              free (stream);
+              return pair;
+            }
+          if (len + blen > cap)
+            {
+              unsigned char *tmp;
+              cap = (len + blen) * 2;
+              tmp = (unsigned char *)realloc (stream, cap);
+              if (!tmp)
+                {
+                  LOG_ERROR ("Out of memory");
+                  free (stream);
+                  return NULL;
+                }
+              stream = tmp;
+            }
+          memcpy (&stream[len], pair->value.s.ptr, blen);
+          len += blen;
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  if (len < gsize)
+    {
+      LOG_ERROR ("%s.proxy_graphics %" PRIuSIZE " < size %" PRIuSIZE, obj->name,
+                 len, gsize);
+      free (stream);
+      return pair;
+    }
+  // the graphics: the proxy_graphics and the common preview
+  o->proxy_graphics = (BITCODE_RC *)malloc (gsize);
+  ent->preview = (BITCODE_TF)malloc (gsize);
+  if (!o->proxy_graphics || !ent->preview)
+    {
+      free (o->proxy_graphics);
+      free (ent->preview);
+      o->proxy_graphics = NULL;
+      ent->preview = NULL;
+      free (stream);
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  memcpy (o->proxy_graphics, stream, gsize);
+  memcpy (ent->preview, stream, gsize);
+  o->proxy_graphics_size = (BITCODE_BL)gsize;
+  ent->preview_size = gsize;
+  ent->preview_exists = 1;
+  // the rest are the entity data
+  if (len > gsize)
+    {
+      const size_t dsize = len - gsize;
+      o->data = (BITCODE_RC *)malloc (dsize);
+      if (!o->data)
+        {
+          free (stream);
+          LOG_ERROR ("Out of memory");
+          return NULL;
+        }
+      memcpy (o->data, &stream[gsize], dsize);
+      o->data_size = (BITCODE_BL)dsize;
+      o->data_numbits = has_numbits && numbits <= dsize * 8
+                            ? numbits
+                            : (BITCODE_BL)(dsize * 8);
+    }
+  else if (has_numbits)
+    o->data_numbits = 0;
+  free (stream);
+  return pair;
+}
+
 // read to BLOCK_HEADER.preview (310), filling in the size
 static Dxf_Pair *
 add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -12963,6 +13079,11 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               pair = add_block_preview (obj, dat, pair);
               goto start_loop;
             }
+          else if (pair->code == 92 && obj->fixedtype == DWG_TYPE_PROXY_ENTITY)
+            {
+              pair = add_proxy_entity_data (obj, dat, pair);
+              goto start_loop;
+            }
           else if (pair->code == 90 && obj->fixedtype == DWG_TYPE_OLE2FRAME)
             {
               Dwg_Entity_OLE2FRAME *o = obj->tio.entity->tio.OLE2FRAME;
@@ -15221,12 +15342,6 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                            || (obj->fixedtype == DWG_TYPE_BODY)
                            || (obj->fixedtype == DWG_TYPE__3DSOLID)))
                 LOG_TRACE ("Unknown DXF code %d for %s\n", pair->code, name);
-              else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY
-                       && pair->code == 92)
-                {
-                  pair = add_ent_preview (obj, dat, pair);
-                  goto start_loop;
-                }
               else if (obj->fixedtype == DWG_TYPE_PROXY_ENTITY
                        && (pair->code == 90 || pair->code == 91
                            || pair->code == 70 || pair->code == 93

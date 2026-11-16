@@ -3802,9 +3802,9 @@ BL,	DXF 95
 BL,	DXF 95
 @item from_dxf
 B,	DXF 70
-@item proxy_data_size
+@item proxy_graphics_size
 BL,	DXF 92
-@item proxy_data
+@item proxy_graphics
 TF,	DXF 310
 @item data_numbits
 BL,	DXF 93

@@ -12,8 +12,8 @@ api_process (dwg_object *obj)
   BITCODE_BL dwg_version;
   BITCODE_BL maint_version;
   BITCODE_B from_dxf;
-  BITCODE_BL proxy_data_size;
-  BITCODE_RC *proxy_data;
+  BITCODE_BL proxy_graphics_size;
+  BITCODE_RC *proxy_graphics;
   BITCODE_BL data_numbits;
   BITCODE_RC *data;
   BITCODE_BL i, num_objids;
@@ -29,8 +29,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, maint_version, BL);
   CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, from_dxf, B);
   CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, data_numbits, BL);
-  CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, proxy_data_size, BL);
-  CHK_ENTITY_BINARY (_obj, PROXY_ENTITY, proxy_data, proxy_data_size);
+  CHK_ENTITY_TYPE (_obj, PROXY_ENTITY, proxy_graphics_size, BL);
+  CHK_ENTITY_BINARY (_obj, PROXY_ENTITY, proxy_graphics, proxy_graphics_size);
 
   if ((data_numbits / 8) > obj->size)
     fail ("Invalid PROXY_ENTITY.data_numbits %u / 8 > %u size",

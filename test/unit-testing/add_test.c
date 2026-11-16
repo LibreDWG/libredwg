@@ -2521,6 +2521,65 @@ test_dxf_oleclient_ownership (void)
   return numfailed ();
 }
 
+/* PROXY_ENTITY: the DXF 92/310 graphics and the 93/310 entity data, with the
+   last 9th bit MSB-first, are imported as proxy_graphics, preview and data. */
+static int
+test_dxf_proxy_entity (void)
+{
+  static const char dxf[]
+      = "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1015\n"
+        "999\nPadding for a valid minimal DXF fixture.\n"
+        "0\nENDSEC\n"
+        "0\nSECTION\n2\nENTITIES\n0\nACAD_PROXY_ENTITY\n5\n255\n"
+        "100\nAcDbEntity\n8\n0\n100\nAcDbProxyEntity\n90\n498\n91\n500\n"
+        "92\n16\n310\n1000000001000000080000001C000000\n"
+        "93\n9\n310\nAB80\n"
+        "0\nENDSEC\n0\nEOF\n";
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  Dwg_Object *obj;
+  Dwg_Entity_PROXY_ENTITY *o;
+  Dwg_Proxy_Graphic *g = NULL;
+  BITCODE_BL ngfx = 0;
+  int error;
+  const int lvl = loglevel;
+
+  failed = 0;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("dxf_proxy_entity: allocation failed");
+      return numfailed ();
+    }
+  dat.size = sizeof (dxf) - 1;
+  error = dwg_read_dxf (&dat, &dwg);
+  loglevel = lvl;
+  obj = first_object (&dwg, DWG_TYPE_PROXY_ENTITY);
+  o = obj && obj->tio.entity ? obj->tio.entity->tio.PROXY_ENTITY : NULL;
+  if (error >= DWG_ERR_CRITICAL || !o)
+    fail ("dxf_proxy_entity: not imported (error 0x%x)", error);
+  else if (o->proxy_graphics_size != 16 || !o->proxy_graphics
+           || obj->tio.entity->preview_size != 16
+           || !obj->tio.entity->preview_exists || !obj->tio.entity->preview
+           || memcmp (o->proxy_graphics, obj->tio.entity->preview, 16))
+    fail ("dxf_proxy_entity: graphics size %u, preview %u",
+          (unsigned)o->proxy_graphics_size,
+          (unsigned)obj->tio.entity->preview_size);
+  else if (o->data_numbits != 9 || o->data_size != 2 || !o->data
+           || o->data[0] != 0xAB || o->data[1] != 0x80)
+    fail ("dxf_proxy_entity: data_numbits %u, size %u", o->data_numbits,
+          o->data_size);
+  else if (dwg_proxy_graphics (obj->tio.entity, &g, &ngfx) || ngfx != 1
+           || g[0].type != DWG_PROXY_GFX_POP_CLIP)
+    fail ("dxf_proxy_entity: graphics not decoded");
+  else
+    ok ("dxf_proxy_entity: graphics and data imported");
+  dwg_free_proxy_graphics (g, ngfx);
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
 #endif
 
 #ifndef DISABLE_JSON
@@ -3244,7 +3303,7 @@ test_proxy_graphics (void)
   double d;
   Dwg_Object_Entity ent;
   Dwg_Proxy_Graphic *g = NULL;
-  BITCODE_BL num = 0;
+  BITCODE_BL ngfx = 0;
   int error, nchunks = 0;
   size_t start;
 
@@ -3306,11 +3365,11 @@ test_proxy_graphics (void)
   ent.preview = (BITCODE_TF)buf;
   ent.preview_size = pos;
 
-  error = dwg_proxy_graphics (&ent, &g, &num);
-  if (error || num != 6 || !g)
+  error = dwg_proxy_graphics (&ent, &g, &ngfx);
+  if (error || ngfx != 6 || !g)
     {
-      fail ("proxy_graphics: error 0x%x, num %u", error, (unsigned)num);
-      dwg_free_proxy_graphics (g, num);
+      fail ("proxy_graphics: error 0x%x, ngfx %u", error, (unsigned)ngfx);
+      dwg_free_proxy_graphics (g, ngfx);
       return numfailed ();
     }
   if (g[0].type != DWG_PROXY_GFX_SUBENT_TRUECOLOR || g[0].rgb[0] != 0xff
@@ -3333,9 +3392,9 @@ test_proxy_graphics (void)
   // a short chunk keeps its raw payload, and does not read past the end
   if (g[5].type != DWG_PROXY_GFX_CIRCLE || g[5].data_size != 8 || !g[5].data)
     fail ("proxy_graphics: truncated circle");
-  if (!error && num == 6 && !failed)
-    ok ("proxy_graphics: decoded %u primitives", (unsigned)num);
-  dwg_free_proxy_graphics (g, num);
+  if (!error && ngfx == 6 && !failed)
+    ok ("proxy_graphics: decoded %u primitives", (unsigned)ngfx);
+  dwg_free_proxy_graphics (g, ngfx);
 
   // invalid sizes and counts are rejected, with no allocation
   for (i = 0; i < 4; i++)
@@ -3601,6 +3660,7 @@ main (int argc, char *argv[])
   error += test_dxf_reused_modelspace_error ();
   error += test_dxf_eval_node_missing_handle ();
   error += test_dxf_oleclient_ownership ();
+  error += test_dxf_proxy_entity ();
 #endif
 #ifndef DISABLE_JSON
   error += test_json_sab_size ();
