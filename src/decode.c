@@ -807,7 +807,7 @@ handles_section:
       secpos = dat->byte;
       section_size = bit_read_RS_BE (dat);
       LOG_TRACE ("Handles page size: %u [RS_BE]", section_size);
-      LOG_HANDLE (" @%" PRIuSIZE, startpos);
+      LOG_HANDLE (" @%" PRIuSIZE, secpos);
       LOG_TRACE ("\n");
       if (section_size > 2040)
         {
@@ -907,8 +907,8 @@ handles_section:
       pvz = dat->byte;
       LOG_TRACE ("\nHandles page crc: %04X [RSx_BE] (%" PRIuSIZE "-%" PRIuSIZE
                  " = %u)\n",
-                 crc, startpos, startpos + section_size, section_size);
-      crc2 = bit_calc_CRC (0xC0C1, dat->chain + startpos, section_size);
+                 crc, secpos, secpos + section_size, section_size);
+      crc2 = bit_calc_CRC (0xC0C1, dat->chain + secpos, section_size);
       if (crc != crc2)
         {
           LOG_ERROR ("Handles Section[%d] page CRC mismatch %04X <=> %04X",
