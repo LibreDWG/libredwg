@@ -3294,6 +3294,16 @@ gfx_put (unsigned char *buf, size_t *pos, const void *src, const size_t n)
   *pos += n;
 }
 
+// The DWG proxy graphics are little-endian
+static void
+gfx_num (unsigned char *dst, const void *src, const size_t n)
+{
+  const uint16_t one = 1;
+  const int is_be = !*(const unsigned char *)&one;
+  for (size_t k = 0; k < n; k++)
+    dst[k] = ((const unsigned char *)src)[is_be ? n - 1 - k : k];
+}
+
 static int
 test_proxy_graphics (void)
 {
@@ -3307,19 +3317,21 @@ test_proxy_graphics (void)
   int error, nchunks = 0;
   size_t start;
 
-#define GFX_RL(v)                                                             \
+#  define GFX_RL(v)                                                             \
   u = (uint32_t)(v);                                                          \
-  gfx_put (buf, &pos, &u, 4)
-#define GFX_RD(v)                                                             \
+  gfx_num (&buf[pos], &u, 4);                                                 \
+  pos += 4
+#  define GFX_RD(v)                                                             \
   d = (v);                                                                    \
-  gfx_put (buf, &pos, &d, 8)
-#define GFX_BEGIN(type)                                                       \
+  gfx_num (&buf[pos], &d, 8);                                                 \
+  pos += 8
+#  define GFX_BEGIN(type)                                                       \
   start = pos;                                                                \
   pos += 4;                                                                   \
   GFX_RL (type)
-#define GFX_END                                                               \
+#  define GFX_END                                                               \
   u = (uint32_t)(pos - start);                                                \
-  memcpy (&buf[start], &u, 4);                                                \
+  gfx_num (&buf[start], &u, 4);                                               \
   nchunks++
 
   failed = 0;
@@ -3328,24 +3340,45 @@ test_proxy_graphics (void)
   GFX_RL (0xc00000ff);
   GFX_END;
   GFX_BEGIN (2); // circle
-  GFX_RD (1.0); GFX_RD (2.0); GFX_RD (0.0);
+  GFX_RD (1.0);
+  GFX_RD (2.0);
+  GFX_RD (0.0);
   GFX_RD (3.5);
-  GFX_RD (0.0); GFX_RD (0.0); GFX_RD (1.0);
+  GFX_RD (0.0);
+  GFX_RD (0.0);
+  GFX_RD (1.0);
   GFX_END;
   GFX_BEGIN (6); // polyline
   GFX_RL (2);
-  GFX_RD (0.0); GFX_RD (0.0); GFX_RD (0.0);
-  GFX_RD (5.0); GFX_RD (6.0); GFX_RD (0.0);
+  GFX_RD (0.0);
+  GFX_RD (0.0);
+  GFX_RD (0.0);
+  GFX_RD (5.0);
+  GFX_RD (6.0);
+  GFX_RD (0.0);
   GFX_END;
   GFX_BEGIN (11); // text2
-  GFX_RD (7.0); GFX_RD (8.0); GFX_RD (0.0);
-  GFX_RD (0.0); GFX_RD (0.0); GFX_RD (1.0);
-  GFX_RD (1.0); GFX_RD (0.0); GFX_RD (0.0);
+  GFX_RD (7.0);
+  GFX_RD (8.0);
+  GFX_RD (0.0);
+  GFX_RD (0.0);
+  GFX_RD (0.0);
+  GFX_RD (1.0);
+  GFX_RD (1.0);
+  GFX_RD (0.0);
+  GFX_RD (0.0);
   gfx_put (buf, &pos, "xyz\0", 4); // padded to 4 bytes
   GFX_RL (3);
   GFX_RL (1);
-  GFX_RD (4.0); GFX_RD (1.0); GFX_RD (0.0); GFX_RD (1.0);
-  GFX_RL (1); GFX_RL (0); GFX_RL (0); GFX_RL (1); GFX_RL (0);
+  GFX_RD (4.0);
+  GFX_RD (1.0);
+  GFX_RD (0.0);
+  GFX_RD (1.0);
+  GFX_RL (1);
+  GFX_RL (0);
+  GFX_RL (0);
+  GFX_RL (1);
+  GFX_RL (0);
   gfx_put (buf, &pos, "txt.shx\0", 8);
   gfx_put (buf, &pos, "\0\0\0\0", 4);
   GFX_END;
@@ -3356,9 +3389,9 @@ test_proxy_graphics (void)
   GFX_RD (1.0);
   GFX_END;
   u = (uint32_t)pos;
-  memcpy (buf, &u, 4);
+  gfx_num (buf, &u, 4);
   u = (uint32_t)nchunks;
-  memcpy (&buf[4], &u, 4);
+  gfx_num (&buf[4], &u, 4);
 
   memset (&ent, 0, sizeof (ent));
   ent.preview_exists = 1;
@@ -3414,10 +3447,10 @@ test_proxy_graphics (void)
     }
   if (!failed)
     ok ("proxy_graphics: invalid headers rejected");
-#undef GFX_RL
-#undef GFX_RD
-#undef GFX_BEGIN
-#undef GFX_END
+#  undef GFX_RL
+#  undef GFX_RD
+#  undef GFX_BEGIN
+#  undef GFX_END
   return numfailed ();
 }
 
