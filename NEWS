@@ -70,8 +70,10 @@ Major features:
     structs data_rowstyle, title_rowstyle and header_rowstyle (with named
     borders top_border .. right_border) instead of rowstyles[], the
     r2010+ handle is cellstyle_handle, and Dwg_TABLESTYLE_CellStyle was
-    renamed to Dwg_TABLESTYLE_cellstyle.  Custom cell styles are not
-    kept when downconverting to r2007, as that format has no place for them.
+    renamed to Dwg_TABLESTYLE_cellstyle.  When downconverting to r2007
+    the first custom cell style becomes the data row style if the standard
+    data style is missing; other custom cell styles are dropped with a
+    warning, as that format has no place for them.
   * GeoJSON: added MLINE, MINSERT (MultiPoint), SOLID, TRACE, 3DFACE, RAY,
     XLINE, POLYLINE_PFACE (MultiPolygon) and POLYLINE_MESH (MultiLineString).
   * Added the r2007 DWG writer (new src/encode_r2007.c): r2007 (AC1021) DWGs

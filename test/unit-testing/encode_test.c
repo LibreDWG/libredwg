@@ -990,6 +990,48 @@ downconvert_TABLESTYLE_test (void)
   ok ("downconvert_TABLESTYLE: rowstyles and back");
 }
 
+// Without the standard data style, the first custom cell style is the data
+// rowstyle.
+static void
+downconvert_TABLESTYLE_custom_test (void)
+{
+  Dwg_Data dwg;
+  Dwg_Object obj;
+  Dwg_Object_Object oo;
+  Dwg_Object_TABLESTYLE ts;
+  Dwg_TABLESTYLE_cellstyle cs[2];
+
+  memset (&dwg, 0, sizeof dwg);
+  memset (&obj, 0, sizeof obj);
+  memset (&oo, 0, sizeof oo);
+  memset (&ts, 0, sizeof ts);
+  memset (cs, 0, sizeof cs);
+  dwg.header.from_version = R_2018;
+  dwg.header.version = R_2018;
+  obj.parent = &dwg;
+  obj.fixedtype = DWG_TYPE_TABLESTYLE;
+  obj.tio.object = &oo;
+  oo.tio.TABLESTYLE = &ts;
+  cs[0].id = 1;
+  cs[0].cellstyle.content_format.text_height = 6.0;
+  cs[0].cellstyle.bg_color.rgb = 0xc8000000;
+  cs[1].id = 10; // custom
+  cs[1].cellstyle.content_format.text_height = 3.5;
+  cs[1].cellstyle.bg_color.rgb = 0xc8000000;
+  ts.num_cellstyles = 2;
+  ts.cellstyles = cs;
+  downconvert_TABLESTYLE (&obj);
+  if (ts.data_rowstyle.text_height != 3.5
+      || ts.title_rowstyle.text_height != 6.0
+      || ts.header_rowstyle.text_height != 3.5)
+    fail ("downconvert_TABLESTYLE_custom: data %f title %f",
+          ts.data_rowstyle.text_height, ts.title_rowstyle.text_height);
+  free (ts.data_rowstyle.format_string);
+  free (ts.title_rowstyle.format_string);
+  free (ts.header_rowstyle.format_string);
+  ok ("downconvert_TABLESTYLE_custom: custom cell style as data rowstyle");
+}
+
 /* The SAB data of ACIS entities is in the AcDs section since r2013. It is
    written from the entities, and read back by the handle, for small data
    directly in the _data_ segment, for large data (> 0x40000) in a blob01
@@ -1377,6 +1419,7 @@ main (int argc, char const *argv[])
   in_json_dotted_array_test ();
   downconvert_TABLE_test ();
   downconvert_TABLESTYLE_test ();
+  downconvert_TABLESTYLE_custom_test ();
   acds_sab_test ();
   acds_records_json_test ();
   large_class_strings_test ();

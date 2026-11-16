@@ -741,8 +741,21 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   if (!_obj->cellstyles || !_obj->num_cellstyles)
     return;
   LOG_WARN ("Downconverting TABLESTYLE with loosing information");
-  data = (cs = tablestyle_find_cellstyle (_obj, 3)) ? &cs->cellstyle
-                                                    : &_obj->sty.cellstyle;
+  // The pre-R2010 format has only the 3 row styles. Without the standard
+  // data style, the first custom cell style is the closest. The other custom
+  // cell styles are lost.
+  if (!(cs = tablestyle_find_cellstyle (_obj, 3)))
+    for (BITCODE_BL i = 0; i < _obj->num_cellstyles; i++)
+      if (_obj->cellstyles[i].id > 3)
+        {
+          cs = &_obj->cellstyles[i];
+          break;
+        }
+  for (BITCODE_BL i = 0; i < _obj->num_cellstyles; i++)
+    if (_obj->cellstyles[i].id > 3 && &_obj->cellstyles[i] != cs)
+      LOG_WARN ("Dropping custom TABLESTYLE cell style %u",
+                _obj->cellstyles[i].id);
+  data = cs ? &cs->cellstyle : &_obj->sty.cellstyle;
   title = (cs = tablestyle_find_cellstyle (_obj, 1)) ? &cs->cellstyle : data;
   header = (cs = tablestyle_find_cellstyle (_obj, 2)) ? &cs->cellstyle : data;
   _obj->data_rowstyle.parent = _obj;

@@ -11979,7 +11979,7 @@ RC,	DXF 70
 BL
 @item unknown_bl2
 BL
-@item cellstyle
+@item cellstyle_handle
 H
 @item sty
 Dwg_TABLESTYLE_cellstyle
@@ -15647,11 +15647,11 @@ CMC
 @item parent
 struct _dwg_object_TABLESTYLE*
 @item id
-BL
+BL,	DXF 90
 @item type
-BL
+BL,	DXF 91
 @item name
-T
+T,	DXF 300
 @item cellstyle.type
 BL
 @item cellstyle.data_flags

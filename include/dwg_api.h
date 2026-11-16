@@ -728,6 +728,7 @@ extern "C"
   typedef struct _dwg_object_SPATIAL_FILTER		dwg_obj_spatial_filter;
   typedef struct _dwg_object_SUN		dwg_obj_sun;
   typedef struct _dwg_object_TABLEGEOMETRY		dwg_obj_tablegeometry;
+  typedef struct _dwg_object_TABLESTYLE		dwg_obj_tablestyle;
   typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA		dwg_obj_textobjectcontextdata;
   typedef struct _dwg_object_VBA_PROJECT		dwg_obj_vba_project;
   typedef struct _dwg_object_VISUALSTYLE		dwg_obj_visualstyle;
@@ -817,7 +818,6 @@ extern "C"
   typedef struct _dwg_object_SOLID_BACKGROUND		dwg_obj_solid_background;
   typedef struct _dwg_object_SPATIAL_INDEX		dwg_obj_spatial_index;
   typedef struct _dwg_object_TABLECONTENT		dwg_obj_tablecontent;
-  typedef struct _dwg_object_TABLESTYLE		dwg_obj_tablestyle;
   typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS		dwg_obj_assocarraymodifyparameters;
   typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS		dwg_obj_assocarraypathparameters;
   typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS		dwg_obj_assocarraypolarparameters;
@@ -1854,6 +1854,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_spatial_filter, SPATIAL_FILTER);
   dwg_get_OBJECT_DECL (obj_sun, SUN);
   dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
+  dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
   dwg_get_OBJECT_DECL (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_vba_project, VBA_PROJECT);
   dwg_get_OBJECT_DECL (obj_visualstyle, VISUALSTYLE);
@@ -1943,7 +1944,6 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_solid_background, SOLID_BACKGROUND);
   dwg_get_OBJECT_DECL (obj_spatial_index, SPATIAL_INDEX);
   dwg_get_OBJECT_DECL (obj_tablecontent, TABLECONTENT);
-  dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
   dwg_get_OBJECT_DECL (obj_assocarraymodifyparameters, ASSOCARRAYMODIFYPARAMETERS);
   dwg_get_OBJECT_DECL (obj_assocarraypathparameters, ASSOCARRAYPATHPARAMETERS);
   dwg_get_OBJECT_DECL (obj_assocarraypolarparameters, ASSOCARRAYPOLARPARAMETERS);
@@ -2999,6 +2999,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (SPATIAL_FILTER);
   DWG_GETALL_OBJECT_DECL (SUN);
   DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY);
+  DWG_GETALL_OBJECT_DECL (TABLESTYLE);
   DWG_GETALL_OBJECT_DECL (TEXTOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (VBA_PROJECT);
   DWG_GETALL_OBJECT_DECL (VISUALSTYLE);
@@ -3088,7 +3089,6 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (SOLID_BACKGROUND);
   DWG_GETALL_OBJECT_DECL (SPATIAL_INDEX);
   DWG_GETALL_OBJECT_DECL (TABLECONTENT);
-  DWG_GETALL_OBJECT_DECL (TABLESTYLE);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYMODIFYPARAMETERS);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYPATHPARAMETERS);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYPOLARPARAMETERS);
@@ -4150,6 +4150,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_FILTER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (SUN);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLEGEOMETRY);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TEXTOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (VBA_PROJECT);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (VISUALSTYLE);
@@ -4239,7 +4240,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (SOLID_BACKGROUND);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_INDEX);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLECONTENT);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYMODIFYPARAMETERS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYPATHPARAMETERS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYPOLARPARAMETERS);

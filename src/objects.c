@@ -968,7 +968,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str147,                     "TABLECONTENT",                      DWG_TYPE_TABLECONTENT,	0,	UNSTABLE},
       {-1}, {-1},
 #line 356 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str150,                       "TABLESTYLE",                        DWG_TYPE_TABLESTYLE,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str150,                       "TABLESTYLE",                        DWG_TYPE_TABLESTYLE,	0,	STABLE},
       {-1},
 #line 313 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str152,                     "MLEADERSTYLE",                      DWG_TYPE_MLEADERSTYLE,	0,	STABLE},
