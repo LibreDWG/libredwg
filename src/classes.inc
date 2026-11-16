@@ -269,7 +269,7 @@
   // not enough coverage, but assumed mostly ok. field names may change.
   // DXF output skipped
 
-  UNSTABLE_CLASS     (ACTION, TABLESTYLE)        // field names
+  STABLE_CLASS       (ACTION, TABLESTYLE)
   UNSTABLE_CLASS     (ACTION, PLANESURFACE)      /* ent */
   UNSTABLE_CLASS     (ACTION, ACSH_BREP_CLASS)   // pretty stable, but cannot roundtrip
   UNSTABLE_CLASS     (ACTION, ACSH_CHAMFER_CLASS) // bl92?
