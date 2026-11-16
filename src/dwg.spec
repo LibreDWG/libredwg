@@ -5638,10 +5638,40 @@ DWG_ENTITY (OLE2FRAME)
                    FIELD_VALUE (data_size), dat->size);
         FIELD_VALUE (data_size) = 0;
       }
+    // the 128 byte header is part of data_size
+    if (FIELD_VALUE (data_size) && FIELD_VALUE (data_size) < 128)
+      {
+        LOG_ERROR ("OLE2FRAME.data_size " FORMAT_BL " < 128, invalid",
+                   FIELD_VALUE (data_size));
+        FIELD_VALUE (data_size) = 0;
+      }
   }
-  FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
+  FIELD_RS (unknown_rs, 0); // 0x80 0x55
+  FIELD_3RD (pt1, 10); // upper-left
+  FIELD_3RD (pt_ur, 0);
+  FIELD_3RD (pt2, 11); // lower-right
+  FIELD_3RD (pt_ll, 0); // lower-left
+  FIELD_RL (unknown_rl1, 0);
+  FIELD_RL (unknown_rl2, 0);
+  FIELD_RL (unknown_rl3, 0);
+  FIELD_RL (unknown_rl4, 0);
+  FIELD_RL (unknown_rl5, 0);
+  FIELD_RL (unknown_rl6, 0);
+  FIELD_RS (unknown_rs2, 0);
+  FIELD_RL (cfb_size, 0);
+  DECODER {
+    // the cfb size drives the allocation, it must fit into data_size
+    if (FIELD_VALUE (cfb_size) > (FIELD_VALUE (data_size) > 128
+                                      ? FIELD_VALUE (data_size) - 128 : 0))
+      {
+        LOG_ERROR ("OLE2FRAME.cfb_size " FORMAT_BL " > data_size - 128",
+                   FIELD_VALUE (cfb_size));
+        FIELD_VALUE (cfb_size) = 0;
+      }
+  }
+  FIELD_BINARY (data, FIELD_VALUE (cfb_size), 310);
 #ifdef IS_DECODER
-  dwg_decode_ole2 (_obj);
+  error |= dwg_decode_ole2 (_obj);
 #endif
 #ifdef IS_DXF
   VALUE_TFF ("OLE", 1);

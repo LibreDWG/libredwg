@@ -4336,73 +4336,41 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
   return error;
 }
 
-/** OL2FRAME.data potentially contains as 128 byte of custom specific data:
-  BITCODE_BS oleversion;   DXF 70, always 2
-  BOTCODE_TF oleclient;    DXF 3, e.g. OLE or Paintbrush Picture
-  BITCODE_3RD pt1;         DXF 10, upper left corner
-  BITCODE_3RD pt2;         DXF 11, lower right corner
-
-plus eventually:
-  T link_name; like C:\My Documents\excel.xls!Sheet1!R5C3:R8C3
-  RC output_quality;
-  BD rotation
-  BD width;
-  BD height;
-  BD scale_width;
-  BD scale_height;
-
-  The rest of data (&data[128]) contains the MS-CFB, see
+/** OLE2FRAME: the 0x80 byte header (unknown_rs, 4 points, unknown_rl1-6,
+  unknown_rs2, cfb_size) is decoded in the spec. data contains only the
+  MS-CFB (Compound File Binary), see
   https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-cfb/53989ce4-7b05-4f8d-829b-d08d6148375b
-  e.g. decodable via py-oletools
+  e.g. decodable via py-oletools.
+  oleversion (DXF 70) and oleclient (DXF 3) are not in the DWG, they are
+  constant in the DXF: 2 and "OLE" (even if the cfb contains PBrush.9).
 */
+static const unsigned char cfb_magic[8]
+    = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
+
 static int
 dwg_decode_ole2 (Dwg_Entity_OLE2FRAME *restrict _obj)
 {
-  Bit_Chain bdat;
-  Bit_Chain *dat = &bdat;
+  const unsigned char *d = _obj->data;
+  // data_size includes the 128-byte header
+  const size_t len = _obj->data_size > 128 ? _obj->data_size - 128 : 0;
 
-  dat->bit = 0;
-  dat->byte = 0;
-  dat->size = 0x80;
-  dat->chain = (unsigned char *)&_obj->data[0];
-  dat->version = _obj->parent->dwg->header.version;
-  dat->from_version = _obj->parent->dwg->header.from_version;
-
-  // TODO decode the unknowns
-  /* Sample data from TS1.dwg:
-00000000: 8055 40f9 3284 d222 3e40 7436 e0d9 23fd  .U@.2..">@t6..#.
-00000010: 32c0 0000 0000 0000 0000 d879 8900 cda2  2..........y....
-00000020: 4140 7436 e0d9 23fd 32c0 0000 0000 0000  A@t6..#.2.......
-00000030: 0000 d879 8900 cda2 4140 1420 d4f3 b864  ...y....A@. ...d
-00000040: 36c0 0000 0000 0000 0000 40f9 3284 d222  6.........@.2.."
-00000050: 3e40 1420 d4f3 b864 36c0 0000 0000 0000  >@. ...d6.......
-00000060: 0000 021f 9114 0100 0000 0001 0000 0100  ................
-00000070: 0000 0100 0000 0000 0100 0000 0090 0500  ................
-=> from the DXF
-oleversion 2 [70]
-oleclient  "OLE" [3] (but the cfb contains PBrush.9)
-pt1        (30.13602472538446, -18.98882829402869, 0.0) [10]
-pt2        (35.27188116753285, -22.39344715050545, 0.0) [11]
-   */
-  // FIXME decode the fields
-  // FIELD_BS (oleversion, 70);
-  // FIELD_TV (oleclient, 3);
-  // FIELD_2BD (pt1, 10);
-  // FIELD_2BD (pt2, 11);
   _obj->oleversion = 2;
+  free (_obj->oleclient);
   _obj->oleclient = (BITCODE_TF)strdup ("OLE");
-  _obj->pt1.x = 30.13602472538446;
-  _obj->pt1.y = -18.98882829402869;
-  _obj->pt2.x = 35.27188116753285;
-  _obj->pt2.y = -22.39344715050545;
-
-  // next, see the MS-CFB format
-  dat->bit = 0;
-  dat->byte = 0;
-  dat->size = _obj->data_size;
-  dat->chain = (unsigned char *)&_obj->data[0x80];
-  // TODO
-
+  if (!d)
+    return 0;
+  if (_obj->cfb_size != len)
+    {
+      LOG_ERROR ("OLE2FRAME.cfb_size %u != data size %" PRIuSIZE,
+                 _obj->cfb_size, len);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  // an empty cfb is valid (e.g. a link)
+  if (_obj->cfb_size >= sizeof (cfb_magic)
+      && memcmp (&d[0], cfb_magic, sizeof (cfb_magic)))
+    {
+      LOG_WARN ("OLE2FRAME.data: no MS-CFB signature");
+    }
   return 0;
 }
 

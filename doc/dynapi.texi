@@ -3302,18 +3302,40 @@ BS,	DXF 71
 BS,	DXF 72
 @item lock_aspect
 RC,	DXF 73
-@item data_size
-BL,	DXF 90
-@item data
-TF,	DXF 310
 @item oleversion
 BS,	DXF 70
 @item oleclient
 TF,	DXF 3
+@item data_size
+BL,	DXF 90
+@item unknown_rs
+RS
 @item pt1
-3BD,	DXF 10
+3RD,	DXF 10
+@item pt_ur
+3RD
 @item pt2
-3BD,	DXF 11
+3RD,	DXF 11
+@item pt_ll
+3RD
+@item unknown_rl1
+RL
+@item unknown_rl2
+RL
+@item unknown_rl3
+RL
+@item unknown_rl4
+RL
+@item unknown_rl5
+RL
+@item unknown_rl6
+RL
+@item unknown_rs2
+RS
+@item cfb_size
+RL
+@item data
+TF,	DXF 310
 
 @end vtable
 @end indentedblock

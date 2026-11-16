@@ -27776,6 +27776,9 @@ dwg_add_OLE2FRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->pt2.x = pt2->x;
   _obj->pt2.y = pt2->y;
   _obj->pt2.z = pt2->z;
+  _obj->pt_ur.x = pt2->x;
+  _obj->pt_ur.y = pt1->y;
+  _obj->pt_ur.z = pt1->z;
   _obj->oleversion = 2;
   if (strEQ (blkhdr->name, "*PAPER_SPACE"))
     _obj->mode = 1;
