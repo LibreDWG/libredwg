@@ -3889,6 +3889,102 @@ typedef struct _dwg_entity_PROXY_ENTITY
 } Dwg_Entity_PROXY_ENTITY;
 
 /**
+ The graphics primitive types of the entity graphics, see ODA
+ chapter 29 PROXY ENTITY GRAPHICS.
+ */
+typedef enum DWG_PROXY_GRAPHIC_TYPE
+{
+  DWG_PROXY_GFX_EXTENTS = 1,
+  DWG_PROXY_GFX_CIRCLE = 2,
+  DWG_PROXY_GFX_CIRCLE3PT = 3,
+  DWG_PROXY_GFX_CIRCULARARC = 4,
+  DWG_PROXY_GFX_CIRCULARARC3PT = 5,
+  DWG_PROXY_GFX_POLYLINE = 6,
+  DWG_PROXY_GFX_POLYGON = 7,
+  DWG_PROXY_GFX_MESH = 8,
+  DWG_PROXY_GFX_SHELL = 9,
+  DWG_PROXY_GFX_TEXT = 10,
+  DWG_PROXY_GFX_TEXT2 = 11,
+  DWG_PROXY_GFX_XLINE = 12,
+  DWG_PROXY_GFX_RAY = 13,
+  DWG_PROXY_GFX_SUBENT_COLOR = 14,
+  DWG_PROXY_GFX_SUBENT_LAYER = 16,
+  DWG_PROXY_GFX_SUBENT_LINETYPE = 18,
+  DWG_PROXY_GFX_SUBENT_MARKER = 19,
+  DWG_PROXY_GFX_SUBENT_FILLON = 20,
+  DWG_PROXY_GFX_SUBENT_TRUECOLOR = 22,
+  DWG_PROXY_GFX_SUBENT_LNWEIGHT = 23,
+  DWG_PROXY_GFX_SUBENT_LTSCALE = 24,
+  DWG_PROXY_GFX_SUBENT_THICKNESS = 25,
+  DWG_PROXY_GFX_SUBENT_PLSTNAME = 26,
+  DWG_PROXY_GFX_PUSH_CLIP = 27,
+  DWG_PROXY_GFX_POP_CLIP = 28,
+  DWG_PROXY_GFX_PUSH_MODELXFORM = 29,
+  DWG_PROXY_GFX_PUSH_MODELXFORM2 = 30,
+  DWG_PROXY_GFX_POP_MODELXFORM = 31,
+  DWG_PROXY_GFX_POLYLINE_NORMAL = 32,
+  DWG_PROXY_GFX_LWPOLYLINE = 33,
+  DWG_PROXY_GFX_SUBENT_MATERIAL = 34,
+  DWG_PROXY_GFX_SUBENT_MAPPER = 35,
+  DWG_PROXY_GFX_UTEXT = 36,
+  DWG_PROXY_GFX_UNKNOWN37 = 37,
+  DWG_PROXY_GFX_UTEXT2 = 38
+} Dwg_Proxy_Graphic_Type;
+
+/**
+ One decoded graphics primitive of an entity, from
+ dwg_proxy_graphics(). Which fields are set depends on the type:
+ - EXTENTS: pt1 min, pt2 max
+ - CIRCLE: pt1 center, radius, normal
+ - CIRCLE3PT, CIRCULARARC3PT: pt1, pt2, pt3 (and arc_type)
+ - CIRCULARARC: pt1 center, radius, normal, direction (start vector),
+   sweep, arc_type
+ - POLYLINE, POLYGON, POLYLINE_NORMAL: num_points, points (and normal)
+ - TEXT, TEXT2, UTEXT, UTEXT2: pt1 start, normal, direction, height,
+   width_factor, oblique_angle, text (utf-8), TEXT2 also tracking, flags
+ - XLINE, RAY: pt1, pt2
+ - SUBENT_*: value, rgb (TRUECOLOR), dvalue (LTSCALE, THICKNESS), value2
+   (PLSTNAME)
+ - PUSH_MODELXFORM(2): matrix
+ - PUSH_CLIP: normal, pt1 origin, num_points, points (z=0), matrix, matrix2,
+   value (flags: 1 front clip on, 2 back clip on, 4 draw boundary),
+   height (front clip), radius (back clip)
+ All other types (MESH, SHELL, LWPOLYLINE, MAPPER, ...) only have the raw
+ payload in data, data_size.
+ */
+typedef struct _dwg_proxy_graphic
+{
+  BITCODE_RL type;       /*!< Dwg_Proxy_Graphic_Type, or unknown */
+  BITCODE_RL size;       /*!< byte size of the chunk, with the 8 byte header */
+  BITCODE_3RD pt1;
+  BITCODE_3RD pt2;
+  BITCODE_3RD pt3;
+  BITCODE_3RD normal;
+  BITCODE_3RD direction;
+  BITCODE_RD radius;
+  BITCODE_RD sweep;      /*!< radians */
+  BITCODE_RL arc_type;
+  BITCODE_RL num_points;
+  BITCODE_3RD *points;
+  BITCODE_RD height;
+  BITCODE_RD width_factor;
+  BITCODE_RD oblique_angle;
+  BITCODE_RD tracking;
+  BITCODE_RL text_flags; /*!< bits: 1 backwards, 2 upside down, 4 vertical,
+                              8 underlined, 16 overlined, 32 bold, 64 italic */
+  char *text;            /*!< utf-8 */
+  BITCODE_RL value;      /*!< color, layer, linetype, marker, fillon, lnweight,
+                              clip flags */
+  BITCODE_RL value2;
+  BITCODE_RC rgb[3];
+  BITCODE_RD dvalue;
+  BITCODE_RD matrix[16];
+  BITCODE_RD matrix2[16];
+  BITCODE_RL data_size;
+  BITCODE_RC *data;
+} Dwg_Proxy_Graphic;
+
+/**
  (ACAD_)PROXY OBJECT (499, 0x1f3) object
  */
 typedef struct _dwg_object_PROXY_OBJECT
@@ -11760,6 +11856,18 @@ EXPORT void dwg_free (Dwg_Data *restrict dwg);
 /** Free the object (all three structs and its fields)
 */
 EXPORT void dwg_free_object (Dwg_Object *restrict obj);
+
+/** Decode the graphics primitives of an entity (ODA chapter 29 PROXY ENTITY
+    GRAPHICS), from its preview (DXF 92/310), which every PROXY_ENTITY, but also
+    other entities may have. Returns 0 (also if there is none) or an error, with
+    no partial result. On success *graphics is a malloc'ed array of *num primitives, to be freed
+    with dwg_free_proxy_graphics().
+ */
+EXPORT int dwg_proxy_graphics (const Dwg_Object_Entity *restrict ent,
+                               Dwg_Proxy_Graphic **restrict graphics,
+                               BITCODE_BL *restrict num);
+EXPORT void dwg_free_proxy_graphics (Dwg_Proxy_Graphic *graphics,
+                                     const BITCODE_BL num);
 
 /** Add the empty ref to the DWG (freshly malloc'ed), or NULL.
 */

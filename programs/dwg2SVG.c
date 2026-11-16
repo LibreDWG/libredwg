@@ -952,6 +952,104 @@ output_SPLINE (Dwg_Object *obj)
   common_entity (obj->tio.entity);
 }
 
+static bool
+isnan_3RD (const BITCODE_3RD pt)
+{
+  return isnan (pt.x) || isnan (pt.y) || isnan (pt.z);
+}
+
+// The decoded proxy graphics primitives of an entity, i.e. of a PROXY_ENTITY.
+// Only the 2D geometry in the WCS (normal 0,0,1). The colors and layers of the
+// sub entities, model transformations and clips are not applied.
+// Returns the number of primitives.
+static int
+output_GRAPHICS (Dwg_Object *obj)
+{
+  Dwg_Proxy_Graphic *gfx = NULL;
+  BITCODE_BL num = 0, i;
+
+  if (entity_invisible (obj) || dwg_proxy_graphics (obj->tio.entity, &gfx, &num)
+      || !num)
+    {
+      dwg_free_proxy_graphics (gfx, num);
+      return 0;
+    }
+  printf ("\t<!-- proxy-graphics-%d -->\n", obj->index);
+  for (i = 0; i < num; i++)
+    {
+      const Dwg_Proxy_Graphic *g = &gfx[i];
+      switch (g->type)
+        {
+        case DWG_PROXY_GFX_CIRCLE:
+          if (isnan_3RD (g->pt1) || isnan (g->radius))
+            break;
+          printf ("\t<circle id=\"dwg-object-%d-%u\" cx=\"%f\" cy=\"%f\" "
+                  "r=\"%f\"\n\t",
+                  obj->index, i, transform_X (g->pt1.x),
+                  transform_Y (g->pt1.y), g->radius);
+          common_entity (obj->tio.entity);
+          break;
+        case DWG_PROXY_GFX_CIRCULARARC:
+          {
+            const double a0 = atan2 (g->direction.y, g->direction.x);
+            const double a1 = a0 + g->sweep;
+            if (isnan_3RD (g->pt1) || isnan (g->radius) || isnan (g->sweep)
+                || isnan (a0))
+              break;
+            printf ("\t<path id=\"dwg-object-%d-%u\" d=\"M %f,%f A %f,%f 0 "
+                    "%d,%d %f,%f\"\n\t",
+                    obj->index, i,
+                    transform_X (g->pt1.x + g->radius * cos (a0)),
+                    transform_Y (g->pt1.y + g->radius * sin (a0)), g->radius,
+                    g->radius, fabs (g->sweep) > M_PI, g->sweep >= 0.0 ? 0 : 1,
+                    transform_X (g->pt1.x + g->radius * cos (a1)),
+                    transform_Y (g->pt1.y + g->radius * sin (a1)));
+            common_entity (obj->tio.entity);
+          }
+          break;
+        case DWG_PROXY_GFX_POLYLINE:
+        case DWG_PROXY_GFX_POLYGON:
+        case DWG_PROXY_GFX_POLYLINE_NORMAL:
+          if (!g->num_points || !g->points)
+            break;
+          printf ("\t<path id=\"dwg-object-%d-%u\" d=\"", obj->index, i);
+          for (BITCODE_RL j = 0; j < g->num_points; j++)
+            printf ("%s%c %f,%f", j ? " " : "", j ? 'L' : 'M',
+                    transform_X (g->points[j].x),
+                    transform_Y (g->points[j].y));
+          if (g->type == DWG_PROXY_GFX_POLYGON)
+            printf (" Z");
+          printf ("\"\n\t");
+          common_entity (obj->tio.entity);
+          break;
+        case DWG_PROXY_GFX_TEXT:
+        case DWG_PROXY_GFX_TEXT2:
+        case DWG_PROXY_GFX_UTEXT:
+        case DWG_PROXY_GFX_UTEXT2:
+          if (g->text && !isnan_3RD (g->pt1))
+            {
+              char *escaped = htmlescape (g->text, CP_UTF8);
+              char *color = entity_color (obj->tio.entity);
+              printf ("\t<text id=\"dwg-object-%d-%u\" x=\"%f\" y=\"%f\" "
+                      "font-family=\"Verdana\" font-size=\"%f\" "
+                      "fill=\"%s\">%s</text>\n",
+                      obj->index, i, transform_X (g->pt1.x),
+                      transform_Y (g->pt1.y), g->height, color,
+                      escaped ? escaped : "");
+              if (escaped)
+                free (escaped);
+              if (*color == '#')
+                free (color);
+            }
+          break;
+        default:
+          break;
+        }
+    }
+  dwg_free_proxy_graphics (gfx, num);
+  return 1;
+}
+
 static void
 output_INSERT (Dwg_Object *obj)
 {
@@ -1047,13 +1145,19 @@ output_object (Dwg_Object *obj)
     case DWG_TYPE_SPLINE:
       output_SPLINE (obj);
       break;
+    case DWG_TYPE_PROXY_ENTITY:
+      num = output_GRAPHICS (obj);
+      break;
     case DWG_TYPE_SEQEND:
     case DWG_TYPE_VIEWPORT:
       num = 0;
       break;
     default:
       num = 0;
+      // the proxy graphics of the entity
       if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+        num = output_GRAPHICS (obj);
+      if (!num && obj->supertype == DWG_SUPERTYPE_ENTITY)
         fprintf (stderr, "%s ignored\n", obj->name);
       // all other non-graphical objects are silently ignored
       break;

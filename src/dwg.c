@@ -4761,3 +4761,353 @@ ordered_ref_find (Dwg_Data *dwg, const BITCODE_RC code,
 
   return NULL;
 }
+
+/* Entity (proxy) graphics, ODA chapter 29. The graphics data of an entity, the
+   preview of the common entity data (DXF 92/310 for entities), starts with
+   RL size (of all, with these two RL) and RL number of chunks, followed by the
+   chunks RL size (with the 8 byte chunk header), RL type, and the payload. */
+typedef struct
+{
+  const unsigned char *p; // payload start
+  size_t pos;
+  size_t end;
+} Gfx_Reader;
+
+static bool
+gfx_need (const Gfx_Reader *restrict r, const size_t n)
+{
+  return n <= r->end && r->pos <= r->end - n;
+}
+
+static bool
+gfx_RL (Gfx_Reader *restrict r, BITCODE_RL *restrict out)
+{
+  if (!gfx_need (r, 4))
+    return false;
+  *out = (BITCODE_RL)r->p[r->pos] | ((BITCODE_RL)r->p[r->pos + 1] << 8)
+         | ((BITCODE_RL)r->p[r->pos + 2] << 16)
+         | ((BITCODE_RL)r->p[r->pos + 3] << 24);
+  r->pos += 4;
+  return true;
+}
+
+static bool
+gfx_RD (Gfx_Reader *restrict r, BITCODE_RD *restrict out)
+{
+  if (!gfx_need (r, 8))
+    return false;
+  memcpy (out, &r->p[r->pos], 8); // little-endian host, as everywhere
+  r->pos += 8;
+  return true;
+}
+
+static bool
+gfx_3RD (Gfx_Reader *restrict r, BITCODE_3RD *restrict out)
+{
+  return gfx_RD (r, &out->x) && gfx_RD (r, &out->y) && gfx_RD (r, &out->z);
+}
+
+static bool
+gfx_matrix (Gfx_Reader *restrict r, BITCODE_RD *restrict m)
+{
+  for (int i = 0; i < 16; i++)
+    if (!gfx_RD (r, &m[i]))
+      return false;
+  return true;
+}
+
+// zero terminated and padded to 4 bytes (PS), codepage encoded
+static bool
+gfx_PS (Gfx_Reader *restrict r, char **restrict out, const BITCODE_RS cp)
+{
+  size_t len = 0;
+  char *u8;
+  while (gfx_need (r, len + 1) && r->p[r->pos + len])
+    len++;
+  if (!gfx_need (r, len + 1)) // no terminator
+    return false;
+  *out = (char *)malloc (len + 1);
+  if (!*out)
+    return false;
+  memcpy (*out, &r->p[r->pos], len);
+  (*out)[len] = '\0';
+  r->pos += (len + 1 + 3) & ~(size_t)3;
+  if (r->pos > r->end)
+    r->pos = r->end;
+  u8 = bit_TV_to_utf8 (*out, cp);
+  if (u8 && u8 != *out)
+    {
+      free (*out);
+      *out = u8;
+    }
+  return true;
+}
+
+// zero terminated 2 byte pairs, padded to 4 bytes (PUS)
+static bool
+gfx_PUS (Gfx_Reader *restrict r, char **restrict out)
+{
+  size_t n = 0;
+  BITCODE_TU wstr;
+  while (gfx_need (r, 2 * n + 2)
+         && (r->p[r->pos + 2 * n] || r->p[r->pos + 2 * n + 1]))
+    n++;
+  if (!gfx_need (r, 2 * n + 2))
+    return false;
+  wstr = (BITCODE_TU)calloc (n + 1, sizeof (DWGCHAR));
+  if (!wstr)
+    return false;
+  for (size_t i = 0; i < n; i++)
+    wstr[i] = (DWGCHAR)(r->p[r->pos + 2 * i] | (r->p[r->pos + 2 * i + 1] << 8));
+  r->pos += (2 * n + 2 + 3) & ~(size_t)3;
+  if (r->pos > r->end)
+    r->pos = r->end;
+  *out = bit_convert_TU (wstr);
+  free (wstr);
+  return *out != NULL;
+}
+
+static bool
+gfx_points (Gfx_Reader *restrict r, Dwg_Proxy_Graphic *restrict g)
+{
+  if (!gfx_RL (r, &g->num_points) || g->num_points > (r->end - r->pos) / 24)
+    {
+      g->num_points = 0;
+      return false;
+    }
+  if (!g->num_points)
+    return true;
+  g->points = (BITCODE_3RD *)calloc (g->num_points, sizeof (BITCODE_3RD));
+  if (!g->points)
+    {
+      g->num_points = 0;
+      return false;
+    }
+  for (BITCODE_RL i = 0; i < g->num_points; i++)
+    if (!gfx_3RD (r, &g->points[i]))
+      return false;
+  return true;
+}
+
+// the payload of a chunk r->p[0 .. end], false on a short or invalid chunk
+static bool
+gfx_decode_chunk (Gfx_Reader *restrict r, Dwg_Proxy_Graphic *restrict g,
+                  const BITCODE_RS cp)
+{
+  BITCODE_RL i, len, raw;
+
+  switch (g->type)
+    {
+    case DWG_PROXY_GFX_EXTENTS:
+    case DWG_PROXY_GFX_XLINE:
+    case DWG_PROXY_GFX_RAY:
+      return gfx_3RD (r, &g->pt1) && gfx_3RD (r, &g->pt2);
+    case DWG_PROXY_GFX_CIRCLE:
+      return gfx_3RD (r, &g->pt1) && gfx_RD (r, &g->radius)
+             && gfx_3RD (r, &g->normal);
+    case DWG_PROXY_GFX_CIRCLE3PT:
+      return gfx_3RD (r, &g->pt1) && gfx_3RD (r, &g->pt2)
+             && gfx_3RD (r, &g->pt3);
+    case DWG_PROXY_GFX_CIRCULARARC:
+      return gfx_3RD (r, &g->pt1) && gfx_RD (r, &g->radius)
+             && gfx_3RD (r, &g->normal) && gfx_3RD (r, &g->direction)
+             && gfx_RD (r, &g->sweep) && gfx_RL (r, &g->arc_type);
+    case DWG_PROXY_GFX_CIRCULARARC3PT:
+      return gfx_3RD (r, &g->pt1) && gfx_3RD (r, &g->pt2)
+             && gfx_3RD (r, &g->pt3) && gfx_RL (r, &g->arc_type);
+    case DWG_PROXY_GFX_POLYLINE:
+    case DWG_PROXY_GFX_POLYGON:
+      return gfx_points (r, g);
+    case DWG_PROXY_GFX_POLYLINE_NORMAL:
+      return gfx_points (r, g) && gfx_3RD (r, &g->normal);
+    case DWG_PROXY_GFX_TEXT:
+      return gfx_3RD (r, &g->pt1) && gfx_3RD (r, &g->normal)
+             && gfx_3RD (r, &g->direction) && gfx_RD (r, &g->height)
+             && gfx_RD (r, &g->width_factor) && gfx_RD (r, &g->oblique_angle)
+             && gfx_PS (r, &g->text, cp);
+    case DWG_PROXY_GFX_UTEXT:
+      return gfx_3RD (r, &g->pt1) && gfx_3RD (r, &g->normal)
+             && gfx_3RD (r, &g->direction) && gfx_RD (r, &g->height)
+             && gfx_RD (r, &g->width_factor) && gfx_RD (r, &g->oblique_angle)
+             && gfx_PUS (r, &g->text);
+    case DWG_PROXY_GFX_TEXT2:
+    case DWG_PROXY_GFX_UTEXT2:
+      if (!gfx_3RD (r, &g->pt1) || !gfx_3RD (r, &g->normal)
+          || !gfx_3RD (r, &g->direction))
+        return false;
+      if (g->type == DWG_PROXY_GFX_TEXT2 ? !gfx_PS (r, &g->text, cp)
+                                         : !gfx_PUS (r, &g->text))
+        return false;
+      if (!gfx_RL (r, &len) || !gfx_RL (r, &raw) || !gfx_RD (r, &g->height)
+          || !gfx_RD (r, &g->width_factor) || !gfx_RD (r, &g->oblique_angle)
+          || !gfx_RD (r, &g->tracking))
+        return false;
+      // backwards, upside down, vertical, underlined, overlined
+      g->text_flags = 0;
+      for (i = 0; i < 5; i++)
+        {
+          if (!gfx_RL (r, &raw))
+            return false;
+          if (raw)
+            g->text_flags |= 1U << i;
+        }
+      // the font names and true type descriptor are not decoded
+      return true;
+    case DWG_PROXY_GFX_SUBENT_COLOR:
+    case DWG_PROXY_GFX_SUBENT_LAYER:
+    case DWG_PROXY_GFX_SUBENT_LINETYPE:
+    case DWG_PROXY_GFX_SUBENT_MARKER:
+    case DWG_PROXY_GFX_SUBENT_FILLON:
+    case DWG_PROXY_GFX_SUBENT_LNWEIGHT:
+      return gfx_RL (r, &g->value);
+    case DWG_PROXY_GFX_SUBENT_TRUECOLOR:
+      if (!gfx_RL (r, &g->value))
+        return false;
+      g->rgb[0] = g->value & 0xff;
+      g->rgb[1] = (g->value >> 8) & 0xff;
+      g->rgb[2] = (g->value >> 16) & 0xff;
+      return true;
+    case DWG_PROXY_GFX_SUBENT_LTSCALE:
+    case DWG_PROXY_GFX_SUBENT_THICKNESS:
+      return gfx_RD (r, &g->dvalue);
+    case DWG_PROXY_GFX_SUBENT_PLSTNAME:
+      return gfx_RL (r, &g->value) && gfx_RL (r, &g->value2);
+    case DWG_PROXY_GFX_PUSH_CLIP:
+      if (!gfx_3RD (r, &g->normal) || !gfx_3RD (r, &g->pt1))
+        return false;
+      if (!gfx_RL (r, &g->num_points) || g->num_points > (r->end - r->pos) / 16)
+        {
+          g->num_points = 0;
+          return false;
+        }
+      if (g->num_points)
+        {
+          g->points
+              = (BITCODE_3RD *)calloc (g->num_points, sizeof (BITCODE_3RD));
+          if (!g->points)
+            {
+              g->num_points = 0;
+              return false;
+            }
+        }
+      for (i = 0; i < g->num_points; i++)
+        if (!gfx_RD (r, &g->points[i].x) || !gfx_RD (r, &g->points[i].y))
+          return false;
+      {
+        BITCODE_RL front, back, draw;
+        // value: 1 front clip on, 2 back clip on, 4 draw boundary
+        if (!gfx_matrix (r, g->matrix) || !gfx_matrix (r, g->matrix2)
+            || !gfx_RL (r, &front) || !gfx_RL (r, &back)
+            || !gfx_RD (r, &g->height) || !gfx_RD (r, &g->radius)
+            || !gfx_RL (r, &draw))
+          return false;
+        g->value = (front ? 1 : 0) | (back ? 2 : 0) | (draw ? 4 : 0);
+        return true;
+      }
+    case DWG_PROXY_GFX_PUSH_MODELXFORM:
+    case DWG_PROXY_GFX_PUSH_MODELXFORM2:
+      return gfx_matrix (r, g->matrix);
+    case DWG_PROXY_GFX_POP_CLIP:
+    case DWG_PROXY_GFX_POP_MODELXFORM:
+    case DWG_PROXY_GFX_UNKNOWN37:
+      return true;
+    default: // MESH, SHELL, LWPOLYLINE, MAPPER, MATERIAL, unknown: raw
+      return false;
+    }
+}
+
+EXPORT void
+dwg_free_proxy_graphics (Dwg_Proxy_Graphic *graphics, const BITCODE_BL num)
+{
+  if (!graphics)
+    return;
+  for (BITCODE_BL i = 0; i < num; i++)
+    {
+      free (graphics[i].points);
+      free (graphics[i].text);
+      free (graphics[i].data);
+    }
+  free (graphics);
+}
+
+EXPORT int
+dwg_proxy_graphics (const Dwg_Object_Entity *restrict ent,
+                    Dwg_Proxy_Graphic **restrict graphics,
+                    BITCODE_BL *restrict num)
+{
+  const unsigned char *d;
+  Gfx_Reader hdr;
+  BITCODE_RL total, count, n = 0;
+  BITCODE_RS cp = 0;
+  size_t o = 8;
+  Dwg_Proxy_Graphic *g;
+
+  *graphics = NULL;
+  *num = 0;
+  if (!ent || !ent->preview_exists || !ent->preview || ent->preview_size < 8
+      || ent->preview_size > 0xffffffffUL)
+    return 0; // none
+  d = (const unsigned char *)ent->preview;
+  hdr = (Gfx_Reader){ d, 0, (size_t)ent->preview_size };
+  if (!gfx_RL (&hdr, &total) || !gfx_RL (&hdr, &count))
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+  if (total < 8 || total != ent->preview_size
+      || count > (total - 8) / 8) // each chunk has at least 8 bytes
+    {
+      LOG_ERROR ("Invalid proxy graphics size %u, count %u, data %u",
+                 (unsigned)total, (unsigned)count,
+                 (unsigned)ent->preview_size);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  if (ent->dwg)
+    cp = ent->dwg->header.codepage;
+  g = (Dwg_Proxy_Graphic *)calloc (count ? count : 1, sizeof (*g));
+  if (!g)
+    return DWG_ERR_OUTOFMEM;
+  while (n < count)
+    {
+      Gfx_Reader r;
+      BITCODE_RL size, type;
+      Gfx_Reader h = { d, o, total };
+      if (!gfx_RL (&h, &size) || !gfx_RL (&h, &type) || size < 8
+          || size > total - o)
+        {
+          LOG_ERROR ("Invalid proxy graphics chunk %u at %" PRIuSIZE,
+                     (unsigned)n, o);
+          break;
+        }
+      g[n].type = type;
+      g[n].size = size;
+      r = (Gfx_Reader){ d, o + 8, o + size };
+      if (!gfx_decode_chunk (&r, &g[n], cp))
+        {
+          // not decodable or truncated: keep the raw payload
+          free (g[n].points);
+          free (g[n].text);
+          g[n].points = NULL;
+          g[n].text = NULL;
+          g[n].num_points = 0;
+          g[n].data_size = size - 8;
+          if (g[n].data_size)
+            {
+              g[n].data = (BITCODE_RC *)malloc (g[n].data_size);
+              if (!g[n].data)
+                {
+                  dwg_free_proxy_graphics (g, n);
+                  return DWG_ERR_OUTOFMEM;
+                }
+              memcpy (g[n].data, &d[o + 8], g[n].data_size);
+            }
+        }
+      o += size;
+      n++;
+    }
+  if (n != count) // invalid chunk, no partial result
+    {
+      dwg_free_proxy_graphics (g, n);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  *graphics = g;
+  *num = n;
+  return 0;
+}

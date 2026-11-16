@@ -1,6 +1,7 @@
 * pre-R13: finish POLYLINE, VERTEX
 * add API for more complex entities, like 3dsolids, hatch, ACSH solids, dynblocks.
-* PROXY subentities, PROXY_ENTITY
+* PROXY graphics: decode MESH, SHELL, LWPOLYLINE, apply the sub entity
+  colors, layers and the model transformations in dwg2SVG
 * rename all internal ent->tio.ENTITY to ent->tio._ENTITY, so that all 3D names can
   stay asis. Which fixes the public API for all _3D names, to be more consistent.
 * extract seldomly used objects into extra sharedlib(s) as dynaloaded or linked plugin.

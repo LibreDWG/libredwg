@@ -3225,6 +3225,143 @@ test_clip_verts_rect (void)
   return numfailed ();
 }
 
+/* dwg_proxy_graphics(): decode the entity graphics, ODA chapter 29. The
+   primitives are a truecolor, a circle, a polyline, a TEXT2 with a padded
+   string, a MESH (raw only) and a truncated circle. */
+static void
+gfx_put (unsigned char *buf, size_t *pos, const void *src, const size_t n)
+{
+  memcpy (&buf[*pos], src, n);
+  *pos += n;
+}
+
+static int
+test_proxy_graphics (void)
+{
+  unsigned char buf[512];
+  size_t pos = 8, i;
+  uint32_t u;
+  double d;
+  Dwg_Object_Entity ent;
+  Dwg_Proxy_Graphic *g = NULL;
+  BITCODE_BL num = 0;
+  int error, nchunks = 0;
+  size_t start;
+
+#define GFX_RL(v)                                                             \
+  u = (uint32_t)(v);                                                          \
+  gfx_put (buf, &pos, &u, 4)
+#define GFX_RD(v)                                                             \
+  d = (v);                                                                    \
+  gfx_put (buf, &pos, &d, 8)
+#define GFX_BEGIN(type)                                                       \
+  start = pos;                                                                \
+  pos += 4;                                                                   \
+  GFX_RL (type)
+#define GFX_END                                                               \
+  u = (uint32_t)(pos - start);                                                \
+  memcpy (&buf[start], &u, 4);                                                \
+  nchunks++
+
+  failed = 0;
+  memset (buf, 0, sizeof (buf));
+  GFX_BEGIN (22); // truecolor
+  GFX_RL (0xc00000ff);
+  GFX_END;
+  GFX_BEGIN (2); // circle
+  GFX_RD (1.0); GFX_RD (2.0); GFX_RD (0.0);
+  GFX_RD (3.5);
+  GFX_RD (0.0); GFX_RD (0.0); GFX_RD (1.0);
+  GFX_END;
+  GFX_BEGIN (6); // polyline
+  GFX_RL (2);
+  GFX_RD (0.0); GFX_RD (0.0); GFX_RD (0.0);
+  GFX_RD (5.0); GFX_RD (6.0); GFX_RD (0.0);
+  GFX_END;
+  GFX_BEGIN (11); // text2
+  GFX_RD (7.0); GFX_RD (8.0); GFX_RD (0.0);
+  GFX_RD (0.0); GFX_RD (0.0); GFX_RD (1.0);
+  GFX_RD (1.0); GFX_RD (0.0); GFX_RD (0.0);
+  gfx_put (buf, &pos, "xyz\0", 4); // padded to 4 bytes
+  GFX_RL (3);
+  GFX_RL (1);
+  GFX_RD (4.0); GFX_RD (1.0); GFX_RD (0.0); GFX_RD (1.0);
+  GFX_RL (1); GFX_RL (0); GFX_RL (0); GFX_RL (1); GFX_RL (0);
+  gfx_put (buf, &pos, "txt.shx\0", 8);
+  gfx_put (buf, &pos, "\0\0\0\0", 4);
+  GFX_END;
+  GFX_BEGIN (8); // mesh, not decoded
+  GFX_RL (0x01020304);
+  GFX_END;
+  GFX_BEGIN (2); // circle, truncated
+  GFX_RD (1.0);
+  GFX_END;
+  u = (uint32_t)pos;
+  memcpy (buf, &u, 4);
+  u = (uint32_t)nchunks;
+  memcpy (&buf[4], &u, 4);
+
+  memset (&ent, 0, sizeof (ent));
+  ent.preview_exists = 1;
+  ent.preview = (BITCODE_TF)buf;
+  ent.preview_size = pos;
+
+  error = dwg_proxy_graphics (&ent, &g, &num);
+  if (error || num != 6 || !g)
+    {
+      fail ("proxy_graphics: error 0x%x, num %u", error, (unsigned)num);
+      dwg_free_proxy_graphics (g, num);
+      return numfailed ();
+    }
+  if (g[0].type != DWG_PROXY_GFX_SUBENT_TRUECOLOR || g[0].rgb[0] != 0xff
+      || g[0].rgb[1] || g[0].rgb[2])
+    fail ("proxy_graphics: truecolor %u rgb %x", g[0].type, g[0].rgb[0]);
+  if (g[1].type != DWG_PROXY_GFX_CIRCLE || g[1].pt1.x != 1.0
+      || g[1].pt1.y != 2.0 || g[1].radius != 3.5 || g[1].normal.z != 1.0)
+    fail ("proxy_graphics: circle");
+  if (g[2].type != DWG_PROXY_GFX_POLYLINE || g[2].num_points != 2
+      || !g[2].points || g[2].points[1].x != 5.0 || g[2].points[1].y != 6.0)
+    fail ("proxy_graphics: polyline");
+  if (g[3].type != DWG_PROXY_GFX_TEXT2 || !g[3].text
+      || strcmp (g[3].text, "xyz") || g[3].pt1.x != 7.0 || g[3].height != 4.0
+      || g[3].text_flags != (1U | 8U))
+    fail ("proxy_graphics: text2 \"%s\" flags %u",
+          g[3].text ? g[3].text : "(null)", g[3].text_flags);
+  if (g[4].type != DWG_PROXY_GFX_MESH || g[4].data_size != 4 || !g[4].data
+      || g[4].data[0] != 4)
+    fail ("proxy_graphics: mesh raw data");
+  // a short chunk keeps its raw payload, and does not read past the end
+  if (g[5].type != DWG_PROXY_GFX_CIRCLE || g[5].data_size != 8 || !g[5].data)
+    fail ("proxy_graphics: truncated circle");
+  if (!error && num == 6 && !failed)
+    ok ("proxy_graphics: decoded %u primitives", (unsigned)num);
+  dwg_free_proxy_graphics (g, num);
+
+  // invalid sizes and counts are rejected, with no allocation
+  for (i = 0; i < 4; i++)
+    {
+      Dwg_Proxy_Graphic *g2 = NULL;
+      BITCODE_BL n2 = 0;
+      unsigned char bad[16];
+      uint32_t v[2] = { i == 0 ? 0 : 16, i == 3 ? 0xffffffffU : 1 };
+      memset (bad, 0, sizeof (bad));
+      memcpy (bad, v, 8);
+      ent.preview = (BITCODE_TF)bad;
+      ent.preview_size = i == 1 ? 12 : 16;
+      error = dwg_proxy_graphics (&ent, &g2, &n2);
+      if (!error || g2 || n2)
+        fail ("proxy_graphics: invalid header %u accepted", (unsigned)i);
+      dwg_free_proxy_graphics (g2, n2);
+    }
+  if (!failed)
+    ok ("proxy_graphics: invalid headers rejected");
+#undef GFX_RL
+#undef GFX_RD
+#undef GFX_BEGIN
+#undef GFX_END
+  return numfailed ();
+}
+
 /* Regression test for GH #1487 (POINTCLOUD clippings): a box or rect
    clipping (type != 3) has exactly 2 verts in the file; only the decoder
    sets num_vertices to 2. The JSON importer allocates vertices at the
@@ -3473,6 +3610,7 @@ main (int argc, char *argv[])
   error += test_json_class_types ();
   error += test_class_object_type ();
   error += test_pointcloud_clippings ();
+  error += test_proxy_graphics ();
 #endif
   error += test_names ();
   error += test_api_version ();

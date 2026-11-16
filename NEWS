@@ -76,6 +76,14 @@ Major features:
     version has the empty format string.  dxf-check roundtrips of
     example_2000 .. 2018 are readable by ODAFileConverter now.  r2013+ solids
     are still written without body, as SAT v1 cannot be converted to SAB.
+  * Added the API dwg_proxy_graphics() and dwg_free_proxy_graphics() with
+    the Dwg_Proxy_Graphic struct, to decode the proxy graphics of an entity
+    (ODA chapter 29) into primitives: circle, arc, polyline, polygon, text,
+    xline, ray, the sub entity colors, layers, linetypes and
+    transformations, and clips.  Other chunks, like MESH and SHELL, are
+    kept raw.  The graphics are in the preview data of a PROXY_ENTITY, but
+    also of other entities, like LEADER.  dwg2SVG renders them for
+    PROXY_ENTITY and as fallback for entities it does not handle yet.
   * OLE2FRAME: the 128 byte header of the data is now decoded into
     unknown_rs, the four corner points pt1, pt_ur, pt2, pt_ll, unknown_rl1-6,
     unknown_rs2 and cfb_size.  data contains only the MS-CFB (starting with
