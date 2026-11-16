@@ -1448,7 +1448,7 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       if (dat->version >= R_2013)
         return error;
       // the ASM SAB cannot be converted to the SAT of the older versions
-      if (!memcmp (_obj->acis_data, "ASM ", 4))
+      if (_obj->sab_size >= 4 && !memcmp (_obj->acis_data, "ASM ", 4))
         {
           LOG_WARN ("%s.acis_data not written, the ASM SAB cannot be "
                     "converted to SAT",
