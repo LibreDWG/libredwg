@@ -13,9 +13,7 @@ api_process (dwg_object *obj)
   BITCODE_BD vert_cell_margin;
   BITCODE_B is_title_suppressed;
   BITCODE_B is_header_suppressed;
-  BITCODE_BL i, j, num_rowstyles;
-  Dwg_TABLESTYLE_rowstyles *rowstyles;
-  Dwg_TABLESTYLE_CellStyle sty;
+  BITCODE_BL i, j;
   BITCODE_RCd unknown_rc;
   BITCODE_BL unknown_bl1;
   BITCODE_BL unknown_bl2;
@@ -39,12 +37,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, vert_cell_margin, BD);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, is_title_suppressed, B);
   CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, is_header_suppressed, B);
-  CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, num_rowstyles, BL);
-  if (num_rowstyles != 3)
-    fail ("TABLESTYLE.num_rowstyles %d != 3", num_rowstyles);
-  if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "rowstyles",
-                                &rowstyles, NULL))
-    fail ("TABLESTYLE.rowstyles");
 
   if (dwg_version >= R_2010)
     {
@@ -52,21 +44,19 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_bl1, BL);
       CHK_ENTITY_TYPE (tblstyle, TABLESTYLE, unknown_bl2, BL);
       CHK_ENTITY_H (tblstyle, TABLESTYLE, cellstyle_handle);
-      if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "cellstyle",
-                                    &cellstyle, NULL))
-        fail ("TABLESTYLE.cellstyle");
+      if (!dwg_dynapi_entity_value (tblstyle, "TABLESTYLE", "sty", &cellstyle,
+                                    NULL))
+        fail ("TABLESTYLE.sty");
       CHK_SUBCLASS_TYPE (cellstyle, TABLESTYLE_cellstyle, id, BL);
       CHK_SUBCLASS_TYPE (cellstyle, TABLESTYLE_cellstyle, type, BL);
       CHK_SUBCLASS_UTF8TEXT (cellstyle, TABLESTYLE_cellstyle, name);
-      if (!dwg_dynapi_entity_value (&cellstyle, "TABLESTYLE_cellstyle", "cell",
-                                    &cell, NULL))
-        fail ("TABLESTYLE.cellstyle.cell");
     }
 
     /* FIXME: border is no subclass. There's no proper parent id to get to the
      * obj */
 #define CHK_BORDER(row, name)                                                 \
-  if (!dwg_dynapi_subclass_value (&rowstyle, "TABLESTYLE_rowstyle", #name,    \
+  if (!dwg_dynapi_subclass_value (&rowstyle, "TABLESTYLE_rowstyle",           \
+                                  #name "_border",                            \
                                   &border, NULL))                             \
     fail ("TABLESTYLE." #row "_rowstyle." #name "_border");                   \
   CHK_SUBCLASS_TYPE (border, TABLESTYLE_border, linewt, BSd);                 \

@@ -490,7 +490,7 @@ in_json_subclass_fixed_elems_test (void)
         "   \"ref\": [ {}, {}, {}, {} ] },\n"
         " { \"object\": \"TABLESTYLE\", \"type\": 724,\n"
         "   \"handle\": [0, 1, 2], \"name\": \"TestTable\",\n"
-        "   \"rowstyles\": [ {} ] } ] }";
+        "   \"data_rowstyle\": { \"text_height\": 1.5 } } ] }";
   char *json = (char *)malloc (strlen (src) + 1);
   Dwg_Data dwg;
   Bit_Chain dat;
@@ -520,14 +520,13 @@ in_json_subclass_fixed_elems_test (void)
     {
       Dwg_Object_DIMASSOC *da = dwg.object[0].tio.object->tio.DIMASSOC;
       Dwg_Object_TABLESTYLE *ts = dwg.object[1].tio.object->tio.TABLESTYLE;
-      // on master: ref[4]/ref[5] past the 4-element buffer,
-      // rowstyles[1]/rowstyles[2] past the 1-element buffer
-      if (!da->ref || !ts->rowstyles)
-        fail ("in_json_subclass_fixed_elems: ref or rowstyles missing");
+      // on master: ref[4]/ref[5] past the 4-element buffer
+      if (!da->ref)
+        fail ("in_json_subclass_fixed_elems: ref missing");
       else if (da->ref[4].osnap_type != 0 || da->ref[5].osnap_type != 0
                || da->ref[5].classname != NULL
-               || ts->rowstyles[1].text_height != 0.0
-               || ts->rowstyles[2].borders != NULL)
+               || ts->data_rowstyle.text_height != 1.5
+               || ts->title_rowstyle.text_height != 0.0)
         fail ("in_json_subclass_fixed_elems: fixed elems not zero-filled");
     }
   // on master: dwg_free walks 6 DIMASSOC refs and 3 rowstyles x 6 borders
@@ -601,7 +600,7 @@ in_json_mline_lines_test (void)
 
 /* Regression test for GH #1487 (in_json dotted keys into unset arrays):
    a dotted key into a subclass array that is not set (e.g.
-   "ref.classname" from example_2004.dwg, "rowstyles.text_height", or
+   "ref.classname" from example_2004.dwg, "data_rowstyle.text_height", or
    "dashes.length" with the array removed) now does what an array of one
    element does: the array gets the elements the specs walk,
    zero-filled, and its count is set to 1 (within the other array when
@@ -620,7 +619,7 @@ in_json_dotted_array_test (void)
                     "   \"ref.classname\": \"AcDbOsnapPointRef\" },\n"
                     " { \"object\": \"TABLESTYLE\", \"type\": 724,\n"
                     "   \"handle\": [0, 1, 2], \"name\": \"TestTable\",\n"
-                    "   \"rowstyles.text_height\": 2.5 },\n"
+                    "   \"data_rowstyle.text_height\": 2.5 },\n"
                     " { \"entity\": \"MLINE\", \"type\": 47,\n"
                     "   \"handle\": [0, 1, 3], \"layer\": \"0\",\n"
                     "   \"verts.lines\": [ {}, {} ] },\n"
@@ -682,22 +681,13 @@ in_json_dotted_array_test (void)
               {
                 Dwg_Object_TABLESTYLE *o
                     = dwg.object[i].tio.object->tio.TABLESTYLE;
-                // the specs walk rowstyles 3 times; 1 element would OOB
-                if (!o->rowstyles)
-                  fail ("in_json_dotted_array: rowstyles not allocated");
-                else
-                  {
-                    if (o->rowstyles[0].text_height != 2.5)
-                      fail ("in_json_dotted_array: rowstyles[0].text_height "
-                            "not set");
-                    if (o->rowstyles[2].text_height != 0.0
-                        || o->rowstyles[2].borders)
-                      fail ("in_json_dotted_array: rowstyles[2] not "
-                            "zero-filled");
-                  }
-                if (o->num_rowstyles != 1)
-                  fail ("in_json_dotted_array: num_rowstyles %u != 1",
-                        (unsigned)o->num_rowstyles);
+                // the embedded rowstyles are not allocated
+                if (o->data_rowstyle.text_height != 2.5)
+                  fail ("in_json_dotted_array: data_rowstyle.text_height "
+                        "not set");
+                if (o->header_rowstyle.text_height != 0.0)
+                  fail ("in_json_dotted_array: header_rowstyle not "
+                        "zero-filled");
                 break;
               }
             case DWG_TYPE_MLINE:
@@ -856,7 +846,7 @@ downconvert_TABLESTYLE_test (void)
   Dwg_Object obj;
   Dwg_Object_Object oo;
   Dwg_Object_TABLESTYLE ts, back;
-  Dwg_TABLESTYLE_CellStyle cs[3];
+  Dwg_TABLESTYLE_cellstyle cs[3];
   Dwg_GridFormat data_borders[2];
   Dwg_GridFormat title_borders[1];
   Dwg_Object_Object oo2;
@@ -913,31 +903,27 @@ downconvert_TABLESTYLE_test (void)
 
   downconvert_TABLESTYLE (&obj);
 
-  if (ts.num_rowstyles != 3 || !ts.rowstyles)
-    {
-      fail ("downconvert_TABLESTYLE: no rowstyles");
-      return;
-    }
-  if (ts.rowstyles[0].text_height != 4.5 || ts.rowstyles[1].text_height != 6.0
-      || ts.rowstyles[2].text_height != 4.5)
+  if (ts.data_rowstyle.text_height != 4.5
+      || ts.title_rowstyle.text_height != 6.0
+      || ts.header_rowstyle.text_height != 4.5)
     fail ("downconvert_TABLESTYLE: order data, title, header");
-  if (ts.rowstyles[0].text_alignment != 2
-      || ts.rowstyles[1].text_alignment != 5)
+  if (ts.data_rowstyle.text_alignment != 2
+      || ts.title_rowstyle.text_alignment != 5)
     fail ("downconvert_TABLESTYLE: alignment");
-  if (ts.rowstyles[0].has_bgcolor || ts.rowstyles[0].fill_color.index != 256
-      || !ts.rowstyles[1].has_bgcolor
-      || ts.rowstyles[1].fill_color.rgb != 0xc2123456)
+  if (ts.data_rowstyle.has_bgcolor || ts.data_rowstyle.fill_color.index != 256
+      || !ts.title_rowstyle.has_bgcolor
+      || ts.title_rowstyle.fill_color.rgb != 0xc2123456)
     fail ("downconvert_TABLESTYLE: fill color");
   // pre-R2010 border order: top, horizontal inside, bottom, left,
   // vertical inside, right
-  if (ts.rowstyles[0].borders[0].linewt != 25
-      || ts.rowstyles[0].borders[0].visible != 0
-      || ts.rowstyles[0].borders[5].linewt != 35
-      || ts.rowstyles[0].borders[5].visible != 1
-      || ts.rowstyles[0].borders[2].linewt != -2
-      || ts.rowstyles[0].borders[2].visible != 1)
+  if (ts.data_rowstyle.top_border.linewt != 25
+      || ts.data_rowstyle.top_border.visible != 0
+      || ts.data_rowstyle.right_border.linewt != 35
+      || ts.data_rowstyle.right_border.visible != 1
+      || ts.data_rowstyle.bot_border.linewt != -2
+      || ts.data_rowstyle.bot_border.visible != 1)
     fail ("downconvert_TABLESTYLE: data borders");
-  if (ts.rowstyles[1].borders[1].linewt != 50)
+  if (ts.title_rowstyle.hor_border.linewt != 50)
     fail ("downconvert_TABLESTYLE: title horizontal inside border");
   if (ts.horiz_cell_margin != 1.5 || ts.vert_cell_margin != 2.0)
     fail ("downconvert_TABLESTYLE: margins");
@@ -949,8 +935,9 @@ downconvert_TABLESTYLE_test (void)
   obj2.fixedtype = DWG_TYPE_TABLESTYLE;
   obj2.tio.object = &oo2;
   oo2.tio.TABLESTYLE = &back;
-  back.num_rowstyles = 3;
-  back.rowstyles = ts.rowstyles;
+  back.data_rowstyle = ts.data_rowstyle;
+  back.title_rowstyle = ts.title_rowstyle;
+  back.header_rowstyle = ts.header_rowstyle;
   back.horiz_cell_margin = 1.5;
   back.vert_cell_margin = 2.0;
   upconvert_TABLESTYLE (&obj2);
@@ -958,9 +945,9 @@ downconvert_TABLESTYLE_test (void)
     fail ("upconvert_TABLESTYLE: no cellstyles");
   else
     {
-      Dwg_TABLESTYLE_CellStyle *t = &back.cellstyles[0];
-      Dwg_TABLESTYLE_CellStyle *h = &back.cellstyles[1];
-      Dwg_TABLESTYLE_CellStyle *d = &back.cellstyles[2];
+      Dwg_TABLESTYLE_cellstyle *t = &back.cellstyles[0];
+      Dwg_TABLESTYLE_cellstyle *h = &back.cellstyles[1];
+      Dwg_TABLESTYLE_cellstyle *d = &back.cellstyles[2];
       if (t->id != 1 || h->id != 2 || d->id != 3 || t->type != 1
           || d->type != 2)
         fail ("upconvert_TABLESTYLE: ids %u %u %u", (unsigned)t->id,
@@ -997,9 +984,9 @@ downconvert_TABLESTYLE_test (void)
     }
   free (back.sty.cellstyle.content_format.text_style);
   free (back.cellstyles);
-  for (unsigned i = 0; i < 3; i++)
-    free (ts.rowstyles[i].borders);
-  free (ts.rowstyles);
+  free (ts.data_rowstyle.format_string);
+  free (ts.title_rowstyle.format_string);
+  free (ts.header_rowstyle.format_string);
   ok ("downconvert_TABLESTYLE: rowstyles and back");
 }
 

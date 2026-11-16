@@ -58844,12 +58844,12 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_H cellstyle;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "cellstyle", &cellstyle, NULL)
-        && !memcmp (&cellstyle, &tablestyle->cellstyle, sizeof (BITCODE_H)))
+    BITCODE_H cellstyle_handle;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "cellstyle_handle", &cellstyle_handle, NULL)
+        && !memcmp (&cellstyle_handle, &tablestyle->cellstyle_handle, sizeof (BITCODE_H)))
         pass ();
     else
-        fail ("TABLESTYLE.cellstyle [H]");
+        fail ("TABLESTYLE.cellstyle_handle [H]");
   }
   {
     Dwg_TABLESTYLE_cellstyle* cellstyles;

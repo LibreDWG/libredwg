@@ -9863,7 +9863,7 @@ static const Dwg_DYNAPI_field _dwg_TABLESTYLE_fields[] = {
     0,0,0, 0 },
   { "unknown_bl2",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_TABLESTYLE, unknown_bl2),
     0,0,0, 0 },
-  { "cellstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_TABLESTYLE, cellstyle),
+  { "cellstyle_handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_TABLESTYLE, cellstyle_handle),
     1,0,0, 0 },
   { "sty",	"Dwg_TABLESTYLE_cellstyle", sizeof (Dwg_TABLESTYLE_cellstyle),  OFF (struct _dwg_object_TABLESTYLE, sty),
     0,0,0, 0 },

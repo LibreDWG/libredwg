@@ -641,16 +641,13 @@ free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
   LOG_HANDLE ("free_TABLESTYLE_r2010\n");
   // The rowstyles made by downconvert_TABLESTYLE own their handle copies
-  // and colors without strings.
-  if (_obj->rowstyles)
-    for (unsigned i = 0; i < 3; i++)
-      {
-        FREE_IF (_obj->rowstyles[i].borders);
-        FREE_IF (_obj->rowstyles[i].format_string);
-        SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
-      }
-  FREE_IF (_obj->rowstyles);
-  _obj->num_rowstyles = 0;
+  // and colors without strings, and an empty format string.
+  FREE_IF (_obj->data_rowstyle.format_string);
+  FREE_IF (_obj->title_rowstyle.format_string);
+  FREE_IF (_obj->header_rowstyle.format_string);
+  SUB_FIELD_HANDLE (data_rowstyle, text_style, 5, 7);
+  SUB_FIELD_HANDLE (title_rowstyle, text_style, 5, 7);
+  SUB_FIELD_HANDLE (header_rowstyle, text_style, 5, 7);
   for (unsigned j = 0; j < _obj->sty.cellstyle.num_borders; j++)
     {
       SUB_FIELD_HANDLE (sty.cellstyle.borders[j], ltype, 3, 340);
@@ -694,8 +691,7 @@ free_TABLESTYLE_upconverted (Dwg_Object *restrict obj)
 static void
 free_TABLE_r2010 (Dwg_Object *restrict obj)
 {
-  Dwg_Entity_TABLE *_obj
-      = obj->tio.entity ? obj->tio.entity->tio.TABLE : NULL;
+  Dwg_Entity_TABLE *_obj = obj->tio.entity ? obj->tio.entity->tio.TABLE : NULL;
   if (!_obj)
     return;
   if (_obj->cells)
@@ -1061,8 +1057,7 @@ dwg_free_object (Dwg_Object *obj)
     }
   else if (obj->fixedtype == DWG_TYPE_TABLESTYLE)
     free_TABLESTYLE_upconverted (obj);
-  if (obj->fixedtype == DWG_TYPE_TABLE
-      && dwg->header.from_version >= R_2010b)
+  if (obj->fixedtype == DWG_TYPE_TABLE && dwg->header.from_version >= R_2010b)
     free_TABLE_r2010 (obj);
   switch (obj->type)
     {

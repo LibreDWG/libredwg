@@ -2092,12 +2092,12 @@ api_common_entity (dwg_object *obj)
     if (dwg_dynapi_entity_fields (#name))                                     \
       _ok = dwg_dynapi_entity_value (&strct, #name, #field, &_value, NULL);   \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &value, NULL);  \
+      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &_value, NULL); \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (strct.field == value)                                             \
+        if (strct.field == _value)                                            \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
@@ -2139,15 +2139,15 @@ api_common_entity (dwg_object *obj)
     BITCODE_3RD _value;                                                       \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&strct, #name, #field, &value, NULL);    \
+      _ok = dwg_dynapi_entity_value (&strct, #name, #field, &_value, NULL);   \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &value, NULL);  \
+      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &_value, NULL); \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (value.x == strct.field.x && value.y == strct.field.y              \
-            && value.z == strct.field.z)                                      \
+        if (_value.x == strct.field.x && _value.y == strct.field.y            \
+            && _value.z == strct.field.z)                                     \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
@@ -2205,7 +2205,7 @@ api_common_entity (dwg_object *obj)
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (value.x == strct.field.x && value.y == strct.field.y)             \
+        if (_value.x == strct.field.x && _value.y == strct.field.y)           \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \

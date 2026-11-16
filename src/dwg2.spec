@@ -1000,6 +1000,32 @@ DWG_ENTITY_END
 #undef attr
 #undef merged
 
+// The pre-r2010 row styles are three embedded structs, data, title, header.
+// grid: top, horizontal inside, bottom, left, vertical inside, right
+#define Border_fields(rs, border, i)                                          \
+  FIELD_BSd (rs.border.linewt, 274 + i);                                      \
+  FIELD_B (rs.border.visible, 284 + i);                                       \
+  FIELD_CMTC (rs.border.color, 64 + i)
+#define Rowstyle_fields(rs)                                                   \
+  FIELD_HANDLE (rs.text_style, 5, 7); /* TODO in DXF by name */               \
+  FIELD_BD (rs.text_height, 140);                                             \
+  FIELD_BS (rs.text_alignment, 170);                                          \
+  FIELD_CMTC (rs.text_color, 62);                                             \
+  FIELD_CMTC (rs.fill_color, 63);                                             \
+  FIELD_B (rs.has_bgcolor, 283);                                              \
+  Border_fields (rs, top_border, 0);                                          \
+  Border_fields (rs, hor_border, 1);                                          \
+  Border_fields (rs, bot_border, 2);                                          \
+  Border_fields (rs, left_border, 3);                                         \
+  Border_fields (rs, vert_border, 4);                                         \
+  Border_fields (rs, right_border, 5);                                        \
+  SINCE (R_2007a)                                                             \
+  {                                                                           \
+    FIELD_BL (rs.data_type, 90);                                              \
+    FIELD_BL (rs.unit_type, 91);                                              \
+    FIELD_TU (rs.format_string, 1);                                           \
+  }
+
 // See TABLE and p20.4.101
 // Added with r2005. unstable for r2010+
 // TABLESTYLE only contains the Table (R24), _Title, _Header and _Data cell style.
@@ -1046,7 +1072,7 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_BL (num_cellstyles, 0);
     VALUEOUTOFBOUNDS (num_cellstyles, 100)
 #ifndef IS_DXF
-    REPEAT (num_cellstyles, cellstyles, Dwg_TABLESTYLE_CellStyle)
+    REPEAT (num_cellstyles, cellstyles, Dwg_TABLESTYLE_cellstyle)
     REPEAT_BLOCK
         // the id before the cell style repeats the id after it
         DECODER_OR_ENCODER {
@@ -1063,39 +1089,15 @@ DWG_OBJECT (TABLESTYLE)
   }
 
   UNTIL (R_2007) {
-    FIELD_VALUE (num_rowstyles) = 3;
+    DECODER_OR_ENCODER {
+      _obj->data_rowstyle.parent = _obj;
+      _obj->title_rowstyle.parent = _obj;
+      _obj->header_rowstyle.parent = _obj;
+    }
     // 0: data, 1: title, 2: header
-    #define rowstyle rowstyles[rcount1]
-    REPEAT_CN (3, rowstyles, Dwg_TABLESTYLE_rowstyles)
-    REPEAT_BLOCK
-        // TODO in DXF by name
-        SUB_FIELD_HANDLE (rowstyle,text_style, 5, 7);
-        SUB_FIELD_BD (rowstyle,text_height, 140);
-        SUB_FIELD_BS (rowstyle,text_alignment, 170);
-        SUB_FIELD_CMTC (rowstyle,text_color, 62);
-        SUB_FIELD_CMTC (rowstyle,fill_color, 63);
-        SUB_FIELD_B (rowstyle,has_bgcolor, 283);
-
-        _obj->rowstyle.num_borders = 6;
-        // grid: top, horizontal inside, bottom, left, vertical inside, right
-        _REPEAT_CN (6, rowstyle.borders, Dwg_TABLESTYLE_border, 2)
-        REPEAT_BLOCK
-            #define border rowstyle.borders[rcount2]
-            SUB_FIELD_BSd (border,linewt, 274+rcount2);
-            SUB_FIELD_B (border,visible, 284+rcount2);
-            SUB_FIELD_CMTC (border,color, 64+rcount2);
-        END_REPEAT_BLOCK
-        END_REPEAT (rowstyle.borders)
-
-        SINCE (R_2007a) {
-          SUB_FIELD_BL (rowstyle,data_type, 90);
-          SUB_FIELD_BL (rowstyle,unit_type, 91);
-          SUB_FIELD_TU (rowstyle,format_string, 1);
-        }
-        #undef border
-    END_REPEAT_BLOCK
-    END_REPEAT (rowstyles)
-    #undef rowstyle
+    Rowstyle_fields (data_rowstyle);
+    Rowstyle_fields (title_rowstyle);
+    Rowstyle_fields (header_rowstyle);
   }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
