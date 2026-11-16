@@ -4056,7 +4056,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         }
       break;
     case 3:
-      if (eed_need_size (8, size))
+      // R11/R12 store the layer index as a 16-bit RS; later versions use RLL.
+      if (eed_need_size (dat->from_version < R_13b1 ? 2 : 8, size))
         return DWG_ERR_INVALIDEED;
       PRE (R_13b1)
       {
