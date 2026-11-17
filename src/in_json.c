@@ -2667,7 +2667,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       // all numfields are calculated from actual array sizes
       // for easier adding or deleting entries.
       else if (t->type == JSMN_PRIMITIVE
-               && (memBEGINc (key, "num_")
+               && (memBEGINc (key, "num_") || strEQc (key, "cfb_size")
                    || (strEQc (key, "sab_size")
                        && find_field (fields, "acis_data"))))
         {
@@ -2791,6 +2791,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   BITCODE_BL bits = (BITCODE_BL)(blen * 8);
                   memcpy (&((char *)_obj)[sf->offset], &bits, sf->size);
                   LOG_TRACE ("%s = " FORMAT_BL "\n", sf->name, bits);
+                }
+              // the OLE2FRAME data is written by cfb_size
+              else if (strEQc (key, "data")
+                       && (sf = find_field (fields, "cfb_size")))
+                {
+                  BITCODE_RL size = (BITCODE_RL)blen;
+                  memcpy (&((char *)_obj)[sf->offset], &size, sf->size);
+                  LOG_TRACE ("%s = " FORMAT_RL "\n", sf->name, size);
                 }
               else
                 json_set_sizefield (_obj, fields, key, blen);
