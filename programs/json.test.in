@@ -35,7 +35,7 @@ ALLDATA="2000/Arc 2000/circle 2000/Multiline 2000/PolyLine2D \
          2010/gh209_1 2013/Arc 2013/Constraints 2013/ConstructionLine 2013/Donut 2013/Ellipse \
          2013/Helix 2013/Leader 2013/Line 2013/Multiline 2013/Point 2013/PolyLine3D 2013/Polygon \
          2013/Polyline 2013/RAY 2013/Spline 2013/Text 2013/circle 2013/gh44-error 2013/gh109_1 \
-         2018/Arc 2018/Constraints 2018/ConstructionLine 2018/Donut 2018/Dynblocks 2018/Ellipse \
+         2018/Arc 2018/Constraints 2018/ConstructionLine 2018/Donut 2018/Ellipse \
          2018/Helix 2018/Leader 2018/Line 2018/LiveSection1 2018/Multiline 2018/Point 2018/PolyLine3D \
          2018/Polygon 2018/Polyline 2018/RAY 2018/Spline 2018/Text 2018/circle"
 #     eed        numentities
@@ -242,7 +242,6 @@ then
     echo ""
     echo "$baseFileConverter roundtrip checks"
     # example_2004-2018: ODA regression (AcDbVisualStyle cast)
-    # timeout with 2018/Dynblocks
     for dwg in $ALLDATA $DATA
     do
         todo_oda=

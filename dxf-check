@@ -72,7 +72,7 @@ fi
 
 # first create a dwg log to compare against
 ./log "$v" "$d"
-rm "./$b.dxf" "./$b.dwg" 2>/dev/null
+rm -f "./$b.dxf" "./$b.dwg" "$b.dwg.err" "$b.dxf.err" 2>/dev/null
 
 if ! ./dxf -y "-l$b.dwg2dxf.log" "$v" -o "$b.dxf" "$d"; then
     exit 2
@@ -104,7 +104,7 @@ if [ -f "$b.dxf" ]; then
             mv "test/$b.dwg.err" "$b.dwg.err"
             exitcode=1
         fi
-        mv -f "test/$b.dwg" "$b.oda.dwg"
+        mv -f "test/$b.dwg" "$b.oda.dwg" 2>/dev/null
     fi
     if ! ./dwg -y "$v" "$b.dxf"; then
         exit 2
