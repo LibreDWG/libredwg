@@ -177,60 +177,54 @@ entity_lweight (Dwg_Object_Entity *ent)
   return (double)lw * 0.01;
 }
 
-static char *
-entity_color (Dwg_Object_Entity *ent)
+// The SVG color of an entity, "#rrggbb" written into buf
+static const char *
+entity_color (Dwg_Object_Entity *ent, char buf[8])
 {
   // TODO: alpha?
   if (ent->color.index >= 8 && ent->color.index < 256)
     {
       const Dwg_RGB_Palette *palette = dwg_rgb_palette ();
       const Dwg_RGB_Palette *rgb = &palette[ent->color.index];
-      char *s = (char *)malloc (8);
-      sprintf (s, "#%02x%02x%02x", rgb->r, rgb->g, rgb->b);
-      return s;
+      snprintf (buf, 8, "#%02x%02x%02x", rgb->r, rgb->g, rgb->b);
+      return buf;
     }
   else if (ent->color.flag & 0x80 && !(ent->color.flag & 0x40))
     {
-      char *s = (char *)malloc (8);
-      sprintf (s, "#%06x", ent->color.rgb & 0x00ffffff);
-      return s;
+      snprintf (buf, 8, "#%06x", ent->color.rgb & 0x00ffffff);
+      return buf;
     }
   else
     switch (ent->color.index)
       {
       case 1:
-        return (char *)"red";
+        return "red";
       case 2:
-        return (char *)"yellow";
+        return "yellow";
       case 3:
-        return (char *)"green";
+        return "green";
       case 4:
-        return (char *)"cyan";
+        return "cyan";
       case 5:
-        return (char *)"blue";
+        return "blue";
       case 6:
-        return (char *)"magenta";
+        return "magenta";
       case 7:
-        return (char *)"white";
+        return "white";
       case 0:   // ByBlock
       case 256: // ByLayer
       default:
-        return (char *)"black";
+        return "black";
       }
 }
 
 static void
 common_entity (Dwg_Object_Entity *ent)
 {
-  double lweight;
-  char *color;
-  lweight = entity_lweight (ent);
-  color = entity_color (ent);
+  char buf[8];
   printf ("      style=\"fill:none;stroke:%s;stroke-width:%f;"
           "vector-effect:non-scaling-stroke\" />\n",
-          color, lweight);
-  if (*color == '#')
-    free (color);
+          entity_color (ent, buf), entity_lweight (ent));
 }
 
 // font-family for a TEXT/MTEXT entity, from its STYLE (null-safe).
@@ -269,6 +263,7 @@ output_TEXT (Dwg_Object *obj)
   Dwg_Data *dwg = obj->parent;
   Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
   char *escaped;
+  char buf[8];
   const char *fontfamily = text_fontfamily (dwg, text->style);
   BITCODE_2DPOINT pt;
 
@@ -285,7 +280,7 @@ output_TEXT (Dwg_Object *obj)
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"%s\" font-size=\"%f\" fill=\"%s\">%s</text>\n",
           obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,
-          text->height /* fontsize */, entity_color (obj->tio.entity),
+          text->height /* fontsize */, entity_color (obj->tio.entity, buf),
           escaped ? escaped : "");
   if (escaped)
     free (escaped);
@@ -297,6 +292,7 @@ output_MTEXT (Dwg_Object *obj)
   Dwg_Data *dwg = obj->parent;
   Dwg_Entity_MTEXT *mtext = obj->tio.entity->tio.MTEXT;
   char *plaintext, *wrapped, *line;
+  char buf[8];
   const char *fontfamily, *anchor;
   BITCODE_2DPOINT pt;
   double angle, line_height, first_offset, num_lines;
@@ -340,7 +336,7 @@ output_MTEXT (Dwg_Object *obj)
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" font-family=\"%s\" "
           "font-size=\"%f\" fill=\"%s\" text-anchor=\"%s\"",
           obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,
-          mtext->text_height, entity_color (obj->tio.entity), anchor);
+          mtext->text_height, entity_color (obj->tio.entity, buf), anchor);
   if (angle != 0.0)
     printf (" transform=\"rotate(%.1f %f %f)\"", angle, transform_X (pt.x),
             transform_Y (pt.y));
@@ -1029,7 +1025,8 @@ output_GRAPHICS (Dwg_Object *obj)
           if (g->text && !isnan_3RD (g->pt1))
             {
               char *escaped = htmlescape (g->text, CP_UTF8);
-              char *color = entity_color (obj->tio.entity);
+              char buf[8];
+              const char *color = entity_color (obj->tio.entity, buf);
               printf ("\t<text id=\"dwg-object-%d-%u\" x=\"%f\" y=\"%f\" "
                       "font-family=\"Verdana\" font-size=\"%f\" "
                       "fill=\"%s\">%s</text>\n",
@@ -1038,8 +1035,6 @@ output_GRAPHICS (Dwg_Object *obj)
                       escaped ? escaped : "");
               if (escaped)
                 free (escaped);
-              if (*color == '#')
-                free (color);
             }
           break;
         default:
