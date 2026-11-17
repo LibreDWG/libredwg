@@ -12552,18 +12552,18 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
             {
               // the field handles, after the 90 num_fields
               Dwg_Object_FIELDLIST *o = obj->tio.object->tio.FIELDLIST;
-              BITCODE_BL j = 0;
+              BITCODE_BL fi = 0;
               if (!o->fields && o->num_fields && o->num_fields < 20000)
                 o->fields
                     = (BITCODE_H *)xcalloc (o->num_fields, sizeof (BITCODE_H));
-              while (o->fields && j < o->num_fields && o->fields[j])
-                j++;
-              if (o->fields && j < o->num_fields)
+              while (o->fields && fi < o->num_fields && o->fields[fi])
+                fi++;
+              if (o->fields && fi < o->num_fields)
                 {
-                  o->fields[j]
+                  o->fields[fi]
                       = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
                   LOG_TRACE ("FIELDLIST.fields[%u] = " FORMAT_REF " [H 330]\n",
-                             (unsigned)j, ARGS_REF (o->fields[j]));
+                             (unsigned)fi, ARGS_REF (o->fields[fi]));
                 }
             }
           // valid ownerhandle, if not XRECORD with an ownerhandle already
