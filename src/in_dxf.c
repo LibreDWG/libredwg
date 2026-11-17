@@ -12739,7 +12739,7 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               strncpy (revision_guid, pair->value.s.ptr, 38);
               revision_guid[38] = '\0';
               if (!dwg_dynapi_entity_set_value (
-                      _obj, obj->name, "revision_guid[39]", revision_guid, 0))
+                      _obj, obj->name, "revision_guid", revision_guid, 0))
                 break;
               if (revision_guid[0] != '{' ||  /* 8 */
                   revision_guid[9] != '-' ||  /* 4 */
@@ -12774,8 +12774,17 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                                            &revision_minor1, 0);
               dwg_dynapi_entity_set_value (_obj, obj->name, "revision_minor2",
                                            &revision_minor2, 0);
-              dwg_dynapi_entity_set_value (
-                  _obj, obj->name, "revision_bytes[9]", revision_bytes, 0);
+              dwg_dynapi_entity_set_value (_obj, obj->name, "revision_bytes",
+                                           revision_bytes, 0);
+              {
+                // the all-zero guid is no revision guid
+                BITCODE_B has_revision_guid
+                    = revision_major || revision_minor1 || revision_minor2
+                      || memcmp (revision_bytes, "\0\0\0\0\0\0\0\0", 8);
+                dwg_dynapi_entity_set_value (_obj, obj->name,
+                                             "has_revision_guid",
+                                             &has_revision_guid, 0);
+              }
               break;
             }
           // fall through

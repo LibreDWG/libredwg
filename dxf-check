@@ -145,9 +145,9 @@ if [ -f "$b.dwg" ]; then
             DEBUG_CLASSES=1
         fi
         if [ -z "$DEBUG_CLASSES" ]; then
-            # We dont write unstable entities yet. WIPEOUT is converted to POINT in encode, but skipped at out_dxf
+            # We dont write unstable entities yet. HELIX is skipped at out_dxf
             grep -E '^Add entity' "$log1" |
-                grep -E -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|SECTIONOBJECT|UNKNOWN_ENT)' >"$log1.tmp"
+                grep -E -v 'entity (HELIX|UNKNOWN_ENT)' >"$log1.tmp"
         else
             grep -E '^Add entity' "$log1" |
                 grep -E -v 'entity UNKNOWN_ENT' >"$log1.tmp"
