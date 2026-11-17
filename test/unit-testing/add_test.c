@@ -1463,7 +1463,7 @@ test_material_dxf (void)
         "     0\n281\n     0\n  0\nENDSEC\n"
         "  0\nSECTION\n  2\nOBJECTS\n"
         "  0\nMATERIAL\n  5\nA0\n330\n0\n100\nAcDbMaterial\n  1\nByBlock\n"
-        " 72\n     0\n"
+        " 72\n     0\n 94\n     0\n"
         "  0\nMATERIAL\n  5\nA1\n330\n0\n100\nAcDbMaterial\n  1\nGlobal\n"
         "  0\nENDSEC\n  0\nEOF\n";
   const char *dxffile = "material.dxf";
@@ -1499,7 +1499,9 @@ test_material_dxf (void)
         continue;
       m = obj->tio.object->tio.MATERIAL;
       found++;
-      if (m->refraction_index != 1.0 || m->channel_flags != 127
+      // 94 is 0 for the first, not the default 127
+      if (m->refraction_index != 1.0
+          || m->channel_flags != (found == 1 ? 0 : 127)
           || m->specular_gloss_factor != 0.5 || m->opacity_percent != 1.0
           || m->diffusemap.blendfactor != 1.0 || m->diffusemap.projection != 2
           || m->bumpmap.tiling != 1)

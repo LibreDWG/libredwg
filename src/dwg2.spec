@@ -2913,7 +2913,7 @@ DWG_OBJECT (MATERIAL)
     FIELD_BD0 (self_illumination, 149);
     FIELD_BD0 (reflectivity, 468);
     FIELD_BL0 (illumination_model, 93);
-    FIELD_BL0 (channel_flags, 94);
+    FIELD_BL (channel_flags, 94); // 0 is not the default 127 of in_dxf
     FIELD_BL0 (mode, 282);
   }
 
