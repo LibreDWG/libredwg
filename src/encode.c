@@ -6271,9 +6271,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   size_t end_address = address + obj->size;
   size_t old_handlestream_size_bytes = 0;
   Dwg_Data *dwg = obj->parent;
-  const bool raw_unknown = (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
-                            || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
-                           && can_emit_raw_unknown (dwg, obj);
+  // also the unstable classes, which keep and re-emit their raw unknown_bits
+  const bool raw_unknown = can_emit_raw_unknown (dwg, obj);
   BITCODE_BL raw_handlestream_size = 0;
 
   PRE (R_2004a)

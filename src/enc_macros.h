@@ -231,8 +231,7 @@
   }
 #define FIELD_T32(nam, dxf)                                                   \
   {                                                                           \
-    if (_obj->nam)                                                            \
-      bit_write_T32 (str_dat, _obj->nam);                                     \
+    bit_write_T32 (str_dat, _obj->nam);                                       \
     if (!IS_FROM_TU (dat))                                                    \
       LOG_TRACE (#nam ": \"%s\" [T32 %d]\n", _obj->nam, dxf);                 \
     else                                                                      \

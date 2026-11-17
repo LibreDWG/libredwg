@@ -4601,7 +4601,7 @@ GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 static int
 dxf_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *pic = (Bit_Chain *)&dwg->thumbnail;
+  Dwg_Chain *pic = &dwg->thumbnail;
   // a r2007 section may be smaller than the offset (GHSA-63vm-xrm5-37jj)
   if (pic->chain && pic->size && pic->size > 10 && pic->size > pic->byte)
     {

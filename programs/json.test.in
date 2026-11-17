@@ -242,14 +242,13 @@ then
     echo ""
     echo "$baseFileConverter roundtrip checks"
     # example_2004-2018: ODA regression (AcDbVisualStyle cast)
-    # 2007/* Out of range
     # 2013/gh44-error: Object improperly read: <AcDbLinetypeTableRecord>
     # 2018/Constraints: Object improperly read: <AcDbProxyObject>
     for dwg in $ALLDATA $DATA
     do
         todo_oda=
         case $dwg in
-            example_20*|2007/*|2013/gh44-error|2018/Constraints) todo_oda=1 ;;
+            example_20*|2013/gh44-error|2018/Constraints) todo_oda=1 ;;
         esac
         check_oda
     done

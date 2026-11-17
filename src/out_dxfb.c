@@ -2701,7 +2701,7 @@ dxfb_acds_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 dxfb_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *pic = (Bit_Chain *)&dwg->thumbnail;
+  Dwg_Chain *pic = &dwg->thumbnail;
   if (pic->chain && pic->size && pic->size > 10)
     {
       SECTION (THUMBNAILIMAGE);

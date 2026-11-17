@@ -2302,7 +2302,7 @@ json_handles_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static int
 json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  Bit_Chain *_obj = (Bit_Chain *)&dwg->thumbnail;
+  Dwg_Chain *_obj = &dwg->thumbnail;
   if (_obj->chain && _obj->size && _obj->size > 10)
     {
       /* SECTION_PREVIEW includes the sentinel.

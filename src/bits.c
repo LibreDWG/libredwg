@@ -2799,6 +2799,12 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
 {
   size_t i, length;
 
+  // from JSON, DXF or pre-r2007 DWG, writing r2007+: read back as TU32
+  if (dat->version >= R_2007 && !IS_FROM_TU (dat))
+    {
+      bit_write_TU32 (dat, chain);
+      return;
+    }
   if (IS_FROM_TU (dat))
     {
       if (chain)

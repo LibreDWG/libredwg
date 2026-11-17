@@ -797,14 +797,16 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size,
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   *size = 0;
   assert (dwg);
-  // copy the chain data. bit_* needs a full chain with opts and version
-  dat = *(Bit_Chain *)&dwg->thumbnail;
-  if (!dat.size || !dat.chain)
+  // Dwg_Chain is not layout-compatible with Bit_Chain. bit_* needs a full
+  // chain with opts and version
+  if (!dwg->thumbnail.size || !dwg->thumbnail.chain)
     {
       LOG_INFO ("no THUMBNAIL Image Data");
       return NULL;
     }
-  // dat.byte = 0; sentinel at 16
+  dat.chain = dwg->thumbnail.chain;
+  dat.size = dwg->thumbnail.size;
+  dat.byte = dwg->thumbnail.byte; // 16 (sentinel) for r2004+, 0 otherwise
   dat.bit = 0;
   dat.opts = dwg->opts;
   dat.from_version = dwg->header.from_version;
