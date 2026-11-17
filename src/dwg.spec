@@ -5987,6 +5987,15 @@ DWG_OBJECT (PROXY_OBJECT)
               & 0xFFFFFFFF;
       }
     _obj->data = bit_read_bits (dat, _obj->data_numbits);
+    if (_obj->data && (_obj->data_numbits % 8))
+      {
+        // bit_read_bits packs the last bits LSB-first, but bit_write_bits and
+        // the DXF have them MSB-first
+        unsigned char _b = _obj->data[_obj->data_numbits / 8], _r = 0;
+        for (int _i = 0; _i < 8; _i++)
+          _r |= ((_b >> _i) & 1) << (7 - _i);
+        _obj->data[_obj->data_numbits / 8] = _r;
+      }
     LOG_TRACE ("> data_numbits: " FORMAT_BL " [ 93]\n", _obj->data_numbits);
     LOG_TRACE_TF (_obj->data, (_obj->data_numbits / 8) + (_obj->data_numbits % 8 ? 1 : 0));
   }
@@ -6004,9 +6013,22 @@ DWG_OBJECT (PROXY_OBJECT)
     FIELD_BINARY (data, _obj->data_numbits / 8, 0);
   }
 
+#ifdef IS_ENCODER
+  {
+    // the raw data of a r2007+ DWG already holds the string stream and its
+    // footer, also via JSON. Not so from DXF or across versions.
+    Bit_Chain *_ostr = str_dat;
+    str_dat = (dat->version >= R_2007 && dwg->header.from_version == dat->version
+               && !(dwg->opts & DWG_OPTS_INDXF)) ? dat : _ostr;
+    START_OBJECT_HANDLE_STREAM;
+  }
+#else
   START_OBJECT_HANDLE_STREAM;
+#endif
 #if defined(IS_DECODER)
-  while (hdl_dat->byte < hdl_dat->size - 1)
+  // up to the last full byte, the rest is padding. Keep consecutive
+  // duplicates, which PUSH_HV would drop.
+  while (bit_position (hdl_dat) + 8 <= hdl_dat->size * 8)
     {
       Dwg_Handle hdl;
       if (bit_read_H (hdl_dat, &hdl))
@@ -6015,7 +6037,15 @@ DWG_OBJECT (PROXY_OBJECT)
         {
           BITCODE_H ref
               = dwg_add_handleref (dwg, hdl.code, hdl.value, NULL);
-          PUSH_HV (_obj, num_objids, objids, ref);
+          BITCODE_H *tmp = (BITCODE_H *)realloc (
+              _obj->objids, (_obj->num_objids + 1) * sizeof (BITCODE_H));
+          if (!tmp)
+            return error | DWG_ERR_OUTOFMEM;
+          _obj->objids = tmp;
+          _obj->objids[_obj->num_objids] = ref;
+          LOG_TRACE ("objids[%u] = " FORMAT_REF " [H]\n", _obj->num_objids,
+                     ARGS_REF (ref));
+          _obj->num_objids++;
         }
     }
   LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);

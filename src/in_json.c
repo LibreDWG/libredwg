@@ -2789,6 +2789,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                        && (sf = find_field (fields, "data_numbits")))
                 {
                   BITCODE_BL bits = (BITCODE_BL)(blen * 8);
+                  BITCODE_BL given = 0;
+                  // keep the exact bit count of a preceding data_numbits,
+                  // if it fits into the last byte
+                  if (sf->size == sizeof (given))
+                    memcpy (&given, &((char *)_obj)[sf->offset], sizeof (given));
+                  if (given && given <= bits && given + 8 > bits)
+                    bits = given;
                   memcpy (&((char *)_obj)[sf->offset], &bits, sf->size);
                   LOG_TRACE ("%s = " FORMAT_BL "\n", sf->name, bits);
                 }
