@@ -124,12 +124,28 @@ ps_segment (PSDoc *ps, BITCODE_2DPOINT prev, BITCODE_2DPOINT pt, double bulge,
     PS_lineto (ps, (float)pt.x, (float)pt.y);
 }
 
-// Draw the numpts OCS points of a polyline, with optional bulges, as one
-// path.  A stroke ends the path, so stroke only once at the end.
+// The 2D point of the OCS point pt at elevation: with a tilted extrusion
+// the elevation moves it, as with ARC and CIRCLE
+static void
+transform_OCS_elevation (BITCODE_2DPOINT *out, const BITCODE_2DPOINT pt,
+                         const double elevation, const BITCODE_BE ext)
+{
+  BITCODE_3DPOINT p, w;
+  p.x = pt.x;
+  p.y = pt.y;
+  p.z = isnan (elevation) ? 0.0 : elevation;
+  transform_OCS (&w, p, ext);
+  out->x = w.x;
+  out->y = w.y;
+}
+
+// Draw the numpts OCS points of a polyline at elevation, with optional
+// bulges, as one path.  A stroke ends the path, so stroke only once at the
+// end.
 static void
 ps_polyline (PSDoc *ps, const dwg_point_2d *pts, const double *bulges,
-             const BITCODE_RL numpts, const BITCODE_BE extrusion,
-             const int closed)
+             const BITCODE_RL numpts, const double elevation,
+             const BITCODE_BE extrusion, const int closed)
 {
   BITCODE_2DPOINT pt0, prev, ptin;
   BITCODE_RL j;
@@ -137,7 +153,7 @@ ps_polyline (PSDoc *ps, const dwg_point_2d *pts, const double *bulges,
 
   ptin.x = pts[0].x;
   ptin.y = pts[0].y;
-  transform_OCS_2d (&pt0, ptin, extrusion);
+  transform_OCS_elevation (&pt0, ptin, elevation, extrusion);
   prev = pt0;
   PS_moveto (ps, (float)pt0.x, (float)pt0.y);
   for (j = 1; j < numpts; j++)
@@ -145,7 +161,7 @@ ps_polyline (PSDoc *ps, const dwg_point_2d *pts, const double *bulges,
       BITCODE_2DPOINT pt;
       ptin.x = pts[j].x;
       ptin.y = pts[j].y;
-      transform_OCS_2d (&pt, ptin, extrusion);
+      transform_OCS_elevation (&pt, ptin, elevation, extrusion);
       ps_segment (ps, prev, pt, bulges ? bulges[j - 1] : 0.0, mirrored);
       prev = pt;
     }
@@ -277,8 +293,8 @@ create_postscript (Dwg_Data *dwg, char *output)
           if (numpts && pts && !error)
             {
               double *bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
-              ps_polyline (ps, pts, bulges, numpts, pline->extrusion,
-                           pline->flag & 1);
+              ps_polyline (ps, pts, bulges, numpts, pline->elevation,
+                           pline->extrusion, pline->flag & 1);
               free (bulges);
             }
           free (pts);
@@ -292,10 +308,10 @@ create_postscript (Dwg_Data *dwg, char *output)
             {
               dwg_point_2d *pts = dwg_ent_lwpline_get_points (pline, &error);
               if (pts && !error)
-                ps_polyline (ps, pts,
-                             pline->num_bulges == numpts ? pline->bulges
-                                                         : NULL,
-                             numpts, pline->extrusion, pline->flag & 512);
+                ps_polyline (
+                    ps, pts,
+                    pline->num_bulges == numpts ? pline->bulges : NULL, numpts,
+                    pline->elevation, pline->extrusion, pline->flag & 512);
               free (pts);
             }
         }

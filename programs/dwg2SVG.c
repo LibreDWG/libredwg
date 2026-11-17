@@ -227,6 +227,21 @@ common_entity (Dwg_Object_Entity *ent)
           entity_color (ent, buf), entity_lweight (ent));
 }
 
+// The 2D point of the OCS point pt at elevation: with a tilted extrusion
+// the elevation moves it, as with ARC and CIRCLE
+static void
+transform_OCS_elevation (BITCODE_2DPOINT *out, const BITCODE_2DPOINT pt,
+                         const double elevation, const BITCODE_BE ext)
+{
+  BITCODE_3DPOINT p, w;
+  p.x = pt.x;
+  p.y = pt.y;
+  p.z = isnan (elevation) ? 0.0 : elevation;
+  transform_OCS (&w, p, ext);
+  out->x = w.x;
+  out->y = w.y;
+}
+
 // font-family for a TEXT/MTEXT entity, from its STYLE (null-safe).
 static const char *
 text_fontfamily (Dwg_Data *dwg, BITCODE_H style_ref)
@@ -276,7 +291,8 @@ output_TEXT (Dwg_Object *obj)
   else
     escaped = htmlescape (text->text_value, dwg->header.codepage);
 
-  transform_OCS_2d (&pt, text->ins_pt, text->extrusion);
+  transform_OCS_elevation (&pt, text->ins_pt, text->elevation,
+                           text->extrusion);
   printf ("\t<text id=\"dwg-object-%d\" x=\"%f\" y=\"%f\" "
           "font-family=\"%s\" font-size=\"%f\" fill=\"%s\">%s</text>\n",
           obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,
@@ -641,10 +657,10 @@ output_SOLID (Dwg_Object *obj)
   if (isnan_2BD (s1) || isnan_2BD (s2) || isnan_2BD (s3) || isnan_2BD (s4)
       || entity_invisible (obj))
     return;
-  transform_OCS_2d (&c1, s1, sol->extrusion);
-  transform_OCS_2d (&c2, s2, sol->extrusion);
-  transform_OCS_2d (&c3, s3, sol->extrusion);
-  transform_OCS_2d (&c4, s4, sol->extrusion);
+  transform_OCS_elevation (&c1, s1, sol->elevation, sol->extrusion);
+  transform_OCS_elevation (&c2, s2, sol->elevation, sol->extrusion);
+  transform_OCS_elevation (&c3, s3, sol->elevation, sol->extrusion);
+  transform_OCS_elevation (&c4, s4, sol->elevation, sol->extrusion);
 
   printf ("\t<!-- solid-%d -->\n", obj->index);
   printf ("\t<polygon id=\"dwg-object-%d\" "
@@ -738,7 +754,7 @@ output_POLYLINE_2D (Dwg_Object *obj)
       mirrored = transform_OCS_2d_is_mirrored (pline->extrusion);
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
-      transform_OCS_2d (&pt, ptin, pline->extrusion);
+      transform_OCS_elevation (&pt, ptin, pline->elevation, pline->extrusion);
       first = prev = pt;
       printf ("\t<!-- polyline_2d-%d -->\n", obj->index);
       printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
@@ -750,7 +766,8 @@ output_POLYLINE_2D (Dwg_Object *obj)
           ptin.y = pts[j].y;
           if (isnan_2BD (ptin))
             continue;
-          transform_OCS_2d (&pt, ptin, pline->extrusion);
+          transform_OCS_elevation (&pt, ptin, pline->elevation,
+                                   pline->extrusion);
           // TODO widths
           path_segment (prev, pt, bulges ? bulges[prev_j] : 0.0, mirrored);
           prev = pt;
@@ -796,7 +813,7 @@ output_LWPOLYLINE (Dwg_Object *obj)
         return;
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
-      transform_OCS_2d (&pt, ptin, pline->extrusion);
+      transform_OCS_elevation (&pt, ptin, pline->elevation, pline->extrusion);
       first = prev = pt;
       printf ("\t<!-- lwpolyline-%d -->\n", obj->index);
       printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
@@ -808,7 +825,8 @@ output_LWPOLYLINE (Dwg_Object *obj)
           ptin.y = pts[j].y;
           if (isnan_2BD (ptin))
             continue;
-          transform_OCS_2d (&pt, ptin, pline->extrusion);
+          transform_OCS_elevation (&pt, ptin, pline->elevation,
+                                   pline->extrusion);
           // TODO widths
           path_segment (prev, pt, has_bulges ? pline->bulges[prev_j] : 0.0,
                         mirrored);
