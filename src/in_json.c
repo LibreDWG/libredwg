@@ -889,7 +889,8 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW_VOID
               LOG_TRACE ("%s.%s.alpha %u [CMC]\n", name, fname, (unsigned)num);
               color->alpha = (BITCODE_RC)num;
-              color->alpha_type = 3;
+              if (!color->alpha_type) // not already set by alpha_raw/_type
+                color->alpha_type = 3;
             }
           else if (strEQc (key, "alpha_raw"))
             {
@@ -2140,8 +2141,7 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   {
     BITCODE_RC *old = NULL;
     dwg_dynapi_entity_value (_obj, obj->name, "acis_data", &old, NULL);
-    if (!dwg_dynapi_entity_set_value (_obj, obj->name, "acis_data", &s,
-                                      false))
+    if (!dwg_dynapi_entity_set_value (_obj, obj->name, "acis_data", &s, false))
       {
         free (s);
         return DWG_ERR_INVALIDTYPE;
@@ -2152,8 +2152,7 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     BITCODE_BL sab_size = len;
     // The buffer length, not an independently supplied JSON field, owns
     // sab_size, even if the version key occurs later.
-    dwg_dynapi_entity_set_value (_obj, obj->name, "sab_size", &sab_size,
-                                 true);
+    dwg_dynapi_entity_set_value (_obj, obj->name, "sab_size", &sab_size, true);
   }
   if (acis_version > 1)
     {
@@ -2183,8 +2182,7 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static const Dwg_DYNAPI_field *
-find_field (const Dwg_DYNAPI_field *restrict fields,
-            const char *restrict key)
+find_field (const Dwg_DYNAPI_field *restrict fields, const char *restrict key)
 {
   const Dwg_DYNAPI_field *f;
   for (f = &fields[0]; f->name; f++)
@@ -2325,8 +2323,8 @@ json_subclass_fixed_elems (const char *restrict name, const char *restrict key)
 // number of elements a subclass array is allocated: at least the
 // array length (or 1), and at least the fixed number the specs walk
 static int
-json_subclass_num_alloc (int num_elems,
-                         const char *restrict name, const char *restrict key)
+json_subclass_num_alloc (int num_elems, const char *restrict name,
+                         const char *restrict key)
 {
   const int fixed = json_subclass_fixed_elems (name, key);
   if (num_elems < 1)
@@ -2724,7 +2722,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     dwg_dynapi_field_set_value (
                         dwg, _obj, f, json_uint_ptr (&u, num, f->size), 0);
                   }
-                  if (strEQc (name, "JUMP") && strEQc (key, "jump_address_raw"))
+                  if (strEQc (name, "JUMP")
+                      && strEQc (key, "jump_address_raw"))
                     {
                       json_fixup_JUMP ((Dwg_Entity_JUMP *)_obj);
                       LOG_TRACE ("%s.%s: " FORMAT_BLx "\n", name, key, num);
@@ -2793,7 +2792,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   // keep the exact bit count of a preceding data_numbits,
                   // if it fits into the last byte
                   if (sf->size == sizeof (given))
-                    memcpy (&given, &((char *)_obj)[sf->offset], sizeof (given));
+                    memcpy (&given, &((char *)_obj)[sf->offset],
+                            sizeof (given));
                   if (given && given <= bits && given + 8 > bits)
                     bits = given;
                   memcpy (&((char *)_obj)[sf->offset], &bits, sf->size);
@@ -3328,11 +3328,10 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             json_mline_num_lines (obj, num_elems);
           // subclass arrays the specs walk a fixed number of times get
           // at least that many elements, zero-filled; empty stays NULL
-          elems = num_elems
-                      ? (char *)calloc (
-                            json_subclass_num_alloc (num_elems, name, key),
-                            size_elem)
-                      : NULL;
+          elems = num_elems ? (char *)calloc (json_subclass_num_alloc (
+                                                  num_elems, name, key),
+                                              size_elem)
+                            : NULL;
           dwg_dynapi_field_set_value (dwg, _obj, f, &elems, 1);
           tokens->index++;
           // array of structs
@@ -3560,7 +3559,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                           // elements the specs walk, zero-filled,
                           // and set the count to 1
                           off = (void *)calloc (
-                            json_subclass_num_alloc (1, name, key), subsize);
+                              json_subclass_num_alloc (1, name, key), subsize);
                           *(void **)((char *)_obj + f1->offset) = off;
                           if (find_numfield (fields, key))
                             json_set_numfield (_obj, fields, key, 1);
@@ -3599,7 +3598,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                           // elements the specs walk, zero-filled,
                           // and set the count to 1
                           off = (void *)calloc (
-                            json_subclass_num_alloc (1, name, key), subsize);
+                              json_subclass_num_alloc (1, name, key), subsize);
                           *(void **)((char *)_obj + f1->offset) = off;
                           if (find_numfield (fields, key))
                             json_set_numfield (_obj, fields, key, 1);
@@ -4406,8 +4405,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
             }
         }
-      if (saw_sab_size && _obj && fields
-          && find_field (fields, "acis_data"))
+      if (saw_sab_size && _obj && fields && find_field (fields, "acis_data"))
         {
           BITCODE_BL actual = 0;
           dwg_dynapi_entity_value (_obj, name, "sab_size", &actual, NULL);

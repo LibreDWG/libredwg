@@ -569,6 +569,8 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
        || obj->fixedtype == DWG_TYPE__3DSOLID                                 \
        || obj->fixedtype == DWG_TYPE_BODY))
 
+/* COMMON_3DSOLID: JSON has [0,0] for no history handle. The encoder makes it
+   a NULL, as a code 0 ref is invalid in the handle stream. */
 #define COMMON_3DSOLID                                                        \
   FIELD_B (wireframe_data_present, 0);                                        \
   if (FIELD_VALUE (wireframe_data_present))                                   \
@@ -663,12 +665,18 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
     }                                                                         \
     FIELD_BL (end_marker, 0);                                                 \
   }                                                                           \
+  ENCODER {                                                                   \
+    if (FIELD_VALUE (history_id) && !FIELD_VALUE (history_id)->handleref.code \
+        && !FIELD_VALUE (history_id)->absolute_ref)                           \
+      FIELD_VALUE (history_id) = NULL;                                        \
+  }                                                                           \
   DXF {                                                                       \
     SINCE (R_2007a) {                                                         \
       SUBCLASS (AcDb3dSolid);                                                 \
       FIELD_HANDLE (history_id, 4, 350);                                      \
     }                                                                         \
-  } else if ((SOLID_VERSION2 || SOLID_SAT1_R2007)                             \
+  } else if (((IF_IS_ENCODER ? dat->version >= R_2007a : SOLID_VERSION2)     \
+              || SOLID_SAT1_R2007)                                            \
              && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \
       FIELD_HANDLE (history_id, 4, 350);                                      \
   }                                                                           \
