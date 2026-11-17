@@ -2553,10 +2553,11 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       fclose (fp);
     }
 #endif
-  if (dat->size - dat->byte <= 200)
+  if (sec_dat.size <= 200)
     {
-      LOG_ERROR ("Not enough space for HEADER %" PRIuSIZE,
-                 dat->size - dat->byte);
+      LOG_ERROR ("Not enough space for HEADER %" PRIuSIZE, sec_dat.size);
+      if (sec_dat.chain)
+        free (sec_dat.chain);
       return error | DWG_ERR_INVALIDDWG;
     }
 
