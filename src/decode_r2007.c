@@ -47,7 +47,7 @@ static unsigned int cur_ver = 0;
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
-#define DBG_MAX_COUNT 0x100000
+#define DBG_MAX_COUNT 0x1000000
 #define DBG_MAX_SIZE 0xff0000 /* should be dat->size */
 
 /* imported */
