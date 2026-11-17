@@ -13133,6 +13133,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                   goto invalid_dxf;
                 }
               o->data_size = pair->value.l;
+              // a new buffer: cfb_size is set from its 310 header again
+              o->cfb_size = 0;
               o->data = (BITCODE_RC *)xcalloc (pair->value.l, 1);
               if (!o->data)
                 {
