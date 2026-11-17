@@ -3628,6 +3628,13 @@ DWG_TABLE (LTYPE)
       SET_PARENT_OBJ (dashes[rcount1]);
     END_REPEAT_BLOCK
     END_REPEAT (dashes);
+    ENCODER {
+      // not stored in JSON: derive it as the decoder does
+      FIELD_VALUE (has_strings_area) = 0;
+      for (rcount1 = 0; _obj->dashes && rcount1 < _obj->numdashes; rcount1++)
+        if (FIELD_VALUE (dashes[rcount1].shape_flag) & 2)
+          FIELD_VALUE (has_strings_area) = 1;
+    }
 
     UNTIL (R_2004) {
 #if !defined(IS_DECODER) && defined(USE_WRITE) && !defined(DECODE_TEST_C)
