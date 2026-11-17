@@ -12547,6 +12547,25 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               LOG_TRACE ("DIMASSOC.dimensionobj = " FORMAT_REF " [H 330]\n",
                          ARGS_REF (o->dimensionobj));
             }
+          else if (pair->code == 330 && obj->fixedtype == DWG_TYPE_FIELDLIST
+                   && strEQc (subclass, "AcDbIdSet"))
+            {
+              // the field handles, after the 90 num_fields
+              Dwg_Object_FIELDLIST *o = obj->tio.object->tio.FIELDLIST;
+              BITCODE_BL j = 0;
+              if (!o->fields && o->num_fields && o->num_fields < 20000)
+                o->fields
+                    = (BITCODE_H *)xcalloc (o->num_fields, sizeof (BITCODE_H));
+              while (o->fields && j < o->num_fields && o->fields[j])
+                j++;
+              if (o->fields && j < o->num_fields)
+                {
+                  o->fields[j]
+                      = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+                  LOG_TRACE ("FIELDLIST.fields[%u] = " FORMAT_REF " [H 330]\n",
+                             (unsigned)j, ARGS_REF (o->fields[j]));
+                }
+            }
           // valid ownerhandle, if not XRECORD with an ownerhandle already
           else if (pair->code == 330
                    && (obj->fixedtype != DWG_TYPE_XRECORD
