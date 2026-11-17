@@ -62,7 +62,7 @@ api_process (dwg_object *obj)
     fail ("old API dwg_ent_lwpline_get_numpoints");
 #endif
 
-    // CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, bulges, BD*, bulges);
+  // CHK_ENTITY_TYPE (lwpline, LWPOLYLINE, bulges, BD*, bulges);
 #ifdef USE_DEPRECATED_API
   bulges = dwg_ent_lwpline_get_bulges (lwpline, &error);
 #else
@@ -73,7 +73,7 @@ api_process (dwg_object *obj)
     {
       for (i = 0; i < lwpline->num_bulges; i++)
         (void)bulges[i];
-        // printf ("bulge[%d] of lwpline : %f\n", (int)i, bulges[i]);
+      // printf ("bulge[%d] of lwpline : %f\n", (int)i, bulges[i]);
 #ifdef USE_DEPRECATED_API
       free (bulges);
 #endif
@@ -90,9 +90,9 @@ api_process (dwg_object *obj)
     {
       for (i = 0; i < lwpline->num_points; i++)
         (void)points[i].x;
-        // printf ("point[%d] of lwpline : x = %f\ty = %f\n", (int)i,
-        // points[i].x,
-        //        points[i].y);
+      // printf ("point[%d] of lwpline : x = %f\ty = %f\n", (int)i,
+      // points[i].x,
+      //        points[i].y);
 #ifdef USE_DEPRECATED_API
       free (points);
 #endif
@@ -109,8 +109,8 @@ api_process (dwg_object *obj)
     {
       for (i = 0; i < lwpline->num_widths; i++)
         (void)width[i].start;
-        // printf ("widths[%d] of lwpline : x = %f\ty = %f\n", (int)i,
-        //        width[i].start, width[i].end);
+      // printf ("widths[%d] of lwpline : x = %f\ty = %f\n", (int)i,
+      //        width[i].start, width[i].end);
 #ifdef USE_DEPRECATED_API
       free (width);
 #endif

@@ -46,8 +46,8 @@ typedef struct dwg_field_name_type_offset
   const char *const type;    /* e.g "RS" for BITCODE_RS */
   const unsigned short size; /* e.g. 2 for RS, 4 for BL */
   const unsigned short offset;
-  const unsigned short
-      is_indirect : 1; // for pointers, references, like 3BD, CMC, H, TV
+  const unsigned short is_indirect
+      : 1; // for pointers, references, like 3BD, CMC, H, TV
   const unsigned short is_malloc : 1; // for strings and dynamic arrays only,
                                       // H*, TV, 3BD*, unknown size
   const unsigned short is_string : 1; // for null-terminated strings, use

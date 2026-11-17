@@ -28,10 +28,10 @@
 #include "encode.h"
 
 #ifndef DISABLE_JSON
-#include "in_json.h"
+#  include "in_json.h"
 #endif
 #ifndef DISABLE_DXF
-#include "in_dxf.h"
+#  include "in_dxf.h"
 #endif
 #ifndef DISABLE_DXF
 extern int enforce_null_termination (Bit_Chain *dat, bool utf8);
@@ -121,8 +121,7 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
         Dwg_Entity_LINE *line = dwg_add_LINE (mspace_hdr, &pt, &pt2);
         if (line)
           line->extrusion = (BITCODE_3DPOINT){ 0, 0, 1 };
-        Dwg_Entity_CIRCLE *circle
-            = dwg_add_CIRCLE (mspace_hdr, &pt, 1.0);
+        Dwg_Entity_CIRCLE *circle = dwg_add_CIRCLE (mspace_hdr, &pt, 1.0);
         if (circle)
           circle->extrusion = (BITCODE_3DPOINT){ 0, 0, 1 };
       }

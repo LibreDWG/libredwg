@@ -3135,8 +3135,7 @@ has_entity_DD (const Dwg_Object *obj)
     return false;
   if (type == DWG_TYPE_LWPOLYLINE || type == DWG_TYPE_LINE
       || type == DWG_TYPE_INSERT || type == DWG_TYPE_MINSERT
-      || type == DWG_TYPE_ACIDBLOCKREFERENCE
-      || type == DWG_TYPE_TABLE)
+      || type == DWG_TYPE_ACIDBLOCKREFERENCE || type == DWG_TYPE_TABLE)
     return true;
   return false;
 }

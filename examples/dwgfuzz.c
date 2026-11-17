@@ -187,8 +187,7 @@ main (int argc, char *argv[])
     JSON,
     GEOJSON,
 #endif
-  } mode
-      = INVALID;
+  } mode = INVALID;
   if (argc <= 1 || !*argv[1])
     return 1;
   if (strEQc (argv[1], "--version"))
@@ -729,8 +728,7 @@ dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
           = dwg_add_DICTIONARY (dwg, text, s1, (unsigned long)u);
       else if (dictionary
                && SSCANF_S (p, "xrecord dictionary " FMT_TBL, &text[0] SZ))
-          xrecord
-          = dwg_add_XRECORD (dictionary, text);
+          xrecord = dwg_add_XRECORD (dictionary, text);
       else if (SSCANF_S (p, "shape " FMT_PATH " (%lf %lf %lf) %lf %lf",
                          &text[0] SZ, &pt1.x, &pt1.y, &pt1.z, &scale.x, &rot))
           dwg_add_SHAPE (hdr, text, &pt1, scale.x, deg2rad (rot));

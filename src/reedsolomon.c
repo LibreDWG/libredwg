@@ -55,7 +55,8 @@ static Rs_Code rs_system = { 0x169, 16, { 0 }, { 0 }, { 0 }, 0 };
 static Rs_Code rs_data = { 0x11d, 4, { 0 }, { 0 }, { 0 }, 0 };
 
 static unsigned char
-gf_mul (const Rs_Code *restrict c, const unsigned char a, const unsigned char b)
+gf_mul (const Rs_Code *restrict c, const unsigned char a,
+        const unsigned char b)
 {
   if (!a || !b)
     return 0;
@@ -96,7 +97,8 @@ rs_init (Rs_Code *restrict c)
     {
       const unsigned char root = c->exp[(RS_FCR + i) % RS_N];
       for (j = i + 1; j > 0; j--)
-        c->gen[j] = (unsigned char)(c->gen[j - 1] ^ gf_mul (c, c->gen[j], root));
+        c->gen[j]
+            = (unsigned char)(c->gen[j - 1] ^ gf_mul (c, c->gen[j], root));
       c->gen[0] = gf_mul (c, c->gen[0], root);
     }
   c->ready = 1;
@@ -131,7 +133,8 @@ rs_encode (Rs_Code *restrict c, unsigned char *parity,
     {
       const unsigned char lead = (unsigned char)(parity[np - 1] ^ src[i]);
       for (j = np - 1; j > 0; j--)
-        parity[j] = (unsigned char)(parity[j - 1] ^ gf_mul (c, lead, c->gen[j]));
+        parity[j]
+            = (unsigned char)(parity[j - 1] ^ gf_mul (c, lead, c->gen[j]));
       parity[0] = gf_mul (c, lead, c->gen[0]);
     }
 }
@@ -143,8 +146,9 @@ rs_decode (Rs_Code *restrict c, unsigned char *blk, const int fix)
   const int t = np / 2;
   unsigned char syn[RS_MAXPARITY];
   unsigned char lambda[RS_MAXPARITY + 1]; /* error locator, low degree first */
-  unsigned char prev[RS_MAXPARITY + 1];   /* the locator before the last change */
-  unsigned char omega[RS_MAXPARITY];      /* error evaluator */
+  unsigned char
+      prev[RS_MAXPARITY + 1];        /* the locator before the last change */
+  unsigned char omega[RS_MAXPARITY]; /* error evaluator */
   int pos[RS_MAXPARITY];
   unsigned char val[RS_MAXPARITY];
   int i, j, r, nerr, deg, shift, have_err = 0;
@@ -157,7 +161,8 @@ rs_decode (Rs_Code *restrict c, unsigned char *blk, const int fix)
       /* S_j = r(alpha^(FCR+j)) */
       unsigned char s = 0;
       for (i = RS_N - 1; i >= 0; i--)
-        s = (unsigned char)(gf_mul (c, s, c->exp[(RS_FCR + j) % RS_N]) ^ blk[i]);
+        s = (unsigned char)(gf_mul (c, s, c->exp[(RS_FCR + j) % RS_N])
+                            ^ blk[i]);
       syn[j] = s;
       if (s)
         have_err = 1;
@@ -221,7 +226,8 @@ rs_decode (Rs_Code *restrict c, unsigned char *blk, const int fix)
         }
     }
   if (nerr != len)
-    return -1; /* not all roots are in the field, more errors than we can fix */
+    return -1; /* not all roots are in the field, more errors than we can fix
+                */
 
   /* omega(X) = S(X) * lambda(X) mod X^nroots */
   for (i = 0; i < np; i++)

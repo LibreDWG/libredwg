@@ -17335,8 +17335,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                       = bctrl->tio.object->tio.BLOCK_CONTROL;
                                   if (_bctrl->num_entries > 0)
                                     _bctrl->entries[_bctrl->num_entries - 1]
-                                        ->r11_idx
-                                        = new_r11_idx;
+                                        ->r11_idx = new_r11_idx;
                                 }
                               LOG_TRACE ("r11: created BLOCK_HEADER %s "
                                          "[r11_idx %d]\n",

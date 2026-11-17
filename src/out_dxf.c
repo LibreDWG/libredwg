@@ -3354,7 +3354,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           return DWG_ERR_INVALIDHANDLE;                                       \
         if (o->fixedtype == DWG_TYPE_VERTEX_##token)                          \
           error |= dwg_dxf_VERTEX_##token (dat, o);                           \
-        *i = *i + 1; /* Follow the entity links to the last vertex. */                   \
+        *i = *i + 1;                                                          \
         for (BITCODE_BL n = 0; o != last_vertex && n < obj->parent->num_objects; \
              n++)                                                             \
           {                                                                   \

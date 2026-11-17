@@ -694,8 +694,7 @@ number_anonymous_blocks (Dwg_Data *restrict dwg)
       else
         snprintf (newname, sizeof (newname), "*%c%u", _hdr->name[1],
                   (unsigned)++max[_hdr->name[1] - 'A']);
-      LOG_TRACE ("BLOCK_HEADER.name: \"%s\" => \"%s\"\n", _hdr->name,
-                 newname);
+      LOG_TRACE ("BLOCK_HEADER.name: \"%s\" => \"%s\"\n", _hdr->name, newname);
       free (_hdr->name);
       _hdr->name = strdup (newname);
       if (_blk)

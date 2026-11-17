@@ -168,7 +168,6 @@ angle_normalize (double angle)
   return angle;
 }
 
-
 // Segmentation of arc,curves into plines for geojson.
 void
 arc_split (BITCODE_2BD *pts, const int num_pts, const BITCODE_2BD ctr,

@@ -461,7 +461,8 @@
 #  define FIELD_2RD_1(nam, dxf) FIELD_2RD (nam, dxf)
 #endif
 
-// double stored as a string, in the same stream as FIELD_T (r2007+ text stream).
+// double stored as a string, in the same stream as FIELD_T (r2007+ text
+// stream).
 #ifndef FIELD_D2T
 #  define FIELD_D2T(name, dxf) FIELD_T (name, dxf)
 #endif

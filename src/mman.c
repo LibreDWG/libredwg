@@ -30,7 +30,6 @@
 #include "config.h"
 #include "mman.h"
 
-
 /* File size via the fd, or -1 on error. Avoids struct stat differences. */
 long long
 dwg_fstat_size (int fd)
@@ -124,14 +123,17 @@ mmap (void *addr, size_t len, int prot, int flags, int fd,
           return MAP_FAILED;
         }
       heap = 1;
-      { LARGE_INTEGER off; off.QuadPart = offset;
-        SetFilePointerEx (hfile, off, NULL, FILE_BEGIN); }
+      {
+        LARGE_INTEGER off;
+        off.QuadPart = offset;
+        SetFilePointerEx (hfile, off, NULL, FILE_BEGIN);
+      }
       {
         DWORD rd = 0;
         LONGLONG avail = fsize.QuadPart - (LONGLONG)offset;
         DWORD to_read = avail > (LONGLONG)len ? (DWORD)len
-                            : avail > 0 ? (DWORD)avail
-                                        : 0;
+                        : avail > 0           ? (DWORD)avail
+                                              : 0;
         if (to_read && !ReadFile (hfile, view, to_read, &rd, NULL))
           {
             DWORD err = GetLastError ();
