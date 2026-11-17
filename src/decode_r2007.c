@@ -958,11 +958,16 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       // debugging sanity
 #if 1
       /* compressed */
-      if (section->data_size > 10 * dat->size
+      if ((section->data_size > 10 * dat->size
+           && (section->num_pages <= 0 || section->max_size <= 0
+               || section->num_pages > (int64_t)dat->size
+               || section->data_size
+                      > 2 * section->num_pages * section->max_size
+               || section->data_size > (int64_t)0x7fffffff))
           || section->name_length >= (int64_t)dat->size
           || section->name_length >= 48)
         {
-          LOG_ERROR ("Invalid System Section");
+          LOG_ERROR ("Invalid System Section sizes");
           free (section);
           bit_chain_free (&page);
           sections_destroy (sections); // the root
