@@ -1965,7 +1965,7 @@ json_header_write_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   const char *codepage
       = (dwg->header.codepage == 30 || dwg->header.codepage == 0) ? "ANSI_1252"
-        : (dwg->header.version >= R_2007)                         ? "UTF-8"
+        : (dwg->header.version >= R_2007) ? "UTF-8"
                                           : "ANSI_1252";
 
   // clang-format off

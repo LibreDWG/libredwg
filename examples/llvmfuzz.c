@@ -277,7 +277,10 @@ static int
 usage (void)
 {
   printf ("\nUsage: OUT=0 VER=3 llvmfuzz_standalone INPUT...\n");
-  printf ("VER: 0=r1.4, 1=r2.0, 2=r2.10, 3=r2.10, 4=r2.4, 5=r2.6, 6=r9, 7=r10, 8=r11,\n"          "     9=r12, 10=r13, 11=r13c3, 12=r14, 13=r2000, 14=r2004, 15=r2010, 16=r2013, 17=r2018. default r2000\n");
+  printf ("VER: 0=r1.4, 1=r2.0, 2=r2.10, 3=r2.10, 4=r2.4, 5=r2.6, 6=r9, "
+          "7=r10, 8=r11,\n"
+          "     9=r12, 10=r13, 11=r13c3, 12=r14, 13=r2000, 14=r2004, "
+          "15=r2010, 16=r2013, 17=r2018. default r2000\n");
   printf ("OUT: 0=encode to dwg, 1=dxf, 2=json, 3=dxfb\n");
   return 1;
 }

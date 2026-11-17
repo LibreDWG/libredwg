@@ -368,8 +368,8 @@ bit_BS_tests (void)
 static void
 bit_BOT_tests (void)
 {
-  const BITCODE_BS values[] = { 0, 255, 256, 495, 496, 751, 752, 32767,
-                                32768, 65535 };
+  const BITCODE_BS values[]
+      = { 0, 255, 256, 495, 496, 751, 752, 32767, 32768, 65535 };
   Bit_Chain dat;
   unsigned i;
 

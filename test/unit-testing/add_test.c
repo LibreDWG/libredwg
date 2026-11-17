@@ -1996,7 +1996,7 @@ test_names (void)
           "QUOTATION MARK");
   if (!dwg_is_valid_name_u8 (dwg, "δ")) // 0xe4
     fail ("dwg_is_valid_name_u8(δ) U+03B4 SMALL DELTA ANSI_1253/r2007");
-    /* The TU strings are UTF-16 in the byte order of the host. */
+  /* The TU strings are UTF-16 in the byte order of the host. */
 #ifdef WORDS_BIGENDIAN
 #  define TU_BB "\x00\xbb\x00\x00"
 #  define TU_DD "\x00\xdd\x00\x00"

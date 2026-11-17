@@ -3375,7 +3375,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {                                                                         \
       int error = 0;                                                          \
       Dwg_Entity_POLYLINE_##token *_obj                                       \
-          = obj->tio.entity->tio.POLYLINE_##token;                            \
+        = obj->tio.entity->tio.POLYLINE_##token;                              \
       const int chain = dat->version < R_13b1                                 \
                             ? !(_obj->num_owned && _obj->vertex)              \
                             : (dat->version <= R_2000 && _obj->first_vertex   \
@@ -3389,7 +3389,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           return DWG_ERR_INVALIDHANDLE;                                       \
         if (o->fixedtype == DWG_TYPE_VERTEX_##token)                          \
           error |= dwg_dxf_VERTEX_##token (dat, o);                           \
-        *i = *i + 1; /* Follow the entity links to the last vertex. */                   \
+        *i = *i + 1;                                                          \
         for (BITCODE_BL n = 0; o != last_vertex && n < obj->parent->num_objects; \
              n++)                                                             \
           {                                                                   \
