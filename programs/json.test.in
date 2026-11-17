@@ -22,6 +22,22 @@ i=0
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14 example_r13"
 DATA="$DATA r11/entities-3d r2.10/entities r2.6/entities r10/entities"
+ALLDATA="2000/Arc 2000/circle 2000/Multiline 2000/PolyLine2D \
+         2000/PolyLine3D 2000/Polygon 2000/RAY 2000/Spline 2000/Text 2000/TS1 \
+         2004/Arc 2004/Constraints 2004/ConstructionLine 2004/Donut 2004/Ellipse \
+         2004/HatchG 2004/Helix 2004/Leader 2004/Multiline 2004/Spline 2004/material \
+         2007/ATMOS-DC22S 2007/Arc 2007/Constraints 2007/ConstructionLine 2007/Donut \
+         2007/Ellipse 2007/Helix 2007/Leader 2007/Line 2007/Multiline 2007/Point \
+         2007/PolyLine3D 2007/Polygon 2007/Polyline 2007/RAY \
+         2007/Spline 2007/Text 2007/circle 2010/Arc 2010/Constraints 2010/ConstructionLine \
+         2010/Donut 2010/Ellipse 2010/Helix 2010/Leader 2010/Line 2010/Multiline 2010/Point \
+         2010/PolyLine3D 2010/Polygon 2010/Polyline 2010/RAY 2010/Spline 2010/Text 2010/circle \
+         2010/gh209_1 2013/Arc 2013/Constraints 2013/ConstructionLine 2013/Donut 2013/Ellipse \
+         2013/Helix 2013/Leader 2013/Line 2013/Multiline 2013/Point 2013/PolyLine3D 2013/Polygon \
+         2013/Polyline 2013/RAY 2013/Spline 2013/Text 2013/circle 2013/gh44-error 2013/gh109_1 \
+         2018/Arc 2018/Constraints 2018/ConstructionLine 2018/Donut 2018/Dynblocks 2018/Ellipse \
+         2018/Helix 2018/Leader 2018/Line 2018/LiveSection1 2018/Multiline 2018/Point 2018/PolyLine3D \
+         2018/Polygon 2018/Polyline 2018/RAY 2018/Spline 2018/Text 2018/circle"
 #     eed        numentities
 TODO="r11/ACEB10 r1.4/entities"
 SED="@SED@"
@@ -225,15 +241,15 @@ if [ -n "$can_teigha" ] && [ -n "$ODAFileConverter" ]
 then
     echo ""
     echo "$baseFileConverter roundtrip checks"
-    # example_r14: CRC does not match
-    # example_2000, example_2004: ODA regression (AcDbVisualStyle cast)
-    for dwg in sample_2000 example_2000 2000/Arc 2000/Text 2000/circle \
-               2000/PolyLine2D 2000/RAY 2000/Spline \
-               r11/entities-3d r11/entities-2d example_2004
+    # example_2004-2018: ODA regression (AcDbVisualStyle cast)
+    # 2007/* Out of range
+    # 2013/gh44-error: Object improperly read: <AcDbLinetypeTableRecord>
+    # 2018/Constraints: Object improperly read: <AcDbProxyObject>
+    for dwg in $ALLDATA $DATA
     do
         todo_oda=
         case $dwg in
-            example_2000|example_2004) todo_oda=1 ;;
+            example_20*|2007/*|2013/gh44-error|2018/Constraints) todo_oda=1 ;;
         esac
         check_oda
     done
