@@ -95,6 +95,22 @@ then
     fi
     rm -f ./OcsEntities.dwg ./OcsEntities.svg
 fi
+# 2000/OcsElevation.dxf is made with ezdxf: the elevation of a LWPOLYLINE
+# and a TEXT in a tilted OCS moves them
+if [ -x "./dxf2dwg${EXEEXT}" ] &&
+   $TESTPROG "./dxf2dwg${EXEEXT}" -y -o OcsElevation.dwg \
+       "$DATADIR/2000/OcsElevation.dxf" >/dev/null 2>&1
+then
+    $TESTPROG "./dwg2SVG${EXEEXT}" OcsElevation.dwg >OcsElevation.svg 2>/dev/null
+    if grep -q 'd="M 5.515229,11.525381 L 8.945201,9.467398 L 8.113650,8.081480"' OcsElevation.svg &&
+       grep -q 'x="5.982889" y="8.417513"' OcsElevation.svg
+    then
+        echo svg OcsElevation ok
+    else
+        i=$((i+1))
+    fi
+    rm -f ./OcsElevation.dwg ./OcsElevation.svg
+fi
 
 # INSERT: a block in its own coordinates from its base point, a rotated
 # INSERT turns the other way as y is flipped, a mirrored OCS mirrors x
