@@ -5875,6 +5875,13 @@ DWG_ENTITY (PROXY_ENTITY)
     FIELD_BINARY (data, _obj->data_numbits / 8, 0);
   }
 
+#ifdef IS_ENCODER
+  // the raw r2007+ data already holds the string stream and its footer, as
+  // in PROXY_OBJECT. Not so from DXF or across versions.
+  if (dat->version >= R_2007 && dwg->header.from_version == dat->version
+      && !(dwg->opts & DWG_OPTS_INDXF))
+    str_dat = dat;
+#endif
   COMMON_ENTITY_HANDLE_DATA;
 #ifdef IS_DECODER
   {

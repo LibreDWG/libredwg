@@ -140,11 +140,11 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   {                                                                           \
     dxf_fixup_string (dat, (char *)str, 0, dxf);                              \
   }
+/* NULL payload -> empty chunk, not `size` zeros (GHSA-fxmw-mp89-7g88) */
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
     if (dxf)                                                                  \
       {                                                                       \
-        /* NULL payload -> empty chunk, not `size` zeros (GHSA-fxmw-mp89-7g88) */ \
         if (!value || !size)                                                  \
           {                                                                   \
             GROUP (dxf);                                                      \
@@ -2945,10 +2945,10 @@ dxf_write_unknown_entity (Bit_Chain *restrict dat,
       fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", 5, obj->handle.value);
     }
   error |= dxf_common_entity_handle_data (dat, obj);
-  // Proxy class markers: 90=498, 91=class id, 95=version, 70=0.
+  // Proxy class markers: 90=498, 91=class id (500 + the class index),
+  // 95=version, 70=0.
   fprintf (dat->fh, "%3i\r\n%9li\r\n", 90, 498L);
-  fprintf (dat->fh, "%3i\r\n%9li\r\n", 91,
-           klass ? (long)klass->item_class_id : 0L);
+  fprintf (dat->fh, "%3i\r\n%9li\r\n", 91, klass ? (long)obj->type : 0L);
   // Group 95 must be decimal: dxf_read_rl parses it decimal, a hex value
   // desyncs the reader.
   fprintf (dat->fh, "%3i\r\n%9li\r\n", 95,
@@ -3023,7 +3023,8 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
-/* process unsorted vertices until SEQEND */
+/* process unsorted vertices until SEQEND. A pre-R13 target uses the vertex
+   list if there is one, else the links. */
 #  define decl_dxf_process_VERTEX(token)                                      \
     static int dxf_process_VERTEX_##token (Bit_Chain *restrict dat,           \
                                            const Dwg_Object *restrict obj,    \
@@ -3031,9 +3032,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     {                                                                         \
       int error = 0;                                                          \
       Dwg_Entity_POLYLINE_##token *_obj                                       \
-          = obj->tio.entity->tio.POLYLINE_##token; \
-      /* A pre-R13 target uses the vertex list if there is one, else the     \
-         links. */                                                          \
+          = obj->tio.entity->tio.POLYLINE_##token;                            \
       const int chain = dat->version < R_13b1                                 \
                             ? !(_obj->num_owned && _obj->vertex)              \
                             : dat->version <= R_2000;                         \
@@ -3046,8 +3045,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           return DWG_ERR_INVALIDHANDLE;                                       \
         if (o->fixedtype == DWG_TYPE_VERTEX_##token)                          \
           error |= dwg_dxf_VERTEX_##token (dat, o);                           \
-        *i = *i + 1;                                                          \
-        /* Follow the entity links to the last vertex. */                   \
+        *i = *i + 1; /* Follow the entity links to the last vertex. */                   \
         for (BITCODE_BL n = 0; o != last_vertex && n < obj->parent->num_objects; \
              n++)                                                             \
           {                                                                   \
@@ -3112,7 +3110,9 @@ decl_dxf_process_VERTEX (MESH)
 decl_dxf_process_VERTEX (PFACE)
 // clang-format on
 
-/* process if seqend before attribs */
+/* process if seqend before attribs. A pre-R13 target uses the attribs list
+   if there is one. Follow the entity links to the last attrib. The SEQEND may
+   lie between the attribs. Without links the next object is next. */
 #  define decl_dxf_process_INSERT(token)                                      \
     static int dxf_process_##token (Bit_Chain *restrict dat,                  \
                                     const Dwg_Object *restrict obj,           \
@@ -3123,7 +3123,6 @@ decl_dxf_process_VERTEX (PFACE)
                                                                               \
       if (!_obj->has_attribs)                                                 \
         return 0;                                                             \
-      /* A pre-R13 target uses the attribs list if there is one. */          \
       if (dat->version < R_13b1 ? !(_obj->num_owned && _obj->attribs)         \
                                 : dat->version <= R_2000)                     \
       {                                                                       \
@@ -3138,8 +3137,6 @@ decl_dxf_process_VERTEX (PFACE)
         if (o->fixedtype == DWG_TYPE_ATTRIB)                                  \
           error |= dwg_dxf_ATTRIB (dat, o);                                   \
         *i = *i + 1;                                                          \
-        /* Follow the entity links to the last attrib. The SEQEND may lie  \
-           between the attribs. Without links the next object is next. */   \
         for (BITCODE_BL n = 0; o != last_attrib && n < obj->parent->num_objects; \
              n++)                                                             \
           {                                                                   \
@@ -4316,11 +4313,12 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               || o->fixedtype == DWG_TYPE_ENDBLK)
             continue;
           // JUMP is not an entity but a "resume reading at this offset" marker
-          // of the R11 entity sections, and it carries no drawing data. DXF has
-          // no such record, and JUMP has no ownerhandle, so the branch below
-          // would emit it into mspace and break the POLYLINE-VERTEX-SEQEND
-          // sequence for conformant readers. decode.c already keeps JUMP out
-          // of the block header entity list for the same reason.
+          // of the R11 entity sections, and it carries no drawing data. DXF
+          // has no such record, and JUMP has no ownerhandle, so the branch
+          // below would emit it into mspace and break the
+          // POLYLINE-VERTEX-SEQEND sequence for conformant readers. decode.c
+          // already keeps JUMP out of the block header entity list for the
+          // same reason.
           if (o->fixedtype == DWG_TYPE_JUMP)
             continue;
           ohdl = o->tio.entity->ownerhandle;
@@ -4457,7 +4455,11 @@ dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 // The constant part of the ACDSDATA section, as AutoCAD writes it: the
 // versions and the 6 schemas, with the schema indices 0 AcDb_Thumbnail_Schema,
 // 1 AcDb3DSolid_ASM_Data and 4 built-in. Pairs of group code and value.
-static const struct { int code; const char *value; } acds_schema_dxf[] = {
+static const struct
+{
+  int code;
+  const char *value;
+} acds_schema_dxf[] = {
   { 70, "2" },
   { 71, "2" },
   { 0, "ACDSSCHEMA" },
@@ -4583,7 +4585,7 @@ dxf_acds_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       GROUP (2);
       fprintf (dat->fh, "%s\r\n",
                rec[i].schidx == ACDS_SCHEMA_THUMBNAIL ? "Thumbnail_Data"
-                                                       : "ASM_Data");
+                                                      : "ASM_Data");
       GROUP (280);
       fprintf (dat->fh, "15\r\n");
       GROUP (94);
