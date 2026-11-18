@@ -3863,7 +3863,45 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
               }
             break;
-          case SECTION_VBAPROJECT: // nyi
+          case SECTION_VBAPROJECT:
+            {
+              // the VBA project data: the section, or else the data of the
+              // VBA_PROJECT object, e.g. from DXF
+              Dwg_VBAProject *_obj = &dwg->vbaproject;
+              const unsigned char *vdata = NULL;
+              size_t vsize = 0;
+              if (_obj->size && _obj->unknown_bits)
+                {
+                  vdata = (const unsigned char *)_obj->unknown_bits;
+                  vsize = _obj->size;
+                }
+              else
+                for (BITCODE_BL vi = 0; vi < dwg->num_objects; vi++)
+                  {
+                    const Dwg_Object *vobj = &dwg->object[vi];
+                    if (vobj->fixedtype == DWG_TYPE_VBA_PROJECT
+                        && vobj->tio.object
+                        && vobj->tio.object->tio.VBA_PROJECT)
+                      {
+                        const Dwg_Object_VBA_PROJECT *vba
+                            = vobj->tio.object->tio.VBA_PROJECT;
+                        if (vba->data && vba->data_size)
+                          {
+                            vdata = vba->data;
+                            vsize = vba->data_size;
+                          }
+                        break;
+                      }
+                  }
+              if (!vsize)
+                break;
+              bit_chain_alloc (&sec_dat[type]);
+              str_dat = hdl_dat = dat = &sec_dat[type];
+              bit_chain_set_version (dat, old_dat);
+              bit_write_TF (dat, (BITCODE_TF)vdata, vsize);
+              LOG_TRACE ("-size: %" PRIuSIZE "\n", dat->byte);
+            }
+            break;
           default:
             break;
           }

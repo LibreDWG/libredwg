@@ -1268,12 +1268,39 @@ DWG_OBJECT (VBA_PROJECT)
     FIELD_BL (data_size, 90);
 #endif
 #ifndef IS_FREE
+#  ifdef IS_ENCODER
+    // since r2004 the VBA data are in the VBAProject section
+    if (dat->version >= R_2004a)
+      {
+      }
+    else
+#  endif
     if (!obj->size || _obj->data_size < obj->size)
       {
         FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
       }
     else
-      LOG_ERROR ("Invalid data_size ignored");
+      {
+        LOG_ERROR ("Invalid data_size ignored");
+        DECODER
+        {
+          // the data are in the VBAProject section
+          if (dwg->vbaproject.size && dwg->vbaproject.unknown_bits)
+            {
+              FIELD_VALUE (data) = (BITCODE_RC *)malloc (dwg->vbaproject.size);
+              if (FIELD_VALUE (data))
+                {
+                  memcpy (FIELD_VALUE (data), dwg->vbaproject.unknown_bits,
+                          dwg->vbaproject.size);
+                  FIELD_VALUE (data_size) = dwg->vbaproject.size;
+                }
+              else
+                FIELD_VALUE (data_size) = 0;
+            }
+          else
+            FIELD_VALUE (data_size) = 0;
+        }
+      }
 #else
     FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
 #endif
