@@ -233,8 +233,11 @@ Minor bugfixes / fuzzing fixes:
   * DXF import: the FIELDLIST fields and SECTION_MANAGER sections were lost
     (read as owner), $DWGCODEPAGE UTF-8 and UTF-16 are accepted, $TIMEZONE
     is signed.  The VBAProject section is written.  Unknown entities are
-    exported as ACAD_PROXY_ENTITY with their class data, in the ODA order.
-    254 of the 262 test DWGs 2000-2018 roundtrip through DXF and ODA now
+    exported as ACAD_PROXY_ENTITY with their class data, in the ODA order,
+    including its object id references.  The *UNDERLAY entities are read
+    with the *REFERENCE record name.  R2010+ DWGs written with a low
+    $ACADMAINTVER keep the bitsize_hi layout.
+    257 of the 262 test DWGs 2000-2018 roundtrip through DXF and ODA now
     (196 before).  GH #1546.
   * Fixed the OSS-Fuzz issues 586576797, 587020301, 583493833
     (heap-buffer-overflow in dwg_encode_eed_data, dxf_write_eed, json_eed
