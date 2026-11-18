@@ -2931,11 +2931,11 @@ dxf_write_unknown_entity (Bit_Chain *restrict dat,
 {
   const Dwg_Data *dwg = obj->parent;
   Dwg_Class *klass = NULL;
-  int j = (int)obj->type - 500;
+  int cidx = (int)obj->type - 500;
   int error = 0;
 
-  if (j >= 0 && j < (int)dwg->num_classes)
-    klass = &dwg->dwg_class[j];
+  if (cidx >= 0 && cidx < (int)dwg->num_classes)
+    klass = &dwg->dwg_class[cidx];
 
   fprintf (dat->fh, "%3i\r\n%s\r\n", 0, "ACAD_PROXY_ENTITY");
   if (dat->version > R_11 || dwg->header_vars.HANDLING)
