@@ -22465,6 +22465,20 @@ dwg_ent_table_get_data_vert_right_visibility (
 
 #endif /* __AFL_COMPILER ************************************************ */
 
+/* R13-R2000: the vertex after vobj of a POLYLINE, by its next_entity link
+   as dwg_next_entity: vertices added later, e.g. the fit vertices of a
+   spline-fit POLYLINE, are after the SEQEND in the objects but linked in
+   their place.  NULL after vlast, or after as many steps as objects,
+   which only a broken, cyclic chain takes.  */
+static Dwg_Object *
+polyline_next_vertex (const Dwg_Object *vobj, const Dwg_Object *vlast,
+                      BITCODE_BL *steps)
+{
+  if (vobj == vlast || ++*steps >= vobj->parent->num_objects)
+    return NULL;
+  return dwg_next_entity (vobj);
+}
+
 /** Returns number of vertices
  */
 EXPORT BITCODE_BL
@@ -22486,6 +22500,7 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
+          BITCODE_BL steps = 0;
           if (!vobj)
             *error = 1;
           else
@@ -22498,7 +22513,7 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
                     *error = 1; // return not all vertices, but some
                 }
               // vlast is the last vertex, not one past it
-              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
+              while ((vobj = polyline_next_vertex (vobj, vlast, &steps)));
             }
         }
       else // <r13: iterate over vertices until seqend
@@ -22573,11 +22588,11 @@ polyline_2d_vertices_r13 (Dwg_Data *restrict dwg,
   BITCODE_BL i = 0;
   Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
   Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
+  BITCODE_BL steps = 0;
   if (!vobj)
     *error = 1;
-  while (vobj && polyline_2d_add_vertex (verts, &i, num_points, vobj, error)
-         && vobj != vlast)
-    vobj = dwg_next_object (vobj);
+  while (vobj && polyline_2d_add_vertex (verts, &i, num_points, vobj, error))
+    vobj = polyline_next_vertex (vobj, vlast, &steps);
 }
 
 // <R13: iterate over the vertices until the SEQEND
@@ -22718,6 +22733,7 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
+          BITCODE_BL steps = 0;
           if (!vobj)
             *error = 1;
           else
@@ -22735,7 +22751,7 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
                     }
                 }
               // vlast is the last vertex, not one past it
-              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
+              while ((vobj = polyline_next_vertex (vobj, vlast, &steps)));
             }
         }
       else // <r13: iterate over vertices until seqend
@@ -22810,6 +22826,7 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
+          BITCODE_BL steps = 0;
           if (!vobj)
             *error = 1;
           else
@@ -22836,7 +22853,7 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
                     }
                 }
               // vlast is the last vertex, not one past it
-              while (vobj != vlast && (vobj = dwg_next_object (vobj)));
+              while ((vobj = polyline_next_vertex (vobj, vlast, &steps)));
             }
         }
       else // <r13: iterate over vertices until seqend
