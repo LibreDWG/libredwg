@@ -3071,6 +3071,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     if (_verp && !_obj->maint_rel_version)
       _obj->maint_rel_version = _verp->maint_rel_version;
+    // e.g. from DXF. The r2010+ layout (bitsize_hi) is only written for
+    // maint_version > 3, which ODA and AutoCAD need. See GH #1546.
+    if (dwg->header.version >= R_2010 && _obj->maint_version <= 3)
+      {
+        _obj->maint_version = 4;
+        _obj->app_maint_version = 4;
+      }
     if (!_obj->app_dwg_version)
       _obj->app_dwg_version = _obj->dwg_version;
     if (!_obj->app_maint_version)
