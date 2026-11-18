@@ -12574,6 +12574,28 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                              (unsigned)fi, ARGS_REF (o->fields[fi]));
                 }
             }
+          else if (pair->code == 330
+                   && obj->fixedtype == DWG_TYPE_SECTION_MANAGER
+                   && strEQc (subclass, "AcDbSectionManager"))
+            {
+              // the section handles, after the 90 num_sections
+              Dwg_Object_SECTION_MANAGER *o
+                  = obj->tio.object->tio.SECTION_MANAGER;
+              BITCODE_BL si = 0;
+              if (!o->sections && o->num_sections && o->num_sections < 20000)
+                o->sections = (BITCODE_H *)xcalloc (o->num_sections,
+                                                    sizeof (BITCODE_H));
+              while (o->sections && si < o->num_sections && o->sections[si])
+                si++;
+              if (o->sections && si < o->num_sections)
+                {
+                  o->sections[si]
+                      = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
+                  LOG_TRACE ("SECTION_MANAGER.sections[%u] = " FORMAT_REF
+                             " [H 330]\n",
+                             (unsigned)si, ARGS_REF (o->sections[si]));
+                }
+            }
           // valid ownerhandle, if not XRECORD with an ownerhandle already
           else if (pair->code == 330
                    && (obj->fixedtype != DWG_TYPE_XRECORD
