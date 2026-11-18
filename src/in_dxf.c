@@ -6112,7 +6112,10 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 #  define CHK_rowstyles                                                       \
     if (i < 0 || i >= 3)                                                      \
-    return NULL
+      {                                                                       \
+        dxf_free_pair (pair);                                                 \
+        return NULL;                                                          \
+      }
 
   while (pair != NULL && pair->code != 0)
     {
@@ -6125,7 +6128,10 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_rowstyles;
           hdl = find_tablehandle (dwg, pair);
           if (!hdl)
-            return NULL;
+            {
+              dxf_free_pair (pair);
+              return NULL;
+            }
           rowstyles[i]->text_style = hdl;
           LOG_TRACE ("%s.rowstyles[%d].text_style = " FORMAT_REF " [H %d]\n",
                      obj->name, i, ARGS_REF (hdl), pair->code);
