@@ -231,6 +231,21 @@ rec_cmp (const void *a, const void *b)
   return 0;
 }
 
+typedef struct
+{
+  BITCODE_RLL handle;
+  unsigned pos;
+} Handle_Pos;
+
+static int
+handlepos_cmp (const void *a, const void *b)
+{
+  const Handle_Pos *ha = (const Handle_Pos *)a, *hb = (const Handle_Pos *)b;
+  if (ha->handle != hb->handle)
+    return ha->handle < hb->handle ? -1 : 1;
+  return ha->pos < hb->pos ? -1 : ha->pos > hb->pos;
+}
+
 /* The records to write: the SAB data of the ACIS entities, and the records
    read which do not belong to an ACIS entity we have, as the thumbnail. Sorted
    by schema and handle. Free the result. */
@@ -264,7 +279,6 @@ acds_collect_records (const Dwg_Data *restrict dwg, unsigned *restrict pnum)
   for (i = 0; i < dwg->acds.num_records; i++)
     {
       const Dwg_AcDs_Record *r = &dwg->acds.records[i];
-      unsigned j;
       if (!r->data || !r->size)
         continue;
       // the thumbnail has no object. Others only if still there, and not
@@ -272,16 +286,38 @@ acds_collect_records (const Dwg_Data *restrict dwg, unsigned *restrict pnum)
       if (r->schidx != ACDS_SCHEMA_THUMBNAIL
           && !dwg_resolve_handle_silent (dwg, r->handle))
         continue;
-      for (j = 0; j < n; j++)
-        if (rec[j].handle == r->handle)
-          break;
-      if (j < n)
-        continue;
       rec[n].handle = r->handle;
       rec[n].schidx = r->schidx;
       rec[n].data = r->data;
       rec[n].size = r->size;
       n++;
+    }
+  /* Drop later records with an already seen handle (the first one wins, the
+     SAB data of the entities come first). GHSA-qr3r-4gxg-wmf4: sort once
+     instead of a linear scan per record, which was quadratic. */
+  if (n > 1)
+    {
+      Handle_Pos *hp = (Handle_Pos *)malloc (n * sizeof (Handle_Pos));
+      unsigned k = 0;
+      if (!hp)
+        {
+          free (rec);
+          return NULL;
+        }
+      for (i = 0; i < n; i++)
+        {
+          hp[i].handle = rec[i].handle;
+          hp[i].pos = i;
+        }
+      qsort (hp, n, sizeof (Handle_Pos), handlepos_cmp);
+      for (i = 0; i < n; i++)
+        if (i > 0 && hp[i].handle == hp[i - 1].handle)
+          rec[hp[i].pos].data = NULL; // duplicate marker
+      free (hp);
+      for (i = 0; i < n; i++)
+        if (rec[i].data)
+          rec[k++] = rec[i];
+      n = k;
     }
   if (!n)
     {
