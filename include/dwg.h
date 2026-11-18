@@ -6706,18 +6706,28 @@ typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER
   BITCODE_H  block;
 } Dwg_Object_DYNAMICBLOCKPURGEPREVENTER;
 
+typedef struct _dwg_PERSUBENTMGR_Record
+{
+  struct _dwg_object_PERSUBENTMGR *parent;
+  BITCODE_BL record_type;     /*!< DXF 90; observed types 3, 5, 7 */
+  BITCODE_BL unknown_bl;      /*!< DXF 90 */
+  BITCODE_BL num_history_ids; /*!< DXF 90 */
+  BITCODE_BL *history_ids;    /*!< DXF 90; record ID and referenced history IDs */
+  BITCODE_BL num_data_values; /*!< DXF 90 */
+  BITCODE_BL *data_values;    /*!< DXF 90; raw type-dependent payload */
+} Dwg_PERSUBENTMGR_Record;
+
 typedef struct _dwg_object_PERSUBENTMGR
 {
   struct _dwg_object_object *parent;
   BITCODE_BL class_version;   /*!< DXF 90 2 */
   BITCODE_BL unknown_0;       /*!< DXF 90 0 */
   BITCODE_BL unknown_2;       /*!< DXF 90 2 */
-  BITCODE_BL numassocsteps;   /*!< DXF 90 3 from ASSOCPERSSUBENTMANAGER */
-  BITCODE_BL numassocsubents; /*!< DXF 90 0 from ASSOCPERSSUBENTMANAGER */
-  BITCODE_BL num_steps;       /*!< DXF 90 1 */
-  BITCODE_BL *steps;          /*!< DXF 90 */
-  BITCODE_BL num_subents;     /*!< DXF 90 */
-  BITCODE_BL *subents;        /*!< DXF 90 types/handles? */
+  BITCODE_BL unknown_bl1;     /*!< DXF 90 */
+  BITCODE_BL num_records;     /*!< DXF 90 */
+  Dwg_PERSUBENTMGR_Record *records;
+  BITCODE_BL num_history_ids; /*!< DXF 90 */
+  BITCODE_BL *history_ids;    /*!< DXF 90 */
 } Dwg_Object_PERSUBENTMGR;
 
 // The dynamic variant of above. May be frozen as static PERSUBENTMGR

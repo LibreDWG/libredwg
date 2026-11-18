@@ -54153,64 +54153,44 @@ static int test_PERSUBENTMGR (const Dwg_Object *obj)
     persubentmgr->class_version--;
   }
   {
-    BITCODE_BL num_steps;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_steps", &num_steps, NULL)
-        && num_steps == persubentmgr->num_steps)
+    BITCODE_BL* history_ids;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_history_ids", &count, NULL)
+        && dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "history_ids", &history_ids, NULL)
+        && history_ids == persubentmgr->history_ids)
       pass ();
     else
-      fail ("PERSUBENTMGR.num_steps [BL] %u != %u", persubentmgr->num_steps, num_steps);
-    num_steps++;
-    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "num_steps", &num_steps, 0)
-        && num_steps == persubentmgr->num_steps)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.num_steps [BL] set+1 %u != %u", persubentmgr->num_steps, num_steps);
-    persubentmgr->num_steps--;
+      fail ("PERSUBENTMGR.history_ids [BL*] * %u num_history_ids", count);
   }
   {
-    BITCODE_BL num_subents;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_subents", &num_subents, NULL)
-        && num_subents == persubentmgr->num_subents)
+    BITCODE_BL num_history_ids;
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_history_ids", &num_history_ids, NULL)
+        && num_history_ids == persubentmgr->num_history_ids)
       pass ();
     else
-      fail ("PERSUBENTMGR.num_subents [BL] %u != %u", persubentmgr->num_subents, num_subents);
-    num_subents++;
-    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "num_subents", &num_subents, 0)
-        && num_subents == persubentmgr->num_subents)
+      fail ("PERSUBENTMGR.num_history_ids [BL] %u != %u", persubentmgr->num_history_ids, num_history_ids);
+    num_history_ids++;
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "num_history_ids", &num_history_ids, 0)
+        && num_history_ids == persubentmgr->num_history_ids)
       pass ();
     else
-      fail ("PERSUBENTMGR.num_subents [BL] set+1 %u != %u", persubentmgr->num_subents, num_subents);
-    persubentmgr->num_subents--;
+      fail ("PERSUBENTMGR.num_history_ids [BL] set+1 %u != %u", persubentmgr->num_history_ids, num_history_ids);
+    persubentmgr->num_history_ids--;
   }
   {
-    BITCODE_BL numassocsteps;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "numassocsteps", &numassocsteps, NULL)
-        && numassocsteps == persubentmgr->numassocsteps)
+    BITCODE_BL num_records;
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_records", &num_records, NULL)
+        && num_records == persubentmgr->num_records)
       pass ();
     else
-      fail ("PERSUBENTMGR.numassocsteps [BL] %u != %u", persubentmgr->numassocsteps, numassocsteps);
-    numassocsteps++;
-    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "numassocsteps", &numassocsteps, 0)
-        && numassocsteps == persubentmgr->numassocsteps)
+      fail ("PERSUBENTMGR.num_records [BL] %u != %u", persubentmgr->num_records, num_records);
+    num_records++;
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "num_records", &num_records, 0)
+        && num_records == persubentmgr->num_records)
       pass ();
     else
-      fail ("PERSUBENTMGR.numassocsteps [BL] set+1 %u != %u", persubentmgr->numassocsteps, numassocsteps);
-    persubentmgr->numassocsteps--;
-  }
-  {
-    BITCODE_BL numassocsubents;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "numassocsubents", &numassocsubents, NULL)
-        && numassocsubents == persubentmgr->numassocsubents)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.numassocsubents [BL] %u != %u", persubentmgr->numassocsubents, numassocsubents);
-    numassocsubents++;
-    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "numassocsubents", &numassocsubents, 0)
-        && numassocsubents == persubentmgr->numassocsubents)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.numassocsubents [BL] set+1 %u != %u", persubentmgr->numassocsubents, numassocsubents);
-    persubentmgr->numassocsubents--;
+      fail ("PERSUBENTMGR.num_records [BL] set+1 %u != %u", persubentmgr->num_records, num_records);
+    persubentmgr->num_records--;
   }
   {
     struct _dwg_object_object* parent;
@@ -54221,24 +54201,14 @@ static int test_PERSUBENTMGR (const Dwg_Object *obj)
         fail ("PERSUBENTMGR.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BL* steps;
+    Dwg_PERSUBENTMGR_Record* records;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_steps", &count, NULL)
-        && dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "steps", &steps, NULL)
-        && steps == persubentmgr->steps)
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_records", &count, NULL)
+        && dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "records", &records, NULL)
+        && records == persubentmgr->records)
       pass ();
     else
-      fail ("PERSUBENTMGR.steps [BL*] * %u num_steps", count);
-  }
-  {
-    BITCODE_BL* subents;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "num_subents", &count, NULL)
-        && dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "subents", &subents, NULL)
-        && subents == persubentmgr->subents)
-      pass ();
-    else
-      fail ("PERSUBENTMGR.subents [BL*] * %u num_subents", count);
+      fail ("PERSUBENTMGR.records [Dwg_PERSUBENTMGR_Record*] * %u num_records", count);
   }
   {
     BITCODE_BL unknown_0;
@@ -54269,6 +54239,21 @@ static int test_PERSUBENTMGR (const Dwg_Object *obj)
     else
       fail ("PERSUBENTMGR.unknown_2 [BL] set+1 %u != %u", persubentmgr->unknown_2, unknown_2);
     persubentmgr->unknown_2--;
+  }
+  {
+    BITCODE_BL unknown_bl1;
+    if (dwg_dynapi_entity_value (persubentmgr, "PERSUBENTMGR", "unknown_bl1", &unknown_bl1, NULL)
+        && unknown_bl1 == persubentmgr->unknown_bl1)
+      pass ();
+    else
+      fail ("PERSUBENTMGR.unknown_bl1 [BL] %u != %u", persubentmgr->unknown_bl1, unknown_bl1);
+    unknown_bl1++;
+    if (dwg_dynapi_entity_set_value (persubentmgr, "PERSUBENTMGR", "unknown_bl1", &unknown_bl1, 0)
+        && unknown_bl1 == persubentmgr->unknown_bl1)
+      pass ();
+    else
+      fail ("PERSUBENTMGR.unknown_bl1 [BL] set+1 %u != %u", persubentmgr->unknown_bl1, unknown_bl1);
+    persubentmgr->unknown_bl1--;
   }
   if (failed && (is_class_unstable ("PERSUBENTMGR") || is_class_debugging ("PERSUBENTMGR")))
     {
@@ -69138,6 +69123,16 @@ test_sizes (void)
       fprintf (stderr,
                "sizeof(struct _dwg_PARTIAL_VIEWING_INDEX_Entry): %d != "
                "dwg_dynapi_fields_size (\"PARTIAL_VIEWING_INDEX_Entry\"): %d\n",
+               size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_PERSUBENTMGR_Record);
+  size2 = dwg_dynapi_fields_size ("PERSUBENTMGR_Record");
+  if (size1 != size2)
+    {
+      fprintf (stderr,
+               "sizeof(struct _dwg_PERSUBENTMGR_Record): %d != "
+               "dwg_dynapi_fields_size (\"PERSUBENTMGR_Record\"): %d\n",
                size1, size2);
       error++;
     }

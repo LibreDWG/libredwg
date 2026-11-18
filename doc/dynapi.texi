@@ -10936,17 +10936,15 @@ BL,	DXF 90
 BL,	DXF 90
 @item unknown_2
 BL,	DXF 90
-@item numassocsteps
+@item unknown_bl1
 BL,	DXF 90
-@item numassocsubents
+@item num_records
 BL,	DXF 90
-@item num_steps
+@item records
+Dwg_PERSUBENTMGR_Record*
+@item num_history_ids
 BL,	DXF 90
-@item steps
-BL*,	DXF 90
-@item num_subents
-BL,	DXF 90
-@item subents
+@item history_ids
 BL*,	DXF 90
 
 @end vtable
@@ -15296,6 +15294,30 @@ struct _dwg_object_PARTIAL_VIEWING_INDEX*
 3BD
 @item object
 H
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_PERSUBENTMGR_Record} @anchor{Dwg_PERSUBENTMGR_Record}
+@vindex Dwg_PERSUBENTMGR_Record
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_PERSUBENTMGR*
+@item record_type
+BL,	DXF 90
+@item unknown_bl
+BL,	DXF 90
+@item num_history_ids
+BL,	DXF 90
+@item history_ids
+BL*,	DXF 90
+@item num_data_values
+BL,	DXF 90
+@item data_values
+BL*,	DXF 90
 
 @end vtable
 @end indentedblock

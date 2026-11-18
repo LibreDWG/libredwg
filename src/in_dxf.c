@@ -7535,6 +7535,41 @@ add_BLOCKFLIPGRIP (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 }
 
 static Dxf_Pair *
+read_PERSUBENTMGR_vector (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                         BITCODE_BL *count, BITCODE_BL **values)
+{
+  Dxf_Pair *pair = dxf_read_pair (dat);
+
+  EXPECT_DXF (obj->name, "vector count", 90);
+  if (pair->value.l < 0 || pair->value.u > dat->size)
+    {
+      LOG_ERROR ("Invalid %s vector count %ld", obj->name, pair->value.l);
+      return pair;
+    }
+  free (*values);
+  *values = NULL;
+  *count = pair->value.u;
+  if (*count)
+    {
+      *values = (BITCODE_BL *)xcalloc (*count, sizeof (BITCODE_BL));
+      if (!*values)
+        {
+          *count = 0;
+          return pair;
+        }
+    }
+  dxf_free_pair (pair);
+  for (BITCODE_BL i = 0; i < *count; i++)
+    {
+      pair = dxf_read_pair (dat);
+      EXPECT_DXF (obj->name, "vector item", 90);
+      (*values)[i] = pair->value.u;
+      dxf_free_pair (pair);
+    }
+  return NULL;
+}
+
+static Dxf_Pair *
 add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   Dxf_Pair *restrict pair)
 {
@@ -7544,53 +7579,57 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   EXPECT_UINT_DXF ("class_version", 90, BL);
   FIELD_BL (unknown_0, 90);
   FIELD_BL (unknown_2, 90);
-  FIELD_BL (numassocsteps, 90);
-  FIELD_BL (numassocsubents, 90);
-  FIELD_BL (num_steps, 90);
-  free (o->steps);
-  o->steps = NULL;
-  if (o->num_steps > 0)
+  FIELD_BL (unknown_bl1, 90);
+  if (o->records)
     {
-      o->steps = (BITCODE_BL *)xcalloc (o->num_steps, sizeof (BITCODE_BL));
-      if (!o->steps)
+      for (BITCODE_BL i = 0; i < o->num_records; i++)
         {
-          o->num_steps = 0;
-          return pair;
+          free (o->records[i].history_ids);
+          free (o->records[i].data_values);
         }
-      for (unsigned i = 0; i < o->num_steps; i++)
+      free (o->records);
+      o->records = NULL;
+    }
+  FIELD_BL (num_records, 90);
+  if (o->num_records > dat->size)
+    {
+      LOG_ERROR ("Invalid %s.num_records %u", obj->name, o->num_records);
+      o->num_records = 0;
+      return dxf_read_pair (dat);
+    }
+  if (o->num_records)
+    {
+      o->records = (Dwg_PERSUBENTMGR_Record *)xcalloc (
+          o->num_records, sizeof (Dwg_PERSUBENTMGR_Record));
+      if (!o->records)
         {
-          pair = dxf_read_pair (dat);
-          if (!pair || pair->code != 90)
-            return pair;
-          o->steps[i] = pair->value.u;
-          LOG_TRACE ("%s.steps[%d] = %u [BL %d]\n", obj->name, i,
-                     pair->value.u, pair->code);
-          dxf_free_pair (pair);
+          o->num_records = 0;
+          return dxf_read_pair (dat);
         }
     }
-  FIELD_BL (num_subents, 90);
-  free (o->subents);
-  o->subents = NULL;
-  if (o->num_subents > 0)
+  for (BITCODE_BL i = 0; i < o->num_records; i++)
     {
-      o->subents = (BITCODE_BL *)xcalloc (o->num_subents, sizeof (BITCODE_BL));
-      if (!o->subents)
-        {
-          o->num_subents = 0;
-          return pair;
-        }
-      for (unsigned i = 0; i < o->num_subents; i++)
-        {
-          pair = dxf_read_pair (dat);
-          if (!pair || pair->code != 90)
-            return pair;
-          o->subents[i] = pair->value.u;
-          LOG_TRACE ("%s.subents[%d] = %u [BL %d]\n", obj->name, i,
-                     pair->value.u, pair->code);
-          dxf_free_pair (pair);
-        }
+      Dwg_PERSUBENTMGR_Record *record = &o->records[i];
+      record->parent = o;
+      pair = dxf_read_pair (dat);
+      EXPECT_DXF (obj->name, "record type", 90);
+      record->record_type = pair->value.u;
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+      EXPECT_DXF (obj->name, "record unknown_bl", 90);
+      record->unknown_bl = pair->value.u;
+      dxf_free_pair (pair);
+      pair = read_PERSUBENTMGR_vector (obj, dat, &record->num_history_ids,
+                                      &record->history_ids);
+      if (pair)
+        return pair;
+      pair = read_PERSUBENTMGR_vector (obj, dat, &record->num_data_values,
+                                      &record->data_values);
+      if (pair)
+        return pair;
     }
-  return NULL;
+  return read_PERSUBENTMGR_vector (obj, dat, &o->num_history_ids,
+                                  &o->history_ids);
 }
 
 static Dxf_Pair *
