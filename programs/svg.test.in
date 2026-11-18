@@ -111,6 +111,22 @@ then
     fi
     rm -f ./OcsElevation.dwg ./OcsElevation.svg
 fi
+# 2000/PolylineSplineFit.dxf is made with ezdxf as AutoCAD stores a
+# spline-fit POLYLINE: the curve of the frame vertices, as Bezier curves
+if [ -x "./dxf2dwg${EXEEXT}" ] &&
+   $TESTPROG "./dxf2dwg${EXEEXT}" -y -o PolylineSplineFit.dwg \
+       "$DATADIR/2000/PolylineSplineFit.dxf" >/dev/null 2>&1
+then
+    $TESTPROG "./dwg2SVG${EXEEXT}" PolylineSplineFit.dwg >PolylineSplineFit.svg 2>/dev/null
+    if grep -q 'd="M 1.000000,15.000000 C 3.000000,11.000000 4.000000,13.000000 5.000000,13.000000 C ' PolylineSplineFit.svg &&
+       grep -q 'd="M 13.000000,15.000000 Q 15.000000,15.000000 15.000000,13.000000 Q ' PolylineSplineFit.svg
+    then
+        echo svg PolylineSplineFit ok
+    else
+        i=$((i+1))
+    fi
+    rm -f ./PolylineSplineFit.dwg ./PolylineSplineFit.svg
+fi
 
 # INSERT: a block in its own coordinates from its base point, a rotated
 # INSERT turns the other way as y is flipped, a mirrored OCS mirrors x
