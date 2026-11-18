@@ -234,6 +234,15 @@ Minor bugfixes / fuzzing fixes:
     exported as ACAD_PROXY_ENTITY with their class data, in the ODA order.
     254 of the 262 test DWGs 2000-2018 roundtrip through DXF and ODA now
     (196 before).  GH #1546.
+  * Fixed the OSS-Fuzz issues 586576797, 587020301, 583493833
+    (heap-buffer-overflow in dwg_encode_eed_data, dxf_write_eed, json_eed
+    from truncated EED strings), 587110816 (NULL deref in dwg_require_class),
+    584255889 and 584519764 (duplicate DXF SEQEND for one owner),
+    583321233 (use-after-free of stale BLOCK_CONTROL entries in
+    dxf_tables_write, and TABLESTYLE leaks), 583030510 (leaks of skipped DXF
+    table records and BLOCK.xref_pname), and the testcases 6383958498279424
+    (double dwg_free after a failed JSON import) and 5647996143075328
+    (dxfb_ENDBLK_empty leak).
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 
