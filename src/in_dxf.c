@@ -13702,7 +13702,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                    && dwg_obj_is_3dsolid (obj))
             {
               Dwg_Entity__3DSOLID *o = obj->tio.entity->tio._3DSOLID;
-              BITCODE_H hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              // 350 is a hard owner, the DWG stores code 3
+              BITCODE_H hdl = dwg_add_handleref (dwg, 3, pair->value.u, obj);
               LOG_TRACE ("%s.history_id = " FORMAT_REF " [H 350]\n", obj->name,
                          ARGS_REF (hdl));
               o->history_id = hdl;
