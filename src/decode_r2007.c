@@ -772,10 +772,83 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   return error;
 }
 
+/* Sorted index of the page map, for O(log n) page lookups. Equal ids keep
+   their list order, so the first page wins as in get_page(). */
+typedef struct
+{
+  int64_t id;
+  size_t pos;
+  r2007_page *page;
+} r2007_page_idx;
+
+static int
+page_idx_cmp (const void *a, const void *b)
+{
+  const r2007_page_idx *pa = (const r2007_page_idx *)a;
+  const r2007_page_idx *pb = (const r2007_page_idx *)b;
+  if (pa->id != pb->id)
+    return pa->id < pb->id ? -1 : 1;
+  return pa->pos < pb->pos ? -1 : pa->pos > pb->pos;
+}
+
+static r2007_page *
+get_page_idx (const r2007_page_idx *idx, size_t n, int64_t id)
+{
+  size_t lo = 0, hi = n;
+  while (lo < hi)
+    {
+      const size_t mid = lo + (hi - lo) / 2;
+      if (idx[mid].id < id)
+        lo = mid + 1;
+      else
+        hi = mid;
+    }
+  return (lo < n && idx[lo].id == id) ? idx[lo].page : NULL;
+}
+
+static int read_data_section_idx (Bit_Chain *sec_dat, Bit_Chain *dat,
+                                  r2007_section *restrict sections_map,
+                                  const r2007_page_idx *idx, size_t nidx,
+                                  Dwg_Section_Type sec_type);
+
 int
 read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
                    r2007_section *restrict sections_map,
                    r2007_page *restrict pages_map, Dwg_Section_Type sec_type)
+{
+  r2007_page_idx *idx;
+  r2007_page *p;
+  size_t n = 0;
+  int error;
+
+  // GHSA-w5cw-g5gp-p6vf: a linear get_page() per section page is quadratic
+  for (p = pages_map; p; p = p->next)
+    n++;
+  idx = n ? (r2007_page_idx *)malloc (n * sizeof (r2007_page_idx)) : NULL;
+  if (n && !idx)
+    {
+      LOG_ERROR ("Out of memory");
+      sec_dat->chain = NULL;
+      return DWG_ERR_OUTOFMEM;
+    }
+  for (n = 0, p = pages_map; p; p = p->next, n++)
+    {
+      idx[n].id = p->id;
+      idx[n].pos = n;
+      idx[n].page = p;
+    }
+  if (n > 1)
+    qsort (idx, n, sizeof (r2007_page_idx), page_idx_cmp);
+  error = read_data_section_idx (sec_dat, dat, sections_map, idx, n, sec_type);
+  free (idx);
+  return error;
+}
+
+static int
+read_data_section_idx (Bit_Chain *sec_dat, Bit_Chain *dat,
+                       r2007_section *restrict sections_map,
+                       const r2007_page_idx *idx, size_t nidx,
+                       Dwg_Section_Type sec_type)
 {
   r2007_section *section;
   r2007_page *page;
@@ -831,7 +904,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
           LOG_ERROR ("Failed to find section page %d", (int)i);
           return DWG_ERR_PAGENOTFOUND;
         }
-      page = get_page (pages_map, section_page->id);
+      page = get_page_idx (idx, nidx, section_page->id);
       if (page == NULL)
         {
           free (decomp);

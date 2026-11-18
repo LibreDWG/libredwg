@@ -26355,17 +26355,24 @@ dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
   return _obj;
 }
 
+/* dwg_add_VERTEX_* and dwg_add_SEQEND may realloc dwg->object[], which
+   invalidates every held Dwg_Object*. Re-resolve the polyline by index.
+   GHSA-vj62-wp5x-vw7v, GHSA-c5qq-r34g-qgpc */
+#define REFRESH_PL() pl = obj = &dwg->object[pl_idx]
+
 EXPORT Dwg_Entity_POLYLINE_2D *
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const int num_pts, const dwg_point_2d *restrict pts)
 {
   Dwg_Object *pl, *seq, *vtx = NULL;
+  BITCODE_BL pl_idx;
   Dwg_Entity_POLYLINE_2D *_pl;
   Dwg_Entity_VERTEX_2D *_vtx;
   Dwg_Entity_SEQEND *_seq;
 
   API_ADD_ENTITY (POLYLINE_2D);
   pl = obj;
+  pl_idx = obj->index;
   _pl = _obj;
   _pl->vertex = (BITCODE_H *)malloc (num_pts * sizeof (BITCODE_H));
   if (!_pl->vertex)
@@ -26384,6 +26391,7 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           LOG_ERROR ("No VERTEX_2D[%d] added", i);
           return NULL;
         }
+      REFRESH_PL ();
       vtx = dwg_obj_generic_to_object (_vtx, &error);
       if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_2d_err;
@@ -26412,6 +26420,7 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
+  REFRESH_PL ();
   seq = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
@@ -26429,12 +26438,14 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const int num_pts, const dwg_point_3d *restrict pts)
 {
   Dwg_Object *pl, *seq, *vtx = NULL;
+  BITCODE_BL pl_idx;
   Dwg_Entity_POLYLINE_3D *_pl;
   Dwg_Entity_VERTEX_3D *_vtx;
   Dwg_Entity_SEQEND *_seq;
 
   API_ADD_ENTITY (POLYLINE_3D);
   pl = obj;
+  pl_idx = obj->index;
   _pl = _obj;
   _pl->vertex = (BITCODE_H *)malloc (num_pts * sizeof (BITCODE_H));
   if (!_pl->vertex)
@@ -26458,6 +26469,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           LOG_ERROR ("No VERTEX_3D[%d] added", i);
           return NULL;
         }
+      REFRESH_PL ();
       vtx = dwg_obj_generic_to_object (_vtx, &error);
       if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_3d_err;
@@ -26484,6 +26496,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
+  REFRESH_PL ();
   seq = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
@@ -26561,6 +26574,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const dwg_face *restrict faces)
 {
   Dwg_Object *pl, *seq, *vtx;
+  BITCODE_BL pl_idx;
   Dwg_Entity_POLYLINE_PFACE *_pl;
   Dwg_Entity_VERTEX_PFACE *_vtx;
   Dwg_Entity_VERTEX_PFACE_FACE *_vtxf;
@@ -26568,6 +26582,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
   API_ADD_ENTITY (POLYLINE_PFACE);
   pl = obj;
+  pl_idx = obj->index;
   _pl = _obj;
   _pl->vertex = (BITCODE_H *)malloc (((unsigned long)numverts + numfaces)
                                      * sizeof (BITCODE_H));
@@ -26594,6 +26609,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           LOG_ERROR ("No VERTEX_PFACE[%d] added", i);
           return NULL;
         }
+      REFRESH_PL ();
       vtx = dwg_obj_generic_to_object (_vtx, &error);
       if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_pface_err;
@@ -26611,6 +26627,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           LOG_ERROR ("No VERTEX_PFACE_FACE[%d] added", j);
           return NULL;
         }
+      REFRESH_PL ();
       vtx = dwg_obj_generic_to_object (_vtxf, &error);
       if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_pface_face_err;
@@ -26632,6 +26649,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
+  REFRESH_PL ();
   seq = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
@@ -26676,12 +26694,14 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                        const dwg_point_3d *restrict verts)
 {
   Dwg_Object *pl, *seq, *vtx;
+  BITCODE_BL pl_idx;
   Dwg_Entity_POLYLINE_MESH *_pl;
   Dwg_Entity_VERTEX_MESH *_vtx;
   Dwg_Entity_SEQEND *_seq;
 
   API_ADD_ENTITY (POLYLINE_MESH);
   pl = obj;
+  pl_idx = obj->index;
   _pl = _obj;
   _pl->vertex = (BITCODE_H *)malloc ((unsigned long)num_m_verts * num_n_verts
                                      * sizeof (BITCODE_H));
@@ -26705,6 +26725,7 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           LOG_ERROR ("No VERTEX_MESH[%d] added", i);
           return NULL;
         }
+      REFRESH_PL ();
       vtx = dwg_obj_generic_to_object (_vtx, &error);
       if (!vtx || !vtx->tio.entity || vtx->supertype != DWG_SUPERTYPE_ENTITY)
         goto vtx_mesh_err;
@@ -26727,6 +26748,7 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
+  REFRESH_PL ();
   seq = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
