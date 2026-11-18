@@ -11669,6 +11669,9 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
           // clang-format on
           {
             dwg->num_objects--;
+            free (dxfname);
+            free (obj->tio.object);
+            obj->tio.object = NULL;
             LOG_ERROR ("Unknown DXF AcDbSymbolTableRecord %s, skipping", name);
             return pair;
           }
@@ -11678,6 +11681,9 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
   if (!_obj)
     {
       dwg->num_objects--;
+      free (dxfname);
+      free (obj->tio.object);
+      obj->tio.object = NULL;
       LOG_ERROR ("Empty _obj at DXF AcDbSymbolTableRecord %s, skipping", name);
       return pair;
     }
