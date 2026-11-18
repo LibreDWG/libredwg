@@ -1393,6 +1393,39 @@
           }                                                                   \
         }                                                                     \
     }
+/* as FIELD_VECTOR_T, but reads the strings from the r2007+ split string
+   stream (str_dat), like FIELD_T does. Only for T types. */
+#define FIELD_VECTOR_TS(name, type, size, dxf)                                \
+  if (_obj->size > 0)                                                         \
+    {                                                                         \
+      _VECTOR_CHKCOUNT (name, _obj->size,                                     \
+                        dat->from_version >= R_2007 ? 18 : 2, dat);           \
+      _obj->name = (char **)calloc (_obj->size, sizeof (char *));             \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
+        {                                                                     \
+          PRE (R_2007a)                                                       \
+          {                                                                   \
+            _obj->name[vcount] = bit_read_TV (dat);                           \
+            LOG_TRACE_TV_NAME_I (name[vcount], vcount, _obj->name[vcount],    \
+                                 dxf);                                        \
+            LOG_POS                                                           \
+          }                                                                   \
+          LATER_VERSIONS                                                      \
+          {                                                                   \
+            if (obj && !obj->has_strings)                                     \
+              {                                                               \
+                LOG_TRACE_TU_NAME_I (name, vcount, NULL, type, dxf);          \
+                continue;                                                     \
+              }                                                               \
+            _obj->name[vcount] = (char *)bit_read_##type (str_dat);           \
+            LOG_TRACE_TU_NAME_I (name, vcount, _obj->name[vcount], type, dxf);\
+          }                                                                   \
+          if (!_obj->name[vcount])                                            \
+            return DWG_ERR_VALUEOUTOFBOUNDS;                                  \
+        }                                                                     \
+    }
 #define FIELD_VECTOR_N1(name, type, size, dxf)                                \
   if (size > 0)                                                               \
     {                                                                         \

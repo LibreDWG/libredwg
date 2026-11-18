@@ -3851,17 +3851,17 @@ DWG_OBJECT (DIMASSOC)
       SUB_FIELD_T  (ref[rcount1], classname, 1); // "AcDbOsnapPointRef"
       SUB_FIELD_RC (ref[rcount1], osnap_type, 72); // 0-13
       // idpaths:
-      SUB_FIELD_BL (ref[rcount1], num_xrefs, 0);
+      SUB_FIELD_BS (ref[rcount1], num_xrefs, 0);
       SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
 
       /* An _End last-point reference without any xrefs has no main subent. */
       if (FIELD_VALUE (ref[rcount1].osnap_type) != 0
           && FIELD_VALUE (ref[rcount1].num_xrefs) > 0)
         {
-          SUB_FIELD_BL (ref[rcount1], main_subent_type, 73);
+          SUB_FIELD_BS (ref[rcount1], main_subent_type, 73);
           SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
-          SUB_FIELD_BL (ref[rcount1], num_xrefpaths, 0);
-          FIELD_VECTOR_T (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
+          SUB_FIELD_BS (ref[rcount1], num_xrefpaths, 0);
+          FIELD_VECTOR_TS (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
         }
 
       SUB_FIELD_BD (ref[rcount1], osnap_dist, 40);
@@ -3873,10 +3873,10 @@ DWG_OBJECT (DIMASSOC)
         {
           SUB_FIELD_BL (ref[rcount1], num_intsectobj, 0); // no count in DXF
           SUB_HANDLE_VECTOR (ref[rcount1], intsectobj, num_intsectobj, 5, 332);
-          SUB_FIELD_BL (ref[rcount1], intersec_subent_type, 74);
+          SUB_FIELD_BS (ref[rcount1], intersec_subent_type, 74);
           SUB_FIELD_BL (ref[rcount1], intersec_gsmarker, 92);
-          SUB_FIELD_BL (ref[rcount1], num_intersec_xrefpaths, 0);
-          FIELD_VECTOR_T (ref[rcount1].intersec_xrefpaths, T, ref[rcount1].num_intersec_xrefpaths, 302)
+          SUB_FIELD_BS (ref[rcount1], num_intersec_xrefpaths, 0);
+          FIELD_VECTOR_TS (ref[rcount1].intersec_xrefpaths, T, ref[rcount1].num_intersec_xrefpaths, 302)
         }
       SUB_FIELD_B (ref[rcount1], has_lastpt_ref, 75);
       FIELD_VALUE(has_lastpt_ref) = SUB_FIELD_VALUE(ref[rcount1], has_lastpt_ref);

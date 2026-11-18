@@ -41,20 +41,20 @@ api_process (dwg_object *obj)
       CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, osnap_type, RC, 13);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, osnap_dist, BD);
       CHK_SUBCLASS_3RD (ref[i], DIMASSOC_Ref, osnap_pt);
-      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, main_subent_type, BL);
-      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, main_subent_type, BL, 2);
+      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, main_subent_type, BS);
+      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, main_subent_type, BS, 2);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, main_gsmarker, BL);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, num_intsectobj, BL);
       CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, num_intsectobj, BL, 100);
       num_intsectobj = ref[i].num_intsectobj;
       CHK_SUBCLASS_HV (ref[i], DIMASSOC_Ref, intsectobj, num_intsectobj);
-      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, num_xrefs, BL);
-      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, num_xrefs, BL, 100);
+      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, num_xrefs, BS);
+      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, num_xrefs, BS, 100);
       num_xrefs = ref[i].num_xrefs;
       CHK_SUBCLASS_HV (ref[i], DIMASSOC_Ref, xrefs, num_xrefs);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, has_lastpt_ref, B);
-      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, num_intersec_xrefpaths, BL);
-      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, num_intersec_xrefpaths, BL, 100);
+      CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, num_intersec_xrefpaths, BS);
+      CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, num_intersec_xrefpaths, BS, 100);
       // num_intersec_xrefpaths = ref[i].num_intersec_xrefpaths;
       // CHK_SUBCLASS_TV (ref[i], DIMASSOC_Ref, intersec_xrefpaths,
       // num_intersec_xrefpaths);
