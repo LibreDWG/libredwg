@@ -1292,7 +1292,7 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
   for (BITCODE_BL i = 0; i < dwg->num_classes; i++)
     {
       Dwg_Class *klass = &dwg->dwg_class[i];
-      if (strEQ (klass->dxfname, dxfname))
+      if (klass->dxfname && strEQ (klass->dxfname, dxfname))
         return klass->number;
     }
 
