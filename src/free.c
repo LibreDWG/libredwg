@@ -1799,6 +1799,9 @@ dwg_free (Dwg_Data *dwg)
             }
         }
       FREE_IF (dwg->object_ref);
+      // the header refs point into the freed object_ref. A second dwg_free
+      // (e.g. after a failed dwg_read_json) must not touch them.
+      memset (&dwg->header_vars, 0, sizeof (dwg->header_vars));
       FREE_IF (dwg->object);
       if (dwg->object_map)
         {
