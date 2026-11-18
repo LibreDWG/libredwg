@@ -1108,7 +1108,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str285,             "ACDBASSOCEDGEACTIONPARAM",          DWG_TYPE_ASSOCEDGEACTIONPARAM,	0,	DEBUGGING},
       {-1},
 #line 176 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str287,           "ACDBASSOC2DCONSTRAINTGROUP",        DWG_TYPE_ASSOC2DCONSTRAINTGROUP,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str287,           "ACDBASSOC2DCONSTRAINTGROUP",        DWG_TYPE_ASSOC2DCONSTRAINTGROUP,	0,	STABLE},
       {-1},
 #line 203 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str289,    "ACDBASSOCNETWORKSURFACEACTIONBODY",  DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY,	0,	UNSTABLE},
@@ -1341,7 +1341,7 @@ in_word_set (const char *str, size_t len)
 #line 69 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str512,         "DIMENSION",                  DWG_TYPE_DIMENSION_ALIGNED,	1,	STABLE},
 #line 219 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str513,                    "ACDBASSOCVARIABLE",                 DWG_TYPE_ASSOCVARIABLE,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str513,                    "ACDBASSOCVARIABLE",                 DWG_TYPE_ASSOCVARIABLE,	0,	STABLE},
 #line 247 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str514,         "BLOCKPROPERTIESTABLEGRIP",          DWG_TYPE_BLOCKPROPERTIESTABLEGRIP,	0,	DEBUGGING},
 #line 161 "src/objects.in"

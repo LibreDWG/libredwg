@@ -679,11 +679,13 @@ extern "C"
   typedef struct _dwg_object_ACSH_TORUS_CLASS		dwg_obj_acsh_torus_class;
   typedef struct _dwg_object_ACSH_WEDGE_CLASS		dwg_obj_acsh_wedge_class;
   typedef struct _dwg_object_ALDIMOBJECTCONTEXTDATA		dwg_obj_aldimobjectcontextdata;
+  typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP		dwg_obj_assoc2dconstraintgroup;
   typedef struct _dwg_object_ASSOCDEPENDENCY		dwg_obj_assocdependency;
   typedef struct _dwg_object_ASSOCDIMDEPENDENCYBODY		dwg_obj_assocdimdependencybody;
   typedef struct _dwg_object_ASSOCGEOMDEPENDENCY		dwg_obj_assocgeomdependency;
   typedef struct _dwg_object_ASSOCNETWORK		dwg_obj_assocnetwork;
   typedef struct _dwg_object_ASSOCVALUEDEPENDENCY		dwg_obj_assocvaluedependency;
+  typedef struct _dwg_object_ASSOCVARIABLE		dwg_obj_assocvariable;
   typedef struct _dwg_object_BLKREFOBJECTCONTEXTDATA		dwg_obj_blkrefobjectcontextdata;
   typedef struct _dwg_object_BLOCKALIGNMENTGRIP		dwg_obj_blockalignmentgrip;
   typedef struct _dwg_object_BLOCKALIGNMENTPARAMETER		dwg_obj_blockalignmentparameter;
@@ -749,7 +751,6 @@ extern "C"
   typedef struct _dwg_object_ACSH_BREP_CLASS		dwg_obj_acsh_brep_class;
   typedef struct _dwg_object_ACSH_CHAMFER_CLASS		dwg_obj_acsh_chamfer_class;
   typedef struct _dwg_object_ACSH_PYRAMID_CLASS		dwg_obj_acsh_pyramid_class;
-  typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP		dwg_obj_assoc2dconstraintgroup;
   typedef struct _dwg_object_ASSOCACTION		dwg_obj_assocaction;
   typedef struct _dwg_object_ASSOCACTIONPARAM		dwg_obj_assocactionparam;
   typedef struct _dwg_object_ASSOCARRAYACTIONBODY		dwg_obj_assocarrayactionbody;
@@ -771,7 +772,6 @@ extern "C"
   typedef struct _dwg_object_ASSOCPOINTREFACTIONPARAM		dwg_obj_assocpointrefactionparam;
   typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY		dwg_obj_assocrevolvedsurfaceactionbody;
   typedef struct _dwg_object_ASSOCTRIMSURFACEACTIONBODY		dwg_obj_assoctrimsurfaceactionbody;
-  typedef struct _dwg_object_ASSOCVARIABLE		dwg_obj_assocvariable;
   typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM		dwg_obj_assocvertexactionparam;
   typedef struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER		dwg_obj_blockalignedconstraintparameter;
   typedef struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER		dwg_obj_blockangularconstraintparameter;
@@ -1805,11 +1805,13 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_acsh_torus_class, ACSH_TORUS_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_wedge_class, ACSH_WEDGE_CLASS);
   dwg_get_OBJECT_DECL (obj_aldimobjectcontextdata, ALDIMOBJECTCONTEXTDATA);
+  dwg_get_OBJECT_DECL (obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP);
   dwg_get_OBJECT_DECL (obj_assocdependency, ASSOCDEPENDENCY);
   dwg_get_OBJECT_DECL (obj_assocdimdependencybody, ASSOCDIMDEPENDENCYBODY);
   dwg_get_OBJECT_DECL (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY);
   dwg_get_OBJECT_DECL (obj_assocnetwork, ASSOCNETWORK);
   dwg_get_OBJECT_DECL (obj_assocvaluedependency, ASSOCVALUEDEPENDENCY);
+  dwg_get_OBJECT_DECL (obj_assocvariable, ASSOCVARIABLE);
   dwg_get_OBJECT_DECL (obj_blkrefobjectcontextdata, BLKREFOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_blockalignmentgrip, BLOCKALIGNMENTGRIP);
   dwg_get_OBJECT_DECL (obj_blockalignmentparameter, BLOCKALIGNMENTPARAMETER);
@@ -1875,7 +1877,6 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_acsh_brep_class, ACSH_BREP_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS);
-  dwg_get_OBJECT_DECL (obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP);
   dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);
   dwg_get_OBJECT_DECL (obj_assocactionparam, ASSOCACTIONPARAM);
   dwg_get_OBJECT_DECL (obj_assocarrayactionbody, ASSOCARRAYACTIONBODY);
@@ -1897,7 +1898,6 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_assocpointrefactionparam, ASSOCPOINTREFACTIONPARAM);
   dwg_get_OBJECT_DECL (obj_assocrevolvedsurfaceactionbody, ASSOCREVOLVEDSURFACEACTIONBODY);
   dwg_get_OBJECT_DECL (obj_assoctrimsurfaceactionbody, ASSOCTRIMSURFACEACTIONBODY);
-  dwg_get_OBJECT_DECL (obj_assocvariable, ASSOCVARIABLE);
   dwg_get_OBJECT_DECL (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM);
   dwg_get_OBJECT_DECL (obj_blockalignedconstraintparameter, BLOCKALIGNEDCONSTRAINTPARAMETER);
   dwg_get_OBJECT_DECL (obj_blockangularconstraintparameter, BLOCKANGULARCONSTRAINTPARAMETER);
@@ -2950,11 +2950,13 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (ACSH_TORUS_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_WEDGE_CLASS);
   DWG_GETALL_OBJECT_DECL (ALDIMOBJECTCONTEXTDATA);
+  DWG_GETALL_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP);
   DWG_GETALL_OBJECT_DECL (ASSOCDEPENDENCY);
   DWG_GETALL_OBJECT_DECL (ASSOCDIMDEPENDENCYBODY);
   DWG_GETALL_OBJECT_DECL (ASSOCGEOMDEPENDENCY);
   DWG_GETALL_OBJECT_DECL (ASSOCNETWORK);
   DWG_GETALL_OBJECT_DECL (ASSOCVALUEDEPENDENCY);
+  DWG_GETALL_OBJECT_DECL (ASSOCVARIABLE);
   DWG_GETALL_OBJECT_DECL (BLKREFOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (BLOCKALIGNMENTGRIP);
   DWG_GETALL_OBJECT_DECL (BLOCKALIGNMENTPARAMETER);
@@ -3020,7 +3022,6 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (ACSH_BREP_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS);
-  DWG_GETALL_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP);
   DWG_GETALL_OBJECT_DECL (ASSOCACTION);
   DWG_GETALL_OBJECT_DECL (ASSOCACTIONPARAM);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYACTIONBODY);
@@ -3042,7 +3043,6 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (ASSOCPOINTREFACTIONPARAM);
   DWG_GETALL_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY);
   DWG_GETALL_OBJECT_DECL (ASSOCTRIMSURFACEACTIONBODY);
-  DWG_GETALL_OBJECT_DECL (ASSOCVARIABLE);
   DWG_GETALL_OBJECT_DECL (ASSOCVERTEXACTIONPARAM);
   DWG_GETALL_OBJECT_DECL (BLOCKALIGNEDCONSTRAINTPARAMETER);
   DWG_GETALL_OBJECT_DECL (BLOCKANGULARCONSTRAINTPARAMETER);
@@ -4101,11 +4101,13 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_TORUS_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_WEDGE_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ALDIMOBJECTCONTEXTDATA);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCDEPENDENCY);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCDIMDEPENDENCYBODY);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCGEOMDEPENDENCY);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCNETWORK);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVALUEDEPENDENCY);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVARIABLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLKREFOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKALIGNMENTGRIP);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKALIGNMENTPARAMETER);
@@ -4171,7 +4173,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BREP_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_PYRAMID_CLASS);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOC2DCONSTRAINTGROUP);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTION);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTIONPARAM);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYACTIONBODY);
@@ -4193,7 +4194,6 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCPOINTREFACTIONPARAM);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCTRIMSURFACEACTIONBODY);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVARIABLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVERTEXACTIONPARAM);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKALIGNEDCONSTRAINTPARAMETER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKANGULARCONSTRAINTPARAMETER);

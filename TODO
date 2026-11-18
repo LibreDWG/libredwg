@@ -4,13 +4,11 @@
   colors, layers and the model transformations in dwg2SVG
 * rename all internal ent->tio.ENTITY to ent->tio._ENTITY, so that all 3D names can
   stay asis. Which fixes the public API for all _3D names, to be more consistent.
-* extract seldomly used objects into extra sharedlib(s) as dynaloaded or linked plugin.
-  dynblocks, ACSH solids, ... to keep compile times managable.
 * TABLE_Cell
 * Enabled, but unstable and un(der)tested (see doc/LibreDWG.texi and
   src/classes.inc for the full list):
   ARCALIGNEDTEXT (only 2018/arcalignedtext.dxf, DXF out is skipped)
-  ASSOCACTION ASSOC2DCONSTRAINTGROUP ASSOCVARIABLE ASSOC*SURFACEACTIONBODY
+  ASSOCACTION ASSOC*SURFACEACTIONBODY
   DATALINK DBCOLOR FCFOBJECTCONTEXTDATA HELIX
   LAYOUTPRINTCONFIG LIGHTLIST OBJECT_PTR PLANESURFACE PROXY_OBJECT
   TABLECONTENT
@@ -20,16 +18,6 @@
   REVOLVEDSURFACE SWEPTSURFACE SUNSTUDY ASSOCALIGNEDDIMACTIONBODY
   ASSOCPERSSUBENTMANAGER PERSUBENTMGR ACSH_SWEEP_CLASS NAVISWORKSMODELDEF
   DATATABLE *OBJECTCONTEXTDATA (all but ALDIM, BLKREF, LEADER, MTEXT, TEXT) ...
-* Promoted to stable since 0.14: MATERIAL (procedural textures are dropped
-  without DEBUG_CLASSES), TABLE, MLEADERSTYLE, DIMASSOC, ARC_DIMENSION,
-  ACIDBLOCKREFERENCE, LAYER_FILTER, and ALDIM, BLKREF, LEADER, MTEXT and
-  TEXT OBJECTCONTEXTDATA.
-* Promoted to stable since 0.15: ASSOCDEPENDENCY, ASSOCVALUEDEPENDENCY,
-  ASSOCDIMDEPENDENCYBODY, BLOCKPARAMDEPENDENCYBODY, BLOCKREPRESENTATION,
-  BLOCKHORIZONTALCONSTRAINTPARAMETER, BLOCKVERTICALCONSTRAINTPARAMETER and
-  EVALUATION_GRAPH (with unit tests and DXF output). ASSOCVARIABLE and
-  ASSOC2DCONSTRAINTGROUP fail the Dynblocks 2018 unit test, they stay
-  unstable, but are written to DXF.
 * Unhandled (i.e. passed through, no DXF and fields):
   ACDSRECORD ACDSSCHEMA NPOCOLLECTION RAPIDRTRENDERENVIRONMENT
   XREFPANELOBJECT
