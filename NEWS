@@ -213,6 +213,17 @@ Minor bugfixes / fuzzing fixes:
   * Fixed dwg_page_x_min to use the correct header variable.
   * spec: implemented TABLESTYLE upconvert to r2010+; promoted
     MLEADERSTYLE and ARC_DIMENSION to stable.
+  * dwg2dxf --as r2000: fixed the lost ATTRIB and VERTEX entities of R2004+
+    sources (INSERT without ATTRIBs, POLYLINE without VERTEX/SEQEND), in the
+    text and binary DXF.  GH #1547.
+  * dwg2dxf --as r2000/r2004: strings of R2007+ sources are written as
+    \U+XXXX, not as raw UTF-8, into the DXF before R2007.  GH #1548.
+  * DXF import: the FIELDLIST fields and SECTION_MANAGER sections were lost
+    (read as owner), $DWGCODEPAGE UTF-8 and UTF-16 are accepted, $TIMEZONE
+    is signed.  The VBAProject section is written.  Unknown entities are
+    exported as ACAD_PROXY_ENTITY with their class data, in the ODA order.
+    254 of the 262 test DWGs 2000-2018 roundtrip through DXF and ODA now
+    (196 before).  GH #1546.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 
