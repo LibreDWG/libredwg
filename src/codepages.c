@@ -293,6 +293,11 @@ dwg_codepage_int (const char *s)
       if (islower (*s) && 0 == strcasecmp (s, _codepage_dxfstr[i]))
         return (Dwg_Codepage)i;
     }
+  // ODA and others write UTF-8 and UTF-16 with a dash
+  if (0 == strcasecmp (s, "UTF-8"))
+    return CP_UTF8;
+  if (0 == strcasecmp (s, "UTF-16"))
+    return CP_UTF16;
   return CP_UNDEFINED;
 }
 

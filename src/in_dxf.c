@@ -1866,6 +1866,14 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               // TODO need to free old string values
               dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, 1);
             }
+          else if (pair->type == DWG_VT_INT16 && strEQc (field, "$TIMEZONE"))
+            {
+              // the signed BLd, the 16bit group value is unsigned
+              BITCODE_BLd tz = (BITCODE_BLd)(int16_t)pair->value.i;
+              LOG_TRACE ("HEADER.%s " FORMAT_BLd " [BLd %d]\n", &field[1], tz,
+                         pair->code);
+              dwg_dynapi_header_set_value (dwg, &field[1], &tz, 1);
+            }
           else
             {
               LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], f->type,
