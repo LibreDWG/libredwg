@@ -3948,6 +3948,23 @@ eed_need_size (unsigned long need, BITCODE_BS have)
   return 0;
 }
 
+// The bytes to read must be inside the chain. A truncated object would
+// otherwise return zeros without advancing, and the decoded lengths then
+// exceed the shrunken allocation.
+static int
+eed_need_dat (const Bit_Chain *restrict dat, const size_t need)
+{
+  if (dat->byte >= dat->size || need > dat->size - dat->byte)
+    {
+      LOG_ERROR ("Invalid EED size %" PRIuSIZE ", only %" PRIuSIZE
+                 " bytes left",
+                 need,
+                 dat->byte < dat->size ? dat->size - dat->byte : (size_t)0);
+      return 1;
+    }
+  return 0;
+}
+
 static int
 dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                      size_t end, BITCODE_BS size)
@@ -3971,11 +3988,12 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           {
             LOG_ERROR ("Invalid EED string len %d, max %d", lenc,
                        (int)size - 3);
+            data->u.eed_0.length = 0; // no string was read
             dat->byte = end;
             break;
           }
         /* code:1 + len:1 */
-        if (eed_need_size (lenc + 2, size))
+        if (eed_need_size (lenc + 2, size) || eed_need_dat (dat, lenc))
           return DWG_ERR_INVALIDEED;
         bit_read_fixed (dat, (BITCODE_RC *)data->u.eed_0.string, lenc);
         data->u.eed_0.string[lenc] = '\0';
@@ -3993,6 +4011,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           {
             LOG_ERROR ("Invalid EED string len %d, max %d", lenc,
                        (int)size - 4);
+            data->u.eed_0.length = 0; // no string was read
             dat->byte = end;
             break;
 #if 0
@@ -4007,7 +4026,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
 #endif
           }
         /* code:1 + len:1 + cp:2 */
-        if (eed_need_size (lenc + 3, size))
+        if (eed_need_size (lenc + 3, size) || eed_need_dat (dat, lenc))
           return DWG_ERR_INVALIDEED;
         bit_read_fixed (dat, (BITCODE_RC *)data->u.eed_0.string, lenc);
         data->u.eed_0.string[lenc] = '\0';
@@ -4021,7 +4040,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         data->u.eed_0.is_tu = 1;
         data->u.eed_0_r2007.length = bit_read_RS (dat);
         lens = data->u.eed_0_r2007.length;
-        if (eed_need_size ((long)(lens * 2) + 2, size))
+        if (eed_need_size ((long)(lens * 2) + 2, size)
+            || eed_need_dat (dat, lens * 2))
           return DWG_ERR_INVALIDEED;
         /* code:1 + len:2 NUL? */
         for (j = 0;
@@ -4079,11 +4099,13 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       if (eed_need_size (1, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_4.length = lenc = bit_read_RC (dat);
-      if (eed_need_size (lenc + 1, size))
+      if (eed_need_size (lenc + 1, size) || eed_need_dat (dat, lenc))
         return DWG_ERR_INVALIDEED;
       /* code:1 + len:1 */
       for (j = 0; j < MIN (lenc, size - 2); j++)
         data->u.eed_4.data[j] = bit_read_RC (dat);
+      // the length of the data really read, the encoder trusts it
+      data->u.eed_4.length = (BITCODE_RC)j;
       LOG_TRACE ("binary[%d] \"%s\" [TF]", j - 1, data->u.eed_4.data);
       break;
     case 5:
