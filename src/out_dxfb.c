@@ -2412,6 +2412,10 @@ dxfb_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
   free (obj->tio.entity->tio.ENDBLK);
   free (obj->tio.entity->ownerhandle);
   free (obj->tio.entity);
+  if (obj->parent->opts & DWG_OPTS_IN)
+    free (obj->dxfname);
+  if (obj->parent->opts & DWG_OPTS_INJSON)
+    free (obj->name);
   free (obj);
 }
 
