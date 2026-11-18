@@ -101,7 +101,7 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_HANDLE(nam, code, dxf) VALUE_HANDLE (_obj->nam, nam, code, dxf)
 #define SUB_FIELD_HANDLE(o, nam, code, dxf)                                   \
   if (obj->fixedtype == DWG_TYPE_TABLESTYLE)                                  \
-    LOG_HANDLE ("free TABLESTYLE.%s.%s\n", #o, #nam);                         \
+    LOG_INSANE ("free TABLESTYLE.%s.%s\n", #o, #nam);                         \
   VALUE_HANDLE (_obj->o.nam, nam, code, dxf)
 // compare to dwg_decode_handleref_with_code: not all refs are stored in the
 // object_ref vector, like relative ptrs and NULL.
