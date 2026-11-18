@@ -63,6 +63,16 @@ Security fixes:
     corrupt entities_end.  The 0.14 fix only reclamped size when
     size > end - start, and its no-advance guard only worked for the
     first entity.  GH #1131.  Reported by batam111.
+  * Fixed GHSA-vj62-wp5x-vw7v and GHSA-c5qq-r34g-qgpc: heap-use-after-free
+    in dwg_add_POLYLINE_*, the dwg_add_VERTEX_* and dwg_add_SEQEND calls can
+    realloc dwg->object[], which invalidated the held polyline Dwg_Object *.
+    It is re-resolved by index now.
+  * Fixed GHSA-qr3r-4gxg-wmf4 (algorithmic complexity): the AcDs section
+    dropped duplicate handles with a linear scan per record, which was
+    quadratic.  It is sorted once now.
+  * Fixed GHSA-w5cw-g5gp-p6vf (algorithmic complexity): the r2007 reader
+    looked up every section page with a linear get_page(), which was
+    quadratic.  It uses an index now.
 
 Major features:
   * use mmap for input files.
