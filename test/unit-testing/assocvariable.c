@@ -41,7 +41,7 @@ api_process (dwg_object *obj)
     }
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCVARIABLE, owned_params, num_owned_params);
-  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_values, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_values, BL);
   CHK_VALUEPARAM (num_values, values);
 
   // ASSOCVARIABLE

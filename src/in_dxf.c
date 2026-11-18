@@ -13402,8 +13402,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               pair = add_EVAL_Node (obj, dat, pair);
               if (!pair)
                 goto fail;
-              // returns with 0
-              if (pair->code == 0)
+              // returns with 0 or the EED 1001
+              if (pair->code == 0 || (pair->code >= 1000 && pair->code < 1999))
                 goto start_loop;
               else
                 goto search_field;

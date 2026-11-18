@@ -40,7 +40,7 @@ api_process (dwg_object *obj)
     }
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, owned_params, num_owned_params);
-  CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_values, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_values, BL);
   CHK_VALUEPARAM (num_values, values);
 
   // ASSOC2DCONSTRAINTGROUP
