@@ -962,6 +962,9 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           VALUE_##type (_obj->nam[vcount], _dxf);                             \
         }                                                                     \
     }
+#ifndef FIELD_VECTOR_TS
+#  define FIELD_VECTOR_TS(nam, type, size, dxf) FIELD_VECTOR_T (nam, type, size, dxf)
+#endif
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (dxf && _obj->nam)                                                       \
     {                                                                         \

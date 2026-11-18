@@ -773,6 +773,9 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         VALUE (_obj->nam[vcount], type, dxf);                                 \
     }
+#ifndef FIELD_VECTOR_TS
+#  define FIELD_VECTOR_TS(nam, type, size, dxf) FIELD_VECTOR_T (nam, type, size, dxf)
+#endif
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (dxf && _obj->nam)                                                       \
     {                                                                         \

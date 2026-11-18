@@ -687,6 +687,9 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   else                                                                        \
     FIRSTPREFIX                                                               \
   ENDARRAY;
+#ifndef FIELD_VECTOR_TS
+#  define FIELD_VECTOR_TS(nam, type, size, dxf) FIELD_VECTOR_T (nam, type, size, dxf)
+#endif
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   KEY (nam);                                                                  \
   ARRAY;                                                                      \

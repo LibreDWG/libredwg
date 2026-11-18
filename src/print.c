@@ -233,6 +233,9 @@ static BITCODE_BL rcount1, rcount2;
                      _obj->name[vcount]);                                     \
         }                                                                     \
     }
+#ifndef FIELD_VECTOR_TS
+#  define FIELD_VECTOR_TS(nam, type, size, dxf) FIELD_VECTOR_T (nam, type, size, dxf)
+#endif
 #define FIELD_VECTOR_T(name, type, size, dxf)                                 \
   if (_obj->size > 0 && _obj->name != NULL)                                   \
     {                                                                         \

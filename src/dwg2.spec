@@ -3809,11 +3809,7 @@ DWG_ENTITY_END
 // 1-6 references, see associativity bits 1-8.
 DWG_OBJECT (DIMASSOC)
 
-  HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbDimAssoc);
-  // ODA writes the dimension 330 first. It lives in the handle stream,
-  // so the DWG bits do not change, and it still comes before the refs'
-  // handles.
   FIELD_HANDLE (dimensionobj, 4, 330);
   FIELD_BLx (associativity, 90);
   FIELD_B (trans_space_flag, 70);

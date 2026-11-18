@@ -548,6 +548,9 @@
           LOG_POS                                                             \
         }                                                                     \
     }
+#ifndef FIELD_VECTOR_TS
+#  define FIELD_VECTOR_TS(nam, type, size, dxf) FIELD_VECTOR_T (nam, type, size, dxf)
+#endif
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (_obj->size > 0 && _obj->nam)                                            \
     {                                                                         \
