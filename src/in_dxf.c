@@ -10710,6 +10710,18 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   obj->tio.entity->entmode = 0;
   owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attribs";
   ow = owner->tio.entity->tio.POLYLINE_2D;
+  // a second SEQEND for the same owner would list the first SEQEND as owned
+  {
+    BITCODE_H old = NULL;
+    if (dwg_dynapi_entity_value (ow, owner->name, "seqend", &old, NULL) && old
+        && old->absolute_ref && old->absolute_ref != obj->handle.value)
+      {
+        LOG_WARN ("Duplicate SEQEND (" FORMAT_HV ") for owner " FORMAT_H
+                  ", ignored",
+                  obj->handle.value, ARGS_H (owner->handle));
+        return;
+      }
+  }
 
   seqend = dwg_add_handleref (dwg, 3, obj->handle.value, owner);
   dwg_dynapi_entity_set_value (ow, owner->name, "seqend", &seqend, 0);
@@ -10756,6 +10768,13 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   dwg_dynapi_entity_set_value (ow, owner->name, "num_owned", &num_owned, 0);
   LOG_TRACE ("%s.num_owned = " FORMAT_BL " [BL 0]\n", owner->name, num_owned);
 
+  {
+    // a second SEQEND for the same owner replaces the list
+    BITCODE_H *old = NULL;
+    if (dwg_dynapi_entity_value (ow, owner->name, owhdls, &old, NULL) && old
+        && old != owned)
+      free (old);
+  }
   dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);
   in_postprocess_SEQEND (obj, num_owned, owned);
 }
