@@ -5820,7 +5820,12 @@ DWG_ENTITY (PROXY_ENTITY)
     }
   }
   SINCE (R_2000b) {
+#ifdef IS_DXF
+    // ODA cannot read the binary 310 data of a "DXF format" proxy from a DXF
+    VALUE_B (0, 70);
+#else
     FIELD_B (from_dxf, 70); // Original Data Format: 0 dwg, 1 dxf
+#endif
   }
 
   // The proxy graphics (par 29) are not in the entity data, but in the preview
