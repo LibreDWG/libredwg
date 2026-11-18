@@ -5803,6 +5803,14 @@ DWG_ENTITY (PROXY_ENTITY)
     LOG_TRACE ("> maint_version: %x\n", _obj->maint_version);
     LOG_TRACE ("> dwg_version: %x\n", _obj->dwg_version);
   }
+#ifdef IS_ENCODER
+  // from DXF or an older version only DXF 95 is set
+  if (!FIELD_VALUE (dwg_version) && !FIELD_VALUE (maint_version))
+    {
+      FIELD_VALUE (maint_version) = FIELD_VALUE (version) >> 8;
+      FIELD_VALUE (dwg_version) = FIELD_VALUE (version) & 0xff;
+    }
+#endif
   SINCE (R_2018) {
     FIELD_BLx (dwg_version, 0);
     FIELD_BLx (maint_version, 0);
@@ -5877,9 +5885,8 @@ DWG_ENTITY (PROXY_ENTITY)
 
 #ifdef IS_ENCODER
   // the raw r2007+ data already holds the string stream and its footer, as
-  // in PROXY_OBJECT. Not so from DXF or across versions.
-  if (dat->version >= R_2007 && dwg->header.from_version == dat->version
-      && !(dwg->opts & DWG_OPTS_INDXF))
+  // in PROXY_OBJECT, also from a DXF or JSON of a r2007+ source.
+  if (dat->version >= R_2007 && dwg->header.from_version >= R_2007)
     str_dat = dat;
 #endif
   COMMON_ENTITY_HANDLE_DATA;

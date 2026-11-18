@@ -2945,8 +2945,9 @@ dxf_write_unknown_entity (Bit_Chain *restrict dat,
       fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", 5, obj->handle.value);
     }
   error |= dxf_common_entity_handle_data (dat, obj);
-  // Proxy class markers: 90=498, 91=class id (500 + the class index),
-  // 95=version, 70=0.
+  // The AcDbProxyEntity subclass: 90=498, 91=class id (500 + the class
+  // index), 95=version, 70=0, then the graphics 92/310 and the data 93/310.
+  fprintf (dat->fh, "%3i\r\n%s\r\n", 100, "AcDbProxyEntity");
   fprintf (dat->fh, "%3i\r\n%9li\r\n", 90, 498L);
   fprintf (dat->fh, "%3i\r\n%9li\r\n", 91, klass ? (long)obj->type : 0L);
   // Group 95 must be decimal: dxf_read_rl parses it decimal, a hex value
@@ -2956,6 +2957,48 @@ dxf_write_unknown_entity (Bit_Chain *restrict dat,
                           | (BITCODE_BL)klass->dwg_version)
                  : 0L);
   fprintf (dat->fh, "%3i\r\n%6i\r\n", 70, 0);
+  if (obj->tio.entity->preview_exists && obj->tio.entity->preview
+      && obj->tio.entity->preview_size)
+    {
+      fprintf (dat->fh, "%3i\r\n%9lu\r\n", 92,
+               (unsigned long)obj->tio.entity->preview_size);
+      VALUE_BINARY (obj->tio.entity->preview, obj->tio.entity->preview_size,
+                    310);
+    }
+  // The class data bits (after the common entity data until the handle
+  // stream), as the proxy data 93/310. The unknown_bits are the whole rest
+  // of the object. Only its last partial byte is packed LSB-first, the data
+  // has the unused bits of its last byte zeroed.
+  // the bits from the start of the class data to the handle stream
+  if (obj->unknown_bits
+      && (size_t)obj->num_unknown_bits + obj->bitsize > (size_t)obj->size * 8)
+    {
+      const size_t numbits = (size_t)obj->num_unknown_bits + obj->bitsize
+                             - (size_t)obj->size * 8;
+      const size_t bytes = (numbits + 7) / 8;
+      const size_t avail = (obj->num_unknown_bits + 7) / 8;
+      if (bytes && bytes <= avail)
+        {
+          unsigned char *data = (unsigned char *)malloc (bytes);
+          if (data)
+            {
+              memcpy (data, obj->unknown_bits, bytes);
+              if (bytes - 1 == obj->num_unknown_bits / 8
+                  && obj->num_unknown_bits % 8)
+                {
+                  unsigned char b = data[bytes - 1], r = 0;
+                  for (int k = 0; k < 8; k++)
+                    r |= ((b >> k) & 1) << (7 - k);
+                  data[bytes - 1] = r;
+                }
+              if (numbits % 8)
+                data[bytes - 1] &= (unsigned char)(0xFF << (8 - numbits % 8));
+              fprintf (dat->fh, "%3i\r\n%9lu\r\n", 93, (unsigned long)numbits);
+              VALUE_BINARY (data, bytes, 310);
+              free (data);
+            }
+        }
+    }
   error |= dxf_write_eed (dat, obj->tio.object);
   return error;
 }

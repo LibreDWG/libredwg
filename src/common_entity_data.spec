@@ -310,8 +310,10 @@
           _ent->preview_is_proxy = 1;
 #endif
 #ifdef IS_DXF
-        // the PROXY_ENTITY writes its graphics (92/310) in its own subclass
-        if (obj->fixedtype != DWG_TYPE_PROXY_ENTITY)
+        // the PROXY_ENTITY and unknown entities written as proxy write their
+        // graphics (92/310) in the AcDbProxyEntity subclass
+        if (obj->fixedtype != DWG_TYPE_PROXY_ENTITY
+            && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT)
           {
 #endif
 #if defined(IS_JSON)
