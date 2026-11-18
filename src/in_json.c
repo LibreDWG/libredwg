@@ -1517,6 +1517,9 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (klass->number != i + 500)
                 LOG_WARN ("Possibly illegal class number %d, expected %d",
                           klass->number, i + 500);
+              // the class identity is its index, a lying number must not
+              // redirect lookups (GHSA-v28x-qfr4-w4vm)
+              klass->number = (BITCODE_BS)(i + 500);
             }
           else if (strEQc (key, "dxfname"))
             {
@@ -4019,8 +4022,36 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               int isent;
               const char *dxfname;
-              obj->type = (BITCODE_BS)json_long (dat, tokens);
+              // json_long returns uint32_t; the type is signed (RSd) and
+              // negative for deleted pre-R13 entities.
+              const long _ty = (int32_t)json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
+              // GHSA-v28x-qfr4-w4vm: bound the value before the BS cast and
+              // check the class it selects against the allocated object.
+              // pre-R13 JSON has no object types and writes 0, or the
+              // signed RS entity type as written by out_json (e.g. -1 for
+              // deleted). R13+ types must be non-negative. Types >= 500
+              // with no such class (hand-written JSON without CLASSES) are
+              // fine: free and the writers dispatch by fixedtype and guard
+              // the class index. A type only selects another class'
+              // destructor when the class exists and its dxfname differs
+              // (checked below).
+              if ((_ty < 0
+                   && (dwg->header.from_version >= R_13b1 || _ty < -32768))
+                  || _ty > 65535)
+                {
+                  LOG_ERROR ("Invalid %s.type %ld", name, (long)(int32_t)_ty);
+                  // exhaust the rest
+                  for (; j < keys; j++)
+                    {
+                      json_advance_unknown (dat, tokens, t->type, 0); // value
+                      tokens->index++; // next key
+                      JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
+                    }
+                  tokens->index--;
+                  break;
+                }
+              obj->type = _ty ? (BITCODE_BS)_ty : obj->type;
 
               if (!dwg_object_name (name, &dxfname, &obj->fixedtype, &isent,
                                     NULL))
@@ -4050,6 +4081,29 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
+                  // GHSA-v28x-qfr4-w4vm: the class selected by a type >= 500
+                  // must match the token allocated for the object name,
+                  // else the destructor of another class is applied to it.
+                  // UNKNOWN_* tokens hold the dxfname of any class.
+                  if (obj->type >= 500 && obj->type - 500 < dwg->num_classes
+                      && dwg->dwg_class[obj->type - 500].dxfname
+                      && strNE (dwg->dwg_class[obj->type - 500].dxfname,
+                                dxfname)
+                      && !memBEGINc (name, "UNKNOWN_"))
+                    {
+                      LOG_ERROR ("Invalid %s.type %d, class %d is %s", name,
+                                 (int)obj->type, obj->type - 500,
+                                 dwg->dwg_class[obj->type - 500].dxfname);
+                      // exhaust the rest
+                      for (; j < keys; j++)
+                        {
+                          json_advance_unknown (dat, tokens, t->type, 0);
+                          tokens->index++;
+                          JSON_TOKENS_CHECK_OVERFLOW (goto harderr);
+                        }
+                      tokens->index--;
+                      break;
+                    }
                   // a fixed type number below 500, as PROXY_OBJECT,
                   // selects that type's struct, also 498/499 in
                   // dwg_free_object (GHSA-v9c2-69pf-gwr5)

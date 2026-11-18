@@ -5,6 +5,17 @@ See the end for copying conditions.
 LibreDWG version 0.15 - 2026-11-28 - beta:
 
 Security fixes:
+  * Fixed GHSA-v28x-qfr4-w4vm: JSON import type confusion.  An OBJECTS
+    entry could decouple the allocated object from the class selected by
+    its "type" key (500+), so the destructor of another class was applied
+    to it (invalid free, heap corruption).  The importer now validates
+    the type key: the value is bounded to the BS range, and a type whose
+    class exists must match the class dxfname of the allocated object; a
+    lying CLASS number is forced to its index.  Types 500+ without a
+    declared class (JSON without CLASSES) stay valid, as free and the
+    writers dispatch by fixedtype and guard the class index.
+    The pre-existing dwg_free_variable_type dxfname check
+    remains as the last line of defense.
   * Fixed GHSA-67c2-h2w2-32g4: double-free and loss of the model-space
     object when an invalid DXF BLOCK_RECORD reuses its handle.
     Reported by hgrgr.

@@ -1011,7 +1011,25 @@ free_preR13_object (Dwg_Object *obj)
       dwg_free_DUMMY (dat, obj);
       break;
     case DWG_TYPE_UNUSED:
-      // deleted entity. leak? see above
+      // deleted entity, or a partial injson/indxf object without a valid
+      // type/fixedtype yet. No fixedtype-specific destructor applies, so
+      // release the generic blocks allocated for it (as in in_json harderr).
+      if (dwg->opts & (DWG_OPTS_IN | DWG_OPTS_INJSON))
+        {
+          if (obj->supertype == DWG_SUPERTYPE_ENTITY)
+            {
+              if (obj->tio.entity)
+                {
+                  FREE_IF (obj->tio.entity->tio.POINT);
+                  FREE_IF (obj->tio.entity);
+                }
+            }
+          else if (obj->tio.object)
+            {
+              FREE_IF (obj->tio.object->tio.APPID);
+              FREE_IF (obj->tio.object);
+            }
+        }
       break;
     default:
       LOG_ERROR (

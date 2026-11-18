@@ -2956,9 +2956,10 @@ write_json_string (Dwg_Data *dwg, const char *file)
 
 // The writers and dwg_free dispatch a variable-type object by the name of
 // its class (classes.inc), which must be the object's own type: else they
-// read its struct as another one. A SCALE whose only class is a MATERIAL
-// is written as an UNKNOWN_OBJ. A fixed type number of another object, as
-// PROXY_OBJECT's, is replaced by the object's own type.
+// read its struct as another one. The JSON importer rejects a SCALE whose
+// type selects the class of another object, a MATERIAL (GHSA-v28x-qfr4-w4vm).
+// A fixed type number of another object, as PROXY_OBJECT's, is replaced by
+// the object's own type.
 static int
 test_class_object_type (void)
 {
@@ -2966,7 +2967,8 @@ test_class_object_type (void)
   const char *file = "class_object_type.json";
   char *out;
   int error;
-  static const char json[]
+  // the class 500 is a MATERIAL, not a SCALE
+  static const char json_mismatch[]
       = "{\n"
         "  \"created_by\": \"add_test\",\n"
         "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
@@ -2977,13 +2979,42 @@ test_class_object_type (void)
         "  ],\n"
         "  \"OBJECTS\": [\n"
         "    { \"object\": \"SCALE\", \"index\": 0, \"type\": 500,\n"
-        "      \"handle\": [0, 1, 1], \"name\": \"1:1\" },\n"
-        "    { \"object\": \"SCALE\", \"index\": 1, \"type\": 499,\n"
+        "      \"handle\": [0, 1, 1], \"name\": \"1:1\" }\n"
+        "  ]\n"
+        "}\n";
+  static const char json[]
+      = "{\n"
+        "  \"created_by\": \"add_test\",\n"
+        "  \"FILEHEADER\": { \"version\": \"AC1018\" },\n"
+        "  \"CLASSES\": [\n"
+        "    { \"number\": 500, \"dxfname\": \"MATERIAL\",\n"
+        "      \"cppname\": \"AcDbMaterial\",\n"
+        "      \"appname\": \"ObjectDBX Classes\", \"item_class_id\": 499 }\n"
+        "  ],\n"
+        "  \"OBJECTS\": [\n"
+        "    { \"object\": \"SCALE\", \"index\": 0, \"type\": 499,\n"
         "      \"handle\": [0, 1, 2], \"name\": \"1:2\" }\n"
         "  ]\n"
         "}\n";
 
   failed = 0;
+  error = read_json_string (&dwg, json_mismatch, sizeof (json_mismatch) - 1);
+  if (error < DWG_ERR_CRITICAL)
+    {
+      out = write_json_string (&dwg, file);
+      if (out
+          && (strstr (out, "\"object\": \"MATERIAL\"")
+              || strstr (out, "\"object\":\"MATERIAL\"")))
+        fail ("class_object_type: SCALE written by its MATERIAL class");
+      else
+        ok ("class_object_type: SCALE with a MATERIAL class not written as "
+            "MATERIAL");
+      free (out);
+    }
+  else
+    ok ("class_object_type: SCALE of a MATERIAL class rejected");
+  dwg_free (&dwg);
+
   error = read_json_string (&dwg, json, sizeof (json) - 1);
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -2991,23 +3022,18 @@ test_class_object_type (void)
       dwg_free (&dwg);
       return numfailed ();
     }
-  if (dwg.num_objects != 2 || dwg.object[1].type != DWG_TYPE_SCALE)
+  if (dwg.num_objects != 1 || dwg.object[0].type != DWG_TYPE_SCALE)
     fail ("class_object_type: SCALE type %u, not its own",
-          dwg.num_objects > 1 ? (unsigned)dwg.object[1].type : 0);
+          dwg.num_objects > 0 ? (unsigned)dwg.object[0].type : 0);
   else
     ok ("class_object_type: SCALE of type PROXY_OBJECT typed as SCALE");
   out = write_json_string (&dwg, file);
   if (!out)
     fail ("class_object_type: no JSON written to %s", file);
-  else if (strstr (out, "\"object\": \"MATERIAL\"")
-           || strstr (out, "\"object\":\"MATERIAL\"")
-           || !strstr (out, "\"UNKNOWN_OBJ\""))
-    fail ("class_object_type: SCALE written by its MATERIAL class");
   else if (strstr (out, "\"PROXY_OBJECT\""))
     fail ("class_object_type: SCALE written as a PROXY_OBJECT");
   else
-    ok ("class_object_type: SCALE with a MATERIAL class written as "
-        "UNKNOWN_OBJ");
+    ok ("class_object_type: SCALE not written as a PROXY_OBJECT");
   free (out);
   dwg_free (&dwg);
   return numfailed ();
