@@ -3028,8 +3028,78 @@ dxf_write_unknown_entity (Bit_Chain *restrict dat,
               VALUE_BINARY (data, bytes, 310);
               free (data);
             }
+          // the object handle stream after the class data, as the proxy
+          // object ids: 330 soft pointer, 340 hard pointer, 350 soft owner,
+          // 360 hard owner
+          {
+            unsigned char *all = (unsigned char *)malloc (avail);
+            if (all)
+              {
+                Bit_Chain hb;
+                memset (&hb, 0, sizeof (hb));
+                memcpy (all, obj->unknown_bits, avail);
+                if (obj->num_unknown_bits % 8)
+                  {
+                    unsigned char b = all[avail - 1], r = 0;
+                    for (int k = 0; k < 8; k++)
+                      r |= ((b >> k) & 1) << (7 - k);
+                    all[avail - 1] = r;
+                  }
+                hb.chain = all;
+                hb.size = avail;
+                hb.byte = numbits / 8;
+                hb.bit = (unsigned char)(numbits % 8);
+                hb.version = hb.from_version = dat->from_version;
+                while (hb.byte * 8 + hb.bit < obj->num_unknown_bits)
+                  {
+                    Dwg_Handle h;
+                    BITCODE_RLL absref;
+                    int dxfcode;
+                    if (bit_read_H (&hb, &h))
+                      break;
+                    switch (h.code)
+                      {
+                      case 2:
+                        dxfcode = 350;
+                        absref = h.value;
+                        break;
+                      case 3:
+                        dxfcode = 360;
+                        absref = h.value;
+                        break;
+                      case 5:
+                        dxfcode = 340;
+                        absref = h.value;
+                        break;
+                      case 6:
+                        dxfcode = 330;
+                        absref = obj->handle.value + 1;
+                        break;
+                      case 8:
+                        dxfcode = 330;
+                        absref = obj->handle.value - 1;
+                        break;
+                      case 10:
+                        dxfcode = 330;
+                        absref = obj->handle.value + h.value;
+                        break;
+                      case 12:
+                        dxfcode = 330;
+                        absref = obj->handle.value - h.value;
+                        break;
+                      default: // 4
+                        dxfcode = 330;
+                        absref = h.value;
+                      }
+                    fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", dxfcode,
+                             (BITCODE_RLL)absref);
+                  }
+                free (all);
+              }
+          }
         }
     }
+  fprintf (dat->fh, "%3i\r\n%9i\r\n", 94, 0);
   error |= dxf_write_eed (dat, obj->tio.object);
   return error;
 }
