@@ -4089,6 +4089,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     ctrl = dwg_obj_generic_to_object (_ctrl, &error);
     if (!ctrl || ctrl->fixedtype != DWG_TYPE_BLOCK_CONTROL)
       return DWG_ERR_INVALIDDWG;
+    // dwg_block_control() is a copy, its entries may be stale
+    _ctrl = ctrl->tio.object->tio.BLOCK_CONTROL;
 
     obj = ctrl;
     TABLE (BLOCK_RECORD);
@@ -4122,13 +4124,13 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxf_BLOCK_HEADER (dat, pspace);
       }
 
-    for (i = 0; i < dwg->block_control.num_entries; i++)
+    for (i = 0; i < _ctrl->num_entries; i++)
       {
-        if (!dwg->block_control.entries)
+        if (!_ctrl->entries)
           break;
-        if (!dwg->block_control.entries[i])
+        if (!_ctrl->entries[i])
           continue;
-        obj = dwg_ref_object (dwg, dwg->block_control.entries[i]);
+        obj = dwg_ref_object (dwg, _ctrl->entries[i]);
         if (obj && obj->type == DWG_TYPE_BLOCK_HEADER && obj != mspace
             && obj != pspace)
           {

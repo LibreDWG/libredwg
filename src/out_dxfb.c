@@ -2339,6 +2339,8 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     ctrl = dwg_obj_generic_to_object (_ctrl, &error);
     if (!ctrl || ctrl->fixedtype != DWG_TYPE_BLOCK_CONTROL)
       return DWG_ERR_INVALIDDWG;
+    // dwg_block_control() is a copy, its entries may be stale
+    _ctrl = ctrl->tio.object->tio.BLOCK_CONTROL;
 
     obj = ctrl;
     TABLE (BLOCK_RECORD);
