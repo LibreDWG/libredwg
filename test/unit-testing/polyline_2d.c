@@ -37,6 +37,19 @@ check_bulges (dwg_object *obj, BITCODE_BL numpoints)
   free (bulges);
 }
 
+static void
+check_flags (dwg_object *obj, BITCODE_BL numpoints)
+{
+  int error;
+  BITCODE_RC *flags = dwg_object_polyline_2d_get_flags (obj, &error);
+  if (!error)
+    for (BITCODE_BL i = 0; flags && i < numpoints; i++)
+      ok ("POLYLINE_2D.flags[%d]: %u", (int)i, (unsigned)flags[i]);
+  else
+    fail ("POLYLINE_2D.flags");
+  free (flags);
+}
+
 void
 api_process (dwg_object *obj)
 {
@@ -87,5 +100,6 @@ api_process (dwg_object *obj)
       check_vertex_chain (obj, first_vertex, last_vertex, numpoints);
     }
   check_bulges (obj, numpoints);
+  check_flags (obj, numpoints);
   CHK_ENTITY_H (polyline_2d, POLYLINE_2D, seqend);
 }

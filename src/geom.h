@@ -78,6 +78,13 @@ EXPORT int spline_eval (BITCODE_3DPOINT *out, const Dwg_Entity_SPLINE *spline,
 // or 0 if the SPLINE is not valid, clamped and non-rational.
 EXPORT int spline_to_bezier (const Dwg_Entity_SPLINE *spline,
                              BITCODE_3DPOINT **pts) __nonnull ((1, 2));
+// The curve of a spline-fit POLYLINE, flag 4, from its frame vertices,
+// flag 16, as Bezier curves of degree 2 or 3 like spline_to_bezier.
+EXPORT int polyline_spline_to_bezier (const BITCODE_3DPOINT *frame,
+                                      const BITCODE_BL num_frame,
+                                      const int degree, const int closed,
+                                      BITCODE_3DPOINT **pts)
+    __nonnull ((1, 5));
 // AutoCAD's cubic interpolation of the fit points of a SPLINE.  Sets *out
 // to a copy with the computed control points and knots, to be freed by the
 // caller.  Returns 0 if the fit points cannot be interpolated.

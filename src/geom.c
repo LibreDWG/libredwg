@@ -765,6 +765,104 @@ spline_to_bezier (const Dwg_Entity_SPLINE *spline, BITCODE_3DPOINT **pts)
   return (int)((n - 1) / p);
 }
 
+// out = wa a + wb b + wc c
+static void
+point_comb3 (BITCODE_3DPOINT *out, const double wa, const BITCODE_3DPOINT *a,
+             const double wb, const BITCODE_3DPOINT *b, const double wc,
+             const BITCODE_3DPOINT *c)
+{
+  out->x = wa * a->x + wb * b->x + wc * c->x;
+  out->y = wa * a->y + wb * b->y + wc * c->y;
+  out->z = wa * a->z + wb * b->z + wc * c->z;
+}
+
+/* An open spline-fit POLYLINE: the clamped uniform B-spline of the frame,
+   with the knots 0 .. 0, 1, 2, .., k .. k, through spline_to_bezier.  */
+static int
+polyline_spline_open (const BITCODE_3DPOINT *frame, const BITCODE_BL n,
+                      const BITCODE_BL p, BITCODE_3DPOINT **pts)
+{
+  Dwg_Entity_SPLINE spline;
+  BITCODE_BL i;
+  int num_curves;
+
+  memset (&spline, 0, sizeof (spline));
+  spline.degree = p;
+  spline.num_ctrl_pts = n;
+  spline.num_knots = n + p + 1;
+  spline.ctrl_pts = (Dwg_SPLINE_control_point *)calloc (
+      n, sizeof (Dwg_SPLINE_control_point));
+  spline.knots = (double *)malloc (spline.num_knots * sizeof (double));
+  if (!spline.ctrl_pts || !spline.knots)
+    {
+      free (spline.ctrl_pts);
+      free (spline.knots);
+      return 0;
+    }
+  for (i = 0; i < n; i++)
+    {
+      spline.ctrl_pts[i].x = frame[i].x;
+      spline.ctrl_pts[i].y = frame[i].y;
+      spline.ctrl_pts[i].z = frame[i].z;
+    }
+  for (i = 0; i < spline.num_knots; i++)
+    spline.knots[i] = i < p ? 0.0 : i > n ? (double)(n - p) : (double)(i - p);
+  num_curves = spline_to_bezier (&spline, pts);
+  free (spline.ctrl_pts);
+  free (spline.knots);
+  return num_curves;
+}
+
+/* The curve of a spline-fit POLYLINE (flag 4) as a chain of Bezier curves
+   of its degree 2 or 3, like spline_to_bezier.  The frame, its vertices
+   with flag 16, are the control points of a uniform B-spline: clamped when
+   open, so it goes from the first to the last frame vertex; periodic when
+   closed.  AutoCAD's fit vertices, flag 8, are points of this curve.  */
+int
+polyline_spline_to_bezier (const BITCODE_3DPOINT *frame,
+                           const BITCODE_BL num_frame, const int degree,
+                           const int closed, BITCODE_3DPOINT **pts)
+{
+  const BITCODE_BL n = num_frame, p = (BITCODE_BL)degree;
+  BITCODE_3DPOINT *P;
+  BITCODE_BL i;
+
+  *pts = NULL;
+  if ((degree != 2 && degree != 3) || n <= p)
+    return 0;
+  for (i = 0; i < n; i++)
+    if (!isfinite (frame[i].x) || !isfinite (frame[i].y)
+        || !isfinite (frame[i].z))
+      return 0;
+  if (!closed)
+    return polyline_spline_open (frame, n, p, pts);
+  // closed: n curves, curve i from the frame vertices i, i+1, i+2 cyclic;
+  // its end is the start of the next one, the last end the first start
+  P = (BITCODE_3DPOINT *)malloc ((n * p + 1) * sizeof (BITCODE_3DPOINT));
+  if (!P)
+    return 0;
+  for (i = 0; i < n; i++)
+    {
+      const BITCODE_3DPOINT *a = &frame[i], *b = &frame[(i + 1) % n],
+                            *c = &frame[(i + 2) % n];
+      BITCODE_3DPOINT *q = &P[i * p];
+      if (p == 2)
+        {
+          point_comb3 (&q[0], 0.5, a, 0.5, b, 0.0, c);
+          q[1] = *b;
+        }
+      else
+        {
+          point_comb3 (&q[0], 1.0 / 6, a, 4.0 / 6, b, 1.0 / 6, c);
+          point_comb3 (&q[1], 0.0, a, 2.0 / 3, b, 1.0 / 3, c);
+          point_comb3 (&q[2], 0.0, a, 1.0 / 3, b, 2.0 / 3, c);
+        }
+    }
+  P[n * p] = P[0];
+  *pts = P;
+  return (int)n;
+}
+
 // One row of a tridiagonal system: a * x[r-1] + b * x[r] + c * x[r+1] = d
 typedef struct _fit_row
 {

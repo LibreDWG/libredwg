@@ -22711,6 +22711,40 @@ dwg_object_polyline_2d_get_bulges (const dwg_object *restrict obj,
   return bulges;
 }
 
+/** Returns a copy of the vertex flags, one per vertex, in the order of
+    dwg_object_polyline_2d_get_points.  E.g. a spline-fit POLYLINE_2D has
+    the frame vertices with flag 16 and the fit vertices with flag 8.
+ */
+BITCODE_RC *
+dwg_object_polyline_2d_get_flags (const dwg_object *restrict obj,
+                                  int *restrict error)
+{
+  BITCODE_BL i, num_points;
+  Dwg_Entity_VERTEX_2D **verts;
+  BITCODE_RC *flags;
+
+  *error = 0;
+  if (!obj || obj->fixedtype != DWG_TYPE_POLYLINE_2D)
+    {
+      LOG_ERROR ("%s: empty arg", __FUNCTION__);
+      *error = 1;
+      return NULL;
+    }
+  verts = polyline_2d_vertices (obj, &num_points, error);
+  if (!verts)
+    return NULL;
+  flags = (BITCODE_RC *)calloc (num_points, sizeof (BITCODE_RC));
+  if (!flags)
+    LOG_ERROR ("%s: Out of memory", __FUNCTION__);
+  for (i = 0; flags && i < num_points; i++)
+    if (verts[i])
+      flags[i] = verts[i]->flag;
+  if (!flags)
+    *error = 1;
+  free (verts);
+  return flags;
+}
+
 /** Returns the number of _dwg_object:: POLYLINE_3D vertices,
     the list of associated _dwg_object_VERTEX_3D:: points.
 */
