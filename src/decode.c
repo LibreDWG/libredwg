@@ -4382,8 +4382,8 @@ typedef struct
 {
   const unsigned char *d;
   size_t len;
-  unsigned ss;           // sector size
-  uint32_t *fat;         // the sector ids of the FAT sectors
+  unsigned ss;   // sector size
+  uint32_t *fat; // the sector ids of the FAT sectors
   size_t n_fat;
 } Cfb;
 
