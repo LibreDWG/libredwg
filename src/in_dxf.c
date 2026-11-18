@@ -6721,12 +6721,11 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return pair;
 }
 
+// the pair is the EvalVariant.code 70, which is consumed
 static Dxf_Pair *
-add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
-                 Dwg_EvalVariant *value)
+add_EVALVARIANT_70 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                    Dxf_Pair *restrict pair, Dwg_EvalVariant *value)
 {
-  Dxf_Pair *pair = dxf_read_pair (dat);
-  EXPECT_DXF ("EvalVariant", code, 70);
   value->code = pair->value.i;
   LOG_TRACE ("%s.%s = %d [BL %d]\n", "EvalVariant", "code", pair->value.i,
              pair->code);
@@ -6788,6 +6787,15 @@ add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     }
   dxf_free_pair (pair);
   return NULL;
+}
+
+static Dxf_Pair *
+add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                 Dwg_EvalVariant *value)
+{
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  EXPECT_DXF ("EvalVariant", code, 70);
+  return add_EVALVARIANT_70 (dwg, dat, pair, value);
 }
 
 static int
@@ -7722,6 +7730,85 @@ add_sub_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   SUB_FIELD_HANDLE (assocdep, node, 3, 330);
   SUB_FIELD_HANDLE (assocdep, dep_body, 4, 360);
   SUB_FIELD_BLd (assocdep, depbodyid, 90);
+  return NULL;
+}
+
+// AcDbAssocValueDependency: class_version, name and the EvalVariant value
+static Dxf_Pair *
+add_ASSOCVALUEDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_ASSOCVALUEDEPENDENCY *o
+      = obj->tio.object->tio.ASSOCVALUEDEPENDENCY;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+
+  FIELD_BL (class_version, 90);
+  FIELD_T (name, 1);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, value, 70);
+  return add_EVALVARIANT_70 (dwg, dat, pair, &o->value);
+}
+
+// AcDbAssocVariable
+static Dxf_Pair *
+add_ASSOCVARIABLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_ASSOCVARIABLE *o = obj->tio.object->tio.ASSOCVARIABLE;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  BITCODE_BL num_var_deps;
+
+  FIELD_BS (av_class_version, 90);
+  FIELD_T (name, 1);
+  FIELD_T (expression, 1);
+  FIELD_T (evaluator, 1);
+  FIELD_T (desc, 1);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, value, 70);
+  pair = add_EVALVARIANT_70 (dwg, dat, pair, &o->value);
+  if (pair)
+    return pair;
+  FIELD_B (has_cached_value, 290);
+  if (o->has_cached_value)
+    {
+      FIELD_T (cached_value, 1);
+    }
+  FIELD_B (flag, 290);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, num_var_deps, 90);
+  num_var_deps = pair->value.u;
+  LOG_TRACE ("%s.num_var_deps = %u [BL %d]\n", obj->name, num_var_deps,
+             pair->code);
+  dxf_free_pair (pair);
+  if (num_var_deps > 1000)
+    {
+      LOG_ERROR ("%s: Invalid num_var_deps %u", obj->name, num_var_deps);
+      return dxf_read_pair (dat);
+    }
+  if (num_var_deps)
+    {
+      o->var_deps = (Dwg_ASSOCVARIABLE_Dep *)xcalloc (
+          num_var_deps, sizeof (Dwg_ASSOCVARIABLE_Dep));
+      for (BITCODE_BL i = 0; i < num_var_deps; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, var_deps.dependency, 330);
+          o->var_deps[i].parent = o;
+          o->var_deps[i].dependency
+              = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+          LOG_TRACE ("%s.var_deps[%u].dependency = " FORMAT_REF " [H %d]\n",
+                     obj->name, i, ARGS_REF (o->var_deps[i].dependency),
+                     pair->code);
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, var_deps.flags, 90);
+          o->var_deps[i].flags = pair->value.u;
+          LOG_TRACE ("%s.var_deps[%u].flags = %u [BL %d]\n", obj->name, i,
+                     o->var_deps[i].flags, pair->code);
+          dxf_free_pair (pair);
+          o->num_var_deps = i + 1;
+        }
+    }
   return NULL;
 }
 
@@ -12329,6 +12416,26 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                   dxf_free_pair (pair);
                   pair
                       = add_sub_ASSOCDEPENDENCY (obj, dat); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (obj->fixedtype == DWG_TYPE_ASSOCVALUEDEPENDENCY
+                       && strEQc (subclass, "AcDbAssocValueDependency"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_ASSOCVALUEDEPENDENCY (obj, dat);
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (obj->fixedtype == DWG_TYPE_ASSOCVARIABLE
+                       && strEQc (subclass, "AcDbAssocVariable"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_ASSOCVARIABLE (obj, dat);
                   if (!pair)
                     goto next_pair;
                   else

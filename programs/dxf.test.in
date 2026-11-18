@@ -179,7 +179,8 @@ for dwg in "$DATADIR"/sample_2*.dwg; do
     done
 done
 
-# Note that UNSTABLE classes are now skipped, just the single CLASS entry
+# Note that other UNSTABLE classes are skipped, just the single CLASS entry.
+# ASSOCDEPENDENCY is written.
 for dwg in "$DATADIR"/example_*.dwg
 do
     test -L "$dwg" && break
@@ -187,7 +188,8 @@ do
     tgt="../$(basename "$dxf")"
     log="$(basename "$tgt").log"
     rm "./$log" 2>/dev/null
-    for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
+    # shellcheck disable=SC2043
+    for dxfname in ACDBPERSSUBENTMANAGER
     do
         if [ "$DEBUG_CLASSES" = "1" ]; then
             check_acdb_dxfname
@@ -195,6 +197,12 @@ do
             check_acdb_dxfname 1
         fi
     done
+    dxfname=ACDBASSOCDEPENDENCY
+    # ODA does not write the r14 object, just the CLASS
+    case "$dwg" in
+        *_r14.dwg) check_acdb_dxfname 2 ;;
+        *)         check_acdb_dxfname ;;
+    esac
 done
 
 # shellcheck disable=SC2043

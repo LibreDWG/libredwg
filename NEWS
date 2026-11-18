@@ -243,6 +243,12 @@ Minor bugfixes / fuzzing fixes:
     table records and BLOCK.xref_pname), and the testcases 6383958498279424
     (double dwg_free after a failed JSON import) and 5647996143075328
     (dxfb_ENDBLK_empty leak).
+  * DXF output and import of the unstable ASSOCDEPENDENCY,
+    ASSOCVALUEDEPENDENCY, ASSOCVARIABLE, ASSOCDIMDEPENDENCYBODY,
+    ASSOC2DCONSTRAINTGROUP, BLOCKPARAMDEPENDENCYBODY, BLOCKREPRESENTATION,
+    BLOCK{HORIZONTAL,VERTICAL}CONSTRAINTPARAMETER and EVALUATION_GRAPH
+    objects.  They were dropped by dwg2dxf, leaving dangling handles
+    ("Object handle not found") after a DXF roundtrip of civil_example.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 

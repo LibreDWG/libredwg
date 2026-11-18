@@ -3064,6 +3064,8 @@ object_alias (char *restrict name)
     strcpy (name, "PERSUBENTMGR");
   else if (strEQc (name, "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION"))
     strcpy (name, "DYNAMICBLOCKPURGEPREVENTER");
+  else if (strEQc (name, "ACDB_BLOCKREPRESENTATION_DATA"))
+    strcpy (name, "BLOCKREPRESENTATION");
   else if (strEQc (name, "EXACXREFPANELOBJECT"))
     strcpy (name, "XREFPANELOBJECT");
   else if (strstr (name, "_BACKGROUND"))
