@@ -52,6 +52,7 @@ TESTDATA = \
     test-data/2000/Polyline.dwg \
     test-data/2000/Polyline.jpg \
     test-data/2000/Polyline.txt \
+    test-data/2000/PolylineSplineFit.dxf \
     test-data/2000/RAY.dwg \
     test-data/2000/RAY.jpg \
     test-data/2000/RAY.txt \

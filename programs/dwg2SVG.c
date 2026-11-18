@@ -726,6 +726,102 @@ path_segment (BITCODE_2DPOINT prev, BITCODE_2DPOINT pt, double bulge,
     printf (" L %f,%f", transform_X (pt.x), transform_Y (pt.y));
 }
 
+static void spline_path_bezier (const BITCODE_3DPOINT *pts,
+                                const int num_curves, const int degree);
+
+// A spline-fit POLYLINE_2D, flag 4: the exact curve of its frame vertices,
+// flag 16, as Bezier curves of degree 2 or 3.  Bezier curves are affine
+// invariant, so the frame is transformed first.  Returns 0 if not usable.
+static int
+polyline_2d_spline (const Dwg_Object *obj, const Dwg_Entity_POLYLINE_2D *pline,
+                    const dwg_point_2d *pts, const BITCODE_RC *flags,
+                    const BITCODE_RL numpts)
+{
+  const int degree = pline->curve_type == 5   ? 2
+                     : pline->curve_type == 6 ? 3
+                                              : 0;
+  BITCODE_3DPOINT *frame, *bez;
+  BITCODE_RL j, n = 0;
+  int num_curves;
+
+  if (!degree)
+    return 0;
+  frame = (BITCODE_3DPOINT *)malloc (numpts * sizeof (BITCODE_3DPOINT));
+  if (!frame)
+    return 0;
+  for (j = 0; j < numpts; j++)
+    if (flags[j] & 16)
+      {
+        BITCODE_2DPOINT pt, ptin;
+        ptin.x = pts[j].x;
+        ptin.y = pts[j].y;
+        transform_OCS_elevation (&pt, ptin, pline->elevation,
+                                 pline->extrusion);
+        frame[n].x = pt.x;
+        frame[n].y = pt.y;
+        frame[n].z = 0.0;
+        n++;
+      }
+  num_curves
+      = polyline_spline_to_bezier (frame, n, degree, pline->flag & 1, &bez);
+  free (frame);
+  if (!num_curves)
+    return 0;
+  printf ("\t<!-- polyline_2d-%d -->\n", obj->index);
+  printf ("\t<path id=\"dwg-object-%d\" d=\"", obj->index);
+  spline_path_bezier (bez, num_curves, degree);
+  if (pline->flag & 1)
+    printf (" Z");
+  printf ("\"\n\t");
+  common_entity (obj->tio.entity);
+  free (bez);
+  return 1;
+}
+
+// Without a usable frame: only the fit vertices, straight as AutoCAD draws
+// them.  Returns their number, 0 if there are none and pts is unchanged.
+static BITCODE_RL
+polyline_2d_drop_frame (dwg_point_2d *pts, const BITCODE_RC *flags,
+                        const BITCODE_RL numpts)
+{
+  BITCODE_RL j, k = 0;
+  for (j = 0; j < numpts; j++)
+    if (!(flags[j] & 16))
+      pts[k++] = pts[j];
+  return k;
+}
+
+// A spline-fit POLYLINE_2D, flag 4: draws its exact curve and returns 1.
+// Else, without a usable frame, keeps only its fit vertices in pts, if
+// any, and returns 0 with *straight set: AutoCAD joins them straight.
+static int
+polyline_2d_spline_fit (const Dwg_Object *obj,
+                        const Dwg_Entity_POLYLINE_2D *pline, dwg_point_2d *pts,
+                        BITCODE_RL *numpts, int *straight)
+{
+  int error, done;
+  BITCODE_RC *flags = dwg_object_polyline_2d_get_flags (obj, &error);
+
+  *straight = 0;
+  if (!flags || error)
+    {
+      free (flags);
+      return 0;
+    }
+  done = polyline_2d_spline (obj, pline, pts, flags, *numpts);
+  if (!done)
+    {
+      const BITCODE_RL k = polyline_2d_drop_frame (pts, flags, *numpts);
+      if (k)
+        {
+          *numpts = k;
+          *straight = 1;
+        }
+    }
+  free (flags);
+  return done;
+}
+
 static void
 output_POLYLINE_2D (Dwg_Object *obj)
 {
@@ -742,15 +838,19 @@ output_POLYLINE_2D (Dwg_Object *obj)
       dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
       double *bulges;
       BITCODE_RL j, prev_j = 0;
-      int mirrored;
+      int mirrored, straight = 0;
 
-      if (error || isnan_2pt (pts[0]) || isnan_3BD (pline->extrusion))
+      if (error || isnan_3BD (pline->extrusion)
+          || ((pline->flag & 4) // spline-fit, drawn as a curve
+              && polyline_2d_spline_fit (obj, pline, pts, &numpts, &straight))
+          || isnan_2pt (pts[0]))
         {
           free (pts);
           return;
         }
-      // without bulges, all segments are straight
-      bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
+      // without bulges, all segments are straight, also the fit vertices
+      bulges
+          = straight ? NULL : dwg_object_polyline_2d_get_bulges (obj, &error);
       mirrored = transform_OCS_2d_is_mirrored (pline->extrusion);
       ptin.x = pts[0].x;
       ptin.y = pts[0].y;
@@ -759,7 +859,6 @@ output_POLYLINE_2D (Dwg_Object *obj)
       printf ("\t<!-- polyline_2d-%d -->\n", obj->index);
       printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f", obj->index,
               transform_X (pt.x), transform_Y (pt.y));
-      // TODO curve_types, C for Bezier https://svgwg.org/specs/paths/#PathData
       for (j = 1; j < numpts; j++)
         {
           ptin.x = pts[j].x;
