@@ -4282,9 +4282,8 @@ DWG_ENTITY (NURBSURFACE)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-// (varies)
-// works ok on all example_20* but this coverage seems limited
-// The static variant
+// Static persistent subentity manager. Record meanings are partly understood.
+// Layout verified against the available class_version 2 samples.
 DWG_OBJECT (PERSUBENTMGR)
   HANDLE_UNKNOWN_BITS;
   SUBCLASS (AcDbPersSubentManager);
@@ -4293,13 +4292,21 @@ DWG_OBJECT (PERSUBENTMGR)
   FIELD_BL (unknown_0, 90); //always 0
   FIELD_BL (unknown_2, 90); //always 2
 
-  FIELD_BL (numassocsteps, 90);  //3
-  FIELD_BL (numassocsubents, 90);//0
-  FIELD_BL (num_steps, 90);      //1
-  FIELD_VECTOR (steps, BL, num_steps, 90); //1
-  FIELD_BL (num_subents, 90);
-  // nope: 3x BL and CALL_SUBENT
-  FIELD_VECTOR (subents, BL, num_subents, 90);
+  FIELD_BL (unknown_bl1, 90);
+  FIELD_BL (num_records, 90);
+  REPEAT (num_records, records, Dwg_PERSUBENTMGR_Record)
+  REPEAT_BLOCK
+    SUB_FIELD_BL (records[rcount1], record_type, 90);
+    SUB_FIELD_BL (records[rcount1], unknown_bl, 90);
+    SUB_FIELD_BL (records[rcount1], num_history_ids, 90);
+    SUB_FIELD_VECTOR (records[rcount1], history_ids, BL, num_history_ids, 90);
+    SUB_FIELD_BL (records[rcount1], num_data_values, 90);
+    SUB_FIELD_VECTOR (records[rcount1], data_values, BL, num_data_values, 90);
+    SET_PARENT_OBJ (records[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (records);
+  FIELD_BL (num_history_ids, 90);
+  FIELD_VECTOR (history_ids, BL, num_history_ids, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
