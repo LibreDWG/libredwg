@@ -71,6 +71,8 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
                               const int opts, const int dxf);
 static bool dxf_needs_cquote (const char *restrict str);
+static void dxf_fixup_TU (Bit_Chain *restrict dat,
+                          const BITCODE_TU restrict wstr, const int dxf);
 static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                      const int dxf, const int opt);
 
@@ -130,10 +132,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       }                                                                       \
     else if (dxf)                                                             \
       {                                                                       \
-        char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                         \
-        dxf_fixup_string (dat, u8, 1, dxf);                                   \
-        if (u8 && u8 != (char*)wstr)                                          \
-          free (u8);                                                          \
+        dxf_fixup_TU (dat, (BITCODE_TU)wstr, dxf);                            \
       }                                                                       \
   }
 #define VALUE_TFF(str, dxf)                                                   \
@@ -837,13 +836,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       {                                                                       \
         if (IS_FROM_TU (dat))                                                 \
           {                                                                   \
-            char *u8 = bit_convert_TU ((BITCODE_TU)_obj->nam);                \
-            if (u8 && *u8)                                                    \
-              {                                                               \
-                GROUP (dxf);                                                  \
-                fprintf (dat->fh, "%s\r\n", u8);                              \
-              }                                                               \
-            free (u8);                                                        \
+            if (dxf && ((BITCODE_TU)_obj->nam)[0])                            \
+              dxf_fixup_TU (dat, (BITCODE_TU)_obj->nam, dxf);                 \
           }                                                                   \
         else if (*_obj->nam)                                                  \
           {                                                                   \
@@ -1625,6 +1619,43 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
     }
   else
     fprintf (dat->fh, "%3d\r\n\r\n", dxf);
+}
+
+/* A UTF-16 string (from a R2007+ source). The DXF before R2007 has the text
+   in the $DWGCODEPAGE, so write all non-ASCII characters as \U+XXXX there,
+   which is valid for every code page. */
+static void
+dxf_fixup_TU (Bit_Chain *restrict dat, const BITCODE_TU restrict wstr,
+              const int dxf)
+{
+  char *u8;
+  if (!dxf)
+    return;
+  u8 = bit_convert_TU (wstr);
+  if (u8 && dat->version < R_2007)
+    {
+      bool nonascii = false;
+      for (const unsigned char *s = (const unsigned char *)u8; *s; s++)
+        if (*s >= 0x80)
+          {
+            nonascii = true;
+            break;
+          }
+      if (nonascii)
+        {
+          char *e = dxf_embed_TU (wstr);
+          if (e)
+            {
+              dxf_fixup_string (dat, e, 1, dxf);
+              free (e);
+              free (u8);
+              return;
+            }
+        }
+    }
+  dxf_fixup_string (dat, u8, 1, dxf);
+  if (u8 && u8 != (char *)wstr)
+    free (u8);
 }
 
 static int
@@ -3078,7 +3109,8 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           = obj->tio.entity->tio.POLYLINE_##token;                            \
       const int chain = dat->version < R_13b1                                 \
                             ? !(_obj->num_owned && _obj->vertex)              \
-                            : dat->version <= R_2000;                         \
+                            : (dat->version <= R_2000 && _obj->first_vertex   \
+                               && _obj->last_vertex);                         \
       if (chain)                                                              \
       {                                                                       \
         Dwg_Object *last_vertex                                               \
@@ -3167,7 +3199,9 @@ decl_dxf_process_VERTEX (PFACE)
       if (!_obj->has_attribs)                                                 \
         return 0;                                                             \
       if (dat->version < R_13b1 ? !(_obj->num_owned && _obj->attribs)         \
-                                : dat->version <= R_2000)                     \
+                                : (dat->version <= R_2000                     \
+                                   && _obj->first_attrib                      \
+                                   && _obj->last_attrib))                     \
       {                                                                       \
         Dwg_Object *last_attrib                                               \
             = _obj->last_attrib ? _obj->last_attrib->obj : NULL;              \

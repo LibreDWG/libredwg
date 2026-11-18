@@ -62,6 +62,45 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                                   const Dwg_Object *restrict obj,
                                   char *restrict name, const int dxf); */
 
+/* The UTF-8 of a UTF-16 string (R2007+ source). Before R2007 the DXF text is
+   in the $DWGCODEPAGE, so non-ASCII characters are written as \U+XXXX there.
+ */
+static char *
+dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
+{
+  char *u8 = bit_convert_TU (wstr);
+  if (u8 && dat->version < R_2007)
+    {
+      size_t len = 0, n = 0;
+      bool nonascii = false;
+      char *d, *e;
+      for (const unsigned char *s = (const unsigned char *)u8; *s; s++)
+        if (*s >= 0x80)
+          {
+            nonascii = true;
+            break;
+          }
+      if (!nonascii)
+        return u8;
+      while (wstr[len])
+        len++;
+      e = d = (char *)malloc ((7 * len) + 1);
+      if (!e)
+        return u8;
+      for (n = 0; n < len; n++)
+        {
+          if (wstr[n] < 0x80)
+            *d++ = (char)wstr[n];
+          else
+            d += sprintf (d, "\\U+%04X", (unsigned)wstr[n]);
+        }
+      *d = '\0';
+      free (u8);
+      return e;
+    }
+  return u8;
+}
+
 /*--------------------------------------------------------------------------------
  * MACROS
  */
@@ -117,7 +156,7 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   {                                                                           \
     if (dxf)                                                                  \
       {                                                                       \
-        char *_u8 = bit_convert_TU ((BITCODE_TU)wstr);                        \
+        char *_u8 = dxfb_convert_TU (dat, (BITCODE_TU)wstr);                  \
         GROUP (dxf);                                                          \
         if (_u8)                                                              \
           fprintf (dat->fh, "%s%c", _u8, 0);                                  \
@@ -1565,8 +1604,11 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     int error = 0;                                                            \
     Dwg_Entity_POLYLINE_##token *_obj                                         \
         = obj->tio.entity->tio.POLYLINE_##token;                              \
+    const int chain                                                           \
+        = dat->version >= R_13b1 && dat->version <= R_2000                    \
+          && _obj->first_vertex && _obj->last_vertex;                         \
                                                                               \
-    VERSIONS (R_13b1, R_2000)                                                 \
+    if (chain)                                                                \
     {                                                                         \
       Dwg_Object *last_vertex                                                 \
           = _obj->last_vertex ? _obj->last_vertex->obj : NULL;                \
@@ -1598,7 +1640,7 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         error |= dwg_dxfb_SEQEND (dat, o);                                    \
       *i = *i + 1;                                                            \
     }                                                                         \
-    SINCE (R_2004a)                                                           \
+    if (!chain && dat->version >= R_13b1)                                     \
     {                                                                         \
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
@@ -1637,10 +1679,13 @@ decl_dxfb_process_VERTEX (PFACE)
   {                                                                           \
     int error = 0;                                                            \
     Dwg_Entity_##token *_obj = obj->tio.entity->tio.token;                    \
+    const int chain                                                           \
+        = dat->version >= R_13b1 && dat->version <= R_2000 && _obj->first_attrib \
+          && _obj->last_attrib;                                               \
     if (!_obj->has_attribs)                                                   \
       return 0;                                                               \
                                                                               \
-    VERSIONS (R_13b1, R_2000)                                                 \
+    if (chain)                                                                \
     {                                                                         \
       Dwg_Object *last_attrib                                                 \
           = _obj->last_attrib ? _obj->last_attrib->obj : NULL;                \
@@ -1665,7 +1710,7 @@ decl_dxfb_process_VERTEX (PFACE)
         error |= dwg_dxfb_SEQEND (dat, o);                                    \
       *i = *i + 1;                                                            \
     }                                                                         \
-    SINCE (R_2004a)                                                           \
+    if (!chain && dat->version >= R_13b1)                                     \
     {                                                                         \
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
@@ -2467,8 +2512,8 @@ dxfb_blocks_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               ;
             else
               {
-                /* Pass a copy of the loop index: dxfb_block_write() advances it
-                   past the sub-entities of the INSERTs and POLYLINEs it
+                /* Pass a copy of the loop index: dxfb_block_write() advances
+                   it past the sub-entities of the INSERTs and POLYLINEs it
                    writes, which is right for the ENTITIES walk but here
                    skips the BLOCK_HEADERs that follow, and their bodies
                    never reach the output (GH #1409). */
@@ -2548,7 +2593,11 @@ dxfb_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 // versions and the 6 schemas, with the schema indices 0 AcDb_Thumbnail_Schema,
 // 1 AcDb3DSolid_ASM_Data and 4 built-in. Pairs of group code and value.
 // same as in out_dxf.c
-static const struct { int code; const char *value; } acds_schema_dxf[] = {
+static const struct
+{
+  int code;
+  const char *value;
+} acds_schema_dxf[] = {
   { 70, "2" },
   { 71, "2" },
   { 0, "ACDSSCHEMA" },
