@@ -2168,7 +2168,7 @@ while (<$in>) {
     if (/^\s*STABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
         $STABLE{$1}++;
     }
-    elsif (/^\s*UNSTABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
+    elsif (/^\s*UNSTABLE_CLASS(?:_DXF|_CPP|)(?:_ALLOW_DXF|)\s*\(ACTION,\s+(.+?)[,\)]/) {
         $UNSTABLE{$1}++;
     }
     elsif (/^\s*DEBUGGING_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {

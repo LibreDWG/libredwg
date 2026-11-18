@@ -1030,13 +1030,13 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str204,         "ACDBASSOCCOMPOUNDACTIONPARAM",      DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM,	0,	UNSTABLE},
       {-1}, {-1},
 #line 191 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str207,           "ACDBASSOCDIMDEPENDENCYBODY",        DWG_TYPE_ASSOCDIMDEPENDENCYBODY,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str207,           "ACDBASSOCDIMDEPENDENCYBODY",        DWG_TYPE_ASSOCDIMDEPENDENCYBODY,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 154 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str212,                     "ACMESTATEMGR",                      DWG_TYPE_ACMESTATEMGR,	0,	DEBUGGING},
       {-1}, {-1},
 #line 190 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str215,                  "ACDBASSOCDEPENDENCY",               DWG_TYPE_ASSOCDEPENDENCY,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str215,                  "ACDBASSOCDEPENDENCY",               DWG_TYPE_ASSOCDEPENDENCY,	0,	STABLE},
 #line 94 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str216,          "LINEARGRIPENTITY",           DWG_TYPE_LINEARGRIPENTITY,	1,	DEBUGGING},
       {-1}, {-1}, {-1},
@@ -1124,7 +1124,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str295,   "ACDBASSOCEXTRUDEDSURFACEACTIONBODY",  DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY,	0,	UNSTABLE},
       {-1}, {-1}, {-1},
 #line 241 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str299,         "BLOCKPARAMDEPENDENCYBODY",          DWG_TYPE_BLOCKPARAMDEPENDENCYBODY,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str299,         "BLOCKPARAMDEPENDENCYBODY",          DWG_TYPE_BLOCKPARAMDEPENDENCYBODY,	0,	STABLE},
       {-1},
 #line 122 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str301,                    "REGION",                     DWG_TYPE_REGION,	1,	STABLE},
@@ -1192,7 +1192,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str363,          "BLOCKBASEPOINTPARAMETER",           DWG_TYPE_BLOCKBASEPOINTPARAMETER,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1},
 #line 249 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str369,              "ACDB_BLOCKREPRESENTATION_DATA",     DWG_TYPE_BLOCKREPRESENTATION,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str369,              "ACDB_BLOCKREPRESENTATION_DATA",     DWG_TYPE_BLOCKREPRESENTATION,	0,	STABLE},
 #line 86 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str370,                     "IMAGE",                      DWG_TYPE_IMAGE,	1,	STABLE},
       {-1}, {-1}, {-1},
@@ -1243,7 +1243,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str416,               "POLYLINE",                   DWG_TYPE_POLYLINE_2D,	1,	STABLE},
       {-1}, {-1},
 #line 233 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str419, "BLOCKHORIZONTALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str419, "BLOCKHORIZONTALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER,	0,	STABLE},
       {-1},
 #line 357 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str421,            "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_TEXTOBJECTCONTEXTDATA,	0,	STABLE},
@@ -1358,7 +1358,7 @@ in_word_set (const char *str, size_t len)
 #line 119 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str529,            "POLYLINE",                   DWG_TYPE_POLYLINE_PFACE,	1,	STABLE},
 #line 218 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str530,             "ACDBASSOCVALUEDEPENDENCY",          DWG_TYPE_ASSOCVALUEDEPENDENCY,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str530,             "ACDBASSOCVALUEDEPENDENCY",          DWG_TYPE_ASSOCVALUEDEPENDENCY,	0,	STABLE},
       {-1}, {-1},
 #line 292 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str533,          "GROUND_PLANE_BACKGROUND",           DWG_TYPE_GROUND_PLANE_BACKGROUND,	0,	UNSTABLE},
@@ -1473,7 +1473,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str645,                       "ACDBMOTIONPATH",                    DWG_TYPE_MOTIONPATH,	0,	DEBUGGING},
       {-1},
 #line 256 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str647, "BLOCKVERTICALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKVERTICALCONSTRAINTPARAMETER,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str647, "BLOCKVERTICALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKVERTICALCONSTRAINTPARAMETER,	0,	STABLE},
       {-1}, {-1}, {-1},
 #line 360 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str651,                      "UCS_CONTROL",                       DWG_TYPE_UCS_CONTROL,	0,	STABLE},
@@ -1717,7 +1717,7 @@ in_word_set (const char *str, size_t len)
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1},
 #line 285 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1316,                 "ACAD_EVALUATION_GRAPH",             DWG_TYPE_EVALUATION_GRAPH,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1316,                 "ACAD_EVALUATION_GRAPH",             DWG_TYPE_EVALUATION_GRAPH,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
