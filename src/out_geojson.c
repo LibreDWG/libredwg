@@ -974,6 +974,36 @@ dwg_geojson_SPLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   return 1;
 }
 
+/* A spline-fit POLYLINE_2D: points on its curve in its OCS, within
+   SPLINE_GEOJSON_TOL, as a malloc'ed array of *num_p points; a closed one
+   without its last point, the first.  NULL if it has no curve. */
+static dwg_point_2d *
+polyline_2d_spline_points (const Dwg_Object *obj, BITCODE_BL *num_p)
+{
+  const int closed = obj->tio.entity->tio.POLYLINE_2D->flag & 1;
+  BITCODE_3DPOINT *bez, *curve;
+  dwg_point_2d *pts;
+  int error, degree, j, num;
+  const int k = dwg_object_polyline_2d_get_spline (obj, &bez, &degree, &error);
+
+  if (!k)
+    return NULL;
+  num = bezier_chain_flatten (bez, k, degree, SPLINE_GEOJSON_TOL, &curve);
+  free (bez);
+  if (closed)
+    num--;
+  pts = num >= 2 ? (dwg_point_2d *)malloc (num * sizeof (dwg_point_2d)) : NULL;
+  for (j = 0; pts && j < num; j++)
+    {
+      pts[j].x = curve[j].x;
+      pts[j].y = curve[j].y;
+    }
+  free (curve);
+  if (pts)
+    *num_p = (BITCODE_BL)num;
+  return pts;
+}
+
 // The tolerance of the curves of a HATCH boundary, relative to its size.
 #define HATCH_GEOJSON_TOL 1e-3
 
@@ -1635,19 +1665,23 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         BITCODE_BL j, numpts, num_bulge_pts;
         // bool is_polygon = false;
         int changed = 0;
-        dwg_point_2d *pts, *orig;
+        dwg_point_2d *pts, *orig, *spline;
         double *bulges;
         Dwg_Entity_POLYLINE_2D *_obj = obj->tio.entity->tio.POLYLINE_2D;
         numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
         if (error || !numpts)
           return 0;
-        pts = dwg_object_polyline_2d_get_points (obj, &error);
+        spline
+            = _obj->flag & 4 ? polyline_2d_spline_points (obj, &numpts) : NULL;
+        pts = spline ? spline
+                     : dwg_object_polyline_2d_get_points (obj, &error);
         if (error || !pts)
           {
             free (pts);
             return 0;
           }
-        bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
+        bulges
+            = spline ? NULL : dwg_object_polyline_2d_get_bulges (obj, &error);
         if (bulges)
           {
             dwg_point_2d *bulge_pts = bulge_points (
