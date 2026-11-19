@@ -1392,7 +1392,7 @@ test_dxf_write_file (void)
   return ret;
 }
 
-#ifndef DISABLE_JSON
+#  ifndef DISABLE_JSON
 /* GH #992: public dwg_write_json() and dwg_write_geojson(). */
 static int
 test_json_write_file (void)
@@ -1450,7 +1450,8 @@ test_json_write_file (void)
     }
   return ret;
 }
-#endif
+
+#  endif
 
 static int
 test_lwpolyline_to_preR13_dxf (void)

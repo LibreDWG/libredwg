@@ -58,6 +58,46 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
                          Dwg_Entity_3DSOLID *restrict _obj);
 static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                       const int dxf, const int opt);
+
+/* Binary DXF stores multi-byte values least-significant-byte-first, as the
+   bit_read_* readers expect. Write them explicitly LE, independent of the
+   host byte order, so the output is identical on big-endian hosts. */
+static void
+dxfb_write_rs (FILE *fh, const BITCODE_RS s)
+{
+  const unsigned char b[2]
+      = { (unsigned char)(s & 0xff), (unsigned char)((s >> 8) & 0xff) };
+  fwrite (b, 2, 1, fh);
+}
+static void
+dxfb_write_rl (FILE *fh, const BITCODE_RL l)
+{
+  const unsigned char b[4]
+      = { (unsigned char)(l & 0xff), (unsigned char)((l >> 8) & 0xff),
+          (unsigned char)((l >> 16) & 0xff),
+          (unsigned char)((l >> 24) & 0xff) };
+  fwrite (b, 4, 1, fh);
+}
+static void
+dxfb_write_rll (FILE *fh, const BITCODE_RLL v)
+{
+  unsigned char b[8];
+  int i;
+  for (i = 0; i < 8; i++)
+    b[i] = (unsigned char)((v >> (i * 8)) & 0xff);
+  fwrite (b, 8, 1, fh);
+}
+static void
+dxfb_write_rd (FILE *fh, const double d)
+{
+  union
+  {
+    double d;
+    BITCODE_RLL u;
+  } u;
+  u.d = d;
+  dxfb_write_rll (fh, u.u);
+}
 /*static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
                                   const Dwg_Object *restrict obj,
                                   char *restrict name, const int dxf); */
@@ -235,9 +275,9 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
     {                                                                         \
       if (code >= 255)                                                        \
         {                                                                     \
-          uint16_t icode = (uint16_t)(code);                                  \
+          const BITCODE_RS icode = (BITCODE_RS)(code);                        \
           fputc (0xff, dat->fh);                                              \
-          fwrite (&icode, 2, 1, dat->fh);                                     \
+          dxfb_write_rs (dat->fh, icode);                                     \
         }                                                                     \
       else                                                                    \
         {                                                                     \
@@ -247,8 +287,8 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      uint16_t icode = (uint16_t)(code);                                      \
-      fwrite (&icode, 2, 1, dat->fh);                                         \
+      const BITCODE_RS icode = (BITCODE_RS)(code);                            \
+      dxfb_write_rs (dat->fh, icode);                                         \
     }
 #define FIELD_TV(nam, dxf)                                                    \
   if (_obj->nam != NULL && dxf != 0)                                          \
@@ -469,12 +509,12 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
   {                                                                           \
     if (dxf)                                                                  \
       {                                                                       \
-        if ((dxf) >= 280 && (dxf) <= 289)                                     \
-          {                                                                   \
-            BITCODE_RS _s = (BITCODE_RS)(BITCODE_RC)(value);                  \
-            GROUP (dxf);                                                      \
-            fwrite (&_s, 2, 1, dat->fh);                                      \
-          }                                                                   \
+        if ((dxf) >= 280 && (dxf) <= 289)                                      \
+          {                                                                     \
+            const BITCODE_RS _s = (BITCODE_RS)(BITCODE_RC)(value);            \
+            GROUP (dxf);                                                        \
+            dxfb_write_rs (dat->fh, _s);                                      \
+          }                                                                     \
         else                                                                  \
           {                                                                   \
             BITCODE_RC _c = (BITCODE_RC)(value);                              \
@@ -487,9 +527,9 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
   {                                                                           \
     if (dxf)                                                                  \
       {                                                                       \
-        BITCODE_RS _s = (BITCODE_RS)(value);                                  \
+        const BITCODE_RS _s = (BITCODE_RS)(value);                            \
         GROUP (dxf);                                                          \
-        fwrite (&_s, 2, 1, dat->fh);                                          \
+        dxfb_write_rs (dat->fh, _s);                                          \
       }                                                                       \
   }
 #define VALUE_RSd(value, dxf) VALUE_RS (value, dxf)
@@ -497,9 +537,9 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
   {                                                                           \
     if (dxf)                                                                  \
       {                                                                       \
-        BITCODE_RL _s = (BITCODE_RL)value;                                    \
+        const BITCODE_RL _s = (BITCODE_RL)value;                              \
         GROUP (dxf);                                                          \
-        fwrite (&_s, 4, 1, dat->fh);                                          \
+        dxfb_write_rl (dat->fh, _s);                                          \
       }                                                                       \
   }
 #define VALUE_RLd(value, dxf) VALUE_RL (value, dxf)
@@ -507,9 +547,9 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
   {                                                                           \
     if (dxf)                                                                  \
       {                                                                       \
-        BITCODE_RLL _s = (BITCODE_RLL)value;                                  \
+        const BITCODE_RLL _s = (BITCODE_RLL)value;                            \
         GROUP (dxf);                                                          \
-        fwrite (&_s, 8, 1, dat->fh);                                          \
+        dxfb_write_rll (dat->fh, _s);                                         \
       }                                                                       \
   }
 // most DXFB FIELD_RC are written as int16 actually
@@ -584,9 +624,9 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
   {                                                                           \
     if (dxf)                                                                  \
     {                                                                         \
-      double d = (value);                                                     \
+      const double d = (value);                                               \
       GROUP (dxf);                                                            \
-      fwrite (&d, 8, 1, dat->fh);                                             \
+      dxfb_write_rd (dat->fh, d);                                             \
     }                                                                         \
   }
 #define FIELD_RD(nam, dxf) VALUE_RD (_obj->nam, dxf)
@@ -673,11 +713,11 @@ dxfb_convert_TU (const Bit_Chain *restrict dat, const BITCODE_TU wstr)
       GROUP (dxf);                                                            \
       if (dwg_resbuf_value_type (dxf) == DWG_VT_INT32)                        \
         {                                                                     \
-          BITCODE_RL _s = (BITCODE_RL)s;                                      \
-          fwrite (&_s, 4, 1, dat->fh);                                        \
+          const BITCODE_RL _s = (BITCODE_RL)s;                                \
+          dxfb_write_rl (dat->fh, _s);                                        \
         }                                                                     \
       else                                                                    \
-        fwrite (&s, 8, 1, dat->fh);                                           \
+        dxfb_write_rll (dat->fh, (BITCODE_RLL)s);                             \
     }                                                                         \
   }
 #define FIELD_RLL(nam, dxf) FIELD_BLL (nam, dxf)
