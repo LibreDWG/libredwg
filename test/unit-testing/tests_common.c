@@ -257,12 +257,6 @@ main (int argc, char *argv[])
               "r9/entities.dwg", "r2.10/entities.dwg", "r2.6/entities.dwg",
               "r1.4/entities.dwg",
 #endif
-              /* TODO
-                "example_r11.dwg"    "example_r10.dwg",  "example_r9.dwg",
-                "example_r2_10.dwg", "example_r2_6.dwg", "example_r1_4.dwg"
-              */
-              //"2000/PolyLine2D.dwg",
-              //"2007/PolyLine3D.dwg",
               NULL };
       const char *prefix = "../test-data";
 
@@ -340,10 +334,15 @@ main (int argc, char *argv[])
                                      "AecObjects.dwg",
                                      cov);
         }
-      // if (DWG_TYPE == DWG_TYPE_MULTILEADER)
-      //  {
-      //    error += test_code_nodist (prefix, "../issues/gh518/9.dwg", cov);
-      //  }
+      if (DWG_TYPE == DWG_TYPE_PERSUBENTMGR)
+        {
+          error += test_code_nodist (prefix, "../issues/gh1021/dev/Platte.dwg",
+                                     cov);
+        }
+      if (DWG_TYPE == DWG_TYPE_MULTILEADER)
+       {
+         error += test_code_nodist (prefix, "../issues/gh518/9.dwg", cov);
+       }
       // if no coverage
       if (!numpassed () && !numfailed ())
         {
