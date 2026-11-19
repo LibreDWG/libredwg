@@ -50,6 +50,19 @@ check_flags (dwg_object *obj, BITCODE_BL numpoints)
   free (flags);
 }
 
+static void
+check_spline (dwg_object *obj)
+{
+  int error, degree;
+  BITCODE_3DPOINT *pts;
+  int k = dwg_object_polyline_2d_get_spline (obj, &pts, &degree, &error);
+  if (error)
+    fail ("POLYLINE_2D.spline");
+  else if (k)
+    ok ("POLYLINE_2D.spline: %d curves of degree %d", k, degree);
+  free (pts);
+}
+
 void
 api_process (dwg_object *obj)
 {
@@ -101,5 +114,6 @@ api_process (dwg_object *obj)
     }
   check_bulges (obj, numpoints);
   check_flags (obj, numpoints);
+  check_spline (obj);
   CHK_ENTITY_H (polyline_2d, POLYLINE_2D, seqend);
 }
