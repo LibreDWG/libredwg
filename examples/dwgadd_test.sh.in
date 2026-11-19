@@ -4,7 +4,7 @@ abs_builddir="@abs_builddir@"
 top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
 TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
-HAVE_ASAN="@HAVE_ASAN@"
+#HAVE_ASAN="@HAVE_ASAN@"
 HAVE_ODA="@HAVE_ODA@"
 ODAFileConverter="@ODAFILECONVERTER@"
 srcdir="@abs_srcdir@"
@@ -165,12 +165,7 @@ if [ -f "$abs_builddir"/../dxf ]; then
         echo "readdxf \"dwgadd_test.dxf\"" >$tmp
         echo "point (10 0 0)" >>$tmp
         cat $tmp
-        if [ "$HAVE_ASAN" = "yes" ]
-        then
-            env ASAN_OPTIONS=detect_leaks=0 dwgaddtest AC1015 r2000 $tmp
-        else
-            dwgaddtest AC1015 r2000 $tmp
-        fi
+        dwgaddtest AC1015 r2000 $tmp
     fi
 fi
 
