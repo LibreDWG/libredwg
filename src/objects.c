@@ -1049,7 +1049,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str225,   "BLOCKRADIALCONSTRAINTPARAMETER",    DWG_TYPE_BLOCKRADIALCONSTRAINTPARAMETER,	0,	UNSTABLE},
       {-1},
 #line 323 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str227,                     "ACDBPERSSUBENTMANAGER",             DWG_TYPE_PERSUBENTMGR,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str227,                     "ACDBPERSSUBENTMANAGER",             DWG_TYPE_PERSUBENTMGR,	0,	UNSTABLE},
       {-1},
 #line 107 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str229,                 "OLE2FRAME",                  DWG_TYPE_OLE2FRAME,	1,	STABLE},

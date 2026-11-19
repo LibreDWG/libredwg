@@ -953,8 +953,6 @@ DWG_ENTITY (TABLE)
   SINCE (R_2010b)
   {
     //... p237
-    LOG_WARN ("TODO TABLE r2010+");
-
     FIELD_BS (unknown_bs, 0); //default 38
     FIELD_3BD (hor_dir, 11);
     FIELD_BL (has_break_data, 0); //BL or B?
@@ -3883,6 +3881,33 @@ DWG_OBJECT (DIMASSOC)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// Static persistent subentity manager. Record meanings are partly understood.
+// Layout verified against the available class_version 2 samples.
+DWG_OBJECT (PERSUBENTMGR)
+  SUBCLASS (AcDbPersSubentManager);
+  FIELD_BL (class_version, 90); //2
+  VALUEOUTOFBOUNDS (class_version, 3);
+  FIELD_BL (unknown_0, 90); //always 0
+  FIELD_BL (unknown_2, 90); //always 2
+
+  FIELD_BL (unknown_bl1, 90);
+  FIELD_BL (num_records, 90);
+  REPEAT (num_records, records, Dwg_PERSUBENTMGR_Record)
+  REPEAT_BLOCK
+    SUB_FIELD_BL (records[rcount1], record_type, 90);
+    SUB_FIELD_BL (records[rcount1], unknown_bl, 90);
+    SUB_FIELD_BL (records[rcount1], num_history_ids, 90);
+    SUB_FIELD_VECTOR (records[rcount1], history_ids, BL, num_history_ids, 90);
+    SUB_FIELD_BL (records[rcount1], num_data_values, 90);
+    SUB_FIELD_VECTOR (records[rcount1], data_values, BL, num_data_values, 90);
+    SET_PARENT_OBJ (records[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (records);
+  FIELD_BL (num_history_ids, 90);
+  FIELD_VECTOR (history_ids, BL, num_history_ids, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -4281,34 +4306,6 @@ DWG_ENTITY (NURBSURFACE)
   }
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
-
-// Static persistent subentity manager. Record meanings are partly understood.
-// Layout verified against the available class_version 2 samples.
-DWG_OBJECT (PERSUBENTMGR)
-  HANDLE_UNKNOWN_BITS;
-  SUBCLASS (AcDbPersSubentManager);
-  FIELD_BL (class_version, 90); //2
-  VALUEOUTOFBOUNDS (class_version, 3);
-  FIELD_BL (unknown_0, 90); //always 0
-  FIELD_BL (unknown_2, 90); //always 2
-
-  FIELD_BL (unknown_bl1, 90);
-  FIELD_BL (num_records, 90);
-  REPEAT (num_records, records, Dwg_PERSUBENTMGR_Record)
-  REPEAT_BLOCK
-    SUB_FIELD_BL (records[rcount1], record_type, 90);
-    SUB_FIELD_BL (records[rcount1], unknown_bl, 90);
-    SUB_FIELD_BL (records[rcount1], num_history_ids, 90);
-    SUB_FIELD_VECTOR (records[rcount1], history_ids, BL, num_history_ids, 90);
-    SUB_FIELD_BL (records[rcount1], num_data_values, 90);
-    SUB_FIELD_VECTOR (records[rcount1], data_values, BL, num_data_values, 90);
-    SET_PARENT_OBJ (records[rcount1]);
-  END_REPEAT_BLOCK
-  END_REPEAT (records);
-  FIELD_BL (num_history_ids, 90);
-  FIELD_VECTOR (history_ids, BL, num_history_ids, 90);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
 
 // See AcDbAssocPersSubentIdPE.h
 // The dynamic variant

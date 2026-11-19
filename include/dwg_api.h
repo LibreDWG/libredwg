@@ -803,6 +803,7 @@ extern "C"
   typedef struct _dwg_object_MENTALRAYRENDERSETTINGS		dwg_obj_mentalrayrendersettings;
   typedef struct _dwg_object_OBJECT_PTR		dwg_obj_object_ptr;
   typedef struct _dwg_object_PARTIAL_VIEWING_INDEX		dwg_obj_partial_viewing_index;
+  typedef struct _dwg_object_PERSUBENTMGR		dwg_obj_persubentmgr;
   typedef struct _dwg_object_POINTCLOUDCOLORMAP		dwg_obj_pointcloudcolormap;
   typedef struct _dwg_object_POINTCLOUDDEF		dwg_obj_pointclouddef;
   typedef struct _dwg_object_POINTCLOUDDEFEX		dwg_obj_pointclouddefex;
@@ -860,7 +861,6 @@ extern "C"
   typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA		dwg_obj_mtextattributeobjectcontextdata;
   typedef struct _dwg_object_NAVISWORKSMODELDEF		dwg_obj_navisworksmodeldef;
   typedef struct _dwg_object_ORDDIMOBJECTCONTEXTDATA		dwg_obj_orddimobjectcontextdata;
-  typedef struct _dwg_object_PERSUBENTMGR		dwg_obj_persubentmgr;
   typedef struct _dwg_object_POINTPATH		dwg_obj_pointpath;
   typedef struct _dwg_object_RADIMLGOBJECTCONTEXTDATA		dwg_obj_radimlgobjectcontextdata;
   typedef struct _dwg_object_RADIMOBJECTCONTEXTDATA		dwg_obj_radimobjectcontextdata;
@@ -1929,6 +1929,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS);
   dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
   dwg_get_OBJECT_DECL (obj_partial_viewing_index, PARTIAL_VIEWING_INDEX);
+  dwg_get_OBJECT_DECL (obj_persubentmgr, PERSUBENTMGR);
   dwg_get_OBJECT_DECL (obj_pointcloudcolormap, POINTCLOUDCOLORMAP);
   dwg_get_OBJECT_DECL (obj_pointclouddef, POINTCLOUDDEF);
   dwg_get_OBJECT_DECL (obj_pointclouddefex, POINTCLOUDDEFEX);
@@ -1986,7 +1987,6 @@ extern "C"
     dwg_get_OBJECT_DECL (obj_mtextattributeobjectcontextdata, MTEXTATTRIBUTEOBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_navisworksmodeldef, NAVISWORKSMODELDEF);
     dwg_get_OBJECT_DECL (obj_orddimobjectcontextdata, ORDDIMOBJECTCONTEXTDATA);
-    dwg_get_OBJECT_DECL (obj_persubentmgr, PERSUBENTMGR);
     dwg_get_OBJECT_DECL (obj_pointpath, POINTPATH);
     dwg_get_OBJECT_DECL (obj_radimlgobjectcontextdata, RADIMLGOBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_radimobjectcontextdata, RADIMOBJECTCONTEXTDATA);
@@ -3074,6 +3074,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
   DWG_GETALL_OBJECT_DECL (OBJECT_PTR);
   DWG_GETALL_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
+  DWG_GETALL_OBJECT_DECL (PERSUBENTMGR);
   DWG_GETALL_OBJECT_DECL (POINTCLOUDCOLORMAP);
   DWG_GETALL_OBJECT_DECL (POINTCLOUDDEF);
   DWG_GETALL_OBJECT_DECL (POINTCLOUDDEFEX);
@@ -3131,7 +3132,6 @@ extern "C"
     DWG_GETALL_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (NAVISWORKSMODELDEF);
     DWG_GETALL_OBJECT_DECL (ORDDIMOBJECTCONTEXTDATA);
-    DWG_GETALL_OBJECT_DECL (PERSUBENTMGR);
     DWG_GETALL_OBJECT_DECL (POINTPATH);
     DWG_GETALL_OBJECT_DECL (RADIMLGOBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (RADIMOBJECTCONTEXTDATA);
@@ -4225,6 +4225,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (PERSUBENTMGR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUDCOLORMAP);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUDDEF);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUDDEFEX);
@@ -4282,7 +4283,6 @@ extern "C"
     CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (NAVISWORKSMODELDEF);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ORDDIMOBJECTCONTEXTDATA);
-    CAST_DWG_OBJECT_TO_OBJECT_DECL (PERSUBENTMGR);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTPATH);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (RADIMLGOBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (RADIMOBJECTCONTEXTDATA);
