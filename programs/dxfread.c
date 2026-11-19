@@ -239,7 +239,7 @@ main (int argc, char *argv[])
   if (out_json)
     {
 #ifndef DISABLE_JSON
-      err = dwg_write_json (&dat, &dwg);
+      err = dwg_write_json_dat (&dat, &dwg);
       if (err >= DWG_ERR_CRITICAL)
         {
           fprintf (stderr, "Failed to write JSON output\n");

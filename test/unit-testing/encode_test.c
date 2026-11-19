@@ -25,7 +25,7 @@ extern unsigned int loglevel;
 // from in_json.h
 extern int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 // from out_json.h
-extern int dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+extern int dwg_write_json_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 // from dwg_api.h
 extern int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);
 extern int dwg_add_class (Dwg_Data *restrict dwg,
@@ -1189,9 +1189,9 @@ acds_records_json_test (void)
         snprintf (msg, sizeof msg, "no tmpfile");
       else
         {
-          error = dwg_write_json (&dat2, &dwg);
+          error = dwg_write_json_dat (&dat2, &dwg);
           if (error >= DWG_ERR_CRITICAL)
-            snprintf (msg, sizeof msg, "dwg_write_json error 0x%x", error);
+            snprintf (msg, sizeof msg, "dwg_write_json_dat error 0x%x", error);
           else
             {
               len = ftell (dat2.fh);

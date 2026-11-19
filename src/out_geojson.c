@@ -2033,7 +2033,7 @@ geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 EXPORT int
-dwg_write_geojson (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+dwg_write_geojson_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   char date[12] = "YYYY-MM-DD";

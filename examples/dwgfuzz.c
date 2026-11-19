@@ -380,14 +380,14 @@ main (int argc, char *argv[])
         case JSON:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              if (dwg_write_json (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
+              if (dwg_write_json_dat (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
                 exit (0);
             }
           break;
         case GEOJSON:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
-              if (dwg_write_geojson (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
+              if (dwg_write_geojson_dat (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
                 exit (0);
             }
           break;

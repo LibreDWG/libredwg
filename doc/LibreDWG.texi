@@ -1069,6 +1069,20 @@ Open @var{filename} and write the @var{dwg} to it.
 Return 0 if successful.
 @end deftypefn
 
+@deftypefn {Function} int dxf_write_file (char *@var{filename}, Dwg_Data *@var{dwg}, int @var{binary})
+Open @var{filename} and write the @var{dwg} to it as ASCII DXF, or as binary DXF
+if @var{binary} is non-zero. An existing file is not overwritten.
+Return 0 if successful. Errors >= @code{DWG_ERR_CRITICAL} are fatal.
+@end deftypefn
+
+@deftypefn {Function} int dwg_write_json (char *@var{filename}, Dwg_Data *@var{dwg})
+@deftypefnx {Function} int dwg_write_geojson (char *@var{filename}, Dwg_Data *@var{dwg})
+Open @var{filename} and write the @var{dwg} to it as JSON, or as GeoJSON.
+Set @code{DWG_OPTS_MINIMAL} in @var{dwg->opts} for minimal JSON.
+An existing file is not overwritten. Not available with @code{--disable-json}.
+Return 0 if successful. Errors >= @code{DWG_ERR_CRITICAL} are fatal.
+@end deftypefn
+
 @xref{add api} for:
 @deftypefn {Function} Dwg_Data* dwg_add_Document (const Dwg_Version_Type @var{version},
                                             const int @var{imperial}, const int @var{loglevel})

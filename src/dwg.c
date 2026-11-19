@@ -55,6 +55,12 @@ char *basename (char *);
 #ifdef USE_WRITE
 #  include "encode.h"
 #endif
+#ifndef DISABLE_DXF
+#  include "out_dxf.h"
+#  ifndef DISABLE_JSON
+#    include "out_json.h"
+#  endif
+#endif
 #include "free.h"
 
 #ifdef USE_TRACING
@@ -785,6 +791,105 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 
   return error;
 }
+
+/* The DXF, JSON and GeoJSON exporters stream directly into dat.fh, so the
+   public *_write_file API wraps them without exposing the internal
+   Bit_Chain.  Does not overwrite an existing file. */
+static int
+dwg_write_stream_file (const char *restrict filename,
+                       const Dwg_Data *restrict dwg, const int fmt)
+{
+  struct_stat_t attrib;
+  Bit_Chain dat = { 0 };
+  int error;
+
+  assert (filename);
+  assert (dwg);
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  dat.opts = dwg->opts;
+  dat.version = (Dwg_Version_Type)dwg->header.version;
+  dat.from_version = (Dwg_Version_Type)dwg->header.from_version;
+  dat.codepage = dwg->header.codepage;
+
+  if (!stat (filename, &attrib)
+#  ifdef _WIN32
+      && strNE (filename, "NUL") && strNE (filename, "CON")
+#  else
+      && strNE (filename, "/dev/null") && strNE (filename, "/dev/stdout")
+#  endif
+  )
+    {
+      LOG_ERROR ("The file already exists. We won't overwrite it.");
+      return DWG_ERR_IOERROR;
+    }
+  dat.fh = fopen (filename, "wb");
+  if (!dat.fh)
+    {
+      LOG_ERROR ("Failed to create the file: %s", filename);
+      return DWG_ERR_IOERROR;
+    }
+
+  switch (fmt)
+    {
+    case 0:
+      error = dwg_write_dxf (&dat, (Dwg_Data *)dwg);
+      break;
+    case 1:
+      error = dwg_write_dxfb (&dat, (Dwg_Data *)dwg);
+      break;
+#  ifndef DISABLE_JSON
+    case 2:
+      error = dwg_write_json_dat (&dat, (Dwg_Data *)dwg);
+      break;
+    case 3:
+      error = dwg_write_geojson_dat (&dat, (Dwg_Data *)dwg);
+      break;
+#  endif
+    default:
+      error = DWG_ERR_INVALIDTYPE;
+    }
+  if (fclose (dat.fh))
+    {
+      LOG_ERROR ("Failed to write data into the file: %s", filename);
+      error |= DWG_ERR_IOERROR;
+    }
+  return error;
+}
+
+#ifndef DISABLE_DXF
+/** Encode the DWG struct into a DXF file, ASCII or binary.
+ *
+ * \param filename  the output file, which must not exist
+ * \param dwg       the document
+ * \param binary    0 for ASCII DXF, otherwise binary DXF
+ * \return 0 or the DWG_ERR_* bitmask. Critical errors are >= DWG_ERR_CRITICAL.
+ */
+EXPORT int
+dxf_write_file (const char *restrict filename, const Dwg_Data *restrict dwg,
+                const int binary)
+{
+  return dwg_write_stream_file (filename, dwg, binary ? 1 : 0);
+}
+#endif /* !DISABLE_DXF */
+
+#ifndef DISABLE_JSON
+/** Write the DWG struct as (minimal with DWG_OPTS_MINIMAL) JSON file.
+ */
+EXPORT int
+dwg_write_json (const char *restrict filename, const Dwg_Data *restrict dwg)
+{
+  return dwg_write_stream_file (filename, dwg, 2);
+}
+
+/** Write the DWG struct as GeoJSON file.
+ */
+EXPORT int
+dwg_write_geojson (const char *restrict filename,
+                   const Dwg_Data *restrict dwg)
+{
+  return dwg_write_stream_file (filename, dwg, 3);
+}
+#endif /* !DISABLE_JSON */
 #endif /* USE_WRITE */
 
 /* THUMBNAIL IMAGE DATA (R13C3+).

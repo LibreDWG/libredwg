@@ -842,13 +842,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
   if (as_dxf)
     {
 #ifndef DISABLE_DXF
-      Bit_Chain dat = { 0 };
-      dat.version = dwg->header.version;
-      dat.from_version = dwg->header.from_version;
-      dat.opts = dwg->opts;
-      dat.fh = fopen (dwgfile, "wb");
-      error = dwg_write_dxf (&dat, dwg);
-      fclose (dat.fh);
+      error = dxf_write_file (dwgfile, dwg, 0);
 #endif
     }
   else
@@ -1341,6 +1335,123 @@ test_lwpolyline_to_preR13 (void)
 
 /* The same for the R12 DXF output: a POLYLINE with VERTEXes and SEQEND at the
    position of the LWPOLYLINE, followed by the LINE. */
+/* GH #992: public dxf_write_file(), ASCII and binary, roundtrips. */
+static int
+test_dxf_write_file (void)
+{
+  const dwg_point_3d a = { 1.0, 2.0, 0.0 }, b = { 3.0, 4.0, 0.0 };
+  char file[] = "add_test_992.dxf";
+  int binary, ret = 0;
+
+  for (binary = 0; binary <= 1; binary++)
+    {
+      Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+      Dwg_Data in = { 0 };
+      Dwg_Object *mspace;
+      Dwg_Object *obj;
+      int error, lines = 0;
+      unsigned i;
+
+      failed = 0;
+      if (!dwg)
+        {
+          fail ("dxf_write_file: cannot create drawing");
+          return 1;
+        }
+      mspace = dwg_model_space_object (dwg);
+      dwg_add_LINE (mspace->tio.object->tio.BLOCK_HEADER, &a, &b);
+      unlink (file);
+      error = dxf_write_file (file, dwg, binary);
+      if (error >= DWG_ERR_CRITICAL)
+        fail ("dxf_write_file binary=%d: 0x%x", binary, error);
+      /* never overwrite */
+      error = dxf_write_file (file, dwg, binary);
+      if (!(error & DWG_ERR_IOERROR))
+        fail ("dxf_write_file binary=%d overwrote an existing file", binary);
+      dwg_free (dwg);
+      free (dwg);
+
+      error = dxf_read_file (file, &in);
+      unlink (file);
+      if (error >= DWG_ERR_CRITICAL)
+        fail ("dxf_write_file binary=%d: dxf_read_file 0x%x", binary, error);
+      for (i = 0; i < in.num_objects; i++)
+        {
+          obj = &in.object[i];
+          if (obj->fixedtype == DWG_TYPE_LINE)
+            lines++;
+        }
+      if (lines != 1)
+        fail ("dxf_write_file binary=%d: %d LINEs, expected 1", binary, lines);
+      dwg_free (&in);
+      if (failed)
+        ret = 1;
+      else
+        ok ("dxf_write_file binary=%d", binary);
+    }
+  return ret;
+}
+
+#ifndef DISABLE_JSON
+/* GH #992: public dwg_write_json() and dwg_write_geojson(). */
+static int
+test_json_write_file (void)
+{
+  const dwg_point_3d a = { 1.0, 2.0, 0.0 }, b = { 3.0, 4.0, 0.0 };
+  const char *file = "add_test_992.json";
+  int geo, ret = 0;
+
+  for (geo = 0; geo <= 1; geo++)
+    {
+      Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+      Dwg_Object *mspace;
+      FILE *fh;
+      char buf[4096];
+      size_t n = 0;
+      int error;
+
+      failed = 0;
+      if (!dwg)
+        {
+          fail ("dwg_write_json: cannot create drawing");
+          return 1;
+        }
+      mspace = dwg_model_space_object (dwg);
+      dwg_add_LINE (mspace->tio.object->tio.BLOCK_HEADER, &a, &b);
+      unlink (file);
+      error = geo ? dwg_write_geojson (file, dwg) : dwg_write_json (file, dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        fail ("dwg_write_json geo=%d: 0x%x", geo, error);
+      /* never overwrite */
+      error = geo ? dwg_write_geojson (file, dwg) : dwg_write_json (file, dwg);
+      if (!(error & DWG_ERR_IOERROR))
+        fail ("dwg_write_json geo=%d overwrote an existing file", geo);
+      dwg_free (dwg);
+      free (dwg);
+
+      fh = fopen (file, "rb");
+      if (fh)
+        {
+          n = fread (buf, 1, sizeof (buf) - 1, fh);
+          fclose (fh);
+        }
+      buf[n] = '\0';
+      unlink (file);
+      if (!n || buf[0] != '{')
+        fail ("dwg_write_json geo=%d: no JSON object written", geo);
+      else if (geo && !strstr (buf, "FeatureCollection"))
+        fail ("dwg_write_geojson: no FeatureCollection");
+      else if (!geo && !strstr (buf, "\"created_by\""))
+        fail ("dwg_write_json: no created_by");
+      if (failed)
+        ret = 1;
+      else
+        ok ("dwg_write_json geo=%d", geo);
+    }
+  return ret;
+}
+#endif
+
 static int
 test_lwpolyline_to_preR13_dxf (void)
 {
@@ -2926,7 +3037,7 @@ test_json_class_types (void)
   return numfailed ();
 }
 
-// dwg_write_json to file, read back as a string (NULL when nothing was
+// dwg_write_json_dat to file, read back as a string (NULL when nothing was
 // written)
 static char *
 write_json_string (Dwg_Data *dwg, const char *file)
@@ -2941,7 +3052,7 @@ write_json_string (Dwg_Data *dwg, const char *file)
   dat.fh = fopen (file, "w+b");
   if (!dat.fh)
     return NULL;
-  dwg_write_json (&dat, dwg);
+  dwg_write_json_dat (&dat, dwg);
   size = ftell (dat.fh);
   if (size > 0 && (out = (char *)calloc (size + 1, 1)))
     {
@@ -3711,6 +3822,10 @@ main (int argc, char *argv[])
   error += test_preR13_dxf_blocks_to_r2000 ();
   error += test_lwpolyline_to_preR13 ();
   error += test_lwpolyline_to_preR13_dxf ();
+  error += test_dxf_write_file ();
+#  ifndef DISABLE_JSON
+  error += test_json_write_file ();
+#  endif
   error += test_material_dxf ();
   error += test_object_ref_chunks ();
   error += test_multileader_vertices ();

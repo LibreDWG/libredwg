@@ -351,9 +351,9 @@ main (int argc, char *argv[])
 #endif
 #ifndef DISABLE_JSON
           if (opt.json)
-        error = dwg_write_json (&out_dat, &dwg);
+        error = dwg_write_json_dat (&out_dat, &dwg);
       else if (opt.geojson)
-        error = dwg_write_geojson (&out_dat, &dwg);
+        error = dwg_write_geojson_dat (&out_dat, &dwg);
       else
 #endif
         {

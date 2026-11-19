@@ -149,6 +149,14 @@ Major features:
     r2007 objects with a string stream and raw unknown objects, which
     overwrote the start of the object section.  Known: large DWGs still
     need recovery in ODA, also when written as r2010.
+  * Added the public APIs dxf_write_file (filename, dwg, binary),
+    dwg_write_json (filename, dwg) and dwg_write_geojson (filename, dwg),
+    to export ASCII or binary DXF, JSON and GeoJSON files without access
+    to the internal Bit_Chain (GH #992).  They do not overwrite existing
+    files, like dwg_write_file.
+    API change: the former Bit_Chain based dwg_write_json and
+    dwg_write_geojson (src/out_json.h, not in the public headers) are
+    renamed to dwg_write_json_dat and dwg_write_geojson_dat.
 
 Minor bugfixes / fuzzing fixes:
   * Fixed DXF input termination at mmap page boundaries, avoiding writes

@@ -300,7 +300,7 @@ main (int argc, char *argv[])
           if ((opts & 0xf) > 1 && outfile)
             fprintf (stderr, "Writing %sJSON file %s\n",
                      opts & DWG_OPTS_MINIMAL ? "minimal " : "", outfile);
-          error = dwg_write_json (&dat, &dwg);
+          error = dwg_write_json_dat (&dat, &dwg);
         }
       else
 #  endif
@@ -321,7 +321,7 @@ main (int argc, char *argv[])
         {
           if ((opts & 0xf) > 1 && outfile)
             fprintf (stderr, "Writing GeoJSON file %s\n", outfile);
-          error = dwg_write_geojson (&dat, &dwg);
+          error = dwg_write_geojson_dat (&dat, &dwg);
         }
       else
 #  endif

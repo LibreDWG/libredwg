@@ -2609,7 +2609,7 @@ json_section_2ndheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 EXPORT int
-dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+dwg_write_json_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header *obj = &dwg->header;
   int error = 0;

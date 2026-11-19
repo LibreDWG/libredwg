@@ -248,10 +248,10 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
       break;
 #  ifndef DISABLE_JSON
     case 3:
-      dwg_write_json (&out_dat, &dwg);
+      dwg_write_json_dat (&out_dat, &dwg);
       break;
     case 4:
-      dwg_write_geojson (&out_dat, &dwg);
+      dwg_write_geojson_dat (&out_dat, &dwg);
       break;
 #  endif
 #endif

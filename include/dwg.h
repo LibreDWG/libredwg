@@ -11689,6 +11689,14 @@ EXPORT int dxf_read_file (const char *restrict filename,
 // You might need to probe for that.
 EXPORT int dwg_write_file (const char *restrict filename,
                            const Dwg_Data *restrict dwg);
+EXPORT int dxf_write_file (const char *restrict filename,
+                           const Dwg_Data *restrict dwg,
+                           const int binary);
+// Export as JSON and GeoJSON. Not available with --disable-json.
+EXPORT int dwg_write_json (const char *restrict filename,
+                           const Dwg_Data *restrict dwg);
+EXPORT int dwg_write_geojson (const char *restrict filename,
+                             const Dwg_Data *restrict dwg);
 
 /* Supports multiple preview picture types.
    Currently 3 types: BMP 2, WMF 3 and PNG as type 6.
