@@ -642,7 +642,7 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
       while (_hv_cap < _hv_new)                                               \
         _hv_cap <<= 1;                                                        \
       _obj->hvfield = (BITCODE_H *)realloc (                                  \
-          _obj->hvfield, _hv_cap * sizeof (BITCODE_H));                        \
+          _obj->hvfield, _hv_cap * sizeof (BITCODE_H));                       \
       _obj->hvfield[_obj->numfield] = ref;                                    \
       LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,   \
                  ARGS_REF (_obj->hvfield[_obj->numfield]));                   \
@@ -660,7 +660,7 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
       while (_hv_cap < _hv_new)                                               \
         _hv_cap <<= 1;                                                        \
       _obj->hvfield = (BITCODE_H *)realloc (                                  \
-          _obj->hvfield, _hv_cap * sizeof (BITCODE_H));                        \
+          _obj->hvfield, _hv_cap * sizeof (BITCODE_H));                       \
       _obj->hvfield[_obj->numfield] = ref;                                    \
       LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,   \
                  ARGS_REF (_obj->hvfield[_obj->numfield]));                   \

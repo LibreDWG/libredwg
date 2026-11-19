@@ -245,9 +245,11 @@ Minor bugfixes / fuzzing fixes:
     (read as owner), $DWGCODEPAGE UTF-8 and UTF-16 are accepted, $TIMEZONE
     is signed.  The VBAProject section is written.  Unknown entities are
     exported as ACAD_PROXY_ENTITY with their class data, in the ODA order,
-    including its object id references.  The *UNDERLAY entities are read
-    with the *REFERENCE record name.  R2010+ DWGs written with a low
-    $ACADMAINTVER keep the bitsize_hi layout.
+    including its object id references, the CLASSES number of its class
+    and, since r2007, the string stream of a proxy ("cn:" and the C++ class
+    name), which ODA needs to read it (2018/Surface).  The *UNDERLAY
+    entities are read with the *REFERENCE record name.  R2010+ DWGs written
+    with a low $ACADMAINTVER keep the bitsize_hi layout.
     258 of the 262 test DWGs 2000-2018 roundtrip through DXF and ODA now
     (196 before).  GH #1546.
   * Fixed the OSS-Fuzz issues 586576797, 587020301, 583493833

@@ -2955,6 +2955,111 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
+/* Whether the CLASSES section skips this class. */
+static int
+dxf_class_skipped (const Bit_Chain *restrict dat, const Dwg_Class *restrict klass)
+{
+  // some classes are now builtin
+  return !klass->dxfname
+         || (dat->version >= R_2004
+             && (strEQc (klass->dxfname, "ACDBPLACEHOLDER")
+                 || strEQc (klass->dxfname, "LAYOUT")));
+}
+
+/* The number of a class in the written CLASSES section, which skips some
+   classes and numbers the rest from 500 on read. */
+static BITCODE_BL
+dxf_class_number (const Bit_Chain *restrict dat, const Dwg_Data *restrict dwg,
+                  const BITCODE_BL type)
+{
+  BITCODE_BL j, num = 500;
+  if (type < 500 || type - 500 >= dwg->num_classes)
+    return type;
+  for (j = 0; j < type - 500; j++)
+    if (!dxf_class_skipped (dat, &dwg->dwg_class[j]))
+      num++;
+  return num;
+}
+
+/* Append bits, most significant first. */
+static void
+dxf_put_bits (unsigned char *restrict buffer, size_t *restrict pos,
+              const unsigned value, const int nbits)
+{
+  int i;
+  for (i = nbits - 1; i >= 0; i--, (*pos)++)
+    if ((value >> i) & 1)
+      buffer[*pos / 8] |= (unsigned char)(0x80 >> (*pos % 8));
+}
+
+/* The r2007+ data of a proxy entity ends with a string stream of its own,
+   which ODA needs to read it: the TU "cn:" and the C++ class name, its size
+   in bits as RS, and the has_strings bit. The data of an unknown class has
+   none, its own has_strings bit is the last bit of its data. Returns the data
+   with this stream appended and its size in bits, or NULL to keep the data. */
+static unsigned char *
+dxf_proxy_string_stream (const Bit_Chain *restrict dat,
+                         const Dwg_Data *restrict dwg,
+                         const Dwg_Class *restrict klass,
+                         const unsigned char *restrict data,
+                         const size_t numbits, size_t *restrict poutbits)
+{
+  char *name;
+  BITCODE_TU wname;
+  size_t len, i, pos, sbits;
+  unsigned char *out;
+
+  if (!klass || !klass->cppname || dat->version < R_2007
+      || dwg->header.from_version < R_2007)
+    return NULL;
+  name = (char *)malloc (strlen (klass->cppname) + 4);
+  if (!name)
+    return NULL;
+  strcpy (name, "cn:");
+  strcat (name, klass->cppname);
+  wname = bit_utf8_to_TU (name, 0);
+  free (name);
+  if (!wname)
+    return NULL;
+  len = bit_wcs2len (wname);
+  // BS length, RS size
+  sbits = (len < 256 ? 10 : 18) + len * 16;
+  if (len > 0xffff || sbits > 0xffff)
+    {
+      free (wname);
+      return NULL;
+    }
+  *poutbits = numbits + sbits + 16 + 1;
+  out = (unsigned char *)calloc ((*poutbits + 7) / 8, 1);
+  if (!out)
+    {
+      free (wname);
+      return NULL;
+    }
+  memcpy (out, data, (numbits + 7) / 8);
+  pos = numbits;
+  if (len < 256)
+    {
+      dxf_put_bits (out, &pos, 1, 2);
+      dxf_put_bits (out, &pos, (unsigned)len, 8);
+    }
+  else
+    {
+      dxf_put_bits (out, &pos, 0, 2);
+      dxf_put_bits (out, &pos, (unsigned)len, 16);
+    }
+  for (i = 0; i < len; i++)
+    {
+      dxf_put_bits (out, &pos, wname[i] & 0xff, 8);
+      dxf_put_bits (out, &pos, wname[i] >> 8, 8);
+    }
+  dxf_put_bits (out, &pos, (unsigned)(sbits & 0xff), 8);
+  dxf_put_bits (out, &pos, (unsigned)(sbits >> 8), 8);
+  dxf_put_bits (out, &pos, 1, 1);
+  free (wname);
+  return out;
+}
+
 /* Emit an ACAD_PROXY_ENTITY for a class we cannot parse: the record name,
  * the common entity data (including the proxy graphics in the preview,
  * groups 92/310), and the proxy class markers. ODA-based converters do the
@@ -2983,7 +3088,8 @@ dxf_write_unknown_entity (Bit_Chain *restrict dat,
   // index), 95=version, 70=0, then the graphics 92/310 and the data 93/310.
   fprintf (dat->fh, "%3i\r\n%s\r\n", 100, "AcDbProxyEntity");
   fprintf (dat->fh, "%3i\r\n%9li\r\n", 90, 498L);
-  fprintf (dat->fh, "%3i\r\n%9li\r\n", 91, klass ? (long)obj->type : 0L);
+  fprintf (dat->fh, "%3i\r\n%9li\r\n", 91,
+           klass ? (long)dxf_class_number (dat, dwg, obj->type) : 0L);
   // Group 95 must be decimal: dxf_read_rl parses it decimal, a hex value
   // desyncs the reader.
   fprintf (dat->fh, "%3i\r\n%9li\r\n", 95,
@@ -3016,6 +3122,9 @@ dxf_write_unknown_entity (Bit_Chain *restrict dat,
           unsigned char *data = (unsigned char *)malloc (bytes);
           if (data)
             {
+              size_t outbits = numbits;
+              size_t outbytes = bytes;
+              unsigned char *out;
               memcpy (data, obj->unknown_bits, bytes);
               if (bytes - 1 == obj->num_unknown_bits / 8
                   && obj->num_unknown_bits % 8)
@@ -3027,8 +3136,16 @@ dxf_write_unknown_entity (Bit_Chain *restrict dat,
                 }
               if (numbits % 8)
                 data[bytes - 1] &= (unsigned char)(0xFF << (8 - numbits % 8));
-              fprintf (dat->fh, "%3i\r\n%9lu\r\n", 93, (unsigned long)numbits);
-              VALUE_BINARY (data, bytes, 310);
+              out = dxf_proxy_string_stream (dat, dwg, klass, data, numbits,
+                                             &outbits);
+              if (out)
+                {
+                  free (data);
+                  data = out;
+                  outbytes = (outbits + 7) / 8;
+                }
+              fprintf (dat->fh, "%3i\r\n%9lu\r\n", 93, (unsigned long)outbits);
+              VALUE_BINARY (data, outbytes, 310);
               free (data);
             }
           // the object handle stream after the class data, as the proxy
@@ -3800,12 +3917,7 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (j = 0; j < dwg->num_classes; j++)
     {
       const char *dxfname = dwg->dwg_class[j].dxfname;
-      if (!dxfname)
-        continue;
-      // some classes are now builtin
-      if (dat->version >= R_2004
-          && (strEQc (dxfname, "ACDBPLACEHOLDER")
-              || strEQc (dxfname, "LAYOUT")))
+      if (dxf_class_skipped (dat, &dwg->dwg_class[j]))
         continue;
       if (strEQc (dxfname, "DATATABLE"))
         dxfname = "ACDBDATATABLE";
