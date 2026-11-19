@@ -139,6 +139,58 @@ transform_OCS_elevation (BITCODE_2DPOINT *out, const BITCODE_2DPOINT pt,
   out->y = w.y;
 }
 
+// The 2D WCS point, in place, of the OCS point p of a polyline at elevation
+static void
+ps_ocs_point (BITCODE_3DPOINT *p, const double elevation, const BITCODE_BE ext)
+{
+  BITCODE_2DPOINT in, out;
+  in.x = p->x;
+  in.y = p->y;
+  transform_OCS_elevation (&out, in, elevation, ext);
+  p->x = out.x;
+  p->y = out.y;
+}
+
+// The Bezier curve b of degree 1, 2 or 3 from the current point b[0].
+// PostScript has only cubic curves: a quadratic one is the cubic one with
+// its inner control points 2/3 of the way to its middle one.
+static void
+ps_bezier (PSDoc *ps, const BITCODE_3DPOINT *b, const int degree)
+{
+  if (degree == 1)
+    PS_lineto (ps, (float)b[1].x, (float)b[1].y);
+  else if (degree == 2)
+    PS_curveto (ps, (float)(b[0].x + 2.0 / 3 * (b[1].x - b[0].x)),
+                (float)(b[0].y + 2.0 / 3 * (b[1].y - b[0].y)),
+                (float)(b[2].x + 2.0 / 3 * (b[1].x - b[2].x)),
+                (float)(b[2].y + 2.0 / 3 * (b[1].y - b[2].y)), (float)b[2].x,
+                (float)b[2].y);
+  else
+    PS_curveto (ps, (float)b[1].x, (float)b[1].y, (float)b[2].x, (float)b[2].y,
+                (float)b[3].x, (float)b[3].y);
+}
+
+// A spline-fit POLYLINE_2D as its curve.  Returns 0 if it has none.
+static int
+ps_polyline_spline (PSDoc *ps, const Dwg_Object *obj)
+{
+  const Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
+  BITCODE_3DPOINT *b;
+  int error, degree, j;
+  const int k = dwg_object_polyline_2d_get_spline (obj, &b, &degree, &error);
+
+  if (!k)
+    return 0;
+  for (j = 0; j <= k * degree; j++)
+    ps_ocs_point (&b[j], pline->elevation, pline->extrusion);
+  PS_moveto (ps, (float)b[0].x, (float)b[0].y);
+  for (j = 0; j < k; j++)
+    ps_bezier (ps, &b[j * degree], degree);
+  PS_stroke (ps);
+  free (b);
+  return 1;
+}
+
 // Draw the numpts OCS points of a polyline at elevation, with optional
 // bulges, as one path.  A stroke ends the path, so stroke only once at the
 // end.
@@ -290,7 +342,7 @@ create_postscript (Dwg_Data *dwg, char *output)
               = dwg_object_polyline_2d_get_numpoints (obj, &error);
           dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
           Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
-          if (numpts && pts && !error)
+          if (numpts && pts && !error && !ps_polyline_spline (ps, obj))
             {
               double *bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
               ps_polyline (ps, pts, bulges, numpts, pline->elevation,

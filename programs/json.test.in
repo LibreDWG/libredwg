@@ -368,6 +368,30 @@ then
         fi
         rm -f ./OcsEntities.dwg ./OcsEntities2.dwg
     fi
+
+    # 2000/PolylineSplineFit.dxf: points on the curves, not the frame
+    if [ -x "./dxf2dwg${EXEEXT}" ] &&
+       $TESTPROG "./dxf2dwg${EXEEXT}" -y -o PolylineSplineFit.dwg \
+           "$DATADIR/2000/PolylineSplineFit.dxf" >/dev/null 2>&1
+    then
+        echo "dwgread -O geojson PolylineSplineFit.dwg | jq spline-fit"
+        if $TESTPROG "./dwgread${EXEEXT}" -O geojson PolylineSplineFit.dwg 2>/dev/null |
+               $JQ -e '[.features[].geometry | select(. != null)
+                        | if .type == "LineString"
+                          then (.coordinates | length > 22
+                                and all(.[1] < 3))
+                          elif .type == "Polygon"
+                          then (.coordinates[0] | length > 37
+                                and all((.[0] - 12) * (.[0] - 12)
+                                        + (.[1] - 2) * (.[1] - 2) < 6.25))
+                          else empty end] == [true, true]' >/dev/null 2>&1
+        then
+            echo geojson spline-fit ok
+        else
+            i=$((i+1))
+        fi
+        rm -f ./PolylineSplineFit.dwg
+    fi
 else
     echo no jq, cannot check pipe
 fi
