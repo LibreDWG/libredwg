@@ -9702,6 +9702,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_WIPEOUT *WIPEOUT;
     /* unstable */
     Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
+    Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
     Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
     Dwg_Entity_LAYOUTPRINTCONFIG *LAYOUTPRINTCONFIG;
@@ -9711,7 +9712,6 @@ typedef struct _dwg_object_entity
     /* debugging */
       Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
       Dwg_Entity_BASEPOINTPARAMETERENTITY *BASEPOINTPARAMETERENTITY;
-      Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
       Dwg_Entity_FLIPGRIPENTITY *FLIPGRIPENTITY;
       Dwg_Entity_FLIPPARAMETERENTITY *FLIPPARAMETERENTITY;
       Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
@@ -12144,6 +12144,7 @@ EXPORT int dwg_setup_DGNDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup_DWFDEFINITION (Dwg_Object *obj);
 /* unstable */
 EXPORT int dwg_setup_ARCALIGNEDTEXT (Dwg_Object *obj);
+EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
@@ -12228,7 +12229,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
   EXPORT int dwg_setup_ALIGNMENTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_BASEPOINTPARAMETERENTITY (Dwg_Object *obj);
-  EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_FLIPGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_FLIPPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOPOSITIONMARKER (Dwg_Object *obj);

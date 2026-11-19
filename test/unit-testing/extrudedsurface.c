@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_EXTRUDEDSURFACE
 #include "tests_common.c"
 
@@ -40,7 +39,6 @@ api_process (dwg_object *obj)
   BITCODE_H path_entity;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_ent_extrudedsurface *_obj = dwg_object_to_EXTRUDEDSURFACE (obj);
 
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, acis_empty, B);
@@ -135,5 +133,4 @@ api_process (dwg_object *obj)
                   reference_vector_for_controlling_twist);
   CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, sweep_entity);
   CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, path_entity);
-#endif
 }

@@ -1315,7 +1315,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str490,                     "XLINE",                      DWG_TYPE_XLINE,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 80 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str495,           "EXTRUDEDSURFACE",            DWG_TYPE_EXTRUDEDSURFACE,	1,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str495,           "EXTRUDEDSURFACE",            DWG_TYPE_EXTRUDEDSURFACE,	1,	UNSTABLE},
 #line 260 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str496,                 "BLOCKXYPARAMETER",                  DWG_TYPE_BLOCKXYPARAMETER,	0,	UNSTABLE},
       {-1},

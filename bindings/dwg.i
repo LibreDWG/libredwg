@@ -235,6 +235,7 @@ EXPORT Dwg_Entity_WIPEOUT** dwg_getall_WIPEOUT (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_XLINE** dwg_getall_XLINE (Dwg_Object_Ref* hdr);
 /* unstable */
 EXPORT Dwg_Entity_ARCALIGNEDTEXT** dwg_getall_ARCALIGNEDTEXT (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_EXTRUDEDSURFACE** dwg_getall_EXTRUDEDSURFACE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_HELIX** dwg_getall_HELIX (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION** dwg_getall_LARGE_RADIAL_DIMENSION (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_LAYOUTPRINTCONFIG** dwg_getall_LAYOUTPRINTCONFIG (Dwg_Object_Ref* hdr);
@@ -244,7 +245,6 @@ EXPORT Dwg_Entity_POINTCLOUDEX** dwg_getall_POINTCLOUDEX (Dwg_Object_Ref* hdr);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ALIGNMENTPARAMETERENTITY** dwg_getall_ALIGNMENTPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_BASEPOINTPARAMETERENTITY** dwg_getall_BASEPOINTPARAMETERENTITY (Dwg_Object_Ref* hdr);
-  EXPORT Dwg_Entity_EXTRUDEDSURFACE** dwg_getall_EXTRUDEDSURFACE (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_FLIPGRIPENTITY** dwg_getall_FLIPGRIPENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_FLIPPARAMETERENTITY** dwg_getall_FLIPPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_GEOPOSITIONMARKER** dwg_getall_GEOPOSITIONMARKER (Dwg_Object_Ref* hdr);
@@ -1365,6 +1365,7 @@ EXPORT Dwg_Entity_WIPEOUT* dwg_object_to_WIPEOUT (Dwg_Object* obj);
 EXPORT Dwg_Entity_XLINE* dwg_object_to_XLINE (Dwg_Object* obj);
 /* unstable */
 EXPORT Dwg_Entity_ARCALIGNEDTEXT* dwg_object_to_ARCALIGNEDTEXT (Dwg_Object* obj);
+EXPORT Dwg_Entity_EXTRUDEDSURFACE* dwg_object_to_EXTRUDEDSURFACE (Dwg_Object* obj);
 EXPORT Dwg_Entity_HELIX* dwg_object_to_HELIX (Dwg_Object* obj);
 EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION* dwg_object_to_LARGE_RADIAL_DIMENSION (Dwg_Object* obj);
 EXPORT Dwg_Entity_LAYOUTPRINTCONFIG* dwg_object_to_LAYOUTPRINTCONFIG (Dwg_Object* obj);
@@ -1374,7 +1375,6 @@ EXPORT Dwg_Entity_POINTCLOUDEX* dwg_object_to_POINTCLOUDEX (Dwg_Object* obj);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ALIGNMENTPARAMETERENTITY* dwg_object_to_ALIGNMENTPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_BASEPOINTPARAMETERENTITY* dwg_object_to_BASEPOINTPARAMETERENTITY (Dwg_Object* obj);
-  EXPORT Dwg_Entity_EXTRUDEDSURFACE* dwg_object_to_EXTRUDEDSURFACE (Dwg_Object* obj);
   EXPORT Dwg_Entity_FLIPGRIPENTITY* dwg_object_to_FLIPGRIPENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_FLIPPARAMETERENTITY* dwg_object_to_FLIPPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_GEOPOSITIONMARKER* dwg_object_to_GEOPOSITIONMARKER (Dwg_Object* obj);

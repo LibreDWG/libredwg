@@ -613,6 +613,7 @@ extern "C"
   typedef struct _dwg_entity_WIPEOUT		dwg_ent_wipeout;
   /* unstable */
   typedef struct _dwg_entity_ARCALIGNEDTEXT		dwg_ent_arcalignedtext;
+  typedef struct _dwg_entity_EXTRUDEDSURFACE		dwg_ent_extrudedsurface;
   typedef struct _dwg_entity_HELIX		dwg_ent_helix;
   typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION		dwg_ent_large_radial_dimension;
   typedef struct _dwg_entity_LAYOUTPRINTCONFIG		dwg_ent_layoutprintconfig;
@@ -622,7 +623,6 @@ extern "C"
   /* debugging */
   typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY		dwg_ent_alignmentparameterentity;
   typedef struct _dwg_entity_BASEPOINTPARAMETERENTITY		dwg_ent_basepointparameterentity;
-  typedef struct _dwg_entity_EXTRUDEDSURFACE		dwg_ent_extrudedsurface;
   typedef struct _dwg_entity_FLIPGRIPENTITY		dwg_ent_flipgripentity;
   typedef struct _dwg_entity_FLIPPARAMETERENTITY		dwg_ent_flipparameterentity;
   typedef struct _dwg_entity_GEOPOSITIONMARKER		dwg_ent_geopositionmarker;
@@ -1737,6 +1737,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
   /* unstable */
   dwg_get_OBJECT_DECL (ent_arcalignedtext, ARCALIGNEDTEXT);
+  dwg_get_OBJECT_DECL (ent_extrudedsurface, EXTRUDEDSURFACE);
   dwg_get_OBJECT_DECL (ent_helix, HELIX);
   dwg_get_OBJECT_DECL (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION);
   dwg_get_OBJECT_DECL (ent_layoutprintconfig, LAYOUTPRINTCONFIG);
@@ -1746,7 +1747,6 @@ extern "C"
 #ifdef DEBUG_CLASSES
     dwg_get_OBJECT_DECL (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_basepointparameterentity, BASEPOINTPARAMETERENTITY);
-    dwg_get_OBJECT_DECL (ent_extrudedsurface, EXTRUDEDSURFACE);
     dwg_get_OBJECT_DECL (ent_flipgripentity, FLIPGRIPENTITY);
     dwg_get_OBJECT_DECL (ent_flipparameterentity, FLIPPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_geopositionmarker, GEOPOSITIONMARKER);
@@ -2873,6 +2873,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (WIPEOUT);
   /* unstable */
   DWG_GETALL_ENTITY_DECL (ARCALIGNEDTEXT);
+  DWG_GETALL_ENTITY_DECL (EXTRUDEDSURFACE);
   DWG_GETALL_ENTITY_DECL (HELIX);
   DWG_GETALL_ENTITY_DECL (LARGE_RADIAL_DIMENSION);
   DWG_GETALL_ENTITY_DECL (LAYOUTPRINTCONFIG);
@@ -2882,7 +2883,6 @@ extern "C"
   /* debugging */
   DWG_GETALL_ENTITY_DECL (ALIGNMENTPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (BASEPOINTPARAMETERENTITY);
-  DWG_GETALL_ENTITY_DECL (EXTRUDEDSURFACE);
   DWG_GETALL_ENTITY_DECL (FLIPGRIPENTITY);
   DWG_GETALL_ENTITY_DECL (FLIPPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (GEOPOSITIONMARKER);
@@ -4024,6 +4024,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT);
   /* unstable */
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARCALIGNEDTEXT);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (EXTRUDEDSURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HELIX);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LARGE_RADIAL_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LAYOUTPRINTCONFIG);
@@ -4033,7 +4034,6 @@ extern "C"
 #  ifdef DEBUG_CLASSES
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ALIGNMENTPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (BASEPOINTPARAMETERENTITY);
-    CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (EXTRUDEDSURFACE);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (FLIPGRIPENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (FLIPPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (GEOPOSITIONMARKER);

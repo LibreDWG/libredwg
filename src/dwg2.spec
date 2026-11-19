@@ -3908,6 +3908,58 @@ DWG_OBJECT (PERSUBENTMGR)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+#define SweepOptions_fields  \
+  FIELD_BD (draft_angle, 42); \
+  FIELD_BD (draft_start_distance, 43); \
+  FIELD_BD (draft_end_distance, 44); \
+  FIELD_BD (twist_angle, 45); \
+  FIELD_BD (scale_factor, 48); \
+  FIELD_BD (align_angle, 49); \
+  FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 46); \
+  FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 47); \
+  FIELD_B (is_solid, 290); \
+  FIELD_BS (sweep_alignment_flags, 70); \
+  FIELD_BS (path_flags, 71); \
+  FIELD_B (align_start, 292); \
+  FIELD_B (bank, 293); \
+  FIELD_B (base_point_set, 294); \
+  FIELD_B (sweep_entity_transform_computed, 295); \
+  FIELD_B (path_entity_transform_computed, 296); \
+  FIELD_3BD (reference_vector_for_controlling_twist, 11)
+
+
+// r2007+
+DWG_ENTITY (EXTRUDEDSURFACE)
+
+  ACTION_3DSOLID;
+  //FIELD_BS (modeler_format_version, 70); //def 1
+  SUBCLASS (AcDbSurface);
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS (AcDbExtrudedSurface);
+#ifdef IS_DXF
+  //FIELD_BL (class_version, 90); // or entity type?
+  CALL_SUBENT (_obj->entity, 90);
+#else
+  // here and at SweptSurface
+  SweepOptions_fields;
+#endif
+  FIELD_3BD (sweep_vector, 10);
+  FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
+#ifdef IS_DXF
+  SweepOptions_fields;
+#else
+  //FIELD_BL (class_version, 90); // or entity type?
+  CALL_SUBENT (_obj->entity, 90);
+#endif
+
+  COMMON_ENTITY_HANDLE_DATA;
+  //FIELD_HANDLE (sweep_entity, 5, 0);
+  //FIELD_HANDLE (path_entity, 5, 0);
+
+DWG_ENTITY_END
+
+
 /*=============================================================================*/
 
 /* In work area:
@@ -4129,57 +4181,6 @@ DWG_ENTITY (GEOPOSITIONMARKER)
 DWG_ENTITY_END
 
 DWG_ENT_SUBCLASS (GEOPOSITIONMARKER, AcDbMTextObjectEmbedded)
-
-#define SweepOptions_fields  \
-  FIELD_BD (draft_angle, 42); \
-  FIELD_BD (draft_start_distance, 43); \
-  FIELD_BD (draft_end_distance, 44); \
-  FIELD_BD (twist_angle, 45); \
-  FIELD_BD (scale_factor, 48); \
-  FIELD_BD (align_angle, 49); \
-  FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 46); \
-  FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 47); \
-  FIELD_B (is_solid, 290); \
-  FIELD_BS (sweep_alignment_flags, 70); \
-  FIELD_BS (path_flags, 71); \
-  FIELD_B (align_start, 292); \
-  FIELD_B (bank, 293); \
-  FIELD_B (base_point_set, 294); \
-  FIELD_B (sweep_entity_transform_computed, 295); \
-  FIELD_B (path_entity_transform_computed, 296); \
-  FIELD_3BD (reference_vector_for_controlling_twist, 11)
-
-// r2007+
-DWG_ENTITY (EXTRUDEDSURFACE)
-
-  HANDLE_UNKNOWN_BITS;
-  ACTION_3DSOLID;
-  //FIELD_BS (modeler_format_version, 70); //def 1
-  SUBCLASS (AcDbSurface);
-  FIELD_BS (u_isolines, 71);
-  FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbExtrudedSurface);
-#ifdef IS_DXF
-  //FIELD_BL (class_version, 90); // or entity type?
-  CALL_SUBENT (_obj->entity, 90);
-#else
-  // here and at SweptSurface
-  SweepOptions_fields;
-#endif
-  FIELD_3BD (sweep_vector, 10);
-  FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
-#ifdef IS_DXF
-  SweepOptions_fields;
-#else
-  //FIELD_BL (class_version, 90); // or entity type?
-  CALL_SUBENT (_obj->entity, 90);
-#endif
-
-  COMMON_ENTITY_HANDLE_DATA;
-  //FIELD_HANDLE (sweep_entity, 5, 0);
-  //FIELD_HANDLE (path_entity, 5, 0);
-
-DWG_ENTITY_END
 
 // r2007+
 DWG_ENTITY (LOFTEDSURFACE)
