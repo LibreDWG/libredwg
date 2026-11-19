@@ -7824,6 +7824,10 @@ add_ASSOCVARIABLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
       LOG_ERROR ("%s: Invalid num_var_deps %u", obj->name, num_var_deps);
       return dxf_read_pair (dat);
     }
+  // a repeated subclass replaces the deps, the count follows the reads
+  free (o->var_deps);
+  o->var_deps = NULL;
+  o->num_var_deps = 0;
   if (num_var_deps)
     {
       o->var_deps = (Dwg_ASSOCVARIABLE_Dep *)xcalloc (
