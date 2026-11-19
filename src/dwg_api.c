@@ -22871,15 +22871,15 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
                   if (vobj->fixedtype == DWG_TYPE_VERTEX_3D
                       && (vertex = dwg_object_to_VERTEX_3D (vobj)))
                     {
-                      ptx[i].x = vertex->point.x;
-                      ptx[i].y = vertex->point.y;
-                      ptx[i].z = vertex->point.z;
-                      i++;
-                      if (i > num_points)
+                      if (i >= num_points)
                         {
                           *error = 1;
                           break;
                         }
+                      ptx[i].x = vertex->point.x;
+                      ptx[i].y = vertex->point.y;
+                      ptx[i].z = vertex->point.z;
+                      i++;
                     }
                   else
                     {
@@ -22900,15 +22900,15 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
               if (vobj->fixedtype == DWG_TYPE_VERTEX_3D
                   && (vertex = dwg_object_to_VERTEX_3D (vobj)))
                 {
-                  ptx[i].x = vertex->point.x;
-                  ptx[i].y = vertex->point.y;
-                  ptx[i].z = vertex->point.z;
-                  i++;
-                  if (i > num_points)
+                  if (i >= num_points)
                     {
                       *error = 1;
                       break;
                     }
+                  ptx[i].x = vertex->point.x;
+                  ptx[i].y = vertex->point.y;
+                  ptx[i].z = vertex->point.z;
+                  i++;
                 }
               else
                 {
