@@ -568,6 +568,12 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
    && (obj->fixedtype == DWG_TYPE_REGION                                      \
        || obj->fixedtype == DWG_TYPE__3DSOLID                                 \
        || obj->fixedtype == DWG_TYPE_BODY))
+/* An EXTRUDEDSURFACE of r2013+ (verified with a r2018 file) keeps its ACIS in
+   AcDs, and has a bit (acis_empty2) after acis_empty_bit instead of the
+   num_materials BL, then the revision GUID. It has no history handle, neither
+   in the handle stream nor in the DXF. Other surfaces are not verified. */
+#define SOLID_SURFACE_R2013                                                   \
+  (dat->version >= R_2013b && obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
 
 /* COMMON_3DSOLID: JSON has [0,0] for no history handle. The encoder makes it
    a NULL, as a code 0 ref is invalid in the handle stream. */
@@ -626,7 +632,11 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   FIELD_B (acis_empty_bit, 0);      \
       /* ?? */ /* The R2007+ unknown BL (num_materials) is there for          \
   SAT v1 also */        \
-  if (SOLID_VERSION2 || SOLID_SAT1_R2007)                                     \
+  if (SOLID_SURFACE_R2013)                                                    \
+    {                                                                         \
+      FIELD_B (acis_empty2, 0);                                               \
+    }                                                                         \
+  else if (SOLID_VERSION2 || SOLID_SAT1_R2007)                                \
     {                                                                         \
       SINCE (R_2007a)                                                         \
       {                                                                       \
@@ -672,11 +682,14 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   }                                                                           \
   DXF {                                                                       \
     SINCE (R_2007a) {                                                         \
-      SUBCLASS (AcDb3dSolid);                                                 \
-      FIELD_HANDLE (history_id, 4, 350);                                      \
+      if (!SOLID_SURFACE_R2013) {                                             \
+        SUBCLASS (AcDb3dSolid);                                               \
+        FIELD_HANDLE (history_id, 4, 350);                                    \
+      }                                                                       \
     }                                                                         \
-  } else if (((IF_IS_ENCODER ? dat->version >= R_2007a : SOLID_VERSION2)     \
-              || SOLID_SAT1_R2007)                                            \
+  } else if (!SOLID_SURFACE_R2013                                             \
+             && ((IF_IS_ENCODER ? dat->version >= R_2007a : SOLID_VERSION2)  \
+                 || SOLID_SAT1_R2007)                                         \
              && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \
       FIELD_HANDLE (history_id, 4, 350);                                      \
   }                                                                           \

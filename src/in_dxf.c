@@ -11617,6 +11617,56 @@ dxf_set_leader_context (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   return 0;
 }
 
+/* Reads the consecutive binary pairs of the group CODE (310 chunks of 127
+   bytes), already decoded by dxf_read_pair, into one NUL-terminated buffer
+   of *PLEN bytes. *PPAIR is the first chunk and returns the next pair, which
+   the caller owns. Returns NULL with *PPAIR freed and NULL on OOM. */
+static BITCODE_TF
+dxf_read_binary_chunks (Bit_Chain *restrict dat, Dxf_Pair **restrict ppair,
+                        const int code, size_t *restrict plen)
+{
+  Dxf_Pair *pair = *ppair;
+  size_t cap = 0, len = 0;
+  BITCODE_TF data = NULL;
+  while (pair && pair->code == code)
+    {
+      const size_t clen = pair->value.s.len;
+      if (len + clen + 1 > cap)
+        {
+          BITCODE_TF tmp;
+          cap = (len + clen + 1) * 2;
+          tmp = (BITCODE_TF)realloc (data, cap);
+          if (!tmp)
+            {
+              free (data);
+              dxf_free_pair (pair);
+              *ppair = NULL;
+              return NULL;
+            }
+          data = tmp;
+        }
+      if (clen)
+        memcpy (data + len, pair->value.s.ptr, clen);
+      len += clen;
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  if (!data)
+    {
+      data = (BITCODE_TF)calloc (1, 1);
+      if (!data)
+        {
+          dxf_free_pair (pair);
+          *ppair = NULL;
+          return NULL;
+        }
+    }
+  data[len] = '\0';
+  *plen = len;
+  *ppair = pair;
+  return data;
+}
+
 /* For tables, entities and objects.
  */
 static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
@@ -11640,6 +11690,7 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
   int j = 0, k = 0, l = 0, error = 0;
+  int es_idx[3] = { 0, 0, 0 };  // EXTRUDEDSURFACE matrices 40, 46, 47
   BITCODE_BL column_idx = 0;    // MTEXTOBJECTCONTEXTDATA.column_heights[46]
   BITCODE_BL leader_pt_idx = 0; // LEADEROBJECTCONTEXTDATA.points[10,20,30]
   BITCODE_BL sf_idx = 0;        // SPATIAL_FILTER matrix values (40)
@@ -14415,6 +14466,93 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               else
                 return pair;
             }
+          else if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE
+                   && strEQc (subclass, "AcDbExtrudedSurface")
+                   && (pair->code == 90 || pair->code == 310
+                       || pair->code == 70 || pair->code == 71
+                       || pair->code == 40 || pair->code == 46
+                       || pair->code == 47))
+            {
+              // The dynapi cannot tell these apart: the first 90 is the class
+              // version, the second its size in bits, the 310 chunks the
+              // data. 70 and 71 are the sweep options (71 is also the
+              // u_isolines of AcDbSurface), and the three transformation
+              // matrices are all BD* with the codes 40, 46 and 47.
+              Dwg_Entity_EXTRUDEDSURFACE *o
+                  = obj->tio.entity->tio.EXTRUDEDSURFACE;
+              if (pair->code == 90)
+                {
+                  if (k++ == 0)
+                    {
+                      o->class_version = pair->value.u;
+                      LOG_TRACE ("%s.class_version = %u [BL 90]\n", name,
+                                 (unsigned)o->class_version);
+                    }
+                  else
+                    {
+                      o->bindata_size = pair->value.u;
+                      LOG_TRACE ("%s.bindata_size = %u [BL 90]\n", name,
+                                 (unsigned)o->bindata_size);
+                    }
+                  goto next_pair;
+                }
+              else if (pair->code == 70)
+                {
+                  o->sweep_alignment_flags = pair->value.i;
+                  LOG_TRACE ("%s.sweep_alignment_flags = %d [BS 70]\n", name,
+                             (int)o->sweep_alignment_flags);
+                  goto next_pair;
+                }
+              else if (pair->code == 71)
+                {
+                  o->path_flags = pair->value.i;
+                  LOG_TRACE ("%s.path_flags = %d [BS 71]\n", name,
+                             (int)o->path_flags);
+                  goto next_pair;
+                }
+              else if (pair->code == 310)
+                {
+                  size_t len = 0;
+                  BITCODE_TF data
+                      = dxf_read_binary_chunks (dat, &pair, 310, &len);
+                  if (!data)
+                    goto fail;
+                  free (o->bindata);
+                  o->bindata = data;
+                  // never claim more bits than the data holds
+                  if (o->bindata_size > len * 8)
+                    o->bindata_size = (BITCODE_BL)(len * 8);
+                  LOG_TRACE ("%s.bindata = TF %u bytes [310]\n", name,
+                             (unsigned)len);
+                  if (!pair || pair->code == 0)
+                    goto end_object_loop;
+                  goto start_loop;
+                }
+              else // the matrices 40, 46, 47: 16 BD each
+                {
+                  const int m = pair->code == 40   ? 0
+                                : pair->code == 46 ? 1
+                                                   : 2;
+                  BITCODE_BD **matrix = m == 0   ? &o->sweep_transmatrix
+                                        : m == 1 ? &o->sweep_entity_transmatrix
+                                                 : &o->path_entity_transmatrix;
+                  if (!*matrix)
+                    {
+                      *matrix
+                          = (BITCODE_BD *)xcalloc (16, sizeof (BITCODE_BD));
+                      if (!*matrix)
+                        goto invalid_dxf;
+                    }
+                  if (es_idx[m] < 16)
+                    {
+                      (*matrix)[es_idx[m]] = pair->value.d;
+                      LOG_TRACE ("%s.matrix%d[%d] = %f [BD %d]\n", name, m,
+                                 es_idx[m], pair->value.d, pair->code);
+                      es_idx[m]++;
+                    }
+                  goto next_pair;
+                }
+            }
           else
           search_field:
             { // search all specific fields and common fields for the DXF
@@ -14685,38 +14823,13 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                           // dxf_read_pair already decoded the hex chunks to
                           // raw bytes (pair->value.s.ptr/len). The total
                           // bit count arrived earlier via 93 (data_numbits).
-                          size_t cap = 0, len = 0;
-                          BITCODE_TF data = NULL;
+                          size_t len = 0;
+                          BITCODE_TF data;
                           BITCODE_BL numbits = 0;
-                          while (pair && pair->code == f->dxf)
-                            {
-                              const char *chunk = pair->value.s.ptr;
-                              const size_t clen = pair->value.s.len;
-                              if (len + clen + 1 > cap)
-                                {
-                                  BITCODE_TF tmp;
-                                  cap = (len + clen + 1) * 2;
-                                  tmp = (BITCODE_TF)realloc (data, cap);
-                                  if (!tmp)
-                                    {
-                                      free (data);
-                                      dxf_free_pair (pair);
-                                      goto fail;
-                                    }
-                                  data = tmp;
-                                }
-                              memcpy (data + len, chunk, clen);
-                              len += clen;
-                              dxf_free_pair (pair);
-                              pair = dxf_read_pair (dat);
-                            }
+                          data = dxf_read_binary_chunks (dat, &pair, f->dxf,
+                                                         &len);
                           if (!data)
-                            {
-                              data = (BITCODE_TF)xcalloc (1, 1);
-                              if (!data)
-                                goto fail;
-                            }
-                          data[len] = '\0';
+                            goto fail;
                           // The DXF packs the last partial byte MSB-first,
                           // bit_write_bits expects it LSB-first (see the
                           // PROXY_OBJECT spec DECODER).

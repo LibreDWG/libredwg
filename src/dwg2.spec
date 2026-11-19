@@ -3927,30 +3927,67 @@ DWG_OBJECT_END
   FIELD_B (path_entity_transform_computed, 296); \
   FIELD_3BD (reference_vector_for_controlling_twist, 11)
 
+// The DWG order of the sweep options: the matrices follow the twist vector
+#define SweepOptions_dwg_fields  \
+  FIELD_BD (draft_angle, 42); \
+  FIELD_BD (draft_start_distance, 43); \
+  FIELD_BD (draft_end_distance, 44); \
+  FIELD_BD (twist_angle, 45); \
+  FIELD_BD (scale_factor, 48); \
+  FIELD_BD (align_angle, 49); \
+  FIELD_B (is_solid, 290); \
+  FIELD_BS (sweep_alignment_flags, 70); \
+  FIELD_BS (path_flags, 71); \
+  FIELD_B (align_start, 292); \
+  FIELD_B (bank, 293); \
+  FIELD_B (base_point_set, 294); \
+  FIELD_B (sweep_entity_transform_computed, 295); \
+  FIELD_B (path_entity_transform_computed, 296); \
+  FIELD_3BD (reference_vector_for_controlling_twist, 11); \
+  FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 46); \
+  FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 47)
+
+// The sweep profile: the class version, the size in bits and the data.
+// Not in JSON, which has no way to tell the bits from the bytes.
+#undef ExtrudedSurface_bindata
+#ifdef IS_JSON
+#  define ExtrudedSurface_bindata
+#else
+#  define ExtrudedSurface_bindata \
+  { \
+    BITCODE_BL _bindata_bytes = (FIELD_VALUE (bindata_size) + 7) / 8; \
+    FIELD_BINARY (bindata, _bindata_bytes, 310); \
+  }
+#endif
+#define ExtrudedSurface_profile  \
+  FIELD_BL (class_version, 90); \
+  FIELD_BL (bindata_size, 90); \
+  VALUEOUTOFBOUNDS (bindata_size, 8 * 65536); \
+  ExtrudedSurface_bindata
+
 
 // r2007+
 DWG_ENTITY (EXTRUDEDSURFACE)
 
   ACTION_3DSOLID;
-  //FIELD_BS (modeler_format_version, 70); //def 1
   SUBCLASS (AcDbSurface);
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
   SUBCLASS (AcDbExtrudedSurface);
 #ifdef IS_DXF
-  //FIELD_BL (class_version, 90); // or entity type?
-  CALL_SUBENT (_obj->entity, 90);
-#else
-  // here and at SweptSurface
-  SweepOptions_fields;
-#endif
+  // ODA writes the sweep profile first, then the sweep vector and matrix,
+  // then the sweep options with the matrices.
+  ExtrudedSurface_profile;
   FIELD_3BD (sweep_vector, 10);
   FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
-#ifdef IS_DXF
   SweepOptions_fields;
 #else
-  //FIELD_BL (class_version, 90); // or entity type?
-  CALL_SUBENT (_obj->entity, 90);
+  // The DWG has the options with the twist vector first, then the matrices
+  // and the sweep profile last (verified with an r2018 file).
+  SweepOptions_dwg_fields;
+  FIELD_3BD (sweep_vector, 10);
+  FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
+  ExtrudedSurface_profile;
 #endif
 
   COMMON_ENTITY_HANDLE_DATA;
