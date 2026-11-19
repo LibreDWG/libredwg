@@ -2957,7 +2957,8 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 
 /* Whether the CLASSES section skips this class. */
 static int
-dxf_class_skipped (const Bit_Chain *restrict dat, const Dwg_Class *restrict klass)
+dxf_class_skipped (const Bit_Chain *restrict dat,
+                   const Dwg_Class *restrict klass)
 {
   // some classes are now builtin
   return !klass->dxfname
@@ -3682,6 +3683,11 @@ decl_dxf_process_INSERT (ACIDBLOCKREFERENCE)
     case DWG_TYPE_PROXY_ENTITY:
       // avoid unused warnings
       error |= dwg_dxf_PROXY_ENTITY (dat, obj);
+      return DWG_ERR_UNHANDLEDCLASS;
+    case DWG_TYPE_PROXY_OBJECT:
+      // ODA drops AcDbProxyObject records on DXF export as well; our raw
+      // data+string-stream dump is not readable back (ODA: "Object
+      // improperly read"). Skip them, like ODA.
       return DWG_ERR_UNHANDLEDCLASS;
     case DWG_TYPE_OLEFRAME:
       return minimal ? 0 : dwg_dxf_OLEFRAME (dat, obj);

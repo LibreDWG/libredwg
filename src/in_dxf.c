@@ -7544,7 +7544,7 @@ add_BLOCKFLIPGRIP (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 
 static Dxf_Pair *
 read_PERSUBENTMGR_vector (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
-                         BITCODE_BL *count, BITCODE_BL **values)
+                          BITCODE_BL *count, BITCODE_BL **values)
 {
   Dxf_Pair *pair = dxf_read_pair (dat);
 
@@ -7628,16 +7628,16 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       record->unknown_bl = pair->value.u;
       dxf_free_pair (pair);
       pair = read_PERSUBENTMGR_vector (obj, dat, &record->num_history_ids,
-                                      &record->history_ids);
+                                       &record->history_ids);
       if (pair)
         return pair;
       pair = read_PERSUBENTMGR_vector (obj, dat, &record->num_data_values,
-                                      &record->data_values);
+                                       &record->data_values);
       if (pair)
         return pair;
     }
   return read_PERSUBENTMGR_vector (obj, dat, &o->num_history_ids,
-                                  &o->history_ids);
+                                   &o->history_ids);
 }
 
 static Dxf_Pair *
@@ -14678,6 +14678,70 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                                        num_f->name, j, size);
                           goto next_pair;
                         }
+                      else if (f->dxf == pair->code && strEQc (f->type, "TF")
+                               && !f->is_string)
+                        {
+                          // binary TF field, e.g. PROXY_OBJECT.data (310).
+                          // dxf_read_pair already decoded the hex chunks to
+                          // raw bytes (pair->value.s.ptr/len). The total
+                          // bit count arrived earlier via 93 (data_numbits).
+                          size_t cap = 0, len = 0;
+                          BITCODE_TF data = NULL;
+                          BITCODE_BL numbits = 0;
+                          while (pair && pair->code == f->dxf)
+                            {
+                              const char *chunk = pair->value.s.ptr;
+                              const size_t clen = pair->value.s.len;
+                              if (len + clen + 1 > cap)
+                                {
+                                  BITCODE_TF tmp;
+                                  cap = (len + clen + 1) * 2;
+                                  tmp = (BITCODE_TF)realloc (data, cap);
+                                  if (!tmp)
+                                    {
+                                      free (data);
+                                      dxf_free_pair (pair);
+                                      goto fail;
+                                    }
+                                  data = tmp;
+                                }
+                              memcpy (data + len, chunk, clen);
+                              len += clen;
+                              dxf_free_pair (pair);
+                              pair = dxf_read_pair (dat);
+                            }
+                          if (!data)
+                            {
+                              data = (BITCODE_TF)xcalloc (1, 1);
+                              if (!data)
+                                goto fail;
+                            }
+                          data[len] = '\0';
+                          // The DXF packs the last partial byte MSB-first,
+                          // bit_write_bits expects it LSB-first (see the
+                          // PROXY_OBJECT spec DECODER).
+                          if (dwg_dynapi_entity_value (_obj, obj->name,
+                                                       "data_numbits",
+                                                       &numbits, NULL)
+                              && (numbits % 8) && (numbits / 8) < len)
+                            {
+                              unsigned char b = data[numbits / 8];
+                              unsigned char r = 0;
+                              int _i;
+                              for (_i = 0; _i < 8; _i++)
+                                r |= (unsigned char)(((b >> _i) & 1)
+                                                     << (7 - _i));
+                              data[numbits / 8] = r;
+                            }
+                          dwg_dynapi_entity_set_value (_obj, obj->name,
+                                                       f->name, &data, 0);
+                          LOG_TRACE ("%s.%s = TF %u bytes [%s %d]\n", name,
+                                     f->name, (unsigned)len, f->type, f->dxf);
+                          if (!pair || pair->code == 0)
+                            goto end_object_loop; // keep the terminating
+                                                  // pair for the caller
+                          goto start_loop;
+                        }
                       else if (f->dxf == pair->code)
                         {
                           LOG_WARN ("Ignore %s.%s VECTOR [%s %d]", name,
@@ -15862,6 +15926,7 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
       DXF_RETURN_EOF (pair);
     }
 
+end_object_loop:
   if (obj->fixedtype == DWG_TYPE_SEQEND)
     dxf_postprocess_SEQEND (obj);
   else if (obj->fixedtype == DWG_TYPE_LAYOUT)

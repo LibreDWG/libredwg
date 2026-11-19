@@ -145,14 +145,18 @@ if [ -f "$b.dwg" ]; then
             DEBUG_CLASSES=1
         fi
         if [ -z "$DEBUG_CLASSES" ]; then
-            # We dont write unstable entities yet. HELIX is skipped at out_dxf
+            # We dont write unstable entities yet. HELIX is skipped at out_dxf.
+            # UNKNOWN_ENT and PROXY_ENTITY are the same proxies: the original
+            # stores them with their class number (EXTRUDEDSURFACE ...), the
+            # roundtripped one as a fixed ACAD_PROXY_ENTITY type.
             grep -E '^Add entity' "$log1" |
-                grep -E -v 'entity (HELIX|UNKNOWN_ENT)' >"$log1.tmp"
+                grep -E -v 'entity (HELIX|UNKNOWN_ENT|PROXY_ENTITY)' >"$log1.tmp"
         else
             grep -E '^Add entity' "$log1" |
-                grep -E -v 'entity UNKNOWN_ENT' >"$log1.tmp"
+                grep -E -v 'entity (UNKNOWN_ENT|PROXY_ENTITY)' >"$log1.tmp"
         fi
-        grep -E '^Add entity' "$log2" >"$log2.tmp"
+        grep -E '^Add entity' "$log2" |
+            grep -E -v 'entity (HELIX|UNKNOWN_ENT|PROXY_ENTITY)' >"$log2.tmp"
         if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
             echo entities roundtrip ok
             rm "$log1.tmp" "$log2.tmp" 2>/dev/null
