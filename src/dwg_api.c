@@ -46,6 +46,7 @@
 #include "classes.h"
 #include "decode.h"
 #include "encode.h"
+#include "geom.h"
 #include "hash.h"
 
 #undef NEED_VPORT_FOR_MODEL_LAYOUT
@@ -22743,6 +22744,98 @@ dwg_object_polyline_2d_get_flags (const dwg_object *restrict obj,
     *error = 1;
   free (verts);
   return flags;
+}
+
+// The points of the vertices with (flag & mask) == value, z = 0.
+static BITCODE_BL
+polyline_2d_vertex_points (BITCODE_3DPOINT *out,
+                           Dwg_Entity_VERTEX_2D *const *verts,
+                           const BITCODE_BL num_points, const int mask,
+                           const int value)
+{
+  BITCODE_BL i, n = 0;
+  for (i = 0; i < num_points; i++)
+    if ((verts[i]->flag & mask) == value)
+      {
+        out[n].x = verts[i]->point.x;
+        out[n].y = verts[i]->point.y;
+        out[n].z = 0.0;
+        n++;
+      }
+  return n;
+}
+
+// Without a usable frame, the fit vertices as straight curves of degree 1,
+// closed by the first one.  Returns their number, 0 if under 2 vertices.
+static int
+polyline_2d_fit_chain (BITCODE_3DPOINT *vpts,
+                       Dwg_Entity_VERTEX_2D *const *verts,
+                       const BITCODE_BL num_points, const int closed)
+{
+  BITCODE_BL n = polyline_2d_vertex_points (vpts, verts, num_points, 16, 0);
+  if (n < 2)
+    return 0;
+  if (closed)
+    vpts[n++] = vpts[0];
+  return (int)(n - 1);
+}
+
+/** The curve of a spline-fit POLYLINE_2D (flag 4) in its OCS: Bezier curves
+    of *degree 2 or 3 from its frame vertices (flag 16), by
+    polyline_spline_to_bezier.  Without a usable frame its fit vertices,
+    as curves of degree 1.  Returns the number k of curves and sets *pts to
+    a malloc'ed array of k * *degree + 1 points, the last one the first if
+    closed; 0 if it is not spline-fit or has nothing usable.
+ */
+int
+dwg_object_polyline_2d_get_spline (const dwg_object *restrict obj,
+                                   BITCODE_3DPOINT **restrict pts,
+                                   int *restrict degree, int *restrict error)
+{
+  Dwg_Entity_POLYLINE_2D *_obj;
+  Dwg_Entity_VERTEX_2D **verts;
+  BITCODE_3DPOINT *vpts = NULL;
+  BITCODE_BL num_points;
+  int num_curves = 0;
+
+  *pts = NULL;
+  *degree = 0;
+  *error = 0;
+  if (!obj || obj->fixedtype != DWG_TYPE_POLYLINE_2D)
+    {
+      LOG_ERROR ("%s: empty arg", __FUNCTION__);
+      *error = 1;
+      return 0;
+    }
+  _obj = obj->tio.entity->tio.POLYLINE_2D;
+  if (!(_obj->flag & 4))
+    return 0;
+  verts = polyline_2d_vertices (obj, &num_points, error);
+  if (verts && !*error)
+    vpts = (BITCODE_3DPOINT *)malloc ((num_points + 1)
+                                      * sizeof (BITCODE_3DPOINT));
+  if (vpts)
+    {
+      const int closed = _obj->flag & 1;
+      const BITCODE_BL n
+          = polyline_2d_vertex_points (vpts, verts, num_points, 16, 16);
+      *degree = _obj->curve_type == 5 ? 2 : _obj->curve_type == 6 ? 3 : 0;
+      if (*degree)
+        num_curves = polyline_spline_to_bezier (vpts, n, *degree, closed, pts);
+      if (!num_curves)
+        {
+          num_curves = polyline_2d_fit_chain (vpts, verts, num_points, closed);
+          *degree = num_curves ? 1 : 0;
+          if (num_curves)
+            {
+              *pts = vpts;
+              vpts = NULL;
+            }
+        }
+    }
+  free (vpts);
+  free (verts);
+  return num_curves;
 }
 
 /** Returns the number of _dwg_object:: POLYLINE_3D vertices,

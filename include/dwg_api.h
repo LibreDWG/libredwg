@@ -9070,6 +9070,12 @@ extern "C"
   dwg_object_polyline_2d_get_flags (const dwg_object *restrict obj,
                                     int *restrict error) __nonnull ((2));
 
+  EXPORT int dwg_object_polyline_2d_get_spline (const dwg_object *restrict obj,
+                                                BITCODE_3DPOINT **restrict pts,
+                                                int *restrict degree,
+                                                int *restrict error)
+      __nonnull ((2, 3, 4));
+
   EXPORT BITCODE_BL dwg_object_polyline_3d_get_numpoints (
       const dwg_object *restrict obj, int *restrict error) __nonnull ((2));
 

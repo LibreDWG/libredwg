@@ -95,6 +95,11 @@ EXPORT int spline_from_fit_points (const Dwg_Entity_SPLINE *spline,
 #define BEZIER_MAX_DEPTH 16
 #define SPLINE_MAX_POINTS 1000000
 #define SPLINE_EVAL_STEPS 16
+// Points on the chain of k Bezier curves of degree p, bez[0 .. k*p], within
+// rel_tol times its size, as a malloc'ed array.  Returns their number, or 0.
+EXPORT int bezier_chain_flatten (const BITCODE_3DPOINT *bez, const int k,
+                                 const int p, const double rel_tol,
+                                 BITCODE_3DPOINT **pts) __nonnull ((1, 5));
 // Points on the curve of a SPLINE, within rel_tol times its size, as a
 // malloc'ed array.  Returns their number, or 0.
 EXPORT int spline_flatten (const Dwg_Entity_SPLINE *spline,

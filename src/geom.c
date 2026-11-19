@@ -1252,6 +1252,34 @@ spline_eval_points (point_list *l, const Dwg_Entity_SPLINE *spline)
     }
 }
 
+/* Points on the chain of k Bezier curves of degree p, bez[0 .. k*p], as a
+   malloc'ed array: each curve is halved by de Casteljau until the polyline
+   is within rel_tol times the size of the chain of the curve.  Returns the
+   number of points, or 0. */
+int
+bezier_chain_flatten (const BITCODE_3DPOINT *bez, const int k, const int p,
+                      const double rel_tol, BITCODE_3DPOINT **pts)
+{
+  point_list l = { NULL, 0, 0, 1 };
+  double tol;
+  int j;
+
+  *pts = NULL;
+  if (k < 1 || p < 1 || p > SPLINE_MAX_DEGREE)
+    return 0;
+  tol = rel_tol * points_size (bez, (BITCODE_BL)(k * p + 1));
+  point_list_add (&l, &bez[0]);
+  for (j = 0; j < k; j++)
+    bezier_flatten (&l, &bez[j * p], p, tol, 0);
+  if (!l.ok || l.num < 2)
+    {
+      free (l.pts);
+      return 0;
+    }
+  *pts = l.pts;
+  return (int)l.num;
+}
+
 /* Points on the curve of a SPLINE, as a malloc'ed array, for outputs
    without curves.  Bezier curves are halved by de Casteljau until the
    polyline is within rel_tol times the size of the SPLINE of the curve.
@@ -1264,8 +1292,7 @@ spline_flatten (const Dwg_Entity_SPLINE *spline, const double rel_tol,
   Dwg_Entity_SPLINE fit;
   const Dwg_Entity_SPLINE *s = spline;
   BITCODE_3DPOINT *bez = NULL;
-  point_list l = { NULL, 0, 0, 1 };
-  int k, j;
+  int k, num = 0;
 
   *pts = NULL;
   if (!spline_is_valid (spline))
@@ -1276,28 +1303,26 @@ spline_flatten (const Dwg_Entity_SPLINE *spline, const double rel_tol,
     }
   k = spline_to_bezier (s, &bez);
   if (k)
-    {
-      const int p = s->degree;
-      const double tol = rel_tol * points_size (bez, k * p + 1);
-      point_list_add (&l, &bez[0]);
-      for (j = 0; j < k; j++)
-        bezier_flatten (&l, &bez[j * p], p, tol, 0);
-      free (bez);
-    }
+    num = bezier_chain_flatten (bez, k, s->degree, rel_tol, pts);
   else
-    spline_eval_points (&l, s);
+    {
+      point_list l = { NULL, 0, 0, 1 };
+      spline_eval_points (&l, s);
+      if (l.ok && l.num >= 2)
+        {
+          *pts = l.pts;
+          num = (int)l.num;
+        }
+      else
+        free (l.pts);
+    }
+  free (bez);
   if (s == &fit)
     {
       free (fit.ctrl_pts);
       free (fit.knots);
     }
-  if (!l.ok || l.num < 2)
-    {
-      free (l.pts);
-      return 0;
-    }
-  *pts = l.pts;
-  return (int)l.num;
+  return num;
 }
 
 /* The signed area of the polygon pts[0..num-1], closed or not, by the
