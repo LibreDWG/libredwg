@@ -1052,6 +1052,12 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                    DWG_TYPE_##token, #token);                                 \
         return DWG_ERR_INVALIDTYPE;                                           \
       }                                                                       \
+    if (!obj->tio.entity || !obj->tio.entity->tio.token)                      \
+      {                                                                       \
+        LOG_WARN ("Incomplete %s " FORMAT_HV ", skipping", #token,            \
+                  obj->handle.value);                                         \
+        return DWG_ERR_INVALIDTYPE;                                           \
+      }                                                                       \
     if (strEQc (#token, "GEOPOSITIONMARKER"))                                 \
       RECORD (POSITIONMARKER)                                                 \
     else if (dat->version < R_13b1 && strlen (#token) == 10                   \
@@ -1117,6 +1123,12 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
       {                                                                       \
         LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
                    DWG_TYPE_##token, #token);                                 \
+        return DWG_ERR_INVALIDTYPE;                                           \
+      }                                                                       \
+    if (!obj->tio.object || !obj->tio.object->tio.token)                      \
+      {                                                                       \
+        LOG_WARN ("Incomplete %s " FORMAT_HV ", skipping", #token,            \
+                  obj->handle.value);                                         \
         return DWG_ERR_INVALIDTYPE;                                           \
       }                                                                       \
     PRE (R_14)                                                                \
@@ -2345,8 +2357,9 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (0)
     {
       Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
-      Dwg_Object_VX_CONTROL *_ctrl = ctrl->tio.object->tio.VX_CONTROL;
-      if (ctrl && ctrl->fixedtype == DWG_TYPE_VX_CONTROL)
+      Dwg_Object_VX_CONTROL *_ctrl
+          = ctrl && ctrl->tio.object ? ctrl->tio.object->tio.VX_CONTROL : NULL;
+      if (_ctrl && ctrl->fixedtype == DWG_TYPE_VX_CONTROL)
         {
           Dwg_Object *obj = ctrl;
           TABLE (VX_TABLE_RECORD);
@@ -2380,7 +2393,8 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         return DWG_ERR_INVALIDDWG;
       }
     ctrl = dwg_obj_generic_to_object (_ctrl, &error);
-    if (!ctrl || ctrl->fixedtype != DWG_TYPE_BLOCK_CONTROL)
+    if (!ctrl || ctrl->fixedtype != DWG_TYPE_BLOCK_CONTROL || !ctrl->tio.object
+        || !ctrl->tio.object->tio.BLOCK_CONTROL)
       return DWG_ERR_INVALIDDWG;
     // dwg_block_control() is a copy, its entries may be stale
     _ctrl = ctrl->tio.object->tio.BLOCK_CONTROL;
@@ -2468,13 +2482,24 @@ dxfb_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
                   const Dwg_Object *restrict pspace, int *restrict i)
 {
   int error = 0;
-  Dwg_Object *restrict obj = get_first_owned_block (hdr); // BLOCK
-  const Dwg_Object_BLOCK_HEADER *restrict _hdr
-      = hdr->tio.object->tio.BLOCK_HEADER;
+  Dwg_Object *restrict obj;
+  const Dwg_Object_BLOCK_HEADER *restrict _hdr;
   Dwg_Object *restrict endblk;
-  Dwg_Data *dwg = hdr->parent;
+  Dwg_Data *dwg;
   BITCODE_RLL mspace_ref = mspace ? mspace->handle.value : 0;
   BITCODE_RLL pspace_ref = pspace ? pspace->handle.value : 0;
+
+  // A BLOCK_HEADER reconstructed from JSON or DXF may be incomplete
+  // (GHSA-vj62-wp5x-vw7v). Skip just this one.
+  if (!hdr || !hdr->parent || !hdr->tio.object
+      || !hdr->tio.object->tio.BLOCK_HEADER)
+    {
+      LOG_WARN ("Incomplete BLOCK_HEADER, skipping");
+      return DWG_ERR_INVALIDTYPE;
+    }
+  _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+  dwg = hdr->parent;
+  obj = get_first_owned_block (hdr); // BLOCK
 
   if (obj && obj->fixedtype == DWG_TYPE_BLOCK)
     {

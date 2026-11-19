@@ -856,7 +856,7 @@ dwg_write_stream_file (const char *restrict filename,
   return error;
 }
 
-#ifndef DISABLE_DXF
+#  ifndef DISABLE_DXF
 /** Encode the DWG struct into a DXF file, ASCII or binary.
  *
  * \param filename  the output file, which must not exist
@@ -870,9 +870,9 @@ dxf_write_file (const char *restrict filename, const Dwg_Data *restrict dwg,
 {
   return dwg_write_stream_file (filename, dwg, binary ? 1 : 0);
 }
-#endif /* !DISABLE_DXF */
+#  endif /* !DISABLE_DXF */
 
-#ifndef DISABLE_JSON
+#  ifndef DISABLE_JSON
 /** Write the DWG struct as (minimal with DWG_OPTS_MINIMAL) JSON file.
  */
 EXPORT int
@@ -884,13 +884,12 @@ dwg_write_json (const char *restrict filename, const Dwg_Data *restrict dwg)
 /** Write the DWG struct as GeoJSON file.
  */
 EXPORT int
-dwg_write_geojson (const char *restrict filename,
-                   const Dwg_Data *restrict dwg)
+dwg_write_geojson (const char *restrict filename, const Dwg_Data *restrict dwg)
 {
   return dwg_write_stream_file (filename, dwg, 3);
 }
-#endif /* !DISABLE_JSON */
-#endif /* USE_WRITE */
+#  endif /* !DISABLE_JSON */
+#endif   /* USE_WRITE */
 
 /* THUMBNAIL IMAGE DATA (R13C3+).
    Supports multiple preview pictures.
@@ -1186,14 +1185,17 @@ dwg_get_entity_layer (const Dwg_Object_Entity *ent)
     return NULL;
 }
 
+/* GHSA-vj62-wp5x-vw7v: objects reconstructed from JSON or DXF may lack their
+   parent or the object array. */
 EXPORT Dwg_Object *
 dwg_next_object (const Dwg_Object *obj)
 {
   Dwg_Data *dwg;
-  if (!obj)
+  if (!obj || !obj->parent)
     return NULL;
   dwg = obj->parent;
-  if ((obj->index + 1) > (dwg->num_objects - 1))
+  // not (num_objects - 1): that underflows for 0
+  if (!dwg->object || (BITCODE_BL)(obj->index + 1) >= dwg->num_objects)
     return NULL;
   return &dwg->object[obj->index + 1];
 }
@@ -1560,18 +1562,32 @@ dwg_paper_space_object (Dwg_Data *dwg)
     return NULL;
 }
 
+/* The BLOCK_HEADER struct of hdr, or NULL if hdr is not a complete one. A
+   BLOCK_HEADER reconstructed from JSON or DXF may lack its parent or its
+   object data, or may not be a BLOCK_HEADER at all. All walkers below
+   dereference these (GHSA-vj62-wp5x-vw7v). */
+static Dwg_Object_BLOCK_HEADER *
+owned_block_header (const Dwg_Object *hdr)
+{
+  if (!hdr || !hdr->parent || !hdr->tio.object
+      || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+    return NULL;
+  return hdr->tio.object->tio.BLOCK_HEADER;
+}
+
 /** Returns the first entity owned by the block hdr, or NULL.
  */
 EXPORT Dwg_Object *
 get_first_owned_entity (const Dwg_Object *hdr)
 {
-  const Dwg_Version_Type version = hdr->parent->header.version;
-  Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+  Dwg_Version_Type version;
+  Dwg_Object_BLOCK_HEADER *_hdr = owned_block_header (hdr);
+  if (!_hdr)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
+      LOG_ERROR ("Invalid BLOCK_HEADER");
       return NULL;
     }
+  version = hdr->parent->header.version;
 
   if (R_13b1 <= version && version <= R_2000)
     {
@@ -1754,14 +1770,16 @@ EXPORT Dwg_Object *
 get_next_owned_entity (const Dwg_Object *restrict hdr,
                        const Dwg_Object *restrict current)
 {
-  Dwg_Data *dwg = hdr->parent;
-  const Dwg_Version_Type version = dwg->header.version;
-  Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+  Dwg_Data *dwg;
+  Dwg_Version_Type version;
+  Dwg_Object_BLOCK_HEADER *_hdr = owned_block_header (hdr);
+  if (!_hdr)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
+      LOG_ERROR ("Invalid BLOCK_HEADER");
       return NULL;
     }
+  dwg = hdr->parent;
+  version = dwg->header.version;
 
   if (R_13b1 <= version && version <= R_2000)
     {
@@ -1843,9 +1861,15 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
 EXPORT Dwg_Object *
 get_first_owned_subentity (const Dwg_Object *owner)
 {
-  Dwg_Data *dwg = owner->parent;
-  const Dwg_Version_Type version = dwg->header.version;
-  const unsigned int type = owner->fixedtype;
+  Dwg_Data *dwg;
+  Dwg_Version_Type version;
+  unsigned int type;
+
+  if (!owner || !owner->parent || !owner->tio.entity)
+    return NULL;
+  dwg = owner->parent;
+  version = dwg->header.version;
+  type = owner->fixedtype;
   if (type == DWG_TYPE_INSERT || type == DWG_TYPE_ACIDBLOCKREFERENCE)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
@@ -1894,17 +1918,25 @@ EXPORT Dwg_Object *
 get_next_owned_subentity (const Dwg_Object *restrict owner,
                           const Dwg_Object *restrict current)
 {
-  Dwg_Data *dwg = owner->parent;
-  Dwg_Version_Type version = dwg->header.version;
-  const Dwg_Object_Type type = (const Dwg_Object_Type)owner->fixedtype;
-  Dwg_Object_Entity *ent = owner->tio.entity;
-  Dwg_Object *obj = dwg_next_object (current);
+  Dwg_Data *dwg;
+  Dwg_Version_Type version;
+  Dwg_Object_Type type;
+  Dwg_Object_Entity *ent;
+  Dwg_Object *obj;
+
+  if (!owner || !current || !owner->parent || !owner->tio.entity)
+    return NULL;
+  dwg = owner->parent;
+  version = dwg->header.version;
+  type = (Dwg_Object_Type)owner->fixedtype;
+  ent = owner->tio.entity;
+  obj = dwg_next_object (current);
 
   if (type == DWG_TYPE_INSERT || type == DWG_TYPE_ACIDBLOCKREFERENCE)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
       if (version >= R_13b1 && version <= R_2000)
-        return (_obj->last_attrib && current != _obj->last_attrib->obj
+        return (_obj->last_attrib && current != _obj->last_attrib->obj && obj
                 && obj->fixedtype == DWG_TYPE_ATTRIB)
                    ? obj
                    : NULL;
@@ -1926,7 +1958,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
     {
       Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
       if (version >= R_13b1 && version <= R_2000)
-        return (_obj->last_attrib && current != _obj->last_attrib->obj
+        return (_obj->last_attrib && current != _obj->last_attrib->obj && obj
                 && obj->fixedtype == DWG_TYPE_ATTRIB)
                    ? obj
                    : NULL;
@@ -1980,15 +2012,16 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
 EXPORT Dwg_Object *
 get_first_owned_block (const Dwg_Object *hdr)
 {
-  Dwg_Data *dwg = hdr->parent;
-  Dwg_Version_Type version = dwg->header.version;
-  const Dwg_Object_BLOCK_HEADER *restrict _hdr
-      = hdr->tio.object->tio.BLOCK_HEADER;
-  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+  Dwg_Data *dwg;
+  Dwg_Version_Type version;
+  const Dwg_Object_BLOCK_HEADER *restrict _hdr = owned_block_header (hdr);
+  if (!_hdr)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
+      LOG_ERROR ("Invalid BLOCK_HEADER");
       return NULL;
     }
+  dwg = hdr->parent;
+  version = dwg->header.version;
 
   if (_hdr->block_entity)
     return dwg_ref_object (dwg, _hdr->block_entity);
@@ -2010,15 +2043,16 @@ EXPORT Dwg_Object *
 get_next_owned_block (const Dwg_Object *restrict hdr,
                       const Dwg_Object *restrict current)
 {
-  Dwg_Data *dwg = hdr->parent;
-  Dwg_Version_Type version = dwg->header.version;
-  const Dwg_Object_BLOCK_HEADER *restrict _hdr
-      = hdr->tio.object->tio.BLOCK_HEADER;
-  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+  Dwg_Data *dwg;
+  Dwg_Version_Type version;
+  const Dwg_Object_BLOCK_HEADER *restrict _hdr = owned_block_header (hdr);
+  if (!_hdr || !current)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
+      LOG_ERROR ("Invalid BLOCK_HEADER");
       return NULL;
     }
+  dwg = hdr->parent;
+  version = dwg->header.version;
 
   if (1 || version >= R_13b1)
     {
@@ -2043,15 +2077,14 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
   Dwg_Version_Type version;
   Dwg_Object_BLOCK_HEADER *restrict _hdr;
 
-  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+  _hdr = owned_block_header (hdr);
+  if (!_hdr || !current)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
+      LOG_ERROR ("Invalid BLOCK_HEADER");
       return NULL;
     }
-
   dwg = hdr->parent;
   version = dwg->header.version;
-  _hdr = hdr->tio.object->tio.BLOCK_HEADER;
 
   if (R_13b1 <= version && version <= R_2000 && _hdr->first_entity
       && _hdr->first_entity->obj)
@@ -2130,14 +2163,16 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
 EXPORT Dwg_Object *
 get_last_owned_block (const Dwg_Object *restrict hdr)
 {
-  Dwg_Data *dwg = hdr->parent;
-  Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
-  const Dwg_Version_Type version = dwg->header.version;
-  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+  Dwg_Data *dwg;
+  Dwg_Object_BLOCK_HEADER *restrict _hdr = owned_block_header (hdr);
+  Dwg_Version_Type version;
+  if (!_hdr)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
+      LOG_ERROR ("Invalid BLOCK_HEADER");
       return NULL;
     }
+  dwg = hdr->parent;
+  version = dwg->header.version;
 
   if (1 || version >= R_13b1)
     {

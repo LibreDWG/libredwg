@@ -691,7 +691,8 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     {
       Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
       Dwg_Object *hdr = dwg_ref_get_object (_obj->block_header, &error);
-      if (!error && hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
+      if (!error && hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER
+          && hdr->tio.object && hdr->tio.object->tio.BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
           char *text;
@@ -712,7 +713,8 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     {
       Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
       Dwg_Object *hdr = dwg_ref_get_object (_obj->block_header, &error);
-      if (!error && hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
+      if (!error && hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER
+          && hdr->tio.object && hdr->tio.object->tio.BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
           char *text;

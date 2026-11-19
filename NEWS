@@ -78,6 +78,12 @@ Security fixes:
     in dwg_add_POLYLINE_*, the dwg_add_VERTEX_* and dwg_add_SEQEND calls can
     realloc dwg->object[], which invalidated the held polyline Dwg_Object *.
     It is re-resolved by index now.
+  * Hardened against objects and BLOCK_HEADERs which an incomplete JSON or
+    DXF import leaves without parent or object data (follow-up of
+    GHSA-vj62-wp5x-vw7v): dwg_next_object and the get_*_owned_* walkers
+    return NULL for them, the DXF, DXFB and GeoJSON writers skip them with
+    a warning, and the MLINESTYLE encoder checks the header linetype
+    handles.  dwg_next_object also read past an empty object array.
   * Fixed GHSA-qr3r-4gxg-wmf4 (algorithmic complexity): the AcDs section
     dropped duplicate handles with a linear scan per record, which was
     quadratic.  It is sorted once now.

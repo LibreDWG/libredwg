@@ -4549,14 +4549,17 @@ DWG_OBJECT (MLINESTYLE)
           && FIELD_VALUE (lines[rcount1].lt_ltype))
         {
           BITCODE_H lt = FIELD_VALUE (lines[rcount1].lt_ltype);
+          BITCODE_H hv_block = dwg->header_vars.LTYPE_BYBLOCK;
+          BITCODE_H hv_layer = dwg->header_vars.LTYPE_BYLAYER;
+          BITCODE_H hv_cont = dwg->header_vars.LTYPE_CONTINUOUS;
           BITCODE_BSd idx = 0;
-          if (lt->absolute_ref == dwg->header_vars.LTYPE_BYBLOCK->absolute_ref)
+          // a file imported from JSON or DXF may lack these header handles
+          // (GHSA-vj62-wp5x-vw7v)
+          if (hv_block && lt->absolute_ref == hv_block->absolute_ref)
             idx = 32766; // BYBLOCK
-          else if (lt->absolute_ref
-                   == dwg->header_vars.LTYPE_BYLAYER->absolute_ref)
+          else if (hv_layer && lt->absolute_ref == hv_layer->absolute_ref)
             idx = 32767; // BYLAYER
-          else if (lt->absolute_ref == dwg->header_vars.LTYPE_CONTINUOUS
-                                      ->absolute_ref)
+          else if (hv_cont && lt->absolute_ref == hv_cont->absolute_ref)
             idx = 0; // CONTINUOUS
           else
             {

@@ -1392,6 +1392,86 @@ test_dxf_write_file (void)
   return ret;
 }
 
+/* GHSA-vj62-wp5x-vw7v: a BLOCK_HEADER reconstructed from JSON or DXF may lack
+   its parent or its object data. The block and entity walkers must return
+   NULL for it, and the DXF writers skip it, instead of dereferencing it. */
+static int
+test_incomplete_block_header (void)
+{
+  Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+  Dwg_Object_BLOCK_HEADER *blk;
+  Dwg_Object *hobj;
+  Dwg_Object_Object *saved;
+  Dwg_Object bad;
+  char file[] = "add_test_vj62.dxf";
+  int error = 0, binary;
+
+  failed = 0;
+  if (!dwg)
+    {
+      fail ("incomplete_block_header: cannot create drawing");
+      return 1;
+    }
+  blk = dwg_add_BLOCK_HEADER (dwg, "incomplete");
+  hobj = blk ? dwg_obj_generic_to_object (blk, &error) : NULL;
+  if (!hobj)
+    {
+      fail ("incomplete_block_header: no BLOCK_HEADER added");
+      dwg_free (dwg);
+      free (dwg);
+      return 1;
+    }
+
+#  define CHECK_NULL(expr)                                                      \
+  if ((expr) != NULL)                                                         \
+  fail ("incomplete_block_header: " #expr " is not NULL")
+  // without a parent
+  memset (&bad, 0, sizeof (bad));
+  bad.fixedtype = DWG_TYPE_BLOCK_HEADER;
+  bad.tio.object = hobj->tio.object;
+  CHECK_NULL (dwg_next_object (&bad));
+  CHECK_NULL (get_first_owned_block (&bad));
+  CHECK_NULL (get_next_owned_block (&bad, hobj));
+  CHECK_NULL (get_last_owned_block (&bad));
+  CHECK_NULL (get_first_owned_entity (&bad));
+  CHECK_NULL (get_next_owned_entity (&bad, hobj));
+  CHECK_NULL (get_next_owned_block_entity (&bad, hobj));
+  CHECK_NULL (get_first_owned_subentity (&bad));
+  CHECK_NULL (get_next_owned_subentity (&bad, hobj));
+  // with a parent, but without the object data
+  bad.parent = dwg;
+  bad.tio.object = NULL;
+  CHECK_NULL (get_first_owned_block (&bad));
+  CHECK_NULL (get_next_owned_block (&bad, hobj));
+  CHECK_NULL (get_last_owned_block (&bad));
+  CHECK_NULL (get_first_owned_entity (&bad));
+  CHECK_NULL (get_next_owned_entity (&bad, hobj));
+  CHECK_NULL (get_next_owned_block_entity (&bad, hobj));
+  CHECK_NULL (get_first_owned_subentity (&bad));
+  CHECK_NULL (get_next_owned_subentity (&bad, hobj));
+#  undef CHECK_NULL
+
+  // the writers skip the incomplete BLOCK_HEADER of the drawing
+  saved = hobj->tio.object;
+  hobj->tio.object = NULL;
+  for (binary = 0; binary <= 1; binary++)
+    {
+      unlink (file);
+      error = dxf_write_file (file, dwg, binary);
+      if (error >= DWG_ERR_CRITICAL)
+        fail ("incomplete_block_header: dxf_write_file binary=%d: 0x%x",
+              binary, error);
+      unlink (file);
+    }
+  hobj->tio.object = saved;
+  dwg_free (dwg);
+  free (dwg);
+  if (failed)
+    return 1;
+  ok ("incomplete_block_header: walkers and DXF writers skip it");
+  return 0;
+}
+
 #  ifndef DISABLE_JSON
 /* GH #992: public dwg_write_json() and dwg_write_geojson(). */
 static int
@@ -3824,6 +3904,7 @@ main (int argc, char *argv[])
   error += test_lwpolyline_to_preR13 ();
   error += test_lwpolyline_to_preR13_dxf ();
   error += test_dxf_write_file ();
+  error += test_incomplete_block_header ();
 #  ifndef DISABLE_JSON
   error += test_json_write_file ();
 #  endif
