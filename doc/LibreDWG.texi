@@ -60,6 +60,7 @@ LibreDWG is neither associated with Autodesk, nor with the Open Design Alliance.
 
 @menu
 * Overview::            General purpose and information.
+* Security Advisory::   Memory safety and untrusted input.
 * Usage::               How to use LibreDWG.
 * Types::               Common types, enums, structs.
 * Objects::             All supported objects and entities.
@@ -292,6 +293,51 @@ write much more DWG versions and details. Which is especially important for
 attached links and data from third party applications:
 BIM, MAP, GIS, AEC, MECH, ..., for 3D solids and dynamic parametric constraints.
 The commercial Teigha library is much better though.
+
+@node Security Advisory
+@chapter Security Advisory
+
+@cindex security
+@cindex security advisory
+@cindex untrusted input
+@cindex fuzzing
+
+LibreDWG is written in C, and parses a complex binary format that had to
+be reverse-engineered.  Like essentially all C parsers of attacker-influenced
+data, it likely still contains memory corruption and out-of-bounds bugs, and
+the attack surface is huge: the DWG specification alone covers about 150 MB
+of structs, bit-level encodings, compressions and cryptographic checksums,
+with 35 years of format evolution from r1.1 to r2018.
+
+That said, LibreDWG is constantly fuzzed (it is a core OSS-Fuzz target since
+2020, built with AddressSanitizer, UndefinedBehaviorSanitizer and
+MemorySanitizer on every commit) and checked with AI-assisted review, and
+findings are fixed quickly.  See the @file{NEWS} Security fixes section for
+the handled reports.
+
+@strong{Recommendation:} do @emph{not} use this library with untrusted input
+in a non-hardened environment.  In particular:
+
+@itemize
+@item
+Do not expose the bundled programs or the library directly to the open web,
+e.g. as WebAssembly converters running in the browser, without a hardened
+sandbox.  WASM does confine memory accesses to its own heap, which mitigates
+most exploitation, but crashes and denial of service are still trivially
+reachable with crafted files.
+@item
+Do not accept our own JSON serialization from untrusted sources.  The JSON
+importer is an internal roundtrip format; it trusts several cross-references
+(e.g. object @code{type} vs. @code{dxfname}) that a crafted file can abuse.
+JSON upload endpoints should validate against a strict schema or reject the
+format outright.
+@end itemize
+
+For context: LibreDWG is much better hardened than AutoCAD@registeredsymbol{}
+or similar proprietary CAD applications, which can be crashed much easier
+than LibreDWG, and for which no public fuzzing infrastructure exists at all.
+But ``better than the proprietary baseline'' is not ``safe against hostile
+input''; plan accordingly.
 
 @node Usage
 @chapter Usage

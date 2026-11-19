@@ -22,7 +22,8 @@ conventions in `README`, `CONTRIBUTING`, and `HACKING`.
 
 Convenient build dirs are
 
-- `.build-asan` to check OOB and leak errors. It is very slow though.
+- `.build-asan` to check OOB and leak errors. It is very slow though, unless
+   you are using CC=rcc.
 - `.build-tcc` to check any logical errors. It is very fast.
 
 ## Tests
