@@ -4349,6 +4349,59 @@ DWG_OBJECT (ACSH_REVOLVE_CLASS)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// The loft profile, the size in bits (verified with the condominium)
+#define ACSH_LOFT_profile(name, bl, sz) \
+  SUB_FIELD_BL (name[rcount1], method, bl); \
+  SUB_FIELD_BL (name[rcount1], size, sz); \
+  VALUEOUTOFBOUNDS (name[rcount1].size, 8 * 65536); \
+  { \
+    BITCODE_BL _bytes = (FIELD_VALUE (name[rcount1].size) + 7) / 8; \
+    FIELD_BINARY (name[rcount1].data, _bytes, 310); \
+  }
+DWG_OBJECT (ACSH_LOFT_CLASS)
+  HANDLE_UNKNOWN_BITS;
+  AcDbEvalExpr_fields;
+  AcDbShHistoryNode_fields (history_node);
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShLoft);
+  DXF { VALUE_BL (33, 90); VALUE_BL (29, 91); }
+  FIELD_BL (num_crosssects, 92);
+  REPEAT (num_crosssects, crosssects, Dwg_ACSH_LOFT_profile)
+  REPEAT_BLOCK
+    ACSH_LOFT_profile (crosssects, 93, 94)
+    SET_PARENT_OBJ (crosssects[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (crosssects);
+  FIELD_BL (num_guides, 95);
+  REPEAT (num_guides, guides, Dwg_ACSH_LOFT_profile)
+  REPEAT_BLOCK
+    ACSH_LOFT_profile (guides, 96, 97)
+    SET_PARENT_OBJ (guides[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (guides);
+  FIELD_BL (shlf_bl98, 98);
+#ifdef IS_DXF
+  FIELD_BL (plane_normal_lofting_type, 70);
+#endif
+  FIELD_BD (start_draft_angle, 41);
+  FIELD_BD (end_draft_angle, 42);
+  FIELD_BD (start_draft_magnitude, 43);
+  FIELD_BD (end_draft_magnitude, 44);
+  FIELD_B (arc_length_parameterization, 290);
+  FIELD_B (no_twist, 291);
+  FIELD_B (align_direction, 292);
+  FIELD_B (simple_surfaces, 293);
+  FIELD_B (closed_surfaces, 294);
+  FIELD_B (solid, 295);
+  FIELD_B (ruled_surface, 296);
+  FIELD_B (virtual_guide, 297);
+#ifndef IS_DXF
+  FIELD_BL (plane_normal_lofting_type, 70);
+#endif
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+#undef ACSH_LOFT_profile
+
 /*=============================================================================*/
 
 /* In work area:
@@ -4677,34 +4730,6 @@ DWG_OBJECT_END
 
 #define CLASS_HAS(x) 1
 
-DWG_OBJECT (ACSH_LOFT_CLASS)
-  HANDLE_UNKNOWN_BITS;
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive);
-  SUBCLASS (AcDbShLoft);
-  FIELD_BL (major, 90);
-  FIELD_BL (minor, 91);
-  FIELD_BL (num_crosssects, 92);
-  REPEAT (num_crosssects, crosssects, BITCODE_H)
-  REPEAT_BLOCK
-  {
-    CALL_SUBENT (_obj->crosssects[rcount1], 93);
-  }
-  END_REPEAT_BLOCK
-  END_REPEAT (crosssects);
-
-  FIELD_BL (num_guides, 95);
-  REPEAT (num_guides, guides, BITCODE_H)
-  REPEAT_BLOCK
-  {
-    CALL_SUBENT (_obj->guides[rcount1], 96);
-  }
-  END_REPEAT_BLOCK
-  END_REPEAT (guides);
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
 
 // called COORDINATION_MODEL in the DXF docs
 // also called NAVISWORKSREFERENCE

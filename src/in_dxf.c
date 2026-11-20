@@ -12047,6 +12047,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
       = { 0, 0, 0, 0, 0 };      // sweep surface matrices 40, 46, 47, 41, 42
   int surf_bin = 0;             // sweep surface 310 data run
   int acsh_n90 = 0;             // the 90 of an ACSH sweep or revolve
+  int loft_idx = -1;            // the current ACSH_LOFT_CLASS crosssect
+  int loft_gidx = -1;           // the current ACSH_LOFT_CLASS guide
   BITCODE_BL column_idx = 0;    // MTEXTOBJECTCONTEXTDATA.column_heights[46]
   BITCODE_BL leader_pt_idx = 0; // LEADEROBJECTCONTEXTDATA.points[10,20,30]
   BITCODE_BL sf_idx = 0;        // SPATIAL_FILTER matrix values (40)
@@ -14578,6 +14580,92 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                   if (!data)
                     goto fail;
                   dxf_acsh_sweep_data (obj, surf_bin++, data, len, name);
+                  if (!pair || pair->code == 0)
+                    goto end_object_loop;
+                  goto start_loop;
+                }
+            }
+          else if (obj->fixedtype == DWG_TYPE_ACSH_LOFT_CLASS
+                   && strEQc (subclass, "AcDbShLoft")
+                   && (pair->code == 90 || pair->code == 91
+                       || (pair->code >= 92 && pair->code <= 97)
+                       || pair->code == 310))
+            {
+              Dwg_Object_ACSH_LOFT_CLASS *o
+                  = obj->tio.object->tio.ACSH_LOFT_CLASS;
+              // 96, 97 and the 310 after them are the guides
+              const bool guide = loft_gidx >= 0;
+              Dwg_ACSH_LOFT_profile *p = NULL;
+              if (pair->code == 90 || pair->code == 91) // the constant 33, 29
+                goto next_pair;
+              if (pair->code == 92 || pair->code == 95)
+                {
+                  BITCODE_BL *pn
+                      = pair->code == 92 ? &o->num_crosssects : &o->num_guides;
+                  Dwg_ACSH_LOFT_profile **pp
+                      = pair->code == 92 ? &o->crosssects : &o->guides;
+                  if (pair->value.u > 65536)
+                    goto invalid_dxf;
+                  *pn = pair->value.u;
+                  free (*pp);
+                  *pp = pair->value.u ? (Dwg_ACSH_LOFT_profile *)xcalloc (
+                                            pair->value.u,
+                                            sizeof (Dwg_ACSH_LOFT_profile))
+                                      : NULL;
+                  if (pair->value.u && !*pp)
+                    goto invalid_dxf;
+                  LOG_TRACE ("%s.%s = %u [BL %d]\n", name,
+                             pair->code == 92 ? "num_crosssects"
+                                              : "num_guides",
+                             pair->value.u, pair->code);
+                  goto next_pair;
+                }
+              if (pair->code == 93)
+                loft_idx++;
+              else if (pair->code == 96)
+                loft_gidx++;
+              {
+                const int i
+                    = (pair->code == 96 || guide) ? loft_gidx : loft_idx;
+                const BITCODE_BL n = (pair->code == 96 || guide)
+                                         ? o->num_guides
+                                         : o->num_crosssects;
+                if (i < 0 || (BITCODE_BL)i >= n)
+                  goto invalid_dxf;
+                p = (pair->code == 96 || guide) ? &o->guides[i]
+                                                : &o->crosssects[i];
+              }
+              if (pair->code == 93 || pair->code == 96)
+                {
+                  p->parent = o;
+                  p->method = pair->value.u;
+                  LOG_TRACE ("%s.%s[%d].method = %u [BL %d]\n", name,
+                             guide || pair->code == 96 ? "guides"
+                                                       : "crosssects",
+                             guide || pair->code == 96 ? loft_gidx : loft_idx,
+                             pair->value.u, pair->code);
+                  goto next_pair;
+                }
+              else if (pair->code == 94 || pair->code == 97)
+                {
+                  p->size = pair->value.u;
+                  LOG_TRACE ("%s.profile.size = %u [BL %d]\n", name,
+                             pair->value.u, pair->code);
+                  goto next_pair;
+                }
+              else // 310
+                {
+                  size_t len = 0;
+                  BITCODE_TF data
+                      = dxf_read_binary_chunks (dat, &pair, 310, &len);
+                  if (!data)
+                    goto fail;
+                  free (p->data);
+                  p->data = data;
+                  if (p->size > len * 8)
+                    p->size = (BITCODE_BL)(len * 8);
+                  LOG_TRACE ("%s.profile.data = TF %u bytes [310]\n", name,
+                             (unsigned)len);
                   if (!pair || pair->code == 0)
                     goto end_object_loop;
                   goto start_loop;

@@ -7350,6 +7350,16 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
   // AcDbShExtrusion
 } Dwg_Object_ACSH_EXTRUSION_CLASS;
 
+/* The profile of a cross section or guide curve of a loft. The size is in
+   bits, the DXF has the bytes. */
+typedef struct _dwg_ACSH_LOFT_profile
+{
+  struct _dwg_object_ACSH_LOFT_CLASS *parent;
+  BITCODE_BL method; /*!< DXF 93 (96), the class version, e.g. 18 */
+  BITCODE_BL size;   /*!< DXF 94 (97), in bits */
+  BITCODE_TF data;   /*!< DXF 310 */
+} Dwg_ACSH_LOFT_profile;
+
 typedef struct _dwg_object_ACSH_LOFT_CLASS
 {
   struct _dwg_object_object *parent;
@@ -7357,12 +7367,24 @@ typedef struct _dwg_object_ACSH_LOFT_CLASS
   Dwg_ACSH_HistoryNode history_node;
   // AcDbShPrimitive
   // AcDbShLoft
-  BITCODE_BL major;       /*!< DXF 90 */
-  BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_BL num_crosssects; /*!< DXF 92 */
-  BITCODE_H *crosssects;
+  Dwg_ACSH_LOFT_profile *crosssects;
   BITCODE_BL num_guides; /*!< DXF 95 */
-  BITCODE_H *guides;
+  Dwg_ACSH_LOFT_profile *guides; /* DXF unverified, as the crosssects */
+  BITCODE_BL shlf_bl98;               /*!< DXF 98 */
+  BITCODE_BD start_draft_angle;       /*!< DXF 41 */
+  BITCODE_BD end_draft_angle;         /*!< DXF 42 */
+  BITCODE_BD start_draft_magnitude;   /*!< DXF 43 */
+  BITCODE_BD end_draft_magnitude;     /*!< DXF 44 */
+  BITCODE_B arc_length_parameterization; /*!< DXF 290 */
+  BITCODE_B no_twist;                 /*!< DXF 291 */
+  BITCODE_B align_direction;          /*!< DXF 292 */
+  BITCODE_B simple_surfaces;          /*!< DXF 293 */
+  BITCODE_B closed_surfaces;          /*!< DXF 294 */
+  BITCODE_B solid;                    /*!< DXF 295 */
+  BITCODE_B ruled_surface;            /*!< DXF 296 */
+  BITCODE_B virtual_guide;            /*!< DXF 297 */
+  BITCODE_BL plane_normal_lofting_type; /*!< DXF 70 */
 } Dwg_Object_ACSH_LOFT_CLASS;
 
 typedef struct _dwg_object_ACSH_FILLET_CLASS
@@ -9894,6 +9916,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
     Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
+    Dwg_Object_ACSH_LOFT_CLASS *ACSH_LOFT_CLASS;
     Dwg_Object_ACSH_PYRAMID_CLASS *ACSH_PYRAMID_CLASS;
     Dwg_Object_ACSH_REVOLVE_CLASS *ACSH_REVOLVE_CLASS;
     Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
@@ -9975,7 +9998,6 @@ typedef struct _dwg_object_object
     Dwg_Object_ACMECOMMANDHISTORY *ACMECOMMANDHISTORY;
     Dwg_Object_ACMESCOPE *ACMESCOPE;
     Dwg_Object_ACMESTATEMGR *ACMESTATEMGR;
-    Dwg_Object_ACSH_LOFT_CLASS *ACSH_LOFT_CLASS;
     Dwg_Object_ANGDIMOBJECTCONTEXTDATA *ANGDIMOBJECTCONTEXTDATA;
     Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA *ANNOTSCALEOBJECTCONTEXTDATA;
     Dwg_Object_ASSOC3POINTANGULARDIMACTIONBODY *ASSOC3POINTANGULARDIMACTIONBODY;
@@ -12136,6 +12158,7 @@ EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_LOFT_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_REVOLVE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
@@ -12237,7 +12260,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESCOPE (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
-  EXPORT int dwg_setup_ACSH_LOFT_CLASS (Dwg_Object *obj);
   EXPORT int dwg_setup_ANGDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_ANNOTSCALEOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOC3POINTANGULARDIMACTIONBODY (Dwg_Object *obj);
