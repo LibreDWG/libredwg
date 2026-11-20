@@ -28979,57 +28979,35 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
         fail ("ACSH_REVOLVE_CLASS.axis_pt [3BD]");
   }
   {
-    BITCODE_B b290;
-    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "b290", &b290, NULL)
-        && b290 == acsh_revolve_class->b290)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.b290 [B] " FORMAT_B " != " FORMAT_B "", acsh_revolve_class->b290, b290);
-    b290++;
-    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "b290", &b290, 0)
-        && b290 == acsh_revolve_class->b290)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.b290 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_revolve_class->b290, b290);
-    acsh_revolve_class->b290--;
-  }
-  {
-    BITCODE_BD bd44;
-    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "bd44", &bd44, NULL)
-        && bd44 == acsh_revolve_class->bd44)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.bd44 [BD] %g != %g", acsh_revolve_class->bd44, bd44);
-    bd44++;
-    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "bd44", &bd44, 0)
-        && bd44 == acsh_revolve_class->bd44)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.bd44 [BD] set+1 %g != %g", acsh_revolve_class->bd44, bd44);
-    acsh_revolve_class->bd44--;
-  }
-  {
-    BITCODE_BD bd45;
-    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "bd45", &bd45, NULL)
-        && bd45 == acsh_revolve_class->bd45)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.bd45 [BD] %g != %g", acsh_revolve_class->bd45, bd45);
-    bd45++;
-    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "bd45", &bd45, 0)
-        && bd45 == acsh_revolve_class->bd45)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.bd45 [BD] set+1 %g != %g", acsh_revolve_class->bd45, bd45);
-    acsh_revolve_class->bd45--;
-  }
-  {
-    BITCODE_2RD direction;
-    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "direction", &direction, NULL)
-        && !memcmp (&direction, &acsh_revolve_class->direction, sizeof (BITCODE_2RD)))
+    BITCODE_TF bindata;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "bindata", &bindata, NULL)
+        && !memcmp (&bindata, &acsh_revolve_class->bindata, sizeof (BITCODE_TF)))
         pass ();
     else
-        fail ("ACSH_REVOLVE_CLASS.direction [2RD]");
+        fail ("ACSH_REVOLVE_CLASS.bindata [TF]");
+  }
+  {
+    BITCODE_BL bindata_size;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "bindata_size", &bindata_size, NULL)
+        && bindata_size == acsh_revolve_class->bindata_size)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.bindata_size [BL] %u != %u", acsh_revolve_class->bindata_size, bindata_size);
+    bindata_size++;
+    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "bindata_size", &bindata_size, 0)
+        && bindata_size == acsh_revolve_class->bindata_size)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.bindata_size [BL] set+1 %u != %u", acsh_revolve_class->bindata_size, bindata_size);
+    acsh_revolve_class->bindata_size--;
+  }
+  {
+    BITCODE_3BD direction;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "direction", &direction, NULL)
+        && !memcmp (&direction, &acsh_revolve_class->direction, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("ACSH_REVOLVE_CLASS.direction [3BD]");
   }
   {
     BITCODE_BD draft_angle;
@@ -29045,6 +29023,36 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_REVOLVE_CLASS.draft_angle [BD] set+1 %g != %g", acsh_revolve_class->draft_angle, draft_angle);
     acsh_revolve_class->draft_angle--;
+  }
+  {
+    BITCODE_BD draft_end_distance;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "draft_end_distance", &draft_end_distance, NULL)
+        && draft_end_distance == acsh_revolve_class->draft_end_distance)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.draft_end_distance [BD] %g != %g", acsh_revolve_class->draft_end_distance, draft_end_distance);
+    draft_end_distance++;
+    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "draft_end_distance", &draft_end_distance, 0)
+        && draft_end_distance == acsh_revolve_class->draft_end_distance)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.draft_end_distance [BD] set+1 %g != %g", acsh_revolve_class->draft_end_distance, draft_end_distance);
+    acsh_revolve_class->draft_end_distance--;
+  }
+  {
+    BITCODE_BD draft_start_distance;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "draft_start_distance", &draft_start_distance, NULL)
+        && draft_start_distance == acsh_revolve_class->draft_start_distance)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.draft_start_distance [BD] %g != %g", acsh_revolve_class->draft_start_distance, draft_start_distance);
+    draft_start_distance++;
+    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "draft_start_distance", &draft_start_distance, 0)
+        && draft_start_distance == acsh_revolve_class->draft_start_distance)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.draft_start_distance [BD] set+1 %g != %g", acsh_revolve_class->draft_start_distance, draft_start_distance);
+    acsh_revolve_class->draft_start_distance--;
   }
   {
     Dwg_EvalExpr evalexpr;
@@ -29093,6 +29101,21 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
     acsh_revolve_class->major--;
   }
   {
+    BITCODE_BL method;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "method", &method, NULL)
+        && method == acsh_revolve_class->method)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.method [BL] %u != %u", acsh_revolve_class->method, method);
+    method++;
+    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "method", &method, 0)
+        && method == acsh_revolve_class->method)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.method [BL] set+1 %u != %u", acsh_revolve_class->method, method);
+    acsh_revolve_class->method--;
+  }
+  {
     BITCODE_BL minor;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "minor", &minor, NULL)
         && minor == acsh_revolve_class->minor)
@@ -29131,6 +29154,21 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
     acsh_revolve_class->revolve_angle--;
   }
   {
+    BITCODE_B solid;
+    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "solid", &solid, NULL)
+        && solid == acsh_revolve_class->solid)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.solid [B] " FORMAT_B " != " FORMAT_B "", acsh_revolve_class->solid, solid);
+    solid++;
+    if (dwg_dynapi_entity_set_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "solid", &solid, 0)
+        && solid == acsh_revolve_class->solid)
+      pass ();
+    else
+      fail ("ACSH_REVOLVE_CLASS.solid [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_revolve_class->solid, solid);
+    acsh_revolve_class->solid--;
+  }
+  {
     BITCODE_BD start_angle;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "start_angle", &start_angle, NULL)
         && start_angle == acsh_revolve_class->start_angle)
@@ -29144,14 +29182,6 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_REVOLVE_CLASS.start_angle [BD] set+1 %g != %g", acsh_revolve_class->start_angle, start_angle);
     acsh_revolve_class->start_angle--;
-  }
-  {
-    BITCODE_H sweep_entity;
-    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "sweep_entity", &sweep_entity, NULL)
-        && !memcmp (&sweep_entity, &acsh_revolve_class->sweep_entity, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ACSH_REVOLVE_CLASS.sweep_entity [H]");
   }
   {
     BITCODE_BD twist_angle;
@@ -29289,18 +29319,18 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     acsh_sweep_class->align_angle--;
   }
   {
-    BITCODE_RC align_option;
+    BITCODE_BS align_option;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "align_option", &align_option, NULL)
         && align_option == acsh_sweep_class->align_option)
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.align_option [RC] %u != %u", acsh_sweep_class->align_option, align_option);
+      fail ("ACSH_SWEEP_CLASS.align_option [BS] %hu != %hu", acsh_sweep_class->align_option, align_option);
     align_option++;
     if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "align_option", &align_option, 0)
         && align_option == acsh_sweep_class->align_option)
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.align_option [RC] set+1 %u != %u", acsh_sweep_class->align_option, align_option);
+      fail ("ACSH_SWEEP_CLASS.align_option [BS] set+1 %hu != %hu", acsh_sweep_class->align_option, align_option);
     acsh_sweep_class->align_option--;
   }
   {
@@ -29448,18 +29478,18 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
     acsh_sweep_class->minor--;
   }
   {
-    BITCODE_RC miter_option;
+    BITCODE_BS miter_option;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "miter_option", &miter_option, NULL)
         && miter_option == acsh_sweep_class->miter_option)
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.miter_option [RC] %u != %u", acsh_sweep_class->miter_option, miter_option);
+      fail ("ACSH_SWEEP_CLASS.miter_option [BS] %hu != %hu", acsh_sweep_class->miter_option, miter_option);
     miter_option++;
     if (dwg_dynapi_entity_set_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "miter_option", &miter_option, 0)
         && miter_option == acsh_sweep_class->miter_option)
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.miter_option [RC] set+1 %u != %u", acsh_sweep_class->miter_option, miter_option);
+      fail ("ACSH_SWEEP_CLASS.miter_option [BS] set+1 %hu != %hu", acsh_sweep_class->miter_option, miter_option);
     acsh_sweep_class->miter_option--;
   }
   {

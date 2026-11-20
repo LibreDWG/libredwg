@@ -5469,25 +5469,29 @@ BL,	DXF 91
 @item axis_pt
 3BD,	DXF 10
 @item direction
-2RD,	DXF 11
+3BD,	DXF 11
 @item revolve_angle
 BD,	DXF 40
 @item start_angle
 BD,	DXF 41
 @item draft_angle
 BD,	DXF 43
-@item bd44
+@item draft_start_distance
 BD,	DXF 44
-@item bd45
+@item draft_end_distance
 BD,	DXF 45
 @item twist_angle
 BD,	DXF 46
-@item b290
+@item solid
 B,	DXF 290
 @item is_close_to_axis
 B,	DXF 291
-@item sweep_entity
-H
+@item method
+BL,	DXF 92
+@item bindata_size
+BL,	DXF 90
+@item bindata
+TF
 
 @end vtable
 @end indentedblock
@@ -5535,26 +5539,26 @@ BL,	DXF 91
 @item direction
 3BD,	DXF 10
 @item method
-BL,	DXF 92
+BL
 @item shsw_text_size
-BL,	DXF 90
+BL
 @item shsw_text
-TF,	DXF 310
+TF
 @item shsw_bl93
-BL,	DXF 93
+BL
 @item shsw_text2_size
-BL,	DXF 90
+BL
 @item shsw_text2
-TF,	DXF 310
+TF
 @item draft_angle
 BD,	DXF 42
 @item start_draft_dist
 BD,	DXF 43
 @item end_draft_dist
 BD,	DXF 44
-@item scale_factor
-BD,	DXF 45
 @item twist_angle
+BD,	DXF 45
+@item scale_factor
 BD,	DXF 48
 @item align_angle
 BD,	DXF 49
@@ -5563,9 +5567,9 @@ BD*,	DXF 46
 @item pathentity_transform
 BD*,	DXF 47
 @item align_option
-RC,	DXF 70
+BS,	DXF 70
 @item miter_option
-RC,	DXF 71
+BS,	DXF 71
 @item has_align_start
 B,	DXF 290
 @item bank
