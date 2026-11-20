@@ -342,7 +342,7 @@ decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
 /* The ACIS of an ACSH_SWEEP_CLASS or ACSH_EXTRUSION_CLASS with the method 37:
    the 3DSOLID header, the SAB and the end marker. Reuse decode_3dsolid with a
    temporary 3DSOLID. Not for r2013+. */
-static int
+static inline int
 acsh_decode_acis (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                   Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
 {
@@ -371,6 +371,71 @@ acsh_decode_acis (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
 #  define DECODE_3DSOLID {}
 #  define FREE_3DSOLID {}
 #endif // #if IS_DECODER
+
+#if defined(IS_ENCODER) || defined(IS_DXF)
+/* A deep copy of the ACIS of an ACSH_SWEEP_CLASS or ACSH_EXTRUSION_CLASS
+   into a temporary 3DSOLID, which the 3DSOLID encoder and DXF exporter may
+   convert and free. */
+static inline void
+acsh_acis_copy (Dwg_Entity_3DSOLID *restrict tmp,
+                const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
+{
+  BITCODE_BL i;
+  memset (tmp, 0, sizeof (*tmp));
+  tmp->acis_empty = _o->shsw_acis_empty;
+  tmp->unknown = _o->shsw_acis_unknown;
+  tmp->version = _o->shsw_acis_version;
+  tmp->num_blocks = _o->shsw_num_blocks;
+  tmp->sab_size = _o->shsw_sab_size;
+  if (_o->shsw_block_size)
+    {
+      tmp->block_size = (BITCODE_BL *)calloc (_o->shsw_num_blocks + 2,
+                                              sizeof (BITCODE_BL));
+      if (tmp->block_size)
+        for (i = 0; i <= _o->shsw_num_blocks; i++)
+          tmp->block_size[i] = _o->shsw_block_size[i];
+    }
+  if (_o->shsw_encr_sat_data && tmp->block_size)
+    {
+      tmp->encr_sat_data
+          = (char **)calloc (_o->shsw_num_blocks + 2, sizeof (char *));
+      if (tmp->encr_sat_data)
+        for (i = 0; i < _o->shsw_num_blocks; i++)
+          if (_o->shsw_encr_sat_data[i])
+            {
+              tmp->encr_sat_data[i]
+                  = (char *)calloc (_o->shsw_block_size[i] + 1, 1);
+              if (tmp->encr_sat_data[i])
+                memcpy (tmp->encr_sat_data[i], _o->shsw_encr_sat_data[i],
+                        _o->shsw_block_size[i]);
+            }
+    }
+  if (_o->shsw_acis_data)
+    {
+      size_t len = _o->shsw_acis_version == 2
+                       ? _o->shsw_sab_size
+                       : strlen ((char *)_o->shsw_acis_data);
+      tmp->acis_data = (BITCODE_RC *)calloc (len + 1, 1);
+      if (tmp->acis_data)
+        memcpy (tmp->acis_data, _o->shsw_acis_data, len);
+    }
+}
+
+static inline void
+acsh_acis_free_tmp (Dwg_Entity_3DSOLID *restrict tmp)
+{
+  BITCODE_BL i;
+  if (tmp->encr_sat_data)
+    {
+      for (i = 0; i <= tmp->num_blocks; i++)
+        free (tmp->encr_sat_data[i]);
+      free (tmp->encr_sat_data);
+    }
+  free (tmp->block_size);
+  free (tmp->acis_data);
+}
+
+#endif
 
 #ifdef IS_ENCODER
 #  define ENCODE_3DSOLID                                                      \
@@ -547,7 +612,7 @@ encode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
   return error;
 }
 
-static int
+static inline int
 acsh_encode_acis (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                   const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
 {
@@ -759,69 +824,27 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   }                                                                           \
   FREE { FIELD_HANDLE (history_id, 4, 350); }
 
-#if defined(IS_ENCODER) || defined(IS_DXF)
-/* A deep copy of the ACIS of an ACSH_SWEEP_CLASS or ACSH_EXTRUSION_CLASS
-   into a temporary 3DSOLID, which the 3DSOLID encoder and DXF exporter may
-   convert and free. */
-static inline void
-acsh_acis_copy (Dwg_Entity_3DSOLID *restrict tmp,
-                const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
-{
-  BITCODE_BL i;
-  memset (tmp, 0, sizeof (*tmp));
-  tmp->acis_empty = _o->shsw_acis_empty;
-  tmp->unknown = _o->shsw_acis_unknown;
-  tmp->version = _o->shsw_acis_version;
-  tmp->num_blocks = _o->shsw_num_blocks;
-  tmp->sab_size = _o->shsw_sab_size;
-  if (_o->shsw_block_size)
-    {
-      tmp->block_size = (BITCODE_BL *)calloc (_o->shsw_num_blocks + 2,
-                                              sizeof (BITCODE_BL));
-      if (tmp->block_size)
-        for (i = 0; i <= _o->shsw_num_blocks; i++)
-          tmp->block_size[i] = _o->shsw_block_size[i];
-    }
-  if (_o->shsw_encr_sat_data && tmp->block_size)
-    {
-      tmp->encr_sat_data
-          = (char **)calloc (_o->shsw_num_blocks + 2, sizeof (char *));
-      if (tmp->encr_sat_data)
-        for (i = 0; i < _o->shsw_num_blocks; i++)
-          if (_o->shsw_encr_sat_data[i])
-            {
-              tmp->encr_sat_data[i]
-                  = (char *)calloc (_o->shsw_block_size[i] + 1, 1);
-              if (tmp->encr_sat_data[i])
-                memcpy (tmp->encr_sat_data[i], _o->shsw_encr_sat_data[i],
-                        _o->shsw_block_size[i]);
-            }
-    }
-  if (_o->shsw_acis_data)
-    {
-      size_t len = _o->shsw_acis_version == 2
-                       ? _o->shsw_sab_size
-                       : strlen ((char *)_o->shsw_acis_data);
-      tmp->acis_data = (BITCODE_RC *)calloc (len + 1, 1);
-      if (tmp->acis_data)
-        memcpy (tmp->acis_data, _o->shsw_acis_data, len);
-    }
-}
-
-static inline void
-acsh_acis_free_tmp (Dwg_Entity_3DSOLID *restrict tmp)
-{
-  BITCODE_BL i;
-  if (tmp->encr_sat_data)
-    {
-      for (i = 0; i <= tmp->num_blocks; i++)
-        free (tmp->encr_sat_data[i]);
-      free (tmp->encr_sat_data);
-    }
-  free (tmp->block_size);
-  free (tmp->acis_data);
-}
-
+/* The ACIS of the ACSH_SWEEP_CLASS and ACSH_EXTRUSION_CLASS method 37 only
+   exists in the decoder, encoder and DXF exporters. */
+#ifdef IS_DECODER
+#  define ACSH_DECODE_ACIS                                                    \
+    error |= acsh_decode_acis (dat, hdl_dat, obj,                             \
+                               (Dwg_Object_ACSH_SWEEP_CLASS *)_obj)
+#else
+#  define ACSH_DECODE_ACIS
+#endif
+#ifdef IS_ENCODER
+#  define ACSH_ENCODE_ACIS                                                    \
+    error |= acsh_encode_acis (dat, hdl_dat, obj,                             \
+                               (Dwg_Object_ACSH_SWEEP_CLASS *)_obj)
+#else
+#  define ACSH_ENCODE_ACIS
+#endif
+#ifdef IS_DXF
+#  define ACSH_DXF_ACIS                                                       \
+    error |= acsh_dxf_acis (dat, obj, (Dwg_Object_ACSH_SWEEP_CLASS *)_obj)
+#else
+#  define ACSH_DXF_ACIS
 #endif
 
 #define ACTION_3DSOLID \

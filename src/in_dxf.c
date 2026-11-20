@@ -14625,15 +14625,15 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               else if (pair->code == 96)
                 loft_gidx++;
               {
-                const int i
+                const int pidx
                     = (pair->code == 96 || guide) ? loft_gidx : loft_idx;
                 const BITCODE_BL n = (pair->code == 96 || guide)
                                          ? o->num_guides
                                          : o->num_crosssects;
-                if (i < 0 || (BITCODE_BL)i >= n)
+                if (pidx < 0 || (BITCODE_BL)pidx >= n)
                   goto invalid_dxf;
-                p = (pair->code == 96 || guide) ? &o->guides[i]
-                                                : &o->crosssects[i];
+                p = (pair->code == 96 || guide) ? &o->guides[pidx]
+                                                : &o->crosssects[pidx];
               }
               if (pair->code == 93 || pair->code == 96)
                 {

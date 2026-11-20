@@ -4195,17 +4195,9 @@ DWG_OBJECT_END
   FIELD_BL (method, 92); /* 77, 18 or 37 */ \
   if (FIELD_VALUE (method) == 37) \
     { \
-      DECODER { \
-        error |= acsh_decode_acis (dat, hdl_dat, obj, \
-                                   (Dwg_Object_ACSH_SWEEP_CLASS *)_obj); \
-      } \
-      ENCODER { \
-        error |= acsh_encode_acis (dat, hdl_dat, obj, \
-                                   (Dwg_Object_ACSH_SWEEP_CLASS *)_obj); \
-      } \
-      DXF { \
-        error |= acsh_dxf_acis (dat, obj, (Dwg_Object_ACSH_SWEEP_CLASS *)_obj); \
-      } \
+      ACSH_DECODE_ACIS; \
+      ACSH_ENCODE_ACIS; \
+      ACSH_DXF_ACIS; \
       FIELD_BL (shsw_bl93, 93); \
     } \
   else \
