@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ACSH_EXTRUSION_CLASS
 #include "tests_common.c"
 
@@ -27,8 +26,8 @@ api_process (dwg_object *obj)
   BITCODE_BD align_angle;            /*!< DXF 49 0.0 */
   BITCODE_BD *sweepentity_transform; /*!< DXF 46 16x */
   BITCODE_BD *pathentity_transform;  /*!< DXF 47 16x */
-  BITCODE_RC align_option;           /*!< DXF 70 2 */
-  BITCODE_RC miter_option;           /*!< DXF 71 2 */
+  BITCODE_BS align_option;           /*!< DXF 70 2 */
+  BITCODE_BS miter_option;           /*!< DXF 71 2 */
   BITCODE_B has_align_start;         /*!< DXF 290 1 */
   BITCODE_B bank;                    /*!< DXF 292 1 */
   BITCODE_B check_intersections;     /*!< DXF 293 0 */
@@ -39,7 +38,6 @@ api_process (dwg_object *obj)
   // AcDbShExtrusion
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_extrusion_class *_obj
       = dwg_object_to_ACSH_EXTRUSION_CLASS (obj);
 
@@ -102,9 +100,9 @@ api_process (dwg_object *obj)
                 pathentity_transform[i]);
       }
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, align_option,
-                   RC); /*!< DXF 70 2 */
+                   BS); /*!< DXF 70 2 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, miter_option,
-                   RC); /*!< DXF 71 2 */
+                   BS); /*!< DXF 71 2 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, has_align_start,
                    B);                                   /*!< DXF 290 1 */
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, bank, B); /*!< DXF 292 1 */
@@ -117,5 +115,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_EXTRUSION_CLASS, shsw_b296,
                    B);                              /*!< DXF 296  1 */
   CHK_ENTITY_3RD (_obj, ACSH_EXTRUSION_CLASS, pt2); /*!< DXF 11 0,0,0 */
-#endif
 }

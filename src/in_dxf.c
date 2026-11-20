@@ -11717,6 +11717,19 @@ dxf_set_leader_context (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   return 0;
 }
 
+/* ACSH_SWEEP_CLASS and ACSH_EXTRUSION_CLASS share their fields
+ * (ACSH_SWEEPBASE_fields) */
+#  define IS_ACSH_SWEEPLIKE(obj)                                                \
+  ((obj)->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS                              \
+   || (obj)->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
+#  define ACSH_SWEEPLIKE(obj)                                                   \
+  ((Dwg_Object_ACSH_SWEEP_CLASS *)((obj)->fixedtype                           \
+                                           == DWG_TYPE_ACSH_EXTRUSION_CLASS   \
+                                       ? (void *)(obj)->tio.object            \
+                                             ->tio.ACSH_EXTRUSION_CLASS       \
+                                       : (void *)(obj)->tio.object            \
+                                             ->tio.ACSH_SWEEP_CLASS))
+
 /* ACSH_SWEEP_CLASS and ACSH_REVOLVE_CLASS: the 92 and 93 method of the
    profile, the IDX-th 90 (1: the size in bits of the first profile, 2: of
    the second) and the data of the RUN-th 310 run. */
@@ -11726,9 +11739,9 @@ dxf_acsh_sweep_bl (Dwg_Object *restrict obj, const int code,
 {
   BITCODE_BL *p = NULL;
   const char *field = "method";
-  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
+  if (IS_ACSH_SWEEPLIKE (obj))
     {
-      Dwg_Object_ACSH_SWEEP_CLASS *o = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+      Dwg_Object_ACSH_SWEEP_CLASS *o = ACSH_SWEEPLIKE (obj);
       p = code == 92 ? &o->method : &o->shsw_bl93;
       field = code == 92 ? "method" : "shsw_bl93";
     }
@@ -11746,9 +11759,9 @@ dxf_acsh_sweep_size (Dwg_Object *restrict obj, const int idx,
 {
   BITCODE_BL *p = NULL;
   const char *field = "bindata_size";
-  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
+  if (IS_ACSH_SWEEPLIKE (obj))
     {
-      Dwg_Object_ACSH_SWEEP_CLASS *o = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+      Dwg_Object_ACSH_SWEEP_CLASS *o = ACSH_SWEEPLIKE (obj);
       p = idx == 1 ? &o->shsw_text_size : &o->shsw_text2_size;
       field = idx == 1 ? "shsw_text_size" : "shsw_text2_size";
     }
@@ -11767,9 +11780,9 @@ dxf_acsh_sweep_data (Dwg_Object *restrict obj, const int run, BITCODE_TF data,
   BITCODE_TF *pdata = NULL;
   BITCODE_BL *psize = NULL;
   const char *field = "bindata";
-  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
+  if (IS_ACSH_SWEEPLIKE (obj))
     {
-      Dwg_Object_ACSH_SWEEP_CLASS *o = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+      Dwg_Object_ACSH_SWEEP_CLASS *o = ACSH_SWEEPLIKE (obj);
       pdata = run == 0 ? &o->shsw_text : &o->shsw_text2;
       psize = run == 0 ? &o->shsw_text_size : &o->shsw_text2_size;
       field = run == 0 ? "shsw_text" : "shsw_text2";
@@ -14470,20 +14483,19 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                     }
                 }
             }
-          else if ((obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS
+          else if ((IS_ACSH_SWEEPLIKE (obj)
                     || obj->fixedtype == DWG_TYPE_ACSH_REVOLVE_CLASS)
                    && (strEQc (subclass, "AcDbShSweepBase")
                        || strEQc (subclass, "AcDbShRevolve"))
                    && (pair->code == 92 || pair->code == 93
                        || pair->code == 310
-                       || (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS
+                       || (IS_ACSH_SWEEPLIKE (obj)
                            && (pair->code == 46 || pair->code == 47))
                        || (pair->code == 90 && acsh_n90++ > 0)))
             {
               if (pair->code == 46 || pair->code == 47)
                 {
-                  Dwg_Object_ACSH_SWEEP_CLASS *o
-                      = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+                  Dwg_Object_ACSH_SWEEP_CLASS *o = ACSH_SWEEPLIKE (obj);
                   BITCODE_BD **matrix = pair->code == 46
                                             ? &o->sweepentity_transform
                                             : &o->pathentity_transform;
@@ -15723,7 +15735,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                                || strEQc (name, "MATERIAL")
                                || strEQc (name, "SPATIAL_FILTER")
                                || /* max 12 */
-                               strEQc (name, "ACSH_SWEEP_CLASS"))
+                               strEQc (name, "ACSH_SWEEP_CLASS")
+                               || strEQc (name, "ACSH_EXTRUSION_CLASS"))
                            && ((pair->code >= 40 && pair->code <= 49)
                                || (pair->code <= 142 && pair->code <= 147)))
                     {

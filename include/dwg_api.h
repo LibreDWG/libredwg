@@ -750,6 +750,7 @@ extern "C"
   /* unstable */
   typedef struct _dwg_object_ACSH_BREP_CLASS		dwg_obj_acsh_brep_class;
   typedef struct _dwg_object_ACSH_CHAMFER_CLASS		dwg_obj_acsh_chamfer_class;
+  typedef struct _dwg_object_ACSH_EXTRUSION_CLASS		dwg_obj_acsh_extrusion_class;
   typedef struct _dwg_object_ACSH_PYRAMID_CLASS		dwg_obj_acsh_pyramid_class;
   typedef struct _dwg_object_ACSH_REVOLVE_CLASS		dwg_obj_acsh_revolve_class;
   typedef struct _dwg_object_ACSH_SWEEP_CLASS		dwg_obj_acsh_sweep_class;
@@ -831,7 +832,6 @@ extern "C"
   typedef struct _dwg_object_ACMECOMMANDHISTORY		dwg_obj_acmecommandhistory;
   typedef struct _dwg_object_ACMESCOPE		dwg_obj_acmescope;
   typedef struct _dwg_object_ACMESTATEMGR		dwg_obj_acmestatemgr;
-  typedef struct _dwg_object_ACSH_EXTRUSION_CLASS		dwg_obj_acsh_extrusion_class;
   typedef struct _dwg_object_ACSH_LOFT_CLASS		dwg_obj_acsh_loft_class;
   typedef struct _dwg_object_ANGDIMOBJECTCONTEXTDATA		dwg_obj_angdimobjectcontextdata;
   typedef struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA		dwg_obj_annotscaleobjectcontextdata;
@@ -1876,6 +1876,7 @@ extern "C"
   /* unstable */
   dwg_get_OBJECT_DECL (obj_acsh_brep_class, ACSH_BREP_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
+  dwg_get_OBJECT_DECL (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_sweep_class, ACSH_SWEEP_CLASS);
@@ -1957,7 +1958,6 @@ extern "C"
     dwg_get_OBJECT_DECL (obj_acmecommandhistory, ACMECOMMANDHISTORY);
     dwg_get_OBJECT_DECL (obj_acmescope, ACMESCOPE);
     dwg_get_OBJECT_DECL (obj_acmestatemgr, ACMESTATEMGR);
-    dwg_get_OBJECT_DECL (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS);
     dwg_get_OBJECT_DECL (obj_acsh_loft_class, ACSH_LOFT_CLASS);
     dwg_get_OBJECT_DECL (obj_angdimobjectcontextdata, ANGDIMOBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_annotscaleobjectcontextdata, ANNOTSCALEOBJECTCONTEXTDATA);
@@ -3021,6 +3021,7 @@ extern "C"
   /* unstable */
   DWG_GETALL_OBJECT_DECL (ACSH_BREP_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS);
+  DWG_GETALL_OBJECT_DECL (ACSH_EXTRUSION_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_SWEEP_CLASS);
@@ -3102,7 +3103,6 @@ extern "C"
     DWG_GETALL_OBJECT_DECL (ACMECOMMANDHISTORY);
     DWG_GETALL_OBJECT_DECL (ACMESCOPE);
     DWG_GETALL_OBJECT_DECL (ACMESTATEMGR);
-    DWG_GETALL_OBJECT_DECL (ACSH_EXTRUSION_CLASS);
     DWG_GETALL_OBJECT_DECL (ACSH_LOFT_CLASS);
     DWG_GETALL_OBJECT_DECL (ANGDIMOBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (ANNOTSCALEOBJECTCONTEXTDATA);
@@ -4172,6 +4172,7 @@ extern "C"
   /* unstable */
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BREP_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_EXTRUSION_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_PYRAMID_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SWEEP_CLASS);
@@ -4253,7 +4254,6 @@ extern "C"
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMECOMMANDHISTORY);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESCOPE);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESTATEMGR);
-    CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_EXTRUSION_CLASS);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_LOFT_CLASS);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ANGDIMOBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ANNOTSCALEOBJECTCONTEXTDATA);

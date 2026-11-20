@@ -7290,43 +7290,45 @@ typedef struct _dwg_object_ACSH_BREP_CLASS
 
 } Dwg_Object_ACSH_BREP_CLASS;
 
+/* The common fields of ACSH_SWEEP_CLASS and ACSH_EXTRUSION_CLASS */
+#define ACSH_SWEEPBASE_fields \
+  /* AcDbShPrimitive, AcDbShSweepBase */ \
+  BITCODE_BL major;           /*!< DXF 90 */ \
+  BITCODE_BL minor;           /*!< DXF 91 */ \
+  BITCODE_3BD direction;      /*!< DXF 10 */ \
+  BITCODE_BL method;          /*!< DXF 92 */ \
+  BITCODE_BL shsw_text_size;  /*!< DXF 90 */ \
+  BITCODE_TF shsw_text;       /*!< DXF 310 */ \
+  BITCODE_BL shsw_bl93;       /*!< DXF 93 */ \
+  BITCODE_BL shsw_text2_size; /*!< DXF 90 */ \
+  BITCODE_TF shsw_text2;      /*!< DXF 310 */ \
+  /* compare to SWEEPOPTIONS_fields */ \
+  BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */ \
+  BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */ \
+  BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */ \
+  BITCODE_BD twist_angle;       /*!< DXF 45 0.0 */ \
+  BITCODE_BD scale_factor;      /*!< DXF 48 1.0 */ \
+  BITCODE_BD align_angle;       /*!< DXF 49 0.0 */ \
+  BITCODE_BD* sweepentity_transform; /*!< DXF 46 16x */ \
+  BITCODE_BD* pathentity_transform;  /*!< DXF 47 16x */ \
+  BITCODE_BS align_option;      /*!< DXF 70 2 */ \
+  BITCODE_BS miter_option;      /*!< DXF 71 2 */ \
+  BITCODE_B has_align_start;    /*!< DXF 290 1 */ \
+  BITCODE_B bank;       /*!< DXF 292 1 */ \
+  BITCODE_B check_intersections; /*!< DXF 293 0 */ \
+  BITCODE_B shsw_b294;  /*!< DXF 294  1 */ \
+  BITCODE_B shsw_b295;  /*!< DXF 295  1 */ \
+  BITCODE_B shsw_b296;  /*!< DXF 296  1 */ \
+  BITCODE_3BD pt2      /*!< DXF 11 0,0,0 */
+
 typedef struct _dwg_object_ACSH_SWEEP_CLASS
 {
   struct _dwg_object_object *parent;
   Dwg_EvalExpr evalexpr;
   Dwg_ACSH_HistoryNode history_node;
-  // AcDbShPrimitive
-  // AcDbShSweepBase
-  BITCODE_BL major;           /*!< DXF 90 */
-  BITCODE_BL minor;           /*!< DXF 91 */
-  BITCODE_3BD direction;      /*!< DXF 10 */
-  BITCODE_BL method;          /*!< DXF 92 */
-  BITCODE_BL shsw_text_size;  /*!< DXF 90 */
-  BITCODE_TF shsw_text;       /*!< DXF 310 */
-  BITCODE_BL shsw_bl93;       /*!< DXF 93 */
-  BITCODE_BL shsw_text2_size; /*!< DXF 90 */
-  BITCODE_TF shsw_text2;      /*!< DXF 310 */
-  // compare to SWEEPOPTIONS_fields
-  BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
-  BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */
-  BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */
-  BITCODE_BD twist_angle;       /*!< DXF 45 0.0 */
-  BITCODE_BD scale_factor;      /*!< DXF 48 1.0 */
-  BITCODE_BD align_angle;       /*!< DXF 49 0.0 */
-  BITCODE_BD* sweepentity_transform; /*!< DXF 46 16x */
-  BITCODE_BD* pathentity_transform;  /*!< DXF 47 16x */
-  BITCODE_BS align_option;      /*!< DXF 70 2 */
-  BITCODE_BS miter_option;      /*!< DXF 71 2 */
-  BITCODE_B has_align_start;    /*!< DXF 290 1 */
-  BITCODE_B bank;       /*!< DXF 292 1 */
-  BITCODE_B check_intersections; /*!< DXF 293 0 */
-  BITCODE_B shsw_b294;  /*!< DXF 294  1 */
-  BITCODE_B shsw_b295;  /*!< DXF 295  1 */
-  BITCODE_B shsw_b296;  /*!< DXF 296  1 */
-  BITCODE_3BD pt2;      /*!< DXF 11 0,0,0 */
+  ACSH_SWEEPBASE_fields;
 
   // AcDbShSweep
-
 } Dwg_Object_ACSH_SWEEP_CLASS;
 
 typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
@@ -7334,35 +7336,7 @@ typedef struct _dwg_object_ACSH_EXTRUSION_CLASS
   struct _dwg_object_object *parent;
   Dwg_EvalExpr evalexpr;
   Dwg_ACSH_HistoryNode history_node;
-  // AcDbShPrimitive
-  // AcDbShSweepBase
-  BITCODE_BL major;           /*!< DXF 90 */
-  BITCODE_BL minor;           /*!< DXF 91 */
-  BITCODE_3BD direction;      /*!< DXF 10 */
-  BITCODE_BL method;          /*!< DXF 92 */
-  BITCODE_BL shsw_text_size;  /*!< DXF 90 */
-  BITCODE_TF shsw_text;       /*!< DXF 310 */
-  BITCODE_BL shsw_bl93;       /*!< DXF 93 */
-  BITCODE_BL shsw_text2_size; /*!< DXF 90 */
-  BITCODE_TF shsw_text2;      /*!< DXF 310 */
-  // compare to SWEEPOPTIONS_fields
-  BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
-  BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */
-  BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */
-  BITCODE_BD scale_factor;      /*!< DXF 45 1.0 */
-  BITCODE_BD twist_angle;       /*!< DXF 48 0.0 */
-  BITCODE_BD align_angle;       /*!< DXF 49 0.0 */
-  BITCODE_BD* sweepentity_transform; /*!< DXF 46 16x */
-  BITCODE_BD* pathentity_transform;  /*!< DXF 47 16x */
-  BITCODE_RC align_option;      /*!< DXF 70 2 */
-  BITCODE_RC miter_option;      /*!< DXF 71 2 */
-  BITCODE_B has_align_start;    /*!< DXF 290 1 */
-  BITCODE_B bank;       /*!< DXF 292 1 */
-  BITCODE_B check_intersections; /*!< DXF 293 0 */
-  BITCODE_B shsw_b294;  /*!< DXF 294  1 */
-  BITCODE_B shsw_b295;  /*!< DXF 295  1 */
-  BITCODE_B shsw_b296;  /*!< DXF 296  1 */
-  BITCODE_3BD pt2;      /*!< DXF 11 0,0,0 */
+  ACSH_SWEEPBASE_fields;
 
   // AcDbShExtrusion
 } Dwg_Object_ACSH_EXTRUSION_CLASS;
@@ -9910,6 +9884,7 @@ typedef struct _dwg_object_object
     /* unstable */
     Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
+    Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
     Dwg_Object_ACSH_PYRAMID_CLASS *ACSH_PYRAMID_CLASS;
     Dwg_Object_ACSH_REVOLVE_CLASS *ACSH_REVOLVE_CLASS;
     Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
@@ -9991,7 +9966,6 @@ typedef struct _dwg_object_object
     Dwg_Object_ACMECOMMANDHISTORY *ACMECOMMANDHISTORY;
     Dwg_Object_ACMESCOPE *ACMESCOPE;
     Dwg_Object_ACMESTATEMGR *ACMESTATEMGR;
-    Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
     Dwg_Object_ACSH_LOFT_CLASS *ACSH_LOFT_CLASS;
     Dwg_Object_ANGDIMOBJECTCONTEXTDATA *ANGDIMOBJECTCONTEXTDATA;
     Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA *ANNOTSCALEOBJECTCONTEXTDATA;
@@ -12152,6 +12126,7 @@ EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_REVOLVE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
@@ -12253,7 +12228,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESCOPE (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
-  EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
   EXPORT int dwg_setup_ACSH_LOFT_CLASS (Dwg_Object *obj);
   EXPORT int dwg_setup_ANGDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_ANNOTSCALEOBJECTCONTEXTDATA (Dwg_Object *obj);

@@ -373,6 +373,7 @@ EXPORT Dwg_Object_DWFDEFINITION** dwg_getall_DWFDEFINITION (Dwg_Data* dwg);
 /* unstable */
 EXPORT Dwg_Object_ACSH_BREP_CLASS** dwg_getall_ACSH_BREP_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_CHAMFER_CLASS** dwg_getall_ACSH_CHAMFER_CLASS (Dwg_Data* dwg);
+EXPORT Dwg_Object_ACSH_EXTRUSION_CLASS** dwg_getall_ACSH_EXTRUSION_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_PYRAMID_CLASS** dwg_getall_ACSH_PYRAMID_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_REVOLVE_CLASS** dwg_getall_ACSH_REVOLVE_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_SWEEP_CLASS** dwg_getall_ACSH_SWEEP_CLASS (Dwg_Data* dwg);
@@ -454,7 +455,6 @@ EXPORT Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS** dwg_getall_ASSOCARRAYRECTANG
   EXPORT Dwg_Object_ACMECOMMANDHISTORY** dwg_getall_ACMECOMMANDHISTORY (Dwg_Data* dwg);
   EXPORT Dwg_Object_ACMESCOPE** dwg_getall_ACMESCOPE (Dwg_Data* dwg);
   EXPORT Dwg_Object_ACMESTATEMGR** dwg_getall_ACMESTATEMGR (Dwg_Data* dwg);
-  EXPORT Dwg_Object_ACSH_EXTRUSION_CLASS** dwg_getall_ACSH_EXTRUSION_CLASS (Dwg_Data* dwg);
   EXPORT Dwg_Object_ACSH_LOFT_CLASS** dwg_getall_ACSH_LOFT_CLASS (Dwg_Data* dwg);
   EXPORT Dwg_Object_ANGDIMOBJECTCONTEXTDATA** dwg_getall_ANGDIMOBJECTCONTEXTDATA (Dwg_Data* dwg);
   EXPORT Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA** dwg_getall_ANNOTSCALEOBJECTCONTEXTDATA (Dwg_Data* dwg);
@@ -1502,6 +1502,7 @@ EXPORT Dwg_Object_DWFDEFINITION* dwg_object_to_DWFDEFINITION (Dwg_Object* obj);
 /* unstable */
 EXPORT Dwg_Object_ACSH_BREP_CLASS* dwg_object_to_ACSH_BREP_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_CHAMFER_CLASS* dwg_object_to_ACSH_CHAMFER_CLASS (Dwg_Object* obj);
+EXPORT Dwg_Object_ACSH_EXTRUSION_CLASS* dwg_object_to_ACSH_EXTRUSION_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_PYRAMID_CLASS* dwg_object_to_ACSH_PYRAMID_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_REVOLVE_CLASS* dwg_object_to_ACSH_REVOLVE_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_SWEEP_CLASS* dwg_object_to_ACSH_SWEEP_CLASS (Dwg_Object* obj);
@@ -1583,7 +1584,6 @@ EXPORT Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS* dwg_object_to_ASSOCARRAYRECTA
   EXPORT Dwg_Object_ACMECOMMANDHISTORY* dwg_object_to_ACMECOMMANDHISTORY (Dwg_Object* obj);
   EXPORT Dwg_Object_ACMESCOPE* dwg_object_to_ACMESCOPE (Dwg_Object* obj);
   EXPORT Dwg_Object_ACMESTATEMGR* dwg_object_to_ACMESTATEMGR (Dwg_Object* obj);
-  EXPORT Dwg_Object_ACSH_EXTRUSION_CLASS* dwg_object_to_ACSH_EXTRUSION_CLASS (Dwg_Object* obj);
   EXPORT Dwg_Object_ACSH_LOFT_CLASS* dwg_object_to_ACSH_LOFT_CLASS (Dwg_Object* obj);
   EXPORT Dwg_Object_ANGDIMOBJECTCONTEXTDATA* dwg_object_to_ANGDIMOBJECTCONTEXTDATA (Dwg_Object* obj);
   EXPORT Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA* dwg_object_to_ANNOTSCALEOBJECTCONTEXTDATA (Dwg_Object* obj);

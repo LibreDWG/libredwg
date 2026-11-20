@@ -4187,16 +4187,69 @@ DWG_OBJECT_END
 
 // Class AcDbSweepOptions? UNSTABLE
 // dbSweepOptions.h dbsurf.h
-// The sweep profile: method (class version), the size in bits, the data
-#define ACSH_SWEEP_profiles \
-  FIELD_BL (method, 92); /* 77 */ \
-  FIELD_BL (shsw_text_size, 90); /* 744 */ \
-  VALUEOUTOFBOUNDS (shsw_text_size, 8 * 65536); \
-  SurfaceBits (shsw_text, shsw_text_size); \
-  FIELD_BL (shsw_bl93, 93); /* 77 */ \
-  FIELD_BL (shsw_text2_size, 90); /* 480 */ \
-  VALUEOUTOFBOUNDS (shsw_text2_size, 8 * 65536); \
-  SurfaceBits (shsw_text2, shsw_text2_size)
+// The sweep profile: method (class version), the size in bits, the data.
+// The method 37 has no profile, but a ACIS SAB with the 3DSOLID header
+// (acis_empty, unknown, version) instead, not supported yet. A second
+// profile is only there with a 93 (the path).
+#define ACSH_SWEEP_profile_fields \
+  FIELD_BL (method, 92); /* 77, 18 or 37 */ \
+  if (FIELD_VALUE (method) == 37) \
+    { \
+      LOG_WARN ("%s.method 37 with ACIS data is not supported", obj->name); \
+    } \
+  else \
+    { \
+      FIELD_BL (shsw_text_size, 90); /* 744 */ \
+      VALUEOUTOFBOUNDS (shsw_text_size, 8 * 65536); \
+      SurfaceBits (shsw_text, shsw_text_size); \
+      FIELD_BL (shsw_bl93, 93); /* 77 */ \
+      if (FIELD_VALUE (shsw_bl93)) \
+        { \
+          FIELD_BL (shsw_text2_size, 90); /* 480 */ \
+          VALUEOUTOFBOUNDS (shsw_text2_size, 8 * 65536); \
+          SurfaceBits (shsw_text2, shsw_text2_size); \
+        } \
+    }
+// the options in the DXF order
+#define ACSH_SWEEP_dxf_fields \
+  FIELD_BD (draft_angle, 42); /* 0.0 */ \
+  FIELD_BD (start_draft_dist, 43); /* 0.0 */ \
+  FIELD_BD (end_draft_dist, 44); /* 0.0 */ \
+  FIELD_BD (twist_angle, 45); /* 0.0 */ \
+  FIELD_BD (scale_factor, 48); /* 1.0 */ \
+  FIELD_BD (align_angle, 49); /* 0.0 */ \
+  FIELD_VECTOR_N (sweepentity_transform, BD, 16, 46); \
+  FIELD_VECTOR_N (pathentity_transform, BD, 16, 47); \
+  FIELD_BS (align_option, 70); /* 2 */ \
+  FIELD_BS (miter_option, 71); /* 2 */ \
+  FIELD_B (has_align_start, 290); /* 1 */ \
+  FIELD_B (bank, 292); /* 1 */ \
+  FIELD_B (check_intersections, 293); /* 0 */ \
+  FIELD_B (shsw_b294, 294); /* 1 */ \
+  FIELD_B (shsw_b295, 295); /* 1 */ \
+  FIELD_B (shsw_b296, 296); /* 1 */ \
+  FIELD_3BD (pt2, 11) /* 0,0,0 */
+// and in the DWG order, as with the SWEPTSURFACE (verified with
+// example_2010.dwg and JW.dwg), with the profile last
+#define ACSH_SWEEP_dwg_fields \
+  FIELD_BD (draft_angle, 42); /* 0.0 */ \
+  FIELD_BD (start_draft_dist, 43); /* 0.0 */ \
+  FIELD_BD (end_draft_dist, 44); /* 0.0 */ \
+  FIELD_BD (twist_angle, 45); /* 0.0 */ \
+  FIELD_BD (scale_factor, 48); /* 1.0 */ \
+  FIELD_BD (align_angle, 49); /* 0.0 */ \
+  FIELD_B (has_align_start, 290); /* 1 */ \
+  FIELD_BS (align_option, 70); /* 2 */ \
+  FIELD_BS (miter_option, 71); /* 2 */ \
+  FIELD_B (bank, 292); /* 1 */ \
+  FIELD_B (check_intersections, 293); /* 0 */ \
+  FIELD_B (shsw_b294, 294); /* 1 */ \
+  FIELD_3BD (pt2, 11); /* 0,0,0 */ \
+  FIELD_B (shsw_b295, 295); /* 1 */ \
+  FIELD_B (shsw_b296, 296); /* 1 */ \
+  FIELD_VECTOR_N (sweepentity_transform, BD, 16, 46); \
+  FIELD_VECTOR_N (pathentity_transform, BD, 16, 47)
+
 DWG_OBJECT (ACSH_SWEEP_CLASS)
   HANDLE_UNKNOWN_BITS;
   AcDbEvalExpr_fields;
@@ -4206,53 +4259,34 @@ DWG_OBJECT (ACSH_SWEEP_CLASS)
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //29
   FIELD_3BD (direction, 10); //0,0,0
-  // sweep_options, sweep_entity, path_entity
 #ifdef IS_DXF
-  ACSH_SWEEP_profiles;
-  FIELD_BD (draft_angle, 42); //0.0
-  FIELD_BD (start_draft_dist, 43); //0.0
-  FIELD_BD (end_draft_dist, 44); //0.0
-  FIELD_BD (twist_angle, 45); //0.0
-  FIELD_BD (scale_factor, 48); //1.0
-  FIELD_BD (align_angle, 49); //0.0
-  FIELD_VECTOR_N (sweepentity_transform, BD, 16, 46);
-  FIELD_VECTOR_N (pathentity_transform, BD, 16, 47);
-  FIELD_BS (align_option, 70); //2
-  FIELD_BS (miter_option, 71); //2
-  FIELD_B (has_align_start, 290); //1
-  FIELD_B (bank, 292); //1
-  FIELD_B (check_intersections, 293); //0
-  FIELD_B (shsw_b294, 294); //1
-  FIELD_B (shsw_b295, 295); //1
-  FIELD_B (shsw_b296, 296); //1
-  FIELD_3BD (pt2, 11); //0,0,0
+  ACSH_SWEEP_profile_fields;
+  ACSH_SWEEP_dxf_fields;
 #else
-  // The DWG order, as with the SWEPTSURFACE (verified with example_2010.dwg)
-  FIELD_BD (draft_angle, 42); //0.0
-  FIELD_BD (start_draft_dist, 43); //0.0
-  FIELD_BD (end_draft_dist, 44); //0.0
-  FIELD_BD (twist_angle, 45); //0.0
-  FIELD_BD (scale_factor, 48); //1.0
-  FIELD_BD (align_angle, 49); //0.0
-  FIELD_B (has_align_start, 290); //1
-  FIELD_BS (align_option, 70); //2
-  FIELD_BS (miter_option, 71); //2
-  FIELD_B (bank, 292); //1
-  FIELD_B (check_intersections, 293); //0
-  FIELD_B (shsw_b294, 294); //1
-  FIELD_3BD (pt2, 11); //0,0,0
-  FIELD_B (shsw_b295, 295); //1
-  FIELD_B (shsw_b296, 296); //1
-  FIELD_VECTOR_N (sweepentity_transform, BD, 16, 46);
-  FIELD_VECTOR_N (pathentity_transform, BD, 16, 47);
-  ACSH_SWEEP_profiles;
+  ACSH_SWEEP_dwg_fields;
+  ACSH_SWEEP_profile_fields;
 #endif
-#undef ACSH_SWEEP_profiles
-
   SUBCLASS (AcDbShSweep);
-  // align_option
-  // miter_option
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
+DWG_OBJECT (ACSH_EXTRUSION_CLASS)
+  HANDLE_UNKNOWN_BITS;
+  AcDbEvalExpr_fields;
+  AcDbShHistoryNode_fields (history_node);
+  SUBCLASS (AcDbShPrimitive);
+  SUBCLASS (AcDbShSweepBase);
+  FIELD_BL (major, 90); //33
+  FIELD_BL (minor, 91); //29
+  FIELD_3BD (direction, 10); //0,0,0
+#ifdef IS_DXF
+  ACSH_SWEEP_profile_fields;
+  ACSH_SWEEP_dxf_fields;
+#else
+  ACSH_SWEEP_dwg_fields;
+  ACSH_SWEEP_profile_fields;
+#endif
+  SUBCLASS (AcDbShExtrusion);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -4617,51 +4651,6 @@ DWG_OBJECT_END
     FIELD_CMC (color.color,62)
 
 #define CLASS_HAS(x) 1
-
-DWG_OBJECT (ACSH_EXTRUSION_CLASS)
-  HANDLE_UNKNOWN_BITS;
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive);
-  SUBCLASS (AcDbShSweepBase);
-  FIELD_BL (major, 90); //33
-  FIELD_BL (minor, 91); //29
-  FIELD_3BD (direction, 10); //0,0,0
-  // sweep_options
-  // sweep_entity
-  // path_entity
-  FIELD_BL (method, 92); //77
-#ifndef IS_JSON
-  FIELD_BL (shsw_text_size, 90); //744
-#endif
-  FIELD_BINARY (shsw_text, FIELD_VALUE (shsw_text_size), 310);
-  FIELD_BL (shsw_bl93, 93); //77
-#ifndef IS_JSON
-  FIELD_BL (shsw_text2_size, 90); //480
-#endif
-  FIELD_BINARY (shsw_text2, FIELD_VALUE (shsw_text2_size), 310);
-  FIELD_BD (draft_angle, 42); //0.0
-  FIELD_BD (start_draft_dist, 43); //0.0
-  FIELD_BD (end_draft_dist, 44); //0.0
-  FIELD_BD (scale_factor, 45); //1.0
-  FIELD_BD (twist_angle, 48); //0.0
-  FIELD_BD (align_angle, 49); //0.0
-  FIELD_VECTOR_N (sweepentity_transform, BD, 16, 46);
-  FIELD_VECTOR_N (pathentity_transform, BD, 16, 47);
-  FIELD_RC (align_option, 70); //2
-  FIELD_RC (miter_option, 71); //2
-  FIELD_B (has_align_start, 290); //1
-  FIELD_B (bank, 292); //1
-  FIELD_B (check_intersections, 293); //0
-  FIELD_B (shsw_b294, 294); //1
-  FIELD_B (shsw_b295, 295); //1
-  FIELD_B (shsw_b296, 296); //1
-  FIELD_3BD (pt2, 11); //0,0,0
-
-  SUBCLASS (AcDbShExtrusion);
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_LOFT_CLASS)
   HANDLE_UNKNOWN_BITS;

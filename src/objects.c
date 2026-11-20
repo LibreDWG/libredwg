@@ -1345,7 +1345,7 @@ in_word_set (const char *str, size_t len)
 #line 247 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str514,         "BLOCKPROPERTIESTABLEGRIP",          DWG_TYPE_BLOCKPROPERTIESTABLEGRIP,	0,	DEBUGGING},
 #line 161 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str515,             "ACSH_EXTRUSION_CLASS",              DWG_TYPE_ACSH_EXTRUSION_CLASS,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str515,             "ACSH_EXTRUSION_CLASS",              DWG_TYPE_ACSH_EXTRUSION_CLASS,	0,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
 #line 220 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str522,           "ACDBASSOCVERTEXACTIONPARAM",        DWG_TYPE_ASSOCVERTEXACTIONPARAM,	0,	UNSTABLE},

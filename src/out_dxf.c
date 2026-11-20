@@ -3294,6 +3294,17 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
     }
 
+  // The sweep profile of an ACIS SAB (method 37) is not supported yet,
+  // and no profile at all would be written. Skip them.
+  if ((obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS
+       || obj->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
+      && obj->tio.object && obj->tio.object->tio.ACSH_SWEEP_CLASS
+      && obj->tio.object->tio.ACSH_SWEEP_CLASS->method == 37)
+    {
+      LOG_WARN ("Skip %s with ACIS data (method 37)", klass->dxfname);
+      return DWG_ERR_UNHANDLEDCLASS;
+    }
+
     // if (!is_entity)
     //  fprintf(dat->fh, "  0\r\n%s\r\n", dxfname);
 
