@@ -11730,6 +11730,33 @@ dxf_set_leader_context (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
                                        : (void *)(obj)->tio.object            \
                                              ->tio.ACSH_SWEEP_CLASS))
 
+/* The SAT lines (1, 3) of the ACIS of an ACSH_SWEEP_CLASS or
+   ACSH_EXTRUSION_CLASS with the method 37, as the 3DSOLID. */
+static Dxf_Pair *
+add_ACSH_acis (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+               Dxf_Pair *restrict pair)
+{
+  Dwg_Object_ACSH_SWEEP_CLASS *o = ACSH_SWEEPLIKE (obj);
+  Dwg_Object fake = *obj;
+  Dwg_Object_Entity ent;
+  Dwg_Entity_3DSOLID tmp;
+
+  memset (&ent, 0, sizeof (ent));
+  memset (&tmp, 0, sizeof (tmp));
+  ent.tio._3DSOLID = (Dwg_Entity__3DSOLID *)&tmp;
+  fake.supertype = DWG_SUPERTYPE_ENTITY;
+  fake.tio.entity = &ent;
+  tmp.version = o->shsw_acis_version;
+  pair = add_3DSOLID_encr (&fake, dat, pair);
+  o->shsw_acis_empty = 0;
+  o->shsw_acis_unknown = tmp.unknown;
+  o->shsw_num_blocks = tmp.num_blocks;
+  o->shsw_block_size = tmp.block_size;
+  o->shsw_encr_sat_data = tmp.encr_sat_data;
+  o->shsw_acis_data = tmp.acis_data;
+  return pair;
+}
+
 /* ACSH_SWEEP_CLASS and ACSH_REVOLVE_CLASS: the 92 and 93 method of the
    profile, the IDX-th 90 (1: the size in bits of the first profile, 2: of
    the second) and the data of the RUN-th 310 run. */
@@ -14491,8 +14518,28 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                        || pair->code == 310
                        || (IS_ACSH_SWEEPLIKE (obj)
                            && (pair->code == 46 || pair->code == 47))
+                       || (IS_ACSH_SWEEPLIKE (obj)
+                           && ACSH_SWEEPLIKE (obj)->method == 37
+                           && (pair->code == 1
+                               || (pair->code == 70
+                                   && !ACSH_SWEEPLIKE (obj)
+                                           ->shsw_acis_version)))
                        || (pair->code == 90 && acsh_n90++ > 0)))
             {
+              if (pair->code == 70) // the version of the ACIS (method 37)
+                {
+                  ACSH_SWEEPLIKE (obj)->shsw_acis_version = pair->value.i;
+                  LOG_TRACE ("%s.acis_version = %d [BS 70]\n", name,
+                             pair->value.i);
+                  goto next_pair;
+                }
+              else if (pair->code == 1)
+                {
+                  pair = add_ACSH_acis (obj, dat, pair);
+                  if (!pair || pair->code == 0)
+                    goto end_object_loop;
+                  goto start_loop;
+                }
               if (pair->code == 46 || pair->code == 47)
                 {
                   Dwg_Object_ACSH_SWEEP_CLASS *o = ACSH_SWEEPLIKE (obj);

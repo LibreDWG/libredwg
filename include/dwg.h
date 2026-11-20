@@ -7302,6 +7302,15 @@ typedef struct _dwg_object_ACSH_BREP_CLASS
   BITCODE_BL shsw_bl93;       /*!< DXF 93 */ \
   BITCODE_BL shsw_text2_size; /*!< DXF 90 */ \
   BITCODE_TF shsw_text2;      /*!< DXF 310 */ \
+  /* the method 37 has an ACIS (the 3DSOLID header, the SAB or SAT) */ \
+  BITCODE_B shsw_acis_empty;       /*!< no DXF */ \
+  BITCODE_B shsw_acis_unknown;     /*!< no DXF */ \
+  BITCODE_BS shsw_acis_version;    /*!< DXF 70 */ \
+  BITCODE_BL shsw_num_blocks;      /*!< no DXF */ \
+  BITCODE_BL *shsw_block_size;     /*!< no DXF */ \
+  char **shsw_encr_sat_data;       /*!< DXF 1, 3 */ \
+  BITCODE_BL shsw_sab_size;        /*!< no DXF */ \
+  BITCODE_RC *shsw_acis_data;      /*!< DXF 1, 3 decrypted, or the SAB */ \
   /* compare to SWEEPOPTIONS_fields */ \
   BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */ \
   BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */ \

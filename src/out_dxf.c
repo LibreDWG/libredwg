@@ -68,6 +68,9 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
 static int dxf_3dsolid (Bit_Chain *restrict dat,
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_3DSOLID *restrict _obj);
+static int acsh_dxf_acis (Bit_Chain *restrict dat,
+                          const Dwg_Object *restrict obj,
+                          const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
                               const int opts, const int dxf);
 static bool dxf_needs_cquote (const char *restrict str);
@@ -2971,6 +2974,27 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
+/* The ACIS of an ACSH_SWEEP_CLASS or ACSH_EXTRUSION_CLASS with the method 37,
+   as the 3DSOLID does. */
+static int
+acsh_dxf_acis (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+               const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
+{
+  Dwg_Object fake = *obj;
+  Dwg_Object_Entity ent;
+  Dwg_Entity_3DSOLID tmp;
+  int error;
+
+  acsh_acis_copy (&tmp, _o);
+  memset (&ent, 0, sizeof (ent));
+  ent.tio._3DSOLID = (Dwg_Entity__3DSOLID *)&tmp;
+  fake.supertype = DWG_SUPERTYPE_ENTITY;
+  fake.tio.entity = &ent;
+  error = dxf_3dsolid (dat, &fake, &tmp);
+  acsh_acis_free_tmp (&tmp);
+  return error;
+}
+
 /* Whether the CLASSES section skips this class. */
 static int
 dxf_class_skipped (const Bit_Chain *restrict dat,
@@ -3292,17 +3316,6 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           LOG_WARN ("Skip %s", klass->dxfname);
           return DWG_ERR_UNHANDLEDCLASS;
         }
-    }
-
-  // The sweep profile of an ACIS SAB (method 37) is not supported yet,
-  // and no profile at all would be written. Skip them.
-  if ((obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS
-       || obj->fixedtype == DWG_TYPE_ACSH_EXTRUSION_CLASS)
-      && obj->tio.object && obj->tio.object->tio.ACSH_SWEEP_CLASS
-      && obj->tio.object->tio.ACSH_SWEEP_CLASS->method == 37)
-    {
-      LOG_WARN ("Skip %s with ACIS data (method 37)", klass->dxfname);
-      return DWG_ERR_UNHANDLEDCLASS;
     }
 
     // if (!is_entity)

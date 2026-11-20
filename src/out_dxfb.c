@@ -56,6 +56,9 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
 static int dxfb_3dsolid (Bit_Chain *restrict dat,
                          const Dwg_Object *restrict obj,
                          Dwg_Entity_3DSOLID *restrict _obj);
+static int acsh_dxf_acis (Bit_Chain *restrict dat,
+                          const Dwg_Object *restrict obj,
+                          const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o);
 static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                       const int dxf, const int opt);
 
@@ -1528,6 +1531,27 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
 #  include "dwg2.spec"
 
 #endif
+
+/* The ACIS of an ACSH_SWEEP_CLASS or ACSH_EXTRUSION_CLASS with the method 37,
+   as the 3DSOLID does. */
+static int
+acsh_dxf_acis (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+               const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
+{
+  Dwg_Object fake = *obj;
+  Dwg_Object_Entity ent;
+  Dwg_Entity_3DSOLID tmp;
+  int error;
+
+  acsh_acis_copy (&tmp, _o);
+  memset (&ent, 0, sizeof (ent));
+  ent.tio._3DSOLID = (Dwg_Entity__3DSOLID *)&tmp;
+  fake.supertype = DWG_SUPERTYPE_ENTITY;
+  fake.tio.entity = &ent;
+  error = dxfb_3dsolid (dat, &fake, &tmp);
+  acsh_acis_free_tmp (&tmp);
+  return error;
+}
 
 static int
 dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,

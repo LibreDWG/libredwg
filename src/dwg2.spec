@@ -4188,14 +4188,25 @@ DWG_OBJECT_END
 // Class AcDbSweepOptions? UNSTABLE
 // dbSweepOptions.h dbsurf.h
 // The sweep profile: method (class version), the size in bits, the data.
-// The method 37 has no profile, but a ACIS SAB with the 3DSOLID header
-// (acis_empty, unknown, version) instead, not supported yet. A second
+// The method 37 has no profile, but an ACIS (the 3DSOLID header acis_empty,
+// unknown, version, and the SAB, or the SAT in the DXF) instead. A second
 // profile is only there with a 93 (the path).
 #define ACSH_SWEEP_profile_fields \
   FIELD_BL (method, 92); /* 77, 18 or 37 */ \
   if (FIELD_VALUE (method) == 37) \
     { \
-      LOG_WARN ("%s.method 37 with ACIS data is not supported", obj->name); \
+      DECODER { \
+        error |= acsh_decode_acis (dat, hdl_dat, obj, \
+                                   (Dwg_Object_ACSH_SWEEP_CLASS *)_obj); \
+      } \
+      ENCODER { \
+        error |= acsh_encode_acis (dat, hdl_dat, obj, \
+                                   (Dwg_Object_ACSH_SWEEP_CLASS *)_obj); \
+      } \
+      DXF { \
+        error |= acsh_dxf_acis (dat, obj, (Dwg_Object_ACSH_SWEEP_CLASS *)_obj); \
+      } \
+      FIELD_BL (shsw_bl93, 93); \
     } \
   else \
     { \
@@ -4210,6 +4221,18 @@ DWG_OBJECT_END
           SurfaceBits (shsw_text2, shsw_text2_size); \
         } \
     }
+#define ACSH_SWEEP_free_acis \
+  FREE { \
+    if (_obj->shsw_encr_sat_data) \
+      { \
+        BITCODE_BL _i; \
+        for (_i = 0; _i <= _obj->shsw_num_blocks; _i++) \
+          free (_obj->shsw_encr_sat_data[_i]); \
+        free (_obj->shsw_encr_sat_data); \
+      } \
+    free (_obj->shsw_block_size); \
+    free (_obj->shsw_acis_data); \
+  }
 // the options in the DXF order
 #define ACSH_SWEEP_dxf_fields \
   FIELD_BD (draft_angle, 42); /* 0.0 */ \
@@ -4267,6 +4290,7 @@ DWG_OBJECT (ACSH_SWEEP_CLASS)
   ACSH_SWEEP_profile_fields;
 #endif
   SUBCLASS (AcDbShSweep);
+  ACSH_SWEEP_free_acis
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -4287,6 +4311,7 @@ DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   ACSH_SWEEP_profile_fields;
 #endif
   SUBCLASS (AcDbShExtrusion);
+  ACSH_SWEEP_free_acis
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
