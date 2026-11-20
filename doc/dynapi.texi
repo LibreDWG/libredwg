@@ -5289,6 +5289,22 @@ BL,	DXF 93
 BL,	DXF 90
 @item shsw_text2
 TF
+@item shsw_acis_empty
+B
+@item shsw_acis_unknown
+B
+@item shsw_acis_version
+BS
+@item shsw_num_blocks
+BL
+@item shsw_block_size
+BL*
+@item shsw_encr_sat_data
+TV
+@item shsw_sab_size
+BL
+@item shsw_acis_data
+RC*
 @item draft_angle
 BD,	DXF 42
 @item start_draft_dist
@@ -5550,6 +5566,22 @@ BL,	DXF 93
 BL,	DXF 90
 @item shsw_text2
 TF
+@item shsw_acis_empty
+B
+@item shsw_acis_unknown
+B
+@item shsw_acis_version
+BS
+@item shsw_num_blocks
+BL
+@item shsw_block_size
+BL*
+@item shsw_encr_sat_data
+TV
+@item shsw_sab_size
+BL
+@item shsw_acis_data
+RC*
 @item draft_angle
 BD,	DXF 42
 @item start_draft_dist
