@@ -11549,21 +11549,6 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
       fail ("EXTRUDEDSURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
   }
   {
-    BITCODE_BS modeler_format_version;
-    if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "modeler_format_version", &modeler_format_version, NULL)
-        && modeler_format_version == extrudedsurface->modeler_format_version)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.modeler_format_version [BS] %hu != %hu", extrudedsurface->modeler_format_version, modeler_format_version);
-    modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (extrudedsurface, "EXTRUDEDSURFACE", "modeler_format_version", &modeler_format_version, 0)
-        && modeler_format_version == extrudedsurface->modeler_format_version)
-      pass ();
-    else
-      fail ("EXTRUDEDSURFACE.modeler_format_version [BS] set+1 %hu != %hu", extrudedsurface->modeler_format_version, modeler_format_version);
-    extrudedsurface->modeler_format_version--;
-  }
-  {
     BITCODE_BL num_blocks;
     if (dwg_dynapi_entity_value (extrudedsurface, "EXTRUDEDSURFACE", "num_blocks", &num_blocks, NULL)
         && num_blocks == extrudedsurface->num_blocks)
@@ -19068,21 +19053,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
         fail ("PLANESURFACE.block_size [BL*]");
   }
   {
-    BITCODE_BL class_version;
-    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "class_version", &class_version, NULL)
-        && class_version == planesurface->class_version)
-      pass ();
-    else
-      fail ("PLANESURFACE.class_version [BL] %u != %u", planesurface->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "class_version", &class_version, 0)
-        && class_version == planesurface->class_version)
-      pass ();
-    else
-      fail ("PLANESURFACE.class_version [BL] set+1 %u != %u", planesurface->class_version, class_version);
-    planesurface->class_version--;
-  }
-  {
     char ** encr_sat_data;
     if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "encr_sat_data", &encr_sat_data, NULL)
         && !memcmp (&encr_sat_data, &planesurface->encr_sat_data, sizeof (planesurface->encr_sat_data)))
@@ -19175,21 +19145,6 @@ static int test_PLANESURFACE (const Dwg_Object *obj)
       pass ();
     else
       fail ("PLANESURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
-  }
-  {
-    BITCODE_BS modeler_format_version;
-    if (dwg_dynapi_entity_value (planesurface, "PLANESURFACE", "modeler_format_version", &modeler_format_version, NULL)
-        && modeler_format_version == planesurface->modeler_format_version)
-      pass ();
-    else
-      fail ("PLANESURFACE.modeler_format_version [BS] %hu != %hu", planesurface->modeler_format_version, modeler_format_version);
-    modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (planesurface, "PLANESURFACE", "modeler_format_version", &modeler_format_version, 0)
-        && modeler_format_version == planesurface->modeler_format_version)
-      pass ();
-    else
-      fail ("PLANESURFACE.modeler_format_version [BS] set+1 %hu != %hu", planesurface->modeler_format_version, modeler_format_version);
-    planesurface->modeler_format_version--;
   }
   {
     BITCODE_BL num_blocks;
@@ -21367,6 +21322,29 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         fail ("REVOLVEDSURFACE.axis_vector [3BD]");
   }
   {
+    BITCODE_TF bindata;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "bindata", &bindata, NULL)
+        && !memcmp (&bindata, &revolvedsurface->bindata, sizeof (BITCODE_TF)))
+        pass ();
+    else
+        fail ("REVOLVEDSURFACE.bindata [TF]");
+  }
+  {
+    BITCODE_BL bindata_size;
+    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "bindata_size", &bindata_size, NULL)
+        && bindata_size == revolvedsurface->bindata_size)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.bindata_size [BL] %u != %u", revolvedsurface->bindata_size, bindata_size);
+    bindata_size++;
+    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "bindata_size", &bindata_size, 0)
+        && bindata_size == revolvedsurface->bindata_size)
+      pass ();
+    else
+      fail ("REVOLVEDSURFACE.bindata_size [BL] set+1 %u != %u", revolvedsurface->bindata_size, bindata_size);
+    revolvedsurface->bindata_size--;
+  }
+  {
     BITCODE_BL* block_size;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "block_size", &block_size, NULL)
         && !memcmp (&block_size, &revolvedsurface->block_size, sizeof (BITCODE_BL*)))
@@ -21504,21 +21482,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
         fail ("REVOLVEDSURFACE.history_id [H]");
   }
   {
-    BITCODE_BL id;
-    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "id", &id, NULL)
-        && id == revolvedsurface->id)
-      pass ();
-    else
-      fail ("REVOLVEDSURFACE.id [BL] %u != %u", revolvedsurface->id, id);
-    id++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "id", &id, 0)
-        && id == revolvedsurface->id)
-      pass ();
-    else
-      fail ("REVOLVEDSURFACE.id [BL] set+1 %u != %u", revolvedsurface->id, id);
-    revolvedsurface->id--;
-  }
-  {
     BITCODE_B isoline_present;
     if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "isoline_present", &isoline_present, NULL)
         && isoline_present == revolvedsurface->isoline_present)
@@ -21557,21 +21520,6 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
       pass ();
     else
       fail ("REVOLVEDSURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
-  }
-  {
-    BITCODE_BS modeler_format_version;
-    if (dwg_dynapi_entity_value (revolvedsurface, "REVOLVEDSURFACE", "modeler_format_version", &modeler_format_version, NULL)
-        && modeler_format_version == revolvedsurface->modeler_format_version)
-      pass ();
-    else
-      fail ("REVOLVEDSURFACE.modeler_format_version [BS] %hu != %hu", revolvedsurface->modeler_format_version, modeler_format_version);
-    modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (revolvedsurface, "REVOLVEDSURFACE", "modeler_format_version", &modeler_format_version, 0)
-        && modeler_format_version == revolvedsurface->modeler_format_version)
-      pass ();
-    else
-      fail ("REVOLVEDSURFACE.modeler_format_version [BS] set+1 %hu != %hu", revolvedsurface->modeler_format_version, modeler_format_version);
-    revolvedsurface->modeler_format_version--;
   }
   {
     BITCODE_BL num_blocks;
@@ -23144,21 +23092,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
       fail ("SWEPTSURFACE.materials [Dwg_3DSOLID_material*] * %u num_materials", count);
   }
   {
-    BITCODE_BS modeler_format_version;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "modeler_format_version", &modeler_format_version, NULL)
-        && modeler_format_version == sweptsurface->modeler_format_version)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.modeler_format_version [BS] %hu != %hu", sweptsurface->modeler_format_version, modeler_format_version);
-    modeler_format_version++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "modeler_format_version", &modeler_format_version, 0)
-        && modeler_format_version == sweptsurface->modeler_format_version)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.modeler_format_version [BS] set+1 %hu != %hu", sweptsurface->modeler_format_version, modeler_format_version);
-    sweptsurface->modeler_format_version--;
-  }
-  {
     BITCODE_BL num_blocks;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "num_blocks", &num_blocks, NULL)
         && num_blocks == sweptsurface->num_blocks)
@@ -23286,6 +23219,14 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
     else
       fail ("SWEPTSURFACE.path_flags [BS] set+1 %hu != %hu", sweptsurface->path_flags, path_flags);
     sweptsurface->path_flags--;
+  }
+  {
+    BITCODE_BD* path_transmatrix;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "path_transmatrix", &path_transmatrix, NULL)
+        && !memcmp (&path_transmatrix, &sweptsurface->path_transmatrix, sizeof (BITCODE_BD*)))
+        pass ();
+    else
+        fail ("SWEPTSURFACE.path_transmatrix [BD*]");
   }
   {
     BITCODE_TF pathdata;
@@ -23466,21 +23407,6 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         fail ("SWEPTSURFACE.sweep_entity [H]");
   }
   {
-    BITCODE_BL sweep_entity_id;
-    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_id", &sweep_entity_id, NULL)
-        && sweep_entity_id == sweptsurface->sweep_entity_id)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.sweep_entity_id [BL] %u != %u", sweptsurface->sweep_entity_id, sweep_entity_id);
-    sweep_entity_id++;
-    if (dwg_dynapi_entity_set_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_id", &sweep_entity_id, 0)
-        && sweep_entity_id == sweptsurface->sweep_entity_id)
-      pass ();
-    else
-      fail ("SWEPTSURFACE.sweep_entity_id [BL] set+1 %u != %u", sweptsurface->sweep_entity_id, sweep_entity_id);
-    sweptsurface->sweep_entity_id--;
-  }
-  {
     BITCODE_B sweep_entity_transform_computed;
     if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_entity_transform_computed", &sweep_entity_transform_computed, NULL)
         && sweep_entity_transform_computed == sweptsurface->sweep_entity_transform_computed)
@@ -23502,6 +23428,14 @@ static int test_SWEPTSURFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("SWEPTSURFACE.sweep_entity_transmatrix [BD*]");
+  }
+  {
+    BITCODE_BD* sweep_transmatrix;
+    if (dwg_dynapi_entity_value (sweptsurface, "SWEPTSURFACE", "sweep_transmatrix", &sweep_transmatrix, NULL)
+        && !memcmp (&sweep_transmatrix, &sweptsurface->sweep_transmatrix, sizeof (BITCODE_BD*)))
+        pass ();
+    else
+        fail ("SWEPTSURFACE.sweep_transmatrix [BD*]");
   }
   {
     BITCODE_TF sweepdata;

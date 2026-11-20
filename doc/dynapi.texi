@@ -2010,8 +2010,6 @@ H,	DXF 350
 B
 @item acis_empty_bit
 B
-@item modeler_format_version
-BS
 @item bindata_size
 BL
 @item bindata
@@ -3440,14 +3438,10 @@ H,	DXF 350
 B
 @item acis_empty_bit
 B
-@item modeler_format_version
-BS,	DXF 70
 @item u_isolines
 BS,	DXF 71
 @item v_isolines
 BS,	DXF 72
-@item class_version
-BL
 
 @end vtable
 @end indentedblock
@@ -3929,16 +3923,16 @@ H,	DXF 350
 B
 @item acis_empty_bit
 B
-@item modeler_format_version
-BS,	DXF 70
 @item u_isolines
 BS,	DXF 71
 @item v_isolines
 BS,	DXF 72
 @item class_version
-BL,	DXF 90
-@item id
-BL,	DXF 90
+BL
+@item bindata_size
+BL
+@item bindata
+TF
 @item axis_point
 3BD,	DXF 10
 @item axis_vector
@@ -4254,26 +4248,26 @@ H,	DXF 350
 B
 @item acis_empty_bit
 B
-@item modeler_format_version
-BS,	DXF 70
 @item u_isolines
 BS,	DXF 71
 @item v_isolines
 BS,	DXF 72
 @item class_version
 BL,	DXF 90
-@item sweep_entity_id
-BL,	DXF 90
 @item sweepdata_size
 BL,	DXF 90
 @item sweepdata
-TF,	DXF 310
+TF
 @item path_entity_id
-BL,	DXF 90
+BL,	DXF 91
 @item pathdata_size
 BL,	DXF 90
 @item pathdata
-TF,	DXF 310
+TF
+@item sweep_transmatrix
+BD*,	DXF 40
+@item path_transmatrix
+BD*,	DXF 41
 @item draft_angle
 BD,	DXF 42
 @item draft_start_distance
