@@ -93,7 +93,7 @@ usage (void)
 static int
 fn_version (void)
 {
-  printf ("dwgadd %s\n", PACKAGE_VERSION);
+  printf ("dwgadd %s\n", dwg_api_version_string ());
   return 0;
 }
 
@@ -1278,8 +1278,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           // clang-format off
         SET_ENT (repeat, REPEAT)
       // clang-format on
-      else if (4
-               == SSCANF_S (p, "endrep %d %d %lf %lf", &i1, &i2, &f1, &f2))
+      else if (4 == SSCANF_S (p, "endrep %d %d %lf %lf", &i1, &i2, &f1, &f2))
       {
         Dwg_Entity_ENDREP *_endrep;
         if (!repeat_open)

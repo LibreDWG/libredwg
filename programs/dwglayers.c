@@ -40,7 +40,7 @@ usage (void)
 static int
 opt_version (void)
 {
-  printf ("dwglayers %s\n", PACKAGE_VERSION);
+  printf ("dwglayers %s\n", dwg_api_version_string ());
   return 0;
 }
 static int

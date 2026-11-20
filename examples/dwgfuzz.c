@@ -72,11 +72,11 @@ static int
 version (void)
 {
 #if FUZZ_MODE == FUZZ_INMEM
-  printf ("dwgfuzz %s INMEM\n", PACKAGE_VERSION);
+  printf ("dwgfuzz %s INMEM\n", dwg_api_version_string ());
 #elif FUZZ_MODE == FUZZ_FILE
-  printf ("dwgfuzz %s FILE\n", PACKAGE_VERSION);
+  printf ("dwgfuzz %s FILE\n", dwg_api_version_string ());
 #elif FUZZ_MODE == FUZZ_STDIN
-  printf ("dwgfuzz %s STDIN\n", PACKAGE_VERSION);
+  printf ("dwgfuzz %s STDIN\n", dwg_api_version_string ());
 #else
   error unknown FUZZ_MODE
 #endif

@@ -93,12 +93,9 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
 
 // #endif
 
-/* Generic version api */
-EXPORT const char *
-dwg_api_version_string (void)
-{
-  return PACKAGE_VERSION;
-}
+/* Generic version api. dwg_api_version_string and dwg_api_package_string are
+   in the generated version.c, so that the other objects do not depend on the
+   version */
 EXPORT int
 dwg_api_version (void)
 {
@@ -118,7 +115,7 @@ EXPORT bool
 dwg_api_version_is_release (void)
 {
 #ifdef IS_RELEASE
-  const char *s = PACKAGE_VERSION;
+  const char *s = dwg_api_version_string ();
   int count_dots = 0; // 0.13.3 vs 0.13.3.7539.2_0c711
   if (!s)
     return false;

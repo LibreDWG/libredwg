@@ -2892,7 +2892,7 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg_resolve_objectrefs_silent (dwg);
 
   fprintf (dat->fh, "AutoCAD Binary DXF\r\n%c%c", 0x1a, 0);
-  // VALUE_TV (PACKAGE_STRING, 999); // not used in binary DXF
+  // VALUE_TV (dwg_api_package_string (), 999); // not used in binary DXF
 
   // a minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html

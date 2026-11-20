@@ -81,7 +81,7 @@ usage (void)
 static int
 opt_version (void)
 {
-  printf ("dwg2SVG %s\n", PACKAGE_VERSION);
+  printf ("dwg2SVG %s\n", dwg_api_version_string ());
   return 0;
 }
 static int
@@ -1081,8 +1081,8 @@ output_GRAPHICS (Dwg_Object *obj)
   Dwg_Proxy_Graphic *gfx = NULL;
   BITCODE_BL num = 0, i;
 
-  if (entity_invisible (obj) || dwg_proxy_graphics (obj->tio.entity, &gfx, &num)
-      || !num)
+  if (entity_invisible (obj)
+      || dwg_proxy_graphics (obj->tio.entity, &gfx, &num) || !num)
     {
       dwg_free_proxy_graphics (gfx, num);
       return 0;

@@ -11684,6 +11684,10 @@ typedef enum RESBUF_VALUE_TYPE
  * Exported Functions
  */
 
+/* The version (from the generated src/version.c), also in dwg_api.h */
+EXPORT const char *dwg_api_version_string (void);
+EXPORT const char *dwg_api_package_string (void);
+
 EXPORT int dwg_read_file (const char *restrict filename,
                           Dwg_Data *restrict dwg);
 EXPORT int dxf_read_file (const char *restrict filename,

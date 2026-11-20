@@ -10401,8 +10401,8 @@ extern "C"
   dwg_geom_transform_OCS (dwg_point_3d *out, const dwg_point_3d pt,
                           const dwg_point_3d ext) __nonnull_all;
 
-  /* Generic version api */
-  EXPORT const char *dwg_api_version_string (void); // ie PACKAGE_VERSION
+  /* Generic version api. dwg_api_version_string and dwg_api_package_string
+     are in dwg.h */
   EXPORT int dwg_api_version (void);                // ie 100*major + minor
   EXPORT int dwg_api_version_major (void); // ie LIBREDWG_VERSION_MAJOR
   EXPORT int dwg_api_version_minor (void); // ie LIBREDWG_VERSION_MINOR

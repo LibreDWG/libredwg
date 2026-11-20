@@ -2623,7 +2623,7 @@ dwg_write_json_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->fh)
     goto fail;
   fprintf (dat->fh, "{%s%s%s\"created_by\":%s\"%s\"", JSON_NL, JSON_SPC,
-           JSON_SPC, JSON_SPC, PACKAGE_STRING);
+           JSON_SPC, JSON_SPC, dwg_api_package_string ());
   dat->bit++; // ident
 
   json_fileheader_write (dat, dwg);

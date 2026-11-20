@@ -61,7 +61,7 @@ usage (void)
 static int
 opt_version (void)
 {
-  printf ("dxfwrite %s\n", PACKAGE_VERSION);
+  printf ("dxfwrite %s\n", dwg_api_version_string ());
   return 0;
 }
 static int

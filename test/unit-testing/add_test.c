@@ -2095,7 +2095,6 @@ test_api_version (void)
   const int minor = dwg_api_version_minor ();
 
   assert (version);
-  assert (strEQc (dwg_api_version_string (), PACKAGE_VERSION));
   assert (major == LIBREDWG_VERSION_MAJOR);
   assert (minor == LIBREDWG_VERSION_MINOR);
 

@@ -1,0 +1,35 @@
+/*****************************************************************************/
+/*  LibreDWG - free implementation of the DWG file format                    */
+/*                                                                           */
+/*  Copyright (C) 2026 Free Software Foundation, Inc.                        */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
+
+/*
+ * version.c.in: generated to version.c by configure or cmake.
+ * The only file which depends on the package version, so that a new version
+ * does not rebuild or invalidate the cache of all the other objects.
+ * config.h has no PACKAGE_VERSION and PACKAGE_STRING.
+ */
+
+#include "config.h" /* ENABLE_SHARED for EXPORT (dllexport on mingw) */
+#include "dwg.h"
+
+/* ie PACKAGE_VERSION */
+EXPORT const char *
+dwg_api_version_string (void)
+{
+  return "@PACKAGE_VERSION@";
+}
+
+/* ie PACKAGE_STRING */
+EXPORT const char *
+dwg_api_package_string (void)
+{
+  return "LibreDWG @PACKAGE_VERSION@";
+}

@@ -53,7 +53,7 @@ usage (void)
 static int
 opt_version (void)
 {
-  printf ("load_dwg %s\n", PACKAGE_VERSION);
+  printf ("load_dwg %s\n", dwg_api_version_string ());
   return 0;
 }
 static int

@@ -306,17 +306,11 @@
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "LibreDWG"
 
-/* Define to the full name and version of this package. */
-#define PACKAGE_STRING "LibreDWG @PACKAGE_VERSION@"
-
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "libredwg"
 
 /* Define to the home page for this package. */
 #define PACKAGE_URL "https://savannah.gnu.org/projects/libredwg/"
-
-/* Define to the version of this package. */
-#define PACKAGE_VERSION "@PACKAGE_VERSION@"
 
 /* Defined in configure.ac to the libtool version-info of the shared lib. */
 #define LIBREDWG_SO_VERSION "@LIBREDWG_SO_VERSION@"

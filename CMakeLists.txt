@@ -222,6 +222,7 @@ if (NOT DISABLE_WERROR)
 endif()
 
 configure_file(src/cmakeconfig.h.in src/config.h)
+configure_file(src/version.c.in src/version.c @ONLY)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release"
@@ -276,6 +277,7 @@ set(libredwg_SOURCES
     src/dwg.c
     src/hash.c
     src/dwg_api.c
+    ${CMAKE_CURRENT_BINARY_DIR}/src/version.c
     src/dynapi.c
     src/dxfclasses.c
     src/free.c

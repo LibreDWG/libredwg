@@ -46,7 +46,7 @@ usage (void)
 static int
 opt_version (void)
 {
-  printf ("dwg2ps %s\n", PACKAGE_VERSION);
+  printf ("dwg2ps %s\n", dwg_api_version_string ());
   return 0;
 }
 static int
@@ -278,7 +278,12 @@ create_postscript (Dwg_Data *dwg, char *output)
       return;
     }
 
-  PS_set_info (ps, "Creator", "dwg2ps " PACKAGE_VERSION);
+  {
+    char creator[80];
+    snprintf (creator, sizeof (creator), "dwg2ps %s",
+              dwg_api_version_string ());
+    PS_set_info (ps, "Creator", creator);
+  }
   (void)set_info (ps, dwg, "Subject", dwg->summaryinfo.SUBJECT);
   (void)set_info (ps, dwg, "Author", dwg->summaryinfo.LASTSAVEDBY);
   if (set_info (ps, dwg, "Title", dwg->summaryinfo.TITLE))

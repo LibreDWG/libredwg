@@ -2064,8 +2064,8 @@ dwg_write_geojson_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   HASH;
   LASTPAIR_Sc (name, "dwgread");
   ENDHASH;
-  PAIR_Sc (package, PACKAGE_NAME);
-  LASTPAIR_Sc (version, PACKAGE_VERSION);
+  PAIR_Sc (package, "LibreDWG");
+  LASTPAIR_Sc (version, dwg_api_version_string ());
   LASTENDHASH;
   // PAIR_S(license, "?");
   LASTENDHASH;

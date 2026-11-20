@@ -114,7 +114,7 @@ usage (void)
 static int
 opt_version (void)
 {
-  printf ("dwggrep %s\n", PACKAGE_VERSION);
+  printf ("dwggrep %s\n", dwg_api_version_string ());
   return 0;
 }
 static int

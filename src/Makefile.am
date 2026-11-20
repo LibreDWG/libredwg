@@ -30,6 +30,8 @@ libredwg_la_LDFLAGS += -lmimalloc
 endif
 CPPCHECK = @CPPCHECK@
 
+nodist_libredwg_la_SOURCES = version.c
+
 libredwg_la_SOURCES = \
 	dwg.c \
 	common.c \
@@ -155,6 +157,7 @@ endif
 endif
 
 EXTRA_DIST = \
+	version.c.in \
 	$(include_HEADERS) \
 	$(EXTRA_HEADERS) \
 	gen-dynapi.pl \

@@ -50,6 +50,13 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AC_CONFIG_HEADERS([src/config.h])
+dnl PACKAGE_STRING and PACKAGE_VERSION change with each commit. Keep them out
+dnl of config.h, so that not all objects are rebuilt and uncached. They are only
+dnl in src/version.c (generated from version.c.in), see dwg_api_version_string.
+AC_CONFIG_COMMANDS_PRE([
+  sed '/^#define PACKAGE_\(STRING\|VERSION\) /d' confdefs.h >confdefs.h.new &&
+    mv confdefs.h.new confdefs.h
+])
 AH_TOP([#ifndef CONFIG_H
 #define CONFIG_H 1])
 AH_BOTTOM([#endif /* CONFIG_H */])
@@ -1063,6 +1070,7 @@ AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
 	src/codepages/Makefile
+	src/version.c
 	doc/Makefile
 	programs/Makefile
 	examples/Makefile

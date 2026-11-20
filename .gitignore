@@ -228,6 +228,7 @@ compile_commands.json
 /m4/lt~obsolete.m4
 /src/compile_commands.json
 /src/config.h
+/src/version.c
 /src/stamp-h1
 /src/dwg_api.c.bak
 /src/free.h.bak
