@@ -2695,7 +2695,8 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           // garbage. Only on !handleoff: the other conditions below also fire
           // on entries that parsed fine, and resyncing on them costs good
           // entries (Leader.dwg would lose all its modelspace entities).
-          if (!handleoff)
+          // Not at the end of the buffer, where the read did not advance.
+          if (!handleoff && oldpos + 1 < hdl_dat.size)
             {
               hdl_dat.byte = oldpos + 1;
               handleoff = bit_read_UMC (&hdl_dat);
