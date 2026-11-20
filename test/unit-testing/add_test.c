@@ -1333,6 +1333,62 @@ test_lwpolyline_to_preR13 (void)
   return numfailed ();
 }
 
+/* Group 43 is optional and occurs once when constant width is present. */
+static int
+test_lwpolyline_const_width_dxf (void)
+{
+  const dwg_point_2d pts[] = { { 0, 0 }, { 2, 0 }, { 2, 1 } };
+  Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+  Dwg_Object_BLOCK_HEADER *hdr;
+  Dwg_Entity_LWPOLYLINE *wide;
+  Bit_Chain dat = { 0 };
+  char code[128], value[128];
+  int entity = 0, in_lw = 0, widths[2] = { 0, 0 };
+
+  failed = 0;
+  if (!dwg)
+    return 1;
+  hdr = dwg_model_space_object (dwg)->tio.object->tio.BLOCK_HEADER;
+  wide = dwg_add_LWPOLYLINE (hdr, 3, pts);
+  if (!wide || !dwg_add_LWPOLYLINE (hdr, 3, pts) || !(dat.fh = tmpfile ()))
+    {
+      dwg_free (dwg);
+      free (dwg);
+      return 1;
+    }
+  wide->flag |= 4;
+  wide->const_width = 2.5;
+  dat.from_version = dat.version = R_2000;
+  if (dwg_write_dxf (&dat, dwg) >= DWG_ERR_CRITICAL)
+    fail ("cannot write LWPOLYLINE widths to DXF");
+  dwg_free (dwg);
+  free (dwg);
+  rewind (dat.fh);
+  while (fgets (code, sizeof (code), dat.fh)
+         && fgets (value, sizeof (value), dat.fh))
+    {
+      if (atoi (code) == 0)
+        {
+          value[strcspn (value, "\r\n")] = '\0';
+          in_lw = !strcmp (value, "LWPOLYLINE");
+          entity += in_lw;
+        }
+      else if (in_lw && entity <= 2 && atoi (code) == 43)
+        {
+          widths[entity - 1]++;
+          if (atof (value) != 2.5)
+            fail ("unexpected LWPOLYLINE constant width: %s", value);
+        }
+    }
+  fclose (dat.fh);
+  if (entity != 2 || widths[0] != 1 || widths[1] != 0)
+    fail ("expected 1 and 0 group 43 tags, got %d and %d", widths[0],
+          widths[1]);
+  else
+    ok ("DXF writes group 43 once for the constant-width polyline only");
+  return numfailed ();
+}
+
 /* The same for the R12 DXF output: a POLYLINE with VERTEXes and SEQEND at the
    position of the LWPOLYLINE, followed by the LINE. */
 /* GH #992: public dxf_write_file(), ASCII and binary, roundtrips. */
@@ -3827,6 +3883,7 @@ main (int argc, char *argv[])
 #  ifndef DISABLE_JSON
   error += test_json_write_file ();
 #  endif
+  error += test_lwpolyline_const_width_dxf ();
   error += test_material_dxf ();
   error += test_object_ref_chunks ();
   error += test_multileader_vertices ();

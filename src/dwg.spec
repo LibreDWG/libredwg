@@ -5516,7 +5516,6 @@ DWG_ENTITY (LWPOLYLINE)
   FIELD_BL (num_points, 90);
   // 1 closed, 128 plinegen
   VALUE_BS (((FIELD_VALUE (flag) & 256) ? 128 : 0) + (FIELD_VALUE (flag) & 512 ? 1 : 0), 70);
-  FIELD_BD (const_width, 43);
 #else
 #  ifdef IS_ENCODER
   if (dat->version < R_2010b) // vertex ids are r2010+
