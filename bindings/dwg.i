@@ -242,6 +242,8 @@ EXPORT Dwg_Entity_LAYOUTPRINTCONFIG** dwg_getall_LAYOUTPRINTCONFIG (Dwg_Object_R
 EXPORT Dwg_Entity_PLANESURFACE** dwg_getall_PLANESURFACE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_POINTCLOUD** dwg_getall_POINTCLOUD (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_POINTCLOUDEX** dwg_getall_POINTCLOUDEX (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_REVOLVEDSURFACE** dwg_getall_REVOLVEDSURFACE (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_SWEPTSURFACE** dwg_getall_SWEPTSURFACE (Dwg_Object_Ref* hdr);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ALIGNMENTPARAMETERENTITY** dwg_getall_ALIGNMENTPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_BASEPOINTPARAMETERENTITY** dwg_getall_BASEPOINTPARAMETERENTITY (Dwg_Object_Ref* hdr);
@@ -256,11 +258,9 @@ EXPORT Dwg_Entity_POINTCLOUDEX** dwg_getall_POINTCLOUDEX (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_NURBSURFACE** dwg_getall_NURBSURFACE (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_POINTPARAMETERENTITY** dwg_getall_POINTPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_POLARGRIPENTITY** dwg_getall_POLARGRIPENTITY (Dwg_Object_Ref* hdr);
-  EXPORT Dwg_Entity_REVOLVEDSURFACE** dwg_getall_REVOLVEDSURFACE (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_ROTATIONGRIPENTITY** dwg_getall_ROTATIONGRIPENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_ROTATIONPARAMETERENTITY** dwg_getall_ROTATIONPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_RTEXT** dwg_getall_RTEXT (Dwg_Object_Ref* hdr);
-  EXPORT Dwg_Entity_SWEPTSURFACE** dwg_getall_SWEPTSURFACE (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_VISIBILITYGRIPENTITY** dwg_getall_VISIBILITYGRIPENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_VISIBILITYPARAMETERENTITY** dwg_getall_VISIBILITYPARAMETERENTITY (Dwg_Object_Ref* hdr);
   EXPORT Dwg_Entity_XYGRIPENTITY** dwg_getall_XYGRIPENTITY (Dwg_Object_Ref* hdr);
@@ -1372,6 +1372,8 @@ EXPORT Dwg_Entity_LAYOUTPRINTCONFIG* dwg_object_to_LAYOUTPRINTCONFIG (Dwg_Object
 EXPORT Dwg_Entity_PLANESURFACE* dwg_object_to_PLANESURFACE (Dwg_Object* obj);
 EXPORT Dwg_Entity_POINTCLOUD* dwg_object_to_POINTCLOUD (Dwg_Object* obj);
 EXPORT Dwg_Entity_POINTCLOUDEX* dwg_object_to_POINTCLOUDEX (Dwg_Object* obj);
+EXPORT Dwg_Entity_REVOLVEDSURFACE* dwg_object_to_REVOLVEDSURFACE (Dwg_Object* obj);
+EXPORT Dwg_Entity_SWEPTSURFACE* dwg_object_to_SWEPTSURFACE (Dwg_Object* obj);
 #ifdef DEBUG_CLASSES
   EXPORT Dwg_Entity_ALIGNMENTPARAMETERENTITY* dwg_object_to_ALIGNMENTPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_BASEPOINTPARAMETERENTITY* dwg_object_to_BASEPOINTPARAMETERENTITY (Dwg_Object* obj);
@@ -1386,11 +1388,9 @@ EXPORT Dwg_Entity_POINTCLOUDEX* dwg_object_to_POINTCLOUDEX (Dwg_Object* obj);
   EXPORT Dwg_Entity_NURBSURFACE* dwg_object_to_NURBSURFACE (Dwg_Object* obj);
   EXPORT Dwg_Entity_POINTPARAMETERENTITY* dwg_object_to_POINTPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_POLARGRIPENTITY* dwg_object_to_POLARGRIPENTITY (Dwg_Object* obj);
-  EXPORT Dwg_Entity_REVOLVEDSURFACE* dwg_object_to_REVOLVEDSURFACE (Dwg_Object* obj);
   EXPORT Dwg_Entity_ROTATIONGRIPENTITY* dwg_object_to_ROTATIONGRIPENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_ROTATIONPARAMETERENTITY* dwg_object_to_ROTATIONPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_RTEXT* dwg_object_to_RTEXT (Dwg_Object* obj);
-  EXPORT Dwg_Entity_SWEPTSURFACE* dwg_object_to_SWEPTSURFACE (Dwg_Object* obj);
   EXPORT Dwg_Entity_VISIBILITYGRIPENTITY* dwg_object_to_VISIBILITYGRIPENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_VISIBILITYPARAMETERENTITY* dwg_object_to_VISIBILITYPARAMETERENTITY (Dwg_Object* obj);
   EXPORT Dwg_Entity_XYGRIPENTITY* dwg_object_to_XYGRIPENTITY (Dwg_Object* obj);

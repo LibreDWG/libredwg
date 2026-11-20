@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_SWEPTSURFACE
 #include "tests_common.c"
 
@@ -8,12 +7,10 @@ api_process (dwg_object *obj)
   int error, isnew;
   _3DSOLID_FIELDS;
 
-  BITCODE_BS modeler_format_version;
   BITCODE_BS u_isolines;
   BITCODE_BS v_isolines;
   BITCODE_BL i, class_version;
 
-  BITCODE_BL sweep_entity_id;
   BITCODE_BL sweepdata_size;
   BITCODE_TF sweepdata;
   BITCODE_BL path_entity_id;
@@ -26,8 +23,8 @@ api_process (dwg_object *obj)
   BITCODE_BD draft_start_distance;
   BITCODE_BD draft_end_distance;
   BITCODE_BD twist_angle;
-  BITCODE_BD *sweep_entity_transmatrix1;
-  BITCODE_BD *path_entity_transmatrix1;
+  BITCODE_BD *sweep_transmatrix;
+  BITCODE_BD *path_transmatrix;
   BITCODE_BD scale_factor;
   BITCODE_BD align_angle;
   BITCODE_B is_solid;
@@ -41,7 +38,6 @@ api_process (dwg_object *obj)
   BITCODE_3BD reference_vector_for_controlling_twist;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_ent_sweptsurface *_obj = dwg_object_to_SWEPTSURFACE (obj);
 
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, acis_empty, B);
@@ -76,7 +72,6 @@ api_process (dwg_object *obj)
       CHK_ENTITY_H (_obj, SWEPTSURFACE, history_id);
     }
 
-  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, modeler_format_version, BS);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, u_isolines, BS);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, v_isolines, BS);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, class_version, BL);
@@ -103,29 +98,24 @@ api_process (dwg_object *obj)
         ok ("SWEPTSURFACE.path_entity_transmatrix[%d]: %f", i,
             path_entity_transmatrix[i]);
       }
-  if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE",
-                                "sweep_entity_transmatrix1",
-                                &sweep_entity_transmatrix1, NULL)
-      || !sweep_entity_transmatrix1)
-    fail ("SWEPTSURFACE.sweep_entity_transmatrix1");
+  if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE", "sweep_transmatrix",
+                                &sweep_transmatrix, NULL)
+      || !sweep_transmatrix)
+    fail ("SWEPTSURFACE.sweep_transmatrix");
   else
     for (i = 0; i < 16; i++)
       {
-        ok ("SWEPTSURFACE.sweep_entity_transmatrix1[%d]: %f", i,
-            sweep_entity_transmatrix1[i]);
+        ok ("SWEPTSURFACE.sweep_transmatrix[%d]: %f", i, sweep_transmatrix[i]);
       }
-  if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE",
-                                "path_entity_transmatrix1",
-                                &path_entity_transmatrix1, NULL)
-      || !path_entity_transmatrix1)
-    fail ("SWEPTSURFACE.path_entity_transmatrix1");
+  if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE", "path_transmatrix",
+                                &path_transmatrix, NULL)
+      || !path_transmatrix)
+    fail ("SWEPTSURFACE.path_transmatrix");
   else
     for (i = 0; i < 16; i++)
       {
-        ok ("SWEPTSURFACE.path_entity_transmatrix1[%d]: %f", i,
-            path_entity_transmatrix1[i]);
+        ok ("SWEPTSURFACE.path_transmatrix[%d]: %f", i, path_transmatrix[i]);
       }
-  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_entity_id, BL);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweepdata_size, BL);
   // CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweepdata, TF);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, path_entity_id, BL);
@@ -146,5 +136,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_entity_transform_computed, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, path_entity_transform_computed, B);
   CHK_ENTITY_3RD (_obj, SWEPTSURFACE, reference_vector_for_controlling_twist);
-#endif
 }

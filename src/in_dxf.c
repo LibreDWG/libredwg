@@ -11617,6 +11617,143 @@ dxf_set_leader_context (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   return 0;
 }
 
+/* The surfaces with a sweep profile: the 90, 310 and sweep option groups
+   cannot be told apart by the dynapi. REVOLVEDSURFACE has just the profile. */
+static bool
+is_sweep_surface_subclass (const Dwg_Object *restrict obj,
+                           const char *restrict subclass)
+{
+  return (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE
+          && strEQc (subclass, "AcDbExtrudedSurface"))
+         || (obj->fixedtype == DWG_TYPE_SWEPTSURFACE
+             && strEQc (subclass, "AcDbSweptSurface"))
+         || (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE
+             && strEQc (subclass, "AcDbRevolvedSurface"));
+}
+
+static BITCODE_BD **
+sweep_surface_matrix (const Dwg_Object *restrict obj, const int code)
+{
+  if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
+    {
+      Dwg_Entity_EXTRUDEDSURFACE *o = obj->tio.entity->tio.EXTRUDEDSURFACE;
+      return code == 40   ? &o->sweep_transmatrix
+             : code == 46 ? &o->sweep_entity_transmatrix
+             : code == 47 ? &o->path_entity_transmatrix
+                          : NULL;
+    }
+  if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
+    {
+      Dwg_Entity_SWEPTSURFACE *o = obj->tio.entity->tio.SWEPTSURFACE;
+      return code == 40   ? &o->sweep_transmatrix
+             : code == 41 ? &o->path_transmatrix
+             : code == 46 ? &o->sweep_entity_transmatrix
+             : code == 47 ? &o->path_entity_transmatrix
+                          : NULL;
+    }
+  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE && code == 42)
+    return &obj->tio.entity->tio.REVOLVEDSURFACE->revolved_entity_transmatrix;
+  return NULL;
+}
+
+/* The IDX-th 90 of a sweep surface: the class version, then the size in bits
+   of the profile (SWEPTSURFACE: the sweep, then after the 91 the path). */
+static void
+dxf_surface_size (Dwg_Object *restrict obj, const int idx, const BITCODE_BL v,
+                  const char *restrict name)
+{
+  BITCODE_BL *p = NULL;
+  const char *field = "bindata_size";
+  if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
+    {
+      Dwg_Entity_EXTRUDEDSURFACE *o = obj->tio.entity->tio.EXTRUDEDSURFACE;
+      p = idx == 0 ? &o->class_version : &o->bindata_size;
+      field = idx == 0 ? "class_version" : "bindata_size";
+    }
+  else if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
+    {
+      Dwg_Entity_REVOLVEDSURFACE *o = obj->tio.entity->tio.REVOLVEDSURFACE;
+      p = idx == 0 ? &o->class_version : &o->bindata_size;
+      field = idx == 0 ? "class_version" : "bindata_size";
+    }
+  else if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
+    {
+      Dwg_Entity_SWEPTSURFACE *o = obj->tio.entity->tio.SWEPTSURFACE;
+      p = idx == 0   ? &o->class_version
+          : idx == 1 ? &o->sweepdata_size
+                     : &o->pathdata_size;
+      field = idx == 0   ? "class_version"
+              : idx == 1 ? "sweepdata_size"
+                         : "pathdata_size";
+    }
+  if (!p)
+    return;
+  *p = v;
+  LOG_TRACE ("%s.%s = %u [BL 90]\n", name, field, (unsigned)v);
+}
+
+static void
+dxf_sweep_flags (Dwg_Object *restrict obj, const int code, const int v,
+                 const char *restrict name)
+{
+  BITCODE_BS *p = NULL;
+  if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
+    {
+      Dwg_Entity_EXTRUDEDSURFACE *o = obj->tio.entity->tio.EXTRUDEDSURFACE;
+      p = code == 70 ? &o->sweep_alignment_flags : &o->path_flags;
+    }
+  else if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
+    {
+      Dwg_Entity_SWEPTSURFACE *o = obj->tio.entity->tio.SWEPTSURFACE;
+      p = code == 70 ? &o->sweep_alignment_flags : &o->path_flags;
+    }
+  if (!p)
+    return;
+  *p = (BITCODE_BS)v;
+  LOG_TRACE ("%s.%s = %d [BS %d]\n", name,
+             code == 70 ? "sweep_alignment_flags" : "path_flags", v, code);
+}
+
+/* Takes DATA: the RUN-th 310 run of a sweep surface. Never claims more bits
+   than the data holds. */
+static void
+dxf_surface_data (Dwg_Object *restrict obj, const int run, BITCODE_TF data,
+                  const size_t len, const char *restrict name)
+{
+  BITCODE_TF *pdata = NULL;
+  BITCODE_BL *psize = NULL;
+  const char *field = "bindata";
+  if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
+    {
+      Dwg_Entity_EXTRUDEDSURFACE *o = obj->tio.entity->tio.EXTRUDEDSURFACE;
+      pdata = &o->bindata;
+      psize = &o->bindata_size;
+    }
+  else if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
+    {
+      Dwg_Entity_REVOLVEDSURFACE *o = obj->tio.entity->tio.REVOLVEDSURFACE;
+      pdata = &o->bindata;
+      psize = &o->bindata_size;
+    }
+  else if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
+    {
+      Dwg_Entity_SWEPTSURFACE *o = obj->tio.entity->tio.SWEPTSURFACE;
+      pdata = run == 0 ? &o->sweepdata : &o->pathdata;
+      psize = run == 0 ? &o->sweepdata_size : &o->pathdata_size;
+      field = run == 0 ? "sweepdata" : "pathdata";
+    }
+  if (!pdata)
+    {
+      free (data);
+      return;
+    }
+  free (*pdata);
+  *pdata = data;
+  if (*psize > len * 8)
+    *psize = (BITCODE_BL)(len * 8);
+  LOG_TRACE ("%s.%s = TF %u bytes [310]\n", name, field, (unsigned)len);
+}
+
 /* Reads the consecutive binary pairs of the group CODE (310 chunks of 127
    bytes), already decoded by dxf_read_pair, into one NUL-terminated buffer
    of *PLEN bytes. *PPAIR is the first chunk and returns the next pair, which
@@ -11690,7 +11827,9 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
   // BITCODE_BL rcount1, rcount2, rcount3, vcount;
   // Bit_Chain *hdl_dat, *str_dat;
   int j = 0, k = 0, l = 0, error = 0;
-  int es_idx[3] = { 0, 0, 0 };  // EXTRUDEDSURFACE matrices 40, 46, 47
+  int es_idx[5]
+      = { 0, 0, 0, 0, 0 };      // sweep surface matrices 40, 46, 47, 41, 42
+  int surf_bin = 0;             // sweep surface 310 data run
   BITCODE_BL column_idx = 0;    // MTEXTOBJECTCONTEXTDATA.column_heights[46]
   BITCODE_BL leader_pt_idx = 0; // LEADEROBJECTCONTEXTDATA.points[10,20,30]
   BITCODE_BL sf_idx = 0;        // SPATIAL_FILTER matrix values (40)
@@ -14466,48 +14605,29 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
               else
                 return pair;
             }
-          else if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE
-                   && strEQc (subclass, "AcDbExtrudedSurface")
+          else if (is_sweep_surface_subclass (obj, subclass)
                    && (pair->code == 90 || pair->code == 310
                        || pair->code == 70 || pair->code == 71
-                       || pair->code == 40 || pair->code == 46
-                       || pair->code == 47))
+                       || pair->code == 40 || pair->code == 41
+                       || pair->code == 46 || pair->code == 47
+                       || (pair->code == 42
+                           && obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)))
             {
               // The dynapi cannot tell these apart: the first 90 is the class
-              // version, the second its size in bits, the 310 chunks the
+              // version, the next its size in bits (the sweep profile, then
+              // for SWEPTSURFACE also the path profile), the 310 chunks the
               // data. 70 and 71 are the sweep options (71 is also the
-              // u_isolines of AcDbSurface), and the three transformation
-              // matrices are all BD* with the codes 40, 46 and 47.
-              Dwg_Entity_EXTRUDEDSURFACE *o
-                  = obj->tio.entity->tio.EXTRUDEDSURFACE;
+              // u_isolines of AcDbSurface), and the transformation matrices
+              // are all BD* with the codes 40, 41, 46 and 47 (REVOLVEDSURFACE:
+              // 42).
               if (pair->code == 90)
                 {
-                  if (k++ == 0)
-                    {
-                      o->class_version = pair->value.u;
-                      LOG_TRACE ("%s.class_version = %u [BL 90]\n", name,
-                                 (unsigned)o->class_version);
-                    }
-                  else
-                    {
-                      o->bindata_size = pair->value.u;
-                      LOG_TRACE ("%s.bindata_size = %u [BL 90]\n", name,
-                                 (unsigned)o->bindata_size);
-                    }
+                  dxf_surface_size (obj, k++, pair->value.u, name);
                   goto next_pair;
                 }
-              else if (pair->code == 70)
+              else if (pair->code == 70 || pair->code == 71)
                 {
-                  o->sweep_alignment_flags = pair->value.i;
-                  LOG_TRACE ("%s.sweep_alignment_flags = %d [BS 70]\n", name,
-                             (int)o->sweep_alignment_flags);
-                  goto next_pair;
-                }
-              else if (pair->code == 71)
-                {
-                  o->path_flags = pair->value.i;
-                  LOG_TRACE ("%s.path_flags = %d [BS 71]\n", name,
-                             (int)o->path_flags);
+                  dxf_sweep_flags (obj, pair->code, pair->value.i, name);
                   goto next_pair;
                 }
               else if (pair->code == 310)
@@ -14517,25 +14637,21 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                       = dxf_read_binary_chunks (dat, &pair, 310, &len);
                   if (!data)
                     goto fail;
-                  free (o->bindata);
-                  o->bindata = data;
-                  // never claim more bits than the data holds
-                  if (o->bindata_size > len * 8)
-                    o->bindata_size = (BITCODE_BL)(len * 8);
-                  LOG_TRACE ("%s.bindata = TF %u bytes [310]\n", name,
-                             (unsigned)len);
+                  dxf_surface_data (obj, surf_bin++, data, len, name);
                   if (!pair || pair->code == 0)
                     goto end_object_loop;
                   goto start_loop;
                 }
-              else // the matrices 40, 46, 47: 16 BD each
+              else // the matrices 40, 41, 42, 46, 47: 16 BD each
                 {
                   const int m = pair->code == 40   ? 0
                                 : pair->code == 46 ? 1
-                                                   : 2;
-                  BITCODE_BD **matrix = m == 0   ? &o->sweep_transmatrix
-                                        : m == 1 ? &o->sweep_entity_transmatrix
-                                                 : &o->path_entity_transmatrix;
+                                : pair->code == 47 ? 2
+                                : pair->code == 41 ? 3
+                                                   : 4;
+                  BITCODE_BD **matrix = sweep_surface_matrix (obj, pair->code);
+                  if (!matrix)
+                    goto search_field;
                   if (!*matrix)
                     {
                       *matrix

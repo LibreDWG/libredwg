@@ -620,6 +620,8 @@ extern "C"
   typedef struct _dwg_entity_PLANESURFACE		dwg_ent_planesurface;
   typedef struct _dwg_entity_POINTCLOUD		dwg_ent_pointcloud;
   typedef struct _dwg_entity_POINTCLOUDEX		dwg_ent_pointcloudex;
+  typedef struct _dwg_entity_REVOLVEDSURFACE		dwg_ent_revolvedsurface;
+  typedef struct _dwg_entity_SWEPTSURFACE		dwg_ent_sweptsurface;
   /* debugging */
   typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY		dwg_ent_alignmentparameterentity;
   typedef struct _dwg_entity_BASEPOINTPARAMETERENTITY		dwg_ent_basepointparameterentity;
@@ -634,11 +636,9 @@ extern "C"
   typedef struct _dwg_entity_NURBSURFACE		dwg_ent_nurbsurface;
   typedef struct _dwg_entity_POINTPARAMETERENTITY		dwg_ent_pointparameterentity;
   typedef struct _dwg_entity_POLARGRIPENTITY		dwg_ent_polargripentity;
-  typedef struct _dwg_entity_REVOLVEDSURFACE		dwg_ent_revolvedsurface;
   typedef struct _dwg_entity_ROTATIONGRIPENTITY		dwg_ent_rotationgripentity;
   typedef struct _dwg_entity_ROTATIONPARAMETERENTITY		dwg_ent_rotationparameterentity;
   typedef struct _dwg_entity_RTEXT		dwg_ent_rtext;
-  typedef struct _dwg_entity_SWEPTSURFACE		dwg_ent_sweptsurface;
   typedef struct _dwg_entity_VISIBILITYGRIPENTITY		dwg_ent_visibilitygripentity;
   typedef struct _dwg_entity_VISIBILITYPARAMETERENTITY		dwg_ent_visibilityparameterentity;
   typedef struct _dwg_entity_XYGRIPENTITY		dwg_ent_xygripentity;
@@ -1744,6 +1744,8 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_planesurface, PLANESURFACE);
   dwg_get_OBJECT_DECL (ent_pointcloud, POINTCLOUD);
   dwg_get_OBJECT_DECL (ent_pointcloudex, POINTCLOUDEX);
+  dwg_get_OBJECT_DECL (ent_revolvedsurface, REVOLVEDSURFACE);
+  dwg_get_OBJECT_DECL (ent_sweptsurface, SWEPTSURFACE);
 #ifdef DEBUG_CLASSES
     dwg_get_OBJECT_DECL (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_basepointparameterentity, BASEPOINTPARAMETERENTITY);
@@ -1758,11 +1760,9 @@ extern "C"
     dwg_get_OBJECT_DECL (ent_nurbsurface, NURBSURFACE);
     dwg_get_OBJECT_DECL (ent_pointparameterentity, POINTPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_polargripentity, POLARGRIPENTITY);
-    dwg_get_OBJECT_DECL (ent_revolvedsurface, REVOLVEDSURFACE);
     dwg_get_OBJECT_DECL (ent_rotationgripentity, ROTATIONGRIPENTITY);
     dwg_get_OBJECT_DECL (ent_rotationparameterentity, ROTATIONPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_rtext, RTEXT);
-    dwg_get_OBJECT_DECL (ent_sweptsurface, SWEPTSURFACE);
     dwg_get_OBJECT_DECL (ent_visibilitygripentity, VISIBILITYGRIPENTITY);
     dwg_get_OBJECT_DECL (ent_visibilityparameterentity, VISIBILITYPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_xygripentity, XYGRIPENTITY);
@@ -2880,6 +2880,8 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (PLANESURFACE);
   DWG_GETALL_ENTITY_DECL (POINTCLOUD);
   DWG_GETALL_ENTITY_DECL (POINTCLOUDEX);
+  DWG_GETALL_ENTITY_DECL (REVOLVEDSURFACE);
+  DWG_GETALL_ENTITY_DECL (SWEPTSURFACE);
   /* debugging */
   DWG_GETALL_ENTITY_DECL (ALIGNMENTPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (BASEPOINTPARAMETERENTITY);
@@ -2894,11 +2896,9 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (NURBSURFACE);
   DWG_GETALL_ENTITY_DECL (POINTPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (POLARGRIPENTITY);
-  DWG_GETALL_ENTITY_DECL (REVOLVEDSURFACE);
   DWG_GETALL_ENTITY_DECL (ROTATIONGRIPENTITY);
   DWG_GETALL_ENTITY_DECL (ROTATIONPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (RTEXT);
-  DWG_GETALL_ENTITY_DECL (SWEPTSURFACE);
   DWG_GETALL_ENTITY_DECL (VISIBILITYGRIPENTITY);
   DWG_GETALL_ENTITY_DECL (VISIBILITYPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (XYGRIPENTITY);
@@ -4031,6 +4031,8 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (PLANESURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUD);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUDEX);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (REVOLVEDSURFACE);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SWEPTSURFACE);
 #  ifdef DEBUG_CLASSES
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ALIGNMENTPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (BASEPOINTPARAMETERENTITY);
@@ -4045,11 +4047,9 @@ extern "C"
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (NURBSURFACE);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POLARGRIPENTITY);
-    CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (REVOLVEDSURFACE);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ROTATIONGRIPENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ROTATIONPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (RTEXT);
-    CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SWEPTSURFACE);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (VISIBILITYGRIPENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (VISIBILITYPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (XYGRIPENTITY);

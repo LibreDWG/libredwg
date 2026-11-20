@@ -1431,7 +1431,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str605,        "ACDBASSOCALIGNEDDIMACTIONBODY",     DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY,	0,	DEBUGGING},
       {-1},
 #line 133 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str607,              "SWEPTSURFACE",               DWG_TYPE_SWEPTSURFACE,	1,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str607,              "SWEPTSURFACE",               DWG_TYPE_SWEPTSURFACE,	1,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 147 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str612,                   "WIPEOUT",                    DWG_TYPE_WIPEOUT,	1,	STABLE},
@@ -1487,7 +1487,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str658,                    "ACDBPOINTCLOUDDEF",                 DWG_TYPE_POINTCLOUDDEF,	0,	UNSTABLE},
       {-1},
 #line 124 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str660,           "REVOLVEDSURFACE",            DWG_TYPE_REVOLVEDSURFACE,	1,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str660,           "REVOLVEDSURFACE",            DWG_TYPE_REVOLVEDSURFACE,	1,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 105 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str665,           "COORDINATION_MODEL",         DWG_TYPE_NAVISWORKSMODEL,	1,	DEBUGGING},

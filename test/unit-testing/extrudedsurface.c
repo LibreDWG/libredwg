@@ -8,12 +8,11 @@ api_process (dwg_object *obj)
   _3DSOLID_FIELDS;
 
   //? sweep_profile, taper_angle
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
-  BITCODE_BL bindata_size;           // 90
-  BITCODE_TF bindata;                // 310|1
-  BITCODE_BS u_isolines;             /*!< DXF 71 */
-  BITCODE_BS v_isolines;             /*!< DXF 72 */
-  BITCODE_BL class_version;          /*!< DXF 90 */
+  BITCODE_BL bindata_size;  // 90
+  BITCODE_TF bindata;       // 310|1
+  BITCODE_BS u_isolines;    /*!< DXF 71 */
+  BITCODE_BS v_isolines;    /*!< DXF 72 */
+  BITCODE_BL class_version; /*!< DXF 90 */
   // sweep_options?
   // BITCODE_BD height;
   BITCODE_3BD sweep_vector;                           /*!< DXF 10 */
@@ -74,7 +73,6 @@ api_process (dwg_object *obj)
       CHK_ENTITY_H (_obj, EXTRUDEDSURFACE, history_id);
     }
 
-  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, modeler_format_version, BS);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata_size, BL);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bindata, TF); // 310|1
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, u_isolines, BS);

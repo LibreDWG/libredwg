@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_REVOLVEDSURFACE
 #include "tests_common.c"
 
@@ -8,12 +7,12 @@ api_process (dwg_object *obj)
   int error, isnew;
   _3DSOLID_FIELDS;
 
-  BITCODE_BS modeler_format_version;
   BITCODE_BS u_isolines;
   BITCODE_BS v_isolines;
   BITCODE_BL i, class_version;
 
-  BITCODE_BL id;
+  BITCODE_BL bindata_size;
+  BITCODE_TF bindata;
   BITCODE_3BD axis_point;
   BITCODE_3BD axis_vector;
   BITCODE_BD revolve_angle;
@@ -27,7 +26,6 @@ api_process (dwg_object *obj)
   BITCODE_B close_to_axis;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_ent_revolvedsurface *_obj = dwg_object_to_REVOLVEDSURFACE (obj);
 
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, acis_empty, B);
@@ -63,12 +61,11 @@ api_process (dwg_object *obj)
       CHK_ENTITY_H (_obj, REVOLVEDSURFACE, history_id);
     }
 
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, modeler_format_version, BS);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, u_isolines, BS);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, v_isolines, BS);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, class_version, BL);
 
-  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, id, BL);
+  CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, bindata_size, BL);
   CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_point);
   CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_vector);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, revolve_angle, BD);
@@ -90,5 +87,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, twist_angle, BD);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, solid, B);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, close_to_axis, B);
-#endif
 }

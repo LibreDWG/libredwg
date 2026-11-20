@@ -3750,19 +3750,10 @@ DWG_OBJECT (EVALUATION_GRAPH)
 DWG_OBJECT_END
 
 DWG_ENTITY (PLANESURFACE)
-  HANDLE_UNKNOWN_BITS;
   ACTION_3DSOLID;
-  FIELD_BS (modeler_format_version, 70); //def 1
-  //FIELD_BL (bindata_size, 90);
-  //FIELD_TF (bindata, FIELD_VALUE (bindata_size), 1); // in DXF as encrypted ASCII
-
   SUBCLASS (AcDbSurface);
   FIELD_BS (u_isolines, 71);
   FIELD_BS (v_isolines, 72);
-  //SUBCLASS (AcDbPlaneSurface);
-  //FIELD_BL (class_version, 90);
-  //if (FIELD_VALUE (class_version) > 10)
-  //  return DWG_ERR_VALUEOUTOFBOUNDS;
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
@@ -3927,7 +3918,9 @@ DWG_OBJECT_END
   FIELD_B (path_entity_transform_computed, 296); \
   FIELD_3BD (reference_vector_for_controlling_twist, 11)
 
-// The DWG order of the sweep options: the matrices follow the twist vector
+// The DWG order of the sweep options: the twist vector sits between the
+// base_point_set and the sweep_entity_transform_computed bit, the matrices
+// follow (verified with AutoCAD r2018 SWEPTSURFACE)
 #define SweepOptions_dwg_fields  \
   FIELD_BD (draft_angle, 42); \
   FIELD_BD (draft_start_distance, 43); \
@@ -3941,29 +3934,30 @@ DWG_OBJECT_END
   FIELD_B (align_start, 292); \
   FIELD_B (bank, 293); \
   FIELD_B (base_point_set, 294); \
+  FIELD_3BD (reference_vector_for_controlling_twist, 11); \
   FIELD_B (sweep_entity_transform_computed, 295); \
   FIELD_B (path_entity_transform_computed, 296); \
-  FIELD_3BD (reference_vector_for_controlling_twist, 11); \
   FIELD_VECTOR_N (sweep_entity_transmatrix, BD, 16, 46); \
   FIELD_VECTOR_N (path_entity_transmatrix, BD, 16, 47)
 
 // The sweep profile: the class version, the size in bits and the data.
 // Not in JSON, which has no way to tell the bits from the bytes.
-#undef ExtrudedSurface_bindata
+// The size is in bits, the DXF has the bytes.
+#undef SurfaceBits
 #ifdef IS_JSON
-#  define ExtrudedSurface_bindata
+#  define SurfaceBits(name, size)
 #else
-#  define ExtrudedSurface_bindata \
+#  define SurfaceBits(name, size) \
   { \
-    BITCODE_BL _bindata_bytes = (FIELD_VALUE (bindata_size) + 7) / 8; \
-    FIELD_BINARY (bindata, _bindata_bytes, 310); \
+    BITCODE_BL _##name##_bytes = (FIELD_VALUE (size) + 7) / 8; \
+    FIELD_BINARY (name, _##name##_bytes, 310); \
   }
 #endif
 #define ExtrudedSurface_profile  \
   FIELD_BL (class_version, 90); \
   FIELD_BL (bindata_size, 90); \
   VALUEOUTOFBOUNDS (bindata_size, 8 * 65536); \
-  ExtrudedSurface_bindata
+  SurfaceBits (bindata, bindata_size)
 
 
 // r2007+
@@ -3997,6 +3991,83 @@ DWG_ENTITY (EXTRUDEDSURFACE)
 DWG_ENTITY_END
 
 
+// r2007+
+DWG_ENTITY (REVOLVEDSURFACE)
+
+  ACTION_3DSOLID;
+  SUBCLASS (AcDbSurface);
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS (AcDbRevolvedSurface);
+#define RevolvedSurface_draft \
+  FIELD_BD (draft_angle, 43); \
+  FIELD_BD (draft_start_distance, 44); \
+  FIELD_BD (draft_end_distance, 45); \
+  FIELD_BD (twist_angle, 46)
+#define RevolvedSurface_axis \
+  FIELD_3BD (axis_point, 10); \
+  FIELD_3BD (axis_vector, 11); \
+  FIELD_BD (revolve_angle, 40); \
+  FIELD_BD (start_angle, 41); \
+  FIELD_VECTOR_N (revolved_entity_transmatrix, BD, 16, 42)
+#ifdef IS_DXF
+  // the profile first, as with the EXTRUDEDSURFACE
+  ExtrudedSurface_profile;
+  RevolvedSurface_axis;
+  RevolvedSurface_draft;
+  FIELD_B (solid, 290);
+  FIELD_B (close_to_axis, 291);
+#else
+  // The DWG has the draft options and the bits first, then the axis, and
+  // the profile last (verified with an AutoCAD r2018 file).
+  RevolvedSurface_draft;
+  FIELD_B (solid, 290);
+  FIELD_B (close_to_axis, 291);
+  RevolvedSurface_axis;
+  ExtrudedSurface_profile;
+#endif
+#undef RevolvedSurface_draft
+#undef RevolvedSurface_axis
+
+  COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY_END
+
+DWG_ENTITY (SWEPTSURFACE)
+
+  ACTION_3DSOLID;
+  SUBCLASS (AcDbSurface);
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS (AcDbSweptSurface);
+#define SweptSurface_profiles \
+  FIELD_BL (class_version, 90); \
+  FIELD_BL (sweepdata_size, 90); \
+  VALUEOUTOFBOUNDS (sweepdata_size, 8 * 65536); \
+  SurfaceBits (sweepdata, sweepdata_size); \
+  FIELD_BL (path_entity_id, 91); \
+  FIELD_BL (pathdata_size, 90); \
+  VALUEOUTOFBOUNDS (pathdata_size, 8 * 65536); \
+  SurfaceBits (pathdata, pathdata_size)
+#ifdef IS_DXF
+  SweptSurface_profiles;
+  FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
+  FIELD_VECTOR_N (path_transmatrix, BD, 16, 41);
+  SweepOptions_fields;
+#else
+  // The DWG order, as with the EXTRUDEDSURFACE (verified with an AutoCAD
+  // r2018 file): the options with the two matrices, the two more
+  // matrices, then the sweep and the path profile
+  SweepOptions_dwg_fields;
+  FIELD_VECTOR_N (sweep_transmatrix, BD, 16, 40);
+  FIELD_VECTOR_N (path_transmatrix, BD, 16, 41);
+  SweptSurface_profiles;
+#endif
+#undef SweptSurface_profiles
+
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -4004,6 +4075,69 @@ DWG_ENTITY_END
    unless enabled via --enable-debug/-DDEBUG_CLASSES */
 
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
+
+// r2007+
+DWG_ENTITY (LOFTEDSURFACE)
+
+  HANDLE_UNKNOWN_BITS;
+  ACTION_3DSOLID;
+  FIELD_BS (modeler_format_version, 70); //def 1
+  VALUEOUTOFBOUNDS (modeler_format_version, 3);
+
+  SUBCLASS (AcDbSurface);
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS (AcDbLoftedSurface);
+  FIELD_VECTOR_N (loft_entity_transmatrix, BD, 16, 40);
+  //90 77
+  //90 544
+  //310
+  //90 77
+  //90 608
+  //310
+  //FIELD_BL (class_version, 90);
+  FIELD_BL (plane_normal_lofting_type, 70);
+  FIELD_BD (start_draft_angle, 41);
+  FIELD_BD (end_draft_angle, 42);
+  FIELD_BD (start_draft_magnitude, 43);
+  FIELD_BD (end_draft_magnitude, 44);
+  FIELD_B (arc_length_parameterization, 290);
+  FIELD_B (no_twist, 291);
+  FIELD_B (align_direction, 292);
+  FIELD_B (simple_surfaces, 293);
+  FIELD_B (closed_surfaces, 294);
+  FIELD_B (solid, 295);
+  FIELD_B (ruled_surface, 296);
+  FIELD_B (virtual_guide, 297);
+  FIELD_BS (num_cross_sections, 0);
+  FIELD_BS (num_guide_curves, 0);
+  VALUEOUTOFBOUNDS (num_cross_sections, 5000);
+  VALUEOUTOFBOUNDS (num_guide_curves, 5000);
+
+  COMMON_ENTITY_HANDLE_DATA;
+  HANDLE_VECTOR (cross_sections, num_cross_sections, 5, 310);
+  HANDLE_VECTOR (guide_curves, num_guide_curves, 5, 310);
+  FIELD_HANDLE (path_curve, 5, 0);
+
+DWG_ENTITY_END
+
+DWG_ENTITY (NURBSURFACE)
+  HANDLE_UNKNOWN_BITS;
+  ACTION_3DSOLID;
+  SUBCLASS (AcDbSurface);
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS (AcDbNurbSurface);
+  SINCE (R_2013b) {
+    FIELD_BS (short170, 170);
+    FIELD_B (cv_hull_display, 290);
+    FIELD_3BD (uvec1, 10);
+    FIELD_3BD (vvec1, 11);
+    FIELD_3BD (uvec2, 12);
+    FIELD_3BD (vvec2, 13);
+  }
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
 
 // (varies) fails the unit-test
 // See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
@@ -4218,132 +4352,6 @@ DWG_ENTITY (GEOPOSITIONMARKER)
 DWG_ENTITY_END
 
 DWG_ENT_SUBCLASS (GEOPOSITIONMARKER, AcDbMTextObjectEmbedded)
-
-// r2007+
-DWG_ENTITY (LOFTEDSURFACE)
-
-  HANDLE_UNKNOWN_BITS;
-  ACTION_3DSOLID;
-  FIELD_BS (modeler_format_version, 70); //def 1
-  VALUEOUTOFBOUNDS (modeler_format_version, 3);
-
-  SUBCLASS (AcDbSurface);
-  FIELD_BS (u_isolines, 71);
-  FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbLoftedSurface);
-  FIELD_VECTOR_N (loft_entity_transmatrix, BD, 16, 40);
-  //90 77
-  //90 544
-  //310
-  //90 77
-  //90 608
-  //310
-  //FIELD_BL (class_version, 90);
-  FIELD_BL (plane_normal_lofting_type, 70);
-  FIELD_BD (start_draft_angle, 41);
-  FIELD_BD (end_draft_angle, 42);
-  FIELD_BD (start_draft_magnitude, 43);
-  FIELD_BD (end_draft_magnitude, 44);
-  FIELD_B (arc_length_parameterization, 290);
-  FIELD_B (no_twist, 291);
-  FIELD_B (align_direction, 292);
-  FIELD_B (simple_surfaces, 293);
-  FIELD_B (closed_surfaces, 294);
-  FIELD_B (solid, 295);
-  FIELD_B (ruled_surface, 296);
-  FIELD_B (virtual_guide, 297);
-  FIELD_BS (num_cross_sections, 0);
-  FIELD_BS (num_guide_curves, 0);
-  VALUEOUTOFBOUNDS (num_cross_sections, 5000);
-  VALUEOUTOFBOUNDS (num_guide_curves, 5000);
-
-  COMMON_ENTITY_HANDLE_DATA;
-  HANDLE_VECTOR (cross_sections, num_cross_sections, 5, 310);
-  HANDLE_VECTOR (guide_curves, num_guide_curves, 5, 310);
-  FIELD_HANDLE (path_curve, 5, 0);
-
-DWG_ENTITY_END
-
-// r2007+
-DWG_ENTITY (REVOLVEDSURFACE)
-
-  HANDLE_UNKNOWN_BITS;
-  ACTION_3DSOLID;
-  FIELD_BS (modeler_format_version, 70); //def 1
-
-  SUBCLASS (AcDbSurface);
-  FIELD_BS (u_isolines, 71);
-  FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbRevolvedSurface);
-  FIELD_BL (class_version, 90);
-  VALUEOUTOFBOUNDS (class_version, 10);
-
-  FIELD_BL (id, 90);
-  //FIELD_BL (bindata_size, 90);
-  //FIELD_BINARY (bindata, FIELD_VALUE (bindata_size), 310);
-  FIELD_3BD (axis_point, 10);
-  FIELD_3BD (axis_vector, 11);
-  FIELD_BD (revolve_angle, 40);
-  FIELD_BD (start_angle, 41);
-  FIELD_VECTOR_N (revolved_entity_transmatrix, BD, 16, 42);
-  FIELD_BD (draft_angle, 43);
-  FIELD_BD (draft_start_distance, 44);
-  FIELD_BD (draft_end_distance, 45);
-  FIELD_BD (twist_angle, 46);
-  FIELD_B (solid, 290);
-  FIELD_B (close_to_axis, 291);
-
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
-
-DWG_ENTITY (SWEPTSURFACE)
-
-  HANDLE_UNKNOWN_BITS;
-  ACTION_3DSOLID;
-  FIELD_BS (modeler_format_version, 70); //def 1
-
-  SUBCLASS (AcDbSurface);
-  FIELD_BS (u_isolines, 71);
-  FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbSweptSurface);
-  FIELD_BL (class_version, 90);
-  VALUEOUTOFBOUNDS (class_version, 10);
-
-  FIELD_BL (sweep_entity_id, 90);
-#ifndef IS_JSON
-  FIELD_BL (sweepdata_size, 90);
-#endif
-  VALUEOUTOFBOUNDS (sweepdata_size, 5000);
-  FIELD_BINARY (sweepdata, FIELD_VALUE (sweepdata_size), 310);
-  FIELD_BL (path_entity_id, 90);
-#ifndef IS_JSON
-  FIELD_BL (pathdata_size, 90);
-#endif
-  VALUEOUTOFBOUNDS (pathdata_size, 5000);
-  FIELD_BINARY (pathdata, FIELD_VALUE (pathdata_size), 310);
-  // here and at ExtrudedSurface
-  SweepOptions_fields;
-  COMMON_ENTITY_HANDLE_DATA;
-DWG_ENTITY_END
-
-DWG_ENTITY (NURBSURFACE)
-  HANDLE_UNKNOWN_BITS;
-  ACTION_3DSOLID;
-  SUBCLASS (AcDbSurface);
-  FIELD_BS (u_isolines, 71);
-  FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbNurbSurface);
-  SINCE (R_2013b) {
-    FIELD_BS (short170, 170);
-    FIELD_B (cv_hull_display, 290);
-    FIELD_3BD (uvec1, 10);
-    FIELD_3BD (vvec1, 11);
-    FIELD_3BD (uvec2, 12);
-    FIELD_3BD (vvec2, 13);
-  }
-  COMMON_ENTITY_HANDLE_DATA;
-DWG_ENTITY_END
 
 // See AcDbAssocPersSubentIdPE.h
 // The dynamic variant

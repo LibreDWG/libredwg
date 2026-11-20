@@ -6026,7 +6026,6 @@ typedef struct _dwg_entity_EXTRUDEDSURFACE
   struct _dwg_object_entity *parent;
   _3DSOLID_FIELDS;
   //? sweep_profile, taper_angle
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BL bindata_size; // 90
   BITCODE_TF bindata; // 310|1
   BITCODE_BS u_isolines;        /*!< DXF 71 */
@@ -6045,17 +6044,17 @@ typedef struct _dwg_entity_SWEPTSURFACE
 {
   struct _dwg_object_entity *parent;
   _3DSOLID_FIELDS;
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
 
-  BITCODE_BL sweep_entity_id; // 90
-  BITCODE_BL sweepdata_size;
-  BITCODE_TF sweepdata;
-  BITCODE_BL path_entity_id;
-  BITCODE_BL pathdata_size;
-  BITCODE_TF pathdata;
+  BITCODE_BL sweepdata_size;  /*!< DXF 90, in bits */
+  BITCODE_TF sweepdata;       /*!< DXF 310 */
+  BITCODE_BL path_entity_id;  /*!< DXF 91 */
+  BITCODE_BL pathdata_size;   /*!< DXF 90, in bits */
+  BITCODE_TF pathdata;        /*!< DXF 310 */
+  BITCODE_BD* sweep_transmatrix; /*!< DXF 40: 16x BD */
+  BITCODE_BD* path_transmatrix;  /*!< DXF 41: 16x BD */
   SWEEPOPTIONS_fields;
 } Dwg_Entity_SWEPTSURFACE;
 
@@ -6118,11 +6117,8 @@ typedef struct _dwg_entity_PLANESURFACE
 {
   struct _dwg_object_entity *parent;
   _3DSOLID_FIELDS;
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL class_version;      /*!< DXF 90 */
-
 } Dwg_Entity_PLANESURFACE;
 
 /**
@@ -6132,12 +6128,12 @@ typedef struct _dwg_entity_REVOLVEDSURFACE
 {
   struct _dwg_object_entity *parent;
   _3DSOLID_FIELDS;
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
   BITCODE_BS u_isolines;         /*!< DXF 71 */
   BITCODE_BS v_isolines;         /*!< DXF 72 */
   BITCODE_BL class_version; /*!< DXF 90 */
 
-  BITCODE_BL id; // 90
+  BITCODE_BL bindata_size; /*!< DXF 90, in bits */
+  BITCODE_TF bindata;      /*!< DXF 310 */
   BITCODE_3BD axis_point; // 10
   BITCODE_3BD axis_vector; // 11
   BITCODE_BD revolve_angle; // 40
@@ -9709,6 +9705,8 @@ typedef struct _dwg_object_entity
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_POINTCLOUD *POINTCLOUD;
     Dwg_Entity_POINTCLOUDEX *POINTCLOUDEX;
+    Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
+    Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
     /* debugging */
       Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
       Dwg_Entity_BASEPOINTPARAMETERENTITY *BASEPOINTPARAMETERENTITY;
@@ -9723,11 +9721,9 @@ typedef struct _dwg_object_entity
       Dwg_Entity_NURBSURFACE *NURBSURFACE;
       Dwg_Entity_POINTPARAMETERENTITY *POINTPARAMETERENTITY;
       Dwg_Entity_POLARGRIPENTITY *POLARGRIPENTITY;
-      Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
       Dwg_Entity_ROTATIONGRIPENTITY *ROTATIONGRIPENTITY;
       Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
       Dwg_Entity_RTEXT *RTEXT;
-      Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
       Dwg_Entity_VISIBILITYGRIPENTITY *VISIBILITYGRIPENTITY;
       Dwg_Entity_VISIBILITYPARAMETERENTITY *VISIBILITYPARAMETERENTITY;
       Dwg_Entity_XYGRIPENTITY *XYGRIPENTITY;
@@ -12151,6 +12147,8 @@ EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDEX (Dwg_Object *obj);
+EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
+EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
@@ -12240,11 +12238,9 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_NURBSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_POLARGRIPENTITY (Dwg_Object *obj);
-  EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_ROTATIONGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_ROTATIONPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
-  EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_VISIBILITYGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_VISIBILITYPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_XYGRIPENTITY (Dwg_Object *obj);

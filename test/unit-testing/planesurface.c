@@ -8,10 +8,9 @@ api_process (dwg_object *obj)
   int error, isnew;
   _3DSOLID_FIELDS;
 
-  BITCODE_BS modeler_format_version;
   BITCODE_BS u_isolines;
   BITCODE_BS v_isolines;
-  BITCODE_BL i, class_version;
+  BITCODE_BL i;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_planesurface *_obj = dwg_object_to_PLANESURFACE (obj);
@@ -48,8 +47,6 @@ api_process (dwg_object *obj)
       CHK_ENTITY_H (_obj, PLANESURFACE, history_id);
     }
 
-  CHK_ENTITY_TYPE (_obj, PLANESURFACE, modeler_format_version, BS);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, u_isolines, BS);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, v_isolines, BS);
-  CHK_ENTITY_TYPE (_obj, PLANESURFACE, class_version, BL);
 }

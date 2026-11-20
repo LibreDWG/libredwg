@@ -321,7 +321,7 @@
   // unstable/undertested.
   // not enough coverage, but assumed mostly ok. field names may change.
   // DXF output skipped
-  UNSTABLE_CLASS     (ACTION, PLANESURFACE)      /* ent */
+  UNSTABLE_CLASS_DXF_ALLOW_DXF (ACTION, PLANESURFACE, PLANESURFACE) /* ent, with DXF in/out */
   UNSTABLE_CLASS     (ACTION, ACSH_BREP_CLASS)   // pretty stable, but cannot roundtrip
   UNSTABLE_CLASS     (ACTION, ACSH_CHAMFER_CLASS) // bl92?
   UNSTABLE_CLASS     (ACTION, ACSH_PYRAMID_CLASS)
@@ -342,6 +342,8 @@
   UNSTABLE_CLASS     (ACTION, DATALINK)
   UNSTABLE_CLASS     (ACTION, DBCOLOR)
   UNSTABLE_CLASS_DXF_ALLOW_DXF (ACTION, EXTRUDEDSURFACE, EXTRUDEDSURFACE) /* ent, with DXF in/out */
+  UNSTABLE_CLASS_DXF_ALLOW_DXF (ACTION, REVOLVEDSURFACE, REVOLVEDSURFACE) /* ent, with DXF in/out */
+  UNSTABLE_CLASS_DXF_ALLOW_DXF (ACTION, SWEPTSURFACE, SWEPTSURFACE) /* ent, with DXF in/out */
   UNSTABLE_CLASS     (ACTION, HELIX)     /* ent, looks very stable */
   UNSTABLE_CLASS     (ACTION, LARGE_RADIAL_DIMENSION) /* ent */
   UNSTABLE_CLASS     (ACTION, LAYOUTPRINTCONFIG) /* ent. CSD_APP, probably a mistake as ent */
@@ -419,8 +421,6 @@
   DEBUGGING_CLASS_DXF (ACTION, GEOPOSITIONMARKER, POSITIONMARKER) /* ent, yet unsorted. no coverage */
   DEBUGGING_CLASS     (ACTION, NURBSURFACE)       /* ent */
   DEBUGGING_CLASS     (ACTION, LOFTEDSURFACE)     /* ent */
-  DEBUGGING_CLASS     (ACTION, REVOLVEDSURFACE)   /* ent */
-  DEBUGGING_CLASS     (ACTION, SWEPTSURFACE)      /* ent */
   DEBUGGING_CLASS     (ACTION, RTEXT)             // ent expresstools
   DEBUGGING_CLASS     (ACTION, MPOLYGON)          // hatch-like ent
   DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
