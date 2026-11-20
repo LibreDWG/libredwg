@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_DATATABLE
 #include "tests_common.c"
 
@@ -13,7 +12,6 @@ api_process (dwg_object *obj)
   Dwg_DATATABLE_column *cols;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_datatable *_obj = dwg_object_to_DATATABLE (obj);
 
   CHK_ENTITY_TYPE (_obj, DATATABLE, flags, BS);
@@ -29,5 +27,4 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_UTF8TEXT (cols[i], DATATABLE_column, text);
         // ..
       }
-#endif
 }

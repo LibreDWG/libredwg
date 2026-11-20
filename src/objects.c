@@ -881,7 +881,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str82,           "ACDB_RADIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_RADIMOBJECTCONTEXTDATA,	0,	DEBUGGING},
       {-1},
 #line 270 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str84,                        "DATATABLE",                         DWG_TYPE_DATATABLE,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str84,                        "DATATABLE",                         DWG_TYPE_DATATABLE,	0,	UNSTABLE},
       {-1},
 #line 304 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str86,                           "LAYOUT",                            DWG_TYPE_LAYOUT,	0,	STABLE},
@@ -1284,7 +1284,7 @@ in_word_set (const char *str, size_t len)
 #line 84 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str465,                     "HATCH",                      DWG_TYPE_HATCH,	1,	STABLE},
 #line 316 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str466,  "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str466,  "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,	0,	UNSTABLE},
       {-1},
 #line 155 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str468,               "ACSH_BOOLEAN_CLASS",                DWG_TYPE_ACSH_BOOLEAN_CLASS,	0,	STABLE},

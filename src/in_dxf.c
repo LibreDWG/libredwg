@@ -5519,6 +5519,105 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #  undef CHK_geomesh_pts
 #  undef CHK_geomesh_faces
 
+// read the DATATABLE columns (92 type, 2 name) with the cells of the column,
+// triggered on the first 92 within AcDbDataTable. A cell is 93 (long),
+// 40 (double), 3 (string), 10, 20, 30 (point) or 360 (handle), by the type.
+// Returns the pair which ends it.
+static Dxf_Pair *
+add_AcDbDataTable (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                   Dxf_Pair *restrict pair)
+{
+  Dwg_Object_DATATABLE *o = obj->tio.object->tio.DATATABLE;
+  Dwg_Data *dwg = obj->parent;
+  long c = -1;
+  unsigned long r = 0;
+  Dwg_DATATABLE_row *cell;
+
+  if (o->cols || !o->num_cols || o->num_cols > 0xffff
+      || (uint64_t)o->num_cols * o->num_rows > 0x1000000)
+    return pair;
+  o->cols = (Dwg_DATATABLE_column *)xcalloc (o->num_cols,
+                                             sizeof (Dwg_DATATABLE_column));
+  if (!o->cols)
+    return pair;
+  while (pair && pair->code != 0)
+    {
+      if (pair->code == 100)
+        break;
+      if (pair->code == 92)
+        {
+          if (++c >= (long)o->num_cols)
+            break;
+          o->cols[c].parent = o;
+          o->cols[c].type = pair->value.u;
+          o->cols[c].rows = o->num_rows
+                                ? (Dwg_DATATABLE_row *)xcalloc (
+                                      o->num_rows, sizeof (Dwg_DATATABLE_row))
+                                : NULL;
+          r = 0;
+          LOG_TRACE ("%s.cols[%ld].type = %u [BL 92]\n", obj->name, c,
+                     o->cols[c].type);
+        }
+      else if (c < 0)
+        break;
+      else if (pair->code == 2)
+        {
+          o->cols[c].text = dxf_pair_string (
+              dwg, pair->value.s.ptr ? pair->value.s.ptr : "");
+          LOG_TRACE ("%s.cols[%ld].text = %s [T 2]\n", obj->name, c,
+                     o->cols[c].text ? o->cols[c].text : "");
+        }
+      else if (!o->cols[c].rows)
+        break;
+      else
+        {
+          // a point is 3 pairs: the row advances with the z
+          cell = r < o->num_rows ? &o->cols[c].rows[r] : NULL;
+          if (!cell)
+            break;
+          cell->parent = &o->cols[c];
+          switch (pair->code)
+            {
+            case 93:
+              cell->value.data_long = pair->value.u;
+              r++;
+              break;
+            case 40:
+              cell->value.data_double = pair->value.d;
+              r++;
+              break;
+            case 3:
+              cell->value.data_string = dxf_pair_string (
+                  dwg, pair->value.s.ptr ? pair->value.s.ptr : "");
+              r++;
+              break;
+            case 10:
+              cell->value.data_3dpoint.x = pair->value.d;
+              break;
+            case 20:
+              cell->value.data_3dpoint.y = pair->value.d;
+              break;
+            case 30:
+              cell->value.data_3dpoint.z = pair->value.d;
+              r++;
+              break;
+            case 360:
+              cell->value.data_handle
+                  = dwg_add_handleref (dwg, 3, pair->value.u, obj);
+              r++;
+              break;
+            default:
+              LOG_WARN ("Unhandled %s.cols[%ld] DXF code %d", obj->name, c,
+                        pair->code);
+              break;
+            }
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  return pair;
+}
+
 // returns with 0
 // subclass for multiple objects.
 // Only handle conflicts?, codes with multiple keys.
@@ -14595,6 +14694,28 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                   LOG_TRACE ("%s.column_heights[%ld] = %g [BD 46]\n",
                              obj->name, (long)column_idx - 1, pair->value.d);
                 }
+              goto next_pair;
+            }
+          else if (pair->code == 92 && obj->fixedtype == DWG_TYPE_DATATABLE
+                   && (strEQc (subclass, "AcDbDataTable")
+                       || strEQc (subclass, "ACDBDATATABLE")))
+            {
+              pair = add_AcDbDataTable (obj, dat, pair);
+              if (pair && pair->code != 0)
+                goto search_field;
+              else
+                return pair;
+            }
+          else if (obj->fixedtype == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA
+                   && pair->code == 290
+                   && strEQc (subclass, "AcDbMTextAttributeObjectContextData"))
+            {
+              // not the is_default 290 of AcDbObjectContextData
+              obj->tio.object->tio.MTEXTATTRIBUTEOBJECTCONTEXTDATA
+                  ->enable_context
+                  = pair->value.i;
+              LOG_TRACE ("%s.enable_context = %d [B 290]\n", name,
+                         pair->value.i);
               goto next_pair;
             }
           else if (pair->code == 171 && strEQc (subclass, "AcDbTable"))

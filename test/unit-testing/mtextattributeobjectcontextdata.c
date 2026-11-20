@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA
 #include "tests_common.c"
 
@@ -16,10 +15,8 @@ api_process (dwg_object *obj)
   BITCODE_2RD alignment_pt;
   // MTEXTATTR
   BITCODE_B enable_context;
-  struct _dwg_object *context;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_mtextattributeobjectcontextdata *_obj
       = dwg_object_to_MTEXTATTRIBUTEOBJECTCONTEXTDATA (obj);
 
@@ -33,15 +30,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_2RD (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, alignment_pt);
 
   CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, enable_context, B);
-  if (!dwg_dynapi_entity_value (_obj, "MTEXTATTRIBUTEOBJECTCONTEXTDATA",
-                                "mtext", &context, NULL))
-    fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.context");
-  else if (context)
-    {
-      if (context->fixedtype != DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
-        fail ("Wrong MTEXTATTRIBUTEOBJECTCONTEXTDATA.context.fixedtype %s %d "
-              "!= MTEXTOBJECTCONTEXTDATA",
-              dwg_type_name (context->fixedtype), context->fixedtype);
-    }
-#endif
 }

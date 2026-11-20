@@ -4068,6 +4068,111 @@ DWG_ENTITY (SWEPTSURFACE)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+  AcDbAnnotScaleObjectContextData_fields;
+  AcDbTextObjectContextData_fields;
+  SUBCLASS (AcDbMTextAttributeObjectContextData);
+  FIELD_B (enable_context, 290);
+  // if scale is not 1:1
+  if (FIELD_VALUE (enable_context))
+    {
+      /*
+      DECODER {
+        dwg_add_object (dwg);
+        _obj->context = &dwg->object[dwg->num_objects - 1];
+        dwg_setup_SCALE (_obj->context);
+      } */
+      DXF { VALUE_TFF ( "Embedded Object", 101 ); }
+      //CALL_SUBCLASS (_obj->context, SCALE, AcDbScale);
+      SUBCLASS (AcDbScale);
+      SUB_FIELD_BS (context, flag, 70); // always 0
+      SUB_FIELD_T (context, name, 300);
+      SUB_FIELD_BD (context, paper_units, 140);
+      SUB_FIELD_BD (context, drawing_units, 141);
+      SUB_FIELD_B (context, is_unit_scale, 290);
+    }
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) UNSTABLE
+DWG_OBJECT (DATATABLE)
+#ifdef IS_DXF
+  UNTIL (R_2002) {
+    SUBCLASS (ACDBDATATABLE);
+  } LATER_VERSIONS {
+    SUBCLASS (AcDbDataTable);
+  }
+#endif
+  DEBUG_HERE_OBJ
+  FIELD_BS (flags, 70);
+  FIELD_BL (num_cols, 90);
+  FIELD_BL (num_rows, 91);
+  FIELD_T (table_name, 1);
+  // A cell takes at least one bit. REPEAT would reject the rows with the
+  // size of a Dwg_DATATABLE_row per cell, but a double or integer cell is 2 bits.
+  DECODER {
+    if (AVAIL_BITS (dat) < 0
+        || (uint64_t)_obj->num_cols * _obj->num_rows
+               > (uint64_t)AVAIL_BITS (dat))
+      {
+        LOG_ERROR ("Invalid DATATABLE.num_cols %u x num_rows %u",
+                   (unsigned)_obj->num_cols, (unsigned)_obj->num_rows);
+        return DWG_ERR_VALUEOUTOFBOUNDS;
+      }
+  }
+  REPEAT (num_cols, cols, Dwg_DATATABLE_column)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (cols[rcount1],type, 92);
+      SUB_FIELD_T (cols[rcount1],text, 2);
+
+      REPEAT2_C (num_rows, cols[rcount1].rows, Dwg_DATATABLE_row) //CellType?
+      REPEAT_BLOCK
+          // the column type selects the cell payload
+          switch (_obj->cols[rcount1].type)
+            {
+            case 1: // integer
+              SUB_FIELD_BL (cols[rcount1].rows[rcount2],value.data_long, 93);
+              break;
+            case 2: // double
+              SUB_FIELD_BD (cols[rcount1].rows[rcount2],value.data_double, 40);
+              break;
+            case 3: // text
+              SUB_FIELD_T (cols[rcount1].rows[rcount2],value.data_string, 3);
+              break;
+            case 4: // point
+              SUB_FIELD_3BD (cols[rcount1].rows[rcount2],value.data_3dpoint, 10);
+              break;
+            case 6: // object id. In the DWG in the handle stream below.
+#if !defined (IS_DECODER) && !defined (IS_ENCODER)
+              SUB_FIELD_HANDLE (cols[rcount1].rows[rcount2],value.data_handle, 3, 360);
+#endif
+              break;
+            default:
+              LOG_ERROR ("Unhandled DATATABLE column type %u",
+                         (unsigned)_obj->cols[rcount1].type);
+              break;
+            }
+          SET_PARENT (cols[rcount1].rows[rcount2], &_obj->cols[rcount1]);
+      END_REPEAT_BLOCK
+      END_REPEAT (cols[rcount1].rows)
+      SET_PARENT_OBJ (cols[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (cols)
+  START_OBJECT_HANDLE_STREAM;
+#if defined (IS_DECODER) || defined (IS_ENCODER)
+  for (rcount1 = 0; rcount1 < _obj->num_cols; rcount1++)
+    {
+      if (!_obj->cols || _obj->cols[rcount1].type != 6
+          || !_obj->cols[rcount1].rows)
+        continue;
+      for (rcount2 = 0; rcount2 < _obj->num_rows; rcount2++)
+        {
+          SUB_FIELD_HANDLE (cols[rcount1].rows[rcount2],value.data_handle, 3, 360);
+        }
+    }
+#endif
+DWG_OBJECT_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -4668,87 +4773,6 @@ DWG_OBJECT (MLEADEROBJECTCONTEXTDATA)
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbMLeaderObjectContextData);
   // ?? ...
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
-  HANDLE_UNKNOWN_BITS;
-  AcDbAnnotScaleObjectContextData_fields;
-  AcDbTextObjectContextData_fields;
-  SUBCLASS (AcDbMTextAttributeObjectContextData);
-  FIELD_B (enable_context, 290);
-  // if scale is not 1:1
-  if (FIELD_VALUE (enable_context))
-    {
-      /*
-      DECODER {
-        dwg_add_object (dwg);
-        _obj->context = &dwg->object[dwg->num_objects - 1];
-        dwg_setup_SCALE (_obj->context);
-      } */
-      DXF { VALUE_TFF ( "Embedded Object", 101 ); }
-      //CALL_SUBCLASS (_obj->context, SCALE, AcDbScale);
-      SUBCLASS (AcDbScale);
-      SUB_FIELD_BS (context, flag, 70); // always 0
-      SUB_FIELD_T (context, name, 300);
-      SUB_FIELD_BD (context, paper_units, 140);
-      SUB_FIELD_BD (context, drawing_units, 141);
-      SUB_FIELD_B (context, is_unit_scale, 290);
-    }
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// (varies) TODO
-DWG_OBJECT (DATATABLE)
-  HANDLE_UNKNOWN_BITS;
-#ifdef IS_DXF
-  UNTIL (R_2002) {
-    SUBCLASS (ACDBDATATABLE);
-  } LATER_VERSIONS {
-    SUBCLASS (AcDbDataTable);
-  }
-#endif
-  DEBUG_HERE_OBJ
-  FIELD_BS (flags, 70);
-  FIELD_BL (num_cols, 90);
-  FIELD_BL (num_rows, 91);
-  FIELD_T (table_name, 1);
-  REPEAT (num_cols, cols, Dwg_DATATABLE_column)
-  REPEAT_BLOCK
-      SUB_FIELD_BL (cols[rcount1],type, 92);
-      SUB_FIELD_T (cols[rcount1],text, 2);
-
-      REPEAT2 (num_rows, cols[rcount1].rows, Dwg_DATATABLE_row) //CellType?
-      REPEAT_BLOCK
-          // the column type selects the cell payload
-          switch (_obj->cols[rcount1].type)
-            {
-            case 1: // integer
-              SUB_FIELD_BL (cols[rcount1].rows[rcount2],value.data_long, 93);
-              break;
-            case 2: // double
-              SUB_FIELD_BD (cols[rcount1].rows[rcount2],value.data_double, 40);
-              break;
-            case 3: // text
-              SUB_FIELD_T (cols[rcount1].rows[rcount2],value.data_string, 3);
-              break;
-            case 4: // point
-              SUB_FIELD_3BD (cols[rcount1].rows[rcount2],value.data_3dpoint, 10);
-              break;
-            case 5: // object id
-              SUB_FIELD_HANDLE (cols[rcount1].rows[rcount2],value.data_handle, 5, 331);
-              break;
-            default:
-              LOG_ERROR ("Unhandled DATATABLE column type %u",
-                         (unsigned)_obj->cols[rcount1].type);
-              break;
-            }
-          SET_PARENT (cols[rcount1].rows[rcount2], &_obj->cols[rcount1]);
-      END_REPEAT_BLOCK
-      END_REPEAT (cols[rcount1].rows)
-      SET_PARENT_OBJ (cols[rcount1]);
-  END_REPEAT_BLOCK
-  END_REPEAT (cols)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

@@ -6259,7 +6259,6 @@ typedef struct _dwg_DATATABLE_column
 
 /**
  Object DATATABLE (varies)
- --enable-debug only
  */
 typedef struct _dwg_object_DATATABLE
 {
@@ -9963,6 +9962,8 @@ typedef struct _dwg_object_object
     Dwg_Object_OBJECT_PTR *OBJECT_PTR;
     Dwg_Object_PARTIAL_VIEWING_INDEX *PARTIAL_VIEWING_INDEX;
     Dwg_Object_PERSUBENTMGR *PERSUBENTMGR;
+    Dwg_Object_DATATABLE *DATATABLE;
+    Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_POINTCLOUDCOLORMAP *POINTCLOUDCOLORMAP;
     Dwg_Object_POINTCLOUDDEF *POINTCLOUDDEF;
     Dwg_Object_POINTCLOUDDEFEX *POINTCLOUDDEFEX;
@@ -10011,13 +10012,11 @@ typedef struct _dwg_object_object
     Dwg_Object_CONTEXTDATAMANAGER *CONTEXTDATAMANAGER;
     Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CURVEPATH *CURVEPATH;
-    Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DMDIMOBJECTCONTEXTDATA *DMDIMOBJECTCONTEXTDATA;
     Dwg_Object_DYNAMICBLOCKPROXYNODE *DYNAMICBLOCKPROXYNODE;
     Dwg_Object_GEOMAPIMAGE *GEOMAPIMAGE;
     Dwg_Object_MLEADEROBJECTCONTEXTDATA *MLEADEROBJECTCONTEXTDATA;
     Dwg_Object_MOTIONPATH *MOTIONPATH;
-    Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_NAVISWORKSMODELDEF *NAVISWORKSMODELDEF;
     Dwg_Object_ORDDIMOBJECTCONTEXTDATA *ORDDIMOBJECTCONTEXTDATA;
     Dwg_Object_POINTPATH *POINTPATH;
@@ -12205,6 +12204,8 @@ EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_setup_PARTIAL_VIEWING_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
+EXPORT int dwg_setup_DATATABLE (Dwg_Object *obj);
+EXPORT int dwg_setup_MTEXTATTRIBUTEOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDCOLORMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDDEF (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDDEFEX (Dwg_Object *obj);
@@ -12273,13 +12274,11 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_CONTEXTDATAMANAGER (Dwg_Object *obj);
   EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
   EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);
-  EXPORT int dwg_setup_DATATABLE (Dwg_Object *obj);
   EXPORT int dwg_setup_DMDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_DYNAMICBLOCKPROXYNODE (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOMAPIMAGE (Dwg_Object *obj);
   EXPORT int dwg_setup_MLEADEROBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_MOTIONPATH (Dwg_Object *obj);
-  EXPORT int dwg_setup_MTEXTATTRIBUTEOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_NAVISWORKSMODELDEF (Dwg_Object *obj);
   EXPORT int dwg_setup_ORDDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTPATH (Dwg_Object *obj);
