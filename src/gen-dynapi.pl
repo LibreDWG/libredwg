@@ -1004,7 +1004,7 @@ sub out_declarator {
         $bc = $h{DIMENSION_COMMON}{$name};
     }
     $type = $bc if $bc;
-    if ( $name eq 'encr_sat_data' ) {
+    if ( $name =~ /encr_sat_data$/ ) {
         $type = 'char **';
         $bc   = '';
     }
@@ -1922,16 +1922,17 @@ EOF
                         #inserts => 'num_inserts',
                         #groups => 'num_groups',
                         #field_handles => 'num_fields',
-                        sort_ents     => 'num_ents',
-                        attr_def_id   => 'num_attr_defs',
-                        layer_entries => 'num_entries',
-                        readdeps      => 'num_deps',
-                        writedeps     => 'num_deps',
-                        dashes_r11    => 'numdashes',
-                        texts         => 'numitems',
-                        encr_sat_data => 'num_blocks',
-                        col_widths    => 'num_cols',        # TABLE
-                        row_heights   => 'num_rows',
+                        sort_ents          => 'num_ents',
+                        attr_def_id        => 'num_attr_defs',
+                        layer_entries      => 'num_entries',
+                        readdeps           => 'num_deps',
+                        writedeps          => 'num_deps',
+                        dashes_r11         => 'numdashes',
+                        texts              => 'numitems',
+                        encr_sat_data      => 'num_blocks',
+                        shsw_encr_sat_data => 'shsw_num_blocks',
+                        col_widths         => 'num_cols',          # TABLE
+                        row_heights        => 'num_rows',
                     );
                     my $countfield
                         = exists $countfield{$var}
@@ -1940,7 +1941,7 @@ EOF
                     $countfield = 'numdashes'
                         if $name eq 'LTYPE' and $var =~ /^(styles|dashes)$/;
                     my $count = 1;
-                    if ( $var eq 'encr_sat_data' ) {
+                    if ( $var =~ /encr_sat_data$/ ) {
                         print $fh <<"EOF";
   {
     $type $var;
@@ -2168,7 +2169,10 @@ while (<$in>) {
     if (/^\s*STABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
         $STABLE{$1}++;
     }
-    elsif (/^\s*UNSTABLE_CLASS(?:_DXF|_CPP|)(?:_ALLOW_DXF|)\s*\(ACTION,\s+(.+?)[,\)]/) {
+    elsif (
+        /^\s*UNSTABLE_CLASS(?:_DXF|_CPP|)(?:_ALLOW_DXF|)\s*\(ACTION,\s+(.+?)[,\)]/
+        )
+    {
         $UNSTABLE{$1}++;
     }
     elsif (/^\s*DEBUGGING_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {

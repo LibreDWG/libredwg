@@ -7308,7 +7308,7 @@ typedef struct _dwg_object_ACSH_BREP_CLASS
   BITCODE_BS shsw_acis_version;    /*!< DXF 70 */ \
   BITCODE_BL shsw_num_blocks;      /*!< no DXF */ \
   BITCODE_BL *shsw_block_size;     /*!< no DXF */ \
-  char **shsw_encr_sat_data;       /*!< DXF 1, 3 */ \
+  char** shsw_encr_sat_data;       /*!< DXF 1, 3 */ \
   BITCODE_BL shsw_sab_size;        /*!< no DXF */ \
   BITCODE_RC *shsw_acis_data;      /*!< DXF 1, 3 decrypted, or the SAB */ \
   /* compare to SWEEPOPTIONS_fields */ \

@@ -5300,7 +5300,7 @@ BL
 @item shsw_block_size
 BL*
 @item shsw_encr_sat_data
-TV
+char **
 @item shsw_sab_size
 BL
 @item shsw_acis_data
@@ -5601,7 +5601,7 @@ BL
 @item shsw_block_size
 BL*
 @item shsw_encr_sat_data
-TV
+char **
 @item shsw_sab_size
 BL
 @item shsw_acis_data

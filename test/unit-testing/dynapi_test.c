@@ -28384,14 +28384,12 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
       fail ("ACSH_EXTRUSION_CLASS.shsw_block_size [BL*] * %u num_shsw_block_size", count);
   }
   {
-    BITCODE_TV shsw_encr_sat_data;
+    char ** shsw_encr_sat_data;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "shsw_encr_sat_data", &shsw_encr_sat_data, NULL)
-        && shsw_encr_sat_data
-           ? strEQ ((char *)shsw_encr_sat_data, (char *)acsh_extrusion_class->shsw_encr_sat_data)
-           : !acsh_extrusion_class->shsw_encr_sat_data)
+        && !memcmp (&shsw_encr_sat_data, &acsh_extrusion_class->shsw_encr_sat_data, sizeof (acsh_extrusion_class->shsw_encr_sat_data)))
       pass ();
     else
-      fail ("ACSH_EXTRUSION_CLASS.shsw_encr_sat_data [TV] '%s' <> '%s'", shsw_encr_sat_data, acsh_extrusion_class->shsw_encr_sat_data);
+      fail ("ACSH_EXTRUSION_CLASS.shsw_encr_sat_data [char **]");
   }
   {
     BITCODE_BL shsw_num_blocks;
@@ -29942,14 +29940,12 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
       fail ("ACSH_SWEEP_CLASS.shsw_block_size [BL*] * %u num_shsw_block_size", count);
   }
   {
-    BITCODE_TV shsw_encr_sat_data;
+    char ** shsw_encr_sat_data;
     if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "shsw_encr_sat_data", &shsw_encr_sat_data, NULL)
-        && shsw_encr_sat_data
-           ? strEQ ((char *)shsw_encr_sat_data, (char *)acsh_sweep_class->shsw_encr_sat_data)
-           : !acsh_sweep_class->shsw_encr_sat_data)
+        && !memcmp (&shsw_encr_sat_data, &acsh_sweep_class->shsw_encr_sat_data, sizeof (acsh_sweep_class->shsw_encr_sat_data)))
       pass ();
     else
-      fail ("ACSH_SWEEP_CLASS.shsw_encr_sat_data [TV] '%s' <> '%s'", shsw_encr_sat_data, acsh_sweep_class->shsw_encr_sat_data);
+      fail ("ACSH_SWEEP_CLASS.shsw_encr_sat_data [char **]");
   }
   {
     BITCODE_BL shsw_num_blocks;
