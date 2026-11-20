@@ -28822,14 +28822,89 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_H* crosssects;
+    BITCODE_B align_direction;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "align_direction", &align_direction, NULL)
+        && align_direction == acsh_loft_class->align_direction)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.align_direction [B] " FORMAT_B " != " FORMAT_B "", acsh_loft_class->align_direction, align_direction);
+    align_direction++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "align_direction", &align_direction, 0)
+        && align_direction == acsh_loft_class->align_direction)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.align_direction [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_loft_class->align_direction, align_direction);
+    acsh_loft_class->align_direction--;
+  }
+  {
+    BITCODE_B arc_length_parameterization;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "arc_length_parameterization", &arc_length_parameterization, NULL)
+        && arc_length_parameterization == acsh_loft_class->arc_length_parameterization)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.arc_length_parameterization [B] " FORMAT_B " != " FORMAT_B "", acsh_loft_class->arc_length_parameterization, arc_length_parameterization);
+    arc_length_parameterization++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "arc_length_parameterization", &arc_length_parameterization, 0)
+        && arc_length_parameterization == acsh_loft_class->arc_length_parameterization)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.arc_length_parameterization [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_loft_class->arc_length_parameterization, arc_length_parameterization);
+    acsh_loft_class->arc_length_parameterization--;
+  }
+  {
+    BITCODE_B closed_surfaces;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "closed_surfaces", &closed_surfaces, NULL)
+        && closed_surfaces == acsh_loft_class->closed_surfaces)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.closed_surfaces [B] " FORMAT_B " != " FORMAT_B "", acsh_loft_class->closed_surfaces, closed_surfaces);
+    closed_surfaces++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "closed_surfaces", &closed_surfaces, 0)
+        && closed_surfaces == acsh_loft_class->closed_surfaces)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.closed_surfaces [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_loft_class->closed_surfaces, closed_surfaces);
+    acsh_loft_class->closed_surfaces--;
+  }
+  {
+    Dwg_ACSH_LOFT_profile* crosssects;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "num_crosssects", &count, NULL)
         && dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "crosssects", &crosssects, NULL)
         && crosssects == acsh_loft_class->crosssects)
       pass ();
     else
-      fail ("ACSH_LOFT_CLASS.crosssects [H*] * %u num_crosssects", count);
+      fail ("ACSH_LOFT_CLASS.crosssects [Dwg_ACSH_LOFT_profile*] * %u num_crosssects", count);
+  }
+  {
+    BITCODE_BD end_draft_angle;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "end_draft_angle", &end_draft_angle, NULL)
+        && end_draft_angle == acsh_loft_class->end_draft_angle)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.end_draft_angle [BD] %g != %g", acsh_loft_class->end_draft_angle, end_draft_angle);
+    end_draft_angle++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "end_draft_angle", &end_draft_angle, 0)
+        && end_draft_angle == acsh_loft_class->end_draft_angle)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.end_draft_angle [BD] set+1 %g != %g", acsh_loft_class->end_draft_angle, end_draft_angle);
+    acsh_loft_class->end_draft_angle--;
+  }
+  {
+    BITCODE_BD end_draft_magnitude;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "end_draft_magnitude", &end_draft_magnitude, NULL)
+        && end_draft_magnitude == acsh_loft_class->end_draft_magnitude)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.end_draft_magnitude [BD] %g != %g", acsh_loft_class->end_draft_magnitude, end_draft_magnitude);
+    end_draft_magnitude++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "end_draft_magnitude", &end_draft_magnitude, 0)
+        && end_draft_magnitude == acsh_loft_class->end_draft_magnitude)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.end_draft_magnitude [BD] set+1 %g != %g", acsh_loft_class->end_draft_magnitude, end_draft_magnitude);
+    acsh_loft_class->end_draft_magnitude--;
   }
   {
     Dwg_EvalExpr evalexpr;
@@ -28840,14 +28915,14 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
         fail ("ACSH_LOFT_CLASS.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_H* guides;
+    Dwg_ACSH_LOFT_profile* guides;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "num_guides", &count, NULL)
         && dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "guides", &guides, NULL)
         && guides == acsh_loft_class->guides)
       pass ();
     else
-      fail ("ACSH_LOFT_CLASS.guides [H*] * %u num_guides", count);
+      fail ("ACSH_LOFT_CLASS.guides [Dwg_ACSH_LOFT_profile*] * %u num_guides", count);
   }
   {
     Dwg_ACSH_HistoryNode history_node;
@@ -28858,34 +28933,19 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
         fail ("ACSH_LOFT_CLASS.history_node [Dwg_ACSH_HistoryNode]");
   }
   {
-    BITCODE_BL major;
-    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "major", &major, NULL)
-        && major == acsh_loft_class->major)
+    BITCODE_B no_twist;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "no_twist", &no_twist, NULL)
+        && no_twist == acsh_loft_class->no_twist)
       pass ();
     else
-      fail ("ACSH_LOFT_CLASS.major [BL] %u != %u", acsh_loft_class->major, major);
-    major++;
-    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "major", &major, 0)
-        && major == acsh_loft_class->major)
+      fail ("ACSH_LOFT_CLASS.no_twist [B] " FORMAT_B " != " FORMAT_B "", acsh_loft_class->no_twist, no_twist);
+    no_twist++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "no_twist", &no_twist, 0)
+        && no_twist == acsh_loft_class->no_twist)
       pass ();
     else
-      fail ("ACSH_LOFT_CLASS.major [BL] set+1 %u != %u", acsh_loft_class->major, major);
-    acsh_loft_class->major--;
-  }
-  {
-    BITCODE_BL minor;
-    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "minor", &minor, NULL)
-        && minor == acsh_loft_class->minor)
-      pass ();
-    else
-      fail ("ACSH_LOFT_CLASS.minor [BL] %u != %u", acsh_loft_class->minor, minor);
-    minor++;
-    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "minor", &minor, 0)
-        && minor == acsh_loft_class->minor)
-      pass ();
-    else
-      fail ("ACSH_LOFT_CLASS.minor [BL] set+1 %u != %u", acsh_loft_class->minor, minor);
-    acsh_loft_class->minor--;
+      fail ("ACSH_LOFT_CLASS.no_twist [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_loft_class->no_twist, no_twist);
+    acsh_loft_class->no_twist--;
   }
   {
     BITCODE_BL num_crosssects;
@@ -28924,6 +28984,126 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_LOFT_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BL plane_normal_lofting_type;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "plane_normal_lofting_type", &plane_normal_lofting_type, NULL)
+        && plane_normal_lofting_type == acsh_loft_class->plane_normal_lofting_type)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.plane_normal_lofting_type [BL] %u != %u", acsh_loft_class->plane_normal_lofting_type, plane_normal_lofting_type);
+    plane_normal_lofting_type++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "plane_normal_lofting_type", &plane_normal_lofting_type, 0)
+        && plane_normal_lofting_type == acsh_loft_class->plane_normal_lofting_type)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.plane_normal_lofting_type [BL] set+1 %u != %u", acsh_loft_class->plane_normal_lofting_type, plane_normal_lofting_type);
+    acsh_loft_class->plane_normal_lofting_type--;
+  }
+  {
+    BITCODE_B ruled_surface;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ruled_surface", &ruled_surface, NULL)
+        && ruled_surface == acsh_loft_class->ruled_surface)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.ruled_surface [B] " FORMAT_B " != " FORMAT_B "", acsh_loft_class->ruled_surface, ruled_surface);
+    ruled_surface++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "ruled_surface", &ruled_surface, 0)
+        && ruled_surface == acsh_loft_class->ruled_surface)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.ruled_surface [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_loft_class->ruled_surface, ruled_surface);
+    acsh_loft_class->ruled_surface--;
+  }
+  {
+    BITCODE_BL shlf_bl98;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "shlf_bl98", &shlf_bl98, NULL)
+        && shlf_bl98 == acsh_loft_class->shlf_bl98)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.shlf_bl98 [BL] %u != %u", acsh_loft_class->shlf_bl98, shlf_bl98);
+    shlf_bl98++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "shlf_bl98", &shlf_bl98, 0)
+        && shlf_bl98 == acsh_loft_class->shlf_bl98)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.shlf_bl98 [BL] set+1 %u != %u", acsh_loft_class->shlf_bl98, shlf_bl98);
+    acsh_loft_class->shlf_bl98--;
+  }
+  {
+    BITCODE_B simple_surfaces;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "simple_surfaces", &simple_surfaces, NULL)
+        && simple_surfaces == acsh_loft_class->simple_surfaces)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.simple_surfaces [B] " FORMAT_B " != " FORMAT_B "", acsh_loft_class->simple_surfaces, simple_surfaces);
+    simple_surfaces++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "simple_surfaces", &simple_surfaces, 0)
+        && simple_surfaces == acsh_loft_class->simple_surfaces)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.simple_surfaces [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_loft_class->simple_surfaces, simple_surfaces);
+    acsh_loft_class->simple_surfaces--;
+  }
+  {
+    BITCODE_B solid;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "solid", &solid, NULL)
+        && solid == acsh_loft_class->solid)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.solid [B] " FORMAT_B " != " FORMAT_B "", acsh_loft_class->solid, solid);
+    solid++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "solid", &solid, 0)
+        && solid == acsh_loft_class->solid)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.solid [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_loft_class->solid, solid);
+    acsh_loft_class->solid--;
+  }
+  {
+    BITCODE_BD start_draft_angle;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "start_draft_angle", &start_draft_angle, NULL)
+        && start_draft_angle == acsh_loft_class->start_draft_angle)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.start_draft_angle [BD] %g != %g", acsh_loft_class->start_draft_angle, start_draft_angle);
+    start_draft_angle++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "start_draft_angle", &start_draft_angle, 0)
+        && start_draft_angle == acsh_loft_class->start_draft_angle)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.start_draft_angle [BD] set+1 %g != %g", acsh_loft_class->start_draft_angle, start_draft_angle);
+    acsh_loft_class->start_draft_angle--;
+  }
+  {
+    BITCODE_BD start_draft_magnitude;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "start_draft_magnitude", &start_draft_magnitude, NULL)
+        && start_draft_magnitude == acsh_loft_class->start_draft_magnitude)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.start_draft_magnitude [BD] %g != %g", acsh_loft_class->start_draft_magnitude, start_draft_magnitude);
+    start_draft_magnitude++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "start_draft_magnitude", &start_draft_magnitude, 0)
+        && start_draft_magnitude == acsh_loft_class->start_draft_magnitude)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.start_draft_magnitude [BD] set+1 %g != %g", acsh_loft_class->start_draft_magnitude, start_draft_magnitude);
+    acsh_loft_class->start_draft_magnitude--;
+  }
+  {
+    BITCODE_B virtual_guide;
+    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "virtual_guide", &virtual_guide, NULL)
+        && virtual_guide == acsh_loft_class->virtual_guide)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.virtual_guide [B] " FORMAT_B " != " FORMAT_B "", acsh_loft_class->virtual_guide, virtual_guide);
+    virtual_guide++;
+    if (dwg_dynapi_entity_set_value (acsh_loft_class, "ACSH_LOFT_CLASS", "virtual_guide", &virtual_guide, 0)
+        && virtual_guide == acsh_loft_class->virtual_guide)
+      pass ();
+    else
+      fail ("ACSH_LOFT_CLASS.virtual_guide [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_loft_class->virtual_guide, virtual_guide);
+    acsh_loft_class->virtual_guide--;
   }
   if (failed && (is_class_unstable ("ACSH_LOFT_CLASS") || is_class_debugging ("ACSH_LOFT_CLASS")))
     {
@@ -68327,6 +68507,16 @@ test_sizes (void)
       fprintf (stderr,
                "sizeof(struct _dwg_ACSH_HistoryNode): %d != "
                "dwg_dynapi_fields_size (\"ACSH_HistoryNode\"): %d\n",
+               size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_ACSH_LOFT_profile);
+  size2 = dwg_dynapi_fields_size ("ACSH_LOFT_profile");
+  if (size1 != size2)
+    {
+      fprintf (stderr,
+               "sizeof(struct _dwg_ACSH_LOFT_profile): %d != "
+               "dwg_dynapi_fields_size (\"ACSH_LOFT_profile\"): %d\n",
                size1, size2);
       error++;
     }

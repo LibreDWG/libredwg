@@ -5420,18 +5420,42 @@ struct _dwg_object_object*
 Dwg_EvalExpr
 @item history_node
 Dwg_ACSH_HistoryNode
-@item major
-BL,	DXF 90
-@item minor
-BL,	DXF 91
 @item num_crosssects
 BL,	DXF 92
 @item crosssects
-H*
+Dwg_ACSH_LOFT_profile*
 @item num_guides
 BL,	DXF 95
 @item guides
-H*
+Dwg_ACSH_LOFT_profile*
+@item shlf_bl98
+BL,	DXF 98
+@item start_draft_angle
+BD,	DXF 41
+@item end_draft_angle
+BD,	DXF 42
+@item start_draft_magnitude
+BD,	DXF 43
+@item end_draft_magnitude
+BD,	DXF 44
+@item arc_length_parameterization
+B,	DXF 290
+@item no_twist
+B,	DXF 291
+@item align_direction
+B,	DXF 292
+@item simple_surfaces
+B,	DXF 293
+@item closed_surfaces
+B,	DXF 294
+@item solid
+B,	DXF 295
+@item ruled_surface
+B,	DXF 296
+@item virtual_guide
+B,	DXF 297
+@item plane_normal_lofting_type
+BL,	DXF 70
 
 @end vtable
 @end indentedblock
@@ -13042,6 +13066,24 @@ CMC
 BL
 @item material
 H
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_ACSH_LOFT_profile} @anchor{Dwg_ACSH_LOFT_profile}
+@vindex Dwg_ACSH_LOFT_profile
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_ACSH_LOFT_CLASS*
+@item method
+BL
+@item size
+BL
+@item data
+TF
 
 @end vtable
 @end indentedblock
