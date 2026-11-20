@@ -164,6 +164,14 @@
       SUB_FIELD_B (name, has_shear, 0);               \
     }
 
+/* The ACSH method 37 ACIS helpers are only used by some of the files which
+   include the specs, and are too big to be inlined (-Werror=inline). */
+#ifdef __GNUC__
+#  define ACSH_ACIS_STATIC static __attribute__ ((unused))
+#else
+#  define ACSH_ACIS_STATIC static
+#endif
+
 #if defined(IS_DECODER)
 
 #  define DECODE_3DSOLID                                                      \
@@ -342,7 +350,7 @@ decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
 /* The ACIS of an ACSH_SWEEP_CLASS or ACSH_EXTRUSION_CLASS with the method 37:
    the 3DSOLID header, the SAB and the end marker. Reuse decode_3dsolid with a
    temporary 3DSOLID. Not for r2013+. */
-static inline int
+ACSH_ACIS_STATIC int
 acsh_decode_acis (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                   Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
 {
@@ -376,7 +384,7 @@ acsh_decode_acis (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
 /* A deep copy of the ACIS of an ACSH_SWEEP_CLASS or ACSH_EXTRUSION_CLASS
    into a temporary 3DSOLID, which the 3DSOLID encoder and DXF exporter may
    convert and free. */
-static inline void
+ACSH_ACIS_STATIC void
 acsh_acis_copy (Dwg_Entity_3DSOLID *restrict tmp,
                 const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
 {
@@ -421,7 +429,7 @@ acsh_acis_copy (Dwg_Entity_3DSOLID *restrict tmp,
     }
 }
 
-static inline void
+ACSH_ACIS_STATIC void
 acsh_acis_free_tmp (Dwg_Entity_3DSOLID *restrict tmp)
 {
   BITCODE_BL i;
@@ -612,7 +620,7 @@ encode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
   return error;
 }
 
-static inline int
+ACSH_ACIS_STATIC int
 acsh_encode_acis (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                   const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o)
 {

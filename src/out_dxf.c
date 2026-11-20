@@ -71,10 +71,9 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
 static int acsh_dxf_acis (Bit_Chain *restrict dat,
                           const Dwg_Object *restrict obj,
                           const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o);
-static inline void
-acsh_acis_copy (Dwg_Entity_3DSOLID *restrict tmp,
-                const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o);
-static inline void acsh_acis_free_tmp (Dwg_Entity_3DSOLID *restrict tmp);
+static void acsh_acis_copy (Dwg_Entity_3DSOLID *restrict tmp,
+                            const Dwg_Object_ACSH_SWEEP_CLASS *restrict _o);
+static void acsh_acis_free_tmp (Dwg_Entity_3DSOLID *restrict tmp);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
                               const int opts, const int dxf);
 static bool dxf_needs_cquote (const char *restrict str);
