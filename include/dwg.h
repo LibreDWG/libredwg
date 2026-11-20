@@ -7310,13 +7310,13 @@ typedef struct _dwg_object_ACSH_SWEEP_CLASS
   BITCODE_BD draft_angle;       /*!< DXF 42 0.0 */
   BITCODE_BD start_draft_dist;  /*!< DXF 43 0.0 */
   BITCODE_BD end_draft_dist;    /*!< DXF 44 0.0 */
-  BITCODE_BD scale_factor;      /*!< DXF 45 1.0 */
-  BITCODE_BD twist_angle;       /*!< DXF 48 0.0 */
+  BITCODE_BD twist_angle;       /*!< DXF 45 0.0 */
+  BITCODE_BD scale_factor;      /*!< DXF 48 1.0 */
   BITCODE_BD align_angle;       /*!< DXF 49 0.0 */
   BITCODE_BD* sweepentity_transform; /*!< DXF 46 16x */
   BITCODE_BD* pathentity_transform;  /*!< DXF 47 16x */
-  BITCODE_RC align_option;      /*!< DXF 70 2 */
-  BITCODE_RC miter_option;      /*!< DXF 71 2 */
+  BITCODE_BS align_option;      /*!< DXF 70 2 */
+  BITCODE_BS miter_option;      /*!< DXF 71 2 */
   BITCODE_B has_align_start;    /*!< DXF 290 1 */
   BITCODE_B bank;       /*!< DXF 292 1 */
   BITCODE_B check_intersections; /*!< DXF 293 0 */
@@ -7502,16 +7502,18 @@ typedef struct _dwg_object_ACSH_REVOLVE_CLASS
   BITCODE_BL major;       /*!< DXF 90 */
   BITCODE_BL minor;       /*!< DXF 91 */
   BITCODE_3BD axis_pt;	/*!< DXF 10 */
-  BITCODE_2RD direction;	/*!< DXF 11 */
+  BITCODE_3BD direction;	/*!< DXF 11 */
   BITCODE_BD revolve_angle;	/*!< DXF 40 */
   BITCODE_BD start_angle;	/*!< DXF 41 */
   BITCODE_BD draft_angle;	/*!< DXF 43 */
-  BITCODE_BD bd44;		/*!< DXF 44 */
-  BITCODE_BD bd45;		/*!< DXF 45 */
+  BITCODE_BD draft_start_distance; /*!< DXF 44 */
+  BITCODE_BD draft_end_distance;   /*!< DXF 45 */
   BITCODE_BD twist_angle;	/*!< DXF 46 */
-  BITCODE_B b290;		/*!< DXF 290 */
+  BITCODE_B solid;		/*!< DXF 290 */
   BITCODE_B is_close_to_axis;	/*!< DXF 291 */
-  BITCODE_H sweep_entity;
+  BITCODE_BL method;		/*!< DXF 92, the class version of the profile */
+  BITCODE_BL bindata_size;	/*!< DXF 90, in bits */
+  BITCODE_TF bindata;		/*!< DXF 310 */
 
 } Dwg_Object_ACSH_REVOLVE_CLASS;
 
@@ -9909,6 +9911,8 @@ typedef struct _dwg_object_object
     Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
     Dwg_Object_ACSH_PYRAMID_CLASS *ACSH_PYRAMID_CLASS;
+    Dwg_Object_ACSH_REVOLVE_CLASS *ACSH_REVOLVE_CLASS;
+    Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
     Dwg_Object_ASSOCACTIONPARAM *ASSOCACTIONPARAM;
     Dwg_Object_ASSOCARRAYACTIONBODY *ASSOCARRAYACTIONBODY;
@@ -9951,6 +9955,7 @@ typedef struct _dwg_object_object
     Dwg_Object_BLOCKXYGRIP *BLOCKXYGRIP;
     Dwg_Object_BLOCKXYPARAMETER *BLOCKXYPARAMETER;
     Dwg_Object_DATALINK *DATALINK;
+    Dwg_Object_DATATABLE *DATATABLE;
     Dwg_Object_DBCOLOR *DBCOLOR;
     Dwg_Object_FCFOBJECTCONTEXTDATA *FCFOBJECTCONTEXTDATA;
     Dwg_Object_GRADIENT_BACKGROUND *GRADIENT_BACKGROUND;
@@ -9959,11 +9964,10 @@ typedef struct _dwg_object_object
     Dwg_Object_IMAGE_BACKGROUND *IMAGE_BACKGROUND;
     Dwg_Object_LIGHTLIST *LIGHTLIST;
     Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
+    Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_OBJECT_PTR *OBJECT_PTR;
     Dwg_Object_PARTIAL_VIEWING_INDEX *PARTIAL_VIEWING_INDEX;
     Dwg_Object_PERSUBENTMGR *PERSUBENTMGR;
-    Dwg_Object_DATATABLE *DATATABLE;
-    Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA *MTEXTATTRIBUTEOBJECTCONTEXTDATA;
     Dwg_Object_POINTCLOUDCOLORMAP *POINTCLOUDCOLORMAP;
     Dwg_Object_POINTCLOUDDEF *POINTCLOUDDEF;
     Dwg_Object_POINTCLOUDDEFEX *POINTCLOUDDEFEX;
@@ -9989,8 +9993,6 @@ typedef struct _dwg_object_object
     Dwg_Object_ACMESTATEMGR *ACMESTATEMGR;
     Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
     Dwg_Object_ACSH_LOFT_CLASS *ACSH_LOFT_CLASS;
-    Dwg_Object_ACSH_REVOLVE_CLASS *ACSH_REVOLVE_CLASS;
-    Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
     Dwg_Object_ANGDIMOBJECTCONTEXTDATA *ANGDIMOBJECTCONTEXTDATA;
     Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA *ANNOTSCALEOBJECTCONTEXTDATA;
     Dwg_Object_ASSOC3POINTANGULARDIMACTIONBODY *ASSOC3POINTANGULARDIMACTIONBODY;
@@ -12151,6 +12153,8 @@ EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_REVOLVE_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCACTIONPARAM (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCARRAYACTIONBODY (Dwg_Object *obj);
@@ -12193,6 +12197,7 @@ EXPORT int dwg_setup_BLOCKVISIBILITYPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKXYGRIP (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKXYPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_DATALINK (Dwg_Object *obj);
+EXPORT int dwg_setup_DATATABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_GRADIENT_BACKGROUND (Dwg_Object *obj);
@@ -12201,11 +12206,10 @@ EXPORT int dwg_setup_IBL_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_IMAGE_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
+EXPORT int dwg_setup_MTEXTATTRIBUTEOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_OBJECT_PTR (Dwg_Object *obj);
 EXPORT int dwg_setup_PARTIAL_VIEWING_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
-EXPORT int dwg_setup_DATATABLE (Dwg_Object *obj);
-EXPORT int dwg_setup_MTEXTATTRIBUTEOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDCOLORMAP (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDDEF (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDDEFEX (Dwg_Object *obj);
@@ -12251,8 +12255,6 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
   EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
   EXPORT int dwg_setup_ACSH_LOFT_CLASS (Dwg_Object *obj);
-  EXPORT int dwg_setup_ACSH_REVOLVE_CLASS (Dwg_Object *obj);
-  EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);
   EXPORT int dwg_setup_ANGDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_ANNOTSCALEOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOC3POINTANGULARDIMACTIONBODY (Dwg_Object *obj);

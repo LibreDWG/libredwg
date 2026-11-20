@@ -568,8 +568,9 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
    && (obj->fixedtype == DWG_TYPE_REGION                                      \
        || obj->fixedtype == DWG_TYPE__3DSOLID                                 \
        || obj->fixedtype == DWG_TYPE_BODY))
-/* The r2013+ surfaces keep their ACIS in AcDs and have no history handle,
-   neither in the handle stream nor in the DXF. Without wireframe data
+/* The surfaces have no history handle (checked with a r2010 PLANESURFACE),
+   neither in the handle stream nor in the DXF. The r2013+ surfaces keep
+   their ACIS in AcDs. Without wireframe data
    (verified with files written by ODA) they have a bit (acis_empty2) after
    acis_empty_bit instead of the num_materials BL, then the revision GUID.
    With wireframe data (verified with an AutoCAD r2018 REVOLVEDSURFACE and
@@ -691,12 +692,12 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   }                                                                           \
   DXF {                                                                       \
     SINCE (R_2007a) {                                                         \
-      if (!SOLID_SURFACE_R2013) {                                             \
+      if (!SOLID_SURFACE) {                                             \
         SUBCLASS (AcDb3dSolid);                                               \
         FIELD_HANDLE (history_id, 4, 350);                                    \
       }                                                                       \
     }                                                                         \
-  } else if (!SOLID_SURFACE_R2013                                             \
+  } else if (!SOLID_SURFACE                                             \
              && ((IF_IS_ENCODER ? dat->version >= R_2007a : SOLID_VERSION2)  \
                  || SOLID_SAT1_R2007)                                         \
              && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \

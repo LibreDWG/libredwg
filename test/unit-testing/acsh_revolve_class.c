@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ACSH_REVOLVE_CLASS
 #include "tests_common.c"
 
@@ -12,19 +11,19 @@ api_process (dwg_object *obj)
   BITCODE_BL major;
   BITCODE_BL minor;
   BITCODE_3BD axis_pt;
-  BITCODE_2RD direction;
+  BITCODE_3BD direction;
   BITCODE_BD revolve_angle;
   BITCODE_BD start_angle;
   BITCODE_BD draft_angle;
-  BITCODE_BD bd44;
-  BITCODE_BD bd45;
+  BITCODE_BD draft_start_distance;
+  BITCODE_BD draft_end_distance;
   BITCODE_BD twist_angle;
-  BITCODE_B b290;
+  BITCODE_B solid;
   BITCODE_B is_close_to_axis;
-  struct _dwg_object_entity *sweep_entity;
+  BITCODE_BL method;
+  BITCODE_BL bindata_size;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_acsh_revolve_class *_obj = dwg_object_to_ACSH_REVOLVE_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_REVOLVE_CLASS);
@@ -33,14 +32,15 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, major, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, minor, BL);
   CHK_ENTITY_3RD (_obj, ACSH_REVOLVE_CLASS, axis_pt);
-  CHK_ENTITY_2RD (_obj, ACSH_REVOLVE_CLASS, direction);
+  CHK_ENTITY_3RD (_obj, ACSH_REVOLVE_CLASS, direction);
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, revolve_angle, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, start_angle, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, draft_angle, BD);
-  CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, bd44, BD);
-  CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, bd45, BD);
+  CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, draft_start_distance, BD);
+  CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, draft_end_distance, BD);
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, twist_angle, BD);
-  CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, b290, B);
+  CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, solid, B);
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, is_close_to_axis, B);
-#endif
+  CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, method, BL);
+  CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, bindata_size, BL);
 }

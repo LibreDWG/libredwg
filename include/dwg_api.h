@@ -751,6 +751,8 @@ extern "C"
   typedef struct _dwg_object_ACSH_BREP_CLASS		dwg_obj_acsh_brep_class;
   typedef struct _dwg_object_ACSH_CHAMFER_CLASS		dwg_obj_acsh_chamfer_class;
   typedef struct _dwg_object_ACSH_PYRAMID_CLASS		dwg_obj_acsh_pyramid_class;
+  typedef struct _dwg_object_ACSH_REVOLVE_CLASS		dwg_obj_acsh_revolve_class;
+  typedef struct _dwg_object_ACSH_SWEEP_CLASS		dwg_obj_acsh_sweep_class;
   typedef struct _dwg_object_ASSOCACTION		dwg_obj_assocaction;
   typedef struct _dwg_object_ASSOCACTIONPARAM		dwg_obj_assocactionparam;
   typedef struct _dwg_object_ASSOCARRAYACTIONBODY		dwg_obj_assocarrayactionbody;
@@ -793,6 +795,7 @@ extern "C"
   typedef struct _dwg_object_BLOCKXYGRIP		dwg_obj_blockxygrip;
   typedef struct _dwg_object_BLOCKXYPARAMETER		dwg_obj_blockxyparameter;
   typedef struct _dwg_object_DATALINK		dwg_obj_datalink;
+  typedef struct _dwg_object_DATATABLE		dwg_obj_datatable;
   typedef struct _dwg_object_DBCOLOR		dwg_obj_dbcolor;
   typedef struct _dwg_object_FCFOBJECTCONTEXTDATA		dwg_obj_fcfobjectcontextdata;
   typedef struct _dwg_object_GRADIENT_BACKGROUND		dwg_obj_gradient_background;
@@ -801,11 +804,10 @@ extern "C"
   typedef struct _dwg_object_IMAGE_BACKGROUND		dwg_obj_image_background;
   typedef struct _dwg_object_LIGHTLIST		dwg_obj_lightlist;
   typedef struct _dwg_object_MENTALRAYRENDERSETTINGS		dwg_obj_mentalrayrendersettings;
+  typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA		dwg_obj_mtextattributeobjectcontextdata;
   typedef struct _dwg_object_OBJECT_PTR		dwg_obj_object_ptr;
   typedef struct _dwg_object_PARTIAL_VIEWING_INDEX		dwg_obj_partial_viewing_index;
   typedef struct _dwg_object_PERSUBENTMGR		dwg_obj_persubentmgr;
-  typedef struct _dwg_object_DATATABLE		dwg_obj_datatable;
-  typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA		dwg_obj_mtextattributeobjectcontextdata;
   typedef struct _dwg_object_POINTCLOUDCOLORMAP		dwg_obj_pointcloudcolormap;
   typedef struct _dwg_object_POINTCLOUDDEF		dwg_obj_pointclouddef;
   typedef struct _dwg_object_POINTCLOUDDEFEX		dwg_obj_pointclouddefex;
@@ -831,8 +833,6 @@ extern "C"
   typedef struct _dwg_object_ACMESTATEMGR		dwg_obj_acmestatemgr;
   typedef struct _dwg_object_ACSH_EXTRUSION_CLASS		dwg_obj_acsh_extrusion_class;
   typedef struct _dwg_object_ACSH_LOFT_CLASS		dwg_obj_acsh_loft_class;
-  typedef struct _dwg_object_ACSH_REVOLVE_CLASS		dwg_obj_acsh_revolve_class;
-  typedef struct _dwg_object_ACSH_SWEEP_CLASS		dwg_obj_acsh_sweep_class;
   typedef struct _dwg_object_ANGDIMOBJECTCONTEXTDATA		dwg_obj_angdimobjectcontextdata;
   typedef struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA		dwg_obj_annotscaleobjectcontextdata;
   typedef struct _dwg_object_ASSOC3POINTANGULARDIMACTIONBODY		dwg_obj_assoc3pointangulardimactionbody;
@@ -1877,6 +1877,8 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_acsh_brep_class, ACSH_BREP_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
   dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS);
+  dwg_get_OBJECT_DECL (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS);
+  dwg_get_OBJECT_DECL (obj_acsh_sweep_class, ACSH_SWEEP_CLASS);
   dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);
   dwg_get_OBJECT_DECL (obj_assocactionparam, ASSOCACTIONPARAM);
   dwg_get_OBJECT_DECL (obj_assocarrayactionbody, ASSOCARRAYACTIONBODY);
@@ -1919,6 +1921,7 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_blockxygrip, BLOCKXYGRIP);
   dwg_get_OBJECT_DECL (obj_blockxyparameter, BLOCKXYPARAMETER);
   dwg_get_OBJECT_DECL (obj_datalink, DATALINK);
+  dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
   dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
   dwg_get_OBJECT_DECL (obj_fcfobjectcontextdata, FCFOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_gradient_background, GRADIENT_BACKGROUND);
@@ -1927,11 +1930,10 @@ extern "C"
   dwg_get_OBJECT_DECL (obj_image_background, IMAGE_BACKGROUND);
   dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
   dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS);
+  dwg_get_OBJECT_DECL (obj_mtextattributeobjectcontextdata, MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_object_ptr, OBJECT_PTR);
   dwg_get_OBJECT_DECL (obj_partial_viewing_index, PARTIAL_VIEWING_INDEX);
   dwg_get_OBJECT_DECL (obj_persubentmgr, PERSUBENTMGR);
-  dwg_get_OBJECT_DECL (obj_datatable, DATATABLE);
-  dwg_get_OBJECT_DECL (obj_mtextattributeobjectcontextdata, MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_pointcloudcolormap, POINTCLOUDCOLORMAP);
   dwg_get_OBJECT_DECL (obj_pointclouddef, POINTCLOUDDEF);
   dwg_get_OBJECT_DECL (obj_pointclouddefex, POINTCLOUDDEFEX);
@@ -1957,8 +1959,6 @@ extern "C"
     dwg_get_OBJECT_DECL (obj_acmestatemgr, ACMESTATEMGR);
     dwg_get_OBJECT_DECL (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS);
     dwg_get_OBJECT_DECL (obj_acsh_loft_class, ACSH_LOFT_CLASS);
-    dwg_get_OBJECT_DECL (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS);
-    dwg_get_OBJECT_DECL (obj_acsh_sweep_class, ACSH_SWEEP_CLASS);
     dwg_get_OBJECT_DECL (obj_angdimobjectcontextdata, ANGDIMOBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_annotscaleobjectcontextdata, ANNOTSCALEOBJECTCONTEXTDATA);
     dwg_get_OBJECT_DECL (obj_assoc3pointangulardimactionbody, ASSOC3POINTANGULARDIMACTIONBODY);
@@ -3022,6 +3022,8 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (ACSH_BREP_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS);
   DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS);
+  DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS);
+  DWG_GETALL_OBJECT_DECL (ACSH_SWEEP_CLASS);
   DWG_GETALL_OBJECT_DECL (ASSOCACTION);
   DWG_GETALL_OBJECT_DECL (ASSOCACTIONPARAM);
   DWG_GETALL_OBJECT_DECL (ASSOCARRAYACTIONBODY);
@@ -3064,6 +3066,7 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (BLOCKXYGRIP);
   DWG_GETALL_OBJECT_DECL (BLOCKXYPARAMETER);
   DWG_GETALL_OBJECT_DECL (DATALINK);
+  DWG_GETALL_OBJECT_DECL (DATATABLE);
   DWG_GETALL_OBJECT_DECL (DBCOLOR);
   DWG_GETALL_OBJECT_DECL (FCFOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (GRADIENT_BACKGROUND);
@@ -3072,11 +3075,10 @@ extern "C"
   DWG_GETALL_OBJECT_DECL (IMAGE_BACKGROUND);
   DWG_GETALL_OBJECT_DECL (LIGHTLIST);
   DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
+  DWG_GETALL_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (OBJECT_PTR);
   DWG_GETALL_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
   DWG_GETALL_OBJECT_DECL (PERSUBENTMGR);
-  DWG_GETALL_OBJECT_DECL (DATATABLE);
-  DWG_GETALL_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (POINTCLOUDCOLORMAP);
   DWG_GETALL_OBJECT_DECL (POINTCLOUDDEF);
   DWG_GETALL_OBJECT_DECL (POINTCLOUDDEFEX);
@@ -3102,8 +3104,6 @@ extern "C"
     DWG_GETALL_OBJECT_DECL (ACMESTATEMGR);
     DWG_GETALL_OBJECT_DECL (ACSH_EXTRUSION_CLASS);
     DWG_GETALL_OBJECT_DECL (ACSH_LOFT_CLASS);
-    DWG_GETALL_OBJECT_DECL (ACSH_REVOLVE_CLASS);
-    DWG_GETALL_OBJECT_DECL (ACSH_SWEEP_CLASS);
     DWG_GETALL_OBJECT_DECL (ANGDIMOBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (ANNOTSCALEOBJECTCONTEXTDATA);
     DWG_GETALL_OBJECT_DECL (ASSOC3POINTANGULARDIMACTIONBODY);
@@ -4173,6 +4173,8 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BREP_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_PYRAMID_CLASS);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SWEEP_CLASS);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTION);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTIONPARAM);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCARRAYACTIONBODY);
@@ -4215,6 +4217,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKXYGRIP);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKXYPARAMETER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (DATALINK);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (DBCOLOR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (FCFOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (GRADIENT_BACKGROUND);
@@ -4223,11 +4226,10 @@ extern "C"
   CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGE_BACKGROUND);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
+  CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (OBJECT_PTR);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PARTIAL_VIEWING_INDEX);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (PERSUBENTMGR);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (DATATABLE);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUDCOLORMAP);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUDDEF);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (POINTCLOUDDEFEX);
@@ -4253,8 +4255,6 @@ extern "C"
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ACMESTATEMGR);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_EXTRUSION_CLASS);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_LOFT_CLASS);
-    CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_REVOLVE_CLASS);
-    CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SWEEP_CLASS);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ANGDIMOBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ANNOTSCALEOBJECTCONTEXTDATA);
     CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOC3POINTANGULARDIMACTIONBODY);

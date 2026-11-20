@@ -9723,6 +9723,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
     return pair;
   ee = (Dwg_EvalExpr *)&(_obj)[f1->offset];
   ee->parentid = -1;
+  ee->value_code = -9999; // none, until a 70 selects the value member
   while (pair && pair->code != 100)
     {
       if (pair->code == 90)
@@ -9733,7 +9734,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
         }
       else if (pair->code == 98)
         {
-          ee->minor = pair->value.u;
+          ee->major = pair->value.u;
           LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", obj->name, evalexpr, "major",
                      pair->value.u, pair->code);
         }
@@ -9743,7 +9744,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
           LOG_TRACE ("%s.%s.%s = %u [BL %d]\n", obj->name, evalexpr, "minor",
                      pair->value.u, pair->code);
         }
-      else if (pair->code == 70 && !ee->value_code)
+      else if (pair->code == 70 && ee->value_code == -9999)
         {
           ee->value_code = pair->value.i;
           LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, evalexpr,
@@ -11716,6 +11717,82 @@ dxf_set_leader_context (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   return 0;
 }
 
+/* ACSH_SWEEP_CLASS and ACSH_REVOLVE_CLASS: the 92 and 93 method of the
+   profile, the IDX-th 90 (1: the size in bits of the first profile, 2: of
+   the second) and the data of the RUN-th 310 run. */
+static void
+dxf_acsh_sweep_bl (Dwg_Object *restrict obj, const int code,
+                   const BITCODE_BL v, const char *restrict name)
+{
+  BITCODE_BL *p = NULL;
+  const char *field = "method";
+  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
+    {
+      Dwg_Object_ACSH_SWEEP_CLASS *o = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+      p = code == 92 ? &o->method : &o->shsw_bl93;
+      field = code == 92 ? "method" : "shsw_bl93";
+    }
+  else if (obj->fixedtype == DWG_TYPE_ACSH_REVOLVE_CLASS && code == 92)
+    p = &obj->tio.object->tio.ACSH_REVOLVE_CLASS->method;
+  if (!p)
+    return;
+  *p = v;
+  LOG_TRACE ("%s.%s = %u [BL %d]\n", name, field, (unsigned)v, code);
+}
+
+static void
+dxf_acsh_sweep_size (Dwg_Object *restrict obj, const int idx,
+                     const BITCODE_BL v, const char *restrict name)
+{
+  BITCODE_BL *p = NULL;
+  const char *field = "bindata_size";
+  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
+    {
+      Dwg_Object_ACSH_SWEEP_CLASS *o = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+      p = idx == 1 ? &o->shsw_text_size : &o->shsw_text2_size;
+      field = idx == 1 ? "shsw_text_size" : "shsw_text2_size";
+    }
+  else if (obj->fixedtype == DWG_TYPE_ACSH_REVOLVE_CLASS && idx == 1)
+    p = &obj->tio.object->tio.ACSH_REVOLVE_CLASS->bindata_size;
+  if (!p)
+    return;
+  *p = v;
+  LOG_TRACE ("%s.%s = %u [BL 90]\n", name, field, (unsigned)v);
+}
+
+static void
+dxf_acsh_sweep_data (Dwg_Object *restrict obj, const int run, BITCODE_TF data,
+                     const size_t len, const char *restrict name)
+{
+  BITCODE_TF *pdata = NULL;
+  BITCODE_BL *psize = NULL;
+  const char *field = "bindata";
+  if (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS)
+    {
+      Dwg_Object_ACSH_SWEEP_CLASS *o = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+      pdata = run == 0 ? &o->shsw_text : &o->shsw_text2;
+      psize = run == 0 ? &o->shsw_text_size : &o->shsw_text2_size;
+      field = run == 0 ? "shsw_text" : "shsw_text2";
+    }
+  else if (obj->fixedtype == DWG_TYPE_ACSH_REVOLVE_CLASS && run == 0)
+    {
+      Dwg_Object_ACSH_REVOLVE_CLASS *o
+          = obj->tio.object->tio.ACSH_REVOLVE_CLASS;
+      pdata = &o->bindata;
+      psize = &o->bindata_size;
+    }
+  if (!pdata)
+    {
+      free (data);
+      return;
+    }
+  free (*pdata);
+  *pdata = data;
+  if (*psize > len * 8)
+    *psize = (BITCODE_BL)(len * 8);
+  LOG_TRACE ("%s.%s = TF %u bytes [310]\n", name, field, (unsigned)len);
+}
+
 /* The surfaces with a sweep profile: the 90, 310 and sweep option groups
    cannot be told apart by the dynapi. REVOLVEDSURFACE has just the profile. */
 static bool
@@ -11929,6 +12006,7 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
   int es_idx[5]
       = { 0, 0, 0, 0, 0 };      // sweep surface matrices 40, 46, 47, 41, 42
   int surf_bin = 0;             // sweep surface 310 data run
+  int acsh_n90 = 0;             // the 90 of an ACSH sweep or revolve
   BITCODE_BL column_idx = 0;    // MTEXTOBJECTCONTEXTDATA.column_heights[46]
   BITCODE_BL leader_pt_idx = 0; // LEADEROBJECTCONTEXTDATA.points[10,20,30]
   BITCODE_BL sf_idx = 0;        // SPATIAL_FILTER matrix values (40)
@@ -14342,6 +14420,17 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                 {
                 hn_color:
                   hn->color.index = pair->value.l;
+                  // the method of the index: ByLayer, ByBlock or ACI
+                  if (pair->value.l == 256)
+                    hn->color.method = 0xc0;
+                  else if (pair->value.l == 0)
+                    hn->color.method = 0xc1;
+                  else if (pair->value.l > 0 && pair->value.l < 256)
+                    hn->color.method = 0xc3;
+                  hn->color.rgb
+                      = ((BITCODE_BL)hn->color.method << 24)
+                        | (hn->color.method == 0xc3 ? (BITCODE_BL)pair->value.l
+                                                    : 0);
                   LOG_TRACE ("%s.%s.%s.index = %u [CMC %d]\n", name,
                              "history_node", "color", pair->value.u,
                              pair->code);
@@ -14365,7 +14454,9 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                   // BD* starting at 40-55
                   for (j = 0; j < 16; j++)
                     {
-                      hn->trans[j] = pair->value.d;
+                      // the DXF has the codes 50-55 in degrees
+                      hn->trans[j] = (j >= 10) ? deg2rad (pair->value.d)
+                                               : pair->value.d;
                       LOG_TRACE ("%s.history_node.trans[%d] = %f [BD %d]\n",
                                  obj->name, j, pair->value.d, j + 40);
                       dxf_free_pair (pair);
@@ -14377,6 +14468,60 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                       if (pair->code != j + 41)
                         goto search_field;
                     }
+                }
+            }
+          else if ((obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS
+                    || obj->fixedtype == DWG_TYPE_ACSH_REVOLVE_CLASS)
+                   && (strEQc (subclass, "AcDbShSweepBase")
+                       || strEQc (subclass, "AcDbShRevolve"))
+                   && (pair->code == 92 || pair->code == 93
+                       || pair->code == 310
+                       || (obj->fixedtype == DWG_TYPE_ACSH_SWEEP_CLASS
+                           && (pair->code == 46 || pair->code == 47))
+                       || (pair->code == 90 && acsh_n90++ > 0)))
+            {
+              if (pair->code == 46 || pair->code == 47)
+                {
+                  Dwg_Object_ACSH_SWEEP_CLASS *o
+                      = obj->tio.object->tio.ACSH_SWEEP_CLASS;
+                  BITCODE_BD **matrix = pair->code == 46
+                                            ? &o->sweepentity_transform
+                                            : &o->pathentity_transform;
+                  const int m = pair->code == 46 ? 1 : 2;
+                  if (!*matrix)
+                    {
+                      *matrix
+                          = (BITCODE_BD *)xcalloc (16, sizeof (BITCODE_BD));
+                      if (!*matrix)
+                        goto invalid_dxf;
+                    }
+                  if (es_idx[m] < 16)
+                    (*matrix)[es_idx[m]++] = pair->value.d;
+                  goto next_pair;
+                }
+              // after the major (90) and minor (91): the method (92), the
+              // size in bits (90) and the data (310) of the profiles
+              if (pair->code == 92 || pair->code == 93)
+                {
+                  dxf_acsh_sweep_bl (obj, pair->code, pair->value.u, name);
+                  goto next_pair;
+                }
+              else if (pair->code == 90)
+                {
+                  dxf_acsh_sweep_size (obj, acsh_n90 - 1, pair->value.u, name);
+                  goto next_pair;
+                }
+              else
+                {
+                  size_t len = 0;
+                  BITCODE_TF data
+                      = dxf_read_binary_chunks (dat, &pair, 310, &len);
+                  if (!data)
+                    goto fail;
+                  dxf_acsh_sweep_data (obj, surf_bin++, data, len, name);
+                  if (!pair || pair->code == 0)
+                    goto end_object_loop;
+                  goto start_loop;
                 }
             }
           else if (dwg_obj_is_acsh (obj) && memBEGINc (subclass, "AcDbSh")
@@ -15051,6 +15196,46 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                           else if (j > size)
                             LOG_ERROR ("%s.%s overflow %d > %ld", name,
                                        num_f->name, j, size);
+                          goto next_pair;
+                        }
+                      // FIELD_VECTOR BITCODE_BL* (one value per code), e.g.
+                      // ACSH_FILLET_CLASS.edges (94), counted by num_edges
+                      else if (strEQc (f->type, "BL*")
+                               && (num_f = find_numfield (fields, f->name))
+                               && f->dxf == pair->code)
+                        {
+                          BITCODE_BL *vals = NULL;
+                          long size = get_numfield_value (_obj, num_f);
+                          if (size <= 0 || size > 0x100000)
+                            {
+                              LOG_TRACE ("Ignore empty %s.%s VECTOR [%s %d]",
+                                         name, f->name, f->type, pair->code);
+                              goto next_pair;
+                            }
+                          if (j == 0)
+                            {
+                              vals = (BITCODE_BL *)xcalloc (
+                                  size, sizeof (BITCODE_BL));
+                              if (!vals)
+                                {
+                                  dxf_free_pair (pair);
+                                  goto fail;
+                                }
+                              dwg_dynapi_entity_set_value (_obj, obj->name,
+                                                           f->name, &vals, 0);
+                            }
+                          else
+                            dwg_dynapi_entity_value (_obj, obj->name, f->name,
+                                                     &vals, NULL);
+                          if (vals && j < size)
+                            {
+                              vals[j] = pair->value.u;
+                              LOG_TRACE ("%s.%s[%d] = %u [%s %d]\n", name,
+                                         f->name, j, pair->value.u, f->type,
+                                         pair->code);
+                              if (++j == size)
+                                j = 0; // restart for the next BL* vector
+                            }
                           goto next_pair;
                         }
                       else if (f->dxf == pair->code && strEQc (f->type, "TF")

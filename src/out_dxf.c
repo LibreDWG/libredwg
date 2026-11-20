@@ -1292,7 +1292,11 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
         }
       if (!opt || color->index || color->method == 0xc1)
         {
-          VALUE_RSd (color->index, dxf);
+          // ByLayer without an index (e.g. from the BS of an ACSH history
+          // node) is 256, not the 0 ByBlock
+          VALUE_RSd (!color->index && color->method == 0xc0 ? 256
+                                                            : color->index,
+                     dxf);
         }
       if (color->method != 0xc2)
         return;

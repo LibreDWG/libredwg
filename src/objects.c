@@ -1464,7 +1464,7 @@ in_word_set (const char *str, size_t len)
 #line 159 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str635,                  "ACSH_CONE_CLASS",                   DWG_TYPE_ACSH_CONE_CLASS,	0,	STABLE},
 #line 168 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str636,                 "ACSH_SWEEP_CLASS",                  DWG_TYPE_ACSH_SWEEP_CLASS,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str636,                 "ACSH_SWEEP_CLASS",                  DWG_TYPE_ACSH_SWEEP_CLASS,	0,	UNSTABLE},
       {-1},
 #line 175 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str638,                    "APPID_CONTROL",                     DWG_TYPE_APPID_CONTROL,	0,	STABLE},
@@ -1556,7 +1556,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str776,                 "IMAGE_BACKGROUND",                  DWG_TYPE_IMAGE_BACKGROUND,	0,	UNSTABLE},
       {-1},
 #line 166 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str778,               "ACSH_REVOLVE_CLASS",                DWG_TYPE_ACSH_REVOLVE_CLASS,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str778,               "ACSH_REVOLVE_CLASS",                DWG_TYPE_ACSH_REVOLVE_CLASS,	0,	UNSTABLE},
       {-1}, {-1}, {-1},
 #line 262 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str782,                     "BLOCK_HEADER",                      DWG_TYPE_BLOCK_HEADER,	0,	STABLE},
