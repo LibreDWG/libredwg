@@ -568,7 +568,8 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
    && (obj->fixedtype == DWG_TYPE_REGION                                      \
        || obj->fixedtype == DWG_TYPE__3DSOLID                                 \
        || obj->fixedtype == DWG_TYPE_BODY))
-/* The surfaces have no history handle (checked with a r2010 PLANESURFACE),
+/* The surfaces have the num_materials BL since r2007 also for SAT v1, but no
+   history handle (checked with a r2010 PLANESURFACE),
    neither in the handle stream nor in the DXF. The r2013+ surfaces keep
    their ACIS in AcDs. Without wireframe data
    (verified with files written by ODA) they have a bit (acis_empty2) after
@@ -639,14 +640,19 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
           END_REPEAT (silhouettes);                                           \
         }                                                                     \
     }                                                                         \
-  FIELD_B (acis_empty_bit, 0);      \
-      /* ?? */ /* The R2007+ unknown BL (num_materials) is there for          \
+  ENCODER { /* AutoCAD has it set also for the surfaces with an inline SAB */           \
+    if (SOLID_SURFACE && dat->version >= R_2007a)                             \
+      FIELD_VALUE (acis_empty_bit) = 1;                                       \
+  }                                                                           \
+  FIELD_B (acis_empty_bit, 0); \
+      /* ?? */ /* The R2007+ unknown BL (num_materials) is there for                      \
   SAT v1 also */        \
   if (SOLID_SURFACE_R2013 && !FIELD_VALUE (wireframe_data_present))           \
     {                                                                         \
       FIELD_B (acis_empty2, 0);                                               \
     }                                                                         \
-  else if (SOLID_VERSION2 || SOLID_SAT1_R2007 || SOLID_SURFACE_R2013)         \
+  else if (SOLID_VERSION2 || SOLID_SAT1_R2007                                \
+           || (SOLID_SURFACE && dat->version >= R_2007a))                    \
     {                                                                         \
       SINCE (R_2007a)                                                         \
       {                                                                       \

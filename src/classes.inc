@@ -321,7 +321,7 @@
   // unstable/undertested.
   // not enough coverage, but assumed mostly ok. field names may change.
   // DXF output skipped
-  UNSTABLE_CLASS     (ACTION, PLANESURFACE)      /* ent, r2010 DXF breaks the ACIS solids for ODA */
+  UNSTABLE_CLASS_DXF_ALLOW_DXF (ACTION, PLANESURFACE, PLANESURFACE)
   UNSTABLE_CLASS     (ACTION, ACSH_BREP_CLASS)   // pretty stable, but cannot roundtrip
   UNSTABLE_CLASS     (ACTION, ACSH_CHAMFER_CLASS) // bl92?
   UNSTABLE_CLASS     (ACTION, ACSH_PYRAMID_CLASS)
