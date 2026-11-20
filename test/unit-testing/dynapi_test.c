@@ -28046,18 +28046,18 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     acsh_extrusion_class->align_angle--;
   }
   {
-    BITCODE_RC align_option;
+    BITCODE_BS align_option;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "align_option", &align_option, NULL)
         && align_option == acsh_extrusion_class->align_option)
       pass ();
     else
-      fail ("ACSH_EXTRUSION_CLASS.align_option [RC] %u != %u", acsh_extrusion_class->align_option, align_option);
+      fail ("ACSH_EXTRUSION_CLASS.align_option [BS] %hu != %hu", acsh_extrusion_class->align_option, align_option);
     align_option++;
     if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "align_option", &align_option, 0)
         && align_option == acsh_extrusion_class->align_option)
       pass ();
     else
-      fail ("ACSH_EXTRUSION_CLASS.align_option [RC] set+1 %u != %u", acsh_extrusion_class->align_option, align_option);
+      fail ("ACSH_EXTRUSION_CLASS.align_option [BS] set+1 %hu != %hu", acsh_extrusion_class->align_option, align_option);
     acsh_extrusion_class->align_option--;
   }
   {
@@ -28205,18 +28205,18 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
     acsh_extrusion_class->minor--;
   }
   {
-    BITCODE_RC miter_option;
+    BITCODE_BS miter_option;
     if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "miter_option", &miter_option, NULL)
         && miter_option == acsh_extrusion_class->miter_option)
       pass ();
     else
-      fail ("ACSH_EXTRUSION_CLASS.miter_option [RC] %u != %u", acsh_extrusion_class->miter_option, miter_option);
+      fail ("ACSH_EXTRUSION_CLASS.miter_option [BS] %hu != %hu", acsh_extrusion_class->miter_option, miter_option);
     miter_option++;
     if (dwg_dynapi_entity_set_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "miter_option", &miter_option, 0)
         && miter_option == acsh_extrusion_class->miter_option)
       pass ();
     else
-      fail ("ACSH_EXTRUSION_CLASS.miter_option [RC] set+1 %u != %u", acsh_extrusion_class->miter_option, miter_option);
+      fail ("ACSH_EXTRUSION_CLASS.miter_option [BS] set+1 %hu != %hu", acsh_extrusion_class->miter_option, miter_option);
     acsh_extrusion_class->miter_option--;
   }
   {
