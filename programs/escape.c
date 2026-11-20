@@ -388,6 +388,8 @@ mtext_escape_line (const char *restrict line)
   end = dest + len;
   while (*s)
     {
+      char c = *s;
+      int step = 1;
       if (*s == '\\' && s[1] == 'U' && s[2] == '+'
           && isxdigit ((unsigned char)s[3]) && isxdigit ((unsigned char)s[4])
           && isxdigit ((unsigned char)s[5]) && isxdigit ((unsigned char)s[6]))
@@ -399,7 +401,10 @@ mtext_escape_line (const char *restrict line)
               int n = 0;
               int i;
               if (cp < 0x80)
-                utf8[n++] = (char)cp;
+                { // XML-escape it below, as the literal char
+                  c = (char)cp;
+                  step = 7;
+                }
               else if (cp < 0x800)
                 {
                   utf8[n++] = (char)(0xC0 | (cp >> 6));
@@ -427,11 +432,14 @@ mtext_escape_line (const char *restrict line)
                   *d++ = utf8[i];
                 }
               *d = 0;
-              s += 7;
-              continue;
+              if (n)
+                {
+                  s += 7;
+                  continue;
+                }
             }
         }
-      switch (*s)
+      switch (c)
         {
         case '"':
           APPEND_GROW (d, dest, end, len, "&quot;");
@@ -450,7 +458,7 @@ mtext_escape_line (const char *restrict line)
           break;
         default:
           {
-            if (*s < 0x20 && *s != 0x09 && *s != 0x0A && *s != 0x0D)
+            if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D)
               {
                 APPEND_GROW (d, dest, end, len, "&#xFFFD;");
                 break;
@@ -466,11 +474,11 @@ mtext_escape_line (const char *restrict line)
                 d = dest + _off;
                 end = dest + len;
               }
-            *d++ = *s;
+            *d++ = c;
             *d = 0;
           }
         }
-      s++;
+      s += step;
     }
   *d = 0;
   return dest;
