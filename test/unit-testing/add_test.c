@@ -1260,6 +1260,58 @@ test_preR13_dxf_blocks_to_r2000 (void)
   return numfailed ();
 }
 
+/* A three-vertex LWPOLYLINE can have a bulge for the first segment only. */
+static int
+test_lwpolyline_partial_bulges (void)
+{
+  const dwg_point_2d pts[] = { { 0, 0 }, { 2, 0 }, { 2, 1 } };
+  const char *file = "lwpolyline_partial_bulges.dxf";
+  Dwg_Data *dwg = dwg_new_Document (R_2000, 0, 0);
+  Dwg_Data in = { 0 };
+  Dwg_Object_BLOCK_HEADER *hdr;
+  Dwg_Entity_LWPOLYLINE *lw, **entities;
+  int error;
+
+  failed = 0;
+  if (!dwg)
+    return 1;
+  hdr = dwg_model_space_object (dwg)->tio.object->tio.BLOCK_HEADER;
+  lw = dwg_add_LWPOLYLINE (hdr, 3, pts);
+  if (!lw || !(lw->bulges = calloc (1, sizeof (*lw->bulges))))
+    {
+      dwg_free (dwg);
+      free (dwg);
+      return 1;
+    }
+  lw->flag |= 16;
+  lw->num_bulges = 1;
+  lw->bulges[0] = 0.5;
+  unlink (file);
+  error = dxf_write_file (file, dwg, 0);
+  dwg_free (dwg);
+  free (dwg);
+  if (error < DWG_ERR_CRITICAL)
+    error = dxf_read_file (file, &in);
+  unlink (file);
+  if (error >= DWG_ERR_CRITICAL)
+    fail ("partial LWPOLYLINE bulges: DXF round trip failed: 0x%x", error);
+  else
+    {
+      entities = dwg_getall_LWPOLYLINE (dwg_model_space_ref (&in));
+      if (!entities || !(lw = entities[0]) || entities[1]
+          || lw->num_points != 3 || !lw->num_bulges || !lw->bulges
+          || lw->num_bulges > 3 || lw->bulges[0] != 0.5
+          || (lw->num_bulges > 1 && lw->bulges[1] != 0.0)
+          || (lw->num_bulges > 2 && lw->bulges[2] != 0.0))
+        fail ("DXF lost the first segment's bulge");
+      else
+        ok ("DXF preserves the first segment's bulge");
+      free (entities);
+    }
+  dwg_free (&in);
+  return numfailed ();
+}
+
 /* Pre-R13 has no LWPOLYLINE. It is written as POLYLINE with VERTEXes, at
    its position. */
 static int
@@ -3821,6 +3873,7 @@ main (int argc, char *argv[])
   error += test_dxf_sat_v1 ();
   error += test_attrib_lock_flags ();
   error += test_preR13_dxf_blocks_to_r2000 ();
+  error += test_lwpolyline_partial_bulges ();
   error += test_lwpolyline_to_preR13 ();
   error += test_lwpolyline_to_preR13_dxf ();
   error += test_dxf_write_file ();

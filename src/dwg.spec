@@ -5563,7 +5563,7 @@ DWG_ENTITY (LWPOLYLINE)
             FIELD_BD (widths[rcount1].end, 41);
           }
         if (FIELD_VALUE (num_bulges) && FIELD_VALUE (bulges) &&
-            FIELD_VALUE (num_bulges) == FIELD_VALUE (num_points))
+            rcount1 < FIELD_VALUE (num_bulges))
           FIELD_BD (bulges[rcount1], 42);
         SINCE (R_2010b) {
           if (FIELD_VALUE (num_vertexids) && FIELD_VALUE (vertexids) &&
