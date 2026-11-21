@@ -130,12 +130,6 @@ Here is a list of features that are still missing:
 
 @table @asis
 
-@item Writing r2007 DWG
-Writing to the r2007 format is supported since 0.14.1, with Reed-Solomon
-coded and compressed pages, and the 64-bit CRCs. ODA reads them.
-Objects from r2010+ are downconverted, e.g. TABLESTYLE.
-We write as default in the r2000 format.
-
 @item Reading and writing pre-R13 DXF
 Reading and writing pre-R13 DXF's is work in progress.
 There is no support planned for the very old pre-R2.0 DXF format.
@@ -213,10 +207,6 @@ For a detailed overview see the file @file{src/classes.inc} or @file{src/classes
 
 See @file{src/classes.inc}.
 
-Missing:
-
-* PROXY subentities, PROXY_ENTITY
-
 Halfway:
 
   SUNSTUDY ASSOCACTION ASSOCNETWORK
@@ -238,7 +228,6 @@ I.e. we need an extended @file{example_2018.dwg} with all types,
 with the following entities, which are in no test DWG:
 
   DGNUNDERLAY DWFUNDERLAY GEOPOSITIONMARKER LONG_TRANSACTION
-  PROXY_ENTITY PROXY_LWPOLYLINE
 
 (DGNUNDERLAY, DWFUNDERLAY and LONG_TRANSACTION have a test DXF.
 CAMERA is DXF only, there is never a DWG with it).
@@ -247,7 +236,7 @@ and objects:
 
   CSACDOCUMENTOPTIONS XREFPANELOBJECT IDBUFFER IMAGEDEF
   IMAGEDEF_REACTOR LAYER_INDEX LIGHTLIST
-  NPOCOLLECTION OBJECT_PTR PLOTSETTINGS PROXY_OBJECT
+  NPOCOLLECTION OBJECT_PTR PLOTSETTINGS
   RASTERVARIABLES SPATIAL_INDEX UCS
 
 @end table
@@ -285,6 +274,8 @@ Written in C++, under the GPLv2 license.
 @item ACadSharp
 Read and write the basic objects in most DWG and DXF formats.
 Written in C#, under the MIT license.
+@item acadrust
+A port of ACadSharp to rust, under the Mozilla Public License 2.0.
 @item OpenDWG
 The OpenDWG's license does not allow the usage in free software projects.
 @end table
@@ -293,7 +284,7 @@ Compared to libdwg, libdxfrw and libopencad, LibreDWG can read and
 write much more DWG versions and details. Which is especially important for
 attached links and data from third party applications:
 BIM, MAP, GIS, AEC, MECH, ..., for 3D solids and dynamic parametric constraints.
-The commercial Teigha library is much better though.
+The commercial Teigha library is much better, but we are getting closer and closer.
 
 @node Security Advisory
 @chapter Security Advisory
@@ -1323,8 +1314,7 @@ Converting a minimal DXF to DWG may fail, and needs some fixes.
 
 @cindex DXFB, Binary DXF, DXB
 
-We can write Binary DXF files in various versions.
-Reading and writing and roundtripping DXB is not that much tested.
+We can write Binary DXF files in various versions, as with ASCII.
 
 We accept the file extensions .dxfb, .DXB and .DXFB for Binary DXF files.
 
@@ -1370,11 +1360,6 @@ We write all coordinates as [x, y], not [y, x]. z-coordinates are
 optional, and only written if not 0.0.
 Colors are either written as palette index as integer if not 256 (ByLayer),
 or as TrueColor RGB hex string values for all r2004+ DWG's.
-
-Missing entities:
-No 3D entities, HATCH by definition.
-ELLIPSE, polyline bulges would need segmention into line segments.
-MLINE, SPLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?)
 
 Due to implementation quirks with ending commas in JSON, we mostly
 add an empty dummy feature at the very end, with null properties and
@@ -1472,7 +1457,7 @@ minJSON is minimized JSON, without whitespace.
 
 Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
 optionally via @code{--as=rNNNN} as another version.
-r2007 DWG files are written natively, with RS-coded compressed pages.
+r2007 DWG files are now written natively, with RS-coded compressed pages.
 
 @item @file{dxfwrite}
 @cindex dxfwrite
@@ -1536,7 +1521,6 @@ and not overwritten, unless the option @code{--overwrite} or @code{-y}
 is given.
 
 AutoCAD @registeredsymbol{} may fail to import it or comes up with a RECOVERY dialog.
-r2007 DWG's are written natively, with RS-coded compressed pages and the 64-bit CRCs.
 
 @item @file{dwgrewrite}
 @cindex dwgrewrite
@@ -1544,7 +1528,6 @@ r2007 DWG's are written natively, with RS-coded compressed pages and the 64-bit 
 
 Read and write the DWG, optionally via @code{--as=rNNNN} as another
 version, an earlier or later version.
-r2007 DWG's are rewritten as r2007.
 
 @item @file{dwglayers}
 @cindex dwglayers
@@ -1590,8 +1573,9 @@ With @code{-i} replaces the DWG in-place. This only makes sense with an JQ expre
 @anchor{dwg2SVG}
 
 Convert a DWG to a limited SVG. All paperspace or modelspace enties of type:
-TEXT, LINE, CIRCLE, ARC, POLYLINE_2D, LWPOLYLINE, INSERT, ELLIPSE (unrotated),
-SOLID, 3DFACE, RAY, XLINE.
+TEXT, MTEXT, LINE, CIRCLE, POINT (as circle of radius 0.1), ARC, POLYLINE_2D,
+LWPOLYLINE, INSERT/ACIDBLOCKREFERENCE, ELLIPSE, SOLID, 3DFACE, RAY, XLINE, SPLINE,
+PROXY GRAPHICS.
 
 With @code{-m} or @code{--mspace} all paper-space entities are
 ignored, and only model-space is printed. The default is to print all
@@ -1604,8 +1588,8 @@ Limitations: Many other graphical entities and some properties are still missing
 @cindex dwg2ps
 @anchor{dwg2ps}
 
-Convert a DWG to a very limited Postscript file. All paperspace and modelspace entities of type LINE,
-POLYLINE_2D, LWPOLYLINE, ARC and CIRCLE.
+Convert a DWG to a very limited Postscript file. All paperspace and modelspace
+entities of type LINE, POLYLINE_2D, LWPOLYLINE, ARC and CIRCLE.
 
 This requires installation of pslib @uref{http://pslib.sourceforge.net/doc/pslib.html}.
 
@@ -1729,8 +1713,11 @@ Patches are welcome; if possible, please make them with
 @samp{git format-patch} and
 include @file{ChangeLog} entries (@pxref{Change Log,,, emacs, The GNU
 Emacs Manual}).  Please follow the existing GNU coding conventions.
+LLM assistance is ok, but must be mentioned in the commit.
 For patches longer than 15 lines we need your copyright assignment to the FSF clerk.
 See @file{CONTRIBUTING} in the source distribution.
+
+Security reports please file at github as security advisory, or mail the maintainer.
 
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License

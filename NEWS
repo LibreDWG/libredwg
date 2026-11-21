@@ -90,9 +90,32 @@ Security fixes:
   * Fixed GHSA-w5cw-g5gp-p6vf (algorithmic complexity): the r2007 reader
     looked up every section page with a linear get_page(), which was
     quadratic.  It uses an index now.
+  * Fixed GHSA-7cvw-9rmm-gpr5 (Moderate): NULL pointer dereference in
+    dxf_blocks_read.  An ENDBLK owned by a BLOCK_RECORD without a name
+    compared the NULL name with "*PAPER_SPACE".  Reported by lcfrateschi.
+  * Hardened against GHSA-p4hw-gv7c-cf35 (Moderate): dwg_read_json frees the
+    partial DWG on an unexpected non-string key, and the caller frees it
+    again as documented.  It is zeroed after the error free now.  It was
+    not reproducible on master anymore, as dwg_free zeroes the header
+    variables since the fix of OSS-Fuzz 6383958498279424.  Reported by
+    lcfrateschi.
+  * PROXY_ENTITY and PROXY_OBJECT: the data_numbits is checked.  It wrapped to
+    4G bits when the stream was already past the handles, which made
+    dwg2dxf write gigabytes of group 310 data per proxy.  The DXF import of
+    a PROXY_ENTITY errors if the group 93 size does not match the 310 data
+    (GH #1557).
 
 Major features:
+  * Added the r2007 DWG writer (new src/encode_r2007.c): r2007 (AC1021) DWGs
+    are now written in the r2007 format instead of falling back to r2010,
+    with Reed-Solomon coded pages, a new LZ77 compressor (the inverse of
+    decompress_r2007), the 64-bit CRCs, page checksums, hashcodes and
+    check data of the ODA spec.  ODAFileConverter reads them.  Objects from
+    r2010+ are downconverted, e.g. TABLESTYLE.
   * use mmap for input files.
+  * big-endian support, ppc64 and s390x now run the full CI.
+  * Fixed now all the remaining memory leaks, in in_dxf (GH #151): the tests
+    now run with the asan leak detection (no more detect_leaks=0).
   * new stable entity: ACIDBLOCKREFERENCE
   * unstable -> stable: MATERIAL, TABLE, TABLESTYLE, DIMASSOC,
     ALDIMOBJECTCONTEXTDATA, MTEXTOBJECTCONTEXTDATA, BLKREFOBJECTCONTEXTDATA,
@@ -104,8 +127,7 @@ Major features:
     REVOLVEDSURFACE, SWEPTSURFACE, DATATABLE, MTEXTATTRIBUTEOBJECTCONTEXTDATA,
     ACSH_REVOLVE_CLASS, ACSH_SWEEP_CLASS, ACSH_EXTRUSION_CLASS,
     ACSH_LOFT_CLASS
-  * renamed: LAYERFILTER => LAYER_FILTER
-  * RAPIDRTRENDERENVIRONMENT is now IBL_BACKGROUND
+  * renamed: LAYERFILTER => LAYER_FILTER, RAPIDRTRENDERENVIRONMENT => IBL_BACKGROUND
   * Fixed the DXF import of ACIS solids (REGION, 3DSOLID, BODY): the SAT v1
     text was kept in the DXF encryption ("^ " for 'A') with the SAT version
     of the source (ASM 20800), and not as ACIS 400 in the DWG encryption.
@@ -147,17 +169,9 @@ Major features:
     data style is missing; other custom cell styles are dropped with a
     warning, as that format has no place for them.
   * GeoJSON: added MLINE, MINSERT (MultiPoint), SOLID, TRACE, 3DFACE, RAY,
-    XLINE, POLYLINE_PFACE (MultiPolygon) and POLYLINE_MESH (MultiLineString).
-  * Added the r2007 DWG writer (new src/encode_r2007.c): r2007 (AC1021) DWGs
-    are now written in the r2007 format instead of falling back to r2010,
-    with Reed-Solomon coded pages, a new LZ77 compressor (the inverse of
-    decompress_r2007), the 64-bit CRCs, page checksums, hashcodes and
-    check data of the ODA spec.  ODAFileConverter reads them.  Objects from
-    r2010+ are downconverted, e.g. TABLESTYLE.  Used by dwgwrite, dxf2dwg
-    and --as r2007, and dwgrewrite keeps r2007.  Fixed the encoding of
-    r2007 objects with a string stream and raw unknown objects, which
-    overwrote the start of the object section.  Known: large DWGs still
-    need recovery in ODA, also when written as r2010.
+    XLINE, POLYLINE_PFACE (MultiPolygon), POLYLINE_MESH (MultiLineString),
+    Attributes, HATCH, ELLIPSE, SPLINE, bulged curve segments,
+    UCS transformations (by Antonio García Leal)
   * Added the public APIs dxf_write_file (filename, dwg, binary),
     dwg_write_json (filename, dwg) and dwg_write_geojson (filename, dwg),
     to export ASCII or binary DXF, JSON and GeoJSON files without access
@@ -166,6 +180,26 @@ Major features:
     API change: the former Bit_Chain based dwg_write_json and
     dwg_write_geojson (src/out_json.h, not in the public headers) are
     renamed to dwg_write_json_dat and dwg_write_geojson_dat.
+  * ACSH_SWEEP_CLASS and ACSH_EXTRUSION_CLASS support the r2007-r2010
+    AutoCAD variant (method 37) of the sweep profile, which is an ACIS SAB
+    with the 3DSOLID header instead of the binary profile.  New fields
+    shsw_acis_empty, shsw_acis_unknown, shsw_acis_version, shsw_num_blocks,
+    shsw_block_size, shsw_encr_sat_data, shsw_sab_size and shsw_acis_data.
+    They are read, written to the DWG, exported to the DXF as SAT, and
+    imported from it.
+  * ACSH_LOFT_CLASS is unstable, with DXF in- and output.  API change: the
+    cross sections and guides are arrays of the new struct
+    Dwg_ACSH_LOFT_profile (method, size in bits, data), no more handle
+    arrays.  major and minor are gone, new are the draft angles and
+    magnitudes, the 8 flags and plane_normal_lofting_type.
+  * PLANESURFACE: fixed the r2007+ layout and the DXF output, which ODA
+    reads now.
+  * The version is not in src/config.h anymore: PACKAGE_VERSION and
+    PACKAGE_STRING changed with every commit, and rebuilt and invalidated
+    all the objects and their ccache entries.  It is in the generated
+    src/version.c (from src/version.c.in) only, with the API
+    dwg_api_version_string and the new dwg_api_package_string, which the
+    programs, examples and the writers use.
 
 Minor bugfixes / fuzzing fixes:
   * Fixed DXF input termination at mmap page boundaries, avoiding writes
@@ -300,12 +334,15 @@ Minor bugfixes / fuzzing fixes:
     (bit_read_TV).
     Out-of-memory: 532220989 530086146 527085540.
     Timeouts: 531651998 530576161 528659158 526962317.
-  * Fixed now all the remaining memory leaks in in_dxf (GH #151): the unit
-    tests, dxf.test, dxfb.test, dxfread.test and the dxf2dwg of alive.test
-    now run with the asan leak detection (no more detect_leaks=0).  Freed are
-    SPLINE with any scenario, unhandled classes created by name by the
-    importers (ASSOCPERSSUBENTMANAGER, ASSOCALIGNEDDIMACTIONBODY), the class
-    dxfname_u of any version, pre-R13 DIMENSION.user_text, and some more.
+  * DXF: the LWPOLYLINE constant width (43) is written once, as AutoCAD does,
+    and not a second time with the width flag.  Reported by aichen2017
+    (GitHub PR #1554).
+  * DXF: the LWPOLYLINE bulges (42) are written when there are fewer bulges
+    than points, they were lost.  Reported by aichen2017 (GitHub PR #1555).
+  * Fixed the uninitialized hdlname in dwg_find_tablehandle (OSS-Fuzz
+    588507950, valgrind finding in dwg_decode_LAYOUT_private).
+  * Fixed the mingw build of the version API (dllexport), the gcc
+    -Werror=inline and -Wshadow of the ACIS helpers, and make distcheck.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 
