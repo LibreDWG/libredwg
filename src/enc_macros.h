@@ -120,7 +120,12 @@
       if (!_obj->nam)                                                         \
         _obj->nam = strdup ("");                                              \
     }                                                                         \
-    bit_write_TV (dat, _obj->nam);                                            \
+    /* a TU string of an r2007+ source in a pre-r2007 TV field (e.g. the      \
+       header GUIDs): bit_write_T converts it. */                             \
+    if (IS_FROM_TU (dat) && dat->version < R_2007)                            \
+      bit_write_T (dat, _obj->nam);                                           \
+    else                                                                      \
+      bit_write_TV (dat, _obj->nam);                                          \
     LOG_TRACE (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);                      \
     LOG_POS                                                                   \
   }
@@ -222,6 +227,20 @@
       {                                                                       \
         bit_write_T16 (str_dat, _obj->nam);                                   \
         LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", _obj->nam, dxf);               \
+      }                                                                       \
+    else if (dat->version < R_2007)                                           \
+      {                                                                       \
+        /* TU source, pre-r2007 target: 8-bit chars, the RS length counts     \
+           the NUL (e.g. the r2004 SummaryInfo) */                            \
+        char *_s16 = _obj->nam ? bit_embed_TU ((BITCODE_TU)_obj->nam) : NULL; \
+        size_t _l16 = _s16 ? strlen (_s16) + 1 : 1;                           \
+        size_t _i16;                                                          \
+        bit_write_RS (str_dat, (BITCODE_RS)_l16);                             \
+        for (_i16 = 0; _i16 + 1 < _l16; _i16++)                               \
+          bit_write_RC (str_dat, (BITCODE_RC)_s16[_i16]);                     \
+        bit_write_RC (str_dat, 0);                                            \
+        LOG_TRACE (#nam ": \"%s\" [T16 %d]\n", _s16 ? _s16 : "", dxf);        \
+        free (_s16);                                                          \
       }                                                                       \
     else                                                                      \
       {                                                                       \

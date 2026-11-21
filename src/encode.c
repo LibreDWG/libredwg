@@ -2484,8 +2484,11 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         Dwg_Class *klass = &dwg->dwg_class[j];
         bit_write_BS (dat, klass->number);
         bit_write_BS (dat, klass->proxyflag);
-        bit_write_TV (dat, klass->appname);
-        bit_write_TV (dat, klass->cppname);
+        // appname and cppname are TU from an r2007+ DWG: bit_write_T
+        // converts them. dxfname is always TV (dxfname_u holds the TU
+        // copy).
+        bit_write_T (dat, klass->appname);
+        bit_write_T (dat, klass->cppname);
         bit_write_TV (dat, klass->dxfname);
         bit_write_B (dat, klass->is_zombie);
         bit_write_BS (dat, klass->item_class_id);
