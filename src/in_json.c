@@ -2669,6 +2669,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       // for easier adding or deleting entries.
       else if (t->type == JSMN_PRIMITIVE
                && (memBEGINc (key, "num_") || strEQc (key, "cfb_size")
+                   || strEQc (key, "shsw_num_blocks")
                    || (strEQc (key, "sab_size")
                        && find_field (fields, "acis_data"))))
         {
