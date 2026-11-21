@@ -76,6 +76,9 @@ add_executable(decode_test
 target_include_directories(decode_test PUBLIC
   ${CMAKE_CURRENT_BINARY_DIR})
 add_test(decode_test ${TARGET_SYSTEM_EMULATOR} decode_test${CMAKE_EXECUTABLE_SUFFIX})
+# the test-data fixtures, as TESTS_ENVIRONMENT in Makefile.am
+set_tests_properties(decode_test PROPERTIES
+  ENVIRONMENT "top_srcdir=${PROJECT_SOURCE_DIR}")
 
 add_executable(dxf_test
   dxf_test.c
