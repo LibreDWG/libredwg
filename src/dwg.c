@@ -758,9 +758,20 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 #  ifdef DWG_HAVE_MMAP
   // shrink the file to the final size, like the heap fwrite() did: the
   // mapping (and the file) may have grown beyond the content.
-  if (dat.fh && dat.mapped && dat.size < dat.mapped
-      && ftruncate (fileno (dat.fh), dat.size))
-    LOG_ERROR ("ftruncate failed with %s", strerror (errno));
+  // Unmap first: Windows cannot change the size of a file with a mapped view
+  // (_chsize_s fails with EACCES), which left the DWG padded with zeros to
+  // the mapping size.
+  if (dat.fh && dat.mapped && dat.size < dat.mapped)
+    {
+      const size_t final_size = dat.size;
+      if (munmap (dat.chain, dat.mapped))
+        LOG_ERROR ("unmap failed with %s", strerror (errno));
+      dat.chain = NULL;
+      dat.mapped = 0;
+      fflush (dat.fh);
+      if (ftruncate (fileno (dat.fh), final_size))
+        LOG_ERROR ("ftruncate failed with %s", strerror (errno));
+    }
   dat_unmap_file (&dat);
 #  else
   fh = fopen (filename, "wb");
