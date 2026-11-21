@@ -17404,7 +17404,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       LOG_TRACE ("BLOCK_HEADER.endblk_entity = " FORMAT_REF
                                  " [H] (blocks)\n",
                                  ARGS_REF (_hdr->endblk_entity));
-                      if (strcasecmp (_hdr->name, "*PAPER_SPACE") == 0)
+                      if (_hdr->name
+                          && strcasecmp (_hdr->name, "*PAPER_SPACE") == 0)
                         ent->entmode = 1;
                       if (_hdr->last_entity)
                         {
