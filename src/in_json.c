@@ -6244,8 +6244,10 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           json_free_globals (&tokens);
           /* On parse errors the caller will typically abort and free the DWG.
              When used from tools/fuzzing, free here to avoid LSan leaks from
-             partially built OBJECTS. */
+             partially built OBJECTS. The caller frees it again (GHSA-p4hw),
+             so zero it: the freed pointers must not stay. */
           dwg_free (dwg);
+          memset (dwg, 0, sizeof (Dwg_Data));
           return DWG_ERR_INVALIDDWG;
         }
       if (len >= 80)
