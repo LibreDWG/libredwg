@@ -46,6 +46,9 @@
         FIELD_RC (flag, 70);                                                  \
       if (R11OPTS (4))                                                        \
         FIELD_TV (user_text, 1);                                              \
+      FREE { /* set by the DXF importer without the R11OPTS flag */           \
+        FIELD_TV (user_text, 1);                                              \
+      }                                                                       \
     }                                                                         \
     LATER_VERSIONS                                                            \
     {                                                                         \

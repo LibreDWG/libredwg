@@ -575,8 +575,15 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
 
     // clang-format off
   #define CLASS_NOT_OF_OBJECT return dwg_free_variable_no_class (dwg, obj)
+  // with indxf even the unhandled classes are created by their name
+  #define UNHANDLED_CLASS_RETURN                                              \
+    if (obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ                                \
+        && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT)                            \
+      return dwg_free_variable_no_class (dwg, obj);                           \
+    return DWG_ERR_UNHANDLEDCLASS
   #include "classes.inc"
 
+  #undef UNHANDLED_CLASS_RETURN
   #undef CLASS_NOT_OF_OBJECT
   #undef WARN_UNHANDLED_CLASS
   #undef WARN_UNSTABLE_CLASS

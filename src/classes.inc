@@ -56,6 +56,12 @@
       CLASS_NOT_OF_OBJECT; \
     }
 
+/* An unhandled class is not decoded, except for the DXF and JSON importers,
+   which create the object by its name: free those. */
+#ifndef UNHANDLED_CLASS_RETURN
+#  define UNHANDLED_CLASS_RETURN return DWG_ERR_UNHANDLEDCLASS
+#endif
+
 #define DISALLOW_DXF(action, _name) \
   (strEQc (_XSTR(action), "dxf")) ? DWG_ERR_NOTYETSUPPORTED :
 #define ALLOW_DXF(action, _name)
@@ -183,7 +189,7 @@
         obj->dxfname = (char*) #_name; \
         obj->klass = klass; \
       } \
-      return DWG_ERR_UNHANDLEDCLASS; \
+      UNHANDLED_CLASS_RETURN; \
     }
 #define UNHANDLED_CLASS_DXF(action, _name, _dxfname) \
   if (klass->dxfname && strEQc (klass->dxfname, #_dxfname)) \
@@ -194,7 +200,7 @@
         obj->dxfname = (char*) #_dxfname; \
         obj->klass = klass; \
       } \
-      return DWG_ERR_UNHANDLEDCLASS; \
+      UNHANDLED_CLASS_RETURN; \
     }
 #define UNHANDLED_CLASS_CPP(action, _name, _cppname) \
   if (klass->cppname && strEQc (klass->cppname, #_cppname)) \
@@ -205,7 +211,7 @@
         obj->dxfname = (char*) #_name; \
         obj->klass = klass; \
       } \
-      return DWG_ERR_UNHANDLEDCLASS; \
+      UNHANDLED_CLASS_RETURN; \
     }
 
   /* Entities */

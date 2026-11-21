@@ -2592,6 +2592,13 @@ DWG_ENTITY (SPLINE)
     FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11);
   }
 
+  // DXF and JSON imports may have all the arrays, with any scenario
+#ifdef IS_FREE
+  FREE_IF (_obj->knots);
+  FREE_IF (_obj->ctrl_pts);
+  FREE_IF (_obj->fit_pts);
+#endif
+
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
