@@ -2465,6 +2465,9 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   size_t size_adr;
   size_t last_offset;
   BITCODE_RLL last_handle;
+  size_t prev_offset = 0, entry_start = 0;
+  BITCODE_RLL prev_handle = 0;
+  int close_page = 0;
   Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
   Object_Map *restrict omap;
 
@@ -2478,7 +2481,13 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     bit_chain_alloc (&sec_dat[sec_id]);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
     bit_chain_set_version (dat, old_dat);
-    dat->byte += 4; // r2004 object map offsets start after a 4-byte prefix
+    // r2004+: the AcDbObjects section starts with RL 0x0dca (ODA spec 20,
+    // AutoCAD writes it), the object map offsets count from the section
+    // start, not after the classes. AutoCAD rejects an r2004 file without
+    // it.
+    if (dat->size < dat->byte + 4)
+      bit_chain_alloc_size (dat, 4);
+    bit_write_RL (dat, 0x0DCA);
   }
   LOG_INFO ("\n=======> Objects: %4zu\n", dat->byte);
   size_adr = dat->byte;
@@ -2651,6 +2660,8 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
       index = omap[i].index;
       if (!index && !omap[i].handle)
         continue; // skipped objects
+    handlemap_entry:
+      entry_start = dat->byte;
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
       LOG_HANDLE ("Handleoff(%3i): " FORMAT_UMC " [UMC] (" FORMAT_HV "), ",
@@ -2664,7 +2675,23 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                   last_offset);
 
       ckr_missing = 1;
-      if (dat->byte - size_adr > 2030) // 2029
+      /* AutoCAD's pages are at most 2032 bytes (0x7F0, with the size field).
+         An entry that would not fit starts the next page, with the deltas
+         restarting at 0. */
+      if (dat->byte - size_adr > 2032 && entry_start - size_adr > 2)
+        {
+          dat->byte = entry_start;
+          dat->bit = 0;
+          last_handle = prev_handle;
+          last_offset = prev_offset;
+          close_page = 1;
+        }
+      else
+        {
+          prev_handle = last_handle;
+          prev_offset = last_offset;
+        }
+      if (close_page || dat->byte - size_adr >= 2032)
         {
           ckr_missing = 0;
           assert (size_adr || dwg->header.version >= R_2004);
@@ -2683,6 +2710,13 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           dat->byte += 2;
           last_offset = 0;
           last_handle = 0;
+          prev_offset = 0;
+          prev_handle = 0;
+          if (close_page)
+            {
+              close_page = 0;
+              goto handlemap_entry; // the entry that did not fit
+            }
         }
     }
   // printf ("Obj size: %u\n", i);
