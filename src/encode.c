@@ -2278,7 +2278,10 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         || dat->version >= R_2018)
       {
         hsize_adr = dat->byte;
-        bit_write_RL (dat, 0); // hsize placeholder
+        // hsize: the high 32 bits of the bit size, so 0, as AutoCAD writes
+        // it. AutoCAD rejects an r2010+ CLASSES section with the byte size
+        // in this word.
+        bit_write_RL (dat, 0);
       }
     if (dat->version >= R_2007)
       {
@@ -2397,7 +2400,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
   }
 
-  /* Patch hsize and bitsize for R2007+ */
+  /* Patch bitsize for R2007+ */
   if (bitsize_adr)
     {
       BITCODE_RL bitsize;
@@ -2405,15 +2408,7 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // up to and including the string stream endbit
       bitsize = (BITCODE_RL)(32 + bit_position (dat) - data_start * 8);
       {
-        BITCODE_RL hsize = (BITCODE_RL)(bitsize / 8);
         size_t pos = bit_position (dat);
-        if (hsize_adr)
-          {
-            bit_set_position (dat, hsize_adr * 8);
-            bit_write_RL (dat, hsize);
-            LOG_TRACE ("hsize: " FORMAT_RL " [RL] @%" PRIuSIZE "\n", hsize,
-                       hsize_adr);
-          }
         bit_set_position (dat, bitsize_adr * 8);
         bit_write_RL (dat, bitsize);
         LOG_TRACE ("bitsize: " FORMAT_RL " [RL] @%" PRIuSIZE "\n", bitsize,
@@ -2426,14 +2421,33 @@ encode_classes (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    */
   assert (size_adr);
   encode_patch_RLsize (dat, size_adr);
+  // As for the header: with the r2010+ high size word the size excludes
+  // its 4 bytes (AutoCAD: size = data bytes after hsize).
+  if (hsize_adr)
+    {
+      BITCODE_RL rsize;
+      memcpy (&rsize, &dat->chain[size_adr], 4);
+      rsize = htole32 (le32toh (rsize) - 4);
+      memcpy (&dat->chain[size_adr], &rsize, 4);
+    }
   bit_write_CRC (dat, size_adr, 0xC0C1);
   write_sentinel (dat, DWG_SENTINEL_CLASS_END);
   dwg->header.section[sec_id].size
       = (dat->byte - dwg->header.section[sec_id].address) & 0xFFFFFFFF;
   LOG_TRACE ("       Classes (end): %4zu\n", dat->byte);
-  // FIXME: for all versions?
-  bit_write_RL (dat, 0x0DCA);
-  LOG_TRACE ("unknown: %04X [RL]\n", 0x0DCA);
+  SINCE (R_2004a)
+  {
+    // AutoCAD ends the r2004+ AcDb:Classes section with 8 zero bytes. The
+    // 0x0dca belongs at the start of AcDb:AcDbObjects.
+    bit_write_RL (dat, 0);
+    bit_write_RL (dat, 0);
+  }
+  else
+  {
+    // FIXME: for all versions?
+    bit_write_RL (dat, 0x0DCA);
+    LOG_TRACE ("unknown: %04X [RL]\n", 0x0DCA);
+  }
   return error;
 }
 
