@@ -21,7 +21,6 @@ JQ="@JQ@"
 
 i=0
 
-HAVE_ASAN="@HAVE_ASAN@"
 # shellcheck disable=2157
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
@@ -32,11 +31,7 @@ elif [ -n "$TESTS_ENVIRONMENT" ]; then
 else
     TESTPROG="@LTEXEC@"
 fi
-if [ -n "$HAVE_ASAN" ]; then
-    DXFREAD="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG ./dxfread${EXEEXT}"
-else
-    DXFREAD="$TESTPROG ./dxfread${EXEEXT}"
-fi
+DXFREAD="$TESTPROG ./dxfread${EXEEXT}"
 
 # Test 1: DXF -> JSON
 # Convert a known DXF file to JSON and check it's valid

@@ -170,11 +170,6 @@ run ()
         # libtool only if shared
         TESTPROG="@LTEXEC@"
     fi
-    # indxf still leaks, GH #151
-    if test "$bprog" = "dxf2dwg" -a -n "@HAVE_ASAN@"
-    then
-       TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
-    fi
     # load_dwg r2000|r13|r14 leaks
     if test "$bprog" = "load_dwg" -a -n "@HAVE_ASAN@"
     then

@@ -27,13 +27,7 @@ elif [ -n "$TESTS_ENVIRONMENT" ]; then
 else
     TESTPROG="@LTEXEC@"
 fi
-# shellcheck disable=SC2157
-if [ -n "@HAVE_ASAN@" ]
-then
-    DXF2DWG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG ./dxf2dwg${EXEEXT}"
-else
-    DXF2DWG="$TESTPROG ./dxf2dwg${EXEEXT}"
-fi
+DXF2DWG="$TESTPROG ./dxf2dwg${EXEEXT}"
 HAVE_ODA="@HAVE_ODA@"
 ODAFileConverter="@ODAFILECONVERTER@"
 if [ -n "$HAVE_ODA" ]; then
