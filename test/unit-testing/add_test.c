@@ -2773,6 +2773,50 @@ test_dxf_proxy_entity (void)
   return numfailed ();
 }
 
+/* PROXY_OBJECT: a DXF 93 bit count larger than its 310 data is rejected,
+   the encoder would write the bits from the shorter buffer. */
+static int
+test_dxf_proxy_object_numbits (void)
+{
+  static const char dxf[]
+      = "0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1015\n0\nENDSEC\n"
+        "0\nSECTION\n2\nCLASSES\n0\nCLASS\n1\nACAD_PROXY_OBJECT\n"
+        "2\nAcDbProxyObject\n3\nObjectDBX Classes\n90\n1153\n91\n1\n"
+        "280\n0\n281\n0\n0\nENDSEC\n0\nSECTION\n2\nOBJECTS\n"
+        "0\nACAD_PROXY_OBJECT\n5\n255\n100\nAcDbProxyObject\n"
+        "90\n499\n91\n500\n93\n61000\n310\nAB80\n"
+        "0\nENDSEC\n0\nEOF\n";
+  Dwg_Data dwg = { 0 };
+  Bit_Chain dat = { 0 };
+  Dwg_Object *obj;
+  Dwg_Object_PROXY_OBJECT *o;
+  int error;
+  const int lvl = loglevel;
+
+  failed = 0;
+  dat.chain = (unsigned char *)strdup (dxf);
+  if (!dat.chain)
+    {
+      fail ("dxf_proxy_object_numbits: allocation failed");
+      return numfailed ();
+    }
+  dat.size = sizeof (dxf) - 1;
+  error = dwg_read_dxf (&dat, &dwg);
+  loglevel = lvl;
+  obj = first_object (&dwg, DWG_TYPE_PROXY_OBJECT);
+  o = obj && obj->tio.object ? obj->tio.object->tio.PROXY_OBJECT : NULL;
+  if (error >= DWG_ERR_CRITICAL || !o)
+    fail ("dxf_proxy_object_numbits: not imported (error 0x%x)", error);
+  else if (o->data || o->data_numbits)
+    fail ("dxf_proxy_object_numbits: data_numbits %u kept for 2 bytes",
+          o->data_numbits);
+  else
+    ok ("dxf_proxy_object_numbits: oversized 93 rejected");
+  dwg_free (&dwg);
+  free (dat.chain);
+  return numfailed ();
+}
+
 #endif
 
 #ifndef DISABLE_JSON
@@ -3918,6 +3962,7 @@ main (int argc, char *argv[])
   error += test_dxf_eval_node_missing_handle ();
   error += test_dxf_oleclient_ownership ();
   error += test_dxf_proxy_entity ();
+  error += test_dxf_proxy_object_numbits ();
 #endif
 #ifndef DISABLE_JSON
   error += test_json_sab_size ();

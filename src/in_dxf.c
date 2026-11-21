@@ -12257,6 +12257,8 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
   BITCODE_3BD pt;
   Dwg_Object *ctrl;
   const Dwg_DYNAPI_field *prev_vstyle = NULL;
+  const Dwg_DYNAPI_field *binfield = NULL; // the imported binary TF
+  size_t binlen = 0;                       // and its size in bytes
   subclass[0] = '\0';
 
   dxf_mtext_text = 0; // reset for this object
@@ -15631,33 +15633,18 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                         {
                           // binary TF field, e.g. PROXY_OBJECT.data (310).
                           // dxf_read_pair already decoded the hex chunks to
-                          // raw bytes (pair->value.s.ptr/len). The total
-                          // bit count arrived earlier via 93 (data_numbits).
+                          // raw bytes (pair->value.s.ptr/len). Its size pair
+                          // is reconciled at end_object_loop.
                           size_t len = 0;
                           BITCODE_TF data;
-                          BITCODE_BL numbits = 0;
                           data = dxf_read_binary_chunks (dat, &pair, f->dxf,
                                                          &len);
                           if (!data)
                             goto fail;
-                          // The DXF packs the last partial byte MSB-first,
-                          // bit_write_bits expects it LSB-first (see the
-                          // PROXY_OBJECT spec DECODER).
-                          if (dwg_dynapi_entity_value (_obj, obj->name,
-                                                       "data_numbits",
-                                                       &numbits, NULL)
-                              && (numbits % 8) && (numbits / 8) < len)
-                            {
-                              unsigned char b = data[numbits / 8];
-                              unsigned char r = 0;
-                              int _i;
-                              for (_i = 0; _i < 8; _i++)
-                                r |= (unsigned char)(((b >> _i) & 1)
-                                                     << (7 - _i));
-                              data[numbits / 8] = r;
-                            }
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &data, 0);
+                          binfield = f;
+                          binlen = len;
                           LOG_TRACE ("%s.%s = TF %u bytes [%s %d]\n", name,
                                      f->name, (unsigned)len, f->type, f->dxf);
                           if (!pair || pair->code == 0)
@@ -16851,6 +16838,56 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
     }
 
 end_object_loop:
+  if (binfield)
+    {
+      // The size of a binary TF field has a pair of its own, which may come
+      // before or after the 310 data: in bits (93) or in bytes (90). Do not
+      // trust it, the encoder writes the data by it.
+      char sizename[80];
+      const Dwg_DYNAPI_field *sf;
+      int in_bits = 1;
+      strcpy (sizename, binfield->name);
+      strcat (sizename, "_numbits");
+      if (!(sf = dwg_dynapi_entity_field (obj->name, sizename)))
+        {
+          in_bits = 0;
+          strcpy (sizename, binfield->name);
+          strcat (sizename, "_size");
+          sf = dwg_dynapi_entity_field (obj->name, sizename);
+        }
+      if (sf && sf->size == sizeof (BITCODE_BL))
+        {
+          BITCODE_TF data;
+          BITCODE_BL size;
+          memcpy (&data, &((char *)_obj)[binfield->offset], sizeof (data));
+          memcpy (&size, &((char *)_obj)[sf->offset], sizeof (size));
+          if (!size)
+            size = (BITCODE_BL)(in_bits ? binlen * 8 : binlen);
+          else if (in_bits ? ((size_t)size + 7) / 8 != binlen
+                           : (size_t)size != binlen)
+            {
+              LOG_ERROR ("Invalid %s.%s " FORMAT_BL " for %" PRIuSIZE " bytes",
+                         name, sizename, size, binlen);
+              free (data);
+              data = NULL;
+              size = 0;
+              memcpy (&((char *)_obj)[binfield->offset], &data, sizeof (data));
+            }
+          if (in_bits && data && (size % 8))
+            {
+              // The DXF packs the last partial byte MSB-first, bit_write_bits
+              // expects it LSB-first (see the PROXY_OBJECT spec DECODER).
+              unsigned char b = data[size / 8];
+              unsigned char r = 0;
+              int _i;
+              for (_i = 0; _i < 8; _i++)
+                r |= (unsigned char)(((b >> _i) & 1) << (7 - _i));
+              data[size / 8] = r;
+            }
+          memcpy (&((char *)_obj)[sf->offset], &size, sizeof (size));
+          LOG_TRACE ("%s.%s = " FORMAT_BL "\n", name, sizename, size);
+        }
+    }
   if (obj->fixedtype == DWG_TYPE_SEQEND)
     dxf_postprocess_SEQEND (obj);
   else if (obj->fixedtype == DWG_TYPE_LAYOUT)
