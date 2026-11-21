@@ -5526,6 +5526,7 @@ DWG_ENTITY (LWPOLYLINE)
   FIELD_BL (num_points, 90);
   // 1 closed, 128 plinegen
   VALUE_BS (((FIELD_VALUE (flag) & 256) ? 128 : 0) + (FIELD_VALUE (flag) & 512 ? 1 : 0), 70);
+  // AutoCAD writes the const_width (43) always, also 0.0, and once
   FIELD_BD (const_width, 43);
 #else
 #  ifdef IS_ENCODER
@@ -5538,7 +5539,7 @@ DWG_ENTITY (LWPOLYLINE)
 #endif
 
   if (FIELD_VALUE (flag) & 4)
-    FIELD_BD (const_width, 43);
+    FIELD_BD (const_width, 0);
   if (FIELD_VALUE (flag) & 8)
     FIELD_BD (elevation, 38);
   if (FIELD_VALUE (flag) & 2)
