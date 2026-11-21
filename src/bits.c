@@ -2238,13 +2238,17 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
                                 length);
                       length = UINT16_MAX - 1;
                     }
-                  bit_write_BS (dat, (BITCODE_BS)(length + 1));
-                  if (length)
+                  // an empty string is length 0 without a NUL (e.g. an r2000
+                  // STYLE bigfont "")
+                  if (!length)
+                    bit_write_BS (dat, 0);
+                  else
                     {
+                      bit_write_BS (dat, (BITCODE_BS)(length + 1));
                       for (i = 0; i < length; i++)
                         bit_write_RC (dat, (unsigned char)str[i]);
+                      bit_write_RC (dat, 0);
                     }
-                  bit_write_RC (dat, 0);
                   free (str);
                 }
               else
@@ -2645,8 +2649,9 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
 {
   size_t i, length;
 
+  // r2007+ TU strings are stored without a terminating NUL
   if (chain)
-    length = bit_wcs2len (chain) + 1;
+    length = bit_wcs2len (chain);
   else
     length = 0;
   if (length > UINT16_MAX)
