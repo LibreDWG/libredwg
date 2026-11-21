@@ -3401,10 +3401,16 @@ DWG_TABLE (LAYER)
   SINCE (R_2007a) {
     ENCODER {
 #ifndef DEBUG_CLASSES
-      if (_obj->material)
+      // Keep a material that is written (usually "Global"). Only clear a
+      // reference that does not resolve to a MATERIAL.
+      if (_obj->material && _obj->material->absolute_ref)
         {
-          _obj->material->absolute_ref = 0;
-          _obj->material->handleref.value = 0;
+          Dwg_Object *_mat = dwg_ref_object (dwg, _obj->material);
+          if (!_mat || _mat->fixedtype != DWG_TYPE_MATERIAL)
+            {
+              _obj->material->absolute_ref = 0;
+              _obj->material->handleref.value = 0;
+            }
         }
 #endif
     }
