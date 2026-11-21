@@ -9698,7 +9698,7 @@ static const Dwg_DYNAPI_field _dwg_SORTENTSTABLE_fields[] = {
   { "sort_ents",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_SORTENTSTABLE, sort_ents),
     1,1,0, 5 },
   { "block_owner",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SORTENTSTABLE, block_owner),
-    1,0,0, 0 },
+    1,0,0, 330 },
   { "ents",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_SORTENTSTABLE, ents),
     1,1,0, 331 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},

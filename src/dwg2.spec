@@ -158,7 +158,7 @@ DWG_OBJECT (SORTENTSTABLE)
   hdl_dat = str_dat;
 
   START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (block_owner, 4, 0); // mspace or pspace
+  FIELD_HANDLE (block_owner, 4, 330); // mspace or pspace
   HANDLE_VECTOR_N (ents, FIELD_VALUE (num_ents), 4, 0);
 
   DXF {
