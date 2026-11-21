@@ -3121,6 +3121,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           // pre-R13b1 must stay 0 (set by dxf_fixup_header or decode)
           _obj->dwg_version = _verp->dwg_version;
       }
+    // AutoCAD writes 0xff as maint_version (@0x12) and app_maint_version
+    // (@0x17) when it saves to an older release (r2004-r2013). 0xff > 3 also
+    // selects the r2010+ high size words in encode_header_vars and
+    // encode_classes.
+    if (dwg->header.version >= R_2004 && dwg->header.version < R_2018
+        && dwg->header.from_version != dwg->header.version)
+      _obj->maint_version = 0xff;
     if (_verp && !_obj->maint_rel_version)
       _obj->maint_rel_version = _verp->maint_rel_version;
     // e.g. from DXF. The r2010+ layout (bitsize_hi) is only written for
@@ -4019,6 +4026,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       dwg->fhdr.r2004_header.numsections = 0;
       dwg->fhdr.r2004_header.numgaps = 0;
+      // The pages are written without gaps, so no gap tree either. AutoCAD
+      // rejects the file with a source DWG's values (e.g. -1/-2/-1 and 53
+      // gaps).
+      dwg->fhdr.r2004_header.root_tree_node_gap = 0;
+      dwg->fhdr.r2004_header.lowermost_left_tree_node_gap = 0;
+      dwg->fhdr.r2004_header.lowermost_right_tree_node_gap = 0;
+      dwg->fhdr.r2004_header.gap_array_size = 0;
 
       // sec_dat[SECTION_UNKNOWN].byte = 0;
       sec_dat[SECTION_INFO].byte = 10
@@ -4228,9 +4242,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         {
           // The system sections (Section Info, Page Map) are no descriptors.
           // ODA would read them as data sections and fail their CRC.
-          unsigned ndesc = 0;
+          // ndesc starts at 1 for the empty section 0: the loop below writes
+          // it first (section_map_order), while this count skips it.
+          unsigned ndesc = 1;
           for (i = 0; i < ARRAY_SIZE (section_map_order); i++)
-            if (section_map_order[i] < SECTION_INFO
+            if (section_map_order[i] != SECTION_UNKNOWN
+                && section_map_order[i] < SECTION_INFO
                 && find_section_info_type (
                     dwg, (Dwg_Section_Type)section_map_order[i]))
               ndesc++;
@@ -4249,6 +4266,24 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         {
           Dwg_Section_Info *_obj;
           type = section_map_order[i];
+          if (type == SECTION_UNKNOWN)
+            {
+              // The empty section: id 0, no pages, unnamed. AutoCAD and the
+              // ODA spec have it first in the section map.
+              LOG_TRACE ("\nSection_Info (empty section) [0]\n");
+              bit_write_RLL (dat, 0);     // size
+              bit_write_RL (dat, 0);      // num_sections
+              bit_write_RL (dat, 0x7400); // max_decomp_size
+              bit_write_RL (dat, 1);      // unknown
+              bit_write_RL (dat, 2);      // compressed
+              bit_write_RL (dat, 0);      // id
+              bit_write_RL (dat, 0);      // encrypted
+              {
+                unsigned char noname[64] = { 0 };
+                bit_write_TF (dat, noname, 64);
+              }
+              continue;
+            }
           _obj = find_section_info_type (dwg, (Dwg_Section_Type)type);
           if (_obj && type < SECTION_INFO)
             {
@@ -4509,7 +4544,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       for (int io = 0;
                            io < (int)ARRAY_SIZE (section_map_order); io++)
                         {
-                          Dwg_Section_Info *inf = find_section_info_type (
+                          Dwg_Section_Info *inf;
+                          if (section_map_order[io] == SECTION_UNKNOWN)
+                            {
+                              pos += 96; // the empty section, no pages
+                              continue;
+                            }
+                          inf = find_section_info_type (
                               dwg, (Dwg_Section_Type)section_map_order[io]);
                           if (!inf || section_map_order[io] >= SECTION_INFO)
                             continue;
@@ -4781,6 +4822,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dat = orig_dat;
       decrypt_R2004_header (&dat->chain[0x80], file_dat.chain,
                             sizeof (Dwg_R2004_Header));
+      // 0xEC..0xFF are the bytes 0xEC..0xFF of the magic sequence, not
+      // encrypted (ODA spec 4.1; AutoCAD writes them so). The struct maps
+      // its last 8 bytes to section_type and decomp_data_size, which are
+      // not encrypted there. The first page starts at 0x100.
+      {
+        uint32_t rseed = 1;
+        unsigned k;
+        for (k = 0; k < 0x100; k++)
+          {
+            rseed = rseed * 0x343fd + 0x269ec3;
+            if (k >= 0xEC)
+              dat->chain[k] = (BITCODE_RC)(rseed >> 16);
+          }
+      }
       bit_chain_free (&file_dat);
       LOG_HANDLE ("encrypted R2004_Header:\n");
       LOG_TF (HANDLE, &dat->chain[0x80], (int)sizeof (Dwg_R2004_Header));
