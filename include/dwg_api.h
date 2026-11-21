@@ -617,6 +617,7 @@ extern "C"
   typedef struct _dwg_entity_HELIX		dwg_ent_helix;
   typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION		dwg_ent_large_radial_dimension;
   typedef struct _dwg_entity_LAYOUTPRINTCONFIG		dwg_ent_layoutprintconfig;
+  typedef struct _dwg_entity_NURBSURFACE		dwg_ent_nurbsurface;
   typedef struct _dwg_entity_PLANESURFACE		dwg_ent_planesurface;
   typedef struct _dwg_entity_POINTCLOUD		dwg_ent_pointcloud;
   typedef struct _dwg_entity_POINTCLOUDEX		dwg_ent_pointcloudex;
@@ -633,7 +634,6 @@ extern "C"
   typedef struct _dwg_entity_LOFTEDSURFACE		dwg_ent_loftedsurface;
   typedef struct _dwg_entity_MPOLYGON		dwg_ent_mpolygon;
   typedef struct _dwg_entity_NAVISWORKSMODEL		dwg_ent_navisworksmodel;
-  typedef struct _dwg_entity_NURBSURFACE		dwg_ent_nurbsurface;
   typedef struct _dwg_entity_POINTPARAMETERENTITY		dwg_ent_pointparameterentity;
   typedef struct _dwg_entity_POLARGRIPENTITY		dwg_ent_polargripentity;
   typedef struct _dwg_entity_ROTATIONGRIPENTITY		dwg_ent_rotationgripentity;
@@ -1741,6 +1741,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_helix, HELIX);
   dwg_get_OBJECT_DECL (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION);
   dwg_get_OBJECT_DECL (ent_layoutprintconfig, LAYOUTPRINTCONFIG);
+  dwg_get_OBJECT_DECL (ent_nurbsurface, NURBSURFACE);
   dwg_get_OBJECT_DECL (ent_planesurface, PLANESURFACE);
   dwg_get_OBJECT_DECL (ent_pointcloud, POINTCLOUD);
   dwg_get_OBJECT_DECL (ent_pointcloudex, POINTCLOUDEX);
@@ -1757,7 +1758,6 @@ extern "C"
     dwg_get_OBJECT_DECL (ent_loftedsurface, LOFTEDSURFACE);
     dwg_get_OBJECT_DECL (ent_mpolygon, MPOLYGON);
     dwg_get_OBJECT_DECL (ent_navisworksmodel, NAVISWORKSMODEL);
-    dwg_get_OBJECT_DECL (ent_nurbsurface, NURBSURFACE);
     dwg_get_OBJECT_DECL (ent_pointparameterentity, POINTPARAMETERENTITY);
     dwg_get_OBJECT_DECL (ent_polargripentity, POLARGRIPENTITY);
     dwg_get_OBJECT_DECL (ent_rotationgripentity, ROTATIONGRIPENTITY);
@@ -2877,6 +2877,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (HELIX);
   DWG_GETALL_ENTITY_DECL (LARGE_RADIAL_DIMENSION);
   DWG_GETALL_ENTITY_DECL (LAYOUTPRINTCONFIG);
+  DWG_GETALL_ENTITY_DECL (NURBSURFACE);
   DWG_GETALL_ENTITY_DECL (PLANESURFACE);
   DWG_GETALL_ENTITY_DECL (POINTCLOUD);
   DWG_GETALL_ENTITY_DECL (POINTCLOUDEX);
@@ -2893,7 +2894,6 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (LOFTEDSURFACE);
   DWG_GETALL_ENTITY_DECL (MPOLYGON);
   DWG_GETALL_ENTITY_DECL (NAVISWORKSMODEL);
-  DWG_GETALL_ENTITY_DECL (NURBSURFACE);
   DWG_GETALL_ENTITY_DECL (POINTPARAMETERENTITY);
   DWG_GETALL_ENTITY_DECL (POLARGRIPENTITY);
   DWG_GETALL_ENTITY_DECL (ROTATIONGRIPENTITY);
@@ -4028,6 +4028,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HELIX);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LARGE_RADIAL_DIMENSION);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LAYOUTPRINTCONFIG);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (NURBSURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (PLANESURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUD);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUDEX);
@@ -4044,7 +4045,6 @@ extern "C"
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LOFTEDSURFACE);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (MPOLYGON);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (NAVISWORKSMODEL);
-    CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (NURBSURFACE);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTPARAMETERENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POLARGRIPENTITY);
     CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ROTATIONGRIPENTITY);

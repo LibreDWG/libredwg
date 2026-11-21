@@ -430,7 +430,7 @@
   DEBUGGING_CLASS     (ACTION, SUNSTUDY)          // almost
 
   DEBUGGING_CLASS_DXF (ACTION, GEOPOSITIONMARKER, POSITIONMARKER) /* ent, yet unsorted. no coverage */
-  DEBUGGING_CLASS     (ACTION, NURBSURFACE)       /* ent */
+  UNSTABLE_CLASS_DXF_ALLOW_DXF (ACTION, NURBSURFACE, NURBSURFACE) /* ent, with DXF in/out */
   DEBUGGING_CLASS     (ACTION, LOFTEDSURFACE)     /* ent */
   DEBUGGING_CLASS     (ACTION, RTEXT)             // ent expresstools
   DEBUGGING_CLASS     (ACTION, MPOLYGON)          // hatch-like ent

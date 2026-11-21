@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_NURBSURFACE
 #include "tests_common.c"
 
@@ -19,7 +19,6 @@ api_process (dwg_object *obj)
   BITCODE_3BD vvec2;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_ent_nurbsurface *_obj = dwg_object_to_NURBSURFACE (obj);
 
   CHK_ENTITY_TYPE (_obj, NURBSURFACE, acis_empty, B);
@@ -51,7 +50,6 @@ api_process (dwg_object *obj)
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
-      // CHK_ENTITY_TYPE (_obj, NURBSURFACE, unknown_2007, BL);
       CHK_ENTITY_H (_obj, NURBSURFACE, history_id);
     }
 
@@ -59,10 +57,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, NURBSURFACE, v_isolines, BS);
 
   CHK_ENTITY_TYPE (_obj, NURBSURFACE, short170, BS);
-  CHK_ENTITY_TYPE (_obj, NURBSURFACE, cv_hull_display, BS);
+  CHK_ENTITY_TYPE (_obj, NURBSURFACE, cv_hull_display, B);
   CHK_ENTITY_3RD (_obj, NURBSURFACE, uvec1);
   CHK_ENTITY_3RD (_obj, NURBSURFACE, vvec1);
   CHK_ENTITY_3RD (_obj, NURBSURFACE, uvec2);
   CHK_ENTITY_3RD (_obj, NURBSURFACE, vvec2);
-#endif
 }

@@ -4401,6 +4401,23 @@ DWG_OBJECT (ACSH_LOFT_CLASS)
 DWG_OBJECT_END
 #undef ACSH_LOFT_profile
 
+DWG_ENTITY (NURBSURFACE)
+  ACTION_3DSOLID;
+  SUBCLASS (AcDbSurface);
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  SUBCLASS (AcDbNurbSurface);
+  SINCE (R_2013b) {
+    FIELD_BS (short170, 170);
+    FIELD_B (cv_hull_display, 290);
+    FIELD_3BD (uvec1, 10);
+    FIELD_3BD (vvec1, 11);
+    FIELD_3BD (uvec2, 12);
+    FIELD_3BD (vvec2, 13);
+  }
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -4452,24 +4469,6 @@ DWG_ENTITY (LOFTEDSURFACE)
   HANDLE_VECTOR (guide_curves, num_guide_curves, 5, 310);
   FIELD_HANDLE (path_curve, 5, 0);
 
-DWG_ENTITY_END
-
-DWG_ENTITY (NURBSURFACE)
-  HANDLE_UNKNOWN_BITS;
-  ACTION_3DSOLID;
-  SUBCLASS (AcDbSurface);
-  FIELD_BS (u_isolines, 71);
-  FIELD_BS (v_isolines, 72);
-  SUBCLASS (AcDbNurbSurface);
-  SINCE (R_2013b) {
-    FIELD_BS (short170, 170);
-    FIELD_B (cv_hull_display, 290);
-    FIELD_3BD (uvec1, 10);
-    FIELD_3BD (vvec1, 11);
-    FIELD_3BD (uvec2, 12);
-    FIELD_3BD (vvec2, 13);
-  }
-  COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 // (varies) fails the unit-test

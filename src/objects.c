@@ -1577,7 +1577,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str809,              "BLOCKVISIBILITYGRIP",               DWG_TYPE_BLOCKVISIBILITYGRIP,	0,	STABLE},
       {-1},
 #line 106 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str811,               "NURBSURFACE",                DWG_TYPE_NURBSURFACE,	1,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str811,               "NURBSURFACE",                DWG_TYPE_NURBSURFACE,	1,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 365 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str816,                      "VISUALSTYLE",                       DWG_TYPE_VISUALSTYLE,	0,	STABLE},
