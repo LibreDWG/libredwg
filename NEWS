@@ -278,6 +278,28 @@ Minor bugfixes / fuzzing fixes:
     table records and BLOCK.xref_pname), and the testcases 6383958498279424
     (double dwg_free after a failed JSON import) and 5647996143075328
     (dxfb_ENDBLK_empty leak).
+  * All the OSS-Fuzz issues closed since 0.14 (45, 42 verified, 3 not
+    reproducible):
+    Heap-buffer-overflow: 586576797 (bit_write_TF), 584255889
+    (dxf_process_VERTEX_2D), 583497902 583493833 587347125 (json_eed),
+    587020301 (dxfb_write_eed), 585006963 (dwg_encode_eed_data), 584815047
+    (bit_write_T16), 584794411 (dwg_encode_xdata), 542249044 531106748
+    42534122 (dxf_entities_read), 538648852 526016910
+    (dwg_encode_add_object), 529593671 (json_objects_write), 42531271
+    (dwg_decode_INSERT_private), 525088817 (dxf_fixup_string), 525088107
+    (dwg_geojson_object), 42533395 (dynapi_set_helper).
+    Null-dereference: 587110816 (dwg_require_class), 42531515 (in_hex2bin),
+    530086151 524854787 (encode_preR13_section), 530762732
+    (dwg_dxfb_PROXY_ENTITY), 525291340 (dwg_dxfb_BLOCK_HEADER), 42533974
+    (dwg_free_MLINESTYLE_private), 524392897 (bit_utf8_to_TV).
+    Use-after-free, double-free, others: 583321233 (dxf_tables_write),
+    529581210 (dxf_blocks_read), 528859714 42535236 (dxf_entities_read),
+    528059079 (section_move_before), 524832524 (dwg_encode), 444908414
+    (bit_read_MC), 42510991 (dxf_header_read).
+    Leaks: 552005396 536190545 (in_postprocess_SEQEND), 382816124
+    (bit_read_TV).
+    Out-of-memory: 532220989 530086146 527085540.
+    Timeouts: 531651998 530576161 528659158 526962317.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 
