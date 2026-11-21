@@ -695,6 +695,14 @@ DWG_ENTITY (TABLE)
                     SUB_FIELD_CMTC (cell,content_color, 64);
                   }
                 if (cell_flag & 0x10) {
+                  // overrides the text_style of the text cell above, a NULL
+                  // ref which is not in the global object_ref vector
+                  DECODER {
+                    Dwg_Object_Ref *_old = _obj->cell.text_style;
+                    if (_old && !_old->handleref.is_global)
+                      free (_old);
+                    _obj->cell.text_style = NULL;
+                  }
                   SUB_FIELD_HANDLE (cell,text_style, 3, 7);
                 }
                 if (cell_flag & 0x20)
@@ -6530,6 +6538,9 @@ DWG_OBJECT (BLOCKLOOKUPPARAMETER)
       }
   }
   ENCODER {
+    FIELD_T (unknown_t, 0);
+  }
+  FREE {
     FIELD_T (unknown_t, 0);
   }
   START_OBJECT_HANDLE_STREAM;

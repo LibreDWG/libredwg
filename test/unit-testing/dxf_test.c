@@ -435,7 +435,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                 {
                   sub_i = DIMASSOC_index (obj, sub_i + 1);
                   if (sub_i > 3)
-                    break;
+                    {
+                      free (subf);
+                      break;
+                    }
                 }
               else
                 sub_i++;
@@ -807,13 +810,15 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
   return failed;
 }
 
+// The last read dwg, freed when the next one is read and at the end
+static Dwg_Data dwg;
+
 static int
 test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
           const char *restrict dwgfile)
 {
   int error = 0;
   static char prev_dwgfile[256];
-  static Dwg_Data dwg;
   BITCODE_BL i;
   char *trace;
   int tracelevel = 0;
@@ -830,12 +835,14 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
     ;
   else
     {
-      if (dwg.num_objects && dwg.header.version > R_INVALID)
+      if (dwg.header.version > R_INVALID)
         dwg_free (&dwg);
+      memset (&dwg, 0, sizeof (dwg));
       dwg.opts = tracelevel;
       if (dwg_read_file (dwgfile, &dwg) >= DWG_ERR_CRITICAL)
         {
           dwg_free (&dwg);
+          memset (&dwg, 0, sizeof (dwg));
           return 1;
         }
     }
@@ -984,6 +991,11 @@ main (int argc, char *argv[])
       else
         error += test_dxf (dxf, name, dwgfile);
       free (dwgfile);
+    }
+  if (dwg.header.version > R_INVALID)
+    {
+      dwg_free (&dwg);
+      memset (&dwg, 0, sizeof (dwg));
     }
   // so far all unknown objects are debugging or unstable. ignore all errors
   return 0;

@@ -732,6 +732,8 @@ free_preR13_object (Dwg_Object *obj)
       dwg = obj->parent;
       dat->version = dwg->header.version;
       dat->from_version = dwg->header.from_version;
+      if (!dat->from_version) // unknown, e.g. a JSON without FILEHEADER
+        dat->from_version = R_2018;
     }
   else
     return;
@@ -1060,6 +1062,8 @@ dwg_free_object (Dwg_Object *obj)
       dwg = obj->parent;
       dat->version = dwg->header.version;
       dat->from_version = dwg->header.from_version;
+      if (!dat->from_version) // unknown, e.g. a JSON without FILEHEADER
+        dat->from_version = R_2018;
     }
   else
     return;
@@ -1364,6 +1368,8 @@ dwg_free_object_private (Dwg_Object *obj)
       dwg = obj->parent;
       dat->version = dwg->header.version;
       dat->from_version = dwg->header.from_version;
+      if (!dat->from_version) // unknown, e.g. a JSON without FILEHEADER
+        dat->from_version = R_2018;
     }
   else
     return;
@@ -1723,7 +1729,7 @@ dwg_free_security (Dwg_Data *dwg)
 }
 
 static int
-dwg_free_acds (Dwg_Data *dwg)
+dwg_free_acds_private (Dwg_Data *dwg)
 {
   Dwg_AcDs *_obj = &dwg->acds;
   Dwg_Object *obj = NULL;
@@ -1733,6 +1739,18 @@ dwg_free_acds (Dwg_Data *dwg)
 
 #include "acds.spec"
   // clang-format on
+  return error;
+}
+
+static int
+dwg_free_acds (Dwg_Data *dwg)
+{
+  Dwg_AcDs *_obj = &dwg->acds;
+  // the spec returns early with too many segments (> 0x7ff), when the arrays
+  // were already allocated
+  (void)dwg_free_acds_private (dwg);
+  FREE_IF (_obj->segidx);
+  FREE_IF (_obj->segments);
   for (BITCODE_BL i = 0; i < _obj->num_records; i++)
     FREE_IF (_obj->records[i].data);
   FREE_IF (_obj->records);
@@ -1748,6 +1766,8 @@ dwg_free (Dwg_Data *dwg)
     {
       pdat.version = dwg->header.version;
       pdat.from_version = dwg->header.from_version;
+      if (!pdat.from_version) // unknown, e.g. a JSON without FILEHEADER
+        pdat.from_version = R_2018;
       if (dwg->opts)
         {
           loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -1805,8 +1825,9 @@ dwg_free (Dwg_Data *dwg)
               FREE_IF (dwg->dwg_class[i].appname);
               FREE_IF (dwg->dwg_class[i].cppname);
               FREE_IF (dwg->dwg_class[i].dxfname);
-              if (dwg->header.from_version >= R_2007)
-                FREE_IF (dwg->dwg_class[i].dxfname_u);
+              // also with DXF and JSON imports and dwg_add_class, which
+              // set it for any version
+              FREE_IF (dwg->dwg_class[i].dxfname_u);
             }
         }
       FREE_IF (dwg->dwg_class);

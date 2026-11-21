@@ -25,7 +25,8 @@ extern unsigned int loglevel;
 // from in_json.h
 extern int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 // from out_json.h
-extern int dwg_write_json_dat (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+extern int dwg_write_json_dat (Bit_Chain *restrict dat,
+                               Dwg_Data *restrict dwg);
 // from dwg_api.h
 extern int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);
 extern int dwg_add_class (Dwg_Data *restrict dwg,
@@ -830,7 +831,11 @@ downconvert_TABLE_test (void)
   // not twice, and free what was made
   downconvert_TABLE (&obj);
   for (unsigned i = 0; i < table.num_cells; i++)
-    free (table.cells[i].text_value);
+    {
+      free (table.cells[i].text_value);
+      free (table.cells[i].value.data_date);
+      free (table.cells[i].value.value_string);
+    }
   free (table.cells);
   free (table.col_widths);
   free (table.row_heights);
