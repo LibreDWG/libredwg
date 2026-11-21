@@ -3628,7 +3628,10 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPGRIP)
   AcDbBlockGrip_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
-  SUBCLASS (AcDbBlockLookupGrip);
+  // AcDbBlockLookUpGrip with "LookUp", as AutoCAD writes this marker
+  // (the CLASSES section has "Lookup"); AutoCAD rejects the other
+  // spelling.
+  SUBCLASS (AcDbBlockLookUpGrip);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -6548,7 +6551,9 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLOOKUPPARAMETER)
   AcDbBlock1PtParameter_fields; // lgtm[cpp/use-after-free] codeql[cpp/use-after-free]
-  SUBCLASS (AcDbBlockLookupParameter)
+  // AcDbBlockLookUpParameter with "LookUp", as AutoCAD writes this marker
+  // (the CLASSES section has "Lookup")
+  SUBCLASS (AcDbBlockLookUpParameter)
   FIELD_BL (index, 0);
   FIELD_T (lookup_name, 303);
   FIELD_T (lookup_desc, 304);
