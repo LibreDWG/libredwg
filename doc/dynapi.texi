@@ -11743,7 +11743,7 @@ BL
 @item sort_ents
 H*,	DXF 5
 @item block_owner
-H
+H,	DXF 330
 @item ents
 H*,	DXF 331
 
