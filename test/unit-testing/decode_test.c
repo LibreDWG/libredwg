@@ -22,6 +22,9 @@ extern unsigned int loglevel;
 // CLANG_DIAG_RESTORE
 #include "tests_common.h"
 
+/* the test's own loglevel, for its ok/fail lines */
+static unsigned int test_loglevel;
+
 static void
 read_literal_length_tests (void)
 {
@@ -443,6 +446,7 @@ class_object_stream_tests (void)
       return;
     }
   error = dwg_read_file (path, &dwg);
+  loglevel = test_loglevel; // dwg_read_file sets it from dwg.opts
   for (i = 0; i < dwg.num_objects; i++)
     if (dwg.object[i].handle.value == 0x96
         && dwg.object[i].fixedtype == DWG_TYPE_MATERIAL)
@@ -515,6 +519,7 @@ r2007_rs_correction_tests (void)
   free (buf);
   error1 = dwg_read_file (path, &clean);
   error2 = dwg_read_file (bad, &dwg);
+  loglevel = test_loglevel; // dwg_read_file sets it from dwg.opts
   remove (bad);
   if (error1 >= DWG_ERR_CRITICAL || error2 >= DWG_ERR_CRITICAL
       || clean.num_objects != dwg.num_objects)
@@ -535,7 +540,7 @@ r2007_rs_correction_tests (void)
 int
 main (int argc, char const *argv[])
 {
-  loglevel = is_make_silent () ? 0 : 2;
+  loglevel = test_loglevel = is_make_silent () ? 0 : 2;
 
   read_literal_length_tests ();
   read_compressed_bytes_tests ();
