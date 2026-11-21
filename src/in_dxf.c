@@ -11978,19 +11978,26 @@ dxf_acsh_sweep_size (Dwg_Object *restrict obj, const int idx,
                      const BITCODE_BL v, const char *restrict name)
 {
   BITCODE_BL *p = NULL;
+  BITCODE_TF data = NULL;
   const char *field = "bindata_size";
   if (IS_ACSH_SWEEPLIKE (obj))
     {
       Dwg_Object_ACSH_SWEEP_CLASS *o = ACSH_SWEEPLIKE (obj);
       p = idx == 1 ? &o->shsw_text_size : &o->shsw_text2_size;
+      data = idx == 1 ? o->shsw_text : o->shsw_text2;
       field = idx == 1 ? "shsw_text_size" : "shsw_text2_size";
     }
   else if (obj->fixedtype == DWG_TYPE_ACSH_REVOLVE_CLASS && idx == 1)
-    p = &obj->tio.object->tio.ACSH_REVOLVE_CLASS->bindata_size;
+    {
+      p = &obj->tio.object->tio.ACSH_REVOLVE_CLASS->bindata_size;
+      data = obj->tio.object->tio.ACSH_REVOLVE_CLASS->bindata;
+    }
   if (!p)
     return;
-  *p = v;
-  LOG_TRACE ("%s.%s = %u [BL 90]\n", name, field, (unsigned)v);
+  // after its data the size must not claim more bits than the data holds
+  if (!data || v < *p)
+    *p = v;
+  LOG_TRACE ("%s.%s = %u [BL 90]\n", name, field, (unsigned)*p);
 }
 
 static void
@@ -12072,17 +12079,20 @@ dxf_surface_size (Dwg_Object *restrict obj, const int idx, const BITCODE_BL v,
                   const char *restrict name)
 {
   BITCODE_BL *p = NULL;
+  BITCODE_TF data = NULL;
   const char *field = "bindata_size";
   if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
     {
       Dwg_Entity_EXTRUDEDSURFACE *o = obj->tio.entity->tio.EXTRUDEDSURFACE;
       p = idx == 0 ? &o->class_version : &o->bindata_size;
+      data = idx == 0 ? NULL : o->bindata;
       field = idx == 0 ? "class_version" : "bindata_size";
     }
   else if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     {
       Dwg_Entity_REVOLVEDSURFACE *o = obj->tio.entity->tio.REVOLVEDSURFACE;
       p = idx == 0 ? &o->class_version : &o->bindata_size;
+      data = idx == 0 ? NULL : o->bindata;
       field = idx == 0 ? "class_version" : "bindata_size";
     }
   else if (obj->fixedtype == DWG_TYPE_SWEPTSURFACE)
@@ -12091,14 +12101,17 @@ dxf_surface_size (Dwg_Object *restrict obj, const int idx, const BITCODE_BL v,
       p = idx == 0   ? &o->class_version
           : idx == 1 ? &o->sweepdata_size
                      : &o->pathdata_size;
+      data = idx == 0 ? NULL : idx == 1 ? o->sweepdata : o->pathdata;
       field = idx == 0   ? "class_version"
               : idx == 1 ? "sweepdata_size"
                          : "pathdata_size";
     }
   if (!p)
     return;
-  *p = v;
-  LOG_TRACE ("%s.%s = %u [BL 90]\n", name, field, (unsigned)v);
+  // after its data the size must not claim more bits than the data holds
+  if (!data || v < *p)
+    *p = v;
+  LOG_TRACE ("%s.%s = %u [BL 90]\n", name, field, (unsigned)*p);
 }
 
 static void
@@ -14889,9 +14902,12 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                 }
               else if (pair->code == 94 || pair->code == 97)
                 {
-                  p->size = pair->value.u;
-                  LOG_TRACE ("%s.profile.size = %u [BL %d]\n", name,
-                             pair->value.u, pair->code);
+                  // after its data the size must not claim more bits
+                  // than the data holds
+                  if (!p->data || pair->value.u < p->size)
+                    p->size = pair->value.u;
+                  LOG_TRACE ("%s.profile.size = %u [BL %d]\n", name, p->size,
+                             pair->code);
                   goto next_pair;
                 }
               else // 310
