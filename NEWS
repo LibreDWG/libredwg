@@ -306,6 +306,14 @@ Minor bugfixes / fuzzing fixes:
     SPLINE with any scenario, unhandled classes created by name by the
     importers (ASSOCPERSSUBENTMANAGER, ASSOCALIGNEDDIMACTIONBODY), the class
     dxfname_u of any version, pre-R13 DIMENSION.user_text, and some more.
+  * Fixed the DWG decoding of the r2013+ surfaces (EXTRUDEDSURFACE,
+    NURBSURFACE, ...) written by ODA, with the acis_empty_bit 0 after their
+    wireframe data: they have an inline ASM SAB, which was not skipped, so
+    that the rest of the entity (num_materials, the isolines, the profile)
+    was lost, and the DXF was a zeroed surface which ODA rejected with
+    "Object improperly read".  The DXF roundtrips of 2018/Surface.dwg and
+    2004/Surface.dwg pass ODA now.  The cached wireframe of the surfaces
+    and solids is still not in the DXF (it is not in ODA's DXF either).
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 

@@ -177,14 +177,38 @@
 
 #if defined(IS_DECODER)
 
+/* ODA: the r2013+ surface with the acis_empty_bit 0 has an inline SAB */
+#  define DECODE_3DSOLID_INLINE_R2013                                         \
+    if (SOLID_SURFACE_R2013 && !FIELD_VALUE (acis_empty_bit))                 \
+      {                                                                       \
+        FIELD_VALUE (acis_empty) = 0;                                         \
+        error |= decode_3dsolid_ex (dat, hdl_dat, obj,                        \
+                                    (Dwg_Entity_3DSOLID *)_obj, 1);           \
+      }
 #  define DECODE_3DSOLID                                                      \
     decode_3dsolid (dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);           \
     if (FIELD_VALUE (encr_sat_data) && !FIELD_VALUE (encr_sat_data[0]))       \
       FIELD_VALUE (block_size[0]) = 0;
 
+static int decode_3dsolid_ex (Bit_Chain *dat, Bit_Chain *hdl_dat,
+                              Dwg_Object *restrict obj,
+                              Dwg_Entity_3DSOLID *restrict _obj,
+                              const int inline_r2013);
+
 static int
 decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                 Dwg_Entity_3DSOLID *restrict _obj)
+{
+  return decode_3dsolid_ex (dat, hdl_dat, obj, _obj, 0);
+}
+
+/* inline_r2013: the r2013+ surface with the acis_empty_bit 0 after its
+   wireframe data (written by ODA). It has the unknown bit, the version and the
+   inline SAB, which is also in the AcDs. */
+static int
+decode_3dsolid_ex (Bit_Chain *dat, Bit_Chain *hdl_dat,
+                   Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj,
+                   const int inline_r2013)
 {
   Dwg_Data *dwg = obj->parent;
   BITCODE_BL j;
@@ -195,19 +219,23 @@ decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
   int acis_data_idx;
   int error = 0;
 
-  PRE (R_2013b)
-  {
-    FIELD_B (acis_empty, 290);
-    if (dat->byte >= dat->size)
-      return DWG_ERR_VALUEOUTOFBOUNDS;
-  }
-  else
-  // no leading ACIS empty bit since R2013; the SAB data is in the
-  // has_ds_data AcDs blob (see common_entity_data.spec), not inline
-  {
-    FIELD_VALUE (acis_empty) = 1;
-    FIELD_VALUE (version) = 2;
-  }
+  // inline_r2013: acis_empty was read as acis_empty_bit
+  if (!inline_r2013)
+    {
+      PRE (R_2013b)
+      {
+        FIELD_B (acis_empty, 290);
+        if (dat->byte >= dat->size)
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+      }
+      else
+      // no leading ACIS empty bit since R2013; the SAB data is in the
+      // has_ds_data AcDs blob (see common_entity_data.spec), not inline
+      {
+        FIELD_VALUE (acis_empty) = 1;
+        FIELD_VALUE (version) = 2;
+      }
+    }
   if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);
@@ -296,7 +324,8 @@ decode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
           FIELD_VALUE (encr_sat_data) = NULL;
           // TODO string in strhdl, even <r2007
           //  either has_ds_data (r2013+) or the blob is here
-          if (!obj->tio.entity->has_ds_data && dat->size > dat->byte + 1)
+          if ((inline_r2013 || !obj->tio.entity->has_ds_data)
+              && dat->size > dat->byte + 1)
             {
               char *p;
               // Note that r2013+ has End-of-ASM-data (not ACIS anymore, but
@@ -379,6 +408,7 @@ acsh_decode_acis (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
   return error;
 }
 #else
+#  define DECODE_3DSOLID_INLINE_R2013
 #  define DECODE_3DSOLID {}
 #  define FREE_3DSOLID {}
 #endif // #if IS_DECODER
@@ -700,7 +730,9 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
    acis_empty_bit instead of the num_materials BL, then the revision GUID.
    With wireframe data (verified with an AutoCAD r2018 REVOLVEDSURFACE and
    SWEPTSURFACE) they have the num_materials BL, like the other solids.
-   ODA writes yet another, unknown layout after the wireframe data. */
+   ODA writes the acis_empty_bit 0 after the wireframe data, then the unknown
+   bit, the version 2 and the inline ASM SAB until End-of-ASM-data (also in the
+   AcDs), then the num_materials BL. */
 #define SOLID_SURFACE                                                         \
   (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE                                 \
    || obj->fixedtype == DWG_TYPE_LOFTEDSURFACE                                \
@@ -769,8 +801,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
       FIELD_VALUE (acis_empty_bit) = 1;                                       \
   }                                                                           \
   FIELD_B (acis_empty_bit, 0); \
-      /* ?? */ /* The R2007+ unknown BL (num_materials) is there for                      \
-  SAT v1 also */        \
+  DECODE_3DSOLID_INLINE_R2013                                                 \
   if (SOLID_SURFACE_R2013 && !FIELD_VALUE (wireframe_data_present))           \
     {                                                                         \
       FIELD_B (acis_empty2, 0);                                               \
