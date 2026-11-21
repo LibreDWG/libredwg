@@ -4123,7 +4123,6 @@ DWG_OBJECT (DATATABLE)
     SUBCLASS (AcDbDataTable);
   }
 #endif
-  DEBUG_HERE_OBJ
   FIELD_BS (flags, 70);
   FIELD_BL (num_cols, 90);
   FIELD_BL (num_rows, 91);
