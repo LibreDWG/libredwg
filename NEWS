@@ -300,6 +300,12 @@ Minor bugfixes / fuzzing fixes:
     (bit_read_TV).
     Out-of-memory: 532220989 530086146 527085540.
     Timeouts: 531651998 530576161 528659158 526962317.
+  * Fixed now all the remaining memory leaks in in_dxf (GH #151): the unit
+    tests, dxf.test, dxfb.test, dxfread.test and the dxf2dwg of alive.test
+    now run with the asan leak detection (no more detect_leaks=0).  Freed are
+    SPLINE with any scenario, unhandled classes created by name by the
+    importers (ASSOCPERSSUBENTMANAGER, ASSOCALIGNEDDIMACTIONBODY), the class
+    dxfname_u of any version, pre-R13 DIMENSION.user_text, and some more.
 
 LibreDWG version 0.14 - 2026-06-27 - beta:
 
