@@ -2050,12 +2050,12 @@ DWG_OBJECT_END
     SUB_FIELD_BL (pab,version, 90);                         \
     SUB_FIELD_BL (pab,minor, 90);                           \
     SUB_FIELD_BL (pab,num_deps, 90);                        \
-    SUB_HANDLE_VECTOR (pab,deps, num_deps, 4, 360);         \
+    SUB_HANDLE_VECTOR (pab,deps, num_deps, 3, 360);         \
     SUB_FIELD_BL (pab,l4, 90);                              \
     SUB_FIELD_BL (pab,num_values, 90);                      \
     if (!FIELD_VALUE (pab.num_values)) {                    \
       SUB_FIELD_BL (pab,l5, 90);                            \
-      SUB_FIELD_HANDLE (pab,assocdep, 5, 330);              \
+      SUB_FIELD_HANDLE (pab,assocdep, 4, 330);              \
     }                                                       \
     REPEAT (pab.num_values, pab.values, Dwg_VALUEPARAM)     \
     REPEAT_BLOCK                                            \
@@ -2629,7 +2629,9 @@ DWG_ENTITY_END
     AcDbAssocParamBasedActionBody_fields (pab);   \
   }                                               \
   LATER_VERSIONS {                                \
+    DXF { SUBCLASS (AcDbAssocActionBody); }       \
     FIELD_BS (aaab_version, 90);                  \
+    DXF { VALUE_BL (0, 90); }                     \
     FIELD_HANDLE (assoc_dep, 5, 330);             \
   }
 
@@ -4418,6 +4420,29 @@ DWG_ENTITY (NURBSURFACE)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
+DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
+  HANDLE_UNKNOWN_BITS;
+  AcDbAssocPathBasedSurfaceActionBody_fields;
+  SUBCLASS (AcDbAssocSweptSurfaceActionBody);
+  FIELD_BL (class_version, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// crashes
+// See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
+DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
+  HANDLE_UNKNOWN_BITS;
+  AcDbAssocAnnotationActionBody_fields;
+  SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY);
+  //SUBCLASS (AcDbAssocAlignedDimActionBody);
+  FIELD_BL (class_version, 90);
+  //or status, 90 //has dimension_node or read_node?
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (read_node, 4, 330);
+  FIELD_HANDLE (dimension_node, 4, 330);
+DWG_OBJECT_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -4471,16 +4496,6 @@ DWG_ENTITY (LOFTEDSURFACE)
 
 DWG_ENTITY_END
 
-// (varies) fails the unit-test
-// See AcDbAssocActionBody.h and ASSOCPLANESURFACEACTIONBODY
-DWG_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
-  HANDLE_UNKNOWN_BITS;
-  AcDbAssocPathBasedSurfaceActionBody_fields;
-  SUBCLASS (AcDbAssocSweptSurfaceActionBody);
-  FIELD_BL (class_version, 90);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 DWG_OBJECT (ASSOCEDGECHAMFERACTIONBODY)
   HANDLE_UNKNOWN_BITS;
   AcDbAssocPathBasedSurfaceActionBody_fields;
@@ -4518,20 +4533,6 @@ DWG_OBJECT (ASSOCMLEADERACTIONBODY)
   END_REPEAT_BLOCK
   END_REPEAT (actions);
   START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// crashes
-// See AcDbAssocActionBody.h and AcDbAssocDimDependencyBody.h
-DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
-  HANDLE_UNKNOWN_BITS;
-  AcDbAssocAnnotationActionBody_fields;
-  SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY);
-  //SUBCLASS (AcDbAssocAlignedDimActionBody);
-  FIELD_BL (class_version, 90);
-  //or status, 90 //has dimension_node or read_node?
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (read_node, 4, 330);
-  FIELD_HANDLE (dimension_node, 4, 330);
 DWG_OBJECT_END
 
 DWG_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)

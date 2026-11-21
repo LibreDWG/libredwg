@@ -7812,6 +7812,177 @@ add_ASSOCPERSSUBENTMANAGER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   return NULL;
 }
 
+/* read the next pair, expect the DXF code, and set the BL. Returns 1 for a
+   failure, with the pair (or NULL at EOF) in failpair. */
+static int
+dxf_expect_BL (Bit_Chain *restrict dat, const char *restrict name,
+               const char *restrict field, const int code,
+               BITCODE_BL *restrict value, Dxf_Pair **failpair)
+{
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  if (!pair || pair->code != code)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", name,
+                 pair ? pair->code : -1, code, field);
+      *failpair = pair;
+      return 1;
+    }
+  *value = pair->value.u;
+  LOG_TRACE ("%s.%s = %u [BL %d]\n", name, field, pair->value.u, code);
+  dxf_free_pair (pair);
+  return 0;
+}
+
+/* read the next pair, expect the DXF code, and set the handle with the given
+   code as in the DWG, absolute: dwg_add_handleref with an obj would make a
+   soft pointer relative. Returns 1 for a failure, with the pair (or NULL at
+   EOF) in failpair. */
+static int
+dxf_expect_H (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+              const char *restrict name, const char *restrict field,
+              const int code, const BITCODE_RC hcode, BITCODE_H *restrict hdl,
+              Dxf_Pair **failpair)
+{
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  if (!pair || pair->code != code)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected %d for %s", name,
+                 pair ? pair->code : -1, code, field);
+      *failpair = pair;
+      return 1;
+    }
+  if (pair->value.u)
+    {
+      *hdl = dwg_add_handleref (dwg, hcode, pair->value.u, NULL);
+      LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", name, field,
+                 ARGS_REF (*hdl), code);
+    }
+  dxf_free_pair (pair);
+  return 0;
+}
+
+/* ACDBASSOCALIGNEDDIMACTIONBODY. The first pair is the 90 after the
+   AcDbAssocActionBody subclass. Until r2010 the AcDbAssocParamBasedActionBody
+   follows, since r2013 just the assoc_dep, then the own subclass. NULL for
+   success. */
+static Dxf_Pair *
+add_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *restrict obj,
+                               Bit_Chain *restrict dat, Dxf_Pair *pair)
+{
+  Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *o
+      = obj->tio.object->tio.ASSOCALIGNEDDIMACTIONBODY;
+  Dwg_Data *dwg = obj->parent;
+
+  if (!pair || pair->code != 90)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected 90 for aab_version",
+                 obj->name, pair ? pair->code : -1);
+      return pair;
+    }
+  o->aab_version = o->aaab_version = (BITCODE_BS)pair->value.u;
+  LOG_TRACE ("%s.aab_version = %u [BS 90]\n", obj->name, pair->value.u);
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  if (pair && pair->code == 100) // r2010: AcDbAssocParamBasedActionBody
+    {
+      Dwg_ASSOCPARAMBASEDACTIONBODY *pab = &o->pab;
+      BITCODE_BL i;
+      if (!pair->value.s.ptr
+          || strNE (pair->value.s.ptr, "AcDbAssocParamBasedActionBody"))
+        {
+          LOG_ERROR ("%s: Unexpected subclass %s", obj->name,
+                     pair->value.s.ptr ? pair->value.s.ptr : "");
+          return pair;
+        }
+      dxf_free_pair (pair);
+      if (dxf_expect_BL (dat, obj->name, "pab.version", 90, &pab->version,
+                         &pair))
+        return pair;
+      if (dxf_expect_BL (dat, obj->name, "pab.minor", 90, &pab->minor, &pair))
+        return pair;
+      if (dxf_expect_BL (dat, obj->name, "pab.num_deps", 90, &pab->num_deps,
+                         &pair))
+        return pair;
+      if (pab->num_deps > 1000)
+        {
+          LOG_ERROR ("Invalid %s.pab.num_deps %u", obj->name, pab->num_deps);
+          pab->num_deps = 0;
+          return NULL;
+        }
+      if (pab->num_deps)
+        {
+          pab->deps = (BITCODE_H *)xcalloc (pab->num_deps, sizeof (BITCODE_H));
+          if (!pab->deps)
+            {
+              pab->num_deps = 0;
+              return NULL;
+            }
+        }
+      for (i = 0; i < pab->num_deps; i++)
+        {
+          pair = dxf_read_pair (dat);
+          if (!pair || pair->code != 360)
+            {
+              LOG_ERROR ("%s: Unexpected DXF code %d, expected 360 for deps",
+                         obj->name, pair ? pair->code : -1);
+              return pair;
+            }
+          pab->deps[i] = dwg_add_handleref (dwg, 3, pair->value.u, NULL);
+          LOG_TRACE ("%s.pab.deps[%u] = " FORMAT_REF " [H 360]\n", obj->name,
+                     i, ARGS_REF (pab->deps[i]));
+          dxf_free_pair (pair);
+        }
+      if (dxf_expect_BL (dat, obj->name, "pab.l4", 90, &pab->l4, &pair))
+        return pair;
+      if (dxf_expect_BL (dat, obj->name, "pab.num_values", 90,
+                         &pab->num_values, &pair))
+        return pair;
+      if (pab->num_values)
+        {
+          LOG_ERROR ("%s.pab.num_values %u is not supported", obj->name,
+                     pab->num_values);
+          pab->num_values = 0;
+          return NULL;
+        }
+      if (dxf_expect_BL (dat, obj->name, "pab.l5", 90, &pab->l5, &pair))
+        return pair;
+      if (dxf_expect_H (dat, dwg, obj->name, "pab.assocdep", 330, 4,
+                        &pab->assocdep, &pair))
+        return pair;
+    }
+  else // r2013+
+    {
+      // 90 0, 330 assoc_dep
+      if (!pair || pair->code != 90)
+        {
+          LOG_ERROR ("%s: Unexpected DXF code %d, expected 90", obj->name,
+                     pair ? pair->code : -1);
+          return pair;
+        }
+      dxf_free_pair (pair);
+      if (dxf_expect_H (dat, dwg, obj->name, "assoc_dep", 330, 4,
+                        &o->assoc_dep, &pair))
+        return pair;
+    }
+  // the own subclass
+  pair = dxf_read_pair (dat);
+  if (!pair || pair->code != 100)
+    {
+      LOG_ERROR ("%s: Unexpected DXF code %d, expected the subclass",
+                 obj->name, pair ? pair->code : -1);
+      return pair;
+    }
+  dxf_free_pair (pair);
+  FIELD_BL (class_version, 90);
+  if (dxf_expect_H (dat, dwg, obj->name, "read_node", 330, 4, &o->read_node,
+                    &pair))
+    return pair;
+  if (dxf_expect_H (dat, dwg, obj->name, "dimension_node", 330, 4,
+                    &o->dimension_node, &pair))
+    return pair;
+  return NULL;
+}
+
 static Dxf_Pair *
 add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 {
@@ -12857,6 +13028,17 @@ static __nonnull ((1, 3, 4)) Dxf_Pair *new_object (
                   dxf_free_pair (pair);
                   pair = dxf_read_pair (dat);
                   pair = add_ASSOCPERSSUBENTMANAGER (obj, dat, pair);
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (obj->fixedtype == DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY
+                       && strEQc (subclass, "AcDbAssocActionBody"))
+                {
+                  dxf_free_pair (pair);
+                  pair = dxf_read_pair (dat);
+                  pair = add_ASSOCALIGNEDDIMACTIONBODY (obj, dat, pair);
                   if (!pair)
                     goto next_pair;
                   else

@@ -1148,7 +1148,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str316,                 "BLOCKARRAYACTION",                  DWG_TYPE_BLOCKARRAYACTION,	0,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1}, {-1},
 #line 216 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str322,      "ACDBASSOCSWEPTSURFACEACTIONBODY",   DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str322,      "ACDBASSOCSWEPTSURFACEACTIONBODY",   DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY,	0,	UNSTABLE},
 #line 278 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str323,                         "DIMSTYLE",                          DWG_TYPE_DIMSTYLE,	0,	STABLE},
       {-1},
@@ -1428,7 +1428,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str603,                    "LAYER_CONTROL",                     DWG_TYPE_LAYER_CONTROL,	0,	STABLE},
       {-1},
 #line 180 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str605,        "ACDBASSOCALIGNEDDIMACTIONBODY",     DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str605,        "ACDBASSOCALIGNEDDIMACTIONBODY",     DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY,	0,	UNSTABLE},
       {-1},
 #line 133 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str607,              "SWEPTSURFACE",               DWG_TYPE_SWEPTSURFACE,	1,	UNSTABLE},

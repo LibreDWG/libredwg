@@ -1,4 +1,4 @@
-// crashes
+// unstable
 #define DWG_TYPE DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY
 #include "tests_common.c"
 
