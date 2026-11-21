@@ -3095,7 +3095,7 @@ dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict,
     return 0;
   for (i = 0; i < _obj->numitems; i++)
     {
-      char *hdlname;
+      char *hdlname = NULL;
       BITCODE_H *hdlv = _obj->itemhandles;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o; // just some random type
@@ -3412,7 +3412,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
     }
   for (i = 0; i < num_entries; i++)
     {
-      char *hdlname;
+      char *hdlname = NULL;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o;
       int isnew = 0;
@@ -3465,7 +3465,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   // then the first ignoring case
   for (i = 0; i < num_entries; i++)
     {
-      char *hdlname;
+      char *hdlname = NULL;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o;
       int isnew = 0;
