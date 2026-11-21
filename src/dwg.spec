@@ -1645,7 +1645,7 @@ DWG_ENTITY (DIMENSION_LINEAR)
     FIELD_3BD (xline1_pt, 13);
     FIELD_3BD (xline2_pt, 14);
     FIELD_3BD (def_pt, 0);
-    FIELD_BD (oblique_angle, 52);
+    FIELD_BD0 (oblique_angle, 52);
     FIELD_BD0 (dim_rotation, 50);
     SUBCLASS (AcDbRotatedDimension);
 
