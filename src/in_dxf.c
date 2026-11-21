@@ -9161,14 +9161,27 @@ add_proxy_entity_data (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_ERROR ("Out of memory");
           return NULL;
         }
+      // do not trust the 93 size: it must match the data
+      if (has_numbits && ((size_t)numbits + 7) / 8 != dsize)
+        {
+          LOG_ERROR ("Invalid %s.data_numbits %u for %" PRIuSIZE " bytes",
+                     obj->name, numbits, dsize);
+          free (o->data);
+          o->data = NULL;
+          o->data_size = 0;
+          o->data_numbits = 0;
+          free (stream);
+          return pair;
+        }
       memcpy (o->data, &stream[gsize], dsize);
       o->data_size = (BITCODE_BL)dsize;
-      o->data_numbits = has_numbits && numbits <= dsize * 8
-                            ? numbits
-                            : (BITCODE_BL)(dsize * 8);
+      o->data_numbits = has_numbits ? numbits : (BITCODE_BL)(dsize * 8);
     }
-  else if (has_numbits)
-    o->data_numbits = 0;
+  else if (has_numbits && numbits)
+    {
+      LOG_ERROR ("Invalid %s.data_numbits %u without data", obj->name,
+                 numbits);
+    }
   free (stream);
   return pair;
 }
