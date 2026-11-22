@@ -59,6 +59,16 @@ encode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/hash.lo \
 	$(top_builddir)/src/reedsolomon.lo \
 	$(top_builddir)/src/mman.lo
+encode_r2007_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/acds.lo \
+	$(top_builddir)/src/bits.lo \
+	$(top_builddir)/src/codepages.lo \
+	$(top_builddir)/src/decode.lo \
+	$(top_builddir)/src/decode2.lo \
+	$(top_builddir)/src/dwg.lo \
+	$(top_builddir)/src/hash.lo \
+	$(top_builddir)/src/reedsolomon.lo \
+	$(top_builddir)/src/mman.lo
 hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
 	$(top_builddir)/src/bits.lo \
@@ -413,6 +423,7 @@ if !HAVE_MINGW
 check_minimal += decode_test$(EXEEXT)
 if USE_WRITE
 check_minimal += encode_test$(EXEEXT)
+check_minimal += encode_r2007_test$(EXEEXT)
 endif
 endif
 

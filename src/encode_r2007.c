@@ -46,13 +46,14 @@
 #define R2007_PAGE_MAX 0xF800 /* the uncompressed size of a data page */
 #define R2007_FIRST_ID 3
 
-/* The order of the sections in the file, as ODA writes them. */
+/* The order of the sections in the file, as AutoCAD writes them (ODA
+   writes SummaryInfo first and FileDepList last). */
 static const Dwg_Section_Type section_order[]
-    = { SECTION_SUMMARYINFO,    SECTION_PREVIEW,    SECTION_APPINFO,
-        SECTION_APPINFOHISTORY, SECTION_REVHISTORY, SECTION_OBJECTS,
-        SECTION_OBJFREESPACE,   SECTION_TEMPLATE,   SECTION_HANDLES,
-        SECTION_CLASSES,        SECTION_AUXHEADER,  SECTION_HEADER,
-        SECTION_FILEDEPLIST,    SECTION_SECURITY,   SECTION_VBAPROJECT };
+    = { SECTION_FILEDEPLIST, SECTION_APPINFOHISTORY, SECTION_APPINFO,
+        SECTION_PREVIEW,     SECTION_SUMMARYINFO,    SECTION_REVHISTORY,
+        SECTION_OBJECTS,     SECTION_OBJFREESPACE,   SECTION_TEMPLATE,
+        SECTION_HANDLES,     SECTION_CLASSES,        SECTION_AUXHEADER,
+        SECTION_HEADER,      SECTION_SECURITY,       SECTION_VBAPROJECT };
 #define R2007_NUM_ORDER ((int)(sizeof (section_order) / sizeof (section_order[0])))
 typedef struct
 {
@@ -666,6 +667,38 @@ done:
   return 0;
 }
 
+/* The padding data, p 5.11: the first 0x80 words of the random table of the
+   file's random_seed (R2007_RANDOM_SEED, which the header gets), little
+   endian, from offset off, repeated every 512 bytes. AutoCAD fills the unused
+   bytes of its pages with it. */
+static void
+pad_fill (unsigned char *restrict dst, size_t len, size_t off)
+{
+  static unsigned char table[0x80 * 4];
+  static int ready = 0;
+  size_t i;
+  if (!ready)
+    {
+      Crc_Rng rng;
+      rng_init (&rng, R2007_RANDOM_SEED);
+      for (i = 0; i < 0x80; i++)
+        put_le32 (&table[4 * i], rng.table[i]);
+      ready = 1;
+    }
+  for (i = 0; i < len; i++)
+    dst[i] = table[(off + i) % sizeof (table)];
+}
+
+/* The size of a raw page as AutoCAD writes it: the Reed-Solomon coded size
+   of the section's max_size, i.e. max_size and the 4 parity bytes of each of
+   its blocks of 251, rounded to 32 (768 -> 800, 1280 -> 1312,
+   0x6c00 -> 28096). */
+static size_t
+raw_page_size (const uint64_t max_size)
+{
+  return ROUND32 ((size_t)max_size + 4 * (((size_t)max_size + 250) / 251));
+}
+
 /* A page of the file: the payload, compressed if that is smaller,
    Reed-Solomon coded with 251 data bytes (encoding 4), or raw (encoding 1),
    and padded to 32. Fills the sizes, the 32-bit checksum of the data and the
@@ -683,14 +716,33 @@ make_data_page (Page *restrict page, const Crc64 *restrict crc,
   *checksum = page_checksum (0, src, size_uncomp);
   if (encoding == 1)
     {
+      /* AutoCAD's raw pages are Reed-Solomon coded too, not interleaved: the
+         data padded to 8, then the 4 parity bytes of each block of 251 data
+         bytes, the last block completed with the padding table for the
+         parity (but not stored), then padding. AutoCAD 2027 checks it and
+         rejects an AppInfoHistory page without it. */
+      const size_t n8 = ROUND8 (size_uncomp);
+      const size_t bc = (n8 + 250) / 251;
+      unsigned char blk[255];
+      size_t i;
       *size_comp = size_uncomp;
       *crc64
           = crc64_calc (crc, 0, crc_seed1 (0, size_uncomp), src, size_uncomp);
-      page->size = ROUND32 (size_uncomp ? size_uncomp : 1);
+      page->size = ROUND32 (n8 + 4 * bc);
       page->data = (unsigned char *)calloc (1, page->size);
       if (!page->data)
         return DWG_ERR_OUTOFMEM;
       memcpy (page->data, src, size_uncomp);
+      for (i = 0; i < bc; i++)
+        {
+          const size_t have = n8 - i * 251 < 251 ? n8 - i * 251 : 251;
+          memcpy (blk, &page->data[i * 251], have);
+          if (have < 251)
+            pad_fill (&blk[have], 251 - have, 0);
+          rs_encode_data_block (&blk[251], blk, 251);
+          memcpy (&page->data[n8 + 4 * i], &blk[251], 4);
+        }
+      pad_fill (&page->data[n8 + 4 * bc], page->size - (n8 + 4 * bc), 0);
       return 0;
     }
   *size_comp = size_uncomp;
@@ -828,8 +880,14 @@ make_file_header (unsigned char *restrict out,
   for (i = 0; i < 8; i++)
     put_le64 (&buf[8 * i], b[i]);
   normal = crc64_calc (crc, 1, ~r2, buf, 64);
+  /* the mirrored crc's buffer is a new chain, each element from the one
+     before (ODA spec 5.2.1.1.5), b[2] and b[4] too: nothing of the
+     normal crc's buffer. */
+  b[0] = crc_shift (r1, r2);
   b[1] = crc_shift (normal, b[0]);
+  b[2] = crc_shift (r2, b[1]);
   b[3] = crc_shift (normal, b[2]);
+  b[4] = crc_shift (r1, b[3]);
   b[5] = crc_shift (normal, b[4]);
   b[6] = crc_shift (r2, b[5]);
   b[7] = crc_shift (b[6], b[6]);
@@ -885,6 +943,7 @@ make_sections_map (const Dwg_Data *restrict dwg, const Sec *restrict secs,
       const char *name = dwg_section_name (dwg, secs[i].type);
       total += 64 + 2 * strlen (name) + 2 + 56 * (size_t)secs[i].num_pages;
     }
+  total += 64; /* the empty section */
   buf = (unsigned char *)calloc (1, total + 8);
   if (!buf)
     return NULL;
@@ -910,8 +969,15 @@ make_sections_map (const Dwg_Data *restrict dwg, const Sec *restrict secs,
       pos += 2 * len + 2; /* with the zero terminator */
       for (k = 0; k < secs[i].num_pages; k++)
         {
+          /* the page size: AutoCAD writes an allocation size, never less
+             than the data or the stored raw page image: the section's max
+             size for the raw sections (1280 for 1240 bytes, 1024 for a 126
+             byte Preview), the uncompressed size of a full Objects page. */
           put_le64 (&buf[pos], secs[i].offset[k]);
-          put_le64 (&buf[pos + 8], ROUND8 (secs[i].uncomp_size[k]));
+          put_le64 (&buf[pos + 8],
+                    ROUND8 (secs[i].uncomp_size[k]) > secs[i].max_size
+                        ? ROUND8 (secs[i].uncomp_size[k])
+                        : secs[i].max_size);
           put_le64 (&buf[pos + 16], (uint64_t)secs[i].id[k]);
           put_le64 (&buf[pos + 24], secs[i].uncomp_size[k]);
           put_le64 (&buf[pos + 32], secs[i].comp_size[k]);
@@ -920,6 +986,19 @@ make_sections_map (const Dwg_Data *restrict dwg, const Sec *restrict secs,
           pos += 56;
         }
     }
+  /* AutoCAD ends the map with an empty section: no pages, max size 0xf800,
+     encoding 4, counted in hdr.num_sections (else AutoCAD reads past the
+     map). No name: name length 0 and no terminator; AutoCAD crashes on a
+     length of 2 with an empty name. */
+  put_le64 (&buf[pos], 0);
+  put_le64 (&buf[pos + 8], R2007_PAGE_MAX);
+  put_le64 (&buf[pos + 16], 0);
+  put_le64 (&buf[pos + 24], 0);
+  put_le64 (&buf[pos + 32], 0);
+  put_le64 (&buf[pos + 40], 0);
+  put_le64 (&buf[pos + 48], 4);
+  put_le64 (&buf[pos + 56], 0);
+  pos += 64;
   *size = pos;
   return buf;
 }
@@ -1021,6 +1100,34 @@ encode_r2007 (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           sec->size[k] = page->size;
           if (ROUND8 (n) > sec->max_size)
             sec->max_size = ROUND8 (n);
+          if (sec->encoding == 1)
+            {
+              const uint64_t r = type == SECTION_PREVIEW ? 0x400 : 0x80;
+              size_t psize;
+              sec->max_size = (size + r - 1) / r * r;
+              /* the data followed by padding; AutoCAD crashes on a raw
+                 page of only ROUND32 (data) bytes */
+              psize = raw_page_size (sec->max_size);
+              if (psize > page->size)
+                {
+                  unsigned char *grown
+                      = (unsigned char *)realloc (page->data, psize);
+                  if (!grown)
+                    {
+                      error |= DWG_ERR_OUTOFMEM;
+                      goto done;
+                    }
+                  {
+                    const size_t n8 = ROUND8 (n);
+                    const size_t used = n8 + 4 * ((n8 + 250) / 251);
+                    pad_fill (grown + page->size, psize - page->size,
+                              page->size - used);
+                  }
+                  page->data = grown;
+                  page->size = psize;
+                  sec->size[k] = psize;
+                }
+            }
           LOG_TRACE ("section %s page %d: id %d, %u => %u bytes, %u on disk\n",
                      dwg_section_name (dwg, type), k, (int)page->id,
                      (unsigned)n, (unsigned)sec->comp_size[k],
