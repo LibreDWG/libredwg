@@ -1127,8 +1127,12 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
       if (section->num_pages <= 0 || section->num_pages > 0xf0000)
         {
-          LOG_ERROR ("Invalid num_pages %" PRIuSIZE ", skip",
-                     (size_t)section->num_pages);
+          // empty unnamed sections are normal
+          if (section->num_pages <= 0)
+            LOG_TRACE ("Empty section, skip\n");
+          else
+            LOG_ERROR ("Invalid num_pages %" PRIuSIZE ", skip",
+                       (size_t)section->num_pages);
           section->num_pages = 0;
           continue;
         }

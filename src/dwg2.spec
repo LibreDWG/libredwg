@@ -150,7 +150,8 @@ DWG_OBJECT (SORTENTSTABLE)
 
   SUBCLASS (AcDbSortentsTable)
   FIELD_BL (num_ents, 0);
-  VALUEOUTOFBOUNDS (num_ents, 50000)
+  // each handle needs at least one byte of the object
+  DECODER { VALUEOUTOFBOUNDS (num_ents, obj->size) }
   // read these code 0 handles from the normal stream
   str_dat = hdl_dat; hdl_dat = dat;
   HANDLE_VECTOR (sort_ents, num_ents, 0, 0);
