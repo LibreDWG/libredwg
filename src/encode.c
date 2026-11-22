@@ -1718,6 +1718,8 @@ encode_preR13_section_hdr (const char *restrict name,
           tbl->size = obj->size;                                              \
           tbl->number = _obj->num_entries;                                    \
           if (!tbl->flags_r11)                                                \
+            tbl->flags_r11 = _obj->flags_r11; /* from JSON/DXF, GH #758 */    \
+          if (!tbl->flags_r11)                                                \
             calc_preR13_ctrl_flags_r11 (dwg, tbl, i);                         \
           tbl->address = addr;                                                \
           addr += tbl->size * tbl->number;                                    \
