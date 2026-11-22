@@ -724,7 +724,9 @@ free_TABLE_r2010 (Dwg_Object *restrict obj)
   _obj->num_cells = 0;
 }
 
-static void
+/* Returns 0 for a class which is not a preR13 one, e.g. an R13+ entity from
+   a DXF without a version. */
+static int
 free_preR13_object (Dwg_Object *obj)
 {
   int error = 0;
@@ -743,9 +745,9 @@ free_preR13_object (Dwg_Object *obj)
         dat->from_version = R_2018;
     }
   else
-    return;
+    return 1;
   if (obj->type == DWG_TYPE_FREED)
-    return;
+    return 1;
 
   /* preR13 objects can be entities or non-entities; they are allocated
      differently (see in_json/in_dxf). Guard the correct union member.
@@ -754,7 +756,7 @@ free_preR13_object (Dwg_Object *obj)
     {
       Dwg_Object_Entity *_obj = obj->tio.entity;
       if (!_obj)
-        return;
+        return 1;
       /* For injson/indxf we may create partial/unknown entities.
          Do not touch potentially uninitialized handle pointers here. */
       if (!(dwg->opts & DWG_OPTS_IN))
@@ -769,7 +771,7 @@ free_preR13_object (Dwg_Object *obj)
         }
     }
   else if (obj->tio.object == NULL)
-    return;
+    return 1;
 
   if (obj->fixedtype == DWG_TYPE_UNUSED // deleted
       && dwg->header.version < R_2_0b && obj->type > 64)
@@ -1041,9 +1043,7 @@ free_preR13_object (Dwg_Object *obj)
         }
       break;
     default:
-      LOG_ERROR (
-          "Unhandled preR13 class %s, fixedtype %d in free_preR13_object()",
-          dwg_type_name (obj->fixedtype), (int)obj->fixedtype);
+      return 0;
     }
 
   /* With indxf and injson the dxfname is dynamic, just the name is const */
@@ -1053,6 +1053,7 @@ free_preR13_object (Dwg_Object *obj)
   if (dwg->opts & DWG_OPTS_INJSON)
     FREE_IF (obj->name);
   obj->type = DWG_TYPE_FREED;
+  return 1;
 }
 
 // using the global dat
@@ -1079,8 +1080,8 @@ dwg_free_object (Dwg_Object *obj)
 
   PRE (R_13b1)
   {
-    free_preR13_object (obj);
-    return;
+    if (free_preR13_object (obj))
+      return;
   }
   if (obj->fixedtype == DWG_TYPE_TABLESTYLE
       && dwg->header.from_version > R_2007)
